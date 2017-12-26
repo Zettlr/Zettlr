@@ -1,0 +1,120 @@
+// Styles for the renderer modals
+
+.modal {
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    background-color:rgba(0,0,0,.5);
+    z-index:1000;
+    overflow:scroll; /* For longer settings(?) and stuff dialogs */
+
+    .dialog {
+        background-color:white;
+        margin:15% 15% 0% 15%;
+        border-radius:10px;
+        padding:20px;
+        -webkit-box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.75);
+        box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.75);
+
+        h1 {
+            font-size: 1.5em;
+            margin-bottom:0.5em;
+        }
+
+        p {
+            margin-bottom:0.5em;
+            line-height:150%;
+        }
+
+        hr {
+            border:none;
+            border-bottom:1px solid black;
+            width:80%;
+            margin:1em 10%;
+        }
+
+        label {
+            color:@grey-4;
+            margin:1em 0.5em 0.5em 0em;
+            display:block;
+            cursor:pointer;
+            display:inline;
+        }
+
+        input {
+            width: 100%;
+            line-height: 150%;
+            font-size: inherit;
+            outline:none;
+            margin-bottom:1em;
+        }
+
+        input[type="checkbox"] {
+            margin:0.5em;
+            width:auto;
+            display:inline;
+        }
+
+        button {
+            display:inline-block;
+            font-size:1em;
+            margin:1em;
+            padding:0.5em 1em;
+            background-color:white;
+            color:black;
+            border:1px solid @grey-6;
+            transition:0.2s background-color ease;
+            cursor:pointer;
+        }
+
+        button:hover {
+            background-color:@green-selection;
+            transition:0.2s background-color ease;
+        }
+
+        div.export_files {
+            display:flex;
+            padding:0.5em;
+            word-wrap:break-all;
+
+            div {
+                display:inline;
+                flex-grow:1;
+                border:1px solid @grey-1;
+                border-radius:10px;
+                margin:0.5em;
+                padding:0.5em;
+                text-align: center;
+                cursor: pointer;
+
+                &:hover {
+                    background-color:rgba(240, 240, 240, 1);
+                }
+
+                span {
+                    background-color: @green-selection;
+                    border-radius:5px;
+                    font-size:80%;
+                    padding:2px;
+                }
+
+                img {
+                    max-width:100%;
+                    max-height:100%;
+                }
+            }
+        }
+
+        .error {
+            background-color:@bg-error;
+            color: @fg-error;
+            border:1px solid @fg-error;
+            border-radius:5px;
+            margin:0.5em;
+            padding:1em;
+        }
+    }
+}

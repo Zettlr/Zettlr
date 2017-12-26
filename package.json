@@ -1,0 +1,93 @@
+{
+    "name": "zettlr",
+    "productName": "Zettlr",
+    "homepage": "https://www.zettlr.com",
+    "author": {
+        "name": "Hendrik Erz",
+        "email": "hendrik.erz@zettlr.com"
+    },
+    "version": "0.5.0",
+    "description": "A powerful Markdown Editor with integrated tree view",
+    "main": "./main.js",
+    "postinstall": "electron-builder install-app-deps",
+    "scripts": {
+        "start": "electron .",
+        "dist": "electron-builder -mwl",
+        "build": "electron-builder",
+        "less": "lessc source/renderer/less/main.less source/renderer/css/main.css && lessc source/renderer/less/theme-zettlr.less source/renderer/css/theme-zettlr.css"
+    },
+    "build": {
+        "appId": "com.zettlr.www",
+        "copyright": "This program is licensed under the MIT-license.",
+        "directories": {
+            "output": "release",
+            "app": "source"
+        },
+        "mac": {
+            "category": "public.app-category.productivity",
+            "target": "dmg",
+            "icon": "resources/icons/icns/icon.icns",
+            "asar": true,
+            "extraResources": [
+                {
+                    "from": "resources/pandoc",
+                    "to": "pandoc",
+                    "filter": [
+                        "**/*"
+                    ]
+                }
+            ]
+        },
+        "win": {
+            "target": "nsis",
+            "icon": "resources/icons/ico/icon.ico",
+            "asar": true,
+            "extraResources": [
+                {
+                    "from": "resources/pandoc",
+                    "to": "pandoc",
+                    "filter": [
+                        "**/*"
+                    ]
+                }
+            ]
+        },
+        "linux": {
+            "target": "zip",
+            "synopsis": "Markdown editor",
+            "category": "Science",
+            "icon": "resources/icons/png",
+            "asar": true,
+            "extraResources": [
+                {
+                    "from": "resources/pandoc",
+                    "to": "pandoc",
+                    "filter": [
+                        "**/*"
+                    ]
+                }
+            ]
+        },
+        "dmg": {
+            "backgroundColor": "rgba(200, 240, 170, 1)",
+            "icon": "resources/icons/icns/icon.icns"
+        },
+        "nsis": {
+            "oneClick": false,
+            "perMachine": true
+        }
+    },
+    "license": "MIT",
+    "dependencies": {
+        "codemirror-markdown-list-autoindent": "^1.0.1",
+        "command-exists": "^1.2.2",
+        "file-exists": "^5.0.0",
+        "sanitize-filename": "^1.6.1",
+        "trash": "^4.2.1",
+        "util": "^0.10.3"
+    },
+    "devDependencies": {
+        "electron": "^1.7.9",
+        "electron-builder": "^19.49.3"
+    }
+}

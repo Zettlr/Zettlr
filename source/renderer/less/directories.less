@@ -1,0 +1,90 @@
+// Directory list
+
+#directories {
+    position:fixed;
+    top:0;
+    left:0;
+    bottom:0;
+    right: 80%;
+    background-color: @grey-0;
+    border-right:2px solid @grey-2;
+    color: @grey-4;
+    overflow-y: auto;
+    cursor:default;
+    outline: none;
+
+    ul {
+        list-style-type: none;
+        margin-left:0px;
+        padding-left:0px;
+
+        .selected {
+            background-color:@green-selection;
+        }
+
+        li {
+            line-height: 180%;
+            white-space: nowrap;
+            padding-left:5px;
+            overflow: hidden;
+
+            &:hover {
+                background-color:@grey-2;
+            }
+
+            &.highlight {
+                box-shadow: 0px 0px 1px 2px @green-selection;
+            }
+        }
+
+        .collapse-indicator::before {
+            content: "\f078";
+            font-family: 'Font Awesome';
+            font-size:70%; /* Bit smaller, those indicators are damned huge */
+            color:@grey-4;
+            display:inline-block;
+            vertical-align: -2%;
+            width:10px;
+            height:19px;
+            overflow:hidden;
+        }
+
+        &.collapsed .collapse-indicator::before {
+            content: "\f054";
+            vertical-align: baseline;
+        }
+
+        &.collapsed ul {
+            height:0px;
+            display:none;
+        }
+    }
+
+    &.dark {
+        border-right-color:@grey-5;
+        color:white;
+        background-color:@grey-4;
+
+        .collapse-indicator::before {
+            color:@grey-1;
+        }
+
+        ul {
+            li:hover {
+                background-color:@grey-5;
+            }
+
+            .selected {
+                background-color:@green-selection-dark;
+            }
+        }
+    }
+}
+
+#directories > ul > li {
+    background-color:@grey-2;
+}
+
+#directories.dark > ul > li {
+    background-color: @grey-6;
+}

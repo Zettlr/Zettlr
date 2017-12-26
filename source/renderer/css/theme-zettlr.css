@@ -1,0 +1,166 @@
+.CodeMirror {
+  line-height: 1.4375;
+  /* Make the formatting characters nearly invisible */
+}
+.CodeMirror pre {
+  padding: 0;
+}
+.CodeMirror .cm-header-1 {
+  font-size: 2em;
+}
+.CodeMirror .cm-header-2 {
+  font-size: 1.8em;
+}
+.CodeMirror .cm-header-3 {
+  font-size: 1.5em;
+}
+.CodeMirror .cm-header-4 {
+  font-size: 1.3em;
+}
+.CodeMirror .cm-header-5 {
+  font-size: 1em;
+}
+.CodeMirror .cm-header-6 {
+  font-size: 1em;
+}
+.CodeMirror .cm-comment {
+  font-family: monospace;
+  font-size: 120%;
+}
+.CodeMirror .CodeMirror-cursor {
+  width: 2px;
+  border: 0;
+  z-index: 1;
+}
+.CodeMirror .cm-formatting-code,
+.CodeMirror .cm-formatting-code-block,
+.CodeMirror .cm-formatting-quote,
+.CodeMirror .cm-formatting-strong,
+.CodeMirror .cm-formatting-em {
+  opacity: .3;
+}
+.CodeMirror .cm-formatting-list-ul,
+.CodeMirror .cm-formatting-list-ol {
+  font-family: monospace;
+}
+.CodeMirror .cm-url,
+.CodeMirror .cm-link {
+  text-decoration: none;
+}
+.CodeMirror .cm-url.shift {
+  cursor: pointer;
+}
+.CodeMirror .CodeMirror-dialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: inherit;
+  z-index: 15;
+  padding: .1em .8em;
+  overflow: hidden;
+  color: inherit;
+}
+.CodeMirror .CodeMirror-dialog input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 20em;
+  color: inherit;
+  font-family: inherit;
+  font-size: 1em;
+}
+.CodeMirror .CodeMirror-dialog button {
+  font-size: 70%;
+}
+.CodeMirror .CodeMirror-dialog-top {
+  top: 0;
+}
+.CodeMirror .CodeMirror-dialog-bottom {
+  border-top: 1px solid #eee;
+  bottom: 0;
+}
+.cm-s-zettlr {
+  /* LISTS */
+  /* TYPOGRAPHY */
+}
+.cm-s-zettlr.CodeMirror {
+  background-color: #ffffff;
+  color: #2e383c;
+}
+.cm-s-zettlr .CodeMirror-selected {
+  background-color: #c8f0aa;
+}
+.cm-s-zettlr .CodeMirror-cursor {
+  background: #f05734;
+}
+.cm-s-zettlr .CodeMirror-dialog {
+  background-color: #c8dcf0;
+}
+.cm-s-zettlr .CodeMirror-dialog input {
+  color: #32465a;
+}
+.cm-s-zettlr .cm-formatting-header-1,
+.cm-s-zettlr .cm-formatting-header-2,
+.cm-s-zettlr .cm-formatting-header-3,
+.cm-s-zettlr .cm-formatting-header-4,
+.cm-s-zettlr .cm-formatting-header-5,
+.cm-s-zettlr .cm-formatting-header-6,
+.cm-s-zettlr .cm-url {
+  color: #ff7c3b;
+}
+.cm-s-zettlr .cm-comment {
+  color: #787878;
+}
+.cm-s-zettlr .cm-formatting-list-ul,
+.cm-s-zettlr .cm-formatting-list-ol {
+  color: #ff7c3b;
+}
+.cm-s-zettlr .cm-quote,
+.cm-s-zettlr .cm-link,
+.cm-s-zettlr .cm-strong,
+.cm-s-zettlr .cm-em {
+  color: #1d75b3;
+}
+/* Zettlr dark theme for codemirror */
+.cm-s-zettlr-dark {
+  /* LISTS */
+  /* TYPOGRAPHY */
+}
+.cm-s-zettlr-dark.CodeMirror {
+  background-color: #282828;
+  color: #c8c8c8;
+}
+.cm-s-zettlr-dark .CodeMirror-selected {
+  background-color: #285028;
+}
+.cm-s-zettlr-dark .CodeMirror-cursor {
+  background: #f05734;
+}
+.cm-s-zettlr-dark .CodeMirror-dialog {
+  background-color: #6478b4;
+}
+.cm-s-zettlr-dark .CodeMirror-dialog input {
+  color: #c8dcf0;
+}
+.cm-s-zettlr-dark .cm-formatting-header-1,
+.cm-s-zettlr-dark .cm-formatting-header-2,
+.cm-s-zettlr-dark .cm-formatting-header-3,
+.cm-s-zettlr-dark .cm-formatting-header-4,
+.cm-s-zettlr-dark .cm-formatting-header-5,
+.cm-s-zettlr-dark .cm-formatting-header-6,
+.cm-s-zettlr-dark .cm-url {
+  color: #ff7c3b;
+}
+.cm-s-zettlr-dark .cm-comment {
+  color: #787878;
+}
+.cm-s-zettlr-dark .cm-formatting-list-ul,
+.cm-s-zettlr-dark .cm-formatting-list-ol {
+  color: #ff7c3b;
+}
+.cm-s-zettlr-dark .cm-quote,
+.cm-s-zettlr-dark .cm-link,
+.cm-s-zettlr-dark .cm-strong,
+.cm-s-zettlr-dark .cm-em {
+  color: #86acd0;
+}

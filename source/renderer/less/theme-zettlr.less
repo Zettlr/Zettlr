@@ -1,0 +1,189 @@
+@import "variables.less";
+
+// GENERAL RULES
+.CodeMirror {
+    line-height:1.4375;
+
+    pre {
+        padding:0;
+    }
+
+    .cm-header-1 { font-size:2em; }
+    .cm-header-2 { font-size:1.8em; }
+    .cm-header-3 { font-size:1.5em; }
+    .cm-header-4 { font-size:1.3em; }
+    .cm-header-5 { font-size:1em; }
+    .cm-header-6 { font-size:1em; }
+
+    .cm-comment {
+        font-family: monospace;
+        font-size:120%;
+    }
+
+    .CodeMirror-cursor {
+        width: 2px;
+        border: 0;
+        z-index: 1;
+    }
+
+    /* Make the formatting characters nearly invisible */
+    .cm-formatting-code,
+    .cm-formatting-code-block,
+    .cm-formatting-quote,
+    .cm-formatting-strong,
+    .cm-formatting-em {
+        opacity:.3;
+    }
+
+    .cm-formatting-list-ul,
+    .cm-formatting-list-ol {
+        font-family:monospace;
+    }
+
+    .cm-url, .cm-link {
+        text-decoration: none;
+    }
+
+    .cm-url.shift {
+        cursor: pointer;
+    }
+
+    // DIALOG FIELD
+    .CodeMirror-dialog {
+        position: absolute;
+        left: 0; right: 0;
+        background: inherit;
+        z-index: 15;
+        padding: .1em .8em;
+        overflow: hidden;
+        color: inherit;
+
+        input {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 20em;
+            color: inherit;
+            font-family: inherit;
+            font-size:1em;
+        }
+
+        button {
+            font-size: 70%;
+        }
+    }
+
+    .CodeMirror-dialog-top {
+        top: 0;
+    }
+
+    .CodeMirror-dialog-bottom {
+        border-top: 1px solid #eee;
+        bottom: 0;
+    }
+}
+
+// LIGHT THEME
+.cm-s-zettlr {
+
+    // Editor styling
+    &.CodeMirror {
+        background-color:#ffffff;
+        color:rgb(46, 56, 60);
+    }
+
+    .CodeMirror-selected {
+        background-color:@green-selection;
+    }
+
+    .CodeMirror-cursor {
+        background: @orange-2;
+    }
+
+    .CodeMirror-dialog {
+        background-color: @blue-selection;
+
+        input {
+            color: @blue-2;
+        }
+    }
+
+    // TYPOGRAPHY
+    .cm-formatting-header-1, .cm-formatting-header-2, .cm-formatting-header-3,
+    .cm-formatting-header-4, .cm-formatting-header-5, .cm-formatting-header-6,
+    .cm-url {
+        color:@orange-1;
+    }
+
+    // Code blocks (called comment, why ever)
+    .cm-comment {
+        color:@grey-3;
+    }
+
+    /* LISTS */
+    .cm-formatting-list-ul,
+    .cm-formatting-list-ol {
+        color:@orange-1;
+    }
+
+    /* TYPOGRAPHY */
+    .cm-quote,
+    .cm-link,
+    .cm-strong,
+    .cm-em {
+        color:@blue-0;
+    }
+}
+
+/* Zettlr dark theme for codemirror */
+.cm-s-zettlr-dark {
+    &.CodeMirror {
+        background-color:@grey-7;
+        color:@grey-2;
+    }
+
+    .CodeMirror-selected {
+        background-color:@green-2;
+    }
+
+    .CodeMirror-cursor {
+        background: @orange-2;
+    }
+
+    .CodeMirror-dialog {
+        background-color: @blue-selection-dark;
+
+        input {
+            color: @blue-selection;
+        }
+    }
+
+    // TYPOGRAPHY
+    .cm-formatting-header-1, .cm-formatting-header-2, .cm-formatting-header-3,
+    .cm-formatting-header-4, .cm-formatting-header-5, .cm-formatting-header-6,
+    .cm-url {
+        color:@orange-1;
+    }
+
+    // Code blocks (called comment, why ever)
+    .cm-comment {
+        color:@grey-3;
+    }
+
+    /* LISTS */
+    .cm-formatting-list-ul,
+    .cm-formatting-list-ol {
+        color:@orange-1;
+    }
+
+    /* TYPOGRAPHY */
+    .cm-quote,
+    .cm-link,
+    .cm-strong,
+    .cm-em {
+        color:@blue-3;
+    }
+
+    // * * * * * * * * * * * * * * *
+
+}
