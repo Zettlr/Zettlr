@@ -35,3 +35,8 @@
 - Global search is now non-blocking and provides a progress indicator
 - Now Shift-click on URLs opens these in external browser.
 - Implemented preferences.
+
+# 0.5.1
+
+- Fixed a bug that disabled the creation of new directories and instead threw errors
+- Fixed an error that was thrown by pandoc on each PDF export.

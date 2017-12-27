@@ -3,3 +3,6 @@ node_modules
 
 # Compiled releases
 release
+
+# Hidden files and stuff
+/**/.DS_Store

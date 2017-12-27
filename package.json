@@ -6,7 +6,7 @@
         "name": "Hendrik Erz",
         "email": "hendrik.erz@zettlr.com"
     },
-    "version": "0.5.0",
+    "version": "0.5.1",
     "description": "A powerful Markdown Editor with integrated tree view",
     "main": "./main.js",
     "postinstall": "electron-builder install-app-deps",

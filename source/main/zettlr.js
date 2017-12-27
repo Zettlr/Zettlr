@@ -617,7 +617,20 @@ function Zettlr(parentApp)
         }
 
         let tempfile = path.join(temp, newname);
-        command = `${this.config.get('pandoc')} "${file.path}" -f markdown ${tpl} -t ${arg.ext} -o "${tempfile}" --pdf-engine="${this.config.get('pdflatex')}"`;
+
+        // We have the problem that pandoc version 2 does not recognize pdflatex
+        // given with the --pdf-engine command. It does work, though, if it finds
+        // it in path. So instead of passing it directly, let us just insert it into
+        // electron's PATH
+        if(path.dirname(this.config.get('pdflatex')).length > 0) {
+            // In the config the user saved a whole path, so obviously pandoc
+            // did not see pdflatex -> insert into path
+            if(process.env.PATH.indexOf(path.dirname(this.config.get('pdflatex'))) == -1) {
+                process.env.PATH = process.env.PATH + ':' + path.dirname(this.config.get('pdflatex'));
+                console.log(process.env.PATH);
+            }
+        }
+        command = `${this.config.get('pandoc')} "${file.path}" -f markdown ${tpl} -t ${arg.ext} -o "${tempfile}"`;
 
         let that = this;
         exec(command, (error, stdout, stderr) => {
@@ -752,7 +765,7 @@ function Zettlr(parentApp)
             this.ipc.send('set-current-file', from);
             return;
         } else if((this.getCurrentFile() !== null)
-                && (from.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
+        && (from.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
             // The current file is in said dir so we need to trick a little bit
             newPath = this.getCurrentFile().path;
             relative = newPath.replace(from.path, ""); // Remove old directory to get relative path

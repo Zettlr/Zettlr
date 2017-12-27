@@ -95,7 +95,20 @@ function ZettlrDir(parent, dir = null)
     this.newdir = function(name) {
         // Remove unallowed characters.
         name = sanitize(name);
-        dir = new ZettlrDir(this, path.join(this.path, name));
+        if(name === '') {
+            throw new DirectoryError('The directory name did not contain any allowed characters.');
+        }
+
+        let newpath = path.join(this.path, name);
+
+        // Create directory firsthand
+        try {
+            let stat = fs.lstatSync(newpath);
+        } catch(e) {
+            fs.mkdirSync(newpath);
+        }
+
+        dir = new ZettlrDir(this, newpath);
         this.children.push(dir);
         this.sort();
 
