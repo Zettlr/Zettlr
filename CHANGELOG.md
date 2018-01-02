@@ -40,3 +40,9 @@
 
 - Fixed a bug that disabled the creation of new directories and instead threw errors
 - Fixed an error that was thrown by pandoc on each PDF export.
+
+# 0.5.2
+
+- Now the file lists are automatically sorted on renaming files to immediately reflect a possibly changed order.
+- The global search now also includes the name of the file
+- Fixed a small error that prevented Zettlr from searching the first file in the preview pane

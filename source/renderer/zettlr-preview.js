@@ -311,7 +311,9 @@ function ZettlrPreview(parent)
             }
         });
         this.currentSearch = newTerms;
-        this.currentSearchIndex = 0;
+        
+        // The search index will be increased BEFORE accessing the first file!
+        this.currentSearchIndex = -1;
 
         // Aaaaand: Go!
         this.counter.addClass('show');

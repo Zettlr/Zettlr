@@ -118,6 +118,9 @@ function ZettlrFile(parent, fname = null)
         // Remove old file
         this.path = newpath;
 
+        // Let the parent sort itself again to reflect possible changes.
+        this.parent.sort();
+
         // Chainability
         return this;
     }
@@ -148,6 +151,28 @@ function ZettlrFile(parent, fname = null)
     this.search = function(terms) {
         // Now suuuuuuurchhhh
         let matches = 0;
+
+        // First match the title (might help)
+        for(let t of terms) {
+            if(t.operator === 'AND') {
+                if(this.name.indexOf(t.word) > -1) {
+                    matches++;
+                }
+            } else {
+                // OR
+                for(let wd of t.word) {
+                    if(this.name.indexOf(wd) > -1) {
+                        matches++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Abort immediately
+        if(matches == terms.length) {
+            return true;
+        }
 
         // Do a full text search.
         let cnt = this.read();
