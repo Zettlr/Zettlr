@@ -47,3 +47,4 @@
 - The global search now also includes the name of the file
 - Fixed a small error that prevented Zettlr from searching the first file in the preview pane
 - Fixed an error in the inter-process communication (IPC) that led to unexpected behavior when using Shortcuts.
+- Fixed an error that prevented renaming of directories if a file was selected.

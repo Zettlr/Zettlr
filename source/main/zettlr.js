@@ -668,7 +668,7 @@ function Zettlr(parentApp)
         isCurDir = (dir.hash == this.getCurrentDir().hash) ? true : false;
         let oldPath = null;
 
-        if((this.getCurrentFile() !== null) && (dir.findFile(this.getCurrentFile().hash) !== null)) {
+        if((this.getCurrentFile() !== null) && (dir.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
             // The current file is in said dir so we need to trick a little bit
             oldPath = this.getCurrentFile().path;
             relative = oldPath.replace(dir.path, ""); // Remove old directory to get relative path
@@ -696,7 +696,7 @@ function Zettlr(parentApp)
 
         if(oldPath != null) {
             // Re-set current file in the client
-            nfile = dir.findFile({ 'hash': oldPath});
+            nfile = dir.findFile({ 'hash': oldPath });
             this.setCurrentFile(nfile);
             this.ipc.send('set-current-file', nfile);
         }
