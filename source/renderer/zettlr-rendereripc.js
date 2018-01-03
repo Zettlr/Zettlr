@@ -18,10 +18,16 @@ function ZettlrRendererIPC(parent)
     };
 
     // Dispatch a command to the parent
-    this.dispatch = function(event, arg) { // TESTING
-        // var nodeConsole = require('console');
-        // var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
-        // myConsole.log('XXX RENDERER-IPC XXX', arg);
+    this.dispatch = function(event, arg) {
+        // handleEvent expects arg to contain at least 'command' and 'content'
+        // properties
+        if(!arg.hasOwnProperty('command')) {
+            console.error('Received a message with no command!', arg);
+            return;
+        }
+        if(!arg.hasOwnProperty('content')) {
+            arg.content = {};
+        }
         this.parent.parent.handleEvent(event, arg);
     };
 

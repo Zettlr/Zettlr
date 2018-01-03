@@ -17,7 +17,15 @@ function ZettlrIPC(zettlrObj) {
     };
 
     this.dispatch = function(event, arg) {
-        // console.log(arg);
+        // handleEvent expects arg to contain at least 'command' and 'content'
+        // properties
+        if(!arg.hasOwnProperty('command')) {
+            console.error('Received a message with no command!', arg);
+            return;
+        }
+        if(!arg.hasOwnProperty('content')) {
+            arg.content = {};
+        }
         this.parent.parent.handleEvent(event, arg);
     };
 

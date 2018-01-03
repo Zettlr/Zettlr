@@ -240,7 +240,7 @@ function ZettlrBody(parent)
 
     this.proceed = function(action, hash = null) {
         // Get the value, "abort" and notify host process.
-        val = this.modal.find('input').val();
+        let val = this.modal.find('input').val();
         this.abort();
 
         if(action == 'file') {
