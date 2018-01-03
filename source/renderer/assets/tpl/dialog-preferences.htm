@@ -1,0 +1,29 @@
+<div class="dialog">
+    <h1>Preferences</h1>
+    <p>Edit your preferences here.</p>
+    <hr>
+    <form  action="" method="GET" id="dialog">
+        <label for="pref-pandoc">
+            Path to the pandoc command. Only change if you
+            installed pandoc but Zettlr is unable to find it.
+        </label>
+        <input type="text" id="pref-pandoc" name="pref-pandoc" placeholder="Default: pandoc" value="%PANDOC%">
+
+        <label for="pref-pdflatex">
+            Path to the pdflatex command. Only change if
+            you installed a LaTeX distribution but Zettlr is unable to locate it.
+        </label>
+        <input type="text" id="pref-pdflatex" name="pref-pdflatex" placeholder="Default: pdflatex" value="%PDFLATEX%">
+
+        <div>
+            <input type="checkbox" name="pref-darkTheme" value="yes" id="pref-darkTheme" %DARK%>
+            <label for="pref-darkTheme">Dark Theme?</label>
+        </div>
+        <div>
+            <input type="checkbox" name="pref-snippets" value="yes" id="pref-snippets" %SNIPPETS%>
+            <label for="pref-snippets">Display snippets?</label>
+        </div>
+        <button type="submit" id="pref-save">Save</button>
+        <button id="abort">Cancel</button>
+    </form>
+</div>

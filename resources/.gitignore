@@ -1,0 +1,7 @@
+# Ignore everything except icons, pandoc and the less files
+/*
+
+!icons
+!pandoc
+!less
+!.gitignore
