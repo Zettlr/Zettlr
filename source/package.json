@@ -6,14 +6,13 @@
         "name": "Hendrik Erz",
         "email": "hendrik.erz@zettlr.com"
     },
-    "version": "0.5.1",
+    "version": "0.6.0",
     "description": "A powerful Markdown Editor with integrated tree view",
     "license": "MIT",
     "main": "main.js",
     "dependencies": {
         "codemirror-markdown-list-autoindent": "^1.0.1",
         "command-exists": "^1.2.2",
-        "file-exists": "^5.0.0",
         "sanitize-filename": "^1.6.1",
         "trash": "^4.2.1",
         "util": "^0.10.3"
