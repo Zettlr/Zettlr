@@ -66,20 +66,24 @@ class ZettlrCon
                 // Now build
                 let that = this;
                 this.menu.append(new MenuItem({'label': label, 'enabled': false }));
-                this.menu.append(new MenuItem({ 'label': 'Rename', click(item, win) {
-                    that.parent.parent.handleEvent(null, {
-                        'command': 'rename-dir',
-                        'content': { 'hash': hash }
-                    });
-                } }));
-                this.menu.append(new MenuItem({ 'label': 'Remove', click(item, win) {
-                    that.parent.parent.handleEvent(null, {
-                        'command': 'remove-dir',
-                        'content': { 'hash': hash }
-                    });
-                }}));
 
-                this.menu.append(new MenuItem({ 'type': 'separator' }));
+                // Only add rename/remove options if not root dir
+                if(elem.attr('id') !== 'root') {
+                    this.menu.append(new MenuItem({ 'label': 'Rename', click(item, win) {
+                        that.parent.parent.handleEvent(null, {
+                            'command': 'rename-dir',
+                            'content': { 'hash': hash }
+                        });
+                    } }));
+                    this.menu.append(new MenuItem({ 'label': 'Remove', click(item, win) {
+                        that.parent.parent.handleEvent(null, {
+                            'command': 'remove-dir',
+                            'content': { 'hash': hash }
+                        });
+                    }}));
+                    this.menu.append(new MenuItem({ 'type': 'separator' }));
+                }
+
                 this.menu.append(new MenuItem({ 'label': 'New File', click(item, win) {
                     that.parent.parent.handleEvent(null, {
                         'command': 'new-file',
