@@ -85,8 +85,6 @@ function Zettlr(parentApp)
         // Everything should be in the respective arrays by now.
         // So create the communications array
         this.ipc = new ZettlrIPC(this);
-        // Activate event listeners
-        this.ipc.init();
 
         // And the window.
         this.window = new ZettlrWindow(this);
