@@ -107,7 +107,7 @@ class ZettlrPreview
         });
 
         // Also make draggable
-        this.div.find('li').draggable({
+        this.div.find('li').not('.directory').draggable({
             'cursorAt': { 'top': 0, 'left': 0},
             'scroll': false,
             'helper': function() {

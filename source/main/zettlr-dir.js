@@ -1,9 +1,8 @@
 // THIS CLASS CONTROLS A SINGLE DIRECTORY
-const path      = require('path');
-const fs        = require('fs');
-const Zettlr    = require('./zettlr.js');
-const sanitize  = require('sanitize-filename');
-const trash     = require('trash');
+const path       = require('path');
+const fs         = require('fs');
+const sanitize   = require('sanitize-filename');
+const trash      = require('trash');
 const ZettlrFile = require('./zettlr-file.js');
 
 function DirectoryError(msg) {

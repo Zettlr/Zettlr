@@ -9,17 +9,17 @@ Creation of browser window etc. will all be done here.
 
 */
 
-const {dialog, app, BrowserWindow} = require('electron');
-const fs = require('fs');
-const process = require('process');
-const path = require('path');
-const {exec} = require('child_process');
+const {dialog, app, BrowserWindow}  = require('electron');
+const fs                            = require('fs');
+const process                       = require('process');
+const path                          = require('path');
+const {exec}                        = require('child_process');
 
 // Internal classes
-const ZettlrIPC = require('./zettlr-ipc.js');
-const ZettlrWindow = require('./zettlr-window.js');
-const ZettlrConfig = require('./zettlr-config.js');
-const ZettlrDir = require('./zettlr-dir.js');
+const ZettlrIPC                     = require('./zettlr-ipc.js');
+const ZettlrWindow                  = require('./zettlr-window.js');
+const ZettlrConfig                  = require('./zettlr-config.js');
+const ZettlrDir                     = require('./zettlr-dir.js');
 
 function Zettlr(parentApp)
 {

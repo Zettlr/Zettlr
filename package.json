@@ -14,7 +14,7 @@
         "start": "electron .",
         "dist": "electron-builder -mwl",
         "build": "electron-builder",
-        "less": "lessc resources/less/main.less source/renderer/css/main.css && lessc resources/less/theme-zettlr.less source/renderer/css/theme-zettlr.css"
+        "less": "lessc resources/less/main.less source/renderer/assets/css/main.css && lessc resources/less/theme-zettlr.less source/renderer/assets/css/theme-zettlr.css"
     },
     "build": {
         "appId": "com.zettlr.www",
