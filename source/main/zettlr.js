@@ -13,7 +13,6 @@ const {dialog, app, BrowserWindow} = require('electron');
 const fs = require('fs');
 const process = require('process');
 const path = require('path');
-const commandExists = require('command-exists').sync; // Does a given shell command exist?
 const {exec} = require('child_process');
 
 // Internal classes
@@ -30,8 +29,6 @@ function Zettlr(parentApp)
     this.currentFile = null;    // Currently opened file (object)
     this.currentDir = null;     // Current working directory (object)
     this.editFlag = false;      // Is the current opened file edited?
-    this.pandoc = false;        // Is pandoc present on this system?
-    this.pdflatex = false;      // Is pdflatex present here? (for PDF-exports)
 
     // INTERNAL OBJECTS
     this.window = null;         // Display content
@@ -77,7 +74,6 @@ function Zettlr(parentApp)
     this.init = function() {
         // Load config
         this.config = new ZettlrConfig(this);
-        this.config.init();
 
         // Initiate the files - every dir will read its own contents.
         this.paths = new ZettlrDir(this, this.config.get('projectDir'));
@@ -96,15 +92,6 @@ function Zettlr(parentApp)
         this.window = new ZettlrWindow(this);
         this.openWindow();
 
-        // Check pandoc availability (general exports)
-        if(commandExists(this.config.get('pandoc'))) {
-            this.pandoc = true;
-        }
-
-        // Check PDFLaTeX availability (PDF exports)
-        if(commandExists(this.config.get('pdflatex'))) {
-            this.pdflatex = true;
-        }
     }; // END init
 
     // Create new window.
@@ -130,7 +117,10 @@ function Zettlr(parentApp)
         }
 
         // Send found binaries from init() to the client
-        this.ipc.send('binaries', { 'pandoc': this.pandoc, 'pdflatex': this.pdflatex });
+        this.ipc.send('binaries', {
+            'pandoc'    : this.config.getEnv('pandoc'),
+            'pdflatex'  : this.config.getEnv('pdflatex')
+        });
     };
 
     // Shutdown the app. This function is called on quit.
@@ -626,8 +616,13 @@ function Zettlr(parentApp)
             // In the config the user saved a whole path, so obviously pandoc
             // did not see pdflatex -> insert into path
             if(process.env.PATH.indexOf(path.dirname(this.config.get('pdflatex'))) == -1) {
-                process.env.PATH = process.env.PATH + ':' + path.dirname(this.config.get('pdflatex'));
-                console.log(process.env.PATH);
+                let delimiter = '';
+                if(process.platform === 'win32') {
+                    delimiter = ';';
+                } else {
+                    delimiter = ':';
+                }
+                process.env.PATH += delimiter + path.dirname(this.config.get('pdflatex'));
             }
         }
         command = `${this.config.get('pandoc')} "${file.path}" -f markdown ${tpl} -t ${arg.ext} -o "${tempfile}"`;
