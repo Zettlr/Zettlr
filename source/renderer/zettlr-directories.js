@@ -1,16 +1,15 @@
 /* THIS CLASS CONTROLS THE DIRECTORIES-DIV */
 
-function ZettlrDirectories(parent)
+class ZettlrDirectories
 {
-    this.parent = parent;
-    this.div = null;
-
-    this.init = function() {
+    constructor(parent)
+    {
+        this.parent = parent;
         this.div = $('#directories');
-        this.activate();
-    };
+    }
 
-    this.activate = function() {
+    activate()
+    {
         let that = this;
         // Enable click events on the directory pane
         this.div.find('li').on('click', function() {
@@ -20,7 +19,6 @@ function ZettlrDirectories(parent)
 
         // Also make draggable
         this.div.find('li:not(#root)').draggable({
-            //'containment': this.div,
             'cursorAt': { 'top': 0, 'left': 0},
             'scroll': false,
             'helper': function() {
@@ -42,7 +40,7 @@ function ZettlrDirectories(parent)
             'distance': 5
         });
 
-        // Also make droppable :D
+        // Also make droppable
         this.div.find('li').droppable({
             'accept': 'li',
             'tolerance': 'pointer', // The pointer must be over the droppable
@@ -72,7 +70,8 @@ function ZettlrDirectories(parent)
     };
 
     // Render a new directory list.
-    this.newDirectoryList = function(files) {
+    newDirectoryList(files)
+    {
         // Somehow the list was empty
         if(files == null) {
             return;
@@ -92,23 +91,25 @@ function ZettlrDirectories(parent)
             }
         });
 
-        // Activate the event listeners again.
+        // Reactivate the event listeners.
         this.activate();
-    };
+    }
 
     // Draw directories into the pane.
-    this.addDirs = function(files, ulToAppend, sublevel) {
+    addDirs(files, ulToAppend, sublevel)
+    {
         if(files == null) {
             return;
         }
 
         // Skip files.
         if(files.type == "directory") {
+            let collClass = '',
+                liClass   = '';
+
             // Collapse all lists except top level
             if(sublevel == 1) collClass = 'class="collapsed"';
-            if(sublevel == 0) collClass = '';
             if(sublevel == 0) liClass = 'id="root"';
-            if(sublevel == 1) liClass = '';
 
             let newul = $(`<ul style="padding-left: ${sublevel}em;" ${collClass}></ul>`);
             ulToAppend.append(newul);
@@ -121,30 +122,34 @@ function ZettlrDirectories(parent)
                 }
             }
         }
-    };
+    }
 
-    this.toggleTheme = function() {
+    toggleTheme()
+    {
         this.div.toggleClass('dark');
-    };
+    }
 
     // Select another directory
-    this.select = function(hash) {
+    select(hash)
+    {
         this.div.find('li').removeClass('selected');
-        elem = this.div.find('li[data-hash="'+hash+'"]').first();
+        let elem = this.div.find('li[data-hash="'+hash+'"]').first();
         elem.addClass('selected');
         this.uncollapse(elem); // Uncollapse directory tree leading to this elem.
         this.scrollIntoView(elem);
-    };
+    }
 
-    this.uncollapse = function(elem) {
+    uncollapse(elem)
+    {
         // Remove collapsed-classes until the parent is a <div>
         while(!elem.parent().is('div')) {
             elem = elem.parent();
             elem.removeClass('collapsed');
         }
-    };
+    }
 
-    this.scrollIntoView = function(elem) {
+    scrollIntoView(elem)
+    {
         // Do we have an element to scroll?
         if(!elem.length) {
             return;
@@ -152,10 +157,10 @@ function ZettlrDirectories(parent)
 
         // Somehow it is impossible to write position().top into a variable.
         // Workaround: Short name for position and then use as pos.top ...
-        pos = elem.position();
-        bot = pos.top + elem.outerHeight();
-        docHeight = this.div.height();
-        curScroll = this.div.scrollTop();
+        let pos = elem.position();
+        let bot = pos.top + elem.outerHeight();
+        let docHeight = this.div.height();
+        let curScroll = this.div.scrollTop();
         // Top:
         if(pos.top < 0) {
             this.div.scrollTop(curScroll + pos.top);
@@ -164,7 +169,7 @@ function ZettlrDirectories(parent)
         if(bot > docHeight) {
             this.div.scrollTop(curScroll + bot - docHeight);
         }
-    };
+    }
 }
 
 module.exports = ZettlrDirectories;
