@@ -31,9 +31,6 @@ function ZettlrRenderer()
         this.editor = new ZettlrEditor(this);
         this.body = new ZettlrBody(this);
 
-        // Enable file list
-        this.preview.init();
-
         // Enable editor
         this.editor.init();
 

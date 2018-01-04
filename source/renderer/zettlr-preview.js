@@ -1,40 +1,26 @@
 /* THIS CLASS CONTROLS THE FILE PREVIEW LIST */
 
-function ZettlrPreview(parent)
+class ZettlrPreview
 {
-    this.parent = parent;
-    this.div = null;
-    this.searchBarElem = null;
-    this.counter = null;
-    this.snippets = true;
+    constructor(parent)
+    {
+        this.parent             = parent;
+        this.snippets           = true;
 
-    // Search related
-    this.hashes = null;
-    this.currentSearch = null;
-    this.currentSearchIndex = 0;
-
-    this.init = function() {
-        // Get our div that this class controls.
-        this.div = $('#preview');
-
-        this.counter = $('<div id="counter"><span class="progress"></span></div>');
-
-        this.div.resizable({
-            alsoResize: ['#directories', '#editor'],
-            handles: 'e, w', // Only move east and west (left/right)
-            minWidth: 150
-        });
-
-        this.searchBarElem = $(`<div id="search-directory">
-        <input type="text" placeholder="Find &hellip;">
-        </div>`);
+        // Elements
+        this.div                = $('#preview');
+        this.counter            = $('<div id="counter"><span class="progress"></span></div>');
+        this.searchBarElem      = $('<div id="search-directory"><input type="text" placeholder="Find &hellip;"></div>');
         this.searchBarElem.append(this.counter);
 
-        // Enable clicks etc.
-        this.activate();
-    };
+        // Search related
+        this.hashes             = null;
+        this.currentSearch      = null;
+        this.currentSearchIndex = 0;
+    }
 
-    this.newFileList = function(files) {
+    newFileList(files)
+    {
         if(files == null) {
             // Somehow the file array was empty
             return;
@@ -48,9 +34,10 @@ function ZettlrPreview(parent)
 
         // Don't forget to reactivate the lis to react on mouse clicks
         this.activate();
-    };
+    }
 
-    this.addFiles = function(files) {
+    addFiles(files)
+    {
         // Sometimes, there are nulls in the directory list.
         if(files == null) {
             return;
@@ -67,10 +54,11 @@ function ZettlrPreview(parent)
                 }
             }
         }
-    };
+    }
 
     // Activate clicks on the lis
-    this.activate = function() {
+    activate()
+    {
         // First: Enable clicks
         let that = this;
         this.div.find('li').on('click', function() {
@@ -91,27 +79,27 @@ function ZettlrPreview(parent)
 
         // Third: Enable arrow key navigation in list
         this.div.on('keydown', (e) => {
-            curLi = this.div.find('li.selected').first();
+            let curLi = this.div.find('li.selected').first();
             // 38 is up, 40 is down
             if(e.which == 38) {
                 e.preventDefault();
                 if(e.metaKey || e.ctrlKey) {
-                    first = curLi.prevAll().not('.directory, .hidden').last();
+                    let first = curLi.prevAll().not('.directory, .hidden').last();
                     first.click();
                     this.scrollIntoView(first);
                 } else {
-                    prev = curLi.prevAll().not('.directory, .hidden').first();
+                    let prev = curLi.prevAll().not('.directory, .hidden').first();
                     prev.click();
                     this.scrollIntoView(prev);
                 }
             } else if(e.which == 40) {
                 e.preventDefault();
                 if(e.metaKey || e.ctrlKey) {
-                    last = curLi.nextAll().not('.directory, .hidden').last();
+                    let last = curLi.nextAll().not('.directory, .hidden').last();
                     last.click();
                     this.scrollIntoView(last);
                 } else {
-                    next = curLi.nextAll().not('.directory, .hidden').first();
+                    let next = curLi.nextAll().not('.directory, .hidden').first();
                     next.click();
                     this.scrollIntoView(next);
                 }
@@ -142,11 +130,12 @@ function ZettlrPreview(parent)
             'revertDuration': 200,
             'distance': 5,
         });
-    };
+    }
 
     // Select a file if possible
-    this.select = function(hash) {
-        elem = this.div.find('li[data-hash="'+hash+'"]');
+    select(hash)
+    {
+        let elem = this.div.find('li[data-hash="'+hash+'"]');
         if(elem != null) {
             this.div.find('li').removeClass('selected');
             elem.addClass('selected');
@@ -154,27 +143,30 @@ function ZettlrPreview(parent)
             // Scroll into view if necessary
             this.scrollIntoView(elem);
         }
-    };
+    }
 
-    this.toggleTheme = function() {
+    toggleTheme()
+    {
         this.div.toggleClass('dark');
-    };
+    }
 
     // Toggle display of snippets
-    this.toggleSnippets = function() {
+    toggleSnippets()
+    {
         this.snippets = !this.snippets;
         this.div.find('span.snippet').toggleClass('hidden');
 
         // If necessary, scroll the selection into view
-        elem = this.div.find('li.selected');
+        let elem = this.div.find('li.selected');
 
         if(elem.length > 0) {
             this.scrollIntoView(elem);
         }
-    };
+    }
 
-    this.getLi = function(file) {
-        snip = '';
+    getLi(file)
+    {
+        let snip = '';
 
         if(!this.snippets) {
             snip = ' hidden';
@@ -185,41 +177,43 @@ function ZettlrPreview(parent)
         </strong><br>
         <span class="snippet${snip}">${file.snippet}</span>
         </li>`;
-    };
+    }
 
-    this.dirLi = function(dir) {
+    dirLi(dir)
+    {
         return `<li class="directory" title="${dir.name}">${dir.name}</li>`;
-    };
+    }
 
     // Display the search bar.
-    this.searchBar = function() {
+    searchBar()
+    {
         if(this.div.find('#search-directory').length > 0) {
             this.searchBarElem.detach();
             this.endSearch();
             this.div.find('li').removeClass('hidden');
 
-            elem = this.div.find('li.selected');
+            let elem = this.div.find('li.selected');
             this.scrollIntoView(elem); // Just in case.
         } else {
             this.div.prepend(this.searchBarElem);
-            input = this.searchBarElem.find('input').first();
+            let input = this.searchBarElem.find('input').first();
             input.focus();
             input.select();
 
             // Activate search function.
-            let that = this;
             input.on('keyup', (e) => {
                 if(e.which == 27) { // ESC
-                    that.searchBar();
+                    this.searchBar();
                 } else if(e.which == 13) { // RETURN
                     // that.requestSearch(that.searchBarElem.find('input').val().toLowerCase());
-                    that.beginSearch(that.searchBarElem.find('input').val().toLowerCase());
+                    this.beginSearch(this.searchBarElem.find('input').val().toLowerCase());
                 }
             });
         }
-    };
+    }
 
-    this.beginSearch = function(term) {
+    beginSearch(term)
+    {
         // First sanitize the terms
         let myTerms = [];
         let curWord = "";
@@ -227,7 +221,7 @@ function ZettlrPreview(parent)
         let operator = 'AND';
 
         for(let i = 0; i < term.length; i++) {
-            c = term.charAt(i);
+            let c = term.charAt(i);
             if((c === " ") && !hasExact) {
                 // Eat word and next
                 if(curWord.trim() !== '') {
@@ -311,16 +305,17 @@ function ZettlrPreview(parent)
             }
         });
         this.currentSearch = newTerms;
-        
+
         // The search index will be increased BEFORE accessing the first file!
         this.currentSearchIndex = -1;
 
         // Aaaaand: Go!
         this.counter.addClass('show');
         this.doSearch();
-    };
+    }
 
-    this.doSearch = function() {
+    doSearch()
+    {
         if(this.hashes.length == 0) {
             this.endSearch();
             return;
@@ -346,27 +341,30 @@ function ZettlrPreview(parent)
             'hash': this.hashes[this.currentSearchIndex],
             'terms': this.currentSearch
         });
-    };
+    }
 
-    this.handleSearchResult = function(res) {
+    handleSearchResult(res)
+    {
         if(res.result) {
             this.div.find('li[data-hash="' + res.hash + '"]').removeClass('hidden');
         }
 
         // Next search cycle
         this.doSearch();
-    };
+    }
 
-    this.endSearch = function() {
+    endSearch()
+    {
         this.counter.removeClass('show');
         this.currentSearchIndex = 0;
-        this.hashes = [];
-        this.currentSearch = null;
-    };
+        this.hashes             = [];
+        this.currentSearch      = null;
+    }
 
     // END SEARCH
 
-    this.scrollIntoView = function(elem) {
+    scrollIntoView(elem)
+    {
         // Do we have an element to scroll?
         if(!elem.length) {
             return;
@@ -374,19 +372,22 @@ function ZettlrPreview(parent)
 
         // Somehow it is impossible to write position().top into a variable.
         // Workaround: Short name for position and then use as pos.top ...
-        pos = elem.position();
-        bot = pos.top + elem.outerHeight();
-        docHeight = this.div.height();
-        curScroll = this.div.scrollTop();
+        let pos = elem.position();
+        let bot = pos.top + elem.outerHeight();
+        let docHeight = this.div.height();
+        let curScroll = this.div.scrollTop();
         // Top:
         if(pos.top < 0) {
-            this.div.scrollTop(curScroll + pos.top);
+            // Here we need to also substract the height of a directory ribbon
+            // because there WILL be one.
+            let ribbonHeight = this.div.find('li.directory').first().outerHeight();
+            this.div.scrollTop(curScroll + pos.top - ribbonHeight);
         }
         // Down:
         if(bot > docHeight) {
             this.div.scrollTop(curScroll + bot - docHeight);
         }
-    };
+    }
 }
 
 module.exports = ZettlrPreview;
