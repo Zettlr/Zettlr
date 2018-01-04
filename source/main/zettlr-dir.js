@@ -1,11 +1,9 @@
 // THIS CLASS CONTROLS A SINGLE DIRECTORY
-const path = require('path');
-const fs = require('fs');
-const Zettlr = require('./zettlr.js');
-const sanitize = require('sanitize-filename');
-const trash = require('trash');
-
-// Require and make the class visible to this file
+const path      = require('path');
+const fs        = require('fs');
+const Zettlr    = require('./zettlr.js');
+const sanitize  = require('sanitize-filename');
+const trash     = require('trash');
 const ZettlrFile = require('./zettlr-file.js');
 
 function DirectoryError(msg) {
@@ -13,17 +11,39 @@ function DirectoryError(msg) {
     this.message = msg;
 }
 
-function ZettlrDir(parent, dir = null)
+class ZettlrDir
 {
-    this.path = "";
-    this.name = "";
-    this.hash = null;
-    this.children = [];
-    this.type = 'directory';
-    this.parent = parent;
+    constructor(parent, dir = null)
+    {
+        this.path = "";
+        this.name = "";
+        this.hash = null;
+        this.children = [];
+        this.type = 'directory';
+        this.parent = parent;
+
+        // Prepopulate if given.
+        if(dir != null) {
+            this.path = dir;
+            this.name = path.basename(this.path);
+            this.hash = this.hashPath(this.path);
+
+            // The directory might've been just been created.
+            try {
+                let stat = fs.lstatSync(this.path);
+            }catch(e) {
+                // Error? -> create
+                fs.mkdirSync(this.path);
+            }
+
+            // Populate children array
+            this.readDir();
+        }
+    }
 
     // Takes an object and returns a ZettlrDir-object (or null)
-    this.findDir = function(obj) {
+    findDir(obj)
+    {
         let prop;
 
         if(obj.hasOwnProperty('path') && obj.path != null) {
@@ -43,7 +63,7 @@ function ZettlrDir(parent, dir = null)
         } else {
             // Traverse the children
             for(let c of this.children) {
-                dir = c.findDir(obj);
+                let dir = c.findDir(obj);
                 if(dir != null) {
                     // Found it
                     return dir;
@@ -53,9 +73,10 @@ function ZettlrDir(parent, dir = null)
 
         // Not found
         return null;
-    };
+    }
 
-    this.findFile = function(obj) {
+    findFile(obj)
+    {
         let prop;
 
         if(obj.hasOwnProperty('path') && obj.path != null) {
@@ -72,7 +93,7 @@ function ZettlrDir(parent, dir = null)
 
         // Traverse the children
         for(let c of this.children) {
-            file = c.findFile(obj);
+            let file = c.findFile(obj);
             if(file != null) {
                 // Found it
                 return file;
@@ -81,42 +102,38 @@ function ZettlrDir(parent, dir = null)
 
         // Not found
         return null;
-    };
+    }
 
-    this.getFileHashes = function(arr = []) {
+    getFileHashes(arr = [])
+    {
         for(let c of this.children) {
             // Concat all directories's hash arrays
             arr.concat(c.getFileHashes(arr));
         }
         // And return
         return arr;
-    };
+    }
 
-    this.newdir = function(name) {
+    newdir(name)
+    {
         // Remove unallowed characters.
         name = sanitize(name);
-        if(name === '') {
+        if((name === '') || (name === null)) {
             throw new DirectoryError('The directory name did not contain any allowed characters.');
         }
 
         let newpath = path.join(this.path, name);
 
-        // Create directory firsthand
-        try {
-            let stat = fs.lstatSync(newpath);
-        } catch(e) {
-            fs.mkdirSync(newpath);
-        }
-
-        dir = new ZettlrDir(this, newpath);
+        let dir = new ZettlrDir(this, newpath);
         this.children.push(dir);
         this.sort();
 
         // Return dir for chainability
         return dir;
-    };
+    }
 
-    this.newfile = function(name = null) {
+    newfile(name = null)
+    {
         if(name == null) {
             // Just take the current time.
             date = new Date();
@@ -138,8 +155,8 @@ function ZettlrDir(parent, dir = null)
 
         name = sanitize(name);
         // This gets executed once the user has not entered any allowed characters
-        if(name == '') {
-            return null;
+        if((name === '') || (name === null)) {
+            throw new DirectoryError('The new file name did not contain any allowed characters.');
         }
 
         // Do we have an extension?
@@ -149,18 +166,18 @@ function ZettlrDir(parent, dir = null)
 
         // Already exists
         if(this.exists(path.join(this.path, name))) {
-            return null;
+            throw new DirectoryError('The file already exists.');
         }
 
         // Create a new file.
-        f = new ZettlrFile(this, path.join(this.path, name));
+        let f = new ZettlrFile(this, path.join(this.path, name));
         this.children.push(f);
-        this.sort(); // Sort again
-        // Return for ease
+        this.sort();
         return f;
-    };
+    }
 
-    this.get = function(hash) {
+    get(hash)
+    {
         // This function is supposed to return the file contents with the hash.
         // Let each children decide if they are correct.
         let cnt = null;
@@ -173,9 +190,10 @@ function ZettlrDir(parent, dir = null)
         }
 
         return cnt;
-    };
+    }
 
-    this.remove = function(obj = this) {
+    remove(obj = this)
+    {
         if(obj === this) {
             // Remove this directory but ONLY if it is NOT the root.
             // Root's parent is the Zettlr object itself
@@ -188,7 +206,7 @@ function ZettlrDir(parent, dir = null)
             this.parent.remove(this);
         } else {
             // Remove a file (function was called by a children)
-            index = this.children.indexOf(obj);
+            let index = this.children.indexOf(obj);
 
             // Should (normally) always be true
             if(index > -1) {
@@ -207,10 +225,11 @@ function ZettlrDir(parent, dir = null)
         }
 
         return true;
-    };
+    }
 
     // Sort the children of this directory
-    this.sort = function() {
+    sort()
+    {
         // First sort through children array (necessary if new children were added)
         this.children.sort((a, b) => {
             // Negative return: a is smaller b
@@ -237,9 +256,10 @@ function ZettlrDir(parent, dir = null)
 
         // Shoud still be sorted from readdirSync and only split into directories and files.
         this.children = f.concat(d);
-    };
+    }
 
-    this.move = function(newpath, name = null) {
+    move(newpath, name = null)
+    {
         // name will only be not-null if the dir should be renamed
         // If we move a directory, all files will automatically move.
         // So easiest way is to move this directory and then re-fetch
@@ -252,7 +272,7 @@ function ZettlrDir(parent, dir = null)
             this.detach();
         }
 
-        oldPath = this.path;
+        let oldPath = this.path;
         this.path = path.join(newpath, this.name);
         this.hash = this.hashPath(this.path);
 
@@ -265,46 +285,49 @@ function ZettlrDir(parent, dir = null)
 
         // Chainability
         return this;
-    };
+    }
 
     // Attach a new children to this element (mainly happens while moving)
-    this.attach = function(newchild) {
+    attach(newchild)
+    {
         this.children.push(newchild);
         // Set the correct new parent
         newchild.parent = this;
         this.sort();
 
         return this;
-    };
+    }
 
     // Detach from parent.
-    this.detach = function() {
+    detach()
+    {
         this.parent.remove(this);
         this.parent = null;
         return this;
-    };
+    }
 
-    this.readDir = function() {
+    readDir()
+    {
         // Reads this directory.
         try {
-            stat = fs.lstatSync(this.path);
+            let stat = fs.lstatSync(this.path);
         }catch(e) {
             // Do not create directories here, only read.
             throw new DirectoryError('Directory does not exist!');
         }
 
         // Read the directory
-        cnt = fs.readdirSync(this.path);
+        let files = fs.readdirSync(this.path);
 
-        for(let f of cnt) {
-            p = path.join(this.path, f);
+        for(let f of files) {
+            let p = path.join(this.path, f);
             // Determine if file or dir.
             // We don't need try/catch because readDirSync doesn't return spurious paths
-            stat = fs.lstatSync(p);
+            let stat = fs.lstatSync(p);
             if(stat.isDirectory()) {
                 this.children.push(new ZettlrDir(this, p)); // This recursively reads the "f" dir
             } else if(stat.isFile()) {
-                extname = path.extname(p);
+                let extname = path.extname(p);
                 if(extname == '.md' || extname == '.txt') {
                     // Exclude non-md- and -txt-files
                     this.children.push(new ZettlrFile(this, p));
@@ -316,13 +339,14 @@ function ZettlrDir(parent, dir = null)
         this.sort();
     }
 
-    this.exists = function(p) {
+    exists(p)
+    {
         // return true if path exists
         if(this.path == p) {
             return true;
         }
 
-        e = false;
+        let e = false;
         for(let c of this.children) {
             if(c.path == p) {
                 e = true;
@@ -336,10 +360,11 @@ function ZettlrDir(parent, dir = null)
         }
 
         return e;
-    };
+    }
 
     // Just very basic hashing function (thanks to https://stackoverflow.com/a/7616484)
-    this.hashPath = function(pathname) {
+    hashPath(pathname)
+    {
         let hash = 0, i, chr;
         if (pathname.length === 0) return hash;
 
@@ -349,22 +374,17 @@ function ZettlrDir(parent, dir = null)
             hash |= 0; // Convert to 32bit integer
         }
         return hash;
-    };
+    }
 
     // Dummy functions
-    this.isDirectory = () => { return true; };
-    this.isFile = () => { return false; };
+    isDirectory()
+    {
+        return true;
+    }
 
-    // Prepopulate if given.
-    if(dir != null) {
-        this.path = dir;
-        this.name = path.basename(this.path);
-        this.hash = this.hashPath(this.path);
-
-        // Populate children array
-        this.readDir();
-
-        // END POPULATE
+    isFile()
+    {
+        return false;
     }
 }
 
