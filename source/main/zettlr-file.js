@@ -1,73 +1,106 @@
 // MODEL HANDLING FILES
 
-const trash = require('trash');
-const fs = require('fs');
-const path = require('path');
-const sanitize = require('sanitize-filename');
+const trash     = require('trash');
+const fs        = require('fs');
+const path      = require('path');
+const sanitize  = require('sanitize-filename');
 
 function FileError(msg) {
     this.name = 'File error';
     this.msg = msg;
 }
 
-function ZettlrFile(parent, fname = null)
+class ZettlrFile
 {
-    this.parent = parent;
-    this.name = "";
-    this.path = "";
-    this.hash = null;
-    this.type = "file";
-    this.ext = "";
-    this.snippet = "";
-    this.content = ''; // Will only be not empty when the file is modified.
-    this.isModified = false;
+    constructor(parent, fname = null)
+    {
+        this.parent     = parent;
+        this.name       = '';
+        this.path       = '';
+        this.hash       = null;
+        this.type       = 'file';
+        this.ext        = '';
+        this.snippet    = '';
+        this.content    = ''; // Will only be not empty when the file is modified.
+        this.isModified = false;
 
-    this.setContent = function(cnt) {
+        // Prepopulate if filename is given
+        if(fname !== null) {
+            this.path = fname;
+            this.name = path.basename(this.path);
+            this.hash = this.hashPath(this.path);
+            this.ext  = path.extname(this.path);
+
+            // The file might've been just created. Test that
+            try {
+                let stat = fs.lstatSync(this.path);
+            }catch(e) {
+                // Error? -> create
+                fs.writeFileSync(this.path, '', { encoding: "utf8" });
+            }
+
+            this.read();
+        }
+    }
+
+    setContent(cnt)
+    {
         this.content = cnt;
         // Also update snippet to reflect changes at the beginning of the file
         this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt ;
         this.isModified = true;
-    };
+    }
 
-    this.read = function() {
+    read()
+    {
         // (Re-)read content of file
-        cnt = fs.readFileSync(this.path, { encoding: "utf8" });
+        let cnt = fs.readFileSync(this.path, { encoding: "utf8" });
         this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt ;
         this.isModified = false;
 
         return cnt;
-    };
+    }
 
     // Returns the file content if hashes match
-    this.get = function(hash) {
+    get(hash)
+    {
         if(this.hash == hash) {
             return this.read();
         }
         return null;
-    };
+    }
 
     // Push this hash into the array and return
-    this.getFileHashes = function(arr) {
+    getFileHashes(arr)
+    {
         return arr.push(this.hash);
-    };
+    }
 
     // The object should return itself with content included
     // -- only for send to client
-    this.withContent = function() {
-        f = this; // Duplicate
+    withContent()
+    {
+        // We need to duplicate the file object, because otherwise the content
+        // will remain in the RAM. If you open a lot files during one session
+        // with Zettlr it will gradually fill up all space, rendering your
+        // computer more and more slow.
+        let f = {};
+        Object.assign(f, this);
         f.content = this.read();
         return f;
-    };
+    }
 
     // Dummy function, always returns null (as this is no directory)
     // Eases recursive use in findDir of directories.
-    this.findDir = function(obj) {
+    findDir(obj)
+    {
         return null;
-    };
+    }
 
     // This function either returns this OR null depending on the prop
-    this.findFile = function(obj) {
-        let prop;
+    findFile(obj)
+    {
+        let prop = '';
 
         if(obj.hasOwnProperty('path') && obj.path != null) {
             prop = 'path';
@@ -81,28 +114,34 @@ function ZettlrFile(parent, fname = null)
 
         // This is not the file you are looking for.
         return null;
-    };
+    }
 
-    this.save = function() {
+    save()
+    {
         fs.writeFileSync(this.path, this.content, { encoding: "utf8" });
         this.content = '';
         this.isModified = false;
-    };
+    }
 
-    this.isModified = function() {
+    isModified()
+    {
         return this.isModified;
-    };
+    }
 
-    this.remove = function() {
+    remove()
+    {
         // Removes the file from system and also from parent object.
         trash([this.path]); // We'll just trust that promise :D
         this.parent.remove(this);
-    };
+    }
 
-    this.rename = function(name) {
+    rename(name)
+    {
+        name = sanitize(name);
+
         // Rename this file.
         if((name == null) || (name == '')) {
-            return;
+            throw new FileError('The new name did not contain any allowed characters.');
         }
 
         // Make sure we got an extension.
@@ -112,25 +151,26 @@ function ZettlrFile(parent, fname = null)
 
         // Rename
         this.name = name;
-        newpath = path.join(path.dirname(this.path), this.name);
+        let newpath = path.join(path.dirname(this.path), this.name);
 
         fs.renameSync(this.path, newpath);
         // Remove old file
         this.path = newpath;
 
-        // Let the parent sort itself again to reflect possible changes.
+        // Let the parent sort itself again to reflect possible changes in order.
         this.parent.sort();
 
         // Chainability
         return this;
     }
 
-    this.move = function(toPath) {
+    move(toPath)
+    {
         // First detach the object.
         this.detach();
 
         // Find new path:
-        oldPath = this.path;
+        let oldPath = this.path;
         this.path = path.join(toPath, this.name);
         this.hash = this.hashPath(this.path);
 
@@ -139,16 +179,18 @@ function ZettlrFile(parent, fname = null)
 
         // Chainability
         return this;
-    };
+    }
 
     // Detach from parent.
-    this.detach = function() {
+    detach()
+    {
         this.parent.remove(this);
         this.parent = null;
         return this;
-    };
+    }
 
-    this.search = function(terms) {
+    search(terms)
+    {
         // Now suuuuuuurchhhh
         let matches = 0;
 
@@ -194,10 +236,11 @@ function ZettlrFile(parent, fname = null)
             }
         }
         return (matches == terms.length);
-    };
+    }
 
     // Just very basic hashing function (thanks to https://stackoverflow.com/a/7616484)
-    this.hashPath = function(pathname) {
+    hashPath(pathname)
+    {
         let hash = 0, i, chr;
         if (pathname.length === 0) return hash;
 
@@ -207,31 +250,18 @@ function ZettlrFile(parent, fname = null)
             hash |= 0; // Convert to 32bit integer
         }
         return hash;
-    };
-
-    // Dummy functions
-    this.isDirectory = () => { return false; };
-    this.isFile = () => { return true; };
-
-    // Prepopulate
-    if(fname != null) {
-        this.path = fname;
-        this.name = path.basename(this.path);
-        this.hash = this.hashPath(this.path);
-        this.ext = path.extname(this.path);
-
-        // The file might've been just created. Test that
-        try {
-            stat = fs.lstatSync(this.path);
-        }catch(e) {
-            // Error? -> create
-            fs.writeFileSync(this.path, '', { encoding: "utf8" });
-        }
-
-        this.read();
     }
 
-    // END POPULATE
+    // Dummy functions
+    isDirectory()
+    {
+        return false;
+    }
+
+    isFile()
+    {
+        return true;
+    }
 }
 
 module.exports = ZettlrFile;
