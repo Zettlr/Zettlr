@@ -13,7 +13,7 @@ class ZettlrCon
     build(event) {
         delete this.menu;
         this.menu = new Menu();
-        elem = $(event.target);
+        let elem = $(event.target);
         let label;
         let hash;
 

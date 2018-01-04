@@ -25,14 +25,11 @@ function ZettlrRenderer()
 
     this.init = function()
     {
-        this.ipc = new ZettlrRendererIPC(this);
+        this.ipc         = new ZettlrRendererIPC(this);
         this.directories = new ZettlrDirectories(this);
-        this.preview = new ZettlrPreview(this);
-        this.editor = new ZettlrEditor(this);
-        this.body = new ZettlrBody(this);
-
-        // Enable editor
-        this.editor.init();
+        this.preview     = new ZettlrPreview(this);
+        this.editor      = new ZettlrEditor(this);
+        this.body        = new ZettlrBody(this);
 
         // Now send the first request to main to ask for a initial file list
         this.ipc.send('get-paths', {});
