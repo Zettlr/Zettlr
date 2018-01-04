@@ -31,9 +31,6 @@ function ZettlrRenderer()
         this.editor = new ZettlrEditor(this);
         this.body = new ZettlrBody(this);
 
-        // Enable event listeners
-        this.ipc.init();
-
         // Enable directory listing
         this.directories.init();
 

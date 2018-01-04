@@ -1,24 +1,18 @@
 /* RENDERER COMMUNICATIONS */
 
-function ZettlrRendererIPC(parent)
+class ZettlrRendererIPC
 {
-    // Reference to ZettlrRenderer-object
-    this.parent = parent;
-    this.ipc = require("electron").ipcRenderer;
-
-    // METHODS
-    this.init;
-    this.dispatch;
-    this.send;
-
-    this.init = function() {
-        // Provide ipcRenderer with reference to this
+    constructor(parent)
+    {
+        this.parent = parent;
+        this.ipc = require("electron").ipcRenderer;
         this.ipc.parent = this;
         this.ipc.on('message', this.dispatch);
-    };
+    }
 
     // Dispatch a command to the parent
-    this.dispatch = function(event, arg) {
+    dispatch(event, arg)
+    {
         // handleEvent expects arg to contain at least 'command' and 'content'
         // properties
         if(!arg.hasOwnProperty('command')) {
@@ -29,15 +23,16 @@ function ZettlrRendererIPC(parent)
             arg.content = {};
         }
         this.parent.parent.handleEvent(event, arg);
-    };
+    }
 
     // Wrapper for ipc send
-    this.send = function(command, arg) {
+    send(command, arg)
+    {
         this.ipc.send('message', {
             'command': command,
             'content': arg
         });
-    };
+    }
 }
 
 module.exports = ZettlrRendererIPC;
