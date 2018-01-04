@@ -3,39 +3,37 @@
 // Enable communication with host process
 const ZettlrRendererIPC = require('./zettlr-rendereripc.js');
 const ZettlrDirectories = require('./zettlr-directories.js');
-const ZettlrPreview = require('./zettlr-preview.js');
-const ZettlrEditor = require('./zettlr-editor.js');
-const ZettlrBody = require('./zettlr-body.js');
+const ZettlrPreview     = require('./zettlr-preview.js');
+const ZettlrEditor      = require('./zettlr-editor.js');
+const ZettlrBody        = require('./zettlr-body.js');
 
 /* CLASS */
-function ZettlrRenderer()
+class ZettlrRenderer
 {
-    this.ipc;
-    this.directories;
-    this.preview;
-    this.editor;
-    this.body;
-
-    this.currentFile = null;
-    this.currentDir = null;
-
-    // Indicators whether or not one of these has been found
-    this.pandoc = false;
-    this.pdflatex = false;
-
-    this.init = function()
+    constructor()
     {
+        this.currentFile = null;
+        this.currentDir  = null;
+
+        // Indicators whether or not one of these has been found
+        this.pandoc      = false;
+        this.pdflatex    = false;
+
         this.ipc         = new ZettlrRendererIPC(this);
         this.directories = new ZettlrDirectories(this);
         this.preview     = new ZettlrPreview(this);
         this.editor      = new ZettlrEditor(this);
         this.body        = new ZettlrBody(this);
+    }
 
-        // Now send the first request to main to ask for a initial file list
+    init()
+    {
+        // Request a first batch of files
         this.ipc.send('get-paths', {});
-    };
+    }
 
-    this.handleEvent = function(event, arg) {
+    handleEvent(event, arg)
+    {
         switch(arg.command)
         {
             case 'paths':
@@ -91,7 +89,7 @@ function ZettlrRenderer()
 
             case 'save-file':
             // The user wants to save the currently opened file.
-            file = this.getCurrentFile();
+            let file = this.getCurrentFile();
             file.content = this.editor.getValue();
             this.ipc.send('save-file', file);
             break;
@@ -221,90 +219,104 @@ function ZettlrRenderer()
             console.log('Unknown command received: ' + arg.command);
             break;
         }
-    };
+    }
 
     // Helper function to find dummy file/dir objects based on a hash
-    this.findObject = function(hash, obj = this.paths) {
+    findObject(hash, obj = this.paths)
+    {
         if(obj.hash == hash) {
             return obj;
         } else if(obj.hasOwnProperty('children')) {
             for(let c of obj.children) {
-                ret = this.findObject(hash, c);
+                let ret = this.findObject(hash, c);
                 if(ret != null) {
                     return ret;
                 }
             }
         }
-
         return null;
-    };
+    }
 
     // Triggered by ZettlrDirectories - if user clicks on another dir
-    this.requestDir = function(hash) {
+    requestDir(hash)
+    {
         // Ask main process for a new file list
         this.ipc.send('get-file-list', hash);
-    };
+    }
 
-    this.requestMove = function(from, to) {
+    requestMove(from, to)
+    {
         // Ask main process for moving
         this.ipc.send('request-move', { 'from': from, 'to': to });
-    };
+    }
 
     // Triggered by ZettlrPreview - if user clicks on another file
-    this.requestFile = function(hash) {
+    requestFile(hash)
+    {
         // Ask main process for a file.
         this.ipc.send('get-file', hash);
-    };
+    }
 
     // Triggered by ZettlrEditor - if the content of editor changes.
-    this.setModified = function() {
+    setModified()
+    {
         this.ipc.send('file-modified', {});
-    };
+    }
 
     // Triggered by ZettlrBody - user has entered a new file name and confirmed
-    this.requestNewFile = function(name, hash) {
+    requestNewFile(name, hash)
+    {
         this.ipc.send('new-file', { 'name': name, 'hash': hash });
-    };
+    }
 
     // Also triggered by ZettlrBody, only for directory
-    this.requestNewDir = function(name, hash) {
+    requestNewDir(name, hash)
+    {
         this.ipc.send('new-dir', { 'name': name, 'hash': hash });
-    };
+    }
 
     // Also triggered by ZettlrBody on export
-    this.requestExport = function(hash, ext) {
+    requestExport(hash, ext)
+    {
         this.ipc.send('export', { 'hash': hash, 'ext': ext});
-    };
+    }
 
     // Triggered by ZettlrBody on DirRename
-    this.requestDirRename = function(val, hash) {
+    requestDirRename(val, hash)
+    {
         this.ipc.send('rename-dir', { 'hash': hash, 'name': val });
-    };
+    }
 
     // Triggered by ZettlrBody on FileRename
-    this.requestFileRename = function(val, hash) {
+    requestFileRename(val, hash)
+    {
         this.ipc.send('rename-file', { 'hash': hash, 'name': val });
-    };
+    }
 
-    this.saveSettings = function(cfg) {
+    saveSettings(cfg)
+    {
         this.ipc.send('update-config', cfg);
-    };
+    }
 
-    this.setCurrentFile = function(newfile) {
+    setCurrentFile(newfile)
+    {
         this.currentFile = newfile;
-    };
+    }
 
-    this.setCurrentDir = function(newdir) {
+    setCurrentDir(newdir)
+    {
         this.currentDir = newdir;
-    };
+    }
 
-    this.getCurrentFile = function() {
+    getCurrentFile()
+    {
         return this.currentFile;
     };
 
-    this.getCurrentDir = function() {
+    getCurrentDir()
+    {
         return this.currentDir;
-    };
+    }
 } // END CLASS
 
 // module.exports = ZettlrRenderer;
