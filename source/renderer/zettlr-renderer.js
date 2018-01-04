@@ -1,11 +1,11 @@
 /* Main Renderer */
 
 // Enable communication with host process
-const ZettlrRendererIPC = require('./zettlr-rendereripc.js');
-const ZettlrDirectories = require('./zettlr-directories.js');
-const ZettlrPreview     = require('./zettlr-preview.js');
-const ZettlrEditor      = require('./zettlr-editor.js');
-const ZettlrBody        = require('./zettlr-body.js');
+const ZettlrRendererIPC = require('../zettlr-rendereripc.js');
+const ZettlrDirectories = require('../zettlr-directories.js');
+const ZettlrPreview     = require('../zettlr-preview.js');
+const ZettlrEditor      = require('../zettlr-editor.js');
+const ZettlrBody        = require('../zettlr-body.js');
 
 /* CLASS */
 class ZettlrRenderer

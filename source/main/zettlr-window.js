@@ -34,7 +34,7 @@ function ZettlrWindow(parent)
         // Then activate listeners.
         // and load the index.html of the app.
         this.window.loadURL(url.format({
-            pathname: path.join(__dirname, '../renderer/index.htm'),
+            pathname: path.join(__dirname, '../renderer/assets/index.htm'),
             protocol: 'file:',
             slashes: true
         }));
