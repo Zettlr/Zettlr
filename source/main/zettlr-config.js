@@ -1,14 +1,14 @@
 /*
- * ZettlrConfig
- *
- * This class fulfills two basic tasks:
- *
- * 1.) Manage the app's configuration, stored in the config.json inside the
- * user data directory.
- *
- * 2.) Check the environment whether or not specific conditions exist (such as
- * the pandoc or pdflatex binaries)
- */
+* ZettlrConfig
+*
+* This class fulfills two basic tasks:
+*
+* 1.) Manage the app's configuration, stored in the config.json inside the
+* user data directory.
+*
+* 2.) Check the environment whether or not specific conditions exist (such as
+* the pandoc or pdflatex binaries)
+*/
 
 const fs            = require('fs');
 const path          = require('path');
@@ -109,6 +109,42 @@ class ZettlrConfig
         // Check PDFLaTeX availability (PDF exports)
         if(commandExists(this.get('pdflatex'))) {
             this.env.pdflatex = true;
+        }
+
+        // This function returns the platform specific template dir for pandoc
+        // template files. This is based on the electron-builder options
+        // See https://www.electron.build/configuration/contents#extraresources
+        // Quote: "Contents/Resources for MacOS, resources for Linux and Windows"
+        let dir = path.dirname(app.getPath('exe')); // Get application directory
+
+        if(process.platform === 'darwin') {
+            // The executable lies in Contents/MacOS --> navigate up a second time
+            dir = path.dirname(dir);
+
+            // macos is capitalized "Resources", not "resources" in lowercase
+            dir = path.join(dir, 'Resources');
+        } else {
+            dir = path.join(dir, 'resources');
+        }
+
+        this.env.templateDir = path.join(dir, 'pandoc');
+
+        // We have the problem that pandoc version 2 does not recognize pdflatex
+        // given with the --pdf-engine command. It does work, though, if it finds
+        // it in path. So instead of passing it directly, let us just insert it into
+        // electron's PATH
+        if(path.dirname(this.get('pdflatex')).length > 0) {
+            // In the config the user saved a whole path, so obviously pandoc
+            // did not see pdflatex -> insert into path
+            if(process.env.PATH.indexOf(path.dirname(this.get('pdflatex'))) == -1) {
+                let delimiter = '';
+                if(process.platform === 'win32') {
+                    delimiter = ';';
+                } else {
+                    delimiter = ':';
+                }
+                process.env.PATH += delimiter + path.dirname(this.get('pdflatex'));
+            }
         }
     }
 

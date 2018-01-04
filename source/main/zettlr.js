@@ -21,59 +21,24 @@ const ZettlrWindow                  = require('./zettlr-window.js');
 const ZettlrConfig                  = require('./zettlr-config.js');
 const ZettlrDir                     = require('./zettlr-dir.js');
 
-function Zettlr(parentApp)
+class Zettlr
 {
-    // INTERNAL VARIABLES
-    this.paths = null;            // All directories and md files, as objects
+    constructor(parentApp)
+    {
+        // INTERNAL VARIABLES
+        this.paths = null;            // All directories and md files, as objects
+        this.currentFile = null;    // Currently opened file (object)
+        this.currentDir = null;     // Current working directory (object)
+        this.editFlag = false;      // Is the current opened file edited?
 
-    this.currentFile = null;    // Currently opened file (object)
-    this.currentDir = null;     // Current working directory (object)
-    this.editFlag = false;      // Is the current opened file edited?
+        // INTERNAL OBJECTS
+        this.window = null;         // Display content
+        this.ipc = null;            // Communicate with said content
+        this.app = parentApp;       // Internal pointer to app object
+        this.config = null;         // Configuration file handler
 
-    // INTERNAL OBJECTS
-    this.window = null;         // Display content
-    this.ipc = null;            // Communicate with said content
-    this.app = parentApp;       // Internal pointer to app object
-    this.config = null;         // Configuration file handler
-
-    // CLASS FUNCTIONS
-    this.init;                  // Initialize app
-    this.openWindow;            // Opens a window.
-    this.closeWindow;           // Closes the current window
-    this.canClose;              // Determines whether or not we can close the window
-    this.reload;                // Reload the whole app
-
-    this.handleEvent;           // Gets called whenever ZettlrIPC receives a message
-
-    this.refreshPaths;          // Reload paths-object
-    this.resetCurrents;         // Reset currentFile/currentDir-pointers
-
-    this.createFile;            // Create a new file
-    this.createDir;             // Create a new folder
-
-    this.saveFile;              // Save a file
-    this.removeFile;            // Delete a file
-    this.removeDir;             // Delete a directory
-
-    this.getWindow;             // Returns the ZettlrWindow
-    this.getPaths;              // Retrieve the paths-object
-    this.getObject;             // Retrieve a dir/file-object from paths tree
-    this.getFile;               // Retrieve a file's contents from disk
-    this.getCurrentDir;         // Retrieve current directory object
-    this.getCurrentFile;        // Retrieve current file object
-    this.getProjectDir;         // Retrieve path to root directory
-
-    this.setCurrentFile;        // Change current file
-    this.setCurrentDir;         // Change current dir
-
-    this.isModified;            // Is the opened file modified?
-    this.setModified;           // Mark the current document as modified
-    this.clearModified;         // Clear modification status
-
-    // This function will be called once the app is ready.
-    this.init = function() {
-        // Load config
         this.config = new ZettlrConfig(this);
+        this.ipc = new ZettlrIPC(this);
 
         // Initiate the files - every dir will read its own contents.
         this.paths = new ZettlrDir(this, this.config.get('projectDir'));
@@ -82,28 +47,26 @@ function Zettlr(parentApp)
         // "parent" and "children[]" on each dir (and file)
         this.currentDir = this.paths;
 
-        // Everything should be in the respective arrays by now.
-        // So create the communications array
-        this.ipc = new ZettlrIPC(this);
-
         // And the window.
         this.window = new ZettlrWindow(this);
         this.openWindow();
-
-    }; // END init
+    }
 
     // Create new window.
-    this.openWindow = function() {
+    openWindow()
+    {
         this.window.open();
-    };
+    }
 
     // Dereference the window
-    this.closeWindow = function() {
+    closeWindow()
+    {
         this.window.close();
-    };
+    }
 
     // Gets called by ZettlrWindow for after-start tasks
-    this.afterWindowStart = function() {
+    afterWindowStart()
+    {
         // Now eventually switch the theme to dark
         if(this.config.get('darkTheme')) {
             this.ipc.send('toggle-theme', 'no-emit'); // Don't send that back to me!
@@ -119,43 +82,53 @@ function Zettlr(parentApp)
             'pandoc'    : this.config.getEnv('pandoc'),
             'pdflatex'  : this.config.getEnv('pdflatex')
         });
-    };
+    }
 
     // Shutdown the app. This function is called on quit.
-    this.shutdown = function() {
+    shutdown()
+    {
         this.config.save();
-    };
+    }
 
-    // Returns false if the window should not close, and true if it's safe.
-    this.canClose = function() {
-        return !this.isModified();
-    };
+    // Returns false if the file should not close, and true if it's safe.
+    canClose()
+    {
+        if(this.isModified()) {
+            // The file is currently modified. Ask for saving.
+            let ret = this.window.askSaveChanges();
+
+            // Cancel: abort opening a new file
+            if(ret == 0) {
+                return false;
+            }
+
+            if(ret == 1) { // User wants to save the file first.
+                this.ipc.send('save-file', {});
+                return false;
+                // TODO: Implement into the event arguments a "intent" of closing
+            }
+
+            // Mark as if nothing has been changed
+            if(ret == 2) {
+                this.clearModified();
+            }
+        }
+        return true;
+    }
 
     // This function is mainly called by the browser window to close the app.
-    this.saveAndClose = function() {
-        ret = this.window.askSaveChanges();
-
-        // User wants to abort close
-        if(ret == 0) {
-            return;
+    saveAndClose()
+    {
+        if(this.canClose()) {
+            // Remember to clear the editFlag because otherwise the window
+            // will refuse to close itself
+            this.clearModified();
+            app.quit();
         }
+    }
 
-        // User wants to save first.
-        if(ret == 1) {
-            // So let us save. Obviously, the current file, so don't provide
-            // an argument.
-            this.ipc.send('save-file', {});
-            return;
-        }
-
-        // User wants to omit changes and close anyway on ret = 2
-        // IMPORTANT: As we did not save the file, the window will not close
-        // because we have not cleared the "isModified"-flag.
-        this.clearModified();
-        app.quit();
-    };
-
-    this.reload = function(newPath = null) {
+    reload(newPath = null)
+    {
         // The application has requested a full reload of the data because the
         // user wants to provide a new path. So basically perform everything in
         // init except loading the config file.
@@ -164,14 +137,14 @@ function Zettlr(parentApp)
             newPath = this.config.get('projectDir');
         }
 
-        // Funny if a normal reload will be done, criss cross variable assignment ftw!
+        // Funny if a normal reload will be done; criss cross variable assignment
         this.config.set('projectDir', newPath);
 
         // Re-Read the paths
         this.refreshPaths();
         // And file pointers (e.g. begin at the root with no file open)
         this.resetCurrents();
-    };
+    }
 
     /***************************************************************************
     **                                                                        **
@@ -183,7 +156,8 @@ function Zettlr(parentApp)
     **                                                                        **
     ***************************************************************************/
 
-    this.handleEvent = function(event, arg) {
+    handleEvent(event, arg)
+    {
         // We received a new event and need to handle it. This function is
         // called by the ZettlrIPC-object.
         switch(arg.command) {
@@ -230,11 +204,6 @@ function Zettlr(parentApp)
             this.openDir();
             break;
 
-            case 'get-current-file-hash':
-            // Easy: Just send the hash.
-            this.ipc.send('current-file-hash', this.getCurrentFile().hash);
-            break;
-
             case 'delete-file':
             if(arg.content.hasOwnProperty('hash')) {
                 this.removeFile(arg.content.hash);
@@ -254,16 +223,16 @@ function Zettlr(parentApp)
             case 'search-file':
             // arg.content contains a hash of the file to be searched
             // and the prepared terms.
-            ret = this.paths.findFile({ 'hash': arg.content.hash }).search(arg.content.terms);
+            let ret = this.paths.findFile({ 'hash': arg.content.hash }).search(arg.content.terms);
             this.ipc.send('search-result', {
-                'hash': arg.content.hash,
+                'hash'  : arg.content.hash,
                 'result': ret
             });
             break;
 
             // Change theme in config
             case 'toggle-theme':
-            this.config.set("darkTheme", !this.config.get('darkTheme'));
+            this.config.set('darkTheme', !this.config.get('darkTheme'));
             break;
 
             // Change snippet setting in config
@@ -272,7 +241,7 @@ function Zettlr(parentApp)
             break;
 
             case 'export':
-            this.export(arg.content);
+            this.exportFile(arg.content);
             break;
 
             // Rename a directory (arg.hash + arg.(new)name)
@@ -309,30 +278,17 @@ function Zettlr(parentApp)
             console.log("Unknown command received: " + arg.command);
             break;
         }
-    };
+    }
 
-    this.sendFile = function(arg) {
-        if(this.isModified()) {
-            // The file is currently modified. Ask for saving.
-
-            ret = this.window.askSaveChanges();
-
-            // Cancel: abort opening a new file
-            if(ret == 0) { return; }
-
-            if(ret == 1) { // User wants to save the file first. -> Send save request and cancel closing
-                this.ipc.send('save-file', arg);
-                return;
-                // TODO: Implement into the event arguments a "intent" of closing
-            }
-
-            // Mark as if nothing has been changed
-            if(ret == 2) { this.clearModified(); }
+    sendFile(arg)
+    {
+        if(!this.canClose()) {
+            return;
         }
 
         // arg contains the hash of a file.
         // getFile now returns the file object
-        file = this.paths.findFile({ 'hash': arg });
+        let file = this.paths.findFile({ 'hash': arg });
 
         if(file != null) {
             this.ipc.send('file', file.withContent());
@@ -345,12 +301,13 @@ function Zettlr(parentApp)
                 message: 'The requested file was not found.'
             });
         }
-    };
+    }
 
     // Send a new directory list to the client.
-    this.sendFileList = function(arg) {
+    sendFileList(arg)
+    {
         // arg contains a hash for a directory.
-        obj = this.paths.findDir({ 'hash': arg });
+        let obj = this.paths.findDir({ 'hash': arg });
 
         // Now send it back (the GUI should by itself filter out the files)
         if(obj != null && obj.isDirectory()) {
@@ -365,28 +322,17 @@ function Zettlr(parentApp)
                 message: 'The requested folder was not found.'
             });
         }
-    };
+    }
 
-    this.newFile = function(arg) {
+    newFile(arg)
+    {
         // If the user ONLY decided to use special chars
         // or did not input anything abort the process.
-        if(this.isModified()) {
-            // The file is currently modified. Ask for saving.
-
-            ret = this.window.askSaveChanges();
-
-            // Cancel: abort opening a new file
-            if(ret == 0) { return; }
-
-            if(ret == 1) { // User wants to save the file first. -> Send save request and cancel closing
-                this.ipc.send('save-file', arg);
-                return;
-                // TODO: Implement into the event arguments a "intent" of closing
-            }
-
-            // Mark as if nothing has been changed
-            if(ret == 2) { this.clearModified(); }
+        if(!this.canClose()) {
+            return;
         }
+
+        let dir = null, file = null;
 
         // There should be also a hash in the argument.
         if(arg.hasOwnProperty('hash')) {
@@ -425,9 +371,11 @@ function Zettlr(parentApp)
         this.ipc.send('file', file.withContent());
         this.ipc.send('file-list', this.getCurrentDir()); // in "dir" the new file is not yet present.
         this.ipc.send('set-current-dir', this.getCurrentDir());
-    };
+    }
 
-    this.newDir = function(arg) {
+    newDir(arg)
+    {
+        let dir = null, curdir = null;
 
         if(arg.hasOwnProperty('hash')) {
             curdir = this.paths.findDir({'hash': arg.hash });
@@ -456,29 +404,18 @@ function Zettlr(parentApp)
         this.ipc.send('paths', this.paths);
         this.ipc.send('file-list', dir);
         this.ipc.send('set-current-dir', dir);
-    };
+    }
 
-    this.openDir = function() {
+    openDir()
+    {
         // The user wants to open a different folder.
         // First check if the document is edited. If yes, ask user to save beforehand.
-        if(this.isModified()) {
-            ret = this.window.askSaveChanges();
-            if(ret == 0) { // Cancel: abort action
-                return;
-            }
-
-            if(ret == 1) { // User wants to save the file first. -> Send save request and abort
-                this.ipc.send('save-file', { 'intent': 'open-dir' });
-                return;
-            }
-
-            if(ret == 2) {
-                this.clearModified();
-            }
+        if(!this.canClose()) {
+            return;
         }
 
         // In case of ret == 2 just proceed with opening another file
-        ret = this.window.askDir(this.getCurrentDir().path);
+        let ret = this.window.askDir(this.getCurrentDir().path);
 
         // The user may have provided no dir at all, which returns in an
         // empty array -> check against and abort if array is empty
@@ -496,22 +433,16 @@ function Zettlr(parentApp)
         // The client now needs to close the current file and refresh its list
         this.ipc.send('close-file');
         this.ipc.send('paths', this.getPaths());
-    };
+    }
 
-    this.removeFile = function(hash = this.getCurrentFile().hash) {
+    removeFile(hash = this.getCurrentFile().hash)
+    {
         // First determine if this is modified.
-        if(this.isModified()) {
-            ret = this.window.askSaveChanges();
-
-            if(ret == 0) { return; }
-
-            if(ret == 1) { // User wants to save the file first. -> Send save request and abort
-                this.ipc.send('save-file', { 'intent': 'delete-file'});
-                return;
-            }
+        if(!this.canClose()) {
+            return;
         }
 
-        file = this.paths.findFile({'hash': hash });
+        let file = this.paths.findFile({'hash': hash });
 
         // TODO: Ask if the user REALLY wants to move file to trash.
         if(!this.window.confirmRemove(file)) {
@@ -521,16 +452,17 @@ function Zettlr(parentApp)
         // Now that we are save, let's move the current file to trash.
         if(file.hash == this.getCurrentFile().hash) {
             this.ipc.send('close-file', {});
-            this.clearModified();
         }
-        let that = this;
         file.remove();
         this.ipc.send('file-list', this.getCurrentDir());
         this.ipc.send('set-current-dir', this.getCurrentDir());
-    };
+    }
 
     // Remove current directory.
-    this.removeDir = function(hash = this.getCurrentDir().hash) {
+    removeDir(hash = this.getCurrentDir().hash)
+    {
+        let filedir = null, dir = null;
+
         // First determine if this is modified.
         if(this.getCurrentFile() == null) {
             filedir = '';
@@ -540,23 +472,14 @@ function Zettlr(parentApp)
 
         dir = this.paths.findDir({'hash': hash });
 
-        if(this.isModified() && (filedir == dir)) {
-            ret = this.window.askSaveChanges();
-
-            if(ret == 0) { // Cancel: abort action
-                return;
-            }
-
-            if(ret == 1) { // User wants to save the file first. -> Send save request and abort
-                // Now we are trying the intent for the first time. If it works out
-                // TODO: implement in all of these save-thingy-stuff-shit. Blah.
-                this.ipc.send('save-file', { 'intent': 'delete-dir'});
+        if(filedir == dir) {
+            if(!this.canClose()) {
                 return;
             }
         }
 
         // No, you will NOT delete the root directory! :O
-        if(dir.path == this.getProjectDir()) {
+        if(dir.path == this.config.get('projectDir')) {
             this.window.prompt({
                 type: 'error',
                 title: 'Cannot delete root folder.',
@@ -579,25 +502,24 @@ function Zettlr(parentApp)
         }
 
         dir.remove();
-        this.clearModified();
 
         // BUG: When these two events are fired in reverse order the child
         // process freezes.
         this.ipc.send('file-list', this.getCurrentDir());
-
         this.ipc.send('dir-list', this.paths);
-    };
+    }
 
-    this.export = function(arg) {
+    exportFile(arg)
+    {
         // arg contains a hash and an extension.
-        file = this.paths.findFile({ 'hash': arg.hash });
-        newname = file.name.substr(0, file.name.lastIndexOf(".")) + "." + arg.ext;
-        temp = app.getPath('temp');
+        let file = this.paths.findFile({ 'hash': arg.hash });
+        let newname = file.name.substr(0, file.name.lastIndexOf(".")) + "." + arg.ext;
+        let temp = app.getPath('temp');
 
         if(arg.ext == "pdf") {
             arg.ext = 'latex';
         }
-        let tpl = path.join(this.getTemplateDir(), 'template.' + arg.ext);
+        let tpl = path.join(this.config.getEnv('templateDir'), 'template.' + arg.ext);
         if(arg.ext === "html" || arg.ext === 'latex') {
             tpl = '--template="' + tpl + '"';
         } else if(arg.ext === 'odt' || arg.ext === 'docx') {
@@ -606,29 +528,11 @@ function Zettlr(parentApp)
 
         let tempfile = path.join(temp, newname);
 
-        // We have the problem that pandoc version 2 does not recognize pdflatex
-        // given with the --pdf-engine command. It does work, though, if it finds
-        // it in path. So instead of passing it directly, let us just insert it into
-        // electron's PATH
-        if(path.dirname(this.config.get('pdflatex')).length > 0) {
-            // In the config the user saved a whole path, so obviously pandoc
-            // did not see pdflatex -> insert into path
-            if(process.env.PATH.indexOf(path.dirname(this.config.get('pdflatex'))) == -1) {
-                let delimiter = '';
-                if(process.platform === 'win32') {
-                    delimiter = ';';
-                } else {
-                    delimiter = ':';
-                }
-                process.env.PATH += delimiter + path.dirname(this.config.get('pdflatex'));
-            }
-        }
-        command = `${this.config.get('pandoc')} "${file.path}" -f markdown ${tpl} -t ${arg.ext} -o "${tempfile}"`;
+        let command = `${this.config.get('pandoc')} "${file.path}" -f markdown ${tpl} -t ${arg.ext} -o "${tempfile}"`;
 
-        let that = this;
         exec(command, (error, stdout, stderr) => {
             if (error) {
-                that.window.prompt({
+                this.window.prompt({
                     type: 'error',
                     title: 'Error on exporting',
                     message: 'Pandoc reported an error: ' + error
@@ -639,11 +543,12 @@ function Zettlr(parentApp)
             // Open externally
             require('electron').shell.openItem(tempfile);
         });
-    };
+    }
 
-    this.renameDir = function(arg) {
+    renameDir(arg)
+    {
         // { 'hash': hash, 'name': val }
-        dir = this.paths.findDir({ 'hash': arg.hash});
+        let dir = this.paths.findDir({ 'hash': arg.hash});
 
         if(dir === this.paths) {
             // Don't rename the root directory
@@ -655,16 +560,16 @@ function Zettlr(parentApp)
             return;
         }
 
-        oldDir = path.dirname(dir.path);
+        let oldDir = path.dirname(dir.path);
 
         // Save for later whether this is the currentDir (have to re-send dir list)
-        isCurDir = (dir.hash == this.getCurrentDir().hash) ? true : false;
+        let isCurDir = (dir.hash == this.getCurrentDir().hash) ? true : false;
         let oldPath = null;
 
         if((this.getCurrentFile() !== null) && (dir.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
             // The current file is in said dir so we need to trick a little bit
             oldPath = this.getCurrentFile().path;
-            relative = oldPath.replace(dir.path, ""); // Remove old directory to get relative path
+            let relative = oldPath.replace(dir.path, ""); // Remove old directory to get relative path
             // Re-merge:
             oldPath = path.join(oldDir, arg.name, relative); // New path now
             // Hash it
@@ -689,13 +594,14 @@ function Zettlr(parentApp)
 
         if(oldPath != null) {
             // Re-set current file in the client
-            nfile = dir.findFile({ 'hash': oldPath });
+            let nfile = dir.findFile({ 'hash': oldPath });
             this.setCurrentFile(nfile);
             this.ipc.send('set-current-file', nfile);
         }
-    };
+    }
 
-    this.renameFile = function(arg) {
+    renameFile(arg)
+    {
         // { 'hash': hash, 'name': val }
         let file = null;
 
@@ -727,20 +633,20 @@ function Zettlr(parentApp)
             // Send a new file list
             this.ipc.send('file-list', this.getCurrentDir());
         }
-    };
+    }
 
-    // TODO: Some slight glitches while moving
-    this.requestMove = function(arg) {
+    requestMove(arg)
+    {
         // arg contains from and to
-        from = this.paths.findDir({ 'hash': arg.from });
+        let from = this.paths.findDir({ 'hash': arg.from });
         if(from == null) {
             // Obviously a file!
             from = this.paths.findFile({ 'hash': arg.from });
         }
 
-        to = this.paths.findDir({ 'hash': arg.to });
+        let to = this.paths.findDir({ 'hash': arg.to });
         let newPath = null;
-        isCurDir = (from.hash == this.getCurrentDir().hash) ? true : false;
+        let isCurDir = (from.hash == this.getCurrentDir().hash) ? true : false;
 
         if(from.isFile() && (this.getCurrentFile() != null) && (from.hash == this.getCurrentFile().hash)) {
             // Current file is to be moved
@@ -761,7 +667,7 @@ function Zettlr(parentApp)
         && (from.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
             // The current file is in said dir so we need to trick a little bit
             newPath = this.getCurrentFile().path;
-            relative = newPath.replace(from.path, ""); // Remove old directory to get relative path
+            let relative = newPath.replace(from.path, ""); // Remove old directory to get relative path
             // Re-merge:
             newPath = path.join(to.path, from.name, relative); // New path now
             // Hash it
@@ -792,11 +698,11 @@ function Zettlr(parentApp)
 
         if(newPath != null) {
             // Re-set current file in the client
-            nfile = from.findFile({ 'hash': newPath});
+            let nfile = from.findFile({ 'hash': newPath});
             this.setCurrentFile(nfile);
             this.ipc.send('set-current-file', nfile);
         }
-    };
+    }
 
     /***************************************************************************
     **                                                                        **
@@ -810,71 +716,30 @@ function Zettlr(parentApp)
 
     // This reloads the path list - is e.g. called after the creation of a new
     // file or a new directory or saving or renaming of a file.
-    this.refreshPaths = function() {
-
+    refreshPaths()
+    {
         // Just create a new ZettlrDir. Garbage Collect will destroy the old.
         this.paths = new ZettlrDir(this, this.config.get('projectDir'));
-    };
+    }
 
     // This function is called when the window is destroyed to remove pointers
     // This does NOT reload the paths!
-    this.resetCurrents = function() {
-        // Set pointers to origin
+    resetCurrents()
+    {
         this.currentDir = this.paths;
         this.currentFile = null;
-    };
-
-    // Creators
-    this.createFile = function(p, file) {
-        // This function is triggered via menu (that sends an ipc event to main)
-        // path contains either the base path (if no dir has been selected previously)
-        // or the specified. This is not done in this function because the
-        // call may come from menu item OR from a context menu (specifying an
-        // even different folder.)
-
-        // Make sure not to overwrite something
-        if(this.paths.exists(path.join(p, file))) {
-            return;
-        }
-
-        // Create an empty file
-        // Therefore get the dir-object and create.
-        d = this.paths.findDir({ 'path': p});
-
-        if(d == null) {
-            // No success
-            this.window.prompt({
-                type: 'error',
-                title: 'Could not find folder',
-                message: 'Could not find the folder in which the file should have been created!'
-            });
-            return null;
-        }
-
-        // ... and return the new file
-        return d.newfile(file);
-    };
-
-    this.createDir = function(dir, foldername) {
-        // Tries to create a folder.
-        // Make sure not to overwrite something
-        if(dir.exists(foldername)) {
-            return null;
-        }
-
-        // ... and return the new folder
-        return dir.newDir(foldername);
     }
 
     // Save a file. A file MUST be given, for the content is needed to write to
     // a file. The content is always freshly grabbed from the CodeMirror content.
-    this.saveFile = function(file) {
+    saveFile(file)
+    {
         if(file == null) {
             // No file given -> abort saving process
             return;
         }
 
-        cnt = file.content;
+        let cnt = file.content;
 
         // This function saves a file to disk.
         // But: The hash is "null", if someone just
@@ -895,53 +760,33 @@ function Zettlr(parentApp)
             this.currentFile = file;
         }
         this.clearModified();
-    };
+    }
 
     // Getters
-    this.getWindow = function() {
+    getWindow()
+    {
         return this.window;
     }
 
-    this.getPaths = function() {
+    getPaths()
+    {
         return this.paths;
-    };
+    }
 
-    this.getCurrentDir = function() {
+    getCurrentDir()
+    {
         return this.currentDir;
-    };
+    }
 
-    this.getCurrentFile = function() {
+    getCurrentFile()
+    {
         return this.currentFile;
-    };
-
-    this.getProjectDir = function() {
-        return this.config.get('projectDir');
-    };
-
-    // This function returns the platform specific template dir for pandoc
-    // template files. This is based on the electron-builder options
-    // See https://www.electron.build/configuration/contents#extraresources
-    // Quote: "Contents/Resources for MacOS, resources for Linux and Windows"
-    this.getTemplateDir = function() {
-        let dir = app.getPath('exe'); // dir is now path to the FILE
-        dir = path.dirname(dir); // dir is now path to directory of executable
-
-        if(process.platform === 'darwin') {
-            // The executable lies in Contents/MacOS --> navigate up a second time
-            dir = path.dirname(dir);
-
-            // macos is capitalized "Resources", not "resources" in lowercase
-            dir = path.join(dir, 'Resources');
-        } else {
-            dir = path.join(dir, 'resources');
-        }
-
-        return path.join(dir, 'pandoc');
-    };
+    }
 
     // Setters - to be triggered from IPC process
     // Set current file pointer
-    this.setCurrentFile = function(f) {
+    setCurrentFile(f)
+    {
         if(f == null) {
             // Dereference
             this.currentFile = null;
@@ -949,10 +794,11 @@ function Zettlr(parentApp)
         }
         // Find the file by hash
         this.currentFile = f;
-    };
+    }
 
     // Set current dir pointer
-    this.setCurrentDir = function(f) {
+    setCurrentDir(f)
+    {
         if(f == null) {
             // Reset to project root
             this.currentDir = this.getPaths();
@@ -960,23 +806,26 @@ function Zettlr(parentApp)
         }
         // Set the dir
         this.currentDir = f;
-    };
+    }
 
     // MODIFICATION FUNCTIONS
-    this.isModified = function() {
+    isModified()
+    {
         return this.editFlag;
     }
 
-    this.setModified = function() {
+    setModified()
+    {
         this.window.setModified();
-        return (this.editFlag = true);
+        this.editFlag = true;
     }
 
     // Remove modified flag
-    this.clearModified = function() {
+    clearModified()
+    {
         this.window.clearModified();
-        return this.editFlag = false;
-    };
+        this.editFlag = false;
+    }
 }
 
 // Export the module on require()

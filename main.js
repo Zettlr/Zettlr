@@ -22,10 +22,6 @@ app.on('ready', function() {
     // First create a new zettlr-object. This will be kept in memory until the
     // app is closed.
     zettlr = new Zettlr(this);
-
-    // Initialize the app. It will take care of opening windows, reading files
-    // etc. etc.
-    zettlr.init();
 });
 
 // Quit when all windows are closed.
