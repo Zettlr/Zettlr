@@ -43,9 +43,6 @@ function ZettlrRenderer()
         // Enable editor
         this.editor.init();
 
-        // Enable body (modal handler)
-        this.body.init();
-
         // Now send the first request to main to ask for a initial file list
         this.ipc.send('get-paths', {});
     };

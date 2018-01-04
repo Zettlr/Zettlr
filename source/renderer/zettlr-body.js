@@ -3,18 +3,11 @@
 const ZettlrCon = require('./zettlr-context.js');
 const ZettlrDialog = require('./zettlr-dialog.js');
 
-// TODO: Move _all_ HTML parts to the Dialog class
-function ZettlrBody(parent)
+class ZettlrBody
 {
-    this.parent = parent;
-    this.dialog;
-    this.div;
-    this.modal;
-    this.container;
-    this.menu;
-
-    this.init = function() {
-
+    constructor(parent)
+    {
+        this.parent = parent;
         this.menu = new ZettlrCon(this);
         this.dialog = new ZettlrDialog(this);
 
@@ -24,31 +17,36 @@ function ZettlrBody(parent)
             e.stopPropagation();
             this.menu.popup(e);
         }, false);
-    };
+    }
 
     // Display a modal to ask for a new file name.
-    this.requestFileName = function(dir) {
+    requestFileName(dir)
+    {
         // Init dialog and show it
         this.dialog.init('file-new', dir);
         this.dialog.open();
-    };
+    }
 
-    this.requestDirName = function(dir) {
+    requestDirName(dir)
+    {
         this.dialog.init('dir-new', dir);
         this.dialog.open();
-    };
+    }
 
-    this.requestNewDirName = function(dir) {
+    requestNewDirName(dir)
+    {
         this.dialog.init('dir-rename', dir);
         this.dialog.open();
-    };
+    }
 
-    this.requestNewFileName = function(file) {
+    requestNewFileName(file)
+    {
         this.dialog.init('file-rename', file);
         this.dialog.open();
-    };
+    }
 
-    this.displayExport = function(file) {
+    displayExport(file)
+    {
         let options = {
                 'name': file.name,
                 'hash': file.hash,
@@ -58,30 +56,33 @@ function ZettlrBody(parent)
 
         this.dialog.init('export', options);
         this.dialog.open();
-    };
+    }
 
     // Display the preferences window
-    this.displayPreferences = function(prefs) {
+    displayPreferences(prefs)
+    {
         this.dialog.init('preferences', prefs);
         this.dialog.open();
-    };
+    }
 
-    this.requestExport = function(elem) {
+    requestExport(elem)
+    {
         // The element contains data-attributes containing all necessary
         // data for export.
-        ext = $(elem).attr('data-ext');
-        hash = $(elem).attr('data-hash');
+        let ext = $(elem).attr('data-ext');
+        let hash = $(elem).attr('data-hash');
         this.parent.requestExport(hash, ext);
-    };
+    }
 
     // This function gets only called by the dialog class with an array
     // containing all serialized form inputs and the dialog type
-    this.proceed = function(dialog, res, passedObj) {
-        let name = '',
-            pandoc = '',
-            pdflatex = '',
+    proceed(dialog, res, passedObj)
+    {
+        let name      = '',
+            pandoc    = '',
+            pdflatex  = '',
             darkTheme = '',
-            snippets = '';
+            snippets  = '';
 
         for(let r of res) {
             // The four prompts will have an input name="name"
@@ -117,7 +118,7 @@ function ZettlrBody(parent)
         }
 
         this.dialog.close();
-    };
+    }
 }
 
 module.exports = ZettlrBody;
