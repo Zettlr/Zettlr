@@ -98,16 +98,16 @@ class ZettlrDialog
             let pandocerror = '';
             let pdflatexerror = '';
             if(obj.pdflatex) {
-                pdflatexexp = this.get('dialog-pdflatex-export', replacements);
+                pdflatexexp = this.get('dialog-export-pdf', replacements);
             } else {
-                pdflatexerror = this.get('dialog-no-pdflatex');
+                pdflatexerror = this.get('dialog-export-no-pdflatex');
             }
             replacements.push('%PDFLATEXEXPORT%|'+pdflatexexp);
             replacements.push('%PDFLATEXERROR%|'+pdflatexerror);
             if(obj.pandoc) {
-                pandocexp = this.get('dialog-exports', replacements);
+                pandocexp = this.get('dialog-export-formats', replacements);
             } else {
-                pandocerror = this.get('dialog-no-pandoc');
+                pandocerror = this.get('dialog-export-no-pandoc');
             }
             replacements.push('%PANDOCERROR%|'+pandocerror);
             replacements.push('%EXPORTS%|'+pandocexp);
