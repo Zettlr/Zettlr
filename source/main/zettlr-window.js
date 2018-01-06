@@ -1,6 +1,7 @@
 /* Wrapper class for BrowserWindow (reduce clutter in main class) */
 
-const {dialog, BrowserWindow} = require('electron')
+const electron                = require('electron');
+const {dialog, BrowserWindow} = electron;
 const url                     = require('url');
 const path                    = require('path');
 
@@ -20,10 +21,12 @@ class ZettlrWindow
             return;
         }
 
+        let screensize = electron.screen.getPrimaryDisplay().workAreaSize;
+
         // First create a new browserWindow
         this.window = new BrowserWindow({
-            width: 1000,
-            height: 600,
+            width: screensize.width,
+            height: screensize.height,
             show: false,
             icon: 'icons/png/64x64.png',
             backgroundColor: '#fff',

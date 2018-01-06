@@ -6,9 +6,13 @@
         "name": "Hendrik Erz",
         "email": "hendrik.erz@zettlr.com"
     },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/Zettlr/Zettlr.git"
+    },
     "version": "0.6.0",
     "description": "A powerful Markdown Editor with integrated tree view",
-    "main": "./main.js",
+    "main": "./source/main.js",
     "postinstall": "electron-builder install-app-deps",
     "scripts": {
         "start": "electron .",
@@ -83,10 +87,12 @@
         "command-exists": "^1.2.2",
         "sanitize-filename": "^1.6.1",
         "trash": "^4.2.1",
+        "typo": "^1.0.6",
+        "typo-js": "^1.0.3",
         "util": "^0.10.3"
     },
     "devDependencies": {
         "electron": "^1.7.9",
-        "electron-builder": "^19.49.3"
+        "electron-builder": "^19.53.0"
     }
 }

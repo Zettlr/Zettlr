@@ -86,6 +86,14 @@ class ZettlrDialog
             replacements.push('%SNIPPETS%|' + snippets);
             replacements.push('%PANDOC%|' + obj.pandoc);
             replacements.push('%PDFLATEX%|' + obj.pdflatex);
+            let spellcheck = '';
+            for(let l in obj.spellcheck) {
+                let sel = (obj.spellcheck[l]) ? 'checked="checked"' : '';
+                spellcheck += '<div>';
+                spellcheck += `<input type="checkbox" value="${l}" ${sel} name="spellcheck[]" id="${l}"><label for="${l}">${l}</label>`;
+                spellcheck += '</div>';
+            }
+            replacements.push('%SPELLCHECK%|' + spellcheck);
             break;
 
             case 'export':

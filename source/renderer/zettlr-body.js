@@ -10,6 +10,7 @@ class ZettlrBody
         this.parent = parent;
         this.menu = new ZettlrCon(this);
         this.dialog = new ZettlrDialog(this);
+        this.spellcheckLangs = null; // This holds all available languages
 
         // Event listener for the context menu
         window.addEventListener('contextmenu', (e) => {
@@ -17,6 +18,25 @@ class ZettlrBody
             e.stopPropagation();
             this.menu.popup(e);
         }, false);
+
+        // TESTING TODO
+        document.addEventListener('dragover',function(event){
+            event.preventDefault();
+            // This event is fired every time a user moves ANYTHING from outside
+            // the app onto the browser window. Which means here we can begin
+            // to differentiate what it will be. If it's nothing we could
+            // indicate it with a forbidden-cursor, or show a preview.
+            // In the event.dataTransfer.files - object there is an array of
+            // files and folders that are being dragged into the application.
+            // console.log(event);
+            return false;
+        },false);
+
+        document.addEventListener('drop',function(event){
+            event.preventDefault();
+            console.log(event.dataTransfer.files);
+            return false;
+        },false);
     }
 
     // Display a modal to ask for a new file name.
@@ -48,10 +68,10 @@ class ZettlrBody
     displayExport(file)
     {
         let options = {
-                'name': file.name,
-                'hash': file.hash,
-                'pdflatex': this.parent.pdflatex,
-                'pandoc': this.parent.pandoc
+            'name': file.name,
+            'hash': file.hash,
+            'pdflatex': this.parent.pdflatex,
+            'pandoc': this.parent.pandoc
         };
 
         this.dialog.init('export', options);
@@ -74,15 +94,25 @@ class ZettlrBody
         this.parent.requestExport(hash, ext);
     }
 
+    setSpellcheckLangs(langs)
+    {
+        this.spellcheckLangs = {};
+        for(let l in langs) {
+            // Default to false, will only be overwritten if a language is checked
+            this.spellcheckLangs[l] = false;
+        }
+    }
+
     // This function gets only called by the dialog class with an array
     // containing all serialized form inputs and the dialog type
     proceed(dialog, res, passedObj)
     {
-        let name      = '',
-            pandoc    = '',
-            pdflatex  = '',
-            darkTheme = '',
-            snippets  = '';
+        let name   = '',
+        pandoc     = '',
+        pdflatex   = '',
+        darkTheme  = '',
+        snippets   = '',
+        spellcheck = this.spellcheckLangs;
 
         for(let r of res) {
             // The four prompts will have an input name="name"
@@ -96,6 +126,8 @@ class ZettlrBody
                 darkTheme = (r.value === 'yes') ? true : false;
             } else if(r.name === 'pref-snippets') {
                 snippets = (r.value === 'yes') ? true : false;
+            } else if(r.name === 'spellcheck[]') {
+                spellcheck[r.value] = true;
             }
         }
 
@@ -112,7 +144,8 @@ class ZettlrBody
                 'pandoc': pandoc,
                 'pdflatex': pdflatex,
                 'darkTheme': darkTheme,
-                'snippets': snippets
+                'snippets': snippets,
+                'spellcheck': spellcheck
             }
             this.parent.saveSettings(cfg);
         }

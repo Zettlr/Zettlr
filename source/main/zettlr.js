@@ -274,6 +274,19 @@ class Zettlr
             this.config.update(arg.content);
             break;
 
+            // SPELLCHECKING EVENTS
+            case 'typo-request-lang':
+            this.ipc.send('typo-lang', this.config.get('spellcheck'));
+            break;
+
+            case 'typo-request-aff':
+            this.retrieveDictFile('aff', arg.content);
+            break;
+
+            case 'typo-request-dic':
+            this.retrieveDictFile('dic', arg.content);
+            break;
+
             default:
             console.log("Unknown command received: " + arg.command);
             break;
@@ -702,6 +715,30 @@ class Zettlr
             this.setCurrentFile(nfile);
             this.ipc.send('set-current-file', nfile);
         }
+    }
+
+    // SPELLCHECKING RELATED FUNCTIONS
+    retrieveDictFile(type, lang)
+    {
+        let p = path.join(
+            path.dirname(__dirname),
+            'renderer',
+            'assets',
+            'dict',
+            lang,
+            lang + '.' + type
+        );
+
+        try {
+            fs.lstatSync(p);
+        } catch(e) {
+            return; // Don't continue the event chain to enable spell checking
+        }
+
+        fs.readFile(p, 'utf8', (err, data) => {
+            // Send the data directly back to the client once it has been read
+            this.ipc.send('typo-' + type, data);
+        });
     }
 
     /***************************************************************************

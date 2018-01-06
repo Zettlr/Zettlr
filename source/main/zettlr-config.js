@@ -32,10 +32,16 @@ class ZettlrConfig
         // Config Template providing all necessary arguments
         this.cfgtpl = {
             "projectDir": app.getPath('documents'),
-            "darkTheme":false,
-            "snippets":true,
-            "pandoc": 'pandoc',
-            "pdflatex": 'pdflatex'
+            "darkTheme" : false,
+            "snippets"  : true,
+            "pandoc"    : 'pandoc',
+            "pdflatex"  : 'pdflatex',
+            "spellcheck": {
+                'en_US' : false,
+                'en_GB' : false,
+                'de_DE' : false,
+                'fr_FR' : false
+            }
         };
 
         // Load the configuration
@@ -68,15 +74,7 @@ class ZettlrConfig
             return; // No need to iterate over objects anymore
         }
 
-        // Overwrite all given attributes (and leave the not given in place)
-        // This will ensure sane defaults.
-        for (let prop in this.config) {
-            if (readConfig.hasOwnProperty(prop)) {
-                if(readConfig[prop] != null) {
-                    this.config[prop] = readConfig[prop];
-                }
-            }
-        }
+        this.update(readConfig);
 
         // Check whether the project dir still exists, if not default to documents
         try {
@@ -174,15 +172,18 @@ class ZettlrConfig
         this.config[option] = value;
     }
 
-    update(cfgobj)
+    update(newcfg, oldcfg = this.config)
     {
         // Overwrite all given attributes (and leave the not given in place)
         // This will ensure sane defaults.
-        for (var prop in this.config) {
-            if (cfgobj.hasOwnProperty(prop)) {
-                if(cfgobj[prop] != null) {
-                    this.config[prop] = cfgobj[prop];
-                }
+        for (var prop in oldcfg) {
+            if (newcfg.hasOwnProperty(prop) && (newcfg[prop] != null)) {
+                    if(typeof newcfg[prop] === 'object') {
+                        // Update sub-object
+                        this.update(newcfg[prop], oldcfg[prop]);
+                    } else {
+                        oldcfg[prop] = newcfg[prop];
+                    }
             }
         }
     }

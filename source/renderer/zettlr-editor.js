@@ -11,8 +11,7 @@ class ZettlrEditor
 
         this.cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
             mode: {
-                name: "gfm",
-                highlightFormatting: true // Highlight the markdown meta chars separately
+                name: 'spellchecker' // This automatically defines gfm as overlay mode
             },
             theme: 'zettlr',
             lineWiseCopyCut: false, // Don't copy/cut whole lines without selection

@@ -119,7 +119,7 @@ class ZettlrCon
                     'content': 'markdownLink'
                 });
             } }));
-            /*
+
             this.menu.append(new MenuItem( { label: 'Numbered List', click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'cm-command',
@@ -132,27 +132,13 @@ class ZettlrCon
                     'content': 'markdownMakeUnorderedList'
                 });
             } }));
-            this.menu.append(new MenuItem( { label: 'Blockquote' }));
-            this.menu.append(new MenuItem({type: 'separator'}));
-            this.menu.append(new MenuItem( { label: 'Cut', click(item, win) {
-                that.parent.parent.handleEvent(null, {
-                    'command': 'cm-command',
-                    'content': 'cut'
-                });
-            } }));
-            this.menu.append(new MenuItem( { label: 'Copy', click(item, win) {
-                that.parent.parent.handleEvent(null, {
-                    'command': 'cm-command',
-                    'content': 'copy'
-                });
-            } }));
-            this.menu.append(new MenuItem( { label: 'Paste', click(item, win) {
-                that.parent.parent.handleEvent(null, {
-                    'command': 'cm-command',
-                    'content': 'paste'
-                });
-            } }));
-            */
+            /*this.menu.append(new MenuItem( { label: 'Blockquote' }));*/
+            this.menu.append(new MenuItem( { type: 'separator' } ));
+            this.menu.append(new MenuItem( { label: 'Cut', role: 'cut', accelerator: 'CmdOrCtrl+X' }));
+            this.menu.append(new MenuItem( { label: 'Copy', role: 'copy', accelerator: 'CmdOrCtrl+C' }));
+            this.menu.append(new MenuItem( { label: 'Paste', role: 'paste', accelerator: 'CmdOrCtrl+V' }));
+            this.menu.append(new MenuItem( { type: 'separator' } ));
+            this.menu.append(new MenuItem( { label: 'Select all', role: 'selectall', accelerator: 'CmdOrCtrl+A' }));
         }
     }
 

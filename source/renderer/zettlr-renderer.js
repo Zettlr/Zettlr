@@ -6,6 +6,8 @@ const ZettlrDirectories = require('../zettlr-directories.js');
 const ZettlrPreview     = require('../zettlr-preview.js');
 const ZettlrEditor      = require('../zettlr-editor.js');
 const ZettlrBody        = require('../zettlr-body.js');
+const ZettlrOverlay     = require('../zettlr-overlay.js');
+const Typo              = require('typo-js');
 
 /* CLASS */
 class ZettlrRenderer
@@ -14,6 +16,13 @@ class ZettlrRenderer
     {
         this.currentFile = null;
         this.currentDir  = null;
+
+        // Spellchecking vars
+        this.typoReady   = false;   // Flag indicating whether Typo has already loaded
+        this.typoLang    = {};      // Which language(s) are we spellchecking?
+        this.typoAff     = null;    // Contains the Aff-file data
+        this.typoDic     = null;    // Contains the dic-file data
+        this.typo        = [];      // Contains the Typo object to check with
 
         // Indicators whether or not one of these has been found
         this.pandoc      = false;
@@ -24,12 +33,18 @@ class ZettlrRenderer
         this.preview     = new ZettlrPreview(this);
         this.editor      = new ZettlrEditor(this);
         this.body        = new ZettlrBody(this);
+        this.overlay     = new ZettlrOverlay(this);
     }
 
     init()
     {
+        this.overlay.show('Initializing …');
+
         // Request a first batch of files
         this.ipc.send('get-paths', {});
+
+        // Also, request the typo things
+        this.ipc.send('typo-request-lang', {});
     }
 
     handleEvent(event, arg)
@@ -43,7 +58,9 @@ class ZettlrRenderer
             this.setCurrentDir(arg.content);
             // Save for later
             this.paths = arg.content;
+            this.overlay.update('Reading directories …');
             this.directories.newDirectoryList(arg.content);
+            this.overlay.update('Reading files …');
             this.preview.newFileList(arg.content);
             this.directories.select(arg.content.hash);
             break;
@@ -57,8 +74,6 @@ class ZettlrRenderer
             case 'file-list':
             // We have received a new file list in arg
             // Set the current dir
-            // this.setCurrentDir(arg.content);
-            // this.directories.select(arg.content.hash);
             this.preview.newFileList(arg.content);
             break;
 
@@ -215,6 +230,29 @@ class ZettlrRenderer
             this.pdflatex = arg.content.pdflatex;
             break;
 
+            // SPELLCHECKING EVENTS
+            case 'typo-lang':
+            // arg.content contains an object holding trues and falses for all
+            // languages to be checked simultaneously
+            this.setSpellcheck(arg.content);
+            // Also pass down the languages to the body so that it can display
+            // them in the preferences dialog
+            this.body.setSpellcheckLangs(arg.content);
+            break;
+
+            // Receive the typo aff!
+            case 'typo-aff':
+            this.typoAff = arg.content;
+            this.requestLang('dic');
+            break;
+
+            // Receive the typo dic!
+            case 'typo-dic':
+            this.typoDic = arg.content;
+            // Now we can finally initialize spell check:
+            this.initTypo();
+            break;
+
             default:
             console.log('Unknown command received: ' + arg.command);
             break;
@@ -236,6 +274,108 @@ class ZettlrRenderer
         }
         return null;
     }
+
+    // SPELLCHECKER FUNCTIONS
+    setSpellcheck(langs)
+    {
+        this.overlay.update('Detecting dictionaries …');
+        // langs is an object containing _all_ available languages and whether
+        // they should be checked or not.
+        for(let prop in langs) {
+            if(langs[prop]) {
+                // We should spellcheck - so insert into the object with a
+                // false, indicating that it has not been loaded yet.
+                this.typoLang[prop] = false;
+            }
+        }
+
+        if(Object.keys(this.typoLang).length > 0) {
+            this.requestLang('aff');
+        }
+    }
+
+    requestLang(type)
+    {
+        let req = null;
+        for(let lang in this.typoLang) {
+            if(!this.typoLang[lang]) {
+                // We should load this lang
+                req = lang;
+                break;
+            }
+        }
+        this.overlay.update('Requesting language files for ' + req);
+
+        // Load the first lang (first aff, then dic)
+        this.ipc.send('typo-request-' + type, req);
+    }
+
+    initTypo()
+    {
+        if(!this.typoLang) { return; }
+        if(!this.typoAff)  { return; }
+        if(!this.typoDic)  { return; }
+
+        let lang = null;
+        for(let l in this.typoLang) {
+            if(!this.typoLang[l]) {
+                // This language should be initialized
+                lang = l;
+                break;
+            }
+        }
+
+        this.overlay.update(`Initializing spellcheck for ${lang}. This may take a while…`);
+
+        // Initialize typo and we're set!
+        this.typo.push(new Typo(lang, this.typoAff, this.typoDic));
+        this.typoLang[lang] = true; // This language is now initialized
+
+        this.overlay.update(`Language ${lang} loaded!`);
+
+        // Free memory
+        this.typoAff = null;
+        this.typoDic = null;
+
+        let done = true;
+        for(let l in this.typoLang) {
+            if(!this.typoLang[l]) {
+                done = false;
+                break;
+            }
+        }
+
+        if(!done) {
+            // There is still at least one language to load. -> request next aff
+            this.requestLang('aff');
+        } else {
+            // Done - enable language checking
+            this.typoReady = true;
+            this.overlay.close(); // Done!
+        }
+    }
+
+    // This function takes a word and returns true or falls depending on
+    // whether or not the word has been spelled correctly using the given
+    // spellchecking language
+    typoCheck(word)
+    {
+        if(!this.typoReady) {
+            return true; // true means: No wrong spelling detected
+        }
+
+        for(let lang of this.typo) {
+            if(lang.check(word)) {
+                // As soon as the word is correct in any lang, break and return true
+                return true;
+            }
+        }
+
+        // No language reported the word exists
+        return false;
+    }
+
+    // END SPELLCHECKER
 
     // Triggered by ZettlrDirectories - if user clicks on another dir
     requestDir(hash)
