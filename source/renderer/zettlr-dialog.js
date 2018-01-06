@@ -2,10 +2,11 @@
 
 const fs = require('fs');
 const path = require('path');
+const {trans} = require('../common/lang/i18n.js');
 
 function DialogError(msg = '') {
-    this.name = 'Dialog Error';
-    this.message = 'Could not generate dialog! ' + msg;
+    this.name = trans(global.i18n.dialog.error.name);
+    this.message = trans(global.i18n.dialog.error.message, msg);
 }
 
 class ZettlrDialog
@@ -25,7 +26,7 @@ class ZettlrDialog
     open()
     {
         if(!this.isInitialized()) {
-            throw new DialogError('The dialog has not been initialized!');
+            throw new DialogError(trans(global.i18n.dialog.error.no_init));
         }
 
         this.container.addClass('blur');
@@ -63,7 +64,7 @@ class ZettlrDialog
         // export
 
         if(!obj) {
-            throw new DialogError('Could not init dialog. Data was ' + obj + '.');
+            throw new DialogError(trans(global.i18n.dialog.error.no_data, obj));
         }
 
         this.passedObj = obj;
@@ -122,7 +123,7 @@ class ZettlrDialog
             break;
 
             default:
-            throw new DialogError('The requested dialog does not exist: ' + dialog);
+            throw new DialogError(trans(global.i18n.dialog.error.unknown_dialog, dialog));
             break;
         }
 
@@ -170,7 +171,7 @@ class ZettlrDialog
         try {
             let stat = fs.lstatSync(p);
         } catch (e) {
-            throw new DialogError('Could not find dialog template.');
+            throw new DialogError(trans(global.i18n.dialog.error.no_template, template));
         }
 
         let cnt = fs.readFileSync(p, { encoding: 'utf8' });

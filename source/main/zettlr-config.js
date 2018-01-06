@@ -37,10 +37,10 @@ class ZettlrConfig
             "pandoc"    : 'pandoc',
             "pdflatex"  : 'pdflatex',
             "spellcheck": {
-                'en_US' : false,
-                'en_GB' : false,
-                'de_DE' : false,
-                'fr_FR' : false
+                'en_US' : (this.getLocale() === 'en_US') ? true : false,
+                'en_GB' : (this.getLocale() === 'en_GB') ? true : false,
+                'de_DE' : (this.getLocale() === 'de_DE') ? true : false,
+                'fr_FR' : (this.getLocale() === 'fr_FR') ? true : false
             }
         };
 
@@ -164,6 +164,50 @@ class ZettlrConfig
         } else {
             return null;
         }
+    }
+
+    // Returns the language (but always specified in the form <main>_<sub>,
+    // b/c we rely on it). If no "sub language" is given (e.g. only en, fr or de),
+    // then we assume the primary language (e.g. this function returns en_US for en,
+    // fr_FR for fr and de_DE for de. And yes, I know that British people won't
+    // like me for that. I'm sorry.)
+    getLocale()
+    {
+        let lang = app.getLocale();
+        let mainlang = null;
+
+        let supportedLangs = [
+            'de_DE',
+            'fr_FR',
+            'en_US',
+            'en_GB'
+        ];
+
+        if(lang.indexOf('-') > -1) {
+            // Specific sub-lang
+            mainlang = lang.split('-')[0];
+            lang = lang.split('-')[1];
+        } else {
+            // Only mainlang
+            mainlang = lang;
+            lang = null;
+        }
+
+        for(let sup of supportedLangs) {
+            let ml = sup.split('_')[0];
+            let sl = sup.split('_')[1];
+            if(ml === mainlang) {
+                if(lang === null) {
+                    return sup;
+                } else {
+                    if(sl === lang) {
+                        return sup;
+                    }
+                }
+            }
+        }
+
+        return 'en_US'; // Fallback default
     }
 
     // Set an option

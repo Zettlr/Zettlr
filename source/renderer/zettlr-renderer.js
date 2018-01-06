@@ -8,6 +8,9 @@ const ZettlrEditor      = require('../zettlr-editor.js');
 const ZettlrBody        = require('../zettlr-body.js');
 const ZettlrOverlay     = require('../zettlr-overlay.js');
 const Typo              = require('typo-js');
+const remote            = require('electron').remote;
+
+const {trans}           = require('../../common/lang/i18n.js');
 
 /* CLASS */
 class ZettlrRenderer
@@ -28,6 +31,9 @@ class ZettlrRenderer
         this.pandoc      = false;
         this.pdflatex    = false;
 
+        // Write translation data into renderer process's global var
+        global.i18n     = remote.getGlobal('i18n');
+
         this.ipc         = new ZettlrRendererIPC(this);
         this.directories = new ZettlrDirectories(this);
         this.preview     = new ZettlrPreview(this);
@@ -38,7 +44,7 @@ class ZettlrRenderer
 
     init()
     {
-        this.overlay.show('Initializing …');
+        this.overlay.show(trans(global.i18n.init.welcome));
 
         // Request a first batch of files
         this.ipc.send('get-paths', {});
@@ -254,7 +260,7 @@ class ZettlrRenderer
             break;
 
             default:
-            console.log('Unknown command received: ' + arg.command);
+            console.log(trans(global.i18n.system.unknown_command, arg.command));
             break;
         }
     }
@@ -278,7 +284,7 @@ class ZettlrRenderer
     // SPELLCHECKER FUNCTIONS
     setSpellcheck(langs)
     {
-        this.overlay.update('Detecting dictionaries …');
+        this.overlay.update(trans(global.i18n.init.spellcheck.get_lang));
         // langs is an object containing _all_ available languages and whether
         // they should be checked or not.
         for(let prop in langs) {
@@ -304,7 +310,7 @@ class ZettlrRenderer
                 break;
             }
         }
-        this.overlay.update('Requesting language files for ' + req);
+        this.overlay.update(trans(global.i18n.init.spellcheck.request_file, req));
 
         // Load the first lang (first aff, then dic)
         this.ipc.send('typo-request-' + type, req);
@@ -325,13 +331,13 @@ class ZettlrRenderer
             }
         }
 
-        this.overlay.update(`Initializing spellcheck for ${lang}. This may take a while…`);
+        this.overlay.update(trans(global.i18n.init.spellcheck.init, lang));
 
         // Initialize typo and we're set!
         this.typo.push(new Typo(lang, this.typoAff, this.typoDic));
         this.typoLang[lang] = true; // This language is now initialized
 
-        this.overlay.update(`Language ${lang} loaded!`);
+        this.overlay.update(trans(global.i18n.init.spellcheck.init_done, lang));
 
         // Free memory
         this.typoAff = null;
@@ -458,5 +464,3 @@ class ZettlrRenderer
         return this.currentDir;
     }
 } // END CLASS
-
-// module.exports = ZettlrRenderer;

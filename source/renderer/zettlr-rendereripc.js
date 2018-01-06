@@ -1,5 +1,7 @@
 /* RENDERER COMMUNICATIONS */
 
+const {trans} = require('../common/lang/i18n.js');
+
 class ZettlrRendererIPC
 {
     constructor(parent)
@@ -16,7 +18,7 @@ class ZettlrRendererIPC
         // handleEvent expects arg to contain at least 'command' and 'content'
         // properties
         if(!arg.hasOwnProperty('command')) {
-            console.error('Received a message with no command!', arg);
+            console.error(trans(global.i18n.system.no_command, arg));
             return;
         }
         if(!arg.hasOwnProperty('content')) {

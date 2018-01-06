@@ -97,11 +97,7 @@ class ZettlrEditor
 
     runCommand(cmd)
     {
-        if(cmd == 'copy' || cmd == 'paste' || cmd == 'cut') {
-            CodeMirror.signal(this.cm, cmd);
-        } else {
-            this.cm.execCommand(cmd);
-        }
+        this.cm.execCommand(cmd);
     }
 
     // Open a new file

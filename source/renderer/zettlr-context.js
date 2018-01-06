@@ -1,7 +1,8 @@
 // This class controls the context menus
 
-const {remote} = require('electron')
-const {Menu, MenuItem} = remote
+const {remote}          = require('electron');
+const {Menu, MenuItem}  = remote;
+const {trans}           = require('../common/lang/i18n.js');
 
 class ZettlrCon
 {
@@ -40,13 +41,13 @@ class ZettlrCon
             // Now build
             let that = this;
             this.menu.append(new MenuItem({'label': label, 'enabled': false }));
-            this.menu.append(new MenuItem({ 'label': 'Rename', click(item, win) {
+            this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.rename), click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'rename-file',
                     'content': { 'hash': hash }
                 });
             }}));
-            this.menu.append(new MenuItem({ 'label': 'Remove', click(item, win) {
+            this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.remove), click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'remove-file',
                     'content': { 'hash': hash }
@@ -69,13 +70,13 @@ class ZettlrCon
 
                 // Only add rename/remove options if not root dir
                 if(elem.attr('id') !== 'root') {
-                    this.menu.append(new MenuItem({ 'label': 'Rename', click(item, win) {
+                    this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.rename), click(item, win) {
                         that.parent.parent.handleEvent(null, {
                             'command': 'rename-dir',
                             'content': { 'hash': hash }
                         });
                     } }));
-                    this.menu.append(new MenuItem({ 'label': 'Remove', click(item, win) {
+                    this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.remove), click(item, win) {
                         that.parent.parent.handleEvent(null, {
                             'command': 'remove-dir',
                             'content': { 'hash': hash }
@@ -84,13 +85,13 @@ class ZettlrCon
                     this.menu.append(new MenuItem({ 'type': 'separator' }));
                 }
 
-                this.menu.append(new MenuItem({ 'label': 'New File', click(item, win) {
+                this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.new_file), click(item, win) {
                     that.parent.parent.handleEvent(null, {
                         'command': 'new-file',
                         'content': { 'hash': hash }
                     });
                 } }));
-                this.menu.append(new MenuItem({ 'label': 'New Subdirectory', click(item, win) {
+                this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.new_dir), click(item, win) {
                     that.parent.parent.handleEvent(null, {
                         'command': 'new-dir',
                         'content': { 'hash': hash }
@@ -100,33 +101,33 @@ class ZettlrCon
         } else if(elem.parents('#editor').length > 0) {
             let that = this;
             // Just build -- these menu items will only trigger CodeMirror actions
-            this.menu.append(new MenuItem( { label: 'Bold', click(item, win) {
+            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.bold), click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'cm-command',
                     'content': 'markdownBold'
                 });
             } }));
-            this.menu.append(new MenuItem( { label: 'Italic', click(item, win) {
+            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.italic), click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'cm-command',
                     'content': 'markdownItalic'
                 });
             } }));
             this.menu.append(new MenuItem({type: 'separator'}));
-            this.menu.append(new MenuItem( { label: 'Insert Link', click(item, win) {
+            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.insert_link), click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'cm-command',
                     'content': 'markdownLink'
                 });
             } }));
 
-            this.menu.append(new MenuItem( { label: 'Numbered List', click(item, win) {
+            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.insert_ol), click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'cm-command',
                     'content': 'markdownMakeOrderedList'
                 });
             } }));
-            this.menu.append(new MenuItem( { label: 'Bullet list', click(item, win) {
+            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.insert_ul), click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'cm-command',
                     'content': 'markdownMakeUnorderedList'
@@ -134,11 +135,11 @@ class ZettlrCon
             } }));
             /*this.menu.append(new MenuItem( { label: 'Blockquote' }));*/
             this.menu.append(new MenuItem( { type: 'separator' } ));
-            this.menu.append(new MenuItem( { label: 'Cut', role: 'cut', accelerator: 'CmdOrCtrl+X' }));
-            this.menu.append(new MenuItem( { label: 'Copy', role: 'copy', accelerator: 'CmdOrCtrl+C' }));
-            this.menu.append(new MenuItem( { label: 'Paste', role: 'paste', accelerator: 'CmdOrCtrl+V' }));
+            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.cut), role: 'cut', accelerator: 'CmdOrCtrl+X' }));
+            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.copy), role: 'copy', accelerator: 'CmdOrCtrl+C' }));
+            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.paste), role: 'paste', accelerator: 'CmdOrCtrl+V' }));
             this.menu.append(new MenuItem( { type: 'separator' } ));
-            this.menu.append(new MenuItem( { label: 'Select all', role: 'selectall', accelerator: 'CmdOrCtrl+A' }));
+            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.select_all), role: 'selectall', accelerator: 'CmdOrCtrl+A' }));
         }
     }
 

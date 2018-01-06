@@ -1,5 +1,8 @@
 /* THIS CLASS CONTROLS THE FILE PREVIEW LIST */
 
+// For ONE. SINGLE. TRANSLATION ...
+const {trans} = require('../common/lang/i18n.js');
+
 class ZettlrPreview
 {
     constructor(parent)
@@ -10,7 +13,7 @@ class ZettlrPreview
         // Elements
         this.div                = $('#preview');
         this.counter            = $('<div id="counter"><span class="progress"></span></div>');
-        this.searchBarElem      = $('<div id="search-directory"><input type="text" placeholder="Find &hellip;"></div>');
+        this.searchBarElem      = $('<div id="search-directory"><input type="text" placeholder="'+trans(global.i18n.gui.find_placeholder)+'"></div>');
         this.searchBarElem.append(this.counter);
 
         // Search related

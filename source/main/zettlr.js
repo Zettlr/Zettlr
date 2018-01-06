@@ -20,6 +20,7 @@ const ZettlrIPC                     = require('./zettlr-ipc.js');
 const ZettlrWindow                  = require('./zettlr-window.js');
 const ZettlrConfig                  = require('./zettlr-config.js');
 const ZettlrDir                     = require('./zettlr-dir.js');
+const {i18n, trans}                 = require('../common/lang/i18n.js');
 
 class Zettlr
 {
@@ -38,6 +39,11 @@ class Zettlr
         this.config = null;         // Configuration file handler
 
         this.config = new ZettlrConfig(this);
+
+        // Init language one-time
+        //i18n(this.config.getLocale());
+        i18n('de_DE');
+        
         this.ipc = new ZettlrIPC(this);
 
         // Initiate the files - every dir will read its own contents.

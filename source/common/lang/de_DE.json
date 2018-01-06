@@ -1,0 +1,92 @@
+{
+    "init": {
+        "welcome": "Lade Anwendung…",
+        "spellcheck": {
+            "get_lang": "Lade Wörterbücher für die Rechtschreibprüfung…",
+            "request_file": "Lese Dateien für %s. Einen Moment bitte…",
+            "init": "Initialisiere Rechtschreibprüfung für %s.",
+            "init_done": "Rechtschreibprüfung für %s erfolgreich initialisiert!"
+        }
+    },
+    "gui": {
+        "find_placeholder": "Finden…"
+    },
+    "menu": {
+        "labels": {
+            "file": "Datei",
+            "edit": "Bearbeiten",
+            "view": "Ansicht",
+            "window": "Fenster",
+            "help": "Hilfe"
+        },
+        "new_file": "Neue Datei…",
+        "new_dir": "Neues Verzeichnis…",
+        "open": "Öffnen…",
+        "save": "Speichern",
+        "export": "Exportieren…",
+        "rename_file": "Datei umbenennen",
+        "rename_dir": "Verzeichnis umbenennen",
+        "delete_file": "Aktuelle Datei löschen",
+        "delete_dir": "Aktuelles Verzeichnis löschen",
+        "undo": "Rückgängig",
+        "redo": "Wiederholen",
+        "cut": "Ausschneiden",
+        "copy": "Kopieren",
+        "paste": "Einfügen",
+        "select_all": "Alles auswählen",
+        "find_file": "In Datei finden",
+        "find_dir": "In Verzeichnis finden",
+        "reload": "Neu laden",
+        "toggle_devtools": "Entwicklerwerkzeuge",
+        "toggle_theme": "Nachtmodus umschalten",
+        "toggle_snippets": "Textfragmente umschalten",
+        "zoom_in": "Hereinzoomen",
+        "zoom_out": "Herauszoomen",
+        "zoom": "Zoom",
+        "reset_zoom": "Zoom zurücksetzen",
+        "toggle_fullscreen": "Vollbild",
+        "win_minimize": "Minimieren",
+        "win_close": "Schließen",
+        "learn_more": "Mehr…",
+        "preferences": "Einstellungen",
+        "quit": "Beenden",
+        "about": "Über %s",
+        "services": "Dienste",
+        "hide": "Verstecken",
+        "unhide": "Zeigen",
+        "hide_others": "Andere verstecken",
+        "speech": "Sprache",
+        "start_speaking": "Sprechen beginnen",
+        "stop_speaking": "Sprechen anhalten",
+        "all_front": "Alle in den Vordergrund"
+    },
+    "dialog": {
+        "error": {
+            "name": "Dialog-Fehler",
+            "message": "Konnte den Dialog %s nicht generieren!",
+            "no_init": "Der Dialog wurde nicht geladen!",
+            "no_data": "Dialog konnte nicht geladen werden. Das Datenobjekt enthielt: %s.",
+            "unknown_dialog": "Dialog '%s' existiert nicht und konnte nicht geladen werden.",
+            "no_template": "Konnte die Vorlage für den Dialog '%s' nicht finden!"
+        }
+    },
+    "context_menu": {
+        "rename": "Umbenennen",
+        "remove": "Entfernen",
+        "new_file": "Neue Datei",
+        "new_dir": "Neues Verzeichnis",
+        "bold": "Fett",
+        "italic": "Kursiv",
+        "insert_link": "Link einfügen",
+        "insert_ol": "Numerierte Liste einfügen",
+        "insert_ul": "Ungeordnete Liste einfügen",
+        "cut": "Ausschneiden",
+        "copy": "Kopieren",
+        "paste": "Einfügen",
+        "select_all": "Alles auswählen"
+    },
+    "system" : {
+        "unknown_command": "Unbekannten Befehl erhalten: %s",
+        "no_command": "Nachricht ohne Befehl erhalten: %s"
+    }
+}

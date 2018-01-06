@@ -1,0 +1,92 @@
+{
+    "init": {
+        "welcome": "Initializing application…",
+        "spellcheck": {
+            "get_lang": "Setting up spellchecking dictionaries…",
+            "request_file": "Reading dictionary for %s. This may take a while…",
+            "init": "Initializing spellcheck for %s.",
+            "init_done": "Initialized spellcheck for %s!"
+        }
+    },
+    "gui": {
+        "find_placeholder": "Find…"
+    },
+    "menu": {
+        "labels": {
+            "file": "File",
+            "edit": "Edit",
+            "view": "View",
+            "window": "Window",
+            "help": "Help"
+        },
+        "new_file": "New File…",
+        "new_dir": "New directory…",
+        "open": "Open…",
+        "save": "Save",
+        "export": "Export…",
+        "rename_file": "Rename file",
+        "rename_dir": "Rename directory",
+        "delete_file": "Delete current file",
+        "delete_dir": "Delete current directory",
+        "undo": "Undo",
+        "redo": "Redo",
+        "cut": "Cut",
+        "copy": "Copy",
+        "paste": "Paste",
+        "select_all": "Select all",
+        "find_file": "Find in file",
+        "find_dir": "Find in directory",
+        "reload": "Reload",
+        "toggle_devtools": "Toggle developer tools",
+        "toggle_theme": "Toggle night mode",
+        "toggle_snippets": "Toggle text snippets",
+        "zoom_in": "Zoom in",
+        "zoom_out": "Zoom out",
+        "zoom": "Zoom",
+        "reset_zoom": "Reset zoom",
+        "toggle_fullscreen": "Toggle fullscreen",
+        "win_minimize": "Minimize",
+        "win_close": "Close",
+        "learn_more": "Learn more",
+        "preferences": "Preferences",
+        "quit": "Quit",
+        "about": "About %s",
+        "services": "Services",
+        "hide": "Hide",
+        "unhide": "Show",
+        "hide_others": "Hide others",
+        "speech": "Speech",
+        "start_speaking": "Start speaking",
+        "stop_speaking": "Stop speaking",
+        "all_front": "Bring All to Front"
+    },
+    "dialog": {
+        "error": {
+            "name": "Dialog Error",
+            "message": "Could not generate dialog! %s",
+            "no_init": "The dialog has not been initialized!",
+            "no_data": "Could not initialize dialog. Data was %s.",
+            "unknown_dialog": "The requested dialog '%s' does not exist.",
+            "no_template": "Could not find dialog template '%s'."
+        }
+    },
+    "context_menu": {
+        "rename": "Rename",
+        "remove": "Remove",
+        "new_file": "New file",
+        "new_dir": "New directory",
+        "bold": "Bold",
+        "italic": "Italic",
+        "insert_link": "Insert link",
+        "insert_ol": "Insert numbered list",
+        "insert_ul": "Insert unordered list",
+        "cut": "Cut",
+        "copy": "Copy",
+        "paste": "Paste",
+        "select_all": "Select all"
+    },
+    "system" : {
+        "unknown_command": "Unknown command received: %s",
+        "no_command": "Received a message with no command: %s"
+    }
+}

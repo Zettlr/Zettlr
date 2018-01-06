@@ -3,13 +3,14 @@
 const {Menu} = require('electron');
 const electron = require('electron');
 const app = electron.app
+const {trans} = require('../common/lang/i18n.js');
 
 const template = [
     {
-        label: 'File',
+        label: trans(global.i18n.menu.labels.file),
         submenu: [
             {
-                label: 'New File…',
+                label: trans(global.i18n.menu.new_file),
                 accelerator: 'CmdOrCtrl+N',
                 click (item, focusedWindow) {
                     // Trigger new file in current directory
@@ -17,7 +18,7 @@ const template = [
                 }
             },
             {
-                label: 'New Folder…',
+                label: trans(global.i18n.menu.new_dir),
                 accelerator: 'CmdOrCtrl+Shift+N',
                 click (item, focusedWindow) {
                     // Trigger new folder in current directory
@@ -26,7 +27,7 @@ const template = [
             },
             { type: 'separator' },
             {
-                label: 'Open…',
+                label: trans(global.i18n.menu.open),
                 accelerator: 'CmdOrCtrl+O',
                 click (item, focusedWindow) {
                     // Trigger open folder action
@@ -34,7 +35,7 @@ const template = [
                 }
             },
             {
-                label: 'Save',
+                label: trans(global.i18n.menu.save),
                 accelerator: 'CmdOrCtrl+S',
                 click (item, focusedWindow) {
                     if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'save-file'});
@@ -42,7 +43,7 @@ const template = [
             },
             { type: 'separator' },
             {
-                label: 'Export…',
+                label: trans(global.i18n.menu.export),
                 accelerator: 'CmdOrCtrl+E',
                 click (item, focusedWindow) {
                     if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'export'});
@@ -50,14 +51,14 @@ const template = [
             },
             { type: 'separator' },
             {
-                label: 'Rename file…',
+                label: trans(global.i18n.menu.rename_file),
                 accelerator: 'CmdOrCtrl+R',
                 click (item, focusedWindow) {
                     if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'rename-file'});
                 }
             },
             {
-                label: 'Rename directory…',
+                label: trans(global.i18n.menu.rename_dir),
                 accelerator: 'CmdOrCtrl+Shift+R',
                 click (item, focusedWindow) {
                     if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'rename-dir'});
@@ -65,13 +66,13 @@ const template = [
             },
             { type: 'separator' },
             {
-                label: 'Delete current file',
+                label: trans(global.i18n.menu.delete_file),
                 accelerator: 'CmdOrCtrl+D',
                 click (item, focusedWindow) {
                     if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'remove-file'});
                 }
             }, {
-                label: 'Delete current directory',
+                label: trans(global.i18n.menu.delete_dir),
                 accelerator: 'CmdOrCtrl+Shift+D',
                 click(item, focusedWindow) {
                     if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'remove-dir'});
@@ -80,25 +81,25 @@ const template = [
         ]
     },
     {
-        label: 'Edit',
+        label: trans(global.i18n.menu.labels.edit),
         submenu: [
-            { role: 'undo' },
-            { role: 'redo' },
+            { label: trans(global.i18n.menu.undo), role: 'undo' },
+            { label: trans(global.i18n.menu.redo), role: 'redo' },
             { type: 'separator' },
-            { role: 'cut' },
-            { role: 'copy' },
-            { role: 'paste' },
-            { role: 'selectall' },
+            { label: trans(global.i18n.menu.cut), role: 'cut' },
+            { label: trans(global.i18n.menu.copy), role: 'copy' },
+            { label: trans(global.i18n.menu.paste), role: 'paste' },
+            { label: trans(global.i18n.menu.select_all), role: 'selectall' },
             { type: 'separator' },
             {
-                label: 'Find in file…',
+                label: trans(global.i18n.menu.find_file),
                 accelerator: 'CmdOrCtrl+F',
                 click(item, focusedWindow) {
                     if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'find-file'});
                 }
             },
             {
-                label: 'Find in directory…',
+                label: trans(global.i18n.menu.find_dir),
                 accelerator: 'CmdOrCtrl+Shift+F',
                 click(item, focusedWindow) {
                     if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'find-dir'});
@@ -107,17 +108,17 @@ const template = [
         ]
     },
     {
-        label: 'View',
+        label: trans(global.i18n.menu.labels.view),
         submenu: [
             {
-                label: 'Reload',
+                label: trans(global.i18n.menu.reload),
                 accelerator: 'CmdOrCtrl+Y',
                 click (item, focusedWindow) {
                     if (focusedWindow) focusedWindow.reload();
                 }
             },
             {
-                label: 'Toggle Developer Tools',
+                label: trans(global.i18n.menu.toggle_devtools),
                 accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
                 click (item, focusedWindow) {
                     if (focusedWindow) focusedWindow.webContents.toggleDevTools();
@@ -125,39 +126,41 @@ const template = [
             },
             { type: 'separator' },
             {
-                label: 'Toggle light and dark theme',
+                label: trans(global.i18n.menu.toggle_theme),
                 accelerator: 'CmdOrCtrl+Alt+L',
                 click(item, focusedWindow) {
                     if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'toggle-theme'});
                 }
             },
             {
-                label: 'Toggle text snippets',
+                label: trans(global.i18n.menu.toggle_snippets),
                 accelerator: 'CmdOrCtrl+Alt+S',
                 click(item, focusedWindow) {
                     if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'toggle-snippets'});
                 }
             },
             { type: 'separator' },
-            { role: 'resetzoom' },
-            { role: 'zoomin' },
-            { role: 'zoomout' },
+            { label: trans(global.i18n.menu.reset_zoom), role: 'resetzoom' },
+            { label: trans(global.i18n.menu.zoom_in), role: 'zoomin' },
+            { label: trans(global.i18n.menu.zoom_out), role: 'zoomout' },
             { type: 'separator' },
-            { role: 'togglefullscreen' }
+            { label: trans(global.i18n.menu.toggle_fullscreen), role: 'togglefullscreen' }
         ]
     },
     {
+        label: trans(global.i18n.menu.labels.window),
         role: 'window',
         submenu: [
-            { role: 'minimize' },
-            { role: 'close' }
+            { label: trans(global.i18n.menu.win_minimize), role: 'minimize' },
+            { label: trans(global.i18n.menu.win_close), role: 'close' }
         ]
     },
     {
+        label: trans(global.i18n.menu.labels.help),
         role: 'help',
         submenu: [
             {
-                label: 'Learn More',
+                label: trans(global.i18n.menu.learn_more),
                 click () { require('electron').shell.openExternal('https://www.zettlr.com/') }
             }
         ]
@@ -171,14 +174,14 @@ if(process.platform != 'darwin') {
     template[0].submenu.push({
         type: 'separator',
     },{
-        label: 'Preferences',
+        label: trans(global.i18n.menu.preferences),
         accelerator: 'CmdOrCtrl+,',
         click (item, focusedWindow) {
             if(focusedWindow) focusedWindow.webContents.send('message', {'command': 'open-preferences'});
         }
     },
     { type: 'separator' },
-    { role: 'quit' });
+    { label: trans(global.i18n.menu.quit), role: 'quit' });
 }
 
 if (process.platform === 'darwin') {
@@ -186,50 +189,50 @@ if (process.platform === 'darwin') {
     template.unshift({
         label: name, // This will be only set on macOS if dedicated binary
         submenu: [
-            { role: 'about' },
+            { label: trans(global.i18n.menu.about, name), role: 'about' },
             {
-                label: 'Preferences',
+                label: trans(global.i18n.menu.preferences),
                 accelerator: 'CmdOrCtrl+,',
                 click (item, focusedWindow) {
                     if(focusedWindow) focusedWindow.webContents.send('message', {'command': 'open-preferences'});
                 }
             },
             { type: 'separator' },
-            { role: 'services', submenu: [] },
+            { label: trans(global.i18n.menu.services), role: 'services', submenu: [] },
             { type: 'separator' },
-            { role: 'hide' },
-            { role: 'hideothers' },
-            { role: 'unhide' },
+            { label: trans(global.i18n.menu.hide), role: 'hide' },
+            { label: trans(global.i18n.menu.hide_others), role: 'hideothers' },
+            { label: trans(global.i18n.menu.unhide), role: 'unhide' },
             { type: 'separator' },
-            { role: 'quit' }
+            { label: trans(global.i18n.menu.quit), role: 'quit' }
         ]
     });
     // Edit menu.
     template[2].submenu.push(
         { type: 'separator' },
         {
-            label: 'Speech',
+            label: trans(global.i18n.menu.speech),
             submenu: [
-                { role: 'startspeaking' },
-                { role: 'stopspeaking' }
+                { label: trans(global.i18n.menu.start_speaking), role: 'startspeaking' },
+                { label: trans(global.i18n.menu.stop_speaking), role: 'stopspeaking' }
             ]
         }
     )
     // Window menu.
     template[4].submenu = [
         {
-            label: 'Close',
+            label: trans(global.i18n.menu.win_close),
             accelerator: 'CmdOrCtrl+W',
             role: 'close'
         },
         {
-            label: 'Minimize',
+            label: trans(global.i18n.menu.win_minimize),
             accelerator: 'CmdOrCtrl+M',
             role: 'minimize'
         },
-        { label: 'Zoom', role: 'zoom' },
+        { label: trans(global.i18n.menu.zoom), role: 'zoom' },
         { type: 'separator' },
-        { label: 'Bring All to Front', role: 'front' }
+        { label: trans(global.i18n.menu.all_front), role: 'front' }
     ]
 }
 
