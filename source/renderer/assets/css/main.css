@@ -7,6 +7,7 @@
 }
 * {
   margin: 0;
+  box-sizing: border-box;
 }
 html,
 body {
@@ -33,11 +34,9 @@ html {
 }
 .modal .dialog {
   background-color: white;
-  margin: 15% 15% 0% 15%;
+  margin: 15% 15% 5% 15%;
   border-radius: 10px;
   padding: 20px;
-  -webkit-box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.75);
 }
 .modal .dialog h1 {
@@ -50,7 +49,7 @@ html {
 }
 .modal .dialog hr {
   border: none;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #646464;
   width: 80%;
   margin: 1em 10%;
 }
@@ -67,6 +66,12 @@ html {
   font-size: inherit;
   outline: none;
   margin-bottom: 1em;
+}
+.modal .dialog select {
+  line-height: 200%;
+  font-size: inherit;
+  padding: 0.5em;
+  margin: 0.5em;
 }
 .modal .dialog input[type="checkbox"] {
   margin: 0.5em;
@@ -488,4 +493,133 @@ html {
     -webkit-transform: scale(1);
     transform: scale(1);
   }
+}
+.quicklook {
+  color: #646464;
+  box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.75);
+  position: fixed;
+  cursor: default;
+  background-color: #dcdcdc;
+}
+.quicklook.minimize {
+  height: 1.6em;
+}
+.quicklook .title {
+  background-color: #282828;
+  color: #f0f0f0;
+  cursor: -webkit-grab;
+  clear: both;
+  height: 1.6em;
+}
+.quicklook .title h1 {
+  font-size: 1em;
+  text-align: center;
+  display: inline-block;
+  padding: 0.2em;
+  white-space: nowrap;
+  max-width: 90%;
+  overflow: hidden;
+}
+.quicklook .title .close {
+  display: inline-block;
+  cursor: pointer;
+  float: right;
+  text-align: center;
+  width: 1.2em;
+  height: 1.2em;
+  margin: 0.1em;
+  border-radius: 50px;
+  padding: 0.1em;
+}
+.quicklook .title .close::before {
+  font-family: 'Font Awesome';
+  font-weight: light;
+  content: "\f00d";
+  line-height: 0.8em;
+  font-size: 0.8em;
+  margin: 0.2em;
+}
+.quicklook .title .close:hover {
+  color: #ffb0b0;
+}
+.quicklook .body {
+  overflow-y: scroll;
+}
+.quicklook .body .CodeMirror {
+  cursor: text;
+  font-size: 1em;
+  font-family: inherit;
+  padding: 0.3em;
+  height: 100%;
+}
+.quicklook .body .CodeMirror-scroll .CodeMirror-sizer {
+  margin-bottom: 1em;
+}
+.quicklook .ui-resizable {
+  position: relative;
+}
+.quicklook .ui-resizable-handle {
+  position: absolute;
+  font-size: 0.1px;
+  display: block;
+}
+.quicklook .ui-resizable-disabled .ui-resizable-handle,
+.quicklook .ui-resizable-autohide .ui-resizable-handle {
+  display: none;
+}
+.quicklook .ui-resizable-n {
+  cursor: n-resize;
+  height: 15px;
+  width: 100%;
+  top: -5px;
+  left: 0;
+}
+.quicklook .ui-resizable-s {
+  cursor: s-resize;
+  height: 15px;
+  width: 100%;
+  bottom: -5px;
+  left: 0;
+}
+.quicklook .ui-resizable-e {
+  cursor: e-resize;
+  width: 15px;
+  right: -5px;
+  top: 0;
+  height: 100%;
+}
+.quicklook .ui-resizable-w {
+  cursor: w-resize;
+  width: 15px;
+  left: -5px;
+  top: 0;
+  height: 100%;
+}
+.quicklook .ui-resizable-se {
+  cursor: se-resize;
+  width: 12px;
+  height: 12px;
+  right: 1px;
+  bottom: 1px;
+}
+.quicklook .ui-resizable-sw {
+  cursor: sw-resize;
+  width: 9px;
+  height: 9px;
+  left: -5px;
+  bottom: -5px;
+}
+.quicklook .ui-resizable-nw {
+  cursor: nw-resize;
+  width: 9px;
+  height: 9px;
+  left: -5px;
+  top: -5px;
+}
+.quicklook .ui-resizable-ne {
+  cursor: ne-resize;
+  width: 9px;
+  height: 9px;
+  right: -5px;
+  top: -5px;
 }

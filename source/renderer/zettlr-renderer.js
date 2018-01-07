@@ -17,29 +17,31 @@ class ZettlrRenderer
 {
     constructor()
     {
-        this.currentFile = null;
-        this.currentDir  = null;
+        this.currentFile    = null;
+        this.currentDir     = null;
+
+        this.lang           = 'en_US'; // Default fallback
 
         // Spellchecking vars
-        this.typoReady   = false;   // Flag indicating whether Typo has already loaded
-        this.typoLang    = {};      // Which language(s) are we spellchecking?
-        this.typoAff     = null;    // Contains the Aff-file data
-        this.typoDic     = null;    // Contains the dic-file data
-        this.typo        = [];      // Contains the Typo object to check with
+        this.typoReady      = false;   // Flag indicating whether Typo has already loaded
+        this.typoLang       = {};      // Which language(s) are we spellchecking?
+        this.typoAff        = null;    // Contains the Aff-file data
+        this.typoDic        = null;    // Contains the dic-file data
+        this.typo           = [];      // Contains the Typo object to check with
 
         // Indicators whether or not one of these has been found
-        this.pandoc      = false;
-        this.pdflatex    = false;
+        this.pandoc         = false;
+        this.pdflatex       = false;
 
         // Write translation data into renderer process's global var
-        global.i18n     = remote.getGlobal('i18n');
+        global.i18n         = remote.getGlobal('i18n');
 
-        this.ipc         = new ZettlrRendererIPC(this);
-        this.directories = new ZettlrDirectories(this);
-        this.preview     = new ZettlrPreview(this);
-        this.editor      = new ZettlrEditor(this);
-        this.body        = new ZettlrBody(this);
-        this.overlay     = new ZettlrOverlay(this);
+        this.ipc            = new ZettlrRendererIPC(this);
+        this.directories    = new ZettlrDirectories(this);
+        this.preview        = new ZettlrPreview(this);
+        this.editor         = new ZettlrEditor(this);
+        this.body           = new ZettlrBody(this);
+        this.overlay        = new ZettlrOverlay(this);
     }
 
     init()
@@ -64,9 +66,7 @@ class ZettlrRenderer
             this.setCurrentDir(arg.content);
             // Save for later
             this.paths = arg.content;
-            this.overlay.update('Reading directories …');
             this.directories.newDirectoryList(arg.content);
-            this.overlay.update('Reading files …');
             this.preview.newFileList(arg.content);
             this.directories.select(arg.content.hash);
             break;
@@ -198,6 +198,7 @@ class ZettlrRenderer
             this.directories.toggleTheme();
             this.preview.toggleTheme();
             this.editor.toggleTheme();
+            this.body.toggleTheme();
             if(arg.content !== 'no-emit') {
                 this.ipc.send('toggle-theme'); // Notify host process for configuration save
             }
@@ -236,6 +237,11 @@ class ZettlrRenderer
             this.pdflatex = arg.content.pdflatex;
             break;
 
+            case 'lang':
+            // Received the language
+            this.lang = arg.content;
+            break;
+
             // SPELLCHECKING EVENTS
             case 'typo-lang':
             // arg.content contains an object holding trues and falses for all
@@ -257,6 +263,14 @@ class ZettlrRenderer
             this.typoDic = arg.content;
             // Now we can finally initialize spell check:
             this.initTypo();
+            break;
+
+            case 'quicklook':
+            this.ipc.send('file-get-quicklook', arg.content.hash);
+            break;
+
+            case 'file-quicklook':
+            this.body.quicklook(arg.content);
             break;
 
             default:
@@ -310,7 +324,12 @@ class ZettlrRenderer
                 break;
             }
         }
-        this.overlay.update(trans(global.i18n.init.spellcheck.request_file, req));
+        this.overlay.update(
+            trans(
+                global.i18n.init.spellcheck.request_file,
+                global.i18n.dialog.preferences.app_lang[req]
+            )
+        );
 
         // Load the first lang (first aff, then dic)
         this.ipc.send('typo-request-' + type, req);
@@ -331,13 +350,23 @@ class ZettlrRenderer
             }
         }
 
-        this.overlay.update(trans(global.i18n.init.spellcheck.init, lang));
+        this.overlay.update(
+            trans(
+                global.i18n.init.spellcheck.init,
+                global.i18n.dialog.preferences.app_lang[lang]
+            )
+        );
 
         // Initialize typo and we're set!
         this.typo.push(new Typo(lang, this.typoAff, this.typoDic));
         this.typoLang[lang] = true; // This language is now initialized
 
-        this.overlay.update(trans(global.i18n.init.spellcheck.init_done, lang));
+        this.overlay.update(
+            trans(
+                global.i18n.init.spellcheck.init_done,
+                global.i18n.dialog.preferences.app_lang[lang]
+            )
+        );
 
         // Free memory
         this.typoAff = null;
@@ -462,5 +491,10 @@ class ZettlrRenderer
     getCurrentDir()
     {
         return this.currentDir;
+    }
+
+    getLocale()
+    {
+        return this.lang;
     }
 } // END CLASS

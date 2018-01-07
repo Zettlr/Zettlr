@@ -15,7 +15,7 @@ class ZettlrEditor
             },
             theme: 'zettlr',
             lineWiseCopyCut: false, // Don't copy/cut whole lines without selection
-            autofocus: true, // Shouldn't be bad
+            autofocus: false, // Shouldn't be bad
             dragDrop: false, // for now - REACTIVATE IN LATER PHASE
             lineWrapping: true,
             autoCloseBrackets: true, // Autoclose brackets and quotes

@@ -4,6 +4,7 @@ const electron                = require('electron');
 const {dialog, BrowserWindow} = electron;
 const url                     = require('url');
 const path                    = require('path');
+const {trans}                 = require('../common/lang/i18n.js');
 
 class ZettlrWindow
 {
@@ -160,17 +161,19 @@ class ZettlrWindow
     // window. It asks the user whether or not he wants to save, omit or cancel.
     askSaveChanges()
     {
-        let ret = dialog.showMessageBox(this.window, {
+        let options = {
             type: "question",
-            title: 'Omit unsaved changes?',
-            message: 'There are unsaved changes to the current file. Do you want to omit them or save?',
+            title: trans(global.i18n.system.save_changes_title),
+            message: trans(global.i18n.system.save_changes_message),
             buttons: [
-                'Cancel',
-                'Save',
-                'Omit changes'
+                trans(global.i18n.system.save_changes_cancel),
+                trans(global.i18n.system.save_changes_save),
+                trans(global.i18n.system.save_changes_omit)
             ],
             cancelId: 0
-        });
+        };
+
+        let ret = dialog.showMessageBox(this.window, options);
 
         // ret can have three status: cancel = 0, save = 1, omit = 2.
         // To keep up with semantics, the function "askSaveChanges" would
@@ -185,7 +188,7 @@ class ZettlrWindow
     askDir(startDir)
     {
         return dialog.showOpenDialog(this.window, {
-            title: 'Open project folder',
+            title: trans(global.i18n.system.open_folder),
             defaultPath: startDir,
             properties: [
                 'openDirectory',
@@ -211,10 +214,10 @@ class ZettlrWindow
     {
         let ret = dialog.showMessageBox(this.window, {
             type: 'warning',
-            buttons: [ 'Ok', 'Cancel' ],
+            buttons: [ 'Ok', trans(global.i18n.system.error.cancel_remove) ],
             defaultId: 1,
-            title: 'Really delete?',
-            message: 'Do you really want to remove ' + obj.type + ' ' + obj.name + '?'
+            title: trans(global.i18n.system.error.remove_title),
+            message: trans(global.i18n.system.error.remove_message, obj.name)
         });
 
         return (ret == 0);

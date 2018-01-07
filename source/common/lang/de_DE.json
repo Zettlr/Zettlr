@@ -68,6 +68,64 @@
             "no_data": "Dialog konnte nicht geladen werden. Das Datenobjekt enthielt: %s.",
             "unknown_dialog": "Dialog '%s' existiert nicht und konnte nicht geladen werden.",
             "no_template": "Konnte die Vorlage für den Dialog '%s' nicht finden!"
+        },
+        "dir_new": {
+            "title": "Verzeichnis erstellen",
+            "message": "Wie soll das neue Verzeichnis heißen?",
+            "info": "Das Verzeichnis wird unter <strong>%PATH%</strong> angelegt.",
+            "placeholder": "Verzeichnisname",
+            "value": "Unbenannt"
+        },
+        "dir_rename": {
+            "title": "Verzeichnis umbenennen",
+            "message": "Wie soll das Verzeichnis heißen?",
+            "info": "Das Verzeichnis <strong>%PATH%</strong> und alle Dateien in ihm werden verschoben.",
+            "placeholder": "Verzeichnis"
+        },
+        "export": {
+            "title": "Datei exportieren",
+            "message": "Du bist dabei, die Datei <strong>%NAME%</strong> zu exportieren.",
+            "info": "Doppelklicke einfach auf den Dateityp, den du exportieren möchtest. Die Datei wird dann automatisch mit deinem Standardprogramm geöffnet, von wo aus du sie dann abspeichern kannst, wo immer du möchtest.",
+            "alt_html": "Als HTML exportieren",
+            "alt_odt": "Als ODT exportieren",
+            "alt_docx": "Als DOCX exportieren",
+            "alt_pdf": "Als PDF exportieren",
+            "no_pdflatex": "Es wurde keine PDFLaTeX-Datei auf diesem System gefunden. Pandoc nutzt sie, um Dateien nach PDF exportieren zu können. Bitte installiere eine Version von LaTeX, die für dein System gemacht ist.",
+            "no_pandoc": "Pandoc wurde auf diesem System nicht gefunden! Um Dateien exportieren zu können, musst du zunächst Pandoc installieren. Pandoc ist frei und quelloffen!"
+        },
+        "file_new": {
+            "title": "Neue Datei",
+            "message": "Wie soll die neue Datei heißen?",
+            "info": "Die Datei wird in <strong>%PATH%</strong> erstellt.",
+            "placeholder": "Dateiname",
+            "value": "Unbenannt"
+        },
+        "file_rename": {
+            "title": "Datei umbenennen",
+            "message": "Wie soll die Datei heißen?",
+            "info": "Die Datei liegt in <strong>%PATH%</strong> und wird entsprechend verschoben.",
+            "placeholder": "Dateiname"
+        },
+        "preferences": {
+            "title": "Einstellungen",
+            "message": "Hier findest du alle Einstellungen",
+            "app_lang": {
+                "title": "Anwendungssprache (<strong>Neustart erforderlich!</strong>)",
+                "de_DE": "Deutsch (Deutschland)",
+                "en_GB": "Englisch (Großbritannien)",
+                "en_US": "Englisch (Vereinigte Staaten)",
+                "fr_FR": "Französisch (Frankreich)"
+            },
+            "pandoc": "Pfad zum Pandoc-Programm. Bitte ändere dies nur, wenn Zettlr Pandoc nicht automatisch findet.",
+            "pdflatex": "Pfad zum PDFLaTeX-Programm. Bitte ändere dies nur, wenn Pandoc einen Fehler ausgibt, dass er die Bibliothek nicht finden kann.",
+            "pandoc_default": "Standard: pandoc",
+            "pdflatex_default": "Standard: pdflatex",
+            "nightmode": "Nachtmodus?",
+            "snippets": "Textfragmente anzeigen?",
+            "spellcheck": "Wähle die Sprachen aus, für welche du die Rechtschreibprüfung einschalten möchtest (<strong>Neustart erforderlich!</strong>)",
+            "spellcheck_warning": "<em>Vorsicht:</em> Zu viele gleichzeitig aktivierte Bibliotheken verlangsamen die App spürbar! Versuche, nicht mehr als drei gleichzeitig zu aktivieren!",
+            "save": "Speichern",
+            "cancel": "Abbrechen"
         }
     },
     "context_menu": {
@@ -83,10 +141,35 @@
         "cut": "Ausschneiden",
         "copy": "Kopieren",
         "paste": "Einfügen",
-        "select_all": "Alles auswählen"
+        "select_all": "Alles auswählen",
+        "quicklook": "Quicklook"
     },
     "system" : {
         "unknown_command": "Unbekannten Befehl erhalten: %s",
-        "no_command": "Nachricht ohne Befehl erhalten: %s"
+        "no_command": "Nachricht ohne Befehl erhalten: %s",
+        "error": {
+            "fnf_title": "Datei nicht gefunden",
+            "fnf_message": "Die angeforderte Datei wurde nicht gefunden.",
+            "dnf_title": "Verzeichnis nicht gefunden",
+            "dnf_message": "Das angefragte Verzeichnis wurde nicht gefunden.",
+            "could_not_create_file": "Fehler bei Dateierstellung",
+            "file_exists": "Die Datei existiert bereits.",
+            "no_allowed_chars": "Der Name enthielt keine erlaubten Zeichen.",
+            "delete_root_title": "Kann Wurzel nicht löschen",
+            "delete_root_message": "Du kannst das Wurzelverzeichnis nicht löschen.",
+            "rename_root_title": "Kann Wurzel nicht umbenennen",
+            "rename_root_message": "Du kannst das Wurzelverzeichnis nicht umbenennen.",
+            "pandoc_error_title": "Fehler bei Dateiexport",
+            "pandoc_error_message": "Pandoc hat beim Export folgenden Fehler ausgegeben: %s",
+            "cancel_remove": "Abbrechen",
+            "remove_title": "Wirklich löschen?",
+            "remove_message": "Möchtest du %s wirklich löschen?"
+        },
+        "save_changes_title": "Änderungen verwerfen?",
+        "save_changes_message": "Die Datei enthält ungespeicherte Änderungen. Verwerfen oder speichern?",
+        "save_changes_cancel": "Abbrechen",
+        "save_changes_save": "Speichern",
+        "save_changes_omit": "Änderungen verwerfen",
+        "open_folder": "Projektverzeichnis öffnen"
     }
 }

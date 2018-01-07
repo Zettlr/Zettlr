@@ -91,10 +91,19 @@ class ZettlrDialog
             for(let l in obj.spellcheck) {
                 let sel = (obj.spellcheck[l]) ? 'checked="checked"' : '';
                 spellcheck += '<div>';
-                spellcheck += `<input type="checkbox" value="${l}" ${sel} name="spellcheck[]" id="${l}"><label for="${l}">${l}</label>`;
+                spellcheck += `<input type="checkbox" value="${l}" ${sel} name="spellcheck[]" id="${l}"><label for="${l}">${trans(global.i18n.dialog.preferences.app_lang[l])}</label>`;
                 spellcheck += '</div>';
             }
             replacements.push('%SPELLCHECK%|' + spellcheck);
+            let lang_selection = '';
+            for(let l of obj.supportedLangs) {
+                if(l === this.parent.parent.getLocale()) {
+                    lang_selection += `<option value="${l}" selected="selected">${trans(global.i18n.dialog.preferences.app_lang[l])}</option>`;
+                } else {
+                    lang_selection += `<option value="${l}">${trans(global.i18n.dialog.preferences.app_lang[l])}</option>`;
+                }
+            }
+            replacements.push('%APP_LANG%|' + lang_selection)
             break;
 
             case 'export':
@@ -159,14 +168,14 @@ class ZettlrDialog
         // Activate event listeners on the exporting divs if present
         $('#html').on('dblclick', (e) => { this.parent.requestExport($('#html')); });
         $('#docx').on('dblclick', (e) => { this.parent.requestExport($('#docx')); });
-        $('#odt').on('dblclick', (e) => { this.parent.requestExport($('#odt')); });
-        $('#pdf').on('dblclick', (e) => { this.parent.requestExport($('#pdf')); });
+        $('#odt' ).on('dblclick', (e) => { this.parent.requestExport($('#odt' )); });
+        $('#pdf' ).on('dblclick', (e) => { this.parent.requestExport($('#pdf' )); });
     }
 
     // Reads and return a template file, applying replacements if given
     get(template, replacements = [])
     {
-        let p = path.join(__dirname, 'assets/tpl', template + '.htm');
+        let p = path.join(__dirname, 'assets', 'tpl', template + '.htm');
 
         try {
             let stat = fs.lstatSync(p);
@@ -176,6 +185,10 @@ class ZettlrDialog
 
         let cnt = fs.readFileSync(p, { encoding: 'utf8' });
 
+        // Translation-strings:
+        let i18n = this.getLanguageTable(cnt);
+        replacements = i18n.concat(replacements);
+
         // Replace variables
         for(let r of replacements) {
             r = r.split('|');
@@ -183,6 +196,45 @@ class ZettlrDialog
         }
 
         return cnt;
+    }
+
+    // This function creates a replacement table for all language strings that
+    // should be translated.
+    getLanguageTable(text)
+    {
+        // How it works: In the template files are replacement strings in the
+        // following format:
+        // %i18n.<dialog>.<stringidentifier>%
+        // Benefit: We can programmatically create the array based on the
+        // JSON values of trans, because the i18n-placeholder exactly matches
+        // a string!
+
+        let replacements = [];
+
+        // First find all i18n-strings
+        let regex = /%i18n\.(.+?)%/g, result, i18n_strings = [];
+        while(result = regex.exec(text)) {
+            i18n_strings.push(result[0]);
+        }
+
+        for(let str of i18n_strings) {
+            let lang_opt = str.substr(0, str.length-1).split('.').slice(1); // Omit first index
+            let obj = global.i18n.dialog;
+
+            for(let x of lang_opt) {
+                // Navigate into the object
+                if(obj.hasOwnProperty(x)) {
+                    obj = obj[x];
+                } else {
+                    // Doesn't exist, throw back the string itself
+                    obj = lang_opt.join('.');
+                    break;
+                }
+            }
+            replacements.push(str + '|' + obj);
+        }
+
+        return replacements;
     }
 }
 

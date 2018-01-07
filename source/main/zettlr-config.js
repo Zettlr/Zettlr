@@ -29,6 +29,13 @@ class ZettlrConfig
             'pdflatex': false
         };
 
+        this.supportedLangs = [
+            'de_DE',
+            'fr_FR',
+            'en_US',
+            'en_GB'
+        ];
+
         // Config Template providing all necessary arguments
         this.cfgtpl = {
             "projectDir": app.getPath('documents'),
@@ -41,7 +48,8 @@ class ZettlrConfig
                 'en_GB' : (this.getLocale() === 'en_GB') ? true : false,
                 'de_DE' : (this.getLocale() === 'de_DE') ? true : false,
                 'fr_FR' : (this.getLocale() === 'fr_FR') ? true : false
-            }
+            },
+            "app_lang": this.getLocale()
         };
 
         // Load the configuration
@@ -176,13 +184,6 @@ class ZettlrConfig
         let lang = app.getLocale();
         let mainlang = null;
 
-        let supportedLangs = [
-            'de_DE',
-            'fr_FR',
-            'en_US',
-            'en_GB'
-        ];
-
         if(lang.indexOf('-') > -1) {
             // Specific sub-lang
             mainlang = lang.split('-')[0];
@@ -193,7 +194,7 @@ class ZettlrConfig
             lang = null;
         }
 
-        for(let sup of supportedLangs) {
+        for(let sup of this.supportedLangs) {
             let ml = sup.split('_')[0];
             let sl = sup.split('_')[1];
             if(ml === mainlang) {
@@ -208,6 +209,11 @@ class ZettlrConfig
         }
 
         return 'en_US'; // Fallback default
+    }
+
+    getSupportedLangs()
+    {
+        return this.supportedLangs;
     }
 
     // Set an option

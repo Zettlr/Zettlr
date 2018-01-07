@@ -68,6 +68,64 @@
             "no_data": "Could not initialize dialog. Data was %s.",
             "unknown_dialog": "The requested dialog '%s' does not exist.",
             "no_template": "Could not find dialog template '%s'."
+        },
+        "dir_new": {
+            "title": "Create directory",
+            "message": "Please enter a name for the new directory.",
+            "info": "The directory will be created in <strong>%PATH%</strong>.",
+            "placeholder": "Directory name",
+            "value": "Untitled"
+        },
+        "dir_rename": {
+            "title": "Rename directory",
+            "message": "Please provide a new name for the directory",
+            "info": "The directory <strong>%PATH%</strong> and all its files will be moved.",
+            "placeholder": "Directory"
+        },
+        "export": {
+            "title": "Export file",
+            "message": "You are about to export <strong>%NAME%</strong>.",
+            "info": "Just double click on the filetype you want to export. The file will automatically be opened in your preferred app, from where you can save it wherever you want.",
+            "alt_html": "Export as HTML",
+            "alt_odt": "Export as ODT",
+            "alt_docx": "Export as DOCX",
+            "alt_pdf": "Export as PDF",
+            "no_pdflatex": "Could not find the pdflatex executable on your system. Please make sure to install LaTeX to be able to export to PDF.",
+            "no_pandoc": "Could not find pandoc. Please install pandoc to enable the file exporting options!"
+        },
+        "file_new": {
+            "title": "New file",
+            "message": "Please provide a name for the file!",
+            "info": "The file will be created in <strong>%PATH%</strong>.",
+            "placeholder": "Filename",
+            "value": "Untitled"
+        },
+        "file_rename": {
+            "title": "Rename file",
+            "message": "Please provide a new filename for the file.",
+            "info": "The file in <strong>%PATH%</strong> will be moved accordingly.",
+            "placeholder": "Filename"
+        },
+        "preferences": {
+            "title": "Preferences",
+            "message": "Here you may edit your preferences.",
+            "app_lang": {
+                "title": "Application language (<strong>Restart required!</strong>)",
+                "de_DE": "German (Germany)",
+                "en_GB": "English (UK)",
+                "en_US": "English (United States)",
+                "fr_FR": "French (France)"
+            },
+            "pandoc": "Path to pandoc executable. Please only change, if Zettlr is unable to locate pandoc.",
+            "pdflatex": "Path to pdflatex executable. Please only change, if Zettlr is unable to locate it.",
+            "pandoc_default": "Default: pandoc",
+            "pdflatex_default": "Default: pdflatex",
+            "nightmode": "Night mode?",
+            "snippets": "Show snippets?",
+            "spellcheck": "Select the languages for which you want to enable automatic spell checking (<strong>Restart required!</strong>)",
+            "spellcheck_warning": "<em>Attention:</em> Too many active spell check libraries may slow the app down significanty! Try to stick with three at maximum.",
+            "save": "Save",
+            "cancel": "Cancel"
         }
     },
     "context_menu": {
@@ -83,10 +141,35 @@
         "cut": "Cut",
         "copy": "Copy",
         "paste": "Paste",
-        "select_all": "Select all"
+        "select_all": "Select all",
+        "quicklook": "Quicklook"
     },
     "system" : {
         "unknown_command": "Unknown command received: %s",
-        "no_command": "Received a message with no command: %s"
+        "no_command": "Received a message with no command: %s",
+        "error": {
+            "fnf_title": "File not found",
+            "fnf_message": "The requested file was not found.",
+            "dnf_title": "Directory not found",
+            "dnf_message": "The requested directory was not found.",
+            "could_not_create_file": "Could not create file",
+            "file_exists": "The file already exists.",
+            "no_allowed_chars": "The provided name did not contain any allowed letters.",
+            "delete_root_title": "Cannot remove root",
+            "delete_root_message": "You cannot remove the root directory.",
+            "rename_root_title": "Cannot rename root",
+            "rename_root_message": "You cannot rename the root directory.",
+            "pandoc_error_title": "Could not export file",
+            "pandoc_error_message": "Pandoc reported an error: %s",
+            "cancel_remove": "Cancel",
+            "remove_title": "Really delete?",
+            "remove_message": "Do you really want to remove %s?"
+        },
+        "save_changes_title": "Omit unsaved changes?",
+        "save_changes_message": "There are unsaved changes to the current file. Do you want to omit them or save?",
+        "save_changes_cancel": "Cancel",
+        "save_changes_save": "Save",
+        "save_changes_omit": "Proceed without saving",
+        "open_folder": "Open project folder"
     }
 }

@@ -52,4 +52,6 @@
 
 # 0.7.0
 
-- Included Spellchecking
+- Included Spellchecking (en_US, en_GB, fr_FR, de_DE, more languages on request)
+- Translated app into English, German and French.
+- Introducing **Quicklook**: Right-click on any note and click "Quicklook" to open the file in a small overlay window. This enables you to keep open a file while simultaneously reading (and copying text) from different files.

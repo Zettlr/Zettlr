@@ -2,6 +2,7 @@
 
 const ZettlrCon = require('./zettlr-context.js');
 const ZettlrDialog = require('./zettlr-dialog.js');
+const ZettlrQuicklook = require('./zettlr-quicklook.js');
 
 class ZettlrBody
 {
@@ -11,6 +12,8 @@ class ZettlrBody
         this.menu = new ZettlrCon(this);
         this.dialog = new ZettlrDialog(this);
         this.spellcheckLangs = null; // This holds all available languages
+        this.ql = []; // This holds all open quicklook windows
+        this.darkTheme = false; // Initial value; will be overwritten by init messages
 
         // Event listener for the context menu
         window.addEventListener('contextmenu', (e) => {
@@ -65,6 +68,30 @@ class ZettlrBody
         this.dialog.open();
     }
 
+    quicklook(file)
+    {
+        this.ql.push(new ZettlrQuicklook(this, file, this.darkTheme));
+    }
+
+    // This function gets called only by ZettlrQuicklook-objects on their
+    // destruction to remove it from the ql-array.
+    qlsplice(zql)
+    {
+        let index = this.ql.indexOf(zql);
+        if(index > -1) {
+            this.ql.splice(index, 1);
+        }
+    }
+
+    toggleTheme()
+    {
+        this.darkTheme = !this.darkTheme;
+        // Toggle the Quicklook-window's style
+        for(let ql of this.ql) {
+            ql.toggleTheme();
+        }
+    }
+
     displayExport(file)
     {
         let options = {
@@ -112,7 +139,8 @@ class ZettlrBody
         pdflatex   = '',
         darkTheme  = '',
         snippets   = '',
-        spellcheck = this.spellcheckLangs;
+        spellcheck = this.spellcheckLangs,
+        app_lang = 'en_US';
 
         for(let r of res) {
             // The four prompts will have an input name="name"
@@ -128,6 +156,8 @@ class ZettlrBody
                 snippets = (r.value === 'yes') ? true : false;
             } else if(r.name === 'spellcheck[]') {
                 spellcheck[r.value] = true;
+            } else if(r.name === 'app-lang') {
+                app_lang = r.value;
             }
         }
 
@@ -145,7 +175,8 @@ class ZettlrBody
                 'pdflatex': pdflatex,
                 'darkTheme': darkTheme,
                 'snippets': snippets,
-                'spellcheck': spellcheck
+                'spellcheck': spellcheck,
+                'app_lang': app_lang
             }
             this.parent.saveSettings(cfg);
         }

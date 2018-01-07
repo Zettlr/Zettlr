@@ -12,11 +12,9 @@
 
     .dialog {
         background-color:white;
-        margin:15% 15% 0% 15%;
-        border-radius:10px;
+        margin:15% 15% 5% 15%;
+        border-radius:@border-radius;
         padding:20px;
-        -webkit-box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.75);
-        -moz-box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.75);
         box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.75);
 
         h1 {
@@ -31,7 +29,7 @@
 
         hr {
             border:none;
-            border-bottom:1px solid black;
+            border-bottom:1px solid @grey-4;
             width:80%;
             margin:1em 10%;
         }
@@ -50,6 +48,13 @@
             font-size: inherit;
             outline:none;
             margin-bottom:1em;
+        }
+
+        select {
+            line-height: 200%;
+            font-size: inherit;
+            padding:0.5em;
+            margin:0.5em;
         }
 
         input[type="checkbox"] {

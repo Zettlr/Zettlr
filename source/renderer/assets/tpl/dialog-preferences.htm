@@ -1,39 +1,41 @@
 <div class="dialog">
-    <h1>Preferences</h1>
-    <p>Edit your preferences here.</p>
+    <h1>%i18n.preferences.title%</h1>
+    <p>%i18n.preferences.message%</p>
     <hr>
     <form  action="" method="GET" id="dialog">
-        <label for="pref-pandoc">
-            Path to the pandoc command. Only change if you
-            installed pandoc but Zettlr is unable to find it.
+        <label for="app-lang">%i18n.preferences.app_lang.title%:
         </label>
-        <input type="text" id="pref-pandoc" name="pref-pandoc" placeholder="Default: pandoc" value="%PANDOC%">
+        <select name="app-lang" id="app-lang">
+            %APP_LANG%
+        </select>
+        <hr>
+        <label for="pref-pandoc">
+            %i18n.preferences.pandoc%
+        </label>
+        <input type="text" id="pref-pandoc" name="pref-pandoc" placeholder="%i18n.preferences.pandoc_default%" value="%PANDOC%">
 
         <label for="pref-pdflatex">
-            Path to the pdflatex command. Only change if
-            you installed a LaTeX distribution but Zettlr is unable to locate it.
+            %i18n.preferences.pdflatex%
         </label>
-        <input type="text" id="pref-pdflatex" name="pref-pdflatex" placeholder="Default: pdflatex" value="%PDFLATEX%">
+        <input type="text" id="pref-pdflatex" name="pref-pdflatex" placeholder="%i18n.preferences.pdflatex_default%" value="%PDFLATEX%">
 
         <div>
             <input type="checkbox" name="pref-darkTheme" value="yes" id="pref-darkTheme" %DARK%>
-            <label for="pref-darkTheme">Dark Theme?</label>
+            <label for="pref-darkTheme">%i18n.preferences.nightmode%</label>
         </div>
         <div>
             <input type="checkbox" name="pref-snippets" value="yes" id="pref-snippets" %SNIPPETS%>
-            <label for="pref-snippets">Display snippets?</label>
+            <label for="pref-snippets">%i18n.preferences.snippets%</label>
         </div>
         <hr>
         <p>
-            Check the languages you want to enable spellcheck for (<strong>Restart required!</strong>)
+            %i18n.preferences.spellcheck%
         </p>
         <p>
-            <em>Attention:</em> Loading too many language spellcheckers will
-            significantly slow down the app. Please try to stick with three
-            at maximum!
+            %i18n.preferences.spellcheck_warning%
         </p>
         %SPELLCHECK%
-        <button type="submit" id="pref-save">Save</button>
-        <button id="abort">Cancel</button>
+        <button type="submit" id="pref-save">%i18n.preferences.save%</button>
+        <button id="abort">%i18n.preferences.cancel%</button>
     </form>
 </div>

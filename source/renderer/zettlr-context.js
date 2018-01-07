@@ -53,6 +53,13 @@ class ZettlrCon
                     'content': { 'hash': hash }
                 });
             }}));
+            this.menu.append(new MenuItem({ 'type': 'separator' }));
+            this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.quicklook), click(item, win) {
+                that.parent.parent.handleEvent(null, {
+                    'command': 'quicklook',
+                    'content': { 'hash': hash }
+                });
+            }}));
 
         } else if(elem.parents('#directories').length > 0) {
             // In case of directories, our wanted elements are: Only the <li>s

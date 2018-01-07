@@ -41,9 +41,8 @@ class Zettlr
         this.config = new ZettlrConfig(this);
 
         // Init language one-time
-        //i18n(this.config.getLocale());
-        i18n('de_DE');
-        
+        i18n(this.config.get('app_lang'));
+
         this.ipc = new ZettlrIPC(this);
 
         // Initiate the files - every dir will read its own contents.
@@ -80,7 +79,7 @@ class Zettlr
 
         // Default is: Show snippets
         if(!this.config.get('snippets')) {
-            this.ipc.send('toggle-snippets');
+            this.ipc.send('toggle-snippets', 'no-emit');
         }
 
         // Send found binaries from init() to the client
@@ -88,6 +87,9 @@ class Zettlr
             'pandoc'    : this.config.getEnv('pandoc'),
             'pdflatex'  : this.config.getEnv('pdflatex')
         });
+
+        // Set the language
+        this.ipc.send('lang', this.config.get('app_lang'));
     }
 
     // Shutdown the app. This function is called on quit.
@@ -170,6 +172,10 @@ class Zettlr
             case 'get-paths':
             // The child process requested the current paths and files
             this.ipc.send('paths', this.getPaths());
+            break;
+
+            case 'file-get-quicklook':
+            this.ipc.send('file-quicklook', this.paths.findFile({'hash': arg.content}).withContent());
             break;
 
             case 'get-file':
@@ -265,7 +271,9 @@ class Zettlr
             break;
 
             case 'get-preferences':
-            this.ipc.send('preferences', this.config.config);
+            let toSend = JSON.parse(JSON.stringify(this.config.config));
+            toSend.supportedLangs = this.config.getSupportedLangs();
+            this.ipc.send('preferences', toSend);
             break;
 
             // Got a new config object
@@ -294,7 +302,7 @@ class Zettlr
             break;
 
             default:
-            console.log("Unknown command received: " + arg.command);
+            console.log(trans(global.i18n.system.unknown_command, arg.command));
             break;
         }
     }
@@ -316,8 +324,8 @@ class Zettlr
         } else {
             this.window.prompt({
                 type: 'error',
-                title: 'File not found',
-                message: 'The requested file was not found.'
+                title: trans(global.i18n.system.error.fnf_title),
+                message: trans(global.i18n.system.error.fnf_message)
             });
         }
     }
@@ -337,8 +345,8 @@ class Zettlr
         else {
             this.window.prompt({
                 type: 'error',
-                title: 'Folder not found',
-                message: 'The requested folder was not found.'
+                title: trans(global.i18n.system.error.dnf_title),
+                message: trans(global.i18n.system.error.dnf_message)
             });
         }
     }
@@ -365,8 +373,8 @@ class Zettlr
             // Already exists.
             this.window.prompt({
                 type: 'error',
-                title: 'Could not create file',
-                message: 'This file already exists.'
+                title: trans(global.i18n.system.error.could_not_create_file),
+                message: trans(global.i18n.system.error.file_exists)
             });
             return;
         }
@@ -376,8 +384,8 @@ class Zettlr
         if(file == null) {
             this.window.prompt({
                 type: 'error',
-                title: 'Could not create file',
-                message: 'The provided file name did not contain any allowed characters.'
+                title: trans(global.i18n.system.error.could_not_create_file),
+                message: trans(global.i18n.system.error.no_allowed_chars)
             });
             return;
         }
@@ -409,8 +417,8 @@ class Zettlr
         if(dir == null) {
             this.window.prompt({
                 type: 'error',
-                title: 'Empty directory name',
-                message: 'The provided name did not contain any allowed characters.'
+                title: trans(global.i18n.system.error.could_not_create_dir),
+                message: trans(global.i18n.system.error.no_allowed_chars)
             });
             return;
         }
@@ -501,8 +509,8 @@ class Zettlr
         if(dir.path == this.config.get('projectDir')) {
             this.window.prompt({
                 type: 'error',
-                title: 'Cannot delete root folder.',
-                message: 'You cannot delete the root folder.'
+                title: trans(global.i18n.system.error.delete_root_title),
+                message: trans(global.i18n.system.error.delete_root_message)
             });
             return;
         }
@@ -553,8 +561,8 @@ class Zettlr
             if (error) {
                 this.window.prompt({
                     type: 'error',
-                    title: 'Error on exporting',
-                    message: 'Pandoc reported an error: ' + error
+                    title: trans(global.i18n.system.error.pandoc_error_title),
+                    message: trans(global.i18n.system.error.pandoc_error_message, error)
                 });
                 return;
             }
@@ -573,8 +581,8 @@ class Zettlr
             // Don't rename the root directory
             this.window.prompt({
                 type: 'error',
-                title: 'Cannot rename root',
-                message: 'You cannot rename the root directory.'
+                title: trans(global.i18n.system.error.rename_root_title),
+                message: trans(global.i18n.system.error.rename_root_message)
             });
             return;
         }
