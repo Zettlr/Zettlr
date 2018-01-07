@@ -55,3 +55,6 @@
 - Included Spellchecking (en_US, en_GB, fr_FR, de_DE, more languages on request)
 - Translated app into English, German and French.
 - Introducing **Quicklook**: Right-click on any note and click "Quicklook" to open the file in a small overlay window. This enables you to keep open a file while simultaneously reading (and copying text) from different files.
+- Fixed a minor error with the detection of clickable links
+- Fixed an error that prevented searching for exact phrases
+- Added a short check that Zettlr does not try to move a directory into a subdirectory.

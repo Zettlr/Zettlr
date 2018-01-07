@@ -6,7 +6,7 @@
         "name": "Hendrik Erz",
         "email": "hendrik.erz@zettlr.com"
     },
-    "version": "0.6.0",
+    "version": "0.7.0",
     "description": "A powerful Markdown Editor with integrated tree view",
     "license": "MIT",
     "main": "main.js",

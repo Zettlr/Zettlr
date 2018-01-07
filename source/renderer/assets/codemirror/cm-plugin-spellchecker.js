@@ -17,6 +17,8 @@
     CodeMirror.defineMode("spellchecker", function(config, parsercfg) {
         // word separators
         var delim = "!\"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ ";
+        // Include special interpunction
+        delim += "«»“”–—…÷‘’‚";
 
 
         // Create the overlay and such
@@ -35,8 +37,18 @@
                     stream.next();
                 }
 
-                // Exclude numbers from spell checking
-                if(/^\d+$/.test(word)) {
+                // Exclude numbers (even inside words) from spell checking
+                // // Regex for whole numbers would be /^\d+$/
+                if(/\d+/.test(word)) {
+                    return null;
+                }
+
+                // Exclude links from spell checking as well
+                if(/https?/.test(word)) {
+                    // Let's eat the stream until the end of the link
+                    while((stream.peek() != null) && (stream.peek() != ' ')) {
+                        stream.next();
+                    }
                     return null;
                 }
 

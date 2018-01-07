@@ -28,6 +28,8 @@ class ZettlrWindow
         this.window = new BrowserWindow({
             width: screensize.width,
             height: screensize.height,
+            minWidth:800,
+            minHeight:450,
             show: false,
             icon: 'icons/png/64x64.png',
             backgroundColor: '#fff',

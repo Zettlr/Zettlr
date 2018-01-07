@@ -74,21 +74,23 @@ class ZettlrEditor
         // Turn cursor into pointer while hovering link with pressed shift
         this.cm.getWrapperElement().addEventListener('mousemove', e => {
             let t = $(e.target);
-            if(t.hasClass('cm-url') && e.shiftKey) {
+            if((t.hasClass('cm-url') || t.hasClass('cm-link')) && e.shiftKey) {
                 t.addClass('shift');
             } else {
                 t.removeClass('shift');
             }
         });
 
-        this.cm.getWrapperElement().addEventListener('click', e => {
+        this.div.on('click', (e) => {
             if(e.shiftKey) {
                 // Now we're handling
                 e.preventDefault();
                 e.stopPropagation();
                 $(e.target).removeClass('shift');
-                url = $(e.target).text();
-                require('electron').shell.openExternal(url);
+                let url = $(e.target).text();
+                if(/https?/.test(url)) {
+                    require('electron').shell.openExternal(url);
+                }
             }
         });
 

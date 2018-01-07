@@ -47,7 +47,8 @@
 .CodeMirror .cm-link {
   text-decoration: none;
 }
-.CodeMirror .cm-url.shift {
+.CodeMirror .cm-url.shift,
+.CodeMirror .cm-link.shift {
   cursor: pointer;
 }
 .CodeMirror .CodeMirror-dialog {

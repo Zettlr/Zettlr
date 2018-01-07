@@ -205,6 +205,7 @@ class ZettlrFile
                 for(let wd of t.word) {
                     if(this.name.indexOf(wd) > -1) {
                         matches++;
+                        // Break to speed up search
                         break;
                     }
                 }

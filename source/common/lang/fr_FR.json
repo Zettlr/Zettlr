@@ -163,7 +163,9 @@
             "pandoc_error_message": "Pandoc a lancé une erreur: %s",
             "cancel_remove": "Annuler",
             "remove_title": "Effacer réellement?",
-            "remove_message": "Effacer %s réellement?"
+            "remove_message": "Effacer %s réellement?",
+            "move_into_child_title": "Impossible de déplacer le dossier",
+            "move_into_child_message": "Tu ne peut pas déplacer le dossier dans un sous-dossier"
         },
         "save_changes_title": "Annuler des modifications?",
         "save_changes_message": "Le fichier contient modifications n'enregistrais pas. Annuler ou enregistrer?",

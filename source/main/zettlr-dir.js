@@ -103,6 +103,16 @@ class ZettlrDir
         return null;
     }
 
+    // Check whether or not this dir contains the given dir
+    contains(dir)
+    {
+        if(this.findDir({ 'hash': dir.hash }) !== null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     getFileHashes(arr = [])
     {
         for(let c of this.children) {

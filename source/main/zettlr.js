@@ -672,6 +672,17 @@ class Zettlr
         }
 
         let to = this.paths.findDir({ 'hash': arg.to });
+
+        // Let's check that:
+        if(from.isDirectory() && from.contains(to)) {
+            this.window.prompt({
+                type: 'error',
+                title: trans(global.i18n.system.error.move_into_child_title),
+                message: trans(global.i18n.system.error.move_into_child_message)
+            });
+            return;
+        }
+
         let newPath = null;
         let isCurDir = (from.hash == this.getCurrentDir().hash) ? true : false;
 

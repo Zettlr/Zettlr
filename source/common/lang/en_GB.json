@@ -163,7 +163,9 @@
             "pandoc_error_message": "Pandoc reported an error: %s",
             "cancel_remove": "Cancel",
             "remove_title": "Really delete?",
-            "remove_message": "Do you really want to remove %s?"
+            "remove_message": "Do you really want to remove %s?",
+            "move_into_child_title": "Cannot move directory",
+            "move_into_child_message": "You cannot move a directory into one of its subdirectories."
         },
         "save_changes_title": "Omit unsaved changes?",
         "save_changes_message": "There are unsaved changes to the current file. Do you want to omit them or save?",

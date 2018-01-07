@@ -58,6 +58,8 @@ class ZettlrQuicklook
         this.window.find('.title').first().on('dblclick', (e) => {
             this.toggleWindow();
         });
+
+        // Listen for resizes on the main window and behave accordingly.
     }
 
     show()
@@ -66,6 +68,14 @@ class ZettlrQuicklook
         let width = $(window).width();
         let qlh = height * 0.66; // Two thirds of screen
         let qlw = width * 0.5;
+
+        // Take care of minimum sizes
+        if(qlh < 400) {
+            qlh = 400;
+        }
+        if(qlw < 400) {
+            qlw = 400;
+        }
 
         // Somehow the draggable() plugin thinks it's best to set the position
         // to relative, which then causes the second window to be positioned

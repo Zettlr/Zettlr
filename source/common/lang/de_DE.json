@@ -163,7 +163,9 @@
             "pandoc_error_message": "Pandoc hat beim Export folgenden Fehler ausgegeben: %s",
             "cancel_remove": "Abbrechen",
             "remove_title": "Wirklich löschen?",
-            "remove_message": "Möchtest du %s wirklich löschen?"
+            "remove_message": "Möchtest du %s wirklich löschen?",
+            "move_into_child_title": "Kann Verzeichnis nicht verschieben",
+            "move_into_child_message": "Du kannst kein Verzeichnis in eines seiner Unterverzeichnisse verschieben."
         },
         "save_changes_title": "Änderungen verwerfen?",
         "save_changes_message": "Die Datei enthält ungespeicherte Änderungen. Verwerfen oder speichern?",

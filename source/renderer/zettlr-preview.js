@@ -249,6 +249,7 @@ class ZettlrPreview
             } else if(c === '"') {
                 if(!hasExact) {
                     hasExact = true;
+                    continue;
                 } else {
                     hasExact = false;
                     myTerms.push({ "word": curWord.trim(), "operator": operator });
