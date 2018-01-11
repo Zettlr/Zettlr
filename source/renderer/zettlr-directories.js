@@ -77,6 +77,8 @@ class ZettlrDirectories
             return;
         }
 
+        this.div.scrollTop(0);
+
         // Empty
         this.div.html('');
 
@@ -127,6 +129,11 @@ class ZettlrDirectories
     toggleTheme()
     {
         this.div.toggleClass('dark');
+    }
+
+    toggleDisplay()
+    {
+        this.div.toggleClass('hidden');
     }
 
     // Select another directory

@@ -7,6 +7,18 @@
     bottom:0;
     left:40%;
 
+    &.no-directories {
+        left:20%;
+    }
+
+    &.no-preview {
+        left:20%;
+    }
+
+    &.no-directories.no-preview {
+        left:0%;
+    }
+
     &.dark {
         background-color:@grey-7;
     }
@@ -14,7 +26,7 @@
     .CodeMirror {
         height:100%;
         cursor:text;
-        font-size:1em;
+        font-size: @font-size-big;
         font-family: inherit;
     }
 

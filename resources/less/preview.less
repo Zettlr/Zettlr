@@ -6,12 +6,19 @@
     bottom:0;
     left:20%;
     right:60%;
-    border-right:2px solid @grey-2;
+
+    border-right:1px solid @grey-2;
     overflow-y: auto;
     overflow-x:hidden;
     cursor: default;
     outline: none;
     background-color:inherit;
+    font-size: @font-size-small;
+
+    &.no-directories {
+        left:0%;
+        right:80%;
+    }
 
     ul {
         list-style-type: none;
@@ -24,7 +31,7 @@
         }
 
         li {
-            padding:10px;
+            padding:@pane-padding;
             border-bottom:1px solid @grey-2;
             background-color:inherit;
 
@@ -37,7 +44,16 @@
             }
 
             strong {
+                // Prevent line breaking in the titles and give a little spacing
+                // before and after
                 white-space: nowrap;
+                display: inline-block;
+                width: 100%;
+                overflow: hidden;
+
+                background-image:linear-gradient(90deg, @grey-7 0%, @grey-7 90%, transparent 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
             }
 
             span {
@@ -52,9 +68,9 @@
             &.directory {
                 background-color:@grey-0;
                 color:@blue-0;
-                line-height:1em;
+                line-height: @ribbon-height;
                 white-space: nowrap;
-                padding:0.3em;
+                padding:@ribbon-padding;
                 position:sticky;
                 top:0;
             }
@@ -121,6 +137,12 @@
                 background-color:@blue-selection-dark;
             }
 
+            li {
+                strong {
+                    background-image:linear-gradient(90deg, white 0%, white 90%, transparent 100%);
+                }
+            }
+
             li:hover {
                 background-color:@grey-3;
             }
@@ -128,8 +150,6 @@
             li.directory {
                 background-color:@grey-7;
                 color:@grey-3;
-                line-height:1em;
-                padding:0.3em;
             }
         }
 

@@ -20,12 +20,8 @@ class ZettlrEditor
             lineWrapping: true,
             autoCloseBrackets: true, // Autoclose brackets and quotes
             extraKeys: {
-                // Disable handling of the deletion-keys by CodeMirror
-                'Cmd-D'         : false,
-                'Cmd-Shift-D'   : false,
-                'Ctrl-D'        : false,
-                'Ctrl-Shift-D'  : false,
                 'Ctrl-Shift-F'  : false,  // Triggers replace in CodeMirror, disables global search
+                'Cmd-Shift-F'   : false,
                 'Enter'         : 'newlineAndIndentContinueMarkdownList',
                 'Tab'           : 'autoIndentMarkdownList',
                 'Shift-Tab'     : 'autoUnindentMarkdownList',
@@ -168,6 +164,16 @@ class ZettlrEditor
             this.div.addClass('dark');
             this.cm.setOption("theme", 'zettlr-dark');
         }
+    }
+
+    toggleDirectories()
+    {
+        this.div.toggleClass('no-directories');
+    }
+
+    togglePreview()
+    {
+        this.div.toggleClass('no-preview');
     }
 
     // Is the editor unmodified?

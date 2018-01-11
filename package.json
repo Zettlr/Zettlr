@@ -57,7 +57,7 @@
             ]
         },
         "linux": {
-            "target": "deb",
+            "target": "zip",
             "synopsis": "Markdown editor",
             "category": "Science",
             "icon": "resources/icons/png",

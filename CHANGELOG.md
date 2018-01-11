@@ -58,3 +58,5 @@
 - Fixed a minor error with the detection of clickable links
 - Fixed an error that prevented searching for exact phrases
 - Added a short check that Zettlr does not try to move a directory into a subdirectory.
+- Multiple minor fixes and improvements
+- Preview pane and directory tree view can now be hidden via `Cmd/Ctrl+1` and `Cmd/Ctrol+2`

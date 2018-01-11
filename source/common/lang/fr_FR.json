@@ -40,6 +40,8 @@
         "toggle_devtools": "Outils du développeur",
         "toggle_theme": "Commuter le mode sombre",
         "toggle_snippets": "Commuter des fragments",
+        "toggle_directories": "Commuter les dossiers",
+        "toggle_preview": "Commuter les fichiers",
         "zoom_in": "Zoomer",
         "zoom_out": "Zoomer dehors",
         "zoom": "Zoom",

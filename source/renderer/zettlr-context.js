@@ -40,7 +40,6 @@ class ZettlrCon
 
             // Now build
             let that = this;
-            this.menu.append(new MenuItem({'label': label, 'enabled': false }));
             this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.rename), click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'rename-file',
@@ -73,7 +72,6 @@ class ZettlrCon
 
                 // Now build
                 let that = this;
-                this.menu.append(new MenuItem({'label': label, 'enabled': false }));
 
                 // Only add rename/remove options if not root dir
                 if(elem.attr('id') !== 'root') {
@@ -108,20 +106,29 @@ class ZettlrCon
         } else if(elem.parents('#editor').length > 0) {
             let that = this;
             // Just build -- these menu items will only trigger CodeMirror actions
-            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.bold), click(item, win) {
+            this.menu.append(new MenuItem({
+                label: trans(global.i18n.context_menu.bold),
+                accelerator: 'CmdOrCtrl+B',
+                click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'cm-command',
                     'content': 'markdownBold'
                 });
-            } }));
-            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.italic), click(item, win) {
+            }}));
+            this.menu.append(new MenuItem({
+                label: trans(global.i18n.context_menu.italic),
+                accelerator: 'CmdOrCtrl+I',
+                click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'cm-command',
                     'content': 'markdownItalic'
                 });
             } }));
             this.menu.append(new MenuItem({type: 'separator'}));
-            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.insert_link), click(item, win) {
+            this.menu.append(new MenuItem({
+                label: trans(global.i18n.context_menu.insert_link),
+                accelerator: 'CmdOrCtrl+K',
+                click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'cm-command',
                     'content': 'markdownLink'

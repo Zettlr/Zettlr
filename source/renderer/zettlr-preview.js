@@ -29,6 +29,8 @@ class ZettlrPreview
             return;
         }
 
+        this.div.scrollTop(0);
+
         // Clear preview list
         this.div.html('<ul></ul>');
 
@@ -153,6 +155,11 @@ class ZettlrPreview
         this.div.toggleClass('dark');
     }
 
+    toggleDirectories()
+    {
+        this.div.toggleClass('no-directories');
+    }
+
     // Toggle display of snippets
     toggleSnippets()
     {
@@ -175,7 +182,7 @@ class ZettlrPreview
             snip = ' hidden';
         }
 
-        return `<li data-hash="${file.hash}">
+        return `<li data-hash="${file.hash}" title="${file.name}">
         <strong>${file.name.substr(0, file.name.length-3)}
         </strong><br>
         <span class="snippet${snip}">${file.snippet}</span>

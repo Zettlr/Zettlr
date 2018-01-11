@@ -136,11 +136,15 @@ html {
   bottom: 0;
   right: 80%;
   background-color: #f0f0f0;
-  border-right: 2px solid #c8c8c8;
+  border-right: 1px solid #c8c8c8;
   color: #646464;
   overflow-y: auto;
   cursor: default;
   outline: none;
+  font-size: 0.9em;
+}
+#directories.hidden {
+  display: none;
 }
 #directories ul {
   list-style-type: none;
@@ -151,7 +155,8 @@ html {
   background-color: #c8f0aa;
 }
 #directories ul li {
-  line-height: 180%;
+  line-height: 1.6em;
+  padding: 0.1em 0.4em;
   white-space: nowrap;
   padding-left: 5px;
   overflow: hidden;
@@ -165,18 +170,18 @@ html {
 #directories ul .collapse-indicator::before {
   content: "\f078";
   font-family: 'Font Awesome';
-  font-size: 70%;
+  font-size: 0.72em;
   /* Bit smaller, those indicators are damned huge */
   color: #646464;
   display: inline-block;
-  vertical-align: -2%;
+  vertical-align: sub;
   width: 10px;
   height: 19px;
   overflow: hidden;
 }
 #directories ul.collapsed .collapse-indicator::before {
   content: "\f054";
-  vertical-align: baseline;
+  vertical-align: sub;
 }
 #directories ul.collapsed ul {
   height: 0px;
@@ -208,12 +213,17 @@ html {
   bottom: 0;
   left: 20%;
   right: 60%;
-  border-right: 2px solid #c8c8c8;
+  border-right: 1px solid #c8c8c8;
   overflow-y: auto;
   overflow-x: hidden;
   cursor: default;
   outline: none;
   background-color: inherit;
+  font-size: 0.9em;
+}
+#preview.no-directories {
+  left: 0%;
+  right: 80%;
 }
 #preview ul {
   list-style-type: none;
@@ -225,7 +235,7 @@ html {
   background-color: #c8dcf0;
 }
 #preview ul li {
-  padding: 10px;
+  padding: 0.4em;
   border-bottom: 1px solid #c8c8c8;
   background-color: inherit;
 }
@@ -237,6 +247,12 @@ html {
 }
 #preview ul li strong {
   white-space: nowrap;
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  background-image: linear-gradient(90deg, #282828 0%, #282828 90%, transparent 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 #preview ul li span {
   display: inline-block;
@@ -248,9 +264,9 @@ html {
 #preview ul li.directory {
   background-color: #f0f0f0;
   color: #1d75b3;
-  line-height: 1em;
+  line-height: 1.6em;
   white-space: nowrap;
-  padding: 0.3em;
+  padding: 0.1em 0.4em;
   position: sticky;
   top: 0;
 }
@@ -306,14 +322,15 @@ html {
 #preview.dark ul .selected {
   background-color: #6478b4;
 }
+#preview.dark ul li strong {
+  background-image: linear-gradient(90deg, white 0%, white 90%, transparent 100%);
+}
 #preview.dark ul li:hover {
   background-color: #787878;
 }
 #preview.dark ul li.directory {
   background-color: #282828;
   color: #787878;
-  line-height: 1em;
-  padding: 0.3em;
 }
 #preview.dark #search-directory input {
   background-color: #6478b4;
@@ -332,13 +349,22 @@ html {
   bottom: 0;
   left: 40%;
 }
+#editor.no-directories {
+  left: 20%;
+}
+#editor.no-preview {
+  left: 20%;
+}
+#editor.no-directories.no-preview {
+  left: 0%;
+}
 #editor.dark {
   background-color: #282828;
 }
 #editor .CodeMirror {
   height: 100%;
   cursor: text;
-  font-size: 1em;
+  font-size: 1.2em;
   font-family: inherit;
 }
 #editor .CodeMirror-code {
@@ -512,7 +538,7 @@ html {
   height: 1.6em;
 }
 .quicklook .title h1 {
-  font-size: 1em;
+  font-size: 0.9em;
   text-align: center;
   display: inline-block;
   padding: 0.2em;
@@ -542,9 +568,6 @@ html {
 .quicklook .title .close:hover {
   color: #ffb0b0;
 }
-.quicklook .body {
-  overflow-y: scroll;
-}
 .quicklook .body .CodeMirror {
   cursor: text;
   font-size: 1em;
@@ -554,9 +577,6 @@ html {
 }
 .quicklook .body .CodeMirror-scroll .CodeMirror-sizer {
   margin-bottom: 1em;
-}
-.quicklook .ui-resizable {
-  position: relative;
 }
 .quicklook .ui-resizable-handle {
   position: absolute;
@@ -571,27 +591,27 @@ html {
   cursor: n-resize;
   height: 15px;
   width: 100%;
-  top: -5px;
+  top: -10px;
   left: 0;
 }
 .quicklook .ui-resizable-s {
   cursor: s-resize;
   height: 15px;
   width: 100%;
-  bottom: -5px;
+  bottom: -10px;
   left: 0;
 }
 .quicklook .ui-resizable-e {
   cursor: e-resize;
   width: 15px;
-  right: -5px;
+  right: -10px;
   top: 0;
   height: 100%;
 }
 .quicklook .ui-resizable-w {
   cursor: w-resize;
   width: 15px;
-  left: -5px;
+  left: -10px;
   top: 0;
   height: 100%;
 }
@@ -599,27 +619,27 @@ html {
   cursor: se-resize;
   width: 12px;
   height: 12px;
-  right: 1px;
-  bottom: 1px;
+  right: -5px;
+  bottom: -5px;
 }
 .quicklook .ui-resizable-sw {
   cursor: sw-resize;
-  width: 9px;
-  height: 9px;
+  width: 12px;
+  height: 12px;
   left: -5px;
   bottom: -5px;
 }
 .quicklook .ui-resizable-nw {
   cursor: nw-resize;
-  width: 9px;
-  height: 9px;
+  width: 12px;
+  height: 12px;
   left: -5px;
   top: -5px;
 }
 .quicklook .ui-resizable-ne {
   cursor: ne-resize;
-  width: 9px;
-  height: 9px;
+  width: 12px;
+  height: 12px;
   right: -5px;
   top: -5px;
 }

@@ -67,13 +67,13 @@ const template = [
             { type: 'separator' },
             {
                 label: trans(global.i18n.menu.delete_file),
-                accelerator: 'CmdOrCtrl+D',
+                accelerator: (process.platform === 'darwin') ? 'Cmd+Backspace': 'Delete',
                 click (item, focusedWindow) {
                     if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'remove-file'});
                 }
             }, {
                 label: trans(global.i18n.menu.delete_dir),
-                accelerator: 'CmdOrCtrl+Shift+D',
+                accelerator: (process.platform === 'darwin') ? 'Cmd+Shift+Backspace': 'Ctrl+Delete',
                 click(item, focusedWindow) {
                     if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'remove-dir'});
                 }
@@ -140,6 +140,21 @@ const template = [
                 }
             },
             { type: 'separator' },
+            {
+                label: trans(global.i18n.menu.toggle_directories),
+                accelerator: 'CmdOrCtrl+1',
+                click(item, focusedWindow) {
+                    if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'toggle-directories'});
+                }
+            },
+            {
+                label: trans(global.i18n.menu.toggle_preview),
+                accelerator: 'CmdOrCtrl+2',
+                click(item, focusedWindow) {
+                    if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'toggle-preview'});
+                }
+            },
+            { type: 'separator' },
             { label: trans(global.i18n.menu.reset_zoom), role: 'resetzoom' },
             { label: trans(global.i18n.menu.zoom_in), role: 'zoomin' },
             { label: trans(global.i18n.menu.zoom_out), role: 'zoomout' },
@@ -181,7 +196,11 @@ if(process.platform != 'darwin') {
         }
     },
     { type: 'separator' },
-    { label: trans(global.i18n.menu.quit), role: 'quit' });
+    { accelerator: 'Ctrl+Q', label: trans(global.i18n.menu.quit), role: 'quit' });
+
+    template[4].submenu.push({
+        type: 'separator'
+    }, { label: trans(global.i18n.menu.about, name), role: 'about' });
 }
 
 if (process.platform === 'darwin') {

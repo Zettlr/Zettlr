@@ -40,6 +40,8 @@
         "toggle_devtools": "Toggle developer tools",
         "toggle_theme": "Toggle night mode",
         "toggle_snippets": "Toggle text snippets",
+        "toggle_directories": "Toggle tree view",
+        "toggle_preview": "Toggle preview pane",
         "zoom_in": "Zoom in",
         "zoom_out": "Zoom out",
         "zoom": "Zoom",

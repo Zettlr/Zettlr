@@ -633,7 +633,7 @@ class Zettlr
         let file = null;
 
         // Possibilities: Non-opened file or opened file
-        if(this.getCurrentFile().hash == arg.hash) {
+        if(this.getCurrentFile() && (this.getCurrentFile().hash == arg.hash)) {
             // Current file should be renamed.
             file = this.getCurrentFile();
             file.rename(arg.name);

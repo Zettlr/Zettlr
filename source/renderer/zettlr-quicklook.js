@@ -25,6 +25,10 @@ class ZettlrQuicklook
                 highlightFormatting: true
             },
             lineWrapping: true,
+            extraKeys: {
+                'Cmd-F'         : 'findPersistent',
+                'Ctrl-F'        : 'findPersistent'
+            },
             theme: (darkTheme) ? 'zettlr-dark' : 'zettlr',
             cursorBlinkRate: -1 // Hide the cursor
         });

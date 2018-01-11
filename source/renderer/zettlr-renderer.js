@@ -69,6 +69,7 @@ class ZettlrRenderer
             this.directories.newDirectoryList(arg.content);
             this.preview.newFileList(arg.content);
             this.directories.select(arg.content.hash);
+            this.body.closeQuicklook();
             break;
 
             case 'dir-list':
@@ -209,6 +210,16 @@ class ZettlrRenderer
             if(arg.content !== 'no-emit') {
                 this.ipc.send('toggle-snippets');
             }
+            break;
+
+            case 'toggle-directories':
+            this.directories.toggleDisplay();
+            this.preview.toggleDirectories();
+            this.editor.toggleDirectories();
+            break;
+
+            case 'toggle-preview':
+            this.editor.togglePreview();
             break;
 
             case 'export':

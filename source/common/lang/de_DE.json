@@ -40,6 +40,8 @@
         "toggle_devtools": "Entwicklerwerkzeuge",
         "toggle_theme": "Nachtmodus umschalten",
         "toggle_snippets": "Textfragmente umschalten",
+        "toggle_directories": "Verzeichnisse umschalten",
+        "toggle_preview": "Dateiliste umschalten",
         "zoom_in": "Hereinzoomen",
         "zoom_out": "Herauszoomen",
         "zoom": "Zoom",

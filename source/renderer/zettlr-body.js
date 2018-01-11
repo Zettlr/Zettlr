@@ -83,6 +83,15 @@ class ZettlrBody
         }
     }
 
+    // Close all quicklooks
+    closeQuicklook()
+    {
+        while(this.ql.length > 0) {
+            // QuickLooks splice themselves from the array -> always close first
+            this.ql[0].close();
+        }
+    }
+
     toggleTheme()
     {
         this.darkTheme = !this.darkTheme;
