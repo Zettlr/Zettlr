@@ -86,7 +86,6 @@
         "codemirror-markdown-list-autoindent": "^1.0.1",
         "command-exists": "^1.2.2",
         "sanitize-filename": "^1.6.1",
-        "trash": "^4.2.1",
         "typo": "^1.0.6",
         "typo-js": "^1.0.3",
         "util": "^0.10.3"

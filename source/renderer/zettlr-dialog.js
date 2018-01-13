@@ -5,8 +5,8 @@ const path = require('path');
 const {trans} = require('../common/lang/i18n.js');
 
 function DialogError(msg = '') {
-    this.name = trans(global.i18n.dialog.error.name);
-    this.message = trans(global.i18n.dialog.error.message, msg);
+    this.name = trans('dialog.error.name');
+    this.message = trans('dialog.error.message', msg);
 }
 
 class ZettlrDialog
@@ -26,11 +26,23 @@ class ZettlrDialog
     open()
     {
         if(!this.isInitialized()) {
-            throw new DialogError(trans(global.i18n.dialog.error.no_init));
+            throw new DialogError(trans('dialog.error.no_init'));
         }
 
         this.container.addClass('blur');
         this.body.append(this.modal);
+
+        // Adjust the margins
+        let dialog = this.modal.find('.dialog').first();
+        let diaH = dialog.height();
+        let winH = $(document).height();
+
+        if(diaH < winH) {
+            let margin = (winH-diaH) / 2;
+            dialog.css('margin-top', margin + "px");
+        } else {
+            dialog.css('margin-top', "15%"); // Otherwise enable scrolling
+        }
 
         // Activate event listeners
         this.activate();
@@ -64,7 +76,7 @@ class ZettlrDialog
         // export
 
         if(!obj) {
-            throw new DialogError(trans(global.i18n.dialog.error.no_data, obj));
+            throw new DialogError(trans('dialog.error.no_data', obj));
         }
 
         this.passedObj = obj;
@@ -91,16 +103,16 @@ class ZettlrDialog
             for(let l in obj.spellcheck) {
                 let sel = (obj.spellcheck[l]) ? 'checked="checked"' : '';
                 spellcheck += '<div>';
-                spellcheck += `<input type="checkbox" value="${l}" ${sel} name="spellcheck[]" id="${l}"><label for="${l}">${trans(global.i18n.dialog.preferences.app_lang[l])}</label>`;
+                spellcheck += `<input type="checkbox" value="${l}" ${sel} name="spellcheck[]" id="${l}"><label for="${l}">${trans('dialog.preferences.app_lang.'+l)}</label>`;
                 spellcheck += '</div>';
             }
             replacements.push('%SPELLCHECK%|' + spellcheck);
             let lang_selection = '';
             for(let l of obj.supportedLangs) {
                 if(l === this.parent.parent.getLocale()) {
-                    lang_selection += `<option value="${l}" selected="selected">${trans(global.i18n.dialog.preferences.app_lang[l])}</option>`;
+                    lang_selection += `<option value="${l}" selected="selected">${trans('dialog.preferences.app_lang.'+l)}</option>`;
                 } else {
-                    lang_selection += `<option value="${l}">${trans(global.i18n.dialog.preferences.app_lang[l])}</option>`;
+                    lang_selection += `<option value="${l}">${trans('dialog.preferences.app_lang.'+l)}</option>`;
                 }
             }
             replacements.push('%APP_LANG%|' + lang_selection)
@@ -132,7 +144,7 @@ class ZettlrDialog
             break;
 
             default:
-            throw new DialogError(trans(global.i18n.dialog.error.unknown_dialog, dialog));
+            throw new DialogError(trans('dialog.error.unknown_dialog', dialog));
             break;
         }
 
@@ -180,7 +192,7 @@ class ZettlrDialog
         try {
             let stat = fs.lstatSync(p);
         } catch (e) {
-            throw new DialogError(trans(global.i18n.dialog.error.no_template, template));
+            throw new DialogError(trans('dialog.error.no_template', template));
         }
 
         let cnt = fs.readFileSync(p, { encoding: 'utf8' });

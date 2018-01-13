@@ -302,7 +302,7 @@ class Zettlr
             break;
 
             default:
-            console.log(trans(global.i18n.system.unknown_command, arg.command));
+            console.log(trans('system.unknown_command', arg.command));
             break;
         }
     }
@@ -319,13 +319,12 @@ class Zettlr
 
         if(file != null) {
             this.ipc.send('file', file.withContent());
-            this.window.setTitle(file.name + ' — Zettlr');
             this.setCurrentFile(file);
         } else {
             this.window.prompt({
                 type: 'error',
-                title: trans(global.i18n.system.error.fnf_title),
-                message: trans(global.i18n.system.error.fnf_message)
+                title: trans('system.error.fnf_title'),
+                message: trans('system.error.fnf_message')
             });
         }
     }
@@ -345,8 +344,8 @@ class Zettlr
         else {
             this.window.prompt({
                 type: 'error',
-                title: trans(global.i18n.system.error.dnf_title),
-                message: trans(global.i18n.system.error.dnf_message)
+                title: trans('system.error.dnf_title'),
+                message: trans('system.error.dnf_message')
             });
         }
     }
@@ -373,8 +372,8 @@ class Zettlr
             // Already exists.
             this.window.prompt({
                 type: 'error',
-                title: trans(global.i18n.system.error.could_not_create_file),
-                message: trans(global.i18n.system.error.file_exists)
+                title: trans('system.error.could_not_create_file'),
+                message: trans('system.error.file_exists')
             });
             return;
         }
@@ -384,8 +383,8 @@ class Zettlr
         if(file == null) {
             this.window.prompt({
                 type: 'error',
-                title: trans(global.i18n.system.error.could_not_create_file),
-                message: trans(global.i18n.system.error.no_allowed_chars)
+                title: trans('system.error.could_not_create_file'),
+                message: trans('system.error.no_allowed_chars')
             });
             return;
         }
@@ -417,8 +416,8 @@ class Zettlr
         if(dir == null) {
             this.window.prompt({
                 type: 'error',
-                title: trans(global.i18n.system.error.could_not_create_dir),
-                message: trans(global.i18n.system.error.no_allowed_chars)
+                title: trans('system.error.could_not_create_dir'),
+                message: trans('system.error.no_allowed_chars')
             });
             return;
         }
@@ -479,6 +478,8 @@ class Zettlr
         // Now that we are save, let's move the current file to trash.
         if(file.hash == this.getCurrentFile().hash) {
             this.ipc.send('close-file', {});
+            // Also re-set the title!
+            this.window.setTitle('Zettlr');
         }
         file.remove();
         this.ipc.send('file-list', this.getCurrentDir());
@@ -509,8 +510,8 @@ class Zettlr
         if(dir.path == this.config.get('projectDir')) {
             this.window.prompt({
                 type: 'error',
-                title: trans(global.i18n.system.error.delete_root_title),
-                message: trans(global.i18n.system.error.delete_root_message)
+                title: trans('system.error.delete_root_title'),
+                message: trans('system.error.delete_root_message')
             });
             return;
         }
@@ -557,12 +558,16 @@ class Zettlr
 
         let command = `${this.config.get('pandoc')} "${file.path}" -f markdown ${tpl} -t ${arg.ext} -o "${tempfile}"`;
 
-        exec(command, (error, stdout, stderr) => {
+        // Set the current working directory of pandoc to temp. Failing to do so
+        // will yield errors on Windows when the app is installed for all users
+        // (because then the application directory will require admin rights to
+        // write files to and pandoc spits out pre-rendered tex-files)
+        exec(command, { 'cwd': app.getPath('temp')}, (error, stdout, stderr) => {
             if (error) {
                 this.window.prompt({
                     type: 'error',
-                    title: trans(global.i18n.system.error.pandoc_error_title),
-                    message: trans(global.i18n.system.error.pandoc_error_message, error)
+                    title: trans('system.error.pandoc_error_title'),
+                    message: trans('system.error.pandoc_error_message', error)
                 });
                 return;
             }
@@ -581,8 +586,8 @@ class Zettlr
             // Don't rename the root directory
             this.window.prompt({
                 type: 'error',
-                title: trans(global.i18n.system.error.rename_root_title),
-                message: trans(global.i18n.system.error.rename_root_message)
+                title: trans('system.error.rename_root_title'),
+                message: trans('system.error.rename_root_message')
             });
             return;
         }
@@ -677,8 +682,8 @@ class Zettlr
         if(from.isDirectory() && from.contains(to)) {
             this.window.prompt({
                 type: 'error',
-                title: trans(global.i18n.system.error.move_into_child_title),
-                message: trans(global.i18n.system.error.move_into_child_message)
+                title: trans('system.error.move_into_child_title'),
+                message: trans('system.error.move_into_child_message')
             });
             return;
         }
@@ -806,7 +811,7 @@ class Zettlr
         // This function saves a file to disk.
         // But: The hash is "null", if someone just
         // started typing with no file open.
-        if(file.hash == null) {
+        if(!file.hasOwnProperty('hash') || file.hash == null) {
             // For ease create a new file in current directory.
             file = this.getCurrentDir().newfile();
         } else {
@@ -815,13 +820,15 @@ class Zettlr
 
         file.setContent(cnt);
         file.save();
-
-        // Check if the filename differs from current path. If yes, set the current
-        // file. This will then switch to the newly created file
-        if(this.currentFile.hash != file.hash) {
-            this.currentFile = file;
-        }
         this.clearModified();
+
+        // Switch to newly created file (only happens before a file is selected)
+        if(this.getCurrentFile() == null) {
+            this.setCurrentFile(file);
+            // "Open" this file.
+            this.sendFileList(this.getCurrentDir().hash);
+            this.sendFile(file.hash);
+        }
     }
 
     // Getters
@@ -854,7 +861,10 @@ class Zettlr
             this.currentFile = null;
             return;
         }
-        // Find the file by hash
+
+        if(this.window != null) {
+            this.window.setTitle(f.name + ' — Zettlr');
+        }
         this.currentFile = f;
     }
 

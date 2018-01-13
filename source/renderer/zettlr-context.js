@@ -40,20 +40,20 @@ class ZettlrCon
 
             // Now build
             let that = this;
-            this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.rename), click(item, win) {
+            this.menu.append(new MenuItem({ 'label': trans('context_menu.rename'), click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'rename-file',
                     'content': { 'hash': hash }
                 });
             }}));
-            this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.remove), click(item, win) {
+            this.menu.append(new MenuItem({ 'label': trans('context_menu.remove'), click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'remove-file',
                     'content': { 'hash': hash }
                 });
             }}));
             this.menu.append(new MenuItem({ 'type': 'separator' }));
-            this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.quicklook), click(item, win) {
+            this.menu.append(new MenuItem({ 'label': trans('context_menu.quicklook'), click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'quicklook',
                     'content': { 'hash': hash }
@@ -75,13 +75,13 @@ class ZettlrCon
 
                 // Only add rename/remove options if not root dir
                 if(elem.attr('id') !== 'root') {
-                    this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.rename), click(item, win) {
+                    this.menu.append(new MenuItem({ 'label': trans('context_menu.rename'), click(item, win) {
                         that.parent.parent.handleEvent(null, {
                             'command': 'rename-dir',
                             'content': { 'hash': hash }
                         });
                     } }));
-                    this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.remove), click(item, win) {
+                    this.menu.append(new MenuItem({ 'label': trans('context_menu.remove'), click(item, win) {
                         that.parent.parent.handleEvent(null, {
                             'command': 'remove-dir',
                             'content': { 'hash': hash }
@@ -90,13 +90,13 @@ class ZettlrCon
                     this.menu.append(new MenuItem({ 'type': 'separator' }));
                 }
 
-                this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.new_file), click(item, win) {
+                this.menu.append(new MenuItem({ 'label': trans('context_menu.new_file'), click(item, win) {
                     that.parent.parent.handleEvent(null, {
                         'command': 'new-file',
                         'content': { 'hash': hash }
                     });
                 } }));
-                this.menu.append(new MenuItem({ 'label': trans(global.i18n.context_menu.new_dir), click(item, win) {
+                this.menu.append(new MenuItem({ 'label': trans('context_menu.new_dir'), click(item, win) {
                     that.parent.parent.handleEvent(null, {
                         'command': 'new-dir',
                         'content': { 'hash': hash }
@@ -104,10 +104,32 @@ class ZettlrCon
                 } }));
             }
         } else if(elem.parents('#editor').length > 0) {
+            // If the word is spelled wrong, request suggestions
+            let suggestions = [];
+            if(elem.hasClass('cm-spell-error')) {
+                suggestions = this.parent.parent.typoSuggest(elem.text());
+            }
+            if(suggestions.length > 0) {
+                // Select the word under the cursor if there are suggestions.
+                // Makes it easier to replace them
+                this.parent.parent.editor.selectWordUnderCursor();
+                let sm = [];
+                let self = this;
+                for(let sug of suggestions) {
+                    sm.push(new MenuItem({ label: sug, click(item, win) {
+                        self.parent.parent.editor.replaceWord(sug);
+                    } }));
+                }
+                this.menu.append(new MenuItem({
+                    label: 'Suggestions',
+                    submenu: sm
+                }));
+            }
+
             let that = this;
             // Just build -- these menu items will only trigger CodeMirror actions
             this.menu.append(new MenuItem({
-                label: trans(global.i18n.context_menu.bold),
+                label: trans('context_menu.bold'),
                 accelerator: 'CmdOrCtrl+B',
                 click(item, win) {
                 that.parent.parent.handleEvent(null, {
@@ -116,7 +138,7 @@ class ZettlrCon
                 });
             }}));
             this.menu.append(new MenuItem({
-                label: trans(global.i18n.context_menu.italic),
+                label: trans('context_menu.italic'),
                 accelerator: 'CmdOrCtrl+I',
                 click(item, win) {
                 that.parent.parent.handleEvent(null, {
@@ -126,7 +148,7 @@ class ZettlrCon
             } }));
             this.menu.append(new MenuItem({type: 'separator'}));
             this.menu.append(new MenuItem({
-                label: trans(global.i18n.context_menu.insert_link),
+                label: trans('context_menu.insert_link'),
                 accelerator: 'CmdOrCtrl+K',
                 click(item, win) {
                 that.parent.parent.handleEvent(null, {
@@ -135,13 +157,13 @@ class ZettlrCon
                 });
             } }));
 
-            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.insert_ol), click(item, win) {
+            this.menu.append(new MenuItem( { label: trans('context_menu.insert_ol'), click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'cm-command',
                     'content': 'markdownMakeOrderedList'
                 });
             } }));
-            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.insert_ul), click(item, win) {
+            this.menu.append(new MenuItem( { label: trans('context_menu.insert_ul'), click(item, win) {
                 that.parent.parent.handleEvent(null, {
                     'command': 'cm-command',
                     'content': 'markdownMakeUnorderedList'
@@ -149,11 +171,11 @@ class ZettlrCon
             } }));
             /*this.menu.append(new MenuItem( { label: 'Blockquote' }));*/
             this.menu.append(new MenuItem( { type: 'separator' } ));
-            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.cut), role: 'cut', accelerator: 'CmdOrCtrl+X' }));
-            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.copy), role: 'copy', accelerator: 'CmdOrCtrl+C' }));
-            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.paste), role: 'paste', accelerator: 'CmdOrCtrl+V' }));
+            this.menu.append(new MenuItem( { label: trans('context_menu.cut'), role: 'cut', accelerator: 'CmdOrCtrl+X' }));
+            this.menu.append(new MenuItem( { label: trans('context_menu.copy'), role: 'copy', accelerator: 'CmdOrCtrl+C' }));
+            this.menu.append(new MenuItem( { label: trans('context_menu.paste'), role: 'paste', accelerator: 'CmdOrCtrl+V' }));
             this.menu.append(new MenuItem( { type: 'separator' } ));
-            this.menu.append(new MenuItem( { label: trans(global.i18n.context_menu.select_all), role: 'selectall', accelerator: 'CmdOrCtrl+A' }));
+            this.menu.append(new MenuItem( { label: trans('context_menu.select_all'), role: 'selectall', accelerator: 'CmdOrCtrl+A' }));
         }
     }
 

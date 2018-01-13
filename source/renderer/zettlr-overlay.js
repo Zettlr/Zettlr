@@ -29,6 +29,14 @@ class ZettlrOverlay
         </div>
         </div>`);
         $('body').append(this.modal);
+
+        // Adjust the margins
+        let dialog = this.modal.find('.dialog').first();
+        let diaH = dialog.height();
+        let winH = $(document).height();
+
+        // The modal dialog is always smaller than the window.
+        dialog.css('margin-top', ((winH - diaH) / 2) + "px");
     }
 
     update(newmsg)

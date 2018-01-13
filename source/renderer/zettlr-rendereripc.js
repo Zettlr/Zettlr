@@ -18,7 +18,7 @@ class ZettlrRendererIPC
         // handleEvent expects arg to contain at least 'command' and 'content'
         // properties
         if(!arg.hasOwnProperty('command')) {
-            console.error(trans(global.i18n.system.no_command, arg));
+            console.error(trans('system.no_command', arg));
             return;
         }
         if(!arg.hasOwnProperty('content')) {

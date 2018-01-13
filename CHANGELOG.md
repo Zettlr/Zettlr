@@ -59,4 +59,21 @@
 - Fixed an error that prevented searching for exact phrases
 - Added a short check that Zettlr does not try to move a directory into a subdirectory.
 - Multiple minor fixes and improvements
-- Preview pane and directory tree view can now be hidden via `Cmd/Ctrl+1` and `Cmd/Ctrol+2`
+- Preview pane and directory tree view can now be hidden via `Cmd/Ctrl+1` and `Cmd/Ctrl+2`
+
+# 0.8.0
+
+## GUI and functionality
+
+- Context menu over a erroneous word now gives you suggestions on possible replacements; selecting them will replace the word.
+- Fixed a small rendering bug that caused the editor not to correctly select text after hide/unhide of either the tree view or file preview pane.
+- Included a toolbar and moved the global search out of the preview pane
+- Fixed a small bug in which the title of the main window still showed the title of the currently opened file after it has been deleted
+- Fixed a bug that made it impossible to export to PDF on Windows when Zettlr was installed to the `Program Files`-directory
+- Fixed a bug that did not close the overlay if there were no dictionaries selected for spell checking
+- Finally implemented the make/unmake itemized or numbered list function
+
+## Under the hood (i.e.: technical stuff)
+
+- Replaced npm package `trash` with electron internal `shell.moveItemToTrash()`
+- Hardened the translation package against potential errors and accounted for also probably missing translations

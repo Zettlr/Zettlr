@@ -1,9 +1,9 @@
 // MODEL HANDLING FILES
 
-const trash     = require('trash');
 const fs        = require('fs');
 const path      = require('path');
 const sanitize  = require('sanitize-filename');
+const {shell}   = require('electron');
 
 function FileError(msg) {
     this.name = 'File error';
@@ -131,8 +131,11 @@ class ZettlrFile
     remove()
     {
         // Removes the file from system and also from parent object.
-        trash([this.path]); // We'll just trust that promise :D
-        this.parent.remove(this);
+        if(shell.moveItemToTrash(this.path)) {
+            this.parent.remove(this);
+        } else {
+            throw new FileError('Could not move item to trash!');
+        }
     }
 
     rename(name)

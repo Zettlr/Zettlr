@@ -1,0 +1,179 @@
+// This file holds all styles for the Zettlr toolbar
+
+#toolbar {
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:@toolbar-height;
+    background-image: linear-gradient(to bottom, white, @grey-0);
+    color:@grey-4;
+    border-bottom: 1px solid @grey-2;
+    margin:0;
+    padding:0;
+    display:flex;
+    align-items:center;
+    cursor:default;
+
+    .button {
+        flex-grow:0.1;
+        border:1px solid @grey-2;
+        border-radius:@button-border-radius;
+        background-image: linear-gradient(to bottom, @grey-1, @grey-2);
+        display:inline-block;
+        width:@button-width;
+        margin:@button-margin; // Add some margin
+        text-align:center;
+        line-height:@button-height;
+        font-family: 'Font Awesome';
+        font-size:@font-size-small * 0.8;
+
+        &:first-child {
+            margin-left:@button-margin * 2;
+        }
+
+        &:last-child {
+            margin-right:@button-margin * 2;
+        }
+
+        &:hover {
+            background-image: none;
+            background-color: @grey-2;
+        }
+
+        &.directory-new::before {
+            content: "\f115";
+            display:inline;
+        }
+
+        &.file-new::before {
+            content: "\f016";
+            display:inline;
+        }
+
+        &.preferences::before {
+            content: "\f013";
+            display:inline;
+        }
+
+        &.file-save::before {
+            content: "\f0c7";
+            display:inline;
+        }
+
+        &.file-remove::before {
+            content: "\f014";
+            display:inline;
+        }
+
+        &.file-rename::before {
+            content: "\f120";
+            display:inline;
+        }
+
+        &.insert-bold::before {
+            content: "\f032";
+            display:inline;
+        }
+
+        &.insert-italic::before {
+            content: "\f033";
+            display:inline;
+        }
+
+        &.insert-ol::before {
+            content: "\f0cb";
+            display:inline;
+        }
+
+        &.insert-ul::before {
+            content: "\f0ca";
+            display:inline;
+        }
+
+        &.insert-link::before {
+            content: "\f0c1";
+            display:inline;
+        }
+
+        &.insert-image::before {
+            content: "\f03e";
+            display:inline;
+        }
+    }
+
+    .spacer {
+        flex-grow:5;
+    }
+
+    .separator {
+        flex-grow:0.3;
+        width:1px;
+        text-align:center;
+
+        &:before {
+            content: "|";
+            display:inline;
+            font-size:@font-size-big;
+        }
+    }
+
+    .file-info {
+        flex-grow:5;
+        text-align:center;
+        font-size:@font-size-small * 0.8;
+    }
+
+    .searchbar {
+        flex-grow:5;
+        input {
+            border-radius:@button-height / 2;
+            height:@button-height;
+            width:90%; // Fill out the whole space
+            margin:@button-margin;
+            border:1px solid @grey-2;
+            font-size:@font-size-small * 0.8; // Even smaller!
+            padding:0.2em 1em;
+            margin:0.3em;
+            box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,.05);
+            outline: none;
+            transition:0.5s all ease;
+
+            &:focus {
+                border-color:@blue-selection;
+                transition:0.5s all ease;
+                box-shadow: inset 0px 0px 15px 0px fade(@blue-selection, 95%);
+            }
+        }
+    }
+
+    &.dark {
+        background-image: linear-gradient(to bottom, @grey-6, @grey-7);
+        border-bottom-color:@grey-5;
+        color:@grey-3;
+
+        .button {
+            border-color:@grey-5;
+            background-image:linear-gradient(to bottom, @grey-4, @grey-5);
+            color:@grey-1;
+
+            &:hover {
+                background-image: none;
+                background-color: @grey-4;
+            }
+        }
+
+        .searchbar {
+            input {
+                background-color:@grey-5;
+                box-shadow: none;
+                border-color:@grey-5;
+                color:@grey-1;
+
+                &:focus {
+                    border-color:@grey-4;
+                }
+            }
+        }
+    }
+}

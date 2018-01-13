@@ -1,8 +1,5 @@
 /* THIS CLASS CONTROLS THE FILE PREVIEW LIST */
 
-// For ONE. SINGLE. TRANSLATION ...
-const {trans} = require('../common/lang/i18n.js');
-
 class ZettlrPreview
 {
     constructor(parent)
@@ -12,9 +9,6 @@ class ZettlrPreview
 
         // Elements
         this.div                = $('#preview');
-        this.counter            = $('<div id="counter"><span class="progress"></span></div>');
-        this.searchBarElem      = $('<div id="search-directory"><input type="text" placeholder="'+trans(global.i18n.gui.find_placeholder)+'"></div>');
-        this.searchBarElem.append(this.counter);
 
         // Search related
         this.hashes             = null;
@@ -194,34 +188,6 @@ class ZettlrPreview
         return `<li class="directory" title="${dir.name}">${dir.name}</li>`;
     }
 
-    // Display the search bar.
-    searchBar()
-    {
-        if(this.div.find('#search-directory').length > 0) {
-            this.searchBarElem.detach();
-            this.endSearch();
-            this.div.find('li').removeClass('hidden');
-
-            let elem = this.div.find('li.selected');
-            this.scrollIntoView(elem); // Just in case.
-        } else {
-            this.div.prepend(this.searchBarElem);
-            let input = this.searchBarElem.find('input').first();
-            input.focus();
-            input.select();
-
-            // Activate search function.
-            input.on('keyup', (e) => {
-                if(e.which == 27) { // ESC
-                    this.searchBar();
-                } else if(e.which == 13) { // RETURN
-                    // that.requestSearch(that.searchBarElem.find('input').val().toLowerCase());
-                    this.beginSearch(this.searchBarElem.find('input').val().toLowerCase());
-                }
-            });
-        }
-    }
-
     beginSearch(term)
     {
         // First sanitize the terms
@@ -321,7 +287,6 @@ class ZettlrPreview
         this.currentSearchIndex = -1;
 
         // Aaaaand: Go!
-        this.counter.addClass('show');
         this.doSearch();
     }
 
@@ -345,7 +310,7 @@ class ZettlrPreview
 
         this.currentSearchIndex++;
 
-        this.counter.find('.progress').css('width', (this.currentSearchIndex / this.hashes.length * 100) + '%')
+        this.parent.searchProgress(this.currentSearchIndex, this.hashes.length);
 
         // Send a request to the main process and handle it afterwards.
         this.parent.ipc.send('search-file', {
@@ -366,7 +331,7 @@ class ZettlrPreview
 
     endSearch()
     {
-        this.counter.removeClass('show');
+        this.parent.endSearch();
         this.currentSearchIndex = 0;
         this.hashes             = [];
         this.currentSearch      = null;

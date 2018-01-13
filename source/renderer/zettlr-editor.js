@@ -44,6 +44,9 @@ class ZettlrEditor
             // The contents have been changed — so fire an event to main process to
             // set the window modified
 
+            // Update wordcount
+            this.parent.updateWordCount(this.cm.getValue().split(' ').length);
+
             if(changeObj.origin != "setValue") {
                 // If origin is setValue this means that the contents have been
                 // programatically changed -> no need to flag any modification!
@@ -155,6 +158,32 @@ class ZettlrEditor
         this.cm.markClean();
     }
 
+    // Currently, this function is only called by the context menu class to
+    // select a word. This function only selects the word if nothing else is
+    // selected (to not fuck up some copy action someone tried to do)
+    selectWordUnderCursor()
+    {
+        // Don't overwrite selections.
+        if(this.cm.somethingSelected()) {
+            return;
+        }
+
+        let cur = this.cm.getCursor();
+        let sel = this.cm.findWordAt(cur);
+        this.cm.setSelection(sel.anchor, sel.head);
+    }
+
+    // Same -- currently only gets called by context menu
+    replaceWord(word)
+    {
+        if(!this.cm.somethingSelected()) {
+            return;
+        }
+
+        // Replace word and select new word
+        this.cm.replaceSelection(word, 'around');
+    }
+
     toggleTheme()
     {
         if(this.div.hasClass('dark')) {
@@ -169,11 +198,17 @@ class ZettlrEditor
     toggleDirectories()
     {
         this.div.toggleClass('no-directories');
+        // CodeMirror needs to recalculate the overlays etc., otherwise
+        // it will be difficult to write, select, etc.
+        this.cm.refresh();
     }
 
     togglePreview()
     {
         this.div.toggleClass('no-preview');
+        // CodeMirror needs to recalculate the overlays etc., otherwise
+        // it will be difficult to write, select, etc.
+        this.cm.refresh();
     }
 
     // Is the editor unmodified?

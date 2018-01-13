@@ -68,6 +68,28 @@
 <body>
     <div id="container">
 
+        <!-- Main toolbar -->
+        <div id="toolbar">
+            <div class="button directory-new" data-command="new-dir"          data-content="{}"></div>
+            <div class="button file-new"      data-command="new-file"         data-content="{}"></div>
+            <div class="button preferences"   data-command="open-preferences" data-content="{}"></div>
+            <div class="searchbar">
+                <input type="text">
+            </div>
+            <div class="spacer"></div>
+            <div class="button file-save"     data-command="save-file"        data-content="{}"></div>
+            <div class="button file-rename"   data-command="rename-file"      data-content="{}"></div>
+            <div class="button file-remove"   data-command="remove-file"      data-content="{}"></div>
+            <div class="separator"></div>
+            <div class="button insert-image"  data-command="cm-command"       data-content="markdownImage"></div>
+            <div class="button insert-link"   data-command="cm-command"       data-content="markdownLink"></div>
+            <div class="button insert-bold"   data-command="cm-command"       data-content="markdownBold"></div>
+            <div class="button insert-italic" data-command="cm-command"       data-content="markdownItalic"></div>
+            <div class="button insert-ul"     data-command="cm-command"       data-content="markdownMakeUnorderedList"></div>
+            <div class="button insert-ol"     data-command="cm-command"       data-content="markdownMakeOrderedList"></div>
+            <div class="file-info"></div>
+        </div>
+
         <!-- First: Pane for directories -->
         <div id="directories" tabindex="1">
         </div>

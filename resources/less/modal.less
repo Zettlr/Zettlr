@@ -8,11 +8,12 @@
     right:0;
     background-color:rgba(0,0,0,.5);
     z-index:1000;
-    overflow:scroll; /* For longer settings(?) and stuff dialogs */
+    overflow-x:hidden; /* For longer settings(?) and stuff dialogs */
+    overflow-y:auto;
 
     .dialog {
         background-color:white;
-        margin:15% 15% 5% 15%;
+        margin:0 15%;
         border-radius:@border-radius;
         padding:20px;
         box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.75);

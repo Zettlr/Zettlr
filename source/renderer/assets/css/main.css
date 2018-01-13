@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'Font Awesome';
+  src: url('../fontawesome/fontawesome-webfont.eot?v=4.7.0');
+  src: url('../fontawesome/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('../fontawesome/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('../fontawesome/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('../fontawesome/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('../fontawesome/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+  font-weight: normal;
   font-style: normal;
-  font-weight: 900;
-  src: url("../fontawesome/fa-solid-900.eot");
-  src: url("../fontawesome/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("../fontawesome/fa-solid-900.woff2") format("woff2"), url("../fontawesome/fa-solid-900.woff") format("woff"), url("../fontawesome/fa-solid-900.ttf") format("truetype"), url("../fontawesome/fa-solid-900.svg#fontawesome") format("svg");
 }
 * {
   margin: 0;
@@ -29,12 +29,13 @@ html {
   right: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
-  overflow: scroll;
+  overflow-x: hidden;
   /* For longer settings(?) and stuff dialogs */
+  overflow-y: auto;
 }
 .modal .dialog {
   background-color: white;
-  margin: 15% 15% 5% 15%;
+  margin: 0 15%;
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.75);
@@ -131,7 +132,7 @@ html {
 }
 #directories {
   position: fixed;
-  top: 0;
+  top: 39px;
   left: 0;
   bottom: 0;
   right: 80%;
@@ -188,15 +189,15 @@ html {
   display: none;
 }
 #directories.dark {
-  border-right-color: #505050;
+  border-right-color: #646464;
   color: white;
-  background-color: #646464;
+  background-color: #505050;
 }
 #directories.dark .collapse-indicator::before {
   color: #dcdcdc;
 }
 #directories.dark ul li:hover {
-  background-color: #505050;
+  background-color: #646464;
 }
 #directories.dark ul .selected {
   background-color: #5aaa50;
@@ -209,7 +210,7 @@ html {
 }
 #preview {
   position: fixed;
-  top: 0;
+  top: 39px;
   bottom: 0;
   left: 20%;
   right: 60%;
@@ -344,7 +345,7 @@ html {
 }
 #editor {
   position: fixed;
-  top: 0;
+  top: 39px;
   right: 0;
   bottom: 0;
   left: 40%;
@@ -392,7 +393,7 @@ html {
   margin: 0 auto;
   width: 15%;
   height: 15%;
-  background-color: #333;
+  background-color: #5aaa50;
   border-radius: 100%;
   -webkit-animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
   animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
@@ -642,4 +643,152 @@ html {
   height: 12px;
   right: -5px;
   top: -5px;
+}
+#toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 39px;
+  background-image: linear-gradient(to bottom, white, #f0f0f0);
+  color: #646464;
+  border-bottom: 1px solid #c8c8c8;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+#toolbar .button {
+  flex-grow: 0.1;
+  border: 1px solid #c8c8c8;
+  border-radius: 5px;
+  background-image: linear-gradient(to bottom, #dcdcdc, #c8c8c8);
+  display: inline-block;
+  width: 24px;
+  margin: 4px;
+  text-align: center;
+  line-height: 20px;
+  font-family: 'Font Awesome';
+  font-size: 0.72em;
+}
+#toolbar .button:first-child {
+  margin-left: 8px;
+}
+#toolbar .button:last-child {
+  margin-right: 8px;
+}
+#toolbar .button:hover {
+  background-image: none;
+  background-color: #c8c8c8;
+}
+#toolbar .button.directory-new::before {
+  content: "\f115";
+  display: inline;
+}
+#toolbar .button.file-new::before {
+  content: "\f016";
+  display: inline;
+}
+#toolbar .button.preferences::before {
+  content: "\f013";
+  display: inline;
+}
+#toolbar .button.file-save::before {
+  content: "\f0c7";
+  display: inline;
+}
+#toolbar .button.file-remove::before {
+  content: "\f014";
+  display: inline;
+}
+#toolbar .button.file-rename::before {
+  content: "\f120";
+  display: inline;
+}
+#toolbar .button.insert-bold::before {
+  content: "\f032";
+  display: inline;
+}
+#toolbar .button.insert-italic::before {
+  content: "\f033";
+  display: inline;
+}
+#toolbar .button.insert-ol::before {
+  content: "\f0cb";
+  display: inline;
+}
+#toolbar .button.insert-ul::before {
+  content: "\f0ca";
+  display: inline;
+}
+#toolbar .button.insert-link::before {
+  content: "\f0c1";
+  display: inline;
+}
+#toolbar .button.insert-image::before {
+  content: "\f03e";
+  display: inline;
+}
+#toolbar .spacer {
+  flex-grow: 5;
+}
+#toolbar .separator {
+  flex-grow: 0.3;
+  width: 1px;
+  text-align: center;
+}
+#toolbar .separator:before {
+  content: "|";
+  display: inline;
+  font-size: 1.2em;
+}
+#toolbar .file-info {
+  flex-grow: 5;
+  text-align: center;
+  font-size: 0.72em;
+}
+#toolbar .searchbar {
+  flex-grow: 5;
+}
+#toolbar .searchbar input {
+  border-radius: 10px;
+  height: 20px;
+  width: 90%;
+  margin: 4px;
+  border: 1px solid #c8c8c8;
+  font-size: 0.72em;
+  padding: 0.2em 1em;
+  margin: 0.3em;
+  box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.05);
+  outline: none;
+  transition: 0.5s all ease;
+}
+#toolbar .searchbar input:focus {
+  border-color: #c8dcf0;
+  transition: 0.5s all ease;
+  box-shadow: inset 0px 0px 15px 0px rgba(200, 220, 240, 0.95);
+}
+#toolbar.dark {
+  background-image: linear-gradient(to bottom, #464646, #282828);
+  border-bottom-color: #505050;
+  color: #787878;
+}
+#toolbar.dark .button {
+  border-color: #505050;
+  background-image: linear-gradient(to bottom, #646464, #505050);
+  color: #dcdcdc;
+}
+#toolbar.dark .button:hover {
+  background-image: none;
+  background-color: #646464;
+}
+#toolbar.dark .searchbar input {
+  background-color: #505050;
+  box-shadow: none;
+  border-color: #505050;
+  color: #dcdcdc;
+}
+#toolbar.dark .searchbar input:focus {
+  border-color: #646464;
 }

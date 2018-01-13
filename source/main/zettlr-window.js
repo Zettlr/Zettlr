@@ -122,8 +122,8 @@ class ZettlrWindow
         }
         // Indicate in title (for all OS)
         let title = this.window.getTitle();
-        if(title.substr(0, 1) != "*") {
-            this.window.setTitle('*' + title);
+        if(title.substr(0, 2) != "* ") {
+            this.window.setTitle('* ' + title);
         }
     }
 
@@ -135,8 +135,8 @@ class ZettlrWindow
         }
         // Indicate in title
         let title = this.window.getTitle();
-        if(title.substr(0, 1) == "*") {
-            this.window.setTitle(title.substr(1));
+        if(title.substr(0, 2) == "* ") {
+            this.window.setTitle(title.substr(2));
         }
     }
 
@@ -165,12 +165,12 @@ class ZettlrWindow
     {
         let options = {
             type: "question",
-            title: trans(global.i18n.system.save_changes_title),
-            message: trans(global.i18n.system.save_changes_message),
+            title: trans('system.save_changes_title'),
+            message: trans('system.save_changes_message'),
             buttons: [
-                trans(global.i18n.system.save_changes_cancel),
-                trans(global.i18n.system.save_changes_save),
-                trans(global.i18n.system.save_changes_omit)
+                trans('system.save_changes_cancel'),
+                trans('system.save_changes_save'),
+                trans('system.save_changes_omit')
             ],
             cancelId: 0
         };
@@ -190,7 +190,7 @@ class ZettlrWindow
     askDir(startDir)
     {
         return dialog.showOpenDialog(this.window, {
-            title: trans(global.i18n.system.open_folder),
+            title: trans('system.open_folder'),
             defaultPath: startDir,
             properties: [
                 'openDirectory',
@@ -216,10 +216,10 @@ class ZettlrWindow
     {
         let ret = dialog.showMessageBox(this.window, {
             type: 'warning',
-            buttons: [ 'Ok', trans(global.i18n.system.error.cancel_remove) ],
+            buttons: [ 'Ok', trans('system.error.cancel_remove') ],
             defaultId: 1,
-            title: trans(global.i18n.system.error.remove_title),
-            message: trans(global.i18n.system.error.remove_message, obj.name)
+            title: trans('system.error.remove_title'),
+            message: trans('system.error.remove_message', obj.name)
         });
 
         return (ret == 0);

@@ -2,8 +2,8 @@
 const path       = require('path');
 const fs         = require('fs');
 const sanitize   = require('sanitize-filename');
-const trash      = require('trash');
 const ZettlrFile = require('./zettlr-file.js');
+const {shell}    = require('electron');
 
 function DirectoryError(msg) {
     this.name = 'Directory error';
@@ -145,19 +145,19 @@ class ZettlrDir
     {
         if(name == null) {
             // Just take the current time.
-            date = new Date();
-            yyyy = date.getFullYear();
-            mm = date.getMonth() + 1;
+            let date = new Date();
+            let yyyy = date.getFullYear();
+            let mm = date.getMonth() + 1;
             if(mm <= 9) mm =  '0' + mm;
-            dd = date.getDate();
+            let dd = date.getDate();
             if(dd <= 9) dd = '0' + dd;
-            hh = date.getHours();
+            let hh = date.getHours();
             if(hh <= 9) hh =  '0' + hh;
-            m = date.getMinutes();
+            let m = date.getMinutes();
             if(m <= 9) m =  '0' + m;
-            ss = date.getSeconds();
+            let ss = date.getSeconds();
             if(ss <= 9) ss =  '0' + ss;
-            add = "-" + yyyy + "-" + mm + "-" + dd + " " + hh + ":" + m + ":" + ss;
+            let add = yyyy + "-" + mm + "-" + dd + " " + hh + ":" + m + ":" + ss;
 
             name = "New file " + add + ".md";
         }
@@ -210,9 +210,12 @@ class ZettlrDir
                 return false;
             }
 
-            trash([this.path]);  // We'll just trust that promise :D
-            // While it is trashing, remove and stuff
-            this.parent.remove(this);
+            if(shell.moveItemToTrash(this.path)) {
+                // While it is trashing, remove and stuff
+                this.parent.remove(this);
+            } else {
+                throw new DirectoryError('Could not move directory to trash!');
+            }
         } else {
             // Remove a file (function was called by a children)
             let index = this.children.indexOf(obj);

@@ -15,7 +15,8 @@
 
     var listRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/,
     emptyListRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/,
-    unorderedListRE = /[*+-]\s/;
+    unorderedListRE = /(\s*)([*+-])\s/,
+    orderedListRE = /^(\s*)((\d+)([.)]))(\s*)/;
 
     var boldRE = /^(\*{2}(.*)\*{2}|\_{2}(.*)\_{2})$/;
     var italRE = /^(\*{1}(.*)\*{1}|\_{1}(.*)\_{1})$/;
@@ -152,15 +153,172 @@
         cm.doc.replaceSelections(sel);
     };
 
-    // TODO
     // Create or uncreate an ordered list
     CodeMirror.commands.markdownMakeOrderedList = function(cm) {
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
+
+        // If nothing is selected we have a very short journey.
+        if(!cm.somethingSelected()) {
+            // Just jump to the beginning of the line and insert a list indicator
+            let cur = cm.getCursor();
+            cur.ch = 0;
+            cm.setCursor(cur);
+            let line = cm.doc.getLineHandle(cur.line);
+            if(orderedListRE.test(line.text)) {
+                // Line is already ordered -> remove
+                cm.doc.setSelection(cur, {'line': cur.line, 'ch': line.text.length});
+                cm.doc.replaceSelection(cm.doc.getSelection().replace(orderedListRE, ''));
+            } else {
+                // Line is not a list -> find out whether the previous line is a list
+                let num = 1;
+                let olSep = '.';
+                let olTab = '';
+                if(cur.line > 0) {
+                    let match = orderedListRE.exec(cm.doc.getLineHandle(cur.line-1).text);
+                    if(match) {
+                        // Third capturing group is the actual number
+                        num = parseInt(match[3]) + 1;
+                        olSep = match[4]; // 4 is either . or )
+                        olTab = match[1]; // Contains the spaces (i.e. the tab position)
+                    }
+                }
+                cm.doc.replaceRange(olTab + num + olSep + ' ', cur);
+            }
+            return;
+        }
+
+        // Now traverse each selections and either apply a listing or remove it
+        for(let sel of cm.doc.getSelections()) {
+            if(sel.indexOf('\n') > -1) {
+                // First get the beginning cursor position (anchor)
+                let cur = cm.doc.getCursor('from');
+                let lineFrom = cur.line;
+                // Second get the ending cursor position (head)
+                let lineTo = cm.doc.getCursor('to').line + 1; // eachLine will exclude the lineTo line
+                // Third traverse each line between both positions and add
+                // numbers to them.
+
+                let itemNo = 1;
+                let olSep = '.';
+                let olTab = '';
+                if(cur.line > 0) {
+                    // Remember to get a (potential) previous number.
+                    let match = orderedListRE.exec(cm.doc.getLineHandle(cur.line-1).text);
+                    if(match) {
+                        // Third capturing group is the actual number
+                        itemNo = parseInt(match[3]) + 1;
+                        olSep = match[4];
+                        olTab = match[1];
+                    }
+                }
+                cm.doc.eachLine(lineFrom, lineTo, (line) => {
+                    let no = line.lineNo();
+                    if(orderedListRE.test(line.text)) {
+                        // Line is already ordered -> remove
+                        cm.doc.setCursor(no, 0);
+                        let curFrom = cm.doc.getCursor();
+                        cm.doc.setSelection(curFrom, { 'line':no, 'ch':line.text.length});
+                        cm.doc.replaceSelection(cm.doc.getSelection().replace(orderedListRE, ''));
+                    } else {
+                        // Just prepend item numbers
+                        cm.doc.setCursor(no, 0);
+                        cm.doc.replaceRange(olTab + (itemNo++) + olSep + ' ', cm.doc.getCursor());
+                    }
+                });
+            } else {
+                let cur = cm.doc.getCursor();
+                cur.ch = 0;
+                cm.doc.setCursor(cur);
+                let num = 1;
+                let olSep = '.';
+                let olTab = '';
+                if(cur.line > 0) {
+                    let match = orderedListRE.exec(cm.doc.getLineHandle(cur.line-1).text);
+                    if(match) {
+                        // Third capturing group is the actual number
+                        num = parseInt(match[3]) + 1;
+                        olSep = match[4]; // 4 is either . or )
+                        olTab = match[1]; // The prepending spaces
+                    }
+                }
+                cm.doc.replaceRange(olTab + num + olSep + ' ', cur); // Only prepend a number
+            }
+        }
     };
 
     // Create or uncreate an unordered list
     CodeMirror.commands.markdownMakeUnorderedList = function(cm) {
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
+
+        // If nothing is selected we have a very short journey.
+        if(!cm.somethingSelected()) {
+            // Just jump to the beginning of the line and insert a list indicator
+            let cur = cm.getCursor();
+            cur.ch = 0;
+            cm.setCursor(cur);
+            let line = cm.doc.getLineHandle(cur.line);
+            if(unorderedListRE.test(line.text)) {
+                // Line is already unordered -> remove
+                cm.doc.setSelection(cur, {'line': cur.line, 'ch': line.text.length});
+                cm.doc.replaceSelection(cm.doc.getSelection().replace(unorderedListRE, ''));
+            } else {
+                // Line is not a list -> Insert a bullet at cursor position
+                let num = '*';
+                let olTab = '';
+                if(cur.line > 0) {
+                    let match = unorderedListRE.exec(cm.doc.getLineHandle(cur.line-1).text);
+                    if(match) {
+                        console.log(match);
+                        // Third capturing group is the bullet char
+                        num = match[2];
+                        olTab = match[1]; // Contains the spaces (i.e. the tab position)
+                    }
+                }
+                cm.doc.replaceRange(olTab + num + ' ', cur);
+            }
+            return;
+        }
+
+        // Now traverse each selections and either apply a listing or remove it
+        for(let sel of cm.doc.getSelections()) {
+            if(sel.indexOf('\n') > -1) {
+                // First get the beginning cursor position (anchor)
+                let lineFrom = cm.doc.getCursor('from').line;
+                // Second get the ending cursor position (head)
+                let lineTo = cm.doc.getCursor('to').line + 1; // eachLine will exclude the lineTo line
+                // Third traverse each line between both positions and add
+                // bullets to them
+                cm.doc.eachLine(lineFrom, lineTo, (line) => {
+                    let no = line.lineNo();
+                    if(unorderedListRE.test(line.text)) {
+                        // Line is already unordered -> remove
+                        cm.doc.setCursor(no, 0);
+                        let curFrom = cm.doc.getCursor();
+                        cm.doc.setSelection(curFrom, { 'line':no, 'ch':line.text.length});
+                        cm.doc.replaceSelection(cm.doc.getSelection().replace(unorderedListRE, ''));
+                    } else {
+                        // Just prepend bullets
+                        cm.doc.setCursor(no, 0);
+                        cm.doc.replaceRange('* ', cm.doc.getCursor());
+                    }
+                });
+            } else {
+                let cur = cm.doc.getCursor();
+                cur.ch = 0;
+                cm.doc.setCursor(cur);
+                let num = '*';
+                let olTab = '';
+                if(cur.line > 0) {
+                    let match = unorderedListRE.exec(cm.doc.getLineHandle(cur.line-1).text);
+                    if(match) {
+                        // Third capturing group is the bullet char
+                        num = match[2];
+                        olTab = match[1]; // Contains the spaces (i.e. the tab position)
+                    }
+                }
+                cm.doc.replaceRange(olTab + num + ' ', cur);
+            }
+        }
     };
 
 });

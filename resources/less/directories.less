@@ -2,7 +2,7 @@
 
 #directories {
     position:fixed;
-    top:0;
+    top:@toolbar-height;
     left:0;
     bottom:0;
     right: 80%;
@@ -68,9 +68,9 @@
     }
 
     &.dark {
-        border-right-color:@grey-5;
+        border-right-color:@grey-4;
         color:white;
-        background-color:@grey-4;
+        background-color:@grey-5;
 
         .collapse-indicator::before {
             color:@grey-1;
@@ -78,7 +78,7 @@
 
         ul {
             li:hover {
-                background-color:@grey-5;
+                background-color:@grey-4;
             }
 
             .selected {

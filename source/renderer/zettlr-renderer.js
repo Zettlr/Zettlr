@@ -7,6 +7,7 @@ const ZettlrPreview     = require('../zettlr-preview.js');
 const ZettlrEditor      = require('../zettlr-editor.js');
 const ZettlrBody        = require('../zettlr-body.js');
 const ZettlrOverlay     = require('../zettlr-overlay.js');
+const ZettlrToolbar     = require('../zettlr-toolbar.js');
 const Typo              = require('typo-js');
 const remote            = require('electron').remote;
 
@@ -42,11 +43,12 @@ class ZettlrRenderer
         this.editor         = new ZettlrEditor(this);
         this.body           = new ZettlrBody(this);
         this.overlay        = new ZettlrOverlay(this);
+        this.toolbar        = new ZettlrToolbar(this);
     }
 
     init()
     {
-        this.overlay.show(trans(global.i18n.init.welcome));
+        this.overlay.show(trans('init.welcome'));
 
         // Request a first batch of files
         this.ipc.send('get-paths', {});
@@ -112,6 +114,12 @@ class ZettlrRenderer
             case 'save-file':
             // The user wants to save the currently opened file.
             let file = this.getCurrentFile();
+            if(file == null) {
+                // User wants to save an untitled file
+                // Important: The main Zettlr-class expects hash to be null
+                // for new files
+                file = {};
+            }
             file.content = this.editor.getValue();
             this.ipc.send('save-file', file);
             break;
@@ -122,7 +130,8 @@ class ZettlrRenderer
 
             case 'find-dir':
             // User wants to search in current directory.
-            this.preview.searchBar();
+            // this.preview.searchBar();
+            this.toolbar.focusSearch();
             break;
 
             case 'search-result':
@@ -200,6 +209,7 @@ class ZettlrRenderer
             this.preview.toggleTheme();
             this.editor.toggleTheme();
             this.body.toggleTheme();
+            this.toolbar.toggleTheme();
             if(arg.content !== 'no-emit') {
                 this.ipc.send('toggle-theme'); // Notify host process for configuration save
             }
@@ -285,7 +295,7 @@ class ZettlrRenderer
             break;
 
             default:
-            console.log(trans(global.i18n.system.unknown_command, arg.command));
+            console.log(trans('system.unknown_command', arg.command));
             break;
         }
     }
@@ -309,7 +319,7 @@ class ZettlrRenderer
     // SPELLCHECKER FUNCTIONS
     setSpellcheck(langs)
     {
-        this.overlay.update(trans(global.i18n.init.spellcheck.get_lang));
+        this.overlay.update(trans('init.spellcheck.get_lang'));
         // langs is an object containing _all_ available languages and whether
         // they should be checked or not.
         for(let prop in langs) {
@@ -322,6 +332,9 @@ class ZettlrRenderer
 
         if(Object.keys(this.typoLang).length > 0) {
             this.requestLang('aff');
+        } else {
+            // We're already done!
+            this.overlay.close();
         }
     }
 
@@ -337,8 +350,8 @@ class ZettlrRenderer
         }
         this.overlay.update(
             trans(
-                global.i18n.init.spellcheck.request_file,
-                global.i18n.dialog.preferences.app_lang[req]
+                'init.spellcheck.request_file',
+                trans('dialog.preferences.app_lang.'+req)
             )
         );
 
@@ -363,8 +376,8 @@ class ZettlrRenderer
 
         this.overlay.update(
             trans(
-                global.i18n.init.spellcheck.init,
-                global.i18n.dialog.preferences.app_lang[lang]
+                'init.spellcheck.init',
+                trans('dialog.preferences.app_lang.'+lang)
             )
         );
 
@@ -374,8 +387,8 @@ class ZettlrRenderer
 
         this.overlay.update(
             trans(
-                global.i18n.init.spellcheck.init_done,
-                global.i18n.dialog.preferences.app_lang[lang]
+                'init.spellcheck.init_done',
+                trans('dialog.preferences.app_lang.'+lang)
             )
         );
 
@@ -421,7 +434,45 @@ class ZettlrRenderer
         return false;
     }
 
+    typoSuggest(word)
+    {
+        if(!this.typoReady) {
+            return [];
+        }
+
+        let ret = [];
+
+        for(let lang of this.typo) {
+            ret = ret.concat(lang.suggest(word));
+        }
+
+        return ret;
+    }
+
     // END SPELLCHECKER
+
+    // SEARCH FUNCTIONS
+    // This class only acts as a pass-through
+    beginSearch(term)
+    {
+        this.preview.beginSearch(term);
+    }
+
+    searchProgress(curIndex, count)
+    {
+        this.toolbar.searchProgress(curIndex, count);
+    }
+
+    endSearch()
+    {
+        this.toolbar.endSearch();
+    }
+
+    updateWordCount(words)
+    {
+        this.toolbar.updateWordCount(words);
+    }
+
 
     // Triggered by ZettlrDirectories - if user clicks on another dir
     requestDir(hash)
