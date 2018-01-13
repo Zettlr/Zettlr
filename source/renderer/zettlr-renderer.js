@@ -249,6 +249,9 @@ class ZettlrRenderer
             // Execute a command with CodeMirror (Bold, Italic, Link, etc)
             case 'cm-command':
             this.editor.runCommand(arg.content);
+            // After a codemirror command has been issued through this function
+            // give the editor back focus
+            this.editor.cm.focus();
             break;
 
             case 'binaries':

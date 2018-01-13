@@ -72,6 +72,8 @@
 - Fixed a bug that made it impossible to export to PDF on Windows when Zettlr was installed to the `Program Files`-directory
 - Fixed a bug that did not close the overlay if there were no dictionaries selected for spell checking
 - Finally implemented the make/unmake itemized or numbered list function
+- Also, finally added an easy way to insert and remove footnotes.
+- - Fixed an error in which you could not save "empty" files on the fly if you just started typing into the editor without any file open.
 
 ## Under the hood (i.e.: technical stuff)
 

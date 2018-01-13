@@ -722,6 +722,14 @@ html {
   content: "\f0ca";
   display: inline;
 }
+#toolbar .button.insert-fn::before {
+  content: "\f12b";
+  display: inline;
+}
+#toolbar .button.remove-fn::before {
+  content: "\f12d";
+  display: inline;
+}
 #toolbar .button.insert-link::before {
   content: "\f0c1";
   display: inline;

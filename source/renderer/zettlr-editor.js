@@ -11,7 +11,8 @@ class ZettlrEditor
 
         this.cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
             mode: {
-                name: 'spellchecker' // This automatically defines gfm as overlay mode
+                name: 'spellchecker', // This automatically defines gfm as overlay mode
+                closeBrackets: '()[]{}\'\'""»«“”‘’**__' // Doesn't work right now. But ill figure it out
             },
             theme: 'zettlr',
             lineWiseCopyCut: false, // Don't copy/cut whole lines without selection

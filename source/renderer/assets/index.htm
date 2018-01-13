@@ -42,9 +42,10 @@
     <!-- Automatically close brackets and quotes -->
     <script src="codemirror/cm-plugin-closebrackets.js"></script>
 
-    <!-- My own plugins: Markdown shortcuts and spell checking -->
-    <script src="codemirror/cm-plugin-markdown-shortcuts.js"></script>
-    <script src="codemirror/cm-plugin-spellchecker.js"></script>
+    <!-- My own plugins: Markdown shortcuts, footnotes and spell checking -->
+    <script src="codemirror/zettlr-plugin-markdown-shortcuts.js"></script>
+    <script src="codemirror/zettlr-plugin-spellchecker.js"></script>
+    <script src="codemirror/zettlr-plugin-footnotes.js"></script>
 
     <!-- Finally the markdown mode -->
     <script src="codemirror/cm-mode-markdown.js"></script>
@@ -87,6 +88,8 @@
             <div class="button insert-italic" data-command="cm-command"       data-content="markdownItalic"></div>
             <div class="button insert-ul"     data-command="cm-command"       data-content="markdownMakeUnorderedList"></div>
             <div class="button insert-ol"     data-command="cm-command"       data-content="markdownMakeOrderedList"></div>
+            <div class="button insert-fn"     data-command="cm-command"       data-content="insertFootnote"></div>
+            <div class="button remove-fn"     data-command="cm-command"       data-content="removeFootnote"></div>
             <div class="file-info"></div>
         </div>
 
