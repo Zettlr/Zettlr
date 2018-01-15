@@ -60,7 +60,14 @@
         "speech": "Parole",
         "start_speaking": "Commence parler",
         "stop_speaking": "Arrêter la parole",
-        "all_front": "Touts dans le devant"
+        "all_front": "Touts dans le devant",
+        "bold": "Gras",
+        "italic": "Italique",
+        "insert_link": "Insérer un lien",
+        "insert_ol": "Insérer une liste avec numéros.",
+        "insert_ul": "Insérer une liste pas de numéros.",
+        "no_suggestions": "Pas de suggestions",
+        "quicklook": "Quicklook"
     },
     "dialog": {
         "error": {
@@ -129,22 +136,6 @@
             "save": "Enregistrer",
             "cancel": "Annuler"
         }
-    },
-    "context_menu": {
-        "rename": "Renommer",
-        "remove": "Effacer",
-        "new_file": "Nouveau fichier",
-        "new_dir": "Nouveau dossier",
-        "bold": "Gras",
-        "italic": "Italique",
-        "insert_link": "Insérer un lien",
-        "insert_ol": "Insérer une liste avec numéros.",
-        "insert_ul": "Insérer une liste pas de numéros.",
-        "cut": "Coute",
-        "copy": "Copier",
-        "paste": "Coller",
-        "select_all": "Sélectionner tous",
-        "quicklook": "Quicklook"
     },
     "system" : {
         "unknown_command": "Reçu une commande inconnu: %s",

@@ -79,3 +79,10 @@
 
 - Replaced npm package `trash` with electron internal `shell.moveItemToTrash()`
 - Hardened the translation package against potential errors and accounted for also probably missing translations
+
+# 0.8.1
+
+**This is an emergency patch**. It fixes an error on Windows and Linux systems that disabled the complete main menu, making it unable to execute commands from the menu (e.g., opening a new root folder).
+
+- Fixes a bug that made the whole application menu unusable
+- Minor localization fixes

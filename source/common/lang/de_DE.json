@@ -3,7 +3,7 @@
         "welcome": "Lade Anwendung…",
         "spellcheck": {
             "get_lang": "Lade Wörterbücher für die Rechtschreibprüfung…",
-            "request_file": "Lese Dateien für %s. Einen Moment bitte…",
+            "request_file": "Lese Wörterbücher für %s. Einen Moment bitte…",
             "init": "Initialisiere Rechtschreibprüfung für %s.",
             "init_done": "Rechtschreibprüfung für %s erfolgreich initialisiert!"
         }
@@ -26,8 +26,8 @@
         "export": "Exportieren…",
         "rename_file": "Datei umbenennen",
         "rename_dir": "Verzeichnis umbenennen",
-        "delete_file": "Aktuelle Datei löschen",
-        "delete_dir": "Aktuelles Verzeichnis löschen",
+        "delete_file": "Datei löschen",
+        "delete_dir": "Verzeichnis löschen",
         "undo": "Rückgängig",
         "redo": "Wiederholen",
         "cut": "Ausschneiden",
@@ -60,7 +60,14 @@
         "speech": "Sprache",
         "start_speaking": "Sprechen beginnen",
         "stop_speaking": "Sprechen anhalten",
-        "all_front": "Alle in den Vordergrund"
+        "all_front": "Alle in den Vordergrund",
+        "no_suggestions": "Keine Vorschläge",
+        "quicklook": "Quicklook",
+        "bold": "Fett",
+        "italic": "Kursiv",
+        "insert_link": "Link einfügen",
+        "insert_ol": "Numerierte Liste einfügen",
+        "insert_ul": "Ungeordnete Liste einfügen"
     },
     "dialog": {
         "error": {
@@ -129,22 +136,6 @@
             "save": "Speichern",
             "cancel": "Abbrechen"
         }
-    },
-    "context_menu": {
-        "rename": "Umbenennen",
-        "remove": "Entfernen",
-        "new_file": "Neue Datei",
-        "new_dir": "Neues Verzeichnis",
-        "bold": "Fett",
-        "italic": "Kursiv",
-        "insert_link": "Link einfügen",
-        "insert_ol": "Numerierte Liste einfügen",
-        "insert_ul": "Ungeordnete Liste einfügen",
-        "cut": "Ausschneiden",
-        "copy": "Kopieren",
-        "paste": "Einfügen",
-        "select_all": "Alles auswählen",
-        "quicklook": "Quicklook"
     },
     "system" : {
         "unknown_command": "Unbekannten Befehl erhalten: %s",

@@ -197,18 +197,13 @@ if(process.platform != 'darwin') {
     },
     { type: 'separator' },
     { accelerator: 'Ctrl+Q', label: trans('menu.quit'), role: 'quit' });
-
-    template[4].submenu.push({
-        type: 'separator'
-    }, { label: trans('menu.about', name), role: 'about' });
 }
 
 if (process.platform === 'darwin') {
-    const name = app.getName();
     template.unshift({
-        label: name, // This will be only set on macOS if dedicated binary
+        label: app.getName(),
         submenu: [
-            { label: trans('menu.about', name), role: 'about' },
+            { label: trans('menu.about', app.getName()), role: 'about' },
             {
                 label: trans('menu.preferences'),
                 accelerator: 'CmdOrCtrl+,',

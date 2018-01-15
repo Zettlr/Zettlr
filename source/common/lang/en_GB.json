@@ -60,7 +60,14 @@
         "speech": "Speech",
         "start_speaking": "Start speaking",
         "stop_speaking": "Stop speaking",
-        "all_front": "Bring All to Front"
+        "all_front": "Bring All to Front",
+        "bold": "Bold",
+        "italic": "Italic",
+        "insert_link": "Insert link",
+        "insert_ol": "Insert numbered list",
+        "insert_ul": "Insert unordered list",
+        "no_suggestions": "No suggestions",
+        "quicklook": "Quicklook"
     },
     "dialog": {
         "error": {
@@ -129,22 +136,6 @@
             "save": "Save",
             "cancel": "Cancel"
         }
-    },
-    "context_menu": {
-        "rename": "Rename",
-        "remove": "Remove",
-        "new_file": "New file",
-        "new_dir": "New directory",
-        "bold": "Bold",
-        "italic": "Italic",
-        "insert_link": "Insert link",
-        "insert_ol": "Insert numbered list",
-        "insert_ul": "Insert unordered list",
-        "cut": "Cut",
-        "copy": "Copy",
-        "paste": "Paste",
-        "select_all": "Select all",
-        "quicklook": "Quicklook"
     },
     "system" : {
         "unknown_command": "Unknown command received: %s",
