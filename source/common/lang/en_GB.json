@@ -9,7 +9,8 @@
         }
     },
     "gui": {
-        "find_placeholder": "Find…"
+        "find_placeholder": "Find…",
+        "words": "%s words"
     },
     "menu": {
         "labels": {

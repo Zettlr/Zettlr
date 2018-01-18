@@ -84,5 +84,21 @@
 
 **This is an emergency patch**. It fixes an error on Windows and Linux systems that disabled the complete main menu, making it unable to execute commands from the menu (e.g., opening a new root folder).
 
-- Fixes a bug that made the whole application menu unusable
+- Fixes a bug that rendered the whole application menu unusable
 - Minor localization fixes
+
+# 0.8.2
+
+## GUI and functionality
+
+- Fixed a bug that did not show the exact word count of 1.000 words in the toolbar.
+- Translated the word counter into de_DE, en_US, en_GB and fr_FR
+- The preview pane now does not scroll to its top on saving if it does not contain the current file
+- Heavily improved footnote placement and removement
+
+## Under the hood
+
+- Updated development dependencies
+- Additional security check in the `trans()` method
+- Footnote plugin now features way better RegEx recognition and works reliably.
+- Also, made the footnote placements and deletions to only create one single history event (so that you don't have to press `Cmd/Ctrl+Z` twice to remove the footnote/re-add the footnote)

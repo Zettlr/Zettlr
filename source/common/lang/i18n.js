@@ -44,6 +44,12 @@ function trans(string, ...args)
         }
     }
 
+    if(typeof transString !== 'string') {
+        // There was an additional attribute missing (there is a whole object
+        // in the variable) -> just return the string
+        return string;
+    }
+
     for(let a of args) {
         transString = transString.replace('%s', a); // Always replace one %s with an arg
     }

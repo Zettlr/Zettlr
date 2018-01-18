@@ -49,7 +49,7 @@ class ZettlrToolbar
         let wd = '';
         if(words < 1000) {
             wd = words;
-        } else if(words > 1000) {
+        } else if(words >= 1000) {
             wd = words.toString();
             let cnt = 0;
             for(let i = wd.length-1; i > 0; i--) {
@@ -61,7 +61,7 @@ class ZettlrToolbar
             }
         }
 
-        this.fileInfo.text(wd + ' Words');
+        this.fileInfo.text(trans('gui.words', wd));
     }
 
     hideWordCount()

@@ -103,14 +103,19 @@ class ZettlrDir
         return null;
     }
 
-    // Check whether or not this dir contains the given dir
-    contains(dir)
+    // Check whether or not this dir contains the given object (dir or file)
+    contains(obj)
     {
-        if(this.findDir({ 'hash': dir.hash }) !== null) {
+        if(this.findDir({ 'hash': obj.hash }) !== null) {
             return true;
         } else {
-            return false;
+            // Try a file
+            if(this.findFile({ 'hash': obj.hash}) !== null) {
+                return true;
+            }
         }
+
+        return false;
     }
 
     getFileHashes(arr = [])

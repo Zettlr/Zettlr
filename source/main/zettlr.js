@@ -82,7 +82,7 @@ class Zettlr
             this.ipc.send('toggle-snippets', 'no-emit');
         }
 
-        // Send found binaries from init() to the client
+        // Send indicators to the client which binaries have been found
         this.ipc.send('binaries', {
             'pandoc'    : this.config.getEnv('pandoc'),
             'pdflatex'  : this.config.getEnv('pdflatex')
@@ -207,8 +207,6 @@ class Zettlr
             // Client has requested a save-action.
             // arg contains the contents of CM and maybe also a hash.
             this.saveFile(arg.content);
-            // Send new file list to reflect changes at the beginning of a file.
-            this.ipc.send('file-list', this.getCurrentDir());
             break;
 
             case 'open-dir':
@@ -828,6 +826,11 @@ class Zettlr
             // "Open" this file.
             this.sendFileList(this.getCurrentDir().hash);
             this.sendFile(file.hash);
+            return;
+        }
+        if(this.getCurrentDir().contains(file)) {
+            // Send new file list to reflect changes at the beginning of a file.
+            this.ipc.send('file-list', this.getCurrentDir());
         }
     }
 
