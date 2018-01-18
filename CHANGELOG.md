@@ -96,6 +96,7 @@
 - The preview pane now does not scroll to its top on saving if it does not contain the current file
 - Heavily improved footnote placement and removement
 - Footnotes now show on hover to ease previewing.
+- Fixed a small error that threw errors on deleting file with no file selected
 
 ## Under the hood
 

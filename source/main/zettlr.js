@@ -474,7 +474,7 @@ class Zettlr
         }
 
         // Now that we are save, let's move the current file to trash.
-        if(file.hash == this.getCurrentFile().hash) {
+        if(this.getCurrentFile() && (file.hash == this.getCurrentFile().hash)) {
             this.ipc.send('close-file', {});
             // Also re-set the title!
             this.window.setTitle('Zettlr');
