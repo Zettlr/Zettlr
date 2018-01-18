@@ -95,6 +95,7 @@
 - Translated the word counter into de_DE, en_US, en_GB and fr_FR
 - The preview pane now does not scroll to its top on saving if it does not contain the current file
 - Heavily improved footnote placement and removement
+- Footnotes now show on hover to ease previewing.
 
 ## Under the hood
 

@@ -6,6 +6,7 @@ class ZettlrEditor
     {
         this.parent = parent;
         this.div = $('#editor');
+        this.fntooltipbubble = $('<div>').addClass('fn-panel');
         this.positions = []; // Saves the positions of the editor
         this.currentHash = null; // Needed for positions
 
@@ -56,7 +57,7 @@ class ZettlrEditor
         });
 
         // Thanks for this to https://discuss.codemirror.net/t/hanging-indent/243/2
-        this.cm.on("renderLine", function(cm, line, elt) {
+        this.cm.on("renderLine", (cm, line, elt) => {
 
             let charWidth = cm.defaultCharWidth() - 2;
             let basePadding = 4;
@@ -72,12 +73,19 @@ class ZettlrEditor
         });
 
         // Turn cursor into pointer while hovering link with pressed shift
-        this.cm.getWrapperElement().addEventListener('mousemove', e => {
+        this.cm.getWrapperElement().addEventListener('mousemove', (e) => {
             let t = $(e.target);
             if((t.hasClass('cm-url') || t.hasClass('cm-link')) && e.shiftKey) {
                 t.addClass('shift');
             } else {
                 t.removeClass('shift');
+            }
+
+            // Display a footnote if the target is a link (and begins with ^)
+            if(t.hasClass('cm-link') && t.text().indexOf('^') === 0) {
+                this.fntooltip(t);
+            } else {
+                this.fntooltipbubble.detach();
             }
         });
 
@@ -183,6 +191,34 @@ class ZettlrEditor
 
         // Replace word and select new word
         this.cm.replaceSelection(word, 'around');
+    }
+
+    // Displays a tooltip under the element.
+    fntooltip(element)
+    {
+        // Because we highlight the formatting as well, the element's text will
+        // only contain ^<id> without the brackets
+        let fn = element.text().substr(1);
+        let fnref = '';
+
+        // Now find the respective line and extract the footnote content using
+        // our RegEx from the footnotes plugin.
+        let fnrefRE = /^\[\^([\da-zA-Z_-]+)\]: (.+)/gm;
+
+        for(let lineNo = this.cm.doc.lastLine(); lineNo > -1; lineNo--) {
+            fnrefRE.lastIndex = 0;
+            let line = this.cm.doc.getLine(lineNo);
+            let match = null;
+            if(((match = fnrefRE.exec(line)) != null) && (match[1] == fn)) {
+                fnref = match[2];
+                break;
+            }
+        }
+
+        // Now we either got a match or an empty fnref. Anyway: display
+        this.fntooltipbubble.text(fnref);
+        this.fntooltipbubble.attr('style', 'bottom:0; left:0; right:0; z-index:10000');
+        this.div.append(this.fntooltipbubble);
     }
 
     toggleTheme()
