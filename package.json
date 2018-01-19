@@ -1,6 +1,5 @@
 {
     "name": "zettlr",
-    "productName": "Zettlr",
     "homepage": "https://www.zettlr.com",
     "author": {
         "name": "Hendrik Erz",
@@ -22,6 +21,8 @@
     },
     "build": {
         "appId": "com.zettlr.www",
+        "productName": "Zettlr",
+        "npmRebuild": false,
         "copyright": "This program is licensed under the MIT-license.",
         "directories": {
             "output": "release",
@@ -92,7 +93,7 @@
         "util": "^0.10.3"
     },
     "devDependencies": {
-        "electron": "^1.7.9",
-        "electron-builder": "^19.54.0"
+        "electron": "^1.7.10",
+        "electron-builder": "^19.55.1"
     }
 }

@@ -98,6 +98,7 @@
 - Footnotes now show on hover to ease previewing.
 - Fixed a small error that threw errors on deleting file with no file selected
 - Fixed selection accuracy in Quicklook windows after they have been resized.
+- Added modification time of files in the file preview.
 
 ## Under the hood
 
@@ -105,3 +106,5 @@
 - Additional security check in the `trans()` method
 - Footnote plugin now features way better RegEx recognition and works reliably.
 - Also, made the footnote placements and deletions to only create one single history event (so that you don't have to press `Cmd/Ctrl+Z` twice to remove the footnote/re-add the footnote)
+- Added basic watchdog functions. Not very sophisticated by now but it works.
+- Now package.json does not trigger a rebuild of all modules when electron-builder is called (as we only rely on those already prebuilt)
