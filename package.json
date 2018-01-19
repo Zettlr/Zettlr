@@ -83,6 +83,7 @@
     },
     "license": "MIT",
     "dependencies": {
+        "chokidar": "^2.0.0",
         "codemirror-markdown-list-autoindent": "^1.0.1",
         "command-exists": "^1.2.2",
         "sanitize-filename": "^1.6.1",

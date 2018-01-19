@@ -20,6 +20,7 @@ class ZettlrFile
         this.hash       = null;
         this.type       = 'file';
         this.ext        = '';
+        this.modtime    = 0;
         this.snippet    = '';
         this.content    = ''; // Will only be not empty when the file is modified.
         this.isModified = false;
@@ -53,6 +54,9 @@ class ZettlrFile
 
     read()
     {
+        let stat = fs.lstatSync(this.path);
+        this.modtime = stat.mtime.getTime();
+
         // (Re-)read content of file
         let cnt = fs.readFileSync(this.path, { encoding: "utf8" });
         this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt ;

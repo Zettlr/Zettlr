@@ -4,6 +4,8 @@ const fs         = require('fs');
 const sanitize   = require('sanitize-filename');
 const ZettlrFile = require('./zettlr-file.js');
 const {shell}    = require('electron');
+// chokidar watchdog
+const chokidar   = require('chokidar');
 
 function DirectoryError(msg) {
     this.name = 'Directory error';
@@ -20,6 +22,8 @@ class ZettlrDir
         this.children = [];
         this.type = 'directory';
         this.parent = parent;
+        this.watchdog = null;
+        this.watching = false; // Is chokidar already watching?
 
         // Prepopulate if given.
         if(dir != null) {
@@ -35,8 +39,84 @@ class ZettlrDir
                 fs.mkdirSync(this.path);
             }
 
-            // Populate children array
-            this.readDir();
+            if(this.isRoot()) {
+                // Begin watching the base dir.
+                this.watchdog = chokidar.watch(this.path, {
+                    ignored: /(^|[\/\\])\../,
+                    persistent: true
+                });
+
+                // Only scan this dir AFTER the watchdog is ready to prevent
+                // inconsistencies!
+                this.watchdog.on('ready', () => {
+                    this.watching = true;
+                    this.scan();
+                });
+
+                this.watchdog.on('add', p => {
+                    if(!this.watching) return;
+                    // Simply add the file.
+
+                    // First hash the path, find the corresponding dir and
+                    // tell it to re-scan itself.
+                    let fhash = this.hashPath(path.dirname(p));
+                    let dir = this.findDir({ 'hash': fhash });
+                    dir.scan();
+                    // TODO: notify Zettlr if the file is currently visible.
+                    if(this.parent.getCurrentDir().contains(this.hashPath(p))) {
+                        this.parent.fsNotify('add', dir.findFile({ 'hash': this.hashPath(p) }));
+                    }
+                });
+
+                this.watchdog.on('change', p => {
+                    // A file has changed
+                    let file = this.findFile({ 'hash': this.hashPath(p) });
+                    // Update
+                    file.read();
+                    if(this.parent.getCurrentDir().contains(file.hash)) {
+                        this.parent.fsNotify('change', file);
+                    }
+                });
+
+                this.watchdog.on('unlink', p => {
+                    // File has been removed
+                    let dir = this.findDir({ 'hash': this.hashPath(path.dirname(p)) });
+                    dir.scan();
+                    if(this.parent.getCurrentDir().contains(this.hashPath(p))) {
+                        this.parent.fsNotify('unlink', dir.findFile({ hash: this.hashPath(p) }));
+                    }
+                });
+
+                this.watchdog.on('addDir', p => {
+                    if(!this.watching) return;
+                    // Add the dir
+                    let dir = this.findDir({ hash: this.hashPath(path.dirname(p)) });
+
+                    // If a dir is added to the root and the root is huge
+                    // guess what happens: exactly, freeze! (e.g.: fine-tune
+                    // in the next version)
+                    dir.scan();
+                    if(this.parent.getCurrentDir().contains(this.hashPath(p))) {
+                        this.parent.fsNotify('addDir', dir);
+                    }
+                });
+
+                this.watchdog.on('unlinkDir', p => {
+                    let dir = this.findDir({hash: this.hashPath(p) });
+                    let contains = false;
+                    if(this.parent.getCurrentDir().contains(dir.hash)) {
+                        contains = true;
+                    } else {
+                        contains = false;
+                    }
+                    dir.remove();
+                    this.parent.fsNotify('unlinkDir', contains); // true = contained the dir
+                });
+            } else {
+                // No root dir - directly scan.
+                // Populate children array
+                this.scan();
+            }
         }
     }
 
@@ -106,6 +186,12 @@ class ZettlrDir
     // Check whether or not this dir contains the given object (dir or file)
     contains(obj)
     {
+        if(typeof obj === 'number') {
+            // Same problem as in the find-methods. Only here I don't care anymore.
+            // Simply assume a hash. Nothing else could be it.
+            obj = { 'hash': obj };
+        }
+
         if(this.findDir({ 'hash': obj.hash }) !== null) {
             return true;
         } else {
@@ -323,17 +409,20 @@ class ZettlrDir
         return this;
     }
 
-    readDir()
+    scan()
     {
         // Reads this directory.
         try {
             let stat = fs.lstatSync(this.path);
         }catch(e) {
             // Do not create directories here, only read.
-            throw new DirectoryError('Directory does not exist!');
+            return;
         }
 
-        // Read the directory
+        // Empty the children array
+        this.children = [];
+
+        // (Re-)read the directory
         let files = fs.readdirSync(this.path);
 
         for(let f of files) {
@@ -402,6 +491,12 @@ class ZettlrDir
     isFile()
     {
         return false;
+    }
+
+    isRoot()
+    {
+        // The Zettlr object is the only possible non-dir parent of a dir
+        return !this.parent.isDirectory();
     }
 }
 

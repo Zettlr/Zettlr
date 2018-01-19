@@ -51,6 +51,10 @@ class ZettlrQuicklook
             resize: (e, ui) => {
                 let bar = this.window.find('.title');
                 this.window.find('.body').css('height', (ui.size.height-bar.outerHeight()) + 'px');
+            },
+            stop: (e, ui) => {
+                // Refresh the editor to account for changes in the size.
+                this.cm.refresh();
             }
         });
 

@@ -176,10 +176,12 @@ class ZettlrPreview
             snip = ' hidden';
         }
 
+        let mtime = new Date(file.modtime);
+        mtime = `${mtime.getFullYear()}-${mtime.getMonth()+1}-${mtime.getDate()} ${mtime.getHours()}:${mtime.getMinutes()}`;
         return `<li data-hash="${file.hash}" title="${file.name}">
         <strong>${file.name.substr(0, file.name.length-3)}
         </strong><br>
-        <span class="snippet${snip}">${file.snippet}</span>
+        <span class="snippet${snip}">${file.snippet}<br><small>${mtime}</small></span>
         </li>`;
     }
 

@@ -240,6 +240,9 @@ html {
   border-bottom: 1px solid #c8c8c8;
   background-color: inherit;
 }
+#preview ul li small {
+  color: #c8c8c8;
+}
 #preview ul li.hidden {
   display: none;
 }
@@ -325,6 +328,9 @@ html {
 }
 #preview.dark ul li strong {
   background-image: linear-gradient(90deg, white 0%, white 90%, transparent 100%);
+}
+#preview.dark ul li small {
+  color: #787878;
 }
 #preview.dark ul li:hover {
   background-color: #787878;

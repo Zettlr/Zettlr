@@ -779,6 +779,45 @@ class Zettlr
     **                                                                        **
     ***************************************************************************/
 
+    // FILESYSTEM CHANGES AND METHODS
+    fsNotify(type, obj)
+    {
+        switch(type) {
+            case 'add':
+            // This is sent if a file has been added AND it is in the current dir
+            // -> simply send a new file list (TODO: simple add-event)
+            this.ipc.send('file-list', this.getCurrentDir());
+            break;
+
+            case 'change':
+            // For now, even if the changed file is the current file, let's simply
+            // resend the list and thereby quietly overwrite the file.
+            this.ipc.send('file-list', this.getCurrentDir());
+            break;
+
+            case 'unlink':
+            if(obj === this.getCurrentFile()) {
+                this.ipc.send('close-file');
+                this.clearModified();
+            }
+            if(this.getCurrentDir().contains(obj.hash)) {
+                this.ipc.send('file-list', this.getCurrentDir());
+            }
+            break;
+
+            case 'addDir':
+            if(this.getCurrentDir().contains(obj.hash)) {
+                this.ipc.send('file-list', this.getCurrentDir());
+            }
+            this.ipc.send('dir-list', this.paths);
+            break;
+
+            default:
+            console.log('Unknown filesystem notification: ' + type);
+            break;
+        }
+    }
+
     // This reloads the path list - is e.g. called after the creation of a new
     // file or a new directory or saving or renaming of a file.
     refreshPaths()
@@ -900,6 +939,12 @@ class Zettlr
     {
         this.window.clearModified();
         this.editFlag = false;
+    }
+
+    // This is used by the root directory to safely determine whether it is root
+    isDirectory()
+    {
+        return false;
     }
 }
 

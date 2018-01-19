@@ -97,6 +97,7 @@
 - Heavily improved footnote placement and removement
 - Footnotes now show on hover to ease previewing.
 - Fixed a small error that threw errors on deleting file with no file selected
+- Fixed selection accuracy in Quicklook windows after they have been resized.
 
 ## Under the hood
 
