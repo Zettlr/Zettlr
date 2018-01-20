@@ -108,3 +108,4 @@
 - Also, made the footnote placements and deletions to only create one single history event (so that you don't have to press `Cmd/Ctrl+Z` twice to remove the footnote/re-add the footnote)
 - Added basic watchdog functions. Not very sophisticated by now but it works.
 - Now package.json does not trigger a rebuild of all modules when electron-builder is called (as we only rely on those already prebuilt)
+- Again some rewrites to slimline the app

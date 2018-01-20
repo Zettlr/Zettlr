@@ -39,34 +39,18 @@ class Zettlr
         this.config = null;         // Configuration file handler
 
         this.config = new ZettlrConfig(this);
-
-        // Init language one-time
+        // Init translations
         i18n(this.config.get('app_lang'));
-
         this.ipc = new ZettlrIPC(this);
-
-        // Initiate the files - every dir will read its own contents.
+        // Initiate the directory tree
         this.paths = new ZettlrDir(this, this.config.get('projectDir'));
 
-        // set currentDir pointer to the root node. We can traverse by using
-        // "parent" and "children[]" on each dir (and file)
+        // set currentDir pointer to the root node.
         this.currentDir = this.paths;
 
         // And the window.
         this.window = new ZettlrWindow(this);
         this.openWindow();
-    }
-
-    // Create new window.
-    openWindow()
-    {
-        this.window.open();
-    }
-
-    // Dereference the window
-    closeWindow()
-    {
-        this.window.close();
     }
 
     // Gets called by ZettlrWindow for after-start tasks
@@ -93,10 +77,7 @@ class Zettlr
     }
 
     // Shutdown the app. This function is called on quit.
-    shutdown()
-    {
-        this.config.save();
-    }
+    shutdown() { this.config.save(); }
 
     // Returns false if the file should not close, and true if it's safe.
     canClose()
@@ -873,27 +854,6 @@ class Zettlr
         }
     }
 
-    // Getters
-    getWindow()
-    {
-        return this.window;
-    }
-
-    getPaths()
-    {
-        return this.paths;
-    }
-
-    getCurrentDir()
-    {
-        return this.currentDir;
-    }
-
-    getCurrentFile()
-    {
-        return this.currentFile;
-    }
-
     // Setters - to be triggered from IPC process
     // Set current file pointer
     setCurrentFile(f)
@@ -922,12 +882,6 @@ class Zettlr
         this.currentDir = f;
     }
 
-    // MODIFICATION FUNCTIONS
-    isModified()
-    {
-        return this.editFlag;
-    }
-
     setModified()
     {
         this.window.setModified();
@@ -941,11 +895,18 @@ class Zettlr
         this.editFlag = false;
     }
 
+    // Getters
+    getWindow()      { return this.window; }
+    getPaths()       { return this.paths; }
+    getCurrentDir()  { return this.currentDir; }
+    getCurrentFile() { return this.currentFile; }
+
     // This is used by the root directory to safely determine whether it is root
-    isDirectory()
-    {
-        return false;
-    }
+    isDirectory() { return false; }
+    isModified() { return this.editFlag; }
+
+    openWindow() { this.window.open(); }
+    closeWindow() { this.window.close(); }
 }
 
 // Export the module on require()

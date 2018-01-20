@@ -1,11 +1,14 @@
 // THIS CLASS CONTROLS A SINGLE DIRECTORY
-const path       = require('path');
-const fs         = require('fs');
-const sanitize   = require('sanitize-filename');
-const ZettlrFile = require('./zettlr-file.js');
-const {shell}    = require('electron');
+const path         = require('path');
+const fs           = require('fs');
+const sanitize     = require('sanitize-filename');
+const ZettlrFile   = require('./zettlr-file.js');
+const {shell}      = require('electron');
 // chokidar watchdog
-const chokidar   = require('chokidar');
+const chokidar     = require('chokidar');
+
+// Include helpers
+const { hash, sort, generateName } = require('../common/zettlr-helpers.js');
 
 function DirectoryError(msg) {
     this.name = 'Directory error';
@@ -16,12 +19,12 @@ class ZettlrDir
 {
     constructor(parent, dir = null)
     {
-        this.path = "";
-        this.name = "";
-        this.hash = null;
+        this.path     = "";
+        this.name     = "";
+        this.hash     = null;
         this.children = [];
-        this.type = 'directory';
-        this.parent = parent;
+        this.type     = 'directory';
+        this.parent   = parent;
         this.watchdog = null;
         this.watching = false; // Is chokidar already watching?
 
@@ -29,7 +32,7 @@ class ZettlrDir
         if(dir != null) {
             this.path = dir;
             this.name = path.basename(this.path);
-            this.hash = this.hashPath(this.path);
+            this.hash = hash(this.path);
 
             // The directory might've been just been created.
             try {
@@ -59,18 +62,21 @@ class ZettlrDir
 
                     // First hash the path, find the corresponding dir and
                     // tell it to re-scan itself.
-                    let fhash = this.hashPath(path.dirname(p));
+                    let fhash = hash(path.dirname(p));
                     let dir = this.findDir({ 'hash': fhash });
-                    dir.scan();
-                    // TODO: notify Zettlr if the file is currently visible.
-                    if(this.parent.getCurrentDir().contains(this.hashPath(p))) {
-                        this.parent.fsNotify('add', dir.findFile({ 'hash': this.hashPath(p) }));
+                    let file = dir.addChild(p);
+                    if(file == null) {
+                        // File was not markdown -> ignore
+                        return;
+                    }
+                    if(this.parent.getCurrentDir().contains(hash(p))) {
+                        this.parent.fsNotify('add', file);
                     }
                 });
 
                 this.watchdog.on('change', p => {
                     // A file has changed
-                    let file = this.findFile({ 'hash': this.hashPath(p) });
+                    let file = this.findFile({ 'hash': hash(p) });
                     // Update
                     file.read();
                     if(this.parent.getCurrentDir().contains(file.hash)) {
@@ -80,29 +86,27 @@ class ZettlrDir
 
                 this.watchdog.on('unlink', p => {
                     // File has been removed
-                    let dir = this.findDir({ 'hash': this.hashPath(path.dirname(p)) });
+                    let dir = this.findDir({ 'hash': hash(path.dirname(p)) });
                     dir.scan();
-                    if(this.parent.getCurrentDir().contains(this.hashPath(p))) {
-                        this.parent.fsNotify('unlink', dir.findFile({ hash: this.hashPath(p) }));
+                    if(this.parent.getCurrentDir().contains(hash(p))) {
+                        this.parent.fsNotify('unlink', dir.findFile({ hash: hash(p) }));
                     }
                 });
 
                 this.watchdog.on('addDir', p => {
                     if(!this.watching) return;
                     // Add the dir
-                    let dir = this.findDir({ hash: this.hashPath(path.dirname(p)) });
+                    let dir = this.findDir({ 'hash': hash(path.dirname(p)) });
 
-                    // If a dir is added to the root and the root is huge
-                    // guess what happens: exactly, freeze! (e.g.: fine-tune
-                    // in the next version)
-                    dir.scan();
-                    if(this.parent.getCurrentDir().contains(this.hashPath(p))) {
-                        this.parent.fsNotify('addDir', dir);
+                    // Tell the directory to add the new one
+                    let newdir = dir.addChild(p);
+                    if(this.parent.getCurrentDir().contains(hash(p))) {
+                        this.parent.fsNotify('addDir', newdir);
                     }
                 });
 
                 this.watchdog.on('unlinkDir', p => {
-                    let dir = this.findDir({hash: this.hashPath(p) });
+                    let dir = this.findDir({ 'hash': hash(p) });
                     let contains = false;
                     if(this.parent.getCurrentDir().contains(dir.hash)) {
                         contains = true;
@@ -183,27 +187,6 @@ class ZettlrDir
         return null;
     }
 
-    // Check whether or not this dir contains the given object (dir or file)
-    contains(obj)
-    {
-        if(typeof obj === 'number') {
-            // Same problem as in the find-methods. Only here I don't care anymore.
-            // Simply assume a hash. Nothing else could be it.
-            obj = { 'hash': obj };
-        }
-
-        if(this.findDir({ 'hash': obj.hash }) !== null) {
-            return true;
-        } else {
-            // Try a file
-            if(this.findFile({ 'hash': obj.hash}) !== null) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     getFileHashes(arr = [])
     {
         for(let c of this.children) {
@@ -226,7 +209,7 @@ class ZettlrDir
 
         let dir = new ZettlrDir(this, newpath);
         this.children.push(dir);
-        this.sort();
+        this.children = sort(this.children);
 
         // Return dir for chainability
         return dir;
@@ -235,27 +218,13 @@ class ZettlrDir
     newfile(name = null)
     {
         if(name == null) {
-            // Just take the current time.
-            let date = new Date();
-            let yyyy = date.getFullYear();
-            let mm = date.getMonth() + 1;
-            if(mm <= 9) mm =  '0' + mm;
-            let dd = date.getDate();
-            if(dd <= 9) dd = '0' + dd;
-            let hh = date.getHours();
-            if(hh <= 9) hh =  '0' + hh;
-            let m = date.getMinutes();
-            if(m <= 9) m =  '0' + m;
-            let ss = date.getSeconds();
-            if(ss <= 9) ss =  '0' + ss;
-            let add = yyyy + "-" + mm + "-" + dd + " " + hh + ":" + m + ":" + ss;
-
-            name = "New file " + add + ".md";
+            // Generate a unique new name
+            name = generateName();
         }
 
         name = sanitize(name);
         // This gets executed once the user has not entered any allowed characters
-        if((name === '') || (name === null)) {
+        if((name == '') || (name == null)) {
             throw new DirectoryError('The new file name did not contain any allowed characters.');
         }
 
@@ -272,24 +241,44 @@ class ZettlrDir
         // Create a new file.
         let f = new ZettlrFile(this, path.join(this.path, name));
         this.children.push(f);
-        this.sort();
+        this.children = sort(this.children);
         return f;
+    }
+
+    // Triggered by the watchdog - add a child
+    addChild(p)
+    {
+        let stat = fs.lstatSync(p);
+
+        if(stat.isDirectory()) {
+            let dir = new ZettlrDir(this, p);
+            this.children.push(dir);
+            this.children = sort(this.children);
+            return dir;
+        } else if(stat.isFile() && (path.extname(p) == '.md')) {
+            let file = new ZettlrFile(this, p);
+            this.children.push(file);
+            this.children = sort(this.children);
+            return file;
+        }
+
+        // Not a correct file type -> ignore
+        return null;
     }
 
     get(hash)
     {
         // This function is supposed to return the file contents with the hash.
         // Let each children decide if they are correct.
-        let cnt = null;
         for(let c of this.children) {
-            cnt = c.get(hash);
+            let cnt = c.get(hash);
             if(cnt != null) {
                 // Got it -> return and abort.
                 return cnt;
             }
         }
 
-        return cnt;
+        return null;
     }
 
     remove(obj = this)
@@ -301,12 +290,11 @@ class ZettlrDir
                 return false;
             }
 
-            if(shell.moveItemToTrash(this.path)) {
-                // While it is trashing, remove and stuff
-                this.parent.remove(this);
-            } else {
-                throw new DirectoryError('Could not move directory to trash!');
-            }
+            // It may be that this method returns false. Mostly, because the
+            // directory has been deleted and this object is only removed to
+            // reflect changes on the disk that have been reported by chokidar
+            shell.moveItemToTrash(this.path);
+            this.parent.remove(this);
         } else {
             // Remove a file (function was called by a children)
             let index = this.children.indexOf(obj);
@@ -315,50 +303,13 @@ class ZettlrDir
             if(index > -1) {
                 this.children.splice(index, 1);
             } else {
-                // If this ever gets written to console, I'd need to inspect ...
-                console.error('I am ' + this.name);
-                console.error('Could not find children inside children array!');
-                for(let c of this.children) {
-                    console.log('Children: ' + c.name);
-                }
-                console.log('*'.repeat(30));
-                console.log('Not found was: ' + obj.name);
-                return false;
+                // Logically, this should never be executed. But who am I to tell
+                // you about logic and software ...
+                throw new DirectoryError('Could not find child inside array to remove!');
             }
         }
 
         return true;
-    }
-
-    // Sort the children of this directory
-    sort()
-    {
-        // First sort through children array (necessary if new children were added)
-        this.children.sort((a, b) => {
-            // Negative return: a is smaller b
-            if(a.name < b.name) {
-                return -1;
-            } else if(a.name > b.name) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-
-        // Now split the children into files and directories and concat again
-        let f = [];
-        let d = [];
-
-        for(let c of this.children) {
-            if(c.type === 'file') {
-                f.push(c);
-            } else if(c.type === 'directory') {
-                d.push(c);
-            }
-        }
-
-        // Shoud still be sorted from readdirSync and only split into directories and files.
-        this.children = f.concat(d);
     }
 
     move(newpath, name = null)
@@ -377,14 +328,14 @@ class ZettlrDir
 
         let oldPath = this.path;
         this.path = path.join(newpath, this.name);
-        this.hash = this.hashPath(this.path);
+        this.hash = hash(this.path);
 
         // Move
         fs.renameSync(oldPath, this.path);
         this.children = []; // Unreference old list
 
         // Re-read
-        this.readDir();
+        this.scan();
 
         // Chainability
         return this;
@@ -396,7 +347,7 @@ class ZettlrDir
         this.children.push(newchild);
         // Set the correct new parent
         newchild.parent = this;
-        this.sort();
+        this.children = sort(this.children);
 
         return this;
     }
@@ -441,8 +392,8 @@ class ZettlrDir
             } // With else if exlude everything like symlinks etc and skip them
         }
 
-        // Final step: Sort the children from files (first) and directories (after)
-        this.sort();
+        // Final step: Sort
+        this.children = sort(this.children);
     }
 
     exists(p)
@@ -468,36 +419,32 @@ class ZettlrDir
         return e;
     }
 
-    // Just very basic hashing function (thanks to https://stackoverflow.com/a/7616484)
-    hashPath(pathname)
+    // Check whether or not this dir contains the given object (dir or file)
+    contains(obj)
     {
-        let hash = 0, i, chr;
-        if (pathname.length === 0) return hash;
-
-        for(i = 0; i < pathname.length; i++) {
-            chr = pathname.charCodeAt(i);
-            hash = ((hash << 5) - hash) + chr;
-            hash |= 0; // Convert to 32bit integer
+        if(typeof obj === 'number') {
+            // Same problem as in the find-methods. Only here I don't care anymore.
+            // Simply assume a hash. Nothing else could be it.
+            obj = { 'hash': obj };
         }
-        return hash;
-    }
 
-    // Dummy functions
-    isDirectory()
-    {
-        return true;
-    }
+        if(this.findDir({ 'hash': obj.hash }) !== null) {
+            return true;
+        } else if(this.findFile({ 'hash': obj.hash}) !== null) {
+            // Try a file
+            return true;
+        }
 
-    isFile()
-    {
         return false;
     }
 
-    isRoot()
-    {
-        // The Zettlr object is the only possible non-dir parent of a dir
-        return !this.parent.isDirectory();
-    }
+    // On renames, ZettlrFile objects will trigger sorts on this object
+    sort() { this.children = sort(this.children); }
+
+    // Dummy functions
+    isDirectory() { return true; }
+    isFile()      { return false; }
+    isRoot()      { return !this.parent.isDirectory(); }
 }
 
 module.exports = ZettlrDir;

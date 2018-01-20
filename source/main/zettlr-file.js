@@ -4,6 +4,7 @@ const fs        = require('fs');
 const path      = require('path');
 const sanitize  = require('sanitize-filename');
 const {shell}   = require('electron');
+const {hash}    = require('../common/zettlr-helpers.js');
 
 function FileError(msg) {
     this.name = 'File error';
@@ -29,7 +30,7 @@ class ZettlrFile
         if(fname !== null) {
             this.path = fname;
             this.name = path.basename(this.path);
-            this.hash = this.hashPath(this.path);
+            this.hash = hash(this.path);
             this.ext  = path.extname(this.path);
 
             // The file might've been just created. Test that
@@ -96,10 +97,7 @@ class ZettlrFile
 
     // Dummy function, always returns null (as this is no directory)
     // Eases recursive use in findDir of directories.
-    findDir(obj)
-    {
-        return null;
-    }
+    findDir(obj) { return null; }
 
     // This function either returns this OR null depending on the prop
     findFile(obj)
@@ -110,6 +108,8 @@ class ZettlrFile
             prop = 'path';
         } else if(obj.hasOwnProperty('hash') && obj.hash != null) {
             prop = 'hash';
+        } else {
+            throw new FileError('Cannot findFile!');
         }
 
         if(this[prop] == obj[prop]) {
@@ -127,19 +127,13 @@ class ZettlrFile
         this.isModified = false;
     }
 
-    isModified()
-    {
-        return this.isModified;
-    }
+    isModified() { return this.isModified; }
 
     remove()
     {
         // Removes the file from system and also from parent object.
-        if(shell.moveItemToTrash(this.path)) {
-            this.parent.remove(this);
-        } else {
-            throw new FileError('Could not move item to trash!');
-        }
+        shell.moveItemToTrash(this.path);
+        this.parent.remove(this);
     }
 
     rename(name)
@@ -179,7 +173,7 @@ class ZettlrFile
         // Find new path:
         let oldPath = this.path;
         this.path = path.join(toPath, this.name);
-        this.hash = this.hashPath(this.path);
+        this.hash = hash(this.path);
 
         // Move
         fs.renameSync(oldPath, this.path);
@@ -198,31 +192,28 @@ class ZettlrFile
 
     search(terms)
     {
-        // Now suuuuuuurchhhh
         let matches = 0;
 
-        // First match the title (might help)
+        // First match the title (faster results)
         for(let t of terms) {
             if(t.operator === 'AND') {
                 if(this.name.indexOf(t.word) > -1) {
                     matches++;
                 }
             } else {
-                // OR
+                // OR operator
                 for(let wd of t.word) {
                     if(this.name.indexOf(wd) > -1) {
                         matches++;
-                        // Break to speed up search
+                        // Break because only one match necessary
                         break;
                     }
                 }
             }
         }
 
-        // Abort immediately
-        if(matches == terms.length) {
-            return true;
-        }
+        // Retrn immediately
+        if(matches == terms.length) { return true; }
 
         // Do a full text search.
         let cnt = this.read();
@@ -246,30 +237,9 @@ class ZettlrFile
         return (matches == terms.length);
     }
 
-    // Just very basic hashing function (thanks to https://stackoverflow.com/a/7616484)
-    hashPath(pathname)
-    {
-        let hash = 0, i, chr;
-        if (pathname.length === 0) return hash;
-
-        for(i = 0; i < pathname.length; i++) {
-            chr = pathname.charCodeAt(i);
-            hash = ((hash << 5) - hash) + chr;
-            hash |= 0; // Convert to 32bit integer
-        }
-        return hash;
-    }
-
     // Dummy functions
-    isDirectory()
-    {
-        return false;
-    }
-
-    isFile()
-    {
-        return true;
-    }
+    isDirectory() { return false; }
+    isFile()      { return true; }
 }
 
 module.exports = ZettlrFile;
