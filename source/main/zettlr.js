@@ -763,6 +763,8 @@ class Zettlr
     // FILESYSTEM CHANGES AND METHODS
     fsNotify(type, obj)
     {
+        //console.log(`Received ${type}-command.`);
+        //console.log(`Current dir is ${this.getCurrentDir().name}`);
         switch(type) {
             case 'add':
             // This is sent if a file has been added AND it is in the current dir
@@ -777,13 +779,13 @@ class Zettlr
             break;
 
             case 'unlink':
+            // obj is the deleted file. Just send a "remove" command to the client.
             if(obj === this.getCurrentFile()) {
                 this.ipc.send('close-file');
+                this.setCurrentFile(null);
                 this.clearModified();
             }
-            if(this.getCurrentDir().contains(obj.hash)) {
-                this.ipc.send('file-list', this.getCurrentDir());
-            }
+            this.ipc.send('file-remove', obj);
             break;
 
             case 'addDir':
@@ -791,6 +793,18 @@ class Zettlr
                 this.ipc.send('file-list', this.getCurrentDir());
             }
             this.ipc.send('dir-list', this.paths);
+            break;
+
+            case 'unlinkDir':
+            // In any case we need a new dir-list
+            this.ipc.send('dir-list', this.paths);
+            // And probably also a new file-list:
+            if(obj) {
+                // currentDir contained the dir.
+                this.ipc.send('file-list', this.getCurrentDir());
+                // The file list may now be empty. In this case the user can
+                // simply select another dir.
+            }
             break;
 
             default:

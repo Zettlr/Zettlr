@@ -341,6 +341,18 @@ class ZettlrPreview
 
     // END SEARCH
 
+    remove(obj)
+    {
+        // This element should remove one element.
+        if(obj.hasOwnProperty('type') && (obj.type == 'file')) {
+            // Simply pluck a file.
+            this.div.find('li[data-hash="'+obj.hash+'"]').first().detach();
+        }
+
+        // Directories cannot be safely removed using dom retrieval -> therefore
+        // we need a complete redraw to be issued from main.
+    }
+
     scrollIntoView(elem)
     {
         // Do we have an element to scroll?

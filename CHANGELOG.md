@@ -99,6 +99,7 @@
 - Fixed a small error that threw errors on deleting file with no file selected
 - Fixed selection accuracy in Quicklook windows after they have been resized.
 - Added modification time of files in the file preview.
+- Zettlr now checks your file system for new files and directories and adds them during runtime. **Attention:** A huge number of files added at once can significantly slow down the application during the process of adding the files. So if you are moving a huge pile of files, try to use the `Open directory`-function.
 
 ## Under the hood
 

@@ -134,6 +134,11 @@ class ZettlrRenderer
             this.toolbar.focusSearch();
             break;
 
+            case 'file-remove':
+            // A file should be removed
+            this.preview.remove(arg.content);
+            break;
+
             case 'search-result':
             this.preview.handleSearchResult(arg.content);
             break;

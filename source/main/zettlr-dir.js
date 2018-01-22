@@ -87,10 +87,9 @@ class ZettlrDir
                 this.watchdog.on('unlink', p => {
                     // File has been removed
                     let dir = this.findDir({ 'hash': hash(path.dirname(p)) });
+                    let file = dir.findFile({ 'hash': hash(p) });
                     dir.scan();
-                    if(this.parent.getCurrentDir().contains(hash(p))) {
-                        this.parent.fsNotify('unlink', dir.findFile({ hash: hash(p) }));
-                    }
+                    this.parent.fsNotify('unlink', file);
                 });
 
                 this.watchdog.on('addDir', p => {
@@ -256,6 +255,12 @@ class ZettlrDir
             this.children = sort(this.children);
             return dir;
         } else if(stat.isFile() && (path.extname(p) == '.md')) {
+            // First check whether or not this thing is already in the children
+            for(let c of this.children) {
+                if(c.path == p) {
+                    return c;                    
+                }
+            }
             let file = new ZettlrFile(this, p);
             this.children.push(file);
             this.children = sort(this.children);
