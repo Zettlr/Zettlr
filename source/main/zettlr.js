@@ -20,6 +20,7 @@ const ZettlrIPC                     = require('./zettlr-ipc.js');
 const ZettlrWindow                  = require('./zettlr-window.js');
 const ZettlrConfig                  = require('./zettlr-config.js');
 const ZettlrDir                     = require('./zettlr-dir.js');
+const ZettlrWatchdog                = require('./zettlr-watchdog.js');
 const {i18n, trans}                 = require('../common/lang/i18n.js');
 
 class Zettlr
@@ -37,6 +38,7 @@ class Zettlr
         this.ipc = null;            // Communicate with said content
         this.app = parentApp;       // Internal pointer to app object
         this.config = null;         // Configuration file handler
+        this.watchdog = null;       // Watchdog object
 
         this.config = new ZettlrConfig(this);
         // Init translations
@@ -51,6 +53,29 @@ class Zettlr
         // And the window.
         this.window = new ZettlrWindow(this);
         this.openWindow();
+
+        // Last: Start watching the directory
+        this.watchdog = new ZettlrWatchdog(this.config.get('projectDir'));
+        this.watchdog.start();
+
+        // Initiate regular polling
+        setTimeout(() => {
+            this.poll();
+        }, 5000);
+    }
+
+    poll()
+    {
+        // Polls the watchdog for changes.
+        if(this.watchdog.countChanges() > 0) {
+            // this.watchdog.each((t, p) => {
+                // console.log(`Staged: ${t} for ${p}`);
+            // });
+            // Development: Do nothing but flush all changes.
+
+            this.watchdog.flush();
+        }
+        setTimeout(() => { this.poll(); }, 5000);
     }
 
     // Gets called by ZettlrWindow for after-start tasks
@@ -77,7 +102,11 @@ class Zettlr
     }
 
     // Shutdown the app. This function is called on quit.
-    shutdown() { this.config.save(); }
+    shutdown()
+    {
+        this.config.save();
+        this.watchdog.stop();
+    }
 
     // Returns false if the file should not close, and true if it's safe.
     canClose()
@@ -92,7 +121,7 @@ class Zettlr
             }
 
             if(ret == 1) { // User wants to save the file first.
-                this.ipc.send('save-file', {});
+                this.ipc.send('file-save', {});
                 return false;
                 // TODO: Implement into the event arguments a "intent" of closing
             }
@@ -159,7 +188,7 @@ class Zettlr
             this.ipc.send('file-quicklook', this.paths.findFile({'hash': arg.content}).withContent());
             break;
 
-            case 'get-file':
+            case 'file-get':
             // The client requested a different file.
             this.sendFile(arg.content);
             break;
@@ -174,28 +203,28 @@ class Zettlr
             this.setModified();
             break;
 
-            case 'new-file':
+            case 'file-new':
             // Client has requested a new file.
             this.newFile(arg.content);
             break;
 
-            case 'new-dir':
+            case 'dir-new':
             // Client has requested a new folder.
             this.newDir(arg.content);
             break;
 
-            case 'save-file':
+            case 'file-save':
             // Client has requested a save-action.
             // arg contains the contents of CM and maybe also a hash.
             this.saveFile(arg.content);
             break;
 
-            case 'open-dir':
+            case 'dir-open':
             // Client requested a totally different folder.
             this.openDir();
             break;
 
-            case 'delete-file':
+            case 'file-delete':
             if(arg.content.hasOwnProperty('hash')) {
                 this.removeFile(arg.content.hash);
             } else if(this.getCurrentFile() != null) {
@@ -203,7 +232,7 @@ class Zettlr
             }
             break;
 
-            case 'delete-dir':
+            case 'dir-delete':
             if(arg.content.hasOwnProperty('hash')) {
                 this.removeDir(arg.content.hash);
             } else if(this.getCurrentDir() != null) {
@@ -211,11 +240,11 @@ class Zettlr
             }
             break;
 
-            case 'search-file':
+            case 'file-search':
             // arg.content contains a hash of the file to be searched
             // and the prepared terms.
             let ret = this.paths.findFile({ 'hash': arg.content.hash }).search(arg.content.terms);
-            this.ipc.send('search-result', {
+            this.ipc.send('file-search-result', {
                 'hash'  : arg.content.hash,
                 'result': ret
             });
@@ -236,11 +265,11 @@ class Zettlr
             break;
 
             // Rename a directory (arg.hash + arg.(new)name)
-            case 'rename-dir':
+            case 'dir-rename':
             this.renameDir(arg.content);
             break;
 
-            case 'rename-file':
+            case 'file-rename':
             this.renameFile(arg.content);
             break;
 
@@ -297,7 +326,7 @@ class Zettlr
         let file = this.paths.findFile({ 'hash': arg });
 
         if(file != null) {
-            this.ipc.send('file', file.withContent());
+            this.ipc.send('file-open', file.withContent());
             this.setCurrentFile(file);
         } else {
             this.window.prompt({
@@ -318,7 +347,7 @@ class Zettlr
         if(obj != null && obj.isDirectory()) {
             this.setCurrentDir(obj);
             this.ipc.send('file-list', obj);
-            this.ipc.send('set-current-dir', obj);
+            this.ipc.send('dir-set-current', obj);
         }
         else {
             this.window.prompt({
@@ -373,9 +402,9 @@ class Zettlr
 
         // This has to be done as the content of the file is only read by this
         // function (speeds up the process of refreshing the file tree)
-        this.ipc.send('file', file.withContent());
+        this.ipc.send('file-open', file.withContent());
         this.ipc.send('file-list', this.getCurrentDir()); // in "dir" the new file is not yet present.
-        this.ipc.send('set-current-dir', this.getCurrentDir());
+        this.ipc.send('dir-set-current', this.getCurrentDir());
     }
 
     newDir(arg)
@@ -408,7 +437,7 @@ class Zettlr
         // current folder.
         this.ipc.send('paths', this.paths);
         this.ipc.send('file-list', dir);
-        this.ipc.send('set-current-dir', dir);
+        this.ipc.send('dir-set-current', dir);
     }
 
     openDir()
@@ -436,7 +465,7 @@ class Zettlr
         this.reload(ret);
 
         // The client now needs to close the current file and refresh its list
-        this.ipc.send('close-file');
+        this.ipc.send('file-close');
         this.ipc.send('paths', this.getPaths());
     }
 
@@ -456,13 +485,13 @@ class Zettlr
 
         // Now that we are save, let's move the current file to trash.
         if(this.getCurrentFile() && (file.hash == this.getCurrentFile().hash)) {
-            this.ipc.send('close-file', {});
+            this.ipc.send('file-close', {});
             // Also re-set the title!
             this.window.setTitle('Zettlr');
         }
         file.remove();
         this.ipc.send('file-list', this.getCurrentDir());
-        this.ipc.send('set-current-dir', this.getCurrentDir());
+        this.ipc.send('dir-set-current', this.getCurrentDir());
     }
 
     // Remove current directory.
@@ -501,7 +530,7 @@ class Zettlr
 
         // Now that we are save, let's move the current directory to trash.
         if(filedir == dir) {
-            this.ipc.send('close-file', {});
+            this.ipc.send('file-close', {});
         }
 
         if(dir == this.getCurrentDir()) {
@@ -607,7 +636,7 @@ class Zettlr
             // Re-set current file in the client
             let nfile = dir.findFile({ 'hash': oldPath });
             this.setCurrentFile(nfile);
-            this.ipc.send('set-current-file', nfile);
+            this.ipc.send('file-set-current', nfile);
         }
     }
 
@@ -622,7 +651,7 @@ class Zettlr
             file = this.getCurrentFile();
             file.rename(arg.name);
             // Set current file to reflect changes in hash
-            this.ipc.send('set-current-file', file);
+            this.ipc.send('file-set-current', file);
 
             // Adapt window title
             let title = this.window.getTitle();
@@ -681,9 +710,9 @@ class Zettlr
             // We have to set current dir (the to-dir) and current file AND
             // select it.
             this.setCurrentDir(to); // Current file is still correctly set
-            this.ipc.send('set-current-dir', to);
+            this.ipc.send('dir-set-current', to);
             this.ipc.send('file-list', to);
-            this.ipc.send('set-current-file', from);
+            this.ipc.send('file-set-current', from);
             return;
         } else if((this.getCurrentFile() !== null)
         && (from.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
@@ -713,7 +742,7 @@ class Zettlr
         }
 
         if(isCurDir) {
-            this.ipc.send('set-current-dir', from); // The client doesn't have the same object reference
+            this.ipc.send('dir-set-current', from); // The client doesn't have the same object reference
             // And, just in case, new directory list
             this.ipc.send('file-list', this.getCurrentDir());
         }
@@ -722,7 +751,7 @@ class Zettlr
             // Re-set current file in the client
             let nfile = from.findFile({ 'hash': newPath});
             this.setCurrentFile(nfile);
-            this.ipc.send('set-current-file', nfile);
+            this.ipc.send('file-set-current', nfile);
         }
     }
 
@@ -759,59 +788,6 @@ class Zettlr
     **                                                                        **
     **                                                                        **
     ***************************************************************************/
-
-    // FILESYSTEM CHANGES AND METHODS
-    fsNotify(type, obj)
-    {
-        //console.log(`Received ${type}-command.`);
-        //console.log(`Current dir is ${this.getCurrentDir().name}`);
-        switch(type) {
-            case 'add':
-            // This is sent if a file has been added AND it is in the current dir
-            // -> simply send a new file list (TODO: simple add-event)
-            this.ipc.send('file-list', this.getCurrentDir());
-            break;
-
-            case 'change':
-            // For now, even if the changed file is the current file, let's simply
-            // resend the list and thereby quietly overwrite the file.
-            this.ipc.send('file-list', this.getCurrentDir());
-            break;
-
-            case 'unlink':
-            // obj is the deleted file. Just send a "remove" command to the client.
-            if(obj === this.getCurrentFile()) {
-                this.ipc.send('close-file');
-                this.setCurrentFile(null);
-                this.clearModified();
-            }
-            this.ipc.send('file-remove', obj);
-            break;
-
-            case 'addDir':
-            if(this.getCurrentDir().contains(obj.hash)) {
-                this.ipc.send('file-list', this.getCurrentDir());
-            }
-            this.ipc.send('dir-list', this.paths);
-            break;
-
-            case 'unlinkDir':
-            // In any case we need a new dir-list
-            this.ipc.send('dir-list', this.paths);
-            // And probably also a new file-list:
-            if(obj) {
-                // currentDir contained the dir.
-                this.ipc.send('file-list', this.getCurrentDir());
-                // The file list may now be empty. In this case the user can
-                // simply select another dir.
-            }
-            break;
-
-            default:
-            console.log('Unknown filesystem notification: ' + type);
-            break;
-        }
-    }
 
     // This reloads the path list - is e.g. called after the creation of a new
     // file or a new directory or saving or renaming of a file.
@@ -850,6 +826,8 @@ class Zettlr
             file = this.paths.findFile({ 'hash': file.hash });
         }
 
+        // Ignore the next change for this specific file
+        this.watchdog.ignoreNext('change', file.path);
         file.setContent(cnt);
         file.save();
         this.clearModified();
@@ -916,11 +894,11 @@ class Zettlr
     getCurrentFile() { return this.currentFile; }
 
     // This is used by the root directory to safely determine whether it is root
-    isDirectory() { return false; }
-    isModified() { return this.editFlag; }
+    isDirectory()    { return false; }
+    isModified()     { return this.editFlag; }
 
-    openWindow() { this.window.open(); }
-    closeWindow() { this.window.close(); }
+    openWindow()     { this.window.open(); }
+    closeWindow()    { this.window.close(); }
 }
 
 // Export the module on require()

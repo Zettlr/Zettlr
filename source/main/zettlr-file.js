@@ -75,12 +75,6 @@ class ZettlrFile
         return null;
     }
 
-    // Push this hash into the array and return
-    getFileHashes(arr)
-    {
-        return arr.push(this.hash);
-    }
-
     // The object should return itself with content included
     // -- only for send to client
     withContent()

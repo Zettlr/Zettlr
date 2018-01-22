@@ -14,7 +14,7 @@ const template = [
                 accelerator: 'CmdOrCtrl+N',
                 click (item, focusedWindow) {
                     // Trigger new file in current directory
-                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'new-file'});
+                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'file-new'});
                 }
             },
             {
@@ -22,7 +22,7 @@ const template = [
                 accelerator: 'CmdOrCtrl+Shift+N',
                 click (item, focusedWindow) {
                     // Trigger new folder in current directory
-                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'new-dir'});
+                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'dir-new'});
                 }
             },
             { type: 'separator' },
@@ -31,14 +31,14 @@ const template = [
                 accelerator: 'CmdOrCtrl+O',
                 click (item, focusedWindow) {
                     // Trigger open folder action
-                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'open-dir'});
+                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'dir-open'});
                 }
             },
             {
                 label: trans('menu.save'),
                 accelerator: 'CmdOrCtrl+S',
                 click (item, focusedWindow) {
-                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'save-file'});
+                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'file-save'});
                 }
             },
             { type: 'separator' },
@@ -54,14 +54,14 @@ const template = [
                 label: trans('menu.rename_file'),
                 accelerator: 'CmdOrCtrl+R',
                 click (item, focusedWindow) {
-                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'rename-file'});
+                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'file-rename'});
                 }
             },
             {
                 label: trans('menu.rename_dir'),
                 accelerator: 'CmdOrCtrl+Shift+R',
                 click (item, focusedWindow) {
-                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'rename-dir'});
+                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'dir-rename'});
                 }
             },
             { type: 'separator' },
@@ -69,13 +69,13 @@ const template = [
                 label: trans('menu.delete_file'),
                 accelerator: (process.platform === 'darwin') ? 'Cmd+Backspace': 'Delete',
                 click (item, focusedWindow) {
-                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'remove-file'});
+                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'file-delete'});
                 }
             }, {
                 label: trans('menu.delete_dir'),
                 accelerator: (process.platform === 'darwin') ? 'Cmd+Shift+Backspace': 'Ctrl+Delete',
                 click(item, focusedWindow) {
-                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'remove-dir'});
+                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'dir-delete'});
                 }
             }
         ]
@@ -95,14 +95,14 @@ const template = [
                 label: trans('menu.find_file'),
                 accelerator: 'CmdOrCtrl+F',
                 click(item, focusedWindow) {
-                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'find-file'});
+                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'file-find'});
                 }
             },
             {
                 label: trans('menu.find_dir'),
                 accelerator: 'CmdOrCtrl+Shift+F',
                 click(item, focusedWindow) {
-                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'find-dir'});
+                    if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'dir-find'});
                 }
             }
         ]

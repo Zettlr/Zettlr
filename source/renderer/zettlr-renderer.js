@@ -63,122 +63,45 @@ class ZettlrRenderer
         {
             case 'paths':
             // arg contains a JSON with all paths and files
-            // Set the currentDir to root, distribute tree to dirs and preview
-            // and select the root. Initial command.
+            // Initial command.
+            this.body.closeQuicklook();
             this.setCurrentDir(arg.content);
-            // Save for later
             this.paths = arg.content;
             this.directories.newDirectoryList(arg.content);
             this.preview.newFileList(arg.content);
             this.directories.select(arg.content.hash);
-            this.body.closeQuicklook();
             break;
 
+            case 'paths-update':
+            // Update the paths
+            // IMPORTANT: Need to remove preview list potentially!
+            break;
+
+            // DIRECTORIES
             case 'dir-list':
             // A directory was created or removed, so repaint.
             this.directories.newDirectoryList(arg.content);
             this.paths = arg.content;
             break;
 
-            case 'file-list':
-            // We have received a new file list in arg
-            // Set the current dir
-            this.preview.newFileList(arg.content);
-            break;
-
-            case 'set-current-dir':
+            case 'dir-set-current':
             // Received a new directory
             this.setCurrentDir(arg.content);
             this.directories.select(arg.content.hash);
             break;
 
-            case 'set-current-file':
-            this.setCurrentFile(arg.content);
-            this.preview.select(arg.content.hash);
-            break;
-
-            case 'file':
-            // We have received a new file. So close the old and open the new
-            this.editor.close();
-            this.setCurrentFile(arg.content);
-            this.preview.select(arg.content.hash);
-            this.editor.open(arg.content);
-            break;
-
-            case 'close-file':
-            // We have received a close-file command.
-            this.editor.close();
-            this.setCurrentFile(null);
-            break;
-
-            case 'save-file':
-            // The user wants to save the currently opened file.
-            let file = this.getCurrentFile();
-            if(file == null) {
-                // User wants to save an untitled file
-                // Important: The main Zettlr-class expects hash to be null
-                // for new files
-                file = {};
-            }
-            file.content = this.editor.getValue();
-            this.ipc.send('save-file', file);
-            break;
-
-            case 'find-file':
-            this.editor.openFind();
-            break;
-
-            case 'find-dir':
+            case 'dir-find':
             // User wants to search in current directory.
             // this.preview.searchBar();
             this.toolbar.focusSearch();
             break;
 
-            case 'file-remove':
-            // A file should be removed
-            this.preview.remove(arg.content);
-            break;
-
-            case 'search-result':
-            this.preview.handleSearchResult(arg.content);
-            break;
-
-            case 'new-file':
-            // User wants to open a new file. Display modal
-            if((arg.content != null) && arg.content.hasOwnProperty('hash')) {
-                // User has probably right clicked
-                this.body.requestFileName(this.findObject(arg.content.hash));
-            } else {
-                this.body.requestFileName(this.getCurrentDir());
-            }
-            break;
-
-            case 'new-dir':
-            // User wants to create a new directory. Display modal
-            if(arg.content.hasOwnProperty('hash')) {
-                // User has probably right clicked
-                this.body.requestDirName(this.findObject(arg.content.hash));
-            } else {
-                this.body.requestDirName(this.getCurrentDir());
-            }
-            break;
-
-            case 'open-dir':
+            case 'dir-open':
             // User has requested to open another folder. Notify host process.
-            this.ipc.send('open-dir', {});
+            this.ipc.send('dir-open', {});
             break;
 
-            case 'rename-file':
-            if(arg.content.hasOwnProperty('hash')) {
-                // Another file should be renamed
-                // Rename a file based on a hash -> find it
-                this.body.requestNewFileName(this.findObject(arg.content.hash));
-            }else if(this.getCurrentFile() != null) {
-                this.body.requestNewFileName(this.getCurrentFile());
-            }
-            break;
-
-            case 'rename-dir':
+            case 'dir-rename':
             if(arg.content.hasOwnProperty('hash')) {
                 // Another dir should be renamed
                 // Rename a dir based on a hash -> find it
@@ -188,24 +111,107 @@ class ZettlrRenderer
             }
             break;
 
-            case 'remove-file':
-            // The user has requested to delete the current file
-            // Request from main process
+            case 'dir-new':
+            // User wants to create a new directory. Display modal
             if(arg.content.hasOwnProperty('hash')) {
-                this.ipc.send('delete-file', { 'hash': arg.content.hash });
+                // User has probably right clicked
+                this.body.requestDirName(this.findObject(arg.content.hash));
             } else {
-                this.ipc.send('delete-file', {});
+                this.body.requestDirName(this.getCurrentDir());
             }
             break;
 
-            case 'remove-dir':
+            case 'dir-delete':
             // The user has requested to delete the current file
             // Request from main process
             if(arg.content.hasOwnProperty('hash')) {
-                this.ipc.send('delete-dir', { 'hash': arg.content.hash });
+                this.ipc.send('dir-delete', { 'hash': arg.content.hash });
             } else {
-                this.ipc.send('delete-dir', {});
+                this.ipc.send('dir-delete', {});
             }
+            break;
+
+            // FILES
+            case 'file-list':
+            // We have received a new file list in arg
+            // Set the current dir
+            this.preview.newFileList(arg.content);
+            break;
+
+            case 'file-set-current':
+            this.setCurrentFile(arg.content);
+            this.preview.select(arg.content.hash);
+            break;
+
+            case 'file-open':
+            // We have received a new file. So close the old and open the new
+            this.editor.close();
+            this.setCurrentFile(arg.content);
+            this.preview.select(arg.content.hash);
+            this.editor.open(arg.content);
+            break;
+
+            case 'file-close':
+            // We have received a close-file command.
+            this.editor.close();
+            this.setCurrentFile(null);
+            break;
+
+            case 'file-save':
+            // The user wants to save the currently opened file.
+            let file = this.getCurrentFile();
+            if(file == null) {
+                // User wants to save an untitled file
+                // Important: The main Zettlr-class expects hash to be null
+                // for new files
+                file = {};
+            }
+            file.content = this.editor.getValue();
+            this.ipc.send('file-save', file);
+            break;
+
+            case 'file-rename':
+            if(arg.content.hasOwnProperty('hash')) {
+                // Another file should be renamed
+                // Rename a file based on a hash -> find it
+                this.body.requestNewFileName(this.findObject(arg.content.hash));
+            }else if(this.getCurrentFile() != null) {
+                this.body.requestNewFileName(this.getCurrentFile());
+            }
+            break;
+
+            case 'file-new':
+            // User wants to open a new file. Display modal
+            if((arg.content != null) && arg.content.hasOwnProperty('hash')) {
+                // User has probably right clicked
+                this.body.requestFileName(this.findObject(arg.content.hash));
+            } else {
+                this.body.requestFileName(this.getCurrentDir());
+            }
+            break;
+
+            case 'file-find':
+            this.editor.openFind();
+            break;
+
+            // Remove a file only from preview (watchdog)
+            case 'file-pluck':
+            // A file should be removed
+            this.preview.remove(arg.content);
+            break;
+
+            case 'file-delete':
+            // The user has requested to delete the current file
+            // Request from main process
+            if(arg.content.hasOwnProperty('hash')) {
+                this.ipc.send('file-delete', { 'hash': arg.content.hash });
+            } else {
+                this.ipc.send('file-delete', {});
+            }
+            break;
+
+            case 'file-search-result':
+            this.preview.handleSearchResult(arg.content);
             break;
 
             case 'toggle-theme':
@@ -499,7 +505,7 @@ class ZettlrRenderer
     requestFile(hash)
     {
         // Ask main process for a file.
-        this.ipc.send('get-file', hash);
+        this.ipc.send('file-get', hash);
     }
 
     // Triggered by ZettlrEditor - if the content of editor changes.
@@ -511,13 +517,13 @@ class ZettlrRenderer
     // Triggered by ZettlrBody - user has entered a new file name and confirmed
     requestNewFile(name, hash)
     {
-        this.ipc.send('new-file', { 'name': name, 'hash': hash });
+        this.ipc.send('file-new', { 'name': name, 'hash': hash });
     }
 
     // Also triggered by ZettlrBody, only for directory
     requestNewDir(name, hash)
     {
-        this.ipc.send('new-dir', { 'name': name, 'hash': hash });
+        this.ipc.send('dir-new', { 'name': name, 'hash': hash });
     }
 
     // Also triggered by ZettlrBody on export
@@ -529,13 +535,13 @@ class ZettlrRenderer
     // Triggered by ZettlrBody on DirRename
     requestDirRename(val, hash)
     {
-        this.ipc.send('rename-dir', { 'hash': hash, 'name': val });
+        this.ipc.send('dir-rename', { 'hash': hash, 'name': val });
     }
 
     // Triggered by ZettlrBody on FileRename
     requestFileRename(val, hash)
     {
-        this.ipc.send('rename-file', { 'hash': hash, 'name': val });
+        this.ipc.send('file-rename', { 'hash': hash, 'name': val });
     }
 
     saveSettings(cfg)

@@ -314,8 +314,9 @@ class ZettlrPreview
 
         this.parent.searchProgress(this.currentSearchIndex, this.hashes.length);
 
+        // TODO: Move out send-methods from all files except renderer!
         // Send a request to the main process and handle it afterwards.
-        this.parent.ipc.send('search-file', {
+        this.parent.ipc.send('file-search', {
             'hash': this.hashes[this.currentSearchIndex],
             'terms': this.currentSearch
         });

@@ -42,13 +42,13 @@ class ZettlrCon
             let that = this;
             this.menu.append(new MenuItem({ 'label': trans('menu.rename_file'), click(item, win) {
                 that.parent.parent.handleEvent(null, {
-                    'command': 'rename-file',
+                    'command': 'file-rename',
                     'content': { 'hash': hash }
                 });
             }}));
             this.menu.append(new MenuItem({ 'label': trans('menu.delete_file'), click(item, win) {
                 that.parent.parent.handleEvent(null, {
-                    'command': 'remove-file',
+                    'command': 'file-delete',
                     'content': { 'hash': hash }
                 });
             }}));
@@ -77,13 +77,13 @@ class ZettlrCon
                 if(elem.attr('id') !== 'root') {
                     this.menu.append(new MenuItem({ 'label': trans('menu.rename_dir'), click(item, win) {
                         that.parent.parent.handleEvent(null, {
-                            'command': 'rename-dir',
+                            'command': 'dir-rename',
                             'content': { 'hash': hash }
                         });
                     } }));
                     this.menu.append(new MenuItem({ 'label': trans('menu.delete_dir'), click(item, win) {
                         that.parent.parent.handleEvent(null, {
-                            'command': 'remove-dir',
+                            'command': 'dir-delete',
                             'content': { 'hash': hash }
                         });
                     }}));
@@ -92,13 +92,13 @@ class ZettlrCon
 
                 this.menu.append(new MenuItem({ 'label': trans('menu.new_file'), click(item, win) {
                     that.parent.parent.handleEvent(null, {
-                        'command': 'new-file',
+                        'command': 'file-new',
                         'content': { 'hash': hash }
                     });
                 } }));
                 this.menu.append(new MenuItem({ 'label': trans('menu.new_dir'), click(item, win) {
                     that.parent.parent.handleEvent(null, {
-                        'command': 'new-dir',
+                        'command': 'dir-new',
                         'content': { 'hash': hash }
                     });
                 } }));

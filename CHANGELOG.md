@@ -110,3 +110,4 @@
 - Added basic watchdog functions. Not very sophisticated by now but it works.
 - Now package.json does not trigger a rebuild of all modules when electron-builder is called (as we only rely on those already prebuilt)
 - Again some rewrites to slimline the app
+- Renamed events (now dir and file are prepended for easier identification)
