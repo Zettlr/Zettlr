@@ -712,7 +712,7 @@ html {
   content: "\f0c7";
   display: inline;
 }
-#toolbar .button.file-remove::before {
+#toolbar .button.file-delete::before {
   content: "\f014";
   display: inline;
 }

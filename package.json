@@ -79,7 +79,9 @@
         },
         "nsis": {
             "oneClick": false,
-            "perMachine": true
+            "perMachine": false,
+            "allowElevation": true,
+            "allowToChangeInstallationDirectory": true
         }
     },
     "license": "MIT",
