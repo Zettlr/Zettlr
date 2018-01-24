@@ -99,7 +99,7 @@
 - Fixed a small error that threw errors on deleting file with no file selected
 - Fixed selection accuracy in Quicklook windows after they have been resized.
 - Added modification time of files in the file preview.
-- Zettlr now checks your file system for new files and directories and adds them during runtime. **Attention:** A huge number of files added at once can significantly slow down the application during the process of adding the files. So if you are moving a huge pile of files, try to use the `Open directory`-function.
+- Modified the night mode and snippets toggler to display the status as checkmark (also amended the translations respectively)
 
 ## Under the hood
 
@@ -112,3 +112,4 @@
 - Again some rewrites to slimline the app
 - Renamed events (now dir and file are prepended for easier identification)
 - Now the renderer is completely autarc concerning configuration as darkTheme and snippets. This means the renderer can now be reloaded in dev mode without screwing up the config in main. (`afterWindowStart()` has been removed and set in the renderer)
+- Wrapped the menu generation into a class (making it possible to set menu items based on configuration options)

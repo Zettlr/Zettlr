@@ -5,6 +5,7 @@ const {dialog, BrowserWindow} = electron;
 const url                     = require('url');
 const path                    = require('path');
 const {trans}                 = require('../common/lang/i18n.js');
+const ZettlrMenu              = require('./zettlr-menu.js');
 
 class ZettlrWindow
 {
@@ -12,6 +13,7 @@ class ZettlrWindow
     {
         this.parent = parent;
         this.window = null;
+        this.menu = null;
     }
 
     // Create and open a new main window
@@ -98,7 +100,8 @@ class ZettlrWindow
         };
 
         // Set the application menu
-        require('./main-menu.js');
+        // require('./main-menu.js');
+        this.menu = new ZettlrMenu(this);
     }
     // END this.open
 
