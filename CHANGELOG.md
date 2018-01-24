@@ -113,3 +113,14 @@
 - Renamed events (now dir and file are prepended for easier identification)
 - Now the renderer is completely autarc concerning configuration as darkTheme and snippets. This means the renderer can now be reloaded in dev mode without screwing up the config in main. (`afterWindowStart()` has been removed and set in the renderer)
 - Wrapped the menu generation into a class (making it possible to set menu items based on configuration options)
+
+# 0.9.1
+
+## GUI and functionality
+
+- Fixed an issue that with 0.9.0 Zettlr didn't tell you if it found pdflatex so that PDF exports were impossible.
+- Small improvement in the HTML export template. Now if you want to print out the HTML preview it should look way better than before.
+
+## Under the hood
+
+(nothing here)

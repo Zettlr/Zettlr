@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"$if(lang)$ lang="$lang$" xml:lang="$lang$"$endif$>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="generator" content="pandoc" />
+    <meta name="generator" content="Zettlr with pandoc" />
     $for(author-meta)$
     <meta name="author" content="$author-meta$" />
     $endfor$
@@ -42,8 +42,6 @@
         background-color:white;
         color:#333;
         font-family: 'DejaVu', 'Georgia', 'Times New Roman', 'Times', serif;
-        font-size:1.5em;
-        line-height:150%;
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -53,7 +51,19 @@
 
     article {
         width:50%;
+        font-size:1.5em;
         margin:0 auto;
+        line-height:150%;
+    }
+
+    /* Better display on printing */
+    @media print {
+        article {
+            width:90%;
+            font-size:12pt;
+            margin:0 auto;
+            line-height:150%;
+        }
     }
 
     article p {

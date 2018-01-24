@@ -302,7 +302,7 @@ class ZettlrRenderer
                 this.pandoc = arg.content.value;
                 break;
                 case 'pdflatex':
-                this.pdflatex = arg.content.pdflatex;
+                this.pdflatex = arg.content.value;
                 break;
             }
             break;
