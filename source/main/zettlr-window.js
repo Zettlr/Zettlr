@@ -55,7 +55,6 @@ class ZettlrWindow
         this.window.once('ready-to-show', () => {
             this.window.show();
             this.window.maximize();
-            this.parent.afterWindowStart();
         });
 
         // Emitted when the window is closed.

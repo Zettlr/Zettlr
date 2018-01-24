@@ -37,6 +37,7 @@ class ZettlrRenderer
         // Write translation data into renderer process's global var
         global.i18n         = remote.getGlobal('i18n');
 
+        // Init the complete list of objects that we need
         this.ipc            = new ZettlrRendererIPC(this);
         this.directories    = new ZettlrDirectories(this);
         this.preview        = new ZettlrPreview(this);
@@ -49,6 +50,14 @@ class ZettlrRenderer
     init()
     {
         this.overlay.show(trans('init.welcome'));
+
+        // First request the configuration
+        // Now eventually switch the theme to dark
+        this.ipc.send('config-get', 'darkTheme');
+        this.ipc.send('config-get', 'snippets');
+        this.ipc.send('config-get', 'app_lang');
+        this.ipc.send('config-get-env', 'pandoc');
+        this.ipc.send('config-get-env', 'pdflatex');
 
         // Request a first batch of files
         this.ipc.send('get-paths', {});
@@ -265,16 +274,37 @@ class ZettlrRenderer
             this.editor.cm.focus();
             break;
 
-            case 'binaries':
-            // Received event containing vars for the found binaries on
-            // this system (especially exporting, e.g. pandoc and pdflatex)
-            this.pandoc = arg.content.pandoc;
-            this.pdflatex = arg.content.pdflatex;
-            break;
-
-            case 'lang':
-            // Received the language
-            this.lang = arg.content;
+            case 'config':
+            switch(arg.content.key)
+            {
+                case 'darkTheme':
+                // Will only be received once, so simply "toggle" from initial
+                // light theme to dark
+                if(arg.content.value == true) {
+                    this.directories.toggleTheme();
+                    this.preview.toggleTheme();
+                    this.editor.toggleTheme();
+                    this.body.toggleTheme();
+                    this.toolbar.toggleTheme();
+                }
+                break;
+                case 'snippets':
+                // Will only be received once; if false toggle from initial "true"
+                // state.
+                if(arg.content.value == false) {
+                    this.preview.toggleSnippets();
+                }
+                break;
+                case 'app_lang':
+                this.lang = arg.content.value;
+                break;
+                case 'pandoc':
+                this.pandoc = arg.content.value;
+                break;
+                case 'pdflatex':
+                this.pdflatex = arg.content.pdflatex;
+                break;
+            }
             break;
 
             // SPELLCHECKING EVENTS

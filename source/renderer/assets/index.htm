@@ -58,7 +58,7 @@
     <script>
     // We need a super global for our renderer element
 
-    var renderer; //= //require('./zettlr-renderer.js');
+    var renderer;
 
     $(document).ready(function() {
         renderer = new ZettlrRenderer();
@@ -71,8 +71,8 @@
 
         <!-- Main toolbar -->
         <div id="toolbar">
-            <div class="button directory-new" data-command="new-dir"          data-content="{}"></div>
-            <div class="button file-new"      data-command="new-file"         data-content="{}"></div>
+            <div class="button directory-new" data-command="dir-new"          data-content="{}"></div>
+            <div class="button file-new"      data-command="file-new"         data-content="{}"></div>
             <div class="button preferences"   data-command="open-preferences" data-content="{}"></div>
             <div class="searchbar">
                 <input type="text">
@@ -97,7 +97,7 @@
         <div id="directories" tabindex="1">
         </div>
 
-        <!-- Second: Pane for preview (can be toggled) -->
+        <!-- Second: Pane for preview -->
         <div id="preview" tabindex="2">
         </div>
 

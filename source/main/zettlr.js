@@ -78,29 +78,6 @@ class Zettlr
         setTimeout(() => { this.poll(); }, 5000);
     }
 
-    // Gets called by ZettlrWindow for after-start tasks
-    afterWindowStart()
-    {
-        // Now eventually switch the theme to dark
-        if(this.config.get('darkTheme')) {
-            this.ipc.send('toggle-theme', 'no-emit'); // Don't send that back to me!
-        }
-
-        // Default is: Show snippets
-        if(!this.config.get('snippets')) {
-            this.ipc.send('toggle-snippets', 'no-emit');
-        }
-
-        // Send indicators to the client which binaries have been found
-        this.ipc.send('binaries', {
-            'pandoc'    : this.config.getEnv('pandoc'),
-            'pdflatex'  : this.config.getEnv('pdflatex')
-        });
-
-        // Set the language
-        this.ipc.send('lang', this.config.get('app_lang'));
-    }
-
     // Shutdown the app. This function is called on quit.
     shutdown()
     {
@@ -279,6 +256,8 @@ class Zettlr
             break;
 
             case 'get-preferences':
+            // Duplicate the object because we only need supportedLangs for the
+            // renderer
             let toSend = JSON.parse(JSON.stringify(this.config.config));
             toSend.supportedLangs = this.config.getSupportedLangs();
             this.ipc.send('preferences', toSend);
@@ -294,6 +273,15 @@ class Zettlr
                 this.ipc.send('toggle-snippets', 'no-emit');
             }
             this.config.update(arg.content);
+            break;
+
+            // Renderer wants a configuration value
+            case 'config-get':
+            this.ipc.send('config', { 'key': arg.content, 'value': this.config.get(arg.content) });
+            break;
+
+            case 'config-get-env':
+            this.ipc.send('config', { 'key': arg.content, 'value': this.config.getEnv(arg.content) });
             break;
 
             // SPELLCHECKING EVENTS

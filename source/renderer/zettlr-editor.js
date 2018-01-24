@@ -147,26 +147,6 @@ class ZettlrEditor
         this.cm.clearHistory();
     }
 
-    // This message is triggered by the renderer process when the user selects
-    // the menu item.
-    openFind()
-    {
-        // Persistent means the dialog does not hide.
-        this.cm.execCommand("findPersistent");
-    }
-
-    getValue()
-    {
-        // Returns the current value. Will be called by ZettlrRenderer when the
-        // user wants to save a file.
-        return this.cm.getValue();
-    }
-
-    markClean()
-    {
-        this.cm.markClean();
-    }
-
     // Currently, this function is only called by the context menu class to
     // select a word. This function only selects the word if nothing else is
     // selected (to not fuck up some copy action someone tried to do)
@@ -185,7 +165,7 @@ class ZettlrEditor
     // Same -- currently only gets called by context menu
     replaceWord(word)
     {
-        if(!this.cm.somethingSelected()) {
+        if(this.cm.somethingSelected()) {
             return;
         }
 
@@ -248,11 +228,13 @@ class ZettlrEditor
         this.cm.refresh();
     }
 
+    // This message is triggered by the renderer process when the user selects
+    // the menu item.
+    openFind() { this.cm.execCommand("findPersistent"); }
+    getValue() { return this.cm.getValue(); }
+    markClean() { this.cm.markClean(); }
     // Is the editor unmodified?
-    isClean()
-    {
-        return this.cm.doc.isClean();
-    }
+    isClean() { return this.cm.doc.isClean(); }
 }
 
 module.exports = ZettlrEditor;

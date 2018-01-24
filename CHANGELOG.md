@@ -87,7 +87,7 @@
 - Fixes a bug that rendered the whole application menu unusable
 - Minor localization fixes
 
-# 0.8.2
+# 0.9.0
 
 ## GUI and functionality
 
@@ -111,3 +111,4 @@
 - Now package.json does not trigger a rebuild of all modules when electron-builder is called (as we only rely on those already prebuilt)
 - Again some rewrites to slimline the app
 - Renamed events (now dir and file are prepended for easier identification)
+- Now the renderer is completely autarc concerning configuration as darkTheme and snippets. This means the renderer can now be reloaded in dev mode without screwing up the config in main. (`afterWindowStart()` has been removed and set in the renderer)
