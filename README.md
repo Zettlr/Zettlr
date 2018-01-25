@@ -2,6 +2,8 @@
 
 A powerful markdown editor with fulltext search, exporting capabilities and an integrated tree view.
 
+[Visit the Website.](https://zettlr.com/)
+
 ![The central window of Zettlr](/resources/screenshots/zettlr_view.png)
 
 ## Features
@@ -23,4 +25,10 @@ To install Zettlr, just [download the latest release](https://github.com/Zettlr/
 
 ## What next?
 
-If you have downloaded Zettlr, [head over to our Wiki](https://github.com/Zettlr/Zettlr/wiki) to get to know Zettlr. Refer to the [Quick Start Guide](https://github.com/Zettlr/Zettlr/wiki/Quick-Start), if you prefer to use software heads-on.
+If you have downloaded Zettlr, [head over to our website](https://zettlr.com/docs) to get to know Zettlr. Refer to the [Quick Start Guide](https://zettlr.com/docs/quick-start), if you prefer to use software heads-on.
+
+## License
+
+This software is licenced via the MIT-License.
+
+The brand (including name, icons and everything Zettlr can be identified with) is exluded and all rights reserved. If you want to fork Zettlr to develop another app, feel free but please change name and icons.
