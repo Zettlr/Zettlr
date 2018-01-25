@@ -118,9 +118,9 @@
 
 ## GUI and functionality
 
-- Fixed an issue that with 0.9.0 Zettlr didn't tell you if it found pdflatex so that PDF exports were impossible.
-- Small improvement in the HTML export template. Now if you want to print out the HTML preview it should look way better than before.
+- Fixed broken PDF export in 0.9.0
+- Small improvement in the HTML export template. Now if you want to print out the HTML file, it should look way better than before.
 
 ## Under the hood
 
-(nothing here)
+- Updated dependencies to electron 1.7.11 to react to exploit [CVE-2018-1000006](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1000006). [See the electron project's blog for more information](https://electronjs.org/blog/protocol-handler-fix).
