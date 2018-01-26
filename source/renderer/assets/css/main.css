@@ -814,3 +814,14 @@ html {
 #toolbar.dark .searchbar input:focus {
   border-color: #646464;
 }
+.notify {
+  position: fixed;
+  display: block;
+  right: 10px;
+  margin: 0;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 3px;
+  cursor: default;
+}

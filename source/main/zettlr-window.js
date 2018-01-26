@@ -105,8 +105,14 @@ class ZettlrWindow
     }
     // END this.open
 
-    setTitle(newTitle)
+    setTitle(newTitle = '')
     {
+        if(newTitle == '') {
+            newTitle = 'Zettlr';
+        } else {
+            newTitle += ' — Zettlr';
+        }
+        
         this.window.setTitle(newTitle);
     }
 

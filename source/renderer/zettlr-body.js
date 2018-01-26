@@ -3,6 +3,7 @@
 const ZettlrCon = require('./zettlr-context.js');
 const ZettlrDialog = require('./zettlr-dialog.js');
 const ZettlrQuicklook = require('./zettlr-quicklook.js');
+const ZettlrNotification = require('./zettlr-notification.js');
 
 class ZettlrBody
 {
@@ -13,6 +14,7 @@ class ZettlrBody
         this.dialog = new ZettlrDialog(this);
         this.spellcheckLangs = null; // This holds all available languages
         this.ql = []; // This holds all open quicklook windows
+        this.n = []; // Holds all notifications currently displaying
         this.darkTheme = false; // Initial value; will be overwritten by init messages
 
         // Event listener for the context menu
@@ -89,6 +91,23 @@ class ZettlrBody
         while(this.ql.length > 0) {
             // QuickLooks splice themselves from the array -> always close first
             this.ql[0].close();
+        }
+    }
+
+    notify(message)
+    {
+        this.n.push(new ZettlrNotification(this, message, this.n.length));
+    }
+
+    notifySplice(ntf, oldH)
+    {
+        let index = this.n.indexOf(ntf);
+        if(index > -1) {
+            this.n.splice(index, 1);
+        }
+
+        for(let msg of this.n) {
+            msg.moveUp(oldH);
         }
     }
 

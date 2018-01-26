@@ -34,14 +34,16 @@ class ZettlrDialog
 
         // Adjust the margins
         let dialog = this.modal.find('.dialog').first();
-        let diaH = dialog.height();
-        let winH = $(document).height();
+        let diaH = dialog.outerHeight();
+        let winH = $(window).height();
 
         if(diaH < winH) {
             let margin = (winH-diaH) / 2;
             dialog.css('margin-top', margin + "px");
+            dialog.css('margin-bottom', margin + "px");
         } else {
-            dialog.css('margin-top', "15%"); // Otherwise enable scrolling
+            dialog.css('margin-top', '15%'); // Otherwise enable scrolling
+            dialog.css('margin-bottom', '15%');
         }
 
         // Activate event listeners

@@ -124,3 +124,15 @@
 ## Under the hood
 
 - Updated dependencies to electron 1.7.11 to react to exploit [CVE-2018-1000006](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1000006). [See the electron project's blog for more information](https://electronjs.org/blog/protocol-handler-fix).
+
+# 0.9.2
+
+## GUI and functionality
+
+- Changed paper format in the odt-template from "Letter" to "DIN A4."
+- Now dialogs are correctly positioned (centered)
+- Implemented notifications that can be used variously
+
+## Under the hood
+
+- Added notification service (can be triggered by sending a `notify`-event to the renderer or call `notify()` on a body element.)

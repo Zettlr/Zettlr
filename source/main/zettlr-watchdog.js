@@ -38,7 +38,7 @@ class ZettlrWatchdog
             this.ready = true;
         });
 
-        this.process.on('raw', (event, path, details) => {
+        this.process.on('all', (event, path) => {
             if(this.watch) {
                 // Should we ignore this event?
                 for(let i in this.ignored) {

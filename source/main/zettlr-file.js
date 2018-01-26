@@ -16,6 +16,7 @@ class ZettlrFile
     constructor(parent, fname = null)
     {
         this.parent     = parent;
+        this.dir        = ''; // Containing dir
         this.name       = '';
         this.path       = '';
         this.hash       = null;
@@ -32,6 +33,7 @@ class ZettlrFile
             this.name = path.basename(this.path);
             this.hash = hash(this.path);
             this.ext  = path.extname(this.path);
+            this.dir = this.parent.name; // Containing dir
 
             // The file might've been just created. Test that
             try {
@@ -64,6 +66,12 @@ class ZettlrFile
         this.isModified = false;
 
         return cnt;
+    }
+
+    update()
+    {
+        // The file has changed remotely -> re-read
+        this.read();
     }
 
     // Returns the file content if hashes match

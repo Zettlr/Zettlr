@@ -68,9 +68,62 @@ class Zettlr
     {
         // Polls the watchdog for changes.
         if(this.watchdog.countChanges() > 0) {
-            // this.watchdog.each((t, p) => {
-                // console.log(`Staged: ${t} for ${p}`);
-            // });
+            this.watchdog.each((t, p) => {
+                // Available events: add, change, unlink, addDir, unlinkDir
+                // No changeDir because this consists of one unlink and one add
+                let f = this.paths.findFile({ 'path': p });
+                let based = this.paths.findDir({ 'path': path.dirname(p) });
+                let d = this.paths.findDir({'path':p});
+                let x = p;
+                switch(t) {
+                    case 'add':
+                    f = based.addChild(p);
+                    this.ipc.send('file-insert', f);
+                    break;
+
+                    case 'change':
+                    f.update();
+                    this.ipc.send('notify', `File ${f.name} changed remotely.`);
+                    break;
+
+                    case 'unlink':
+                    if(f == null) { // Happens on move
+                        break;
+                    }
+                    f.remove();
+                    this.ipc.send('notify', `File ${f.name} has been removed.`);
+                    this.ipc.send('file-pluck', f.hash); // Remove the file from client
+                    if(f === this.getCurrentFile()) {
+                        this.ipc.send('file-close', {});
+                        this.clearModified();
+                        this.setCurrentFile(null);
+                        this.window.setTitle();
+                    }
+                    break;
+
+                    case 'addDir':
+                    d = null;
+                    do {
+                        x = path.dirname(p);
+                        d = this.paths.findDir({'path': x});
+                    } while(d === null);
+                    if(d != null) {
+                        d.addChild(p);
+                        this.ipc.send('dir-list', this.paths);
+                    } // Else: Silently fail
+                    break;
+
+                    case 'unlinkDir':
+                    d.remove();
+                    this.ipc.send('dir-list', this.paths);
+                    this.ipc.send('notify', `Directory ${d.name} has been removed.`);
+                    break;
+
+                    default:
+                    this.ipc.send('notify', `Unknown event ${t} on path ${p}.`);
+                    break;
+                }
+            });
             // Development: Do nothing but flush all changes.
 
             this.watchdog.flush();
@@ -374,6 +427,8 @@ class Zettlr
             return;
         }
         file = dir.newfile(arg.name);
+        // Immediately ignore the event (path can have changed if arg.name is empty)
+        this.watchdog.ignoreNext('add', file.path);
 
         // This gets executed if arg contained no allowed chars, so warn.
         if(file == null) {
@@ -385,7 +440,7 @@ class Zettlr
             return;
         }
 
-        this.window.setTitle(file.name + ' — Zettlr');
+        this.window.setTitle(file.name);
         this.setCurrentFile(file);
 
         // This has to be done as the content of the file is only read by this
@@ -475,7 +530,7 @@ class Zettlr
         if(this.getCurrentFile() && (file.hash == this.getCurrentFile().hash)) {
             this.ipc.send('file-close', {});
             // Also re-set the title!
-            this.window.setTitle('Zettlr');
+            this.window.setTitle();
         }
         file.remove();
         this.ipc.send('file-list', this.getCurrentDir());
@@ -845,7 +900,7 @@ class Zettlr
         }
 
         if(this.window != null) {
-            this.window.setTitle(f.name + ' — Zettlr');
+            this.window.setTitle(f.name);
         }
         this.currentFile = f;
     }

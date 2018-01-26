@@ -32,11 +32,13 @@ class ZettlrOverlay
 
         // Adjust the margins
         let dialog = this.modal.find('.dialog').first();
-        let diaH = dialog.height();
-        let winH = $(document).height();
+        let diaH = dialog.outerHeight();
+        let winH = $(window).height();
 
         // The modal dialog is always smaller than the window.
-        dialog.css('margin-top', ((winH - diaH) / 2) + "px");
+        let margin = (winH-diaH) / 2;
+        dialog.css('margin-top', margin + "px");
+        dialog.css('margin-bottom', margin + "px");
     }
 
     update(newmsg)
@@ -45,6 +47,16 @@ class ZettlrOverlay
             this.show('');
         }
         this.modal.find('#msg').text(newmsg);
+
+        // Adjust the margins
+        let dialog = this.modal.find('.dialog').first();
+        let diaH = dialog.outerHeight();
+        let winH = $(window).height();
+
+        // The modal dialog is always smaller than the window.
+        let margin = (winH-diaH) / 2;
+        dialog.css('margin-top', margin + "px");
+        dialog.css('margin-bottom', margin + "px");
     }
 
     close()

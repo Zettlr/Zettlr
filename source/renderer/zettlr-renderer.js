@@ -209,6 +209,10 @@ class ZettlrRenderer
             this.preview.remove(arg.content);
             break;
 
+            case 'file-insert':
+            this.preview.insert(arg.content);
+            break;
+
             case 'file-delete':
             // The user has requested to delete the current file
             // Request from main process
@@ -336,6 +340,10 @@ class ZettlrRenderer
 
             case 'file-quicklook':
             this.body.quicklook(arg.content);
+            break;
+
+            case 'notify':
+            this.body.notify(arg.content);
             break;
 
             default:

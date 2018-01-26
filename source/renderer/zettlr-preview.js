@@ -187,7 +187,7 @@ class ZettlrPreview
 
     dirLi(dir)
     {
-        return `<li class="directory" title="${dir.name}">${dir.name}</li>`;
+        return `<li class="directory" title="${dir.name}" data-hash="${dir.hash}">${dir.name}</li>`;
     }
 
     beginSearch(term)
@@ -342,16 +342,27 @@ class ZettlrPreview
 
     // END SEARCH
 
-    remove(obj)
+    remove(hash)
     {
-        // This element should remove one element.
-        if(obj.hasOwnProperty('type') && (obj.type == 'file')) {
-            // Simply pluck a file.
-            this.div.find('li[data-hash="'+obj.hash+'"]').first().detach();
-        }
+        // Simply pluck a file
+        this.div.find('li[data-hash="'+hash+'"]').first().detach();
+    }
 
-        // Directories cannot be safely removed using dom retrieval -> therefore
-        // we need a complete redraw to be issued from main.
+    insert(obj)
+    {
+        // Insert a path into the preview list.
+        if(obj.type == 'file') {
+            // Find the dir, after which it should be inserted
+            let self = this;
+            this.div.find('.directory').each(function(index) {
+                if($(this).text() == obj.dir) {
+                    $(this).after($(self.getLi(obj)));
+                    self.activate();
+                    return false; // Break
+                }
+            });
+        }
+        // Don't insert dirs by now.
     }
 
     scrollIntoView(elem)
