@@ -132,7 +132,8 @@
 - Changed paper format in the odt-template from "Letter" to "DIN A4."
 - Now dialogs are correctly positioned (centered)
 - Implemented notifications that can be used variously
-- Watchdog now monitors changes to the file system (still beta, so don't rely on it and please report bugs!)
+- Watchdog now monitors changes to the file system
+- Small fixes in functionality and translations
 
 ## Under the hood
 
