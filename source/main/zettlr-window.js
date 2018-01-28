@@ -112,7 +112,7 @@ class ZettlrWindow
         } else {
             newTitle += ' — Zettlr';
         }
-        
+
         this.window.setTitle(newTitle);
     }
 
@@ -179,6 +179,30 @@ class ZettlrWindow
                 trans('system.save_changes_cancel'),
                 trans('system.save_changes_save'),
                 trans('system.save_changes_omit')
+            ],
+            cancelId: 0
+        };
+
+        let ret = dialog.showMessageBox(this.window, options);
+
+        // ret can have three status: cancel = 0, save = 1, omit = 2.
+        // To keep up with semantics, the function "askSaveChanges" would
+        // naturally return "true" if the user wants to save changes and "false"
+        // - so how deal with "omit" changes?
+        // Well I don't want to create some constants so let's just leave it
+        // with these three values.
+        return ret;
+    }
+
+    askReplaceFile()
+    {
+        let options = {
+            type: "question",
+            title: trans('system.replace_file_title'),
+            message: trans('system.replace_file_message'),
+            buttons: [
+                trans('system.cancel'),
+                trans('system.ok'),
             ],
             cancelId: 0
         };

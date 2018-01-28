@@ -166,6 +166,10 @@
         "save_changes_cancel": "Abbrechen",
         "save_changes_save": "Speichern",
         "save_changes_omit": "Änderungen verwerfen",
+        "replace_file_title": "Aktuelle Datei ersetzen?",
+        "replace_file_message": "Die aktuelle Datei wurde von außerhalb verändert. Änderungen übernehmen?",
+        "ok": "Ok",
+        "cancel": "Abbrechen",
         "open_folder": "Projektverzeichnis öffnen"
     }
 }

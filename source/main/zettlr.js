@@ -82,8 +82,17 @@ class Zettlr
                     break;
 
                     case 'change':
-                    f.update();
-                    this.ipc.send('notify', `File ${f.name} changed remotely.`);
+                    if(f == this.getCurrentFile()) {
+                        let ret = this.window.askReplaceFile();
+                        // 1 = do it, 0 = don't
+                        if(ret == 1) {
+                            this.clearModified();
+                            this.ipc.send('file-close', {});
+                            this.ipc.send('file-open', f.withContent());
+                        }
+                    } else {
+                        this.ipc.send('notify', `File ${f.name} changed remotely.`);
+                    }
                     break;
 
                     case 'unlink':
@@ -114,9 +123,11 @@ class Zettlr
                     break;
 
                     case 'unlinkDir':
-                    d.remove();
-                    this.ipc.send('dir-list', this.paths);
-                    this.ipc.send('notify', `Directory ${d.name} has been removed.`);
+                    if(d != null) {
+                        d.remove();
+                        this.ipc.send('dir-list', this.paths);
+                        this.ipc.send('notify', `Directory ${d.name} has been removed.`);
+                    }
                     break;
 
                     default:
@@ -124,8 +135,8 @@ class Zettlr
                     break;
                 }
             });
-            // Development: Do nothing but flush all changes.
 
+            // flush all changes so they aren't processed again next cycle
             this.watchdog.flush();
         }
         setTimeout(() => { this.poll(); }, 5000);
@@ -460,6 +471,7 @@ class Zettlr
             curdir = this.getCurrentDir();
         }
 
+        this.watchdog.ignoreNext('addDir', path.join(curdir.path, arg.name));
         dir = curdir.newdir(arg.name);
 
         // If the user ONLY decided to use special chars
@@ -580,6 +592,7 @@ class Zettlr
             this.setCurrentDir(dir.parent); // Move up one level
         }
 
+        this.watchdog.ignoreNext('unlinkDir', dir.path);
         dir.remove();
 
         // BUG: When these two events are fired in reverse order the child
@@ -718,6 +731,7 @@ class Zettlr
         }
     }
 
+    // Move a directory or file
     requestMove(arg)
     {
         // arg contains from and to
@@ -745,6 +759,8 @@ class Zettlr
         if(from.isFile() && (this.getCurrentFile() != null) && (from.hash == this.getCurrentFile().hash)) {
             // Current file is to be moved
             // So move the file and immediately retrieve the new path
+            this.watchdog.ignoreNext('unlink', from.path);
+            this.watchdog.ignoreNext('add', path.join(to.path, from.name));
             from.move(to.path);
             to.attach(from);
 
@@ -765,9 +781,18 @@ class Zettlr
             // Re-merge:
             newPath = path.join(to.path, from.name, relative); // New path now
             // Hash it
-            newPath = this.getCurrentFile().hashPath(newPath); // Misuse hashing function :D
+            newPath = hash(newPath);
         }
 
+        if(from.isDirectory()) {
+            // TODO: Think of something to ignore _all_ events emanating from
+            // the directory (every file will also trigger an unlink/add-couple)
+            this.watchdog.ignoreNext('unlinkDir', from.path);
+            this.watchdog.ignoreNext('addDir', path.join(to.path, from.name));
+        } else if(from.isFile()) {
+            this.watchdog.ignoreNext('unlink', from.path);
+            this.watchdog.ignoreNext('add', path.join(to.path, from.name));
+        }
 
         from.move(to.path);
         // Add directory or file to target dir
@@ -865,6 +890,7 @@ class Zettlr
         if(!file.hasOwnProperty('hash') || file.hash == null) {
             // For ease create a new file in current directory.
             file = this.getCurrentDir().newfile();
+            this.watchdog.ignoreNext('add', file.path);
         } else {
             file = this.paths.findFile({ 'hash': file.hash });
         }
