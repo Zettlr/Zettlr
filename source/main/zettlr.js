@@ -203,6 +203,10 @@ class Zettlr
         this.refreshPaths();
         // And file pointers (e.g. begin at the root with no file open)
         this.resetCurrents();
+
+        // Restart watchdog with old/new path
+        this.watchdog.setPath(this.config.get('projectDir'));
+        this.watchdog.restart();
     }
 
     /***************************************************************************
@@ -533,7 +537,6 @@ class Zettlr
 
         let file = this.paths.findFile({'hash': hash });
 
-        // TODO: Ask if the user REALLY wants to move file to trash.
         if(!this.window.confirmRemove(file)) {
             return;
         }

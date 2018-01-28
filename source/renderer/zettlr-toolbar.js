@@ -45,7 +45,7 @@ class ZettlrToolbar
             return this.hideWordCount();
         }
 
-        // Format the number nicely TODO: Translate Words
+        // Format the number nicely
         let wd = '';
         if(words < 1000) {
             wd = words;

@@ -60,6 +60,11 @@ class ZettlrWatchdog
     {
         this.process.close();
         this.process = null;
+        // Also flush all changes and ignores
+        this.staged = [];
+        this.ignored = [];
+        this.watch = false;
+        this.ready = false;
     }
 
     // Temporarily pause the watchdog (don't stage changes)
