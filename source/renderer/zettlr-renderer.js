@@ -295,7 +295,7 @@ class ZettlrRenderer
                 case 'snippets':
                 // Will only be received once; if false toggle from initial "true"
                 // state.
-                if(arg.content.value == false) {
+                if(!arg.content.value) {
                     this.preview.toggleSnippets();
                 }
                 break;

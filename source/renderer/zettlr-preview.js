@@ -1,5 +1,7 @@
 /* THIS CLASS CONTROLS THE FILE PREVIEW LIST */
 
+const ListView = require('./list-view.js');
+
 class ZettlrPreview
 {
     constructor(parent)
@@ -9,11 +11,18 @@ class ZettlrPreview
 
         // Elements
         this.div                = $('#preview');
+        this.list               = new ListView(this, this.div, this.snippets);
 
         // Search related
         this.hashes             = null;
         this.currentSearch      = null;
         this.currentSearchIndex = 0;
+    }
+
+    requestFile(hash)
+    {
+        // Request a file from the renderer
+        this.parent.requestFile(hash);
     }
 
     newFileList(files)
@@ -23,171 +32,22 @@ class ZettlrPreview
             return;
         }
 
-        this.div.scrollTop(0);
-
-        // Clear preview list
-        this.div.html('<ul></ul>');
-
-        // Put the files into the list
-        this.addFiles(files);
-
-        // Don't forget to reactivate the lis to react on mouse clicks
-        this.activate();
-    }
-
-    addFiles(files)
-    {
-        // Sometimes, there are nulls in the directory list.
-        if(files == null) {
-            return;
-        }
-
-        if(files.type == "file") {
-            this.div.find('ul').first().append(this.getLi(files));
-        } else if(files.type == "directory") {
-            // Append directory (for easier overview)
-            this.div.find('ul').first().append(this.dirLi(files));
-            if(files.children != null) {
-                for(let c of files.children) {
-                    this.addFiles(c);
-                }
-            }
-        }
-    }
-
-    // Activate clicks on the lis
-    activate()
-    {
-        // First: Enable clicks
-        let that = this;
-        this.div.find('li').on('click', function() {
-            if($(this).hasClass('directory')) {
-                return;
-            }
-            that.parent.requestFile($(this).attr('data-hash'));
-            // We need to focus the div again because as the lis are draggable
-            // they will retain focus.
-            that.div.focus();
-        });
-
-        // Second: Select a file
-        if(this.parent.getCurrentFile() != null) {
-            // Try to find the file (elem == null if not in list)
-            this.select(this.parent.getCurrentFile().hash);
-        }
-
-        // Third: Enable arrow key navigation in list
-        this.div.on('keydown', (e) => {
-            let curLi = this.div.find('li.selected').first();
-            // 38 is up, 40 is down
-            if(e.which == 38) {
-                e.preventDefault();
-                if(e.metaKey || e.ctrlKey) {
-                    let first = curLi.prevAll().not('.directory, .hidden').last();
-                    first.click();
-                    this.scrollIntoView(first);
-                } else {
-                    let prev = curLi.prevAll().not('.directory, .hidden').first();
-                    prev.click();
-                    this.scrollIntoView(prev);
-                }
-            } else if(e.which == 40) {
-                e.preventDefault();
-                if(e.metaKey || e.ctrlKey) {
-                    let last = curLi.nextAll().not('.directory, .hidden').last();
-                    last.click();
-                    this.scrollIntoView(last);
-                } else {
-                    let next = curLi.nextAll().not('.directory, .hidden').first();
-                    next.click();
-                    this.scrollIntoView(next);
-                }
-            }
-        });
-
-        // Also make draggable
-        this.div.find('li').not('.directory').draggable({
-            'cursorAt': { 'top': 0, 'left': 0},
-            'scroll': false,
-            'helper': function() {
-                // Return a clone attached to the body (movable through the whole view)
-                // and that has the same CSS classes
-                return $(this)
-                .clone()
-                .appendTo('body')
-                .css('z-index', 1000)
-                .css('height', $(this).innerHeight())
-                .css('width', $(this).innerWidth())
-                .css('background-color', $(this).css('background-color'))
-                .css('color', $(this).css('color'))
-                .css('font-family', $(this).css('font-family'))
-                .css('padding', $(this).css('padding'))
-                .css('margin', $(this).css('margin'))
-                .css('list-style-type', $(this).css('list-style-type'));
-            },
-            'revert': "invalid", // Only revert if target was invalid
-            'revertDuration': 200,
-            'distance': 5,
-        });
+        this.list.refresh(files);
     }
 
     // Select a file if possible
-    select(hash)
-    {
-        let elem = this.div.find('li[data-hash="'+hash+'"]');
-        if(elem != null) {
-            this.div.find('li').removeClass('selected');
-            elem.addClass('selected');
+    select(hash) { this.list.select(hash); }
 
-            // Scroll into view if necessary
-            this.scrollIntoView(elem);
-        }
-    }
+    toggleTheme() { this.div.toggleClass('dark'); }
 
-    toggleTheme()
-    {
-        this.div.toggleClass('dark');
-    }
-
-    toggleDirectories()
-    {
-        this.div.toggleClass('no-directories');
-    }
+    toggleDirectories() { this.div.toggleClass('no-directories'); }
 
     // Toggle display of snippets
     toggleSnippets()
     {
         this.snippets = !this.snippets;
-        this.div.find('span.snippet').toggleClass('hidden');
-
-        // If necessary, scroll the selection into view
-        let elem = this.div.find('li.selected');
-
-        if(elem.length > 0) {
-            this.scrollIntoView(elem);
-        }
-    }
-
-    getLi(file)
-    {
-        let snip = '';
-
-        if(!this.snippets) {
-            snip = ' hidden';
-        }
-
-        let mtime = new Date(file.modtime);
-        mtime = `${mtime.getFullYear()}-${mtime.getMonth()+1}-${mtime.getDate()} ${mtime.getHours()}:${mtime.getMinutes()}`;
-        return `<li data-hash="${file.hash}" title="${file.name}">
-        <strong>${file.name.substr(0, file.name.length-3)}
-        </strong><br>
-        <span class="snippet${snip}">${file.snippet}<br><small>${mtime}</small></span>
-        </li>`;
-    }
-
-    dirLi(dir)
-    {
-        return `<li class="directory" title="${dir.name}" data-hash="${dir.hash}">${dir.name}</li>`;
+        // this.div.find('span.snippet').toggleClass('hidden');
+        this.list.toggleSnippets();
     }
 
     beginSearch(term)
@@ -348,47 +208,10 @@ class ZettlrPreview
         this.div.find('li[data-hash="'+hash+'"]').first().detach();
     }
 
-    insert(obj)
+    update(files)
     {
-        // Insert a path into the preview list.
-        if(obj.type == 'file') {
-            // Find the dir, after which it should be inserted
-            let self = this;
-            this.div.find('.directory').each(function(index) {
-                if($(this).text() == obj.dir) {
-                    $(this).after($(self.getLi(obj)));
-                    self.activate();
-                    return false; // Break
-                }
-            });
-        }
-        // Don't insert dirs by now.
-    }
-
-    scrollIntoView(elem)
-    {
-        // Do we have an element to scroll?
-        if(!elem.length) {
-            return;
-        }
-
-        // Somehow it is impossible to write position().top into a variable.
-        // Workaround: Short name for position and then use as pos.top ...
-        let pos = elem.position();
-        let bot = pos.top + elem.outerHeight();
-        let docHeight = this.div.height();
-        let curScroll = this.div.scrollTop();
-        // Top:
-        if(pos.top < 0) {
-            // Here we need to also substract the height of a directory ribbon
-            // because there WILL be one.
-            let ribbonHeight = this.div.find('li.directory').first().outerHeight();
-            this.div.scrollTop(curScroll + pos.top - ribbonHeight);
-        }
-        // Down:
-        if(bot > docHeight) {
-            this.div.scrollTop(curScroll + bot - docHeight);
-        }
+        //NEw file list arrived TODO
+        this.list.refresh(files);
     }
 }
 

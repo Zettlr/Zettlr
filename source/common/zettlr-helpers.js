@@ -65,4 +65,30 @@ function generateName()
     return "New file " + add + ".md";
 }
 
-module.exports = { hash, sort, generateName };
+// TODO: Localize options once they're implemented in the preferences/config.
+function formatDate(dateObj)
+{
+    let str = '';
+    let yyyy = dateObj.getFullYear();
+    let mm = dateObj.getMonth()+1;
+    let dd = dateObj.getDate();
+    let h = dateObj.getHours();
+    let m = dateObj.getMinutes();
+
+    if(mm < 10) {
+        mm = '0' + mm;
+    }
+    if(dd < 10) {
+        dd = '0' + dd;
+    }
+    if(h < 10) {
+        h = '0' + h;
+    }
+    if(m < 10) {
+        m = '0' + m;
+    }
+
+    return `${dd}.${mm}.${yyyy}, ${h}:${m}`;
+}
+
+module.exports = { hash, sort, generateName, formatDate };
