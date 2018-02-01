@@ -46,7 +46,6 @@ class ZettlrPreview
     toggleSnippets()
     {
         this.snippets = !this.snippets;
-        // this.div.find('span.snippet').toggleClass('hidden');
         this.list.toggleSnippets();
     }
 
@@ -137,10 +136,10 @@ class ZettlrPreview
 
         let that = this;
         this.hashes = [];
-        this.div.find('li').each(function() {
-            if(!$(this).hasClass('directory')) {
-                $(this).addClass('hidden');
-                that.hashes.push($(this).attr('data-hash'));
+        this.list.each((listelem) => {
+            if(listelem.isFile()) {
+                listelem.hide();
+                this.hashes.push(listelem.hash);
             }
         });
         this.currentSearch = newTerms;

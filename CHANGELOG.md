@@ -138,3 +138,13 @@
 ## Under the hood
 
 - Added notification service (can be triggered by sending a `notify`-event to the renderer or call `notify()` on a body element.)
+
+# 0.10.0
+
+## GUI and functionality
+
+(nothing here)
+
+## Under the hood
+
+- Massive rewrite of the logic behind the preview pane. Now only necessary changes are actually rendered (and not, as was the case until now, everything), which decreases the locking-potential of the application as well as the average energy impact A LOT. Additionally, now it is possible simply to spit out one updated paths-object from main to simply trigger a (possible) re-render.

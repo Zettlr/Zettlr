@@ -21,7 +21,11 @@ class ListViewItem
         if(this.fileObj.type == 'directory') {
             this.elem.html(this.fileObj.name);
         } else if (this.fileObj.type == 'file') {
-            this.elem.append($('<strong>').text(this.fileObj.name.substr(0, this.fileObj.name.lastIndexOf('.'))));
+            this.elem.append(
+                $('<strong>').text(
+                    this.fileObj.name.substr(0, this.fileObj.name.lastIndexOf('.'))
+                )
+            );
             this.elem.append($('<br>'));
             this.elem.append(
                 $('<span>').addClass('snippet')
@@ -88,13 +92,11 @@ class ListViewItem
     {
         if(this.elem.index() == this.target) {
             return;
-        }
-        if(this.target == 0) {
+        } else if(this.target == 0) {
             this.elem.insertBefore(this.parent.container.find('li')[0]);
-            return;
+        } else {
+            this.elem.insertAfter(this.parent.container.find('li')[this.target-1]);
         }
-
-        this.elem.insertAfter(this.parent.container.find('li')[this.target-1]);
     }
 
     update(nData)

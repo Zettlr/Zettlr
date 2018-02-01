@@ -128,6 +128,48 @@ class ListView
         }
     }
 
+    hide(hash = null)
+    {
+        if(hash == null) {
+            for(let li of this.li) {
+                li.hide();
+            }
+        } else {
+            for(let li of this.li) {
+                if(li.hash == hash) {
+                    li.hide();
+                    break;
+                }
+            }
+        }
+    }
+
+    show(hash = null)
+    {
+        if(hash == null) {
+            for(let li of this.li) {
+                li.show();
+            }
+        } else {
+            for(let li of this.li) {
+                if(li.hash == hash) {
+                    li.show();
+                    break;
+                }
+            }
+        }
+    }
+
+    each(callback)
+    {
+        let t = {};
+        if(callback && t.toString.call(callback) == '[object Function]') {
+            for(let li of this.li) {
+                callback(li);
+            }
+        }
+    }
+
     // Toggles the snippets on and off
     toggleSnippets()
     {
@@ -212,10 +254,9 @@ class ListView
     // Request a file
     requestFile(elem)
     {
-        // elem.elem.attr('data-hash')
         this.liSelected = elem;
         // Refocus for arrow key navigation
-        this.container.parent().focus(); // Yep, need parent.
+        this.container.parent().focus();
         // Parent request
         this.parent.requestFile(elem.hash)
     }
