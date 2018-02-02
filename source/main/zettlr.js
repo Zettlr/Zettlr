@@ -60,7 +60,7 @@ class Zettlr
 
         // Initiate regular polling
         setTimeout(() => {
-            // this.poll(); DEBUG for now deactivate the watchdog
+            this.poll();
         }, 5000);
     }
 
