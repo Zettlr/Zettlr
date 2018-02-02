@@ -148,3 +148,4 @@
 ## Under the hood
 
 - Massive rewrite of the logic behind the preview pane. Now only necessary changes are actually rendered (and not, as was the case until now, everything), which decreases the locking-potential of the application as well as the average energy impact A LOT. Additionally, now it is possible simply to spit out one updated paths-object from main to simply trigger a (possible) re-render.
+- Also massive rewrite of the logic behind the tree view. The changes have the same effects as those in the preview pane.
