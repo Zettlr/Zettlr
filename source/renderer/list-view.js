@@ -48,19 +48,6 @@ class ListView
     // Merges the nData object into this list's tree
     merge(nData)
     {
-        /*
-        * Okay, here's how we're gonna do this:
-        * First we have three arrays and we are doing this matrix-style.
-        * This means: Our nData-object is the middle vector, telling us
-        * how to merge the old data towards the new.
-        * While doing this, we're gonna save the old indices in a separate
-        * array and when everything is done, we're just gonna tell the list items
-        * to re-arrange according to our moving matrix.
-        * While transposing the list items from the old into the new array,
-        * we also pass to them (to an update function) the new object so that
-        * they may decide whether or not they should update.
-        */
-
         // First pre-allocate the target array
         let target = new Array(nData.length);
 
@@ -95,13 +82,6 @@ class ListView
 
         // Swap the old list with the new
         this.li = target;
-
-        // Now sort. Bubblesort because the actual indices of the list in the dom
-        // will be always changing depending on where we put them. So we can either
-        // re-build the whole dom from the bottom up (increasing energy consumption
-        // for a re-render, which we wanted to reduce) OR simply swap all those
-        // elements that are not correctly positioned. The latter is simpler because
-        // in 99% of the cases we will not have a random sort.
 
         for(let li of this.li) {
             li.moveToTarget();

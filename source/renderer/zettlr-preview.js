@@ -31,7 +31,6 @@ class ZettlrPreview
             // Somehow the file array was empty
             return;
         }
-
         this.list.refresh(this.parent.getCurrentDir());
     }
 
@@ -201,15 +200,8 @@ class ZettlrPreview
 
     // END SEARCH
 
-    remove(hash)
-    {
-        // Simply pluck a file
-        this.div.find('li[data-hash="'+hash+'"]').first().detach();
-    }
-
     update(files)
     {
-        //NEw file list arrived TODO
         this.list.refresh(files);
     }
 }

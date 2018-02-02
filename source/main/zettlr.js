@@ -60,7 +60,7 @@ class Zettlr
 
         // Initiate regular polling
         setTimeout(() => {
-            this.poll();
+            // this.poll(); DEBUG for now deactivate the watchdog
         }, 5000);
     }
 
@@ -78,8 +78,6 @@ class Zettlr
                 switch(t) {
                     case 'add':
                     f = based.addChild(p);
-                    // this.ipc.send('file-insert', f);
-                    this.ipc.send('paths-update', this.paths);
                     break;
 
                     case 'change':
@@ -102,7 +100,6 @@ class Zettlr
                     }
                     f.remove();
                     this.ipc.send('notify', `File ${f.name} has been removed.`);
-                    this.ipc.send('file-pluck', f.hash); // Remove the file from client
                     if(f === this.getCurrentFile()) {
                         this.ipc.send('file-close', {});
                         this.clearModified();
@@ -119,16 +116,12 @@ class Zettlr
                     } while(d === null);
                     if(d != null) {
                         d.addChild(p);
-                        // this.ipc.send('dir-list', this.paths);
-                        this.ipc.send('paths-update', this.paths);
                     } // Else: Silently fail
                     break;
 
                     case 'unlinkDir':
                     if(d != null) {
                         d.remove();
-                        // this.ipc.send('dir-list', this.paths);
-                        this.ipc.send('paths-update', this.paths);
                         this.ipc.send('notify', `Directory ${d.name} has been removed.`);
                     }
                     break;
@@ -141,6 +134,9 @@ class Zettlr
 
             // flush all changes so they aren't processed again next cycle
             this.watchdog.flush();
+
+            // Notify the renderer of changes
+            this.ipc.send('paths-update', this.paths);
         }
         setTimeout(() => { this.poll(); }, 5000);
     }
@@ -241,9 +237,9 @@ class Zettlr
             this.sendFile(arg.content);
             break;
 
-            case 'get-file-list':
-            // The client requested a new directory.
-            this.sendFileList(arg.content);
+            case 'dir-select':
+            // The client requested another directory
+            this.selectDir(arg.content);
             break;
 
             case 'file-modified':
@@ -397,7 +393,7 @@ class Zettlr
     }
 
     // Send a new directory list to the client.
-    sendFileList(arg)
+    selectDir(arg)
     {
         // arg contains a hash for a directory.
         let obj = this.paths.findDir({ 'hash': arg });
@@ -680,9 +676,7 @@ class Zettlr
         }
         this.ipc.send('paths-update', this.paths);
 
-        // Refresh file list with new hashes
         if(isCurDir) {
-            this.ipc.send('paths-update', this.paths);
             this.ipc.send('set-current-dir', dir);
         }
 
@@ -795,7 +789,7 @@ class Zettlr
         // Add directory or file to target dir
         to.attach(from);
 
-        this.ipc.send('paths-update', this.paths);
+        this.ipc.send('paths-update', this.getPaths());
 
         if(isCurDir) {
             this.ipc.send('dir-set-current', from);
@@ -891,7 +885,7 @@ class Zettlr
         if(this.getCurrentFile() == null) {
             this.setCurrentFile(file);
             // "Open" this file.
-            this.sendFileList(this.getCurrentDir().hash);
+            this.selectDir(this.getCurrentDir().hash);
             this.sendFile(file.hash);
             return;
         }

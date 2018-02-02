@@ -11,8 +11,6 @@ class ZettlrDirectories
         this.tree = null;
     }
 
-    getContainer() { return this.div; }
-
     // Render a new directory list.
     refresh()
     {
@@ -25,12 +23,12 @@ class ZettlrDirectories
 
     empty()
     {
+        if(this.tree == null) {
+            return;
+        }
         this.tree.detach(); // Will remove all descendants as well
-        this.tree = null; // Dereference
+        this.tree = null;   // Dereference
     }
-
-    toggleTheme() { this.div.toggleClass('dark'); }
-    toggleDisplay() { this.div.toggleClass('hidden'); }
 
     // Select another directory
     select(hash)
@@ -46,31 +44,13 @@ class ZettlrDirectories
         // Do nothing. Dummy function b/c recursion
     }
 
+    getContainer() { return this.div; }
+
+    toggleTheme() { this.div.toggleClass('dark'); }
+    toggleDisplay() { this.div.toggleClass('hidden'); }
+
     requestDir(hash) { this.parent.requestDir(hash); }
     requestMove(from, to) { this.parent.requestMove(from, to); }
-
-    scrollIntoView(elem)
-    {
-        // Do we have an element to scroll?
-        if(!elem.length) {
-            return;
-        }
-
-        // Somehow it is impossible to write position().top into a variable.
-        // Workaround: Short name for position and then use as pos.top ...
-        let pos = elem.position();
-        let bot = pos.top + elem.outerHeight();
-        let docHeight = this.div.height();
-        let curScroll = this.div.scrollTop();
-        // Top:
-        if(pos.top < 0) {
-            this.div.scrollTop(curScroll + pos.top);
-        }
-        // Down:
-        if(bot > docHeight) {
-            this.div.scrollTop(curScroll + bot - docHeight);
-        }
-    }
 }
 
 module.exports = ZettlrDirectories;

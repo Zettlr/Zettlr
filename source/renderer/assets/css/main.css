@@ -168,6 +168,9 @@ html {
 #directories ul li.highlight {
   box-shadow: 0px 0px 1px 2px #c8f0aa;
 }
+#directories ul .collapse-indicator {
+  margin-right: 3px;
+}
 #directories ul .collapse-indicator::before {
   content: "\f078";
   font-family: 'Font Awesome';

@@ -44,16 +44,20 @@
             }
         }
 
-        .collapse-indicator::before {
-            content: "\f078";
-            font-family: 'Font Awesome';
-            font-size: @font-size-small * 0.8; /* Bit smaller, those indicators are damned huge */
-            color:@grey-4;
-            display:inline-block;
-            vertical-align: sub;
-            width:10px;
-            height:19px;
-            overflow:hidden;
+        .collapse-indicator {
+            margin-right:3px;
+            
+            &::before {
+                content: "\f078";
+                font-family: 'Font Awesome';
+                font-size: @font-size-small * 0.8; /* Bit smaller, those indicators are damned huge */
+                color:@grey-4;
+                display:inline-block;
+                vertical-align: sub;
+                width:10px;
+                height:19px;
+                overflow:hidden;
+            }
         }
 
         &.collapsed .collapse-indicator::before {

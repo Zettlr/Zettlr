@@ -75,9 +75,9 @@ class ZettlrRenderer
             // Initial command.
             this.body.closeQuicklook();
             this.setCurrentDir(arg.content);
+            this.setCurrentFile(null);
             this.paths = arg.content;
             this.directories.empty();
-            this.preview.empty();
             this.directories.refresh();
             this.preview.refresh();
             this.directories.select(arg.content.hash);
@@ -85,20 +85,12 @@ class ZettlrRenderer
 
             case 'paths-update':
             // Update the paths
-            this.paths = arg.content;
+            this.updatePaths(arg.content);
             this.directories.refresh();
             this.preview.refresh();
             break;
 
             // DIRECTORIES
-            case 'dir-list':
-            // A directory was created or removed, so repaint.
-            // this.directories.newDirectoryList(arg.content);
-            this.paths = arg.content;
-            this.preview.refresh();
-            this.directories.refresh();
-            break;
-
             case 'dir-set-current':
             // Received a new directory
             this.setCurrentDir(arg.content);
@@ -147,11 +139,6 @@ class ZettlrRenderer
             break;
 
             // FILES
-            case 'file-list':
-            // We have received a new file list in arg
-            // Set the current dir
-            this.preview.refresh();
-            break;
 
             case 'file-set-current':
             this.setCurrentFile(arg.content);
@@ -207,13 +194,6 @@ class ZettlrRenderer
 
             case 'file-find':
             this.editor.openFind();
-            break;
-
-            // Remove a file only from preview (watchdog)
-            case 'file-pluck':
-            // A file should be removed
-            // this.preview.remove(arg.content);
-            this.preview.refresh();
             break;
 
             case 'file-insert':
@@ -376,6 +356,15 @@ class ZettlrRenderer
         return null;
     }
 
+    updatePaths(nData)
+    {
+        this.paths = nData;
+        this.setCurrentDir(this.findObject(this.getCurrentDir().hash));
+        if(this.getCurrentFile()) {
+            this.setCurrentFile(this.findObject(this.getCurrentFile().hash));
+        }
+    }
+
     // SPELLCHECKER FUNCTIONS
     setSpellcheck(langs)
     {
@@ -520,7 +509,7 @@ class ZettlrRenderer
     updateWordCount(words) { this.toolbar.updateWordCount(words); }
     // Triggered by ZettlrDirectories - if user clicks on another dir
 
-    requestDir(hash) { this.ipc.send('get-file-list', hash); }
+    requestDir(hash) { this.ipc.send('dir-select', hash); }
     requestMove(from, to) { this.ipc.send('request-move', { 'from': from, 'to': to }); }
     // Triggered by ZettlrPreview - if user clicks on another file
     requestFile(hash) { this.ipc.send('file-get', hash); }
