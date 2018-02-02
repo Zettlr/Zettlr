@@ -78,7 +78,8 @@ class Zettlr
                 switch(t) {
                     case 'add':
                     f = based.addChild(p);
-                    this.ipc.send('file-insert', f);
+                    // this.ipc.send('file-insert', f);
+                    this.ipc.send('paths-update', this.paths);
                     break;
 
                     case 'change':
@@ -118,14 +119,16 @@ class Zettlr
                     } while(d === null);
                     if(d != null) {
                         d.addChild(p);
-                        this.ipc.send('dir-list', this.paths);
+                        // this.ipc.send('dir-list', this.paths);
+                        this.ipc.send('paths-update', this.paths);
                     } // Else: Silently fail
                     break;
 
                     case 'unlinkDir':
                     if(d != null) {
                         d.remove();
-                        this.ipc.send('dir-list', this.paths);
+                        // this.ipc.send('dir-list', this.paths);
+                        this.ipc.send('paths-update', this.paths);
                         this.ipc.send('notify', `Directory ${d.name} has been removed.`);
                     }
                     break;
@@ -402,7 +405,6 @@ class Zettlr
         // Now send it back (the GUI should by itself filter out the files)
         if(obj != null && obj.isDirectory()) {
             this.setCurrentDir(obj);
-            this.ipc.send('file-list', obj);
             this.ipc.send('dir-set-current', obj);
         }
         else {
@@ -460,9 +462,9 @@ class Zettlr
 
         // This has to be done as the content of the file is only read by this
         // function (speeds up the process of refreshing the file tree)
+        // ^-- ??? What did I mean by that comment?
+        this.ipc.send('paths-update', this.paths);
         this.ipc.send('file-open', file.withContent());
-        this.ipc.send('file-list', this.getCurrentDir()); // in "dir" the new file is not yet present.
-        this.ipc.send('dir-set-current', this.getCurrentDir());
     }
 
     newDir(arg)
@@ -494,9 +496,7 @@ class Zettlr
 
         // Re-render the directories, and then as well the file-list of the
         // current folder.
-        this.ipc.send('paths', this.paths);
-        this.ipc.send('file-list', dir);
-        this.ipc.send('dir-set-current', dir);
+        this.ipc.send('paths-update', this.paths);
     }
 
     openDir()
@@ -548,7 +548,7 @@ class Zettlr
             this.window.setTitle();
         }
         file.remove();
-        this.ipc.send('file-list', this.getCurrentDir());
+        this.ipc.send('paths-update', this.paths);
         this.ipc.send('dir-set-current', this.getCurrentDir());
     }
 
@@ -598,10 +598,7 @@ class Zettlr
         this.watchdog.ignoreNext('unlinkDir', dir.path);
         dir.remove();
 
-        // BUG: When these two events are fired in reverse order the child
-        // process freezes.
-        this.ipc.send('file-list', this.getCurrentDir());
-        this.ipc.send('dir-list', this.paths);
+        this.ipc.send('paths-update', this.paths);
     }
 
     exportFile(arg)
@@ -672,7 +669,7 @@ class Zettlr
             // Re-merge:
             oldPath = path.join(oldDir, arg.name, relative); // New path now
             // Hash it
-            oldPath = this.getCurrentFile().hashPath(oldPath); // Misuse hashing function :D
+            oldPath = hash(oldPath);
         }
 
         // Move to same location with different name
@@ -681,13 +678,11 @@ class Zettlr
         } catch(e) {
             console.error(e);
         }
-        // Send new directory list
-        this.ipc.send('dir-list', this.paths);
-        this.ipc.send('update-paths', this.paths);
+        this.ipc.send('paths-update', this.paths);
 
         // Refresh file list with new hashes
         if(isCurDir) {
-            this.ipc.send('file-list', dir);
+            this.ipc.send('paths-update', this.paths);
             this.ipc.send('set-current-dir', dir);
         }
 
@@ -729,8 +724,7 @@ class Zettlr
 
         // Is renamed file in displayed directory?
         if(this.getCurrentDir().findFile({ 'hash': file.hash}) !== null) {
-            // Send a new file list
-            this.ipc.send('file-list', this.getCurrentDir());
+            this.ipc.send('paths-update', this.paths);
         }
     }
 
@@ -772,8 +766,8 @@ class Zettlr
             // We have to set current dir (the to-dir) and current file AND
             // select it.
             this.setCurrentDir(to); // Current file is still correctly set
+            this.ipc.send('paths-update', this.paths);
             this.ipc.send('dir-set-current', to);
-            this.ipc.send('file-list', to);
             this.ipc.send('file-set-current', from);
             return;
         } else if((this.getCurrentFile() !== null)
@@ -801,21 +795,10 @@ class Zettlr
         // Add directory or file to target dir
         to.attach(from);
 
-        if(from.isDirectory()) {
-            // Send new directory list
-            this.ipc.send('dir-list', this.paths);
-        }
-
-        if(from.isFile()) {
-            // Yes, it's a file, but no, not the current. So just repaint files
-            // TODO: Being able to pluck or push files and dirs would ease everything
-            this.ipc.send('file-list', this.getCurrentDir());
-        }
+        this.ipc.send('paths-update', this.paths);
 
         if(isCurDir) {
-            this.ipc.send('dir-set-current', from); // The client doesn't have the same object reference
-            // And, just in case, new directory list
-            this.ipc.send('file-list', this.getCurrentDir());
+            this.ipc.send('dir-set-current', from);
         }
 
         if(newPath != null) {
@@ -913,8 +896,7 @@ class Zettlr
             return;
         }
         if(this.getCurrentDir().contains(file)) {
-            // Send new file list to reflect changes at the beginning of a file.
-            this.ipc.send('file-list', this.getCurrentDir());
+            this.ipc.send('paths-update', this.paths);
         }
     }
 

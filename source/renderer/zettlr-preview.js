@@ -25,14 +25,14 @@ class ZettlrPreview
         this.parent.requestFile(hash);
     }
 
-    newFileList(files)
+    refresh()
     {
-        if(files == null) {
+        if(this.parent.getCurrentDir() == null) {
             // Somehow the file array was empty
             return;
         }
 
-        this.list.refresh(files);
+        this.list.refresh(this.parent.getCurrentDir());
     }
 
     // Select a file if possible

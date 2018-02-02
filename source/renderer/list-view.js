@@ -63,7 +63,6 @@ class ListView
 
         // First pre-allocate the target array
         let target = new Array(nData.length);
-        let move = new Array(nData.length);
 
         // First detach all list items that are no longer present
         for(let li of this.li) {
@@ -106,12 +105,6 @@ class ListView
 
         for(let li of this.li) {
             li.moveToTarget();
-        }
-        // DEBUG: Simply assert
-        for(let c of this.li) {
-            if(c.getPos() != c.getTarget()) {
-                console.error(`Element ${c.hash} has a position of ${c.getPos()}, but should be at ${c.getTarget()}!`);
-            }
         }
     }
 

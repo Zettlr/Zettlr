@@ -1,0 +1,230 @@
+// Class for a single Tree-View Directory. Can contain recursively other dirs.
+
+function TreeError(msg) {
+    this.name = 'TreeView Error';
+    this.message = msg;
+};
+
+class TreeView
+{
+    constructor(parent, paths, isRoot = false)
+    {
+        if(paths == null) {
+            throw new TreeError('Paths must be given on instantiation!');
+        }
+
+        this.parent = parent;
+        this.root = isRoot;
+        this.paths = paths;
+        this.hash = this.paths.hash;
+        this.children = [];
+        this.ul = $('<ul>').addClass('collapsed');
+        this.indicator = $('<span>').addClass('collapse-indicator');
+
+        if(!this.isRoot()) {
+            this.ul.css('padding-left', '1em');
+        }
+
+        this.dir = $('<li>').attr('data-hash', this.paths.hash).attr('title', this.paths.name);
+
+        this.dir.append('<span>').text(this.paths.name);
+        if(this.isRoot()) {
+            // TODO: Somewhere here jQuery spits out max Stack Call exceeded.
+            // I assume an infinite loop
+            this.dir.attr('id', 'root');
+        }
+        this.ul.append(this.dir);
+
+        // Append to DOM
+        this.parent.getContainer().append(this.ul);
+
+        // Add children etc.
+        this.refresh(this.paths);
+    }
+
+    activate()
+    {
+        // Activate event listeners
+        this.dir.on('click', () => {
+            // Request the selection of a new directory
+            this.parent.requestDir(this.hash);
+        });
+
+        // Also make draggable
+        if(!this.isRoot()) {
+            this.dir.draggable({
+                'cursorAt': { 'top': 0, 'left': 0},
+                'scroll': false,
+                'helper': function() {
+                    return $(this)
+                    .clone()
+                    .appendTo('body')
+                    .css('z-index', 1000)
+                    .css('height', $(this).innerHeight())
+                    .css('width', $(this).innerWidth())
+                    .css('background-color', $(this).css('background-color'))
+                    .css('color', $(this).css('color'))
+                    .css('font-family', $(this).css('font-family'))
+                    .css('padding', $(this).css('padding'))
+                    .css('margin', $(this).css('margin'))
+                    .css('list-style-type', $(this).css('list-style-type'));
+                },
+                'revert': "invalid", // Only revert if target was invalid
+                'revertDuration': 200,
+                'distance': 5
+            });
+        }
+        // Also make droppable
+        this.dir.droppable({
+            'accept': 'li',
+            'tolerance': 'pointer', // The pointer must be over the droppable
+            'drop': (e, ui) => {
+                this.dir.removeClass('highlight');
+                // requestMove: From, to
+                this.parent.requestMove(ui.draggable.attr('data-hash'), this.hash);
+            },
+            'over': (e, ui) => {
+                this.dir.addClass('highlight');
+            },
+            'out': (e, ui) => {
+                this.dir.removeClass('highlight');
+            }
+        });
+    }
+
+    uncollapse()
+    {
+        this.ul.removeClass('collapsed');
+        this.parent.uncollapse();
+    }
+
+    select(hash)
+    {
+        if(this.hash == hash) {
+            this.dir.addClass('selected');
+            this.uncollapse();
+            // this.parent.uncollapse();
+        } else {
+            for(let c of this.children) {
+                c.select(hash);
+            }
+        }
+    }
+
+    deselect()
+    {
+        if(this.isSelected()) { this.dir.removeClass('selected'); }
+        for(let c of this.children) { c.deselect(); }
+    }
+
+    refresh(p)
+    {
+        if(p == null) {
+            return;
+        }
+        this.paths = p;
+        this.merge(p);
+
+        // Update if necessary
+        if(this.children.length > 0) {
+            this.dir.prepend(this.indicator);
+            this.indicator.on('click', (e) => {
+                // Prevent to "bubble" event to parent, because this would "click"
+                // it, retrieving another dir
+                e.stopPropagation();
+                this.toggleCollapse();
+            });
+        } else {
+            this.indicator.detach();
+        }
+    }
+
+    merge(nData)
+    {
+        // First pre-allocate the target array
+        let l = 0;
+        for(let x of nData.children) {
+            if(x.type == 'directory') {
+                l++;
+            }
+        }
+        let target = new Array(l);
+
+        // Second detach all directories that are no longer present
+        for(let dir of this.children) {
+            let found = false;
+            console.log(`Going through ${dir.paths.name}`);
+            for(let subdir of nData.children) {
+                if(subdir.hash == dir.hash) {
+                    found = true;
+                }
+            }
+            if(!found) {
+                dir.detach();
+            }
+        }
+
+        // Then iterate over the paths object
+        for(let i in nData.children) {
+            // First lets search if we already got this element.
+            let found = null;
+            for(let dir of this.children) {
+                if(nData.children[i].hash == dir.hash) {
+                    found = dir;
+                    break;
+                }
+                if(found != null) {
+                    break; // Break immediately
+                }
+            }
+
+            if(found != null) {
+                target[i] = this.children[this.children.indexOf(found)];
+                // Also update if necessary
+                target[i].refresh(nData.children[i]);
+            } else if(nData.children[i].type == 'directory') {
+                // Not found -> insert. The items will be inserted immediately
+                // at the end of the list.
+                target[i] = new TreeView(this, nData.children[i]);
+            }
+
+            // Save the target position
+            target[i].setTarget(i);
+        }
+
+        // Swap the old list with the new
+        this.children = target;
+
+        // Rearrange as necessary
+        for(let dir of this.children) {
+            dir.moveToTarget();
+        }
+    }
+
+    setTarget(i) { this.target = i; }
+    detach() { this.ul.detach(); }
+    moveToTarget()
+    {
+        if(this.ul.index() == this.target) {
+            return;
+        } else if(this.target == 0) {
+            this.ul.insertBefore(this.parent.getContainer().find('ul')[0]);
+        } else {
+            this.elem.insertAfter(this.parent.getContainer().find('ul')[this.target-1]);
+        }
+    }
+
+    getContainer() { return this.ul; }
+
+    toggleCollapse() { this.ul.toggleClass('collapsed'); }
+
+    isRoot() { return this.root; }
+    isCollappsed() { return this.ul.hasClass('collapsed'); }
+    isSelected() { return this.dir.hasClass('selected'); }
+
+    // Easy bubble-up of the functions
+    requestMove(from, to) { this.parent.requestMove(from, to); }
+    requestDir(hash) { this.parent.requestDir(hash); }
+}
+
+module.exports = TreeView;

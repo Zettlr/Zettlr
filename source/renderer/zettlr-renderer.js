@@ -76,32 +76,38 @@ class ZettlrRenderer
             this.body.closeQuicklook();
             this.setCurrentDir(arg.content);
             this.paths = arg.content;
-            this.directories.newDirectoryList(arg.content);
-            this.preview.newFileList(arg.content);
+            this.directories.empty();
+            this.preview.empty();
+            this.directories.refresh();
+            this.preview.refresh();
             this.directories.select(arg.content.hash);
             break;
 
             case 'paths-update':
             // Update the paths
-            // IMPORTANT: Need to remove preview list potentially!
+            this.paths = arg.content;
+            this.directories.refresh();
+            this.preview.refresh();
             break;
 
             // DIRECTORIES
             case 'dir-list':
             // A directory was created or removed, so repaint.
-            this.directories.newDirectoryList(arg.content);
+            // this.directories.newDirectoryList(arg.content);
             this.paths = arg.content;
+            this.preview.refresh();
+            this.directories.refresh();
             break;
 
             case 'dir-set-current':
             // Received a new directory
             this.setCurrentDir(arg.content);
             this.directories.select(arg.content.hash);
+            this.preview.refresh();
             break;
 
             case 'dir-find':
             // User wants to search in current directory.
-            // this.preview.searchBar();
             this.toolbar.focusSearch();
             break;
 
@@ -144,7 +150,7 @@ class ZettlrRenderer
             case 'file-list':
             // We have received a new file list in arg
             // Set the current dir
-            this.preview.newFileList(arg.content);
+            this.preview.refresh();
             break;
 
             case 'file-set-current':
@@ -206,11 +212,13 @@ class ZettlrRenderer
             // Remove a file only from preview (watchdog)
             case 'file-pluck':
             // A file should be removed
-            this.preview.remove(arg.content);
+            // this.preview.remove(arg.content);
+            this.preview.refresh();
             break;
 
             case 'file-insert':
-            this.preview.insert(arg.content);
+            this.preview.refresh();
+            // this.preview.insert(arg.content);
             break;
 
             case 'file-delete':
@@ -505,110 +513,32 @@ class ZettlrRenderer
 
     // SEARCH FUNCTIONS
     // This class only acts as a pass-through
-    beginSearch(term)
-    {
-        this.preview.beginSearch(term);
-    }
+    beginSearch(term) { this.preview.beginSearch(term); }
+    searchProgress(curIndex, count) { this.toolbar.searchProgress(curIndex, count); }
+    endSearch() { this.toolbar.endSearch(); }
 
-    searchProgress(curIndex, count)
-    {
-        this.toolbar.searchProgress(curIndex, count);
-    }
-
-    endSearch()
-    {
-        this.toolbar.endSearch();
-    }
-
-    updateWordCount(words)
-    {
-        this.toolbar.updateWordCount(words);
-    }
-
-
+    updateWordCount(words) { this.toolbar.updateWordCount(words); }
     // Triggered by ZettlrDirectories - if user clicks on another dir
-    requestDir(hash)
-    {
-        // Ask main process for a new file list
-        this.ipc.send('get-file-list', hash);
-    }
 
-    requestMove(from, to)
-    {
-        // Ask main process for moving
-        this.ipc.send('request-move', { 'from': from, 'to': to });
-    }
-
+    requestDir(hash) { this.ipc.send('get-file-list', hash); }
+    requestMove(from, to) { this.ipc.send('request-move', { 'from': from, 'to': to }); }
     // Triggered by ZettlrPreview - if user clicks on another file
-    requestFile(hash)
-    {
-        // Ask main process for a file.
-        this.ipc.send('file-get', hash);
-    }
-
-    // Triggered by ZettlrEditor - if the content of editor changes.
-    setModified()
-    {
-        this.ipc.send('file-modified', {});
-    }
-
+    requestFile(hash) { this.ipc.send('file-get', hash); }
     // Triggered by ZettlrBody - user has entered a new file name and confirmed
-    requestNewFile(name, hash)
-    {
-        this.ipc.send('file-new', { 'name': name, 'hash': hash });
-    }
-
+    requestNewFile(name, hash) { this.ipc.send('file-new', { 'name': name, 'hash': hash }); }
     // Also triggered by ZettlrBody, only for directory
-    requestNewDir(name, hash)
-    {
-        this.ipc.send('dir-new', { 'name': name, 'hash': hash });
-    }
-
+    requestNewDir(name, hash) { this.ipc.send('dir-new', { 'name': name, 'hash': hash }); }
     // Also triggered by ZettlrBody on export
-    requestExport(hash, ext)
-    {
-        this.ipc.send('export', { 'hash': hash, 'ext': ext});
-    }
-
+    requestExport(hash, ext) { this.ipc.send('export', { 'hash': hash, 'ext': ext}); }
     // Triggered by ZettlrBody on DirRename
-    requestDirRename(val, hash)
-    {
-        this.ipc.send('dir-rename', { 'hash': hash, 'name': val });
-    }
-
+    requestDirRename(val, hash) { this.ipc.send('dir-rename', { 'hash': hash, 'name': val }); }
     // Triggered by ZettlrBody on FileRename
-    requestFileRename(val, hash)
-    {
-        this.ipc.send('file-rename', { 'hash': hash, 'name': val });
-    }
-
-    saveSettings(cfg)
-    {
-        this.ipc.send('update-config', cfg);
-    }
-
-    setCurrentFile(newfile)
-    {
-        this.currentFile = newfile;
-    }
-
-    setCurrentDir(newdir)
-    {
-        this.currentDir = newdir;
-    }
-
-    getCurrentFile()
-    {
-        return this.currentFile;
-    };
-
-    getCurrentDir()
-    {
-        return this.currentDir;
-    }
-
-    getLocale()
-    {
-        return this.lang;
-    }
+    requestFileRename(val, hash) { this.ipc.send('file-rename', { 'hash': hash, 'name': val }); }
+    saveSettings(cfg) { this.ipc.send('update-config', cfg); }
+    setCurrentFile(newfile) { this.currentFile = newfile; }
+    setCurrentDir(newdir) { this.currentDir = newdir; }
+    getCurrentFile() { return this.currentFile; }
+    getCurrentDir() { return this.currentDir; }
+    getLocale() { return this.lang; }
+    setModified() { this.ipc.send('file-modified', {}); }
 } // END CLASS
