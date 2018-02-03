@@ -20,7 +20,7 @@ class ZettlrRenderer
     {
         this.currentFile    = null;
         this.currentDir     = null;
-
+        this.paths          = null;
         this.lang           = 'en_US'; // Default fallback
 
         // Spellchecking vars
@@ -359,7 +359,11 @@ class ZettlrRenderer
     updatePaths(nData)
     {
         this.paths = nData;
-        this.setCurrentDir(this.findObject(this.getCurrentDir().hash));
+        if(this.getCurrentDir()) {
+            this.setCurrentDir(this.findObject(this.getCurrentDir().hash));
+        } else {
+            this.setCurrentDir(this.paths); // Reset
+        }
         if(this.getCurrentFile()) {
             this.setCurrentFile(this.findObject(this.getCurrentFile().hash));
         }

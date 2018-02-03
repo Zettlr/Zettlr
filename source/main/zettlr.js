@@ -121,6 +121,9 @@ class Zettlr
 
                     case 'unlinkDir':
                     if(d != null) {
+                        if(d == this.getCurrentDir()) {
+                            this.setCurrentDir(d.parent);
+                        }
                         d.remove();
                         this.ipc.send('notify', `Directory ${d.name} has been removed.`);
                     }
@@ -401,7 +404,6 @@ class Zettlr
         // Now send it back (the GUI should by itself filter out the files)
         if(obj != null && obj.isDirectory()) {
             this.setCurrentDir(obj);
-            this.ipc.send('dir-set-current', obj);
         }
         else {
             this.window.prompt({
@@ -545,7 +547,7 @@ class Zettlr
         }
         file.remove();
         this.ipc.send('paths-update', this.paths);
-        this.ipc.send('dir-set-current', this.getCurrentDir());
+        // this.ipc.send('dir-set-current', this.getCurrentDir()); DEBUG
     }
 
     // Remove current directory.
@@ -684,7 +686,6 @@ class Zettlr
             // Re-set current file in the client
             let nfile = dir.findFile({ 'hash': oldPath });
             this.setCurrentFile(nfile);
-            this.ipc.send('file-set-current', nfile);
         }
     }
 
@@ -761,8 +762,7 @@ class Zettlr
             // select it.
             this.setCurrentDir(to); // Current file is still correctly set
             this.ipc.send('paths-update', this.paths);
-            this.ipc.send('dir-set-current', to);
-            this.ipc.send('file-set-current', from);
+            this.ipc.send('file-set-current', from); // TODO: I _think_ this message is unnecessary.
             return;
         } else if((this.getCurrentFile() !== null)
         && (from.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
@@ -799,7 +799,6 @@ class Zettlr
             // Re-set current file in the client
             let nfile = from.findFile({ 'hash': newPath});
             this.setCurrentFile(nfile);
-            this.ipc.send('file-set-current', nfile);
         }
     }
 
@@ -843,6 +842,7 @@ class Zettlr
     {
         // Just create a new ZettlrDir. Garbage Collect will destroy the old.
         this.paths = new ZettlrDir(this, this.config.get('projectDir'));
+        this.resetCurrents();
     }
 
     // This function is called when the window is destroyed to remove pointers
@@ -908,18 +908,20 @@ class Zettlr
             this.window.setTitle(f.name);
         }
         this.currentFile = f;
+        this.ipc.send('file-set-current', f);
     }
 
     // Set current dir pointer
-    setCurrentDir(f)
+    setCurrentDir(d)
     {
-        if(f == null) {
+        if(d == null) {
             // Reset to project root
             this.currentDir = this.getPaths();
             return;
         }
         // Set the dir
-        this.currentDir = f;
+        this.currentDir = d;
+        this.ipc.send('dir-set-current', d);
     }
 
     setModified()
