@@ -4,12 +4,12 @@ const { formatDate } = require('../common/zettlr-helpers.js');
 
 class ListViewItem
 {
-    constructor(parent, fileobj, hidden = false)
+    constructor(parent, fileobj, snippets)
     {
         this.parent = parent;
         this.fileObj = fileobj;
         this.hash = this.fileObj.hash; // Associate for ease
-        this.hidden = hidden;
+        this.snippets = snippets;
         this.target = -1;
         // Create the element
         this.elem = $('<li>')
@@ -38,7 +38,7 @@ class ListViewItem
         }
 
         // Add class if necessary
-        if(hidden) {
+        if(!this.snippets) {
             this.elem.find('.snippet').first().addClass('hidden');
         }
 
@@ -120,7 +120,11 @@ class ListViewItem
     deselect()       { this.elem.removeClass('selected'); }
     isSelected()     { return this.elem.hasClass('selected'); }
 
-    toggleSnippets() { this.elem.find('.snippet').toggleClass('hidden'); }
+    toggleSnippets()
+    {
+        this.snippets = !this.snippet;
+        this.elem.find('.snippet').toggleClass('hidden');
+    }
 
     detach()         { this.elem.detach(); }
 

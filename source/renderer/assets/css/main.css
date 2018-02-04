@@ -755,6 +755,10 @@ html {
   content: "\f03e";
   display: inline;
 }
+#toolbar .button.share::before {
+  content: "\f1e0";
+  display: inline;
+}
 #toolbar .spacer {
   flex-grow: 5;
 }

@@ -6,13 +6,13 @@ const ListViewItem = require('./list-view-item.js');
 // Generate a list from a data-object
 class ListView
 {
-    constructor(parent, elem, snippetsHidden)
+    constructor(parent, elem, snippets)
     {
         this.parent = parent;
         this.element = elem; // For the key navigation
         this.container = $('<ul>').appendTo(this.element); // The only element our items should be involved with
         this.li = [];
-        this.snippets = true;
+        this.snippets = snippets;
         this.liSelected = null;
 
         // Activate arrow key navigation

@@ -143,9 +143,12 @@
 
 ## GUI and functionality
 
-(nothing here)
+- Fixed a small bug that did not remove the file list if the open directory was removed from the file system. Now, if the current directory is deleted, Zettlr will automatically select the parent directory.
+- Small fix to the translations.
+- Added a toolbar button that also triggers the export dialog.
+- Fixed an issue that prevented you from autocorrecting misspelled words.
 
 ## Under the hood
 
-- Massive rewrite of the logic behind the preview pane. Now only necessary changes are actually rendered (and not, as was the case until now, everything), which decreases the locking-potential of the application as well as the average energy impact A LOT. Additionally, now it is possible simply to spit out one updated paths-object from main to simply trigger a (possible) re-render.
+- Massive rewrite of the logic behind the preview pane. Now only necessary changes are actually re-rendered (and not, as was the case until now, everything), which decreases the locking-potential of the application as well as the average energy impact. Additionally, now it is possible simply to spit out one updated paths-object from main to simply trigger a (possible) re-render.
 - Also massive rewrite of the logic behind the tree view. The changes have the same effects as those in the preview pane.

@@ -9,7 +9,7 @@
         "type": "git",
         "url": "git://github.com/Zettlr/Zettlr.git"
     },
-    "version": "0.10.0-alpha",
+    "version": "0.10.0-beta",
     "description": "A powerful Markdown Editor with integrated tree view",
     "main": "./source/main.js",
     "postinstall": "electron-builder install-app-deps",

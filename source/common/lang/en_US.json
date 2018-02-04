@@ -94,7 +94,7 @@
         },
         "export": {
             "title": "Export file",
-            "message": "You are about to export <strong>%NAME%</strong>.",
+            "message": "You are about to export <strong>%NAME%.md</strong>.",
             "info": "Just double click on the filetype you want to export. The file will automatically be opened in your preferred app, from where you can save it wherever you want.",
             "alt_html": "Export as HTML",
             "alt_odt": "Export as ODT",

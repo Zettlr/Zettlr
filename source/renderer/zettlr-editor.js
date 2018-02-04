@@ -17,7 +17,7 @@ class ZettlrEditor
             },
             theme: 'zettlr',
             lineWiseCopyCut: false, // Don't copy/cut whole lines without selection
-            autofocus: false, // Shouldn't be bad
+            autofocus: false,
             dragDrop: false, // for now - REACTIVATE IN LATER PHASE
             lineWrapping: true,
             autoCloseBrackets: true, // Autoclose brackets and quotes
@@ -157,15 +157,20 @@ class ZettlrEditor
             return;
         }
 
+        console.log(`Selecting word under cursor...`);
+
         let cur = this.cm.getCursor();
         let sel = this.cm.findWordAt(cur);
         this.cm.setSelection(sel.anchor, sel.head);
+
+        console.log(`Selected ${this.cm.getSelection()}!`);
     }
 
     // Same -- currently only gets called by context menu
     replaceWord(word)
     {
-        if(this.cm.somethingSelected()) {
+        if(!this.cm.somethingSelected()) {
+            // We obviously need a selection to replace
             return;
         }
 

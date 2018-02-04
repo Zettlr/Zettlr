@@ -94,7 +94,7 @@
         },
         "export": {
             "title": "Exporter le fichier",
-            "message": "Tu veux exporter le fichier <strong>%NAME%</strong>.",
+            "message": "Tu veux exporter le fichier <strong>%NAME%.md</strong>.",
             "info": "Faire un double-clic à le format, à qui tu veux exporter le fichier. Le fichier ouvrirai dans le programme standard, de qui tu peut enregistrer le fichier.",
             "alt_html": "Exporter dans HTML",
             "alt_odt": "Exporter dans ODT",

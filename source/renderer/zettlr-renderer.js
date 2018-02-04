@@ -114,7 +114,10 @@ class ZettlrRenderer
                 // Rename a dir based on a hash -> find it
                 this.body.requestNewDirName(this.findObject(arg.content.hash));
             } else if(this.getCurrentDir() != null) {
-                this.body.requestNewDirName(this.getCurrentDir());
+                // Root means the parent has no type property.
+                if(this.getCurrentDir().parent.hasOwnProperty('type')) {
+                    this.body.requestNewDirName(this.getCurrentDir());
+                }
             }
             break;
 
