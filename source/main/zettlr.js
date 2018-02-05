@@ -22,6 +22,7 @@ const ZettlrConfig                  = require('./zettlr-config.js');
 const ZettlrDir                     = require('./zettlr-dir.js');
 const ZettlrWatchdog                = require('./zettlr-watchdog.js');
 const {i18n, trans}                 = require('../common/lang/i18n.js');
+const {hash}                        = require('../common/zettlr-helpers.js');
 
 class Zettlr
 {

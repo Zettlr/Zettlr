@@ -19,10 +19,10 @@ function sort(arr)
 {
     // First sort through children array (necessary if new children were added)
     arr.sort((a, b) => {
-        // Negative return: a is smaller b
+        // Negative return: a is smaller b (case insensitive)
         if(a.name < b.name) {
             return -1;
-        } else if(a.name > b.name) {
+        } else if(a.name.toLowerCase() > b.name.toLowerCase()) {
             return 1;
         } else {
             return 0;

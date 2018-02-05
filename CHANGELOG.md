@@ -147,6 +147,9 @@
 - Small fix to the translations.
 - Added a toolbar button that also triggers the export dialog.
 - Fixed an issue that prevented you from autocorrecting misspelled words.
+- Fixed the sorting of directories (now case insensitive)
+- Fixed an error that didn't update the ID of a file on renaming
+- Fixed an issue that threw errors sometimes while moving directories
 
 ## Under the hood
 

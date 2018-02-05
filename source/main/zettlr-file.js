@@ -159,6 +159,7 @@ class ZettlrFile
         fs.renameSync(this.path, newpath);
         // Remove old file
         this.path = newpath;
+        this.hash = hash(this.path);
 
         // Let the parent sort itself again to reflect possible changes in order.
         this.parent.sort();
