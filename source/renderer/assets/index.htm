@@ -7,50 +7,20 @@
     <!-- Include main CSS -->
     <link rel="stylesheet" href="css/main.css">
 
-    <!-- Codemirror theme -->
-    <link rel="stylesheet" href="codemirror/cm.css">
+    <!-- Codemirror CSS files: Codemirror, Dialog and Zettlr Theme -->
+    <link rel="stylesheet" href="../../node_modules/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="../../node_modules/codemirror/addon/dialog/dialog.css">
     <link rel="stylesheet" href="css/theme-zettlr.css">
-    <link rel="stylesheet" href="codemirror/cm-plugin-dialog.css">
 
     <!-- And now the JS -->
     <!-- Hack for recognizing jquery (thanks to https://stackoverflow.com/a/37480521/8651046)-->
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
-    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../../node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 
     <!-- Include the main renderer class -->
     <script typye="text/javascript" src="../zettlr-renderer.js"></script>
-
-    <!-- CODEMIRROR -->
-    <script src="codemirror/cm.js"></script>
-    <!-- Fix for markdown mode -->
-    <script src="codemirror/cm-plugin-overlay.js"></script>
-    <!-- Automatic continuation of markdown lists -->
-    <script src="codemirror/cm-plugin-continuelist.js"></script>
-    <!-- Automatic indentation / unindentation of lists -->
-    <script src="codemirror/cm-plugin-indentlist.js"></script>
-
-    <!-- Trigger searches on the current doc -->
-    <script src="codemirror/cm-plugin-search.js"></script>
-    <script src="codemirror/cm-plugin-searchcursor.js"></script>
-    <script src="codemirror/cm-plugin-jump-to-line.js"></script>
-
-    <!-- Needed for better search dialog -->
-    <script src="codemirror/cm-plugin-dialog.js"></script>
-
-    <!-- Automatically close brackets and quotes -->
-    <script src="codemirror/cm-plugin-closebrackets.js"></script>
-
-    <!-- My own plugins: Markdown shortcuts, footnotes and spell checking -->
-    <script src="codemirror/zettlr-plugin-markdown-shortcuts.js"></script>
-    <script src="codemirror/zettlr-plugin-spellchecker.js"></script>
-    <script src="codemirror/zettlr-plugin-footnotes.js"></script>
-
-    <!-- Finally the markdown mode -->
-    <script src="codemirror/cm-mode-markdown.js"></script>
-    <!-- ... with GitHub Flavored addon -->
-    <script src="codemirror/cm-mode-gfm.js"></script>
 
     <!-- Hack for jQuery (part 2) -->
     <script>if (window.module) module = window.module;</script>
@@ -92,6 +62,12 @@
             <div class="button insert-fn"     data-command="cm-command"       data-content="insertFootnote"></div>
             <div class="button remove-fn"     data-command="cm-command"       data-content="removeFootnote"></div>
             <div class="file-info"></div>
+            <div class="button pomodoro"      data-command="pomodoro"         data-content="{}">
+                <svg width="16" height="16" viewBox="0 0 20 20">
+                    <circle class="pomodoro-meter" cx="10" cy="10" r="7" stroke-width="6" />
+                    <circle class="pomodoro-value" cx="10" cy="10" r="7" stroke-width="6" />
+                </svg>
+            </div>
         </div>
 
         <!-- First: Pane for directories -->

@@ -1,5 +1,27 @@
 /* THIS CLASS CONTROLS THE CODEMIRROR EDITOR */
 
+// First codemirror addons
+require('codemirror/addon/mode/overlay');
+require('codemirror/addon/edit/continuelist');
+require('codemirror/addon/edit/indentlist');
+require('codemirror/addon/search/search');
+require('codemirror/addon/search/searchcursor');
+require('codemirror/addon/search/jump-to-line');
+require('codemirror/addon/dialog/dialog.js');
+require('codemirror/addon/edit/closebrackets');
+
+// Modes
+require('codemirror/mode/markdown/markdown');
+require('codemirror/mode/gfm/gfm');
+
+// Zettlr specific addons
+require('./assets/codemirror/zettlr-plugin-markdown-shortcuts.js');
+require('./assets/codemirror/zettlr-plugin-spellchecker.js');
+require('./assets/codemirror/zettlr-plugin-footnotes.js');
+
+// Finally CodeMirror itself
+const CodeMirror = require('codemirror');
+
 class ZettlrEditor
 {
     constructor(parent)

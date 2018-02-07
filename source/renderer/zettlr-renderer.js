@@ -8,6 +8,8 @@ const ZettlrEditor      = require('../zettlr-editor.js');
 const ZettlrBody        = require('../zettlr-body.js');
 const ZettlrOverlay     = require('../zettlr-overlay.js');
 const ZettlrToolbar     = require('../zettlr-toolbar.js');
+const ZettlrPomodoro    = require('../zettlr-pomodoro.js');
+
 const Typo              = require('typo-js');
 const remote            = require('electron').remote;
 
@@ -45,6 +47,7 @@ class ZettlrRenderer
         this.body           = new ZettlrBody(this);
         this.overlay        = new ZettlrOverlay(this);
         this.toolbar        = new ZettlrToolbar(this);
+        this.pomodoro       = new ZettlrPomodoro(this, $('div.button.pomodoro'));
     }
 
     init()
@@ -335,6 +338,13 @@ class ZettlrRenderer
 
             case 'notify':
             this.body.notify(arg.content);
+            break;
+
+            // Pomodoro timer toggle
+            case 'pomodoro':
+            if(this.pomodoro.isRunning()) {
+                this.pomodoro.stop();
+            } else { this.pomodoro.start(); }
             break;
 
             default:

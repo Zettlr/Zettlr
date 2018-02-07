@@ -759,6 +759,29 @@ html {
   content: "\f1e0";
   display: inline;
 }
+#toolbar .button.pomodoro {
+  padding: 2px;
+  background-image: none;
+  border: none;
+}
+#toolbar .button.pomodoro:hover {
+  background-color: transparent;
+}
+#toolbar .button.pomodoro svg {
+  transform: rotate(-90deg);
+  display: inherit;
+  margin: 0 auto;
+}
+#toolbar .button.pomodoro svg .pomodoro-meter,
+#toolbar .button.pomodoro svg .pomodoro-value {
+  fill: none;
+}
+#toolbar .button.pomodoro svg .pomodoro-meter {
+  stroke: #c8c8c8;
+}
+#toolbar .button.pomodoro svg .pomodoro-value {
+  stroke-linecap: square;
+}
 #toolbar .spacer {
   flex-grow: 5;
 }
@@ -811,6 +834,15 @@ html {
 #toolbar.dark .button:hover {
   background-image: none;
   background-color: #646464;
+}
+#toolbar.dark .button.pomodoro {
+  background-image: none;
+}
+#toolbar.dark .button.pomodoro:hover {
+  background-color: transparent;
+}
+#toolbar.dark .button.pomodoro .pomodoro-meter {
+  stroke: #c8c8c8;
 }
 #toolbar.dark .searchbar input {
   background-color: #505050;

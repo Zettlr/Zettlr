@@ -3,6 +3,22 @@
 const fs = require('fs');
 const path = require('path');
 
+// CodeMirror related includes
+// First codemirror addons
+require('codemirror/addon/mode/overlay');
+require('codemirror/addon/edit/continuelist');
+require('codemirror/addon/edit/indentlist');
+require('codemirror/addon/search/search');
+require('codemirror/addon/search/searchcursor');
+require('codemirror/addon/search/jump-to-line');
+require('codemirror/addon/dialog/dialog.js');
+require('codemirror/addon/edit/closebrackets');
+
+// Modes
+require('codemirror/mode/markdown/markdown');
+require('codemirror/mode/gfm/gfm');
+const CodeMirror = require('codemirror');
+
 class ZettlrQuicklook
 {
     constructor(parent, file, darkTheme)

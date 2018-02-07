@@ -115,6 +115,36 @@
             content:"\f1e0";
             display:inline;
         }
+
+        // Pomodoro meter
+        &.pomodoro {
+            padding:2px;
+            // Don't display as button
+            background-image:none;
+            border:none;
+            &:hover {
+                background-color:transparent;
+            }
+
+            svg {
+                transform: rotate(-90deg);
+                display: inherit;
+                margin: 0 auto;
+
+                .pomodoro-meter,
+                .pomodoro-value {
+                    fill: none;
+                }
+
+                .pomodoro-meter {
+                    stroke: @grey-2;
+                }
+
+                .pomodoro-value {
+                    stroke-linecap: square;
+                }
+            }
+        }
     }
 
     .spacer {
@@ -175,6 +205,18 @@
             &:hover {
                 background-image: none;
                 background-color: @grey-4;
+            }
+
+            &.pomodoro {
+                background-image:none;
+
+                &:hover {
+                    background-color:transparent;
+                }
+
+                .pomodoro-meter {
+                    stroke: @grey-2;
+                }
             }
         }
 

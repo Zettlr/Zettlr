@@ -27,12 +27,13 @@ class ZettlrToolbar
 
         // Activate buttons
         // -- so beautifully DRY <3
-        this.div.find('.button').on('click', (e) => {
-            let elem = $(e.target);
+        let self = this;
+        this.div.find('.button').on('click', function(e) {
+            let elem = $(this);
             let command = elem.attr('data-command') || 'unknown-command';
             let content = elem.attr('data-content') || {};
 
-            this.parent.handleEvent(null, {
+            self.parent.handleEvent(null, {
                 'command': command,
                 'content': content
             });
