@@ -31,6 +31,7 @@ class ZettlrEditor
         this.fntooltipbubble = $('<div>').addClass('fn-panel');
         this.positions = []; // Saves the positions of the editor
         this.currentHash = null; // Needed for positions
+        this.words = 0;
 
         this.cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
             mode: {
@@ -69,7 +70,7 @@ class ZettlrEditor
             // set the window modified
 
             // Update wordcount
-            this.parent.updateWordCount(this.cm.getValue().split(' ').length);
+            this.parent.updateWordCount(this.getWordCount());
 
             if(changeObj.origin != "setValue") {
                 // If origin is setValue this means that the contents have been
@@ -145,6 +146,7 @@ class ZettlrEditor
 
         this.cm.setValue(file.content);
         this.currentHash = 'hash' + file.hash;
+        this.words = this.getWordCount();
 
         // Mark clean, because now we got a new (and therefore unmodified) file
         this.cm.markClean();
@@ -167,6 +169,20 @@ class ZettlrEditor
         this.cm.setValue('');
         this.cm.markClean();
         this.cm.clearHistory();
+        this.words = 0;
+    }
+
+    getWordCount()
+    {
+        return this.cm.getValue().split(' ').length;
+    }
+
+    getWrittenWords()
+    {
+        // Return the additional written words
+        let cnt = this.getWordCount() - this.words;
+        this.words = this.getWordCount();
+        return cnt;
     }
 
     // Currently, this function is only called by the context menu class to

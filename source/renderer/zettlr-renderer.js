@@ -175,6 +175,7 @@ class ZettlrRenderer
                 file = {};
             }
             file.content = this.editor.getValue();
+            file.wordcount = this.editor.getWrittenWords(); // For statistical purposes only =D
             this.ipc.send('file-save', file);
             break;
 

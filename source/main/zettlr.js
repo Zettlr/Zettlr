@@ -21,6 +21,7 @@ const ZettlrWindow                  = require('./zettlr-window.js');
 const ZettlrConfig                  = require('./zettlr-config.js');
 const ZettlrDir                     = require('./zettlr-dir.js');
 const ZettlrWatchdog                = require('./zettlr-watchdog.js');
+const ZettlrStats                   = require('./zettlr-stats.js');
 const {i18n, trans}                 = require('../common/lang/i18n.js');
 const {hash}                        = require('../common/zettlr-helpers.js');
 
@@ -50,6 +51,9 @@ class Zettlr
 
         // set currentDir pointer to the root node.
         this.currentDir = this.paths;
+
+        // Statistics
+        this.stats = new ZettlrStats(this);
 
         // And the window.
         this.window = new ZettlrWindow(this);
@@ -149,6 +153,7 @@ class Zettlr
     shutdown()
     {
         this.config.save();
+        this.stats.save();
         this.watchdog.stop();
     }
 
@@ -864,6 +869,9 @@ class Zettlr
         }
 
         let cnt = file.content;
+
+        // Update word count
+        this.stats.updateWordCount(file.wordcount || 0);
 
         // This function saves a file to disk.
         // But: The hash is "null", if someone just
