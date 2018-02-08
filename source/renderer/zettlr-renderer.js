@@ -342,9 +342,7 @@ class ZettlrRenderer
 
             // Pomodoro timer toggle
             case 'pomodoro':
-            if(this.pomodoro.isRunning()) {
-                this.pomodoro.stop();
-            } else { this.pomodoro.start(); }
+            this.pomodoro.popup();
             break;
 
             default:

@@ -1,22 +1,20 @@
 // Controls the pomodoro timer
 
+const ZettlrPopup = require('./zettlr-popup.js');
+
+const {trans} = require('../common/lang/i18n.js');
+
 class ZettlrPomodoro
 {
     constructor(parent, container)
     {
         this.parent = parent;
-        this.container = container;
+        this.preferences = null;
 
         this.duration = {
             'task': 1500,
             'short': 300,
             'long': 1200
-        };
-
-        this.duration = {
-            'task': 10,
-            'short': 10,
-            'long': 10
         };
 
         // Color variables from resources/less/variables.less
@@ -40,7 +38,7 @@ class ZettlrPomodoro
         };
 
         this.running = false; // Is timer currently running?
-        this.playSound = true; // Play a sound each time a phase ends?
+        this.playSound = false; // Play a sound each time a phase ends?
 
         this.svg = $('#toolbar .button.pomodoro svg').first();
         this.progressMeter = $('.pomodoro-value');
@@ -48,8 +46,21 @@ class ZettlrPomodoro
 
         // For playing optional sound effects
         this.sound = new window.Audio();
-        this.sound.volume = 0.15;
+        this.sound.volume = 1;
         this.sound.src = `file://${__dirname}/assets/glass.ogg`;
+
+        // Preferences popup
+        this.form = $('<form>').prop('method', 'GET').prop('action', '#');
+        this.form.html(
+            `
+            <input type="number" style="color:${this.colors.task}" value="${this.duration.task/60}" name="task" min="1" max="100" required>
+            <input type="number" style="color:${this.colors.short}" value="${this.duration.short/60}" name="short" min="1" max="100" required>
+            <input type="number" style="color:${this.colors.long}" value="${this.duration.long/60}" name="long" min="1" max="100" required>
+            <input type="checkbox" name="mute" id="mute"><label for="mute">${trans('pomodoro.mute')}</label>
+            <input type="range" name="volume" min="0" max="100" value="${this.sound.volume*100}">
+            <input type="submit" value="${trans('pomodoro.start')}">
+            `
+        );
     }
 
     start()
@@ -63,12 +74,6 @@ class ZettlrPomodoro
 
         // Commence
         setTimeout(() => {this.progress();}, 1000);
-
-        // Start!
-        this.parent.handleEvent(null, {
-            'command': 'notify',
-            'content': `Let's begin with a first working phase!`
-        });
     }
 
     // This function progresses the meter every second
@@ -86,12 +91,6 @@ class ZettlrPomodoro
             if(this.phase.type === 'task') {
                 this.counter.task++;
 
-                // Display nice little notification
-                this.parent.handleEvent(null, {
-                    'command': 'notify',
-                    'content': `You've done ${this.counter.task} tasks! Now pause.`
-                });
-
                 if((this.counter.task % 4) === 0) {
                     // Long break every four tasks
                     this.phase.type = 'long';
@@ -107,12 +106,6 @@ class ZettlrPomodoro
                 // One of the pauses is over -> begin next task
                 this.counter[this.phase.type] = this.counter[this.phase.type]+1;
 
-                // Display nice little notification
-                this.parent.handleEvent(null, {
-                    'command': 'notify',
-                    'content': `Your ${this.phase.type} break is over! Continue with a work phase.`
-                });
-
                 this.phase.type = 'task';
                 this.phase.max = this.duration.task;
                 this.progressMeter.attr('stroke', this.colors.task);
@@ -122,6 +115,7 @@ class ZettlrPomodoro
                 this.sound.currentTime = 0;
                 this.sound.play();
             }
+            $('#pomodoro-phase-type').text(trans('pomodoro.phase.'+this.phase.type));
         }
 
         // Progress.
@@ -129,6 +123,12 @@ class ZettlrPomodoro
         var dashoffset = Math.PI * 14 * (1 - this.phase.cur/this.phase.max);
 
         this.progressMeter.attr('stroke-dashoffset', dashoffset);
+
+        let sec = ((this.phase.max-this.phase.cur)%60);
+        if(sec < 10) {
+            sec = '0' + sec;
+        }
+        $('#pomodoro-time-remaining').text(Math.floor((this.phase.max-this.phase.cur)/60) + ':' + sec);
 
         // Prepare next cycle
         this.phase.cur++;
@@ -143,12 +143,6 @@ class ZettlrPomodoro
         // Reset timer to none
         this.progressMeter.attr('stroke-dashoffset', this.progressMeter.attr('stroke-dasharray'));
 
-        // Display success notification
-        this.parent.handleEvent(null, {
-            'command': 'notify',
-            'content': `You have completed ${this.counter.task} tasks and had ${this.counter.short} short and ${this.counter.long} long breaks!`
-        });
-
         // Now reset counters
         this.counter = {
             'task': 0,
@@ -157,9 +151,71 @@ class ZettlrPomodoro
         };
     }
 
+    popup()
+    {
+        // Display the small settings popup
+        if(this.preferences == null) {
+            let targetX = this.progressMeter.offset().left + this.progressMeter.outerWidth()/2;
+            let targetY = this.progressMeter.offset().top + this.progressMeter.outerHeight();
+
+            if(!this.isRunning()) {
+                this.preferences = new ZettlrPopup(this, targetX, targetY, this.form, (form) => {
+                    // Callback
+                    this.preferences = null;
+                    if(!form) {
+                        // User has aborted
+                        return;
+                    }
+                    // 0 = task
+                    // 1 = Short
+                    // 2 = long
+                    // 3 = mute OR volume
+                    // 4 = volume if mute
+                    this.duration.task = form[0].value * 60;
+                    this.duration.short = form[1].value * 60;
+                    this.duration.long = form[2].value * 60;
+                    if(form[3].name == 'mute') {
+                        this.unmute();
+                        this.sound.volume = form[4].value / 100;
+                    } else {
+                        this.mute();
+                        this.sound.volume = form[3].value / 100;
+                    }
+                    // Now start
+                    this.start();
+                });
+            } else {
+                // Display information and a stop button
+                let sec = ((this.phase.max-this.phase.cur)%60);
+                if(sec < 10) {
+                    sec = '0' + sec;
+                }
+                let time = Math.floor((this.phase.max-this.phase.cur)/60) + ':' + sec;
+                this.preferences = new ZettlrPopup(this, targetX, targetY, $('<div>').html(
+                    `<p><span id="pomodoro-phase-type">${trans('pomodoro.phase.'+this.phase.type)}</span></p>
+                    <p><span id="pomodoro-time-remaining">${time}</span></p>
+                    <button id="pomodoro-stop-button">${trans('pomodoro.stop')}</button>`
+                ), (form) => {
+                    // Callback
+                    this.preferences = null;
+                });
+                $('#pomodoro-stop-button').on('click', (e) => {
+                    this.preferences.close();
+                    this.preferences = null;
+                    this.stop();
+                });
+            }
+        } else {
+            this.preferences.close();
+            this.preferences = null;
+        }
+    }
+
     // Helper
     isRunning() { return this.running; }
-    isMuted() { return !this.playSound; }
+    isMuted()   { return !this.playSound; }
+    mute()      { this.playSound = false; }
+    unmute()    { this.playSound = true; }
 }
 
 module.exports = ZettlrPomodoro;

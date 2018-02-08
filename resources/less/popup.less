@@ -1,0 +1,85 @@
+// Popup related css classes
+
+@arrow-size: 5px;
+
+.popup {
+    position:fixed;
+    background-color:rgba(0,0,0,.8);
+    color:white;
+    border-radius:2px;
+    max-width:200px; // Maximum width. Height is (potentially) indefinite.
+    max-height:100%;
+    overflow:hidden;
+
+    .arrow {
+        width:0;
+        height:0;
+        position:relative;
+
+        &.up {
+            border-left: @arrow-size solid transparent;
+            border-right: @arrow-size solid transparent;
+            border-bottom: @arrow-size solid rgba(0,0,0,.8);
+        }
+        &.down {
+            border-left: @arrow-size solid transparent;
+            border-right: @arrow-size solid transparent;
+            border-top: @arrow-size solid rgba(0,0,0,.8);
+        }
+        &.left {
+            border-top: @arrow-size solid transparent;
+            border-bottom: @arrow-size solid transparent;
+            border-right:@arrow-size solid rgba(0,0,0,.8);
+        }
+        &.right {
+            border-top: @arrow-size solid transparent;
+            border-bottom: @arrow-size solid transparent;
+            border-left: @arrow-size solid rgba(0,0,0,.8);
+        }
+    }
+
+    p {
+        margin:10px;
+        font-size:200%;
+        text-align:center;
+    }
+
+    button {
+        border:none;
+        font-size:200%;
+        width:100%;
+        background-color:rgba(0,0,0,1);
+        color:white;
+        padding:10px;
+        display:block;
+        text-align:center;
+    }
+
+    // Elements inside popups
+    form {
+        input {
+            background-color:rgba(0,0,0,1);
+            color:white;
+            padding:5px;
+            font-size:200%;
+            display:block;
+            border:none;
+            width:100%;
+            text-align:center;
+            &:focus {
+                outline:0;
+            }
+        }
+
+        input[type="checkbox"] {
+            display:inline-block;
+            margin:5px;
+            width:auto;
+        }
+
+        label {
+            display: inline-block;
+            margin:5px;
+        }
+    }
+}

@@ -12,6 +12,16 @@
         "find_placeholder": "Trouver…",
         "words": "%s mots"
     },
+    "pomodoro": {
+        "start": "Start",
+        "stop": "Stop",
+        "mute": "Ton",
+        "phase": {
+            "task": "Exercice",
+            "short": "Pause brève",
+            "long": "Pause longue"
+        }
+    },
     "menu": {
         "labels": {
             "file": "Fichier",

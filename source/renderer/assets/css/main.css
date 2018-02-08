@@ -864,3 +864,74 @@ html {
   border-radius: 3px;
   cursor: default;
 }
+.popup {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 2px;
+  max-width: 200px;
+  max-height: 100%;
+  overflow: hidden;
+}
+.popup .arrow {
+  width: 0;
+  height: 0;
+  position: relative;
+}
+.popup .arrow.up {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid rgba(0, 0, 0, 0.8);
+}
+.popup .arrow.down {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid rgba(0, 0, 0, 0.8);
+}
+.popup .arrow.left {
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 5px solid rgba(0, 0, 0, 0.8);
+}
+.popup .arrow.right {
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid rgba(0, 0, 0, 0.8);
+}
+.popup p {
+  margin: 10px;
+  font-size: 200%;
+  text-align: center;
+}
+.popup button {
+  border: none;
+  font-size: 200%;
+  width: 100%;
+  background-color: #000000;
+  color: white;
+  padding: 10px;
+  display: block;
+  text-align: center;
+}
+.popup form input {
+  background-color: #000000;
+  color: white;
+  padding: 5px;
+  font-size: 200%;
+  display: block;
+  border: none;
+  width: 100%;
+  text-align: center;
+}
+.popup form input:focus {
+  outline: 0;
+}
+.popup form input[type="checkbox"] {
+  display: inline-block;
+  margin: 5px;
+  width: auto;
+}
+.popup form label {
+  display: inline-block;
+  margin: 5px;
+}

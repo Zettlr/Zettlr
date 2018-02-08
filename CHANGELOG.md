@@ -165,3 +165,4 @@
 ## Under the hood
 
 - Included jQuery and CodeMirror as npm packages for easier updating
+- Added a `ZettlrPopup`-class for easy displaying of small forms and info texts, this will replace most `ZettlrDialog`-forms, because we don't need such a massive dialog box for a single text field (or something else)
