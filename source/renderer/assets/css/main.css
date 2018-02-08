@@ -5,6 +5,34 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: 'Lato';
+  src: url('../lato/Lato-Light.woff2') format('woff2');
+  font-style: normal;
+  font-weight: normal;
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: 'Lato';
+  src: url('../lato/Lato-LightItalic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: normal;
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: 'Lato';
+  src: url('../lato/Lato-Heavy.woff2') format('woff2');
+  font-style: normal;
+  font-weight: bold;
+  text-rendering: optimizeLegibility;
+}
+@font-face {
+  font-family: 'Lato';
+  src: url('../lato/Lato-HeavyItalic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: bold;
+  text-rendering: optimizeLegibility;
+}
 * {
   margin: 0;
   box-sizing: border-box;
@@ -14,7 +42,7 @@ body {
   box-sizing: border-box;
 }
 html {
-  font-family: 'Raleway', 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
+  font-family: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
   font-size: 1em;
 }
 #container.blur {
@@ -871,7 +899,6 @@ html {
   border-radius: 2px;
   max-width: 200px;
   max-height: 100%;
-  overflow: hidden;
 }
 .popup .arrow {
   width: 0;

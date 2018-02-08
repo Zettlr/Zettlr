@@ -161,6 +161,7 @@
 ## GUI and functionality
 
 - Introducing a **pomodoro** counter! Now you can simply click on the circle at the right end of the toolbar to start a pomodoro counter. It alternates task-phases of 25 Minutes with short breaks of five minutes and, after every fourth task-phase, a longer break of twenty minutes. It also notifies you when a phase is over with a small notification and a soft sound. Head over to [the official website](https://francescocirillo.com/pages/pomodoro-technique) to get to know what this technique is about.
+- Switched to default Lato font on all platforms (included the font into the app itself)
 
 ## Under the hood
 
