@@ -1,23 +1,23 @@
 {
     "name": "zettlr",
     "homepage": "https://www.zettlr.com",
-    "author": {
-        "name": "Hendrik Erz",
-        "email": "hendrik.erz@zettlr.com"
-    },
+    "author": "Hendrik Erz <zettlr@mailbox.org>",
     "repository": {
         "type": "git",
         "url": "git://github.com/Zettlr/Zettlr.git"
     },
-    "version": "0.10.0",
+    "version": "0.11.0",
     "description": "A powerful Markdown Editor with integrated tree view",
     "main": "./source/main.js",
-    "postinstall": "electron-builder install-app-deps",
     "scripts": {
+        "postinstall": "electron-builder install-app-deps",
         "start": "electron .",
-        "dist": "electron-builder -mwl",
-        "build": "electron-builder",
-        "less": "lessc resources/less/main.less source/renderer/assets/css/main.css && lessc resources/less/theme-zettlr.less source/renderer/assets/css/theme-zettlr.css"
+        "build:quick": "electron-builder --dir",
+        "release:this": "electron-builder",
+        "release:mac": "electron-builder --mac dmg",
+        "release:win": "electron-builder --win nsis",
+        "release:linux": "electron-builder --linux deb rpm",
+        "less": "node scripts/less.js"
     },
     "build": {
         "appId": "com.zettlr.www",
@@ -58,9 +58,9 @@
             ]
         },
         "linux": {
-            "target": "zip",
+            "target": "deb",
             "synopsis": "Markdown editor",
-            "category": "Science",
+            "category": "Office",
             "icon": "resources/icons/png",
             "asar": true,
             "extraResources": [
@@ -82,22 +82,26 @@
             "perMachine": false,
             "allowElevation": true,
             "allowToChangeInstallationDirectory": true
-        }
+        },
+        "deb": {
+            "priority": "optional"
+        },
+        "rpm": {}
     },
     "license": "MIT",
     "dependencies": {
-        "chokidar": "^2.0.0",
+        "chokidar": "^2.0.1",
         "codemirror": "^5.34.0",
         "codemirror-markdown-list-autoindent": "^1.0.1",
         "command-exists": "^1.2.2",
         "jquery": "^3.3.1",
         "sanitize-filename": "^1.6.1",
         "typo": "^1.0.6",
-        "typo-js": "^1.0.3",
-        "util": "^0.10.3"
+        "typo-js": "^1.0.3"
     },
     "devDependencies": {
-        "electron": "^1.7.11",
-        "electron-builder": "^19.55.1"
+        "electron": "^1.8.2",
+        "electron-builder": "^19.56.0",
+        "less": "^2.7.3"
     }
 }

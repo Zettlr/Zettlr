@@ -167,3 +167,12 @@
 
 - Included jQuery and CodeMirror as npm packages for easier updating
 - Added a `ZettlrPopup`-class for easy displaying of small forms and info texts, this will replace most `ZettlrDialog`-forms, because we don't need such a massive dialog box for a single text field (or something else)
+- Updated electron to version `1.8.2`, updated other dependencies.
+- Updated scripts section. Now the available commands are:
+    - `npm run start`: Start the development environment
+    - `npm run less`: Same command then previous, now only with more output
+    - `npm run build:quick`: Quick'n'dirty unpacked release for current platform
+    - `npm run release:this`: Build and pack the app for the current platform
+    - `npm run release:mac`: Build and pack for macOS x64 as DMG
+    - `npm run release:win`: Build and pack for Win x64 as NSIS installer
+    - `npm run release:linux`: Build and pack for Linux x64 both as deb and rpm
