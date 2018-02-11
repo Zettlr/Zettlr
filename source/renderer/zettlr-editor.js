@@ -32,6 +32,7 @@ class ZettlrEditor
         this.positions = []; // Saves the positions of the editor
         this.currentHash = null; // Needed for positions
         this.words = 0;
+        this.fontsize = 100;
 
         this.cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
             mode: {
@@ -126,11 +127,6 @@ class ZettlrEditor
         });
 
         this.cm.refresh();
-    }
-
-    runCommand(cmd)
-    {
-        this.cm.execCommand(cmd);
     }
 
     // Open a new file
@@ -271,6 +267,16 @@ class ZettlrEditor
         this.cm.refresh();
     }
 
+    zoom(direction) {
+        if(direction === 0) {
+            this.fontsize = 100;
+        } else {
+            this.fontsize = this.fontsize + 10*direction
+        }
+        this.div.css('font-size', this.fontsize + '%');
+        this.cm.refresh();
+    }
+
     // This message is triggered by the renderer process when the user selects
     // the menu item.
     openFind() { this.cm.execCommand("findPersistent"); }
@@ -278,6 +284,8 @@ class ZettlrEditor
     markClean() { this.cm.markClean(); }
     // Is the editor unmodified?
     isClean() { return this.cm.doc.isClean(); }
+
+    runCommand(cmd) { this.cm.execCommand(cmd); }
 }
 
 module.exports = ZettlrEditor;

@@ -711,9 +711,9 @@ class Zettlr
             // Adapt window title
             let title = this.window.getTitle();
             if(title.indexOf('*') > -1) {
-                title = "*" + this.getCurrentFile().name + " — Zettlr";
+                title = "*" + this.getCurrentFile().name;
             } else {
-                title = this.getCurrentFile().name + " — Zettlr";
+                title = this.getCurrentFile().name;
             }
 
             this.window.setTitle(title);
@@ -742,11 +742,21 @@ class Zettlr
         let to = this.paths.findDir({ 'hash': arg.to });
 
         // Let's check that:
-        if(from.isDirectory() && from.contains(to)) {
+        if(from.contains(to)) {
             this.window.prompt({
                 type: 'error',
                 title: trans('system.error.move_into_child_title'),
                 message: trans('system.error.move_into_child_message')
+            });
+            return;
+        }
+
+        // Now check if there already is a directory/file with the same name
+        if(to.hasChild({ 'name': from.name })) {
+            this.window.prompt({
+                type: 'error',
+                title: trans('system.error.already_exists_title'),
+                message: trans('system.error.already_exists_message', from.name)
             });
             return;
         }

@@ -5,6 +5,8 @@
 .popup {
     position:fixed;
     background-color:rgba(0,0,0,.8);
+    border-radius:4px;
+    box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.75);
     color:white;
     border-radius:2px;
     max-width:200px; // Maximum width. Height is (potentially) indefinite.
@@ -13,7 +15,7 @@
     .arrow {
         width:0;
         height:0;
-        position:relative;
+        position:absolute;
 
         &.up {
             border-left: @arrow-size solid transparent;
@@ -68,6 +70,11 @@
             &:focus {
                 outline:0;
             }
+
+            &.small {
+                font-size:140%;
+                text-align:left;
+            }
         }
 
         input[type="checkbox"] {
@@ -79,6 +86,49 @@
         label {
             display: inline-block;
             margin:5px;
+        }
+    }
+
+    // Share buttons
+    .btn-share {
+        display:inline-block;
+        width:46px;
+        height:46px;
+        line-height:50px;
+        text-align:center;
+        transition:0.2s all ease;
+        cursor:default;
+
+        &.htm {
+            color:rgba(78, 175, 87, 1); /* W3C color code */
+            &:hover {
+                background-color:rgba(78, 175, 87, 1);
+                color:white;
+            }
+        }
+
+        &.docx {
+            color:rgba(45, 88, 151, 1); /* MS Word color code */
+            &:hover {
+                background-color:rgba(45, 88, 151, 1);
+                color:white;
+            }
+        }
+
+        &.odt {
+            color:white; /* Is white even a color? */
+            &:hover {
+                background-color:white;
+                color:black;
+            }
+        }
+
+        &.pdf {
+            color:rgba(253, 48, 26, 1); /* Adobe reader PDF color code */
+            &:hover {
+                background-color:rgba(253, 48, 26, 1);
+                color:black;
+            }
         }
     }
 }

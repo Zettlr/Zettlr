@@ -90,22 +90,13 @@
             "no_template": "N'été trouver pas le modèle du dialogue '%s'!"
         },
         "dir_new": {
-            "title": "Créer un dossier",
-            "message": "Entrer un nom du dossier",
-            "info": "Le dossier serai créer dans le dossier <strong>%PATH%</strong>.",
             "placeholder": "Le nom du dossier",
             "value": "Innommé"
         },
         "dir_rename": {
-            "title": "Renommer le dossier",
-            "message": "Entrer un nom nouveau pour le dossier",
-            "info": "Le dossier <strong>%PATH%</strong> et touts fichiers dans il serai déplaces.",
             "placeholder": "Le nom du dossier"
         },
         "export": {
-            "title": "Exporter le fichier",
-            "message": "Tu veux exporter le fichier <strong>%NAME%.md</strong>.",
-            "info": "Faire un double-clic à le format, à qui tu veux exporter le fichier. Le fichier ouvrirai dans le programme standard, de qui tu peut enregistrer le fichier.",
             "alt_html": "Exporter dans HTML",
             "alt_odt": "Exporter dans ODT",
             "alt_docx": "Exporter dans DOCX",
@@ -114,21 +105,17 @@
             "no_pandoc": "Il est impossible de trouver Pandoc, mais c'est essentiel pour exporter les fichiers. Installer une distribution de Pandoc pour enabler l'export. Il est gratuit et open source!"
         },
         "file_new": {
-            "title": "Créer un fichier",
-            "message": "Entrer un nom pour le fichier.",
-            "info": "Le fichier serai créer dans le dossier <strong>%PATH%</strong>.",
             "placeholder": "Le nom du fichier",
             "value": "Innommé"
         },
         "file_rename": {
-            "title": "Renommer le fichier",
-            "message": "Entrer un nom noveau pour le fichier.",
-            "info": "Le fichier dans <strong>%PATH%</strong> serai déplace.",
             "placeholder": "Le nom du fichier"
         },
         "preferences": {
             "title": "Paramètres",
-            "message": "Ici tu peut trouver les paramètres de l'app.",
+            "general": "Général",
+            "editor": "Editeur",
+            "advanced": "Paramètres elargi",
             "app_lang": {
                 "title": "La langue de l'app (<strong>Redémmarage indispensable</strong>)",
                 "de_DE": "L'Allemand (Allemangne)",
@@ -144,6 +131,7 @@
             "snippets": "Fragments du texte",
             "spellcheck": "Choisier les langues, pour quelles tu veux activer la correcteur orthographique. (<strong>Redémmarage indispensable!</strong>)",
             "spellcheck_warning": "<em>Attention:</em> Si le trop bibliothèques sont activer en même temps, il est possible, que Zettlr devenir lent. Tenter n'activer plus de trois bibliothèques.",
+            "debug": "Debug",
             "save": "Enregistrer",
             "cancel": "Annuler"
         }
@@ -169,7 +157,9 @@
             "remove_title": "Effacer réellement?",
             "remove_message": "Effacer %s réellement?",
             "move_into_child_title": "Impossible de déplacer le dossier",
-            "move_into_child_message": "Tu ne peut pas déplacer le dossier dans un sous-dossier"
+            "move_into_child_message": "Tu ne peut pas déplacer le dossier dans un sous-dossier",
+            "already_exists_title": "Impossible de déplacer le dossier ou le fichier",
+            "already_exists_message": "Le fichier ou le dossier %s existe déjà."
         },
         "save_changes_title": "Annuler des modifications?",
         "save_changes_message": "Le fichier contient modifications n'enregistrais pas. Annuler ou enregistrer?",

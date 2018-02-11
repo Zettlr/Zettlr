@@ -56,7 +56,10 @@ class ZettlrQuicklook
             handle: 'div.title',
             containment: 'document',
             cursor: '-webkit-grabbing',
-            stack: '.quicklook'
+            stack: '.quicklook',
+            stop: (e, ui) => {
+                this.cm.focus();
+            }
         });
 
         this.window.resizable({
@@ -67,10 +70,12 @@ class ZettlrQuicklook
             resize: (e, ui) => {
                 let bar = this.window.find('.title');
                 this.window.find('.body').css('height', (ui.size.height-bar.outerHeight()) + 'px');
+                this.cm.refresh();
             },
             stop: (e, ui) => {
                 // Refresh the editor to account for changes in the size.
                 this.cm.refresh();
+                this.cm.focus();
             }
         });
 
@@ -82,8 +87,6 @@ class ZettlrQuicklook
         this.window.find('.title').first().on('dblclick', (e) => {
             this.toggleWindow();
         });
-
-        // Listen for resizes on the main window and behave accordingly.
     }
 
     show()
@@ -135,6 +138,8 @@ class ZettlrQuicklook
                 'height',
                 (parseFloat(this.bodyHeight)-bar.outerHeight()) + 'px'
             );
+            this.window.find('.CodeMirror').css('display', 'block');
+            this.cm.refresh();
         } else {
             // Minimize
             this.window.addClass('minimize');
@@ -142,6 +147,7 @@ class ZettlrQuicklook
             this.window.find('.body').css('height', '0px');
             this.window.resizable('disable');
             this.window.css('height', '');
+            this.window.find('.CodeMirror').css('display', 'none');
         }
     }
 

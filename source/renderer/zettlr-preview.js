@@ -17,6 +17,11 @@ class ZettlrPreview
         this.hashes             = null;
         this.currentSearch      = null;
         this.currentSearchIndex = 0;
+
+        // Add event listener for ending search
+        $('.end-search').on('click', (e) => {
+            this.div.find('li').removeClass('hidden');
+        });
     }
 
     requestFile(hash)

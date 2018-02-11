@@ -21,8 +21,8 @@ class ZettlrPomodoro
         this.colors = {
             'meter': 'rgba(100, 100, 100, 1)',
             'task': 'rgba(240,  87, 52, 1)',
-            'short': 'rgba(247, 235, 159, 1)',
-            'long': 'rgba(200, 240, 170, 1)'
+            'short': 'rgba(197, 175,  32, 1)',
+            'long': 'rgba( 90, 170,  80, 1)'
         };
 
         this.phase = {
@@ -155,11 +155,9 @@ class ZettlrPomodoro
     {
         // Display the small settings popup
         if(this.preferences == null) {
-            let targetX = this.progressMeter.offset().left + this.progressMeter.outerWidth()/2;
-            let targetY = this.progressMeter.offset().top + this.progressMeter.outerHeight();
 
             if(!this.isRunning()) {
-                this.preferences = new ZettlrPopup(this, targetX, targetY, this.form, (form) => {
+                this.preferences = new ZettlrPopup(this, $('.button.pomodoro'), this.form, (form) => {
                     // Callback
                     this.preferences = null;
                     if(!form) {
@@ -191,7 +189,7 @@ class ZettlrPomodoro
                     sec = '0' + sec;
                 }
                 let time = Math.floor((this.phase.max-this.phase.cur)/60) + ':' + sec;
-                this.preferences = new ZettlrPopup(this, targetX, targetY, $('<div>').html(
+                this.preferences = new ZettlrPopup(this, $('.button.pomodoro'), $('<div>').html(
                     `<p><span id="pomodoro-phase-type">${trans('pomodoro.phase.'+this.phase.type)}</span></p>
                     <p><span id="pomodoro-time-remaining">${time}</span></p>
                     <button id="pomodoro-stop-button">${trans('pomodoro.stop')}</button>`

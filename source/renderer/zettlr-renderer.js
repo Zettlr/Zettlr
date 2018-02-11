@@ -346,6 +346,17 @@ class ZettlrRenderer
             this.pomodoro.popup();
             break;
 
+            // Zoom
+            case 'zoom-reset':
+            this.editor.zoom(0); // <-- Sometimes I think I am stupid. Well, but it works, I guess.
+            break;
+            case 'zoom-in':
+            this.editor.zoom(1);
+            break;
+            case 'zoom-out':
+            this.editor.zoom(-1);
+            break;
+
             default:
             console.log(trans('system.unknown_command', arg.command));
             break;

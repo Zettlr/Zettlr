@@ -161,7 +161,13 @@
 ## GUI and functionality
 
 - Introducing a **pomodoro** counter! Now you can simply click on the circle at the right end of the toolbar to start a pomodoro counter. It alternates task-phases of 25 Minutes with short breaks of five minutes and, after every fourth task-phase, a longer break of twenty minutes. It also notifies you when a phase is over with a small notification and a soft sound. Head over to [the official website](https://francescocirillo.com/pages/pomodoro-technique) to get to know what this technique is about.
-- Switched to default Lato font on all platforms (included the font into the app itself)
+- Switched to default Lato font on all platforms (embedded the font in the app)
+- Additional check whether or not a file/directory already exists at the target location when moving by drag'n'drop
+- Some fixes to the Quicklook-windows
+- Moved some development functions into a "debug" mode that can be activated in the preferences.
+- Now the zoom in/out menu commands only zoom the editor itself, not the whole application
+- Added a small little button to end a search (and thereby make visible again all files)
+- Switched most dialogs to the smaller (and really nice) popups
 
 ## Under the hood
 
@@ -170,7 +176,7 @@
 - Updated electron to version `1.8.2`, updated other dependencies.
 - Updated scripts section. Now the available commands are:
     - `npm run start`: Start the development environment
-    - `npm run less`: Same command then previous, now only with more output
+    - `npm run less`: Same command as previous, now only with more output
     - `npm run build:quick`: Quick'n'dirty unpacked release for current platform
     - `npm run release:this`: Build and pack the app for the current platform
     - `npm run release:mac`: Build and pack for macOS x64 as DMG

@@ -122,5 +122,40 @@
             margin:0.5em;
             padding:1em;
         }
+
+        // Tabs styles
+        .ui-tabs-nav {
+            display:flex;
+            border-bottom:1px solid black;
+            padding:0;
+            margin-bottom:20px;
+
+            .ui-tabs-tab {
+                flex: 1;
+                display:inline-block;
+                line-height:200%;
+                list-style-type: none;
+
+                &.ui-tabs-active {
+                    background-color:@blue-selection;
+                }
+
+                a {
+                    color:black;
+                    text-decoration:none;
+                    display:inline-block;
+                    width:100%;
+                    text-align:center;
+                    outline:none;
+                    transition:0.4s all ease;
+                }
+
+                &:hover {
+                    background-color:@grey-1;
+                    transition:0.4s all ease;
+                }
+            }
+        }
+
     }
 }

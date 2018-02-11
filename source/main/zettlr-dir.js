@@ -344,6 +344,37 @@ class ZettlrDir
         return false;
     }
 
+    // Has this dir a direct child with the given property?
+    hasChild(obj)
+    {
+        let prop = '';
+        if(typeof obj === 'string') {
+            // assume path
+            obj.path = obj;
+        } else if(typeof obj === 'number') {
+            // assume hash
+            obj.hash = obj;
+        } else if(obj.hasOwnProperty('path')) {
+            prop = 'path;'
+        } else if(obj.hasOwnProperty('name')) {
+            prop = 'name';
+        } else if(obj.hasOwnProperty('hash')) {
+            prop = 'hash';
+        }
+
+        if(prop === '') {
+            return false;
+        }
+
+        for(let c of this.children) {
+            if(c[prop] === obj[prop]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // On renames, ZettlrFile objects will trigger sorts on this object
     sort() { this.children = sort(this.children); }
 

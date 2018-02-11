@@ -69,13 +69,7 @@ class ZettlrDialog
     init(dialog, obj = null)
     {
         // POSSIBLE DIALOGS:
-        //
-        // file-new
-        // file-rename
-        // dir-new
-        // dir-rename
         // preferences
-        // export
 
         if(!obj) {
             throw new DialogError(trans('dialog.error.no_data', obj));
@@ -86,19 +80,13 @@ class ZettlrDialog
 
         let replacements = [];
         switch(dialog) {
-            case 'file-new':
-            case 'dir-new':
-            case 'file-rename':
-            case 'dir-rename':
-            replacements.push('%PATH%|' + obj.path);
-            replacements.push('%NAME%|' + obj.name);
-            break;
-
             case 'preferences':
             let dark = (obj.darkTheme) ? 'checked="checked"' : '';
             let snippets = (obj.snippets) ? 'checked="checked"' : '';
+            let debug = (obj.debug) ? 'checked="checked"' : '';
             replacements.push('%DARK%|' + dark);
             replacements.push('%SNIPPETS%|' + snippets);
+            replacements.push('%DEBUG%|' + debug);
             replacements.push('%PANDOC%|' + obj.pandoc);
             replacements.push('%PDFLATEX%|' + obj.pdflatex);
             let spellcheck = '';
@@ -118,31 +106,6 @@ class ZettlrDialog
                 }
             }
             replacements.push('%APP_LANG%|' + lang_selection)
-            break;
-
-            case 'export':
-            obj.name = obj.name.substr(0, obj.name.lastIndexOf('.'));
-            replacements.push('%NAME%|'+obj.name);
-            replacements.push('%HASH%|'+obj.hash);
-
-            let pdflatexexp = '';
-            let pandocexp = '';
-            let pandocerror = '';
-            let pdflatexerror = '';
-            if(obj.pdflatex) {
-                pdflatexexp = this.get('dialog-export-pdf', replacements);
-            } else {
-                pdflatexerror = this.get('dialog-export-no-pdflatex');
-            }
-            replacements.push('%PDFLATEXEXPORT%|'+pdflatexexp);
-            replacements.push('%PDFLATEXERROR%|'+pdflatexerror);
-            if(obj.pandoc) {
-                pandocexp = this.get('dialog-export-formats', replacements);
-            } else {
-                pandocerror = this.get('dialog-export-no-pandoc');
-            }
-            replacements.push('%PANDOCERROR%|'+pandocerror);
-            replacements.push('%EXPORTS%|'+pandocexp);
             break;
 
             default:
@@ -179,11 +142,12 @@ class ZettlrDialog
         // Abort on click
         this.modal.on('click', (e) => { this.close(); });
 
-        // Activate event listeners on the exporting divs if present
-        $('#html').on('dblclick', (e) => { this.parent.requestExport($('#html')); });
-        $('#docx').on('dblclick', (e) => { this.parent.requestExport($('#docx')); });
-        $('#odt' ).on('dblclick', (e) => { this.parent.requestExport($('#odt' )); });
-        $('#pdf' ).on('dblclick', (e) => { this.parent.requestExport($('#pdf' )); });
+        // Tabbify the settings dialog
+        if(this.dlg === 'preferences') {
+            this.modal.find('.dialog').tabs({
+                heightStyle: 'auto' // All tabs same height
+            });
+        }
     }
 
     // Reads and return a template file, applying replacements if given

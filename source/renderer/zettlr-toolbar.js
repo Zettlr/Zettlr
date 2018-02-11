@@ -20,9 +20,14 @@ class ZettlrToolbar
         this.searchbar.on('keyup', (e) => {
             if(e.which == 27) { // ESC
                 this.searchbar.blur();
+                $('#preview').find('li').removeClass('hidden');
             } else if(e.which == 13) { // RETURN
                 this.parent.beginSearch(this.searchbar.val().toLowerCase());
             }
+        });
+
+        this.searchbar.on('focus', function(e) {
+            $(this).select();
         });
 
         // Activate buttons

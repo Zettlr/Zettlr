@@ -4,6 +4,7 @@ const ZettlrCon = require('./zettlr-context.js');
 const ZettlrDialog = require('./zettlr-dialog.js');
 const ZettlrQuicklook = require('./zettlr-quicklook.js');
 const ZettlrNotification = require('./zettlr-notification.js');
+const ZettlrPopup = require('./zettlr-popup.js');
 
 class ZettlrBody
 {
@@ -47,27 +48,78 @@ class ZettlrBody
     // Display a modal to ask for a new file name.
     requestFileName(dir)
     {
-        // Init dialog and show it
-        this.dialog.init('file-new', dir);
-        this.dialog.open();
+        let cnt = $('<div>').html(
+            `
+            <form action="#" method="GET">
+            <input type="text" class="small" value="${trans('dialog.file_new.value')}" placeholder="${trans('dialog.file_new.placeholder')}" name="name" required>
+            </form>
+            `
+        );
+
+        let popup = new ZettlrPopup(this, $('.button.file-new'), cnt, (form) => {
+            if(form) {
+                this.parent.requestNewFile(form[0].value, dir.hash);
+            }
+        });
     }
 
     requestDirName(dir)
     {
-        this.dialog.init('dir-new', dir);
-        this.dialog.open();
+        let cnt = $('<div>').html(
+            `
+            <form action="#" method="GET">
+            <input type="text" class="small" value="${trans('dialog.dir_new.value')}" placeholder="${trans('dialog.dir_new.placeholder')}" name="name" required>
+            </form>
+            `
+        );
+
+        let popup = new ZettlrPopup(this, $('.button.directory-new'), cnt, (form) => {
+            if(form) {
+                this.parent.requestNewDir(form[0].value, dir.hash);
+            }
+        });
     }
 
     requestNewDirName(dir)
     {
-        this.dialog.init('dir-rename', dir);
-        this.dialog.open();
+        let elem = $('#directories').find('li[data-hash="'+dir.hash+'"]').first();
+        let cnt = $('<div>').html(
+            `
+            <form action="#" method="GET">
+            <input type="text" class="small" value="${dir.name}" placeholder="${trans('dialog.dir_rename.placeholder')}" name="name" required>
+            </form>
+            `
+        );
+
+        let popup = new ZettlrPopup(this, elem, cnt, (form) => {
+            if(form) {
+                this.parent.requestDirRename(form[0].value, dir.hash);
+            }
+        });
     }
 
     requestNewFileName(file)
     {
-        this.dialog.init('file-rename', file);
-        this.dialog.open();
+        let elem = '';
+        if(this.parent.getCurrentFile() != null && this.parent.getCurrentFile().hash === file.hash) {
+            elem = $('.button.file-rename');
+        } else {
+            elem = $('#preview').find('li[data-hash="'+file.hash+'"]').first();
+        }
+
+        let cnt = $('<div>').html(
+            `
+            <form action="#" method="GET">
+            <input type="text" class="small" value="${file.name}" placeholder="${trans('dialog.file_rename.placeholder')}" name="name" required>
+            </form>
+            `
+        );
+
+        let popup = new ZettlrPopup(this, elem, cnt, (form) => {
+            if(form) {
+                this.parent.requestFileRename(form[0].value, file.hash);
+            }
+        });
     }
 
     quicklook(file)
@@ -129,8 +181,18 @@ class ZettlrBody
             'pandoc': this.parent.pandoc
         };
 
-        this.dialog.init('export', options);
-        this.dialog.open();
+        // Create a popup
+        let cnt = $('<div>').html(
+            `
+            <div class="btn-share htm" title="${trans('dialog.export.alt_html')}" data-ext="html" data-hash="${file.hash}">HTML</div>
+            <div class="btn-share pdf" title="${trans('dialog.export.alt_pdf')}" data-ext="pdf" data-hash="${file.hash}">PDF</div>
+            <div class="btn-share odt" title="${trans('dialog.export.alt_odt')}" data-ext="odt" data-hash="${file.hash}">ODT</div>
+            <div class="btn-share docx" title="${trans('dialog.export.alt_docx')}" data-ext="docx" data-hash="${file.hash}">DOCX</div>
+            `
+        );
+        let popup = new ZettlrPopup(this, $('.button.share'), cnt);
+
+        $('.btn-share').click((e) => { this.requestExport(e.target); });
     }
 
     // Display the preferences window
@@ -168,7 +230,8 @@ class ZettlrBody
         darkTheme  = '',
         snippets   = '',
         spellcheck = this.spellcheckLangs,
-        app_lang = 'en_US';
+        app_lang = 'en_US',
+        debug = '';
 
         for(let r of res) {
             // The four prompts will have an input name="name"
@@ -186,25 +249,20 @@ class ZettlrBody
                 spellcheck[r.value] = true;
             } else if(r.name === 'app-lang') {
                 app_lang = r.value;
+            } else if(r.name === 'debug') {
+                debug = (r.value === 'yes') ? true : false;
             }
         }
 
-        if(dialog == 'file-new') {
-            this.parent.requestNewFile(name, passedObj.hash);
-        } else if(dialog == 'dir-new') {
-            this.parent.requestNewDir(name, passedObj.hash);
-        } else if(dialog == 'dir-rename') {
-            this.parent.requestDirRename(name, passedObj.hash);
-        } else if(dialog == 'file-rename') {
-            this.parent.requestFileRename(name, passedObj.hash);
-        } else if(dialog == 'preferences') {
+        if(dialog == 'preferences') {
             let cfg = {
                 'pandoc': pandoc,
                 'pdflatex': pdflatex,
                 'darkTheme': darkTheme,
                 'snippets': snippets,
                 'spellcheck': spellcheck,
-                'app_lang': app_lang
+                'app_lang': app_lang,
+                'debug': debug
             }
             this.parent.saveSettings(cfg);
         }

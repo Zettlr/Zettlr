@@ -158,6 +158,34 @@ html {
   margin: 0.5em;
   padding: 1em;
 }
+.modal .dialog .ui-tabs-nav {
+  display: flex;
+  border-bottom: 1px solid black;
+  padding: 0;
+  margin-bottom: 20px;
+}
+.modal .dialog .ui-tabs-nav .ui-tabs-tab {
+  flex: 1;
+  display: inline-block;
+  line-height: 200%;
+  list-style-type: none;
+}
+.modal .dialog .ui-tabs-nav .ui-tabs-tab.ui-tabs-active {
+  background-color: #c8dcf0;
+}
+.modal .dialog .ui-tabs-nav .ui-tabs-tab a {
+  color: black;
+  text-decoration: none;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  outline: none;
+  transition: 0.4s all ease;
+}
+.modal .dialog .ui-tabs-nav .ui-tabs-tab:hover {
+  background-color: #dcdcdc;
+  transition: 0.4s all ease;
+}
 #directories {
   position: fixed;
   top: 39px;
@@ -849,6 +877,22 @@ html {
   transition: 0.5s all ease;
   box-shadow: inset 0px 0px 15px 0px rgba(200, 220, 240, 0.95);
 }
+#toolbar .searchbar div.end-search {
+  position: relative;
+  right: 26px;
+  background-color: #c8c8c8;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  border-radius: 100%;
+  line-height: 11px;
+  font-size: 80%;
+  text-align: center;
+}
+#toolbar .searchbar div.end-search:hover {
+  background-color: #787878;
+  color: white;
+}
 #toolbar.dark {
   background-image: linear-gradient(to bottom, #464646, #282828);
   border-bottom-color: #505050;
@@ -895,6 +939,8 @@ html {
 .popup {
   position: fixed;
   background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 4px;
+  box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.75);
   color: white;
   border-radius: 2px;
   max-width: 200px;
@@ -903,7 +949,7 @@ html {
 .popup .arrow {
   width: 0;
   height: 0;
-  position: relative;
+  position: absolute;
 }
 .popup .arrow.up {
   border-left: 5px solid transparent;
@@ -953,6 +999,10 @@ html {
 .popup form input:focus {
   outline: 0;
 }
+.popup form input.small {
+  font-size: 140%;
+  text-align: left;
+}
 .popup form input[type="checkbox"] {
   display: inline-block;
   margin: 5px;
@@ -961,4 +1011,45 @@ html {
 .popup form label {
   display: inline-block;
   margin: 5px;
+}
+.popup .btn-share {
+  display: inline-block;
+  width: 46px;
+  height: 46px;
+  line-height: 50px;
+  text-align: center;
+  transition: 0.2s all ease;
+  cursor: default;
+}
+.popup .btn-share.htm {
+  color: #4eaf57;
+  /* W3C color code */
+}
+.popup .btn-share.htm:hover {
+  background-color: #4eaf57;
+  color: white;
+}
+.popup .btn-share.docx {
+  color: #2d5897;
+  /* MS Word color code */
+}
+.popup .btn-share.docx:hover {
+  background-color: #2d5897;
+  color: white;
+}
+.popup .btn-share.odt {
+  color: white;
+  /* Is white even a color? */
+}
+.popup .btn-share.odt:hover {
+  background-color: white;
+  color: black;
+}
+.popup .btn-share.pdf {
+  color: #fd301a;
+  /* Adobe reader PDF color code */
+}
+.popup .btn-share.pdf:hover {
+  background-color: #fd301a;
+  color: black;
 }

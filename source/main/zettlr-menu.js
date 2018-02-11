@@ -116,21 +116,6 @@ class ZettlrMenu
                 label: trans('menu.labels.view'),
                 submenu: [
                     {
-                        label: trans('menu.reload'),
-                        accelerator: 'CmdOrCtrl+Y',
-                        click (item, focusedWindow) {
-                            if (focusedWindow) focusedWindow.reload();
-                        }
-                    },
-                    {
-                        label: trans('menu.toggle_devtools'),
-                        accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-                        click (item, focusedWindow) {
-                            if (focusedWindow) focusedWindow.webContents.toggleDevTools();
-                        }
-                    },
-                    { type: 'separator' },
-                    {
                         label: trans('menu.toggle_theme'),
                         accelerator: 'CmdOrCtrl+Alt+L',
                         type: 'checkbox',
@@ -164,9 +149,27 @@ class ZettlrMenu
                         }
                     },
                     { type: 'separator' },
-                    { label: trans('menu.reset_zoom'), role: 'resetzoom' },
-                    { label: trans('menu.zoom_in'), role: 'zoomin' },
-                    { label: trans('menu.zoom_out'), role: 'zoomout' },
+                    {
+                        label: trans('menu.reset_zoom'),
+                        accelerator: 'CmdOrCtrl+0',
+                        click(item, focusedWindow) {
+                            if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'zoom-reset' });
+                        }
+                    },
+                    {
+                        label: trans('menu.zoom_in'),
+                        accelerator: 'CmdOrCtrl+Plus',
+                        click(item, focusedWindow) {
+                            if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'zoom-in' });
+                        }
+                    },
+                    {
+                        label: trans('menu.zoom_out'),
+                        accelerator: 'CmdOrCtrl+-',
+                        click(item, focusedWindow) {
+                            if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'zoom-out' });
+                        }
+                    },
                     { type: 'separator' },
                     { label: trans('menu.toggle_fullscreen'), role: 'togglefullscreen' }
                 ]
@@ -191,6 +194,27 @@ class ZettlrMenu
             }
         ];
         // END TEMPLATE
+
+        // Show debug stuff?
+        if(this.parent.parent.config.get('debug')) {
+            this.template[2].submenu.unshift(
+                {
+                    label: trans('menu.reload'),
+                    accelerator: 'CmdOrCtrl+Y',
+                    click (item, focusedWindow) {
+                        if (focusedWindow) focusedWindow.reload();
+                    }
+                },
+                {
+                    label: trans('menu.toggle_devtools'),
+                    accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+                    click (item, focusedWindow) {
+                        if (focusedWindow) focusedWindow.webContents.toggleDevTools();
+                    }
+                },
+                { type: 'separator' }
+            );
+        }
 
         if(process.platform != 'darwin') {
             // On windows and linux add a quit option.

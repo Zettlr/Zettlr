@@ -90,22 +90,13 @@
             "no_template": "Konnte die Vorlage für den Dialog '%s' nicht finden!"
         },
         "dir_new": {
-            "title": "Verzeichnis erstellen",
-            "message": "Wie soll das neue Verzeichnis heißen?",
-            "info": "Das Verzeichnis wird unter <strong>%PATH%</strong> angelegt.",
             "placeholder": "Verzeichnisname",
             "value": "Unbenannt"
         },
         "dir_rename": {
-            "title": "Verzeichnis umbenennen",
-            "message": "Wie soll das Verzeichnis heißen?",
-            "info": "Das Verzeichnis <strong>%PATH%</strong> und alle Dateien in ihm werden verschoben.",
             "placeholder": "Verzeichnis"
         },
         "export": {
-            "title": "Datei exportieren",
-            "message": "Du bist dabei, die Datei <strong>%NAME%.md</strong> zu exportieren.",
-            "info": "Doppelklicke einfach auf den Dateityp, den du exportieren möchtest. Die Datei wird dann automatisch mit deinem Standardprogramm geöffnet, von wo aus du sie dann abspeichern kannst, wo immer du möchtest.",
             "alt_html": "Als HTML exportieren",
             "alt_odt": "Als ODT exportieren",
             "alt_docx": "Als DOCX exportieren",
@@ -114,21 +105,17 @@
             "no_pandoc": "Pandoc wurde auf diesem System nicht gefunden! Um Dateien exportieren zu können, musst du zunächst Pandoc installieren. Pandoc ist frei und quelloffen!"
         },
         "file_new": {
-            "title": "Neue Datei",
-            "message": "Wie soll die neue Datei heißen?",
-            "info": "Die Datei wird in <strong>%PATH%</strong> erstellt.",
             "placeholder": "Dateiname",
             "value": "Unbenannt"
         },
         "file_rename": {
-            "title": "Datei umbenennen",
-            "message": "Wie soll die Datei heißen?",
-            "info": "Die Datei liegt in <strong>%PATH%</strong> und wird entsprechend verschoben.",
             "placeholder": "Dateiname"
         },
         "preferences": {
             "title": "Einstellungen",
-            "message": "Hier findest du alle Einstellungen",
+            "general": "Allgemein",
+            "editor": "Editor",
+            "advanced": "Erweitert",
             "app_lang": {
                 "title": "Anwendungssprache (<strong>Neustart erforderlich!</strong>)",
                 "de_DE": "Deutsch (Deutschland)",
@@ -144,6 +131,7 @@
             "snippets": "Textfragmente anzeigen",
             "spellcheck": "Wähle die Sprachen aus, für welche du die Rechtschreibprüfung einschalten möchtest (<strong>Neustart erforderlich!</strong>)",
             "spellcheck_warning": "<em>Vorsicht:</em> Zu viele gleichzeitig aktivierte Bibliotheken verlangsamen die App spürbar! Versuche, nicht mehr als drei gleichzeitig zu aktivieren!",
+            "debug": "Entwicklermodus",
             "save": "Speichern",
             "cancel": "Abbrechen"
         }
@@ -169,7 +157,9 @@
             "remove_title": "Wirklich löschen?",
             "remove_message": "Möchtest du %s wirklich löschen?",
             "move_into_child_title": "Kann Verzeichnis nicht verschieben",
-            "move_into_child_message": "Du kannst kein Verzeichnis in eines seiner Unterverzeichnisse verschieben."
+            "move_into_child_message": "Du kannst kein Verzeichnis in eines seiner Unterverzeichnisse verschieben.",
+            "already_exists_title": "Kann Datei oder Verzeichnis nicht verschieben",
+            "already_exists_message": "Die Datei bzw. das Verzeichnis %s existiert am Zielort bereits."
         },
         "save_changes_title": "Änderungen verwerfen?",
         "save_changes_message": "Die Datei enthält ungespeicherte Änderungen. Verwerfen oder speichern?",

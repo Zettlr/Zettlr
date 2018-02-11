@@ -49,7 +49,8 @@ class ZettlrConfig
                 'de_DE' : (this.getLocale() === 'de_DE') ? true : false,
                 'fr_FR' : (this.getLocale() === 'fr_FR') ? true : false
             },
-            "app_lang": this.getLocale()
+            "app_lang": this.getLocale(),
+            "debug": false
         };
 
         // Load the configuration
