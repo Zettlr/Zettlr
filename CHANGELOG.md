@@ -168,6 +168,8 @@
 - Now the zoom in/out menu commands only zoom the editor itself, not the whole application
 - Added a small little button to end a search (and thereby make visible again all files)
 - Switched most dialogs to the smaller (and really nice) popups
+- Moved the Exporting options directly to the new share button
+- Now Zettlr shows default context menus for text fields
 
 ## Under the hood
 

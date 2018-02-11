@@ -178,6 +178,13 @@ class ZettlrCon
             this.menu.append(new MenuItem( { label: trans('menu.paste'), role: 'paste', accelerator: 'CmdOrCtrl+V' }));
             this.menu.append(new MenuItem( { type: 'separator' } ));
             this.menu.append(new MenuItem( { label: trans('menu.select_all'), role: 'selectall', accelerator: 'CmdOrCtrl+A' }));
+        } else if(elem.is('input[type="text"]') || elem.is('textarea')) {
+            // Generate default text context menu
+            this.menu.append(new MenuItem( { label: trans('menu.cut'), role: 'cut', accelerator: 'CmdOrCtrl+X' }));
+            this.menu.append(new MenuItem( { label: trans('menu.copy'), role: 'copy', accelerator: 'CmdOrCtrl+C' }));
+            this.menu.append(new MenuItem( { label: trans('menu.paste'), role: 'paste', accelerator: 'CmdOrCtrl+V' }));
+            this.menu.append(new MenuItem( { type: 'separator' } ));
+            this.menu.append(new MenuItem( { label: trans('menu.select_all'), role: 'selectall', accelerator: 'CmdOrCtrl+A' }));
         }
     }
 
