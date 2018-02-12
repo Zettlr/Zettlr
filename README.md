@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="https://github.com/Zettlr/Zettlr/raw/master/resources/icons/png/512x512.png" alt="Zettlr Logo‚" width="25%" height="25%" />
+</p>
+
 # Zettlr
 
 A powerful markdown editor with fulltext search, exporting capabilities and an integrated tree view.

@@ -192,7 +192,10 @@ class ZettlrBody
         );
         let popup = new ZettlrPopup(this, $('.button.share'), cnt);
 
-        $('.btn-share').click((e) => { this.requestExport(e.target); });
+        $('.btn-share').click((e) => {
+            this.requestExport(e.target);
+            popup.close();
+        });
     }
 
     // Display the preferences window
