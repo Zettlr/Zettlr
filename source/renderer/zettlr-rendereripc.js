@@ -30,7 +30,6 @@ class ZettlrRendererIPC
     // Wrapper for ipc send
     send(command, arg)
     {
-        console.log(`Sending event to main process: ${command} |,`, arg);
         this.ipc.send('message', {
             'command': command,
             'content': arg
