@@ -1,4 +1,4 @@
-// MODEL HANDLING FILES
+this.modified// MODEL HANDLING FILES
 
 const fs        = require('fs');
 const path      = require('path');
@@ -25,7 +25,7 @@ class ZettlrFile
         this.modtime    = 0;
         this.snippet    = '';
         this.content    = ''; // Will only be not empty when the file is modified.
-        this.isModified = false;
+        this.modified = false;
 
         // Prepopulate if filename is given
         if(fname !== null) {
@@ -52,7 +52,7 @@ class ZettlrFile
         this.content = cnt;
         // Also update snippet to reflect changes at the beginning of the file
         this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt ;
-        this.isModified = true;
+        this.modified = true;
     }
 
     read()
@@ -63,7 +63,7 @@ class ZettlrFile
         // (Re-)read content of file
         let cnt = fs.readFileSync(this.path, { encoding: "utf8" });
         this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt ;
-        this.isModified = false;
+        this.modified = false;
 
         return cnt;
     }
@@ -97,10 +97,6 @@ class ZettlrFile
         return f;
     }
 
-    // Dummy function, always returns null (as this is no directory)
-    // Eases recursive use in findDir of directories.
-    findDir(obj) { return null; }
-
     // This function either returns this OR null depending on the prop
     findFile(obj)
     {
@@ -126,10 +122,8 @@ class ZettlrFile
     {
         fs.writeFileSync(this.path, this.content, { encoding: "utf8" });
         this.content = '';
-        this.isModified = false;
+        this.modified = false;
     }
-
-    isModified() { return this.isModified; }
 
     remove()
     {
@@ -240,9 +234,12 @@ class ZettlrFile
         return (matches == terms.length);
     }
 
-    // Dummy functions
+    // Dummy functions (either for recursive use or because their return val is obvious)
     isDirectory() { return false; }
-    isFile()      { return true; }
+    isFile()      { return true;  }
+    isModified()  { return this.modified; }
+    contains(obj) { return false; }
+    findDir(obj)  { return null;  }
 }
 
 module.exports = ZettlrFile;

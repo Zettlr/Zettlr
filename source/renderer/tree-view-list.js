@@ -77,7 +77,7 @@ class TreeView
             'drop': (e, ui) => {
                 this.dir.removeClass('highlight');
                 // requestMove: From, to
-                this.parent.requestMove(ui.draggable.attr('data-hash'), this.hash);
+                this.parent.requestMove(parseInt(ui.draggable.attr('data-hash')), this.hash);
             },
             'over': (e, ui) => {
                 this.dir.addClass('highlight');
