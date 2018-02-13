@@ -512,7 +512,7 @@ class Zettlr
         }
 
         // In case of ret == 2 just proceed with opening another file
-        let ret = this.window.askDir(this.getCurrentDir().path);
+        let ret = this.window.askDir(this.config.get('projectDir'));
 
         // The user may have provided no dir at all, which returns in an
         // empty array -> check against and abort if array is empty

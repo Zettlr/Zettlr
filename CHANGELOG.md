@@ -170,6 +170,7 @@
 - Switched most dialogs to the smaller (and really nice) popups
 - Moved the Exporting options directly to the new share button
 - Now Zettlr shows default context menus for text fields
+- Fixed an issue on opening new project directories that provided you with the current directory's path instead of the project directory
 
 ## Under the hood
 
