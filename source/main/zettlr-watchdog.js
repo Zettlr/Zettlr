@@ -30,7 +30,9 @@ class ZettlrWatchdog
         this.process = chokidar.watch(this.path, {
             ignored: /(^|[\/\\])\../,
             persistent: true,
-            ignoreInitial: true // Do not track the initial watch as changes
+            ignoreInitial: true, // Do not track the initial watch as changes
+            followSymlinks: false, // Do not follow symlinks to other directories.
+            ignorePermissionErrors: true // In the worst case one has to reboot the software, but so it looks nicer.
         });
 
         this.process.on('ready', () => {
