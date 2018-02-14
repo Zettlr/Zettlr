@@ -22,11 +22,22 @@ class ZettlrPopup
         this.y = 0;
 
         this.modal = $('<div>').css('top', '0').css('left', '0').css('bottom', '0').css('right', '0').css('position', 'absolute');
+
+        // Close the popup either on left or right mouse click
         this.modal.on('click', (e) => {
             this.close(true);
             // Simulate a click-through afterwards
             document.elementFromPoint(e.clientX, e.clientY).click();
-        })
+        });
+        this.modal.on('contextmenu', (e) => {
+            this.close(true);
+        });
+
+        // Keep the popup relative to parent element even on resize
+        $(window).on('resize', (e) => {
+            this.place();
+        });
+
         this.popup = $('<div>').addClass('popup').css('opacity', '0');
         this.arrow = $('<div>').addClass('arrow');
         this.popup.append(this.content).append(this.arrow);
