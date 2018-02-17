@@ -1,8 +1,27 @@
-// Toolbar controller
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrToolbar class
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     Handles the toolbar
+ *
+ * END HEADER
+ */
+
 const {trans} = require('../common/lang/i18n.js');
 
+/**
+ * ZettlrToolbar class
+ */
 class ZettlrToolbar
 {
+    /**
+     * Initialize the toolbar handlers and activate
+     * @param {ZettlrRenderer} parent The renderer object
+     */
     constructor(parent)
     {
         this.parent = parent;
@@ -14,6 +33,10 @@ class ZettlrToolbar
         this.activate();
     }
 
+    /**
+     * Activate event listeners
+     * @return {void} Nothing to return.
+     */
     activate()
     {
         // Activate search function.
@@ -45,6 +68,11 @@ class ZettlrToolbar
         });
     }
 
+    /**
+     * Updates the word count in the info area
+     * @param  {Integer} words Wordcount
+     * @return {void}       Nothing to return
+     */
     updateWordCount(words)
     {
         if(words === 0) {
@@ -70,22 +98,43 @@ class ZettlrToolbar
         this.fileInfo.text(trans('gui.words', wd));
     }
 
+    /**
+     * Hides the word count
+     * @return {ZettlrToolbar} Chainability.
+     */
     hideWordCount()
     {
         this.fileInfo.text('');
+        return this;
     }
 
+    /**
+     * Toggles the theme on the toolbar
+     * @return {ZettlrToolbar} Chainability.
+     */
     toggleTheme()
     {
         this.div.toggleClass('dark');
+        return this;
     }
 
+    /**
+     * Focuses the search area
+     * @return {ZettlrToolbar} Chainability.
+     */
     focusSearch()
     {
         this.searchbar.focus();
         this.searchbar.select();
+        return this;
     }
 
+    /**
+     * Progresses the search indicator
+     * @param  {Integer} item    Current items that have been searched
+     * @param  {Integer} itemCnt Overall amount of items to be searched
+     * @return {void}         Nothing to return.
+     */
     searchProgress(item, itemCnt)
     {
         // Colors (see variables.less): either green-selection or green-selection-dark
@@ -95,6 +144,10 @@ class ZettlrToolbar
         this.searchbar.css('background-image', `linear-gradient(to right, ${color} 0%, ${color} ${percent}%, ${bgcol} ${percent}%, ${bgcol} 100%)`)
     }
 
+    /**
+     * Ends the search by resetting the indicator
+     * @return {void} Nothing to return.
+     */
     endSearch()
     {
         this.searchbar.css('background-image', 'none');

@@ -7,6 +7,7 @@
 ## Under the hood
 
 - Moved supported filetypes to unified file `source/common/filetypes.json`
+- Documentation for all files added.
 
 # 0.11.0
 

@@ -1,9 +1,27 @@
-/* THIS CLASS CONTROLS THE FILE PREVIEW LIST */
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrPreview class
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     Controls the file list in the preview pane.
+ *
+ * END HEADER
+ */
 
 const ListView = require('./list-view.js');
 
+/**
+ * ZettlrPreview class
+ */
 class ZettlrPreview
 {
+    /**
+     * Initialize
+     * @param {ZettlrRenderer} parent The renderer object
+     */
     constructor(parent)
     {
         this.parent             = parent;
@@ -24,12 +42,21 @@ class ZettlrPreview
         });
     }
 
+    /**
+     * Needed for bubbling up the request of a new file
+     * @param  {Integer} hash The hash of the file that's being requested
+     * @return {void}      Nothing to return.
+     */
     requestFile(hash)
     {
         // Request a file from the renderer
         this.parent.requestFile(hash);
     }
 
+    /**
+     * Refreshes the file list.
+     * @return {ZettlrPreview} Chainability.
+     */
     refresh()
     {
         if(this.parent.getCurrentDir() == null) {
@@ -37,22 +64,57 @@ class ZettlrPreview
             return;
         }
         this.list.refresh(this.parent.getCurrentDir());
+
+        return this;
     }
 
-    // Select a file if possible
-    select(hash) { this.list.select(hash); }
+    /**
+     * Simply select a file.
+     * @param  {Integer} hash Hash of the file to be selected
+     * @return {ZettlrPreview}      Chainability.
+     */
+    select(hash)
+    {
+        this.list.select(hash);
+        return this;
+    }
 
-    toggleTheme() { this.div.toggleClass('dark'); }
+    /**
+     * Toggles the theme
+     * @return {ZettlrPreview} Chainability.
+     */
+    toggleTheme()
+    {
+        this.div.toggleClass('dark');
+        return this;
+    }
 
-    toggleDirectories() { this.div.toggleClass('no-directories'); }
+    /**
+     * Toggles the display of the directory tree.
+     * @return {ZettlrPreview} Chainability.
+     */
+    toggleDirectories()
+    {
+        this.div.toggleClass('no-directories');
+        return this;
+    }
 
-    // Toggle display of snippets
+    /**
+     * Toggle the snippets.
+     * @return {ZettlrPreview} Chainability.
+     */
     toggleSnippets()
     {
         this.snippets = !this.snippets;
         this.list.toggleSnippets();
+        return this;
     }
 
+    /**
+     * The user has requested a search. This function prepares the terms and commences the search.
+     * @param  {String} term The value of the search field.
+     * @return {void}      Nothing to return.
+     */
     beginSearch(term)
     {
         // First sanitize the terms
@@ -155,6 +217,10 @@ class ZettlrPreview
         this.doSearch();
     }
 
+    /**
+     * Do one single search cycle.
+     * @return {void} Nothing to return.
+     */
     doSearch()
     {
         if(this.hashes.length == 0) {
@@ -185,6 +251,11 @@ class ZettlrPreview
         });
     }
 
+    /**
+     * Handle the result of the search from main process.
+     * @param  {Object} res Contains the search result and the hash.
+     * @return {void}     Nothing to return.
+     */
     handleSearchResult(res)
     {
         if(res.result) {
@@ -195,6 +266,10 @@ class ZettlrPreview
         this.doSearch();
     }
 
+    /**
+     * Ends a search if there are no more hashes to search through.
+     * @return {void} Nothing to return.
+     */
     endSearch()
     {
         this.parent.endSearch();
@@ -205,9 +280,15 @@ class ZettlrPreview
 
     // END SEARCH
 
+    /**
+     * Update the files displayed.
+     * @param  {Object} files A directory tree.
+     * @return {ZettlrPreview}       Chainability.
+     */
     update(files)
     {
         this.list.refresh(files);
+        return this;
     }
 }
 

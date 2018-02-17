@@ -1,4 +1,17 @@
-// THIS CLASS CONTROLS A SINGLE DIRECTORY
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrDir class
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This file contains the ZettlrDir class, modeling a directory
+ *                  on disk for the app.
+ *
+ * END HEADER
+ */
+
 const path         = require('path');
 const fs           = require('fs');
 const sanitize     = require('sanitize-filename');
@@ -8,13 +21,26 @@ const {shell}      = require('electron');
 // Include helpers
 const { hash, sort, generateName } = require('../common/zettlr-helpers.js');
 
+/**
+ * Error object constructor
+ * @param       {string} msg The error message
+ * @constructor
+ */
 function DirectoryError(msg) {
     this.name = 'Directory error';
     this.message = msg;
 }
 
+/**
+ * This class models properties and features of a directory on disk.
+ */
 class ZettlrDir
 {
+    /**
+     * Read a directory.
+     * @param {Mixed} parent     Either ZettlrDir or Zettlr, depending on root status.
+     * @param {String} [dir=null] The full path to the directory.
+     */
     constructor(parent, dir = null)
     {
         this.path     = "";
@@ -45,7 +71,11 @@ class ZettlrDir
         }
     }
 
-    // Takes an object and returns a ZettlrDir-object (or null)
+    /**
+     * Takes an object and returns a ZettlrDir-object (or null)
+     * @param  {Object} obj An object containing information for search
+     * @return {Mixed}     Either null, if not found, or the ZettlrDir object.
+     */
     findDir(obj)
     {
         let prop;
@@ -75,6 +105,11 @@ class ZettlrDir
         return null;
     }
 
+    /**
+     * Finds a file in this directory
+     * @param  {Object} obj An object containing information on the file.
+     * @return {Mixed}     Either ZettlrFile or null, if not found.
+     */
     findFile(obj)
     {
         let prop;
@@ -100,6 +135,11 @@ class ZettlrDir
         return null;
     }
 
+    /**
+     * Creates a new subdirectory and returns it.
+     * @param  {String} name The name (not path!) for the subdirectory.
+     * @return {ZettlrDir}      The newly created directory.
+     */
     newdir(name)
     {
         // Remove unallowed characters.
@@ -118,6 +158,11 @@ class ZettlrDir
         return dir;
     }
 
+    /**
+     * Create a new file in this directory.
+     * @param  {String} [name=null] The new name, if given
+     * @return {ZettlrFile}             The newly created file.
+     */
     newfile(name = null)
     {
         if(name == null) {
@@ -148,7 +193,10 @@ class ZettlrDir
         return f;
     }
 
-    // Triggered by the watchdog - add a child
+    /**
+     * Triggered by the watchdog - add a child
+     * @param {String} p The path to the child
+     */
     addChild(p)
     {
         let stat = fs.lstatSync(p);
@@ -175,6 +223,11 @@ class ZettlrDir
         return null;
     }
 
+    /**
+     * Returns the contents of a file identified by its hash
+     * @param  {Integer} hash The file's hash
+     * @return {Mixed}      Either a string containing the file's content or null.
+     */
     get(hash)
     {
         // This function is supposed to return the file contents with the hash.
@@ -190,6 +243,11 @@ class ZettlrDir
         return null;
     }
 
+    /**
+     * Removes either a child or this directory.
+     * @param  {Mixed} [obj=this] Either ZettlrDir or ZettlrFile
+     * @return {Boolean}            Whether or not the operation completed successfully.
+     */
     remove(obj = this)
     {
         if(obj === this) {
@@ -221,6 +279,12 @@ class ZettlrDir
         return true;
     }
 
+    /**
+     * Move (or rename) this directory. It's a double-use function
+     * @param  {String} newpath     The new location of this dir
+     * @param  {String} [name=null] A name, given when this should be renamed
+     * @return {ZettlrDir}             This for chainability.
+     */
     move(newpath, name = null)
     {
         // name will only be not-null if the dir should be renamed
@@ -250,7 +314,11 @@ class ZettlrDir
         return this;
     }
 
-    // Attach a new children to this element (mainly happens while moving)
+    /**
+     * Attach a new children to this element (mainly happens while moving)
+     * @param  {Mixed} newchild ZettlrDir or ZettlrFile object
+     * @return {ZettlrDir}          This for chainability.
+     */
     attach(newchild)
     {
         this.children.push(newchild);
@@ -261,7 +329,10 @@ class ZettlrDir
         return this;
     }
 
-    // Detach from parent.
+    /**
+     * Detaches this directory from its parent.
+     * @return {ZettlrDir} This for chainability.
+     */
     detach()
     {
         this.parent.remove(this);
@@ -269,6 +340,11 @@ class ZettlrDir
         return this;
     }
 
+    /**
+     * Scans the directory and adds all children that match the criteria (e.g.
+     * dir or file permitted by filetypes)
+     * @return {ZettlrDir} This for chainability.
+     */
     scan()
     {
         // Reads this directory.
@@ -303,8 +379,15 @@ class ZettlrDir
 
         // Final step: Sort
         this.children = sort(this.children);
+
+        return this;
     }
 
+    /**
+     * Returns true, if the given path exists somewhere in this dir.
+     * @param  {String} p An absolute path.
+     * @return {Boolean}   True (if the path exists) or false.
+     */
     exists(p)
     {
         // return true if path exists
@@ -328,7 +411,11 @@ class ZettlrDir
         return e;
     }
 
-    // Check whether or not this dir contains the given object (dir or file)
+    /**
+     * Check whether or not this dir contains the given object (dir or file)
+     * @param  {Object} obj An object containing a hash.
+     * @return {Boolean}     True (if this directory contains <hash>) or false
+     */
     contains(obj)
     {
         if(typeof obj === 'number') {
@@ -347,7 +434,11 @@ class ZettlrDir
         return false;
     }
 
-    // Has this dir a direct child with the given property?
+    /**
+     * Has this dir a direct child with the given property?
+     * @param  {Object}  obj An object containing a path, name or hash
+     * @return {Boolean}     Whether or not the given property represents a direct descendant of this.
+     */
     hasChild(obj)
     {
         let prop = '';
@@ -378,12 +469,32 @@ class ZettlrDir
         return false;
     }
 
-    // On renames, ZettlrFile objects will trigger sorts on this object
-    sort() { this.children = sort(this.children); }
+    /**
+     * On renames, ZettlrFile objects will trigger sorts on this object
+     * @return {ZettlrDir} This for chainability.
+     */
+    sort()
+    {
+        this.children = sort(this.children);
+        return this;
+    }
 
-    // Dummy functions
+    /**
+     * Dummy function for recursive use. Always returns true.
+     * @return {Boolean} Returns true, because this is a directory.
+     */
     isDirectory() { return true; }
+
+    /**
+     * Dummy function for recursive use. Always returns false.
+     * @return {Boolean} Returns false, because this is not a file.
+     */
     isFile()      { return false; }
+
+    /**
+     * Returns false, if this.parent is a directory.
+     * @return {Boolean} True or false depending on the type of this.parent
+     */
     isRoot()      { return !this.parent.isDirectory(); }
 }
 

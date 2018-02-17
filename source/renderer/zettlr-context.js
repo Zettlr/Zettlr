@@ -1,16 +1,40 @@
-// This class controls the context menus
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrCon class
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This model builds and displays a context menu based on where
+ *                  the oncontextmenu event occurred.
+ *
+ * END HEADER
+ */
 
 const {remote}          = require('electron');
 const {Menu, MenuItem}  = remote;
 const {trans}           = require('../common/lang/i18n.js');
 
+/**
+ * ZettlrCon class
+ */
 class ZettlrCon
 {
+    /**
+     * Create the object.
+     * @param {ZettlrBody} parent Body element.
+     */
     constructor(parent) {
         this.parent = parent;
         this.menu = new Menu();
     }
 
+    /**
+     * Build the context menu.
+     * @param  {Event} event The JavaScript event containing information for the menu
+     * @return {void}       Nothing to return.
+     */
     build(event) {
         delete this.menu;
         this.menu = new Menu();
@@ -188,6 +212,11 @@ class ZettlrCon
         }
     }
 
+    /**
+     * Display the popup using the event passed by ZettlrBody
+     * @param  {Event} event The oncontextmenu event
+     * @return {void}       Nothing to return.
+     */
     popup(event) {
         this.build(event);
         if(this.menu.items.length > 0) {

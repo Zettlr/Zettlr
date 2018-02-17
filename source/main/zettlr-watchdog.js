@@ -1,19 +1,35 @@
-// This class can watch a directory and stage potential changes to execute later on.
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrWatchdog class
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     Monitors the projectDir for external changes.
+ *                  Some words on the ignoring array: We cannot simply pause()
+ *                  and resume() the watchdog during save operations, because
+ *                  the write process will trigger a change event after the save
+ *                  process has stopped. This means that the actual event will
+ *                  be fired by chokidar only AFTER resume() has been called
+ *                  already. Therefore we will just be ignoring change events
+ *                  for the specific path.
+ *
+ * END HEADER
+ */
 
 const path          = require('path');
 const chokidar      = require('chokidar');
 
-/*
- * Some words on the ignoring array: We cannot simply pause() and resume() the
- * watchdog during save operations, because the write process will trigger a
- * change event after the save process has stopped. This means that the actual
- * event will be fired by chokidar only AFTER resume() has been called already.
- * Therefore we will just be ignoring change events for the specific path.
+/**
+ * Zettlr Watchdog class
  */
-
 class ZettlrWatchdog
 {
-    // Create a new watcher instance
+    /**
+     * Create a new watcher instance
+     * @param {String} path The path to projectDir
+     */
     constructor(path)
     {
         this.staged = [];
@@ -27,7 +43,10 @@ class ZettlrWatchdog
         this.filetypes = require('../common/filetypes.json').filetypes;
     }
 
-    // Initiate watching process and stage all changes in the staged-array
+    /**
+     * Initiate watching process and stage all changes in the staged-array
+     * @return {ZettlrWatchdog} This for chainability.
+     */
     start()
     {
         // Begin watching the base dir.
@@ -74,10 +93,15 @@ class ZettlrWatchdog
                 }
             }
         });
+
+        return this;
     }
 
-    // Stop the watchdog completely (saves energy on pause because the process
-    // is terminated)
+    /**
+     * Stop the watchdog completely (saves energy on pause because the process
+     * is terminated)
+     * @return {ZettlrWatchdog} This for chainability.
+     */
     stop()
     {
         this.process.close();
@@ -89,27 +113,75 @@ class ZettlrWatchdog
         this.ready = false;
     }
 
-    // Temporarily pause the watchdog (don't stage changes)
-    pause() { this.watch = false; }
-    // Resume watching
-    resume() { this.watch = true; }
+    /**
+     * Temporarily pause the watchdog (don't stage changes)
+     * @return {ZettlrWatchdog} This for chainability.
+     */
+    pause()
+    {
+        this.watch = false;
+        return this;
+    }
 
+    /**
+     * Resumes watching (e.g. putting changes into the array)
+     * @return {ZettlrWatchdog} This for chainability.
+     */
+    resume()
+    {
+        this.watch = true;
+        return this;
+    }
+
+    /**
+     * Is the instance currently logging changes?
+     * @return {Boolean} True or false depending on watch flag.
+     */
     isWatching() { return this.watch; }
+
+    /**
+     * Is chokidar done with its initial scan?
+     * @return {Boolean} True or false depending on the start sequence.
+     */
     isReady() { return this.ready; }
 
-    // Return the complete array
+    /**
+     * Return all staged changes
+     * @return {array} Array containing all change objects.
+     */
     getChanges() { return this.staged; }
 
-    // Returns number of staged changes
+    /**
+     * Returns number of staged changes
+     * @return {Integer} The amount of changes
+     */
     countChanges() { return this.staged.length; }
 
-    // Remove all changes from array.
-    flush() { this.staged = []; }
+    /**
+     * Remove all changes from array.
+     * @return {ZettlrWatchdog} This for chainability.
+     */
+    flush()
+    {
+        this.staged = [];
+        return this;
+    }
 
-    // Sets the path to be watched
-    setPath(path) { this.path = path; }
+    /**
+     * Sets the path to be watched
+     * @param {String} path A new directory to be watched.
+     * @return {ZettlrWatchdog} This for chainability.
+     */
+    setPath(path)
+    {
+        this.path = path;
+        return this;
+    }
 
-    // Restarts the service
+    /**
+     * Restart the watchdog service
+     * @return {ZettlrWatchdog} This for chainability.
+     */
     restart()
     {
         if(this.process != null) {
@@ -117,9 +189,15 @@ class ZettlrWatchdog
         }
 
         this.start();
+
+        return this;
     }
 
-    // Iterate over all staged changes
+    /**
+     * Iterate over all staged changes with a callback
+     * @param  {Function} callback A function to be called for each change.
+     * @return {ZettlrWatchdog}            This for chainability.
+     */
     each(callback)
     {
         let t = {};
@@ -128,13 +206,21 @@ class ZettlrWatchdog
                 callback(change.type, change.path);
             }
         }
+
+        return this;
     }
 
-    // Ignore the next event of type evt for path "path"
-    // Useful to ignore save events from the editor
+    /**
+     * Ignore the next event of type evt for path "path"
+     * Useful to ignore save events from the editor
+     * @param  {String} evt  Event to be ignored
+     * @param  {String} path Absolute path
+     * @return {ZettlrWatchdog}      This for ... dude, you know why we return this.
+     */
     ignoreNext(evt, path)
     {
         this.ignored.push({ 'type': evt, 'path': path });
+        return this;
     }
 }
 

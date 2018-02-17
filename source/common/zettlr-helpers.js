@@ -1,6 +1,22 @@
-// Class independent helper functions
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        General helper functions
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This file contains several functions, not classes, that are
+ *                  used for general purposes.
+ *
+ * END HEADER
+ */
 
-// Basic hashing function (thanks to https://stackoverflow.com/a/7616484)
+/**
+ * Basic hashing function (thanks to https://stackoverflow.com/a/7616484)
+ * @param  {String} string The string that should be hashed
+ * @return {Integer}        The hash of the given string
+ */
 function hash(string)
 {
     let hash = 0, i, chr;
@@ -14,7 +30,11 @@ function hash(string)
     return hash;
 }
 
-// This function can sort an array of ZettlrFile and ZettlrDir objects
+/**
+ * This function can sort an array of ZettlrFile and ZettlrDir objects
+ * @param  {Array} arr An array containing only ZettlrFile and ZettlrDir objects
+ * @return {Array}     The sorted array
+ */
 function sort(arr)
 {
     // First sort through children array (necessary if new children were added)
@@ -45,7 +65,10 @@ function sort(arr)
     return f.concat(d);
 }
 
-// This function generates a (per second unique) name
+/**
+ * This function generates a (per second unique) name
+ * @return {String} A name in the format "New File YYYY-MM-DD hh:mm:ss.md"
+ */
 function generateName()
 {
     let date = new Date();
@@ -65,7 +88,11 @@ function generateName()
     return "New file " + add + ".md";
 }
 
-// TODO: Localize options once they're implemented in the preferences/config.
+/**
+ * Format a date. TODO: Localize options once they're implemented in the preferences/config.
+ * @param  {Date} dateObj Object of type date.
+ * @return {String}         Returns the localized, human-readable date as a string
+ */
 function formatDate(dateObj)
 {
     let str = '';

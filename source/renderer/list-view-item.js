@@ -1,9 +1,29 @@
-// Handles a single list view element in the preview
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ListViewItem class
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This class represents a single list view item in the preview
+ *
+ * END HEADER
+ */
 
 const { formatDate } = require('../common/zettlr-helpers.js');
 
+/**
+ * ListViewItemClass
+ */
 class ListViewItem
 {
+    /**
+     * Construct and append the list view item
+     * @param {ListView} parent   The list
+     * @param {Mixed} fileobj  ZettlrFile or ZettlrDir that should be displayed
+     * @param {Boolean} snippets Whether or not to show the text fragment
+     */
     constructor(parent, fileobj, snippets)
     {
         this.parent = parent;
@@ -47,7 +67,10 @@ class ListViewItem
         this.act();
     }
 
-    // Activate this element
+    /**
+     * Activate the element
+     * @return {ListViewItem} Chainability.
+     */
     act()
     {
         // Only activate files
@@ -86,52 +109,147 @@ class ListViewItem
             'revertDuration': 200,
             'distance': 5,
         });
+
+        return this;
     }
 
+    /**
+     * Moves the DOM element to the correct index position
+     * @return {ListViewItem} Chainability
+     */
     moveToTarget()
     {
         if(this.elem.index() == this.target) {
-            return;
+            return this;
         } else if(this.target == 0) {
             this.elem.insertBefore(this.parent.container.find('li')[0]);
         } else {
             this.elem.insertAfter(this.parent.container.find('li')[this.target-1]);
         }
+
+        return this;
     }
 
+    /**
+     * Update the displayed properties
+     * @param  {Mixed} nData The new ZettlrFile or ZettlrDir object
+     * @return {ListViewItem}       Chainability.
+     */
     update(nData)
     {
         if(this.fileObj.type == 'directory') {
             // Names are updated by unlinking only because they change the hash.
-            return;
+            return this;
         }
 
         // Update if necessary
         if(nData.snippet != this.fileObj.snippet || this.fileObj.modtime != nData.modtime) {
             this.elem.find('.snippet').html(`${nData.snippet}<br><small>${formatDate(new Date(this.fileObj.modtime))}</small>`);
         }
+
+        return this;
     }
 
+    /**
+     * Get the actual index of the DOM element
+     * @return {Integer} The DOM element's index
+     */
     getPos()         { return this.elem.index(); }
+
+    /**
+     * Get the correct index for the DOM element
+     * @return {Integer} The target position of the DOM element
+     */
     getTarget()      { return this.target; }
-    setTarget(i)     { this.target = i; }
 
-    select()         { this.elem.addClass('selected'); }
-    deselect()       { this.elem.removeClass('selected'); }
-    isSelected()     { return this.elem.hasClass('selected'); }
+    /**
+     * Set the target of this item's DOM element
+     * @param {Integer} i Zero-based target index
+     * @return {ListViewItem} Chainability.
+     */
+    setTarget(i)
+    {
+        this.target = i;
+        return this;
+    }
 
+    /**
+     * Select this element (add the highlight class to the DOM)
+     * @return {ListViewItem} Chainability.
+     */
+    select()
+    {
+        this.elem.addClass('selected');
+        return this;
+    }
+
+    /**
+     * Remove the highlight class from the DOM element
+     * @return {ListViewItem} Chainability.
+     */
+    deselect()
+    {
+        this.elem.removeClass('selected');
+        return this;
+    }
+
+    /**
+     * Is the item selected?
+     * @return {Boolean} Whether or not this item is selected
+     */
+    isSelected() { return this.elem.hasClass('selected'); }
+
+    /**
+     * Toggle display of file information
+     * @return {ListViewItem} Chainability.
+     */
     toggleSnippets()
     {
         this.snippets = !this.snippet;
         this.elem.find('.snippet').toggleClass('hidden');
+        return this;
     }
 
-    detach()         { this.elem.detach(); }
+    /**
+     * Detach the DOM element
+     * @return {ListViewItem} Chainability.
+     */
+    detach()
+    {
+        this.elem.detach();
+        return this;
+    }
 
-    hide()           { this.elem.addClass('hidden'); }
-    show()           { this.elem.removeClass('hidden'); }
+    /**
+     * Hide the DOM element
+     * @return {ListViewItem} Chainability.
+     */
+    hide()
+    {
+        this.elem.addClass('hidden');
+        return this;
+    }
 
+    /**
+     * Show the DOM element
+     * @return {ListViewItem} Chainability.
+     */
+    show()
+    {
+        this.elem.removeClass('hidden');
+        return this;
+    }
+
+    /**
+     * Is the item a directory?
+     * @return {Boolean} True if the object represented is a directory.
+     */
     isDirectory()    { return (this.fileObj.type == 'directory'); }
+
+    /**
+     * Is the item a file?
+     * @return {Boolean} True if the object represented is a file.
+     */
     isFile()         { return (this.fileObj.type == 'file'); }
 }
 

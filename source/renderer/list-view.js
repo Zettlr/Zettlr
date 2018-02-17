@@ -1,11 +1,30 @@
-// Generate a list view out of a dom-element
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ListViewItem class
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This class represents the preview list
+ *
+ * END HEADER
+ */
 
 const { formatDate } = require('../common/zettlr-helpers.js');
 const ListViewItem = require('./list-view-item.js');
 
-// Generate a list from a data-object
+/**
+ * ListView class
+ */
 class ListView
 {
+    /**
+     * Create the preview list
+     * @param {ZettlrPreview} parent   The controller
+     * @param {jQuery} elem     The #preview element.
+     * @param {Boolean} snippets Show text fragments?
+     */
     constructor(parent, elem, snippets)
     {
         this.parent = parent;
@@ -19,7 +38,11 @@ class ListView
         this.activate();
     }
 
-    // Refreshens the data in the tree
+    /**
+     * Refreshes the list with new data
+     * @param  {Object} data A ZettlrDir tree object
+     * @return {ListView}      Chainability.
+     */
     refresh(data)
     {
         if(this.li.length == 0) {
@@ -34,18 +57,29 @@ class ListView
             let tmp = this.flattenTree(data);
             this.merge(tmp);
         }
+
+        return this;
     }
 
-    // Empties the list
+    /**
+     * Empty the list
+     * @return {ListView} Chainability.
+     */
     empty()
     {
         for(let li of this.li) {
             li.detach();
         }
         this.li = [];
+
+        return this;
     }
 
-    // Merges the nData object into this list's tree
+    /**
+     * Merges a new data object into the already existing object.
+     * @param  {Object} nData A new ZettlrDir tree
+     * @return {ListView}       Chainability.
+     */
     merge(nData)
     {
         // First pre-allocate the target array
@@ -86,9 +120,15 @@ class ListView
         for(let li of this.li) {
             li.moveToTarget();
         }
+
+        return this;
     }
 
-    // Selects a specific element
+    /**
+     * Selects a specific element
+     * @param  {Integer} hash The hash representing the file to select
+     * @return {ListView}      Chainability.
+     */
     select(hash)
     {
         for(let li of this.li) {
@@ -99,8 +139,15 @@ class ListView
                 li.deselect();
             }
         }
+
+        return this;
     }
 
+    /**
+     * Hide either the complete list (hash = null) or a specific element
+     * @param  {Mixed} [hash=null] Integer or null
+     * @return {ListView}             Chainability.
+     */
     hide(hash = null)
     {
         if(hash == null) {
@@ -115,8 +162,15 @@ class ListView
                 }
             }
         }
+
+        return this;
     }
 
+    /**
+     * Show either the complete list (hash = null) or only a specific element.
+     * @param  {Mixed} [hash=null] Integer representing a hash or null
+     * @return {ListView}             Chainability.
+     */
     show(hash = null)
     {
         if(hash == null) {
@@ -133,6 +187,11 @@ class ListView
         }
     }
 
+    /**
+     * Iterate over all list items, calling a function on each
+     * @param  {Function} callback The callback to use for each element
+     * @return {ListView}            Chainability.
+     */
     each(callback)
     {
         let t = {};
@@ -141,18 +200,28 @@ class ListView
                 callback(li);
             }
         }
+
+        return this;
     }
 
-    // Toggles the snippets on and off
+    /**
+     * Toggles the snippets.
+     * @return {ListView} Chainability.
+     */
     toggleSnippets()
     {
         this.snippets = !this.snippets;
         for(let li of this.li) {
             li.toggleSnippets();
         }
+
+        return this;
     }
 
-    // Activate this list's event handlers
+    /**
+     * Activate this list's event handlers.
+     * @return {ListView} Chainability.
+     */
     activate()
     {
         // Enable arrow key navigation
@@ -190,9 +259,14 @@ class ListView
                 }
             }
         });
+
+        return this;
     }
 
-    // Find a valid next list element
+    /**
+     * Finds the next valid (i.e. type = file) list item
+     * @return {ListViewItem} The next valid item or the current.
+     */
     findNext()
     {
         if(this.li.indexOf(this.liSelected)+1 == this.li.length) {
@@ -208,7 +282,10 @@ class ListView
         return li.elem;
     }
 
-    // Find a valid previous list element
+    /**
+     * Finds the previous valid (type = directory) list item
+     * @return {ListViewItem} The previous valid item (or the current)
+     */
     findPrev()
     {
         if(this.li.indexOf(this.liSelected) == 0) {
@@ -224,7 +301,11 @@ class ListView
         return li.elem;
     }
 
-    // Request a file
+    /**
+     * Request a new file. Triggered by a list view item.
+     * @param  {ListViewItem} elem The item that requested the file
+     * @return {void}      Nothing to return.
+     */
     requestFile(elem)
     {
         this.liSelected = elem;
@@ -234,7 +315,11 @@ class ListView
         this.parent.requestFile(elem.hash)
     }
 
-    // Scrolls the given ListViewItem into view
+    /**
+     * Scroll a given item into view.
+     * @param  {jQuery} elem The jQuery element representing the DOM element.
+     * @return {void}      Nothing to return.
+     */
     scrollIntoView(elem)
     {
         // Somehow it is impossible to write position().top into a variable.
@@ -256,7 +341,12 @@ class ListView
         }
     }
 
-    // This function flattens an object tree (file tree) to an array.
+    /**
+     * This function flattens an object tree (file tree) to an array.
+     * @param  {Object} data        A ZettlrDir tree
+     * @param  {Array}  [newarr=[]] Needed for recursion
+     * @return {Mixed}             An array or nothing.
+     */
     flattenTree(data, newarr = [])
     {
         if(data == null) {

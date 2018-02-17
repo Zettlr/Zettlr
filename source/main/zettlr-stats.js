@@ -1,12 +1,30 @@
-// This class monitors word counts and keeps track of how much the user
-// has written over time.
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrStats class
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This class controls some statistics that may be of interest
+ *                  to the user. Currently, this only includes the word count.
+ *
+ * END HEADER
+ */
 
 const fs            = require('fs');
 const path          = require('path');
 const {app}         = require('electron');
 
+/**
+ * ZettlrStats works like the ZettlrConfig object, only with a different file.
+ */
 class ZettlrStats
 {
+    /**
+     * Preset sane defaults and load an existing stats file if present
+     * @param {Zettlr} parent The main zettlr object.
+     */
     constructor(parent)
     {
         this.parent = parent;
@@ -21,6 +39,10 @@ class ZettlrStats
         this.load();
     }
 
+    /**
+     * Load a potentially existing stats file.
+     * @return {ZettlrStats} This for chainability.
+     */
     load()
     {
         this.stats = this.statstpl;
@@ -38,10 +60,17 @@ class ZettlrStats
             this.stats = JSON.parse(fs.readFileSync(this.statsFile, { encoding: 'utf8' }));
         } catch(e) {
             fs.writeFileSync(this.statsFile, JSON.stringify(this.statstpl), { encoding: 'utf8' });
-            return;
+            return this;
         }
+
+        return this;
     }
 
+    /**
+     * Increase the word count by val
+     * @param  {Integer} val The amount of words written since the last call of this function.
+     * @return {ZettlrStats}     This for chainability.
+     */
     updateWordCount(val)
     {
         if(!this.stats.hasOwnProperty('wordCount')) {
@@ -60,7 +89,10 @@ class ZettlrStats
         }
     }
 
-    // Write the statistics (e.g. on app exit)
+    /**
+     * Write the statistics (e.g. on app exit)
+     * @return {ZettlrStats} This for chainability.
+     */
     save()
     {
         if(this.statsFile == null || this.stats == null) {
@@ -68,9 +100,14 @@ class ZettlrStats
         }
         // (Over-)write the configuration
         fs.writeFileSync(this.statsFile, JSON.stringify(this.stats), { encoding: 'utf8' });
+
+        return this;
     }
 
-    // Return today's date in the form YYYY-MM-DD
+    /**
+     * Return today's date in the form YYYY-MM-DD
+     * @return {String} Today's date in international standard form.
+     */
     getDate()
     {
         let d = new Date();

@@ -1,4 +1,18 @@
-/* Wrapper class for BrowserWindow (reduce clutter in main class) */
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrWindow class
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This class is responsible for the main window of Zettlr. It
+ *                  opens it, closes it, controls the title and diverse other
+ *                  stuff that has to do with the window itself (such as showing
+ *                  modal boxes, e.g. errors or dialogs for opening new paths.)
+ *
+ * END HEADER
+ */
 
 const electron                = require('electron');
 const {dialog, BrowserWindow} = electron;
@@ -7,8 +21,15 @@ const path                    = require('path');
 const {trans}                 = require('../common/lang/i18n.js');
 const ZettlrMenu              = require('./zettlr-menu.js');
 
+/**
+ * Begin ZettlrWindow class
+ */
 class ZettlrWindow
 {
+    /**
+     * Initiate a new window.
+     * @param {Zettlr} parent The main zettlr object.
+     */
     constructor(parent)
     {
         this.parent = parent;
@@ -16,7 +37,10 @@ class ZettlrWindow
         this.menu = null;
     }
 
-    // Create and open a new main window
+    /**
+     * Create and open a new main window
+     * @return {ZettlrWindow} Again this for chainability.
+     */
     open()
     {
         if(this.window != null) {
@@ -102,9 +126,16 @@ class ZettlrWindow
         // Set the application menu
         // require('./main-menu.js');
         this.menu = new ZettlrMenu(this);
+
+        return this;
     }
     // END this.open
 
+    /**
+     * Sets the title and always appends Zettlr to it.
+     * @param {String} [newTitle=''] The new title to set.
+     * @return {ZettlrWindow} This for chainability.
+     */
     setTitle(newTitle = '')
     {
         if(newTitle == '') {
@@ -116,11 +147,20 @@ class ZettlrWindow
         this.window.setTitle(newTitle);
     }
 
+    /**
+     * Returns the current window title
+     * @return {String} The window's current title.
+     */
     getTitle()
     {
         return this.window.getTitle();
     }
 
+    /**
+     * Indicates that there are unsaved changes with a star in title and, on
+     * macOS, also the indicator in the traffic lights.
+     * @return {ZettlrWindow} This for chainability.
+     */
     setModified()
     {
         // Set the modified flag on the window if the file is edited (macOS only)
@@ -133,8 +173,14 @@ class ZettlrWindow
         if(title.substr(0, 2) != "* ") {
             this.window.setTitle('* ' + title);
         }
+
+        return this;
     }
 
+    /**
+     * Removes any marks that indicate modifications.
+     * @return {ZettlrWindow} This for chainability.
+     */
     clearModified()
     {
         // Clear the modified flag on the window if the file is edited (macOS only)
@@ -146,29 +192,44 @@ class ZettlrWindow
         if(title.substr(0, 2) == "* ") {
             this.window.setTitle(title.substr(2));
         }
+
+        return this;
     }
 
+    /**
+     * Returns the current window instance (or null, if window is null)
+     * @return {Mixed} Either a BrowserWindow instance or null
+     */
     getWindow()
     {
         return this.window;
     }
 
     // FUNCTIONS CALLED FROM WITHIN EVENT LISTENERS
+
+    /**
+     * Dereference a window if it has been destroyed (called by BrowserWindow)
+     * @return {void} Does not return anything.
+     */
     close()
     {
         // Dereference the window.
         this.window = null;
     }
 
-    // The window asks if it can close itself - so lets's ask our main process
-    // whether it's okay.
+    /**
+     * Can we close the window?
+     * @return {Boolean} Returns either true or false depending on modification flag on parent.
+     */
     canClose()
     {
         return this.parent.canClose();
     }
 
-    // This function belongs to the window because the dialog is attached to the
-    // window. It asks the user whether or not he wants to save, omit or cancel.
+    /**
+     * Prompt the user to save or omit changes, or cancel the process completely.
+     * @return {Integer} Either 0 (cancel), 1 (save changes) or 2 (omit changes)
+     */
     askSaveChanges()
     {
         let options = {
@@ -194,6 +255,10 @@ class ZettlrWindow
         return ret;
     }
 
+    /**
+     * The currently opened file's contents have changed on disk -- reload?
+     * @return {Integer} 0 (Do not replace the file) or 1 (Replace the file)
+     */
     askReplaceFile()
     {
         let options = {
@@ -218,7 +283,11 @@ class ZettlrWindow
         return ret;
     }
 
-    // Show dialog to open another folder.
+    /**
+     * Show the dialog for choosing a new project directory
+     * @param  {String} startDir Which directory should be shown initially?
+     * @return {Array}          An array containing all selected paths.
+     */
     askDir(startDir)
     {
         return dialog.showOpenDialog(this.window, {
@@ -231,7 +300,11 @@ class ZettlrWindow
         });
     }
 
-    // This function prompts the user with information.
+    /**
+     * This function prompts the user with information.
+     * @param  {Object} options Necessary informations for displaying the prompt
+     * @return {ZettlrWindow}         This for chainability.
+     */
     prompt(options)
     {
         dialog.showMessageBox(this.window, {
@@ -241,9 +314,15 @@ class ZettlrWindow
             title: options.title,
             message: options.message
         });
+
+        return this;
     }
 
-    // Ask to remove the given obj
+    /**
+     * Ask to remove the given object (either ZettlrFile or ZettlrDirectory)
+     * @param  {Mixed} obj Either ZettlrFile or ZettlrDirectory
+     * @return {Boolean}     True if user wishes to remove it, or false.
+     */
     confirmRemove(obj)
     {
         let ret = dialog.showMessageBox(this.window, {

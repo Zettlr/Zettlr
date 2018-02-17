@@ -1,7 +1,27 @@
-// Display a small notification in the top-right corner of the window
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrNotification class
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     Displays Operating Style system notifications
+ *
+ * END HEADER
+ */
 
+/**
+ * ZettlrNotification class
+ */
 class ZettlrNotification
 {
+    /**
+     * Show a new notification.
+     * @param {ZettlrBody} parent   The Zettlr body object.
+     * @param {String} message  The message that should be displayed
+     * @param {Integer} position The position in the holding array.
+     */
     constructor(parent, message, position)
     {
         this.parent = parent;
@@ -21,6 +41,10 @@ class ZettlrNotification
         }, 3000);
     }
 
+    /**
+     * Close the notification
+     * @return {void} Nothing to return.
+     */
     close()
     {
         this.div.animate({
@@ -33,6 +57,11 @@ class ZettlrNotification
         });
     }
 
+    /**
+     * Move up the notification by the height given
+     * @param  {Integer} oldelemheight The amount this should go up.
+     * @return {void}               Nothing to return.
+     */
     moveUp(oldelemheight)
     {
         let newpos = parseInt(this.div.css('top')) - oldelemheight - 10;

@@ -1,7 +1,26 @@
-/* Well, this class exists because 8 seconds start up time is just unbearable. */
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrOverlay class
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     Well, this class exists because 8 seconds start up time is
+ *                  just unbearable.
+ *
+ * END HEADER
+ */
 
+/**
+ * ZettlrOverlay
+ */
 class ZettlrOverlay
 {
+    /**
+     * Prepare the overlay
+     * @param {ZettlrRenderer} parent The renderer
+     */
     constructor(parent)
     {
         this.parent = parent;
@@ -9,6 +28,11 @@ class ZettlrOverlay
         this.modal = $('<div>').addClass('modal');
     }
 
+    /**
+     * Show the overlay with a given message.
+     * @param  {String} message The message to be shown.
+     * @return {ZettlrOverlay}         Chainability.
+     */
     show(message)
     {
         this.modal.html(`<div class="dialog">
@@ -39,8 +63,15 @@ class ZettlrOverlay
         let margin = (winH-diaH) / 2;
         dialog.css('margin-top', margin + "px");
         dialog.css('margin-bottom', margin + "px");
+
+        return this;
     }
 
+    /**
+     * Uddates the content of the overlay
+     * @param  {String} newmsg The new message
+     * @return {ZettlrOverlay}        Chainability.
+     */
     update(newmsg)
     {
         if(this.modal.html() === '') {
@@ -57,12 +88,20 @@ class ZettlrOverlay
         let margin = (winH-diaH) / 2;
         dialog.css('margin-top', margin + "px");
         dialog.css('margin-bottom', margin + "px");
+
+        return this;
     }
 
+    /**
+     * Closes the overlay.
+     * @return {ZettlrOverlay} Chainability.
+     */
     close()
     {
         this.modal.detach();
         this.modal.html('');
+
+        return this;
     }
 }
 

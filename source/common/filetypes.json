@@ -1,6 +1,7 @@
 {
     "filetypes": [
         ".txt",
-        ".md"
+        ".md",
+        ".markdown"
     ]
 }

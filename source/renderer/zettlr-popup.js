@@ -1,15 +1,34 @@
-/*
-* ZettlrPopup features a class that can be instantiated to pop up small tooltip
-* style windows that can hold some content. It can be used to offer small
-* pieces of configuration or simply hold text. They are modal, i.e. you can't
-* click something else -- a click anywhere in the window is required to hide
-* it first.
-*
-* ZettlrPopup is currently used by the pomodoro timer and the export function.
-*/
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrPopup class
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     Displays a popup to the target element.
+ *                  ZettlrPopup features a class that can be instantiated to
+ *                  pop up small tooltip style windows that can hold some
+ *                  content. It can be used to offer small pieces of
+ *                  configuration or simply hold text. They are modal, i.e. you
+ *                  can't click something else -- a click anywhere in the
+ *                  window is required to hide it first.
+ *
+ * END HEADER
+ */
 
+/**
+ * ZettlrPopup class
+ */
 class ZettlrPopup
 {
+    /**
+     * Display the popup
+     * @param {Mixed} parent          The object that called this popup
+     * @param {jQuery} elem            The DOM element to which the popup should bind itself.
+     * @param {Mixed} content         The content of the popup (either jQuery or text)
+     * @param {Function} [callback=null] A callback to be called when the popup is closed.
+     */
     constructor(parent, elem, content, callback = null)
     {
         this.parent = parent;
@@ -66,7 +85,10 @@ class ZettlrPopup
         this.popup.animate({'opacity': '1'}, 200, 'swing');
     }
 
-    // Places the popup onto the window.
+    /**
+     * Places the popup relative to the target element.
+     * @return {void} Nothing to return.
+     */
     place()
     {
         // TODO: Automatically choose one of the points depending on where there is enough space
@@ -128,6 +150,11 @@ class ZettlrPopup
         }
     }
 
+    /**
+     * Closes the popup and calls the callback, if given
+     * @param  {Boolean} [abort=false] Should we send the form if there is one?
+     * @return {void}                Nothing to return.
+     */
     close(abort = false)
     {
         let t = {};

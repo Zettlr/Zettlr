@@ -1,13 +1,17 @@
-/* Zettlr Main Project file class. */
-
-/*
-WHAT THIS FILE DOES
-
-This is the main hub for everything that the main
-process does. This means that here everything comes together.
-Creation of browser window etc. will all be done here.
-
-*/
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        Zettlr class
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This class is the main hub for everything that the main
+ *                  process does. This means that here everything the app can
+ *                  or cannot do come together.
+ *
+ * END HEADER
+ */
 
 const {dialog, app, BrowserWindow}  = require('electron');
 const fs                            = require('fs');
@@ -25,8 +29,15 @@ const ZettlrStats                   = require('./zettlr-stats.js');
 const {i18n, trans}                 = require('../common/lang/i18n.js');
 const {hash}                        = require('../common/zettlr-helpers.js');
 
+/**
+ * Main class definition
+ */
 class Zettlr
 {
+    /**
+     * Create a new application object
+     * @param {electron.app} parentApp The app object.
+     */
     constructor(parentApp)
     {
         // INTERNAL VARIABLES
@@ -69,6 +80,10 @@ class Zettlr
         }, 5000);
     }
 
+    /**
+     * Performs recurring tasks such as polling the watchdog every five secs.
+     * @return {void} Returns nothing.
+     */
     poll()
     {
         // Polls the watchdog for changes.
@@ -149,7 +164,10 @@ class Zettlr
         setTimeout(() => { this.poll(); }, 5000);
     }
 
-    // Shutdown the app. This function is called on quit.
+    /**
+     * Shutdown the app. This function is called on quit.
+     * @return {void} Does not return anything.
+     */
     shutdown()
     {
         this.config.save();
@@ -157,7 +175,10 @@ class Zettlr
         this.watchdog.stop();
     }
 
-    // Returns false if the file should not close, and true if it's safe.
+    /**
+     * Returns false if the file should not close, and true if it's safe.
+     * @return {Boolean} Either true, if the window can close, or false.
+     */
     canClose()
     {
         if(this.isModified()) {
@@ -183,7 +204,10 @@ class Zettlr
         return true;
     }
 
-    // This function is mainly called by the browser window to close the app.
+    /**
+     * This function is mainly called by the browser window to close the app.
+     * @return {void} Does not return anything.
+     */
     saveAndClose()
     {
         if(this.canClose()) {
@@ -194,6 +218,11 @@ class Zettlr
         }
     }
 
+    /**
+     * Reloads the complete application.
+     * @param  {String} [newPath=null] A new path, or null.
+     * @return {void}                Does not return anything.
+     */
     reload(newPath = null)
     {
         // The application has requested a full reload of the data because the
@@ -227,6 +256,14 @@ class Zettlr
     **                                                                        **
     ***************************************************************************/
 
+    /**
+     * This function switches through the received command. DEPRECATED! Will
+     * be moved to IPC in future version.
+     * @param  {Event} event Unused
+     * @param  {Object} arg   Contains the message body.
+     * @return {void}       Does not return anything.
+     * @deprecated
+     */
     handleEvent(event, arg)
     {
         // We received a new event and need to handle it. This function is
@@ -379,6 +416,11 @@ class Zettlr
         }
     }
 
+    /**
+     * Send a file with its contents to the renderer process.
+     * @param  {Integer} arg An integer containing the file's hash.
+     * @return {void}     This function does not return anything.
+     */
     sendFile(arg)
     {
         if(!this.canClose()) {
@@ -401,7 +443,11 @@ class Zettlr
         }
     }
 
-    // Send a new directory list to the client.
+    /**
+     * Send a new directory list to the client.
+     * @param  {Integer} arg A hash identifying the directory.
+     * @return {void}     This function does not return anything.
+     */
     selectDir(arg)
     {
         // arg contains a hash for a directory.
@@ -420,6 +466,11 @@ class Zettlr
         }
     }
 
+    /**
+     * Create a new file.
+     * @param  {Object} arg An object containing a hash of containing directory and a file name.
+     * @return {void}     This function does not return anything.
+     */
     newFile(arg)
     {
         // If the user ONLY decided to use special chars
@@ -471,6 +522,11 @@ class Zettlr
         this.ipc.send('file-open', file.withContent());
     }
 
+    /**
+     * Create a new directory.
+     * @param  {Object} arg An object containing hash of containing and name of new dir.
+     * @return {void}     This function does not return anything.
+     */
     newDir(arg)
     {
         let dir = null, curdir = null;
@@ -503,6 +559,10 @@ class Zettlr
         this.ipc.send('paths-update', this.paths);
     }
 
+    /**
+     * Open a wholly new project path.
+     * @return {void} This function does not reload anything.
+     */
     openDir()
     {
         // The user wants to open a different folder.
@@ -532,6 +592,11 @@ class Zettlr
         this.ipc.send('paths', this.getPaths());
     }
 
+    /**
+     * Removes a file.
+     * @param  {Ineger} [hash=this.getCurrentFile().hash] The hash of the file to be deleted.
+     * @return {void}                                   This function does not return.
+     */
     removeFile(hash = this.getCurrentFile().hash)
     {
         // First determine if this is modified.
@@ -556,7 +621,11 @@ class Zettlr
         // this.ipc.send('dir-set-current', this.getCurrentDir()); DEBUG
     }
 
-    // Remove current directory.
+    /**
+     * Remove a directory.
+     * @param  {Integer} [hash=this.getCurrentDir().hash] The hash of dir to be deleted.
+     * @return {void}                                  This function does not return anything.
+     */
     removeDir(hash = this.getCurrentDir().hash)
     {
         let filedir = null, dir = null;
@@ -605,6 +674,13 @@ class Zettlr
         this.ipc.send('paths-update', this.paths);
     }
 
+    /**
+     * Export a file to another format. DEPRECATED: This function will be
+     * moved into another class in further versions.
+     * @param  {Object} arg An object containing hash and wanted extension.
+     * @return {void}     Does not return.
+     * @deprecated
+     */
     exportFile(arg)
     {
         // arg contains a hash and an extension.
@@ -645,6 +721,11 @@ class Zettlr
         });
     }
 
+    /**
+     * Renames a directory.
+     * @param  {Object} arg An object containing a hash.
+     * @return {void}     This function does not return anything.
+     */
     renameDir(arg)
     {
         // { 'hash': hash, 'name': val }
@@ -695,6 +776,11 @@ class Zettlr
         }
     }
 
+    /**
+     * Renames a file.
+     * @param  {Object} arg An object containing hash and name.
+     * @return {void}     This function does not return.
+     */
     renameFile(arg)
     {
         // { 'hash': hash, 'name': val }
@@ -729,7 +815,11 @@ class Zettlr
         }
     }
 
-    // Move a directory or file
+    /**
+     * Move a directory or a file.
+     * @param  {Object} arg An object containing a ZettlrDir or ZettlrFile object
+     * @return {void}     This function does not return anything.
+     */
     requestMove(arg)
     {
         // arg contains from and to
@@ -819,6 +909,13 @@ class Zettlr
     }
 
     // SPELLCHECKING RELATED FUNCTIONS
+
+    /**
+     * Loads a DIC or AFF file and sends it to the renderer.
+     * @param  {String} type Either 'dic' or 'aff'
+     * @param  {String} lang Which language dic/aff to load?
+     * @return {void}      This function does not return.
+     */
     retrieveDictFile(type, lang)
     {
         let p = path.join(
@@ -852,8 +949,10 @@ class Zettlr
     **                                                                        **
     ***************************************************************************/
 
-    // This reloads the path list - is e.g. called after the creation of a new
-    // file or a new directory or saving or renaming of a file.
+    /**
+     * Reloads the complete directory tree.
+     * @return {void} This function does not return anything.
+     */
     refreshPaths()
     {
         // Just create a new ZettlrDir. Garbage Collect will destroy the old.
@@ -861,8 +960,10 @@ class Zettlr
         this.resetCurrents();
     }
 
-    // This function is called when the window is destroyed to remove pointers
-    // This does NOT reload the paths!
+    /**
+     * Reset the current pointers to initial values.
+     * @return {void} This function does not return.
+     */
     resetCurrents()
     {
         this.currentDir = this.paths;
@@ -871,6 +972,12 @@ class Zettlr
 
     // Save a file. A file MUST be given, for the content is needed to write to
     // a file. The content is always freshly grabbed from the CodeMirror content.
+
+    /**
+     * Saves a file.
+     * @param  {Object} file An object containing some properties of the file.
+     * @return {void}      This function does not return.
+     */
     saveFile(file)
     {
         if(file == null) {
@@ -913,8 +1020,10 @@ class Zettlr
         }
     }
 
-    // Setters - to be triggered from IPC process
-    // Set current file pointer
+    /**
+     * Sets the current file to the given file.
+     * @param {ZettlrFile} f A ZettlrFile object.
+     */
     setCurrentFile(f)
     {
         if(f == null) {
@@ -930,7 +1039,10 @@ class Zettlr
         this.ipc.send('file-set-current', f);
     }
 
-    // Set current dir pointer
+    /**
+     * Sets the current directory.
+     * @param {ZettlrDir} d Directory to be selected.
+     */
     setCurrentDir(d)
     {
         if(d == null) {
@@ -943,13 +1055,20 @@ class Zettlr
         this.ipc.send('dir-set-current', d);
     }
 
+    /**
+     * Indicate modifications.
+     * @return {void} Nothing to return here.
+     */
     setModified()
     {
         this.window.setModified();
         this.editFlag = true;
     }
 
-    // Remove modified flag
+    /**
+     * remove the modification flag.
+     * @return {void} Nothing to return.
+     */
     clearModified()
     {
         this.window.clearModified();
@@ -957,16 +1076,53 @@ class Zettlr
     }
 
     // Getters
+
+    /**
+     * Returns the window instance.
+     * @return {ZettlrWindow} The main window
+     */
     getWindow()      { return this.window; }
+
+    /**
+     * Returns the directory tree.
+     * @return {ZettlrDir} The root directory pointer.
+     */
     getPaths()       { return this.paths; }
+
+    /**
+     * Get the current directory.
+     * @return {ZettlrDir} Current directory.
+     */
     getCurrentDir()  { return this.currentDir; }
+
+    /**
+     * Return the current file.
+     * @return {Mixed} ZettlrFile or null.
+     */
     getCurrentFile() { return this.currentFile; }
 
-    // This is used by the root directory to safely determine whether it is root
+    /**
+     * Called by the root directory to determine if it is root.
+     * @return {Boolean} Always returns false.
+     */
     isDirectory()    { return false; }
+
+    /**
+     * Is the current file modified?
+     * @return {Boolean} Return true, if there are unsaved changes, or false.
+     */
     isModified()     { return this.editFlag; }
 
+    /**
+     * Open a new window.
+     * @return {void} This does not return.
+     */
     openWindow()     { this.window.open(); }
+
+    /**
+     * Close the current window.
+     * @return {void} Does not return.
+     */
     closeWindow()    { this.window.close(); }
 }
 

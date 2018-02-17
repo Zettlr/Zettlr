@@ -1,16 +1,39 @@
-// This file contains a class that spits out templates for the main dialogs
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrDialog class
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This class displays big modals on the app.
+ *
+ * END HEADER
+ */
 
 const fs = require('fs');
 const path = require('path');
 const {trans} = require('../common/lang/i18n.js');
 
+/**
+ * Dialog errors may occur.
+ * @param       {String} [msg=''] An additional error message.
+ * @constructor
+ */
 function DialogError(msg = '') {
     this.name = trans('dialog.error.name');
     this.message = trans('dialog.error.message', msg);
 }
 
+/**
+ * ZettlrDialog class
+ */
 class ZettlrDialog
 {
+    /**
+     * Prepare the dialog
+     * @param {Mixed} [parent=null] The containing object
+     */
     constructor(parent = null)
     {
         // Used to retrieve some configuration options
@@ -22,7 +45,10 @@ class ZettlrDialog
         this.passedObj = null;
     }
 
-    // Show the dialog
+    /**
+     * Opens a dialog after it has been initialized
+     * @return {ZettlrDialog} Chainability.
+     */
     open()
     {
         if(!this.isInitialized()) {
@@ -47,10 +73,13 @@ class ZettlrDialog
         }
 
         // Activate event listeners
-        this.activate();
+        return this.activate();
     }
 
-    // Close the dialog
+    /**
+     * Closes the dialog.
+     * @return {ZettlrDialog} Chainability.
+     */
     close()
     {
         this.modal.detach();
@@ -58,14 +87,24 @@ class ZettlrDialog
         this.modal.html('');
         this.dlg = null;
         this.passedObj = null;
+        return this;
     }
 
+    /**
+     * Has the dialog been initialized?
+     * @return {Boolean} True, if the initialization has occurred previously.
+     */
     isInitialized()
     {
         return (this.dlg !== null);
     }
 
-    // This generates the dialog prior to showing (i.e., set the modal's html)
+    /**
+     * Initializes the dialog.
+     * @param  {String} dialog     The dialog type (i.e. template name)
+     * @param  {Mixed} [obj=null] An object representing things to be replaced
+     * @return {ZettlrDialog}            Chainability.
+     */
     init(dialog, obj = null)
     {
         // POSSIBLE DIALOGS:
@@ -114,8 +153,14 @@ class ZettlrDialog
         }
 
         this.modal.html(this.get('dialog-' + dialog, replacements));
+
+        return this;
     }
 
+    /**
+     * Activates the event listeners.
+     * @return {ZettlrDialog} Chainability.
+     */
     activate()
     {
         // Select the "untitled"-content
@@ -148,9 +193,16 @@ class ZettlrDialog
                 heightStyle: 'auto' // All tabs same height
             });
         }
+
+        return this;
     }
 
-    // Reads and return a template file, applying replacements if given
+    /**
+     * Reads and return a template file, applying replacements if given
+     * @param  {String} template          The template to load
+     * @param  {Array}  [replacements=[]] Replacement table for variables
+     * @return {String}                   Returns the template with replaced vars.
+     */
     get(template, replacements = [])
     {
         let p = path.join(__dirname, 'assets', 'tpl', template + '.htm');
@@ -176,8 +228,12 @@ class ZettlrDialog
         return cnt;
     }
 
-    // This function creates a replacement table for all language strings that
-    // should be translated.
+    /**
+     * This function creates a replacement table for all language strings that
+     * should be translated.
+     * @param  {String} text The string in which i18n strings should be replaced.
+     * @return {String}      The text with translation strings replaced.
+     */
     getLanguageTable(text)
     {
         // How it works: In the template files are replacement strings in the

@@ -1,22 +1,34 @@
-/*
-* ZettlrConfig
-*
-* This class fulfills two basic tasks:
-*
-* 1.) Manage the app's configuration, stored in the config.json inside the
-* user data directory.
-*
-* 2.) Check the environment whether or not specific conditions exist (such as
-* the pandoc or pdflatex binaries)
-*/
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrConfig class
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This class fulfills two basic tasks: (1) Manage the app's
+ *                  configuration, stored in the config.json inside the user
+ *                  data directory. (2) Check the environment whether or not
+ *                  specific conditions exist (such as the pandoc or pdflatex
+ *                  binaries)
+ *
+ * END HEADER
+ */
 
 const fs            = require('fs');
 const path          = require('path');
 const {app}         = require('electron');
 const commandExists = require('command-exists').sync; // Does a given shell command exist?
 
+/**
+ * The ZettlrConfig class.
+ */
 class ZettlrConfig
 {
+    /**
+     * Preset sane defaults, then load the config and perform a system check.
+     * @param {Zettlr} parent Parent Zettlr object.
+     */
     constructor(parent)
     {
         this.parent = parent;
@@ -60,7 +72,10 @@ class ZettlrConfig
         this.checkSystem();
     }
 
-    // This function only (re-)reads the configuration file if present
+    /**
+     * This function only (re-)reads the configuration file if present
+     * @return {ZettlrConfig} This for chainability.
+     */
     load()
     {
         this.config = this.cfgtpl;
@@ -80,7 +95,7 @@ class ZettlrConfig
         } catch(e) {
             fs.writeFileSync(this.configFile, JSON.stringify(this.cfgtpl), { encoding: 'utf8' });
             this.config = this.cfgtpl;
-            return; // No need to iterate over objects anymore
+            return this; // No need to iterate over objects anymore
         }
 
         this.update(readConfig);
@@ -92,9 +107,14 @@ class ZettlrConfig
             // Doesn't exist, so revert to default
             this.config.projectDir = app.getPath('documents');
         }
+
+        return this;
     }
 
-    // Write the config (e.g. on app exit)
+    /**
+     * Write the config file (e.g. on app exit)
+     * @return {ZettlrConfig} This for chainability.
+     */
     save()
     {
         if(this.configFile == null || this.config == null) {
@@ -102,10 +122,17 @@ class ZettlrConfig
         }
         // (Over-)write the configuration
         fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' });
+
+        return this;
     }
 
     // This function runs a general environment check and tries to determine
     // some environment variables (such as the existence of pandoc or pdflatex)
+    /**
+     * This function runs a general environment check and tries to determine
+     * some environment variables (such as the existence of pandoc or pdflatex)
+     * @return {ZettlrConfig} This for chainability.
+     */
     checkSystem()
     {
         // Check pandoc availability (general exports)
@@ -153,9 +180,15 @@ class ZettlrConfig
                 process.env.PATH += delimiter + path.dirname(this.get('pdflatex'));
             }
         }
+
+        return this;
     }
 
-    // Get an option
+    /**
+     * Returns a config property
+     * @param  {String} attr The property to return
+     * @return {Mixed}      Either the config property or null
+     */
     get(attr)
     {
         if(this.config.hasOwnProperty(attr)){
@@ -165,7 +198,11 @@ class ZettlrConfig
         }
     }
 
-    // Get an environment variable
+    /**
+     * Returns an environment variable
+     * @param  {String} attr The environment variable to be returned.
+     * @return {Mixed}      Either the variable's value or null.
+     */
     getEnv(attr)
     {
         if(this.env.hasOwnProperty(attr)) {
@@ -175,11 +212,14 @@ class ZettlrConfig
         }
     }
 
-    // Returns the language (but always specified in the form <main>_<sub>,
-    // b/c we rely on it). If no "sub language" is given (e.g. only en, fr or de),
-    // then we assume the primary language (e.g. this function returns en_US for en,
-    // fr_FR for fr and de_DE for de. And yes, I know that British people won't
-    // like me for that. I'm sorry.)
+    /**
+     * Returns the language (but always specified in the form <main>_<sub>,
+     * b/c we rely on it). If no "sub language" is given (e.g. only en, fr or de),
+     * then we assume the primary language (e.g. this function returns en_US for en,
+     * fr_FR for fr and de_DE for de. And yes, I know that British people won't
+     * like me for that. I'm sorry.)
+     * @return {String} The user's locale
+     */
     getLocale()
     {
         let lang = app.getLocale();
@@ -212,17 +252,31 @@ class ZettlrConfig
         return 'en_US'; // Fallback default
     }
 
+    /**
+     * Return all supported languages.
+     * @return {Array} An array containing all allowed language codes.
+     */
     getSupportedLangs()
     {
         return this.supportedLangs;
     }
 
-    // Set an option
+    /**
+     * Sets a configuration option
+     * @param {String} option The option to be set
+     * @param {Mixed} value  The value of the config variable.
+     */
     set(option, value)
     {
         this.config[option] = value;
     }
 
+    /**
+     * Update the complete configuration object with new values
+     * @param  {Object} newcfg               The new object containing new props
+     * @param  {Object} [oldcfg=this.config] Necessary for recursion
+     * @return {void}                      Does not return anything.
+     */
     update(newcfg, oldcfg = this.config)
     {
         // Overwrite all given attributes (and leave the not given in place)
@@ -237,6 +291,8 @@ class ZettlrConfig
                     }
             }
         }
+
+        return;
     }
 }
 

@@ -1,12 +1,30 @@
-// Main menu file
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrMenu class
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     Very basic wrapper around electron Menu class.
+ *
+ * END HEADER
+ */
 
 const {Menu} = require('electron');
 const electron = require('electron');
 const app = electron.app
 const {trans} = require('../common/lang/i18n.js');
 
+/**
+ * Builds a menu and sets it in its constructor.
+ */
 class ZettlrMenu
 {
+    /**
+     * Creates the main application menu and sets it.
+     * @param {Zettlr} parent The Zettlr object.
+     */
     constructor(parent)
     {
         this.parent = parent;

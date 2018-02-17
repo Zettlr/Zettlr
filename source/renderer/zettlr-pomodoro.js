@@ -1,12 +1,30 @@
-// Controls the pomodoro timer
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrPomodoro class
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This class controls the pomodoro timer.
+ *
+ * END HEADER
+ */
 
 const ZettlrPopup = require('./zettlr-popup.js');
 
 const {trans} = require('../common/lang/i18n.js');
 
+/**
+ * ZettlrPomodoro class.
+ */
 class ZettlrPomodoro
 {
-    constructor(parent, container)
+    /**
+     * Prepare the timer.
+     * @param {ZettlrRenderer} parent    The renderer object
+     */
+    constructor(parent)
     {
         this.parent = parent;
         this.preferences = null;
@@ -63,6 +81,10 @@ class ZettlrPomodoro
         );
     }
 
+    /**
+     * Start the timer with the current settings and begin the timeouts.
+     * @return {void} Nothing to return.
+     */
     start()
     {
         // Start the timer
@@ -76,7 +98,10 @@ class ZettlrPomodoro
         setTimeout(() => {this.progress();}, 1000);
     }
 
-    // This function progresses the meter every second
+    /**
+     * This progresses the timer every second
+     * @return {void} Nothing to return.
+     */
     progress()
     {
         if(!this.isRunning()) {
@@ -136,6 +161,10 @@ class ZettlrPomodoro
         setTimeout(() => {this.progress();}, 1000);
     }
 
+    /**
+     * Stop the timer.
+     * @return {void} Nothing to return.
+     */
     stop()
     {
         // Reset everything
@@ -151,6 +180,10 @@ class ZettlrPomodoro
         };
     }
 
+    /**
+     * Display a popup with information on the status.
+     * @return {void} Nothing to return.
+     */
     popup()
     {
         // Display the small settings popup
@@ -209,11 +242,39 @@ class ZettlrPomodoro
         }
     }
 
-    // Helper
+    // Helper functions
+
+    /**
+     * Is the timer running?
+     * @return {Boolean} True, if the timer is currently running.
+     */
     isRunning() { return this.running; }
+
+    /**
+     * Is the timer currently muted, i.e. won't play the notification sound?
+     * @return {Boolean} True, if the timer is silent.
+     */
     isMuted()   { return !this.playSound; }
-    mute()      { this.playSound = false; }
-    unmute()    { this.playSound = true; }
+
+    /**
+     * Mutes the timer.
+     * @return {ZettlrPomodoro} Chainability.
+     */
+    mute()
+    {
+        this.playSound = false;
+        return this;
+    }
+
+    /**
+     * Unmutes the timer.
+     * @return {ZettlrPomodoro} Chainability.
+     */
+    unmute()
+    {
+        this.playSound = true;
+        return this;
+    }
 }
 
 module.exports = ZettlrPomodoro;

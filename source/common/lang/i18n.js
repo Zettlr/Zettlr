@@ -1,14 +1,36 @@
-// Loads the translation table based on a given language
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        Internationalization functions
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This file contains several functions, not classes, that help
+ *                  with the internationalization of the app.
+ *
+ * END HEADER
+ */
 
 const fs = require('fs');
 const path = require('path');
 
+/**
+ * Template for the translation error
+ * @param       {String} msg The error message
+ * @constructor
+ */
 function TranslationError(msg)
 {
     this.title = 'Translation Error';
     this.message = msg;
 }
 
+/**
+ * This function loads the language into the global object
+ * @param  {String} [lang='en_US'] The language to be loaded
+ * @return {void}                Function does not return anything.
+ */
 function i18n(lang = 'en_US')
 {
     let file = path.join(__dirname, lang + '.json');
@@ -16,6 +38,7 @@ function i18n(lang = 'en_US')
     try {
         fs.lstatSync(file);
     } catch(e) {
+        file = path.join(__dirname, 'en_US.json'); // Fallback
         throw { 'name': 'Localization', 'message': `Could not load language ${lang}!` };
     }
 
@@ -24,6 +47,12 @@ function i18n(lang = 'en_US')
     global.i18n = JSON.parse(fs.readFileSync(file, 'utf8'));
 };
 
+/**
+ * This translates a string into the loaded language
+ * @param  {String} string A dot-delimited string containing the translatable
+ * @param  {String} args   Zero or more strings that will replace %s-placeholders in the string
+ * @return {String}        The translation with all potential replacements applied.
+ */
 function trans(string, ...args)
 {
     if(string.indexOf('.') === -1) {

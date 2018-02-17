@@ -1,9 +1,27 @@
-// This manages the IPC events for the main process
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrIPC class
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This class is basically the postmaster of the app.
+ *
+ * END HEADER
+ */
 
 const {trans} = require('../common/lang/i18n.js');
 
+/**
+ * ZettlrIPC, controlling communication with the renderer.
+ */
 class ZettlrIPC
 {
+    /**
+     * Create the ipc
+     * @param {Zettlr} zettlrObj The application main object
+     */
     constructor(zettlrObj)
     {
         this.parent = zettlrObj;
@@ -14,6 +32,12 @@ class ZettlrIPC
         this.ipc.on('message', this.dispatch);
     }
 
+    /**
+     * This function gets called every time the renderer sends a message.
+     * @param  {IPCEvent} event The event (never used)
+     * @param  {Object} arg   The message's body
+     * @return {void}       Does not return anything.
+     */
     dispatch(event, arg)
     {
         // handleEvent expects arg to contain at least 'command' and 'content'
@@ -28,7 +52,12 @@ class ZettlrIPC
         this.parent.parent.handleEvent(event, arg);
     }
 
-    // This sends a message to the current window's renderer process.
+    /**
+     * This sends a message to the current window's renderer process.
+     * @param  {String} command The command to be sent
+     * @param  {Mixed} content Can be either simply a string or a whole object
+     * @return {ZettlrIPC}         This for chainability.
+     */
     send(command, content)
     {
         // sender = this.parent.getWindow().getWindow().webContents;
@@ -37,6 +66,8 @@ class ZettlrIPC
             'command': command,
             'content': content
         });
+
+        return this;
     }
 }
 

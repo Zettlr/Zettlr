@@ -1,4 +1,15 @@
-// Quicklook windows
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrQuicklook class
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     Controls a single Quicklook window
+ *
+ * END HEADER
+ */
 
 const fs = require('fs');
 const path = require('path');
@@ -19,8 +30,17 @@ require('codemirror/mode/markdown/markdown');
 require('codemirror/mode/gfm/gfm');
 const CodeMirror = require('codemirror');
 
+/**
+ * ZettlrQuicklook class
+ */
 class ZettlrQuicklook
 {
+    /**
+     * Create a window
+     * @param {ZettlrBody} parent    Calling object
+     * @param {ZettlrFile} file      The file whose content should be displayed
+     * @param {Boolean} darkTheme Dark theme?
+     */
     constructor(parent, file, darkTheme)
     {
         this.parent = parent;
@@ -30,6 +50,12 @@ class ZettlrQuicklook
         this.show();
     }
 
+    /**
+     * Load the Quicklook template and prepare everything
+     * @param  {ZettlrFile} file      The file whose content should be displayed.
+     * @param  {Boolean} darkTheme Dark Theme?
+     * @return {void}           Nothing to return.
+     */
     load(file, darkTheme)
     {
         this.window = $(fs.readFileSync(path.join(__dirname, 'assets', 'tpl', 'quicklook.htm'), 'utf8'));
@@ -89,6 +115,10 @@ class ZettlrQuicklook
         });
     }
 
+    /**
+     * Shows the quicklook window on screen.
+     * @return {ZettlrQuicklook} Chainability.
+     */
     show()
     {
         let height = $(window).height();
@@ -124,8 +154,13 @@ class ZettlrQuicklook
             (qlh-this.window.find('.title').outerHeight()) + 'px'
         );
         this.cm.refresh();
+        return this;
     }
 
+    /**
+     * Displays visibility of the window's body.
+     * @return {ZettlrQuicklook} Chainability.
+     */
     toggleWindow()
     {
         if(this.window.hasClass('minimize')) {
@@ -149,8 +184,14 @@ class ZettlrQuicklook
             this.window.css('height', '');
             this.window.find('.CodeMirror').css('display', 'none');
         }
+
+        return this;
     }
 
+    /**
+     * Toggles the theme of the quicklook window.
+     * @return {ZettlrQuicklook} Chainability.
+     */
     toggleTheme()
     {
         if(this.cm.getOption('theme') === 'zettlr-dark') {
@@ -158,8 +199,13 @@ class ZettlrQuicklook
         } else {
             this.cm.setOption('theme', 'zettlr-dark');
         }
+        return this;
     }
 
+    /**
+     * Closes the window and destroys it.
+     * @return {void} Nothing to return.
+     */
     close()
     {
         this.window.detach();

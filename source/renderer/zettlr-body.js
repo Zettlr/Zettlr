@@ -1,4 +1,17 @@
-/* THIS CLASS CONTROLS THE WHOLE BODY FOR DISPLAYING MODALS ETC */
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrBody class
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This is a model that represents all GUI elements that are
+ *                  not controlled by one of the other Models (e.g. affect the
+ *                  whole app)
+ *
+ * END HEADER
+ */
 
 const ZettlrCon = require('./zettlr-context.js');
 const ZettlrDialog = require('./zettlr-dialog.js');
@@ -6,8 +19,15 @@ const ZettlrQuicklook = require('./zettlr-quicklook.js');
 const ZettlrNotification = require('./zettlr-notification.js');
 const ZettlrPopup = require('./zettlr-popup.js');
 
+/**
+ * ZettlrBody class
+ */
 class ZettlrBody
 {
+    /**
+     * Activate whatever we need
+     * @param {ZettlrRenderer} parent The renderer main object
+     */
     constructor(parent)
     {
         this.parent = parent;
@@ -45,7 +65,11 @@ class ZettlrBody
         },false);
     }
 
-    // Display a modal to ask for a new file name.
+    /**
+     * Display a small popup to ask for a new file name
+     * @param  {ZettlrDir} dir A directory object
+     * @return {void}     Nothing to return.
+     */
     requestFileName(dir)
     {
         let cnt = $('<div>').html(
@@ -63,6 +87,11 @@ class ZettlrBody
         });
     }
 
+    /**
+     * Display a small popup for a new directory.
+     * @param  {ZettlrDir} dir The parent directory object.
+     * @return {void}     Nothing to return.
+     */
     requestDirName(dir)
     {
         let cnt = $('<div>').html(
@@ -80,6 +109,11 @@ class ZettlrBody
         });
     }
 
+    /**
+     * Display a small popup to ask for a new dir name for an already existing.
+     * @param  {ZettlrDir} dir The directory to be renamed
+     * @return {void}     Nothing to return.
+     */
     requestNewDirName(dir)
     {
         let elem = $('#directories').find('li[data-hash="'+dir.hash+'"]').first();
@@ -98,6 +132,11 @@ class ZettlrBody
         });
     }
 
+    /**
+     * Requests a new file name.
+     * @param  {ZettlrFile} file The file to be renamed.
+     * @return {void}      Nothing to return.
+     */
     requestNewFileName(file)
     {
         let elem = '';
@@ -122,35 +161,64 @@ class ZettlrBody
         });
     }
 
+    /**
+     * Opens a quicklook window for a given file.
+     * @param  {ZettlrFile} file The file to be loaded into the QuickLook
+     * @return {void}      Nothing to return.
+     */
     quicklook(file)
     {
         this.ql.push(new ZettlrQuicklook(this, file, this.darkTheme));
     }
 
-    // This function gets called only by ZettlrQuicklook-objects on their
-    // destruction to remove it from the ql-array.
+    /**
+     * This function is called by Quicklook windows on their destruction to
+     * remove them from this array.
+     * @param  {ZettlrQuicklook} zql The Quicklook that has requested its removal.
+     * @return {Boolean}     True, if the call succeeded, or false.
+     */
     qlsplice(zql)
     {
         let index = this.ql.indexOf(zql);
         if(index > -1) {
             this.ql.splice(index, 1);
+            return true;
         }
+
+        return false;
     }
 
-    // Close all quicklooks
+    /**
+     * Closes all quicklooks.
+     * @return {ZettlrBody} Chainability.
+     */
     closeQuicklook()
     {
         while(this.ql.length > 0) {
             // QuickLooks splice themselves from the array -> always close first
             this.ql[0].close();
         }
+
+        return this;
     }
 
+    /**
+     * Display a small notifiation.
+     * @param  {String} message What should the user be notified about?
+     * @return {ZettlrBody}         Chainability.
+     */
     notify(message)
     {
         this.n.push(new ZettlrNotification(this, message, this.n.length));
+        return this;
     }
 
+    /**
+     * Remove a notification from the array.
+     * @param  {ZettlrNotification} ntf  The notification that wants itself removed.
+     * @param  {Integer} oldH The old height of the notification.
+     * @return {void}      Nothing to return.
+     */
     notifySplice(ntf, oldH)
     {
         let index = this.n.indexOf(ntf);
@@ -163,6 +231,10 @@ class ZettlrBody
         }
     }
 
+    /**
+     * Toggled the theme
+     * @return {ZettlrBody} Chainability.
+     */
     toggleTheme()
     {
         this.darkTheme = !this.darkTheme;
@@ -170,17 +242,17 @@ class ZettlrBody
         for(let ql of this.ql) {
             ql.toggleTheme();
         }
+
+        return this;
     }
 
+    /**
+     * Opens the exporting popup
+     * @param  {ZettlrFile} file Which file should be exported?
+     * @return {void}      Nothing to return.
+     */
     displayExport(file)
     {
-        let options = {
-            'name': file.name,
-            'hash': file.hash,
-            'pdflatex': this.parent.pdflatex,
-            'pandoc': this.parent.pandoc
-        };
-
         // Create a popup
         let cnt = $('<div>').html(
             `
@@ -198,13 +270,22 @@ class ZettlrBody
         });
     }
 
-    // Display the preferences window
+    /**
+     * Open a new dialog for displaying the preferences.
+     * @param  {Object} prefs An object containing all current config variables
+     * @return {void}       Nothing to return.
+     */
     displayPreferences(prefs)
     {
         this.dialog.init('preferences', prefs);
         this.dialog.open();
     }
 
+    /**
+     * Requests the export of a file. Is called by the exporting buttons.
+     * @param  {jQuery} elem A jQuery object representing the clicked button.
+     * @return {void}      Nothing to return.
+     */
     requestExport(elem)
     {
         // The element contains data-attributes containing all necessary
@@ -214,6 +295,10 @@ class ZettlrBody
         this.parent.requestExport(hash, ext);
     }
 
+    /**
+     * Simply set the spellchecking languages. Needed for the preferences.
+     * @param {array} langs An array containing all supported languages.
+     */
     setSpellcheckLangs(langs)
     {
         this.spellcheckLangs = {};
@@ -225,6 +310,13 @@ class ZettlrBody
 
     // This function gets only called by the dialog class with an array
     // containing all serialized form inputs and the dialog type
+    /**
+     * This function is called by the dialog class when the user saves settings.
+     * @param  {String} dialog    The opened dialog. TODO: Not needed.
+     * @param  {Array} res       An array containing all settings
+     * @param  {Object} passedObj A passed object. TODO: Not needed anymore.
+     * @return {void}           Nothing to return.
+     */
     proceed(dialog, res, passedObj)
     {
         let name   = '',

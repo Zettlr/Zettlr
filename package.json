@@ -102,6 +102,8 @@
     "devDependencies": {
         "electron": "^1.8.2",
         "electron-builder": "^19.56.0",
+        "esdoc": "^1.0.4",
+        "esdoc-standard-plugin": "^1.0.0",
         "less": "^2.7.3"
     }
 }

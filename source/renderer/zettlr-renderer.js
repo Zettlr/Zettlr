@@ -1,4 +1,15 @@
-/* Main Renderer */
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrRenderer class
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     Controls the whole renderer process.
+ *
+ * END HEADER
+ */
 
 // Enable communication with host process
 const ZettlrRendererIPC = require('../zettlr-rendereripc.js');
@@ -47,7 +58,7 @@ class ZettlrRenderer
         this.body           = new ZettlrBody(this);
         this.overlay        = new ZettlrOverlay(this);
         this.toolbar        = new ZettlrToolbar(this);
-        this.pomodoro       = new ZettlrPomodoro(this, $('div.button.pomodoro'));
+        this.pomodoro       = new ZettlrPomodoro(this);
     }
 
     init()

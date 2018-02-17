@@ -1,12 +1,33 @@
-// Class for a single Tree-View Directory. Can contain recursively other dirs.
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        TreeView class
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This class represents the directory tree of the app. It can
+ *                  recursively contain itself as subdirectories.
+ *
+ * END HEADER
+ */
 
 function TreeError(msg) {
     this.name = 'TreeView Error';
     this.message = msg;
 };
 
+/**
+ * TreeView class
+ */
 class TreeView
 {
+    /**
+     * Create a new tree view
+     * @param {Mixed}  parent         Either ZettlrDirectories or TreeView
+     * @param {Object}  paths          A tree to be displayed
+     * @param {Boolean} [isRoot=false] Only set to true for the upmost TreeView
+     */
     constructor(parent, paths, isRoot = false)
     {
         if(paths == null) {
@@ -41,6 +62,10 @@ class TreeView
         this.refresh();
     }
 
+    /**
+     * Activates the tree view
+     * @return {ListView} Chainability.
+     */
     activate()
     {
         // Activate event listeners
@@ -92,14 +117,26 @@ class TreeView
             e.stopPropagation();
             this.toggleCollapse();
         });
+
+        return this;
     }
 
+    /**
+     * Open all trees leading to this specific tree.
+     * @return {ListView} Chainability.
+     */
     uncollapse()
     {
         this.ul.removeClass('collapsed');
         this.parent.uncollapse();
+        return this;
     }
 
+    /**
+     * Selects a specific directory.
+     * @param  {Integer} hash The hash representing the directory to be displayed.
+     * @return {ListView}      Chainability.
+     */
     select(hash)
     {
         if(this.hash == hash) {
@@ -110,15 +147,26 @@ class TreeView
                 c.select(hash);
             }
         }
+
+        return this;
     }
 
+    /**
+     * Remove selection from all dirs.
+     * @return {ListView} Chainability.
+     */
     deselect()
     {
         if(this.isSelected()) { this.dir.removeClass('selected'); }
         for(let c of this.children) { c.deselect(); }
+        return this;
     }
 
-    // Refresh
+    /**
+     * Refresh the directories lists.
+     * @param  {Object} [p=this.paths] A new path object.
+     * @return {ListView}                Chainability.
+     */
     refresh(p = this.paths)
     {
         this.paths = p;
@@ -131,8 +179,14 @@ class TreeView
         } else {
             this.indicator.detach();
         }
+
+        return this;
     }
 
+    /**
+     * Merge a new path object
+     * @return {void} Don't return anything.
+     */
     merge()
     {
         // First determine how many children there are in the new object
@@ -192,9 +246,22 @@ class TreeView
         }
     }
 
+    /**
+     * Sets the DOM target for this directory.
+     * @param {Integer} i The wanted target.
+     */
     setTarget(i) { this.target = i; }
+
+    /**
+     * Detach from DOM
+     * @return {void} Nothing to return.
+     */
     detach() { this.ul.detach(); }
 
+    /**
+     * Moves the list to the target position.
+     * @return {ListView} Chainability.
+     */
     moveToTarget()
     {
         // +1 to account for the parent's <li>-tag
@@ -205,18 +272,57 @@ class TreeView
         } else {
             this.ul.insertAfter(this.parent.getContainer().children('ul')[this.target-1]);
         }
+
+        return this;
     }
 
+    /**
+     * Returns the DOM element
+     * @return {jQuery} The DOM container element
+     */
     getContainer() { return this.ul; }
 
-    toggleCollapse() { this.ul.toggleClass('collapsed'); }
+    /**
+     * Toggles the collapsed class.
+     * @return {ListView} Chainability
+     */
+    toggleCollapse()
+    {
+        this.ul.toggleClass('collapsed');
+        return this;
+    }
 
+    /**
+     * Is this the root directory?
+     * @return {Boolean} True, if this is the root directory, or false.
+     */
     isRoot() { return this.root; }
+
+    /**
+     * Is this directory currently collapsed or open?
+     * @return {Boolean} True, if the directory is uncollapsed.
+     */
     isCollappsed() { return this.ul.hasClass('collapsed'); }
+
+    /**
+     * Is the directory currently selected?
+     * @return {Boolean} True, if this directory is currently selected, else false.
+     */
     isSelected() { return this.dir.hasClass('selected'); }
 
-    // Easy bubble-up of the functions
+    /**
+     * Needed for "bubbling up" of move requests from subdirs to ZettlrDirectories class.
+     * @param  {Integer} from Hash of the source directory
+     * @param  {Integer} to   Hash representing the target
+     * @return {void}      Nothing to return.
+     */
     requestMove(from, to) { this.parent.requestMove(from, to); }
+
+    /**
+     * Needed for "bubbling up" of move requests from subdirs to the ZettlrDirectories class.
+     * @param  {Integer} hash The hash of the directory to select
+     * @return {void}      Nothing to return.
+     */
     requestDir(hash) { this.parent.requestDir(hash); }
 }
 

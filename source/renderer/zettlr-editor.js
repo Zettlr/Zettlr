@@ -1,4 +1,15 @@
-/* THIS CLASS CONTROLS THE CODEMIRROR EDITOR */
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrEditor class
+ * CVM-Role:        Model
+ * Maintainer:      Hendrik Erz
+ * License:         MIT
+ *
+ * Description:     This class controls and initialized the CodeMirror editor.
+ *
+ * END HEADER
+ */
 
 // First codemirror addons
 require('codemirror/addon/mode/overlay');
@@ -22,8 +33,15 @@ require('./assets/codemirror/zettlr-plugin-footnotes.js');
 // Finally CodeMirror itself
 const CodeMirror = require('codemirror');
 
+/**
+ * ZettlrEditor class
+ */
 class ZettlrEditor
 {
+    /**
+     * Instantiate the editor
+     * @param {ZettlrRenderer} parent The parent renderer element.
+     */
     constructor(parent)
     {
         this.parent = parent;
@@ -129,7 +147,11 @@ class ZettlrEditor
         this.cm.refresh();
     }
 
-    // Open a new file
+    /**
+     * Opens a file, i.e. replaced the editor's content
+     * @param  {ZettlrFile} file The file to be renderer
+     * @return {ZettlrEditor}      Chainability.
+     */
     open(file)
     {
         if(this.currentHash != null) {
@@ -157,22 +179,37 @@ class ZettlrEditor
             this.cm.doc.setCursor({line: 0, ch: 0});
             $('#CodeMirror-scroll').scrollTop(0);
         }
+
+        return this;
     }
 
-    // Close the current file
+    /**
+     * Closes the current file.
+     * @return {ZettlrEditor} Chainability.
+     */
     close()
     {
         this.cm.setValue('');
         this.cm.markClean();
         this.cm.clearHistory();
         this.words = 0;
+        return this;
     }
 
+    /**
+     * Returns the current word count in the editor.
+     * @return {Integer} The word count.
+     */
     getWordCount()
     {
         return this.cm.getValue().split(' ').length;
     }
 
+    /**
+     * Returns the (newly) written words since the last time this function was
+     * called.
+     * @return {Integer} The delta of the word count.
+     */
     getWrittenWords()
     {
         // Return the additional written words
@@ -181,9 +218,13 @@ class ZettlrEditor
         return cnt;
     }
 
-    // Currently, this function is only called by the context menu class to
-    // select a word. This function only selects the word if nothing else is
-    // selected (to not fuck up some copy action someone tried to do)
+    /**
+     * Selects a word that is under the current cursor.
+     * Currently, this function is only called by the context menu class to
+     * select a word. This function only selects the word if nothing else is
+     * selected (to not fuck up some copy action someone tried to do)
+     * @return {void} Nothing to return.
+     */
     selectWordUnderCursor()
     {
         // Don't overwrite selections.
@@ -191,16 +232,17 @@ class ZettlrEditor
             return;
         }
 
-        console.log(`Selecting word under cursor...`);
-
         let cur = this.cm.getCursor();
         let sel = this.cm.findWordAt(cur);
         this.cm.setSelection(sel.anchor, sel.head);
-
-        console.log(`Selected ${this.cm.getSelection()}!`);
     }
 
-    // Same -- currently only gets called by context menu
+    /**
+     * Replaces the currently selected words. Is only called by the context
+     * menu currently.
+     * @param  {String} word The new word.
+     * @return {void}      Nothing to return.
+     */
     replaceWord(word)
     {
         if(!this.cm.somethingSelected()) {
@@ -212,7 +254,11 @@ class ZettlrEditor
         this.cm.replaceSelection(word, 'around');
     }
 
-    // Displays a tooltip under the element.
+    /**
+     * Displays the footnote content for a given footnote (element)
+     * @param  {jQuery} element The footnote element
+     * @return {void}         Nothing to return.
+     */
     fntooltip(element)
     {
         // Because we highlight the formatting as well, the element's text will
@@ -240,6 +286,10 @@ class ZettlrEditor
         this.div.append(this.fntooltipbubble);
     }
 
+    /**
+     * Toggles the theme.
+     * @return {ZettlrEditor} Chainability.
+     */
     toggleTheme()
     {
         if(this.div.hasClass('dark')) {
@@ -249,24 +299,41 @@ class ZettlrEditor
             this.div.addClass('dark');
             this.cm.setOption("theme", 'zettlr-dark');
         }
+
+        return this;
     }
 
+    /**
+     * Called when the directories are shown/hidden
+     * @return {ZettlrEditor} Chainability.
+     */
     toggleDirectories()
     {
         this.div.toggleClass('no-directories');
         // CodeMirror needs to recalculate the overlays etc., otherwise
         // it will be difficult to write, select, etc.
         this.cm.refresh();
+        return this;
     }
 
+    /**
+     * Called when the preview list is shown/hidden
+     * @return {ZettlrEditor} Chainability.
+     */
     togglePreview()
     {
         this.div.toggleClass('no-preview');
         // CodeMirror needs to recalculate the overlays etc., otherwise
         // it will be difficult to write, select, etc.
         this.cm.refresh();
+        return this;
     }
 
+    /**
+     * Alter the font size of the editor.
+     * @param  {Integer} direction The direction, can be 1 (increase), -1 (decrease) or 0 (reset)
+     * @return {ZettlrEditor}           Chainability.
+     */
     zoom(direction) {
         if(direction === 0) {
             this.fontsize = 100;
@@ -275,16 +342,38 @@ class ZettlrEditor
         }
         this.div.css('font-size', this.fontsize + '%');
         this.cm.refresh();
+        return this;
     }
 
-    // This message is triggered by the renderer process when the user selects
-    // the menu item.
+    /**
+     * The CodeMirror instane should open the find dialog
+     * @return {void} Nothing to return.
+     */
     openFind() { this.cm.execCommand("findPersistent"); }
+
+    /**
+     * Returns the current value of the editor.
+     * @return {String} The current editor contents.
+     */
     getValue() { return this.cm.getValue(); }
+
+    /**
+     * Mark clean the CodeMirror instance
+     * @return {void} Nothing to return.
+     */
     markClean() { this.cm.markClean(); }
-    // Is the editor unmodified?
+
+    /**
+     * Query if the editor is currently modified
+     * @return {Boolean} True, if there are no changes, false, if there are.
+     */
     isClean() { return this.cm.doc.isClean(); }
 
+    /**
+     * Run a CodeMirror command.
+     * @param  {String} cmd The command to be passed to cm.
+     * @return {void}     Nothing to return.
+     */
     runCommand(cmd) { this.cm.execCommand(cmd); }
 }
 
