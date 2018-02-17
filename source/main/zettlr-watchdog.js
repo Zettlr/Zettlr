@@ -1,6 +1,7 @@
 // This class can watch a directory and stage potential changes to execute later on.
 
-const chokidar     = require('chokidar');
+const path          = require('path');
+const chokidar      = require('chokidar');
 
 /*
  * Some words on the ignoring array: We cannot simply pause() and resume() the
@@ -21,6 +22,9 @@ class ZettlrWatchdog
         this.process = null;
         this.watch = false;
         this.path = path;
+
+        // Only watch these filetypes
+        this.filetypes = require('../common/filetypes.json').filetypes;
     }
 
     // Initiate watching process and stage all changes in the staged-array
@@ -40,18 +44,34 @@ class ZettlrWatchdog
             this.ready = true;
         });
 
-        this.process.on('all', (event, path) => {
+        this.process.on('all', (event, p) => {
             if(this.watch) {
                 // Should we ignore this event?
                 for(let i in this.ignored) {
-                    if(this.ignored[i].type == event && this.ignored[i].path == path) {
+                    if(this.ignored[i].type == event && this.ignored[i].path == p) {
                         // We have ignored it once -> remove from array
                         this.ignored.splice(i, 1);
                         return;
                     }
                 }
 
-                this.staged.push({ 'type': event, 'path': path });
+                let s;
+                try {
+                    s = fs.lstatSync(p);
+                } catch(e) {
+                    // On unlink, fsstat of course fails => imitate isDirectory()
+                    // behavior
+                    s = {
+                        'isDirectory': function() {
+                            return (event === 'unlinkDir') ? true : false;
+                        }
+                    };
+                }
+
+                // Only watch changes in directories and supported files
+                if(s.isDirectory() || this.filetypes.includes(path.extname(p))) {
+                    this.staged.push({ 'type': event, 'path': p });
+                }
             }
         });
     }

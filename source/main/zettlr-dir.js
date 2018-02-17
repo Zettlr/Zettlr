@@ -24,6 +24,9 @@ class ZettlrDir
         this.type     = 'directory';
         this.parent   = parent;
 
+        // Supported filetypes
+        this.filetypes = require('../common/filetypes.json').filetypes;
+
         // Prepopulate if given.
         if(dir != null) {
             this.path = dir;
@@ -291,7 +294,7 @@ class ZettlrDir
                 this.children.push(new ZettlrDir(this, p)); // This recursively reads the "f" dir
             } else if(stat.isFile()) {
                 let extname = path.extname(p);
-                if(extname == '.md' || extname == '.txt') {
+                if(this.filetypes.includes(extname)) {
                     // Exclude non-md- and -txt-files
                     this.children.push(new ZettlrFile(this, p));
                 }

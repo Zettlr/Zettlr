@@ -1,3 +1,13 @@
+# 0.12.0
+
+## GUI and functionality
+
+(nothing here)
+
+## Under the hood
+
+- Moved supported filetypes to unified file `source/common/filetypes.json`
+
 # 0.11.0
 
 ## GUI and functionality

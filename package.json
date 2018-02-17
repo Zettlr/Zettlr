@@ -7,6 +7,7 @@
         "url": "git://github.com/Zettlr/Zettlr.git"
     },
     "version": "0.11.0",
+    "license": "MIT",
     "description": "A powerful Markdown Editor with integrated tree view",
     "main": "./source/main.js",
     "scripts": {
@@ -88,7 +89,6 @@
         },
         "rpm": {}
     },
-    "license": "MIT",
     "dependencies": {
         "chokidar": "^2.0.1",
         "codemirror": "^5.34.0",
