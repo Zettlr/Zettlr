@@ -1,4 +1,5 @@
 /**
+ * @ignore
  * BEGIN HEADER
  *
  * Contains:        ZettlrIPC class

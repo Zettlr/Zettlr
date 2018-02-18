@@ -1,7 +1,12 @@
 {
     "source": "./source",
     "destination": "./resources/docs",
+    "excludes": ["node_modules"],
     "plugins": [{
-        "name": "esdoc-standard-plugin"
+        "name": "esdoc-standard-plugin",
+        "option": {
+            "undocumentIdentifier": {"enable": false},
+            "unexportedIdentifier": {"enable": true}
+        }
         }]
     }

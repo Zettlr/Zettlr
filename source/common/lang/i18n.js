@@ -12,7 +12,13 @@
  * END HEADER
  */
 
+/**
+ * @ignore
+ */
 const fs = require('fs');
+/**
+ * @ignore
+ */
 const path = require('path');
 
 /**

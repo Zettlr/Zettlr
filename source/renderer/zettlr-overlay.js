@@ -1,4 +1,5 @@
 /**
+ * @ignore
  * BEGIN HEADER
  *
  * Contains:        ZettlrOverlay class

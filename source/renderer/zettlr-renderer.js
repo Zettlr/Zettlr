@@ -1,4 +1,5 @@
 /**
+ * @ignore
  * BEGIN HEADER
  *
  * Contains:        ZettlrRenderer class
@@ -11,7 +12,6 @@
  * END HEADER
  */
 
-// Enable communication with host process
 const ZettlrRendererIPC = require('../zettlr-rendereripc.js');
 const ZettlrDirectories = require('../zettlr-directories.js');
 const ZettlrPreview     = require('../zettlr-preview.js');
@@ -26,9 +26,14 @@ const remote            = require('electron').remote;
 
 const {trans}           = require('../../common/lang/i18n.js');
 
-/* CLASS */
+/**
+ * ZettlrRenderer class
+ */
 class ZettlrRenderer
 {
+    /**
+     * Initialize all dynamic elements in the renderer process
+     */
     constructor()
     {
         this.currentFile    = null;
@@ -61,6 +66,10 @@ class ZettlrRenderer
         this.pomodoro       = new ZettlrPomodoro(this);
     }
 
+    /**
+     * Begin sending the first wave of messages to get info from main.
+     * @return {void} Nothing to return.
+     */
     init()
     {
         this.overlay.show(trans('init.welcome'));
@@ -80,6 +89,13 @@ class ZettlrRenderer
         this.ipc.send('typo-request-lang', {});
     }
 
+    /**
+     * Switch over the received message.
+     * @param  {Event} event Unused
+     * @param  {Object} arg   The message's body
+     * @return {void}       Nothing to return.
+     * @deprecated Will be moved to Renderer-IPC in another version
+     */
     handleEvent(event, arg)
     {
         switch(arg.command)
@@ -374,7 +390,12 @@ class ZettlrRenderer
         }
     }
 
-    // Helper function to find dummy file/dir objects based on a hash
+    /**
+     * Helper function to find dummy file/dir objects based on a hash
+     * @param  {Integer} hash             The hash identifying whatever is to be searched for.
+     * @param  {Object} [obj=this.paths] A sub-object or the whole tree to be searched.
+     * @return {Mixed}                  Either null, or ZettlrFile/ZettlrDir if found.
+     */
     findObject(hash, obj = this.paths)
     {
         if(obj.hash == hash) {
@@ -390,6 +411,12 @@ class ZettlrRenderer
         return null;
     }
 
+    /**
+     * A new paths object came from main process. This function replaces the
+     * renderer's and re-sets current's pointers.
+     * @param  {Object} nData The new file tree
+     * @return {void}       Nothing to return.
+     */
     updatePaths(nData)
     {
         this.paths = nData;
@@ -404,6 +431,12 @@ class ZettlrRenderer
     }
 
     // SPELLCHECKER FUNCTIONS
+
+    /**
+     * Is called when we receive the array of enabled spellchecking langs. This
+     * begins fetching all of them by requesting the first aff-file.
+     * @param {Array} langs The array from main with correct info about the spellchecker.
+     */
     setSpellcheck(langs)
     {
         this.overlay.update(trans('init.spellcheck.get_lang'));
@@ -425,6 +458,11 @@ class ZettlrRenderer
         }
     }
 
+    /**
+     * Requests a language file (either aff or dic)
+     * @param  {String} type The type of file, either "aff" or "dic"
+     * @return {void}      Nothing to return.
+     */
     requestLang(type)
     {
         let req = null;
@@ -446,6 +484,11 @@ class ZettlrRenderer
         this.ipc.send('typo-request-' + type, req);
     }
 
+    /**
+     * This function checks for existence of Aff and Dic files and then inits
+     * the given language using the dictionaries.
+     * @return {void} Nothing to return.
+     */
     initTypo()
     {
         if(!this.typoLang) { return; }
@@ -501,9 +544,12 @@ class ZettlrRenderer
         }
     }
 
-    // This function takes a word and returns true or falls depending on
-    // whether or not the word has been spelled correctly using the given
-    // spellchecking language
+    /**
+     * This function returns either true or false based on whether or not the
+     * word given has been found in any of the dictionaries.
+     * @param  {String} word The word to check
+     * @return {Boolean}      True, if it has been found, or false if no language recognizes it.
+     */
     typoCheck(word)
     {
         if(!this.typoReady) {
@@ -521,6 +567,11 @@ class ZettlrRenderer
         return false;
     }
 
+    /**
+     * Returns an array of suggested correct spellings of a word.
+     * @param  {String} word The word to get suggestions for.
+     * @return {Array}      An array of strings containing suggestions.
+     */
     typoSuggest(word)
     {
         if(!this.typoReady) {
@@ -540,32 +591,139 @@ class ZettlrRenderer
 
     // SEARCH FUNCTIONS
     // This class only acts as a pass-through
+
+    /**
+     * Pass-through function from ZettlrToolbar to ZettlrPreview. TODO: This
+     * looks weird from a organizational perspective.
+     * @param  {String} term The term to be searched for.
+     * @return {void}      Nothing to return.
+     */
     beginSearch(term) { this.preview.beginSearch(term); }
+
+    /**
+     * Pass-through function from ZettlrPreview to Toolbar.
+     * @param  {Integer} curIndex Current searched file
+     * @param  {Integer} count    Absolute count of files to search.
+     * @return {void}          Nothing to return.
+     */
     searchProgress(curIndex, count) { this.toolbar.searchProgress(curIndex, count); }
+
+    /**
+     * Pass-through function from ZettlrPreview to Toolbar.
+     * @return {void} Nothing to return.
+     */
     endSearch() { this.toolbar.endSearch(); }
 
+    /**
+     * Pass-through function from ZettlrEditor to ZettlrToolbar.
+     * @param  {Integer} words Number of words in editor.
+     * @return {void}       Nothing to return.
+     */
     updateWordCount(words) { this.toolbar.updateWordCount(words); }
-    // Triggered by ZettlrDirectories - if user clicks on another dir
 
+    /**
+     * Request the selection of the directory in main. TODO: Rename function
+     * (because we are not REALLY requesting the dir, only that the pointer is
+     * set!)
+     * @param  {Integer} hash As usually, a hash identifying a directory.
+     * @return {void}      Nothing to return.
+     */
     requestDir(hash) { this.ipc.send('dir-select', hash); }
+
+    /**
+     * Triggered when a file or dir is dropped on a dir.
+     * @param  {Integer} from Hash of the source file/dir.
+     * @param  {Integer} to   Where to move? (Hash)
+     * @return {void}      Nothing to return.
+     */
     requestMove(from, to) { this.ipc.send('request-move', { 'from': from, 'to': to }); }
-    // Triggered by ZettlrPreview - if user clicks on another file
+
+    /**
+     * Requests the opening of another file in editor.
+     * @param  {Integer} hash The hash of the file to be loaded.
+     * @return {void}      Nothing to return.
+     */
     requestFile(hash) { this.ipc.send('file-get', hash); }
-    // Triggered by ZettlrBody - user has entered a new file name and confirmed
+
+    /**
+     * Executed when a user has finished typing a new file name.
+     * @param  {String} name The new name
+     * @param  {Integer} hash The containing dir's hash
+     * @return {void}      Nothing to return.
+     */
     requestNewFile(name, hash) { this.ipc.send('file-new', { 'name': name, 'hash': hash }); }
-    // Also triggered by ZettlrBody, only for directory
+
+    /**
+     * Executed when a user has finished typing a new dir name.
+     * @param  {String} name The new name
+     * @param  {Integer} hash The containing dir's hash
+     * @return {void}      Nothing to return.
+     */
     requestNewDir(name, hash) { this.ipc.send('dir-new', { 'name': name, 'hash': hash }); }
-    // Also triggered by ZettlrBody on export
+
+    /**
+     * Executed when the user clicks on a filetype to export to.
+     * @param  {Integer} hash The hash of the file to be exported
+     * @param  {String} ext  Either "odt", "docx", "html" or "pdf".
+     * @return {void}      Nothing to return.
+     */
     requestExport(hash, ext) { this.ipc.send('export', { 'hash': hash, 'ext': ext}); }
-    // Triggered by ZettlrBody on DirRename
+
+    /**
+     * Requests a rename of a directory.
+     * @param  {String} val  The new name.
+     * @param  {Integer} hash The directory's identifier.
+     * @return {void}      Nothing to return.
+     */
     requestDirRename(val, hash) { this.ipc.send('dir-rename', { 'hash': hash, 'name': val }); }
-    // Triggered by ZettlrBody on FileRename
+
+    /**
+     * Request a rename of a file.
+     * @param  {String} val  The new name
+     * @param  {Integer} hash The identifier of the file.
+     * @return {void}      Nothing to return.
+     */
     requestFileRename(val, hash) { this.ipc.send('file-rename', { 'hash': hash, 'name': val }); }
+
+    /**
+     * Called by the dialog when the user saves the settings.
+     * @param  {Object} cfg A correct configuration object to be sent to main.
+     * @return {void}     Nothing to return.
+     */
     saveSettings(cfg) { this.ipc.send('update-config', cfg); }
+
+    /**
+     * Simply sets the current file pointer to the new.
+     * @param {ZettlrFile} newfile The new file's pointer.
+     */
     setCurrentFile(newfile) { this.currentFile = newfile; }
+
+    /**
+     * Sets the current dir pointer to the new. TODO: Maybe include a selection thingy here.
+     * @param {ZettlrDir} newdir The new dir.
+     */
     setCurrentDir(newdir) { this.currentDir = newdir; }
+
+    /**
+     * Returns the current file's pointer.
+     * @return {ZettlrFile} The file object.
+     */
     getCurrentFile() { return this.currentFile; }
+
+    /**
+     * Returns the current directory's pointer.
+     * @return {ZettlrDir} The dir object.
+     */
     getCurrentDir() { return this.currentDir; }
+
+    /**
+     * Returns the language of the GUI.
+     * @return {String} The language code.
+     */
     getLocale() { return this.lang; }
+
+    /**
+     * Simply indicates to main to set the modified flag.
+     */
     setModified() { this.ipc.send('file-modified', {}); }
 } // END CLASS

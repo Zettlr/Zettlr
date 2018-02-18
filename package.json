@@ -18,7 +18,8 @@
         "release:mac": "electron-builder --mac dmg",
         "release:win": "electron-builder --win nsis",
         "release:linux": "electron-builder --linux deb rpm",
-        "less": "node scripts/less.js"
+        "less": "node scripts/less.js",
+        "docs:build": "esdoc"
     },
     "build": {
         "appId": "com.zettlr.www",
