@@ -52,7 +52,7 @@ class ZettlrDir
         this.parent   = parent;
 
         // Supported filetypes
-        this.filetypes = require('../common/filetypes.json').filetypes;
+        this.filetypes = require('../common/data.json').filetypes;
 
         // Prepopulate if given.
         if(dir != null) {

@@ -41,7 +41,7 @@ class ZettlrWatchdog
         this.path = path;
 
         // Only watch these filetypes
-        this.filetypes = require('../common/filetypes.json').filetypes;
+        this.filetypes = require('../common/data.json').filetypes;
     }
 
     /**

@@ -91,8 +91,8 @@
         "rpm": {}
     },
     "dependencies": {
-        "chokidar": "^2.0.1",
-        "codemirror": "^5.34.0",
+        "chokidar": "^2.0.2",
+        "codemirror": "^5.35.0",
         "codemirror-markdown-list-autoindent": "^1.0.1",
         "command-exists": "^1.2.2",
         "jquery": "^3.3.1",
@@ -102,7 +102,7 @@
     },
     "devDependencies": {
         "electron": "^1.8.2",
-        "electron-builder": "^19.56.0",
+        "electron-builder": "^20.0.8",
         "esdoc": "^1.0.4",
         "esdoc-standard-plugin": "^1.0.0",
         "less": "^2.7.3"

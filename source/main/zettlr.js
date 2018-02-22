@@ -258,166 +258,6 @@ class Zettlr
     ***************************************************************************/
 
     /**
-     * This function switches through the received command. DEPRECATED! Will
-     * be moved to IPC in future version.
-     * @param  {Event} event Unused
-     * @param  {Object} arg   Contains the message body.
-     * @return {void}       Does not return anything.
-     * @deprecated
-     */
-    handleEvent(event, arg)
-    {
-        // We received a new event and need to handle it. This function is
-        // called by the ZettlrIPC-object.
-        switch(arg.command) {
-            case 'get-paths':
-            // The child process requested the current paths and files
-            this.ipc.send('paths', this.getPaths());
-            break;
-
-            case 'file-get-quicklook':
-            this.ipc.send('file-quicklook', this.paths.findFile({'hash': arg.content}).withContent());
-            break;
-
-            case 'file-get':
-            // The client requested a different file.
-            this.sendFile(arg.content);
-            break;
-
-            case 'dir-select':
-            // The client requested another directory
-            this.selectDir(arg.content);
-            break;
-
-            case 'file-modified':
-            // Just set the modification flags.
-            this.setModified();
-            break;
-
-            case 'file-new':
-            // Client has requested a new file.
-            this.newFile(arg.content);
-            break;
-
-            case 'dir-new':
-            // Client has requested a new folder.
-            this.newDir(arg.content);
-            break;
-
-            case 'file-save':
-            // Client has requested a save-action.
-            // arg contains the contents of CM and maybe also a hash.
-            this.saveFile(arg.content);
-            break;
-
-            case 'dir-open':
-            // Client requested a totally different folder.
-            this.openDir();
-            break;
-
-            case 'file-delete':
-            if(arg.content.hasOwnProperty('hash')) {
-                this.removeFile(arg.content.hash);
-            } else if(this.getCurrentFile() != null) {
-                this.removeFile();
-            }
-            break;
-
-            case 'dir-delete':
-            if(arg.content.hasOwnProperty('hash')) {
-                this.removeDir(arg.content.hash);
-            } else if(this.getCurrentDir() != null) {
-                this.removeDir();
-            }
-            break;
-
-            case 'file-search':
-            // arg.content contains a hash of the file to be searched
-            // and the prepared terms.
-            let ret = this.paths.findFile({ 'hash': arg.content.hash }).search(arg.content.terms);
-            this.ipc.send('file-search-result', {
-                'hash'  : arg.content.hash,
-                'result': ret
-            });
-            break;
-
-            // Change theme in config
-            case 'toggle-theme':
-            this.config.set('darkTheme', !this.config.get('darkTheme'));
-            break;
-
-            // Change snippet setting in config
-            case 'toggle-snippets':
-            this.config.set('snippets', !this.config.get('snippets'));
-            break;
-
-            case 'export':
-            this.exportFile(arg.content);
-            break;
-
-            // Rename a directory (arg.hash + arg.(new)name)
-            case 'dir-rename':
-            this.renameDir(arg.content);
-            break;
-
-            case 'file-rename':
-            this.renameFile(arg.content);
-            break;
-
-            // Client requested a directory move
-            case 'request-move':
-            this.requestMove(arg.content);
-            break;
-
-            case 'get-preferences':
-            // Duplicate the object because we only need supportedLangs for the
-            // renderer
-            let toSend = JSON.parse(JSON.stringify(this.config.config));
-            toSend.supportedLangs = this.config.getSupportedLangs();
-            this.ipc.send('preferences', toSend);
-            break;
-
-            // Got a new config object
-            case 'update-config':
-            // Immediately reflect snippets and theme
-            if(arg.content.darkTheme != this.config.get('darkTheme')) {
-                this.ipc.send('toggle-theme', 'no-emit');
-            }
-            if(arg.content.snippets != this.config.get('snippets')) {
-                this.ipc.send('toggle-snippets', 'no-emit');
-            }
-            this.config.update(arg.content);
-            break;
-
-            // Renderer wants a configuration value
-            case 'config-get':
-            this.ipc.send('config', { 'key': arg.content, 'value': this.config.get(arg.content) });
-            break;
-
-            case 'config-get-env':
-            this.ipc.send('config', { 'key': arg.content, 'value': this.config.getEnv(arg.content) });
-            break;
-
-            // SPELLCHECKING EVENTS
-            case 'typo-request-lang':
-            this.ipc.send('typo-lang', this.config.get('spellcheck'));
-            break;
-
-            case 'typo-request-aff':
-            this.retrieveDictFile('aff', arg.content);
-            break;
-
-            case 'typo-request-dic':
-            this.retrieveDictFile('dic', arg.content);
-            break;
-
-            default:
-            console.log(trans('system.unknown_command', arg.command));
-            break;
-        }
-    }
-
-    /**
      * Send a file with its contents to the renderer process.
      * @param  {Integer} arg An integer containing the file's hash.
      * @return {void}     This function does not return anything.
@@ -1089,6 +929,12 @@ class Zettlr
      * @return {ZettlrDir} The root directory pointer.
      */
     getPaths()       { return this.paths; }
+
+    /**
+     * Returns the ZettlrConfig object
+     * @return {ZettlrConfig} The configuration
+     */
+    getConfig()      { return this.config; }
 
     /**
      * Get the current directory.

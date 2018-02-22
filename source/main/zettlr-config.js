@@ -200,6 +200,15 @@ class ZettlrConfig
     }
 
     /**
+     * Simply returns the complete config object.
+     * @return {Object} The configuration object.
+     */
+    getConfig()
+    {
+        return this.config;
+    }
+
+    /**
      * Returns an environment variable
      * @param  {String} attr The environment variable to be returned.
      * @return {Mixed}      Either the variable's value or null.
