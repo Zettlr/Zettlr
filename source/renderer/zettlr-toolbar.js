@@ -62,10 +62,7 @@ class ZettlrToolbar
             let command = elem.attr('data-command') || 'unknown-command';
             let content = elem.attr('data-content') || {};
 
-            self.parent.handleEvent(null, {
-                'command': command,
-                'content': content
-            });
+            self.parent.handleEvent(command, content);
         });
     }
 

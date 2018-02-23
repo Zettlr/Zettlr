@@ -66,23 +66,14 @@ class ZettlrCon
             // Now build
             let that = this;
             this.menu.append(new MenuItem({ 'label': trans('menu.rename_file'), click(item, win) {
-                that.parent.parent.handleEvent(null, {
-                    'command': 'file-rename',
-                    'content': { 'hash': hash }
-                });
+                that.parent.parent.handleEvent('file-rename', { 'hash': hash });
             }}));
             this.menu.append(new MenuItem({ 'label': trans('menu.delete_file'), click(item, win) {
-                that.parent.parent.handleEvent(null, {
-                    'command': 'file-delete',
-                    'content': { 'hash': hash }
-                });
+                that.parent.parent.handleEvent('file-delete', { 'hash': hash });
             }}));
             this.menu.append(new MenuItem({ 'type': 'separator' }));
             this.menu.append(new MenuItem({ 'label': trans('menu.quicklook'), click(item, win) {
-                that.parent.parent.handleEvent(null, {
-                    'command': 'quicklook',
-                    'content': { 'hash': hash }
-                });
+                that.parent.parent.handleEvent('quicklook', { 'hash': hash });
             }}));
 
         } else if(elem.parents('#directories').length > 0) {
@@ -101,31 +92,19 @@ class ZettlrCon
                 // Only add rename/remove options if not root dir
                 if(elem.attr('id') !== 'root') {
                     this.menu.append(new MenuItem({ 'label': trans('menu.rename_dir'), click(item, win) {
-                        that.parent.parent.handleEvent(null, {
-                            'command': 'dir-rename',
-                            'content': { 'hash': hash }
-                        });
+                        that.parent.parent.handleEvent('dir-rename', { 'hash': hash });
                     } }));
                     this.menu.append(new MenuItem({ 'label': trans('menu.delete_dir'), click(item, win) {
-                        that.parent.parent.handleEvent(null, {
-                            'command': 'dir-delete',
-                            'content': { 'hash': hash }
-                        });
+                        that.parent.parent.handleEvent('dir-delete', { 'hash': hash });
                     }}));
                     this.menu.append(new MenuItem({ 'type': 'separator' }));
                 }
 
                 this.menu.append(new MenuItem({ 'label': trans('menu.new_file'), click(item, win) {
-                    that.parent.parent.handleEvent(null, {
-                        'command': 'file-new',
-                        'content': { 'hash': hash }
-                    });
+                    that.parent.parent.handleEvent('file-new', { 'hash': hash });
                 } }));
                 this.menu.append(new MenuItem({ 'label': trans('menu.new_dir'), click(item, win) {
-                    that.parent.parent.handleEvent(null, {
-                        'command': 'dir-new',
-                        'content': { 'hash': hash }
-                    });
+                    that.parent.parent.handleEvent('dir-new', { 'hash': hash });
                 } }));
             }
         } else if(elem.parents('#editor').length > 0) {
@@ -159,42 +138,27 @@ class ZettlrCon
                 label: trans('menu.bold'),
                 accelerator: 'CmdOrCtrl+B',
                 click(item, win) {
-                that.parent.parent.handleEvent(null, {
-                    'command': 'cm-command',
-                    'content': 'markdownBold'
-                });
+                that.parent.parent.handleEvent('cm-command', 'markdownBold');
             }}));
             this.menu.append(new MenuItem({
                 label: trans('menu.italic'),
                 accelerator: 'CmdOrCtrl+I',
                 click(item, win) {
-                that.parent.parent.handleEvent(null, {
-                    'command': 'cm-command',
-                    'content': 'markdownItalic'
-                });
+                that.parent.parent.handleEvent('cm-command', 'markdownItalic');
             } }));
             this.menu.append(new MenuItem({type: 'separator'}));
             this.menu.append(new MenuItem({
                 label: trans('menu.insert_link'),
                 accelerator: 'CmdOrCtrl+K',
                 click(item, win) {
-                that.parent.parent.handleEvent(null, {
-                    'command': 'cm-command',
-                    'content': 'markdownLink'
-                });
+                that.parent.parent.handleEvent('cm-command', 'markdownLink');
             } }));
 
             this.menu.append(new MenuItem( { label: trans('menu.insert_ol'), click(item, win) {
-                that.parent.parent.handleEvent(null, {
-                    'command': 'cm-command',
-                    'content': 'markdownMakeOrderedList'
-                });
+                that.parent.parent.handleEvent('cm-command', 'markdownMakeOrderedList');
             } }));
             this.menu.append(new MenuItem( { label: trans('menu.insert_ul'), click(item, win) {
-                that.parent.parent.handleEvent(null, {
-                    'command': 'cm-command',
-                    'content': 'markdownMakeUnorderedList'
-                });
+                that.parent.parent.handleEvent('cm-command', 'markdownMakeUnorderedList');
             } }));
             /*this.menu.append(new MenuItem( { label: 'Blockquote' }));*/
             this.menu.append(new MenuItem( { type: 'separator' } ));

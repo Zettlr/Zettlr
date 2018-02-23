@@ -90,304 +90,105 @@ class ZettlrRenderer
     }
 
     /**
-     * Switch over the received message.
-     * @param  {Event} event Unused
-     * @param  {Object} arg   The message's body
-     * @return {void}       Nothing to return.
-     * @deprecated Will be moved to Renderer-IPC in another version
+     * The toolbar buttons trigger IPC event types. Therefore simply forward to
+     * the IPC which in turn will call the corresponding events on this class.
+     * @param  {String} cmd The command
+     * @param  {Object} cnt The message's body
+     * @return {void}     No return.
      */
-    handleEvent(event, arg)
+    handleEvent(cmd, cnt)
     {
-        switch(arg.command)
-        {
-            case 'paths':
-            // arg contains a JSON with all paths and files
-            // Initial command.
-            this.body.closeQuicklook();
-            this.setCurrentDir(arg.content);
-            this.setCurrentFile(null);
-            this.paths = arg.content;
-            this.directories.empty();
-            this.directories.refresh();
-            this.preview.refresh();
-            this.directories.select(arg.content.hash);
-            break;
+        this.ipc.handleEvent(cmd, cnt);
+    }
 
-            case 'paths-update':
-            // Update the paths
-            this.updatePaths(arg.content);
-            this.directories.refresh();
-            this.preview.refresh();
-            break;
+    /**
+     * The user has opened a completely new directory.
+     * @param  {Object} newPaths The new paths object
+     * @return {void}          As this is called by event handler, don't do a thing.
+     */
+    newProject(newPaths)
+    {
+        this.paths = newPaths;
+        this.body.closeQuicklook();
+        this.setCurrentDir(newPaths);
+        this.setCurrentFile(null);
+        this.directories.empty();
+        this.directories.refresh();
+        this.preview.refresh();
+        this.directories.select(newPaths.hash);
+    }
 
-            // DIRECTORIES
-            case 'dir-set-current':
-            // Received a new directory
-            this.setCurrentDir(arg.content);
-            this.directories.select(arg.content.hash);
-            this.preview.refresh();
-            break;
+    /**
+     * Update somewhere in the paths.
+     * @param  {[type]} newPaths [description]
+     * @return {[type]}          [description]
+     */
+    refresh(newPaths)
+    {
+        this.updatePaths(newPaths);
+        this.directories.refresh();
+        this.preview.refresh();
+    }
 
-            case 'dir-find':
-            // User wants to search in current directory.
-            this.toolbar.focusSearch();
-            break;
-
-            case 'dir-open':
-            // User has requested to open another folder. Notify host process.
-            this.ipc.send('dir-open', {});
-            break;
-
-            case 'dir-rename':
-            if(arg.content.hasOwnProperty('hash')) {
-                // Another dir should be renamed
-                // Rename a dir based on a hash -> find it
-                this.body.requestNewDirName(this.findObject(arg.content.hash));
-            } else if(this.getCurrentDir() != null) {
-                // Root means the parent has no type property.
-                if(this.getCurrentDir().parent.hasOwnProperty('type')) {
-                    this.body.requestNewDirName(this.getCurrentDir());
-                }
+    /**
+     * Requests the renaming of either the current or another directory.
+     * @param  {Object} arg Message body
+     * @return {void}     No return.
+     */
+    renameDir(arg)
+    {
+        if(arg.hasOwnProperty('hash')) {
+            // Another dir should be renamed
+            // Rename a dir based on a hash -> find it
+            this.body.requestNewDirName(this.findObject(arg.hash));
+        } else if(this.getCurrentDir() != null) {
+            // Root means the parent has no type property. (IMPORTANT: NEVER
+            // ever think it would be a good idea to give ZettlrRenderer a type
+            // property!! TODO: Harden this.)
+            if(this.getCurrentDir().parent.hasOwnProperty('type')) {
+                this.body.requestNewDirName(this.getCurrentDir());
             }
-            break;
-
-            case 'dir-new':
-            // User wants to create a new directory. Display modal
-            if(arg.content.hasOwnProperty('hash')) {
-                // User has probably right clicked
-                this.body.requestDirName(this.findObject(arg.content.hash));
-            } else {
-                this.body.requestDirName(this.getCurrentDir());
-            }
-            break;
-
-            case 'dir-delete':
-            // The user has requested to delete the current file
-            // Request from main process
-            if(arg.content.hasOwnProperty('hash')) {
-                this.ipc.send('dir-delete', { 'hash': arg.content.hash });
-            } else {
-                this.ipc.send('dir-delete', {});
-            }
-            break;
-
-            // FILES
-
-            case 'file-set-current':
-            this.setCurrentFile(arg.content);
-            this.preview.select(arg.content.hash);
-            break;
-
-            case 'file-open':
-            // We have received a new file. So close the old and open the new
-            this.editor.close();
-            this.setCurrentFile(arg.content);
-            this.preview.select(arg.content.hash);
-            this.editor.open(arg.content);
-            break;
-
-            case 'file-close':
-            // We have received a close-file command.
-            this.editor.close();
-            this.setCurrentFile(null);
-            break;
-
-            case 'file-save':
-            // The user wants to save the currently opened file.
-            let file = this.getCurrentFile();
-            if(file == null) {
-                // User wants to save an untitled file
-                // Important: The main Zettlr-class expects hash to be null
-                // for new files
-                file = {};
-            }
-            file.content = this.editor.getValue();
-            file.wordcount = this.editor.getWrittenWords(); // For statistical purposes only =D
-            this.ipc.send('file-save', file);
-            break;
-
-            case 'file-rename':
-            if(arg.content.hasOwnProperty('hash')) {
-                // Another file should be renamed
-                // Rename a file based on a hash -> find it
-                this.body.requestNewFileName(this.findObject(arg.content.hash));
-            }else if(this.getCurrentFile() != null) {
-                this.body.requestNewFileName(this.getCurrentFile());
-            }
-            break;
-
-            case 'file-new':
-            // User wants to open a new file. Display modal
-            if((arg.content != null) && arg.content.hasOwnProperty('hash')) {
-                // User has probably right clicked
-                this.body.requestFileName(this.findObject(arg.content.hash));
-            } else {
-                this.body.requestFileName(this.getCurrentDir());
-            }
-            break;
-
-            case 'file-find':
-            this.editor.openFind();
-            break;
-
-            case 'file-insert':
-            this.preview.refresh();
-            // this.preview.insert(arg.content);
-            break;
-
-            case 'file-delete':
-            // The user has requested to delete the current file
-            // Request from main process
-            if(arg.content.hasOwnProperty('hash')) {
-                this.ipc.send('file-delete', { 'hash': arg.content.hash });
-            } else {
-                this.ipc.send('file-delete', {});
-            }
-            break;
-
-            case 'file-search-result':
-            this.preview.handleSearchResult(arg.content);
-            break;
-
-            case 'toggle-theme':
-            // User wants to switch the theme
-            this.directories.toggleTheme();
-            this.preview.toggleTheme();
-            this.editor.toggleTheme();
-            this.body.toggleTheme();
-            this.toolbar.toggleTheme();
-            if(arg.content !== 'no-emit') {
-                this.ipc.send('toggle-theme'); // Notify host process for configuration save
-            }
-            break;
-
-            case 'toggle-snippets':
-            this.preview.toggleSnippets();
-            if(arg.content !== 'no-emit') {
-                this.ipc.send('toggle-snippets');
-            }
-            break;
-
-            case 'toggle-directories':
-            this.directories.toggleDisplay();
-            this.preview.toggleDirectories();
-            this.editor.toggleDirectories();
-            break;
-
-            case 'toggle-preview':
-            this.editor.togglePreview();
-            break;
-
-            case 'export':
-            if(this.getCurrentFile() != null) {
-                this.body.displayExport(this.getCurrentFile());
-            }
-            break;
-
-            case 'open-preferences':
-            this.ipc.send('get-preferences', {});
-            break;
-
-            case 'preferences':
-            this.body.displayPreferences(arg.content);
-            break;
-
-            // Execute a command with CodeMirror (Bold, Italic, Link, etc)
-            case 'cm-command':
-            this.editor.runCommand(arg.content);
-            // After a codemirror command has been issued through this function
-            // give the editor back focus
-            this.editor.cm.focus();
-            break;
-
-            case 'config':
-            switch(arg.content.key)
-            {
-                case 'darkTheme':
-                // Will only be received once, so simply "toggle" from initial
-                // light theme to dark
-                if(arg.content.value == true) {
-                    this.directories.toggleTheme();
-                    this.preview.toggleTheme();
-                    this.editor.toggleTheme();
-                    this.body.toggleTheme();
-                    this.toolbar.toggleTheme();
-                }
-                break;
-                case 'snippets':
-                // Will only be received once; if false toggle from initial "true"
-                // state.
-                if(!arg.content.value) {
-                    this.preview.toggleSnippets();
-                }
-                break;
-                case 'app_lang':
-                this.lang = arg.content.value;
-                break;
-                case 'pandoc':
-                this.pandoc = arg.content.value;
-                break;
-                case 'pdflatex':
-                this.pdflatex = arg.content.value;
-                break;
-            }
-            break;
-
-            // SPELLCHECKING EVENTS
-            case 'typo-lang':
-            // arg.content contains an object holding trues and falses for all
-            // languages to be checked simultaneously
-            this.setSpellcheck(arg.content);
-            // Also pass down the languages to the body so that it can display
-            // them in the preferences dialog
-            this.body.setSpellcheckLangs(arg.content);
-            break;
-
-            // Receive the typo aff!
-            case 'typo-aff':
-            this.typoAff = arg.content;
-            this.requestLang('dic');
-            break;
-
-            // Receive the typo dic!
-            case 'typo-dic':
-            this.typoDic = arg.content;
-            // Now we can finally initialize spell check:
-            this.initTypo();
-            break;
-
-            case 'quicklook':
-            this.ipc.send('file-get-quicklook', arg.content.hash);
-            break;
-
-            case 'file-quicklook':
-            this.body.quicklook(arg.content);
-            break;
-
-            case 'notify':
-            this.body.notify(arg.content);
-            break;
-
-            // Pomodoro timer toggle
-            case 'pomodoro':
-            this.pomodoro.popup();
-            break;
-
-            // Zoom
-            case 'zoom-reset':
-            this.editor.zoom(0); // <-- Sometimes I think I am stupid. Well, but it works, I guess.
-            break;
-            case 'zoom-in':
-            this.editor.zoom(1);
-            break;
-            case 'zoom-out':
-            this.editor.zoom(-1);
-            break;
-
-            default:
-            console.log(trans('system.unknown_command', arg.command));
-            break;
         }
+    }
+
+    newDir(arg)
+    {
+        // User wants to create a new directory. Display modal
+        if(arg.hasOwnProperty('hash')) {
+            // User has probably right clicked
+            this.body.requestDirName(this.findObject(arg.hash));
+        } else {
+            this.body.requestDirName(this.getCurrentDir());
+        }
+    }
+
+    deleteDir(arg)
+    {
+        // The user has requested to delete the current file
+        // Request from main process
+        if(arg.hasOwnProperty('hash')) {
+            this.ipc.send('dir-delete', { 'hash': arg.hash });
+        } else {
+            this.ipc.send('dir-delete', {});
+        }
+    }
+
+    toggleTheme(notify)
+    {
+        // Welcome to FUNCTION HELL! (Proposal: How about simply setting the
+        // "dark" class on the body ...?)
+        this.directories.toggleTheme();
+        this.preview.toggleTheme();
+        this.editor.toggleTheme();
+        this.body.toggleTheme();
+        this.toolbar.toggleTheme();
+    }
+
+    toggleDirectories()
+    {
+        this.directories.toggleDisplay();
+        this.preview.toggleDirectories();
+        this.editor.toggleDirectories();
     }
 
     /**
@@ -696,13 +497,80 @@ class ZettlrRenderer
      * Simply sets the current file pointer to the new.
      * @param {ZettlrFile} newfile The new file's pointer.
      */
-    setCurrentFile(newfile) { this.currentFile = newfile; }
+    setCurrentFile(newfile)
+    {
+        this.currentFile = newfile;
+        // Also directly select it
+        if(newfile !== null) {
+            this.preview.select(newfile.hash);
+        }
+    }
+
+    openFile(f)
+    {
+        // We have received a new file. So close the old and open the new
+        this.editor.close();
+        this.setCurrentFile(f);
+        this.preview.select(f.hash);
+        this.editor.open(f);
+    }
+
+    closeFile()
+    {
+        // We have received a close-file command.
+        this.editor.close();
+        this.setCurrentFile(null);
+    }
+
+    saveFile()
+    {
+        // The user wants to save the currently opened file.
+        let file = this.getCurrentFile();
+        if(file == null) {
+            // User wants to save an untitled file
+            // Important: The main Zettlr-class expects hash to be null
+            // for new files
+            file = {};
+        }
+        file.content = this.editor.getValue();
+        file.wordcount = this.editor.getWrittenWords(); // For statistical purposes only =D
+        this.ipc.send('file-save', file);
+    }
+
+    renameFile(f)
+    {
+        if(f.hasOwnProperty('hash')) {
+            // Another file should be renamed
+            // Rename a file based on a hash -> find it
+            this.body.requestNewFileName(this.findObject(f.hash));
+        }else if(this.getCurrentFile() != null) {
+            this.body.requestNewFileName(this.getCurrentFile());
+        }
+    }
+
+    newFile(f)
+    {
+        // User wants to open a new file. Display modal
+        if((f != null) && f.hasOwnProperty('hash')) {
+            // User has probably right clicked
+            this.body.requestFileName(this.findObject(f.hash));
+        } else {
+            this.body.requestFileName(this.getCurrentDir());
+        }
+    }
 
     /**
      * Sets the current dir pointer to the new. TODO: Maybe include a selection thingy here.
      * @param {ZettlrDir} newdir The new dir.
      */
-    setCurrentDir(newdir) { this.currentDir = newdir; }
+    setCurrentDir(newdir)
+    {
+        this.currentDir = newdir;
+        // What we can also do here: Select the dir and refresh the file list.
+        // Because that's what _always_ follows this function call.
+        this.directories.select(newdir.hash);
+        this.preview.refresh();
+    }
 
     /**
      * Returns the current file's pointer.
@@ -721,6 +589,22 @@ class ZettlrRenderer
      * @return {String} The language code.
      */
     getLocale() { return this.lang; }
+
+    /**
+     * Returns the toolbar object
+     * @return {ZettlrToolbar} The current toolbar
+     */
+    getToolbar() { return this.toolbar; }
+
+    getEditor() { return this.editor; }
+
+    getPreview() { return this.preview; }
+
+    getEditor() { return this.editor; }
+
+    getBody() { return this.body; }
+
+    getPomodoro() { return this.pomodoro; }
 
     /**
      * Simply indicates to main to set the modified flag.

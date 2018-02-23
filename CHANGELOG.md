@@ -6,7 +6,7 @@
 
 ## Under the hood
 
-- Moved supported filetypes to unified file `source/common/filetypes.json`
+- Moved supported filetypes to unified file `source/common/data.json`
 - Documentation for all files added.
 - `ESDoc`-support integrated for API documentation. Simply run `npm run docs:build` to generate a full documentation in `resources/docs`
 

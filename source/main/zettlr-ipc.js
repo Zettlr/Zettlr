@@ -186,7 +186,7 @@ class ZettlrIPC
             // Duplicate the object because we only need supportedLangs for the
             // renderer
             let toSend = JSON.parse(JSON.stringify(this._app.getConfig().getConfig()));
-            toSend.supportedLangs = this._app.getConfig().getConfig().getSupportedLangs();
+            toSend.supportedLangs = this._app.getConfig().getSupportedLangs();
             this.send('preferences', toSend);
             break;
 
