@@ -2,13 +2,15 @@
 
 ## GUI and functionality
 
-(nothing here)
+- Improved the markdown shortcuts. Now, if nothing is selected, when you trigger the bold or italics option, the cursor will automatically be placed inside the formatting marks, so that you can start typing without having to worry about the placement of the cursor.
+- Now, if there is a valid URL in the clipboard when you trigger the insert link/image commands, it will be taken automatically as the linking target, so that you only have to type in the text it should link to.
 
 ## Under the hood
 
 - Moved supported filetypes to unified file `source/common/data.json`
 - Documentation for all files added.
 - `ESDoc`-support integrated for API documentation. Simply run `npm run docs:build` to generate a full documentation in `resources/docs`
+- Moved the `handleEvent()` functions from the main objects to the IPC classes.
 
 # 0.11.0
 

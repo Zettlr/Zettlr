@@ -72,16 +72,7 @@ class ZettlrEditor
                 'Shift-Tab'     : 'autoUnindentMarkdownList',
                 // Default bindings are non-persistent searches (dialog hides after enter)
                 'Cmd-F'         : 'findPersistent',
-                'Ctrl-F'        : 'findPersistent',
-                // Markdown-specific shortcuts
-                'Cmd-B'         : 'markdownBold',
-                'Ctrl-B'        : 'markdownBold',
-                'Cmd-I'         : 'markdownItalic',
-                'Ctrl-I'        : 'markdownItalic',
-                'Cmd-K'         : 'markdownLink',
-                'Ctrl-K'        : 'markdownLink',
-                'Cmd-Shift-I'   : 'markdownImage',
-                'Ctrl-Shift-I'  : 'markdownImage'
+                'Ctrl-F'        : 'findPersistent'
             }
         });
 

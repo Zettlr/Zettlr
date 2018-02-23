@@ -3,6 +3,8 @@
 //
 // This plugin defines shortcuts for CodeMirror Markdown (Bold, italic, link, etc)
 
+const {clipboard} = require('electron');
+
 (function(mod) {
     if (typeof exports == "object" && typeof module == "object") // CommonJS
     mod(require("../../../node_modules/codemirror/lib/codemirror"));
@@ -20,28 +22,28 @@
 
     var boldRE = /^(\*{2}(.*)\*{2}|\_{2}(.*)\_{2})$/;
     var italRE = /^(\*{1}(.*)\*{1}|\_{1}(.*)\_{1})$/;
+    var urlRE = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
 
     // Either encapsulates the selection bold or "un-bolds" or inserts new
     // Bold-characters
     CodeMirror.commands.markdownBold = function(cm) {
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
 
-        // Retrieve currently selected selections
-        var sel = cm.doc.getSelections();
-
         // Is something selected?
-        if(sel.length == 0) {
+        if(!cm.doc.somethingSelected()) {
             // No, so just insert something at cursor -> ****
-            cur = cm.doc.getCursor('from'); // Get beginning
-            // Now ch contains the cursor char and line the corresponding line.
             // Replace the selection
-            cm.doc.replaceSelection('****');
-            // And then move the cursor two chars back (to place it in the
-            // middle of the boldened)
-            cur.ch = cur.ch - 2;
+            cm.doc.replaceSelection('****', 'start');
+            // Move cursor two chars forward (to the middle of the insertion)
+            let cur = cm.doc.getCursor();
+            cur.ch = cur.ch + 2;
             cm.doc.setCursor(cur);
+            cm.refresh();
             return;
         }
+
+        // Retrieve currently selected selections
+        var sel = cm.doc.getSelections();
 
         // Traverse all selections and perform bolden or unbolden on them
         for(let i = 0; i < sel.length; i++) {
@@ -64,21 +66,21 @@
     CodeMirror.commands.markdownItalic = function(cm) {
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
 
-        // Retrieve currently selected selections
-        var sel = cm.doc.getSelections();
-
         // Is something selected?
-        if(sel.length == 0) {
+        if(!cm.doc.somethingSelected()) {
             // No, so just insert something at cursor
-            cur = cm.doc.getCursor('from'); // Get beginning
-            // Now ch contains the cursor char and line the corresponding line.
             // Replace the selection
-            cm.doc.replaceSelection('__');
-            // And then move the cursor one char back
-            cur.ch = cur.ch - 1;
+            cm.doc.replaceSelection('__', 'start');
+            // And then move the cursor one char forward
+            let cur = cm.doc.getCursor();
+            cur.ch = cur.ch + 1;
             cm.doc.setCursor(cur);
+            cm.refresh();
             return;
         }
+
+        // Retrieve currently selected selections
+        var sel = cm.doc.getSelections();
 
         // Traverse all selections and perform bolden or unbolden on them
         for(let i = 0; i < sel.length; i++) {
@@ -101,17 +103,22 @@
     CodeMirror.commands.markdownLink = function(cm) {
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
 
-        // Retrieve currently selected selections
-        var sel = cm.doc.getSelections();
-
         // Is something selected?
-        if(sel.length == 0) {
-            cur = cm.doc.getCursor('from');
-            cm.doc.replaceSelection('[]()');
-            cur.ch = cur.ch - 3;
+        if(!cm.doc.somethingSelected()) {
+            if(urlRE.test(clipboard.readText())) {
+                cm.doc.replaceSelection(`[](${clipboard.readText()})`, 'start');
+            } else {
+                cm.doc.replaceSelection('[]()', 'start');
+            }
+            let cur = cm.doc.getCursor();
+            cur.ch = cur.ch + 1;
             cm.doc.setCursor(cur);
+            cm.refresh();
             return;
         }
+
+        // Retrieve currently selected selections
+        var sel = cm.doc.getSelections();
 
         // Traverse all selections and perform bolden or unbolden on them
         for(let i = 0; i < sel.length; i++) {
@@ -129,17 +136,22 @@
     CodeMirror.commands.markdownImage = function(cm) {
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
 
-        // Retrieve currently selected selections
-        var sel = cm.doc.getSelections();
-
         // Is something selected?
-        if(sel.length == 0) {
-            cur = cm.doc.getCursor('from');
-            cm.doc.replaceSelection('![]()');
-            cur.ch = cur.ch - 3;
+        if(!cm.doc.somethingSelected()) {
+            if(urlRE.test(clipboard.readText())) {
+                cm.doc.replaceSelection(`![](${clipboard.readText()})`, 'start');
+            } else {
+                cm.doc.replaceSelection('![]()', 'start');
+            }
+            let cur = cm.doc.getCursor();
+            cur.ch = cur.ch + 2;
             cm.doc.setCursor(cur);
+            cm.refresh();
             return;
         }
+
+        // Retrieve currently selected selections
+        var sel = cm.doc.getSelections();
 
         // Traverse all selections and perform bolden or unbolden on them
         for(let i = 0; i < sel.length; i++) {
@@ -158,7 +170,7 @@
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
 
         // If nothing is selected we have a very short journey.
-        if(!cm.somethingSelected()) {
+        if(!cm.doc.somethingSelected()) {
             // Just jump to the beginning of the line and insert a list indicator
             let cur = cm.getCursor();
             cur.ch = 0;
@@ -251,7 +263,7 @@
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
 
         // If nothing is selected we have a very short journey.
-        if(!cm.somethingSelected()) {
+        if(!cm.doc.somethingSelected()) {
             // Just jump to the beginning of the line and insert a list indicator
             let cur = cm.getCursor();
             cur.ch = 0;
@@ -320,5 +332,15 @@
             }
         }
     };
+
+    // Add all commands to the default keymap
+    CodeMirror.keyMap['default']['Cmd-B']           = 'markdownBold';
+    CodeMirror.keyMap['default']['Ctrl-B']          = 'markdownBold';
+    CodeMirror.keyMap['default']['Cmd-I']           = 'markdownItalic';
+    CodeMirror.keyMap['default']['Ctrl-I']          = 'markdownItalic';
+    CodeMirror.keyMap['default']['Cmd-K']           = 'markdownLink';
+    CodeMirror.keyMap['default']['Ctrl-K']          = 'markdownLink';
+    CodeMirror.keyMap['default']['Cmd-Shift-I']     = 'markdownImage';
+    CodeMirror.keyMap['default']['Ctrl-Shift-I']    = 'markdownImage';
 
 });

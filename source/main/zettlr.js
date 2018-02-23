@@ -658,7 +658,7 @@ class Zettlr
 
     /**
      * Move a directory or a file.
-     * @param  {Object} arg An object containing a ZettlrDir or ZettlrFile object
+     * @param  {Object} arg An object containing the hash of source and destination
      * @return {void}     This function does not return anything.
      */
     requestMove(arg)
@@ -852,7 +852,7 @@ class Zettlr
         if(this.getCurrentFile() == null) {
             this.setCurrentFile(file);
             // "Open" this file.
-            this.selectDir(this.getCurrentDir().hash);
+            // this.selectDir(this.getCurrentDir().hash);
             this.sendFile(file.hash);
             return;
         }
