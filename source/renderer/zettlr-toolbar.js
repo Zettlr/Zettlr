@@ -27,6 +27,7 @@ class ZettlrToolbar
     {
         this.parent = parent;
         this.div = $('#toolbar');
+        this._build();
         this.searchbar = this.div.find('.searchbar').first().find('input').first();
         this.searchbar.attr('placeholder', trans('gui.find_placeholder'));
         this.fileInfo = this.div.find('.file-info');
@@ -64,6 +65,33 @@ class ZettlrToolbar
 
             self.parent.handleEvent(command, content);
         });
+    }
+
+    /**
+     * This builds the toolbar
+     * @return {void} No return.
+     */
+    _build()
+    {
+        let tpl = require('./assets/toolbar/toolbar.json').toolbar;
+
+        // Append everything to the div.
+        for(let elem of tpl) {
+            let child = $('<div>').addClass(elem.role);
+            if(elem.role === 'button') {
+                child.addClass(elem.class);
+                child.attr('data-command', elem.command);
+                child.attr('data-content', elem.content);
+            } else if(elem.role === 'searchbar') {
+                child.html('<input type="text"><div class="end-search">&times;</div>');
+            } else if(elem.role === 'file-info') {
+            } else if(elem.role === 'pomodoro') {
+                child.addClass('button');
+                child.attr('data-command', 'pomodoro');
+                child.html('<svg width="16" height="16" viewBox="0 0 20 20"><circle class="pomodoro-meter" cx="10" cy="10" r="7" stroke-width="6" /> <circle class="pomodoro-value" cx="10" cy="10" r="7" stroke-width="6" /></svg>');
+            }
+            this.div.append(child);
+        }
     }
 
     /**

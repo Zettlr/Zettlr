@@ -11,6 +11,7 @@
 - Documentation for all files added.
 - `ESDoc`-support integrated for API documentation. Simply run `npm run docs:build` to generate a full documentation in `resources/docs`
 - Moved the `handleEvent()` functions from the main objects to the IPC classes.
+- Moved the toolbar buttons to `source/renderer/assets/toolbar/toolbar.json` as in the example of Electron Menu, to have more dynamic control over the generation of the toolbar.
 
 # 0.11.0
 

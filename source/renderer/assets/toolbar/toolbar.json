@@ -1,0 +1,110 @@
+{
+    "toolbar": [
+        {
+            "role": "button",
+            "class": "directory-new",
+            "command": "dir-new",
+            "content": "{}"
+        },
+        {
+            "role": "button",
+            "class":  "file-new",
+            "command": "file-new",
+            "content": "{}"
+        },
+        {
+            "role": "button",
+            "class": "preferences",
+            "command": "open-preferences",
+            "content": "{}"
+        },
+        {
+            "role": "searchbar"
+        },
+        {
+            "role": "spacer"
+        },
+        {
+            "role": "button",
+            "class": "file-save",
+            "command": "file-save",
+            "content": "{}"
+        },
+        {
+            "role": "button",
+            "class": "share",
+            "command": "export",
+            "content": "{}"
+        },
+        {
+            "role": "button",
+            "class": "file-rename",
+            "command": "file-rename",
+            "content": "{}"
+        },
+        {
+            "role": "button",
+            "class": "file-delete",
+            "command": "file-delete",
+            "content": "{}"
+        },
+        {
+            "role": "separator"
+        },
+        {
+            "role": "button",
+            "class": "insert-image",
+            "command": "cm-command",
+            "content": "markdownImage"
+        },
+        {
+            "role": "button",
+            "class": "insert-link",
+            "command": "cm-command",
+            "content": "markdownLink"
+        },
+        {
+            "role": "button",
+            "class": "insert-bold",
+            "command": "cm-command",
+            "content": "markdownBold"
+        },
+        {
+            "role": "button",
+            "class": "insert-italic",
+            "command": "cm-command",
+            "content": "markdownItalic"
+        },
+        {
+            "role": "button",
+            "class": "insert-ul",
+            "command": "cm-command",
+            "content": "markdownMakeUnorderedList"
+        },
+        {
+            "role": "button",
+            "class": "insert-ol",
+            "command": "cm-command",
+            "content": "markdownMakeOrderedList"
+        },
+        {
+            "role": "button",
+            "class": "insert-fn",
+            "command": "cm-command",
+            "content": "insertFootnote"
+        },
+        {
+            "role": "button",
+            "class": "remove-fn",
+            "command": "cm-command",
+            "content": "removeFootnote"
+        },
+        {
+            "role": "file-info"
+        },
+        {
+            "role": "pomodoro"
+        }
+
+    ]
+}
