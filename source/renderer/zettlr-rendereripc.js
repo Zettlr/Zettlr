@@ -259,6 +259,10 @@ class ZettlrRendererIPC
             this._app.getBody().notify(cnt);
             break;
 
+            case 'toc':
+            this._app.toc();
+            break;
+
             // Pomodoro timer toggle
             case 'pomodoro':
             this._app.getPomodoro().popup();

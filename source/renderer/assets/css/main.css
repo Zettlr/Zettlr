@@ -815,6 +815,10 @@ html {
   content: "\f1e0";
   display: inline;
 }
+#toolbar .button.show-toc::before {
+  content: "\f292";
+  display: inline;
+}
 #toolbar .button.pomodoro {
   padding: 2px;
   background-image: none;
@@ -936,6 +940,31 @@ html {
   border-radius: 3px;
   cursor: default;
 }
+.popup-arrow {
+  width: 0;
+  height: 0;
+  position: fixed;
+}
+.popup-arrow.up {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid rgba(0, 0, 0, 0.8);
+}
+.popup-arrow.down {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid rgba(0, 0, 0, 0.8);
+}
+.popup-arrow.left {
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 5px solid rgba(0, 0, 0, 0.8);
+}
+.popup-arrow.right {
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid rgba(0, 0, 0, 0.8);
+}
 .popup {
   position: fixed;
   background-color: rgba(0, 0, 0, 0.8);
@@ -944,32 +973,23 @@ html {
   color: white;
   border-radius: 2px;
   max-width: 200px;
-  max-height: 100%;
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
-.popup .arrow {
-  width: 0;
-  height: 0;
-  position: absolute;
+.popup a.toc-link {
+  color: white;
+  transition: 0.4s all ease;
+  text-decoration: none;
+  display: block;
+  line-height: 150%;
+  padding: 4px;
+  overflow-x: hidden;
+  white-space: nowrap;
 }
-.popup .arrow.up {
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 5px solid rgba(0, 0, 0, 0.8);
-}
-.popup .arrow.down {
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid rgba(0, 0, 0, 0.8);
-}
-.popup .arrow.left {
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-right: 5px solid rgba(0, 0, 0, 0.8);
-}
-.popup .arrow.right {
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-left: 5px solid rgba(0, 0, 0, 0.8);
+.popup a.toc-link:hover {
+  background-color: #c8c8c8;
+  transition: 0.4s all ease;
 }
 .popup p {
   margin: 10px;

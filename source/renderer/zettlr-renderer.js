@@ -20,6 +20,7 @@ const ZettlrBody        = require('../zettlr-body.js');
 const ZettlrOverlay     = require('../zettlr-overlay.js');
 const ZettlrToolbar     = require('../zettlr-toolbar.js');
 const ZettlrPomodoro    = require('../zettlr-pomodoro.js');
+const ZettlrPopup       = require('../zettlr-popup.js');
 
 const Typo              = require('typo-js');
 const remote            = require('electron').remote;
@@ -151,6 +152,11 @@ class ZettlrRenderer
         }
     }
 
+    /**
+     * Displays the popup for a new directory name.
+     * @param  {Object} arg Contains the containing dir's hash
+     * @return {void}     No return.
+     */
     newDir(arg)
     {
         // User wants to create a new directory. Display modal
@@ -162,6 +168,11 @@ class ZettlrRenderer
         }
     }
 
+    /**
+     * The user wants to delete a directory
+     * @param  {Object} arg Contains the hash (or none)
+     * @return {void}     No return.
+     */
     deleteDir(arg)
     {
         // The user has requested to delete the current file
@@ -173,7 +184,11 @@ class ZettlrRenderer
         }
     }
 
-    toggleTheme(notify)
+    /**
+     * Toggle the theme
+     * @return {void}        No return.
+     */
+    toggleTheme()
     {
         // Welcome to FUNCTION HELL! (Proposal: How about simply setting the
         // "dark" class on the body ...?)
@@ -184,11 +199,49 @@ class ZettlrRenderer
         this.toolbar.toggleTheme();
     }
 
+    /**
+     * Toggle the display of the directory pane.
+     * @return {void} No return.
+     */
     toggleDirectories()
     {
         this.directories.toggleDisplay();
         this.preview.toggleDirectories();
         this.editor.toggleDirectories();
+    }
+
+    /**
+     * Displays a table of content.
+     * @return {void} No return.
+     */
+    toc()
+    {
+        if(this.getCurrentFile() === null) {
+            return;
+        }
+
+        let toc = this.editor.buildTOC();
+
+        if(toc.length === 0) {
+            return;
+        }
+
+        let cnt = $('<div>');
+        for(let entry of toc) {
+            cnt.append(
+                $('<a>').text(entry.level + '. ' + entry.text)
+                .attr('data-line', entry.line)
+                .attr('href', '#')
+                .addClass('toc-link')
+            );
+        }
+        let popup = new ZettlrPopup(this, $('.button.show-toc'), cnt);
+
+        // On click jump to line
+        $('.toc-link').click((event) => {
+            let elem = $(event.target);
+            this.editor.jtl(elem.attr('data-line'));
+        });
     }
 
     /**

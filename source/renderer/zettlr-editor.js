@@ -59,9 +59,7 @@ class ZettlrEditor
                 closeBrackets: '()[]{}\'\'""»«“”‘’**__' // Doesn't work right now. But ill figure it out
             },
             theme: 'zettlr',
-            lineWiseCopyCut: false, // Don't copy/cut whole lines without selection
             autofocus: false,
-            dragDrop: false, // for now - REACTIVATE IN LATER PHASE
             lineWrapping: true,
             autoCloseBrackets: true, // Autoclose brackets and quotes
             extraKeys: {
@@ -276,6 +274,40 @@ class ZettlrEditor
         this.fntooltipbubble.text(fnref);
         this.fntooltipbubble.attr('style', 'bottom:0; left:0; right:0; z-index:10000');
         this.div.append(this.fntooltipbubble);
+    }
+
+    /**
+     * This function builds a table of contents based on the editor contents
+     * @return {Array} An array containing objects with all headings
+     */
+    buildTOC()
+    {
+        let cnt = this.cm.getValue();
+        let toc = [];
+        cnt = cnt.split('\n');
+        for(let i in cnt) {
+            if(/^#{1,6} /.test(cnt[i])) {
+                toc.push({
+                    'line': i,
+                    'text': cnt[i].replace(/^#{1,6} /, ''),
+                    'level': (cnt[i].match(/#/g) || []).length
+                });
+            }
+        }
+
+        return toc;
+    }
+
+    /**
+     * Small function that jumps to a specific line in the editor.
+     * @param  {Integer} line The line to pull into view
+     * @return {void}      No return.
+     */
+    jtl(line)
+    {
+        // Wow. Such magic.
+        this.cm.doc.setCursor({ 'line' : line, 'ch': 0 });
+        this.cm.refresh();
     }
 
     /**

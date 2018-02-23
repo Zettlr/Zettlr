@@ -2,6 +2,33 @@
 
 @arrow-size: 5px;
 
+.popup-arrow {
+    width:0;
+    height:0;
+    position:fixed;
+
+    &.up {
+        border-left: @arrow-size solid transparent;
+        border-right: @arrow-size solid transparent;
+        border-bottom: @arrow-size solid rgba(0,0,0,.8);
+    }
+    &.down {
+        border-left: @arrow-size solid transparent;
+        border-right: @arrow-size solid transparent;
+        border-top: @arrow-size solid rgba(0,0,0,.8);
+    }
+    &.left {
+        border-top: @arrow-size solid transparent;
+        border-bottom: @arrow-size solid transparent;
+        border-right:@arrow-size solid rgba(0,0,0,.8);
+    }
+    &.right {
+        border-top: @arrow-size solid transparent;
+        border-bottom: @arrow-size solid transparent;
+        border-left: @arrow-size solid rgba(0,0,0,.8);
+    }
+}
+
 .popup {
     position:fixed;
     background-color:rgba(0,0,0,.8);
@@ -9,33 +36,24 @@
     box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.75);
     color:white;
     border-radius:2px;
-    max-width:200px; // Maximum width. Height is (potentially) indefinite.
-    max-height:100%;
+    max-width:200px; // Maximum width.
+    max-height:600px; // Maximum height. If its too much simply scroll.
+    overflow-y: auto;
+    overflow-x: hidden;
 
-    .arrow {
-        width:0;
-        height:0;
-        position:absolute;
-
-        &.up {
-            border-left: @arrow-size solid transparent;
-            border-right: @arrow-size solid transparent;
-            border-bottom: @arrow-size solid rgba(0,0,0,.8);
-        }
-        &.down {
-            border-left: @arrow-size solid transparent;
-            border-right: @arrow-size solid transparent;
-            border-top: @arrow-size solid rgba(0,0,0,.8);
-        }
-        &.left {
-            border-top: @arrow-size solid transparent;
-            border-bottom: @arrow-size solid transparent;
-            border-right:@arrow-size solid rgba(0,0,0,.8);
-        }
-        &.right {
-            border-top: @arrow-size solid transparent;
-            border-bottom: @arrow-size solid transparent;
-            border-left: @arrow-size solid rgba(0,0,0,.8);
+    // TOC links
+    a.toc-link {
+        color: white;
+        transition:0.4s all ease;
+        text-decoration:none;
+        display:block;
+        line-height:150%;
+        padding:4px;
+        overflow-x: hidden;
+        white-space:nowrap;
+        &:hover {
+            background-color:@grey-2;
+            transition:0.4s all ease;
         }
     }
 

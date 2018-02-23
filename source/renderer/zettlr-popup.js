@@ -59,10 +59,11 @@ class ZettlrPopup
         });
 
         this.popup = $('<div>').addClass('popup').css('opacity', '0');
-        this.arrow = $('<div>').addClass('arrow');
-        this.popup.append(this.content).append(this.arrow);
+        this.arrow = $('<div>').addClass('popup-arrow');
+        this.popup.append(this.content);
         $('body').append(this.modal);
         $('body').append(this.popup);
+        $('body').append(this.arrow);
 
         // Activate forms
         this.popup.find('form').on('submit', (e) => {
@@ -110,7 +111,7 @@ class ZettlrPopup
         // 10px: arrow plus the safety-margin
         if(bottom > height + 10) {
             // Below element
-            this.arrow.addClass('up').css('top', (-this.arrow.outerHeight()) + 'px');
+            this.arrow.addClass('up');
             this.popup.css('top', (this.y + 5) + 'px');
             if(offsetX > window.innerWidth-5) {
                 this.popup.css('left', (window.innerWidth - width - 5) + 'px'); // 5px margin to document
@@ -121,33 +122,36 @@ class ZettlrPopup
                     this.popup.css('left', (this.x - width/2) + 'px');
                 }
             }
-            this.arrow.css('left', (this.x - this.popup.offset().left - this.arrow.outerHeight()) + 'px');
+            this.arrow.css('top', (top + this.elem.outerHeight()) + 'px');
+            this.arrow.css('left', (left + (this.elem.outerWidth()/2)) + 'px');
         } else if(right > width + 10) {
             // We can place it right of the element
             // Therefore re-compute x and y
             this.x = this.elem.offset().left + this.elem.outerWidth();
             this.y = this.elem.offset().top + this.elem.outerHeight()/2;
-            this.arrow.addClass('left').css('left', (-this.arrow.outerWidth()) + 'px');
+            this.arrow.addClass('left');
             this.popup.css('left', (this.x + 5) + 'px');
             if(this.y + height/2 > window.innerHeight-5) {
                 this.popup.css('top', (window.innerHeight - height - 5) + 'px');
             } else {
                 this.popup.css('top', (this.y - height/2) + 'px');
             }
-            this.arrow.css('top', (this.popup.outerHeight()/2) + 'px');
+            this.arrow.css('left', (left + this.elem.outerWidth()) + 'px');
+            this.arrow.css('top', top + (this.elem.outerHeight()/2) + 'px');
         } else {
             // Above
             // Therefore re-compute x and y
             this.x = this.elem.offset().left + this.elem.outerWidth()/2;
             this.y = this.elem.offset().top;
-            this.arrow.addClass('down').css('top', this.arrow.outerHeight() + 'px');
+            this.arrow.addClass('down');
             this.popup.css('top', (this.y - height - 5) + 'px');
             if(this.x+width/2 > window.innerWidth - 5) {
                 this.popup.css('left', (window.innerWidth - width - 5) + 'px');
             } else {
                 this.popup.css('left', (this.x - width/2) + 'px');
             }
-            this.arrow.css('left', (this.x - this.popup.offset().left) + 'px');
+            this.arrow.css('top', top + 'px');
+            this.arrow.css('left', (left+this.elem.outerWidth()/2) + 'px');
         }
     }
 
@@ -169,6 +173,7 @@ class ZettlrPopup
             }
         }
 
+        this.arrow.detach();
         this.popup.animate({'opacity': '0'}, 200, 'swing', () => {
             this.popup.detach();
             this.modal.detach();
