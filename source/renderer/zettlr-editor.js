@@ -104,9 +104,8 @@ class ZettlrEditor
             elt.style.textIndent = "-" + off + "px";
             elt.style.paddingLeft = (basePadding + off) + "px";
 
-            // Test for images to be rendered.
-            //console.log(line);
-            //this.renderImage(line);
+            // Render images if applicable
+            this.renderImage(cm, line, elt);
         });
 
         // Turn cursor into pointer while hovering link with pressed shift
@@ -141,45 +140,43 @@ class ZettlrEditor
 
         this.cm.refresh();
     }
+    // END constructor
 
-    renderImages()
+    renderImage(cm, line, elt)
     {
-        let imageRE = /^!\[(.*?)\]\((.*?)\)/;
-
-        for(let widget of this.inlineImages) {
-            widget.close();
+        // This function converts a line into an image, if applicable. It only
+        // renders images where the whole line is only an image.
+        let imageRE = /^!\[(.*?)\]\((.*?)\)$/;
+        if(!imageRE.test(line.text)) {
+            return;
+        }
+        let match = imageRE.exec(line.text);
+        let caption = match[1] || '';
+        let url = match[2] || '';
+        if(url == '') {
+            // Nothing to render here
+            return;
         }
 
-        for(let i = 0; i < this.cm.lineCount(); i++) {
-            if(!imageRE.test(line.text)) {
-                // Not an image
-                continue;
-            }
-            let match = imageRE.exec(line.text);
-            console.log(`Found image in line beginning with "${line.text.substr(0.15)}..."!`);
-            let caption = match[1] || '';
-            let url = match[2] || '';
-            if(url == '') {
-                // Nothing to render here
-                continue;
-            }
+        let img = new Image();
+
+        // Disable internal error handling...
+        img.onerror = (e) => { e.preventDefault(); e.stopPropagation(); };
+        img.src = url;
+
+        // ... and simply do it by the onload-function.
+        img.onload = () => {
+            let aspect = elt.getBoundingClientRect().width / img.naturalWidth;
+            let h = Math.round(img.naturalHeight * aspect);
+            elt.style.backgroundImage = `url(${url})`;
+            elt.style.backgroundSize = 'cover';
+            elt.title = `${caption} (${img.naturalWidth}x${img.naturalHeight})`;
+            elt.style.height = h + 'px';
+            // Until here everything is really nice. Only one problem: We have
+            // to somehow manually overwrite the line.height. Problem: then the
+            // document becomes completely uneditable. BUG
+            //line.height = h;
         }
-
-        let realUrl = url;
-        // TODO: Some testing concerning the validity of the URL
-
-        console.log(`Creating image`);
-        let img = document.createElement('img');
-        img.src = realUrl;
-        img.alt = caption;
-        img.title = caption;
-        console.log(`Adding line widget!`);
-        return;
-        let lw = this.cm.addLineWidget(line, img, {noHScroll:true, above:true});
-        console.log(lw);
-        this.inlineImages.push(lw);
-
-        // TODO: Render the actual line image
     }
 
     /**
