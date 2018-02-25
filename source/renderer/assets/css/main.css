@@ -1,7 +1,7 @@
 @font-face {
-  font-family: 'Font Awesome';
-  src: url('../fontawesome/fontawesome-webfont.eot?v=4.7.0');
-  src: url('../fontawesome/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('../fontawesome/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('../fontawesome/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('../fontawesome/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('../fontawesome/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+  font-family: 'WebHostingHub-Glyphs';
+  src: url('../whh-font/webhostinghub-glyphs.eot');
+  src: url('../whh-font/webhostinghub-glyphs.eot?#iefix') format('embedded-opentype'), url('../whh-font/webhostinghub-glyphs.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -228,19 +228,19 @@ html {
   margin-right: 3px;
 }
 #directories ul .collapse-indicator::before {
-  content: "\f078";
-  font-family: 'Font Awesome';
+  content: "\f48b";
+  font-family: 'WebHostingHub-Glyphs';
   font-size: 0.72em;
   /* Bit smaller, those indicators are damned huge */
   color: #646464;
   display: inline-block;
   vertical-align: sub;
-  width: 10px;
-  height: 19px;
+  width: 13px;
+  height: 20px;
   overflow: hidden;
 }
 #directories ul.collapsed .collapse-indicator::before {
-  content: "\f054";
+  content: "\f488";
   vertical-align: sub;
 }
 #directories ul.collapsed ul {
@@ -632,9 +632,9 @@ html {
   padding: 0.1em;
 }
 .quicklook .title .close::before {
-  font-family: 'Font Awesome';
+  font-family: 'WebHostingHub-Glyphs';
   font-weight: light;
-  content: "\f00d";
+  content: "\00d7";
   line-height: 0.8em;
   font-size: 0.8em;
   margin: 0.2em;
@@ -742,7 +742,7 @@ html {
   margin: 4px;
   text-align: center;
   line-height: 20px;
-  font-family: 'Font Awesome';
+  font-family: 'WebHostingHub-Glyphs';
   font-size: 0.72em;
 }
 #toolbar .button:first-child {
@@ -756,71 +756,72 @@ html {
   background-color: #c8c8c8;
 }
 #toolbar .button.dir-open::before {
-  content: "\f07c";
+  content: "\f73e";
   display: inline;
 }
 #toolbar .button.directory-new::before {
-  content: "\f07b";
+  content: "\f0da";
   display: inline;
 }
 #toolbar .button.file-new::before {
-  content: "\f016";
+  content: "\f0c6";
   display: inline;
 }
 #toolbar .button.preferences::before {
-  content: "\f013";
+  content: "\f00f";
   display: inline;
 }
 #toolbar .button.file-save::before {
-  content: "\f0c7";
+  content: "\f0c8";
   display: inline;
 }
 #toolbar .button.file-delete::before {
-  content: "\f014";
+  content: "\f0ce";
   display: inline;
 }
 #toolbar .button.file-rename::before {
-  content: "\f120";
+  content: "\f5d4";
   display: inline;
 }
 #toolbar .button.insert-bold::before {
-  content: "\f032";
+  content: "\f1f4";
   display: inline;
 }
 #toolbar .button.insert-italic::before {
-  content: "\f033";
+  content: "\f1f5";
   display: inline;
 }
 #toolbar .button.insert-ol::before {
-  content: "\f0cb";
+  content: "\f4c3";
   display: inline;
 }
 #toolbar .button.insert-ul::before {
-  content: "\f0ca";
+  content: "\f4c2";
   display: inline;
 }
 #toolbar .button.insert-fn::before {
-  content: "\f12b";
+  content: "\f1eb";
   display: inline;
 }
 #toolbar .button.remove-fn::before {
-  content: "\f12d";
+  content: "\f1eb";
   display: inline;
+  text-decoration: line-through;
 }
 #toolbar .button.insert-link::before {
-  content: "\f0c1";
+  content: "\f022";
   display: inline;
 }
 #toolbar .button.insert-image::before {
-  content: "\f03e";
+  content: "\22b7";
   display: inline;
 }
 #toolbar .button.share::before {
-  content: "\f1e0";
+  content: "\f16c";
   display: inline;
 }
 #toolbar .button.show-toc::before {
-  content: "\f292";
+  content: "\f68c";
   display: inline;
 }
 #toolbar .button.pomodoro {
