@@ -2,6 +2,12 @@
     "toolbar": [
         {
             "role": "button",
+            "class": "dir-open",
+            "command": "dir-open",
+            "content": "{}"
+        },
+        {
+            "role": "button",
             "class": "directory-new",
             "command": "dir-new",
             "content": "{}"

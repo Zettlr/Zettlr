@@ -106,7 +106,7 @@ class ZettlrEditor
 
             // Test for images to be rendered.
             //console.log(line);
-            this.renderImage(line);
+            //this.renderImage(line);
         });
 
         // Turn cursor into pointer while hovering link with pressed shift
@@ -149,7 +149,7 @@ class ZettlrEditor
         for(let widget of this.inlineImages) {
             widget.close();
         }
-        
+
         for(let i = 0; i < this.cm.lineCount(); i++) {
             if(!imageRE.test(line.text)) {
                 // Not an image

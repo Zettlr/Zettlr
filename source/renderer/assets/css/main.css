@@ -755,8 +755,12 @@ html {
   background-image: none;
   background-color: #c8c8c8;
 }
+#toolbar .button.dir-open::before {
+  content: "\f07c";
+  display: inline;
+}
 #toolbar .button.directory-new::before {
-  content: "\f115";
+  content: "\f07b";
   display: inline;
 }
 #toolbar .button.file-new::before {
