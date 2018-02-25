@@ -123,7 +123,7 @@ class ZettlrPopup
                 }
             }
             this.arrow.css('top', (top + this.elem.outerHeight()) + 'px');
-            this.arrow.css('left', (left + (this.elem.outerWidth()/2)) + 'px');
+            this.arrow.css('left', (left + this.elem.outerWidth()/2 - this.arrow.outerWidth()/2) + 'px');
         } else if(right > width + 10) {
             // We can place it right of the element
             // Therefore re-compute x and y
@@ -137,7 +137,7 @@ class ZettlrPopup
                 this.popup.css('top', (this.y - height/2) + 'px');
             }
             this.arrow.css('left', (left + this.elem.outerWidth()) + 'px');
-            this.arrow.css('top', top + (this.elem.outerHeight()/2) + 'px');
+            this.arrow.css('top', (top + this.elem.outerHeight()/2 - this.arrow.outerHeight()/2) + 'px');
         } else {
             // Above
             // Therefore re-compute x and y
@@ -151,7 +151,7 @@ class ZettlrPopup
                 this.popup.css('left', (this.x - width/2) + 'px');
             }
             this.arrow.css('top', top + 'px');
-            this.arrow.css('left', (left+this.elem.outerWidth()/2) + 'px');
+            this.arrow.css('left', (left+this.elem.outerWidth()/2 - this.arrow.outerWidth()/2) + 'px');
         }
     }
 
