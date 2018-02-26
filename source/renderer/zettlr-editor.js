@@ -3,7 +3,7 @@
 * BEGIN HEADER
 *
 * Contains:        ZettlrEditor class
-* CVM-Role:        Model
+* CVM-Role:        View
 * Maintainer:      Hendrik Erz
 * License:         MIT
 *
@@ -50,8 +50,8 @@ class ZettlrEditor
         this.fntooltipbubble = $('<div>').addClass('fn-panel');
         this.positions = []; // Saves the positions of the editor
         this.currentHash = null; // Needed for positions
-        this.words = 0;
-        this.fontsize = 100;
+        this.words = 0; // Currently written words
+        this.fontsize = 100; // Font size (used for zooming)
         this.inlineImages = []; // Image widgets that are currently rendered
 
         this.cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
@@ -89,6 +89,12 @@ class ZettlrEditor
             }
         });
 
+        this.cm.on('cursorActivity', (cm) => {
+            // This event fires on either editor changes (because, obviously the
+            // cursor changes its position as well then) or when the cursor moves.
+            this.renderImages();
+        })
+
         // Thanks for this to https://discuss.codemirror.net/t/hanging-indent/243/2
         this.cm.on("renderLine", (cm, line, elt) => {
 
@@ -103,9 +109,6 @@ class ZettlrEditor
 
             elt.style.textIndent = "-" + off + "px";
             elt.style.paddingLeft = (basePadding + off) + "px";
-
-            // Render images if applicable
-            this.renderImage(cm, line, elt);
         });
 
         // Turn cursor into pointer while hovering link with pressed shift
@@ -142,40 +145,90 @@ class ZettlrEditor
     }
     // END constructor
 
-    renderImage(cm, line, elt)
+    /**
+     * Renders images for all valid image-tags in the document.
+     */
+    renderImages()
     {
-        // This function converts a line into an image, if applicable. It only
-        // renders images where the whole line is only an image.
-        let imageRE = /^!\[(.*?)\]\((.*?)\)$/;
-        if(!imageRE.test(line.text)) {
-            return;
-        }
-        let match = imageRE.exec(line.text);
-        let caption = match[1] || '';
-        let url = match[2] || '';
-        if(url == '') {
-            // Nothing to render here
-            return;
-        }
+        let imageRE = /^!\[(.+?)\]\((.+?)\)$/;
+        let i = 0;
+        let rendered = [];
 
-        let img = new Image();
+        // First remove images that may not exist anymore. As soon as someone
+        // clicks into the image, it will be automatically removed, as well as
+        // if someone simply deletes the whole line.
+        do {
+            if(!this.inlineImages[i]) {
+                continue;
+            }
+            if(this.inlineImages[i] && this.inlineImages[i].find() === undefined) {
+                // Marker is no longer present, so splice it
+                this.inlineImages.splice(i, 1);
+            } else {
+                // Push the marker's actual _line_ (not the index) into the
+                // rendered array.
+                rendered.push(this.inlineImages[i].find().from.line);
+                // Array is same size, so increase i
+                i++;
+            }
+        } while(i < this.inlineImages.length);
 
-        // Disable internal error handling...
-        img.onerror = (e) => { e.preventDefault(); e.stopPropagation(); };
-        img.src = url;
+        // Now render all potential new images
+        for(let i = 0; i < this.cm.doc.lineCount(); i++)
+        {
+            // Already rendered, so move on
+            if(rendered.includes(i)) {
+                continue;
+            }
 
-        // ... and simply do it by the onload-function.
-        img.onload = () => {
-            let aspect = elt.getBoundingClientRect().width / img.naturalWidth;
-            let h = Math.round(img.naturalHeight * aspect);
-            elt.style.backgroundImage = `url(${url})`;
-            elt.style.backgroundSize = 'cover';
-            elt.title = `${caption} (${img.naturalWidth}x${img.naturalHeight})`;
-            elt.style.height = h + 'px';
-            // Until here everything is really nice. Only one problem: We have
-            // to somehow manually overwrite the line.height. Problem: then the
-            // document becomes completely uneditable. BUG
-            //line.height = h;
+            // Cursor is in here, so also don't render (for now)
+            if(this.cm.doc.getCursor('from').line === i) {
+                continue;
+            }
+
+            // First get the line and test if the contents contain an image
+            let line = this.cm.doc.getLine(i);
+            if(!imageRE.test(line)) {
+                continue;
+            }
+
+            // Extract information from the line
+            let match = imageRE.exec(line);
+            let caption = match[1];
+            let url = match[2];
+
+            // Retrieve lineInfo for line number
+            let lineInfo = this.cm.doc.lineInfo(i);
+            let img = new Image();
+            // Now add a line widget to this line.
+            let textMarker = this.cm.doc.markText(
+                {'line':lineInfo.line, 'ch':0},
+                {'line':lineInfo.line, 'ch':line.length},
+                {
+                    'clearOnEnter': true,
+                    'replacedWith': img,
+                    'handleMouseEvents': true
+                }
+            );
+
+            // Display a replacement image in case the correct one is not found
+            img.onerror = (e) => { img.src = `file://${__dirname}/assets/image-not-found.png` };
+            img.style.width = '100%';
+            img.style.maxHeight = '100%';
+            img.style.cursor = 'default'; // Nicer cursor
+            img.src = url;
+            img.onclick = (e) => { textMarker.clear(); };
+
+            // ... and simply do it by the onload-function.
+            img.onload = () => {
+                let aspect = img.getBoundingClientRect().width / img.naturalWidth;
+                let h = Math.round(img.naturalHeight * aspect);
+                img.title = `${caption} (${img.naturalWidth}x${img.naturalHeight})`;
+                textMarker.changed();
+            }
+
+            // Finally: Push the textMarker into the array
+            this.inlineImages.push(textMarker);
         }
     }
 
