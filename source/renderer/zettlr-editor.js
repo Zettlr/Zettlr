@@ -48,11 +48,12 @@ class ZettlrEditor
         this.parent = parent;
         this.div = $('#editor');
         this.fntooltipbubble = $('<div>').addClass('fn-panel');
-        this.positions = []; // Saves the positions of the editor
-        this.currentHash = null; // Needed for positions
-        this.words = 0; // Currently written words
-        this.fontsize = 100; // Font size (used for zooming)
-        this.inlineImages = []; // Image widgets that are currently rendered
+        this.positions = [];        // Saves the positions of the editor
+        this.currentHash = null;    // Needed for positions
+        this.words = 0;             // Currently written words
+        this.fontsize = 100;        // Font size (used for zooming)
+        this.inlineImages = [];     // Image widgets that are currently rendered
+        this.inlineLinks = [];      // Inline links that are currently rendered
 
         this.cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
             mode: {
@@ -89,10 +90,14 @@ class ZettlrEditor
             }
         });
 
+        // On cursor activity (not the mouse one but the text one), render all
+        // things we should replace in the sense of render directly in the text
+        // such as images, links, other stuff.
         this.cm.on('cursorActivity', (cm) => {
             // This event fires on either editor changes (because, obviously the
             // cursor changes its position as well then) or when the cursor moves.
             this.renderImages();
+            this.renderLinks();
         })
 
         // Thanks for this to https://discuss.codemirror.net/t/hanging-indent/243/2
@@ -128,6 +133,7 @@ class ZettlrEditor
             }
         });
 
+        // Open hyperlinks on shift-clicks externally.
         this.div.on('click', (e) => {
             if(e.shiftKey) {
                 // Now we're handling
@@ -146,8 +152,8 @@ class ZettlrEditor
     // END constructor
 
     /**
-     * Renders images for all valid image-tags in the document.
-     */
+    * Renders images for all valid image-tags in the document.
+    */
     renderImages()
     {
         let imageRE = /^!\[(.+?)\]\((.+?)\)$/;
@@ -229,6 +235,98 @@ class ZettlrEditor
 
             // Finally: Push the textMarker into the array
             this.inlineImages.push(textMarker);
+        }
+    }
+
+    renderLinks()
+    {
+        let linkRE = /\[(.+?)\]\((.+?)\)/g;
+        let i = 0;
+        let match;
+
+        // First remove links that don't exist anymore. As soon as someone
+        // moves the cursor into the link, it will be automatically removed,
+        // as well as if someone simply deletes the whole line.
+        do {
+            if(!this.inlineLinks[i]) {
+                continue;
+            }
+            if(this.inlineLinks[i].find() === undefined) {
+                // Marker is no longer present, so splice it
+                this.inlineLinks.splice(i, 1);
+            } else {
+                i++;
+            }
+        } while(i < this.inlineLinks.length);
+
+        // Now render all potential new links
+        for(let i = 0; i < this.cm.doc.lineCount(); i++)
+        {
+            // Always reset lastIndex property, because test()-ing on regular
+            // expressions advance it.
+            linkRE.lastIndex = 0;
+
+            // First get the line and test if the contents contain a link
+            let line = this.cm.doc.getLine(i);
+            if(!linkRE.test(line)) {
+                continue;
+            }
+
+            linkRE.lastIndex = 0;
+
+            // Run through all links on this line
+            while((match = linkRE.exec(line)) != null) {
+                if((match.index > 0) && (line[match.index-1] == '!')) {
+                    continue;
+                }
+                let caption = match[1];
+                let url = match[2];
+
+                // Now get the precise beginning of the match and its end
+                let curFrom = { 'line': i, 'ch': match.index };
+                let curTo = { 'line': i, 'ch': match.index + match[0].length };
+
+                let cur = this.cm.doc.getCursor('from');
+                if(cur.line === curFrom.line && cur.ch >= curFrom.ch && cur.ch <= curTo.ch) {
+                    // Cursor is in selection: Do not render.
+                    continue;
+                }
+
+                // Has this thing already been rendered?
+                let marks = this.cm.doc.findMarks(curFrom, curTo);
+                for(let marx of marks) {
+                    if(this.inlineLinks.includes(marx)) {
+                        // We've got communism. (Sorry for the REALLY bad pun.)
+                        continue;
+                    }
+                }
+
+                let a = document.createElement('a');
+                a.innerHTML = caption; // TODO: Better testing against HTML entities!
+                a.className = 'cma'; // CodeMirrorAnchors
+                // Apply TextMarker
+                let textMarker = this.cm.doc.markText(
+                    curFrom, curTo,
+                    {
+                        'clearOnEnter': true,
+                        'replacedWith': a,
+                        'inclusiveLeft': false,
+                        'inclusiveRight': false
+                    }
+                );
+
+                a.onclick = function(e) {
+                    // Only open shift clicks
+                    if(e.shiftKey) {
+                        e.preventDefault();
+                        require('electron').shell.openExternal(url);
+                    } else {
+                        textMarker.clear();
+                    }
+                };
+
+                this.inlineLinks.push(textMarker);
+            }
         }
     }
 

@@ -5,6 +5,12 @@
 .CodeMirror pre {
   padding: 0;
 }
+.CodeMirror a.cma {
+  cursor: pointer;
+}
+.CodeMirror a.cma:hover {
+  text-decoration: underline;
+}
 .CodeMirror .cm-header-1 {
   font-size: 2em;
 }
@@ -125,6 +131,9 @@
 .cm-s-zettlr .cm-spell-error {
   border-bottom: 2px dotted #941010;
 }
+.cm-s-zettlr .cma {
+  color: #1d75b3;
+}
 /* Zettlr dark theme for codemirror */
 .cm-s-zettlr-dark {
   /* LISTS */
@@ -170,4 +179,7 @@
 }
 .cm-s-zettlr-dark .cm-spell-error {
   border-bottom: 2px dotted #ffb0b0;
+}
+.cm-s-zettlr-dark .cma {
+  color: #c8dcf0;
 }

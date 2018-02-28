@@ -8,6 +8,14 @@
         padding:0;
     }
 
+    a.cma {
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
     .cm-header-1 { font-size:2em; }
     .cm-header-2 { font-size:1.8em; }
     .cm-header-3 { font-size:1.5em; }
@@ -135,6 +143,10 @@
     }
 
     .cm-spell-error { border-bottom:2px dotted @fg-error; }
+
+    .cma {
+        color: @blue-0;
+    }
 }
 
 /* Zettlr dark theme for codemirror */
@@ -187,4 +199,8 @@
     }
 
     .cm-spell-error { border-bottom:2px dotted @bg-error; }
+
+    .cma {
+        color: @blue-selection;
+    }
 }
