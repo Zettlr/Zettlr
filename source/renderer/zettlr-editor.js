@@ -116,37 +116,6 @@ class ZettlrEditor
             elt.style.paddingLeft = (basePadding + off) + "px";
         });
 
-        // Turn cursor into pointer while hovering link with pressed shift
-        this.cm.getWrapperElement().addEventListener('mousemove', (e) => {
-            let t = $(e.target);
-            if((t.hasClass('cm-url') || t.hasClass('cm-link')) && e.shiftKey) {
-                t.addClass('shift');
-            } else {
-                t.removeClass('shift');
-            }
-
-            // Display a footnote if the target is a link (and begins with ^)
-            if(t.hasClass('cm-link') && t.text().indexOf('^') === 0) {
-                this.fntooltip(t);
-            } else {
-                this.fntooltipbubble.detach();
-            }
-        });
-
-        // Open hyperlinks on shift-clicks externally.
-        this.div.on('click', (e) => {
-            if(e.shiftKey) {
-                // Now we're handling
-                e.preventDefault();
-                e.stopPropagation();
-                $(e.target).removeClass('shift');
-                let url = $(e.target).text();
-                if(/https?/.test(url)) {
-                    require('electron').shell.openExternal(url);
-                }
-            }
-        });
-
         this.cm.refresh();
     }
     // END constructor
