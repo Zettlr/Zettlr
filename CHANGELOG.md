@@ -4,7 +4,7 @@
 
 - *New feature*: Integrated dynamically generated **Table of Contents**! Simply click the hashtag symbol and a popup will appear that lets you quickly navigate through all headings in your file.
 - *New feature*: Now **images are automatically displayed**, if they are on a single line (only the image, no other text)!
-- *New feature*: Now **links are automatically rendered**! Simply shift-click on them!
+- *New feature*: Now **links are automatically rendered**! Simply shift-click on them! (closes #12)
 - Improved the markdown shortcuts. Now, if nothing is selected, when you trigger the bold or italics option, the cursor will automatically be placed inside the formatting marks, so that you can start typing without having to worry about the placement of the cursor.
 - Now, if there is a valid URL in the clipboard when you trigger the insert link/image commands, it will be taken automatically as the linking target, so that you only have to type in the text it should link to.
 - Added Open-button to the toolbar to select a new directory (closes #2)

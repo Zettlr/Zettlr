@@ -6,7 +6,7 @@
         "type": "git",
         "url": "git://github.com/Zettlr/Zettlr.git"
     },
-    "version": "0.11.0",
+    "version": "0.12.0",
     "license": "MIT",
     "description": "A powerful Markdown Editor with integrated tree view",
     "main": "./source/main.js",
