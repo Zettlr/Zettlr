@@ -116,6 +116,16 @@ class ZettlrEditor
             elt.style.paddingLeft = (basePadding + off) + "px";
         });
 
+        // Display a footnote if the target is a link (and begins with ^)
+        this.cm.getWrapperElement().addEventListener('mousemove', (e) => {
+            let t = $(e.target);
+            if(t.hasClass('cm-link') && t.text().indexOf('^') === 0) {
+                this.fntooltip(t);
+            } else {
+                this.fntooltipbubble.detach();
+            }
+        });
+
         this.cm.refresh();
     }
     // END constructor
