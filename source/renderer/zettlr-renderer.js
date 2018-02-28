@@ -227,9 +227,47 @@ class ZettlrRenderer
         }
 
         let cnt = $('<div>');
+        let h1 = 0;
+        let h2 = 0;
+        let h3 = 0;
+        let h4 = 0;
+        let h5 = 0;
+        let h6 = 0;
         for(let entry of toc) {
+            let level = '';
+            switch(entry.level) {
+                case 1:
+                h1++;
+                h2 = h3 = h4 = h5 = h6 = 0;
+                level = h1;
+                break;
+                case 2:
+                h2++;
+                h3 = h4 = h5 = h6 = 0;
+                level = [h1, h2].join('.');
+                break;
+                case 3:
+                h3++;
+                h4 = h5 = h6 = 0;
+                level = [h1, h2, h3].join('.');
+                break;
+                case 4:
+                h4++;
+                h5 = h6 = 0;
+                level = [h1, h2, h3, h4].join('.');
+                break;
+                case 5:
+                h5++;
+                h6 = 0;
+                level = [h1, h2, h3, h4, h5].join('.');
+                break;
+                case 6:
+                h6++;
+                level = [h1, h2, h3, h4, h5, h6].join('.');
+            }
+
             cnt.append(
-                $('<a>').text(entry.level + '. ' + entry.text)
+                $('<a>').text(level + ' ' + entry.text)
                 .attr('data-line', entry.line)
                 .attr('href', '#')
                 .addClass('toc-link')
