@@ -297,6 +297,8 @@ html {
 #preview ul li {
   padding: 0.4em;
   border-bottom: 1px solid #c8c8c8;
+  border-top: 1px solid #c8c8c8;
+  margin-top: -1px;
   background-color: inherit;
 }
 #preview ul li small {
@@ -331,7 +333,7 @@ html {
   white-space: nowrap;
   padding: 0.1em 0.4em;
   position: sticky;
-  top: 0;
+  top: -1px;
 }
 #preview #search-directory {
   position: sticky;

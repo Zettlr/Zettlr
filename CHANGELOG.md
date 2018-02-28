@@ -9,6 +9,7 @@
 - Now, if there is a valid URL in the clipboard when you trigger the insert link/image commands, it will be taken automatically as the linking target, so that you only have to type in the text it should link to.
 - Added Open-button to the toolbar to select a new directory (closes #2)
 - Switched the icon font from fontawesome to the [WebHostingHub-Glyphs](http://www.webhostinghub.com/glyphs)
+- Small UI fix in the preview listing
 
 ## Under the hood
 

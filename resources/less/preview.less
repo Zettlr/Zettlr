@@ -33,6 +33,8 @@
         li {
             padding:@pane-padding;
             border-bottom:1px solid @grey-2;
+            border-top:1px solid @grey-2;
+            margin-top:-1px;
             background-color:inherit;
 
             small {
@@ -76,7 +78,7 @@
                 white-space: nowrap;
                 padding:@ribbon-padding;
                 position:sticky;
-                top:0;
+                top:-1px; // Account for the border-top
             }
         }
     }
