@@ -31,6 +31,18 @@ To install Zettlr, just [download the latest release](https://github.com/Zettlr/
 
 If you have downloaded Zettlr, [head over to our website](https://zettlr.com/docs) to get to know Zettlr. Refer to the [Quick Start Guide](https://zettlr.com/docs/quick-start), if you prefer to use software heads-on.
 
+## Developing
+
+To start developing, simply `git clone` and `npm install` the app on your local computer:
+
+`$ git clone https://github.com/Zettlr/Zettlr.git`\
+`$ cd Zettlr`\
+`$ npm install`\
+`$ cd source`\
+`$ npm install`
+
+_(Please note the second `npm install` in the source directory. This is necessary if you want to build the app locally.)_
+
 ## License
 
 This software is licenced via the MIT-License.
