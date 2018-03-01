@@ -10,6 +10,7 @@
 - Added Open-button to the toolbar to select a new directory (closes #2)
 - Switched the icon font from fontawesome to the [WebHostingHub-Glyphs](http://www.webhostinghub.com/glyphs)
 - Small UI fix in the preview listing
+- Small UI fix: Now Zettlr auto-closes the following pairs of characters: `() [] {} '' "" »« “” ‘’ ** __`.
 
 ## Under the hood
 

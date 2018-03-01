@@ -57,13 +57,15 @@ class ZettlrEditor
 
         this.cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
             mode: {
-                name: 'spellchecker', // This automatically defines gfm as overlay mode
-                closeBrackets: '()[]{}\'\'""»«“”‘’**__' // Doesn't work right now. But ill figure it out
+                name: 'spellchecker' // This automatically defines gfm as overlay mode
             },
             theme: 'zettlr',
             autofocus: false,
             lineWrapping: true,
-            autoCloseBrackets: true, // Autoclose brackets and quotes
+            autoCloseBrackets: {
+                pairs: '()[]{}\'\'""»«“”‘’**__', // Autoclose markdown specific stuff
+                override: true
+            },
             extraKeys: {
                 'Ctrl-Shift-F'  : false,  // Triggers replace in CodeMirror, disables global search
                 'Cmd-Shift-F'   : false,
