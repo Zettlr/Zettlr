@@ -136,6 +136,25 @@
             "cancel": "Cancel"
         }
     },
+    "toolbar": {
+        "dir_open": "Open new root directory",
+        "dir_new": "Create a new directory",
+        "file_new": "Create a new file",
+        "preferences": "Open the settings dialog",
+        "file_save": "Save the current file",
+        "share": "Share the current file as HTML, DOCX, ODT or PDF",
+        "file_rename": "Rename the current file",
+        "file_delete": "Remove the current file",
+        "insert_image": "Insert an image",
+        "insert_link": "Insert a link",
+        "insert_bold": "Make bold",
+        "insert_italic": "Make italic",
+        "insert_ol": "Make an ordered list",
+        "insert_ul": "Make an itemized list",
+        "insert_fn": "Add a footnote",
+        "remove_fn": "Remove the footnote under the cursor",
+        "show_toc": "Show the table of contents"
+    },
     "system" : {
         "unknown_command": "Unknown command received: %s",
         "no_command": "Received a message with no command: %s",

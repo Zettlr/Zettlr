@@ -3,6 +3,7 @@
 ## GUI and functionality
 
 - Fixed a bug that could lead to errors and misbehaviour if a huge number of directories and files was added
+- Added toolbar button descriptions. Simply hover over a button with your mouse to learn about its functionality
 
 ## Under the hood
 

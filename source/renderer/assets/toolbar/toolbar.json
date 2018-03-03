@@ -4,25 +4,29 @@
             "role": "button",
             "class": "dir-open",
             "command": "dir-open",
-            "content": "{}"
+            "content": "{}",
+            "title": "toolbar.dir_open"
         },
         {
             "role": "button",
             "class": "directory-new",
             "command": "dir-new",
-            "content": "{}"
+            "content": "{}",
+            "title": "toolbar.dir_new"
         },
         {
             "role": "button",
             "class":  "file-new",
             "command": "file-new",
-            "content": "{}"
+            "content": "{}",
+            "title": "toolbar.file_new"
         },
         {
             "role": "button",
             "class": "preferences",
             "command": "open-preferences",
-            "content": "{}"
+            "content": "{}",
+            "title": "toolbar.preferences"
         },
         {
             "role": "searchbar"
@@ -34,25 +38,29 @@
             "role": "button",
             "class": "file-save",
             "command": "file-save",
-            "content": "{}"
+            "content": "{}",
+            "title": "toolbar.file_save"
         },
         {
             "role": "button",
             "class": "share",
             "command": "export",
-            "content": "{}"
+            "content": "{}",
+            "title": "toolbar.share"
         },
         {
             "role": "button",
             "class": "file-rename",
             "command": "file-rename",
-            "content": "{}"
+            "content": "{}",
+            "title": "toolbar.file_rename"
         },
         {
             "role": "button",
             "class": "file-delete",
             "command": "file-delete",
-            "content": "{}"
+            "content": "{}",
+            "title": "toolbar.file_delete"
         },
         {
             "role": "separator"
@@ -61,55 +69,64 @@
             "role": "button",
             "class": "insert-image",
             "command": "cm-command",
-            "content": "markdownImage"
+            "content": "markdownImage",
+            "title": "toolbar.insert_image"
         },
         {
             "role": "button",
             "class": "insert-link",
             "command": "cm-command",
-            "content": "markdownLink"
+            "content": "markdownLink",
+            "title": "toolbar.insert_link"
         },
         {
             "role": "button",
             "class": "insert-bold",
             "command": "cm-command",
-            "content": "markdownBold"
+            "content": "markdownBold",
+            "title": "toolbar.insert_bold"
         },
         {
             "role": "button",
             "class": "insert-italic",
             "command": "cm-command",
-            "content": "markdownItalic"
+            "content": "markdownItalic",
+            "title": "toolbar.insert_italic"
         },
         {
             "role": "button",
             "class": "insert-ul",
             "command": "cm-command",
-            "content": "markdownMakeUnorderedList"
+            "content": "markdownMakeUnorderedList",
+            "title": "toolbar.insert_ul"
         },
         {
             "role": "button",
             "class": "insert-ol",
             "command": "cm-command",
-            "content": "markdownMakeOrderedList"
+            "content": "markdownMakeOrderedList",
+            "title": "toolbar.insert_ol"
         },
         {
             "role": "button",
             "class": "insert-fn",
             "command": "cm-command",
-            "content": "insertFootnote"
+            "content": "insertFootnote",
+            "title": "toolbar.insert_fn"
         },
         {
             "role": "button",
             "class": "remove-fn",
             "command": "cm-command",
-            "content": "removeFootnote"
+            "content": "removeFootnote",
+            "title": "toolbar.remove_fn"
         },
         {
             "role": "button",
             "class": "show-toc",
             "command": "toc",
-            "content": "{}"
+            "content": "{}",
+            "title": "toolbar.show_toc"
         },
         {
             "role": "file-info"

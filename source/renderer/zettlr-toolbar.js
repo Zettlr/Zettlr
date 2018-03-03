@@ -82,6 +82,7 @@ class ZettlrToolbar
                 child.addClass(elem.class);
                 child.attr('data-command', elem.command);
                 child.attr('data-content', elem.content);
+                child.attr('title', trans(elem.title));
             } else if(elem.role === 'searchbar') {
                 child.html('<input type="text"><div class="end-search">&times;</div>');
             } else if(elem.role === 'file-info') {

@@ -136,6 +136,25 @@
             "cancel": "Annuler"
         }
     },
+    "toolbar": {
+        "dir_open": "Ouvrir un dossier",
+        "dir_new": "Créer un dossier",
+        "file_new": "Créer un fichier",
+        "preferences": "Ouvrir les paramètres",
+        "file_save": "Enregistrer les modifications",
+        "share": "Exporter le fichier dans HTML, DOCX, ODT, ou PDF",
+        "file_rename": "Changer le nom de fichier",
+        "file_delete": "Effacer le fichier",
+        "insert_image": "Insérer une image",
+        "insert_link": "Insérer un lien",
+        "insert_bold": "Gras",
+        "insert_italic": "Italique",
+        "insert_ol": "Insérer une liste avec numéros",
+        "insert_ul": "Insérer une liste pas de numéros",
+        "insert_fn": "Insérer un note en bas en page",
+        "remove_fn": "Effacer le note",
+        "show_toc": "Ouvrir le sommaire"
+    },
     "system" : {
         "unknown_command": "Reçu une commande inconnu: %s",
         "no_command": "Reçu une message sans commande: %s",

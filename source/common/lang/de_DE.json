@@ -136,6 +136,25 @@
             "cancel": "Abbrechen"
         }
     },
+    "toolbar": {
+        "dir_open": "Neues Wurzelverzeichnis öffnen",
+        "dir_new": "Neues Verzeichnis erstellen",
+        "file_new": "Neue Datei erstellen",
+        "preferences": "Einstellungen anzeigen",
+        "file_save": "Änderungen an der Datei speichern",
+        "share": "Aktuelle Datei nach HTML, DOCX, ODT oder PDF exportieren",
+        "file_rename": "Datei umbenennen",
+        "file_delete": "Datei in den Papierkorb verschieben",
+        "insert_image": "Bild einfügen",
+        "insert_link": "Link einfügen",
+        "insert_bold": "Fett",
+        "insert_italic": "Kursiv",
+        "insert_ol": "Nummerierte Liste erstellen",
+        "insert_ul": "Strichliste erstellen",
+        "insert_fn": "Fußnote hinzufügen",
+        "remove_fn": "Fußnote unter dem Cursor entfernen",
+        "show_toc": "Inhaltsverzeichnis anzeigen"
+    },
     "system" : {
         "unknown_command": "Unbekannten Befehl erhalten: %s",
         "no_command": "Nachricht ohne Befehl erhalten: %s",
