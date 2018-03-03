@@ -120,6 +120,14 @@ class ZettlrRendererIPC
             this._app.saveFile();
             break;
 
+            case 'file-request-revert':
+            // wow such empty
+            break;
+
+            case 'file-revert':
+            this._app.getEditor().revert(cnt);
+            break;
+
             case 'file-rename':
             this._app.renameFile(cnt);
             break;

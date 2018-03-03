@@ -360,6 +360,15 @@ class ZettlrEditor
         return this;
     }
 
+    revert(file)
+    {
+        // Simply revert the contents of the editor without touching anything else
+        if(file && file.hasOwnProperty('content')) {
+            this.cm.setValue(file.content);
+        }
+        return this;
+    }
+
     /**
     * Returns the current word count in the editor.
     * @return {Integer} The word count.

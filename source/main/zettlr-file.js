@@ -41,17 +41,18 @@ class ZettlrFile
      */
     constructor(parent, fname = null)
     {
-        this.parent     = parent;
-        this.dir        = ''; // Containing dir
-        this.name       = '';
-        this.path       = '';
-        this.hash       = null;
-        this.type       = 'file';
-        this.ext        = '';
-        this.modtime    = 0;
-        this.snippet    = '';
-        this.content    = ''; // Will only be not empty when the file is modified.
-        this.modified = false;
+        this.parent       = parent;
+        this.dir          = ''; // Containing dir
+        this.name         = '';
+        this.path         = '';
+        this.hash         = null;
+        this.type         = 'file';
+        this.ext          = '';
+        this.modtime      = 0;
+        this.snippet      = '';
+        this.content      = ''; // Will only be not empty when the file is modified.
+        this.modified     = false;
+        this.autosavefile = null; // Contains path to autosave file
 
         // Prepopulate if filename is given
         if(fname !== null) {
@@ -179,7 +180,57 @@ class ZettlrFile
         this.content = '';
         this.modified = false;
 
+        if(this.canRevert()) {
+            // Delete all autosaves
+            this.revert();
+        }
+
         return this;
+    }
+
+    autoSave(content)
+    {
+        // Create or overwrite the autosave file.
+        if(!this.autosavefile) {
+            this.autosavefile = path.join(path.dirname(this.path), this.hash + '.autosave');
+        }
+
+        fs.writeFile(this.autosavefile, content, 'utf-8', (err) => {
+            if(err) throw err; // Wow, I'm becoming lazy now. It's getting too late.
+            console.log(`Autosave created!`);
+        });
+    }
+
+    revert()
+    {
+        // Revert means: Delete all autosaves
+        if(this.canRevert()) {
+            // But only if there is one
+            fs.unlink(this.autosavefile, (err) => {
+                if(err) {
+                    console.error(`Reversion failed. Reason: ${err}`);
+                }
+            });
+        }
+        return this;
+    }
+
+    canRevert()
+    {
+        if(this.autosavefile) {
+            try {
+                let stat = fs.lstatSync(this.autosavefile);
+
+                // Only revert if the actual file is older than the autosave
+                if(this.modtime < stat.mtime.getTime()) {
+                    return true;
+                }
+            } catch (err) {
+                // Silently fail
+            }
+        }
+
+        return false;
     }
 
     /**

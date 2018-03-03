@@ -123,6 +123,10 @@ class ZettlrIPC
             this._app.saveFile(cnt);
             break;
 
+            case 'file-autosave':
+            this._app.autoSave(cnt);
+            break;
+
             case 'dir-open':
             // Client requested a totally different folder.
             this._app.openDir();

@@ -870,6 +870,38 @@ class Zettlr
         }
     }
 
+    autoSave(f)
+    {
+        if(f == null) {
+            // No file given -> abort autosave
+            return;
+        }
+
+        let file = this.paths.findFile({ 'hash': f.hash });
+
+        if(file !== null) {
+            file.autoSave(f.content);
+        }
+    }
+
+    revert(fhash)
+    {
+        // The user wants to revert the current file
+        if(this.getCurrentFile() == null) {
+            return console.log(`Error: Cannot revert an empty file!`);
+        }
+
+        // Simply send the old contents of the file (which haven't been overwritten)
+        // to the client.
+        let file = this.paths.findFile({ 'hash': fhash });
+
+        if(file != null) {
+            this.ipc.send('file-revert', file.revert().withContent());
+        } else {
+            console.error(`The file does not exist anymore!`);
+        }
+    }
+
     /**
      * Sets the current file to the given file.
      * @param {ZettlrFile} f A ZettlrFile object.

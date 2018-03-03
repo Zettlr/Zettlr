@@ -90,6 +90,21 @@ class ZettlrRenderer
         this.ipc.send('typo-request-lang', {});
     }
 
+    finishStartup()
+    {
+        // Here we can init actions and stuff to be done after the startup has finished
+        setTimeout(() => { this.poll(); }, 10000); // Poll every ten seconds
+    }
+
+    poll()
+    {
+        // Do recurring tasks.
+        this.autoSave();
+
+        // Set next timeout
+        setTimeout(() => { this.poll(); }, 10000);
+    }
+
     /**
      * The toolbar buttons trigger IPC event types. Therefore simply forward to
      * the IPC which in turn will call the corresponding events on this class.
@@ -347,6 +362,8 @@ class ZettlrRenderer
         } else {
             // We're already done!
             this.overlay.close();
+            // Finish and cleanup from startup
+            this.finishStartup();
         }
     }
 
@@ -433,6 +450,8 @@ class ZettlrRenderer
             // Done - enable language checking
             this.typoReady = true;
             this.overlay.close(); // Done!
+            // Finish and cleanup from startup
+            this.finishStartup();
         }
     }
 
@@ -597,6 +616,10 @@ class ZettlrRenderer
         }
     }
 
+    /**
+     * Opens a new file
+     * @param  {ZettlrFile} f The file to be opened
+     */
     openFile(f)
     {
         // We have received a new file. So close the old and open the new
@@ -606,6 +629,9 @@ class ZettlrRenderer
         this.editor.open(f);
     }
 
+    /**
+     * Closes the current file
+     */
     closeFile()
     {
         // We have received a close-file command.
@@ -613,6 +639,9 @@ class ZettlrRenderer
         this.setCurrentFile(null);
     }
 
+    /**
+     * Saves the current file
+     */
     saveFile()
     {
         // The user wants to save the currently opened file.
@@ -628,6 +657,24 @@ class ZettlrRenderer
         this.ipc.send('file-save', file);
     }
 
+    autoSave()
+    {
+        let file = this.getCurrentFile();
+        if(file == null) {
+            file = {};
+            file.hash = "undefined";
+        }
+
+        file.content = this.editor.getValue();
+        this.ipc.send('file-autosave', file);
+    }
+
+    revertFile(fhash)
+    {
+        // Revert a file
+        this.ipc.send('file-revert', fhash);
+    }
+
     renameFile(f)
     {
         if(f.hasOwnProperty('hash')) {
@@ -641,7 +688,7 @@ class ZettlrRenderer
 
     newFile(f)
     {
-        // User wants to open a new file. Display modal
+        // User wants to create a new file. Display popup
         if((f != null) && f.hasOwnProperty('hash')) {
             // User has probably right clicked
             this.body.requestFileName(this.findObject(f.hash));
