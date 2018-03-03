@@ -1,3 +1,13 @@
+# 0.13.0
+
+## GUI and functionality
+
+- Fixed a bug that could lead to errors and misbehaviour if a huge number of directories and files was added
+
+## Under the hood
+
+- Added the `ignoreDir` and `ignoreFile` helper functions to check whether or not a specific path should be excluded or not. This applies to directories and the watchdog. Ignored directory patterns (as regular expressions) reside in `source/common/data.json`.
+
 # 0.12.0
 
 ## GUI and functionality

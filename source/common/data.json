@@ -4,5 +4,9 @@
         ".md",
         ".markdown"
     ],
+    "ignoreDirs": [
+        "^\\.",
+        ".+?\\.app"
+    ],
     "events": []
 }

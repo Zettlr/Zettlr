@@ -28,7 +28,7 @@ const ZettlrDir                     = require('./zettlr-dir.js');
 const ZettlrWatchdog                = require('./zettlr-watchdog.js');
 const ZettlrStats                   = require('./zettlr-stats.js');
 const {i18n, trans}                 = require('../common/lang/i18n.js');
-const {hash}                        = require('../common/zettlr-helpers.js');
+const {hash, ignoreDir}             = require('../common/zettlr-helpers.js');
 
 /**
  * Main class definition
@@ -402,7 +402,7 @@ class Zettlr
 
     /**
      * Open a wholly new project path.
-     * @return {void} This function does not reload anything.
+     * @return {void} This function does not return anything.
      */
     openDir()
     {
@@ -424,6 +424,15 @@ class Zettlr
         // Ret is now an array. As we do not allow multiple selection, just
         // take the first index.
         ret = ret[0];
+
+        if(ignoreDir(ret)) {
+            // We cannot add this dir, because it is in the list of ignored directories.
+            return this.window.prompt({
+                'type': 'error',
+                'title': trans('system.error.ignored_dir_title'),
+                'message': trans('system.error.ignored_dir_message', path.basename(ret))
+            });
+        }
 
         // ret now contains the path. So let's alter configuration and reload.
         this.reload(ret);

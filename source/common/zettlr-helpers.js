@@ -1,22 +1,31 @@
 /**
- * BEGIN HEADER
- *
- * Contains:        General helper functions
- * CVM-Role:        <none>
- * Maintainer:      Hendrik Erz
- * License:         MIT
- *
- * Description:     This file contains several functions, not classes, that are
- *                  used for general purposes.
- *
- * END HEADER
- */
+* BEGIN HEADER
+*
+* Contains:        General helper functions
+* CVM-Role:        <none>
+* Maintainer:      Hendrik Erz
+* License:         MIT
+*
+* Description:     This file contains several functions, not classes, that are
+*                  used for general purposes.
+*
+* END HEADER
+*/
+
+// GLOBALS
+
+// Supported filetypes
+const filetypes = require('./data.json').filetypes;
+// Ignored directory patterns
+const ignoreDirs = require('./data.json').ignoreDirs;
+
+const path = require('path');
 
 /**
- * Basic hashing function (thanks to https://stackoverflow.com/a/7616484)
- * @param  {String} string The string that should be hashed
- * @return {Integer}        The hash of the given string
- */
+* Basic hashing function (thanks to https://stackoverflow.com/a/7616484)
+* @param  {String} string The string that should be hashed
+* @return {Integer}        The hash of the given string
+*/
 function hash(string)
 {
     let hash = 0, i, chr;
@@ -31,10 +40,10 @@ function hash(string)
 }
 
 /**
- * This function can sort an array of ZettlrFile and ZettlrDir objects
- * @param  {Array} arr An array containing only ZettlrFile and ZettlrDir objects
- * @return {Array}     The sorted array
- */
+* This function can sort an array of ZettlrFile and ZettlrDir objects
+* @param  {Array} arr An array containing only ZettlrFile and ZettlrDir objects
+* @return {Array}     The sorted array
+*/
 function sort(arr)
 {
     // First sort through children array (necessary if new children were added)
@@ -66,9 +75,9 @@ function sort(arr)
 }
 
 /**
- * This function generates a (per second unique) name
- * @return {String} A name in the format "New File YYYY-MM-DD hh:mm:ss.md"
- */
+* This function generates a (per second unique) name
+* @return {String} A name in the format "New File YYYY-MM-DD hh:mm:ss.md"
+*/
 function generateName()
 {
     let date = new Date();
@@ -89,10 +98,10 @@ function generateName()
 }
 
 /**
- * Format a date. TODO: Localize options once they're implemented in the preferences/config.
- * @param  {Date} dateObj Object of type date.
- * @return {String}         Returns the localized, human-readable date as a string
- */
+* Format a date. TODO: Localize options once they're implemented in the preferences/config.
+* @param  {Date} dateObj Object of type date.
+* @return {String}         Returns the localized, human-readable date as a string
+*/
 function formatDate(dateObj)
 {
     let str = '';
@@ -118,4 +127,34 @@ function formatDate(dateObj)
     return `${dd}.${mm}.${yyyy}, ${h}:${m}`;
 }
 
-module.exports = { hash, sort, generateName, formatDate };
+/**
+* Returns true, if a directory should be ignored, and false, if not.
+* @param  {String} p The path to the directory. It will be checked against some regexps.
+* @return {Boolean}   True or false, depending on whether or not the dir should be ignored.
+*/
+function ignoreDir(p)
+{
+    let name = path.basename(p);
+    // Directories are ignored on a regexp basis
+    for(let re of ignoreDirs) {
+        let regexp = new RegExp(re, 'i');
+        if(regexp.test(name)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+* Returns true, if a given file should be ignored.
+* @param  {String} p The path to the file.
+* @return {Boolean}   True or false, depending on whether the file should be ignored.
+*/
+function ignoreFile(p)
+{
+    let ext = path.extname(p);
+    return (!filetypes.includes(ext));
+}
+
+module.exports = { hash, sort, generateName, formatDate, ignoreFile, ignoreDir };

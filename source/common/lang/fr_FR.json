@@ -159,7 +159,9 @@
             "move_into_child_title": "Impossible de déplacer le dossier",
             "move_into_child_message": "Tu ne peut pas déplacer le dossier dans un sous-dossier",
             "already_exists_title": "Impossible de déplacer le dossier ou le fichier",
-            "already_exists_message": "Le fichier ou le dossier %s existe déjà."
+            "already_exists_message": "Le fichier ou le dossier %s existe déjà.",
+            "ignored_dir_title": "N'été ouvrir pas le dossier",
+            "ignored_dir_message": "Impossible d'ouvrir le dossier \"%s\" au travers de Zettlr."
         },
         "save_changes_title": "Annuler des modifications?",
         "save_changes_message": "Le fichier contient modifications n'enregistrais pas. Annuler ou enregistrer?",

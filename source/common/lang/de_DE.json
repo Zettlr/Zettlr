@@ -159,7 +159,9 @@
             "move_into_child_title": "Kann Verzeichnis nicht verschieben",
             "move_into_child_message": "Du kannst kein Verzeichnis in eines seiner Unterverzeichnisse verschieben.",
             "already_exists_title": "Kann Datei oder Verzeichnis nicht verschieben",
-            "already_exists_message": "Die Datei bzw. das Verzeichnis %s existiert am Zielort bereits."
+            "already_exists_message": "Die Datei bzw. das Verzeichnis %s existiert am Zielort bereits.",
+            "ignored_dir_title": "Kann Verzeichnis nicht öffnen",
+            "ignored_dir_message": "Das Verzeichnis \"%s\" kann von Zettlr nicht geöffnet werden."
         },
         "save_changes_title": "Änderungen verwerfen?",
         "save_changes_message": "Die Datei enthält ungespeicherte Änderungen. Verwerfen oder speichern?",

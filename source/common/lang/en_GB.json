@@ -159,7 +159,9 @@
             "move_into_child_title": "Cannot move directory",
             "move_into_child_message": "You cannot move a directory into one of its subdirectories.",
             "already_exists_title": "Cannot move directory or file",
-            "already_exists_message": "The file/directory %s already exists in target."
+            "already_exists_message": "The file/directory %s already exists in target.",
+            "ignored_dir_title": "Cannot open directory",
+            "ignored_dir_message": "Directory \"%s\" cannot be opened by Zettlr."
         },
         "save_changes_title": "Omit unsaved changes?",
         "save_changes_message": "There are unsaved changes to the current file. Do you want to omit them or save?",

@@ -20,7 +20,7 @@ const ZettlrFile   = require('./zettlr-file.js');
 const {shell}      = require('electron');
 
 // Include helpers
-const { hash, sort, generateName } = require('../common/zettlr-helpers.js');
+const { hash, sort, generateName, ignoreDir, ignoreFile } = require('../common/zettlr-helpers.js');
 
 /**
  * Error object constructor
@@ -50,9 +50,6 @@ class ZettlrDir
         this.children = [];
         this.type     = 'directory';
         this.parent   = parent;
-
-        // Supported filetypes
-        this.filetypes = require('../common/data.json').filetypes;
 
         // Prepopulate if given.
         if(dir != null) {
@@ -202,12 +199,18 @@ class ZettlrDir
     {
         let stat = fs.lstatSync(p);
 
-        if(stat.isDirectory()) {
+        if(stat.isDirectory() && !ignoreDir(p)) {
+            // First check whether or not this thing is already in the children
+            for(let d of this.children) {
+                if(d.path == p) {
+                    return d;
+                }
+            }
             let dir = new ZettlrDir(this, p);
             this.children.push(dir);
             this.children = sort(this.children);
             return dir;
-        } else if(stat.isFile() && (path.extname(p) == '.md')) {
+        } else if(stat.isFile() && !ignoreFile(p)) {
             // First check whether or not this thing is already in the children
             for(let c of this.children) {
                 if(c.path == p) {
@@ -368,10 +371,13 @@ class ZettlrDir
             // We don't need try/catch because readDirSync doesn't return spurious paths
             let stat = fs.lstatSync(p);
             if(stat.isDirectory()) {
-                this.children.push(new ZettlrDir(this, p)); // This recursively reads the "f" dir
+                // Only add non-ignored dirs
+                if(!ignoreDir(p)) {
+                    this.children.push(new ZettlrDir(this, p)); // This recursively reads the "f" dir
+                }
             } else if(stat.isFile()) {
                 let extname = path.extname(p);
-                if(this.filetypes.includes(extname)) {
+                if(!ignoreFile(p)) {
                     // Exclude non-md- and -txt-files
                     this.children.push(new ZettlrFile(this, p));
                 }

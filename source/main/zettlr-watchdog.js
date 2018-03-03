@@ -22,6 +22,8 @@
 const path          = require('path');
 const chokidar      = require('chokidar');
 
+const { ignoreDir, ignoreFile } = require('../common/zettlr-helpers.js');
+
 /**
  * Zettlr Watchdog class
  */
@@ -39,9 +41,6 @@ class ZettlrWatchdog
         this.process = null;
         this.watch = false;
         this.path = path;
-
-        // Only watch these filetypes
-        this.filetypes = require('../common/data.json').filetypes;
     }
 
     /**
@@ -89,7 +88,7 @@ class ZettlrWatchdog
                 }
 
                 // Only watch changes in directories and supported files
-                if(s.isDirectory() || this.filetypes.includes(path.extname(p))) {
+                if((s.isDirectory() && !ignoreDir(p)) || !ignoreFile(p)) {
                     this.staged.push({ 'type': event, 'path': p });
                 }
             }

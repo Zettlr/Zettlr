@@ -212,7 +212,7 @@ class ZettlrRenderer
 
     /**
      * Displays a table of content.
-     * @return {void} No return.
+     * @return {void} (Point of) No return.
      */
     toc()
     {
