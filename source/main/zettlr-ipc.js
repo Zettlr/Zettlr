@@ -76,7 +76,7 @@ class ZettlrIPC
      * This function switches through the received command and issues function
      * calls to the zettlr object according to the events.
      * @param {String} cmd The command to be handled
-     * @param  {Object} arg   Contains the message body.
+     * @param  {Object} cnt   Contains the message body.
      * @return {void}       Does not return anything.
      */
     handleEvent(cmd, cnt)

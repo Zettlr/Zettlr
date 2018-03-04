@@ -1,7 +1,7 @@
 {
     "source": "./source",
     "destination": "./resources/docs",
-    "excludes": ["node_modules"],
+    "excludes": ["node_modules", "jquery-ui.min.js"],
     "plugins": [{
         "name": "esdoc-standard-plugin",
         "option": {
