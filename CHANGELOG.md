@@ -4,10 +4,14 @@
 
 - Fixed a bug that could lead to errors and misbehaviour if a huge number of directories and files was added
 - Added toolbar button descriptions. Simply hover over a button with your mouse to learn about its functionality
+- Added an autosave feature. Now, Zettlr keeps automatic saves of your current file.
+- Added a reversion feature. With the revert button you can restore the editor content to the last saved state.
 
 ## Under the hood
 
 - Added the `ignoreDir` and `ignoreFile` helper functions to check whether or not a specific path should be excluded or not. This applies to directories and the watchdog. Ignored directory patterns (as regular expressions) reside in `source/common/data.json`.
+- Ignoring the `jquery-ui.min.js` file on docs generation.
+- Improved the documentation of the main classes.
 
 # 0.12.0
 

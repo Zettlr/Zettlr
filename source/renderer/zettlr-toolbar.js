@@ -3,7 +3,7 @@
  * BEGIN HEADER
  *
  * Contains:        ZettlrToolbar class
- * CVM-Role:        Controller
+ * CVM-Role:        View
  * Maintainer:      Hendrik Erz
  * License:         MIT
  *
@@ -15,7 +15,10 @@
 const {trans} = require('../common/lang/i18n.js');
 
 /**
- * ZettlrToolbar class
+ * This class is responsible for rendering the Toolbar. It builds the toolbar
+ * based on the toolbar.json file in the assets directory. Therefore one can
+ * think of hooks to implement buttons dynamically in the future (e.g., for
+ * plugins).
  */
 class ZettlrToolbar
 {

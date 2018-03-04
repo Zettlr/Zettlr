@@ -35,7 +35,13 @@ require('./assets/codemirror/zettlr-plugin-footnotes.js');
 const CodeMirror = require('codemirror');
 
 /**
-* ZettlrEditor class
+* This class propably has the most `require`s in it, because it loads all
+* functionality concerning the CodeMirror editor. It loads them, initializes
+* the editor and then does stuff related to the editor. This class, together with
+* the ZettlrDialog class is of somewhat problematic appearance because here two
+* styles of programming clash: My own and the one of CodeMirror. As I have to
+* hook into their API for interacting with CodeMirror you will see unusual
+* functions.
 */
 class ZettlrEditor
 {

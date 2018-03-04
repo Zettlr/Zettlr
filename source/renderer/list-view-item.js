@@ -3,7 +3,7 @@
  * BEGIN HEADER
  *
  * Contains:        ListViewItem class
- * CVM-Role:        Model
+ * CVM-Role:        View
  * Maintainer:      Hendrik Erz
  * License:         MIT
  *
@@ -15,7 +15,9 @@
 const { formatDate } = require('../common/zettlr-helpers.js');
 
 /**
- * ListViewItemClass
+ * This class is a view that deals only with displaying one single item of the
+ * list view (the preview pane). Therefore it can be a directory or a file.
+ * Necessary actions like dragging and dropping are also handled on such a basis.
  */
 class ListViewItem
 {

@@ -19,7 +19,12 @@
  */
 
 /**
- * ZettlrPopup class
+ * This is the native enemy of the ZettlrDialog class, because it just snatched
+ * away most of the functions from it. Fundamentally, you can create objects of
+ * this class to display popups on the screen. They are semi-modal, meaning that
+ * they have to be closed first by clicking outside of them, or by an action that
+ * can contain a callback, but they can be closed at any time. Bonus: They hook
+ * into many events to stay fixed to their root element.
  */
 class ZettlrPopup
 {

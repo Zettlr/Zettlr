@@ -14,7 +14,9 @@
  */
 
 /**
- * ZettlrOverlay
+ * This class only exists because Typo.js needs about eight seconds to
+ * initizalize the German dictionary (and, probably, other huge dictionaries
+ * as well, once they have been included).
  */
 class ZettlrOverlay
 {

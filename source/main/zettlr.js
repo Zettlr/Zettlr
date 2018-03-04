@@ -31,7 +31,12 @@ const {i18n, trans}                 = require('../common/lang/i18n.js');
 const {hash, ignoreDir}             = require('../common/zettlr-helpers.js');
 
 /**
- * Main class definition
+ * The Zettlr class handles every core functionality of Zettlr. Nothing works
+ * without this. One object of Zettlr is created on initialization of the app
+ * and will remain in memory until the app is quit completely. It will initialize
+ * all additional classes that are needed, as well as prepare everything for
+ * the main window to be opened. And, to complicate matters, my aim is to break
+ * the 10.000 lines with this behemoth.
  */
 class Zettlr
 {

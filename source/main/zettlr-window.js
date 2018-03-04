@@ -3,7 +3,7 @@
  * BEGIN HEADER
  *
  * Contains:        ZettlrWindow class
- * CVM-Role:        Controller
+ * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
  * License:         MIT
  *
@@ -23,7 +23,9 @@ const {trans}                 = require('../common/lang/i18n.js');
 const ZettlrMenu              = require('./zettlr-menu.js');
 
 /**
- * Begin ZettlrWindow class
+ * This class is a wrapper for electron's BrowserWindow class with some functions
+ * that make the handling of it much more easy. But besides of that, it's not
+ * much.
  */
 class ZettlrWindow
 {

@@ -25,7 +25,12 @@ const chokidar      = require('chokidar');
 const { ignoreDir, ignoreFile } = require('../common/zettlr-helpers.js');
 
 /**
- * Zettlr Watchdog class
+ * This class enables some realtime monitoring features of Zettlr. As the Files
+ * are unable to monitor changes by themselves, and a regular "pulse" would be
+ * too resource-heavy, we've got chokidar, a file watcher that stages all changes
+ * that have occurred on the disk and need to be handled with. To save even more
+ * resources, we are only monitoring changes that are (1) not ignored, (2) not
+ * in the blacklist of directories and (3) on the file whitelist.
  */
 class ZettlrWatchdog
 {

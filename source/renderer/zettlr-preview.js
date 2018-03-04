@@ -15,7 +15,10 @@
 const ListView = require('./list-view.js');
 
 /**
- * ZettlrPreview class
+ * This class represents the file tree as a two-dimensional list. It makes use
+ * of the ListView class to actually render the list. It is rather similar to
+ * the ZettlrDirectories class, but ZettlrPreview handles searches as well,
+ * which makes the big share of the class's functionality.
  */
 class ZettlrPreview
 {

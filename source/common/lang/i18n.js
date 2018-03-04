@@ -12,17 +12,11 @@
  * END HEADER
  */
 
-/**
- * @ignore
- */
 const fs = require('fs');
-/**
- * @ignore
- */
 const path = require('path');
 
 /**
- * Template for the translation error
+ * This error is thrown when the internationalization functions encounter an error
  * @param       {String} msg The error message
  * @constructor
  */
@@ -33,7 +27,7 @@ function TranslationError(msg)
 }
 
 /**
- * This function loads the language into the global object
+ * This function loads a language JSON file specified by lang into the global i18n-object
  * @param  {String} [lang='en_US'] The language to be loaded
  * @return {void}                Function does not return anything.
  */
@@ -54,7 +48,7 @@ function i18n(lang = 'en_US')
 };
 
 /**
- * This translates a string into the loaded language
+ * This translates a given identifier string into the loaded language
  * @param  {String} string A dot-delimited string containing the translatable
  * @param  {String} args   Zero or more strings that will replace %s-placeholders in the string
  * @return {String}        The translation with all potential replacements applied.

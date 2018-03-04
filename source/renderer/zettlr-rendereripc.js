@@ -15,7 +15,10 @@
 const {trans} = require('../common/lang/i18n.js');
 
 /**
- * ZettlrRendererIPC class
+ * This class is the interface between the renderer and main process on the
+ * renderer side. It acts exactly like the ZettlrIPC class, only that it is
+ * instantiated and referenced to from the renderer process, and not the main.
+ * Therefore, mainly the events being handled differ.
  */
 class ZettlrRendererIPC
 {

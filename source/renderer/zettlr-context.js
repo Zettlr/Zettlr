@@ -18,7 +18,10 @@ const {Menu, MenuItem}  = remote;
 const {trans}           = require('../common/lang/i18n.js');
 
 /**
- * ZettlrCon class
+ * This class is a wrapper for the remote Menu class. What it does is basically
+ * being called by ZettlrBody object, and then determine from the event itself,
+ * how the context menu should be built. For instance, it will build a different
+ * context menu, if it detects the parent #editor-element, or the #directories.
  */
 class ZettlrCon
 {

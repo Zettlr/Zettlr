@@ -22,7 +22,10 @@ const {app}         = require('electron');
 const commandExists = require('command-exists').sync; // Does a given shell command exist?
 
 /**
- * The ZettlrConfig class.
+ * This class represents the configuration of Zettlr, represented by the
+ * config.json file in the user's data directory as well as some environment
+ * variables. Basically, this class tells Zettlr what the user wants and what
+ * the environment Zettlr is running in is capable of.
  */
 class ZettlrConfig
 {
@@ -127,8 +130,6 @@ class ZettlrConfig
         return this;
     }
 
-    // This function runs a general environment check and tries to determine
-    // some environment variables (such as the existence of pandoc or pdflatex)
     /**
      * This function runs a general environment check and tries to determine
      * some environment variables (such as the existence of pandoc or pdflatex)

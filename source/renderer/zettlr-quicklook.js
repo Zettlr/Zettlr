@@ -32,7 +32,11 @@ require('codemirror/mode/gfm/gfm');
 const CodeMirror = require('codemirror');
 
 /**
- * ZettlrQuicklook class
+ * Quicklook windows are small overlay windows based on pure CSS (so that they
+ * behave correctly even in fullscreen mode, where it is difficult to display
+ * native modal windows per OS). They are read-only CodeMirror instances that
+ * can be resized, dragged around, minimized by a double-click on the title bar
+ * and make use of the necessary CodeMirror functionality, such as Searching.
  */
 class ZettlrQuicklook
 {

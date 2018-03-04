@@ -3,7 +3,7 @@
  * BEGIN HEADER
  *
  * Contains:        ListViewItem class
- * CVM-Role:        Model
+ * CVM-Role:        View
  * Maintainer:      Hendrik Erz
  * License:         MIT
  *
@@ -16,7 +16,8 @@ const { formatDate } = require('../common/zettlr-helpers.js');
 const ListViewItem = require('./list-view-item.js');
 
 /**
- * ListView class
+ * This is an intermediary list class that generates and maintains the preview
+ * pane.
  */
 class ListView
 {

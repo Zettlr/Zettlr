@@ -30,7 +30,8 @@ function FileError(msg) {
 }
 
 /**
- * Model for accessing files on the filesystem
+ * Model for accessing files on the filesystem. This class is also capable of
+ * keeping autosave files and reverting to certain states.
  */
 class ZettlrFile
 {

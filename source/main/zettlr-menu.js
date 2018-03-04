@@ -18,7 +18,10 @@ const app = electron.app
 const {trans} = require('../common/lang/i18n.js');
 
 /**
- * Builds a menu and sets it in its constructor.
+ * This class is of little use. It simply creates the application main menu.
+ * The fact that this logic is contained in a class only is used because the
+ * menu needs some prior configuration information to display the correct status
+ * of the checkable items such as the dark theme and text snippet switcher.
  */
 class ZettlrMenu
 {

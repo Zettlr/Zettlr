@@ -27,7 +27,14 @@ function DialogError(msg = '') {
 }
 
 /**
- * ZettlrDialog class
+ * This class definitely needs a revamp, because it is not self-sustaining but
+ * relies to a mind-boggling extent on functionality and assumptions about the
+ * ZettlrBody-class. While in the early days of Zettlr, this class's task was to
+ * provide windows for everything (even renaming files or creating new), with
+ * the advent of the ZettlrPopup class, most of the functionality went there.
+ * What has remained is the Preferences window. What will, in the future, be
+ * added, is the About window. And maybe something else. But as I said, first,
+ * it needs a revamp.
  */
 class ZettlrDialog
 {

@@ -15,7 +15,10 @@
 const {trans} = require('../common/lang/i18n.js');
 
 /**
- * ZettlrIPC, controlling communication with the renderer.
+ * This class acts as the interface between the main process and the renderer.
+ * It receives messages from the renderer and dispatches them to their appropriate
+ * addressees, as well as send commands after a small sanity check (such that
+ * the content is never empty)
  */
 class ZettlrIPC
 {

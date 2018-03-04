@@ -28,7 +28,12 @@ const remote            = require('electron').remote;
 const {trans}           = require('../../common/lang/i18n.js');
 
 /**
- * ZettlrRenderer class
+ * This is the pendant class to the Zettlr class in the main process. It mirrors
+ * the functionality of the main process, only that the functionality in here
+ * is connected with the rendering, not with the reading of files, etc. This is
+ * the only object that is directly referenced from with the index.html file --
+ * this is why all the paths in here do not begin in the `renderer` directory,
+ * but in the assets directory (which is where the index.htm resides).
  */
 class ZettlrRenderer
 {

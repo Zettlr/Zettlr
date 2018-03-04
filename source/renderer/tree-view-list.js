@@ -3,7 +3,7 @@
  * BEGIN HEADER
  *
  * Contains:        TreeView class
- * CVM-Role:        Model
+ * CVM-Role:        View
  * Maintainer:      Hendrik Erz
  * License:         MIT
  *
@@ -19,7 +19,8 @@ function TreeError(msg) {
 };
 
 /**
- * TreeView class
+ * This class represents the directory tree on disk. To do this adequately, it
+ * is a recursive class that can hold objects of itself.
  */
 class TreeView
 {

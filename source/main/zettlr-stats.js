@@ -19,6 +19,10 @@ const {app}         = require('electron');
 
 /**
  * ZettlrStats works like the ZettlrConfig object, only with a different file.
+ * ZettlrStats monitors how the user uses Zettlr and should in the future be
+ * able to present the user some nice looking statistics on his own behavior.
+ * (In case anyone is worried: No, there will be no transmission of stats to
+ * anyone.)
  */
 class ZettlrStats
 {

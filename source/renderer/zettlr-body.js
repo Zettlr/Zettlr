@@ -21,7 +21,10 @@ const ZettlrNotification = require('./zettlr-notification.js');
 const ZettlrPopup = require('./zettlr-popup.js');
 
 /**
- * ZettlrBody class
+ * This class's duty is to handle everything that affects (or can potentially
+ * occur over) the whole app window, such as dialogs (preferences), Quicklook
+ * windows or popups. Among the tasks of this class is to bundle these together
+ * for easy access so that we always know where to put such things.
  */
 class ZettlrBody
 {

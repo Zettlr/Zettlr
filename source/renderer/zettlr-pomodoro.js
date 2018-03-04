@@ -17,7 +17,10 @@ const ZettlrPopup = require('./zettlr-popup.js');
 const {trans} = require('../common/lang/i18n.js');
 
 /**
- * ZettlrPomodoro class.
+ * This class is pretty straight-forward: It handles clicks on the pomodoro button,
+ * updates its circle and handles the pomodoro timer functionality. It can start
+ * and stop the timer and display a context-sensitive popup that either shows
+ * controls for the timer _or_ the current status of it.
  */
 class ZettlrPomodoro
 {

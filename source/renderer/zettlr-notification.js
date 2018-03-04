@@ -13,7 +13,9 @@
  */
 
 /**
- * ZettlrNotification class
+ * This is one of the shortest classes in Zettlr, as it only displays small
+ * notification badges in the upper right edge of the window to notify the user,
+ * e.g, for remote changes on disk or such things.
  */
 class ZettlrNotification
 {

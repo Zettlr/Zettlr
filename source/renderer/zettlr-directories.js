@@ -15,7 +15,10 @@
 const TreeView = require('./tree-view-list.js');
 
 /**
- * ZettlrDirectories class
+ * This class acts as the intermediary between the actual directories in memory
+ * and the visual experience of the user. It can refresh itself and change if
+ * it intelligently detects changes, so all you need to do is call refresh() from
+ * time to time, to reflect changes in memory visually.
  */
 class ZettlrDirectories
 {
