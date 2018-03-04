@@ -153,7 +153,8 @@
         "insert_ul": "Insérer une liste pas de numéros",
         "insert_fn": "Insérer un note en bas en page",
         "remove_fn": "Effacer le note",
-        "show_toc": "Ouvrir le sommaire"
+        "show_toc": "Ouvrir le sommaire",
+        "file_revert": "Remettre le fichier à la derniere version de le fichier"
     },
     "system" : {
         "unknown_command": "Reçu une commande inconnu: %s",

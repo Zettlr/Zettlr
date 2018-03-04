@@ -53,6 +53,20 @@ class ZettlrRendererIPC
     }
 
     /**
+     * Wrapper for ipc send
+     * @param  {String} command The command to send
+     * @param  {Mixed} [arg={}] Additional content for the command
+     * @return {void}         Nothing to return.
+     */
+    send(command, arg = {})
+    {
+        this._ipc.send('message', {
+            'command': command,
+            'content': arg
+        });
+    }
+
+    /**
      * Switch over the received message.
      * @param {String} cmd The command
      * @param  {Object} cnt   The message's body
@@ -120,8 +134,12 @@ class ZettlrRendererIPC
             this._app.saveFile();
             break;
 
+            case 'mark-clean':
+            this._app.getEditor().markClean();
+            break;
+
             case 'file-request-revert':
-            // wow such empty
+            this.send('file-revert');
             break;
 
             case 'file-revert':
@@ -291,20 +309,6 @@ class ZettlrRendererIPC
             console.log(trans('system.unknown_command', cmd));
             break;
         }
-    }
-
-    /**
-     * Wrapper for ipc send
-     * @param  {String} command The command to send
-     * @param  {Mixed} [arg={}] Additional content for the command
-     * @return {void}         Nothing to return.
-     */
-    send(command, arg = {})
-    {
-        this._ipc.send('message', {
-            'command': command,
-            'content': arg
-        });
     }
 }
 

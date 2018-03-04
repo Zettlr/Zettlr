@@ -153,7 +153,8 @@
         "insert_ul": "Make an itemized list",
         "insert_fn": "Add a footnote",
         "remove_fn": "Remove the footnote under the cursor",
-        "show_toc": "Show the table of contents"
+        "show_toc": "Show the table of contents",
+        "file_revert": "Revert last saved version of this file"
     },
     "system" : {
         "unknown_command": "Unknown command received: %s",

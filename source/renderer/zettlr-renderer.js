@@ -657,8 +657,16 @@ class ZettlrRenderer
         this.ipc.send('file-save', file);
     }
 
+    /**
+     * Send a file-autosave command to the main process, requesting the creation of an autosave file.
+     */
     autoSave()
     {
+        // Only create autosaves if the editor is currently dirty
+        if(this.editor.isClean()) {
+            return;
+        }
+
         let file = this.getCurrentFile();
         if(file == null) {
             file = {};
@@ -669,12 +677,10 @@ class ZettlrRenderer
         this.ipc.send('file-autosave', file);
     }
 
-    revertFile(fhash)
-    {
-        // Revert a file
-        this.ipc.send('file-revert', fhash);
-    }
-
+    /**
+     * Request the renaming of a file
+     * @param  {ZettlrFile} f The file, whose name should be changed
+     */
     renameFile(f)
     {
         if(f.hasOwnProperty('hash')) {
@@ -686,12 +692,16 @@ class ZettlrRenderer
         }
     }
 
-    newFile(f)
+    /**
+     * Create a new file.
+     * @param  {ZettlrDir} d Contains a directory in which the file should be created
+     */
+    newFile(d)
     {
         // User wants to create a new file. Display popup
-        if((f != null) && f.hasOwnProperty('hash')) {
+        if((d != null) && d.hasOwnProperty('hash')) {
             // User has probably right clicked
-            this.body.requestFileName(this.findObject(f.hash));
+            this.body.requestFileName(this.findObject(d.hash));
         } else {
             this.body.requestFileName(this.getCurrentDir());
         }

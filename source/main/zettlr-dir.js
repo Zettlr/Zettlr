@@ -70,6 +70,22 @@ class ZettlrDir
     }
 
     /**
+     * Reverts all files (i.e. removes their autosaves)
+     */
+    shutdown()
+    {
+        // Revert all files in this directory and send the shutdown command
+        // further down the road.
+        for(let c of this.children) {
+            if(c.isFile()) {
+                c.revert();
+            } else if(c.isDirectory()) {
+                c.shutdown();
+            }
+        }
+    }
+
+    /**
      * Takes an object and returns a ZettlrDir-object (or null)
      * @param  {Object} obj An object containing information for search
      * @return {Mixed}     Either null, if not found, or the ZettlrDir object.

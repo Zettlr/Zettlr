@@ -60,9 +60,14 @@ class ZettlrIPC
      * @param  {Mixed} content Can be either simply a string or a whole object
      * @return {ZettlrIPC}         This for chainability.
      */
-    send(command, content)
+    /**
+     * This sends a message to the current window's renderer process.
+     * @param  {String} command      The command to be sent
+     * @param  {Object} [content={}] Can be either simply a string or a whole object
+     * @return {ZettlrIPC}              This for chainability.
+     */
+    send(command, content = {})
     {
-        // sender = this.parent.getWindow().getWindow().webContents;
         let sender = this._app.window.getWindow().webContents;
         sender.send('message', {
             'command': command,
@@ -125,6 +130,10 @@ class ZettlrIPC
 
             case 'file-autosave':
             this._app.autoSave(cnt);
+            break;
+
+            case 'file-revert':
+            this._app.revert();
             break;
 
             case 'dir-open':

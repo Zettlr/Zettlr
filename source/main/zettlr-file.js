@@ -188,6 +188,11 @@ class ZettlrFile
         return this;
     }
 
+    /**
+     * Creates or overwrites the corresponding autosave file.
+     * @param  {String} content The current contents of the editor.
+     * @return {ZettlrFile} This for chainability
+     */
     autoSave(content)
     {
         // Create or overwrite the autosave file.
@@ -196,11 +201,18 @@ class ZettlrFile
         }
 
         fs.writeFile(this.autosavefile, content, 'utf-8', (err) => {
-            if(err) throw err; // Wow, I'm becoming lazy now. It's getting too late.
-            console.log(`Autosave created!`);
+            if(err) {
+                // Well ... who needs autosaves anyway?
+            }
         });
+
+        return this;
     }
 
+    /**
+     * Removes potential autosaves.
+     * @return {ZettlrFile} This for chainability.
+     */
     revert()
     {
         // Revert means: Delete all autosaves
@@ -208,13 +220,17 @@ class ZettlrFile
             // But only if there is one
             fs.unlink(this.autosavefile, (err) => {
                 if(err) {
-                    console.error(`Reversion failed. Reason: ${err}`);
+                    // Have fun removing this file by yourself!
                 }
             });
         }
         return this;
     }
 
+    /**
+     * Can this file be reverted, that is, are there autosaves?
+     * @return {Boolean} True, if there are autosaves newer than the file, or false.
+     */
     canRevert()
     {
         if(this.autosavefile) {

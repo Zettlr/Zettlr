@@ -174,6 +174,8 @@ class Zettlr
         this.config.save();
         this.stats.save();
         this.watchdog.stop();
+        // Perform closing activity in the path.
+        this.paths.shutdown();
     }
 
     /**
@@ -884,21 +886,15 @@ class Zettlr
         }
     }
 
-    revert(fhash)
+    /**
+     * Send the content of the "hard saved" version of a file to the renderer.
+     */
+    revert()
     {
-        // The user wants to revert the current file
-        if(this.getCurrentFile() == null) {
-            return console.log(`Error: Cannot revert an empty file!`);
-        }
-
         // Simply send the old contents of the file (which haven't been overwritten)
-        // to the client.
-        let file = this.paths.findFile({ 'hash': fhash });
-
-        if(file != null) {
-            this.ipc.send('file-revert', file.revert().withContent());
-        } else {
-            console.error(`The file does not exist anymore!`);
+        // to the client and remove all potential autosaves.
+        if(this.getCurrentFile() != null) {
+            this.ipc.send('file-revert', this.getCurrentFile().revert().withContent());
         }
     }
 
@@ -948,13 +944,15 @@ class Zettlr
     }
 
     /**
-     * remove the modification flag.
+     * Remove the modification flag. Also notify the renderer process so that
+     * the editor can mark itself clear as well.
      * @return {void} Nothing to return.
      */
     clearModified()
     {
         this.window.clearModified();
         this.editFlag = false;
+        this.ipc.send('mark-clean');
     }
 
     // Getters

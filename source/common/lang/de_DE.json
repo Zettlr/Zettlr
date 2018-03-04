@@ -153,7 +153,8 @@
         "insert_ul": "Strichliste erstellen",
         "insert_fn": "Fußnote hinzufügen",
         "remove_fn": "Fußnote unter dem Cursor entfernen",
-        "show_toc": "Inhaltsverzeichnis anzeigen"
+        "show_toc": "Inhaltsverzeichnis anzeigen",
+        "file_revert": "Letzte gespeicherte Dateiversion wiederherstellen"
     },
     "system" : {
         "unknown_command": "Unbekannten Befehl erhalten: %s",

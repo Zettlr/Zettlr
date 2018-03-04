@@ -360,6 +360,11 @@ class ZettlrEditor
         return this;
     }
 
+    /**
+     * Revert the editor's contents to a previous state of the file.
+     * @param  {ZettlrFile} file The file with original content
+     * @return {ZettlrEditor}      This for chainability.
+     */
     revert(file)
     {
         // Simply revert the contents of the editor without touching anything else
