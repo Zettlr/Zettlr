@@ -62,6 +62,7 @@
         "win_close": "Schließen",
         "learn_more": "Zettlr im Web",
         "docs": "Handbuch öffnen",
+        "update": "Nach neuer Version suchen",
         "preferences": "Einstellungen",
         "quit": "Beenden",
         "about": "Über %s",
@@ -136,6 +137,13 @@
             "save": "Speichern",
             "cancel": "Abbrechen",
             "autosave_enabled": "Speichere Änderungen automatisch"
+        },
+        "update": {
+            "title": "Neue Version",
+            "notification": "Eine neue Version von Zettlr steht zum Download bereit. Bitte lies die Änderungsdatei unten.",
+            "release_url": "Zum Download",
+            "close": "Schließen",
+            "no_update": "Du nutzt die aktuelle Version von Zettlr"
         }
     },
     "toolbar": {

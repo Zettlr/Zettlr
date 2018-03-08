@@ -240,6 +240,11 @@ class ZettlrIPC
             this._app.retrieveDictFile('dic', cnt);
             break;
 
+            // UPDATE
+            case 'update-check':
+            this._app.checkForUpdate();
+            break;
+
             default:
             console.log(trans('system.unknown_command', cmd));
             break;

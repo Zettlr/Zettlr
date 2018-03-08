@@ -210,12 +210,18 @@ class ZettlrMenu
                 submenu: [
                     {
                         label: trans('menu.learn_more'),
-                        click () { require('electron').shell.openExternal('https://www.zettlr.com/') }
+                        click (item, focusedWindow) { require('electron').shell.openExternal('https://www.zettlr.com/') }
                     },
                     {
                         label: trans('menu.docs'),
                         accelerator: 'F1',
-                        click() { require('electron').shell.openExternal('https://www.zettlr.com/docs') }
+                        click(item, focusedWindow) { require('electron').shell.openExternal('https://www.zettlr.com/docs') }
+                    },
+                    {
+                        label: trans('menu.update'),
+                        click(item, focusedWindow) {
+                            if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'update-check' });
+                        }
                     }
                 ]
             }

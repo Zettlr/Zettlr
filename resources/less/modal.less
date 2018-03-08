@@ -18,6 +18,7 @@
         padding:20px;
         box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.75);
 
+        // General typography
         h1 {
             font-size: 1.5em;
             margin-bottom:0.5em;
@@ -34,6 +35,24 @@
             width:80%;
             margin:1em 10%;
         }
+
+        ul {
+            li {
+                line-height:150%;
+            }
+        }
+
+        code {
+            background-color:@grey-1;
+            border-radius:5px;
+        }
+
+        img {
+            max-width:100%;
+            max-height:100%;
+        }
+
+        // Forms
 
         label {
             color:@grey-4;
@@ -64,7 +83,7 @@
             display:inline;
         }
 
-        button {
+        button, a.button {
             display:inline-block;
             font-size:1em;
             margin:1em;
@@ -74,44 +93,21 @@
             border:1px solid @grey-6;
             transition:0.2s background-color ease;
             cursor:pointer;
-        }
+            text-decoration:none;
 
-        button:hover {
-            background-color:@green-selection;
-            transition:0.2s background-color ease;
-        }
-
-        div.export_files {
-            display:flex;
-            padding:0.5em;
-            word-wrap:break-all;
-
-            div {
-                display:inline;
-                flex-grow:1;
-                border:1px solid @grey-1;
-                border-radius:10px;
-                margin:0.5em;
-                padding:0.5em;
-                text-align: center;
-                cursor: pointer;
-
-                &:hover {
-                    background-color:rgba(240, 240, 240, 1);
-                }
-
-                span {
-                    background-color: @green-selection;
-                    border-radius:5px;
-                    font-size:80%;
-                    padding:2px;
-                }
-
-                img {
-                    max-width:100%;
-                    max-height:100%;
-                }
+            &:hover {
+                background-color:@green-selection;
+                transition:0.2s background-color ease;
             }
+        }
+
+        .changelog {
+            max-height:300px;
+            overflow-y:auto;
+            border:1px solid @grey-4;
+            border-radius:@border-radius;
+            padding:10px;
+            margin:10px 0px;
         }
 
         .error {

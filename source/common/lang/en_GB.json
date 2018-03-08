@@ -62,6 +62,7 @@
         "win_close": "Close",
         "learn_more": "Go to website",
         "docs": "Open user manual",
+        "update": "Check for updates",
         "preferences": "Preferences",
         "quit": "Quit",
         "about": "About %s",
@@ -136,6 +137,13 @@
             "save": "Save",
             "cancel": "Cancel",
             "autosave_enabled": "Automatically save file modifications"
+        },
+        "update": {
+            "title": "New update available",
+            "notification": "There is a new version of Zettlr available to download. Please read the changelog below.",
+            "release_url": "Open download page",
+            "close": "Close",
+            "no_update": "You got the newest version of Zettlr"
         }
     },
     "toolbar": {

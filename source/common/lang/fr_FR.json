@@ -62,6 +62,7 @@
         "win_close": "Fermer",
         "learn_more": "Visiter Zettlr en ligne",
         "docs": "Ouvrir le manuel",
+        "update": "Mise à jour",
         "preferences": "Paramètres",
         "quit": "Quitter",
         "about": "De %s",
@@ -136,6 +137,13 @@
             "save": "Enregistrer",
             "cancel": "Annuler",
             "autosave_enabled": "Enregistrer des modifications à le fichier en automatique."
+        },
+        "update": {
+            "title": "Nouveau version",
+            "notification": "Un nouveau version de Zettlr est preparée à téléchargement. Lire le changelog en bas.",
+            "release_url": "Telecharger",
+            "close": "Fermer",
+            "no_update": "Tu as la version derniere de Zettlr"
         }
     },
     "toolbar": {

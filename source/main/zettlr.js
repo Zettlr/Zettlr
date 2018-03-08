@@ -83,9 +83,9 @@ class Zettlr
         this.watchdog = new ZettlrWatchdog(this.config.get('projectDir'));
         this.watchdog.start();
 
-        // TESTING
         this._updater = new ZettlrUpdater(this);
 
+        // Initial update check after 10 seconds into the app start
         setTimeout(() => { this._updater.check(); }, 10000);
 
         // Initiate regular polling
@@ -837,6 +837,14 @@ class Zettlr
     }
 
     /**
+     * Initiates the search for an update.
+     */
+    checkForUpdate()
+    {
+        this._updater.check();
+    }
+
+    /**
      * Notify the renderer process of an available update.
      * @param  {String} newVer           The newest available version
      * @param  {String} message          The message, i.e. the changelog
@@ -851,6 +859,15 @@ class Zettlr
             'releaseURL': releaseURL,
             'downloadURL': downloadURL
         });
+    }
+
+    /**
+     * Simple wrapper for notifications.
+     * @param  {String} message The message to be sent to the renderer.
+     */
+    notify(message)
+    {
+        this.ipc.send('notify', message);
     }
 
     // Save a file. A file MUST be given, for the content is needed to write to

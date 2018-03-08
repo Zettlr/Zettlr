@@ -192,7 +192,7 @@ class ZettlrDialog
         });
 
         // Abort integration if an abort button is given
-        form.find('button#abort').on('click', (e) => {
+        this.modal.find('#abort').on('click', (e) => {
             this.close();
         });
 
