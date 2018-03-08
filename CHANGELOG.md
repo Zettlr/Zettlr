@@ -6,6 +6,8 @@
 - Added toolbar button descriptions. Simply hover over a button with your mouse to learn about its functionality
 - Added an autosave feature. Now, Zettlr keeps automatic saves of your current file.
 - Added a reversion feature. With the revert button you can restore the editor content to the last saved state.
+- Added an automatic check for updates. It is run on every start of Zettlr and can be called programmatically by clicking Help -> Check for Updates
+- Fixed an error that disabled the end-search button in the searchbar.
 
 ## Under the hood
 
@@ -16,6 +18,7 @@
 - Updated Electron builder to 20.4.0.
 - Forgot to update the dependencies for export last time.
 - Moved the polling interval into `data.json`
+- Added class `ZettlrUpdater` with barebone functionality.
 
 # 0.12.0
 

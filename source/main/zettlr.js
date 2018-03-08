@@ -85,9 +85,6 @@ class Zettlr
 
         this._updater = new ZettlrUpdater(this);
 
-        // Initial update check after 10 seconds into the app start
-        setTimeout(() => { this._updater.check(); }, 10000);
-
         // Initiate regular polling
         setTimeout(() => {
             this.poll();

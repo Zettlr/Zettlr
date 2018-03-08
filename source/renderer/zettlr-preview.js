@@ -39,11 +39,6 @@ class ZettlrPreview
         this.hashes             = null;
         this.currentSearch      = null;
         this.currentSearchIndex = 0;
-
-        // Add event listener for ending search
-        $('.end-search').on('click', (e) => {
-            this.div.find('li').removeClass('hidden');
-        });
     }
 
     /**
@@ -235,11 +230,11 @@ class ZettlrPreview
         // We got an array to search through.
         if(this.currentSearchIndex == (this.hashes.length-1)) {
             // End search
-            this.endSearch();
+            this.parent.endSearch();
             return;
         }
         if(this.currentSearchIndex > this.hashes.length) {
-            this.endSearch();
+            this.parent.endSearch();
             return;
         }
 
@@ -276,10 +271,17 @@ class ZettlrPreview
      */
     endSearch()
     {
-        this.parent.endSearch();
         this.currentSearchIndex = 0;
         this.hashes             = [];
         this.currentSearch      = null;
+    }
+
+    /**
+     * Shows all files that may have been hidden by a search
+     */
+    showFiles()
+    {
+        this.div.find('li').removeClass('hidden');
     }
 
     // END SEARCH

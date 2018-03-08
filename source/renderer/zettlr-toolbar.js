@@ -48,11 +48,15 @@ class ZettlrToolbar
         this.searchbar.on('keyup', (e) => {
             if(e.which == 27) { // ESC
                 this.searchbar.blur();
-                $('#preview').find('li').removeClass('hidden');
+                this.parent.getPreview().showFiles();
             } else if(e.which == 13) { // RETURN
                 this.parent.beginSearch(this.searchbar.val().toLowerCase());
             }
         });
+
+        this.div.find('.end-search').on('click', (e) => {
+            this.parent.getPreview().showFiles();
+        })
 
         this.searchbar.on('focus', function(e) {
             $(this).select();

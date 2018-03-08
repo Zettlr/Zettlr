@@ -104,6 +104,9 @@ class ZettlrRenderer
     {
         // Here we can init actions and stuff to be done after the startup has finished
         setTimeout(() => { this.poll(); }, POLL_TIME); // Poll every POLL_TIME seconds
+
+        // Send an initial check for an update
+        this.ipc.send('update-check');
     }
 
     poll()
@@ -535,7 +538,11 @@ class ZettlrRenderer
      * Pass-through function from ZettlrPreview to Toolbar.
      * @return {void} Nothing to return.
      */
-    endSearch() { this.toolbar.endSearch(); }
+    endSearch()
+    {
+        this.toolbar.endSearch();
+        this.preview.endSearch();
+    }
 
     /**
      * Pass-through function from ZettlrEditor to ZettlrToolbar.
