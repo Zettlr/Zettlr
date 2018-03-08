@@ -157,6 +157,12 @@ class ZettlrDialog
             replacements.push('%APP_LANG%|' + lang_selection)
             break;
 
+            case 'update':
+            replacements.push('%NEWVER%|' + obj.newVer);
+            replacements.push('%CHANGELOG%|' + obj.changelog);
+            replacements.push('%RELEASEURL%|' + obj.releaseURL);
+            break;
+
             default:
             throw new DialogError(trans('dialog.error.unknown_dialog', dialog));
             break;

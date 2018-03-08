@@ -211,6 +211,11 @@ class ZettlrMenu
                     {
                         label: trans('menu.learn_more'),
                         click () { require('electron').shell.openExternal('https://www.zettlr.com/') }
+                    },
+                    {
+                        label: trans('menu.docs'),
+                        accelerator: 'F1',
+                        click() { require('electron').shell.openExternal('https://www.zettlr.com/docs') }
                     }
                 ]
             }

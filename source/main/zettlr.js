@@ -27,6 +27,7 @@ const ZettlrConfig                  = require('./zettlr-config.js');
 const ZettlrDir                     = require('./zettlr-dir.js');
 const ZettlrWatchdog                = require('./zettlr-watchdog.js');
 const ZettlrStats                   = require('./zettlr-stats.js');
+const ZettlrUpdater                 = require('./zettlr-updater.js');
 const {i18n, trans}                 = require('../common/lang/i18n.js');
 const {hash, ignoreDir}             = require('../common/zettlr-helpers.js');
 
@@ -81,6 +82,11 @@ class Zettlr
         // Last: Start watching the directory
         this.watchdog = new ZettlrWatchdog(this.config.get('projectDir'));
         this.watchdog.start();
+
+        // TESTING
+        this._updater = new ZettlrUpdater(this);
+
+        setTimeout(() => { this._updater.check(); }, 10000);
 
         // Initiate regular polling
         setTimeout(() => {
@@ -169,7 +175,7 @@ class Zettlr
             // Notify the renderer of changes
             this.ipc.send('paths-update', this.paths);
         }
-        
+
         setTimeout(() => { this.poll(); }, POLL_TIME);
     }
 
@@ -830,6 +836,23 @@ class Zettlr
         this.currentFile = null;
     }
 
+    /**
+     * Notify the renderer process of an available update.
+     * @param  {String} newVer           The newest available version
+     * @param  {String} message          The message, i.e. the changelog
+     * @param  {String} releaseURL       URL to the release page on GitHub
+     * @param  {String} [downloadURL=''] Optionally a URL to the install file
+     */
+    notifyUpdate(newVer, message, releaseURL, downloadURL = '')
+    {
+        this.ipc.send('update-available', {
+            'newVer': newVer,
+            'changelog': message,
+            'releaseURL': releaseURL,
+            'downloadURL': downloadURL
+        });
+    }
+
     // Save a file. A file MUST be given, for the content is needed to write to
     // a file. The content is always freshly grabbed from the CodeMirror content.
 
@@ -982,6 +1005,12 @@ class Zettlr
      * @return {ZettlrConfig} The configuration
      */
     getConfig()      { return this.config; }
+
+    /**
+     * Returns the updater
+     * @return {ZettlrUpdater} The updater.
+     */
+    getUpdater()     { return this._updater; }
 
     /**
      * Get the current directory.

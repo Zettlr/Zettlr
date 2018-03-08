@@ -13,7 +13,9 @@
         "codemirror-markdown-list-autoindent": "^1.0.1",
         "command-exists": "^1.2.2",
         "jquery": "^3.3.1",
+        "markdown": "^0.5.0",
         "sanitize-filename": "^1.6.1",
+        "semver": "^5.5.0",
         "typo": "^1.0.6",
         "typo-js": "^1.0.3"
     },

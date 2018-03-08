@@ -311,6 +311,11 @@ class ZettlrRendererIPC
             this._app.getEditor().zoom(-1);
             break;
 
+            // Updater
+            case 'update-available':
+            this._app.getBody().displayUpdate(cnt);
+            break;
+
             default:
             console.log(trans('system.unknown_command', cmd));
             break;
