@@ -15,6 +15,7 @@
 - Updated to Electron 1.8.3.
 - Updated Electron builder to 20.4.0.
 - Forgot to update the dependencies for export last time.
+- Moved the polling interval into `data.json`
 
 # 0.12.0
 

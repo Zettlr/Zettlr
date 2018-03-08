@@ -30,6 +30,8 @@ const ZettlrStats                   = require('./zettlr-stats.js');
 const {i18n, trans}                 = require('../common/lang/i18n.js');
 const {hash, ignoreDir}             = require('../common/zettlr-helpers.js');
 
+const POLL_TIME                     = require('../common/data.json').poll_time;
+
 /**
  * The Zettlr class handles every core functionality of Zettlr. Nothing works
  * without this. One object of Zettlr is created on initialization of the app
@@ -83,7 +85,7 @@ class Zettlr
         // Initiate regular polling
         setTimeout(() => {
             this.poll();
-        }, 5000);
+        }, POLL_TIME);
     }
 
     /**
@@ -167,7 +169,8 @@ class Zettlr
             // Notify the renderer of changes
             this.ipc.send('paths-update', this.paths);
         }
-        setTimeout(() => { this.poll(); }, 5000);
+        
+        setTimeout(() => { this.poll(); }, POLL_TIME);
     }
 
     /**

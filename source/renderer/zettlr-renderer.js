@@ -27,7 +27,8 @@ const remote            = require('electron').remote;
 
 const {trans}           = require('../../common/lang/i18n.js');
 
-const POLL_TIME         = 5000; // Currently: 5 seconds for each round
+                        // Pull the poll-time from the data
+const POLL_TIME         = require('../../common/data.json').poll_time;
 
 /**
  * This is the pendant class to the Zettlr class in the main process. It mirrors
