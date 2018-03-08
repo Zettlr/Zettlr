@@ -66,7 +66,8 @@ class ZettlrConfig
                 'fr_FR' : (this.getLocale() === 'fr_FR') ? true : false
             },
             "app_lang": this.getLocale(),
-            "debug": false
+            "debug": false,
+            "autosave": true
         };
 
         // Load the configuration
@@ -294,7 +295,7 @@ class ZettlrConfig
         // This will ensure sane defaults.
         for (var prop in oldcfg) {
             if (newcfg.hasOwnProperty(prop) && (newcfg[prop] != null)) {
-                    if(typeof newcfg[prop] === 'object') {
+                    if(typeof oldcfg[prop] === 'object') {
                         // Update sub-object
                         this.update(newcfg[prop], oldcfg[prop]);
                     } else {

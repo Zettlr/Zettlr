@@ -12,6 +12,9 @@
 - Added the `ignoreDir` and `ignoreFile` helper functions to check whether or not a specific path should be excluded or not. This applies to directories and the watchdog. Ignored directory patterns (as regular expressions) reside in `source/common/data.json`.
 - Ignoring the `jquery-ui.min.js` file on docs generation.
 - Improved the documentation of the main classes.
+- Updated to Electron 1.8.3.
+- Updated Electron builder to 20.4.0.
+- Forgot to update the dependencies for export last time.
 
 # 0.12.0
 

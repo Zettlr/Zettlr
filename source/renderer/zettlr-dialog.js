@@ -131,9 +131,11 @@ class ZettlrDialog
             let dark = (obj.darkTheme) ? 'checked="checked"' : '';
             let snippets = (obj.snippets) ? 'checked="checked"' : '';
             let debug = (obj.debug) ? 'checked="checked"' : '';
+            let autosave = (obj.autosave) ? 'checked="checked"' : '';
             replacements.push('%DARK%|' + dark);
             replacements.push('%SNIPPETS%|' + snippets);
             replacements.push('%DEBUG%|' + debug);
+            replacements.push('%AUTOSAVE%|' + autosave);
             replacements.push('%PANDOC%|' + obj.pandoc);
             replacements.push('%PDFLATEX%|' + obj.pdflatex);
             let spellcheck = '';

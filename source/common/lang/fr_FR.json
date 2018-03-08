@@ -133,7 +133,8 @@
             "spellcheck_warning": "<em>Attention:</em> Si le trop bibliothèques sont activer en même temps, il est possible, que Zettlr devenir lent. Tenter n'activer plus de trois bibliothèques.",
             "debug": "Debug",
             "save": "Enregistrer",
-            "cancel": "Annuler"
+            "cancel": "Annuler",
+            "autosave_enabled": "Enregistrer des modifications à le fichier en automatique."
         }
     },
     "toolbar": {

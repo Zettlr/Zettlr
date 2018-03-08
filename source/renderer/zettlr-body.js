@@ -323,33 +323,32 @@ class ZettlrBody
      */
     proceed(dialog, res, passedObj)
     {
-        let name   = '',
-        pandoc     = '',
+        let pandoc     = '',
         pdflatex   = '',
-        darkTheme  = '',
-        snippets   = '',
+        darkTheme  = false,
+        snippets   = false,
         spellcheck = this.spellcheckLangs,
         app_lang = 'en_US',
-        debug = '';
+        debug = false,
+        autosave = false;
 
         for(let r of res) {
-            // The four prompts will have an input name="name"
-            if(r.name === 'name') {
-                name = r.value;
-            } else if(r.name === 'pref-pandoc') {
+            if(r.name === 'pref-pandoc') {
                 pandoc = r.value;
             } else if(r.name === 'pref-pdflatex') {
                 pdflatex = r.value;
             } else if(r.name === 'pref-darkTheme') {
-                darkTheme = (r.value === 'yes') ? true : false;
+                darkTheme = true;
             } else if(r.name === 'pref-snippets') {
-                snippets = (r.value === 'yes') ? true : false;
+                snippets = true;
             } else if(r.name === 'spellcheck[]') {
                 spellcheck[r.value] = true;
             } else if(r.name === 'app-lang') {
                 app_lang = r.value;
             } else if(r.name === 'debug') {
-                debug = (r.value === 'yes') ? true : false;
+                debug = true;
+            } else if(r.name === 'autosave-enabled') {
+                autosave = true;
             }
         }
 
@@ -361,7 +360,8 @@ class ZettlrBody
                 'snippets': snippets,
                 'spellcheck': spellcheck,
                 'app_lang': app_lang,
-                'debug': debug
+                'debug': debug,
+                'autosave': autosave
             }
             this.parent.saveSettings(cfg);
         }

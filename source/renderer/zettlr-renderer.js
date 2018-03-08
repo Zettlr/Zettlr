@@ -27,6 +27,8 @@ const remote            = require('electron').remote;
 
 const {trans}           = require('../../common/lang/i18n.js');
 
+const POLL_TIME         = 5000; // Currently: 5 seconds for each round
+
 /**
  * This is the pendant class to the Zettlr class in the main process. It mirrors
  * the functionality of the main process, only that the functionality in here
@@ -57,6 +59,7 @@ class ZettlrRenderer
         // Indicators whether or not one of these has been found
         this.pandoc         = false;
         this.pdflatex       = false;
+        this.autosave_enabled = false;
 
         // Write translation data into renderer process's global var
         global.i18n         = remote.getGlobal('i18n');
@@ -85,6 +88,7 @@ class ZettlrRenderer
         this.ipc.send('config-get', 'darkTheme');
         this.ipc.send('config-get', 'snippets');
         this.ipc.send('config-get', 'app_lang');
+        this.ipc.send('config-get', 'autosave');
         this.ipc.send('config-get-env', 'pandoc');
         this.ipc.send('config-get-env', 'pdflatex');
 
@@ -98,16 +102,18 @@ class ZettlrRenderer
     finishStartup()
     {
         // Here we can init actions and stuff to be done after the startup has finished
-        setTimeout(() => { this.poll(); }, 10000); // Poll every ten seconds
+        setTimeout(() => { this.poll(); }, POLL_TIME); // Poll every POLL_TIME seconds
     }
 
     poll()
     {
         // Do recurring tasks.
-        this.autoSave();
+        if(this.autosave_enabled) {
+            this.autoSave();
+        }
 
         // Set next timeout
-        setTimeout(() => { this.poll(); }, 10000);
+        setTimeout(() => { this.poll(); }, POLL_TIME);
     }
 
     /**

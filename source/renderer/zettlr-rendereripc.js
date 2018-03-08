@@ -250,6 +250,9 @@ class ZettlrRendererIPC
                 case 'pdflatex':
                 this._app.pdflatex = cnt.value;
                 break;
+                case 'autosave':
+                this._app.autosave_enabled = cnt.value;
+                break;
             }
             break;
 
