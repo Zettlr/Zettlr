@@ -11,6 +11,8 @@
 - Fixed an error that did not refresh the preview list when a new file was created by saving an empty file.
 - Fixed an error that did not select newly created directories in the tree view, although they were selected as could be seen in the preview pane.
 - Small changes in the system integration.
+- Additional check whether or not Pandoc and LaTeX are installed on the system.
+- Added menu entries for downloading LaTeX and Pandoc.
 
 ## Under the hood
 

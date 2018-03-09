@@ -546,6 +546,22 @@ class Zettlr
      */
     exportFile(arg)
     {
+        if(!this.config.getEnv('pandoc')) {
+            return this.window.prompt({
+                type: 'error',
+                title: trans('system.error.no_pandoc_title'),
+                message: trans('system.error.no_pandoc_message')
+            });
+        }
+
+        if((arg.ext == 'pdf') && !this.config.getEnv('pdflatex')) {
+            return this.window.prompt({
+                type: 'error',
+                title: trans('system.error.no_pdflatex_title'),
+                message: trans('system.error.no_pdflatex_message', error)
+            });
+        }
+
         // arg contains a hash and an extension.
         let file = this.paths.findFile({ 'hash': arg.hash });
         let newname = file.name.substr(0, file.name.lastIndexOf(".")) + "." + arg.ext;

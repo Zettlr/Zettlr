@@ -213,6 +213,14 @@ class ZettlrMenu
                         click (item, focusedWindow) { require('electron').shell.openExternal('https://www.zettlr.com/') }
                     },
                     {
+                        label: trans('menu.pandoc'),
+                        click (item, focusedWindow) { require('electron').shell.openExternal('https://github.com/jgm/pandoc/releases/latest') }
+                    },
+                    {
+                        label: trans('menu.latex'),
+                        click (item, focusedWindow) { require('electron').shell.openExternal('https://www.latex-project.org/get/#tex-distributions') }
+                    },
+                    {
                         label: trans('menu.docs'),
                         accelerator: 'F1',
                         click(item, focusedWindow) { require('electron').shell.openExternal('https://www.zettlr.com/docs') }

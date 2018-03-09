@@ -61,6 +61,9 @@ class ZettlrEditor
         this.inlineImages = [];     // Image widgets that are currently rendered
         this.inlineLinks = [];      // Inline links that are currently rendered
 
+        // These are used for calculating a correct word count
+        this._blockElements = require('../common/data.json').block_elements;
+
         this.cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
             mode: {
                 name: 'spellchecker' // This automatically defines gfm as overlay mode
@@ -386,7 +389,20 @@ class ZettlrEditor
     */
     getWordCount()
     {
-        return this.cm.getValue().split(' ').length;
+        let words = this.cm.getValue().split(' ')
+
+        let i = 0;
+
+        // Remove block elements from word count to get a more accurate count.
+        while(i < words.length) {
+            if(this._blockElements.includes(words[i])) {
+                words.splice(i, 1);
+            } else {
+                i++;
+            }
+        }
+
+        return words.length;
     }
 
     /**
