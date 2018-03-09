@@ -8,6 +8,9 @@
 - Added a reversion feature. With the revert button you can restore the editor content to the last saved state.
 - Added an automatic check for updates. It is run on every start of Zettlr and can be called programmatically by clicking Help -> Check for Updates
 - Fixed an error that disabled the end-search button in the searchbar.
+- Fixed an error that did not refresh the preview list when a new file was created by saving an empty file.
+- Fixed an error that did not select newly created directories in the tree view, although they were selected as could be seen in the preview pane.
+- Small changes in the system integration.
 
 ## Under the hood
 
@@ -19,6 +22,7 @@
 - Forgot to update the dependencies for export last time.
 - Moved the polling interval into `data.json`
 - Added class `ZettlrUpdater` with barebone functionality.
+- Added `additional_paths` in `source/common/data.json` to automatically append to electron's PATH as to make sure the additional fields in the preferences are no longer needed (unless in special cases).
 
 # 0.12.0
 

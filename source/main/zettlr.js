@@ -405,12 +405,12 @@ class Zettlr
             return;
         }
 
-        // Switch to newly created directory.
-        this.setCurrentDir(dir);
-
         // Re-render the directories, and then as well the file-list of the
         // current folder.
         this.ipc.send('paths-update', this.paths);
+
+        // Switch to newly created directory.
+        this.setCurrentDir(dir);
     }
 
     /**
@@ -563,7 +563,7 @@ class Zettlr
 
         let tempfile = path.join(temp, newname);
 
-        let command = `${this.config.get('pandoc')} "${file.path}" -f markdown ${tpl} -t ${arg.ext} -o "${tempfile}"`;
+        let command = `pandoc "${file.path}" -f markdown ${tpl} -t ${arg.ext} -o "${tempfile}"`;
 
         // Set the current working directory of pandoc to temp. Failing to do so
         // will yield errors on Windows when the app is installed for all users
@@ -908,15 +908,18 @@ class Zettlr
         if(this.getCurrentFile() == null) {
             this.setCurrentFile(file);
             // "Open" this file.
-            // this.selectDir(this.getCurrentDir().hash);
             this.sendFile(file.hash);
-            return;
         }
+
         if(this.getCurrentDir().contains(file)) {
             this.ipc.send('paths-update', this.paths);
         }
     }
 
+    /**
+     * Automatically saves changes to a file in a special file.
+     * @param  {ZettlrFile} f The file containing the new content.
+     */
     autoSave(f)
     {
         if(f == null) {
@@ -927,6 +930,7 @@ class Zettlr
         let file = this.paths.findFile({ 'hash': f.hash });
 
         if(file !== null) {
+            // Don't autosave unnamed files.
             file.autoSave(f.content);
         }
     }

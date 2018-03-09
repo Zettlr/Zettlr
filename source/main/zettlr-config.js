@@ -40,11 +40,22 @@ class ZettlrConfig
         this.configFile = path.join(this.configPath, 'config.json');
         this.config = null;
 
+        // Environment variables TODO: Generate them dynamically
         this.env = {
             'pandoc': false,
             'pdflatex': false
         };
 
+        // Additional environmental paths (for locating LaTeX and Pandoc)
+        if(process.platform === 'win32') {
+            this._additional_paths = require('../common/data.json').additional_paths.win32;
+        } else if(process.platform === 'linux') {
+            this._additional_paths = require('../common/data.json').additional_paths.linux;
+        } else if(process.platform === 'darwin') {
+            this._additional_paths = require('../common/data.json').additional_paths.macos;
+        }
+
+        // Supported Spellcheck languages
         this.supportedLangs = [
             'de_DE',
             'fr_FR',
@@ -138,13 +149,41 @@ class ZettlrConfig
      */
     checkSystem()
     {
-        // Check pandoc availability (general exports)
-        if(commandExists(this.get('pandoc'))) {
+        let delim = (process.platform === 'win32') ? ';' : ':' ;
+
+        // First integrate the additional paths that we need.
+        let nPATH = process.env.PATH.split(delim);
+        for(let x of this._additional_paths) {
+            if(!nPATH.includes(x)) {
+                nPATH.push(x);
+            }
+        }
+
+        process.env.PATH = nPATH.join(delim);
+
+        // We have the problem that pandoc version 2 does not recognize pdflatex
+        // given with the --pdf-engine command. It does work, though, if it finds
+        // it in path. So instead of passing it directly, let us just insert it into
+        // electron's PATH
+        if(path.dirname(this.get('pdflatex')).length > 0) {
+            if(process.env.PATH.indexOf(path.dirname(this.get('pdflatex'))) == -1) {
+                process.env.PATH += delim + path.dirname(this.get('pdflatex'));
+            }
+        }
+
+        if(path.dirname(this.get('pandoc')).length > 0) {
+            if(process.env.PATH.indexOf(path.dirname(this.get('pandoc'))) == -1) {
+                process.env.PATH += delim + path.dirname(this.get('pandoc'));
+            }
+        }
+
+        // Now check the availability of the pandoc and pdflatex commands.
+        if(commandExists('pandoc')) {
             this.env.pandoc = true;
         }
 
         // Check PDFLaTeX availability (PDF exports)
-        if(commandExists(this.get('pdflatex'))) {
+        if(commandExists('pdflatex')) {
             this.env.pdflatex = true;
         }
 
@@ -156,33 +195,13 @@ class ZettlrConfig
 
         if(process.platform === 'darwin') {
             // The executable lies in Contents/MacOS --> navigate up a second time
-            dir = path.dirname(dir);
-
             // macos is capitalized "Resources", not "resources" in lowercase
-            dir = path.join(dir, 'Resources');
+            dir = path.join(path.dirname(dir), 'Resources');
         } else {
             dir = path.join(dir, 'resources');
         }
 
         this.env.templateDir = path.join(dir, 'pandoc');
-
-        // We have the problem that pandoc version 2 does not recognize pdflatex
-        // given with the --pdf-engine command. It does work, though, if it finds
-        // it in path. So instead of passing it directly, let us just insert it into
-        // electron's PATH
-        if(path.dirname(this.get('pdflatex')).length > 0) {
-            // In the config the user saved a whole path, so obviously pandoc
-            // did not see pdflatex -> insert into path
-            if(process.env.PATH.indexOf(path.dirname(this.get('pdflatex'))) == -1) {
-                let delimiter = '';
-                if(process.platform === 'win32') {
-                    delimiter = ';';
-                } else {
-                    delimiter = ':';
-                }
-                process.env.PATH += delimiter + path.dirname(this.get('pdflatex'));
-            }
-        }
 
         return this;
     }

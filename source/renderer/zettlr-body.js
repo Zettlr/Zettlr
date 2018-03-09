@@ -251,6 +251,30 @@ class ZettlrBody
     }
 
     /**
+     * Opens the exporting popup
+     * @param  {ZettlrFile} file Which file should be exported?
+     * @return {void}      Nothing to return.
+     */
+    displayExport(file)
+    {
+        // Create a popup
+        let cnt = $('<div>').html(
+            `
+            <div class="btn-share htm" title="${trans('dialog.export.alt_html')}" data-ext="html" data-hash="${file.hash}">HTML</div>
+            <div class="btn-share pdf" title="${trans('dialog.export.alt_pdf')}" data-ext="pdf" data-hash="${file.hash}">PDF</div>
+            <div class="btn-share odt" title="${trans('dialog.export.alt_odt')}" data-ext="odt" data-hash="${file.hash}">ODT</div>
+            <div class="btn-share docx" title="${trans('dialog.export.alt_docx')}" data-ext="docx" data-hash="${file.hash}">DOCX</div>
+            `
+        );
+        let popup = new ZettlrPopup(this, $('.button.share'), cnt);
+
+        $('.btn-share').click((e) => {
+            this.requestExport(e.target);
+            popup.close();
+        });
+    }
+
+    /**
      * Open a new dialog for displaying the preferences.
      * @param  {Object} prefs An object containing all current config variables
      * @return {void}       Nothing to return.

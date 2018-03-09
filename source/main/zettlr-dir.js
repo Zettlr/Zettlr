@@ -445,6 +445,9 @@ class ZettlrDir
             // Same problem as in the find-methods. Only here I don't care anymore.
             // Simply assume a hash. Nothing else could be it.
             obj = { 'hash': obj };
+        } else if(!obj.hasOwnProperty('hash')) {
+            // Prevent errors.
+            return false;
         }
 
         if(this.findDir({ 'hash': obj.hash }) !== null) {
