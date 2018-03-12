@@ -12,7 +12,9 @@
     "repo_url": "https://api.github.com/repos/Zettlr/Zettlr/",
     "additional_paths": {
         "win32": [],
-        "linux": [],
+        "linux": [
+            "/usr/bin"
+        ],
         "macos": [
             "/usr/local/bin",
             "/Library/TeX/texbin"
@@ -27,6 +29,7 @@
         "######",
         ">",
         "*",
+        "-",
         "1.",
         "2.",
         "3.",

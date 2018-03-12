@@ -153,18 +153,20 @@ class ZettlrConfig
 
         // First integrate the additional paths that we need.
         let nPATH = process.env.PATH.split(delim);
+
         for(let x of this._additional_paths) {
-            if(!nPATH.includes(x)) {
+            // Check for both trailing and non-trailing slashes (to not add any
+            // directory more than once)
+            let y = (x[x.length-1] === '/') ? x.substr(0, x.length-1) : x + '/';
+            if(!nPATH.includes(x) && !nPATH.includes(y)) {
                 nPATH.push(x);
             }
         }
 
         process.env.PATH = nPATH.join(delim);
 
-        // We have the problem that pandoc version 2 does not recognize pdflatex
-        // given with the --pdf-engine command. It does work, though, if it finds
-        // it in path. So instead of passing it directly, let us just insert it into
-        // electron's PATH
+        // Also add to PATH pdflatex and pandoc-directories if these variables
+        // contain actual dirs.
         if(path.dirname(this.get('pdflatex')).length > 0) {
             if(process.env.PATH.indexOf(path.dirname(this.get('pdflatex'))) == -1) {
                 process.env.PATH += delim + path.dirname(this.get('pdflatex'));
