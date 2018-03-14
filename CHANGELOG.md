@@ -1,3 +1,13 @@
+# 0.14.0
+
+## GUI and functionality
+
+(nothing here)
+
+## Under the hood
+
+- Begun another code rewrite. This time, the focus is on two parts: First, prevent any access of object properties from other objects than `this`, instead, use public functions (also, prevent calling of private functions from the outside). Second: Try to, again, move out some functionality from the Zettlr main function to shorten it.
+
 # 0.13.0
 
 ## GUI and functionality

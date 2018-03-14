@@ -27,17 +27,17 @@ class ListView
      * @param {jQuery} elem     The #preview element.
      * @param {Boolean} snippets Show text fragments?
      */
-    constructor(parent, elem, snippets)
+    constructor(zetPreview, elem, snippets)
     {
-        this.parent = parent;
-        this.element = elem; // For the key navigation
-        this.container = $('<ul>').appendTo(this.element); // The only element our items should be involved with
-        this.li = [];
-        this.snippets = snippets;
-        this.liSelected = null;
+        this._preview = zetPreview;
+        this._elem = elem; // For the key navigation
+        this._container = $('<ul>').appendTo(this._elem); // The only element our items should be involved with
+        this._li = [];
+        this._snippets = snippets;
+        this._liSelected = null;
 
         // Activate arrow key navigation
-        this.activate();
+        this._activate();
     }
 
     /**
@@ -47,17 +47,17 @@ class ListView
      */
     refresh(data)
     {
-        if(this.li.length == 0) {
+        if(this._li.length == 0) {
             // Initial call
-            data = this.flattenTree(data);
+            data = this._flattenTree(data);
              for(let d of data)
              {
-                 this.li.push(new ListViewItem(this, d, this.snippets));
+                 this._li.push(new ListViewItem(this, d, this._snippets));
              }
         } else {
             // Each subsequent call
-            let tmp = this.flattenTree(data);
-            this.merge(tmp);
+            let tmp = this._flattenTree(data);
+            this._merge(tmp);
         }
 
         return this;
@@ -69,10 +69,10 @@ class ListView
      */
     empty()
     {
-        for(let li of this.li) {
+        for(let li of this._li) {
             li.detach();
         }
-        this.li = [];
+        this._li = [];
 
         return this;
     }
@@ -82,14 +82,14 @@ class ListView
      * @param  {Object} nData A new ZettlrDir tree
      * @return {ListView}       Chainability.
      */
-    merge(nData)
+    _merge(nData)
     {
         // First pre-allocate the target array
         let target = new Array(nData.length);
 
         // First detach all list items that are no longer present
-        for(let li of this.li) {
-            if(!nData.find((element) => {return (element.hash == li.hash);})) {
+        for(let li of this._li) {
+            if(!nData.find((element) => {return (element.hash == li.getHash());})) {
                 li.detach();
             }
         }
@@ -98,18 +98,18 @@ class ListView
         for(let i in nData) {
 
             // First lets search if we already got this element.
-            let found = this.li.find((element) => {
-                return (element.hash == nData[i].hash);
+            let found = this._li.find((li) => {
+                return (li.getHash() == nData[i].hash);
             });
 
             if(found !== undefined) {
-                target[i] = this.li[this.li.indexOf(found)];
+                target[i] = this._li[this._li.indexOf(found)];
                 // Also update if necessary
                 target[i].update(nData[i]);
             } else {
                 // Not found -> insert. The items will be inserted immediately
                 // at the end of the list.
-                target[i] = new ListViewItem(this, nData[i], this.snippets);
+                target[i] = new ListViewItem(this, nData[i], this._snippets);
             }
 
             // Save the target position
@@ -117,9 +117,9 @@ class ListView
         }
 
         // Swap the old list with the new
-        this.li = target;
+        this._li = target;
 
-        for(let li of this.li) {
+        for(let li of this._li) {
             li.moveToTarget();
         }
 
@@ -133,10 +133,10 @@ class ListView
      */
     select(hash)
     {
-        for(let li of this.li) {
-            if(li.hash == hash) {
+        for(let li of this._li) {
+            if(li.getHash() == hash) {
                 li.select();
-                this.scrollIntoView(li.elem);
+                this._scrollIntoView(li);
             } else {
                 li.deselect();
             }
@@ -153,12 +153,12 @@ class ListView
     hide(hash = null)
     {
         if(hash == null) {
-            for(let li of this.li) {
+            for(let li of this._li) {
                 li.hide();
             }
         } else {
-            for(let li of this.li) {
-                if(li.hash == hash) {
+            for(let li of this._li) {
+                if(li.getHash() == hash) {
                     li.hide();
                     break;
                 }
@@ -176,12 +176,12 @@ class ListView
     show(hash = null)
     {
         if(hash == null) {
-            for(let li of this.li) {
+            for(let li of this._li) {
                 li.show();
             }
         } else {
-            for(let li of this.li) {
-                if(li.hash == hash) {
+            for(let li of this._li) {
+                if(li.getHash() == hash) {
                     li.show();
                     break;
                 }
@@ -198,7 +198,7 @@ class ListView
     {
         let t = {};
         if(callback && t.toString.call(callback) == '[object Function]') {
-            for(let li of this.li) {
+            for(let li of this._li) {
                 callback(li);
             }
         }
@@ -212,8 +212,8 @@ class ListView
      */
     toggleSnippets()
     {
-        this.snippets = !this.snippets;
-        for(let li of this.li) {
+        this._snippets = !this._snippets;
+        for(let li of this._li) {
             li.toggleSnippets();
         }
 
@@ -224,40 +224,40 @@ class ListView
      * Activate this list's event handlers.
      * @return {ListView} Chainability.
      */
-    activate()
+    _activate()
     {
         // Enable arrow key navigation
-        this.element.on('keydown', (e) => {
-            if(this.li.length == 0) {
+        this._elem.on('keydown', (e) => {
+            if(this._li.length == 0) {
                 return;
             }
 
             // 38 is up, 40 is down
             if(e.which == 38) {
                 e.preventDefault();
-                if(!this.liSelected) {
-                    return this.li[this.li.length-1].elem.click();
+                if(!this._liSelected) {
+                    return this._li[this._li.length-1].click();
                 }
                 if(e.metaKey || e.ctrlKey) {
-                    this.li[0].elem.click();
-                    this.scrollIntoView(this.li[0].elem);
+                    this._li[0].click();
+                    this._scrollIntoView(this._li[0]);
                 } else {
-                    let prev = this.findPrev();
+                    let prev = this._findPrev();
                     prev.click();
-                    this.scrollIntoView(prev);
+                    this._scrollIntoView(prev);
                 }
             } else if(e.which == 40) {
                 e.preventDefault();
-                if(!this.liSelected) {
-                    return this.li[0].elem.click();
+                if(!this._liSelected) {
+                    return this._li[0].click();
                 }
                 if(e.metaKey || e.ctrlKey) {
-                    this.li[this.li.length-1].elem.click();
-                    this.scrollIntoView(this.li[this.li.length-1].elem);
+                    this._li[this._li.length-1].click();
+                    this._scrollIntoView(this._li[this._li.length-1]);
                 } else {
-                    let next = this.findNext();
+                    let next = this._findNext();
                     next.click();
-                    this.scrollIntoView(next);
+                    this._scrollIntoView(next);
                 }
             }
         });
@@ -269,38 +269,38 @@ class ListView
      * Finds the next valid (i.e. type = file) list item
      * @return {ListViewItem} The next valid item or the current.
      */
-    findNext()
+    _findNext()
     {
-        if(this.li.indexOf(this.liSelected)+1 == this.li.length) {
-            return this.liSelected.elem;
+        if(this._li.indexOf(this._liSelected)+1 == this._li.length) {
+            return this._liSelected;
         }
 
-        let li = this.li[this.li.indexOf(this.liSelected)+1];
+        let li = this._li[this._li.indexOf(this._liSelected)+1];
 
-        while(li.isDirectory() && this.li.indexOf(li) < this.li.length) {
-            li = this.li[this.li.indexOf(li)+1];
+        while(li.isDirectory() && this._li.indexOf(li) < this._li.length) {
+            li = this._li[this._li.indexOf(li)+1];
         }
 
-        return li.elem;
+        return li;
     }
 
     /**
      * Finds the previous valid (type = directory) list item
      * @return {ListViewItem} The previous valid item (or the current)
      */
-    findPrev()
+    _findPrev()
     {
-        if(this.li.indexOf(this.liSelected) == 0) {
-            return this.liSelected.elem;
+        if(this._li.indexOf(this._liSelected) == 0) {
+            return this._liSelected;
         }
 
-        let li = this.li[this.li.indexOf(this.liSelected)-1];
+        let li = this._li[this._li.indexOf(this._liSelected)-1];
 
-        while(li.isDirectory() && this.li.indexOf(li) > 0) {
-            li = this.li[this.li.indexOf(li)-1];
+        while(li.isDirectory() && this._li.indexOf(li) > 0) {
+            li = this._li[this._li.indexOf(li)-1];
         }
 
-        return li.elem;
+        return li;
     }
 
     /**
@@ -310,11 +310,11 @@ class ListView
      */
     requestFile(elem)
     {
-        this.liSelected = elem;
+        this._liSelected = elem;
         // Refocus for arrow key navigation
-        this.container.parent().focus();
+        this._container.parent().focus();
         // Parent request
-        this.parent.requestFile(elem.hash)
+        this._preview.requestFile(elem.getHash())
     }
 
     /**
@@ -322,24 +322,25 @@ class ListView
      * @param  {jQuery} elem The jQuery element representing the DOM element.
      * @return {void}      Nothing to return.
      */
-    scrollIntoView(elem)
+    _scrollIntoView(lielem)
     {
+        let elem = lielem.getElem();
         // Somehow it is impossible to write position().top into a variable.
         // Workaround: Short name for position and then use as pos.top ...
         let pos = elem.position();
         let bot = pos.top + elem.outerHeight();
-        let docHeight = this.element.height();
-        let curScroll = this.element.scrollTop();
+        let docHeight = this._elem.height();
+        let curScroll = this._elem.scrollTop();
         // Top:
         if(pos.top < 0) {
             // Here we need to also substract the height of a directory ribbon
             // because there WILL be one.
-            let ribbonHeight = this.element.find('li.directory').first().outerHeight();
-            this.element.scrollTop(curScroll + pos.top - ribbonHeight);
+            let ribbonHeight = this._elem.find('li.directory').first().outerHeight();
+            this._elem.scrollTop(curScroll + pos.top - ribbonHeight);
         }
         // Down:
         if(bot > docHeight) {
-            this.element.scrollTop(curScroll + bot - docHeight);
+            this._elem.scrollTop(curScroll + bot - docHeight);
         }
     }
 
@@ -349,7 +350,7 @@ class ListView
      * @param  {Array}  [newarr=[]] Needed for recursion
      * @return {Mixed}             An array or nothing.
      */
-    flattenTree(data, newarr = [])
+    _flattenTree(data, newarr = [])
     {
         if(data == null) {
             return;
@@ -362,12 +363,16 @@ class ListView
             newarr.push(data);
             if(data.children != null) {
                 for(let c of data.children) {
-                    newarr.concat(this.flattenTree(c, newarr));
+                    newarr.concat(this._flattenTree(c, newarr));
                 }
             }
             return newarr;
         }
     }
+
+    // GETTERS
+
+    getContainer() { return this._container; }
 }
 
 module.exports = ListView;

@@ -186,6 +186,10 @@ class ZettlrFile
             this.revert();
         }
 
+        // Last but not least: Get the new (current) modtime by re-reading the
+        // contents
+        this.read();
+
         return this;
     }
 

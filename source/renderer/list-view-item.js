@@ -29,67 +29,67 @@ class ListViewItem
      */
     constructor(parent, fileobj, snippets)
     {
-        this.parent = parent;
-        this.fileObj = fileobj;
-        this.hash = this.fileObj.hash; // Associate for ease
-        this.snippets = snippets;
-        this.target = -1;
+        this._listview = parent;
+        this._fileObj = fileobj;
+        this._hash = this._fileObj.hash; // Associate for ease
+        this._snippets = snippets;
+        this._target = -1;
         // Create the element
-        this.elem = $('<li>')
-        .addClass(this.fileObj.type)
-        .attr('data-hash', this.fileObj.hash)
-        .attr('title', this.fileObj.name);
+        this._elem = $('<li>')
+        .addClass(this._fileObj.type)
+        .attr('data-hash', this._fileObj.hash)
+        .attr('title', this._fileObj.name);
 
         // Populate
-        if(this.fileObj.type == 'directory') {
-            this.elem.html(this.fileObj.name);
-        } else if (this.fileObj.type == 'file') {
-            this.elem.append(
+        if(this._fileObj.type == 'directory') {
+            this._elem.html(this._fileObj.name);
+        } else if (this._fileObj.type == 'file') {
+            this._elem.append(
                 $('<strong>').text(
-                    this.fileObj.name.substr(0, this.fileObj.name.lastIndexOf('.'))
+                    this._fileObj.name.substr(0, this._fileObj.name.lastIndexOf('.'))
                 )
             );
-            this.elem.append($('<br>'));
-            this.elem.append(
+            this._elem.append($('<br>'));
+            this._elem.append(
                 $('<span>').addClass('snippet')
-                .text(this.fileObj.snippet)
+                .text(this._fileObj.snippet)
                 .append($('<br>'))
                 .append(
-                    $('<small>').text(formatDate(new Date(this.fileObj.modtime)))
+                    $('<small>').text(formatDate(new Date(this._fileObj.modtime)))
                 )
             );
         }
 
         // Add class if necessary
-        if(!this.snippets) {
-            this.elem.find('.snippet').first().addClass('hidden');
+        if(!this._snippets) {
+            this._elem.find('.snippet').first().addClass('hidden');
         }
 
         // Attach to element and activate listeners
-        this.parent.container.append(this.elem);
-        this.act();
+        this._listview.getContainer().append(this._elem);
+        this._act();
     }
 
     /**
      * Activate the element
      * @return {ListViewItem} Chainability.
      */
-    act()
+    _act()
     {
         // Only activate files
-        if(this.fileObj.type == 'directory') {
+        if(this._fileObj.type == 'directory') {
             return;
         }
 
-        this.elem.on('click', () => {
+        this._elem.on('click', () => {
             if(this.isSelected()) {
                 return;
             }
 
-            this.parent.requestFile(this);
+            this._listview.requestFile(this);
         });
 
-        this.elem.draggable({
+        this._elem.draggable({
             'cursorAt': { 'top': 0, 'left': 0},
             'scroll': false,
             'helper': function() {
@@ -122,12 +122,12 @@ class ListViewItem
      */
     moveToTarget()
     {
-        if(this.elem.index() == this.target) {
+        if(this._elem.index() == this._target) {
             return this;
-        } else if(this.target == 0) {
-            this.elem.insertBefore(this.parent.container.find('li')[0]);
+        } else if(this._target == 0) {
+            this._elem.insertBefore(this._listview.getContainer().find('li')[0]);
         } else {
-            this.elem.insertAfter(this.parent.container.find('li')[this.target-1]);
+            this._elem.insertAfter(this._listview.getContainer().find('li')[this._target-1]);
         }
 
         return this;
@@ -140,14 +140,19 @@ class ListViewItem
      */
     update(nData)
     {
-        if(this.fileObj.type == 'directory') {
+        if(this._fileObj.type == 'directory') {
             // Names are updated by unlinking only because they change the hash.
             return this;
         }
 
         // Update if necessary
-        if(nData.snippet != this.fileObj.snippet || this.fileObj.modtime != nData.modtime) {
-            this.elem.find('.snippet').html(`${nData.snippet}<br><small>${formatDate(new Date(this.fileObj.modtime))}</small>`);
+        if(this._fileObj.modtime != nData.modtime) {
+            console.log(`Changes detected in ${this._fileObj.name}!`);
+            this._fileObj = nData;
+            this._hash = this._fileObj.hash;
+            this._elem.attr('data-hash', this._fileObj.hash)
+            .attr('title', this._fileObj.name);
+            this._elem.find('.snippet').html(`${nData.snippet}<br><small>${formatDate(new Date(nData.modtime))}</small>`);
         }
 
         return this;
@@ -157,13 +162,25 @@ class ListViewItem
      * Get the actual index of the DOM element
      * @return {Integer} The DOM element's index
      */
-    getPos()         { return this.elem.index(); }
+    getPos()         { return this._elem.index(); }
 
     /**
      * Get the correct index for the DOM element
      * @return {Integer} The target position of the DOM element
      */
-    getTarget()      { return this.target; }
+    getTarget()      { return this._target; }
+
+    /**
+     * Returns the list element
+     * @return {jQuery} The DOM element of this item
+     */
+    getElem() { return this._elem; }
+
+    /**
+     * Returns the hash of the file to retrieve
+     * @return {Integer} The hash
+     */
+    getHash() { return this._hash; }
 
     /**
      * Set the target of this item's DOM element
@@ -172,7 +189,7 @@ class ListViewItem
      */
     setTarget(i)
     {
-        this.target = i;
+        this._target = i;
         return this;
     }
 
@@ -182,7 +199,7 @@ class ListViewItem
      */
     select()
     {
-        this.elem.addClass('selected');
+        this._elem.addClass('selected');
         return this;
     }
 
@@ -192,7 +209,7 @@ class ListViewItem
      */
     deselect()
     {
-        this.elem.removeClass('selected');
+        this._elem.removeClass('selected');
         return this;
     }
 
@@ -200,7 +217,7 @@ class ListViewItem
      * Is the item selected?
      * @return {Boolean} Whether or not this item is selected
      */
-    isSelected() { return this.elem.hasClass('selected'); }
+    isSelected() { return this._elem.hasClass('selected'); }
 
     /**
      * Toggle display of file information
@@ -208,8 +225,8 @@ class ListViewItem
      */
     toggleSnippets()
     {
-        this.snippets = !this.snippet;
-        this.elem.find('.snippet').toggleClass('hidden');
+        this._snippets = !this._snippets;
+        this._elem.find('.snippet').toggleClass('hidden');
         return this;
     }
 
@@ -219,7 +236,7 @@ class ListViewItem
      */
     detach()
     {
-        this.elem.detach();
+        this._elem.detach();
         return this;
     }
 
@@ -229,7 +246,7 @@ class ListViewItem
      */
     hide()
     {
-        this.elem.addClass('hidden');
+        this._elem.addClass('hidden');
         return this;
     }
 
@@ -239,7 +256,17 @@ class ListViewItem
      */
     show()
     {
-        this.elem.removeClass('hidden');
+        this._elem.removeClass('hidden');
+        return this;
+    }
+
+    /**
+     * Trigger a click event on the element
+     * @return {ListViewItem} This for chainability.
+     */
+    click()
+    {
+        this._elem.click();
         return this;
     }
 
@@ -247,13 +274,13 @@ class ListViewItem
      * Is the item a directory?
      * @return {Boolean} True if the object represented is a directory.
      */
-    isDirectory()    { return (this.fileObj.type == 'directory'); }
+    isDirectory()    { return (this._fileObj.type === 'directory'); }
 
     /**
      * Is the item a file?
      * @return {Boolean} True if the object represented is a file.
      */
-    isFile()         { return (this.fileObj.type == 'file'); }
+    isFile()         { return (this._fileObj.type === 'file'); }
 }
 
 module.exports = ListViewItem;
