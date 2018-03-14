@@ -2,7 +2,7 @@
 
 ## GUI and functionality
 
-(nothing here)
+- Now Zettlr can detect relative image paths (e.g. relative to the file in which they are referenced) and show these images successfully
 
 ## Under the hood
 
