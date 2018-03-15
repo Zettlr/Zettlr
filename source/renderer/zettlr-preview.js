@@ -63,6 +63,8 @@ class ZettlrPreview
             return;
         }
         this.list.refresh(this.parent.getCurrentDir());
+        // Potentially re-select the current file
+        this.select(this.parent.getCurrentFile());
 
         return this;
     }

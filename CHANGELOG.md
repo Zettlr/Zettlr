@@ -3,6 +3,8 @@
 ## GUI and functionality
 
 - Now Zettlr can detect relative image paths (e.g. relative to the file in which they are referenced) and show these images successfully
+- Fixed a bug that did not update the modification time of a file on save.
+- Fixed the non-selection of the current file on directory selection
 
 ## Under the hood
 
