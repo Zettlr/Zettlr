@@ -146,6 +146,19 @@ class ListView
     }
 
     /**
+     * Simply deselect any selection
+     * @return {ListView} Chainability
+     */
+    deselect()
+    {
+        for(let li of this._li) {
+            li.deselect();
+        }
+
+        return this;
+    }
+
+    /**
      * Hide either the complete list (hash = null) or a specific element
      * @param  {Mixed} [hash=null] Integer or null
      * @return {ListView}             Chainability.

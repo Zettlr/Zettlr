@@ -64,7 +64,11 @@ class ZettlrPreview
         }
         this.list.refresh(this.parent.getCurrentDir());
         // Potentially re-select the current file
-        this.select(this.parent.getCurrentFile());
+        if(this.parent.getCurrentFile()) {
+            this.select(this.parent.getCurrentFile().hash);
+        } else {
+            this.list.deselect();
+        }
 
         return this;
     }

@@ -157,8 +157,6 @@ class ZettlrRenderer
     refresh(newPaths)
     {
         this.updatePaths(newPaths);
-        this.directories.refresh();
-        this.preview.refresh();
     }
 
     /**

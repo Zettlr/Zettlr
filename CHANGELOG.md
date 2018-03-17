@@ -2,7 +2,7 @@
 
 ## GUI and functionality
 
-- Now Zettlr can detect relative image paths (e.g. relative to the file in which they are referenced) and show these images successfully
+- Now Zettlr can detect relative image paths (i.e. relative to the file in which they are referenced) and show these images successfully
 - Fixed a bug that did not update the modification time of a file on save.
 - Fixed the non-selection of the current file on directory selection
 - Fixed a small bug that sometimes could throw an error when moving directories within the app
@@ -10,6 +10,7 @@
 ## Under the hood
 
 - Begun another code rewrite. This time, the focus is on two parts: First, prevent any access of object properties from other objects than `this`, instead, use public functions (also, prevent calling of private functions from the outside). Second: Try to, again, move out some functionality from the Zettlr main function to shorten it.
+- Removed unnecessary function calls in the renderer.
 
 # 0.13.0
 

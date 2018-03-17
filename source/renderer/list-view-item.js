@@ -179,7 +179,7 @@ class ListViewItem
      * Returns the hash of the file to retrieve
      * @return {Integer} The hash
      */
-    getHash() { return this._hash; }
+    getHash() { return this._fileObj.hash; }
 
     /**
      * Set the target of this item's DOM element
