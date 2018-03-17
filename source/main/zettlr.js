@@ -108,7 +108,10 @@ class Zettlr
                 let x = p;
                 switch(t) {
                     case 'add':
-                    f = based.addChild(p);
+                    if(based) {
+                        f = based.addChild(p);
+                        this.ipc.send('notify', `File ${f.name} added.`);                       
+                    }
                     break;
 
                     case 'change':
@@ -777,7 +780,7 @@ class Zettlr
         this.ipc.send('paths-update', this.getPaths());
 
         if(isCurDir) {
-            this.ipc.send('dir-set-current', from);
+            this.ipc.send('dir-set-current', this.getCurrentDir());
         }
 
         if(newPath != null) {

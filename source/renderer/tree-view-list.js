@@ -36,29 +36,28 @@ class TreeView
             throw new TreeError('Paths must be given on instantiation!');
         }
 
-        this.parent = parent;
-        this.paths = paths; // Pointer to this dir's base object
-        this.root = isRoot;
-        this.hash = this.paths.hash; // Ease of access
-        this.children = [];
-        this.target = null;
+        this._parent = parent;
+        this._paths = paths; // Pointer to this dir's base object
+        this._root = isRoot;
+        this._children = [];
+        this._target = null;
 
         // Create the elements
-        this.ul = $('<ul>').addClass('collapsed');
-        if(!this.isRoot()) { this.ul.css('padding-left', '1em'); }
+        this._ul = $('<ul>').addClass('collapsed');
+        if(!this.isRoot()) { this._ul.css('padding-left', '1em'); }
 
-        this.indicator = $('<span>').addClass('collapse-indicator');
+        this._indicator = $('<span>').addClass('collapse-indicator');
 
-        this.dir = $('<li>').attr('data-hash', this.paths.hash).attr('title', this.paths.name);
-        this.dir.append('<span>').text(this.paths.name);
-        if(this.isRoot()) { this.dir.attr('id', 'root'); }
+        this._dir = $('<li>').attr('data-hash', this.getHash()).attr('title', this._paths.name);
+        this._dir.append('<span>').text(this._paths.name);
+        if(this.isRoot()) { this._dir.attr('id', 'root'); }
 
         // Append to DOM
-        this.ul.append(this.dir);
-        this.parent.getContainer().append(this.ul);
+        this._ul.append(this._dir);
+        this._parent.getContainer().append(this._ul);
 
         // Activate event listeners
-        this.activate();
+        this._act();
 
         // Add children etc.
         this.refresh();
@@ -68,14 +67,14 @@ class TreeView
      * Activates the tree view
      * @return {ListView} Chainability.
      */
-    activate()
+    _act()
     {
         // Activate event listeners
-        this.dir.on('click', () => { this.parent.requestDir(this.hash); });
+        this._dir.on('click', () => { this._parent.requestDir(this.getHash()); });
 
         // Make draggable (unless root)
         if(!this.isRoot()) {
-            this.dir.draggable({
+            this._dir.draggable({
                 'cursorAt': { 'top': 0, 'left': 0},
                 'scroll': false,
                 'helper': function() {
@@ -98,24 +97,24 @@ class TreeView
             });
         }
         // Also make droppable
-        this.dir.droppable({
+        this._dir.droppable({
             'accept': 'li', // Only accept lis
             'tolerance': 'pointer', // The pointer must be over the droppable
             'drop': (e, ui) => {
-                this.dir.removeClass('highlight');
+                this._dir.removeClass('highlight');
                 // requestMove: From, to
-                this.parent.requestMove(parseInt(ui.draggable.attr('data-hash')), this.hash);
+                this._parent.requestMove(parseInt(ui.draggable.attr('data-hash')), this.getHash());
             },
             'over': (e, ui) => {
-                this.dir.addClass('highlight');
+                this._dir.addClass('highlight');
             },
             'out': (e, ui) => {
-                this.dir.removeClass('highlight');
+                this._dir.removeClass('highlight');
             }
         });
 
         // Activate the indicator
-        this.indicator.on('click', (e) => {
+        this._indicator.on('click', (e) => {
             e.stopPropagation();
             this.toggleCollapse();
         });
@@ -129,8 +128,8 @@ class TreeView
      */
     uncollapse()
     {
-        this.ul.removeClass('collapsed');
-        this.parent.uncollapse();
+        this._ul.removeClass('collapsed');
+        this._parent.uncollapse();
         return this;
     }
 
@@ -141,11 +140,11 @@ class TreeView
      */
     select(hash)
     {
-        if(this.hash == hash) {
-            this.dir.addClass('selected');
+        if(this.getHash() == hash) {
+            this._dir.addClass('selected');
             this.uncollapse();
         } else {
-            for(let c of this.children) {
+            for(let c of this._children) {
                 c.select(hash);
             }
         }
@@ -159,8 +158,8 @@ class TreeView
      */
     deselect()
     {
-        if(this.isSelected()) { this.dir.removeClass('selected'); }
-        for(let c of this.children) { c.deselect(); }
+        if(this.isSelected()) { this._dir.removeClass('selected'); }
+        for(let c of this._children) { c.deselect(); }
         return this;
     }
 
@@ -169,17 +168,17 @@ class TreeView
      * @param  {Object} [p=this.paths] A new path object.
      * @return {ListView}                Chainability.
      */
-    refresh(p = this.paths)
+    refresh(p = this._paths)
     {
-        this.paths = p;
+        this._paths = p;
         // Then merge children
-        this.merge();
+        this._merge();
 
         // Attach or detach the indicator based on whether there are children
-        if(this.children.length > 0) {
-            this.dir.prepend(this.indicator);
+        if(this._children.length > 0) {
+            this._dir.prepend(this._indicator);
         } else {
-            this.indicator.detach();
+            this._indicator.detach();
         }
 
         return this;
@@ -189,11 +188,11 @@ class TreeView
      * Merge a new path object
      * @return {void} Don't return anything.
      */
-    merge()
+    _merge()
     {
         // First determine how many children there are in the new object
         let l = 0;
-        for(let c of this.paths.children) {
+        for(let c of this._paths.children) {
             if(c.type == 'directory') {
                 l++;
             }
@@ -201,16 +200,16 @@ class TreeView
         // No children, so detach any that we may have and return.
         if(l == 0) {
             // Detach all children and return; nothing else to do.
-            for(let c of this.children) {
+            for(let c of this._children) {
                 c.detach();
             }
-            this.children = []; // Dereference
+            this._children = []; // Dereference
             return;
         }
 
         // Detach all children that are no longer present
-        for(let dir of this.children) {
-            if(!this.paths.children.find((elem) => {return (elem.hash == dir.hash);})) {
+        for(let dir of this._children) {
+            if(!this._paths.children.find((elem) => {return (elem.hash == dir.getHash());})) {
                 dir.detach();
             }
         }
@@ -220,19 +219,19 @@ class TreeView
 
         // Iterate over the new children
         // i counts all children (incl. files), j only directories
-        for(let i = 0, j = 0; i < this.paths.children.length; i++) {
-            if(this.paths.children[i].type != 'directory') {
+        for(let i = 0, j = 0; i < this._paths.children.length; i++) {
+            if(this._paths.children[i].type != 'directory') {
                 continue;
             }
             // First check if we've already gotten that directory in our children
-            let found = this.children.find((elem) => {return elem.hash == this.paths.children[i].hash;});
+            let found = this._children.find((elem) => {return elem.getHash() == this._paths.children[i].hash;});
             if(found != undefined) {
                 // Got it -> insert at correct position in target array and refresh
-                target[j] = this.children[this.children.indexOf(found)];
-                target[j].refresh(this.paths.children[i]);
+                target[j] = this._children[this._children.indexOf(found)];
+                target[j].refresh(this._paths.children[i]);
             } else {
                 // New directory -> add
-                target[j] = new TreeView(this, this.paths.children[i]);
+                target[j] = new TreeView(this, this._paths.children[i]);
             }
             target[j].setTarget(j);
             // Increment after every dir
@@ -240,10 +239,10 @@ class TreeView
         }
 
         // Swap
-        this.children = target;
+        this._children = target;
 
         // Now move to target
-        for(let dir of this.children) {
+        for(let dir of this._children) {
             dir.moveToTarget();
         }
     }
@@ -252,13 +251,13 @@ class TreeView
      * Sets the DOM target for this directory.
      * @param {Integer} i The wanted target.
      */
-    setTarget(i) { this.target = i; }
+    setTarget(i) { this._target = i; }
 
     /**
      * Detach from DOM
      * @return {void} Nothing to return.
      */
-    detach() { this.ul.detach(); }
+    detach() { this._ul.detach(); }
 
     /**
      * Moves the list to the target position.
@@ -267,12 +266,12 @@ class TreeView
     moveToTarget()
     {
         // +1 to account for the parent's <li>-tag
-        if((this.ul.index() == this.target+1) || !this.target) {
+        if((this._ul.index() == this._target+1) || !this._target) {
             return;
-        } else if(this.target == 0) {
-            this.ul.insertBefore(this.parent.getContainer().children('ul')[0]);
+        } else if(this._target == 0) {
+            this._ul.insertBefore(this._parent.getContainer().children('ul')[0]);
         } else {
-            this.ul.insertAfter(this.parent.getContainer().children('ul')[this.target-1]);
+            this._ul.insertAfter(this._parent.getContainer().children('ul')[this._target-1]);
         }
 
         return this;
@@ -282,7 +281,13 @@ class TreeView
      * Returns the DOM element
      * @return {jQuery} The DOM container element
      */
-    getContainer() { return this.ul; }
+    getContainer() { return this._ul; }
+
+    /**
+     * Returns the hash associated with this specific TreeView
+     * @return {Number} 32-Bit integer hash
+     */
+    getHash() { return this._paths.hash; }
 
     /**
      * Toggles the collapsed class.
@@ -290,7 +295,7 @@ class TreeView
      */
     toggleCollapse()
     {
-        this.ul.toggleClass('collapsed');
+        this._ul.toggleClass('collapsed');
         return this;
     }
 
@@ -298,19 +303,19 @@ class TreeView
      * Is this the root directory?
      * @return {Boolean} True, if this is the root directory, or false.
      */
-    isRoot() { return this.root; }
+    isRoot() { return this._root; }
 
     /**
      * Is this directory currently collapsed or open?
      * @return {Boolean} True, if the directory is uncollapsed.
      */
-    isCollappsed() { return this.ul.hasClass('collapsed'); }
+    isCollappsed() { return this._ul.hasClass('collapsed'); }
 
     /**
      * Is the directory currently selected?
      * @return {Boolean} True, if this directory is currently selected, else false.
      */
-    isSelected() { return this.dir.hasClass('selected'); }
+    isSelected() { return this._dir.hasClass('selected'); }
 
     /**
      * Needed for "bubbling up" of move requests from subdirs to ZettlrDirectories class.
@@ -318,14 +323,14 @@ class TreeView
      * @param  {Integer} to   Hash representing the target
      * @return {void}      Nothing to return.
      */
-    requestMove(from, to) { this.parent.requestMove(from, to); }
+    requestMove(from, to) { this._parent.requestMove(from, to); }
 
     /**
      * Needed for "bubbling up" of move requests from subdirs to the ZettlrDirectories class.
      * @param  {Integer} hash The hash of the directory to select
      * @return {void}      Nothing to return.
      */
-    requestDir(hash) { this.parent.requestDir(hash); }
+    requestDir(hash) { this._parent.requestDir(hash); }
 }
 
 module.exports = TreeView;

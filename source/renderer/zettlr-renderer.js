@@ -727,11 +727,14 @@ class ZettlrRenderer
     }
 
     /**
-     * Sets the current dir pointer to the new. TODO: Maybe include a selection thingy here.
+     * Sets the current dir pointer to the new.
      * @param {ZettlrDir} newdir The new dir.
      */
     setCurrentDir(newdir)
     {
+        if(!newdir) {
+            return console.error(`Could not set current dir to ${newdir}!`);
+        }
         this.currentDir = newdir;
         // What we can also do here: Select the dir and refresh the file list.
         // Because that's what _always_ follows this function call.

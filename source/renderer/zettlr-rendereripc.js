@@ -315,7 +315,7 @@ class ZettlrRendererIPC
             case 'update-check':
             this.send('update-check');
             break;
-            
+
             case 'update-available':
             this._app.getBody().displayUpdate(cnt);
             break;
