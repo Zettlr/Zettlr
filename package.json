@@ -103,8 +103,8 @@
         "typo-js": "^1.0.3"
     },
     "devDependencies": {
-        "electron": "^1.8.3",
-        "electron-builder": "^20.4.0",
+        "electron": "^1.8.4",
+        "electron-builder": "^20.5.1",
         "esdoc": "^1.0.4",
         "esdoc-standard-plugin": "^1.0.0",
         "less": "^2.7.3"
