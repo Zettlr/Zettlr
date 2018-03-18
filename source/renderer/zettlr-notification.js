@@ -27,15 +27,15 @@ class ZettlrNotification
      */
     constructor(parent, message, position)
     {
-        this.parent = parent;
-        this.div = $('<div>').addClass('notify');
-        this.div.html(message);
-        $('body').append(this.div);
+        this._parent = parent;
+        this._div = $('<div>').addClass('notify');
+        this._div.html(message);
+        $('body').append(this._div);
 
-        let pos = this.div.outerHeight()+10;
-        this.div.css('top', 10 + (position * pos) + "px");
+        let pos = this._div.outerHeight()+10;
+        this._div.css('top', 10 + (position * pos) + "px");
 
-        this.div.on('click', (e) => {
+        this._div.on('click', (e) => {
             this.close();
         });
 
@@ -50,13 +50,13 @@ class ZettlrNotification
      */
     close()
     {
-        this.div.animate({
+        this._div.animate({
             opacity: 0,
         }, 200, () => {
             // Complete -> remove
-            let h = this.div.outerHeight();
-            this.div.detach();
-            this.parent.notifySplice(this, h);
+            let h = this._div.outerHeight();
+            this._div.detach();
+            this._parent.notifySplice(this, h);
         });
     }
 
@@ -67,8 +67,8 @@ class ZettlrNotification
      */
     moveUp(oldelemheight)
     {
-        let newpos = parseInt(this.div.css('top')) - oldelemheight - 10;
-        this.div.css('top', newpos + "px");
+        let newpos = parseInt(this._div.css('top')) - oldelemheight - 10;
+        this._div.css('top', newpos + "px");
     }
 }
 
