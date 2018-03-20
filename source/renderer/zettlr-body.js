@@ -374,6 +374,15 @@ class ZettlrBody
 
         this.dialog.close();
     }
+
+    /**
+     * Needed by the dialog
+     * @return {String} The locale String from ZettlrRenderer
+     */
+    getLocale()
+    {
+        return this.parent.getLocale();
+    }
 }
 
 module.exports = ZettlrBody;

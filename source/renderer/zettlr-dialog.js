@@ -45,12 +45,12 @@ class ZettlrDialog
     constructor(parent = null)
     {
         // Used to retrieve some configuration options
-        this.parent = parent;
-        this.body = $('body');
-        this.container = $('#container');
-        this.modal = $('<div>').addClass('modal');
-        this.dlg = null;
-        this.passedObj = null;
+        this._parent = parent;
+        this._body = $('body');
+        this._container = $('#container');
+        this._modal = $('<div>').addClass('modal');
+        this._dlg = null;
+        this._passedObj = null;
     }
 
     /**
@@ -63,11 +63,11 @@ class ZettlrDialog
             throw new DialogError(trans('dialog.error.no_init'));
         }
 
-        this.container.addClass('blur');
-        this.body.append(this.modal);
+        this._container.addClass('blur');
+        this._body.append(this._modal);
 
         // Adjust the margins
-        let dialog = this.modal.find('.dialog').first();
+        let dialog = this._modal.find('.dialog').first();
         let diaH = dialog.outerHeight();
         let winH = $(window).height();
 
@@ -81,7 +81,7 @@ class ZettlrDialog
         }
 
         // Activate event listeners
-        return this.activate();
+        return this._act();
     }
 
     /**
@@ -90,11 +90,11 @@ class ZettlrDialog
      */
     close()
     {
-        this.modal.detach();
-        this.container.removeClass('blur');
-        this.modal.html('');
-        this.dlg = null;
-        this.passedObj = null;
+        this._modal.detach();
+        this._container.removeClass('blur');
+        this._modal.html('');
+        this._dlg = null;
+        this._passedObj = null;
         return this;
     }
 
@@ -104,7 +104,7 @@ class ZettlrDialog
      */
     isInitialized()
     {
-        return (this.dlg !== null);
+        return (this._dlg !== null);
     }
 
     /**
@@ -122,8 +122,8 @@ class ZettlrDialog
             throw new DialogError(trans('dialog.error.no_data', obj));
         }
 
-        this.passedObj = obj;
-        this.dlg = dialog;
+        this._passedObj = obj;
+        this._dlg = dialog;
 
         let replacements = [];
         switch(dialog) {
@@ -148,7 +148,7 @@ class ZettlrDialog
             replacements.push('%SPELLCHECK%|' + spellcheck);
             let lang_selection = '';
             for(let l of obj.supportedLangs) {
-                if(l === this.parent.parent.getLocale()) {
+                if(l === this._parent.getLocale()) {
                     lang_selection += `<option value="${l}" selected="selected">${trans('dialog.preferences.app_lang.'+l)}</option>`;
                 } else {
                     lang_selection += `<option value="${l}">${trans('dialog.preferences.app_lang.'+l)}</option>`;
@@ -168,7 +168,7 @@ class ZettlrDialog
             break;
         }
 
-        this.modal.html(this.get('dialog-' + dialog, replacements));
+        this._modal.html(this._get('dialog-' + dialog, replacements));
 
         return this;
     }
@@ -177,10 +177,10 @@ class ZettlrDialog
      * Activates the event listeners.
      * @return {ZettlrDialog} Chainability.
      */
-    activate()
+    _act()
     {
         // Select the "untitled"-content
-        let form = this.modal.find('form#dialog');
+        let form = this._modal.find('form#dialog');
         form.find('input').first().select();
 
         // Activate the form to be submitted
@@ -188,24 +188,24 @@ class ZettlrDialog
             e.preventDefault();
             // Give the ZettlrBody object the results
             // Form: dialog type, values, the originally passed object
-            this.parent.proceed(this.dlg, form.serializeArray(), this.passedObj);
+            this._parent.proceed(this._dlg, form.serializeArray(), this._passedObj);
         });
 
         // Abort integration if an abort button is given
-        this.modal.find('#abort').on('click', (e) => {
+        this._modal.find('#abort').on('click', (e) => {
             this.close();
         });
 
         // Don't bubble so that the user may click on the dialog without
         // closing the whole modal.
-        this.modal.find('.dialog').on('click', (e) => { e.stopPropagation(); });
+        this._modal.find('.dialog').on('click', (e) => { e.stopPropagation(); });
 
         // Abort on click
-        this.modal.on('click', (e) => { this.close(); });
+        this._modal.on('click', (e) => { this.close(); });
 
         // Tabbify the settings dialog
-        if(this.dlg === 'preferences') {
-            this.modal.find('.dialog').tabs({
+        if(this._dlg === 'preferences') {
+            this._modal.find('.dialog').tabs({
                 heightStyle: 'auto' // All tabs same height
             });
         }
@@ -219,7 +219,7 @@ class ZettlrDialog
      * @param  {Array}  [replacements=[]] Replacement table for variables
      * @return {String}                   Returns the template with replaced vars.
      */
-    get(template, replacements = [])
+    _get(template, replacements = [])
     {
         let p = path.join(__dirname, 'assets', 'tpl', template + '.htm');
 
@@ -232,7 +232,7 @@ class ZettlrDialog
         let cnt = fs.readFileSync(p, { encoding: 'utf8' });
 
         // Translation-strings:
-        let i18n = this.getLanguageTable(cnt);
+        let i18n = this._getLanguageTable(cnt);
         replacements = i18n.concat(replacements);
 
         // Replace variables
@@ -250,7 +250,7 @@ class ZettlrDialog
      * @param  {String} text The string in which i18n strings should be replaced.
      * @return {String}      The text with translation strings replaced.
      */
-    getLanguageTable(text)
+    _getLanguageTable(text)
     {
         // How it works: In the template files are replacement strings in the
         // following format:
