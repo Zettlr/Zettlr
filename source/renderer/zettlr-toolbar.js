@@ -66,6 +66,10 @@ class ZettlrToolbar
         // -- so beautifully DRY <3
         this._div.find('.button').on('click', (e) => {
             let elem = $(e.currentTarget);
+<<<<<<< HEAD
+=======
+            console.log(e.currentTarget);
+>>>>>>> 49a5cbc8b79c6730cc53f427898461dadddd8fd7
             let command = elem.attr('data-command') || 'unknown-command';
             let content = elem.attr('data-content') || {};
 
