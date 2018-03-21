@@ -1,3 +1,14 @@
+# 0.14.1
+
+## GUI and functionality
+
+- Finally got rid of the horizontal scrollbar in the editor, that was visible on Windows and Linux systems
+- Also, customized the scrollbar style to be more decent
+
+## Under the hood
+
+(nothing here)
+
 # 0.14.0
 
 ## GUI and functionality
