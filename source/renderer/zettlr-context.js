@@ -22,6 +22,10 @@ const {trans}           = require('../common/lang/i18n.js');
  * being called by ZettlrBody object, and then determine from the event itself,
  * how the context menu should be built. For instance, it will build a different
  * context menu, if it detects the parent #editor-element, or the #directories.
+ * What I just realized is, that the context menu is **reference hell**, so in
+ * a future version, the context menu should be moved to ... like the renderer.
+ * Or, even better: the main process (because then it does not lock the renderer
+ * on generation, making the experience smoother.)
  */
 class ZettlrCon
 {
@@ -30,8 +34,8 @@ class ZettlrCon
      * @param {ZettlrBody} parent Body element.
      */
     constructor(parent) {
-        this.parent = parent;
-        this.menu = new Menu();
+        this._body = parent;
+        this._menu = new Menu();
     }
 
     /**
@@ -39,9 +43,9 @@ class ZettlrCon
      * @param  {Event} event The JavaScript event containing information for the menu
      * @return {void}       Nothing to return.
      */
-    build(event) {
-        delete this.menu;
-        this.menu = new Menu();
+    _build(event) {
+        delete this._menu;
+        this._menu = new Menu();
         let elem = $(event.target);
         let label;
         let hash;
@@ -68,15 +72,15 @@ class ZettlrCon
 
             // Now build
             let that = this;
-            this.menu.append(new MenuItem({ 'label': trans('menu.rename_file'), click(item, win) {
-                that.parent.parent.handleEvent('file-rename', { 'hash': hash });
+            this._menu.append(new MenuItem({ 'label': trans('menu.rename_file'), click(item, win) {
+                that._body.getRenderer().handleEvent('file-rename', { 'hash': hash });
             }}));
-            this.menu.append(new MenuItem({ 'label': trans('menu.delete_file'), click(item, win) {
-                that.parent.parent.handleEvent('file-delete', { 'hash': hash });
+            this._menu.append(new MenuItem({ 'label': trans('menu.delete_file'), click(item, win) {
+                that._body.getRenderer().handleEvent('file-delete', { 'hash': hash });
             }}));
-            this.menu.append(new MenuItem({ 'type': 'separator' }));
-            this.menu.append(new MenuItem({ 'label': trans('menu.quicklook'), click(item, win) {
-                that.parent.parent.handleEvent('quicklook', { 'hash': hash });
+            this._menu.append(new MenuItem({ 'type': 'separator' }));
+            this._menu.append(new MenuItem({ 'label': trans('menu.quicklook'), click(item, win) {
+                that._body.getRenderer().handleEvent('quicklook', { 'hash': hash });
             }}));
 
         } else if(elem.parents('#directories').length > 0) {
@@ -94,89 +98,89 @@ class ZettlrCon
 
                 // Only add rename/remove options if not root dir
                 if(elem.attr('id') !== 'root') {
-                    this.menu.append(new MenuItem({ 'label': trans('menu.rename_dir'), click(item, win) {
-                        that.parent.parent.handleEvent('dir-rename', { 'hash': hash });
+                    this._menu.append(new MenuItem({ 'label': trans('menu.rename_dir'), click(item, win) {
+                        that._body.getRenderer().handleEvent('dir-rename', { 'hash': hash });
                     } }));
-                    this.menu.append(new MenuItem({ 'label': trans('menu.delete_dir'), click(item, win) {
-                        that.parent.parent.handleEvent('dir-delete', { 'hash': hash });
+                    this._menu.append(new MenuItem({ 'label': trans('menu.delete_dir'), click(item, win) {
+                        that._body.getRenderer().handleEvent('dir-delete', { 'hash': hash });
                     }}));
-                    this.menu.append(new MenuItem({ 'type': 'separator' }));
+                    this._menu.append(new MenuItem({ 'type': 'separator' }));
                 }
 
-                this.menu.append(new MenuItem({ 'label': trans('menu.new_file'), click(item, win) {
-                    that.parent.parent.handleEvent('file-new', { 'hash': hash });
+                this._menu.append(new MenuItem({ 'label': trans('menu.new_file'), click(item, win) {
+                    that._body.getRenderer().handleEvent('file-new', { 'hash': hash });
                 } }));
-                this.menu.append(new MenuItem({ 'label': trans('menu.new_dir'), click(item, win) {
-                    that.parent.parent.handleEvent('dir-new', { 'hash': hash });
+                this._menu.append(new MenuItem({ 'label': trans('menu.new_dir'), click(item, win) {
+                    that._body.getRenderer().handleEvent('dir-new', { 'hash': hash });
                 } }));
             }
         } else if(elem.parents('#editor').length > 0) {
             // If the word is spelled wrong, request suggestions
             let suggestions = [];
             if(elem.hasClass('cm-spell-error')) {
-                suggestions = this.parent.parent.typoSuggest(elem.text());
+                suggestions = this._body.getRenderer().typoSuggest(elem.text());
             }
             if(suggestions.length > 0) {
                 // Select the word under the cursor if there are suggestions.
                 // Makes it easier to replace them
-                this.parent.parent.editor.selectWordUnderCursor();
+                this._body.getRenderer().getEditor().selectWordUnderCursor();
                 let self = this;
                 for(let sug of suggestions) {
-                    this.menu.append(new MenuItem({ label: sug, click(item, win) {
-                        self.parent.parent.editor.replaceWord(sug);
+                    this._menu.append(new MenuItem({ label: sug, click(item, win) {
+                        self._body.getRenderer().getEditor().replaceWord(sug);
                     } }));
                 }
-                this.menu.append(new MenuItem({ type: 'separator' }));
+                this._menu.append(new MenuItem({ type: 'separator' }));
             } else {
-                this.menu.append(new MenuItem({
+                this._menu.append(new MenuItem({
                     label: trans('menu.no_suggestions'),
                     enabled: 'false'
                 }));
-                this.menu.append(new MenuItem({ type: 'separator' }));
+                this._menu.append(new MenuItem({ type: 'separator' }));
             }
 
             let that = this;
             // Just build -- these menu items will only trigger CodeMirror actions
-            this.menu.append(new MenuItem({
+            this._menu.append(new MenuItem({
                 label: trans('menu.bold'),
                 accelerator: 'CmdOrCtrl+B',
                 click(item, win) {
-                that.parent.parent.handleEvent('cm-command', 'markdownBold');
+                that._body.getRenderer().handleEvent('cm-command', 'markdownBold');
             }}));
-            this.menu.append(new MenuItem({
+            this._menu.append(new MenuItem({
                 label: trans('menu.italic'),
                 accelerator: 'CmdOrCtrl+I',
                 click(item, win) {
-                that.parent.parent.handleEvent('cm-command', 'markdownItalic');
+                that._body.getRenderer().handleEvent('cm-command', 'markdownItalic');
             } }));
-            this.menu.append(new MenuItem({type: 'separator'}));
-            this.menu.append(new MenuItem({
+            this._menu.append(new MenuItem({type: 'separator'}));
+            this._menu.append(new MenuItem({
                 label: trans('menu.insert_link'),
                 accelerator: 'CmdOrCtrl+K',
                 click(item, win) {
-                that.parent.parent.handleEvent('cm-command', 'markdownLink');
+                that._body.getRenderer().handleEvent('cm-command', 'markdownLink');
             } }));
 
-            this.menu.append(new MenuItem( { label: trans('menu.insert_ol'), click(item, win) {
-                that.parent.parent.handleEvent('cm-command', 'markdownMakeOrderedList');
+            this._menu.append(new MenuItem( { label: trans('menu.insert_ol'), click(item, win) {
+                that._body.getRenderer().handleEvent('cm-command', 'markdownMakeOrderedList');
             } }));
-            this.menu.append(new MenuItem( { label: trans('menu.insert_ul'), click(item, win) {
-                that.parent.parent.handleEvent('cm-command', 'markdownMakeUnorderedList');
+            this._menu.append(new MenuItem( { label: trans('menu.insert_ul'), click(item, win) {
+                that._body.getRenderer().handleEvent('cm-command', 'markdownMakeUnorderedList');
             } }));
             /*this.menu.append(new MenuItem( { label: 'Blockquote' }));*/
-            this.menu.append(new MenuItem( { type: 'separator' } ));
-            this.menu.append(new MenuItem( { label: trans('menu.cut'), role: 'cut', accelerator: 'CmdOrCtrl+X' }));
-            this.menu.append(new MenuItem( { label: trans('menu.copy'), role: 'copy', accelerator: 'CmdOrCtrl+C' }));
-            this.menu.append(new MenuItem( { label: trans('menu.paste'), role: 'paste', accelerator: 'CmdOrCtrl+V' }));
-            this.menu.append(new MenuItem( { type: 'separator' } ));
-            this.menu.append(new MenuItem( { label: trans('menu.select_all'), role: 'selectall', accelerator: 'CmdOrCtrl+A' }));
+            this._menu.append(new MenuItem( { type: 'separator' } ));
+            this._menu.append(new MenuItem( { label: trans('menu.cut'), role: 'cut', accelerator: 'CmdOrCtrl+X' }));
+            this._menu.append(new MenuItem( { label: trans('menu.copy'), role: 'copy', accelerator: 'CmdOrCtrl+C' }));
+            this._menu.append(new MenuItem( { label: trans('menu.paste'), role: 'paste', accelerator: 'CmdOrCtrl+V' }));
+            this._menu.append(new MenuItem( { type: 'separator' } ));
+            this._menu.append(new MenuItem( { label: trans('menu.select_all'), role: 'selectall', accelerator: 'CmdOrCtrl+A' }));
         } else if(elem.is('input[type="text"]') || elem.is('textarea')) {
             // Generate default text context menu
-            this.menu.append(new MenuItem( { label: trans('menu.cut'), role: 'cut', accelerator: 'CmdOrCtrl+X' }));
-            this.menu.append(new MenuItem( { label: trans('menu.copy'), role: 'copy', accelerator: 'CmdOrCtrl+C' }));
-            this.menu.append(new MenuItem( { label: trans('menu.paste'), role: 'paste', accelerator: 'CmdOrCtrl+V' }));
-            this.menu.append(new MenuItem( { type: 'separator' } ));
-            this.menu.append(new MenuItem( { label: trans('menu.select_all'), role: 'selectall', accelerator: 'CmdOrCtrl+A' }));
+            this._menu.append(new MenuItem( { label: trans('menu.cut'), role: 'cut', accelerator: 'CmdOrCtrl+X' }));
+            this._menu.append(new MenuItem( { label: trans('menu.copy'), role: 'copy', accelerator: 'CmdOrCtrl+C' }));
+            this._menu.append(new MenuItem( { label: trans('menu.paste'), role: 'paste', accelerator: 'CmdOrCtrl+V' }));
+            this._menu.append(new MenuItem( { type: 'separator' } ));
+            this._menu.append(new MenuItem( { label: trans('menu.select_all'), role: 'selectall', accelerator: 'CmdOrCtrl+A' }));
         }
     }
 
@@ -186,9 +190,9 @@ class ZettlrCon
      * @return {void}       Nothing to return.
      */
     popup(event) {
-        this.build(event);
-        if(this.menu.items.length > 0) {
-            this.menu.popup();
+        this._build(event);
+        if(this._menu.items.length > 0) {
+            this._menu.popup();
         }
     }
 }

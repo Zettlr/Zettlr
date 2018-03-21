@@ -14,11 +14,11 @@
  * END HEADER
  */
 
-const ZettlrCon = require('./zettlr-context.js');
-const ZettlrDialog = require('./zettlr-dialog.js');
-const ZettlrQuicklook = require('./zettlr-quicklook.js');
-const ZettlrNotification = require('./zettlr-notification.js');
-const ZettlrPopup = require('./zettlr-popup.js');
+const ZettlrCon             = require('./zettlr-context.js');
+const ZettlrDialog          = require('./zettlr-dialog.js');
+const ZettlrQuicklook       = require('./zettlr-quicklook.js');
+const ZettlrNotification    = require('./zettlr-notification.js');
+const ZettlrPopup           = require('./zettlr-popup.js');
 
 /**
  * This class's duty is to handle everything that affects (or can potentially
@@ -34,19 +34,19 @@ class ZettlrBody
      */
     constructor(parent)
     {
-        this.parent = parent;
-        this.menu = new ZettlrCon(this);
-        this.dialog = new ZettlrDialog(this);
-        this.spellcheckLangs = null; // This holds all available languages
-        this.ql = []; // This holds all open quicklook windows
-        this.n = []; // Holds all notifications currently displaying
-        this.darkTheme = false; // Initial value; will be overwritten by init messages
+        this._renderer = parent;
+        this._menu = new ZettlrCon(this);
+        this._dialog = new ZettlrDialog(this);
+        this._spellcheckLangs = null; // This holds all available languages
+        this._ql = []; // This holds all open quicklook windows
+        this._n = []; // Holds all notifications currently displaying
+        this._darkTheme = false; // Initial value; will be overwritten by init messages
 
         // Event listener for the context menu
         window.addEventListener('contextmenu', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            this.menu.popup(e);
+            this._menu.popup(e);
         }, false);
 
         // TESTING TODO
@@ -86,7 +86,7 @@ class ZettlrBody
 
         let popup = new ZettlrPopup(this, $('.button.file-new'), cnt, (form) => {
             if(form) {
-                this.parent.requestNewFile(form[0].value, dir.hash);
+                this._renderer.requestNewFile(form[0].value, dir.hash);
             }
         });
     }
@@ -108,7 +108,7 @@ class ZettlrBody
 
         let popup = new ZettlrPopup(this, $('.button.directory-new'), cnt, (form) => {
             if(form) {
-                this.parent.requestNewDir(form[0].value, dir.hash);
+                this._renderer.requestNewDir(form[0].value, dir.hash);
             }
         });
     }
@@ -131,7 +131,7 @@ class ZettlrBody
 
         let popup = new ZettlrPopup(this, elem, cnt, (form) => {
             if(form) {
-                this.parent.requestDirRename(form[0].value, dir.hash);
+                this._renderer.requestDirRename(form[0].value, dir.hash);
             }
         });
     }
@@ -144,7 +144,7 @@ class ZettlrBody
     requestNewFileName(file)
     {
         let elem = '';
-        if(this.parent.getCurrentFile() != null && this.parent.getCurrentFile().hash === file.hash) {
+        if(this._renderer.getCurrentFile() != null && this._renderer.getCurrentFile().hash === file.hash) {
             elem = $('.button.file-rename');
         } else {
             elem = $('#preview').find('li[data-hash="'+file.hash+'"]').first();
@@ -160,7 +160,7 @@ class ZettlrBody
 
         let popup = new ZettlrPopup(this, elem, cnt, (form) => {
             if(form) {
-                this.parent.requestFileRename(form[0].value, file.hash);
+                this._renderer.requestFileRename(form[0].value, file.hash);
             }
         });
     }
@@ -172,7 +172,7 @@ class ZettlrBody
      */
     quicklook(file)
     {
-        this.ql.push(new ZettlrQuicklook(this, file, this.darkTheme));
+        this._ql.push(new ZettlrQuicklook(this, file, this._darkTheme));
     }
 
     /**
@@ -183,9 +183,9 @@ class ZettlrBody
      */
     qlsplice(zql)
     {
-        let index = this.ql.indexOf(zql);
+        let index = this._ql.indexOf(zql);
         if(index > -1) {
-            this.ql.splice(index, 1);
+            this._ql.splice(index, 1);
             return true;
         }
 
@@ -198,9 +198,9 @@ class ZettlrBody
      */
     closeQuicklook()
     {
-        while(this.ql.length > 0) {
+        while(this._ql.length > 0) {
             // QuickLooks splice themselves from the array -> always close first
-            this.ql[0].close();
+            this._ql[0].close();
         }
 
         return this;
@@ -213,7 +213,7 @@ class ZettlrBody
      */
     notify(message)
     {
-        this.n.push(new ZettlrNotification(this, message, this.n.length));
+        this._n.push(new ZettlrNotification(this, message, this._n.length));
         return this;
     }
 
@@ -225,12 +225,12 @@ class ZettlrBody
      */
     notifySplice(ntf, oldH)
     {
-        let index = this.n.indexOf(ntf);
+        let index = this._n.indexOf(ntf);
         if(index > -1) {
-            this.n.splice(index, 1);
+            this._n.splice(index, 1);
         }
 
-        for(let msg of this.n) {
+        for(let msg of this._n) {
             msg.moveUp(oldH);
         }
     }
@@ -241,9 +241,9 @@ class ZettlrBody
      */
     toggleTheme()
     {
-        this.darkTheme = !this.darkTheme;
+        this._darkTheme = !this._darkTheme;
         // Toggle the Quicklook-window's style
-        for(let ql of this.ql) {
+        for(let ql of this._ql) {
             ql.toggleTheme();
         }
 
@@ -281,14 +281,14 @@ class ZettlrBody
      */
     displayPreferences(prefs)
     {
-        this.dialog.init('preferences', prefs);
-        this.dialog.open();
+        this._dialog.init('preferences', prefs);
+        this._dialog.open();
     }
 
     displayUpdate(cnt)
     {
-        this.dialog.init('update', cnt);
-        this.dialog.open();
+        this._dialog.init('update', cnt);
+        this._dialog.open();
     }
 
     /**
@@ -311,10 +311,10 @@ class ZettlrBody
      */
     setSpellcheckLangs(langs)
     {
-        this.spellcheckLangs = {};
+        this._spellcheckLangs = {};
         for(let l in langs) {
             // Default to false, will only be overwritten if a language is checked
-            this.spellcheckLangs[l] = false;
+            this._spellcheckLangs[l] = false;
         }
     }
 
@@ -333,7 +333,7 @@ class ZettlrBody
         pdflatex   = '',
         darkTheme  = false,
         snippets   = false,
-        spellcheck = this.spellcheckLangs,
+        spellcheck = this._spellcheckLangs,
         app_lang = 'en_US',
         debug = false,
         autosave = false;
@@ -369,20 +369,23 @@ class ZettlrBody
                 'debug': debug,
                 'autosave': autosave
             }
-            this.parent.saveSettings(cfg);
+            this._renderer.saveSettings(cfg);
         }
 
-        this.dialog.close();
+        this._dialog.close();
     }
 
     /**
      * Needed by the dialog
      * @return {String} The locale String from ZettlrRenderer
      */
-    getLocale()
-    {
-        return this.parent.getLocale();
-    }
+    getLocale() { return this._renderer.getLocale(); }
+
+    /**
+     * Returns the renderer
+     * @return {ZettlrRenderer} The renderer object
+     */
+    getRenderer() { return this._renderer; }
 }
 
 module.exports = ZettlrBody;
