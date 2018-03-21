@@ -28,9 +28,9 @@ class ZettlrDirectories
      */
     constructor(parent)
     {
-        this.parent = parent;
-        this.div = $('#directories');
-        this.tree = null;
+        this._renderer = parent;
+        this._div = $('#directories');
+        this._tree = null;
     }
 
     /**
@@ -39,10 +39,10 @@ class ZettlrDirectories
      */
     refresh()
     {
-        if(this.tree == null) {
-            this.tree = new TreeView(this, this.parent.paths, true);
+        if(this._tree == null) {
+            this._tree = new TreeView(this, this._renderer.paths, true);
         } else {
-            this.tree.refresh(this.parent.paths);
+            this._tree.refresh(this._renderer.paths);
         }
 
         return this;
@@ -54,9 +54,9 @@ class ZettlrDirectories
      */
     empty()
     {
-        if(this.tree != null) {
-            this.tree.detach(); // Will remove all descendants as well
-            this.tree = null;   // Dereference
+        if(this._tree != null) {
+            this._tree.detach(); // Will remove all descendants as well
+            this._tree = null;   // Dereference
         }
         return this;
     }
@@ -68,9 +68,9 @@ class ZettlrDirectories
      */
     select(hash)
     {
-        if(this.tree != null) {
-            this.tree.deselect();
-            this.tree.select(hash);
+        if(this._tree != null) {
+            this._tree.deselect();
+            this._tree.select(hash);
         }
 
         return this;
@@ -89,7 +89,7 @@ class ZettlrDirectories
      * Returns the directory container (#directories)
      * @return {jQuery} The DOM element
      */
-    getContainer() { return this.div; }
+    getContainer() { return this._div; }
 
     /**
      * Toggle the theme on the div.
@@ -97,7 +97,7 @@ class ZettlrDirectories
      */
     toggleTheme()
     {
-        this.div.toggleClass('dark');
+        this._div.toggleClass('dark');
         return this;
     }
 
@@ -107,7 +107,7 @@ class ZettlrDirectories
      */
     toggleDisplay()
     {
-        this.div.toggleClass('hidden');
+        this._div.toggleClass('hidden');
         return this;
     }
 
@@ -116,7 +116,7 @@ class ZettlrDirectories
      * @param  {Integer} hash The hash of the directory to be selected
      * @return {void}      Nothing to return.
      */
-    requestDir(hash) { this.parent.requestDir(hash); }
+    requestDir(hash) { this._renderer.requestDir(hash); }
 
     /**
      * Needed for bubbling up of selections
@@ -124,7 +124,7 @@ class ZettlrDirectories
      * @param  {Integer} to   Hash representing the target dir
      * @return {void}      Nothing to return.
      */
-    requestMove(from, to) { this.parent.requestMove(from, to); }
+    requestMove(from, to) { this._renderer.requestMove(from, to); }
 }
 
 module.exports = ZettlrDirectories;
