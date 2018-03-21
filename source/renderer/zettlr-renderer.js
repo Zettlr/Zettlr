@@ -768,8 +768,6 @@ class ZettlrRenderer
 
     getPreview() { return this.preview; }
 
-    getEditor() { return this.editor; }
-
     getBody() { return this.body; }
 
     getPomodoro() { return this.pomodoro; }

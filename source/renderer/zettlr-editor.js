@@ -53,20 +53,20 @@ class ZettlrEditor
     */
     constructor(parent)
     {
-        this.parent = parent;
-        this.div = $('#editor');
-        this.fntooltipbubble = $('<div>').addClass('fn-panel');
-        this.positions = [];        // Saves the positions of the editor
-        this.currentHash = null;    // Needed for positions
-        this.words = 0;             // Currently written words
-        this.fontsize = 100;        // Font size (used for zooming)
-        this.inlineImages = [];     // Image widgets that are currently rendered
-        this.inlineLinks = [];      // Inline links that are currently rendered
+        this._renderer = parent;
+        this._div = $('#editor');
+        this._fntooltipbubble = $('<div>').addClass('fn-panel');
+        this._positions = [];        // Saves the positions of the editor
+        this._currentHash = null;    // Needed for positions
+        this._words = 0;             // Currently written words
+        this._fontsize = 100;        // Font size (used for zooming)
+        this._inlineImages = [];     // Image widgets that are currently rendered
+        this._inlineLinks = [];      // Inline links that are currently rendered
 
         // These are used for calculating a correct word count
         this._blockElements = require('../common/data.json').block_elements;
 
-        this.cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
+        this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
             mode: {
                 name: 'spellchecker' // This automatically defines gfm as overlay mode
             },
@@ -89,32 +89,32 @@ class ZettlrEditor
             }
         });
 
-        this.cm.on('change', (cm, changeObj) => {
+        this._cm.on('change', (cm, changeObj) => {
             // The contents have been changed — so fire an event to main process to
             // set the window modified
 
             // Update wordcount
-            this.parent.updateWordCount(this.getWordCount());
+            this._renderer.updateWordCount(this.getWordCount());
 
             if(changeObj.origin != "setValue") {
                 // If origin is setValue this means that the contents have been
                 // programatically changed -> no need to flag any modification!
-                this.parent.setModified();
+                this._renderer.setModified();
             }
         });
 
         // On cursor activity (not the mouse one but the text one), render all
         // things we should replace in the sense of render directly in the text
         // such as images, links, other stuff.
-        this.cm.on('cursorActivity', (cm) => {
+        this._cm.on('cursorActivity', (cm) => {
             // This event fires on either editor changes (because, obviously the
             // cursor changes its position as well then) or when the cursor moves.
-            this.renderImages();
-            this.renderLinks();
+            this._renderImages();
+            this._renderLinks();
         })
 
         // Thanks for this to https://discuss.codemirror.net/t/hanging-indent/243/2
-        this.cm.on("renderLine", (cm, line, elt) => {
+        this._cm.on("renderLine", (cm, line, elt) => {
 
             let charWidth = cm.defaultCharWidth() - 2;
             let basePadding = 4;
@@ -130,23 +130,23 @@ class ZettlrEditor
         });
 
         // Display a footnote if the target is a link (and begins with ^)
-        this.cm.getWrapperElement().addEventListener('mousemove', (e) => {
+        this._cm.getWrapperElement().addEventListener('mousemove', (e) => {
             let t = $(e.target);
             if(t.hasClass('cm-link') && t.text().indexOf('^') === 0) {
-                this.fntooltip(t);
+                this._fntooltip(t);
             } else {
-                this.fntooltipbubble.detach();
+                this._fntooltipbubble.detach();
             }
         });
 
-        this.cm.refresh();
+        this._cm.refresh();
     }
     // END constructor
 
     /**
     * Renders images for all valid image-tags in the document.
     */
-    renderImages()
+    _renderImages()
     {
         let imageRE = /^!\[(.+?)\]\((.+?)\)$/;
         let i = 0;
@@ -156,23 +156,23 @@ class ZettlrEditor
         // clicks into the image, it will be automatically removed, as well as
         // if someone simply deletes the whole line.
         do {
-            if(!this.inlineImages[i]) {
+            if(!this._inlineImages[i]) {
                 continue;
             }
-            if(this.inlineImages[i] && this.inlineImages[i].find() === undefined) {
+            if(this._inlineImages[i] && this._inlineImages[i].find() === undefined) {
                 // Marker is no longer present, so splice it
-                this.inlineImages.splice(i, 1);
+                this._inlineImages.splice(i, 1);
             } else {
                 // Push the marker's actual _line_ (not the index) into the
                 // rendered array.
-                rendered.push(this.inlineImages[i].find().from.line);
+                rendered.push(this._inlineImages[i].find().from.line);
                 // Array is same size, so increase i
                 i++;
             }
-        } while(i < this.inlineImages.length);
+        } while(i < this._inlineImages.length);
 
         // Now render all potential new images
-        for(let i = 0; i < this.cm.doc.lineCount(); i++)
+        for(let i = 0; i < this._cm.doc.lineCount(); i++)
         {
             // Already rendered, so move on
             if(rendered.includes(i)) {
@@ -180,12 +180,12 @@ class ZettlrEditor
             }
 
             // Cursor is in here, so also don't render (for now)
-            if(this.cm.doc.getCursor('from').line === i) {
+            if(this._cm.doc.getCursor('from').line === i) {
                 continue;
             }
 
             // First get the line and test if the contents contain an image
-            let line = this.cm.doc.getLine(i);
+            let line = this._cm.doc.getLine(i);
             if(!imageRE.test(line)) {
                 continue;
             }
@@ -196,10 +196,10 @@ class ZettlrEditor
             let url = match[2];
 
             // Retrieve lineInfo for line number
-            let lineInfo = this.cm.doc.lineInfo(i);
+            let lineInfo = this._cm.doc.lineInfo(i);
             let img = new Image();
             // Now add a line widget to this line.
-            let textMarker = this.cm.doc.markText(
+            let textMarker = this._cm.doc.markText(
                 {'line':lineInfo.line, 'ch':0},
                 {'line':lineInfo.line, 'ch':line.length},
                 {
@@ -238,11 +238,11 @@ class ZettlrEditor
             }
 
             // Finally: Push the textMarker into the array
-            this.inlineImages.push(textMarker);
+            this._inlineImages.push(textMarker);
         }
     }
 
-    renderLinks()
+    _renderLinks()
     {
         let linkRE = /\[(.+?)\]\((.+?)\)/g;
         let i = 0;
@@ -252,26 +252,26 @@ class ZettlrEditor
         // moves the cursor into the link, it will be automatically removed,
         // as well as if someone simply deletes the whole line.
         do {
-            if(!this.inlineLinks[i]) {
+            if(!this._inlineLinks[i]) {
                 continue;
             }
-            if(this.inlineLinks[i].find() === undefined) {
+            if(this._inlineLinks[i].find() === undefined) {
                 // Marker is no longer present, so splice it
-                this.inlineLinks.splice(i, 1);
+                this._inlineLinks.splice(i, 1);
             } else {
                 i++;
             }
-        } while(i < this.inlineLinks.length);
+        } while(i < this._inlineLinks.length);
 
         // Now render all potential new links
-        for(let i = 0; i < this.cm.doc.lineCount(); i++)
+        for(let i = 0; i < this._cm.doc.lineCount(); i++)
         {
             // Always reset lastIndex property, because test()-ing on regular
             // expressions advance it.
             linkRE.lastIndex = 0;
 
             // First get the line and test if the contents contain a link
-            let line = this.cm.doc.getLine(i);
+            let line = this._cm.doc.getLine(i);
             if(!linkRE.test(line)) {
                 continue;
             }
@@ -290,16 +290,16 @@ class ZettlrEditor
                 let curFrom = { 'line': i, 'ch': match.index };
                 let curTo = { 'line': i, 'ch': match.index + match[0].length };
 
-                let cur = this.cm.doc.getCursor('from');
+                let cur = this._cm.doc.getCursor('from');
                 if(cur.line === curFrom.line && cur.ch >= curFrom.ch && cur.ch <= curTo.ch) {
                     // Cursor is in selection: Do not render.
                     continue;
                 }
 
                 // Has this thing already been rendered?
-                let marks = this.cm.doc.findMarks(curFrom, curTo);
+                let marks = this._cm.doc.findMarks(curFrom, curTo);
                 for(let marx of marks) {
-                    if(this.inlineLinks.includes(marx)) {
+                    if(this._inlineLinks.includes(marx)) {
                         // We've got communism. (Sorry for the REALLY bad pun.)
                         continue;
                     }
@@ -309,7 +309,7 @@ class ZettlrEditor
                 a.innerHTML = caption; // TODO: Better testing against HTML entities!
                 a.className = 'cma'; // CodeMirrorAnchors
                 // Apply TextMarker
-                let textMarker = this.cm.doc.markText(
+                let textMarker = this._cm.doc.markText(
                     curFrom, curTo,
                     {
                         'clearOnEnter': true,
@@ -329,7 +329,7 @@ class ZettlrEditor
                     }
                 };
 
-                this.inlineLinks.push(textMarker);
+                this._inlineLinks.push(textMarker);
             }
         }
     }
@@ -341,29 +341,29 @@ class ZettlrEditor
     */
     open(file)
     {
-        if(this.currentHash != null) {
-            let cr = this.cm.doc.getCursor();
-            this.positions[this.currentHash] = {
+        if(this._currentHash != null) {
+            let cr = this._cm.doc.getCursor();
+            this._positions[this._currentHash] = {
                 'cursor': JSON.parse(JSON.stringify(cr)),
                 'scroll': $('.CodeMirror-scroll').offset()['top']
             };
         }
 
-        this.cm.setValue(file.content);
-        this.currentHash = 'hash' + file.hash;
-        this.words = this.getWordCount();
+        this._cm.setValue(file.content);
+        this._currentHash = 'hash' + file.hash;
+        this._words = this.getWordCount();
 
         // Mark clean, because now we got a new (and therefore unmodified) file
-        this.cm.markClean();
-        this.cm.clearHistory(); // Clear history so that no "old" files can be
+        this._cm.markClean();
+        this._cm.clearHistory(); // Clear history so that no "old" files can be
         // recreated using Cmd/Ctrl+Z.
 
-        if(this.positions[this.currentHash] !== undefined) {
-            this.cm.setCursor(this.positions[this.currentHash].cursor);
-            $('CodeMirror-scroll').scrollTop(this.positions[this.currentHash].scroll);
+        if(this._positions[this._currentHash] !== undefined) {
+            this._cm.setCursor(this._positions[this._currentHash].cursor);
+            $('CodeMirror-scroll').scrollTop(this._positions[this._currentHash].scroll);
         } else {
             // Default to start positions
-            this.cm.doc.setCursor({line: 0, ch: 0});
+            this._cm.doc.setCursor({line: 0, ch: 0});
             $('#CodeMirror-scroll').scrollTop(0);
         }
 
@@ -376,10 +376,10 @@ class ZettlrEditor
     */
     close()
     {
-        this.cm.setValue('');
-        this.cm.markClean();
-        this.cm.clearHistory();
-        this.words = 0;
+        this._cm.setValue('');
+        this._cm.markClean();
+        this._cm.clearHistory();
+        this._words = 0;
         return this;
     }
 
@@ -403,7 +403,7 @@ class ZettlrEditor
     */
     getWordCount()
     {
-        let words = this.cm.getValue().split(' ')
+        let words = this._cm.getValue().split(' ')
 
         let i = 0;
 
@@ -427,9 +427,9 @@ class ZettlrEditor
     getWrittenWords()
     {
         // Return the additional written words
-        let cnt = this.getWordCount() - this.words;
-        this.words = this.getWordCount();
-        return cnt;
+        let nbr = this.getWordCount() - this._words;
+        this._words = this.getWordCount();
+        return nbr;
     }
 
     /**
@@ -442,13 +442,13 @@ class ZettlrEditor
     selectWordUnderCursor()
     {
         // Don't overwrite selections.
-        if(this.cm.somethingSelected()) {
+        if(this._cm.somethingSelected()) {
             return;
         }
 
-        let cur = this.cm.getCursor();
-        let sel = this.cm.findWordAt(cur);
-        this.cm.setSelection(sel.anchor, sel.head);
+        let cur = this._cm.getCursor();
+        let sel = this._cm.findWordAt(cur);
+        this._cm.setSelection(sel.anchor, sel.head);
     }
 
     /**
@@ -459,13 +459,13 @@ class ZettlrEditor
     */
     replaceWord(word)
     {
-        if(!this.cm.somethingSelected()) {
+        if(!this._cm.somethingSelected()) {
             // We obviously need a selection to replace
             return;
         }
 
         // Replace word and select new word
-        this.cm.replaceSelection(word, 'around');
+        this._cm.replaceSelection(word, 'around');
     }
 
     /**
@@ -473,7 +473,7 @@ class ZettlrEditor
     * @param  {jQuery} element The footnote element
     * @return {void}         Nothing to return.
     */
-    fntooltip(element)
+    _fntooltip(element)
     {
         // Because we highlight the formatting as well, the element's text will
         // only contain ^<id> without the brackets
@@ -484,9 +484,9 @@ class ZettlrEditor
         // our RegEx from the footnotes plugin.
         let fnrefRE = /^\[\^([\da-zA-Z_-]+)\]: (.+)/gm;
 
-        for(let lineNo = this.cm.doc.lastLine(); lineNo > -1; lineNo--) {
+        for(let lineNo = this._cm.doc.lastLine(); lineNo > -1; lineNo--) {
             fnrefRE.lastIndex = 0;
-            let line = this.cm.doc.getLine(lineNo);
+            let line = this._cm.doc.getLine(lineNo);
             let match = null;
             if(((match = fnrefRE.exec(line)) != null) && (match[1] == fn)) {
                 fnref = match[2];
@@ -496,14 +496,14 @@ class ZettlrEditor
 
         if(!fnref || fnref === '') {
             // Indicate that the footnote is empty
-            this.fntooltipbubble.html('<em>no reference text</em>');
+            this._fntooltipbubble.html('<em>no reference text</em>');
         } else {
-            this.fntooltipbubble.text(fnref);
+            this._fntooltipbubble.text(fnref);
         }
 
         // Now we either got a match or an empty fnref. Anyway: display
-        this.fntooltipbubble.attr('style', 'bottom:0; left:0; right:0; z-index:10000');
-        this.div.append(this.fntooltipbubble);
+        this._fntooltipbubble.attr('style', 'bottom:0; left:0; right:0; z-index:10000');
+        this._div.append(this._fntooltipbubble);
     }
 
     /**
@@ -512,7 +512,7 @@ class ZettlrEditor
     */
     buildTOC()
     {
-        let cnt = this.cm.getValue().split('\n');
+        let cnt = this._cm.getValue().split('\n');
         let toc = [];
         for(let i in cnt) {
             if(/^#{1,6} /.test(cnt[i])) {
@@ -535,8 +535,8 @@ class ZettlrEditor
     jtl(line)
     {
         // Wow. Such magic.
-        this.cm.doc.setCursor({ 'line' : line, 'ch': 0 });
-        this.cm.refresh();
+        this._cm.doc.setCursor({ 'line' : line, 'ch': 0 });
+        this._cm.refresh();
     }
 
     /**
@@ -545,12 +545,12 @@ class ZettlrEditor
     */
     toggleTheme()
     {
-        if(this.div.hasClass('dark')) {
-            this.div.removeClass('dark');
-            this.cm.setOption("theme", 'zettlr');
+        if(this._div.hasClass('dark')) {
+            this._div.removeClass('dark');
+            this._cm.setOption("theme", 'zettlr');
         } else {
-            this.div.addClass('dark');
-            this.cm.setOption("theme", 'zettlr-dark');
+            this._div.addClass('dark');
+            this._cm.setOption("theme", 'zettlr-dark');
         }
 
         return this;
@@ -562,10 +562,10 @@ class ZettlrEditor
     */
     toggleDirectories()
     {
-        this.div.toggleClass('no-directories');
+        this._div.toggleClass('no-directories');
         // CodeMirror needs to recalculate the overlays etc., otherwise
         // it will be difficult to write, select, etc.
-        this.cm.refresh();
+        this._cm.refresh();
         return this;
     }
 
@@ -575,10 +575,10 @@ class ZettlrEditor
     */
     togglePreview()
     {
-        this.div.toggleClass('no-preview');
+        this._div.toggleClass('no-preview');
         // CodeMirror needs to recalculate the overlays etc., otherwise
         // it will be difficult to write, select, etc.
-        this.cm.refresh();
+        this._cm.refresh();
         return this;
     }
 
@@ -589,12 +589,12 @@ class ZettlrEditor
     */
     zoom(direction) {
         if(direction === 0) {
-            this.fontsize = 100;
+            this._fontsize = 100;
         } else {
-            this.fontsize = this.fontsize + 10*direction
+            this._fontsize = this._fontsize + 10*direction
         }
-        this.div.css('font-size', this.fontsize + '%');
-        this.cm.refresh();
+        this._div.css('font-size', this._fontsize + '%');
+        this._cm.refresh();
         return this;
     }
 
@@ -602,32 +602,32 @@ class ZettlrEditor
     * The CodeMirror instane should open the find dialog
     * @return {void} Nothing to return.
     */
-    openFind() { this.cm.execCommand("findPersistent"); }
+    openFind() { this._cm.execCommand("findPersistent"); }
 
     /**
     * Returns the current value of the editor.
     * @return {String} The current editor contents.
     */
-    getValue() { return this.cm.getValue(); }
+    getValue() { return this._cm.getValue(); }
 
     /**
     * Mark clean the CodeMirror instance
     * @return {void} Nothing to return.
     */
-    markClean() { this.cm.markClean(); }
+    markClean() { this._cm.markClean(); }
 
     /**
     * Query if the editor is currently modified
     * @return {Boolean} True, if there are no changes, false, if there are.
     */
-    isClean() { return this.cm.doc.isClean(); }
+    isClean() { return this._cm.doc.isClean(); }
 
     /**
     * Run a CodeMirror command.
     * @param  {String} cmd The command to be passed to cm.
     * @return {void}     Nothing to return.
     */
-    runCommand(cmd) { this.cm.execCommand(cmd); }
+    runCommand(cmd) { this._cm.execCommand(cmd); }
 }
 
 module.exports = ZettlrEditor;
