@@ -17,28 +17,25 @@
 
     .button {
         flex-grow:0.1;
-        border:1px solid @grey-2;
-        border-radius:@button-border-radius;
-        background-image: linear-gradient(to bottom, @grey-1, @grey-2);
         display:inline-block;
-        width:@button-width;
-        margin:@button-margin; // Add some margin
+        width:@button-size;
         text-align:center;
-        line-height:@button-height;
+        line-height:@button-size;
         font-family:'WebHostingHub-Glyphs';
         font-size:@font-size-small * 0.8;
+        transition:@fast-transition all ease;
 
         &:first-child {
-            margin-left:@button-margin * 2;
+            margin-left:@toolbar-margin * 2;
         }
 
         &:last-child {
-            margin-right:@button-margin * 2;
+            margin-right:@toolbar-margin * 2;
         }
 
         &:hover {
-            background-image: none;
-            background-color: @grey-2;
+            background-color: @grey-0;
+            transition:@fast-transition all ease;
         }
 
         &.dir-open::before {
@@ -188,15 +185,16 @@
     .searchbar {
         flex-grow:5;
         input {
-            border-radius:@button-height / 2;
-            height:@button-height;
+            color:inherit;
+            height:@button-size;
+            background-color:transparent;
             width:90%; // Fill out the whole space
-            margin:@button-margin;
-            border:1px solid @grey-2;
-            font-size:@font-size-small * 0.8; // Even smaller!
+            margin:@toolbar-margin;
+            border:none;
+            font-size:@font-size-base;
+            line-height:@button-size;
             padding:0.2em 1em;
             margin:0.3em;
-            box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,.05);
             outline: none;
             transition:0.5s all ease;
 
@@ -210,35 +208,24 @@
         div.end-search {
             position: relative;
             right: 26px;
-            background-color: @grey-2;
             width: 12px;
             height: 12px;
             display: inline-block;
-            border-radius: 100%;
             line-height: 11px;
             font-size: 80%;
             text-align: center;
-
-            &:hover {
-                background-color: @grey-3;
-                color:white;
-            }
         }
     }
 
     &.dark {
-        background-image: linear-gradient(to bottom, @grey-6, @grey-7);
-        border-bottom-color:@grey-5;
-        color:@grey-3;
+        color:@grey-1;
+        background-image: linear-gradient(to bottom, @grey-3, @grey-4);
 
         .button {
-            border-color:@grey-5;
-            background-image:linear-gradient(to bottom, @grey-4, @grey-5);
-            color:@grey-1;
-
+            transition:@fast-transition all ease;
             &:hover {
-                background-image: none;
-                background-color: @grey-4;
+                background-color: @grey-3;
+                transition:@fast-transition all ease;
             }
 
             &.pomodoro {
@@ -256,13 +243,9 @@
 
         .searchbar {
             input {
-                background-color:@grey-5;
-                box-shadow: none;
-                border-color:@grey-5;
-                color:@grey-1;
-
+                color:inherit;
                 &:focus {
-                    border-color:@grey-4;
+                    box-shadow: inset 0px 0px 15px 0px fade(@blue-selection-dark, 95%);
                 }
             }
         }

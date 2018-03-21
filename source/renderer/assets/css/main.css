@@ -730,26 +730,23 @@ html {
 }
 #toolbar .button {
   flex-grow: 0.1;
-  border: 1px solid #c8c8c8;
-  border-radius: 5px;
-  background-image: linear-gradient(to bottom, #dcdcdc, #c8c8c8);
   display: inline-block;
-  width: 24px;
-  margin: 4px;
+  width: 38px;
   text-align: center;
-  line-height: 20px;
+  line-height: 38px;
   font-family: 'WebHostingHub-Glyphs';
   font-size: 0.72em;
+  transition: 0.2s all ease;
 }
 #toolbar .button:first-child {
-  margin-left: 8px;
+  margin-left: 10px;
 }
 #toolbar .button:last-child {
-  margin-right: 8px;
+  margin-right: 10px;
 }
 #toolbar .button:hover {
-  background-image: none;
-  background-color: #c8c8c8;
+  background-color: #f0f0f0;
+  transition: 0.2s all ease;
 }
 #toolbar .button.dir-open::before {
   content: "\f73e";
@@ -869,15 +866,16 @@ html {
   flex-grow: 5;
 }
 #toolbar .searchbar input {
-  border-radius: 10px;
-  height: 20px;
+  color: inherit;
+  height: 38px;
+  background-color: transparent;
   width: 90%;
-  margin: 4px;
-  border: 1px solid #c8c8c8;
-  font-size: 0.72em;
+  margin: 5px;
+  border: none;
+  font-size: 1em;
+  line-height: 38px;
   padding: 0.2em 1em;
   margin: 0.3em;
-  box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.05);
   outline: none;
   transition: 0.5s all ease;
 }
@@ -889,32 +887,23 @@ html {
 #toolbar .searchbar div.end-search {
   position: relative;
   right: 26px;
-  background-color: #c8c8c8;
   width: 12px;
   height: 12px;
   display: inline-block;
-  border-radius: 100%;
   line-height: 11px;
   font-size: 80%;
   text-align: center;
 }
-#toolbar .searchbar div.end-search:hover {
-  background-color: #787878;
-  color: white;
-}
 #toolbar.dark {
-  background-image: linear-gradient(to bottom, #464646, #282828);
-  border-bottom-color: #505050;
-  color: #787878;
+  color: #dcdcdc;
+  background-image: linear-gradient(to bottom, #787878, #646464);
 }
 #toolbar.dark .button {
-  border-color: #505050;
-  background-image: linear-gradient(to bottom, #646464, #505050);
-  color: #dcdcdc;
+  transition: 0.2s all ease;
 }
 #toolbar.dark .button:hover {
-  background-image: none;
-  background-color: #646464;
+  background-color: #787878;
+  transition: 0.2s all ease;
 }
 #toolbar.dark .button.pomodoro {
   background-image: none;
@@ -926,13 +915,10 @@ html {
   stroke: #c8c8c8;
 }
 #toolbar.dark .searchbar input {
-  background-color: #505050;
-  box-shadow: none;
-  border-color: #505050;
-  color: #dcdcdc;
+  color: inherit;
 }
 #toolbar.dark .searchbar input:focus {
-  border-color: #646464;
+  box-shadow: inset 0px 0px 15px 0px rgba(100, 120, 180, 0.95);
 }
 .notify {
   position: fixed;

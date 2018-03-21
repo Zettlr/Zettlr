@@ -55,14 +55,14 @@ less.render(mainLess, {
         console.info(`Sourcemap:`, output.map);
         console.info(`Imported files:`, output.imports);
     } catch(e) {
-        console.error(`ERROR: Error on writing css: ${e.name}`);
+        console.error(`ERROR: Error on writing ${mainFile}: ${e.name}`);
         console.error(e.message);
     }
 },
 function(error) {
     if(error) {
-        console.error(`ERROR: Could not compile LESS: ${e.name}`);
-        console.error(e.message);
+        console.error(`ERROR: Could not compile ${mainLess}: ${error.name}`);
+        console.error(error.message);
     }
 });
 
@@ -82,13 +82,13 @@ less.render(themeLess, {
         console.info(`Sourcemap:`, output.map);
         console.info(`Imported files:`, output.imports);
     } catch(e) {
-        console.error(`ERROR: Error on writing css: ${e.name}`);
+        console.error(`ERROR: Error on writing ${themeFile}: ${e.name}`);
         console.error(e.message);
     }
 },
 function(error) {
     if(error) {
-        console.error(`ERROR: Could not compile LESS: ${e.name}`);
-        console.error(e.message);
+        console.error(`ERROR: Could not compile ${themeLess}: ${error.name}`);
+        console.error(error.message);
     }
 });
