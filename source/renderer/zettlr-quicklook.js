@@ -42,30 +42,29 @@ class ZettlrQuicklook
 {
     /**
      * Create a window
-     * @param {ZettlrBody} parent    Calling object
-     * @param {ZettlrFile} file      The file whose content should be displayed
-     * @param {Boolean} darkTheme Dark theme?
+     * @param {ZettlrBody} parent   Calling object
+     * @param {ZettlrFile} file     The file whose content should be displayed
+     * @param {Boolean} darkTheme   Dark theme?
      */
     constructor(parent, file, darkTheme)
     {
-        this.parent = parent;
-        this.file = file;
-        this.bodyHeight = 0; // Contains the height of the element, in case it was minimized
-        this.load(file, darkTheme);
+        this._body = parent;
+        this._file = file;
+        this._cm = null;
+        this._window = null;
+        this._bodyHeight = 0; // Contains the height of the element, in case it was minimized
+        this._load();
         this.show();
     }
 
     /**
      * Load the Quicklook template and prepare everything
-     * @param  {ZettlrFile} file      The file whose content should be displayed.
-     * @param  {Boolean} darkTheme Dark Theme?
-     * @return {void}           Nothing to return.
      */
-    load(file, darkTheme)
+    _load()
     {
-        this.window = $(fs.readFileSync(path.join(__dirname, 'assets', 'tpl', 'quicklook.htm'), 'utf8'));
+        this._window = $(fs.readFileSync(path.join(__dirname, 'assets', 'tpl', 'quicklook.htm'), 'utf8'));
 
-        this.cm = CodeMirror.fromTextArea(this.window.find('textarea')[0], {
+        this._cm = CodeMirror.fromTextArea(this._window.find('textarea')[0], {
             readOnly: true,
             mode: {
                 name: 'gfm',
@@ -76,47 +75,62 @@ class ZettlrQuicklook
                 'Cmd-F'         : 'findPersistent',
                 'Ctrl-F'        : 'findPersistent'
             },
-            theme: (darkTheme) ? 'zettlr-dark' : 'zettlr',
+            theme: (this._darkTheme) ? 'zettlr-dark' : 'zettlr',
             cursorBlinkRate: -1 // Hide the cursor
         });
 
-        this.window.find('h1').first().text(file.name);
-        this.cm.setValue(file.content);
+        this._window.find('h1').first().text(this._file.name);
+        this._cm.setValue(this._file.content);
 
-        this.window.draggable({
+        this._window.draggable({
             handle: 'div.title',
             containment: 'document',
             cursor: '-webkit-grabbing',
             stack: '.quicklook',
             stop: (e, ui) => {
-                this.cm.focus();
+                this._cm.focus();
             }
         });
 
-        this.window.resizable({
+        this._window.resizable({
             handles: 'e, se, s, sw, w',
             containment: 'document',
             minHeight: 400,
             minWidth: 400,
             resize: (e, ui) => {
-                let bar = this.window.find('.title');
-                this.window.find('.body').css('height', (ui.size.height-bar.outerHeight()) + 'px');
-                this.cm.refresh();
+                let bar = this._window.find('.title');
+                this._window.find('.body').css('height', (ui.size.height-bar.outerHeight()) + 'px');
+                this._cm.refresh();
             },
             stop: (e, ui) => {
                 // Refresh the editor to account for changes in the size.
-                this.cm.refresh();
-                this.cm.focus();
+                this._cm.refresh();
+                this._cm.focus();
             }
         });
 
-        this.window.find('.close').first().on('click', (e) => {
+        this._window.find('.close').first().on('click', (e) => {
             e.stopPropagation();
             this.close();
         });
 
-        this.window.find('.title').first().on('dblclick', (e) => {
+        this._window.find('.title').first().on('dblclick', (e) => {
             this.toggleWindow();
+        });
+
+        // Bring quicklook window to front on click on the title
+        this._window.find('.title').first().on('click', (e) => {
+            let max, group = $('.quicklook');
+
+            if(group.length < 1) return;
+            max = parseInt(group[0].style.zIndex, 10) || 0;
+            $(group).each(function(i) {
+                if(parseInt(this.style.zIndex, 10) > max) {
+                    max = parseInt(this.style.zIndex, 10);
+                }
+            });
+
+            this._window.css({'zIndex' : max+1});
         });
     }
 
@@ -143,22 +157,22 @@ class ZettlrQuicklook
         // to relative, which then causes the second window to be positioned
         // NOT where it should but directly beneath the first QL-Window
         // (respectively its original place before it was moved).
-        this.window.css('position', 'fixed');
+        this._window.css('position', 'fixed');
 
         // Set dimensions and positions
-        this.window.css('width', qlw);
-        this.window.css('height', qlh);
-        this.window.css('top', height/2 - qlh/2);
-        this.window.css('left', width/2 - qlw/2);
+        this._window.css('width', qlw);
+        this._window.css('height', qlh);
+        this._window.css('top', height/2 - qlh/2);
+        this._window.css('left', width/2 - qlw/2);
 
         // Append (e.g., show) and set the body to a correct size and give the
         // CM a first refresh
-        $('body').append(this.window);
-        this.window.find('.body').css(
+        $('body').append(this._window);
+        this._window.find('.body').css(
             'height',
-            (qlh-this.window.find('.title').outerHeight()) + 'px'
+            (qlh-this._window.find('.title').outerHeight()) + 'px'
         );
-        this.cm.refresh();
+        this._cm.refresh();
         return this;
     }
 
@@ -168,26 +182,26 @@ class ZettlrQuicklook
      */
     toggleWindow()
     {
-        if(this.window.hasClass('minimize')) {
+        if(this._window.hasClass('minimize')) {
             // Restore
-            this.window.removeClass('minimize');
-            this.window.css('height', this.bodyHeight);
-            let bar = this.window.find('.title');
-            this.window.resizable('enable');
-            this.window.find('.body').css(
+            this._window.removeClass('minimize');
+            this._window.css('height', this._bodyHeight);
+            let bar = this._window.find('.title');
+            this._window.resizable('enable');
+            this._window.find('.body').css(
                 'height',
-                (parseFloat(this.bodyHeight)-bar.outerHeight()) + 'px'
+                (parseFloat(this._bodyHeight)-bar.outerHeight()) + 'px'
             );
-            this.window.find('.CodeMirror').css('display', 'block');
-            this.cm.refresh();
+            this._window.find('.CodeMirror').css('display', 'block');
+            this._cm.refresh();
         } else {
             // Minimize
-            this.window.addClass('minimize');
-            this.bodyHeight = this.window.css('height');
-            this.window.find('.body').css('height', '0px');
-            this.window.resizable('disable');
-            this.window.css('height', '');
-            this.window.find('.CodeMirror').css('display', 'none');
+            this._window.addClass('minimize');
+            this._bodyHeight = this._window.css('height');
+            this._window.find('.body').css('height', '0px');
+            this._window.resizable('disable');
+            this._window.css('height', '');
+            this._window.find('.CodeMirror').css('display', 'none');
         }
 
         return this;
@@ -199,10 +213,10 @@ class ZettlrQuicklook
      */
     toggleTheme()
     {
-        if(this.cm.getOption('theme') === 'zettlr-dark') {
-            this.cm.setOption('theme', 'zettlr');
+        if(this._cm.getOption('theme') === 'zettlr-dark') {
+            this._cm.setOption('theme', 'zettlr');
         } else {
-            this.cm.setOption('theme', 'zettlr-dark');
+            this._cm.setOption('theme', 'zettlr-dark');
         }
         return this;
     }
@@ -213,10 +227,10 @@ class ZettlrQuicklook
      */
     close()
     {
-        this.window.detach();
-        this.cm = null;
-        this.window = null;
-        this.parent.qlsplice(this); // Remove from ql-list in ZettlrBody
+        this._window.detach();
+        this._cm = null;
+        this._window = null;
+        this._body.qlsplice(this); // Remove from ql-list in ZettlrBody
     }
 }
 
