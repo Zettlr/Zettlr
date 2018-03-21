@@ -37,48 +37,48 @@ class ZettlrPopup
      */
     constructor(parent, elem, content, callback = null)
     {
-        this.parent = parent;
-        this.content = content; // Should contain a jQuery object
-        this.callback = callback; // Function to be called on close
-        this.elem = elem;
+        this._parent = parent;
+        this._cnt = content; // Should contain a jQuery object
+        this._callback = callback; // Function to be called on close
+        this._elem = elem;
 
         // Where the small arrow should point to.
-        this.x = 0;
-        this.y = 0;
+        this._x = 0;
+        this._y = 0;
 
-        this.modal = $('<div>').css('top', '0').css('left', '0').css('bottom', '0').css('right', '0').css('position', 'absolute');
+        this._modal = $('<div>').css('top', '0').css('left', '0').css('bottom', '0').css('right', '0').css('position', 'absolute');
 
         // Close the popup either on left or right mouse click
-        this.modal.on('click', (e) => {
+        this._modal.on('click', (e) => {
             this.close(true);
-            // Simulate a click-through afterwards
+            // Simulate a click-through after the close
             document.elementFromPoint(e.clientX, e.clientY).click();
         });
-        this.modal.on('contextmenu', (e) => {
+        this._modal.on('contextmenu', (e) => {
             this.close(true);
         });
 
         // Keep the popup relative to parent element even on resize
         $(window).on('resize', (e) => {
-            this.place();
+            this._place();
         });
 
-        this.popup = $('<div>').addClass('popup').css('opacity', '0');
-        this.arrow = $('<div>').addClass('popup-arrow');
-        this.popup.append(this.content);
-        $('body').append(this.modal);
-        $('body').append(this.popup);
-        $('body').append(this.arrow);
+        this._popup = $('<div>').addClass('popup').css('opacity', '0');
+        this._arrow = $('<div>').addClass('popup-arrow');
+        this._popup.append(this._cnt);
+        $('body').append(this._modal);
+        $('body').append(this._popup);
+        $('body').append(this._arrow);
 
         // Activate forms
-        this.popup.find('form').on('submit', (e) => {
+        this._popup.find('form').on('submit', (e) => {
             e.preventDefault();
             this.close();
         });
 
         // If there is a form, autoselect the content of its first input
-        this.popup.find('input').first().select().focus();
-        this.popup.find('input').on('keyup', (e) => {
+        this._popup.find('input').first().select().focus();
+        this._popup.find('input').on('keyup', (e) => {
             if(e.which == 27) {
                 // ESC
                 this.close(true);
@@ -86,77 +86,77 @@ class ZettlrPopup
         });
 
         // Place
-        this.place();
+        this._place();
 
         // Afterwards blend it in
-        this.popup.animate({'opacity': '1'}, 200, 'swing');
+        this._popup.animate({'opacity': '1'}, 200, 'swing');
     }
 
     /**
      * Places the popup relative to the target element.
      * @return {void} Nothing to return.
      */
-    place()
+    _place()
     {
         // TODO: Automatically choose one of the points depending on where there is enough space
-        this.x = this.elem.offset().left + this.elem.outerWidth()/2;
-        this.y = this.elem.offset().top + this.elem.outerHeight();
+        this._x = this._elem.offset().left + this._elem.outerWidth()/2;
+        this._y = this._elem.offset().top + this._elem.outerHeight();
 
-        let offsetY = this.popup.outerHeight() + this.y + 5; // 5px for arrow
-        let offsetX = this.popup.outerWidth() + this.x + 5;
-        let height = this.popup.outerHeight();
-        let width = this.popup.outerWidth();
+        let offsetY = this._popup.outerHeight() + this._y + 5; // 5px for arrow
+        let offsetX = this._popup.outerWidth() + this._x + 5;
+        let height = this._popup.outerHeight();
+        let width = this._popup.outerWidth();
 
         // First find on which side there is the most space.
-        let top    = this.elem.offset().top;
-        let left   = this.elem.offset().left;
-        let right  = window.innerWidth - left - this.elem.outerWidth();
-        let bottom = window.innerHeight - top - this.elem.outerHeight();
+        let top    = this._elem.offset().top;
+        let left   = this._elem.offset().left;
+        let right  = window.innerWidth - left - this._elem.outerWidth();
+        let bottom = window.innerHeight - top - this._elem.outerHeight();
 
         // 10px: arrow plus the safety-margin
         if(bottom > height + 10) {
             // Below element
-            this.arrow.addClass('up');
-            this.popup.css('top', (this.y + 5) + 'px');
+            this._arrow.addClass('up');
+            this._popup.css('top', (this._y + 5) + 'px');
             if(offsetX > window.innerWidth-5) {
-                this.popup.css('left', (window.innerWidth - width - 5) + 'px'); // 5px margin to document
+                this._popup.css('left', (window.innerWidth - width - 5) + 'px'); // 5px margin to document
             } else {
-                if(this.x - width/2 < 0) {
-                    this.popup.css('left', '5px');
+                if(this._x - width/2 < 0) {
+                    this._popup.css('left', '5px');
                 } else {
-                    this.popup.css('left', (this.x - width/2) + 'px');
+                    this._popup.css('left', (this._x - width/2) + 'px');
                 }
             }
-            this.arrow.css('top', (top + this.elem.outerHeight()) + 'px');
-            this.arrow.css('left', (left + this.elem.outerWidth()/2 - this.arrow.outerWidth()/2) + 'px');
+            this._arrow.css('top', (top + this._elem.outerHeight()) + 'px');
+            this._arrow.css('left', (left + this._elem.outerWidth()/2 - this._arrow.outerWidth()/2) + 'px');
         } else if(right > width + 10) {
             // We can place it right of the element
             // Therefore re-compute x and y
-            this.x = this.elem.offset().left + this.elem.outerWidth();
-            this.y = this.elem.offset().top + this.elem.outerHeight()/2;
-            this.arrow.addClass('left');
-            this.popup.css('left', (this.x + 5) + 'px');
-            if(this.y + height/2 > window.innerHeight-5) {
-                this.popup.css('top', (window.innerHeight - height - 5) + 'px');
+            this._x = this._elem.offset().left + this._elem.outerWidth();
+            this._y = this._elem.offset().top + this._elem.outerHeight()/2;
+            this._arrow.addClass('left');
+            this._popup.css('left', (this._x + 5) + 'px');
+            if(this._y + height/2 > window.innerHeight-5) {
+                this._popup.css('top', (window.innerHeight - height - 5) + 'px');
             } else {
-                this.popup.css('top', (this.y - height/2) + 'px');
+                this._popup.css('top', (this._y - height/2) + 'px');
             }
-            this.arrow.css('left', (left + this.elem.outerWidth()) + 'px');
-            this.arrow.css('top', (top + this.elem.outerHeight()/2 - this.arrow.outerHeight()/2) + 'px');
+            this._arrow.css('left', (left + this._elem.outerWidth()) + 'px');
+            this._arrow.css('top', (top + this._elem.outerHeight()/2 - this._arrow.outerHeight()/2) + 'px');
         } else {
             // Above
             // Therefore re-compute x and y
-            this.x = this.elem.offset().left + this.elem.outerWidth()/2;
-            this.y = this.elem.offset().top;
-            this.arrow.addClass('down');
-            this.popup.css('top', (this.y - height - 5) + 'px');
-            if(this.x+width/2 > window.innerWidth - 5) {
-                this.popup.css('left', (window.innerWidth - width - 5) + 'px');
+            this._x = this._elem.offset().left + this._elem.outerWidth()/2;
+            this._y = this._elem.offset().top;
+            this._arrow.addClass('down');
+            this._popup.css('top', (this._y - height - 5) + 'px');
+            if(this._x+width/2 > window.innerWidth - 5) {
+                this._popup.css('left', (window.innerWidth - width - 5) + 'px');
             } else {
-                this.popup.css('left', (this.x - width/2) + 'px');
+                this._popup.css('left', (this._x - width/2) + 'px');
             }
-            this.arrow.css('top', top + 'px');
-            this.arrow.css('left', (left+this.elem.outerWidth()/2 - this.arrow.outerWidth()/2) + 'px');
+            this._arrow.css('top', top + 'px');
+            this._arrow.css('left', (left+this._elem.outerWidth()/2 - this._arrow.outerWidth()/2) + 'px');
         }
     }
 
@@ -169,19 +169,19 @@ class ZettlrPopup
     {
         let t = {};
 
-        if(this.callback && t.toString.call(this.callback) === '[object Function]') {
-            if(this.popup.find('form').length > 0 && !abort) {
-                let f = this.popup.find('form').first().serializeArray();
-                this.callback(f);
+        if(this._callback && t.toString.call(this._callback) === '[object Function]') {
+            if(this._popup.find('form').length > 0 && !abort) {
+                let f = this._popup.find('form').first().serializeArray();
+                this._callback(f);
             } else {
-                this.callback(null);
+                this._callback(null);
             }
         }
 
-        this.arrow.detach();
-        this.popup.animate({'opacity': '0'}, 200, 'swing', () => {
-            this.popup.detach();
-            this.modal.detach();
+        this._arrow.detach();
+        this._popup.animate({'opacity': '0'}, 200, 'swing', () => {
+            this._popup.detach();
+            this._modal.detach();
         });
     }
 }
