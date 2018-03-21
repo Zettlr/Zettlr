@@ -242,16 +242,10 @@ class ZettlrRendererIPC
                 }
                 break;
                 case 'app_lang':
-                this._app.lang = cnt.value;
-                break;
-                case 'pandoc':
-                this._app.pandoc = cnt.value;
-                break;
-                case 'pdflatex':
-                this._app.pdflatex = cnt.value;
+                this._app.setLocale(cnt.value);
                 break;
                 case 'autosave':
-                this._app.autosave_enabled = cnt.value;
+                this._app.setAutosaveStatus(cnt.value);
                 break;
             }
             break;
@@ -268,13 +262,13 @@ class ZettlrRendererIPC
 
             // Receive the typo aff!
             case 'typo-aff':
-            this._app.typoAff = cnt;
+            this._app.setAff(cnt);
             this._app.requestLang('dic');
             break;
 
             // Receive the typo dic!
             case 'typo-dic':
-            this._app.typoDic = cnt;
+            this._app.setDic(cnt);
             // Now we can finally initialize spell check:
             this._app.initTypo();
             break;

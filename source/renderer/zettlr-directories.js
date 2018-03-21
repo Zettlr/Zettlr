@@ -40,9 +40,9 @@ class ZettlrDirectories
     refresh()
     {
         if(this._tree == null) {
-            this._tree = new TreeView(this, this._renderer.paths, true);
+            this._tree = new TreeView(this, this._renderer.getPaths(), true);
         } else {
-            this._tree.refresh(this._renderer.paths);
+            this._tree.refresh(this._renderer.getPaths());
         }
 
         return this;

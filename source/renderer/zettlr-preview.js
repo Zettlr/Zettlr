@@ -250,7 +250,7 @@ class ZettlrPreview
 
         // TODO: Move out send-methods from all files except renderer!
         // Send a request to the main process and handle it afterwards.
-        this._renderer.ipc.send('file-search', {
+        this._renderer.send('file-search', {
             'hash': this._hashes[this._currentSearchIndex],
             'terms': this._currentSearch
         });

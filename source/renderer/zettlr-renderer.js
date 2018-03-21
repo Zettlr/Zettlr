@@ -45,35 +45,33 @@ class ZettlrRenderer
      */
     constructor()
     {
-        this.currentFile    = null;
-        this.currentDir     = null;
-        this.paths          = null;
-        this.lang           = 'en_US'; // Default fallback
+        this._currentFile    = null;
+        this._currentDir     = null;
+        this._paths          = null;
+        this._lang           = 'en_US'; // Default fallback
 
         // Spellchecking vars
-        this.typoReady      = false;   // Flag indicating whether Typo has already loaded
-        this.typoLang       = {};      // Which language(s) are we spellchecking?
-        this.typoAff        = null;    // Contains the Aff-file data
-        this.typoDic        = null;    // Contains the dic-file data
-        this.typo           = [];      // Contains the Typo object to check with
+        this._typoReady      = false;   // Flag indicating whether Typo has already loaded
+        this._typoLang       = {};      // Which language(s) are we spellchecking?
+        this._typoAff        = null;    // Contains the Aff-file data
+        this._typoDic        = null;    // Contains the dic-file data
+        this._typo           = [];      // Contains the Typo object to check with
 
-        // Indicators whether or not one of these has been found
-        this.pandoc         = false;
-        this.pdflatex       = false;
-        this.autosave_enabled = false;
+        // Is autosave enabled?
+        this._autosave_enabled = false;
 
         // Write translation data into renderer process's global var
         global.i18n         = remote.getGlobal('i18n');
 
         // Init the complete list of objects that we need
-        this.ipc            = new ZettlrRendererIPC(this);
-        this.directories    = new ZettlrDirectories(this);
-        this.preview        = new ZettlrPreview(this);
-        this.editor         = new ZettlrEditor(this);
-        this.body           = new ZettlrBody(this);
-        this.overlay        = new ZettlrOverlay(this);
-        this.toolbar        = new ZettlrToolbar(this);
-        this.pomodoro       = new ZettlrPomodoro(this);
+        this._ipc            = new ZettlrRendererIPC(this);
+        this._directories    = new ZettlrDirectories(this);
+        this._preview        = new ZettlrPreview(this);
+        this._editor         = new ZettlrEditor(this);
+        this._body           = new ZettlrBody(this);
+        this._overlay        = new ZettlrOverlay(this);
+        this._toolbar        = new ZettlrToolbar(this);
+        this._pomodoro       = new ZettlrPomodoro(this);
     }
 
     /**
@@ -82,22 +80,20 @@ class ZettlrRenderer
      */
     init()
     {
-        this.overlay.show(trans('init.welcome'));
+        this._overlay.show(trans('init.welcome'));
 
         // First request the configuration
         // Now eventually switch the theme to dark
-        this.ipc.send('config-get', 'darkTheme');
-        this.ipc.send('config-get', 'snippets');
-        this.ipc.send('config-get', 'app_lang');
-        this.ipc.send('config-get', 'autosave');
-        this.ipc.send('config-get-env', 'pandoc');
-        this.ipc.send('config-get-env', 'pdflatex');
+        this._ipc.send('config-get', 'darkTheme');
+        this._ipc.send('config-get', 'snippets');
+        this._ipc.send('config-get', 'app_lang');
+        this._ipc.send('config-get', 'autosave');
 
         // Request a first batch of files
-        this.ipc.send('get-paths', {});
+        this._ipc.send('get-paths', {});
 
         // Also, request the typo things
-        this.ipc.send('typo-request-lang', {});
+        this._ipc.send('typo-request-lang', {});
     }
 
     finishStartup()
@@ -106,13 +102,13 @@ class ZettlrRenderer
         setTimeout(() => { this.poll(); }, POLL_TIME); // Poll every POLL_TIME seconds
 
         // Send an initial check for an update
-        this.ipc.send('update-check');
+        this._ipc.send('update-check');
     }
 
     poll()
     {
         // Do recurring tasks.
-        if(this.autosave_enabled) {
+        if(this._autosave_enabled) {
             this.autoSave();
         }
 
@@ -129,7 +125,7 @@ class ZettlrRenderer
      */
     handleEvent(cmd, cnt)
     {
-        this.ipc.handleEvent(cmd, cnt);
+        this._ipc.handleEvent(cmd, cnt);
     }
 
     /**
@@ -139,14 +135,14 @@ class ZettlrRenderer
      */
     newProject(newPaths)
     {
-        this.paths = newPaths;
-        this.body.closeQuicklook();
+        this._paths = newPaths;
+        this._body.closeQuicklook();
         this.setCurrentDir(newPaths);
         this.setCurrentFile(null);
-        this.directories.empty();
-        this.directories.refresh();
-        this.preview.refresh();
-        this.directories.select(newPaths.hash);
+        this._directories.empty();
+        this._directories.refresh();
+        this._preview.refresh();
+        this._directories.select(newPaths.hash);
     }
 
     /**
@@ -169,13 +165,13 @@ class ZettlrRenderer
         if(arg.hasOwnProperty('hash')) {
             // Another dir should be renamed
             // Rename a dir based on a hash -> find it
-            this.body.requestNewDirName(this.findObject(arg.hash));
+            this._body.requestNewDirName(this.findObject(arg.hash));
         } else if(this.getCurrentDir() != null) {
             // Root means the parent has no type property. (IMPORTANT: NEVER
             // ever think it would be a good idea to give ZettlrRenderer a type
             // property!! TODO: Harden this.)
             if(this.getCurrentDir().parent.hasOwnProperty('type')) {
-                this.body.requestNewDirName(this.getCurrentDir());
+                this._body.requestNewDirName(this.getCurrentDir());
             }
         }
     }
@@ -190,9 +186,9 @@ class ZettlrRenderer
         // User wants to create a new directory. Display modal
         if(arg.hasOwnProperty('hash')) {
             // User has probably right clicked
-            this.body.requestDirName(this.findObject(arg.hash));
+            this._body.requestDirName(this.findObject(arg.hash));
         } else {
-            this.body.requestDirName(this.getCurrentDir());
+            this._body.requestDirName(this.getCurrentDir());
         }
     }
 
@@ -206,9 +202,9 @@ class ZettlrRenderer
         // The user has requested to delete the current file
         // Request from main process
         if(arg.hasOwnProperty('hash')) {
-            this.ipc.send('dir-delete', { 'hash': arg.hash });
+            this._ipc.send('dir-delete', { 'hash': arg.hash });
         } else {
-            this.ipc.send('dir-delete', {});
+            this._ipc.send('dir-delete', {});
         }
     }
 
@@ -220,11 +216,11 @@ class ZettlrRenderer
     {
         // Welcome to FUNCTION HELL! (Proposal: How about simply setting the
         // "dark" class on the body ...?)
-        this.directories.toggleTheme();
-        this.preview.toggleTheme();
-        this.editor.toggleTheme();
-        this.body.toggleTheme();
-        this.toolbar.toggleTheme();
+        this._directories.toggleTheme();
+        this._preview.toggleTheme();
+        this._editor.toggleTheme();
+        this._body.toggleTheme();
+        this._toolbar.toggleTheme();
     }
 
     /**
@@ -233,9 +229,9 @@ class ZettlrRenderer
      */
     toggleDirectories()
     {
-        this.directories.toggleDisplay();
-        this.preview.toggleDirectories();
-        this.editor.toggleDirectories();
+        this._directories.toggleDisplay();
+        this._preview.toggleDirectories();
+        this._editor.toggleDirectories();
     }
 
     /**
@@ -248,7 +244,7 @@ class ZettlrRenderer
             return;
         }
 
-        let toc = this.editor.buildTOC();
+        let toc = this._editor.buildTOC();
 
         if(toc.length === 0) {
             return;
@@ -306,17 +302,17 @@ class ZettlrRenderer
         // On click jump to line
         $('.toc-link').click((event) => {
             let elem = $(event.target);
-            this.editor.jtl(elem.attr('data-line'));
+            this._editor.jtl(elem.attr('data-line'));
         });
     }
 
     /**
      * Helper function to find dummy file/dir objects based on a hash
      * @param  {Integer} hash             The hash identifying whatever is to be searched for.
-     * @param  {Object} [obj=this.paths] A sub-object or the whole tree to be searched.
+     * @param  {Object} [obj=this._paths] A sub-object or the whole tree to be searched.
      * @return {Mixed}                  Either null, or ZettlrFile/ZettlrDir if found.
      */
-    findObject(hash, obj = this.paths)
+    findObject(hash, obj = this._paths)
     {
         if(obj.hash == hash) {
             return obj;
@@ -339,11 +335,11 @@ class ZettlrRenderer
      */
     updatePaths(nData)
     {
-        this.paths = nData;
+        this._paths = nData;
         if(this.getCurrentDir()) {
             this.setCurrentDir(this.findObject(this.getCurrentDir().hash));
         } else {
-            this.setCurrentDir(this.paths); // Reset
+            this.setCurrentDir(this._paths); // Reset
         }
         if(this.getCurrentFile()) {
             this.setCurrentFile(this.findObject(this.getCurrentFile().hash));
@@ -359,22 +355,22 @@ class ZettlrRenderer
      */
     setSpellcheck(langs)
     {
-        this.overlay.update(trans('init.spellcheck.get_lang'));
+        this._overlay.update(trans('init.spellcheck.get_lang'));
         // langs is an object containing _all_ available languages and whether
         // they should be checked or not.
         for(let prop in langs) {
             if(langs[prop]) {
                 // We should spellcheck - so insert into the object with a
                 // false, indicating that it has not been loaded yet.
-                this.typoLang[prop] = false;
+                this._typoLang[prop] = false;
             }
         }
 
-        if(Object.keys(this.typoLang).length > 0) {
+        if(Object.keys(this._typoLang).length > 0) {
             this.requestLang('aff');
         } else {
             // We're already done!
-            this.overlay.close();
+            this._overlay.close();
             // Finish and cleanup from startup
             this.finishStartup();
         }
@@ -388,14 +384,14 @@ class ZettlrRenderer
     requestLang(type)
     {
         let req = null;
-        for(let lang in this.typoLang) {
-            if(!this.typoLang[lang]) {
+        for(let lang in this._typoLang) {
+            if(!this._typoLang[lang]) {
                 // We should load this lang
                 req = lang;
                 break;
             }
         }
-        this.overlay.update(
+        this._overlay.update(
             trans(
                 'init.spellcheck.request_file',
                 trans('dialog.preferences.app_lang.'+req)
@@ -403,7 +399,7 @@ class ZettlrRenderer
         );
 
         // Load the first lang (first aff, then dic)
-        this.ipc.send('typo-request-' + type, req);
+        this._ipc.send('typo-request-' + type, req);
     }
 
     /**
@@ -413,20 +409,20 @@ class ZettlrRenderer
      */
     initTypo()
     {
-        if(!this.typoLang) { return; }
-        if(!this.typoAff)  { return; }
-        if(!this.typoDic)  { return; }
+        if(!this._typoLang) { return; }
+        if(!this._typoAff)  { return; }
+        if(!this._typoDic)  { return; }
 
         let lang = null;
-        for(let l in this.typoLang) {
-            if(!this.typoLang[l]) {
+        for(let l in this._typoLang) {
+            if(!this._typoLang[l]) {
                 // This language should be initialized
                 lang = l;
                 break;
             }
         }
 
-        this.overlay.update(
+        this._overlay.update(
             trans(
                 'init.spellcheck.init',
                 trans('dialog.preferences.app_lang.'+lang)
@@ -434,10 +430,10 @@ class ZettlrRenderer
         );
 
         // Initialize typo and we're set!
-        this.typo.push(new Typo(lang, this.typoAff, this.typoDic));
-        this.typoLang[lang] = true; // This language is now initialized
+        this._typo.push(new Typo(lang, this._typoAff, this._typoDic));
+        this._typoLang[lang] = true; // This language is now initialized
 
-        this.overlay.update(
+        this._overlay.update(
             trans(
                 'init.spellcheck.init_done',
                 trans('dialog.preferences.app_lang.'+lang)
@@ -445,12 +441,12 @@ class ZettlrRenderer
         );
 
         // Free memory
-        this.typoAff = null;
-        this.typoDic = null;
+        this._typoAff = null;
+        this._typoDic = null;
 
         let done = true;
-        for(let l in this.typoLang) {
-            if(!this.typoLang[l]) {
+        for(let l in this._typoLang) {
+            if(!this._typoLang[l]) {
                 done = false;
                 break;
             }
@@ -461,8 +457,8 @@ class ZettlrRenderer
             this.requestLang('aff');
         } else {
             // Done - enable language checking
-            this.typoReady = true;
-            this.overlay.close(); // Done!
+            this._typoReady = true;
+            this._overlay.close(); // Done!
             // Finish and cleanup from startup
             this.finishStartup();
         }
@@ -476,11 +472,11 @@ class ZettlrRenderer
      */
     typoCheck(word)
     {
-        if(!this.typoReady) {
+        if(!this._typoReady) {
             return true; // true means: No wrong spelling detected
         }
 
-        for(let lang of this.typo) {
+        for(let lang of this._typo) {
             if(lang.check(word)) {
                 // As soon as the word is correct in any lang, break and return true
                 return true;
@@ -498,13 +494,13 @@ class ZettlrRenderer
      */
     typoSuggest(word)
     {
-        if(!this.typoReady) {
+        if(!this._typoReady) {
             return [];
         }
 
         let ret = [];
 
-        for(let lang of this.typo) {
+        for(let lang of this._typo) {
             ret = ret.concat(lang.suggest(word));
         }
 
@@ -522,7 +518,7 @@ class ZettlrRenderer
      * @param  {String} term The term to be searched for.
      * @return {void}      Nothing to return.
      */
-    beginSearch(term) { this.preview.beginSearch(term); }
+    beginSearch(term) { this._preview.beginSearch(term); }
 
     /**
      * Pass-through function from ZettlrPreview to Toolbar.
@@ -530,7 +526,7 @@ class ZettlrRenderer
      * @param  {Integer} count    Absolute count of files to search.
      * @return {void}          Nothing to return.
      */
-    searchProgress(curIndex, count) { this.toolbar.searchProgress(curIndex, count); }
+    searchProgress(curIndex, count) { this._toolbar.searchProgress(curIndex, count); }
 
     /**
      * Pass-through function from ZettlrPreview to Toolbar.
@@ -538,8 +534,8 @@ class ZettlrRenderer
      */
     endSearch()
     {
-        this.toolbar.endSearch();
-        this.preview.endSearch();
+        this._toolbar.endSearch();
+        this._preview.endSearch();
     }
 
     /**
@@ -547,7 +543,7 @@ class ZettlrRenderer
      * @param  {Integer} words Number of words in editor.
      * @return {void}       Nothing to return.
      */
-    updateWordCount(words) { this.toolbar.updateWordCount(words); }
+    updateWordCount(words) { this._toolbar.updateWordCount(words); }
 
     /**
      * Request the selection of the directory in main. TODO: Rename function
@@ -556,7 +552,7 @@ class ZettlrRenderer
      * @param  {Integer} hash As usually, a hash identifying a directory.
      * @return {void}      Nothing to return.
      */
-    requestDir(hash) { this.ipc.send('dir-select', hash); }
+    requestDir(hash) { this._ipc.send('dir-select', hash); }
 
     /**
      * Triggered when a file or dir is dropped on a dir.
@@ -564,14 +560,14 @@ class ZettlrRenderer
      * @param  {Integer} to   Where to move? (Hash)
      * @return {void}      Nothing to return.
      */
-    requestMove(from, to) { this.ipc.send('request-move', { 'from': from, 'to': to }); }
+    requestMove(from, to) { this._ipc.send('request-move', { 'from': from, 'to': to }); }
 
     /**
      * Requests the opening of another file in editor.
      * @param  {Integer} hash The hash of the file to be loaded.
      * @return {void}      Nothing to return.
      */
-    requestFile(hash) { this.ipc.send('file-get', hash); }
+    requestFile(hash) { this._ipc.send('file-get', hash); }
 
     /**
      * Executed when a user has finished typing a new file name.
@@ -579,7 +575,7 @@ class ZettlrRenderer
      * @param  {Integer} hash The containing dir's hash
      * @return {void}      Nothing to return.
      */
-    requestNewFile(name, hash) { this.ipc.send('file-new', { 'name': name, 'hash': hash }); }
+    requestNewFile(name, hash) { this._ipc.send('file-new', { 'name': name, 'hash': hash }); }
 
     /**
      * Executed when a user has finished typing a new dir name.
@@ -587,7 +583,7 @@ class ZettlrRenderer
      * @param  {Integer} hash The containing dir's hash
      * @return {void}      Nothing to return.
      */
-    requestNewDir(name, hash) { this.ipc.send('dir-new', { 'name': name, 'hash': hash }); }
+    requestNewDir(name, hash) { this._ipc.send('dir-new', { 'name': name, 'hash': hash }); }
 
     /**
      * Executed when the user clicks on a filetype to export to.
@@ -595,7 +591,7 @@ class ZettlrRenderer
      * @param  {String} ext  Either "odt", "docx", "html" or "pdf".
      * @return {void}      Nothing to return.
      */
-    requestExport(hash, ext) { this.ipc.send('export', { 'hash': hash, 'ext': ext}); }
+    requestExport(hash, ext) { this._ipc.send('export', { 'hash': hash, 'ext': ext}); }
 
     /**
      * Requests a rename of a directory.
@@ -603,7 +599,7 @@ class ZettlrRenderer
      * @param  {Integer} hash The directory's identifier.
      * @return {void}      Nothing to return.
      */
-    requestDirRename(val, hash) { this.ipc.send('dir-rename', { 'hash': hash, 'name': val }); }
+    requestDirRename(val, hash) { this._ipc.send('dir-rename', { 'hash': hash, 'name': val }); }
 
     /**
      * Request a rename of a file.
@@ -611,14 +607,14 @@ class ZettlrRenderer
      * @param  {Integer} hash The identifier of the file.
      * @return {void}      Nothing to return.
      */
-    requestFileRename(val, hash) { this.ipc.send('file-rename', { 'hash': hash, 'name': val }); }
+    requestFileRename(val, hash) { this._ipc.send('file-rename', { 'hash': hash, 'name': val }); }
 
     /**
      * Called by the dialog when the user saves the settings.
      * @param  {Object} cfg A correct configuration object to be sent to main.
      * @return {void}     Nothing to return.
      */
-    saveSettings(cfg) { this.ipc.send('update-config', cfg); }
+    saveSettings(cfg) { this._ipc.send('update-config', cfg); }
 
     /**
      * Simply sets the current file pointer to the new.
@@ -626,10 +622,10 @@ class ZettlrRenderer
      */
     setCurrentFile(newfile)
     {
-        this.currentFile = newfile;
+        this._currentFile = newfile;
         // Also directly select it
         if(newfile !== null) {
-            this.preview.select(newfile.hash);
+            this._preview.select(newfile.hash);
         }
     }
 
@@ -640,10 +636,10 @@ class ZettlrRenderer
     openFile(f)
     {
         // We have received a new file. So close the old and open the new
-        this.editor.close();
+        this._editor.close();
         this.setCurrentFile(f);
-        this.preview.select(f.hash);
-        this.editor.open(f);
+        this._preview.select(f.hash);
+        this._editor.open(f);
     }
 
     /**
@@ -652,7 +648,7 @@ class ZettlrRenderer
     closeFile()
     {
         // We have received a close-file command.
-        this.editor.close();
+        this._editor.close();
         this.setCurrentFile(null);
     }
 
@@ -669,9 +665,9 @@ class ZettlrRenderer
             // for new files
             file = {};
         }
-        file.content = this.editor.getValue();
-        file.wordcount = this.editor.getWrittenWords(); // For statistical purposes only =D
-        this.ipc.send('file-save', file);
+        file.content = this._editor.getValue();
+        file.wordcount = this._editor.getWrittenWords(); // For statistical purposes only =D
+        this._ipc.send('file-save', file);
     }
 
     /**
@@ -680,7 +676,7 @@ class ZettlrRenderer
     autoSave()
     {
         // Only create autosaves if the editor is currently dirty
-        if(this.editor.isClean()) {
+        if(this._editor.isClean()) {
             return;
         }
 
@@ -690,8 +686,8 @@ class ZettlrRenderer
             file.hash = "undefined";
         }
 
-        file.content = this.editor.getValue();
-        this.ipc.send('file-autosave', file);
+        file.content = this._editor.getValue();
+        this._ipc.send('file-autosave', file);
     }
 
     /**
@@ -703,9 +699,9 @@ class ZettlrRenderer
         if(f.hasOwnProperty('hash')) {
             // Another file should be renamed
             // Rename a file based on a hash -> find it
-            this.body.requestNewFileName(this.findObject(f.hash));
+            this._body.requestNewFileName(this.findObject(f.hash));
         }else if(this.getCurrentFile() != null) {
-            this.body.requestNewFileName(this.getCurrentFile());
+            this._body.requestNewFileName(this.getCurrentFile());
         }
     }
 
@@ -718,9 +714,9 @@ class ZettlrRenderer
         // User wants to create a new file. Display popup
         if((d != null) && d.hasOwnProperty('hash')) {
             // User has probably right clicked
-            this.body.requestFileName(this.findObject(d.hash));
+            this._body.requestFileName(this.findObject(d.hash));
         } else {
-            this.body.requestFileName(this.getCurrentDir());
+            this._body.requestFileName(this.getCurrentDir());
         }
     }
 
@@ -733,47 +729,80 @@ class ZettlrRenderer
         if(!newdir) {
             return console.error(`Could not set current dir to ${newdir}!`);
         }
-        this.currentDir = newdir;
+        this._currentDir = newdir;
         // What we can also do here: Select the dir and refresh the file list.
         // Because that's what _always_ follows this function call.
-        this.directories.select(newdir.hash);
-        this.preview.refresh();
+        this._directories.select(newdir.hash);
+        this._preview.refresh();
     }
 
     /**
      * Returns the current file's pointer.
      * @return {ZettlrFile} The file object.
      */
-    getCurrentFile() { return this.currentFile; }
+    getCurrentFile() { return this._currentFile; }
 
     /**
      * Returns the current directory's pointer.
      * @return {ZettlrDir} The dir object.
      */
-    getCurrentDir() { return this.currentDir; }
+    getCurrentDir() { return this._currentDir; }
 
     /**
      * Returns the language of the GUI.
      * @return {String} The language code.
      */
-    getLocale() { return this.lang; }
+    getLocale() { return this._lang; }
+
+    /**
+     * Sets the GUI language
+     * @param {String} lang locale code
+     */
+    setLocale(lang) { this._lang = lang; }
+
+    /**
+     * Enable/disable autosave
+     * @param {Boolean} status True or false
+     */
+    setAutosaveStatus(status) { this._autosave_enabled = status; }
+
+    /**
+     * Sets the Aff-File contents
+     * @param {String} affFile The file contents
+     */
+    setAff(affFile) { this._typoAff = affFile; }
+
+    /**
+     * Sets the Dic-File contents
+     * @param {String} dicFile The file contents
+     */
+    setDic(dicFile) { this._typoDic = dicFile; }
 
     /**
      * Returns the toolbar object
      * @return {ZettlrToolbar} The current toolbar
      */
-    getToolbar() { return this.toolbar; }
+    getToolbar() { return this._toolbar; }
 
-    getEditor() { return this.editor; }
+    getEditor() { return this._editor; }
 
-    getPreview() { return this.preview; }
+    getPreview() { return this._preview; }
 
-    getBody() { return this.body; }
+    getBody() { return this._body; }
 
-    getPomodoro() { return this.pomodoro; }
+    getPomodoro() { return this._pomodoro; }
+
+    getPaths() { return this._paths; }
+
+    /**
+     * Sends a command to Main (only used in ZettlrPreview for searching)
+     * @param  {String} command The command to be sent
+     * @param  {Mixed} content The content belonging to the sent command
+     */
+    send(command, content) { this._ipc.send(command, content); }
 
     /**
      * Simply indicates to main to set the modified flag.
      */
-    setModified() { this.ipc.send('file-modified', {}); }
+    setModified() { this._ipc.send('file-modified', {}); }
 } // END CLASS
