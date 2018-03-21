@@ -12,7 +12,7 @@
 
 ## Under the hood
 
-- Begun another code rewrite. This time, the focus is on two parts: First, prevent any access of object properties from other objects than `this`, instead, use public functions (also, prevent calling of private functions from the outside). Second: Try to, again, move out some functionality from the Zettlr main function to shorten it.
+- Begun another code rewrite. This time, the focus is on two parts: First, prevent any access of object properties from other objects than `this`. Instead, use public functions (also, prevent calling of private functions from the outside). Second: Try to, again, move out some functionality from the Zettlr main class to shorten it.
 - Removed unnecessary function calls in the renderer.
 - Also added support for the [yarn package manager](https://yarnpkg.com/)
 
