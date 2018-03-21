@@ -28,49 +28,48 @@ class ZettlrToolbar
      */
     constructor(parent)
     {
-        this.parent = parent;
-        this.div = $('#toolbar');
+        this._renderer = parent;
+        this._div = $('#toolbar');
         this._build();
-        this.searchbar = this.div.find('.searchbar').first().find('input').first();
-        this.searchbar.attr('placeholder', trans('gui.find_placeholder'));
-        this.fileInfo = this.div.find('.file-info');
+        this._searchbar = this._div.find('.searchbar').first().find('input').first();
+        this._searchbar.attr('placeholder', trans('gui.find_placeholder'));
+        this._fileInfo = this._div.find('.file-info');
 
-        this.activate();
+        this._act();
     }
 
     /**
      * Activate event listeners
      * @return {void} Nothing to return.
      */
-    activate()
+    _act()
     {
         // Activate search function.
-        this.searchbar.on('keyup', (e) => {
+        this._searchbar.on('keyup', (e) => {
             if(e.which == 27) { // ESC
-                this.searchbar.blur();
-                this.parent.getPreview().showFiles();
+                this._searchbar.blur();
+                this._renderer.getPreview().showFiles();
             } else if(e.which == 13) { // RETURN
-                this.parent.beginSearch(this.searchbar.val().toLowerCase());
+                this._renderer.beginSearch(this._searchbar.val().toLowerCase());
             }
         });
 
-        this.div.find('.end-search').on('click', (e) => {
-            this.parent.getPreview().showFiles();
+        this._div.find('.end-search').on('click', (e) => {
+            this._renderer.getPreview().showFiles();
         })
 
-        this.searchbar.on('focus', function(e) {
+        this._searchbar.on('focus', function(e) {
             $(this).select();
         });
 
         // Activate buttons
         // -- so beautifully DRY <3
-        let self = this;
-        this.div.find('.button').on('click', function(e) {
-            let elem = $(this);
+        this._div.find('.button').on('click', (e) => {
+            let elem = $(e.currentTarget);
             let command = elem.attr('data-command') || 'unknown-command';
             let content = elem.attr('data-content') || {};
 
-            self.parent.handleEvent(command, content);
+            this._renderer.handleEvent(command, content);
         });
     }
 
@@ -98,7 +97,7 @@ class ZettlrToolbar
                 child.attr('data-command', 'pomodoro');
                 child.html('<svg width="16" height="16" viewBox="0 0 20 20"><circle class="pomodoro-meter" cx="10" cy="10" r="7" stroke-width="6" /> <circle class="pomodoro-value" cx="10" cy="10" r="7" stroke-width="6" /></svg>');
             }
-            this.div.append(child);
+            this._div.append(child);
         }
     }
 
@@ -129,7 +128,7 @@ class ZettlrToolbar
             }
         }
 
-        this.fileInfo.text(trans('gui.words', wd));
+        this._fileInfo.text(trans('gui.words', wd));
     }
 
     /**
@@ -138,7 +137,7 @@ class ZettlrToolbar
      */
     hideWordCount()
     {
-        this.fileInfo.text('');
+        this._fileInfo.text('');
         return this;
     }
 
@@ -148,7 +147,7 @@ class ZettlrToolbar
      */
     toggleTheme()
     {
-        this.div.toggleClass('dark');
+        this._div.toggleClass('dark');
         return this;
     }
 
@@ -158,8 +157,8 @@ class ZettlrToolbar
      */
     focusSearch()
     {
-        this.searchbar.focus();
-        this.searchbar.select();
+        this._searchbar.focus();
+        this._searchbar.select();
         return this;
     }
 
@@ -173,9 +172,9 @@ class ZettlrToolbar
     {
         // Colors (see variables.less): either green-selection or green-selection-dark
         let percent = item / itemCnt * 100;
-        let color = this.div.hasClass('dark') ? 'rgba( 90, 170,  80, 1)' : 'rgba(200, 240, 170, 1)';
-        let bgcol = this.div.css('background-color');
-        this.searchbar.css('background-image', `linear-gradient(to right, ${color} 0%, ${color} ${percent}%, ${bgcol} ${percent}%, ${bgcol} 100%)`)
+        let color = this._div.hasClass('dark') ? 'rgba( 90, 170,  80, 1)' : 'rgba(200, 240, 170, 1)';
+        let bgcol = this._div.css('background-color');
+        this._searchbar.css('background-image', `linear-gradient(to right, ${color} 0%, ${color} ${percent}%, ${bgcol} ${percent}%, ${bgcol} 100%)`)
     }
 
     /**
@@ -184,7 +183,7 @@ class ZettlrToolbar
      */
     endSearch()
     {
-        this.searchbar.css('background-image', 'none');
+        this._searchbar.css('background-image', 'none');
     }
 }
 

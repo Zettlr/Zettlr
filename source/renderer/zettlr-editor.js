@@ -628,6 +628,11 @@ class ZettlrEditor
     * @return {void}     Nothing to return.
     */
     runCommand(cmd) { this._cm.execCommand(cmd); }
+
+    /**
+     * Focus the CodeMirror instance
+     */
+    focus() { this._cm.focus(); }
 }
 
 module.exports = ZettlrEditor;
