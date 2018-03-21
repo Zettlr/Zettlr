@@ -186,7 +186,6 @@ html {
   left: 0;
   bottom: 0;
   right: 80%;
-  background-color: #f0f0f0;
   border-right: 1px solid #c8c8c8;
   color: #646464;
   overflow-y: auto;
@@ -205,15 +204,30 @@ html {
 #directories ul .selected {
   background-color: #c8f0aa;
 }
+#directories ul li#root:after {
+  content: '\f0f0';
+  font-family: 'WebHostingHub-Glyphs';
+  font-size: 0.54em;
+  /* Bit smaller, those indicators are damned huge */
+  margin-right: 5px;
+  display: inline-block;
+  position: absolute;
+  right: 5px;
+  height: 16px;
+  color: #1d75b3;
+}
 #directories ul li {
   line-height: 1.6em;
   padding: 0.1em 0.4em;
   white-space: nowrap;
   padding-left: 5px;
+  margin: 5px;
+  line-height: 120%;
+  border-radius: 8px;
   overflow: hidden;
 }
 #directories ul li:hover {
-  background-color: #c8c8c8;
+  background-color: #dcdcdc;
 }
 #directories ul li.highlight {
   box-shadow: 0px 0px 1px 2px #c8f0aa;
@@ -224,13 +238,13 @@ html {
 #directories ul .collapse-indicator::before {
   content: "\f48b";
   font-family: 'WebHostingHub-Glyphs';
-  font-size: 0.72em;
+  font-size: 0.54em;
   /* Bit smaller, those indicators are damned huge */
   color: #646464;
   display: inline-block;
   vertical-align: sub;
-  width: 13px;
-  height: 20px;
+  width: 10px;
+  height: 16px;
   overflow: hidden;
 }
 #directories ul.collapsed .collapse-indicator::before {
@@ -242,24 +256,18 @@ html {
   display: none;
 }
 #directories.dark {
+  background-color: #464646;
   border-right-color: #646464;
   color: white;
-  background-color: #505050;
 }
 #directories.dark .collapse-indicator::before {
   color: #dcdcdc;
 }
 #directories.dark ul li:hover {
-  background-color: #646464;
+  background-color: #505050;
 }
 #directories.dark ul .selected {
-  background-color: #5aaa50;
-}
-#directories > ul > li {
-  background-color: #c8c8c8;
-}
-#directories.dark > ul > li {
-  background-color: #464646;
+  background-color: #35652f;
 }
 #preview {
   position: fixed;
@@ -296,7 +304,7 @@ html {
   background-color: inherit;
 }
 #preview ul li small {
-  color: #c8c8c8;
+  color: #646464;
 }
 #preview ul li.hidden {
   display: none;
@@ -385,7 +393,7 @@ html {
   background-image: linear-gradient(90deg, white 0%, white 90%, transparent 100%);
 }
 #preview.dark ul li small {
-  color: #787878;
+  color: #dcdcdc;
 }
 #preview.dark ul li:hover {
   background-color: #787878;
@@ -872,7 +880,7 @@ html {
   width: 90%;
   margin: 5px;
   border: none;
-  font-size: 1em;
+  font-size: 0.72em;
   line-height: 38px;
   padding: 0.2em 1em;
   margin: 0.3em;

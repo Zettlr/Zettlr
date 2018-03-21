@@ -7,7 +7,6 @@
     bottom:0;
     right: 80%;
 
-    background-color: @grey-0;
     border-right:1px solid @grey-2;
     color: @grey-4;
     overflow-y: auto;
@@ -28,15 +27,30 @@
             background-color:@green-selection;
         }
 
+        li#root:after {
+            content: '\f0f0';
+            font-family: 'WebHostingHub-Glyphs';
+            font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
+            margin-right:5px;
+            display:inline-block;
+            position:absolute;
+            right:5px;
+            height:16px;
+            color:@blue-0;
+        }
+
         li {
             line-height: @ribbon-height;
             padding:@ribbon-padding;
             white-space: nowrap;
             padding-left:5px;
+            margin:5px;
+            line-height:120%;
+            border-radius:8px;
             overflow: hidden;
 
             &:hover {
-                background-color:@grey-2;
+                background-color:@grey-1;
             }
 
             &.highlight {
@@ -50,12 +64,12 @@
             &::before {
                 content: "\f48b";
                 font-family: 'WebHostingHub-Glyphs';
-                font-size: @font-size-small * 0.8; /* Bit smaller, those indicators are damned huge */
+                font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
                 color:@grey-4;
                 display:inline-block;
                 vertical-align: sub;
-                width:13px;
-                height:20px;
+                width:10px;
+                height:16px;
                 overflow:hidden;
             }
         }
@@ -72,9 +86,9 @@
     }
 
     &.dark {
+        background-color: @grey-6;
         border-right-color:@grey-4;
         color:white;
-        background-color:@grey-5;
 
         .collapse-indicator::before {
             color:@grey-1;
@@ -82,20 +96,20 @@
 
         ul {
             li:hover {
-                background-color:@grey-4;
+                background-color:@grey-5;
             }
 
             .selected {
-                background-color:@green-selection-dark;
+                background-color:darken(@green-selection-dark, 20%);
             }
         }
     }
 }
 
 #directories > ul > li {
-    background-color:@grey-2;
+    // background-color:@grey-2;
 }
 
 #directories.dark > ul > li {
-    background-color: @grey-6;
+    // background-color: @grey-6;
 }
