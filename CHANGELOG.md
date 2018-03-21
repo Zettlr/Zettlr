@@ -7,6 +7,7 @@
 - Fixed the non-selection of the current file on directory selection
 - Fixed a small bug that sometimes could throw an error when moving directories within the app
 - Now a quicklook window can be brought to front by simply clicking its title
+- Hid the textarea by default, so that on startup the editor field is clean
 
 ## Under the hood
 

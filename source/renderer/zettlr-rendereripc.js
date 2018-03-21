@@ -221,7 +221,7 @@ class ZettlrRendererIPC
             this._app.getEditor().runCommand(cnt);
             // After a codemirror command has been issued through this function
             // give the editor back focus
-            this._app.getEditor().cm.focus();
+            this._app.getEditor().focus();
             break;
 
             case 'config':

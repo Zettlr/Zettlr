@@ -302,7 +302,7 @@ class ZettlrBody
         // data for export.
         let ext = $(elem).attr('data-ext');
         let hash = $(elem).attr('data-hash');
-        this.parent.requestExport(hash, ext);
+        this._renderer.requestExport(hash, ext);
     }
 
     /**
