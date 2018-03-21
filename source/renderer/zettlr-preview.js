@@ -28,17 +28,17 @@ class ZettlrPreview
      */
     constructor(parent)
     {
-        this.parent             = parent;
-        this.snippets           = true;
+        this._renderer           = parent;
+        this._snippets           = true;
 
         // Elements
-        this.div                = $('#preview');
-        this.list               = new ListView(this, this.div, this.snippets);
+        this._div                = $('#preview');
+        this._list               = new ListView(this, this._div, this._snippets);
 
         // Search related
-        this.hashes             = null;
-        this.currentSearch      = null;
-        this.currentSearchIndex = 0;
+        this._hashes             = null;
+        this._currentSearch      = null;
+        this._currentSearchIndex = 0;
     }
 
     /**
@@ -49,7 +49,7 @@ class ZettlrPreview
     requestFile(hash)
     {
         // Request a file from the renderer
-        this.parent.requestFile(hash);
+        this._renderer.requestFile(hash);
     }
 
     /**
@@ -58,16 +58,16 @@ class ZettlrPreview
      */
     refresh()
     {
-        if(this.parent.getCurrentDir() == null) {
+        if(this._renderer.getCurrentDir() == null) {
             // Somehow the file array was empty
             return;
         }
-        this.list.refresh(this.parent.getCurrentDir());
+        this._list.refresh(this._renderer.getCurrentDir());
         // Potentially re-select the current file
-        if(this.parent.getCurrentFile()) {
-            this.select(this.parent.getCurrentFile().hash);
+        if(this._renderer.getCurrentFile()) {
+            this.select(this._renderer.getCurrentFile().hash);
         } else {
-            this.list.deselect();
+            this._list.deselect();
         }
 
         return this;
@@ -80,7 +80,7 @@ class ZettlrPreview
      */
     select(hash)
     {
-        this.list.select(hash);
+        this._list.select(hash);
         return this;
     }
 
@@ -90,7 +90,7 @@ class ZettlrPreview
      */
     toggleTheme()
     {
-        this.div.toggleClass('dark');
+        this._div.toggleClass('dark');
         return this;
     }
 
@@ -100,7 +100,7 @@ class ZettlrPreview
      */
     toggleDirectories()
     {
-        this.div.toggleClass('no-directories');
+        this._div.toggleClass('no-directories');
         return this;
     }
 
@@ -110,8 +110,8 @@ class ZettlrPreview
      */
     toggleSnippets()
     {
-        this.snippets = !this.snippets;
-        this.list.toggleSnippets();
+        this._snippets = !this._snippets;
+        this._list.toggleSnippets();
         return this;
     }
 
@@ -206,53 +206,53 @@ class ZettlrPreview
         // we are done.
 
         let that = this;
-        this.hashes = [];
-        this.list.each((listelem) => {
+        this._hashes = [];
+        this._list.each((listelem) => {
             if(listelem.isFile()) {
                 listelem.hide();
-                this.hashes.push(listelem.hash);
+                this._hashes.push(listelem.getHash());
             }
         });
-        this.currentSearch = newTerms;
+        this._currentSearch = newTerms;
 
         // The search index will be increased BEFORE accessing the first file!
-        this.currentSearchIndex = -1;
+        this._currentSearchIndex = -1;
 
         // Aaaaand: Go!
-        this.doSearch();
+        this._doSearch();
     }
 
     /**
      * Do one single search cycle.
      * @return {void} Nothing to return.
      */
-    doSearch()
+    _doSearch()
     {
-        if(this.hashes.length == 0) {
+        if(this._hashes.length == 0) {
             this.endSearch();
             return;
         }
 
         // We got an array to search through.
-        if(this.currentSearchIndex == (this.hashes.length-1)) {
+        if(this._currentSearchIndex == (this._hashes.length-1)) {
             // End search
-            this.parent.endSearch();
+            this._renderer.endSearch();
             return;
         }
-        if(this.currentSearchIndex > this.hashes.length) {
-            this.parent.endSearch();
+        if(this._currentSearchIndex > this._hashes.length) {
+            this._renderer.endSearch();
             return;
         }
 
-        this.currentSearchIndex++;
+        this._currentSearchIndex++;
 
-        this.parent.searchProgress(this.currentSearchIndex, this.hashes.length);
+        this._renderer.searchProgress(this._currentSearchIndex, this._hashes.length);
 
         // TODO: Move out send-methods from all files except renderer!
         // Send a request to the main process and handle it afterwards.
-        this.parent.ipc.send('file-search', {
-            'hash': this.hashes[this.currentSearchIndex],
-            'terms': this.currentSearch
+        this._renderer.ipc.send('file-search', {
+            'hash': this._hashes[this._currentSearchIndex],
+            'terms': this._currentSearch
         });
     }
 
@@ -264,11 +264,11 @@ class ZettlrPreview
     handleSearchResult(res)
     {
         if(res.result) {
-            this.div.find('li[data-hash="' + res.hash + '"]').removeClass('hidden');
+            this._div.find('li[data-hash="' + res.hash + '"]').removeClass('hidden');
         }
 
         // Next search cycle
-        this.doSearch();
+        this._doSearch();
     }
 
     /**
@@ -277,9 +277,9 @@ class ZettlrPreview
      */
     endSearch()
     {
-        this.currentSearchIndex = 0;
-        this.hashes             = [];
-        this.currentSearch      = null;
+        this._currentSearchIndex = 0;
+        this._hashes             = [];
+        this._currentSearch      = null;
     }
 
     /**
@@ -287,7 +287,7 @@ class ZettlrPreview
      */
     showFiles()
     {
-        this.div.find('li').removeClass('hidden');
+        this._div.find('li').removeClass('hidden');
     }
 
     // END SEARCH
@@ -299,7 +299,7 @@ class ZettlrPreview
      */
     update(files)
     {
-        this.list.refresh(files);
+        this._list.refresh(files);
         return this;
     }
 }
