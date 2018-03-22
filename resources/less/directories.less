@@ -24,7 +24,12 @@
         padding-left:0px;
 
         .selected {
-            background-color:@green-selection;
+            background-color:@green-0;
+            color:white;
+
+            &:before {
+                color:white;
+            }
         }
 
         li#root:after {
@@ -65,7 +70,7 @@
                 content: "\f48b";
                 font-family: 'WebHostingHub-Glyphs';
                 font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
-                color:@grey-4;
+                // color:inherit;
                 display:inline-block;
                 vertical-align: sub;
                 width:10px;

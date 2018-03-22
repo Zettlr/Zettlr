@@ -24,20 +24,14 @@ html {
     filter:blur(5px);
 }
 
-::-webkit-scrollbar {
-    width: 4px;
-}
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background-color:rgba(240,240,240,1); }
+::-webkit-scrollbar-thumb { background-color:@green-0; }
+::-webkit-scrollbar-thumb:window-inactive { background-color: lighten(@green-0, 40%); }
 
-::-webkit-scrollbar-track {
-    background-color:rgba(240,240,240,1);
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background-color:lighten(@blue-0, 50%);
-}
-::-webkit-scrollbar-thumb:window-inactive {
-	background-color: @grey-1;
+.dark {
+    // Dark scrollbars
+    ::-webkit-scrollbar-track { background-color:@grey-6; }
 }
 
 @import "modal.less";

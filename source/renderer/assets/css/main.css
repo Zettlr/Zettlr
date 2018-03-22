@@ -55,12 +55,14 @@ html {
 ::-webkit-scrollbar-track {
   background-color: #f0f0f0;
 }
-/* Handle */
 ::-webkit-scrollbar-thumb {
-  background-color: #d7eaf8;
+  background-color: #1cb27e;
 }
 ::-webkit-scrollbar-thumb:window-inactive {
-  background-color: #dcdcdc;
+  background-color: #a9f1d8;
+}
+.dark ::-webkit-scrollbar-track {
+  background-color: #464646;
 }
 .modal {
   position: fixed;
@@ -215,7 +217,11 @@ html {
   padding-left: 0px;
 }
 #directories ul .selected {
-  background-color: #c8f0aa;
+  background-color: #1cb27e;
+  color: white;
+}
+#directories ul .selected:before {
+  color: white;
 }
 #directories ul li#root:after {
   content: '\f0f0';
@@ -253,7 +259,6 @@ html {
   font-family: 'WebHostingHub-Glyphs';
   font-size: 0.54em;
   /* Bit smaller, those indicators are damned huge */
-  color: #646464;
   display: inline-block;
   vertical-align: sub;
   width: 10px;
@@ -307,7 +312,7 @@ html {
   background-color: inherit;
 }
 #preview ul .selected {
-  background-color: #c8dcf0;
+  background-color: #c8f0aa;
 }
 #preview ul li {
   padding: 0.4em;
@@ -323,7 +328,7 @@ html {
   display: none;
 }
 #preview ul li:hover {
-  background-color: #dcdcdc;
+  background-color: #f0f0f0;
 }
 #preview ul li strong {
   white-space: nowrap;
@@ -343,7 +348,7 @@ html {
 }
 #preview ul li.directory {
   background-color: #f0f0f0;
-  color: #1d75b3;
+  color: #1cb27e;
   line-height: 1.6em;
   white-space: nowrap;
   padding: 0.1em 0.4em;

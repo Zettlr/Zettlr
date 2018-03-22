@@ -209,7 +209,7 @@ class ZettlrBody
     /**
      * Display a small notifiation.
      * @param  {String} message What should the user be notified about?
-     * @return {ZettlrBody}         Chainability.
+     * n {ZettlrBody}         Chainability.
      */
     notify(message)
     {
@@ -246,6 +246,9 @@ class ZettlrBody
         for(let ql of this._ql) {
             ql.toggleTheme();
         }
+
+        // Also set the body to light/dark (needed for the scrollbars)
+        $('body').toggleClass('dark');
 
         return this;
     }
