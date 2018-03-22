@@ -924,13 +924,14 @@ html {
 }
 #toolbar.dark {
   color: #dcdcdc;
-  background-image: linear-gradient(to bottom, #787878, #646464);
+  background-image: linear-gradient(to bottom, #464646, #282828);
+  border-bottom-color: #505050;
 }
 #toolbar.dark .button {
   transition: 0.2s all ease;
 }
 #toolbar.dark .button:hover {
-  background-color: #787878;
+  background-color: #464646;
   transition: 0.2s all ease;
 }
 #toolbar.dark .button.pomodoro {
@@ -967,28 +968,29 @@ html {
 .popup-arrow.up {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-bottom: 5px solid rgba(0, 0, 0, 0.8);
+  border-bottom: 5px solid rgba(255, 255, 255, 0.9);
 }
 .popup-arrow.down {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 5px solid rgba(0, 0, 0, 0.8);
+  border-top: 5px solid rgba(255, 255, 255, 0.9);
 }
 .popup-arrow.left {
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
-  border-right: 5px solid rgba(0, 0, 0, 0.8);
+  border-right: 5px solid rgba(255, 255, 255, 0.9);
 }
 .popup-arrow.right {
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
-  border-left: 5px solid rgba(0, 0, 0, 0.8);
+  border-left: 5px solid rgba(255, 255, 255, 0.9);
 }
 .popup {
   position: fixed;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #282828;
   border-radius: 4px;
-  box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.25);
   color: white;
   border-radius: 2px;
   max-width: 200px;
@@ -997,7 +999,7 @@ html {
   overflow-x: hidden;
 }
 .popup a.toc-link {
-  color: white;
+  color: #282828;
   transition: 0.4s all ease;
   text-decoration: none;
   display: block;
@@ -1007,7 +1009,7 @@ html {
   white-space: nowrap;
 }
 .popup a.toc-link:hover {
-  background-color: #c8c8c8;
+  background-color: #f0f0f0;
   transition: 0.4s all ease;
 }
 .popup p {
@@ -1019,14 +1021,14 @@ html {
   border: none;
   font-size: 200%;
   width: 100%;
-  background-color: #000000;
+  background-color: rgba(255, 255, 255, 0.9);
   color: white;
   padding: 10px;
   display: block;
   text-align: center;
 }
 .popup form input {
-  background-color: #000000;
+  background-color: transparent;
   color: white;
   padding: 5px;
   font-size: 200%;
@@ -1077,8 +1079,7 @@ html {
   color: white;
 }
 .popup .btn-share.odt {
-  color: white;
-  /* Is white even a color? */
+  color: #282828;
 }
 .popup .btn-share.odt:hover {
   background-color: white;
@@ -1091,4 +1092,32 @@ html {
 .popup .btn-share.pdf:hover {
   background-color: #fd301a;
   color: black;
+}
+.dark .popup {
+  background-color: rgba(0, 0, 0, 0.9);
+  box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.75);
+}
+.dark .popup button {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+.dark .popup .btn-share.odt {
+  color: #dcdcdc;
+}
+.dark .popup a.toc-link {
+  color: #dcdcdc;
+}
+.dark .popup a.toc-link:hover {
+  background-color: rgba(51, 51, 51, 0.9);
+}
+.dark .popup-arrow.up {
+  border-bottom-color: rgba(0, 0, 0, 0.9);
+}
+.dark .popup-arrow.down {
+  border-top-color: rgba(0, 0, 0, 0.9);
+}
+.dark .popup-arrow.left {
+  border-right-color: rgba(0, 0, 0, 0.9);
+}
+.dark .popup-arrow.right {
+  border-left-color: rgba(0, 0, 0, 0.9);
 }

@@ -4,6 +4,7 @@
 
 - Finally got rid of the horizontal scrollbar in the editor, that was visible on Windows and Linux systems
 - Also, customized the scrollbar style to be more decent
+- Major fixes to the User Interface (now looks way more modern and less cluttered)
 
 ## Under the hood
 

@@ -219,12 +219,13 @@
 
     &.dark {
         color:@grey-1;
-        background-image: linear-gradient(to bottom, @grey-3, @grey-4);
+        background-image: linear-gradient(to bottom, @grey-6, @grey-7); // Make it nearly black
+        border-bottom-color:@grey-5;
 
         .button {
             transition:@fast-transition all ease;
             &:hover {
-                background-color: @grey-3;
+                background-color: @grey-6;
                 transition:@fast-transition all ease;
             }
 

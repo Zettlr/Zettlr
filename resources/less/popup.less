@@ -2,6 +2,12 @@
 
 @arrow-size: 5px;
 
+@popup-light-color: rgba(255, 255, 255, .9);
+@popup-dark-color:  rgba(  0,   0,   0, .9);
+
+@popup-light-text: @grey-7;
+@popup-dark-text: @grey-1;
+
 .popup-arrow {
     width:0;
     height:0;
@@ -10,30 +16,31 @@
     &.up {
         border-left: @arrow-size solid transparent;
         border-right: @arrow-size solid transparent;
-        border-bottom: @arrow-size solid rgba(0,0,0,.8);
+        border-bottom: @arrow-size solid @popup-light-color;
     }
     &.down {
         border-left: @arrow-size solid transparent;
         border-right: @arrow-size solid transparent;
-        border-top: @arrow-size solid rgba(0,0,0,.8);
+        border-top: @arrow-size solid @popup-light-color;
     }
     &.left {
         border-top: @arrow-size solid transparent;
         border-bottom: @arrow-size solid transparent;
-        border-right:@arrow-size solid rgba(0,0,0,.8);
+        border-right:@arrow-size solid @popup-light-color;
     }
     &.right {
         border-top: @arrow-size solid transparent;
         border-bottom: @arrow-size solid transparent;
-        border-left: @arrow-size solid rgba(0,0,0,.8);
+        border-left: @arrow-size solid @popup-light-color;
     }
 }
 
 .popup {
     position:fixed;
-    background-color:rgba(0,0,0,.8);
+    background-color: @popup-light-color;
+    color: @popup-light-text;
     border-radius:4px;
-    box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.25);
     color:white;
     border-radius:2px;
     max-width:200px; // Maximum width.
@@ -43,7 +50,7 @@
 
     // TOC links
     a.toc-link {
-        color: white;
+        color: @popup-light-text;
         transition:0.4s all ease;
         text-decoration:none;
         display:block;
@@ -52,7 +59,7 @@
         overflow-x: hidden;
         white-space:nowrap;
         &:hover {
-            background-color:@grey-2;
+            background-color:@grey-0;
             transition:0.4s all ease;
         }
     }
@@ -67,7 +74,7 @@
         border:none;
         font-size:200%;
         width:100%;
-        background-color:rgba(0,0,0,1);
+        background-color: @popup-light-color;
         color:white;
         padding:10px;
         display:block;
@@ -77,7 +84,7 @@
     // Elements inside popups
     form {
         input {
-            background-color:rgba(0,0,0,1);
+            background-color: transparent;
             color:white;
             padding:5px;
             font-size:200%;
@@ -134,7 +141,7 @@
         }
 
         &.odt {
-            color:white; /* Is white even a color? */
+            color:@popup-light-text;
             &:hover {
                 background-color:white;
                 color:black;
@@ -148,5 +155,38 @@
                 color:black;
             }
         }
+    }
+}
+
+// If the body has the dark class, display dark popups
+.dark {
+    .popup {
+        background-color: @popup-dark-color;
+        box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.75);
+
+        button {
+            background-color: @popup-dark-color;
+        }
+
+        .btn-share {
+            &.odt {
+                color: @popup-dark-text;
+            }
+        }
+
+        a.toc-link {
+            color: @popup-dark-text;
+
+            &:hover {
+                background-color: lighten(@popup-dark-color, 20%);
+            }
+        }
+    }
+
+    .popup-arrow {
+        &.up    { border-bottom-color: @popup-dark-color; }
+        &.down  { border-top-color:    @popup-dark-color; }
+        &.left  { border-right-color:  @popup-dark-color; }
+        &.right { border-left-color:   @popup-dark-color; }
     }
 }
