@@ -54,13 +54,26 @@ class ZettlrWatchdog
      */
     start()
     {
+        // chokidar's ignored-setting is compatible to anymatch, so we can
+        // pass an array containing the standard dotted directory-indicators,
+        // directories that should be ignored and a function that returns true
+        // for all files that are _not_ in the filetypes list (whitelisting)
+        // Further reading: https://github.com/micromatch/anymatch
+        let ignore_dirs = [/(^|[\/\\])\../];
+        let d = require('../common/data.json').ignoreDirs;
+
+        for(let x of d) {
+            // Create new regexps from the strings
+            ignore_dirs.push(new RegExp(x, 'i'));
+        }
+
         // Begin watching the base dir.
         this.process = chokidar.watch(this.path, {
-            ignored: /(^|[\/\\])\../,
-            persistent: true,
-            ignoreInitial: true, // Do not track the initial watch as changes
-            followSymlinks: false, // Do not follow symlinks to other directories.
-            ignorePermissionErrors: true // In the worst case one has to reboot the software, but so it looks nicer.
+            'ignored': ignore_dirs,
+            'persistent': true,
+            'ignoreInitial': true, // Do not track the initial watch as changes
+            'followSymlinks': false, // Do not follow symlinks to other directories.
+            'ignorePermissionErrors': true // In the worst case one has to reboot the software, but so it looks nicer.
         });
 
         this.process.on('ready', () => {

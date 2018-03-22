@@ -5,10 +5,12 @@
 - Finally got rid of the horizontal scrollbar in the editor, that was visible on Windows and Linux systems
 - Also, customized the scrollbar style to be more decent
 - Major fixes to the User Interface (now looks way more modern and less cluttered)
+- Fixed an error that did not update the snippet of a file on remote change
 
 ## Under the hood
 
-(nothing here)
+- Added other files and directories to the ignore dirs of `chokidar`
+- Fixed a small bug in the `poll()`-function
 
 # 0.14.0
 

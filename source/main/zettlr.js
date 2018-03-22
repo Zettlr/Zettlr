@@ -110,7 +110,7 @@ class Zettlr
                     case 'add':
                     if(based) {
                         f = based.addChild(p);
-                        this.ipc.send('notify', `File ${f.name} added.`);                       
+                        this.ipc.send('notify', `File ${f.name} added.`);
                     }
                     break;
 
@@ -119,11 +119,13 @@ class Zettlr
                         let ret = this.window.askReplaceFile();
                         // 1 = do it, 0 = don't
                         if(ret == 1) {
+                            f.update();
                             this.clearModified();
                             this.ipc.send('file-close', {});
                             this.ipc.send('file-open', f.withContent());
                         }
                     } else {
+                        f.update();
                         this.ipc.send('notify', `File ${f.name} changed remotely.`);
                     }
                     break;

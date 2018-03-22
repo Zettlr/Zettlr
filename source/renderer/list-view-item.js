@@ -147,6 +147,7 @@ class ListViewItem
 
         // Update if necessary
         if(this._fileObj.modtime != nData.modtime) {
+            console.log(`Updating file ${this._fileObj.name}!`);
             this._fileObj = nData;
             this._hash = this._fileObj.hash;
             this._elem.attr('data-hash', this._fileObj.hash)
