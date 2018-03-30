@@ -938,37 +938,6 @@ class Zettlr
     }
 
     /**
-     * Automatically saves changes to a file in a special file.
-     * @param  {ZettlrFile} f The file containing the new content.
-     */
-    autoSave(f)
-    {
-        if(f == null) {
-            // No file given -> abort autosave
-            return;
-        }
-
-        let file = this.paths.findFile({ 'hash': f.hash });
-
-        if(file !== null) {
-            // Don't autosave unnamed files.
-            file.autoSave(f.content);
-        }
-    }
-
-    /**
-     * Send the content of the "hard saved" version of a file to the renderer.
-     */
-    revert()
-    {
-        // Simply send the old contents of the file (which haven't been overwritten)
-        // to the client and remove all potential autosaves.
-        if(this.getCurrentFile() != null) {
-            this.ipc.send('file-revert', this.getCurrentFile().revert().withContent());
-        }
-    }
-
-    /**
      * Sets the current file to the given file.
      * @param {ZettlrFile} f A ZettlrFile object.
      */

@@ -36,6 +36,9 @@ require('./assets/codemirror/zettlr-plugin-footnotes.js');
 // Finally CodeMirror itself
 const CodeMirror = require('codemirror');
 
+// The timeout after which a "save"-command is triggered to automatically save changes
+const SAVE_TIMOUT = 400;
+
 /**
 * This class propably has the most `require`s in it, because it loads all
 * functionality concerning the CodeMirror editor. It loads them, initializes
@@ -60,6 +63,7 @@ class ZettlrEditor
         this._currentHash = null;    // Needed for positions
         this._words = 0;             // Currently written words
         this._fontsize = 100;        // Font size (used for zooming)
+        this._timeout = null;        // Stores a current timeout for a save-command
         this._inlineImages = [];     // Image widgets that are currently rendered
         this._inlineLinks = [];      // Inline links that are currently rendered
 
@@ -100,6 +104,13 @@ class ZettlrEditor
                 // If origin is setValue this means that the contents have been
                 // programatically changed -> no need to flag any modification!
                 this._renderer.setModified();
+
+                // Automatically save the file each time there have been changes
+                if(this._timeout) {
+                    clearTimeout(this._timeout);
+                }
+
+                this._timeout = setTimeout((e) => { this._renderer.saveFile(); }, SAVE_TIMOUT);
             }
         });
 

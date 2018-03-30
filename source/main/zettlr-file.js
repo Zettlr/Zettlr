@@ -53,7 +53,6 @@ class ZettlrFile
         this.snippet      = '';
         this.content      = ''; // Will only be not empty when the file is modified.
         this.modified     = false;
-        this.autosavefile = null; // Contains path to autosave file
 
         // Prepopulate if filename is given
         if(fname !== null) {
@@ -73,6 +72,16 @@ class ZettlrFile
 
             this.read();
         }
+    }
+
+    /**
+     * This function is always called when the app closes. It can be used to
+     * perform closing activity.
+     * @return {void} Does not return anything.
+     */
+    shutdown()
+    {
+        // Such empty
     }
 
     /**
@@ -181,77 +190,11 @@ class ZettlrFile
         this.content = '';
         this.modified = false;
 
-        if(this.canRevert()) {
-            // Delete all autosaves
-            this.revert();
-        }
-
         // Last but not least: Get the new (current) modtime by re-reading the
         // contents
         this.read();
 
         return this;
-    }
-
-    /**
-     * Creates or overwrites the corresponding autosave file.
-     * @param  {String} content The current contents of the editor.
-     * @return {ZettlrFile} This for chainability
-     */
-    autoSave(content)
-    {
-        // Create or overwrite the autosave file.
-        if(!this.autosavefile) {
-            this.autosavefile = path.join(path.dirname(this.path), this.hash + '.autosave');
-        }
-
-        fs.writeFile(this.autosavefile, content, 'utf-8', (err) => {
-            if(err) {
-                // Well ... who needs autosaves anyway?
-            }
-        });
-
-        return this;
-    }
-
-    /**
-     * Removes potential autosaves.
-     * @return {ZettlrFile} This for chainability.
-     */
-    revert()
-    {
-        // Revert means: Delete all autosaves
-        if(this.canRevert()) {
-            // But only if there is one
-            fs.unlink(this.autosavefile, (err) => {
-                if(err) {
-                    // Have fun removing this file by yourself!
-                }
-            });
-        }
-        return this;
-    }
-
-    /**
-     * Can this file be reverted, that is, are there autosaves?
-     * @return {Boolean} True, if there are autosaves newer than the file, or false.
-     */
-    canRevert()
-    {
-        if(this.autosavefile) {
-            try {
-                let stat = fs.lstatSync(this.autosavefile);
-
-                // Only revert if the actual file is older than the autosave
-                if(this.modtime < stat.mtime.getTime()) {
-                    return true;
-                }
-            } catch (err) {
-                // Silently fail
-            }
-        }
-
-        return false;
     }
 
     /**

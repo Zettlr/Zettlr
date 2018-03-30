@@ -43,13 +43,6 @@
         },
         {
             "role": "button",
-            "class": "file-revert",
-            "command": "file-request-revert",
-            "content": "{}",
-            "title": "toolbar.file_revert"
-        },
-        {
-            "role": "button",
             "class": "share",
             "command": "export",
             "content": "{}",

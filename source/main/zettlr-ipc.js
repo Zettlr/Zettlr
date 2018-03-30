@@ -131,10 +131,6 @@ class ZettlrIPC
             this._app.saveFile(cnt);
             break;
 
-            case 'file-autosave':
-            this._app.autoSave(cnt);
-            break;
-
             case 'file-revert':
             this._app.revert();
             break;

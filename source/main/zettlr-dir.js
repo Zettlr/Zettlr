@@ -78,7 +78,7 @@ class ZettlrDir
         // further down the road.
         for(let c of this.children) {
             if(c.isFile()) {
-                c.revert();
+                c.shutdown();
             } else if(c.isDirectory()) {
                 c.shutdown();
             }

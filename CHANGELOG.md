@@ -2,13 +2,15 @@
 
 ## GUI and functionality
 
-- Fixed input text color in popups (e.g., for new files and directories)
+- Fixed input text color in popups (e.g., for new files and directories).
+- Removed the autosave functionality. Now Zettlr automatically saves all changes "completely."
 
 ## Under the hood
 
-- Updated `less.js` (dev-dependency) to latest version
-- Updated `chokidar` to latest version
-- Updated `electron-builder` (dev-dependency) to latest version
+- Updated `less.js` (dev-dependency) to latest version.
+- Updated `chokidar` to latest version.
+- Updated `electron-builder` (dev-dependency) to latest version.
+- Removed all autosave-functions.
 
 # 0.14.1
 

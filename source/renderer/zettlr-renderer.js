@@ -57,9 +57,6 @@ class ZettlrRenderer
         this._typoDic        = null;    // Contains the dic-file data
         this._typo           = [];      // Contains the Typo object to check with
 
-        // Is autosave enabled?
-        this._autosave_enabled = false;
-
         // Write translation data into renderer process's global var
         global.i18n         = remote.getGlobal('i18n');
 
@@ -87,7 +84,6 @@ class ZettlrRenderer
         this._ipc.send('config-get', 'darkTheme');
         this._ipc.send('config-get', 'snippets');
         this._ipc.send('config-get', 'app_lang');
-        this._ipc.send('config-get', 'autosave');
 
         // Request a first batch of files
         this._ipc.send('get-paths', {});
@@ -107,10 +103,8 @@ class ZettlrRenderer
 
     poll()
     {
-        // Do recurring tasks.
-        if(this._autosave_enabled) {
-            this.autoSave();
-        }
+        // This poll is useful. You may not see it now, but someday it's gonna
+        // be tremendous!
 
         // Set next timeout
         setTimeout(() => { this.poll(); }, POLL_TIME);
@@ -671,26 +665,6 @@ class ZettlrRenderer
     }
 
     /**
-     * Send a file-autosave command to the main process, requesting the creation of an autosave file.
-     */
-    autoSave()
-    {
-        // Only create autosaves if the editor is currently dirty
-        if(this._editor.isClean()) {
-            return;
-        }
-
-        let file = this.getCurrentFile();
-        if(file == null) {
-            file = {};
-            file.hash = "undefined";
-        }
-
-        file.content = this._editor.getValue();
-        this._ipc.send('file-autosave', file);
-    }
-
-    /**
      * Request the renaming of a file
      * @param  {ZettlrFile} f The file, whose name should be changed
      */
@@ -759,12 +733,6 @@ class ZettlrRenderer
      * @param {String} lang locale code
      */
     setLocale(lang) { this._lang = lang; }
-
-    /**
-     * Enable/disable autosave
-     * @param {Boolean} status True or false
-     */
-    setAutosaveStatus(status) { this._autosave_enabled = status; }
 
     /**
      * Sets the Aff-File contents

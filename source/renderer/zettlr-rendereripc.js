@@ -244,9 +244,6 @@ class ZettlrRendererIPC
                 case 'app_lang':
                 this._app.setLocale(cnt.value);
                 break;
-                case 'autosave':
-                this._app.setAutosaveStatus(cnt.value);
-                break;
             }
             break;
 
