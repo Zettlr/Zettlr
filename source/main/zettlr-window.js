@@ -35,9 +35,9 @@ class ZettlrWindow
      */
     constructor(parent)
     {
-        this.parent = parent;
-        this.window = null;
-        this.menu = null;
+        this._app = parent;
+        this._win = null;
+        this._menu = null;
     }
 
     /**
@@ -46,7 +46,7 @@ class ZettlrWindow
      */
     open()
     {
-        if(this.window != null) {
+        if(this._win != null) {
             // There is still a window active, so don't do anything (one-window app)
             return;
         }
@@ -54,7 +54,7 @@ class ZettlrWindow
         let screensize = electron.screen.getPrimaryDisplay().workAreaSize;
 
         // First create a new browserWindow
-        this.window = new BrowserWindow({
+        this._win = new BrowserWindow({
             width: screensize.width,
             height: screensize.height,
             minWidth:800,
@@ -67,12 +67,9 @@ class ZettlrWindow
             // devTools: false, ---- TODO: ACTIVATE WHEN READY WITH DEVELOPING
         });
 
-        // Save this object as a parent to the browser window
-        // this.window.parent = this;
-
         // Then activate listeners.
         // and load the index.html of the app.
-        this.window.loadURL(url.format({
+        this._win.loadURL(url.format({
             pathname: path.join(__dirname, '../renderer/assets/index.htm'),
             protocol: 'file:',
             slashes: true
@@ -81,26 +78,26 @@ class ZettlrWindow
         // EVENT LISTENERS
 
         // Only show window once it is completely initialized + maximize it
-        this.window.once('ready-to-show', () => {
-            this.window.show();
-            this.window.maximize();
+        this._win.once('ready-to-show', () => {
+            this._win.show();
+            this._win.maximize();
         });
 
         // Emitted when the window is closed.
-        this.window.on('closed', () => {
+        this._win.on('closed', () => {
             this.close();
         });
 
         // Emitted when the user wants to close the window.
-        this.window.on('close', (event) => {
+        this._win.on('close', (event) => {
             // Only check, if we can close. Unless we can, abort closing process.
             if(!this.canClose()) {
                 event.preventDefault();
                 // Parent's (ZettlrWindow) parent (Zettlr)
-                this.parent.saveAndClose();
+                this._app.saveAndClose();
             } else {
                 // We can close - so clear down the cache in any case
-                let ses = this.window.webContents.session;
+                let ses = this._win.webContents.session;
                 // Do not "clearCache" because that would only delete my own index files
                 ses.clearStorageData({
                     storages: [
@@ -115,20 +112,19 @@ class ZettlrWindow
         });
 
         // Prevent closing if unable to comply
-        this.window.beforeunload = (e) => {
+        this._win.beforeunload = (e) => {
             if(!this.canClose()) {
                 // Prevent closing for now.
                 e.returnValue = false;
                 // And ask the user to save changes. The parent will then re-
                 // emit the close-event which in the second round will not
-                // trigger this event.
-                this.parent.saveAndClose();
+                // trigger this if-loop.
+                this._app.saveAndClose();
             }
         };
 
         // Set the application menu
-        // require('./main-menu.js');
-        this.menu = new ZettlrMenu(this);
+        this._menu = new ZettlrMenu(this);
 
         return this;
     }
@@ -147,7 +143,7 @@ class ZettlrWindow
             newTitle += ' — Zettlr';
         }
 
-        this.window.setTitle(newTitle);
+        this._win.setTitle(newTitle);
     }
 
     /**
@@ -156,7 +152,7 @@ class ZettlrWindow
      */
     getTitle()
     {
-        return this.window.getTitle();
+        return this._win.getTitle();
     }
 
     /**
@@ -168,13 +164,13 @@ class ZettlrWindow
     {
         // Set the modified flag on the window if the file is edited (macOS only)
         // Function does nothing if not on macOS
-        if(this.window != null) {
-            this.window.setDocumentEdited(true);
+        if(this._win != null) {
+            this._win.setDocumentEdited(true);
         }
         // Indicate in title (for all OS)
-        let title = this.window.getTitle();
+        let title = this._win.getTitle();
         if(title.substr(0, 2) != "* ") {
-            this.window.setTitle('* ' + title);
+            this._win.setTitle('* ' + title);
         }
 
         return this;
@@ -187,13 +183,13 @@ class ZettlrWindow
     clearModified()
     {
         // Clear the modified flag on the window if the file is edited (macOS only)
-        if(this.window != null) {
-            this.window.setDocumentEdited(false);
+        if(this._win != null) {
+            this._win.setDocumentEdited(false);
         }
         // Indicate in title
-        let title = this.window.getTitle();
+        let title = this._win.getTitle();
         if(title.substr(0, 2) == "* ") {
-            this.window.setTitle(title.substr(2));
+            this._win.setTitle(title.substr(2));
         }
 
         return this;
@@ -205,7 +201,7 @@ class ZettlrWindow
      */
     getWindow()
     {
-        return this.window;
+        return this._win;
     }
 
     // FUNCTIONS CALLED FROM WITHIN EVENT LISTENERS
@@ -217,7 +213,7 @@ class ZettlrWindow
     close()
     {
         // Dereference the window.
-        this.window = null;
+        this._win = null;
     }
 
     /**
@@ -226,7 +222,7 @@ class ZettlrWindow
      */
     canClose()
     {
-        return this.parent.canClose();
+        return this._app.canClose();
     }
 
     /**
@@ -247,7 +243,7 @@ class ZettlrWindow
             cancelId: 0
         };
 
-        let ret = dialog.showMessageBox(this.window, options);
+        let ret = dialog.showMessageBox(this._win, options);
 
         // ret can have three status: cancel = 0, save = 1, omit = 2.
         // To keep up with semantics, the function "askSaveChanges" would
@@ -275,7 +271,7 @@ class ZettlrWindow
             cancelId: 0
         };
 
-        let ret = dialog.showMessageBox(this.window, options);
+        let ret = dialog.showMessageBox(this._win, options);
 
         // ret can have three status: cancel = 0, save = 1, omit = 2.
         // To keep up with semantics, the function "askSaveChanges" would
@@ -293,7 +289,7 @@ class ZettlrWindow
      */
     askDir(startDir)
     {
-        return dialog.showOpenDialog(this.window, {
+        return dialog.showOpenDialog(this._win, {
             title: trans('system.open_folder'),
             defaultPath: startDir,
             properties: [
@@ -310,7 +306,7 @@ class ZettlrWindow
      */
     prompt(options)
     {
-        dialog.showMessageBox(this.window, {
+        dialog.showMessageBox(this._win, {
             type: options.type,
             buttons: [ 'Ok' ],
             defaultId: 0,
@@ -328,7 +324,7 @@ class ZettlrWindow
      */
     confirmRemove(obj)
     {
-        let ret = dialog.showMessageBox(this.window, {
+        let ret = dialog.showMessageBox(this.win, {
             type: 'warning',
             buttons: [ 'Ok', trans('system.error.cancel_remove') ],
             defaultId: 1,
@@ -338,6 +334,12 @@ class ZettlrWindow
 
         return (ret == 0);
     }
+
+    /**
+     * Returns the Zettlr main object
+     * @return {Zettlr} The parent app object
+     */
+    getApp() { return this._app; }
 }
 
 module.exports = ZettlrWindow;

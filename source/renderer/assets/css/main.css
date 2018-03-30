@@ -991,7 +991,6 @@ html {
   color: #282828;
   border-radius: 4px;
   box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.25);
-  color: white;
   border-radius: 2px;
   max-width: 200px;
   max-height: 600px;
@@ -1029,7 +1028,7 @@ html {
 }
 .popup form input {
   background-color: transparent;
-  color: white;
+  color: inherit;
   padding: 5px;
   font-size: 200%;
   display: block;
@@ -1096,6 +1095,7 @@ html {
 .dark .popup {
   background-color: rgba(0, 0, 0, 0.9);
   box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.75);
+  color: #dcdcdc;
 }
 .dark .popup button {
   background-color: rgba(0, 0, 0, 0.9);

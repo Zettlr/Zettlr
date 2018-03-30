@@ -1,3 +1,15 @@
+# 0.14.2
+
+## GUI and functionality
+
+- Fixed input text color in popups (e.g., for new files and directories)
+
+## Under the hood
+
+- Updated `less.js` (dev-dependency) to latest version
+- Updated `chokidar` to latest version
+- Updated `electron-builder` (dev-dependency) to latest version
+
 # 0.14.1
 
 ## GUI and functionality

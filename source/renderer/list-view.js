@@ -332,7 +332,7 @@ class ListView
 
     /**
      * Scroll a given item into view.
-     * @param  {jQuery} elem The jQuery element representing the DOM element.
+     * @param  {jQuery} lielem The jQuery element representing the DOM element.
      * @return {void}      Nothing to return.
      */
     _scrollIntoView(lielem)
@@ -385,6 +385,10 @@ class ListView
 
     // GETTERS
 
+    /**
+     * Returns the container object of this list view
+     * @return {jQuery} Container DOM element wrapped by jQuery
+     */
     getContainer() { return this._container; }
 }
 

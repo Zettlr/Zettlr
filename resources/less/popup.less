@@ -41,7 +41,6 @@
     color: @popup-light-text;
     border-radius:4px;
     box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.25);
-    color:white;
     border-radius:2px;
     max-width:200px; // Maximum width.
     max-height:600px; // Maximum height. If its too much simply scroll.
@@ -85,7 +84,7 @@
     form {
         input {
             background-color: transparent;
-            color:white;
+            color:inherit;
             padding:5px;
             font-size:200%;
             display:block;
@@ -163,6 +162,7 @@
     .popup {
         background-color: @popup-dark-color;
         box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.75);
+        color:@popup-dark-text;
 
         button {
             background-color: @popup-dark-color;

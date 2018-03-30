@@ -27,11 +27,11 @@ class ZettlrMenu
 {
     /**
      * Creates the main application menu and sets it.
-     * @param {Zettlr} parent The Zettlr object.
+     * @param {ZettlrWindow} parent The main window.
      */
     constructor(parent)
     {
-        this.parent = parent;
+        this._window = parent;
         this.template = [
             {
                 label: trans('menu.labels.file'),
@@ -141,7 +141,7 @@ class ZettlrMenu
                         label: trans('menu.toggle_theme'),
                         accelerator: 'CmdOrCtrl+Alt+L',
                         type: 'checkbox',
-                        checked : this.parent.parent.config.get('darkTheme'),
+                        checked : this._window.getApp().getConfig().get('darkTheme'),
                         click(item, focusedWindow) {
                             if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'toggle-theme'});
                         }
@@ -150,7 +150,7 @@ class ZettlrMenu
                         label: trans('menu.toggle_snippets'),
                         accelerator: 'CmdOrCtrl+Alt+S',
                         type: 'checkbox',
-                        checked: this.parent.parent.config.get('snippets'),
+                        checked: this._window.getApp().getConfig().get('snippets'),
                         click(item, focusedWindow) {
                             if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'toggle-snippets'});
                         }
@@ -237,7 +237,7 @@ class ZettlrMenu
         // END TEMPLATE
 
         // Show debug stuff?
-        if(this.parent.parent.config.get('debug')) {
+        if(this._window.getApp().getConfig().get('debug')) {
             this.template[2].submenu.unshift(
                 {
                     label: trans('menu.reload'),
