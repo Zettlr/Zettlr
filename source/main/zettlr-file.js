@@ -360,6 +360,12 @@ class ZettlrFile
      * @return {null}     Always return null.
      */
     findDir(obj)  { return null;  }
+
+    /**
+     * Returns false, if this.parent is a directory.
+     * @return {Boolean} True or false depending on the type of this.parent
+     */
+    isRoot()      { return !this.parent.isDirectory(); }
 }
 
 module.exports = ZettlrFile;
