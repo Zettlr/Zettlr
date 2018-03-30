@@ -11,6 +11,8 @@
 - Updated `chokidar` to latest version.
 - Updated `electron-builder` (dev-dependency) to latest version.
 - Removed all autosave-functions.
+- `ZettlrWatchdog` can now add multiple paths to watch
+- `ZettlrFile` can now also be root (e.g. have the `Zettlr`-object as parent)
 
 # 0.14.1
 

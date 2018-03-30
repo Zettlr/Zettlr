@@ -244,7 +244,7 @@ class ZettlrEditor
             img.onload = () => {
                 let aspect = img.getBoundingClientRect().width / img.naturalWidth;
                 let h = Math.round(img.naturalHeight * aspect);
-                img.title = `${caption} (${img.naturalWidth}x${img.naturalHeight})`;
+                img.title = `${caption} (${img.naturalWidth}x${img.naturalHeight}px)`;
                 textMarker.changed();
             }
 
@@ -318,6 +318,7 @@ class ZettlrEditor
 
                 let a = document.createElement('a');
                 a.innerHTML = caption; // TODO: Better testing against HTML entities!
+                a.title = url; // Set the url as title to let users see where they're going
                 a.className = 'cma'; // CodeMirrorAnchors
                 // Apply TextMarker
                 let textMarker = this._cm.doc.markText(
