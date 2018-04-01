@@ -1,3 +1,14 @@
+# 0.14.3
+
+## GUI and functionality
+
+- Fixed a bug that prevented deletion of files and folders.
+- Removed the now defunct autosave option in preferences.
+
+## Under the hood
+
+- Fixed a type error in `ZettlrWindow` that passed `undefined` instead of the window to the `showMessageBox` function.
+
 # 0.14.2
 
 ## GUI and functionality

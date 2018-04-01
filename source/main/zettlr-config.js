@@ -77,8 +77,7 @@ class ZettlrConfig
                 'fr_FR' : (this.getLocale() === 'fr_FR') ? true : false
             },
             "app_lang": this.getLocale(),
-            "debug": false,
-            "autosave": true
+            "debug": false
         };
 
         // Load the configuration

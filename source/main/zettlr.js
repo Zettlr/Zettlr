@@ -486,7 +486,6 @@ class Zettlr
         }
         file.remove();
         this.ipc.send('paths-update', this.paths);
-        // this.ipc.send('dir-set-current', this.getCurrentDir()); DEBUG
     }
 
     /**

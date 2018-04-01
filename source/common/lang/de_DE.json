@@ -137,8 +137,7 @@
             "spellcheck_warning": "<em>Vorsicht:</em> Zu viele gleichzeitig aktivierte Bibliotheken verlangsamen die App spürbar! Versuche, nicht mehr als drei gleichzeitig zu aktivieren!",
             "debug": "Entwicklermodus",
             "save": "Speichern",
-            "cancel": "Abbrechen",
-            "autosave_enabled": "Speichere Änderungen automatisch"
+            "cancel": "Abbrechen"
         },
         "update": {
             "title": "Neue Version",

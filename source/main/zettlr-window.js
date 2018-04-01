@@ -324,7 +324,7 @@ class ZettlrWindow
      */
     confirmRemove(obj)
     {
-        let ret = dialog.showMessageBox(this.win, {
+        let ret = dialog.showMessageBox(this._win, {
             type: 'warning',
             buttons: [ 'Ok', trans('system.error.cancel_remove') ],
             defaultId: 1,

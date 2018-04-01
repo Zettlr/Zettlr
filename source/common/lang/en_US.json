@@ -137,8 +137,7 @@
             "spellcheck_warning": "<em>Attention:</em> Too many active spell check libraries may slow the app down significanty! Try to stick with three at maximum.",
             "debug": "Debug",
             "save": "Save",
-            "cancel": "Cancel",
-            "autosave_enabled": "Automatically save file modifications"
+            "cancel": "Cancel"
         },
         "update": {
             "title": "New update available",

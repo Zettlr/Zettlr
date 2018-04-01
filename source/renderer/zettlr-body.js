@@ -338,8 +338,7 @@ class ZettlrBody
         snippets   = false,
         spellcheck = this._spellcheckLangs,
         app_lang = 'en_US',
-        debug = false,
-        autosave = false;
+        debug = false;
 
         for(let r of res) {
             if(r.name === 'pref-pandoc') {
@@ -356,8 +355,6 @@ class ZettlrBody
                 app_lang = r.value;
             } else if(r.name === 'debug') {
                 debug = true;
-            } else if(r.name === 'autosave-enabled') {
-                autosave = true;
             }
         }
 
@@ -369,8 +366,7 @@ class ZettlrBody
                 'snippets': snippets,
                 'spellcheck': spellcheck,
                 'app_lang': app_lang,
-                'debug': debug,
-                'autosave': autosave
+                'debug': debug
             }
             this._renderer.saveSettings(cfg);
         }
