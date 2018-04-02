@@ -97,7 +97,7 @@ class ZettlrCon
                 let that = this;
 
                 // Only add rename/remove options if not root dir
-                if(elem.attr('id') !== 'root') {
+                if(!elem.hasClass('root')) {
                     this._menu.append(new MenuItem({ 'label': trans('menu.rename_dir'), click(item, win) {
                         that._body.getRenderer().handleEvent('dir-rename', { 'hash': hash });
                     } }));
@@ -113,6 +113,29 @@ class ZettlrCon
                 this._menu.append(new MenuItem({ 'label': trans('menu.new_dir'), click(item, win) {
                     that._body.getRenderer().handleEvent('dir-new', { 'hash': hash });
                 } }));
+
+                if(elem.hasClass('root')) {
+                    // Root dirs can be closed
+                    this._menu.append(new MenuItem({ 'type': 'separator' }));
+                    this._menu.append(new MenuItem({ 'label': trans('menu.close_dir'), click(item, win) {
+                        that._body.getRenderer().handleEvent('dir-close', { 'hash': hash });
+                    }}));
+                }
+            } else if(elem.is('div') && elem.hasClass('file')) {
+                // Standalone root file selected
+                label = elem.text();
+                hash = elem.attr('data-hash');
+                let that = this;
+                this._menu.append(new MenuItem({ 'label': trans('menu.rename_file'), click(item, win) {
+                    that._body.getRenderer().handleEvent('file-rename', { 'hash': hash });
+                }}));
+                this._menu.append(new MenuItem({ 'label': trans('menu.delete_file'), click(item, win) {
+                    that._body.getRenderer().handleEvent('file-delete', { 'hash': hash });
+                }}));
+                this._menu.append(new MenuItem({ 'type': 'separator' }));
+                this._menu.append(new MenuItem({ 'label': trans('menu.close_file'), click(item, win) {
+                    that._body.getRenderer().handleEvent('file-close', { 'hash': hash });
+                }}));
             }
         } else if(elem.parents('#editor').length > 0) {
             // If the word is spelled wrong, request suggestions

@@ -2,7 +2,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ListViewItem class
+ * Contains:        ListView class
  * CVM-Role:        View
  * Maintainer:      Hendrik Erz
  * License:         MIT

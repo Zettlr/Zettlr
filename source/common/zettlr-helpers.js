@@ -15,11 +15,13 @@
 // GLOBALS
 
 // Supported filetypes
-const filetypes = require('./data.json').filetypes;
+const filetypes  = require('./data.json').filetypes;
 // Ignored directory patterns
 const ignoreDirs = require('./data.json').ignoreDirs;
 
-const path = require('path');
+// Include modules
+const path       = require('path');
+const fs         = require('fs');
 
 /**
 * Basic hashing function (thanks to https://stackoverflow.com/a/7616484)
@@ -157,4 +159,43 @@ function ignoreFile(p)
     return (!filetypes.includes(ext));
 }
 
-module.exports = { hash, sort, generateName, formatDate, ignoreFile, ignoreDir };
+/**
+ * Checks if a given path is a valid file
+ * @param  {String}  p The path to check
+ * @return {Boolean}   True, if it is a valid path + file, and false if not
+ */
+function isFile(p)
+{
+    try {
+        let s = fs.lstatSync(p);
+        return s.isFile();
+    } catch(e) {
+        return false;
+    }
+}
+
+/**
+ * Checks if a given path is a valid directory
+ * @param  {String}  p The path to check
+ * @return {Boolean}   True, if p is valid and also a directory
+ */
+function isDir(p)
+{
+    try {
+        let s = fs.lstatSync(p);
+        return s.isDirectory();
+    } catch(e) {
+        return false;
+    }
+}
+
+module.exports = {
+    hash,
+    sort,
+    generateName,
+    formatDate,
+    ignoreFile,
+    ignoreDir,
+    isFile,
+    isDir
+};

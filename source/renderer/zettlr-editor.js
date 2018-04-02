@@ -225,7 +225,7 @@ class ZettlrEditor
                 // Obviously, the real URL has not been found. Let's do
                 // a check if a relative path works, by using the path of the
                 // current file and joining it with the url. Maybe this works.
-                let rel = path.dirname(this.parent.getCurrentFile().path);
+                let rel = path.dirname(this._renderer.getCurrentFile().path);
                 rel = path.join(rel, url);
 
                 // If this does not work, then simply fall back to the 404 image.

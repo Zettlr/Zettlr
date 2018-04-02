@@ -13,6 +13,8 @@
  * END HEADER
  */
 
+const FileView = require('./file-view.js');
+
 function TreeError(msg) {
     this.name = 'TreeView Error';
     this.message = msg;
@@ -36,6 +38,12 @@ class TreeView
             throw new TreeError('Paths must be given on instantiation!');
         }
 
+        if(paths.type === 'file') {
+            // It's a file, so silently replace this TreeView object
+            // with a FileView (so sneaky!)
+            return new FileView(parent, paths, isRoot);
+        }
+
         this._parent = parent;
         this._paths = paths; // Pointer to this dir's base object
         this._root = isRoot;
@@ -50,7 +58,7 @@ class TreeView
 
         this._dir = $('<li>').attr('data-hash', this.getHash()).attr('title', this._paths.name);
         this._dir.append('<span>').text(this._paths.name);
-        if(this.isRoot()) { this._dir.attr('id', 'root'); }
+        if(this.isRoot()) { this._dir.addClass('root'); }
 
         // Append to DOM
         this._ul.append(this._dir);
@@ -290,6 +298,12 @@ class TreeView
     getHash() { return this._paths.hash; }
 
     /**
+     * Returns the path associated with this TreeView
+     * @return {String} The path associated with this TreeView
+     */
+    getPath() { return this._paths.path; }
+
+    /**
      * Toggles the collapsed class.
      * @return {ListView} Chainability
      */
@@ -304,6 +318,12 @@ class TreeView
      * @return {Boolean} True, if this is the root directory, or false.
      */
     isRoot() { return this._root; }
+
+    /**
+     * Returns false, as this represents not a file
+     * @return {Boolean} Always returns false
+     */
+    isFile() { return false; }
 
     /**
      * Is this directory currently collapsed or open?

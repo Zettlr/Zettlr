@@ -59,7 +59,10 @@ class ZettlrPreview
     refresh()
     {
         if(this._renderer.getCurrentDir() == null) {
-            // Somehow the file array was empty
+            // On fresh installations and if the user has closed everything
+            // the directory is null. Or, if the user selected a file in the
+            // directory pane.
+            this._list.empty();
             return;
         }
         this._list.refresh(this._renderer.getCurrentDir());

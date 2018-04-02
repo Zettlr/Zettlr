@@ -18,6 +18,14 @@
         display:none;
     }
 
+    // Direct descendants need some margin to the files and to other roots
+    & > ul:not(:first-child) {
+        padding-top:@ribbon-height/2;
+        padding-bottom:@ribbon-height/2;
+        border-top:1px solid @grey-2;
+    }
+
+
     ul {
         list-style-type: none;
         margin-left:0px;
@@ -30,18 +38,6 @@
             &:before {
                 color:white;
             }
-        }
-
-        li#root:after {
-            content: '\f0f0';
-            font-family: 'WebHostingHub-Glyphs';
-            font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
-            margin-right:5px;
-            display:inline-block;
-            position:absolute;
-            right:5px;
-            height:16px;
-            color:@blue-0;
         }
 
         li {
@@ -61,6 +57,21 @@
             &.highlight {
                 box-shadow: 0px 0px 1px 2px @green-selection;
             }
+
+            &.root {
+
+                &:after {
+                    content: '\f0f0';
+                    font-family: 'WebHostingHub-Glyphs';
+                    font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
+                    margin-right:5px;
+                    display:inline-block;
+                    position:absolute;
+                    right:5px;
+                    height:16px;
+                    color: @blue-0;
+                }
+            }
         }
 
         .collapse-indicator {
@@ -70,7 +81,6 @@
                 content: "\f48b";
                 font-family: 'WebHostingHub-Glyphs';
                 font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
-                // color:inherit;
                 display:inline-block;
                 vertical-align: sub;
                 width:10px;
@@ -90,10 +100,66 @@
         }
     }
 
+    .file {
+        line-height: @ribbon-height;
+        padding:@ribbon-padding;
+        white-space: nowrap;
+        padding-left:5px;
+        margin:5px;
+        line-height:120%;
+        border-radius:8px;
+        overflow: hidden;
+
+        &:after {
+            content: "\f0d6";
+            font-family: 'WebHostingHub-Glyphs';
+            font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
+            margin-right:5px;
+            display:inline-block;
+            position:absolute;
+            right:5px;
+            height:16px;
+            color: @green-0;
+        }
+
+        &.selected {
+            background-color:@blue-0;
+            color:white;
+        }
+
+        &:hover {
+            background-color:@grey-1;
+            color:inherit;
+        }
+    }
+
+    .emptyPaths {
+        background-color:@grey-0;
+        color:@grey-4;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+
+        .info {
+            display: block;
+            padding: 10px;
+            margin-top: 50%;
+            font-weight: bold;
+            font-size: 200%;
+        }
+    }
+
     &.dark {
         background-color: @grey-6;
         border-right-color:@grey-4;
         color:white;
+
+        & > ul:not(:first-child) {
+            border-top-color:@grey-4;
+        }
 
         .collapse-indicator::before {
             color:@grey-1;
@@ -108,13 +174,16 @@
                 background-color:darken(@green-selection-dark, 20%);
             }
         }
+
+        .file {
+            &:hover {
+                background-color:@grey-5;
+            }
+        }
+
+        .emptyPaths {
+            background-color:@grey-5;
+            color:@grey-1;
+        }
     }
-}
-
-#directories > ul > li {
-    // background-color:@grey-2;
-}
-
-#directories.dark > ul > li {
-    // background-color: @grey-6;
 }

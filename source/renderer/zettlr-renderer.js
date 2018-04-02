@@ -123,23 +123,6 @@ class ZettlrRenderer
     }
 
     /**
-     * The user has opened a completely new directory.
-     * @param  {Object} newPaths The new paths object
-     * @return {void}          As this is called by event handler, don't do a thing.
-     */
-    newProject(newPaths)
-    {
-        this._paths = newPaths;
-        this._body.closeQuicklook();
-        this.setCurrentDir(newPaths);
-        this.setCurrentFile(null);
-        this._directories.empty();
-        this._directories.refresh();
-        this._preview.refresh();
-        this._directories.select(newPaths.hash);
-    }
-
-    /**
      * Update somewhere in the paths.
      * @param  {[type]} newPaths [description]
      * @return {[type]}          [description]
@@ -333,11 +316,16 @@ class ZettlrRenderer
         if(this.getCurrentDir()) {
             this.setCurrentDir(this.findObject(this.getCurrentDir().hash));
         } else {
-            this.setCurrentDir(this._paths); // Reset
+            this.setCurrentDir(null); // Reset
         }
         if(this.getCurrentFile()) {
             this.setCurrentFile(this.findObject(this.getCurrentFile().hash));
+        } else {
+            this.setCurrentFile(null);
         }
+
+        this._directories.refresh();
+        this._preview.refresh();
     }
 
     // SPELLCHECKER FUNCTIONS
@@ -611,19 +599,6 @@ class ZettlrRenderer
     saveSettings(cfg) { this._ipc.send('update-config', cfg); }
 
     /**
-     * Simply sets the current file pointer to the new.
-     * @param {ZettlrFile} newfile The new file's pointer.
-     */
-    setCurrentFile(newfile)
-    {
-        this._currentFile = newfile;
-        // Also directly select it
-        if(newfile !== null) {
-            this._preview.select(newfile.hash);
-        }
-    }
-
-    /**
      * Opens a new file
      * @param  {ZettlrFile} f The file to be opened
      */
@@ -632,7 +607,9 @@ class ZettlrRenderer
         // We have received a new file. So close the old and open the new
         this._editor.close();
         this.setCurrentFile(f);
+        // Select the file either in the preview list or in the directory tree
         this._preview.select(f.hash);
+        this._directories.select(f.hash);
         this._editor.open(f);
     }
 
@@ -698,16 +675,29 @@ class ZettlrRenderer
      * Sets the current dir pointer to the new.
      * @param {ZettlrDir} newdir The new dir.
      */
-    setCurrentDir(newdir)
+    setCurrentDir(newdir = null)
     {
-        if(!newdir) {
-            return console.error(`Could not set current dir to ${newdir}!`);
-        }
         this._currentDir = newdir;
-        // What we can also do here: Select the dir and refresh the file list.
-        // Because that's what _always_ follows this function call.
-        this._directories.select(newdir.hash);
-        this._preview.refresh();
+
+        if(newdir != null) {
+            // What we can also do here: Select the dir and refresh the file list.
+            // Because that's what _always_ follows this function call.
+            this._directories.select(newdir.hash);
+            this._preview.refresh();
+        }
+    }
+
+    /**
+     * Simply sets the current file pointer to the new.
+     * @param {ZettlrFile} newfile The new file's pointer.
+     */
+    setCurrentFile(newfile)
+    {
+        this._currentFile = newfile;
+        // Also directly select it
+        if(newfile !== null) {
+            this._preview.select(newfile.hash);
+        }
     }
 
     /**

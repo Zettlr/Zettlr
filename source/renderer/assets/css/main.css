@@ -211,6 +211,11 @@ html {
 #directories.hidden {
   display: none;
 }
+#directories > ul:not(:first-child) {
+  padding-top: 0.8em;
+  padding-bottom: 0.8em;
+  border-top: 1px solid #c8c8c8;
+}
 #directories ul {
   list-style-type: none;
   margin-left: 0px;
@@ -222,18 +227,6 @@ html {
 }
 #directories ul .selected:before {
   color: white;
-}
-#directories ul li#root:after {
-  content: '\f0f0';
-  font-family: 'WebHostingHub-Glyphs';
-  font-size: 0.54em;
-  /* Bit smaller, those indicators are damned huge */
-  margin-right: 5px;
-  display: inline-block;
-  position: absolute;
-  right: 5px;
-  height: 16px;
-  color: #1d75b3;
 }
 #directories ul li {
   line-height: 1.6em;
@@ -250,6 +243,18 @@ html {
 }
 #directories ul li.highlight {
   box-shadow: 0px 0px 1px 2px #c8f0aa;
+}
+#directories ul li.root:after {
+  content: '\f0f0';
+  font-family: 'WebHostingHub-Glyphs';
+  font-size: 0.54em;
+  /* Bit smaller, those indicators are damned huge */
+  margin-right: 5px;
+  display: inline-block;
+  position: absolute;
+  right: 5px;
+  height: 16px;
+  color: #1d75b3;
 }
 #directories ul .collapse-indicator {
   margin-right: 3px;
@@ -273,10 +278,60 @@ html {
   height: 0px;
   display: none;
 }
+#directories .file {
+  line-height: 1.6em;
+  padding: 0.1em 0.4em;
+  white-space: nowrap;
+  padding-left: 5px;
+  margin: 5px;
+  line-height: 120%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+#directories .file:after {
+  content: "\f0d6";
+  font-family: 'WebHostingHub-Glyphs';
+  font-size: 0.54em;
+  /* Bit smaller, those indicators are damned huge */
+  margin-right: 5px;
+  display: inline-block;
+  position: absolute;
+  right: 5px;
+  height: 16px;
+  color: #1cb27e;
+}
+#directories .file.selected {
+  background-color: #1d75b3;
+  color: white;
+}
+#directories .file:hover {
+  background-color: #dcdcdc;
+  color: inherit;
+}
+#directories .emptyPaths {
+  background-color: #f0f0f0;
+  color: #646464;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+#directories .emptyPaths .info {
+  display: block;
+  padding: 10px;
+  margin-top: 50%;
+  font-weight: bold;
+  font-size: 200%;
+}
 #directories.dark {
   background-color: #464646;
   border-right-color: #646464;
   color: white;
+}
+#directories.dark > ul:not(:first-child) {
+  border-top-color: #646464;
 }
 #directories.dark .collapse-indicator::before {
   color: #dcdcdc;
@@ -286,6 +341,13 @@ html {
 }
 #directories.dark ul .selected {
   background-color: #35652f;
+}
+#directories.dark .file:hover {
+  background-color: #505050;
+}
+#directories.dark .emptyPaths {
+  background-color: #505050;
+  color: #dcdcdc;
 }
 #preview {
   position: fixed;
@@ -802,10 +864,6 @@ html {
 }
 #toolbar .button.file-rename::before {
   content: "\f5d4";
-  display: inline;
-}
-#toolbar .button.file-revert::before {
-  content: "\f32a";
   display: inline;
 }
 #toolbar .button.insert-bold::before {

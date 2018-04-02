@@ -38,7 +38,7 @@ class ZettlrWatchdog
      * Create a new watcher instance
      * @param {String} path The path to projectDir
      */
-    constructor(paths)
+    constructor(paths = [])
     {
         this._staged = [];
         this._ignored = [];
@@ -54,6 +54,12 @@ class ZettlrWatchdog
      */
     start()
     {
+        if(this._paths.length < 1) {
+            // Can't start with nothing to watch. It will start as soon as
+            // something is added via ZettlrWatchdog::add()
+            return;
+        }
+
         // chokidar's ignored-setting is compatible to anymatch, so we can
         // pass an array containing the standard dotted directory-indicators,
         // directories that should be ignored and a function that returns true
@@ -122,8 +128,10 @@ class ZettlrWatchdog
      */
     stop()
     {
-        this._process.close();
-        this._process = null;
+        if(this._process != null) {
+            this._process.close();
+            this._process = null;
+        }
         // Also flush all changes and ignores
         this._staged = [];
         this._ignored = [];
@@ -209,7 +217,16 @@ class ZettlrWatchdog
 
         // Add the path to the watched
         this._paths.push(p);
-        this._process.add(p);
+
+        if(!this.isWatching() && !this.isReady()) {
+            // Begin watching
+            this.start();
+        } else {
+            // If it hasn't been started yet, ZettlrWatchdog will automatically
+            // begin watching the this._paths array. If it has already been
+            // started, we need to manually add it to the process.
+            this._process.add(p);
+        }
 
         return this;
     }

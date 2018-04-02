@@ -71,6 +71,11 @@ class ZettlrFile
             }
 
             this.read();
+
+            if(this.isRoot()) {
+                // We have to add our file to the watchdog
+                this.parent.getWatchdog().addPath(this.path);
+            }
         }
     }
 
@@ -326,6 +331,24 @@ class ZettlrFile
         }
         return (matches == terms.length);
     }
+
+    /**
+     * Returns the hash of the file
+     * @return {Number} The hash
+     */
+    getHash() { return this.hash; }
+
+    /**
+     * Returns the file path
+     * @return {String} The path
+     */
+    getPath() { return this.path; }
+
+    /**
+     * Returns the file name
+     * @return {String} The file name
+     */
+    getName() { return this.name; }
 
     // Dummy functions (either for recursive use or because their return val is obvious)
 

@@ -54,13 +54,13 @@ class ZettlrUpdater
 
     /**
      * Performs a check against the GitHub API, to determine whether or not
-     * there is a new version of Zettlr available.
+     * there is a new version of Zettlr available. TODO: Handle disconnect errors!
      */
     check()
     {
         let request = net.request(this._url('/releases'));
+
         request.on('response', (response) => {
-            // console.log(`STATUS: ${response.statusCode}`);
             response.on('data', (chunk) => {
                 // Add everything until the request is complete
                 this._response = this._response + chunk;

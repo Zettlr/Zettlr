@@ -80,12 +80,6 @@ class ZettlrRendererIPC
     {
         switch(cmd)
         {
-            case 'paths':
-            // arg contains a JSON with all paths and files
-            // Initial command.
-            this._app.newProject(cnt);
-            break;
-
             case 'paths-update':
             // Update the paths
             this._app.refresh(cnt);
@@ -104,7 +98,7 @@ class ZettlrRendererIPC
 
             case 'dir-open':
             // User has requested to open another folder. Notify host process.
-            this.send('dir-open', {});
+            this.send('dir-open');
             break;
 
             case 'dir-rename':
@@ -117,6 +111,11 @@ class ZettlrRendererIPC
 
             case 'dir-delete':
             this._app.deleteDir(cnt);
+            break;
+
+            case 'file-close':
+            case 'dir-close':
+            this.send('close-root', cnt.hash);
             break;
 
             // FILES

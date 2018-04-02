@@ -66,6 +66,11 @@ class ZettlrDir
             }
 
             this.scan();
+
+            if(this.isRoot()) {
+                // We have to add our dir to the watchdog
+                this.parent.getWatchdog().addPath(this.path);
+            }
         }
     }
 
@@ -504,6 +509,24 @@ class ZettlrDir
         this.children = sort(this.children);
         return this;
     }
+
+    /**
+     * Returns the hash of the dir
+     * @return {Number} The hash
+     */
+    getHash() { return this.hash; }
+
+    /**
+     * Returns the directory path
+     * @return {String} The path
+     */
+    getPath() { return this.path; }
+
+    /**
+     * Returns the directory name
+     * @return {String} The dir name
+     */
+    getName() { return this.name; }
 
     /**
      * Dummy function for recursive use. Always returns true.

@@ -93,7 +93,7 @@ class ZettlrIPC
         switch(cmd) {
             case 'get-paths':
             // The child process requested the current paths and files
-            this.send('paths', this._app.getPaths());
+            this.send('paths-update', this._app.getPaths());
             break;
 
             case 'file-get-quicklook':
@@ -154,6 +154,10 @@ class ZettlrIPC
             } else if(this._app.getCurrentDir() != null) {
                 this._app.removeDir();
             }
+            break;
+
+            case 'close-root':
+            this._app.close(cnt);
             break;
 
             case 'file-search':

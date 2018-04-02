@@ -25,11 +25,13 @@ const ZettlrIPC                     = require('./zettlr-ipc.js');
 const ZettlrWindow                  = require('./zettlr-window.js');
 const ZettlrConfig                  = require('./zettlr-config.js');
 const ZettlrDir                     = require('./zettlr-dir.js');
+const ZettlrFile                    = require('./zettlr-file.js');
 const ZettlrWatchdog                = require('./zettlr-watchdog.js');
 const ZettlrStats                   = require('./zettlr-stats.js');
 const ZettlrUpdater                 = require('./zettlr-updater.js');
 const {i18n, trans}                 = require('../common/lang/i18n.js');
-const {hash, ignoreDir}             = require('../common/zettlr-helpers.js');
+const {hash, ignoreDir,
+       ignoreFile, isFile, isDir}   = require('../common/zettlr-helpers.js');
 
 const POLL_TIME                     = require('../common/data.json').poll_time;
 
@@ -55,6 +57,9 @@ class Zettlr
         this.currentDir = null;     // Current working directory (object)
         this.editFlag = false;      // Is the current opened file edited?
 
+        // Let's finally try the multi-root
+        this._openPaths = [];
+
         // INTERNAL OBJECTS
         this.window = null;         // Display content
         this.ipc = null;            // Communicate with said content
@@ -66,11 +71,16 @@ class Zettlr
         // Init translations
         i18n(this.config.get('app_lang'));
         this.ipc = new ZettlrIPC(this);
-        // Initiate the directory tree
-        this.paths = new ZettlrDir(this, this.config.get('projectDir'));
 
-        // set currentDir pointer to the root node.
-        this.currentDir = this.paths;
+        // Initiate the watchdog
+        this.watchdog = new ZettlrWatchdog();
+
+        // Initiate the directory tree
+        // this.paths = new ZettlrDir(this, this.config.get('projectDir'));
+
+        // set currentDir pointer to null (WARNING somewhere I've assumed
+        // currentDir never to be null!!!! HAVE to double check that!)
+        this.currentDir = null;
 
         // Statistics
         this.stats = new ZettlrStats(this);
@@ -79,9 +89,8 @@ class Zettlr
         this.window = new ZettlrWindow(this);
         this.openWindow();
 
-        // Last: Start watching the directory
-        this.watchdog = new ZettlrWatchdog(this.config.get('projectDir'));
-        this.watchdog.start();
+        // Read all paths into the app
+        this.refreshPaths();
 
         this._updater = new ZettlrUpdater(this);
 
@@ -191,7 +200,9 @@ class Zettlr
         this.stats.save();
         this.watchdog.stop();
         // Perform closing activity in the path.
-        this.paths.shutdown();
+        for(let p of this._openPaths) {
+            p.shutdown();
+        }
     }
 
     /**
@@ -288,7 +299,13 @@ class Zettlr
 
         // arg contains the hash of a file.
         // getFile now returns the file object
-        let file = this.paths.findFile({ 'hash': arg });
+        let file = null;
+        for(let p of this.getPaths()) {
+            file = p.findFile({ 'hash': arg });
+            if(file != null) {
+                break;
+            }
+        }
 
         if(file != null) {
             this.ipc.send('file-open', file.withContent());
@@ -310,7 +327,13 @@ class Zettlr
     selectDir(arg)
     {
         // arg contains a hash for a directory.
-        let obj = this.paths.findDir({ 'hash': arg });
+        let obj = null;
+        for(let p of this.getPaths()) {
+            obj = p.findDir({ 'hash': arg });
+            if(obj != null) {
+                break;
+            }
+        }
 
         // Now send it back (the GUI should by itself filter out the files)
         if(obj != null && obj.isDirectory()) {
@@ -384,7 +407,6 @@ class Zettlr
     /**
      * Create a new directory.
      * @param  {Object} arg An object containing hash of containing and name of new dir.
-     * @return {void}     This function does not return anything.
      */
     newDir(arg)
     {
@@ -419,31 +441,24 @@ class Zettlr
     }
 
     /**
-     * Open a wholly new project path.
-     * @return {void} This function does not return anything.
+     * Open a new root
      */
     openDir()
     {
-        // The user wants to open a different folder.
-        // First check if the document is edited. If yes, ask user to save beforehand.
-        if(!this.canClose()) {
-            return;
-        }
+        // The user wants to open another file or directory.
+        let ret = this.window.askDir(require('electron').app.getPath('home'));
 
-        // In case of ret == 2 just proceed with opening another file
-        let ret = this.window.askDir(this.config.get('projectDir'));
-
-        // The user may have provided no dir at all, which returns in an
+        // The user may have provided no path at all, which returns in an
         // empty array -> check against and abort if array is empty
         if(!(ret && ret.length)) {
             return;
         }
 
         // Ret is now an array. As we do not allow multiple selection, just
-        // take the first index.
+        // take the first index. TODO: Allow multiple selection
         ret = ret[0];
 
-        if(ignoreDir(ret)) {
+        if((isDir(ret) && ignoreDir(ret)) || (isFile(ret) && ignoreFile(ret))) {
             // We cannot add this dir, because it is in the list of ignored directories.
             return this.window.prompt({
                 'type': 'error',
@@ -452,12 +467,20 @@ class Zettlr
             });
         }
 
-        // ret now contains the path. So let's alter configuration and reload.
-        this.reload(ret);
+        // ret now contains the path. So let's add it.
+        if(isFile(ret)) {
+            this._openPaths.push(new ZettlrFile(this, ret))
+        } else if(isDir(ret)) {
+            this._openPaths.push(new ZettlrDir(this, ret));
+        }
 
-        // The client now needs to close the current file and refresh its list
-        this.ipc.send('file-close');
-        this.ipc.send('paths', this.getPaths());
+        // Sorta sort this out
+        this._sortPaths();
+
+        this.getConfig().addPath(ret);
+
+        // Send the updated paths with the new path
+        this.ipc.send('paths-update', this.getPaths());
     }
 
     /**
@@ -838,8 +861,15 @@ class Zettlr
      */
     refreshPaths()
     {
-        // Just create a new ZettlrDir. Garbage Collect will destroy the old.
-        this.paths = new ZettlrDir(this, this.config.get('projectDir'));
+        this._openPaths = [];
+        // Reload all opened files, garbage collect will get the old ones.
+        for(let p of this.getConfig().get('openPaths')) {
+            if(isFile(p)) {
+                this._openPaths.push(new ZettlrFile(this, p))
+            } else if(isDir(p)) {
+                this._openPaths.push(new ZettlrDir(this, p));
+            }
+        }
         this.resetCurrents();
     }
 
@@ -849,8 +879,8 @@ class Zettlr
      */
     resetCurrents()
     {
-        this.currentDir = this.paths;
-        this.currentFile = null;
+        this.setCurrentDir(null);
+        this.setCurrentFile(null);
     }
 
     /**
@@ -912,10 +942,27 @@ class Zettlr
         // started typing with no file open.
         if(!file.hasOwnProperty('hash') || file.hash == null) {
             // For ease create a new file in current directory.
+            if(this.getCurrentDir() == null) {
+                return this.notify('Cannot save file: You must select a directory in which the file should be created!');
+            }
             file = this.getCurrentDir().newfile();
             this.watchdog.ignoreNext('add', file.path);
         } else {
-            file = this.paths.findFile({ 'hash': file.hash });
+            let f = null;
+            for(let p of this.getPaths()) {
+                f = p.findFile({ 'hash': file.hash });
+                if(f != null) {
+                    break;
+                }
+            }
+            if(f == null) {
+                return this.window.prompt({
+                    type: 'error',
+                    title: trans('system.error.fnf_title'),
+                    message: trans('system.error.fnf_message')
+                });
+            }
+            file = f;
         }
 
         // Ignore the next change for this specific file
@@ -932,8 +979,62 @@ class Zettlr
         }
 
         if(this.getCurrentDir().contains(file)) {
-            this.ipc.send('paths-update', this.paths);
+            this.ipc.send('paths-update', this.getPaths());
         }
+    }
+
+    /**
+     * Closes an open file/dir if the hashes match
+     * @param  {Number} hash The hash to be closed
+     */
+    close(hash)
+    {
+        for(let p of this.getPaths()) {
+            console.log(`checking for closing of ${p.getPath()}`);
+            if(p.getHash() == hash) {
+                console.log(`Closing root ${p.getPath()}!`);
+                this.getConfig().removePath(p.getPath());
+                this.getPaths().splice(this.getPaths().indexOf(p), 1);
+                this.ipc.send('paths-update', this.getPaths());
+                break;
+            }
+        }
+    }
+
+    _sortPaths()
+    {
+        let f = [];
+        let d = [];
+
+        for(let p of this.getPaths()) {
+            if(p.isFile()) {
+                f.push(p);
+            } else {
+                d.push(p);
+            }
+        }
+
+        f = f.sort((a, b) => {
+            if(a.getName() < b.getName()) {
+                return -1
+            } else if(a.getName() > b.getName()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        d = d.sort((a, b) => {
+            if(a.getName() < b.getName()) {
+                return -1
+            } else if(a.getName() > b.getName()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        this._openPaths = f.concat(d);
     }
 
     /**
@@ -949,7 +1050,11 @@ class Zettlr
         }
 
         if(this.window != null) {
-            this.window.setTitle(f.name);
+            if(f.isRoot()) {
+                this.window.setTitle(f.path);
+            } else {
+                this.window.setTitle(f.name);
+            }
         }
         this.currentFile = f;
         this.ipc.send('file-set-current', f);
@@ -961,11 +1066,6 @@ class Zettlr
      */
     setCurrentDir(d)
     {
-        if(d == null) {
-            // Reset to project root
-            this.currentDir = this.getPaths();
-            return;
-        }
         // Set the dir
         this.currentDir = d;
         this.ipc.send('dir-set-current', d);
@@ -1005,7 +1105,7 @@ class Zettlr
      * Returns the directory tree.
      * @return {ZettlrDir} The root directory pointer.
      */
-    getPaths()       { return this.paths; }
+    getPaths()       { return this._openPaths; }
 
     /**
      * Returns the ZettlrConfig object
@@ -1018,6 +1118,12 @@ class Zettlr
      * @return {ZettlrUpdater} The updater.
      */
     getUpdater()     { return this._updater; }
+
+    /**
+     * Returns the watchdog
+     * @return {ZettlrWatchdog} The watchdog instance.
+     */
+    getWatchdog()    { return this.watchdog; }
 
     /**
      * Get the current directory.

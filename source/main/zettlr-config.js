@@ -16,10 +16,11 @@
  * END HEADER
  */
 
-const fs            = require('fs');
-const path          = require('path');
-const {app}         = require('electron');
-const commandExists = require('command-exists').sync; // Does a given shell command exist?
+const fs             = require('fs');
+const path           = require('path');
+const {app}          = require('electron');
+const commandExists  = require('command-exists').sync; // Does a given shell command exist?
+const {isFile,isDir} = require('../common/zettlr-helpers.js');
 
 /**
  * This class represents the configuration of Zettlr, represented by the
@@ -66,6 +67,7 @@ class ZettlrConfig
         // Config Template providing all necessary arguments
         this.cfgtpl = {
             "projectDir": app.getPath('documents'),
+            "openPaths" : [],
             "darkTheme" : false,
             "snippets"  : true,
             "pandoc"    : 'pandoc',
@@ -85,6 +87,9 @@ class ZettlrConfig
 
         // Run system check
         this.checkSystem();
+
+        // Remove potential dead links to non-existent files and dirs
+        this.checkPaths();
     }
 
     /**
@@ -208,6 +213,56 @@ class ZettlrConfig
     }
 
     /**
+     * Checks the validity of each path that should be opened and removes all
+     * those that are invalid
+     * @return {void} Nothing to return.
+     */
+    checkPaths()
+    {
+        for(let i = 0; i < this.config['openPaths'].length; i++) {
+            try {
+                let s = fs.lstatSync(this.config['openPaths'][i]);
+            } catch(e) {
+                // Remove the path
+                this.config['openPaths'].splice(i, 1);
+                --i;
+            }
+        }
+
+        // Remove duplicates
+        this.config['openPaths'] = [...new Set(this.config['openPaths'])];
+
+        // Now sort the paths.
+        this._sortPaths();
+    }
+
+    /**
+     * Adds a path to be opened on startup
+     * @param {String} p The path to be added
+     */
+    addPath(p)
+    {
+        // Only add valid and unique paths
+        if((isFile(p) || isDir(p)) && !this.config['openPaths'].includes(p)) {
+            this.config['openPaths'].push(p);
+            this._sortPaths();
+        }
+
+        return this;
+    }
+
+    /**
+     * Removes a path from the startup paths
+     * @param  {String} p The path to be removed
+     */
+    removePath(p)
+    {
+        if(this.config['openPaths'].includes(p)) {
+            this.config['openPaths'].splice(this.config['openPaths'].indexOf(p), 1);
+        }
+    }
+
+    /**
      * Returns a config property
      * @param  {String} attr The property to return
      * @return {Mixed}      Either the config property or null
@@ -315,16 +370,36 @@ class ZettlrConfig
         // This will ensure sane defaults.
         for (var prop in oldcfg) {
             if (newcfg.hasOwnProperty(prop) && (newcfg[prop] != null)) {
-                    if(typeof oldcfg[prop] === 'object') {
-                        // Update sub-object
-                        this.update(newcfg[prop], oldcfg[prop]);
-                    } else {
-                        oldcfg[prop] = newcfg[prop];
-                    }
+                // We have some variable-length arrays that only contain
+                // strings, e.g. we cannot update them using update()
+                if((typeof oldcfg[prop] === 'object') && !Array.isArray(oldcfg[prop])) {
+                    // Update sub-object
+                    this.update(newcfg[prop], oldcfg[prop]);
+                } else {
+                    oldcfg[prop] = newcfg[prop];
+                }
             }
         }
 
         return;
+    }
+
+    _sortPaths()
+    {
+        let f = [];
+        let d = [];
+        for(let p of this.config['openPaths']) {
+            if(isDir(p)) {
+                d.push(p);
+            } else {
+                f.push(p);
+            }
+        }
+        f.sort();
+        d.sort();
+        this.config['openPaths'] = f.concat(d);
+
+        return this;
     }
 }
 
