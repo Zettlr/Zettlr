@@ -273,13 +273,23 @@ class TreeView
      */
     moveToTarget()
     {
-        // +1 to account for the parent's <li>-tag
-        if((this._ul.index() == this._target+1) || !this._target) {
-            return;
-        } else if(this._target == 0) {
-            this._ul.insertBefore(this._parent.getContainer().children('ul')[0]);
+        if(this.isRoot()) {
+            if(this._ul.index() == this._target || !this._target) {
+                return this;
+            } else if(this._target == 0) {
+                this._ul.insertBefore(this._parent.getContainer().children().first());
+            } else {
+                this._ul.insertAfter(this._parent.getContainer().children()[this._target-1]);
+            }
         } else {
-            this._ul.insertAfter(this._parent.getContainer().children('ul')[this._target-1]);
+            // +1 to account for the parent's <li>-tag
+            if((this._ul.index() == this._target+1) || !this._target) {
+                return this;
+            } else if(this._target == 0) {
+                this._ul.insertBefore(this._parent.getContainer().children('ul')[0]);
+            } else {
+                this._ul.insertAfter(this._parent.getContainer().children('ul')[this._target-1]);
+            }
         }
 
         return this;

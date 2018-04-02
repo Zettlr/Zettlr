@@ -66,7 +66,6 @@ class ZettlrConfig
 
         // Config Template providing all necessary arguments
         this.cfgtpl = {
-            "projectDir": app.getPath('documents'),
             "openPaths" : [],
             "darkTheme" : false,
             "snippets"  : true,

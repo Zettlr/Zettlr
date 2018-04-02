@@ -284,18 +284,36 @@ class ZettlrRenderer
     }
 
     /**
+     * Tries to find a given hash in all open directories and files
+     * @param  {Number} hash The hash to be searched for
+     * @return {Object}      Either a file or a directory object
+     */
+    findObject(hash)
+    {
+        let o = null;
+        for(let p of this._paths) {
+            o = this._find(hash, p);
+            if(o != null) {
+                break;
+            }
+        }
+
+        return o;
+    }
+
+    /**
      * Helper function to find dummy file/dir objects based on a hash
      * @param  {Integer} hash             The hash identifying whatever is to be searched for.
      * @param  {Object} [obj=this._paths] A sub-object or the whole tree to be searched.
      * @return {Mixed}                  Either null, or ZettlrFile/ZettlrDir if found.
      */
-    findObject(hash, obj = this._paths)
+    _find(hash, obj = this._paths)
     {
         if(obj.hash == hash) {
             return obj;
         } else if(obj.hasOwnProperty('children')) {
             for(let c of obj.children) {
-                let ret = this.findObject(hash, c);
+                let ret = this._find(hash, c);
                 if(ret != null) {
                     return ret;
                 }

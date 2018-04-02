@@ -148,6 +148,10 @@ class ZettlrBody
             elem = $('.button.file-rename');
         } else {
             elem = $('#preview').find('li[data-hash="'+file.hash+'"]').first();
+            if(elem.length == 0) {
+                // Obviously the file is standalone
+                elem = $('#directories').find('div[data-hash="'+file.hash+'"]').first();
+            }
         }
 
         let cnt = $('<div>').html(

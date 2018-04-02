@@ -88,9 +88,9 @@ class FileView
         if((this._elem.index() == this._target) || !this._target) {
             return;
         } else if(this._target == 0) {
-            this._ul.insertBefore(this._parent.getContainer());
+            this._elem.insertBefore(this._parent.getContainer().children().first());
         } else {
-            this._ul.insertAfter(this._parent.getContainer());
+            this._elem.insertAfter(this._parent.getContainer().children()[this._target-1]);
         }
 
         return this;
