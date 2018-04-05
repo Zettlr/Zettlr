@@ -238,6 +238,7 @@ class ZettlrConfig
     /**
      * Adds a path to be opened on startup
      * @param {String} p The path to be added
+     * @return {Boolean} True, if the path was succesfully added, else false.
      */
     addPath(p)
     {
@@ -245,9 +246,10 @@ class ZettlrConfig
         if((isFile(p) || isDir(p)) && !this.config['openPaths'].includes(p)) {
             this.config['openPaths'].push(p);
             this._sortPaths();
+            return true;
         }
 
-        return this;
+        return false;
     }
 
     /**

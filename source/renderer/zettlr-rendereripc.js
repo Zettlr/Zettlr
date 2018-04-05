@@ -113,8 +113,7 @@ class ZettlrRendererIPC
             this._app.deleteDir(cnt);
             break;
 
-            case 'file-close':
-            case 'dir-close':
+            case 'root-close':
             this.send('close-root', cnt.hash);
             break;
 

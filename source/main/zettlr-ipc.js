@@ -137,7 +137,7 @@ class ZettlrIPC
 
             case 'dir-open':
             // Client requested a totally different folder.
-            this._app.openDir();
+            this._app.open('dir');
             break;
 
             case 'file-delete':
@@ -163,7 +163,7 @@ class ZettlrIPC
             case 'file-search':
             // arg.content contains a hash of the file to be searched
             // and the prepared terms.
-            let ret = this._app.getPaths().findFile({ 'hash': cnt.hash }).search(cnt.terms);
+            let ret = this._app.findFile({ 'hash': cnt.hash }).search(cnt.terms);
             this.send('file-search-result', {
                 'hash'  : cnt.hash,
                 'result': ret
@@ -243,6 +243,11 @@ class ZettlrIPC
             // UPDATE
             case 'update-check':
             this._app.checkForUpdate();
+            break;
+
+            // Handle dropped files/folders
+            case 'handle-drop':
+            this._app.handleDrop(cnt);
             break;
 
             default:

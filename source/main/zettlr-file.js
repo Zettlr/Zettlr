@@ -13,11 +13,11 @@
  * END HEADER
  */
 
-const fs        = require('fs');
-const path      = require('path');
-const sanitize  = require('sanitize-filename');
-const {shell}   = require('electron');
-const {hash}    = require('../common/zettlr-helpers.js');
+const fs                    = require('fs');
+const path                  = require('path');
+const sanitize              = require('sanitize-filename');
+const {shell}               = require('electron');
+const {hash, ignoreFile}    = require('../common/zettlr-helpers.js');
 
 /**
  * Error Object
@@ -38,9 +38,9 @@ class ZettlrFile
     /**
      * Create the model by reading the file on disk.
      * @param {ZettlrDir} parent       The containing directory model
-     * @param {String} [fname=null] The full path to the file to be read
+     * @param {String} fname        The full path to the file to be read
      */
-    constructor(parent, fname = null)
+    constructor(parent, fname)
     {
         this.parent       = parent;
         this.dir          = ''; // Containing dir
@@ -54,29 +54,28 @@ class ZettlrFile
         this.content      = ''; // Will only be not empty when the file is modified.
         this.modified     = false;
 
-        // Prepopulate if filename is given
-        if(fname !== null) {
-            this.path = fname;
-            this.name = path.basename(this.path);
-            this.hash = hash(this.path);
-            this.ext  = path.extname(this.path);
-            this.dir = this.parent.name; // Containing dir
+        // Prepopulate
+        this.path = fname;
+        this.name = path.basename(this.path);
+        this.hash = hash(this.path);
+        this.ext  = path.extname(this.path);
+        this.dir = this.parent.name; // Containing dir
 
-            // The file might've been just created. Test that
-            try {
-                let stat = fs.lstatSync(this.path);
-            }catch(e) {
-                // Error? -> create
-                fs.writeFileSync(this.path, '', { encoding: "utf8" });
-            }
-
-            this.read();
-
-            if(this.isRoot()) {
-                // We have to add our file to the watchdog
-                this.parent.getWatchdog().addPath(this.path);
-            }
+        // The file might've been just created. Test that
+        try {
+            let stat = fs.lstatSync(this.path);
+        }catch(e) {
+            // Error? -> create
+            fs.writeFileSync(this.path, '', { encoding: "utf8" });
         }
+
+        this.read();
+
+        if(this.isRoot()) {
+            // We have to add our file to the watchdog
+            this.parent.getWatchdog().addPath(this.path);
+        }
+
     }
 
     /**
@@ -87,6 +86,21 @@ class ZettlrFile
     shutdown()
     {
         // Such empty
+    }
+
+    handleEvent(p, e)
+    {
+        if(this.isScope(p) === this) {
+            console.log(`File ${this.name} is handling the event ${e}`);
+            // Only in this case may we handle the event. Possible events:
+            // change, unlink
+            if(e === 'change') {
+                this.update().parent.notifyChange(`File ${this.name} has changed remotely.`);
+            } else if(e === 'unlink') {
+                this.parent.notifyChange(`File ${this.name} has been removed.`);
+                this.remove();
+            }
+        }
     }
 
     /**
@@ -215,9 +229,10 @@ class ZettlrFile
     /**
      * Renames the file on disk
      * @param  {string} name The new name (not path!)
+     * @param {ZettlrWatchdog} [watchdog=null] The watchdog instance to ignore the events if possible
      * @return {ZettlrFile}      this for chainability.
      */
-    rename(name)
+    rename(name, watchdog = null)
     {
         name = sanitize(name);
 
@@ -227,7 +242,7 @@ class ZettlrFile
         }
 
         // Make sure we got an extension.
-        if(path.extname(name) != '.md') {
+        if(ignoreFile(name)) {
             name += '.md';
         }
 
@@ -235,8 +250,12 @@ class ZettlrFile
         this.name = name;
         let newpath = path.join(path.dirname(this.path), this.name);
 
+        // If the watchdog is given, ignore the generated events pre-emptively
+        if(typeof watchdog === 'object' && watchdog.hasOwnProperty('ignoreNext')) {
+            watchdog.ignoreNext('unlink', this.path);
+            watchdog.ignoreNext('add', newpath);
+        }
         fs.renameSync(this.path, newpath);
-        // Remove old file
         this.path = newpath;
         this.hash = hash(this.path);
 
@@ -307,7 +326,7 @@ class ZettlrFile
             }
         }
 
-        // Retrn immediately
+        // Return immediately
         if(matches == terms.length) { return true; }
 
         // Do a full text search.
@@ -389,6 +408,20 @@ class ZettlrFile
      * @return {Boolean} True or false depending on the type of this.parent
      */
     isRoot()      { return !this.parent.isDirectory(); }
+
+    /**
+     * Checks whether or not the given path p is in the scope of this object
+     * @param  {String}  p The path to test
+     * @return {Mixed}   "this" if p equals path, false otherwise.
+     */
+    isScope(p)
+    {
+        if(p === this.path) {
+            return this;
+        }
+
+        return false;
+    }
 }
 
 module.exports = ZettlrFile;

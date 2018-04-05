@@ -60,13 +60,16 @@ class ZettlrBody
             // files and folders that are being dragged into the application.
             // console.log(event);
             return false;
-        },false);
+        }, false);
 
-        document.addEventListener('drop',function(event){
+        // On drop, tell the renderer to tell main that there's something to
+        // handle.
+        document.addEventListener('drop',(event) => {
             event.preventDefault();
-            console.log(event.dataTransfer.files);
+            //console.log(event.dataTransfer.files);
+            //this._renderer.handleDrop(event.dataTransfer.files);
             return false;
-        },false);
+        }, false);
     }
 
     /**

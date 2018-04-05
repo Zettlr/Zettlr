@@ -2,11 +2,14 @@
 
 ## GUI and functionality
 
-(nothing here)
+- Fixed the button text color in popups.
 
 ## Under the hood
 
-(nothing here)
+- Fixed a small bug in the `ZettlrWatchdog` that prevented remotely added directories from being detected by the app.
+- Given the classes `ZettlrFile` and `ZettlrDir` more authority over what happens with them. Now they're handling all events by themselves.
+- Made the paths mandatory on creation of new `ZettlrFile` and `ZettlrDir` instances
+- Found **A LOT** of unnecessary and duplicate code in the `Zettlr` main class and removed it.
 
 # 0.14.3
 

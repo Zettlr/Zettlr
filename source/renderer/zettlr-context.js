@@ -118,7 +118,7 @@ class ZettlrCon
                     // Root dirs can be closed
                     this._menu.append(new MenuItem({ 'type': 'separator' }));
                     this._menu.append(new MenuItem({ 'label': trans('menu.close_dir'), click(item, win) {
-                        that._body.getRenderer().handleEvent('dir-close', { 'hash': hash });
+                        that._body.getRenderer().handleEvent('root-close', { 'hash': hash });
                     }}));
                 }
             } else if(elem.is('div') && elem.hasClass('file')) {
@@ -134,7 +134,7 @@ class ZettlrCon
                 }}));
                 this._menu.append(new MenuItem({ 'type': 'separator' }));
                 this._menu.append(new MenuItem({ 'label': trans('menu.close_file'), click(item, win) {
-                    that._body.getRenderer().handleEvent('file-close', { 'hash': hash });
+                    that._body.getRenderer().handleEvent('root-close', { 'hash': hash });
                 }}));
             }
         } else if(elem.parents('#editor').length > 0) {

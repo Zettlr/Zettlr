@@ -123,16 +123,6 @@ class ZettlrRenderer
     }
 
     /**
-     * Update somewhere in the paths.
-     * @param  {[type]} newPaths [description]
-     * @return {[type]}          [description]
-     */
-    refresh(newPaths)
-    {
-        this.updatePaths(newPaths);
-    }
-
-    /**
      * Requests the renaming of either the current or another directory.
      * @param  {Object} arg Message body
      * @return {void}     No return.
@@ -193,11 +183,11 @@ class ZettlrRenderer
     {
         // Welcome to FUNCTION HELL! (Proposal: How about simply setting the
         // "dark" class on the body ...?)
-        this._directories.toggleTheme();
-        this._preview.toggleTheme();
-        this._editor.toggleTheme();
+        //this._directories.toggleTheme();
+        //this._preview.toggleTheme();
+        //this._editor.toggleTheme();
         this._body.toggleTheme();
-        this._toolbar.toggleTheme();
+        // this._toolbar.toggleTheme();
     }
 
     /**
@@ -328,20 +318,21 @@ class ZettlrRenderer
      * @param  {Object} nData The new file tree
      * @return {void}       Nothing to return.
      */
-    updatePaths(nData)
+    refresh(nData)
     {
         this._paths = nData;
-        if(this.getCurrentDir()) {
+        if(this.getCurrentDir() != null) {
             this.setCurrentDir(this.findObject(this.getCurrentDir().hash));
         } else {
             this.setCurrentDir(null); // Reset
         }
-        if(this.getCurrentFile()) {
+        if(this.getCurrentFile() != null) {
             this.setCurrentFile(this.findObject(this.getCurrentFile().hash));
         } else {
             this.setCurrentFile(null);
         }
 
+        // Trigger a refresh in directories and preview
         this._directories.refresh();
         this._preview.refresh();
     }
@@ -536,6 +527,13 @@ class ZettlrRenderer
     {
         this._toolbar.endSearch();
         this._preview.endSearch();
+    }
+
+    // END search functions
+
+    handleDrop(filelist)
+    {
+        this._ipc.send('handle-drop', filelist);
     }
 
     /**

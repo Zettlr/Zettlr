@@ -244,20 +244,19 @@ html {
 #directories ul li.highlight {
   box-shadow: 0px 0px 1px 2px #c8f0aa;
 }
-#directories ul li.root:after {
+#directories ul li.root:before {
   content: '\f0f0';
   font-family: 'WebHostingHub-Glyphs';
-  font-size: 0.54em;
+  font-size: 0.72em;
   /* Bit smaller, those indicators are damned huge */
   margin-right: 5px;
   display: inline-block;
-  position: absolute;
-  right: 5px;
   height: 16px;
   color: #1d75b3;
 }
 #directories ul .collapse-indicator {
   margin-right: 3px;
+  float: left;
 }
 #directories ul .collapse-indicator::before {
   content: "\f48b";
@@ -288,20 +287,18 @@ html {
   border-radius: 8px;
   overflow: hidden;
 }
-#directories .file:after {
-  content: "\f0d6";
+#directories .file:before {
+  content: '\f0d6';
   font-family: 'WebHostingHub-Glyphs';
-  font-size: 0.54em;
+  font-size: 0.9em;
   /* Bit smaller, those indicators are damned huge */
   margin-right: 5px;
   display: inline-block;
-  position: absolute;
-  right: 5px;
-  height: 16px;
-  color: #1cb27e;
+  position: relative;
+  bottom: -2px;
 }
 #directories .file.selected {
-  background-color: #1d75b3;
+  background-color: #1cb27e;
   color: white;
 }
 #directories .file:hover {
@@ -1048,7 +1045,7 @@ html {
   background-color: rgba(255, 255, 255, 0.9);
   color: #282828;
   border-radius: 4px;
-  box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.5);
   border-radius: 2px;
   max-width: 200px;
   max-height: 600px;
@@ -1079,7 +1076,7 @@ html {
   font-size: 200%;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.9);
-  color: white;
+  color: #282828;
   padding: 10px;
   display: block;
   text-align: center;
@@ -1157,6 +1154,7 @@ html {
 }
 .dark .popup button {
   background-color: rgba(0, 0, 0, 0.9);
+  color: #dcdcdc;
 }
 .dark .popup .btn-share.odt {
   color: #dcdcdc;

@@ -49,59 +49,54 @@ class ZettlrDirectories
 
         this._empty.hide();
 
-        if(this._tree.length == 0) { // Initial call
-            for(let p of this._renderer.getPaths()) {
-                this._tree.push(new TreeView(this, p, true));
-            }
-        } else {
-            // First determine how many objects we have to display
-            let l = this._renderer.getPaths().length;
+        // First determine how many objects we have to display
+        let l = this._renderer.getPaths().length;
 
-            // No children, so detach any that we may have and return.
-            if(l == 0) {
-                for(let t of this._tree) {
-                    t.detach();
-                }
-                this._tree = []; // Dereference
-                this._empty.show(); // Display the no-dirs message
-                return;
-            }
-
-            // Detach all objects that are no longer present
+        // No children, so detach any that we may have and return.
+        if(l == 0) {
             for(let t of this._tree) {
-                if(!this._renderer.getPaths().find((elem) => {return (elem.hash == t.getHash());})) {
-                    t.detach();
-                }
+                t.detach();
             }
+            this._tree = []; // Dereference
+            this._empty.show(); // Display the no-dirs message
+            return;
+        }
 
-            // Allocate target array
-            let target = new Array(l);
-
-            // Iterate over the new objects
-            let x = this._renderer.getPaths(); // Ease of access
-            for(let i = 0; i < x.length; i++) {
-                // First check if we've already gotten that object in our list
-                let found = this._tree.find((elem) => {return elem.getHash() == x[i].hash;});
-                if(found != undefined) {
-                    // Got it -> insert at correct position in target array and refresh
-                    target[i] = this._tree[this._tree.indexOf(found)];
-                    target[i].refresh(x[i]);
-                } else {
-                    // New object -> add
-                    target[i] = new TreeView(this, x[i], true);
-                }
-                target[i].setTarget(i);
-            }
-
-            // Swap
-            this._tree = target;
-
-            // Now move to target
-            for(let t of this._tree) {
-                t.moveToTarget();
+        // Detach all objects that are no longer present
+        for(let t of this._tree) {
+            if(!this._renderer.getPaths().find((elem) => {return (elem.hash == t.getHash());})) {
+                t.detach();
             }
         }
 
+        // Allocate target array
+        let target = new Array(l);
+
+        // Iterate over the new objects
+        let x = this._renderer.getPaths(); // Ease of access
+        for(let i = 0; i < x.length; i++) {
+            // First check if we've already gotten that object in our list
+            let found = this._tree.find((elem) => {return elem.getHash() == x[i].hash;});
+            if(found != undefined) {
+                // Got it -> insert at correct position in target array and refresh
+                target[i] = this._tree[this._tree.indexOf(found)];
+                target[i].refresh(x[i]);
+            } else {
+                // New object -> add
+                target[i] = new TreeView(this, x[i], true);
+            }
+            target[i].setTarget(i);
+        }
+
+        // Swap
+        this._tree = target;
+
+        // Now move to target
+        for(let t of this._tree) {
+            t.moveToTarget();
+        }
+
+        // Select everything that may be selected.
         this.select();
 
         return this;

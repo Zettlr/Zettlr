@@ -18,9 +18,12 @@ const fs           = require('fs');
 const sanitize     = require('sanitize-filename');
 const ZettlrFile   = require('./zettlr-file.js');
 const {shell}      = require('electron');
+const {trans}      = require('../common/lang/i18n.js');
 
 // Include helpers
-const { hash, sort, generateName, ignoreDir, ignoreFile } = require('../common/zettlr-helpers.js');
+const { hash, sort, generateName,
+    ignoreDir, ignoreFile, isFile, isDir
+} = require('../common/zettlr-helpers.js');
 
 /**
  * Error object constructor
@@ -40,10 +43,14 @@ class ZettlrDir
     /**
      * Read a directory.
      * @param {Mixed} parent     Either ZettlrDir or Zettlr, depending on root status.
-     * @param {String} [dir=null] The full path to the directory.
+     * @param {String} dir      The full path to the directory
      */
-    constructor(parent, dir = null)
+    constructor(parent, dir)
     {
+        if(dir === null || dir === '') {
+            throw new DirectoryError('Error on ZettlrDir instantiation: dir cannot be empty!');
+        }
+
         this.path     = "";
         this.name     = "";
         this.hash     = null;
@@ -51,43 +58,68 @@ class ZettlrDir
         this.type     = 'directory';
         this.parent   = parent;
 
-        // Prepopulate if given.
-        if(dir != null) {
-            this.path = dir;
-            this.name = path.basename(this.path);
-            this.hash = hash(this.path);
+        // Prepopulate
+        this.path = dir;
+        this.name = path.basename(this.path);
+        this.hash = hash(this.path);
 
-            // The directory might've been just been created.
-            try {
-                let stat = fs.lstatSync(this.path);
-            }catch(e) {
-                // Error? -> create
-                fs.mkdirSync(this.path);
-            }
+        // The directory might've been just been created.
+        try {
+            let stat = fs.lstatSync(this.path);
+        }catch(e) {
+            // Error? -> create
+            fs.mkdirSync(this.path);
+        }
 
-            this.scan();
+        this.scan();
 
-            if(this.isRoot()) {
-                // We have to add our dir to the watchdog
-                this.parent.getWatchdog().addPath(this.path);
-            }
+        if(this.isRoot()) {
+            // We have to add our dir to the watchdog
+            this.parent.getWatchdog().addPath(this.path);
         }
     }
 
     /**
-     * Reverts all files (i.e. removes their autosaves)
+     * Initiates a shutdown to all children
      */
     shutdown()
     {
-        // Revert all files in this directory and send the shutdown command
-        // further down the road.
+        // Shutdown all objects
         for(let c of this.children) {
-            if(c.isFile()) {
-                c.shutdown();
-            } else if(c.isDirectory()) {
-                c.shutdown();
+            c.shutdown();
+        }
+    }
+
+    /**
+     * Handles an event sent fron the watchdog
+     * @param  {String} p The path for which the event was thrown
+     * @param  {String} e The event itself
+     * @return {void}   No return.
+     */
+    handleEvent(p, e)
+    {
+        if((this.isScope(p) === this) && (e === 'unlinkDir')) {
+            // This directory has been removed. Notify host process and remove.
+            // TODO: Translate
+            this.parent.notifyChange(`The directory ${this.name} has been removed.`);
+            this.remove();
+        } else if(this.isScope(p) === true) {
+            if((path.dirname(p) === this.path) && (e === 'add' || e === 'addDir')) {
+                // A new dir or a new file has been created here. Re-Scan.
+                this.scan();
+                this.parent.notifyChange(`The directory ${this.name} has changed.`);
+                return;
+            }
+            // Some children has to handle it
+            for(let c of this.children) {
+                c.handleEvent(p, e);
             }
         }
+    }
+
+    notifyChange(msg)
+    {
+        this.parent.notifyChange(msg);
     }
 
     /**
@@ -157,17 +189,21 @@ class ZettlrDir
     /**
      * Creates a new subdirectory and returns it.
      * @param  {String} name The name (not path!) for the subdirectory.
+     * @param  {ZettlrWatchdog} [watchdog=null] The optional watchdog instance
      * @return {ZettlrDir}      The newly created directory.
      */
-    newdir(name)
+    newdir(name, watchdog = null)
     {
         // Remove unallowed characters.
         name = sanitize(name);
         if((name === '') || (name === null)) {
-            throw new DirectoryError('The directory name did not contain any allowed characters.');
+            throw new DirectoryError(trans('system.error.no_allowed_chars'));
         }
-
         let newpath = path.join(this.path, name);
+
+        if(typeof watchdog === 'object' && watchdog.hasOwnProperty('ignoreNext')) {
+            this.watchdog.ignoreNext('addDir', newpath);
+        }
 
         let dir = new ZettlrDir(this, newpath);
         this.children.push(dir);
@@ -179,10 +215,11 @@ class ZettlrDir
 
     /**
      * Create a new file in this directory.
-     * @param  {String} [name=null] The new name, if given
+     * @param  {String} name The new name, if given
+     * @param {ZettlrWatchdog} [watchdog=null] The optional watchdog instance
      * @return {ZettlrFile}             The newly created file.
      */
-    newfile(name = null)
+    newfile(name, watchdog = null)
     {
         if(name == null) {
             // Generate a unique new name
@@ -192,7 +229,7 @@ class ZettlrDir
         name = sanitize(name);
         // This gets executed once the user has not entered any allowed characters
         if((name == '') || (name == null)) {
-            throw new DirectoryError('The new file name did not contain any allowed characters.');
+            throw new DirectoryError(trans('system.error.no_allowed_chars'));
         }
 
         // Do we have an extension?
@@ -202,7 +239,12 @@ class ZettlrDir
 
         // Already exists
         if(this.exists(path.join(this.path, name))) {
-            throw new DirectoryError('The file already exists.');
+            throw new DirectoryError(trans('system.error.file_exists'));
+        }
+
+        // If we got the watchdog instance, ignore the creation event
+        if(typeof watchdog === 'object' && watchdog.hasOwnProperty('ignoreNext')) {
+            watchdog.ignoreNext('add', path.join(this.path, name));
         }
 
         // Create a new file.
@@ -281,6 +323,8 @@ class ZettlrDir
             if( (!this.parent.hasOwnProperty('type')) && (this.parent.type !== 'directory') ) {
                 return false;
             }
+
+            this.shutdown();
 
             // It may be that this method returns false. Mostly, because the
             // directory has been deleted and this object is only removed to
@@ -372,7 +416,7 @@ class ZettlrDir
      */
     scan()
     {
-        // Reads this directory.
+        // (Re-)Reads this directory.
         try {
             let stat = fs.lstatSync(this.path);
         }catch(e) {
@@ -380,30 +424,49 @@ class ZettlrDir
             return;
         }
 
-        // Empty the children array
-        this.children = [];
-
         // (Re-)read the directory
         let files = fs.readdirSync(this.path);
 
-        for(let f of files) {
-            let p = path.join(this.path, f);
-            // Determine if file or dir.
-            // We don't need try/catch because readDirSync doesn't return spurious paths
-            let stat = fs.lstatSync(p);
-            if(stat.isDirectory()) {
-                // Only add non-ignored dirs
-                if(!ignoreDir(p)) {
-                    this.children.push(new ZettlrDir(this, p)); // This recursively reads the "f" dir
-                }
-            } else if(stat.isFile()) {
-                let extname = path.extname(p);
-                if(!ignoreFile(p)) {
-                    // Exclude non-md- and -txt-files
-                    this.children.push(new ZettlrFile(this, p));
-                }
-            } // With else if exlude everything like symlinks etc and skip them
+        // Convert to absolute paths
+        for(let i = 0; i < files.length; i++) {
+            files[i] = path.join(this.path, files[i]);
         }
+
+        // Remove all paths that are to be ignored
+        for(let f of files) {
+            if((isDir(f) && ignoreDir(f)) || (isFile(f) && ignoreFile(f))) {
+                files.splice(files.indexOf(f), 1);
+            }
+        }
+
+        let nChildren = [];
+
+        // Remove all children that are no longer present
+        for(let c of this.children) {
+            if(!files.includes(c.path)) {
+                c.shutdown();
+                this.children.splice(this.children.indexOf(c), 1);
+            }
+        }
+
+        // Iterate over all files
+        for(let f of files) {
+            // Do we already have it?
+            let found = this.children.find((elem) => { return elem.path == f; });
+            if(found !== undefined) {
+                nChildren.push(found);
+            } else {
+                // Otherwise create new
+                if(isFile(f)) {
+                    nChildren.push(new ZettlrFile(this, f));
+                } else if(isDir(f)) {
+                    nChildren.push(new ZettlrDir(this, f));
+                }
+            }
+        }
+
+        // Swap
+        this.children = nChildren;
 
         // Final step: Sort
         this.children = sort(this.children);
@@ -545,6 +608,22 @@ class ZettlrDir
      * @return {Boolean} True or false depending on the type of this.parent
      */
     isRoot()      { return !this.parent.isDirectory(); }
+
+    /**
+     * Checks whether or not the given path p is in the scope of this object
+     * @param  {String}  p The path to test
+     * @return {Mixed}   "this" if p equals path, true if in scope or false.
+     */
+    isScope(p)
+    {
+        if(p === this.path) {
+            return this;
+        } else if(p.indexOf(this.path) != -1) {
+            return true;
+        }
+
+        return false;
+    }
 }
 
 module.exports = ZettlrDir;

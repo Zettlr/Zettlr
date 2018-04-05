@@ -60,14 +60,12 @@
 
             &.root {
 
-                &:after {
+                &:before {
                     content: '\f0f0';
                     font-family: 'WebHostingHub-Glyphs';
-                    font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
+                    font-size: @font-size-small * 0.8; /* Bit smaller, those indicators are damned huge */
                     margin-right:5px;
                     display:inline-block;
-                    position:absolute;
-                    right:5px;
                     height:16px;
                     color: @blue-0;
                 }
@@ -76,6 +74,7 @@
 
         .collapse-indicator {
             margin-right:3px;
+            float:left;
 
             &::before {
                 content: "\f48b";
@@ -110,20 +109,18 @@
         border-radius:8px;
         overflow: hidden;
 
-        &:after {
-            content: "\f0d6";
+        &:before {
+            content: '\f0d6';
             font-family: 'WebHostingHub-Glyphs';
-            font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
+            font-size: @font-size-small; /* Bit smaller, those indicators are damned huge */
             margin-right:5px;
             display:inline-block;
-            position:absolute;
-            right:5px;
-            height:16px;
-            color: @green-0;
+            position:relative;
+            bottom:-2px;
         }
 
         &.selected {
-            background-color:@blue-0;
+            background-color:@green-0;
             color:white;
         }
 

@@ -22,7 +22,9 @@
 const path          = require('path');
 const chokidar      = require('chokidar');
 
-const { ignoreDir, ignoreFile } = require('../common/zettlr-helpers.js');
+const { ignoreDir, ignoreFile,
+        isFile, isDir
+    } = require('../common/zettlr-helpers.js');
 
 /**
  * This class enables some realtime monitoring features of Zettlr. As the Files
@@ -98,21 +100,12 @@ class ZettlrWatchdog
                     }
                 }
 
-                let s;
-                try {
-                    s = fs.lstatSync(p);
-                } catch(e) {
-                    // On unlink, fsstat of course fails => imitate isDirectory()
-                    // behavior
-                    s = {
-                        'isDirectory': function() {
-                            return (event === 'unlinkDir') ? true : false;
-                        }
-                    };
-                }
+                // Determine that these are real and valid files/dirs
+                let is_dir = (event === 'unlinkDir') ? true : isDir(p);
+                let is_file = (event === 'unlink') ? true : isFile(p);
 
                 // Only watch changes in directories and supported files
-                if((s.isDirectory() && !ignoreDir(p)) || !ignoreFile(p)) {
+                if((is_dir && !ignoreDir(p)) || (is_file && !ignoreFile(p))) {
                     this._staged.push({ 'type': event, 'path': p });
                 }
             }
