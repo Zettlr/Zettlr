@@ -91,7 +91,6 @@ class ZettlrFile
     handleEvent(p, e)
     {
         if(this.isScope(p) === this) {
-            console.log(`File ${this.name} is handling the event ${e}`);
             // Only in this case may we handle the event. Possible events:
             // change, unlink
             if(e === 'change') {

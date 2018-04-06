@@ -82,6 +82,9 @@ class Zettlr
         // Read all paths into the app
         this.refreshPaths();
 
+        // If there are any, open argv-files
+        this.handleDrop(global.filesToOpen);
+
         this._updater = new ZettlrUpdater(this);
 
         // Initiate regular polling
@@ -364,19 +367,31 @@ class Zettlr
         }
     }
 
+    /**
+     * Handles a list of files and folders dropped onto the app.
+     * @param  {Array} filelist An array of absolute paths
+     */
     handleDrop(filelist)
     {
+        // As long as it's not a forbidden file or ignored directory, add it.
+        let newFile, newDir;
         for(let f of filelist) {
-            if(isDir(f) && !ignoreDir(f)) {
-                this._openPaths.push(new ZettlrDir(this, f));
-                this._sortPaths();
-                this.ipc.send('paths-update', this.getPaths());
-            } else if(isFile(f) && !ignoreFile(f)) {
-                this._openPaths.push(new ZettlrFile(this, f));
-                this._sortPaths();
-                this.ipc.send('paths-update', this.getPaths());
+            if(this.getConfig().addPath(f)) {
+                if(isFile(f)) {
+                    newFile = new ZettlrFile(this, f);
+                    this._openPaths.push(newFile);
+                } else {
+                    newDir = new ZettlrDir(this, f);
+                    this._openPaths.push(newDir);
+                }
             }
         }
+
+        this._sortPaths();
+        this.ipc.send('paths-update', this.getPaths());
+        // Open the newly added path(s) directly.
+        if(newDir)  { this.setCurrentDir(newDir); }
+        if(newFile) { this.sendFile(newFile.hash); }
     }
 
     /**
@@ -844,6 +859,11 @@ class Zettlr
         this.ipc.send('paths-update', this.getPaths());
     }
 
+    /**
+     * Wrapper to find files within all open paths
+     * @param  {Object} obj An object that conforms with ZettlrDir/ZettlrFile::findFile()
+     * @return {Mixed}     ZettlrFile or null
+     */
     findFile(obj)
     {
         let found = null;
@@ -857,6 +877,11 @@ class Zettlr
         return null;
     }
 
+    /**
+     * Wrapper around findDir
+     * @param  {Object} obj An object that conforms with ZettlrDir/ZettlrFile::findDir()
+     * @return {Mixed}     ZettlrDir or null
+     */
     findDir(obj)
     {
         let found = null;
@@ -878,6 +903,14 @@ class Zettlr
     {
         for(let p of this.getPaths()) {
             if(p.getHash() == hash) {
+                // If it's the current file, close it
+                if(p === this.getCurrentFile()) {
+                    this.ipc.send('file-close');
+                    this.getWindow().setTitle('');
+                }
+                if(p === this.getCurrentDir()) {
+                    this.setCurrentDir(null);
+                }
                 this.getConfig().removePath(p.getPath());
                 this.getPaths().splice(this.getPaths().indexOf(p), 1);
                 this.ipc.send('paths-update', this.getPaths());

@@ -596,7 +596,7 @@ cheerio@0.22.0:
     lodash.reject "^4.4.0"
     lodash.some "^4.4.0"
 
-chokidar@^2.0.2:
+chokidar@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.0.3.tgz#dcbd4f6cbb2a55b4799ba8a840ac527e5f4b1176"
   dependencies:
@@ -1021,7 +1021,7 @@ electron-builder-lib@~20.6.2:
     semver "^5.5.0"
     temp-file "^3.1.1"
 
-electron-builder@^20.5.1:
+electron-builder@^20.8.1:
   version "20.8.1"
   resolved "https://registry.yarnpkg.com/electron-builder/-/electron-builder-20.8.1.tgz#3d19607a7f7d3ee7f3e110a6fc66c720ed1d2cc0"
   dependencies:

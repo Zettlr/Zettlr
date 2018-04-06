@@ -6,3 +6,6 @@ release
 
 # Hidden files and stuff
 /**/.DS_Store
+
+# Don't commit these pesky yarn error logs
+yarn-error.log

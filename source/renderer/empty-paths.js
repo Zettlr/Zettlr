@@ -13,13 +13,15 @@
  * END HEADER
  */
 
+const {trans} = require('../common/lang/i18n.js');
+
 class EmptyPaths
 {
     constructor(dirobj)
     {
         this._directories = dirobj;
         this._container = $('<div>').addClass('emptyPaths'); // TODO: Translate below
-        this._container.append($('<div>').addClass('info').text('Open a file or directory'));
+        this._container.append($('<div>').addClass('info').text(trans('gui.empty_directories')));
     }
 
     show()

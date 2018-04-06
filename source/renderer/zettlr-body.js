@@ -66,8 +66,12 @@ class ZettlrBody
         // handle.
         document.addEventListener('drop',(event) => {
             event.preventDefault();
-            //console.log(event.dataTransfer.files);
-            //this._renderer.handleDrop(event.dataTransfer.files);
+            // Retrieve all paths
+            let f = [];
+            for(let i = 0; i < event.dataTransfer.files.length; i++) {
+                f.push(event.dataTransfer.files.item(i).path);
+            }
+            this._renderer.handleDrop(f);
             return false;
         }, false);
     }

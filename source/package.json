@@ -3,7 +3,7 @@
     "productName": "Zettlr",
     "homepage": "https://www.zettlr.com",
     "author": "Hendrik Erz <zettlr@mailbox.org>",
-    "version": "0.14.3",
+    "version": "0.15.0",
     "description": "A powerful Markdown Editor with integrated tree view",
     "license": "MIT",
     "main": "main.js",

@@ -312,10 +312,10 @@ class ZettlrWindow
     prompt(options)
     {
         dialog.showMessageBox(this._win, {
-            type: options.type,
+            type: options.type || 'info',
             buttons: [ 'Ok' ],
             defaultId: 0,
-            title: options.title,
+            title: options.title || 'Zettlr',
             message: options.message
         });
 

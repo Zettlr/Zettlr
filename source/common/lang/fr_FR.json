@@ -10,7 +10,8 @@
     },
     "gui": {
         "find_placeholder": "Trouver…",
-        "words": "%s mots"
+        "words": "%s mots",
+        "empty_directories": "Pas des fichiers ou dossiers"
     },
     "pomodoro": {
         "start": "Start",
@@ -47,6 +48,8 @@
         "select_all": "Sélectionner tous",
         "find_file": "Trouver dans le fichier",
         "find_dir": "Trouver dans le dossier",
+        "close_file": "Fermer le fichier",
+        "close_dir": "Fermer le dossier",
         "reload": "Renouveler",
         "toggle_devtools": "Outils du développeur",
         "toggle_theme": "Mode sombre",

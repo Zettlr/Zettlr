@@ -24,11 +24,64 @@ const process = require('process');
 // Include the global Zettlr class
 const Zettlr = require('./main/zettlr.js');
 
+const {isFile, ignoreFile} = require('./common/zettlr-helpers.js');
+
 /**
  * The main Zettlr object. As long as this exists in memory, the app will run.
  * @type {Zettlr}
  */
 let zettlr;
+
+/**
+ * Global array containing files collected from argv before process start
+ * @type {Array}
+ */
+global.filesToOpen = [];
+
+// Ensure we only got one version of the app running
+let isSecondInstance = app.makeSingleInstance((argv, cwd) => {
+    // Retrieve all potential files from the list of arguments. Thanks to
+    // Abricotine for this logic!
+    // Taken from: https://github.com/brrd/Abricotine/blob/develop/app/abr-application.js
+    argv = argv && argv.length > 0 ? argv : process.argv;
+    let files = argv.filter(function(element) {
+        return element.substring(0, 2) !== "--" && isFile(element) && !ignoreFile(element);
+    });
+
+    // Someone tried to run a second instance, so focus the main window if existing
+    if(zettlr) {
+        let win = zettlr.getWindow().getWindow();
+        if(win.isMinimized()) {
+            win.restore();
+        }
+        win.focus();
+
+        // In case the user wants to open a file/folder with this running instance
+        zettlr.handleDrop(files);
+    } else {
+        // The Zettlr object has not yet been instantiated (e.g. the user double
+        // clicked a file with Zettlr not being open or something like that.)
+        // Workaround: Use the global array filesToOpen.
+        global.filesToOpen = files;
+    }
+});
+
+if (isSecondInstance) {
+    return app.quit();
+}
+
+/**
+ * This gets executed when the user wants to open a file on macOS.
+ */
+app.on('open-file', (e, p) => {
+    // The user wants to open a file -> simply handle it.
+    if(zettlr) {
+        zettlr.handleDrop([p]);
+    } else {
+        // The Zettlr object has yet to be created -> use the global.
+        global.filesToOpen = [p];
+    }
+});
 
 /**
  * Hook into the ready event and initialize the main object creating everything

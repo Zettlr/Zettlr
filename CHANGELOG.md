@@ -1,15 +1,23 @@
-# (no svn number assigned)
+# 0.15.0
 
 ## GUI and functionality
 
 - Fixed the button text color in popups.
+- More shadow under the popups (makes them stick out more in the white mode).
+- Now it is possible to open Markdown files directly with Zettlr by double clicking them or dragging them onto the app. Dropping also works for directories.
+- Zettlr now tells the Operating System that it is capable of handling `.md`- and `.markdown` files.
+- Small fixes to the translations.
 
 ## Under the hood
 
 - Fixed a small bug in the `ZettlrWatchdog` that prevented remotely added directories from being detected by the app.
 - Given the classes `ZettlrFile` and `ZettlrDir` more authority over what happens with them. Now they're handling all events by themselves.
-- Made the paths mandatory on creation of new `ZettlrFile` and `ZettlrDir` instances
+- Made the paths mandatory on creation of new `ZettlrFile` and `ZettlrDir` instances.
+- Added `isFile()` and `isDir()` helper functions to check if paths actually denote a valid file or directory.
+- Added `openPaths` configuration option to hold all opened paths and re-open them on every start.
+- Small fix to the loading mechanism of the configuration to allow flexible arrays (needed for the `openPaths` option).
 - Found **A LOT** of unnecessary and duplicate code in the `Zettlr` main class and removed it.
+- Handle open events in `main.js` and make Zettlr definitively a single app instance.
 
 # 0.14.3
 

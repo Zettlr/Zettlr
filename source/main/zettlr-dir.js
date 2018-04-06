@@ -107,7 +107,6 @@ class ZettlrDir
             if((path.dirname(p) === this.path) && (e === 'add' || e === 'addDir')) {
                 // A new dir or a new file has been created here. Re-Scan.
                 this.scan();
-                this.parent.notifyChange(`The directory ${this.name} has changed.`);
                 return;
             }
             // Some children has to handle it

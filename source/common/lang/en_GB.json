@@ -10,7 +10,8 @@
     },
     "gui": {
         "find_placeholder": "Find…",
-        "words": "%s words"
+        "words": "%s words",
+        "empty_directories": "No open files or folders"
     },
     "pomodoro": {
         "start": "Start",
@@ -47,6 +48,8 @@
         "select_all": "Select all",
         "find_file": "Find in file",
         "find_dir": "Find in directory",
+        "close_file": "Close file",
+        "close_dir": "Close directory",
         "reload": "Reload",
         "toggle_devtools": "Toggle developer tools",
         "toggle_theme": "Night mode",
