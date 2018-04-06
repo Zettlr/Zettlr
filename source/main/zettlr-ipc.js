@@ -250,6 +250,11 @@ class ZettlrIPC
             this._app.handleDrop(cnt);
             break;
 
+            // Statistics
+            case 'request-stats-data':
+            this.send('stats-data', this._app.getStats().getData());
+            break;
+
             default:
             console.log(trans('system.unknown_command', cmd));
             break;

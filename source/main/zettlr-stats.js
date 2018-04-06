@@ -45,6 +45,15 @@ class ZettlrStats
     }
 
     /**
+     * Returns the data object.
+     * @return {Object} All statistical data.
+     */
+    getData()
+    {
+        return this.stats;
+    }
+
+    /**
      * Load a potentially existing stats file.
      * @return {ZettlrStats} This for chainability.
      */

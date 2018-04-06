@@ -11,6 +11,9 @@
     "gui": {
         "find_placeholder": "Find…",
         "words": "%s words",
+        "overall_words": "Overall you've written %s words.",
+        "avg_words": "On average, you write %s words per day.",
+        "today_words": "Today, you've written %s words.",
         "empty_directories": "No open files or folders"
     },
     "pomodoro": {

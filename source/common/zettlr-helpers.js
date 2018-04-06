@@ -189,6 +189,31 @@ function isDir(p)
     }
 }
 
+/**
+ * Adds delimiters to numbers. TODO: Actually *localise* it.
+ * @param  {Number} number The number to be localised.
+ * @return {String}        The number with delimiters.
+ */
+function localiseNumber(number)
+{
+    if(typeof number !== 'number' || number < 1000) {
+        return number;
+    }
+
+    let ret = '';
+    ret = number.toString();
+    let cnt = 0;
+    for(let i = ret.length-1; i > 0; i--) {
+        cnt++;
+        if(cnt === 3) {
+            ret = ret.substr(0, i) + '.' + ret.substr(i);
+            cnt = 0;
+        }
+    }
+
+    return ret;
+}
+
 module.exports = {
     hash,
     sort,
@@ -197,5 +222,6 @@ module.exports = {
     ignoreFile,
     ignoreDir,
     isFile,
-    isDir
+    isDir,
+    localiseNumber
 };

@@ -23,6 +23,13 @@
         },
         {
             "role": "button",
+            "class": "stats",
+            "command": "show-stats",
+            "content": "{}",
+            "title": "toolbar.stats"
+        },
+        {
+            "role": "button",
             "class": "preferences",
             "command": "open-preferences",
             "content": "{}",

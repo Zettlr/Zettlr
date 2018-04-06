@@ -13,6 +13,7 @@
  */
 
 const {trans} = require('../common/lang/i18n.js');
+const {localiseNumber} = require('../common/zettlr-helpers.js');
 
 /**
  * This class is responsible for rendering the Toolbar. It builds the toolbar
@@ -112,23 +113,7 @@ class ZettlrToolbar
             return this.hideWordCount();
         }
 
-        // Format the number nicely
-        let wd = '';
-        if(words < 1000) {
-            wd = words;
-        } else if(words >= 1000) {
-            wd = words.toString();
-            let cnt = 0;
-            for(let i = wd.length-1; i > 0; i--) {
-                cnt++;
-                if(cnt === 3) {
-                    wd = wd.substr(0, i) + '.' + wd.substr(i);
-                    cnt = 0;
-                }
-            }
-        }
-
-        this._fileInfo.text(trans('gui.words', wd));
+        this._fileInfo.text(trans('gui.words', localiseNumber(words)));
     }
 
     /**

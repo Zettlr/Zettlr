@@ -309,6 +309,15 @@ class ZettlrRendererIPC
             this._app.getBody().displayUpdate(cnt);
             break;
 
+            // Stats
+            case 'show-stats':
+            this.send('request-stats-data');
+            break;
+
+            case 'stats-data':
+            this._app.getStatsView().show(cnt);
+            break;
+
             default:
             console.log(trans('system.unknown_command', cmd));
             break;

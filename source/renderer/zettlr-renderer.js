@@ -21,6 +21,7 @@ const ZettlrOverlay     = require('../zettlr-overlay.js');
 const ZettlrToolbar     = require('../zettlr-toolbar.js');
 const ZettlrPomodoro    = require('../zettlr-pomodoro.js');
 const ZettlrPopup       = require('../zettlr-popup.js');
+const ZettlrStatsView   = require('../zettlr-stats-view.js');
 
 const Typo              = require('typo-js');
 const remote            = require('electron').remote;
@@ -69,6 +70,7 @@ class ZettlrRenderer
         this._overlay        = new ZettlrOverlay(this);
         this._toolbar        = new ZettlrToolbar(this);
         this._pomodoro       = new ZettlrPomodoro(this);
+        this._stats          = new ZettlrStatsView(this);
     }
 
     /**
@@ -767,6 +769,8 @@ class ZettlrRenderer
     getPomodoro() { return this._pomodoro; }
 
     getPaths() { return this._paths; }
+
+    getStatsView() { return this._stats; }
 
     /**
      * Sends a command to Main (only used in ZettlrPreview for searching)

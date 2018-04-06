@@ -1066,6 +1066,12 @@ class Zettlr
     getWatchdog()    { return this.watchdog; }
 
     /**
+     * Returns the stats
+     * @return {ZettlrStats} The stats object.
+     */
+    getStats()       { return this.stats; }
+
+    /**
      * Get the current directory.
      * @return {ZettlrDir} Current directory.
      */

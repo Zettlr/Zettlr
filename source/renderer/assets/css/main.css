@@ -847,6 +847,10 @@ html {
   content: "\f0c6";
   display: inline;
 }
+#toolbar .button.stats::before {
+  content: "\f6b8";
+  display: inline;
+}
 #toolbar .button.preferences::before {
   content: "\f00f";
   display: inline;
