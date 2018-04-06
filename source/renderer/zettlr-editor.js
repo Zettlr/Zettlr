@@ -78,7 +78,7 @@ class ZettlrEditor
             autofocus: false,
             lineWrapping: true,
             autoCloseBrackets: {
-                pairs: '()[]{}\'\'""»«“”‘’**__', // Autoclose markdown specific stuff
+                pairs: '()[]{}\'\'""»«“”‘’__', // Autoclose markdown specific stuff
                 override: true
             },
             extraKeys: {
@@ -354,10 +354,10 @@ class ZettlrEditor
     open(file)
     {
         if(this._currentHash != null) {
-            let cr = this._cm.doc.getCursor();
+            let rect = this._cm.getWrapperElement().getBoundingClientRect();
+            let topVisibleLine = this._cm.lineAtHeight(rect.top, "window");
             this._positions[this._currentHash] = {
-                'cursor': JSON.parse(JSON.stringify(cr)),
-                'scroll': $('.CodeMirror-scroll').offset()['top']
+                'scroll': topVisibleLine
             };
         }
 
@@ -371,12 +371,10 @@ class ZettlrEditor
         // recreated using Cmd/Ctrl+Z.
 
         if(this._positions[this._currentHash] !== undefined) {
-            this._cm.setCursor(this._positions[this._currentHash].cursor);
-            $('CodeMirror-scroll').scrollTop(this._positions[this._currentHash].scroll);
+            this.jtl(this._positions[this._currentHash].scroll);
         } else {
             // Default to start positions
-            this._cm.doc.setCursor({line: 0, ch: 0});
-            $('#CodeMirror-scroll').scrollTop(0);
+            this.jtl(0);
         }
 
         return this;
