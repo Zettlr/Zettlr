@@ -83,7 +83,7 @@ class Zettlr
         this.refreshPaths();
 
         // If there are any, open argv-files
-        this.handleDrop(global.filesToOpen);
+        this.handleAddRoots(global.filesToOpen);
 
         this._updater = new ZettlrUpdater(this);
 
@@ -96,6 +96,8 @@ class Zettlr
     /**
      * Performs recurring tasks such as polling the watchdog every five secs.
      * @return {void} Returns nothing.
+     * @deprecated The watchdog polls will be put into an event listening system
+     * in the future.
      */
     poll()
     {
@@ -351,32 +353,30 @@ class Zettlr
             });
         }
 
-        // ret now contains the path. So let's add it.
-        if(this.getConfig().addPath(ret)) {
-            if(isFile(ret)) {
-                this._openPaths.push(new ZettlrFile(this, ret))
-            } else if(isDir(ret)) {
-                this._openPaths.push(new ZettlrDir(this, ret));
-            }
-
-            // Sorta sort this out
-            this._sortPaths();
-
-            // Send the updated paths with the new path
-            this.ipc.send('paths-update', this.getPaths());
-        }
+        this.handleAddRoots([ret]);
     }
 
     /**
-     * Handles a list of files and folders dropped onto the app.
+     * Handles a list of files and folders that the user in any way wants to add
+     * to the app.
      * @param  {Array} filelist An array of absolute paths
      */
-    handleDrop(filelist)
+    handleAddRoots(filelist)
     {
         // As long as it's not a forbidden file or ignored directory, add it.
         let newFile, newDir;
         for(let f of filelist) {
-            if(this.getConfig().addPath(f)) {
+            // First check if this thing is already added. If so, simply write
+            // the existing file/dir into the newFile/newDir vars. They will be
+            // opened accordingly.
+            if(this.findFile({'path': f}) != null) {
+                newFile = this.findFile({'path': f});
+                // Also set the newDir variable so that Zettlr will automatically
+                // navigate to the directory.
+                newDir = newFile.parent;
+            } else if(this.findDir({'path': f}) != null) {
+                newDir = this.findDir({'path': f});
+            } else if(this.getConfig().addPath(f)) {
                 if(isFile(f)) {
                     newFile = new ZettlrFile(this, f);
                     this._openPaths.push(newFile);

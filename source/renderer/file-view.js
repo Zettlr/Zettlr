@@ -7,7 +7,7 @@
  * Maintainer:      Hendrik Erz
  * License:         MIT
  *
- * Description:     Represents a file on disk.
+ * Description:     Represents a root file on disk.
  *
  * END HEADER
  */
@@ -90,7 +90,7 @@ class FileView
         } else if(this._target == 0) {
             this._elem.insertBefore(this._parent.getContainer().children().first());
         } else {
-            this._elem.insertAfter(this._parent.getContainer().children()[this._target-1]);
+            this._elem.insertAfter(this._parent.getContainer().children()[this._target]);
         }
 
         return this;

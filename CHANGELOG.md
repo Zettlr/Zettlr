@@ -8,6 +8,7 @@
 - Zettlr now tells the Operating System that it is capable of handling `.md`- and `.markdown` files.
 - Small fixes to the translations.
 - Added an about dialog.
+- Now Zettlr also converts "standalone" links (e.g. simple detected URLs without Markdown formatting around them) into clickable links.
 
 ## Under the hood
 

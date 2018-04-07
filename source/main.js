@@ -57,7 +57,7 @@ let isSecondInstance = app.makeSingleInstance((argv, cwd) => {
         win.focus();
 
         // In case the user wants to open a file/folder with this running instance
-        zettlr.handleDrop(files);
+        zettlr.handleAddRoots(files);
     } else {
         // The Zettlr object has not yet been instantiated (e.g. the user double
         // clicked a file with Zettlr not being open or something like that.)
@@ -76,7 +76,7 @@ if (isSecondInstance) {
 app.on('open-file', (e, p) => {
     // The user wants to open a file -> simply handle it.
     if(zettlr) {
-        zettlr.handleDrop([p]);
+        zettlr.handleAddRoots([p]);
     } else {
         // The Zettlr object has yet to be created -> use the global.
         global.filesToOpen = [p];

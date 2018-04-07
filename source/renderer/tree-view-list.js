@@ -285,7 +285,7 @@ class TreeView
         } else if(this._target == 0) {
             this._ul.insertBefore(this._parent.getContainer().children(selector)[0]);
         } else {
-            this._ul.insertAfter(this._parent.getContainer().children(selector)[this._target-1]);
+            this._ul.insertAfter(this._parent.getContainer().children(selector)[this._target-mod]);
         }
 
         return this;

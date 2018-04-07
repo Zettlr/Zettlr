@@ -247,7 +247,7 @@ class ZettlrIPC
 
             // Handle dropped files/folders
             case 'handle-drop':
-            this._app.handleDrop(cnt);
+            this._app.handleAddRoots(cnt);
             break;
 
             // Statistics

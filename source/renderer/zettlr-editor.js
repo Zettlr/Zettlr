@@ -253,9 +253,13 @@ class ZettlrEditor
         }
     }
 
+    /**
+     * Renders all links in the document into clickable links.
+     */
     _renderLinks()
     {
-        let linkRE = /\[(.+?)\]\((.+?)\)/g;
+        // let linkRE = /\[(.+?)\]\((.+?)\)/g;
+        let linkRE = / \[(.+?)\]\((.+?)\)|(https?\S+|www\S+)/g; // Matches [Link](www.xyz.tld) and simple links
         let i = 0;
         let match;
 
@@ -294,8 +298,9 @@ class ZettlrEditor
                 if((match.index > 0) && (line[match.index-1] == '!')) {
                     continue;
                 }
-                let caption = match[1];
-                let url = match[2];
+                let caption = match[1] || '';
+                let url = match[2] || '';
+                let standalone = match[3] || '';
 
                 // Now get the precise beginning of the match and its end
                 let curFrom = { 'line': i, 'ch': match.index };
@@ -317,8 +322,15 @@ class ZettlrEditor
                 }
 
                 let a = document.createElement('a');
-                a.innerHTML = caption; // TODO: Better testing against HTML entities!
-                a.title = url; // Set the url as title to let users see where they're going
+                if(standalone) {
+                    // In case of a standalone link, all is the same
+                    a.innerHTML = standalone;
+                    a.title = standalone;
+                    url = standalone;
+                } else {
+                    a.innerHTML = caption; // TODO: Better testing against HTML entities!
+                    a.title = url; // Set the url as title to let users see where they're going
+                }
                 a.className = 'cma'; // CodeMirrorAnchors
                 // Apply TextMarker
                 let textMarker = this._cm.doc.markText(
