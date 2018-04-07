@@ -209,6 +209,12 @@ class ZettlrMenu
                 role: 'help',
                 submenu: [
                     {
+                        label: trans('menu.about'),
+                        click (item, focusedWindow) {
+                            if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'display-about' });
+                        }
+                    },
+                    {
                         label: trans('menu.learn_more'),
                         click (item, focusedWindow) { require('electron').shell.openExternal('https://www.zettlr.com/') }
                     },

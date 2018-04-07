@@ -22,6 +22,11 @@
         h1 {
             font-size: 1.5em;
             margin-bottom:0.5em;
+
+            small {
+                font-size:75%;
+                color:@grey-3;
+            }
         }
 
         p {
@@ -119,6 +124,21 @@
             padding:1em;
         }
 
+        // About projects section
+        .projects {
+            display: flex;
+
+            .flex {
+                flex: 1;
+                padding:1em;
+
+                img {
+                    width:100%;
+                    max-height:100%;
+                }
+            }
+        }
+
         // Tabs styles
         .ui-tabs-nav {
             display:flex;
@@ -133,7 +153,7 @@
                 list-style-type: none;
 
                 &.ui-tabs-active {
-                    background-color:@blue-selection;
+                    background-color:@green-0;
                 }
 
                 a {

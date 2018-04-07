@@ -45,9 +45,11 @@ class ZettlrWatchdog
         this._staged = [];
         this._ignored = [];
         this._ready = false;
+        this._booting = false;
         this._process = null;
         this._watch = false;
         this._paths = paths;
+        this._bootuppaths = [];
     }
 
     /**
@@ -56,10 +58,16 @@ class ZettlrWatchdog
      */
     start()
     {
-        if(this._paths.length < 1) {
-            // Can't start with nothing to watch. It will start as soon as
-            // something is added via ZettlrWatchdog::add()
+        if(this._paths.length < 1 || this.isBooting()) {
+            // Don't boot up twice and only boot if there's at least one path
             return;
+        }
+
+        this._booting = true; // Lock the start function
+
+        // Freeze the paths that have been added before the startup.
+        for(let x of this._paths) {
+            this._bootuppaths.push(x);
         }
 
         // chokidar's ignored-setting is compatible to anymatch, so we can
@@ -75,7 +83,7 @@ class ZettlrWatchdog
             ignore_dirs.push(new RegExp(x, 'i'));
         }
 
-        // Begin watching the base dir.
+        // Begin watching the pushed paths
         this._process = chokidar.watch(this._paths, {
             'ignored': ignore_dirs,
             'persistent': true,
@@ -85,8 +93,16 @@ class ZettlrWatchdog
         });
 
         this._process.on('ready', () => {
+            // Add all paths that may have been added to the array while the process
+            // was starting up.
+            for(let p of this._paths) {
+                if(!this._bootuppaths.includes(p)) {
+                    this._process.add(p);
+                }
+            }
             this._watch = true;
             this._ready = true;
+            this._booting = false; // Unlock the start function
         });
 
         this._process.on('all', (event, p) => {
@@ -101,8 +117,8 @@ class ZettlrWatchdog
                 }
 
                 // Determine that these are real and valid files/dirs
-                let is_dir = (event === 'unlinkDir') ? true : isDir(p);
-                let is_file = (event === 'unlink') ? true : isFile(p);
+                let is_dir  = (event === 'unlinkDir') ? true : isDir(p);
+                let is_file = (event === 'unlink')    ? true : isFile(p);
 
                 // Only watch changes in directories and supported files
                 if((is_dir && !ignoreDir(p)) || (is_file && !ignoreFile(p))) {
@@ -171,6 +187,12 @@ class ZettlrWatchdog
     getChanges() { return this._staged; }
 
     /**
+     * Is the process currently booting up?
+     * @return {Boolean} True, if it's booting and false if it's not.
+     */
+    isBooting() { return this._booting; }
+
+    /**
      * Returns number of staged changes
      * @return {Integer} The amount of changes
      */
@@ -211,13 +233,14 @@ class ZettlrWatchdog
         // Add the path to the watched
         this._paths.push(p);
 
-        if(!this.isWatching() && !this.isReady()) {
-            // Begin watching
+        if(!this.isWatching() && !this.isReady() && !this.isBooting()) {
+            // Boot the watchdog if not done yet.
             this.start();
-        } else {
-            // If it hasn't been started yet, ZettlrWatchdog will automatically
-            // begin watching the this._paths array. If it has already been
-            // started, we need to manually add it to the process.
+        } else if(this.isReady()) {
+            // If the watchdog is ready, the _process may accept new files and
+            // folders. As soon as the watchdog becomes ready, it will automatically
+            // add all _paths to watch that have been collected during the startup
+            // of the watchdog.
             this._process.add(p);
         }
 

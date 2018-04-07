@@ -73,7 +73,7 @@
         "update": "Check for updates",
         "preferences": "Preferences",
         "quit": "Quit",
-        "about": "About %s",
+        "about": "About Zettlr",
         "services": "Services",
         "hide": "Hide",
         "unhide": "Show",
@@ -151,6 +151,19 @@
             "release_url": "Open download page",
             "close": "Close",
             "no_update": "You got the newest version of Zettlr"
+        },
+        "about": {
+            "title": "About Zettlr",
+            "lead": "Zettlr is a project by Hendrik Erz, licensed under the MIT license. It is Open Source, free of charge and based upon the Electron framework. Zettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Zettlr would not be possible. Below you can find all projects that Zettlr uses.",
+            "other_projects": "Zettlr also makes use of these projects:",
+            "jquery": "Makes it easy to render the whole user interface",
+            "chokidar": "Detects any changes you make to your files outside the app",
+            "typojs": "Providing Zettlr with spellchecking abilities",
+            "showdownjs": "Renders the Changelog so that you can see what's changed in an update",
+            "esdoc": "Used to generate the API documentation at http://dev.zettlr.com/api",
+            "lessjs": "Helps a lot in writing the styles for Zettlr",
+            "trademark": "All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc.",
+            "close": "Close"
         }
     },
     "toolbar": {

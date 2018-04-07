@@ -73,7 +73,7 @@
         "update": "Mise à jour",
         "preferences": "Paramètres",
         "quit": "Quitter",
-        "about": "De %s",
+        "about": "Sur Zettlr",
         "services": "Services",
         "hide": "Cacher",
         "unhide": "Remontrer",
@@ -151,6 +151,19 @@
             "release_url": "Telecharger",
             "close": "Fermer",
             "no_update": "Tu as la version derniere de Zettlr"
+        },
+        "about": {
+            "title": "Sur Zettlr",
+            "lead": "Zettlr est un projet Open Source par Hendrik Erz, sous licence MIT. Il est basé sur le framework Electron. Zettlr voule rendre grâce à les developpeurs de Electron, Node.js et CodeMirror. Sans ils, Zettlr n'est pas possible. Ici tu trouve tous projets qui Zettlr est basé sur.",
+            "other_projects": "Zettlr est basé également sur:",
+            "jquery": "Un indispensable aide pour présenter le UX",
+            "chokidar": "Voir les modifications sur les fichiers à l'extérieur de l'app",
+            "typojs": "Alimenter le correcteur d'orthographe sur l'app",
+            "showdownjs": "Présenter le Changelog, qui tu vois pour les updates",
+            "esdoc": "Engendrer le manuel de l'API ici: http://dev.zettlr.com/api",
+            "lessjs": "Un aide pour écrire le design",
+            "trademark": "Tous les logos et les noms de marque sont soumis à leurs propriétaires légitimes. En plus d'utiliser leur code, Zettlr n'est aucunement affilié à aucun de ces projets. Node.js est une marque de commerce de Joyent, Inc.",
+            "close": "Fermer"
         }
     },
     "toolbar": {

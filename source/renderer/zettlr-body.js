@@ -49,16 +49,8 @@ class ZettlrBody
             this._menu.popup(e);
         }, false);
 
-        // TESTING TODO
         document.addEventListener('dragover',function(event){
             event.preventDefault();
-            // This event is fired every time a user moves ANYTHING from outside
-            // the app onto the browser window. Which means here we can begin
-            // to differentiate what it will be. If it's nothing we could
-            // indicate it with a forbidden-cursor, or show a preview.
-            // In the event.dataTransfer.files - object there is an array of
-            // files and folders that are being dragged into the application.
-            // console.log(event);
             return false;
         }, false);
 
@@ -299,9 +291,22 @@ class ZettlrBody
         this._dialog.open();
     }
 
+    /**
+     * Displays the update notification
+     * @param  {Object} cnt An object containing information on the update.
+     */
     displayUpdate(cnt)
     {
         this._dialog.init('update', cnt);
+        this._dialog.open();
+    }
+
+    /**
+     * Displays the about dialog
+     */
+    displayAbout()
+    {
+        this._dialog.init('about');
         this._dialog.open();
     }
 

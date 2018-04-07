@@ -4,7 +4,7 @@
     position:fixed;
     top:@toolbar-height;
     right:0;
-    height:100%;
+    bottom:0;
     left:40%;
     overflow-x:hidden;
 
@@ -47,6 +47,6 @@
 
     .CodeMirror-scroll {
         padding:0em 5em;
-        overflow:hidden;
+        overflow-x:hidden !important; // Necessary to hide the horizontal scrollbar
     }
 }

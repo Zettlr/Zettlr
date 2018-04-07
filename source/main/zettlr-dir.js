@@ -456,9 +456,9 @@ class ZettlrDir
                 nChildren.push(found);
             } else {
                 // Otherwise create new
-                if(isFile(f)) {
+                if(isFile(f) && !ignoreFile(f)) {
                     nChildren.push(new ZettlrFile(this, f));
-                } else if(isDir(f)) {
+                } else if(isDir(f) && !ignoreDir(f)) {
                     nChildren.push(new ZettlrDir(this, f));
                 }
             }

@@ -500,11 +500,19 @@ class Zettlr
 
         // arg contains a hash and an extension.
         let file = this.findFile({ 'hash': arg.hash });
+        let cwd = path.dirname(file.path);
         let newname = file.name.substr(0, file.name.lastIndexOf(".")) + "." + arg.ext;
         let temp = app.getPath('temp');
+        let pdfengine = ''
 
         if(arg.ext == "pdf") {
             arg.ext = 'latex';
+            // The next line enables xelatex as the main pdf engine for pandoc.
+            // The problem is: Although it is able to render non-latin characters
+            // such as Greek, Kyrillic, Arab, Hebrew and other, it needs a lot of
+            // configuration being done. We will implement it, once we have moved
+            // the export functions to a separate class.
+            // pdfengine = '--pdf-engine=xelatex';
         }
         let tpl = path.join(this.config.getEnv('templateDir'), 'template.' + arg.ext);
         if(arg.ext === "html" || arg.ext === 'latex') {
@@ -515,13 +523,13 @@ class Zettlr
 
         let tempfile = path.join(temp, newname);
 
-        let command = `pandoc "${file.path}" -f markdown ${tpl} -t ${arg.ext} -o "${tempfile}"`;
+        let command = `pandoc "${file.path}" -f markdown ${tpl} -t ${arg.ext} ${pdfengine} -o "${tempfile}"`;
 
-        // Set the current working directory of pandoc to temp. Failing to do so
+        // Set the current working directory of pandoc to the file's directory. Failing to do so
         // will yield errors on Windows when the app is installed for all users
         // (because then the application directory will require admin rights to
         // write files to and pandoc spits out pre-rendered tex-files)
-        exec(command, { 'cwd': app.getPath('temp')}, (error, stdout, stderr) => {
+        exec(command, { 'cwd': cwd }, (error, stdout, stderr) => {
             if (error) {
                 this.window.prompt({
                     type: 'error',
@@ -848,7 +856,6 @@ class Zettlr
         file.setContent(cnt);
         file.save();
         this.clearModified();
-
         // Switch to newly created file (only happens before a file is selected)
         if(this.getCurrentFile() == null) {
             this.setCurrentFile(file);

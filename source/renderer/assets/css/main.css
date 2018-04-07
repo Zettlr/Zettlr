@@ -87,6 +87,10 @@ html {
   font-size: 1.5em;
   margin-bottom: 0.5em;
 }
+.modal .dialog h1 small {
+  font-size: 75%;
+  color: #787878;
+}
 .modal .dialog p {
   margin-bottom: 0.5em;
   line-height: 150%;
@@ -167,6 +171,17 @@ html {
   margin: 0.5em;
   padding: 1em;
 }
+.modal .dialog .projects {
+  display: flex;
+}
+.modal .dialog .projects .flex {
+  flex: 1;
+  padding: 1em;
+}
+.modal .dialog .projects .flex img {
+  width: 100%;
+  max-height: 100%;
+}
 .modal .dialog .ui-tabs-nav {
   display: flex;
   border-bottom: 1px solid black;
@@ -180,7 +195,7 @@ html {
   list-style-type: none;
 }
 .modal .dialog .ui-tabs-nav .ui-tabs-tab.ui-tabs-active {
-  background-color: #c8dcf0;
+  background-color: #1cb27e;
 }
 .modal .dialog .ui-tabs-nav .ui-tabs-tab a {
   color: black;
@@ -493,7 +508,7 @@ html {
   position: fixed;
   top: 39px;
   right: 0;
-  height: 100%;
+  bottom: 0;
   left: 40%;
   overflow-x: hidden;
 }
@@ -528,7 +543,7 @@ html {
 }
 #editor .CodeMirror-scroll {
   padding: 0em 5em;
-  overflow: hidden;
+  overflow-x: hidden !important;
 }
 .sk-circle {
   margin: 100px auto;

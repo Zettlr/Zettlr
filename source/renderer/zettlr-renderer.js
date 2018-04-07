@@ -185,11 +185,11 @@ class ZettlrRenderer
     {
         // Welcome to FUNCTION HELL! (Proposal: How about simply setting the
         // "dark" class on the body ...?)
-        //this._directories.toggleTheme();
-        //this._preview.toggleTheme();
-        //this._editor.toggleTheme();
+        this._directories.toggleTheme();
+        this._preview.toggleTheme();
+        this._editor.toggleTheme();
         this._body.toggleTheme();
-        // this._toolbar.toggleTheme();
+        this._toolbar.toggleTheme();
     }
 
     /**

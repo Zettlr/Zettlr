@@ -110,13 +110,14 @@ class ZettlrDialog
     /**
      * Initializes the dialog.
      * @param  {String} dialog     The dialog type (i.e. template name)
-     * @param  {Mixed} [obj=null] An object representing things to be replaced
+     * @param  {Mixed} [obj={}] An object representing things to be replaced
      * @return {ZettlrDialog}            Chainability.
      */
-    init(dialog, obj = null)
+    init(dialog, obj = {})
     {
         // POSSIBLE DIALOGS:
         // preferences
+        // about
 
         if(!obj) {
             throw new DialogError(trans('dialog.error.no_data', obj));
@@ -127,6 +128,10 @@ class ZettlrDialog
 
         let replacements = [];
         switch(dialog) {
+            case 'about':
+            replacements.push('%PKGVER%|' + require('../package.json').version);
+            break;
+
             case 'preferences':
             let dark = (obj.darkTheme) ? 'checked="checked"' : '';
             let snippets = (obj.snippets) ? 'checked="checked"' : '';

@@ -7,6 +7,7 @@
 - Now it is possible to open Markdown files directly with Zettlr by double clicking them or dragging them onto the app. Dropping also works for directories.
 - Zettlr now tells the Operating System that it is capable of handling `.md`- and `.markdown` files.
 - Small fixes to the translations.
+- Added an about dialog.
 
 ## Under the hood
 
