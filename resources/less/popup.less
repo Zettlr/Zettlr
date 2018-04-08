@@ -70,7 +70,7 @@
 
     table {
         vertical-align:middle;
-        
+
         td {
             padding:4px;
         }
@@ -162,6 +162,58 @@
             }
         }
     }
+
+    // Formatting
+    .formatting {
+        a {
+            text-decoration:none;
+            display:block;
+            padding:5px;
+            color:inherit;
+
+            &:hover {
+                background-color:@grey-2;
+            }
+
+            &::before {
+                font-family: 'WebHostingHub-Glyphs';
+                font-size:@font-size-small * 0.8;
+                padding-right:5px;
+                width:30px;
+                display:inline-block;
+            }
+        }
+
+        .markdownHeading1::before           { content: "h1"; }
+        .markdownHeading2::before           { content: "h2"; }
+        .markdownHeading3::before           { content: "h3"; }
+        .markdownHeading4::before           { content: "h4"; }
+        .markdownHeading5::before           { content: "h5"; }
+        .markdownHeading6::before           { content: "h6"; }
+        .markdownBlockquote::before         { content: '\f328'; }
+        .markdownLink::before               { content: "\f022"; }
+        .markdownImage::before              { content: "\22b7"; }
+        .markdownCode::before               { content: "\f743"; }
+        .markdownMakeOrderedList::before    { content: "\f4c3"; }
+        .markdownMakeUnorderedList::before  { content: "\f4c2"; }
+        .markdownDivider::before            { content: "\f1cc"; }
+        .insertFootnote::before             { content: "\f1eb"; }
+
+        .markdownBold {
+            font-weight:bold;
+            &::before { content: "\f1f4"; }
+        }
+
+        .markdownItalic {
+            font-style:italic;
+            &::before { content: "\f1f5"; }
+        }
+
+        .removeFootnote::before {
+            content: "\f1eb";
+            text-decoration:line-through;
+        }
+    }
 }
 
 // If the body has the dark class, display dark popups
@@ -187,6 +239,12 @@
 
             &:hover {
                 background-color: lighten(@popup-dark-color, 20%);
+            }
+        }
+
+        .formatting {
+            a:hover {
+                background-color:@grey-3;
             }
         }
     }

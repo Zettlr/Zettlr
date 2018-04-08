@@ -10,6 +10,9 @@
 - Added an about dialog.
 - Now Zettlr also converts "standalone" links (e.g. simple detected URLs without Markdown formatting around them) into clickable links.
 - Added a small popup to view some stats on your writing.
+- Fixes to the word count (now also splits along line breaks).
+- Moved all formattings to a small popup (indicated by the carriage return symbol). Also added other formatting possibilities, such as code, headings and blockquotes.
+- Fixes to the formatting commands.
 
 ## Under the hood
 

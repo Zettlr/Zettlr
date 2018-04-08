@@ -222,6 +222,11 @@ class ZettlrRendererIPC
             this._app.getEditor().focus();
             break;
 
+            // Show the format option table
+            case 'formatting':
+            this._app.getBody().displayFormatting();
+            break;
+
             case 'config':
             switch(cnt.key)
             {

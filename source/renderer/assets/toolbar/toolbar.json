@@ -70,63 +70,11 @@
             "title": "toolbar.file_delete"
         },
         {
-            "role": "separator"
-        },
-        {
             "role": "button",
-            "class": "insert-image",
-            "command": "cm-command",
-            "content": "markdownImage",
-            "title": "toolbar.insert_image"
-        },
-        {
-            "role": "button",
-            "class": "insert-link",
-            "command": "cm-command",
-            "content": "markdownLink",
-            "title": "toolbar.insert_link"
-        },
-        {
-            "role": "button",
-            "class": "insert-bold",
-            "command": "cm-command",
-            "content": "markdownBold",
-            "title": "toolbar.insert_bold"
-        },
-        {
-            "role": "button",
-            "class": "insert-italic",
-            "command": "cm-command",
-            "content": "markdownItalic",
-            "title": "toolbar.insert_italic"
-        },
-        {
-            "role": "button",
-            "class": "insert-ul",
-            "command": "cm-command",
-            "content": "markdownMakeUnorderedList",
-            "title": "toolbar.insert_ul"
-        },
-        {
-            "role": "button",
-            "class": "insert-ol",
-            "command": "cm-command",
-            "content": "markdownMakeOrderedList",
-            "title": "toolbar.insert_ol"
-        },
-        {
-            "role": "button",
-            "class": "insert-fn",
-            "command": "cm-command",
-            "content": "insertFootnote",
-            "title": "toolbar.insert_fn"
-        },
-        {
-            "role": "button",
-            "class": "remove-fn",
-            "command": "cm-command",
-            "content": "removeFootnote",
-            "title": "toolbar.remove_fn"
+            "class": "formatting",
+            "command": "formatting",
+            "content": "{}",
+            "title": "toolbar.formatting"
         },
         {
             "role": "button",

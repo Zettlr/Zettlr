@@ -20,83 +20,215 @@ const {clipboard} = require('electron');
     unorderedListRE = /(\s*)([*+-])\s/,
     orderedListRE = /^(\s*)((\d+)([.)]))(\s*)/;
 
-    var boldRE = /^(\*{2}(.*)\*{2}|\_{2}(.*)\_{2})$/;
-    var italRE = /^(\*{1}(.*)\*{1}|\_{1}(.*)\_{1})$/;
+    var reservedChars = "+.*_/\\[](){}?^$".split('');
     var urlRE = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+
+    /**
+     * Converts selection into a markdown inline element (or removes formatting)
+     * @param  {CodeMirror} cm   The CodeMirror instance
+     * @param  {String} pre  The formatting mark before the element
+     * @param  {String} post The formatting mark behind the element
+     */
+    function markdownInline(cm, pre, post) {
+        // Is something selected?
+        if(!cm.doc.somethingSelected()) {
+            // No, so just insert something at cursor -> ****
+            // Replace the selection
+            cm.doc.replaceSelection(pre + '' + post, 'start');
+            // Move cursor two chars forward (to the middle of the insertion)
+            let cur = cm.doc.getCursor();
+            cur.ch = cur.ch + pre.length;
+            cm.doc.setCursor(cur);
+            cm.refresh();
+            return;
+        }
+
+        // Build the regular expression by first escaping problematic characters
+        let preregex = '', postregex = '';
+        for(let i = 0; i < pre.length; i++) {
+            if(reservedChars.includes(pre.charAt(i))) {
+                preregex += "\\" + pre.charAt(i);
+            } else {
+                preregex += pre.charAt(i);
+            }
+        }
+        for(let i = 0; i < post.length; i++) {
+            if(reservedChars.includes(post.charAt(i))) {
+                postregex += "\\" + post.charAt(i);
+            } else {
+                postregex += post.charAt(i);
+            }
+        }
+
+        let re = new RegExp(preregex + '(.*)' + postregex, 'g');
+
+        // Retrieve currently selected selections
+        var sel = cm.doc.getSelections();
+
+        // Traverse all selections and perform bolden or unbolden on them
+        for(let i = 0; i < sel.length; i++) {
+            if(re.test(sel[i])) {
+                // We got something so unformat.
+                sel[i] = sel[i].substr(pre.length, sel[i].length - pre.length - post.length);
+            } else {
+                // TODO: Check whether the user just selected the text itself and
+                // not the formatting marks!
+                // We got no bold so bolden
+                sel[i] = pre + sel[i] + post;
+            }
+        }
+
+        // Replace with changes selections
+        cm.doc.replaceSelections(sel, 'around');
+    }
+
+    /**
+     * Converts a selection into a block element
+     * @param  {CodeMirror} cm   The codemirror instance
+     * @param  {String} mark The formatting mark to be inserted
+     */
+    function markdownBlock(cm, mark) {
+        // Build the regular expression
+        let markregex = '';
+        for(let i = 0; i < mark.length; i++) {
+            if(reservedChars.includes(mark.charAt(i))) {
+                markregex += '\\' + mark.charAt(i);
+            } else {
+                markregex += mark.charAt(i);
+            }
+        }
+        let re = new RegExp('^' + markregex + ' (.*)$');
+
+        // If nothing is selected we have a very short journey.
+        if(!cm.doc.somethingSelected()) {
+            // Just jump to the beginning of the line and insert a mark
+            let cur = cm.getCursor();
+            cur.ch = 0;
+            cm.setCursor(cur);
+            let line = cm.doc.getLineHandle(cur.line);
+            if(re.test(line.text)) {
+                let match = re.exec(line.text);
+
+                // Line already contains the formatting -> remove
+                cm.doc.setSelection(cur, {'line': cur.line, 'ch': line.text.length});
+                // Replace only with the first capturing group
+                cm.doc.replaceSelection(match[1]);
+            } else {
+                // Line is not formatted -> insert a mark
+                cm.doc.setSelection(cur, {'line': cur.line, 'ch': line.text.length});
+                cm.doc.replaceSelection(mark + ' ' + line.text);
+            }
+            return;
+        }
+
+        // We've got at least one selection. So first get all line numbers inside
+        // the selection.
+        let lines = [];
+        for(let sel of cm.doc.listSelections()) {
+            // Anchor is greater than head if the user selected "backwards"
+            let higher = (sel.anchor.line > sel.head.line) ? sel.anchor : sel.head;
+            let lower = (sel.anchor.line < sel.head.line) ? sel.anchor : sel.head;
+            for(let i = lower.line; i <= higher.line; i++) {
+                lines.push(i);
+            }
+        }
+
+        // Second: Unique-ify the lines array (one selection may start at a line
+        // where another ends)
+        lines = [...new Set(lines)];
+        if(lines.length === 0) {
+            return;
+        }
+
+        // Third: Convert all lines into single selections.
+        let finalCursor = { 'line': 0, 'ch': 0};
+        let from;
+        let sel = [];
+        for(let no of lines) {
+            from = {'line': no, 'ch': 0}
+            finalCursor = { 'line': no, 'ch': cm.doc.getLine(no).length };
+            sel.push({ 'anchor': from, 'head': finalCursor});
+        }
+        cm.doc.setSelections(sel);
+
+        // Now traverse each selections and either apply a formatting mark or remove it
+        let replacements = [];
+
+        for(let sel of cm.doc.listSelections()) {
+            let line = cm.doc.getLine(sel.anchor.line);
+            if(re.test(line)) {
+                let match = re.exec(line);
+                // Line already contains the formatting -> remove
+                replacements.push(match[1]);
+            } else {
+                // Line is not formatted -> insert a mark
+                replacements.push(mark + ' ' + line);
+            }
+        }
+
+        cm.doc.replaceSelections(replacements);
+        cm.doc.setCursor(finalCursor);
+    }
 
     // Either encapsulates the selection bold or "un-bolds" or inserts new
     // Bold-characters
     CodeMirror.commands.markdownBold = function(cm) {
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
-
-        // Is something selected?
-        if(!cm.doc.somethingSelected()) {
-            // No, so just insert something at cursor -> ****
-            // Replace the selection
-            cm.doc.replaceSelection('****', 'start');
-            // Move cursor two chars forward (to the middle of the insertion)
-            let cur = cm.doc.getCursor();
-            cur.ch = cur.ch + 2;
-            cm.doc.setCursor(cur);
-            cm.refresh();
-            return;
-        }
-
-        // Retrieve currently selected selections
-        var sel = cm.doc.getSelections();
-
-        // Traverse all selections and perform bolden or unbolden on them
-        for(let i = 0; i < sel.length; i++) {
-            if(boldRE.test(sel[i])) {
-                // We got bold so un-bolden.
-                sel[i] = sel[i].substr(2, sel[i].length - 4);
-            } else {
-                // TODO: Check whether the user just selected the text itself and
-                // not the formatting marks!
-                // We got no bold so bolden
-                sel[i] = "**" + sel[i] + "**";
-            }
-        }
-
-        // Replace with changes selections
-        cm.doc.replaceSelections(sel, 'around');
+        markdownInline(cm, '**', '**');
     };
 
     // The same for italic
     CodeMirror.commands.markdownItalic = function(cm) {
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
+        markdownInline(cm, '_', '_');
+    };
 
-        // Is something selected?
-        if(!cm.doc.somethingSelected()) {
-            // No, so just insert something at cursor
-            // Replace the selection
-            cm.doc.replaceSelection('__', 'start');
-            // And then move the cursor one char forward
-            let cur = cm.doc.getCursor();
-            cur.ch = cur.ch + 1;
-            cm.doc.setCursor(cur);
-            cm.refresh();
-            return;
+    // Code blocks
+    CodeMirror.commands.markdownCode = function(cm) {
+        if (cm.getOption("disableInput")) return CodeMirror.Pass;
+        markdownInline(cm, '`', '`');
+    };
+
+    // Headings 1-6
+    CodeMirror.commands.markdownHeading1 = function(cm) {
+        if (cm.getOption("disableInput")) return CodeMirror.Pass;
+        markdownBlock(cm, '#');
+    };
+    CodeMirror.commands.markdownHeading2 = function(cm) {
+        if (cm.getOption("disableInput")) return CodeMirror.Pass;
+        markdownBlock(cm, '##');
+    };
+    CodeMirror.commands.markdownHeading3 = function(cm) {
+        if (cm.getOption("disableInput")) return CodeMirror.Pass;
+        markdownBlock(cm, '###');
+    };
+    CodeMirror.commands.markdownHeading4 = function(cm) {
+        if (cm.getOption("disableInput")) return CodeMirror.Pass;
+        markdownBlock(cm, '####');
+    };
+    CodeMirror.commands.markdownHeading5 = function(cm) {
+        if (cm.getOption("disableInput")) return CodeMirror.Pass;
+        markdownBlock(cm, '#####');
+    };
+    CodeMirror.commands.markdownHeading6 = function(cm) {
+        if (cm.getOption("disableInput")) return CodeMirror.Pass;
+        markdownBlock(cm, '######');
+    };
+
+    // Blockquotes
+    CodeMirror.commands.markdownBlockquote = function(cm) {
+        if (cm.getOption("disableInput")) return CodeMirror.Pass;
+        markdownBlock(cm, '>');
+    };
+
+    // Divider
+    CodeMirror.commands.markdownDivider = function(cm) {
+        if (cm.getOption("disableInput")) return CodeMirror.Pass;
+
+        if(cm.doc.somethingSelected()) {
+            cm.doc.setCursor(cm.doc.listSelections()[0].anchor);
         }
-
-        // Retrieve currently selected selections
-        var sel = cm.doc.getSelections();
-
-        // Traverse all selections and perform bolden or unbolden on them
-        for(let i = 0; i < sel.length; i++) {
-            if(italRE.test(sel[i])) {
-                // We got italic so un-emphasize.
-                sel[i] = sel[i].substr(1, sel[i].length - 2);
-            } else {
-                // TODO: Check whether the user just selected the text itself and
-                // not the formatting marks!
-                // We got no italics so emphasize
-                sel[i] = "_" + sel[i] + "_";
-            }
-        }
-
-        // Replace with changes selections
-        cm.doc.replaceSelections(sel, 'around');
+        cm.doc.replaceSelection('\n---\n');
     };
 
     // Inserts a link template
@@ -280,7 +412,6 @@ const {clipboard} = require('electron');
                 if(cur.line > 0) {
                     let match = unorderedListRE.exec(cm.doc.getLineHandle(cur.line-1).text);
                     if(match) {
-                        console.log(match);
                         // Third capturing group is the bullet char
                         num = match[2];
                         olTab = match[1]; // Contains the spaces (i.e. the tab position)

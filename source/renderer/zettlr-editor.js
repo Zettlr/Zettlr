@@ -425,7 +425,7 @@ class ZettlrEditor
     */
     getWordCount()
     {
-        let words = this._cm.getValue().split(' ')
+        let words = this._cm.getValue().split(/[\s ]+/);
 
         let i = 0;
 

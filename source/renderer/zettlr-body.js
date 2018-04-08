@@ -310,6 +310,37 @@ class ZettlrBody
         this._dialog.open();
     }
 
+    displayFormatting()
+    {
+        let cnt = `
+        <div class="formatting">
+        <a href="#" class="markdownHeading1">Heading 1</a>
+        <a href="#" class="markdownHeading2">Heading 2</a>
+        <a href="#" class="markdownHeading3">Heading 3</a>
+        <a href="#" class="markdownHeading4">Heading 4</a>
+        <a href="#" class="markdownHeading5">Heading 5</a>
+        <a href="#" class="markdownHeading6">Heading 6</a>
+        <a href="#" class="markdownBold">Bold</a>
+        <a href="#" class="markdownItalic">Italic</a>
+        <a href="#" class="markdownBlockquote">Blockquote</a>
+        <a href="#" class="markdownLink">Link</a>
+        <a href="#" class="markdownImage">Image</a>
+        <a href="#" class="markdownCode">Code</a>
+        <a href="#" class="markdownMakeOrderedList">Ordered List</a>
+        <a href="#" class="markdownMakeUnorderedList">Itemized List</a>
+        <a href="#" class="markdownDivider">Divider</a>
+        <a href="#" class="insertFootnote">Footnote</a>
+        <a href="#" class="removeFootnote">Remove footnote</a>
+        </div>`;
+        let popup = new ZettlrPopup(this, $('.button.formatting'), cnt);
+
+        $('.formatting a').click((e) => {
+            let cm = e.target.className;
+            this._renderer.handleEvent('cm-command', cm);
+            popup.close();
+        });
+    }
+
     /**
      * Requests the export of a file. Is called by the exporting buttons.
      * @param  {jQuery} elem A jQuery object representing the clicked button.

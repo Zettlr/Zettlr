@@ -852,76 +852,36 @@ html {
 }
 #toolbar .button.dir-open::before {
   content: "\f73e";
-  display: inline;
 }
 #toolbar .button.directory-new::before {
   content: "\f0da";
-  display: inline;
 }
 #toolbar .button.file-new::before {
   content: "\f0c6";
-  display: inline;
 }
 #toolbar .button.stats::before {
   content: "\f6b8";
-  display: inline;
 }
 #toolbar .button.preferences::before {
   content: "\f00f";
-  display: inline;
 }
 #toolbar .button.file-save::before {
   content: "\f0c8";
-  display: inline;
 }
 #toolbar .button.file-delete::before {
   content: "\f0ce";
-  display: inline;
 }
 #toolbar .button.file-rename::before {
   content: "\f5d4";
-  display: inline;
 }
-#toolbar .button.insert-bold::before {
-  content: "\f1f4";
-  display: inline;
-}
-#toolbar .button.insert-italic::before {
-  content: "\f1f5";
-  display: inline;
-}
-#toolbar .button.insert-ol::before {
-  content: "\f4c3";
-  display: inline;
-}
-#toolbar .button.insert-ul::before {
-  content: "\f4c2";
-  display: inline;
-}
-#toolbar .button.insert-fn::before {
-  content: "\f1eb";
-  display: inline;
-}
-#toolbar .button.remove-fn::before {
-  content: "\f1eb";
-  display: inline;
-  text-decoration: line-through;
-}
-#toolbar .button.insert-link::before {
-  content: "\f022";
-  display: inline;
-}
-#toolbar .button.insert-image::before {
-  content: "\22b7";
-  display: inline;
+#toolbar .button.formatting::before {
+  content: "\00b6";
 }
 #toolbar .button.share::before {
   content: "\f16c";
-  display: inline;
 }
 #toolbar .button.show-toc::before {
   content: "\f68c";
-  display: inline;
 }
 #toolbar .button.pomodoro {
   padding: 2px;
@@ -1171,6 +1131,80 @@ html {
   background-color: #fd301a;
   color: black;
 }
+.popup .formatting a {
+  text-decoration: none;
+  display: block;
+  padding: 5px;
+  color: inherit;
+}
+.popup .formatting a:hover {
+  background-color: #c8c8c8;
+}
+.popup .formatting a::before {
+  font-family: 'WebHostingHub-Glyphs';
+  font-size: 0.72em;
+  padding-right: 5px;
+  width: 30px;
+  display: inline-block;
+}
+.popup .formatting .markdownHeading1::before {
+  content: "h1";
+}
+.popup .formatting .markdownHeading2::before {
+  content: "h2";
+}
+.popup .formatting .markdownHeading3::before {
+  content: "h3";
+}
+.popup .formatting .markdownHeading4::before {
+  content: "h4";
+}
+.popup .formatting .markdownHeading5::before {
+  content: "h5";
+}
+.popup .formatting .markdownHeading6::before {
+  content: "h6";
+}
+.popup .formatting .markdownBlockquote::before {
+  content: '\f328';
+}
+.popup .formatting .markdownLink::before {
+  content: "\f022";
+}
+.popup .formatting .markdownImage::before {
+  content: "\22b7";
+}
+.popup .formatting .markdownCode::before {
+  content: "\f743";
+}
+.popup .formatting .markdownMakeOrderedList::before {
+  content: "\f4c3";
+}
+.popup .formatting .markdownMakeUnorderedList::before {
+  content: "\f4c2";
+}
+.popup .formatting .markdownDivider::before {
+  content: "\f1cc";
+}
+.popup .formatting .insertFootnote::before {
+  content: "\f1eb";
+}
+.popup .formatting .markdownBold {
+  font-weight: bold;
+}
+.popup .formatting .markdownBold::before {
+  content: "\f1f4";
+}
+.popup .formatting .markdownItalic {
+  font-style: italic;
+}
+.popup .formatting .markdownItalic::before {
+  content: "\f1f5";
+}
+.popup .formatting .removeFootnote::before {
+  content: "\f1eb";
+  text-decoration: line-through;
+}
 .dark .popup {
   background-color: rgba(0, 0, 0, 0.9);
   box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.75);
@@ -1188,6 +1222,9 @@ html {
 }
 .dark .popup a.toc-link:hover {
   background-color: rgba(51, 51, 51, 0.9);
+}
+.dark .popup .formatting a:hover {
+  background-color: #787878;
 }
 .dark .popup-arrow.up {
   border-bottom-color: rgba(0, 0, 0, 0.9);
