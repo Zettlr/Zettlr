@@ -53,6 +53,16 @@ class ZettlrPreview
     }
 
     /**
+     * Passes the sorting request to the renderer
+     * @param  {Number} hash The hash of the dir to be sorted
+     * @param  {String} type Either name or time
+     */
+    sortDir(hash, type)
+    {
+        this._renderer.sortDir(hash, type);
+    }
+
+    /**
      * Refreshes the file list.
      * @return {ZettlrPreview} Chainability.
      */

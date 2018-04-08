@@ -331,6 +331,16 @@ class ListView
     }
 
     /**
+     * Request sorting of the given directory
+     * @param  {ListViewItem} elem The emitting element
+     * @param  {String} type Either "time" or "name"
+     */
+    sortDir(elem, type)
+    {
+        this._preview.sortDir(elem.getHash(), type);
+    }
+
+    /**
      * Scroll a given item into view.
      * @param  {jQuery} lielem The jQuery element representing the DOM element.
      * @return {void}      Nothing to return.

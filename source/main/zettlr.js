@@ -252,6 +252,28 @@ class Zettlr
     }
 
     /**
+     * Sorts a directory according to the argument
+     * @param  {Object} arg An object containing both a hash and a sorting type
+     */
+    sortDir(arg)
+    {
+        if(!arg.hasOwnProperty('hash') || !arg.hasOwnProperty('type')) {
+            return;
+        }
+
+        let dir = this.findDir({ 'hash': arg.hash });
+        if(dir === null) {
+            return;
+        }
+
+        if(arg.type === 'name' || arg.type === 'time') {
+            dir.toggleSorting(arg.type);
+        }
+
+        this.ipc.send('paths-update', this.getPaths());
+    }
+
+    /**
      * Create a new file.
      * @param  {Object} arg An object containing a hash of containing directory and a file name.
      * @return {void}     This function does not return anything.

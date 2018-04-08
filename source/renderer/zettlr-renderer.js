@@ -577,6 +577,13 @@ class ZettlrRenderer
     requestFile(hash) { this._ipc.send('file-get', hash); }
 
     /**
+     * Tells the main to tell the directory to sort itself
+     * @param  {Number} hash The hash of the directory to be sorted
+     * @param  {String} type Either time or name
+     */
+    sortDir(hash, type) { this._ipc.send('dir-sort', {'hash':hash, 'type':type}); }
+
+    /**
      * Executed when a user has finished typing a new file name.
      * @param  {String} name The new name
      * @param  {Integer} hash The containing dir's hash

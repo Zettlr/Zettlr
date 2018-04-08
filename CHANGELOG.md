@@ -14,6 +14,7 @@
 - Moved all formattings to a small popup (indicated by the carriage return symbol). Also added other formatting possibilities, such as code, headings and blockquotes.
 - Fixes to the formatting commands.
 - Added an attachment pane (#6).
+- Added an option to sort directories according to time or name (#4).
 
 ## Under the hood
 

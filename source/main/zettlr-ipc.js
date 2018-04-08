@@ -110,6 +110,10 @@ class ZettlrIPC
             this._app.selectDir(cnt);
             break;
 
+            case 'dir-sort':
+            this._app.sortDir(cnt);
+            break;
+
             case 'file-modified':
             // Just set the modification flags.
             this._app.setModified();

@@ -439,6 +439,25 @@ body {
   position: sticky;
   top: -1px;
 }
+#preview ul li.directory .sorter {
+  position: absolute;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  right: 0;
+  bottom: 0;
+}
+#preview ul li.directory span.sortTime,
+#preview ul li.directory span.sortName {
+  font-family: 'WebHostingHub-Glyphs';
+  font-size: 0.72em;
+  padding: 0 0.5em;
+  display: inline-block;
+}
+#preview ul li.directory span.sortTime:hover,
+#preview ul li.directory span.sortName:hover {
+  color: #505050;
+}
 #preview #search-directory {
   position: sticky;
   z-index: 1001;
@@ -503,6 +522,10 @@ body {
 #preview.dark ul li.directory {
   background-color: #282828;
   color: #787878;
+}
+#preview.dark ul li.directory span.sortTime:hover,
+#preview.dark ul li.directory span.sortName:hover {
+  color: #c8c8c8;
 }
 #preview.dark #search-directory input {
   background-color: #6478b4;
@@ -1292,7 +1315,6 @@ body {
   bottom: 0;
   width: 20%;
   background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.6);
 }
 #attachments h1 {
   padding: 10px;

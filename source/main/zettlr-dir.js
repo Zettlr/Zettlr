@@ -59,6 +59,7 @@ class ZettlrDir
         this.attachments    = [];
         this.type           = 'directory';
         this.parent         = parent;
+        this.sorting        = 'name-up'; // Other options: name-down, time-up and time-down
 
         // Prepopulate
         this.path = dir;
@@ -208,7 +209,7 @@ class ZettlrDir
 
         let dir = new ZettlrDir(this, newpath);
         this.children.push(dir);
-        this.children = sort(this.children);
+        this.children = sort(this.children, this.sorting);
 
         // Return dir for chainability
         return dir;
@@ -251,44 +252,8 @@ class ZettlrDir
         // Create a new file.
         let f = new ZettlrFile(this, path.join(this.path, name));
         this.children.push(f);
-        this.children = sort(this.children);
+        this.children = sort(this.children, this.sorting);
         return f;
-    }
-
-    /**
-     * Triggered by the watchdog - add a child
-     * @param {String} p The path to the child
-     */
-    addChild(p)
-    {
-        let stat = fs.lstatSync(p);
-
-        if(stat.isDirectory() && !ignoreDir(p)) {
-            // First check whether or not this thing is already in the children
-            for(let d of this.children) {
-                if(d.path == p) {
-                    return d;
-                }
-            }
-            let dir = new ZettlrDir(this, p);
-            this.children.push(dir);
-            this.children = sort(this.children);
-            return dir;
-        } else if(stat.isFile() && !ignoreFile(p)) {
-            // First check whether or not this thing is already in the children
-            for(let c of this.children) {
-                if(c.path == p) {
-                    return c;
-                }
-            }
-            let file = new ZettlrFile(this, p);
-            this.children.push(file);
-            this.children = sort(this.children);
-            return file;
-        }
-
-        // Not a correct file type -> ignore
-        return null;
     }
 
     /**
@@ -394,7 +359,7 @@ class ZettlrDir
         this.children.push(newchild);
         // Set the correct new parent
         newchild.parent = this;
-        this.children = sort(this.children);
+        this.children = sort(this.children, this.sorting);
 
         return this;
     }
@@ -477,17 +442,43 @@ class ZettlrDir
         this.attachments = nAttachments;
 
         // Final step: Sort
-        this.children = sort(this.children);
-        this.attachments.sort(function(a, b) {
-            if(a.name > b.name) {
-                return 1;
-            } else if(a.name < b.name) {
+        this.children = sort(this.children, this.sorting);
+        this.attachments.sort((a, b) => {
+            // Negative return: a is smaller b (case insensitive)
+            if(a.name.toLowerCase() < b.name.toLowerCase()) {
                 return -1;
+            } else if(a.name.toLowerCase() > b.name.toLowerCase()) {
+                return 1;
             } else {
                 return 0;
             }
         });
 
+        return this;
+    }
+
+    /**
+     * Toggles the sorting. Default is name-up
+     * @param  {String} [type='name'] Either "time" or "name". Up/down will toggle automatically.
+     * @return {ZettlrDir}               Chainability
+     */
+    toggleSorting(type = 'name')
+    {
+        if(type == 'name') {
+            if(this.sorting == 'name-up') {
+                this.sorting = 'name-down';
+            } else {
+                this.sorting = 'name-up';
+            }
+        } else if(type == 'time') {
+            if(this.sorting == 'time-up') {
+                this.sorting = 'time-down';
+            } else {
+                this.sorting = 'time-up';
+            }
+        }
+
+        this.children = sort(this.children, this.sorting);
         return this;
     }
 
@@ -586,7 +577,7 @@ class ZettlrDir
      */
     sort()
     {
-        this.children = sort(this.children);
+        this.children = sort(this.children, this.sorting);
         return this;
     }
 

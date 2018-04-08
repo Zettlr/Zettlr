@@ -44,23 +44,12 @@ function hash(string)
 /**
 * This function can sort an array of ZettlrFile and ZettlrDir objects
 * @param  {Array} arr An array containing only ZettlrFile and ZettlrDir objects
+* @param {String} [type='name-up'] The type of sorting - can be time-up, time-down, name-up or name-down
 * @return {Array}     The sorted array
 */
-function sort(arr)
+function sort(arr, type = 'name-up')
 {
-    // First sort through children array (necessary if new children were added)
-    arr.sort((a, b) => {
-        // Negative return: a is smaller b (case insensitive)
-        if(a.name < b.name) {
-            return -1;
-        } else if(a.name.toLowerCase() > b.name.toLowerCase()) {
-            return 1;
-        } else {
-            return 0;
-        }
-    });
-
-    // Now split the array into files and directories and concat again
+    // First split the array based on type
     let f = [];
     let d = [];
 
@@ -71,6 +60,55 @@ function sort(arr)
             d.push(c);
         }
     }
+
+    // Then sort the directories (always based on name)
+    d.sort((a, b) => {
+        // Negative return: a is smaller b (case insensitive)
+        if(a.name.toLowerCase() < b.name.toLowerCase()) {
+            return -1;
+        } else if(a.name.toLowerCase() > b.name.toLowerCase()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+
+    // Now sort the files according to the type
+    f.sort((a, b) => {
+        if(type === 'name-up') {
+            if(a.name.toLowerCase() < b.name.toLowerCase()) {
+                return -1;
+            } else if(a.name.toLowerCase() > b.name.toLowerCase()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else if(type === 'name-down') {
+            if(a.name.toLowerCase() < b.name.toLowerCase()) {
+                return 1;
+            } else if(a.name.toLowerCase() > b.name.toLowerCase()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        } else if(type === 'time-up') {
+            if(a.modtime < b.modtime) {
+                return -1;
+            } else if(a.modtime > b.modtime) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else if(type === 'time-down') {
+            if(a.modtime < b.modtime) {
+                return 1;
+            } else if(a.modtime > b.modtime) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    });
 
     // Return sorted array
     return f.concat(d);

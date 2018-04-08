@@ -40,6 +40,8 @@ class ListViewItem
         .attr('data-hash', this._fileObj.hash)
         .attr('title', this._fileObj.name);
 
+        this._sortingHeader = $('<div class="sorter"><span class="sortName">&#xf1c2;</span><span class="sortTime">&#xf1c3;</span></div>');
+
         // Populate
         if(this._fileObj.type == 'directory') {
             this._elem.html(this._fileObj.name);
@@ -78,6 +80,22 @@ class ListViewItem
     {
         // Only activate files
         if(this._fileObj.type == 'directory') {
+            this._elem.hover(() => {
+                // In
+                this._elem.append(this._sortingHeader);
+            }, () => {
+                // Out
+                this._sortingHeader.detach();
+            });
+
+            this._sortingHeader.click((e) => {
+                let elem = $(e.target);
+                if(elem.hasClass('sortName')) {
+                    this._listview.sortDir(this, 'name');
+                } else if(elem.hasClass('sortTime')) {
+                    this._listview.sortDir(this, 'time');
+                }
+            })
             return;
         }
 

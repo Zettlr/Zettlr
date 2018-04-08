@@ -79,6 +79,26 @@
                 padding:@ribbon-padding;
                 position:sticky;
                 top:-1px; // Account for the border-top
+
+                .sorter {
+                    position:absolute;
+                    display:inline-block;
+                    margin:0;
+                    padding:0;
+                    right:0;
+                    bottom:0;
+                }
+
+                span.sortTime, span.sortName {
+                    font-family:'WebHostingHub-Glyphs';
+                    font-size:@font-size-small * 0.8;
+                    padding:0 0.5em;
+                    display:inline-block;
+
+                    &:hover {
+                        color:@grey-5;
+                    }
+                }
             }
         }
     }
@@ -160,6 +180,10 @@
             li.directory {
                 background-color:@grey-7;
                 color:@grey-3;
+
+                span.sortTime:hover, span.sortName:hover {
+                    color: @grey-2;
+                }
             }
         }
 
