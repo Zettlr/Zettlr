@@ -170,6 +170,13 @@ class ZettlrMenu
                             if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'toggle-preview'});
                         }
                     },
+                    {
+                        label: trans('menu.toggle_attachments'),
+                        accelerator: 'CmdOrCtrl+3',
+                        click(item, focusedWindow) {
+                            if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'toggle-attachments'});
+                        }
+                    },
                     { type: 'separator' },
                     {
                         label: trans('menu.reset_zoom'),

@@ -63,6 +63,7 @@
         "toggle_theme": "Night mode",
         "toggle_snippets": "Text snippets",
         "toggle_directories": "Toggle tree view",
+        "toggle_attachments": "View attachments",
         "toggle_preview": "Toggle preview pane",
         "zoom_in": "Zoom in",
         "zoom_out": "Zoom out",
