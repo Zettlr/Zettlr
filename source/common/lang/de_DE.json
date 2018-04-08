@@ -17,7 +17,9 @@
         "avg_surpassed": "🔥 Weiter so!",
         "avg_close_to": "💪 Fast geschafft!",
         "avg_not_reached": "✍🏼 Schreibe, um deinen Durchschnitt zu übertreffen.",
-        "empty_directories": "Keine offenen Dateien oder Ordner"
+        "empty_directories": "Keine offenen Dateien oder Ordner",
+        "attachments": "Anhänge",
+        "no_attachments": "Keine Anhänge"
     },
     "pomodoro": {
         "start": "Start",
@@ -129,6 +131,8 @@
             "general": "Allgemein",
             "editor": "Editor",
             "advanced": "Erweitert",
+            "attachments": "Anhänge",
+            "attachments_info": "Trage hier alle Dateitypen ein, die du in der Attachment-Sidebar sehen möchtest. Trenne jeden Dateityp mit einem Komma. Änderungen werden nach einem Neustart wirksam.",
             "app_lang": {
                 "title": "Anwendungssprache (<strong>Neustart erforderlich!</strong>)",
                 "de_DE": "Deutsch (Deutschland)",
@@ -188,7 +192,8 @@
         "insert_fn": "Fußnote hinzufügen",
         "remove_fn": "Fußnote unter dem Cursor entfernen",
         "show_toc": "Inhaltsverzeichnis anzeigen",
-        "file_revert": "Letzte gespeicherte Dateiversion wiederherstellen"
+        "toggle_attachments": "Anhänge anzeigen",
+        "formatting": "Textformate"
     },
     "system" : {
         "unknown_command": "Unbekannten Befehl erhalten: %s",

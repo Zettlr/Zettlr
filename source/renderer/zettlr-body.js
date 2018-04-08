@@ -417,7 +417,8 @@ class ZettlrBody
         snippets   = false,
         spellcheck = this._spellcheckLangs,
         app_lang = 'en_US',
-        debug = false;
+        debug = false,
+        attachments = [];
 
         for(let r of res) {
             if(r.name === 'pref-pandoc') {
@@ -434,6 +435,20 @@ class ZettlrBody
                 app_lang = r.value;
             } else if(r.name === 'debug') {
                 debug = true;
+            } else if(r.name === 'pref-attachments') {
+                // We have to account for user jokes
+                attachments = r.value.split(',');
+                for(let i = 0; i < attachments.length; i++) {
+                    attachments[i] = attachments[i].trim().replace(/[\s]/g, '');
+                    if(attachments[i].length < 2) {
+                        attachments.splice(i, 1);
+                        i--;
+                        continue;
+                    }
+                    if(attachments[i].charAt(0) != '.') {
+                        attachments[i] = '.' + attachments[i];
+                    }
+                }
             }
         }
 
@@ -445,7 +460,8 @@ class ZettlrBody
                 'snippets': snippets,
                 'spellcheck': spellcheck,
                 'app_lang': app_lang,
-                'debug': debug
+                'debug': debug,
+                'attachmentExtensions': attachments
             }
             this._renderer.saveSettings(cfg);
         }

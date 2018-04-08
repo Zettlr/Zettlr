@@ -88,6 +88,11 @@ class ZettlrFile
         // Such empty
     }
 
+    /**
+     * Handles an event emitted by the watchdog
+     * @param  {String} p The path to test against
+     * @param  {String} e The event to handle
+     */
     handleEvent(p, e)
     {
         if(this.isScope(p) === this) {

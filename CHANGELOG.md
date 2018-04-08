@@ -4,7 +4,7 @@
 
 - Fixed the button text color in popups.
 - More shadow under the popups (makes them stick out more in the white mode).
-- Now it is possible to open Markdown files directly with Zettlr by double clicking them or dragging them onto the app. Dropping also works for directories.
+- Now it is possible to open Markdown files directly with Zettlr by double clicking them or dragging them onto the app. Dropping also works for directories (#3).
 - Zettlr now tells the Operating System that it is capable of handling `.md`- and `.markdown` files.
 - Small fixes to the translations.
 - Added an about dialog.
@@ -13,6 +13,7 @@
 - Fixes to the word count (now also splits along line breaks).
 - Moved all formattings to a small popup (indicated by the carriage return symbol). Also added other formatting possibilities, such as code, headings and blockquotes.
 - Fixes to the formatting commands.
+- Added an attachment pane (#6).
 
 ## Under the hood
 

@@ -23,7 +23,7 @@ const path          = require('path');
 const chokidar      = require('chokidar');
 
 const { ignoreDir, ignoreFile,
-        isFile, isDir
+        isFile, isDir, isAttachment
     } = require('../common/zettlr-helpers.js');
 
 /**
@@ -121,7 +121,7 @@ class ZettlrWatchdog
                 let is_file = (event === 'unlink')    ? true : isFile(p);
 
                 // Only watch changes in directories and supported files
-                if((is_dir && !ignoreDir(p)) || (is_file && !ignoreFile(p))) {
+                if((is_dir && !ignoreDir(p)) || (is_file && (!ignoreFile(p) || isAttachment(p)))) {
                     this._staged.push({ 'type': event, 'path': p });
                 }
             }

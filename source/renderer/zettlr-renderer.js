@@ -22,6 +22,7 @@ const ZettlrToolbar     = require('../zettlr-toolbar.js');
 const ZettlrPomodoro    = require('../zettlr-pomodoro.js');
 const ZettlrPopup       = require('../zettlr-popup.js');
 const ZettlrStatsView   = require('../zettlr-stats-view.js');
+const ZettlrAttachments = require('../zettlr-attachments.js');
 
 const Typo              = require('typo-js');
 const remote            = require('electron').remote;
@@ -71,6 +72,7 @@ class ZettlrRenderer
         this._toolbar        = new ZettlrToolbar(this);
         this._pomodoro       = new ZettlrPomodoro(this);
         this._stats          = new ZettlrStatsView(this);
+        this._attachments   = new ZettlrAttachments(this);
     }
 
     /**
@@ -201,6 +203,11 @@ class ZettlrRenderer
         this._directories.toggleDisplay();
         this._preview.toggleDirectories();
         this._editor.toggleDirectories();
+    }
+
+    toggleAttachments()
+    {
+        this._attachments.toggle();
     }
 
     /**
@@ -334,7 +341,7 @@ class ZettlrRenderer
             this.setCurrentFile(null);
         }
 
-        // Trigger a refresh in directories and preview
+        // Trigger a refresh in directories and preview and attachment pane
         this._directories.refresh();
         this._preview.refresh();
     }
@@ -696,6 +703,7 @@ class ZettlrRenderer
     setCurrentDir(newdir = null)
     {
         this._currentDir = newdir;
+        this._attachments.refresh();
 
         if(newdir != null) {
             // What we can also do here: Select the dir and refresh the file list.

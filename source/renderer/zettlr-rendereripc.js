@@ -319,6 +319,10 @@ class ZettlrRendererIPC
             this._app.getBody().displayAbout();
             break;
 
+            case 'toggle-attachments':
+            this._app.toggleAttachments();
+            break;
+
             // Stats
             case 'show-stats':
             this.send('request-stats-data');

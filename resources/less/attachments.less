@@ -1,0 +1,45 @@
+// Attachment pane
+
+#attachments {
+    position: absolute;
+    top: @toolbar-height;
+    right: -20%;
+    bottom: 0;
+    width: 20%;
+    background-color: rgba(255,255,255,.8);
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.6);
+
+    h1 {
+        padding:10px;
+        font-size:@font-size-big;
+    }
+
+    p {
+        padding:10px;
+    }
+
+    a {
+        display:block;
+        margin:10px;
+        padding:4px;
+        border-radius: @border-radius;
+        text-decoration:none;
+        color:inherit;
+
+        &:hover {
+            text-decoration:underline;
+        }
+
+        &::before {
+            font-family: 'WebHostingHub-Glyphs';
+            content: "\f285";
+            margin-right:5px;
+            display:inline-block;
+        }
+    }
+}
+
+.dark #attachments {
+    background-color: rgba(0,0,0,.8);
+    color:@grey-0;
+}

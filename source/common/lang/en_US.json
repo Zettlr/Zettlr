@@ -17,7 +17,9 @@
         "avg_surpassed": "🔥 You're on fire!",
         "avg_close_to": "💪 You're close to hitting your daily average!",
         "avg_not_reached": "✍🏼 Get writing to surpass your daily average.",
-        "empty_directories": "No open files or folders"
+        "empty_directories": "No open files or folders",
+        "attachments": "Attachments",
+        "no_attachments": "No attachments"
     },
     "pomodoro": {
         "start": "Start",
@@ -129,6 +131,8 @@
             "general": "General",
             "editor": "Editor",
             "advanced": "Advanced",
+            "attachments": "Attachments",
+            "attachments_info": "Enter all file extensions that you want to see in your attachment sidebar. Separate them with a comma. Changes are recognized after a restart.",
             "app_lang": {
                 "title": "Application language (<strong>Restart required!</strong>)",
                 "de_DE": "German (Germany)",
@@ -188,7 +192,8 @@
         "insert_fn": "Add a footnote",
         "remove_fn": "Remove the footnote under the cursor",
         "show_toc": "Show the table of contents",
-        "file_revert": "Revert last saved version of this file"
+        "toggle_attachments": "View attachments",
+        "formatting": "Text formats"
     },
     "system" : {
         "unknown_command": "Unknown command received: %s",

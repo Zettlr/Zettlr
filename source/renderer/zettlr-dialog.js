@@ -157,7 +157,8 @@ class ZettlrDialog
                     lang_selection += `<option value="${l}">${trans('dialog.preferences.app_lang.'+l)}</option>`;
                 }
             }
-            replacements.push('%APP_LANG%|' + lang_selection)
+            replacements.push('%APP_LANG%|' + lang_selection);
+            replacements.push('%ATTACHMENT_EXTENSIONS%|' + obj.attachmentExtensions.join(', '));
             break;
 
             case 'update':

@@ -88,6 +88,13 @@
         },
         {
             "role": "pomodoro"
+        },
+        {
+            "role": "button",
+            "class": "toggle-attachments",
+            "command": "toggle-attachments",
+            "content": "{}",
+            "title": "toolbar.toggle_attachments"
         }
 
     ]

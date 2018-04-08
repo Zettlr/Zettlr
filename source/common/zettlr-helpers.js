@@ -189,6 +189,16 @@ function isDir(p)
     }
 }
 
+function isAttachment(p)
+{
+    if(!global.attachmentExtensions) {
+        // Something went wrong on init. Hey ZettlrConfig, are you even there?
+        return false;
+    }
+
+    return isFile(p) && global.attachmentExtensions.includes(path.extname(p));
+}
+
 /**
  * Adds delimiters to numbers. TODO: Actually *localise* it.
  * @param  {Number} number The number to be localised.
@@ -223,5 +233,6 @@ module.exports = {
     ignoreDir,
     isFile,
     isDir,
+    isAttachment,
     localiseNumber
 };

@@ -6,6 +6,7 @@
                 <li><a href="#prefs-tabs-general">%i18n.preferences.general%</a></li>
                 <li><a href="#prefs-tabs-editor">%i18n.preferences.editor%</a></li>
                 <li><a href="#prefs-tabs-advanced">%i18n.preferences.advanced%</a></li>
+                <li><a href="#prefs-tabs-attachments">%i18n.preferences.attachments%</a></li>
             </ul>
             <div id="prefs-tabs-general">
                 <label for="app-lang">%i18n.preferences.app_lang.title%
@@ -47,6 +48,12 @@
                 <div>
                     <input type="checkbox" name="debug" value="yes" id="debug" %DEBUG%>
                     <label for="debug">%i18n.preferences.debug%</label>
+                </div>
+            </div>
+            <div id="prefs-tabs-attachments">
+                <p>%i18n.preferences.attachments_info%</p>
+                <div>
+                    <textarea id="pref-attachments" name="pref-attachments">%ATTACHMENT_EXTENSIONS%</textarea>
                 </div>
             </div>
         </div>

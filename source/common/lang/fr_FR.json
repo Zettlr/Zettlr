@@ -17,7 +17,9 @@
         "avg_surpassed": "🔥 Tu es en feu!",
         "avg_close_to": "💪 Tu es auprès de moyenne par jou!",
         "avg_not_reached": "✍🏼 Écrire pour surpasser ta moyenne.",
-        "empty_directories": "Pas des fichiers ou dossiers"
+        "empty_directories": "Pas des fichiers ou dossiers",
+        "attachments": "Annexes",
+        "no_attachments": "Pas des annexes"
     },
     "pomodoro": {
         "start": "Start",
@@ -129,6 +131,8 @@
             "general": "Général",
             "editor": "Editeur",
             "advanced": "Paramètres elargi",
+            "attachments": "Annexes",
+            "attachments_info": "Entrer tous les extensions des fichiers, quelles tu veux voir dans le liston d'annexes. Separer cettes par les virgules. Les modifications avoir effet après un redémmarage.",
             "app_lang": {
                 "title": "La langue de l'app (<strong>Redémmarage indispensable</strong>)",
                 "de_DE": "L'Allemand (Allemangne)",
@@ -188,7 +192,8 @@
         "insert_fn": "Insérer un note en bas en page",
         "remove_fn": "Effacer le note",
         "show_toc": "Ouvrir le sommaire",
-        "file_revert": "Remettre le fichier à la derniere version de le fichier"
+        "toggle_attachments": "Voir les annexes",
+        "formatting": "Formats du texte"
     },
     "system" : {
         "unknown_command": "Reçu une commande inconnu: %s",

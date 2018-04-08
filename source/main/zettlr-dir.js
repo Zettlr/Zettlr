@@ -13,16 +13,17 @@
  * END HEADER
  */
 
-const path         = require('path');
-const fs           = require('fs');
-const sanitize     = require('sanitize-filename');
-const ZettlrFile   = require('./zettlr-file.js');
-const {shell}      = require('electron');
-const {trans}      = require('../common/lang/i18n.js');
+const path              = require('path');
+const fs                = require('fs');
+const sanitize          = require('sanitize-filename');
+const ZettlrFile        = require('./zettlr-file.js');
+const ZettlrAttachment  = require('./zettlr-attachment.js');
+const {shell}           = require('electron');
+const {trans}           = require('../common/lang/i18n.js');
 
 // Include helpers
 const { hash, sort, generateName,
-    ignoreDir, ignoreFile, isFile, isDir
+    ignoreDir, ignoreFile, isFile, isDir, isAttachment
 } = require('../common/zettlr-helpers.js');
 
 /**
@@ -51,12 +52,13 @@ class ZettlrDir
             throw new DirectoryError('Error on ZettlrDir instantiation: dir cannot be empty!');
         }
 
-        this.path     = "";
-        this.name     = "";
-        this.hash     = null;
-        this.children = [];
-        this.type     = 'directory';
-        this.parent   = parent;
+        this.path           = "";
+        this.name           = "";
+        this.hash           = null;
+        this.children       = [];
+        this.attachments    = [];
+        this.type           = 'directory';
+        this.parent         = parent;
 
         // Prepopulate
         this.path = dir;
@@ -433,12 +435,13 @@ class ZettlrDir
 
         // Remove all paths that are to be ignored
         for(let f of files) {
-            if((isDir(f) && ignoreDir(f)) || (isFile(f) && ignoreFile(f))) {
+            if((isDir(f) && ignoreDir(f)) || (isFile(f) && ignoreFile(f) && !isAttachment(f))) {
                 files.splice(files.indexOf(f), 1);
             }
         }
 
         let nChildren = [];
+        let nAttachments = [];
 
         // Remove all children that are no longer present
         for(let c of this.children) {
@@ -452,23 +455,38 @@ class ZettlrDir
         for(let f of files) {
             // Do we already have it?
             let found = this.children.find((elem) => { return elem.path == f; });
-            if(found !== undefined) {
-                nChildren.push(found);
+            let fattach = this.attachments.find((elem) => { return elem.path == f; });
+            if(found !== undefined || fattach !== undefined) {
+                if(found) nChildren.push(found);
+                if(fattach) nAttachments.push(fattach);
+                if(fattach) console.log(`re-adding attachment ${fattach.path}`);
             } else {
                 // Otherwise create new
                 if(isFile(f) && !ignoreFile(f)) {
                     nChildren.push(new ZettlrFile(this, f));
                 } else if(isDir(f) && !ignoreDir(f)) {
                     nChildren.push(new ZettlrDir(this, f));
+                } else if(isAttachment(f)) {
+                    nAttachments.push(new ZettlrAttachment(this, f));
                 }
             }
         }
 
         // Swap
         this.children = nChildren;
+        this.attachments = nAttachments;
 
         // Final step: Sort
         this.children = sort(this.children);
+        this.attachments.sort(function(a, b) {
+            if(a.name > b.name) {
+                return 1;
+            } else if(a.name < b.name) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
 
         return this;
     }

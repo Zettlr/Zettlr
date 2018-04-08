@@ -45,6 +45,9 @@ html {
   font-family: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
   font-size: 1em;
 }
+body {
+  overflow: hidden;
+}
 #container.blur {
   /* This is applied when a modal is shown */
   filter: blur(5px);
@@ -136,6 +139,13 @@ html {
   margin: 0.5em;
   width: auto;
   display: inline;
+}
+.modal .dialog textarea {
+  font-size: inherit;
+  width: 100%;
+  padding: 1em;
+  margin: 1em;
+  border-radius: 10px;
 }
 .modal .dialog button,
 .modal .dialog a.button {
@@ -883,6 +893,9 @@ html {
 #toolbar .button.show-toc::before {
   content: "\f68c";
 }
+#toolbar .button.toggle-attachments::before {
+  content: "\f285";
+}
 #toolbar .button.pomodoro {
   padding: 2px;
   background-image: none;
@@ -1271,4 +1284,41 @@ html {
 }
 .dark .popup-arrow.right {
   border-left-color: rgba(0, 0, 0, 0.9);
+}
+#attachments {
+  position: absolute;
+  top: 39px;
+  right: -20%;
+  bottom: 0;
+  width: 20%;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.6);
+}
+#attachments h1 {
+  padding: 10px;
+  font-size: 1.2em;
+}
+#attachments p {
+  padding: 10px;
+}
+#attachments a {
+  display: block;
+  margin: 10px;
+  padding: 4px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+#attachments a:hover {
+  text-decoration: underline;
+}
+#attachments a::before {
+  font-family: 'WebHostingHub-Glyphs';
+  content: "\f285";
+  margin-right: 5px;
+  display: inline-block;
+}
+.dark #attachments {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #f0f0f0;
 }

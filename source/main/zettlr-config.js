@@ -67,6 +67,30 @@ class ZettlrConfig
         // Config Template providing all necessary arguments
         this.cfgtpl = {
             "openPaths" : [],
+            "attachmentExtensions": [
+                ".pdf",     // PDF
+                ".odt",     // OpenDocument Types
+                ".odp",
+                ".ods",
+                ".doc",     // Microsoft Office Types
+                ".docx",
+                ".xls",
+                ".xlsx",
+                ".ppt",
+                ".pptx",
+                ".do",      // Stata do-files
+                ".r",       // R script file
+                ".py",      // Python script file
+                ".sav",     // SPSS script files
+                ".zsav",
+                ".csv",     // CSV data file
+                ".png",     // Images
+                ".jpg",
+                ".jpeg",
+                ".gif",
+                ".tiff"
+
+            ],
             "darkTheme" : false,
             "snippets"  : true,
             "pandoc"    : 'pandoc',
@@ -89,6 +113,10 @@ class ZettlrConfig
 
         // Remove potential dead links to non-existent files and dirs
         this.checkPaths();
+
+        // Put the attachment extensions into the global so that the helper
+        // function isAttachment() can grab them
+        global.attachmentExtensions = this.config.attachmentExtensions;
     }
 
     /**
