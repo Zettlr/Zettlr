@@ -9,6 +9,7 @@
 - Small fixes to the translations.
 - Added an about dialog.
 - Now Zettlr also converts "standalone" links (e.g. simple detected URLs without Markdown formatting around them) into clickable links.
+- Added a small popup to view some stats on your writing.
 
 ## Under the hood
 

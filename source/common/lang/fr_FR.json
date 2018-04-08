@@ -11,9 +11,12 @@
     "gui": {
         "find_placeholder": "Trouver…",
         "words": "%s mots",
-        "overall_words": "En tout, tu as écrit %s mots.",
-        "avg_words": "Tu écris %s mots en moyenne par jour.",
-        "today_words": "Aujourd'hui tu as écrit %s mots.",
+        "overall_words": "en tout",
+        "avg_words": "moyenne par jour",
+        "today_words": "mots aujourd'hui",
+        "avg_surpassed": "🔥 Tu es en feu!",
+        "avg_close_to": "💪 Tu es auprès de moyenne par jou!",
+        "avg_not_reached": "✍🏼 Écrire pour surpasser ta moyenne.",
         "empty_directories": "Pas des fichiers ou dossiers"
     },
     "pomodoro": {
@@ -170,6 +173,7 @@
         "dir_open": "Ouvrir un dossier",
         "dir_new": "Créer un dossier",
         "file_new": "Créer un fichier",
+        "stats": "Voir la statistique",
         "preferences": "Ouvrir les paramètres",
         "file_save": "Enregistrer les modifications",
         "share": "Exporter le fichier dans HTML, DOCX, ODT, ou PDF",

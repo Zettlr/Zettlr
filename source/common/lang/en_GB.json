@@ -11,9 +11,12 @@
     "gui": {
         "find_placeholder": "Find…",
         "words": "%s words",
-        "overall_words": "Overall you've written %s words.",
-        "avg_words": "On average, you write %s words per day.",
-        "today_words": "Today, you've written %s words.",
+        "overall_words": "words overall",
+        "avg_words": "daily average",
+        "today_words": "words today",
+        "avg_surpassed": "🔥 You're on fire!",
+        "avg_close_to": "💪 You're close to hitting your daily average!",
+        "avg_not_reached": "✍🏼 Get writing to surpass your daily average.",
         "empty_directories": "No open files or folders"
     },
     "pomodoro": {
@@ -170,6 +173,7 @@
         "dir_open": "Open new root directory",
         "dir_new": "Create a new directory",
         "file_new": "Create a new file",
+        "stats": "View stats",
         "preferences": "Open the settings dialog",
         "file_save": "Save the current file",
         "share": "Share the current file as HTML, DOCX, ODT or PDF",

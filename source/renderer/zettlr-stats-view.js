@@ -57,11 +57,28 @@ class ZettlrStatsView
 
         today = yyyy + '-' + mm + '-' + dd;
 
-        today = wcount[today];
+        today = wcount[today] || 0;
 
-        let cnt = '<p>' + trans('gui.overall_words', localiseNumber(sum)) + '</p>';
-        cnt += '<p>' + trans('gui.avg_words', localiseNumber(avg)) + '</p>';
-        cnt += '<p>' + trans('gui.today_words', localiseNumber(today)) + '</p>';
+        let cnt = `
+        <table>
+        <tr>
+            <td style="text-align:right"><strong>${localiseNumber(sum)}</strong></td><td>${trans('gui.overall_words')}</td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><strong>${localiseNumber(avg)}</strong></td><td>${trans('gui.avg_words')}</td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><strong>${localiseNumber(today)}</strong></td><td>${trans('gui.today_words')}</td>
+        </tr>
+        </table>`;
+
+        if(today > avg) {
+            cnt += `<p><strong>${trans('gui.avg_surpassed')}</strong></p>`;
+        } else if(today > avg-50) {
+            cnt += `<p><strong>${trans('gui.avg_close_to')}</strong></p>`;
+        } else {
+            cnt += `<p><strong>${trans('gui.avg_not_reached')}</strong></p>`;
+        }
 
         let popup = new ZettlrPopup(this, this._toolbarbutton, cnt);
     }

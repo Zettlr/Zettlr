@@ -1089,6 +1089,12 @@ html {
   margin: 10px;
   text-align: center;
 }
+.popup table {
+  vertical-align: middle;
+}
+.popup table td {
+  padding: 4px;
+}
 .popup button {
   border: none;
   font-size: 200%;
