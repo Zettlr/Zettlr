@@ -314,29 +314,61 @@ class ZettlrBody
     {
         let cnt = `
         <div class="formatting">
-        <a href="#" class="markdownHeading1">Heading 1</a>
-        <a href="#" class="markdownHeading2">Heading 2</a>
-        <a href="#" class="markdownHeading3">Heading 3</a>
-        <a href="#" class="markdownHeading4">Heading 4</a>
-        <a href="#" class="markdownHeading5">Heading 5</a>
-        <a href="#" class="markdownHeading6">Heading 6</a>
+        <a href="#" class="markdownHeading1" id="header-formatting">
+        <span class="markdownHeading1">#</span>
+        <span class="markdownHeading2">#</span>
+        <span class="markdownHeading3">#</span>
+        <span class="markdownHeading4">#</span>
+        <span class="markdownHeading5">#</span>
+        <span class="markdownHeading6">#</span>
+        </a>
+        <hr>
         <a href="#" class="markdownBold">Bold</a>
         <a href="#" class="markdownItalic">Italic</a>
-        <a href="#" class="markdownBlockquote">Blockquote</a>
+        <a href="#" class="markdownCode">Code</a>
+        <hr>
         <a href="#" class="markdownLink">Link</a>
         <a href="#" class="markdownImage">Image</a>
-        <a href="#" class="markdownCode">Code</a>
+        <hr>
+        <a href="#" class="markdownBlockquote">Blockquote</a>
         <a href="#" class="markdownMakeOrderedList">Ordered List</a>
         <a href="#" class="markdownMakeUnorderedList">Itemized List</a>
+        <hr>
         <a href="#" class="markdownDivider">Divider</a>
+        <hr>
         <a href="#" class="insertFootnote">Footnote</a>
         <a href="#" class="removeFootnote">Remove footnote</a>
         </div>`;
         let popup = new ZettlrPopup(this, $('.button.formatting'), cnt);
 
+        $('.formatting #header-formatting').on('mousemove', (e) => {
+            let elem = $(e.target);
+            $('.formatting span').removeClass('active');
+            if(!elem.is('span')) {
+                $('.formatting #header-formatting').prop('class', 'markdownHeading1');
+                return;
+            }
+            // Nice little effect
+            switch(e.target.className) {
+                case 'markdownHeading6':
+                $('.formatting .markdownHeading6').addClass('active');
+                case 'markdownHeading5':
+                $('.formatting .markdownHeading5').addClass('active');
+                case 'markdownHeading4':
+                $('.formatting .markdownHeading4').addClass('active');
+                case 'markdownHeading3':
+                $('.formatting .markdownHeading3').addClass('active');
+                case 'markdownHeading2':
+                $('.formatting .markdownHeading2').addClass('active');
+                case 'markdownHeading1':
+                $('.formatting .markdownHeading1').addClass('active');
+            }
+            $('.formatting #header-formatting').prop('class', e.target.className);
+        });
+
         $('.formatting a').click((e) => {
-            let cm = e.target.className;
-            this._renderer.handleEvent('cm-command', cm);
+            $('.formatting span').removeClass('active');
+            this._renderer.handleEvent('cm-command', e.target.className);
             popup.close();
         });
     }

@@ -168,11 +168,38 @@
         a {
             text-decoration:none;
             display:block;
-            padding:5px;
+            padding:5px 10px;
             color:inherit;
 
             &:hover {
                 background-color:@grey-2;
+            }
+
+            &#header-formatting {
+                display:flex;
+                &::before {
+                    padding:10px 0px;
+                }
+                &:hover {
+                    background-color:transparent;
+                }
+            }
+
+            span.markdownHeading1,
+            span.markdownHeading2,
+            span.markdownHeading3,
+            span.markdownHeading4,
+            span.markdownHeading5,
+            span.markdownHeading6 {
+                display:inline-block;
+                padding:5px 0px;
+                flex: 1;
+                text-align:center;
+                font-weight:bold;
+
+                &.active {
+                    color:@green-0;
+                }
             }
 
             &::before {
@@ -184,12 +211,13 @@
             }
         }
 
-        .markdownHeading1::before           { content: "h1"; }
-        .markdownHeading2::before           { content: "h2"; }
-        .markdownHeading3::before           { content: "h3"; }
-        .markdownHeading4::before           { content: "h4"; }
-        .markdownHeading5::before           { content: "h5"; }
-        .markdownHeading6::before           { content: "h6"; }
+        #header-formatting.markdownHeading1::before { content: "h1"; }
+        #header-formatting.markdownHeading2::before { content: "h2"; }
+        #header-formatting.markdownHeading3::before { content: "h3"; }
+        #header-formatting.markdownHeading4::before { content: "h4"; }
+        #header-formatting.markdownHeading5::before { content: "h5"; }
+        #header-formatting.markdownHeading6::before { content: "h6"; }
+
         .markdownBlockquote::before         { content: '\f328'; }
         .markdownLink::before               { content: "\f022"; }
         .markdownImage::before              { content: "\22b7"; }
@@ -212,6 +240,12 @@
         .removeFootnote::before {
             content: "\f1eb";
             text-decoration:line-through;
+        }
+
+        hr {
+            margin:14px 20px;
+            border:none;
+            border-bottom:1px solid @grey-3;
         }
     }
 }

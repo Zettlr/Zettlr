@@ -1134,11 +1134,40 @@ html {
 .popup .formatting a {
   text-decoration: none;
   display: block;
-  padding: 5px;
+  padding: 5px 10px;
   color: inherit;
 }
 .popup .formatting a:hover {
   background-color: #c8c8c8;
+}
+.popup .formatting a#header-formatting {
+  display: flex;
+}
+.popup .formatting a#header-formatting::before {
+  padding: 10px 0px;
+}
+.popup .formatting a#header-formatting:hover {
+  background-color: transparent;
+}
+.popup .formatting a span.markdownHeading1,
+.popup .formatting a span.markdownHeading2,
+.popup .formatting a span.markdownHeading3,
+.popup .formatting a span.markdownHeading4,
+.popup .formatting a span.markdownHeading5,
+.popup .formatting a span.markdownHeading6 {
+  display: inline-block;
+  padding: 5px 0px;
+  flex: 1;
+  text-align: center;
+  font-weight: bold;
+}
+.popup .formatting a span.markdownHeading1.active,
+.popup .formatting a span.markdownHeading2.active,
+.popup .formatting a span.markdownHeading3.active,
+.popup .formatting a span.markdownHeading4.active,
+.popup .formatting a span.markdownHeading5.active,
+.popup .formatting a span.markdownHeading6.active {
+  color: #1cb27e;
 }
 .popup .formatting a::before {
   font-family: 'WebHostingHub-Glyphs';
@@ -1147,22 +1176,22 @@ html {
   width: 30px;
   display: inline-block;
 }
-.popup .formatting .markdownHeading1::before {
+.popup .formatting #header-formatting.markdownHeading1::before {
   content: "h1";
 }
-.popup .formatting .markdownHeading2::before {
+.popup .formatting #header-formatting.markdownHeading2::before {
   content: "h2";
 }
-.popup .formatting .markdownHeading3::before {
+.popup .formatting #header-formatting.markdownHeading3::before {
   content: "h3";
 }
-.popup .formatting .markdownHeading4::before {
+.popup .formatting #header-formatting.markdownHeading4::before {
   content: "h4";
 }
-.popup .formatting .markdownHeading5::before {
+.popup .formatting #header-formatting.markdownHeading5::before {
   content: "h5";
 }
-.popup .formatting .markdownHeading6::before {
+.popup .formatting #header-formatting.markdownHeading6::before {
   content: "h6";
 }
 .popup .formatting .markdownBlockquote::before {
@@ -1204,6 +1233,11 @@ html {
 .popup .formatting .removeFootnote::before {
   content: "\f1eb";
   text-decoration: line-through;
+}
+.popup .formatting hr {
+  margin: 14px 20px;
+  border: none;
+  border-bottom: 1px solid #787878;
 }
 .dark .popup {
   background-color: rgba(0, 0, 0, 0.9);
