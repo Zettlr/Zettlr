@@ -15,6 +15,10 @@
 - Fixes to the formatting commands.
 - Added an attachment pane (#6).
 - Added an option to sort directories according to time or name (#4).
+- Begun adding zkn-functionality to Zettlr.
+- Now it is possible to use `@ID:<your-ID>` to give an ID to a file. If multiple IDs are defined in such a way, the first found will take precedence.
+- You can now tag your files using the Twitter-like syntax: `#hashtag`. Alt-Clicking on them will trigger a search for the tag.
+- You can now link searches in your files. If you type `[[search terms]]` this will trigger a directory-wide search for the search terms. If the link contains an ID in the format `[[@ID:<your-ID>]]`, Zettlr will try to get an exact match. If there is a file using that ID, it will be immediately opened. Also, a directory-wide search for all files referencing this ID will be conducted.
 
 ## Under the hood
 

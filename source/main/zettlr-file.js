@@ -181,7 +181,7 @@ class ZettlrFile
         if(length <= 0) {
             return cnt;
         }
-        
+
         this.id = cnt.substr(index, length);
 
         return cnt;
@@ -260,12 +260,15 @@ class ZettlrFile
      */
     findExact(term)
     {
+        let name = this.name.substr(0, this.name.length - this.ext.length);
+        let titleFound = (name.toLowerCase() === term.toLowerCase()) ? true : false;
         // Remove a possible @ID: in the term
         if(term.indexOf(':') > -1) {
             term = term.split(':')[1];
         }
 
-        return (this.id === term) ? this : null;
+        // Return ID exact match or title exact match. Or null, if nothing found.
+        return (this.id === term) ? this : (titleFound) ? this : null;
     }
 
     /**
@@ -400,17 +403,23 @@ class ZettlrFile
 
         // Do a full text search.
         let cnt = this.read();
-        cnt = cnt.toLowerCase();
+        let cntLower = cnt.toLowerCase();
 
         for(let t of terms) {
             if(t.operator === 'AND') {
+                // Try both normal and lowercase
                 if(cnt.indexOf(t.word) > -1) {
+                    matches++;
+                } else if(cntLower.indexOf(t.word) > -1) {
                     matches++;
                 }
             } else {
                 // OR operator.
                 for(let wd of t.word) {
                     if(cnt.indexOf(wd) > -1) {
+                        matches++;
+                        break;
+                    } else if(cnt.Lower.indexOf(wd) > -1) {
                         matches++;
                         break;
                     }
