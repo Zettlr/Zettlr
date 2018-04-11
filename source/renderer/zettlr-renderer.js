@@ -513,12 +513,33 @@ class ZettlrRenderer
     // This class only acts as a pass-through
 
     /**
-     * Pass-through function from ZettlrToolbar to ZettlrPreview. TODO: This
-     * looks weird from a organizational perspective.
+     * Pass-through function from ZettlrToolbar to ZettlrPreview.
      * @param  {String} term The term to be searched for.
      * @return {void}      Nothing to return.
      */
     beginSearch(term) { this._preview.beginSearch(term); }
+
+    /**
+     * Initiates an auto-search that either directly opens a file (forceOpen=true)
+     * or simply automatically searches for something and displays the results.
+     * @param  {String} term The content of the Wikilink or Tag that has been clicked
+     * @param {Boolean} [forceOpen=false] If true, Zettlr will directly open the file
+     */
+    autoSearch(term, forceOpen = false)
+    {
+        if(!forceOpen) {
+            // Insert the term into the search field and commence search.
+            this._toolbar.setSearch(term);
+            this.beginSearch(term);
+        } else {
+            // Don't search, simply tell main to open the file
+            this._ipc.send('force-open', term);
+            // Also initiate a search to be run accordingly for any files that
+            // might reference the file.
+            this._toolbar.setSearch(term);
+            this.beginSearch(term);
+        }
+    }
 
     /**
      * Pass-through function from ZettlrPreview to Toolbar.

@@ -174,6 +174,14 @@ class ZettlrIPC
             });
             break;
 
+            // Force-open is basically a search and immediate return.
+            case 'force-open':
+            let open = this._app.findExact(cnt); // Find an exact match
+            if(open != null) {
+                this._app.sendFile(open.hash);
+            }
+            break;
+
             // Change theme in config
             case 'toggle-theme':
             this._app.getConfig().set('darkTheme', !this._app.getConfig().get('darkTheme'));

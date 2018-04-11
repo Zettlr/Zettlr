@@ -30,7 +30,7 @@ require('codemirror/mode/gfm/gfm');
 
 // Zettlr specific addons
 require('./assets/codemirror/zettlr-plugin-markdown-shortcuts.js');
-require('./assets/codemirror/zettlr-plugin-spellchecker.js');
+require('./assets/codemirror/zettlr-modes-spellchecker-zkn.js');
 require('./assets/codemirror/zettlr-plugin-footnotes.js');
 
 // Finally CodeMirror itself
@@ -72,7 +72,7 @@ class ZettlrEditor
 
         this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
             mode: {
-                name: 'spellchecker' // This automatically defines gfm as overlay mode
+                name: 'markdown-zkn' // This will automatically pull in spellchecker and this gfm mode
             },
             theme: 'zettlr',
             autofocus: false,
@@ -122,7 +122,7 @@ class ZettlrEditor
             // cursor changes its position as well then) or when the cursor moves.
             this._renderImages();
             this._renderLinks();
-        })
+        });
 
         // Thanks for this to https://discuss.codemirror.net/t/hanging-indent/243/2
         this._cm.on("renderLine", (cm, line, elt) => {
@@ -147,6 +147,21 @@ class ZettlrEditor
                 this._fntooltip(t);
             } else {
                 this._fntooltipbubble.detach();
+            }
+        });
+
+        this._cm.getWrapperElement().addEventListener('click', (e) => {
+            if(!event.altKey) { // Such links open on ALT-Click (b/c CodeMirror handles Ctrl+Cmd)
+                return true; // Stop handling event.
+            }
+            e.preventDefault();
+
+            let elem = $(e.target);
+            if(elem.hasClass('cm-zkn-tag')) {
+                // The user clicked a zkn link -> create a search
+                this._renderer.autoSearch(elem.text());
+            } else if(elem.hasClass('cm-zkn-link')) {
+                this._renderer.autoSearch(elem.text(), true);
             }
         });
 
@@ -258,7 +273,6 @@ class ZettlrEditor
      */
     _renderLinks()
     {
-        // let linkRE = /\[(.+?)\]\((.+?)\)/g;
         let linkRE = / \[(.+?)\]\((.+?)\)|(https?\S+|www\S+)/g; // Matches [Link](www.xyz.tld) and simple links
         let i = 0;
         let match;
@@ -344,8 +358,9 @@ class ZettlrEditor
                 );
 
                 a.onclick = function(e) {
-                    // Only open shift clicks
-                    if(e.shiftKey) {
+                    // Only open ALT-clicks (Doesn't select and also is not used
+                    // elsewhere)
+                    if(event.altKey) {
                         e.preventDefault();
                         require('electron').shell.openExternal(url);
                     } else {
@@ -402,20 +417,6 @@ class ZettlrEditor
         this._cm.markClean();
         this._cm.clearHistory();
         this._words = 0;
-        return this;
-    }
-
-    /**
-     * Revert the editor's contents to a previous state of the file.
-     * @param  {ZettlrFile} file The file with original content
-     * @return {ZettlrEditor}      This for chainability.
-     */
-    revert(file)
-    {
-        // Simply revert the contents of the editor without touching anything else
-        if(file && file.hasOwnProperty('content')) {
-            this.cm.setValue(file.content);
-        }
         return this;
     }
 

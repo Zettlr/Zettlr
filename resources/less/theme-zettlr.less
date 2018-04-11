@@ -56,6 +56,15 @@
         cursor: pointer;
     }
 
+    .cm-zkn-tag, .cm-zkn-id {
+        font-weight:bold;
+    }
+
+    .cm-zkn-tag:hover, .cm-zkn-id:hover, .cm-zkn-link:hover {
+        text-decoration: underline;
+        cursor:pointer;
+    }
+
     // DIALOG FIELD
     .CodeMirror-dialog {
         position: absolute;
@@ -105,7 +114,6 @@
     }
 
     .CodeMirror-cursor {
-        // background: @orange-2;
         background: @green-0;
     }
 
@@ -120,22 +128,14 @@
     // TYPOGRAPHY
     .cm-formatting-header-1, .cm-formatting-header-2, .cm-formatting-header-3,
     .cm-formatting-header-4, .cm-formatting-header-5, .cm-formatting-header-6,
-    .cm-url {
-        // color:@orange-1;
-        color: @green-0;
-    }
+    .cm-url { color: @green-0; }
 
     // Code blocks (called comment, why ever)
-    .cm-comment {
-        color:@grey-3;
-    }
+    .cm-comment { color:@grey-3; }
 
     /* LISTS */
     .cm-formatting-list-ul,
-    .cm-formatting-list-ol {
-        // color:@orange-1;
-        color: @green-0;
-    }
+    .cm-formatting-list-ol { color: @green-0; }
 
     /* TYPOGRAPHY */
     .cm-quote,
@@ -147,9 +147,10 @@
 
     .cm-spell-error { border-bottom:2px dotted @orange-2; }
 
-    .cma {
-        color: @blue-0;
-    }
+    .cm-zkn-tag, .cm-zkn-id, .cm-zkn-link { color:@green-0; }
+
+    // cma = code-mirror-anchor
+    .cma { color: @blue-0; }
 }
 
 /* Zettlr dark theme for codemirror */
@@ -164,7 +165,6 @@
     }
 
     .CodeMirror-cursor {
-        // background: @orange-2;
         background: @green-0;
     }
 
@@ -179,34 +179,24 @@
     // TYPOGRAPHY
     .cm-formatting-header-1, .cm-formatting-header-2, .cm-formatting-header-3,
     .cm-formatting-header-4, .cm-formatting-header-5, .cm-formatting-header-6,
-    .cm-url {
-        // color:@orange-1;
-        color: @green-0;
-    }
+    .cm-url { color: @green-0; }
 
     // Code blocks (called comment, why ever)
-    .cm-comment {
-        color:@grey-3;
-    }
+    .cm-comment { color:@grey-3; }
 
     /* LISTS */
     .cm-formatting-list-ul,
-    .cm-formatting-list-ol {
-        // color:@orange-1;
-        color: @green-0;
-    }
+    .cm-formatting-list-ol { color: @green-0; }
 
     /* TYPOGRAPHY */
     .cm-quote,
     .cm-link,
     .cm-strong,
-    .cm-em {
-        color:@blue-3;
-    }
+    .cm-em { color:@blue-3; }
 
     .cm-spell-error { border-bottom:2px dotted @bg-error; }
 
-    .cma {
-        color: @blue-selection;
-    }
+    .cm-zkn-tag, .cm-zkn-id, .cm-zkn-link { color:@green-0; }
+
+    .cma { color: @blue-selection; }
 }

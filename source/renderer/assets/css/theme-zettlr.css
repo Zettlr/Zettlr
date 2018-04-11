@@ -57,6 +57,16 @@
 .CodeMirror .cm-link.shift {
   cursor: pointer;
 }
+.CodeMirror .cm-zkn-tag,
+.CodeMirror .cm-zkn-id {
+  font-weight: bold;
+}
+.CodeMirror .cm-zkn-tag:hover,
+.CodeMirror .cm-zkn-id:hover,
+.CodeMirror .cm-zkn-link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
 .CodeMirror .CodeMirror-dialog {
   position: absolute;
   left: 0;
@@ -131,6 +141,11 @@
 .cm-s-zettlr .cm-spell-error {
   border-bottom: 2px dotted #f05734;
 }
+.cm-s-zettlr .cm-zkn-tag,
+.cm-s-zettlr .cm-zkn-id,
+.cm-s-zettlr .cm-zkn-link {
+  color: #1cb27e;
+}
 .cm-s-zettlr .cma {
   color: #1d75b3;
 }
@@ -179,6 +194,11 @@
 }
 .cm-s-zettlr-dark .cm-spell-error {
   border-bottom: 2px dotted #ffb0b0;
+}
+.cm-s-zettlr-dark .cm-zkn-tag,
+.cm-s-zettlr-dark .cm-zkn-id,
+.cm-s-zettlr-dark .cm-zkn-link {
+  color: #1cb27e;
 }
 .cm-s-zettlr-dark .cma {
   color: #c8dcf0;

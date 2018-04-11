@@ -14,6 +14,12 @@
 
 const { formatDate } = require('../common/zettlr-helpers.js');
 
+// Sorting icons (WebHostingHub-Glyphs)
+const SORT_NAME_UP = '&#xf1c2;'
+const SORT_NAME_DOWN = '&#xf1c1;';
+const SORT_TIME_UP = '&#xf1c3;';
+const SORT_TIME_DOWN = '&#xf1c4;';
+
 /**
  * This class is a view that deals only with displaying one single item of the
  * list view (the preview pane). Therefore it can be a directory or a file.
@@ -40,11 +46,31 @@ class ListViewItem
         .attr('data-hash', this._fileObj.hash)
         .attr('title', this._fileObj.name);
 
-        this._sortingHeader = $('<div class="sorter"><span class="sortName">&#xf1c2;</span><span class="sortTime">&#xf1c3;</span></div>');
-
         // Populate
         if(this._fileObj.type == 'directory') {
+            // Render a directory
+            this._sorting = this._fileObj.sorting || '';
+
+            if(this._sorting == 'name-up') {
+                this._sortNameIcon = SORT_NAME_UP;
+                this._sortTimeIcon = SORT_TIME_DOWN;
+            } else if(this._sorting == 'name-down') {
+                this._sortNameIcon = SORT_NAME_DOWN;
+                this._sortTimeIcon = SORT_TIME_DOWN;
+            } else if(this._sorting == 'time-up') {
+                this._sortTimeIcon = SORT_TIME_UP;
+                this._sortNameIcon = SORT_NAME_DOWN;
+            } else if(this._sorting == 'time-down') {
+                this._sortTimeIcon = SORT_TIME_DOWN;
+                this._sortNameIcon = SORT_NAME_DOWN;
+            } else {
+                this._sortTimeIcon = SORT_TIME_UP;
+                this._sortNameIcon = SORT_NAME_UP;
+            }
+
+            this._sortingHeader = $(`<div class="sorter"><span class="sortName">${this._sortNameIcon}</span><span class="sortTime">${this._sortTimeIcon}</span></div>`);
             this._elem.html(this._fileObj.name);
+
         } else if (this._fileObj.type == 'file') {
             this._elem.append(
                 $('<strong>').text(
@@ -78,7 +104,7 @@ class ListViewItem
      */
     _act()
     {
-        // Only activate files
+        // Activate directories and files respectively.
         if(this._fileObj.type == 'directory') {
             this._elem.hover(() => {
                 // In
@@ -90,10 +116,17 @@ class ListViewItem
 
             this._sortingHeader.click((e) => {
                 let elem = $(e.target);
-                if(elem.hasClass('sortName')) {
-                    this._listview.sortDir(this, 'name');
-                } else if(elem.hasClass('sortTime')) {
-                    this._listview.sortDir(this, 'time');
+                // We need the hex charcode as HTML entity. jQuery is not as
+                // nice as to give it back to us itself.
+                let sort = "&#x" + elem.text().charCodeAt(0).toString(16) + ';';
+                if(sort == SORT_NAME_UP) {
+                    this._listview.sortDir(this, 'name-down');
+                } else if(sort == SORT_TIME_UP) {
+                    this._listview.sortDir(this, 'time-down');
+                } else if(sort == SORT_NAME_DOWN) {
+                    this._listview.sortDir(this, 'name-up');
+                } else if(sort == SORT_TIME_DOWN) {
+                    this._listview.sortDir(this, 'time-up');
                 }
             })
             return;
@@ -159,7 +192,29 @@ class ListViewItem
     update(nData)
     {
         if(this._fileObj.type == 'directory') {
-            // Names are updated by unlinking only because they change the hash.
+            this._fileObj = nData;
+            // The only thing that might've changed is the sorting order.
+            if(this._fileObj.sorting != this._sorting) {
+                this._sorting = this._fileObj.sorting || '';
+                if(this._sorting == 'name-up') {
+                    this._sortNameIcon = SORT_NAME_UP;
+                    this._sortTimeIcon = SORT_TIME_DOWN;
+                } else if(this._sorting == 'name-down') {
+                    this._sortNameIcon = SORT_NAME_DOWN;
+                    this._sortTimeIcon = SORT_TIME_DOWN;
+                } else if(this._sorting == 'time-up') {
+                    this._sortTimeIcon = SORT_TIME_UP;
+                    this._sortNameIcon = SORT_NAME_DOWN;
+                } else if(this._sorting == 'time-down') {
+                    this._sortTimeIcon = SORT_TIME_DOWN;
+                    this._sortNameIcon = SORT_NAME_DOWN;
+                } else {
+                    this._sortTimeIcon = SORT_TIME_UP;
+                    this._sortNameIcon = SORT_NAME_UP;
+                }
+                this._sortingHeader.find('.sortName').html(this._sortNameIcon);
+                this._sortingHeader.find('.sortTime').html(this._sortTimeIcon);
+            }
             return this;
         }
 

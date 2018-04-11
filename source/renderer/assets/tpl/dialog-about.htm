@@ -1,10 +1,12 @@
 <div class="dialog">
+    <img src="img/zettlr-official-logo.png" title="Zettlr" alt="Zettlr Logo" style="width:20%; float:left;">
     <h1>%i18n.about.title% <small>Version %PKGVER%</small></h1>
     <p>
         %i18n.about.lead%
     </p>
-    <hr>
+    <hr style="clear:left;">
     <div class="projects">
+        <div class="flex"></div>
         <div class="flex">
             <a href="#" onclick="require('electron').shell.openExternal('http://electronjs.org/')" title="Electron">
                 <svg width="60%" style="margin:0 20%" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -27,6 +29,7 @@
         <div class="flex">
             <a href="#" onclick="require('electron').shell.openExternal('https://codemirror.net/')" title="CodeMirror"><img src="img/codemirror-official-logo.png" style="width:60%; margin:0 20%" alt="CodeMirror Logo" title="CodeMirror"></a>
         </div>
+        <div class="flex"></div>
     </div>
     <p>
         %i18n.about.other_projects%

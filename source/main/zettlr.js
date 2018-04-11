@@ -266,9 +266,7 @@ class Zettlr
             return;
         }
 
-        if(arg.type === 'name' || arg.type === 'time') {
-            dir.toggleSorting(arg.type);
-        }
+        dir.toggleSorting(arg.type);
 
         this.ipc.send('paths-update', this.getPaths());
     }
@@ -916,6 +914,24 @@ class Zettlr
         let found = null;
         for(let p of this.getPaths()) {
             found = p.findDir(obj);
+            if(found != null) {
+                return found;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Either returns one file that matches its ID with the given term or null
+     * @param  {String} term The ID to be searched for
+     * @return {ZettlrFile}      The exact match, or null.
+     */
+    findExact(term)
+    {
+        let found = null;
+        for(let p of this.getPaths()) {
+            found = p.findExact(term);
             if(found != null) {
                 return found;
             }

@@ -47,6 +47,7 @@ class ZettlrFile
         this.name         = '';
         this.path         = '';
         this.hash         = null;
+        this.id           = ''; // The ID, if there is one inside the file.
         this.type         = 'file';
         this.ext          = '';
         this.modtime      = 0;
@@ -133,6 +134,37 @@ class ZettlrFile
         let cnt = fs.readFileSync(this.path, { encoding: "utf8" });
         this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt ;
         this.modified = false;
+        // Search for an ID
+        // We cannot use RegEx, as negative lookbehind is not supported (yet,
+        // so we have to do it the ugly way: ITERATE OVER THE TEXT!)
+        //
+        // For further reference (as soon as it gets implemented; the proposal
+        // is from March 21, 2018 (lel), here the correct regex needed:)
+        // let idRE = /(?<!\[\[)@ID:(.*)(?!\]\])/g
+
+        if(cnt.indexOf('@ID:') < 0) {
+            return cnt;
+        }
+
+        let index = 0;
+        do {
+            index = cnt.indexOf('@ID:', index);
+            if(cnt.substr(index-2, index) != '[[') {
+                // Found the first ID. Precedence should go to the first found.
+                break;
+            }
+        } while(index < cnt.length);
+
+        index += 4
+
+        let end = index+1;
+        while(!/\s/.test(cnt.charAt(end))) {
+            end++; // just lol to what I have to do here.
+            if(end == cnt.length) {
+                break;
+            }
+        }
+        this.id = cnt.substr(index, end - index);
 
         return cnt;
     }
@@ -201,6 +233,21 @@ class ZettlrFile
 
         // This is not the file you are looking for.
         return null;
+    }
+
+    /**
+     * Either returns this, if the ID matches the term, or null
+     * @param  {String} term The ID-term to be searched for
+     * @return {ZettlrFile}      This or null.
+     */
+    findExact(term)
+    {
+        // Remove a possible @ID: in the term
+        if(term.indexOf(':') > -1) {
+            term = term.split(':')[1];
+        }
+
+        return (this.id === term) ? this : null;
     }
 
     /**

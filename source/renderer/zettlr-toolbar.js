@@ -148,6 +148,15 @@ class ZettlrToolbar
     }
 
     /**
+     * Overrides the current contents of the searchbar.
+     * @param {String} term The new value to be written into the searchbar.
+     */
+    setSearch(term)
+    {
+        this._searchbar.val(term);
+    }
+
+    /**
      * Progresses the search indicator
      * @param  {Integer} item    Current items that have been searched
      * @param  {Integer} itemCnt Overall amount of items to be searched

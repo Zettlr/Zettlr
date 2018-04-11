@@ -26,6 +26,8 @@ const { hash, sort, generateName,
     ignoreDir, ignoreFile, isFile, isDir, isAttachment
 } = require('../common/zettlr-helpers.js');
 
+const ALLOW_SORTS = ['name-up', 'name-down', 'time-up', 'time-down'];
+
 /**
  * Error object constructor
  * @param       {string} msg The error message
@@ -59,7 +61,7 @@ class ZettlrDir
         this.attachments    = [];
         this.type           = 'directory';
         this.parent         = parent;
-        this.sorting        = 'name-up'; // Other options: name-down, time-up and time-down
+        this.sorting        = 'name-up';
 
         // Prepopulate
         this.path = dir;
@@ -185,6 +187,23 @@ class ZettlrDir
         }
 
         // Not found
+        return null;
+    }
+
+    /**
+     * Either returns a file if the match is exact, or null
+     * @param  {String} term The ID to be searched for
+     * @return {ZettlrFile}      ZettlrFile or null.
+     */
+    findExact(term)
+    {
+        for(let c of this.children) {
+            let file = c.findExact(term);
+            if(file != null) {
+                return file;
+            }
+        }
+
         return null;
     }
 
@@ -459,23 +478,27 @@ class ZettlrDir
 
     /**
      * Toggles the sorting. Default is name-up
-     * @param  {String} [type='name'] Either "time" or "name". Up/down will toggle automatically.
+     * @param  {String} [type='name-up'] Can be an allowed sorting, or just time or name.
      * @return {ZettlrDir}               Chainability
      */
-    toggleSorting(type = 'name')
+    toggleSorting(type = 'name-up')
     {
-        if(type == 'name') {
+        if(ALLOW_SORTS.includes(type)) {
+            this.sorting = type;
+        } else if(type.indexOf('name') > -1) {
             if(this.sorting == 'name-up') {
                 this.sorting = 'name-down';
             } else {
                 this.sorting = 'name-up';
             }
-        } else if(type == 'time') {
+        } else if(type.indexOf('time') > -1) {
             if(this.sorting == 'time-up') {
                 this.sorting = 'time-down';
             } else {
                 this.sorting = 'time-up';
             }
+        } else {
+            this.sorting = 'name-up';
         }
 
         this.children = sort(this.children, this.sorting);

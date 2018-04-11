@@ -449,6 +449,7 @@ body {
 }
 #preview ul li.directory span.sortTime,
 #preview ul li.directory span.sortName {
+  background-color: #f0f0f0;
   font-family: 'WebHostingHub-Glyphs';
   font-size: 0.72em;
   padding: 0 0.5em;
@@ -526,6 +527,7 @@ body {
 #preview.dark ul li.directory span.sortTime:hover,
 #preview.dark ul li.directory span.sortName:hover {
   color: #c8c8c8;
+  background-color: #282828;
 }
 #preview.dark #search-directory input {
   background-color: #6478b4;
