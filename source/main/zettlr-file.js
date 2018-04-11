@@ -134,6 +134,7 @@ class ZettlrFile
         let cnt = fs.readFileSync(this.path, { encoding: "utf8" });
         this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt ;
         this.modified = false;
+
         // Search for an ID
         // We cannot use RegEx, as negative lookbehind is not supported (yet,
         // so we have to do it the ugly way: ITERATE OVER THE TEXT!)
@@ -155,16 +156,33 @@ class ZettlrFile
             }
         } while(index < cnt.length);
 
-        index += 4
+        index += 4;
 
         let end = index+1;
+
+        // If this gets executed, the file simply ended with an @ID:.
+        // WARNING: This _MUST_ For ALL COSTS stay inside here, because
+        // otherwise the charAt - function in the while-loop will completely
+        // fuck the complete application up. I had to recover for two hours
+        // the last time.
+        if(end >= cnt.length) {
+            return cnt;
+        }
+
         while(!/\s/.test(cnt.charAt(end))) {
             end++; // just lol to what I have to do here.
             if(end == cnt.length) {
+                end--; // Not to cause buffer overflows.
                 break;
             }
         }
-        this.id = cnt.substr(index, end - index);
+
+        let length = end - index;
+        if(length <= 0) {
+            return cnt;
+        }
+        
+        this.id = cnt.substr(index, length);
 
         return cnt;
     }
