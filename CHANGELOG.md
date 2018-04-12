@@ -8,17 +8,17 @@
 - Zettlr now tells the Operating System that it is capable of handling `.md`- and `.markdown` files.
 - Small fixes to the translations.
 - Added an about dialog.
-- Now Zettlr also converts "standalone" links (e.g. simple detected URLs without Markdown formatting around them) into clickable links.
+- Now Zettlr also converts "standalone" links (e.g. simple detected URLs without Markdown formatting around them) into clickable links. **Attention: Clicking now works with ALT instead of Shift!**
 - Added a small popup to view some stats on your writing.
 - Fixes to the word count (now also splits along line breaks).
 - Moved all formattings to a small popup (indicated by the carriage return symbol). Also added other formatting possibilities, such as code, headings and blockquotes.
 - Fixes to the formatting commands.
 - Added an attachment pane (#6).
-- Added an option to sort directories according to time or name (#4).
-- Begun adding zkn-functionality to Zettlr.
-- Now it is possible to use `@ID:<your-ID>` to give an ID to a file. If multiple IDs are defined in such a way, the first found will take precedence.
-- You can now tag your files using the Twitter-like syntax: `#hashtag`. Alt-Clicking on them will trigger a search for the tag.
-- You can now link searches in your files. If you type `[[search terms]]` this will trigger a directory-wide search for the search terms. If the link contains an ID in the format `[[@ID:<your-ID>]]`, Zettlr will try to get an exact match. If there is a file using that ID, it will be immediately opened. Also, a directory-wide search for all files referencing this ID will be conducted.
+- Added an option to sort directories chronologically or according to name (#4).
+- Begun adding zkn-functionality to Zettlr:
+  - Now it is possible to use `@ID:<your-ID>` to give an ID to a file (generate one using the Toolbar Button or by pressing `Cmd/Ctrl+L`). If multiple IDs are defined in such a way, the first found will take precedence.
+  - You can now tag your files using the Twitter-like syntax: `#hashtag`. Alt-Clicking on them will trigger a search for the tag.
+  - You can now link searches in your files. If you type `[[search terms]]` this will trigger a directory-wide search for the search terms. If the link contains an ID in the format `[[@ID:<your-ID>]]`, Zettlr will try to get an exact match. If there is a file using that ID, it will be immediately opened. Also, a directory-wide search for all files referencing this ID will be conducted.
 
 ## Under the hood
 
