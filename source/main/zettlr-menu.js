@@ -131,6 +131,16 @@ class ZettlrMenu
                         click(item, focusedWindow) {
                             if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'dir-find'});
                         }
+                    },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        label: trans('menu.generate_id'),
+                        accelerator: 'CmdOrCtrl+L',
+                        click(item, focusedWindow) {
+                            if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'insert-id'});
+                        }
                     }
                 ]
             },

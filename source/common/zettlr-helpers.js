@@ -138,6 +138,27 @@ function generateName()
 }
 
 /**
+* This function generates a (per second unique) ID to be inserted into the editor
+* @return {String} An id in the format "YYYYMMDDHHMMSS"
+*/
+function generateId()
+{
+    let date = new Date();
+    let yyyy = date.getFullYear();
+    let mm = date.getMonth() + 1;
+    if(mm <= 9) mm =  '0' + mm;
+    let dd = date.getDate();
+    if(dd <= 9) dd = '0' + dd;
+    let hh = date.getHours();
+    if(hh <= 9) hh =  '0' + hh;
+    let m = date.getMinutes();
+    if(m <= 9) m =  '0' + m;
+    let ss = date.getSeconds();
+    if(ss <= 9) ss =  '0' + ss;
+    return '@ID:' + yyyy + mm + dd + hh + m + ss;
+}
+
+/**
 * Format a date. TODO: Localize options once they're implemented in the preferences/config.
 * @param  {Date} dateObj Object of type date.
 * @return {String}         Returns the localized, human-readable date as a string
@@ -266,6 +287,7 @@ module.exports = {
     hash,
     sort,
     generateName,
+    generateId,
     formatDate,
     ignoreFile,
     ignoreDir,

@@ -78,6 +78,13 @@
         },
         {
             "role": "button",
+            "class": "insert-id",
+            "command": "insert-id",
+            "content": "{}",
+            "title": "toolbar.generate_id"
+        },
+        {
+            "role": "button",
             "class": "show-toc",
             "command": "toc",
             "content": "{}",

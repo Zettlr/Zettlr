@@ -56,6 +56,7 @@
         "select_all": "Select all",
         "find_file": "Find in file",
         "find_dir": "Find in directory",
+        "generate_id": "Generate new ID",
         "close_file": "Close file",
         "close_dir": "Close directory",
         "reload": "Reload",
@@ -194,7 +195,8 @@
         "remove_fn": "Remove the footnote under the cursor",
         "show_toc": "Show the table of contents",
         "toggle_attachments": "View attachments",
-        "formatting": "Text formats"
+        "formatting": "Text formats",
+        "generate_id": "Generate new ID"
     },
     "system" : {
         "unknown_command": "Unknown command received: %s",

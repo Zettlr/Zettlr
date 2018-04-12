@@ -143,46 +143,24 @@ class ZettlrFile
         // is from March 21, 2018 (lel), here the correct regex needed:)
         // let idRE = /(?<!\[\[)@ID:(.*)(?!\]\])/g
 
-        if(cnt.indexOf('@ID:') < 0) {
+        let idRE = /@ID:([^\s]*)/g;
+        let match;
+
+        if((match = idRE.exec(cnt)) == null) {
             return cnt;
         }
 
         let index = 0;
         do {
-            index = cnt.indexOf('@ID:', index);
-            if(cnt.substr(index-2, index) != '[[') {
+            if(cnt.substr(match.index-2, match.index) != '[[') {
                 // Found the first ID. Precedence should go to the first found.
                 break;
             }
-        } while(index < cnt.length);
+        } while((match = idRE.exec(cnt)) != null);
 
-        index += 4;
-
-        let end = index+1;
-
-        // If this gets executed, the file simply ended with an @ID:.
-        // WARNING: This _MUST_ For ALL COSTS stay inside here, because
-        // otherwise the charAt - function in the while-loop will completely
-        // fuck the complete application up. I had to recover for two hours
-        // the last time.
-        if(end >= cnt.length) {
-            return cnt;
+        if((match != null) && (match[1].substr(-2) != ']]')) {
+            this.id = match[1] || '';
         }
-
-        while(!/\s/.test(cnt.charAt(end))) {
-            end++; // just lol to what I have to do here.
-            if(end == cnt.length) {
-                end--; // Not to cause buffer overflows.
-                break;
-            }
-        }
-
-        let length = end - index;
-        if(length <= 0) {
-            return cnt;
-        }
-
-        this.id = cnt.substr(index, length);
 
         return cnt;
     }

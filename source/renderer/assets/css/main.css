@@ -921,6 +921,9 @@ body {
 #toolbar .button.toggle-attachments::before {
   content: "\f285";
 }
+#toolbar .button.insert-id::before {
+  content: "ID";
+}
 #toolbar .button.pomodoro {
   padding: 2px;
   background-image: none;

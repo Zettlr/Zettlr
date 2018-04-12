@@ -56,6 +56,7 @@
         "select_all": "Sélectionner tous",
         "find_file": "Trouver dans le fichier",
         "find_dir": "Trouver dans le dossier",
+        "generate_id": "Créer une nouvelle identification",
         "close_file": "Fermer le fichier",
         "close_dir": "Fermer le dossier",
         "reload": "Renouveler",
@@ -194,7 +195,8 @@
         "remove_fn": "Effacer le note",
         "show_toc": "Ouvrir le sommaire",
         "toggle_attachments": "Voir les annexes",
-        "formatting": "Formats du texte"
+        "formatting": "Formats du texte",
+        "generate_id": "Créer une nouvelle identification"
     },
     "system" : {
         "unknown_command": "Reçu une commande inconnu: %s",

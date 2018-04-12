@@ -332,6 +332,11 @@ class ZettlrRendererIPC
             this._app.getStatsView().show(cnt);
             break;
 
+            // Generate a new ID
+            case 'insert-id':
+            this._app.getEditor().insertId();
+            break;
+
             default:
             console.log(trans('system.unknown_command', cmd));
             break;

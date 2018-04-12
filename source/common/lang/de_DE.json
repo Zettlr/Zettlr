@@ -56,6 +56,7 @@
         "select_all": "Alles auswählen",
         "find_file": "In Datei finden",
         "find_dir": "In Verzeichnis finden",
+        "generate_id": "Neue ID generieren",
         "close_file": "Datei schließen",
         "close_dir": "Verzeichnis schließen",
         "reload": "Neu laden",
@@ -194,7 +195,8 @@
         "remove_fn": "Fußnote unter dem Cursor entfernen",
         "show_toc": "Inhaltsverzeichnis anzeigen",
         "toggle_attachments": "Anhänge anzeigen",
-        "formatting": "Textformate"
+        "formatting": "Textformate",
+        "generate_id": "Neue ID generieren"
     },
     "system" : {
         "unknown_command": "Unbekannten Befehl erhalten: %s",

@@ -443,7 +443,6 @@ class ZettlrDir
             if(found !== undefined || fattach !== undefined) {
                 if(found) nChildren.push(found);
                 if(fattach) nAttachments.push(fattach);
-                if(fattach) console.log(`re-adding attachment ${fattach.path}`);
             } else {
                 // Otherwise create new
                 if(isFile(f) && !ignoreFile(f)) {

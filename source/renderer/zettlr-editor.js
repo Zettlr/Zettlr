@@ -33,6 +33,8 @@ require('./assets/codemirror/zettlr-plugin-markdown-shortcuts.js');
 require('./assets/codemirror/zettlr-modes-spellchecker-zkn.js');
 require('./assets/codemirror/zettlr-plugin-footnotes.js');
 
+const {generateId} = require('../common/zettlr-helpers.js');
+
 // Finally CodeMirror itself
 const CodeMirror = require('codemirror');
 
@@ -489,6 +491,18 @@ class ZettlrEditor
 
         // Replace word and select new word
         this._cm.replaceSelection(word, 'around');
+    }
+
+    /**
+     * Inserts a new ID at the current cursor position
+     */
+    insertId()
+    {
+        if(!this._cm.somethingSelected()) {
+            // Don't replace selections
+            this._cm.replaceSelection(generateId());
+            this._cm.focus();
+        }
     }
 
     /**

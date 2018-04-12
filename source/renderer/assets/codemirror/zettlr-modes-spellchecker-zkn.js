@@ -10,6 +10,9 @@
 })(function(CodeMirror) {
     "use strict";
 
+    var zkndelim = "!\"$%&()*+,/:;<=>?@[\\]^`{|}~ «»“”–—…÷‘’‚"; // Some less zkn delims
+    var delim = "!\"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚";
+
     /**
      * Define the spellchecker mode that will simply check all found words against
      * the renderer's typoCheck function.
@@ -19,7 +22,6 @@
      */
     CodeMirror.defineMode("spellchecker", function(config, parsercfg) {
         // word separators including special interpunction
-        var delim = "!\"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚";
 
         // Create the overlay and such
         var spellchecker = {
@@ -32,6 +34,17 @@
                 // render it way more difficult to extract the search terms.)
                 if (stream.match(/\[\[(.*)\]\]/)) {
                     return null;
+                }
+
+                if (ch == '#') {
+                    stream.next();
+                    if(![' ', '#'].includes(stream.peek())) {
+                        // We've got a tag so skip spell checking
+                        while(!/\s/.test(ch) && ch != null) {
+                            ch = stream.next();
+                        }
+                        return null;
+                    }
                 }
 
                 if(delim.includes(ch)) {
@@ -82,7 +95,6 @@
      * @return {OverlayMode}              The loaded overlay mode.
      */
     CodeMirror.defineMode("markdown-zkn", function(config, parserConfig) {
-        var delim = "!\"$%&()*+,/:;<=>?@[\\]^`{|}~ «»“”–—…÷‘’‚";
 
         var markdownZkn = {
             token: function(stream, state) {
@@ -96,7 +108,7 @@
                     }
                     let chars = 0;
                     while ((ch = stream.next()) != null) {
-                        if (delim.includes(ch) && chars > 1) {
+                        if (zkndelim.includes(ch) && chars > 1) {
                             stream.backUp(1); // Go one back
                             return "zkn-tag";
                         }
@@ -119,7 +131,7 @@
                 if(stream.match('@ID:')) {
                     let chars = 0;
                     while((ch = stream.next()) != null) {
-                        if (delim.includes(ch) && chars > 1) {
+                        if (zkndelim.includes(ch) && chars > 1) {
                             stream.backUp(1); // Go one back
                             return "zkn-id";
                         }
