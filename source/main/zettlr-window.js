@@ -294,12 +294,7 @@ class ZettlrWindow
             defaultPath: startDir,
             properties: [
                 'openDirectory',
-                'openFile',
                 'createDirectory' // macOS only
-            ],
-            filters: [
-                {name: 'Markdown files', extensions: ['md', 'markdown']},
-                {name: 'Text files', extensions: ['txt']}
             ]
         });
     }
