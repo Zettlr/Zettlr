@@ -235,13 +235,14 @@ const {clipboard} = require('electron');
     CodeMirror.commands.markdownLink = function(cm) {
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
 
+        let url = '';
+        if(urlRE.test(clipboard.readText())) {
+            url = clipboard.readText();
+        }
+
         // Is something selected?
         if(!cm.doc.somethingSelected()) {
-            if(urlRE.test(clipboard.readText())) {
-                cm.doc.replaceSelection(`[](${clipboard.readText()})`, 'start');
-            } else {
-                cm.doc.replaceSelection('[]()', 'start');
-            }
+            cm.doc.replaceSelection(`[](${url})`, 'start');
             let cur = cm.doc.getCursor();
             cur.ch = cur.ch + 1;
             cm.doc.setCursor(cur);
@@ -257,7 +258,7 @@ const {clipboard} = require('electron');
             // We don't need regular expressions here because we will
             // just transform the text into a Link that has to be provided with
             // an URL
-            sel[i] = "[" + sel[i] + "]()";
+            sel[i] = "[" + sel[i] + "](" + url + ")";
         }
 
         // Replace with changes selections
@@ -268,13 +269,14 @@ const {clipboard} = require('electron');
     CodeMirror.commands.markdownImage = function(cm) {
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
 
+        let url = '';
+        if(urlRE.test(clipboard.readText())) {
+            url = clipboard.readText();
+        }
+
         // Is something selected?
         if(!cm.doc.somethingSelected()) {
-            if(urlRE.test(clipboard.readText())) {
-                cm.doc.replaceSelection(`![](${clipboard.readText()})`, 'start');
-            } else {
-                cm.doc.replaceSelection('![]()', 'start');
-            }
+            cm.doc.replaceSelection(`![](${url})`, 'start');
             let cur = cm.doc.getCursor();
             cur.ch = cur.ch + 2;
             cm.doc.setCursor(cur);
@@ -290,7 +292,7 @@ const {clipboard} = require('electron');
             // We don't need regular expressions here because we will
             // just transform the text into a Link that has to be provided with
             // an URL
-            sel[i] = "![" + sel[i] + "]()";
+            sel[i] = "![" + sel[i] + "](" + url + ")";
         }
 
         // Replace with changes selections

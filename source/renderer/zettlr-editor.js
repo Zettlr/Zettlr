@@ -80,7 +80,7 @@ class ZettlrEditor
             autofocus: false,
             lineWrapping: true,
             autoCloseBrackets: {
-                pairs: '()[]{}\'\'""»«“”‘’__', // Autoclose markdown specific stuff
+                pairs: '()[]{}\'\'""»«“”‘’__``', // Autoclose markdown specific stuff
                 override: true
             },
             extraKeys: {
@@ -153,7 +153,7 @@ class ZettlrEditor
         });
 
         this._cm.getWrapperElement().addEventListener('click', (e) => {
-            if(!event.altKey) { // Such links open on ALT-Click (b/c CodeMirror handles Ctrl+Cmd)
+            if(!e.altKey) { // Such links open on ALT-Click (b/c CodeMirror handles Ctrl+Cmd)
                 return true; // Stop handling event.
             }
             e.preventDefault();
@@ -163,7 +163,7 @@ class ZettlrEditor
                 // The user clicked a zkn link -> create a search
                 this._renderer.autoSearch(elem.text());
             } else if(elem.hasClass('cm-zkn-link')) {
-                this._renderer.autoSearch(elem.text(), true);
+                this._renderer.autoSearch(elem.text().replace(/[\[\]]/g, ''), true);
             }
         });
 
@@ -275,7 +275,7 @@ class ZettlrEditor
      */
     _renderLinks()
     {
-        let linkRE = / \[(.+?)\]\((.+?)\)|(https?\S+|www\S+)/g; // Matches [Link](www.xyz.tld) and simple links
+        let linkRE = /\[(.+?)\]\((.+?)\)|(https?\S+|www\S+)/g; // Matches [Link](www.xyz.tld) and simple links
         let i = 0;
         let match;
 
@@ -362,7 +362,7 @@ class ZettlrEditor
                 a.onclick = function(e) {
                     // Only open ALT-clicks (Doesn't select and also is not used
                     // elsewhere)
-                    if(event.altKey) {
+                    if(e.altKey) {
                         e.preventDefault();
                         require('electron').shell.openExternal(url);
                     } else {

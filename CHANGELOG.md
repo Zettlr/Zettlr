@@ -1,3 +1,17 @@
+# 0.15.1
+
+## GUI and functionality
+
+- Now if there is a valid URL in the clipboard it will be inserted as the URL on all images and links created, not just if there's nothing selected.
+- Fixed a bug that prevented the opening of links if clicked with `Alt`-key pressed.
+- Added the code indicators (backticks) to the list of auto-complete pairs.
+- Fixed the rendering of internal links.
+- Small changes to the design of file IDs.
+
+## Under the hood
+
+- Small change to the zkn-link regular expression (was greedy, now it is lazy) to prevent huge misrenderings in case two links were on one line.
+
 # 0.15.0
 
 ## GUI and functionality

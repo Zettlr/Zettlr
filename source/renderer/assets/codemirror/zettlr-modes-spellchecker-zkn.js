@@ -12,6 +12,7 @@
 
     var zkndelim = "!\"$%&()*+,/:;<=>?@[\\]^`{|}~ «»“”–—…÷‘’‚"; // Some less zkn delims
     var delim = "!\"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚";
+    var zknLinkRE = /\[\[(.*?)\]\]/;
 
     /**
      * Define the spellchecker mode that will simply check all found words against
@@ -32,7 +33,7 @@
                 // Exclude zkn-links (because otherwise CodeMirror will create
                 // multiple HTML elements _inside_ the link block, which will
                 // render it way more difficult to extract the search terms.)
-                if (stream.match(/\[\[(.*)\]\]/)) {
+                if (stream.match(zknLinkRE)) {
                     return null;
                 }
 
@@ -121,7 +122,7 @@
                 }
 
                 // Second: zkn links. This is MUCH easier than I thought :o
-                if (stream.match(/\[\[(.*)\]\]/)) {
+                if (stream.match(zknLinkRE)) {
                     return "zkn-link";
                 }
 

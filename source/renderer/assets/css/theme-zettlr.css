@@ -57,12 +57,10 @@
 .CodeMirror .cm-link.shift {
   cursor: pointer;
 }
-.CodeMirror .cm-zkn-tag,
-.CodeMirror .cm-zkn-id {
+.CodeMirror .cm-zkn-tag {
   font-weight: bold;
 }
 .CodeMirror .cm-zkn-tag:hover,
-.CodeMirror .cm-zkn-id:hover,
 .CodeMirror .cm-zkn-link:hover {
   text-decoration: underline;
   cursor: pointer;
