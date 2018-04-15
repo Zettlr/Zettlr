@@ -19,7 +19,20 @@
         "avg_not_reached": "✍🏼 Get writing to surpass your daily average.",
         "empty_directories": "No open files or folders",
         "attachments": "Attachments",
-        "no_attachments": "No attachments"
+        "no_attachments": "No attachments",
+        "formatting": {
+            "bold": "Bold",
+            "italic": "Italics",
+            "code": "Code",
+            "link": "Link",
+            "image": "Image",
+            "blockquote": "Blockquote",
+            "ol": "Numbered list",
+            "ul": "Itemised list",
+            "divider": "Divider",
+            "footnote": "Footnote",
+            "remove_footnote": "Remove footnote"
+        }
     },
     "pomodoro": {
         "start": "Start",
@@ -159,11 +172,12 @@
             "notification": "There is a new version of Zettlr available to download. Please read the changelog below.",
             "release_url": "Open download page",
             "close": "Close",
-            "no_update": "You got the newest version of Zettlr"
+            "no_update": "You got the newest version of Zettlr",
+            "current_version": "Your version"
         },
         "about": {
             "title": "About Zettlr",
-            "lead": "Zettlr is a project by Hendrik Erz, licensed under the MIT license. It is Open Source, free of charge and based upon the Electron framework. Zettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Zettlr would not be possible. Below you can find all projects that Zettlr uses.",
+            "lead": "Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. It is Open Source, free of charge and based upon the Electron framework. Zettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Zettlr would not be possible. Below you can find all projects that Zettlr uses.",
             "other_projects": "Zettlr also makes use of these projects:",
             "jquery": "Makes it easy to render the whole user interface",
             "chokidar": "Detects any changes you make to your files outside the app",

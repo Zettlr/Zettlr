@@ -96,7 +96,15 @@ class ZettlrUpdater
                 return `<a${p1} onclick="require('electron').shell.openExternal(this.getAttribute('href')); return false;" target="_blank">${p2}</a>`;
             });
 
-            this._app.notifyUpdate(this._response[0].tag_name, html, this._response[0].html_url);
+            let updateContent = {
+                    'newVer': this._response[0].tag_name,
+                    'curVer': CUR_VER,
+                    'changelog': html,
+                    'releaseURL': this._response[0].html_url,
+                    'downloadURL': ''
+                };
+
+            this._app.getIPC().send('update-available', updateContent);
         } else {
             this._app.notify(trans('dialog.update.no_update'));
         }

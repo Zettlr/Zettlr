@@ -323,21 +323,21 @@ class ZettlrBody
         <span class="markdownHeading6">#</span>
         </a>
         <hr>
-        <a href="#" class="markdownBold">Bold</a>
-        <a href="#" class="markdownItalic">Italic</a>
-        <a href="#" class="markdownCode">Code</a>
+        <a href="#" class="markdownBold">${trans('gui.formatting.bold')}</a>
+        <a href="#" class="markdownItalic">${trans('gui.formatting.italic')}</a>
+        <a href="#" class="markdownCode">${trans('gui.formatting.code')}</a>
         <hr>
-        <a href="#" class="markdownLink">Link</a>
-        <a href="#" class="markdownImage">Image</a>
+        <a href="#" class="markdownLink">${trans('gui.formatting.link')}</a>
+        <a href="#" class="markdownImage">${trans('gui.formatting.image')}</a>
         <hr>
-        <a href="#" class="markdownBlockquote">Blockquote</a>
-        <a href="#" class="markdownMakeOrderedList">Ordered List</a>
-        <a href="#" class="markdownMakeUnorderedList">Itemized List</a>
+        <a href="#" class="markdownBlockquote">${trans('gui.formatting.blockquote')}</a>
+        <a href="#" class="markdownMakeOrderedList">${trans('gui.formatting.ol')}</a>
+        <a href="#" class="markdownMakeUnorderedList">${trans('gui.formatting.ul')}</a>
         <hr>
-        <a href="#" class="markdownDivider">Divider</a>
+        <a href="#" class="markdownDivider">${trans('gui.formatting.divider')}</a>
         <hr>
-        <a href="#" class="insertFootnote">Footnote</a>
-        <a href="#" class="removeFootnote">Remove footnote</a>
+        <a href="#" class="insertFootnote">${trans('gui.formatting.footnote')}</a>
+        <a href="#" class="removeFootnote">${trans('gui.formatting.remove_footnote')}</a>
         </div>`;
         let popup = new ZettlrPopup(this, $('.button.formatting'), cnt);
 

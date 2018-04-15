@@ -805,23 +805,6 @@ class Zettlr
     }
 
     /**
-     * Notify the renderer process of an available update.
-     * @param  {String} newVer           The newest available version
-     * @param  {String} message          The message, i.e. the changelog
-     * @param  {String} releaseURL       URL to the release page on GitHub
-     * @param  {String} [downloadURL=''] Optionally a URL to the install file
-     */
-    notifyUpdate(newVer, message, releaseURL, downloadURL = '')
-    {
-        this.ipc.send('update-available', {
-            'newVer': newVer,
-            'changelog': message,
-            'releaseURL': releaseURL,
-            'downloadURL': downloadURL
-        });
-    }
-
-    /**
      * Simple wrapper for notifications.
      * @param  {String} message The message to be sent to the renderer.
      */
@@ -1085,6 +1068,12 @@ class Zettlr
      * @return {ZettlrWindow} The main window
      */
     getWindow()      { return this.window; }
+
+    /**
+     * Returns the IPC instance.
+     * @return {ZettlrIPC}  The IPC object
+     */
+    getIPC()         { return this.ipc; }
 
     /**
      * Returns the directory tree.

@@ -163,6 +163,7 @@ class ZettlrDialog
 
             case 'update':
             replacements.push('%NEWVER%|' + obj.newVer);
+            replacements.push('%CURVER%|' + obj.curVer);
             replacements.push('%CHANGELOG%|' + obj.changelog);
             replacements.push('%RELEASEURL%|' + obj.releaseURL);
             break;

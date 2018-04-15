@@ -97,7 +97,7 @@ class ZettlrIPC
             break;
 
             case 'file-get-quicklook':
-            this.send('file-quicklook', this._app.getPaths().findFile({'hash': cnt}).withContent());
+            this.send('file-quicklook', this._app.findFile({'hash': cnt}).withContent());
             break;
 
             case 'file-get':

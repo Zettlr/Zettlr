@@ -397,7 +397,7 @@ class ZettlrFile
                     if(cnt.indexOf(wd) > -1) {
                         matches++;
                         break;
-                    } else if(cnt.Lower.indexOf(wd) > -1) {
+                    } else if(cntLower.indexOf(wd) > -1) {
                         matches++;
                         break;
                     }

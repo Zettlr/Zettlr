@@ -182,9 +182,13 @@
                 background-color:@grey-7;
                 color:@grey-3;
 
-                span.sortTime:hover, span.sortName:hover {
-                    color: @grey-2;
+                span.sortTime, span.sortName {
                     background-color:@grey-7;
+
+                    &:hover {
+                        color: @grey-2;
+                        background-color:@grey-7;
+                    }
                 }
             }
         }

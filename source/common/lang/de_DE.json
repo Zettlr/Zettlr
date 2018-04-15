@@ -19,7 +19,20 @@
         "avg_not_reached": "✍🏼 Schreibe, um deinen Durchschnitt zu übertreffen.",
         "empty_directories": "Keine offenen Dateien oder Ordner",
         "attachments": "Anhänge",
-        "no_attachments": "Keine Anhänge"
+        "no_attachments": "Keine Anhänge",
+        "formatting": {
+            "bold": "Fett",
+            "italic": "Kursiv",
+            "code": "Codeblock",
+            "link": "Link",
+            "image": "Bild",
+            "blockquote": "Zitat",
+            "ol": "Nummerierte Liste",
+            "ul": "Liste",
+            "divider": "Trennstrich",
+            "footnote": "Fußnote",
+            "remove_footnote": "Fußnote entfernen"
+        }
     },
     "pomodoro": {
         "start": "Start",
@@ -159,11 +172,12 @@
             "notification": "Eine neue Version von Zettlr steht zum Download bereit. Bitte lies die Änderungsdatei unten.",
             "release_url": "Zum Download",
             "close": "Schließen",
-            "no_update": "Du nutzt die aktuelle Version von Zettlr"
+            "no_update": "Du nutzt die aktuelle Version von Zettlr",
+            "current_version": "Deine Version"
         },
         "about": {
             "title": "Über Zettlr",
-            "lead": "Zettlr ist ein Projekt von Hendrik Erz, lizensiert unter der MIT-Lizenz. Es ist Open Source, komplett kostenlos und basiert auf dem Electron-Framework. Zettlr dankt an dieser Stelle den Entwicklern von Electron, Node.js und dem CodeMirror-Editor für ihre Arbeit. Ohne sie wäre die Entwicklung von Zettlr nicht möglich. Hier sind alle Projekte aufgelistet, die Zettlr ermöglichen.",
+            "lead": "Zettlr ist ein Projekt von Hendrik Erz, lizensiert unter der GNU GPL v3-Lizenz. Es ist Open Source, komplett kostenlos und basiert auf dem Electron-Framework. Zettlr dankt an dieser Stelle den Entwicklern von Electron, Node.js und dem CodeMirror-Editor für ihre Arbeit. Ohne sie wäre die Entwicklung von Zettlr nicht möglich. Hier sind alle Projekte aufgelistet, die Zettlr ermöglichen.",
             "other_projects": "Zettlr nutzt auch folgende Projekte:",
             "jquery": "Unersetzlich für die Darstellung des Nutzer-Interfaces",
             "chokidar": "Erkennt alle Änderung an den Dateien von außerhalb und stellt sie dar",

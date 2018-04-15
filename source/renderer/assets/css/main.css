@@ -88,15 +88,27 @@ body {
 }
 .modal .dialog h1 {
   font-size: 1.5em;
-  margin-bottom: 0.5em;
+  margin-bottom: 1.5em;
 }
 .modal .dialog h1 small {
   font-size: 75%;
   color: #787878;
 }
-.modal .dialog p {
+.modal .dialog h2,
+.modal .dialog h3,
+.modal .dialog h4,
+.modal .dialog h5,
+.modal .dialog h6 {
+  margin-bottom: 1em;
+}
+.modal .dialog p,
+.modal .dialog li {
   margin-bottom: 0.5em;
   line-height: 150%;
+}
+.modal .dialog ul,
+.modal .dialog ol {
+  margin-bottom: 0.5em;
 }
 .modal .dialog hr {
   border: none;
@@ -108,8 +120,9 @@ body {
   line-height: 150%;
 }
 .modal .dialog code {
-  background-color: #dcdcdc;
-  border-radius: 5px;
+  background-color: #f0f0f0;
+  border-radius: 2px;
+  padding: 2px 5px;
 }
 .modal .dialog img {
   max-width: 100%;
@@ -169,7 +182,7 @@ body {
   max-height: 300px;
   overflow-y: auto;
   border: 1px solid #646464;
-  border-radius: 10px;
+  border-radius: 2px;
   padding: 10px;
   margin: 10px 0px;
 }
@@ -524,6 +537,10 @@ body {
   background-color: #282828;
   color: #787878;
 }
+#preview.dark ul li.directory span.sortTime,
+#preview.dark ul li.directory span.sortName {
+  background-color: #282828;
+}
 #preview.dark ul li.directory span.sortTime:hover,
 #preview.dark ul li.directory span.sortName:hover {
   color: #c8c8c8;
@@ -798,57 +815,57 @@ body {
   cursor: n-resize;
   height: 15px;
   width: 100%;
-  top: -10px;
+  top: -15px;
   left: 0;
 }
 .quicklook .ui-resizable-s {
   cursor: s-resize;
   height: 15px;
   width: 100%;
-  bottom: -10px;
+  bottom: -15px;
   left: 0;
 }
 .quicklook .ui-resizable-e {
   cursor: e-resize;
   width: 15px;
-  right: -10px;
+  right: -15px;
   top: 0;
   height: 100%;
 }
 .quicklook .ui-resizable-w {
   cursor: w-resize;
   width: 15px;
-  left: -10px;
+  left: -15px;
   top: 0;
   height: 100%;
 }
 .quicklook .ui-resizable-se {
   cursor: se-resize;
-  width: 12px;
-  height: 12px;
-  right: -5px;
-  bottom: -5px;
+  width: 15px;
+  height: 15px;
+  right: -15px;
+  bottom: -15px;
 }
 .quicklook .ui-resizable-sw {
   cursor: sw-resize;
-  width: 12px;
-  height: 12px;
-  left: -5px;
-  bottom: -5px;
+  width: 15px;
+  height: 15px;
+  left: -15px;
+  bottom: -15px;
 }
 .quicklook .ui-resizable-nw {
   cursor: nw-resize;
-  width: 12px;
-  height: 12px;
-  left: -5px;
-  top: -5px;
+  width: 15px;
+  height: 15px;
+  left: -15px;
+  top: -15px;
 }
 .quicklook .ui-resizable-ne {
   cursor: ne-resize;
-  width: 12px;
-  height: 12px;
-  right: -5px;
-  top: -5px;
+  width: 15px;
+  height: 15px;
+  right: -15px;
+  top: -15px;
 }
 #toolbar {
   position: absolute;

@@ -2,15 +2,26 @@
 
 ## GUI and functionality
 
+- **Switched license from MIT to GNU GPL v3. This also includes all prior releases!**
 - Now if there is a valid URL in the clipboard it will be inserted as the URL on all images and links created, not just if there's nothing selected.
 - Fixed a bug that prevented the opening of links if clicked with `Alt`-key pressed.
 - Added the code indicators (backticks) to the list of auto-complete pairs.
 - Fixed the rendering of internal links.
 - Small changes to the design of file IDs.
+- Moved the resize handles of quicklook windows completely out of the windows themselves so that they are more easy to reach and don't block the scrollbar.
+- Fixed the colours of the directory sorters in dark mode.
+- Translated the formattings.
+- Updates to the readme.
+- ID generation now also works if there is something selected.
+- More generally: All CodeMirror commands (such as changing the formatting of a selection) will retain the selection you have made (i.e. they will save them, run the command and afterwards re-select what was selected previously).
+- Fixed a small bug that could lead to errors while searching using the OR-operator.
+- Updater now shows your current version in the update window.
+- Small fixes to the styling of the update dialog.
 
 ## Under the hood
 
 - Small change to the zkn-link regular expression (was greedy, now it is lazy) to prevent huge misrenderings in case two links were on one line.
+- Removed the unnecessary `_sort()`-function in the `ZettlrDirectories`-class.
 
 # 0.15.0
 

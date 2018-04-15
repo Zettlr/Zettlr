@@ -19,7 +19,20 @@
         "avg_not_reached": "✍🏼 Écrire pour surpasser ta moyenne.",
         "empty_directories": "Pas des fichiers ou dossiers",
         "attachments": "Annexes",
-        "no_attachments": "Pas des annexes"
+        "no_attachments": "Pas des annexes",
+        "formatting": {
+            "bold": "Gras",
+            "italic": "Italique",
+            "code": "Code",
+            "link": "Lien",
+            "image": "Image",
+            "blockquote": "Citation",
+            "ol": "Liste avec des numeros",
+            "ul": "Liste",
+            "divider": "Séparateur",
+            "footnote": "Note en bas de page",
+            "remove_footnote": "Éliminer la note"
+        }
     },
     "pomodoro": {
         "start": "Start",
@@ -159,11 +172,12 @@
             "notification": "Un nouveau version de Zettlr est preparée à téléchargement. Lire le changelog en bas.",
             "release_url": "Telecharger",
             "close": "Fermer",
-            "no_update": "Tu as la version derniere de Zettlr"
+            "no_update": "Tu as la version derniere de Zettlr",
+            "current_version": "Ta version"
         },
         "about": {
             "title": "Sur Zettlr",
-            "lead": "Zettlr est un projet Open Source par Hendrik Erz, sous licence MIT. Il est basé sur le framework Electron. Zettlr voule rendre grâce à les developpeurs de Electron, Node.js et CodeMirror. Sans ils, Zettlr n'est pas possible. Ici tu trouve tous projets qui Zettlr est basé sur.",
+            "lead": "Zettlr est un projet Open Source par Hendrik Erz, sous licence GNU GPL v3. Il est basé sur le framework Electron. Zettlr voule rendre grâce à les developpeurs de Electron, Node.js et CodeMirror. Sans ils, Zettlr n'est pas possible. Ici tu trouve tous projets qui Zettlr est basé sur.",
             "other_projects": "Zettlr est basé également sur:",
             "jquery": "Un indispensable aide pour présenter le UX",
             "chokidar": "Voir les modifications sur les fichiers à l'extérieur de l'app",

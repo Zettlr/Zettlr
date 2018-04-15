@@ -21,7 +21,7 @@
         // General typography
         h1 {
             font-size: 1.5em;
-            margin-bottom:0.5em;
+            margin-bottom:1.5em;
 
             small {
                 font-size:75%;
@@ -29,9 +29,17 @@
             }
         }
 
-        p {
+        h2, h3, h4, h5, h6 {
+            margin-bottom:1em;
+        }
+
+        p, li {
             margin-bottom:0.5em;
             line-height:150%;
+        }
+
+        ul, ol {
+            margin-bottom:0.5em;
         }
 
         hr {
@@ -48,8 +56,9 @@
         }
 
         code {
-            background-color:@grey-1;
-            border-radius:5px;
+            background-color:@grey-0;
+            border-radius:2px;
+            padding:2px 5px;
         }
 
         img {
@@ -118,7 +127,7 @@
             max-height:300px;
             overflow-y:auto;
             border:1px solid @grey-4;
-            border-radius:@border-radius;
+            border-radius:2px;
             padding:10px;
             margin:10px 0px;
         }

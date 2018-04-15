@@ -68,6 +68,7 @@ class ZettlrEditor
         this._timeout = null;        // Stores a current timeout for a save-command
         this._inlineImages = [];     // Image widgets that are currently rendered
         this._inlineLinks = [];      // Inline links that are currently rendered
+        this._prevSelections = [];   // Used to save all selections before a command is run to re-select
 
         // These are used for calculating a correct word count
         this._blockElements = require('../common/data.json').block_elements;
@@ -419,6 +420,7 @@ class ZettlrEditor
         this._cm.markClean();
         this._cm.clearHistory();
         this._words = 0;
+        this._prevSeletions = [];
         return this;
     }
 
@@ -502,6 +504,13 @@ class ZettlrEditor
             // Don't replace selections
             this._cm.replaceSelection(generateId());
             this._cm.focus();
+        } else {
+            // Save and afterwards retain the selections
+            this._prevSelections = this._cm.doc.listSelections();
+            this._cm.setCursor({'line': this._cm.doc.lastLine(), 'ch': this._cm.doc.getLine(this._cm.doc.lastLine()).length });
+            this._cm.replaceSelection('\n\n'+generateId()); // Insert at the end of document
+            this._cm.doc.setSelections(this._prevSelections);
+            this._prevSelections = [];
         }
     }
 
@@ -664,7 +673,16 @@ class ZettlrEditor
     * @param  {String} cmd The command to be passed to cm.
     * @return {void}     Nothing to return.
     */
-    runCommand(cmd) { this._cm.execCommand(cmd); }
+    runCommand(cmd)
+    {
+        this._prevSelections = this._cm.doc.listSelections();
+        this._cm.execCommand(cmd);
+
+        if(this._prevSelections.length > 0) {
+            this._cm.doc.setSelections(this._prevSelections);
+            this._prevSelections = [];
+        }
+    }
 
     /**
      * Focus the CodeMirror instance

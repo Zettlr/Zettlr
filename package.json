@@ -6,8 +6,8 @@
         "type": "git",
         "url": "git://github.com/Zettlr/Zettlr.git"
     },
-    "version": "0.15.0",
-    "license": "MIT",
+    "version": "0.15.1",
+    "license": "GPL-3.0",
     "description": "A powerful Markdown Editor with integrated tree view",
     "main": "./source/main.js",
     "scripts": {
@@ -25,7 +25,7 @@
         "appId": "com.zettlr.www",
         "productName": "Zettlr",
         "npmRebuild": false,
-        "copyright": "This program is licensed under the MIT-license.",
+        "copyright": "This program is licensed under the GNU GPL v3 license.",
         "fileAssociations": [
             {
                 "ext": ["md", "markdown"],

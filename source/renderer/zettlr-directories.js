@@ -172,48 +172,6 @@ class ZettlrDirectories
     }
 
     /**
-    * Sorts the tree array
-    */
-    _sort()
-    {
-        let f = [];
-        let d = [];
-
-        for(let t of this._tree) {
-            if(t.isFile()) {
-                f.push(t);
-            } else {
-                d.push(t);
-            }
-        }
-
-        f = f.sort((a, b) => {
-            if(a.getPath() < b.getPath()) {
-                return -1;
-            } else if(a.getPath() > b.getPath()) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-
-        d = d.sort((a, b) => {
-            if(a.getPath() < b.getPath()) {
-                return -1;
-            } else if(a.getPath() > b.getPath()) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-
-        // First files, then directories.
-        this._tree = f.concat(d);
-
-        // TODO move in place
-    }
-
-    /**
     * Needed for bubbling up of selections
     * @param  {Integer} hash The hash of the directory to be selected
     * @return {void}      Nothing to return.
