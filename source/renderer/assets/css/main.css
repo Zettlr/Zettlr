@@ -447,32 +447,38 @@ body {
   background-color: #c8f0aa;
 }
 #preview ul li {
-  padding: 0.4em;
   border-bottom: 1px solid #c8c8c8;
   border-top: 1px solid #c8c8c8;
   margin-top: -1px;
   background-color: inherit;
+  overflow: hidden;
+  height: 1.6em;
+  padding: 2px;
+}
+#preview ul li.snippets {
+  height: 90px;
+  padding: 0.4em;
 }
 #preview ul li:hover {
   background-color: #f0f0f0;
 }
 #preview ul li strong {
   white-space: nowrap;
-  display: inline-block;
+  display: block;
   width: 100%;
   overflow: hidden;
   background-image: linear-gradient(90deg, #282828 0%, #282828 90%, transparent 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-#preview ul li span {
-  display: inline-block;
-  margin-top: 10px;
+#preview ul li span,
+#preview ul li small {
+  display: block;
+  margin-top: 5px;
 }
 #preview ul li.directory {
   background-color: #f0f0f0;
   color: #1cb27e;
-  line-height: 1.6em;
   white-space: nowrap;
   padding: 0.1em 0.4em;
   position: sticky;

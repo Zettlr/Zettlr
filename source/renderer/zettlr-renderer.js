@@ -738,6 +738,10 @@ class ZettlrRenderer
             // Because that's what _always_ follows this function call.
             this._directories.select(newdir.hash);
             this._preview.refresh();
+            if(this.getCurrentFile()) {
+                // Necessary to scroll the file into view
+                this._preview.select(this.getCurrentFile().hash);
+            }
         }
     }
 

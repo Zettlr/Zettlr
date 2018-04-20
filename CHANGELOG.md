@@ -10,6 +10,7 @@
 - Small fix to the Tag-recognition (now a `#` sign immediately followed by a delim char will not render a tag formatting).
 - The Attachment pane will now scroll if there are many attachments in it.
 - Added an option to open the currently selected directory in the system's file browser (i.e. Finder on macOS or Explorer on Windows). The respective button resides next to the attachment pane's header.
+- Small fix to the context menu: It will popup where the click occurred, and not where the mouse is when the menu is actually shown (noticeable especially when right-clicking a misspelled word).
 
 ## Under the hood
 

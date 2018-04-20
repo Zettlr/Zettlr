@@ -3,6 +3,9 @@
 // Import clusterize.js styles
 @import 'clusterize.less';
 
+@tile-height-full: 90px;
+@tile-height-min:  @ribbon-height;
+
 #preview {
     position:fixed;
     top:@toolbar-height;
@@ -34,11 +37,19 @@
         }
 
         li {
-            padding:@pane-padding;
             border-bottom:1px solid @grey-2;
             border-top:1px solid @grey-2;
             margin-top:-1px;
             background-color:inherit;
+            overflow:hidden;
+            height:@tile-height-min;
+            padding:2px;
+
+            // Bigger size when snippets are on.
+            &.snippets {
+                height:@tile-height-full;
+                padding:@pane-padding;
+            }
 
             &:hover {
                 background-color:@grey-0;
@@ -48,7 +59,7 @@
                 // Prevent line breaking in the titles and give a little spacing
                 // before and after
                 white-space: nowrap;
-                display: inline-block;
+                display: block;
                 width: 100%;
                 overflow: hidden;
 
@@ -57,15 +68,14 @@
                 -webkit-text-fill-color: transparent;
             }
 
-            span {
-                display:inline-block;
-                margin-top:10px;
+            span, small {
+                display:block;
+                margin-top:5px;
             }
 
             &.directory {
                 background-color:@grey-0;
                 color:@green-0;
-                line-height: @ribbon-height;
                 white-space: nowrap;
                 padding:@ribbon-padding;
                 position:sticky;

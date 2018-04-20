@@ -215,7 +215,8 @@ class ZettlrCon
     popup(event) {
         this._build(event);
         if(this._menu.items.length > 0) {
-            this._menu.popup();
+            // Open at click coords even the user may have moved the mouse
+            this._menu.popup({ 'x': event.clientX, 'y': event.clientY});
         }
     }
 }

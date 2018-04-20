@@ -38,8 +38,8 @@ class ZettlrPreview
         this._snippets           = true;
         this._selectedFile       = null;
 
-        this._data               = [];
-        this._tags               = [];
+        this._data               = []; // The whole data (as returned by _renderer.getCurrentDir())
+        this._tags               = []; // Only the rendered elements (may exclude some)
 
         // Elements
         this._div                = $('#preview');
@@ -113,13 +113,14 @@ class ZettlrPreview
         // representation as an HTML string
         for(let i = start; i < until; i++) {
             let d = this._data[i];
-            if(this._showSearchResults && !this._results.find((elem) => { elem.hash == d.hash })) {
+            if(this._showSearchResults && !this._results.find((elem) => { return (elem.hash == d.hash); })) {
                 // Don't include no-result-rows in the next list.
                 continue;
             }
             let sort = (d.type == 'directory') ? `data-sorting="${d.sorting}" ` : '';
             let selected = (this._selectedFile && this._selectedFile == d.hash) ? ` selected` : '';
-            let elem = `<li class="${d.type}${selected}" data-hash="${d.hash}" ${sort}title="${d.name}">`;
+            let snippets = (this._snippets) ? ' snippets' : '';
+            let elem = `<li class="${d.type}${selected}${snippets}" data-hash="${d.hash}" ${sort}title="${d.name}">`;
             if(d.type == 'directory') {
                 // Render a directory
                 elem += d.name;
@@ -127,7 +128,7 @@ class ZettlrPreview
                 elem += `<strong>${d.name.substr(0, d.name.lastIndexOf('.'))}</strong>`;
 
                 if(this._snippets) {
-                    elem += `<br><span class="snippet">${d.snippet}
+                    elem += `<span class="snippet">${d.snippet}
                     <small>${formatDate(new Date(d.modtime))}</small></span>`;
                 }
             }
@@ -204,6 +205,10 @@ class ZettlrPreview
         return this.refresh([]);
     }
 
+    /**
+     * Activates the event listeners on the preview pane.
+     * @return {void} No return.
+     */
     _act()
     {
         // Activate directories and files respectively.
@@ -271,8 +276,15 @@ class ZettlrPreview
         return this;
     }
 
+    /**
+     * Selects a specific hash
+     * @param  {Number} hash The hash describing the file
+     */
     select(hash)
     {
+        if(!hash) {
+            return;
+        }
         this._selectedFile = hash;
         let elem = this._listContainer.find('li[data-hash="' + hash + '"]');
         if(elem.length > 0) {
@@ -280,14 +292,19 @@ class ZettlrPreview
             elem.addClass('selected');
         } else {
             // We need a manual refresh because the element currently is not rendered
-            for(let i = 0; i < this._data.length; i++) {
-                if(this._data[i].hash == hash) {
-                    this._gen(i); // Only re-generate this specific index
-                    // And push it into clusterize
-                    this._list.update(this._tags);
-                    break;
-                }
-            } // This for loop will simply run through each element if the hash does not exist
+            elem = this._data.find((el) => { return (el.hash == hash); });
+            if(elem) {
+                this._gen(this._data.indexOf(elem)); // Only re-generate this specific index
+                // And push it into clusterize
+                this._list.update(this._tags);
+            }
+        }
+        // Now scroll it into view if not already
+        let i = this._data.find((elem) => { return (elem.hash == hash); });
+        if(i) {
+            console.log('Scrolling');
+            i = this._data.indexOf(i);
+            this._scrollIntoView(i);
         }
     }
 
@@ -507,10 +524,46 @@ class ZettlrPreview
         this._hashes             = [];
         this._currentSearch      = null;
         this._showSearchResults  = true; // Indicate that the list should be only displaying search results.
+        console.log(`Search done. Results:`, this._results);
         this.refresh(); // Refresh to apply.
     }
 
+    /**
+     * Removes all search indicators and shows all contents.
+     */
+    showFiles()
+    {
+        this._showSearchResults = false;
+        this._results = [];
+        this.refresh(); // Refresh to re-show.
+    }
+
     // END SEARCH
+
+    /**
+     * Scrolls the element given by index into view.
+     * @param  {Number} index The index (as referring to _data).
+     * @return {Boolean} True if the call succeeded, false if not.
+     */
+    _scrollIntoView(index)
+    {
+        // TODO: Not working currently
+        let el = this._tags.find((elem) => { return ($(elem).attr('data-hash') == this._data[index]); })
+        // First let's see if the data thingy has been rendered (should have been
+        // on each call of this, so this is only to be sure.)
+        if(!el) {
+            return false; // Not in list
+        }
+
+        let totalHeight = $('#filelist').innerHeight(); // Returns the total height
+        let elemHeight = totalHeight / this._tags.length;
+        let scrollPos = elemHeight * this._tags.indexOf(el);
+
+        console.log(`Element is at position ${scrollPos}, given ${elemHeight}px Element height.`);
+
+        this._div.scrollTop(scrollPos); // Scroll it into view
+        return true;
+    }
 
     /**
      * Update the files displayed.
