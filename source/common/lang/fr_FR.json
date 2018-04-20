@@ -20,6 +20,7 @@
         "empty_directories": "Pas des fichiers ou dossiers",
         "attachments": "Annexes",
         "no_attachments": "Pas des annexes",
+        "attachments_open_dir": "Ouvrir le dossier",
         "formatting": {
             "bold": "Gras",
             "italic": "Italique",

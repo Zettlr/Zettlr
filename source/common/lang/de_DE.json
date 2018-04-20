@@ -20,6 +20,7 @@
         "empty_directories": "Keine offenen Dateien oder Ordner",
         "attachments": "Anhänge",
         "no_attachments": "Keine Anhänge",
+        "attachments_open_dir": "Öffne Verzeichnis",
         "formatting": {
             "bold": "Fett",
             "italic": "Kursiv",

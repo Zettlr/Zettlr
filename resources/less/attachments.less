@@ -7,6 +7,18 @@
     bottom: 0;
     width: 20%;
     background-color: rgba(255,255,255,.8);
+    overflow-y:auto;
+    overflow-x:hidden;
+
+    #open-dir-external {
+        font-family: 'WebHostingHub-Glyphs';
+        cursor:default;
+        color:@grey-2;
+
+        &:hover {
+            color:@grey-6;
+        }
+    }
 
     h1 {
         padding:10px;
@@ -41,4 +53,12 @@
 .dark #attachments {
     background-color: rgba(0,0,0,.8);
     color:@grey-0;
+
+    #open-dir-external {
+        color:@grey-6;
+
+        &:hover {
+            color:@grey-2;
+        }
+    }
 }

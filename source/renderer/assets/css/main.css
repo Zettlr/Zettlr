@@ -289,6 +289,7 @@ body {
   /* Bit smaller, those indicators are damned huge */
   margin-right: 5px;
   display: inline-block;
+  float: left;
   height: 16px;
   color: #1d75b3;
 }
@@ -384,6 +385,40 @@ body {
   background-color: #505050;
   color: #dcdcdc;
 }
+/* max-height - the only parameter in this file that needs to be edited.
+ * Change it to suit your needs. The rest is recommended to leave as is.
+ */
+.clusterize-scroll {
+  max-height: 100%;
+  overflow: auto;
+}
+/**
+ * Avoid vertical margins for extra tags
+ * Necessary for correct calculations when rows have nonzero vertical margins
+ */
+.clusterize-extra-row {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+/* By default extra tag .clusterize-keep-parity added to keep parity of rows.
+ * Useful when used :nth-child(even/odd)
+ */
+.clusterize-extra-row.clusterize-keep-parity {
+  display: none;
+}
+/* During initialization clusterize adds tabindex to force the browser to keep focus
+ * on the scrolling list, see issue #11
+ * Outline removes default browser's borders for focused elements.
+ */
+.clusterize-content {
+  outline: 0;
+  counter-reset: clusterize-counter;
+}
+/* Centering message that appears when no data provided
+ */
+.clusterize-no-data td {
+  text-align: center;
+}
 #preview {
   position: fixed;
   top: 39px;
@@ -418,12 +453,6 @@ body {
   margin-top: -1px;
   background-color: inherit;
 }
-#preview ul li small {
-  color: #646464;
-}
-#preview ul li.hidden {
-  display: none;
-}
 #preview ul li:hover {
   background-color: #f0f0f0;
 }
@@ -439,9 +468,6 @@ body {
 #preview ul li span {
   display: inline-block;
   margin-top: 10px;
-}
-#preview ul li span.hidden {
-  display: none;
 }
 #preview ul li.directory {
   background-color: #f0f0f0;
@@ -1337,6 +1363,16 @@ body {
   bottom: 0;
   width: 20%;
   background-color: rgba(255, 255, 255, 0.8);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#attachments #open-dir-external {
+  font-family: 'WebHostingHub-Glyphs';
+  cursor: default;
+  color: #c8c8c8;
+}
+#attachments #open-dir-external:hover {
+  color: #464646;
 }
 #attachments h1 {
   padding: 10px;
@@ -1365,4 +1401,10 @@ body {
 .dark #attachments {
   background-color: rgba(0, 0, 0, 0.8);
   color: #f0f0f0;
+}
+.dark #attachments #open-dir-external {
+  color: #464646;
+}
+.dark #attachments #open-dir-external:hover {
+  color: #c8c8c8;
 }

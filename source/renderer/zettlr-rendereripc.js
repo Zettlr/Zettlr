@@ -159,11 +159,6 @@ class ZettlrRendererIPC
             this._app.getEditor().openFind();
             break;
 
-            case 'file-insert':
-            // DEPRECATED
-            this._app.getPreview().refresh();
-            break;
-
             case 'file-delete':
             // The user has requested to delete the current file
             // Request from main process

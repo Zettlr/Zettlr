@@ -12,6 +12,8 @@
  * END HEADER
  */
 
+const {shell} = require('electron');
+
 const {trans} = require('../common/lang/i18n.js');
 
 class ZettlrAttachments
@@ -23,6 +25,8 @@ class ZettlrAttachments
         $('body').append(this._container);
         this._open = false;
         this._attachments = [];
+
+        this.refresh();
     }
 
     toggle()
@@ -39,7 +43,8 @@ class ZettlrAttachments
 
     refresh()
     {
-        this._container.html(`<h1>${trans('gui.attachments')}</h1>`);
+        this._container.html(`<h1>${trans('gui.attachments')} <small id="open-dir-external" title="${trans('gui.attachments_open_dir')}">&#xf332;</small></h1>`);
+        this._act(); // We have to act now (sorry for the pun, again)
         // Grab the newest attachments and refresh
         if(!this._renderer.getCurrentDir()) {
             this._container.append($('<p>').text(trans('gui.no_attachments')));
@@ -56,8 +61,6 @@ class ZettlrAttachments
         for(let a of this._attachments) {
             this._container.append($('<a>').text(a.name).attr('href', '#').attr('data-hash', a.hash));
         }
-
-        this._act();
     }
 
     _act()
@@ -66,9 +69,15 @@ class ZettlrAttachments
             let elem = $(e.target);
             for(let a of this._attachments) {
                 if(a.hash == elem.attr('data-hash')) {
-                    require('electron').shell.openItem(a.path);
+                    shell.openItem(a.path);
                     break;
                 }
+            }
+        });
+
+        $('#attachments #open-dir-external').click((e) => {
+            if(this._renderer.getCurrentDir()) {
+                shell.openItem(this._renderer.getCurrentDir().path);
             }
         });
     }

@@ -376,35 +376,76 @@ class ZettlrFile
             }
         }
 
-        // Return immediately
-        if(matches == terms.length) { return true; }
+        // Return immediately with an object of line -1 (indicating filename) and a huge weight
+        if(matches == terms.length) { return [{line: -1, restext: this.name, 'weight': 2}]; }
 
         // Do a full text search.
         let cnt = this.read();
         let cntLower = cnt.toLowerCase();
 
+        let lines = cnt.split('\n');
+        let linesLower = cntLower.split('\n');
+        matches = [];
+
         for(let t of terms) {
             if(t.operator === 'AND') {
-                // Try both normal and lowercase
-                if(cnt.indexOf(t.word) > -1) {
-                    matches++;
-                } else if(cntLower.indexOf(t.word) > -1) {
-                    matches++;
+                for(let index in lines) {
+                    // Try both normal and lowercase
+                    if(lines[index].indexOf(t.word) > -1) {
+                        matches.push({
+                            'line': index,
+                            'restext': lines[index],
+                            'weight': 1 // Weight indicates that this was an exact match
+                        });
+                    } else if(linesLower[index].indexOf(t.word) > -1) {
+                        matches.push({
+                            'line': index,
+                            'restext': lines[index],
+                            'weight': 0.5 // Weight indicates that this was an approximate match
+                        });
+                    }
                 }
             } else {
                 // OR operator.
                 for(let wd of t.word) {
-                    if(cnt.indexOf(wd) > -1) {
-                        matches++;
-                        break;
-                    } else if(cntLower.indexOf(wd) > -1) {
-                        matches++;
-                        break;
+                    let br = false;
+                    for(let index in lines) {
+                        // Try both normal and lowercase
+                        if(lines[index].indexOf(wd) > -1) {
+                            matches.push({
+                                'line': index,
+                                'restext': lines[index],
+                                'weight': 1 // Weight indicates that this was an exact match
+                            });
+                            br = true;
+                        } else if(linesLower[index].indexOf(wd) > -1) {
+                            matches.push({
+                                'line': index,
+                                'restext': lines[index],
+                                'weight': 0.5 // Weight indicates that this was an approximate match
+                            });
+                            br = true;
+                        }
                     }
+                    if(br) break;
                 }
             }
         }
-        return (matches == terms.length);
+
+        // Before we can return the matches, we need to make sure the lines are
+        // not duplicates
+        let ret = [];
+        for(let m of matches) {
+            let found = ret.find((elem) => { return (elem.line === m.line) });
+            if(found) {
+                // As objects are stored in matches, we can directly work on found
+                found.weight += m.weight; // Add the weight to make it heavier (sorry for pun)
+            } else {
+                ret.push(m);
+            }
+        }
+
+        return ret;
     }
 
     /**

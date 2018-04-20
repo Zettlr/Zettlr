@@ -264,7 +264,7 @@ class ZettlrMenu
             this.template[2].submenu.unshift(
                 {
                     label: trans('menu.reload'),
-                    accelerator: 'CmdOrCtrl+Y',
+                    accelerator: 'F5',
                     click (item, focusedWindow) {
                         if (focusedWindow) focusedWindow.reload();
                     }
@@ -288,7 +288,7 @@ class ZettlrMenu
                 type: 'separator',
             },{
                 label: trans('menu.preferences'),
-                accelerator: 'CmdOrCtrl+,',
+                accelerator: 'Ctrl+,',
                 click (item, focusedWindow) {
                     if(focusedWindow) focusedWindow.webContents.send('message', {'command': 'open-preferences'});
                 }
@@ -305,7 +305,7 @@ class ZettlrMenu
                     { label: trans('menu.about', app.getName()), role: 'about' },
                     {
                         label: trans('menu.preferences'),
-                        accelerator: 'CmdOrCtrl+,',
+                        accelerator: 'Cmd+,',
                         click (item, focusedWindow) {
                             if(focusedWindow) focusedWindow.webContents.send('message', {'command': 'open-preferences'});
                         }
@@ -343,7 +343,6 @@ class ZettlrMenu
                     accelerator: 'CmdOrCtrl+M',
                     role: 'minimize'
                 },
-                { label: trans('menu.zoom'), role: 'zoom' },
                 { type: 'separator' },
                 { label: trans('menu.all_front'), role: 'front' }
             ]

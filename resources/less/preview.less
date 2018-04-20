@@ -1,5 +1,8 @@
 // Preview pane
 
+// Import clusterize.js styles
+@import 'clusterize.less';
+
 #preview {
     position:fixed;
     top:@toolbar-height;
@@ -37,14 +40,6 @@
             margin-top:-1px;
             background-color:inherit;
 
-            small {
-                color:@grey-4;
-            }
-
-            &.hidden {
-                display:none;
-            }
-
             &:hover {
                 background-color:@grey-0;
             }
@@ -65,10 +60,6 @@
             span {
                 display:inline-block;
                 margin-top:10px;
-
-                &.hidden {
-                    display:none;
-                }
             }
 
             &.directory {

@@ -102,8 +102,9 @@
                 var ch;
 
                 // First: Tags, in the format of Twitter
-                if (stream.match("#")) {
-                    if([' ', '#'].includes(stream.peek())) { // We've just unraveled a heading.
+                if (stream.match('#')) {
+                    if([' ', '#'].includes(stream.peek()) // We've just unraveled a heading.
+                        || zkndelim.includes(stream.peek())) { // This means # is followed by a delim
                         stream.next();
                         return null;
                     }

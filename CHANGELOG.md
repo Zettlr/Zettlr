@@ -1,3 +1,21 @@
+# 0.15.2
+
+## GUI and functionality
+
+- Switched the directory indicator with the collapse indicator on root directories, so that the first always stays first.
+- Huge performance increase in rendering the preview list.
+- Small fix to the word count. Now an empty editor does not show that there's a word written.
+- Removed the `Zoom` menu entry from the Window menu on macOS.
+- The Reload-shortcut in debug-mode is now `F5`.
+- Small fix to the Tag-recognition (now a `#` sign immediately followed by a delim char will not render a tag formatting).
+- The Attachment pane will now scroll if there are many attachments in it.
+- Added an option to open the currently selected directory in the system's file browser (i.e. Finder on macOS or Explorer on Windows). The respective button resides next to the attachment pane's header.
+
+## Under the hood
+
+- Switched Preview-list rendering to `Clusterize.js` to keep huge lists renderable and reduce loading times.
+- Removed the now unnecessary `ListView` and `ListViewItem` classes.
+
 # 0.15.1
 
 ## GUI and functionality
