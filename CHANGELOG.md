@@ -11,11 +11,18 @@
 - The Attachment pane will now scroll if there are many attachments in it.
 - Added an option to open the currently selected directory in the system's file browser (i.e. Finder on macOS or Explorer on Windows). The respective button resides next to the attachment pane's header.
 - Small fix to the context menu: It will popup where the click occurred, and not where the mouse is when the menu is actually shown (noticeable especially when right-clicking a misspelled word).
+- Augmented the autoclose-pairs with the default German quotes `„` and `”`.
+- Changed the save function so that it does not save immediately, but gracefully implements a way to save changes any time a potentially file-closing command is issued.
+- Changes to the design of the preview list.
 
 ## Under the hood
 
 - Switched Preview-list rendering to `Clusterize.js` to keep huge lists renderable and reduce loading times.
 - Removed the now unnecessary `ListView` and `ListViewItem` classes.
+- Removed the unnecessary `file-revert` command handler in `ZettlrIPC`.
+- Removed a `console.log` in `ZettlrPreview`.
+- Added a `isModified()` function in `ZettlrRenderer`.
+- Changes to `ZettlrRendererIPC` to accomodate graceful saving procedure.
 
 # 0.15.1
 

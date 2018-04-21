@@ -14,6 +14,17 @@
 
 const {trans} = require('../common/lang/i18n.js');
 
+// The following commands are sent from the renderer and can potentially close
+// the current file. In that case we have to save the file first and then send
+// the actual command.
+const CLOSING_COMMANDS = [
+    'file-get',
+    'file-new',
+    'file-delete',
+    'close-root',
+    'force-open'
+];
+
 /**
  * This class is the interface between the renderer and main process on the
  * renderer side. It acts exactly like the ZettlrIPC class, only that it is
@@ -34,6 +45,8 @@ class ZettlrRendererIPC
             // Omit the event immediately
             this.dispatch(arg);
         });
+
+        this._bufferedMessage = null;
     }
 
     /**
@@ -63,6 +76,17 @@ class ZettlrRendererIPC
      */
     send(command, arg = {})
     {
+        if(CLOSING_COMMANDS.includes(command) && this._app.isModified()) {
+            // Buffer the command for later and send a save command
+            this._bufferedMessage = {
+                'command': command,
+                'content': arg
+            }
+
+            this._app.saveFile();
+            return;
+        }
+
         this._ipc.send('message', {
             'command': command,
             'content': arg
@@ -137,6 +161,11 @@ class ZettlrRendererIPC
 
             case 'mark-clean':
             this._app.getEditor().markClean();
+            // If we have a buffered message, send that and afterwards clean up
+            if(this._bufferedMessage != null) {
+                this.send(this._bufferedMessage.command, this._bufferedMessage.content);
+                this._bufferedMessage = null;
+            }
             break;
 
             case 'file-request-revert':

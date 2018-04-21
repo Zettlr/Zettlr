@@ -302,7 +302,6 @@ class ZettlrPreview
         // Now scroll it into view if not already
         let i = this._data.find((elem) => { return (elem.hash == hash); });
         if(i) {
-            console.log('Scrolling');
             i = this._data.indexOf(i);
             this._scrollIntoView(i);
         }

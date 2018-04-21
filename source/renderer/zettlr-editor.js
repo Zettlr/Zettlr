@@ -39,7 +39,7 @@ const {generateId} = require('../common/zettlr-helpers.js');
 const CodeMirror = require('codemirror');
 
 // The timeout after which a "save"-command is triggered to automatically save changes
-const SAVE_TIMOUT = 400;
+const SAVE_TIMOUT = require('../../common/data.json').poll_time;
 
 /**
 * This class propably has the most `require`s in it, because it loads all
@@ -81,7 +81,7 @@ class ZettlrEditor
             autofocus: false,
             lineWrapping: true,
             autoCloseBrackets: {
-                pairs: '()[]{}\'\'""»«“”‘’__``', // Autoclose markdown specific stuff
+                pairs: '()[]{}\'\'""»«„”“”‘’__``', // Autoclose markdown specific stuff
                 override: true
             },
             extraKeys: {
@@ -431,7 +431,7 @@ class ZettlrEditor
     getWordCount()
     {
         if(this._cm.getValue() == '') return 0;
-        
+
         let words = this._cm.getValue().split(/[\s ]+/);
 
         let i = 0;

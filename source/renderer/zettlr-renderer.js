@@ -823,4 +823,10 @@ class ZettlrRenderer
      * Simply indicates to main to set the modified flag.
      */
     setModified() { this._ipc.send('file-modified', {}); }
+
+    /**
+     * Can tell whether or not the editor is modified.
+     * @return {Boolean} True if the editor's contents are modified.
+     */
+    isModified() { return !this.getEditor().isClean(); }
 } // END CLASS

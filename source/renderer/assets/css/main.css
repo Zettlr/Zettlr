@@ -452,8 +452,8 @@ body {
   margin-top: -1px;
   background-color: inherit;
   overflow: hidden;
-  height: 1.6em;
-  padding: 2px;
+  line-height: 25px;
+  padding-left: 6px;
 }
 #preview ul li.snippets {
   height: 90px;
