@@ -100,7 +100,6 @@ class ZettlrPomodoro
         this._phase.cur = 0;
         this._phase.max = this._duration.task;
         this._progressMeter.attr('stroke', this._colors.task);
-        console.log(`Starting:`, this._phase);
 
         // Commence
         setTimeout(() => {this._progress();}, 1000);

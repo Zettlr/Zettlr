@@ -523,7 +523,6 @@ class ZettlrPreview
         this._hashes             = [];
         this._currentSearch      = null;
         this._showSearchResults  = true; // Indicate that the list should be only displaying search results.
-        console.log(`Search done. Results:`, this._results);
         this.refresh(); // Refresh to apply.
     }
 
@@ -557,8 +556,6 @@ class ZettlrPreview
         let totalHeight = $('#filelist').innerHeight(); // Returns the total height
         let elemHeight = totalHeight / this._tags.length;
         let scrollPos = elemHeight * this._tags.indexOf(el);
-
-        console.log(`Element is at position ${scrollPos}, given ${elemHeight}px Element height.`);
 
         this._div.scrollTop(scrollPos); // Scroll it into view
         return true;

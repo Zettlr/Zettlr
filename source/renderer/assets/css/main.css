@@ -216,6 +216,7 @@ body {
   display: inline-block;
   line-height: 200%;
   list-style-type: none;
+  margin-bottom: 0;
 }
 .modal .dialog .ui-tabs-nav .ui-tabs-tab.ui-tabs-active {
   background-color: #1cb27e;
