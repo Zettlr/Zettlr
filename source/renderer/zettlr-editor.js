@@ -81,7 +81,7 @@ class ZettlrEditor
             autofocus: false,
             lineWrapping: true,
             autoCloseBrackets: {
-                pairs: '()[]{}\'\'""»«„”“”‘’__``', // Autoclose markdown specific stuff
+                pairs: '()[]{}\'\'""»«„““”‘’__``', // Autoclose markdown specific stuff
                 override: true
             },
             extraKeys: {

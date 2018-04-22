@@ -39,7 +39,7 @@ class FileView
         // Request file on click
         this._elem.click((e) => {
             this._parent.requestFile(this.getHash());
-        })
+        });
     }
 
     refresh(p = this._file)
@@ -81,12 +81,12 @@ class FileView
 
     /**
      * Moves the list to the target position.
-     * @return {ListView} Chainability.
+     * @return {FileView} Chainability.
      */
     moveToTarget()
     {
-        if((this._elem.index() == this._target) || !this._target) {
-            return;
+        if((this._elem.index() == this._target) || this._target == null) {
+            return this;
         } else if(this._target == 0) {
             this._elem.insertBefore(this._parent.getContainer().children().first());
         } else {
@@ -95,6 +95,12 @@ class FileView
 
         return this;
     }
+
+    /**
+     * Sets the DOM target for this file.
+     * @param {Integer} i The wanted target.
+     */
+    setTarget(i) { this._target = i; }
 
     /**
      * Root level?
@@ -119,11 +125,6 @@ class FileView
     getHash() { return this._file.hash; }
 
     getPath() { return this._file.path; }
-
-    setTarget(i)
-    {
-        this._target = i;
-    }
 }
 
 module.exports = FileView;

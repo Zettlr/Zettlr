@@ -280,7 +280,7 @@ class TreeView
             selector = 'ul';
         }
 
-        if((this._ul.index() == this._target+mod) || !this._target) {
+        if((this._ul.index() == this._target+mod) || this._target == null) {
             return this;
         } else if(this._target == 0) {
             this._ul.insertBefore(this._parent.getContainer().children(selector)[0]);

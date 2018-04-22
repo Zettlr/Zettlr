@@ -7,14 +7,15 @@
 - Small fix to the word count. Now an empty editor does not show that there's a word written.
 - Removed the `Zoom` menu entry from the Window menu on macOS.
 - The Reload-shortcut in debug-mode is now `F5`.
-- Small fix to the Tag-recognition (now a `#` sign immediately followed by a delim char will not render a tag formatting).
-- The Attachment pane will now scroll if there are many attachments in it.
-- Added an option to open the currently selected directory in the system's file browser (i.e. Finder on macOS or Explorer on Windows). The respective button resides next to the attachment pane's header.
+- Small fix to the Tag-recognition (now a `#` sign immediately followed by a delimiter character (e.g. spaces, line breaks or apostrophes) will not render a tag formatting).
+- The Attachment pane will now scroll if there are too many attachments in it.
+- Added an option to open the currently selected directory in the system's file browser (e.g. Finder on macOS or Explorer on Windows). The respective button resides next to the attachment pane's header.
 - Small fix to the context menu: It will popup where the click occurred, and not where the mouse is when the menu is actually shown (noticeable especially when right-clicking a misspelled word).
-- Augmented the autoclose-pairs with the default German quotes `„` and `”`.
-- Changed the save function so that it does not save immediately, but gracefully implements a way to save changes any time a potentially file-closing command is issued.
+- Augmented the autoclose-pairs with the default German quotes `„` and `“`.
+- Changed the save function so that it does not save immediately, but gracefully implements a way to save changes any time a potentially file-closing command is issued (such as selecting another file).
 - Changes to the design of the preview list.
 - Removed the save-button from the toolbar and now Zettlr will not show you an indicator whether or not there are unsaved changes, because normally everything should be saved. In case changes are *not* saved under strange circumstances, Zettlr will still prompt you to save them if they would be lost.
+- Fixed a small error that led Zettlr to believe that it doesn't need to reorder the opened root files and directories, although it should have, thereby having newly opened files pop up not at the top of the directories' list but at random positions somewhere in the directories.
 
 ## Under the hood
 

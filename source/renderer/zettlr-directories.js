@@ -59,7 +59,7 @@ class ZettlrDirectories
             }
             this._tree = []; // Dereference
             this._empty.show(); // Display the no-dirs message
-            return;
+            return this;
         }
 
         // Detach all objects that are no longer present
