@@ -38,7 +38,7 @@ class ZettlrStatsView
         let wcount = data.wordCount;
 
         // Compute average
-        let sum = 0;
+        let allwords = [];
         for(let day in wcount) {
             // hasOwnProperty only returns "true" if the prop is not a default
             // prop that every object has.
@@ -47,10 +47,18 @@ class ZettlrStatsView
                 // we'll run into trouble because it's then close to
                 // Number.MAX_SAFE_INTEGER. In this case only compute the last
                 // week.
-                sum += wcount[day];
+                allwords.push(wcount[day]);
             }
         }
-        let avg = Math.round(sum / Object.keys(wcount).length);
+        allwords.reverse(); // We only want the last 30 days.
+
+        // Now summarize the last 30 days. Should never exceed 100k. (Still, let's check it)
+        let sum = 0;
+        for(let i = 0; i < 30; i++) {
+            sum += allwords[i];
+        }
+
+        let avg = Math.round(sum / 30); // Average last month
 
         let today = new Date();
         let yyyy = today.getFullYear();
@@ -63,10 +71,17 @@ class ZettlrStatsView
 
         today = wcount[today] || 0;
 
+        if(sum > 99999) {
+            // Would look stupid in display ->
+            sum = '>100k';
+        } else {
+            sum = localiseNumber(sum);
+        }
+
         let cnt = `
         <table>
         <tr>
-            <td style="text-align:right"><strong>${localiseNumber(sum)}</strong></td><td>${trans('gui.overall_words')}</td>
+            <td style="text-align:right"><strong>${sum}</strong></td><td>${trans('gui.words_last_month')}</td>
         </tr>
         <tr>
             <td style="text-align:right"><strong>${localiseNumber(avg)}</strong></td><td>${trans('gui.avg_words')}</td>

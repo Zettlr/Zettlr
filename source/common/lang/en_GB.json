@@ -11,7 +11,7 @@
     "gui": {
         "find_placeholder": "Find…",
         "words": "%s words",
-        "overall_words": "words overall",
+        "words_last_month": "words last month",
         "avg_words": "daily average",
         "today_words": "words today",
         "avg_surpassed": "🔥 You're on fire!",

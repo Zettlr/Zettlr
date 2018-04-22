@@ -14,6 +14,7 @@
 - Augmented the autoclose-pairs with the default German quotes `„` and `”`.
 - Changed the save function so that it does not save immediately, but gracefully implements a way to save changes any time a potentially file-closing command is issued.
 - Changes to the design of the preview list.
+- Removed the save-button from the toolbar and now Zettlr will not show you an indicator whether or not there are unsaved changes, because normally everything should be saved. In case changes are *not* saved under strange circumstances, Zettlr will still prompt you to save them if they would be lost.
 
 ## Under the hood
 
@@ -23,6 +24,8 @@
 - Removed a `console.log` in `ZettlrPreview`.
 - Added a `isModified()` function in `ZettlrRenderer`.
 - Changes to `ZettlrRendererIPC` to accomodate graceful saving procedure.
+- Upgraded dependencies.
+- Coloured the output of the less compiler script so that it's easy to discern whether or not an error or a warning occurred.
 
 # 0.15.1
 

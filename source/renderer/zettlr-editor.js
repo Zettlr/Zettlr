@@ -39,7 +39,7 @@ const {generateId} = require('../common/zettlr-helpers.js');
 const CodeMirror = require('codemirror');
 
 // The timeout after which a "save"-command is triggered to automatically save changes
-const SAVE_TIMOUT = require('../../common/data.json').poll_time;
+const SAVE_TIMOUT = require('../common/data.json').poll_time;
 
 /**
 * This class propably has the most `require`s in it, because it loads all

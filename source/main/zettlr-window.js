@@ -167,6 +167,10 @@ class ZettlrWindow
         if(this._win != null) {
             this._win.setDocumentEdited(true);
         }
+
+        return this;
+
+        // DEPRECATED CODE
         // Indicate in title (for all OS)
         let title = this._win.getTitle();
         if(title.substr(0, 2) != "* ") {
@@ -186,6 +190,10 @@ class ZettlrWindow
         if(this._win != null) {
             this._win.setDocumentEdited(false);
         }
+
+        return this;
+
+        // DEPRECATED CODE
         // Indicate in title
         let title = this._win.getTitle();
         if(title.substr(0, 2) == "* ") {

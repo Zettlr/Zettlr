@@ -4,7 +4,7 @@
 @import 'clusterize.less';
 
 @tile-height-full: 90px;
-@tile-height-min:  25px;
+@tile-height-min:  30px;
 
 #preview {
     position:fixed;
@@ -47,8 +47,9 @@
 
             // Bigger size when snippets are on.
             &.snippets {
-                height:@tile-height-full;
+                height:@tile-height-full - (2*@pane-padding); // Remove top/bottom padding
                 padding:@pane-padding;
+                line-height:inherit;
             }
 
             &:hover {
@@ -59,6 +60,7 @@
                 // Prevent line breaking in the titles and give a little spacing
                 // before and after
                 white-space: nowrap;
+                font-weight:normal; // ALERT! ALERT! TODO: This is complete semantic bullshit.
                 display: block;
                 width: 100%;
                 overflow: hidden;
@@ -77,7 +79,6 @@
                 background-color:@grey-0;
                 color:@green-0;
                 white-space: nowrap;
-                padding:@ribbon-padding;
                 position:sticky;
                 top:-1px; // Account for the border-top
 

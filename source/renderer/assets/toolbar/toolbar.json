@@ -43,13 +43,6 @@
         },
         {
             "role": "button",
-            "class": "file-save",
-            "command": "file-save",
-            "content": "{}",
-            "title": "toolbar.file_save"
-        },
-        {
-            "role": "button",
             "class": "share",
             "command": "export",
             "content": "{}",

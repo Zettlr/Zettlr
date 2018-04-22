@@ -11,7 +11,7 @@
     "gui": {
         "find_placeholder": "Trouver…",
         "words": "%s mots",
-        "overall_words": "en tout",
+        "words_last_month": "mots dernièr mois",
         "avg_words": "moyenne par jour",
         "today_words": "mots aujourd'hui",
         "avg_surpassed": "🔥 Tu es en feu!",

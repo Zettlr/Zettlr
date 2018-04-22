@@ -116,6 +116,7 @@
         "typo-js": "^1.0.3"
     },
     "devDependencies": {
+        "chalk": "^2.4.0",
         "electron": "^1.8.4",
         "electron-builder": "^20.8.1",
         "esdoc": "^1.0.4",

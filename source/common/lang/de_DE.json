@@ -11,7 +11,7 @@
     "gui": {
         "find_placeholder": "Finden…",
         "words": "%s Wörter",
-        "overall_words": "Wörter insgesamt",
+        "words_last_month": "Wörter (Monat)",
         "avg_words": "durchschnittlich",
         "today_words": "Wörter heute",
         "avg_surpassed": "🔥 Weiter so!",

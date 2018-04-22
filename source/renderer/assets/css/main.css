@@ -452,18 +452,20 @@ body {
   margin-top: -1px;
   background-color: inherit;
   overflow: hidden;
-  line-height: 25px;
+  line-height: 30px;
   padding-left: 6px;
 }
 #preview ul li.snippets {
-  height: 90px;
+  height: 89.2px;
   padding: 0.4em;
+  line-height: inherit;
 }
 #preview ul li:hover {
   background-color: #f0f0f0;
 }
 #preview ul li strong {
   white-space: nowrap;
+  font-weight: normal;
   display: block;
   width: 100%;
   overflow: hidden;
@@ -480,7 +482,6 @@ body {
   background-color: #f0f0f0;
   color: #1cb27e;
   white-space: nowrap;
-  padding: 0.1em 0.4em;
   position: sticky;
   top: -1px;
 }
