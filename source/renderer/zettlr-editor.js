@@ -69,6 +69,7 @@ class ZettlrEditor
         this._inlineImages = [];     // Image widgets that are currently rendered
         this._inlineLinks = [];      // Inline links that are currently rendered
         this._prevSelections = [];   // Used to save all selections before a command is run to re-select
+        this._fileIsOpen = false;    // Is there currently a file opened?
 
         // These are used for calculating a correct word count
         this._blockElements = require('../common/data.json').block_elements;
@@ -399,6 +400,7 @@ class ZettlrEditor
         this._cm.markClean();
         this._cm.clearHistory(); // Clear history so that no "old" files can be
         // recreated using Cmd/Ctrl+Z.
+        this._fileIsOpen = true;
 
         if(this._positions[this._currentHash] !== undefined) {
             this.jtl(this._positions[this._currentHash].scroll);
@@ -419,6 +421,7 @@ class ZettlrEditor
         this._cm.setValue('');
         this._cm.markClean();
         this._cm.clearHistory();
+        this._fileIsOpen = false;
         this._words = 0;
         this._prevSeletions = [];
         return this;
@@ -669,6 +672,12 @@ class ZettlrEditor
     * @return {Boolean} True, if there are no changes, false, if there are.
     */
     isClean() { return this._cm.doc.isClean(); }
+
+    /**
+     * Is a file currently open in editor?
+     * @return {Boolean} Returns true, if there is a file opened.
+     */
+    isFileOpen() { return this._fileIsOpen; }
 
     /**
     * Run a CodeMirror command.

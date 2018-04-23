@@ -755,6 +755,9 @@ class ZettlrRenderer
         // Also directly select it
         if(newfile !== null) {
             this._preview.select(newfile.hash);
+            if(!this._editor.isFileOpen()) {
+                this.openFile(newfile);
+            }
         }
     }
 

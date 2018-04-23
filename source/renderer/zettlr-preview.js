@@ -505,8 +505,6 @@ class ZettlrPreview
     {
         if(res.result.length > 0) {
             this._results.push(res); // For later reference
-            let str = this._div.find('li[data-hash="'+res.hash+'"]');
-            str.prepend(`<span class="result-counter">(${res.result.length})</span>`);
         }
 
         // Next search cycle

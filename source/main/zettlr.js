@@ -115,9 +115,6 @@ class Zettlr
 
             // flush all changes so they aren't processed again next cycle
             this.watchdog.flush();
-
-            // Notify the renderer of changes
-            this.ipc.send('paths-update', this.getPaths());
         }
 
         setTimeout(() => { this.poll(); }, POLL_TIME);
@@ -410,7 +407,7 @@ class Zettlr
         this._sortPaths();
         this.ipc.send('paths-update', this.getPaths());
         // Open the newly added path(s) directly.
-        if(newDir)  { this.setCurrentDir(newDir); }
+        if(newDir)  { this.setCurrentDir(newDir);  }
         if(newFile) { this.sendFile(newFile.hash); }
     }
 

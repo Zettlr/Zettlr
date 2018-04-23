@@ -59,18 +59,16 @@ class ZettlrIPC
 
     /**
      * This sends a message to the current window's renderer process.
-     * @param  {String} command The command to be sent
-     * @param  {Mixed} content Can be either simply a string or a whole object
-     * @return {ZettlrIPC}         This for chainability.
-     */
-    /**
-     * This sends a message to the current window's renderer process.
      * @param  {String} command      The command to be sent
      * @param  {Object} [content={}] Can be either simply a string or a whole object
      * @return {ZettlrIPC}              This for chainability.
      */
     send(command, content = {})
     {
+        if(!this._app.window.getWindow()) {
+            return this; // Fail gracefully
+        }
+        
         let sender = this._app.window.getWindow().webContents;
         sender.send('message', {
             'command': command,

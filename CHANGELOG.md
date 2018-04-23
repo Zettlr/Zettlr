@@ -1,3 +1,13 @@
+# 0.15.3
+
+## GUI and functionality
+
+- Removed some displaying of numbers during search.
+
+## Under the hood
+
+- Removed an unnecessary `paths-update` event.
+
 # 0.15.2
 
 ## GUI and functionality
