@@ -739,6 +739,7 @@ class ZettlrRenderer
      */
     setCurrentDir(newdir = null)
     {
+        let oldDir = this._currentDir;
         this._currentDir = newdir;
         this._attachments.refresh();
 
@@ -746,8 +747,14 @@ class ZettlrRenderer
             // What we can also do here: Select the dir and refresh the file list.
             // Because that's what _always_ follows this function call.
             this._directories.select(newdir.hash);
-            // End (potential) displaying of file results. showFiles() also refreshes.
-            this.exitSearch();
+            if((oldDir != null) && (newdir != null) && (oldDir.path != newdir.path)) {
+                // End (potential) displaying of file results. showFiles() also refreshes.
+                this.exitSearch();
+            } else {
+                // Else don't exit the search
+                this._preview.refresh();
+            }
+
             if(this.getCurrentFile()) {
                 // Necessary to scroll the file into view
                 this._preview.select(this.getCurrentFile().hash);
