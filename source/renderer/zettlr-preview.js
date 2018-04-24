@@ -60,6 +60,7 @@ class ZettlrPreview
         this._currentSearch      = null;
         this._currentSearchIndex = 0;
         this._results            = []; // Saves all search results
+        this._maxWeight          = -1; // Maximum weight found during search
         this._showSearchResults  = false; // Indicates whether or not _gen() should include negative search results.
 
         // Activate event listeners
@@ -117,14 +118,28 @@ class ZettlrPreview
                 // Don't include no-result-rows in the next list.
                 continue;
             }
+
+            // Calculate search result bg color, in the style of a heat map.
+            let bgcolor = '';
+            if(this._showSearchResults) {
+                let res = this._results.find((elem) => { return (elem.hash == d.hash); });
+                let w = 0;
+                for(let r of res.result) {
+                    w += r.weight;
+                }
+                w = Math.round(w / this._maxWeight * 100); // Percentage
+                bgcolor = ` style="background-color:hsla(159, ${w}%, 50%, ${w/100});"`; // hue of 159 corresponds to @green-0
+            }
+
             let sort = (d.type == 'directory') ? `data-sorting="${d.sorting}" ` : '';
             let selected = (this._selectedFile && this._selectedFile == d.hash) ? ` selected` : '';
             let snippets = (this._snippets) ? ' snippets' : '';
-            let elem = `<li class="${d.type}${selected}${snippets}" data-hash="${d.hash}" ${sort}title="${d.name}">`;
+            let elem = `<li class="${d.type}${selected}${snippets}" data-hash="${d.hash}" ${sort}title="${d.name}"${bgcolor}>`;
             if(d.type == 'directory') {
                 // Render a directory
                 elem += d.name;
             } else if (d.type == 'file') {
+
                 elem += `<strong>${d.name.substr(0, d.name.lastIndexOf('.'))}</strong>`;
 
                 if(this._snippets) {
@@ -458,6 +473,10 @@ class ZettlrPreview
         // The search index will be increased BEFORE accessing the first file!
         this._currentSearchIndex = -1;
 
+        // Also, to prevent previous search results from showing up, remove them
+        this._results = [];
+        this._maxWeight = -1;
+
         // Aaaaand: Go!
         this._doSearch();
     }
@@ -505,6 +524,13 @@ class ZettlrPreview
     {
         if(res.result.length > 0) {
             this._results.push(res); // For later reference
+            let w = 0;
+            for(let r of res.result) {
+                w += r.weight;
+            }
+            if(w > this._maxWeight) {
+                this._maxWeight = w;
+            }
         }
 
         // Next search cycle
@@ -522,6 +548,8 @@ class ZettlrPreview
         this._currentSearch      = null;
         this._showSearchResults  = true; // Indicate that the list should be only displaying search results.
         this.refresh(); // Refresh to apply.
+        // Also mark the results in the potential open file
+        this._renderer.getEditor().markResults();
     }
 
     /**
@@ -531,7 +559,18 @@ class ZettlrPreview
     {
         this._showSearchResults = false;
         this._results = [];
+        this._maxWeight = -1;
         this.refresh(); // Refresh to re-show.
+    }
+
+    /**
+     * Returns a search result or null.
+     * @param  {Number}  hash The hash to be searched for.
+     * @return {Object} Either the search result or null.
+     */
+    hasResult(hash)
+    {
+        return this._results.find((elem) => {return (elem.hash == hash) });
     }
 
     // END SEARCH

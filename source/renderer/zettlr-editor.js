@@ -23,6 +23,7 @@ require('codemirror/addon/search/searchcursor');
 require('codemirror/addon/search/jump-to-line');
 require('codemirror/addon/dialog/dialog.js');
 require('codemirror/addon/edit/closebrackets');
+require('codemirror/addon/selection/mark-selection');
 
 // Modes
 require('codemirror/mode/markdown/markdown');
@@ -69,7 +70,7 @@ class ZettlrEditor
         this._inlineImages = [];     // Image widgets that are currently rendered
         this._inlineLinks = [];      // Inline links that are currently rendered
         this._prevSelections = [];   // Used to save all selections before a command is run to re-select
-        this._fileIsOpen = false;    // Is there currently a file opened?
+        this._markedResults = [];    // Contains the search results marked in the text
 
         // These are used for calculating a correct word count
         this._blockElements = require('../common/data.json').block_elements;
@@ -400,7 +401,6 @@ class ZettlrEditor
         this._cm.markClean();
         this._cm.clearHistory(); // Clear history so that no "old" files can be
         // recreated using Cmd/Ctrl+Z.
-        this._fileIsOpen = true;
 
         if(this._positions[this._currentHash] !== undefined) {
             this.jtl(this._positions[this._currentHash].scroll);
@@ -409,7 +409,42 @@ class ZettlrEditor
             this.jtl(0);
         }
 
+        // Last but not least: If there are any search results currently
+        // display, mark the respective positions.
+        this.markResults(file);
+
         return this;
+    }
+
+    /**
+     * Highlights search results if any given.
+     * @param {ZettlrFile} [file=this._renderer.getCurrentFile()] The file to retrieve and mark results for
+     */
+    markResults(file = this._renderer.getCurrentFile())
+    {
+        if(!file) {
+            return;
+        }
+        
+        this.unmarkResults(); // Clear potential previous marks
+        if(this._renderer.getPreview().hasResult(file.hash)) {
+            for(let result of this._renderer.getPreview().hasResult(file.hash).result) {
+                this._markedResults.push(this._cm.markText(result.from, result.to, {className: "search-result"}));
+            }
+        }
+    }
+
+    /**
+     * Removes all marked search results
+     */
+    unmarkResults()
+    {
+        // Simply remove all markers
+        for(let mark of this._markedResults) {
+            mark.clear();
+        }
+
+        this._markedResults = [];
     }
 
     /**
@@ -421,7 +456,6 @@ class ZettlrEditor
         this._cm.setValue('');
         this._cm.markClean();
         this._cm.clearHistory();
-        this._fileIsOpen = false;
         this._words = 0;
         this._prevSeletions = [];
         return this;
@@ -429,13 +463,14 @@ class ZettlrEditor
 
     /**
     * Returns the current word count in the editor.
+    * @param {String} [words=this._cm.getValue()] The string to be counted
     * @return {Integer} The word count.
     */
-    getWordCount()
+    getWordCount(words = this._cm.getValue())
     {
-        if(this._cm.getValue() == '') return 0;
+        if(words == '') return 0;
 
-        let words = this._cm.getValue().split(/[\s ]+/);
+        words = words.split(/[\s ]+/);
 
         let i = 0;
 
@@ -449,6 +484,26 @@ class ZettlrEditor
         }
 
         return words.length;
+    }
+
+    /**
+     * Returns an object containing info about the opened file.
+     * @return {Objet} An object containing words, chars, chars_wo_spaces, if selection: words_sel and chars_sel
+     */
+    getFileInfo()
+    {
+        let ret = {
+            'words'          : this.getWordCount(),
+            'chars'          : this._cm.getValue().length,
+            'chars_wo_spaces': this._cm.getValue().replace(/[\s ]+/g, '').length
+        }
+
+        if(this._cm.somethingSelected()) {
+            ret.words_sel = this.getWordCount(this._cm.getSelections().join(''));
+            ret.chars_sel = this._cm.getSelections().join('').length;
+        }
+
+        return ret;
     }
 
     /**
@@ -672,12 +727,6 @@ class ZettlrEditor
     * @return {Boolean} True, if there are no changes, false, if there are.
     */
     isClean() { return this._cm.doc.isClean(); }
-
-    /**
-     * Is a file currently open in editor?
-     * @return {Boolean} Returns true, if there is a file opened.
-     */
-    isFileOpen() { return this._fileIsOpen; }
 
     /**
     * Run a CodeMirror command.

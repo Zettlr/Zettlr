@@ -53,7 +53,8 @@
             }
 
             &:hover {
-                background-color:@grey-0;
+                // important is needed to not mess with the heatmap styles
+                background-color:@grey-0 !important;
             }
 
             strong {
@@ -177,7 +178,9 @@
             }
 
             li:hover {
-                background-color:@grey-3;
+                // important is needed to not mess with the heatmap styles and
+                // to overwrite the light theme
+                background-color:@grey-3 !important;
             }
 
             li.directory {

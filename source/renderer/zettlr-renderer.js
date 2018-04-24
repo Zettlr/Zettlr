@@ -72,7 +72,7 @@ class ZettlrRenderer
         this._toolbar        = new ZettlrToolbar(this);
         this._pomodoro       = new ZettlrPomodoro(this);
         this._stats          = new ZettlrStatsView(this);
-        this._attachments   = new ZettlrAttachments(this);
+        this._attachments    = new ZettlrAttachments(this);
     }
 
     /**
@@ -725,6 +725,15 @@ class ZettlrRenderer
     }
 
     /**
+     * Exits the search, i.e. resets everything back to what it looked like.
+     */
+    exitSearch()
+    {
+        this._preview.showFiles();
+        this._editor.unmarkResults();
+    }
+
+    /**
      * Sets the current dir pointer to the new.
      * @param {ZettlrDir} newdir The new dir.
      */
@@ -737,7 +746,8 @@ class ZettlrRenderer
             // What we can also do here: Select the dir and refresh the file list.
             // Because that's what _always_ follows this function call.
             this._directories.select(newdir.hash);
-            this._preview.refresh();
+            // End (potential) displaying of file results. showFiles() also refreshes.
+            this.exitSearch();
             if(this.getCurrentFile()) {
                 // Necessary to scroll the file into view
                 this._preview.select(this.getCurrentFile().hash);
@@ -755,9 +765,6 @@ class ZettlrRenderer
         // Also directly select it
         if(newfile !== null) {
             this._preview.select(newfile.hash);
-            if(!this._editor.isFileOpen()) {
-                this.openFile(newfile);
-            }
         }
     }
 

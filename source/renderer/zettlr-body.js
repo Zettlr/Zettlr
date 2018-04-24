@@ -20,6 +20,9 @@ const ZettlrQuicklook       = require('./zettlr-quicklook.js');
 const ZettlrNotification    = require('./zettlr-notification.js');
 const ZettlrPopup           = require('./zettlr-popup.js');
 
+const {trans} = require('../common/lang/i18n.js');
+const {localiseNumber} = require('../common/zettlr-helpers.js');
+
 /**
  * This class's duty is to handle everything that affects (or can potentially
  * occur over) the whole app window, such as dialogs (preferences), Quicklook
@@ -168,6 +171,39 @@ class ZettlrBody
         });
     }
 
+    /**
+     * Displays file information (such as word count etc)
+     * @return {ZettlrPopup} The popup that is shown.
+     */
+    showFileInfo()
+    {
+        let info = this._renderer.getEditor().getFileInfo();
+        let cnt = `
+        <table>
+        <tr>
+            <td style="text-align:right"><strong>${localiseNumber(info.words)}</strong></td><td>${trans('gui.file_words')}</td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><strong>${localiseNumber(info.chars)}</strong></td><td>${trans('gui.file_chars')}</td>
+        </tr>
+        <tr>
+            <td style="text-align:right"><strong>${localiseNumber(info.chars_wo_spaces)}</strong></td><td>${trans('gui.file_chars_wo_spaces')}</td>
+        </tr>`
+
+        if(info.words_sel && info.chars_sel) {
+            cnt += `
+            <tr>
+                <td style="text-align:right"><strong>${localiseNumber(info.words_sel)}</strong></td><td>${trans('gui.file_words_sel')}</td>
+            </tr>
+            <tr>
+                <td style="text-align:right"><strong>${localiseNumber(info.chars_sel)}</strong></td><td>${trans('gui.file_chars_sel')}</td>
+            </tr>`;
+        }
+
+        cnt += `</table>`;
+
+        return new ZettlrPopup(this, $('#toolbar .file-info'), cnt);
+    }
     /**
      * Opens a quicklook window for a given file.
      * @param  {ZettlrFile} file The file to be loaded into the QuickLook

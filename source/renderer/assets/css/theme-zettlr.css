@@ -11,6 +11,9 @@
 .CodeMirror a.cma:hover {
   text-decoration: underline;
 }
+.CodeMirror .search-result {
+  background-color: yellow;
+}
 .CodeMirror .cm-header-1 {
   font-size: 2em;
 }

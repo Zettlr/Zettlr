@@ -393,14 +393,28 @@ class ZettlrFile
                     // Try both normal and lowercase
                     if(lines[index].indexOf(t.word) > -1) {
                         matches.push({
-                            'line': index,
-                            'restext': lines[index],
+                            'term': t.word,
+                            'from': {
+                                'line': parseInt(index),
+                                'ch': lines[index].indexOf(t.word)
+                            },
+                            'to': {
+                                'line': parseInt(index),
+                                'ch': lines[index].indexOf(t.word) + t.word.length
+                            },
                             'weight': 1 // Weight indicates that this was an exact match
                         });
                     } else if(linesLower[index].indexOf(t.word) > -1) {
                         matches.push({
-                            'line': index,
-                            'restext': lines[index],
+                            'term': t.word,
+                            'from': {
+                                'line': parseInt(index),
+                                'ch': linesLower[index].indexOf(t.word)
+                            },
+                            'to': {
+                                'line': parseInt(index),
+                                'ch': linesLower[index].indexOf(t.word) + t.word.length
+                            },
                             'weight': 0.5 // Weight indicates that this was an approximate match
                         });
                     }
@@ -413,16 +427,30 @@ class ZettlrFile
                         // Try both normal and lowercase
                         if(lines[index].indexOf(wd) > -1) {
                             matches.push({
-                                'line': index,
-                                'restext': lines[index],
+                                'term': wd,
+                                'from': {
+                                    'line': parseInt(index),
+                                    'ch': lines[index].indexOf(wd)
+                                },
+                                'to': {
+                                    'line': parseInt(index),
+                                    'ch': lines[index].indexOf(wd) + wd.length
+                                },
                                 'weight': 1 // Weight indicates that this was an exact match
                             });
                             br = true;
                         } else if(linesLower[index].indexOf(wd) > -1) {
                             matches.push({
-                                'line': index,
-                                'restext': lines[index],
-                                'weight': 0.5 // Weight indicates that this was an approximate match
+                                'term': wd,
+                                'from': {
+                                    'line': parseInt(index),
+                                    'ch': linesLower[index].indexOf(wd)
+                                },
+                                'to': {
+                                    'line': parseInt(index),
+                                    'ch': linesLower[index].indexOf(wd) + wd.length
+                                },
+                                'weight': 1 // Weight indicates that this was an exact match
                             });
                             br = true;
                         }
@@ -432,20 +460,7 @@ class ZettlrFile
             }
         }
 
-        // Before we can return the matches, we need to make sure the lines are
-        // not duplicates
-        let ret = [];
-        for(let m of matches) {
-            let found = ret.find((elem) => { return (elem.line === m.line) });
-            if(found) {
-                // As objects are stored in matches, we can directly work on found
-                found.weight += m.weight; // Add the weight to make it heavier (sorry for pun)
-            } else {
-                ret.push(m);
-            }
-        }
-
-        return ret;
+        return matches;
     }
 
     /**

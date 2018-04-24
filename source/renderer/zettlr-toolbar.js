@@ -49,18 +49,23 @@ class ZettlrToolbar
         this._searchbar.on('keyup', (e) => {
             if(e.which == 27) { // ESC
                 this._searchbar.blur();
-                this._renderer.getPreview().showFiles();
+                this._renderer.exitSearch();
             } else if(e.which == 13) { // RETURN
                 this._renderer.beginSearch(this._searchbar.val().toLowerCase());
             }
         });
 
         this._div.find('.end-search').on('click', (e) => {
-            this._renderer.getPreview().showFiles();
+            this._searchbar.blur();
+            this._renderer.exitSearch();
         })
 
         this._searchbar.on('focus', function(e) {
             $(this).select();
+        });
+
+        this._fileInfo.click((e) => {
+            this._renderer.getBody().showFileInfo();
         });
 
         // Activate buttons

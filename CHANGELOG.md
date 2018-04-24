@@ -3,10 +3,18 @@
 ## GUI and functionality
 
 - Removed some displaying of numbers during search.
+- Added more file info - when you click on the word count, a small popup containing info about the characters, characters without spaces and also the selection is shown.
+- Added a heatmap that shows you the relevance of the search results by adding a background color to the individual file ribbons. The more green and bright they get, the more relevant the file showed up in the results. **Important**: Files that do not match any of the selectors will be hidden as always, e.g. even grey files will at least fulfill the criteria!
+- Removed directory ribbons while in search mode.
+- Search mode will automatically be exited when selecting a different directory.
+- Also, now when a search is done, the opened file will have all results marked in text so you can easily discern them from the rest of the text.
 
 ## Under the hood
 
 - Removed an unnecessary `paths-update` event.
+- Augmented `getWordCount()` function to return the wordcount of any given string.
+- Removed some strange artifacts from the search.
+- Huge improvements to the search functionality.
 
 # 0.15.2
 
