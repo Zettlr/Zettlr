@@ -17,8 +17,15 @@ const ZettlrPopup = require('./zettlr-popup.js');
 const {trans} = require('../common/lang/i18n.js');
 const {localiseNumber} = require('../common/zettlr-helpers.js');
 
+/**
+ * Simply controls the small popup containing the stats.
+ */
 class ZettlrStatsView
 {
+    /**
+    * Creates the instance
+    * @param {ZettlrRenderer} parent The renderer.
+    */
     constructor(parent)
     {
         this._renderer = parent;

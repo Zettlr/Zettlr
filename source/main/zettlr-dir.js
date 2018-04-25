@@ -121,6 +121,10 @@ class ZettlrDir
         }
     }
 
+    /**
+     * Notifies the parent (a dir or Zettlr) to send a notification + paths-update.
+     * @param  {String} msg The message to be sent.
+     */
     notifyChange(msg)
     {
         this.parent.notifyChange(msg);

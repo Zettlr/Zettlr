@@ -346,6 +346,9 @@ class ZettlrBody
         this._dialog.open();
     }
 
+    /**
+     * Displays a popup containing all formattings
+     */
     displayFormatting()
     {
         let cnt = `

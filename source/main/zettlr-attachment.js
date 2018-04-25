@@ -17,8 +17,17 @@
 const path = require('path');
 const {hash} = require('../common/zettlr-helpers.js');
 
+/**
+ * This class simply manages all non-markdown files in directories. Basically a
+ * ZettlrFile clone with much less functionality.
+ */
 class ZettlrAttachment
 {
+    /**
+     * Create a new instance of ZettlrAttachment.
+     * @param {ZettlrDir} parent The containing dir.
+     * @param {String} fname  The full path to the attachment.
+     */
     constructor(parent, fname)
     {
         this.dir = parent;

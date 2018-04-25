@@ -15,20 +15,33 @@
 
 const {trans} = require('../common/lang/i18n.js');
 
+/**
+ * Simply handles a small no-roots-open-message.
+ */
 class EmptyPaths
 {
+    /**
+     * Create the div.
+     * @param {ZettlrDirectories} dirobj The directory container
+     */
     constructor(dirobj)
     {
         this._directories = dirobj;
-        this._container = $('<div>').addClass('emptyPaths'); // TODO: Translate below
+        this._container = $('<div>').addClass('emptyPaths');
         this._container.append($('<div>').addClass('info').text(trans('gui.empty_directories')));
     }
 
+    /**
+     * Shows the message
+     */
     show()
     {
         this._directories.getContainer().append(this._container);
     }
 
+    /**
+     * Hides the message
+     */
     hide()
     {
         this._container.detach();

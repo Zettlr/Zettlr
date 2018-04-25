@@ -413,6 +413,10 @@ class ZettlrConfig
         return;
     }
 
+    /**
+     * Sorts the paths prior to using them alphabetically and by type.
+     * @return {ZettlrConfig} Chainability.
+     */
     _sortPaths()
     {
         let f = [];

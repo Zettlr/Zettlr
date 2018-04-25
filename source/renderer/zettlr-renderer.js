@@ -96,6 +96,9 @@ class ZettlrRenderer
         this._ipc.send('typo-request-lang', {});
     }
 
+    /**
+     * This function gets called when the renderer finishes its startup.
+     */
     finishStartup()
     {
         // Here we can init actions and stuff to be done after the startup has finished
@@ -105,6 +108,9 @@ class ZettlrRenderer
         this._ipc.send('update-check');
     }
 
+    /**
+     * This function is called every POLL_TIME seconds to execute recurring tasks.
+     */
     poll()
     {
         // This poll is useful. You may not see it now, but someday it's gonna
@@ -205,6 +211,9 @@ class ZettlrRenderer
         this._editor.toggleDirectories();
     }
 
+    /**
+     * Toggles display of the attachment pane.
+     */
     toggleAttachments()
     {
         this._attachments.toggle();
@@ -561,6 +570,10 @@ class ZettlrRenderer
 
     // END search functions
 
+    /**
+     * Handles a list of files and directories dropped onto the app.
+     * @param  {Array} filelist An array containing all paths.
+     */
     handleDrop(filelist)
     {
         this._ipc.send('handle-drop', filelist);
@@ -817,16 +830,40 @@ class ZettlrRenderer
      */
     getToolbar() { return this._toolbar; }
 
+    /**
+     * Returns the editor object
+     * @return {ZettlrEditor} The editor instance
+     */
     getEditor() { return this._editor; }
 
+    /**
+     * Returns the preview object
+     * @return {ZettlrPreview} The preview list
+     */
     getPreview() { return this._preview; }
 
+    /**
+     * Returns the body object
+     * @return {ZettlrBody} The body instance
+     */
     getBody() { return this._body; }
 
+    /**
+     * Returns the pomodoro
+     * @return {ZettlrPomodoro} The pomodoro object
+     */
     getPomodoro() { return this._pomodoro; }
 
+    /**
+     * Returns the current paths
+     * @return {Object} The paths object
+     */
     getPaths() { return this._paths; }
 
+    /**
+     * Returns the stats view
+     * @return {ZettlrStatsView} The view instance
+     */
     getStatsView() { return this._stats; }
 
     /**

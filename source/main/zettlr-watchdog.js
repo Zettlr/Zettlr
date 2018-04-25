@@ -209,8 +209,8 @@ class ZettlrWatchdog
     }
 
     /**
-     * Sets the path to be watched
-     * @param {String} path A new directory to be watched.
+     * Sets the paths to be watched
+     * @param {String} paths Sets paths to be watched.
      * @return {ZettlrWatchdog} This for chainability.
      */
     setPath(paths)

@@ -18,6 +18,10 @@ const {trans} = require('../common/lang/i18n.js');
 
 class ZettlrAttachments
 {
+    /**
+     * Create and append the attachment pane.
+     * @param {ZettlrRenderer} parent The renderer.
+     */
     constructor(parent)
     {
         this._renderer = parent;
@@ -29,6 +33,9 @@ class ZettlrAttachments
         this.refresh();
     }
 
+    /**
+     * Shows/hides the pane.
+     */
     toggle()
     {
         // Toggles the display of the attachment pane
@@ -41,6 +48,9 @@ class ZettlrAttachments
         this._open = !this._open;
     }
 
+    /**
+     * Refreshes the list with new attachments on dir change.
+     */
     refresh()
     {
         this._container.html(`<h1>${trans('gui.attachments')} <small id="open-dir-external" title="${trans('gui.attachments_open_dir')}">&#xf332;</small></h1>`);
@@ -64,6 +74,9 @@ class ZettlrAttachments
         this._act(); // We have to act now (sorry for the pun, again)
     }
 
+    /**
+     * Activates the event listeners on the attachment pane.
+     */
     _act()
     {
         $('#attachments a').click((e) => {
