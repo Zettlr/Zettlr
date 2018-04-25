@@ -5,7 +5,7 @@
  * Contains:        ZettlrAttachments class
  * CVM-Role:        View
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     Displays the attachments of the current directory.
  *

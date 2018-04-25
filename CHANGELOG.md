@@ -15,6 +15,7 @@
 - Augmented `getWordCount()` function to return the wordcount of any given string.
 - Removed some strange artifacts from the search.
 - Huge improvements to the search functionality.
+- Finally implemented the new license in the files
 
 # 0.15.2
 

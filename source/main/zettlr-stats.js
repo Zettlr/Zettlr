@@ -5,7 +5,7 @@
  * Contains:        ZettlrStats class
  * CVM-Role:        Controller
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This class controls some statistics that may be of interest
  *                  to the user. Currently, this only includes the word count.

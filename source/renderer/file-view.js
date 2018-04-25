@@ -5,7 +5,7 @@
  * Contains:        FileView class
  * CVM-Role:        View
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     Represents a root file on disk.
  *

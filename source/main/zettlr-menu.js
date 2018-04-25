@@ -5,7 +5,7 @@
  * Contains:        ZettlrMenu class
  * CVM-Role:        Controller
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     Very basic wrapper around electron Menu class.
  *

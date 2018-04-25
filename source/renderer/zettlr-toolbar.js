@@ -5,7 +5,7 @@
  * Contains:        ZettlrToolbar class
  * CVM-Role:        View
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     Handles the toolbar
  *

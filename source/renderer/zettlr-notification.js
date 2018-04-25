@@ -5,7 +5,7 @@
  * Contains:        ZettlrNotification class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     Displays Operating Style system notifications
  *

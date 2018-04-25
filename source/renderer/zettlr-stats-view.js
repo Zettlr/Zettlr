@@ -5,7 +5,7 @@
  * Contains:        ZettlrStatsView class
  * CVM-Role:        View
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This class displays information about the collected data,
  *                  such as average word count per day and today's word count.

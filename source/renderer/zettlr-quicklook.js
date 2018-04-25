@@ -5,7 +5,7 @@
  * Contains:        ZettlrQuicklook class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     Controls a single Quicklook window
  *

@@ -5,7 +5,7 @@
  * Contains:        ZettlrRenderer class
  * CVM-Role:        Controller
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     Controls the whole renderer process.
  *

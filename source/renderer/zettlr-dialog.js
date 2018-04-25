@@ -5,7 +5,7 @@
  * Contains:        ZettlrDialog class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This class displays big modals on the app.
  *

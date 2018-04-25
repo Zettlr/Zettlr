@@ -5,7 +5,7 @@
  * Contains:        EmptyPaths class
  * CVM-Role:        View
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This class creates a message that is displayed when the tree
  *                  is empty.

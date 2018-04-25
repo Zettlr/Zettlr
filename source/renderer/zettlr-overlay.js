@@ -5,7 +5,7 @@
  * Contains:        ZettlrOverlay class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     Well, this class exists because 8 seconds start up time is
  *                  just unbearable.

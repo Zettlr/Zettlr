@@ -5,7 +5,7 @@
  * Contains:        Zettlr class
  * CVM-Role:        Controller
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This class is the main hub for everything that the main
  *                  process does. This means that here everything the app can

@@ -5,7 +5,7 @@
  * Contains:        ZettlrCon class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This model builds and displays a context menu based on where
  *                  the oncontextmenu event occurred.

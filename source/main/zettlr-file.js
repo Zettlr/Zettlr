@@ -5,7 +5,7 @@
  * Contains:        ZettlrFile class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This file contains the ZettlrFile class, modeling a file on
  *                  disk for the app.

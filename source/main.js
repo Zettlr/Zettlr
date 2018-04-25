@@ -5,7 +5,7 @@
  * Contains:        main.js
  * CVM-Role:        <none>
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This file is the only procedural file in the app. It is the
  *                  main entry point for the application. What it does: Listen

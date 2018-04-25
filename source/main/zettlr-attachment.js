@@ -5,7 +5,7 @@
  * Contains:        ZettlrAttachment class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This class represents one of the attachment files on disk
  *                  that can be referenced from within the app. They'll do not

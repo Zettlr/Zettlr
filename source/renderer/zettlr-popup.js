@@ -5,7 +5,7 @@
  * Contains:        ZettlrPopup class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     Displays a popup to the target element.
  *                  ZettlrPopup features a class that can be instantiated to

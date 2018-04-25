@@ -5,7 +5,7 @@
 * Contains:        ZettlrUpdater class
 * CVM-Role:        Controller
 * Maintainer:      Hendrik Erz
-* License:         MIT
+* License:         GNU GPL v3
 *
 * Description:     This class can check for new updates and display it to the
 *                  user. We need this class because as Squirrel does not

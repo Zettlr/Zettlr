@@ -5,7 +5,7 @@
  * Contains:        ZettlrWindow class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This class is responsible for the main window of Zettlr. It
  *                  opens it, closes it, controls the title and diverse other

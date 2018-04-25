@@ -5,7 +5,7 @@
  * Contains:        ZettlrRendererIPC class
  * CVM-Role:        Controller
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     Handles communication with the main process.
  *

@@ -4,7 +4,7 @@
  * Contains:        Internationalization functions
  * CVM-Role:        <none>
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This file contains several functions, not classes, that help
  *                  with the internationalization of the app.

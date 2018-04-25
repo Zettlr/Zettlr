@@ -5,7 +5,7 @@
  * Contains:        ZettlrIPC class
  * CVM-Role:        Controller
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This class is basically the postmaster of the app.
  *
@@ -68,7 +68,7 @@ class ZettlrIPC
         if(!this._app.window.getWindow()) {
             return this; // Fail gracefully
         }
-        
+
         let sender = this._app.window.getWindow().webContents;
         sender.send('message', {
             'command': command,

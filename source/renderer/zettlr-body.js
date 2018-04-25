@@ -5,7 +5,7 @@
  * Contains:        ZettlrBody class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This is a model that represents all GUI elements that are
  *                  not controlled by one of the other Models (e.g. affect the

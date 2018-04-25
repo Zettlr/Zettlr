@@ -5,7 +5,7 @@
 * Contains:        ZettlrEditor class
 * CVM-Role:        View
 * Maintainer:      Hendrik Erz
-* License:         MIT
+* License:         GNU GPL v3
 *
 * Description:     This class controls and initialized the CodeMirror editor.
 *
@@ -425,7 +425,7 @@ class ZettlrEditor
         if(!file) {
             return;
         }
-        
+
         this.unmarkResults(); // Clear potential previous marks
         if(this._renderer.getPreview().hasResult(file.hash)) {
             for(let result of this._renderer.getPreview().hasResult(file.hash).result) {

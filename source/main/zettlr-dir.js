@@ -5,7 +5,7 @@
  * Contains:        ZettlrDir class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This file contains the ZettlrDir class, modeling a directory
  *                  on disk for the app.

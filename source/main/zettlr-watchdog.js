@@ -5,7 +5,7 @@
  * Contains:        ZettlrWatchdog class
  * CVM-Role:        Controller
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     Monitors the projectDir for external changes.
  *                  Some words on the ignoring array: We cannot simply pause()

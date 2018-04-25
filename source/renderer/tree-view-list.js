@@ -5,7 +5,7 @@
  * Contains:        TreeView class
  * CVM-Role:        View
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This class represents the directory tree of the app. It can
  *                  recursively contain itself as subdirectories.

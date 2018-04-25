@@ -5,7 +5,7 @@
  * Contains:        ZettlrPreview class
  * CVM-Role:        Controller
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     Controls the file list in the preview pane.
  *

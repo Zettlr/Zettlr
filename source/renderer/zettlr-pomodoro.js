@@ -5,7 +5,7 @@
  * Contains:        ZettlrPomodoro class
  * CVM-Role:        Controller
  * Maintainer:      Hendrik Erz
- * License:         MIT
+ * License:         GNU GPL v3
  *
  * Description:     This class controls the pomodoro timer.
  *
