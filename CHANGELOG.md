@@ -8,6 +8,7 @@
 - Removed directory ribbons while in search mode.
 - Search mode will automatically be exited when selecting a different directory.
 - Also, now when a search is done, the opened file will have all results marked in text so you can easily discern them from the rest of the text.
+- Small design fixes.
 
 ## Under the hood
 

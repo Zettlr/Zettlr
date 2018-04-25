@@ -44,7 +44,6 @@ class ZettlrAttachments
     refresh()
     {
         this._container.html(`<h1>${trans('gui.attachments')} <small id="open-dir-external" title="${trans('gui.attachments_open_dir')}">&#xf332;</small></h1>`);
-        this._act(); // We have to act now (sorry for the pun, again)
         // Grab the newest attachments and refresh
         if(!this._renderer.getCurrentDir()) {
             this._container.append($('<p>').text(trans('gui.no_attachments')));
@@ -61,6 +60,8 @@ class ZettlrAttachments
         for(let a of this._attachments) {
             this._container.append($('<a>').text(a.name).attr('href', '#').attr('data-hash', a.hash));
         }
+
+        this._act(); // We have to act now (sorry for the pun, again)
     }
 
     _act()

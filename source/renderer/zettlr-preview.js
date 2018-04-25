@@ -285,7 +285,7 @@ class ZettlrPreview
         });
 
         this._listContainer.on('mouseleave', 'li.directory', (e) => {
-            $(e.target).find('.sorter').detach();
+            this._listContainer.find('.sorter').detach();
         });
 
         return this;

@@ -483,16 +483,12 @@ body {
   background-color: #f0f0f0;
   color: #1cb27e;
   white-space: nowrap;
-  position: sticky;
-  top: -1px;
 }
 #preview ul li.directory .sorter {
-  position: absolute;
-  display: inline-block;
+  display: block;
+  float: right;
   margin: 0;
   padding: 0;
-  right: 0;
-  bottom: 0;
 }
 #preview ul li.directory span.sortTime,
 #preview ul li.directory span.sortName {
@@ -1015,6 +1011,7 @@ body {
   flex-grow: 5;
   text-align: center;
   font-size: 0.72em;
+  line-height: 39px;
 }
 #toolbar .searchbar {
   flex-grow: 5;
