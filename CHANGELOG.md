@@ -4,6 +4,7 @@
 
 - Zettlr saves a file prior to exporting to make sure you export what you see (WYSIWYE).
 - Now Zettlr is more performant especially in documents containing a lot of links. Also, clicking a link _without_ the `ALT`-key pressed will remove the link and make it editable.
+- Small design change: Now the sorters in the preview pane don't alter the size of the directory field.
 
 ## Under the hood
 

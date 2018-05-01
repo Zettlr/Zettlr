@@ -455,6 +455,7 @@ body {
   overflow: hidden;
   line-height: 30px;
   padding-left: 6px;
+  position: relative;
 }
 #preview ul li.snippets {
   height: 89.2px;
@@ -486,9 +487,13 @@ body {
 }
 #preview ul li.directory .sorter {
   display: block;
-  float: right;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  text-align: right;
   margin: 0;
-  padding: 0;
 }
 #preview ul li.directory span.sortTime,
 #preview ul li.directory span.sortName {
@@ -497,6 +502,7 @@ body {
   font-size: 0.72em;
   padding: 0 0.5em;
   display: inline-block;
+  margin-top: 0px;
 }
 #preview ul li.directory span.sortTime:hover,
 #preview ul li.directory span.sortName:hover {
