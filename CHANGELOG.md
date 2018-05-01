@@ -3,11 +3,13 @@
 ## GUI and functionality
 
 - Zettlr saves a file prior to exporting to make sure you export what you see (WYSIWYE).
+- Now Zettlr is more performant especially in documents containing a lot of links. Also, clicking a link _without_ the `ALT`-key pressed will remove the link and make it editable.
 
 ## Under the hood
 
 - Added `export` to the `CLOSING_COMMANDS`.
 - Updates in `package.json`, updated dependencies.
+- Fixed a wrongly placed `continue` in `_renderLinks()` in the `ZettlrEditor` class.
 
 # 0.15.3
 

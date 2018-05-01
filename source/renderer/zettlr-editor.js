@@ -291,7 +291,6 @@ class ZettlrEditor
             }
             if(this._inlineLinks[i] && this._inlineLinks[i].find() === undefined) {
                 // Marker is no longer present, so splice it
-                console.log(`Removing link `, this._inlineLinks[i]);
                 this._inlineLinks.splice(i, 1);
             } else {
                 i++;
@@ -333,13 +332,16 @@ class ZettlrEditor
                 }
 
                 // Has this thing already been rendered?
+                let con = false;
                 let marks = this._cm.doc.findMarks(curFrom, curTo);
-                for(let marx of marks) { // TODO: Ineffective; doesn't prevent re-rendering
+                for(let marx of marks) {
                     if(this._inlineLinks.includes(marx)) {
                         // We've got communism. (Sorry for the REALLY bad pun.)
-                        continue;
+                        con = true;
+                        break;
                     }
                 }
+                if(con) continue; // Skip this match
 
                 let a = document.createElement('a');
                 if(standalone) {
@@ -353,7 +355,6 @@ class ZettlrEditor
                 }
                 a.className = 'cma'; // CodeMirrorAnchors
                 // Apply TextMarker
-                console.log(`Creating marker for url ${url}`);
                 let textMarker = this._cm.doc.markText(
                     curFrom, curTo,
                     {
