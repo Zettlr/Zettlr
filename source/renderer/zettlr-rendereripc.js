@@ -22,7 +22,8 @@ const CLOSING_COMMANDS = [
     'file-new',
     'file-delete',
     'close-root',
-    'force-open'
+    'force-open',
+    'export' // Doesn't force-close, but this way the export is ensured to be the newest version
 ];
 
 /**

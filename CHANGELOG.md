@@ -1,3 +1,14 @@
+# 0.15.4
+
+## GUI and functionality
+
+- Zettlr saves a file prior to exporting to make sure you export what you see (WYSIWYE).
+
+## Under the hood
+
+- Added `export` to the `CLOSING_COMMANDS`.
+- Updates in `package.json`, updated dependencies.
+
 # 0.15.3
 
 ## GUI and functionality

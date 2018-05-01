@@ -289,8 +289,9 @@ class ZettlrEditor
             if(!this._inlineLinks[i]) {
                 continue;
             }
-            if(this._inlineLinks[i].find() === undefined) {
+            if(this._inlineLinks[i] && this._inlineLinks[i].find() === undefined) {
                 // Marker is no longer present, so splice it
+                console.log(`Removing link `, this._inlineLinks[i]);
                 this._inlineLinks.splice(i, 1);
             } else {
                 i++;
@@ -310,7 +311,7 @@ class ZettlrEditor
                 continue;
             }
 
-            linkRE.lastIndex = 0;
+            linkRE.lastIndex = 0; // Necessary because of global flag in RegExp
 
             // Run through all links on this line
             while((match = linkRE.exec(line)) != null) {
@@ -333,7 +334,7 @@ class ZettlrEditor
 
                 // Has this thing already been rendered?
                 let marks = this._cm.doc.findMarks(curFrom, curTo);
-                for(let marx of marks) {
+                for(let marx of marks) { // TODO: Ineffective; doesn't prevent re-rendering
                     if(this._inlineLinks.includes(marx)) {
                         // We've got communism. (Sorry for the REALLY bad pun.)
                         continue;
@@ -352,6 +353,7 @@ class ZettlrEditor
                 }
                 a.className = 'cma'; // CodeMirrorAnchors
                 // Apply TextMarker
+                console.log(`Creating marker for url ${url}`);
                 let textMarker = this._cm.doc.markText(
                     curFrom, curTo,
                     {

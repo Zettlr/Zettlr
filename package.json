@@ -105,9 +105,9 @@
     "dependencies": {
         "chokidar": "^2.0.3",
         "clusterize.js": "^0.18.1",
-        "codemirror": "^5.35.0",
+        "codemirror": "^5.37.0",
         "codemirror-markdown-list-autoindent": "^1.0.1",
-        "command-exists": "^1.2.2",
+        "command-exists": "^1.2.6",
         "jquery": "^3.3.1",
         "sanitize-filename": "^1.6.1",
         "semver": "^5.5.0",
@@ -116,11 +116,11 @@
         "typo-js": "^1.0.3"
     },
     "devDependencies": {
-        "chalk": "^2.4.0",
-        "electron": "^1.8.4",
-        "electron-builder": "^20.8.1",
-        "esdoc": "^1.0.4",
+        "chalk": "^2.4.1",
+        "electron": "^1.8.6",
+        "electron-builder": "^20.11.1",
+        "esdoc": "^1.1.0",
         "esdoc-standard-plugin": "^1.0.0",
-        "less": "^3.0.1"
+        "less": "^3.0.2"
     }
 }
