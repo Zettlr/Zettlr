@@ -42,11 +42,18 @@ body {
   box-sizing: border-box;
 }
 html {
-  font-family: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
   font-size: 1em;
 }
 body {
   overflow: hidden;
+  font-family: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
+}
+body.win32 {
+  font-family: 'Segoe UI', 'Liberation Sans', Arial, sans-serif;
+}
+body.darwin,
+body.linux {
+  font-family: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
 }
 #container.blur {
   /* This is applied when a modal is shown */

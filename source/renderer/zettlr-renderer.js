@@ -62,6 +62,10 @@ class ZettlrRenderer
         // Write translation data into renderer process's global var
         global.i18n         = remote.getGlobal('i18n');
 
+        // Immediately add the operating system class to the body element to
+        // enable the font-family.
+        $('body').addClass(process.platform);
+
         // Init the complete list of objects that we need
         this._ipc            = new ZettlrRendererIPC(this);
         this._directories    = new ZettlrDirectories(this);

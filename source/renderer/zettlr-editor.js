@@ -388,15 +388,8 @@ class ZettlrEditor
     */
     open(file)
     {
-        if(this._currentHash != null) {
-            let rect = this._cm.getWrapperElement().getBoundingClientRect();
-            let topVisibleLine = this._cm.lineAtHeight(rect.top, "window");
-            this._positions[this._currentHash] = {
-                'scroll': topVisibleLine
-            };
-        }
-
         this._cm.setValue(file.content);
+        this._cm.refresh();
         this._currentHash = 'hash' + file.hash;
         this._words = this.getWordCount();
 
@@ -406,10 +399,9 @@ class ZettlrEditor
         // recreated using Cmd/Ctrl+Z.
 
         if(this._positions[this._currentHash] !== undefined) {
-            this.jtl(this._positions[this._currentHash].scroll);
-        } else {
-            // Default to start positions
-            this.jtl(0);
+            // Restore scroll positions
+            this._cm.scrollIntoView(this._positions[this._currentHash].scroll);
+            this._cm.setSelection(this._positions[this._currentHash].cursor);
         }
 
         // Last but not least: If there are any search results currently
@@ -456,6 +448,14 @@ class ZettlrEditor
     */
     close()
     {
+        // Save current positions in case the file is being opened again later.
+        if(this._currentHash != null) {
+            this._positions[this._currentHash] = {
+                'scroll': JSON.parse(JSON.stringify(this._cm.getScrollInfo())),
+                'cursor': JSON.parse(JSON.stringify(this._cm.getCursor()))
+            };
+        }
+
         this._cm.setValue('');
         this._cm.markClean();
         this._cm.clearHistory();

@@ -15,12 +15,24 @@ html, body {
 }
 
 html {
-    font-family: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
     font-size:@font-size-base;
 }
 
 body {
     overflow: hidden;
+    // Fallback for all systems not identified as win32, darwin, or linux.
+    font-family: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
+
+    &.win32 {
+        // Lato on Windows looks bad b/c of very strange font antialiasing,
+        // therefore we have to use Segoe UI, if available.
+        font-family: 'Segoe UI', 'Liberation Sans', Arial, sans-serif;
+    }
+
+    &.darwin, &.linux {
+        // Use built-in Lato for other systems.
+        font-family: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
+    }
 }
 
 #container.blur {

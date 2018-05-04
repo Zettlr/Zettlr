@@ -3,14 +3,17 @@
 ## GUI and functionality
 
 - Zettlr saves a file prior to exporting to make sure you export what you see (WYSIWYE).
-- Now Zettlr is more performant especially in documents containing a lot of links. Also, clicking a link _without_ the `ALT`-key pressed will remove the link and make it editable.
-- Small design change: Now the sorters in the preview pane don't alter the size of the directory field.
+- Now Zettlr is more performant especially in documents containing a lot of links. Also, clicking a link _without_ the `ALT`-key pressed will now remove the link and make it editable, as intended.
+- Design fix: Now the sorters in the preview pane don't alter the size of the directory field.
+- Design change for Windows users: Now Zettlr on Windows uses the system's default font "Segoe UI", because as of strange font-smoothing effects, Lato is barely readable on Windows machines.
+- Fixed a logical error in the script, so now Zettlr will remember where you were in a document and restore that view on every opening of a file (not persistent, i.e. if you close and re-open Zettlr itself, the positions will be reset).
 
 ## Under the hood
 
 - Added `export` to the `CLOSING_COMMANDS`.
 - Updates in `package.json`, updated dependencies.
 - Fixed a wrongly placed `continue` in `_renderLinks()` in the `ZettlrEditor` class.
+- Moved the saving of scrolling info from the `open()` function to the `close()` function in `ZettlrEditor`.
 
 # 0.15.3
 
