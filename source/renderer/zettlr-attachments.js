@@ -57,21 +57,19 @@ class ZettlrAttachments
         // Grab the newest attachments and refresh
         if(!this._renderer.getCurrentDir()) {
             this._container.append($('<p>').text(trans('gui.no_attachments')));
-            return;
+            return; // Don't activate in this instance
         }
 
         if(this._renderer.getCurrentDir().attachments.length == 0) {
             this._container.append($('<p>').text(trans('gui.no_attachments')));
-            return;
+        } else {
+            this._attachments = this._renderer.getCurrentDir().attachments;
+            for(let a of this._attachments) {
+                this._container.append($('<a>').text(a.name).attr('href', '#').attr('data-hash', a.hash));
+            }
         }
 
-        this._attachments = this._renderer.getCurrentDir().attachments;
-
-        for(let a of this._attachments) {
-            this._container.append($('<a>').text(a.name).attr('href', '#').attr('data-hash', a.hash));
-        }
-
-        this._act(); // We have to act now (sorry for the pun, again)
+        this._act(); // Activate both the directory toggle and the
     }
 
     /**

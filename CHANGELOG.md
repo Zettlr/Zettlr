@@ -3,10 +3,12 @@
 ## GUI and functionality
 
 - If you click a link without the `ALT`-key now, the cursor will be automatically placed and you can edit the link exactly where you clicked without having to click the position twice.
+- Fixes to the attachment pane — now opening a directory will always work.
 
 ## Under the hood
 
 - Small changes to the `_renderLinks()`-function in `ZettlrEditor`.
+- Calling `_act()` in `ZettlrAttachments` even if there are no attachments to be able to still open the directory in these cases.
 
 # 0.15.4
 
