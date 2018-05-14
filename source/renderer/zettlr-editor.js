@@ -365,14 +365,18 @@ class ZettlrEditor
                     }
                 );
 
-                a.onclick = function(e) {
+                a.onclick = (e) => {
                     // Only open ALT-clicks (Doesn't select and also is not used
                     // elsewhere)
                     if(e.altKey) {
                         e.preventDefault();
                         require('electron').shell.openExternal(url);
                     } else {
+                        // Clear the textmarker and set the cursor to where the
+                        // user has clicked the link.
                         textMarker.clear();
+                        this._cm.setCursor(this._cm.coordsChar({ 'left': e.clientX, 'top': e.clientY }));
+                        this._cm.focus();
                     }
                 };
 

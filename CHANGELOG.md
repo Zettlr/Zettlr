@@ -1,3 +1,13 @@
+# 0.15.5
+
+## GUI and functionality
+
+- If you click a link without the `ALT`-key now, the cursor will be automatically placed and you can edit the link exactly where you clicked without having to click the position twice.
+
+## Under the hood
+
+- Small changes to the `_renderLinks()`-function in `ZettlrEditor`.
+
 # 0.15.4
 
 ## GUI and functionality
