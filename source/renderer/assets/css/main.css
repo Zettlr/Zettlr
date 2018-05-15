@@ -1128,7 +1128,7 @@ body.linux {
   border-radius: 4px;
   box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.5);
   border-radius: 2px;
-  max-width: 200px;
+  max-width: 250px;
   max-height: 600px;
   overflow-y: auto;
   overflow-x: hidden;

@@ -5,11 +5,14 @@
 - If you click a link without the `ALT`-key now, the cursor will be automatically placed and you can edit the link exactly where you clicked without having to click the position twice.
 - Fixes to the attachment pane — now opening a directory will always work.
 - Now the vertical scrollbar in the editor uses the default cursor, not the text cursor.
+- Fixes to the generation and placement of popups. Now a bigger margin to the edges of the window is ensured, and the popups are now a little bit wider to reduce the possibilities of ugly line-breaks.
 
 ## Under the hood
 
 - Small changes to the `_renderLinks()`-function in `ZettlrEditor`.
 - Calling `_act()` in `ZettlrAttachments` even if there are no attachments to be able to still open the directory in these cases.
+- Changes to `_place()` in `ZettlrPopup`
+- Design-fixes
 
 # 0.15.4
 

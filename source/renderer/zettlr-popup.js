@@ -102,8 +102,6 @@ class ZettlrPopup
         this._x = this._elem.offset().left + this._elem.outerWidth()/2;
         this._y = this._elem.offset().top + this._elem.outerHeight();
 
-        let offsetY = this._popup.outerHeight() + this._y + 5; // 5px for arrow
-        let offsetX = this._popup.outerWidth() + this._x + 5;
         let height = this._popup.outerHeight();
         let width = this._popup.outerWidth();
 
@@ -115,17 +113,16 @@ class ZettlrPopup
 
         // 10px: arrow plus the safety-margin
         if(bottom > height + 10) {
+            console.log('Placing popup below element.');
             // Below element
             this._arrow.addClass('up');
-            this._popup.css('top', (this._y + 5) + 'px');
-            if(offsetX > window.innerWidth-5) {
-                this._popup.css('left', (window.innerWidth - width - 5) + 'px'); // 5px margin to document
+            this._popup.css('top', (this._y + 5) + 'px'); // 5px margin for arrow
+            if((this._x + width/2) > (window.innerWidth-10)) { // 10px margin to document
+                this._popup.css('left', (window.innerWidth - width - 10) + 'px'); // 10px margin to document
+            } else if(this._x - width/2 < 10) { // 10px margin to document
+                this._popup.css('left', '10px'); // 10px margin to document
             } else {
-                if(this._x - width/2 < 0) {
-                    this._popup.css('left', '5px');
-                } else {
-                    this._popup.css('left', (this._x - width/2) + 'px');
-                }
+                this._popup.css('left', (this._x - width/2) + 'px'); // Place centered under element
             }
             this._arrow.css('top', (top + this._elem.outerHeight()) + 'px');
             this._arrow.css('left', (left + this._elem.outerWidth()/2 - this._arrow.outerWidth()/2) + 'px');
@@ -178,10 +175,10 @@ class ZettlrPopup
             }
         }
 
+        this._modal.detach();
         this._arrow.detach();
         this._popup.animate({'opacity': '0'}, 200, 'swing', () => {
             this._popup.detach();
-            this._modal.detach();
         });
     }
 }
