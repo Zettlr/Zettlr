@@ -1,3 +1,6 @@
+.CodeMirror-vscrollbar {
+  cursor: default;
+}
 .CodeMirror {
   line-height: 1.4375;
   /* Make the formatting characters nearly invisible */

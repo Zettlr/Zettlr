@@ -4,6 +4,7 @@
 
 - If you click a link without the `ALT`-key now, the cursor will be automatically placed and you can edit the link exactly where you clicked without having to click the position twice.
 - Fixes to the attachment pane — now opening a directory will always work.
+- Now the vertical scrollbar in the editor uses the default cursor, not the text cursor.
 
 ## Under the hood
 

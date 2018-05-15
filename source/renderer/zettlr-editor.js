@@ -99,9 +99,6 @@ class ZettlrEditor
         });
 
         this._cm.on('change', (cm, changeObj) => {
-            // The contents have been changed — so fire an event to main process to
-            // set the window modified
-
             // Update wordcount
             this._renderer.updateWordCount(this.getWordCount());
 

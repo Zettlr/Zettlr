@@ -50,16 +50,12 @@ class ZettlrStatsView
             // hasOwnProperty only returns "true" if the prop is not a default
             // prop that every object has.
             if(wcount.hasOwnProperty(day)) {
-                // TODO: As soon as the sum exceeds the Peta-amount (10^15),
-                // we'll run into trouble because it's then close to
-                // Number.MAX_SAFE_INTEGER. In this case only compute the last
-                // week.
                 allwords.push(wcount[day]);
             }
         }
         allwords.reverse(); // We only want the last 30 days.
 
-        // Now summarize the last 30 days. Should never exceed 100k. (Still, let's check it)
+        // Now summarize the last 30 days. Should never exceed 100k.
         let sum = 0;
         for(let i = 0; i < 30; i++) {
             sum += allwords[i];
