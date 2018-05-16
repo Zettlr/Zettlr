@@ -26,6 +26,7 @@ const ZettlrAttachments = require('../zettlr-attachments.js');
 
 const Typo              = require('typo-js');
 const remote            = require('electron').remote;
+const path              = require('path');
 
 const {trans}           = require('../../common/lang/i18n.js');
 
@@ -526,11 +527,17 @@ class ZettlrRenderer
     // This class only acts as a pass-through
 
     /**
-     * Pass-through function from ZettlrToolbar to ZettlrPreview.
+     * This function is called by ZettlrToolbar. The term gets passed on to
+     * ZettlrPreview, but also a force-open event is sent to main, in case there
+     * is a file that completely matches the file name.
      * @param  {String} term The term to be searched for.
      * @return {void}      Nothing to return.
      */
-    beginSearch(term) { this._preview.beginSearch(term); }
+    beginSearch(term)
+    {
+        this._ipc.send('force-open', term);
+        this._preview.beginSearch(term);
+    }
 
     /**
      * Initiates an auto-search that either directly opens a file (forceOpen=true)
@@ -869,6 +876,32 @@ class ZettlrRenderer
      * @return {ZettlrStatsView} The view instance
      */
     getStatsView() { return this._stats; }
+
+    /**
+     * Returns a one-dimensional array of all files in the current directory and
+     * its subdirectories. The extensions are omitted!
+     * @param  {Object} [obj=this.getCurrentDir()] The object to be searched in.
+     * @param  {Array}  [arr=[]]                   The array containing file names
+     * @return {Array}                            The array containing all file names
+     */
+    getFilesInDirectory(obj = this.getCurrentDir(), arr = [])
+    {
+        if(!obj) return arr;
+
+        if(obj.type == 'directory') {
+            for(let child of obj.children) {
+                if(child.type == 'file') {
+                    arr.push(path.basename(child.name, path.extname(child.name)));
+                } else if(child.type == 'directory') {
+                    arr = this.getFilesInDirectory(child, arr);
+                }
+            }
+        } else if(obj.type == 'file') {
+            arr.push(path.basename(obj.name, path.extname(child.name)));
+        }
+
+        return arr;
+    }
 
     /**
      * Sends a command to Main (only used in ZettlrPreview for searching)

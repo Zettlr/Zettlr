@@ -36,6 +36,10 @@ class ZettlrToolbar
         this._searchbar.attr('placeholder', trans('gui.find_placeholder'));
         this._fileInfo = this._div.find('.file-info');
 
+        // Searchbar autocomplete variables
+        this._autocomplete = [];
+        this._oldval = '';
+
         this._act();
     }
 
@@ -49,19 +53,42 @@ class ZettlrToolbar
         this._searchbar.on('keyup', (e) => {
             if(e.which == 27) { // ESC
                 this._searchbar.blur();
+                this._searchbar.val('');
                 this._renderer.exitSearch();
             } else if(e.which == 13) { // RETURN
-                this._renderer.beginSearch(this._searchbar.val().toLowerCase());
+                this._renderer.beginSearch(this._searchbar.val());
+                this._searchbar.select(); // Select everything in the area.
+            } else {
+                if(e.which == 8 || e.which == 46) return; // DEL or backspace has been pressed
+                if((this._searchbar.val() == '') || (this._searchbar.val() == this._oldval)) return; // Content has not changed
+                // Any other key has been pressed
+                this._oldval = this._searchbar.val();
+                for(let name of this._autocomplete) {
+                    if(name.substr(0, this._oldval.length) == this._oldval) {
+                        this._searchbar.val(name).select().focus();
+                        let e = this._searchbar[0]; // Retrieve actual DOM element
+                        if (e.setSelectionRange) { e.setSelectionRange(this._oldval.length, this._searchbar.val().length); }
+                        break;
+                    }
+                }
+                this._oldval = this._searchbar.val(); // Now this is the old value
             }
         });
 
         this._div.find('.end-search').on('click', (e) => {
             this._searchbar.blur();
+            this._searchbar.val('');
             this._renderer.exitSearch();
         })
 
-        this._searchbar.on('focus', function(e) {
-            $(this).select();
+        this._searchbar.on('focus', (e) => {
+            this._searchbar.select();
+            this._autocomplete = this._renderer.getFilesInDirectory();
+        });
+
+        this._searchbar.on('blur', (e) => {
+            this._autocomplete = []; // Reset auto completion array
+            this._oldval = '';
         });
 
         this._fileInfo.click((e) => {

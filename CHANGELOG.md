@@ -2,6 +2,8 @@
 
 ## GUI and functionality
 
+- Additions to the search functionality. If you begin typing in the global search field, Zettlr will autocomplete your typings with exact name matches. This way you can directly open respective files from your searchbar by simply confirming the file to be opened with the `RETURN`-key.
+- Zettlr will now automatically try to force open a file when you commence a global search, if there is a file containing the typed name somewhere in the system.
 - If you click a link without the `ALT`-key now, the cursor will be automatically placed and you can edit the link exactly where you clicked without having to click the position twice.
 - Fixes to the attachment pane — now opening a directory will always work.
 - Now the vertical scrollbar in the editor uses the default cursor, not the text cursor.
@@ -13,6 +15,7 @@
 - Small changes to the `_renderLinks()`-function in `ZettlrEditor`.
 - Calling `_act()` in `ZettlrAttachments` even if there are no attachments to be able to still open the directory in these cases.
 - Changes to `_place()` in `ZettlrPopup`.
+- Changes to the `ZettlrToolbar` and `ZettlrRenderer` classes.
 - Design-fixes.
 
 # 0.15.4
