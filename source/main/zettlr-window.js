@@ -169,15 +169,6 @@ class ZettlrWindow
         }
 
         return this;
-
-        // DEPRECATED CODE
-        // Indicate in title (for all OS)
-        let title = this._win.getTitle();
-        if(title.substr(0, 2) != "* ") {
-            this._win.setTitle('* ' + title);
-        }
-
-        return this;
     }
 
     /**
@@ -189,15 +180,6 @@ class ZettlrWindow
         // Clear the modified flag on the window if the file is edited (macOS only)
         if(this._win != null) {
             this._win.setDocumentEdited(false);
-        }
-
-        return this;
-
-        // DEPRECATED CODE
-        // Indicate in title
-        let title = this._win.getTitle();
-        if(title.substr(0, 2) == "* ") {
-            this._win.setTitle(title.substr(2));
         }
 
         return this;
@@ -314,6 +296,10 @@ class ZettlrWindow
      */
     prompt(options)
     {
+        if(typeof options == 'string') {
+            options = { 'message': options };
+        }
+
         dialog.showMessageBox(this._win, {
             type: options.type || 'info',
             buttons: [ 'Ok' ],
@@ -339,6 +325,8 @@ class ZettlrWindow
             title: trans('system.error.remove_title'),
             message: trans('system.error.remove_message', obj.name)
         });
+
+        // 0 = Ok, 1 = Cancel
 
         return (ret == 0);
     }

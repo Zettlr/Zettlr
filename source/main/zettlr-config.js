@@ -54,6 +54,8 @@ class ZettlrConfig
             this._additional_paths = require('../common/data.json').additional_paths.linux;
         } else if(process.platform === 'darwin') {
             this._additional_paths = require('../common/data.json').additional_paths.macos;
+        } else {
+            this._additional_paths = []; // Fallback: No additional paths
         }
 
         // Supported Spellcheck languages
@@ -89,7 +91,6 @@ class ZettlrConfig
                 ".jpeg",
                 ".gif",
                 ".tiff"
-
             ],
             "darkTheme" : false,
             "snippets"  : true,
@@ -147,14 +148,6 @@ class ZettlrConfig
 
         this.update(readConfig);
 
-        // Check whether the project dir still exists, if not default to documents
-        try {
-            let stats = fs.lstatSync(this.config.projectDir);
-        } catch(e) {
-            // Doesn't exist, so revert to default
-            this.config.projectDir = app.getPath('documents');
-        }
-
         return this;
     }
 
@@ -182,19 +175,21 @@ class ZettlrConfig
     {
         let delim = (process.platform === 'win32') ? ';' : ':' ;
 
-        // First integrate the additional paths that we need.
-        let nPATH = process.env.PATH.split(delim);
+        if(this._additional_paths.length > 0) {
+            // First integrate the additional paths that we need.
+            let nPATH = process.env.PATH.split(delim);
 
-        for(let x of this._additional_paths) {
-            // Check for both trailing and non-trailing slashes (to not add any
-            // directory more than once)
-            let y = (x[x.length-1] === '/') ? x.substr(0, x.length-1) : x + '/';
-            if(!nPATH.includes(x) && !nPATH.includes(y)) {
-                nPATH.push(x);
+            for(let x of this._additional_paths) {
+                // Check for both trailing and non-trailing slashes (to not add any
+                // directory more than once)
+                let y = (x[x.length-1] === '/') ? x.substr(0, x.length-1) : x + '/';
+                if(!nPATH.includes(x) && !nPATH.includes(y)) {
+                    nPATH.push(x);
+                }
             }
-        }
 
-        process.env.PATH = nPATH.join(delim);
+            process.env.PATH = nPATH.join(delim);
+        }
 
         // Also add to PATH pdflatex and pandoc-directories if these variables
         // contain actual dirs.
@@ -298,6 +293,22 @@ class ZettlrConfig
      */
     get(attr)
     {
+        if(attr.indexOf('.') > 0) {
+            // A nested argument was requested, so iterate until we find it
+            let nested = attr.split('.');
+            let cfg = this.config;
+            for(let arg of nested) {
+                if(cfg.hasOwnProperty(arg)) {
+                    cfg = cfg[arg];
+                } else {
+                    return null; // The config option must match exactly
+                }
+            }
+
+            return cfg; // Now not the requested config option.
+        }
+
+        // Plain attribute requested
         if(this.config.hasOwnProperty(attr)){
             return this.config[attr];
         } else {
@@ -381,10 +392,17 @@ class ZettlrConfig
      * Sets a configuration option
      * @param {String} option The option to be set
      * @param {Mixed} value  The value of the config variable.
+     * @return {Boolean} Whether or not the option was successfully set.
      */
     set(option, value)
     {
-        this.config[option] = value;
+        // Don't add non-existent options
+        if(this.config.hasOwnProperty(option)) {
+            this.config[option] = value;
+            return true;
+        }
+
+        return false;
     }
 
     /**

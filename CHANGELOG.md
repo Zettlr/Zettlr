@@ -17,6 +17,11 @@
 - Changes to `_place()` in `ZettlrPopup`.
 - Changes to the `ZettlrToolbar` and `ZettlrRenderer` classes.
 - Design-fixes.
+- Removed an unnecessary check for the now non-existent `projectDir` option in the configuration constructor.
+- Added a security check for additional `PATH`-variables in `ZettlrConfig`.
+- Additional security-check in `ZettlrConfig`s `set()`-function to only add valid options. Now `set()` will return either `true` or `false` depending on whether the option was successfully set.
+- Removed deprecated code from `ZettlrWindow` class.
+- Added a security check in `ZettlrWindow`s `prompt()` function.
 
 # 0.15.4
 
