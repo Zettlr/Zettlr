@@ -469,7 +469,7 @@ body.linux {
   padding: 0.4em;
   line-height: inherit;
 }
-#preview ul li:hover {
+#preview ul li.file:hover {
   background-color: #f0f0f0 !important;
 }
 #preview ul li strong {
@@ -573,7 +573,7 @@ body.linux {
 #preview.dark ul li small {
   color: #dcdcdc;
 }
-#preview.dark ul li:hover {
+#preview.dark ul li.file:hover {
   background-color: #787878 !important;
 }
 #preview.dark ul li.directory {
