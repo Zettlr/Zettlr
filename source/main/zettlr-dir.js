@@ -13,13 +13,15 @@
  * END HEADER
  */
 
-const path              = require('path');
-const fs                = require('fs');
-const sanitize          = require('sanitize-filename');
-const ZettlrFile        = require('./zettlr-file.js');
-const ZettlrAttachment  = require('./zettlr-attachment.js');
-const {shell}           = require('electron');
-const {trans}           = require('../common/lang/i18n.js');
+const path                   = require('path');
+const fs                     = require('fs');
+const sanitize               = require('sanitize-filename');
+const ZettlrFile             = require('./zettlr-file.js');
+const ZettlrAttachment       = require('./zettlr-attachment.js');
+const ZettlrFilter           = require('./zettlr-filter.js');
+const ZettlrVirtualDirectory = require('./zettlr-virtual-directory.js');
+const {shell}                = require('electron');
+const {trans}                = require('../common/lang/i18n.js');
 
 // Include helpers
 const { hash, sort, generateName,
@@ -54,19 +56,17 @@ class ZettlrDir
             throw new DirectoryError('Error on ZettlrDir instantiation: dir cannot be empty!');
         }
 
-        this.path           = "";
-        this.name           = "";
-        this.hash           = null;
-        this.children       = [];
-        this.attachments    = [];
-        this.type           = 'directory';
-        this.parent         = parent;
-        this.sorting        = 'name-up';
-
         // Prepopulate
         this.path = dir;
         this.name = path.basename(this.path);
         this.hash = hash(this.path);
+        this.children       = [];
+        this.attachments    = [];
+        this.filters        = new ZettlrFilter(this);
+        this.virtualDirs    = new ZettlrVirtualDirectory(this);
+        this.type           = 'directory';
+        this.parent         = parent;
+        this.sorting        = 'name-up';
 
         // The directory might've been just been created.
         try {

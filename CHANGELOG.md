@@ -22,6 +22,9 @@
 - Additional security-check in `ZettlrConfig`s `set()`-function to only add valid options. Now `set()` will return either `true` or `false` depending on whether the option was successfully set.
 - Removed deprecated code from `ZettlrWindow` class.
 - Added a security check in `ZettlrWindow`s `prompt()` function.
+- Removed some unnecessary code from `ZettlrDir` class.
+- Small changes to `ZettlrDir` constructor.
+- Began first work on `ZettlrFilter` and `ZettlrVirtualDirectory`.
 
 # 0.15.4
 
