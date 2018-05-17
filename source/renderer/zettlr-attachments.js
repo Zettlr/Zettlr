@@ -69,7 +69,7 @@ class ZettlrAttachments
             }
         }
 
-        this._act(); // Activate both the directory toggle and the
+        this._act(); // Activate both the directory toggle and the link
     }
 
     /**

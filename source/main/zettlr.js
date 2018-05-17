@@ -115,6 +115,8 @@ class Zettlr
 
             // flush all changes so they aren't processed again next cycle
             this.watchdog.flush();
+            // Send a paths update to the renderer to reflect the changes.
+            this.ipc.send('paths-update', this.getPaths());
         }
 
         setTimeout(() => { this.poll(); }, POLL_TIME);

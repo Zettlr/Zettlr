@@ -9,6 +9,7 @@
 - Now the vertical scrollbar in the editor uses the default cursor, not the text cursor.
 - Fixes to the generation and placement of popups. Now a bigger margin to the edges of the window is ensured, and the popups are now a little bit wider to reduce the possibilities of ugly line-breaks.
 - Small fix to the color of directory ribbons in dark mode.
+- The attachment pane now refreshes on new attachments without the need to switch to another directory and then switch back. Also, after every watchdog run the renderer receives a new list of objects now in memory.
 
 ## Under the hood
 
@@ -25,6 +26,7 @@
 - Removed some unnecessary code from `ZettlrDir` class.
 - Small changes to `ZettlrDir` constructor.
 - Began first work on `ZettlrFilter` and `ZettlrVirtualDirectory`.
+- Changes to `Zettlr` and `ZettlrRenderer` classes.
 
 # 0.15.4
 

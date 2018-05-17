@@ -358,6 +358,7 @@ class ZettlrRenderer
         // Trigger a refresh in directories and preview and attachment pane
         this._directories.refresh();
         this._preview.refresh();
+        this._attachments.refresh();
     }
 
     // SPELLCHECKER FUNCTIONS
