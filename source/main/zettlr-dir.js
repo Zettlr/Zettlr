@@ -18,8 +18,8 @@ const fs                     = require('fs');
 const sanitize               = require('sanitize-filename');
 const ZettlrFile             = require('./zettlr-file.js');
 const ZettlrAttachment       = require('./zettlr-attachment.js');
-const ZettlrFilter           = require('./zettlr-filter.js');
-const ZettlrVirtualDirectory = require('./zettlr-virtual-directory.js');
+// const ZettlrFilter           = require('./zettlr-filter.js');
+// const ZettlrVirtualDirectory = require('./zettlr-virtual-directory.js');
 const {shell}                = require('electron');
 const {trans}                = require('../common/lang/i18n.js');
 
@@ -62,8 +62,8 @@ class ZettlrDir
         this.hash = hash(this.path);
         this.children       = [];
         this.attachments    = [];
-        this.filters        = new ZettlrFilter(this);
-        this.virtualDirs    = new ZettlrVirtualDirectory(this);
+        this.filters        = null;// new ZettlrFilter(this);
+        this.virtualDirs    = null;// new ZettlrVirtualDirectory(this);
         this.type           = 'directory';
         this.parent         = parent;
         this.sorting        = 'name-up';
