@@ -7,7 +7,7 @@
 * Maintainer:      Hendrik Erz
 * License:         GNU GPL v3
 *
-* Description:     This class controls and initialized the CodeMirror editor.
+* Description:     This class controls and initializes the CodeMirror editor.
 *
 * END HEADER
 */
@@ -17,7 +17,7 @@ const path = require('path');
 // First codemirror addons
 require('codemirror/addon/mode/overlay');
 require('codemirror/addon/edit/continuelist');
-require('codemirror/addon/edit/indentlist');
+require('./assets/codemirror/indentlist.js');
 require('codemirror/addon/search/search');
 require('codemirror/addon/search/searchcursor');
 require('codemirror/addon/search/jump-to-line');

@@ -251,19 +251,9 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codemirror-markdown-list-autoindent@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/codemirror-markdown-list-autoindent/-/codemirror-markdown-list-autoindent-1.0.1.tgz#712ec4a9cc636f5070d40253f74fa353a56f0092"
-  dependencies:
-    codemirror "^5.x"
-
 codemirror@^5.35.0:
   version "5.37.0"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.37.0.tgz#c349b584e158f590277f26d37c2469a6bc538036"
-
-codemirror@^5.x:
-  version "5.36.0"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.36.0.tgz#1172ad9dc298056c06e0b34e5ccd23825ca15b40"
 
 collection-visit@^1.0.0:
   version "1.0.0"
