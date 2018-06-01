@@ -14,6 +14,7 @@
  */
 
 const FileView = require('./file-view.js');
+const VirtualDirView = require('./virtual-dir-view.js');
 
 function TreeError(msg) {
     this.name = 'TreeView Error';
@@ -42,6 +43,12 @@ class TreeView
             // It's a file, so silently replace this TreeView object
             // with a FileView (so sneaky!)
             return new FileView(parent, paths, isRoot);
+        }
+
+        if(paths.type === 'virtualdir') {
+            // It's a virtual directory so do the same as with files -> silently
+            // return another kind of object
+            return new VirtualDirView(parent, paths);
         }
 
         this._parent = parent;

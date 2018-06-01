@@ -1,3 +1,15 @@
+# 0.15.6
+
+## GUI and functionality
+
+(nothing here)
+
+## Under the hood
+
+- Removed an excess `console.log`.
+- Implemented `indentlist` plugin directly in Zettlr core.
+- Continued work on virtual directories.
+
 # 0.15.5
 
 ## GUI and functionality

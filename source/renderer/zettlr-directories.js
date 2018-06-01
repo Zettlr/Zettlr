@@ -2,7 +2,7 @@
 * @ignore
 * BEGIN HEADER
 *
-* Contains:        ZettlrDialog class
+* Contains:        ZettlrDirectories class
 * CVM-Role:        Model
 * Maintainer:      Hendrik Erz
 * License:         GNU GPL v3

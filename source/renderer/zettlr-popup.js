@@ -113,7 +113,6 @@ class ZettlrPopup
 
         // 10px: arrow plus the safety-margin
         if(bottom > height + 10) {
-            console.log('Placing popup below element.');
             // Below element
             this._arrow.addClass('up');
             this._popup.css('top', (this._y + 5) + 'px'); // 5px margin for arrow
