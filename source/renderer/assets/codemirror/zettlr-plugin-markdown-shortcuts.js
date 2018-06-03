@@ -29,16 +29,30 @@ const {clipboard} = require('electron');
      * @param  {String} pre  The formatting mark before the element
      * @param  {String} post The formatting mark behind the element
      */
-    function markdownInline(cm, pre, post) {
+    function markdownInline(cm, pre, post, tokentype = undefined) {
         // Is something selected?
         if(!cm.doc.somethingSelected()) {
-            // No, so just insert something at cursor -> ****
-            // Replace the selection
-            cm.doc.replaceSelection(pre + '' + post, 'start');
-            // Move cursor two chars forward (to the middle of the insertion)
-            let cur = cm.doc.getCursor();
-            cur.ch = cur.ch + pre.length;
-            cm.doc.setCursor(cur);
+            // TODO: Check token type state at the cursor position to leave the
+            // mode if already in the mode.
+            let currentToken = cm.getTokenAt(cm.getCursor()).type;
+            if(currentToken != null && (currentToken.indexOf(tokentype) > -1)) { // -- the tokentypes can be multiple (spell-error, e.g.)
+                // We are, indeed, currently in this token. So let's check *how*
+                // we are going to leave the state.
+                let to = { 'line': cm.getCursor().line, 'ch': cm.getCursor().ch + post.length };
+                if(cm.getRange(cm.getCursor(), to) == post) {
+                    cm.setCursor(to);
+                } else {
+                    // No sign in sight -> insert it. Cursor will automatically move forward
+                    cm.replaceSelection(post);
+                }
+            } else {
+                // Not in the mode -> simply do the standard.
+                cm.doc.replaceSelection(pre + '' + post, 'start');
+                // Move cursor forward (to the middle of the insertion)
+                let cur = cm.doc.getCursor();
+                cur.ch = cur.ch + pre.length;
+                cm.doc.setCursor(cur);
+            }
             cm.refresh();
             return;
         }
@@ -174,19 +188,19 @@ const {clipboard} = require('electron');
     // Bold-characters
     CodeMirror.commands.markdownBold = function(cm) {
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
-        markdownInline(cm, '**', '**');
+        markdownInline(cm, '**', '**', "strong");
     };
 
     // The same for italic
     CodeMirror.commands.markdownItalic = function(cm) {
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
-        markdownInline(cm, '_', '_');
+        markdownInline(cm, '_', '_', "em");
     };
 
     // Code blocks
     CodeMirror.commands.markdownCode = function(cm) {
         if (cm.getOption("disableInput")) return CodeMirror.Pass;
-        markdownInline(cm, '`', '`');
+        markdownInline(cm, '`', '`', "comment");
     };
 
     // Headings 1-6

@@ -9,6 +9,11 @@
  *
  * Description:     Creates a virtual directory (for manually sorting files)
  *
+ *                  How it works:
+ *                  1. Always holds a pointer to its "real" directory
+ *                  2. On every read and write, the realDirectories are refreshed
+ *                  3. Add and remove cause writes, read only once (constructor)
+ *
  * END HEADER
  */
 
@@ -26,6 +31,8 @@ class ZettlrVirtualDirectory
         this._file = path.join(this._directory.getPath(), '.ztr-virtual-dir');
         this._virtualDirectories = [];
         this._realDirectories = []; // Representation of _virtualDirectories containing links to the actual ZettlrFileObjects
+
+        this._read(); // Read initially.
     }
 
     /**

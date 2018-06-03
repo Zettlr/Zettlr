@@ -543,6 +543,11 @@ class ZettlrDir
      */
     contains(obj)
     {
+        if(!obj) {
+            // In rare occasions, it can happen that there is no object given
+            return false;
+        }
+
         if(typeof obj === 'number') {
             // Same problem as in the find-methods. Only here I don't care anymore.
             // Simply assume a hash. Nothing else could be it.

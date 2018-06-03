@@ -2,13 +2,16 @@
 
 ## GUI and functionality
 
-(nothing here)
+- Fixed a bug that threw an error every time you tried to delete a directory with no file open currently.
+- Fixes to the inline commands. Now, when you press `Cmd/Ctrl+I` or `Cmd/Ctrl+B` a second time after you finished writing your strong/emphasised text, Zettlr will actually "exit" the bold/italic markings and not try to insert them a second time. (_Note that it will still insert the end-markings if the characters directly after the current cursor position are not the end-markings_).
 
 ## Under the hood
 
 - Removed an excess `console.log`.
 - Implemented `indentlist` plugin directly in Zettlr core.
 - Continued work on virtual directories.
+- Small changes to `Zettlr` and `ZettlrDir` classes.
+- Small changes to the markdown shortcut plugin.
 
 # 0.15.5
 

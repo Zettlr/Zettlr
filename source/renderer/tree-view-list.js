@@ -45,12 +45,6 @@ class TreeView
             return new FileView(parent, paths, isRoot);
         }
 
-        if(paths.type === 'virtualdir') {
-            // It's a virtual directory so do the same as with files -> silently
-            // return another kind of object
-            return new VirtualDirView(parent, paths);
-        }
-
         this._parent = parent;
         this._paths = paths; // Pointer to this dir's base object
         this._root = isRoot;

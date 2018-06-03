@@ -476,8 +476,8 @@ class Zettlr
             return;
         }
 
-        // Close the current file
-        if(dir.contains(this.getCurrentFile())) {
+        // Close the current file, if there is one open
+        if((this.getCurrentFile() != null) && dir.contains(this.getCurrentFile())) {
             this.closeFile();
         }
 
