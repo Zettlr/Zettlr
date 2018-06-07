@@ -301,7 +301,7 @@ class ZettlrFile
         let newpath = path.join(path.dirname(this.path), this.name);
 
         // If the watchdog is given, ignore the generated events pre-emptively
-        if(typeof watchdog === 'object' && watchdog.hasOwnProperty('ignoreNext')) {
+        if(watchdog != null) {
             watchdog.ignoreNext('unlink', this.path);
             watchdog.ignoreNext('add', newpath);
         }

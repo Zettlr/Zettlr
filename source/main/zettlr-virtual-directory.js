@@ -19,6 +19,7 @@
 
  const path = require('path');
  const fs   = require('fs');
+ const {hash} = require('../common/zettlr-helpers.js');
 
 /**
  * Manages virtual directories containing manually added files.
@@ -70,6 +71,57 @@ class ZettlrVirtualDirectory
     }
 
     /**
+     * Removes either an array of hashes from virtual directory with name or the
+     * whole directory, if hashes is an empty array.
+     * @param  {String} name        The virtual directory.
+     * @param  {Array}  [hashes=[]] An optional array of hashes from files to remove.
+     * @return {void}               Doesn't return anything.
+     */
+    remove(name, hashes = [])
+    {
+        let dir = this._virtualDirectories.find((elem) => { return (elem.name.toLowerCase() == name.toLowerCase()); });
+
+        if(!dir) {
+            return; // Doesn't exist, so fail gracefully
+        }
+
+        if(hashes.length == 0) {
+            // Remove the virtual directory
+            this._virtualDirectories.splice(this._virtualDirectories.indexOf(dir), 1);
+        } else {
+            // Remove all given hashes
+            for(let h of hashes) {
+                let file = dir.find((elem) => { return (elem.hash == h); });
+                if(file) {
+                    dir.splice(dir.indexOf(file), 1);
+                }
+            }
+        }
+
+        // Immediately reflect changes on disk
+        this._write();
+    }
+
+    /**
+     * Returns a "real" virtual directory if the hash fits any existing virtual dir.
+     * @param  {Object} obj An object that either has path or hash as argument
+     * @return {Mixed}     Either a mock directory object or null
+     */
+    find(obj)
+    {
+        // obj must have property hash
+        if(obj.hasOwnProperty('hash')) {
+            for(let dir of this._realDirectories) {
+                if(dir.hash == obj.hash) {
+                    return dir;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Read filters from our filter file (or return false if no filters were found)
      * @return {Boolean} True, if filters have been loaded and false if not.
      */
@@ -82,7 +134,7 @@ class ZettlrVirtualDirectory
             return false;
         }
 
-        // We've got filters!
+        // We've got virtual directories!
         this._virtualDirectories = JSON.parse(fs.readFileSync(this._file, { encoding: "utf8" }));
         this._refresh(); // Initial refresh
         return true;
@@ -90,14 +142,19 @@ class ZettlrVirtualDirectory
 
     _write()
     {
-        // TODO: We need to ensure the file is also hidden on Windows. But writing
-        // with "w" will result in EPERM, we need to use r+ for this.
-        // Maybe use this: https://nodejs.org/api/fs.html#fs_fs_ftruncatesync_fd_len
-        // Truncates a file using its descriptor
-        //
-        // Update June 1st: I don't think we need to ensure the bullshitty attribute
-        // thing Windows does.
-        fs.writeFileSync(this._file, JSON.stringify(this._virtualDirectories), { encoding: "utf8", flag: "w" });
+        if(this._virtualDirectories.length == 0) {
+            // No virtual dirs -> remove file
+            fs.unlinkSync(this._file);
+        } else {
+            // TODO: We need to ensure the file is also hidden on Windows. But writing
+            // with "w" will result in EPERM, we need to use r+ for this.
+            // Maybe use this: https://nodejs.org/api/fs.html#fs_fs_ftruncatesync_fd_len
+            // Truncates a file using its descriptor
+            //
+            // Update June 1st: I don't think we need to ensure the bullshitty attribute
+            // thing Windows does.
+            fs.writeFileSync(this._file, JSON.stringify(this._virtualDirectories), { encoding: "utf8", flag: "w" });
+        }
         this._refresh();
     }
 
@@ -110,14 +167,15 @@ class ZettlrVirtualDirectory
 
         for(let dir of this._virtualDirectories)
         {
-            let real = { 'name': dir.name, 'files': []};
+            // Hash is needed because the directory itself mimicks a directory for the renderer
+            let real = { 'name': dir.name, 'children': [], 'hash': hash(dir.name), 'type': 'virtualdir' };
             for(let file of dir.files) {
                 // 1. Find file
                 // 2. Add file
                 // 3. Add complete dir.
                 let file = this._directory.findFile({'path': this._makeAbsolute(file)});
                 if(file) {
-                    real.files.push(file);
+                    real.children.push(file);
                 }
             }
             this._realDirectories.push(real);

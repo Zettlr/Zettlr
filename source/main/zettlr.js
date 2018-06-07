@@ -645,7 +645,7 @@ class Zettlr
         } else {
             // Non-open file should be renamed.
             file = this.findFile({'hash': arg.hash});
-            file.rename(arg.name); // Done.
+            file.rename(arg.name, this.getWatchdog()); // Done.
         }
 
         this.ipc.send('paths-update', this.getPaths());

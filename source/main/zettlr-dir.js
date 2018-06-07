@@ -19,7 +19,7 @@ const sanitize               = require('sanitize-filename');
 const ZettlrFile             = require('./zettlr-file.js');
 const ZettlrAttachment       = require('./zettlr-attachment.js');
 // const ZettlrFilter           = require('./zettlr-filter.js');
-// const ZettlrVirtualDirectory = require('./zettlr-virtual-directory.js');
+const ZettlrVirtualDirectory = require('./zettlr-virtual-directory.js');
 const {shell}                = require('electron');
 const {trans}                = require('../common/lang/i18n.js');
 
@@ -57,15 +57,15 @@ class ZettlrDir
         }
 
         // Prepopulate
-        this.path = dir;
-        this.name = path.basename(this.path);
-        this.hash = hash(this.path);
+        this.parent         = parent;
+        this.path           = dir;
+        this.name           = path.basename(this.path);
+        this.hash           = hash(this.path);
         this.children       = [];
         this.attachments    = [];
         this.filters        = null;// new ZettlrFilter(this);
-        this.virtualDirs    = null;// new ZettlrVirtualDirectory(this);
+        this.virtualDirs    = new ZettlrVirtualDirectory(this);
         this.type           = 'directory';
-        this.parent         = parent;
         this.sorting        = 'name-up';
 
         // The directory might've been just been created.
@@ -145,6 +145,12 @@ class ZettlrDir
             prop = 'hash';
         } else {
             throw new DirectoryError("Cannot search directory. Neither path nor hash given.");
+        }
+
+        // It may be that the "obj" to find actually is a virtual dir -> check these first
+        let vDir = this.virtualDirs.find(obj);
+        if(vDir) {
+            return vDir; // Send a fake directory
         }
 
         if(this[prop] == obj[prop]) {
