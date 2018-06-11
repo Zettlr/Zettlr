@@ -343,6 +343,19 @@ class Zettlr
         this.setCurrentDir(dir);
     }
 
+    newVirtualDir(arg)
+    {
+        let dir = null;
+        if(arg.hasOwnProperty('hash')) {
+            dir = this.findDir({'hash': arg.hash });
+        } else {
+            dir = this.getCurrentDir();
+        }
+
+        // Use helper function to create the virtual directory.
+        
+    }
+
     /**
      * Open a new root.
      * @param  {String} [type='dir'] 'dir' or 'file'. Necessary, because on windows

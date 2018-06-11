@@ -138,6 +138,10 @@ class ZettlrRendererIPC
             this._app.deleteDir(cnt);
             break;
 
+            case 'dir-new-vd':
+            this._app.newVirtualDir(cnt);
+            break;
+
             case 'root-close':
             this.send('close-root', cnt.hash);
             break;

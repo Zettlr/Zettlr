@@ -28,6 +28,9 @@ const { hash, sort, generateName,
     ignoreDir, ignoreFile, isFile, isDir, isAttachment
 } = require('../common/zettlr-helpers.js');
 
+// Directory plugin helpers
+const { applyPlugins } = require('./zettlr-directory-helpers.js');
+
 const ALLOW_SORTS = ['name-up', 'name-down', 'time-up', 'time-down'];
 
 /**
@@ -63,8 +66,6 @@ class ZettlrDir
         this.hash           = hash(this.path);
         this.children       = [];
         this.attachments    = [];
-        this.filters        = null;// new ZettlrFilter(this);
-        this.virtualDirs    = new ZettlrVirtualDirectory(this);
         this.type           = 'directory';
         this.sorting        = 'name-up';
 
@@ -145,12 +146,6 @@ class ZettlrDir
             prop = 'hash';
         } else {
             throw new DirectoryError("Cannot search directory. Neither path nor hash given.");
-        }
-
-        // It may be that the "obj" to find actually is a virtual dir -> check these first
-        let vDir = this.virtualDirs.find(obj);
-        if(vDir) {
-            return vDir; // Send a fake directory
         }
 
         if(this[prop] == obj[prop]) {
@@ -369,7 +364,7 @@ class ZettlrDir
 
         // Move
         fs.renameSync(oldPath, this.path);
-        this.children = []; // Unreference old list
+        this.children = []; // Dereference old list
 
         // Re-read
         this.scan();
@@ -481,6 +476,11 @@ class ZettlrDir
                 return 0;
             }
         });
+
+        // Post-processing: Apply directory plugins to the children's list
+        // IMPORTANT: We have to concat, because unshift would also add empty arrays
+        // instead of objects.
+        this.children = applyPlugins(this).concat(this.children);
 
         return this;
     }

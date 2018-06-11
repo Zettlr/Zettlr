@@ -127,6 +127,11 @@ class ZettlrIPC
             this._app.newDir(cnt);
             break;
 
+            case 'dir-new-vd':
+            // Client has requested a new virtual directory
+            this._app.newVirtualDir(cnt);
+            break;
+
             case 'file-save':
             // Client has requested a save-action.
             // arg contains the contents of CM and maybe also a hash.

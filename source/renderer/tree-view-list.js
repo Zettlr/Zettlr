@@ -35,7 +35,7 @@ class TreeView
      */
     constructor(parent, paths, isRoot = false)
     {
-        if(paths == null) {
+        if(paths == null || typeof paths != 'object') {
             throw new TreeError('Paths must be given on instantiation!');
         }
 
@@ -58,6 +58,7 @@ class TreeView
         this._indicator = $('<span>').addClass('collapse-indicator');
 
         this._dir = $('<li>').attr('data-hash', this.getHash()).attr('title', this._paths.name);
+        this._dir.addClass(this._paths.type); // To ensure proper display of virtual directories and filters in different colours
         this._dir.append('<span>').text(this._paths.name);
         if(this.isRoot()) { this._dir.addClass('root'); }
 
@@ -202,7 +203,7 @@ class TreeView
         // First determine how many children there are in the new object
         let l = 0;
         for(let c of this._paths.children) {
-            if(c.type == 'directory') {
+            if(c.type != 'file') { // Only ignore files, display everything else (filters, virtual directories)
                 l++;
             }
         }
@@ -229,7 +230,7 @@ class TreeView
         // Iterate over the new children
         // i counts all children (incl. files), j only directories
         for(let i = 0, j = 0; i < this._paths.children.length; i++) {
-            if(this._paths.children[i].type != 'directory') {
+            if(this._paths.children[i].type == 'file') { // Only ignore files, display everything else
                 continue;
             }
             // First check if we've already gotten that directory in our children

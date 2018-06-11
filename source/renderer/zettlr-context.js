@@ -107,12 +107,18 @@ class ZettlrCon
                     this._menu.append(new MenuItem({ 'type': 'separator' }));
                 }
 
-                this._menu.append(new MenuItem({ 'label': trans('menu.new_file'), click(item, win) {
-                    that._body.getRenderer().handleEvent('file-new', { 'hash': hash });
-                } }));
-                this._menu.append(new MenuItem({ 'label': trans('menu.new_dir'), click(item, win) {
-                    that._body.getRenderer().handleEvent('dir-new', { 'hash': hash });
-                } }));
+                // Only add new file, dir and virtual dir-options if directory
+                if(elem.hasClass('directory')) {
+                    this._menu.append(new MenuItem({ 'label': trans('menu.new_file'), click(item, win) {
+                        that._body.getRenderer().handleEvent('file-new', { 'hash': hash });
+                    } }));
+                    this._menu.append(new MenuItem({ 'label': trans('menu.new_dir'), click(item, win) {
+                        that._body.getRenderer().handleEvent('dir-new', { 'hash': hash });
+                    } }));
+                    this._menu.append(new MenuItem({ 'label': trans('menu.new_vd'), click(item, win) {
+                        that._body.getRenderer().handleEvent('dir-new-vd', { 'hash': hash});
+                }}));
+                }
 
                 if(elem.hasClass('root')) {
                     // Root dirs can be closed

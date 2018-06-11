@@ -116,6 +116,28 @@ class ZettlrBody
     }
 
     /**
+     * Requests a directory name for a new virtual directory
+     * @param  {ZettlrDir} dir The parent directory object.
+     * @return {void}     Nothing to return.
+     */
+    requestVirtualDirName(dir)
+    {
+        let cnt = $('<div>').html(
+            `
+            <form action="#" method="GET">
+            <input type="text" class="small" value="${trans('dialog.dir_new.value')}" placeholder="${trans('dialog.dir_new.placeholder')}" name="name" required>
+            </form>
+            `
+        );
+
+        let popup = new ZettlrPopup(this, $(`[data-hash=${dir.hash}]`), cnt, (form) => {
+            if(form) {
+                this._renderer.requestNewVirtualDir(form[0].value, dir.hash);
+            }
+        });
+    }
+
+    /**
      * Display a small popup to ask for a new dir name for an already existing.
      * @param  {ZettlrDir} dir The directory to be renamed
      * @return {void}     Nothing to return.

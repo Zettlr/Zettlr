@@ -64,7 +64,7 @@ class ZettlrRenderer
         global.i18n         = remote.getGlobal('i18n');
 
         // Immediately add the operating system class to the body element to
-        // enable the font-family.
+        // enable the correct font-family.
         $('body').addClass(process.platform);
 
         // Init the complete list of objects that we need
@@ -171,6 +171,19 @@ class ZettlrRenderer
             this._body.requestDirName(this.findObject(arg.hash));
         } else {
             this._body.requestDirName(this.getCurrentDir());
+        }
+    }
+
+    /**
+     * Tells the ZettlrBody to request a new virtualdir name
+     * @param  {Object} arg Contains the parent dir's hash
+     */
+    newVirtualDir(arg)
+    {
+        if(arg.hasOwnProperty('hash')) {
+            this._body.requestVirtualDirName(this.findObject(arg.hash));
+        } else if(this.getCurrentDir().type == 'directory') { // Only add vds to normal directories
+            this._body.requestVirtualDirName(this.getCurrentDir());
         }
     }
 
@@ -644,6 +657,14 @@ class ZettlrRenderer
      * @return {void}      Nothing to return.
      */
     requestNewDir(name, hash) { this._ipc.send('dir-new', { 'name': name, 'hash': hash }); }
+
+    /**
+     * Executed when a user has finished typing a new virtual directory name.
+     * @param  {String} name The virtual directory's name
+     * @param  {Integer} hash The parent directory's hash
+     * @return {void}      No return.
+     */
+    requestNewVirtualDir(name, hash) { this._ipc.send('dir-new-vd', { 'name': name, 'hash': hash }); }
 
     /**
      * Executed when the user clicks on a filetype to export to.
