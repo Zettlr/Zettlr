@@ -140,6 +140,7 @@ class ZettlrVirtualDirectory
             // the children, who have another parent!
             if(index > -1) {
                 this.children.splice(index, 1);
+                this._updateModel();
             } else {
                 // Fail gracefully
                 return false;
@@ -307,7 +308,6 @@ class ZettlrVirtualDirectory
         }
 
         let nData = { 'name': this.name, 'files': arr }
-        console.log(`Updating the model. New row data:`, nData);
 
         this._model.set(rowname, nData);
     }

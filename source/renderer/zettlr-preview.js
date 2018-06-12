@@ -112,6 +112,7 @@ class ZettlrPreview
 
         // Indicator whether or not we're currently in a virtual directory
         let inVirtualDir = false;
+        let vdhash = undefined;
 
         // Traverse the flattened data-array and replace each object with its
         // representation as an HTML string
@@ -125,8 +126,10 @@ class ZettlrPreview
             // Only change the indicator with different directory types
             if(d.type == 'virtual-directory') {
                 inVirtualDir = true;
+                vdhash = d.hash;
             } else if(d.type == 'directory') {
                 inVirtualDir = false;
+                vdhash = undefined;
             }
 
             // Calculate search result bg color, in the style of a heat map.
@@ -145,7 +148,8 @@ class ZettlrPreview
             let selected = (this._selectedFile && this._selectedFile == d.hash) ? ` selected` : '';
             let snippets = (this._snippets) ? ' snippets' : '';
             let vdclass = (inVirtualDir) ? ' vd-file' : ''; // File is not actually present in this "dir"
-            let elem = `<li class="${d.type}${selected}${snippets}${vdclass}" data-hash="${d.hash}" ${sort}title="${d.name}"${bgcolor}>`;
+            let vdhashAttr = (inVirtualDir && vdhash) ? ' data-vd-hash="' + vdhash + '"' : ''; // For context menu actions we need to pass vd-hash, b/c accessing parent will not work.
+            let elem = `<li class="${d.type}${selected}${snippets}${vdclass}" data-hash="${d.hash}" ${sort}title="${d.name}"${bgcolor}${vdhashAttr}>`;
             if(d.type == 'directory' || d.type == 'virtual-directory') {
                 // Render a directory
                 elem += d.name;

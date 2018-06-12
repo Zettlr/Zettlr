@@ -58,16 +58,30 @@ class ZettlrCon
             }
             // In case of preview, our wanted elements are: the strong-tag (containing
             // the name) inside the <li> and the data-hash attr inside the <li>
+            let vdfile = false; // Is this file part of a virtual directory?
+            let vdhash = undefined;
             if(elem.is('li')) {
                 // Already got it
                 label = elem.children('strong').first().text();
                 hash = elem.attr('data-hash');
+                vdfile = (elem.hasClass('vd-file')) ? true : false;
+                if(vdfile) {
+                    vdhash = elem.attr('data-vd-hash');
+                }
             } else if(elem.is('strong')) {
                 label = elem.text();
                 hash = elem.parent().attr('data-hash');
+                vdfile = (elem.parent().hasClass('vd-file')) ? true : false;
+                if(vdfile) {
+                    vdhash = elem.parent().attr('data-vd-hash');
+                }
             } else if(elem.is('span')) {
                 label = elem.parent().children('strong').first().text();
                 hash = elem.parent().attr('data-hash');
+                vdfile = (elem.parent().hasClass('vd-file')) ? true : false;
+                if(vdfile) {
+                    vdhash = elem.parent().attr('data-vd-hash');
+                }
             }
 
             // Now build
@@ -78,6 +92,12 @@ class ZettlrCon
             this._menu.append(new MenuItem({ 'label': trans('menu.delete_file'), click(item, win) {
                 that._body.getRenderer().handleEvent('file-delete', { 'hash': hash });
             }}));
+            // Enable removal of files from virtual directories
+            if(vdfile) {
+                this._menu.append(new MenuItem({ 'label': trans('menu.delete_from_vd'), click(item, win) {
+                    that._body.getRenderer().handleEvent('file-delete-from-vd', { 'hash': hash, 'virtualdir': vdhash });
+                }}));
+            }
             this._menu.append(new MenuItem({ 'type': 'separator' }));
             this._menu.append(new MenuItem({ 'label': trans('menu.quicklook'), click(item, win) {
                 that._body.getRenderer().handleEvent('quicklook', { 'hash': hash });

@@ -203,6 +203,13 @@ class ZettlrRendererIPC
             }
             break;
 
+            case 'file-delete-from-vd':
+            if(cnt.hasOwnProperty('hash') && cnt.hasOwnProperty('virtualdir')) {
+                this.send('file-delete-from-vd', cnt);
+                // TODO: On else inform user of error
+            }
+            break;
+
             case 'file-search-result':
             this._app.getPreview().handleSearchResult(cnt);
             break;

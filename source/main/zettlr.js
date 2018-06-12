@@ -512,6 +512,23 @@ class Zettlr
     }
 
     /**
+     * Removes a file from the index of a virtual directory.
+     * @param  {Object} cnt Should contain both hash and virtualdir (also a hash)
+     */
+    removeFromVirtualDir(cnt)
+    {
+        let vd = this.findDir({ 'hash': cnt.virtualdir });
+        let file = null;
+        if(vd) {
+            file = vd.findFile({ 'hash': cnt.hash });
+        }
+        if(vd && file) {
+            vd.remove(file);
+            this.ipc.send('paths-update', this.getPaths());
+        }
+    }
+
+    /**
      * Export a file to another format. DEPRECATED: This function will be
      * moved into another class in further versions.
      * @param  {Object} arg An object containing hash and wanted extension.

@@ -151,6 +151,12 @@ class ZettlrIPC
             }
             break;
 
+            case 'file-delete-from-vd':
+            if(cnt.hasOwnProperty('hash') && cnt.hasOwnProperty('virtualdir')) {
+                this._app.removeFromVirtualDir(cnt);
+            }
+            break;
+
             case 'dir-delete':
             if(cnt.hasOwnProperty('hash')) {
                 this._app.removeDir(cnt.hash);

@@ -57,11 +57,9 @@ class ZettlrInterface
         if(found) {
             if(value != null) {
                 // Use splice for the first time to not delete, but replace by giving the third argument.
-                console.log(`Updating row ${row} in dataset.`);
                 this._data.splice(this._data.indexOf(found), 1, value);
             } else {
                 // Remove from dataset
-                console.log(`Removing row ${row} from dataset.`);
                 this._data.splice(this._data.indexOf(found), 1);
             }
         } else {
