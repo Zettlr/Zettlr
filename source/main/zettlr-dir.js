@@ -473,6 +473,7 @@ class ZettlrDir
             }
         }
 
+        // Add the virtual directories to the children's list
         this.children = nVirtualDirectories.concat(nChildren);
         this.attachments = nAttachments;
 
@@ -640,6 +641,7 @@ class ZettlrDir
             arr.push(new ZettlrVirtualDirectory(this, vd, this._vdInterface));
         }
 
+        // Initial load of virtual directories
         this.children = arr.concat(this.children);
         this.sort();
     }
@@ -659,7 +661,7 @@ class ZettlrDir
             this.sort();
         } else {
             // Already exists!
-            this.notifyChange(trans('system.virtual_dir_exists', n));
+            this.notifyChange(trans('system.error.virtual_dir_exists', n));
         }
     }
 

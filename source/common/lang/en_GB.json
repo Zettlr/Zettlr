@@ -66,6 +66,7 @@
         "rename_file": "Rename file",
         "rename_dir": "Rename directory",
         "delete_file": "Delete file",
+        "delete_from_vd": "Delete from virtual directory",
         "delete_dir": "Delete directory",
         "undo": "Undo",
         "redo": "Redo",
@@ -247,7 +248,8 @@
             "already_exists_title": "Cannot move directory or file",
             "already_exists_message": "The file/directory %s already exists in target.",
             "ignored_dir_title": "Cannot open directory",
-            "ignored_dir_message": "Directory \"%s\" cannot be opened by Zettlr."
+            "ignored_dir_message": "Directory \"%s\" cannot be opened by Zettlr.",
+            "virtual_dir_exists": "The virtual directory \"%s\" already exists."
         },
         "save_changes_title": "Omit unsaved changes?",
         "save_changes_message": "There are unsaved changes to the current file. Do you want to omit them or save?",

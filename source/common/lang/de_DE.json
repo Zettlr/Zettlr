@@ -66,6 +66,7 @@
         "rename_file": "Datei umbenennen",
         "rename_dir": "Verzeichnis umbenennen",
         "delete_file": "Datei löschen",
+        "delete_from_vd": "Aus virtuellem Verzeichnis löschen",
         "delete_dir": "Verzeichnis löschen",
         "undo": "Rückgängig",
         "redo": "Wiederholen",
@@ -247,7 +248,8 @@
             "already_exists_title": "Kann Datei oder Verzeichnis nicht verschieben",
             "already_exists_message": "Die Datei bzw. das Verzeichnis %s existiert am Zielort bereits.",
             "ignored_dir_title": "Kann Verzeichnis nicht öffnen",
-            "ignored_dir_message": "Das Verzeichnis \"%s\" kann von Zettlr nicht geöffnet werden."
+            "ignored_dir_message": "Das Verzeichnis \"%s\" kann von Zettlr nicht geöffnet werden.",
+            "virtual_dir_exists": "Das virtuelle Verzeichnis \"%s\" existiert bereits."
         },
         "save_changes_title": "Änderungen verwerfen?",
         "save_changes_message": "Die Datei enthält ungespeicherte Änderungen. Verwerfen oder speichern?",
