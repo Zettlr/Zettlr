@@ -343,6 +343,10 @@ class Zettlr
         this.setCurrentDir(dir);
     }
 
+    /**
+     * Creates a new virtual directory
+     * @param  {Object} arg The argument, containing both the containing hash and the new name
+     */
     newVirtualDir(arg)
     {
         let dir = null;
@@ -352,8 +356,10 @@ class Zettlr
             dir = this.getCurrentDir();
         }
 
-        // Use helper function to create the virtual directory.
-        
+        // Create the vd
+        let vd = dir.addVirtualDir(arg.name);
+        this.ipc.send('paths-update', this.getPaths());
+        this.setCurrentDir(vd);
     }
 
     /**
@@ -599,7 +605,7 @@ class Zettlr
         let oldDir = path.dirname(dir.path);
 
         // Save for later whether this is the currentDir (have to re-send dir list)
-        let isCurDir = (dir.hash == this.getCurrentDir().hash) ? true : false;
+        let isCurDir = ((this.getCurrentDir() != null) && (dir.hash == this.getCurrentDir().hash)) ? true : false;
         let oldPath = null;
 
         if((this.getCurrentFile() !== null) && (dir.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
@@ -696,6 +702,13 @@ class Zettlr
                 title: trans('system.error.already_exists_title'),
                 message: trans('system.error.already_exists_message', from.name)
             });
+        }
+
+        // Now check if we've actually gotten a virtual directory
+        if(to.isVirtualDirectory() && from.isFile()) {
+            // Then simply attach.
+            to.attach(from);
+            return;
         }
 
         let newPath = null;

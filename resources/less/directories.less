@@ -131,9 +131,18 @@
         }
     }
 
-    .virtualdir {
+    .virtual-directory {
         background-color: @purple-selection;
         color:inherit;
+
+        &:before {
+            content: '\f4ea';
+            font-family: 'WebHostingHub-Glyphs';
+            font-size: @font-size-small; /* Bit smaller, those indicators are damned huge */
+            margin-right:5px;
+            display:inline-block;
+            position:relative;
+        }
     }
 
     .emptyPaths {
@@ -182,6 +191,10 @@
             &:hover {
                 background-color:@grey-5;
             }
+        }
+
+        .virtual-directory {
+            background-color:@purple-selection-dark;
         }
 
         .emptyPaths {

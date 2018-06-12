@@ -20,6 +20,7 @@ const ZettlrFile             = require('./zettlr-file.js');
 const ZettlrAttachment       = require('./zettlr-attachment.js');
 // const ZettlrFilter           = require('./zettlr-filter.js');
 const ZettlrVirtualDirectory = require('./zettlr-virtual-directory.js');
+const ZettlrInterface        = require('./zettlr-interface.js');
 const {shell}                = require('electron');
 const {trans}                = require('../common/lang/i18n.js');
 
@@ -69,6 +70,9 @@ class ZettlrDir
         this.type           = 'directory';
         this.sorting        = 'name-up';
 
+        // Create an interface for virtual directories
+        this._vdInterface   = new ZettlrInterface(path.join(this.path, '.ztr-virtual-directories'));
+
         // The directory might've been just been created.
         try {
             let stat = fs.lstatSync(this.path);
@@ -77,7 +81,10 @@ class ZettlrDir
             fs.mkdirSync(this.path);
         }
 
+        // Load default files and folders
         this.scan();
+        // Load virtual directories initially (if existent)
+        this.loadVirtualDirectories();
 
         if(this.isRoot()) {
             // We have to add our dir to the watchdog
@@ -429,11 +436,17 @@ class ZettlrDir
             }
         }
 
+        let nVirtualDirectories = [];
         let nChildren = [];
         let nAttachments = [];
 
         // Remove all children that are no longer present
         for(let c of this.children) {
+            // Hop over virtual directories.
+            if(c.type == 'virtual-directory') {
+                nVirtualDirectories.push(c);
+                continue;
+            }
             if(!files.includes(c.path)) {
                 c.shutdown();
                 this.children.splice(this.children.indexOf(c), 1);
@@ -460,8 +473,7 @@ class ZettlrDir
             }
         }
 
-        // Swap
-        this.children = nChildren;
+        this.children = nVirtualDirectories.concat(nChildren);
         this.attachments = nAttachments;
 
         // Final step: Sort
@@ -476,11 +488,6 @@ class ZettlrDir
                 return 0;
             }
         });
-
-        // Post-processing: Apply directory plugins to the children's list
-        // IMPORTANT: We have to concat, because unshift would also add empty arrays
-        // instead of objects.
-        this.children = applyPlugins(this).concat(this.children);
 
         return this;
     }
@@ -619,6 +626,44 @@ class ZettlrDir
     }
 
     /**
+     * Loads virtual directories from disk
+     */
+    loadVirtualDirectories()
+    {
+        let data = this._vdInterface.getData();
+        if(!data) {
+            // No data in file
+            return;
+        }
+        let arr = [];
+        for(let vd of data) {
+            arr.push(new ZettlrVirtualDirectory(this, vd, this._vdInterface));
+        }
+
+        this.children = arr.concat(this.children);
+        this.sort();
+    }
+
+    /**
+     * Adds a virtual directory if it doesn't already exist.
+     * @param {String} n The directory's name
+     */
+    addVirtualDir(n)
+    {
+        n = sanitize(n); // Same rules as "normal" directories. Why? To keep it JSON-safe.
+        let vd = { 'name': n, 'files': []};
+        if(!this._vdInterface.has(vd)) {
+            this._vdInterface.set(vd.name, vd);
+            vd = new ZettlrVirtualDirectory(this, vd, this._vdInterface);
+            this.children.push(vd);
+            this.sort();
+        } else {
+            // Already exists!
+            this.notifyChange(trans('system.virtual_dir_exists', n));
+        }
+    }
+
+    /**
      * Returns the hash of the dir
      * @return {Number} The hash
      */
@@ -641,6 +686,12 @@ class ZettlrDir
      * @return {Boolean} Returns true, because this is a directory.
      */
     isDirectory() { return true; }
+
+    /**
+     * Dummy function for recursive use. Always returns false.
+     * @return {Boolean} Returns false.
+     */
+    isVirtualDirectory() { return false; }
 
     /**
      * Dummy function for recursive use. Always returns false.

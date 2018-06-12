@@ -490,6 +490,12 @@ class ZettlrFile
     isDirectory() { return false; }
 
     /**
+     * Dummy function for recursive use. Always returns false.
+     * @return {Boolean} Returns false.
+     */
+    isVirtualDirectory() { return false; }
+
+    /**
      * Dummy function for recursive use. Always returns true.
      * @return {Boolean} Always returns true.
      */

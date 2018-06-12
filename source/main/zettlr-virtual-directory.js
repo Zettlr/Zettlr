@@ -18,7 +18,9 @@
  */
 
  const path = require('path');
- const {hash} = require('../common/zettlr-helpers.js');
+
+ // Include helpers
+ const { hash, sort } = require('../common/zettlr-helpers.js');
 
 /**
  * Manages one single virtual directory containing manually added files. This
@@ -32,7 +34,6 @@ class ZettlrVirtualDirectory
     constructor(dir, vd, model)
     {
          this.parent         = dir;
-         this.model          = model; // Handles persistancy of all these directories on disk (e.g. .ztr-virtual-directories- files)
          this.path           = model.getDatabase();
          this.name           = vd.name;
          this.hash           = hash(this.path + this.name); // Path can be the same for multiple virtual dirs, therefore include name!
@@ -40,6 +41,7 @@ class ZettlrVirtualDirectory
          this.attachments    = [];
          this.type           = 'virtual-directory';
          this.sorting        = 'name-up';
+         this._model         = model; // Handles persistancy of all these directories on disk (e.g. .ztr-virtual-directories- files)
 
          // Read in children from file
          this.init(vd.files);
@@ -71,6 +73,11 @@ class ZettlrVirtualDirectory
     }
     findDir(obj)
     {
+        // Return this, if hashes match
+        if(obj.hasOwnProperty('hash') && obj.hash == this.hash) {
+            return this;
+        }
+
         return null;
     }
     findFile(obj)
@@ -124,7 +131,7 @@ class ZettlrVirtualDirectory
     {
         if(obj === this) {
             // Remove this directory
-            this.parent.remove(this);
+            this.detach();
         } else {
             // Remove a file
             let index = this.children.indexOf(obj);
@@ -147,7 +154,12 @@ class ZettlrVirtualDirectory
         if(!name) {
             return this;
         }
+
+        // Update model!
+        let oldname = this.name
         this.name = name; // No need to detach on rename
+        this._updateModel(oldname);
+
         // But what we want to do is have the parent re-sort its children
         this.parent.sort();
         this.hash = hash(this.path + this.name);
@@ -156,17 +168,15 @@ class ZettlrVirtualDirectory
     }
     attach(newchild)
     {
-        // Only add files and prevent duplicates
-        if(!newchild.isFile() || this.contains(newchild)) {
+        // Only add files, prevent duplicates and make sure the file is inside the parent directory.
+        if(!newchild.isFile() || this.contains(newchild) || !this.parent.contains(newchild)) {
             return this;
         }
 
         this.children.push(newchild);
         this.children = sort(this.children, this.sorting);
 
-        // TODO: Also add to model! HowTo: Retrieve model based on this name
-        // and then add the JSON thing. Stringify and stuff will be handled by
-        // the interface.
+        this._updateModel();
 
         return this;
     }
@@ -174,7 +184,8 @@ class ZettlrVirtualDirectory
     {
         this.parent.remove(this);
         this.parent = null;
-        // TODO: Also remove from model!
+        // Also remove from model by passing null as value argument
+        this._model.set(this.name, null);
         return this;
     }
     toggleSorting(type='name-up')
@@ -259,6 +270,11 @@ class ZettlrVirtualDirectory
         // In this very instance, we may respectfully pretend to be a directory
         return true;
     }
+    /**
+     * Dummy function for recursive use. Always returns true.
+     * @return {Boolean} Returns true.
+     */
+    isVirtualDirectory() { return true; }
     isFile()
     {
         return false;
@@ -278,6 +294,23 @@ class ZettlrVirtualDirectory
     /**
      *   HELPER FUNCTIONS
      */
+
+     /**
+      * Write changes to the model
+      * @param  {String} [rowname=this.name] If the name has changed, this is the possibility to give the correct one.
+      */
+    _updateModel(rowname = this.name)
+    {
+        let arr = [];
+        for(let c of this.children) {
+            arr.push(this._makeRelative(c.path));
+        }
+
+        let nData = { 'name': this.name, 'files': arr }
+        console.log(`Updating the model. New row data:`, nData);
+
+        this._model.set(rowname, nData);
+    }
 
     /**
      * Makes a path relative (extracts the root directory's path from interval)
@@ -327,7 +360,7 @@ class ZettlrVirtualDirectory
      */
     _getRootPath()
     {
-        return this.dir.path;
+        return this.parent.path;
     }
 }
 

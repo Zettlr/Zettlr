@@ -43,26 +43,41 @@ function hash(string)
 
 /**
 * This function can sort an array of ZettlrFile and ZettlrDir objects
-* @param  {Array} arr An array containing only ZettlrFile and ZettlrDir objects
+* @param  {Array} arr An array containing only ZettlrFile, ZettlrVirtualDirectory and ZettlrDir objects
 * @param {String} [type='name-up'] The type of sorting - can be time-up, time-down, name-up or name-down
 * @return {Array}     The sorted array
 */
 function sort(arr, type = 'name-up')
 {
     // First split the array based on type
-    let f = [];
-    let d = [];
+    let f  = [];
+    let d  = [];
+    let vd = [];
 
     for(let c of arr) {
         if(c.type === 'file') {
             f.push(c);
         } else if(c.type === 'directory') {
             d.push(c);
+        } else if(c.type === 'virtual-directory') {
+            vd.push(c);
         }
     }
 
     // Then sort the directories (always based on name)
     d.sort((a, b) => {
+        // Negative return: a is smaller b (case insensitive)
+        if(a.name.toLowerCase() < b.name.toLowerCase()) {
+            return -1;
+        } else if(a.name.toLowerCase() > b.name.toLowerCase()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+
+    // The virtual directories (also by name)
+    vd.sort((a, b) => {
         // Negative return: a is smaller b (case insensitive)
         if(a.name.toLowerCase() < b.name.toLowerCase()) {
             return -1;
@@ -110,8 +125,8 @@ function sort(arr, type = 'name-up')
         }
     });
 
-    // Return sorted array
-    return f.concat(d);
+    // Return sorted array files -> virtual directories -> directories
+    return f.concat(vd).concat(d);
 }
 
 /**

@@ -82,8 +82,8 @@ class TreeView
         // Activate event listeners
         this._dir.on('click', () => { this._parent.requestDir(this.getHash()); });
 
-        // Make draggable (unless root)
-        if(!this.isRoot()) {
+        // Make draggable (unless root or virtual directory)
+        if(!this.isRoot() && this._paths.type != 'virtual-directory') {
             this._dir.draggable({
                 'cursorAt': { 'top': 0, 'left': 0},
                 'scroll': false,

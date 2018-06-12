@@ -46,6 +46,7 @@ html {
 }
 body {
   overflow: hidden;
+  user-select: none;
   font-family: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
 }
 body.win32 {
@@ -352,6 +353,19 @@ body.linux {
   background-color: #dcdcdc;
   color: inherit;
 }
+#directories .virtual-directory {
+  background-color: #d8abf1;
+  color: inherit;
+}
+#directories .virtual-directory:before {
+  content: '\f4ea';
+  font-family: 'WebHostingHub-Glyphs';
+  font-size: 0.9em;
+  /* Bit smaller, those indicators are damned huge */
+  margin-right: 5px;
+  display: inline-block;
+  position: relative;
+}
 #directories .emptyPaths {
   background-color: #f0f0f0;
   color: #646464;
@@ -388,6 +402,9 @@ body.linux {
 }
 #directories.dark .file:hover {
   background-color: #505050;
+}
+#directories.dark .virtual-directory {
+  background-color: #641e78;
 }
 #directories.dark .emptyPaths {
   background-color: #505050;
@@ -455,8 +472,8 @@ body.linux {
   background-color: #c8f0aa;
 }
 #preview ul li {
-  border-bottom: 1px solid #c8c8c8;
-  border-top: 1px solid #c8c8c8;
+  border-bottom: 1px solid #dcdcdc;
+  border-top: 1px solid #dcdcdc;
   margin-top: -1px;
   background-color: inherit;
   overflow: hidden;
@@ -468,6 +485,9 @@ body.linux {
   height: 89.2px;
   padding: 0.4em;
   line-height: inherit;
+}
+#preview ul li.vd-file {
+  background-color: #d8abf1;
 }
 #preview ul li.file:hover {
   background-color: #f0f0f0 !important;
@@ -487,12 +507,14 @@ body.linux {
   display: block;
   margin-top: 5px;
 }
-#preview ul li.directory {
+#preview ul li.directory,
+#preview ul li.virtual-directory {
   background-color: #f0f0f0;
   color: #1cb27e;
   white-space: nowrap;
 }
-#preview ul li.directory .sorter {
+#preview ul li.directory .sorter,
+#preview ul li.virtual-directory .sorter {
   display: block;
   position: absolute;
   top: 0;
@@ -503,7 +525,9 @@ body.linux {
   margin: 0;
 }
 #preview ul li.directory span.sortTime,
-#preview ul li.directory span.sortName {
+#preview ul li.virtual-directory span.sortTime,
+#preview ul li.directory span.sortName,
+#preview ul li.virtual-directory span.sortName {
   background-color: #f0f0f0;
   font-family: 'WebHostingHub-Glyphs';
   font-size: 0.72em;
@@ -512,8 +536,13 @@ body.linux {
   margin-top: 0px;
 }
 #preview ul li.directory span.sortTime:hover,
-#preview ul li.directory span.sortName:hover {
+#preview ul li.virtual-directory span.sortTime:hover,
+#preview ul li.directory span.sortName:hover,
+#preview ul li.virtual-directory span.sortName:hover {
   color: #505050;
+}
+#preview ul li.virtual-directory {
+  color: #641e78;
 }
 #preview #search-directory {
   position: sticky;
@@ -576,18 +605,29 @@ body.linux {
 #preview.dark ul li.file:hover {
   background-color: #787878 !important;
 }
-#preview.dark ul li.directory {
+#preview.dark ul li.vd-file {
+  background-color: #641e78;
+}
+#preview.dark ul li.directory,
+#preview.dark ul li.virtual-directory {
   background-color: #282828;
   color: #787878;
 }
 #preview.dark ul li.directory span.sortTime,
-#preview.dark ul li.directory span.sortName {
+#preview.dark ul li.virtual-directory span.sortTime,
+#preview.dark ul li.directory span.sortName,
+#preview.dark ul li.virtual-directory span.sortName {
   background-color: #282828;
 }
 #preview.dark ul li.directory span.sortTime:hover,
-#preview.dark ul li.directory span.sortName:hover {
+#preview.dark ul li.virtual-directory span.sortTime:hover,
+#preview.dark ul li.directory span.sortName:hover,
+#preview.dark ul li.virtual-directory span.sortName:hover {
   color: #c8c8c8;
   background-color: #282828;
+}
+#preview.dark ul li.virtual-directory {
+  color: #d8abf1;
 }
 #preview.dark #search-directory input {
   background-color: #6478b4;

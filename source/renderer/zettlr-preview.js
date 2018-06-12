@@ -110,6 +110,9 @@ class ZettlrPreview
 
         this._tags = [];
 
+        // Indicator whether or not we're currently in a virtual directory
+        let inVirtualDir = false;
+
         // Traverse the flattened data-array and replace each object with its
         // representation as an HTML string
         for(let i = start; i < until; i++) {
@@ -117,6 +120,13 @@ class ZettlrPreview
             if(this._showSearchResults && !this._results.find((elem) => { return (elem.hash == d.hash); })) {
                 // Don't include no-result-rows in the next list.
                 continue;
+            }
+
+            // Only change the indicator with different directory types
+            if(d.type == 'virtual-directory') {
+                inVirtualDir = true;
+            } else if(d.type == 'directory') {
+                inVirtualDir = false;
             }
 
             // Calculate search result bg color, in the style of a heat map.
@@ -131,11 +141,12 @@ class ZettlrPreview
                 bgcolor = ` style="background-color:hsla(159, ${w}%, 50%, ${w/100});"`; // hue of 159 corresponds to @green-0
             }
 
-            let sort = (d.type == 'directory') ? `data-sorting="${d.sorting}" ` : '';
+            let sort = (d.type == 'directory' || d.type == 'virtual-directory') ? `data-sorting="${d.sorting}" ` : '';
             let selected = (this._selectedFile && this._selectedFile == d.hash) ? ` selected` : '';
             let snippets = (this._snippets) ? ' snippets' : '';
-            let elem = `<li class="${d.type}${selected}${snippets}" data-hash="${d.hash}" ${sort}title="${d.name}"${bgcolor}>`;
-            if(d.type == 'directory') {
+            let vdclass = (inVirtualDir) ? ' vd-file' : ''; // File is not actually present in this "dir"
+            let elem = `<li class="${d.type}${selected}${snippets}${vdclass}" data-hash="${d.hash}" ${sort}title="${d.name}"${bgcolor}>`;
+            if(d.type == 'directory' || d.type == 'virtual-directory') {
                 // Render a directory
                 elem += d.name;
             } else if (d.type == 'file') {
@@ -198,7 +209,7 @@ class ZettlrPreview
 
         if(data.type == "file") {
             return newarr.push(data);
-        } else if(data.type == "directory") {
+        } else if(data.type == "directory" || data.type == 'virtual-directory') {
             // Append directory (for easier overview)
             newarr.push(data);
             if(data.children != null) {

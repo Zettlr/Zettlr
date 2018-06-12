@@ -18,8 +18,11 @@
  * END HEADER
  */
 
- const path = require('path');
- const TIMEOUT = require('../common/data.json').poll_time;
+const path    = require('path');
+const fs      = require('fs');
+
+// Needed to throttle the file access
+const TIMEOUT = 1000; // = require('../common/data.json').poll_time;
 
 class ZettlrInterface
 {
@@ -27,7 +30,7 @@ class ZettlrInterface
     {
         this._path = dbPath;
         this._data = [];
-        this._timeout = null; // Minimize disk use
+        this._timeout = null; // Minimise disk use
         // Initial read
         this._read();
     }
@@ -42,15 +45,29 @@ class ZettlrInterface
         return this._data;
     }
 
-    has(attribute)
+    has(data)
     {
-        return this._data.hasOwnProperty(attribute);
+        return (this._data.indexOf(data) > -1);
     }
 
-    set(attribute, value)
+    set(row, value)
     {
         clearTimeout(this._timeout);
-        this._data[attribute] = value;
+        let found = this._data.find((elem) => { return (elem.name == row); });
+        if(found) {
+            if(value != null) {
+                // Use splice for the first time to not delete, but replace by giving the third argument.
+                console.log(`Updating row ${row} in dataset.`);
+                this._data.splice(this._data.indexOf(found), 1, value);
+            } else {
+                // Remove from dataset
+                console.log(`Removing row ${row} from dataset.`);
+                this._data.splice(this._data.indexOf(found), 1);
+            }
+        } else {
+            // Create new
+            this._data.push(value);
+        }
         this._timeout = setTimeout(() => { this._write(); }, TIMEOUT);
         return this;
     }
