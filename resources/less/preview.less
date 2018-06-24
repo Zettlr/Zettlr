@@ -37,8 +37,8 @@
         }
 
         li {
-            border-bottom:1px solid @grey-1;
-            border-top:1px solid @grey-1;
+            border-bottom:1px solid @grey-2;
+            border-top:1px solid @grey-2;
             margin-top:-1px;
             background-color:inherit;
             overflow:hidden;
@@ -56,7 +56,7 @@
             // File is displayed as part of a virtual directory -> actually
             // some kind of a "ghost" file
             &.vd-file {
-                background-color:@purple-selection;
+                background-color:lighten(@purple-selection, 10%);
             }
 
             &.file:hover {

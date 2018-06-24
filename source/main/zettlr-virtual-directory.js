@@ -81,11 +81,13 @@ class ZettlrVirtualDirectory
             }
         }
     }
+
     handleEvent(p, e)
     {
         // TODO: Needs to listen for unlink-events of files and check all children
         // if they're still there!
     }
+
     findDir(obj)
     {
         // Return this, if hashes match
@@ -95,6 +97,7 @@ class ZettlrVirtualDirectory
 
         return null;
     }
+
     findFile(obj)
     {
         let prop;
@@ -119,6 +122,7 @@ class ZettlrVirtualDirectory
         // Not found
         return null;
     }
+
     findExact(term)
     {
         for(let c of this.children) {
@@ -130,6 +134,7 @@ class ZettlrVirtualDirectory
 
         return null;
     }
+
     get(hash)
     {
         for(let c of this.children) {
@@ -142,6 +147,7 @@ class ZettlrVirtualDirectory
 
         return null;
     }
+
     remove(obj = this)
     {
         if(obj === this) {
@@ -165,6 +171,7 @@ class ZettlrVirtualDirectory
 
         return true;
     }
+
     move(newpath, name = null)
     {
         // Name must be given for virtual directories.
@@ -183,10 +190,14 @@ class ZettlrVirtualDirectory
         // Chainability
         return this;
     }
+
     attach(newchild)
     {
         // Only add files, prevent duplicates and make sure the file is inside the parent directory.
         if(!newchild.isFile() || this.contains(newchild) || !this.parent.contains(newchild)) {
+            if(!this.parent.contains(newchild)) {
+                this.parent.notifyChange(`Cannot add file to virtual directory ${this.name}, it resides outside the containing directory.`);
+            }
             return this;
         }
 
@@ -198,6 +209,7 @@ class ZettlrVirtualDirectory
 
         return this;
     }
+
     detach()
     {
         this.parent.remove(this);
@@ -209,6 +221,7 @@ class ZettlrVirtualDirectory
         }
         return this;
     }
+
     toggleSorting(type='name-up')
     {
 
@@ -233,11 +246,13 @@ class ZettlrVirtualDirectory
             this.children = sort(this.children, this.sorting);
             return this;
     }
+
     exists(p)
     {
         // VirtualDirectories must never act as if they were really containing something
         return null;
     }
+
     contains(obj)
     {
         if(!obj) {
@@ -263,48 +278,58 @@ class ZettlrVirtualDirectory
 
         return false;
     }
+
     hasChild(obj)
     {
         // VirtualDirectories don't really contain children.
         return null;
     }
+
     sort()
     {
         this.children = sort(this.children, this.sorting);
         return this;
     }
+
     getHash()
     {
         return this.hash;
     }
+
     getPath()
     {
         // VirtualDirectories don't have a specific path
         return '';
     }
+
     getName()
     {
         return this.name;
     }
+
     isDirectory()
     {
         // In this very instance, we may respectfully pretend to be a directory
         return true;
     }
+
     /**
      * Dummy function for recursive use. Always returns true.
      * @return {Boolean} Returns true.
      */
     isVirtualDirectory() { return true; }
+
     isFile()
     {
         return false;
     }
+
     isRoot()
     {
         // VirtualDirectories are never root
         return false;
     }
+
     isScope()
     {
         // Must return false, because we're not a real directory, the real parent

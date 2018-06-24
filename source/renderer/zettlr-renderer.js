@@ -358,12 +358,12 @@ class ZettlrRenderer
     {
         this._paths = nData;
         if(this.getCurrentDir() != null) {
-            this.setCurrentDir(this.findObject(this.getCurrentDir().hash));
+            this.setCurrentDir(this.getCurrentDir().hash);
         } else {
             this.setCurrentDir(null); // Reset
         }
         if(this.getCurrentFile() != null) {
-            this.setCurrentFile(this.findObject(this.getCurrentFile().hash));
+            this.setCurrentFile(this.getCurrentFile().hash);
         } else {
             this.setCurrentFile(null);
         }
@@ -705,7 +705,6 @@ class ZettlrRenderer
     {
         // We have received a new file. So close the old and open the new
         this._editor.close();
-        this.setCurrentFile(f);
         // Select the file either in the preview list or in the directory tree
         // this._preview.select(f.hash);
         this._editor.open(f);
@@ -718,7 +717,7 @@ class ZettlrRenderer
     {
         // We have received a close-file command.
         this._editor.close();
-        this.setCurrentFile(null);
+        // this.setCurrentFile(null);
     }
 
     /**
@@ -788,7 +787,7 @@ class ZettlrRenderer
         this._currentDir = this.findObject(newdir); // Find the dir (hash) in our own paths object
         this._attachments.refresh();
 
-        if(newdir != null) {
+        if(this._currentDir != null) {
             // What we can also do here: Select the dir and refresh the file list.
             // Because that's what _always_ follows this function call.
             this._directories.select(newdir);
@@ -815,7 +814,7 @@ class ZettlrRenderer
     {
         this._currentFile = this.findObject(newfile);
         // Also directly select it
-        if(newfile !== null) {
+        if(this._currentFile !== null) {
             this._preview.select(newfile);
             this._directories.select(newfile);
         }

@@ -2,14 +2,13 @@
 
 ## GUI and functionality
 
-- Introducing **Virtual Directories**. Now it is possible to add "ghost" directories to your directories that act as some kind of a subset of these directories. They are not actually present on disk (but are persistent with a so-called dot-file named `.ztr-virtual-directory`) and therefore can be used to create collections of files by manually adding files to them. _You can only add files to these virtual directories that are present in the containing directory. Also, you cannot move them because they are bound to their parent directories._
+- Introducing **Virtual Directories**. Now it is possible to add "ghost" directories to your directories that act as a subset of these directories. They are not actually present on disk (but are persistent with a so-called dot-file named `.ztr-virtual-directory`) and therefore can be used to create collections of files by manually adding files to them. _You can only add files to these virtual directories that are present in the containing directory. Also, you cannot move them because they are bound to their parent directories._
 - Fixed a bug that threw an error every time you tried to delete a directory with no file open currently.
 - Fixes to the inline commands. Now, when you press `Cmd/Ctrl+I` or `Cmd/Ctrl+B` a second time after you finished writing your strong/emphasised text, Zettlr will actually "exit" the bold/italic markings and not try to insert them a second time. (_Note that it will still insert the end-markings if the characters directly after the current cursor position are not the end-markings_).
 - Fixed a bug that threw errors if you were to rename a non-opened file.
 - Fixed a bug that threw errors if you were to rename a directory, while none was selected.
 - Prevent arbitrary selection in the app to make it feel even more native.
-- Selecting directories is now much faster.
-- Selecting files is now also much faster.
+- Huge performance boost on selecting directories and files.
 
 ## Under the hood
 
@@ -18,7 +17,7 @@
 - Continued work on virtual directories.
 - Small changes to `Zettlr` and `ZettlrDir` classes.
 - Small changes to the markdown shortcut plugin.
-- Fixed a small error in  `Zettlr` class.
+- Fixed a small error in `Zettlr` class.
 - Removed a huge bottleneck in the directory selection logic (now the Zettlr main process will not send the complete `ZettlrDir`-object to the renderer, but just the hash, because the renderer has a full copy of the objects in memory).
 - Removed the same, big bottleneck in the file selection logic.
 

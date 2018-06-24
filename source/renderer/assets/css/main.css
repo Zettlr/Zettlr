@@ -468,8 +468,8 @@ body.linux {
   background-color: #c8f0aa;
 }
 #preview ul li {
-  border-bottom: 1px solid #dcdcdc;
-  border-top: 1px solid #dcdcdc;
+  border-bottom: 1px solid #c8c8c8;
+  border-top: 1px solid #c8c8c8;
   margin-top: -1px;
   background-color: inherit;
   overflow: hidden;
@@ -483,7 +483,7 @@ body.linux {
   line-height: inherit;
 }
 #preview ul li.vd-file {
-  background-color: #d8abf1;
+  background-color: #ecd7f8;
 }
 #preview ul li.file:hover {
   background-color: #f0f0f0 !important;

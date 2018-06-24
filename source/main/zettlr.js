@@ -216,8 +216,8 @@ class Zettlr
         let file = this.findFile({ 'hash': arg });
 
         if(file != null) {
-            this.ipc.send('file-open', file.withContent());
             this.setCurrentFile(file);
+            this.ipc.send('file-open', file.withContent());
         } else {
             this.window.prompt({
                 type: 'error',
@@ -303,11 +303,10 @@ class Zettlr
             });
         }
 
-        this.window.setTitle(file.name);
-        this.setCurrentFile(file);
-
         // Send the new paths and open the respective file.
         this.ipc.send('paths-update', this.getPaths());
+        this.window.setTitle(file.name);
+        this.setCurrentFile(file);
         this.ipc.send('file-open', file.withContent());
     }
 
@@ -455,6 +454,8 @@ class Zettlr
             this.ipc.send('file-close', {});
             // Also re-set the title!
             this.window.setTitle();
+            // Tell main & renderer to close file references
+            this.setCurrentFile(null);
         }
         file.remove();
         this.ipc.send('paths-update', this.getPaths());
@@ -725,6 +726,8 @@ class Zettlr
         if(to.isVirtualDirectory() && from.isFile()) {
             // Then simply attach.
             to.attach(from);
+            // And, of course, refresh the renderer.
+            this.ipc.send('paths-update', this.getPaths());
             return;
         }
 
@@ -766,6 +769,7 @@ class Zettlr
             this.watchdog.ignoreNext('add', path.join(to.path, from.name));
         }
 
+        console.log(`Moving file/dir ${from.name} to dir ${to.name}!`);
         from.move(to.path);
         // Add directory or file to target dir
         to.attach(from);
@@ -865,7 +869,7 @@ class Zettlr
      */
     saveFile(file)
     {
-        if(file == null) {
+        if((file == null) || !file.hasOwnProperty('content')) {
             // No file given -> abort saving process
             return;
         }
@@ -885,7 +889,7 @@ class Zettlr
             }
             file = this.getCurrentDir().newfile(null, this.watchdog);
         } else {
-            let f = this.findFile({ 'hash': file.hash });
+            let f = this.getCurrentFile(); //this.findFile({ 'hash': file.hash });
             if(f == null) {
                 return this.window.prompt({
                     type: 'error',
@@ -901,14 +905,16 @@ class Zettlr
         file.setContent(cnt);
         file.save();
         this.clearModified();
+        // Immediately update the paths in renderer so that it is able to find
+        // the file to (re)-select it.
+        this.ipc.send('paths-update', this.getPaths());
+
         // Switch to newly created file (only happens before a file is selected)
         if(this.getCurrentFile() == null) {
             this.setCurrentFile(file);
             // "Open" this file.
             this.sendFile(file.hash);
         }
-
-        this.ipc.send('paths-update', this.getPaths());
     }
 
     /**

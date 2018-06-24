@@ -287,6 +287,9 @@ class ZettlrFile
     remove()
     {
         shell.moveItemToTrash(this.path);
+        // Notify the virtual directories that this file is now in the trash
+        // (also a virtual directory, but not quite the same).
+        this.removeFromVD();
         return this.parent.remove(this);
     }
 
@@ -396,6 +399,16 @@ class ZettlrFile
     {
         if(this._vd.includes(vd)) {
             this._vd.splice(this._vd.indexOf(vd), 1);
+        }
+    }
+
+    /**
+     * Notifies all virtual directories that they can now remove this file.
+     */
+    removeFromVD()
+    {
+        for(let vd of this._vd) {
+            vd.remove(this);
         }
     }
 

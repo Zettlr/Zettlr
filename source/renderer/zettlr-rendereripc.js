@@ -103,6 +103,8 @@ class ZettlrRendererIPC
      */
     handleEvent(cmd, cnt)
     {
+        console.log(`RECEIVED ${cmd} with`, cnt);
+        
         switch(cmd)
         {
             case 'paths-update':
