@@ -234,13 +234,11 @@ class Zettlr
      */
     selectDir(arg)
     {
-        console.log(`${Date.now()}: Searching for dir ${arg}...`);
         // arg contains a hash for a directory.
         let obj = this.findDir({ 'hash': arg });
 
         // Now send it back (the GUI should by itself filter out the files)
         if(obj != null && obj.isDirectory()) {
-            console.log(`${Date.now()}: Found dir! Setting as current!`);
             this.setCurrentDir(obj);
         }
         else {

@@ -618,7 +618,7 @@ class ZettlrRenderer
      * @param  {Integer} hash As usually, a hash identifying a directory.
      * @return {void}      Nothing to return.
      */
-    requestDir(hash) { console.log(`${Date.now()}: Requesting dir ${hash}`); this._ipc.send('dir-select', hash); }
+    requestDir(hash) { this._ipc.send('dir-select', hash); }
 
     /**
      * Triggered when a file or dir is dropped on a dir.

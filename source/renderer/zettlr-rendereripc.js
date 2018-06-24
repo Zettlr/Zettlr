@@ -87,7 +87,6 @@ class ZettlrRendererIPC
             this._app.saveFile();
             return;
         }
-        console.log(`${Date.now()}: Sending command ${command}`);
 
         this._ipc.send('message', {
             'command': command,

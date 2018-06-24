@@ -30,7 +30,6 @@ const PLUGINS = [
             }
 
             for(let vd of data) {
-                console.log('Applying filter to directory:', vd);
                 arr.push(new pluginClass(dir, vd, model))
             }
             return arr;
