@@ -354,8 +354,7 @@ body.linux {
   color: inherit;
 }
 #directories .virtual-directory {
-  background-color: #d8abf1;
-  color: inherit;
+  color: #d8abf1;
 }
 #directories .virtual-directory:before {
   content: '\f4ea';
@@ -402,9 +401,6 @@ body.linux {
 }
 #directories.dark .file:hover {
   background-color: #505050;
-}
-#directories.dark .virtual-directory {
-  background-color: #641e78;
 }
 #directories.dark .emptyPaths {
   background-color: #505050;

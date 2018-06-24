@@ -234,11 +234,13 @@ class Zettlr
      */
     selectDir(arg)
     {
+        console.log(`${Date.now()}: Searching for dir ${arg}...`);
         // arg contains a hash for a directory.
         let obj = this.findDir({ 'hash': arg });
 
         // Now send it back (the GUI should by itself filter out the files)
         if(obj != null && obj.isDirectory()) {
+            console.log(`${Date.now()}: Found dir! Setting as current!`);
             this.setCurrentDir(obj);
         }
         else {
@@ -1057,7 +1059,7 @@ class Zettlr
             }
         }
         this.currentFile = f;
-        this.ipc.send('file-set-current', f);
+        this.ipc.send('file-set-current', f.hash);
     }
 
     /**
@@ -1068,7 +1070,14 @@ class Zettlr
     {
         // Set the dir
         this.currentDir = d;
-        this.ipc.send('dir-set-current', d);
+        // HOLY SHIT. Sending only the hash instead of the whole object (which
+        // has to be crunched to be send through the pipe) is SO MUCH FASTER.
+        // Especially with virtual directories, because they got a LOT of
+        // recursive stuff going on. And we can be sure, that this directory
+        // will definitely exist in the renderer's memory, b/c we re-send the
+        // paths each time we change them. So renderer should always be on the
+        // newest update.
+        this.ipc.send('dir-set-current', (d) ? d.hash : null);
     }
 
     /**

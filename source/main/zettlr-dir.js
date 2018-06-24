@@ -653,8 +653,8 @@ class ZettlrDir
     addVirtualDir(n)
     {
         n = sanitize(n); // Same rules as "normal" directories. Why? To keep it JSON-safe.
-        let vd = { 'name': n, 'files': []};
-        if(!this._vdInterface.has(vd)) {
+        if(!this._vdInterface.has(n)) {
+            let vd = { 'name': n, 'files': []};
             this._vdInterface.set(vd.name, vd);
             vd = new ZettlrVirtualDirectory(this, vd, this._vdInterface);
             this.children.push(vd);

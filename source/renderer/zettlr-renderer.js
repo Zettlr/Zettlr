@@ -618,7 +618,7 @@ class ZettlrRenderer
      * @param  {Integer} hash As usually, a hash identifying a directory.
      * @return {void}      Nothing to return.
      */
-    requestDir(hash) { this._ipc.send('dir-select', hash); }
+    requestDir(hash) { console.log(`${Date.now()}: Requesting dir ${hash}`); this._ipc.send('dir-select', hash); }
 
     /**
      * Triggered when a file or dir is dropped on a dir.
@@ -707,8 +707,7 @@ class ZettlrRenderer
         this._editor.close();
         this.setCurrentFile(f);
         // Select the file either in the preview list or in the directory tree
-        this._preview.select(f.hash);
-        this._directories.select(f.hash);
+        // this._preview.select(f.hash);
         this._editor.open(f);
     }
 
@@ -786,14 +785,14 @@ class ZettlrRenderer
     setCurrentDir(newdir = null)
     {
         let oldDir = this._currentDir;
-        this._currentDir = newdir;
+        this._currentDir = this.findObject(newdir); // Find the dir (hash) in our own paths object
         this._attachments.refresh();
 
         if(newdir != null) {
             // What we can also do here: Select the dir and refresh the file list.
             // Because that's what _always_ follows this function call.
-            this._directories.select(newdir.hash);
-            if((oldDir != null) && (newdir != null) && (oldDir.path != newdir.path)) {
+            this._directories.select(newdir);
+            if((oldDir != null) && (oldDir.path != newdir.path)) {
                 // End (potential) displaying of file results. showFiles() also refreshes.
                 this.exitSearch();
             } else {
@@ -814,10 +813,11 @@ class ZettlrRenderer
      */
     setCurrentFile(newfile)
     {
-        this._currentFile = newfile;
+        this._currentFile = this.findObject(newfile);
         // Also directly select it
         if(newfile !== null) {
-            this._preview.select(newfile.hash);
+            this._preview.select(newfile);
+            this._directories.select(newfile);
         }
     }
 

@@ -45,9 +45,9 @@ class ZettlrInterface
         return this._data;
     }
 
-    has(data)
+    has(rowname)
     {
-        return (this._data.indexOf(data) > -1);
+        return (this._data.find((elem) => { return (elem.name == rowname); }) != undefined);
     }
 
     set(row, value)
@@ -72,11 +72,19 @@ class ZettlrInterface
 
     get(attribute)
     {
-        if(this.has(attribute)) {
-            return this._data[attribute];
+        let found = this._data.find((elem) => { return (elem.name == attribute); });
+        if(found) {
+            return found;
         }
 
         return undefined;
+    }
+
+    flush()
+    {
+        // Immediately write all data to disk
+        clearTimeout(this._timeout);
+        this._write();
     }
 
     _write()

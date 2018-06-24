@@ -60,6 +60,7 @@
         },
         "new_file": "Nouveau fichier…",
         "new_dir": "Nouveau dossier…",
+        "new_vd": "Nouveau dossier virtuel…",
         "open": "Ouvrier…",
         "save": "Enregistrer",
         "export": "Exporter…",

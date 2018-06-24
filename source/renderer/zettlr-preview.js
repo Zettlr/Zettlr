@@ -252,7 +252,6 @@ class ZettlrPreview
             if(elem.hasClass('selected')) {
                 return;
             }
-
             this.requestFile(elem.attr('data-hash'));
         });
 

@@ -55,16 +55,31 @@ class ZettlrVirtualDirectory
     {
         for(let file of fileArray) {
             let f = this.parent.findFile({ 'path': this._makeAbsolute(file) });
+            // Don't remove files from array if they aren't found.
             if(f != null) {
                 this.children.push(f);
+                f.addVD(this);
             }
         }
     }
 
     shutdown()
     {
-        // Do nothing, the ZettlrFiles will shutdown when their real parent shuts
-        // down.
+        // The ZettlrFiles will shutdown when their real parent shuts down.
+        // The model we may check, whether or not there were changes.
+        let arr = this._model.get(this.name);
+        let found = null;
+        if(arr) {
+            arr = arr.files;
+            for(let f of arr) {
+                if(!this.children.find((elem) => { return elem.path == this._makeAbsolute(f); })) {
+                    // At least one file has changed -> Update everything, flush to disk and exit loop
+                    this._updateModel();
+                    this._model.flush();
+                    break;
+                }
+            }
+        }
     }
     handleEvent(p, e)
     {
@@ -141,6 +156,7 @@ class ZettlrVirtualDirectory
             if(index > -1) {
                 this.children.splice(index, 1);
                 this._updateModel();
+                obj.removeVD(this);
             } else {
                 // Fail gracefully
                 return false;
@@ -178,6 +194,7 @@ class ZettlrVirtualDirectory
         this.children = sort(this.children, this.sorting);
 
         this._updateModel();
+        newchild.addVD(this);
 
         return this;
     }
@@ -187,6 +204,9 @@ class ZettlrVirtualDirectory
         this.parent = null;
         // Also remove from model by passing null as value argument
         this._model.set(this.name, null);
+        for(let c of this.children) {
+            c.removeVD(this);
+        }
         return this;
     }
     toggleSorting(type='name-up')
@@ -296,6 +316,21 @@ class ZettlrVirtualDirectory
      *   HELPER FUNCTIONS
      */
 
+    update()
+    {
+        // This function is called whenever an included file changes its path to
+        // make sure files that have been moved outside will be removed.
+        for(let c of this.children) {
+            if(!this.parent.contains(c)) {
+                // Remove
+                this.children.splice(this.children.indexOf(c), 1);
+            }
+        }
+
+        // Update
+        this._updateModel();
+    }
+
      /**
       * Write changes to the model
       * @param  {String} [rowname=this.name] If the name has changed, this is the possibility to give the correct one.
@@ -304,7 +339,9 @@ class ZettlrVirtualDirectory
     {
         let arr = [];
         for(let c of this.children) {
-            arr.push(this._makeRelative(c.path));
+            if(c.isFile() && this.parent.contains(c)) { // Doublecheck if this is still the case.
+                arr.push(this._makeRelative(c.path));
+            }
         }
 
         let nData = { 'name': this.name, 'files': arr }

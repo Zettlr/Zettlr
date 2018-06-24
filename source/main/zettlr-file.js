@@ -54,6 +54,7 @@ class ZettlrFile
         this.snippet      = '';
         this.content      = ''; // Will only be not empty when the file is modified.
         this.modified     = false;
+        this._vd          = []; // This array holds all virtual directories in which the file is also present. Necessary to inform them of renames etc.
 
         // Prepopulate
         this.path = fname;
@@ -200,7 +201,20 @@ class ZettlrFile
         // will remain in the RAM. If you open a lot files during one session
         // with Zettlr it will gradually fill up all space, rendering your
         // computer more and more slow.
-        let f = {};
+        return {
+            'dir'          : this.dir, // Containing dir
+            'name'         : this.name,
+            'path'         : this.path,
+            'hash'         : this.hash,
+            'id'           : this.id, // The ID, if there is one inside the file.
+            'type'         : this.type,
+            'ext'          : this.ext,
+            'modtime'      : this.modtime,
+            'snippet'      : this.snippet,
+            'content'      : this.read(), // Will only be not empty when the file is modified.
+            'modified'     : false
+        };
+
         Object.assign(f, this);
         f.content = this.read();
         return f;
@@ -312,6 +326,9 @@ class ZettlrFile
         // Let the parent sort itself again to reflect possible changes in order.
         this.parent.sort();
 
+        // Notify virtualDirectories of the path change.
+        this._notifyVD();
+
         // Chainability
         return this;
     }
@@ -334,6 +351,9 @@ class ZettlrFile
         // Move
         fs.renameSync(oldPath, this.path);
 
+        // Notify virtualDirectories of the path change.
+        this._notifyVD();
+
         // Chainability
         return this;
     }
@@ -347,6 +367,36 @@ class ZettlrFile
         this.parent.remove(this);
         this.parent = null;
         return this;
+    }
+
+    /**
+     * Add a virtual directory to the list of virtual directories
+     * @param {ZettlrVirtualDirectory} vd The directory to be added
+     */
+    addVD(vd)
+    {
+        // Prevent duplicates
+        if(!this._vd.includes(vd)) {
+            this._vd.push(vd);
+        }
+    }
+
+    _notifyVD()
+    {
+        for(let vd of this._vd) {
+            vd.update(); // Call update method
+        }
+    }
+
+    /**
+     * Remove a virtual directory to the list of virtual directories
+     * @param {ZettlrVirtualDirectory} vd The directory to be removed
+     */
+    removeVD(vd)
+    {
+        if(this._vd.includes(vd)) {
+            this._vd.splice(this._vd.indexOf(vd), 1);
+        }
     }
 
     /**
