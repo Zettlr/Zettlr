@@ -102,9 +102,7 @@ class ZettlrRendererIPC
      * @deprecated Will be moved to Renderer-IPC in another version
      */
     handleEvent(cmd, cnt)
-    {
-        console.log(`RECEIVED ${cmd} with`, cnt);
-        
+    {        
         switch(cmd)
         {
             case 'paths-update':

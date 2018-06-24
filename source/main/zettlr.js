@@ -769,7 +769,6 @@ class Zettlr
             this.watchdog.ignoreNext('add', path.join(to.path, from.name));
         }
 
-        console.log(`Moving file/dir ${from.name} to dir ${to.name}!`);
         from.move(to.path);
         // Add directory or file to target dir
         to.attach(from);

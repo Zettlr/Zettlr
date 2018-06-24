@@ -20,6 +20,7 @@
 - Fixed a small error in `Zettlr` class.
 - Removed a huge bottleneck in the directory selection logic (now the Zettlr main process will not send the complete `ZettlrDir`-object to the renderer, but just the hash, because the renderer has a full copy of the objects in memory).
 - Removed the same, big bottleneck in the file selection logic.
+- Updated all dependencies to their latest version.
 
 # 0.15.5
 
