@@ -19,7 +19,6 @@ const {exec}        = require('child_process');
 const path          = require('path');
 const fs            = require('fs');
 const showdown      = require('showdown');
-const footnotes     = require('showdown-footnotes');
 
 /**
  * ZettlrExport is a stateless class that gets invoked via the constructor.
@@ -84,7 +83,6 @@ class ZettlrExport
     {
         // Create a new showdown converter w/ footnotes support
         this.showdown = new showdown.Converter({
-            'extensions': [footnotes],
             'tables': true,
             'requireSpaceBeforeHeadingText': true // Needed to not render tags at line beginning
         });
@@ -115,10 +113,19 @@ class ZettlrExport
         if(this.options.format == 'html' && this.showdown != null) {
             // Simply write the target file ourselves. Therefore first convert
             // to HTML and insert into the template, then replace the variables.
-            let cnt = this.showdown.makeHtml(this.options.file.withContent().content);
-            let file = fs.readFileSync(path.join(__dirname, './export.tpl'), 'utf8').replace('%BODY%', cnt);
+            let file = this.showdown.makeHtml(this.options.file.withContent().content);
+            file = fs.readFileSync(path.join(__dirname, './export.tpl'), 'utf8').replace('%BODY%', file);
             file = file.replace('%TITLE%', this.options.file.name);
             file = file.replace('%DATE%', formatDate(new Date()));
+            // Replace footnotes. As HTML is only meant for preview & quick prints,
+            // it doesn't matter how exact it is. Doesn't need to get to pandoc's
+            // abilities.
+            file = file.replace(/\[\^([\d\w]+)\]: (.+)\n/g, function(match, p1, p2, offset, string) {
+                return `<p><small><sup><a name="fn-${p1}" ></a><a href="#fnref-${p1}">${p1}</a></sup> ${p2}</small></p>`;
+            });
+            file = file.replace(/\[\^([\d\w]+)\]/g, function(match, p1, offset, string) {
+                return `<sup><a name="fnref-${p1}"></a><a href="#fn-${p1}">${p1}</a></sup>`;
+            });
 
             fs.writeFile(this.targetFile, file, 'utf8', (err) => {
                 if(err) {
