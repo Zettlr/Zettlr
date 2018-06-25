@@ -1,3 +1,14 @@
+# 0.16.1
+
+## GUI and functionality
+
+- Added full stops after TOC-ordinals.
+- The `HTML`-export (e.g., for printing) does not rely on `pandoc` to be present on the system anymore. In other words: `HTML`-export is now working everywhere and has no prerequisites anymore.
+
+## Under the hood
+
+- Moved all exporting functionality to a separate class, `ZettlrExport`.
+
 # 0.16.0
 
 ## GUI and functionality

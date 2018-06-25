@@ -18,7 +18,6 @@ const {dialog, app, BrowserWindow}  = require('electron');
 const fs                            = require('fs');
 const process                       = require('process');
 const path                          = require('path');
-const {exec}                        = require('child_process');
 
 // Internal classes
 const ZettlrIPC                     = require('./zettlr-ipc.js');
@@ -29,6 +28,7 @@ const ZettlrFile                    = require('./zettlr-file.js');
 const ZettlrWatchdog                = require('./zettlr-watchdog.js');
 const ZettlrStats                   = require('./zettlr-stats.js');
 const ZettlrUpdater                 = require('./zettlr-updater.js');
+const ZettlrExport                  = require('./zettlr-export.js');
 const {i18n, trans}                 = require('../common/lang/i18n.js');
 const {hash, ignoreDir,
        ignoreFile, isFile, isDir}   = require('../common/zettlr-helpers.js');
@@ -547,70 +547,23 @@ class Zettlr
      * moved into another class in further versions.
      * @param  {Object} arg An object containing hash and wanted extension.
      * @return {void}     Does not return.
-     * @deprecated
      */
     exportFile(arg)
     {
-        if(!this.config.getEnv('pandoc')) {
-            return this.window.prompt({
-                type: 'error',
-                title: trans('system.error.no_pandoc_title'),
-                message: trans('system.error.no_pandoc_message')
-            });
-        }
-
-        if((arg.ext == 'pdf') && !this.config.getEnv('pdflatex')) {
-            return this.window.prompt({
-                type: 'error',
-                title: trans('system.error.no_pdflatex_title'),
-                message: trans('system.error.no_pdflatex_message', error)
-            });
-        }
-
-        // arg contains a hash and an extension.
+        // TODO: Call the exporter
         let file = this.findFile({ 'hash': arg.hash });
-        let cwd = path.dirname(file.path);
-        let newname = file.name.substr(0, file.name.lastIndexOf(".")) + "." + arg.ext;
-        let temp = app.getPath('temp');
-        let pdfengine = ''
+        let opt = {
+            'format': arg.ext,      // Which format: "html", "docx", "odt", "pdf"
+            'file': file,           // The file to be exported
+            'dest': (this.config.get('exportDir') == 'temp') ? app.getPath('temp') : file.parent.path, // Either temp or cwd
+            'pdfengine': 'pdflatex',
+            'tplDir': this.config.getEnv('templateDir'),
+            'pandoc': this.config.getEnv('pandoc'),
+            'pdflatex': this.config.getEnv('pdflatex')
+        };
 
-        if(arg.ext == "pdf") {
-            arg.ext = 'latex';
-            // The next line enables xelatex as the main pdf engine for pandoc.
-            // The problem is: Although it is able to render non-latin characters
-            // such as Greek, Kyrillic, Arab, Hebrew and other, it needs a lot of
-            // configuration being done. We will implement it, once we have moved
-            // the export functions to a separate class.
-            // pdfengine = '--pdf-engine=xelatex';
-        }
-        let tpl = path.join(this.config.getEnv('templateDir'), 'template.' + arg.ext);
-        if(arg.ext === "html" || arg.ext === 'latex') {
-            tpl = '--template="' + tpl + '"';
-        } else if(arg.ext === 'odt' || arg.ext === 'docx') {
-            tpl = '--reference-doc="' + tpl + '" -s'; // Don't forget standalone flag
-        }
-
-        let tempfile = path.join(temp, newname);
-
-        let command = `pandoc "${file.path}" -f markdown ${tpl} -t ${arg.ext} ${pdfengine} -o "${tempfile}"`;
-
-        // Set the current working directory of pandoc to the file's directory. Failing to do so
-        // will yield errors on Windows when the app is installed for all users
-        // (because then the application directory will require admin rights to
-        // write files to and pandoc spits out pre-rendered tex-files)
-        exec(command, { 'cwd': cwd }, (error, stdout, stderr) => {
-            if (error) {
-                this.window.prompt({
-                    type: 'error',
-                    title: trans('system.error.pandoc_error_title'),
-                    message: trans('system.error.pandoc_error_message', error)
-                });
-                return;
-            }
-
-            // Open externally
-            require('electron').shell.openItem(tempfile);
-        });
+        // Call the exporter.
+        new ZettlrExport(this, opt);
     }
 
     /**

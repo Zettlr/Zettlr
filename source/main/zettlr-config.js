@@ -96,6 +96,7 @@ class ZettlrConfig
             "snippets"  : true,
             "pandoc"    : 'pandoc',
             "pdflatex"  : 'pdflatex',
+            "exportDir" : 'temp',   // Can either be "temp" or "cwd" (current working directory)
             "spellcheck": {
                 'en_US' : (this.getLocale() === 'en_US') ? true : false,
                 'en_GB' : (this.getLocale() === 'en_GB') ? true : false,
