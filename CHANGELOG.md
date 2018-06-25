@@ -10,8 +10,10 @@
 - Prevent arbitrary selection in the app to make it feel even more native.
 - Huge performance boost on selecting directories and files.
 - Translated remotely triggered file- and directory-events.
+- Finally fixed the bug that the end-search button disappeared and the input field went in disarray when the window size was too small.
 - Re-introduced feature that Zettlr asks the user to replace the current editor content, if the current file has been changed remotely.
 - Now, if the current file is removed remotely, Zettlr automatically closes the file in the editor as well.
+- On updates, the download URL to GitHub now opens on the system's browser.
 
 ## Under the hood
 

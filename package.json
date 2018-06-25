@@ -1,12 +1,15 @@
 {
-    "name": "zettlr",
+    "name": "Zettlr",
     "homepage": "https://www.zettlr.com",
-    "author": "Hendrik Erz <zettlr@mailbox.org>",
+    "author": {
+    "name": "Hendrik Erz",
+    "email": "zettlr@mailbox.org"
+    },
     "repository": {
         "type": "git",
         "url": "git://github.com/Zettlr/Zettlr.git"
     },
-    "version": "0.15.5",
+    "version": "0.16.0",
     "license": "GPL-3.0",
     "description": "A powerful Markdown Editor with integrated tree view",
     "main": "./source/main.js",

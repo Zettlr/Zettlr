@@ -7,6 +7,6 @@
     <div class="changelog">
         %CHANGELOG%
     </div>
-    <a href="%RELEASEURL%" target="_blank" class="button">%i18n.update.release_url%</a>
+    <a href="%RELEASEURL%" target="_blank" class="button" onclick="require('electron').shell.openExternal(this.getAttribute('href')); return false;">%i18n.update.release_url%</a>
     <button id="abort">%i18n.update.close%</button>
 </div>
