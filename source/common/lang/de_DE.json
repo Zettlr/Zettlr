@@ -259,6 +259,7 @@
         "save_changes_omit": "Änderungen verwerfen",
         "replace_file_title": "Aktuelle Datei ersetzen?",
         "replace_file_message": "Die aktuelle Datei wurde von außerhalb verändert. Änderungen übernehmen?",
+        "directory_removed": "Das Verzeichnis %s wurde entfernt.",
         "ok": "Ok",
         "cancel": "Abbrechen",
         "open_folder": "Projektverzeichnis öffnen"

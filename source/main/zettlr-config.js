@@ -41,7 +41,7 @@ class ZettlrConfig
         this.configFile = path.join(this.configPath, 'config.json');
         this.config = null;
 
-        // Environment variables TODO: Generate them dynamically
+        // Environment variables
         this.env = {
             'pandoc': false,
             'pdflatex': false

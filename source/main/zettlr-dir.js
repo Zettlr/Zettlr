@@ -113,8 +113,7 @@ class ZettlrDir
     {
         if((this.isScope(p) === this) && (e === 'unlinkDir')) {
             // This directory has been removed. Notify host process and remove.
-            // TODO: Translate
-            this.parent.notifyChange(`The directory ${this.name} has been removed.`);
+            this.parent.notifyChange(trans('system.directory_removed', this.name));
             this.remove();
         } else if(this.isScope(p) === true) {
             if((path.dirname(p) === this.path) && (e === 'add' || e === 'addDir')) {

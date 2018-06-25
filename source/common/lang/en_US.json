@@ -259,6 +259,7 @@
         "save_changes_omit": "Proceed without saving",
         "replace_file_title": "Replace current file?",
         "replace_file_message": "The current file has been modified remotely. Replace in editor?",
+        "directory_removed": "Directory %s has been removed.",
         "ok": "Ok",
         "cancel": "Cancel",
         "open_folder": "Open project folder"

@@ -174,28 +174,19 @@ class ZettlrPreview
     _updateDraggable()
     {
         this._listContainer.find('li.file').draggable({
-            'cursorAt': { 'top': 0, 'left': 0},
+            'cursorAt': { 'top': 10, 'left': 10},
             'scroll': false,
             'helper': function() {
-                // Return a clone attached to the body (movable through the whole view)
-                // and that has the same CSS classes
-                return $(this)
-                .clone()
-                .appendTo('body')
-                .css('z-index', 1000)
-                .css('height', $(this).innerHeight())
-                .css('width', $(this).innerWidth())
-                .css('background-color', $(this).css('background-color'))
-                .css('color', $(this).css('color'))
-                .css('font-family', $(this).css('font-family'))
-                .css('padding', $(this).css('padding'))
-                .css('margin', $(this).css('margin'))
-                .css('list-style-type', $(this).css('list-style-type'));
+                // Return a dragger element containing the filename
+                return $('<div>').addClass('dragger').text($(this).children('strong').first().text()).appendTo('body');
             },
             'revert': "invalid", // Only revert if target was invalid
             'revertDuration': 200,
             'distance': 5,
         });
+
+        // Enable to drag out files from the app
+        // TODO: Here's the tutorial: https://electronjs.org/docs/tutorial/native-file-drag-drop
     }
 
     /**

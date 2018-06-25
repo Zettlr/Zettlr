@@ -63,8 +63,7 @@ class ZettlrWindow
             icon: 'icons/png/64x64.png',
             backgroundColor: '#fff',
             scrollBounce: true, // The nice scrolling effect for macOS
-            defaultEncoding: 'utf8', // Why the hell does this default to ISO?
-            // devTools: false, ---- TODO: ACTIVATE WHEN READY WITH DEVELOPING
+            defaultEncoding: 'utf8' // Why the hell does this default to ISO?
         });
 
         // Then activate listeners.

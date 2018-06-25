@@ -56,6 +56,22 @@ body.darwin,
 body.linux {
   font-family: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
 }
+body div.dragger {
+  display: block;
+  font-size: 0.9em;
+  z-index: 1000;
+  max-width: 500px;
+  white-space: nowrap;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #dcdcdc;
+  box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
+  cursor: default;
+}
+body.dark div.dragger {
+  color: white;
+  background-color: #464646;
+}
 #container.blur {
   /* This is applied when a modal is shown */
   filter: blur(5px);
@@ -290,6 +306,9 @@ body.linux {
 }
 #directories ul li.highlight {
   box-shadow: 0px 0px 1px 2px #c8f0aa;
+}
+#directories ul li.highlight:hover {
+  background-color: inherit;
 }
 #directories ul li.root:before {
   content: '\f0f0';

@@ -34,6 +34,27 @@ body {
         // Use built-in Lato for other systems.
         font-family: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
     }
+
+    div.dragger {
+        // This class is applied to dragged elements
+        display:block;
+        font-size:@font-size-small;
+        z-index:1000;
+        max-width:500px;
+        white-space: nowrap;
+        padding:5px;
+        border-radius:5px;
+        background-color:@grey-1;
+        box-shadow:5px 5px 15px 0px rgba(0,0,0,.25);
+        cursor:default;
+    }
+
+    &.dark {
+        div.dragger {
+            color:white;
+            background-color:@grey-6;
+        }
+    }
 }
 
 #container.blur {
