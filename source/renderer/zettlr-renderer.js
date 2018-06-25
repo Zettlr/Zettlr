@@ -294,7 +294,7 @@ class ZettlrRenderer
             }
 
             cnt.append(
-                $('<a>').text(level + ' ' + entry.text)
+                $('<a>').text(level + '. ' + entry.text)
                 .attr('data-line', entry.line)
                 .attr('href', '#')
                 .addClass('toc-link')
