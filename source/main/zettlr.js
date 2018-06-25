@@ -109,6 +109,19 @@ class Zettlr
                 for(let root of this.getPaths()) {
                     if(root.isScope(p) !== false) {
                         root.handleEvent(p, t);
+                        let isCurrentFile = (this.getCurrentFile() && (hash(p) == this.getCurrentFile().hash));
+                        if(isCurrentFile && (t == 'unlink')) {
+                            // We need to close the file
+                            this.ipc.send('file-close');
+                            this.getWindow().setTitle(''); // Reset window title
+                            this.setCurrentFile(null); // Reset file
+                        } else if(isCurrentFile && (t == 'change')) {
+                            // Current file has changed -> ask to replace and do
+                            // as the user wishes
+                            if(this.getWindow().askReplaceFile()) {
+                                this.ipc.send('file-open', this.getCurrentFile().withContent());
+                            }
+                        }
                     }
                 }
             });

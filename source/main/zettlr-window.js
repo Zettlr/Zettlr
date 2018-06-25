@@ -268,7 +268,7 @@ class ZettlrWindow
         // - so how deal with "omit" changes?
         // Well I don't want to create some constants so let's just leave it
         // with these three values.
-        return ret;
+        return (ret == 1);
     }
 
     /**

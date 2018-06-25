@@ -1106,7 +1106,7 @@ body.dark div.dragger {
 #toolbar .searchbar div.end-search {
   position: relative;
   right: 26px;
-  width: 12px;
+  width: 0px;
   height: 12px;
   display: inline-block;
   line-height: 11px;

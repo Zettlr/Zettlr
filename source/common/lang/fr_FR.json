@@ -260,6 +260,7 @@
         "replace_file_title": "Remplacer le fichier?",
         "replace_file_message": "Le fichier actuel été modifié externe à l'application. Remplacer?",
         "directory_removed": "Le dossier %s a été supprimer.",
+        "file_removed": "Le fichier %s a été supprimer.",
         "ok": "Ok",
         "cancel": "Annuler",
         "open_folder": "Ouvrir un dossier de la racine."

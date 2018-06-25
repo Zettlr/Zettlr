@@ -18,6 +18,7 @@ const path                  = require('path');
 const sanitize              = require('sanitize-filename');
 const {shell}               = require('electron');
 const {hash, ignoreFile}    = require('../common/zettlr-helpers.js');
+const {trans}               = require('../common/lang/i18n.js');
 
 /**
  * Error Object
@@ -103,7 +104,7 @@ class ZettlrFile
             if(e === 'change') {
                 this.update().parent.notifyChange(`File ${this.name} has changed remotely.`);
             } else if(e === 'unlink') {
-                this.parent.notifyChange(`File ${this.name} has been removed.`);
+                this.parent.notifyChange(trans('system.file_removed', this.name));
                 this.remove();
             }
         }

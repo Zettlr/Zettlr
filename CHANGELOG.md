@@ -9,6 +9,9 @@
 - Fixed a bug that threw errors if you were to rename a directory, while none was selected.
 - Prevent arbitrary selection in the app to make it feel even more native.
 - Huge performance boost on selecting directories and files.
+- Translated remotely triggered file- and directory-events.
+- Re-introduced feature that Zettlr asks the user to replace the current editor content, if the current file has been changed remotely.
+- Now, if the current file is removed remotely, Zettlr automatically closes the file in the editor as well.
 
 ## Under the hood
 
@@ -20,7 +23,7 @@
 - Fixed a small error in `Zettlr` class.
 - Removed a huge bottleneck in the directory selection logic (now the Zettlr main process will not send the complete `ZettlrDir`-object to the renderer, but just the hash, because the renderer has a full copy of the objects in memory).
 - Removed the same, big bottleneck in the file selection logic.
-- Updated all dependencies to their latest version.
+- Updated all dependencies to their latest version. Thereby we've switched to Electron 2.0.3.
 
 # 0.15.5
 
