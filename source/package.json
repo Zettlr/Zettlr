@@ -1,23 +1,18 @@
 {
-    "name": "Zettlr",
+    "name": "zettlr",
+    "productName": "Zettlr",
     "homepage": "https://www.zettlr.com",
-    "author": {
-        "name": "Hendrik Erz",
-        "email": "zettlr@mailbox.org"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/Zettlr/Zettlr.git"
-    },
+    "author": "Hendrik Erz <zettlr@mailbox.org>",
     "version": "0.16.0",
     "description": "A powerful Markdown Editor with integrated tree view",
     "license": "GPL-3.0",
     "main": "main.js",
     "dependencies": {
-        "chokidar": "^2.0.4",
+        "chokidar": "^2.0.3",
         "clusterize.js": "^0.18.1",
-        "codemirror": "^5.39.0",
-        "command-exists": "^1.2.7",
+        "codemirror": "^5.35.0",
+        "codemirror-markdown-list-autoindent": "^1.0.1",
+        "command-exists": "^1.2.2",
         "jquery": "^3.3.1",
         "sanitize-filename": "^1.6.1",
         "semver": "^5.5.0",

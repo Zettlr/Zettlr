@@ -1,10 +1,7 @@
 {
-    "name": "Zettlr",
+    "name": "zettlr",
     "homepage": "https://www.zettlr.com",
-    "author": {
-    "name": "Hendrik Erz",
-    "email": "zettlr@mailbox.org"
-    },
+    "author": "Hendrik Erz <zettlr@mailbox.org>",
     "repository": {
         "type": "git",
         "url": "git://github.com/Zettlr/Zettlr.git"
@@ -106,10 +103,11 @@
         "rpm": {}
     },
     "dependencies": {
-        "chokidar": "^2.0.4",
+        "chokidar": "^2.0.3",
         "clusterize.js": "^0.18.1",
-        "codemirror": "^5.39.0",
-        "command-exists": "^1.2.7",
+        "codemirror": "^5.37.0",
+        "codemirror-markdown-list-autoindent": "^1.0.1",
+        "command-exists": "^1.2.6",
         "jquery": "^3.3.1",
         "sanitize-filename": "^1.6.1",
         "semver": "^5.5.0",
@@ -119,8 +117,8 @@
     },
     "devDependencies": {
         "chalk": "^2.4.1",
-        "electron": "^2.0.3",
-        "electron-builder": "^20.15.1",
+        "electron": "^1.8.6",
+        "electron-builder": "^20.11.1",
         "esdoc": "^1.1.0",
         "esdoc-standard-plugin": "^1.0.0",
         "less": "^3.0.2"
