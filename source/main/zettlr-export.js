@@ -46,7 +46,7 @@ class ZettlrExport
 
         // Second make sure pandoc is installed. Without, only HTML is possible
         // through showdown.
-        if(!this.options.pandoc || this.options.format != "html") {
+        if(!this.options.pandoc && this.options.format != "html") {
             return app.window.prompt({
                 type: 'error',
                 title: trans('system.error.no_pandoc_title'),
