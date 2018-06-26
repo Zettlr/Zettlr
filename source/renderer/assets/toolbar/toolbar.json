@@ -84,6 +84,13 @@
             "title": "toolbar.show_toc"
         },
         {
+            "role": "button",
+            "class": "find",
+            "command": "file-find",
+            "content": "{}",
+            "title": "toolbar.find"
+        },
+        {
             "role": "file-info"
         },
         {

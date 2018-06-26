@@ -1045,6 +1045,9 @@ body.dark .sb-annotation {
 #toolbar .button.formatting::before {
   content: "\00b6";
 }
+#toolbar .button.find::before {
+  content: "\f16d";
+}
 #toolbar .button.share::before {
   content: "\f16c";
 }
@@ -1239,6 +1242,31 @@ body.dark .sb-annotation {
   padding: 10px;
   display: block;
   text-align: center;
+}
+.popup form.search input {
+  font-size: 100%;
+  text-align: left;
+  display: inline;
+  width: 60%;
+  background-color: transparent;
+  color: inherit;
+  padding: 5px;
+  border: none;
+}
+.popup form.search input:focus {
+  outline: 0;
+}
+.popup form.search button {
+  width: auto;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 2px;
+  font-size: 1em;
+  display: inline;
+  background-color: #f0f0f0;
+}
+.popup form.search button:hover {
+  background-color: #787878;
 }
 .popup form input {
   background-color: transparent;

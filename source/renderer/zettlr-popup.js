@@ -41,6 +41,7 @@ class ZettlrPopup
         this._cnt = content; // Should contain a jQuery object
         this._callback = callback; // Function to be called on close
         this._elem = elem;
+        this._persistent = false; // Should the popup stay open even on form submit?
 
         // Where the small arrow should point to.
         this._x = 0;
@@ -73,6 +74,7 @@ class ZettlrPopup
         // Activate forms
         this._popup.find('form').on('submit', (e) => {
             e.preventDefault();
+            if(this._persistent) return; // Prevent default but do not yet close
             this.close();
         });
 
@@ -179,6 +181,14 @@ class ZettlrPopup
         this._popup.animate({'opacity': '0'}, 200, 'swing', () => {
             this._popup.detach();
         });
+    }
+
+    /**
+     * Make the popup persistent (i.e. it can only be closed via click on the modal, not by form submission)
+     */
+    makePersistent()
+    {
+        this._persistent = true;
     }
 }
 

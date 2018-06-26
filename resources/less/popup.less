@@ -87,6 +87,37 @@
         text-align:center;
     }
 
+    // SEARCH POPUP
+    form.search {
+        input {
+            font-size:100%;
+            text-align:left;
+            display:inline;
+            width:60%;
+            background-color: transparent;
+            color:inherit;
+            padding:5px;
+            border:none;
+            &:focus {
+                outline:0;
+            }
+        }
+
+        button {
+            width:auto;
+            padding:5px;
+            margin:5px;
+            border-radius:2px;
+            font-size:@font-size-base;
+            display:inline;
+            background-color:@grey-0;
+
+            &:hover {
+                background-color:@grey-3;
+            }
+        }
+    }
+
     // Elements inside popups
     form {
         input {

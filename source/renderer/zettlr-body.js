@@ -379,6 +379,55 @@ class ZettlrBody
         this._dialog.open();
     }
 
+    displayFind()
+    {
+        if(this._renderer.getCurrentFile() === null) {
+            return;
+        }
+
+        let cnt = `<form class="search"><input type="text" placeholder="find..." value="" id="searchWhat"><button id="searchNext">Search</button><br>
+        <input type="text" placeholder="replace with" value="" id="replaceWhat"><button id="replaceNext">Replace</button><button id="replaceAll">All</button></form>`;
+
+        // This must be a persistent popup
+        let popup = (new ZettlrPopup(this, $('.button.find'), cnt, (x) => {
+            // Remove search cursor once the popup is closed
+            this._renderer.getEditor().stopSearch();
+        })).makePersistent();
+
+        $('#searchWhat').on('keyup', (e) => {
+            if(e.which == 27) { // Enter
+                e.preventDefault();
+                $('#searchNext').click();
+            }
+        });
+
+        $('#replaceWhat').on('keyup', (e) => {
+            if(e.which == 27) {
+                e.preventDefault();
+                console.log(`Return on replace field`);
+                if(e.altKey) {
+                    $('#replaceAll').click();
+                } else {
+                    $('#replaceNext').click();
+                }
+            }
+        });
+
+        $('#searchNext').click((e) => {
+            this._renderer.getEditor().searchNext($('#searchWhat').val());
+        });
+
+        $('#replaceNext').click((e) => {
+            this._renderer.getEditor().replaceNext($('#replaceWhat').val());
+            // Immediately highlight the next search result
+            this._renderer.getEditor().searchNext($('#searchWhat').val());
+        });
+
+        $('#replaceAll').click((e) => {
+            this._renderer.getEditor().replaceAll($('#searchWhat').val(), $('#replaceWhat'));
+        });
+    }
+
     /**
      * Displays a popup containing all formattings
      */

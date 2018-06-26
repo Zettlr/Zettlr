@@ -18,10 +18,8 @@ const path = require('path');
 require('codemirror/addon/mode/overlay');
 require('codemirror/addon/edit/continuelist');
 require('./assets/codemirror/indentlist.js');
-require('codemirror/addon/search/search');
 require('codemirror/addon/search/searchcursor');
 require('codemirror/addon/search/jump-to-line');
-require('codemirror/addon/dialog/dialog.js');
 require('codemirror/addon/edit/closebrackets');
 require('codemirror/addon/selection/mark-selection');
 require('codemirror/addon/scroll/annotatescrollbar');
@@ -73,6 +71,7 @@ class ZettlrEditor
         this._prevSelections = [];          // Used to save all selections before a command is run to re-select
         this._markedResults = [];           // Contains the search results marked in the text
         this._scrollbarAnnotations = null;  // Contains an object to mark search results on the scrollbar
+        this._searchCursor = null;          // A search cursor while searching
 
         // These are used for calculating a correct word count
         this._blockElements = require('../common/data.json').block_elements;
@@ -89,14 +88,9 @@ class ZettlrEditor
                 override: true
             },
             extraKeys: {
-                'Ctrl-Shift-F'  : false,  // Triggers replace in CodeMirror, disables global search
-                'Cmd-Shift-F'   : false,
                 'Enter'         : 'newlineAndIndentContinueMarkdownList',
                 'Tab'           : 'autoIndentMarkdownList',
-                'Shift-Tab'     : 'autoUnindentMarkdownList',
-                // Default bindings are non-persistent searches (dialog hides after enter)
-                'Cmd-F'         : 'findPersistent',
-                'Ctrl-F'        : 'findPersistent'
+                'Shift-Tab'     : 'autoUnindentMarkdownList'
             }
         });
 
@@ -721,10 +715,60 @@ class ZettlrEditor
     }
 
     /**
-    * The CodeMirror instane should open the find dialog
-    * @return {void} Nothing to return.
-    */
-    openFind() { this._cm.execCommand("findPersistent"); }
+     * Find the next occurrence of a given term
+     * @param  {String} [term] The term to search for
+     */
+    searchNext(term)
+    {
+        let cur = this._cm.getCursor();
+
+        if(this._searchCursor == null) {
+            this._searchCursor = this._cm.getSearchCursor(term, this._cm.getCursor());
+        }
+
+        if(this._searchCursor.findNext()) {
+            this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to());
+        } else {
+            // Start from beginning
+            this._searchCursor = this._cm.getSearchCursor(term, {'line': 0, 'ch': 0});
+            if(this._searchCursor.findNext()) {
+                this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to());
+            }
+        }
+    }
+
+    /**
+     * Stops the search by destroying the search cursor
+     */
+    stopSearch()
+    {
+        this._searchCursor = null;
+    }
+
+    /**
+     * Replace the next occurrence with str_replace
+     * @param  {String} str_replace The string with which the next occurrence of the search cursor term will be replaced
+     */
+    replaceNext(str_replace)
+    {
+        if(this._searchCursor != null) {
+            this._searchCursor.replace(str_replace);
+        }
+    }
+
+    /**
+     * Replace all occurrences of a given string with a given replacement
+     * @param  {String} searchWhat  The string to be searched for
+     * @param  {String} replaceWhat Replace with this string
+     */
+    replaceAll(searchWhat, replaceWhat)
+    {
+        this._searchCursor = this._cm.getSearchCursor(searchWhat, {'line':0,'ch':0});
+        while(this._searchCursor.findNext()) {
+            this._searchCursor.replace(replaceWhat);
+        }
+        this._searchCursor = null;
+    }
 
     /**
     * Returns the current value of the editor.

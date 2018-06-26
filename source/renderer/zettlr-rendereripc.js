@@ -173,14 +173,6 @@ class ZettlrRendererIPC
             }
             break;
 
-            case 'file-request-revert':
-            this.send('file-revert');
-            break;
-
-            case 'file-revert':
-            this._app.getEditor().revert(cnt);
-            break;
-
             case 'file-rename':
             this._app.renameFile(cnt);
             break;
@@ -190,7 +182,7 @@ class ZettlrRendererIPC
             break;
 
             case 'file-find':
-            this._app.getEditor().openFind();
+            this._app.getBody().displayFind();
             break;
 
             case 'file-delete':
