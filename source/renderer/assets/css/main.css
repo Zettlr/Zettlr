@@ -1046,7 +1046,7 @@ body.dark .sb-annotation {
   content: "\00b6";
 }
 #toolbar .button.find::before {
-  content: "\f16d";
+  content: "\f0c5";
 }
 #toolbar .button.share::before {
   content: "\f16c";
