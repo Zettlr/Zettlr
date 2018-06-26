@@ -350,6 +350,17 @@ class ZettlrBody
     }
 
     /**
+     * Open a new dialog for displaying the PDF preferences.
+     * @param  {Object} prefs An object containing all current config variables
+     * @return {void}       Nothing to return.
+     */
+    displayPDFPreferences(prefs)
+    {
+        this._dialog.init('pdf-preferences', prefs);
+        this._dialog.open();
+    }
+
+    /**
      * Displays the update notification
      * @param  {Object} cnt An object containing information on the update.
      */
@@ -465,13 +476,13 @@ class ZettlrBody
     // containing all serialized form inputs and the dialog type
     /**
      * This function is called by the dialog class when the user saves settings.
-     * @param  {String} dialog    The opened dialog. TODO: Not needed.
+     * @param  {String} dialog    The opened dialog.
      * @param  {Array} res       An array containing all settings
      * @return {void}           Nothing to return.
      */
     proceed(dialog, res)
     {
-        let pandoc     = '',
+        let pandoc = '',
         pdflatex   = '',
         darkTheme  = false,
         snippets   = false,
@@ -482,7 +493,19 @@ class ZettlrBody
         exportDir = 'temp',
         stripIDs = false,
         stripTags = false,
-        stripLinks = "full";
+        stripLinks = "full",
+        author = '',
+        keywords = '',
+        lmargin = 0,
+        rmargin = 0,
+        bmargin = 0,
+        tmargin = 0,
+        fontsize = 12,
+        papertype = 'a4paper',
+        lineheight = 1,
+        mainfont = 'Times New Roman',
+        margin_unit = 'cm',
+        pagenumbering = 'gobble';
 
         for(let r of res) {
             if(r.name === 'pref-pandoc') {
@@ -521,11 +544,37 @@ class ZettlrBody
                         attachments[i] = '.' + attachments[i];
                     }
                 }
+            } else if(r.name === 'prefs-pdf-author') {
+                author = r.value;
+            } else if(r.name === 'prefs-pdf-keywords') {
+                keywords = r.value;
+            } else if(r.name === 'prefs-pdf-papertype') {
+                papertype = r.value;
+            } else if(r.name === 'prefs-pdf-margin-unit') {
+                margin_unit = r.value;
+            } else if(r.name === 'prefs-pdf-tmargin') {
+                tmargin = r.value || 0;
+            } else if(r.name === 'prefs-pdf-bmargin') {
+                bmargin = r.value || 0;
+            } else if(r.name === 'prefs-pdf-lmargin') {
+                lmargin = r.value || 0;
+            } else if(r.name === 'prefs-pdf-rmargin') {
+                rmargin = r.value || 0;
+            } else if(r.name === 'prefs-pdf-mainfont') {
+                mainfont = r.value;
+            } else if(r.name === 'prefs-pdf-fontsize') {
+                fontsize = r.value;
+            } else if(r.name === 'prefs-pdf-lineheight') {
+                lineheight = r.value / 100; // Convert to floating point scale
+            } else if(r.name === 'prefs-pdf-pagenumbering') {
+                pagenumbering = r.value;
             }
         }
 
+        // Build the config object and send it to main
+        let cfg = {};
         if(dialog == 'preferences') {
-            let cfg = {
+            cfg = {
                 'pandoc': pandoc,
                 'pdflatex': pdflatex,
                 'darkTheme': darkTheme,
@@ -541,8 +590,25 @@ class ZettlrBody
                 },
                 'attachmentExtensions': attachments
             }
-            this._renderer.saveSettings(cfg);
+        } else if(dialog == 'pdf-preferences') {
+            cfg = {
+                "pdf": {
+                    "author" : author,
+                    "keywords" : keywords,
+                    "papertype" : papertype,
+                    "pagenumbering": pagenumbering,
+                    "tmargin": tmargin,
+                    "rmargin": rmargin,
+                    "bmargin": bmargin,
+                    "lmargin": lmargin,
+                    "margin_unit": margin_unit,
+                    "lineheight": lineheight,
+                    "mainfont": mainfont,
+                    "fontsize": fontsize
+                }
+            };
         }
+        this._renderer.saveSettings(cfg);
 
         this._dialog.close();
     }

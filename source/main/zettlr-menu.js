@@ -292,6 +292,12 @@ class ZettlrMenu
                 click (item, focusedWindow) {
                     if(focusedWindow) focusedWindow.webContents.send('message', {'command': 'open-preferences'});
                 }
+            },{
+                label: trans('menu.pdf_preferences'),
+                accelerator: 'Ctrl+Alt+,',
+                click (item, focusedWindow) {
+                    if(focusedWindow) focusedWindow.webContents.send('message', {'command': 'open-pdf-preferences'});
+                }
             },
             { type: 'separator' },
             { accelerator: 'Ctrl+Q', label: trans('menu.quit'), role: 'quit' });
@@ -308,6 +314,12 @@ class ZettlrMenu
                         accelerator: 'Cmd+,',
                         click (item, focusedWindow) {
                             if(focusedWindow) focusedWindow.webContents.send('message', {'command': 'open-preferences'});
+                        }
+                    },{
+                        label: trans('menu.pdf_preferences'),
+                        accelerator: 'Cmd+Alt+,',
+                        click (item, focusedWindow) {
+                            if(focusedWindow) focusedWindow.webContents.send('message', {'command': 'open-pdf-preferences'});
                         }
                     },
                     { type: 'separator' },

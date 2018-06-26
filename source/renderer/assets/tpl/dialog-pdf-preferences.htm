@@ -1,0 +1,67 @@
+<div class="dialog">
+    <h1>%i18n.preferences.pdf.title%</h1>
+    <form action="" method="GET" id="dialog">
+        <div id="prefs-tabs" class="clear">
+            <ul>
+                <li><a href="#prefs-tabs-general">%i18n.preferences.pdf.metadata%</a></li>
+                <li><a href="#prefs-tabs-page">%i18n.preferences.pdf.page%</a></li>
+                <li><a href="#prefs-tabs-font">%i18n.preferences.pdf.font%</a></li>
+            </ul>
+            <!-- Metadata for PDF files -->
+            <div id="prefs-tabs-general">
+                <p>%i18n.preferences.pdf.metadata_intro%</p>
+                <label for="prefs-pdf-author">%i18n.preferences.pdf.author_label%</label>
+                <input type="text" name="prefs-pdf-author" id="prefds-pdf-author" value="%PREFS_AUTHOR%" placeholder="%i18n.preferences.pdf.author%">
+                <label for="prefs-pdf-keywords">%i18n.preferences.pdf.keywords_label%</label>
+                <input type="text" name="prefs-pdf-keywords" if="prefs-pdf-keywords" value="%PREFS_KEYWORDS%" placeholder="%i18n.preferences.pdf.keywords%">
+            </div>
+            <!-- Page layout -->
+            <div id="prefs-tabs-page">
+                <p>%i18n.preferences.pdf.page_intro%</p>
+                <hr>
+                <div class="clear"></div>
+                <div class="box-left">
+                    <label for="prefs-pdf-tmargin">%i18n.preferences.pdf.tmargin_label%</label>
+                    <input type="number" min="0" max="9999" step="0.1" name="prefs-pdf-tmargin" id="prefs-pdftlmargin" value="%PREFS_TMARGIN%" placeholder="%i18n.preferences.pdf.tmargin%">
+                    <label for="prefs-pdf-rmargin">%i18n.preferences.pdf.rmargin_label%</label>
+                    <input type="number" min="0" max="9999" step="0.1" name="prefs-pdf-rmargin" id="prefs-pdf-rmargin" value="%PREFS_RMARGIN%" placeholder="%i18n.preferences.pdf.rmargin%">
+                    <label for="prefs-pdf-bmargin">%i18n.preferences.pdf.bmargin_label%</label>
+                    <input type="number" min="0" max="9999" step="0.1" name="prefs-pdf-bmargin" id="prefs-pdf-bmargin" value="%PREFS_BMARGIN%" placeholder="%i18n.preferences.pdf.bmargin%">
+                    <label for="prefs-pdf-lmargin">%i18n.preferences.pdf.lmargin_label%</label>
+                    <input type="number" min="0" max="9999" step="0.1" name="prefs-pdf-lmargin" id="prefs-pdf-lmargin" value="%PREFS_LMARGIN%" placeholder="%i18n.preferences.pdf.lmargin%">
+                </div>
+                <div class="box-right">
+                    <label for="prefs-pdf-unit">%i18n.preferences.pdf.unit_label%</label>
+                    <select name="prefs-pdf-unit" id="prefs-pdf-margin-unit">
+                        %MARGIN_UNITS%
+                    </select>
+                    <hr>
+                    <label for="prefs-pdf-papertype">%i18n.preferences.pdf.papertype%</label>
+                    <select name="prefs-pdf-papertype">
+                        %PAPERTYPES%
+                    </select>
+                    <hr>
+                    <label for="prefs-pdf-pagenumbering">%i18n.preferences.pdf.pagenumbering_label%</label>
+                    <select name="prefs-pdf-pagenumbering">
+                        %PAGENUMBERING%
+                    </select>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <!-- Font options -->
+            <div id="prefs-tabs-font">
+                <p>%i18n.preferences.font_intro%</p>
+                <label for="prefs-pdf-mainfont">%i18n.preferences.pdf.mainfont_label%</label>
+                <input type="text" name="prefs-pdf-mainfont" id="prefs-pdf-mainfont" value="%PREFS_MAINFONT%" placeholder="%i18n.preferences.pdf.mainfont%">
+                <label for="prefs-pdf-fontsize">%i18n.preferences.pdf.fontsize_label%</label>
+                <input type="number" min="0" max="10000" step="1" name="prefs-pdf-fontsize" id="prefs-pdf-fontsize" value="%PREFS_FONTSIZE%" placeholder="%i18n.preferences.pdf.fontsize%">
+                <label for="prefs-pdf-lineheight">%i18n.preferences.pdf.lineheight_label%</label>
+                <input type="number" min="0" max="1000" step="1" name="prefs-pdf-lineheight" id="prefs-pdf-lineheight" value="%PREFS_LINEHEIGHT%" placeholder="%i18n.preferences.pdf.lineheight%">
+            </div>
+        </div>
+        <div>
+            <button type="submit" id="pref-save">%i18n.preferences.save%</button>
+            <button id="abort">%i18n.preferences.cancel%</button>
+        </div>
+    </form>
+</div>

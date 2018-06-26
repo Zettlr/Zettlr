@@ -559,7 +559,11 @@ class Zettlr
             'pdfengine': 'pdflatex',
             'tplDir': this.config.getEnv('templateDir'),
             'pandoc': this.config.getEnv('pandoc'),
-            'pdflatex': this.config.getEnv('pdflatex')
+            'pdflatex': this.config.getEnv('pdflatex'),
+            'pdf': this.config.get('pdf'),
+            'title': file.name,
+            'author': this.config.get('pdf').author,
+            'keywords': this.config.get('pdf').keywords
         };
 
         // Call the exporter.

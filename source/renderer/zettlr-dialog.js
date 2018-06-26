@@ -15,6 +15,7 @@
 const fs = require('fs');
 const path = require('path');
 const {trans} = require('../common/lang/i18n.js');
+const SUPPORTED_PAPERTYPES = require('../common/data.json').papertypes;
 
 /**
  * Dialog errors may occur.
@@ -172,6 +173,45 @@ class ZettlrDialog
             replacements.push('%ATTACHMENT_EXTENSIONS%|' + obj.attachmentExtensions.join(', '));
             break;
 
+            case 'pdf-preferences':
+            replacements.push('%PREFS_AUTHOR%|' + obj.author);
+            replacements.push('%PREFS_KEYWORDS%|' + obj.keywords);
+            replacements.push('%PREFS_TMARGIN%|' + obj.tmargin);
+            replacements.push('%PREFS_RMARGIN%|' + obj.rmargin);
+            replacements.push('%PREFS_BMARGIN%|' + obj.bmargin);
+            replacements.push('%PREFS_LMARGIN%|' + obj.lmargin);
+            replacements.push('%PREFS_MAINFONT%|' + obj.mainfont);
+            replacements.push('%PREFS_FONTSIZE%|' + obj.fontsize);
+            replacements.push('%PREFS_LINEHEIGHT%|' + obj.lineheight * 100); // Convert to percent
+            let papertypes = '';
+            for(let pt of SUPPORTED_PAPERTYPES) {
+                papertypes += `<option value="${pt}"`;
+                if(pt == obj.papertype) {
+                    papertypes += ' selected="selected"';
+                }
+                papertypes += `>${trans('dialog.preferences.pdf.'+pt)}</option>\n`;
+            }
+            replacements.push('%PAPERTYPES%|' + papertypes);
+            let margin_units = '';
+            for(let u of ['cm', 'mm', 'pt']) {
+                margin_units += `<option value="${u}"`;
+                if(u == obj.margin_unit) {
+                    margin_units += ' selected="selected"';
+                }
+                margin_units += `>${u}</option>\n`;
+            }
+            replacements.push('%MARGIN_UNITS%|' + margin_units);
+            let pagenumbering = '';
+            for(let n of ['arabic', 'alph', 'Alph', 'roman', 'Roman', 'gobble']) {
+                pagenumbering += `<option value="${n}"`;
+                if(n == obj.pagenumbering) {
+                    pagenumbering += ' selected="selected"';
+                }
+                pagenumbering += `>${trans('dialog.preferences.pdf.pagenumbering_'+n)}</option>\n`;
+            }
+            replacements.push('%PAGENUMBERING%|' + pagenumbering);
+            break;
+
             case 'update':
             replacements.push('%NEWVER%|' + obj.newVer);
             replacements.push('%CURVER%|' + obj.curVer);
@@ -220,7 +260,7 @@ class ZettlrDialog
         this._modal.on('click', (e) => { this.close(); });
 
         // Tabbify the settings dialog
-        if(this._dlg === 'preferences') {
+        if(this._dlg === 'preferences' || this._dlg === 'pdf-preferences') {
             this._modal.find('.dialog').tabs({
                 heightStyle: 'auto' // All tabs same height
             });

@@ -223,13 +223,17 @@ class ZettlrIPC
             this.send('preferences', toSend);
             break;
 
+            case 'get-pdf-preferences':
+            this.send('pdf-preferences', this._app.getConfig().get('pdf'));
+            break;
+
             // Got a new config object
             case 'update-config':
             // Immediately reflect snippets and theme
-            if(cnt.darkTheme != this._app.getConfig().get('darkTheme')) {
+            if(cnt.hasOwnProperty('darkTheme') && cnt.darkTheme != this._app.getConfig().get('darkTheme')) {
                 this.send('toggle-theme', 'no-emit');
             }
-            if(cnt.snippets != this._app.getConfig().get('snippets')) {
+            if(cnt.hasOwnProperty('snippets') && cnt.snippets != this._app.getConfig().get('snippets')) {
                 this.send('toggle-snippets', 'no-emit');
             }
             this._app.getConfig().update(cnt);

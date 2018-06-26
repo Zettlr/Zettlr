@@ -1,0 +1,279 @@
+\documentclass[12pt]{article}
+
+% -- We are in swanky unicode, XeTeX land, and must now import these packages:
+\usepackage{fontspec,xltxtra,xunicode}
+% fontspec means we can specify pretty much any font.
+% Because we are using XeTeX material,
+% this template needs to be called with the `--xetex` flag.
+
+
+% Symbols:
+% Pandoc imports the extensive `amsmath` collection of symbols
+% for typesetting ordinary math.
+\usepackage{amsmath}
+% if you use exotic symbols you need to import specific packages, eg. for
+% electrical engineering diagrams, musical notation, exotic currency symbols,
+% the unspeakable rites of freemasonry etc.
+
+
+% `babel`:
+% The `babel` package, among other things, lets you determine what
+% language you are using in a given stretch of text, so that typesetting
+% will go well. Here we specify that mostly, we are speaking English:
+\usepackage[english]{babel}
+
+
+% Margins, etc:
+% the `geometry` package makes for convenient adjusting of margins, which is what
+% you asked about.  Of course it can do much more, even make coffee for you:
+\usepackage{geometry}
+\geometry{verbose,letterpaper,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+% so if you just keep a copy of this template in the directory you are working in, you
+% can adjust the margins by going into this file and messing with the margins.
+% the syntax is very unforgiving, but permits 3cm and 2.5in and some other things.
+
+
+% Font:
+% Here I set my main font, which is an Apple Corporation Exclusive, golly.
+
+% \setmainfont{Hoefler Text}
+% \setromanfont[Mapping=tex-text,Contextuals={NoWordInitial,NoWordFinal,NoLineInitial,NoLineFinal},Ligatures={NoCommon}]{Hoefler Text}
+
+% Hoefler Text is okay, but note the long discussion of 'contextuals' which is necessary to cools off
+% some of its show-offy properties. (You can make your essay look like the
+% Declaration of Independence by specifying e.g. Ligatures={Rare} )
+% If you have a copy you might try it; as it is
+% I will comment it out and supply something more certain to be around:
+
+\setmainfont{Times Roman}
+
+% Properly one should specify a sanserif font and a monospace font
+% see e.g. the example of Kieran Healy:
+% \setromanfont[Mapping=tex-text,Numbers=OldStyle]{Minion Pro}
+% \setsansfont[Mapping=tex-text]{Minion Pro}
+% \setmonofont[Mapping=tex-text,Scale=0.8]{Pragmata}
+
+% But I hate sanserif fonts, and anyway there are defaults.
+
+
+
+% Heading styles:
+% These commands keep the koma system from making stupid sans serif section headings
+\setkomafont{title}{\rmfamily\mdseries\upshape\normalsize}
+\setkomafont{sectioning}{\rmfamily\mdseries\upshape\normalsize}
+\setkomafont{descriptionlabel}{\rmfamily\mdseries\upshape\normalsize}
+
+
+
+% I'm puzzled why I have this foonote speciality,
+% I wonder if it's part of my problem I've been having, but wont look
+% into it now.
+\usepackage[flushmargin]{footmisc}
+% \usepackage[hang,flushmargin]{footmisc}
+
+
+% So much for my personal template.
+
+
+% Everything that follows is copied from the pandoc default template:
+% I will interpolate a few comments, the comments that are in
+% the default template will be marked % --
+
+% Paragraph format:
+% Pandoc prefers unindented paragraphs in the European style:
+\setlength{\parindent}{0pt}
+%  ... with paragraph breaks marked by a slight lengthening of
+% the space between paragraphs:
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+% Page format:
+\pagestyle{plain}
+% The default `plain` pagestyle just numbers the pages,
+% whereas
+% \pagestyle{empty}
+% would give you no numbering.
+% After one-million man-years of macro-composition,
+% there are also fancy pagestyles with much wilder options
+% for headers and footers, of course.
+
+% Footnotes
+% if you have code in your footnotes, the million macro march
+% kind of bumps into itself.
+% Pandoc, having just rendered your text into LaTeX,
+% knows whether the 'variable' `verbatim-in-note` is True, and
+% If it is, it asks for a  LaTeX package that solves the dilemma:
+$if(verbatim-in-note)$
+\usepackage{fancyvrb}
+$endif$
+
+% Lists formatting:
+% note sure what 'fancy enums' are; something to do with lists,
+% as the further comment suggests:
+$if(fancy-enums)$
+% -- Redefine labelwidth for lists; otherwise, the enumerate package will cause
+% -- markers to extend beyond the left margin.
+\makeatletter\AtBeginDocument{%
+  \renewcommand{\@listi}
+    {\setlength{\labelwidth}{4em}}
+}\makeatother
+\usepackage{enumerate}
+$endif$
+
+
+% Table formatting:
+% What if you make a table? -- Pandoc knows, of course, and
+% then declares that its  variable `table` is True and
+% imports a table package suitable to its pleasantly simple tables.
+% Needless to say infinitely   complicated tables are possible in
+% LaTeX with suitable packages. We are spared the temptation:
+
+$if(tables)$
+\usepackage{array}
+
+% Continuing on the topic of tables ... (we havent reached `endif`).
+% The commented out line below is in the default pandoc  latex.template.
+% Some unpleasantness with table formatting must be corrected.
+
+% -- This is needed because raggedright in table elements redefines \\:
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\let\PBS=\PreserveBackslash
+
+$endif$
+
+
+% Subscripts:
+% Pandoc remembers whether you used subscripts, assigning True to
+% its `subscript` variable
+% It then needs to adopt a default with an incantation like this:
+$if(subscript)$
+\newcommand{\textsubscr}[1]{\ensuremath{_{\scriptsize\textrm{#1}}}}
+$endif$
+
+
+% Web-style links:
+
+% markdown inclines us to use links, since our texts can be made into html.
+% Why not have clickable blue links even in
+% learned, scientific, religious, juridical, poetical and other suchlike texts?
+% Never mind that they have been proven to destroy the nervous system!
+
+% First, what about the fact that links like http://example.com are
+% technically code and thus must not be broken across lines?
+% [breaklinks=true] to the rescue!
+
+% Nowadays LaTeX can handle all of this with another half million macros:
+
+\usepackage[breaklinks=true]{hyperref}
+\hypersetup{colorlinks,%
+citecolor=blue,%
+filecolor=blue,%
+linkcolor=blue,%
+urlcolor=blue}
+$if(url)$
+\usepackage{url}
+$endif$
+
+
+
+% Images.
+% In ye olde LaTeX one could only import a limited range of image
+% types, e.g. the forgotten .eps files.  Or else one simply drew the image with suitable
+% commands and drawing packages.  Today we want to import .jpg files we make with
+% our smart phones or whatever:
+
+$if(graphics)$
+\usepackage{graphicx}
+% -- We will generate all images so they have a width \maxwidth. This means
+% -- that they will get their normal width if they fit onto the page, but
+% -- are scaled down if they would overflow the margins.
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+\else\Gin@nat@width\fi}
+\makeatother
+\let\Oldincludegraphics\includegraphics
+\renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=\maxwidth]{#1}}
+$endif$
+
+
+
+% Section numbering.
+% Here again is a variable you can specify on the commandline
+% `markdown2pdf my.txt --number-sections --xetex --template=/wherever/this/is -o my.pdf`
+$if(numbersections)$
+$else$
+\setcounter{secnumdepth}{0}
+$endif$
+
+% Footnotes:
+% Wait, didn't we already discuss the crisis of code in footnotes?
+% Evidently the order of unfolding of macros required that
+% we import a package to deal with them earlier
+% and issue a command it defines now. (Or maybe that's not the reason;
+% very often the order does matter as the insane system of macro expansion
+% must take place by stages.)
+$if(verbatim-in-note)$
+\VerbatimFootnotes % -- allows verbatim text in footnotes
+$endif$
+
+% Other stuff you specify on the command line:
+% You can include stuff for the header from a file specified on the command line;
+% I've never done this, but that stuff will go here:
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+% Title, authors, date.
+% If you specified title authors and date at the start of
+% your pandoc-markdown file, pandoc knows the 'values' of the
+% variables: title authors date and fills them in.
+
+$if(title)$
+\title{$title$}
+$endif$
+\author{$for(author)$$author$$sep$\\$endfor$}
+$if(date)$
+\date{$date$}
+$endif$
+
+% At last:
+% The document itself!:
+
+% After filling in all these blanks above, or erasing them
+% where they are not needed, Pandoc has finished writing the
+% famous LaTeX *preamble* for your document.
+% Now comes the all-important command \begin{document}
+% which as you can see, will be paired with an \end{document} at the end.
+% Pandoc knows whether you have a title, and has already
+% specified what it is; if so, it demands that the title be rendered.
+% Pandoc knows whether you want a table of contents, you
+% specify this on the command line.
+% Then, after fiddling with alignments, there comes the real
+% business: pandoc slaps its rendering of your text in the place of
+% the variable `body`
+% It then concludes the document it has been writing.
+
+\begin{document}
+
+
+$if(title)$
+\maketitle
+$endif$
+
+$if(toc)$
+\tableofcontents
+
+$endif$
+
+
+$if(alignment)$
+\begin{$alignment$}
+$endif$
+
+$body$
+
+%$if(alignment)$
+\end{$alignment$}
+$endif$
+
+
+\end{document}

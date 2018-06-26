@@ -43,6 +43,8 @@ class ZettlrExport
         this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + "." + this.options.format);
         // Intermediary file containing all content replacements et al.
         this.tempfile = path.join(this.options.dest, 'export.tmp');
+        // If we have PDF export, we need a template file
+        this.textpl = '';
 
         // Second make sure pandoc is installed. Without, only HTML is possible
         // through showdown.
@@ -65,6 +67,10 @@ class ZettlrExport
 
         //  Third prepare the export (e.g., strip IDs, tags or other unnecessary stuff)
         this._prepareFile();
+
+        if(this.options.format == 'pdf') {
+            this._buildLatexTpl();
+        }
 
         // Fourth defer to the respective functions.
         switch(options.format)
@@ -124,6 +130,39 @@ class ZettlrExport
     }
 
     /**
+     * On PDF export only, this function is called to prepare the LaTeX-template file
+     */
+    _buildLatexTpl()
+    {
+        this.textpl = path.join(this.options.dest, 'template.latex');
+        let pdf = this.options.pdf; // Retrieve the PDF options
+        let cnt = fs.readFileSync(path.join(__dirname, './assets/export.tex'), 'utf8');
+        // Do updates to the template
+        // General options
+        cnt = cnt.replace('%PAGE_NUMBERING%', pdf.pagenumbering); // gobble turns page numbering off
+
+        // Page setup
+        cnt = cnt.replace('%PAPER_TYPE%', pdf.papertype);
+        cnt = cnt.replace('%TOP_MARGIN%', pdf.tmargin + pdf.margin_unit);
+        cnt = cnt.replace('%RIGHT_MARGIN%', pdf.rmargin + pdf.margin_unit);
+        cnt = cnt.replace('%BOTTOM_MARGIN%', pdf.bmargin + pdf.margin_unit);
+        cnt = cnt.replace('%LEFT_MARGIN%', pdf.lmargin + pdf.margin_unit);
+
+        // Font setup
+        cnt = cnt.replace('%MAIN_FONT%', pdf.mainfont);
+        cnt = cnt.replace('%LINE_SPACING%', pdf.lineheight);
+        cnt = cnt.replace('%FONT_SIZE%', pdf.fontsize + 'pt');
+
+        // Metadata
+        cnt = cnt.replace('%PDF_TITLE%', this.options.title);
+        cnt = cnt.replace('%PDF_SUBJECT%', this.options.title);
+        cnt = cnt.replace('%PDF_AUTHOR%', this.options.author);
+        cnt = cnt.replace('%PDF_KEYWORDS%', this.options.keywords);
+
+        fs.writeFileSync(this.textpl, cnt, 'utf8');
+    }
+
+    /**
      * This function prepares HTML export of markdown files using showdown.
      */
     _prepareHTML()
@@ -149,9 +188,9 @@ class ZettlrExport
     _preparePDF()
     {
         // TODO: In the future generate the template based on user's decisions.
-        this.tpl = '--template="' + path.join(this.options.tplDir, 'template.latex') + '"';
-        let pdfengine = '--pdf-engine=' + this.options.pdfengine;
-        this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} -t ${this.options.format} ${pdfengine} -o "${this.targetFile}"`;
+        this.tpl = `--template="${this.textpl}"`;
+        let pdfengine = '--pdf-engine=xelatex';// + this.options.pdfengine;
+        this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${pdfengine} -o "${this.targetFile}"`;
     }
 
     /**
@@ -165,7 +204,7 @@ class ZettlrExport
             // to HTML and insert into the template, then replace the variables.
             let file = fs.readFileSync(this.tempfile, 'utf8');
             file = this.showdown.makeHtml(file);
-            file = fs.readFileSync(path.join(__dirname, './export.tpl'), 'utf8').replace('%BODY%', file);
+            file = fs.readFileSync(path.join(__dirname, './assets/export.tpl'), 'utf8').replace('%BODY%', file);
             file = file.replace('%TITLE%', this.options.file.name);
             file = file.replace('%DATE%', formatDate(new Date()));
             // Replace footnotes. As HTML is only meant for preview & quick prints,
@@ -179,6 +218,7 @@ class ZettlrExport
             });
 
             fs.writeFile(this.targetFile, file, 'utf8', (err) => {
+                this._cleanup(); // Has to be done even on error
                 if(err) {
                     return this._abort(err);
                 }
@@ -194,6 +234,7 @@ class ZettlrExport
         }
 
         exec(this.command, { 'cwd': this.options.dest }, (error, stdout, stderr) => {
+            this._cleanup(); // Has to be done even on error
             if (error) {
                 return this._abort(error);
             }
@@ -210,16 +251,15 @@ class ZettlrExport
     {
         this.app.window.prompt({
             type: 'error',
-            title: trans('system.error.html_error_title'),
-            message: trans('system.error.html_error_message', err)
+            title: trans('system.error.export_error_title'),
+            message: trans('system.error.export_error_message', error)
         });
     }
 
     /**
-     * Finish the export: Clean up the temporary file(s) and notify the user of
-     * the success.
+     * Cleanup operations (such as removing the temporary files)
      */
-    _finish()
+    _cleanup()
     {
         // remove the temporary file and then open it externally. Also, show
         // a notification that the export is complete.
@@ -228,8 +268,23 @@ class ZettlrExport
                 this.app.notify(trans('system.error.export_temp_file', this.tempfile));
             }
         });
-        require('electron').shell.openItem(this.targetFile);
 
+        // Remove LaTeX template file if given
+        if(this.options.format == 'pdf') {
+            fs.unlink(this.textpl, (err) => {
+                if(err) {
+                    this.app.notify(trans('system.error.export_temp_file', this.textpl));
+                }
+            });
+        }
+    }
+
+    /**
+     * Finish the export: Open the resulting file and notify of successful export.
+     */
+    _finish()
+    {
+        require('electron').shell.openItem(this.targetFile);
         this.app.notify(trans('system.export_success', this.options.format.toUpperCase()));
     }
 }

@@ -10,6 +10,8 @@
     - Strip tags (in the format `#tag`).
     - Completely remove internal Zettelkasten-links (e.g. `[[<link-text>]]`).
     - Only unlink internal Zettelkaten-links (i.e. transform `[[<link-text>]]` to `<link-text>`).
+- Switched to the better `xelatex` engine to render PDF documents.
+- Added a great number of PDF export customization options.
 
 ## Under the hood
 

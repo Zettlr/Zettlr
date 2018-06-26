@@ -211,6 +211,19 @@ body.dark div.dragger {
   padding: 10px;
   margin: 10px 0px;
 }
+.modal .dialog div.clear {
+  clear: both;
+}
+.modal .dialog div.box-left {
+  width: 50%;
+  padding: 2%;
+  float: left;
+}
+.modal .dialog div.box-right {
+  width: 50%;
+  padding: 2%;
+  float: right;
+}
 .modal .dialog .error {
   background-color: #ffb0b0;
   color: #941010;

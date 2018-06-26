@@ -102,7 +102,7 @@ class ZettlrRendererIPC
      * @deprecated Will be moved to Renderer-IPC in another version
      */
     handleEvent(cmd, cnt)
-    {        
+    {
         switch(cmd)
         {
             case 'paths-update':
@@ -246,8 +246,16 @@ class ZettlrRendererIPC
             this.send('get-preferences', {});
             break;
 
+            case 'open-pdf-preferences':
+            this.send('get-pdf-preferences');
+            break;
+
             case 'preferences':
             this._app.getBody().displayPreferences(cnt);
+            break;
+
+            case 'pdf-preferences':
+            this._app.getBody().displayPDFPreferences(cnt);
             break;
 
             // Execute a command with CodeMirror (Bold, Italic, Link, etc)
