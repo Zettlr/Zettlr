@@ -25,17 +25,26 @@ const showdown      = require('showdown');
  */
 class ZettlrExport
 {
+    /**
+     * Is invoked on each export and calls all necessary functions from within.
+     * @param {Zettlr} app     The app object (needed for occasional access of the configuration object or for showing errors)
+     * @param {Object} options An object containing necessary configuration to export
+     */
     constructor(app, options)
     {
+        // First: Initialise the engine
         // Make the variables available to all functions
         this.app = app;
         this.options = options;
         this.tpl = '';
         this.command = '';
         this.showdown = null;
+        // We already know where the file will end up
         this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + "." + this.options.format);
+        // Intermediary file containing all content replacements et al.
+        this.tempfile = path.join(this.options.dest, 'export.tmp');
 
-        // First make sure pandoc is installed. Without, only HTML is possible
+        // Second make sure pandoc is installed. Without, only HTML is possible
         // through showdown.
         if(!this.options.pandoc || this.options.format != "html") {
             return app.window.prompt({
@@ -54,7 +63,10 @@ class ZettlrExport
             });
         }
 
-        // Now defer to the respective functions.
+        //  Third prepare the export (e.g., strip IDs, tags or other unnecessary stuff)
+        this._prepareFile();
+
+        // Fourth defer to the respective functions.
         switch(options.format)
         {
             case 'html':
@@ -77,7 +89,42 @@ class ZettlrExport
     }
 
     /**
-     * This function prepares HTML export of markdown files.
+     * Perform necessary steps on the file such as replacing IDs or tags, if
+     * wanted.
+     * TODO: For PDF exports this function should also create the latex-template.
+     */
+    _prepareFile()
+    {
+        // First load the file.
+        let cnt = this.options.file.withContent().content;
+
+        // Second check if we should strip something, if yes, do so.
+        if(this.app.getConfig().get('export.stripIDs')) {
+            // Strip all ZKN-IDs in format @ID:
+            cnt = cnt.replace(/[^\[\[]@ID:([^\s]*)/g, ''); // Regular expression from ZettlrFile class
+        }
+
+        if(this.app.getConfig().get('export.stripTags')) {
+            // Strip all tags
+            cnt = cnt.replace(/#[\d\w-]+/g, '');
+        }
+
+        if(this.app.getConfig().get('export.stripLinks') == 'full') {
+            // Completely remove internal links
+            cnt = cnt.replace(/\[\[.+?\]\]/g, ''); // Important: Non-greedy modifier needed to not strip out the whole text!
+        } else if(this.app.getConfig().get('export.stripLinks') == 'unlink') {
+            // Remove square brackets from internal links
+            cnt = cnt.replace(/\[\[(.+?)\]\]/g, function(match, p1, offset, string) {
+                return p1;
+            });
+        }
+
+        // Finally, save as temporary file.
+        fs.writeFileSync(this.tempfile, cnt, 'utf8');
+    }
+
+    /**
+     * This function prepares HTML export of markdown files using showdown.
      */
     _prepareHTML()
     {
@@ -89,11 +136,14 @@ class ZettlrExport
         this.showdown.setFlavor('github');
     }
 
+    /**
+     * Prepares the export via pandoc using a reference document (e.g., odt or docx)
+     */
     _prepareWordProcessor()
     {
         // -s is the standalone flag
         this.tpl = '--reference-doc="' + path.join(this.options.tplDir, 'template.' + this.options.format) + '" -s';
-        this.command = `pandoc "${this.options.file.path}" -f markdown ${this.tpl} -t ${this.options.format} -o "${this.targetFile}"`;
+        this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} -t ${this.options.format} -o "${this.targetFile}"`;
     }
 
     _preparePDF()
@@ -101,7 +151,7 @@ class ZettlrExport
         // TODO: In the future generate the template based on user's decisions.
         this.tpl = '--template="' + path.join(this.options.tplDir, 'template.latex') + '"';
         let pdfengine = '--pdf-engine=' + this.options.pdfengine;
-        this.command = `pandoc "${this.options.file.path}" -f markdown ${this.tpl} -t ${this.options.format} ${pdfengine} -o "${this.targetFile}"`;
+        this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} -t ${this.options.format} ${pdfengine} -o "${this.targetFile}"`;
     }
 
     /**
@@ -113,7 +163,8 @@ class ZettlrExport
         if(this.options.format == 'html' && this.showdown != null) {
             // Simply write the target file ourselves. Therefore first convert
             // to HTML and insert into the template, then replace the variables.
-            let file = this.showdown.makeHtml(this.options.file.withContent().content);
+            let file = fs.readFileSync(this.tempfile, 'utf8');
+            file = this.showdown.makeHtml(file);
             file = fs.readFileSync(path.join(__dirname, './export.tpl'), 'utf8').replace('%BODY%', file);
             file = file.replace('%TITLE%', this.options.file.name);
             file = file.replace('%DATE%', formatDate(new Date()));
@@ -129,16 +180,10 @@ class ZettlrExport
 
             fs.writeFile(this.targetFile, file, 'utf8', (err) => {
                 if(err) {
-                    this.app.window.prompt({
-                        type: 'error',
-                        title: trans('system.error.html_error_title'),
-                        message: trans('system.error.html_error_message', err)
-                    });
-                    return;
+                    return this._abort(err);
                 }
 
-                // Open externally
-                require('electron').shell.openItem(this.targetFile);
+                this._finish();
             });
             return;
         }
@@ -150,17 +195,42 @@ class ZettlrExport
 
         exec(this.command, { 'cwd': this.options.dest }, (error, stdout, stderr) => {
             if (error) {
-                this.app.window.prompt({
-                    type: 'error',
-                    title: trans('system.error.pandoc_error_title'),
-                    message: trans('system.error.pandoc_error_message', error)
-                });
-                return;
+                return this._abort(error);
             }
 
-            // Open externally
-            require('electron').shell.openItem(this.targetFile);
+            this._finish();
         });
+    }
+
+    /**
+     * Abort by showing an error prompt
+     * @param  {String} [error=''] The error, if given
+     */
+    _abort(error = '')
+    {
+        this.app.window.prompt({
+            type: 'error',
+            title: trans('system.error.html_error_title'),
+            message: trans('system.error.html_error_message', err)
+        });
+    }
+
+    /**
+     * Finish the export: Clean up the temporary file(s) and notify the user of
+     * the success.
+     */
+    _finish()
+    {
+        // remove the temporary file and then open it externally. Also, show
+        // a notification that the export is complete.
+        fs.unlink(this.tempfile, (err) => {
+            if(err) {
+                this.app.notify(trans('system.error.export_temp_file', this.tempfile));
+            }
+        });
+        require('electron').shell.openItem(this.targetFile);
+
+        this.app.notify(trans('system.export_success', this.options.format.toUpperCase()));
     }
 }
 

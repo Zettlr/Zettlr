@@ -172,7 +172,8 @@ body.dark div.dragger {
   padding: 0.5em;
   margin: 0.5em;
 }
-.modal .dialog input[type="checkbox"] {
+.modal .dialog input[type="checkbox"],
+.modal .dialog input[type="radio"] {
   margin: 0.5em;
   width: auto;
   display: inline;
@@ -252,11 +253,9 @@ body.dark div.dragger {
   width: 100%;
   text-align: center;
   outline: none;
-  transition: 0.4s all ease;
 }
 .modal .dialog .ui-tabs-nav .ui-tabs-tab:hover {
   background-color: #dcdcdc;
-  transition: 0.4s all ease;
 }
 #directories {
   position: fixed;

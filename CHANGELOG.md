@@ -4,6 +4,12 @@
 
 - Added full stops after TOC-ordinals.
 - The `HTML`-export (e.g., for printing) does not rely on `pandoc` to be present on the system anymore. In other words: `HTML`-export is now working everywhere and has no prerequisites anymore. _Attention: As we do not rely on pandoc for HTML exports anymore, this means that the HTML format is likely to suffer from some inconsistencies, as the rendering engine is way less advanced than pandoc. Yet, this should not pose a problem, as the HTML-export is intended to be for quick previews and prints only._
+- Added a bunch of options for exporting files, such as:
+    - Choose whether to save the exported files in the temporary directory (which is expunged on each restart of the system) or in your current working directory (meaning they are persistent across system reboots and are also accessible normally through your file explorer).
+    - Strip Zettelkasten-IDs (such as `@ID:yyyymmddhhmmss`).
+    - Strip tags (in the format `#tag`).
+    - Completely remove internal Zettelkasten-links (e.g. `[[<link-text>]]`).
+    - Only unlink internal Zettelkaten-links (i.e. transform `[[<link-text>]]` to `<link-text>`).
 
 ## Under the hood
 

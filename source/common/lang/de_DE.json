@@ -156,6 +156,18 @@
             "advanced": "Erweitert",
             "attachments": "Anhänge",
             "attachments_info": "Trage hier alle Dateitypen ein, die du in der Attachment-Sidebar sehen möchtest. Trenne jeden Dateityp mit einem Komma. Änderungen werden nach einem Neustart wirksam.",
+            "export": {
+                "title": "Export",
+                "dest": "Zielverzeichnis für Exporte. <em>Vorsicht:</em> Die Auswahl &quot;Aktuelles Verzeichnis&quot; überschreibt ohne Warnung eventuell vorhandene Dateien!",
+                "dest_temp_label": "Temporäres Verzeichnis: wird regelmäßig geleert",
+                "dest_cwd_label": "Aktuelles Verzeichnis: die Exporte werden im aktuell ausgewählten Verzeichnis gespeichert.",
+                "stripping": "Optionen für ZKN-Elemente",
+                "strip_id_label": "Entferne ZKN-IDs aus den Dateien",
+                "strip_tags_label": "Entferne Schlagworte aus den Dateien",
+                "strip_links_full_label": "Entferne interne Links komplett",
+                "strip_links_unlink_label": "Entferne eckige Klammern um interne Links",
+                "strip_links_no_label": "Lasse interne Links unverändert"
+            },
             "app_lang": {
                 "title": "Anwendungssprache (<strong>Neustart erforderlich!</strong>)",
                 "de_DE": "Deutsch (Deutschland)",
@@ -249,8 +261,9 @@
             "already_exists_title": "Kann Datei oder Verzeichnis nicht verschieben",
             "already_exists_message": "Die Datei bzw. das Verzeichnis %s existiert am Zielort bereits.",
             "ignored_dir_title": "Kann Verzeichnis nicht öffnen",
-            "ignored_dir_message": "Das Verzeichnis \"%s\" kann von Zettlr nicht geöffnet werden.",
-            "virtual_dir_exists": "Das virtuelle Verzeichnis \"%s\" existiert bereits."
+            "ignored_dir_message": "Das Verzeichnis &quot;%s&quot; kann von Zettlr nicht geöffnet werden.",
+            "virtual_dir_exists": "Das virtuelle Verzeichnis &quot;%s&quot; existiert bereits.",
+            "export_temp_file": "Konnte temporäre Datei &quot;%s&quot; nicht entfernen. Bitte manuell entfernen."
         },
         "save_changes_title": "Änderungen verwerfen?",
         "save_changes_message": "Die Datei enthält ungespeicherte Änderungen. Verwerfen oder speichern?",
@@ -261,6 +274,7 @@
         "replace_file_message": "Die aktuelle Datei wurde von außerhalb verändert. Änderungen übernehmen?",
         "directory_removed": "Das Verzeichnis %s wurde entfernt.",
         "file_removed": "Datei %s wurde entfernt.",
+        "export_success": "Exported successfully to %s",
         "ok": "Ok",
         "cancel": "Abbrechen",
         "open_folder": "Projektverzeichnis öffnen"

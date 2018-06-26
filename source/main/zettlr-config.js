@@ -68,7 +68,9 @@ class ZettlrConfig
 
         // Config Template providing all necessary arguments
         this.cfgtpl = {
+            // Root directories
             "openPaths" : [],
+            // Visible attachment filetypes
             "attachmentExtensions": [
                 ".pdf",     // PDF
                 ".odt",     // OpenDocument Types
@@ -92,11 +94,19 @@ class ZettlrConfig
                 ".gif",
                 ".tiff"
             ],
+            // UI related options
             "darkTheme" : false,
             "snippets"  : true,
+            // Export options
             "pandoc"    : 'pandoc',
             "pdflatex"  : 'pdflatex',
-            "exportDir" : 'temp',   // Can either be "temp" or "cwd" (current working directory)
+            "export"    : {
+                "dir": 'temp',   // Can either be "temp" or "cwd" (current working directory)
+                "stripIDs": true,  // Strip ZKN IDs such as @ID:<id>
+                "stripTags": false, // Strip tags a.k.a. #tag
+                "stripLinks": "full", // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
+            },
+            // Language
             "spellcheck": {
                 'en_US' : (this.getLocale() === 'en_US') ? true : false,
                 'en_GB' : (this.getLocale() === 'en_GB') ? true : false,

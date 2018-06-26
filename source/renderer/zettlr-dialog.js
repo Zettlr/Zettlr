@@ -50,7 +50,6 @@ class ZettlrDialog
         this._container = $('#container');
         this._modal = $('<div>').addClass('modal');
         this._dlg = null;
-        this._passedObj = null;
     }
 
     /**
@@ -94,7 +93,6 @@ class ZettlrDialog
         this._container.removeClass('blur');
         this._modal.html('');
         this._dlg = null;
-        this._passedObj = null;
         return this;
     }
 
@@ -123,7 +121,6 @@ class ZettlrDialog
             throw new DialogError(trans('dialog.error.no_data', obj));
         }
 
-        this._passedObj = obj;
         this._dlg = dialog;
 
         let replacements = [];
@@ -136,9 +133,23 @@ class ZettlrDialog
             let dark = (obj.darkTheme) ? 'checked="checked"' : '';
             let snippets = (obj.snippets) ? 'checked="checked"' : '';
             let debug = (obj.debug) ? 'checked="checked"' : '';
+            let exportTemp = (obj.export.dir == 'temp') ? 'checked="checked"' : '';
+            let exportCwd = (obj.export.dir == 'cwd') ? 'checked="checked"' : '';
+            let stripID = (obj.export.stripIDs) ? 'checked="checked"' : '';
+            let stripTags = (obj.export.stripTags) ? 'checked="checked"': '';
+            let stripLinksFull = (obj.export.stripLinks == "full") ? 'checked="checked"' : '';
+            let stripLinksUnlink = (obj.export.stripLinks == "unlink") ? 'checked="checked"': '';
+            let stripLinksNo = (obj.export.stripLinks == "no") ? 'checked="checked"' : '';
             replacements.push('%DARK%|' + dark);
             replacements.push('%SNIPPETS%|' + snippets);
             replacements.push('%DEBUG%|' + debug);
+            replacements.push('%EXPORT_DEST_TEMP%|' + exportTemp);
+            replacements.push('%EXPORT_DEST_CWD%|' + exportCwd);
+            replacements.push('%EXPORT_STRIP_ID%|' + stripID);
+            replacements.push('%EXPORT_STRIP_TAGS%|' + stripTags);
+            replacements.push('%EXPORT_STRIP_LINKS_FULL%|' + stripLinksFull);
+            replacements.push('%EXPORT_STRIP_LINKS_UNLINK%|' + stripLinksUnlink);
+            replacements.push('%EXPORT_STRIP_LINKS_NO%|' + stripLinksNo);
             replacements.push('%PANDOC%|' + obj.pandoc);
             replacements.push('%PDFLATEX%|' + obj.pdflatex);
             let spellcheck = '';
@@ -193,7 +204,7 @@ class ZettlrDialog
             e.preventDefault();
             // Give the ZettlrBody object the results
             // Form: dialog type, values, the originally passed object
-            this._parent.proceed(this._dlg, form.serializeArray(), this._passedObj);
+            this._parent.proceed(this._dlg, form.serializeArray());
         });
 
         // Abort integration if an abort button is given

@@ -156,6 +156,18 @@
             "advanced": "Advanced",
             "attachments": "Attachments",
             "attachments_info": "Enter all file extensions that you want to see in your attachment sidebar. Separate them with a comma. Changes are recognised after a restart.",
+            "export": {
+                "title": "Export",
+                "dest": "Target directory for exported files. <em>Attention:</em> Selecting the current working directory will overwrite files without warning!",
+                "dest_temp_label": "Temporary directory: is regularly expunged",
+                "dest_cwd_label": "Current working directory: exported files will be saved into the currently selected directory.",
+                "stripping": "Options for ZKN elements",
+                "strip_id_label": "Remove ZKN IDs from files",
+                "strip_tags_label": "Remove tags from files",
+                "strip_links_full_label": "Remove internal links completely",
+                "strip_links_unlink_label": "Unlink internal links",
+                "strip_links_no_label": "Don't touch internal links"
+            },
             "app_lang": {
                 "title": "Application language (<strong>Restart required!</strong>)",
                 "de_DE": "German (Germany)",
@@ -249,8 +261,9 @@
             "already_exists_title": "Cannot move directory or file",
             "already_exists_message": "The file/directory %s already exists in target.",
             "ignored_dir_title": "Cannot open directory",
-            "ignored_dir_message": "Directory \"%s\" cannot be opened by Zettlr.",
-            "virtual_dir_exists": "The virtual directory \"%s\" already exists."
+            "ignored_dir_message": "Directory &quot;%s&quot; cannot be opened by Zettlr.",
+            "virtual_dir_exists": "The virtual directory &quot;%s&quot; already exists.",
+            "export_temp_file": "Could not remove the temporary file &quot;%s&quot;. Please remove it manually."
         },
         "save_changes_title": "Omit unsaved changes?",
         "save_changes_message": "There are unsaved changes to the current file. Do you want to omit them or save?",
@@ -261,6 +274,7 @@
         "replace_file_message": "The current file has been modified remotely. Replace in editor?",
         "directory_removed": "Directory %s has been removed.",
         "file_removed": "File %s has been removed.",
+        "export_success": "Exported successfully to %s",
         "ok": "Ok",
         "cancel": "Cancel",
         "open_folder": "Open project folder"

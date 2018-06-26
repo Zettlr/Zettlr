@@ -555,7 +555,7 @@ class Zettlr
         let opt = {
             'format': arg.ext,      // Which format: "html", "docx", "odt", "pdf"
             'file': file,           // The file to be exported
-            'dest': (this.config.get('exportDir') == 'temp') ? app.getPath('temp') : file.parent.path, // Either temp or cwd
+            'dest': (this.config.get('export.dir') == 'temp') ? app.getPath('temp') : file.parent.path, // Either temp or cwd
             'pdfengine': 'pdflatex',
             'tplDir': this.config.getEnv('templateDir'),
             'pandoc': this.config.getEnv('pandoc'),

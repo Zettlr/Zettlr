@@ -467,10 +467,9 @@ class ZettlrBody
      * This function is called by the dialog class when the user saves settings.
      * @param  {String} dialog    The opened dialog. TODO: Not needed.
      * @param  {Array} res       An array containing all settings
-     * @param  {Object} passedObj A passed object. TODO: Not needed anymore.
      * @return {void}           Nothing to return.
      */
-    proceed(dialog, res, passedObj)
+    proceed(dialog, res)
     {
         let pandoc     = '',
         pdflatex   = '',
@@ -479,7 +478,11 @@ class ZettlrBody
         spellcheck = this._spellcheckLangs,
         app_lang = 'en_US',
         debug = false,
-        attachments = [];
+        attachments = [],
+        exportDir = 'temp',
+        stripIDs = false,
+        stripTags = false,
+        stripLinks = "full";
 
         for(let r of res) {
             if(r.name === 'pref-pandoc') {
@@ -496,6 +499,14 @@ class ZettlrBody
                 app_lang = r.value;
             } else if(r.name === 'debug') {
                 debug = true;
+            } else if(r.name === 'pref-export-dest') {
+                exportDir = r.value;
+            } else if(r.name === 'pref-export-strip-id') {
+                stripIDs = true;
+            } else if(r.name === 'pref-export-strip-tags') {
+                stripTags = true;
+            } else if(r.name === 'pref-export-strip-links') {
+                stripLinks = r.value;
             } else if(r.name === 'pref-attachments') {
                 // We have to account for user jokes
                 attachments = r.value.split(',');
@@ -522,6 +533,12 @@ class ZettlrBody
                 'spellcheck': spellcheck,
                 'app_lang': app_lang,
                 'debug': debug,
+                'export': {
+                    'dir'       : exportDir,
+                    'stripIDs'  : stripIDs,
+                    'stripTags' : stripTags,
+                    'stripLinks': stripLinks
+                },
                 'attachmentExtensions': attachments
             }
             this._renderer.saveSettings(cfg);

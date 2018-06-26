@@ -5,9 +5,11 @@
             <ul>
                 <li><a href="#prefs-tabs-general">%i18n.preferences.general%</a></li>
                 <li><a href="#prefs-tabs-editor">%i18n.preferences.editor%</a></li>
-                <li><a href="#prefs-tabs-advanced">%i18n.preferences.advanced%</a></li>
+                <li><a href="#prefs-tabs-export">%i18n.preferences.export.title%</a></li>
                 <li><a href="#prefs-tabs-attachments">%i18n.preferences.attachments%</a></li>
+                <li><a href="#prefs-tabs-advanced">%i18n.preferences.advanced%</a></li>
             </ul>
+            <!-- General settings -->
             <div id="prefs-tabs-general">
                 <label for="app-lang">%i18n.preferences.app_lang.title%
                 </label>
@@ -23,6 +25,7 @@
                     <label for="pref-snippets">%i18n.preferences.snippets%</label>
                 </div>
             </div>
+            <!-- Editor related options -->
             <div id="prefs-tabs-editor">
                 <p>
                     %i18n.preferences.spellcheck%
@@ -32,6 +35,52 @@
                 </p>
                 %SPELLCHECK%
             </div>
+            <!-- Export related options (except pandoc+pdflatex) -->
+            <div id="prefs-tabs-export">
+                <p>
+                    %i18n.preferences.export.dest%
+                </p>
+                <p>
+                    <input type="radio" name="pref-export-dest" value="temp" id="pref-export-temp" %EXPORT_DEST_TEMP%>
+                    <label for="pref-export-temp">%i18n.preferences.export.dest_temp_label%</label>
+                </p>
+                <p>
+                    <input type="radio" name="pref-export-dest" value="cwd" id="pref-export-cwd" %EXPORT_DEST_CWD%>
+                    <label for="pref-export-cwd">%i18n.preferences.export.dest_cwd_label%</label>
+                </p>
+                <hr>
+                <div>
+                    <p>%i18n.preferences.export.stripping%</p>
+                    <p>
+                        <input type="checkbox" name="pref-export-strip-id" value="yes" id="pref-export-strip-id" %EXPORT_STRIP_ID%>
+                        <label for="pref-export-strip-id">%i18n.preferences.export.strip_id_label%</label>
+                    </p>
+                    <p>
+                        <input type="checkbox" name="pref-export-strip-tags" value="yes" id="pref-export-strip-tags" %EXPORT_STRIP_TAGS%>
+                        <label for="pref-export-strip-tags">%i18n.preferences.export.strip_tags_label%</label>
+                    </p>
+                    <p>
+                        <input type="radio" name="pref-export-strip-links" value="full" id="pref-export-strip-link-full" %EXPORT_STRIP_LINKS_FULL%>
+                        <label for="pref-export-strip-link-full">%i18n.preferences.export.strip_links_full_label%</label>
+                    </p>
+                    <p>
+                        <input type="radio" name="pref-export-strip-links" value="unlink" id="pref-export-strip-link-unlink" %EXPORT_STRIP_LINKS_UNLINK%>
+                        <label for="pref-export-strip-link-unlink">%i18n.preferences.export.strip_links_unlink_label%</label>
+                    </p>
+                    <p>
+                        <input type="radio" name="pref-export-strip-links" value="no" id="pref-export-strip-link-no" %EXPORT_STRIP_LINKS_NO%>
+                        <label for="pref-export-strip-link-no">%i18n.preferences.export.strip_links_no_label%</label>
+                    </p>
+                </div>
+            </div>
+            <!-- Attachment options -->
+            <div id="prefs-tabs-attachments">
+                <p>%i18n.preferences.attachments_info%</p>
+                <div>
+                    <textarea id="pref-attachments" name="pref-attachments">%ATTACHMENT_EXTENSIONS%</textarea>
+                </div>
+            </div>
+            <!-- Export/seldomly used options -->
             <div id="prefs-tabs-advanced">
                 <label for="pref-pandoc">
                     %i18n.preferences.pandoc%
@@ -48,12 +97,6 @@
                 <div>
                     <input type="checkbox" name="debug" value="yes" id="debug" %DEBUG%>
                     <label for="debug">%i18n.preferences.debug%</label>
-                </div>
-            </div>
-            <div id="prefs-tabs-attachments">
-                <p>%i18n.preferences.attachments_info%</p>
-                <div>
-                    <textarea id="pref-attachments" name="pref-attachments">%ATTACHMENT_EXTENSIONS%</textarea>
                 </div>
             </div>
         </div>
