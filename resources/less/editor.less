@@ -1,5 +1,14 @@
 // Editor CSS
 
+// Scrollbar annotations reside outside CodeMirror element
+.sb-annotation {
+    background-color:@orange-2;
+}
+
+body.dark .sb-annotation {
+    background-color:yellow;
+}
+
 #editor {
     position:fixed;
     top:@toolbar-height;

@@ -139,7 +139,7 @@ class ZettlrExport
         let cnt = fs.readFileSync(path.join(__dirname, './assets/export.tex'), 'utf8');
         // Do updates to the template
         // General options
-        cnt = cnt.replace('%PAGE_NUMBERING%', pdf.pagenumbering); // gobble turns page numbering off
+        cnt = cnt.replace('%PAGE_NUMBERING%', pdf.pagenumbering);
 
         // Page setup
         cnt = cnt.replace('%PAPER_TYPE%', pdf.papertype);

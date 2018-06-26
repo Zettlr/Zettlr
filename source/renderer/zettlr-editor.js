@@ -24,6 +24,7 @@ require('codemirror/addon/search/jump-to-line');
 require('codemirror/addon/dialog/dialog.js');
 require('codemirror/addon/edit/closebrackets');
 require('codemirror/addon/selection/mark-selection');
+require('codemirror/addon/scroll/annotatescrollbar');
 
 // Modes
 require('codemirror/mode/markdown/markdown');
@@ -62,15 +63,16 @@ class ZettlrEditor
         this._renderer = parent;
         this._div = $('#editor');
         this._fntooltipbubble = $('<div>').addClass('fn-panel');
-        this._positions = [];        // Saves the positions of the editor
-        this._currentHash = null;    // Needed for positions
-        this._words = 0;             // Currently written words
-        this._fontsize = 100;        // Font size (used for zooming)
-        this._timeout = null;        // Stores a current timeout for a save-command
-        this._inlineImages = [];     // Image widgets that are currently rendered
-        this._inlineLinks = [];      // Inline links that are currently rendered
-        this._prevSelections = [];   // Used to save all selections before a command is run to re-select
-        this._markedResults = [];    // Contains the search results marked in the text
+        this._positions = [];               // Saves the positions of the editor
+        this._currentHash = null;           // Needed for positions
+        this._words = 0;                    // Currently written words
+        this._fontsize = 100;               // Font size (used for zooming)
+        this._timeout = null;               // Stores a current timeout for a save-command
+        this._inlineImages = [];            // Image widgets that are currently rendered
+        this._inlineLinks = [];             // Inline links that are currently rendered
+        this._prevSelections = [];          // Used to save all selections before a command is run to re-select
+        this._markedResults = [];           // Contains the search results marked in the text
+        this._scrollbarAnnotations = null;  // Contains an object to mark search results on the scrollbar
 
         // These are used for calculating a correct word count
         this._blockElements = require('../common/data.json').block_elements;
@@ -168,6 +170,10 @@ class ZettlrEditor
         });
 
         this._cm.refresh();
+
+        // Finally create the annotateScrollbar object to be able to annotate the scrollbar with search results.
+        this._scrollbarAnnotations = this._cm.annotateScrollbar('sb-annotation');
+        this._scrollbarAnnotations.update([]);
     }
     // END constructor
 
@@ -424,9 +430,13 @@ class ZettlrEditor
 
         this.unmarkResults(); // Clear potential previous marks
         if(this._renderer.getPreview().hasResult(file.hash)) {
+            let sbannotate = [];
             for(let result of this._renderer.getPreview().hasResult(file.hash).result) {
+                sbannotate.push({ 'from': result.from, 'to': result.to });
                 this._markedResults.push(this._cm.markText(result.from, result.to, {className: "search-result"}));
             }
+
+            this._scrollbarAnnotations.update(sbannotate);
         }
     }
 
@@ -439,6 +449,8 @@ class ZettlrEditor
         for(let mark of this._markedResults) {
             mark.clear();
         }
+
+        this._scrollbarAnnotations.update([]);
 
         this._markedResults = [];
     }

@@ -561,7 +561,7 @@ class Zettlr
             'pandoc': this.config.getEnv('pandoc'),
             'pdflatex': this.config.getEnv('pdflatex'),
             'pdf': this.config.get('pdf'),
-            'title': file.name,
+            'title': file.name.substr(0, file.name.lastIndexOf('.')),
             'author': this.config.get('pdf').author,
             'keywords': this.config.get('pdf').keywords
         };

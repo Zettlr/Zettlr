@@ -666,6 +666,12 @@ body.dark div.dragger {
 #preview.dark #search-directory #counter .progress {
   background-color: #c8f0aa;
 }
+.sb-annotation {
+  background-color: #f05734;
+}
+body.dark .sb-annotation {
+  background-color: yellow;
+}
 #editor {
   position: fixed;
   top: 39px;

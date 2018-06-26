@@ -11,7 +11,8 @@
     - Completely remove internal Zettelkasten-links (e.g. `[[<link-text>]]`).
     - Only unlink internal Zettelkaten-links (i.e. transform `[[<link-text>]]` to `<link-text>`).
 - Switched to the better `xelatex` engine to render PDF documents.
-- Added a great number of PDF export customization options.
+- Added a great number of PDF export customization options. More will be coming in the future (depending on necessities and user wishes).
+- Added a feature that search results now also are shown on the scrollbar so that you know exactly where the matches reside in your document.
 
 ## Under the hood
 
