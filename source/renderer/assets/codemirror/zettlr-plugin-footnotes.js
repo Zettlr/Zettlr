@@ -287,4 +287,7 @@
         // At the end re-set the cursor to the old one.
         cm.doc.setCursor(oldCursor);
     };
+
+    CodeMirror.keyMap['default']['Ctrl-Alt-F']    = 'insertFootnote';
+    CodeMirror.keyMap['default']['Cmd-Alt-F']    = 'insertFootnote';
 });

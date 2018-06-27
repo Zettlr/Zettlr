@@ -1473,6 +1473,17 @@ body.dark .sb-annotation {
 .popup .recent-docs a:hover {
   background-color: #dcdcdc;
 }
+.popup .footnote-edit textarea {
+  background-color: transparent;
+  color: inherit;
+  font-size: 1em;
+  min-height: 150px;
+  border: none;
+  width: 250px;
+}
+.popup .footnote-edit textarea:focus {
+  outline: 0;
+}
 .dark .popup {
   background-color: rgba(0, 0, 0, 0.9);
   box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.75);

@@ -13,6 +13,7 @@
 */
 
 const path = require('path');
+const ZettlrPopup = require('./zettlr-popup.js');
 
 // First codemirror addons
 require('codemirror/addon/mode/overlay');
@@ -165,6 +166,9 @@ class ZettlrEditor
                 this._renderer.autoSearch(elem.text());
             } else if(elem.hasClass('cm-zkn-link')) {
                 this._renderer.autoSearch(elem.text().replace(/[\[\]]/g, ''), true);
+            } else if(elem.hasClass('cm-link') && elem.text().indexOf('^') === 0) {
+                // We've got a footnote
+                this._editFootnote(elem);
             }
         });
 
@@ -675,6 +679,40 @@ class ZettlrEditor
         // Now we either got a match or an empty fnref. Anyway: display
         this._fntooltipbubble.attr('style', 'bottom:0; left:0; right:0; z-index:10000');
         this._div.append(this._fntooltipbubble);
+    }
+
+    /**
+     * This displays a small popup to allow editing the text from within the text, without the need to scroll.
+     * @param  {jQuery} elem The (jQuery) encapsulated footnote reference.
+     */
+    _editFootnote(elem)
+    {
+        let ref = elem.text().substr(1);
+        let line = null;
+        this._cm.eachLine((handle) => {
+            if(handle.text.indexOf(`[^${ref}]:`) == 0) {
+                // Got the line
+                line = handle;
+            }
+        });
+
+        let cnt = `<div class="footnote-edit">`;
+        cnt += `<textarea>${line.text.substr(5 + ref.length)}</textarea>`;
+        cnt += '</div>';
+
+        let popup = new ZettlrPopup(this, elem, cnt);
+
+        $('.popup .footnote-edit').on('keyup', (e) => {
+            if(e.which == 13 && e.shiftKey) {
+                // Done editing.
+                e.preventDefault();
+                let newtext = `[^${ref}]: ${e.target.value.replace(/\n/, '')}`;
+                let sc = this._cm.getSearchCursor(line.text, {'line':0, 'ch':0});
+                sc.findNext();
+                sc.replace(newtext);
+                popup.close();
+            }
+        })
     }
 
     /**

@@ -229,6 +229,9 @@ class ZettlrBody
         return new ZettlrPopup(this, $('#toolbar .file-info'), cnt);
     }
 
+    /**
+     * Display a popup containing the list of the most recent documents used during this session
+     */
     showRecentDocuments()
     {
         if(this._recentDocs.length == 0) {
@@ -250,6 +253,10 @@ class ZettlrBody
         });
     }
 
+    /**
+     * Add a new document to the list of recent documents, unless it already exists
+     * @param {ZettlrFile} file The file to be added
+     */
     addRecentDocument(file)
     {
         let found = this._recentDocs.find((elem) => { return (elem.hash == file.hash); });
