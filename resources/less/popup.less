@@ -248,52 +248,69 @@
             border-bottom:1px solid @grey-3;
         }
     }
-}
 
-.popup form.search {
     // SEARCH POPUP
-    input {
-        font-size:100%;
-        text-align:left;
-        display:inline;
-        width:60%;
-        background-color: transparent;
-        color:inherit;
-        padding:5px;
-        border:none;
-        &:focus {
-            outline:0;
+    .search {
+        input {
+            font-size:100%;
+            text-align:left;
+            display:inline;
+            width:60%;
+            background-color: transparent;
+            color:inherit;
+            padding:5px;
+            border:none;
+            &:focus {
+                outline:0;
+            }
+
+            &:first-child {
+                border-bottom:1px solid @grey-5;
+            }
         }
 
-        &:first-child {
-            border-bottom:1px solid @grey-5;
+        button {
+            width:auto;
+            padding:5px 2px;
+            margin:0px;
+            border-radius:2px;
+            font-size:@font-size-small;
+            overflow:hidden;
+            display:inline;
+            background-color:@grey-0;
+
+            &:hover {
+                background-color:@grey-3;
+            }
+
+            &#searchNext {
+                width:40%;
+            }
+
+            &#replaceNext {
+                width:28%;
+            }
+
+            &#replaceAll {
+                width:12%;
+            }
         }
     }
 
-    button {
-        width:auto;
-        padding:5px 2px;
-        margin:0px;
-        border-radius:2px;
-        font-size:@font-size-small;
-        overflow:hidden;
-        display:inline;
-        background-color:@grey-0;
+    // Recent docs
+    .recent-docs {
+        a {
+            display:block;
+            text-decoration: none;
+            color:inherit;
+            padding:5px;
+            margin:0;
+            white-space: nowrap;
+            overflow-x:hidden;
 
-        &:hover {
-            background-color:@grey-3;
-        }
-
-        &#searchNext {
-            width:40%;
-        }
-
-        &#replaceNext {
-            width:28%;
-        }
-
-        &#replaceAll {
-            width:12%;
+            &:hover {
+                background-color:@grey-1;
+            }
         }
     }
 }
@@ -329,15 +346,17 @@
                 background-color:@grey-3;
             }
         }
-    }
 
-    /**
-     * POPUPS
-     */
+        .search {
+            button {
+                background-color: @popup-dark-color;
+            }
+        }
 
-    form.search {
-        button {
-            background-color: @popup-dark-color;
+        .recent-docs {
+            a:hover {
+                background-color:@grey-3;
+            }
         }
     }
 

@@ -36,6 +36,13 @@
             "title": "toolbar.preferences"
         },
         {
+            "role": "button",
+            "class": "recent-docs",
+            "command": "show-docs",
+            "content": "{}",
+            "title": "toolbar.recent_docs"
+        },
+        {
             "role": "searchbar"
         },
         {

@@ -1036,6 +1036,9 @@ body.dark .sb-annotation {
 #toolbar .button.preferences::before {
   content: "\f00f";
 }
+#toolbar .button.recent-docs::before {
+  content: "\f0c2";
+}
 #toolbar .button.file-save::before {
   content: "\f0c8";
 }
@@ -1420,7 +1423,7 @@ body.dark .sb-annotation {
   border: none;
   border-bottom: 1px solid #787878;
 }
-.popup form.search input {
+.popup .search input {
   font-size: 100%;
   text-align: left;
   display: inline;
@@ -1430,13 +1433,13 @@ body.dark .sb-annotation {
   padding: 5px;
   border: none;
 }
-.popup form.search input:focus {
+.popup .search input:focus {
   outline: 0;
 }
-.popup form.search input:first-child {
+.popup .search input:first-child {
   border-bottom: 1px solid #505050;
 }
-.popup form.search button {
+.popup .search button {
   width: auto;
   padding: 5px 2px;
   margin: 0px;
@@ -1446,22 +1449,29 @@ body.dark .sb-annotation {
   display: inline;
   background-color: #f0f0f0;
 }
-.popup form.search button:hover {
+.popup .search button:hover {
   background-color: #787878;
 }
-.popup form.search button#searchNext {
+.popup .search button#searchNext {
   width: 40%;
 }
-.popup form.search button#replaceNext {
+.popup .search button#replaceNext {
   width: 28%;
 }
-.popup form.search button#replaceAll {
+.popup .search button#replaceAll {
   width: 12%;
 }
-.dark {
-  /**
-     * POPUPS
-     */
+.popup .recent-docs a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 5px;
+  margin: 0;
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+.popup .recent-docs a:hover {
+  background-color: #dcdcdc;
 }
 .dark .popup {
   background-color: rgba(0, 0, 0, 0.9);
@@ -1484,8 +1494,11 @@ body.dark .sb-annotation {
 .dark .popup .formatting a:hover {
   background-color: #787878;
 }
-.dark form.search button {
+.dark .popup .search button {
   background-color: rgba(0, 0, 0, 0.9);
+}
+.dark .popup .recent-docs a:hover {
+  background-color: #787878;
 }
 .dark .popup-arrow.up {
   border-bottom-color: rgba(0, 0, 0, 0.9);

@@ -44,6 +44,8 @@ class ZettlrBody
         this._ql = []; // This holds all open quicklook windows
         this._n = []; // Holds all notifications currently displaying
         this._darkTheme = false; // Initial value; will be overwritten by init messages
+        this._recentDocs = []; // All documents, up to twenty that have been opened on a per-session basis
+        this._numRecentDocs = 10; // No more than 10 docs in the list
 
         // Event listener for the context menu
         window.addEventListener('contextmenu', (e) => {
@@ -226,6 +228,44 @@ class ZettlrBody
 
         return new ZettlrPopup(this, $('#toolbar .file-info'), cnt);
     }
+
+    showRecentDocuments()
+    {
+        if(this._recentDocs.length == 0) {
+            return new ZettlrPopup(this, $('#toolbar .recent-docs'), '<p>' + trans('gui.no_recent_docs') + '</p>');
+        }
+
+        let cnt = '<div class="recent-docs">\n';
+        for(let doc of this._recentDocs) {
+            cnt += `<a href="#" data-hash="${doc.hash}" title="${doc.name}">${doc.name}</a>\n`;
+        }
+        cnt += '</div>';
+
+        let popup =  new ZettlrPopup(this, $('#toolbar .recent-docs'), cnt);
+
+        $('.popup .recent-docs a').click((e) => {
+            let hash = $(e.target).attr('data-hash');
+            this._renderer.requestFile(hash);
+            popup.close();
+        });
+    }
+
+    addRecentDocument(file)
+    {
+        let found = this._recentDocs.find((elem) => { return (elem.hash == file.hash); });
+        if(found !== undefined) {
+            this._recentDocs.splice(this._recentDocs.indexOf(found), 1);
+            this._recentDocs.push(found);
+            return;
+        }
+
+        while(this._recentDocs.length > this._numRecentDocs-1) {
+            this._recentDocs.shift();
+        }
+
+        this._recentDocs.push({'hash':file.hash, 'name':file.name});
+    }
+
     /**
      * Opens a quicklook window for a given file.
      * @param  {ZettlrFile} file The file to be loaded into the QuickLook

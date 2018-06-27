@@ -288,7 +288,6 @@ class ZettlrRendererIPC
                 this._app.setLocale(cnt.value);
                 break;
                 case 'muteLines':
-                console.log(`Received muteLines, changing ...`);
                 this._app.getEditor().setMuteLines(cnt.value);
                 break;
             }
@@ -370,6 +369,11 @@ class ZettlrRendererIPC
             // Stats
             case 'show-stats':
             this.send('request-stats-data');
+            break;
+
+            // Recent documents
+            case 'show-docs':
+            this._app.getBody().showRecentDocuments();
             break;
 
             case 'stats-data':
