@@ -10,6 +10,10 @@
     },
     "gui": {
         "find_placeholder": "Trouver…",
+        "replace_placeholder": "Substituer à",
+        "find_label": "Trouver",
+        "replace_label": "Subst.",
+        "replace_all_label": "Tout",
         "words": "%s mots",
         "words_last_month": "mots dernièr mois",
         "file_words": "mots",
@@ -291,7 +295,8 @@
         "show_toc": "Ouvrir le sommaire",
         "toggle_attachments": "Voir les annexes",
         "formatting": "Formats du texte",
-        "generate_id": "Créer une nouvelle identification"
+        "generate_id": "Créer une nouvelle identification",
+        "find": "Chercher dans le fichier"
     },
     "system" : {
         "unknown_command": "Reçu une commande inconnu: %s",

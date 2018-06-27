@@ -10,6 +10,10 @@
     },
     "gui": {
         "find_placeholder": "Find…",
+        "replace_placeholder": "Replace with",
+        "find_label": "Find",
+        "replace_label": "Replace",
+        "replace_all_label": "All",
         "words": "%s words",
         "words_last_month": "words last month",
         "file_words": "words",
@@ -291,7 +295,8 @@
         "show_toc": "Show the table of contents",
         "toggle_attachments": "View attachments",
         "formatting": "Text formats",
-        "generate_id": "Generate new ID"
+        "generate_id": "Generate new ID",
+        "find": "Find in file"
     },
     "system" : {
         "unknown_command": "Unknown command received: %s",

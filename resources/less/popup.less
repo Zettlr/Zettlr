@@ -87,37 +87,6 @@
         text-align:center;
     }
 
-    // SEARCH POPUP
-    form.search {
-        input {
-            font-size:100%;
-            text-align:left;
-            display:inline;
-            width:60%;
-            background-color: transparent;
-            color:inherit;
-            padding:5px;
-            border:none;
-            &:focus {
-                outline:0;
-            }
-        }
-
-        button {
-            width:auto;
-            padding:5px;
-            margin:5px;
-            border-radius:2px;
-            font-size:@font-size-base;
-            display:inline;
-            background-color:@grey-0;
-
-            &:hover {
-                background-color:@grey-3;
-            }
-        }
-    }
-
     // Elements inside popups
     form {
         input {
@@ -281,6 +250,54 @@
     }
 }
 
+.popup form.search {
+    // SEARCH POPUP
+    input {
+        font-size:100%;
+        text-align:left;
+        display:inline;
+        width:60%;
+        background-color: transparent;
+        color:inherit;
+        padding:5px;
+        border:none;
+        &:focus {
+            outline:0;
+        }
+
+        &:first-child {
+            border-bottom:1px solid @grey-5;
+        }
+    }
+
+    button {
+        width:auto;
+        padding:5px 2px;
+        margin:0px;
+        border-radius:2px;
+        font-size:@font-size-small;
+        overflow:hidden;
+        display:inline;
+        background-color:@grey-0;
+
+        &:hover {
+            background-color:@grey-3;
+        }
+
+        &#searchNext {
+            width:40%;
+        }
+
+        &#replaceNext {
+            width:28%;
+        }
+
+        &#replaceAll {
+            width:12%;
+        }
+    }
+}
+
 // If the body has the dark class, display dark popups
 .dark {
     .popup {
@@ -311,6 +328,16 @@
             a:hover {
                 background-color:@grey-3;
             }
+        }
+    }
+
+    /**
+     * POPUPS
+     */
+
+    form.search {
+        button {
+            background-color: @popup-dark-color;
         }
     }
 

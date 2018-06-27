@@ -385,8 +385,8 @@ class ZettlrBody
             return;
         }
 
-        let cnt = `<form class="search"><input type="text" placeholder="find..." value="" id="searchWhat"><button id="searchNext">Search</button><br>
-        <input type="text" placeholder="replace with" value="" id="replaceWhat"><button id="replaceNext">Replace</button><button id="replaceAll">All</button></form>`;
+        let cnt = `<form class="search"><input type="text" placeholder="${trans('gui.find_placeholder')}" value="" id="searchWhat"><button id="searchNext">${trans('gui.find_label')}</button><br>
+        <input type="text" placeholder="${trans('gui.replace_placeholder')}" value="" id="replaceWhat"><button id="replaceNext">${trans('gui.replace_label')}</button><button id="replaceAll">${trans('gui.replace_all_label')}</button></form>`;
 
         // This must be a persistent popup
         let popup = (new ZettlrPopup(this, $('.button.find'), cnt, (x) => {
@@ -395,16 +395,15 @@ class ZettlrBody
         })).makePersistent();
 
         $('#searchWhat').on('keyup', (e) => {
-            if(e.which == 27) { // Enter
+            if(e.which == 13) { // Enter
                 e.preventDefault();
                 $('#searchNext').click();
             }
         });
 
         $('#replaceWhat').on('keyup', (e) => {
-            if(e.which == 27) {
+            if(e.which == 13) { // Return
                 e.preventDefault();
-                console.log(`Return on replace field`);
                 if(e.altKey) {
                     $('#replaceAll').click();
                 } else {
@@ -424,7 +423,7 @@ class ZettlrBody
         });
 
         $('#replaceAll').click((e) => {
-            this._renderer.getEditor().replaceAll($('#searchWhat').val(), $('#replaceWhat'));
+            this._renderer.getEditor().replaceAll($('#searchWhat').val(), $('#replaceWhat').val());
         });
     }
 

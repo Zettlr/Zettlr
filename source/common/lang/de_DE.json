@@ -10,6 +10,10 @@
     },
     "gui": {
         "find_placeholder": "Finden…",
+        "replace_placeholder": "Ersetzen mit",
+        "find_label": "Finden",
+        "replace_label": "Ersetzen",
+        "replace_all_label": "Alle",
         "words": "%s Wörter",
         "words_last_month": "Wörter (Monat)",
         "file_words": "Wörter",
@@ -291,7 +295,8 @@
         "show_toc": "Inhaltsverzeichnis anzeigen",
         "toggle_attachments": "Anhänge anzeigen",
         "formatting": "Textformate",
-        "generate_id": "Neue ID generieren"
+        "generate_id": "Neue ID generieren",
+        "find": "In Datei finden"
     },
     "system" : {
         "unknown_command": "Unbekannten Befehl erhalten: %s",

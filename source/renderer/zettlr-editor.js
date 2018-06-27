@@ -19,9 +19,7 @@ require('codemirror/addon/mode/overlay');
 require('codemirror/addon/edit/continuelist');
 require('./assets/codemirror/indentlist.js');
 require('codemirror/addon/search/searchcursor');
-require('codemirror/addon/search/jump-to-line');
 require('codemirror/addon/edit/closebrackets');
-require('codemirror/addon/selection/mark-selection');
 require('codemirror/addon/scroll/annotatescrollbar');
 
 // Modes
@@ -88,6 +86,8 @@ class ZettlrEditor
                 override: true
             },
             extraKeys: {
+                'Cmd-F'         : false,
+                'Ctrl-F'        : false,
                 'Enter'         : 'newlineAndIndentContinueMarkdownList',
                 'Tab'           : 'autoIndentMarkdownList',
                 'Shift-Tab'     : 'autoUnindentMarkdownList'
@@ -722,6 +722,9 @@ class ZettlrEditor
     {
         let cur = this._cm.getCursor();
 
+        // We need a regex because only this way we can case-insensitively search
+        term = new RegExp(term, 'i');
+
         if(this._searchCursor == null) {
             this._searchCursor = this._cm.getSearchCursor(term, this._cm.getCursor());
         }
@@ -748,12 +751,15 @@ class ZettlrEditor
     /**
      * Replace the next occurrence with str_replace
      * @param  {String} str_replace The string with which the next occurrence of the search cursor term will be replaced
+     * @return {Boolean} Whether or not a string has been replaced.
      */
     replaceNext(str_replace)
     {
         if(this._searchCursor != null) {
             this._searchCursor.replace(str_replace);
+            return true;
         }
+        return false;
     }
 
     /**
@@ -763,6 +769,7 @@ class ZettlrEditor
      */
     replaceAll(searchWhat, replaceWhat)
     {
+        searchWhat = new RegExp(searchWhat, 'i');
         this._searchCursor = this._cm.getSearchCursor(searchWhat, {'line':0,'ch':0});
         while(this._searchCursor.findNext()) {
             this._searchCursor.replace(replaceWhat);

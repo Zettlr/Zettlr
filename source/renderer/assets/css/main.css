@@ -1243,31 +1243,6 @@ body.dark .sb-annotation {
   display: block;
   text-align: center;
 }
-.popup form.search input {
-  font-size: 100%;
-  text-align: left;
-  display: inline;
-  width: 60%;
-  background-color: transparent;
-  color: inherit;
-  padding: 5px;
-  border: none;
-}
-.popup form.search input:focus {
-  outline: 0;
-}
-.popup form.search button {
-  width: auto;
-  padding: 5px;
-  margin: 5px;
-  border-radius: 2px;
-  font-size: 1em;
-  display: inline;
-  background-color: #f0f0f0;
-}
-.popup form.search button:hover {
-  background-color: #787878;
-}
 .popup form input {
   background-color: transparent;
   color: inherit;
@@ -1442,6 +1417,49 @@ body.dark .sb-annotation {
   border: none;
   border-bottom: 1px solid #787878;
 }
+.popup form.search input {
+  font-size: 100%;
+  text-align: left;
+  display: inline;
+  width: 60%;
+  background-color: transparent;
+  color: inherit;
+  padding: 5px;
+  border: none;
+}
+.popup form.search input:focus {
+  outline: 0;
+}
+.popup form.search input:first-child {
+  border-bottom: 1px solid #505050;
+}
+.popup form.search button {
+  width: auto;
+  padding: 5px 2px;
+  margin: 0px;
+  border-radius: 2px;
+  font-size: 0.9em;
+  overflow: hidden;
+  display: inline;
+  background-color: #f0f0f0;
+}
+.popup form.search button:hover {
+  background-color: #787878;
+}
+.popup form.search button#searchNext {
+  width: 40%;
+}
+.popup form.search button#replaceNext {
+  width: 28%;
+}
+.popup form.search button#replaceAll {
+  width: 12%;
+}
+.dark {
+  /**
+     * POPUPS
+     */
+}
 .dark .popup {
   background-color: rgba(0, 0, 0, 0.9);
   box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.75);
@@ -1462,6 +1480,9 @@ body.dark .sb-annotation {
 }
 .dark .popup .formatting a:hover {
   background-color: #787878;
+}
+.dark form.search button {
+  background-color: rgba(0, 0, 0, 0.9);
 }
 .dark .popup-arrow.up {
   border-bottom-color: rgba(0, 0, 0, 0.9);
