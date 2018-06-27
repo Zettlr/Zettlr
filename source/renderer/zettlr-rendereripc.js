@@ -287,6 +287,10 @@ class ZettlrRendererIPC
                 case 'app_lang':
                 this._app.setLocale(cnt.value);
                 break;
+                case 'muteLines':
+                console.log(`Received muteLines, changing ...`);
+                this._app.getEditor().setMuteLines(cnt.value);
+                break;
             }
             break;
 

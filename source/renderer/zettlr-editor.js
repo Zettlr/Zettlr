@@ -71,6 +71,7 @@ class ZettlrEditor
         this._markedResults = [];           // Contains the search results marked in the text
         this._scrollbarAnnotations = null;  // Contains an object to mark search results on the scrollbar
         this._searchCursor = null;          // A search cursor while searching
+        this._mute = true;                  // Should the editor mute lines while in distraction-free mode?
 
         // These are used for calculating a correct word count
         this._blockElements = require('../common/data.json').block_elements;
@@ -121,7 +122,7 @@ class ZettlrEditor
             // cursor changes its position as well then) or when the cursor moves.
             this._renderImages();
             this._renderLinks();
-            if(this._cm.getOption('fullScreen')) {
+            if(this._cm.getOption('fullScreen') && this._mute) {
                 this._muteLines();
             }
         });
@@ -484,8 +485,20 @@ class ZettlrEditor
         // TODO: Maybe other theme with softer colors for non-cursor-lines
         if(!this._cm.getOption('fullScreen')) {
             this._unmuteLines();
-        } else {
+        } else if(this._mute) {
             this._muteLines();
+        }
+    }
+
+    /**
+     * Sets the variable that controls the muting of lines
+     * @param {Boolean} state True or false, depending on whether or not we should mute the lines in distraction free mode
+     */
+    setMuteLines(state)
+    {
+        this._mute = state;
+        if(this._cm.getOption('fullScreen') && !this._mute) {
+            this._unmuteLines(); // Unmute (muting will occur on next cursor activity)
         }
     }
 

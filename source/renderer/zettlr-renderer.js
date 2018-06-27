@@ -89,10 +89,10 @@ class ZettlrRenderer
         this._overlay.show(trans('init.welcome'));
 
         // First request the configuration
-        // Now eventually switch the theme to dark
         this._ipc.send('config-get', 'darkTheme');
         this._ipc.send('config-get', 'snippets');
         this._ipc.send('config-get', 'app_lang');
+        this._ipc.send('config-get', 'muteLines');
 
         // Request a first batch of files
         this._ipc.send('get-paths', {});

@@ -141,8 +141,10 @@ class ZettlrDialog
             let stripLinksFull = (obj.export.stripLinks == "full") ? 'checked="checked"' : '';
             let stripLinksUnlink = (obj.export.stripLinks == "unlink") ? 'checked="checked"': '';
             let stripLinksNo = (obj.export.stripLinks == "no") ? 'checked="checked"' : '';
+            let mute = (obj.muteLines) ? 'checked="checked"' : '';
             replacements.push('%DARK%|' + dark);
             replacements.push('%SNIPPETS%|' + snippets);
+            replacements.push('%MUTE_LINES%|' + mute)
             replacements.push('%DEBUG%|' + debug);
             replacements.push('%EXPORT_DEST_TEMP%|' + exportTemp);
             replacements.push('%EXPORT_DEST_CWD%|' + exportCwd);

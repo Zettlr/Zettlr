@@ -249,6 +249,7 @@
             "snippets": "Textfragmente anzeigen",
             "spellcheck": "Wähle die Sprachen aus, für welche du die Rechtschreibprüfung einschalten möchtest (<strong>Neustart erforderlich!</strong>)",
             "spellcheck_warning": "<em>Vorsicht:</em> Zu viele gleichzeitig aktivierte Bibliotheken verlangsamen die App spürbar! Versuche, nicht mehr als drei gleichzeitig zu aktivieren!",
+            "mute_lines": "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab",
             "debug": "Entwicklermodus",
             "save": "Speichern",
             "cancel": "Abbrechen"

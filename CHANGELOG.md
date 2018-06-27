@@ -20,6 +20,7 @@
 
 - Moved all exporting functionality to a separate class, `ZettlrExport`.
 - Removed unnecessary CodeMirror plugins.
+- Removed unnecessary styles and some unnecessary (b/c unused) functionality.
 
 # 0.16.0
 

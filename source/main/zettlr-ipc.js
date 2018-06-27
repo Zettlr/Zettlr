@@ -236,6 +236,9 @@ class ZettlrIPC
             if(cnt.hasOwnProperty('snippets') && cnt.snippets != this._app.getConfig().get('snippets')) {
                 this.send('toggle-snippets', 'no-emit');
             }
+            if(cnt.hasOwnProperty('muteLines') && cnt.muteLines != this._app.getConfig().get('muteLines')) {
+                this.send('config', { 'key': 'muteLines', 'value': cnt.muteLines});
+            }
             this._app.getConfig().update(cnt);
             break;
 

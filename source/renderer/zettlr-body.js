@@ -553,7 +553,8 @@ class ZettlrBody
         lineheight = 1,
         mainfont = 'Times New Roman',
         margin_unit = 'cm',
-        pagenumbering = 'gobble';
+        pagenumbering = 'gobble',
+        mute = false;
 
         for(let r of res) {
             if(r.name === 'pref-pandoc') {
@@ -564,6 +565,8 @@ class ZettlrBody
                 darkTheme = true;
             } else if(r.name === 'pref-snippets') {
                 snippets = true;
+            } else if(r.name === 'pref-mute-lines') {
+                mute = true;
             } else if(r.name === 'spellcheck[]') {
                 spellcheck[r.value] = true;
             } else if(r.name === 'app-lang') {
@@ -627,6 +630,7 @@ class ZettlrBody
                 'pdflatex': pdflatex,
                 'darkTheme': darkTheme,
                 'snippets': snippets,
+                'muteLines': mute,
                 'spellcheck': spellcheck,
                 'app_lang': app_lang,
                 'debug': debug,

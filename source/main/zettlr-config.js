@@ -97,6 +97,7 @@ class ZettlrConfig
             // UI related options
             "darkTheme" : false,
             "snippets"  : true,
+            "muteLines" : true,  // Should the editor mute lines in distraction free mode?
             // Export options
             "pandoc"    : 'pandoc',
             "pdflatex"  : 'pdflatex',
