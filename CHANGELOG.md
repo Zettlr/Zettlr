@@ -14,6 +14,7 @@
 - Added a great number of PDF export customization options. More will be coming in the future (depending on necessities and user wishes).
 - Added a feature that search results now also are shown on the scrollbar so that you know exactly where the matches reside in your document.
 - Replaced the ugly find-in-file dialog with a Zettlr-style popup and added a replace-function as well. Simply press `Return` while inside the replacement-field to replace the next occurrence of your search term, or press `ALT`+`Return`, to replace *all* occurrences at once. **The search is case-insensitive**.
+- Introducing a **distraction free mode**, which can be toggled by pressing `Cmd/Ctrl+J`. This makes the editor fullscreen and mutes all lines except the one in which you are currently working.
 
 ## Under the hood
 

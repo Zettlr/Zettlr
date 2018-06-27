@@ -1,3 +1,15 @@
+.CodeMirror-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: auto;
+  z-index: 500;
+}
+.CodeMirror-fullscreen .CodeMirror-scroll {
+  padding: 0em 20em !important;
+}
 .CodeMirror-vscrollbar {
   cursor: default;
 }
@@ -71,35 +83,6 @@
   text-decoration: underline;
   cursor: pointer;
 }
-.CodeMirror .CodeMirror-dialog {
-  position: absolute;
-  left: 0;
-  right: 0;
-  background: inherit;
-  z-index: 15;
-  padding: .1em .8em;
-  overflow: hidden;
-  color: inherit;
-}
-.CodeMirror .CodeMirror-dialog input {
-  border: none;
-  outline: none;
-  background: transparent;
-  width: 20em;
-  color: inherit;
-  font-family: inherit;
-  font-size: 1em;
-}
-.CodeMirror .CodeMirror-dialog button {
-  font-size: 70%;
-}
-.CodeMirror .CodeMirror-dialog-top {
-  top: 0;
-}
-.CodeMirror .CodeMirror-dialog-bottom {
-  border-top: 1px solid #eee;
-  bottom: 0;
-}
 .cm-s-zettlr {
   /* LISTS */
   /* TYPOGRAPHY */
@@ -113,12 +96,6 @@
 }
 .cm-s-zettlr .CodeMirror-cursor {
   background: #1cb27e;
-}
-.cm-s-zettlr .CodeMirror-dialog {
-  background-color: #c8dcf0;
-}
-.cm-s-zettlr .CodeMirror-dialog input {
-  color: #32465a;
 }
 .cm-s-zettlr .cm-formatting-header-1,
 .cm-s-zettlr .cm-formatting-header-2,

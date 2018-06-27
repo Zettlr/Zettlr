@@ -220,6 +220,10 @@ class ZettlrRendererIPC
             }
             break;
 
+            case 'toggle-distraction-free':
+            this._app.getEditor().toggleDistractionFree();
+            break;
+
             case 'toggle-directories':
             this._app.toggleDirectories();
             break;

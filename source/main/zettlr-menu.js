@@ -165,6 +165,15 @@ class ZettlrMenu
                             if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'toggle-snippets'});
                         }
                     },
+                    {
+                        label: trans('menu.toggle_distraction_free'),
+                        accelerator: 'CmdOrCtrl+J',
+                        type: 'checkbox',
+                        checked: false,
+                        click(item, focusedWindow) {
+                            if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'toggle-distraction-free'});
+                        }
+                    },
                     { type: 'separator' },
                     {
                         label: trans('menu.toggle_directories'),

@@ -88,6 +88,7 @@
         "toggle_devtools": "Toggle developer tools",
         "toggle_theme": "Night mode",
         "toggle_snippets": "Text snippets",
+        "toggle_distraction_free": "Distraction free mode",
         "toggle_directories": "Toggle tree view",
         "toggle_attachments": "View attachments",
         "toggle_preview": "Toggle preview pane",

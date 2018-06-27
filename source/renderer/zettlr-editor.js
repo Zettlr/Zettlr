@@ -18,6 +18,7 @@ const path = require('path');
 require('codemirror/addon/mode/overlay');
 require('codemirror/addon/edit/continuelist');
 require('./assets/codemirror/indentlist.js');
+require('codemirror/addon/display/fullscreen');
 require('codemirror/addon/search/searchcursor');
 require('codemirror/addon/edit/closebrackets');
 require('codemirror/addon/scroll/annotatescrollbar');
@@ -120,6 +121,9 @@ class ZettlrEditor
             // cursor changes its position as well then) or when the cursor moves.
             this._renderImages();
             this._renderLinks();
+            if(this._cm.getOption('fullScreen')) {
+                this._muteLines();
+            }
         });
 
         // Thanks for this to https://discuss.codemirror.net/t/hanging-indent/243/2
@@ -469,6 +473,44 @@ class ZettlrEditor
         this._words = 0;
         this._prevSeletions = [];
         return this;
+    }
+
+    /**
+     * Toggles the distraction free mode
+     */
+    toggleDistractionFree()
+    {
+        this._cm.setOption('fullScreen', !this._cm.getOption('fullScreen'));
+        // TODO: Maybe other theme with softer colors for non-cursor-lines
+        if(!this._cm.getOption('fullScreen')) {
+            this._unmuteLines();
+        } else {
+            this._muteLines();
+        }
+    }
+
+    /**
+     * Removes the mute-class from all lines
+     */
+    _unmuteLines()
+    {
+        for(let i = 0; i < this._cm.lineCount(); i++) {
+            this._cm.doc.removeLineClass(i, "text", "mute");
+        }
+    }
+
+    /**
+     * Adds the mute-class to all lines except where the cursor is at.
+     */
+    _muteLines()
+    {
+        this._unmuteLines();
+        let highlightLine = this._cm.getCursor().line;
+        for(let i = 0; i < this._cm.lineCount(); i++) {
+            if(highlightLine != i) {
+                this._cm.doc.addLineClass(i, "text", "mute");
+            }
+        }
     }
 
     /**

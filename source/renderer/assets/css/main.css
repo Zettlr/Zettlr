@@ -666,7 +666,7 @@ body.dark div.dragger {
 #preview.dark #search-directory #counter .progress {
   background-color: #c8f0aa;
 }
-.sb-annotation {
+body .sb-annotation {
   background-color: #f05734;
 }
 body.dark .sb-annotation {
@@ -708,6 +708,9 @@ body.dark .sb-annotation {
 }
 #editor .CodeMirror-code {
   margin: 5em 0em;
+}
+#editor .CodeMirror-code .mute {
+  opacity: 0.2;
 }
 #editor .CodeMirror-scroll {
   padding: 0em 5em;
