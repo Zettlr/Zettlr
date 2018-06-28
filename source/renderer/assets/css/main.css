@@ -1107,6 +1107,8 @@ body.dark .sb-annotation {
   text-align: center;
   font-size: 0.72em;
   line-height: 39px;
+  white-space: nowrap;
+  overflow-x: hidden;
 }
 #toolbar .searchbar {
   flex-grow: 5;
