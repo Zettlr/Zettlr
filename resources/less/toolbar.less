@@ -15,6 +15,12 @@
     align-items:center;
     cursor:default;
 
+    &.mute {
+        border-bottom:none;
+        opacity:0.5; // Mute out a little bit to not distract too much
+        background-image: linear-gradient(to bottom, @grey-0, white); // Nicer fade effect into the editor
+    }
+
     .button {
         flex-grow:0.1;
         display:inline-block;

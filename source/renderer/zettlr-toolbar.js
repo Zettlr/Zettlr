@@ -168,6 +168,12 @@ class ZettlrToolbar
         return this;
     }
 
+    toggleDistractionFree()
+    {
+        this._div.toggleClass('mute');
+        return this;
+    }
+
     /**
      * Focuses the search area
      * @return {ZettlrToolbar} Chainability.

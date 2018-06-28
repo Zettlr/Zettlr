@@ -222,6 +222,7 @@ class ZettlrRendererIPC
 
             case 'toggle-distraction-free':
             this._app.getEditor().toggleDistractionFree();
+            this._app.getToolbar().toggleDistractionFree();
             break;
 
             case 'toggle-directories':
