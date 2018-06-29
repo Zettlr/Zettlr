@@ -103,6 +103,17 @@
 
                 // First: Tags, in the format of Twitter
                 if (stream.match('#')) {
+                    // Check if the Hashtag begins on the start of line or is preceded by a space.
+                    stream.backUp(1);
+                    if(!stream.sol()) {
+                        stream.backUp(1);
+                        if(stream.next() != ' ') {
+                            stream.next();
+                            return null;
+                        }
+                        stream.next();
+                    }
+                    stream.next();
                     if([' ', '#'].includes(stream.peek()) // We've just unraveled a heading.
                         || zkndelim.includes(stream.peek())) { // This means # is followed by a delim
                         stream.next();
