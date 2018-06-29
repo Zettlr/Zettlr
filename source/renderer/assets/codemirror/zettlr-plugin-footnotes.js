@@ -289,5 +289,5 @@
     };
 
     CodeMirror.keyMap['default']['Ctrl-Alt-F']    = 'insertFootnote';
-    CodeMirror.keyMap['default']['Cmd-Alt-F']    = 'insertFootnote';
+    CodeMirror.keyMap['default']['Cmd-Alt-R']     = 'insertFootnote';
 });
