@@ -7,11 +7,17 @@
 @tile-height-min:  30px;
 
 #preview {
-    position:fixed;
-    top:@toolbar-height;
+    position:absolute;
+    top:0;
+    width:100%;
+    left:0%;
     bottom:0;
-    left:20%;
-    right:60%;
+    transition:0.3s left ease;
+
+    &.hidden {
+        left:100%;
+        transition:0.3s left ease;
+    }
 
     border-right:1px solid @grey-2;
     overflow-y: auto;
@@ -20,11 +26,6 @@
     outline: none;
     background-color:inherit;
     font-size: @font-size-small;
-
-    &.no-directories {
-        left:0%;
-        right:80%;
-    }
 
     ul {
         list-style-type: none;

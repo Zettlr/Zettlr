@@ -293,6 +293,31 @@ class ZettlrPreview
             this._listContainer.find('.sorter').detach();
         });
 
+        // Show the arrow button once the mouse pointer gets high enough
+        this._div.on('mousemove', (e) => {
+            if(e.clientY < ($('#toolbar').height() + 80)) {
+                $('#arrow-button').removeClass('hidden');
+            } else {
+                $('#arrow-button').addClass('hidden');
+            }
+        });
+
+        // Have it stay visible b/c hovering over the button will "leave" the
+        // div itself
+        $('#arrow-button').on('mousemove', (e) => {
+            $('#arrow-button').removeClass('hidden');
+        });
+
+        this._div.on('mouseleave', (e) => {
+            $('#arrow-button').addClass('hidden');
+        })
+
+        // Switch over to the directories once clicked
+        $('#arrow-button').click((e) => {
+            this._renderer.showDirectories();
+            $('#arrow-button').addClass('hidden');
+        })
+
         return this;
     }
 
@@ -356,14 +381,20 @@ class ZettlrPreview
     }
 
     /**
-     * Toggles the display of the directory tree.
-     * @return {ZettlrPreview} Chainability.
+     * Is the preview pane currently hidden?
+     * @return {Boolean} True or false, depending on the class.
      */
-    toggleDirectories()
-    {
-        this._div.toggleClass('no-directories');
-        return this;
-    }
+    isHidden() { return this._div.hasClass('hidden'); }
+
+    /**
+     * Show the preview pane (by removing the hidden class)
+     */
+    show() { this._div.removeClass('hidden'); }
+
+    /**
+     * Hide the preview pane (by adding the hidden class)
+     */
+    hide() { this._div.addClass('hidden'); }
 
     /**
      * Toggle the snippets.

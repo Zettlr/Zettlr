@@ -162,14 +162,20 @@ class ZettlrDirectories
     }
 
     /**
-    * Show/Hide the complete list
-    * @return {ZettlrDirectories} Chainability.
-    */
-    toggleDisplay()
-    {
-        this._div.toggleClass('hidden');
-        return this;
-    }
+     * Is the directory pane currently hidden?
+     * @return {Boolean} True or false, depending on the class.
+     */
+    isHidden() { return this._div.hasClass('hidden'); }
+
+    /**
+     * Show the directories pane (by removing the hidden class)
+     */
+    show() { this._div.removeClass('hidden'); }
+
+    /**
+     * Hide the directories pane (by adding the hidden class)
+     */
+    hide() { this._div.addClass('hidden'); }
 
     /**
     * Needed for bubbling up of selections

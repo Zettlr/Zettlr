@@ -222,11 +222,13 @@ class ZettlrRenderer
      * Toggle the display of the directory pane.
      * @return {void} No return.
      */
-    toggleDirectories()
+    toggleCombiner()
     {
-        this._directories.toggleDisplay();
-        this._preview.toggleDirectories();
-        this._editor.toggleDirectories();
+        // this._directories.toggleDisplay();
+        // this._preview.toggleDirectories();
+        // this._editor.toggleDirectories();
+        $('#combiner').hide(); // bruh
+        this._editor.toggleCombiner(); // Need a better name for this thing. Definitely.
     }
 
     /**
@@ -549,6 +551,8 @@ class ZettlrRenderer
      */
     beginSearch(term)
     {
+        // Show preview before searching the dir
+        this.showPreivew();
         this._ipc.send('force-open', term);
         this._preview.beginSearch(term);
     }
@@ -566,6 +570,8 @@ class ZettlrRenderer
             this._toolbar.setSearch(term);
             this.beginSearch(term);
         } else {
+            // Show preview before searching the dir
+            this.showPreivew();
             // Don't search, simply tell main to open the file
             this._ipc.send('force-open', term);
             // Also initiate a search to be run accordingly for any files that
@@ -718,7 +724,6 @@ class ZettlrRenderer
     {
         // We have received a close-file command.
         this._editor.close();
-        // this.setCurrentFile(null);
     }
 
     /**
@@ -746,6 +751,8 @@ class ZettlrRenderer
     renameFile(f)
     {
         if(f.hasOwnProperty('hash')) {
+            // Make sure preview is visible for this to work correctly
+            this.showPreview();
             // Another file should be renamed
             // Rename a file based on a hash -> find it
             this._body.requestNewFileName(this.findObject(f.hash));
@@ -804,6 +811,9 @@ class ZettlrRenderer
                 // Necessary to scroll the file into view
                 this._preview.select(this.getCurrentFile().hash);
             }
+            this.showPreview();
+        } else {
+            this.showDirectories();
         }
     }
 
@@ -876,6 +886,12 @@ class ZettlrRenderer
     getPreview() { return this._preview; }
 
     /**
+     * Returns the directories object
+     * @return {ZettlrDirectories} The directory object
+     */
+    getDirectories() { return this._directories; }
+
+    /**
      * Returns the body object
      * @return {ZettlrBody} The body instance
      */
@@ -923,6 +939,24 @@ class ZettlrRenderer
         }
 
         return arr;
+    }
+
+    /**
+     * Shows directory pane in combiner
+     */
+    showDirectories()
+    {
+        this._preview.hide();
+        this._directories.show();
+    }
+
+    /**
+     * Shows preview in combiner
+     */
+    showPreview()
+    {
+        this._preview.show();
+        this._directories.hide();
     }
 
     /**

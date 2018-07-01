@@ -79,6 +79,37 @@ body.dark div.dragger {
   /* This is applied when a modal is shown */
   filter: blur(5px);
 }
+#combiner {
+  position: fixed;
+  top: 39px;
+  left: 0;
+  width: 20%;
+  bottom: 0;
+  overflow: hidden;
+}
+#combiner #arrow-button {
+  text-align: center;
+  vertical-align: middle;
+  z-index: 400;
+  background-color: white;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.25);
+  transition: 0.4s left ease;
+}
+#combiner #arrow-button:before {
+  content: '\f305';
+  font-family: 'WebHostingHub-Glyphs';
+  line-height: 30px;
+}
+#combiner #arrow-button.hidden {
+  left: -60px;
+  transition: 0.4s left ease;
+}
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -274,11 +305,12 @@ body.dark div.dragger {
   background-color: #dcdcdc;
 }
 #directories {
-  position: fixed;
-  top: 39px;
-  left: 0;
+  position: absolute;
+  top: 0;
+  left: 0%;
+  width: 100%;
   bottom: 0;
-  right: 80%;
+  transition: 0.3s left ease;
   border-right: 1px solid #c8c8c8;
   color: #646464;
   overflow-y: auto;
@@ -287,7 +319,8 @@ body.dark div.dragger {
   font-size: 0.9em;
 }
 #directories.hidden {
-  display: none;
+  left: -100%;
+  transition: 0.3s left ease;
 }
 #directories > ul:not(:first-child) {
   padding-top: 0.8em;
@@ -475,11 +508,12 @@ body.dark div.dragger {
   text-align: center;
 }
 #preview {
-  position: fixed;
-  top: 39px;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  left: 0%;
   bottom: 0;
-  left: 20%;
-  right: 60%;
+  transition: 0.3s left ease;
   border-right: 1px solid #c8c8c8;
   overflow-y: auto;
   overflow-x: hidden;
@@ -488,9 +522,9 @@ body.dark div.dragger {
   background-color: inherit;
   font-size: 0.9em;
 }
-#preview.no-directories {
-  left: 0%;
-  right: 80%;
+#preview.hidden {
+  left: 100%;
+  transition: 0.3s left ease;
 }
 #preview ul {
   list-style-type: none;
@@ -680,7 +714,7 @@ body.dark .sb-annotation {
   top: 39px;
   right: 0;
   bottom: 0;
-  left: 40%;
+  left: 20%;
   overflow-x: hidden;
 }
 #editor .fn-panel {
@@ -691,13 +725,7 @@ body.dark .sb-annotation {
   padding: 10px;
   display: inline-block;
 }
-#editor.no-directories {
-  left: 20%;
-}
-#editor.no-preview {
-  left: 20%;
-}
-#editor.no-directories.no-preview {
+#editor.no-combiner {
   left: 0%;
 }
 #editor.dark {

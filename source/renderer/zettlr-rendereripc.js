@@ -226,11 +226,19 @@ class ZettlrRendererIPC
             break;
 
             case 'toggle-directories':
-            this._app.toggleDirectories();
+            if(this._app.getDirectories().isHidden()) {
+                this._app.showDirectories();
+            } else {
+                this._app.showPreview();
+            }
             break;
 
             case 'toggle-preview':
-            this._app.getEditor().togglePreview();
+            if(this._app.getPreview().isHidden()) {
+                this._app.showPreview();
+            } else {
+                this._app.showDirectories();
+            }
             break;
 
             case 'export':

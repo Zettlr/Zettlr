@@ -766,28 +766,13 @@ class ZettlrEditor
     }
 
     /**
-    * Called when the directories are shown/hidden
-    * @return {ZettlrEditor} Chainability.
-    */
-    toggleDirectories()
+     * Toggles display of the side pane
+     * @return {ZettlrEditor} Chainability
+     */
+    toggleCombiner()
     {
-        this._div.toggleClass('no-directories');
-        // CodeMirror needs to recalculate the overlays etc., otherwise
-        // it will be difficult to write, select, etc.
-        this._cm.refresh();
-        return this;
-    }
-
-    /**
-    * Called when the preview list is shown/hidden
-    * @return {ZettlrEditor} Chainability.
-    */
-    togglePreview()
-    {
-        this._div.toggleClass('no-preview');
-        // CodeMirror needs to recalculate the overlays etc., otherwise
-        // it will be difficult to write, select, etc.
-        this._cm.refresh();
+        this._div.toggleClass('no-combiner');
+        this._cm.refres();
         return this;
     }
 

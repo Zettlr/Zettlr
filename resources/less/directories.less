@@ -1,11 +1,17 @@
 // Directory list
 
 #directories {
-    position:fixed;
-    top:@toolbar-height;
-    left:0;
+    position:absolute;
+    top:0;
+    left:0%;
+    width:100%;
     bottom:0;
-    right: 80%;
+    transition:0.3s left ease;
+
+    &.hidden {
+        left:-100%;
+        transition:0.3s left ease;
+    }
 
     border-right:1px solid @grey-2;
     color: @grey-4;
@@ -13,10 +19,6 @@
     cursor:default;
     outline: none;
     font-size:@font-size-small;
-
-    &.hidden {
-        display:none;
-    }
 
     // Direct descendants need some margin to the files and to other roots
     & > ul:not(:first-child) {

@@ -43,12 +43,18 @@
         <div id="toolbar">
         </div>
 
-        <!-- First: Pane for directories -->
-        <div id="directories" tabindex="1">
-        </div>
+        <!-- A pane to combine both directories and preview -->
+        <div id="combiner">
+            <div id="arrow-button" class="hidden"></div>
 
-        <!-- Second: Pane for preview -->
-        <div id="preview" tabindex="2">
+            <!-- First: Pane for directories -->
+            <div id="directories" tabindex="1">
+            </div>
+
+            <!-- Second: Pane for preview -->
+            <div id="preview" class="hidden" tabindex="2">
+            </div>
+
         </div>
 
         <!-- Three: The editor itself -->
