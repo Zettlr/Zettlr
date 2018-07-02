@@ -48,9 +48,18 @@ class ZettlrBody
         this._numRecentDocs = 10; // No more than 10 docs in the list
 
         // Make preview and editor resizable
-        $('#combiner').resizable({
-            'alsoResize': '#editor',
-            'handles': 'e'
+        $('#editor').resizable({
+            // 'alsoResize': '#editor',
+            'handles': 'w',
+            'resize' : (e, ui) => { $('#combiner').css('width', ($(window).width()-ui.size.width)+'px'); },
+            'minWidth': Math.round($(window).width() * 0.4),
+            'maxWidth': Math.round($(window).width() * 0.95)
+        });
+
+        // Update resize options on window resize
+        window.addEventListener('resize', (e) => {
+            $('#editor').resizable("option", "minWidth", Math.round($(window).width() * 0.4));
+            $('#editor').resizable("option", "maxWidth", Math.round($(window).width() * 0.95));
         });
 
         // Event listener for the context menu
