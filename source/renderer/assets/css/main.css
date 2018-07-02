@@ -110,6 +110,22 @@ body.dark div.dragger {
   left: -60px;
   transition: 0.4s left ease;
 }
+#combiner .ui-resizable-handle {
+  position: absolute;
+  font-size: 0.1px;
+  display: block;
+}
+#combiner .ui-resizable-disabled .ui-resizable-handle,
+#combiner .ui-resizable-autohide .ui-resizable-handle {
+  display: none;
+}
+#combiner .ui-resizable-e {
+  cursor: e-resize;
+  width: 10px;
+  right: 0px;
+  top: 0;
+  height: 100%;
+}
 ::-webkit-scrollbar {
   width: 4px;
 }

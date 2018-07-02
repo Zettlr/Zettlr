@@ -310,13 +310,13 @@ class ZettlrPreview
 
         this._div.on('mouseleave', (e) => {
             $('#arrow-button').addClass('hidden');
-        })
+        });
 
         // Switch over to the directories once clicked
         $('#arrow-button').click((e) => {
             this._renderer.showDirectories();
             $('#arrow-button').addClass('hidden');
-        })
+        });
 
         return this;
     }

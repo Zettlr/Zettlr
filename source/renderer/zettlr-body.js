@@ -47,6 +47,12 @@ class ZettlrBody
         this._recentDocs = []; // All documents, up to twenty that have been opened on a per-session basis
         this._numRecentDocs = 10; // No more than 10 docs in the list
 
+        // Make preview and editor resizable
+        $('#combiner').resizable({
+            'alsoResize': '#editor',
+            'handles': 'e'
+        });
+
         // Event listener for the context menu
         window.addEventListener('contextmenu', (e) => {
             e.preventDefault();

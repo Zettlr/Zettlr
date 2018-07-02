@@ -96,7 +96,12 @@ body {
             left:-60px;
             transition:0.4s left ease;
         }
-    }
+    }    
+
+    // JQUERY UI - THEME (necessary for resizable to work)
+    .ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }
+    .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
+    .ui-resizable-e { cursor: e-resize; width: 10px; right: 0px; top: 0; height: 100%; }
 }
 
 ::-webkit-scrollbar { width: 4px; }
