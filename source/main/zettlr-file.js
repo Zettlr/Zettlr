@@ -49,6 +49,7 @@ class ZettlrFile
         this.path         = '';
         this.hash         = null;
         this.id           = ''; // The ID, if there is one inside the file.
+        this.tags         = []; // All tags that are to be found inside the file's contents.
         this.type         = 'file';
         this.ext          = '';
         this.modtime      = 0;
@@ -146,6 +147,7 @@ class ZettlrFile
         // let idRE = /(?<!\[\[)@ID:(.*)(?!\]\])/g
 
         let idRE = /@ID:([^\s]*)/g;
+        let tagRE = /#(\S+)/g;
         let match;
 
         if((match = idRE.exec(cnt)) == null) {
@@ -163,6 +165,18 @@ class ZettlrFile
         if((match != null) && (match[1].substr(-2) != ']]')) {
             this.id = match[1] || '';
         }
+
+        // Now read all tags
+        this.tags = [];
+        while((match = tagRE.exec(cnt)) != null) {
+            let tag = match[1];
+            tag = tag.replace(/#/g, ''); // Prevent headings levels 2-6 from showing up in the tag list
+            if(tag.length > 0) {
+                this.tags.push(match[1]);
+            }
+        }
+        // Remove duplicates
+        this.tags = [...new Set(this.tags)];
 
         return cnt;
     }
