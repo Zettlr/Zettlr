@@ -78,6 +78,8 @@ class ZettlrRenderer
         this._pomodoro       = new ZettlrPomodoro(this);
         this._stats          = new ZettlrStatsView(this);
         this._attachments    = new ZettlrAttachments(this);
+
+        this._directoriesLocked = false; // Is the directory tree view currently locked?
     }
 
     /**
@@ -956,8 +958,26 @@ class ZettlrRenderer
      */
     showPreview()
     {
+        if(this._directoriesLocked) {
+            return; // Can't show the preview pane
+        }
         this._preview.show();
         this._directories.hide();
+    }
+
+    /**
+     * Lock the directories so that preview won't show up
+     */
+    lockDirectories()
+    {
+        this._directoriesLocked = false;
+        // Also make sure directories are shown
+        this.showDirectories();
+    }
+
+    unlockDirectories()
+    {
+        this._directoriesLocked = false;
     }
 
     /**

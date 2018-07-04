@@ -183,6 +183,10 @@ class ZettlrPreview
             'revert': "invalid", // Only revert if target was invalid
             'revertDuration': 200,
             'distance': 5,
+            // We have to lock/unlock directories on dragging, so that not
+            // suddenly the preview list reappears and dropping becomes impossible
+            'start': (e, ui) => { this._renderer.lockDirectories(); },
+            'stop': (e, ui) => { this._renderer.unlockDirectories(); }
         });
 
         // Enable to drag out files from the app
