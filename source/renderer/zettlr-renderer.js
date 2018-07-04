@@ -553,7 +553,7 @@ class ZettlrRenderer
     beginSearch(term)
     {
         // Show preview before searching the dir
-        this.showPreivew();
+        this.showPreview();
         this._ipc.send('force-open', term);
         this._preview.beginSearch(term);
     }
