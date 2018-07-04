@@ -64,41 +64,6 @@ body {
     filter:blur(@song2);
 }
 
-#combiner {
-    position:fixed;
-    top:@toolbar-height;
-    left:0;
-    width:20%;
-    bottom:0;
-    overflow:hidden;
-
-    #arrow-button {
-        &:before {
-            content: '\f305'; // Black arrow left
-            font-family: 'WebHostingHub-Glyphs';
-            line-height:30px; // Same as parent element
-        }
-        text-align:center;
-        vertical-align: middle;
-        z-index:400;
-        background-color: white;
-
-        position:absolute;
-        top:10px;
-        left:10px;
-        width:30px;
-        height:30px;
-        border-radius:100%;
-        box-shadow:1px 1px 10px 0px rgba(0,0,0,.25);
-        transition:0.4s left ease;
-
-        &.hidden {
-            left:-60px;
-            transition:0.4s left ease;
-        }
-    }    
-}
-
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background-color:rgba(240,240,240,1); }
 ::-webkit-scrollbar-thumb { background-color:@green-0; }
@@ -114,6 +79,10 @@ body {
 @import "directories.less";
 
 @import "preview.less";
+
+// Combiner has to be included after directories and preview b/c of some
+// alterations to expanded directories and preview
+@import "combiner.less";
 
 @import "editor.less";
 

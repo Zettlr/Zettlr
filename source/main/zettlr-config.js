@@ -98,6 +98,7 @@ class ZettlrConfig
             "darkTheme" : false,
             "snippets"  : true,
             "muteLines" : true,  // Should the editor mute lines in distraction free mode?
+            "combinerState" : 'collapsed', // collapsed = Preview or directories visible --- expanded = both visible
             // Export options
             "pandoc"    : 'pandoc',
             "pdflatex"  : 'pdflatex',

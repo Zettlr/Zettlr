@@ -142,8 +142,12 @@ class ZettlrDialog
             let stripLinksUnlink = (obj.export.stripLinks == "unlink") ? 'checked="checked"': '';
             let stripLinksNo = (obj.export.stripLinks == "no") ? 'checked="checked"' : '';
             let mute = (obj.muteLines) ? 'checked="checked"' : '';
+            let cmbStateExp = (obj.combinerState === 'expanded') ? 'checked="checked"' : '';
+            let cmbStateCol = (obj.combinerState === 'collapsed') ? 'checked="checked"' : '';
             replacements.push('%DARK%|' + dark);
             replacements.push('%SNIPPETS%|' + snippets);
+            replacements.push('%COMBINER_EXPANDED%|' + cmbStateExp);
+            replacements.push('%COMBINER_COLLAPSED%|' + cmbStateCol);
             replacements.push('%MUTE_LINES%|' + mute)
             replacements.push('%DEBUG%|' + debug);
             replacements.push('%EXPORT_DEST_TEMP%|' + exportTemp);

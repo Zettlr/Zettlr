@@ -616,7 +616,8 @@ class ZettlrBody
         mainfont = 'Times New Roman',
         margin_unit = 'cm',
         pagenumbering = 'gobble',
-        mute = false;
+        mute = false,
+        combinerState = 'collapsed';
 
         for(let r of res) {
             if(r.name === 'pref-pandoc') {
@@ -627,6 +628,8 @@ class ZettlrBody
                 darkTheme = true;
             } else if(r.name === 'pref-snippets') {
                 snippets = true;
+            } else if(r.name === 'pref-combiner-state') {
+                combinerState = r.value;
             } else if(r.name === 'pref-mute-lines') {
                 mute = true;
             } else if(r.name === 'spellcheck[]') {
@@ -692,6 +695,7 @@ class ZettlrBody
                 'pdflatex': pdflatex,
                 'darkTheme': darkTheme,
                 'snippets': snippets,
+                'combinerState': combinerState,
                 'muteLines': mute,
                 'spellcheck': spellcheck,
                 'app_lang': app_lang,

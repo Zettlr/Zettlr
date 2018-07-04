@@ -299,6 +299,14 @@ class ZettlrRendererIPC
                 case 'muteLines':
                 this._app.getEditor().setMuteLines(cnt.value);
                 break;
+                case 'combinerState':
+                if(cnt.value == 'expanded') {
+                    $('#editor').addClass('collapsed');
+                    $('#combiner').addClass('expanded');
+                } else if(cnt.value == 'collapsed') {
+                    $('#editor').removeClass('collapsed');
+                    $('#combiner').removeClass('expanded');
+                }
             }
             break;
 

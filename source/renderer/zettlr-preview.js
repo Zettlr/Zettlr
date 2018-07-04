@@ -295,6 +295,9 @@ class ZettlrPreview
 
         // Show the arrow button once the mouse pointer gets high enough
         this._div.on('mousemove', (e) => {
+            if($('#combiner').hasClass('expanded')) {
+                return; // No need for the arrow in expanded mode
+            }
             if(e.clientY < ($('#toolbar').height() + 80)) {
                 $('#arrow-button').removeClass('hidden');
             } else {

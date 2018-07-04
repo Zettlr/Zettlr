@@ -6,6 +6,7 @@
 - Added syntax highlightning for Markdown tables.
 - Resizing of combined tree view and preview pane as well es the editor is now possible.
 - Changes to the HTML export template. Now tables are better integrated, as well as blockquotes.
+- Added an option to choose whether or not the combined view or the regular, old view should be used for preview and tree view.
 
 ## Under the hood
 
@@ -13,6 +14,7 @@
 - Changes to the styles of preview and directory panes.
 - Changes to the main template.
 - Markdown table detection is now handled by the ZKN-mode.
+- Changes to the styles for enabling both extended and narrow sidebar mode.
 
 # 0.17.0
 

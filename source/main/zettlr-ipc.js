@@ -239,6 +239,9 @@ class ZettlrIPC
             if(cnt.hasOwnProperty('muteLines') && cnt.muteLines != this._app.getConfig().get('muteLines')) {
                 this.send('config', { 'key': 'muteLines', 'value': cnt.muteLines});
             }
+            if(cnt.hasOwnProperty('combinerState') && cnt.combinerState != this._app.getConfig().get('combinerState')) {
+                this.send('config', { 'key': 'combinerState', 'value': cnt.combinerState});
+            }
             this._app.getConfig().update(cnt);
             break;
 

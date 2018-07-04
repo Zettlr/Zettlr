@@ -93,6 +93,7 @@ class ZettlrRenderer
         this._ipc.send('config-get', 'snippets');
         this._ipc.send('config-get', 'app_lang');
         this._ipc.send('config-get', 'muteLines');
+        this._ipc.send('config-get', 'combinerState');
 
         // Request a first batch of files
         this._ipc.send('get-paths', {});
