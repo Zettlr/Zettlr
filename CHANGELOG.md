@@ -4,6 +4,7 @@
 
 - **Combined preview and directory pane**. Now only one of both is visible, never both, but also never none. Pressing `Cmd/Ctrl+1` and `Cmd/Ctrl+2` will still toggle visibility of both preview and directory pane, but not in parallel anymore. So hiding the preview pane will automatically show the directory pane and vice versa. Also, if you are on the preview pane, moving with your mouse to the top of the pane will show an arrow that lets you enter the directory pane again. Zettlr will automatically switch to the preview pane in a number of cases: Selection of a directory, searches, and renaming of files.
 - Added syntax highlightning for Markdown tables.
+- Resizing of combined tree view and preview pane as well es the editor is now possible.
 - Changes to the HTML export template. Now tables are better integrated, as well as blockquotes.
 
 ## Under the hood

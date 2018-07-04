@@ -459,7 +459,7 @@ class ZettlrBody
         $('#searchWhat').on('keyup', (e) => {
             if(e.which == 13) { // Enter
                 e.preventDefault();
-                $('#searchNext').click();
+                // TODO: Still testing, but it should work now.
             }
         });
 

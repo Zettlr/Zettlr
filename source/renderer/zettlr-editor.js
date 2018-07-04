@@ -63,15 +63,21 @@ class ZettlrEditor
         this._fntooltipbubble = $('<div>').addClass('fn-panel');
         this._positions = [];               // Saves the positions of the editor
         this._currentHash = null;           // Needed for positions
+
         this._words = 0;                    // Currently written words
         this._fontsize = 100;               // Font size (used for zooming)
         this._timeout = null;               // Stores a current timeout for a save-command
+
         this._inlineImages = [];            // Image widgets that are currently rendered
         this._inlineLinks = [];             // Inline links that are currently rendered
+
         this._prevSelections = [];          // Used to save all selections before a command is run to re-select
+
+        this._currentLocalSearch = '';      // Saves a current local search, to re-start search on text field change
         this._markedResults = [];           // Contains the search results marked in the text
         this._scrollbarAnnotations = null;  // Contains an object to mark search results on the scrollbar
         this._searchCursor = null;          // A search cursor while searching
+
         this._mute = true;                  // Should the editor mute lines while in distraction-free mode?
 
         // These are used for calculating a correct word count
@@ -431,16 +437,32 @@ class ZettlrEditor
             return;
         }
 
-        this.unmarkResults(); // Clear potential previous marks
         if(this._renderer.getPreview().hasResult(file.hash)) {
-            let sbannotate = [];
-            for(let result of this._renderer.getPreview().hasResult(file.hash).result) {
-                sbannotate.push({ 'from': result.from, 'to': result.to });
-                this._markedResults.push(this._cm.markText(result.from, result.to, {className: "search-result"}));
-            }
-
-            this._scrollbarAnnotations.update(sbannotate);
+            let res = this._renderer.getPreview().hasResult(file.hash).result;
+            this._mark(res);
         }
+    }
+
+    /**
+     * Why do you have a second _mark-function, when there is markResults?
+     * Because the local search also generates search results that have to be
+     * marked without retrieving anything from the ZettlrPreview.
+     * @param  {Array} res An Array containing all positions to be rendered.
+     */
+    _mark(res)
+    {
+        if(!res) {
+            return;
+        }
+
+        this.unmarkResults(); // Clear potential previous marks
+        let sbannotate = [];
+        for(let result of res) {
+            sbannotate.push({ 'from': result.from, 'to': result.to });
+            this._markedResults.push(this._cm.markText(result.from, result.to, {className: "search-result"}));
+        }
+
+        this._scrollbarAnnotations.update(sbannotate);
     }
 
     /**
@@ -800,12 +822,13 @@ class ZettlrEditor
     {
         let cur = this._cm.getCursor();
 
+        if(this._searchCursor == null || this._currentLocalSearch != term) {
+            // (Re)start search in case there was none or the term has changed
+            this.startSearch(term);
+        }
+
         // We need a regex because only this way we can case-insensitively search
         term = new RegExp(term, 'i');
-
-        if(this._searchCursor == null) {
-            this._searchCursor = this._cm.getSearchCursor(term, this._cm.getCursor());
-        }
 
         if(this._searchCursor.findNext()) {
             this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to());
@@ -818,12 +841,38 @@ class ZettlrEditor
         }
     }
 
+    startSearch(term)
+    {
+        // Create a new search cursor
+        this._searchCursor = this._cm.getSearchCursor(term, this._cm.getCursor());
+        this._currentLocalSearch = term;
+
+        // Find all matches
+        let tRE = new RegExp(term, 'gi');
+        let res = [];
+        let match = null;
+        for(let i = 0; i < this._cm.lineCount(); i++) {
+            let l = this._cm.getLine(i);
+            tRE.lastIndex = 0;
+            while((match = tRE.exec(l)) != null) {
+                res.push({
+                    'from': { 'line': i, 'ch': match.index },
+                    'to':   { 'line': i, 'ch': match.index + term.length }
+                });
+            }
+        }
+
+        // Mark these in document and on the scroll bar
+        this._mark(res);
+    }
+
     /**
      * Stops the search by destroying the search cursor
      */
     stopSearch()
     {
         this._searchCursor = null;
+        this.unmarkResults();
     }
 
     /**
