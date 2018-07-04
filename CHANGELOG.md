@@ -15,6 +15,7 @@
 - Changes to the main template.
 - Markdown table detection is now handled by the ZKN-mode.
 - Changes to the styles for enabling both extended and narrow sidebar mode.
+- Added another check for popup height in `ZettlrPopup` to ensure popups can be displayed on screen and don't end up being cut off by the window.
 
 # 0.17.0
 
