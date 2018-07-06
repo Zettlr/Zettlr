@@ -574,7 +574,7 @@ class ZettlrRenderer
             this.beginSearch(term);
         } else {
             // Show preview before searching the dir
-            this.showPreivew();
+            this.showPreview();
             // Don't search, simply tell main to open the file
             this._ipc.send('force-open', term);
             // Also initiate a search to be run accordingly for any files that
