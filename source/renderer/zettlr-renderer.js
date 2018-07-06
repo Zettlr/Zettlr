@@ -814,7 +814,9 @@ class ZettlrRenderer
                 // Necessary to scroll the file into view
                 this._preview.select(this.getCurrentFile().hash);
             }
-            this.showPreview();
+            if(oldDir == null || this._currentDir.hash != oldDir.hash) {
+                this.showPreview();
+            } // Else stay where we are
         } else {
             this.showDirectories();
         }
