@@ -13,6 +13,7 @@
     var zkndelim = "!\"$%&()*+,/:;<=>?@[\\]^`{|}~ «»“”–—…÷‘’‚"; // Some less zkn delims
     var delim = "!\"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚";
     var zknLinkRE = /\[\[(.*?)\]\]/;
+    var tableRE = /^\|.+\|$/i;
 
     /**
      * Define the spellchecker mode that will simply check all found words against
@@ -100,6 +101,13 @@
         var markdownZkn = {
             token: function(stream, state) {
                 var ch;
+
+                // This mode should also handle tables, b/c they are rather simple to detect.
+                if(stream.sol() && stream.match(tableRE, false)) {
+                    // Got a table line -> skip to end and convert to table
+                    stream.skipToEnd();
+                    return 'table';
+                }
 
                 // First: Tags, in the format of Twitter
                 if (stream.match('#')) {

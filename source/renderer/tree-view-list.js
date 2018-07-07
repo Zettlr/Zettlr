@@ -14,7 +14,6 @@
  */
 
 const FileView = require('./file-view.js');
-const VirtualDirView = require('./virtual-dir-view.js');
 
 function TreeError(msg) {
     this.name = 'TreeView Error';

@@ -36,11 +36,6 @@
         font-family: 'DejaVu', 'Georgia', 'Times New Roman', 'Times', serif;
     }
 
-    h1, h2, h3, h4, h5, h6 {
-        font-family: 'Raleway', 'Lato', 'Liberation sans', 'Helvetica', sans-serif;
-        color: #FF7C3B;
-    }
-
     article {
         width:50%;
         font-size:1.5em;
@@ -61,6 +56,30 @@
     article p {
         hyphens: auto;
         text-align: justify;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Raleway', 'Lato', 'Liberation sans', 'Helvetica', sans-serif;
+        color: #FF7C3B;
+    }
+
+    blockquote {
+        font-size:80%;
+        color: rgba(120, 120, 120, 1);
+        margin:2% 5%;
+        line-height:120%;
+    }
+
+    table {
+        border-collapse:collapse;
+        width:100%;
+        font-size:70%;
+        font-family: 'Raleway', 'Lato', 'Liberation sans', 'Helvetica', sans-serif;
+    }
+
+    th, td {
+        padding:4px 20px;
+        border-bottom:1px solid #333;
     }
     </style>
 </head>

@@ -78,6 +78,8 @@ class ZettlrRenderer
         this._pomodoro       = new ZettlrPomodoro(this);
         this._stats          = new ZettlrStatsView(this);
         this._attachments    = new ZettlrAttachments(this);
+
+        this._directoriesLocked = false; // Is the directory tree view currently locked?
     }
 
     /**
@@ -93,6 +95,7 @@ class ZettlrRenderer
         this._ipc.send('config-get', 'snippets');
         this._ipc.send('config-get', 'app_lang');
         this._ipc.send('config-get', 'muteLines');
+        this._ipc.send('config-get', 'combinerState');
 
         // Request a first batch of files
         this._ipc.send('get-paths', {});
@@ -552,7 +555,7 @@ class ZettlrRenderer
     beginSearch(term)
     {
         // Show preview before searching the dir
-        this.showPreivew();
+        this.showPreview();
         this._ipc.send('force-open', term);
         this._preview.beginSearch(term);
     }
@@ -571,7 +574,7 @@ class ZettlrRenderer
             this.beginSearch(term);
         } else {
             // Show preview before searching the dir
-            this.showPreivew();
+            this.showPreview();
             // Don't search, simply tell main to open the file
             this._ipc.send('force-open', term);
             // Also initiate a search to be run accordingly for any files that
@@ -811,7 +814,9 @@ class ZettlrRenderer
                 // Necessary to scroll the file into view
                 this._preview.select(this.getCurrentFile().hash);
             }
-            this.showPreview();
+            if(oldDir == null || this._currentDir.hash != oldDir.hash) {
+                this.showPreview();
+            } // Else stay where we are
         } else {
             this.showDirectories();
         }
@@ -955,8 +960,26 @@ class ZettlrRenderer
      */
     showPreview()
     {
+        if(this._directoriesLocked) {
+            return; // Can't show the preview pane
+        }
         this._preview.show();
         this._directories.hide();
+    }
+
+    /**
+     * Lock the directories so that preview won't show up
+     */
+    lockDirectories()
+    {
+        this._directoriesLocked = false;
+        // Also make sure directories are shown
+        this.showDirectories();
+    }
+
+    unlockDirectories()
+    {
+        this._directoriesLocked = false;
     }
 
     /**

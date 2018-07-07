@@ -51,6 +51,10 @@
 .CodeMirror .search-result {
   background-color: yellow;
 }
+.CodeMirror .cm-table {
+  font-family: monospace;
+  font-weight: bold;
+}
 .CodeMirror .cm-header-1 {
   font-size: 2em;
 }

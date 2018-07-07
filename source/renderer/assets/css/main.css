@@ -79,37 +79,6 @@ body.dark div.dragger {
   /* This is applied when a modal is shown */
   filter: blur(5px);
 }
-#combiner {
-  position: fixed;
-  top: 39px;
-  left: 0;
-  width: 20%;
-  bottom: 0;
-  overflow: hidden;
-}
-#combiner #arrow-button {
-  text-align: center;
-  vertical-align: middle;
-  z-index: 400;
-  background-color: white;
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 30px;
-  height: 30px;
-  border-radius: 100%;
-  box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.25);
-  transition: 0.4s left ease;
-}
-#combiner #arrow-button:before {
-  content: '\f305';
-  font-family: 'WebHostingHub-Glyphs';
-  line-height: 30px;
-}
-#combiner #arrow-button.hidden {
-  left: -60px;
-  transition: 0.4s left ease;
-}
 ::-webkit-scrollbar {
   width: 4px;
 }
@@ -703,6 +672,56 @@ body.dark div.dragger {
 #preview.dark #search-directory #counter .progress {
   background-color: #c8f0aa;
 }
+#combiner {
+  position: fixed;
+  top: 39px;
+  left: 0;
+  width: 20%;
+  bottom: 0;
+  overflow: hidden;
+}
+#combiner.expanded {
+  width: 40%;
+}
+#combiner.expanded #directories,
+#combiner.expanded #preview {
+  width: 50%;
+}
+#combiner.expanded #preview {
+  left: 50%;
+}
+#combiner.expanded #preview.hidden {
+  left: 50%;
+}
+#combiner.expanded #directories {
+  left: 0%;
+}
+#combiner.expanded #directories.hidden {
+  left: 0%;
+}
+#combiner #arrow-button {
+  text-align: center;
+  vertical-align: middle;
+  z-index: 400;
+  background-color: white;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.25);
+  transition: 0.4s left ease;
+}
+#combiner #arrow-button:before {
+  content: '\f305';
+  font-family: 'WebHostingHub-Glyphs';
+  line-height: 30px;
+}
+#combiner #arrow-button.hidden {
+  left: -60px;
+  transition: 0.4s left ease;
+}
 body .sb-annotation {
   background-color: #f05734;
 }
@@ -714,8 +733,27 @@ body.dark .sb-annotation {
   top: 39px;
   right: 0;
   bottom: 0;
-  left: 20%;
+  width: 80%;
   overflow-x: hidden;
+}
+#editor.collapsed {
+  width: 60%;
+}
+#editor .ui-resizable-handle {
+  position: absolute;
+  font-size: 0.1px;
+  display: block;
+}
+#editor .ui-resizable-disabled .ui-resizable-handle,
+#editor .ui-resizable-autohide .ui-resizable-handle {
+  display: none;
+}
+#editor .ui-resizable-w {
+  cursor: ew-resize;
+  width: 10px;
+  left: 0px;
+  top: 0;
+  height: 100%;
 }
 #editor .fn-panel {
   position: absolute;

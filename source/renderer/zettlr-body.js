@@ -47,6 +47,21 @@ class ZettlrBody
         this._recentDocs = []; // All documents, up to twenty that have been opened on a per-session basis
         this._numRecentDocs = 10; // No more than 10 docs in the list
 
+        // Make preview and editor resizable
+        $('#editor').resizable({
+            // 'alsoResize': '#editor',
+            'handles': 'w',
+            'resize' : (e, ui) => { $('#combiner').css('width', ($(window).width()-ui.size.width)+'px'); },
+            'minWidth': Math.round($(window).width() * 0.4),
+            'maxWidth': Math.round($(window).width() * 0.95)
+        });
+
+        // Update resize options on window resize
+        window.addEventListener('resize', (e) => {
+            $('#editor').resizable("option", "minWidth", Math.round($(window).width() * 0.4));
+            $('#editor').resizable("option", "maxWidth", Math.round($(window).width() * 0.95));
+        });
+
         // Event listener for the context menu
         window.addEventListener('contextmenu', (e) => {
             e.preventDefault();
@@ -444,7 +459,7 @@ class ZettlrBody
         $('#searchWhat').on('keyup', (e) => {
             if(e.which == 13) { // Enter
                 e.preventDefault();
-                $('#searchNext').click();
+                // TODO: Still testing, but it should work now.
             }
         });
 
@@ -601,7 +616,8 @@ class ZettlrBody
         mainfont = 'Times New Roman',
         margin_unit = 'cm',
         pagenumbering = 'gobble',
-        mute = false;
+        mute = false,
+        combinerState = 'collapsed';
 
         for(let r of res) {
             if(r.name === 'pref-pandoc') {
@@ -612,6 +628,8 @@ class ZettlrBody
                 darkTheme = true;
             } else if(r.name === 'pref-snippets') {
                 snippets = true;
+            } else if(r.name === 'pref-combiner-state') {
+                combinerState = r.value;
             } else if(r.name === 'pref-mute-lines') {
                 mute = true;
             } else if(r.name === 'spellcheck[]') {
@@ -677,6 +695,7 @@ class ZettlrBody
                 'pdflatex': pdflatex,
                 'darkTheme': darkTheme,
                 'snippets': snippets,
+                'combinerState': combinerState,
                 'muteLines': mute,
                 'spellcheck': spellcheck,
                 'app_lang': app_lang,

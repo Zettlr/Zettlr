@@ -107,6 +107,13 @@ class ZettlrPopup
         let height = this._popup.outerHeight();
         let width = this._popup.outerWidth();
 
+        // Ensure the popup is not heigher than the window itself (can happen,
+        // e.g., with the formatting popup)
+        if(height > window.innerHeight-20-this._y) {
+            this._popup.css('height', (window.innerHeight-20-this._y) + 'px');
+            height = this._popup.outerHeight();
+        }
+
         // First find on which side there is the most space.
         let top    = this._elem.offset().top;
         let left   = this._elem.offset().left;

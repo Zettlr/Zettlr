@@ -59,6 +59,7 @@ class ZettlrDirectories
             }
             this._tree = []; // Dereference
             this._empty.show(); // Display the no-dirs message
+            $('#arrow-button').addClass('hidden'); // In case it's displayed when the last dir is closed, we have to re-hide it
             return this;
         }
 
