@@ -13,7 +13,7 @@
     var zkndelim = "!\"$%&()*+,/:;<=>?@[\\]^`{|}~ «»“”–—…÷‘’‚"; // Some less zkn delims
     var delim = "!\"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚";
     var zknLinkRE = /\[\[(.*?)\]\]/;
-    var tableRE = /^\|.+/i;
+    var tableRE = /^\|.+\|$/i;
 
     /**
      * Define the spellchecker mode that will simply check all found words against
@@ -103,8 +103,8 @@
                 var ch;
 
                 // This mode should also handle tables, b/c they are rather simple to detect.
-                if(stream.sol() && stream.match(tableRE)) {
-                    // Beginning of table -> simply return table mode.
+                if(stream.sol() && stream.match(tableRE, false)) {
+                    // Got a table line -> skip to end and convert to table
                     stream.skipToEnd();
                     return 'table';
                 }
