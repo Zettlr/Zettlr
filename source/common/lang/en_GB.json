@@ -106,7 +106,8 @@
         "latex": "Get LaTeX",
         "update": "Check for updates",
         "preferences": "Preferences…",
-        "pdf_preferences": "PDF preferences…",
+        "pdf_preferences": "PDF Preferences…",
+        "tags": "Manage Tags…",
         "quit": "Quit",
         "about": "About Zettlr",
         "services": "Services",
@@ -257,6 +258,13 @@
             "debug": "Debug",
             "save": "Save",
             "cancel": "Cancel"
+        },
+        "tags": {
+            "title": "Manage tags",
+            "description": "Here you can assign colours to different tags. If a tag is found in a file, its tile in the preview list will receive a coloured indicator. The description will be shown on mouse hover.",
+            "name_desc": "The Tag (without #)",
+            "color_desc": "Colour (e.g. #ff0000 or rgb(255, 0, 0))",
+            "desc_desc": "A short and concise description (max. 100 characters)"
         },
         "update": {
             "title": "New update available",

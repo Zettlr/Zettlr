@@ -1,3 +1,14 @@
+# 0.17.2
+
+## GUI and functionality
+
+- Included tag preferences. These allow you to assign colours to specific tags, so that you can see in the preview list directly which files contain specific tags (such as, e.g., `#todo` or `#in-progress`) to have an overview over the work you need to do or categorise your files.
+
+## Under the hood
+
+- Finally renamed the `strong` element in the file tiles in the preview list to a simple `p` to re-gain semantic correctness there.
+- Lots of LESS-code added, several other files have been changed.
+
 # 0.17.1
 
 ## GUI and functionality

@@ -218,6 +218,16 @@ class ZettlrDialog
             replacements.push('%PAGENUMBERING%|' + pagenumbering);
             break;
 
+            case 'tags-preferences':
+            let t = '';
+            for(let tag of obj) {
+                t += `<div><input type="text" name="prefs-tags-name" value="${tag.name}">`;
+                t += `<input type="text" name="prefs-tags-color" value="${tag.color}" onblur="updateColor(this)">`;
+                t += `<input type="text" name="prefs-tags-desc" value="${tag.desc}"></div>\n`;
+            }
+            replacements.push('%TAGS%|' + t);
+            break;
+
             case 'update':
             replacements.push('%NEWVER%|' + obj.newVer);
             replacements.push('%CURVER%|' + obj.curVer);

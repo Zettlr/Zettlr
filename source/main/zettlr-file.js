@@ -133,23 +133,35 @@ class ZettlrFile
         let stat = fs.lstatSync(this.path);
         this.modtime = stat.mtime.getTime();
 
-        // (Re-)read content of file
-        let cnt = fs.readFileSync(this.path, { encoding: "utf8" });
-        this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt ;
-        this.modified = false;
-
-        // Search for an ID
         // We cannot use RegEx, as negative lookbehind is not supported (yet,
         // so we have to do it the ugly way: ITERATE OVER THE TEXT!)
         //
         // For further reference (as soon as it gets implemented; the proposal
         // is from March 21, 2018 (lel), here the correct regex needed:)
         // let idRE = /(?<!\[\[)@ID:(.*)(?!\]\])/g
-
         let idRE = /@ID:([^\s]*)/g;
         let tagRE = /#(\S+)/g;
         let match;
 
+
+        // (Re-)read content of file
+        let cnt = fs.readFileSync(this.path, { encoding: "utf8" });
+        this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt ;
+        this.modified = false;
+
+        // Now read all tags
+        this.tags = [];
+        while((match = tagRE.exec(cnt)) != null) {
+            let tag = match[1];
+            tag = tag.replace(/#/g, ''); // Prevent headings levels 2-6 from showing up in the tag list
+            if(tag.length > 0) {
+                this.tags.push(match[1]);
+            }
+        }
+        // Remove duplicates
+        this.tags = [...new Set(this.tags)];
+
+        // Search for an ID
         if((match = idRE.exec(cnt)) == null) {
             return cnt;
         }
@@ -165,18 +177,6 @@ class ZettlrFile
         if((match != null) && (match[1].substr(-2) != ']]')) {
             this.id = match[1] || '';
         }
-
-        // Now read all tags
-        this.tags = [];
-        while((match = tagRE.exec(cnt)) != null) {
-            let tag = match[1];
-            tag = tag.replace(/#/g, ''); // Prevent headings levels 2-6 from showing up in the tag list
-            if(tag.length > 0) {
-                this.tags.push(match[1]);
-            }
-        }
-        // Remove duplicates
-        this.tags = [...new Set(this.tags)];
 
         return cnt;
     }

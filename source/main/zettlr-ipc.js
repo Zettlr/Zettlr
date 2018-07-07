@@ -227,6 +227,10 @@ class ZettlrIPC
             this.send('pdf-preferences', this._app.getConfig().get('pdf'));
             break;
 
+            case 'get-tags-preferences':
+            this.send('tags-preferences', this._app.getTags().get());
+            break;
+
             // Got a new config object
             case 'update-config':
             // Immediately reflect snippets and theme
@@ -243,6 +247,15 @@ class ZettlrIPC
                 this.send('config', { 'key': 'combinerState', 'value': cnt.combinerState});
             }
             this._app.getConfig().update(cnt);
+            break;
+
+            case 'update-tags':
+            this._app.getTags().update(cnt);
+            this.send('set-tags', cnt); // Send back to renderer so preview knows about this
+            break;
+
+            case 'get-tags':
+            this.send('set-tags', this._app.getTags().get());
             break;
 
             // Renderer wants a configuration value

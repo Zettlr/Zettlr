@@ -107,6 +107,7 @@
         "update": "Mise à jour",
         "preferences": "Paramètres…",
         "pdf_preferences": "Paramètres de PDF…",
+        "tags": "Adjuste les mots-clés…",
         "quit": "Quitter",
         "about": "Sur Zettlr",
         "services": "Services",
@@ -257,6 +258,13 @@
             "debug": "Debug",
             "save": "Enregistrer",
             "cancel": "Annuler"
+        },
+        "tags": {
+            "title": "Ajuster les mots-clés",
+            "description": "Ici tu peux assigner une couleur pour un mot-clé. Si un fichier contenir le mot-clé, un symbole est ajouter dans le Preview pane. L'explanation est montrer durant souris-sur.",
+            "name_desc": "Le mot-clé (sans #)",
+            "color_desc": "Couleur (par ex. #ff0000 ou rgb(255, 0, 0))",
+            "desc_desc": "Un court explanation pour le mot-clé (max. 100 signes)"
         },
         "update": {
             "title": "Nouveau version",

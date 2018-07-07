@@ -422,6 +422,12 @@ class ZettlrBody
         this._dialog.open();
     }
 
+    displayTagsPreferences(prefs)
+    {
+        this._dialog.init('tags-preferences', prefs);
+        this._dialog.open();
+    }
+
     /**
      * Displays the update notification
      * @param  {Object} cnt An object containing information on the update.
@@ -617,7 +623,8 @@ class ZettlrBody
         margin_unit = 'cm',
         pagenumbering = 'gobble',
         mute = false,
-        combinerState = 'collapsed';
+        combinerState = 'collapsed',
+        tags = { 'name' : [], 'color': [], 'desc': []};
 
         for(let r of res) {
             if(r.name === 'pref-pandoc') {
@@ -684,6 +691,12 @@ class ZettlrBody
                 lineheight = r.value / 100; // Convert to floating point scale
             } else if(r.name === 'prefs-pdf-pagenumbering') {
                 pagenumbering = r.value;
+            } else if(r.name === 'prefs-tags-name') {
+                tags.name.push(r.value);
+            } else if(r.name === 'prefs-tags-color') {
+                tags.color.push(r.value);
+            } else if(r.name === 'prefs-tags-desc') {
+                tags.desc.push(r.value);
             }
         }
 
@@ -707,7 +720,9 @@ class ZettlrBody
                     'stripLinks': stripLinks
                 },
                 'attachmentExtensions': attachments
-            }
+            };
+            this._renderer.saveSettings(cfg);
+            this._dialog.close();
         } else if(dialog == 'pdf-preferences') {
             cfg = {
                 "pdf": {
@@ -725,10 +740,16 @@ class ZettlrBody
                     "fontsize": fontsize
                 }
             };
+            this._renderer.saveSettings(cfg);
+            this._dialog.close();
+        } else if(dialog == 'tags-preferences') {
+            let t = [];
+            for(let i = 0; i < tags.name.length; i++) {
+                t.push({ 'name': tags.name[i], 'color': tags.color[i], 'desc':tags.desc[i] });
+            }
+            this._renderer.saveTags(t);
+            this._dialog.close();
         }
-        this._renderer.saveSettings(cfg);
-
-        this._dialog.close();
     }
 
     /**

@@ -107,6 +107,7 @@
         "update": "Nach neuer Version suchen",
         "preferences": "Einstellungen…",
         "pdf_preferences": "PDF-Einstellungen…",
+        "tags": "Schlagwörter…",
         "quit": "Beenden",
         "about": "Über Zettlr",
         "services": "Dienste",
@@ -257,6 +258,13 @@
             "debug": "Entwicklermodus",
             "save": "Speichern",
             "cancel": "Abbrechen"
+        },
+        "tags": {
+            "title": "Schlagwörter",
+            "description": "Hier kannst du für bestimmte Schlagworte Farben vergeben. Enthält eine Datei ein solches Schlagwort, wird bei ihr in der Preview-Liste automatisch ein farbiges Symbol angezeigt. Die kurze Beschreibung erscheint beim darüber fahren.",
+            "name_desc": "Schlagwort (ohne #)",
+            "color_desc": "Farbe (z.B. #ff0000 oder rgb(255, 0, 0))",
+            "desc_desc": "Eine kurze lesbare Beschreibung (max. 100 Zeichen)"
         },
         "update": {
             "title": "Neue Version",

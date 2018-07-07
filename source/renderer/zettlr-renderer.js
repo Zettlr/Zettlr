@@ -96,6 +96,7 @@ class ZettlrRenderer
         this._ipc.send('config-get', 'app_lang');
         this._ipc.send('config-get', 'muteLines');
         this._ipc.send('config-get', 'combinerState');
+        this._ipc.send('get-tags'); // Receive initial list of tags to display
 
         // Request a first batch of files
         this._ipc.send('get-paths', {});
@@ -705,6 +706,12 @@ class ZettlrRenderer
      * @return {void}     Nothing to return.
      */
     saveSettings(cfg) { this._ipc.send('update-config', cfg); }
+
+    /**
+     * Sends the new tag-object to main.
+     * @param  {Object} tags The tags to be sent
+     */
+    saveTags(tags) { this._ipc.send('update-tags', tags); }
 
     /**
      * Opens a new file

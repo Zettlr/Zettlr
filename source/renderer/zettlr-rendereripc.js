@@ -248,11 +248,15 @@ class ZettlrRendererIPC
             break;
 
             case 'open-preferences':
-            this.send('get-preferences', {});
+            this.send('get-preferences');
             break;
 
             case 'open-pdf-preferences':
             this.send('get-pdf-preferences');
+            break;
+
+            case 'open-tags-preferences':
+            this.send('get-tags-preferences');
             break;
 
             case 'preferences':
@@ -261,6 +265,14 @@ class ZettlrRendererIPC
 
             case 'pdf-preferences':
             this._app.getBody().displayPDFPreferences(cnt);
+            break;
+
+            case 'tags-preferences':
+            this._app.getBody().displayTagsPreferences(cnt);
+            break;
+
+            case 'set-tags':
+            this._app.getPreview().setTags(cnt);
             break;
 
             // Execute a command with CodeMirror (Bold, Italic, Link, etc)

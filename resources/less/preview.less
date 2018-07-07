@@ -65,11 +65,10 @@
                 background-color:@grey-0 !important;
             }
 
-            strong {
+            p.filename {
                 // Prevent line breaking in the titles and give a little spacing
                 // before and after
                 white-space: nowrap;
-                font-weight:normal; // ALERT! ALERT! TODO: This is complete semantic bullshit.
                 display: block;
                 width: 100%;
                 overflow: hidden;
@@ -82,6 +81,55 @@
             span, small {
                 display:block;
                 margin-top:5px;
+            }
+
+            /* Taglist stuff */
+            .taglist {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                display:flex;
+                align-items:center;
+                width:25px;
+                justify-content: space-between;
+                transition:0.2s width ease;
+
+                .tag {
+                    height:25px;
+                    width:auto;
+                    border-radius:0;
+                    border:none;
+                    margin:0 auto;
+                    transition:0.2s all ease-out;
+                    opacity:0.4;
+                }
+
+                &:hover {
+                    width:100%;
+                    transition:0.2s width ease;
+                    opacity:1;
+
+                    .tag {
+                        width:25px;
+                        border-radius:50%;
+                        border:2px solid white;
+                        transition:0.2s all ease-in;
+                        opacity:1;
+                    }
+                }
+
+                .tagspacer {
+                    flex-grow:1;
+                    text-align:center;
+                    overflow:hidden;
+                }
+
+                .tagspacer:only-child .tag {
+                    width:25px;
+                    border-radius:50%;
+                    border:2px solid white;
+                }
             }
 
             &.directory, &.virtual-directory {
@@ -181,7 +229,7 @@
             }
 
             li {
-                strong {
+                p.filename {
                     background-image:linear-gradient(90deg, white 0%, white 90%, transparent 100%);
                 }
 

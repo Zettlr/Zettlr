@@ -23,6 +23,7 @@ const path                          = require('path');
 const ZettlrIPC                     = require('./zettlr-ipc.js');
 const ZettlrWindow                  = require('./zettlr-window.js');
 const ZettlrConfig                  = require('./zettlr-config.js');
+const ZettlrTags                    = require('./zettlr-tags.js');
 const ZettlrDir                     = require('./zettlr-dir.js');
 const ZettlrFile                    = require('./zettlr-file.js');
 const ZettlrWatchdog                = require('./zettlr-watchdog.js');
@@ -68,6 +69,9 @@ class Zettlr
         // Init translations
         i18n(this.config.get('app_lang'));
         this.ipc = new ZettlrIPC(this);
+
+        // Initiate tags
+        this._tags = new ZettlrTags(this);
 
         // Initiate the watchdog
         this.watchdog = new ZettlrWatchdog();
@@ -1110,6 +1114,12 @@ class Zettlr
      * @return {ZettlrConfig} The configuration
      */
     getConfig()      { return this.config; }
+
+    /**
+     * Returns the ZettlrTags object
+     * @return {ZettlrTags} The tags object
+     */
+    getTags()        { return this._tags; }
 
     /**
      * Returns the updater

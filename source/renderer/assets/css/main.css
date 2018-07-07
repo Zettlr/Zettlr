@@ -235,6 +235,15 @@ body.dark div.dragger {
   margin: 0.5em;
   padding: 1em;
 }
+.modal .dialog div#prefs-taglist div {
+  display: flex;
+}
+.modal .dialog div#prefs-taglist div input,
+.modal .dialog div#prefs-taglist div button {
+  flex-grow: 1;
+  display: inline;
+  margin: 0.5em;
+}
 .modal .dialog .projects {
   display: flex;
 }
@@ -513,6 +522,7 @@ body.dark div.dragger {
   line-height: 30px;
   padding-left: 6px;
   position: relative;
+  /* Taglist stuff */
 }
 #preview ul li.snippets {
   height: 89.2px;
@@ -525,9 +535,8 @@ body.dark div.dragger {
 #preview ul li.file:hover {
   background-color: #f0f0f0 !important;
 }
-#preview ul li strong {
+#preview ul li p.filename {
   white-space: nowrap;
-  font-weight: normal;
   display: block;
   width: 100%;
   overflow: hidden;
@@ -539,6 +548,48 @@ body.dark div.dragger {
 #preview ul li small {
   display: block;
   margin-top: 5px;
+}
+#preview ul li .taglist {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  width: 25px;
+  justify-content: space-between;
+  transition: 0.2s width ease;
+}
+#preview ul li .taglist .tag {
+  height: 25px;
+  width: auto;
+  border-radius: 0;
+  border: none;
+  margin: 0 auto;
+  transition: 0.2s all ease-out;
+  opacity: 0.4;
+}
+#preview ul li .taglist:hover {
+  width: 100%;
+  transition: 0.2s width ease;
+  opacity: 1;
+}
+#preview ul li .taglist:hover .tag {
+  width: 25px;
+  border-radius: 50%;
+  border: 2px solid white;
+  transition: 0.2s all ease-in;
+  opacity: 1;
+}
+#preview ul li .taglist .tagspacer {
+  flex-grow: 1;
+  text-align: center;
+  overflow: hidden;
+}
+#preview ul li .taglist .tagspacer:only-child .tag {
+  width: 25px;
+  border-radius: 50%;
+  border: 2px solid white;
 }
 #preview ul li.directory,
 #preview ul li.virtual-directory {
@@ -629,7 +680,7 @@ body.dark div.dragger {
 #preview.dark ul .selected {
   background-color: #6478b4;
 }
-#preview.dark ul li strong {
+#preview.dark ul li p.filename {
   background-image: linear-gradient(90deg, white 0%, white 90%, transparent 100%);
 }
 #preview.dark ul li small {

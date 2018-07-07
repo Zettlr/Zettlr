@@ -40,6 +40,7 @@ class ZettlrPreview
 
         this._data               = []; // The whole data (as returned by _renderer.getCurrentDir())
         this._tags               = []; // Only the rendered elements (may exclude some)
+        this._keywords           = []; // YAY good programming style, why do I have two attributes translating to "tags"?
 
         // Elements
         this._div                = $('#preview');
@@ -90,7 +91,7 @@ class ZettlrPreview
     }
 
     /**
-     * Generates the HTML code as string that will be used by Clusterize.js to display elements.
+     * Generates the HTML code as strings that will be used by Clusterize.js to display elements.
      * @param  {Number} [index=-1] If given and in bounds of element count, will only regenerate this index.
      * @return {void}            No return.
      */
@@ -109,6 +110,11 @@ class ZettlrPreview
         }
 
         this._tags = [];
+
+        let keywords = [];
+        for(let kw of this._keywords) {
+            keywords.push(kw.name); // For quicker access during huge list builds
+        }
 
         // Indicator whether or not we're currently in a virtual directory
         let inVirtualDir = false;
@@ -154,8 +160,18 @@ class ZettlrPreview
                 // Render a directory
                 elem += d.name;
             } else if (d.type == 'file') {
+                // Retrieve all tags the file got.
+                // Seriously, I _need_ to refactor all this messy monkey-patched code some day.
+                let tl = `<div class="taglist">`;
+                for(let t of d.tags) {
+                    if(keywords.includes(t)) {
+                        let thekey = this._keywords.find((elem) => { return (elem.name == t);});
+                        tl += `<div class="tagspacer"><div class="tag" style="background-color:${thekey.color};" title="${thekey.desc}"></div></div>`;
+                    }
+                }
+                tl += `</div>`;
 
-                elem += `<strong>${d.name.substr(0, d.name.lastIndexOf('.'))}</strong>`;
+                elem += `<p class="filename">${d.name.substr(0, d.name.lastIndexOf('.'))}</p>${tl}`;
 
                 if(this._snippets) {
                     elem += `<span class="snippet">${d.snippet}
@@ -650,6 +666,15 @@ class ZettlrPreview
     update(files)
     {
         return this.refresh(files);
+    }
+
+    /**
+     * Sets the tags. But not the _tags, the _keywords
+     * @param {Array} newtags The new tags
+     */
+    setTags(newtags)
+    {
+        this._keywords = newtags;
     }
 }
 
