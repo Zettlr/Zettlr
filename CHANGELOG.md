@@ -5,6 +5,7 @@
 - Included tag preferences. These allow you to assign colours to specific tags, so that you can see in the preview list directly which files contain specific tags (such as, e.g., `#todo` or `#in-progress`) to have an overview over the work you need to do or categorise your files.
 - Now the editor should correctly resize itself if the window itself changes its size.
 - Now, if you use the combined view, Zettlr recognises a second click on an already selected directory and switches to the preview list instead. If you do so while the expanded mode is active, nothing will happen.
+- I finally found the bug that was showing `NaN` instead of real numbers in the stats view. Now it should work on all systems just fine.
 
 ## Under the hood
 
@@ -12,6 +13,7 @@
 - Lots of LESS-code added, several other files have been changed.
 - Added an event listener to Window resizes to change the editor's width accordingly with the `resizable` activated.
 - Changes to `requestDir()` function in `ZettlrRenderer`.
+- Changes to the Statistics viewer.
 
 # 0.17.1
 

@@ -57,11 +57,12 @@ class ZettlrStatsView
 
         // Now summarize the last 30 days. Should never exceed 100k.
         let sum = 0;
-        for(let i = 0; i < 30; i++) {
+        let end = (allwords.length > 29) ? 30 : allwords.length; // Necessary for fresh users that haven't used Zettlr 30 days.
+        for(let i = 0; i < end; i++) {
             sum += allwords[i];
         }
 
-        let avg = Math.round(sum / 30); // Average last month
+        let avg = Math.round(sum / end); // Average last month
 
         let today = new Date();
         let yyyy = today.getFullYear();
