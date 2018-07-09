@@ -628,7 +628,17 @@ class ZettlrRenderer
      * @param  {Integer} hash As usually, a hash identifying a directory.
      * @return {void}      Nothing to return.
      */
-    requestDir(hash) { this._ipc.send('dir-select', hash); }
+    requestDir(hash)
+    {
+        // Only request a new directory if it is about to be changed.
+        if(this.getCurrentDir() == null || this.getCurrentDir().hash != hash) {
+            this._ipc.send('dir-select', hash);
+        } else {
+            // Otherwise, the user simply has clicked on the dir again to show
+            // the preview list.
+            this.showPreview();
+        }
+    }
 
     /**
      * Triggered when a file or dir is dropped on a dir.

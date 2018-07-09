@@ -49,7 +49,6 @@ class ZettlrBody
 
         // Make preview and editor resizable
         $('#editor').resizable({
-            // 'alsoResize': '#editor',
             'handles': 'w',
             'resize' : (e, ui) => { $('#combiner').css('width', ($(window).width()-ui.size.width)+'px'); },
             'minWidth': Math.round($(window).width() * 0.4),
@@ -60,6 +59,9 @@ class ZettlrBody
         window.addEventListener('resize', (e) => {
             $('#editor').resizable("option", "minWidth", Math.round($(window).width() * 0.4));
             $('#editor').resizable("option", "maxWidth", Math.round($(window).width() * 0.95));
+
+            // Also we have to resize the editor to the correct width again
+            $('#editor').css('width', $(window).innerWidth() - $('#combiner').outerWidth() + 'px');
         });
 
         // Event listener for the context menu
