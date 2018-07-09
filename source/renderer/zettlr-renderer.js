@@ -61,7 +61,13 @@ class ZettlrRenderer
         this._typo           = [];      // Contains the Typo object to check with
 
         // Write translation data into renderer process's global var
-        global.i18n         = remote.getGlobal('i18n');
+        // Why do we have to stringify and parse it? Because otherwise the
+        // renderer's global.i18n-variable will simply be a huge object calling
+        // the main's IPC EVERY TIME it is accessed. Therefore, we take some more
+        // time to copy it completely into the renderer's memory. It will take up
+        // some time at the beginning, but as we are using an overlay either way
+        // it's not gonna impact that much.
+        global.i18n         = JSON.parse(JSON.stringify(remote.getGlobal('i18n')));
 
         // Immediately add the operating system class to the body element to
         // enable the correct font-family.

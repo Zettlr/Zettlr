@@ -6,6 +6,8 @@
 - Now the editor should correctly resize itself if the window itself changes its size.
 - Now, if you use the combined view, Zettlr recognises a second click on an already selected directory and switches to the preview list instead. If you do so while the expanded mode is active, nothing will happen.
 - I finally found the bug that was showing `NaN` instead of real numbers in the stats view. Now it should work on all systems just fine.
+- Adjusted the placement of the dialogs. Now they should definitely be placed in the center, if they are smaller than the window and should never result in a scrollable window.
+- The dialog windows should pop up much faster now.
 
 ## Under the hood
 
@@ -14,6 +16,8 @@
 - Added an event listener to Window resizes to change the editor's width accordingly with the `resizable` activated.
 - Changes to `requestDir()` function in `ZettlrRenderer`.
 - Changes to the Statistics viewer.
+- Changes to `ZettlrDialog`.
+- Changes to `ZettlrRenderer`. Now the translation strings will be copied into the memory of the renderer process directly. This results in better overall performance, especially in dialogs, for which a lot of such strings are needed.
 
 # 0.17.1
 

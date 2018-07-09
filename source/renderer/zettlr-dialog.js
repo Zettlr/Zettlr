@@ -66,22 +66,31 @@ class ZettlrDialog
         this._container.addClass('blur');
         this._body.append(this._modal);
 
+        // Activate event listeners
+        return this._act();
+    }
+
+    /**
+     * Place the dialog in the middle of the screen
+     */
+    _place()
+    {
         // Adjust the margins
         let dialog = this._modal.find('.dialog').first();
         let diaH = dialog.outerHeight();
-        let winH = $(window).height();
+        let winH = $(window).innerHeight();
+        console.log(`Dialog is ${diaH}px, Window is ${winH}px.`);
 
         if(diaH < winH) {
             let margin = (winH-diaH) / 2;
+            console.log(`Margin is ${margin}`);
             dialog.css('margin-top', margin + "px");
             dialog.css('margin-bottom', margin + "px");
         } else {
+            console.log(`Margin is 15%`);
             dialog.css('margin-top', '15%'); // Otherwise enable scrolling
             dialog.css('margin-bottom', '15%');
         }
-
-        // Activate event listeners
-        return this._act();
     }
 
     /**
@@ -281,6 +290,10 @@ class ZettlrDialog
                 heightStyle: 'auto' // All tabs same height
             });
         }
+
+        // After we are done (also included tabs and stuff), we can finally
+        // detect the right margins.
+        this._place();
 
         return this;
     }
