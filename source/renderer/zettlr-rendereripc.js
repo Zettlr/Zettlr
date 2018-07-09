@@ -66,7 +66,6 @@ class ZettlrRendererIPC
         if(!arg.hasOwnProperty('content')) {
             arg.content = {};
         }
-        console.log(`${Date.now()}: Received event ${arg.command}!`);
         this.handleEvent(arg.command, arg.content);
     }
 
@@ -88,8 +87,6 @@ class ZettlrRendererIPC
             this._app.saveFile();
             return;
         }
-
-        console.log(`${Date.now()}: Sending event ${command}!`);
 
         this._ipc.send('message', {
             'command': command,
