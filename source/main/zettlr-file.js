@@ -155,7 +155,7 @@ class ZettlrFile
             let tag = match[1];
             tag = tag.replace(/#/g, ''); // Prevent headings levels 2-6 from showing up in the tag list
             if(tag.length > 0) {
-                this.tags.push(match[1]);
+                this.tags.push(match[1].toLowerCase());
             }
         }
         // Remove duplicates

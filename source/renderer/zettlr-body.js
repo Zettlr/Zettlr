@@ -694,7 +694,10 @@ class ZettlrBody
             } else if(r.name === 'prefs-pdf-pagenumbering') {
                 pagenumbering = r.value;
             } else if(r.name === 'prefs-tags-name') {
-                tags.name.push(r.value);
+                // Some users will nevertheless add the preceding hashtags, albeit
+                // told not to. So give them a pat on the back and remove it for
+                // them :)
+                tags.name.push((r.value[0] == '#') ? r.value.substr(1).toLowerCase() : r.value.toLowerCase());
             } else if(r.name === 'prefs-tags-color') {
                 tags.color.push(r.value);
             } else if(r.name === 'prefs-tags-desc') {
