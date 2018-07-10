@@ -5,7 +5,7 @@
 - Included tag preferences. These allow you to assign colours to specific tags, so that you can see in the preview list directly which files contain specific tags (such as, e.g., `#todo` or `#in-progress`) to have an overview over the work you need to do or categorise your files.
 - Now the editor should correctly resize itself if the window itself changes its size.
 - Now, if you use the combined view, Zettlr recognises a second click on an already selected directory and switches to the preview list instead. If you do so while the expanded mode is active, nothing will happen.
-- I finally found the bug that was showing `NaN` instead of real numbers in the stats view. Now it should work on all systems just fine.
+- I finally found the bug that was showing `NaN` instead of real numbers in the stats view. Now it should work on all systems just fine. (It only happened when there were less than thirty days of recorded statistical history available.)
 - Adjusted the placement of the dialogs. Now they should definitely be placed in the center, if they are smaller than the window and should never result in a scrollable window.
 - The dialog windows should pop up much faster now.
 

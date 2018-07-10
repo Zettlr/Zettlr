@@ -8,10 +8,8 @@
             <div id="prefs-taglist">
                 %TAGS%
             </div>
-            <div>
-                <button type="button" onclick="addTagLine()">+</button>
-            </div>
         </div>
+        <button type="button" onclick="addTagLine()">+</button>
         <button type="submit" id="pref-save">%i18n.preferences.save%</button>
         <button id="abort">%i18n.preferences.cancel%</button>
     </form>
@@ -21,62 +19,11 @@
         $('#prefs-taglist').append(
             `<div>
             <input type="text" name="prefs-tags-name" placeholder="%i18n.tags.name_desc%">
-            <input type="text" name="prefs-tags-color" placeholder="%i18n.tags.color_desc%" onblur="updateColor(this)">
+            <input type="color" name="prefs-tags-color" placeholder="%i18n.tags.color_desc%">
             <input type="text" name="prefs-tags-desc" placeholder="%i18n.tags.desc_desc%">
             <button type="button" onclick="$(this).parent().detach()">-</button>
             </div>`
         );
     }
-
-    /**
-     * This function updates the contents as well as the background color to the
-     * current, specified value either in Hex, or rgb() or rgba()
-     * @param  {DOMElement} elem The element whose value to convert
-     */
-    function updateColor(elem) {
-        elem = $(elem);
-        let val = elem.val().trim();
-        let r = 0;
-        let g = 0;
-        let b = 0;
-        if(val[0] === '#'  || (val.length == 6 && parseInt(val, 16) != NaN) || (val.length == 3 && parseInt(val, 16) != NaN)) {
-            // hex color value
-            if(val[0] === '#') {
-                val = val.substr(1);
-            }
-            if(val.length == 3) {
-                // Short notation
-                val = val[0] + val[0] + val[1] + val[1] + val[2] + val[2];
-            }
-            r = parseInt(val.substr(0, 2), 16);
-            g = parseInt(val.substr(2, 2), 16);
-            b = parseInt(val.substr(4, 2), 16);
-        } else if(val.indexOf('rgb(') == 0 || val.indexOf('rgba(') == 0) {
-            //rgb(r, g, b) or rgba(r, g, b, 0-1) notation
-            val = (val.indexOf('rgb(') == 0) ? val.substr(4) : val.substr(5);
-            val = val.split(',');
-            r = parseInt(val[0].trim());
-            g = parseInt(val[1].trim());
-            b = parseInt(val[2].trim()); // Removes the trailing brace in rgb()
-        }
-        if(typeof r != 'number' || typeof g != 'number' || typeof b != 'number' ||
-        r > 255 || b > 255 || g > 255 || r < 0 || g < 0 || b < 0) {
-            // A lot can go wrong here. Simply convert to white then.
-            r = 255;
-            g = 255;
-            b = 255;
-        }
-        let o = Math.round(((r * 299) + (g * 587) + (b * 114)) / 1000); // http://www.w3.org/TR/AERT#color-contrast
-        let color = (o > 125) ? 'black' : 'white';
-        val = '#' + r.toString(16).repeat(2).substr(0, 2) + g.toString(16).repeat(2).substr(0, 2) + b.toString(16).repeat(2).substr(0, 2);
-        elem.css('background-color', val);
-        elem.css('color', color);
-        elem.val(val);
-    }
-
-    // Now rush one run through all fields
-    $('input[name="prefs-tags-color"]').each(function(i) {
-        updateColor(this);
-    });
     </script>
 </div>
