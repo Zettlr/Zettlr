@@ -235,6 +235,9 @@ class ZettlrDialog
             replacements.push('%TAGS%|' + t);
             break;
 
+            case 'project-properties':
+            break;
+
             case 'update':
             replacements.push('%NEWVER%|' + obj.newVer);
             replacements.push('%CURVER%|' + obj.curVer);

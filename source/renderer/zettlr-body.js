@@ -430,6 +430,12 @@ class ZettlrBody
         this._dialog.open();
     }
 
+    displayProjectProperties(prefs)
+    {
+        this._dialog.init('project-properties', prefs);
+        this._dialog.open();
+    }
+
     /**
      * Displays the update notification
      * @param  {Object} cnt An object containing information on the update.

@@ -123,7 +123,7 @@ class ZettlrCon
                     } }));
                     this._menu.append(new MenuItem({ 'label': trans('menu.delete_dir'), click(item, win) {
                         that._body.getRenderer().handleEvent('dir-delete', { 'hash': hash });
-                    }}));
+                    } }));
                     this._menu.append(new MenuItem({ 'type': 'separator' }));
                 }
 
@@ -136,8 +136,25 @@ class ZettlrCon
                         that._body.getRenderer().handleEvent('dir-new', { 'hash': hash });
                     } }));
                     this._menu.append(new MenuItem({ 'label': trans('menu.new_vd'), click(item, win) {
-                        that._body.getRenderer().handleEvent('dir-new-vd', { 'hash': hash});
-                }}));
+                        that._body.getRenderer().handleEvent('dir-new-vd', { 'hash': hash });
+                    } }));
+
+                    this._menu.append(new MenuItem({ 'type': 'separator' }));
+                    if(elem.hasClass('project')) {
+                        this._menu.append(new MenuItem({ 'label': trans('menu.remove_project'), click(item, win) {
+                            that._body.getRenderer().handleEvent('dir-remove-project', { 'hash': hash });
+                        } }));
+                        this._menu.append(new MenuItem({ 'label': trans('menu.project_properties'), click(item, win) {
+                            that._body.getRenderer().handleEvent('dir-project-properties', { 'hash': hash });
+                        } }));
+                        this._menu.append(new MenuItem({ 'label': trans('menu.project_build'), click(item, win) {
+                            that._body.getRenderer().handleEvent('dir-project-export', { 'hash': hash });
+                        } }));
+                    } else {
+                        this._menu.append(new MenuItem({ 'label': trans('menu.new_project'), click(item, win) {
+                            that._body.getRenderer().handleEvent('dir-new-project', { 'hash': hash });
+                        } }));
+                    }
                 }
 
                 if(elem.hasClass('root')) {

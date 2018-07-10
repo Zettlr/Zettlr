@@ -142,6 +142,24 @@ class ZettlrRendererIPC
             this._app.newVirtualDir(cnt);
             break;
 
+            // Make a project from a directory
+            case 'dir-new-project':
+            this.send('dir-new-project', cnt);
+            break;
+
+            // Unmake the project
+            case 'dir-remove-project':
+            this.send('dir-remove-project', cnt);
+            break;
+
+            case 'dir-project-properties':
+            this.send('dir-project-properties', cnt);
+            break;
+
+            case 'project-properties':
+            this._app.getBody().displayProjectProperties(cnt);
+            break;
+
             case 'root-close':
             this.send('close-root', cnt.hash);
             break;

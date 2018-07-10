@@ -151,6 +151,20 @@
         }
     }
 
+    .project {
+        color: @fg-error;
+
+        &:before {
+            content: '\f6af';
+            font-family: 'WebHostingHub-Glyphs';
+            font-size: @font-size-small; /* Bit smaller, those indicators are damned huge */
+            margin-right:5px;
+            vertical-align: bottom;
+            display:inline-block;
+            position:relative;
+        }
+    }
+
     .emptyPaths {
         background-color:@grey-0;
         color:@grey-4;
@@ -197,6 +211,10 @@
             &:hover {
                 background-color:@grey-5;
             }
+        }
+
+        .project {
+            color: @bg-error;
         }
 
         .emptyPaths {

@@ -101,7 +101,7 @@ class ZettlrConfig
             "combinerState" : 'collapsed', // collapsed = Preview or directories visible --- expanded = both visible
             // Export options
             "pandoc"    : 'pandoc',
-            "pdflatex"  : 'pdflatex',
+            "pdflatex"  : 'xelatex',
             "export"    : {
                 "dir": 'temp',   // Can either be "temp" or "cwd" (current working directory)
                 "stripIDs": true,  // Strip ZKN IDs such as @ID:<id>
@@ -170,7 +170,6 @@ class ZettlrConfig
             readConfig = JSON.parse(fs.readFileSync(this.configFile, { encoding: 'utf8' }));
         } catch(e) {
             fs.writeFileSync(this.configFile, JSON.stringify(this.cfgtpl), { encoding: 'utf8' });
-            this.config = this.cfgtpl;
             return this; // No need to iterate over objects anymore
         }
 

@@ -410,6 +410,19 @@ body.dark div.dragger {
   display: inline-block;
   position: relative;
 }
+#directories .project {
+  color: #941010;
+}
+#directories .project:before {
+  content: '\f6af';
+  font-family: 'WebHostingHub-Glyphs';
+  font-size: 0.9em;
+  /* Bit smaller, those indicators are damned huge */
+  margin-right: 5px;
+  vertical-align: bottom;
+  display: inline-block;
+  position: relative;
+}
 #directories .emptyPaths {
   background-color: #f0f0f0;
   color: #646464;
@@ -446,6 +459,9 @@ body.dark div.dragger {
 }
 #directories.dark .file:hover {
   background-color: #505050;
+}
+#directories.dark .project {
+  color: #ffb0b0;
 }
 #directories.dark .emptyPaths {
   background-color: #505050;

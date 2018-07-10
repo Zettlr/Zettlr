@@ -61,6 +61,11 @@ class TreeView
         this._dir.append('<span>').text(this._paths.name);
         if(this.isRoot()) { this._dir.addClass('root'); }
 
+        // Indicate that there is a project.
+        if(paths.project != null) {
+            this._dir.addClass('project');
+        }
+
         // Append to DOM
         this._ul.append(this._dir);
         this._parent.getContainer().append(this._ul);
@@ -177,6 +182,13 @@ class TreeView
             this._dir.prepend(this._indicator);
         } else {
             this._indicator.detach();
+        }
+
+        // Indicate that there is a project (if there is one)
+        if(this._paths.project != null) {
+            this._dir.addClass('project');
+        } else {
+            this._dir.removeClass('project');
         }
 
         return this;

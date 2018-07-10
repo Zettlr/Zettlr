@@ -18,7 +18,7 @@ const fs                     = require('fs');
 const sanitize               = require('sanitize-filename');
 const ZettlrFile             = require('./zettlr-file.js');
 const ZettlrAttachment       = require('./zettlr-attachment.js');
-// const ZettlrFilter           = require('./zettlr-filter.js');
+const ZettlrProject          = require('./zettlr-project.js');
 const ZettlrVirtualDirectory = require('./zettlr-virtual-directory.js');
 const ZettlrInterface        = require('./zettlr-interface.js');
 const {shell}                = require('electron');
@@ -65,6 +65,7 @@ class ZettlrDir
         this.path           = dir;
         this.name           = path.basename(this.path);
         this.hash           = hash(this.path);
+        this.project        = null;  // null, if this directory is not a project, and an instance of ZettlrProject, if it is.
         this.children       = [];
         this.attachments    = [];
         this.type           = 'directory';
@@ -100,6 +101,10 @@ class ZettlrDir
         // Shutdown all objects
         for(let c of this.children) {
             c.shutdown();
+        }
+
+        if(this.project) {
+            this.project.save();
         }
     }
 
@@ -489,7 +494,44 @@ class ZettlrDir
             }
         });
 
+        // Last but not least check if we are a project
+        if(ZettlrProject.isProject(this)) {
+            // We can reuse the function here.
+            this.makeProject();
+        }
+
         return this;
+    }
+
+    /**
+     * Creates a project for this directory.
+     */
+    makeProject()
+    {
+        if(!this.project) {
+            this.project = new ZettlrProject(this);
+        }
+    }
+
+    /**
+     * Removes the project from this dir.
+     * @return {[type]} [description]
+     */
+    removeProject()
+    {
+        if(this.project) {
+            this.project.remove();
+            this.project = null;
+        }
+    }
+
+    /**
+     * Returns the project.
+     * @return {ZettlrProject} The Zettlr Project instance, or null, if there is none.
+     */
+    getProject()
+    {
+        return this.project;
     }
 
     /**

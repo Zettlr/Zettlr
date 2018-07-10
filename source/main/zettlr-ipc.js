@@ -88,6 +88,11 @@ class ZettlrIPC
     handleEvent(cmd, cnt)
     {
         // We received a new event and need to handle it.
+
+        // This class can handle some events by itself, because they don't involve
+        // a lot of code and it saves space doing it here. Therefore we need some vars.
+        let dir = null;
+
         switch(cmd) {
             case 'get-paths':
             // The child process requested the current paths and files
@@ -130,6 +135,31 @@ class ZettlrIPC
             case 'dir-new-vd':
             // Client has requested a new virtual directory
             this._app.newVirtualDir(cnt);
+            break;
+
+            // PROJECTS
+            case 'dir-new-project':
+            dir = this._app.findDir(cnt);
+            if(dir) {
+                dir.makeProject();
+                this.send('paths-update', this._app.getPaths());
+            }
+            break;
+
+            case 'dir-remove-project':
+            dir = this._app.findDir(cnt);
+            if(dir) {
+                dir.removeProject();
+                this.send('paths-update', this._app.getPaths());
+            }
+            break;
+
+            case 'dir-project-properties':
+            dir = this._app.findDir(cnt);
+            if(dir) {
+                cnt.properties = dir.getProject().getProperties();
+                this.send('project-properties', cnt); // Now cnt not only contains hash, but also the properties
+            }
             break;
 
             case 'file-save':
