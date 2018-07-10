@@ -87,7 +87,7 @@
 .CodeMirror .cm-formatting-quote,
 .CodeMirror .cm-formatting-strong,
 .CodeMirror .cm-formatting-em {
-  opacity: .3;
+  opacity: 0.3;
 }
 .CodeMirror .cm-formatting-list-ul,
 .CodeMirror .cm-formatting-list-ol {

@@ -18,6 +18,7 @@
 - Changes to the Statistics viewer.
 - Changes to `ZettlrDialog`.
 - Changes to `ZettlrRenderer`. Now the translation strings will be copied into the memory of the renderer process directly. This results in better overall performance, especially in dialogs, for which a lot of such strings are needed.
+- Updated development dependencies: `electron` is now `2.0.4`, `electron-builder` is now `20.19.2` and `less.js` is now `3.5.3`.
 
 # 0.17.1
 
