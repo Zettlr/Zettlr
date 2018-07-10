@@ -79,15 +79,12 @@ class ZettlrDialog
         let dialog = this._modal.find('.dialog').first();
         let diaH = dialog.outerHeight();
         let winH = $(window).innerHeight();
-        console.log(`Dialog is ${diaH}px, Window is ${winH}px.`);
 
         if(diaH < winH) {
             let margin = (winH-diaH) / 2;
-            console.log(`Margin is ${margin}`);
             dialog.css('margin-top', margin + "px");
             dialog.css('margin-bottom', margin + "px");
         } else {
-            console.log(`Margin is 15%`);
             dialog.css('margin-top', '15%'); // Otherwise enable scrolling
             dialog.css('margin-bottom', '15%');
         }
