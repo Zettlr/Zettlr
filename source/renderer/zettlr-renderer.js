@@ -724,6 +724,13 @@ class ZettlrRenderer
     saveSettings(cfg) { this._ipc.send('update-config', cfg); }
 
     /**
+     * Called by the dialog when the user saves the settings.
+     * @param  {Object} cfg An object to be sent to main, containing properties and hash attributes.
+     * @return {void}     Nothing to return.
+     */
+    saveProjectSettings(cfg) { this._ipc.send('update-project-properties', cfg); }
+
+    /**
      * Sends the new tag-object to main.
      * @param  {Object} tags The tags to be sent
      */

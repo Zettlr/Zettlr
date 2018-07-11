@@ -180,6 +180,10 @@
                 "strip_links_unlink_label": "Unlink internal links",
                 "strip_links_no_label": "Don't touch internal links"
             },
+            "project": {
+                "title": "Project settings",
+                "title_label": "Project Title"
+            },
             "pdf": {
                 "title": "PDF Settings",
                 "metadata": "Metadata",

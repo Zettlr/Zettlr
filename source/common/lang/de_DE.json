@@ -180,6 +180,10 @@
                 "strip_links_unlink_label": "Entferne eckige Klammern um interne Links",
                 "strip_links_no_label": "Lasse interne Links unverändert"
             },
+            "project": {
+                "title": "Projekteinstellungen",
+                "title_label": "Name des Projektes"
+            },
             "pdf": {
                 "title": "PDF-Einstellungen",
                 "metadata": "Metadaten",

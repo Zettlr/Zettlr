@@ -157,6 +157,7 @@ class ZettlrRendererIPC
             break;
 
             case 'project-properties':
+            console.log(cnt);
             this._app.getBody().displayProjectProperties(cnt);
             break;
 

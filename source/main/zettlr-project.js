@@ -56,7 +56,7 @@ class ZettlrProject
         this._cfg = this._cfgtpl;
         try {
             let stat = fs.lstatSync(this._projectFile);
-            this._update(fs.readFileSync(this._projectFile, 'utf8'));
+            this.update(fs.readFileSync(this._projectFile, 'utf8'));
         } catch(e) {
             this.save(); // Simply create the file
         }
@@ -103,7 +103,7 @@ class ZettlrProject
      * @param  {Object} [oldcfg=this.config] Necessary for recursion
      * @return {void}                      Does not return anything.
      */
-    _update(newcfg, oldcfg = this._cfg)
+    update(newcfg, oldcfg = this._cfg)
     {
         // Overwrite all given attributes (and leave the not given in place)
         // This will ensure sane defaults.
@@ -113,7 +113,7 @@ class ZettlrProject
                 // strings, e.g. we cannot update them using update()
                 if((typeof oldcfg[prop] === 'object') && !Array.isArray(oldcfg[prop])) {
                     // Update sub-object
-                    this._update(newcfg[prop], oldcfg[prop]);
+                    this.update(newcfg[prop], oldcfg[prop]);
                 } else {
                     oldcfg[prop] = newcfg[prop];
                 }

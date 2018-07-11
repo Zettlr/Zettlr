@@ -16,6 +16,11 @@ const fs = require('fs');
 const path = require('path');
 const {trans} = require('../common/lang/i18n.js');
 const SUPPORTED_PAPERTYPES = require('../common/data.json').papertypes;
+const TAB_DIALOGS = [
+    'pdf-preferences',
+    'preferences',
+    'project-properties'
+];
 
 /**
  * Dialog errors may occur.
@@ -185,20 +190,28 @@ class ZettlrDialog
             replacements.push('%ATTACHMENT_EXTENSIONS%|' + obj.attachmentExtensions.join(', '));
             break;
 
+            case 'project-properties':
+            let hash = obj.hash; // In this case, the object also contains a hash we need.
+            obj = obj.properties;
+            // Project properties are a superset of the pdf preferences, so we
+            // don't add a break here, because we need them as well.
+            replacements.push('%PREFS_TITLE%|' + obj.title);
+            replacements.push('%PROJECT_DIRECTORY%|' + this._parent.getRenderer().findObject(hash).name);
+            replacements.push('%HASH%|' + hash);
             case 'pdf-preferences':
-            replacements.push('%PREFS_AUTHOR%|' + obj.author);
-            replacements.push('%PREFS_KEYWORDS%|' + obj.keywords);
-            replacements.push('%PREFS_TMARGIN%|' + obj.tmargin);
-            replacements.push('%PREFS_RMARGIN%|' + obj.rmargin);
-            replacements.push('%PREFS_BMARGIN%|' + obj.bmargin);
-            replacements.push('%PREFS_LMARGIN%|' + obj.lmargin);
-            replacements.push('%PREFS_MAINFONT%|' + obj.mainfont);
-            replacements.push('%PREFS_FONTSIZE%|' + obj.fontsize);
-            replacements.push('%PREFS_LINEHEIGHT%|' + obj.lineheight * 100); // Convert to percent
+            replacements.push('%PREFS_AUTHOR%|' + obj.pdf.author);
+            replacements.push('%PREFS_KEYWORDS%|' + obj.pdf.keywords);
+            replacements.push('%PREFS_TMARGIN%|' + obj.pdf.tmargin);
+            replacements.push('%PREFS_RMARGIN%|' + obj.pdf.rmargin);
+            replacements.push('%PREFS_BMARGIN%|' + obj.pdf.bmargin);
+            replacements.push('%PREFS_LMARGIN%|' + obj.pdf.lmargin);
+            replacements.push('%PREFS_MAINFONT%|' + obj.pdf.mainfont);
+            replacements.push('%PREFS_FONTSIZE%|' + obj.pdf.fontsize);
+            replacements.push('%PREFS_LINEHEIGHT%|' + obj.pdf.lineheight * 100); // Convert to percent
             let papertypes = '';
             for(let pt of SUPPORTED_PAPERTYPES) {
                 papertypes += `<option value="${pt}"`;
-                if(pt == obj.papertype) {
+                if(pt == obj.pdf.papertype) {
                     papertypes += ' selected="selected"';
                 }
                 papertypes += `>${trans('dialog.preferences.pdf.'+pt)}</option>\n`;
@@ -207,7 +220,7 @@ class ZettlrDialog
             let margin_units = '';
             for(let u of ['cm', 'mm', 'pt']) {
                 margin_units += `<option value="${u}"`;
-                if(u == obj.margin_unit) {
+                if(u == obj.pdf.margin_unit) {
                     margin_units += ' selected="selected"';
                 }
                 margin_units += `>${u}</option>\n`;
@@ -216,7 +229,7 @@ class ZettlrDialog
             let pagenumbering = '';
             for(let n of ['arabic', 'alph', 'Alph', 'roman', 'Roman', 'gobble']) {
                 pagenumbering += `<option value="${n}"`;
-                if(n == obj.pagenumbering) {
+                if(n == obj.pdf.pagenumbering) {
                     pagenumbering += ' selected="selected"';
                 }
                 pagenumbering += `>${trans('dialog.preferences.pdf.pagenumbering_'+n)}</option>\n`;
@@ -233,9 +246,6 @@ class ZettlrDialog
                 t += `<button type="button" onclick="$(this).parent().detach()">-</button></div>\n`;
             }
             replacements.push('%TAGS%|' + t);
-            break;
-
-            case 'project-properties':
             break;
 
             case 'update':
@@ -285,8 +295,8 @@ class ZettlrDialog
         // Abort on click
         this._modal.on('click', (e) => { this.close(); });
 
-        // Tabbify the settings dialog
-        if(this._dlg === 'preferences' || this._dlg === 'pdf-preferences') {
+        // Tabbify all dialogs mentioned in the TAB_DIALOGS list.
+        if(TAB_DIALOGS.includes(this._dlg)) {
             this._modal.find('.dialog').tabs({
                 heightStyle: 'auto' // All tabs same height
             });

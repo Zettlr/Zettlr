@@ -320,6 +320,11 @@ class ZettlrConfig
      */
     get(attr)
     {
+        if(!attr) {
+            // If no attribute is given, simply return the complete config object.
+            return this.getConfig();
+        }
+
         if(attr.indexOf('.') > 0) {
             // A nested argument was requested, so iterate until we find it
             let nested = attr.split('.');

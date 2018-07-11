@@ -162,6 +162,13 @@ class ZettlrIPC
             }
             break;
 
+            case 'update-project-properties':
+            dir = this._app.findDir(cnt); // Contains a hash property
+            if(dir) {
+                dir.getProject().update(cnt.properties);
+            }
+            break;
+
             case 'file-save':
             // Client has requested a save-action.
             // arg contains the contents of CM and maybe also a hash.
@@ -254,7 +261,12 @@ class ZettlrIPC
             break;
 
             case 'get-pdf-preferences':
-            this.send('pdf-preferences', this._app.getConfig().get('pdf'));
+            // Get the same whole config object. ZettlrDialog will filter out
+            // the PDF preferences. Why do we need the whole? Because the project
+            // settings are a superset of PDF, so to save space, we'll re-use
+            // their code, but to unify it we need these settings to access
+            // obj.pdf instead of obj.
+            this.send('pdf-preferences', this._app.getConfig().getConfig());
             break;
 
             case 'get-tags-preferences':

@@ -632,8 +632,11 @@ class ZettlrBody
         pagenumbering = 'gobble',
         mute = false,
         combinerState = 'collapsed',
-        tags = { 'name' : [], 'color': [], 'desc': []};
+        tags = { 'name' : [], 'color': [], 'desc': []},
+        project_title = '',
+        hash = '';
 
+        // TODO: Convert to switch. It's embarassing to have such an else if thingy floating around here.
         for(let r of res) {
             if(r.name === 'pref-pandoc') {
                 pandoc = r.value;
@@ -708,6 +711,10 @@ class ZettlrBody
                 tags.color.push(r.value);
             } else if(r.name === 'prefs-tags-desc') {
                 tags.desc.push(r.value);
+            } else if(r.name === 'prefs-project-title') {
+                project_title = r.value;
+            } else if(r.name === 'prefs-project-hash') {
+                hash = r.value;
             }
         }
 
@@ -734,7 +741,7 @@ class ZettlrBody
             };
             this._renderer.saveSettings(cfg);
             this._dialog.close();
-        } else if(dialog == 'pdf-preferences') {
+        } else if(dialog == 'pdf-preferences' || dialog == 'project-properties') {
             cfg = {
                 "pdf": {
                     "author" : author,
@@ -751,7 +758,19 @@ class ZettlrBody
                     "fontsize": fontsize
                 }
             };
-            this._renderer.saveSettings(cfg);
+            // Add additional properties for the project settings.
+            if(dialog == 'project-properties') {
+                cfg.title = project_title;
+
+                // Convert to correct object
+                let obj = {};
+                obj.properties = cfg;
+                obj.hash = hash;
+                this._renderer.saveProjectSettings(obj);
+            } else {
+                // pdf preferences
+                this._renderer.saveSettings(cfg);
+            }
             this._dialog.close();
         } else if(dialog == 'tags-preferences') {
             let t = [];

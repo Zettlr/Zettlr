@@ -180,6 +180,10 @@
                 "strip_links_unlink_label": "Supprimer des crochets des liens interne",
                 "strip_links_no_label": "Ne modifier pas des liens interne"
             },
+            "project": {
+                "title": "Paramètres du Projet",
+                "title_label": "Titre du Projet"
+            },
             "pdf": {
                 "title": "PDF Settings",
                 "metadata": "Metadata",
