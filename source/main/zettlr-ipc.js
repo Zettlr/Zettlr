@@ -169,6 +169,14 @@ class ZettlrIPC
             }
             break;
 
+            case 'dir-project-export':
+            dir = this._app.findDir(cnt); // Contains a hash propety
+            if(dir) {
+                dir.getProject().build();
+                this.send('notify', 'Building project ...');
+            }
+            break;
+
             case 'file-save':
             // Client has requested a save-action.
             // arg contains the contents of CM and maybe also a hash.

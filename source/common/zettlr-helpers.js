@@ -42,6 +42,34 @@ function hash(string)
 }
 
 /**
+ * This function flattens an object tree (file tree) to an array.
+ * @param  {Object} data        A ZettlrDir tree
+ * @param  {Array}  [newarr=[]] Needed for recursion
+ * @return {Mixed}             An array or nothing.
+ * @deprecated
+ */
+function flattenDirectoryTree(tree, newarr = [])
+{
+    // In case of completely empty stuff, simply return an empty array
+    if(tree == null || tree.length === 0) {
+        return [];
+    }
+
+    if(tree.type == "file") {
+        return newarr.push(tree);
+    } else if(tree.type == "directory" || tree.type == 'virtual-directory') {
+        // Append directory (for easier overview)
+        newarr.push(tree);
+        if(tree.children != null) {
+            for(let c of tree.children) {
+                newarr.concat(flattenDirectoryTree(c, newarr));
+            }
+        }
+        return newarr;
+    }
+}
+
+/**
 * This function can sort an array of ZettlrFile and ZettlrDir objects
 * @param  {Array} arr An array containing only ZettlrFile, ZettlrVirtualDirectory and ZettlrDir objects
 * @param {String} [type='name-up'] The type of sorting - can be time-up, time-down, name-up or name-down
@@ -300,6 +328,7 @@ function localiseNumber(number)
 
 module.exports = {
     hash,
+    flattenDirectoryTree,
     sort,
     generateName,
     generateId,

@@ -16,8 +16,9 @@
  * END HEADER
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs                        = require('fs');
+const path                      = require('path');
+const { flattenDirectoryTree }  = require('../common/zettlr-helpers.js');
 
 const PROJECT_FILE = '.ztr-project';
 
@@ -65,6 +66,37 @@ class ZettlrProject
     save()
     {
         fs.writeFileSync(this._projectFile, JSON.stringify(this._cfg), 'utf8');
+    }
+
+    /**
+     * This function builds the complete project at once.
+     */
+    build()
+    {
+        // How it works:
+        // 1. Get the complete child list
+        // 2. "Flatten tree", to have a two-dimensional array.
+        let files = flattenDirectoryTree(this._dir);
+        // 3. Remove all non-file files.
+        for(let i = 0; i < files.length; i++) {
+            if(files[i].type != 'file') {
+                files.splice(i, 1);
+                i--;
+            }
+        }
+        // 4. Read all files.
+        let contents = [];
+        for(let file of files) {
+            contents.push(file.read());
+        }
+        // 5. TODO: Add option to automatically normalise headings (i.e. all headings to heading 1)
+        // 6. Concat.
+        contents = contents.join('\n');
+        // 7. Save to tmp file.
+        let tempfile = path.join(this._dir.path, 'export-project.tmp');
+        fs.writeFileSync(tempfile, contents, 'utf8');
+        // 8. Start up the Exporter
+        // 9. Export!
     }
 
     /**

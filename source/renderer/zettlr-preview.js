@@ -13,7 +13,7 @@
  */
 
 const Clusterize = require('clusterize.js');
-const { formatDate } = require('../common/zettlr-helpers.js');
+const { formatDate, flattenDirectoryTree } = require('../common/zettlr-helpers.js');
 // Sorting icons (WebHostingHub-Glyphs)
 const SORT_NAME_UP = '&#xf1c2;'
 const SORT_NAME_DOWN = '&#xf1c1;';
@@ -98,7 +98,7 @@ class ZettlrPreview
     _gen(index = -1)
     {
         if(!Array.isArray(this._data)) {
-            this._data = this._flattenTree(this._data);
+            this._data = flattenDirectoryTree(this._data);
         }
         let start = 0;
         let until = this._data.length;
@@ -207,33 +207,6 @@ class ZettlrPreview
 
         // Enable to drag out files from the app
         // TODO: Here's the tutorial: https://electronjs.org/docs/tutorial/native-file-drag-drop
-    }
-
-    /**
-     * This function flattens an object tree (file tree) to an array.
-     * @param  {Object} data        A ZettlrDir tree
-     * @param  {Array}  [newarr=[]] Needed for recursion
-     * @return {Mixed}             An array or nothing.
-     */
-    _flattenTree(data, newarr = [])
-    {
-        // In case of completely empty stuff, simply return an empty array
-        if(data == null || data.length === 0) {
-            return [];
-        }
-
-        if(data.type == "file") {
-            return newarr.push(data);
-        } else if(data.type == "directory" || data.type == 'virtual-directory') {
-            // Append directory (for easier overview)
-            newarr.push(data);
-            if(data.children != null) {
-                for(let c of data.children) {
-                    newarr.concat(this._flattenTree(c, newarr));
-                }
-            }
-            return newarr;
-        }
     }
 
     /**

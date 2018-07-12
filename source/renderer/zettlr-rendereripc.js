@@ -161,6 +161,10 @@ class ZettlrRendererIPC
             this._app.getBody().displayProjectProperties(cnt);
             break;
 
+            case 'dir-project-export':
+            this.send('dir-project-export', cnt);
+            break;
+
             case 'root-close':
             this.send('close-root', cnt.hash);
             break;
