@@ -36,13 +36,35 @@ pdfauthor={%PDF_AUTHOR%},
 pdfkeywords={%PDF_KEYWORDS%}
 }
 
-% Always use today's date
+% Always use today's date TODO: Nope, let the user decide (for projects)
 \date{\today}
 
 % The following commands must be provided for Pandoc to work correctly.
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
+\title{%PDF_TITLE%}
+\author{%PDF_AUTHOR%}
+
 \begin{document}
+
+% Title page?
+%TITLEPAGE%
+
+% Generate a table of contents?
+%GENERATE_TOC%
+
+% LIST OF TABLES?
+$if(lot)$
+\listoftables
+$endif$
+
+% LIST OF FIGURES?
+$if(lof)$
+\listoffigures
+$endif$
+
+% BEGIN BODY
 $body$
+
 \end{document}

@@ -554,16 +554,15 @@ class Zettlr
      */
     exportFile(arg)
     {
-        // TODO: Call the exporter
         let file = this.findFile({ 'hash': arg.hash });
         let opt = {
             'format': arg.ext,      // Which format: "html", "docx", "odt", "pdf"
             'file': file,           // The file to be exported
             'dest': (this.config.get('export.dir') == 'temp') ? app.getPath('temp') : file.parent.path, // Either temp or cwd
-            'pdfengine': 'pdflatex',
             'tplDir': this.config.getEnv('templateDir'),
-            'pandoc': this.config.getEnv('pandoc'),
-            'pdflatex': this.config.getEnv('pdflatex'),
+            'stripIDs': this.config.get('export.stripIDs'),
+            'stripTags': this.config.get('export.stripTags'),
+            'stripLinks': this.config.get('export.stripLinks'),
             'pdf': this.config.get('pdf'),
             'title': file.name.substr(0, file.name.lastIndexOf('.')),
             'author': this.config.get('pdf').author,
@@ -571,7 +570,12 @@ class Zettlr
         };
 
         // Call the exporter.
-        new ZettlrExport(this, opt);
+        try {
+            new ZettlrExport(opt); // TODO don't do this with instantiation
+            this.notify(trans('system.export_success', this.options.format.toUpperCase()));
+        } catch(err) {
+            this.notify(err.name + ': ' + err.message); // Error may be thrown
+        }
     }
 
     /**

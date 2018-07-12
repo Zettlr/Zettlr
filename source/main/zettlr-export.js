@@ -16,25 +16,70 @@
 const {trans}       = require('../common/lang/i18n.js');
 const {formatDate}  = require('../common/zettlr-helpers.js');
 const {exec}        = require('child_process');
+const commandExists = require('command-exists').sync; // Need to use here because we cannot rely on the config's availability
 const path          = require('path');
 const fs            = require('fs');
 const showdown      = require('showdown');
 
 /**
+ * Error object constructor
+ * @param       {string} msg The error message
+ * @constructor
+ */
+function ExportError(msg, name = 'Exporting error') {
+    this.name = name;
+    this.message = msg;
+}
+
+/**
  * ZettlrExport is a stateless class that gets invoked via the constructor.
+ * TODO: Failsafe-checks for options!
  */
 class ZettlrExport
 {
     /**
      * Is invoked on each export and calls all necessary functions from within.
+     *
+     * The option object should have the following design (some options don't need
+     * to be given on certain exports):
+     *
+     * options = {
+     *     'file': {
+     *         'path': "The source path",
+     *         'name': "The name only",
+     *         'read': "function that returns the contents"
+     *     },
+     *     'dest': "The target directory",
+     *     'format': "The format to which to export, can be pdf, odt, docx or html"
+     *     'stripIDs': Should IDs be stripped?
+     *     'stripTags': Should tags be stripped?
+     *     'stripLinks': false, unlink, full
+     *     'pdf': {
+     *         'pagenumbering': 'numbering',
+     *         'papertype': 'Papertype to be used',
+     *         'margin_unit': 'cm, mm, pt or something for xelatex to use',
+     *         'tmargin': 'Top page margin',
+     *         'rmargin': 'Right page margin',
+     *         'bmargin': 'Bottom page pargin',
+     *         'lmargin': 'Left page margin',
+     *         'mainfont': 'main font to use',
+     *         'lineheight': 'float number',
+     *         'fontsize': 'integer',
+     *         'toc': 'Should a table of contents be generated?',
+     *         'tocDepth': 'Level of headings to be evaluated: 1-6'
+     *     }
+     *     'title': "Title of the document",
+     *     'author': "Author of the document",
+     *     'keywords': "Keywords, separated by comma",
+     *     'tplDir': "Where are the docx and odt templates?"
+     * }
      * @param {Zettlr} app     The app object (needed for occasional access of the configuration object or for showing errors)
      * @param {Object} options An object containing necessary configuration to export
      */
-    constructor(app, options)
+    constructor(options)
     {
         // First: Initialise the engine
         // Make the variables available to all functions
-        this.app = app;
         this.options = options;
         this.tpl = '';
         this.command = '';
@@ -48,21 +93,24 @@ class ZettlrExport
 
         // Second make sure pandoc is installed. Without, only HTML is possible
         // through showdown.
-        if(!this.options.pandoc && this.options.format != "html") {
-            return app.window.prompt({
-                type: 'error',
-                title: trans('system.error.no_pandoc_title'),
-                message: trans('system.error.no_pandoc_message')
-            });
+        if(!commandExists('pandoc') && this.options.format != "html") {
+            throw new ExportError(trans('system.error.no_pandoc_message'), trans('system.error.no_pandoc_title'));
         }
 
         // No matter what, for pdf we always need pandoc + latex installed.
-        if((this.options.format == 'pdf') && !this.options.pdflatex) {
-            return app.window.prompt({
-                type: 'error',
-                title: trans('system.error.no_pdflatex_title'),
-                message: trans('system.error.no_pdflatex_message', error)
-            });
+        if((this.options.format == 'pdf') && !commandExists('xelatex')) {
+            throw new ExportError(trans('system.error.no_pdflatex_message'), trans('system.error.no_pdflatex_title'));
+        }
+
+        // Necessary evaluations
+        if(!this.options.pdf.hasOwnProperty('toc')) {
+            this.options.pdf.toc = false;
+        }
+        if(!this.options.pdf.hasOwnProperty('tocDepth')) {
+            this.options.pdf.tocDepth = 0;
+        }
+        if(!this.options.odf.hasOwnProperty('titlepage')) {
+            this.options.pdf.titlepage = false;
         }
 
         //  Third prepare the export (e.g., strip IDs, tags or other unnecessary stuff)
@@ -73,7 +121,7 @@ class ZettlrExport
         }
 
         // Fourth defer to the respective functions.
-        switch(options.format)
+        switch(this.options.format)
         {
             case 'html':
             this._prepareHTML();
@@ -86,7 +134,7 @@ class ZettlrExport
             this._preparePDF();
             break;
             default:
-            app.notify('Unknown format: ' + options.format);
+            // this.app.notify('Unknown format: ' + this.options.format);
             break;
         }
 
@@ -102,23 +150,23 @@ class ZettlrExport
     _prepareFile()
     {
         // First load the file.
-        let cnt = this.options.file.withContent().content;
+        let cnt = this.options.file.read();
 
         // Second check if we should strip something, if yes, do so.
-        if(this.app.getConfig().get('export.stripIDs')) {
+        if(this.options.stripIDs) {
             // Strip all ZKN-IDs in format @ID:
             cnt = cnt.replace(/[^\[\[]@ID:([^\s]*)/g, ''); // Regular expression from ZettlrFile class
         }
 
-        if(this.app.getConfig().get('export.stripTags')) {
+        if(this.options.stripTags) {
             // Strip all tags
             cnt = cnt.replace(/#[\d\w-]+/g, '');
         }
 
-        if(this.app.getConfig().get('export.stripLinks') == 'full') {
+        if(this.options.stripLinks == 'full') {
             // Completely remove internal links
             cnt = cnt.replace(/\[\[.+?\]\]/g, ''); // Important: Non-greedy modifier needed to not strip out the whole text!
-        } else if(this.app.getConfig().get('export.stripLinks') == 'unlink') {
+        } else if(this.options.stripLinks == 'unlink') {
             // Remove square brackets from internal links
             cnt = cnt.replace(/\[\[(.+?)\]\]/g, function(match, p1, offset, string) {
                 return p1;
@@ -154,10 +202,23 @@ class ZettlrExport
         cnt = cnt.replace('%FONT_SIZE%', pdf.fontsize + 'pt');
 
         // Metadata
-        cnt = cnt.replace('%PDF_TITLE%', this.options.title);
+        cnt = cnt.replace(/%PDF_TITLE%/g, this.options.title);
         cnt = cnt.replace('%PDF_SUBJECT%', this.options.title);
-        cnt = cnt.replace('%PDF_AUTHOR%', this.options.author);
-        cnt = cnt.replace('%PDF_KEYWORDS%', this.options.keywords);
+        cnt = cnt.replace(/%PDF_AUTHOR%/g, this.options.author);
+        cnt = cnt.replace(/%PDF_KEYWORDS%/g, this.options.keywords);
+
+        if(this.options.pdf.titlepage) {
+            cnt = cnt.replace('%TITLEPAGE%', '\\maketitle\n\\pagebreak\n');
+        } else {
+            cnt = cnt.replace('%TITLEPAGE%', '');
+        }
+
+        if(this.options.pdf.toc) {
+            // Also generate a table of contents
+            cnt = cnt.replace('%GENERATE_TOC%', '\\setcounter{tocdepth}{' + this.options.pdf.tocDepth + '}\n\\tableofcontents\n\\pagebreak\n');
+        } else {
+            cnt = cnt.replace('%GENERATE_TOC%', '');
+        }
 
         fs.writeFileSync(this.textpl, cnt, 'utf8');
     }
@@ -189,8 +250,13 @@ class ZettlrExport
     {
         // TODO: In the future generate the template based on user's decisions.
         this.tpl = `--template="${this.textpl}"`;
-        let pdfengine = '--pdf-engine=xelatex';// + this.options.pdfengine;
-        this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${pdfengine} -o "${this.targetFile}"`;
+
+        // It is necessary to tell Pandoc to generate a toc explicitly, b/c then
+        // we don't need to grab the pre-rendered tex-file prior and chase it
+        // through the xelatex engine manually and can let pandoc do the work.
+        let toc = (this.options.pdf.toc) ? '--toc' : '';
+        let tocdepth = (this.options.pdf.tocDepth) ? '--toc-depth='+this.options.pdf.tocDepth : '';
+        this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${toc} ${tocdepth} --pdf-engine=xelatex -o "${this.targetFile}"`;
     }
 
     /**
@@ -230,7 +296,7 @@ class ZettlrExport
 
         if(!this.command || this.command.length == 0) {
             // No command given -> abort
-            return;
+            throw new ExportError('Exporting command was empty');
         }
 
         exec(this.command, { 'cwd': this.options.dest }, (error, stdout, stderr) => {
@@ -249,11 +315,7 @@ class ZettlrExport
      */
     _abort(error = '')
     {
-        this.app.window.prompt({
-            type: 'error',
-            title: trans('system.error.export_error_title'),
-            message: trans('system.error.export_error_message', error)
-        });
+        throw new ExportError(trans('system.error.export_error_message', error), trans('system.error.export_error_title'));
     }
 
     /**
@@ -265,7 +327,7 @@ class ZettlrExport
         // a notification that the export is complete.
         fs.unlink(this.tempfile, (err) => {
             if(err) {
-                this.app.notify(trans('system.error.export_temp_file', this.tempfile));
+                throw new ExportError(trans('system.error.export_temp_file', this.tempfile));
             }
         });
 
@@ -273,7 +335,7 @@ class ZettlrExport
         if(this.options.format == 'pdf') {
             fs.unlink(this.textpl, (err) => {
                 if(err) {
-                    this.app.notify(trans('system.error.export_temp_file', this.textpl));
+                    throw new ExportError(trans('system.error.export_temp_file', this.textpl));
                 }
             });
         }
@@ -285,7 +347,6 @@ class ZettlrExport
     _finish()
     {
         require('electron').shell.openItem(this.targetFile);
-        this.app.notify(trans('system.export_success', this.options.format.toUpperCase()));
     }
 }
 

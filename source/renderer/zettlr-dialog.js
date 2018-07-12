@@ -193,11 +193,18 @@ class ZettlrDialog
             case 'project-properties':
             let hash = obj.hash; // In this case, the object also contains a hash we need.
             obj = obj.properties;
+            let genToc = (obj.pdf.toc) ? 'checked="checked"' : '';
+            let tocdepth = '';
+            for(let i = 1; i < 7; i++) {
+                tocdepth += `<option value="${i}" ` + ((obj.pdf.tocDepth == i) ? 'selected="selected"': '') + `>${i}</option>`;
+            }
             // Project properties are a superset of the pdf preferences, so we
             // don't add a break here, because we need them as well.
             replacements.push('%PREFS_TITLE%|' + obj.title);
             replacements.push('%PROJECT_DIRECTORY%|' + this._parent.getRenderer().findObject(hash).name);
             replacements.push('%HASH%|' + hash);
+            replacements.push('%GENERATE_TOC%|' + genToc);
+            replacements.push('%TOCDEPTH%|' + tocdepth);
             case 'pdf-preferences':
             replacements.push('%PREFS_AUTHOR%|' + obj.pdf.author);
             replacements.push('%PREFS_KEYWORDS%|' + obj.pdf.keywords);

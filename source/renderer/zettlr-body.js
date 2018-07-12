@@ -634,7 +634,9 @@ class ZettlrBody
         combinerState = 'collapsed',
         tags = { 'name' : [], 'color': [], 'desc': []},
         project_title = '',
-        hash = '';
+        hash = '',
+        toc = false,
+        tocDepth = 0;
 
         // TODO: Convert to switch. It's embarassing to have such an else if thingy floating around here.
         for(let r of res) {
@@ -715,6 +717,10 @@ class ZettlrBody
                 project_title = r.value;
             } else if(r.name === 'prefs-project-hash') {
                 hash = r.value;
+            } else if(r.name === 'prefs-pdf-toc') {
+                toc = true;
+            } else if(r.name === 'prefs-pdf-toc-depth') {
+                tocDepth = parseInt(r.value);
             }
         }
 
@@ -755,7 +761,9 @@ class ZettlrBody
                     "margin_unit": margin_unit,
                     "lineheight": lineheight,
                     "mainfont": mainfont,
-                    "fontsize": fontsize
+                    "fontsize": fontsize,
+                    "toc": toc,
+                    "tocDepth": tocDepth
                 }
             };
             // Add additional properties for the project settings.
