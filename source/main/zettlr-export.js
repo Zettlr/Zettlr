@@ -99,7 +99,7 @@ class ZettlrExport
 
         // No matter what, for pdf we always need pandoc + latex installed.
         if((this.options.format == 'pdf') && !commandExists('xelatex')) {
-            throw new ExportError(trans('system.error.no_pdflatex_message'), trans('system.error.no_pdflatex_title'));
+            throw new ExportError(trans('system.error.no_xelatex_message'), trans('system.error.no_xelatex_title'));
         }
 
         // Necessary evaluations

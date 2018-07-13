@@ -151,7 +151,7 @@
             "alt_odt": "Export as ODT",
             "alt_docx": "Export as DOCX",
             "alt_pdf": "Export as PDF",
-            "no_pdflatex": "Could not find the pdflatex executable on your system. Please make sure to install LaTeX to be able to export to PDF.",
+            "no_xelatex": "Could not find the xelatex executable on your system. Please make sure to install LaTeX to be able to export to PDF.",
             "no_pandoc": "Could not find pandoc. Please install pandoc to enable the file exporting options!"
         },
         "file_new": {
@@ -254,9 +254,9 @@
                 "fr_FR": "French (France)"
             },
             "pandoc": "Path to pandoc executable. Please only change, if Zettlr is unable to locate pandoc.",
-            "pdflatex": "Path to pdflatex executable. Please only change, if Zettlr is unable to locate it.",
+            "xelatex": "Path to xelatex executable. Please only change, if Zettlr is unable to locate it.",
             "pandoc_default": "Default: pandoc",
-            "pdflatex_default": "Default: pdflatex",
+            "xelatex_default": "Default: xelatex",
             "nightmode": "Night mode",
             "snippets": "Text snippets",
             "combiner_explanation": "Side pane mode",
@@ -342,8 +342,8 @@
             "pandoc_error_message": "Pandoc reported an error: %s",
             "no_pandoc_title": "Pandoc not found",
             "no_pandoc_message": "Pandoc has not been found on this system. Please install Pandoc prior to exporting files.",
-            "no_pdflatex_title": "LaTeX not found",
-            "no_pdflatex_message": "Zettlr couldn't detect a LaTeX-distribution on this system. Please install LaTeX prior to exporting to PDF.",
+            "no_xelatex_title": "LaTeX not found",
+            "no_xelatex_message": "Zettlr couldn't detect a LaTeX-distribution on this system. Please install LaTeX prior to exporting to PDF.",
             "cancel_remove": "Cancel",
             "remove_title": "Really delete?",
             "remove_message": "Do you really want to remove %s?",

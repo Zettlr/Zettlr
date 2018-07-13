@@ -572,7 +572,7 @@ class Zettlr
         // Call the exporter.
         try {
             new ZettlrExport(opt); // TODO don't do this with instantiation
-            this.notify(trans('system.export_success', this.options.format.toUpperCase()));
+            this.notify(trans('system.export_success', this.opt.format.toUpperCase()));
         } catch(err) {
             this.notify(err.name + ': ' + err.message); // Error may be thrown
         }

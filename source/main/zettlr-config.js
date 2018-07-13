@@ -10,7 +10,7 @@
  * Description:     This class fulfills two basic tasks: (1) Manage the app's
  *                  configuration, stored in the config.json inside the user
  *                  data directory. (2) Check the environment whether or not
- *                  specific conditions exist (such as the pandoc or pdflatex
+ *                  specific conditions exist (such as the pandoc or xelatex
  *                  binaries)
  *
  * END HEADER
@@ -44,7 +44,7 @@ class ZettlrConfig
         // Environment variables
         this.env = {
             'pandoc': false,
-            'pdflatex': false
+            'xelatex': false
         };
 
         // Additional environmental paths (for locating LaTeX and Pandoc)
@@ -101,7 +101,7 @@ class ZettlrConfig
             "combinerState" : 'collapsed', // collapsed = Preview or directories visible --- expanded = both visible
             // Export options
             "pandoc"    : 'pandoc',
-            "pdflatex"  : 'xelatex',
+            "xelatex"   : 'xelatex',
             "export"    : {
                 "dir": 'temp',   // Can either be "temp" or "cwd" (current working directory)
                 "stripIDs": true,  // Strip ZKN IDs such as @ID:<id>
@@ -195,7 +195,7 @@ class ZettlrConfig
 
     /**
      * This function runs a general environment check and tries to determine
-     * some environment variables (such as the existence of pandoc or pdflatex)
+     * some environment variables (such as the existence of pandoc or xelatex)
      * @return {ZettlrConfig} This for chainability.
      */
     checkSystem()
@@ -218,11 +218,11 @@ class ZettlrConfig
             process.env.PATH = nPATH.join(delim);
         }
 
-        // Also add to PATH pdflatex and pandoc-directories if these variables
+        // Also add to PATH xelatex and pandoc-directories if these variables
         // contain actual dirs.
-        if(path.dirname(this.get('pdflatex')).length > 0) {
-            if(process.env.PATH.indexOf(path.dirname(this.get('pdflatex'))) == -1) {
-                process.env.PATH += delim + path.dirname(this.get('pdflatex'));
+        if(path.dirname(this.get('xelatex')).length > 0) {
+            if(process.env.PATH.indexOf(path.dirname(this.get('xelatex'))) == -1) {
+                process.env.PATH += delim + path.dirname(this.get('xelatex'));
             }
         }
 
@@ -232,14 +232,14 @@ class ZettlrConfig
             }
         }
 
-        // Now check the availability of the pandoc and pdflatex commands.
+        // Now check the availability of the pandoc and xelatex commands.
         if(commandExists('pandoc')) {
             this.env.pandoc = true;
         }
 
-        // Check PDFLaTeX availability (PDF exports)
-        if(commandExists('pdflatex')) {
-            this.env.pdflatex = true;
+        // Check xelatex availability (PDF exports)
+        if(commandExists('xelatex')) {
+            this.env.xelatex = true;
         }
 
         // This function returns the platform specific template dir for pandoc

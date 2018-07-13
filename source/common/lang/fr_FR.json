@@ -151,7 +151,7 @@
             "alt_odt": "Exporter dans ODT",
             "alt_docx": "Exporter dans DOCX",
             "alt_pdf": "Exporter dans PDF",
-            "no_pdflatex": "Il-y-a pas de pdflatex, qui l'app peut trouver. Pandoc c'utiliser pour exporter dans PDF. Installer une distribution de LaTeX pour enabler l'export dans PDF.",
+            "no_xelatex": "Il-y-a pas de xelatex, qui l'app peut trouver. Pandoc c'utiliser pour exporter dans PDF. Installer une distribution de LaTeX pour enabler l'export dans PDF.",
             "no_pandoc": "Il est impossible de trouver Pandoc, mais c'est essentiel pour exporter les fichiers. Installer une distribution de Pandoc pour enabler l'export. Il est gratuit et open source!"
         },
         "file_new": {
@@ -254,9 +254,9 @@
                 "fr_FR": "Français (France)"
             },
             "pandoc": "Chemin d'accès à Pandoc. Seulement changer le, si Zettlr est dans l'impossibilité de faire trouver le programme.",
-            "pdflatex": "Chemin d'accès à pdflatex. Seulement changer le, si Zettlr est dans l'impossibilité de faire trouver le programme.",
+            "xelatex": "Chemin d'accès à xelatex. Seulement changer le, si Zettlr est dans l'impossibilité de faire trouver le programme.",
             "pandoc_default": "Standard: pandoc",
-            "pdflatex_default": "Standard: pdflatex",
+            "xelatex_default": "Standard: xelatex",
             "nightmode": "Mode sombre",
             "snippets": "Fragments du texte",
             "combiner_explanation": "Mode du barre de côté",
@@ -342,8 +342,8 @@
             "pandoc_error_message": "Pandoc a lancé une erreur: %s",
             "no_pandoc_title": "Impossible de trouver Pandoc",
             "no_pandoc_message": "Pandoc n'été trouver pas dans l'ordinateur. Télécharger Pandoc pour exporter les fichiers.",
-            "no_pdflatex_title": "Impossible de trouver LaTeX",
-            "no_pdflatex_message": "LaTeX n'èté trouver pas dans l'ordinateur. Télécharger LaTeX pour exporter les fichiers à PDF.",
+            "no_xelatex_title": "Impossible de trouver LaTeX",
+            "no_xelatex_message": "LaTeX n'èté trouver pas dans l'ordinateur. Télécharger LaTeX pour exporter les fichiers à PDF.",
             "cancel_remove": "Annuler",
             "remove_title": "Supprimer réellement?",
             "remove_message": "Supprimer %s réellement?",

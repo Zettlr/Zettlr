@@ -151,7 +151,7 @@
             "alt_odt": "Als ODT exportieren",
             "alt_docx": "Als DOCX exportieren",
             "alt_pdf": "Als PDF exportieren",
-            "no_pdflatex": "Es wurde keine PDFLaTeX-Datei auf diesem System gefunden. Pandoc nutzt sie, um Dateien nach PDF exportieren zu können. Bitte installiere eine Version von LaTeX, die für dein System gemacht ist.",
+            "no_xelatex": "Es wurde keine XeLaTeX-Datei auf diesem System gefunden. Pandoc nutzt sie, um Dateien nach PDF exportieren zu können. Bitte installiere eine Version von LaTeX, die für dein System gemacht ist.",
             "no_pandoc": "Pandoc wurde auf diesem System nicht gefunden! Um Dateien exportieren zu können, musst du zunächst Pandoc installieren. Pandoc ist frei und quelloffen!"
         },
         "file_new": {
@@ -254,9 +254,9 @@
                 "fr_FR": "Französisch (Frankreich)"
             },
             "pandoc": "Pfad zum Pandoc-Programm. Bitte ändere dies nur, wenn Zettlr Pandoc nicht automatisch findet.",
-            "pdflatex": "Pfad zum PDFLaTeX-Programm. Bitte ändere dies nur, wenn Pandoc einen Fehler ausgibt, dass er die Bibliothek nicht finden kann.",
+            "xelatex": "Pfad zum XeLaTeX-Programm. Bitte ändere dies nur, wenn Pandoc einen Fehler ausgibt, dass er die Bibliothek nicht finden kann.",
             "pandoc_default": "Standard: pandoc",
-            "pdflatex_default": "Standard: pdflatex",
+            "xelatex_default": "Standard: xelatex",
             "nightmode": "Dunkles Thema",
             "snippets": "Textfragmente anzeigen",
             "combiner_explanation": "Modus der Seitenleiste",
@@ -342,8 +342,8 @@
             "pandoc_error_message": "Pandoc hat beim Export folgenden Fehler ausgegeben: %s",
             "no_pandoc_title": "Pandoc nicht gefunden",
             "no_pandoc_message": "Pandoc wurde auf diesem System nicht gefunden. Bitte installiere zunächst Pandoc, um den Export nutzen zu können.",
-            "no_pdflatex_title": "LaTeX nicht gefunden",
-            "no_pdflatex_message": "Es wurde keine LaTeX-Installation gefunden. Bitte installiere zunächst LaTeX, um nach PDF zu exportieren.",
+            "no_xelatex_title": "LaTeX nicht gefunden",
+            "no_xelatex_message": "Es wurde keine LaTeX-Installation gefunden. Bitte installiere zunächst LaTeX, um nach PDF zu exportieren.",
             "cancel_remove": "Abbrechen",
             "remove_title": "Wirklich löschen?",
             "remove_message": "Möchtest du %s wirklich löschen?",

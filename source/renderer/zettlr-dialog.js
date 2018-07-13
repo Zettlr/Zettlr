@@ -169,7 +169,7 @@ class ZettlrDialog
             replacements.push('%EXPORT_STRIP_LINKS_UNLINK%|' + stripLinksUnlink);
             replacements.push('%EXPORT_STRIP_LINKS_NO%|' + stripLinksNo);
             replacements.push('%PANDOC%|' + obj.pandoc);
-            replacements.push('%PDFLATEX%|' + obj.pdflatex);
+            replacements.push('%XELATEX%|' + obj.xelatex);
             let spellcheck = '';
             for(let l in obj.spellcheck) {
                 let sel = (obj.spellcheck[l]) ? 'checked="checked"' : '';

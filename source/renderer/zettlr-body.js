@@ -607,7 +607,7 @@ class ZettlrBody
     proceed(dialog, res)
     { console.log(dialog, res);
         let pandoc = '',
-        pdflatex   = '',
+        xelatex    = '',
         darkTheme  = false,
         snippets   = false,
         spellcheck = this._spellcheckLangs,
@@ -644,8 +644,8 @@ class ZettlrBody
                 case 'pref-pandoc':
                 pandoc = r.value;
                 break;
-                case 'pref-pdflatex':
-                pdflatex = r.value;
+                case 'pref-xelatex':
+                xelatex = r.value;
                 break;
                 case 'pref-darkTheme':
                 darkTheme = true;
@@ -763,7 +763,7 @@ class ZettlrBody
         if(dialog == 'preferences') {
             cfg = {
                 'pandoc': pandoc,
-                'pdflatex': pdflatex,
+                'xelatex': xelatex,
                 'darkTheme': darkTheme,
                 'snippets': snippets,
                 'combinerState': combinerState,
