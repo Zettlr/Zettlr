@@ -189,6 +189,7 @@
                 "metadata": "Metadata",
                 "metadata_intro": "These metadata are written into the respective fields on PDF generation. Separate keywords with comma.",
                 "toc_label": "Generate table of contents and evaluate until level ",
+                "titlepage_label": "Generate title page",
                 "page": "Page",
                 "page_intro": "Adjust the page layout settings. The margins can be in cm, mm or pt.",
                 "font": "Font",

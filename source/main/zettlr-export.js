@@ -109,7 +109,7 @@ class ZettlrExport
         if(!this.options.pdf.hasOwnProperty('tocDepth')) {
             this.options.pdf.tocDepth = 0;
         }
-        if(!this.options.odf.hasOwnProperty('titlepage')) {
+        if(!this.options.pdf.hasOwnProperty('titlepage')) {
             this.options.pdf.titlepage = false;
         }
 

@@ -189,6 +189,7 @@
                 "metadata": "Metadaten",
                 "metadata_intro": "Diese Metadaten werden in jedes PDF-Dokument geschrieben. Trenne die Schlagwörter mit Kommata.",
                 "toc_label": "Inhaltsverzeichnis erstellen, auswerten bis Level ",
+                "titlepage_label": "Erstelle Titelseite",
                 "page": "Seite",
                 "page_intro": "Passe das Seitenlayout und die Seitengröße an.",
                 "font": "Schrift",

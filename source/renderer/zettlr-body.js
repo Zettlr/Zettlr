@@ -605,7 +605,7 @@ class ZettlrBody
      * @return {void}           Nothing to return.
      */
     proceed(dialog, res)
-    {
+    { console.log(dialog, res);
         let pandoc = '',
         pdflatex   = '',
         darkTheme  = false,
@@ -636,7 +636,8 @@ class ZettlrBody
         project_title = '',
         hash = '',
         toc = false,
-        tocDepth = 0;
+        tocDepth = 0,
+        titlepage = false;
 
         // TODO: Convert to switch. It's embarassing to have such an else if thingy floating around here.
         for(let r of res) {
@@ -721,6 +722,8 @@ class ZettlrBody
                 toc = true;
             } else if(r.name === 'prefs-pdf-toc-depth') {
                 tocDepth = parseInt(r.value);
+            } else if(r.name === 'prefs-pdf-titlepage') {
+                titlepage = true;
             }
         }
 
@@ -763,10 +766,12 @@ class ZettlrBody
                     "mainfont": mainfont,
                     "fontsize": fontsize,
                     "toc": toc,
-                    "tocDepth": tocDepth
+                    "tocDepth": tocDepth,
+                    "titlepage": titlepage
                 }
             };
             // Add additional properties for the project settings.
+            console.log(dialog);
             if(dialog == 'project-properties') {
                 cfg.title = project_title;
 
@@ -775,6 +780,7 @@ class ZettlrBody
                 obj.properties = cfg;
                 obj.hash = hash;
                 this._renderer.saveProjectSettings(obj);
+                console.log(obj);
             } else {
                 // pdf preferences
                 this._renderer.saveSettings(cfg);
