@@ -9,6 +9,7 @@
 - I finally found the bug that was showing `NaN` instead of real numbers in the stats view. Now it should work on all systems just fine. (It only happened when there were less than thirty days of recorded statistical history available.)
 - Adjusted the placement of the dialogs. Now they should definitely be placed in the center, if they are smaller than the window and should never result in a scrollable window.
 - The dialog windows should pop up much faster now.
+- Changed the styles of all dialog windows, and made pretty especially the PDF preferences windows.
 
 ## Under the hood
 

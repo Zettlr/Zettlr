@@ -16,7 +16,7 @@
         margin:0 15%;
         border-radius:@border-radius;
         padding:20px;
-        box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.75);
+        box-shadow: 20px 20px 40px 0px rgba(0, 0, 0, 0.45);
 
         // General typography
         h1 {
@@ -101,7 +101,6 @@
             font-size:inherit;
             width:100%;
             padding:1em;
-            margin:1em;
             border-radius: @border-radius;
         }
 
@@ -138,14 +137,62 @@
 
         div.box-left {
             width:50%;
+            height:80%;
             padding:2%;
             float:left;
         }
 
         div.box-right {
             width:50%;
+            height:80%;
             padding:2%;
             float:right;
+        }
+
+        // Positioning of the paper margin text elements
+        div.paper {
+            position:relative;
+            &.a4paper {
+                width: 5em;
+                height: 7em;
+                margin: 1em auto;
+                border: 1px solid black;
+            }
+
+            input[type="number"] {
+                text-align:center;
+                width:4em;
+            }
+
+            .tmargin {
+                position: absolute;
+                top: -2em;
+                margin: 0 0.5em;
+            }
+
+            .rmargin {
+                position: absolute;
+                right: -4.1em;
+                top: 2.5em;
+            }
+
+            .bmargin {
+                position: absolute;
+                bottom: -2em;
+                margin: 0 0.5em;
+            }
+
+            .lmargin {
+                position: absolute;
+                left: -4.2em;
+                top: 2.5em;
+            }
+        }
+
+        // This is the paragraph needed for previewing of changes to PDF preferences.
+        .pdf-preview {
+            max-height:100%;
+            overflow-y:auto;
         }
 
         .error {

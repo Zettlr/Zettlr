@@ -94,6 +94,9 @@ body.dark div.dragger {
 .dark ::-webkit-scrollbar-track {
   background-color: #464646;
 }
+.clearfix {
+  clear: both;
+}
 .modal {
   position: fixed;
   top: 0;
@@ -109,9 +112,9 @@ body.dark div.dragger {
 .modal .dialog {
   background-color: white;
   margin: 0 15%;
-  border-radius: 10px;
+  border-radius: 4px;
   padding: 20px;
-  box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 20px 20px 40px 0px rgba(0, 0, 0, 0.45);
 }
 .modal .dialog h1 {
   font-size: 1.5em;
@@ -185,8 +188,7 @@ body.dark div.dragger {
   font-size: inherit;
   width: 100%;
   padding: 1em;
-  margin: 1em;
-  border-radius: 10px;
+  border-radius: 4px;
 }
 .modal .dialog button,
 .modal .dialog a.button {
@@ -219,13 +221,52 @@ body.dark div.dragger {
 }
 .modal .dialog div.box-left {
   width: 50%;
+  height: 80%;
   padding: 2%;
   float: left;
 }
 .modal .dialog div.box-right {
   width: 50%;
+  height: 80%;
   padding: 2%;
   float: right;
+}
+.modal .dialog div.paper {
+  position: relative;
+}
+.modal .dialog div.paper.a4paper {
+  width: 5em;
+  height: 7em;
+  margin: 1em auto;
+  border: 1px solid black;
+}
+.modal .dialog div.paper input[type="number"] {
+  text-align: center;
+  width: 4em;
+}
+.modal .dialog div.paper .tmargin {
+  position: absolute;
+  top: -2em;
+  margin: 0 0.5em;
+}
+.modal .dialog div.paper .rmargin {
+  position: absolute;
+  right: -4.1em;
+  top: 2.5em;
+}
+.modal .dialog div.paper .bmargin {
+  position: absolute;
+  bottom: -2em;
+  margin: 0 0.5em;
+}
+.modal .dialog div.paper .lmargin {
+  position: absolute;
+  left: -4.2em;
+  top: 2.5em;
+}
+.modal .dialog .pdf-preview {
+  max-height: 100%;
+  overflow-y: auto;
 }
 .modal .dialog .error {
   background-color: #ffb0b0;
@@ -841,6 +882,10 @@ body.dark .sb-annotation {
   cursor: text;
   font-size: 1.2em;
   font-family: inherit;
+}
+#editor .CodeMirror .CodeMirror-placeholder {
+  color: #999;
+  background-image: url(../img/zettlr-official-logo.png);
 }
 #editor .CodeMirror-code {
   margin: 5em 0em;
@@ -1695,7 +1740,7 @@ body.dark .sb-annotation {
   display: block;
   margin: 10px;
   padding: 4px;
-  border-radius: 10px;
+  border-radius: 4px;
   text-decoration: none;
   color: inherit;
 }
