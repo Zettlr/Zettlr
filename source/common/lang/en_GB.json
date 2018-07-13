@@ -294,6 +294,8 @@
             "showdownjs": "Renders the Changelog so that you can see what's changed in an update",
             "esdoc": "Used to generate the API documentation at http://dev.zettlr.com/api",
             "lessjs": "Helps a lot in writing the styles for Zettlr",
+            "clusterizejs": "Displays even the longest file lists reliably",
+            "tippyjs": "That's where the nice tooltips come from",
             "trademark": "All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc.",
             "close": "Close"
         }

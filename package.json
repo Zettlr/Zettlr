@@ -114,6 +114,7 @@
         "sanitize-filename": "^1.6.1",
         "semver": "^5.5.0",
         "showdown": "^1.8.6",
+        "tippy.js": "^2.5.3",
         "typo": "^1.0.6",
         "typo-js": "^1.0.3"
     },

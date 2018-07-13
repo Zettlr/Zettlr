@@ -294,6 +294,8 @@
             "showdownjs": "Übersetzt das in Markdown geschriebene Changelog im Update-Dialog",
             "esdoc": "Mit ESDoc generieren wir die Entwicklerdokumentation unter http://dev.zettlr.com/api",
             "lessjs": "Kompiliert die Design-Richtlinien für die App",
+            "clusterizejs": "Stellt selbst die längsten Dateilisten zuverlässig dar",
+            "tippyjs": "Ist für die schicken Tooltips verantwortlich",
             "trademark": "Alle Logos und Markennamen gehören ihren rechtmäßigen Besitzern. Außer durch die Nutzung ihres Codes ist Zettlr auf keine Weise mit diesen Projekten verbunden. Node.js ist ein eingetragenes Warenzeichen von Joyent, Inc.",
             "close": "Schließen"
         }

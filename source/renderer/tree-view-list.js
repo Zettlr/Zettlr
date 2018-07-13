@@ -56,7 +56,7 @@ class TreeView
 
         this._indicator = $('<span>').addClass('collapse-indicator');
 
-        this._dir = $('<li>').attr('data-hash', this.getHash()).attr('title', this._paths.name);
+        this._dir = $('<li>').attr('data-hash', this.getHash());
         this._dir.addClass(this._paths.type); // To ensure proper display of virtual directories and filters in different colours
         this._dir.append('<span>').text(this._paths.name);
         if(this.isRoot()) { this._dir.addClass('root'); }

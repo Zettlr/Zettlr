@@ -24,6 +24,7 @@ const ZettlrPopup       = require('../zettlr-popup.js');
 const ZettlrStatsView   = require('../zettlr-stats-view.js');
 const ZettlrAttachments = require('../zettlr-attachments.js');
 
+const tippy             = require('tippy.js')
 const Typo              = require('typo-js');
 const remote            = require('electron').remote;
 const path              = require('path');
@@ -118,6 +119,14 @@ class ZettlrRenderer
     {
         // Here we can init actions and stuff to be done after the startup has finished
         setTimeout(() => { this.poll(); }, POLL_TIME); // Poll every POLL_TIME seconds
+
+        // Tippify all titled elements
+        tippy('[title]', {
+            delay: 100,
+            arrow: true,
+            duration: 100,
+            flip: true
+        });
 
         // Send an initial check for an update
         this._ipc.send('update-check');

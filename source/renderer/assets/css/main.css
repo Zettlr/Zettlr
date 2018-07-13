@@ -244,6 +244,11 @@ body.dark div.dragger {
   text-align: center;
   width: 4em;
 }
+.modal .dialog div.paper input[type="number"]::-webkit-inner-spin-button,
+.modal .dialog div.paper input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 .modal .dialog div.paper .tmargin {
   position: absolute;
   top: -2em;
@@ -882,10 +887,6 @@ body.dark .sb-annotation {
   cursor: text;
   font-size: 1.2em;
   font-family: inherit;
-}
-#editor .CodeMirror .CodeMirror-placeholder {
-  color: #999;
-  background-image: url(../img/zettlr-official-logo.png);
 }
 #editor .CodeMirror-code {
   margin: 5em 0em;

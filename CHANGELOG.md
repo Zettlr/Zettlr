@@ -10,6 +10,7 @@
 - Adjusted the placement of the dialogs. Now they should definitely be placed in the center, if they are smaller than the window and should never result in a scrollable window.
 - The dialog windows should pop up much faster now.
 - Changed the styles of all dialog windows, and made pretty especially the PDF preferences windows.
+- Replaced the system default's title popups with nicer looking popups.
 
 ## Under the hood
 
@@ -22,6 +23,7 @@
 - Changes to `ZettlrRenderer`. Now the translation strings will be copied into the memory of the renderer process directly. This results in better overall performance, especially in dialogs, for which a lot of such strings are needed.
 - Updated development dependencies: `electron` is now `2.0.4`, `electron-builder` is now `20.19.2` and `less.js` is now `3.5.3`.
 - Changes to `ZettlrBody`-proceed function.
+- Added `tippy.js` to the list of dependencies; replaced standard system titles with Tippy titles.
 
 # 0.17.1
 

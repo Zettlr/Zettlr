@@ -966,6 +966,10 @@ path-key@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/path-key/-/path-key-2.0.1.tgz#411cadb574c5a140d3a4b1910d40d80cc9f40b40"
 
+popper.js@^1.14.3:
+  version "1.14.3"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.14.3.tgz#1438f98d046acf7b4d78cd502bf418ac64d4f095"
+
 posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
@@ -1251,6 +1255,12 @@ tar@^4:
     mkdirp "^0.5.0"
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
+
+tippy.js@^2.5.3:
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-2.5.3.tgz#a75b0b6d18633cea8ec79658a85d07599c77c9a4"
+  dependencies:
+    popper.js "^1.14.3"
 
 to-object-path@^0.3.0:
   version "0.3.0"

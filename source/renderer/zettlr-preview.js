@@ -155,7 +155,7 @@ class ZettlrPreview
             let snippets = (this._snippets) ? ' snippets' : '';
             let vdclass = (inVirtualDir) ? ' vd-file' : ''; // File is not actually present in this "dir"
             let vdhashAttr = (inVirtualDir && vdhash) ? ' data-vd-hash="' + vdhash + '"' : ''; // For context menu actions we need to pass vd-hash, b/c accessing parent will not work.
-            let elem = `<li class="${d.type}${selected}${snippets}${vdclass}" data-hash="${d.hash}" ${sort}title="${d.name}"${bgcolor}${vdhashAttr}>`;
+            let elem = `<li class="${d.type}${selected}${snippets}${vdclass}" data-hash="${d.hash}" ${sort}${bgcolor}${vdhashAttr}>`;
             if(d.type == 'directory' || d.type == 'virtual-directory') {
                 // Render a directory
                 elem += d.name;

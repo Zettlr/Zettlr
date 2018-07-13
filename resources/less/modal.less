@@ -162,6 +162,11 @@
             input[type="number"] {
                 text-align:center;
                 width:4em;
+
+                &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
             }
 
             .tmargin {
