@@ -639,35 +639,48 @@ class ZettlrBody
         tocDepth = 0,
         titlepage = false;
 
-        // TODO: Convert to switch. It's embarassing to have such an else if thingy floating around here.
         for(let r of res) {
-            if(r.name === 'pref-pandoc') {
+            switch(r.name) {
+                case 'pref-pandoc':
                 pandoc = r.value;
-            } else if(r.name === 'pref-pdflatex') {
+                break;
+                case 'pref-pdflatex':
                 pdflatex = r.value;
-            } else if(r.name === 'pref-darkTheme') {
+                break;
+                case 'pref-darkTheme':
                 darkTheme = true;
-            } else if(r.name === 'pref-snippets') {
+                break;
+                case 'pref-snippets':
                 snippets = true;
-            } else if(r.name === 'pref-combiner-state') {
+                break;
+                case 'pref-combiner-state':
                 combinerState = r.value;
-            } else if(r.name === 'pref-mute-lines') {
+                break;
+                case 'pref-mute-lines':
                 mute = true;
-            } else if(r.name === 'spellcheck[]') {
+                break;
+                case 'spellcheck[]':
                 spellcheck[r.value] = true;
-            } else if(r.name === 'app-lang') {
+                break;
+                case 'app-lang':
                 app_lang = r.value;
-            } else if(r.name === 'debug') {
+                break;
+                case 'debug':
                 debug = true;
-            } else if(r.name === 'pref-export-dest') {
+                break;
+                case 'pref-export-dest':
                 exportDir = r.value;
-            } else if(r.name === 'pref-export-strip-id') {
+                break;
+                case 'pref-export-strip-id':
                 stripIDs = true;
-            } else if(r.name === 'pref-export-strip-tags') {
+                break;
+                case 'pref-export-strip-tags':
                 stripTags = true;
-            } else if(r.name === 'pref-export-strip-links') {
+                break;
+                case 'pref-export-strip-links':
                 stripLinks = r.value;
-            } else if(r.name === 'pref-attachments') {
+                break;
+                case 'pref-attachments':
                 // We have to account for user jokes
                 attachments = r.value.split(',');
                 for(let i = 0; i < attachments.length; i++) {
@@ -681,49 +694,67 @@ class ZettlrBody
                         attachments[i] = '.' + attachments[i];
                     }
                 }
-            } else if(r.name === 'prefs-pdf-author') {
+                break;
+                case 'prefs-pdf-author':
                 author = r.value;
-            } else if(r.name === 'prefs-pdf-keywords') {
+                break;
+                case 'prefs-pdf-keywords':
                 keywords = r.value;
-            } else if(r.name === 'prefs-pdf-papertype') {
+                break;
+                case 'prefs-pdf-papertype':
                 papertype = r.value;
-            } else if(r.name === 'prefs-pdf-margin-unit') {
-                margin_unit = r.value;
-            } else if(r.name === 'prefs-pdf-tmargin') {
+                break;
+                case 'prefs-pdf-margin-unit':
+                margun_unit = r.value;
+                break;
+                case 'prefs-pdf-tmargin':
                 tmargin = r.value || 0;
-            } else if(r.name === 'prefs-pdf-bmargin') {
+                break;
+                case 'prefs-pdf-bmargin':
                 bmargin = r.value || 0;
-            } else if(r.name === 'prefs-pdf-lmargin') {
+                break;
+                case 'prefs-pdf-lmargin':
                 lmargin = r.value || 0;
-            } else if(r.name === 'prefs-pdf-rmargin') {
+                break;
+                case 'prefs-pdf-rmargin':
                 rmargin = r.value || 0;
-            } else if(r.name === 'prefs-pdf-mainfont') {
+                break;
+                case 'prefs-pdf-mainfont':
                 mainfont = r.value;
-            } else if(r.name === 'prefs-pdf-fontsize') {
-                fontsize = r.value;
-            } else if(r.name === 'prefs-pdf-lineheight') {
+                break;
+                case 'prefs-pdf-fontsize':
+                fontsize = parseInt(r.value);
+                break;
+                case 'prefs-pdf-lineheight':
                 lineheight = r.value / 100; // Convert to floating point scale
-            } else if(r.name === 'prefs-pdf-pagenumbering') {
+                break;
+                case 'prefs-pdf-pagenumbering':
                 pagenumbering = r.value;
-            } else if(r.name === 'prefs-tags-name') {
-                // Some users will nevertheless add the preceding hashtags, albeit
-                // told not to. So give them a pat on the back and remove it for
-                // them :)
+                break;
+                case 'prefs-tags-name':
                 tags.name.push((r.value[0] == '#') ? r.value.substr(1).toLowerCase() : r.value.toLowerCase());
-            } else if(r.name === 'prefs-tags-color') {
+                break;
+                case 'prefs-tags-color':
                 tags.color.push(r.value);
-            } else if(r.name === 'prefs-tags-desc') {
+                break;
+                case 'prefs-tags-desc':
                 tags.desc.push(r.value);
-            } else if(r.name === 'prefs-project-title') {
+                break;
+                case 'prefs-project-title':
                 project_title = r.value;
-            } else if(r.name === 'prefs-project-hash') {
-                hash = r.value;
-            } else if(r.name === 'prefs-pdf-toc') {
+                break;
+                case 'prefs-project-hash':
+                hash = parseInt(r.value);
+                break;
+                case 'prefs-pdf-toc':
                 toc = true;
-            } else if(r.name === 'prefs-pdf-toc-depth') {
+                break;
+                case 'prefs-pdf-toc-depth':
                 tocDepth = parseInt(r.value);
-            } else if(r.name === 'prefs-pdf-titlepage') {
+                break;
+                case 'prefs-pdf-titlepage':
                 titlepage = true;
+                break;
             }
         }
 
