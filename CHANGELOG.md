@@ -11,6 +11,7 @@
 - The dialog windows should pop up much faster now.
 - Changed the styles of all dialog windows, and made pretty especially the PDF preferences windows.
 - Replaced the system default's title popups with nicer looking popups.
+- Changed image preview rendering. Now, images smaller than the viewport will not scale up to fill the full width, but remain smaller than the viewport width.
 
 ## Under the hood
 

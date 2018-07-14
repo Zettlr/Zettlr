@@ -266,7 +266,7 @@ class ZettlrEditor
                 // Try it
                 img.src = rel;
             };
-            img.style.width = '100%';
+            img.style.maxWidth = '100%';
             img.style.maxHeight = '100%';
             img.style.cursor = 'default'; // Nicer cursor
             img.src = url;
