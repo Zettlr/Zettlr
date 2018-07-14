@@ -14,6 +14,8 @@
 - Changed image preview rendering. Now, images smaller than the viewport will not scale up to fill the full width, but remain smaller than the viewport width.
 - Added a preview rendering of task items with checkboxes.
 - Now Zettlr will directly react to you clicking with your mouse into the window and doesn't require you to click a second time after the app has been focused again.
+- Snippets are now off by default.
+- Fixed a small error that led to the editor behaving strange after resizing the sidebar.
 
 ## Under the hood
 
@@ -28,6 +30,7 @@
 - Changes to `ZettlrBody`-proceed function.
 - Added `tippy.js` to the list of dependencies; replaced standard system titles with Tippy titles.
 - Added the `acceptFirstMouse` option to the creation of new `BrowserWindow`s.
+- Now refreshing the editor instance after dragstop of the divider between combiner and the editor.
 
 # 0.17.1
 

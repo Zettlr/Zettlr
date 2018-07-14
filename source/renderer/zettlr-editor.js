@@ -1044,6 +1044,11 @@ class ZettlrEditor
      * Focus the CodeMirror instance
      */
     focus() { this._cm.focus(); }
+
+    /**
+     * Refresh the CodeMirror instance
+     */
+    refresh() { this._cm.refresh(); }
 }
 
 module.exports = ZettlrEditor;

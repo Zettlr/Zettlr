@@ -51,6 +51,7 @@ class ZettlrBody
         $('#editor').resizable({
             'handles': 'w',
             'resize' : (e, ui) => { $('#combiner').css('width', ($(window).width()-ui.size.width)+'px'); },
+            'stop': (e, ui) => { this._renderer.getEditor().refresh(); }, // Refresh the editor to update lines and cursor positions.
             'minWidth': Math.round($(window).width() * 0.4),
             'maxWidth': Math.round($(window).width() * 0.95)
         });
