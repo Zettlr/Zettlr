@@ -57,6 +57,7 @@ class ZettlrWindow
         this._win = new BrowserWindow({
             width: screensize.width,
             height: screensize.height,
+            acceptFirstMouse: true,
             minWidth:800,
             minHeight:450,
             show: false,

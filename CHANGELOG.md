@@ -12,6 +12,8 @@
 - Changed the styles of all dialog windows, and made pretty especially the PDF preferences windows.
 - Replaced the system default's title popups with nicer looking popups.
 - Changed image preview rendering. Now, images smaller than the viewport will not scale up to fill the full width, but remain smaller than the viewport width.
+- Added a preview rendering of task items with checkboxes.
+- Now Zettlr will directly react to you clicking with your mouse into the window and doesn't require you to click a second time after the app has been focused again.
 
 ## Under the hood
 
@@ -25,6 +27,7 @@
 - Updated development dependencies: `electron` is now `2.0.4`, `electron-builder` is now `20.19.2` and `less.js` is now `3.5.3`.
 - Changes to `ZettlrBody`-proceed function.
 - Added `tippy.js` to the list of dependencies; replaced standard system titles with Tippy titles.
+- Added the `acceptFirstMouse` option to the creation of new `BrowserWindow`s.
 
 # 0.17.1
 
