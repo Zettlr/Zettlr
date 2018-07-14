@@ -629,7 +629,6 @@ body.dark div.dragger {
   border: none;
   margin: 0 auto;
   transition: 0.2s all ease-out;
-  opacity: 0.4;
 }
 #preview ul li .taglist:hover {
   width: 100%;
@@ -641,7 +640,6 @@ body.dark div.dragger {
   border-radius: 50%;
   border: 2px solid white;
   transition: 0.2s all ease-in;
-  opacity: 1;
 }
 #preview ul li .taglist .tagspacer {
   flex-grow: 1;
