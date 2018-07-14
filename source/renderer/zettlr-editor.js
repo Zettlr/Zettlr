@@ -70,6 +70,7 @@ class ZettlrEditor
 
         this._inlineImages = [];            // Image widgets that are currently rendered
         this._inlineLinks = [];             // Inline links that are currently rendered
+        this._inlineTasks = [];             // Tasks that are present in the document.
 
         this._prevSelections = [];          // Used to save all selections before a command is run to re-select
 
@@ -129,6 +130,7 @@ class ZettlrEditor
             // cursor changes its position as well then) or when the cursor moves.
             this._renderImages();
             this._renderLinks();
+            this._renderTasks();
             if(this._cm.getOption('fullScreen') && this._mute) {
                 this._muteLines();
             }
@@ -394,6 +396,106 @@ class ZettlrEditor
 
                 this._inlineLinks.push(textMarker);
             }
+        }
+    }
+
+    /**
+     * This renders tasks in the format of - [ ]
+     * @return {[type]} [description]
+     */
+    _renderTasks()
+    {
+        let taskRE = /^- \[( |x)\]/g; // Matches `- [ ]` and `- [x]`
+        let i = 0;
+        let match;
+
+        // First remove links that don't exist anymore. As soon as someone
+        // moves the cursor into the link, it will be automatically removed,
+        // as well as if someone simply deletes the whole line.
+        do {
+            if(!this._inlineTasks[i]) {
+                continue;
+            }
+            if(this._inlineTasks[i] && this._inlineTasks[i].find() === undefined) {
+                // Marker is no longer present, so splice it
+                this._inlineTasks.splice(i, 1);
+            } else {
+                i++;
+            }
+        } while(i < this._inlineTasks.length);
+
+        // Now render all potential new tasks
+        for(let i = 0; i < this._cm.doc.lineCount(); i++)
+        {
+            // Always reset lastIndex property, because test()-ing on regular
+            // expressions advances it.
+            taskRE.lastIndex = 0;
+
+            // First get the line and test if the contents contain a link
+            let line = this._cm.doc.getLine(i);
+            if((match = taskRE.exec(line)) == null) {
+                continue;
+            }
+
+            if(this._cm.doc.getCursor('from').line == i && this._cm.doc.getCursor('from').ch < 6) {
+                // We're directly in the formatting so don't render.
+                continue;
+            }
+
+            let curFrom = { 'line': i, 'ch': 0};
+            let curTo   = { 'line': i, 'ch': 5};
+
+            let isRendered = false;
+            let marks = this._cm.doc.findMarks(curFrom, curTo);
+            for(let marx of marks) {
+                if(this._inlineTasks.includes(marx)) {
+                    isRendered = true;
+                    break;
+                }
+            }
+
+            // Also in this case simply skip.
+            if(isRendered) continue;
+
+            // Now we can render it finally.
+            let checked = (match[1] == 'x') ? true : false;
+
+            let cbox = document.createElement('input');
+            cbox.type = 'checkbox';
+            if(checked) {
+                cbox.checked = true;
+            }
+
+            let textMarker = this._cm.doc.markText(
+                curFrom, curTo,
+                {
+                    'clearOnEnter': true,
+                    'replacedWith': cbox,
+                    'inclusiveLeft': false,
+                    'inclusiveRight': false
+                }
+            );
+
+            cbox.onclick = (e) => {
+                // Check or uncheck it
+                // Check the checkbox, alter the underlying text and replace the
+                // text marker in the list of checkboxes.
+                let check = (cbox.checked) ? 'x' : ' ';
+                this._cm.doc.replaceRange(`- [${check}]`, curFrom, curTo);
+                this._inlineTasks.splice(this._inlineTasks.indexOf(textMarker), 1);
+                textMarker = this._cm.doc.markText(
+                    curFrom, curTo,
+                    {
+                        'clearOnEnter': true,
+                        'replacedWith': cbox,
+                        'inclusiveLeft': false,
+                        'inclusiveRight': false
+                    }
+                );
+                this._inlineTasks.push(textMarker);
+            }
+
+            this._inlineTasks.push(textMarker);
         }
     }
 

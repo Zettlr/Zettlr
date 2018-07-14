@@ -48,6 +48,10 @@
 .CodeMirror a.cma:hover {
   text-decoration: underline;
 }
+.CodeMirror input[type="checkbox"] {
+  transform: scale(1.2);
+  margin: 0.2em;
+}
 .CodeMirror .search-result {
   background-color: yellow;
 }
@@ -73,7 +77,8 @@
 .CodeMirror .cm-header-6 {
   font-size: 1em;
 }
-.CodeMirror .cm-comment {
+.CodeMirror .cm-comment,
+.CodeMirror .cm-formatting-task {
   font-family: monospace;
   font-size: 120%;
 }
