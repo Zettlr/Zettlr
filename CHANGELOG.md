@@ -34,6 +34,7 @@
 - Now refreshing the editor instance after dragstop of the divider between combiner and the editor.
 - Removed an unnecessary if-statement in `ZettlrToolbar`.
 - Added a method to only update the current file in the renderer process, which speeds up saving *a lot*.
+- Additional check in `ZettlrVirtualDirectory`.
 
 # 0.17.1
 

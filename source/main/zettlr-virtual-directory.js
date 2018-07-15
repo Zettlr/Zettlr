@@ -20,7 +20,7 @@
  const path = require('path');
 
  // Include helpers
- const { hash, sort } = require('../common/zettlr-helpers.js');
+ const { hash, sort, isFile } = require('../common/zettlr-helpers.js');
 
 /**
  * Manages one single virtual directory containing manually added files. This
@@ -88,6 +88,11 @@ class ZettlrVirtualDirectory
         // if they're still there!
     }
 
+    /**
+     * Returns the virtual directory instance or null.
+     * @param  {Object} obj An object containing a hash.
+     * @return {Mixed}     Either this or null.
+     */
     findDir(obj)
     {
         // Return this, if hashes match
@@ -98,6 +103,11 @@ class ZettlrVirtualDirectory
         return null;
     }
 
+    /**
+     * Returns a file from within this virtual directory (if its still there).
+     * @param  {Object} obj An object containing either a path or a hash property.
+     * @return {Mixed}     A ZettlrFile or null.
+     */
     findFile(obj)
     {
         let prop;
@@ -115,7 +125,20 @@ class ZettlrVirtualDirectory
             let file = c.findFile(obj);
             if(file != null) {
                 // Found it
-                return file;
+                // Now check if it still exists, because it may be that the whole
+                // directory has been moved. As the files are then simply dropped
+                // and the directory re-reads itself at the new location, there
+                // may be dead links in the files.
+                if(!isFile(file.path)) {
+                    // File doesn't exist there anymore -> splice it from the
+                    // array and notify the renderer that the file has been moved.
+                    this.remove(file);
+                    // TODO: Enable locating stuff. And besides, the files aren't
+                    // removed anymore if they are moved outside.
+                    this.parent.notifyChange('The file ' + file.name + ' doesn\'t exist anymore');
+                } else {
+                    return file;
+                }
             }
         }
 
