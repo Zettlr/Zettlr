@@ -16,7 +16,7 @@
 - Now Zettlr will directly react to you clicking with your mouse into the window and doesn't require you to click a second time after the app has been focused again.
 - Snippets are now off by default.
 - Fixed a small error that led to the editor behaving strange after resizing the sidebar.
-- There is now no lag anymore on saving files.
+- There is now no lag anymore on saving files. As a side effect, the global search is not exited when you change a little bit and then save the file.
 
 ## Under the hood
 
