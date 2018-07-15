@@ -110,6 +110,12 @@ class ZettlrRendererIPC
             this._app.refresh(cnt);
             break;
 
+            // A "minor" update which is send on saving the current file
+            // Saves resources and prevents the app to feel laggy.
+            case 'file-update':
+            this._app.refreshCurrentFile(cnt);
+            break;
+
             // DIRECTORIES
             case 'dir-set-current':
             // Received a new directory

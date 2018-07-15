@@ -16,6 +16,7 @@
 - Now Zettlr will directly react to you clicking with your mouse into the window and doesn't require you to click a second time after the app has been focused again.
 - Snippets are now off by default.
 - Fixed a small error that led to the editor behaving strange after resizing the sidebar.
+- There is now no lag anymore on saving files.
 
 ## Under the hood
 
@@ -31,6 +32,8 @@
 - Added `tippy.js` to the list of dependencies; replaced standard system titles with Tippy titles.
 - Added the `acceptFirstMouse` option to the creation of new `BrowserWindow`s.
 - Now refreshing the editor instance after dragstop of the divider between combiner and the editor.
+- Removed an unnecessary if-statement in `ZettlrToolbar`.
+- Added a method to only update the current file in the renderer process, which speeds up saving *a lot*.
 
 # 0.17.1
 

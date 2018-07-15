@@ -124,7 +124,6 @@ class ZettlrToolbar
                 child.attr('title', trans(elem.title));
             } else if(elem.role === 'searchbar') {
                 child.html('<input type="text"><div class="end-search">&times;</div>');
-            } else if(elem.role === 'file-info') {
             } else if(elem.role === 'pomodoro') {
                 child.addClass('button');
                 child.attr('data-command', 'pomodoro');

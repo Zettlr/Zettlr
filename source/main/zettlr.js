@@ -884,7 +884,8 @@ class Zettlr
         this.clearModified();
         // Immediately update the paths in renderer so that it is able to find
         // the file to (re)-select it.
-        this.ipc.send('paths-update', this.getPaths());
+        // this.ipc.send('paths-update', this.getPaths());
+        this.ipc.send('file-update', file);
 
         // Switch to newly created file (only happens before a file is selected)
         if(this.getCurrentFile() == null) {

@@ -395,6 +395,23 @@ class ZettlrRenderer
         this._attachments.refresh();
     }
 
+    refreshCurrentFile(file)
+    {
+        if(this.getCurrentFile()) {
+            // The only things that could've changed and that are immediately
+            // visible to the user (which is why we need to update them) are:
+            // modtime, snippet, tags, id. The rest can wait until the next big
+            // update.
+            let f = this.getCurrentFile();
+            f.modtime = file.modtime;
+            f.snippet = file.snippet;
+            f.tags = file.tags;
+            f.id = file.id;
+            // Trigger a redraw of this specific file in the preview list.
+            this._preview.refresh();
+        }
+    }
+
     // SPELLCHECKER FUNCTIONS
 
     /**
