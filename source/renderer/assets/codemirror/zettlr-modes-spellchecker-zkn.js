@@ -13,7 +13,7 @@
     var zkndelim = "!\"$%&()*+,/:;<=>?@[\\]^`{|}~ «»“”–—…÷‘’‚"; // Some less zkn delims
     var delim = "!\"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚";
     var zknLinkRE = /\[\[(.*?)\]\]/;
-    var zknTagRE = /#[\S]+/i;
+    var zknTagRE = /#[A-Z0-9-_]+/i;
     var tableRE = /^\|.+\|$/i;
 
     /**
