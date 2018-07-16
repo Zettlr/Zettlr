@@ -17,6 +17,8 @@
 - Snippets are now off by default.
 - Fixed a small error that led to the editor behaving strange after resizing the sidebar.
 - There is now no lag anymore on saving files. As a side effect, the global search is not exited when you change a little bit and then save the file.
+- Changed PDF export.
+- Small fix to the ZKN tag detection.
 
 ## Under the hood
 
@@ -35,6 +37,8 @@
 - Removed an unnecessary if-statement in `ZettlrToolbar`.
 - Added a method to only update the current file in the renderer process, which speeds up saving *a lot*.
 - Additional check in `ZettlrVirtualDirectory`.
+- Changes to the `LaTeX` export template.
+- Replaced the complicated and unreliable tag recognition to a much simpler regular expression.
 
 # 0.17.1
 

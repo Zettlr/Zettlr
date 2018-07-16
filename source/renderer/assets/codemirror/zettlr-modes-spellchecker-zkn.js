@@ -13,6 +13,7 @@
     var zkndelim = "!\"$%&()*+,/:;<=>?@[\\]^`{|}~ «»“”–—…÷‘’‚"; // Some less zkn delims
     var delim = "!\"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚";
     var zknLinkRE = /\[\[(.*?)\]\]/;
+    var zknTagRE = /#[\S]+/i;
     var tableRE = /^\|.+\|$/i;
 
     /**
@@ -110,35 +111,8 @@
                 }
 
                 // First: Tags, in the format of Twitter
-                if (stream.match('#')) {
-                    // Check if the Hashtag begins on the start of line or is preceded by a space.
-                    stream.backUp(1);
-                    if(!stream.sol()) {
-                        stream.backUp(1);
-                        if(stream.next() != ' ') {
-                            stream.next();
-                            return null;
-                        }
-                        stream.next();
-                    }
-                    stream.next();
-                    if([' ', '#'].includes(stream.peek()) // We've just unraveled a heading.
-                        || zkndelim.includes(stream.peek())) { // This means # is followed by a delim
-                        stream.next();
-                        return null;
-                    }
-                    let chars = 0;
-                    while ((ch = stream.next()) != null) {
-                        if (zkndelim.includes(ch) && chars > 1) {
-                            stream.backUp(1); // Go one back
-                            return "zkn-tag";
-                        }
-                        chars++;
-                    }
-
-                    if(stream.eol() && chars > 0) {
-                        return "zkn-tag";
-                    }
+                if(stream.match(zknTagRE)) {
+                    return 'zkn-tag';
                 }
 
                 // Second: zkn links. This is MUCH easier than I thought :o
@@ -166,9 +140,9 @@
 
                 // Progress until another match.
                 while (stream.next() != null
-                && !stream.match("#", false)
+                && !stream.match(zknTagRE, false)
                 && !stream.match('@ID:', false)
-                && !stream.match('[[', false)) {}
+                && !stream.match(zknLinkRE, false)) {}
 
                 return null;
             }
