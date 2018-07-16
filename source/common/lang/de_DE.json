@@ -282,7 +282,13 @@
             "release_url": "Zum Download",
             "close": "Schließen",
             "no_update": "Du nutzt die aktuelle Version von Zettlr",
-            "current_version": "Deine Version"
+            "current_version": "Deine Version",
+            "server_error": "Konnte nicht nach Updates suchen: Server Error (Statuscode: %s)",
+            "client_error": "Konnte nicht nach Updates suchen: Clientfehler (Statuscode: %s)",
+            "redirect_error": "Konnte nicht nach Updates suchen: Der Server hat eine Weiterleitung gesendet (Statuscode: %s)",
+            "transmission_error": "Konnte nicht nach Updates suchen: Verbindung abgebrochen",
+            "connection_error": "Konnte nicht nach Updates suchen: Verbindung konnte nicht hergestellt werden",
+            "no_data": "Konnte nicht nach Updates suchen: Server hat keine Daten gesendet"
         },
         "about": {
             "title": "Über Zettlr",

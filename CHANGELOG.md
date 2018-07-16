@@ -19,6 +19,7 @@
 - There is now no lag anymore on saving files. As a side effect, the global search is not exited when you change a little bit and then save the file.
 - Changed PDF export.
 - Small fix to the ZKN tag detection.
+- Added additional error handling in the updater (so you know _why_ Zettlr couldn't tell you why no update check is possible).
 
 ## Under the hood
 
@@ -39,6 +40,7 @@
 - Additional check in `ZettlrVirtualDirectory`.
 - Changes to the `LaTeX` export template.
 - Replaced the complicated and unreliable tag recognition to a much simpler regular expression.
+- Error handling in `ZettlrUpdater`.
 
 # 0.17.1
 

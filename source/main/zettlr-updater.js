@@ -39,6 +39,7 @@ class ZettlrUpdater
     constructor(app)
     {
         this._app = app;
+        this._error = false;
         this._availableUpdates = [];
         this._repo = REPO_URL;
         if(this._repo[this._repo.length-1] != '/') {
@@ -58,12 +59,36 @@ class ZettlrUpdater
      */
     check()
     {
+        net.on('error', (err) => {
+            this._app.notify(trans('dialog.update.connection_error'));
+        });
+
         let request = net.request(this._url('/releases'));
 
+        if(!request) {
+            return this._app.notify(trans('dialog.update.connection_error'));
+        }
+
         request.on('response', (response) => {
+            if(response.statusCode >= 300) {
+                if(response.statusCode >= 500) {
+                    return this._app.notify(trans('dialog.update.server_error', response.statusCode));
+                }
+                if(response.statusCode >= 400) {
+                    return this._app.notify(trans('dialog.update.client_error', response.statusCode));
+                }
+                if(response.statusCode >= 300) {
+                    // Don't follow potentially harmful redirections (in case someone tries to mock the app)
+                    return this._app.notify(trans('dialog.update.redirect_error', response.statusCode));
+                }
+            }
             response.on('data', (chunk) => {
                 // Add everything until the request is complete
                 this._response = this._response + chunk;
+            });
+            response.on('error', (err) => {
+                this._error = true;
+                this._app.notify(trans('dialog.update.transmission_error'));
             });
             response.on('end', () => {
                 // Now parse the response.
@@ -78,6 +103,19 @@ class ZettlrUpdater
      */
     _parseResponse()
     {
+        // Error handling
+        if(this._response.trim() === '') {
+            this._app.notify(trans('dialog.update.no_data'));
+            this._response = '';
+            return;
+        }
+
+        if(this._error) {
+            this._response = '';
+            this._error = false;
+            return; // A notification has been sent from within the asynchronous function
+        }
+
         // First we need to deal with it.
         this._response = JSON.parse(this._response);
 

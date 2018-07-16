@@ -508,6 +508,10 @@ class ZettlrEditor
     {
         this._cm.setValue(file.content);
         this._cm.refresh();
+        // Scroll the scrollbar to top, to make sure it's at the top of the new
+        // file (in case there are positions saved, they will be scrolled to
+        // later in this function)
+        $('.CodeMirror-vscrollbar').scrollTop(0);
         this._currentHash = 'hash' + file.hash;
         this._words = this.getWordCount();
 

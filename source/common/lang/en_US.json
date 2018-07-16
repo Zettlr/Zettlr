@@ -282,7 +282,13 @@
             "release_url": "Open download page",
             "close": "Close",
             "no_update": "You got the newest version of Zettlr",
-            "current_version": "Your version"
+            "current_version": "Your version",
+            "server_error": "Could not check for updates: Server Error (Status code: %s)",
+            "client_error": "Could not check for updates: Client Error (Status code: %s)",
+            "redirect_error": "Could not check for updates: The server tried to redirect (Status code: %s)",
+            "transmission_error": "Could not check for updates: Connection interrupted",
+            "connection_error": "Could not check for updates: Could not establish connection",
+            "no_data": "Could not check for updates: Server hasn't sent any data"
         },
         "about": {
             "title": "About Zettlr",

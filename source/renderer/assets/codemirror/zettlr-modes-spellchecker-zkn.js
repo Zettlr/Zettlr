@@ -10,7 +10,6 @@
 })(function(CodeMirror) {
     "use strict";
 
-    var zkndelim = "!\"$%&()*+,/:;<=>?@[\\]^`{|}~ «»“”–—…÷‘’‚"; // Some less zkn delims
     var delim = "!\"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚";
     var zknLinkRE = /\[\[(.*?)\]\]/;
     var zknTagRE = /#[A-Z0-9-_]+/i;
@@ -39,15 +38,11 @@
                     return null;
                 }
 
-                if (ch == '#') {
-                    stream.next();
-                    if(![' ', '#'].includes(stream.peek())) {
-                        // We've got a tag so skip spell checking
-                        while(!/\s/.test(ch) && ch != null) {
-                            ch = stream.next();
-                        }
-                        return null;
-                    }
+                // Don't spellcheck tags -> match the zknTagRe first without
+                // forwarding the stream (to avoid having to go back all the way)
+                if(stream.match(zknTagRE, false)) {
+                    stream.match(zknTagRE); // In this case simply forward
+                    return null; // And return null
                 }
 
                 if(delim.includes(ch)) {
@@ -71,6 +66,14 @@
                         stream.next();
                     }
                     return null;
+                }
+
+                // Prevent returning false results because of 'quoted' words.
+                if(word[0] == "'") {
+                    word = word.substr(1);
+                }
+                if(word[word.length-1] == "'") {
+                    word = word.substr(0, word.length-2);
                 }
 
                 if(window.renderer && !window.renderer.typoCheck(word)) {

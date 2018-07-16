@@ -282,7 +282,13 @@
             "release_url": "Telecharger",
             "close": "Fermer",
             "no_update": "Tu as la version derniere de Zettlr",
-            "current_version": "Ta version"
+            "current_version": "Ta version",
+            "server_error": "Impossible de rechercher la mise à jour: Server Error (Status code: %s)",
+            "client_error": "Impossible de rechercher la mise à jour: Client Error (Status code: %s)",
+            "redirect_error": "Impossible de rechercher la mise à jour: The server tried to redirect (Status code: %s)",
+            "transmission_error": "Impossible de rechercher la mise à jour: Connexion interrompue",
+            "connection_error": "Impossible de rechercher la mise à jour: Pas de connexion",
+            "no_data": "Impossible de rechercher la mise à jour: Pas de data"
         },
         "about": {
             "title": "Sur Zettlr",
