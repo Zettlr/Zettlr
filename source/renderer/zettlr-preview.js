@@ -203,7 +203,17 @@ class ZettlrPreview
             // We have to lock/unlock directories on dragging, so that not
             // suddenly the preview list reappears and dropping becomes impossible
             'start': (e, ui) => { this._renderer.lockDirectories(); },
-            'stop': (e, ui) => { this._renderer.unlockDirectories(); }
+            'stop': (e, ui) => { this._renderer.unlockDirectories(); },
+            'drag': (e, ui) => {
+                if(e.clientX <= 0 || e.clientX >= $(window).innerWidth() || e.clientY <= 0 || e.clientY >= $(window).innerHeight()) {
+                    let elem = $(e.target);
+                    while(!elem.is('li')) {
+                        elem = elem.parent();
+                    }
+                    this._renderer.send('file-drag-start', { 'hash': elem.attr('data-hash') });
+                    return false; // Return false to cancel the current drag operation
+                }
+            }
         });
 
         // Enable to drag out files from the app

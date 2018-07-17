@@ -129,7 +129,7 @@
                 if(stream.match('@ID:')) {
                     let chars = 0;
                     while((ch = stream.next()) != null) {
-                        if (zkndelim.includes(ch) && chars > 1) {
+                        if (delim.includes(ch) && chars > 1) {
                             stream.backUp(1); // Go one back
                             return "zkn-id";
                         }

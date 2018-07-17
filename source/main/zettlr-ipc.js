@@ -33,7 +33,15 @@ class ZettlrIPC
 
         // Beginn listening to messages
         this._ipc.on('message', (event, arg) => {
-            // Omit the event right now
+            if(arg.hasOwnProperty('command') && arg.command == 'file-drag-start') {
+                event.sender.startDrag({
+                    'file': this._app.findFile(arg.content).path,
+                    'icon': require('path').join(__dirname, '/assets/dragicon.png')
+                });
+                return; // Don't dispatch further
+            }
+
+            // In all other occasions omit the event.
             this.dispatch(arg);
         });
     }
