@@ -73,10 +73,11 @@
                     word = word.substr(1);
                 }
                 if(word[word.length-1] == "'") {
-                    word = word.substr(0, word.length-2);
+                    word = word.substr(0, word.length-1);
                 }
 
                 if(window.renderer && !window.renderer.typoCheck(word)) {
+                    console.log(word);
                     return "spell-error"; // CSS class: cm-spell-error
                 }
 
