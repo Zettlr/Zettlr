@@ -163,7 +163,6 @@ class ZettlrRendererIPC
             break;
 
             case 'project-properties':
-            console.log(cnt);
             this._app.getBody().displayProjectProperties(cnt);
             break;
 
@@ -191,6 +190,11 @@ class ZettlrRendererIPC
 
             case 'file-save':
             this._app.saveFile();
+            break;
+
+            // Replace all properties of a file (e.g. on rename)
+            case 'file-replace':
+            this._app.replaceFile(cnt.hash, cnt.file);
             break;
 
             case 'mark-clean':
@@ -328,9 +332,9 @@ class ZettlrRendererIPC
                 }
                 break;
                 case 'snippets':
-                // Will only be received once; if false toggle from initial "true"
+                // Will only be received once; if true toggle from initial "false"
                 // state.
-                if(!cnt.value) {
+                if(cnt.value) {
                     this._app.getPreview().toggleSnippets();
                 }
                 break;

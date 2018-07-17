@@ -645,25 +645,17 @@ class Zettlr
             // Current file should be renamed.
             file = this.getCurrentFile();
             file.rename(arg.name, this.getWatchdog());
-            // Set current file to reflect changes in hash
-            this.ipc.send('file-set-current', file);
 
             // Adapt window title
-            let title = this.window.getTitle();
-            if(title.indexOf('*') > -1) {
-                title = "*" + this.getCurrentFile().name;
-            } else {
-                title = this.getCurrentFile().name;
-            }
-
-            this.window.setTitle(title);
+            this.window.setTitle(this.getCurrentFile().name);
         } else {
             // Non-open file should be renamed.
             file = this.findFile({'hash': arg.hash});
             file.rename(arg.name, this.getWatchdog()); // Done.
         }
 
-        this.ipc.send('paths-update', this.getPaths());
+        // Replace all relevant properties of the renamed file in renderer.
+        this.ipc.send('file-replace', { 'hash': arg.hash, 'file': file });
     }
 
     /**

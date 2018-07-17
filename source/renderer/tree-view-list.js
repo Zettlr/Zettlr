@@ -101,7 +101,7 @@ class TreeView
         }
         // Also make droppable
         this._dir.droppable({
-            'accept': 'li', // Only accept lis
+            'accept': 'li', // Only accept dragger-divs (the helper elements)
             'tolerance': 'pointer', // The pointer must be over the droppable
             'drop': (e, ui) => {
                 this._dir.removeClass('highlight');

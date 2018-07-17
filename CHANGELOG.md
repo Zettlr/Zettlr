@@ -20,6 +20,8 @@
 - Changed PDF export.
 - Small fix to the ZKN tag detection.
 - Added additional error handling in the updater (so you know _why_ Zettlr couldn't tell you why no update check is possible).
+- Renaming files is now faster.
+- If you now begin to drag a file, after you have stopped dragging the file (i.e. either you dropped it onto a directory or you dropped it somewhere else to cancel the move), the preview pane will be shown again.
 
 ## Under the hood
 
@@ -41,6 +43,8 @@
 - Changes to the `LaTeX` export template.
 - Replaced the complicated and unreliable tag recognition to a much simpler regular expression.
 - Error handling in `ZettlrUpdater`.
+- Changes to the process of renaming files. Now the renaming process should be reflected quicker in the renderer, because we don't send a complete new path object, but only the specific, renamed file.
+- Fixes and changes to the dragging behaviour in the renderer.
 
 # 0.17.1
 

@@ -140,7 +140,7 @@ class ZettlrFile
         // is from March 21, 2018 (lel), here the correct regex needed:)
         // let idRE = /(?<!\[\[)@ID:(.*)(?!\]\])/g
         let idRE = /@ID:([^\s]*)/g;
-        let tagRE = /#([A-Z0-9-_]+)/g;
+        let tagRE = /#([A-Z0-9-_]+)/gi;
         let match;
 
 

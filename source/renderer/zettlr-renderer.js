@@ -87,6 +87,7 @@ class ZettlrRenderer
         this._attachments    = new ZettlrAttachments(this);
 
         this._directoriesLocked = false; // Is the directory tree view currently locked?
+        this._stateBeforeLocked = ''; // Saves the state the combiner was in before lock was initialised, can be preview or directories
     }
 
     /**
@@ -409,6 +410,32 @@ class ZettlrRenderer
             f.id = file.id;
             // Trigger a redraw of this specific file in the preview list.
             this._preview.refresh();
+        }
+    }
+
+    replaceFile(oldHash, file)
+    {
+        if(!file) {
+            return; // No file given; main has screwed up
+        }
+
+        let oldFile = this.findObject(oldHash);
+
+        if(oldFile && oldFile.type == 'file') {
+            // Apply all necessary properties
+            oldFile.dir          = file.dir;
+            oldFile.name         = file.name;
+            oldFile.path         = file.path;
+            oldFile.hash         = file.hash;
+            oldFile.id           = file.id;
+            oldFile.tags         = file.tags;
+            oldFile.ext          = file.ext;
+            oldFile.modtime      = file.modtime;
+            oldFile.snippet      = file.snippet;
+
+            // Then refresh
+            this._preview.refresh();
+            this._directories.refresh();
         }
     }
 
@@ -1028,14 +1055,23 @@ class ZettlrRenderer
      */
     lockDirectories()
     {
-        this._directoriesLocked = false;
+        this._directoriesLocked = true;
+        // Get previous state
+        this._stateBeforeLocked = ($('#preview').hasClass('hidden')) ? 'directories' : 'preview';
         // Also make sure directories are shown
         this.showDirectories();
     }
 
+    /**
+     * Unlocks the directory pane, e.g. preview can be shown again
+     */
     unlockDirectories()
     {
         this._directoriesLocked = false;
+        // Restore preview, if it was shown before the directories were locked.
+        if(this._stateBeforeLocked == 'preview') {
+            this.showPreview();
+        }
     }
 
     /**

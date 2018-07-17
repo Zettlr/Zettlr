@@ -35,7 +35,7 @@ class ZettlrPreview
     constructor(parent)
     {
         this._renderer           = parent;
-        this._snippets           = true;
+        this._snippets           = false;
         this._selectedFile       = null;
 
         this._data               = []; // The whole data (as returned by _renderer.getCurrentDir())
@@ -194,7 +194,8 @@ class ZettlrPreview
             'scroll': false,
             'helper': function() {
                 // Return a dragger element containing the filename
-                return $('<div>').addClass('dragger').text($(this).children('strong').first().text()).appendTo('body');
+                return $('<div>').addClass('dragger').text($(this).children('p').first().text()).appendTo('body');
+                // Why 'li'? b/c the directories only accept lis.
             },
             'revert': "invalid", // Only revert if target was invalid
             'revertDuration': 200,
