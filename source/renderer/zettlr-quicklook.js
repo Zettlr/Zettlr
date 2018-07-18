@@ -50,6 +50,7 @@ class ZettlrQuicklook
     {
         this._body = parent;
         this._file = file;
+        this._darkTheme = darkTheme;
         this._cm = null;
         this._window = null;
         this._bodyHeight = 0; // Contains the height of the element, in case it was minimized
@@ -215,8 +216,10 @@ class ZettlrQuicklook
     {
         if(this._cm.getOption('theme') === 'zettlr-dark') {
             this._cm.setOption('theme', 'zettlr');
+            this._darkTheme = false;
         } else {
             this._cm.setOption('theme', 'zettlr-dark');
+            this._darkTheme = true;
         }
         return this;
     }

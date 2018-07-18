@@ -24,6 +24,7 @@
 - If you now begin to drag a file, after you have stopped dragging the file (i.e. either you dropped it onto a directory or you dropped it somewhere else to cancel the move), the preview pane will be shown again.
 - Now it is possible to drag out Markdown files from Zettlr into other apps.
 - Clicking on the "No open files or folders"-notification when there are no open folders or files in the directory tree will automatically show the open-dialog.
+- Fixed the theming in the QuickLook windows. Now they will be the same theme as the app itself.
 
 ## Under the hood
 
