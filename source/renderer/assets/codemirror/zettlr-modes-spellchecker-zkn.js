@@ -77,7 +77,6 @@
                 }
 
                 if(window.renderer && !window.renderer.typoCheck(word)) {
-                    console.log(word);
                     return "spell-error"; // CSS class: cm-spell-error
                 }
 
