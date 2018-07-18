@@ -37,6 +37,9 @@ class EmptyPaths
     show()
     {
         this._directories.getContainer().append(this._container);
+        this._container.click((e) => {
+            this._directories.getRenderer().send('dir-open');
+        });
     }
 
     /**

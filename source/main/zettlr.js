@@ -871,8 +871,7 @@ class Zettlr
 
         // Ignore the next change for this specific file
         this.watchdog.ignoreNext('change', file.path);
-        file.setContent(cnt);
-        file.save();
+        file.save(cnt);
         this.clearModified();
         // Immediately update the paths in renderer so that it is able to find
         // the file to (re)-select it.

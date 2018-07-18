@@ -23,6 +23,7 @@
 - Renaming files is now faster.
 - If you now begin to drag a file, after you have stopped dragging the file (i.e. either you dropped it onto a directory or you dropped it somewhere else to cancel the move), the preview pane will be shown again.
 - Now it is possible to drag out Markdown files from Zettlr into other apps.
+- Clicking on the "No open files or folders"-notification when there are no open folders or files in the directory tree will automatically show the open-dialog.
 
 ## Under the hood
 
@@ -47,6 +48,8 @@
 - Changes to the process of renaming files. Now the renaming process should be reflected quicker in the renderer, because we don't send a complete new path object, but only the specific, renamed file.
 - Fixes and changes to the dragging behaviour in the renderer.
 - Added a dragging event, so that the main process automatically enables dragging out of the app.
+- Added the `getRenderer()`-function to `ZettlrDirectories`, so that the `EmptyPaths`-object can send the respective event to the main process.
+- Combined the `setContent()` and `save()`-functions in `ZettlrFile`, because there was simply no need to have them separated. Also, removed the `modified`-flag from the file.
 
 # 0.17.1
 

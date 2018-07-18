@@ -198,6 +198,12 @@ class ZettlrDirectories
     * @return {void}      Nothing to return.
     */
     requestMove(from, to) { this._renderer.requestMove(from, to); }
+
+    /**
+     * Returns the renderer reference
+     * @return {ZettlrRenderer} The renderer object
+     */
+    getRenderer() { return this._renderer; }
 }
 
 module.exports = ZettlrDirectories;

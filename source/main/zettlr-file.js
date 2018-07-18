@@ -54,8 +54,10 @@ class ZettlrFile
         this.ext          = '';
         this.modtime      = 0;
         this.snippet      = '';
-        this.content      = ''; // Will only be not empty when the file is modified.
-        this.modified     = false;
+        // This variable is only used to transfer the file contents to and from
+        // the renderer. It will be empty all other times, because otherwise the
+        // RAM will fill up pretty fast.
+        this.content      = '';
         this._vd          = []; // This array holds all virtual directories in which the file is also present. Necessary to inform them of renames etc.
 
         // Prepopulate
@@ -112,18 +114,6 @@ class ZettlrFile
     }
 
     /**
-     * Sets the content of the file model. Does not alter the file itself.
-     * @param {String} cnt The new content that is to be held in buffer.
-     */
-    setContent(cnt)
-    {
-        this.content = cnt;
-        // Also update snippet to reflect changes at the beginning of the file
-        this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt ;
-        this.modified = true;
-    }
-
-    /**
      * Reads the file and returns its contents. Also updates snippet but does
      * not keep the contents in buffer (saving memory)
      * @return {String} The file contents as string.
@@ -147,7 +137,6 @@ class ZettlrFile
         // (Re-)read content of file
         let cnt = fs.readFileSync(this.path, { encoding: "utf8" });
         this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt ;
-        this.modified = false;
 
         // Now read all tags
         this.tags = [];
@@ -227,7 +216,6 @@ class ZettlrFile
             'modtime'      : this.modtime,
             'snippet'      : this.snippet,
             'content'      : this.read(), // Will only be not empty when the file is modified.
-            'modified'     : false
         };
 
         Object.assign(f, this);
@@ -282,14 +270,12 @@ class ZettlrFile
      * Writes the buffer to the file and clears the buffer.
      * @return {ZettlrFile} this
      */
-    save()
+    save(cnt)
     {
-        fs.writeFileSync(this.path, this.content, { encoding: "utf8" });
-        this.content = '';
-        this.modified = false;
+        fs.writeFileSync(this.path, cnt, { encoding: "utf8" });
 
-        // Last but not least: Get the new (current) modtime by re-reading the
-        // contents
+        // Last but not least: Retrieve all changed information by re-reading
+        // the file again.
         this.read();
 
         return this;
@@ -578,12 +564,6 @@ class ZettlrFile
      * @return {Boolean} Always returns true.
      */
     isFile()      { return true;  }
-
-    /**
-     * Returns the modified flag.
-     * @return {Boolean} True or false, depending on modification status.
-     */
-    isModified()  { return this.modified; }
 
     /**
      * Dummy function for recursive use. Always returns false.

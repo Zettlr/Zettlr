@@ -1077,9 +1077,9 @@ class ZettlrRenderer
     /**
      * Sends a command to Main (only used in ZettlrPreview for searching)
      * @param  {String} command The command to be sent
-     * @param  {Mixed} content The content belonging to the sent command
+     * @param  {Mixed} [content={}] The content belonging to the sent command, can be empty
      */
-    send(command, content) { this._ipc.send(command, content); }
+    send(command, content = {}) { this._ipc.send(command, content); }
 
     /**
      * Simply indicates to main to set the modified flag.
