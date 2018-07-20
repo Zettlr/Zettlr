@@ -51,6 +51,6 @@ If you want to explore the functionality and inner workings of the app, [head ov
 
 ## License
 
-This software is licenced via the GNU GPL v3-License.
+This software is licenced via the GNU GPL v3 License, or (at your option) any later version.
 
 The brand (including name, icons and everything Zettlr can be identified with) is exluded and all rights reserved. If you want to fork Zettlr to develop another app, feel free but please change name and icons.
