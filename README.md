@@ -4,7 +4,7 @@
 
 # Zettlr [_ˈset·lər_]
 
-A powerful markdown editor with fulltext search, exporting capabilities and an integrated tree view.
+Zettlr is a powerful Markdown editor designed for people who work with text in a structured way and need to retain control over millions of words in thousands of files.
 
 [Visit the Website.](https://zettlr.com/)
 
