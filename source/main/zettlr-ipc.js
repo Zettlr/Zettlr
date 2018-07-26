@@ -353,6 +353,11 @@ class ZettlrIPC
             this.send('stats-data', this._app.getStats().getData());
             break;
 
+            // Language file import
+            case 'import-lang-file':
+            this._app.importLangFile();
+            break;
+
             default:
             console.log(trans('system.unknown_command', cmd));
             break;

@@ -73,6 +73,7 @@
         "open": "Öffnen…",
         "save": "Speichern",
         "export": "Exportieren…",
+        "import_lang_file": "Sprachdatei importieren…",
         "rename_file": "Datei umbenennen",
         "rename_dir": "Verzeichnis umbenennen",
         "delete_file": "Datei löschen",
@@ -378,6 +379,9 @@
         "export_success": "Exported successfully to %s",
         "ok": "Ok",
         "cancel": "Abbrechen",
-        "open_folder": "Projektverzeichnis öffnen"
+        "open_folder": "Projektverzeichnis öffnen",
+        "import_lang_file": "Sprachdatei importieren",
+        "lang_import_success": "Sprachdatei %s wurde erfolgreich importiert!",
+        "lang_import_error": "Die Sprachdatei %s konnte nicht importiert werden!"
     }
 }

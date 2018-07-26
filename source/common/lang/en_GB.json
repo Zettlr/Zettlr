@@ -73,6 +73,7 @@
         "open": "Open…",
         "save": "Save",
         "export": "Export…",
+        "import_lang_file": "Import translation…",
         "rename_file": "Rename file",
         "rename_dir": "Rename directory",
         "delete_file": "Delete file",
@@ -378,6 +379,9 @@
         "export_success": "Exported successfully to %s",
         "ok": "Ok",
         "cancel": "Cancel",
-        "open_folder": "Open project folder"
+        "open_folder": "Open project folder",
+        "import_lang_file": "Import new translation",
+        "lang_import_success": "Language file imported: %s",
+        "lang_import_error": "Could not import language file %s!"
     }
 }

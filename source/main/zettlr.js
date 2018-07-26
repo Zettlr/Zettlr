@@ -1085,6 +1085,37 @@ class Zettlr
         this.ipc.send('mark-clean');
     }
 
+    /**
+     * Imports language files into the application's data directory.
+     */
+    importLangFile()
+    {
+        let files = this.getWindow().askLangFile();
+        let langDir = path.join(app.getPath('userData'), '/lang/');
+
+        // First test if the lang directory already exists
+        try {
+            fs.lstatSync(langDir);
+        } catch(e) {
+            // Create
+            fs.mkdirSync(langDir);
+        }
+
+        for(let f of files) {
+            if(/[a-z]{1,3}_[A-Z]{1,3}\.json/.test(path.basename(f))) {
+                // It's a language file!
+                try {
+                    fs.copyFileSync(f, path.join(langDir, path.basename(f)));
+                    this.notify(trans('system.lang_import_success', path.basename(f)));
+                } catch(e) {
+                    this.notify(trans('system.lang_import_error', path.basename(f)));
+                }
+            } else {
+                this.notify(trans('system.lang_import_error', path.basename(f)));
+            }
+        }
+    }
+
     // Getters
 
     /**

@@ -290,6 +290,23 @@ class ZettlrWindow
     }
 
     /**
+     * Asks for a language file to be imported to the app.
+     * @return {[type]} [description]
+     */
+    askLangFile()
+    {
+        return dialog.showOpenDialog(this._win, {
+            title: trans('system.import_lang_file'),
+            filters: [
+                {name: 'JSON File', extensions: ['json']}
+            ],
+            properties: [
+                'openFile'
+            ]
+        });
+    }
+
+    /**
      * This function prompts the user with information.
      * @param  {Object} options Necessary informations for displaying the prompt
      * @return {ZettlrWindow}         This for chainability.

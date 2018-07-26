@@ -433,18 +433,23 @@ class ZettlrRendererIPC
             this.send('request-stats-data');
             break;
 
+            case 'stats-data':
+            this._app.getStatsView().show(cnt);
+            break;
+
             // Recent documents
             case 'show-docs':
             this._app.getBody().showRecentDocuments();
             break;
 
-            case 'stats-data':
-            this._app.getStatsView().show(cnt);
-            break;
-
             // Generate a new ID
             case 'insert-id':
             this._app.getEditor().insertId();
+            break;
+
+            // Import a language file
+            case 'import-lang-file':
+            this.send('import-lang-file');
             break;
 
             default:

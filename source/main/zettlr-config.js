@@ -58,14 +58,6 @@ class ZettlrConfig
             this._additional_paths = []; // Fallback: No additional paths
         }
 
-        // Supported Spellcheck languages
-        this.supportedLangs = [
-            'de_DE',
-            'fr_FR',
-            'en_US',
-            'en_GB'
-        ];
-
         // Config Template providing all necessary arguments
         this.cfgtpl = {
             // Root directories
@@ -421,7 +413,7 @@ class ZettlrConfig
         let files = fs.readdirSync(path.join(__dirname, '../common/lang'));
         let languageFiles = [];
         for(let f of files) {
-            if(/[a-z_A-Z]{5,7}\.json/.test(f)) { // Minimum: aa_AA.json, maximum: aaa_AAA.json
+            if(/[a-z]{1,3}_[A-Z]{1,3}\.json/.test(f)) { // Minimum: aa_AA.json, maximum: aaa_AAA.json
                 // It's a language file!
                 languageFiles.push(f.substr(0, f.lastIndexOf('.')));
             }
@@ -431,7 +423,7 @@ class ZettlrConfig
         try {
             files = fs.readdirSync(path.join(this.configPath, '/lang'));
             for(let f of files) {
-                if(/[a-z_A-Z]{5,7}\.json/.test(f)) {
+                if(/[a-z]{1,3}_[A-Z]{1,3}\.json/.test(f)) {
                     // It's a language file!
                     languageFiles.push(f.substr(0, f.lastIndexOf('.')));
                 }

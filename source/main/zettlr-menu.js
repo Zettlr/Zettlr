@@ -78,6 +78,13 @@ class ZettlrMenu
                     },
                     { type: 'separator' },
                     {
+                        label: trans('menu.import_lang_file'),
+                        click (item, focusedWindow) {
+                            if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'import-lang-file' });
+                        }
+                    },
+                    { type: 'separator' },
+                    {
                         label: trans('menu.rename_file'),
                         accelerator: 'CmdOrCtrl+R',
                         click (item, focusedWindow) {

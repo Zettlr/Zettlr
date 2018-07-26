@@ -3,6 +3,7 @@
 ## GUI and functionality
 
 - Now it's possible to download and install custom translations for Zettlr! If you want to use a translation that is not (yet) officially bundled with the app, simply copy the translation JSON-file into the `lang` subfolder (which you may have to create) within the application's data directory. It will immediately be available for selection within your preferences (but a restart to apply the change is still necessary).
+- You can now comfortably import new translations using the respective menu entry. The language file must be in the format `aaa_AAA.json` so that the app can detect the language by looking at the file name.
 
 ## Under the hood
 
