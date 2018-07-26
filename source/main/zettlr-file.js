@@ -54,6 +54,7 @@ class ZettlrFile
         this.ext          = '';
         this.modtime      = 0;
         this.snippet      = '';
+        this.linefeed     = '\n';
         // This variable is only used to transfer the file contents to and from
         // the renderer. It will be empty all other times, because otherwise the
         // RAM will fill up pretty fast.
@@ -133,10 +134,19 @@ class ZettlrFile
         let tagRE = /#([A-Z0-9-_]+)/gi;
         let match;
 
-
         // (Re-)read content of file
         let cnt = fs.readFileSync(this.path, { encoding: "utf8" });
         this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt ;
+
+        // Determine linefeed to preserve on saving so that version control
+        // systems don't complain.
+        if(/\r\n/.test(cnt)) {
+            this.linefeed = '\r\n';
+        } else if(/\n\r/.test(cnt)) {
+            this.linefeed = '\n\r';
+        } else {
+            this.linefeed = '\n';
+        }
 
         // Now read all tags
         this.tags = [];
@@ -272,6 +282,8 @@ class ZettlrFile
      */
     save(cnt)
     {
+        // Replace CodeMirror \n linefeeds with detected one
+        cnt = cnt.split('\n').join(this.linefeed);
         fs.writeFileSync(this.path, cnt, { encoding: "utf8" });
 
         // Last but not least: Retrieve all changed information by re-reading

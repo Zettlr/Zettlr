@@ -10,6 +10,7 @@
 
 - Changes to `getSupportedLangs()`: The function now returns a dynamically generated array of all available translations. This also includes language files that are placed inside the app's data directory (in the subdirectory `lang`).
 - Changes to `i18n.js` to reflect the fact that a language could also be located inside the application data directory (it now first tries to load the file from within the app, and if this fails searches for the file in the app data directory).
+- Zettlr now preserves the linefeeds of a file on saving.
 
 # 0.18.0
 
