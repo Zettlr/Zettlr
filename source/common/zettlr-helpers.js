@@ -19,6 +19,9 @@ const filetypes  = require('./data.json').filetypes;
 // Ignored directory patterns
 const ignoreDirs = require('./data.json').ignoreDirs;
 
+// Translation functions
+const { trans }  = require('./lang/i18n.js');
+
 // Include modules
 const path       = require('path');
 const fs         = require('fs');
@@ -312,13 +315,19 @@ function localiseNumber(number)
         return number;
     }
 
+    let delim = trans('localise.thousand_delimiter');
+    if(delim.length > 1) {
+        // No delimiter available -> fallback
+        delim = '.';
+    }
+
     let ret = '';
     ret = number.toString();
     let cnt = 0;
     for(let i = ret.length-1; i > 0; i--) {
         cnt++;
         if(cnt === 3) {
-            ret = ret.substr(0, i) + '.' + ret.substr(i);
+            ret = ret.substr(0, i) + delim + ret.substr(i);
             cnt = 0;
         }
     }

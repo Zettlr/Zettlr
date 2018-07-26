@@ -1,4 +1,8 @@
 {
+    "localise": {
+        "thousand_delimiter": ",",
+        "decimal_delimiter": "."
+    },
     "init": {
         "welcome": "Initializing application…",
         "spellcheck": {
