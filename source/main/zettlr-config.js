@@ -394,7 +394,7 @@ class ZettlrConfig
             lang = null;
         }
 
-        for(let sup of this.supportedLangs) {
+        for(let sup of this.getSupportedLangs()) {
             let ml = sup.split('_')[0];
             let sl = sup.split('_')[1];
             if(ml === mainlang) {
@@ -417,7 +417,30 @@ class ZettlrConfig
      */
     getSupportedLangs()
     {
-        return this.supportedLangs;
+        // First dynamically enumerate all files that come shipped with the app.
+        let files = fs.readdirSync(path.join(__dirname, '../common/lang'));
+        let languageFiles = [];
+        for(let f of files) {
+            if(/[a-z_A-Z]{5,7}\.json/.test(f)) { // Minimum: aa_AA.json, maximum: aaa_AAA.json
+                // It's a language file!
+                languageFiles.push(f.substr(0, f.lastIndexOf('.')));
+            }
+        }
+
+        // Secondly, enumerate all user translations. Path: APP_DATA/lang
+        try {
+            files = fs.readdirSync(path.join(this.configPath, '/lang'));
+            for(let f of files) {
+                if(/[a-z_A-Z]{5,7}\.json/.test(f)) {
+                    // It's a language file!
+                    languageFiles.push(f.substr(0, f.lastIndexOf('.')));
+                }
+            }
+        } catch(e) {
+            // If something goes wrong, simply don't include any user files.
+        }
+
+        return languageFiles;
     }
 
     /**

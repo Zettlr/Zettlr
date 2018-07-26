@@ -171,18 +171,24 @@ class ZettlrDialog
             replacements.push('%XELATEX%|' + obj.xelatex);
             let spellcheck = '';
             for(let l in obj.spellcheck) {
+                // Prevent ugly language labels in the spellchecker selection.
+                let spellcheckLabel = trans('dialog.preferences.app_lang.'+l);
+                spellcheckLabel = (spellcheckLabel === 'dialog.preferences.app_lang.'+l) ? l : spellcheckLabel;
                 let sel = (obj.spellcheck[l]) ? 'checked="checked"' : '';
                 spellcheck += '<div>';
-                spellcheck += `<input type="checkbox" value="${l}" ${sel} name="spellcheck[]" id="${l}"><label for="${l}">${trans('dialog.preferences.app_lang.'+l)}</label>`;
+                spellcheck += `<input type="checkbox" value="${l}" ${sel} name="spellcheck[]" id="${l}"><label for="${l}">${spellcheckLabel}</label>`;
                 spellcheck += '</div>';
             }
             replacements.push('%SPELLCHECK%|' + spellcheck);
             let lang_selection = '';
             for(let l of obj.supportedLangs) {
+                // Prevent ugly language labels in the app language selection.
+                let langLabel = trans('dialog.preferences.app_lang.'+l);
+                langLabel = (langLabel === 'dialog.preferences.app_lang.'+l) ? l : langLabel;
                 if(l === this._parent.getLocale()) {
-                    lang_selection += `<option value="${l}" selected="selected">${trans('dialog.preferences.app_lang.'+l)}</option>`;
+                    lang_selection += `<option value="${l}" selected="selected">${langLabel}</option>`;
                 } else {
-                    lang_selection += `<option value="${l}">${trans('dialog.preferences.app_lang.'+l)}</option>`;
+                    lang_selection += `<option value="${l}">${langLabel}</option>`;
                 }
             }
             replacements.push('%APP_LANG%|' + lang_selection);

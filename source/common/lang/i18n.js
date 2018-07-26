@@ -14,6 +14,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { app } = require('electron');
 
 /**
  * This error is thrown when the internationalization functions encounter an error
@@ -38,8 +39,14 @@ function i18n(lang = 'en_US')
     try {
         fs.lstatSync(file);
     } catch(e) {
-        file = path.join(__dirname, 'en_US.json'); // Fallback
-        throw { 'name': 'Localization', 'message': `Could not load language ${lang}!` };
+        try {
+            // If the language file is not found in the app's directory, search
+            // for it in the application data directory under APP_DATA/lang
+            file = path.join(app.getPath('userData'), '/lang/', lang + '.json');
+            fs.lstatSync(file);
+        } catch(e) {
+            file = path.join(__dirname, 'en_US.json'); // Fallback
+        }
     }
 
     // Cannot do this asynchronously, because it HAS to be loaded directly

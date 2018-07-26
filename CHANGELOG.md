@@ -1,3 +1,14 @@
+# 0.18.1
+
+## GUI and functionality
+
+- Now it's possible to download and install custom translations for Zettlr! If you want to use a translation that is not (yet) officially bundled with the app, simply copy the translation JSON-file into the `lang` subfolder (which you may have to create) within the application's data directory. It will immediately be available for selection within your preferences (but a restart to apply the change is still necessary).
+
+## Under the hood
+
+- Changes to `getSupportedLangs()`: The function now returns a dynamically generated array of all available translations. This also includes language files that are placed inside the app's data directory (in the subdirectory `lang`).
+- Changes to `i18n.js` to reflect the fact that a language could also be located inside the application data directory (it now first tries to load the file from within the app, and if this fails searches for the file in the app data directory).
+
 # 0.18.0
 
 ## GUI and functionality
