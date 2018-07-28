@@ -283,7 +283,9 @@ class ZettlrFile
     save(cnt)
     {
         // Replace CodeMirror \n linefeeds with detected one
-        cnt = cnt.split('\n').join(this.linefeed);
+        if(this.linefeed !== '\n') {
+            cnt = cnt.split('\n').join(this.linefeed);
+        }
         fs.writeFileSync(this.path, cnt, { encoding: "utf8" });
 
         // Last but not least: Retrieve all changed information by re-reading
