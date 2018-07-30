@@ -1,0 +1,22 @@
+// Toolbar styling
+
+#toolbar {
+    color:@grey-1;
+    background-image: linear-gradient(to bottom, @grey-6, @grey-7); // Make it nearly black
+    border-bottom-color:@grey-5;
+
+    .button {
+        transition:@fast-transition all ease;
+        &:hover {
+            background-color: @grey-6;
+            transition:@fast-transition all ease;
+        }
+    }
+
+    .searchbar {
+        input {
+            color:inherit;
+            &:focus { box-shadow: inset 0px 0px 15px 0px fade(@blue-selection-dark, 95%); }
+        }
+    }
+}

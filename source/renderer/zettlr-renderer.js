@@ -229,13 +229,9 @@ class ZettlrRenderer
      */
     toggleTheme()
     {
-        // Welcome to FUNCTION HELL! (Proposal: How about simply setting the
-        // "dark" class on the body ...?)
-        this._directories.toggleTheme();
-        this._preview.toggleTheme();
-        this._editor.toggleTheme();
+        // Setting the "dark" class on body is sufficient to toggle all other
+        // elements.
         this._body.toggleTheme();
-        this._toolbar.toggleTheme();
     }
 
     /**

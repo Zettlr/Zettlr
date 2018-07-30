@@ -1,0 +1,25 @@
+// Dark directory colours
+
+#directories {
+    background-color: @grey-6;
+    border-right-color:@grey-4;
+    color:white;
+
+    & > ul:not(:first-child) { border-top-color:@grey-4; }
+
+    .collapse-indicator::before { color:@grey-1; }
+
+    ul {
+        li:hover { background-color:@grey-5; }
+        .selected { background-color:darken(@green-selection-dark, 20%); }
+    }
+
+    .file:hover { background-color:@grey-5; }
+
+    .project { color: @bg-error; }
+
+    .emptyPaths {
+        background-color:@grey-5;
+        color:@grey-1;
+    }
+}

@@ -1,0 +1,58 @@
+// Directory styling
+
+#directories {
+    border-right:1px solid @grey-2;
+    color: @grey-4;
+    font-size:@font-size-small;
+
+    // Direct descendants need some margin to the files and to other roots
+    & > ul:not(:first-child) { border-top:1px solid @grey-2; }
+
+
+    ul {
+        .selected {
+            background-color:@green-0;
+            color:white;
+
+            &:before { color:white; }
+        }
+
+        li {
+            line-height:120%;
+            border-radius:8px;
+
+            &:hover { background-color:@grey-1; }
+
+            &.highlight {
+                box-shadow: 0px 0px 1px 2px @green-selection;
+
+                // Prevent hovering effect on drag'n'drop actions
+                &:hover  { background-color:inherit; }
+            }
+        }
+    }
+
+    .file {
+        line-height:120%;
+        border-radius:8px;
+
+        &.selected {
+            background-color:@green-0;
+            color:white;
+        }
+
+        &:hover {
+            background-color:@grey-1;
+            color:inherit;
+        }
+    }
+
+    .virtual-directory { color: @purple-selection; }
+
+    .project { color: @fg-error; }
+
+    .emptyPaths {
+        background-color:@grey-0;
+        color:@grey-4;
+    }
+}

@@ -1,0 +1,58 @@
+// Editor Geometry
+
+#editor {
+    position:fixed;
+    top:@toolbar-height;
+    right:0;
+    bottom:0;
+    width:80%;
+    overflow-x:hidden;
+
+    &.collapsed { width:60%; }
+
+    // JQUERY UI - THEME (necessary for resizable to work)
+    .ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }
+    .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
+    .ui-resizable-w { cursor: ew-resize; width: 10px; left: 0px; top: 0; height: 100%; }
+
+    // Footnote preview panel
+    .fn-panel {
+        position:absolute;
+        padding:10px;
+        display:inline-block;
+    }
+
+    .CodeMirror {
+        height:100%;
+        cursor:text;
+        font-family: inherit;
+    }
+
+    .CodeMirror-code {
+        margin:5em 0em;
+
+        .mute { opacity:0.2; }
+    }
+
+    .CodeMirror-scroll {
+        padding:0em 5em;
+        overflow-x:hidden !important; // Necessary to hide the horizontal scrollbar
+    }
+}
+
+
+// CodeMirror fullscreen
+.CodeMirror-fullscreen {
+  position: fixed !important; // Have to override another relative
+  top: @toolbar-height; left: 0; right: 0; bottom: 0;
+  height: auto;
+  z-index: 500;
+
+  .CodeMirror-scroll {
+      @media(min-width: 1301px) { padding:0em 20em  !important; }
+      @media(max-width: 1300px) { padding:0em 10em  !important; }
+      @media(max-width:1100px)  { padding:0em 7.5em !important; }
+      @media(max-width:1000px)  { padding:0em 5em   !important; }
+      @media(max-width:800px)   { padding:0em 2.5em !important; }
+  }
+}

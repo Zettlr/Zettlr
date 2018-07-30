@@ -19,61 +19,35 @@ console.info(info(`Current working directory: ${__dirname}`));
 // (to pass to less.render) and then set the filename field on options to be
 // the filename of the main file. less will handle all the processing of the
 // imports.
-let mainFile    = path.join(__dirname, '../resources/less/main.less');
-let mainTarget  = path.join(__dirname, '../source/renderer/assets/css/main.css');
-let themeFile   = path.join(__dirname, '../resources/less/theme-zettlr.less');
-let themeTarget = path.join(__dirname, '../source/renderer/assets/css/theme-zettlr.css');
-let mainLess    = '';
+let geometryFile = path.join(__dirname, '../resources/less/geometry/geometry-main.less');
+let geometryTarget = path.join(__dirname, '../source/renderer/assets/css/geometry.css');
+let themeFile = path.join(__dirname, '../resources/less/theme-default/theme-main.less');
+let themeTarget = path.join(__dirname, '../source/renderer/assets/css/theme.css');
+let geometryLess = '';
 let themeLess   = '';
 
 console.log(info(`Reading input files ...`));
-try {
-    mainLess = fs.readFileSync(mainFile, { encoding: 'utf8' });
-    console.log(success(`Successfully read ${mainFile}!`));
-}catch(e) {
-    console.error(err(`ERROR: Could not read ${mainFile}: ${e.name}`));
-    console.error(err(e.message));
-    return;
-}
 
 try {
     themeLess = fs.readFileSync(themeFile, { encoding: 'utf8' });
     console.log(success(`Successfully read ${themeFile}`));
-}catch(e) {
+} catch(e) {
     console.error(err(`ERROR: Could not read ${themeFile}: ${e.name}`));
     console.error(err(e.message));
     return;
 }
 
-/*
- * PART ONE
- */
-
-console.log(info(`Compiling ${mainFile} ...`));
-less.render(mainLess, {
-    'filename': mainFile
-})
-.then(function(output) {
-    console.log(success(`Done compiling ${mainFile}! Writing to target file ...`));
-    try {
-        fs.writeFileSync(mainTarget, output.css, { encoding: 'utf8' });
-        console.log(success(`Done writing CSS to file ${mainTarget}!`));
-        console.info(info(`Sourcemap:`, output.map));
-        console.info(info(`Imported files: [\n   `, output.imports.join(',\n    '), '\n]'));
-    } catch(e) {
-        console.error(err(`ERROR: Error on writing ${mainFile}: ${e.name}`));
-        console.error(err(e.message));
-    }
-},
-function(error) {
-    if(error) {
-        console.error(err(`ERROR: Could not compile ${mainLess}: ${error.name}`));
-        console.error(err(error.message));
-    }
-});
+try {
+    geometryLess = fs.readFileSync(geometryFile, { encoding: 'utf8' });
+    console.log(success(`Successfully read ${geometryFile}`));
+} catch(e) {
+    console.error(err(`ERROR: Could not read ${geometryFile}: ${e.name}`));
+    console.error(err(e.message));
+    return;
+}
 
 /*
- * PART TWO
+ * THEME
  */
 
 console.log(info(`Compiling ${themeFile} ...`));
@@ -94,7 +68,34 @@ less.render(themeLess, {
 },
 function(error) {
     if(error) {
-        console.error(err(`ERROR: Could not compile ${themeLess}: ${error.name}`));
+        console.error(err(`ERROR: Could not compile ${themeFile}: ${error.name}`));
+        console.error(err(error.message));
+    }
+});
+
+/*
+ * GEOMETRY
+ */
+
+console.log(info(`Compiling ${geometryFile} ...`));
+less.render(geometryLess, {
+    'filename': geometryFile
+})
+.then(function(output) {
+    console.log(success(`Done compiling ${geometryFile}! Writing to target file ...`));
+    try {
+        fs.writeFileSync(geometryTarget, output.css, { encoding: 'utf8' });
+        console.log(success(`Done writing CSS to file ${geometryTarget}!`));
+        console.info(info(`Sourcemap:`, output.map));
+        console.info(info(`Imported files: [\n   `, output.imports.join(',\n    '), '\n]'));
+    } catch(e) {
+        console.error(err(`ERROR: Error on writing ${geometryTarget}: ${e.name}`));
+        console.error(err(e.message));
+    }
+},
+function(error) {
+    if(error) {
+        console.error(err(`ERROR: Could not compile ${geometryFile}: ${error.name}`));
         console.error(err(error.message));
     }
 });

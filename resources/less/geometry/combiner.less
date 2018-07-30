@@ -1,0 +1,49 @@
+// The combiner holds together preview and directories
+
+#combiner {
+    position:fixed;
+    top:@toolbar-height;
+    left:0;
+    width:20%;
+    bottom:0;
+    overflow:hidden;
+
+    &.expanded {
+        width:40%;
+
+        #directories, #preview { width:50%; }
+
+        #preview {
+            left:50%;
+            &.hidden { left:50%; }
+        }
+
+        #directories {
+            left:0%;
+            &.hidden { left:0%; }
+        }
+    }
+
+    #arrow-button {
+        &:before {
+            content: '\f305'; // Black arrow left
+            font-family: 'WebHostingHub-Glyphs';
+            line-height:30px; // Same as parent element
+        }
+        text-align:center;
+        vertical-align: middle;
+        z-index:400;
+
+        position:absolute;
+        top:10px;
+        left:10px;
+        width:30px;
+        height:30px;
+        transition:0.4s left ease;
+
+        &.hidden {
+            left:-60px;
+            transition:0.4s left ease;
+        }
+    }
+}

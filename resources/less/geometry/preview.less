@@ -1,0 +1,126 @@
+// Preview pane
+
+#preview {
+    position:absolute;
+    top:0;
+    left:0%;
+    bottom:0;
+    width:100%;
+    transition:0.3s left ease;
+
+    &.hidden {
+        left:100%;
+        transition:0.3s left ease;
+    }
+
+    overflow-y: auto;
+    overflow-x:hidden;
+    cursor: default;
+    outline: none;
+    background-color:inherit;
+
+    ul {
+        list-style-type: none;
+        margin-left:0px;
+        padding-left:0px;
+        background-color:inherit;
+
+        li {
+            margin-top:-1px;
+            background-color:inherit;
+            overflow:hidden;
+            line-height:@tile-height-min;
+            padding-left:6px;
+            position:relative;
+
+            // Bigger size when snippets are on.
+            &.snippets {
+                height:@tile-height-full - (2*@pane-padding); // Remove top/bottom padding
+                padding:@pane-padding;
+                line-height:inherit;
+            }
+
+            p.filename {
+                // Prevent line breaking in the titles and give a little spacing
+                // before and after
+                white-space: nowrap;
+                display: block;
+                width: 100%;
+                overflow: hidden;
+            }
+
+            span, small {
+                display:block;
+                margin-top:5px;
+            }
+
+            /* Taglist stuff */
+            .taglist {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                display:flex;
+                align-items:center;
+                width:@tag-size;
+                justify-content: space-between;
+                transition:0.2s width ease;
+
+                .tag {
+                    height:@tag-size;
+                    width:auto;
+                    border-radius:0;
+                    border:none;
+                    margin:0 auto;
+                    transition:0.2s all ease-out;
+                }
+
+                &:hover {
+                    width:100%;
+                    transition:0.2s width ease;
+                    opacity:1;
+
+                    .tag {
+                        width:@tag-size;
+                        border-radius:50%;
+                        transition:0.2s all ease-in;
+                    }
+                }
+
+                .tagspacer {
+                    flex-grow:1;
+                    text-align:center;
+                    overflow:hidden;
+                }
+
+                .tagspacer:only-child .tag {
+                    width:25px;
+                    border-radius:50%;
+                }
+            }
+
+            &.directory, &.virtual-directory {
+                white-space: nowrap;
+
+                .sorter {
+                    display:block;
+                    position:absolute;
+                    top:0;
+                    left:0;
+                    bottom:0;
+                    right:0;
+                    text-align: right;
+                    margin:0;
+                }
+
+                span.sortTime, span.sortName {
+                    font-family:'WebHostingHub-Glyphs';
+                    font-size:@font-size-small * 0.8;
+                    padding:0 0.5em;
+                    display:inline-block;
+                    margin-top:0px; // Overwrite margin of the spans
+                }
+            }
+        }
+    }
+}

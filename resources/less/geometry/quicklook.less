@@ -1,0 +1,65 @@
+// Quicklook window options
+
+.quicklook {
+    position:fixed;
+
+    &.minimize { height:@title-bar-height; }
+
+    .title {
+        // Title bar options
+        cursor:-webkit-grab;
+        clear:both;
+        height:@title-bar-height;
+
+        h1 {
+            text-align: center;
+            display: inline-block;
+            padding: 0.2em;
+            white-space: nowrap;
+            max-width: 90%;
+            overflow: hidden;
+        }
+
+        .close {
+            &::before {
+                font-family:'WebHostingHub-Glyphs';
+                font-weight:light;
+                content: "\00d7";
+                line-height:0.8em;
+                font-size:0.8em;
+                margin:0.2em;
+            }
+            display:inline-block;
+            cursor:pointer;
+            float:right;
+            text-align:center;
+            width:1.2em;
+            height:1.2em;
+            margin: 0.1em;
+            border-radius:50px;
+            padding:0.1em;
+        }
+    }
+
+    .body .CodeMirror {
+        cursor:text;
+        font-size:1em;
+        font-family: inherit;
+        padding:0.3em;
+        height:100%;
+    }
+
+    .CodeMirror-scroll .CodeMirror-sizer { margin-bottom:1em; }
+
+    // JQUERY UI - THEME (necessary for resizable to work)
+    .ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }
+    .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
+    .ui-resizable-n { cursor: n-resize; height: 15px; width: 100%; top: -15px; left: 0; }
+    .ui-resizable-s { cursor: s-resize; height: 15px; width: 100%; bottom: -15px; left: 0; }
+    .ui-resizable-e { cursor: e-resize; width: 15px; right: -15px; top: 0; height: 100%; }
+    .ui-resizable-w { cursor: w-resize; width: 15px; left: -15px; top: 0; height: 100%; }
+    .ui-resizable-se { cursor: se-resize; width: 15px; height: 15px; right: -15px; bottom: -15px; }
+    .ui-resizable-sw { cursor: sw-resize; width: 15px; height: 15px; left: -15px; bottom: -15px; }
+    .ui-resizable-nw { cursor: nw-resize; width: 15px; height: 15px; left: -15px; top: -15px; }
+    .ui-resizable-ne { cursor: ne-resize; width: 15px; height: 15px; right: -15px; top: -15px;}
+}

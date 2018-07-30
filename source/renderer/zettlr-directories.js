@@ -153,16 +153,6 @@ class ZettlrDirectories
     getContainer() { return this._div; }
 
     /**
-    * Toggle the theme on the div.
-    * @return {ZettlrDirectories} Chainability.
-    */
-    toggleTheme()
-    {
-        this._div.toggleClass('dark');
-        return this;
-    }
-
-    /**
      * Is the directory pane currently hidden?
      * @return {Boolean} True or false, depending on the class.
      */

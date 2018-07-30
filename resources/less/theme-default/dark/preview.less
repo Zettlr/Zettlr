@@ -1,0 +1,42 @@
+// Dark preview styling
+
+#preview {
+    background-color: @grey-6;
+    border-right-color:@grey-5;
+    color:white;
+
+    ul {
+        .selected { background-color:@blue-selection-dark; }
+
+        li {
+            p.filename { background-image:linear-gradient(90deg, white 0%, white 90%, transparent 100%); }
+            small { color:@grey-1; }
+        }
+
+        li.file:hover {
+            // important is needed to not mess with the heatmap styles and
+            // to overwrite the light theme
+            background-color:@grey-3 !important;
+        }
+
+        // File is displayed as part of a virtual directory -> actually
+        // some kind of a "ghost" file
+        li.vd-file { background-color:@purple-selection-dark; }
+
+        li.directory, li.virtual-directory {
+            background-color:@grey-7;
+            color:@grey-3;
+
+            span.sortTime, span.sortName {
+                background-color:@grey-7;
+
+                &:hover {
+                    color: @grey-2;
+                    background-color:@grey-7;
+                }
+            }
+        }
+
+        li.virtual-directory { color:@purple-selection; }
+    }
+}

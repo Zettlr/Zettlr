@@ -44,13 +44,11 @@ class ZettlrQuicklook
      * Create a window
      * @param {ZettlrBody} parent   Calling object
      * @param {ZettlrFile} file     The file whose content should be displayed
-     * @param {Boolean} darkTheme   Dark theme?
      */
-    constructor(parent, file, darkTheme)
+    constructor(parent, file)
     {
         this._body = parent;
         this._file = file;
-        this._darkTheme = darkTheme;
         this._cm = null;
         this._window = null;
         this._bodyHeight = 0; // Contains the height of the element, in case it was minimized
@@ -76,7 +74,7 @@ class ZettlrQuicklook
                 'Cmd-F'         : 'findPersistent',
                 'Ctrl-F'        : 'findPersistent'
             },
-            theme: (this._darkTheme) ? 'zettlr-dark' : 'zettlr',
+            theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
             cursorBlinkRate: -1 // Hide the cursor
         });
 
@@ -205,22 +203,6 @@ class ZettlrQuicklook
             this._window.find('.CodeMirror').css('display', 'none');
         }
 
-        return this;
-    }
-
-    /**
-     * Toggles the theme of the quicklook window.
-     * @return {ZettlrQuicklook} Chainability.
-     */
-    toggleTheme()
-    {
-        if(this._cm.getOption('theme') === 'zettlr-dark') {
-            this._cm.setOption('theme', 'zettlr');
-            this._darkTheme = false;
-        } else {
-            this._cm.setOption('theme', 'zettlr-dark');
-            this._darkTheme = true;
-        }
         return this;
     }
 

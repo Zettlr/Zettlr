@@ -1,0 +1,98 @@
+// Modal styles
+// These are loaded within the theme-main.less, because they won't change with
+// theme changing
+.modal {
+    background-color:rgba(0,0,0,.5);
+
+    .dialog {
+        background-color:white;
+        border-radius:@border-radius;
+        box-shadow: 20px 20px 40px 0px rgba(0, 0, 0, 0.45);
+
+        // General typography
+        h1 {
+            font-size: 1.5em;
+
+            small {
+                font-size:75%;
+                color:@grey-3;
+            }
+        }
+
+        hr {
+            border-bottom:1px solid @grey-4;
+            width: 80%;
+        }
+
+        code {
+            background-color:@grey-0;
+            border-radius:2px;
+        }
+
+        // Forms
+
+        label { color:@grey-4; }
+
+        input {
+            line-height: 150%;
+            font-size: inherit;
+        }
+
+        select {
+            line-height: 200%;
+            font-size: inherit;
+        }
+
+        textarea { border-radius: @border-radius; }
+
+        button, a.button {
+            background-color:white;
+            color:black;
+            border:1px solid @grey-6;
+            transition:0.2s background-color ease;
+            text-decoration:none;
+
+            &:hover {
+                background-color:@green-selection;
+                transition:0.2s background-color ease;
+            }
+        }
+
+        .changelog {
+            border:1px solid @grey-4;
+            border-radius:2px;
+        }
+
+        // Positioning of the paper margin text elements
+        div.paper {
+            position:relative;
+            &.a4paper { border: 1px solid black; }
+
+            .error {
+                background-color:@bg-error;
+                color: @fg-error;
+                border:1px solid @fg-error;
+                border-radius:5px;
+            }
+        }
+
+        // Tabs styles
+        .ui-tabs-nav {
+            border-bottom:1px solid black;
+
+            .ui-tabs-tab {
+                line-height:200%;
+
+                &.ui-tabs-active { background-color:@green-0; }
+
+                a {
+                    color:black;
+                    text-decoration:none;
+                    text-align:center;
+                }
+
+                &:hover { background-color:@grey-1; }
+            }
+        }
+    } // END modal
+}

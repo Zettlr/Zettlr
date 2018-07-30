@@ -88,7 +88,7 @@ class ZettlrEditor
             mode: {
                 name: 'markdown-zkn' // This will automatically pull in spellchecker and this gfm mode
             },
-            theme: 'zettlr',
+            theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
             autofocus: false,
             lineWrapping: true,
             autoCloseBrackets: {

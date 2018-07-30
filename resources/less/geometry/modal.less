@@ -1,0 +1,207 @@
+// Geometry for the renderer modals
+
+.modal {
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index:1000;
+    overflow-x:hidden; /* For longer settings(?) and stuff dialogs */
+    overflow-y:auto;
+
+    .dialog {
+        margin:0 15%;
+        padding:20px;
+
+        // General typography
+        h1 {
+            font-size: 1.5em;
+            margin-bottom:1.5em;
+
+            small { font-size:75%; }
+        }
+
+        h2, h3, h4, h5, h6 { margin-bottom:1em; }
+
+        p, li { line-height:150%; }
+
+        ul, ol, p, li { margin-bottom:0.5em; }
+
+        hr {
+            border:none;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            width:80%;
+            margin:1em 10%;
+        }
+
+        img {
+            max-width:100%;
+            max-height:100%;
+        }
+
+        // Forms
+
+        label {
+            margin:1em 0.5em 0.5em 0em;
+            display:block;
+            cursor:pointer;
+            display:inline;
+        }
+
+        input {
+            width: 100%;
+            line-height: 150%;
+            font-size: inherit;
+            outline:none;
+            margin-bottom:1em;
+        }
+
+        select {
+            line-height: 200%;
+            font-size: inherit;
+            padding:0.5em;
+            margin:0.5em;
+        }
+
+        input[type="checkbox"], input[type="radio"] {
+            margin:0.5em;
+            width:auto;
+            display:inline;
+        }
+
+        textarea {
+            font-size:inherit;
+            width:100%;
+            padding:1em;
+            border-radius: @border-radius;
+        }
+
+        button, a.button {
+            display:inline-block;
+            font-size:1em;
+            margin:1em;
+            padding:0.5em 1em;
+            cursor:pointer;
+            text-decoration:none;
+        }
+
+        .changelog {
+            max-height:300px;
+            overflow-y:auto;
+            border-radius:2px;
+            padding:10px;
+            margin:10px 0px;
+        }
+
+        div.clear {
+            clear:both;
+        }
+
+        div.box-left {
+            width:50%;
+            height:80%;
+            padding:2%;
+            float:left;
+        }
+
+        div.box-right {
+            width:50%;
+            height:80%;
+            padding:2%;
+            float:right;
+        }
+
+        // Positioning of the paper margin text elements
+        div.paper {
+            position:relative;
+
+            &.a4paper {
+                width: 5em; // Approx. aspect ratio is 5em/7em
+                height: 7em;
+                margin: 1em auto;
+                border: 1px solid black;
+            }
+
+            input[type="number"] {
+                text-align:center;
+                width:4em;
+
+                &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+            }
+
+            .tmargin, .rmargin, .bmargin, .lmargin { position:absolute; }
+            .tmargin { top: -2em;     margin: 0 0.5em; }
+            .rmargin { right: -4.1em; top: 2.5em;      }
+            .bmargin { bottom: -2em;  margin: 0 0.5em; }
+            .lmargin { left: -4.2em;  top: 2.5em;      }
+        }
+
+        // This is the paragraph needed for previewing of changes to PDF preferences.
+        .pdf-preview {
+            max-height:100%;
+            overflow-y:auto;
+        }
+
+        .error {
+            border-radius:5px;
+            margin:0.5em;
+            padding:1em;
+        }
+
+        div#prefs-taglist {
+            div {
+                display:flex;
+
+                input, button {
+                    flex-grow:1;
+                    display:inline;
+                    margin:0.5em;
+                }
+            }
+        }
+
+        // About projects section
+        .projects {
+            display: flex;
+
+            .flex {
+                flex: 1;
+                padding:1em;
+
+                img {
+                    width:100%;
+                    max-height:100%;
+                }
+            }
+        }
+
+        // Tabs styles
+        .ui-tabs-nav {
+            display:flex;
+            padding:0;
+            margin-bottom:20px;
+
+            .ui-tabs-tab {
+                flex: 1;
+                display:inline-block;
+                line-height:200%;
+                list-style-type: none;
+                margin-bottom:0;
+
+                a {
+                    text-decoration:none;
+                    display:inline-block;
+                    width:100%;
+                    text-align:center;
+                    outline:none;
+                }
+            }
+        } // END tabs styles
+
+    } // END dialog styles
+} // END modal styles

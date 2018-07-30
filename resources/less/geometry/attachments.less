@@ -1,0 +1,38 @@
+// Attachment pane
+
+#attachments {
+    position: absolute;
+    top: @toolbar-height;
+    right: -20%;
+    bottom: 0;
+    width: 20%;
+    overflow-y:auto;
+    overflow-x:hidden;
+
+    #open-dir-external {
+        font-family: 'WebHostingHub-Glyphs';
+        cursor:default;
+    }
+
+    h1 {
+        padding:10px;
+        font-size:@font-size-big;
+    }
+
+    p { padding:10px; }
+
+    a {
+        display:block;
+        margin:10px;
+        padding:4px;
+        text-decoration:none;
+        color:inherit;
+
+        &::before {
+            font-family: 'WebHostingHub-Glyphs';
+            content: "\f285";
+            margin-right:5px;
+            display:inline-block;
+        }
+    }
+}

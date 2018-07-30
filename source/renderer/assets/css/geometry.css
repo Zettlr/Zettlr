@@ -1,3 +1,22 @@
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        Geometry CSS
+ * CVM-Role:        Theme
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains the main commands and style rules for the
+ *                  geometry of the app itself. It sizes and frames the elements
+ *                  but does not contain any colours or other styling elements.
+ *                  These are located in the theme files.
+ *
+ *                  The aim of the geometry is that even without any theme all
+ *                  elements are positioned correctly. Colouring is the only
+ *                  thing that will at that point be missing.
+ *
+ * END HEADER
+ */
 @font-face {
   font-family: 'WebHostingHub-Glyphs';
   src: url('../whh-font/webhostinghub-glyphs.eot');
@@ -5,75 +24,17 @@
   font-weight: normal;
   font-style: normal;
 }
-@font-face {
-  font-family: 'Lato';
-  src: url('../lato/Lato-Light.woff2') format('woff2');
-  font-style: normal;
-  font-weight: normal;
-  text-rendering: optimizeLegibility;
-}
-@font-face {
-  font-family: 'Lato';
-  src: url('../lato/Lato-LightItalic.woff2') format('woff2');
-  font-style: italic;
-  font-weight: normal;
-  text-rendering: optimizeLegibility;
-}
-@font-face {
-  font-family: 'Lato';
-  src: url('../lato/Lato-Heavy.woff2') format('woff2');
-  font-style: normal;
-  font-weight: bold;
-  text-rendering: optimizeLegibility;
-}
-@font-face {
-  font-family: 'Lato';
-  src: url('../lato/Lato-HeavyItalic.woff2') format('woff2');
-  font-style: italic;
-  font-weight: bold;
-  text-rendering: optimizeLegibility;
-}
 * {
   margin: 0;
   box-sizing: border-box;
 }
-html,
-body {
-  box-sizing: border-box;
-}
 html {
   font-size: 1em;
+  cursor: default;
 }
 body {
   overflow: hidden;
   user-select: none;
-  font-family: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
-}
-body.win32 {
-  font-family: 'Segoe UI', 'Liberation Sans', Arial, sans-serif;
-}
-body.darwin,
-body.linux {
-  font-family: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
-}
-body div.dragger {
-  display: block;
-  font-size: 0.9em;
-  z-index: 1000;
-  max-width: 500px;
-  white-space: nowrap;
-  padding: 5px;
-  border-radius: 5px;
-  background-color: #dcdcdc;
-  box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
-  cursor: default;
-}
-body.dark {
-  background-color: #282828;
-}
-body.dark div.dragger {
-  color: white;
-  background-color: #464646;
 }
 #container.blur {
   /* This is applied when a modal is shown */
@@ -82,39 +43,27 @@ body.dark div.dragger {
 ::-webkit-scrollbar {
   width: 4px;
 }
-::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
-}
-::-webkit-scrollbar-thumb {
-  background-color: #1cb27e;
-}
-::-webkit-scrollbar-thumb:window-inactive {
-  background-color: #a9f1d8;
-}
-.dark ::-webkit-scrollbar-track {
-  background-color: #464646;
-}
 .clearfix {
   clear: both;
 }
+/**
+ * Now the import directives to include the geometrical preconditions for all
+ * elements.
+ */
 .modal {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
   overflow-x: hidden;
   /* For longer settings(?) and stuff dialogs */
   overflow-y: auto;
 }
 .modal .dialog {
-  background-color: white;
   margin: 0 15%;
-  border-radius: 4px;
   padding: 20px;
-  box-shadow: 20px 20px 40px 0px rgba(0, 0, 0, 0.45);
 }
 .modal .dialog h1 {
   font-size: 1.5em;
@@ -122,7 +71,6 @@ body.dark div.dragger {
 }
 .modal .dialog h1 small {
   font-size: 75%;
-  color: #787878;
 }
 .modal .dialog h2,
 .modal .dialog h3,
@@ -133,33 +81,26 @@ body.dark div.dragger {
 }
 .modal .dialog p,
 .modal .dialog li {
-  margin-bottom: 0.5em;
   line-height: 150%;
 }
 .modal .dialog ul,
-.modal .dialog ol {
+.modal .dialog ol,
+.modal .dialog p,
+.modal .dialog li {
   margin-bottom: 0.5em;
 }
 .modal .dialog hr {
   border: none;
-  border-bottom: 1px solid #646464;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
   width: 80%;
   margin: 1em 10%;
-}
-.modal .dialog ul li {
-  line-height: 150%;
-}
-.modal .dialog code {
-  background-color: #f0f0f0;
-  border-radius: 2px;
-  padding: 2px 5px;
 }
 .modal .dialog img {
   max-width: 100%;
   max-height: 100%;
 }
 .modal .dialog label {
-  color: #646464;
   margin: 1em 0.5em 0.5em 0em;
   display: block;
   cursor: pointer;
@@ -196,22 +137,12 @@ body.dark div.dragger {
   font-size: 1em;
   margin: 1em;
   padding: 0.5em 1em;
-  background-color: white;
-  color: black;
-  border: 1px solid #464646;
-  transition: 0.2s background-color ease;
   cursor: pointer;
   text-decoration: none;
-}
-.modal .dialog button:hover,
-.modal .dialog a.button:hover {
-  background-color: #c8f0aa;
-  transition: 0.2s background-color ease;
 }
 .modal .dialog .changelog {
   max-height: 300px;
   overflow-y: auto;
-  border: 1px solid #646464;
   border-radius: 2px;
   padding: 10px;
   margin: 10px 0px;
@@ -249,23 +180,25 @@ body.dark div.dragger {
   -webkit-appearance: none;
   margin: 0;
 }
-.modal .dialog div.paper .tmargin {
+.modal .dialog div.paper .tmargin,
+.modal .dialog div.paper .rmargin,
+.modal .dialog div.paper .bmargin,
+.modal .dialog div.paper .lmargin {
   position: absolute;
+}
+.modal .dialog div.paper .tmargin {
   top: -2em;
   margin: 0 0.5em;
 }
 .modal .dialog div.paper .rmargin {
-  position: absolute;
   right: -4.1em;
   top: 2.5em;
 }
 .modal .dialog div.paper .bmargin {
-  position: absolute;
   bottom: -2em;
   margin: 0 0.5em;
 }
 .modal .dialog div.paper .lmargin {
-  position: absolute;
   left: -4.2em;
   top: 2.5em;
 }
@@ -274,9 +207,6 @@ body.dark div.dragger {
   overflow-y: auto;
 }
 .modal .dialog .error {
-  background-color: #ffb0b0;
-  color: #941010;
-  border: 1px solid #941010;
   border-radius: 5px;
   margin: 0.5em;
   padding: 1em;
@@ -303,7 +233,6 @@ body.dark div.dragger {
 }
 .modal .dialog .ui-tabs-nav {
   display: flex;
-  border-bottom: 1px solid black;
   padding: 0;
   margin-bottom: 20px;
 }
@@ -314,19 +243,12 @@ body.dark div.dragger {
   list-style-type: none;
   margin-bottom: 0;
 }
-.modal .dialog .ui-tabs-nav .ui-tabs-tab.ui-tabs-active {
-  background-color: #1cb27e;
-}
 .modal .dialog .ui-tabs-nav .ui-tabs-tab a {
-  color: black;
   text-decoration: none;
   display: inline-block;
   width: 100%;
   text-align: center;
   outline: none;
-}
-.modal .dialog .ui-tabs-nav .ui-tabs-tab:hover {
-  background-color: #dcdcdc;
 }
 #directories {
   position: absolute;
@@ -335,12 +257,8 @@ body.dark div.dragger {
   width: 100%;
   bottom: 0;
   transition: 0.3s left ease;
-  border-right: 1px solid #c8c8c8;
-  color: #646464;
   overflow-y: auto;
-  cursor: default;
   outline: none;
-  font-size: 0.9em;
 }
 #directories.hidden {
   left: -100%;
@@ -349,19 +267,11 @@ body.dark div.dragger {
 #directories > ul:not(:first-child) {
   padding-top: 0.8em;
   padding-bottom: 0.8em;
-  border-top: 1px solid #c8c8c8;
 }
 #directories ul {
   list-style-type: none;
   margin-left: 0px;
   padding-left: 0px;
-}
-#directories ul .selected {
-  background-color: #1cb27e;
-  color: white;
-}
-#directories ul .selected:before {
-  color: white;
 }
 #directories ul li {
   line-height: 1.6em;
@@ -369,18 +279,7 @@ body.dark div.dragger {
   white-space: nowrap;
   padding-left: 5px;
   margin: 5px;
-  line-height: 120%;
-  border-radius: 8px;
   overflow: hidden;
-}
-#directories ul li:hover {
-  background-color: #dcdcdc;
-}
-#directories ul li.highlight {
-  box-shadow: 0px 0px 1px 2px #c8f0aa;
-}
-#directories ul li.highlight:hover {
-  background-color: inherit;
 }
 #directories ul li.root:before {
   content: '\f0f0';
@@ -391,7 +290,6 @@ body.dark div.dragger {
   display: inline-block;
   float: left;
   height: 16px;
-  color: #1d75b3;
 }
 #directories ul .collapse-indicator {
   margin-right: 3px;
@@ -422,8 +320,6 @@ body.dark div.dragger {
   white-space: nowrap;
   padding-left: 5px;
   margin: 5px;
-  line-height: 120%;
-  border-radius: 8px;
   overflow: hidden;
 }
 #directories .file:before {
@@ -436,17 +332,6 @@ body.dark div.dragger {
   position: relative;
   bottom: -2px;
 }
-#directories .file.selected {
-  background-color: #1cb27e;
-  color: white;
-}
-#directories .file:hover {
-  background-color: #dcdcdc;
-  color: inherit;
-}
-#directories .virtual-directory {
-  color: #d8abf1;
-}
 #directories .virtual-directory:before {
   content: '\f4ea';
   font-family: 'WebHostingHub-Glyphs';
@@ -455,9 +340,6 @@ body.dark div.dragger {
   margin-right: 5px;
   display: inline-block;
   position: relative;
-}
-#directories .project {
-  color: #941010;
 }
 #directories .project:before {
   content: '\f6af';
@@ -470,8 +352,6 @@ body.dark div.dragger {
   position: relative;
 }
 #directories .emptyPaths {
-  background-color: #f0f0f0;
-  color: #646464;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -485,33 +365,6 @@ body.dark div.dragger {
   margin-top: 50%;
   font-weight: bold;
   font-size: 200%;
-}
-#directories.dark {
-  background-color: #464646;
-  border-right-color: #646464;
-  color: white;
-}
-#directories.dark > ul:not(:first-child) {
-  border-top-color: #646464;
-}
-#directories.dark .collapse-indicator::before {
-  color: #dcdcdc;
-}
-#directories.dark ul li:hover {
-  background-color: #505050;
-}
-#directories.dark ul .selected {
-  background-color: #35652f;
-}
-#directories.dark .file:hover {
-  background-color: #505050;
-}
-#directories.dark .project {
-  color: #ffb0b0;
-}
-#directories.dark .emptyPaths {
-  background-color: #505050;
-  color: #dcdcdc;
 }
 /* max-height - the only parameter in this file that needs to be edited.
  * Change it to suit your needs. The rest is recommended to leave as is.
@@ -550,17 +403,15 @@ body.dark div.dragger {
 #preview {
   position: absolute;
   top: 0;
-  width: 100%;
   left: 0%;
   bottom: 0;
+  width: 100%;
   transition: 0.3s left ease;
-  border-right: 1px solid #c8c8c8;
   overflow-y: auto;
   overflow-x: hidden;
   cursor: default;
   outline: none;
   background-color: inherit;
-  font-size: 0.9em;
 }
 #preview.hidden {
   left: 100%;
@@ -572,12 +423,7 @@ body.dark div.dragger {
   padding-left: 0px;
   background-color: inherit;
 }
-#preview ul .selected {
-  background-color: #c8f0aa;
-}
 #preview ul li {
-  border-bottom: 1px solid #c8c8c8;
-  border-top: 1px solid #c8c8c8;
   margin-top: -1px;
   background-color: inherit;
   overflow: hidden;
@@ -591,20 +437,11 @@ body.dark div.dragger {
   padding: 0.4em;
   line-height: inherit;
 }
-#preview ul li.vd-file {
-  background-color: #ecd7f8;
-}
-#preview ul li.file:hover {
-  background-color: #f0f0f0 !important;
-}
 #preview ul li p.filename {
   white-space: nowrap;
   display: block;
   width: 100%;
   overflow: hidden;
-  background-image: linear-gradient(90deg, #282828 0%, #282828 90%, transparent 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 #preview ul li span,
 #preview ul li small {
@@ -638,7 +475,6 @@ body.dark div.dragger {
 #preview ul li .taglist:hover .tag {
   width: 25px;
   border-radius: 50%;
-  border: 2px solid white;
   transition: 0.2s all ease-in;
 }
 #preview ul li .taglist .tagspacer {
@@ -649,12 +485,9 @@ body.dark div.dragger {
 #preview ul li .taglist .tagspacer:only-child .tag {
   width: 25px;
   border-radius: 50%;
-  border: 2px solid white;
 }
 #preview ul li.directory,
 #preview ul li.virtual-directory {
-  background-color: #f0f0f0;
-  color: #1cb27e;
   white-space: nowrap;
 }
 #preview ul li.directory .sorter,
@@ -672,116 +505,11 @@ body.dark div.dragger {
 #preview ul li.virtual-directory span.sortTime,
 #preview ul li.directory span.sortName,
 #preview ul li.virtual-directory span.sortName {
-  background-color: #f0f0f0;
   font-family: 'WebHostingHub-Glyphs';
   font-size: 0.72em;
   padding: 0 0.5em;
   display: inline-block;
   margin-top: 0px;
-}
-#preview ul li.directory span.sortTime:hover,
-#preview ul li.virtual-directory span.sortTime:hover,
-#preview ul li.directory span.sortName:hover,
-#preview ul li.virtual-directory span.sortName:hover {
-  color: #505050;
-}
-#preview ul li.virtual-directory {
-  color: #641e78;
-}
-#preview #search-directory {
-  position: sticky;
-  z-index: 1001;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2em;
-  overflow: hidden;
-  border-bottom: 1px solid #32465a;
-}
-#preview #search-directory input {
-  font-size: 1em;
-  outline: none;
-  border: none;
-  height: 100%;
-  width: 100%;
-  padding: 2px 10px;
-  background-color: #c8dcf0;
-  color: #32465a;
-}
-#preview #search-directory input::placeholder {
-  color: #1d75b3;
-}
-#preview #search-directory #counter {
-  position: relative;
-  bottom: 0px;
-  left: 0;
-  right: 0;
-  height: 5px;
-  margin: 0;
-  padding: 0;
-  transition: 0.2s bottom ease;
-}
-#preview #search-directory #counter.show {
-  bottom: 9px;
-  transition: 0.2s bottom ease;
-}
-#preview #search-directory #counter .progress {
-  background-color: #5aaa50;
-  display: block;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-#preview.dark {
-  background-color: #464646;
-  border-right-color: #505050;
-  color: white;
-}
-#preview.dark ul .selected {
-  background-color: #6478b4;
-}
-#preview.dark ul li p.filename {
-  background-image: linear-gradient(90deg, white 0%, white 90%, transparent 100%);
-}
-#preview.dark ul li small {
-  color: #dcdcdc;
-}
-#preview.dark ul li.file:hover {
-  background-color: #787878 !important;
-}
-#preview.dark ul li.vd-file {
-  background-color: #641e78;
-}
-#preview.dark ul li.directory,
-#preview.dark ul li.virtual-directory {
-  background-color: #282828;
-  color: #787878;
-}
-#preview.dark ul li.directory span.sortTime,
-#preview.dark ul li.virtual-directory span.sortTime,
-#preview.dark ul li.directory span.sortName,
-#preview.dark ul li.virtual-directory span.sortName {
-  background-color: #282828;
-}
-#preview.dark ul li.directory span.sortTime:hover,
-#preview.dark ul li.virtual-directory span.sortTime:hover,
-#preview.dark ul li.directory span.sortName:hover,
-#preview.dark ul li.virtual-directory span.sortName:hover {
-  color: #c8c8c8;
-  background-color: #282828;
-}
-#preview.dark ul li.virtual-directory {
-  color: #d8abf1;
-}
-#preview.dark #search-directory input {
-  background-color: #6478b4;
-  color: #c8dcf0;
-}
-#preview.dark #search-directory input::placeholder {
-  color: #c8dcf0;
-}
-#preview.dark #search-directory #counter .progress {
-  background-color: #c8f0aa;
 }
 #combiner {
   position: fixed;
@@ -814,14 +542,11 @@ body.dark div.dragger {
   text-align: center;
   vertical-align: middle;
   z-index: 400;
-  background-color: white;
   position: absolute;
   top: 10px;
   left: 10px;
   width: 30px;
   height: 30px;
-  border-radius: 100%;
-  box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.25);
   transition: 0.4s left ease;
 }
 #combiner #arrow-button:before {
@@ -832,12 +557,6 @@ body.dark div.dragger {
 #combiner #arrow-button.hidden {
   left: -60px;
   transition: 0.4s left ease;
-}
-body .sb-annotation {
-  background-color: #f05734;
-}
-body.dark .sb-annotation {
-  background-color: yellow;
 }
 #editor {
   position: fixed;
@@ -868,22 +587,12 @@ body.dark .sb-annotation {
 }
 #editor .fn-panel {
   position: absolute;
-  font-size: 0.9em;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
   padding: 10px;
   display: inline-block;
-}
-#editor.no-combiner {
-  left: 0%;
-}
-#editor.dark {
-  background-color: #282828;
 }
 #editor .CodeMirror {
   height: 100%;
   cursor: text;
-  font-size: 1.2em;
   font-family: inherit;
 }
 #editor .CodeMirror-code {
@@ -895,6 +604,122 @@ body.dark .sb-annotation {
 #editor .CodeMirror-scroll {
   padding: 0em 5em;
   overflow-x: hidden !important;
+}
+.CodeMirror-fullscreen {
+  position: fixed !important;
+  top: 39px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: auto;
+  z-index: 500;
+}
+@media (min-width: 1301px) {
+  .CodeMirror-fullscreen .CodeMirror-scroll {
+    padding: 0em 20em  !important;
+  }
+}
+@media (max-width: 1300px) {
+  .CodeMirror-fullscreen .CodeMirror-scroll {
+    padding: 0em 10em  !important;
+  }
+}
+@media (max-width: 1100px) {
+  .CodeMirror-fullscreen .CodeMirror-scroll {
+    padding: 0em 7.5em !important;
+  }
+}
+@media (max-width: 1000px) {
+  .CodeMirror-fullscreen .CodeMirror-scroll {
+    padding: 0em 5em   !important;
+  }
+}
+@media (max-width: 800px) {
+  .CodeMirror-fullscreen .CodeMirror-scroll {
+    padding: 0em 2.5em !important;
+  }
+}
+.CodeMirror-vscrollbar {
+  cursor: default;
+}
+.CodeMirror {
+  line-height: 1.4375;
+  /* Make the formatting characters nearly invisible */
+}
+.CodeMirror pre {
+  padding: 0;
+}
+.CodeMirror a.cma {
+  cursor: pointer;
+}
+.CodeMirror a.cma:hover {
+  text-decoration: underline;
+}
+.CodeMirror input[type="checkbox"] {
+  transform: scale(1.2);
+  margin: 0.2em;
+}
+.CodeMirror .search-result {
+  background-color: yellow;
+}
+.CodeMirror .cm-table {
+  font-family: monospace;
+  font-weight: bold;
+}
+.CodeMirror .cm-header-1 {
+  font-size: 2em;
+}
+.CodeMirror .cm-header-2 {
+  font-size: 1.8em;
+}
+.CodeMirror .cm-header-3 {
+  font-size: 1.5em;
+}
+.CodeMirror .cm-header-4 {
+  font-size: 1.3em;
+}
+.CodeMirror .cm-header-5 {
+  font-size: 1em;
+}
+.CodeMirror .cm-header-6 {
+  font-size: 1em;
+}
+.CodeMirror .cm-comment,
+.CodeMirror .cm-formatting-task {
+  font-family: monospace;
+  font-size: 120%;
+}
+.CodeMirror .CodeMirror-cursor {
+  width: 2px;
+  border: 0;
+  z-index: 1;
+}
+.CodeMirror .cm-formatting-code,
+.CodeMirror .cm-formatting-code-block,
+.CodeMirror .cm-formatting-quote,
+.CodeMirror .cm-formatting-strong,
+.CodeMirror .cm-formatting-em {
+  opacity: 0.3;
+}
+.CodeMirror .cm-formatting-list-ul,
+.CodeMirror .cm-formatting-list-ol {
+  font-family: monospace;
+}
+.CodeMirror .cm-url,
+.CodeMirror .cm-link {
+  text-decoration: none;
+}
+.CodeMirror .cm-url.shift,
+.CodeMirror .cm-link.shift {
+  cursor: pointer;
+}
+.CodeMirror .cm-zkn-tag {
+  font-weight: bold;
+}
+.CodeMirror .cm-zkn-tag:hover,
+.CodeMirror .cm-zkn-link:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 .sk-circle {
   margin: 100px auto;
@@ -915,119 +740,83 @@ body.dark .sb-annotation {
   margin: 0 auto;
   width: 15%;
   height: 15%;
-  background-color: #5aaa50;
   border-radius: 100%;
-  -webkit-animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
   animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
+  background-color: black;
 }
 .sk-circle .sk-circle2 {
-  -webkit-transform: rotate(30deg);
-  -ms-transform: rotate(30deg);
   transform: rotate(30deg);
 }
 .sk-circle .sk-circle3 {
-  -webkit-transform: rotate(60deg);
-  -ms-transform: rotate(60deg);
   transform: rotate(60deg);
 }
 .sk-circle .sk-circle4 {
-  -webkit-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
   transform: rotate(90deg);
 }
 .sk-circle .sk-circle5 {
-  -webkit-transform: rotate(120deg);
-  -ms-transform: rotate(120deg);
   transform: rotate(120deg);
 }
 .sk-circle .sk-circle6 {
-  -webkit-transform: rotate(150deg);
-  -ms-transform: rotate(150deg);
   transform: rotate(150deg);
 }
 .sk-circle .sk-circle7 {
-  -webkit-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
   transform: rotate(180deg);
 }
 .sk-circle .sk-circle8 {
-  -webkit-transform: rotate(210deg);
-  -ms-transform: rotate(210deg);
   transform: rotate(210deg);
 }
 .sk-circle .sk-circle9 {
-  -webkit-transform: rotate(240deg);
-  -ms-transform: rotate(240deg);
   transform: rotate(240deg);
 }
 .sk-circle .sk-circle10 {
-  -webkit-transform: rotate(270deg);
-  -ms-transform: rotate(270deg);
   transform: rotate(270deg);
 }
 .sk-circle .sk-circle11 {
-  -webkit-transform: rotate(300deg);
-  -ms-transform: rotate(300deg);
   transform: rotate(300deg);
 }
 .sk-circle .sk-circle12 {
-  -webkit-transform: rotate(330deg);
-  -ms-transform: rotate(330deg);
   transform: rotate(330deg);
 }
 .sk-circle .sk-circle2:before {
-  -webkit-animation-delay: -1.1s;
   animation-delay: -1.1s;
 }
 .sk-circle .sk-circle3:before {
-  -webkit-animation-delay: -1s;
   animation-delay: -1s;
 }
 .sk-circle .sk-circle4:before {
-  -webkit-animation-delay: -0.9s;
   animation-delay: -0.9s;
 }
 .sk-circle .sk-circle5:before {
-  -webkit-animation-delay: -0.8s;
   animation-delay: -0.8s;
 }
 .sk-circle .sk-circle6:before {
-  -webkit-animation-delay: -0.7s;
   animation-delay: -0.7s;
 }
 .sk-circle .sk-circle7:before {
-  -webkit-animation-delay: -0.6s;
   animation-delay: -0.6s;
 }
 .sk-circle .sk-circle8:before {
-  -webkit-animation-delay: -0.5s;
   animation-delay: -0.5s;
 }
 .sk-circle .sk-circle9:before {
-  -webkit-animation-delay: -0.4s;
   animation-delay: -0.4s;
 }
 .sk-circle .sk-circle10:before {
-  -webkit-animation-delay: -0.3s;
   animation-delay: -0.3s;
 }
 .sk-circle .sk-circle11:before {
-  -webkit-animation-delay: -0.2s;
   animation-delay: -0.2s;
 }
 .sk-circle .sk-circle12:before {
-  -webkit-animation-delay: -0.1s;
   animation-delay: -0.1s;
 }
 @-webkit-keyframes sk-circleBounceDelay {
   0%,
   80%,
   100% {
-    -webkit-transform: scale(0);
     transform: scale(0);
   }
   40% {
-    -webkit-transform: scale(1);
     transform: scale(1);
   }
 }
@@ -1035,33 +824,24 @@ body.dark .sb-annotation {
   0%,
   80%,
   100% {
-    -webkit-transform: scale(0);
     transform: scale(0);
   }
   40% {
-    -webkit-transform: scale(1);
     transform: scale(1);
   }
 }
 .quicklook {
-  color: #646464;
-  box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.75);
   position: fixed;
-  cursor: default;
-  background-color: #dcdcdc;
 }
 .quicklook.minimize {
   height: 1.6em;
 }
 .quicklook .title {
-  background-color: #282828;
-  color: #f0f0f0;
   cursor: -webkit-grab;
   clear: both;
   height: 1.6em;
 }
 .quicklook .title h1 {
-  font-size: 0.9em;
   text-align: center;
   display: inline-block;
   padding: 0.2em;
@@ -1088,9 +868,6 @@ body.dark .sb-annotation {
   font-size: 0.8em;
   margin: 0.2em;
 }
-.quicklook .title .close:hover {
-  color: #ffb0b0;
-}
 .quicklook .body .CodeMirror {
   cursor: text;
   font-size: 1em;
@@ -1098,7 +875,7 @@ body.dark .sb-annotation {
   padding: 0.3em;
   height: 100%;
 }
-.quicklook .body .CodeMirror-scroll .CodeMirror-sizer {
+.quicklook .CodeMirror-scroll .CodeMirror-sizer {
   margin-bottom: 1em;
 }
 .quicklook .ui-resizable-handle {
@@ -1172,19 +949,11 @@ body.dark .sb-annotation {
   left: 0;
   width: 100%;
   height: 39px;
-  background-image: linear-gradient(to bottom, white, #f0f0f0);
-  color: #646464;
-  border-bottom: 1px solid #c8c8c8;
   margin: 0;
   padding: 0;
   display: flex;
   align-items: center;
   cursor: default;
-}
-#toolbar.mute {
-  border-bottom: none;
-  opacity: 0.5;
-  background-image: linear-gradient(to bottom, #f0f0f0, white);
 }
 #toolbar .button {
   flex-grow: 0.1;
@@ -1194,17 +963,12 @@ body.dark .sb-annotation {
   line-height: 38px;
   font-family: 'WebHostingHub-Glyphs';
   font-size: 0.72em;
-  transition: 0.2s all ease;
 }
 #toolbar .button:first-child {
   margin-left: 10px;
 }
 #toolbar .button:last-child {
   margin-right: 10px;
-}
-#toolbar .button:hover {
-  background-color: #f0f0f0;
-  transition: 0.2s all ease;
 }
 #toolbar .button.dir-open::before {
   content: "\f73e";
@@ -1255,9 +1019,6 @@ body.dark .sb-annotation {
   padding: 2px;
   background-image: none;
   border: none;
-}
-#toolbar .button.pomodoro:hover {
-  background-color: transparent;
 }
 #toolbar .button.pomodoro svg {
   transform: rotate(-90deg);
@@ -1312,11 +1073,6 @@ body.dark .sb-annotation {
   outline: none;
   transition: 0.5s all ease;
 }
-#toolbar .searchbar input:focus {
-  border-color: #c8dcf0;
-  transition: 0.5s all ease;
-  box-shadow: inset 0px 0px 15px 0px rgba(200, 220, 240, 0.95);
-}
 #toolbar .searchbar div.end-search {
   position: relative;
   right: 26px;
@@ -1327,42 +1083,12 @@ body.dark .sb-annotation {
   font-size: 80%;
   text-align: center;
 }
-#toolbar.dark {
-  color: #dcdcdc;
-  background-image: linear-gradient(to bottom, #464646, #282828);
-  border-bottom-color: #505050;
-}
-#toolbar.dark .button {
-  transition: 0.2s all ease;
-}
-#toolbar.dark .button:hover {
-  background-color: #464646;
-  transition: 0.2s all ease;
-}
-#toolbar.dark .button.pomodoro {
-  background-image: none;
-}
-#toolbar.dark .button.pomodoro:hover {
-  background-color: transparent;
-}
-#toolbar.dark .button.pomodoro .pomodoro-meter {
-  stroke: #c8c8c8;
-}
-#toolbar.dark .searchbar input {
-  color: inherit;
-}
-#toolbar.dark .searchbar input:focus {
-  box-shadow: inset 0px 0px 15px 0px rgba(100, 120, 180, 0.95);
-}
 .notify {
   position: fixed;
   display: block;
   right: 10px;
   margin: 0;
   padding: 10px;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  border-radius: 3px;
   cursor: default;
 }
 .popup-arrow {
@@ -1373,48 +1099,41 @@ body.dark .sb-annotation {
 .popup-arrow.up {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-bottom: 5px solid rgba(255, 255, 255, 0.9);
+  border-bottom-width: 5px;
+  border-bottom-style: solid;
 }
 .popup-arrow.down {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 5px solid rgba(255, 255, 255, 0.9);
+  border-top-width: 5px;
+  border-top-style: solid;
 }
 .popup-arrow.left {
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
-  border-right: 5px solid rgba(255, 255, 255, 0.9);
+  border-right-width: 5px;
+  border-right-style: solid;
 }
 .popup-arrow.right {
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
-  border-left: 5px solid rgba(255, 255, 255, 0.9);
+  border-left-width: 5px;
+  border-left-style: solid;
 }
 .popup {
   position: fixed;
-  background-color: rgba(255, 255, 255, 0.9);
-  color: #282828;
-  border-radius: 4px;
-  box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.5);
-  border-radius: 2px;
   max-width: 250px;
   max-height: 600px;
   overflow-y: auto;
   overflow-x: hidden;
 }
 .popup a.toc-link {
-  color: #282828;
-  transition: 0.4s all ease;
   text-decoration: none;
   display: block;
   line-height: 150%;
   padding: 4px;
   overflow-x: hidden;
   white-space: nowrap;
-}
-.popup a.toc-link:hover {
-  background-color: #f0f0f0;
-  transition: 0.4s all ease;
 }
 .popup p {
   margin: 10px;
@@ -1430,15 +1149,11 @@ body.dark .sb-annotation {
   border: none;
   font-size: 200%;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.9);
-  color: #282828;
   padding: 10px;
   display: block;
   text-align: center;
 }
 .popup form input {
-  background-color: transparent;
-  color: inherit;
   padding: 5px;
   font-size: 200%;
   display: block;
@@ -1488,7 +1203,7 @@ body.dark .sb-annotation {
   color: white;
 }
 .popup .btn-share.odt {
-  color: #282828;
+  color: #141414;
 }
 .popup .btn-share.odt:hover {
   background-color: white;
@@ -1506,19 +1221,12 @@ body.dark .sb-annotation {
   text-decoration: none;
   display: block;
   padding: 5px 10px;
-  color: inherit;
-}
-.popup .formatting a:hover {
-  background-color: #c8c8c8;
 }
 .popup .formatting a#header-formatting {
   display: flex;
 }
 .popup .formatting a#header-formatting::before {
   padding: 10px 0px;
-}
-.popup .formatting a#header-formatting:hover {
-  background-color: transparent;
 }
 .popup .formatting a span.markdownHeading1,
 .popup .formatting a span.markdownHeading2,
@@ -1531,14 +1239,6 @@ body.dark .sb-annotation {
   flex: 1;
   text-align: center;
   font-weight: bold;
-}
-.popup .formatting a span.markdownHeading1.active,
-.popup .formatting a span.markdownHeading2.active,
-.popup .formatting a span.markdownHeading3.active,
-.popup .formatting a span.markdownHeading4.active,
-.popup .formatting a span.markdownHeading5.active,
-.popup .formatting a span.markdownHeading6.active {
-  color: #1cb27e;
 }
 .popup .formatting a::before {
   font-family: 'WebHostingHub-Glyphs';
@@ -1608,7 +1308,8 @@ body.dark .sb-annotation {
 .popup .formatting hr {
   margin: 14px 20px;
   border: none;
-  border-bottom: 1px solid #787878;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
 }
 .popup .search input {
   font-size: 100%;
@@ -1623,21 +1324,13 @@ body.dark .sb-annotation {
 .popup .search input:focus {
   outline: 0;
 }
-.popup .search input:first-child {
-  border-bottom: 1px solid #505050;
-}
 .popup .search button {
   width: auto;
   padding: 5px 2px;
   margin: 0px;
   border-radius: 2px;
-  font-size: 0.9em;
   overflow: hidden;
   display: inline;
-  background-color: #f0f0f0;
-}
-.popup .search button:hover {
-  background-color: #787878;
 }
 .popup .search button#searchNext {
   width: 40%;
@@ -1657,12 +1350,7 @@ body.dark .sb-annotation {
   white-space: nowrap;
   overflow-x: hidden;
 }
-.popup .recent-docs a:hover {
-  background-color: #dcdcdc;
-}
 .popup .footnote-edit textarea {
-  background-color: transparent;
-  color: inherit;
   font-size: 1em;
   min-height: 150px;
   border: none;
@@ -1671,62 +1359,18 @@ body.dark .sb-annotation {
 .popup .footnote-edit textarea:focus {
   outline: 0;
 }
-.dark .popup {
-  background-color: rgba(0, 0, 0, 0.9);
-  box-shadow: 0px 0px 42px -10px rgba(0, 0, 0, 0.75);
-  color: #dcdcdc;
-}
-.dark .popup button {
-  background-color: rgba(0, 0, 0, 0.9);
-  color: #dcdcdc;
-}
-.dark .popup .btn-share.odt {
-  color: #dcdcdc;
-}
-.dark .popup a.toc-link {
-  color: #dcdcdc;
-}
-.dark .popup a.toc-link:hover {
-  background-color: rgba(51, 51, 51, 0.9);
-}
-.dark .popup .formatting a:hover {
-  background-color: #787878;
-}
-.dark .popup .search button {
-  background-color: rgba(0, 0, 0, 0.9);
-}
-.dark .popup .recent-docs a:hover {
-  background-color: #787878;
-}
-.dark .popup-arrow.up {
-  border-bottom-color: rgba(0, 0, 0, 0.9);
-}
-.dark .popup-arrow.down {
-  border-top-color: rgba(0, 0, 0, 0.9);
-}
-.dark .popup-arrow.left {
-  border-right-color: rgba(0, 0, 0, 0.9);
-}
-.dark .popup-arrow.right {
-  border-left-color: rgba(0, 0, 0, 0.9);
-}
 #attachments {
   position: absolute;
   top: 39px;
   right: -20%;
   bottom: 0;
   width: 20%;
-  background-color: rgba(255, 255, 255, 0.8);
   overflow-y: auto;
   overflow-x: hidden;
 }
 #attachments #open-dir-external {
   font-family: 'WebHostingHub-Glyphs';
   cursor: default;
-  color: #c8c8c8;
-}
-#attachments #open-dir-external:hover {
-  color: #464646;
 }
 #attachments h1 {
   padding: 10px;
@@ -1739,26 +1383,12 @@ body.dark .sb-annotation {
   display: block;
   margin: 10px;
   padding: 4px;
-  border-radius: 4px;
   text-decoration: none;
   color: inherit;
-}
-#attachments a:hover {
-  text-decoration: underline;
 }
 #attachments a::before {
   font-family: 'WebHostingHub-Glyphs';
   content: "\f285";
   margin-right: 5px;
   display: inline-block;
-}
-.dark #attachments {
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #f0f0f0;
-}
-.dark #attachments #open-dir-external {
-  color: #464646;
-}
-.dark #attachments #open-dir-external:hover {
-  color: #c8c8c8;
 }

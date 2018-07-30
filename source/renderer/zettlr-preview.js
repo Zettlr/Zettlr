@@ -378,16 +378,6 @@ class ZettlrPreview
     sortDir(hash, type) { this._renderer.sortDir(hash, type); }
 
     /**
-     * Toggles the theme
-     * @return {ZettlrPreview} Chainability.
-     */
-    toggleTheme()
-    {
-        this._div.toggleClass('dark');
-        return this;
-    }
-
-    /**
      * Is the preview pane currently hidden?
      * @return {Boolean} True or false, depending on the class.
      */

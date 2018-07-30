@@ -1,0 +1,134 @@
+// Geometry for the tree view
+
+#directories {
+    position:absolute;
+    top:0;
+    left:0%;
+    width:100%;
+    bottom:0;
+    transition:0.3s left ease;
+
+    &.hidden {
+        left:-100%;
+        transition:0.3s left ease;
+    }
+
+    overflow-y: auto;
+    outline: none;
+
+    // Direct descendants need some margin to the files and to other roots
+    & > ul:not(:first-child) {
+        padding-top:@ribbon-height/2;
+        padding-bottom:@ribbon-height/2;
+    }
+
+
+    ul {
+        list-style-type: none;
+        margin-left:0px;
+        padding-left:0px;
+
+        li {
+            line-height: @ribbon-height;
+            padding:@ribbon-padding;
+            white-space: nowrap;
+            padding-left:5px;
+            margin:5px;
+            overflow: hidden;
+
+            &.root {
+
+                &:before {
+                    content: '\f0f0';
+                    font-family: 'WebHostingHub-Glyphs';
+                    font-size: @font-size-small * 0.8; /* Bit smaller, those indicators are damned huge */
+                    margin-right:5px;
+                    display:inline-block;
+                    float:left; // So that the Icon stays leftmost, no matter what the indicator does.
+                    height:16px;
+                }
+            }
+        }
+
+        .collapse-indicator {
+            margin-right:3px;
+            float:left;
+
+            &::before {
+                content: "\f48b";
+                font-family: 'WebHostingHub-Glyphs';
+                font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
+                display:inline-block;
+                vertical-align: sub;
+                width:10px;
+                height:16px;
+                overflow:hidden;
+            }
+        }
+
+        &.collapsed .collapse-indicator::before {
+            content: "\f488";
+            vertical-align: sub;
+        }
+
+        &.collapsed ul {
+            height:0px;
+            display:none;
+        }
+    }
+
+    .file {
+        line-height: @ribbon-height;
+        padding:@ribbon-padding;
+        white-space: nowrap;
+        padding-left:5px;
+        margin:5px;
+        overflow: hidden;
+
+        &:before {
+            content: '\f0d6';
+            font-family: 'WebHostingHub-Glyphs';
+            font-size: @font-size-small; /* Bit smaller, those indicators are damned huge */
+            margin-right:5px;
+            display:inline-block;
+            position:relative;
+            bottom:-2px;
+        }
+    }
+
+    .virtual-directory:before {
+        content: '\f4ea';
+        font-family: 'WebHostingHub-Glyphs';
+        font-size: @font-size-small; /* Bit smaller, those indicators are damned huge */
+        margin-right:5px;
+        display:inline-block;
+        position:relative;
+    }
+
+    .project:before {
+        content: '\f6af';
+        font-family: 'WebHostingHub-Glyphs';
+        font-size: @font-size-small; /* Bit smaller, those indicators are damned huge */
+        margin-right:5px;
+        vertical-align: bottom;
+        display:inline-block;
+        position:relative;
+    }
+
+    .emptyPaths {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+
+        .info {
+            display: block;
+            padding: 10px;
+            margin-top: 50%;
+            font-weight: bold;
+            font-size: 200%;
+        }
+    }
+}

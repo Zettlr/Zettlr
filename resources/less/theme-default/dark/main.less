@@ -1,0 +1,31 @@
+/**
+ * MAIN CSS FOR DARK THEMING
+ */
+
+// CodeMirror scrollbar annotations
+.sb-annotation { background-color:yellow; }
+
+.dragger {
+    color:white;
+    background-color:@grey-6;
+}
+
+background-color:@grey-7; // To make opacity to toolbar better looking
+
+::-webkit-scrollbar-track { background-color:@grey-6; }
+
+// Now all other, bigger stylings.
+
+@import "directories.less";
+
+@import "preview.less";
+
+@import "toolbar.less";
+
+@import "editor.less";
+
+@import "codemirror.less";
+
+@import "popup.less";
+
+@import "attachments.less";

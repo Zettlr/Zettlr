@@ -1,0 +1,29 @@
+// Light theme for CodeMirror
+
+// Editor styling
+.CodeMirror {
+    background-color:#ffffff;
+    color:rgb(46, 56, 60);
+}
+
+.CodeMirror-selected { background-color:@green-selection; }
+.CodeMirror-cursor { background: @green-0; }
+
+// TYPOGRAPHY
+.cm-formatting-header-1, .cm-formatting-header-2, .cm-formatting-header-3,
+.cm-formatting-header-4, .cm-formatting-header-5, .cm-formatting-header-6,
+.cm-url { color: @green-0; }
+
+// Code blocks (called comment, why ever)
+.cm-comment { color:@grey-3; }
+
+/* LISTS */
+.cm-formatting-list-ul,
+.cm-formatting-list-ol { color: @green-0; }
+
+/* TYPOGRAPHY */
+.cm-quote, .cm-link, .cm-strong, .cm-em { color:@blue-0; }
+.cm-spell-error { border-bottom:2px dotted @orange-2; }
+.cm-zkn-tag, .cm-zkn-id, .cm-zkn-link { color:@green-0; }
+// cma = code-mirror-anchor
+.cma { color: @blue-0; }

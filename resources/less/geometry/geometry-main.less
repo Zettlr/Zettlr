@@ -1,0 +1,84 @@
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        Geometry CSS
+ * CVM-Role:        Theme
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains the main commands and style rules for the
+ *                  geometry of the app itself. It sizes and frames the elements
+ *                  but does not contain any colours or other styling elements.
+ *                  These are located in the theme files.
+ *
+ *                  The aim of the geometry is that even without any theme all
+ *                  elements are positioned correctly. Colouring is the only
+ *                  thing that will at that point be missing.
+ *
+ * END HEADER
+ */
+
+// First import the geometry variables
+@import "variables.less";
+
+// Then the WebHostingHub Glyph font
+@import "fonts.less";
+
+// Common CSS
+* {
+    margin:0;
+    box-sizing:border-box;
+}
+
+html {
+    font-size:@font-size-base;
+    // Prevent text selection cursor throughout the app (except CodeMirror)
+    cursor:default;
+}
+
+body {
+    overflow: hidden;
+    user-select:none; // Prevent arbitrary selection outside of inputs
+}
+
+#container.blur {
+    /* This is applied when a modal is shown */
+    filter:blur(@song2);
+}
+
+::-webkit-scrollbar { width: 4px; }
+
+.clearfix { clear:both; }
+
+/**
+ * Now the import directives to include the geometrical preconditions for all
+ * elements.
+ */
+
+@import "modal.less";
+
+@import "directories.less";
+
+@import "clusterize.less"; // Clusterize.js styles
+
+@import "preview.less";
+
+@import "combiner.less"; // Has to be included after directories and preview.
+
+@import "editor.less";
+
+@import "codemirror.less";
+
+@import "loading-spinner.less";
+
+@import "quicklook.less";
+
+@import "toolbar.less";
+
+@import "notify.less";
+
+@import "preview.less";
+
+@import "popup.less";
+
+@import "attachments.less";

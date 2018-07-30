@@ -43,7 +43,6 @@ class ZettlrBody
         this._spellcheckLangs = null; // This holds all available languages
         this._ql = []; // This holds all open quicklook windows
         this._n = []; // Holds all notifications currently displaying
-        this._darkTheme = false; // Initial value; will be overwritten by init messages
         this._recentDocs = []; // All documents, up to twenty that have been opened on a per-session basis
         this._numRecentDocs = 10; // No more than 10 docs in the list
 
@@ -298,7 +297,7 @@ class ZettlrBody
      */
     quicklook(file)
     {
-        this._ql.push(new ZettlrQuicklook(this, file, this._darkTheme));
+        this._ql.push(new ZettlrQuicklook(this, file));
     }
 
     /**
@@ -367,12 +366,6 @@ class ZettlrBody
      */
     toggleTheme()
     {
-        this._darkTheme = !this._darkTheme;
-        // Toggle the Quicklook-window's style
-        for(let ql of this._ql) {
-            ql.toggleTheme();
-        }
-
         // Also set the body to light/dark (needed for the scrollbars)
         $('body').toggleClass('dark');
 
@@ -803,7 +796,6 @@ class ZettlrBody
                 }
             };
             // Add additional properties for the project settings.
-            console.log(dialog);
             if(dialog == 'project-properties') {
                 cfg.title = project_title;
 

@@ -1,0 +1,113 @@
+// This file holds all geometry for the Zettlr toolbar
+
+#toolbar {
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:@toolbar-height;
+    margin:0;
+    padding:0;
+    display:flex;
+    align-items:center;
+    cursor:default;
+
+    .button {
+        flex-grow:0.1;
+        display:inline-block;
+        width:@button-size;
+        text-align:center;
+        line-height:@button-size;
+        font-family:'WebHostingHub-Glyphs';
+        font-size:@font-size-small * 0.8;
+
+        &:first-child { margin-left:@toolbar-margin * 2; }
+        &:last-child { margin-right:@toolbar-margin * 2; }
+
+        &.dir-open::before           { content: "\f73e"; }
+        &.directory-new::before      { content: "\f0da"; }
+        &.file-new::before           { content: "\f0c6"; }
+        &.stats::before              { content: "\f6b8"; }
+        &.preferences::before        { content: "\f00f"; }
+        &.recent-docs::before        { content: "\f0c2"; }
+        &.file-save::before          { content: "\f0c8"; }
+        &.file-delete::before        { content: "\f0ce"; }
+        &.file-rename::before        { content: "\f5d4"; }
+        &.formatting::before         { content: "\00b6"; }
+        &.find::before               { content: "\f0c5"; }
+        &.share::before              { content: "\f16c"; }
+        &.show-toc::before           { content: "\f68c"; }
+        &.toggle-attachments::before { content: "\f285"; } // Alternative: '\f284' and '\f286'
+        &.insert-id::before          { content: "ID";    }
+
+        // Pomodoro meter
+        &.pomodoro {
+            padding:2px;
+            // Don't display as button
+            background-image:none;
+            border:none;
+
+            svg {
+                transform: rotate(-90deg);
+                display: inherit;
+                margin: 0 auto;
+
+                .pomodoro-meter, .pomodoro-value { fill: none; }
+                .pomodoro-meter { stroke: rgba(200, 200, 200, 1); }
+                .pomodoro-value { stroke-linecap: square; }
+            }
+        }
+    }
+
+    .spacer { flex-grow:5; }
+
+    .separator {
+        flex-grow:0.3;
+        width:1px;
+        text-align:center;
+
+        &:before {
+            content: "|";
+            display:inline;
+            font-size:@font-size-big;
+        }
+    }
+
+    .file-info {
+        flex-grow:5;
+        text-align:center;
+        font-size:@font-size-small * 0.8;
+        line-height:@toolbar-height;
+        white-space: nowrap;
+        overflow-x: hidden;
+    }
+
+    .searchbar {
+        flex-grow:5;
+        input {
+            color:inherit;
+            height:@button-size;
+            background-color:transparent;
+            width:90%; // Fill out the whole space
+            margin:@toolbar-margin;
+            border:none;
+            font-size:@font-size-small * 0.8;
+            line-height:@button-size;
+            padding:0.2em 1em;
+            margin:0.3em;
+            outline: none;
+            transition:0.5s all ease;
+        }
+
+        div.end-search {
+            position: relative;
+            right: 26px;
+            width: 0px; // 0px will ensure it stays on the input in all sizes
+            height: 12px;
+            display: inline-block;
+            line-height: 11px;
+            font-size: 80%;
+            text-align: center;
+        }
+    }
+}
