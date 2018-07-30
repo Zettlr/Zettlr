@@ -411,7 +411,6 @@ body {
   overflow-x: hidden;
   cursor: default;
   outline: none;
-  background-color: inherit;
 }
 #preview.hidden {
   left: 100%;
@@ -421,11 +420,9 @@ body {
   list-style-type: none;
   margin-left: 0px;
   padding-left: 0px;
-  background-color: inherit;
 }
 #preview ul li {
   margin-top: -1px;
-  background-color: inherit;
   overflow: hidden;
   line-height: 30px;
   padding-left: 6px;
