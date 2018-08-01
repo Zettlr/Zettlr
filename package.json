@@ -120,7 +120,7 @@
     },
     "devDependencies": {
         "chalk": "^2.4.1",
-        "electron": "2.0.4",
+        "electron": "~2.0",
         "electron-builder": "^20.19.2",
         "esdoc": "^1.1.0",
         "esdoc-standard-plugin": "^1.0.0",

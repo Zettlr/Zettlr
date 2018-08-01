@@ -14,6 +14,8 @@
 - Refactored the app's LESS and style handling.
 - Simplified the theme toggling.
 - Consolidated CSS styles.
+- Updated dependencies. Switched to Electron `2.0.6`.
+- Removed `package-lock.json`, because nobody uses them anyway and yarn `1.9.2` just complained about them.
 
 # 0.18.0
 
