@@ -91,6 +91,7 @@ class ZettlrEditor
             theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
             autofocus: false,
             lineWrapping: true,
+            indentUnit: 4,       // Indent lists etc. by 4, not 2 spaces (necessary, e.g., for pandoc)
             autoCloseBrackets: {
                 pairs: '()[]{}\'\'""»«„““”‘’__``', // Autoclose markdown specific stuff
                 override: true

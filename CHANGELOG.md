@@ -4,6 +4,7 @@
 
 - Now it's possible to download and install custom translations for Zettlr! If you want to use a translation that is not (yet) officially bundled with the app, simply import the translation JSON-file into Zettlr using the respective option. It will immediately be available for selection within your preferences (but a restart to apply the change is still necessary). The language file must be in the format `aaa_AAA.json` so that the app can detect the language by looking at the file name.
 - Numbers are now localised with the correct delimiters.
+- Zettlr now automatically indents text using four spaces to better work with other Markdown parsers.
 
 ## Under the hood
 
