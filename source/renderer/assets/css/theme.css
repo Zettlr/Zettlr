@@ -75,7 +75,7 @@ body .CodeMirror {
   color: #2e383c;
 }
 body .CodeMirror-selected {
-  background-color: #c8f0aa;
+  background-color: #c8f0aa !important;
 }
 body .CodeMirror-cursor {
   background: #1cb27e;
@@ -614,7 +614,7 @@ body.dark .CodeMirror {
   color: #c8c8c8;
 }
 body.dark .CodeMirror-selected {
-  background-color: #285028;
+  background-color: #285028 !important;
 }
 body.dark .CodeMirror-cursor {
   background: #1cb27e;
