@@ -126,6 +126,9 @@ body #directories ul li {
   line-height: 120%;
   border-radius: 8px;
 }
+body #directories ul li.root:before {
+  color: #1d75b3;
+}
 body #directories ul li:hover {
   background-color: #dcdcdc;
 }
