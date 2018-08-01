@@ -6,15 +6,11 @@
     left:0%;
     width:100%;
     bottom:0;
-    transition:0.3s left ease;
-
-    &.hidden {
-        left:-100%;
-        transition:0.3s left ease;
-    }
-
     overflow-y: auto;
     outline: none;
+    transition:0.3s left ease;
+
+    &.hidden { left:-100%; }
 
     // Direct descendants need some margin to the files and to other roots
     & > ul:not(:first-child) {
@@ -36,17 +32,14 @@
             margin:5px;
             overflow: hidden;
 
-            &.root {
-
-                &:before {
-                    content: '\f0f0';
-                    font-family: 'WebHostingHub-Glyphs';
-                    font-size: @font-size-small * 0.8; /* Bit smaller, those indicators are damned huge */
-                    margin-right:5px;
-                    display:inline-block;
-                    float:left; // So that the Icon stays leftmost, no matter what the indicator does.
-                    height:16px;
-                }
+            &.root:before {
+                content: '\f0f0';
+                font-family: 'WebHostingHub-Glyphs';
+                font-size: @font-size-small * 0.8; /* Bit smaller, those indicators are damned huge */
+                margin-right:5px;
+                display:inline-block;
+                float:left; // So that the Icon stays leftmost, no matter what the indicator does.
+                height:16px;
             }
         }
 

@@ -6,17 +6,12 @@
     left:0%;
     bottom:0;
     width:100%;
-    transition:0.3s left ease;
-
-    &.hidden {
-        left:100%;
-        transition:0.3s left ease;
-    }
-
     overflow-y: auto;
     overflow-x:hidden;
-    cursor: default;
     outline: none;
+    transition:0.3s left ease;
+
+    &.hidden { left:100%; }
 
     ul {
         list-style-type: none;
@@ -66,8 +61,6 @@
                 .tag {
                     height:@tag-size;
                     width:auto;
-                    border-radius:0;
-                    border:none;
                     margin:0 auto;
                     transition:0.2s all ease-out;
                 }

@@ -64,6 +64,12 @@ body ::-webkit-scrollbar-thumb {
 body ::-webkit-scrollbar-thumb:window-inactive {
   background-color: #a9f1d8;
 }
+body #attachments {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+body #attachments a:hover {
+  text-decoration: underline;
+}
 body .CodeMirror {
   background-color: #ffffff;
   color: #2e383c;

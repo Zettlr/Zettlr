@@ -256,13 +256,12 @@ body {
   left: 0%;
   width: 100%;
   bottom: 0;
-  transition: 0.3s left ease;
   overflow-y: auto;
   outline: none;
+  transition: 0.3s left ease;
 }
 #directories.hidden {
   left: -100%;
-  transition: 0.3s left ease;
 }
 #directories > ul:not(:first-child) {
   padding-top: 0.8em;
@@ -406,15 +405,13 @@ body {
   left: 0%;
   bottom: 0;
   width: 100%;
-  transition: 0.3s left ease;
   overflow-y: auto;
   overflow-x: hidden;
-  cursor: default;
   outline: none;
+  transition: 0.3s left ease;
 }
 #preview.hidden {
   left: 100%;
-  transition: 0.3s left ease;
 }
 #preview ul {
   list-style-type: none;
@@ -459,8 +456,6 @@ body {
 #preview ul li .taglist .tag {
   height: 25px;
   width: auto;
-  border-radius: 0;
-  border: none;
   margin: 0 auto;
   transition: 0.2s all ease-out;
 }
@@ -553,7 +548,6 @@ body {
 }
 #combiner #arrow-button.hidden {
   left: -60px;
-  transition: 0.4s left ease;
 }
 #editor {
   position: fixed;
@@ -946,11 +940,9 @@ body {
   left: 0;
   width: 100%;
   height: 39px;
-  margin: 0;
   padding: 0;
   display: flex;
   align-items: center;
-  cursor: default;
 }
 #toolbar .button {
   flex-grow: 0.1;
@@ -1048,7 +1040,6 @@ body {
 #toolbar .file-info {
   flex-grow: 5;
   text-align: center;
-  font-size: 0.72em;
   line-height: 39px;
   white-space: nowrap;
   overflow-x: hidden;
@@ -1057,18 +1048,13 @@ body {
   flex-grow: 5;
 }
 #toolbar .searchbar input {
-  color: inherit;
   height: 38px;
-  background-color: transparent;
   width: 90%;
   margin: 5px;
-  border: none;
-  font-size: 0.72em;
   line-height: 38px;
   padding: 0.2em 1em;
   margin: 0.3em;
   outline: none;
-  transition: 0.5s all ease;
 }
 #toolbar .searchbar div.end-search {
   position: relative;

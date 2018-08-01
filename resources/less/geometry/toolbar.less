@@ -6,11 +6,9 @@
     left:0;
     width:100%;
     height:@toolbar-height;
-    margin:0;
     padding:0;
     display:flex;
     align-items:center;
-    cursor:default;
 
     .button {
         flex-grow:0.1;
@@ -76,7 +74,6 @@
     .file-info {
         flex-grow:5;
         text-align:center;
-        font-size:@font-size-small * 0.8;
         line-height:@toolbar-height;
         white-space: nowrap;
         overflow-x: hidden;
@@ -85,18 +82,13 @@
     .searchbar {
         flex-grow:5;
         input {
-            color:inherit;
             height:@button-size;
-            background-color:transparent;
             width:90%; // Fill out the whole space
             margin:@toolbar-margin;
-            border:none;
-            font-size:@font-size-small * 0.8;
             line-height:@button-size;
             padding:0.2em 1em;
             margin:0.3em;
             outline: none;
-            transition:0.5s all ease;
         }
 
         div.end-search {

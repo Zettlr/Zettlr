@@ -13,6 +13,7 @@
 - Zettlr now preserves the linefeeds of a file on saving.
 - Refactored the app's LESS and style handling.
 - Simplified the theme toggling.
+- Consolidated CSS styles.
 
 # 0.18.0
 
