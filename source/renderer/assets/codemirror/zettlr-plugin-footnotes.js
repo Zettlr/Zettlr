@@ -38,14 +38,14 @@
 
         if(fnrefRE.test(cm.doc.getLine(cur.line))) {
             // Let's try to keep inception with fns inside other fns to a minimum.
-            return;
+            return CodeMirror.Pass;
         }
 
         let content = cm.doc.getValue();
 
         // Find all footnotes
         let lastIndex = 0; // Start with 0 because the index WILL be increased.
-        let match = [];
+        let match;
 
         while((match = fnRE.exec(content)) !== null) {
             // Find the highest index
@@ -55,22 +55,27 @@
             }
         }
 
+        // lastIndex is now one bigger than the last found actual (number) index
+        // but at least 1.
         lastIndex++;
 
+        // First insert the footnote anchor.
         cm.doc.replaceRange(`[^${lastIndex}]`, cur);
-        // Also, add a reference to the bottom of the document
+        // Then add a reference to the bottom of the document
         cur.line = cm.doc.lastLine();
         cur.ch = cm.doc.getLine(cur.line).length;
         cm.doc.setCursor(cur);
-        let nl = '\n\n';
-        // Check if the last line is either empty or contains a footnote
-        if(cur.line > 0) {
-            let line = cm.doc.getLine(cur.line);
-            if(fnrefRE.test(line) || line.trim() === '') {
-                nl = '\n'; // Only one newline char in that case.
-            }
+        if(cm.doc.getLine(cur.line).trim() === '') {
+            cm.doc.replaceRange(`[^${lastIndex}]: `, cur);
+        } else if(fnrefRE.test(cm.doc.getLine(cur.line))) {
+            // Last line is a footnote reference -> Only add one newline.
+            cm.doc.replaceRange(`\n[^${lastIndex}]: `, cur);
+            cm.doc.setCursor({ 'line': (cur.line + 1), 'ch': (5 + lastIndex.toString().length) });
+        } else {
+            // Line is neither empty nor a footnote reference.
+            cm.doc.replaceRange(`\n\n[^${lastIndex}]: `, cur);
+            cm.doc.setCursor({ 'line': (cur.line + 2), 'ch': (5 + lastIndex.toString().length) });
         }
-        cm.doc.replaceRange(`${nl}[^${lastIndex}]: `, cur);
     };
 
     // Removes a footnote. It searches for a footnote under the cursor and
