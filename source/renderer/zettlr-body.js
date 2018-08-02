@@ -52,13 +52,13 @@ class ZettlrBody
             'resize' : (e, ui) => { $('#combiner').css('width', ($(window).width()-ui.size.width)+'px'); },
             'stop': (e, ui) => { this._renderer.getEditor().refresh(); }, // Refresh the editor to update lines and cursor positions.
             'minWidth': Math.round($(window).width() * 0.4),
-            'maxWidth': Math.round($(window).width() * 0.95)
+            'maxWidth': Math.round($(window).width() * 0.9)
         });
 
         // Update resize options on window resize
         window.addEventListener('resize', (e) => {
             $('#editor').resizable("option", "minWidth", Math.round($(window).width() * 0.4));
-            $('#editor').resizable("option", "maxWidth", Math.round($(window).width() * 0.95));
+            $('#editor').resizable("option", "maxWidth", Math.round($(window).width() * 0.9));
 
             // Also we have to resize the editor to the correct width again
             $('#editor').css('width', $(window).innerWidth() - $('#combiner').outerWidth() + 'px');
