@@ -18,8 +18,9 @@
 const {net}      = require('electron');
 const semver     = require('semver');
 const showdown   = require('showdown');
+const isOnline   = require('is-online');
 
-const {trans} = require('../common/lang/i18n.js');
+const {trans}    = require('../common/lang/i18n.js');
 
 const REPO_URL   = require('../common/data.json').repo_url;
 const CUR_VER    = require('../package.json').version;
@@ -54,10 +55,32 @@ class ZettlrUpdater
     }
 
     /**
-     * Performs a check against the GitHub API, to determine whether or not
-     * there is a new version of Zettlr available. TODO: Handle disconnect errors!
+     * Check whether or not the application is online. If so, perform the actual
+     * update check.
+     * @return {ZettlrUpdater} Returns this for chainability.
      */
     check()
+    {
+        isOnline().then(online => {
+            if(!online) {
+                this._app.notify(trans('dialog.update.connection_error'));
+
+            } else {
+                this._app.notify('We are online! Checking...');
+                this._fetchReleases();
+            }
+        });
+
+        return this;
+    }
+
+    /**
+     * This function is buffered by a connectivity check, and will only executed
+     * if there is a connection, because otherwise, net will throw errors like
+     * mad.
+     * @return {void} Does not return anything.
+     */
+    _fetchReleases()
     {
         net.on('error', (err) => {
             this._app.notify(trans('dialog.update.connection_error'));
@@ -103,17 +126,17 @@ class ZettlrUpdater
      */
     _parseResponse()
     {
+        if(this._error) {
+            this._response = '';
+            this._error = false;
+            return; // A notification has been sent from within the asynchronous function
+        }
+
         // Error handling
         if(this._response.trim() === '') {
             this._app.notify(trans('dialog.update.no_data'));
             this._response = '';
             return;
-        }
-
-        if(this._error) {
-            this._response = '';
-            this._error = false;
-            return; // A notification has been sent from within the asynchronous function
         }
 
         // First we need to deal with it.

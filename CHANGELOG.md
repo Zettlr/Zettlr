@@ -8,6 +8,7 @@
 - Changed resizing constraints: Editor can now have 90 percent width at maximum.
 - Fixed a small bug that lets you open non-markdown files as roots.
 - You can now copy selected Markdown text as HTML! Just press `Cmd/Ctrl+Alt+C` instead of `Cmd/Ctrl+C`.
+- Added an online-check. From now on, if you are offline, Zettlr won't show you ugly error messages, but a simple notification that you are, in fact, offline and Zettlr can't check for updates.
 
 ## Under the hood
 
@@ -20,7 +21,8 @@
 - Updated dependencies. Switched to Electron `2.0.6`.
 - Removed `package-lock.json`, because nobody uses them anyway and yarn `1.9.2` just complained about them.
 - Changed resizing constraints: Editor can now have 90 percent width at maximum.
-- Fixed logical error in `ZettlrConfig` that allowed non-markdown-files to be opened as root files.
+- Fixed a logical error in `ZettlrConfig` that allowed non-markdown-files to be opened as root files.
+- Buffered the update check with an online-check. Renamed the original `check()` to `_fetchReleases()`.
 
 # 0.18.0
 
