@@ -87,6 +87,7 @@
         "redo": "Repeter",
         "cut": "Couper",
         "copy": "Copier",
+        "copy_html": "Copier en HTML",
         "paste": "Coller",
         "select_all": "Sélectionner tous",
         "find_file": "Trouver dans le fichier",

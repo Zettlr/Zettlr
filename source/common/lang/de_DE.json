@@ -87,6 +87,7 @@
         "redo": "Wiederholen",
         "cut": "Ausschneiden",
         "copy": "Kopieren",
+        "copy_html": "Als HTML kopieren",
         "paste": "Einfügen",
         "select_all": "Alles auswählen",
         "find_file": "In Datei finden",

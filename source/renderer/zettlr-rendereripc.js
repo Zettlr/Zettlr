@@ -452,6 +452,11 @@ class ZettlrRendererIPC
             this.send('import-lang-file');
             break;
 
+            // Copy a selection as HTML
+            case 'copy-as-html':
+            this._app.getEditor().copyAsHTML();
+            break;
+
             default:
             console.log(trans('system.unknown_command', cmd));
             break;

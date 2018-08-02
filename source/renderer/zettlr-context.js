@@ -237,6 +237,9 @@ class ZettlrCon
             this._menu.append(new MenuItem( { type: 'separator' } ));
             this._menu.append(new MenuItem( { label: trans('menu.cut'), role: 'cut', accelerator: 'CmdOrCtrl+X' }));
             this._menu.append(new MenuItem( { label: trans('menu.copy'), role: 'copy', accelerator: 'CmdOrCtrl+C' }));
+            this._menu.append(new MenuItem( { label: trans('menu.copy_html'), click(item, win) {
+                that._body.getRenderer().handleEvent('copy-as-html');
+            } }));
             this._menu.append(new MenuItem( { label: trans('menu.paste'), role: 'paste', accelerator: 'CmdOrCtrl+V' }));
             this._menu.append(new MenuItem( { type: 'separator' } ));
             this._menu.append(new MenuItem( { label: trans('menu.select_all'), role: 'selectall', accelerator: 'CmdOrCtrl+A' }));

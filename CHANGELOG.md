@@ -7,6 +7,7 @@
 - Zettlr now automatically indents text using four spaces to better work with other Markdown parsers.
 - Changed resizing constraints: Editor can now have 90 percent width at maximum.
 - Fixed a small bug that lets you open non-markdown files as roots.
+- You can now copy selected Markdown text as HTML! Just press `Cmd/Ctrl+Alt+C` instead of `Cmd/Ctrl+C`.
 
 ## Under the hood
 

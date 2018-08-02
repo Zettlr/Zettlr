@@ -12,8 +12,10 @@
 * END HEADER
 */
 
-const path = require('path');
-const ZettlrPopup = require('./zettlr-popup.js');
+const path          = require('path');
+const ZettlrPopup   = require('./zettlr-popup.js');
+const showdown      = require('showdown');
+const { clipboard } = require('electron');
 
 // First codemirror addons
 require('codemirror/addon/mode/overlay');
@@ -1009,6 +1011,21 @@ class ZettlrEditor
             this._searchCursor.replace(replaceWhat);
         }
         this._searchCursor = null;
+    }
+
+    /**
+     * This function copies text as HTML, if there are selections
+     * @return {ZettlrEditor} This (chainabiltiy)
+     */
+    copyAsHTML()
+    {
+        if(this._cm.somethingSelected()) {
+            let md = this._cm.getSelections().join(' ');
+            let conv = new showdown.Converter();
+            conv.setFlavor('github');
+            clipboard.writeHTML(conv.makeHtml(md));
+        }
+        return this;
     }
 
     /**

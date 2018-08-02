@@ -366,7 +366,7 @@ class ZettlrBody
      */
     toggleTheme()
     {
-        // Also set the body to light/dark (needed for the scrollbars)
+        // Set the body to dark; will affect everything on the page.
         $('body').toggleClass('dark');
 
         return this;

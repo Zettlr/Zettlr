@@ -103,13 +103,13 @@ class ZettlrMenu
                         label: trans('menu.delete_file'),
                         accelerator: (process.platform === 'darwin') ? 'Cmd+Backspace': 'Delete',
                         click (item, focusedWindow) {
-                            if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'file-delete'});
+                            if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'file-delete' });
                         }
                     }, {
                         label: trans('menu.delete_dir'),
                         accelerator: (process.platform === 'darwin') ? 'Cmd+Shift+Backspace': 'Ctrl+Delete',
                         click(item, focusedWindow) {
-                            if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'dir-delete'});
+                            if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'dir-delete' });
                         }
                     }
                 ]
@@ -122,6 +122,13 @@ class ZettlrMenu
                     { type: 'separator' },
                     { label: trans('menu.cut'), role: 'cut' },
                     { label: trans('menu.copy'), role: 'copy' },
+                    {
+                        label: trans('menu.copy_html'),
+                        accelerator: 'CmdOrCtrl+Alt+C',
+                        click(item, focusedWindow) {
+                            if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'copy-as-html' });
+                        }
+                    },
                     { label: trans('menu.paste'), role: 'paste' },
                     { label: trans('menu.select_all'), role: 'selectall' },
                     { type: 'separator' },

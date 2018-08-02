@@ -87,6 +87,7 @@
         "redo": "Redo",
         "cut": "Cut",
         "copy": "Copy",
+        "copy_html": "Copy as HTML",
         "paste": "Paste",
         "select_all": "Select all",
         "find_file": "Find in file",
