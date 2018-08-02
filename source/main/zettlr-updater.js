@@ -66,7 +66,6 @@ class ZettlrUpdater
                 this._app.notify(trans('dialog.update.connection_error'));
 
             } else {
-                this._app.notify('We are online! Checking...');
                 this._fetchReleases();
             }
         });
