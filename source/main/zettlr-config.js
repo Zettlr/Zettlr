@@ -20,7 +20,7 @@ const fs             = require('fs');
 const path           = require('path');
 const {app}          = require('electron');
 const commandExists  = require('command-exists').sync; // Does a given shell command exist?
-const {isFile,isDir} = require('../common/zettlr-helpers.js');
+const {ignoreFile,isDir} = require('../common/zettlr-helpers.js');
 
 /**
  * This class represents the configuration of Zettlr, represented by the
@@ -285,7 +285,7 @@ class ZettlrConfig
     addPath(p)
     {
         // Only add valid and unique paths
-        if((isFile(p) || isDir(p)) && !this.config['openPaths'].includes(p)) {
+        if((!ignoreFile(p) || isDir(p)) && !this.config['openPaths'].includes(p)) {
             this.config['openPaths'].push(p);
             this._sortPaths();
             return true;

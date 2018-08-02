@@ -6,6 +6,7 @@
 - Numbers are now localised with the correct delimiters.
 - Zettlr now automatically indents text using four spaces to better work with other Markdown parsers.
 - Changed resizing constraints: Editor can now have 90 percent width at maximum.
+- Fixed a small bug that lets you open non-markdown files as roots.
 
 ## Under the hood
 
@@ -18,6 +19,7 @@
 - Updated dependencies. Switched to Electron `2.0.6`.
 - Removed `package-lock.json`, because nobody uses them anyway and yarn `1.9.2` just complained about them.
 - Changed resizing constraints: Editor can now have 90 percent width at maximum.
+- Fixed logical error in `ZettlrConfig` that allowed non-markdown-files to be opened as root files.
 
 # 0.18.0
 

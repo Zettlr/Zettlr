@@ -423,13 +423,12 @@ class Zettlr
             // First check if this thing is already added. If so, simply write
             // the existing file/dir into the newFile/newDir vars. They will be
             // opened accordingly.
-            if(this.findFile({'path': f}) != null) {
-                newFile = this.findFile({'path': f});
+            if((newFile = this.findFile({'path': f})) != null) {
                 // Also set the newDir variable so that Zettlr will automatically
                 // navigate to the directory.
                 newDir = newFile.parent;
-            } else if(this.findDir({'path': f}) != null) {
-                newDir = this.findDir({'path': f});
+            } else if((newDir = this.findDir({'path': f})) != null) {
+                // Do nothing
             } else if(this.getConfig().addPath(f)) {
                 if(isFile(f)) {
                     newFile = new ZettlrFile(this, f);
@@ -438,6 +437,8 @@ class Zettlr
                     newDir = new ZettlrDir(this, f);
                     this._openPaths.push(newDir);
                 }
+            } else {
+                this.notify(trans('system.error.open_root_error', path.basename(f)));
             }
         }
 

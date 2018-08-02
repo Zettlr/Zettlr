@@ -369,7 +369,8 @@
             "virtual_dir_exists": "Das virtuelle Verzeichnis &quot;%s&quot; existiert bereits.",
             "export_temp_file": "Konnte temporäre Datei &quot;%s&quot; nicht entfernen. Bitte manuell entfernen.",
             "export_error_title": "Export fehlgeschlagen",
-            "export_error_message": "Ein Fehler ist beim Export aufgetreten: %s"
+            "export_error_message": "Ein Fehler ist beim Export aufgetreten: %s",
+            "open_root_error": "Konnte Datei %s nicht öffnen"
         },
         "save_changes_title": "Änderungen verwerfen?",
         "save_changes_message": "Die Datei enthält ungespeicherte Änderungen. Verwerfen oder speichern?",
@@ -380,7 +381,7 @@
         "replace_file_message": "Die aktuelle Datei wurde von außerhalb verändert. Änderungen übernehmen?",
         "directory_removed": "Das Verzeichnis %s wurde entfernt.",
         "file_removed": "Datei %s wurde entfernt.",
-        "export_success": "Exported successfully to %s",
+        "export_success": "Erfolgreich exportiert nach %s",
         "ok": "Ok",
         "cancel": "Abbrechen",
         "open_folder": "Projektverzeichnis öffnen",
