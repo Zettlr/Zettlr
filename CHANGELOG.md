@@ -25,6 +25,7 @@
 - Fixed a logical error in `ZettlrConfig` that allowed non-markdown-files to be opened as root files.
 - Buffered the update check with an online-check. Renamed the original `check()` to `_fetchReleases()`.
 - Fixes to the footnote placement.
+- Removed an unused function from `ZettlrEditor`.
 
 # 0.18.0
 

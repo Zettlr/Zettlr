@@ -699,7 +699,7 @@ class ZettlrEditor
         }
 
         if(this._cm.somethingSelected()) {
-            ret.words_sel = this.getWordCount(this._cm.getSelections().join(''));
+            ret.words_sel = this.getWordCount(this._cm.getSelections().join(' '));
             ret.chars_sel = this._cm.getSelections().join('').length;
         }
 
@@ -843,7 +843,7 @@ class ZettlrEditor
                 sc.replace(newtext);
                 popup.close();
             }
-        })
+        });
     }
 
     /**
@@ -877,34 +877,6 @@ class ZettlrEditor
         // Wow. Such magic.
         this._cm.doc.setCursor({ 'line' : line, 'ch': 0 });
         this._cm.refresh();
-    }
-
-    /**
-    * Toggles the theme.
-    * @return {ZettlrEditor} Chainability.
-    */
-    toggleTheme()
-    {
-        if(this._div.hasClass('dark')) {
-            this._div.removeClass('dark');
-            this._cm.setOption("theme", 'zettlr');
-        } else {
-            this._div.addClass('dark');
-            this._cm.setOption("theme", 'zettlr-dark');
-        }
-
-        return this;
-    }
-
-    /**
-     * Toggles display of the side pane
-     * @return {ZettlrEditor} Chainability
-     */
-    toggleCombiner()
-    {
-        this._div.toggleClass('no-combiner');
-        this._cm.refres();
-        return this;
     }
 
     /**
@@ -950,6 +922,12 @@ class ZettlrEditor
         }
     }
 
+    /**
+     * Starts the search by preparing a search cursor we can use to forward the
+     * search.
+     * @param  {String} term The string to start a search for
+     * @return {ZettlrEditor}      This for chainability.
+     */
     startSearch(term)
     {
         // Create a new search cursor
@@ -973,15 +951,20 @@ class ZettlrEditor
 
         // Mark these in document and on the scroll bar
         this._mark(res);
+
+        return this;
     }
 
     /**
      * Stops the search by destroying the search cursor
+     * @return {ZettlrEditor}   This for chainability.
      */
     stopSearch()
     {
         this._searchCursor = null;
         this.unmarkResults();
+
+        return this;
     }
 
     /**

@@ -145,7 +145,6 @@ class ZettlrExport
     /**
      * Perform necessary steps on the file such as replacing IDs or tags, if
      * wanted.
-     * TODO: For PDF exports this function should also create the latex-template.
      */
     _prepareFile()
     {
@@ -172,6 +171,9 @@ class ZettlrExport
                 return p1;
             });
         }
+
+        // Finally, make all images paths absolute.
+        // TODO
 
         // Finally, save as temporary file.
         fs.writeFileSync(this.tempfile, cnt, 'utf8');
