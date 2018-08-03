@@ -10,6 +10,7 @@
 - You can now copy selected Markdown text as HTML! Just press `Cmd/Ctrl+Alt+C` instead of `Cmd/Ctrl+C`.
 - Added an online-check. From now on, if you are offline, Zettlr won't show you ugly error messages, but a simple notification that you are, in fact, offline and Zettlr can't check for updates.
 - Improved footnote placement.
+- Improved the placement of images in exported PDF files.
 
 ## Under the hood
 
@@ -26,6 +27,7 @@
 - Buffered the update check with an online-check. Renamed the original `check()` to `_fetchReleases()`.
 - Fixes to the footnote placement.
 - Removed an unused function from `ZettlrEditor`.
+- Removed excess `console.log` from `ZettlrBody`.
 
 # 0.18.0
 

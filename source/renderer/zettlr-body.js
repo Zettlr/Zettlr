@@ -599,7 +599,7 @@ class ZettlrBody
      * @return {void}           Nothing to return.
      */
     proceed(dialog, res)
-    { console.log(dialog, res);
+    {
         let pandoc = '',
         xelatex    = '',
         darkTheme  = false,
@@ -804,7 +804,6 @@ class ZettlrBody
                 obj.properties = cfg;
                 obj.hash = hash;
                 this._renderer.saveProjectSettings(obj);
-                console.log(obj);
             } else {
                 // pdf preferences
                 this._renderer.saveSettings(cfg);

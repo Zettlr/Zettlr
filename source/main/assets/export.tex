@@ -15,6 +15,33 @@
 % This package is needed for better rendering of images (including captions)
 \usepackage{graphicx}
 
+% Calc is needed to compute the image width (to prevent up-scaling of small images)
+\usepackage{calc}
+
+% Pandoc uses includegraphics. But as some images may be too big, we have to
+% replace the command with another one that ensures proper scaling of images.
+% Therefore first save the old includegraphics command somewhere else.
+\let\oldincg\includegraphics
+
+% Create the imgwidth variable
+\newlength{\imgwidth}
+
+% Now renew the original includegraphics command to include some logic that
+% first determines the width of the image and then either scales it down or
+% retains it at original size (using the minof command). The centering is done
+% automatically by Pandoc.
+\renewcommand\includegraphics[1]{%
+    \settowidth{\imgwidth}{\oldincg{#1}}%
+    \setlength{\imgwidth}{\minof{\imgwidth}{\textwidth}}%
+    \oldincg[width=\imgwidth]{#1}%
+}
+
+% Now we also have to make sure that the figures Pandoc inserts are positioned
+% approximately where they are at. Therefore we have to overwrite the
+% \begin{figure} command a little bit by using the float package:
+\usepackage{float}
+\floatplacement{figure}{H} % ensure default position as H (exactly where the figure is in the text)
+
 % Needed for pandoc's table generation
 \usepackage{longtable}
 \usepackage{booktabs}  % For using \midrule and \toprule, whatever they are

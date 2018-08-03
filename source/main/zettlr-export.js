@@ -172,8 +172,20 @@ class ZettlrExport
             });
         }
 
-        // Finally, make all images paths absolute.
-        // TODO
+        // Finally, make all image paths absolute for the export to Pandoc.
+        let absPath = path.dirname(this.options.file.path);
+        let imgRE = /^!\[(.+?)\]\((.+?)\)$/gmi;
+        let match;
+        cnt = cnt.replace(imgRE, (match, p1, p2, offset, string) => {
+            // Check if the path (p2) contains the absolute path
+            if(p2.indexOf(absPath) === 0 || p2.indexOf('http') === 0) {
+                // It's already absolute (either local or remote)
+                return `![${p1}](${p2})`;
+            } else {
+                // Make it absolute
+                return `![${p1}](${path.join(absPath, p2)})`;
+            }
+        });
 
         // Finally, save as temporary file.
         fs.writeFileSync(this.tempfile, cnt, 'utf8');
