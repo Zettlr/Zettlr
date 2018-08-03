@@ -567,6 +567,11 @@ class ZettlrEditor
         this.unmarkResults(); // Clear potential previous marks
         let sbannotate = [];
         for(let result of res) {
+            if(!result.from || !result.to) {
+                // One of these was undefined. And somehow this if-clause has made
+                // searching approximately three times faster. Crazy.
+                continue;
+            }
             sbannotate.push({ 'from': result.from, 'to': result.to });
             this._markedResults.push(this._cm.markText(result.from, result.to, {className: "search-result"}));
         }
