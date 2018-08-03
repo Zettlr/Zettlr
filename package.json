@@ -101,9 +101,12 @@
             "allowToChangeInstallationDirectory": true
         },
         "deb": {
-            "priority": "optional"
+            "priority": "optional",
+            "compression": "gz"
         },
-        "rpm": {}
+        "rpm": {
+            "compression": "gz"
+        }
     },
     "dependencies": {
         "chokidar": "^2.0.4",
