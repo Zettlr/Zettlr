@@ -1,3 +1,13 @@
+# 0.18.2
+
+## GUI and functionality
+
+- Minor fix to the style of `code`-blocks in modals.
+
+## Under the hood
+
+(nothing here)
+
 # 0.18.1
 
 ## GUI and functionality

@@ -409,6 +409,8 @@ body .modal .dialog hr {
 body .modal .dialog code {
   background-color: #f0f0f0;
   border-radius: 2px;
+  font-weight: bold;
+  padding: 2px 5px;
 }
 body .modal .dialog label {
   color: #646464;
