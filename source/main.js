@@ -38,7 +38,11 @@ let zettlr;
  */
 global.filesToOpen = [];
 
-// Ensure we only got one version of the app running
+/**
+ * This variable is false, if this process is the only one, or if there is
+ * already one running on this system.
+ * @type {Boolean}
+ */
 let isSecondInstance = app.makeSingleInstance((argv, cwd) => {
     // Retrieve all potential files from the list of arguments. Thanks to
     // Abricotine for this logic!
@@ -65,10 +69,6 @@ let isSecondInstance = app.makeSingleInstance((argv, cwd) => {
         global.filesToOpen = files;
     }
 });
-
-if (isSecondInstance) {
-    return app.quit();
-}
 
 /**
  * This gets executed when the user wants to open a file on macOS.
@@ -127,3 +127,11 @@ process.on('unhandledRejection', (err) => {
     // Just log to console.
     console.error('Received an unhandled rejection: ' + err.message);
 });
+
+/**
+ * Quit if this is a second instance of Zettlr.
+ * @param  {Boolean} isSecondInstance Whether or not this is a second instance.
+ */
+if(isSecondInstance) {
+    app.quit();
+}

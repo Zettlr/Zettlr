@@ -157,6 +157,10 @@ class ZettlrToolbar
         return this;
     }
 
+    /**
+     * Toggles the distraction free's mute class on the toolbar.
+     * @return {ZettlrToolbar} This for chainability.
+     */
     toggleDistractionFree()
     {
         this._div.toggleClass('mute');

@@ -392,6 +392,10 @@ class ZettlrRenderer
         this._attachments.refresh();
     }
 
+    /**
+     * Replaces the current file with a new version after a save.
+     * @param  {ZettlrFile} file The new file object.
+     */
     refreshCurrentFile(file)
     {
         if(this.getCurrentFile()) {
@@ -409,6 +413,11 @@ class ZettlrRenderer
         }
     }
 
+    /**
+     * Replaces a file after the name has changed (or it has been moved)
+     * @param  {Number} oldHash The old hash
+     * @param  {ZettlrFile} file    The new file to replace the old.
+     */
     replaceFile(oldHash, file)
     {
         if(!file) {

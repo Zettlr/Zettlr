@@ -99,19 +99,25 @@ class ZettlrFile
      * Handles an event emitted by the watchdog
      * @param  {String} p The path to test against
      * @param  {String} e The event to handle
+     * @return {Boolean} True, if the file has been changed, or false.
      */
     handleEvent(p, e)
     {
-        if(this.isScope(p) === this) {
+        if(this.isScope(p) === this && this.hasChanged()) {
             // Only in this case may we handle the event. Possible events:
             // change, unlink
             if(e === 'change') {
-                this.update().parent.notifyChange(`File ${this.name} has changed remotely.`);
+                this.update().parent.notifyChange(trans('system.file_changed', this.name));
+                return true;
             } else if(e === 'unlink') {
                 this.parent.notifyChange(trans('system.file_removed', this.name));
                 this.remove();
+                return true;
             }
         }
+
+        // Nothing has changed.
+        return false;
     }
 
     /**
@@ -399,6 +405,10 @@ class ZettlrFile
         }
     }
 
+    /**
+     * This function notifies all virtual directories, of which this file is a
+     * member, that something has changed and they should update themselves.
+     */
     _notifyVD()
     {
         for(let vd of this._vd) {
@@ -611,6 +621,24 @@ class ZettlrFile
         }
 
         return false;
+    }
+
+    /**
+     * This function returns true, if the modtime of the file is different than
+     * the last one that has been recorded (after the last save of the file).
+     * @return {Boolean} True, if the file has changed since last check, or false.
+     */
+    hasChanged()
+    {
+        try {
+            let stat = fs.lstatSync(this.path);
+            return (stat.mtime.getTime() !== this.modtime);
+        } catch(e) {
+            // An error occurred, which means the file seems to have been deleted
+            // in the meantime. We won't handle this case here, but indeed the
+            // file must've been changed.
+            return true;
+        }
     }
 }
 

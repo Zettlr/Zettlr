@@ -24,8 +24,15 @@ const { flattenDirectoryTree }  = require('../common/zettlr-helpers.js');
 
 const PROJECT_FILE = '.ztr-project';
 
+/**
+ * ZettlrProjects adds project functionality to any given directory. It manages
+ * its own settings via a small file inside the directory and handles exports.
+ */
 class ZettlrProject
 {
+    /**
+     * Creates the instance and reads the project file, if there is one.
+     */
     constructor(directory)
     {
         this._dir = directory;
@@ -57,6 +64,9 @@ class ZettlrProject
         this._read();
     }
 
+    /**
+     * Reads the project file from disk or creates a file, if there is none.
+     */
     _read()
     {
         this._cfg = this._cfgtpl;
@@ -68,6 +78,9 @@ class ZettlrProject
         }
     }
 
+    /**
+     * Saves changes to the project to disk.
+     */
     save()
     {
         fs.writeFileSync(this._projectFile, JSON.stringify(this._cfg), 'utf8');

@@ -46,10 +46,9 @@ function hash(string)
 
 /**
  * This function flattens an object tree (file tree) to an array.
- * @param  {Object} data        A ZettlrDir tree
- * @param  {Array}  [newarr=[]] Needed for recursion
+ * @param  {Object} tree        A ZettlrDir tree
+ * @param  {Array}  [newarr=[]] Needed for recursion. Do not use.
  * @return {Mixed}             An array or nothing.
- * @deprecated
  */
 function flattenDirectoryTree(tree, newarr = [])
 {
@@ -294,6 +293,11 @@ function isDir(p)
     }
 }
 
+/**
+ * This function determines whether or not a given path describes an attachment.
+ * @param  {string}  p The path to be checked.
+ * @return {Boolean}   Returns true, if the path is an attachment, or false.
+ */
 function isAttachment(p)
 {
     if(!global.attachmentExtensions) {

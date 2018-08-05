@@ -29,9 +29,15 @@
  * class as one likes (virtual directories and filters are one possibility. Also
  * thinkable would be virtual project directories as well, or weblink directories.)
  */
-class ZettlrVirtualDirectory
-{
-    constructor(dir, vd, model)
+ class ZettlrVirtualDirectory
+ {
+     /**
+      * Initialises the virtual directories for a given directory.
+      * @param {ZettlrDir} dir   The containing directory.
+      * @param {Array} vd    An array of files inside this directory.
+      * @param {ZettlrInterface} model The ZettlrInterface
+      */
+     constructor(dir, vd, model)
     {
          this.parent         = dir;
          this.path           = model.getDatabase();
@@ -63,6 +69,9 @@ class ZettlrVirtualDirectory
         }
     }
 
+    /**
+     * Shuts down the virtual directory, saves the last changes and quits.
+     */
     shutdown()
     {
         // The ZettlrFiles will shutdown when their real parent shuts down.
@@ -82,10 +91,18 @@ class ZettlrVirtualDirectory
         }
     }
 
+    /**
+     * Serves as a dummy function so we don't have to check on ZettlrDir's
+     * handleEvent function.
+     * @param  {String} p The path to be checked for.
+     * @param  {String} e The event type.
+     * @return {Boolean} Always false, because events don't trigger changes here.
+     */
     handleEvent(p, e)
     {
         // TODO: Needs to listen for unlink-events of files and check all children
         // if they're still there!
+        return false;
     }
 
     /**
@@ -146,6 +163,11 @@ class ZettlrVirtualDirectory
         return null;
     }
 
+    /**
+     * Returns an exact match, if possible.
+     * @param  {String} term The search term.
+     * @return {Mixed}      Either a ZettlrFile or null.
+     */
     findExact(term)
     {
         for(let c of this.children) {
@@ -158,6 +180,11 @@ class ZettlrVirtualDirectory
         return null;
     }
 
+    /**
+     * Return a specific file based on its hash.
+     * @param  {Number} hash The hash to be searched for
+     * @return {Mixed}      Either a ZettlrFile object, or null.
+     */
     get(hash)
     {
         for(let c of this.children) {
@@ -171,6 +198,11 @@ class ZettlrVirtualDirectory
         return null;
     }
 
+    /**
+     * Removes either a file from this VD or this VD from the containing dir.
+     * @param  {Object} [obj=this] Either this or a specific file that has called this function.
+     * @return {Boolean}            Whether or not the remove operation was successful.
+     */
     remove(obj = this)
     {
         if(obj === this) {
@@ -195,6 +227,13 @@ class ZettlrVirtualDirectory
         return true;
     }
 
+    /**
+     * Although this function is in normal directories used to move and rename
+     * the directory, for virtual directories it can only rename them.
+     * @param  {String} newpath     The new path (not used, only for API consistency)
+     * @param  {string} [name=null] The new directory name.
+     * @return {ZettlrVirtualDirectory}             This (chainability)
+     */
     move(newpath, name = null)
     {
         // Name must be given for virtual directories.
@@ -214,6 +253,11 @@ class ZettlrVirtualDirectory
         return this;
     }
 
+    /**
+     * Add a new file to this directory.
+     * @param  {ZettlrFile} newchild The file to be added
+     * @return {ZettlrVirtualDirectory}          This for chainability.
+     */
     attach(newchild)
     {
         // Only add files, prevent duplicates and make sure the file is inside the parent directory.
@@ -233,6 +277,10 @@ class ZettlrVirtualDirectory
         return this;
     }
 
+    /**
+     * Detaches this virtual directory from its containing directory.
+     * @return {ZettlrVirtualDirectory} This for chainability.
+     */
     detach()
     {
         this.parent.remove(this);
@@ -245,6 +293,11 @@ class ZettlrVirtualDirectory
         return this;
     }
 
+    /**
+     * Changes the sorting mechanism and re-sorts the directory.
+     * @param  {String} [type='name-up'] The new sorting mechanism.
+     * @return {ZettlrVirtualDirectory}                  This for chainability.
+     */
     toggleSorting(type='name-up')
     {
 
@@ -270,12 +323,23 @@ class ZettlrVirtualDirectory
             return this;
     }
 
+    /**
+     * Checks if a path exists inside this -> Always return false, as VDs don't
+     * contain files.
+     * @param  {String} p The path to be checked.
+     * @return {null}   Always null, as VDs don't contain files.
+     */
     exists(p)
     {
         // VirtualDirectories must never act as if they were really containing something
         return null;
     }
 
+    /**
+     * Checks whether or not a given object is present in this virtual directory.
+     * @param  {Object} obj Either a number, or an object containing a hash
+     * @return {Boolean}     True, if a file is present here, or false.
+     */
     contains(obj)
     {
         if(!obj) {
@@ -302,34 +366,59 @@ class ZettlrVirtualDirectory
         return false;
     }
 
+    /**
+     * Returns null, as Virtual directories don't have children.
+     * @param  {Object}  obj An object, which will be omitted.
+     * @return {null}     Always returns null.
+     */
     hasChild(obj)
     {
         // VirtualDirectories don't really contain children.
         return null;
     }
 
+    /**
+     * Re-sorts this virtual directory.
+     * @return {ZettlrVirtualDirectory} This for chainability.
+     */
     sort()
     {
         this.children = sort(this.children, this.sorting);
         return this;
     }
 
+    /**
+     * Returns the hash of this VD.
+     * @return {Number} The hash.
+     */
     getHash()
     {
         return this.hash;
     }
 
+    /**
+     * Returns the path of this directory.
+     * @return {String} The path (always an empty string).
+     */
     getPath()
     {
         // VirtualDirectories don't have a specific path
         return '';
     }
 
+    /**
+     * Returns the name of this virtual directory.
+     * @return {String} The name.
+     */
     getName()
     {
         return this.name;
     }
 
+    /**
+     * Returns whether or not this is a directory.
+     * @return {Boolean} Always true, for this is a directory.
+     */
     isDirectory()
     {
         // In this very instance, we may respectfully pretend to be a directory
@@ -342,18 +431,31 @@ class ZettlrVirtualDirectory
      */
     isVirtualDirectory() { return true; }
 
+    /**
+     * Returns whether or not this is a file.
+     * @return {Boolean} Always false, for this is not a file.
+     */
     isFile()
     {
         return false;
     }
 
+    /**
+     * Returns whether or not this is a root.
+     * @return {Boolean} Always false, because VDs can't be roots.
+     */
     isRoot()
     {
         // VirtualDirectories are never root
         return false;
     }
 
-    isScope()
+    /**
+     * Returns whether or not the given path is inside this object's scope.
+     * @param  {String}  p The path to be checked.
+     * @return {Boolean}   Always false, for a VD can't handle events.
+     */
+    isScope(p)
     {
         // Must return false, because we're not a real directory, the real parent
         // should handle this case.
@@ -364,6 +466,9 @@ class ZettlrVirtualDirectory
      *   HELPER FUNCTIONS
      */
 
+     /**
+      * Updates the model with the current data.
+      */
     update()
     {
         // This function is called whenever an included file changes its path to

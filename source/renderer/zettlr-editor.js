@@ -612,7 +612,7 @@ class ZettlrEditor
         this._cm.markClean();
         this._cm.clearHistory();
         this._words = 0;
-        this._prevSeletions = [];
+        this._prevSelections = [];
         return this;
     }
 
@@ -1007,6 +1007,7 @@ class ZettlrEditor
      */
     copyAsHTML()
     {
+        console.log(`Copying as HTML!`);
         if(this._cm.somethingSelected()) {
             let md = this._cm.getSelections().join(' ');
             let conv = new showdown.Converter();

@@ -382,6 +382,7 @@
         "replace_file_message": "Le fichier actuel été modifié externe à l'application. Remplacer?",
         "directory_removed": "Le dossier %s a été supprimer.",
         "file_removed": "Le fichier %s a été supprimer.",
+        "file_changed": "Le fichier %s a modifié loin.",
         "export_success": "Exporter à %s",
         "ok": "Ok",
         "cancel": "Annuler",

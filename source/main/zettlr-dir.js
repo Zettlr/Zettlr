@@ -112,7 +112,7 @@ class ZettlrDir
      * Handles an event sent fron the watchdog
      * @param  {String} p The path for which the event was thrown
      * @param  {String} e The event itself
-     * @return {void}   No return.
+     * @return {Boolean}   Whether the event actually caused a change.
      */
     handleEvent(p, e)
     {
@@ -120,17 +120,25 @@ class ZettlrDir
             // This directory has been removed. Notify host process and remove.
             this.parent.notifyChange(trans('system.directory_removed', this.name));
             this.remove();
+            return true;
         } else if(this.isScope(p) === true) {
             if((path.dirname(p) === this.path) && (e === 'add' || e === 'addDir')) {
                 // A new dir or a new file has been created here. Re-Scan.
                 this.scan();
-                return;
+                return true;
             }
             // Some children has to handle it
+            let change = false;
             for(let c of this.children) {
-                c.handleEvent(p, e);
+                if(c.handleEvent(p, e)) {
+                    change = true;
+                }
             }
+            return change;
         }
+
+        // If this part is executed, nothing has changed.
+        return false;
     }
 
     /**

@@ -382,6 +382,7 @@
         "replace_file_message": "Die aktuelle Datei wurde von außerhalb verändert. Änderungen übernehmen?",
         "directory_removed": "Das Verzeichnis %s wurde entfernt.",
         "file_removed": "Datei %s wurde entfernt.",
+        "file_changed": "Datei %s wurde außerhalb bearbeitet.",
         "export_success": "Exportiere nach %s",
         "ok": "Ok",
         "cancel": "Abbrechen",

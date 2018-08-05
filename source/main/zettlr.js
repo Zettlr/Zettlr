@@ -107,21 +107,21 @@ class Zettlr
     {
         // Polls the watchdog for changes.
         if(this.watchdog.countChanges() > 0) {
-            this.watchdog.each((t, p) => {
+            this.watchdog.each((e, p) => {
                 // Available events: add, change, unlink, addDir, unlinkDir
                 // No changeDir because this consists of one unlink and one add
                 for(let root of this.getPaths()) {
                     if(root.isScope(p) !== false) {
-                        root.handleEvent(p, t);
+                        let changed = root.handleEvent(p, e);
                         let isCurrentFile = (this.getCurrentFile() && (hash(p) == this.getCurrentFile().hash));
-                        if(isCurrentFile && (t == 'unlink')) {
+                        if(isCurrentFile && (e == 'unlink')) {
                             // We need to close the file
                             this.ipc.send('file-close');
                             this.getWindow().setTitle(''); // Reset window title
                             this.setCurrentFile(null); // Reset file
-                        } else if(isCurrentFile && (t == 'change')) {
+                        } else if(isCurrentFile && (e == 'change') && changed) {
                             // Current file has changed -> ask to replace and do
-                            // as the user wishes
+                            // as the user wishes)
                             if(this.getWindow().askReplaceFile()) {
                                 this.ipc.send('file-open', this.getCurrentFile().withContent());
                             }

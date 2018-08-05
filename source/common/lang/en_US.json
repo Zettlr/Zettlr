@@ -382,6 +382,7 @@
         "replace_file_message": "The current file has been modified remotely. Replace in editor?",
         "directory_removed": "Directory %s has been removed.",
         "file_removed": "File %s has been removed.",
+        "file_changed": "File %s has changed remotely.",
         "export_success": "Exporting to %s",
         "ok": "Ok",
         "cancel": "Cancel",

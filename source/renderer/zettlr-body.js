@@ -418,12 +418,22 @@ class ZettlrBody
         this._dialog.open();
     }
 
+    /**
+     * Displays the tag preferences with the current settings.
+     * @param  {Object} prefs An object containing the current tags.
+     * @return {void}       Nothing to return.
+     */
     displayTagsPreferences(prefs)
     {
         this._dialog.init('tags-preferences', prefs);
         this._dialog.open();
     }
 
+    /**
+     * Displays project properties for a given project.
+     * @param  {Object} prefs The project's preferences.
+     * @return {void}       Nothing to return.
+     */
     displayProjectProperties(prefs)
     {
         this._dialog.init('project-properties', prefs);
@@ -449,6 +459,10 @@ class ZettlrBody
         this._dialog.open();
     }
 
+    /**
+     * Displays the find-in-file popup.
+     * @return {void} Nothing to return.
+     */
     displayFind()
     {
         if(this._renderer.getCurrentFile() === null) {

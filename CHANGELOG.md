@@ -3,10 +3,12 @@
 ## GUI and functionality
 
 - Minor fix to the style of `code`-blocks in modals.
+- Fixed Zettlr always asking to replace a file although it hasn't been modified remotely.
+- Fixed a missing translation for changed files.
 
 ## Under the hood
 
-(nothing here)
+- Added an additional check to definitely determine if chokidar has choked or the file has indeed been modified remotely.
 
 # 0.18.1
 

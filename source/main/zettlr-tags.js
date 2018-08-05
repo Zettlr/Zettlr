@@ -15,8 +15,16 @@
  const fs             = require('fs');
  const path           = require('path');
 
+/**
+ * This class manages the coloured tags of the app. It reads the tags on each
+ * start of the app and writes them after they have been changed.
+ */
 class ZettlrTags
 {
+    /**
+     * Create the instance on program start and initially load the tags.
+     * @param {Zettlr} parent The main app object.
+     */
     constructor(parent)
     {
         this._app = parent;
@@ -51,6 +59,10 @@ class ZettlrTags
         return this;
     }
 
+    /**
+     * Simply writes the tag data to disk.
+     * @return {ZettlrTags} This for chainability.
+     */
     _save()
     {
         // (Over-)write the tags

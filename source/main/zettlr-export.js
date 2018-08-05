@@ -22,8 +22,9 @@ const fs            = require('fs');
 const showdown      = require('showdown');
 
 /**
- * Error object constructor
- * @param       {string} msg The error message
+ * Error object constructor.
+ * @param       {String} msg              The message
+ * @param       {String} [name='Exporting error']       The name of the error.
  * @constructor
  */
 function ExportError(msg, name = 'Exporting error') {
@@ -260,6 +261,9 @@ class ZettlrExport
         this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} -t ${this.options.format} -o "${this.targetFile}"`;
     }
 
+    /**
+     * This function prepares a PDF for export by setting the command.
+     */
     _preparePDF()
     {
         // TODO: In the future generate the template based on user's decisions.

@@ -12,8 +12,17 @@
  * END HEADER
  */
 
+/**
+ * The file view displays a single root file.
+ */
 class FileView
 {
+    /**
+     * Create a new file view.
+     * @param {ZettlrDirectories}  parent         The directories object
+     * @param {Object}  paths          The paths object
+     * @param {Boolean} [isRoot=false] Whether or not this is a root.
+     */
     constructor(parent, paths, isRoot = false)
     {
         this._parent = parent;
@@ -34,6 +43,9 @@ class FileView
         this._elem.text(paths.name).attr('data-hash', this._file.hash).attr('title', this._file.path);
     }
 
+    /**
+     * Activates the event listeners of this file.
+     */
     _act()
     {
         // Request file on click
@@ -42,6 +54,11 @@ class FileView
         });
     }
 
+    /**
+     * Refreshes this file with new data.
+     * @param  {Object} [p=this._file] The file object.
+     * @return {FileView} This for chainability.
+     */
     refresh(p = this._file)
     {
         if(p.modtime != this._file.modtime) {
@@ -50,6 +67,8 @@ class FileView
             this._elem.attr('title', this._file.path);
             this._elem.text(this._file.name);
         }
+
+        return this;
     }
 
     /**
@@ -68,12 +87,20 @@ class FileView
         return this;
     }
 
+    /**
+     * Unselects this file.
+     * @return {FileView} This for chainability.
+     */
     deselect()
     {
         this._elem.removeClass('selected');
         return this;
     }
 
+    /**
+     * Detaches the element from DOM.
+     * @return {FileView} This for chainability.
+     */
     detach()
     {
         this._elem.detach();
@@ -120,10 +147,22 @@ class FileView
      */
     isSelected() { return this._elem.hasClass('selected'); }
 
+    /**
+     * Returns the element of this file.
+     * @return {DOMElement} The element.
+     */
     getContainer() { return this._elem; }
 
+    /**
+     * Returns this file's hash.
+     * @return {Number} The hash.
+     */
     getHash() { return this._file.hash; }
 
+    /**
+     * Returns the path of this file.
+     * @return {String} The path.
+     */
     getPath() { return this._file.path; }
 }
 
