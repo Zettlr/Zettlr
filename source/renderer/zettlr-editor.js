@@ -1006,12 +1006,12 @@ class ZettlrEditor
      */
     copyAsHTML()
     {
-        console.log(`Copying as HTML!`);
         if(this._cm.somethingSelected()) {
             let md = this._cm.getSelections().join(' ');
             let conv = new showdown.Converter();
             conv.setFlavor('github');
-            clipboard.writeHTML(conv.makeHtml(md));
+            let html = conv.makeHtml(md);
+            clipboard.writeHTML(html);
         }
         return this;
     }
