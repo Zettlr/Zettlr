@@ -29,9 +29,6 @@ const { hash, sort, generateName,
     ignoreDir, ignoreFile, isFile, isDir, isAttachment
 } = require('../common/zettlr-helpers.js');
 
-// Directory plugin helpers
-const { applyPlugins } = require('./zettlr-directory-helpers.js');
-
 const ALLOW_SORTS = ['name-up', 'name-down', 'time-up', 'time-down'];
 
 /**

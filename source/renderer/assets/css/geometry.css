@@ -579,7 +579,10 @@ body {
 #editor .fn-panel {
   position: absolute;
   padding: 10px;
-  display: inline-block;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
 }
 #editor .CodeMirror {
   height: 100%;

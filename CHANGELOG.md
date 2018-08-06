@@ -5,10 +5,13 @@
 - Minor fix to the style of `code`-blocks in modals.
 - Fixed Zettlr always asking to replace a file although it hasn't been modified remotely.
 - Fixed a missing translation for changed files.
+- Fixed the threshold for being close to surpassing average from 50 words below average to the half of average. 50 words were definitely too narrow for anyone to really see the intermediary message.
+- Fixed the tooltip for the footnotes.
 
 ## Under the hood
 
 - Added an additional check to definitely determine if chokidar has choked or the file has indeed been modified remotely.
+- Lots of documentation has been added to the source code.
 
 # 0.18.1
 

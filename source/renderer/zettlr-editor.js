@@ -813,7 +813,6 @@ class ZettlrEditor
         }
 
         // Now we either got a match or an empty fnref. Anyway: display
-        this._fntooltipbubble.attr('style', 'bottom:0; left:0; right:0; z-index:10000');
         this._div.append(this._fntooltipbubble);
     }
 

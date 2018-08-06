@@ -97,7 +97,7 @@ class ZettlrStatsView
 
         if(today > avg) {
             cnt += `<p><strong>${trans('gui.avg_surpassed')}</strong></p>`;
-        } else if(today > avg-50) {
+        } else if(today > avg/2) {
             cnt += `<p><strong>${trans('gui.avg_close_to')}</strong></p>`;
         } else {
             cnt += `<p><strong>${trans('gui.avg_not_reached')}</strong></p>`;

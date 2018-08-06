@@ -217,7 +217,7 @@ body #preview ul li.virtual-directory span.sortName:hover {
 body #preview ul li.virtual-directory {
   color: #641e78;
 }
-body #editor.fn-panel {
+body #editor .fn-panel {
   font-size: 0.9em;
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
