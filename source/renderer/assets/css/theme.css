@@ -113,6 +113,14 @@ body .cm-zkn-link {
 body .cma {
   color: #1d75b3;
 }
+body .cm-formatting-escape {
+  color: #787878;
+}
+body .cm-hr {
+  color: #1cb27e;
+  font-family: monospace;
+  font-weight: bold;
+}
 body #directories {
   border-right: 1px solid #c8c8c8;
   color: #646464;
@@ -659,6 +667,9 @@ body.dark .cm-zkn-link {
 }
 body.dark .cma {
   color: #c8dcf0;
+}
+body.dark .cm-formatting-escape {
+  color: #f0f0f0;
 }
 body.dark .popup {
   background-color: rgba(0, 0, 0, 0.9);

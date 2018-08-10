@@ -7,6 +7,7 @@
 - Fixed a missing translation for changed files.
 - Fixed the threshold for being close to surpassing average from 50 words below average to the half of average. 50 words were definitely too narrow for anyone to really see the intermediary message.
 - Fixed the tooltip for the footnotes.
+- Added styling for horizontal rulers (`* * *`) and escaped characters (e.g. `\*`).
 
 ## Under the hood
 

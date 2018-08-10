@@ -638,7 +638,7 @@ body {
 }
 .CodeMirror {
   line-height: 1.4375;
-  /* Make the formatting characters nearly invisible */
+  /* Make the formatting characters and escape sequences nearly invisible */
 }
 .CodeMirror pre {
   padding: 0;
@@ -692,7 +692,8 @@ body {
 .CodeMirror .cm-formatting-code-block,
 .CodeMirror .cm-formatting-quote,
 .CodeMirror .cm-formatting-strong,
-.CodeMirror .cm-formatting-em {
+.CodeMirror .cm-formatting-em,
+.CodeMirror .cm-formatting-escape {
   opacity: 0.3;
 }
 .CodeMirror .cm-formatting-list-ul,
