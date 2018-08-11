@@ -13,6 +13,7 @@
  */
 
 const Clusterize = require('clusterize.js');
+const tippy      = require('tippy.js');
 const { formatDate, flattenDirectoryTree } = require('../common/zettlr-helpers.js');
 // Sorting icons (WebHostingHub-Glyphs)
 const SORT_NAME_UP = '&#xf1c2;'
@@ -185,6 +186,7 @@ class ZettlrPreview
 
     /**
      * Updates the draggables. Is called everytime a new cluster is rendered.
+     * It also updates the tippy-tooltips on the tags.
      * @return {void} No return.
      */
     _updateDraggable()
@@ -216,8 +218,13 @@ class ZettlrPreview
             }
         });
 
-        // Enable to drag out files from the app
-        // TODO: Here's the tutorial: https://electronjs.org/docs/tutorial/native-file-drag-drop
+        // Also, always re-tippify the tags on the files on each cluster change
+        tippy('#preview .taglist .tag', {
+            delay: 100,
+            arrow: true,
+            duration: 100,
+            flip: true
+        });
     }
 
     /**

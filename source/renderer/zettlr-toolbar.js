@@ -12,8 +12,9 @@
  * END HEADER
  */
 
-const {trans} = require('../common/lang/i18n.js');
-const {localiseNumber} = require('../common/zettlr-helpers.js');
+const { trans }          = require('../common/lang/i18n.js');
+const { localiseNumber } = require('../common/zettlr-helpers.js');
+const tippy              = require('tippy.js');
 
 /**
  * This class is responsible for rendering the Toolbar. It builds the toolbar
@@ -103,6 +104,14 @@ class ZettlrToolbar
             let content = elem.attr('data-content') || {};
 
             this._renderer.handleEvent(command, content);
+        });
+
+        // Tippify all buttons
+        tippy('#toolbar .button', {
+            delay: 100,
+            arrow: true,
+            duration: 100,
+            flip: true
         });
     }
 

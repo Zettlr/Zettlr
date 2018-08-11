@@ -8,11 +8,13 @@
 - Fixed the threshold for being close to surpassing average from 50 words below average to the half of average. 50 words were definitely too narrow for anyone to really see the intermediary message.
 - Fixed the tooltip for the footnotes.
 - Added styling for horizontal rulers (`* * *`) and escaped characters (e.g. `\*`).
+- Fixes to the new tooltips. Now all tags receive the nicer tooltips on mouse over.
 
 ## Under the hood
 
 - Added an additional check to definitely determine if chokidar has choked or the file has indeed been modified remotely.
 - Lots of documentation has been added to the source code.
+- Moved the `tippy()` function from the `ZettlrRenderer` to the correct classes (`ZettlrToolbar` and `ZettlrPreview`).
 
 # 0.18.1
 
