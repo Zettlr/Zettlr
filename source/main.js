@@ -109,7 +109,7 @@ app.on('window-all-closed', function () {
  * On macOS also hook into the will-quit event to save config.json and stats.JSON
  */
 app.on('will-quit', function() {
-    zettlr.shutdown();
+    if(zettlr) zettlr.shutdown();
 })
 
 /**

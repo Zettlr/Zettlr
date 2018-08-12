@@ -225,11 +225,6 @@ body #preview ul li.virtual-directory span.sortName:hover {
 body #preview ul li.virtual-directory {
   color: #641e78;
 }
-body #editor .fn-panel {
-  font-size: 0.9em;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-}
 body .popup-arrow.up {
   border-bottom-color: rgba(255, 255, 255, 0.9);
 }

@@ -15,6 +15,7 @@
 const path          = require('path');
 const ZettlrPopup   = require('./zettlr-popup.js');
 const showdown      = require('showdown');
+const tippy         = require('tippy.js');
 const { clipboard } = require('electron');
 
 // First codemirror addons
@@ -62,7 +63,6 @@ class ZettlrEditor
     {
         this._renderer = parent;
         this._div = $('#editor');
-        this._fntooltipbubble = $('<div>').addClass('fn-panel');
         this._positions = [];               // Saves the positions of the editor
         this._currentHash = null;           // Needed for positions
 
@@ -160,8 +160,6 @@ class ZettlrEditor
             let t = $(e.target);
             if(t.hasClass('cm-link') && t.text().indexOf('^') === 0) {
                 this._fntooltip(t);
-            } else {
-                this._fntooltipbubble.detach();
             }
         });
 
@@ -786,6 +784,12 @@ class ZettlrEditor
     */
     _fntooltip(element)
     {
+        // First let us see if there is already a tippy-instance bound to this.
+        // If so, we can abort now.
+        if(element[0].hasOwnProperty('_tippy') && element[0]._tippy) {
+            return;
+        }
+
         // Because we highlight the formatting as well, the element's text will
         // only contain ^<id> without the brackets
         let fn = element.text().substr(1);
@@ -807,13 +811,21 @@ class ZettlrEditor
 
         if(!fnref || fnref === '') {
             // Indicate that the footnote is empty
-            this._fntooltipbubble.html('<em>no reference text</em>');
+            element.attr('title', 'no reference text');
         } else {
-            this._fntooltipbubble.text(fnref);
+            element.attr('title', fnref);
         }
 
-        // Now we either got a match or an empty fnref. Anyway: display
-        this._div.append(this._fntooltipbubble);
+        // Now we either got a match or an empty fnref. So create a tippy
+        // instance
+        tippy.one(element[0], {
+            onHidden(instance) {
+                instance.destroy(); // Destroy the tippy instance.
+            },
+            'performance': true,
+            flip: true,
+            arrow: true //  TODO
+        }).show(); // Immediately show the tooltip
     }
 
     /**

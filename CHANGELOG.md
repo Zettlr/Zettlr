@@ -9,6 +9,7 @@
 - Fixed the tooltip for the footnotes.
 - Added styling for horizontal rulers (`* * *`) and escaped characters (e.g. `\*`).
 - Fixes to the new tooltips. Now all tags receive the nicer tooltips on mouse over.
+- Replaced the old footnote tooltip bubble, which did not look nice, with much better `tippy.js`-bubbles.
 
 ## Under the hood
 
