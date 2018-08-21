@@ -26,10 +26,23 @@ require('codemirror/addon/display/fullscreen');
 require('codemirror/addon/search/searchcursor');
 require('codemirror/addon/edit/closebrackets');
 require('codemirror/addon/scroll/annotatescrollbar');
+require('codemirror/addon/mode/multiplex'); // Multiplex needed for syntax highlighting
 
 // Modes
 require('codemirror/mode/markdown/markdown');
 require('codemirror/mode/gfm/gfm');
+
+// Highlighting modes
+require('codemirror/mode/javascript/javascript');
+require('codemirror/mode/clike/clike');
+require('codemirror/mode/css/css');
+require('codemirror/mode/php/php');
+require('codemirror/mode/python/python');
+require('codemirror/mode/r/r');
+require('codemirror/mode/ruby/ruby');
+require('codemirror/mode/sql/sql');
+require('codemirror/mode/swift/swift');
+require('codemirror/mode/yaml/yaml');
 
 // Zettlr specific addons
 require('./assets/codemirror/zettlr-plugin-markdown-shortcuts.js');
@@ -88,12 +101,13 @@ class ZettlrEditor
 
         this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
             mode: {
-                name: 'markdown-zkn' // This will automatically pull in spellchecker and this gfm mode
+                name: 'multiplex' // This will automatically pull in all other overlays
             },
             theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
             autofocus: false,
             lineWrapping: true,
             indentUnit: 4,       // Indent lists etc. by 4, not 2 spaces (necessary, e.g., for pandoc)
+            // inputStyle: "contenteditable", // Will enable this in a future version
             autoCloseBrackets: {
                 pairs: '()[]{}\'\'""»«„““”‘’__``', // Autoclose markdown specific stuff
                 override: true

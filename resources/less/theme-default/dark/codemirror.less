@@ -20,7 +20,7 @@
 .cm-url { color: @green-0; }
 
 // Code blocks (called comment, why ever)
-.cm-comment { color:@grey-3; }
+.cm-comment, .cm-fenced-code { color:@grey-1; }
 
 /* LISTS */
 .cm-formatting-list-ul,
@@ -33,3 +33,21 @@
 .cma { color: @blue-selection; }
 
 .cm-formatting-escape { color:@grey-0; }
+
+// HTML tags
+.cm-tag {
+    color: @orange-2;
+
+    &.cm-bracket { color: @grey-1; }
+}
+
+.cm-attribute { color:@blue-3; }
+.cm-string { color:@green-0; }
+
+// Additional code highlighting vars
+
+.cm-variable { color: @grey-1; }
+.cm-keyword { color: @purple-selection; }
+.cm-property { color: @orange-1; }
+.cm-atom { color: @green-selection-dark; }
+.cm-number { color: @blue-3; }

@@ -671,9 +671,9 @@ body {
   font-size: 1em;
 }
 .CodeMirror .cm-comment,
-.CodeMirror .cm-formatting-task {
+.CodeMirror .cm-formatting-task,
+.CodeMirror .cm-fenced-code {
   font-family: monospace;
-  font-size: 120%;
 }
 .CodeMirror .CodeMirror-cursor {
   width: 2px;

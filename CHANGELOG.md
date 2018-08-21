@@ -12,6 +12,22 @@
 - Replaced the old footnote tooltip bubble, which did not look nice, with much better `tippy.js`-bubbles.
 - Added HTML syntax highlighting.
 - Fixed an error on the export of Markdown files with code blocks.
+- Added syntax highlighting capabilities in fenced code blocks for the following languages:
+    - C
+    - C#
+    - C++
+    - CSS
+    - Java
+    - JavaScript
+    - LESS
+    - Objective C
+    - PHP
+    - Python
+    - R
+    - Ruby
+    - SQL
+    - Swift
+    - YAML
 
 ## Under the hood
 
@@ -21,6 +37,7 @@
 - Changes to the link detection regex in `ZettlrEditor`.
 - Changes to the `export.tex` LaTeX export template. It now provides the `Shaded`-environment Pandoc requires on exporting code.
 - Added some amount of `HTML` syntax highlighting.
+- Added a multiplex mode that can highlight fenced code blocks.
 
 # 0.18.1
 
