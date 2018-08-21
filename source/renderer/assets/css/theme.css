@@ -52,6 +52,9 @@ body {
 body .CodeMirror {
   font-size: 1.2em;
 }
+body .cm-hr {
+  text-align: center;
+}
 body .sb-annotation {
   background-color: #f05734;
 }
@@ -120,6 +123,21 @@ body .cm-hr {
   color: #1cb27e;
   font-family: monospace;
   font-weight: bold;
+}
+body .cm-tag {
+  font-family: monospace;
+  color: #f05734;
+}
+body .cm-tag.cm-bracket {
+  color: #505050;
+}
+body .cm-attribute {
+  font-family: monospace;
+  color: #1d75b3;
+}
+body .cm-string {
+  font-family: monospace;
+  color: #1cb27e;
 }
 body #directories {
   border-right: 1px solid #c8c8c8;

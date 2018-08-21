@@ -10,12 +10,17 @@
 - Added styling for horizontal rulers (`* * *`) and escaped characters (e.g. `\*`).
 - Fixes to the new tooltips. Now all tags receive the nicer tooltips on mouse over.
 - Replaced the old footnote tooltip bubble, which did not look nice, with much better `tippy.js`-bubbles.
+- Added HTML syntax highlighting.
+- Fixed an error on the export of Markdown files with code blocks.
 
 ## Under the hood
 
 - Added an additional check to definitely determine if chokidar has choked or the file has indeed been modified remotely.
 - Lots of documentation has been added to the source code.
 - Moved the `tippy()` function from the `ZettlrRenderer` to the correct classes (`ZettlrToolbar` and `ZettlrPreview`).
+- Changes to the link detection regex in `ZettlrEditor`.
+- Changes to the `export.tex` LaTeX export template. It now provides the `Shaded`-environment Pandoc requires on exporting code.
+- Added some amount of `HTML` syntax highlighting.
 
 # 0.18.1
 

@@ -293,7 +293,7 @@ class ZettlrEditor
      */
     _renderLinks()
     {
-        let linkRE = /\[(.+?)\]\((.+?)\)|(https?\S+|www\S+)/g; // Matches [Link](www.xyz.tld) and simple links
+        let linkRE = /\[(.+?)\]\((.+?)\)|(https?:\/\/\S+|www\.\S+)/g; // Matches [Link](www.xyz.tld) and simple links
         let i = 0;
         let match;
 
