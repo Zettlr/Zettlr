@@ -12,22 +12,22 @@
 - Replaced the old footnote tooltip bubble, which did not look nice, with much better `tippy.js`-bubbles.
 - Added HTML syntax highlighting.
 - Fixed an error on the export of Markdown files with code blocks.
-- Added syntax highlighting capabilities in fenced code blocks for the following languages:
-    - C
-    - C#
-    - C++
-    - CSS
-    - Java
-    - JavaScript
-    - LESS
-    - Objective C
-    - PHP
-    - Python
-    - R
-    - Ruby
-    - SQL
-    - Swift
-    - YAML
+- Added syntax highlighting capabilities in fenced code blocks for the following languages (use the words in brackets after the beginning of a code block, i.e. `\`\`\`javascript`):
+    - C (c)
+    - C# (csharp)
+    - C++ (cpp)
+    - CSS (css)
+    - Java (java)
+    - JavaScript (javascript)
+    - LESS (less)
+    - Objective C (objectivec)
+    - PHP (php)
+    - Python (python)
+    - R (r)
+    - Ruby (ruby)
+    - SQL (sql)
+    - Swift (swift)
+    - YAML (yaml)
 
 ## Under the hood
 
