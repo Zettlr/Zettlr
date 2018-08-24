@@ -18,13 +18,10 @@ const path = require('path');
 // CodeMirror related includes
 // First codemirror addons
 require('codemirror/addon/mode/overlay');
-require('codemirror/addon/edit/continuelist');
-require('./assets/codemirror/indentlist.js');
 require('codemirror/addon/search/search');
 require('codemirror/addon/search/searchcursor');
 require('codemirror/addon/search/jump-to-line');
 require('codemirror/addon/dialog/dialog.js');
-require('codemirror/addon/edit/closebrackets');
 
 // Modes
 require('codemirror/mode/markdown/markdown');
@@ -65,10 +62,7 @@ class ZettlrQuicklook
 
         this._cm = CodeMirror.fromTextArea(this._window.find('textarea')[0], {
             readOnly: true,
-            mode: {
-                name: 'gfm',
-                highlightFormatting: true
-            },
+            mode: 'multiplex',
             lineWrapping: true,
             extraKeys: {
                 'Cmd-F'         : 'findPersistent',
