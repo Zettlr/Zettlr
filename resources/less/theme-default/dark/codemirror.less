@@ -14,13 +14,31 @@
     input { color: @blue-selection; }
 }
 
+// First the code blocks
+.cm-comment, .cm-fenced-code { color:@grey-1; }
+.cm-fenced-code {
+    &.cm-comment    { color: @grey-3; }
+    &.cm-attribute  { color: @blue-3; }
+    &.cm-string     { color: @green-0; }
+    &.cm-string-2   { color: @gold-selection-dark; }
+    &.cm-variable   { color: @grey-1; }
+    &.cm-variable-2 { color: @blue-0; }
+    &.cm-keyword    { color: @purple-selection; }
+    &.cm-property   { color: @orange-1; }
+    &.cm-atom       { color: @green-selection-dark; }
+    &.cm-number     { color: @blue-3; }
+}
+
+// HTML tags
+.cm-tag       { color: @orange-2; }
+.cm-attribute { color: @blue-3; }
+.cm-bracket   { color: @grey-1; }
+.cm-string    { color: @green-0; }
+
 // TYPOGRAPHY
 .cm-formatting-header-1, .cm-formatting-header-2, .cm-formatting-header-3,
 .cm-formatting-header-4, .cm-formatting-header-5, .cm-formatting-header-6,
 .cm-url { color: @green-0; }
-
-// Code blocks (called comment, why ever)
-.cm-comment, .cm-fenced-code { color:@grey-1; }
 
 /* LISTS */
 .cm-formatting-list-ul,
@@ -33,21 +51,3 @@
 .cma { color: @blue-selection; }
 
 .cm-formatting-escape { color:@grey-0; }
-
-// HTML tags
-.cm-tag {
-    color: @orange-2;
-
-    &.cm-bracket { color: @grey-1; }
-}
-
-.cm-attribute { color:@blue-3; }
-.cm-string { color:@green-0; }
-
-// Additional code highlighting vars
-
-.cm-variable { color: @grey-1; }
-.cm-keyword { color: @purple-selection; }
-.cm-property { color: @orange-1; }
-.cm-atom { color: @green-selection-dark; }
-.cm-number { color: @blue-3; }

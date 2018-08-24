@@ -12,27 +12,34 @@
 * END HEADER
 */
 
-const path          = require('path');
-const ZettlrPopup   = require('./zettlr-popup.js');
-const showdown      = require('showdown');
-const tippy         = require('tippy.js');
-const { clipboard } = require('electron');
+const path           = require('path');
+const ZettlrPopup    = require('./zettlr-popup.js');
+const showdown       = require('showdown');
+const tippy          = require('tippy.js');
+const { clipboard }  = require('electron');
+const { generateId } = require('../common/zettlr-helpers.js');
 
-// First codemirror addons
+// 1. Mode addons
 require('codemirror/addon/mode/overlay');
-require('codemirror/addon/edit/continuelist');
-require('./assets/codemirror/indentlist.js');
-require('codemirror/addon/display/fullscreen');
-require('codemirror/addon/search/searchcursor');
-require('codemirror/addon/edit/closebrackets');
-require('codemirror/addon/scroll/annotatescrollbar');
 require('codemirror/addon/mode/multiplex'); // Multiplex needed for syntax highlighting
 
-// Modes
+// 2. Editing addons
+require('codemirror/addon/edit/continuelist');
+require('codemirror/addon/edit/closebrackets');
+require('./assets/codemirror/indentlist.js');
+
+// 3. Display addons
+require('codemirror/addon/display/fullscreen');
+
+// 4. Search addons
+require('codemirror/addon/search/searchcursor');
+require('codemirror/addon/scroll/annotatescrollbar');
+
+// 5. Central modes
 require('codemirror/mode/markdown/markdown');
 require('codemirror/mode/gfm/gfm');
 
-// Highlighting modes
+// 6. Code highlighting modes
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/clike/clike');
 require('codemirror/mode/css/css');
@@ -48,8 +55,6 @@ require('codemirror/mode/yaml/yaml');
 require('./assets/codemirror/zettlr-plugin-markdown-shortcuts.js');
 require('./assets/codemirror/zettlr-modes-spellchecker-zkn.js');
 require('./assets/codemirror/zettlr-plugin-footnotes.js');
-
-const {generateId} = require('../common/zettlr-helpers.js');
 
 // Finally CodeMirror itself
 const CodeMirror = require('codemirror');

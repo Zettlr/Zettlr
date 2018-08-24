@@ -1,3 +1,13 @@
+# 0.18.3
+
+## GUI and functionality
+
+- Now the list design and all other colours and syntax highlighting should be fixed again.
+
+## Under the hood
+
+- Cleaned up the mess inside the LESS resource files and removed the global pollution with CSS styles that led to strange rendering behaviour.
+
 # 0.18.2
 
 ## GUI and functionality
