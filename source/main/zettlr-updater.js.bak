@@ -15,9 +15,10 @@
 * END HEADER
 */
 
-const got        = require('got');
+const {net}      = require('electron');
 const semver     = require('semver');
 const showdown   = require('showdown');
+const isOnline   = require('is-online');
 
 const {trans}    = require('../common/lang/i18n.js');
 
@@ -42,6 +43,9 @@ class ZettlrUpdater
         this._error = false;
         this._availableUpdates = [];
         this._repo = REPO_URL;
+        if(this._repo[this._repo.length-1] != '/') {
+            this._repo = this._repo + '/'; // Add trailing slash
+        }
         this._conv = new showdown.Converter({
             'headerLevelStart': 2
         });
@@ -57,32 +61,63 @@ class ZettlrUpdater
      */
     check()
     {
-        let request = got(this._url('/releases'), {
-            followRedirect: false, // Prevent intrusions
-            headers: {
-                'accept': 'application/vnd.github.v3+json'
-            }
-        }).then((response) => {
-            // Success: Write the response to the variable and let's move on.
-            this._response = response.body;
-            this._parseResponse();
-        }).catch((error) => {
-            if(error.statusCode >= 500) {
-                this._app.notify(trans('dialog.update.server_error', error.statusCode));
-            } else if(error.statusCode >= 400) {
-                this._app.notify(trans('dialog.update.client_error', error.statusCode));
-            } else if(error.statusCode >= 300) {
-                this._app.notify(trans('dialog.update.redirect_error', error.statusCode));
-            } else if(error.code == 'ENOTFOUND'){
-                // getaddrinfo has reported that the host has not been found.
-                // This normally only happens if the networking interface is
-                // offline.
+        isOnline().then(online => {
+            if(!online) {
                 this._app.notify(trans('dialog.update.connection_error'));
+
             } else {
-                // Something else has occurred.
-                this._app.notify(`Could not check for updates. ${error.code}: ${error.message}`);
+                this._fetchReleases();
             }
         });
+
+        return this;
+    }
+
+    /**
+     * This function is buffered by a connectivity check, and will only executed
+     * if there is a connection, because otherwise, net will throw errors like
+     * mad.
+     * @return {void} Does not return anything.
+     */
+    _fetchReleases()
+    {
+        net.on('error', (err) => {
+            this._app.notify(trans('dialog.update.connection_error'));
+        });
+
+        let request = net.request(this._url('/releases'));
+
+        if(!request) {
+            return this._app.notify(trans('dialog.update.connection_error'));
+        }
+
+        request.on('response', (response) => {
+            if(response.statusCode >= 300) {
+                if(response.statusCode >= 500) {
+                    return this._app.notify(trans('dialog.update.server_error', response.statusCode));
+                }
+                if(response.statusCode >= 400) {
+                    return this._app.notify(trans('dialog.update.client_error', response.statusCode));
+                }
+                if(response.statusCode >= 300) {
+                    // Don't follow potentially harmful redirections (in case someone tries to mock the app)
+                    return this._app.notify(trans('dialog.update.redirect_error', response.statusCode));
+                }
+            }
+            response.on('data', (chunk) => {
+                // Add everything until the request is complete
+                this._response = this._response + chunk;
+            });
+            response.on('error', (err) => {
+                this._error = true;
+                this._app.notify(trans('dialog.update.transmission_error'));
+            });
+            response.on('end', () => {
+                // Now parse the response.
+                this._parseResponse();
+            });
+        });
+        request.end();
     }
 
     /**
