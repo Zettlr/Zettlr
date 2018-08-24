@@ -93,10 +93,9 @@ class ZettlrPreview
 
     /**
      * Generates the HTML code as strings that will be used by Clusterize.js to display elements.
-     * @param  {Number} [index=-1] If given and in bounds of element count, will only regenerate this index.
      * @return {void}            No return.
      */
-    _gen(index = -1)
+    _gen()
     {
         // Check whether the data-array is already an array. Else, flatten the
         // object tree to a one-dimensional array.
@@ -104,28 +103,8 @@ class ZettlrPreview
             this._data = flattenDirectoryTree(this._data);
         }
 
-        // Check whether the tags-array is defined.
-        if(!this._tags) this._tags = [];
-
-        let start = 0;
-        let until = this._data.length;
-        if(index > -1 && index < this._data.length) {
-            // Regenerate the specified index
-            let start = index;
-            let until = index+1;
-        }
-
-        // First resize the tags array so that it is accurate to reflect the data.
-        // Enlargen if necessary
-        while(this._tags.length < this._data.length) {
-            this._tags.push(''); // Simply push empty strings. They will be replaced.
-        }
-
-        // Make smaller if necessary
-        if(this._tags.length > this._data.length) {
-            let count = this._tags.length - this._data.length;
-            this._tags.splice(this._data.length, count);
-        }
+        // Reset the tags.
+        this._tags = [];
 
         let keywords = [];
         for(let kw of this._keywords) {
@@ -138,7 +117,7 @@ class ZettlrPreview
 
         // Traverse the flattened data-array and replace each corresponding
         // index in this._tags with an HTML representation of the object.
-        for(let i = start; i < until; i++) {
+        for(let i = 0; i < this._data.length; i++) {
             let d = this._data[i];
             if(this._showSearchResults && !this._results.find((elem) => { return (elem.hash == d.hash); })) {
                 // Don't include no-result-rows in the next list.
@@ -198,7 +177,7 @@ class ZettlrPreview
 
             // First, this will create the index, thereby enlargening the array.
             // And each subsequent time, it will simply replace the elements.
-            this._tags[i] = elem;
+            this._tags.push(elem);
         }
     }
 
@@ -373,7 +352,8 @@ class ZettlrPreview
             // We need a manual refresh because the element currently is not rendered
             elem = this._data.find((el) => { return (el.hash == hash); });
             if(elem) {
-                this._gen(this._data.indexOf(elem)); // Only re-generate this specific index
+                // Only regenerate everything if the element is in the current dir
+                this._gen();
                 // And push it into clusterize
                 this._list.update(this._tags);
             }

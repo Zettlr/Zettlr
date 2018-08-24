@@ -9,6 +9,7 @@
 - Cleaned up the mess inside the LESS resource files and removed the global pollution with CSS styles that led to strange rendering behaviour.
 - Replaced the `net` command to check for updates with the better package `got`, thereby reducing the amount of requests to one only. Therefore, `is-online` also has been removed.
 - Updated dependencies. Switched to electron `2.0.8`.
+- Changes to the `_gen()` and `select()` methods in `ZettlrPreview`.
 
 # 0.18.2
 
