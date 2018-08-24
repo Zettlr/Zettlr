@@ -39,7 +39,6 @@ class ZettlrUpdater
     constructor(app)
     {
         this._app = app;
-        this._error = false;
         this._availableUpdates = [];
         this._repo = REPO_URL;
         this._conv = new showdown.Converter({
@@ -90,12 +89,6 @@ class ZettlrUpdater
      */
     _parseResponse()
     {
-        if(this._error) {
-            this._response = '';
-            this._error = false;
-            return; // A notification has been sent from within the asynchronous function
-        }
-
         // Error handling
         if(this._response.trim() === '') {
             this._app.notify(trans('dialog.update.no_data'));
