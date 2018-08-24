@@ -10,10 +10,9 @@
 - Fixed the threshold for being close to surpassing average from 50 words below average to the half of average. 50 words were definitely too narrow for anyone to really see the intermediary message.
 - Fixed some design rules.
 - Reallowed arbitrary text selection inside the editor (mainly necessary for macOS's quick lookup functionality).
-- Fixed the tooltip for the footnotes.
 - Added styling for horizontal rulers (`* * *`) and escaped characters (e.g. `\*`).
 - Fixes to the new tooltips. Now all tags receive the nicer tooltips on mouse over.
-- Replaced the old footnote tooltip bubble, which did not look nice, with much better `tippy.js`-bubbles.
+- Replaced the old footnote tooltip bubble, which did not look nice, with the much better `tippy.js`-bubbles.
 - Added HTML syntax highlighting.
 - Fixed an error on the export of Markdown files with code blocks.
 - Added syntax highlighting capabilities in fenced code blocks for the following languages (use the words in brackets after the beginning of a code block, i.e. `\`\`\`javascript`):
@@ -39,11 +38,12 @@
 - Lots of documentation has been added to the source code.
 - Moved the `tippy()` function from the `ZettlrRenderer` to the correct classes (`ZettlrToolbar` and `ZettlrPreview`).
 - Changes to the link detection regex in `ZettlrEditor`.
-- Changes to the `export.tex` LaTeX export template. It now provides the `Shaded`-environment Pandoc requires on exporting code.
+- Changes to the `export.tex` LaTeX export template. It now provides the `Shaded`-environment Pandoc requires on exporting files containing fenced code blocks.
 - Added some amount of `HTML` syntax highlighting.
 - Added a multiplex mode that can highlight fenced code blocks.
 - Changed signature documentation of `ZettlrRenderer`'s `setCurrentFile` method to reflect the actual process (it is being passed a hash, not a file object).
 - Changes to the `_tags`-array in `ZettlrPreview`. Now, the array is never completely regenerated, but resized according to the actual `_data`-array. The changes have affected the functionality of the functions `_gen()` and `refresh()` in this class.
+- Added a `remove()` method to `Zettlr` for root files wanting to delete themselves.
 
 # 0.18.1
 
