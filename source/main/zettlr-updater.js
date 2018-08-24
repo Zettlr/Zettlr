@@ -51,8 +51,8 @@ class ZettlrUpdater
     }
 
     /**
-     * Check whether or not the application is online. If so, perform the actual
-     * update check.
+     * Query the GitHub API for a list of all releases. If successful, forward
+     * the resulting JSON object to _parseResponse().
      * @return {ZettlrUpdater} Returns this for chainability.
      */
     check()
