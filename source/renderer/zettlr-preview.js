@@ -83,7 +83,7 @@ class ZettlrPreview
         } else {
             this._selectedFile = null;
         }
-        delete this._tags;
+
         this._gen(); // Generate all tags
         this._list.update(this._tags);
         // Afterwards, update the draggables
@@ -98,19 +98,34 @@ class ZettlrPreview
      */
     _gen(index = -1)
     {
+        // Check whether the data-array is already an array. Else, flatten the
+        // object tree to a one-dimensional array.
         if(!Array.isArray(this._data)) {
             this._data = flattenDirectoryTree(this._data);
         }
+
+        // Check whether the tags-array is defined.
+        if(!this._tags) this._tags = [];
+
         let start = 0;
         let until = this._data.length;
         if(index > -1 && index < this._data.length) {
             // Regenerate the specified index
             let start = index;
             let until = index+1;
-            this._tags = new Array(this._data.length);
         }
 
-        this._tags = [];
+        // First resize the tags array so that it is accurate to reflect the data.
+        // Enlargen if necessary
+        while(this._tags.length < this._data.length) {
+            this._tags.push(''); // Simply push empty strings. They will be replaced.
+        }
+
+        // Make smaller if necessary
+        if(this._tags.length > this._data.length) {
+            let count = this._tags.length - this._data.length;
+            this._tags.splice(this._data.length, count);
+        }
 
         let keywords = [];
         for(let kw of this._keywords) {
@@ -121,8 +136,8 @@ class ZettlrPreview
         let inVirtualDir = false;
         let vdhash = undefined;
 
-        // Traverse the flattened data-array and replace each object with its
-        // representation as an HTML string
+        // Traverse the flattened data-array and replace each corresponding
+        // index in this._tags with an HTML representation of the object.
         for(let i = start; i < until; i++) {
             let d = this._data[i];
             if(this._showSearchResults && !this._results.find((elem) => { return (elem.hash == d.hash); })) {
@@ -180,7 +195,10 @@ class ZettlrPreview
                 }
             }
             elem += '</li>'; // Close the tag
-            this._tags.push(elem);
+
+            // First, this will create the index, thereby enlargening the array.
+            // And each subsequent time, it will simply replace the elements.
+            this._tags[i] = elem;
         }
     }
 
@@ -345,9 +363,11 @@ class ZettlrPreview
             return;
         }
         this._selectedFile = hash;
+        // First deselect all
+        this._listContainer.find('li.file').removeClass('selected');
+        // Then determine whether or not the new element is already rendered
         let elem = this._listContainer.find('li[data-hash="' + hash + '"]');
         if(elem.length > 0) {
-            this._listContainer.find('li.file').removeClass('selected');
             elem.addClass('selected');
         } else {
             // We need a manual refresh because the element currently is not rendered

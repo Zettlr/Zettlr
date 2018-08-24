@@ -903,15 +903,15 @@ class ZettlrRenderer
 
     /**
      * Simply sets the current file pointer to the new.
-     * @param {ZettlrFile} newfile The new file's pointer.
+     * @param {Number} newHash The new file's hash.
      */
-    setCurrentFile(newfile)
+    setCurrentFile(newHash)
     {
-        this._currentFile = this.findObject(newfile);
+        this._currentFile = this.findObject(newHash);
         // Also directly select it
         if(this._currentFile !== null) {
-            this._preview.select(newfile);
-            this._directories.select(newfile);
+            this._preview.select(newHash);
+            this._directories.select(newHash);
         }
     }
 

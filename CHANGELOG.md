@@ -3,6 +3,8 @@
 ## GUI and functionality
 
 - Minor fix to the style of `code`-blocks in modals.
+- Fixed a bug that prevented you from immediately re-selecting the previous file by simply clicking it again, after you opened an external markdown file in Zettlr, which then was selected automatically.
+- Fixed an error thrown if a root file was removed remotely.
 - Fixed Zettlr always asking to replace a file although it hasn't been modified remotely.
 - Fixed a missing translation for changed files.
 - Fixed the threshold for being close to surpassing average from 50 words below average to the half of average. 50 words were definitely too narrow for anyone to really see the intermediary message.
@@ -38,6 +40,8 @@
 - Changes to the `export.tex` LaTeX export template. It now provides the `Shaded`-environment Pandoc requires on exporting code.
 - Added some amount of `HTML` syntax highlighting.
 - Added a multiplex mode that can highlight fenced code blocks.
+- Changed signature documentation of `ZettlrRenderer`'s `setCurrentFile` method to reflect the actual process (it is being passed a hash, not a file object).
+- Changes to the `_tags`-array in `ZettlrPreview`. Now, the array is never completely regenerated, but resized according to the actual `_data`-array. The changes have affected the functionality of the functions `_gen()` and `refresh()` in this class.
 
 # 0.18.1
 

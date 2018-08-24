@@ -794,6 +794,20 @@ class Zettlr
     ***************************************************************************/
 
     /**
+     * Called by root ZettlrFiles to remove themselves from the open paths.
+     * @param  {ZettlrFile} file The root file requesting removal.
+     * @return {void}      Does not return.
+     */
+    remove(file)
+    {
+        // This function is always called if root files are removed externally
+        // and therefore want to remove themselves. This means we simply have
+        // to splice the object from our paths array.
+        this._openPaths.splice(this._openPaths.indexOf(file), 1);
+        this.ipc.send('paths-update', this.getPaths());
+    }
+
+    /**
      * Reloads the complete directory tree.
      * @return {void} This function does not return anything.
      */
@@ -829,11 +843,9 @@ class Zettlr
         this.ipc.send('notify', message);
     }
 
-    // Save a file. A file MUST be given, for the content is needed to write to
-    // a file. The content is always freshly grabbed from the CodeMirror content.
-
     /**
-     * Saves a file.
+     * Saves a file. A file MUST be given, for the content is needed to write to
+     * a file. Content is always freshly grabbed from the CodeMirror content.
      * @param  {Object} file An object containing some properties of the file.
      * @return {void}      This function does not return.
      */
@@ -876,7 +888,6 @@ class Zettlr
         this.clearModified();
         // Immediately update the paths in renderer so that it is able to find
         // the file to (re)-select it.
-        // this.ipc.send('paths-update', this.getPaths());
         this.ipc.send('file-update', file);
 
         // Switch to newly created file (only happens before a file is selected)
@@ -966,7 +977,7 @@ class Zettlr
     }
 
     /**
-     * Called when a root file is renamed.
+     * Called when a root file is renamed. This is an alias for _sortPaths.
      */
     sort()
     {
