@@ -8,6 +8,8 @@
 - Fixed Zettlr always asking to replace a file although it hasn't been modified remotely.
 - Fixed a missing translation for changed files.
 - Fixed the threshold for being close to surpassing average from 50 words below average to the half of average. 50 words were definitely too narrow for anyone to really see the intermediary message.
+- Fixed some design rules.
+- Reallowed arbitrary text selection inside the editor (mainly necessary for macOS's quick lookup functionality).
 - Fixed the tooltip for the footnotes.
 - Added styling for horizontal rulers (`* * *`) and escaped characters (e.g. `\*`).
 - Fixes to the new tooltips. Now all tags receive the nicer tooltips on mouse over.

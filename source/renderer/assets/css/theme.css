@@ -92,6 +92,38 @@ body .CodeMirror-selected {
 body .CodeMirror-cursor {
   background: #1cb27e;
 }
+body .cm-tag {
+  font-family: monospace;
+  color: #f05734;
+}
+body .cm-tag.cm-bracket {
+  color: #505050;
+}
+body .cm-attribute {
+  font-family: monospace;
+  color: #1d75b3;
+}
+body .cm-string {
+  font-family: monospace;
+  color: #1cb27e;
+}
+body .cm-variable,
+body .cm-variable-2 {
+  color: #464646;
+}
+body .cm-keyword {
+  color: #641e78;
+}
+body .cm-property,
+body .cm-type {
+  color: #f05734;
+}
+body .cm-atom {
+  color: #1cb27e;
+}
+body .cm-number {
+  color: #1d75b3;
+}
 body .cm-formatting-header-1,
 body .cm-formatting-header-2,
 body .cm-formatting-header-3,
@@ -133,38 +165,6 @@ body .cm-hr {
   color: #1cb27e;
   font-family: monospace;
   font-weight: bold;
-}
-body .cm-tag {
-  font-family: monospace;
-  color: #f05734;
-}
-body .cm-tag.cm-bracket {
-  color: #505050;
-}
-body .cm-attribute {
-  font-family: monospace;
-  color: #1d75b3;
-}
-body .cm-string {
-  font-family: monospace;
-  color: #1cb27e;
-}
-body .cm-variable,
-body .cm-variable-2 {
-  color: #464646;
-}
-body .cm-keyword {
-  color: #641e78;
-}
-body .cm-property,
-body .cm-type {
-  color: #f05734;
-}
-body .cm-atom {
-  color: #1cb27e;
-}
-body .cm-number {
-  color: #1d75b3;
 }
 body #directories {
   border-right: 1px solid #c8c8c8;
@@ -537,6 +537,7 @@ body .dragger {
   font-size: 0.9em;
   border-radius: 5px;
   background-color: #dcdcdc;
+  padding: 4px;
   box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.25);
 }
 body .taglist .tagspacer:only-child .tag {
