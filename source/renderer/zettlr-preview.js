@@ -248,7 +248,14 @@ class ZettlrPreview
                 elem = elem.parent();
             }
 
+            if(e.altKey) {
+                // Request a quicklook for that thing.
+                this._renderer.handleEvent('quicklook', { 'hash': elem.attr('data-hash') });
+                return;
+            }
+
             if(elem.hasClass('selected')) {
+                // Don't re-select an already selected file.
                 return;
             }
             this.requestFile(elem.attr('data-hash'));

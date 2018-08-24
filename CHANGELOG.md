@@ -3,6 +3,7 @@
 ## GUI and functionality
 
 - Now the list design and all other colours and syntax highlighting should be fixed again.
+- `ALT`-clicking files now opens them as QuickLook windows.
 
 ## Under the hood
 
