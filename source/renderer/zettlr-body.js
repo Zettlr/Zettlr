@@ -97,6 +97,10 @@ class ZettlrBody
      */
     requestFileName(dir)
     {
+        if(!dir) {
+            return; // No directory selected.
+        }
+
         let cnt = $('<div>').html(
             `
             <form action="#" method="GET">
@@ -119,6 +123,10 @@ class ZettlrBody
      */
     requestDirName(dir)
     {
+        if(!dir) {
+            return; // No directory selected.
+        }
+
         let cnt = $('<div>').html(
             `
             <form action="#" method="GET">
@@ -141,6 +149,10 @@ class ZettlrBody
      */
     requestVirtualDirName(dir)
     {
+        if(!dir) {
+            return; // No directory selected.
+        }
+
         let cnt = $('<div>').html(
             `
             <form action="#" method="GET">

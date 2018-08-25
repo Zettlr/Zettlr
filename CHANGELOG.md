@@ -5,6 +5,7 @@
 - Now the list design and all other colours and syntax highlighting should be fixed again.
 - `ALT`-clicking files now opens them as QuickLook windows.
 - Now Quicklook windows render the content automatically as the main editor does. Only the previewable elements will not be rendered.
+- Fixed a bug that allowed you to try to create files, folders and virtual directories although no directory is selected.
 
 ## Under the hood
 
