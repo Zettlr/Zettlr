@@ -656,22 +656,22 @@ body .dragger {
   font-family: monospace;
   font-weight: bold;
 }
-.CodeMirror .cm-header-1 {
+.CodeMirror .size-header-1 {
   font-size: 2em;
 }
-.CodeMirror .cm-header-2 {
+.CodeMirror .size-header-2 {
   font-size: 1.8em;
 }
-.CodeMirror .cm-header-3 {
+.CodeMirror .size-header-3 {
   font-size: 1.5em;
 }
-.CodeMirror .cm-header-4 {
+.CodeMirror .size-header-4 {
   font-size: 1.3em;
 }
-.CodeMirror .cm-header-5 {
+.CodeMirror .size-header-5 {
   font-size: 1em;
 }
-.CodeMirror .cm-header-6 {
+.CodeMirror .size-header-6 {
   font-size: 1em;
 }
 .CodeMirror .cm-comment,

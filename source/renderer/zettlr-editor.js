@@ -58,6 +58,7 @@ require('./assets/codemirror/zettlr-plugin-footnotes.js');
 require('./assets/codemirror/zettlr-plugin-render-images.js');
 require('./assets/codemirror/zettlr-plugin-render-links.js');
 require('./assets/codemirror/zettlr-plugin-render-tasks.js');
+require('./assets/codemirror/zettlr-plugin-markdown-header-classes.js');
 
 // Finally CodeMirror itself
 const CodeMirror = require('codemirror');
@@ -150,9 +151,10 @@ class ZettlrEditor
         this._cm.on('cursorActivity', (cm) => {
             // This event fires on either editor changes (because, obviously the
             // cursor changes its position as well then) or when the cursor moves.
-            this._cm.execCommand('markdownRenderImages');
-            this._cm.execCommand('markdownRenderLinks');
-            this._cm.execCommand('markdownRenderTasks');
+            this._cm.execCommand('markdownRenderImages'); // Render images
+            this._cm.execCommand('markdownRenderLinks'); // Render links
+            this._cm.execCommand('markdownRenderTasks'); // Render tasks
+            this._cm.execCommand('markdownHeaderClasses'); // Apply heading line classes
             if(this._cm.getOption('fullScreen') && this._mute) {
                 this._muteLines();
             }

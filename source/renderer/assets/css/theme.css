@@ -154,6 +154,14 @@ body .cm-formatting-header-6,
 body .cm-url {
   color: #1cb27e;
 }
+body .size-header-1,
+body .size-header-2,
+body .size-header-3,
+body .size-header-4,
+body .size-header-5,
+body .size-header-6 {
+  font-weight: bold;
+}
 body .cm-formatting-list-ul,
 body .cm-formatting-list-ol {
   color: #1cb27e;
@@ -174,6 +182,7 @@ body .cm-zkn-link {
 }
 body .cma {
   color: #1d75b3;
+  font-weight: inherit;
 }
 body .cm-formatting-escape {
   color: #787878;
