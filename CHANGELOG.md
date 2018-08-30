@@ -1,3 +1,19 @@
+# 0.18.4
+
+## GUI and functionality
+
+- If you insert a footnote, the cursor is not moved throughout the document so that the writing flow is more immersive.
+- The text field used to edit a footnote reference text is now automatically focused.
+
+## Under the hood
+
+- Changes to the `runCommand` method in `ZettlrEditor`.
+- Changes to the `insertFootnote` command.
+- Changes to the `_editFootnote()` method in `ZettlrEditor`.
+- Changed the event type the editor is listening to when the user finishes editing a footnote from `keyup` to `keydown`.
+- Moved the inline and block element rendering functions to their own commands to reduce the file size of `ZettlrEditor`.
+- Fixed the task recognition regex to prevent ugly errors logged to the console if you entered on an empty line a task list item directly followed by braces (such as `- [ ](some text)`).
+
 # 0.18.3
 
 ## GUI and functionality

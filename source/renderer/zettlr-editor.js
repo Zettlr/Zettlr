@@ -55,6 +55,9 @@ require('codemirror/mode/yaml/yaml');
 require('./assets/codemirror/zettlr-plugin-markdown-shortcuts.js');
 require('./assets/codemirror/zettlr-modes-spellchecker-zkn.js');
 require('./assets/codemirror/zettlr-plugin-footnotes.js');
+require('./assets/codemirror/zettlr-plugin-render-images.js');
+require('./assets/codemirror/zettlr-plugin-render-links.js');
+require('./assets/codemirror/zettlr-plugin-render-tasks.js');
 
 // Finally CodeMirror itself
 const CodeMirror = require('codemirror');
@@ -88,10 +91,6 @@ class ZettlrEditor
         this._fontsize = 100;               // Font size (used for zooming)
         this._timeout = null;               // Stores a current timeout for a save-command
 
-        this._inlineImages = [];            // Image widgets that are currently rendered
-        this._inlineLinks = [];             // Inline links that are currently rendered
-        this._inlineTasks = [];             // Tasks that are present in the document.
-
         this._prevSelections = [];          // Used to save all selections before a command is run to re-select
 
         this._currentLocalSearch = '';      // Saves a current local search, to re-start search on text field change
@@ -117,6 +116,7 @@ class ZettlrEditor
                 pairs: '()[]{}\'\'""»«„““”‘’__``', // Autoclose markdown specific stuff
                 override: true
             },
+            markdownImageBasePath: '', // The base path used to render the image in case of relative URLs
             extraKeys: {
                 'Cmd-F'         : false,
                 'Ctrl-F'        : false,
@@ -150,9 +150,9 @@ class ZettlrEditor
         this._cm.on('cursorActivity', (cm) => {
             // This event fires on either editor changes (because, obviously the
             // cursor changes its position as well then) or when the cursor moves.
-            this._renderImages();
-            this._renderLinks();
-            this._renderTasks();
+            this._cm.execCommand('markdownRenderImages');
+            this._cm.execCommand('markdownRenderLinks');
+            this._cm.execCommand('markdownRenderTasks');
             if(this._cm.getOption('fullScreen') && this._mute) {
                 this._muteLines();
             }
@@ -209,317 +209,6 @@ class ZettlrEditor
     // END constructor
 
     /**
-    * Renders images for all valid image-tags in the document.
-    */
-    _renderImages()
-    {
-        let imageRE = /^!\[(.+?)\]\((.+?)\)$/;
-        let i = 0;
-        let rendered = [];
-
-        // First remove images that may not exist anymore. As soon as someone
-        // clicks into the image, it will be automatically removed, as well as
-        // if someone simply deletes the whole line.
-        do {
-            if(!this._inlineImages[i]) {
-                continue;
-            }
-            if(this._inlineImages[i] && this._inlineImages[i].find() === undefined) {
-                // Marker is no longer present, so splice it
-                this._inlineImages.splice(i, 1);
-            } else {
-                // Push the marker's actual _line_ (not the index) into the
-                // rendered array.
-                rendered.push(this._inlineImages[i].find().from.line);
-                // Array is same size, so increase i
-                i++;
-            }
-        } while(i < this._inlineImages.length);
-
-        // Now render all potential new images
-        for(let i = 0; i < this._cm.doc.lineCount(); i++)
-        {
-            // Already rendered, so move on
-            if(rendered.includes(i)) {
-                continue;
-            }
-
-            // Cursor is in here, so also don't render (for now)
-            if(this._cm.doc.getCursor('from').line === i) {
-                continue;
-            }
-
-            // First get the line and test if the contents contain an image
-            let line = this._cm.doc.getLine(i);
-            if(!imageRE.test(line)) {
-                continue;
-            }
-
-            // Extract information from the line
-            let match = imageRE.exec(line);
-            let caption = match[1];
-            let url = match[2];
-
-            // Retrieve lineInfo for line number
-            let lineInfo = this._cm.doc.lineInfo(i);
-            let img = new Image();
-            // Now add a line widget to this line.
-            let textMarker = this._cm.doc.markText(
-                {'line':lineInfo.line, 'ch':0},
-                {'line':lineInfo.line, 'ch':line.length},
-                {
-                    'clearOnEnter': true,
-                    'replacedWith': img,
-                    'handleMouseEvents': true
-                }
-            );
-
-            // Display a replacement image in case the correct one is not found
-            img.onerror = (e) => {
-                // Obviously, the real URL has not been found. Let's do
-                // a check if a relative path works, by using the path of the
-                // current file and joining it with the url. Maybe this works.
-                let rel = path.dirname(this._renderer.getCurrentFile().path);
-                rel = path.join(rel, url);
-
-                // If this does not work, then simply fall back to the 404 image.
-                img.onerror = (e) => { img.src = `file://${__dirname}/assets/image-not-found.png` };
-
-                // Try it
-                img.src = rel;
-            };
-            img.style.maxWidth = '100%';
-            img.style.maxHeight = '100%';
-            img.style.cursor = 'default'; // Nicer cursor
-            img.src = url;
-            img.onclick = (e) => { textMarker.clear(); };
-
-            // ... and simply do it by the onload-function.
-            img.onload = () => {
-                let aspect = img.getBoundingClientRect().width / img.naturalWidth;
-                let h = Math.round(img.naturalHeight * aspect);
-                img.title = `${caption} (${img.naturalWidth}x${img.naturalHeight}px)`;
-                textMarker.changed();
-            }
-
-            // Finally: Push the textMarker into the array
-            this._inlineImages.push(textMarker);
-        }
-    }
-
-    /**
-     * Renders all links in the document into clickable links.
-     */
-    _renderLinks()
-    {
-        let linkRE = /\[(.+?)\]\((.+?)\)|(https?:\/\/\S+|www\.\S+)/g; // Matches [Link](www.xyz.tld) and simple links
-        let i = 0;
-        let match;
-
-        // First remove links that don't exist anymore. As soon as someone
-        // moves the cursor into the link, it will be automatically removed,
-        // as well as if someone simply deletes the whole line.
-        do {
-            if(!this._inlineLinks[i]) {
-                continue;
-            }
-            if(this._inlineLinks[i] && this._inlineLinks[i].find() === undefined) {
-                // Marker is no longer present, so splice it
-                this._inlineLinks.splice(i, 1);
-            } else {
-                i++;
-            }
-        } while(i < this._inlineLinks.length);
-
-        // Now render all potential new links
-        for(let i = 0; i < this._cm.doc.lineCount(); i++)
-        {
-            // Always reset lastIndex property, because test()-ing on regular
-            // expressions advance it.
-            linkRE.lastIndex = 0;
-
-            // First get the line and test if the contents contain a link
-            let line = this._cm.doc.getLine(i);
-            if(!linkRE.test(line)) {
-                continue;
-            }
-
-            linkRE.lastIndex = 0; // Necessary because of global flag in RegExp
-
-            // Run through all links on this line
-            while((match = linkRE.exec(line)) != null) {
-                if((match.index > 0) && (line[match.index-1] == '!')) {
-                    continue;
-                }
-                let caption = match[1] || '';
-                let url = match[2] || '';
-                let standalone = match[3] || '';
-
-                // Now get the precise beginning of the match and its end
-                let curFrom = { 'line': i, 'ch': match.index };
-                let curTo = { 'line': i, 'ch': match.index + match[0].length };
-
-                let cur = this._cm.doc.getCursor('from');
-                if(cur.line === curFrom.line && cur.ch >= curFrom.ch && cur.ch <= curTo.ch) {
-                    // Cursor is in selection: Do not render.
-                    continue;
-                }
-
-                // Has this thing already been rendered?
-                let con = false;
-                let marks = this._cm.doc.findMarks(curFrom, curTo);
-                for(let marx of marks) {
-                    if(this._inlineLinks.includes(marx)) {
-                        // We've got communism. (Sorry for the REALLY bad pun.)
-                        con = true;
-                        break;
-                    }
-                }
-                if(con) continue; // Skip this match
-
-                let a = document.createElement('a');
-                if(standalone) {
-                    // In case of a standalone link, all is the same
-                    a.innerHTML = standalone;
-                    a.title = standalone;
-                    url = standalone;
-                } else {
-                    a.innerHTML = caption; // TODO: Better testing against HTML entities!
-                    a.title = url; // Set the url as title to let users see where they're going
-                }
-                a.className = 'cma'; // CodeMirrorAnchors
-                // Apply TextMarker
-                let textMarker = this._cm.doc.markText(
-                    curFrom, curTo,
-                    {
-                        'clearOnEnter': true,
-                        'replacedWith': a,
-                        'inclusiveLeft': false,
-                        'inclusiveRight': false
-                    }
-                );
-
-                a.onclick = (e) => {
-                    // Only open ALT-clicks (Doesn't select and also is not used
-                    // elsewhere)
-                    if(e.altKey) {
-                        e.preventDefault();
-                        require('electron').shell.openExternal(url);
-                    } else {
-                        // Clear the textmarker and set the cursor to where the
-                        // user has clicked the link.
-                        textMarker.clear();
-                        this._cm.setCursor(this._cm.coordsChar({ 'left': e.clientX, 'top': e.clientY }));
-                        this._cm.focus();
-                    }
-                };
-
-                this._inlineLinks.push(textMarker);
-            }
-        }
-    }
-
-    /**
-     * This renders tasks in the format of - [ ]
-     * @return {[type]} [description]
-     */
-    _renderTasks()
-    {
-        let taskRE = /^- \[( |x)\]/g; // Matches `- [ ]` and `- [x]`
-        let i = 0;
-        let match;
-
-        // First remove links that don't exist anymore. As soon as someone
-        // moves the cursor into the link, it will be automatically removed,
-        // as well as if someone simply deletes the whole line.
-        do {
-            if(!this._inlineTasks[i]) {
-                continue;
-            }
-            if(this._inlineTasks[i] && this._inlineTasks[i].find() === undefined) {
-                // Marker is no longer present, so splice it
-                this._inlineTasks.splice(i, 1);
-            } else {
-                i++;
-            }
-        } while(i < this._inlineTasks.length);
-
-        // Now render all potential new tasks
-        for(let i = 0; i < this._cm.doc.lineCount(); i++)
-        {
-            // Always reset lastIndex property, because test()-ing on regular
-            // expressions advances it.
-            taskRE.lastIndex = 0;
-
-            // First get the line and test if the contents contain a link
-            let line = this._cm.doc.getLine(i);
-            if((match = taskRE.exec(line)) == null) {
-                continue;
-            }
-
-            if(this._cm.doc.getCursor('from').line == i && this._cm.doc.getCursor('from').ch < 6) {
-                // We're directly in the formatting so don't render.
-                continue;
-            }
-
-            let curFrom = { 'line': i, 'ch': 0};
-            let curTo   = { 'line': i, 'ch': 5};
-
-            let isRendered = false;
-            let marks = this._cm.doc.findMarks(curFrom, curTo);
-            for(let marx of marks) {
-                if(this._inlineTasks.includes(marx)) {
-                    isRendered = true;
-                    break;
-                }
-            }
-
-            // Also in this case simply skip.
-            if(isRendered) continue;
-
-            // Now we can render it finally.
-            let checked = (match[1] == 'x') ? true : false;
-
-            let cbox = document.createElement('input');
-            cbox.type = 'checkbox';
-            if(checked) {
-                cbox.checked = true;
-            }
-
-            let textMarker = this._cm.doc.markText(
-                curFrom, curTo,
-                {
-                    'clearOnEnter': true,
-                    'replacedWith': cbox,
-                    'inclusiveLeft': false,
-                    'inclusiveRight': false
-                }
-            );
-
-            cbox.onclick = (e) => {
-                // Check or uncheck it
-                // Check the checkbox, alter the underlying text and replace the
-                // text marker in the list of checkboxes.
-                let check = (cbox.checked) ? 'x' : ' ';
-                this._cm.doc.replaceRange(`- [${check}]`, curFrom, curTo);
-                this._inlineTasks.splice(this._inlineTasks.indexOf(textMarker), 1);
-                textMarker = this._cm.doc.markText(
-                    curFrom, curTo,
-                    {
-                        'clearOnEnter': true,
-                        'replacedWith': cbox,
-                        'inclusiveLeft': false,
-                        'inclusiveRight': false
-                    }
-                );
-                this._inlineTasks.push(textMarker);
-            }
-
-            this._inlineTasks.push(textMarker);
-        }
-    }
-
-    /**
     * Opens a file, i.e. replaced the editor's content
     * @param  {ZettlrFile} file The file to be renderer
     * @return {ZettlrEditor}      Chainability.
@@ -527,6 +216,7 @@ class ZettlrEditor
     open(file)
     {
         this._cm.setValue(file.content);
+        this._cm.setOption('markdownImageBasePath', path.dirname(file.path)); // Set the base path for image rendering
         this._cm.refresh();
         // Scroll the scrollbar to top, to make sure it's at the top of the new
         // file (in case there are positions saved, they will be scrolled to
@@ -630,6 +320,7 @@ class ZettlrEditor
         this._cm.clearHistory();
         this._words = 0;
         this._prevSelections = [];
+        this._cm.setOption('markdownImageBasePath', ''); // Reset base path
         return this;
     }
 
@@ -863,16 +554,19 @@ class ZettlrEditor
         });
 
         let cnt = `<div class="footnote-edit">`;
-        cnt += `<textarea>${line.text.substr(5 + ref.length)}</textarea>`;
+        cnt += `<textarea id="footnote-edit-textarea">${line.text.substr(5 + ref.length)}</textarea>`;
         cnt += '</div>';
 
         let popup = new ZettlrPopup(this, elem, cnt);
 
-        $('.popup .footnote-edit').on('keyup', (e) => {
+        // Focus the textarea immediately.
+        $('#footnote-edit-textarea').focus();
+
+        $('.popup .footnote-edit').on('keydown', (e) => {
             if(e.which == 13 && e.shiftKey) {
                 // Done editing.
                 e.preventDefault();
-                let newtext = `[^${ref}]: ${e.target.value.replace(/\n/, '')}`;
+                let newtext = `[^${ref}]: ${e.target.value}`;
                 let sc = this._cm.getSearchCursor(line.text, {'line':0, 'ch':0});
                 sc.findNext();
                 sc.replace(newtext);
@@ -1073,11 +767,19 @@ class ZettlrEditor
     runCommand(cmd)
     {
         this._prevSelections = this._cm.doc.listSelections();
+        let oldCur = JSON.parse(JSON.stringify(this._cm.getCursor()));
         this._cm.execCommand(cmd);
 
         if(this._prevSelections.length > 0) {
             this._cm.doc.setSelections(this._prevSelections);
             this._prevSelections = [];
+        }
+
+        if(cmd == 'insertFootnote') {
+            // In case the user inserted a footnote, we have to re-set the cursor
+            // for ease of access.
+            oldCur.ch += 2; // This sets the cursor inside, so the user has a visual on where to ALT-Click
+            this._cm.setCursor(oldCur);
         }
     }
 

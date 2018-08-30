@@ -62,19 +62,15 @@
         // First insert the footnote anchor.
         cm.doc.replaceRange(`[^${lastIndex}]`, cur);
         // Then add a reference to the bottom of the document
-        cur.line = cm.doc.lastLine();
-        cur.ch = cm.doc.getLine(cur.line).length;
-        cm.doc.setCursor(cur);
-        if(cm.doc.getLine(cur.line).trim() === '') {
-            cm.doc.replaceRange(`[^${lastIndex}]: `, cur);
-        } else if(fnrefRE.test(cm.doc.getLine(cur.line))) {
+        if(cm.doc.getLine(cm.doc.lastLine()).trim() === '') {
+            // If the last line is empty, simply put the ref in it.
+            cm.doc.replaceRange(`[^${lastIndex}]: `, { 'line': cm.doc.lastLine(), 'ch': cm.doc.getLine(cm.doc.lastLine()).length });
+        } else if(fnrefRE.test(cm.doc.getLine(cm.doc.lastLine()))) {
             // Last line is a footnote reference -> Only add one newline.
-            cm.doc.replaceRange(`\n[^${lastIndex}]: `, cur);
-            cm.doc.setCursor({ 'line': (cur.line + 1), 'ch': (5 + lastIndex.toString().length) });
+            cm.doc.replaceRange(`\n[^${lastIndex}]: `, { 'line': cm.doc.lastLine(), 'ch': cm.doc.getLine(cm.doc.lastLine()).length });
         } else {
             // Line is neither empty nor a footnote reference.
-            cm.doc.replaceRange(`\n\n[^${lastIndex}]: `, cur);
-            cm.doc.setCursor({ 'line': (cur.line + 2), 'ch': (5 + lastIndex.toString().length) });
+            cm.doc.replaceRange(`\n\n[^${lastIndex}]: `, { 'line': cm.doc.lastLine(), 'ch': cm.doc.getLine(cm.doc.lastLine()).length });
         }
     };
 
