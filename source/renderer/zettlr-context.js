@@ -50,6 +50,11 @@ class ZettlrCon
         let label;
         let hash;
 
+        // No context menu for sorters
+        if(elem.hasClass('sorter')) {
+            return;
+        }
+
         // First: determine where the click happened (preview pane, directories or editor)
         if(elem.parents('#preview').length > 0) {
             if(elem.hasClass('directory')) {
@@ -182,27 +187,26 @@ class ZettlrCon
             }
         } else if(elem.parents('#editor').length > 0) {
             // If the word is spelled wrong, request suggestions
-            let suggestions = [];
             if(elem.hasClass('cm-spell-error')) {
-                suggestions = this._body.getRenderer().typoSuggest(elem.text());
-            }
-            if(suggestions.length > 0) {
-                // Select the word under the cursor if there are suggestions.
-                // Makes it easier to replace them
-                this._body.getRenderer().getEditor().selectWordUnderCursor();
-                let self = this;
-                for(let sug of suggestions) {
-                    this._menu.append(new MenuItem({ label: sug, click(item, win) {
-                        self._body.getRenderer().getEditor().replaceWord(sug);
-                    } }));
+                let suggestions = this._body.getRenderer().typoSuggest(elem.text());
+                if(suggestions.length > 0) {
+                    // Select the word under the cursor if there are suggestions.
+                    // Makes it easier to replace them
+                    this._body.getRenderer().getEditor().selectWordUnderCursor();
+                    let self = this;
+                    for(let sug of suggestions) {
+                        this._menu.append(new MenuItem({ label: sug, click(item, win) {
+                            self._body.getRenderer().getEditor().replaceWord(sug);
+                        } }));
+                    }
+                    this._menu.append(new MenuItem({ type: 'separator' }));
+                } else {
+                    this._menu.append(new MenuItem({
+                        label: trans('menu.no_suggestions'),
+                        enabled: 'false'
+                    }));
+                    this._menu.append(new MenuItem({ type: 'separator' }));
                 }
-                this._menu.append(new MenuItem({ type: 'separator' }));
-            } else {
-                this._menu.append(new MenuItem({
-                    label: trans('menu.no_suggestions'),
-                    enabled: 'false'
-                }));
-                this._menu.append(new MenuItem({ type: 'separator' }));
             }
 
             let that = this;
