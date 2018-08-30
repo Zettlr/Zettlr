@@ -4,13 +4,14 @@
 
 - If you insert a footnote, the cursor is not moved throughout the document so that the writing flow is more immersive.
 - The text field used to edit a footnote reference text is now automatically focused.
+- The editor will now directly mute lines when in full screen as soon as you change the preference setting for this. You don't have to move the cursor anymore for this.
 
 ## Under the hood
 
 - Changes to the `runCommand` method in `ZettlrEditor`.
 - Changes to the `insertFootnote` command.
 - Changes to the `_editFootnote()` method in `ZettlrEditor`.
-- Changed the event type the editor is listening to when the user finishes editing a footnote from `keyup` to `keydown`.
+- Changed the event type the editor is listening to when you finished editing a footnote from `keyup` to `keydown`.
 - Moved the inline and block element rendering functions to their own commands to reduce the file size of `ZettlrEditor`.
 - Fixed the task recognition regex to prevent ugly errors logged to the console if you entered on an empty line a task list item directly followed by braces (such as `- [ ](some text)`).
 

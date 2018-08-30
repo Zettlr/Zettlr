@@ -330,7 +330,6 @@ class ZettlrEditor
     toggleDistractionFree()
     {
         this._cm.setOption('fullScreen', !this._cm.getOption('fullScreen'));
-        // TODO: Maybe other theme with softer colors for non-cursor-lines
         if(!this._cm.getOption('fullScreen')) {
             this._unmuteLines();
         } else if(this._mute) {
@@ -346,7 +345,9 @@ class ZettlrEditor
     {
         this._mute = state;
         if(this._cm.getOption('fullScreen') && !this._mute) {
-            this._unmuteLines(); // Unmute (muting will occur on next cursor activity)
+            this._unmuteLines(); // Unmute
+        } else if(this._cm.getOption('fullScreen') && this._mute) {
+            this._muteLines(); // Mute
         }
     }
 
