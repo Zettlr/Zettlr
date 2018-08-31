@@ -358,6 +358,11 @@ class ZettlrIPC
             this._app.importLangFile();
             break;
 
+            // Import files and folders
+            case 'import-files':
+            this._app.importFile();
+            break;
+
             default:
             console.log(trans('system.unknown_command', cmd));
             break;

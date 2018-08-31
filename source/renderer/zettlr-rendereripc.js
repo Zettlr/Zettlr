@@ -452,6 +452,11 @@ class ZettlrRendererIPC
             this.send('import-lang-file');
             break;
 
+            // Import files and folders
+            case 'import-files':
+            this.send('import-files');
+            break;
+
             // Copy a selection as HTML
             case 'copy-as-html':
             this._app.getEditor().copyAsHTML();

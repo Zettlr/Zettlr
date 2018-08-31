@@ -70,6 +70,12 @@ class ZettlrMenu
                     },
                     { type: 'separator' },
                     {
+                        label: trans('menu.import_files'),
+                        click (item, focusedWindow) {
+                            if(focusedWindow) focusedWindow.webContents.send('message', { 'command': 'import-files' });
+                        }
+                    },
+                    {
                         label: trans('menu.export'),
                         accelerator: 'CmdOrCtrl+E',
                         click (item, focusedWindow) {

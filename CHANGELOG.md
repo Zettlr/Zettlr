@@ -2,6 +2,7 @@
 
 ## GUI and functionality
 
+- **Import functionality**: Now you can import from nearly all file types pandoc supports into Zettlr. Simply select the desired target directory and select File -> Import files!
 - If you insert a footnote, the cursor is not moved throughout the document so that the writing flow is more immersive.
 - The text field used to edit a footnote reference text is now automatically focused.
 - The editor will now directly mute lines when in full screen as soon as you change the preference setting for this. You don't have to move the cursor anymore for this.
@@ -20,6 +21,7 @@
 - Fixed the task recognition regex to prevent ugly errors logged to the console if you entered on an empty line a task list item directly followed by braces (such as `- [ ](some text)`).
 - Additional security checks while building the context menu.
 - Amended the regex for rendering links. Also provided a callback option for CodeMirror to be able to port the plugin fully externally and integrate it into other instances.
+- Added `ZettlrImport` class for handling file imports.
 
 # 0.18.3
 

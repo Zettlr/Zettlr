@@ -273,7 +273,7 @@ class ZettlrWindow
     }
 
     /**
-     * Show the dialog for choosing a new project directory
+     * Show the dialog for choosing a directory
      * @param  {String} startDir Which directory should be shown initially?
      * @return {Array}          An array containing all selected paths.
      */
@@ -286,6 +286,34 @@ class ZettlrWindow
                 'openDirectory',
                 'createDirectory' // macOS only
             ]
+        });
+    }
+
+    /**
+     * Shows the dialog for importing files from the disk.
+     * @param  {String} startDir Which directory should the dialog start with?
+     * @return {Array}          An array containing all selected paths or undefined.
+     */
+    askFile(startDir)
+    {
+        let formats = require('../common/data.json').import_files;
+        let fltr = [];
+        for(let f of formats) {
+            // The import_files array has the structure "pandoc format" "readable format" "extensions"...
+            // Here we set index 1 as readable name and all following elements (without leading dots)
+            // as extensions
+            fltr.push({ 'name': f[1], 'extensions': f.slice(2).map((val) => { return val.substr(1); }) });
+        }
+        fltr.push({ 'name': trans('system.all_files'), 'extensions': [ '*' ]});
+
+        return dialog.showOpenDialog(this._win, {
+            'title': trans('system.open_file'),
+            'defaultPath': startDir,
+            'properties': [
+                'openFile',
+                'multiSelections'
+            ],
+            'filters': fltr
         });
     }
 

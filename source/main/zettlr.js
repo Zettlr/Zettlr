@@ -30,6 +30,7 @@ const ZettlrWatchdog                = require('./zettlr-watchdog.js');
 const ZettlrStats                   = require('./zettlr-stats.js');
 const ZettlrUpdater                 = require('./zettlr-updater.js');
 const ZettlrExport                  = require('./zettlr-export.js');
+const ZettlrImport                  = require('./zettlr-import.js');
 const {i18n, trans}                 = require('../common/lang/i18n.js');
 const {hash, ignoreDir,
        ignoreFile, isFile, isDir}   = require('../common/zettlr-helpers.js');
@@ -548,8 +549,7 @@ class Zettlr
     }
 
     /**
-     * Export a file to another format. DEPRECATED: This function will be
-     * moved into another class in further versions.
+     * Export a file to another format.
      * @param  {Object} arg An object containing hash and wanted extension.
      * @return {void}     Does not return.
      */
@@ -576,6 +576,41 @@ class Zettlr
             this.notify(trans('system.export_success', opt.format.toUpperCase()));
         } catch(err) {
             this.notify(err.name + ': ' + err.message); // Error may be thrown
+        }
+    }
+
+    /**
+     * This function asks the user for a list of files and then imports them.
+     * @return {void} Does not return.
+     */
+    importFile()
+    {
+        if(!this.getCurrentDir()) {
+            return this.notify(trans('system.import_no_directory'));
+        }
+
+        // First ask the user for a fileList
+        let startDir = app.getPath('documents'); // Always start in documents folder.
+        let fileList = this.window.askFile(startDir);
+        if(!fileList || fileList.length == 0) {
+            // The user seems to have decided not to import anything. Gracefully
+            // fail. Not like the German SPD.
+            return;
+        }
+
+        // Now import.
+        this.notify(trans('system.import_status'));
+        let ret = ZettlrImport(fileList, this.getCurrentDir(), (file, error) => {
+            // This callback gets called whenever there is an error while running pandoc.
+            this.notify(trans('system.import_error', path.basename(file)));
+        }, (file) => {
+            // And this on each success!
+            this.notify(trans('system.import_success', path.basename(file)));
+        });
+
+        if(ret.length > 0) {
+            // Some files failed to import.
+            this.notify(trans('system.import_fail', ret.length, ret.map((x) => { return path.basename(x); }).join(', ')));
         }
     }
 
