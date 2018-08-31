@@ -20,6 +20,14 @@
             "/Library/TeX/texbin"
         ]
     },
+    "import_files": [
+        [ "Microsoft Word", "docx", "doc" ],
+        [ "OpenDocument", "odt" ],
+        [ "re:structured Text", "rst" ],
+        [ "HTML", "html", "htm" ],
+        [ "LaTeX", "tex", "latex" ],
+        [ "DocBook", "docbook" ]
+    ],
     "block_elements": [
         "#",
         "##",

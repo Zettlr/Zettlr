@@ -118,6 +118,7 @@ class ZettlrEditor
                 override: true
             },
             markdownImageBasePath: '', // The base path used to render the image in case of relative URLs
+            markdownOnLinkOpen: function(url) { require('electron').shell.openExternal(url); }, // Action for ALT-Clicks
             extraKeys: {
                 'Cmd-F'         : false,
                 'Ctrl-F'        : false,

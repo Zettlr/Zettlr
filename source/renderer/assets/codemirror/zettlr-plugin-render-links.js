@@ -10,7 +10,11 @@
 })(function(CodeMirror) {
     "use strict";
 
-    var linkRE = /\[(.+?)\]\((.+?)\)|(https?:\/\/\S+|www\.\S+)/g; // Matches [Link](www.xyz.tld) and simple links
+    // This regular expression matches three different kinds of URLs:
+    // 1. Markdown URLs in the format [Caption](www.link-target.tld)
+    // 2. Standalone links, either beginning with http(s):// or www.
+    // 3. Email addresses.
+    var linkRE = /\[(.+?)\]\((.+?)\)|(https?:\/\/\S+|www\.\S+)|([a-z0-9\.\-_+]+?@[a-z0-9\.\-_+]+\.[a-z]{2,7})/gi; // Matches [Link](www.xyz.tld) and simple links
     var linkMarkers = [];
 
 
@@ -56,6 +60,7 @@
                 let caption = match[1] || '';
                 let url = match[2] || '';
                 let standalone = match[3] || '';
+                let email = match[4] || '';
 
                 // Now get the precise beginning of the match and its end
                 let curFrom = { 'line': i, 'ch': match.index };
@@ -85,7 +90,14 @@
                     a.innerHTML = standalone;
                     a.title = standalone;
                     url = standalone;
+                } else if(email) {
+                    // In case of an email, the same except the URL (which gets
+                    // an added mailto protocol handler).
+                    a.innerHTML = email;
+                    a.title = email;
+                    url = 'mailto:' + email;
                 } else {
+                    // Markdown URL
                     a.innerHTML = caption; // TODO: Better testing against HTML entities!
                     a.title = url; // Set the url as title to let users see where they're going
                 }
@@ -106,7 +118,13 @@
                     // elsewhere)
                     if(e.altKey) {
                         e.preventDefault();
-                        require('electron').shell.openExternal(url);
+                        // On ALT-Clicks, use the callback to have the user decide
+                        // what should happen when they click on links, defined
+                        // in the markdownOnLinkOpen option.
+                        let callback = cm.getOption('markdownOnLinkOpen');
+                        if(callback && {}.toString.call(callback) === '[object Function]') {
+                            callback(url);
+                        }
                     } else {
                         // Clear the textmarker and set the cursor to where the
                         // user has clicked the link.

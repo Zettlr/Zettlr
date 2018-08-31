@@ -14,6 +14,12 @@
     var taskRE = /^- \[( |x)\] /g; // Matches `- [ ]` and `- [x]`
     var taskMarkers = [];
 
+    /**
+     * This command applies the classes size-header-x for all six different
+     * markdown headings.
+     * @param  {CodeMirror} cm The CodeMirror instance
+     * @return {void}    Commands do not return.
+     */
     CodeMirror.commands.markdownHeaderClasses = function(cm) {
         let line = '';
         for(let i = 0; i < cm.lineCount(); i++) {

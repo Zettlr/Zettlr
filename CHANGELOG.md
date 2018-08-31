@@ -7,6 +7,8 @@
 - The editor will now directly mute lines when in full screen as soon as you change the preference setting for this. You don't have to move the cursor anymore for this.
 - Fixed a bug that showed a dedicated _file_ menu when right-clicking directory ribbons and then threw errors if you clicked on anything in the menu.
 - Fixed the strange behaviour of Zettlr telling you there are no suggestions for a word, although you did not right-click a wrongly spelled word.
+- Inline links rendered inside headers are now always the correct size.
+- Email-addresses are now correctly identified and will be rendered as clickable links as well. If you `Alt`-click on them, they will open the default email option (i.e. they are the same as clicking on any website's email addresses).
 
 ## Under the hood
 
@@ -17,6 +19,7 @@
 - Moved the inline and block element rendering functions to their own commands to reduce the file size of `ZettlrEditor`.
 - Fixed the task recognition regex to prevent ugly errors logged to the console if you entered on an empty line a task list item directly followed by braces (such as `- [ ](some text)`).
 - Additional security checks while building the context menu.
+- Amended the regex for rendering links. Also provided a callback option for CodeMirror to be able to port the plugin fully externally and integrate it into other instances.
 
 # 0.18.3
 
