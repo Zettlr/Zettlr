@@ -394,10 +394,24 @@ class ZettlrBody
         // Create a popup
         let cnt = $('<div>').html(
             `
-            <div class="btn-share htm" title="${trans('dialog.export.alt_html')}" data-ext="html" data-hash="${file.hash}">HTML</div>
-            <div class="btn-share pdf" title="${trans('dialog.export.alt_pdf')}" data-ext="pdf" data-hash="${file.hash}">PDF</div>
-            <div class="btn-share odt" title="${trans('dialog.export.alt_odt')}" data-ext="odt" data-hash="${file.hash}">ODT</div>
-            <div class="btn-share docx" title="${trans('dialog.export.alt_docx')}" data-ext="docx" data-hash="${file.hash}">DOCX</div>
+            <div class="row">
+                <div class="btn-share htm" title="${trans('dialog.export.alt_html')}" data-ext="html" data-hash="${file.hash}">HTML</div>
+                <div class="btn-share pdf" title="${trans('dialog.export.alt_pdf')}" data-ext="pdf" data-hash="${file.hash}">PDF</div>
+                <div class="btn-share odt" title="${trans('dialog.export.alt_odt')}" data-ext="odt" data-hash="${file.hash}">ODT</div>
+                <div class="btn-share docx" title="${trans('dialog.export.alt_docx')}" data-ext="docx" data-hash="${file.hash}">DOCX</div>
+            </div>
+            <div class="row">
+                <div class="btn-share revealjs" title="reveal.js Presentation" data-ext="revealjs" data-hash="${file.hash}"></div>
+                <div class="btn-share rst" title="reStructuredText" data-ext="rst" data-hash="${file.hash}">rST</div>
+                <div class="btn-share rtf" title="Rich Text Format" data-ext="rtf" data-hash="${file.hash}">RTF</div>
+                <div class="btn-share tex" title="LaTeX" data-ext="latex" data-hash="${file.hash}">TeX</div>
+            </div>
+            <div class="row">
+                <div class="btn-share plain" title="Text" data-ext="plain" data-hash="${file.hash}">TXT</div>
+                <div class="btn-share org" title="Emacs Org" data-ext="org" data-hash="${file.hash}">ORG</div>
+                <div class="btn-share textile" title="Textile" data-ext="textile" data-hash="${file.hash}">Txtl</div>
+                <div class="btn-share mediawiki" title="MediaWiki" data-ext="mediawiki" data-hash="${file.hash}">mWiki</div>
+            </div>
             `
         );
         let popup = new ZettlrPopup(this, $('.button.share'), cnt);

@@ -10,7 +10,14 @@
         color: @popup-dark-text;
     }
 
-    .btn-share.odt { color: @popup-dark-text; }
+    .btn-share {
+        &.odt, &.plain, &.tex {
+            color: @popup-dark-text;
+            &:hover {
+                color: black;
+            }
+        }
+    }
 
     a.toc-link {
         color: @popup-dark-text;

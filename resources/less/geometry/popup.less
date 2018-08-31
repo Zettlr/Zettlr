@@ -103,7 +103,7 @@
         display:inline-block;
         width:46px;
         height:46px;
-        line-height:50px;
+        line-height:46px;
         text-align:center;
         transition:0.2s all ease;
         cursor:default;
@@ -118,14 +118,48 @@
             &:hover { background-color:rgba(45, 88, 151, 1); color:white; }
         }
 
-        &.odt {
+        &.odt, &.tex, &.plain {
             color:rgba(20, 20, 20, 1);
-            &:hover { background-color:white; color:black; }
+            &:hover { background-color:rgba(220, 220, 220, 1); color:black; }
         }
 
         &.pdf {
             color:rgba(253, 48, 26, 1); /* Adobe reader PDF color code */
             &:hover { background-color:rgba(253, 48, 26, 1); color:black; }
+        }
+
+        &.revealjs {
+            &:before {
+                font-family: 'WebHostingHub-Glyphs';
+                content: "\f0c4";
+            }
+            color: rgba(120, 120, 120, 1);
+            &:hover { background-color: rgba( 40,  40,  40, 1); color: white; }
+        }
+
+        &.rst {
+            color: rgb(28, 78, 98);
+            &:hover { color: white; background-color: rgb(28, 78, 98); } // This is literally the first colour I found on the web for rst
+        }
+
+        &.rtf {
+            color: rgb(223, 51, 68);
+            &:hover { background-color: rgb(223, 51, 68); color: white; }
+        }
+
+        &.org {
+            color: lighten(rgb(0, 42, 53), 10%);
+            &:hover { background-color: rgb(0, 42, 53); color: white; }
+        }
+
+        &.textile {
+            color: #00b58c;
+            &:hover { background-color: #00b58c; color:white; }
+        }
+
+        &.mediawiki {
+            color: lighten(#0b0080, 20%);
+            &:hover { background-color: #0b0080; color: white; }
         }
     }
 

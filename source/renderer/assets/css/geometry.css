@@ -1164,7 +1164,7 @@ body .dragger {
   display: inline-block;
   width: 46px;
   height: 46px;
-  line-height: 50px;
+  line-height: 46px;
   text-align: center;
   transition: 0.2s all ease;
   cursor: default;
@@ -1185,11 +1185,15 @@ body .dragger {
   background-color: #2d5897;
   color: white;
 }
-.popup .btn-share.odt {
+.popup .btn-share.odt,
+.popup .btn-share.tex,
+.popup .btn-share.plain {
   color: #141414;
 }
-.popup .btn-share.odt:hover {
-  background-color: white;
+.popup .btn-share.odt:hover,
+.popup .btn-share.tex:hover,
+.popup .btn-share.plain:hover {
+  background-color: #dcdcdc;
   color: black;
 }
 .popup .btn-share.pdf {
@@ -1199,6 +1203,52 @@ body .dragger {
 .popup .btn-share.pdf:hover {
   background-color: #fd301a;
   color: black;
+}
+.popup .btn-share.revealjs {
+  color: #787878;
+}
+.popup .btn-share.revealjs:before {
+  font-family: 'WebHostingHub-Glyphs';
+  content: "\f0c4";
+}
+.popup .btn-share.revealjs:hover {
+  background-color: #282828;
+  color: white;
+}
+.popup .btn-share.rst {
+  color: #1c4e62;
+}
+.popup .btn-share.rst:hover {
+  color: white;
+  background-color: #1c4e62;
+}
+.popup .btn-share.rtf {
+  color: #df3344;
+}
+.popup .btn-share.rtf:hover {
+  background-color: #df3344;
+  color: white;
+}
+.popup .btn-share.org {
+  color: #005268;
+}
+.popup .btn-share.org:hover {
+  background-color: #002a35;
+  color: white;
+}
+.popup .btn-share.textile {
+  color: #00b58c;
+}
+.popup .btn-share.textile:hover {
+  background-color: #00b58c;
+  color: white;
+}
+.popup .btn-share.mediawiki {
+  color: #1400e6;
+}
+.popup .btn-share.mediawiki:hover {
+  background-color: #0b0080;
+  color: white;
 }
 .popup .formatting a {
   text-decoration: none;

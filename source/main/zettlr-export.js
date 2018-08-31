@@ -74,7 +74,6 @@ class ZettlrExport
      *     'keywords': "Keywords, separated by comma",
      *     'tplDir': "Where are the docx and odt templates?"
      * }
-     * @param {Zettlr} app     The app object (needed for occasional access of the configuration object or for showing errors)
      * @param {Object} options An object containing necessary configuration to export
      */
     constructor(options)
@@ -85,7 +84,8 @@ class ZettlrExport
         this.tpl = '';
         this.command = '';
         this.showdown = null;
-        // We already know where the file will end up
+        // We already know where the file will end up (on some exports this will
+        // be overwritten by the prepare-command).
         this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + "." + this.options.format);
         // Intermediary file containing all content replacements et al.
         this.tempfile = path.join(this.options.dest, 'export.tmp');
@@ -134,8 +134,18 @@ class ZettlrExport
             case 'pdf':
             this._preparePDF();
             break;
+            case 'revealjs':
+            case 'rst':
+            case 'rtf':
+            case 'latex':
+            case 'plain':
+            case 'org':
+            case 'textile':
+            case 'mediawiki':
+            this._prepareStandardExport();
+            break;
             default:
-            // this.app.notify('Unknown format: ' + this.options.format);
+            throw ExportError('Unknown format: ' + this.options.format);
             break;
         }
 
@@ -262,6 +272,33 @@ class ZettlrExport
     }
 
     /**
+     * This prepares all file exports except HTML, PDF, DOCX, and ODT.
+     */
+    _prepareStandardExport()
+    {
+        // First override the tempfile in case the markdown input format differs
+        // from the file format (e.g. revealjs results in an HTML file).
+        let standalone = '';
+        switch(this.options.format) {
+            case 'revealjs':
+            this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + ".revealjs.htm");
+            break;
+            case 'rtf':
+            standalone = '-s'; // Must produce a standalone
+            break;
+            case 'latex':
+            // I don't like the .latex ending Pandoc uses.
+            this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + ".tex");
+            break;
+            case 'plain':
+            this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + ".txt");
+            break;
+        }
+
+        this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} -t ${this.options.format} ${standalone} -o "${this.targetFile}"`;
+    }
+
+    /**
      * This function prepares a PDF for export by setting the command.
      */
     _preparePDF()
@@ -364,6 +401,15 @@ class ZettlrExport
      */
     _finish()
     {
+        if(this.options.format == 'revealjs') {
+            // We have to integrate the output of Pandoc into the template and
+            // overwrite the destination file.
+            let tpl = fs.readFileSync(path.join(__dirname, './assets/template.revealjs.htm'), 'utf8');
+            tpl = tpl.replace('$title$', this.options.file.name);
+            tpl = tpl.replace('$body$', fs.readFileSync(this.targetFile, 'utf8'));
+            fs.writeFileSync(this.targetFile, tpl, 'utf8');
+        }
+
         require('electron').shell.openItem(this.targetFile);
     }
 }

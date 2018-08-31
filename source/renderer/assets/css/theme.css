@@ -790,8 +790,15 @@ body.dark .popup button {
   background-color: rgba(0, 0, 0, 0.9);
   color: #dcdcdc;
 }
-body.dark .popup .btn-share.odt {
+body.dark .popup .btn-share.odt,
+body.dark .popup .btn-share.plain,
+body.dark .popup .btn-share.tex {
   color: #dcdcdc;
+}
+body.dark .popup .btn-share.odt:hover,
+body.dark .popup .btn-share.plain:hover,
+body.dark .popup .btn-share.tex:hover {
+  color: black;
 }
 body.dark .popup a.toc-link {
   color: #dcdcdc;
