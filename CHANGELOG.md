@@ -11,6 +11,7 @@
 - Fixed the strange behaviour of Zettlr telling you there are no suggestions for a word, although you did not right-click a wrongly spelled word.
 - Inline links rendered inside headers are now always the correct size.
 - Email-addresses are now correctly identified and will be rendered as clickable links as well. If you `Alt`-click on them, they will open the default email option (i.e. they are the same as clicking on any website's email addresses).
+- Fixes to the project feature.
 
 ## Under the hood
 
@@ -24,6 +25,8 @@
 - Amended the regex for rendering links. Also provided a callback option for CodeMirror to be able to port the plugin fully externally and integrate it into other instances.
 - Added `ZettlrImport` class for handling file imports.
 - Removed the unnecessary PDF exporting LaTeX template from the pandoc directory.
+- Added another newline character when gluing Markdown files together on project exports.
+- Fixed a bug that would not read in a saved project config on restart.
 
 # 0.18.3
 

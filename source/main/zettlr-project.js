@@ -72,7 +72,7 @@ class ZettlrProject
         this._cfg = this._cfgtpl;
         try {
             let stat = fs.lstatSync(this._projectFile);
-            this.update(fs.readFileSync(this._projectFile, 'utf8'));
+            this.update(JSON.parse(fs.readFileSync(this._projectFile, 'utf8')));
         } catch(e) {
             this.save(); // Simply create the file
         }
@@ -109,7 +109,7 @@ class ZettlrProject
         }
 
         // Make one string
-        contents = contents.join('\n');
+        contents = contents.join('\n\n');
 
         // Mock a file object to which ZettlrExport has access
         let tempfile = {
@@ -193,6 +193,9 @@ class ZettlrProject
                 }
             }
         }
+
+        // Save the new configuration to disk.
+        this.save();
     }
 
     /**
