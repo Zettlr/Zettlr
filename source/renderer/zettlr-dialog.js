@@ -14,6 +14,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const tippy = require('tippy.js');
 const {trans} = require('../common/lang/i18n.js');
 const SUPPORTED_PAPERTYPES = require('../common/data.json').papertypes;
 const TAB_DIALOGS = [
@@ -170,16 +171,25 @@ class ZettlrDialog
             replacements.push('%PANDOC%|' + obj.pandoc);
             replacements.push('%XELATEX%|' + obj.xelatex);
             let spellcheck = '';
-            for(let l in obj.spellcheck) {
+            let spellcheckLabel = '';
+            for(let l of obj.selectedDicts) {
                 // Prevent ugly language labels in the spellchecker selection.
-                let spellcheckLabel = trans('dialog.preferences.app_lang.'+l);
+                spellcheckLabel = trans('dialog.preferences.app_lang.'+l);
                 spellcheckLabel = (spellcheckLabel === 'dialog.preferences.app_lang.'+l) ? l : spellcheckLabel;
-                let sel = (obj.spellcheck[l]) ? 'checked="checked"' : '';
-                spellcheck += '<div>';
-                spellcheck += `<input type="checkbox" value="${l}" ${sel} name="spellcheck[]" id="${l}"><label for="${l}">${spellcheckLabel}</label>`;
-                spellcheck += '</div>';
+                spellcheck += `\n<div class="selected-dict"><input type="hidden" value="${l}" name="spellcheck[]" id="${l}">${spellcheckLabel}</div>`;
             }
             replacements.push('%SPELLCHECK%|' + spellcheck);
+            let avail = '';
+            for(let l of obj.availableDicts) {
+                if(obj.selectedDicts.includes(l)) {
+                    continue; // Don't include already selected in the list.
+                }
+                // Prevent ugly language labels in the spellchecker selection.
+                spellcheckLabel = trans('dialog.preferences.app_lang.'+l);
+                spellcheckLabel = (spellcheckLabel === 'dialog.preferences.app_lang.'+l) ? l : spellcheckLabel;
+                avail += `\n<li data-value="${l}" class="dicts-list-item">${spellcheckLabel}</li>`;
+            }
+            replacements.push('%AVAILABLE_DICTS%|' + avail);
             let lang_selection = '';
             for(let l of obj.supportedLangs) {
                 // Prevent ugly language labels in the app language selection.

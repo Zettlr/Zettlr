@@ -445,17 +445,12 @@ class ZettlrRenderer
     setSpellcheck(langs)
     {
         this._overlay.update(trans('init.spellcheck.get_lang'));
-        // langs is an object containing _all_ available languages and whether
-        // they should be checked or not.
-        for(let prop in langs) {
-            if(langs[prop]) {
-                // We should spellcheck - so insert into the object with a
-                // false, indicating that it has not been loaded yet.
-                this._typoLang[prop] = false;
-            }
-        }
 
-        if(Object.keys(this._typoLang).length > 0) {
+        // Save all languages in _typoLang. They will be spliced out as soon as
+        // they are loaded.
+        this._typoLang = langs;
+
+        if(this._typoLang.length > 0) {
             this.requestLang('aff');
         } else {
             // We're already done!
@@ -472,23 +467,17 @@ class ZettlrRenderer
      */
     requestLang(type)
     {
-        let req = null;
-        for(let lang in this._typoLang) {
-            if(!this._typoLang[lang]) {
-                // We should load this lang
-                req = lang;
-                break;
-            }
-        }
+        // Fetch from first upwards. As we splice the successfully loaded langs,
+        // 0 will always refer to the next language to be loaded.
         this._overlay.update(
             trans(
                 'init.spellcheck.request_file',
-                trans('dialog.preferences.app_lang.'+req)
+                trans('dialog.preferences.app_lang.'+this._typoLang[0])
             )
         );
 
         // Load the first lang (first aff, then dic)
-        this._ipc.send('typo-request-' + type, req);
+        this._ipc.send('typo-request-' + type, this._typoLang[0]);
     }
 
     /**
@@ -502,30 +491,22 @@ class ZettlrRenderer
         if(!this._typoAff)  { return; }
         if(!this._typoDic)  { return; }
 
-        let lang = null;
-        for(let l in this._typoLang) {
-            if(!this._typoLang[l]) {
-                // This language should be initialized
-                lang = l;
-                break;
-            }
-        }
-
         this._overlay.update(
             trans(
                 'init.spellcheck.init',
-                trans('dialog.preferences.app_lang.'+lang)
+                trans('dialog.preferences.app_lang.'+this._typoLang[0])
             )
         );
 
         // Initialize typo and we're set!
-        this._typo.push(new Typo(lang, this._typoAff, this._typoDic));
-        this._typoLang[lang] = true; // This language is now initialized
+        this._typo.push(new Typo(this._typoLang[0], this._typoAff, this._typoDic));
 
+        // Shift out the first index while transmitting the "loaded!" message,
+        // as the return value of shift() is precisely the removed item.
         this._overlay.update(
             trans(
                 'init.spellcheck.init_done',
-                trans('dialog.preferences.app_lang.'+lang)
+                trans('dialog.preferences.app_lang.'+this._typoLang.shift())
             )
         );
 
@@ -533,15 +514,7 @@ class ZettlrRenderer
         this._typoAff = null;
         this._typoDic = null;
 
-        let done = true;
-        for(let l in this._typoLang) {
-            if(!this._typoLang[l]) {
-                done = false;
-                break;
-            }
-        }
-
-        if(!done) {
+        if(this._typoLang.length > 0) {
             // There is still at least one language to load. -> request next aff
             this.requestLang('aff');
         } else {

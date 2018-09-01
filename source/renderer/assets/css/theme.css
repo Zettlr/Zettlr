@@ -546,6 +546,62 @@ body .modal .dialog .ui-tabs-nav .ui-tabs-tab a {
 body .modal .dialog .ui-tabs-nav .ui-tabs-tab:hover {
   background-color: #dcdcdc;
 }
+body .modal .dialog ul.dicts-list {
+  margin: 0px;
+  border: 1px solid #c8c8c8;
+  padding: 0;
+  border-radius: 5px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+body .modal .dialog ul.dicts-list li.dicts-list-item {
+  padding: 10px;
+  font-weight: bold;
+  margin: 0;
+  background-color: white;
+  border-bottom: 1px solid #c8c8c8;
+}
+body .modal .dialog ul.dicts-list li.dicts-list-item:hover {
+  background-color: #f0f0f0;
+}
+body .modal .dialog ul.dicts-list li.dicts-list-item:last-child {
+  border-bottom: none;
+}
+body .modal .dialog input.dicts-list-search {
+  border: 1px solid #c8c8c8;
+  border-bottom: none;
+  font-size: inherit;
+  display: block;
+  margin: 0;
+  padding: 10px;
+  border-radius: 5px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+body .modal .dialog .selected-dict {
+  color: white;
+  cursor: pointer;
+  background-color: #1cb27e;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 5px;
+  border: 1px solid #047d65;
+}
+body .modal .dialog .selected-dict:after {
+  content: "\00d7";
+  font-size: 150%;
+  padding: 0px 5px;
+  color: #047d65;
+  line-height: 50%;
+  vertical-align: baseline;
+}
+body .modal .dialog .selected-dict:hover {
+  background-color: #047d65;
+  border-color: #285028;
+}
+body .modal .dialog .selected-dict:hover:after {
+  color: #285028;
+}
 body #combiner #arrow-button {
   background-color: white;
   border-radius: 100%;

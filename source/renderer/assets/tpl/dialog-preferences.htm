@@ -39,13 +39,26 @@
             </div>
             <!-- Editor related options -->
             <div id="prefs-tabs-editor">
-                <p>
-                    %i18n.preferences.spellcheck%
-                </p>
-                <p>
-                    %i18n.preferences.spellcheck_warning%
-                </p>
-                %SPELLCHECK%
+                <div class="clear"></div>
+                <div class="box-left">
+                    <input type="text" class="dicts-list-search" placeholder="%i18n.preferences.spellcheck_search_placeholder%">
+                    <ul class="dicts-list">
+                        %AVAILABLE_DICTS%
+                    </ul>
+                </div>
+                <div class="box-right">
+                    <p>
+                        %i18n.preferences.spellcheck%
+                    </p>
+                    <p>
+                        %i18n.preferences.spellcheck_warning%
+                    </p>
+                    <hr>
+                    <div class="selected-dictionaries">
+                    %SPELLCHECK%
+                </div>
+                </div>
+                <div class="clear"></div>
                 <hr>
                 <div>
                     <input type="checkbox" name="pref-mute-lines" value="yes" id="pref-mute-lines" %MUTE_LINES%>
@@ -121,3 +134,47 @@
         </div>
     </form>
 </div>
+<script type="text/javascript">
+// Functions for the search field of the dictionary list.
+$('.dicts-list-search').on('keyup', (e) => {
+    let val = $('.dicts-list-search').val().toLowerCase();
+    let list = $('.dicts-list').find('li').each(function(i) {
+        if($(this).text().toLowerCase().indexOf(val) === -1) {
+            $(this).hide();
+        } else {
+            $(this).show();
+        }
+    });
+});
+
+$('.dicts-list').on('click', (e) => {
+    let elem = $(e.target);
+    if(elem.is('li') && elem.hasClass('dicts-list-item')) {
+        let selection = $(`<div class="selected-dict"><input type="hidden" value="${elem.attr('data-value')}" name="spellcheck[]" id="${elem.attr('data-value')}">${elem.text()}</div>`);
+        $('.selected-dictionaries').append(selection);
+        elem.detach();
+        $('.dicts-list-search').val('').focus().trigger('keyup'); // Next search
+    }
+});
+
+$('.selected-dictionaries').on('click', (e) => {
+    let elem = $(e.target);
+    if(elem.is('div') && elem.hasClass('selected-dict')) {
+        let selection = $(`<li data-value="${elem.children('input').first().val()}" class="dicts-list-item">${elem.text()}</li>`);
+        let length = $('.dicts-list').find('li').length;
+        if(length == 0) {
+            $('.dicts-list').append(selection);
+        } else {
+            $('.dicts-list').find('li').each(function(i) {
+                if($(this).text() > elem.text()) {
+                    selection.insertBefore($(this));
+                    return false; // Break out of the loop
+                } else if(i == length-1) {
+                    selection.insertAfter($(this));
+                }
+            });
+        }
+        elem.detach();
+    }
+});
+</script>

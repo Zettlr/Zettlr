@@ -20,7 +20,7 @@ const fs             = require('fs');
 const path           = require('path');
 const {app}          = require('electron');
 const commandExists  = require('command-exists').sync; // Does a given shell command exist?
-const {ignoreFile,isDir} = require('../common/zettlr-helpers.js');
+const {ignoreFile,isDir,isDictAvailable} = require('../common/zettlr-helpers.js');
 
 /**
  * This class represents the configuration of Zettlr, represented by the
@@ -116,12 +116,7 @@ class ZettlrConfig
                 "fontsize": 12 // Will be translated to pt
             },
             // Language
-            "spellcheck": {
-                'en_US' : (this.getLocale() === 'en_US') ? true : false,
-                'en_GB' : (this.getLocale() === 'en_GB') ? true : false,
-                'de_DE' : (this.getLocale() === 'de_DE') ? true : false,
-                'fr_FR' : (this.getLocale() === 'fr_FR') ? true : false
-            },
+            "selectedDicts": [ this.getLocale() ], // Default spellcheck is OS locale
             "app_lang": this.getLocale(),
             "debug": false
         };
@@ -260,6 +255,13 @@ class ZettlrConfig
      */
     checkPaths()
     {
+        // First check if the dict directory exists and create, if not.
+        try {
+            fs.lstatSync(path.join(this.configPath, 'dict'));
+        } catch(e) {
+            fs.mkdirSync(path.join(this.configPath, 'dict'));
+        }
+
         for(let i = 0; i < this.config['openPaths'].length; i++) {
             try {
                 let s = fs.lstatSync(this.config['openPaths'][i]);
@@ -275,6 +277,15 @@ class ZettlrConfig
 
         // Now sort the paths.
         this._sortPaths();
+
+        // We have to run over the spellchecking dictionaries and see whether or
+        // not they are still valid or if they have been deleted.
+        for(let i = 0; i < this.config['selectedDicts'].length; i++) {
+            if(!isDictAvailable(this.config['selectedDicts'][i])) {
+                this.config['selectedDicts'].splice(i, 1);
+                --i;
+            }
+        }
     }
 
     /**
@@ -433,6 +444,40 @@ class ZettlrConfig
         }
 
         return languageFiles;
+    }
+
+    /**
+     * This function dynamically generates an array of all available dictionaries.
+     * @return {Array} An array containing all language codes available.
+     */
+    getDictionaries()
+    {
+        // First dynamically enumerate all files that come shipped with the app.
+        let scanfolder = path.join(__dirname, '../renderer/assets/dict');
+        let dirs = fs.readdirSync(scanfolder);
+        let dictLangs = [];
+        for(let d of dirs) {
+            if(/^[a-z]{1,3}_[A-Z]{1,3}$/.test(d) && isDir(path.join(scanfolder, d)) && isDictAvailable(d)) {
+                // It's a dict dir!
+                dictLangs.push(d);
+            }
+        }
+
+        // Secondly, enumerate all custom dicts. Path: APP_DATA/dict
+        try {
+            scanfolder = path.join(this.configPath, '/dict');
+            dirs = fs.readdirSync(scanfolder);
+            for(let d of dirs) {
+                if(/^[a-z]{1,3}_[A-Z]{1,3}$/.test(d) && isDir(path.join(scanfolder, d)) && isDictAvailable(d)) {
+                    // It's a dict dir!
+                    dictLangs.push(d);
+                }
+            }
+        } catch(e) {
+            // If something goes wrong, simply don't include any user files.
+        }
+
+        return dictLangs;
     }
 
     /**

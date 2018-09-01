@@ -41,7 +41,6 @@ body .dragger {
 }
 #container.blur {
   /* This is applied when a modal is shown */
-  filter: blur(5px);
 }
 ::-webkit-scrollbar {
   width: 4px;
@@ -252,6 +251,22 @@ body .dragger {
   width: 100%;
   text-align: center;
   outline: none;
+}
+.modal .dialog ul.dicts-list {
+  list-style-type: none;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.modal .dialog ul.dicts-list li.dicts-list-item {
+  display: block;
+  cursor: pointer;
+  line-height: 1.5em;
+}
+.modal .dialog input.dicts-list-search {
+  line-height: 200%;
+}
+.modal .dialog .selected-dict {
+  display: inline-block;
 }
 #directories {
   position: absolute;

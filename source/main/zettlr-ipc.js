@@ -269,10 +269,11 @@ class ZettlrIPC
             break;
 
             case 'get-preferences':
-            // Duplicate the object because we only need supportedLangs for the
-            // renderer
-            let toSend = JSON.parse(JSON.stringify(this._app.getConfig().getConfig()));
+            // Duplicate the object
+            let toSend = Object.assign({}, this._app.getConfig().getConfig());// JSON.parse(JSON.stringify(this._app.getConfig().getConfig()));
+            // Add available translations and dictionaries
             toSend.supportedLangs = this._app.getConfig().getSupportedLangs();
+            toSend.availableDicts = this._app.getConfig().getDictionaries();
             this.send('preferences', toSend);
             break;
 
@@ -327,7 +328,8 @@ class ZettlrIPC
 
             // SPELLCHECKING EVENTS
             case 'typo-request-lang':
-            this.send('typo-lang', this._app.getConfig().get('spellcheck'));
+            // Send the renderer all activated spellchecking dictionaries.
+            this.send('typo-lang', this._app.getConfig().get('selectedDicts'));
             break;
 
             case 'typo-request-aff':

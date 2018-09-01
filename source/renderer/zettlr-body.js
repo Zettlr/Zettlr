@@ -644,7 +644,7 @@ class ZettlrBody
         xelatex    = '',
         darkTheme  = false,
         snippets   = false,
-        spellcheck = this._spellcheckLangs,
+        selectedDicts = [],
         app_lang = 'en_US',
         debug = false,
         attachments = [],
@@ -694,7 +694,7 @@ class ZettlrBody
                 mute = true;
                 break;
                 case 'spellcheck[]':
-                spellcheck[r.value] = true;
+                selectedDicts.push(r.value);
                 break;
                 case 'app-lang':
                 app_lang = r.value;
@@ -802,7 +802,7 @@ class ZettlrBody
                 'snippets': snippets,
                 'combinerState': combinerState,
                 'muteLines': mute,
-                'spellcheck': spellcheck,
+                'selectedDicts': selectedDicts,
                 'app_lang': app_lang,
                 'debug': debug,
                 'export': {

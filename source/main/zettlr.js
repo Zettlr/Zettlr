@@ -810,7 +810,13 @@ class Zettlr
         try {
             fs.lstatSync(p);
         } catch(e) {
-            return; // Don't continue the event chain to enable spell checking
+            // Try the custom folder
+            p = path.join(app.getPath('userData'), '/dict', lang, lang + '.' + type);
+            try {
+                fs.lstatSync(p);
+            } catch(e) {
+                return;
+            }
         }
 
         fs.readFile(p, 'utf8', (err, data) => {

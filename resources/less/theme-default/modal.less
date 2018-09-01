@@ -96,5 +96,71 @@
                 &:hover { background-color:@grey-1; }
             }
         }
+
+        // Dictionary list styles
+        ul.dicts-list {
+            margin:0px;
+            border:1px solid @grey-2;
+            padding:0;
+            border-radius:5px;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+
+            li.dicts-list-item {
+                padding:10px;
+                font-weight: bold;
+                margin:0;
+                background-color: white;
+                border-bottom:1px solid @grey-2;
+                &:hover {
+                    background-color:@grey-0;
+                }
+
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
+        }
+
+        input.dicts-list-search {
+            border:1px solid @grey-2;
+            border-bottom:none;
+            font-size: inherit;
+            display:block;
+            margin:0;
+            padding:10px;
+            border-radius: 5px;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+        }
+
+        .selected-dict {
+            color: white;
+            cursor: pointer;
+            background-color: @green-0;
+            border-radius:5px;
+            padding:5px 10px;
+            margin:5px;
+            border:1px solid @green-1;
+
+            &:after {
+                content: "\00d7"; // &times;
+                font-size:150%;
+                padding:0px 5px;
+                color:@green-1;
+                line-height: 50%;
+                vertical-align: baseline;
+            }
+
+            &:hover {
+                background-color:@green-1;
+                border-color:@green-2;
+
+                &:after {
+                    color:@green-2;
+                }
+            }
+        }
+
     } // END modal
 }

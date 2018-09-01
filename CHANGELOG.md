@@ -12,6 +12,9 @@
 - Inline links rendered inside headers are now always the correct size.
 - Email-addresses are now correctly identified and will be rendered as clickable links as well. If you `Alt`-click on them, they will open the default email option (i.e. they are the same as clicking on any website's email addresses).
 - Fixes to the project feature.
+- Made the dictionaries finally independent from the four default translations.
+- Added about 70 languages to the four default translations. This means: If you now include a custom dictionary or a custom translation, chances are high that it will be detected and translated automatically!
+- Added a bunch of dictionaries that now come shipped with the app.
 
 ## Under the hood
 
@@ -27,6 +30,7 @@
 - Removed the unnecessary PDF exporting LaTeX template from the pandoc directory.
 - Added another newline character when gluing Markdown files together on project exports.
 - Fixed a bug that would not read in a saved project config on restart.
+- Huge changes to the selection and retrieval of dictionaries for the spellchecking algorithm.
 
 # 0.18.3
 

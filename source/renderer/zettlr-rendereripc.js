@@ -327,7 +327,7 @@ class ZettlrRendererIPC
                 case 'darkTheme':
                 // Will only be received once, so simply "toggle" from initial
                 // light theme to dark
-                if(cnt.value == true) {
+                if(cnt.value) {
                     this._app.toggleTheme();
                 }
                 break;
@@ -357,8 +357,7 @@ class ZettlrRendererIPC
 
             // SPELLCHECKING EVENTS
             case 'typo-lang':
-            // arg.content contains an object holding trues and falses for all
-            // languages to be checked simultaneously
+            // cnt holds an array of all languages that should be initialised.
             this._app.setSpellcheck(cnt);
             // Also pass down the languages to the body so that it can display
             // them in the preferences dialog
