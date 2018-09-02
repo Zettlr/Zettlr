@@ -15,6 +15,7 @@
 - Made the dictionaries finally independent from the four default translations.
 - Added about 70 languages to the four default translations. This means: If you now include a custom dictionary or a custom translation, chances are high that it will be detected and translated automatically!
 - Added a bunch of dictionaries that now come shipped with the app.
+- Finally found & fixed the bug that kept detecting whole swathes of text as links and inserted them on link insert or didn't detect any link at all.
 
 ## Under the hood
 

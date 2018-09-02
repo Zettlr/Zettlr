@@ -21,7 +21,7 @@ const {clipboard} = require('electron');
     orderedListRE = /^(\s*)((\d+)([.)]))(\s*)/;
 
     var reservedChars = "+.*_/\\[](){}?^$".split('');
-    var urlRE = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+    var urlRE = /^[-a-z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-z0-9@:%_\+.~#?&//=]*)?$/i;
 
     /**
      * Converts selection into a markdown inline element (or removes formatting)
@@ -242,7 +242,7 @@ const {clipboard} = require('electron');
         if(cm.doc.somethingSelected()) {
             cm.doc.setCursor(cm.doc.listSelections()[0].anchor);
         }
-        cm.doc.replaceSelection('\n---\n');
+        cm.doc.replaceSelection('\n***\n');
     };
 
     // Inserts a link template

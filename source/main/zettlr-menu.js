@@ -92,7 +92,6 @@ class ZettlrMenu
                     {
                         label: trans('menu.import_dict_file'),
                         click (item, focusedWindow) {
-                            console.log(require('path').join(require('electron').app.getPath('userData'), '/dict'));
                             require('electron').shell.openItem(require('path').join(require('electron').app.getPath('userData'), '/dict'));
                         }
                     },
