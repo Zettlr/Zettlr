@@ -18,6 +18,7 @@
 - Finally found & fixed the bug that kept detecting whole swathes of text as links and inserted them on link insert or didn't detect any link at all.
 - Transferred the download page in the updater to the new download landing page at zettlr.com/download.
 - Clicking on marked tags in the preview list will now trigger a search for these tags.
+- Added support for `TeX`-files. So in case you want to export something to PDF, you can add custom `LaTeX` statements in their respective file to amend the styling Zettlr applies.
 
 ## Under the hood
 
@@ -37,6 +38,7 @@
 - Made the regular expression detecting links in the clipboard non-global and limited it to only detecting single links in the clipboard.
 - The download page will now count all updates by users to keep track of how many users are using the app (only the click is counted, no personal information is collected). To avoid detection of you updating, simply visit zettlr.com/download manually.
 - Amended `ZettlrRenderer` by a function to programmatically trigger global searches.
+- Added `.tex` to the list of supported file types. Added a mode switch to `ZettlrEditor`s `open()` method.
 
 # 0.18.3
 

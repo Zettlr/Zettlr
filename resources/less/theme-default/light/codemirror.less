@@ -1,9 +1,25 @@
 // Light theme for CodeMirror
 
 // Editor styling
-.CodeMirror {
+#editor .CodeMirror {
     background-color:#ffffff;
     color:rgb(46, 56, 60);
+
+    // TODO: Ugly repetition
+    &.cm-stex-mode {
+        font-family: monospace;
+        .cm-comment    { color: @grey-2; }
+        .cm-attribute  { color: @blue-0; }
+        .cm-string     { color: @green-0; }
+        .cm-string-2   { color: @gold-selection-dark; }
+        .cm-variable   { color: @grey-6; }
+        .cm-variable-2 { color: @green-selection-dark; }
+        .cm-keyword    { color: @purple-selection-dark; }
+        .cm-property   { color: @orange-2; }
+        .cm-type       { color: @orange-2; }
+        .cm-atom       { color: @green-0; }
+        .cm-number     { color: @blue-0; }
+    }
 }
 
 .CodeMirror-selected { background-color:@green-selection !important; }
@@ -14,7 +30,7 @@
 // First generic variables
 .cm-comment, .cm-fenced-code { color:@grey-3; }
 
-.cm-fenced-code {
+.cm-fenced-code, .cm-stex-mode {
     &.cm-comment    { color: @grey-2; }
     &.cm-attribute  { color: @blue-0; }
     &.cm-string     { color: @green-0; }

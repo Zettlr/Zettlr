@@ -38,6 +38,7 @@ require('codemirror/addon/scroll/annotatescrollbar');
 // 5. Central modes
 require('codemirror/mode/markdown/markdown');
 require('codemirror/mode/gfm/gfm');
+require('codemirror/mode/stex/stex');
 
 // 6. Code highlighting modes
 require('codemirror/mode/javascript/javascript');
@@ -220,6 +221,16 @@ class ZettlrEditor
     {
         this._cm.setValue(file.content);
         this._cm.setOption('markdownImageBasePath', path.dirname(file.path)); // Set the base path for image rendering
+
+        // Switch modes based on the file type
+        if(file.ext == '.tex') {
+            this._cm.setOption('mode', 'stex');
+            $('.CodeMirror').addClass('cm-stex-mode');
+        } else if(this._cm.getOption('mode') == 'stex') {
+            this._cm.setOption('mode', 'multiplex');
+            $('.CodeMirror').removeClass('cm-stex-mode');
+        }
+
         this._cm.refresh();
         // Scroll the scrollbar to top, to make sure it's at the top of the new
         // file (in case there are positions saved, they will be scrolled to

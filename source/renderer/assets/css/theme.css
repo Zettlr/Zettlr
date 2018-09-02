@@ -82,9 +82,45 @@ body #attachments {
 body #attachments a:hover {
   text-decoration: underline;
 }
-body .CodeMirror {
+body #editor .CodeMirror {
   background-color: #ffffff;
   color: #2e383c;
+}
+body #editor .CodeMirror.cm-stex-mode {
+  font-family: monospace;
+}
+body #editor .CodeMirror.cm-stex-mode .cm-comment {
+  color: #c8c8c8;
+}
+body #editor .CodeMirror.cm-stex-mode .cm-attribute {
+  color: #1d75b3;
+}
+body #editor .CodeMirror.cm-stex-mode .cm-string {
+  color: #1cb27e;
+}
+body #editor .CodeMirror.cm-stex-mode .cm-string-2 {
+  color: #c5af20;
+}
+body #editor .CodeMirror.cm-stex-mode .cm-variable {
+  color: #464646;
+}
+body #editor .CodeMirror.cm-stex-mode .cm-variable-2 {
+  color: #5aaa50;
+}
+body #editor .CodeMirror.cm-stex-mode .cm-keyword {
+  color: #641e78;
+}
+body #editor .CodeMirror.cm-stex-mode .cm-property {
+  color: #f05734;
+}
+body #editor .CodeMirror.cm-stex-mode .cm-type {
+  color: #f05734;
+}
+body #editor .CodeMirror.cm-stex-mode .cm-atom {
+  color: #1cb27e;
+}
+body #editor .CodeMirror.cm-stex-mode .cm-number {
+  color: #1d75b3;
 }
 body .CodeMirror-selected {
   background-color: #c8f0aa !important;
@@ -96,37 +132,48 @@ body .cm-comment,
 body .cm-fenced-code {
   color: #787878;
 }
-body .cm-fenced-code.cm-comment {
+body .cm-fenced-code.cm-comment,
+body .cm-stex-mode.cm-comment {
   color: #c8c8c8;
 }
-body .cm-fenced-code.cm-attribute {
+body .cm-fenced-code.cm-attribute,
+body .cm-stex-mode.cm-attribute {
   color: #1d75b3;
 }
-body .cm-fenced-code.cm-string {
+body .cm-fenced-code.cm-string,
+body .cm-stex-mode.cm-string {
   color: #1cb27e;
 }
-body .cm-fenced-code.cm-string-2 {
+body .cm-fenced-code.cm-string-2,
+body .cm-stex-mode.cm-string-2 {
   color: #c5af20;
 }
-body .cm-fenced-code.cm-variable {
+body .cm-fenced-code.cm-variable,
+body .cm-stex-mode.cm-variable {
   color: #464646;
 }
-body .cm-fenced-code.cm-variable-2 {
+body .cm-fenced-code.cm-variable-2,
+body .cm-stex-mode.cm-variable-2 {
   color: #5aaa50;
 }
-body .cm-fenced-code.cm-keyword {
+body .cm-fenced-code.cm-keyword,
+body .cm-stex-mode.cm-keyword {
   color: #641e78;
 }
-body .cm-fenced-code.cm-property {
+body .cm-fenced-code.cm-property,
+body .cm-stex-mode.cm-property {
   color: #f05734;
 }
-body .cm-fenced-code.cm-type {
+body .cm-fenced-code.cm-type,
+body .cm-stex-mode.cm-type {
   color: #f05734;
 }
-body .cm-fenced-code.cm-atom {
+body .cm-fenced-code.cm-atom,
+body .cm-stex-mode.cm-atom {
   color: #1cb27e;
 }
-body .cm-fenced-code.cm-number {
+body .cm-fenced-code.cm-number,
+body .cm-stex-mode.cm-number {
   color: #1d75b3;
 }
 body .cm-tag {

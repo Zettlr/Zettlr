@@ -2,7 +2,8 @@
     "filetypes": [
         ".txt",
         ".md",
-        ".markdown"
+        ".markdown",
+        ".tex"
     ],
     "ignoreDirs": [
         "^\\.",
