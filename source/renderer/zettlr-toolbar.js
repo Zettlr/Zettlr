@@ -206,7 +206,7 @@ class ZettlrToolbar
     {
         // Colors (see variables.less): either green-selection or green-selection-dark
         let percent = item / itemCnt * 100;
-        let color = $('body').hasClass('dark') ? 'rgba( 90, 170,  80, 1)' : 'rgba(200, 240, 170, 1)';
+        let color = $('body').hasClass('dark') ? 'rgba(  4, 125, 101, 1)' : 'rgba( 28, 178, 126, 1)';
         let bgcol = this._div.css('background-color');
         this._searchbar.css('background-image', `linear-gradient(to right, ${color} 0%, ${color} ${percent}%, ${bgcol} ${percent}%, ${bgcol} 100%)`)
     }
