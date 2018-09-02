@@ -278,11 +278,11 @@ class ZettlrDialog
             replacements.push('%CHANGELOG%|' + obj.changelog);
             // replacements.push('%RELEASEURL%|' + obj.releaseURL);
             if($('body').hasClass('darwin')) {
-                replacements.push('%RELEASEURL%|' + 'https://www.zettlr.com/download/macos');
+                replacements.push('%RELEASEURL%|' + 'https://www.zettlr.com/download/macos?pk_campaign=RecurringUsers&pk_source=app&pk_medium=ZettlrUpdater');
             } else if($('body').hasClass('win32')) {
-                replacements.push('%RELEASEURL%|' + 'https://www.zettlr.com/download/win32');
+                replacements.push('%RELEASEURL%|' + 'https://www.zettlr.com/download/win32?pk_campaign=RecurringUsers&pk_source=app&pk_medium=ZettlrUpdater');
             } else if($('body').hasClass('linux')) {
-                replacements.push('%RELEASEURL%|' + 'https://www.zettlr.com/download/linux');
+                replacements.push('%RELEASEURL%|' + 'https://www.zettlr.com/download/linux?pk_campaign=RecurringUsers&pk_source=app&pk_medium=ZettlrUpdater');
             }
             break;
 

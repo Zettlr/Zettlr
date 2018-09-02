@@ -17,6 +17,7 @@
 - Added a bunch of dictionaries that now come shipped with the app.
 - Finally found & fixed the bug that kept detecting whole swathes of text as links and inserted them on link insert or didn't detect any link at all.
 - Transferred the download page in the updater to the new download landing page at zettlr.com/download.
+- Clicking on marked tags in the preview list will now trigger a search for these tags.
 
 ## Under the hood
 
@@ -34,6 +35,8 @@
 - Fixed a bug that would not read in a saved project config on restart.
 - Huge changes to the selection and retrieval of dictionaries for the spellchecking algorithm.
 - Made the regular expression detecting links in the clipboard non-global and limited it to only detecting single links in the clipboard.
+- The download page will now count all updates by users to keep track of how many users are using the app (only the click is counted, no personal information is collected). To avoid detection of you updating, simply visit zettlr.com/download manually.
+- Amended `ZettlrRenderer` by a function to programmatically trigger global searches.
 
 # 0.18.3
 

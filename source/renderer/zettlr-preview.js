@@ -161,7 +161,7 @@ class ZettlrPreview
                 for(let t of d.tags) {
                     if(keywords.includes(t)) {
                         let thekey = this._keywords.find((elem) => { return (elem.name == t);});
-                        tl += `<div class="tagspacer"><div class="tag" style="background-color:${thekey.color};" title="${thekey.desc}"></div></div>`;
+                        tl += `<div class="tagspacer"><div class="tag" style="background-color:${thekey.color};" title="${thekey.desc}" data-tag="${thekey.name}"></div></div>`;
                     }
                 }
                 tl += `</div>`;
@@ -306,6 +306,13 @@ class ZettlrPreview
 
         this._listContainer.on('mouseleave', 'li.directory', (e) => {
             this._listContainer.find('.sorter').detach();
+        });
+
+        this._listContainer.on('click', '.taglist .tag', (e) => {
+            // Initiate tag searches when the user clicks a tag.
+            this._renderer.triggerGlobalSearch('#' + $(e.target).attr('data-tag'));
+            e.target._tippy.hide().destroy(); // Also hide the tooltip
+            e.stopPropagation(); // Prevent the file itself from being clicked
         });
 
         // Show the arrow button once the mouse pointer gets high enough

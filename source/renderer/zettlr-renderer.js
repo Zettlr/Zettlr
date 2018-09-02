@@ -575,6 +575,20 @@ class ZettlrRenderer
     // This class only acts as a pass-through
 
     /**
+     * This function can be used to programmatically start a global search. It
+     * takes care that the toolbar shows the correct search term and that the
+     * search is initiated.
+     * @param  {String} term A term in string form
+     * @return {ZettlrRenderer} This for chainability.
+     */
+    triggerGlobalSearch(term)
+    {
+        this._toolbar.setSearch(term);
+        this.beginSearch(term);
+        return this;
+    }
+
+    /**
      * This function is called by ZettlrToolbar. The term gets passed on to
      * ZettlrPreview, but also a force-open event is sent to main, in case there
      * is a file that completely matches the file name.
