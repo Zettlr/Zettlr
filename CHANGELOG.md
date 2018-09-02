@@ -16,6 +16,7 @@
 - Added about 70 languages to the four default translations. This means: If you now include a custom dictionary or a custom translation, chances are high that it will be detected and translated automatically!
 - Added a bunch of dictionaries that now come shipped with the app.
 - Finally found & fixed the bug that kept detecting whole swathes of text as links and inserted them on link insert or didn't detect any link at all.
+- Transferred the download page in the updater to the new download landing page at zettlr.com/download.
 
 ## Under the hood
 
@@ -32,6 +33,7 @@
 - Added another newline character when gluing Markdown files together on project exports.
 - Fixed a bug that would not read in a saved project config on restart.
 - Huge changes to the selection and retrieval of dictionaries for the spellchecking algorithm.
+- Made the regular expression detecting links in the clipboard non-global and limited it to only detecting single links in the clipboard.
 
 # 0.18.3
 

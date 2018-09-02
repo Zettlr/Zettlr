@@ -276,7 +276,14 @@ class ZettlrDialog
             replacements.push('%NEWVER%|' + obj.newVer);
             replacements.push('%CURVER%|' + obj.curVer);
             replacements.push('%CHANGELOG%|' + obj.changelog);
-            replacements.push('%RELEASEURL%|' + obj.releaseURL);
+            // replacements.push('%RELEASEURL%|' + obj.releaseURL);
+            if($('body').hasClass('darwin')) {
+                replacements.push('%RELEASEURL%|' + 'https://www.zettlr.com/download/macos');
+            } else if($('body').hasClass('win32')) {
+                replacements.push('%RELEASEURL%|' + 'https://www.zettlr.com/download/win32');
+            } else if($('body').hasClass('linux')) {
+                replacements.push('%RELEASEURL%|' + 'https://www.zettlr.com/download/linux');
+            }
             break;
 
             default:
