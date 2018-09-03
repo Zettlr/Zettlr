@@ -776,7 +776,7 @@ body.dark #toolbar {
 body.dark #toolbar .button {
   transition: 0.2s all ease;
 }
-body.dark #toolbar .button:hover {
+body.dark #toolbar .button:not(.pomodoro):hover {
   background-color: #464646;
   transition: 0.2s all ease;
 }
@@ -789,7 +789,7 @@ body.dark #toolbar .searchbar input:focus {
 body.dark #editor {
   background-color: #282828;
 }
-body.dark .CodeMirror {
+body.dark #editor .CodeMirror {
   background-color: #282828;
   color: #c8c8c8;
 }

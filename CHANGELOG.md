@@ -39,6 +39,7 @@
 - The download page will now count all updates by users to keep track of how many users are using the app (only the click is counted, no personal information is collected). To avoid detection of you updating, simply visit zettlr.com/download manually.
 - Amended `ZettlrRenderer` by a function to programmatically trigger global searches.
 - Added `.tex` to the list of supported file types. Added a mode switch to `ZettlrEditor`s `open()` method.
+- Small fix to the toolbar CSS for not having a hover effect on the Pomodoro button in dark mode.
 
 # 0.18.3
 
