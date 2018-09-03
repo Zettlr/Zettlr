@@ -99,8 +99,11 @@
     }
 
     // Share buttons
+    .row {
+        display:flex;
+    }
     .btn-share {
-        display:inline-block;
+        flex-grow:1;
         width:46px;
         height:46px;
         line-height:46px;
@@ -137,6 +140,50 @@
             &:hover { background-color: rgba( 40,  40,  40, 1); color: white; }
         }
 
+        // revealJS theme buttons
+        &.revealjs-beige {
+            color: #333333;
+            background-color: #f7f2d3;
+            &:hover { background-color: darken(#f7f2d3, 20%); color: #333333; }
+        }
+        &.revealjs-black {
+            color: #ffffff;
+            background-color: #222222;
+            &:hover { background-color: lighten(#222222, 20%); color: #ffffff; }
+        }
+        &.revealjs-league {
+            color: #71e9f4;
+            background-color: #555a5f;
+            &:hover { background-color: lighten(#555a5f, 20%); color: lighten(#71e9f4, 20%); }
+        }
+        &.revealjs-moon {
+            color: #268bd2;
+            background-color: #002b36;
+            &:hover { background-color: lighten(#002b36, 20%); color: lighten(#268bd2, 20%); }
+        }
+        &.revealjs-serif {
+            color: #383d3d;
+            font-family: 'Georgia', 'Liberation serif', 'Times New Roman', serif;
+            background-color: #f0f1eb;
+            &:hover { background-color: darken(#f0f1eb, 10%); color: #383d3d; }
+        }
+        &.revealjs-sky {
+            color: #333333;
+            background-color: #add9e4;
+            &:hover { background-color: darken(#add9e4, 10%); color: #333333; }
+        }
+        &.revealjs-solarized {
+            color: #657b83;
+            background-color: #fdf6e3;
+            &:hover { background-color: darken(#fdf6e3, 10%); color: #657b83; }
+        }
+        &.revealjs-white {
+            color: #222222;
+            background-color: white;
+            &:hover { background-color: darken(white, 20%); color: #222222; }
+        }
+        // END revealJS theme buttons
+
         &.rst {
             color: rgb(28, 78, 98);
             &:hover { color: white; background-color: rgb(28, 78, 98); } // This is literally the first colour I found on the web for rst
@@ -160,6 +207,16 @@
         &.mediawiki {
             color: lighten(#0b0080, 20%);
             &:hover { background-color: #0b0080; color: white; }
+        }
+    }
+
+    // The revealjs theme selector's visibility
+    #reveal-themes {
+        transition:0.2s height ease;
+        height:46px * 2; // Share button height times 2
+        overflow:hidden;
+        &.hidden {
+            height:0px;
         }
     }
 

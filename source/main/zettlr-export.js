@@ -134,7 +134,18 @@ class ZettlrExport
             case 'pdf':
             this._preparePDF();
             break;
-            case 'revealjs':
+            case 'revealjs-beige':
+            case 'revealjs-black':
+            case 'revealjs-league':
+            case 'revealjs-moon':
+            case 'revealjs-serif':
+            case 'revealjs-sky':
+            case 'revealjs-solarized':
+            case 'revealjs-white':
+            // For revealjs extract the wanted theme so that the finalise method
+            // can apply it.
+            this.options.revealJSStyle = this.options.format.substr(9);
+            this.options.format = this.options.format.substr(0, 8);
             case 'rst':
             case 'rtf':
             case 'latex':
@@ -407,6 +418,7 @@ class ZettlrExport
             let tpl = fs.readFileSync(path.join(__dirname, './assets/template.revealjs.htm'), 'utf8');
             tpl = tpl.replace('$title$', this.options.file.name);
             tpl = tpl.replace('$body$', fs.readFileSync(this.targetFile, 'utf8'));
+            tpl = tpl.replace('$style$', fs.readFileSync(path.join(__dirname, './assets/revealjs-styles', this.options.revealJSStyle + '.css'), 'utf8'));
             fs.writeFileSync(this.targetFile, tpl, 'utf8');
         }
 

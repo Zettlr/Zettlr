@@ -1175,8 +1175,11 @@ body .dragger {
   display: inline-block;
   margin: 5px;
 }
+.popup .row {
+  display: flex;
+}
 .popup .btn-share {
-  display: inline-block;
+  flex-grow: 1;
   width: 46px;
   height: 46px;
   line-height: 46px;
@@ -1230,6 +1233,71 @@ body .dragger {
   background-color: #282828;
   color: white;
 }
+.popup .btn-share.revealjs-beige {
+  color: #333333;
+  background-color: #f7f2d3;
+}
+.popup .btn-share.revealjs-beige:hover {
+  background-color: #e7d87d;
+  color: #333333;
+}
+.popup .btn-share.revealjs-black {
+  color: #ffffff;
+  background-color: #222222;
+}
+.popup .btn-share.revealjs-black:hover {
+  background-color: #555555;
+  color: #ffffff;
+}
+.popup .btn-share.revealjs-league {
+  color: #71e9f4;
+  background-color: #555a5f;
+}
+.popup .btn-share.revealjs-league:hover {
+  background-color: #878d93;
+  color: #d0f8fb;
+}
+.popup .btn-share.revealjs-moon {
+  color: #268bd2;
+  background-color: #002b36;
+}
+.popup .btn-share.revealjs-moon:hover {
+  background-color: #007c9c;
+  color: #78b9e6;
+}
+.popup .btn-share.revealjs-serif {
+  color: #383d3d;
+  font-family: 'Georgia', 'Liberation serif', 'Times New Roman', serif;
+  background-color: #f0f1eb;
+}
+.popup .btn-share.revealjs-serif:hover {
+  background-color: #dadccd;
+  color: #383d3d;
+}
+.popup .btn-share.revealjs-sky {
+  color: #333333;
+  background-color: #add9e4;
+}
+.popup .btn-share.revealjs-sky:hover {
+  background-color: #87c7d7;
+  color: #333333;
+}
+.popup .btn-share.revealjs-solarized {
+  color: #657b83;
+  background-color: #fdf6e3;
+}
+.popup .btn-share.revealjs-solarized:hover {
+  background-color: #fae7b3;
+  color: #657b83;
+}
+.popup .btn-share.revealjs-white {
+  color: #222222;
+  background-color: white;
+}
+.popup .btn-share.revealjs-white:hover {
+  background-color: #cccccc;
+  color: #222222;
+}
 .popup .btn-share.rst {
   color: #1c4e62;
 }
@@ -1264,6 +1332,14 @@ body .dragger {
 .popup .btn-share.mediawiki:hover {
   background-color: #0b0080;
   color: white;
+}
+.popup #reveal-themes {
+  transition: 0.2s height ease;
+  height: 92px;
+  overflow: hidden;
+}
+.popup #reveal-themes.hidden {
+  height: 0px;
 }
 .popup .formatting a {
   text-decoration: none;

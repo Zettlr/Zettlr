@@ -401,11 +401,26 @@ class ZettlrBody
                 <div class="btn-share docx" title="${trans('dialog.export.alt_docx')}" data-ext="docx" data-hash="${file.hash}">DOCX</div>
             </div>
             <div class="row">
-                <div class="btn-share revealjs" title="reveal.js Presentation" data-ext="revealjs" data-hash="${file.hash}"></div>
+                <div class="btn-share revealjs" title="reveal.js Presentation"></div>
                 <div class="btn-share rst" title="reStructuredText" data-ext="rst" data-hash="${file.hash}">rST</div>
                 <div class="btn-share rtf" title="Rich Text Format" data-ext="rtf" data-hash="${file.hash}">RTF</div>
                 <div class="btn-share tex" title="LaTeX" data-ext="latex" data-hash="${file.hash}">TeX</div>
             </div>
+            <!-- This row's visibility will be toggled by clicking the reveal.js button -->
+            <div id="reveal-themes" class="hidden">
+                <div class="row">
+                    <div class="btn-share revealjs-black" title="Black" data-ext="revealjs-black" data-hash="${file.hash}">B</div>
+                    <div class="btn-share revealjs-moon" title="Moon" data-ext="revealjs-moon" data-hash="${file.hash}">M</div>
+                    <div class="btn-share revealjs-league" title="League" data-ext="revealjs-league" data-hash="${file.hash}">L</div>
+                    <div class="btn-share revealjs-sky" title="Sky" data-ext="revealjs-sky" data-hash="${file.hash}">S</div>
+                </div>
+                <div class="row">
+                    <div class="btn-share revealjs-beige" title="Beige" data-ext="revealjs-beige" data-hash="${file.hash}">B</div>
+                    <div class="btn-share revealjs-solarized" title="Solarized" data-ext="revealjs-solarized" data-hash="${file.hash}">S</div>
+                    <div class="btn-share revealjs-serif" title="Serif" data-ext="revealjs-serif" data-hash="${file.hash}">S</div>
+                    <div class="btn-share revealjs-white" title="White" data-ext="revealjs-white" data-hash="${file.hash}">W</div>
+                </div>
+            </div> <!-- END #reveal-themes -->
             <div class="row">
                 <div class="btn-share plain" title="Text" data-ext="plain" data-hash="${file.hash}">TXT</div>
                 <div class="btn-share org" title="Emacs Org" data-ext="org" data-hash="${file.hash}">ORG</div>
@@ -417,6 +432,12 @@ class ZettlrBody
         let popup = new ZettlrPopup(this, $('.button.share'), cnt);
 
         $('.btn-share').click((e) => {
+            // The revealjs-button doesn't trigger an export, but the visibility
+            // of the themes selection
+            if($(e.target).hasClass('revealjs')) {
+                $('#reveal-themes').toggleClass('hidden');
+                return;
+            }
             this.requestExport(e.target);
             popup.close();
         });
