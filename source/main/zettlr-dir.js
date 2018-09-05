@@ -30,6 +30,7 @@ const { hash, sort, generateName,
 } = require('../common/zettlr-helpers.js');
 
 const ALLOW_SORTS = ['name-up', 'name-down', 'time-up', 'time-down'];
+const FILETYPES = require('../common/data.json').filetypes;
 
 /**
  * Error object constructor
@@ -274,9 +275,9 @@ class ZettlrDir
             throw new DirectoryError(trans('system.error.no_allowed_chars'));
         }
 
-        // Do we have an extension?
-        if(path.extname(name) != '.md') {
-            name = name + ".md";
+        // Do we have a valid extension?
+        if(!FILETYPES.includes(path.extname(name))) {
+            name = name + ".md"; // Assume Markdown by default
         }
 
         // Already exists

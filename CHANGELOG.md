@@ -46,6 +46,7 @@
 - Change to the `less.js` script. It now minimises the CSS output to further optimise the styling.
 - Spell checking is now off by default in fresh installations to speed up the first start.
 - Amendments to `ZettlrProject`, `ZettlrFile` and `ZettlrExport` to ensure relative image paths are accurately converted into absolute ones on exporting them.
+- Streamlined setting the `ZettlrWindow` title. `Zettlrwindow::setTitle()` is now deprecated.
 
 # 0.18.3
 

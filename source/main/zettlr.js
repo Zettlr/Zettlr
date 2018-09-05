@@ -118,7 +118,6 @@ class Zettlr
                         if(isCurrentFile && (e == 'unlink')) {
                             // We need to close the file
                             this.ipc.send('file-close');
-                            this.getWindow().setTitle(''); // Reset window title
                             this.setCurrentFile(null); // Reset file
                         } else if(isCurrentFile && (e == 'change') && changed) {
                             // Current file has changed -> ask to replace and do
@@ -323,7 +322,6 @@ class Zettlr
 
         // Send the new paths and open the respective file.
         this.ipc.send('paths-update', this.getPaths());
-        this.window.setTitle(file.name);
         this.setCurrentFile(file);
         this.ipc.send('file-open', file.withContent());
     }
@@ -471,8 +469,6 @@ class Zettlr
         // Now that we are save, let's move the current file to trash.
         if(this.getCurrentFile() && (file.hash == this.getCurrentFile().hash)) {
             this.ipc.send('file-close', {});
-            // Also re-set the title!
-            this.window.setTitle();
             // Tell main & renderer to close file references
             this.setCurrentFile(null);
         }
@@ -683,8 +679,8 @@ class Zettlr
             file = this.getCurrentFile();
             file.rename(arg.name, this.getWatchdog());
 
-            // Adapt window title
-            this.window.setTitle(this.getCurrentFile().name);
+            // Adapt window title (manually trigger a fileUpdate)
+            this.window.fileUpdate();
         } else {
             // Non-open file should be renamed.
             file = this.findFile({'hash': arg.hash});
@@ -1005,7 +1001,7 @@ class Zettlr
                 // If it's the current file, close it
                 if(p === this.getCurrentFile()) {
                     this.ipc.send('file-close');
-                    this.getWindow().setTitle('');
+                    this.getWindow().setTitle(''); // TODO can we remove this?
                 }
                 if(p === this.getCurrentDir()) {
                     this.setCurrentDir(null);
@@ -1076,17 +1072,15 @@ class Zettlr
             this.currentFile = null;
             this.ipc.send('file-set-current', null);
             return;
+        } else {
+            this.currentFile = f;
+            this.ipc.send('file-set-current', f.hash);
         }
 
+        // Always adapt the window title
         if(this.window != null) {
-            if(f.isRoot()) {
-                this.window.setTitle(f.path);
-            } else {
-                this.window.setTitle(f.name);
-            }
+            this.window.fileUpdate();
         }
-        this.currentFile = f;
-        this.ipc.send('file-set-current', f.hash);
     }
 
     /**
@@ -1112,7 +1106,6 @@ class Zettlr
      */
     closeFile()
     {
-        this.window.setTitle('');
         this.setCurrentFile(null);
         this.ipc.send('file-close', {});
     }
