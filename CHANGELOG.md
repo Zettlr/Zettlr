@@ -42,6 +42,7 @@
 - Added `.tex` to the list of supported file types. Added a mode switch to `ZettlrEditor`s `open()` method.
 - Small fix to the toolbar CSS for not having a hover effect on the Pomodoro button in dark mode.
 - Change to the `less.js` script. It now minimises the CSS output to further optimise the styling.
+- Spell checking is now off by default in fresh installations to speed up the first start.
 
 # 0.18.3
 

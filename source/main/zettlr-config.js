@@ -116,7 +116,7 @@ class ZettlrConfig
                 "fontsize": 12 // Will be translated to pt
             },
             // Language
-            "selectedDicts": [ this.getLocale() ], // Default spellcheck is OS locale
+            "selectedDicts": [ ], // By default no spell checking is active to speed up first start.
             "app_lang": this.getLocale(),
             "debug": false
         };
