@@ -105,7 +105,10 @@ class ZettlrProject
         // Concat the files
         let contents = [];
         for(let file of files) {
-            contents.push(file.read());
+            // Directly make all image paths absolute to prevent errors if used
+            // in nested project directories (in which this._dir.path is not the
+            // same for all files).
+            contents.push(file.read({ 'absoluteImagePaths': true }));
         }
 
         // Make one string
@@ -115,7 +118,7 @@ class ZettlrProject
         let tempfile = {
             'path': path.join(this._dir.path, sanitize(this._cfg.title)),
             'name': sanitize(this._cfg.title), // obvious filename
-            'read': () => { return contents; }
+            'read': (opt) => { return contents; }
         };
 
         // Start up the Exporter

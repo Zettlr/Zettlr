@@ -17,7 +17,7 @@ const fs                    = require('fs');
 const path                  = require('path');
 const sanitize              = require('sanitize-filename');
 const {shell}               = require('electron');
-const {hash, ignoreFile}    = require('../common/zettlr-helpers.js');
+const {hash, ignoreFile, makeImgPathsAbsolute} = require('../common/zettlr-helpers.js');
 const {trans}               = require('../common/lang/i18n.js');
 
 /**
@@ -44,14 +44,14 @@ class ZettlrFile
     constructor(parent, fname)
     {
         this.parent       = parent;
-        this.dir          = ''; // Containing dir
-        this.name         = '';
-        this.path         = '';
-        this.hash         = null;
+        this.dir          = this.parent.name; // Containing dir
+        this.path         = fname;
+        this.name         = path.basename(this.path);
+        this.hash         = hash(this.path);
+        this.ext          = path.extname(this.path);
         this.id           = ''; // The ID, if there is one inside the file.
         this.tags         = []; // All tags that are to be found inside the file's contents.
         this.type         = 'file';
-        this.ext          = '';
         this.modtime      = 0;
         this.snippet      = '';
         this.linefeed     = '\n';
@@ -60,13 +60,6 @@ class ZettlrFile
         // RAM will fill up pretty fast.
         this.content      = '';
         this._vd          = []; // This array holds all virtual directories in which the file is also present. Necessary to inform them of renames etc.
-
-        // Prepopulate
-        this.path = fname;
-        this.name = path.basename(this.path);
-        this.hash = hash(this.path);
-        this.ext  = path.extname(this.path);
-        this.dir = this.parent.name; // Containing dir
 
         // The file might've been just created. Test that
         try {
@@ -125,7 +118,7 @@ class ZettlrFile
      * not keep the contents in buffer (saving memory)
      * @return {String} The file contents as string.
      */
-    read()
+    read(options = {})
     {
         let stat = fs.lstatSync(this.path);
         this.modtime = stat.mtime.getTime();
@@ -150,8 +143,12 @@ class ZettlrFile
             this.linefeed = '\r\n';
         } else if(/\n\r/.test(cnt)) {
             this.linefeed = '\n\r';
-        } else {
-            this.linefeed = '\n';
+        }
+
+        // Iterate over options to do something to the contents.
+        if(options.hasOwnProperty('absoluteImagePaths') && options.absoluteImagePaths === true) {
+            // We should convert all image paths to absolute.
+            cnt = makeImgPathsAbsolute(path.dirname(this.path), cnt);
         }
 
         // Now read all tags
@@ -233,10 +230,6 @@ class ZettlrFile
             'snippet'      : this.snippet,
             'content'      : this.read(), // Will only be not empty when the file is modified.
         };
-
-        Object.assign(f, this);
-        f.content = this.read();
-        return f;
     }
 
     /**

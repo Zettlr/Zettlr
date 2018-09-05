@@ -20,6 +20,8 @@
 - Transferred the download page in the updater to the new download landing page at zettlr.com/download.
 - Clicking on marked tags in the preview list will now trigger a search for these tags.
 - Added support for `TeX`-files. So in case you want to export something to PDF, you can add custom `LaTeX` statements in their respective file to amend the styling Zettlr applies.
+- You can now rest assured that on export of projects with nested files all images, even relative ones, will successfully be rendered in your PDF output.
+- Changes to the HTML exporting template. Now, images should always fit on screen.
 
 ## Under the hood
 
@@ -43,6 +45,7 @@
 - Small fix to the toolbar CSS for not having a hover effect on the Pomodoro button in dark mode.
 - Change to the `less.js` script. It now minimises the CSS output to further optimise the styling.
 - Spell checking is now off by default in fresh installations to speed up the first start.
+- Amendments to `ZettlrProject`, `ZettlrFile` and `ZettlrExport` to ensure relative image paths are accurately converted into absolute ones on exporting them.
 
 # 0.18.3
 

@@ -63,6 +63,11 @@
         color: #FF7C3B;
     }
 
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
     blockquote {
         font-size:80%;
         color: rgba(120, 120, 120, 1);

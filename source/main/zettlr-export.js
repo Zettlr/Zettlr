@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const {trans}       = require('../common/lang/i18n.js');
-const {formatDate}  = require('../common/zettlr-helpers.js');
+const { trans }       = require('../common/lang/i18n.js');
+const { formatDate, makeImgPathsAbsolute } = require('../common/zettlr-helpers.js');
 const {exec}        = require('child_process');
 const commandExists = require('command-exists').sync; // Need to use here because we cannot rely on the config's availability
 const path          = require('path');
@@ -171,7 +171,7 @@ class ZettlrExport
     _prepareFile()
     {
         // First load the file.
-        let cnt = this.options.file.read();
+        let cnt = this.options.file.read({ 'absoluteImagePaths': true });
 
         // Second check if we should strip something, if yes, do so.
         if(this.options.stripIDs) {
@@ -193,21 +193,6 @@ class ZettlrExport
                 return p1;
             });
         }
-
-        // Finally, make all image paths absolute for the export to Pandoc.
-        let absPath = path.dirname(this.options.file.path);
-        let imgRE = /^!\[(.+?)\]\((.+?)\)$/gmi;
-        let match;
-        cnt = cnt.replace(imgRE, (match, p1, p2, offset, string) => {
-            // Check if the path (p2) contains the absolute path
-            if(p2.indexOf(absPath) === 0 || p2.indexOf('http') === 0) {
-                // It's already absolute (either local or remote)
-                return `![${p1}](${p2})`;
-            } else {
-                // Make it absolute
-                return `![${p1}](${path.join(absPath, p2)})`;
-            }
-        });
 
         // Finally, save as temporary file.
         fs.writeFileSync(this.tempfile, cnt, 'utf8');
