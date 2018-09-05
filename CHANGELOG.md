@@ -4,6 +4,7 @@
 
 - **Import functionality**: Now you can import from nearly all file types pandoc supports into Zettlr. Simply select the desired target directory and select File -> Import files!
 - Added a lot of **exporting** options. More are still to come!
+- **Export Markdown files as reveal.js presentations**: From 0.19.0 on, Zettlr will support the export of reveal.js-presentations. Also, there's theme support built in!
 - If you insert a footnote, the cursor is not moved throughout the document so that the writing flow is more immersive.
 - The text field used to edit a footnote reference text is now automatically focused.
 - The editor will now directly mute lines when in full screen as soon as you change the preference setting for this. You don't have to move the cursor anymore for this.
@@ -40,6 +41,7 @@
 - Amended `ZettlrRenderer` by a function to programmatically trigger global searches.
 - Added `.tex` to the list of supported file types. Added a mode switch to `ZettlrEditor`s `open()` method.
 - Small fix to the toolbar CSS for not having a hover effect on the Pomodoro button in dark mode.
+- Change to the `less.js` script. It now minimises the CSS output to further optimise the styling.
 
 # 0.18.3
 

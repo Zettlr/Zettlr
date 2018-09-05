@@ -5,6 +5,7 @@ const less  = require('less');
 const fs    = require('fs');
 const path  = require('path');
 const chalk = require('chalk');
+const csso  = require('csso');
 
 let err     = chalk.bold.red;
 let warn    = chalk.yellow;
@@ -28,6 +29,7 @@ let themeLess   = '';
 
 console.log(info(`Reading input files ...`));
 
+// First read both the theme and the geometry file into memory.
 try {
     themeLess = fs.readFileSync(themeFile, { encoding: 'utf8' });
     console.log(success(`Successfully read ${themeFile}`));
@@ -55,7 +57,10 @@ less.render(themeLess, {
     'filename': themeFile
 })
 .then(function(output) {
-    console.log(success(`Done compiling ${themeFile}! Writing to target file ...`));
+    console.log(success(`Done compiling ${themeFile}! Minimising ...`));
+    // Overwrite output.css with a minified version.
+    output.css = csso.minify(output.css).css
+    console.log(success(`Done minimising ${themeFile}! Writing to target file ...`));
     try {
         fs.writeFileSync(themeTarget, output.css, { encoding: 'utf8' });
         console.log(success(`Done writing CSS to file ${themeTarget}!`));
@@ -82,7 +87,10 @@ less.render(geometryLess, {
     'filename': geometryFile
 })
 .then(function(output) {
-    console.log(success(`Done compiling ${geometryFile}! Writing to target file ...`));
+    console.log(success(`Done compiling ${geometryFile}! Minimising ...`));
+    // Overwrite output.css with a minified version.
+    output.css = csso.minify(output.css).css
+    console.log(success(`Done minimising ${geometryFile}! Writing to target file ...`));
     try {
         fs.writeFileSync(geometryTarget, output.css, { encoding: 'utf8' });
         console.log(success(`Done writing CSS to file ${geometryTarget}!`));
