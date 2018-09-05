@@ -88,7 +88,7 @@ class ZettlrConfig
             ],
             // UI related options
             "darkTheme" : false,
-            "snippets"  : true,
+            "snippets"  : false,
             "muteLines" : true,  // Should the editor mute lines in distraction free mode?
             "combinerState" : 'collapsed', // collapsed = Preview or directories visible --- expanded = both visible
             // Export options
