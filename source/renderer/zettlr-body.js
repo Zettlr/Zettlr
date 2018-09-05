@@ -409,16 +409,16 @@ class ZettlrBody
             <!-- This row's visibility will be toggled by clicking the reveal.js button -->
             <div id="reveal-themes" class="hidden">
                 <div class="row">
-                    <div class="btn-share revealjs-black" title="Black" data-ext="revealjs-black" data-hash="${file.hash}">B</div>
-                    <div class="btn-share revealjs-moon" title="Moon" data-ext="revealjs-moon" data-hash="${file.hash}">M</div>
-                    <div class="btn-share revealjs-league" title="League" data-ext="revealjs-league" data-hash="${file.hash}">L</div>
-                    <div class="btn-share revealjs-sky" title="Sky" data-ext="revealjs-sky" data-hash="${file.hash}">S</div>
+                    <div class="btn-share revealjs-black" title="Black" data-ext="revealjs-black" data-hash="${file.hash}"></div>
+                    <div class="btn-share revealjs-moon" title="Moon" data-ext="revealjs-moon" data-hash="${file.hash}"></div>
+                    <div class="btn-share revealjs-league" title="League" data-ext="revealjs-league" data-hash="${file.hash}"></div>
+                    <div class="btn-share revealjs-sky" title="Sky" data-ext="revealjs-sky" data-hash="${file.hash}"></div>
                 </div>
                 <div class="row">
-                    <div class="btn-share revealjs-beige" title="Beige" data-ext="revealjs-beige" data-hash="${file.hash}">B</div>
-                    <div class="btn-share revealjs-solarized" title="Solarized" data-ext="revealjs-solarized" data-hash="${file.hash}">S</div>
-                    <div class="btn-share revealjs-serif" title="Serif" data-ext="revealjs-serif" data-hash="${file.hash}">S</div>
-                    <div class="btn-share revealjs-white" title="White" data-ext="revealjs-white" data-hash="${file.hash}">W</div>
+                    <div class="btn-share revealjs-beige" title="Beige" data-ext="revealjs-beige" data-hash="${file.hash}"></div>
+                    <div class="btn-share revealjs-solarized" title="Solarized" data-ext="revealjs-solarized" data-hash="${file.hash}"></div>
+                    <div class="btn-share revealjs-serif" title="Serif" data-ext="revealjs-serif" data-hash="${file.hash}"></div>
+                    <div class="btn-share revealjs-white" title="White" data-ext="revealjs-white" data-hash="${file.hash}"></div>
                 </div>
             </div> <!-- END #reveal-themes -->
             <div class="row">

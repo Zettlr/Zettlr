@@ -22,6 +22,7 @@
 - Added support for `TeX`-files. So in case you want to export something to PDF, you can add custom `LaTeX` statements in their respective file to amend the styling Zettlr applies.
 - You can now rest assured that on export of projects with nested files all images, even relative ones, will successfully be rendered in your PDF output.
 - Changes to the HTML exporting template. Now, images should always fit on screen.
+- You can now create `LaTeX` files by using the extension `.tex` when creating new files.
 
 ## Under the hood
 

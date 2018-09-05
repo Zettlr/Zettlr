@@ -136,7 +136,7 @@ class ZettlrToolbar
             } else if(elem.role === 'pomodoro') {
                 child.addClass('button');
                 child.attr('data-command', 'pomodoro');
-                child.html('<svg width="16" height="16" viewBox="0 0 20 20"><circle class="pomodoro-meter" cx="10" cy="10" r="7" stroke-width="6" /> <circle class="pomodoro-value" cx="10" cy="10" r="7" stroke-width="6" /></svg>');
+                child.html('<svg width="20" height="20" viewBox="-1 -1 2 2"><circle class="pomodoro-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle><path d="" fill="" class="pomodoro-value" shape-rendering="geometricPrecision"></path></svg>');
             }
             this._div.append(child);
         }
