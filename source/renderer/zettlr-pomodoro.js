@@ -223,7 +223,7 @@ class ZettlrPomodoro
                     sec = '0' + sec;
                 }
                 let time = Math.floor((this._phase.max-this._phase.cur)/60) + ':' + sec;
-                this._pref = new ZettlrPopup(this, $('.button.pomodoro'), $('<div>').html(
+                this._pref = new ZettlrPopup(this, $('.button.pomodoro'), $('<div class="pomodoro">').html(
                     `<p><span id="pomodoro-phase-type">${trans('pomodoro.phase.'+this._phase.type)}</span></p>
                     <p><span id="pomodoro-time-remaining">${time}</span></p>
                     <button id="pomodoro-stop-button">${trans('pomodoro.stop')}</button>`

@@ -23,6 +23,7 @@
 - You can now rest assured that on export of projects with nested files all images, even relative ones, will successfully be rendered in your PDF output.
 - Changes to the HTML exporting template. Now, images should always fit on screen.
 - You can now create `LaTeX` files by using the extension `.tex` when creating new files.
+- Better Pomodoro counter.
 
 ## Under the hood
 
