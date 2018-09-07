@@ -24,7 +24,7 @@
     "import_files": [
         [ "docx",       "Microsoft Word",                   ".docx", ".doc" ],
         [ "odt",        "Open Document Text",               ".odt" ],
-        [ "rst",        "re:structured Text",               ".rst" ],
+        [ "rst",        "reStructured Text",               ".rst" ],
         [ "html",       "Hypertext Markup Language",        ".html", ".htm" ],
         [ "latex",      "LaTeX",                            ".tex", ".latex" ],
         [ "docbook",    "DocBook",                          ".docbook" ],
