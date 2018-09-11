@@ -4,6 +4,7 @@
 
 - Fixed a bug during import that resulted in crashing the app if no Pandoc was found.
 - Updated the styling of the app to make it feel more modern.
+- To open a file directly by typing its name into the search bar you don't have to get the capitalisation correct anymore.
 
 ## Under the hood
 

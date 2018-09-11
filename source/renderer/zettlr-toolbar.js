@@ -65,8 +65,8 @@ class ZettlrToolbar
                 // Any other key has been pressed
                 this._oldval = this._searchbar.val();
                 for(let name of this._autocomplete) {
-                    if(name.substr(0, this._oldval.length) == this._oldval) {
-                        this._searchbar.val(name).select().focus();
+                    if(name.substr(0, this._oldval.length).toLowerCase() == this._oldval.toLowerCase()) {
+                        this._searchbar.val(this._oldval + name.substr(this._oldval.length)).select().focus();
                         let e = this._searchbar[0]; // Retrieve actual DOM element
                         if (e.setSelectionRange) { e.setSelectionRange(this._oldval.length, this._searchbar.val().length); }
                         break;
