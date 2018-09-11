@@ -18,19 +18,9 @@ const commandExists     = require('command-exists').sync;
 const path              = require('path');
 const {exec}            = require('child_process');
 const { isDir, isFile } = require('../common/zettlr-helpers.js');
+const { trans }         = require('../common/lang/i18n.js');
 
 const FILES             = require('../common/data.json').import_files;
-
-/**
- * Error object constructor.
- * @param       {String} msg              The message
- * @param       {String} [name='Import error']       The name of the error.
- * @constructor
- */
-function ImportError(msg, name = 'Import error') {
-    this.name = name;
-    this.message = msg;
-}
 
 /**
  * This function checks a given file list and checks how good it is at guessing
@@ -49,7 +39,7 @@ function checkImportIntegrity(fileList)
             let stat = fs.lstatSync(fileList);
         }catch(e) {
             // Complain big time
-            throw ImportError(`${fileList} does not exist.`);
+            throw Error(`${fileList} does not exist.`);
         }
 
         let base = fileList;
@@ -64,7 +54,7 @@ function checkImportIntegrity(fileList)
     // It may be that the user did indeed not provide a directory, but also not
     // an array. In this case, abort.
     if(!Array.isArray(fileList)) {
-        throw ImportError(`The file list was not an array.`);
+        throw Error(`The file list was not an array.`);
     }
 
     // Now do the integrity check.
@@ -107,7 +97,7 @@ function checkImportIntegrity(fileList)
 function ZettlrImport(fileOrFolder, dirToImport, errorCallback = null, successCallback = null)
 {
     if(!commandExists('pandoc')) {
-        throw ImportError('Pandoc was not found!');
+        throw Error(trans('system.error.no_pandoc_message'));
     }
 
     let files = checkImportIntegrity(fileOrFolder);

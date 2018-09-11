@@ -1,3 +1,13 @@
+# 0.19.1
+
+## GUI and functionality
+
+- Fixed a bug during import that resulted in crashing the app if no Pandoc was found.
+
+## Under the hood
+
+- Implemented the try/catch construct around `ZettlrImport` to actually catch the errors that were thrown by this function.
+
 # 0.19.0
 
 ## GUI and functionality

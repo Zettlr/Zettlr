@@ -597,17 +597,23 @@ class Zettlr
 
         // Now import.
         this.notify(trans('system.import_status'));
-        let ret = ZettlrImport(fileList, this.getCurrentDir(), (file, error) => {
-            // This callback gets called whenever there is an error while running pandoc.
-            this.notify(trans('system.import_error', path.basename(file)));
-        }, (file) => {
-            // And this on each success!
-            this.notify(trans('system.import_success', path.basename(file)));
-        });
+        try {
+            let ret = ZettlrImport(fileList, this.getCurrentDir(), (file, error) => {
+                // This callback gets called whenever there is an error while running pandoc.
+                this.notify(trans('system.import_error', path.basename(file)));
+            }, (file) => {
+                // And this on each success!
+                this.notify(trans('system.import_success', path.basename(file)));
+            });
 
-        if(ret.length > 0) {
-            // Some files failed to import.
-            this.notify(trans('system.import_fail', ret.length, ret.map((x) => { return path.basename(x); }).join(', ')));
+            if(ret.length > 0) {
+                // Some files failed to import.
+                this.notify(trans('system.import_fail', ret.length, ret.map((x) => { return path.basename(x); }).join(', ')));
+            }
+        } catch(e) {
+            // There has been an error on importing (e.g. Pandoc was not found)
+            // This catches this and displays it.
+            this.notify(e.message);
         }
     }
 
