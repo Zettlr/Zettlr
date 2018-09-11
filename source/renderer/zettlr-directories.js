@@ -84,7 +84,7 @@ class ZettlrDirectories
                 target[i].refresh(x[i]);
             } else {
                 // New object -> add
-                target[i] = new TreeView(this, x[i], true);
+                target[i] = new TreeView(this, x[i], 1, true);
             }
             target[i].setTarget(i);
         }

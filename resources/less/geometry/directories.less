@@ -29,7 +29,7 @@
             padding:@ribbon-padding;
             white-space: nowrap;
             padding-left:5px;
-            margin:5px;
+            margin:5px 0px;
             overflow: hidden;
 
             &.root:before {
@@ -38,30 +38,27 @@
                 font-size: @font-size-small * 0.8; /* Bit smaller, those indicators are damned huge */
                 margin-right:5px;
                 display:inline-block;
-                float:left; // So that the Icon stays leftmost, no matter what the indicator does.
-                height:16px;
+                line-height:@ribbon-height;
             }
         }
 
         .collapse-indicator {
             margin-right:3px;
-            float:left;
 
             &::before {
                 content: "\f48b";
                 font-family: 'WebHostingHub-Glyphs';
                 font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
                 display:inline-block;
-                vertical-align: sub;
+                vertical-align: middle;
                 width:10px;
-                height:16px;
+                line-height:@ribbon-height;
                 overflow:hidden;
             }
         }
 
         &.collapsed .collapse-indicator::before {
             content: "\f488";
-            vertical-align: sub;
         }
 
         &.collapsed ul {
@@ -75,7 +72,7 @@
         padding:@ribbon-padding;
         white-space: nowrap;
         padding-left:5px;
-        margin:5px;
+        margin:5px 0px;
         overflow: hidden;
 
         &:before {

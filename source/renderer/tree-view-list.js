@@ -32,7 +32,7 @@ class TreeView
      * @param {Object}  paths          A tree to be displayed
      * @param {Boolean} [isRoot=false] Only set to true for the upmost TreeView
      */
-    constructor(parent, paths, isRoot = false)
+    constructor(parent, paths, level = 1, isRoot = false)
     {
         if(paths == null || typeof paths != 'object') {
             throw new TreeError('Paths must be given on instantiation!');
@@ -49,14 +49,16 @@ class TreeView
         this._root = isRoot;
         this._children = [];
         this._target = null;
+        this._level = level;
 
         // Create the elements
         this._ul = $('<ul>').addClass('collapsed');
-        if(!this.isRoot()) { this._ul.css('padding-left', '1em'); }
+        // if(!this.isRoot()) { this._ul.css('padding-left', '1em'); }
 
         this._indicator = $('<span>').addClass('collapse-indicator');
 
         this._dir = $('<li>').attr('data-hash', this.getHash());
+        if(!this.isRoot()) { this._dir.css('padding-left', this._level + 'em'); }
         this._dir.addClass(this._paths.type); // To ensure proper display of virtual directories and filters in different colours
         this._dir.append('<span>').text(this._paths.name);
         if(this.isRoot()) { this._dir.addClass('root'); }
@@ -241,7 +243,7 @@ class TreeView
                 target[j].refresh(this._paths.children[i]);
             } else {
                 // New directory -> add
-                target[j] = new TreeView(this, this._paths.children[i]);
+                target[j] = new TreeView(this, this._paths.children[i], this._level+1);
             }
             target[j].setTarget(j);
             // Increment after every dir
