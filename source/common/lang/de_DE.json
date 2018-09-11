@@ -419,7 +419,7 @@
             "pandoc_error_title": "Fehler bei Dateiexport",
             "pandoc_error_message": "Pandoc hat beim Export folgenden Fehler ausgegeben: %s",
             "no_pandoc_title": "Pandoc nicht gefunden",
-            "no_pandoc_message": "Pandoc wurde auf diesem System nicht gefunden. Bitte installiere zunächst Pandoc, um den Export nutzen zu können.",
+            "no_pandoc_message": "Pandoc wurde auf diesem System nicht gefunden. Bitte installiere zunächst Pandoc, um Dateien importieren und exportieren zu können.",
             "no_xelatex_title": "LaTeX nicht gefunden",
             "no_xelatex_message": "Es wurde keine LaTeX-Installation gefunden. Bitte installiere zunächst LaTeX, um nach PDF zu exportieren.",
             "cancel_remove": "Abbrechen",

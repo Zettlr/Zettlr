@@ -419,7 +419,7 @@
             "pandoc_error_title": "Erreur lors d'exporter",
             "pandoc_error_message": "Pandoc a lancé une erreur: %s",
             "no_pandoc_title": "Impossible de trouver Pandoc",
-            "no_pandoc_message": "Pandoc n'été trouver pas dans l'ordinateur. Télécharger Pandoc pour exporter les fichiers.",
+            "no_pandoc_message": "Pandoc n'été trouver pas dans l'ordinateur. Télécharger Pandoc pour exporter ou importer les fichiers.",
             "no_xelatex_title": "Impossible de trouver LaTeX",
             "no_xelatex_message": "LaTeX n'èté trouver pas dans l'ordinateur. Télécharger LaTeX pour exporter les fichiers à PDF.",
             "cancel_remove": "Annuler",
