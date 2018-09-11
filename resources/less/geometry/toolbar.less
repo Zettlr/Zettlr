@@ -14,6 +14,8 @@
         flex-grow:0.1;
         display:inline-block;
         width:@button-size;
+        margin:@button-margin;
+        border-radius:@button-margin; // Control the radius with the margin var
         text-align:center;
         line-height:@button-size;
         font-family:'WebHostingHub-Glyphs';
@@ -80,10 +82,10 @@
         input {
             height:@button-size;
             width:90%; // Fill out the whole space
-            margin:@toolbar-margin;
             line-height:@button-size;
             padding:0.2em 1em;
-            margin:0.3em;
+            margin:@button-margin;
+            border-radius:@button-margin;
             outline: none;
         }
 

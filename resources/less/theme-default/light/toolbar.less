@@ -1,20 +1,19 @@
 // Toolbar styling
 
 #toolbar {
-    background-image: linear-gradient(to bottom, white, @grey-0);
+    background-color: @grey-0;
     color:@grey-4;
-    border-bottom: 1px solid @grey-2;
+    box-shadow:0px 0px 5px 5px 15px rgba(0,0,0,.25);
 
     &.mute {
-        border-bottom:none;
-        background-image: linear-gradient(to bottom, @grey-0, white); // Nicer fade effect into the editor
+        // border-bottom:none;
     }
 
     .button {
         transition:@fast-transition all ease;
 
         &:not(.pomodoro):hover {
-            background-color: @grey-0;
+            background-color: @grey-1;
             transition:@fast-transition all ease;
         }
 
@@ -32,15 +31,13 @@
 
     .searchbar input {
         color:inherit;
-        background-color:transparent;
-        border:none;
+        background-color:white;
+        border:1px solid white;
         font-size:@font-size-small * 0.8;
-        transition:0.5s all ease;
+        transition:0.5s border-color ease;
 
         &:focus {
-            border-color:@blue-selection;
-            transition:0.5s all ease;
-            box-shadow: inset 0px 0px 15px 0px fade(@blue-selection, 95%);
+            border-color: @grey-1;
         }
     }
 

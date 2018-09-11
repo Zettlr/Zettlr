@@ -2,21 +2,24 @@
 
 #toolbar {
     color:@grey-1;
-    background-image: linear-gradient(to bottom, @grey-6, @grey-7); // Make it nearly black
-    border-bottom-color:@grey-5;
+    background-color: @grey-8;
 
     .button {
         transition:@fast-transition all ease;
         &:not(.pomodoro):hover {
-            background-color: @grey-6;
-            transition:@fast-transition all ease;
+            background-color: @grey-7;
         }
     }
 
     .searchbar {
         input {
+            &::placeholder {
+                color: inherit;
+            }
             color:inherit;
-            &:focus { box-shadow: inset 0px 0px 15px 0px fade(@blue-selection-dark, 95%); }
+            background-color: black;
+            border:1px solid black;
+            &:focus { border-color: @grey-7; }
         }
     }
 }
