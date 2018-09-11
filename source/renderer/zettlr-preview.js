@@ -14,7 +14,7 @@
 
 const Clusterize = require('clusterize.js');
 const tippy      = require('tippy.js');
-const { formatDate, flattenDirectoryTree } = require('../common/zettlr-helpers.js');
+const { formatDate, flattenDirectoryTree, hash } = require('../common/zettlr-helpers.js');
 // Sorting icons (WebHostingHub-Glyphs)
 const SORT_NAME_UP = '&#xf1c2;'
 const SORT_NAME_DOWN = '&#xf1c1;';
@@ -241,7 +241,7 @@ class ZettlrPreview
     _act()
     {
         // Activate directories and files respectively.
-        this._listContainer.on('click', 'li.file', (e) => {
+        this._listContainer.on('click', 'li', (e) => {
             let elem = $(e.target);
             while(!elem.is('li') && !elem.is('body')) {
                 // Click may have occurred on a span or strong
@@ -249,8 +249,26 @@ class ZettlrPreview
             }
 
             if(e.altKey) {
-                // Request a quicklook for that thing.
-                this._renderer.handleEvent('quicklook', { 'hash': elem.attr('data-hash') });
+                // Request a quicklook for that thing. Or to enter that dir.
+                if(elem.hasClass('directory')) {
+                    let par = this._renderer.findObject(parseInt(elem.attr('data-hash')));
+                    console.log(par);
+                    if(par.hasOwnProperty('path')) {
+                        // As the "parent" property is cut out during the preparation
+                        // for the sending of the whole directory tree, we have
+                        // to improvise: Generate the hash from the dirname of
+                        // our directory.
+                        let parentHash = hash(require('path').dirname(par.path));
+                        this._renderer.requestDir(parentHash);
+                    }
+                } else {
+                    this._renderer.handleEvent('quicklook', { 'hash': elem.attr('data-hash') });
+                }
+                return;
+            }
+
+            if(elem.hasClass('directory')) {
+                this._renderer.requestDir(elem.attr('data-hash'));
                 return;
             }
 
