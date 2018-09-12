@@ -6,6 +6,7 @@
 - Updated the styling of the app to make it feel more modern.
 - To open a file directly by typing its name into the search bar you don't have to get the capitalisation correct anymore.
 - It is now possible to traverse the file tree directly by clicking on the directories inside the preview pane. Use a single click to make that directory your current one, or use an `Alt`-click to traverse back up to its parent directory.
+- Now the "Save changes before quitting?"-Dialog won't appear — all your files will be saved immediately before quitting.
 
 ## Under the hood
 
