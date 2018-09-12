@@ -107,6 +107,10 @@ class ZettlrIPC {
       case 'get-paths':
         // The child process requested the current paths and files
         this.send('paths-update', this._app.getPaths())
+        // Also set the current file and dir correctly immediately
+        this.send('file-set-current', (this._app.getCurrentFile()) ? this._app.getCurrentFile().hash : null)
+        this.send('dir-set-current', (this._app.getCurrentDir()) ? this._app.getCurrentDir().hash : null)
+        if (this._app.getCurrentFile()) this.send('file-open', this._app.getCurrentFile().withContent())
         break
 
       case 'file-get-quicklook':

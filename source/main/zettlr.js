@@ -46,51 +46,51 @@ const POLL_TIME = require('../common/data.json').poll_time
  * the 10.000 lines with this behemoth.
  */
 class Zettlr {
-    /**
-     * Create a new application object
-     * @param {electron.app} parentApp The app object.
-     */
+  /**
+    * Create a new application object
+    * @param {electron.app} parentApp The app object.
+    */
   constructor (parentApp) {
-        // INTERNAL VARIABLES
-    this.currentFile = null    // Currently opened file (object)
-    this.currentDir = null     // Current working directory (object)
-    this.editFlag = false      // Is the current opened file edited?
+    // INTERNAL VARIABLES
+    this.currentFile = null // Currently opened file (object)
+    this.currentDir = null // Current working directory (object)
+    this.editFlag = false // Is the current opened file edited?
     this._openPaths = []
 
-        // INTERNAL OBJECTS
-    this.window = null         // Display content
-    this.ipc = null            // Communicate with said content
-    this.app = parentApp       // Internal pointer to app object
-    this.config = null         // Configuration file handler
-    this.watchdog = null       // Watchdog object
+    // INTERNAL OBJECTS
+    this.window = null // Display content
+    this.ipc = null // Communicate with said content
+    this.app = parentApp // Internal pointer to app object
+    this.config = null // Configuration file handler
+    this.watchdog = null // Watchdog object
 
     this.config = new ZettlrConfig(this)
-        // Init translations
+    // Init translations
     i18n(this.config.get('app_lang'))
     this.ipc = new ZettlrIPC(this)
 
-        // Initiate tags
+    // Initiate tags
     this._tags = new ZettlrTags(this)
 
-        // Initiate the watchdog
+    // Initiate the watchdog
     this.watchdog = new ZettlrWatchdog()
 
-        // Statistics
+    // Statistics
     this.stats = new ZettlrStats(this)
 
-        // And the window.
+    // And the window.
     this.window = new ZettlrWindow(this)
     this.openWindow()
 
-        // Read all paths into the app
+    // Read all paths into the app
     this.refreshPaths()
 
-        // If there are any, open argv-files
+    // If there are any, open argv-files
     this.handleAddRoots(global.filesToOpen)
 
     this._updater = new ZettlrUpdater(this)
 
-        // Initiate regular polling
+    // Initiate regular polling
     setTimeout(() => {
       this.poll()
     }, POLL_TIME)
@@ -825,13 +825,13 @@ class Zettlr {
     this.ipc.send('paths-update', this.getPaths())
   }
 
-    /**
-     * Reloads the complete directory tree.
-     * @return {void} This function does not return anything.
-     */
+  /**
+    * Reloads the complete directory tree.
+    * @return {void} This function does not return anything.
+    */
   refreshPaths () {
     this._openPaths = []
-        // Reload all opened files, garbage collect will get the old ones.
+    // Reload all opened files, garbage collect will get the old ones.
     for (let p of this.getConfig().get('openPaths')) {
       if (isFile(p)) {
         this._openPaths.push(new ZettlrFile(this, p))
@@ -839,8 +839,9 @@ class Zettlr {
         this._openPaths.push(new ZettlrDir(this, p))
       }
     }
-    this.setCurrentDir(null)
-    this.setCurrentFile(null)
+    // Set the pointers either to null or last opened dir/file
+    this.setCurrentDir(this.findDir({ 'hash': this.config.get('lastDir') }))
+    this.setCurrentFile(this.findFile({ 'hash': this.config.get('lastFile') }))
   }
 
     /**
@@ -897,7 +898,7 @@ class Zettlr {
       }
       file = this.getCurrentDir().newfile(null, this.watchdog)
     } else {
-      let f = this.getCurrentFile() // this.findFile({ 'hash': file.hash });
+      let f = this.getCurrentFile()
       if (f == null) {
         return this.window.prompt({
           type: 'error',
@@ -924,12 +925,18 @@ class Zettlr {
     }
   }
 
-    /**
-     * Wrapper to find files within all open paths
-     * @param  {Object} obj An object that conforms with ZettlrDir/ZettlrFile::findFile()
-     * @return {Mixed}     ZettlrFile or null
-     */
+  /**
+    * Wrapper to find files within all open paths
+    * @param  {Object} obj An object that conforms with ZettlrDir/ZettlrFile::findFile()
+    * @return {Mixed}     ZettlrFile or null
+    */
   findFile (obj) {
+    if (obj.hasOwnProperty('hash') && obj.hash == null) {
+      return null
+    } else if (obj.hasOwnProperty('path') && obj.path == null) {
+      return null
+    }
+
     let found = null
     for (let p of this.getPaths()) {
       found = p.findFile(obj)
@@ -941,12 +948,18 @@ class Zettlr {
     return null
   }
 
-    /**
-     * Wrapper around findDir
-     * @param  {Object} obj An object that conforms with ZettlrDir/ZettlrFile::findDir()
-     * @return {Mixed}     ZettlrDir or null
-     */
+  /**
+    * Wrapper around findDir
+    * @param  {Object} obj An object that conforms with ZettlrDir/ZettlrFile::findDir()
+    * @return {Mixed}     ZettlrDir or null
+    */
   findDir (obj) {
+    if (obj.hasOwnProperty('hash') && obj.hash == null) {
+      return null
+    } else if (obj.hasOwnProperty('path') && obj.path == null) {
+      return null
+    }
+
     let found = null
     for (let p of this.getPaths()) {
       found = p.findDir(obj)
@@ -1043,42 +1056,35 @@ class Zettlr {
     this._openPaths = f.concat(d)
   }
 
-    /**
-     * Sets the current file to the given file.
-     * @param {ZettlrFile} f A ZettlrFile object.
-     */
+  /**
+    * Sets the current file to the given file.
+    * @param {ZettlrFile} f A ZettlrFile object.
+    */
   setCurrentFile (f) {
-    if (f == null) {
-            // Dereference
-      this.currentFile = null
-      this.ipc.send('file-set-current', null)
-      return
-    } else {
-      this.currentFile = f
-      this.ipc.send('file-set-current', f.hash)
-    }
+    this.currentFile = f
+    this.ipc.send('file-set-current', (f && f.hasOwnProperty('hash')) ? f.hash : null)
+    this.config.set('lastFile', (f && f.hasOwnProperty('hash')) ? f.hash : null)
 
-        // Always adapt the window title
-    if (this.window != null) {
-      this.window.fileUpdate()
-    }
+    // Always adapt the window title
+    if (this.window) this.window.fileUpdate()
   }
 
-    /**
-     * Sets the current directory.
-     * @param {ZettlrDir} d Directory to be selected.
-     */
+  /**
+    * Sets the current directory.
+    * @param {ZettlrDir} d Directory to be selected.
+    */
   setCurrentDir (d) {
-        // Set the dir
+    // Set the dir
     this.currentDir = d
-        // HOLY SHIT. Sending only the hash instead of the whole object (which
-        // has to be crunched to be send through the pipe) is SO MUCH FASTER.
-        // Especially with virtual directories, because they got a LOT of
-        // recursive stuff going on. And we can be sure, that this directory
-        // will definitely exist in the renderer's memory, b/c we re-send the
-        // paths each time we change them. So renderer should always be on the
-        // newest update.
-    this.ipc.send('dir-set-current', (d) ? d.hash : null)
+    // HOLY SHIT. Sending only the hash instead of the whole object (which
+    // has to be crunched to be send through the pipe) is SO MUCH FASTER.
+    // Especially with virtual directories, because they got a LOT of
+    // recursive stuff going on. And we can be sure, that this directory
+    // will definitely exist in the renderer's memory, b/c we re-send the
+    // paths each time we change them. So renderer should always be on the
+    // newest update.
+    this.ipc.send('dir-set-current', (d && d.hasOwnProperty('hash')) ? d.hash : null)
+    this.config.set('lastDir', (d && d.hasOwnProperty('hash')) ? d.hash : null)
   }
 
     /**
