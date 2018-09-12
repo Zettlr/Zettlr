@@ -439,6 +439,7 @@
         },
         "save_changes_title": "Annuler des modifications?",
         "save_changes_message": "Le fichier contient modifications n'enregistrais pas. Annuler ou enregistrer?",
+        "save_changes_select_dir": "Selecter un dossier pour enregistrer le nouvel fichier, s'il te plaît.",
         "save_changes_cancel": "Annuler",
         "save_changes_save": "Enregistrer",
         "save_changes_omit": "Annuler des modifications",

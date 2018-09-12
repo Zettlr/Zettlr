@@ -439,6 +439,7 @@
         },
         "save_changes_title": "Omit unsaved changes?",
         "save_changes_message": "There are unsaved changes to the current file. Do you want to omit them or save?",
+        "save_changes_select_dir": "Please select a directory so that the new file can be saved.",
         "save_changes_cancel": "Cancel",
         "save_changes_save": "Save",
         "save_changes_omit": "Proceed without saving",
