@@ -382,16 +382,16 @@ function localiseNumber(number)
  */
 function makeImgPathsAbsolute(basePath, mdstring)
 {
-    let imgRE = /^!\[(.*?)\]\((.+?)\)$/gmi;
+    let imgRE = /^!\[(.*?)\]\((.+?)\)({.*})$/gmi;
     let match;
-    return mdstring.replace(imgRE, (match, p1, p2, offset, string) => {
+    return mdstring.replace(imgRE, (match, p1, p2, p3, offset, string) => {
         // Check if the path (p2) contains the absolute path
         if(p2.indexOf(basePath) === 0 || p2.indexOf('http') === 0) {
             // It's already absolute (either local or remote)
-            return `![${p1}](${p2})`;
+            return `![${p1}](${p2})${p3}`;
         } else {
             // Make it absolute
-            return `![${p1}](${path.join(basePath, p2)})`;
+            return `![${p1}](${path.join(basePath, p2)})${p3}`;
         }
     });
 }
