@@ -60,6 +60,13 @@ class ZettlrConfig {
     this.cfgtpl = {
       // Root directories
       'openPaths': [],
+      'window': {
+        'x': 0,
+        'y': 0,
+        'width': require('electron').screen.getPrimaryDisplay().workAreaSize.width,
+        'height': require('electron').screen.getPrimaryDisplay().workAreaSize.width,
+        'max': true
+      },
       'lastFile': null, // Save last opened file hash here
       'lastDir': null, // Save last opened dir hash here
       // Visible attachment filetypes
@@ -133,6 +140,18 @@ class ZettlrConfig {
     // Put the attachment extensions into the global so that the helper
     // function isAttachment() can grab them
     global.attachmentExtensions = this.config.attachmentExtensions
+
+    // Put a global setter and getter for config keys into the globals.
+    global.config = {
+      get: (key) => {
+        // Clone the properties to prevent intrusion
+        return JSON.parse(JSON.stringify(this.get(key)))
+      },
+      // The setter is a simply pass-through
+      set: (key, val) => {
+        return this.set(key, val)
+      }
+    }
   }
 
   /**
@@ -479,6 +498,26 @@ class ZettlrConfig {
     if (this.config.hasOwnProperty(option)) {
       this.config[option] = value
       return true
+    }
+
+    if (option.indexOf('.') > 0) {
+      // A nested argument was requested, so iterate until we find it
+      let nested = option.split('.')
+      let prop = nested.pop() // Last one must be set manually, b/c simple attributes aren't pointers
+      let cfg = this.config
+      for (let arg of nested) {
+        if (cfg.hasOwnProperty(arg)) {
+          cfg = cfg[arg]
+        } else {
+          return false // The config option must match exactly
+        }
+      }
+
+      // Set the nested property
+      if (cfg.hasOwnProperty(prop)) {
+        cfg[prop] = value
+        return true
+      }
     }
 
     return false

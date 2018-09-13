@@ -9,10 +9,12 @@
 - Now the "Save changes before quitting?"-Dialog won't appear — all your files will be saved immediately before quitting.
 - Zettlr now remembers your last opened file and the last selected directory and restores them on each restart (if they still exist).
 - Images can now also have pandoc attributes assigned (in curly brackets after the image tag) and will both render correctly inside Zettlr and work as intended on export.
+- The app will now remember its size and position on screen and restore it after a restart.
 
 ## Under the hood
 
 - Implemented the try/catch construct around `ZettlrImport` to actually catch the errors that were thrown by this function.
+- Changes to `ZettlrWindow` to create windows using programmatical boundaries.
 
 # 0.19.0
 
