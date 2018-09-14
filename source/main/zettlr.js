@@ -459,51 +459,47 @@ class Zettlr {
     this.ipc.send('paths-update', this.getPaths())
   }
 
-    /**
-     * Remove a directory.
-     * @param  {Integer} [hash=this.getCurrentDir().hash] The hash of dir to be deleted.
-     * @return {void}                                  This function does not return anything.
-     */
+  /**
+    * Remove a directory.
+    * @param  {Integer} [hash=this.getCurrentDir().hash] The hash of dir to be deleted.
+    * @return {void}                                  This function does not return anything.
+    */
   removeDir (hash = this.getCurrentDir().hash) {
-    let filedir = null, dir = null
+    let filedir = null
+    let dir = null
 
-        // First determine if this is modified.
+    // First determine if this is modified.
     if (this.getCurrentFile() == null) {
       filedir = ''
     } else {
       filedir = this.getCurrentFile().parent // Oh I knew this would be clever :>
     }
 
-    dir = this.findDir({'hash': hash })
+    dir = this.findDir({ 'hash': parseInt(hash) })
 
-    if (filedir == dir && !this.canClose()) {
+    if (filedir === dir && !this.canClose()) {
       return
-    }
-
-        // roots can only be closed.
-    if (this.getPaths().includes(dir.path)) {
-      return this.window.prompt({
-        type: 'error',
-        title: trans('system.error.delete_root_title'),
-        message: trans('system.error.delete_root_message')
-      })
     }
 
     if (!this.window.confirmRemove(dir)) {
       return
     }
 
-        // Close the current file, if there is one open
+    // Close the current file, if there is one open
     if ((this.getCurrentFile() != null) && dir.contains(this.getCurrentFile())) {
       this.closeFile()
     }
 
-    if (dir == this.getCurrentDir()) {
+    if (dir === this.getCurrentDir()) {
       this.setCurrentDir(dir.parent) // Move up one level
     }
 
-        // Now that we are save, let's move the current directory to trash.
+    // Now that we are save, let's move the current directory to trash.
     this.watchdog.ignoreNext('unlinkDir', dir.path)
+    // Roots must be removed from the openPaths as well
+    if (this.getPaths().includes(dir.path)) {
+      this.getPaths().splice(this.getPaths().indexOf(dir), 1)
+    }
     dir.remove()
 
     this.ipc.send('paths-update', this.getPaths())
@@ -821,7 +817,7 @@ class Zettlr {
         // This function is always called if root files are removed externally
         // and therefore want to remove themselves. This means we simply have
         // to splice the object from our paths array.
-    this._openPaths.splice(this._openPaths.indexOf(file), 1)
+    this.getPaths().splice(this.getPaths().indexOf(file), 1)
     this.ipc.send('paths-update', this.getPaths())
   }
 
