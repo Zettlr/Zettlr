@@ -10,10 +10,12 @@
 - Zettlr now remembers your last opened file and the last selected directory and restores them on each restart (if they still exist).
 - Images can now also have pandoc attributes assigned (in curly brackets after the image tag) and will both render correctly inside Zettlr and work as intended on export.
 - The app will now remember its size and position on screen and restore it after a restart.
+- Changes to the design of the dark mode. It's now a little bit blue-ish and the colours are finally adapted to the brand.
 
 ## Under the hood
 
 - Implemented the try/catch construct around `ZettlrImport` to actually catch the errors that were thrown by this function.
+- Added globally accessible config getters and setters so that the `ZettlrConfig`-object is now reachable from within all classes in the app.
 - Changes to `ZettlrWindow` to create windows using programmatical boundaries.
 
 # 0.19.0

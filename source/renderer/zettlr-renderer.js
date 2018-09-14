@@ -163,9 +163,7 @@ class ZettlrRenderer
             // Root means the parent has no type property. (IMPORTANT: NEVER
             // ever think it would be a good idea to give ZettlrRenderer a type
             // property!! TODO: Harden this.)
-            if(this.getCurrentDir().parent.hasOwnProperty('type')) {
                 this._body.requestNewDirName(this.getCurrentDir());
-            }
         }
     }
 

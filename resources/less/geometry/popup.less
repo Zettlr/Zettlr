@@ -236,7 +236,9 @@
             &#header-formatting {
                 display:flex;
                 &::before {
-                    padding:10px 0px;
+                  font-family: inherit;
+                  font-weight: bold;
+                  padding:10px 0px;
                 }
             }
 
@@ -262,12 +264,12 @@
             }
         }
 
-        #header-formatting.markdownHeading1::before { content: "h1"; }
-        #header-formatting.markdownHeading2::before { content: "h2"; }
-        #header-formatting.markdownHeading3::before { content: "h3"; }
-        #header-formatting.markdownHeading4::before { content: "h4"; }
-        #header-formatting.markdownHeading5::before { content: "h5"; }
-        #header-formatting.markdownHeading6::before { content: "h6"; }
+        #header-formatting.markdownHeading1::before { content: "H1"; }
+        #header-formatting.markdownHeading2::before { content: "H2"; }
+        #header-formatting.markdownHeading3::before { content: "H3"; }
+        #header-formatting.markdownHeading4::before { content: "H4"; }
+        #header-formatting.markdownHeading5::before { content: "H5"; }
+        #header-formatting.markdownHeading6::before { content: "H6"; }
 
         .markdownBlockquote::before         { content: '\f328'; }
         .markdownLink::before               { content: "\f022"; }
