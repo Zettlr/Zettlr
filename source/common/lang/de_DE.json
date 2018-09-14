@@ -35,6 +35,8 @@
         "attachments": "Anhänge",
         "no_attachments": "Keine Anhänge",
         "attachments_open_dir": "Öffne Verzeichnis",
+        "dirs": "Verzeichnisse",
+        "files": "Dateien",
         "formatting": {
             "bold": "Fett",
             "italic": "Kursiv",

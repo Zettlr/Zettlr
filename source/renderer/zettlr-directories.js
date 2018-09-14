@@ -15,6 +15,7 @@
 
 const TreeView = require('./tree-view-list.js')
 const EmptyPaths = require('./empty-paths.js')
+const { trans } = require('../common/lang/i18n.js')
 
 /**
 * This class acts as the intermediary between the actual directories in memory
@@ -98,8 +99,8 @@ class ZettlrDirectories {
     this.select()
 
     // Insert the headers appropriately.
-    if (dirs) $('<div id="directories-dirs-header">Directories</div>').insertBefore($('#directories ul').first())
-    if (files) $('<div id="directories-files-header">Files</div>').insertBefore($('#directories div.file').first())
+    if (dirs) $(`<div id="directories-dirs-header">${trans('gui.dirs')}</div>`).insertBefore($('#directories ul').first())
+    if (files) $(`<div id="directories-files-header">${trans('gui.files')}</div>`).insertBefore($('#directories div.file').first())
 
     return this
   }

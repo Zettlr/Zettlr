@@ -35,6 +35,8 @@
         "attachments": "Annexes",
         "no_attachments": "Pas des annexes",
         "attachments_open_dir": "Ouvrir le dossier",
+        "dirs": "Dossiers",
+        "files": "Fichiers",
         "formatting": {
             "bold": "Gras",
             "italic": "Italique",
