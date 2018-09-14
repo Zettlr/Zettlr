@@ -12,12 +12,14 @@
 - The app will now remember its size and position on screen and restore it after a restart.
 - Changes to the design of the dark mode. It's now a little bit blue-ish and the colours are finally adapted to the brand.
 - The directory list is now way less cluttered and looks way better than before.
+- Dropping images onto the app is now possible!
 
 ## Under the hood
 
 - Implemented the try/catch construct around `ZettlrImport` to actually catch the errors that were thrown by this function.
 - Added globally accessible config getters and setters so that the `ZettlrConfig`-object is now reachable from within all classes in the app.
 - Changes to `ZettlrWindow` to create windows using programmatical boundaries.
+- Updated the image finding regex again.
 
 # 0.19.0
 

@@ -343,6 +343,7 @@ class ZettlrMenu {
         label: trans('menu.quit'),
         click (item, focusedWindow) {
           if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'app-quit' })
+          else app.quit() // If this part is executed it means there's no window, so simply quit.
         }
       })
     }
@@ -383,6 +384,7 @@ class ZettlrMenu {
             accelerator: 'Cmd+Q',
             click (item, focusedWindow) {
               if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'app-quit' })
+              else app.quit() // If this part is executed it means there's no window, so simply quit.
             }
           }
         ]
