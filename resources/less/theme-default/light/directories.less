@@ -6,7 +6,12 @@
     font-size:@font-size-small;
 
     // Direct descendants need some margin to the files and to other roots
-    & > ul:not(:first-child) { border-top:1px solid @grey-2; }
+    // &//  > ul:not(:first-child) { border-top:1px solid @grey-2; }
+    #directories-dirs-header, #directories-files-header {
+      border-bottom:1px solid @grey-2;
+      color: @grey-2;
+      font-sizte: @font-size-small * 0.8; // Even smaller
+    }
 
 
     ul {
