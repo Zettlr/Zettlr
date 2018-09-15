@@ -221,7 +221,7 @@ class Zettlr {
 
     // arg contains the hash of a file.
     // findFile now returns the file object
-    let file = this.findFile({ 'hash': arg })
+    let file = this.findFile({ 'hash': parseInt(arg) })
 
     if (file != null) {
       this.setCurrentFile(file)
@@ -508,10 +508,10 @@ class Zettlr {
     * @param  {Object} cnt Should contain both hash and virtualdir (also a hash)
     */
   removeFromVirtualDir (cnt) {
-    let vd = this.findDir({ 'hash': cnt.virtualdir })
+    let vd = this.findDir({ 'hash': parseInt(cnt.virtualdir) })
     let file = null
     if (vd) {
-      file = vd.findFile({ 'hash': cnt.hash })
+      file = vd.findFile({ 'hash': parseInt(cnt.hash) })
     }
     if (vd && file) {
       vd.remove(file)
@@ -525,7 +525,7 @@ class Zettlr {
     * @return {void}     Does not return.
     */
   exportFile (arg) {
-    let file = this.findFile({ 'hash': arg.hash })
+    let file = this.findFile({ 'hash': parseInt(arg.hash) })
     let opt = {
       'format': arg.ext, // Which format: "html", "docx", "odt", "pdf"
       'file': file, // The file to be exported
@@ -599,16 +599,6 @@ class Zettlr {
     // { 'hash': hash, 'name': val }
     let dir = this.findDir({ 'hash': parseInt(arg.hash) })
 
-    if (this.getPaths().includes(dir.path)) {
-      // Don't rename a root
-      this.window.prompt({
-        type: 'error',
-        title: trans('system.error.rename_root_title'),
-        message: trans('system.error.rename_root_message')
-      })
-      return
-    }
-
     let oldDir = path.dirname(dir.path)
 
     // Save for later whether this is the currentDir (have to re-send dir list)
@@ -621,12 +611,22 @@ class Zettlr {
       let relative = oldPath.replace(dir.path, '') // Remove old directory to get relative path
       // Re-merge:
       oldPath = path.join(oldDir, arg.name, relative) // New path now
-      // Hash it
-      oldPath = hash(oldPath)
     }
 
     // Move to same location with different name
     dir.move(oldDir, arg.name)
+
+    // A root has been renamed -> reflect in openPaths
+    if (this.getPaths().includes(dir)) {
+      let oP = this.getConfig().get('openPaths')
+      for (let i = 0; i < oP.length; i++) {
+        if (oP[i] === oldPath) {
+          oP[i] = dir.path
+          this.getConfig().set('openPaths', oP)
+          break
+        }
+      }
+    }
 
     this.ipc.send('paths-update', this.getPaths())
 
@@ -636,7 +636,7 @@ class Zettlr {
 
     if (oldPath != null) {
       // Re-set current file in the client
-      let nfile = dir.findFile({ 'hash': oldPath })
+      let nfile = dir.findFile({ 'hash': hash(oldPath) })
       this.setCurrentFile(nfile)
     }
   }
@@ -649,11 +649,13 @@ class Zettlr {
   renameFile (arg) {
     // { 'hash': hash, 'name': val }
     let file = null
+    let oldpath = ''
 
     // Possibilities: Non-opened file or opened file
     if (this.getCurrentFile() && (this.getCurrentFile().hash === parseInt(arg.hash))) {
       // Current file should be renamed.
       file = this.getCurrentFile()
+      oldpath = file.path
       file.rename(arg.name, this.getWatchdog())
 
       // Adapt window title (manually trigger a fileUpdate)
@@ -661,11 +663,24 @@ class Zettlr {
     } else {
       // Non-open file should be renamed.
       file = this.findFile({ 'hash': parseInt(arg.hash) })
+      oldpath = file.path
       file.rename(arg.name, this.getWatchdog()) // Done.
     }
 
+    // A root has been renamed -> reflect in openPaths
+    if (this.getPaths().includes(file)) {
+      let oP = this.getConfig().get('openPaths')
+      for (let i = 0; i < oP.length; i++) {
+        if (oP[i] === oldpath) {
+          oP[i] = file.path
+          this.getConfig().set('openPaths', oP)
+          break
+        }
+      }
+    }
+
     // Replace all relevant properties of the renamed file in renderer.
-    this.ipc.send('file-replace', { 'hash': arg.hash, 'file': file })
+    this.ipc.send('file-replace', { 'hash': parseInt(arg.hash), 'file': file })
   }
 
   /**
@@ -835,8 +850,8 @@ class Zettlr {
       }
     }
     // Set the pointers either to null or last opened dir/file
-    this.setCurrentDir(this.findDir({ 'hash': this.config.get('lastDir') }))
-    this.setCurrentFile(this.findFile({ 'hash': this.config.get('lastFile') }))
+    this.setCurrentDir(this.findDir({ 'hash': parseInt(this.config.get('lastDir')) }))
+    this.setCurrentFile(this.findFile({ 'hash': parseInt(this.config.get('lastFile')) }))
   }
 
   /**
