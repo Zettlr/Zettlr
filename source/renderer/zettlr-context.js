@@ -286,12 +286,18 @@ class ZettlrCon {
           that._body.getRenderer().handleEvent('cm-command', 'markdownMakeUnorderedList')
         }
       }))
-      /* this.menu.append(new MenuItem( { label: 'Blockquote' })); */
+      this._menu.append(new MenuItem({
+        'label': trans('gui.formatting.blockquote'),
+        click (item, win) {
+          that._body.getRenderer().handleEvent('cm-command', 'markdownBlockquote')
+        }
+      }))
       this._menu.append(new MenuItem({ type: 'separator' }))
       this._menu.append(new MenuItem({ 'label': trans('menu.cut'), role: 'cut', accelerator: 'CmdOrCtrl+X' }))
       this._menu.append(new MenuItem({ 'label': trans('menu.copy'), role: 'copy', accelerator: 'CmdOrCtrl+C' }))
       this._menu.append(new MenuItem({
         'label': trans('menu.copy_html'),
+        'accelerator': 'CmdOrCtrl+Alt+C',
         click (item, win) {
           that._body.getRenderer().handleEvent('copy-as-html')
         }

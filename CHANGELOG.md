@@ -13,6 +13,7 @@
 - Changes to the design of the dark mode. It's now a little bit blue-ish and the colours are finally adapted to the brand.
 - The directory list is now way less cluttered and looks way better than before.
 - Dropping images onto the app is now possible!
+- Added the long-commented-out blockquote command to the context menu.
 
 ## Under the hood
 
