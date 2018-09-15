@@ -14,6 +14,7 @@
 - The directory list is now way less cluttered and looks way better than before.
 - Dropping images onto the app is now possible!
 - Added the long-commented-out blockquote command to the context menu.
+- iframes will now be rendered as well (such as the embed codes by YouTube or Vimeo). Note that only `<iframe>`-tags will be rendered, so Twitter embed won't work, for example.
 
 ## Under the hood
 

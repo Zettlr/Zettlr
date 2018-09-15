@@ -60,6 +60,7 @@ require('./assets/codemirror/zettlr-plugin-footnotes.js')
 require('./assets/codemirror/zettlr-plugin-render-images.js')
 require('./assets/codemirror/zettlr-plugin-render-links.js')
 require('./assets/codemirror/zettlr-plugin-render-tasks.js')
+require('./assets/codemirror/zettlr-plugin-render-iframes.js')
 require('./assets/codemirror/zettlr-plugin-markdown-header-classes.js')
 
 // Finally CodeMirror itself
@@ -153,6 +154,7 @@ class ZettlrEditor {
       // This event fires on either editor changes (because, obviously the
       // cursor changes its position as well then) or when the cursor moves.
       this._cm.execCommand('markdownRenderImages') // Render images
+      this._cm.execCommand('markdownRenderIframes') // Render iFrames
       this._cm.execCommand('markdownRenderLinks') // Render links
       this._cm.execCommand('markdownRenderTasks') // Render tasks
       this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
