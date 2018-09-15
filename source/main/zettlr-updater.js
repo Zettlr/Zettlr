@@ -102,8 +102,6 @@ class ZettlrUpdater
         // Check if (1) our app is less than and (2) the new release is _not_ a draft
         // and (3) the new release is _not_ a prerelease (only stable for this updater)
         if(semver.lt(CUR_VER, this._response[0].tag_name) && !this._response[0].draft && !this._response[0].prerelease) {
-            // TODO: On mac and windows, already include the download link to easily
-            // download the update and start the updater.
             let html = this._conv.makeHtml(this._response[0].body);
 
             // Convert links, so that they remain but do not open in the same

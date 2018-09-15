@@ -562,7 +562,7 @@ class ZettlrEditor {
       },
       'performance': true,
       flip: true,
-      arrow: true //  TODO
+      arrow: true
     }).show() // Immediately show the tooltip
   }
 

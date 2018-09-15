@@ -343,7 +343,7 @@ function isDictAvailable(lang)
 }
 
 /**
- * Adds delimiters to numbers. TODO: Actually *localise* it.
+ * Adds delimiters to numbers.
  * @param  {Number} number The number to be localised.
  * @return {String}        The number with delimiters.
  */

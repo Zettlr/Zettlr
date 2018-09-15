@@ -100,7 +100,6 @@ class ZettlrPopup
      */
     _place()
     {
-        // TODO: Automatically choose one of the points depending on where there is enough space
         this._x = this._elem.offset().left + this._elem.outerWidth()/2;
         this._y = this._elem.offset().top + this._elem.outerHeight();
 

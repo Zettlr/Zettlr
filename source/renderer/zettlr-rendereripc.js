@@ -236,7 +236,6 @@ class ZettlrRendererIPC {
       case 'file-delete-from-vd':
         if (cnt.hasOwnProperty('hash') && cnt.hasOwnProperty('virtualdir')) {
           this.send('file-delete-from-vd', cnt)
-          // TODO: On else inform user of error
         }
         break
 

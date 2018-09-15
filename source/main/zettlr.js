@@ -378,7 +378,7 @@ class Zettlr {
     }
 
     // Ret is now an array. As we do not allow multiple selection, just
-    // take the first index. TODO: Allow multiple selection
+    // take the first index.
     ret = ret[0]
 
     if ((isDir(ret) && ignoreDir(ret)) || (isFile(ret) && ignoreFile(ret))) {
@@ -993,7 +993,7 @@ class Zettlr {
         // If it's the current file, close it
         if (p === this.getCurrentFile()) {
           this.ipc.send('file-close')
-          this.getWindow().setTitle('') // TODO can we remove this?
+          this.getWindow().setTitle()
         }
         if (p === this.getCurrentDir()) {
           this.setCurrentDir(null)

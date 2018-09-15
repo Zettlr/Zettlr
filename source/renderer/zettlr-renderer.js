@@ -160,9 +160,6 @@ class ZettlrRenderer
             // Rename a dir based on a hash -> find it
             this._body.requestNewDirName(this.findObject(arg.hash));
         } else if(this.getCurrentDir() != null) {
-            // Root means the parent has no type property. (IMPORTANT: NEVER
-            // ever think it would be a good idea to give ZettlrRenderer a type
-            // property!! TODO: Harden this.)
                 this._body.requestNewDirName(this.getCurrentDir());
         }
     }
@@ -662,9 +659,7 @@ class ZettlrRenderer
     updateWordCount(words) { this._toolbar.updateWordCount(words); }
 
     /**
-     * Request the selection of the directory in main. TODO: Rename function
-     * (because we are not REALLY requesting the dir, only that the pointer is
-     * set!)
+     * Request the selection of the directory in main.
      * @param  {Integer} hash As usually, a hash identifying a directory.
      * @return {void}      Nothing to return.
      */

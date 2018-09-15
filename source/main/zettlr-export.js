@@ -299,7 +299,6 @@ class ZettlrExport
      */
     _preparePDF()
     {
-        // TODO: In the future generate the template based on user's decisions.
         this.tpl = `--template="${this.textpl}"`;
 
         // It is necessary to tell Pandoc to generate a toc explicitly, b/c then

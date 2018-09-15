@@ -155,7 +155,8 @@ class ZettlrProject
             let stat = fs.lstatSync(this._projectFile);
             fs.unlink(this._projectFile, (err) => {
                 if(err) {
-                    // TODO: Handle error.
+                    // Do nothing. Worst thing that could happen is that the user
+                    // some day discovers an abandoned file on his/her disk.
                 }
             });
         } catch(e) {
