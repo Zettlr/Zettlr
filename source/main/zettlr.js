@@ -14,9 +14,8 @@
  * END HEADER
  */
 
-const {dialog, app, BrowserWindow} = require('electron')
+const { app } = require('electron')
 const fs = require('fs')
-const process = require('process')
 const path = require('path')
 
 // Internal classes
@@ -96,29 +95,29 @@ class Zettlr {
     }, POLL_TIME)
   }
 
-    /**
-     * Performs recurring tasks such as polling the watchdog every five secs.
-     * @return {void} Returns nothing.
-     * @deprecated The watchdog polls will be put into an event listening system
-     * in the future.
-     */
+  /**
+    * Performs recurring tasks such as polling the watchdog every five secs.
+    * @return {void} Returns nothing.
+    * @deprecated The watchdog polls will be put into an event listening system
+    * in the future.
+    */
   poll () {
-        // Polls the watchdog for changes.
+    // Polls the watchdog for changes.
     if (this.watchdog.countChanges() > 0) {
       this.watchdog.each((e, p) => {
-                // Available events: add, change, unlink, addDir, unlinkDir
-                // No changeDir because this consists of one unlink and one add
+      // Available events: add, change, unlink, addDir, unlinkDir
+      // No changeDir because this consists of one unlink and one add
         for (let root of this.getPaths()) {
           if (root.isScope(p) !== false) {
             let changed = root.handleEvent(p, e)
-            let isCurrentFile = (this.getCurrentFile() && (hash(p) == this.getCurrentFile().hash))
-            if (isCurrentFile && (e == 'unlink')) {
-                            // We need to close the file
+            let isCurrentFile = (this.getCurrentFile() && (hash(p) === this.getCurrentFile().hash))
+            if (isCurrentFile && (e === 'unlink')) {
+              // We need to close the file
               this.ipc.send('file-close')
               this.setCurrentFile(null) // Reset file
-            } else if (isCurrentFile && (e == 'change') && changed) {
-                            // Current file has changed -> ask to replace and do
-                            // as the user wishes)
+            } else if (isCurrentFile && (e === 'change') && changed) {
+              // Current file has changed -> ask to replace and do
+              // as the user wishes)
               if (this.getWindow().askReplaceFile()) {
                 this.ipc.send('file-open', this.getCurrentFile().withContent())
               }
@@ -127,101 +126,101 @@ class Zettlr {
         }
       })
 
-            // flush all changes so they aren't processed again next cycle
+      // flush all changes so they aren't processed again next cycle
       this.watchdog.flush()
-            // Send a paths update to the renderer to reflect the changes.
+      // Send a paths update to the renderer to reflect the changes.
       this.ipc.send('paths-update', this.getPaths())
     }
 
     setTimeout(() => { this.poll() }, POLL_TIME)
   }
 
-    /**
-     * Sends a notification together with a change event.
-     * @param  {String} msg The message to be sent
-     */
+  /**
+    * Sends a notification together with a change event.
+    * @param  {String} msg The message to be sent
+    */
   notifyChange (msg) {
     this.ipc.send('paths-update', this.getPaths())
     this.notify(msg)
   }
 
-    /**
-     * Shutdown the app. This function is called on quit.
-     * @return {void} Does not return anything.
-     */
+  /**
+    * Shutdown the app. This function is called on quit.
+    * @return {void} Does not return anything.
+    */
   shutdown () {
     this.config.save()
     this.stats.save()
     this.watchdog.stop()
-        // Perform closing activity in the path.
+    // Perform closing activity in the path.
     for (let p of this._openPaths) {
       p.shutdown()
     }
   }
 
-    /**
-     * Returns false if the file should not close, and true if it's safe.
-     * @return {Boolean} Either true, if the window can close, or false.
-     */
+  /**
+    * Returns false if the file should not close, and true if it's safe.
+    * @return {Boolean} Either true, if the window can close, or false.
+    */
   canClose () {
     if (this.isModified()) {
-            // The file is currently modified. Ask for saving.
+      // The file is currently modified. Ask for saving.
       let ret = this.window.askSaveChanges()
 
-            // Cancel: abort opening a new file
-      if (ret == 0) {
+      // Cancel: abort opening a new file
+      if (ret === 0) {
         return false
       }
 
-      if (ret == 1) { // User wants to save the file first.
+      if (ret === 1) { // User wants to save the file first.
         this.ipc.send('file-save', {})
         return false
-                // TODO: Implement into the event arguments a "intent" of closing
+        // TODO: Implement into the event arguments a "intent" of closing
       }
 
-            // Mark as if nothing has been changed
-      if (ret == 2) {
+      // Mark as if nothing has been changed
+      if (ret === 2) {
         this.clearModified()
       }
     }
     return true
   }
 
-    /**
-     * This function is mainly called by the browser window to close the app.
-     * @return {void} Does not return anything.
-     */
+  /**
+    * This function is mainly called by the browser window to close the app.
+    * @return {void} Does not return anything.
+    */
   saveAndClose () {
     if (this.canClose()) {
-            // Remember to clear the editFlag because otherwise the window
-            // will refuse to close itself
+      // Remember to clear the editFlag because otherwise the window
+      // will refuse to close itself
       this.clearModified()
       app.quit()
     }
   }
 
-    /***************************************************************************
-    **                                                                        **
-    **                                                                        **
-    **                                                                        **
-    **                          BEGIN EVENT HANDLE EVENTS                     **
-    **                                                                        **
-    **                                                                        **
-    **                                                                        **
-    ***************************************************************************/
+  /****************************************************************************
+   **                                                                        **
+   **                                                                        **
+   **                                                                        **
+   **                          BEGIN EVENT HANDLE EVENTS                     **
+   **                                                                        **
+   **                                                                        **
+   **                                                                        **
+   ***************************************************************************/
 
-    /**
-     * Send a file with its contents to the renderer process.
-     * @param  {Integer} arg An integer containing the file's hash.
-     * @return {void}     This function does not return anything.
-     */
+  /**
+    * Send a file with its contents to the renderer process.
+    * @param  {Integer} arg An integer containing the file's hash.
+    * @return {void}     This function does not return anything.
+    */
   sendFile (arg) {
     if (!this.canClose()) {
       return
     }
 
-        // arg contains the hash of a file.
-        // findFile now returns the file object
+    // arg contains the hash of a file.
+    // findFile now returns the file object
     let file = this.findFile({ 'hash': arg })
 
     if (file != null) {
@@ -236,16 +235,16 @@ class Zettlr {
     }
   }
 
-    /**
-     * Send a new directory list to the client.
-     * @param  {Integer} arg A hash identifying the directory.
-     * @return {void}     This function does not return anything.
-     */
+  /**
+    * Send a new directory list to the client.
+    * @param  {Integer} arg A hash identifying the directory.
+    * @return {void}     This function does not return anything.
+    */
   selectDir (arg) {
-        // arg contains a hash for a directory.
-    let obj = this.findDir({ 'hash': arg })
+    // arg contains a hash for a directory.
+    let obj = this.findDir({ 'hash': parseInt(arg) })
 
-        // Now send it back (the GUI should by itself filter out the files)
+    // Now send it back (the GUI should by itself filter out the files)
     if (obj != null && obj.isDirectory()) {
       this.setCurrentDir(obj)
     } else {
@@ -257,16 +256,16 @@ class Zettlr {
     }
   }
 
-    /**
-     * Sorts a directory according to the argument
-     * @param  {Object} arg An object containing both a hash and a sorting type
-     */
+  /**
+    * Sorts a directory according to the argument
+    * @param  {Object} arg An object containing both a hash and a sorting type
+    */
   sortDir (arg) {
     if (!arg.hasOwnProperty('hash') || !arg.hasOwnProperty('type')) {
       return
     }
 
-    let dir = this.findDir({ 'hash': arg.hash })
+    let dir = this.findDir({ 'hash': parseInt(arg.hash) })
     if (dir === null) {
       return
     }
@@ -276,28 +275,29 @@ class Zettlr {
     this.ipc.send('paths-update', this.getPaths())
   }
 
-    /**
-     * Create a new file.
-     * @param  {Object} arg An object containing a hash of containing directory and a file name.
-     * @return {void}     This function does not return anything.
-     */
+  /**
+    * Create a new file.
+    * @param  {Object} arg An object containing a hash of containing directory and a file name.
+    * @return {void}     This function does not return anything.
+    */
   newFile (arg) {
-        // If the user ONLY decided to use special chars
-        // or did not input anything abort the process.
+    // If the user ONLY decided to use special chars
+    // or did not input anything abort the process.
     if (!this.canClose()) {
       return
     }
 
-    let dir = null, file = null
+    let dir = null
+    let file = null
 
-        // There should be also a hash in the argument.
+    // There should be also a hash in the argument.
     if (arg.hasOwnProperty('hash')) {
-      dir = this.findDir({'hash': arg.hash })
+      dir = this.findDir({ 'hash': parseInt(arg.hash) })
     } else {
       dir = this.getCurrentDir()
     }
 
-        // Create the file
+    // Create the file
     try {
       file = dir.newfile(arg.name, this.watchdog)
     } catch (e) {
@@ -308,21 +308,22 @@ class Zettlr {
       })
     }
 
-        // Send the new paths and open the respective file.
+    // Send the new paths and open the respective file.
     this.ipc.send('paths-update', this.getPaths())
     this.setCurrentFile(file)
     this.ipc.send('file-open', file.withContent())
   }
 
-    /**
-     * Create a new directory.
-     * @param  {Object} arg An object containing hash of containing and name of new dir.
-     */
+  /**
+    * Create a new directory.
+    * @param  {Object} arg An object containing hash of containing and name of new dir.
+    */
   newDir (arg) {
-    let dir = null, curdir = null
+    let dir = null
+    let curdir = null
 
     if (arg.hasOwnProperty('hash')) {
-      curdir = this.findDir({'hash': arg.hash })
+      curdir = this.findDir({ 'hash': parseInt(arg.hash) })
     } else {
       curdir = this.getCurrentDir()
     }
@@ -337,53 +338,51 @@ class Zettlr {
       })
     }
 
-        // Re-render the directories, and then as well the file-list of the
-        // current folder.
+    // Re-render the directories, and then as well the file-list of the
+    // current folder.
     this.ipc.send('paths-update', this.getPaths())
 
-        // Switch to newly created directory.
+    // Switch to newly created directory.
     this.setCurrentDir(dir)
   }
 
-    /**
-     * Creates a new virtual directory
-     * @param  {Object} arg The argument, containing both the containing hash and the new name
-     */
+  /**
+    * Creates a new virtual directory
+    * @param  {Object} arg The argument, containing both the containing hash and the new name
+    */
   newVirtualDir (arg) {
     let dir = null
     if (arg.hasOwnProperty('hash')) {
-      dir = this.findDir({'hash': arg.hash })
+      dir = this.findDir({ 'hash': parseInt(arg.hash) })
     } else {
       dir = this.getCurrentDir()
     }
 
-        // Create the vd
+    // Create the vd
     let vd = dir.addVirtualDir(arg.name)
     this.ipc.send('paths-update', this.getPaths())
     this.setCurrentDir(vd)
   }
 
-    /**
-     * Open a new root.
-     * @param  {String} [type='dir'] 'dir' or 'file'. Necessary, because on windows
-     *                               the dialog can only be either-or.
-     */
-  open (type = 'dir') {
-        // The user wants to open another file or directory.
+  /**
+    * Open a new root.
+    */
+  open () {
+    // The user wants to open another file or directory.
     let ret = this.window.askDir(require('electron').app.getPath('home'))
 
-        // The user may have provided no path at all, which returns in an
-        // empty array -> check against and abort if array is empty
+    // The user may have provided no path at all, which returns in an
+    // empty array -> check against and abort if array is empty
     if (!(ret && ret.length)) {
       return
     }
 
-        // Ret is now an array. As we do not allow multiple selection, just
-        // take the first index. TODO: Allow multiple selection
+    // Ret is now an array. As we do not allow multiple selection, just
+    // take the first index. TODO: Allow multiple selection
     ret = ret[0]
 
     if ((isDir(ret) && ignoreDir(ret)) || (isFile(ret) && ignoreFile(ret))) {
-            // We cannot add this dir, because it is in the list of ignored directories.
+      // We cannot add this dir, because it is in the list of ignored directories.
       return this.window.prompt({
         'type': 'error',
         'title': trans('system.error.ignored_dir_title'),
@@ -394,24 +393,24 @@ class Zettlr {
     this.handleAddRoots([ret])
   }
 
-    /**
-     * Handles a list of files and folders that the user in any way wants to add
-     * to the app.
-     * @param  {Array} filelist An array of absolute paths
-     */
+  /**
+    * Handles a list of files and folders that the user in any way wants to add
+    * to the app.
+    * @param  {Array} filelist An array of absolute paths
+    */
   handleAddRoots (filelist) {
-        // As long as it's not a forbidden file or ignored directory, add it.
+    // As long as it's not a forbidden file or ignored directory, add it.
     let newFile, newDir
     for (let f of filelist) {
-            // First check if this thing is already added. If so, simply write
-            // the existing file/dir into the newFile/newDir vars. They will be
-            // opened accordingly.
+      // First check if this thing is already added. If so, simply write
+      // the existing file/dir into the newFile/newDir vars. They will be
+      // opened accordingly.
       if ((newFile = this.findFile({'path': f})) != null) {
-                // Also set the newDir variable so that Zettlr will automatically
-                // navigate to the directory.
+        // Also set the newDir variable so that Zettlr will automatically
+        // navigate to the directory.
         newDir = newFile.parent
       } else if ((newDir = this.findDir({'path': f})) != null) {
-                // Do nothing
+        // Do nothing
       } else if (this.getConfig().addPath(f)) {
         if (isFile(f)) {
           newFile = new ZettlrFile(this, f)
@@ -427,32 +426,32 @@ class Zettlr {
 
     this._sortPaths()
     this.ipc.send('paths-update', this.getPaths())
-        // Open the newly added path(s) directly.
+    // Open the newly added path(s) directly.
     if (newDir) { this.setCurrentDir(newDir) }
     if (newFile) { this.sendFile(newFile.hash) }
   }
 
-    /**
-     * Removes a file.
-     * @param  {Ineger} [hash=this.getCurrentFile().hash] The hash of the file to be deleted.
-     * @return {void}                                   This function does not return.
-     */
+  /**
+    * Removes a file.
+    * @param  {number} [hash=this.getCurrentFile().hash] The hash of the file to be deleted.
+    * @return {void}                                   This function does not return.
+    */
   removeFile (hash = this.getCurrentFile().hash) {
-        // First determine if this is modified.
+    // First determine if this is modified.
     if (!this.canClose()) {
       return
     }
 
-    let file = this.findFile({'hash': hash })
+    let file = this.findFile({ 'hash': parseInt(hash) })
 
     if (!this.window.confirmRemove(file)) {
       return
     }
 
-        // Now that we are save, let's move the current file to trash.
-    if (this.getCurrentFile() && (file.hash == this.getCurrentFile().hash)) {
+    // Now that we are save, let's move the current file to trash.
+    if (this.getCurrentFile() && (file.hash === this.getCurrentFile().hash)) {
       this.ipc.send('file-close', {})
-            // Tell main & renderer to close file references
+      // Tell main & renderer to close file references
       this.setCurrentFile(null)
     }
     file.remove()
@@ -490,25 +489,24 @@ class Zettlr {
       this.closeFile()
     }
 
-    if (dir === this.getCurrentDir()) {
+    if (dir === this.getCurrentDir() && !this.getCurrentDir().isRoot()) {
       this.setCurrentDir(dir.parent) // Move up one level
+    } else if (dir === this.getCurrentDir() && this.getCurrentDir().isRoot()) {
+      this.setCurrentDir(null) // Simply reset the current dir pointer
     }
 
     // Now that we are save, let's move the current directory to trash.
     this.watchdog.ignoreNext('unlinkDir', dir.path)
-    // Roots must be removed from the openPaths as well
-    if (this.getPaths().includes(dir.path)) {
-      this.getPaths().splice(this.getPaths().indexOf(dir), 1)
-    }
+
     dir.remove()
 
     this.ipc.send('paths-update', this.getPaths())
   }
 
-    /**
-     * Removes a file from the index of a virtual directory.
-     * @param  {Object} cnt Should contain both hash and virtualdir (also a hash)
-     */
+  /**
+    * Removes a file from the index of a virtual directory.
+    * @param  {Object} cnt Should contain both hash and virtualdir (also a hash)
+    */
   removeFromVirtualDir (cnt) {
     let vd = this.findDir({ 'hash': cnt.virtualdir })
     let file = null
@@ -521,17 +519,17 @@ class Zettlr {
     }
   }
 
-    /**
-     * Export a file to another format.
-     * @param  {Object} arg An object containing hash and wanted extension.
-     * @return {void}     Does not return.
-     */
+  /**
+    * Export a file to another format.
+    * @param  {Object} arg An object containing hash and wanted extension.
+    * @return {void}     Does not return.
+    */
   exportFile (arg) {
     let file = this.findFile({ 'hash': arg.hash })
     let opt = {
-      'format': arg.ext,      // Which format: "html", "docx", "odt", "pdf"
-      'file': file,           // The file to be exported
-      'dest': (this.config.get('export.dir') == 'temp') ? app.getPath('temp') : file.parent.path, // Either temp or cwd
+      'format': arg.ext, // Which format: "html", "docx", "odt", "pdf"
+      'file': file, // The file to be exported
+      'dest': (this.config.get('export.dir') === 'temp') ? app.getPath('temp') : file.parent.path, // Either temp or cwd
       'tplDir': this.config.getEnv('templateDir'),
       'stripIDs': this.config.get('export.stripIDs'),
       'stripTags': this.config.get('export.stripTags'),
@@ -542,9 +540,9 @@ class Zettlr {
       'keywords': this.config.get('pdf').keywords
     }
 
-        // Call the exporter.
+    // Call the exporter.
     try {
-            // TODO don't do this with instantiation
+      // TODO don't do this with instantiation
       new ZettlrExport(opt)
       this.notify(trans('system.export_success', opt.format.toUpperCase()))
     } catch (err) {
@@ -552,57 +550,57 @@ class Zettlr {
     }
   }
 
-    /**
-     * This function asks the user for a list of files and then imports them.
-     * @return {void} Does not return.
-     */
+  /**
+    * This function asks the user for a list of files and then imports them.
+    * @return {void} Does not return.
+    */
   importFile () {
     if (!this.getCurrentDir()) {
       return this.notify(trans('system.import_no_directory'))
     }
 
-        // First ask the user for a fileList
+    // First ask the user for a fileList
     let startDir = app.getPath('documents') // Always start in documents folder.
     let fileList = this.window.askFile(startDir)
-    if (!fileList || fileList.length == 0) {
-            // The user seems to have decided not to import anything. Gracefully
-            // fail. Not like the German SPD.
+    if (!fileList || fileList.length === 0) {
+      // The user seems to have decided not to import anything. Gracefully
+      // fail. Not like the German SPD.
       return
     }
 
-        // Now import.
+    // Now import.
     this.notify(trans('system.import_status'))
     try {
       let ret = ZettlrImport(fileList, this.getCurrentDir(), (file, error) => {
-                // This callback gets called whenever there is an error while running pandoc.
+        // This callback gets called whenever there is an error while running pandoc.
         this.notify(trans('system.import_error', path.basename(file)))
       }, (file) => {
-                // And this on each success!
+        // And this on each success!
         this.notify(trans('system.import_success', path.basename(file)))
       })
 
       if (ret.length > 0) {
-                // Some files failed to import.
+        // Some files failed to import.
         this.notify(trans('system.import_fail', ret.length, ret.map((x) => { return path.basename(x) }).join(', ')))
       }
     } catch (e) {
-            // There has been an error on importing (e.g. Pandoc was not found)
-            // This catches this and displays it.
+      // There has been an error on importing (e.g. Pandoc was not found)
+      // This catches this and displays it.
       this.notify(e.message)
     }
   }
 
-    /**
-     * Renames a directory.
-     * @param  {Object} arg An object containing a hash.
-     * @return {void}     This function does not return anything.
-     */
+  /**
+    * Renames a directory.
+    * @param  {Object} arg An object containing a hash.
+    * @return {void}     This function does not return anything.
+    */
   renameDir (arg) {
-        // { 'hash': hash, 'name': val }
-    let dir = this.findDir({ 'hash': arg.hash})
+    // { 'hash': hash, 'name': val }
+    let dir = this.findDir({ 'hash': parseInt(arg.hash) })
 
     if (this.getPaths().includes(dir.path)) {
-            // Don't rename a root
+      // Don't rename a root
       this.window.prompt({
         type: 'error',
         title: trans('system.error.rename_root_title'),
@@ -613,21 +611,21 @@ class Zettlr {
 
     let oldDir = path.dirname(dir.path)
 
-        // Save for later whether this is the currentDir (have to re-send dir list)
-    let isCurDir = ((this.getCurrentDir() != null) && (dir.hash == this.getCurrentDir().hash)) ? true : false
+    // Save for later whether this is the currentDir (have to re-send dir list)
+    let isCurDir = ((this.getCurrentDir() != null) && (dir.hash === this.getCurrentDir().hash))
     let oldPath = null
 
     if ((this.getCurrentFile() !== null) && (dir.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
-            // The current file is in said dir so we need to trick a little bit
+      // The current file is in said dir so we need to trick a little bit
       oldPath = this.getCurrentFile().path
       let relative = oldPath.replace(dir.path, '') // Remove old directory to get relative path
-            // Re-merge:
+      // Re-merge:
       oldPath = path.join(oldDir, arg.name, relative) // New path now
-            // Hash it
+      // Hash it
       oldPath = hash(oldPath)
     }
 
-        // Move to same location with different name
+    // Move to same location with different name
     dir.move(oldDir, arg.name)
 
     this.ipc.send('paths-update', this.getPaths())
@@ -637,55 +635,55 @@ class Zettlr {
     }
 
     if (oldPath != null) {
-            // Re-set current file in the client
+      // Re-set current file in the client
       let nfile = dir.findFile({ 'hash': oldPath })
       this.setCurrentFile(nfile)
     }
   }
 
-    /**
-     * Renames a file.
-     * @param  {Object} arg An object containing hash and name.
-     * @return {void}     This function does not return.
-     */
+  /**
+    * Renames a file.
+    * @param  {Object} arg An object containing hash and name.
+    * @return {void}     This function does not return.
+    */
   renameFile (arg) {
-        // { 'hash': hash, 'name': val }
+    // { 'hash': hash, 'name': val }
     let file = null
 
-        // Possibilities: Non-opened file or opened file
-    if (this.getCurrentFile() && (this.getCurrentFile().hash == arg.hash)) {
-            // Current file should be renamed.
+    // Possibilities: Non-opened file or opened file
+    if (this.getCurrentFile() && (this.getCurrentFile().hash === parseInt(arg.hash))) {
+      // Current file should be renamed.
       file = this.getCurrentFile()
       file.rename(arg.name, this.getWatchdog())
 
-            // Adapt window title (manually trigger a fileUpdate)
+      // Adapt window title (manually trigger a fileUpdate)
       this.window.fileUpdate()
     } else {
-            // Non-open file should be renamed.
-      file = this.findFile({'hash': arg.hash})
+      // Non-open file should be renamed.
+      file = this.findFile({ 'hash': parseInt(arg.hash) })
       file.rename(arg.name, this.getWatchdog()) // Done.
     }
 
-        // Replace all relevant properties of the renamed file in renderer.
+    // Replace all relevant properties of the renamed file in renderer.
     this.ipc.send('file-replace', { 'hash': arg.hash, 'file': file })
   }
 
-    /**
-     * Move a directory or a file.
-     * @param  {Object} arg An object containing the hash of source and destination
-     * @return {void}     This function does not return anything.
-     */
+  /**
+    * Move a directory or a file.
+    * @param  {Object} arg An object containing the hash of source and destination
+    * @return {void}     This function does not return anything.
+    */
   requestMove (arg) {
-        // arg contains from and to
-    let from = this.findDir({ 'hash': arg.from })
+    // arg contains from and to
+    let from = this.findDir({ 'hash': parseInt(arg.from) })
     if (from == null) {
-            // Obviously a file!
-      from = this.findFile({ 'hash': arg.from })
+      // Obviously a file!
+      from = this.findFile({ 'hash': parseInt(arg.from) })
     }
 
-    let to = this.findDir({ 'hash': arg.to })
+    let to = this.findDir({ 'hash': parseInt(arg.to) })
 
-        // Let's check that:
+    // Let's check that:
     if (from.contains(to)) {
       return this.window.prompt({
         type: 'error',
@@ -694,7 +692,7 @@ class Zettlr {
       })
     }
 
-        // Now check if there already is a directory/file with the same name
+    // Now check if there already is a directory/file with the same name
     if (to.hasChild({ 'name': from.name })) {
       return this.window.prompt({
         type: 'error',
@@ -703,46 +701,46 @@ class Zettlr {
       })
     }
 
-        // Now check if we've actually gotten a virtual directory
+    // Now check if we've actually gotten a virtual directory
     if (to.isVirtualDirectory() && from.isFile()) {
-            // Then simply attach.
+      // Then simply attach.
       to.attach(from)
-            // And, of course, refresh the renderer.
+      // And, of course, refresh the renderer.
       this.ipc.send('paths-update', this.getPaths())
       return
     }
 
     let newPath = null
 
-    if (from.isFile() && (this.getCurrentFile() != null) && (from.hash == this.getCurrentFile().hash)) {
-            // Current file is to be moved
-            // So move the file and immediately retrieve the new path
+    if (from.isFile() && (this.getCurrentFile() != null) && (from.hash === this.getCurrentFile().hash)) {
+      // Current file is to be moved
+      // So move the file and immediately retrieve the new path
       this.watchdog.ignoreNext('unlink', from.path)
       this.watchdog.ignoreNext('add', path.join(to.path, from.name))
       from.move(to.path)
       to.attach(from)
 
-            // Now our current file has been successfully moved and will
-            // save correctly. Problem? The client needs it as well.
-            // We have to set current dir (the to-dir) and current file AND
-            // select it.
+      // Now our current file has been successfully moved and will
+      // save correctly. Problem? The client needs it as well.
+      // We have to set current dir (the to-dir) and current file AND
+      // select it.
       this.setCurrentDir(to) // Current file is still correctly set
       this.ipc.send('paths-update', this.getPaths())
       return
-    } else if ((this.getCurrentFile() !== null)
-        && (from.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
-            // The current file is in said dir so we need to trick a little bit
+    } else if ((this.getCurrentFile() !== null) &&
+    (from.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
+      // The current file is in said dir so we need to trick a little bit
       newPath = this.getCurrentFile().path
       let relative = newPath.replace(from.path, '') // Remove old directory to get relative path
-            // Re-merge:
+      // Re-merge:
       newPath = path.join(to.path, from.name, relative) // New path now
-            // Hash it
+      // Hash it
       newPath = hash(newPath)
     }
 
     if (from.isDirectory()) {
-            // TODO: Think of something to ignore _all_ events emanating from
-            // the directory (every file will also trigger an unlink/add-couple)
+      // TODO: Think of something to ignore _all_ events emanating from
+      // the directory (every file will also trigger an unlink/add-couple)
       this.watchdog.ignoreNext('unlinkDir', from.path)
       this.watchdog.ignoreNext('addDir', path.join(to.path, from.name))
     } else if (from.isFile()) {
@@ -751,39 +749,39 @@ class Zettlr {
     }
 
     from.move(to.path)
-        // Add directory or file to target dir
+    // Add directory or file to target dir
     to.attach(from)
 
     this.ipc.send('paths-update', this.getPaths())
 
     if (newPath != null) {
-            // Find the current file and reset the pointers to it.
-      this.setCurrentFile(from.findFile({ 'hash': newPath}))
+      // Find the current file and reset the pointers to it.
+      this.setCurrentFile(from.findFile({ 'hash': newPath }))
     }
   }
 
-    // SPELLCHECKING RELATED FUNCTIONS
+  // SPELLCHECKING RELATED FUNCTIONS
 
-    /**
-     * Loads a DIC or AFF file and sends it to the renderer.
-     * @param  {String} type Either 'dic' or 'aff'
-     * @param  {String} lang Which language dic/aff to load?
-     * @return {void}      This function does not return.
-     */
+  /**
+    * Loads a DIC or AFF file and sends it to the renderer.
+    * @param  {String} type Either 'dic' or 'aff'
+    * @param  {String} lang Which language dic/aff to load?
+    * @return {void}      This function does not return.
+    */
   retrieveDictFile (type, lang) {
     let p = path.join(
-            path.dirname(__dirname),
-            'renderer',
-            'assets',
-            'dict',
-            lang,
-            lang + '.' + type
-        )
+      path.dirname(__dirname),
+      'renderer',
+      'assets',
+      'dict',
+      lang,
+      lang + '.' + type
+    )
 
     try {
       fs.lstatSync(p)
     } catch (e) {
-            // Try the custom folder
+      // Try the custom folder
       p = path.join(app.getPath('userData'), '/dict', lang, lang + '.' + type)
       try {
         fs.lstatSync(p)
@@ -793,31 +791,32 @@ class Zettlr {
     }
 
     fs.readFile(p, 'utf8', (err, data) => {
-            // Send the data directly back to the client once it has been read
+      if (err) console.error(err)
+      // Send the data directly back to the client once it has been read
       this.ipc.send('typo-' + type, data)
     })
   }
 
-    /***************************************************************************
-    **                                                                        **
-    **                                                                        **
-    **                                                                        **
-    **                           END EVENT HANDLE EVENTS                      **
-    **                                                                        **
-    **                                                                        **
-    **                                                                        **
-    ***************************************************************************/
+  /****************************************************************************
+   **                                                                        **
+   **                                                                        **
+   **                                                                        **
+   **                           END EVENT HANDLE EVENTS                      **
+   **                                                                        **
+   **                                                                        **
+   **                                                                        **
+   ***************************************************************************/
 
-    /**
-     * Called by root ZettlrFiles to remove themselves from the open paths.
-     * @param  {ZettlrFile} file The root file requesting removal.
-     * @return {void}      Does not return.
-     */
-  remove (file) {
-        // This function is always called if root files are removed externally
-        // and therefore want to remove themselves. This means we simply have
-        // to splice the object from our paths array.
-    this.getPaths().splice(this.getPaths().indexOf(file), 1)
+  /**
+    * Called by roots to remove themselves from the open paths.
+    * @param  {Mixed} obj The root file or dir requesting removal.
+    * @return {void}      Does not return.
+    */
+  remove (obj) {
+    // This function is always called if root files are removed externally
+    // and therefore want to remove themselves. This means we simply have
+    // to splice the object from our paths array.
+    this.getPaths().splice(this.getPaths().indexOf(obj), 1)
     this.ipc.send('paths-update', this.getPaths())
   }
 
@@ -840,27 +839,27 @@ class Zettlr {
     this.setCurrentFile(this.findFile({ 'hash': this.config.get('lastFile') }))
   }
 
-    /**
-     * Initiates the search for an update.
-     */
+  /**
+    * Initiates the search for an update.
+    */
   checkForUpdate () {
     this._updater.check()
   }
 
-    /**
-     * Simple wrapper for notifications.
-     * @param  {String} message The message to be sent to the renderer.
-     */
+  /**
+    * Simple wrapper for notifications.
+    * @param  {String} message The message to be sent to the renderer.
+    */
   notify (message) {
     this.ipc.send('notify', message)
   }
 
-    /**
-     * Saves a file. A file MUST be given, for the content is needed to write to
-     * a file. Content is always freshly grabbed from the CodeMirror content.
-     * @param  {Object} file An object containing some properties of the file.
-     * @return {void}      This function does not return.
-     */
+  /**
+    * Saves a file. A file MUST be given, for the content is needed to write to
+    * a file. Content is always freshly grabbed from the CodeMirror content.
+    * @param  {Object} file An object containing some properties of the file.
+    * @return {void}      This function does not return.
+    */
   saveFile (file) {
     if ((file == null) || !file.hasOwnProperty('content')) {
       // No file given -> abort saving process
@@ -967,11 +966,11 @@ class Zettlr {
     return null
   }
 
-    /**
-     * Either returns one file that matches its ID with the given term or null
-     * @param  {String} term The ID to be searched for
-     * @return {ZettlrFile}      The exact match, or null.
-     */
+  /**
+    * Either returns one file that matches its ID with the given term or null
+    * @param  {String} term The ID to be searched for
+    * @return {ZettlrFile}      The exact match, or null.
+    */
   findExact (term) {
     let found = null
     for (let p of this.getPaths()) {
@@ -984,14 +983,14 @@ class Zettlr {
     return null
   }
 
-    /**
-     * Closes an open file/dir if the hashes match
-     * @param  {Number} hash The hash to be closed
-     */
+  /**
+    * Closes an open file/dir if the hashes match
+    * @param  {Number} hash The hash to be closed
+    */
   close (hash) {
     for (let p of this.getPaths()) {
-      if (p.getHash() == hash) {
-                // If it's the current file, close it
+      if (p.getHash() === parseInt(hash)) {
+        // If it's the current file, close it
         if (p === this.getCurrentFile()) {
           this.ipc.send('file-close')
           this.getWindow().setTitle('') // TODO can we remove this?
@@ -1007,16 +1006,16 @@ class Zettlr {
     }
   }
 
-    /**
-     * Called when a root file is renamed. This is an alias for _sortPaths.
-     */
+  /**
+    * Called when a root file is renamed. This is an alias for _sortPaths.
+    */
   sort () {
     this._sortPaths()
   }
 
-    /**
-     * Sorts currently opened root paths
-     */
+  /**
+    * Sorts currently opened root paths
+    */
   _sortPaths () {
     let f = []
     let d = []
@@ -1083,52 +1082,52 @@ class Zettlr {
     this.config.set('lastDir', (d && d.hasOwnProperty('hash')) ? d.hash : null)
   }
 
-    /**
-     * Closes the current file and takes care of all steps necessary to accomodate.
-     */
+  /**
+    * Closes the current file and takes care of all steps necessary to accomodate.
+    */
   closeFile () {
     this.setCurrentFile(null)
     this.ipc.send('file-close', {})
   }
 
-    /**
-     * Indicate modifications.
-     * @return {void} Nothing to return here.
-     */
+  /**
+    * Indicate modifications.
+    * @return {void} Nothing to return here.
+    */
   setModified () {
     this.window.setModified()
     this.editFlag = true
   }
 
-    /**
-     * Remove the modification flag. Also notify the renderer process so that
-     * the editor can mark itself clear as well.
-     * @return {void} Nothing to return.
-     */
+  /**
+    * Remove the modification flag. Also notify the renderer process so that
+    * the editor can mark itself clear as well.
+    * @return {void} Nothing to return.
+    */
   clearModified () {
     this.window.clearModified()
     this.editFlag = false
     this.ipc.send('mark-clean')
   }
 
-    /**
-     * Imports language files into the application's data directory.
-     */
+  /**
+    * Imports language files into the application's data directory.
+    */
   importLangFile () {
     let files = this.getWindow().askLangFile()
     let langDir = path.join(app.getPath('userData'), '/lang/')
 
-        // First test if the lang directory already exists
+    // First test if the lang directory already exists
     try {
       fs.lstatSync(langDir)
     } catch (e) {
-            // Create
+      // Create
       fs.mkdirSync(langDir)
     }
 
     for (let f of files) {
       if (/[a-z]{1,3}_[A-Z]{1,3}\.json/.test(path.basename(f))) {
-                // It's a language file!
+        // It's a language file!
         try {
           fs.copyFileSync(f, path.join(langDir, path.basename(f)))
           this.notify(trans('system.lang_import_success', path.basename(f)))
@@ -1141,90 +1140,90 @@ class Zettlr {
     }
   }
 
-    // Getters
+  // Getters
 
-    /**
-     * Returns the window instance.
-     * @return {ZettlrWindow} The main window
-     */
+  /**
+    * Returns the window instance.
+    * @return {ZettlrWindow} The main window
+    */
   getWindow () { return this.window }
 
-    /**
-     * Returns the IPC instance.
-     * @return {ZettlrIPC}  The IPC object
-     */
+  /**
+    * Returns the IPC instance.
+    * @return {ZettlrIPC}  The IPC object
+    */
   getIPC () { return this.ipc }
 
-    /**
-     * Returns the directory tree.
-     * @return {ZettlrDir} The root directory pointer.
-     */
+  /**
+    * Returns the directory tree.
+    * @return {ZettlrDir} The root directory pointer.
+    */
   getPaths () { return this._openPaths }
 
-    /**
-     * Returns the ZettlrConfig object
-     * @return {ZettlrConfig} The configuration
-     */
+  /**
+    * Returns the ZettlrConfig object
+    * @return {ZettlrConfig} The configuration
+    */
   getConfig () { return this.config }
 
-    /**
-     * Returns the ZettlrTags object
-     * @return {ZettlrTags} The tags object
-     */
+  /**
+    * Returns the ZettlrTags object
+    * @return {ZettlrTags} The tags object
+    */
   getTags () { return this._tags }
 
-    /**
-     * Returns the updater
-     * @return {ZettlrUpdater} The updater.
-     */
+  /**
+    * Returns the updater
+    * @return {ZettlrUpdater} The updater.
+    */
   getUpdater () { return this._updater }
 
-    /**
-     * Returns the watchdog
-     * @return {ZettlrWatchdog} The watchdog instance.
-     */
+  /**
+    * Returns the watchdog
+    * @return {ZettlrWatchdog} The watchdog instance.
+    */
   getWatchdog () { return this.watchdog }
 
-    /**
-     * Returns the stats
-     * @return {ZettlrStats} The stats object.
-     */
+  /**
+    * Returns the stats
+    * @return {ZettlrStats} The stats object.
+    */
   getStats () { return this.stats }
 
-    /**
-     * Get the current directory.
-     * @return {ZettlrDir} Current directory.
-     */
+  /**
+    * Get the current directory.
+    * @return {ZettlrDir} Current directory.
+    */
   getCurrentDir () { return this.currentDir }
 
-    /**
-     * Return the current file.
-     * @return {Mixed} ZettlrFile or null.
-     */
+  /**
+    * Return the current file.
+    * @return {Mixed} ZettlrFile or null.
+    */
   getCurrentFile () { return this.currentFile }
 
-    /**
-     * Called by the root directory to determine if it is root.
-     * @return {Boolean} Always returns false.
-     */
+  /**
+    * Called by the root directory to determine if it is root.
+    * @return {Boolean} Always returns false.
+    */
   isDirectory () { return false }
 
-    /**
-     * Is the current file modified?
-     * @return {Boolean} Return true, if there are unsaved changes, or false.
-     */
+  /**
+    * Is the current file modified?
+    * @return {Boolean} Return true, if there are unsaved changes, or false.
+    */
   isModified () { return this.editFlag }
 
-    /**
-     * Open a new window.
-     * @return {void} This does not return.
-     */
+  /**
+    * Open a new window.
+    * @return {void} This does not return.
+    */
   openWindow () { this.window.open() }
 
-    /**
-     * Close the current window.
-     * @return {void} Does not return.
-     */
+  /**
+    * Close the current window.
+    * @return {void} Does not return.
+    */
   closeWindow () { this.window.close() }
 }
 

@@ -303,12 +303,6 @@ class ZettlrDir {
     */
   remove (obj = this) {
     if (obj === this) {
-      // Remove this directory but ONLY if it is NOT the root.
-      // Root's parent is the Zettlr object itself
-      if ((!this.parent.hasOwnProperty('type')) && (this.parent.type !== 'directory')) {
-        return false
-      }
-
       this.shutdown()
 
       // It may be that this method returns false. Mostly, because the
