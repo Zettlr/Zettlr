@@ -32,8 +32,9 @@ class ZettlrIPC {
     // Beginn listening to messages
     this._ipc.on('message', (event, arg) => {
       if (arg.hasOwnProperty('command') && arg.command === 'file-drag-start') {
+        console.log(`Starting drag with arg:`, arg)
         event.sender.startDrag({
-          'file': this._app.findFile(arg.content).path,
+          'file': this._app.findFile({ hash: parseInt(arg.content.hash) }).path,
           'icon': require('path').join(__dirname, '/assets/dragicon.png')
         })
         return // Don't dispatch further
@@ -114,7 +115,7 @@ class ZettlrIPC {
         break
 
       case 'file-get-quicklook':
-        this.send('file-quicklook', this._app.findFile({'hash': cnt}).withContent())
+        this.send('file-quicklook', this._app.findFile({ 'hash': parseInt(cnt) }).withContent())
         break
 
       case 'file-get':

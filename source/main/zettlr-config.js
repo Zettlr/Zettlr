@@ -60,6 +60,11 @@ class ZettlrConfig {
     this.cfgtpl = {
       // Root directories
       'openPaths': [],
+      'dialogPaths': {
+        'askFileDialog': '',
+        'askDirDialog': '',
+        'askLangFileDialog': ''
+      },
       'window': {
         'x': 0,
         'y': 0,

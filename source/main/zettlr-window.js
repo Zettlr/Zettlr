@@ -16,10 +16,11 @@
  */
 
 const electron = require('electron')
-const {dialog, BrowserWindow} = electron
+const {dialog, BrowserWindow, app} = electron
 const url = require('url')
 const path = require('path')
 const {trans} = require('../common/lang/i18n.js')
+const {isDir} = require('../common/zettlr-helpers.js')
 const ZettlrMenu = require('./zettlr-menu.js')
 
 /**
@@ -316,26 +317,41 @@ class ZettlrWindow {
 
   /**
     * Show the dialog for choosing a directory
-    * @param  {String} startDir Which directory should be shown initially?
     * @return {Array}          An array containing all selected paths.
     */
-  askDir (startDir) {
-    return dialog.showOpenDialog(this._win, {
+  askDir () {
+    let startDir = app.getPath('home')
+    if (isDir(global.config.get('dialogPaths.askDirDialog'))) {
+      startDir = global.config.get('dialogPaths.askDirDialog')
+    }
+
+    let ret = dialog.showOpenDialog(this._win, {
       title: trans('system.open_folder'),
       defaultPath: startDir,
       properties: [
         'openDirectory',
         'createDirectory' // macOS only
       ]
-    })
+    }) || [] // In case the dialog spits out an undefined we need a default array
+
+    // Save the path of the dir into the config
+    if (ret.length > 0 && isDir(path.dirname(ret[0]))) {
+      global.config.set('dialogPaths.askDirDialog', ret[0])
+    }
+
+    return ret
   }
 
   /**
     * Shows the dialog for importing files from the disk.
-    * @param  {String} startDir Which directory should the dialog start with?
     * @return {Array}          An array containing all selected paths or undefined.
     */
-  askFile (startDir) {
+  askFile () {
+    let startDir = app.getPath('documents')
+    if (isDir(global.config.get('dialogPaths.askFileDialog'))) {
+      startDir = global.config.get('dialogPaths.askFileDialog')
+    }
+
     let formats = require('../common/data.json').import_files
     let fltr = []
     for (let f of formats) {
@@ -346,7 +362,7 @@ class ZettlrWindow {
     }
     fltr.push({ 'name': trans('system.all_files'), 'extensions': [ '*' ] })
 
-    return dialog.showOpenDialog(this._win, {
+    let ret = dialog.showOpenDialog(this._win, {
       'title': trans('system.open_file'),
       'defaultPath': startDir,
       'properties': [
@@ -354,7 +370,14 @@ class ZettlrWindow {
         'multiSelections'
       ],
       'filters': fltr
-    })
+    }) || [] // In case the dialog spits out an undefined we need a default array
+
+    // Save the path of the containing dir of the first file into the config
+    if (ret.length > 0 && isDir(path.dirname(ret[0]))) {
+      global.config.set('dialogPaths.askFileDialog', ret[0])
+    }
+
+    return ret
   }
 
   /**
@@ -362,15 +385,28 @@ class ZettlrWindow {
     * @return {[type]} [description]
     */
   askLangFile () {
-    return dialog.showOpenDialog(this._win, {
-      title: trans('system.import_lang_file'),
-      filters: [
+    let startDir = app.getPath('desktop')
+    if (isDir(global.config.get('dialogPaths.askLangFileDialog'))) {
+      startDir = global.config.get('dialogPaths.askLangFileDialog')
+    }
+
+    let ret = dialog.showOpenDialog(this._win, {
+      'title': trans('system.import_lang_file'),
+      'defaultPath': startDir,
+      'filters': [
         {name: 'JSON File', extensions: ['json']}
       ],
-      properties: [
+      'properties': [
         'openFile'
       ]
-    })
+    }) || [] // In case the dialog spits out an undefined we need a default array
+
+    // Save the path of the containing dir of the first file into the config
+    if (ret.length > 0 && isDir(path.dirname(ret[0]))) {
+      global.config.set('dialogPaths.askLangFileDialog', ret[0])
+    }
+
+    return ret
   }
 
   /**

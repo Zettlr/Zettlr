@@ -369,7 +369,7 @@ class Zettlr {
     */
   open () {
     // The user wants to open another file or directory.
-    let ret = this.window.askDir(require('electron').app.getPath('home'))
+    let ret = this.window.askDir()
 
     // The user may have provided no path at all, which returns in an
     // empty array -> check against and abort if array is empty
@@ -560,8 +560,7 @@ class Zettlr {
     }
 
     // First ask the user for a fileList
-    let startDir = app.getPath('documents') // Always start in documents folder.
-    let fileList = this.window.askFile(startDir)
+    let fileList = this.window.askFile()
     if (!fileList || fileList.length === 0) {
       // The user seems to have decided not to import anything. Gracefully
       // fail. Not like the German SPD.
