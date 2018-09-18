@@ -135,7 +135,7 @@
         &.revealjs-beige, &.revealjs-black, &.revealjs-league, &.revealjs-moon,
         &.revealjs-serif, &.revealjs-sky, &.revealjs-solarized, &.revealjs-white {
             &:before {
-                font-family: 'WebHostingHub-Glyphs';
+                font-family: @font-icon;
                 content: "\f0c4";
             }
         }
@@ -169,7 +169,6 @@
         }
         &.revealjs-serif {
             color: #383d3d;
-            font-family: 'Georgia', 'Liberation serif', 'Times New Roman', serif;
             background-color: #f0f1eb;
             &:hover { background-color: darken(#f0f1eb, 10%); color: #383d3d; }
         }
@@ -256,7 +255,7 @@
             }
 
             &::before {
-                font-family: 'WebHostingHub-Glyphs';
+                font-family: @font-icon;
                 font-size:@font-size-small * 0.8;
                 padding-right:5px;
                 width:30px;

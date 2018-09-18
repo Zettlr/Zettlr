@@ -17,6 +17,7 @@
 - iframes will now be rendered as well (such as the embed codes by YouTube or Vimeo). Note that only `<iframe>`-tags will be rendered, so Twitter embed won't work, for example.
 - Removed a small bug that would use the text selection cursor over directories after you've dragged a file.
 - Zettlr now remembers the last directories you were in when you successfully imported a file or opened a directory.
+- Added `Droid Sans Mono` as monospaced font family and updated the fonts around the app.
 
 ## Under the hood
 
@@ -24,6 +25,7 @@
 - Added globally accessible config getters and setters so that the `ZettlrConfig`-object is now reachable from within all classes in the app.
 - Changes to `ZettlrWindow` to create windows using programmatical boundaries.
 - Updated the image finding regex again.
+- Reorganised the font families in the less resources.
 
 # 0.19.0
 

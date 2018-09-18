@@ -24,7 +24,7 @@
       margin-top: @ribbon-height/2;
 
       &:before {
-          font-family: 'WebHostingHub-Glyphs';
+          font-family: @font-icon;
           font-size: @font-size-small * 0.8;
           margin:0px 5px;
           display:inline-block;
@@ -47,15 +47,6 @@
             padding-left:5px;
             margin:5px 0px;
             overflow: hidden;
-
-            /*&.root:before {
-                content: '\f0f0';
-                font-family: 'WebHostingHub-Glyphs';
-                font-size: @font-size-small * 0.8; /* Bit smaller, those indicators are damned huge *
-                margin-right:5px;
-                display:inline-block;
-                line-height:@ribbon-height;
-            }*/
         }
 
         .collapse-indicator {
@@ -63,7 +54,7 @@
 
             &::before {
                 content: "\f48b";
-                font-family: 'WebHostingHub-Glyphs';
+                font-family: @font-icon;
                 font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
                 display:inline-block;
                 vertical-align: middle;
@@ -90,21 +81,11 @@
         padding-left:5px;
         margin:5px 0px;
         overflow: hidden;
-
-        /*&:before {
-            content: '\f0d6';
-            font-family: 'WebHostingHub-Glyphs';
-            font-size: @font-size-small; /* Bit smaller, those indicators are damned huge *
-            margin-right:5px;
-            display:inline-block;
-            position:relative;
-            bottom:-2px;
-        }*/
     }
 
     .virtual-directory:before {
         content: '\f4ea';
-        font-family: 'WebHostingHub-Glyphs';
+        font-family: @font-icon;
         font-size: @font-size-small; /* Bit smaller, those indicators are damned huge */
         margin-right:5px;
         display:inline-block;
@@ -113,7 +94,7 @@
 
     .project:before {
         content: '\f6af';
-        font-family: 'WebHostingHub-Glyphs';
+        font-family: @font-icon;
         font-size: @font-size-small; /* Bit smaller, those indicators are damned huge */
         margin-right:5px;
         vertical-align: bottom;

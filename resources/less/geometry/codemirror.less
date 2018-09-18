@@ -22,7 +22,8 @@
     .search-result { background-color: yellow; }
 
     .cm-table {
-        font-family:monospace;
+        font-family: @font-mono;
+        font-size: @font-mono-size;
         font-weight:bold;
     }
 
@@ -35,7 +36,7 @@
 
     .cm-comment,
     .cm-formatting-task,
-    .cm-fenced-code { font-family: monospace; }
+    .cm-fenced-code { font-family: @font-mono; font-size: @font-mono-size; }
 
     .CodeMirror-cursor {
         width: 2px;
@@ -53,7 +54,8 @@
 
     .cm-formatting-list-ul,
     .cm-formatting-list-ol {
-        font-family:monospace;
+        font-family: @font-mono;
+        font-size: @font-mono-size;
     }
 
     .cm-url, .cm-link { text-decoration: none; }
