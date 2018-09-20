@@ -300,7 +300,7 @@ class ZettlrFile {
     * @return {ZettlrFile}      this for chainability.
     */
   rename (name, watchdog = null) {
-    name = sanitize(name)
+    name = sanitize(name, { replacement: '-' })
 
     // Rename this file.
     if ((name == null) || (name === '')) {

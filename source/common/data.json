@@ -21,6 +21,29 @@
             "/Library/TeX/texbin"
         ]
     },
+    "attachmentExtensions": [
+      ".pdf",
+      ".odt",
+      ".odp",
+      ".ods",
+      ".doc",
+      ".docx",
+      ".xls",
+      ".xlsx",
+      ".ppt",
+      ".pptx",
+      ".do",
+      ".r",
+      ".py",
+      ".sav",
+      ".zsav",
+      ".csv",
+      ".png",
+      ".jpg",
+      ".jpeg",
+      ".gif",
+      ".tiff"
+    ],
     "import_files": [
         [ "docx",       "Microsoft Word",                   ".docx", ".doc" ],
         [ "odt",        "Open Document Text",               ".odt" ],

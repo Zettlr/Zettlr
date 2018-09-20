@@ -219,7 +219,7 @@ class ZettlrDir {
     */
   newdir (name, watchdog = null) {
     // Remove unallowed characters.
-    name = sanitize(name)
+    name = sanitize(name, { replacement: '-' })
     if ((name === '') || (name === null)) {
       throw new DirectoryError(trans('system.error.no_allowed_chars'))
     }
@@ -249,7 +249,7 @@ class ZettlrDir {
       name = generateName()
     }
 
-    name = sanitize(name)
+    name = sanitize(name, { replacement: '-' })
     // This gets executed once the user has not entered any allowed characters
     if ((name === '') || (name == null)) {
       throw new DirectoryError(trans('system.error.no_allowed_chars'))
@@ -675,7 +675,7 @@ class ZettlrDir {
     * @param {String} n The directory's name
     */
   addVirtualDir (n) {
-    n = sanitize(n) // Same rules as "normal" directories. Why? To keep it JSON-safe.
+    n = sanitize(n, { replacement: '-' }) // Same rules as "normal" directories. Why? To keep it JSON-safe.
     if (!this._vdInterface.has(n)) {
       let vd = { 'name': n, 'files': [] }
       this._vdInterface.set(vd.name, vd)

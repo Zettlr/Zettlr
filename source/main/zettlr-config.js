@@ -21,6 +21,7 @@ const path = require('path')
 const {app} = require('electron')
 const commandExists = require('command-exists').sync // Does a given shell command exist?
 const {ignoreFile, isDir, isDictAvailable} = require('../common/zettlr-helpers.js')
+const COMMON_DATA = require('../common/data.json')
 
 /**
  * This class represents the configuration of Zettlr, represented by the
@@ -47,11 +48,11 @@ class ZettlrConfig {
 
     // Additional environmental paths (for locating LaTeX and Pandoc)
     if (process.platform === 'win32') {
-      this._additional_paths = require('../common/data.json').additional_paths.win32
+      this._additional_paths = COMMON_DATA.additional_paths.win32
     } else if (process.platform === 'linux') {
-      this._additional_paths = require('../common/data.json').additional_paths.linux
+      this._additional_paths = COMMON_DATA.additional_paths.linux
     } else if (process.platform === 'darwin') {
-      this._additional_paths = require('../common/data.json').additional_paths.macos
+      this._additional_paths = COMMON_DATA.additional_paths.macos
     } else {
       this._additional_paths = [] // Fallback: No additional paths
     }
@@ -75,29 +76,7 @@ class ZettlrConfig {
       'lastFile': null, // Save last opened file hash here
       'lastDir': null, // Save last opened dir hash here
       // Visible attachment filetypes
-      'attachmentExtensions': [
-        '.pdf', // PDF
-        '.odt', // OpenDocument Types
-        '.odp',
-        '.ods',
-        '.doc', // Microsoft Office Types
-        '.docx',
-        '.xls',
-        '.xlsx',
-        '.ppt',
-        '.pptx',
-        '.do', // Stata do-files
-        '.r', // R script file
-        '.py', // Python script file
-        '.sav', // SPSS script files
-        '.zsav',
-        '.csv', // CSV data file
-        '.png', // Images
-        '.jpg',
-        '.jpeg',
-        '.gif',
-        '.tiff'
-      ],
+      'attachmentExtensions': COMMON_DATA.attachmentExtensions,
       // UI related options
       'darkTheme': false,
       'snippets': false,

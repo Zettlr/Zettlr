@@ -116,8 +116,8 @@ class ZettlrProject
 
         // Mock a file object to which ZettlrExport has access
         let tempfile = {
-            'path': path.join(this._dir.path, sanitize(this._cfg.title)),
-            'name': sanitize(this._cfg.title), // obvious filename
+            'path': path.join(this._dir.path, sanitize(this._cfg.title, { replacement: '-' })),
+            'name': sanitize(this._cfg.title, { replacement: '-' }), // obvious filename
             'read': (opt) => { return contents; }
         };
 
