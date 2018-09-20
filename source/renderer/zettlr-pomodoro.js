@@ -1,3 +1,4 @@
+/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -12,9 +13,9 @@
  * END HEADER
  */
 
-const ZettlrPopup = require('./zettlr-popup.js');
+const ZettlrPopup = require('./zettlr-popup.js')
 
-const {trans} = require('../common/lang/i18n.js');
+const { trans } = require('../common/lang/i18n.js')
 
 /**
  * This class is pretty straight-forward: It handles clicks on the pomodoro button,
@@ -22,260 +23,251 @@ const {trans} = require('../common/lang/i18n.js');
  * and stop the timer and display a context-sensitive popup that either shows
  * controls for the timer _or_ the current status of it.
  */
-class ZettlrPomodoro
-{
-    /**
-     * Prepare the timer.
-     * @param {ZettlrRenderer} parent    The renderer object
-     */
-    constructor(parent)
-    {
-        this._renderer = parent;
-        this._pref = null;
+class ZettlrPomodoro {
+  /**
+   * Prepare the timer.
+   * @param {ZettlrRenderer} parent    The renderer object
+   */
+  constructor (parent) {
+    this._renderer = parent
+    this._pref = null
 
-        // Default durations for all tasks (will be used on program start)
-        this._duration = {
-            'task': 1500,
-            'short': 300,
-            'long': 1200
-        };
-
-        // Info about the current phase
-        this._phase = {
-            'max'  : 0, // Overall time for current task
-            'cur'  : 0, // Current elapsed time
-            'type' : 'task'
-        };
-
-        // Counts elapsed phases during one run (is reset on stop)
-        this._counter = {
-            'task': 0,
-            'short': 0,
-            'long': 0
-        };
-
-        this._running = false; // Is timer currently running?
-        this._playSound = false; // Play a sound each time a phase ends?
-
-        this._svg = $('#toolbar .button.pomodoro svg').first();
-        this._progressMeter = $('.pomodoro-value');
-        this._progressValue = this._svg.find('.pomodoro-value').first();
-
-        // For playing optional sound effects
-        this._sound = new window.Audio();
-        this._sound.volume = 1;
-        this._sound.src = `file://${__dirname}/assets/glass.ogg`;
-
-        // Preferences popup
-        this._form = $('<form>').addClass('pomodoro').prop('method', 'GET').prop('action', '#');
-        this._form.html(
-            `
-            <input type="number" class="pomodoro-task" value="${this._duration.task/60}" name="task" min="1" max="100" required>
-            <input type="number" class="pomodoro-short" value="${this._duration.short/60}" name="short" min="1" max="100" required>
-            <input type="number" class="pomodoro-long" value="${this._duration.long/60}" name="long" min="1" max="100" required>
-            <input type="checkbox" name="mute" id="mute"><label for="mute">${trans('pomodoro.mute')}</label>
-            <input type="range" name="volume" min="0" max="100" value="${this._sound.volume*100}">
-            <input type="submit" value="${trans('pomodoro.start')}">
-            `
-        );
+    // Default durations for all tasks (will be used on program start)
+    this._duration = {
+      'task': 1500,
+      'short': 300,
+      'long': 1200
     }
 
-    /**
-     * Start the timer with the current settings and begin the timeouts.
-     * @return {void} Nothing to return.
-     */
-    _start()
-    {
-        // Start the timer
-        this._running = true;
-        this._phase.type = 'task';
-        this._phase.cur = 0;
-        this._phase.max = this._duration.task;
-        this._progressValue.addClass('task');
-
-        // Commence
-        setTimeout(() => {this._progress();}, 1000);
+    // Info about the current phase
+    this._phase = {
+      'max': 0, // Overall time for current task
+      'cur': 0, // Current elapsed time
+      'type': 'task'
     }
 
-    /**
-     * This progresses the timer every second
-     * @return {void} Nothing to return.
-     */
-    _progress()
-    {
-        if(!this.isRunning()) {
-            // Break out of the loop
-            return;
-        }
-
-        // Check if phase is ending
-        if(this._phase.cur == this._phase.max) {
-            // Remove phase classes
-            this._progressValue.removeClass('long short task');
-            // Reset and start next
-            this._phase.cur = 0;
-            if(this._phase.type === 'task') {
-                this._counter.task++;
-
-                if((this._counter.task % 4) === 0) {
-                    // Long break every four tasks
-                    this._phase.type = 'long';
-                    this._phase.max = this._duration.long;
-                } else {
-                    // Short break
-                    this._phase.type = 'short';
-                    this._phase.max = this._duration.short;
-                }
-            } else {
-                // One of the pauses is over -> begin next task
-                this._counter[this._phase.type] = this._counter[this._phase.type]+1;
-
-                this._phase.type = 'task';
-                this._phase.max = this._duration.task;
-            }
-            if(!this.isMuted()) {
-                // Play a "finish" audio sound
-                this._sound.currentTime = 0;
-                this._sound.play();
-            }
-            // Set the class of the value accordingly
-            this._progressValue.addClass(this._phase.type);
-            $('#pomodoro-phase-type').text(trans('pomodoro.phase.'+this._phase.type));
-        }
-
-        // Visualise the progress using the Pomodoro circle.
-        let progress = this._phase.cur/this._phase.max;
-        let large = (progress > .5) ? 1 : 0;
-        let x = Math.cos(2 * Math.PI * progress);
-        let y = Math.sin(2 * Math.PI * progress);
-        this._progressValue.attr('d', `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`);
-
-        let sec = ((this._phase.max-this._phase.cur)%60);
-        if(sec < 10) {
-            sec = '0' + sec;
-        }
-        $('#pomodoro-time-remaining').text(Math.floor((this._phase.max-this._phase.cur)/60) + ':' + sec);
-
-        // Prepare next cycle
-        this._phase.cur++;
-
-        setTimeout(() => {this._progress();}, 1000);
+    // Counts elapsed phases during one run (is reset on stop)
+    this._counter = {
+      'task': 0,
+      'short': 0,
+      'long': 0
     }
 
-    /**
-     * Stop the timer.
-     * @return {void} Nothing to return.
-     */
-    _stop()
-    {
-        // Reset everything
-        this._running = false;
-        // Reset timer to none
-        this._progressValue.attr('d', '');
+    this._running = false // Is timer currently running?
+    this._playSound = false // Play a sound each time a phase ends?
 
-        // Now reset counters
-        this._counter = {
-            'task'  : 0,
-            'short' : 0,
-            'long'  : 0
-        };
+    this._svg = $('#toolbar .button.pomodoro svg').first()
+    this._progressMeter = $('.pomodoro-value')
+    this._progressValue = this._svg.find('.pomodoro-value').first()
+
+    // For playing optional sound effects
+    this._sound = new window.Audio()
+    this._sound.volume = 1
+    this._sound.src = `file://${__dirname}/assets/glass.ogg`
+
+    // Preferences popup
+    this._form = $('<form>').addClass('pomodoro').prop('method', 'GET').prop('action', '#')
+    this._form.html(
+      `
+      <input type="number" class="pomodoro-task" value="${this._duration.task / 60}" name="task" min="1" max="100" required>
+      <input type="number" class="pomodoro-short" value="${this._duration.short / 60}" name="short" min="1" max="100" required>
+      <input type="number" class="pomodoro-long" value="${this._duration.long / 60}" name="long" min="1" max="100" required>
+      <input type="checkbox" name="mute" id="mute"><label for="mute">${trans('pomodoro.mute')}</label>
+      <input type="range" name="volume" min="0" max="100" value="${this._sound.volume * 100}">
+      <input type="submit" value="${trans('pomodoro.start')}">
+      `
+    )
+  }
+
+  /**
+   * Start the timer with the current settings and begin the timeouts.
+   * @return {void} Nothing to return.
+   */
+  _start () {
+    // Start the timer
+    this._running = true
+    this._phase.type = 'task'
+    this._phase.cur = 0
+    this._phase.max = this._duration.task
+    this._progressValue.addClass('task')
+
+    // Commence
+    setTimeout(() => { this._progress() }, 1000)
+  }
+
+  /**
+   * This progresses the timer every second
+   * @return {void} Nothing to return.
+   */
+  _progress () {
+    if (!this.isRunning()) {
+      // Break out of the loop
+      return
     }
 
-    /**
-     * Display a popup with information on the status.
-     * @return {void} Nothing to return.
-     */
-    popup()
-    {
-        // Display the small settings popup
-        if(this._pref == null) {
+    // Check if phase is ending
+    if (this._phase.cur === this._phase.max) {
+      // Remove phase classes
+      this._progressValue.removeClass('long short task')
+      // Reset and start next
+      this._phase.cur = 0
+      if (this._phase.type === 'task') {
+        this._counter.task++
 
-            if(!this.isRunning()) {
-                this._pref = new ZettlrPopup(this, $('.button.pomodoro'), this._form, (form) => {
-                    // Callback
-                    this._pref = null;
-                    if(!form) {
-                        // User has aborted
-                        return;
-                    }
-                    // 0 = task
-                    // 1 = short
-                    // 2 = long
-                    // 3 = mute OR volume
-                    // 4 = volume if mute
-                    this._duration.task  = form[0].value * 60;
-                    this._duration.short = form[1].value * 60;
-                    this._duration.long  = form[2].value * 60;
-                    if(form[3].name == 'mute') {
-                        this.unmute();
-                        this._sound.volume = form[4].value / 100;
-                    } else {
-                        this.mute();
-                        this._sound.volume = form[3].value / 100;
-                    }
-                    // Now start
-                    this._start();
-                });
-            } else {
-                // Display information and a stop button
-                let sec = ((this._phase.max-this._phase.cur)%60);
-                if(sec < 10) {
-                    sec = '0' + sec;
-                }
-                let time = Math.floor((this._phase.max-this._phase.cur)/60) + ':' + sec;
-                this._pref = new ZettlrPopup(this, $('.button.pomodoro'), $('<div class="pomodoro">').html(
-                    `<p><span id="pomodoro-phase-type">${trans('pomodoro.phase.'+this._phase.type)}</span></p>
-                    <p><span id="pomodoro-time-remaining">${time}</span></p>
-                    <button id="pomodoro-stop-button">${trans('pomodoro.stop')}</button>`
-                ), (form) => {
-                    // Callback
-                    this._pref = null;
-                });
-                $('#pomodoro-stop-button').on('click', (e) => {
-                    this._pref.close();
-                    this._pref = null;
-                    this._stop();
-                });
-            }
+        if ((this._counter.task % 4) === 0) {
+          // Long break every four tasks
+          this._phase.type = 'long'
+          this._phase.max = this._duration.long
         } else {
-            this._pref.close();
-            this._pref = null;
+          // Short break
+          this._phase.type = 'short'
+          this._phase.max = this._duration.short
         }
+      } else {
+        // One of the pauses is over -> begin next task
+        this._counter[this._phase.type] = this._counter[this._phase.type] + 1
+
+        this._phase.type = 'task'
+        this._phase.max = this._duration.task
+      }
+      if (!this.isMuted()) {
+        // Play a "finish" audio sound
+        this._sound.currentTime = 0
+        this._sound.play()
+      }
+      // Set the class of the value accordingly
+      this._progressValue.addClass(this._phase.type)
+      $('#pomodoro-phase-type').text(trans('pomodoro.phase.' + this._phase.type))
     }
 
-    // Helper functions
+    // Visualise the progress using the Pomodoro circle.
+    let progress = this._phase.cur / this._phase.max
+    let large = (progress > 0.5) ? 1 : 0
+    let x = Math.cos(2 * Math.PI * progress)
+    let y = Math.sin(2 * Math.PI * progress)
+    this._progressValue.attr('d', `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`)
 
-    /**
-     * Is the timer running?
-     * @return {Boolean} True, if the timer is currently running.
-     */
-    isRunning() { return this._running; }
-
-    /**
-     * Is the timer currently muted, i.e. won't play the notification sound?
-     * @return {Boolean} True, if the timer is silent.
-     */
-    isMuted()   { return !this._playSound; }
-
-    /**
-     * Mutes the timer.
-     * @return {ZettlrPomodoro} Chainability.
-     */
-    mute()
-    {
-        this._playSound = false;
-        return this;
+    let sec = ((this._phase.max - this._phase.cur) % 60)
+    if (sec < 10) {
+      sec = '0' + sec
     }
+    $('#pomodoro-time-remaining').text(Math.floor((this._phase.max - this._phase.cur) / 60) + ':' + sec)
 
-    /**
-     * Unmutes the timer.
-     * @return {ZettlrPomodoro} Chainability.
-     */
-    unmute()
-    {
-        this._playSound = true;
-        return this;
+    // Prepare next cycle
+    this._phase.cur++
+
+    setTimeout(() => { this._progress() }, 1000)
+  }
+
+  /**
+   * Stop the timer.
+   * @return {void} Nothing to return.
+   */
+  _stop () {
+    // Reset everything
+    this._running = false
+    // Reset timer to none
+    this._progressValue.attr('d', '')
+
+    // Now reset counters
+    this._counter = {
+      'task': 0,
+      'short': 0,
+      'long': 0
     }
+  }
+
+  /**
+   * Display a popup with information on the status.
+   * @return {void} Nothing to return.
+   */
+  popup () {
+    // Display the small settings popup
+    if (this._pref == null) {
+      if (!this.isRunning()) {
+        this._pref = new ZettlrPopup(this, $('.button.pomodoro'), this._form, (form) => {
+          // Callback
+          this._pref = null
+          if (!form) {
+            // User has aborted
+            return
+          }
+          // 0 = task
+          // 1 = short
+          // 2 = long
+          // 3 = mute OR volume
+          // 4 = volume if mute
+          this._duration.task = form[0].value * 60
+          this._duration.short = form[1].value * 60
+          this._duration.long = form[2].value * 60
+          if (form[3].name === 'mute') {
+            this.unmute()
+            this._sound.volume = form[4].value / 100
+          } else {
+            this.mute()
+            this._sound.volume = form[3].value / 100
+          }
+          // Now start
+          this._start()
+        })
+      } else {
+        // Display information and a stop button
+        let sec = ((this._phase.max - this._phase.cur) % 60)
+        if (sec < 10) {
+          sec = '0' + sec
+        }
+        let time = Math.floor((this._phase.max - this._phase.cur) / 60) + ':' + sec
+        this._pref = new ZettlrPopup(this, $('.button.pomodoro'), $('<div class="pomodoro">').html(
+          `<p><span id="pomodoro-phase-type">${trans('pomodoro.phase.' + this._phase.type)}</span></p>
+          <p><span id="pomodoro-time-remaining">${time}</span></p>
+          <button id="pomodoro-stop-button">${trans('pomodoro.stop')}</button>`
+        ), (form) => {
+          // Callback
+          this._pref = null
+        })
+        $('#pomodoro-stop-button').on('click', (e) => {
+          this._pref.close()
+          this._pref = null
+          this._stop()
+        })
+      }
+    } else {
+      this._pref.close()
+      this._pref = null
+    }
+  }
+
+  // Helper functions
+
+  /**
+   * Is the timer running?
+   * @return {Boolean} True, if the timer is currently running.
+   */
+  isRunning () { return this._running }
+
+  /**
+   * Is the timer currently muted, i.e. won't play the notification sound?
+   * @return {Boolean} True, if the timer is silent.
+   */
+  isMuted () { return !this._playSound }
+
+  /**
+   * Mutes the timer.
+   * @return {ZettlrPomodoro} Chainability.
+   */
+  mute () {
+    this._playSound = false
+    return this
+  }
+
+  /**
+   * Unmutes the timer.
+   * @return {ZettlrPomodoro} Chainability.
+   */
+  unmute () {
+    this._playSound = true
+    return this
+  }
 }
 
-module.exports = ZettlrPomodoro;
+module.exports = ZettlrPomodoro

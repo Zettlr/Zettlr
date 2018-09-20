@@ -14,7 +14,7 @@
 * END HEADER
 */
 
-const {trans} = require('../common/lang/i18n.js')
+const { trans } = require('../common/lang/i18n.js')
 
 // The following commands are sent from the renderer and can potentially close
 // the current file. In that case we have to save the file first and then send
@@ -179,7 +179,7 @@ class ZettlrRendererIPC {
         this.send('close-root', cnt.hash)
         break
 
-      // FILES
+        // FILES
 
       case 'file-set-current':
         this._app.setCurrentFile(cnt)

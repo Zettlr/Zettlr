@@ -1,3 +1,4 @@
+/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -13,76 +14,73 @@
  * END HEADER
  */
 
-const ZettlrPopup = require('./zettlr-popup.js');
-const {trans} = require('../common/lang/i18n.js');
-const {localiseNumber} = require('../common/zettlr-helpers.js');
+const ZettlrPopup = require('./zettlr-popup.js')
+const { trans } = require('../common/lang/i18n.js')
+const { localiseNumber } = require('../common/zettlr-helpers.js')
 
 /**
  * Simply controls the small popup containing the stats.
  */
-class ZettlrStatsView
-{
-    /**
+class ZettlrStatsView {
+  /**
     * Creates the instance
     * @param {ZettlrRenderer} parent The renderer.
     */
-    constructor(parent)
-    {
-        this._renderer = parent;
-        this._toolbarbutton = $('#toolbar .stats');
+  constructor (parent) {
+    this._renderer = parent
+    this._toolbarbutton = $('#toolbar .stats')
+  }
+
+  /**
+    * Shows a popup using the given data
+    * @param  {Object} data All data from main
+    */
+  show (data) {
+    if (!data) {
+      return
+    }
+    // For now we only need the word count
+    let wcount = data.wordCount
+
+    // Compute average
+    let allwords = []
+    for (let day in wcount) {
+      // hasOwnProperty only returns "true" if the prop is not a default
+      // prop that every object has.
+      if (wcount.hasOwnProperty(day)) {
+        allwords.push(wcount[day])
+      }
+    }
+    allwords.reverse() // We only want the last 30 days.
+
+    // Now summarize the last 30 days. Should never exceed 100k.
+    let sum = 0
+    let end = (allwords.length > 29) ? 30 : allwords.length // Necessary for fresh users that haven't used Zettlr 30 days.
+    for (let i = 0; i < end; i++) {
+      sum += allwords[i]
     }
 
-    /**
-     * Shows a popup using the given data
-     * @param  {Object} data All data from main
-     */
-    show(data)
-    {
-        if(!data) {
-            return;
-        }
-        // For now we only need the word count
-        let wcount = data.wordCount;
+    let avg = Math.round(sum / end) // Average last month
 
-        // Compute average
-        let allwords = [];
-        for(let day in wcount) {
-            // hasOwnProperty only returns "true" if the prop is not a default
-            // prop that every object has.
-            if(wcount.hasOwnProperty(day)) {
-                allwords.push(wcount[day]);
-            }
-        }
-        allwords.reverse(); // We only want the last 30 days.
+    let today = new Date()
+    let yyyy = today.getFullYear()
+    let mm = today.getMonth() + 1
+    if (mm <= 9) mm = '0' + mm
+    let dd = today.getDate()
+    if (dd <= 9) dd = '0' + dd
 
-        // Now summarize the last 30 days. Should never exceed 100k.
-        let sum = 0;
-        let end = (allwords.length > 29) ? 30 : allwords.length; // Necessary for fresh users that haven't used Zettlr 30 days.
-        for(let i = 0; i < end; i++) {
-            sum += allwords[i];
-        }
+    today = yyyy + '-' + mm + '-' + dd
 
-        let avg = Math.round(sum / end); // Average last month
+    today = wcount[today] || 0
 
-        let today = new Date();
-        let yyyy = today.getFullYear();
-        let mm = today.getMonth() + 1;
-        if(mm <= 9) mm =  '0' + mm;
-        let dd = today.getDate();
-        if(dd <= 9) dd = '0' + dd;
+    if (sum > 99999) {
+      // Would look stupid in display ->
+      sum = '>100k'
+    } else {
+      sum = localiseNumber(sum)
+    }
 
-        today = yyyy + '-' + mm + '-' + dd;
-
-        today = wcount[today] || 0;
-
-        if(sum > 99999) {
-            // Would look stupid in display ->
-            sum = '>100k';
-        } else {
-            sum = localiseNumber(sum);
-        }
-
-        let cnt = `
+    let cnt = `
         <table>
         <tr>
             <td style="text-align:right"><strong>${sum}</strong></td><td>${trans('gui.words_last_month')}</td>
@@ -93,18 +91,20 @@ class ZettlrStatsView
         <tr>
             <td style="text-align:right"><strong>${localiseNumber(today)}</strong></td><td>${trans('gui.today_words')}</td>
         </tr>
-        </table>`;
+        </table>`
 
-        if(today > avg) {
-            cnt += `<p><strong>${trans('gui.avg_surpassed')}</strong></p>`;
-        } else if(today > avg/2) {
-            cnt += `<p><strong>${trans('gui.avg_close_to')}</strong></p>`;
-        } else {
-            cnt += `<p><strong>${trans('gui.avg_not_reached')}</strong></p>`;
-        }
-
-        let popup = new ZettlrPopup(this, this._toolbarbutton, cnt);
+    if (today > avg) {
+      cnt += `<p><strong>${trans('gui.avg_surpassed')}</strong></p>`
+    } else if (today > avg / 2) {
+      cnt += `<p><strong>${trans('gui.avg_close_to')}</strong></p>`
+    } else {
+      cnt += `<p><strong>${trans('gui.avg_not_reached')}</strong></p>`
     }
+
+    let popup = new ZettlrPopup(this, this._toolbarbutton, cnt, (f) => {
+      popup.close() // For now simply close; in a later version we may add a stats dialog
+    })
+  }
 }
 
-module.exports = ZettlrStatsView;
+module.exports = ZettlrStatsView

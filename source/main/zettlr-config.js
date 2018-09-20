@@ -18,9 +18,9 @@
 
 const fs = require('fs')
 const path = require('path')
-const {app} = require('electron')
+const { app } = require('electron')
 const commandExists = require('command-exists').sync // Does a given shell command exist?
-const {ignoreFile, isDir, isDictAvailable} = require('../common/zettlr-helpers.js')
+const { ignoreFile, isDir, isDictAvailable } = require('../common/zettlr-helpers.js')
 const COMMON_DATA = require('../common/data.json')
 
 /**
