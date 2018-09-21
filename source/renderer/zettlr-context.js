@@ -14,9 +14,9 @@
  * END HEADER
  */
 
-const {remote} = require('electron')
-const {Menu, MenuItem} = remote
-const {trans} = require('../common/lang/i18n.js')
+const { remote } = require('electron')
+const { Menu, MenuItem } = remote
+const { trans } = require('../common/lang/i18n.js')
 
 /**
  * This class is a wrapper for the remote Menu class. What it does is basically
@@ -259,14 +259,14 @@ class ZettlrCon {
         accelerator: 'CmdOrCtrl+B',
         click (item, win) {
           that._body.getRenderer().handleEvent('cm-command', 'markdownBold')
-        }}))
+        } }))
       this._menu.append(new MenuItem({
         'label': trans('menu.italic'),
         accelerator: 'CmdOrCtrl+I',
         click (item, win) {
           that._body.getRenderer().handleEvent('cm-command', 'markdownItalic')
         } }))
-      this._menu.append(new MenuItem({type: 'separator'}))
+      this._menu.append(new MenuItem({ type: 'separator' }))
       this._menu.append(new MenuItem({
         'label': trans('menu.insert_link'),
         accelerator: 'CmdOrCtrl+K',

@@ -319,7 +319,7 @@ class ZettlrEditor {
         continue
       }
       sbannotate.push({ 'from': result.from, 'to': result.to })
-      this._markedResults.push(this._cm.markText(result.from, result.to, {className: 'search-result'}))
+      this._markedResults.push(this._cm.markText(result.from, result.to, { className: 'search-result' }))
     }
 
     this._scrollbarAnnotations.update(sbannotate)
@@ -596,7 +596,7 @@ class ZettlrEditor {
         // Done editing.
         e.preventDefault()
         let newtext = `[^${ref}]: ${e.target.value}`
-        let sc = this._cm.getSearchCursor(line.text, {'line': 0, 'ch': 0})
+        let sc = this._cm.getSearchCursor(line.text, { 'line': 0, 'ch': 0 })
         sc.findNext()
         sc.replace(newtext)
         popup.close()
@@ -668,7 +668,7 @@ class ZettlrEditor {
       this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
     } else {
       // Start from beginning
-      this._searchCursor = this._cm.getSearchCursor(term, {'line': 0, 'ch': 0})
+      this._searchCursor = this._cm.getSearchCursor(term, { 'line': 0, 'ch': 0 })
       if (this._searchCursor.findNext()) {
         this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
       }
@@ -738,7 +738,7 @@ class ZettlrEditor {
     */
   replaceAll (searchWhat, replaceWhat) {
     searchWhat = new RegExp(searchWhat, 'i')
-    this._searchCursor = this._cm.getSearchCursor(searchWhat, {'line': 0, 'ch': 0})
+    this._searchCursor = this._cm.getSearchCursor(searchWhat, { 'line': 0, 'ch': 0 })
     while (this._searchCursor.findNext()) {
       this._searchCursor.replace(replaceWhat)
     }

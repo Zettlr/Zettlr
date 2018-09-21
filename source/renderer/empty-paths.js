@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-const {trans} = require('../common/lang/i18n.js')
+const { trans } = require('../common/lang/i18n.js')
 
 /**
  * Simply handles a small no-roots-open-message.

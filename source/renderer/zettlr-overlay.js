@@ -1,3 +1,4 @@
+/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -18,27 +19,24 @@
  * initizalize the German dictionary (and, probably, other huge dictionaries
  * as well, once they have been included).
  */
-class ZettlrOverlay
-{
-    /**
-     * Prepare the overlay
-     * @param {ZettlrRenderer} parent The renderer
-     */
-    constructor(parent)
-    {
-        this.parent = parent;
-        this.container = $('#container');
-        this.modal = $('<div>').addClass('modal');
-    }
+class ZettlrOverlay {
+  /**
+    * Prepare the overlay
+    * @param {ZettlrRenderer} parent The renderer
+    */
+  constructor (parent) {
+    this.parent = parent
+    this.container = $('#container')
+    this.modal = $('<div>').addClass('modal')
+  }
 
-    /**
-     * Show the overlay with a given message.
-     * @param  {String} message The message to be shown.
-     * @return {ZettlrOverlay}         Chainability.
-     */
-    show(message)
-    {
-        this.modal.html(`<div class="dialog">
+  /**
+    * Show the overlay with a given message.
+    * @param  {String} message The message to be shown.
+    * @return {ZettlrOverlay}         Chainability.
+    */
+  show (message) {
+    this.modal.html(`<div class="dialog">
         <h1 id="msg" style="text-align:center">${message}</h1>
         <div class="sk-circle">
         <div class="sk-circle1 sk-child"></div>
@@ -54,58 +52,56 @@ class ZettlrOverlay
         <div class="sk-circle11 sk-child"></div>
         <div class="sk-circle12 sk-child"></div>
         </div>
-        </div>`);
-        $('body').append(this.modal);
+        </div>`)
+    $('body').append(this.modal)
 
-        // Adjust the margins
-        let dialog = this.modal.find('.dialog').first();
-        let diaH = dialog.outerHeight();
-        let winH = $(window).height();
+    // Adjust the margins
+    let dialog = this.modal.find('.dialog').first()
+    let diaH = dialog.outerHeight()
+    let winH = $(window).height()
 
-        // The modal dialog is always smaller than the window.
-        let margin = (winH-diaH) / 2;
-        dialog.css('margin-top', margin + "px");
-        dialog.css('margin-bottom', margin + "px");
+    // The modal dialog is always smaller than the window.
+    let margin = (winH - diaH) / 2
+    dialog.css('margin-top', margin + 'px')
+    dialog.css('margin-bottom', margin + 'px')
 
-        return this;
+    return this
+  }
+
+  /**
+    * Uddates the content of the overlay
+    * @param  {String} newmsg The new message
+    * @return {ZettlrOverlay}        Chainability.
+    */
+  update (newmsg) {
+    if (this.modal.html() === '') {
+      this.show('')
     }
+    this.modal.find('#msg').text(newmsg)
 
-    /**
-     * Uddates the content of the overlay
-     * @param  {String} newmsg The new message
-     * @return {ZettlrOverlay}        Chainability.
-     */
-    update(newmsg)
-    {
-        if(this.modal.html() === '') {
-            this.show('');
-        }
-        this.modal.find('#msg').text(newmsg);
+    // Adjust the margins
+    let dialog = this.modal.find('.dialog').first()
+    let diaH = dialog.outerHeight()
+    let winH = $(window).height()
 
-        // Adjust the margins
-        let dialog = this.modal.find('.dialog').first();
-        let diaH = dialog.outerHeight();
-        let winH = $(window).height();
+    // The modal dialog is always smaller than the window.
+    let margin = (winH - diaH) / 2
+    dialog.css('margin-top', margin + 'px')
+    dialog.css('margin-bottom', margin + 'px')
 
-        // The modal dialog is always smaller than the window.
-        let margin = (winH-diaH) / 2;
-        dialog.css('margin-top', margin + "px");
-        dialog.css('margin-bottom', margin + "px");
+    return this
+  }
 
-        return this;
-    }
+  /**
+    * Closes the overlay.
+    * @return {ZettlrOverlay} Chainability.
+    */
+  close () {
+    this.modal.detach()
+    this.modal.html('')
 
-    /**
-     * Closes the overlay.
-     * @return {ZettlrOverlay} Chainability.
-     */
-    close()
-    {
-        this.modal.detach();
-        this.modal.html('');
-
-        return this;
-    }
+    return this
+  }
 }
 
-module.exports = ZettlrOverlay;
+module.exports = ZettlrOverlay
