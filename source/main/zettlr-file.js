@@ -16,9 +16,9 @@
 const fs = require('fs')
 const path = require('path')
 const sanitize = require('sanitize-filename')
-const {shell} = require('electron')
-const {hash, ignoreFile, makeImgPathsAbsolute} = require('../common/zettlr-helpers.js')
-const {trans} = require('../common/lang/i18n.js')
+const { shell } = require('electron')
+const { hash, ignoreFile, makeImgPathsAbsolute } = require('../common/zettlr-helpers.js')
+const { trans } = require('../common/lang/i18n.js')
 
 /**
  * Error Object
@@ -123,10 +123,17 @@ class ZettlrFile {
     // For further reference (as soon as it gets implemented; the proposal
     // is from March 21, 2018 (lel), here the correct regex needed:)
     // let idRE = /(?<!\[\[)@ID:(.*)(?!\]\])/g
-    let idRE = /@ID:([^\s]*)/g
+    let idStr = global.config.get('zkn.idRE')
+    // Make sure the ID definitely has at least one capturing group to not produce
+    // errors.
+    if (/\(.+?\)/.test(idStr)) {
+      idStr = `(${idStr})`
+    }
+    let idRE = new RegExp(idStr, 'g') // /@ID:([^\s]*)/g
+    let linkStart = global.config.get('zkn.linkStart')
+    let linkEnd = global.config.get('zkn.linkEnd')
     let tagRE = /#([A-Z0-9-_]+)/gi
     let match
-
     // (Re-)read content of file
     let cnt = fs.readFileSync(this.path, { encoding: 'utf8' })
     this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt
@@ -163,13 +170,13 @@ class ZettlrFile {
     }
 
     do {
-      if (cnt.substr(match.index - 2, match.index) !== '[[') {
+      if (cnt.substr(match.index - linkStart.length, match.index) !== linkStart) {
         // Found the first ID. Precedence should go to the first found.
         break
       }
     } while ((match = idRE.exec(cnt)) != null)
 
-    if ((match != null) && (match[1].substr(-2) !== ']]')) {
+    if ((match != null) && (match[1].substr(-(linkEnd.length)) !== linkEnd)) {
       this.id = match[1] || ''
     }
 
@@ -436,7 +443,7 @@ class ZettlrFile {
     }
 
     // Return immediately with an object of line -1 (indicating filename) and a huge weight
-    if (matches === terms.length) { return [{line: -1, restext: this.name, 'weight': 2}] }
+    if (matches === terms.length) { return [{ line: -1, restext: this.name, 'weight': 2 }] }
 
     // Do a full text search.
     let cnt = this.read()

@@ -355,6 +355,9 @@ class ZettlrRendererIPC {
               $('#editor').removeClass('collapsed')
               $('#combiner').removeClass('expanded')
             }
+            break
+          case 'zkn':
+            this._app.getEditor().getEditor().setOption('zkn', cnt.value)
         }
         break
 

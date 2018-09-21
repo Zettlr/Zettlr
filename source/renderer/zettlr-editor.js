@@ -120,6 +120,11 @@ class ZettlrEditor {
       },
       markdownImageBasePath: '', // The base path used to render the image in case of relative URLs
       markdownOnLinkOpen: function (url) { require('electron').shell.openExternal(url) }, // Action for ALT-Clicks
+      zkn: {
+        idRE: '(\\d{14})', // What do the IDs look like?
+        linkStart: '[[', // Start of links?
+        linkEnd: ']]' // End of links?
+      },
       extraKeys: {
         'Cmd-F': false,
         'Ctrl-F': false,
@@ -810,6 +815,12 @@ class ZettlrEditor {
     * Refresh the CodeMirror instance
     */
   refresh () { this._cm.refresh() }
+
+  /**
+   * Get the CodeMirror instance
+   * @return {CodeMirror} The editor instance
+   */
+  getEditor () { return this._cm }
 }
 
 module.exports = ZettlrEditor

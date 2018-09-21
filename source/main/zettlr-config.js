@@ -106,6 +106,12 @@ class ZettlrConfig {
         'mainfont': 'Times New Roman', // Main font
         'fontsize': 12 // Will be translated to pt
       },
+      // Zettelkasten stuff (IDs, as well as link matchers)
+      'zkn': {
+        'idRE': '@ID:(\\d{14})',
+        'linkStart': '\\[\\[',
+        'linkEnd': '\\]\\]'
+      },
       // Language
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.
       'app_lang': this.getLocale(),

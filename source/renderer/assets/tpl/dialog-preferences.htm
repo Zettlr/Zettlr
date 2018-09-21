@@ -6,6 +6,7 @@
                 <li><a href="#prefs-tabs-general">%i18n.preferences.general%</a></li>
                 <li><a href="#prefs-tabs-editor">%i18n.preferences.editor%</a></li>
                 <li><a href="#prefs-tabs-export">%i18n.preferences.export.title%</a></li>
+                <li><a href="#prefs-tabs-zkn">%i18n.preferences.zkn.title%</a></li>
                 <li><a href="#prefs-tabs-attachments">%i18n.preferences.attachments%</a></li>
                 <li><a href="#prefs-tabs-advanced">%i18n.preferences.advanced%</a></li>
             </ul>
@@ -103,6 +104,21 @@
                     </p>
                 </div>
             </div>
+            <!-- Zettelkasten options -->
+            <div id="prefs-tabs-zkn">
+              <p>%i18n.preferences.zkn.intro</p>
+              <radio id="pref-zkn-default-id" name="zkn-select-id"> <label for="pref-zkn-default-id">%i18n.preferences.zkn.default_id_label%</label>
+                <radio id="pref-zkn-free-id" name="zkn-select-id">
+                  <input type="text" value="%ZKN_ID%" name="pref-zkn-id-regex">
+              <hr>
+              <radio id="pref-zkn-default-linkstart" name="zkn-select-linkstart"> <label for="pref-zkn-default-id">%i18n.preferences.zkn.default_linkstart_label%</label>
+                <radio id="pref-zkn-free-linkstart" name="zkn-select-linkstart">
+                  <input type="text" value="%ZKN_LINKSTART%" name="pref-zkn-linkstart-regex">
+              <hr>
+              <radio id="pref-zkn-default-linkend" name="zkn-select-linkend"> <label for="pref-zkn-default-id">%i18n.preferences.zkn.default_linkend_label%</label>
+                <radio id="pref-zkn-free-linkend" name="zkn-select-linkend">
+                  <input type="text" value="%ZKN_LINKEND%" name="pref-zkn-linkend-regex">
+            </div>
             <!-- Attachment options -->
             <div id="prefs-tabs-attachments">
                 <p>%i18n.preferences.attachments_info%</p>
@@ -135,46 +151,48 @@
     </form>
 </div>
 <script type="text/javascript">
+/* global $ */
 // Functions for the search field of the dictionary list.
 $('.dicts-list-search').on('keyup', (e) => {
-    let val = $('.dicts-list-search').val().toLowerCase();
-    let list = $('.dicts-list').find('li').each(function(i) {
-        if($(this).text().toLowerCase().indexOf(val) === -1) {
-            $(this).hide();
-        } else {
-            $(this).show();
-        }
-    });
-});
+  let val = $('.dicts-list-search').val().toLowerCase()
+  $('.dicts-list').find('li').each(function (i) {
+    if ($(this).text().toLowerCase().indexOf(val) === -1) {
+      $(this).hide()
+    } else {
+      $(this).show()
+    }
+  })
+})
 
 $('.dicts-list').on('click', (e) => {
-    let elem = $(e.target);
-    if(elem.is('li') && elem.hasClass('dicts-list-item')) {
-        let selection = $(`<div class="selected-dict"><input type="hidden" value="${elem.attr('data-value')}" name="spellcheck[]" id="${elem.attr('data-value')}">${elem.text()}</div>`);
-        $('.selected-dictionaries').append(selection);
-        elem.detach();
-        $('.dicts-list-search').val('').focus().trigger('keyup'); // Next search
-    }
-});
+  let elem = $(e.target)
+  if (elem.is('li') && elem.hasClass('dicts-list-item')) {
+    let selection = $(`<div class="selected-dict"><input type="hidden" value="${elem.attr('data-value')}" name="spellcheck[]" id="${elem.attr('data-value')}">${elem.text()}</div>`)
+    $('.selected-dictionaries').append(selection)
+    elem.detach()
+    $('.dicts-list-search').val('').focus().trigger('keyup') // Next search
+  }
+})
 
 $('.selected-dictionaries').on('click', (e) => {
-    let elem = $(e.target);
-    if(elem.is('div') && elem.hasClass('selected-dict')) {
-        let selection = $(`<li data-value="${elem.children('input').first().val()}" class="dicts-list-item">${elem.text()}</li>`);
-        let length = $('.dicts-list').find('li').length;
-        if(length == 0) {
-            $('.dicts-list').append(selection);
-        } else {
-            $('.dicts-list').find('li').each(function(i) {
-                if($(this).text() > elem.text()) {
-                    selection.insertBefore($(this));
-                    return false; // Break out of the loop
-                } else if(i == length-1) {
-                    selection.insertAfter($(this));
-                }
-            });
+  let elem = $(e.target)
+  if (elem.is('div') && elem.hasClass('selected-dict')) {
+    let selection = $(`<li data-value="${elem.children('input').first().val()}" class="dicts-list-item">${elem.text()}</li>`)
+    let length = $('.dicts-list').find('li').length
+    if (length === 0) {
+      $('.dicts-list').append(selection)
+    } else {
+      $('.dicts-list').find('li').each(function (i) {
+        if ($(this).text() > elem.text()) {
+          selection.insertBefore($(this))
+          return false // Break out of the loop
+        } else if (i === length - 1) {
+          selection.insertAfter($(this))
         }
-        elem.detach();
+      })
     }
-});
+    elem.detach()
+  }
+})
+
 </script>

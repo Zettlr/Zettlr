@@ -101,6 +101,7 @@ class ZettlrRenderer {
     this._ipc.send('config-get', 'app_lang')
     this._ipc.send('config-get', 'muteLines')
     this._ipc.send('config-get', 'combinerState')
+    this._ipc.send('config-get', 'zkn')
     this._ipc.send('get-tags') // Receive initial list of tags to display
 
     // Request a first batch of files
