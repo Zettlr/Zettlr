@@ -110,8 +110,8 @@ class ZettlrConfig {
       'zkn': {
         'idRE': '(\\d{14})',
         'idGen': '%Y%M%D%h%m%s',
-        'linkStart': '\\[\\[',
-        'linkEnd': '\\]\\]'
+        'linkStart': '[[',
+        'linkEnd': ']]'
       },
       // Language
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.

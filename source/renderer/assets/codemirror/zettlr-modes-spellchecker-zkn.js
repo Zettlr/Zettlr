@@ -33,7 +33,9 @@
       token: function (stream) {
         var ch = stream.peek()
         var word = ''
-        let zknLinkRE = new RegExp(config.zkn.linkStart + '.+?' + config.zkn.linkEnd)
+        let ls = config.zkn.linkStart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+        let le = config.zkn.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+        let zknLinkRE = new RegExp(ls + '.+?' + le)
 
         // Exclude zkn-links (because otherwise CodeMirror will create
         // multiple HTML elements _inside_ the link block, which will
@@ -106,7 +108,10 @@
     var markdownZkn = {
       token: function (stream, state) {
         let zknIDRE = new RegExp(config.zkn.idRE)
-        let zknLinkRE = new RegExp(config.zkn.linkStart + '.+?' + config.zkn.linkEnd)
+        // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
+        let ls = config.zkn.linkStart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+        let le = config.zkn.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+        let zknLinkRE = new RegExp(ls + '.+?' + le)
 
         // This mode should also handle tables, b/c they are rather simple to detect.
         if (stream.sol() && stream.match(tableRE, false)) {

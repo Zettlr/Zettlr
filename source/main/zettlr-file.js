@@ -126,7 +126,7 @@ class ZettlrFile {
     let idStr = global.config.get('zkn.idRE')
     // Make sure the ID definitely has at least one capturing group to not produce
     // errors.
-    if (/\(.+?\)/.test(idStr)) {
+    if (!/\(.+?\)/.test(idStr)) {
       idStr = `(${idStr})`
     }
     let idRE = new RegExp(idStr, 'g') // /@ID:([^\s]*)/g
@@ -170,8 +170,9 @@ class ZettlrFile {
     }
 
     do {
-      if (cnt.substr(match.index - linkStart.length, match.index) !== linkStart) {
+      if (cnt.substr(match.index - linkStart.length, linkStart.length) !== linkStart) {
         // Found the first ID. Precedence should go to the first found.
+        // Minor BUG: Takes IDs that are inside links but not literally make up for a link.
         break
       }
     } while ((match = idRE.exec(cnt)) != null)
