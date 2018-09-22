@@ -186,21 +186,28 @@ function generateName()
 * This function generates a (per second unique) ID to be inserted into the editor
 * @return {String} An id in the format "YYYYMMDDHHMMSS"
 */
-function generateId()
-{
-    let date = new Date();
-    let yyyy = date.getFullYear();
-    let mm = date.getMonth() + 1;
-    if(mm <= 9) mm =  '0' + mm;
-    let dd = date.getDate();
-    if(dd <= 9) dd = '0' + dd;
-    let hh = date.getHours();
-    if(hh <= 9) hh =  '0' + hh;
-    let m = date.getMinutes();
-    if(m <= 9) m =  '0' + m;
-    let ss = date.getSeconds();
-    if(ss <= 9) ss =  '0' + ss;
-    return '@ID:' + yyyy + mm + dd + hh + m + ss;
+function generateId (pattern = '@ID:%Y%M%D%h%m%s') {
+  let date = new Date()
+  let yyyy = date.getFullYear()
+  let mm = date.getMonth() + 1
+  if (mm <= 9) mm = '0' + mm
+  let dd = date.getDate()
+  if (dd <= 9) dd = '0' + dd
+  let hh = date.getHours()
+  if (hh <= 9) hh = '0' + hh
+  let m = date.getMinutes()
+  if (m <= 9) m = '0' + m
+  let ss = date.getSeconds()
+  if (ss <= 9) ss = '0' + ss
+
+  // Now generate the id by replacing all placeholders in the pattern
+  pattern = pattern.replace(/%Y/g, yyyy)
+  pattern = pattern.replace(/%M/g, mm)
+  pattern = pattern.replace(/%D/g, dd)
+  pattern = pattern.replace(/%h/g, hh)
+  pattern = pattern.replace(/%m/g, m)
+  pattern = pattern.replace(/%s/g, ss)
+  return pattern
 }
 
 /**

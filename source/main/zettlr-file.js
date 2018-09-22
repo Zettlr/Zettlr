@@ -261,13 +261,9 @@ class ZettlrFile {
   findExact (term) {
     let name = this.name.substr(0, this.name.length - this.ext.length)
     let titleFound = (name.toLowerCase() === term.toLowerCase())
-    // Remove a possible @ID: in the term
-    if (term.indexOf(':') > -1) {
-      term = term.split(':')[1]
-    }
 
     // Return ID exact match or title exact match. Or null, if nothing found.
-    return (this.id === term) ? this : (titleFound) ? this : null
+    return (String(this.id) === String(term)) ? this : (titleFound) ? this : null
   }
 
   /**

@@ -106,18 +106,42 @@
             </div>
             <!-- Zettelkasten options -->
             <div id="prefs-tabs-zkn">
-              <p>%i18n.preferences.zkn.intro</p>
-              <radio id="pref-zkn-default-id" name="zkn-select-id"> <label for="pref-zkn-default-id">%i18n.preferences.zkn.default_id_label%</label>
-                <radio id="pref-zkn-free-id" name="zkn-select-id">
-                  <input type="text" value="%ZKN_ID%" name="pref-zkn-id-regex">
-              <hr>
-              <radio id="pref-zkn-default-linkstart" name="zkn-select-linkstart"> <label for="pref-zkn-default-id">%i18n.preferences.zkn.default_linkstart_label%</label>
-                <radio id="pref-zkn-free-linkstart" name="zkn-select-linkstart">
-                  <input type="text" value="%ZKN_LINKSTART%" name="pref-zkn-linkstart-regex">
-              <hr>
-              <radio id="pref-zkn-default-linkend" name="zkn-select-linkend"> <label for="pref-zkn-default-id">%i18n.preferences.zkn.default_linkend_label%</label>
-                <radio id="pref-zkn-free-linkend" name="zkn-select-linkend">
-                  <input type="text" value="%ZKN_LINKEND%" name="pref-zkn-linkend-regex">
+              <div class="box-left">
+                <label for="pref-zkn-free-id">%i18n.preferences.zkn.id_label%</label>
+                <input type="text" id="pref-zkn-free-id" value="%ZKN_ID%" name="pref-zkn-id-regex">
+                <button type="button" id="reset-id-regex">%i18n.preferences.zkn.reset_default_id%</button>
+                <hr>
+                <label for="pref-zkn-free-linkstart">%i18n.preferences.zkn.linkstart_label%</label>
+                <input type="text" id="pref-zkn-free-linkstart" value="%ZKN_LINKSTART%" name="pref-zkn-linkstart-regex">
+                <button type="button" id="reset-linkstart-regex">%i18n.preferences.zkn.reset_default_linkstart%</button>
+                <hr>
+                <label for="pref-zkn-free-linkend">%i18n.preferences.zkn.linkend_label%</label>
+                <input type="text" id="pref-zkn-free-linkend" value="%ZKN_LINKEND%" name="pref-zkn-linkend-regex">
+                <button type="button" id="reset-linkend-regex">%i18n.preferences.zkn.reset_default_linkend%</button>
+                <hr>
+                <label for="pref-zkn-id-gen">%i18n.preferences.zkn.id_generator_label%</label>
+                <input type="text" id="pref-zkn-id-gen" value="%ZKN_IDGEN%" name="pref-zkn-id-generator">
+                <button type="button" id="reset-id-generator">%i18n.preferences.zkn.reset_default_generator%</button>
+              </div>
+              <div class="box-right">
+                <p>
+                  %i18n.preferences.zkn.intro%
+                  <ul>
+                    <li><strong>%Y</strong>: %i18n.preferences.zkn.var_year%</li>
+                    <li><strong>%M</strong>: %i18n.preferences.zkn.var_month%</li>
+                    <li><strong>%D</strong>: %i18n.preferences.zkn.var_day%</li>
+                    <li><strong>%h</strong>: %i18n.preferences.zkn.var_hour%</li>
+                    <li><strong>%m</strong>: %i18n.preferences.zkn.var_minute%</li>
+                    <li><strong>%s</strong>: %i18n.preferences.zkn.var_second%</li>
+                  </ul>
+                </p>
+                <hr>
+                <p>
+                  <button type="button" id="generate-id">%i18n.preferences.zkn.test_id_generator%</button>
+                </p>
+                <p>%i18n.preferences.zkn.generated_id%: <strong><span id="generator-tester"></span></strong></p>
+                  <p><span id="pass-check"></span></p>
+              </div>
             </div>
             <!-- Attachment options -->
             <div id="prefs-tabs-attachments">
@@ -192,6 +216,32 @@ $('.selected-dictionaries').on('click', (e) => {
       })
     }
     elem.detach()
+  }
+})
+// END searchfield functions.
+
+// Begin: functions for the zkn regular expression fields
+$('#reset-id-regex').on('click', (e) => {
+  $('#pref-zkn-free-id').val('(\\d{14})')
+})
+$('#reset-linkstart-regex').on('click', (e) => {
+  $('#pref-zkn-free-linkstart').val('\\[\\[')
+})
+$('#reset-linkend-regex').on('click', (e) => {
+  $('#pref-zkn-free-linkend').val('\\]\\]')
+})
+$('#reset-id-generator').on('click', (e) => {
+  $('#pref-zkn-id-gen').val('%Y%M%D%h%m%s')
+})
+const { generateId } = require('../../common/zettlr-helpers.js')
+$('#generate-id').on('click', (e) => {
+  let id = generateId($('#pref-zkn-id-gen').val())
+  let re = new RegExp('^' + $('#pref-zkn-free-id').val() + '$')
+  $('#generator-tester').text(id)
+  if (re.test(id)) {
+    $('#pass-check').text('%i18n.preferences.zkn.pass_check_yes%')
+  } else {
+    $('#pass-check').text('%i18n.preferences.zkn.pass_check_no%')
   }
 })
 

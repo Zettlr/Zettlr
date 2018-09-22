@@ -19,6 +19,7 @@
 - Zettlr now remembers the last directories you were in when you successfully imported a file or opened a directory.
 - Added `Droid Sans Mono` as monospaced font family and updated the fonts around the app.
 - The Zettelkasten ID doesn't need to be in the format `@ID:<your-id>` anymore. Also the zkn-links can be customised.
+- The generation of IDs is now up to your creativity.
 
 ## Under the hood
 

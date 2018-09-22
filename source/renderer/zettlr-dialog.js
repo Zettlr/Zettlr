@@ -164,6 +164,10 @@ class ZettlrDialog {
         replacements.push('%EXPORT_STRIP_LINKS_NO%|' + stripLinksNo)
         replacements.push('%PANDOC%|' + obj.pandoc)
         replacements.push('%XELATEX%|' + obj.xelatex)
+        replacements.push('%ZKN_ID%|' + obj.zkn.idRE)
+        replacements.push('%ZKN_LINKSTART%|' + obj.zkn.linkStart)
+        replacements.push('%ZKN_LINKEND%|' + obj.zkn.linkEnd)
+        replacements.push('%ZKN_IDGEN%|' + obj.zkn.idGen)
         let spellcheck = ''
         let spellcheckLabel = ''
         for (let l of obj.selectedDicts) {

@@ -93,8 +93,6 @@ class ZettlrEditor {
     this._fontsize = 100 // Font size (used for zooming)
     this._timeout = null // Stores a current timeout for a save-command
 
-    this._prevSelections = [] // Used to save all selections before a command is run to re-select
-
     this._currentLocalSearch = '' // Saves a current local search, to re-start search on text field change
     this._markedResults = [] // Contains the search results marked in the text
     this._scrollbarAnnotations = null // Contains an object to mark search results on the scrollbar
@@ -122,8 +120,8 @@ class ZettlrEditor {
       markdownOnLinkOpen: function (url) { require('electron').shell.openExternal(url) }, // Action for ALT-Clicks
       zkn: {
         idRE: '(\\d{14})', // What do the IDs look like?
-        linkStart: '[[', // Start of links?
-        linkEnd: ']]' // End of links?
+        linkStart: '\\[\\[', // Start of links?
+        linkEnd: '\\]\\]' // End of links?
       },
       extraKeys: {
         'Cmd-F': false,
@@ -361,7 +359,6 @@ class ZettlrEditor {
     this._cm.markClean()
     this._cm.clearHistory()
     this._words = 0
-    this._prevSelections = []
     this._cm.setOption('markdownImageBasePath', '') // Reset base path
     return this
   }
@@ -508,18 +505,17 @@ class ZettlrEditor {
   insertId () {
     if (!this._cm.somethingSelected()) {
     // Don't replace selections
-      this._cm.replaceSelection(generateId())
+      this._cm.replaceSelection(generateId(this._cm.getOption('zkn').idGen))
       this._cm.focus()
     } else {
       // Save and afterwards retain the selections
-      this._prevSelections = this._cm.doc.listSelections()
+      let sel = this._cm.doc.listSelections()
       this._cm.setCursor({
         'line': this._cm.doc.lastLine(),
         'ch': this._cm.doc.getLine(this._cm.doc.lastLine()).length
       })
-      this._cm.replaceSelection('\n\n' + generateId()) // Insert at the end of document
-      this._cm.doc.setSelections(this._prevSelections)
-      this._prevSelections = []
+      this._cm.replaceSelection('\n\n' + generateId(this._cm.getOption('zkn').idGen)) // Insert at the end of document
+      this._cm.doc.setSelections(sel)
     }
   }
 
@@ -789,13 +785,12 @@ class ZettlrEditor {
     * @return {void}     Nothing to return.
     */
   runCommand (cmd) {
-    this._prevSelections = this._cm.doc.listSelections()
+    let sel = this._cm.doc.listSelections()
     let oldCur = JSON.parse(JSON.stringify(this._cm.getCursor()))
     this._cm.execCommand(cmd)
 
-    if (this._prevSelections.length > 0) {
-      this._cm.doc.setSelections(this._prevSelections)
-      this._prevSelections = []
+    if (sel.length > 0) {
+      this._cm.doc.setSelections(sel)
     }
 
     if (cmd === 'insertFootnote') {

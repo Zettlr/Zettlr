@@ -108,7 +108,8 @@ class ZettlrConfig {
       },
       // Zettelkasten stuff (IDs, as well as link matchers)
       'zkn': {
-        'idRE': '@ID:(\\d{14})',
+        'idRE': '(\\d{14})',
+        'idGen': '%Y%M%D%h%m%s',
         'linkStart': '\\[\\[',
         'linkEnd': '\\]\\]'
       },
