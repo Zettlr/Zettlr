@@ -151,6 +151,9 @@ class ZettlrPreview {
       if (d.type === 'directory' || d.type === 'virtual-directory') {
         // Render a directory
         elem += d.name
+        if (this._snippets) {
+          elem += `<span class="snippet">${d.children.length} Children</span>`
+        }
       } else if (d.type === 'file') {
         // Retrieve all tags the file got.
         // Seriously, I _need_ to refactor all this messy monkey-patched code some day.
@@ -166,8 +169,10 @@ class ZettlrPreview {
         elem += `<p class="filename">${d.name.substr(0, d.name.lastIndexOf('.'))}</p>${tl}`
 
         if (this._snippets) {
-          elem += `<span class="snippet">${d.snippet}
-                    <small>${formatDate(new Date(d.modtime))}</small></span>`
+          elem += `<span class="snippet">${d.snippet}<small>${formatDate(new Date(d.modtime))}`
+          if (d.id) elem += ` | ID: ${d.id}`
+          if (d.tags.length > 0) elem += ` | ${d.tags.length} #`
+          elem += `</small></span>`
         }
       }
       elem += '</li>' // Close the tag
