@@ -36,6 +36,9 @@ class ZettlrToolbar {
     this._searchbar.attr('placeholder', trans('gui.find_placeholder'))
     this._fileInfo = this._div.find('.file-info')
 
+    // Create the progress indicator circle and insert it hidden
+    this._searchProgress = $('<svg id="search-progress-indicator" class="hidden" width="20" height="20" viewBox="-1 -1 2 2"><circle class="indicator-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle><path d="" fill="" class="indicator-value" shape-rendering="geometricPrecision"></path></svg>')
+    this._searchProgress.insertAfter($('#toolbar .searchbar').first())
     // Searchbar autocomplete variables
     this._autocomplete = []
     this._oldval = ''
@@ -195,11 +198,15 @@ class ZettlrToolbar {
     * @return {void}         Nothing to return.
     */
   searchProgress (item, itemCnt) {
-    // Colors (see variables.less): either green-selection or green-selection-dark
-    let percent = item / itemCnt * 100
-    let color = $('body').hasClass('dark') ? 'rgba(  4, 125, 101, 1)' : 'rgba( 28, 178, 126, 1)'
-    let bgcol = this._div.css('background-color')
-    this._searchbar.css('background-image', `linear-gradient(to right, ${color} 0%, ${color} ${percent}%, ${bgcol} ${percent}%, ${bgcol} 100%)`)
+    if (this._searchProgress.hasClass('hidden')) {
+      this._searchProgress.removeClass('hidden')
+    } else {
+      let progress = item / itemCnt
+      let large = (progress > 0.5) ? 1 : 0
+      let x = Math.cos(2 * Math.PI * progress)
+      let y = Math.sin(2 * Math.PI * progress)
+      this._searchProgress.find('.indicator-value').attr('d', `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`)
+    }
   }
 
   /**
@@ -207,7 +214,7 @@ class ZettlrToolbar {
     * @return {void} Nothing to return.
     */
   endSearch () {
-    this._searchbar.css('background-image', 'none')
+    this._searchProgress.addClass('hidden')
   }
 }
 

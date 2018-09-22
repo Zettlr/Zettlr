@@ -20,6 +20,7 @@
 - Added `Droid Sans Mono` as monospaced font family and updated the fonts around the app.
 - The Zettelkasten ID doesn't need to be in the format `@ID:<your-id>` anymore. Also the zkn-links can be customised.
 - The generation of IDs is now up to your creativity.
+- Made the search progress indication better. Now, instead of the background filling up with sometimes ugly colours, a circle just as for the Pomodoro timer is used.
 
 ## Under the hood
 

@@ -29,6 +29,15 @@
 
     .file-info { font-size:@font-size-small * 0.8; }
 
+    svg#search-progress-indicator {
+      opacity: 1;
+      transition: 0.2s opacity ease;
+      .indicator-meter { fill: @grey-2; }
+      .indicator-value { fill: @green-0; }
+
+      &.hidden { opacity: 0; }
+    }
+
     .searchbar input {
         color:inherit;
         background-color:white;
@@ -40,6 +49,4 @@
             border-color: @grey-1;
         }
     }
-
-
 }
