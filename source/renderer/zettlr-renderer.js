@@ -404,7 +404,6 @@ class ZettlrRenderer {
       oldFile.tags = file.tags
       oldFile.ext = file.ext
       oldFile.modtime = file.modtime
-      oldFile.snippet = file.snippet
 
       // Then refresh
       this._preview.refresh()

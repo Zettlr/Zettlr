@@ -58,12 +58,10 @@ class FileView {
     * @return {FileView} This for chainability.
     */
   refresh (p = this._file) {
-    if (parseInt(p.modtime) !== this._file.modtime) {
-      this._file = p
-      this._elem.attr('data-hash', this._file.hash)
-      this._elem.attr('title', this._file.path)
-      this._elem.text(this._file.name)
-    }
+    this._file = p
+    this._elem.attr('data-hash', this._file.hash)
+    this._elem.attr('title', this._file.path)
+    this._elem.text(this._file.name)
 
     return this
   }
