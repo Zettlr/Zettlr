@@ -13,10 +13,8 @@
   'use strict'
 
   var delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚'
-  // var zknLinkRE = /\[\[(.*?)\]\]/
   var zknTagRE = /#[A-Z0-9-_]+/i
   var tableRE = /^\|.+\|$/i
-  // var zknIDRE = /\d{14}/
 
   /**
     * Define the spellchecker mode that will simply check all found words against

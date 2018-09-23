@@ -168,25 +168,31 @@ class ZettlrExport {
     // First load the file.
     let cnt = this.options.file.read({ 'absoluteImagePaths': true })
 
-    // Second check if we should strip something, if yes, do so.
-    if (this.options.stripIDs) {
-      // Strip all ZKN-IDs in the pattern given by the user
-      cnt = cnt.replace(new RegExp(global.config.get('zkn.idRE'), 'g'), '')
-    }
-
+    // Second strip tags if necessary
     if (this.options.stripTags) {
       // Strip all tags
       cnt = cnt.replace(/#[\d\w-]+/g, '')
     }
 
+    // Second remove or unlink links.
+    let ls = global.config.get('zkn.linkStart').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    let le = global.config.get('zkn.linkEnd').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
     if (this.options.stripLinks === 'full') {
-      // Completely remove internal links
-      cnt = cnt.replace(/\[\[.+?\]\]/g, '') // Important: Non-greedy modifier needed to not strip out the whole text!
+      cnt = cnt.replace(new RegExp(ls + '.+?' + le, 'g'), '') // Important: Non-greedy modifier needed to not strip out the whole text!
     } else if (this.options.stripLinks === 'unlink') {
-      // Remove square brackets from internal links // ATTENTION BUG BUG BUG
-      cnt = cnt.replace(/\[\[(.+?)\]\]/g, function (match, p1, offset, string) {
+      // Only remove the link identifiers, not the content (note the capturing
+      // group that's missing from above's replacement)
+      cnt = cnt.replace(new RegExp(ls + '(.+?)' + le, 'g'), function (match, p1, offset, string) {
         return p1
       })
+    }
+
+    // Third check if we should strip the IDs. We have to do IDs afterwards because
+    // of the "at least 1"-modifier (+) in the link-unlink-regexes.
+    if (this.options.stripIDs) {
+      // Strip all ZKN-IDs in the pattern given by the user
+      cnt = cnt.replace(new RegExp(global.config.get('zkn.idRE'), 'g'), '')
     }
 
     // Finally, save as temporary file.
