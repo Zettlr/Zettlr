@@ -30,9 +30,9 @@ const ZettlrStats = require('./zettlr-stats.js')
 const ZettlrUpdater = require('./zettlr-updater.js')
 const ZettlrExport = require('./zettlr-export.js')
 const ZettlrImport = require('./zettlr-import.js')
-const {i18n, trans} = require('../common/lang/i18n.js')
-const {hash, ignoreDir,
-  ignoreFile, isFile, isDir} = require('../common/zettlr-helpers.js')
+const { i18n, trans } = require('../common/lang/i18n.js')
+const { hash, ignoreDir,
+  ignoreFile, isFile, isDir } = require('../common/zettlr-helpers.js')
 
 const POLL_TIME = require('../common/data.json').poll_time
 
@@ -680,6 +680,12 @@ class Zettlr {
 
     // Replace all relevant properties of the renamed file in renderer.
     this.ipc.send('file-replace', { 'hash': parseInt(arg.hash), 'file': file })
+
+    if (this.getCurrentFile().hash === parseInt(arg.hash)) {
+      // Also "re-set" the current file to trigger some additional actions
+      // necessary to reflect the changes throughout the app.
+      this.setCurrentFile(this.getCurrentFile())
+    }
   }
 
   /**

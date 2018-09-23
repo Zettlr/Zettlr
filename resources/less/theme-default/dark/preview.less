@@ -10,7 +10,14 @@
 
         li {
             p.filename { background-image:linear-gradient(90deg, white 0%, white 90%, transparent 100%); }
-            small { color:@grey-1; }
+            p.snippet {
+              .excerpt { color: @grey-2; }
+
+              .date, .id, .tags, .directories, .files, .virtual-directories {
+                background-color:@grey-4;
+                color: @grey-0;
+              }
+            }
         }
 
         li.file:hover {

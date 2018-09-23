@@ -51,7 +51,6 @@ class ZettlrFile {
     this.tags = [] // All tags that are to be found inside the file's contents.
     this.type = 'file'
     this.modtime = 0
-    this.snippet = ''
     this.linefeed = '\n'
     // This variable is only used to transfer the file contents to and from
     // the renderer. It will be empty all other times, because otherwise the
@@ -109,8 +108,8 @@ class ZettlrFile {
   }
 
   /**
-    * Reads the file and returns its contents. Also updates snippet but does
-    * not keep the contents in buffer (saving memory)
+    * Reads the file and returns its contents. Does not keep the contents in
+    * buffer (saving memory)
     * @return {String} The file contents as string.
     */
   read (options = {}) {
@@ -136,7 +135,6 @@ class ZettlrFile {
     let match
     // (Re-)read content of file
     let cnt = fs.readFileSync(this.path, { encoding: 'utf8' })
-    this.snippet = (cnt.length > 50) ? cnt.substr(0, 50) + '…' : cnt
 
     // Determine linefeed to preserve on saving so that version control
     // systems don't complain.
@@ -225,7 +223,6 @@ class ZettlrFile {
       'type': this.type,
       'ext': this.ext,
       'modtime': this.modtime,
-      'snippet': this.snippet,
       'content': this.read() // Will only be not empty when the file is modified.
     }
   }

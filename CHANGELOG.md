@@ -21,6 +21,8 @@
 - The Zettelkasten ID doesn't need to be in the format `@ID:<your-id>` anymore. Also the zkn-links can be customised.
 - The generation of IDs is now up to your creativity.
 - Made the search progress indication better. Now, instead of the background filling up with sometimes ugly colours, a circle just as for the Pomodoro timer is used.
+- The file snippets now hold additional information, such as the ID of the given file or the amount of tags. Additionally, if you hover over the number of tags, a popup will tell you *which* tags the file holds. Directories also now show their number of children elements (both directories and files).
+- The text snippets have been removed from the app.
 
 ## Under the hood
 

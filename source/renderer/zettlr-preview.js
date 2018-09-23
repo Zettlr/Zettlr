@@ -116,7 +116,7 @@ class ZettlrPreview {
     // index in this._tags with an HTML representation of the object.
     for (let i = 0; i < this._data.length; i++) {
       let d = this._data[i]
-      if (this._showSearchResults && !this._results.find((elem) => { return (elem.hash === d.hash) })) {
+      if (this._showSearchResults && !this._results.find((elem) => { return (elem.hash === d.hash) }) && d.type === 'file') {
         // Don't include no-result-rows in the next list.
         continue
       }
@@ -132,7 +132,7 @@ class ZettlrPreview {
 
       // Calculate search result bg color, in the style of a heat map.
       let bgcolor = ''
-      if (this._showSearchResults) {
+      if (this._showSearchResults && d.type === 'file') {
         let res = this._results.find((elem) => { return (elem.hash === d.hash) })
         let w = 0
         for (let r of res.result) {
@@ -152,7 +152,17 @@ class ZettlrPreview {
         // Render a directory
         elem += d.name
         if (this._snippets) {
-          elem += `<p class="snippet"><span class="children">${d.children.length} Children</span></p>` // TODO TRANSLATE
+          elem += `<p class="snippet">
+          <span class="directories">
+            ${d.children.filter(e => e.type === 'directory').length} Directories
+          </span>
+          <span class="files">
+            ${d.children.filter(e => e.type === 'files').length} Files
+          </span>
+          <span class="virtual-directories">
+            ${d.children.filter(e => e.type === 'virtual-directory').length} Virtual Directories
+          </span>
+          </p>` // TODO TRANSLATE
         }
       } else if (d.type === 'file') {
         // Retrieve all tags the file got.
@@ -169,7 +179,7 @@ class ZettlrPreview {
         elem += `<p class="filename">${d.name.substr(0, d.name.lastIndexOf('.'))}</p>${tl}`
 
         if (this._snippets) {
-          elem += `<p class="snippet"><span class="excerpt">${d.snippet}</span>
+          elem += `<p class="snippet">
           <span class="date">${formatDate(new Date(d.modtime))}</span>`
           if (d.id) elem += ` <span class="id">${d.id}</span>`
           if (d.tags.length > 0) elem += ` <span class="tags" title="${d.tags.join(',\n')}">#${d.tags.length}</span>`
@@ -323,6 +333,11 @@ class ZettlrPreview {
       let sortingHeader = $(`<div class="sorter"><span class="sortName">${sortNameIcon}</span><span class="sortTime">${sortTimeIcon}</span></div>`)
       sortingHeader.click((e) => {
         let elem = $(e.target)
+        if (elem.hasClass('sortName') || elem.hasClass('sortTime')) {
+          e.preventDefault()
+          e.stopPropagation() // Don't "click through" and select the directory.
+        }
+
         // We need the hex charcode as HTML entity. jQuery is not as
         // nice as to give it back to us itself.
         let sort = '&#x' + elem.text().charCodeAt(0).toString(16) + ';'

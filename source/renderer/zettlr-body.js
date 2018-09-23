@@ -112,7 +112,6 @@ class ZettlrBody {
       if (form) {
         this._renderer.requestNewFile(form[0].value, dir.hash)
       }
-      popup.close()
     })
   }
 
@@ -136,7 +135,6 @@ class ZettlrBody {
       if (form) {
         this._renderer.requestNewDir(form[0].value, dir.hash)
       }
-      popup.close()
     })
   }
 
@@ -160,7 +158,6 @@ class ZettlrBody {
       if (form) {
         this._renderer.requestNewVirtualDir(form[0].value, dir.hash)
       }
-      popup.close()
     })
   }
 
@@ -181,7 +178,6 @@ class ZettlrBody {
       if (form) {
         this._renderer.requestDirRename(form[0].value, dir.hash)
       }
-      popup.close()
     })
   }
 
@@ -212,7 +208,6 @@ class ZettlrBody {
       if (form) {
         this._renderer.requestFileRename(form[0].value, file.hash)
       }
-      popup.close()
     })
   }
 

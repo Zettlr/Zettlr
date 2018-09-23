@@ -38,25 +38,23 @@
                 white-space: nowrap;
                 display: block;
                 width: 100%;
-                font-weight: bold;
                 overflow: hidden;
             }
 
-            /*span, small {
-                display:block;
-                margin-top:5px;
-            }*/
             p.snippet {
               margin-top: 5px;
               .excerpt { display:block; }
 
               // Small info blocks inside the snippets
-              .date, .id, .tags, .children {
+              .date, .id, .tags, .directories, .files, .virtual-directories {
                 font-size:75%;
                 border-radius:4px;
                 padding:2px 4px;
-                background-color:gray;
-                color:white;
+              }
+
+              .directories, .files, .virtual-directories {
+                margin: inherit 2px;
+                display: inline-block;
               }
             }
 
