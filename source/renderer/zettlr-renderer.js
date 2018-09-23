@@ -290,7 +290,6 @@ class ZettlrRenderer {
       )
     }
     let popup = new ZettlrPopup(this, $('.button.show-toc'), cnt, (f) => {
-      popup.close()
     })
 
     // On click jump to line

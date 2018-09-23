@@ -102,7 +102,6 @@ class ZettlrStatsView {
     }
 
     let popup = new ZettlrPopup(this, this._toolbarbutton, cnt, (f) => {
-      popup.close() // For now simply close; in a later version we may add a stats dialog
     })
   }
 }
