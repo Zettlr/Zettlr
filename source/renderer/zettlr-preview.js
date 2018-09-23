@@ -152,7 +152,7 @@ class ZettlrPreview {
         // Render a directory
         elem += d.name
         if (this._snippets) {
-          elem += `<span class="snippet">${d.children.length} Children</span>`
+          elem += `<p class="snippet"><span class="children">${d.children.length} Children</span></p>` // TODO TRANSLATE
         }
       } else if (d.type === 'file') {
         // Retrieve all tags the file got.
@@ -169,16 +169,21 @@ class ZettlrPreview {
         elem += `<p class="filename">${d.name.substr(0, d.name.lastIndexOf('.'))}</p>${tl}`
 
         if (this._snippets) {
-          elem += `<span class="snippet">${d.snippet}<small>${formatDate(new Date(d.modtime))}`
-          if (d.id) elem += ` | ID: ${d.id}`
-          if (d.tags.length > 0) elem += ` | ${d.tags.length} #`
-          elem += `</small></span>`
+          elem += `<p class="snippet"><span class="excerpt">${d.snippet}</span>
+          <span class="date">${formatDate(new Date(d.modtime))}</span>`
+          if (d.id) elem += ` <span class="id">${d.id}</span>`
+          if (d.tags.length > 0) elem += ` <span class="tags" title="${d.tags.join(',\n')}">#${d.tags.length}</span>`
+          elem += `</p>`
         }
       }
       elem += '</li>' // Close the tag
 
       // First, this will create the index, thereby enlargening the array.
       // And each subsequent time, it will simply replace the elements.
+      //
+      // ^-- Hendrik, were you drunk writing this? Where is anything replaced here?
+      // There will be NOTHING replaced here. You hear me? NOTHING. This whole
+      // array will be recreated EVERY TIME. Live with it. Your life is a failure.
       this._tags.push(elem)
     }
   }
@@ -226,6 +231,15 @@ class ZettlrPreview {
       arrow: true,
       duration: 100,
       flip: true
+    })
+
+    // Also tippify the tag list of each file
+    tippy('#preview .snippet .tags', {
+      delay: 100,
+      arrow: true,
+      duration: 100,
+      flip: false,
+      flipBehavior: [ 'right' ]
     })
   }
 
