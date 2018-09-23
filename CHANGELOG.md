@@ -32,6 +32,7 @@
 - Updated the image finding regex again.
 - Reorganised the font families in the less resources.
 - The popup is now much simpler to call.
+- Removed instantiation from both ZettlrImport and ZettlrExport.
 
 # 0.19.0
 

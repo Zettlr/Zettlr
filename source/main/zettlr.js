@@ -28,7 +28,7 @@ const ZettlrFile = require('./zettlr-file.js')
 const ZettlrWatchdog = require('./zettlr-watchdog.js')
 const ZettlrStats = require('./zettlr-stats.js')
 const ZettlrUpdater = require('./zettlr-updater.js')
-const ZettlrExport = require('./zettlr-export.js')
+const makeExport = require('./zettlr-export.js')
 const ZettlrImport = require('./zettlr-import.js')
 const { i18n, trans } = require('../common/lang/i18n.js')
 const { hash, ignoreDir,
@@ -405,11 +405,11 @@ class Zettlr {
       // First check if this thing is already added. If so, simply write
       // the existing file/dir into the newFile/newDir vars. They will be
       // opened accordingly.
-      if ((newFile = this.findFile({'path': f})) != null) {
+      if ((newFile = this.findFile({ 'path': f })) != null) {
         // Also set the newDir variable so that Zettlr will automatically
         // navigate to the directory.
         newDir = newFile.parent
-      } else if ((newDir = this.findDir({'path': f})) != null) {
+      } else if ((newDir = this.findDir({ 'path': f })) != null) {
         // Do nothing
       } else if (this.getConfig().addPath(f)) {
         if (isFile(f)) {
@@ -542,8 +542,7 @@ class Zettlr {
 
     // Call the exporter.
     try {
-      // TODO don't do this with instantiation
-      new ZettlrExport(opt)
+      makeExport(opt)
       this.notify(trans('system.export_success', opt.format.toUpperCase()))
     } catch (err) {
       this.notify(err.name + ': ' + err.message) // Error may be thrown
