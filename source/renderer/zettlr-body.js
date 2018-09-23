@@ -19,7 +19,7 @@ const ZettlrCon = require('./zettlr-context.js')
 const ZettlrDialog = require('./zettlr-dialog.js')
 const ZettlrQuicklook = require('./zettlr-quicklook.js')
 const ZettlrNotification = require('./zettlr-notification.js')
-const ZettlrPopup = require('./zettlr-popup.js')
+const popup = require('./zettlr-popup.js')
 
 const { trans } = require('../common/lang/i18n.js')
 const { localiseNumber } = require('../common/zettlr-helpers.js')
@@ -108,7 +108,7 @@ class ZettlrBody {
       </form>`
     )
 
-    let popup = new ZettlrPopup(this, $('.button.file-new'), cnt, (form) => {
+    popup($('.button.file-new'), cnt, (form) => {
       if (form) {
         this._renderer.requestNewFile(form[0].value, dir.hash)
       }
@@ -131,7 +131,7 @@ class ZettlrBody {
       </form>`
     )
 
-    let popup = new ZettlrPopup(this, $('.button.directory-new'), cnt, (form) => {
+    popup($('.button.directory-new'), cnt, (form) => {
       if (form) {
         this._renderer.requestNewDir(form[0].value, dir.hash)
       }
@@ -154,7 +154,7 @@ class ZettlrBody {
       </form>`
     )
 
-    let popup = new ZettlrPopup(this, $(`[data-hash=${dir.hash}]`), cnt, (form) => {
+    popup($(`[data-hash=${dir.hash}]`), cnt, (form) => {
       if (form) {
         this._renderer.requestNewVirtualDir(form[0].value, dir.hash)
       }
@@ -174,7 +174,7 @@ class ZettlrBody {
       </form>`
     )
 
-    let popup = new ZettlrPopup(this, elem, cnt, (form) => {
+    popup(elem, cnt, (form) => {
       if (form) {
         this._renderer.requestDirRename(form[0].value, dir.hash)
       }
@@ -204,7 +204,7 @@ class ZettlrBody {
       </form>`
     )
 
-    let popup = new ZettlrPopup(this, elem, cnt, (form) => {
+    popup(elem, cnt, (form) => {
       if (form) {
         this._renderer.requestFileRename(form[0].value, file.hash)
       }
@@ -241,7 +241,7 @@ class ZettlrBody {
 
     cnt += `</table>`
 
-    return new ZettlrPopup(this, $('#toolbar .file-info'), cnt)
+    return popup($('#toolbar .file-info'), cnt)
   }
 
   /**
@@ -249,7 +249,7 @@ class ZettlrBody {
     */
   showRecentDocuments () {
     if (this._recentDocs.length === 0) {
-      return new ZettlrPopup(this, $('#toolbar .recent-docs'), '<p>' + trans('gui.no_recent_docs') + '</p>')
+      return popup($('#toolbar .recent-docs'), '<p>' + trans('gui.no_recent_docs') + '</p>')
     }
 
     let cnt = '<div class="recent-docs">\n'
@@ -258,12 +258,12 @@ class ZettlrBody {
     }
     cnt += '</div>'
 
-    let popup = new ZettlrPopup(this, $('#toolbar .recent-docs'), cnt)
+    let p = popup($('#toolbar .recent-docs'), cnt)
 
     $('.popup .recent-docs a').click((e) => {
       let hash = $(e.target).attr('data-hash')
       this._renderer.requestFile(hash)
-      popup.close()
+      p.close()
     })
   }
 
@@ -406,7 +406,7 @@ class ZettlrBody {
       </div>
       `
     )
-    let popup = new ZettlrPopup(this, $('.button.share'), cnt)
+    let p = popup($('.button.share'), cnt)
 
     $('.btn-share').click((e) => {
       // The revealjs-button doesn't trigger an export, but the visibility
@@ -416,7 +416,7 @@ class ZettlrBody {
         return
       }
       this.requestExport(e.target)
-      popup.close()
+      p.close()
     })
   }
 
@@ -490,10 +490,10 @@ class ZettlrBody {
         <input type="text" placeholder="${trans('gui.replace_placeholder')}" value="" id="replaceWhat"><button id="replaceNext">${trans('gui.replace_label')}</button><button id="replaceAll">${trans('gui.replace_all_label')}</button></form>`
 
     // This must be a persistent popup
-    let popup = (new ZettlrPopup(this, $('.button.find'), cnt, (x) => {
+    popup($('.button.find'), cnt, (x) => {
       // Remove search cursor once the popup is closed
       this._renderer.getEditor().stopSearch()
-    })).makePersistent()
+    }).makePersistent()
 
     $('#searchWhat').on('keyup', (e) => {
       if (e.which === 13) { // Enter
@@ -558,7 +558,7 @@ class ZettlrBody {
         <a href="#" class="insertFootnote">${trans('gui.formatting.footnote')}</a>
         <a href="#" class="removeFootnote">${trans('gui.formatting.remove_footnote')}</a>
         </div>`
-    let popup = new ZettlrPopup(this, $('.button.formatting'), cnt)
+    let p = popup($('.button.formatting'), cnt)
 
     $('.formatting #header-formatting').on('mousemove', (e) => {
       let elem = $(e.target)
@@ -593,7 +593,7 @@ class ZettlrBody {
     $('.formatting a').click((e) => {
       $('.formatting span').removeClass('active')
       this._renderer.handleEvent('cm-command', e.target.className)
-      popup.close()
+      p.close()
     })
   }
 

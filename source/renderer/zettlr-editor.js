@@ -14,7 +14,7 @@
 */
 
 const path = require('path')
-const ZettlrPopup = require('./zettlr-popup.js')
+const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const tippy = require('tippy.js')
 const { clipboard } = require('electron')
@@ -587,7 +587,7 @@ class ZettlrEditor {
     cnt += `<textarea id="footnote-edit-textarea">${line.text.substr(5 + ref.length)}</textarea>`
     cnt += '</div>'
 
-    let popup = new ZettlrPopup(this, elem, cnt)
+    let p = popup(elem, cnt)
 
     // Focus the textarea immediately.
     $('#footnote-edit-textarea').focus()
@@ -600,7 +600,7 @@ class ZettlrEditor {
         let sc = this._cm.getSearchCursor(line.text, { 'line': 0, 'ch': 0 })
         sc.findNext()
         sc.replace(newtext)
-        popup.close()
+        p.close()
       }
     })
   }

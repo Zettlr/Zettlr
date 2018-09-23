@@ -31,6 +31,7 @@
 - Changes to `ZettlrWindow` to create windows using programmatical boundaries.
 - Updated the image finding regex again.
 - Reorganised the font families in the less resources.
+- The popup is now much simpler to call.
 
 # 0.19.0
 

@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-const ZettlrPopup = require('./zettlr-popup.js')
+const popup = require('./zettlr-popup.js')
 const { trans } = require('../common/lang/i18n.js')
 const { localiseNumber } = require('../common/zettlr-helpers.js')
 
@@ -101,8 +101,7 @@ class ZettlrStatsView {
       cnt += `<p><strong>${trans('gui.avg_not_reached')}</strong></p>`
     }
 
-    let popup = new ZettlrPopup(this, this._toolbarbutton, cnt, (f) => {
-    })
+    popup(this._toolbarbutton, cnt)
   }
 }
 

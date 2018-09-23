@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const ZettlrPopup = require('./zettlr-popup.js')
+const popup = require('./zettlr-popup.js')
 
 const { trans } = require('../common/lang/i18n.js')
 
@@ -185,7 +185,7 @@ class ZettlrPomodoro {
     // Display the small settings popup
     if (this._pref == null) {
       if (!this.isRunning()) {
-        this._pref = new ZettlrPopup(this, $('.button.pomodoro'), this._form, (form) => {
+        this._pref = popup($('.button.pomodoro'), this._form, (form) => {
           // Callback
           this._pref = null
           if (!form) {
@@ -217,7 +217,7 @@ class ZettlrPomodoro {
           sec = '0' + sec
         }
         let time = Math.floor((this._phase.max - this._phase.cur) / 60) + ':' + sec
-        this._pref = new ZettlrPopup(this, $('.button.pomodoro'), $('<div class="pomodoro">').html(
+        this._pref = popup($('.button.pomodoro'), $('<div class="pomodoro">').html(
           `<p><span id="pomodoro-phase-type">${trans('pomodoro.phase.' + this._phase.type)}</span></p>
           <p><span id="pomodoro-time-remaining">${time}</span></p>
           <button id="pomodoro-stop-button">${trans('pomodoro.stop')}</button>`

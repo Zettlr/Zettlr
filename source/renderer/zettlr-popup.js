@@ -30,13 +30,11 @@
 class ZettlrPopup {
   /**
     * Display the popup
-    * @param {Mixed} parent          The object that called this popup
     * @param {jQuery} elem            The DOM element to which the popup should bind itself.
     * @param {Mixed} content         The content of the popup (either jQuery or text)
     * @param {Function} [callback=null] A callback to be called when the popup is closed.
     */
-  constructor (parent, elem, content, callback = null) {
-    this._parent = parent
+  constructor (elem, content, callback = null) {
     this._cnt = content // Should contain a jQuery object
     this._callback = callback // Function to be called on close
     this._elem = elem
@@ -194,4 +192,8 @@ class ZettlrPopup {
   }
 }
 
-module.exports = ZettlrPopup
+function popup (element, content, callback = null) {
+  return new ZettlrPopup(element, content, callback)
+}
+
+module.exports = popup

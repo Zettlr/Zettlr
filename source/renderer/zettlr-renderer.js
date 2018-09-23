@@ -21,7 +21,7 @@ const ZettlrBody = require('../zettlr-body.js')
 const ZettlrOverlay = require('../zettlr-overlay.js')
 const ZettlrToolbar = require('../zettlr-toolbar.js')
 const ZettlrPomodoro = require('../zettlr-pomodoro.js')
-const ZettlrPopup = require('../zettlr-popup.js')
+const popup = require('../zettlr-popup.js')
 const ZettlrStatsView = require('../zettlr-stats-view.js')
 const ZettlrAttachments = require('../zettlr-attachments.js')
 
@@ -289,8 +289,8 @@ class ZettlrRenderer {
           .addClass('toc-link')
       )
     }
-    let popup = new ZettlrPopup(this, $('.button.show-toc'), cnt, (f) => {
-    })
+
+    popup($('.button.show-toc'), cnt)
 
     // On click jump to line
     $('.toc-link').click((event) => {
