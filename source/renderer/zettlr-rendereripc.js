@@ -62,8 +62,8 @@ class ZettlrRendererIPC {
         }
         // We will send a synchronous event to the main process in order to
         // immediately receive the config value we need. Basically we are pulling
-        // the get()-handler from main using the "remote" feature, but we'll implement
-        // it ourselves.
+        // the get()-handler from main using the "remote" feature, but we'll
+        // implement it ourselves.
         return this._ipc.sendSync('config', key)
       }
     }
@@ -341,42 +341,6 @@ class ZettlrRendererIPC {
       // Show the format option table
       case 'formatting':
         this._app.getBody().displayFormatting()
-        break
-
-      case 'config':
-        switch (cnt.key) {
-          case 'darkTheme':
-          // Will only be received once, so simply "toggle" from initial
-          // light theme to dark
-            if (cnt.value) {
-              this._app.toggleTheme()
-            }
-            break
-          case 'snippets':
-            // Will only be received once; if true toggle from initial "false"
-            // state.
-            if (cnt.value) {
-              this._app.getPreview().toggleSnippets()
-            }
-            break
-          case 'app_lang':
-            this._app.setLocale(cnt.value)
-            break
-          case 'muteLines':
-            this._app.getEditor().setMuteLines(cnt.value)
-            break
-          case 'combinerState':
-            if (cnt.value === 'expanded') {
-              $('#editor').addClass('collapsed')
-              $('#combiner').addClass('expanded')
-            } else if (cnt.value === 'collapsed') {
-              $('#editor').removeClass('collapsed')
-              $('#combiner').removeClass('expanded')
-            }
-            break
-          case 'zkn':
-            this._app.getEditor().getEditor().setOption('zkn', cnt.value)
-        }
         break
 
       // SPELLCHECKING EVENTS

@@ -258,7 +258,6 @@ class ZettlrConfig {
     if (!this.config.uuid) {
       this.config.uuid = uuid('com.zettlr.app', uuid.DNS)
     }
-    console.log('Application ID: ' + this.config.uuid)
 
     return this
   }

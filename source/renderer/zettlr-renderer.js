@@ -73,7 +73,9 @@ class ZettlrRenderer {
     $('body').addClass(process.platform)
 
     // Init the complete list of objects that we need
+    console.log(`Initiating IPC ...`)
     this._ipc = new ZettlrRendererIPC(this)
+    console.log(`IPC initiated!`)
     this._directories = new ZettlrDirectories(this)
     this._preview = new ZettlrPreview(this)
     this._editor = new ZettlrEditor(this)
@@ -95,13 +97,36 @@ class ZettlrRenderer {
   init () {
     this._overlay.show(trans('init.welcome'))
 
-    // First request the configuration
-    this._ipc.send('config-get', 'darkTheme')
-    this._ipc.send('config-get', 'snippets')
-    this._ipc.send('config-get', 'app_lang')
-    this._ipc.send('config-get', 'muteLines')
-    this._ipc.send('config-get', 'combinerState')
-    this._ipc.send('config-get', 'zkn')
+    // We have to carve out the initial configuration of the renderer from the
+    // first tick of the renderer event loop, because at this early stage (init
+    // is called right after the DOM has loaded) the ipc is not yet ready. This
+    // short delay gives us the time the IPC needs to get ready.
+    setTimeout(() => {
+      // Set dark theme
+      if (global.config.get('darkTheme')) { this.toggleTheme() }
+      // Set snippets
+      if (global.config.get('snippets')) { this.getPreview().toggleSnippets() }
+      // Receive the application language
+      this.setLocale(global.config.get('app_lang'))
+      // muteLines initial setting
+      this.getEditor().setMuteLines(global.config.get('muteLines'))
+
+      // Set the correct combiner state
+      switch (global.config.get('combinerState')) {
+        case 'expanded':
+          $('#editor').addClass('collapsed')
+          $('#combiner').addClass('expanded')
+          break
+        case 'collapsed':
+          $('#editor').removeClass('collapsed')
+          $('#combiner').removeClass('expanded')
+          break
+      }
+
+      // And last but not least the zkn options
+      this.getEditor().getEditor().setOption('zkn', global.config.get('zkn'))
+    }, 10) // 10ms should suffice - the number is irrelevant. The important part is that it's out of the first tick of the app.
+
     this._ipc.send('get-tags') // Receive initial list of tags to display
 
     // Request a first batch of files
