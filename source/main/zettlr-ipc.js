@@ -332,15 +332,6 @@ class ZettlrIPC {
         this.send('set-tags', this._app.getTags().get())
         break
 
-      // Renderer wants a configuration value
-      case 'config-get':
-        this.send('config', { 'key': cnt, 'value': this._app.getConfig().get(cnt) })
-        break
-
-      case 'config-get-env':
-        this.send('config', { 'key': cnt, 'value': this._app.getConfig().getEnv(cnt) })
-        break
-
       // SPELLCHECKING EVENTS
       case 'typo-request-lang':
         // Send the renderer all activated spellchecking dictionaries.

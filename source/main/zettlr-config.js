@@ -20,7 +20,6 @@ const fs = require('fs')
 const path = require('path')
 const uuid = require('uuid/v5')
 const { app } = require('electron')
-const commandExists = require('command-exists').sync // Does a given shell command exist?
 const { ignoreFile, isDir, isDictAvailable } = require('../common/zettlr-helpers.js')
 const COMMON_DATA = require('../common/data.json')
 
@@ -42,10 +41,7 @@ class ZettlrConfig {
     this.config = null
 
     // Environment variables
-    this.env = {
-      'pandoc': false,
-      'xelatex': false
-    }
+    this.env = {}
 
     // Additional environmental paths (for locating LaTeX and Pandoc)
     if (process.platform === 'win32') {
@@ -228,16 +224,6 @@ class ZettlrConfig {
       }
     }
 
-    // Now check the availability of the pandoc and xelatex commands.
-    if (commandExists('pandoc')) {
-      this.env.pandoc = true
-    }
-
-    // Check xelatex availability (PDF exports)
-    if (commandExists('xelatex')) {
-      this.env.xelatex = true
-    }
-
     // This function returns the platform specific template dir for pandoc
     // template files. This is based on the electron-builder options
     // See https://www.electron.build/configuration/contents#extraresources
@@ -252,6 +238,7 @@ class ZettlrConfig {
       dir = path.join(dir, 'resources')
     }
 
+    // Write the templateDir into the environment variables
     this.env.templateDir = path.join(dir, 'pandoc')
 
     // Finally, check whether or not a UUID exists, and, if not, generate one.
