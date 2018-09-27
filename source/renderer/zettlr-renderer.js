@@ -73,9 +73,7 @@ class ZettlrRenderer {
     $('body').addClass(process.platform)
 
     // Init the complete list of objects that we need
-    console.log(`Initiating IPC ...`)
     this._ipc = new ZettlrRendererIPC(this)
-    console.log(`IPC initiated!`)
     this._directories = new ZettlrDirectories(this)
     this._preview = new ZettlrPreview(this)
     this._editor = new ZettlrEditor(this)
@@ -1049,5 +1047,3 @@ class ZettlrRenderer {
    */
   isModified () { return !this.getEditor().isClean() }
 } // END CLASS
-
-module.exports = ZettlrRenderer

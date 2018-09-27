@@ -684,7 +684,7 @@ class ZettlrEditor {
     */
   startSearch (term) {
     // Create a new search cursor
-    this._searchCursor = this._cm.getSearchCursor(term, this._cm.getCursor())
+    this._searchCursor = this._cm.getSearchCursor(new RegExp(term, 'i'), this._cm.getCursor())
     this._currentLocalSearch = term
 
     // Find all matches

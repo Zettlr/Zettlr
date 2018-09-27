@@ -8,19 +8,22 @@
     .title {
         // Title bar options
         cursor:-webkit-grab;
-        clear:both;
         height:@title-bar-height;
+        display: flex;
+        padding:0;
+        margin:0;
 
         h1 {
-            text-align: center;
+            flex-grow:5;
             display: inline-block;
-            padding: 0.2em;
+            padding: 0.2em 1em;
             white-space: nowrap;
             max-width: 90%;
             overflow: hidden;
         }
 
-        .close, .find {
+        .close {
+          flex-grow: 1;
             &::before {
                 font-family: @font-icon;
                 font-weight:light;
@@ -40,7 +43,25 @@
             padding:0.1em;
         }
 
-        .find::before { content: '\f0c5'; font-weight: normal; }
+        .find {
+          flex-grow:4;
+          display: inline-block;
+          width:30%;
+          float: right;
+          height:100%;
+          padding:0;
+          margin:0;
+
+          input {
+            width:100%;
+            padding:0.2em 1em;
+            margin:0;
+            outline: none;
+            border:none;
+            height: 100%;
+            line-height: @title-bar-height;
+          }
+        }
     }
 
     .body .CodeMirror {

@@ -84,6 +84,7 @@ class ZettlrQuicklook {
     this._file = file
     this._cm = null
     this._window = null
+    this._findTimeout = null // Timeout to begin search after
     this._bodyHeight = 0 // Contains the height of the element, in case it was minimized
     this._searchcursor = null // The search cursor used for searching
     this._currentLocalSearch = '' // Used to not re-start a search everytime
@@ -91,51 +92,48 @@ class ZettlrQuicklook {
     this._scrollbarAnnotations = null // Contains an object to mark search results on the scrollbar
     this._load()
 
-    let qlinstance = this
+    // Focus the search bar
+    CodeMirror.commands.focusFind = (cm) => { this._window.find('#searchWhat').first().focus() }
 
-    // Simply show the popup window for searching
-    CodeMirror.commands.showFind = (cm) => {
-      if (cm.getOption('disableInput')) return CodeMirror.Pass
-      let elem = qlinstance._window.find('.find').first()
-      let cnt = `<form class="search"><input type="text" placeholder="${trans('gui.find_placeholder')}" value="" id="searchWhat"><button id="searchNext">${trans('gui.find_label')}</button></form>`
-      popup(elem, cnt, (x) => {
-        // Remove search cursor once the popup is closed
-        qlinstance.stopSearch() // TODO
-      }).makePersistent()
-
-      $('#searchWhat').on('keydown', (e) => {
-        console.log(e.which) // TODO this shit with searching does not work yet
-        if (e.which === 13) { // Enter
-          e.preventDefault()
-        }
-      })
-
-      $('#searchNext').click((e) => {
-        qlinstance.searchNext($('#searchWhat').val())
-      })
-    }
-
-    // Now show the QL Window
-    this.show()
+    this._window.find('#searchWhat').first().on('keydown', (e) => {
+      if (e.which === 13) {
+        e.preventDefault()
+        e.stopPropagation()
+        // Search next immediately because the term is the same and the user
+        // wants to cycle through the results.
+        this.searchNext($('#searchWhat').val())
+      } else {
+        // Set a timeout with a short delay to not make the app feel laggy
+        clearTimeout(this._findTimeout)
+        this._findTimeout = setTimeout(() => {
+          this.searchNext($('#searchWhat').val())
+        }, 300) // 300ms delay
+      }
+    })
 
     // Finally create the annotateScrollbar object to be able to annotate the scrollbar with search results.
     this._scrollbarAnnotations = this._cm.annotateScrollbar('sb-annotation')
     this._scrollbarAnnotations.update([])
+
+    // Now show the QL Window
+    this.show()
   }
 
   /**
     * Load the Quicklook template and prepare everything
     */
   _load () {
-    this._window = $(fs.readFileSync(path.join(__dirname, 'assets', 'tpl', 'quicklook.htm'), 'utf8'))
+    let qlcontent = fs.readFileSync(path.join(__dirname, 'assets', 'tpl', 'quicklook.htm'), 'utf8')
+    qlcontent = qlcontent.replace('%FIND%', trans('gui.find_placeholder'))
+    this._window = $(qlcontent)
 
     this._cm = CodeMirror.fromTextArea(this._window.find('textarea')[0], {
       readOnly: true,
       mode: 'multiplex',
       lineWrapping: true,
       extraKeys: {
-        'Cmd-F': 'showFind',
-        'Ctrl-F': 'showFind'
+        'Cmd-F': 'focusFind',
+        'Ctrl-F': 'focusFind'
       },
       theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
       cursorBlinkRate: -1 // Hide the cursor
@@ -286,6 +284,12 @@ class ZettlrQuicklook {
 
   // SEARCH FUNCTIONS STOLEN FROM THE ZETTLREDITOR CLASS
   searchNext (term) {
+    if (term === '') {
+      // Stop search if the field is empty
+      this.stopSearch()
+      return
+    }
+
     if (this._searchCursor == null || this._currentLocalSearch !== term) {
       // (Re)start search in case there was none or the term has changed
       this.startSearch(term)
@@ -313,7 +317,7 @@ class ZettlrQuicklook {
     */
   startSearch (term) {
     // Create a new search cursor
-    this._searchCursor = this._cm.getSearchCursor(term, this._cm.getCursor())
+    this._searchCursor = this._cm.getSearchCursor(new RegExp(term, 'i'), this._cm.getCursor())
     this._currentLocalSearch = term
 
     // Find all matches
