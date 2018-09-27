@@ -49,6 +49,24 @@ class ZettlrRendererIPC {
     })
 
     this._bufferedMessage = null
+
+    // What we are doing here is setting up a special communications channel
+    // with the main process to receive config values. This way it is much
+    // easier to access the configuration from throughout the whole renderer
+    // process.
+    global.config = {
+      get: (key) => {
+        if (typeof key !== 'string') {
+          console.error('Cannot request config value - key was not a string.')
+          return undefined // On error return undefined
+        }
+        // We will send a synchronous event to the main process in order to
+        // immediately receive the config value we need. Basically we are pulling
+        // the get()-handler from main using the "remote" feature, but we'll implement
+        // it ourselves.
+        return this._ipc.sendSync('config', key)
+      }
+    }
   }
 
   /**

@@ -33,6 +33,8 @@
 - Reorganised the font families in the less resources.
 - The popup is now much simpler to call.
 - Removed instantiation from both ZettlrImport and ZettlrExport.
+- All Zettlr installations now receive a unique UUID.
+- Using `global.config.get` it is now possible in the renderer to access the configuration programmatically without the need to send events.
 
 # 0.19.0
 

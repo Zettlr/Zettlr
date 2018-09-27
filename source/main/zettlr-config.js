@@ -18,6 +18,7 @@
 
 const fs = require('fs')
 const path = require('path')
+const uuid = require('uuid/v5')
 const { app } = require('electron')
 const commandExists = require('command-exists').sync // Does a given shell command exist?
 const { ignoreFile, isDir, isDictAvailable } = require('../common/zettlr-helpers.js')
@@ -116,7 +117,8 @@ class ZettlrConfig {
       // Language
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.
       'app_lang': this.getLocale(),
-      'debug': false
+      'debug': false,
+      'uuid': null // The app's unique anonymous identifier
     }
 
     // Load the configuration
@@ -251,6 +253,12 @@ class ZettlrConfig {
     }
 
     this.env.templateDir = path.join(dir, 'pandoc')
+
+    // Finally, check whether or not a UUID exists, and, if not, generate one.
+    if (!this.config.uuid) {
+      this.config.uuid = uuid('com.zettlr.app', uuid.DNS)
+    }
+    console.log('Application ID: ' + this.config.uuid)
 
     return this
   }

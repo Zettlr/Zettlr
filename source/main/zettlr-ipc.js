@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-const {trans} = require('../common/lang/i18n.js')
+const { trans } = require('../common/lang/i18n.js')
 
 /**
  * This class acts as the interface between the main process and the renderer.
@@ -39,6 +39,14 @@ class ZettlrIPC {
         })
         return // Don't dispatch further
       }
+
+      // Listen for synchronous messages from the renderer process to access
+      // config options.
+      this._ipc.on('config', (event, key) => {
+        // We have received a config event -> simply return back the respective
+        // key.
+        event.returnValue = global.config.get(key)
+      })
 
       // In all other occasions omit the event.
       this.dispatch(arg)

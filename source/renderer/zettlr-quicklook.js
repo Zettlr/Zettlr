@@ -15,18 +15,55 @@
 
 const fs = require('fs')
 const path = require('path')
+const popup = require('./zettlr-popup.js')
+const { trans } = require('../common/lang/i18n.js')
 
 // CodeMirror related includes
-// First codemirror addons
-require('codemirror/addon/mode/overlay')
-require('codemirror/addon/search/search')
-require('codemirror/addon/search/searchcursor')
-require('codemirror/addon/search/jump-to-line')
-require('codemirror/addon/dialog/dialog.js')
 
-// Modes
+// 1. Mode addons
+require('codemirror/addon/mode/overlay')
+require('codemirror/addon/mode/multiplex') // Multiplex needed for syntax highlighting
+
+// 2. Editing addons
+require('codemirror/addon/edit/continuelist')
+require('codemirror/addon/edit/closebrackets')
+require('./assets/codemirror/indentlist.js')
+
+// 3. Display addons
+require('codemirror/addon/display/fullscreen')
+
+// 4. Search addons
+require('codemirror/addon/search/searchcursor')
+require('codemirror/addon/scroll/annotatescrollbar')
+
+// 5. Central modes
 require('codemirror/mode/markdown/markdown')
 require('codemirror/mode/gfm/gfm')
+require('codemirror/mode/stex/stex')
+
+// 6. Code highlighting modes
+require('codemirror/mode/javascript/javascript')
+require('codemirror/mode/clike/clike')
+require('codemirror/mode/css/css')
+require('codemirror/mode/php/php')
+require('codemirror/mode/python/python')
+require('codemirror/mode/r/r')
+require('codemirror/mode/ruby/ruby')
+require('codemirror/mode/sql/sql')
+require('codemirror/mode/swift/swift')
+require('codemirror/mode/yaml/yaml')
+
+// Zettlr specific addons
+require('./assets/codemirror/zettlr-plugin-markdown-shortcuts.js')
+require('./assets/codemirror/zettlr-modes-spellchecker-zkn.js')
+require('./assets/codemirror/zettlr-plugin-footnotes.js')
+require('./assets/codemirror/zettlr-plugin-render-images.js')
+require('./assets/codemirror/zettlr-plugin-render-links.js')
+require('./assets/codemirror/zettlr-plugin-render-tasks.js')
+require('./assets/codemirror/zettlr-plugin-render-iframes.js')
+require('./assets/codemirror/zettlr-plugin-markdown-header-classes.js')
+
+// Finally CodeMirror itself
 const CodeMirror = require('codemirror')
 
 /**
@@ -48,8 +85,42 @@ class ZettlrQuicklook {
     this._cm = null
     this._window = null
     this._bodyHeight = 0 // Contains the height of the element, in case it was minimized
+    this._searchcursor = null // The search cursor used for searching
+    this._currentLocalSearch = '' // Used to not re-start a search everytime
+    this._markedResults = [] // Stores marked results in case of a search
+    this._scrollbarAnnotations = null // Contains an object to mark search results on the scrollbar
     this._load()
+
+    let qlinstance = this
+
+    // Simply show the popup window for searching
+    CodeMirror.commands.showFind = (cm) => {
+      if (cm.getOption('disableInput')) return CodeMirror.Pass
+      let elem = qlinstance._window.find('.find').first()
+      let cnt = `<form class="search"><input type="text" placeholder="${trans('gui.find_placeholder')}" value="" id="searchWhat"><button id="searchNext">${trans('gui.find_label')}</button></form>`
+      popup(elem, cnt, (x) => {
+        // Remove search cursor once the popup is closed
+        qlinstance.stopSearch() // TODO
+      }).makePersistent()
+
+      $('#searchWhat').on('keydown', (e) => {
+        console.log(e.which) // TODO this shit with searching does not work yet
+        if (e.which === 13) { // Enter
+          e.preventDefault()
+        }
+      })
+
+      $('#searchNext').click((e) => {
+        qlinstance.searchNext($('#searchWhat').val())
+      })
+    }
+
+    // Now show the QL Window
     this.show()
+
+    // Finally create the annotateScrollbar object to be able to annotate the scrollbar with search results.
+    this._scrollbarAnnotations = this._cm.annotateScrollbar('sb-annotation')
+    this._scrollbarAnnotations.update([])
   }
 
   /**
@@ -63,8 +134,8 @@ class ZettlrQuicklook {
       mode: 'multiplex',
       lineWrapping: true,
       extraKeys: {
-        'Cmd-F': 'findPersistent',
-        'Ctrl-F': 'findPersistent'
+        'Cmd-F': 'showFind',
+        'Ctrl-F': 'showFind'
       },
       theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
       cursorBlinkRate: -1 // Hide the cursor
@@ -103,6 +174,11 @@ class ZettlrQuicklook {
     this._window.find('.close').first().on('click', (e) => {
       e.stopPropagation()
       this.close()
+    })
+
+    this._window.find('.find').first().on('click', (e) => {
+      e.stopPropagation()
+      this._cm.execCommand('showFind')
     })
 
     this._window.find('.title').first().on('dblclick', (e) => {
@@ -206,6 +282,127 @@ class ZettlrQuicklook {
     this._cm = null
     this._window = null
     this._body.qlsplice(this) // Remove from ql-list in ZettlrBody
+  }
+
+  // SEARCH FUNCTIONS STOLEN FROM THE ZETTLREDITOR CLASS
+  searchNext (term) {
+    if (this._searchCursor == null || this._currentLocalSearch !== term) {
+      // (Re)start search in case there was none or the term has changed
+      this.startSearch(term)
+    }
+
+    // We need a regex because only this way we can case-insensitively search
+    term = new RegExp(term, 'i')
+
+    if (this._searchCursor.findNext()) {
+      this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
+    } else {
+      // Start from beginning
+      this._searchCursor = this._cm.getSearchCursor(term, { 'line': 0, 'ch': 0 })
+      if (this._searchCursor.findNext()) {
+        this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
+      }
+    }
+  }
+
+  /**
+    * Starts the search by preparing a search cursor we can use to forward the
+    * search.
+    * @param  {String} term The string to start a search for
+    * @return {ZettlrEditor}      This for chainability.
+    */
+  startSearch (term) {
+    // Create a new search cursor
+    this._searchCursor = this._cm.getSearchCursor(term, this._cm.getCursor())
+    this._currentLocalSearch = term
+
+    // Find all matches
+    let tRE = new RegExp(term, 'gi')
+    let res = []
+    let match = null
+    for (let i = 0; i < this._cm.lineCount(); i++) {
+      let l = this._cm.getLine(i)
+      tRE.lastIndex = 0
+      while ((match = tRE.exec(l)) != null) {
+        res.push({
+          'from': { 'line': i, 'ch': match.index },
+          'to': { 'line': i, 'ch': match.index + term.length }
+        })
+      }
+    }
+
+    // Mark these in document and on the scroll bar
+    this._mark(res)
+
+    return this
+  }
+
+  /**
+    * Stops the search by destroying the search cursor
+    * @return {ZettlrEditor}   This for chainability.
+    */
+  stopSearch () {
+    this._searchCursor = null
+    this.unmarkResults()
+
+    return this
+  }
+
+  // MARK FUNCTIONS ALSO STOLEN FROM ZETTLREDITOR
+
+  /**
+    * Highlights search results if any given.
+    * @param {ZettlrFile} [file=this._renderer.getCurrentFile()] The file to retrieve and mark results for
+    */
+  markResults (file = this._renderer.getCurrentFile()) {
+    if (!file) {
+      return
+    }
+
+    if (this._renderer.getPreview().hasResult(file.hash)) {
+      let res = this._renderer.getPreview().hasResult(file.hash).result
+      this._mark(res)
+    }
+  }
+
+  /**
+    * Why do you have a second _mark-function, when there is markResults?
+    * Because the local search also generates search results that have to be
+    * marked without retrieving anything from the ZettlrPreview.
+    * @param  {Array} res An Array containing all positions to be rendered.
+    */
+  _mark (res) {
+    if (!res) {
+      return
+    }
+
+    this.unmarkResults() // Clear potential previous marks
+    let sbannotate = []
+    for (let result of res) {
+      if (!result.from || !result.to) {
+        // One of these was undefined. And somehow this if-clause has made
+        // searching approximately three times faster. Crazy.
+        continue
+      }
+      sbannotate.push({ 'from': result.from, 'to': result.to })
+      this._markedResults.push(this._cm.markText(result.from, result.to, { className: 'search-result' }))
+    }
+
+    this._scrollbarAnnotations.update(sbannotate)
+  }
+
+  /**
+    * Removes all marked search results
+    */
+  unmarkResults () {
+    // Simply remove all markers
+    for (let mark of this._markedResults) {
+      mark.clear()
+    }
+
+    this._scrollbarAnnotations.update([])
+
+    this._markedResults = []
   }
 }
 

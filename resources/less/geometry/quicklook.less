@@ -20,7 +20,7 @@
             overflow: hidden;
         }
 
-        .close {
+        .close, .find {
             &::before {
                 font-family: @font-icon;
                 font-weight:light;
@@ -39,6 +39,8 @@
             border-radius:50px;
             padding:0.1em;
         }
+
+        .find::before { content: '\f0c5'; font-weight: normal; }
     }
 
     .body .CodeMirror {

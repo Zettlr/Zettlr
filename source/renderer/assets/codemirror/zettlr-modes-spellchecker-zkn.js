@@ -31,14 +31,21 @@
       token: function (stream) {
         var ch = stream.peek()
         var word = ''
-        let ls = config.zkn.linkStart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
-        let le = config.zkn.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+        let ls = ''
+        let le = ''
+        if (config.hasOwnProperty('zkn') && config.zkn.hasOwnProperty('linkStart') && config.zkn.hasOwnProperty('linkEnd')) {
+          // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
+          ls = config.zkn.linkStart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+          le = config.zkn.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+        }
+
         let zknLinkRE = new RegExp(ls + '.+?' + le)
 
         // Exclude zkn-links (because otherwise CodeMirror will create
         // multiple HTML elements _inside_ the link block, which will
         // render it way more difficult to extract the search terms.)
-        if (stream.match(zknLinkRE)) {
+        if ((ls !== '') && stream.match(zknLinkRE)) {
+          // Don't check on links if this is impossible
           return null
         }
 
@@ -105,10 +112,17 @@
   CodeMirror.defineMode('markdown-zkn', function (config, parserConfig) {
     var markdownZkn = {
       token: function (stream, state) {
-        let zknIDRE = new RegExp(config.zkn.idRE)
-        // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
-        let ls = config.zkn.linkStart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
-        let le = config.zkn.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+        let zknIDRE = ''
+        if (config.hasOwnProperty('zkn') && config.zkn.hasOwnProperty('idRE')) {
+          zknIDRE = new RegExp(config.zkn.idRE)
+        }
+        let ls = ''
+        let le = ''
+        if (config.hasOwnProperty('zkn') && config.zkn.hasOwnProperty('linkStart') && config.zkn.hasOwnProperty('linkEnd')) {
+          // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
+          ls = config.zkn.linkStart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+          le = config.zkn.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+        }
         let zknLinkRE = new RegExp(ls + '.+?' + le)
 
         // This mode should also handle tables, b/c they are rather simple to detect.
@@ -124,14 +138,14 @@
         }
 
         // Second: zkn links. This is MUCH easier than I thought :o
-        if (stream.match(zknLinkRE)) {
+        if ((le !== '') && stream.match(zknLinkRE)) {
           return 'zkn-link'
         }
 
         // Third: IDs (The upside of this is that IDs _inside_ links will
         // be treated as _links_ and not as "THE" ID of the file as long
         // as the definition of zlkn-links is above this matcher.)
-        if (stream.match(zknIDRE)) {
+        if ((zknIDRE !== '') && stream.match(zknIDRE)) {
           return 'zkn-id'
         }
 

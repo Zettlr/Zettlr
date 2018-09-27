@@ -120,7 +120,8 @@
         "showdown": "^1.8.6",
         "tippy.js": "^2.5.3",
         "typo": "^1.0.6",
-        "typo-js": "^1.0.3"
+        "typo-js": "^1.0.3",
+        "uuid": "^3.3.2"
     },
     "devDependencies": {
         "chalk": "^2.4.1",

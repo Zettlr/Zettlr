@@ -133,6 +133,7 @@ class ZettlrDialog {
     switch (dialog) {
       case 'about':
         replacements.push('%PKGVER%|' + require('../package.json').version)
+        replacements.push('%UUID%|' + global.config.get('uuid'))
         break
 
       case 'preferences':
