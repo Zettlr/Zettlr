@@ -18,11 +18,17 @@
                     %APP_LANG%
                 </select>
                 <div>
+                  <label class="cb-toggle">
                     <input type="checkbox" name="pref-darkTheme" value="yes" id="pref-darkTheme" %DARK%>
+                    <div class="toggle"></div>
+                  </label>
                     <label for="pref-darkTheme">%i18n.preferences.nightmode%</label>
                 </div>
                 <div>
+                  <label class="cb-toggle">
                     <input type="checkbox" name="pref-snippets" value="yes" id="pref-snippets" %SNIPPETS%>
+                    <div class="toggle"></div>
+                  </label>
                     <label for="pref-snippets">%i18n.preferences.snippets%</label>
                 </div>
                 <hr>
@@ -62,7 +68,10 @@
                 <div class="clear"></div>
                 <hr>
                 <div>
+                  <label class="cb-toggle">
                     <input type="checkbox" name="pref-mute-lines" value="yes" id="pref-mute-lines" %MUTE_LINES%>
+                    <div class="toggle"></div>
+                  </label>
                     <label for="pref-mute-lines">%i18n.preferences.mute_lines%</label>
                 </div>
             </div>
@@ -83,11 +92,17 @@
                 <div>
                     <p>%i18n.preferences.export.stripping%</p>
                     <p>
+                      <label class="cb-toggle">
                         <input type="checkbox" name="pref-export-strip-id" value="yes" id="pref-export-strip-id" %EXPORT_STRIP_ID%>
+                        <div class="toggle"></div>
+                      </label>
                         <label for="pref-export-strip-id">%i18n.preferences.export.strip_id_label%</label>
                     </p>
                     <p>
+                      <label class="cb-toggle">
                         <input type="checkbox" name="pref-export-strip-tags" value="yes" id="pref-export-strip-tags" %EXPORT_STRIP_TAGS%>
+                        <div class="toggle"></div>
+                      </label>
                         <label for="pref-export-strip-tags">%i18n.preferences.export.strip_tags_label%</label>
                     </p>
                     <p>
@@ -106,22 +121,22 @@
             </div>
             <!-- Zettelkasten options -->
             <div id="prefs-tabs-zkn">
-              <div class="box-left">
+              <div class="box-left form-inline-buttons">
                 <label for="pref-zkn-free-id">%i18n.preferences.zkn.id_label%</label>
                 <input type="text" id="pref-zkn-free-id" value="%ZKN_ID%" name="pref-zkn-id-regex">
-                <button type="button" id="reset-id-regex">%i18n.preferences.zkn.reset_default_id%</button>
+                <button type="button" id="reset-id-regex" title="%i18n.preferences.zkn.reset_default_id%">&#9003;</button>
                 <hr>
                 <label for="pref-zkn-free-linkstart">%i18n.preferences.zkn.linkstart_label%</label>
                 <input type="text" id="pref-zkn-free-linkstart" value="%ZKN_LINKSTART%" name="pref-zkn-linkstart-regex">
-                <button type="button" id="reset-linkstart-regex">%i18n.preferences.zkn.reset_default_linkstart%</button>
+                <button type="button" id="reset-linkstart-regex" title="%i18n.preferences.zkn.reset_default_linkstart%">&#9003;</button>
                 <hr>
                 <label for="pref-zkn-free-linkend">%i18n.preferences.zkn.linkend_label%</label>
                 <input type="text" id="pref-zkn-free-linkend" value="%ZKN_LINKEND%" name="pref-zkn-linkend-regex">
-                <button type="button" id="reset-linkend-regex">%i18n.preferences.zkn.reset_default_linkend%</button>
+                <button type="button" id="reset-linkend-regex" title="%i18n.preferences.zkn.reset_default_linkend%">&#9003;</button>
                 <hr>
                 <label for="pref-zkn-id-gen">%i18n.preferences.zkn.id_generator_label%</label>
                 <input type="text" id="pref-zkn-id-gen" value="%ZKN_IDGEN%" name="pref-zkn-id-generator">
-                <button type="button" id="reset-id-generator">%i18n.preferences.zkn.reset_default_generator%</button>
+                <button type="button" id="reset-id-generator" title="%i18n.preferences.zkn.reset_default_generator%">&#9003;</button>
               </div>
               <div class="box-right">
                 <p>
@@ -163,7 +178,10 @@
                 <hr>
 
                 <div>
+                  <label class="cb-toggle">
                     <input type="checkbox" name="debug" value="yes" id="debug" %DEBUG%>
+                    <div class="toggle"></div>
+                  </label>
                     <label for="debug">%i18n.preferences.debug%</label>
                 </div>
             </div>
@@ -233,7 +251,9 @@ $('#reset-linkend-regex').on('click', (e) => {
 $('#reset-id-generator').on('click', (e) => {
   $('#pref-zkn-id-gen').val('%Y%M%D%h%m%s')
 })
+
 const { generateId } = require('../../common/zettlr-helpers.js')
+
 $('#generate-id').on('click', (e) => {
   let id = generateId($('#pref-zkn-id-gen').val())
   let re = new RegExp('^' + $('#pref-zkn-free-id').val() + '$')

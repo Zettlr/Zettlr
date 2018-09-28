@@ -13,17 +13,17 @@
         <button type="submit" id="pref-save">%i18n.preferences.save%</button>
         <button id="abort">%i18n.preferences.cancel%</button>
     </form>
-    <script>
-    function addTagLine()
-    {
-        $('#prefs-taglist').append(
-            `<div>
-            <input type="text" name="prefs-tags-name" placeholder="%i18n.tags.name_desc%">
-            <input type="color" name="prefs-tags-color" placeholder="%i18n.tags.color_desc%">
-            <input type="text" name="prefs-tags-desc" placeholder="%i18n.tags.desc_desc%">
-            <button type="button" onclick="$(this).parent().detach()">-</button>
-            </div>`
-        );
-    }
-    </script>
+<script>
+/* global $ */
+function addTagLine () {
+  $('#prefs-taglist').append(
+    `<div>
+        <input type="text" name="prefs-tags-name" placeholder="%i18n.tags.name_desc%">
+        <input type="color" name="prefs-tags-color" placeholder="%i18n.tags.color_desc%">
+        <input type="text" name="prefs-tags-desc" placeholder="%i18n.tags.desc_desc%">
+        <button type="button" onclick="$(this).parent().detach()">-</button>
+        </div>`
+  )
+}
+</script>
 </div>

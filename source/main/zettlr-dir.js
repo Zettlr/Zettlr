@@ -21,8 +21,8 @@ const ZettlrAttachment = require('./zettlr-attachment.js')
 const ZettlrProject = require('./zettlr-project.js')
 const ZettlrVirtualDirectory = require('./zettlr-virtual-directory.js')
 const ZettlrInterface = require('./zettlr-interface.js')
-const {shell} = require('electron')
-const {trans} = require('../common/lang/i18n.js')
+const { shell } = require('electron')
+const { trans } = require('../common/lang/i18n.js')
 
 // Include helpers
 const { hash, sort, generateName,

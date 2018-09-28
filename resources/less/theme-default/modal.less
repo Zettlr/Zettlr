@@ -1,6 +1,9 @@
 // Modal styles
 // These are loaded within the theme-main.less, because they won't change with
 // theme changing
+@cb-size: 36px;
+@cb-margin: 2px;
+
 .modal {
     background-color:rgba(0,0,0,.5);
 
@@ -37,31 +40,86 @@
 
         // Forms
 
-        label { color:@grey-4; }
+        label {
+          color:@grey-4;
+          margin-bottom:0.2em;
+          padding-bottom:0;
+        }
 
         input {
             line-height: 150%;
             font-size: inherit;
         }
 
-        select {
-            line-height: 200%;
-            font-size: inherit;
+        input[type="text"], input[type="number"], button, a.button, textarea, select {
+          line-height: 150%;
+          border: none;
+          border-radius: @border-radius;
+          padding: 2px 10px;
+          background-color: @grey-0;
+          color: @grey-5;
+          border-radius: @border-radius;
         }
 
-        textarea { border-radius: @border-radius; }
-
         button, a.button {
-            background-color:white;
-            color:black;
-            border:1px solid @grey-6;
-            transition:0.2s background-color ease;
-            text-decoration:none;
+          background-color: @grey-1;
+          color: @grey-7;
+          transition: 0.2s background-color ease;
+          &:hover { background-color:@green-selection; }
+        }
 
-            &:hover {
-                background-color:@green-selection;
-                transition:0.2s background-color ease;
+        // This class can be used for the combination of a label with an input
+        // text and a button (e.g. to reset). If applied to the parent container
+        // it will change the appearance of these three elements.
+        .form-inline-buttons {
+          label { display: block; margin-bottom:0.2em; }
+          input[type="text"] { width: 80%; margin:0; }
+          button, a.button { margin:0; }
+        }
+
+        // Apply this class to elements that should represent toggles instead of
+        // regular checkboxes.
+        .cb-toggle {
+          position: relative;
+          display: inline-block;
+          width: @cb-size;
+          height: @cb-size / 2;
+
+          input { display: none; }
+
+          .toggle {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: @grey-1;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: @cb-size / 3 - @cb-margin;
+
+            &:before {
+              position: absolute;
+              content: "";
+              height: @cb-size / 2 - @cb-margin * 2; // Fancy equations here!
+              width: @cb-size / 2 - @cb-margin * 2;
+              left: @cb-margin;
+              bottom: @cb-margin;
+              background-color: white;
+              -webkit-transition: .4s;
+              transition: .4s;
+              border-radius: 50%;
             }
+          }
+
+          input:checked + .toggle {
+            background-color: @green-0;
+          }
+
+          input:checked + .toggle:before {
+            transform: translateX(@cb-size / 2);
+          }
         }
 
         .changelog {
@@ -128,6 +186,7 @@
 
         input.dicts-list-search {
             border:1px solid @grey-2;
+            background-color: white;
             border-bottom:none;
             font-size: inherit;
             display:block;
