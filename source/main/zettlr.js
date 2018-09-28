@@ -951,6 +951,12 @@ class Zettlr {
       return null
     }
 
+    // We may have to cast the hash into a number, because stupid IPC doesn't care
+    // about whether we transmit a number or a string.
+    if (obj.hasOwnProperty('hash') && typeof obj.hash !== 'number') {
+      obj.hash = parseInt(obj.hash)
+    }
+
     let found = null
     for (let p of this.getPaths()) {
       found = p.findFile(obj)
@@ -972,6 +978,12 @@ class Zettlr {
       return null
     } else if (obj.hasOwnProperty('path') && obj.path == null) {
       return null
+    }
+
+    // We may have to cast the hash into a number, because stupid IPC doesn't care
+    // about whether we transmit a number or a string.
+    if (obj.hasOwnProperty('hash') && typeof obj.hash !== 'number') {
+      obj.hash = parseInt(obj.hash)
     }
 
     let found = null

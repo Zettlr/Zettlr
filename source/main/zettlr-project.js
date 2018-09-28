@@ -60,6 +60,7 @@ class ZettlrProject {
     this._projectFile = path.join(this._dir.path, PROJECT_FILE)
 
     this._read()
+    console.log(`Successfully made project for ${this._dir.name}`)
   }
 
   /**

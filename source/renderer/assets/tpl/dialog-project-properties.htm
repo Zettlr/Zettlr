@@ -21,10 +21,16 @@
                     <input type="text" name="prefs-pdf-keywords" if="prefs-pdf-keywords" value="%PREFS_KEYWORDS%" placeholder="%i18n.preferences.pdf.keywords%">
                 </div>
                 <div class="box-right">
+                  <label class="cb-toggle">
                     <input type="checkbox" value="yes" name="prefs-pdf-titlepage" id="prefs-pdf-titlepage" %GENERATE_TITLEPAGE%>
+                    <div class="toggle"></div>
+                  </label>
                     <label for="prefs-pdf-titlepage">%i18n.preferences.pdf.titlepage_label%</label>
                     <div class="clearfix"></div>
-                    <input type="checkbox" value="yes" name="prefs-pdf-toc" id="prefs-pdf-toc" %GENERATE_TOC%>
+                    <label class="cb-toggle">
+                      <input type="checkbox" value="yes" name="prefs-pdf-toc" id="prefs-pdf-toc" %GENERATE_TOC%>
+                      <div class="toggle"></div>
+                    </label>
                     <label for="prefs-pdf-toc">%i18n.preferences.pdf.toc_label%</label>
                     <select name="prefs-pdf-toc-depth">
                         %TOCDEPTH%
