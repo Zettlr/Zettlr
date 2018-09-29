@@ -38,6 +38,7 @@
 - All Zettlr installations now receive a unique UUID.
 - Using `global.config.get` it is now possible in the renderer to access the configuration programmatically without the need to send events.
 - Replaced all renderer configuration requests with the new, faster and synchronous method.
+- Fixed a missing dependency in `ZettlrAttachment`.
 
 # 0.19.0
 
