@@ -398,6 +398,13 @@
             "tippyjs": "Responsible pour les belles infobulles",
             "trademark": "Tous les logos et les noms de marque sont soumis à leurs propriétaires légitimes. En plus d'utiliser leur code, Zettlr n'est aucunement affilié à aucun de ces projets. Node.js est une marque de commerce de Joyent, Inc.",
             "close": "Fermer"
+        },
+        "statistics": {
+          "title": "Statistique d'écrirer",
+          "intro": "Ici il-y-a les statistiques élargi d'écrirer.",
+          "words_per_day": "Mots par jour",
+          "words": "Mots",
+          "day": "Date"
         }
     },
     "toolbar": {

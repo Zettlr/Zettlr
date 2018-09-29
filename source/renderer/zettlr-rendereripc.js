@@ -1,5 +1,3 @@
-/* global $ */
-
 /**
 * @ignore
 * BEGIN HEADER

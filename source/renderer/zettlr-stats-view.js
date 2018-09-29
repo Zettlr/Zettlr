@@ -15,6 +15,7 @@
  */
 
 const popup = require('./zettlr-popup.js')
+const ZettlrDialog = require('./zettlr-dialog.js')
 const { trans } = require('../common/lang/i18n.js')
 const { localiseNumber } = require('../common/zettlr-helpers.js')
 
@@ -29,6 +30,7 @@ class ZettlrStatsView {
   constructor (parent) {
     this._renderer = parent
     this._toolbarbutton = $('#toolbar .stats')
+    this._data = null
   }
 
   /**
@@ -39,6 +41,10 @@ class ZettlrStatsView {
     if (!data) {
       return
     }
+
+    // In case the user requests the big window.
+    this._data = data
+
     // For now we only need the word count
     let wcount = data.wordCount
 
@@ -101,7 +107,14 @@ class ZettlrStatsView {
       cnt += `<p><strong>${trans('gui.avg_not_reached')}</strong></p>`
     }
 
-    popup(this._toolbarbutton, cnt)
+    cnt += `<p><form><button type="submit">More &hellip;</button></form></p>`
+
+    popup(this._toolbarbutton, cnt, (form) => {
+      // Theres no form but the user has clicked the more button
+      let dialog = new ZettlrDialog()
+      dialog.init('statistics', this._data.wordCount)
+      dialog.open()
+    })
   }
 }
 

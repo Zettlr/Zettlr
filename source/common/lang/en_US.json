@@ -398,6 +398,13 @@
             "tippyjs": "That's where the nice tooltips come from",
             "trademark": "All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc.",
             "close": "Close"
+        },
+        "statistics": {
+          "title": "Writing statistics",
+          "intro": "Here you can find extended statistics on your writing behavior, such as a detailed graph of your words per day.",
+          "words_per_day": "Words per day",
+          "words": "Words",
+          "day": "Date"
         }
     },
     "toolbar": {

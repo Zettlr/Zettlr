@@ -398,6 +398,13 @@
             "tippyjs": "Ist für die schicken Tooltips verantwortlich",
             "trademark": "Alle Logos und Markennamen gehören ihren rechtmäßigen Besitzern. Außer durch die Nutzung ihres Codes ist Zettlr auf keine Weise mit diesen Projekten verbunden. Node.js ist ein eingetragenes Warenzeichen von Joyent, Inc.",
             "close": "Schließen"
+        },
+        "statistics": {
+          "title": "Schreibstatistiken",
+          "intro": "Hier findest du erweiterte Statistiken über dein Schreibverhalten.",
+          "words_per_day": "Wörter pro Tag",
+          "words": "Wörter",
+          "day": "Datum"
         }
     },
     "toolbar": {

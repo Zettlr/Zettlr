@@ -16,6 +16,7 @@
 const fs = require('fs')
 const path = require('path')
 const tippy = require('tippy.js')
+const Chart = require('chart.js')
 const { trans } = require('../common/lang/i18n.js')
 const SUPPORTED_PAPERTYPES = require('../common/data.json').papertypes
 
@@ -51,6 +52,8 @@ class ZettlrDialog {
     this._container = $('#container')
     this._modal = $('<div>').addClass('modal')
     this._dlg = null
+    this._statsData = []
+    this._statsLabels = []
   }
 
   /**
@@ -129,6 +132,15 @@ class ZettlrDialog {
       case 'about':
         replacements.push('%PKGVER%|' + require('../package.json').version)
         replacements.push('%UUID%|' + global.config.get('uuid'))
+        break
+
+      case 'statistics':
+        this._statsData = []
+        this._statsLabels = []
+        for (let key in obj) {
+          this._statsLabels.push(key)
+          this._statsData.push(obj[key])
+        }
         break
 
       case 'preferences':
@@ -348,6 +360,36 @@ class ZettlrDialog {
       duration: 100,
       flip: true
     })
+
+    // Initiate the chartJS
+    if ($('#canvas').length > 0) {
+      let config = {
+        type: 'line',
+        data: {
+          labels: this._statsLabels,
+          datasets: [{
+            label: trans('dialog.statistics.words'),
+            backgroundColor: 'rgba( 28, 178, 126, 1)',
+            borderColor: 'rgba( 28, 178, 126, 1)',
+            data: this._statsData,
+            fill: false
+          }]
+        },
+        options: {
+          elements: { line: { tension: 0 } },
+          responsive: true,
+          title: { display: true, text: trans('dialog.statistics.words_per_day') },
+          tooltips: { mode: 'index', intersect: false },
+          hover: { mode: 'nearest', intersect: true },
+          scales: {
+            xAxes: [{ display: true, scaleLabel: { display: true, labelString: trans('dialog.statistics.day') } }],
+            yAxes: [{ display: true, scaleLabel: { display: true, labelString: trans('dialog.statistics.words') } }]
+          },
+          onResize: () => { this._place() }
+        }
+      }
+      this._chart = new Chart(document.getElementById('canvas').getContext('2d'), config)
+    } // END initiate canvas
 
     return this
   }

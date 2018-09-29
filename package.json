@@ -109,6 +109,7 @@
         }
     },
     "dependencies": {
+        "chart.js": "^2.7.2",
         "chokidar": "^2.0.4",
         "clusterize.js": "^0.18.1",
         "codemirror": "^5.39.0",
