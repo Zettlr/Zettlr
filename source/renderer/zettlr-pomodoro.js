@@ -72,7 +72,13 @@ class ZettlrPomodoro {
       <input type="number" class="pomodoro-task" value="${this._duration.task / 60}" name="task" min="1" max="100" required>
       <input type="number" class="pomodoro-short" value="${this._duration.short / 60}" name="short" min="1" max="100" required>
       <input type="number" class="pomodoro-long" value="${this._duration.long / 60}" name="long" min="1" max="100" required>
-      <input type="checkbox" name="mute" id="mute"><label for="mute">${trans('pomodoro.mute')}</label>
+      <div class="cb-group">
+      <label class="cb-toggle">
+      <input type="checkbox" name="mute" id="mute">
+      <div class="toggle"></div>
+      </label>
+      <label for="mute">${trans('pomodoro.mute')}</label>
+      </div>
       <input type="range" name="volume" min="0" max="100" value="${this._sound.volume * 100}">
       <input type="submit" value="${trans('pomodoro.start')}">
       `

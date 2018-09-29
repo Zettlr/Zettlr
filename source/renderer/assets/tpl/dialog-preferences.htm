@@ -1,196 +1,197 @@
 <div class="dialog">
-    <h1>%i18n.preferences.title%</h1>
-    <form  action="" method="GET" id="dialog">
-        <div id="prefs-tabs">
+  <h1>%i18n.preferences.title%</h1>
+  <form  action="" method="GET" id="dialog">
+    <div id="prefs-tabs">
+      <ul>
+        <li><a href="#prefs-tabs-general">%i18n.preferences.general%</a></li>
+        <li><a href="#prefs-tabs-editor">%i18n.preferences.editor%</a></li>
+        <li><a href="#prefs-tabs-export">%i18n.preferences.export.title%</a></li>
+        <li><a href="#prefs-tabs-zkn">%i18n.preferences.zkn.title%</a></li>
+        <li><a href="#prefs-tabs-attachments">%i18n.preferences.attachments%</a></li>
+        <li><a href="#prefs-tabs-advanced">%i18n.preferences.advanced%</a></li>
+      </ul>
+      <!-- General settings -->
+      <div id="prefs-tabs-general">
+        <label for="app-lang">%i18n.preferences.app_lang.title%
+        </label>
+        <select name="app-lang" id="app-lang">
+          %APP_LANG%
+        </select>
+        <div class="cb-group">
+          <label class="cb-toggle">
+            <input type="checkbox" name="pref-darkTheme" value="yes" id="pref-darkTheme" %DARK%>
+            <div class="toggle"></div>
+          </label>
+          <label for="pref-darkTheme">%i18n.preferences.nightmode%</label>
+        </div>
+        <div class="cb-group">
+          <label class="cb-toggle">
+            <input type="checkbox" name="pref-snippets" value="yes" id="pref-snippets" %SNIPPETS%>
+            <div class="toggle"></div>
+          </label>
+          <label for="pref-snippets">%i18n.preferences.snippets%</label>
+        </div>
+        <hr>
+        <p>
+          %i18n.preferences.combiner_explanation%
+        </p>
+        <div class="cb-group">
+          <input type="radio" name="pref-combiner-state" value="collapsed" id="pref-comb-state-coll" %COMBINER_COLLAPSED%>
+          <label for="pref-comb-state-coll">%i18n.preferences.combiner_collapsed%</label>
+        </div>
+        <div class="cb-group">
+          <input type="radio" name="pref-combiner-state" value="expanded" id="pref-comb-state-exp" %COMBINER_EXPANDED%>
+          <label for="pref-comb-state-exp">%i18n.preferences.combiner_expanded%</label>
+        </div>
+      </div>
+      <!-- Editor related options -->
+      <div id="prefs-tabs-editor">
+        <div class="clear"></div>
+        <div class="box-left">
+          <input type="text" class="dicts-list-search" placeholder="%i18n.preferences.spellcheck_search_placeholder%">
+          <ul class="dicts-list">
+            %AVAILABLE_DICTS%
+          </ul>
+        </div>
+        <div class="box-right">
+          <p>
+            %i18n.preferences.spellcheck%
+          </p>
+          <p>
+            %i18n.preferences.spellcheck_warning%
+          </p>
+          <hr>
+          <div class="selected-dictionaries">
+            %SPELLCHECK%
+          </div>
+        </div>
+        <div class="clear"></div>
+        <hr>
+        <div class="cb-group">
+          <label class="cb-toggle">
+            <input type="checkbox" name="pref-mute-lines" value="yes" id="pref-mute-lines" %MUTE_LINES%>
+            <div class="toggle"></div>
+          </label>
+          <label for="pref-mute-lines">%i18n.preferences.mute_lines%</label>
+        </div>
+      </div>
+      <!-- Export related options (except pandoc+xelatex) -->
+      <div id="prefs-tabs-export">
+        <p>
+          %i18n.preferences.export.dest%
+        </p>
+        <div class="cb-group">
+          <input type="radio" name="pref-export-dest" value="temp" id="pref-export-temp" %EXPORT_DEST_TEMP%>
+          <label for="pref-export-temp">%i18n.preferences.export.dest_temp_label%</label>
+        </div>
+        <div class="cb-group">
+          <input type="radio" name="pref-export-dest" value="cwd" id="pref-export-cwd" %EXPORT_DEST_CWD%>
+          <label for="pref-export-cwd">%i18n.preferences.export.dest_cwd_label%</label>
+        </div>
+        <hr>
+        <p>%i18n.preferences.export.stripping%</p>
+        <div class="box-left">
+          <p>
+            <div class="cb-group">
+              <label class="cb-toggle">
+                <input type="checkbox" name="pref-export-strip-id" value="yes" id="pref-export-strip-id" %EXPORT_STRIP_ID%>
+                <div class="toggle"></div>
+              </label>
+              <label for="pref-export-strip-id">%i18n.preferences.export.strip_id_label%</label>
+            </div>
+            <div class="cb-group">
+              <label class="cb-toggle">
+                <input type="checkbox" name="pref-export-strip-tags" value="yes" id="pref-export-strip-tags" %EXPORT_STRIP_TAGS%>
+                <div class="toggle"></div>
+              </label>
+              <label for="pref-export-strip-tags">%i18n.preferences.export.strip_tags_label%</label>
+            </div>
+          </p>
+        </div>
+        <div class="box-right">
+          <div class="cb-group">
+            <input type="radio" name="pref-export-strip-links" value="full" id="pref-export-strip-link-full" %EXPORT_STRIP_LINKS_FULL%>
+            <label for="pref-export-strip-link-full">%i18n.preferences.export.strip_links_full_label%</label>
+          </div>
+          <div class="cb-group">
+            <input type="radio" name="pref-export-strip-links" value="unlink" id="pref-export-strip-link-unlink" %EXPORT_STRIP_LINKS_UNLINK%>
+            <label for="pref-export-strip-link-unlink">%i18n.preferences.export.strip_links_unlink_label%</label>
+          </div>
+          <div class="cb-group">
+            <input type="radio" name="pref-export-strip-links" value="no" id="pref-export-strip-link-no" %EXPORT_STRIP_LINKS_NO%>
+            <label for="pref-export-strip-link-no">%i18n.preferences.export.strip_links_no_label%</label>
+          </div>
+        </div>
+      </div>
+      <!-- Zettelkasten options -->
+      <div id="prefs-tabs-zkn">
+        <div class="box-left form-inline-buttons">
+          <label for="pref-zkn-free-id">%i18n.preferences.zkn.id_label%</label>
+          <input type="text" id="pref-zkn-free-id" value="%ZKN_ID%" name="pref-zkn-id-regex">
+          <button type="button" id="reset-id-regex" title="%i18n.preferences.zkn.reset_default_id%">&#9003;</button>
+          <label for="pref-zkn-free-linkstart">%i18n.preferences.zkn.linkstart_label%</label>
+          <input type="text" id="pref-zkn-free-linkstart" value="%ZKN_LINKSTART%" name="pref-zkn-linkstart-regex">
+          <button type="button" id="reset-linkstart-regex" title="%i18n.preferences.zkn.reset_default_linkstart%">&#9003;</button>
+          <label for="pref-zkn-free-linkend">%i18n.preferences.zkn.linkend_label%</label>
+          <input type="text" id="pref-zkn-free-linkend" value="%ZKN_LINKEND%" name="pref-zkn-linkend-regex">
+          <button type="button" id="reset-linkend-regex" title="%i18n.preferences.zkn.reset_default_linkend%">&#9003;</button>
+          <label for="pref-zkn-id-gen">%i18n.preferences.zkn.id_generator_label%</label>
+          <input type="text" id="pref-zkn-id-gen" value="%ZKN_IDGEN%" name="pref-zkn-id-generator">
+          <button type="button" id="reset-id-generator" title="%i18n.preferences.zkn.reset_default_generator%">&#9003;</button>
+          <hr>
+          <p>
+            <button type="button" id="generate-id">%i18n.preferences.zkn.test_id_generator%</button>
+          </p>
+          <p>%i18n.preferences.zkn.generated_id%: <strong><span id="generator-tester"></span></strong></p>
+          <p><span id="pass-check"></span></p>
+        </div>
+        <div class="box-right">
+          <p>
+            %i18n.preferences.zkn.intro%
             <ul>
-                <li><a href="#prefs-tabs-general">%i18n.preferences.general%</a></li>
-                <li><a href="#prefs-tabs-editor">%i18n.preferences.editor%</a></li>
-                <li><a href="#prefs-tabs-export">%i18n.preferences.export.title%</a></li>
-                <li><a href="#prefs-tabs-zkn">%i18n.preferences.zkn.title%</a></li>
-                <li><a href="#prefs-tabs-attachments">%i18n.preferences.attachments%</a></li>
-                <li><a href="#prefs-tabs-advanced">%i18n.preferences.advanced%</a></li>
+              <li><strong>%Y</strong>: %i18n.preferences.zkn.var_year%</li>
+              <li><strong>%M</strong>: %i18n.preferences.zkn.var_month%</li>
+              <li><strong>%D</strong>: %i18n.preferences.zkn.var_day%</li>
+              <li><strong>%h</strong>: %i18n.preferences.zkn.var_hour%</li>
+              <li><strong>%m</strong>: %i18n.preferences.zkn.var_minute%</li>
+              <li><strong>%s</strong>: %i18n.preferences.zkn.var_second%</li>
             </ul>
-            <!-- General settings -->
-            <div id="prefs-tabs-general">
-                <label for="app-lang">%i18n.preferences.app_lang.title%
-                </label>
-                <select name="app-lang" id="app-lang">
-                    %APP_LANG%
-                </select>
-                <div>
-                  <label class="cb-toggle">
-                    <input type="checkbox" name="pref-darkTheme" value="yes" id="pref-darkTheme" %DARK%>
-                    <div class="toggle"></div>
-                  </label>
-                    <label for="pref-darkTheme">%i18n.preferences.nightmode%</label>
-                </div>
-                <div>
-                  <label class="cb-toggle">
-                    <input type="checkbox" name="pref-snippets" value="yes" id="pref-snippets" %SNIPPETS%>
-                    <div class="toggle"></div>
-                  </label>
-                    <label for="pref-snippets">%i18n.preferences.snippets%</label>
-                </div>
-                <hr>
-                <p>
-                    %i18n.preferences.combiner_explanation%
-                </p>
-                <div>
-                    <input type="radio" name="pref-combiner-state" value="collapsed" id="pref-comb-state-coll" %COMBINER_COLLAPSED%>
-                    <label for="pref-comb-state-coll">%i18n.preferences.combiner_collapsed%</label>
-                </div>
-                <div>
-                    <input type="radio" name="pref-combiner-state" value="expanded" id="pref-comb-state-exp" %COMBINER_EXPANDED%>
-                    <label for="pref-comb-state-exp">%i18n.preferences.combiner_expanded%</label>
-                </div>
-            </div>
-            <!-- Editor related options -->
-            <div id="prefs-tabs-editor">
-                <div class="clear"></div>
-                <div class="box-left">
-                    <input type="text" class="dicts-list-search" placeholder="%i18n.preferences.spellcheck_search_placeholder%">
-                    <ul class="dicts-list">
-                        %AVAILABLE_DICTS%
-                    </ul>
-                </div>
-                <div class="box-right">
-                    <p>
-                        %i18n.preferences.spellcheck%
-                    </p>
-                    <p>
-                        %i18n.preferences.spellcheck_warning%
-                    </p>
-                    <hr>
-                    <div class="selected-dictionaries">
-                    %SPELLCHECK%
-                </div>
-                </div>
-                <div class="clear"></div>
-                <hr>
-                <div>
-                  <label class="cb-toggle">
-                    <input type="checkbox" name="pref-mute-lines" value="yes" id="pref-mute-lines" %MUTE_LINES%>
-                    <div class="toggle"></div>
-                  </label>
-                    <label for="pref-mute-lines">%i18n.preferences.mute_lines%</label>
-                </div>
-            </div>
-            <!-- Export related options (except pandoc+xelatex) -->
-            <div id="prefs-tabs-export">
-                <p>
-                    %i18n.preferences.export.dest%
-                </p>
-                <p>
-                    <input type="radio" name="pref-export-dest" value="temp" id="pref-export-temp" %EXPORT_DEST_TEMP%>
-                    <label for="pref-export-temp">%i18n.preferences.export.dest_temp_label%</label>
-                </p>
-                <p>
-                    <input type="radio" name="pref-export-dest" value="cwd" id="pref-export-cwd" %EXPORT_DEST_CWD%>
-                    <label for="pref-export-cwd">%i18n.preferences.export.dest_cwd_label%</label>
-                </p>
-                <hr>
-                <div>
-                    <p>%i18n.preferences.export.stripping%</p>
-                    <p>
-                      <label class="cb-toggle">
-                        <input type="checkbox" name="pref-export-strip-id" value="yes" id="pref-export-strip-id" %EXPORT_STRIP_ID%>
-                        <div class="toggle"></div>
-                      </label>
-                        <label for="pref-export-strip-id">%i18n.preferences.export.strip_id_label%</label>
-                    </p>
-                    <p>
-                      <label class="cb-toggle">
-                        <input type="checkbox" name="pref-export-strip-tags" value="yes" id="pref-export-strip-tags" %EXPORT_STRIP_TAGS%>
-                        <div class="toggle"></div>
-                      </label>
-                        <label for="pref-export-strip-tags">%i18n.preferences.export.strip_tags_label%</label>
-                    </p>
-                    <p>
-                        <input type="radio" name="pref-export-strip-links" value="full" id="pref-export-strip-link-full" %EXPORT_STRIP_LINKS_FULL%>
-                        <label for="pref-export-strip-link-full">%i18n.preferences.export.strip_links_full_label%</label>
-                    </p>
-                    <p>
-                        <input type="radio" name="pref-export-strip-links" value="unlink" id="pref-export-strip-link-unlink" %EXPORT_STRIP_LINKS_UNLINK%>
-                        <label for="pref-export-strip-link-unlink">%i18n.preferences.export.strip_links_unlink_label%</label>
-                    </p>
-                    <p>
-                        <input type="radio" name="pref-export-strip-links" value="no" id="pref-export-strip-link-no" %EXPORT_STRIP_LINKS_NO%>
-                        <label for="pref-export-strip-link-no">%i18n.preferences.export.strip_links_no_label%</label>
-                    </p>
-                </div>
-            </div>
-            <!-- Zettelkasten options -->
-            <div id="prefs-tabs-zkn">
-              <div class="box-left form-inline-buttons">
-                <label for="pref-zkn-free-id">%i18n.preferences.zkn.id_label%</label>
-                <input type="text" id="pref-zkn-free-id" value="%ZKN_ID%" name="pref-zkn-id-regex">
-                <button type="button" id="reset-id-regex" title="%i18n.preferences.zkn.reset_default_id%">&#9003;</button>
-                <hr>
-                <label for="pref-zkn-free-linkstart">%i18n.preferences.zkn.linkstart_label%</label>
-                <input type="text" id="pref-zkn-free-linkstart" value="%ZKN_LINKSTART%" name="pref-zkn-linkstart-regex">
-                <button type="button" id="reset-linkstart-regex" title="%i18n.preferences.zkn.reset_default_linkstart%">&#9003;</button>
-                <hr>
-                <label for="pref-zkn-free-linkend">%i18n.preferences.zkn.linkend_label%</label>
-                <input type="text" id="pref-zkn-free-linkend" value="%ZKN_LINKEND%" name="pref-zkn-linkend-regex">
-                <button type="button" id="reset-linkend-regex" title="%i18n.preferences.zkn.reset_default_linkend%">&#9003;</button>
-                <hr>
-                <label for="pref-zkn-id-gen">%i18n.preferences.zkn.id_generator_label%</label>
-                <input type="text" id="pref-zkn-id-gen" value="%ZKN_IDGEN%" name="pref-zkn-id-generator">
-                <button type="button" id="reset-id-generator" title="%i18n.preferences.zkn.reset_default_generator%">&#9003;</button>
-              </div>
-              <div class="box-right">
-                <p>
-                  %i18n.preferences.zkn.intro%
-                  <ul>
-                    <li><strong>%Y</strong>: %i18n.preferences.zkn.var_year%</li>
-                    <li><strong>%M</strong>: %i18n.preferences.zkn.var_month%</li>
-                    <li><strong>%D</strong>: %i18n.preferences.zkn.var_day%</li>
-                    <li><strong>%h</strong>: %i18n.preferences.zkn.var_hour%</li>
-                    <li><strong>%m</strong>: %i18n.preferences.zkn.var_minute%</li>
-                    <li><strong>%s</strong>: %i18n.preferences.zkn.var_second%</li>
-                  </ul>
-                </p>
-                <hr>
-                <p>
-                  <button type="button" id="generate-id">%i18n.preferences.zkn.test_id_generator%</button>
-                </p>
-                <p>%i18n.preferences.zkn.generated_id%: <strong><span id="generator-tester"></span></strong></p>
-                  <p><span id="pass-check"></span></p>
-              </div>
-            </div>
-            <!-- Attachment options -->
-            <div id="prefs-tabs-attachments">
-                <p>%i18n.preferences.attachments_info%</p>
-                <textarea id="pref-attachments" name="pref-attachments">%ATTACHMENT_EXTENSIONS%</textarea>
-            </div>
-            <!-- Export/seldomly used options -->
-            <div id="prefs-tabs-advanced">
-                <label for="pref-pandoc">
-                    %i18n.preferences.pandoc%
-                </label>
-                <input type="text" id="pref-pandoc" name="pref-pandoc" placeholder="%i18n.preferences.pandoc_default%" value="%PANDOC%">
-
-                <label for="pref-xelatex">
-                    %i18n.preferences.xelatex%
-                </label>
-                <input type="text" id="pref-xelatex" name="pref-xelatex" placeholder="%i18n.preferences.xelatex_default%" value="%XELATEX%">
-
-                <hr>
-
-                <div>
-                  <label class="cb-toggle">
-                    <input type="checkbox" name="debug" value="yes" id="debug" %DEBUG%>
-                    <div class="toggle"></div>
-                  </label>
-                    <label for="debug">%i18n.preferences.debug%</label>
-                </div>
-            </div>
+          </p>
         </div>
-        <div>
-            <button type="submit" id="pref-save">%i18n.preferences.save%</button>
-            <button id="abort">%i18n.preferences.cancel%</button>
+      </div>
+      <!-- Attachment options -->
+      <div id="prefs-tabs-attachments">
+        <p>%i18n.preferences.attachments_info%</p>
+        <textarea id="pref-attachments" name="pref-attachments">%ATTACHMENT_EXTENSIONS%</textarea>
+      </div>
+      <!-- Export/seldomly used options -->
+      <div id="prefs-tabs-advanced">
+        <label for="pref-pandoc">
+          %i18n.preferences.pandoc%
+        </label>
+        <input type="text" id="pref-pandoc" name="pref-pandoc" placeholder="%i18n.preferences.pandoc_default%" value="%PANDOC%">
+
+        <label for="pref-xelatex">
+          %i18n.preferences.xelatex%
+        </label>
+        <input type="text" id="pref-xelatex" name="pref-xelatex" placeholder="%i18n.preferences.xelatex_default%" value="%XELATEX%">
+
+        <hr>
+
+        <div class="cb-group">
+          <label class="cb-toggle">
+            <input type="checkbox" name="debug" value="yes" id="debug" %DEBUG%>
+            <div class="toggle"></div>
+          </label>
+          <label for="debug">%i18n.preferences.debug%</label>
         </div>
-    </form>
+      </div>
+    </div>
+    <div class="prefs-submit-group">
+      <button type="submit" id="pref-save">%i18n.preferences.save%</button>
+      <button id="abort">%i18n.preferences.cancel%</button>
+    </div>
+  </form>
 </div>
 <script type="text/javascript">
 /* global $ */

@@ -2,8 +2,60 @@
  * MAIN CSS FOR LIGHT THEMING
  */
 
+// Helper variables for the checkbox controls
+@cb-size: 36px;
+@cb-margin: 2px;
+
 // CodeMirror scrollbar annotations
 .sb-annotation { background-color:@orange-2; }
+
+// Apply this class to elements that should represent toggles instead of
+// regular checkboxes.
+.cb-toggle {
+  position: relative;
+  display: inline-block !important;
+  width: @cb-size;
+  height: @cb-size / 2;
+  margin:0 !important;
+  padding: 0;
+
+  input { display: none !important; }
+
+  .toggle {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: @grey-1;
+    transition: .4s;
+    border-radius: @cb-size / 3 - @cb-margin;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: @cb-size / 2 - @cb-margin * 2; // Fancy equations here!
+      width: @cb-size / 2 - @cb-margin * 2;
+      left: @cb-margin;
+      bottom: @cb-margin;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+  }
+  input:checked + .toggle { background-color: @green-0; }
+  input:checked + .toggle:before { transform: translateX(@cb-size / 2); }
+}
+
+// This class can be applied to the wrapper div of a checkbox-toggle to
+// make the label and the toggle align on the same level.
+.cb-group {
+  margin-bottom: 0.2em;
+  & > label { line-height: @cb-size / 2 + @cb-margin * 2; vertical-align: middle; }
+  & > input[type="radio"] { margin:0 !important; }
+  & > .cb-toggle { margin-right:0.2em; }
+}
 
 ::-webkit-scrollbar-track { background-color:rgba(240,240,240,1); }
 ::-webkit-scrollbar-thumb { background-color:@green-0; }

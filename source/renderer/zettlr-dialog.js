@@ -18,11 +18,6 @@ const path = require('path')
 const tippy = require('tippy.js')
 const { trans } = require('../common/lang/i18n.js')
 const SUPPORTED_PAPERTYPES = require('../common/data.json').papertypes
-const TAB_DIALOGS = [
-  'pdf-preferences',
-  'preferences',
-  'project-properties'
-]
 
 /**
  * Dialog errors may occur.
@@ -324,11 +319,23 @@ class ZettlrDialog {
     this._modal.on('click', (e) => { this.close() })
 
     // Tabbify all dialogs mentioned in the TAB_DIALOGS list.
-    if (TAB_DIALOGS.includes(this._dlg)) {
+    if (this._modal.find('#prefs-tabs').length > 0) {
       this._modal.find('.dialog').tabs({
-        heightStyle: 'auto' // All tabs same height
+        // Always re-place the modal and adjust the margins.
+        activate: (event, ui) => { this._place() }
       })
     }
+
+    // Always keep the dialog centered and nice
+    $(window).on('resize', (e) => {
+      this._place()
+    })
+
+    // If there are any images in the tab, re-compute the size of the dialog
+    // margins after the images load.
+    this._modal.on('load', 'img', (e) => {
+      this._place()
+    })
 
     // After we are done (also included tabs and stuff), we can finally
     // detect the right margins.
