@@ -19,6 +19,7 @@ const tippy = require('tippy.js')
 const Chart = require('chart.js')
 const { trans } = require('../common/lang/i18n.js')
 const SUPPORTED_PAPERTYPES = require('../common/data.json').papertypes
+const PAPERNAMES = require('../common/data.json').papernames
 
 /**
  * Dialog errors may occur.
@@ -245,7 +246,7 @@ class ZettlrDialog {
           if (pt === obj.pdf.papertype) {
             papertypes += ' selected="selected"'
           }
-          papertypes += `>${trans('dialog.preferences.pdf.' + pt)}</option>\n`
+          papertypes += `>${PAPERNAMES[pt]}</option>\n`
         }
         replacements.push('%PAPERTYPES%|' + papertypes)
         let marginUnits = ''

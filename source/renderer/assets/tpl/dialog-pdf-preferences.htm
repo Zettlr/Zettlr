@@ -80,20 +80,21 @@
     </form>
 </div>
 <script>
-    // These scripts only are used to update the preview paragraph
-    $('#prefs-pdf-lineheight').change((e) => {
-        $('.pdf-preview').css('line-height', $(e.target).val() + '%');
-    });
-    $('#prefs-pdf-fontsize').change((e) => {
-        // 1pt is approx. 1.333333 px
-        $('.pdf-preview').css('font-size', ($(e.target).val() * 1.3) + 'px');
-    });
-    $('#prefs-pdf-mainfont').change((e) => {
-        $('.pdf-preview').css('font-family', $(e.target).val());
-    });
+/* global $ */
+// These scripts only are used to update the preview paragraph
+$('#prefs-pdf-lineheight').change((e) => {
+  $('.pdf-preview').css('line-height', $(e.target).val() + '%')
+})
+$('#prefs-pdf-fontsize').change((e) => {
+  // 1pt is approx. 1.333333 px
+  $('.pdf-preview').css('font-size', ($(e.target).val() * 1.3) + 'px')
+})
+$('#prefs-pdf-mainfont').change((e) => {
+  $('.pdf-preview').css('font-family', $(e.target).val())
+})
 
-    // Initial changing of CSS
-    $('.pdf-preview').css('line-height', $('#prefs-pdf-lineheight').val() + '%');
-    $('.pdf-preview').css('font-size', ($('#prefs-pdf-fontsize').val() * 1.3) + 'px');
-    $('.pdf-preview').css('font-family', $('#prefs-pdf-mainfont').val());
+// Initial changing of CSS
+$('.pdf-preview').css('line-height', $('#prefs-pdf-lineheight').val() + '%')
+$('.pdf-preview').css('font-size', ($('#prefs-pdf-fontsize').val() * 1.3) + 'px')
+$('.pdf-preview').css('font-family', $('#prefs-pdf-mainfont').val())
 </script>
