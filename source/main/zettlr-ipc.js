@@ -123,7 +123,7 @@ class ZettlrIPC {
         break
 
       case 'file-get-quicklook':
-        this.send('file-quicklook', this._app.findFile({ 'hash': parseInt(cnt) }).withContent())
+        this.send('file-quicklook', this._app.findFile({ 'hash': cnt }).withContent())
         break
 
       case 'file-get':

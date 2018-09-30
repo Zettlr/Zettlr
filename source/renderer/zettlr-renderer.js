@@ -13,26 +13,26 @@
  * END HEADER
  */
 
-const ZettlrRendererIPC = require('../zettlr-rendereripc.js')
-const ZettlrDirectories = require('../zettlr-directories.js')
-const ZettlrPreview = require('../zettlr-preview.js')
-const ZettlrEditor = require('../zettlr-editor.js')
-const ZettlrBody = require('../zettlr-body.js')
-const ZettlrOverlay = require('../zettlr-overlay.js')
-const ZettlrToolbar = require('../zettlr-toolbar.js')
-const ZettlrPomodoro = require('../zettlr-pomodoro.js')
-const popup = require('../zettlr-popup.js')
-const ZettlrStatsView = require('../zettlr-stats-view.js')
-const ZettlrAttachments = require('../zettlr-attachments.js')
+const ZettlrRendererIPC = require('./zettlr-rendereripc.js')
+const ZettlrDirectories = require('./zettlr-directories.js')
+const ZettlrPreview = require('./zettlr-preview.js')
+const ZettlrEditor = require('./zettlr-editor.js')
+const ZettlrBody = require('./zettlr-body.js')
+const ZettlrOverlay = require('./zettlr-overlay.js')
+const ZettlrToolbar = require('./zettlr-toolbar.js')
+const ZettlrPomodoro = require('./zettlr-pomodoro.js')
+const popup = require('./zettlr-popup.js')
+const ZettlrStatsView = require('./zettlr-stats-view.js')
+const ZettlrAttachments = require('./zettlr-attachments.js')
 
 const Typo = require('typo-js')
 const remote = require('electron').remote
 const path = require('path')
 
-const { trans } = require('../../common/lang/i18n.js')
+const { trans } = require('../common/lang/i18n.js')
 
 // Pull the poll-time from the data
-const POLL_TIME = require('../../common/data.json').poll_time
+const POLL_TIME = require('../common/data.json').poll_time
 
 /**
  * This is the pendant class to the Zettlr class in the main process. It mirrors
@@ -1047,3 +1047,5 @@ class ZettlrRenderer {
    */
   isModified () { return !this.getEditor().isClean() }
 } // END CLASS
+
+module.exports = ZettlrRenderer

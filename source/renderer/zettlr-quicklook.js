@@ -15,7 +15,6 @@
 
 const fs = require('fs')
 const path = require('path')
-const popup = require('./zettlr-popup.js')
 const { trans } = require('../common/lang/i18n.js')
 
 // CodeMirror related includes

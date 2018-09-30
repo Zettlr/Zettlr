@@ -24,22 +24,21 @@
     <script type="text/javascript" src="../../node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
 
-    <!-- Include the main renderer class -->
-    <script typye="text/javascript" src="../zettlr-renderer.js"></script>
-
     <!-- Hack for jQuery (part 2) -->
     <script>if (window.module) module = window.module;</script>
 
-    <script>
-    // We need a global for our renderer element
+<script>
+/* global $ */
+const ZettlrRenderer = require('../zettlr-renderer.js')
+// We need a global for our renderer element
+var renderer
 
-    var renderer;
-
-    $(document).ready(function() {
-        renderer = new ZettlrRenderer();
-        renderer.init();
-    });
-    </script>
+$(document).ready(function () {
+  // Create the renderer
+  renderer = new ZettlrRenderer()
+  renderer.init()
+})
+</script>
 </head>
 <body>
     <div id="container">
