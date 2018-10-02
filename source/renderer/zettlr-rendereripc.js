@@ -259,18 +259,13 @@ class ZettlrRendererIPC {
         this._app.getPreview().handleSearchResult(cnt)
         break
 
+      // Toggle theme or snippets, main will automatically trigger a configuration change.
       case 'toggle-theme':
-        this._app.toggleTheme()
-        if (cnt !== 'no-emit') {
-          this.send('toggle-theme') // Notify host process for configuration save
-        }
+        this.send('toggle-theme') // Notify host process for configuration save
         break
 
       case 'toggle-snippets':
-        this._app.getPreview().toggleSnippets()
-        if (cnt !== 'no-emit') {
-          this.send('toggle-snippets')
-        }
+        this.send('toggle-snippets')
         break
 
       case 'toggle-distraction-free':
@@ -298,6 +293,11 @@ class ZettlrRendererIPC {
         if (this._app.getCurrentFile() != null) {
           this._app.getBody().displayExport(this._app.getCurrentFile())
         }
+        break
+
+      // An update in the config needs to be reflected in the renderer.
+      case 'config-update':
+        this._app.configChange()
         break
 
       case 'open-preferences':

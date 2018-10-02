@@ -464,12 +464,12 @@ class ZettlrPreview {
   hide () { this._div.addClass('hidden') }
 
   /**
-    * Toggle the snippets.
-    * @return {ZettlrPreview} Chainability.
-    */
-  toggleSnippets () {
-    this._snippets = !this._snippets
-    // We need to completely refresh the thing, to make the changes visible.
+   * Set the snippets to true or false depending on val.
+   * @param  {Boolean} val Either true or false.
+   * @return {ZettlrPreview}     This for chainability.
+   */
+  snippets (val) {
+    this._snippets = Boolean(val)
     this.refresh()
     return this
   }

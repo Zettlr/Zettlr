@@ -99,31 +99,7 @@ class ZettlrRenderer {
     // first tick of the renderer event loop, because at this early stage (init
     // is called right after the DOM has loaded) the ipc is not yet ready. This
     // short delay gives us the time the IPC needs to get ready.
-    setTimeout(() => {
-      // Set dark theme
-      if (global.config.get('darkTheme')) { this.toggleTheme() }
-      // Set snippets
-      if (global.config.get('snippets')) { this.getPreview().toggleSnippets() }
-      // Receive the application language
-      this.setLocale(global.config.get('app_lang'))
-      // muteLines initial setting
-      this.getEditor().setMuteLines(global.config.get('muteLines'))
-
-      // Set the correct combiner state
-      switch (global.config.get('combinerState')) {
-        case 'expanded':
-          $('#editor').addClass('collapsed')
-          $('#combiner').addClass('expanded')
-          break
-        case 'collapsed':
-          $('#editor').removeClass('collapsed')
-          $('#combiner').removeClass('expanded')
-          break
-      }
-
-      // And last but not least the zkn options
-      this.getEditor().getEditor().setOption('zkn', global.config.get('zkn'))
-    }, 10) // 10ms should suffice - the number is irrelevant. The important part is that it's out of the first tick of the app.
+    setTimeout(() => { this.configChange() }, 10) // 10ms should suffice - the number is irrelevant. The important part is that it's out of the first tick of the app.
 
     this._ipc.send('get-tags') // Receive initial list of tags to display
 
@@ -165,6 +141,37 @@ class ZettlrRenderer {
     */
   handleEvent (cmd, cnt) {
     this._ipc.handleEvent(cmd, cnt)
+  }
+
+  /**
+   * This function is called by the IPC to indicate changes in the config that
+   * have to be applied in the renderer. It will fetch all config variables
+   * and apply them.
+   */
+  configChange () {
+    // Set dark theme
+    this.darkTheme(global.config.get('darkTheme'))
+    // Set snippets
+    this.getPreview().snippets(global.config.get('snippets'))
+    // Receive the application language
+    this.setLocale(global.config.get('app_lang'))
+    // muteLines initial setting
+    this.getEditor().setMuteLines(global.config.get('muteLines'))
+
+    // Set the correct combiner state
+    switch (global.config.get('combinerState')) {
+      case 'expanded':
+        $('#editor').addClass('collapsed')
+        $('#combiner').addClass('expanded')
+        break
+      case 'collapsed':
+        $('#editor').removeClass('collapsed')
+        $('#combiner').removeClass('expanded')
+        break
+    }
+
+    // And last but not least the zkn options
+    this.getEditor().getEditor().setOption('zkn', global.config.get('zkn'))
   }
 
   /**
@@ -225,13 +232,11 @@ class ZettlrRenderer {
   }
 
   /**
-    * Toggle the theme
-    * @return {void}        No return.
-    */
-  toggleTheme () {
-    // Setting the "dark" class on body is sufficient to toggle all other
-    // elements.
-    this._body.toggleTheme()
+   * Set the dark theme of the app based upon the value of val.
+   * @param  {Boolean} val Whether or not we should enable the dark theme.
+   */
+  darkTheme (val) {
+    this._body.darkTheme(val)
   }
 
   /**

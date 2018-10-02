@@ -258,11 +258,13 @@ class ZettlrIPC {
       // Change theme in config
       case 'toggle-theme':
         this._app.getConfig().set('darkTheme', !this._app.getConfig().get('darkTheme'))
+        this.send('config-update')
         break
 
       // Change snippet setting in config
       case 'toggle-snippets':
         this._app.getConfig().set('snippets', !this._app.getConfig().get('snippets'))
+        this.send('config-update')
         break
 
       case 'export':
@@ -307,20 +309,8 @@ class ZettlrIPC {
 
       // Got a new config object
       case 'update-config':
-        // Immediately reflect snippets and theme
-        if (cnt.hasOwnProperty('darkTheme') && cnt.darkTheme !== this._app.getConfig().get('darkTheme')) {
-          this.send('toggle-theme', 'no-emit')
-        }
-        if (cnt.hasOwnProperty('snippets') && cnt.snippets !== this._app.getConfig().get('snippets')) {
-          this.send('toggle-snippets', 'no-emit')
-        }
-        if (cnt.hasOwnProperty('muteLines') && cnt.muteLines !== this._app.getConfig().get('muteLines')) {
-          this.send('config', { 'key': 'muteLines', 'value': cnt.muteLines })
-        }
-        if (cnt.hasOwnProperty('combinerState') && cnt.combinerState !== this._app.getConfig().get('combinerState')) {
-          this.send('config', { 'key': 'combinerState', 'value': cnt.combinerState })
-        }
         this._app.getConfig().update(cnt)
+        this.send('config-update')
         break
 
       case 'update-tags':

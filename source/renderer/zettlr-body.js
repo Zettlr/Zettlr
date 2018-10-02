@@ -352,13 +352,13 @@ class ZettlrBody {
   }
 
   /**
-    * Toggled the theme
-    * @return {ZettlrBody} Chainability.
-    */
-  toggleTheme () {
-    // Set the body to dark; will affect everything on the page.
-    $('body').toggleClass('dark')
-
+   * Set the theme depending of a truthy or falsy value of val.
+   * @param  {Boolean} val Either true or false.
+   * @return {ZettlrBody}     Chainability.
+   */
+  darkTheme (val) {
+    if (val && !$('body').hasClass('dark')) $('body').addClass('dark')
+    else if (!val) $('body').removeClass('dark')
     return this
   }
 
