@@ -43,6 +43,7 @@
 - Replaced all renderer configuration requests with the new, faster and synchronous method.
 - Fixed a missing dependency in `ZettlrAttachment`.
 - Updated to `electron` 3.
+- Changed `app.makeSingleInstance` to `app.requestSingleInstanceLock` as recommended by the docs.
 
 # 0.19.0
 
