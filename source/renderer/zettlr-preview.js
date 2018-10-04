@@ -157,7 +157,7 @@ class ZettlrPreview {
             ${d.children.filter(e => e.type === 'directory').length} Directories
           </span>
           <span class="files">
-            ${d.children.filter(e => e.type === 'files').length} Files
+            ${d.children.filter(e => e.type === 'file').length} Files
           </span>
           <span class="virtual-directories">
             ${d.children.filter(e => e.type === 'virtual-directory').length} Virtual Directories
