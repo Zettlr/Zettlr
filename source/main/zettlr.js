@@ -856,6 +856,7 @@ class Zettlr {
     // Set the pointers either to null or last opened dir/file
     this.setCurrentDir(this.findDir({ 'hash': parseInt(this.config.get('lastDir')) }))
     this.setCurrentFile(this.findFile({ 'hash': parseInt(this.config.get('lastFile')) }))
+    this.window.fileUpdate() // Preset the window's title with the current file, if applicable
   }
 
   /**
