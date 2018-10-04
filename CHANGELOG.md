@@ -28,6 +28,7 @@
 - Added extended statistics. Now you can exactly see when you've written how many words by clicking the new button in the small statistics popup.
 - You may now use `#`-characters inside tags.
 - macOS users now have an inset titlebar to make the app feel more immersive while not in fullscreen as well.
+- QuickLook windows now display the headings in the correct size again.
 
 ## Under the hood
 

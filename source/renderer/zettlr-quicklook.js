@@ -140,6 +140,8 @@ class ZettlrQuicklook {
 
     this._window.find('h1').first().text(this._file.name)
     this._cm.setValue(this._file.content)
+    // Apply heading line classes immediately
+    this._cm.execCommand('markdownHeaderClasses')
 
     this._window.draggable({
       handle: 'div.title',
