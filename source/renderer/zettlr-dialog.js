@@ -354,8 +354,8 @@ class ZettlrDialog {
     // detect the right margins.
     this._place()
 
-    // Tippify all titled elements
-    tippy('[title]', {
+    // Tippify all elements with the respective attribute
+    tippy('[data-tippy-content]', {
       delay: 100,
       arrow: true,
       duration: 100,

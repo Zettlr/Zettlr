@@ -171,7 +171,7 @@ class ZettlrPreview {
         for (let t of d.tags) {
           if (keywords.includes(t)) {
             let thekey = this._keywords.find((elem) => { return (elem.name === t) })
-            tl += `<div class="tagspacer"><div class="tag" style="background-color:${thekey.color};" title="${thekey.desc}" data-tag="${thekey.name}"></div></div>`
+            tl += `<div class="tagspacer"><div class="tag" style="background-color:${thekey.color};" data-tippy-content="${thekey.desc}" data-tag="${thekey.name}"></div></div>`
           }
         }
         tl += `</div>`
@@ -182,7 +182,7 @@ class ZettlrPreview {
           elem += `<p class="snippet">
           <span class="date">${formatDate(new Date(d.modtime))}</span>`
           if (d.id) elem += ` <span class="id">${d.id}</span>`
-          if (d.tags.length > 0) elem += ` <span class="tags" title="${d.tags.join(',\n')}">#${d.tags.length}</span>`
+          if (d.tags.length > 0) elem += ` <span class="tags" data-tippy-content="${d.tags.join(',\n')}">#${d.tags.length}</span>`
           elem += `</p>`
         }
       }

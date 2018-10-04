@@ -45,6 +45,7 @@
 - Fixed a missing dependency in `ZettlrAttachment`.
 - Updated to `electron` 3.
 - Changed `app.makeSingleInstance` to `app.requestSingleInstanceLock` as recommended by the docs.
+- Updated dependencies to the newest versions.
 
 # 0.19.0
 

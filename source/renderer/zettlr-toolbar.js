@@ -136,12 +136,13 @@ class ZettlrToolbar {
         child.addClass(elem.class)
         child.attr('data-command', elem.command)
         child.attr('data-content', elem.content)
-        child.attr('title', trans(elem.title))
+        child.attr('data-tippy-content', trans(elem.title))
       } else if (elem.role === 'searchbar') {
         child.html('<input type="text"><div class="end-search">&times;</div>')
       } else if (elem.role === 'pomodoro') {
         child.addClass('button')
         child.attr('data-command', 'pomodoro')
+        child.attr('data-tippy-content', trans(elem.title))
         child.html('<svg width="20" height="20" viewBox="-1 -1 2 2"><circle class="pomodoro-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle><path d="" fill="" class="pomodoro-value" shape-rendering="geometricPrecision"></path></svg>')
       }
       this._div.append(child)

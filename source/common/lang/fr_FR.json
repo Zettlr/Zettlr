@@ -406,7 +406,8 @@
         "toggle_attachments": "Voir les annexes",
         "formatting": "Formats du texte",
         "generate_id": "Créer une nouvelle identification",
-        "find": "Chercher dans le fichier"
+        "find": "Chercher dans le fichier",
+        "pomodoro": "Pomodoro-Timer"
     },
     "system" : {
         "unknown_command": "Reçu une commande inconnu: %s",

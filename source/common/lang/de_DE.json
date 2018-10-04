@@ -406,7 +406,8 @@
         "toggle_attachments": "Anhänge anzeigen",
         "formatting": "Textformate",
         "generate_id": "Neue ID generieren",
-        "find": "In Datei finden"
+        "find": "In Datei finden",
+        "pomodoro": "Pomodoro-Timer"
     },
     "system" : {
         "unknown_command": "Unbekannten Befehl erhalten: %s",

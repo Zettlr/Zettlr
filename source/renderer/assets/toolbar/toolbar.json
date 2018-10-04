@@ -101,7 +101,8 @@
             "role": "file-info"
         },
         {
-            "role": "pomodoro"
+            "role": "pomodoro",
+            "title": "toolbar.pomodoro"
         },
         {
             "role": "button",
