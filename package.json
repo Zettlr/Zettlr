@@ -127,7 +127,7 @@
     "devDependencies": {
         "chalk": "^2.4.1",
         "csso": "^3.5.1",
-        "electron": "~2.0",
+        "electron": "^3.0.2",
         "electron-builder": "^20.19.2",
         "esdoc": "^1.1.0",
         "esdoc-standard-plugin": "^1.0.0",

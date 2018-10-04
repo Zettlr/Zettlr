@@ -16,11 +16,11 @@
  */
 
 const electron = require('electron')
-const {dialog, BrowserWindow, app} = electron
+const { dialog, BrowserWindow, app } = electron
 const url = require('url')
 const path = require('path')
-const {trans} = require('../common/lang/i18n.js')
-const {isDir} = require('../common/zettlr-helpers.js')
+const { trans } = require('../common/lang/i18n.js')
+const { isDir } = require('../common/zettlr-helpers.js')
 const ZettlrMenu = require('./zettlr-menu.js')
 
 /**
@@ -50,7 +50,6 @@ class ZettlrWindow {
     }
 
     // Prepare saved attributes from the config.
-    let screensize = electron.screen.getPrimaryDisplay().workAreaSize
     let winWidth = global.config.get('window.width')
     let winHeight = global.config.get('window.height')
     let winX = global.config.get('window.x')
@@ -58,14 +57,14 @@ class ZettlrWindow {
     let winMax = global.config.get('window.max')
 
     // Sanity checks
+    let screensize = electron.screen.getPrimaryDisplay().workAreaSize
     if (typeof winWidth !== 'number' || winWidth > screensize.width) winWidth = screensize.width
     if (typeof winHeight !== 'number' || winHeight > screensize.height) winHeight = screensize.height
     if (typeof winX !== 'number' || winX > screensize.width) winX = 0
     if (typeof winY !== 'number' || winY > screensize.height) winY = 0
     if (typeof winMax !== 'boolean') winMax = true
 
-    // First create a new browserWindow
-    this._win = new BrowserWindow({
+    let winConf = {
       width: winWidth,
       height: winHeight,
       x: winX,
@@ -78,7 +77,15 @@ class ZettlrWindow {
       backgroundColor: '#fff',
       scrollBounce: true, // The nice scrolling effect for macOS
       defaultEncoding: 'utf8' // Why the hell does this default to ISO?
-    })
+    }
+
+    // On macOS create a chromeless window with the window controls.
+    if (process.platform === 'darwin') {
+      winConf.titleBarStyle = 'hiddenInset'
+    }
+
+    // First create a new browserWindow
+    this._win = new BrowserWindow(winConf)
 
     // Then activate listeners.
     // and load the index.html of the app.
@@ -203,6 +210,20 @@ class ZettlrWindow {
     */
   getTitle () {
     return this._win.getTitle()
+  }
+
+  /**
+   * Toggle the maximisation of the window (either maximise or unmaximise)
+   * @return {ZettlrWindow} Chainability.
+   */
+  toggleMaximise () {
+    if (this._win.isMaximized()) {
+      this._win.unmaximize()
+    } else {
+      this._win.maximize()
+    }
+
+    return this
   }
 
   /**
@@ -394,7 +415,7 @@ class ZettlrWindow {
       'title': trans('system.import_lang_file'),
       'defaultPath': startDir,
       'filters': [
-        {name: 'JSON File', extensions: ['json']}
+        { name: 'JSON File', extensions: ['json'] }
       ],
       'properties': [
         'openFile'

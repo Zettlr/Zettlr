@@ -113,6 +113,10 @@ class ZettlrIPC {
         require('electron').app.quit()
         break
 
+      case 'app-maximise':
+        this._app.getWindow().toggleMaximise()
+        break
+
       case 'get-paths':
         // The child process requested the current paths and files
         this.send('paths-update', this._app.getPaths())

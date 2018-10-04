@@ -107,6 +107,12 @@ class ZettlrToolbar {
       this._renderer.handleEvent(command, content)
     })
 
+    // Enable maximise window only on double-click of the toolbar
+    this._div.on('dblclick', (e) => {
+      this._renderer.handleEvent('app-maximise')
+      // console.log(`Doubleclick requested!`)
+    })
+
     // Tippify all buttons
     tippy('#toolbar .button', {
       delay: 100,

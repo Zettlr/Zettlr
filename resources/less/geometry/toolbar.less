@@ -101,3 +101,13 @@
         }
     }
 }
+
+// For macOS, we need to add some more margin
+body.darwin #toolbar {
+  padding-left: 70px;
+  -webkit-app-region: drag;
+
+  & > .searchbar, & > .file-info, & > .button, & > svg:not(#search-progress-indicator) {
+    -webkit-app-region: no-drag;
+  }
+}

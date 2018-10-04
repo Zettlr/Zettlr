@@ -126,6 +126,11 @@ class ZettlrRendererIPC {
         this.send('app-quit')
         break
 
+      // Tell the main process to maximise the window
+      case 'app-maximise':
+        this.send('app-maximise')
+        break
+
       case 'paths-update':
         // Update the paths
         this._app.refresh(cnt)

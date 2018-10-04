@@ -27,6 +27,7 @@
 - Fixed a bug that generated a falsy first search cursor and prevented case insensitive searching.
 - Added extended statistics. Now you can exactly see when you've written how many words by clicking the new button in the small statistics popup.
 - You may now use `#`-characters inside tags.
+- macOS users now have an inset titlebar to make the app feel more immersive while not in fullscreen as well.
 
 ## Under the hood
 
@@ -41,6 +42,7 @@
 - Using `global.config.get` it is now possible in the renderer to access the configuration programmatically without the need to send events.
 - Replaced all renderer configuration requests with the new, faster and synchronous method.
 - Fixed a missing dependency in `ZettlrAttachment`.
+- Updated to `electron` 3.
 
 # 0.19.0
 
