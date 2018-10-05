@@ -23,12 +23,16 @@
 
     .CodeMirror-code {
         margin:5em 0em;
+        @media(max-width: 1024px) { margin: 0.5em 0em; }
 
         .mute { opacity:0.2; }
     }
 
     .CodeMirror-scroll {
         padding:0em 5em;
+        @media(max-width: 1200px) { padding: 0 2.5em; }
+        @media(max-width: 1024px) { padding: 0 1em; }
+        @media(max-width: 900px) { padding: 0 0.5em; }
         overflow-x:hidden !important; // Necessary to hide the horizontal scrollbar
     }
 }

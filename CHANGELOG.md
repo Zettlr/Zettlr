@@ -29,6 +29,7 @@
 - You may now use `#`-characters inside tags.
 - macOS users now have an inset titlebar to make the app feel more immersive while not in fullscreen as well.
 - QuickLook windows now display the headings in the correct size again.
+- On smaller displays, Zettlr now has smaller margins and paddings so that each display size's space is used best.
 
 ## Under the hood
 
