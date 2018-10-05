@@ -405,7 +405,6 @@
         "show_toc": "Show the table of contents",
         "toggle_attachments": "View attachments",
         "formatting": "Text formats",
-        "generate_id": "Generate new ID",
         "find": "Find in file",
         "pomodoro": "Pomodoro-Timer"
     },
