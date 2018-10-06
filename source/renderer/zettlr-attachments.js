@@ -24,7 +24,7 @@ class ZettlrAttachments {
     */
   constructor (parent) {
     this._renderer = parent
-    this._container = $('<div>').prop('id', 'attachments')
+    this._container = $('<div>').prop('id', 'attachments').css('display', 'none')
     $('body').append(this._container)
     this._open = false
     this._attachments = []
@@ -38,9 +38,12 @@ class ZettlrAttachments {
   toggle () {
     // Toggles the display of the attachment pane
     if (!this._open) {
+      this._container.css('display', '')
       this._container.animate({ 'right': '0%' })
     } else {
-      this._container.animate({ 'right': '-20%' })
+      this._container.animate({ 'right': '-20%' }, () => {
+        this._container.css('display', 'none')
+      })
     }
 
     this._open = !this._open

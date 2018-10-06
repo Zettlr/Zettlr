@@ -31,6 +31,7 @@
 - QuickLook windows now display the headings in the correct size again.
 - On smaller displays, Zettlr now has smaller margins and paddings so that each display size's space is used best.
 - Removed the `ID`-button from the toolbar. The command is still present in the menu and still works using the shortcut `Cmd/Ctrl+L`.
+- Fixed the bug that the attachment pane tooltip was partially hidden.
 
 ## Under the hood
 
