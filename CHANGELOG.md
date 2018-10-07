@@ -32,6 +32,7 @@
 - On smaller displays, Zettlr now has smaller margins and paddings so that each display size's space is used best.
 - Removed the `ID`-button from the toolbar. The command is still present in the menu and still works using the shortcut `Cmd/Ctrl+L`.
 - Fixed the bug that the attachment pane tooltip was partially hidden.
+- Quicklook windows are now constrained to the body area, and cannot be dragged over the toolbar.
 
 ## Under the hood
 

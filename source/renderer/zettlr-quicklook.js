@@ -143,11 +143,18 @@ class ZettlrQuicklook {
     // Apply heading line classes immediately
     this._cm.execCommand('markdownHeaderClasses')
 
+    let toolbarheight = $('#toolbar').outerHeight()
+
     this._window.draggable({
       handle: 'div.title',
       containment: 'document',
       cursor: '-webkit-grabbing',
       stack: '.quicklook',
+      drag: (e, ui) => {
+        if (ui.position.top < toolbarheight) {
+          ui.position.top = toolbarheight
+        }
+      },
       stop: (e, ui) => {
         this._cm.focus()
       }
