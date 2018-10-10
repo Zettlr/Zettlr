@@ -13,7 +13,7 @@
   'use strict'
 
   var delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚'
-  var zknTagRE = /#[A-Z0-9-_#]+/i
+  var zknTagRE = /##?[A-Z0-9-_]+#?/i
   var tableRE = /^\|.+\|$/i
 
   /**
