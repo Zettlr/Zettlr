@@ -295,7 +295,8 @@ class ZettlrWindow {
         trans('system.save_changes_save'),
         trans('system.save_changes_omit')
       ],
-      cancelId: 0
+      cancelId: 0,
+      defaultId: 1
     }
 
     let ret = dialog.showMessageBox(this._win, options)
@@ -322,7 +323,8 @@ class ZettlrWindow {
         trans('system.cancel'),
         trans('system.ok')
       ],
-      cancelId: 0
+      cancelId: 0,
+      defaultId: 1
     }
 
     let ret = dialog.showMessageBox(this._win, options)
@@ -460,7 +462,8 @@ class ZettlrWindow {
     let ret = dialog.showMessageBox(this._win, {
       type: 'warning',
       buttons: [ 'Ok', trans('system.error.cancel_remove') ],
-      defaultId: 1,
+      defaultId: 0,
+      cancelId: 1,
       title: trans('system.error.remove_title'),
       message: trans('system.error.remove_message', obj.name)
     })

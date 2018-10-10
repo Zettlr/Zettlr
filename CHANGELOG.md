@@ -34,6 +34,7 @@
 - Fixed the bug that the attachment pane tooltip was partially hidden.
 - Quicklook windows are now constrained to the body area, and cannot be dragged over the toolbar.
 - Added validation to the settings so that you can't accidentally set wrong values.
+- The default buttons for dialogs are now reactivated, so you can remove files and folders by simply hitting `Return` to confirm the removal again.
 
 ## Under the hood
 
@@ -53,6 +54,7 @@
 - Updated dependencies to the newest versions.
 - Image preview rendering is now independent of `path`.
 - Refactored the complete configuration setting process.
+- Explicitly set `defaultId` on confirmation dialogs.
 
 # 0.19.0
 
