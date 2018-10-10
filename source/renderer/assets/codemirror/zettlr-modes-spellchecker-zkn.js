@@ -282,6 +282,13 @@
         mode: CodeMirror.getMode(config, 'text/x-rsrc'),
         delimStyle: 'formatting-code-block',
         innerStyle: 'fenced-code'
+      },
+      {
+        open: '```',
+        close: '```',
+        mode: CodeMirror.getMode(config, 'text/plain'),
+        delimStyle: 'formatting-code-block',
+        innerStyle: 'fenced-code'
       }
     )
   })
