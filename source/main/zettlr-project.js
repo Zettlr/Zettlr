@@ -195,6 +195,55 @@ class ZettlrProject {
   }
 
   /**
+    * Sets a project property
+    * @param {String} option The option to be set
+    * @param {Mixed} value  The value of the config variable.
+    * @return {Boolean} Whether or not the option was successfully set.
+    */
+  set (option, value) {
+    // Don't add non-existent options
+    if (this._cfg.hasOwnProperty(option)) {
+      this._cfg[option] = value
+      return true
+    }
+
+    if (option.indexOf('.') > 0) {
+      // A nested argument was requested, so iterate until we find it
+      let nested = option.split('.')
+      let prop = nested.pop() // Last one must be set manually, b/c simple attributes aren't pointers
+      let cfg = this._cfg
+      for (let arg of nested) {
+        if (cfg.hasOwnProperty(arg)) {
+          cfg = cfg[arg]
+        } else {
+          return false // The config option must match exactly
+        }
+      }
+
+      // Set the nested property
+      if (cfg.hasOwnProperty(prop)) {
+        cfg[prop] = value
+        return true
+      }
+    }
+
+    return false
+  }
+
+  /**
+   * Update the project's settings according to the new object.
+   * @param  {Objext} cfgObj An object containing the settings in key:value form.
+   * @return {Boolean}        True or false, if an error occurred.
+   */
+  bulkSet (cfgObj) {
+    let ret = true
+    for (let opt in cfgObj) {
+      if (!this.set(opt, cfgObj[opt])) ret = false
+    }
+    return ret
+  }
+
+  /**
     * Static method used by ZettlrDir to determine whether or not it's a project.
     * @param  {ZettlrDir}  directory The directory for which existence of this file should be testet.
     * @return {Boolean}           Returns true, if a corresponding file has been found, or null.

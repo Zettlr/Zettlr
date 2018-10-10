@@ -33,6 +33,7 @@
 - Removed the `ID`-button from the toolbar. The command is still present in the menu and still works using the shortcut `Cmd/Ctrl+L`.
 - Fixed the bug that the attachment pane tooltip was partially hidden.
 - Quicklook windows are now constrained to the body area, and cannot be dragged over the toolbar.
+- Added validation to the settings so that you can't accidentally set wrong values.
 
 ## Under the hood
 
@@ -51,6 +52,7 @@
 - Changed `app.makeSingleInstance` to `app.requestSingleInstanceLock` as recommended by the docs.
 - Updated dependencies to the newest versions.
 - Image preview rendering is now independent of `path`.
+- Refactored the complete configuration setting process.
 
 # 0.19.0
 

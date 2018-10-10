@@ -14,33 +14,33 @@
       <div id="prefs-tabs-general">
         <label for="app-lang">%i18n.preferences.app_lang.title%
         </label>
-        <select name="app-lang" id="app-lang">
+        <select name="app_lang" id="app-lang">
           %APP_LANG%
         </select>
         <div class="cb-group">
           <label class="cb-toggle">
-            <input type="checkbox" name="pref-darkTheme" value="yes" id="pref-darkTheme" %DARK%>
+            <input type="checkbox" name="darkTheme" value="yes" id="darkTheme" %DARK%>
             <div class="toggle"></div>
           </label>
-          <label for="pref-darkTheme">%i18n.preferences.nightmode%</label>
+          <label for="darkTheme">%i18n.preferences.nightmode%</label>
         </div>
         <div class="cb-group">
           <label class="cb-toggle">
-            <input type="checkbox" name="pref-snippets" value="yes" id="pref-snippets" %SNIPPETS%>
+            <input type="checkbox" name="snippets" value="yes" id="snippets" %SNIPPETS%>
             <div class="toggle"></div>
           </label>
-          <label for="pref-snippets">%i18n.preferences.snippets%</label>
+          <label for="snippets">%i18n.preferences.snippets%</label>
         </div>
         <hr>
         <p>
           %i18n.preferences.combiner_explanation%
         </p>
         <div class="cb-group">
-          <input type="radio" name="pref-combiner-state" value="collapsed" id="pref-comb-state-coll" %COMBINER_COLLAPSED%>
+          <input type="radio" name="combinerState" value="collapsed" id="pref-comb-state-coll" %COMBINER_COLLAPSED%>
           <label for="pref-comb-state-coll">%i18n.preferences.combiner_collapsed%</label>
         </div>
         <div class="cb-group">
-          <input type="radio" name="pref-combiner-state" value="expanded" id="pref-comb-state-exp" %COMBINER_EXPANDED%>
+          <input type="radio" name="combinerState" value="expanded" id="pref-comb-state-exp" %COMBINER_EXPANDED%>
           <label for="pref-comb-state-exp">%i18n.preferences.combiner_expanded%</label>
         </div>
       </div>
@@ -69,10 +69,10 @@
         <hr>
         <div class="cb-group">
           <label class="cb-toggle">
-            <input type="checkbox" name="pref-mute-lines" value="yes" id="pref-mute-lines" %MUTE_LINES%>
+            <input type="checkbox" name="muteLines" value="yes" id="muteLines" %MUTE_LINES%>
             <div class="toggle"></div>
           </label>
-          <label for="pref-mute-lines">%i18n.preferences.mute_lines%</label>
+          <label for="muteLines">%i18n.preferences.mute_lines%</label>
         </div>
       </div>
       <!-- Export related options (except pandoc+xelatex) -->
@@ -81,11 +81,11 @@
           %i18n.preferences.export.dest%
         </p>
         <div class="cb-group">
-          <input type="radio" name="pref-export-dest" value="temp" id="pref-export-temp" %EXPORT_DEST_TEMP%>
+          <input type="radio" name="export.dir" value="temp" id="pref-export-temp" %EXPORT_DEST_TEMP%>
           <label for="pref-export-temp">%i18n.preferences.export.dest_temp_label%</label>
         </div>
         <div class="cb-group">
-          <input type="radio" name="pref-export-dest" value="cwd" id="pref-export-cwd" %EXPORT_DEST_CWD%>
+          <input type="radio" name="export.dir" value="cwd" id="pref-export-cwd" %EXPORT_DEST_CWD%>
           <label for="pref-export-cwd">%i18n.preferences.export.dest_cwd_label%</label>
         </div>
         <hr>
@@ -94,31 +94,31 @@
           <p>
             <div class="cb-group">
               <label class="cb-toggle">
-                <input type="checkbox" name="pref-export-strip-id" value="yes" id="pref-export-strip-id" %EXPORT_STRIP_ID%>
+                <input type="checkbox" name="export.stripIDs" value="yes" id="export.stripIDs" %EXPORT_STRIP_ID%>
                 <div class="toggle"></div>
               </label>
-              <label for="pref-export-strip-id">%i18n.preferences.export.strip_id_label%</label>
+              <label for="export.stripIDs">%i18n.preferences.export.strip_id_label%</label>
             </div>
             <div class="cb-group">
               <label class="cb-toggle">
-                <input type="checkbox" name="pref-export-strip-tags" value="yes" id="pref-export-strip-tags" %EXPORT_STRIP_TAGS%>
+                <input type="checkbox" name="export.stripTags" value="yes" id="export.stripTags" %EXPORT_STRIP_TAGS%>
                 <div class="toggle"></div>
               </label>
-              <label for="pref-export-strip-tags">%i18n.preferences.export.strip_tags_label%</label>
+              <label for="export.stripTags">%i18n.preferences.export.strip_tags_label%</label>
             </div>
           </p>
         </div>
         <div class="box-right">
           <div class="cb-group">
-            <input type="radio" name="pref-export-strip-links" value="full" id="pref-export-strip-link-full" %EXPORT_STRIP_LINKS_FULL%>
+            <input type="radio" name="export.stripLinks" value="full" id="pref-export-strip-link-full" %EXPORT_STRIP_LINKS_FULL%>
             <label for="pref-export-strip-link-full">%i18n.preferences.export.strip_links_full_label%</label>
           </div>
           <div class="cb-group">
-            <input type="radio" name="pref-export-strip-links" value="unlink" id="pref-export-strip-link-unlink" %EXPORT_STRIP_LINKS_UNLINK%>
+            <input type="radio" name="export.stripLinks" value="unlink" id="pref-export-strip-link-unlink" %EXPORT_STRIP_LINKS_UNLINK%>
             <label for="pref-export-strip-link-unlink">%i18n.preferences.export.strip_links_unlink_label%</label>
           </div>
           <div class="cb-group">
-            <input type="radio" name="pref-export-strip-links" value="no" id="pref-export-strip-link-no" %EXPORT_STRIP_LINKS_NO%>
+            <input type="radio" name="export.stripLinks" value="no" id="pref-export-strip-link-no" %EXPORT_STRIP_LINKS_NO%>
             <label for="pref-export-strip-link-no">%i18n.preferences.export.strip_links_no_label%</label>
           </div>
         </div>
@@ -127,16 +127,16 @@
       <div id="prefs-tabs-zkn">
         <div class="box-left form-inline-buttons">
           <label for="pref-zkn-free-id">%i18n.preferences.zkn.id_label%</label>
-          <input type="text" id="pref-zkn-free-id" value="%ZKN_ID%" name="pref-zkn-id-regex">
+          <input type="text" id="pref-zkn-free-id" value="%ZKN_ID%" name="zkn.idRE">
           <button type="button" id="reset-id-regex" data-tippy-content="%i18n.preferences.zkn.reset_default_id%">&#9003;</button>
           <label for="pref-zkn-free-linkstart">%i18n.preferences.zkn.linkstart_label%</label>
-          <input type="text" id="pref-zkn-free-linkstart" value="%ZKN_LINKSTART%" name="pref-zkn-linkstart-regex">
+          <input type="text" id="pref-zkn-free-linkstart" value="%ZKN_LINKSTART%" name="zkn.linkStart">
           <button type="button" id="reset-linkstart-regex" data-tippy-content="%i18n.preferences.zkn.reset_default_linkstart%">&#9003;</button>
           <label for="pref-zkn-free-linkend">%i18n.preferences.zkn.linkend_label%</label>
-          <input type="text" id="pref-zkn-free-linkend" value="%ZKN_LINKEND%" name="pref-zkn-linkend-regex">
+          <input type="text" id="pref-zkn-free-linkend" value="%ZKN_LINKEND%" name="zkn.linkEnd">
           <button type="button" id="reset-linkend-regex" data-tippy-content="%i18n.preferences.zkn.reset_default_linkend%">&#9003;</button>
           <label for="pref-zkn-id-gen">%i18n.preferences.zkn.id_generator_label%</label>
-          <input type="text" id="pref-zkn-id-gen" value="%ZKN_IDGEN%" name="pref-zkn-id-generator">
+          <input type="text" id="pref-zkn-id-gen" value="%ZKN_IDGEN%" name="zkn.idGen">
           <button type="button" id="reset-id-generator" data-tippy-content="%i18n.preferences.zkn.reset_default_generator%">&#9003;</button>
           <hr>
           <p>
@@ -162,19 +162,19 @@
       <!-- Attachment options -->
       <div id="prefs-tabs-attachments">
         <p>%i18n.preferences.attachments_info%</p>
-        <textarea id="pref-attachments" name="pref-attachments">%ATTACHMENT_EXTENSIONS%</textarea>
+        <textarea id="attachmentExtensions" name="attachmentExtensions">%ATTACHMENT_EXTENSIONS%</textarea>
       </div>
       <!-- Export/seldomly used options -->
       <div id="prefs-tabs-advanced">
-        <label for="pref-pandoc">
+        <label for="pandoc">
           %i18n.preferences.pandoc%
         </label>
-        <input type="text" id="pref-pandoc" name="pref-pandoc" placeholder="%i18n.preferences.pandoc_default%" value="%PANDOC%">
+        <input type="text" id="pandoc" name="pandoc" placeholder="%i18n.preferences.pandoc_default%" value="%PANDOC%">
 
-        <label for="pref-xelatex">
+        <label for="xelatex">
           %i18n.preferences.xelatex%
         </label>
-        <input type="text" id="pref-xelatex" name="pref-xelatex" placeholder="%i18n.preferences.xelatex_default%" value="%XELATEX%">
+        <input type="text" id="xelatex" name="xelatex" placeholder="%i18n.preferences.xelatex_default%" value="%XELATEX%">
 
         <hr>
 
@@ -210,7 +210,7 @@ $('.dicts-list-search').on('keyup', (e) => {
 $('.dicts-list').on('click', (e) => {
   let elem = $(e.target)
   if (elem.is('li') && elem.hasClass('dicts-list-item')) {
-    let selection = $(`<div class="selected-dict"><input type="hidden" value="${elem.attr('data-value')}" name="spellcheck[]" id="${elem.attr('data-value')}">${elem.text()}</div>`)
+    let selection = $(`<div class="selected-dict"><input type="hidden" value="${elem.attr('data-value')}" name="selectedDicts" id="${elem.attr('data-value')}">${elem.text()}</div>`)
     $('.selected-dictionaries').append(selection)
     elem.detach()
     $('.dicts-list-search').val('').focus().trigger('keyup') // Next search
@@ -253,10 +253,8 @@ $('#reset-id-generator').on('click', (e) => {
   $('#pref-zkn-id-gen').val('%Y%M%D%h%m%s')
 })
 
-const { generateId } = require('../../common/zettlr-helpers.js')
-
 $('#generate-id').on('click', (e) => {
-  let id = generateId($('#pref-zkn-id-gen').val())
+  let id = require('../../common/zettlr-helpers.js').generateId($('#pref-zkn-id-gen').val())
   let re = new RegExp('^' + $('#pref-zkn-free-id').val() + '$')
   $('#generator-tester').text(id)
   if (re.test(id)) {

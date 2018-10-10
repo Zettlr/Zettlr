@@ -1,8 +1,8 @@
-<div class="dialog">
+pdf.lmargin<div class="dialog">
     <h1>%i18n.preferences.project.title%: %PROJECT_DIRECTORY%</h1>
     <form action="" method="GET" id="dialog">
         <!-- Transmit the project's hash as well. -->
-        <input type="hidden" name="prefs-project-hash" value="%HASH%">
+        <input type="hidden" name="projectHash" value="%HASH%">
         <div id="prefs-tabs" class="clear">
             <ul>
                 <li><a href="#prefs-tabs-general">%i18n.preferences.pdf.metadata%</a></li>
@@ -13,26 +13,26 @@
             <div id="prefs-tabs-general">
                 <p>%i18n.preferences.pdf.metadata_intro%</p>
                 <div class="box-left">
-                    <label for="prefs-pdf-title">%i18n.preferences.project.title_label%</label>
-                    <input type="text" name="prefs-project-title" id="prefs-project-title" value="%PREFS_TITLE%" placeholder="%i18n.preferences.project.title_label%">
-                    <label for="prefs-pdf-author">%i18n.preferences.pdf.author_label%</label>
-                    <input type="text" name="prefs-pdf-author" id="prefds-pdf-author" value="%PREFS_AUTHOR%" placeholder="%i18n.preferences.pdf.author%">
-                    <label for="prefs-pdf-keywords">%i18n.preferences.pdf.keywords_label%</label>
-                    <input type="text" name="prefs-pdf-keywords" if="prefs-pdf-keywords" value="%PREFS_KEYWORDS%" placeholder="%i18n.preferences.pdf.keywords%">
+                    <label for="title">%i18n.preferences.project.title_label%</label>
+                    <input type="text" name="title" id="title" value="%PREFS_TITLE%" placeholder="%i18n.preferences.project.title_label%">
+                    <label for="pdf.author">%i18n.preferences.pdf.author_label%</label>
+                    <input type="text" name="pdf.author" id="pdf.author" value="%PREFS_AUTHOR%" placeholder="%i18n.preferences.pdf.author%">
+                    <label for="pdf.keywords">%i18n.preferences.pdf.keywords_label%</label>
+                    <input type="text" name="pdf.keywords" if="pdf.keywords" value="%PREFS_KEYWORDS%" placeholder="%i18n.preferences.pdf.keywords%">
                 </div>
                 <div class="box-right">
                   <label class="cb-toggle">
-                    <input type="checkbox" value="yes" name="prefs-pdf-titlepage" id="prefs-pdf-titlepage" %GENERATE_TITLEPAGE%>
+                    <input type="checkbox" value="yes" name="pdf.titlepage" id="pdf.titlepage" %GENERATE_TITLEPAGE%>
                     <div class="toggle"></div>
                   </label>
-                    <label for="prefs-pdf-titlepage">%i18n.preferences.pdf.titlepage_label%</label>
+                    <label for="pdf.titlepage">%i18n.preferences.pdf.titlepage_label%</label>
                     <div class="clearfix"></div>
                     <label class="cb-toggle">
-                      <input type="checkbox" value="yes" name="prefs-pdf-toc" id="prefs-pdf-toc" %GENERATE_TOC%>
+                      <input type="checkbox" value="yes" name="pdf.toc" id="pdf.toc" %GENERATE_TOC%>
                       <div class="toggle"></div>
                     </label>
-                    <label for="prefs-pdf-toc">%i18n.preferences.pdf.toc_label%</label>
-                    <select name="prefs-pdf-toc-depth">
+                    <label for="pdf.toc">%i18n.preferences.pdf.toc_label%</label>
+                    <select name="pdf.tocDepth">
                         %TOCDEPTH%
                     </select>
                     <div class="clearfix"></div>
@@ -45,25 +45,25 @@
                 <div class="clear"></div>
                 <div class="box-left">
                     <div class="paper a4paper">
-                        <input class="tmargin" type="number" min="0" max="9999" step="0.1" name="prefs-pdf-tmargin" id="prefs-pdftlmargin" value="%PREFS_TMARGIN%" placeholder="%i18n.preferences.pdf.tmargin%" data-tippy-content="%i18n.preferences.pdf.tmargin_label%">
-                        <input class="rmargin" type="number" min="0" max="9999" step="0.1" name="prefs-pdf-rmargin" id="prefs-pdf-rmargin" value="%PREFS_RMARGIN%" placeholder="%i18n.preferences.pdf.rmargin%" data-tippy-content="%i18n.preferences.pdf.rmargin_label%">
-                        <input class="bmargin" type="number" min="0" max="9999" step="0.1" name="prefs-pdf-bmargin" id="prefs-pdf-bmargin" value="%PREFS_BMARGIN%" placeholder="%i18n.preferences.pdf.bmargin%" data-tippy-content="%i18n.preferences.pdf.bmargin_label%">
-                        <input class="lmargin" type="number" min="0" max="9999" step="0.1" name="prefs-pdf-lmargin" id="prefs-pdf-lmargin" value="%PREFS_LMARGIN%" placeholder="%i18n.preferences.pdf.lmargin%" data-tippy-content="%i18n.preferences.pdf.lmargin_label%">
+                        <input class="tmargin" type="number" min="0" max="9999" step="0.1" name="pdf.tmargin" id="pdf.tmargin" value="%PREFS_TMARGIN%" placeholder="%i18n.preferences.pdf.tmargin%" data-tippy-content="%i18n.preferences.pdf.tmargin_label%">
+                        <input class="rmargin" type="number" min="0" max="9999" step="0.1" name="pdf.rmargin" id="pdf.rmargin" value="%PREFS_RMARGIN%" placeholder="%i18n.preferences.pdf.rmargin%" data-tippy-content="%i18n.preferences.pdf.rmargin_label%">
+                        <input class="bmargin" type="number" min="0" max="9999" step="0.1" name="pdf.bmargin" id="pdf.bmargin" value="%PREFS_BMARGIN%" placeholder="%i18n.preferences.pdf.bmargin%" data-tippy-content="%i18n.preferences.pdf.bmargin_label%">
+                        <input class="lmargin" type="number" min="0" max="9999" step="0.1" name="pdf.lmargin" id="pdf.lmargin" value="%PREFS_LMARGIN%" placeholder="%i18n.preferences.pdf.lmargin%" data-tippy-content="%i18n.preferences.pdf.lmargin_label%">
                     </div>
                 </div>
                 <div class="box-right">
-                    <label for="prefs-pdf-unit">%i18n.preferences.pdf.unit_label%</label>
-                    <select name="prefs-pdf-unit" id="prefs-pdf-margin-unit">
+                    <label for="pdf.margin_unit">%i18n.preferences.pdf.unit_label%</label>
+                    <select name="pdf.margin_unit" id="pdf.margin_unit">
                         %MARGIN_UNITS%
                     </select>
                     <hr>
-                    <label for="prefs-pdf-papertype">%i18n.preferences.pdf.papertype%</label>
-                    <select name="prefs-pdf-papertype">
+                    <label for="pdf.papertype">%i18n.preferences.pdf.papertype%</label>
+                    <select name="pdf.papertype">
                         %PAPERTYPES%
                     </select>
                     <hr>
-                    <label for="prefs-pdf-pagenumbering">%i18n.preferences.pdf.pagenumbering_label%</label>
-                    <select name="prefs-pdf-pagenumbering">
+                    <label for="pdf.pagenumbering">%i18n.preferences.pdf.pagenumbering_label%</label>
+                    <select name="pdf.pagenumbering">
                         %PAGENUMBERING%
                     </select>
                 </div>
@@ -73,12 +73,12 @@
             <div id="prefs-tabs-font">
                 <p>%i18n.preferences.pdf.font_intro%</p>
                 <div class="box-left">
-                    <label for="prefs-pdf-mainfont">%i18n.preferences.pdf.mainfont_label%</label>
-                    <input type="text" name="prefs-pdf-mainfont" id="prefs-pdf-mainfont" value="%PREFS_MAINFONT%" placeholder="%i18n.preferences.pdf.mainfont%">
-                    <label for="prefs-pdf-fontsize">%i18n.preferences.pdf.fontsize_label%</label>
-                    <input type="number" min="0" max="10000" step="1" name="prefs-pdf-fontsize" id="prefs-pdf-fontsize" value="%PREFS_FONTSIZE%" placeholder="%i18n.preferences.pdf.fontsize%">
-                    <label for="prefs-pdf-lineheight">%i18n.preferences.pdf.lineheight_label%</label>
-                    <input type="number" min="0" max="1000" step="1" name="prefs-pdf-lineheight" id="prefs-pdf-lineheight" value="%PREFS_LINEHEIGHT%" placeholder="%i18n.preferences.pdf.lineheight%">
+                    <label for="pdf.mainfont">%i18n.preferences.pdf.mainfont_label%</label>
+                    <input type="text" name="pdf.mainfont" id="mainfont" value="%PREFS_MAINFONT%" placeholder="%i18n.preferences.pdf.mainfont%">
+                    <label for="pdf.fontsize">%i18n.preferences.pdf.fontsize_label%</label>
+                    <input type="number" min="0" max="10000" step="1" name="pdf.fontsize" id="fontsize" value="%PREFS_FONTSIZE%" placeholder="%i18n.preferences.pdf.fontsize%">
+                    <label for="pdf.lineheight">%i18n.preferences.pdf.lineheight_label%</label>
+                    <input type="number" min="0" max="1000" step="1" name="pdf.lineheight" id="lineheight" value="%PREFS_LINEHEIGHT%" placeholder="%i18n.preferences.pdf.lineheight%">
                 </div>
                 <div class="box-right">
                     <!-- This is the preview tab. It shows how everything will look afterwards. -->
@@ -105,19 +105,19 @@
 <script>
 /* global $ */
 // These scripts only are used to update the preview paragraph
-$('#prefs-pdf-lineheight').change((e) => {
+$('#lineheight').change((e) => {
   $('.pdf-preview').css('line-height', $(e.target).val() + '%')
 })
-$('#prefs-pdf-fontsize').change((e) => {
+$('#fontsize').change((e) => {
   // 1pt is approx. 1.333333 px
   $('.pdf-preview').css('font-size', ($(e.target).val() * 1.3) + 'px')
 })
-$('#prefs-pdf-mainfont').change((e) => {
+$('#mainfont').change((e) => {
   $('.pdf-preview').css('font-family', $(e.target).val())
 })
 
 // Initial changing of CSS
-$('.pdf-preview').css('line-height', $('#prefs-pdf-lineheight').val() + '%')
-$('.pdf-preview').css('font-size', ($('#prefs-pdf-fontsize').val() * 1.3) + 'px')
-$('.pdf-preview').css('font-family', $('#prefs-pdf-mainfont').val())
+$('.pdf-preview').css('line-height', $('#lineheight').val() + '%')
+$('.pdf-preview').css('font-size', ($('#fontsize').val() * 1.3) + 'px')
+$('.pdf-preview').css('font-family', $('#mainfont').val())
 </script>

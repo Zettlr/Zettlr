@@ -50,8 +50,10 @@
         }
 
         input {
-            line-height: 150%;
-            font-size: inherit;
+          line-height: 150%;
+          font-size: inherit;
+
+          &.has-error { background-color: @bg-error !important; }
         }
 
         input[type="text"], input[type="number"], button, a.button, textarea, select {

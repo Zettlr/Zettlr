@@ -183,7 +183,7 @@ class ZettlrDialog {
           // Prevent ugly language labels in the spellchecker selection.
           spellcheckLabel = trans('dialog.preferences.app_lang.' + l)
           spellcheckLabel = (spellcheckLabel === 'dialog.preferences.app_lang.' + l) ? l : spellcheckLabel
-          spellcheck += `\n<div class="selected-dict"><input type="hidden" value="${l}" name="spellcheck[]" id="${l}">${spellcheckLabel}</div>`
+          spellcheck += `\n<div class="selected-dict"><input type="hidden" value="${l}" name="selectedDicts" id="${l}">${spellcheckLabel}</div>`
         }
         replacements.push('%SPELLCHECK%|' + spellcheck)
         let avail = ''
@@ -468,6 +468,12 @@ class ZettlrDialog {
 
     return replacements
   }
+
+  /**
+   * This function grants access to the modal object to e.g. assign classes to certain elements.
+   * @return {jQuery} The modal DOM object.
+   */
+  getModal () { return this._modal }
 }
 
 module.exports = ZettlrDialog

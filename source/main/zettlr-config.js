@@ -509,6 +509,22 @@ class ZettlrConfig {
   }
 
   /**
+   * This function allows multiple options to be set at once. It needs to be an
+   * associative array in the form key:value.
+   * @param  {Object} cfgObj An object containing the keys and new values.
+   * @return {Boolean}        True, if all went well, or false, if an error occurred.
+   */
+  bulkSet (cfgObj) {
+    // Iterate and return whether there was a mistake.
+    let ret = true
+    for (let opt in cfgObj) {
+      if (!this.set(opt, cfgObj[opt])) ret = false
+    }
+
+    return ret
+  }
+
+  /**
     * Update the complete configuration object with new values
     * @param  {Object} newcfg               The new object containing new props
     * @param  {Object} [oldcfg=this.config] Necessary for recursion

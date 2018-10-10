@@ -192,7 +192,7 @@ class ZettlrIPC {
       case 'update-project-properties':
         dir = this._app.findDir(cnt) // Contains a hash property
         if (dir) {
-          dir.getProject().update(cnt.properties)
+          dir.getProject().bulkSet(cnt.properties)
         }
         break
 
@@ -313,7 +313,7 @@ class ZettlrIPC {
 
       // Got a new config object
       case 'update-config':
-        this._app.getConfig().update(cnt)
+        this._app.getConfig().bulkSet(cnt)
         this.send('config-update')
         break
 

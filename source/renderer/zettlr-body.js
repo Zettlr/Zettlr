@@ -19,6 +19,7 @@ const ZettlrCon = require('./zettlr-context.js')
 const ZettlrDialog = require('./zettlr-dialog.js')
 const ZettlrQuicklook = require('./zettlr-quicklook.js')
 const ZettlrNotification = require('./zettlr-notification.js')
+const ZettlrValidation = require('../common/zettlr-validation.js')
 const popup = require('./zettlr-popup.js')
 
 const { trans } = require('../common/lang/i18n.js')
@@ -631,237 +632,117 @@ class ZettlrBody {
     * @return {void}           Nothing to return.
     */
   proceed (dialog, res) {
-    let pandoc = ''
-    let xelatex = ''
-    let darkTheme = false
-    let snippets = false
-    let selectedDicts = []
-    let appLang = 'en_US'
-    let debug = false
-    let attachments = []
-    let exportDir = 'temp'
-    let stripIDs = false
-    let stripTags = false
-    let stripLinks = 'full'
-    let author = ''
-    let keywords = ''
-    let lmargin = 0
-    let rmargin = 0
-    let bmargin = 0
-    let tmargin = 0
-    let fontsize = 12
-    let papertype = 'a4paper'
-    let lineheight = 1
-    let mainfont = 'Times New Roman'
-    let marginUnit = 'cm'
-    let pagenumbering = 'gobble'
-    let mute = false
-    let combinerState = 'collapsed'
-    let tags = { 'name': [], 'color': [], 'desc': [] }
-    let projectTitle = ''
-    let hash = ''
-    let toc = false
-    let tocDepth = 0
-    let titlepage = false
-    let zkn = { 'idRE': '', 'linkStart': '', 'linkEnd': '', 'idGen': '' }
+    // First remove potential error-classes
+    this._dialog.getModal().find(`input`).removeClass('has-error')
 
+    let props = Object.keys(require('../common/validation.json'))
+    let validate = Object.values(require('../common/validation.json'))
+    let cfg = {}
+    let hash
+
+    // There are some values that are set using checkboxes. If true, they are
+    // present and "yes" (not true), if false, they are simply missing.
+    if (dialog === 'preferences') {
+      // Standard preferences
+      cfg['darkTheme'] = (res.find(elem => elem.name === 'darkTheme') !== undefined)
+      cfg['snippets'] = (res.find(elem => elem.name === 'snippets') !== undefined)
+      cfg['muteLines'] = (res.find(elem => elem.name === 'muteLines') !== undefined)
+      cfg['export.stripIDs'] = (res.find(elem => elem.name === 'export.stripIDs') !== undefined)
+      cfg['export.stripTags'] = (res.find(elem => elem.name === 'export.stripTags') !== undefined)
+      cfg['debug'] = (res.find(elem => elem.name === 'debug') !== undefined)
+      // Extract selected dictionaries
+      cfg['selectedDicts'] = res.filter(elem => elem.name === 'selectedDicts').map(elem => elem.value)
+    } else if (dialog === 'pdf-preferences') {
+      // PDF preferences
+      cfg['pdf.titlepage'] = (res.find(elem => elem.name === 'pdf.titlepage') !== undefined)
+      cfg['pdf.toc'] = (res.find(elem => elem.name === 'pdf.toc') !== undefined)
+    } else if (dialog === 'tags-preferences') {
+      // Tags preferences
+      let tags = {
+        'name': res.filter(elem => elem.name === 'prefs-tags-name').map(elem => elem.value.toLowerCase()),
+        'color': res.filter(elem => elem.name === 'prefs-tags-color').map(elem => elem.value),
+        'desc': res.filter(elem => elem.name === 'prefs-tags-desc').map(elem => elem.value)
+      }
+      cfg['tags'] = []
+      for (let i = 0; i < tags.name.length; i++) {
+        cfg['tags'].push({ 'name': tags.name[i], 'color': tags.color[i], 'desc': tags.desc[i] })
+      }
+    } else if (dialog === 'project-properties') {
+      hash = res.find(elem => elem.name === 'projectHash').value
+      cfg['pdf.titlepage'] = (res.find(elem => elem.name === 'pdf.titlepage') !== undefined)
+      cfg['pdf.toc'] = (res.find(elem => elem.name === 'pdf.toc') !== undefined)
+    }
+
+    // Copy over all other field values from the result set.
     for (let r of res) {
-      switch (r.name) {
-        case 'pref-pandoc':
-          pandoc = r.value
-          break
-        case 'pref-xelatex':
-          xelatex = r.value
-          break
-        case 'pref-darkTheme':
-          darkTheme = true
-          break
-        case 'pref-snippets':
-          snippets = true
-          break
-        case 'pref-combiner-state':
-          combinerState = r.value
-          break
-        case 'pref-mute-lines':
-          mute = true
-          break
-        case 'spellcheck[]':
-          selectedDicts.push(r.value)
-          break
-        case 'app-lang':
-          appLang = r.value
-          break
-        case 'debug':
-          debug = true
-          break
-        case 'pref-export-dest':
-          exportDir = r.value
-          break
-        case 'pref-export-strip-id':
-          stripIDs = true
-          break
-        case 'pref-export-strip-tags':
-          stripTags = true
-          break
-        case 'pref-export-strip-links':
-          stripLinks = r.value
-          break
-        case 'pref-attachments':
-          // We have to account for user jokes
-          attachments = r.value.split(',')
-          for (let i = 0; i < attachments.length; i++) {
-            attachments[i] = attachments[i].trim().replace(/[\s]/g, '')
-            if (attachments[i].length < 2) {
-              attachments.splice(i, 1)
-              i--
-              continue
-            }
-            if (attachments[i].charAt(0) !== '.') {
-              attachments[i] = '.' + attachments[i]
-            }
-          }
-          break
-        case 'prefs-pdf-author':
-          author = r.value
-          break
-        case 'prefs-pdf-keywords':
-          keywords = r.value
-          break
-        case 'prefs-pdf-papertype':
-          papertype = r.value
-          break
-        case 'prefs-pdf-margin-unit':
-          marginUnit = r.value
-          break
-        case 'prefs-pdf-tmargin':
-          tmargin = r.value || 0
-          break
-        case 'prefs-pdf-bmargin':
-          bmargin = r.value || 0
-          break
-        case 'prefs-pdf-lmargin':
-          lmargin = r.value || 0
-          break
-        case 'prefs-pdf-rmargin':
-          rmargin = r.value || 0
-          break
-        case 'prefs-pdf-mainfont':
-          mainfont = r.value
-          break
-        case 'prefs-pdf-fontsize':
-          fontsize = parseInt(r.value)
-          break
-        case 'prefs-pdf-lineheight':
-          lineheight = r.value / 100 // Convert to floating point scale
-          break
-        case 'prefs-pdf-pagenumbering':
-          pagenumbering = r.value
-          break
-        case 'prefs-tags-name':
-          tags.name.push((r.value[0] === '#') ? r.value.substr(1).toLowerCase() : r.value.toLowerCase())
-          break
-        case 'prefs-tags-color':
-          tags.color.push(r.value)
-          break
-        case 'prefs-tags-desc':
-          tags.desc.push(r.value)
-          break
-        case 'prefs-project-title':
-          projectTitle = r.value
-          break
-        case 'prefs-project-hash':
-          hash = parseInt(r.value)
-          break
-        case 'prefs-pdf-toc':
-          toc = true
-          break
-        case 'prefs-pdf-toc-depth':
-          tocDepth = parseInt(r.value)
-          break
-        case 'prefs-pdf-titlepage':
-          titlepage = true
-          break
-        case 'pref-zkn-id-regex':
-          zkn.idRE = r.value
-          break
-        case 'pref-zkn-linkstart-regex':
-          zkn.linkStart = r.value
-          break
-        case 'pref-zkn-linkend-regex':
-          zkn.linkEnd = r.value
-          break
-        case 'pref-zkn-id-generator':
-          zkn.idGen = r.value
-          break
+      // Only non-missing to not overwrite the checkboxes that ARE checked with a "yes"
+      if (!cfg.hasOwnProperty(r.name)) {
+        // Convert numbers to prevent validation errors.
+        if (!isNaN(r.value) && r.value !== '') r.value = Number(r.value)
+        cfg[r.name] = r.value
       }
     }
 
-    // Build the config object and send it to main
-    let cfg = {}
-    if (dialog === 'preferences') {
-      cfg = {
-        'pandoc': pandoc,
-        'xelatex': xelatex,
-        'darkTheme': darkTheme,
-        'snippets': snippets,
-        'combinerState': combinerState,
-        'muteLines': mute,
-        'selectedDicts': selectedDicts,
-        'app_lang': appLang,
-        'debug': debug,
-        'export': {
-          'dir': exportDir,
-          'stripIDs': stripIDs,
-          'stripTags': stripTags,
-          'stripLinks': stripLinks
-        },
-        'zkn': zkn,
-        'attachmentExtensions': attachments
-      }
-      this._renderer.saveSettings(cfg)
-      this._dialog.close()
-    } else if (dialog === 'pdf-preferences' || dialog === 'project-properties') {
-      cfg = {
-        'pdf': {
-          'author': author,
-          'keywords': keywords,
-          'papertype': papertype,
-          'pagenumbering': pagenumbering,
-          'tmargin': tmargin,
-          'rmargin': rmargin,
-          'bmargin': bmargin,
-          'lmargin': lmargin,
-          'margin_unit': marginUnit,
-          'lineheight': lineheight,
-          'mainfont': mainfont,
-          'fontsize': fontsize,
-          'toc': toc,
-          'tocDepth': tocDepth,
-          'titlepage': titlepage
+    // Potential other adaptions
+    if (cfg.hasOwnProperty('pdf.lineheight')) cfg['pdf.lineheight'] = cfg['pdf.lineheight'] / 100 // We need a floating point scale
+
+    // Now finally the attachment extensions.
+    if (cfg.hasOwnProperty('attachmentExtensions')) {
+      let attachments = cfg['attachmentExtensions'].split(',')
+      for (let i = 0; i < attachments.length; i++) {
+        attachments[i] = attachments[i].trim().replace(/[\s]/g, '')
+        if (attachments[i].length < 2) {
+          attachments.splice(i, 1)
+          i--
+          continue
+        }
+        if (attachments[i].charAt(0) !== '.') {
+          attachments[i] = '.' + attachments[i]
         }
       }
-      // Add additional properties for the project settings.
-      if (dialog === 'project-properties') {
-        cfg.title = projectTitle
-
-        // Convert to correct object
-        let obj = {}
-        obj.properties = cfg
-        obj.hash = hash
-        this._renderer.saveProjectSettings(obj)
-      } else {
-        // pdf preferences
-        this._renderer.saveSettings(cfg)
-      }
-      this._dialog.close()
-    } else if (dialog === 'tags-preferences') {
-      let t = []
-      for (let i = 0; i < tags.name.length; i++) {
-        t.push({ 'name': tags.name[i], 'color': tags.color[i], 'desc': tags.desc[i] })
-      }
-      this._renderer.saveTags(t)
-      this._dialog.close()
+      cfg['attachmentExtensions'] = attachments
     }
+
+    // Validate dat shit.
+    let unvalidated = []
+    for (let key in cfg) {
+      // We have some checkboxes that are either present or missing, and if present,
+      // they are a "yes". We have to account for that, b/c they should be validated
+      // as boolean.
+      if (props.includes(key)) {
+        let rule = validate[props.indexOf(key)] // TODO TOMORROW
+        let val = new ZettlrValidation(rule)
+        if (!val.validate(cfg[key])) {
+          unvalidated.push(key)
+        }
+      }
+    }
+
+    if (unvalidated.length > 0) {
+      console.log(`The following keys were false: `, unvalidated)
+      for (let prop of unvalidated) {
+        // Indicate which ones were wrong.
+        this._dialog.getModal().find(`input[name="${prop}"]`).first().addClass('has-error')
+      }
+      return // Don't try to update falsy settings.
+    }
+
+    // TODO tomorrow: Make main handle these new things correctly!
+    // Send the ready configuration back to main.
+    if (dialog === 'preferences') {
+      this._renderer.saveSettings(cfg)
+    } else if (dialog === 'project-properties') {
+      // Add additional properties for the project settings.
+      this._renderer.saveProjectSettings({ 'properties': cfg, 'hash': hash })
+    } else if (dialog === 'pdf-preferences') {
+      // pdf preferences
+      this._renderer.saveSettings(cfg)
+    } else if (dialog === 'tags-preferences') {
+      this._renderer.saveTags(cfg['tags'])
+    }
+
+    // Finally close the dialog!
+    this._dialog.close()
   }
 
   /**
