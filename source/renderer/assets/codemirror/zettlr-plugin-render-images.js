@@ -97,15 +97,18 @@
         let rel = img404
         if (cm.getOption('markdownImageBasePath')) {
           // This actually works even better than path.join
-          let base = cm.getOption('markdownImageBasePath').split(/\/\\/)
-          url = url.split('/')
+          let base = cm.getOption('markdownImageBasePath').split(/[/\\]/)
+          url = url.split(/[/\\]/)
           if (url[0] === '.') url.shift() // Remove "this" indicators
           for (let elem of url) {
-            if (elem === '..') base.pop() // Remove the last element of the base part in that case
+            if (elem === '..') {
+              base.pop() // Remove the last element of the base part in that case
+              url.splice(url.indexOf(elem), 1) // Also we need to remove the .. from the URL, obviously.
+            }
           }
           // Put everything back together
           base = base.concat(url).join('/')
-          rel = base // require('path').join(cm.getOption('markdownImageBasePath'), url)
+          rel = base
         }
 
         // If this does not work, then simply fall back to the 404 image.
