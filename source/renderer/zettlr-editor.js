@@ -550,16 +550,10 @@ class ZettlrEditor {
       }
     }
 
-    if (!fnref || fnref === '') {
-      // Indicate that the footnote is empty
-      element.attr('title', 'no reference text')
-    } else {
-      element.attr('title', fnref)
-    }
-
     // Now we either got a match or an empty fnref. So create a tippy
     // instance
     tippy.one(element[0], {
+      'content': (fnref && fnref !== '') ? fnref : 'no reference text',
       onHidden (instance) {
         instance.destroy() // Destroy the tippy instance.
       },
