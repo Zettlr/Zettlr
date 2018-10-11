@@ -38,6 +38,7 @@
 - Anything markdown-specific (links, tasks, images) won't be rendered in any mode other than markdown anymore. So you can now rest assured that your links won't be converted and comments won't be displayed the size of headings in comment blocks or something.
 - Indented tasks are now rendered.
 - The table of contents now ignores comments in comment-blocks (no matter which language) and also has a better detection for the level of these.
+- Fixed a bug that threw errors on moving directories around.
 
 ## Under the hood
 
@@ -58,6 +59,7 @@
 - Image preview rendering is now independent of `path`.
 - Refactored the complete configuration setting process.
 - Explicitly set `defaultId` on confirmation dialogs.
+- `detach()` is now called only after the move operation of a `ZettlrDir` has been completed to remove the `parent`-pointer.
 
 # 0.19.0
 

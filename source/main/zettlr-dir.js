@@ -342,8 +342,6 @@ class ZettlrDir {
       this.name = name // No need to detach on rename
       // But what we want to do is have the parent re-sort its children
       this.parent.sort()
-    } else {
-      this.detach()
     }
 
     let oldPath = this.path
@@ -365,6 +363,9 @@ class ZettlrDir {
 
     // Move
     fs.renameSync(oldPath, this.path)
+
+    // Now detach from parent, because it's no longer in there
+    this.detach()
 
     // Reset the interface
     this._vdInterface = new ZettlrInterface(path.join(this.path, '.ztr-virtual-directories'))
