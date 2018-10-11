@@ -22,7 +22,6 @@
   CodeMirror.commands.markdownHeaderClasses = function (cm) {
     let line = ''
     for (let i = 0; i < cm.lineCount(); i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
       // First remove all header styles
       cm.removeLineClass(i, 'text', 'size-header-1')
       cm.removeLineClass(i, 'text', 'size-header-2')
@@ -30,6 +29,9 @@
       cm.removeLineClass(i, 'text', 'size-header-4')
       cm.removeLineClass(i, 'text', 'size-header-5')
       cm.removeLineClass(i, 'text', 'size-header-6')
+
+      // Then only re-add if allowed.
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
 
       // Then re-add them as necessary.
       line = cm.getLine(i)
