@@ -12,7 +12,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  var taskRE = /^- \[( |x)\] /g // Matches `- [ ]` and `- [x]`
+  var taskRE = /^(\s*?)- \[( |x)\] /g // Matches `- [ ]` and `- [x]`
   var taskMarkers = []
 
   CodeMirror.commands.markdownRenderTasks = function (cm) {
@@ -46,14 +46,15 @@
       if ((match = taskRE.exec(line)) == null) {
         continue
       }
+      let leadingSpaces = match[1].length || 0
 
-      if (cm.getCursor('from').line === i && cm.getCursor('from').ch < 6) {
+      if (cm.getCursor('from').line === i && leadingSpaces < cm.getCursor('from').ch < 5 + leadingSpaces) {
         // We're directly in the formatting so don't render.
         continue
       }
 
-      let curFrom = { 'line': i, 'ch': 0 }
-      let curTo = { 'line': i, 'ch': 5 }
+      let curFrom = { 'line': i, 'ch': 0 + leadingSpaces }
+      let curTo = { 'line': i, 'ch': 5 + leadingSpaces }
 
       let isRendered = false
       let marks = cm.findMarks(curFrom, curTo)
@@ -68,7 +69,7 @@
       if (isRendered) continue
 
       // Now we can render it finally.
-      let checked = (match[1] === 'x')
+      let checked = (match[2] === 'x')
 
       let cbox = document.createElement('input')
       cbox.type = 'checkbox'

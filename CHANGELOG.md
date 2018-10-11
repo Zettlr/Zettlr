@@ -36,6 +36,7 @@
 - Added validation to the settings so that you can't accidentally set wrong values.
 - The default buttons for dialogs are now reactivated, so you can remove files and folders by simply hitting `Return` to confirm the removal.
 - Anything markdown-specific (links, tasks, images) won't be rendered in any mode other than markdown anymore. So you can now rest assured that your links won't be converted and comments won't be displayed the size of headings in comment blocks or something.
+- Indented tasks are now rendered.
 
 ## Under the hood
 
