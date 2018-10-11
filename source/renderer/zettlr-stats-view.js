@@ -107,9 +107,10 @@ class ZettlrStatsView {
       cnt += `<p><strong>${trans('gui.avg_not_reached')}</strong></p>`
     }
 
-    cnt += `<p><form><button type="submit">More &hellip;</button></form></p>`
+    cnt += `<p><a class="button" id="more-stats">More &hellip;</a></p>`
 
-    popup(this._toolbarbutton, cnt, (form) => {
+    popup(this._toolbarbutton, cnt)
+    $('#more-stats').on('click', (e) => {
       // Theres no form but the user has clicked the more button
       let dialog = new ZettlrDialog()
       dialog.init('statistics', this._data.wordCount)
