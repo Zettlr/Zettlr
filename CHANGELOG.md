@@ -39,6 +39,7 @@
 - Indented tasks are now rendered.
 - The table of contents now ignores comments in comment-blocks (no matter which language) and also has a better detection for the level of these.
 - Fixed a bug that threw errors on moving directories around.
+- Added Math inline-rendering.
 
 ## Under the hood
 
