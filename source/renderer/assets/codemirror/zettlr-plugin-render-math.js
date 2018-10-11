@@ -37,19 +37,49 @@
     // Now render all potential new Math elements
     for (let i = 0; i < cm.lineCount(); i++) {
       if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
-      // First get the line and test if the contents contain a math element
-      let line = cm.getLine(i)
-      if ((match = mathRE.exec(line)) == null) {
-        continue
-      }
-
       if (cm.getCursor('from').line === i) {
         // We're directly in the formatting so don't render.
         continue
       }
 
-      let curFrom = { 'line': i, 'ch': match.index }
-      let curTo = { 'line': i, 'ch': match.index + match[0].length }
+      let j = i
+      let fromCh = 0
+      let fromLine = i
+      let toCh = 0
+      let toLine = j
+      let eq = ''
+
+      // First get the line and test if the contents contain a math element
+      let line = cm.getLine(i)
+      if (line === '$$') {
+        console.log(`Found a multiline!`)
+        j++
+        // Multiline equation
+        while (j < cm.lineCount() && cm.getLine(j) !== '$$') {
+          eq += cm.getLine(j) + '\n'
+          j++
+        }
+        // If the following if becomes true, there was no matching element in
+        // the whole document -> don't render!
+        if (cm.getLine(j) !== '$$') continue
+        i = j // After this excursus continue with the next line
+        toLine = j
+        toCh = 2 // Include the closing characters ($$)
+        // Is the cursor here somewhere?
+        if (cm.getCursor('from').line >= fromLine && toLine >= cm.getCursor('from').line) {
+          continue
+        }
+      } else if ((match = mathRE.exec(line)) != null) {
+        fromCh = match.index
+        toCh = match.index + match[0].length
+        eq = match[1] || match[2]
+      } else {
+        // Found neither multiline nor single line
+        continue
+      }
+
+      let curFrom = { 'line': fromLine, 'ch': fromCh }
+      let curTo = { 'line': toLine, 'ch': toCh }
 
       let isRendered = false
       let marks = cm.findMarks(curFrom, curTo)
@@ -77,7 +107,7 @@
       )
 
       // It's match[2] if it was inline.
-      require('katex').render(match[1] || match[2], elem, {
+      require('katex').render(eq, elem, {
         throwOnError: false
       })
       textMarker.changed()
