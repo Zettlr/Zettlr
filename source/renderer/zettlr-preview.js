@@ -16,6 +16,7 @@
 const Clusterize = require('clusterize.js')
 const tippy = require('tippy.js')
 const { formatDate, flattenDirectoryTree, hash } = require('../common/zettlr-helpers.js')
+const { trans } = require('../common/lang/i18n.js')
 // Sorting icons (WebHostingHub-Glyphs)
 const SORT_NAME_UP = '&#xf1c2;'
 const SORT_NAME_DOWN = '&#xf1c1;'
@@ -154,13 +155,13 @@ class ZettlrPreview {
         if (this._snippets) {
           elem += `<p class="snippet">
           <span class="directories">
-            ${d.children.filter(e => e.type === 'directory').length} Directories
+            ${d.children.filter(e => e.type === 'directory').length} ${trans('gui.dirs')}
           </span>
           <span class="files">
-            ${d.children.filter(e => e.type === 'file').length} Files
+            ${d.children.filter(e => e.type === 'file').length} ${trans('gui.files')}
           </span>
           <span class="virtual-directories">
-            ${d.children.filter(e => e.type === 'virtual-directory').length} Virtual Directories
+            ${d.children.filter(e => e.type === 'virtual-directory').length} ${trans('gui.virtual_dirs')}
           </span>
           </p>` // TODO TRANSLATE
         }

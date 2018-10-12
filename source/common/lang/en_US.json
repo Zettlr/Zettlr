@@ -37,6 +37,7 @@
         "attachments_open_dir": "Open directory",
         "dirs": "Directories",
         "files": "Files",
+        "virtual_dirs": "Virtual Directories",
         "formatting": {
             "bold": "Bold",
             "italic": "Italics",
