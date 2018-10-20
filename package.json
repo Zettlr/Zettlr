@@ -18,9 +18,9 @@
         "start": "electron .",
         "build:quick": "electron-builder --dir",
         "release:this": "electron-builder",
-        "release:mac": "electron-builder --mac dmg",
-        "release:win": "electron-builder --win nsis",
-        "release:linux": "electron-builder --linux deb rpm",
+        "release:mac": "electron-builder --mac",
+        "release:win": "electron-builder --win",
+        "release:linux": "electron-builder --linux",
         "less": "node scripts/less.js",
         "docs:build": "esdoc"
     },
@@ -67,21 +67,34 @@
             "icon": "resources/icons/ico/icon.ico"
         },
         "linux": {
-            "target": "deb",
+            "target": ["deb", "rpm"],
             "artifactName": "Zettlr-linux-x64-${version}.${ext}",
             "synopsis": "Markdown editor",
             "category": "Office",
             "icon": "resources/icons/png"
         },
         "dmg": {
-            "backgroundColor": "rgba(200, 240, 170, 1)",
-            "icon": "resources/icons/icns/icon.icns"
+          "background": "resources/icons/dmg/dmg_back.tiff",
+            "icon": "resources/icons/icns/icon.icns",
+            "contents": [
+              {
+                "x": 130,
+                "y": 220
+              },
+              {
+                "x": 410,
+                "y": 220,
+                "type": "link",
+                "path": "/Applications"
+              }
+            ]
         },
         "nsis": {
             "oneClick": false,
             "perMachine": false,
             "allowElevation": true,
-            "allowToChangeInstallationDirectory": true
+            "allowToChangeInstallationDirectory": true,
+            "uninstallDisplayName": "${productName}"
         },
         "deb": {
             "priority": "optional",
