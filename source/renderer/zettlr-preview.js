@@ -288,7 +288,7 @@ class ZettlrPreview {
             let parentHash = hash(require('path').dirname(par.path))
             this._renderer.requestDir(parentHash)
           }
-        } else {
+        } else if (elem.hasClass('file')) {
           this._renderer.handleEvent('quicklook', { 'hash': elem.attr('data-hash') })
         }
         return
