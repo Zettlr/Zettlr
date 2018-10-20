@@ -91,6 +91,11 @@ class ZettlrBody {
       this._renderer.handleDrop(f)
       return false
     }, false)
+
+    // Inject a global notify function
+    global.notify = (msg) => {
+      this.notify(msg)
+    }
   }
 
   /**

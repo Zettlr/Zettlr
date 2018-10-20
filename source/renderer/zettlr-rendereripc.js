@@ -377,7 +377,7 @@ class ZettlrRendererIPC {
         break
 
       case 'notify':
-        this._app.getBody().notify(cnt)
+        global.notify(cnt)
         break
 
       case 'toc':

@@ -12,6 +12,7 @@
 - Consolidated the `package.json` build fields.
 - **Warning: The app ID has changed from `com.zettlr.www` to `com.zettlr.app`.** [For the implications please check this link](https://www.electron.build/configuration/nsis#guid-vs-application-name) -- the change only affects Windows users.
 - Refactored the complete menu logic to make it more accessible.
+- Added a global `notify()` method in the renderer process for convenience.
 
 # 0.20.0
 
