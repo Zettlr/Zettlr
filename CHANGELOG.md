@@ -1,3 +1,13 @@
+# 0.20.1
+
+## GUI and functionality
+
+- Added a written reason for why some preferences options failed validation and need to be corrected.
+
+## Under the hood
+
+- Documentation update in `ZettlrValidation`.
+
 # 0.20.0
 
 ## GUI and functionality

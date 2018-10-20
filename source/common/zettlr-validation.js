@@ -16,6 +16,11 @@
 const { trans } = require('../common/lang/i18n.js')
 
 class ZettlrValidation {
+  /**
+   * Create a validation ruleset.
+   * @param {string} option  The key/option that can be validated with this ruleset.
+   * @param {string} ruleset The unparsed ruleset, e.g. "required|min:4|max:5|string"
+   */
   constructor (option, ruleset) {
     this._isValidated = false
     this._option = option // The option this ruleset can validate
@@ -32,6 +37,11 @@ class ZettlrValidation {
     this._parseRules(ruleset)
   }
 
+  /**
+   * Parses the rules and prepares the validation of a value.
+   * @param  {string} rules The rulset provided to the constructor.
+   * @return {void}       There's nothing to return.
+   */
   _parseRules (rules) {
     if (typeof rules !== 'string') throw Error('Ruleset was not a string!')
 
@@ -134,14 +144,25 @@ class ZettlrValidation {
     return this.isValid()
   }
 
-  // Basic checks
+  /**
+   * Returns whether or not the last given input has been successfully validated.
+   * @return {Boolean} Whether or not the last input was valid.
+   */
   isValid () { return this._isValidated }
 
+  /**
+   * Returns whether this option is required.
+   * @return {Boolean} True, if the option is required, false if not.
+   */
   isRequired () {
     if (this._isRequired === undefined) return false
     return this._isRequired
   }
 
+  /**
+   * Returns whether or not the last given input was empty.
+   * @return {Boolean} True, if the input was empty, or false.
+   */
   isEmpty () {
     let empty = false
     if (typeof this._input === 'string' && this._input.length === 0) empty = true
@@ -150,7 +171,10 @@ class ZettlrValidation {
     return empty
   }
 
-  // These functions let you determine the reason why validation failed or passed.
+  /**
+   * Returns whether or not the input meets the min/max criteria of the ruleset.
+   * @return {Boolean} Returns false, if one of the range criteria were not met, otherwise true.
+   */
   isInRange () {
     if (this._min === undefined && this._max === undefined) return true
     let pass = true
@@ -166,6 +190,10 @@ class ZettlrValidation {
     return pass
   }
 
+  /**
+   * Returns whether or not the type of the last given input is correct.
+   * @return {Boolean} True, if the type matches the criteria, or false.
+   */
   isTypeCorrect () {
     if (this._type === undefined) return true
     if (this._type === 'array') return Array.isArray(this._input)
@@ -174,11 +202,19 @@ class ZettlrValidation {
     if (this._type === 'boolean') return typeof this._input === 'boolean'
   }
 
+  /**
+   * Returns whether or not the provided input is included in the predefined keys.
+   * @return {Boolean} True, if the given value has been mentioned in the "in:"-criterium
+   */
   isValueCorrect () {
     if (this._in === undefined) return true
     return this._in.includes(this._input)
   }
 
+  /**
+   * Returns a message explaining why the last validation failed, or an empty string.
+   * @return {string} A fully parsed and translated string indicating the first violated rule.
+   */
   why () {
     // Returns a message explaining why the validation failed.
     if (!this.isTypeCorrect()) return trans('validation.error_type', this._option, this._type)
@@ -190,9 +226,16 @@ class ZettlrValidation {
     return '' // Failsafe
   }
 
-  // Get the default for this input rule.
+  /**
+   * Returns the default value that inputs for this rule should have, if any.
+   * @return {[type]} [description]
+   */
   getDefault () { return this._default }
 
+  /**
+   * Returns the key for which this rule is made.
+   * @return {string} The key.
+   */
   getKey () { return this._option }
 }
 
