@@ -52,6 +52,14 @@
             "remove_footnote": "Fußnote entfernen"
         }
     },
+    "validation": {
+      "error_type": "Option %s muss den Typ %s besitzen.",
+      "error_value": "Option %s muss einen der folgenden Werte aufweisen: %s.",
+      "error_range_both": "Option %s muss im Bereich von %s und %s (Zeichen) liegen.",
+      "error_range_min": "Option %s muss mindestens %s Zeichen lang bzw. groß sein.",
+      "error_range_max": "Option %s darf maximal %s Zeichen lang bzw. groß sein.",
+      "error_empty": "Option %s ist erforderlich."
+    },
     "pomodoro": {
         "start": "Start",
         "stop": "Stop",

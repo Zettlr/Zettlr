@@ -19,6 +19,7 @@
 const fs = require('fs')
 const path = require('path')
 const uuid = require('uuid/v5')
+const ZettlrValidation = require('../common/zettlr-validation.js')
 const { app } = require('electron')
 const { ignoreFile, isDir, isDictAvailable } = require('../common/zettlr-helpers.js')
 const COMMON_DATA = require('../common/data.json')
@@ -39,6 +40,7 @@ class ZettlrConfig {
     this.configPath = app.getPath('userData')
     this.configFile = path.join(this.configPath, 'config.json')
     this.config = null
+    this._rules = [] // This array holds all validation rules
 
     // Environment variables
     this.env = {}
@@ -125,6 +127,12 @@ class ZettlrConfig {
 
     // Remove potential dead links to non-existent files and dirs
     this.checkPaths()
+
+    // Boot up the validation rules
+    let rules = require('../common/validation.json')
+    for (let key in rules) {
+      this._rules.push(new ZettlrValidation(key, rules[key]))
+    }
 
     // Put the attachment extensions into the global so that the helper
     // function isAttachment() can grab them
@@ -480,7 +488,7 @@ class ZettlrConfig {
     */
   set (option, value) {
     // Don't add non-existent options
-    if (this.config.hasOwnProperty(option)) {
+    if (this.config.hasOwnProperty(option) && this._validate(option, value)) {
       this.config[option] = value
       return true
     }
@@ -499,7 +507,7 @@ class ZettlrConfig {
       }
 
       // Set the nested property
-      if (cfg.hasOwnProperty(prop)) {
+      if (cfg.hasOwnProperty(prop) && this._validate(option, value)) {
         cfg[prop] = value
         return true
       }
@@ -566,6 +574,20 @@ class ZettlrConfig {
     this.config['openPaths'] = f.concat(d)
 
     return this
+  }
+
+  /**
+   * Validates a key's value based upon previously set up validation rules
+   * @param  {string} key   The key (can be dotted) to be validated
+   * @param  {mixed} value The value to be validated
+   * @return {Boolean}       False, if a given validation failed, otherwise true.
+   */
+  _validate (key, value) {
+    let rule = this._rules.find(elem => elem.getKey() === key)
+    if (rule) { // There is a rule for this key, so validate
+      return rule.validate(value)
+    }
+    return true // There are some options for which there is no validation.
   }
 }
 

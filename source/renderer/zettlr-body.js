@@ -710,19 +710,23 @@ class ZettlrBody {
       // they are a "yes". We have to account for that, b/c they should be validated
       // as boolean.
       if (props.includes(key)) {
-        let rule = validate[props.indexOf(key)] // TODO TOMORROW
-        let val = new ZettlrValidation(rule)
+        let rule = validate[props.indexOf(key)]
+        let val = new ZettlrValidation(key, rule)
         if (!val.validate(cfg[key])) {
-          unvalidated.push(key)
+          unvalidated.push({
+            'key': key,
+            'reason': val.why()
+          })
         }
       }
     }
 
     if (unvalidated.length > 0) {
-      console.log(`The following keys were false: `, unvalidated)
+      // For brevity reasons only show one at a time (they have to be resolved either way)
+      this._dialog.getModal().find('.error-info').text(unvalidated[0].reason)
       for (let prop of unvalidated) {
         // Indicate which ones were wrong.
-        this._dialog.getModal().find(`input[name="${prop}"]`).first().addClass('has-error')
+        this._dialog.getModal().find(`input[name="${prop.key}"]`).first().addClass('has-error')
       }
       return // Don't try to update falsy settings.
     }

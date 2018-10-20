@@ -16,8 +16,9 @@
 const { trans } = require('../common/lang/i18n.js')
 
 class ZettlrValidation {
-  constructor (ruleset) {
+  constructor (option, ruleset) {
     this._isValidated = false
+    this._option = option // The option this ruleset can validate
 
     // Rule requirements
     this._isRequired = undefined
@@ -179,17 +180,20 @@ class ZettlrValidation {
   }
 
   why () {
-    // Returns a message containing why the validation failed. TODO
-    if (!this.isTypeCorrect()) return trans('TODO', this._type)
-    if (!this.isValueCorrect()) return trans('TODO', this._in.join(', '))
-    if (!this.isInRange() && this._min && this._max) return trans('TODO', this._min, this._max)
-    if (!this.isInRange() && !this._min && this._max) return trans('TODO', this._max)
-    if (!this.isInRange() && this._min && !this._max) return trans('TODO', this._min)
-    if (this.isEmpty() && this.isRequired()) return trans('TODO')
+    // Returns a message explaining why the validation failed.
+    if (!this.isTypeCorrect()) return trans('validation.error_type', this._option, this._type)
+    if (!this.isValueCorrect()) return trans('validation_error_value', this._option, this._in.join(', '))
+    if (!this.isInRange() && this._min && this._max) return trans('validation.error_range_both', this._option, this._min, this._max)
+    if (!this.isInRange() && !this._min && this._max) return trans('validation.error_range_max', this._option, this._max)
+    if (!this.isInRange() && this._min && !this._max) return trans('validation.error_range_min', this._option, this._min)
+    if (this.isEmpty() && this.isRequired()) return trans('validation.error_empty', this._option)
+    return '' // Failsafe
   }
 
   // Get the default for this input rule.
   getDefault () { return this._default }
+
+  getKey () { return this._option }
 }
 
 module.exports = ZettlrValidation
