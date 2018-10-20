@@ -76,6 +76,7 @@
             "edit": "Edit",
             "view": "View",
             "window": "Window",
+            "debug": "Develop",
             "help": "Help"
         },
         "new_file": "New File…",

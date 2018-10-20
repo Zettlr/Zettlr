@@ -17,17 +17,6 @@ const path = require('path');
 const { app } = require('electron');
 
 /**
- * This error is thrown when the internationalization functions encounter an error
- * @param       {String} msg The error message
- * @constructor
- */
-function TranslationError(msg)
-{
-    this.title = 'Translation Error';
-    this.message = msg;
-}
-
-/**
  * This function loads a language JSON file specified by lang into the global i18n-object
  * @param  {String} [lang='en_US'] The language to be loaded
  * @return {void}                Function does not return anything.
@@ -63,7 +52,7 @@ function i18n(lang = 'en_US')
 function trans(string, ...args)
 {
     if(string.indexOf('.') === -1) {
-        throw new TranslationError('No translation string recognized!');
+        throw new Error('The translation string was malformed: ' + string + '!');
     }
 
     // Split the string by dots

@@ -169,6 +169,7 @@ class ZettlrWindow {
 
     // Set the application menu
     this._menu = new ZettlrMenu(this)
+    this._menu.set()
 
     return this
   }

@@ -76,6 +76,7 @@
             "edit": "Adapter",
             "view": "Affichage",
             "window": "Fenêtre",
+            "debug": "Develop",
             "help": "Aide"
         },
         "new_file": "Nouveau fichier…",
