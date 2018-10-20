@@ -3,6 +3,7 @@
 ## GUI and functionality
 
 - Added a written reason for why some preferences options failed validation and need to be corrected.
+- Moved the attachment options to the "Advanced"-tab in the preferences window.
 
 ## Under the hood
 

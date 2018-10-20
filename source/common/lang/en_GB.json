@@ -185,7 +185,6 @@
             "general": "General",
             "editor": "Editor",
             "advanced": "Advanced",
-            "attachments": "Attachments",
             "attachments_info": "Enter all file extensions that you want to see in your attachment sidebar. Separate them with a comma. Changes are recognised after a restart.",
             "export": {
                 "title": "Export",

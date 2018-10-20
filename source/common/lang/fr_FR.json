@@ -185,7 +185,6 @@
             "general": "Général",
             "editor": "Editeur",
             "advanced": "Paramètres elargi",
-            "attachments": "Annexes",
             "attachments_info": "Entrer tous les extensions des fichiers, quelles tu veux voir dans le liston d'annexes. Separer cettes par les virgules. Les modifications avoir effet après un redémmarage.",
             "export": {
                 "title": "Exporter",

@@ -185,7 +185,6 @@
             "general": "Allgemein",
             "editor": "Editor",
             "advanced": "Erweitert",
-            "attachments": "Anhänge",
             "attachments_info": "Trage hier alle Dateitypen ein, die du in der Attachment-Sidebar sehen möchtest. Trenne jeden Dateityp mit einem Komma. Änderungen werden nach einem Neustart wirksam.",
             "export": {
                 "title": "Export",
