@@ -5,6 +5,7 @@
 - Added a written reason for why some preferences options failed validation and need to be corrected.
 - Moved the attachment options to the "Advanced"-tab in the preferences window.
 - Fixed a bug that threw errors when you tried to `Alt`-click a virtual directory.
+- Fixed the bug that virtual directories got duplicated on the creation of new files.
 
 ## Under the hood
 
