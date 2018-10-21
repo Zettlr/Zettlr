@@ -150,6 +150,12 @@ class ZettlrFile {
       cnt = makeImgPathsAbsolute(path.dirname(this.path), cnt)
     }
 
+    // Makes footnotes unique by prefixing them with this file's hash (which is unique)
+    // Pandoc will make sure the footnotes are numbered correctly.
+    if (options.hasOwnProperty('uniqueFootnotes') && options.uniqueFootnotes === true) {
+      cnt = cnt.replace(/\[\^([\w]+?)\]/gm, (match, p1, offset, string) => `[^${String(this.hash)}${p1}]`)
+    }
+
     // Now read all tags
     this.tags = []
     while ((match = tagRE.exec(cnt)) != null) {

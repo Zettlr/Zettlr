@@ -102,8 +102,12 @@ class ZettlrProject {
     for (let file of files) {
       // Directly make all image paths absolute to prevent errors if used
       // in nested project directories (in which this._dir.path is not the
-      // same for all files).
-      contents.push(file.read({ 'absoluteImagePaths': true }))
+      // same for all files). Also make the footnotes unique to prevent
+      // assigning errors.
+      contents.push(file.read({
+        'absoluteImagePaths': true,
+        'uniqueFootnotes': true
+      }))
     }
 
     // Make one string
