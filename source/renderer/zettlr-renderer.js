@@ -18,7 +18,6 @@ const ZettlrDirectories = require('./zettlr-directories.js')
 const ZettlrPreview = require('./zettlr-preview.js')
 const ZettlrEditor = require('./zettlr-editor.js')
 const ZettlrBody = require('./zettlr-body.js')
-const ZettlrOverlay = require('./zettlr-overlay.js')
 const ZettlrToolbar = require('./zettlr-toolbar.js')
 const ZettlrPomodoro = require('./zettlr-pomodoro.js')
 const popup = require('./zettlr-popup.js')
@@ -28,7 +27,7 @@ const ZettlrAttachments = require('./zettlr-attachments.js')
 const remote = require('electron').remote
 const path = require('path')
 
-const { trans } = require('../common/lang/i18n.js')
+// const { trans } = require('../common/lang/i18n.js')
 
 // Pull the poll-time from the data
 const POLL_TIME = require('../common/data.json').poll_time
@@ -70,7 +69,6 @@ class ZettlrRenderer {
     this._preview = new ZettlrPreview(this)
     this._editor = new ZettlrEditor(this)
     this._body = new ZettlrBody(this)
-    this._overlay = new ZettlrOverlay(this)
     this._toolbar = new ZettlrToolbar(this)
     this._pomodoro = new ZettlrPomodoro(this)
     this._stats = new ZettlrStatsView(this)
@@ -85,8 +83,6 @@ class ZettlrRenderer {
     * @return {void} Nothing to return.
     */
   init () {
-    this._overlay.show(trans('init.welcome'))
-
     // We have to carve out the initial configuration of the renderer from the
     // first tick of the renderer event loop, because at this early stage (init
     // is called right after the DOM has loaded) the ipc is not yet ready. This
@@ -99,18 +95,12 @@ class ZettlrRenderer {
     this._ipc.send('get-paths', {})
 
     this.finishStartup()
-  }
 
-  /**
-    * This function gets called when the renderer finishes its startup.
-    */
-  finishStartup () {
     // Here we can init actions and stuff to be done after the startup has finished
     setTimeout(() => { this.poll() }, POLL_TIME) // Poll every POLL_TIME seconds
 
     // Send an initial check for an update
     this._ipc.send('update-check')
-    this._overlay.close()
   }
 
   /**

@@ -7,6 +7,7 @@
 - Fixed a bug that threw errors when you tried to `Alt`-click a virtual directory.
 - Fixed the bug that virtual directories got duplicated on the creation of new files.
 - Added a "Donate" menu entry to the help menu.
+- The startup overlay is now gone.
 
 ## Under the hood
 
@@ -17,6 +18,7 @@
 - Refactored the complete menu logic to make it more accessible.
 - Added a global `notify()` method in the renderer process for convenience.
 - Added an option to make footnotes inside files unique prior to project exports.
+- Moved the dictionary functions to the main process for asynchronous background loading.
 
 # 0.20.0
 
