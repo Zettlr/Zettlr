@@ -8,6 +8,7 @@
 - Fixed the bug that virtual directories got duplicated on the creation of new files.
 - Added a "Donate" menu entry to the help menu.
 - The startup overlay is now gone.
+- Dictionaries can be selected and deselected at runtime.
 
 ## Under the hood
 

@@ -314,7 +314,7 @@ function isAttachment (p) {
  * @return {Boolean}      True, if a valid hunspell dict was found, otherwise false.
  */
 function isDictAvailable (lang) {
-  let p = path.join(__dirname, '../renderer/assets/dict', lang)
+  let p = path.join(__dirname, '../main/assets/dict', lang)
   try {
     fs.lstatSync(p)
   } catch (e) {

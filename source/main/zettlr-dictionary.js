@@ -26,8 +26,28 @@ class ZettlrDictionary {
   }
 
   _load () {
-    let dictsToLoad = global.config.get('selectedDicts')
+    let selectedDicts = global.config.get('selectedDicts')
     let dictPath = path.join(__dirname, 'assets/dict')
+    let dictsToLoad = []
+
+    // This function can also be called during runtime to exchange some dicts,
+    // so make sure we don't reload these monstrous things all too often.
+    // 1. Which dicts do we have to load?
+    for (let dict of selectedDicts) {
+      if (!this._loadedDicts.includes(dict)) dictsToLoad.push(dict)
+    }
+
+    // 2. Which of the already loaded dicts can be trashed?
+    for (let dict of this._loadedDicts) {
+      if (!selectedDicts.includes(dict)) {
+        let index = this._loadedDicts.indexOf(dict)
+        this._loadedDicts.splice(index, 1) // Remove both from the loadedDicts...
+        this._typos.splice(index, 1) // ... and the typos themselves
+      }
+    }
+
+    // Now set the toLoad variable to the length of the remaining dicts
+    this._toLoad = this._typos.length
 
     for (let dict of dictsToLoad) {
       this._toLoad++
@@ -40,9 +60,7 @@ class ZettlrDictionary {
               this._toLoad--
             } else if (dicData) {
               // Finally push the typo!
-              console.log(`Data length is: DIC: ${affData.length}, AFF: ${dicData.length}`)
               this._typos.push(new Typo(dict, affData, dicData, {}))
-              console.log(`Dictionary ${dict} loaded!`)
               this._loadedDicts.push(dict)
             } // END second else if
           }) // END second readFile
@@ -52,7 +70,8 @@ class ZettlrDictionary {
   }
 
   check (term) {
-    if (this._toLoad > this._typos.length) return true // Don't check until all are loaded
+    // Don't check until all are loaded
+    if (this._toLoad > this._typos.length || this._typos.length === 0) return true
 
     let correct = false
     for (let typo of this._typos) {
@@ -63,7 +82,8 @@ class ZettlrDictionary {
   }
 
   suggest (term) {
-    if (this._toLoad > this._typos.length) return [] // Return no suggestions
+    // Return no suggestions
+    if (this._toLoad > this._typos.length || this._typos.length === 0) return []
 
     let suggestions = []
     for (let typo of this._typos) {
@@ -71,6 +91,13 @@ class ZettlrDictionary {
     }
 
     return suggestions
+  }
+
+  reload () {
+    if (global.config.get('selectedDicts') === this._loadedDicts) return
+
+    // Reload the dictionary based upon the new selected dictionaries.
+    this._load()
   }
 
   /**

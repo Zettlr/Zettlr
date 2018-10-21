@@ -98,13 +98,11 @@ class ZettlrIPC {
     if (!this._app.window.getWindow()) {
       return this // Fail gracefully
     }
-    console.log(`Sending command ${command} with content`, content)
     let sender = this._app.window.getWindow().webContents
     sender.send('message', {
       'command': command,
       'content': content
     })
-    console.log(`Done!`)
 
     return this
   }
@@ -333,6 +331,8 @@ class ZettlrIPC {
       case 'update-config':
         this._app.getConfig().bulkSet(cnt)
         this.send('config-update')
+        // Reload the dictionaries based on the user's selection
+        this._app.dict.reload()
         break
 
       case 'update-tags':

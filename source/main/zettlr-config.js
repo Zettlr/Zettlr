@@ -453,7 +453,7 @@ class ZettlrConfig {
     */
   getDictionaries () {
     // First dynamically enumerate all files that come shipped with the app.
-    let scanfolder = path.join(__dirname, '../renderer/assets/dict')
+    let scanfolder = path.join(__dirname, './assets/dict')
     let dirs = fs.readdirSync(scanfolder)
     let dictLangs = []
     for (let d of dirs) {

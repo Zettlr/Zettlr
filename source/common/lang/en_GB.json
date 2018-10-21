@@ -341,7 +341,7 @@
             "combiner_explanation": "Side pane mode",
             "combiner_expanded": "Extended &mdash; Show both preview and tree view",
             "combiner_collapsed": "Thin &mdash; Show either preview or tree view",
-            "spellcheck": "Select the languages for which you want to enable automatic spell checking (<strong>Restart required!</strong>)",
+            "spellcheck": "Select the languages for which you want to enable automatic spell checking.",
             "spellcheck_warning": "<em>Attention:</em> Too many active spell check libraries may slow the app down significanty! Try to stick with three at maximum.",
             "spellcheck_search_placeholder": "Search for dictionaries &hellip;",
             "mute_lines": "Mute non-focused lines in distraction-free mode",

@@ -341,7 +341,7 @@
             "combiner_explanation": "Modus der Seitenleiste",
             "combiner_expanded": "Erweitert &mdash; zeige sowohl Preview als auch Verzeichnisse",
             "combiner_collapsed": "Schmal &mdash; zeige entweder Preview oder Verzeichnisse",
-            "spellcheck": "Wähle die Sprachen aus, für welche du die Rechtschreibprüfung einschalten möchtest (<strong>Neustart erforderlich!</strong>)",
+            "spellcheck": "Wähle die Sprachen aus, für welche du die Rechtschreibprüfung einschalten möchtest.",
             "spellcheck_warning": "<em>Vorsicht:</em> Zu viele gleichzeitig aktivierte Bibliotheken verlangsamen die App spürbar! Versuche, nicht mehr als drei gleichzeitig zu aktivieren!",
             "spellcheck_search_placeholder": "Suche nach Wörterbüchern &hellip;",
             "mute_lines": "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab",
