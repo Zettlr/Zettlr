@@ -547,6 +547,22 @@ class ZettlrFile {
     */
   getName () { return this.name }
 
+  /**
+   * Returns the file's metadata
+   * @return {Object} An object containing only the metadata fields
+   */
+  getMetadata () {
+    return {
+      'name': this.name,
+      'path': this.path,
+      'hash': this.hash,
+      'modtime': this.modtime,
+      'id': this.id,
+      'tags': this.tags,
+      'dir': this.dir
+    }
+  }
+
   // Dummy functions (either for recursive use or because their return val is obvious)
 
   /**

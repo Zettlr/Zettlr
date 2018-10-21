@@ -7,7 +7,11 @@
 * Maintainer:      Hendrik Erz
 * License:         GNU GPL v3
 *
-* Description:     Handles communication with the main process.
+* Description:     Handles communication with the main process. There are
+*                  three channels that are used for communication:
+*                  - message: The default channel for most of the stuff (async)
+*                  - config: Retrieve configuration values (sync)
+*                  - typo: Retrieve dictionary functions (sync)
 *
 * END HEADER
 */
@@ -63,6 +67,15 @@ class ZettlrRendererIPC {
         // the get()-handler from main using the "remote" feature, but we'll
         // implement it ourselves.
         return this._ipc.sendSync('config', key)
+      }
+    }
+
+    global.typo = {
+      check: (term) => {
+        return this._ipc.sendSync('typo', { 'type': 'check', 'term': term })
+      },
+      suggest: (term) => {
+        return this._ipc.sendSync('typo', { 'type': 'suggest', 'term': term })
       }
     }
   }
@@ -344,28 +357,6 @@ class ZettlrRendererIPC {
       // Show the format option table
       case 'formatting':
         this._app.getBody().displayFormatting()
-        break
-
-      // SPELLCHECKING EVENTS
-      case 'typo-lang':
-        // cnt holds an array of all languages that should be initialised.
-        this._app.setSpellcheck(cnt)
-        // Also pass down the languages to the body so that it can display
-        // them in the preferences dialog
-        this._app.getBody().setSpellcheckLangs(cnt)
-        break
-
-      // Receive the typo aff!
-      case 'typo-aff':
-        this._app.setAff(cnt)
-        this._app.requestLang('dic')
-        break
-
-      // Receive the typo dic!
-      case 'typo-dic':
-        this._app.setDic(cnt)
-        // Now we can finally initialize spell check:
-        this._app.initTypo()
         break
 
       case 'quicklook':

@@ -30,6 +30,7 @@ const ZettlrStats = require('./zettlr-stats.js')
 const ZettlrUpdater = require('./zettlr-updater.js')
 const makeExport = require('./zettlr-export.js')
 const ZettlrImport = require('./zettlr-import.js')
+const ZettlrDictionary = require('./zettlr-dictionary.js')
 const { i18n, trans } = require('../common/lang/i18n.js')
 const { hash, ignoreDir,
   ignoreFile, isFile, isDir } = require('../common/zettlr-helpers.js')
@@ -91,6 +92,11 @@ class Zettlr {
 
     // Initiate regular polling
     setTimeout(() => {
+      // Begin loading the dictionaries in the background
+      // We have to push this into the background, because otherwise the window
+      // won't open. As usual: Everything time-consuming shouldn't be done in the
+      // first tick of the app.
+      this.dict = new ZettlrDictionary()
       this.poll()
     }, POLL_TIME)
   }
@@ -779,43 +785,6 @@ class Zettlr {
     }
   }
 
-  // SPELLCHECKING RELATED FUNCTIONS
-
-  /**
-    * Loads a DIC or AFF file and sends it to the renderer.
-    * @param  {String} type Either 'dic' or 'aff'
-    * @param  {String} lang Which language dic/aff to load?
-    * @return {void}      This function does not return.
-    */
-  retrieveDictFile (type, lang) {
-    let p = path.join(
-      path.dirname(__dirname),
-      'renderer',
-      'assets',
-      'dict',
-      lang,
-      lang + '.' + type
-    )
-
-    try {
-      fs.lstatSync(p)
-    } catch (e) {
-      // Try the custom folder
-      p = path.join(app.getPath('userData'), '/dict', lang, lang + '.' + type)
-      try {
-        fs.lstatSync(p)
-      } catch (e) {
-        return
-      }
-    }
-
-    fs.readFile(p, 'utf8', (err, data) => {
-      if (err) console.error(err)
-      // Send the data directly back to the client once it has been read
-      this.ipc.send('typo-' + type, data)
-    })
-  }
-
   /****************************************************************************
    **                                                                        **
    **                                                                        **
@@ -930,7 +899,7 @@ class Zettlr {
     this.clearModified()
     // Immediately update the paths in renderer so that it is able to find
     // the file to (re)-select it.
-    this.ipc.send('file-update', file)
+    this.ipc.send('file-update', file.getMetadata())
 
     // Switch to newly created file (only happens before a file is selected)
     if (this.getCurrentFile() == null) {

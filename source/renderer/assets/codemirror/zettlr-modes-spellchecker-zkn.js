@@ -85,7 +85,7 @@
           word = word.substr(0, word.length - 1)
         }
 
-        if (window.renderer && !window.renderer.typoCheck(word)) {
+        if (global.typo && !global.typo.check(word)) {
           return 'spell-error' // CSS class: cm-spell-error
         }
 

@@ -25,7 +25,6 @@ const popup = require('./zettlr-popup.js')
 const ZettlrStatsView = require('./zettlr-stats-view.js')
 const ZettlrAttachments = require('./zettlr-attachments.js')
 
-const Typo = require('typo-js')
 const remote = require('electron').remote
 const path = require('path')
 
@@ -51,13 +50,6 @@ class ZettlrRenderer {
     this._currentDir = null
     this._paths = null
     this._lang = 'en_US' // Default fallback
-
-    // Spellchecking vars
-    this._typoReady = false // Flag indicating whether Typo has already loaded
-    this._typoLang = {} // Which language(s) are we spellchecking?
-    this._typoAff = null // Contains the Aff-file data
-    this._typoDic = null // Contains the dic-file data
-    this._typo = [] // Contains the Typo object to check with
 
     // Write translation data into renderer process's global var
     // Why do we have to stringify and parse it? Because otherwise the
@@ -106,8 +98,7 @@ class ZettlrRenderer {
     // Request a first batch of files
     this._ipc.send('get-paths', {})
 
-    // Also, request the typo things
-    this._ipc.send('typo-request-lang', {})
+    this.finishStartup()
   }
 
   /**
@@ -119,6 +110,7 @@ class ZettlrRenderer {
 
     // Send an initial check for an update
     this._ipc.send('update-check')
+    this._overlay.close()
   }
 
   /**
@@ -401,7 +393,6 @@ class ZettlrRenderer {
       // update.
       let f = this.getCurrentFile()
       f.modtime = file.modtime
-      f.snippet = file.snippet
       f.tags = file.tags
       f.id = file.id
       // Trigger a redraw of this specific file in the preview list.
@@ -436,116 +427,6 @@ class ZettlrRenderer {
       this._preview.refresh()
       this._directories.refresh()
     }
-  }
-
-  // SPELLCHECKER FUNCTIONS
-
-  /**
-   * Is called when we receive the array of enabled spellchecking langs. This
-   * begins fetching all of them by requesting the first aff-file.
-   * @param {Array} langs The array from main with correct info about the spellchecker.
-   */
-  setSpellcheck (langs) {
-    this._overlay.update(trans('init.spellcheck.get_lang'))
-
-    // Save all languages in _typoLang. They will be spliced out as soon as
-    // they are loaded.
-    this._typoLang = langs
-
-    if (this._typoLang.length > 0) {
-      this.requestLang('aff')
-    } else {
-      // We're already done!
-      this._overlay.close()
-      // Finish and cleanup from startup
-      this.finishStartup()
-    }
-  }
-
-  /**
-   * Requests a language file (either aff or dic)
-   * @param  {String} type The type of file, either "aff" or "dic"
-   * @return {void}      Nothing to return.
-   */
-  requestLang (type) {
-    // Fetch from first upwards. As we splice the successfully loaded langs,
-    // 0 will always refer to the next language to be loaded.
-    this._overlay.update(
-      trans(
-        'init.spellcheck.request_file',
-        trans('dialog.preferences.app_lang.' + this._typoLang[0])
-      )
-    )
-
-    // Load the first lang (first aff, then dic)
-    this._ipc.send('typo-request-' + type, this._typoLang[0])
-  }
-
-  /**
-   * This function checks for existence of Aff and Dic files and then inits
-   * the given language using the dictionaries.
-   * @return {void} Nothing to return.
-   */
-  initTypo () {
-    if (!this._typoLang) { return }
-    if (!this._typoAff) { return }
-    if (!this._typoDic) { return }
-
-    this._overlay.update(
-      trans(
-        'init.spellcheck.init',
-        trans('dialog.preferences.app_lang.' + this._typoLang[0])
-      )
-    )
-
-    // Initialize typo and we're set!
-    this._typo.push(new Typo(this._typoLang[0], this._typoAff, this._typoDic))
-
-    // Shift out the first index while transmitting the "loaded!" message,
-    // as the return value of shift() is precisely the removed item.
-    this._overlay.update(
-      trans(
-        'init.spellcheck.init_done',
-        trans('dialog.preferences.app_lang.' + this._typoLang.shift())
-      )
-    )
-
-    // Free memory
-    this._typoAff = null
-    this._typoDic = null
-
-    if (this._typoLang.length > 0) {
-      // There is still at least one language to load. -> request next aff
-      this.requestLang('aff')
-    } else {
-      // Done - enable language checking
-      this._typoReady = true
-      this._overlay.close() // Done!
-      // Finish and cleanup from startup
-      this.finishStartup()
-    }
-  }
-
-  /**
-   * This function returns either true or false based on whether or not the
-   * word given has been found in any of the dictionaries.
-   * @param  {String} word The word to check
-   * @return {Boolean}      True, if it has been found, or false if no language recognizes it.
-   */
-  typoCheck (word) {
-    if (!this._typoReady) {
-      return true // true means: No wrong spelling detected
-    }
-
-    for (let lang of this._typo) {
-      if (lang.check(word)) {
-        // As soon as the word is correct in any lang, break and return true
-        return true
-      }
-    }
-
-    // No language reported the word exists
-    return false
   }
 
   /**
@@ -797,6 +678,7 @@ class ZettlrRenderer {
     }
     file.content = this._editor.getValue()
     file.wordcount = this._editor.getWrittenWords() // For statistical purposes only =D
+    console.log(`Saving file ${file.name}!`)
     this._ipc.send('file-save', file)
   }
 

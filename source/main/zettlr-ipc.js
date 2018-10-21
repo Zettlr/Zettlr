@@ -7,7 +7,11 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This class is basically the postmaster of the app.
+ * Description:     This class is basically the postmaster of the app. There are
+ *                  three channels that are used for communication:
+ *                  - message: The default channel for most of the stuff (async)
+ *                  - config: Retrieve configuration values (sync)
+ *                  - typo: Retrieve dictionary functions (sync)
  *
  * END HEADER
  */
@@ -48,6 +52,19 @@ class ZettlrIPC {
         event.returnValue = global.config.get(key)
       })
 
+      // Listen for synchronous messages from the renderer process for typos.
+      this._ipc.on('typo', (event, message) => {
+        if (message.type === 'check') {
+          event.returnValue = (this._app.dict) ? this._app.dict.check(message.term) : true
+        } else if (message.type === 'suggest') {
+          event.returnValue = (this._app.dict) ? this._app.dict.suggest(message.term) : []
+        }
+      })
+
+      // Increase the event listener cap to 20. Normally we have 11, which is a
+      // result of the wrappers electron puts around the node objects, I guess.
+      this._ipc.setMaxListeners(20)
+
       // In all other occasions omit the event.
       this.dispatch(arg)
     })
@@ -81,12 +98,13 @@ class ZettlrIPC {
     if (!this._app.window.getWindow()) {
       return this // Fail gracefully
     }
-
+    console.log(`Sending command ${command} with content`, content)
     let sender = this._app.window.getWindow().webContents
     sender.send('message', {
       'command': command,
       'content': content
     })
+    console.log(`Done!`)
 
     return this
   }
@@ -324,20 +342,6 @@ class ZettlrIPC {
 
       case 'get-tags':
         this.send('set-tags', this._app.getTags().get())
-        break
-
-      // SPELLCHECKING EVENTS
-      case 'typo-request-lang':
-        // Send the renderer all activated spellchecking dictionaries.
-        this.send('typo-lang', this._app.getConfig().get('selectedDicts'))
-        break
-
-      case 'typo-request-aff':
-        this._app.retrieveDictFile('aff', cnt)
-        break
-
-      case 'typo-request-dic':
-        this._app.retrieveDictFile('dic', cnt)
         break
 
       // UPDATE
