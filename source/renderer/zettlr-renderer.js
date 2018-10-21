@@ -92,8 +92,6 @@ class ZettlrRenderer {
     // Request a first batch of files
     this._ipc.send('get-paths', {})
 
-    this.finishStartup()
-
     // Here we can init actions and stuff to be done after the startup has finished
     setTimeout(() => { this.poll() }, POLL_TIME) // Poll every POLL_TIME seconds
 
