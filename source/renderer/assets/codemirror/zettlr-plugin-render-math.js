@@ -52,7 +52,6 @@
       // First get the line and test if the contents contain a math element
       let line = cm.getLine(i)
       if (line === '$$') {
-        console.log(`Found a multiline!`)
         j++
         // Multiline equation
         while (j < cm.lineCount() && cm.getLine(j) !== '$$') {
