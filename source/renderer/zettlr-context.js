@@ -228,7 +228,7 @@ class ZettlrCon {
     } else if (elem.parents('#editor').length > 0) {
       // If the word is spelled wrong, request suggestions
       if (elem.hasClass('cm-spell-error')) {
-        let suggestions = this._body.getRenderer().typoSuggest(elem.text())
+        let suggestions = global.typo.suggest(elem.text())
         if (suggestions.length > 0) {
           // Select the word under the cursor if there are suggestions.
           // Makes it easier to replace them

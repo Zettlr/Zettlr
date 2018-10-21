@@ -27,8 +27,6 @@ const ZettlrAttachments = require('./zettlr-attachments.js')
 const remote = require('electron').remote
 const path = require('path')
 
-// const { trans } = require('../common/lang/i18n.js')
-
 // Pull the poll-time from the data
 const POLL_TIME = require('../common/data.json').poll_time
 

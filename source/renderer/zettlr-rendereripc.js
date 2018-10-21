@@ -70,6 +70,7 @@ class ZettlrRendererIPC {
       }
     }
 
+    // Inject typo spellcheck and suggest functions into the globals
     global.typo = {
       check: (term) => {
         return this._ipc.sendSync('typo', { 'type': 'check', 'term': term })
