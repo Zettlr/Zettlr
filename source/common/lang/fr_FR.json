@@ -148,7 +148,8 @@
         "insert_ol": "Insérer une liste avec numéros.",
         "insert_ul": "Insérer une liste pas de numéros.",
         "no_suggestions": "Pas de suggestions",
-        "quicklook": "Quicklook"
+        "quicklook": "Quicklook",
+        "donate": "Supporter Zettlr"
     },
     "dialog": {
         "error": {

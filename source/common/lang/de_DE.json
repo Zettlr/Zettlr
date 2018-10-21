@@ -142,13 +142,14 @@
         "start_speaking": "Sprechen beginnen",
         "stop_speaking": "Sprechen anhalten",
         "all_front": "Alle in den Vordergrund",
-        "no_suggestions": "Keine Vorschläge",
-        "quicklook": "Quicklook",
         "bold": "Fett",
         "italic": "Kursiv",
         "insert_link": "Link einfügen",
         "insert_ol": "Numerierte Liste einfügen",
-        "insert_ul": "Ungeordnete Liste einfügen"
+        "insert_ul": "Ungeordnete Liste einfügen",
+        "no_suggestions": "Keine Vorschläge",
+        "quicklook": "Quicklook",
+        "donate": "Unterstützen"
     },
     "dialog": {
         "error": {

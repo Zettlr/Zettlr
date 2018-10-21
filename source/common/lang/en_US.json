@@ -148,7 +148,8 @@
         "insert_ol": "Insert numbered list",
         "insert_ul": "Insert unordered list",
         "no_suggestions": "No suggestions",
-        "quicklook": "Quicklook"
+        "quicklook": "Quicklook",
+        "donate": "Support Zettlr"
     },
     "dialog": {
         "error": {

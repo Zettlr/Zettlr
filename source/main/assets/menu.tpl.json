@@ -172,6 +172,10 @@
     "submenu": [
     { "label": "menu.about", "command": "display-about" },
     {
+      "label": "menu.donate",
+      "target": "https://paypal.me/hendrikerz"
+    },
+    {
       "label": "menu.learn_more",
       "target": "https://www.zettlr.com/"
     }, {

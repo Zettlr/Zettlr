@@ -6,6 +6,7 @@
 - Moved the attachment options to the "Advanced"-tab in the preferences window.
 - Fixed a bug that threw errors when you tried to `Alt`-click a virtual directory.
 - Fixed the bug that virtual directories got duplicated on the creation of new files.
+- Added a "Donate" menu entry to the help menu.
 
 ## Under the hood
 
