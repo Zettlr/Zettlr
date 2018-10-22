@@ -42,15 +42,6 @@
                 "isPackage": false
             }
         ],
-        "extraResources": [
-            {
-                "from": "resources/pandoc",
-                "to": "pandoc",
-                "filter": [
-                    "**/*"
-                ]
-            }
-        ],
         "directories": {
             "output": "release",
             "app": "source"

@@ -124,10 +124,6 @@ class ZettlrExport {
       case 'html':
         this._prepareHTML()
         break
-      case 'odt':
-      case 'docx':
-        this._prepareWordProcessor()
-        break
       case 'pdf':
         this._preparePDF()
         break
@@ -151,6 +147,8 @@ class ZettlrExport {
       case 'org':
       case 'textile':
       case 'mediawiki':
+      case 'docx':
+      case 'odt':
         this._prepareStandardExport()
         break
       default:
@@ -257,15 +255,6 @@ class ZettlrExport {
   }
 
   /**
-   * Prepares the export via pandoc using a reference document (e.g., odt or docx)
-   */
-  _prepareWordProcessor () {
-    // -s is the standalone flag
-    this.tpl = '--reference-doc="' + path.join(this.options.tplDir, 'template.' + this.options.format) + '" -s'
-    this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} -t ${this.options.format} -o "${this.targetFile}"`
-  }
-
-  /**
    * This prepares all file exports except HTML, PDF, DOCX, and ODT.
    */
   _prepareStandardExport () {
@@ -277,6 +266,8 @@ class ZettlrExport {
         this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + '.revealjs.htm')
         break
       case 'rtf':
+      case 'odt':
+      case 'docx':
         standalone = '-s' // Must produce a standalone
         break
       case 'latex':
