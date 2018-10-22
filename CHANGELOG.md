@@ -20,6 +20,10 @@
 - Added a global `notify()` method in the renderer process for convenience.
 - Added an option to make footnotes inside files unique prior to project exports.
 - Moved the dictionary functions to the main process for asynchronous background loading.
+- Began using `tern.js` for better autocompletion.
+- **Fundamental Core Update**: Now on each request for a new file tree (using the command `paths-update`) not the whole object is sent towards the renderer because of app crashes arising from the use of synchronous messages via the new `typo`-channel. Instead, a dummy list is sent containing only the properties that the renderer accesses anyway. This way not only the amount of data is reduced quite significantly, but also the app does not crash on file and directory operations.
+- Removed an additional openPaths-update during the renaming of root files.
+- Now the current directory is re-set correctly after renaming the current directory.
 
 # 0.20.0
 

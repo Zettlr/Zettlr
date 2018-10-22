@@ -180,7 +180,8 @@ class ZettlrPreview {
         elem += `<p class="filename">${d.name.substr(0, d.name.lastIndexOf('.'))}</p>${tl}`
 
         if (this._snippets) {
-          elem += `<p class="snippet">
+          let extindicator = (d.ext === '.tex') ? '<span class="tex-indicator">TeX</span>' : ''
+          elem += `<p class="snippet">${extindicator}
           <span class="date">${formatDate(new Date(d.modtime))}</span>`
           if (d.id) elem += ` <span class="id">${d.id}</span>`
           if (d.tags.length > 0) elem += ` <span class="tags" data-tippy-content="${d.tags.join(',\n')}">#${d.tags.length}</span>`

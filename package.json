@@ -67,26 +67,29 @@
             "icon": "resources/icons/ico/icon.ico"
         },
         "linux": {
-            "target": ["deb", "rpm"],
+            "target": [
+                "deb",
+                "rpm"
+            ],
             "artifactName": "Zettlr-linux-x64-${version}.${ext}",
             "synopsis": "Markdown editor",
             "category": "Office",
             "icon": "resources/icons/png"
         },
         "dmg": {
-          "background": "resources/icons/dmg/dmg_back.tiff",
+            "background": "resources/icons/dmg/dmg_back.tiff",
             "icon": "resources/icons/icns/icon.icns",
             "contents": [
-              {
-                "x": 130,
-                "y": 220
-              },
-              {
-                "x": 410,
-                "y": 220,
-                "type": "link",
-                "path": "/Applications"
-              }
+                {
+                    "x": 130,
+                    "y": 220
+                },
+                {
+                    "x": 410,
+                    "y": 220,
+                    "type": "link",
+                    "path": "/Applications"
+                }
             ]
         },
         "nsis": {

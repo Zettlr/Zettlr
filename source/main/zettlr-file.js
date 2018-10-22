@@ -530,6 +530,26 @@ class ZettlrFile {
   }
 
   /**
+   * Returns the file's metadata
+   * @return {Object} An object containing only the metadata fields
+   */
+  getMetadata (parent = true) {
+    return {
+      'parent': (this.isRoot()) ? null : (parent) ? this.parent.getMetadata(false) : null,
+      'dir': this.dir,
+      'path': this.path,
+      'name': this.name,
+      'hash': this.hash,
+      'ext': this.ext,
+      'id': this.id,
+      'tags': JSON.parse(JSON.stringify(this.tags)), // Simple copy
+      'type': this.type,
+      'modtime': this.modtime,
+      'linefeed': this.linefeed
+    }
+  }
+
+  /**
     * Returns the hash of the file
     * @return {Number} The hash
     */
@@ -546,22 +566,6 @@ class ZettlrFile {
     * @return {String} The file name
     */
   getName () { return this.name }
-
-  /**
-   * Returns the file's metadata
-   * @return {Object} An object containing only the metadata fields
-   */
-  getMetadata () {
-    return {
-      'name': this.name,
-      'path': this.path,
-      'hash': this.hash,
-      'modtime': this.modtime,
-      'id': this.id,
-      'tags': this.tags,
-      'dir': this.dir
-    }
-  }
 
   // Dummy functions (either for recursive use or because their return val is obvious)
 

@@ -567,7 +567,7 @@ class ZettlrRenderer {
    * @param  {Integer} hash The containing dir's hash
    * @return {void}      Nothing to return.
    */
-  requestNewFile (name, hash) { this._ipc.send('file-new', { 'name': name, 'hash': hash }) }
+  requestNewFile (name, hash) { console.log(name, hash); this._ipc.send('file-new', { 'name': name, 'hash': hash }) }
 
   /**
    * Executed when a user has finished typing a new dir name.

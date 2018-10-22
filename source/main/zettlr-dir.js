@@ -344,6 +344,9 @@ class ZettlrDir {
       this.parent.sort()
     }
 
+    // Determine if this is just a rename or a move
+    let rename = (newpath === path.dirname(this.path))
+
     let oldPath = this.path
     this.path = path.join(newpath, this.name)
     this.hash = hash(this.path)
@@ -364,8 +367,8 @@ class ZettlrDir {
     // Move
     fs.renameSync(oldPath, this.path)
 
-    // Now detach from parent, because it's no longer in there
-    this.detach()
+    // Detach from parent if not only renamed, because it's no longer in there
+    if (!rename) this.detach()
 
     // Reset the interface
     this._vdInterface = new ZettlrInterface(path.join(this.path, '.ztr-virtual-directories'))
@@ -686,6 +689,27 @@ class ZettlrDir {
     } else {
       // Already exists!
       this.notifyChange(trans('system.error.virtual_dir_exists', n))
+    }
+  }
+
+  /**
+   * Returns the directory's metadata
+   * @return {Object} An object containing only the metadata fields
+   */
+  getMetadata (children = true) {
+    // Don't pull in the children twice to prevent an infinite loop
+    return {
+      'parent': (this.isRoot()) ? null : this.parent.getMetadata(false),
+      'path': this.path,
+      'name': this.name,
+      'hash': this.hash,
+      // The project itself is not needed, renderer only checks if it equals
+      // null, or not (then it means there is a project)
+      'project': (this.project) ? true : null,
+      'children': (children) ? this.children.map(elem => elem.getMetadata()) : [],
+      'attachments': this.attachments.map(elem => elem.name),
+      'type': this.type,
+      'sorting': this.sorting
     }
   }
 

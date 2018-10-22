@@ -135,7 +135,7 @@ class Zettlr {
       // flush all changes so they aren't processed again next cycle
       this.watchdog.flush()
       // Send a paths update to the renderer to reflect the changes.
-      this.ipc.send('paths-update', this.getPaths())
+      this.ipc.send('paths-update', this.getPathDummies())
     }
 
     setTimeout(() => { this.poll() }, POLL_TIME)
@@ -146,7 +146,7 @@ class Zettlr {
     * @param  {String} msg The message to be sent
     */
   notifyChange (msg) {
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
     this.notify(msg)
   }
 
@@ -278,7 +278,7 @@ class Zettlr {
 
     dir.toggleSorting(arg.type)
 
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
   }
 
   /**
@@ -315,7 +315,7 @@ class Zettlr {
     }
 
     // Send the new paths and open the respective file.
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
     this.setCurrentFile(file)
     this.ipc.send('file-open', file.withContent())
   }
@@ -346,7 +346,7 @@ class Zettlr {
 
     // Re-render the directories, and then as well the file-list of the
     // current folder.
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
 
     // Switch to newly created directory.
     this.setCurrentDir(dir)
@@ -366,7 +366,7 @@ class Zettlr {
 
     // Create the vd
     let vd = dir.addVirtualDir(arg.name)
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
     this.setCurrentDir(vd)
   }
 
@@ -431,7 +431,7 @@ class Zettlr {
     }
 
     this._sortPaths()
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
     // Open the newly added path(s) directly.
     if (newDir) { this.setCurrentDir(newDir) }
     if (newFile) { this.sendFile(newFile.hash) }
@@ -461,7 +461,7 @@ class Zettlr {
       this.setCurrentFile(null)
     }
     file.remove()
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
   }
 
   /**
@@ -506,7 +506,7 @@ class Zettlr {
 
     dir.remove()
 
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
   }
 
   /**
@@ -521,7 +521,7 @@ class Zettlr {
     }
     if (vd && file) {
       vd.remove(file)
-      this.ipc.send('paths-update', this.getPaths())
+      this.ipc.send('paths-update', this.getPathDummies())
     }
   }
 
@@ -620,23 +620,9 @@ class Zettlr {
     // Move to same location with different name
     dir.move(oldDir, arg.name)
 
-    // A root has been renamed -> reflect in openPaths
-    if (this.getPaths().includes(dir)) {
-      let oP = this.getConfig().get('openPaths')
-      for (let i = 0; i < oP.length; i++) {
-        if (oP[i] === oldPath) {
-          oP[i] = dir.path
-          this.getConfig().set('openPaths', oP)
-          break
-        }
-      }
-    }
+    this.ipc.send('paths-update', this.getPathDummies())
 
-    this.ipc.send('paths-update', this.getPaths())
-
-    if (isCurDir) {
-      this.ipc.send('set-current-dir', dir)
-    }
+    if (isCurDir) this.setCurrentDir(dir)
 
     if (oldPath != null) {
       // Re-set current file in the client
@@ -684,9 +670,9 @@ class Zettlr {
     }
 
     // Replace all relevant properties of the renamed file in renderer.
-    this.ipc.send('file-replace', { 'hash': parseInt(arg.hash), 'file': file })
+    this.ipc.send('file-replace', { 'hash': parseInt(arg.hash), 'file': file.getMetadata() })
 
-    if (this.getCurrentFile().hash === parseInt(arg.hash)) {
+    if (this.getCurrentFile() && this.getCurrentFile().hash === parseInt(arg.hash)) {
       // Also "re-set" the current file to trigger some additional actions
       // necessary to reflect the changes throughout the app.
       this.setCurrentFile(this.getCurrentFile())
@@ -731,7 +717,7 @@ class Zettlr {
       // Then simply attach.
       to.attach(from)
       // And, of course, refresh the renderer.
-      this.ipc.send('paths-update', this.getPaths())
+      this.ipc.send('paths-update', this.getPathDummies())
       return
     }
 
@@ -750,7 +736,7 @@ class Zettlr {
       // We have to set current dir (the to-dir) and current file AND
       // select it.
       this.setCurrentDir(to) // Current file is still correctly set
-      this.ipc.send('paths-update', this.getPaths())
+      this.ipc.send('paths-update', this.getPathDummies())
       return
     } else if ((this.getCurrentFile() !== null) &&
     (from.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
@@ -777,7 +763,7 @@ class Zettlr {
     // Add directory or file to target dir
     to.attach(from)
 
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
 
     if (newPath != null) {
       // Find the current file and reset the pointers to it.
@@ -805,7 +791,7 @@ class Zettlr {
     // and therefore want to remove themselves. This means we simply have
     // to splice the object from our paths array.
     this.getPaths().splice(this.getPaths().indexOf(obj), 1)
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
   }
 
   /**
@@ -1001,7 +987,7 @@ class Zettlr {
         }
         this.getConfig().removePath(p.getPath())
         this.getPaths().splice(this.getPaths().indexOf(p), 1)
-        this.ipc.send('paths-update', this.getPaths())
+        this.ipc.send('paths-update', this.getPathDummies())
         break
       }
     }
@@ -1156,10 +1142,14 @@ class Zettlr {
   getIPC () { return this.ipc }
 
   /**
-    * Returns the directory tree.
+    * Returns the directory tree. Thid does _not_, however, leave the paths
+    * unchanged. It re-maps them and removes from the roots the pointer to this
+    * object to prevent strange crashes of the app.
     * @return {ZettlrDir} The root directory pointer.
     */
   getPaths () { return this._openPaths }
+
+  getPathDummies () { return this._openPaths.map(elem => elem.getMetadata()) }
 
   /**
     * Returns the ZettlrConfig object

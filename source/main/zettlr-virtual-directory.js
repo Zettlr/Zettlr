@@ -359,6 +359,25 @@ class ZettlrVirtualDirectory {
   }
 
   /**
+   * Returns the virtual directory's metadata
+   * @return {Object} An object containing only the metadata fields
+   */
+  getMetadata () {
+    // For VDs we don't need the circular prevention b/c none of the children
+    // have this as their parent.
+    return {
+      'parent': null, // this.parent.getMetadata(false),
+      'path': this.path,
+      'name': this.name,
+      'hash': this.hash,
+      'children': this.children.map(elem => elem.getMetadata(false)),
+      'attachments': this.attachments,
+      'type': this.type,
+      'sorting': this.sorting
+    }
+  }
+
+  /**
    * Returns the hash of this VD.
    * @return {Number} The hash.
    */
