@@ -192,8 +192,9 @@
                 "strip_links_no_label": "Ne modifier pas des liens interne"
             },
             "project": {
-                "title": "Paramètres du Projet",
-                "title_label": "Titre du Projet"
+                "title": "Paramètres du projet",
+                "title_label": "Titre du projet",
+                "format": "Exporter le projet dans:"
             },
             "pdf": {
                 "title": "Paramètres du PDF",

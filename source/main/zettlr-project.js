@@ -54,7 +54,8 @@ class ZettlrProject {
         'tocDepth': 2, // Default: evaluate until level 2
         'titlepage': true // Generate a title page by default
       },
-      'title': this._dir.name // Default project title is the directory's name
+      'title': this._dir.name, // Default project title is the directory's name
+      'format': 'pdf' // Default export format: pdf.
     }
     this._cfg = null
     this._projectFile = path.join(this._dir.path, PROJECT_FILE)
@@ -122,7 +123,7 @@ class ZettlrProject {
 
     // Start up the Exporter
     let opt = {
-      'format': 'pdf', // Which format: "html", "docx", "odt", "pdf"
+      'format': this._cfg.format, // Which format: "html", "docx", "odt", "pdf"
       'file': tempfile, // The file to be exported
       'dest': this._dir.path, // On project exports, always dir path
       'stripIDs': true,

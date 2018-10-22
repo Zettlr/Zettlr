@@ -193,7 +193,8 @@
             },
             "project": {
                 "title": "Project settings",
-                "title_label": "Project Title"
+                "title_label": "Project Title",
+                "format": "Export project to:"
             },
             "pdf": {
                 "title": "PDF Settings",

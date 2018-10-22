@@ -223,6 +223,11 @@ class ZettlrDialog {
         for (let i = 1; i < 7; i++) {
           tocdepth += `<option value="${i}" ` + ((parseInt(obj.pdf.tocDepth) === i) ? 'selected="selected"' : '') + `>${i}</option>`
         }
+        let formats = ''
+        for (let format of ['pdf', 'docx', 'odt', 'html']) {
+          formats += `<option value="${format}"` + ((obj.format === format) ? 'selected="selected"' : '') + `>${format.toUpperCase()}</option>`
+        }
+        replacements.push('%FORMAT%|' + formats)
         // Project properties are a superset of the pdf preferences, so we
         // don't add a break here, because we need them as well.
         replacements.push('%PREFS_TITLE%|' + obj.title)

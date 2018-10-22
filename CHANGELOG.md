@@ -13,6 +13,7 @@
 - Added an option to deactivate the automatic closing of pairs of matching characters in the editor.
 - The app now supports code folding! Now you can click the new, small arrows left to Markdown headings to collapse everything below it!
 - Removed the customised word processor templates. Zettlr now uses the default reference docs provided by Pandoc.
+- Projects can now also be exported to odt, docx, and HTML.
 
 ## Under the hood
 
