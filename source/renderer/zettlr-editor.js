@@ -808,10 +808,15 @@ class ZettlrEditor {
     // Make preview and editor resizable
     this._div.resizable({
       'handles': 'w',
-      'resize': (e, ui) => { $('#combiner').css('width', ($(window).width() - ui.size.width) + 'px'); this._div.css('width', '') },
+      'resize': (e, ui) => {
+        // We need to account for the 10 pixels padding in the editor somehow.
+        $('#combiner').css('width', ($(window).width() - ui.size.width - 10) + 'px')
+        this._div.css('width', '')
+      },
       'stop': (e, ui) => {
         this._renderer.getEditor().refresh() // Refresh the editor to update lines and cursor positions.
         $('body').css('cursor', '') // Why does jQueryUI ALWAYS do this to me?
+        this._div.css('width', '')
       },
       'minWidth': Math.round($(window).width() * 0.4),
       'maxWidth': Math.round($(window).width() * 0.9)
