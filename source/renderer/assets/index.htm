@@ -29,6 +29,28 @@
     <!-- Hack for jQuery (part 2) -->
     <script>if (window.module) module = window.module;</script>
 
+    <style>
+    .CodeMirror-gutters {
+      background-color: transparent;
+      border: none;
+      left: 0 !important;
+    }
+    
+    .CodeMirror-foldgutter {
+      width: .7em;
+    }
+    .CodeMirror-foldgutter-open,
+    .CodeMirror-foldgutter-folded {
+      cursor: pointer;
+    }
+    .CodeMirror-foldgutter-open:after {
+      content: "\25BE";
+    }
+    .CodeMirror-foldgutter-folded:after {
+      content: "\25B8";
+    }
+    </style>
+
 <script>
 /* global $ */
 const ZettlrRenderer = require('../zettlr-renderer.js')

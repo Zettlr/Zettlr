@@ -53,6 +53,14 @@ require('codemirror/mode/sql/sql')
 require('codemirror/mode/swift/swift')
 require('codemirror/mode/yaml/yaml')
 
+// 7. The folding addon
+require('codemirror/addon/fold/foldcode')
+require('codemirror/addon/fold/foldgutter')
+require('codemirror/addon/fold/brace-fold')
+require('codemirror/addon/fold/indent-fold')
+require('codemirror/addon/fold/markdown-fold')
+require('codemirror/addon/fold/comment-fold')
+
 // Zettlr specific addons
 require('./assets/codemirror/zettlr-plugin-markdown-shortcuts.js')
 require('./assets/codemirror/zettlr-modes-spellchecker-zkn.js')
@@ -64,7 +72,7 @@ require('./assets/codemirror/zettlr-plugin-render-iframes.js')
 require('./assets/codemirror/zettlr-plugin-render-math.js')
 require('./assets/codemirror/zettlr-plugin-markdown-header-classes.js')
 
-// Finally CodeMirror itself
+// 8. Finally CodeMirror itself
 const CodeMirror = require('codemirror')
 
 // The timeout after which a "save"-command is triggered to automatically save changes
@@ -114,6 +122,11 @@ class ZettlrEditor {
       },
       theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
       autofocus: false,
+      foldGutter: true,
+      gutters: ['CodeMirror-foldgutter'],
+      foldOptions: {
+        'widget': '[\u2026]'
+      },
       lineWrapping: true,
       indentUnit: 4, // Indent lists etc. by 4, not 2 spaces (necessary, e.g., for pandoc)
       // inputStyle: "contenteditable", // Will enable this in a future version
@@ -239,6 +252,18 @@ class ZettlrEditor {
     })
 
     this._cm.refresh()
+
+    // Enable resizing of the editor
+    this.enableResizable()
+    // Update resize options on window resize
+    window.addEventListener('resize', (e) => {
+      if (this._div.hasClass('fullscreen')) return // Don't handle
+      this._div.resizable('option', 'minWidth', Math.round($(window).width() * 0.4))
+      this._div.resizable('option', 'maxWidth', Math.round($(window).width() * 0.9))
+
+      // Also we have to resize the editor to the correct width again
+      $('#editor').css('width', $(window).innerWidth() - $('#combiner').outerWidth() + 'px')
+    })
 
     // Finally create the annotateScrollbar object to be able to annotate the scrollbar with search results.
     this._scrollbarAnnotations = this._cm.annotateScrollbar('sb-annotation')
@@ -373,9 +398,16 @@ class ZettlrEditor {
     this._cm.setOption('fullScreen', !this._cm.getOption('fullScreen'))
     if (!this._cm.getOption('fullScreen')) {
       this._unmuteLines()
-    } else if (this._mute) {
-      this._muteLines()
+      this._div.removeClass('fullscreen')
+      this.enableResizable()
+    } else {
+      if (this._mute) this._muteLines()
+      this._div.addClass('fullscreen')
+      this.disableResizable()
     }
+
+    // Refresh to reflect the size changes
+    this._cm.refresh()
   }
 
   /**
@@ -770,6 +802,27 @@ class ZettlrEditor {
       clipboard.writeHTML(html)
     }
     return this
+  }
+
+  enableResizable () {
+    // Make preview and editor resizable
+    this._div.resizable({
+      'handles': 'w',
+      'resize': (e, ui) => { $('#combiner').css('width', ($(window).width() - ui.size.width) + 'px'); this._div.css('width', '') },
+      'stop': (e, ui) => {
+        this._renderer.getEditor().refresh() // Refresh the editor to update lines and cursor positions.
+        $('body').css('cursor', '') // Why does jQueryUI ALWAYS do this to me?
+      },
+      'minWidth': Math.round($(window).width() * 0.4),
+      'maxWidth': Math.round($(window).width() * 0.9)
+    })
+  }
+
+  disableResizable () {
+    $('#editor').resizable('destroy')
+    $('#editor').prop('style', '') // Remove the left and width things
+    $('#combiner').prop('style', '')
+    // TODO save these variables!
   }
 
   /**

@@ -46,27 +46,6 @@ class ZettlrBody {
     this._recentDocs = [] // All documents, up to twenty that have been opened on a per-session basis
     this._numRecentDocs = 10 // No more than 10 docs in the list
 
-    // Make preview and editor resizable
-    $('#editor').resizable({
-      'handles': 'w',
-      'resize': (e, ui) => { $('#combiner').css('width', ($(window).width() - ui.size.width) + 'px') },
-      'stop': (e, ui) => {
-        this._renderer.getEditor().refresh() // Refresh the editor to update lines and cursor positions.
-        $('body').css('cursor', '') // Why does jQueryUI ALWAYS do this to me?
-      },
-      'minWidth': Math.round($(window).width() * 0.4),
-      'maxWidth': Math.round($(window).width() * 0.9)
-    })
-
-    // Update resize options on window resize
-    window.addEventListener('resize', (e) => {
-      $('#editor').resizable('option', 'minWidth', Math.round($(window).width() * 0.4))
-      $('#editor').resizable('option', 'maxWidth', Math.round($(window).width() * 0.9))
-
-      // Also we have to resize the editor to the correct width again
-      $('#editor').css('width', $(window).innerWidth() - $('#combiner').outerWidth() + 'px')
-    })
-
     // Event listener for the context menu
     window.addEventListener('contextmenu', (e) => {
       e.preventDefault()
