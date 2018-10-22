@@ -185,7 +185,7 @@ class ZettlrIPC {
         dir = this._app.findDir(cnt)
         if (dir) {
           dir.makeProject()
-          this.send('paths-update', this._app.getPaths())
+          this.send('paths-update', this._app.getPathDummies())
         }
         break
 
@@ -193,7 +193,7 @@ class ZettlrIPC {
         dir = this._app.findDir(cnt)
         if (dir) {
           dir.removeProject()
-          this.send('paths-update', this._app.getPaths())
+          this.send('paths-update', this._app.getPathDummies())
         }
         break
 
