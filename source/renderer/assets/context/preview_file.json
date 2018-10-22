@@ -1,0 +1,22 @@
+[
+  {
+    "label": "menu.rename_file",
+    "command": "file-rename"
+  },
+  {
+    "label": "menu.delete_file",
+    "command": "file-delete"
+  },
+  {
+    "scope": "virtual-directory",
+    "label": "menu.delete_from_vd",
+    "command": "file-delete-from-vd"
+  },
+  {
+    "type": "separator"
+  },
+  {
+    "label": "menu.quicklook",
+    "command": "quicklook"
+  }
+]
