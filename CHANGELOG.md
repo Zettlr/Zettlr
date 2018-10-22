@@ -9,6 +9,7 @@
 - Added a "Donate" menu entry to the help menu.
 - The startup overlay is now gone.
 - Dictionaries can be selected and deselected at runtime.
+- Fixed a bug that did not remove the file's ID in the preview list, after it has been deleted from the file itself.
 
 ## Under the hood
 

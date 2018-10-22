@@ -169,6 +169,7 @@ class ZettlrFile {
     this.tags = [...new Set(this.tags)]
 
     // Search for an ID
+    this.id = ''
     if ((match = idRE.exec(cnt)) == null) {
       return cnt
     }
