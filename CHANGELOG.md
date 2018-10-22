@@ -11,6 +11,7 @@
 - Dictionaries can be selected and deselected at runtime.
 - Fixed a bug that did not remove the file's ID in the preview list, after it has been deleted from the file itself.
 - Added an option to deactivate the automatic closing of pairs of matching characters in the editor.
+- The app now supports code folding! Now you can click the new, small arrows left to Markdown headings to collapse everything below it!
 
 ## Under the hood
 

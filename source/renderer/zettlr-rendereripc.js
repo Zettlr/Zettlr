@@ -74,10 +74,14 @@ class ZettlrRendererIPC {
     // of word: correct?
     // We are explicitly omitting the prototype stuff, as we don't access this.
     this._typoCache = Object.create(null)
+    this._typoCheck = false
+    // Activate typocheck after 2 seconds to speed up the app's start
+    setTimeout(() => { this._typoCheck = true }, 2000)
 
     // Inject typo spellcheck and suggest functions into the globals
     global.typo = {
       check: (term) => {
+        if (!this._typoCheck) return true // Give the dictionaries some time to heat up
         // Return cache if possible
         if (this._typoCache[term] !== undefined) return this._typoCache[term]
         // Save into the corresponding cache and return the query result
