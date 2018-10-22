@@ -55,7 +55,7 @@ class ZettlrIPC {
       // Listen for synchronous messages from the renderer process for typos.
       this._ipc.on('typo', (event, message) => {
         if (message.type === 'check') {
-          event.returnValue = (this._app.dict) ? this._app.dict.check(message.term) : true
+          event.returnValue = (this._app.dict) ? this._app.dict.check(message.term) : 'not-ready'
         } else if (message.type === 'suggest') {
           event.returnValue = (this._app.dict) ? this._app.dict.suggest(message.term) : []
         }

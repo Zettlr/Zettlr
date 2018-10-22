@@ -70,10 +70,22 @@ class ZettlrRendererIPC {
       }
     }
 
+    // This is an object that will hold all previously checked words in the form
+    // of word: correct?
+    // We are explicitly omitting the prototype stuff, as we don't access this.
+    this._typoCache = Object.create(null)
+
     // Inject typo spellcheck and suggest functions into the globals
     global.typo = {
       check: (term) => {
-        return this._ipc.sendSync('typo', { 'type': 'check', 'term': term })
+        // Return cache if possible
+        if (this._typoCache[term] !== undefined) return this._typoCache[term]
+        // Save into the corresponding cache and return the query result
+        // Return the query result
+        let correct = this._ipc.sendSync('typo', { 'type': 'check', 'term': term })
+        if (correct === 'not-ready') return true // Don't check unless its ready
+        this._typoCache[term] = correct
+        return correct
       },
       suggest: (term) => {
         return this._ipc.sendSync('typo', { 'type': 'suggest', 'term': term })

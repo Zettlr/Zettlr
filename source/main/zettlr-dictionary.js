@@ -71,7 +71,12 @@ class ZettlrDictionary {
 
   check (term) {
     // Don't check until all are loaded
-    if (this._toLoad > this._typos.length || this._typos.length === 0) return true
+    if (this._toLoad > this._typos.length) return 'not-ready'
+    // We need to differentiate between not ready and ready, but there are no
+    // dictionaries. Because in the latter case, returning true means to let the
+    // renderer save the words anyway. Object indexing is still more efficient
+    // than querying the main process via IPC.
+    if (this._typos.length === 0) return true
 
     let correct = false
     for (let typo of this._typos) {
