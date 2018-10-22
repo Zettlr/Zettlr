@@ -163,7 +163,7 @@ class ZettlrPreview {
           <span class="virtual-directories">
             ${d.children.filter(e => e.type === 'virtual-directory').length} ${trans('gui.virtual_dirs')}
           </span>
-          </p>` // TODO TRANSLATE
+          </p>`
         }
       } else if (d.type === 'file') {
         // Retrieve all tags the file got.

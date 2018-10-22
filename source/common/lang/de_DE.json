@@ -3,15 +3,6 @@
         "thousand_delimiter": ".",
         "decimal_delimiter": ","
     },
-    "init": {
-        "welcome": "Lade Anwendung…",
-        "spellcheck": {
-            "get_lang": "Lade Wörterbücher für die Rechtschreibprüfung…",
-            "request_file": "Lese Wörterbücher für %s. Einen Moment bitte…",
-            "init": "Initialisiere Rechtschreibprüfung für %s.",
-            "init_done": "Rechtschreibprüfung für %s erfolgreich initialisiert!"
-        }
-    },
     "gui": {
         "find_placeholder": "Finden…",
         "replace_placeholder": "Ersetzen mit",

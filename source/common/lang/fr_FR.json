@@ -3,15 +3,6 @@
         "thousand_delimiter": " ",
         "decimal_delimiter": ","
     },
-    "init": {
-        "welcome": "Initialiser l'application…",
-        "spellcheck": {
-            "get_lang": "Charger les dictionnaires pour vérificateur d'orthographe…",
-            "request_file": "Charger les fichiers du %s. Un instant, s'il te plaît…",
-            "init": "Initialiser la correcteur orthographique du %s.",
-            "init_done": "La correcteur orthographique du %s devenu initialiser!"
-        }
-    },
     "gui": {
         "find_placeholder": "Trouver…",
         "replace_placeholder": "Substituer à",

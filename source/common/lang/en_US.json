@@ -3,15 +3,6 @@
         "thousand_delimiter": ",",
         "decimal_delimiter": "."
     },
-    "init": {
-        "welcome": "Initializing application…",
-        "spellcheck": {
-            "get_lang": "Setting up spellchecking dictionaries…",
-            "request_file": "Reading dictionary for %s. This may take a while…",
-            "init": "Initializing spellcheck for %s.",
-            "init_done": "Initialized spellcheck for %s!"
-        }
-    },
     "gui": {
         "find_placeholder": "Find…",
         "replace_placeholder": "Replace with",
