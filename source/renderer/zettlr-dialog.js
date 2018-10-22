@@ -148,6 +148,7 @@ class ZettlrDialog {
         let dark = (obj.darkTheme) ? 'checked="checked"' : ''
         let snippets = (obj.snippets) ? 'checked="checked"' : ''
         let debug = (obj.debug) ? 'checked="checked"' : ''
+        let autoCloseBrackets = (obj.editor.autoCloseBrackets) ? 'checked="checked"' : ''
         let exportTemp = (obj.export.dir === 'temp') ? 'checked="checked"' : ''
         let exportCwd = (obj.export.dir === 'cwd') ? 'checked="checked"' : ''
         let stripID = (obj.export.stripIDs) ? 'checked="checked"' : ''
@@ -164,6 +165,7 @@ class ZettlrDialog {
         replacements.push('%COMBINER_COLLAPSED%|' + cmbStateCol)
         replacements.push('%MUTE_LINES%|' + mute)
         replacements.push('%DEBUG%|' + debug)
+        replacements.push('%AUTOCLOSEBRACKETS%|' + autoCloseBrackets)
         replacements.push('%EXPORT_DEST_TEMP%|' + exportTemp)
         replacements.push('%EXPORT_DEST_CWD%|' + exportCwd)
         replacements.push('%EXPORT_STRIP_ID%|' + stripID)

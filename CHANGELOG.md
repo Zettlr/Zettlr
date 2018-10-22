@@ -10,6 +10,7 @@
 - The startup overlay is now gone.
 - Dictionaries can be selected and deselected at runtime.
 - Fixed a bug that did not remove the file's ID in the preview list, after it has been deleted from the file itself.
+- Added an option to deactivate the automatic closing of pairs of matching characters in the editor.
 
 ## Under the hood
 

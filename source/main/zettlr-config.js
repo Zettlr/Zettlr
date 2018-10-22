@@ -112,6 +112,10 @@ class ZettlrConfig {
         'linkStart': '[[',
         'linkEnd': ']]'
       },
+      // Editor related stuff
+      'editor': {
+        'autoCloseBrackets': true
+      },
       // Language
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.
       'app_lang': this.getLocale(),

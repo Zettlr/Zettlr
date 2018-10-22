@@ -69,6 +69,10 @@ const CodeMirror = require('codemirror')
 
 // The timeout after which a "save"-command is triggered to automatically save changes
 const SAVE_TIMOUT = require('../common/data.json').poll_time
+const AUTOCLOSEBRACKETS = {
+  pairs: '()[]{}\'\'""»«„““”‘’__``', // Autoclose markdown specific stuff
+  override: true
+}
 
 /**
 * This class propably has the most `require`s in it, because it loads all
@@ -113,10 +117,7 @@ class ZettlrEditor {
       lineWrapping: true,
       indentUnit: 4, // Indent lists etc. by 4, not 2 spaces (necessary, e.g., for pandoc)
       // inputStyle: "contenteditable", // Will enable this in a future version
-      autoCloseBrackets: {
-        pairs: '()[]{}\'\'""»«„““”‘’__``', // Autoclose markdown specific stuff
-        override: true
-      },
+      autoCloseBrackets: AUTOCLOSEBRACKETS,
       markdownImageBasePath: '', // The base path used to render the image in case of relative URLs
       markdownOnLinkOpen: function (url) { require('electron').shell.openExternal(url) }, // Action for ALT-Clicks
       zkn: {
@@ -387,6 +388,18 @@ class ZettlrEditor {
       this._unmuteLines() // Unmute
     } else if (this._cm.getOption('fullScreen') && this._mute) {
       this._muteLines() // Mute
+    }
+  }
+
+  /**
+   * Sets the autoCloseBrackets command of the editor to the respective value.
+   * @param {Boolean} state True, if brackets should be autoclosed, or false.
+   */
+  setAutoCloseBrackets (state) {
+    if (state) {
+      this._cm.setOption('autoCloseBrackets', AUTOCLOSEBRACKETS)
+    } else {
+      this._cm.setOption('autoCloseBrackets', false)
     }
   }
 

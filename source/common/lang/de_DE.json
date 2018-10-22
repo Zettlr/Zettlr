@@ -337,6 +337,7 @@
             "spellcheck_search_placeholder": "Suche nach Wörterbüchern &hellip;",
             "mute_lines": "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab",
             "debug": "Entwicklermodus",
+            "autoCloseBrackets": "Schließe automatisch die folgenden Zeichenpaare: ()[]{}'\"\"»«„““”‘’__``",
             "save": "Speichern",
             "cancel": "Abbrechen"
         },

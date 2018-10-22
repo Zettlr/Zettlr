@@ -655,6 +655,7 @@ class ZettlrBody {
       cfg['export.stripIDs'] = (res.find(elem => elem.name === 'export.stripIDs') !== undefined)
       cfg['export.stripTags'] = (res.find(elem => elem.name === 'export.stripTags') !== undefined)
       cfg['debug'] = (res.find(elem => elem.name === 'debug') !== undefined)
+      cfg['editor.autoCloseBrackets'] = (res.find(elem => elem.name === 'editor.autoCloseBrackets') !== undefined)
       // Extract selected dictionaries
       cfg['selectedDicts'] = res.filter(elem => elem.name === 'selectedDicts').map(elem => elem.value)
     } else if (dialog === 'pdf-preferences') {

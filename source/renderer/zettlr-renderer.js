@@ -135,6 +135,7 @@ class ZettlrRenderer {
     this.setLocale(global.config.get('app_lang'))
     // muteLines initial setting
     this.getEditor().setMuteLines(global.config.get('muteLines'))
+    this.getEditor().setAutoCloseBrackets(global.config.get('editor.autoCloseBrackets'))
 
     // Set the correct combiner state
     switch (global.config.get('combinerState')) {
@@ -664,7 +665,6 @@ class ZettlrRenderer {
     }
     file.content = this._editor.getValue()
     file.wordcount = this._editor.getWrittenWords() // For statistical purposes only =D
-    console.log(`Saving file ${file.name}!`)
     this._ipc.send('file-save', file)
   }
 

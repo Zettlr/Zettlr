@@ -337,6 +337,7 @@
             "spellcheck_search_placeholder": "Search for dictionaries &hellip;",
             "mute_lines": "Mute non-focused lines in distraction-free mode",
             "debug": "Debug",
+            "autoCloseBrackets": "Automatically close the following character pairs: ()[]{}'\"\"»«„““”‘’__``",
             "save": "Save",
             "cancel": "Cancel"
         },

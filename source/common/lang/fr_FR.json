@@ -337,6 +337,7 @@
             "spellcheck_search_placeholder": "Chercher les bibliothèques &hellip;",
             "mute_lines": "Masquer les lignes dans la mode sans distraction",
             "debug": "Debug",
+            "autoCloseBrackets": "Fermer les pairs du caractères suivants: ()[]{}'\"\"»«„““”‘’__``",
             "save": "Enregistrer",
             "cancel": "Annuler"
         },
