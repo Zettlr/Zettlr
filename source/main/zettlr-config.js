@@ -42,9 +42,6 @@ class ZettlrConfig {
     this.config = null
     this._rules = [] // This array holds all validation rules
 
-    // Environment variables
-    this.env = {}
-
     // Additional environmental paths (for locating LaTeX and Pandoc)
     if (process.platform === 'win32') {
       this._additional_paths = COMMON_DATA.additional_paths.win32
@@ -242,17 +239,6 @@ class ZettlrConfig {
     // Quote: "Contents/Resources for MacOS, resources for Linux and Windows"
     let dir = path.dirname(app.getPath('exe')) // Get application directory
 
-    if (process.platform === 'darwin') {
-      // The executable lies in Contents/MacOS --> navigate up a second time
-      // macos is capitalized "Resources", not "resources" in lowercase
-      dir = path.join(path.dirname(dir), 'Resources')
-    } else {
-      dir = path.join(dir, 'resources')
-    }
-
-    // Write the templateDir into the environment variables
-    this.env.templateDir = path.join(dir, 'pandoc')
-
     // Finally, check whether or not a UUID exists, and, if not, generate one.
     if (!this.config.uuid) {
       this.config.uuid = uuid('com.zettlr.app', uuid.DNS)
@@ -366,19 +352,6 @@ class ZettlrConfig {
     */
   getConfig () {
     return this.config
-  }
-
-  /**
-    * Returns an environment variable
-    * @param  {String} attr The environment variable to be returned.
-    * @return {Mixed}      Either the variable's value or null.
-    */
-  getEnv (attr) {
-    if (this.env.hasOwnProperty(attr)) {
-      return this.env[attr]
-    } else {
-      return null
-    }
   }
 
   /**

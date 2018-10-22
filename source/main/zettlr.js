@@ -536,7 +536,6 @@ class Zettlr {
       'format': arg.ext, // Which format: "html", "docx", "odt", "pdf"
       'file': file, // The file to be exported
       'dest': (this.config.get('export.dir') === 'temp') ? app.getPath('temp') : file.parent.path, // Either temp or cwd
-      'tplDir': this.config.getEnv('templateDir'),
       'stripIDs': this.config.get('export.stripIDs'),
       'stripTags': this.config.get('export.stripTags'),
       'stripLinks': this.config.get('export.stripLinks'),
