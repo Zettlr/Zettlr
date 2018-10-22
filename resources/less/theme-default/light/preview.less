@@ -50,12 +50,16 @@
             p.snippet {
               .excerpt { color: @grey-3; }
 
-              .date, .id, .tags, .directories, .files, .virtual-directories, .tex-indicator {
+              .date, .id, .tags, .directories, .files, .virtual-directories {
                 background-color:@grey-1;
                 color: @grey-3;
               }
 
-              .tex-indicator { font-family: @font-mono; }
+              .tex-indicator {
+                color: @grey-0;
+                font-family: @font-mono;
+                background-color: @green-0;
+              }
             }
         }
     }
