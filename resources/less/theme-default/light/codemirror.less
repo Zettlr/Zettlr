@@ -4,6 +4,21 @@
 #editor .CodeMirror, .quicklook .body .CodeMirror {
     background-color:#ffffff;
     color:rgb(46, 56, 60);
+
+    &.cm-stex-mode {
+      font-family: @font-mono;
+        .cm-comment    { color: @grey-2; }
+        .cm-attribute  { color: @blue-0; }
+        .cm-string     { color: @green-0; }
+        .cm-string-2   { color: @gold-selection-dark; }
+        .cm-variable   { color: @grey-6; }
+        .cm-variable-2 { color: @green-selection-dark; }
+        .cm-keyword    { color: @purple-selection-dark; }
+        .cm-property   { color: @orange-2; }
+        .cm-type       { color: @orange-2; }
+        .cm-atom       { color: @green-0; }
+        .cm-number     { color: @blue-0; }
+    }
 }
 
 .CodeMirror-selected { background-color:@green-selection !important; }
