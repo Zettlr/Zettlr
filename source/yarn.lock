@@ -250,6 +250,11 @@ chownr@^1.0.1:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.0.1.tgz#e2a75042a9551908bebd25b8523d5f9769d79181"
   integrity sha1-4qdQQqlVGQi+vSW4Uj1fl2nXkYE=
 
+citeproc@^2.1.210:
+  version "2.1.210"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.1.210.tgz#2d8475c3ecd051e5ec6770ad5c2d33eb8e80300c"
+  integrity sha512-6hBVPAee7lVv8iCXs+GYoKiX+AjH7BqYsoe7hFeoIQV1ZqnXEJIR1Ehdv9iQPAalfMyhHkHJDXRyd/UFaMTh6A==
+
 class-utils@^0.3.5:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/class-utils/-/class-utils-0.3.6.tgz#f93369ae8b9a7ce02fd41faad0ca83033190c463"

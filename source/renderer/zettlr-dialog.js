@@ -179,6 +179,7 @@ class ZettlrDialog {
         replacements.push('%ZKN_LINKSTART%|' + obj.zkn.linkStart)
         replacements.push('%ZKN_LINKEND%|' + obj.zkn.linkEnd)
         replacements.push('%ZKN_IDGEN%|' + obj.zkn.idGen)
+        replacements.push('%CSLLIBRARY%|' + obj.cslLibrary)
         let spellcheck = ''
         let spellcheckLabel = ''
         for (let l of obj.selectedDicts) {

@@ -70,6 +70,7 @@ require('./assets/codemirror/zettlr-modes-spellchecker-zkn.js')
 require('./assets/codemirror/zettlr-plugin-footnotes.js')
 require('./assets/codemirror/zettlr-plugin-render-images.js')
 require('./assets/codemirror/zettlr-plugin-render-links.js')
+require('./assets/codemirror/zettlr-plugin-render-citations.js')
 require('./assets/codemirror/zettlr-plugin-render-tasks.js')
 require('./assets/codemirror/zettlr-plugin-render-iframes.js')
 require('./assets/codemirror/zettlr-plugin-render-math.js')
@@ -155,6 +156,7 @@ class ZettlrEditor {
       autoCloseBrackets: AUTOCLOSEBRACKETS,
       markdownImageBasePath: '', // The base path used to render the image in case of relative URLs
       markdownOnLinkOpen: function (url) { require('electron').shell.openExternal(url) }, // Action for ALT-Clicks
+      cite: function (id) { return global.cite.get([id]) },
       zkn: {
         idRE: '(\\d{14})', // What do the IDs look like?
         linkStart: '\\[\\[', // Start of links?
@@ -203,6 +205,7 @@ class ZettlrEditor {
       this._cm.execCommand('markdownRenderIframes') // Render iFrames
       this._cm.execCommand('markdownRenderMath') // Render equations
       this._cm.execCommand('markdownRenderLinks') // Render links
+      this._cm.execCommand('markdownRenderCitations') // Render citations
       this._cm.execCommand('markdownRenderTasks') // Render tasks
       this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
       if (this._cm.getOption('fullScreen') && this._mute) {

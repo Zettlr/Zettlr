@@ -31,6 +31,7 @@ const ZettlrUpdater = require('./zettlr-updater.js')
 const makeExport = require('./zettlr-export.js')
 const ZettlrImport = require('./zettlr-import.js')
 const ZettlrDictionary = require('./zettlr-dictionary.js')
+const ZettlrCiteproc = require('./zettlr-citeproc.js')
 const { i18n, trans } = require('../common/lang/i18n.js')
 const { hash, ignoreDir,
   ignoreFile, isFile, isDir } = require('../common/zettlr-helpers.js')
@@ -92,11 +93,12 @@ class Zettlr {
 
     // Initiate regular polling
     setTimeout(() => {
-      // Begin loading the dictionaries in the background
+      // Begin loading the dictionaries and the citations in the background
       // We have to push this into the background, because otherwise the window
       // won't open. As usual: Everything time-consuming shouldn't be done in the
       // first tick of the app.
       this.dict = new ZettlrDictionary()
+      this._citeproc = new ZettlrCiteproc()
       this.poll()
     }, POLL_TIME)
   }

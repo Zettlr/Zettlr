@@ -61,6 +61,9 @@ class ZettlrIPC {
         }
       })
 
+      // Citeproc calls
+      this._ipc.on('cite', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.get(idList) : false })
+
       // Increase the event listener cap to 20. Normally we have 11, which is a
       // result of the wrappers electron puts around the node objects, I guess.
       this._ipc.setMaxListeners(20)

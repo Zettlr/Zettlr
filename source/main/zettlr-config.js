@@ -116,6 +116,7 @@ class ZettlrConfig {
       // Language
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.
       'app_lang': this.getLocale(),
+      'cslLibrary': '',
       'debug': false,
       'uuid': null // The app's unique anonymous identifier
     }
@@ -232,12 +233,6 @@ class ZettlrConfig {
         process.env.PATH += delim + path.dirname(this.get('pandoc'))
       }
     }
-
-    // This function returns the platform specific template dir for pandoc
-    // template files. This is based on the electron-builder options
-    // See https://www.electron.build/configuration/contents#extraresources
-    // Quote: "Contents/Resources for MacOS, resources for Linux and Windows"
-    let dir = path.dirname(app.getPath('exe')) // Get application directory
 
     // Finally, check whether or not a UUID exists, and, if not, generate one.
     if (!this.config.uuid) {

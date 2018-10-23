@@ -674,6 +674,11 @@ ci-info@^1.5.0:
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-1.6.0.tgz#2ca20dbb9ceb32d4524a683303313f0304b1e497"
   integrity sha512-vsGdkwSCDpWmP80ncATX7iea5DWQemg1UgCW5J8tqjU3lYw4FBYuj89J0CTVomA7BEfvSZd84GmHko+MxFQU2A==
 
+citeproc@^2.1.210:
+  version "2.1.210"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.1.210.tgz#2d8475c3ecd051e5ec6770ad5c2d33eb8e80300c"
+  integrity sha512-6hBVPAee7lVv8iCXs+GYoKiX+AjH7BqYsoe7hFeoIQV1ZqnXEJIR1Ehdv9iQPAalfMyhHkHJDXRyd/UFaMTh6A==
+
 class-utils@^0.3.5:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/class-utils/-/class-utils-0.3.6.tgz#f93369ae8b9a7ce02fd41faad0ca83033190c463"

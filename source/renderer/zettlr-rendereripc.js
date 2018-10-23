@@ -52,6 +52,14 @@ class ZettlrRendererIPC {
 
     this._bufferedMessage = null
 
+    // This is an object that will hold all previously checked words in the form
+    // of word: correct?
+    // We are explicitly omitting the prototype stuff, as we don't access this.
+    this._typoCache = Object.create(null)
+    this._typoCheck = false
+    // Activate typocheck after 2 seconds to speed up the app's start
+    setTimeout(() => { this._typoCheck = true }, 2000)
+
     // What we are doing here is setting up a special communications channel
     // with the main process to receive config values. This way it is much
     // easier to access the configuration from throughout the whole renderer
@@ -70,14 +78,6 @@ class ZettlrRendererIPC {
       }
     }
 
-    // This is an object that will hold all previously checked words in the form
-    // of word: correct?
-    // We are explicitly omitting the prototype stuff, as we don't access this.
-    this._typoCache = Object.create(null)
-    this._typoCheck = false
-    // Activate typocheck after 2 seconds to speed up the app's start
-    setTimeout(() => { this._typoCheck = true }, 2000)
-
     // Inject typo spellcheck and suggest functions into the globals
     global.typo = {
       check: (term) => {
@@ -94,6 +94,12 @@ class ZettlrRendererIPC {
       suggest: (term) => {
         return this._ipc.sendSync('typo', { 'type': 'suggest', 'term': term })
       }
+    }
+
+    // Sends an array of IDs to main. If they are found in the JSON, cool! Otherwise
+    // this will return false.
+    global.cite = {
+      get: (idList) => { return this._ipc.sendSync('cite', idList) }
     }
   }
 

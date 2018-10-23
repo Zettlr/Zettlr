@@ -31,5 +31,6 @@
    "pdf.pagenumbering": "required|string|in:arabic,alph,Alph,roman,Roman,gobble|default:gobble",
    "pdf.mainfont": "required|string|min:3|default:Times New Roman",
    "pdf.fontsize": "required|number|min:4|default:12",
-   "pdf.lineheight": "required|number|default:1.5"
+   "pdf.lineheight": "required|number|default:1.5",
+   "cslLibrary": "optional|string|default:"
 }
