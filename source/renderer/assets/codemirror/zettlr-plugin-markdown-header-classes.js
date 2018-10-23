@@ -23,12 +23,12 @@
     let line = ''
     for (let i = 0; i < cm.lineCount(); i++) {
       // First remove all header styles
-      cm.removeLineClass(i, 'text', 'size-header-1')
-      cm.removeLineClass(i, 'text', 'size-header-2')
-      cm.removeLineClass(i, 'text', 'size-header-3')
-      cm.removeLineClass(i, 'text', 'size-header-4')
-      cm.removeLineClass(i, 'text', 'size-header-5')
-      cm.removeLineClass(i, 'text', 'size-header-6')
+      cm.removeLineClass(i, 'wrap', 'size-header-1')
+      cm.removeLineClass(i, 'wrap', 'size-header-2')
+      cm.removeLineClass(i, 'wrap', 'size-header-3')
+      cm.removeLineClass(i, 'wrap', 'size-header-4')
+      cm.removeLineClass(i, 'wrap', 'size-header-5')
+      cm.removeLineClass(i, 'wrap', 'size-header-6')
 
       // Then only re-add if allowed.
       if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
@@ -36,17 +36,17 @@
       // Then re-add them as necessary.
       line = cm.getLine(i)
       if (/^# /.test(line)) {
-        cm.addLineClass(i, 'text', 'size-header-1')
+        cm.addLineClass(i, 'wrap', 'size-header-1')
       } else if (/^## /.test(line)) {
-        cm.addLineClass(i, 'text', 'size-header-2')
+        cm.addLineClass(i, 'wrap', 'size-header-2')
       } else if (/^### /.test(line)) {
-        cm.addLineClass(i, 'text', 'size-header-3')
+        cm.addLineClass(i, 'wrap', 'size-header-3')
       } else if (/^#### /.test(line)) {
-        cm.addLineClass(i, 'text', 'size-header-4')
+        cm.addLineClass(i, 'wrap', 'size-header-4')
       } else if (/^##### /.test(line)) {
-        cm.addLineClass(i, 'text', 'size-header-5')
+        cm.addLineClass(i, 'wrap', 'size-header-5')
       } else if (/^###### /.test(line)) {
-        cm.addLineClass(i, 'text', 'size-header-6')
+        cm.addLineClass(i, 'wrap', 'size-header-6')
       }
     }
   }

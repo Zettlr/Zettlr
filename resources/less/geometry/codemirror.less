@@ -27,10 +27,22 @@
     font-weight:bold;
   }
 
-  .size-header-1 { font-size:2em; }
-  .size-header-2 { font-size:1.8em; }
-  .size-header-3 { font-size:1.5em; }
-  .size-header-4 { font-size:1.3em; }
+  .size-header-1 {
+    font-size:2em;
+    .CodeMirror-gutter-elt { line-height: 1.5em; }
+  }
+  .size-header-2 {
+    font-size:1.8em;
+    .CodeMirror-gutter-elt { line-height: 1.5em; }
+  }
+  .size-header-3 {
+    font-size:1.5em;
+    .CodeMirror-gutter-elt { line-height: 1.4em; }
+  }
+  .size-header-4 {
+    font-size:1.3em;
+    .CodeMirror-gutter-elt { line-height: 1.3em; }
+  }
   .size-header-5 { font-size:1em; }
   .size-header-6 { font-size:1em; }
 
@@ -76,12 +88,16 @@
     left: 0 !important;
   }
   .CodeMirror-foldgutter { width: .7em; }
-  .CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded { cursor: pointer; }
+  .CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
+    cursor: pointer;
+    font-size: 18px;
+  }
   .CodeMirror-foldgutter-open:after { content: "\25BE"; }
   .CodeMirror-foldgutter-folded:after { content: "\25B8"; }
 
   .CodeMirror-foldmarker {
     border-radius:@border-radius;
+    display: inline-block;
     font-size: 75%;
     margin-left: 10px;
     padding:2px;

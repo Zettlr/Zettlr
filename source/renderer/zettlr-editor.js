@@ -125,7 +125,7 @@ class ZettlrEditor {
       foldGutter: true,
       gutters: ['CodeMirror-foldgutter'],
       foldOptions: {
-        'widget': '\u0020\u2026\u0020' // space ellipse space
+        'widget': '\u00A0\u2026\u00A0' // nbsp ellipse nbsp
       },
       lineWrapping: true,
       indentUnit: 4, // Indent lists etc. by 4, not 2 spaces (necessary, e.g., for pandoc)
