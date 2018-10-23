@@ -105,3 +105,24 @@
     vertical-align: baseline;
   }
 }
+
+// Hints (tag autocompletion, etc.)
+.CodeMirror-hints {
+  position: absolute;
+  z-index: 10;
+  overflow: hidden;
+  list-style: none;
+
+  margin: 0;
+  padding: 0px;
+
+  max-height: 20em;
+  overflow-y: auto;
+  li.CodeMirror-hint {
+    margin: 0;
+    white-space: pre;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 150%;
+  }
+}

@@ -340,8 +340,15 @@ class ZettlrIPC {
         this.send('set-tags', cnt) // Send back to renderer so preview knows about this
         break
 
+      // Send the database of tags to display explicitly in the preview pane to
+      // the renderer.
       case 'get-tags':
         this.send('set-tags', this._app.getTags().get())
+        break
+
+      // Send the global tag database to the renderer process.
+      case 'get-tags-database':
+        this.send('tags-database', global.tags.get())
         break
 
       // UPDATE

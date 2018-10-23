@@ -363,6 +363,11 @@ class ZettlrRendererIPC {
         this._app.getPreview().setTags(cnt)
         break
 
+      // Update the editor's tag database
+      case 'tags-database':
+        this._app.getEditor().setTagDatabase(cnt)
+        break
+
       // Execute a command with CodeMirror (Bold, Italic, Link, etc)
       case 'cm-command':
         this._app.getEditor().runCommand(cnt)

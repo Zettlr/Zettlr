@@ -61,6 +61,9 @@ require('codemirror/addon/fold/indent-fold')
 require('codemirror/addon/fold/markdown-fold')
 require('codemirror/addon/fold/comment-fold')
 
+// 8. Hinting (tag autocompletion, e.g.)
+require('codemirror/addon/hint/show-hint')
+
 // Zettlr specific addons
 require('./assets/codemirror/zettlr-plugin-markdown-shortcuts.js')
 require('./assets/codemirror/zettlr-modes-spellchecker-zkn.js')
@@ -111,6 +114,9 @@ class ZettlrEditor {
     this._scrollbarAnnotations = null // Contains an object to mark search results on the scrollbar
     this._searchCursor = null // A search cursor while searching
 
+    // The starting position for a tag autocomplete.
+    this._tagAutoCompleteStart = null
+
     this._mute = true // Should the editor mute lines while in distraction-free mode?
 
     // These are used for calculating a correct word count
@@ -126,6 +132,22 @@ class ZettlrEditor {
       gutters: ['CodeMirror-foldgutter'],
       foldOptions: {
         'widget': '\u00A0\u2026\u00A0' // nbsp ellipse nbsp
+      },
+      hintOptions: {
+        completeSingle: false, // Don't auto-complete, even if there's only one word available
+        hint: (cm, opt) => {
+          let term = cm.getRange(this._tagAutoCompleteStart, cm.getCursor())
+          let completionObject = {
+            'list': Object.keys(this._tagDB).filter(elem => elem.indexOf(term) === 0),
+            'from': this._tagAutoCompleteStart,
+            'to': cm.getCursor()
+          }
+          // Set the autocomplete to false as soon as the user has actively selected something.
+          CodeMirror.on(completionObject, 'pick', () => {
+            this._tagAutoCompleteStart = null
+          })
+          return completionObject
+        }
       },
       lineWrapping: true,
       indentUnit: 4, // Indent lists etc. by 4, not 2 spaces (necessary, e.g., for pandoc)
@@ -148,6 +170,12 @@ class ZettlrEditor {
     })
 
     this._cm.on('change', (cm, changeObj) => {
+      // Show tag autocompletion window, if applicable (or close it)
+      if (changeObj.text[0] === '#') {
+        this._tagAutoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
+        this._cm.showHint()
+      }
+
       // Update wordcount
       this._renderer.updateWordCount(this.getWordCount())
 
@@ -433,6 +461,14 @@ class ZettlrEditor {
     } else {
       this._cm.setOption('autoCloseBrackets', false)
     }
+  }
+
+  /**
+   * This sets the tag database necessary for the tag autocomplete.
+   * @param {Object} tagDB An object (here with prototype due to JSON) containing tags
+   */
+  setTagDatabase (tagDB) {
+    this._tagDB = tagDB
   }
 
   /**

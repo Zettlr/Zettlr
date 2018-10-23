@@ -14,6 +14,7 @@
 - The app now supports code folding! Now you can click the new, small arrows left to Markdown headings to collapse everything below it!
 - Removed the customised word processor templates. Zettlr now uses the default reference docs provided by Pandoc.
 - Projects can now also be exported to odt, docx, and HTML.
+- Added tag autocomplete. Now when you start typing a `#`-character, you are presented with a list of tags you already use inside your files, so you don't use similar (but not same) tags in different files.
 
 ## Under the hood
 

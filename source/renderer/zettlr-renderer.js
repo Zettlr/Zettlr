@@ -87,7 +87,10 @@ class ZettlrRenderer {
     // short delay gives us the time the IPC needs to get ready.
     setTimeout(() => { this.configChange() }, 10) // 10ms should suffice - the number is irrelevant. The important part is that it's out of the first tick of the app.
 
-    this._ipc.send('get-tags') // Receive initial list of tags to display
+    // Receive an initial list of tags to display in the preview list
+    this._ipc.send('get-tags')
+    // Additionally, request the full database of already existing tags inside files.
+    this._ipc.send('get-tags-database')
 
     // Request a first batch of files
     this._ipc.send('get-paths', {})

@@ -60,3 +60,25 @@
 }
 
 .CodeMirror-guttermarker-subtle { color: #464646; }
+
+// Hint related stuff
+.CodeMirror-hints {
+  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  border: 1px solid @grey-5;
+
+  background: @grey-7;
+  li.CodeMirror-hint {
+    color: @grey-0;
+
+    &:hover { background-color: @grey-5; }
+  }
+
+  li.CodeMirror-hint-active {
+    background-color: darken(@green-0, 10%);
+    color: @grey-0;
+
+    &:hover { background-color: @green-0; }
+  }
+}
