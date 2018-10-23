@@ -168,6 +168,9 @@ class ZettlrFile {
     // Remove duplicates
     this.tags = [...new Set(this.tags)]
 
+    // Report the tags to the global database
+    if (global.tags && global.tags.hasOwnProperty('report') && this.tags.length > 0) global.tags.report(this.tags)
+
     // Search for an ID
     this.id = ''
     if ((match = idRE.exec(cnt)) == null) {
