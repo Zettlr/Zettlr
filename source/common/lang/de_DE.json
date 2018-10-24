@@ -194,7 +194,8 @@
             "project": {
                 "title": "Projekteinstellungen",
                 "title_label": "Name des Projektes",
-                "format": "Exportiere Projekt nach:"
+                "format": "Exportiere Projekt nach:",
+                "csl_style": "CSL-Styledatei (optional)"
             },
             "pdf": {
                 "title": "PDF-Einstellungen",
@@ -339,6 +340,7 @@
             "mute_lines": "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab",
             "debug": "Entwicklermodus",
             "autoCloseBrackets": "Schließe automatisch die folgenden Zeichenpaare: ()[]{}'\"\"»«„““”‘’__``",
+            "csl_database": "CSL JSON-Datenbankdatei",
             "save": "Speichern",
             "cancel": "Abbrechen"
         },

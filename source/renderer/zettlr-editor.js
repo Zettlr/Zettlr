@@ -18,7 +18,7 @@ const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const tippy = require('tippy.js')
 const { clipboard } = require('electron')
-const { generateId } = require('../common/zettlr-helpers.js')
+const { generateId, hash } = require('../common/zettlr-helpers.js')
 
 // 1. Mode addons
 require('codemirror/addon/mode/overlay')
@@ -124,6 +124,9 @@ class ZettlrEditor {
     // The last array of IDs as fetched from the document
     this._lastKnownCitationCluster = []
 
+    // All individual citations fetched during this session.
+    this._citationBuffer = Object.create(null)
+
     this._mute = true // Should the editor mute lines while in distraction-free mode?
 
     // These are used for calculating a correct word count
@@ -182,7 +185,7 @@ class ZettlrEditor {
         this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
         this._currentDatabase = this._tagDB
         this._cm.showHint()
-      } else if(changeObj.text[0] === '@') {
+      } else if (changeObj.text[0] === '@') {
         this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
         this._currentDatabase = this._citeprocIDs
         this._cm.showHint()
@@ -893,6 +896,10 @@ class ZettlrEditor {
     // TODO save these variables!
   }
 
+  /**
+   * This method updates both the in-text citations as well as the bibliography.
+   * @return {void} Does not return.
+   */
   updateCitations () {
     // This function searches for all elements with class .citeproc-citation and
     // updates the contents of these elements based upon the ID.
@@ -903,11 +910,11 @@ class ZettlrEditor {
     let cnt = this._cm.getValue()
     let totalIDs = Object.create(null)
     let match
-    let citeprocIDRE = /@([a-z0-9_-]+)[\s.,:;)]|@([a-z0-9_-]+)$/gi
+    let citeprocIDRE = /@([a-z0-9_:.#$%&\-+?<>~/]+)/gi
     let somethingUpdated = false // This flag indicates if anything has changed and justifies a new bibliography.
     let needRefresh = false // Do we need to refresh CodeMirror?
     while ((match = citeprocIDRE.exec(cnt)) != null) {
-      let id = match[1] || match[2]
+      let id = match[1]
       totalIDs[id] = this._lastKnownCitationCluster[id] // Could be undefined.
     }
 
@@ -915,12 +922,8 @@ class ZettlrEditor {
     // citations of new ones.
     for (let id in totalIDs) {
       if (totalIDs[id] === undefined) {
-        // Fetch citation and remove braces for this preview
-        let citation = global.citeproc.getCitation([id])
-        if (citation !== false) {
-          totalIDs[id] = citation.replace(/[()]/gi, '')
-          somethingUpdated = true // We had to fetch a new citation
-        }
+        totalIDs[id] = true
+        somethingUpdated = true // We have to fetch a new citation
       }
     }
 
@@ -940,11 +943,24 @@ class ZettlrEditor {
     let elements = $('.CodeMirror .citeproc-citation')
     elements.each((index, elem) => {
       elem = $(elem)
-      let id = elem.attr('data-citeproc-citation-id')
-      if ('@' + id === elem.text()) {
-        if (this._lastKnownCitationCluster[id] === undefined) elem.addClass('error')
-        elem.html(this._lastKnownCitationCluster[id]).removeClass('error')
-        needRefresh = true
+      if (elem.attr('data-rendered') !== 'yes') {
+        let item = elem.attr('data-citeproc-cite-item')
+        let id = hash(item)
+        console.log(`Pass element ID ${id}`)
+        item = JSON.parse(item)
+        if (this._citationBuffer[id] !== undefined) {
+          elem.html(this._citationBuffer[id]).removeClass('error').attr('data-rendered', 'yes')
+          needRefresh = true
+        } else {
+          let newCite = global.citeproc.getCitation(item)
+          if (newCite) {
+            elem.html(newCite).removeClass('error').attr('data-rendered', 'yes')
+            this._citationBuffer[id] = newCite
+            needRefresh = true
+          } else {
+            elem.addClass('error')
+          }
+        }
       }
     })
 
@@ -966,6 +982,7 @@ class ZettlrEditor {
     // altered the widths of the spans.
     if (needRefresh) this._cm.refresh()
   }
+
   /**
    * Returns the current value of the editor.
    * @return {String} The current editor contents.

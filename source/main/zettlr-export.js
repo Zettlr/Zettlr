@@ -14,7 +14,7 @@
  */
 
 const { trans } = require('../common/lang/i18n.js')
-const { formatDate } = require('../common/zettlr-helpers.js')
+const { formatDate, isFile } = require('../common/zettlr-helpers.js')
 const { exec } = require('child_process')
 const commandExists = require('command-exists').sync // Need to use here because we cannot rely on the config's availability
 const path = require('path')
@@ -110,6 +110,16 @@ class ZettlrExport {
     }
     if (!this.options.pdf.hasOwnProperty('titlepage')) {
       this.options.pdf.titlepage = false
+    }
+
+    // Check the citeproc availability
+    this._citeprocOptions = ''
+    if (isFile(global.config.get('cslLibrary'))) {
+      this._citeprocOptions += `--filter pandoc-citeproc --bibliography "${global.config.get('cslLibrary')}"`
+    }
+
+    if (this.options.hasOwnProperty('cslStyle') && isFile(this.options.cslStyle)) {
+      this._citeprocOptions += ` --csl "${this.options.cslStyle}"`
     }
 
     //  Third prepare the export (e.g., strip IDs, tags or other unnecessary stuff)
@@ -278,8 +288,7 @@ class ZettlrExport {
         this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + '.txt')
         break
     }
-
-    this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} -t ${this.options.format} ${standalone} -o "${this.targetFile}"`
+    this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${this._citeprocOptions} -t ${this.options.format} ${standalone} -o "${this.targetFile}"`
   }
 
   /**
@@ -293,7 +302,7 @@ class ZettlrExport {
     // through the xelatex engine manually and can let pandoc do the work.
     let toc = (this.options.pdf.toc) ? '--toc' : ''
     let tocdepth = (this.options.pdf.tocDepth) ? '--toc-depth=' + this.options.pdf.tocDepth : ''
-    this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${toc} ${tocdepth} --pdf-engine=xelatex -o "${this.targetFile}"`
+    this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${toc} ${tocdepth} ${this._citeprocOptions} --pdf-engine=xelatex -o "${this.targetFile}"`
   }
 
   /**

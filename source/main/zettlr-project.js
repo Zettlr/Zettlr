@@ -55,7 +55,8 @@ class ZettlrProject {
         'titlepage': true // Generate a title page by default
       },
       'title': this._dir.name, // Default project title is the directory's name
-      'format': 'pdf' // Default export format: pdf.
+      'format': 'pdf', // Default export format: pdf.
+      'cslStyle': '' // A CSL style file, if applicable.
     }
     this._cfg = null
     this._projectFile = path.join(this._dir.path, PROJECT_FILE)
@@ -132,7 +133,8 @@ class ZettlrProject {
       'pdf': this._cfg.pdf,
       'title': this._cfg.title,
       'author': this._cfg.pdf.author,
-      'keywords': this._cfg.pdf.keywords
+      'keywords': this._cfg.pdf.keywords,
+      'cslStyle': this._cfg.cslStyle
     }
 
     try {

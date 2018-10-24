@@ -237,6 +237,7 @@ class ZettlrDialog {
         replacements.push('%GENERATE_TOC%|' + genToc)
         replacements.push('%GENERATE_TITLEPAGE%|' + genTitle)
         replacements.push('%TOCDEPTH%|' + tocdepth)
+        replacements.push('%CSLSTYLE%|' + obj.cslStyle)
         // fall through to continue processing the more general pdf preferences
       case 'pdf-preferences':
         replacements.push('%PREFS_AUTHOR%|' + obj.pdf.author)

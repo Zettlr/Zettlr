@@ -194,7 +194,8 @@
             "project": {
                 "title": "Project settings",
                 "title_label": "Project Title",
-                "format": "Export project to:"
+                "format": "Export project to:",
+                "csl_style": "CSL-Style (optional)"
             },
             "pdf": {
                 "title": "PDF Settings",
@@ -339,6 +340,7 @@
             "mute_lines": "Mute non-focused lines in distraction-free mode",
             "debug": "Debug",
             "autoCloseBrackets": "Automatically close the following character pairs: ()[]{}'\"\"»«„““”‘’__``",
+            "csl_database": "CSL JSON Database",
             "save": "Save",
             "cancel": "Cancel"
         },
