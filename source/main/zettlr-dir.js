@@ -707,7 +707,7 @@ class ZettlrDir {
       // null, or not (then it means there is a project)
       'project': (this.project) ? true : null,
       'children': (children) ? this.children.map(elem => elem.getMetadata()) : [],
-      'attachments': this.attachments.map(elem => elem.name),
+      'attachments': this.attachments.map(elem => elem.getMetadata()),
       'type': this.type,
       'sorting': this.sorting
     }
