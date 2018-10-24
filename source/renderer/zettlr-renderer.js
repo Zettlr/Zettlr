@@ -106,9 +106,13 @@ class ZettlrRenderer {
     * This function is called every POLL_TIME seconds to execute recurring tasks.
     */
   poll () {
-    // This poll is useful. You may not see it now, but someday it's gonna
-    // be tremendous!
-
+    // The updating of both the IDs available for citation as well as updating
+    // the citations of a whole book you may have written costs a lot of time,
+    // we'll do this outside of the normal run of the application, every
+    // POLL_TIME seconds. This way, it might feel "laggy", but after all the
+    // writing itself does not seem laggy, and this is the main aim. Nobody can
+    // seriously complain that the citations update "slowly".
+    this._ipc.send('citeproc-get-ids')
     // Set next timeout
     setTimeout(() => { this.poll() }, POLL_TIME)
   }
@@ -911,6 +915,19 @@ class ZettlrRenderer {
    * @param  {Mixed} [content={}] The content belonging to the sent command, can be empty
    */
   send (command, content = {}) { this._ipc.send(command, content) }
+
+  /**
+   * Updates the list of IDs available for autocomplete
+   * @param {Array} idList An array containing all available IDs.
+   */
+  setCiteprocIDs (idList) { this._editor.setCiteprocIDs(idList) }
+
+  /**
+   * Gets called whenever a new bibliography comes from main, and we need to
+   * update it here.
+   * @param {Object} bib A new citeproc bibliography object.
+   */
+  setBibliography (bib) { this._attachments.refreshBibliography(bib) }
 
   /**
    * Simply indicates to main to set the modified flag.

@@ -61,12 +61,13 @@ class ZettlrIPC {
         }
       })
 
-      // Citeproc calls
-      this._ipc.on('cite', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.get(idList) : false })
+      // Citeproc calls (either single citation or a whole cluster)
+      this._ipc.on('getCitation', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.getCitation(idList) : false })
+      this._ipc.on('updateItems', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.updateItems(idList) : false })
 
       // Increase the event listener cap to 20. Normally we have 11, which is a
       // result of the wrappers electron puts around the node objects, I guess.
-      this._ipc.setMaxListeners(20)
+      this._ipc.setMaxListeners(250)
 
       // In all other occasions omit the event.
       this.dispatch(arg)
@@ -377,6 +378,16 @@ class ZettlrIPC {
       // Import files and folders
       case 'import-files':
         this._app.importFile()
+        break
+
+      // Return a list of all available IDs in the currently loaded database
+      case 'citeproc-get-ids':
+        this.send('citeproc-ids', (global.citeproc) ? global.citeproc.getIDs() : [])
+        break
+
+      // The renderer requested an updated bibliography
+      case 'citeproc-make-bibliography':
+        this.send('citeproc-bibliography', (global.citeproc) ? global.citeproc.makeBibliography() : '')
         break
 
       default:

@@ -16,28 +16,21 @@
   // 1. Markdown URLs in the format [Caption](www.link-target.tld)
   // 2. Standalone links, either beginning with http(s):// or www.
   // 3. Email addresses.
-  var citationRE = /\[@(\w+?)\]/gi
-  // Matches [Link](www.xyz.tld) and simple links
-  var citeMarkers = []
+  var citationRE = /@([a-z0-9_-]+)[\s.,:;)]|@([a-z0-9_-]+)$/gi // Matches either followed by delim or EOL
+  var citeMarkers = [] // CiteMarkers
 
   CodeMirror.commands.markdownRenderCitations = function (cm) {
-    let i = 0
     let match
 
     // First remove links that don't exist anymore. As soon as someone
     // moves the cursor into the link, it will be automatically removed,
     // as well as if someone simply deletes the whole line.
-    do {
-      if (!citeMarkers[i]) {
-        continue
-      }
+    for (let i in citeMarkers) {
       if (citeMarkers[i] && citeMarkers[i].find() === undefined) {
         // Marker is no longer present, so splice it
         citeMarkers.splice(i, 1)
-      } else {
-        i++
       }
-    } while (i < citeMarkers.length)
+    }
 
     // Now render all potential new links
     for (let i = 0; i < cm.lineCount(); i++) {
@@ -56,12 +49,18 @@
 
       // Run through all links on this line
       while ((match = citationRE.exec(line)) != null) {
-        let id = match[1] || ''
-        console.log(match[1])
+        let backOff = 0 // We need to go back a character sometimes b/c missing lookahead
+        let id = ''
+        if (match[1]) {
+          id = match[1]
+          backOff = 1
+        } else {
+          id = match[2] || ''
+        }
 
         // Now get the precise beginning of the match and its end
         let curFrom = { 'line': i, 'ch': match.index }
-        let curTo = { 'line': i, 'ch': match.index + match[0].length }
+        let curTo = { 'line': i, 'ch': match.index + match[0].length - backOff }
 
         let cur = cm.getCursor('from')
         if (cur.line === curFrom.line && cur.ch >= curFrom.ch && cur.ch <= curTo.ch) {
@@ -80,14 +79,12 @@
           }
         }
         if (con) continue // Skip this match
-
         let span = document.createElement('span')
-        span.className = 'citation' // CodeMirrorAnchors
-        if (cm.getOption('cite')) {
-          span.textContent = cm.getOption('cite')(id) || '@' + id
-        } else {
-          span.textContent = '@' + id
-        }
+        span.className = 'citeproc-citation' // citations
+        // The text content will be updated automatically based upon the ID
+        span.textContent = '@' + id
+        // The attribute will be taken by the citation updater to update the citations
+        span.setAttribute('data-citeproc-citation-id', id)
         // Apply TextMarker
         let textMarker = cm.markText(
           curFrom, curTo,
@@ -105,6 +102,7 @@
           cm.focus()
         }
 
+        // Finally push the marker into the array
         citeMarkers.push(textMarker)
       }
     }

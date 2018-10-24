@@ -27,6 +27,7 @@
         padding:4px;
         text-decoration:none;
         color:inherit;
+        white-space:nowrap;
 
         &::before {
             font-family: @font-icon;
@@ -34,5 +35,15 @@
             margin-right:5px;
             display:inline-block;
         }
+    }
+
+    // Bibliography entries
+    div.csl-bib-body {
+      div.csl-entry {
+        display: list-item;
+        list-style-type: square;
+        margin: 1em 0.2em 1em 1.8em;
+        font-size: 80%;
+      }
     }
 }

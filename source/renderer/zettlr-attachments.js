@@ -25,6 +25,12 @@ class ZettlrAttachments {
   constructor (parent) {
     this._renderer = parent
     this._container = $('<div>').prop('id', 'attachments').css('display', 'none')
+    this._container.html(`<h1>${trans('gui.attachments')} <small id="open-dir-external" title="${trans('gui.attachments_open_dir')}">&#xf332;</small></h1>`)
+    this._fileContainer = $('<div>').prop('id', 'files')
+    this._bibliographyContainer = $('<div>').prop('id', 'bibliography')
+    this._container.append(this._fileContainer)
+    this._container.append($('<h1>').text('Bibliography'))
+    this._container.append(this._bibliographyContainer)
     $('body').append(this._container)
     this._open = false
     this._attachments = []
@@ -53,23 +59,33 @@ class ZettlrAttachments {
     * Refreshes the list with new attachments on dir change.
     */
   refresh () {
-    this._container.html(`<h1>${trans('gui.attachments')} <small id="open-dir-external" title="${trans('gui.attachments_open_dir')}">&#xf332;</small></h1>`)
+    this._fileContainer.text('')
     // Grab the newest attachments and refresh
     if (!this._renderer.getCurrentDir()) {
-      this._container.append($('<p>').text(trans('gui.no_attachments')))
+      this._fileContainer.append($('<p>').text(trans('gui.no_attachments')))
       return // Don't activate in this instance
     }
 
     if (this._renderer.getCurrentDir().attachments.length === 0) {
-      this._container.append($('<p>').text(trans('gui.no_attachments')))
+      this._fileContainer.append($('<p>').text(trans('gui.no_attachments')))
     } else {
       this._attachments = this._renderer.getCurrentDir().attachments
       for (let a of this._attachments) {
-        this._container.append($('<a>').text(a.name).attr('href', '#').attr('data-hash', a.hash))
+        this._fileContainer.append($('<a>').text(a.name).attr('href', '#').attr('data-hash', a.hash))
       }
     }
 
     this._act() // Activate both the directory toggle and the link
+  }
+
+  /**
+   * This function refreshes the bibliography settings.
+   * @param  {Mixed} bib Either an array as returned from citeproc, or a string.
+   * @return {void}     This does not return.
+   */
+  refreshBibliography (bib) {
+    if (typeof bib === 'string') this._bibliographyContainer.html(`<p>${bib}</p>`)
+    else this._bibliographyContainer.html(bib[0].bibstart + bib[1].join('\n') + bib[0].bibend)
   }
 
   /**

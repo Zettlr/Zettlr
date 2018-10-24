@@ -116,7 +116,13 @@ class ZettlrEditor {
     this._searchCursor = null // A search cursor while searching
 
     // The starting position for a tag autocomplete.
-    this._tagAutoCompleteStart = null
+    this._autoCompleteStart = null
+    this._tagDB = null // Holds all available tags for autocomplete
+    this._citeprocIDs = null // Holds all available IDs for autocomplete
+    this._currentDatabase = null // Points either to the tagDB or the ID database
+
+    // The last array of IDs as fetched from the document
+    this._lastKnownCitationCluster = []
 
     this._mute = true // Should the editor mute lines while in distraction-free mode?
 
@@ -137,15 +143,15 @@ class ZettlrEditor {
       hintOptions: {
         completeSingle: false, // Don't auto-complete, even if there's only one word available
         hint: (cm, opt) => {
-          let term = cm.getRange(this._tagAutoCompleteStart, cm.getCursor())
+          let term = cm.getRange(this._autoCompleteStart, cm.getCursor())
           let completionObject = {
-            'list': Object.keys(this._tagDB).filter(elem => elem.indexOf(term) === 0),
-            'from': this._tagAutoCompleteStart,
+            'list': Object.keys(this._currentDatabase).filter(elem => elem.indexOf(term) === 0),
+            'from': this._autoCompleteStart,
             'to': cm.getCursor()
           }
           // Set the autocomplete to false as soon as the user has actively selected something.
           CodeMirror.on(completionObject, 'pick', () => {
-            this._tagAutoCompleteStart = null
+            this._autoCompleteStart = null
           })
           return completionObject
         }
@@ -156,7 +162,6 @@ class ZettlrEditor {
       autoCloseBrackets: AUTOCLOSEBRACKETS,
       markdownImageBasePath: '', // The base path used to render the image in case of relative URLs
       markdownOnLinkOpen: function (url) { require('electron').shell.openExternal(url) }, // Action for ALT-Clicks
-      cite: function (id) { return global.cite.get([id]) },
       zkn: {
         idRE: '(\\d{14})', // What do the IDs look like?
         linkStart: '\\[\\[', // Start of links?
@@ -174,7 +179,12 @@ class ZettlrEditor {
     this._cm.on('change', (cm, changeObj) => {
       // Show tag autocompletion window, if applicable (or close it)
       if (changeObj.text[0] === '#') {
-        this._tagAutoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
+        this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
+        this._currentDatabase = this._tagDB
+        this._cm.showHint()
+      } else if(changeObj.text[0] === '@') {
+        this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
+        this._currentDatabase = this._citeprocIDs
         this._cm.showHint()
       }
 
@@ -191,7 +201,13 @@ class ZettlrEditor {
           clearTimeout(this._timeout)
         }
 
-        this._timeout = setTimeout((e) => { this._renderer.saveFile() }, SAVE_TIMOUT)
+        // This timeout can be used for everything that takes some time and
+        // makes the writing feel laggy (such as generating a bunch of
+        // bibliography entries.)
+        this._timeout = setTimeout((e) => {
+          this._renderer.saveFile()
+          this.updateCitations()
+        }, SAVE_TIMOUT)
       }
     })
 
@@ -472,6 +488,14 @@ class ZettlrEditor {
    */
   setTagDatabase (tagDB) {
     this._tagDB = tagDB
+  }
+
+  /**
+   * Sets the citeprocIDs available to autocomplete to a new list
+   * @param {Array} idList An array containing the new IDs
+   */
+  setCiteprocIDs (idList) {
+    this._citeprocIDs = idList
   }
 
   /**
@@ -869,6 +893,79 @@ class ZettlrEditor {
     // TODO save these variables!
   }
 
+  updateCitations () {
+    // This function searches for all elements with class .citeproc-citation and
+    // updates the contents of these elements based upon the ID.
+
+    // NEVER use jQuery to always query all citeproc-citations, because CodeMirror
+    // does NOT always print them! We have to manually go through the value of
+    // the code ...
+    let cnt = this._cm.getValue()
+    let totalIDs = Object.create(null)
+    let match
+    let citeprocIDRE = /@([a-z0-9_-]+)[\s.,:;)]|@([a-z0-9_-]+)$/gi
+    let somethingUpdated = false // This flag indicates if anything has changed and justifies a new bibliography.
+    let needRefresh = false // Do we need to refresh CodeMirror?
+    while ((match = citeprocIDRE.exec(cnt)) != null) {
+      let id = match[1] || match[2]
+      totalIDs[id] = this._lastKnownCitationCluster[id] // Could be undefined.
+    }
+
+    // Now we have the correct amount of IDs in our cluster. Now fetch all
+    // citations of new ones.
+    for (let id in totalIDs) {
+      if (totalIDs[id] === undefined) {
+        // Fetch citation and remove braces for this preview
+        let citation = global.citeproc.getCitation([id])
+        if (citation !== false) {
+          totalIDs[id] = citation.replace(/[()]/gi, '')
+          somethingUpdated = true // We had to fetch a new citation
+        }
+      }
+    }
+
+    // Check if there are some citations _missing_ from the new array
+    for (let id in this._lastKnownCitationCluster) {
+      if (totalIDs[id] === undefined) {
+        somethingUpdated = true // We only need one entry to justify an update
+        break
+      }
+    }
+
+    // Swap
+    this._lastKnownCitationCluster = totalIDs
+
+    // Now everything is set -> Go through all rendered spans and update if
+    // necessary
+    let elements = $('.CodeMirror .citeproc-citation')
+    elements.each((index, elem) => {
+      elem = $(elem)
+      let id = elem.attr('data-citeproc-citation-id')
+      if ('@' + id === elem.text()) {
+        if (this._lastKnownCitationCluster[id] === undefined) elem.addClass('error')
+        elem.html(this._lastKnownCitationCluster[id]).removeClass('error')
+        needRefresh = true
+      }
+    })
+
+    if (Object.keys(this._lastKnownCitationCluster).length === 0) {
+      return this._renderer.setBibliography('There are no citations in this document.')
+    }
+
+    if (somethingUpdated) {
+      // Need to update
+      // We need to update the items first!
+      if (global.citeproc.updateItems(Object.keys(this._lastKnownCitationCluster))) {
+        global.citeproc.makeBibliography() // Trigger a new bibliography build
+      } else {
+        this._renderer.setBibliography('Could not update bibliography!')
+      }
+    }
+
+    // We need to refresh the editor, because the updating process has certainly
+    // altered the widths of the spans.
+    if (needRefresh) this._cm.refresh()
+  }
   /**
    * Returns the current value of the editor.
    * @return {String} The current editor contents.

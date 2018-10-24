@@ -98,8 +98,10 @@ class ZettlrRendererIPC {
 
     // Sends an array of IDs to main. If they are found in the JSON, cool! Otherwise
     // this will return false.
-    global.cite = {
-      get: (idList) => { return this._ipc.sendSync('cite', idList) }
+    global.citeproc = {
+      getCitation: (idList) => { return this._ipc.sendSync('getCitation', idList) },
+      updateItems: (idList) => { return this._ipc.sendSync('updateItems', idList) },
+      makeBibliography: () => { return this.send('citeproc-make-bibliography') }
     }
   }
 
@@ -469,6 +471,16 @@ class ZettlrRendererIPC {
       // Copy a selection as HTML
       case 'copy-as-html':
         this._app.getEditor().copyAsHTML()
+        break
+
+      // Return to the app a fresh list of IDs available.
+      case 'citeproc-ids':
+        this._app.setCiteprocIDs(cnt)
+        break
+
+      // The argument contains a new bibliography object
+      case 'citeproc-bibliography':
+        this._app.setBibliography(cnt)
         break
 
       default:
