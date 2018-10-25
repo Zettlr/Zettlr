@@ -544,7 +544,8 @@ class Zettlr {
       'pdf': this.config.get('pdf'),
       'title': file.name.substr(0, file.name.lastIndexOf('.')),
       'author': this.config.get('pdf').author,
-      'keywords': this.config.get('pdf').keywords
+      'keywords': this.config.get('pdf').keywords,
+      'cslStyle': this.config.get('export.cslStyle')
     }
 
     // Call the exporter.

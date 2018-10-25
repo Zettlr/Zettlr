@@ -85,7 +85,9 @@ class ZettlrConfig {
         'dir': 'temp', // Can either be "temp" or "cwd" (current working directory)
         'stripIDs': true, // Strip ZKN IDs such as @ID:<id>
         'stripTags': false, // Strip tags a.k.a. #tag
-        'stripLinks': 'full' // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
+        'stripLinks': 'full', // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
+        'cslLibrary': '', // Path to a CSL JSON library file
+        'cslStyle': '' // Path to a CSL Style file
       },
       // PDF options (for all documents; projects will copy this object over)
       'pdf': {
@@ -116,7 +118,6 @@ class ZettlrConfig {
       // Language
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.
       'app_lang': this.getLocale(),
-      'cslLibrary': '',
       'debug': false,
       'uuid': null // The app's unique anonymous identifier
     }

@@ -26,7 +26,7 @@ class ZettlrCiteproc {
    * Initialises ZettlrCiteproc and also directly tries to boot the engine.
    */
   constructor () {
-    this._mainLibrary = global.config.get('cslLibrary')
+    this._mainLibrary = global.config.get('export.cslLibrary')
     // The Zettlr internal preview of these citations will always use Chicago,
     // because (a) it's just a preview, and (b) Chicago is the default of Pandoc.
     this._styleID = 'chicago-author-date'

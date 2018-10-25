@@ -114,8 +114,8 @@ class ZettlrExport {
 
     // Check the citeproc availability
     this._citeprocOptions = ''
-    if (isFile(global.config.get('cslLibrary'))) {
-      this._citeprocOptions += `--filter pandoc-citeproc --bibliography "${global.config.get('cslLibrary')}"`
+    if (isFile(global.config.get('export.cslLibrary'))) {
+      this._citeprocOptions += `--filter pandoc-citeproc --bibliography "${global.config.get('export.cslLibrary')}"`
     }
 
     if (this.options.hasOwnProperty('cslStyle') && isFile(this.options.cslStyle)) {

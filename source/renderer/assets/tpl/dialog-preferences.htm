@@ -42,9 +42,6 @@
           <input type="radio" name="combinerState" value="expanded" id="pref-comb-state-exp" %COMBINER_EXPANDED%>
           <label for="pref-comb-state-exp">%i18n.preferences.combiner_expanded%</label>
         </div>
-        <hr>
-        <label for="cslLibrary">%i18n.preferences.csl_database%</label>
-        <input type="text" placeholder="Default: none" name="cslLibrary" id="cslLibrary" value="%CSLLIBRARY%">
       </div>
       <!-- Editor related options -->
       <div id="prefs-tabs-editor">
@@ -86,20 +83,8 @@
       </div>
       <!-- Export related options (except pandoc+xelatex) -->
       <div id="prefs-tabs-export">
-        <p>
-          %i18n.preferences.export.dest%
-        </p>
-        <div class="cb-group">
-          <input type="radio" name="export.dir" value="temp" id="pref-export-temp" %EXPORT_DEST_TEMP%>
-          <label for="pref-export-temp">%i18n.preferences.export.dest_temp_label%</label>
-        </div>
-        <div class="cb-group">
-          <input type="radio" name="export.dir" value="cwd" id="pref-export-cwd" %EXPORT_DEST_CWD%>
-          <label for="pref-export-cwd">%i18n.preferences.export.dest_cwd_label%</label>
-        </div>
-        <hr>
-        <p>%i18n.preferences.export.stripping%</p>
         <div class="box-left">
+          <p>%i18n.preferences.export.stripping%</p>
           <p>
             <div class="cb-group">
               <label class="cb-toggle">
@@ -116,8 +101,7 @@
               <label for="export.stripTags">%i18n.preferences.export.strip_tags_label%</label>
             </div>
           </p>
-        </div>
-        <div class="box-right">
+          <hr>
           <div class="cb-group">
             <input type="radio" name="export.stripLinks" value="full" id="pref-export-strip-link-full" %EXPORT_STRIP_LINKS_FULL%>
             <label for="pref-export-strip-link-full">%i18n.preferences.export.strip_links_full_label%</label>
@@ -130,6 +114,24 @@
             <input type="radio" name="export.stripLinks" value="no" id="pref-export-strip-link-no" %EXPORT_STRIP_LINKS_NO%>
             <label for="pref-export-strip-link-no">%i18n.preferences.export.strip_links_no_label%</label>
           </div>
+        </div>
+        <div class="box-right">
+          <p>
+            %i18n.preferences.export.dest%
+          </p>
+          <div class="cb-group">
+            <input type="radio" name="export.dir" value="temp" id="pref-export-temp" %EXPORT_DEST_TEMP%>
+            <label for="pref-export-temp">%i18n.preferences.export.dest_temp_label%</label>
+          </div>
+          <div class="cb-group">
+            <input type="radio" name="export.dir" value="cwd" id="pref-export-cwd" %EXPORT_DEST_CWD%>
+            <label for="pref-export-cwd">%i18n.preferences.export.dest_cwd_label%</label>
+          </div>
+          <hr>
+          <label for="cslLibrary">%i18n.preferences.csl_database%</label>
+          <input type="text" name="export.cslLibrary" id="cslLibrary" value="%CSLLIBRARY%">
+          <label for="cslStyle">%i18n.preferences.csl_style%</label>
+          <input type="text" name="export.cslStyle" id="cslStyle" value="%CSLSTYLE%">
         </div>
       </div>
       <!-- Zettelkasten options -->
