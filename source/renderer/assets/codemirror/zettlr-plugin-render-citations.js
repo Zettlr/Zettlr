@@ -19,7 +19,8 @@
   // Should match everything permittible -- first alternative are the huge
   // blocks, second alternative are the simple @ID-things, both recognised by
   // Pandoc.
-  var citationRE = /\[([\w -]*@[\w-]+.*)\]|@([a-z0-9_:.#$%&\-+?<>~/]+)/gi
+  // var citationRE = /\[([\w -]*@[\w-]+.*)\]|@([a-z0-9_:.#$%&\-+?<>~/]+)/gi
+  var citationRE = /\[([^[]*@[^\]]+)\]|@([a-z0-9_:.#$%&\-+?<>~/]+)/gi
   var citeMarkers = [] // CiteMarkers
 
   CodeMirror.commands.markdownRenderCitations = function (cm) {
@@ -56,6 +57,7 @@
         if (match[1]) {
           let cite = match[1].split(';') // First extract all citations in this thing
           for (let c of cite) {
+            console.log(`Going through ${c}`)
             // Loop through all array items and deconstruct them. They can look like this:
             /*
             [see @doe99, pp. 33-35; also @smith04, chap. 1]
