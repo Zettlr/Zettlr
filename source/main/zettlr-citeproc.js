@@ -159,7 +159,7 @@ class ZettlrCiteproc {
    * @return {String}         The rendered string
    */
   getCitation (citeIDs) {
-    if (!this._loaded) return false // Don't try to access the engine before loaded
+    if (!this._loaded) return 'not-ready' // Don't try to access the engine before loaded
     citeIDs = this._sanitiseItemList(citeIDs)
     if (citeIDs.length === 0) return false // Nothing to render
     try {
@@ -176,7 +176,7 @@ class ZettlrCiteproc {
    * @return {Boolean}        An indicator whether or not the call succeeded and the registry has been updated.
    */
   updateItems (idList) {
-    if (!this._loaded) return false // Don't try to access the engine before loaded
+    if (!this._loaded) return 'not-ready' // Don't try to access the engine before loaded
     try {
       idList = this._sanitiseItemList(idList)
       this._engine.updateItems(idList)
@@ -193,7 +193,7 @@ class ZettlrCiteproc {
    * @return {CSLBibTex} A CSL object containing the bibliography.
    */
   makeBibliography () {
-    if (!this._loaded) return false // Don't try to access the engine before loaded
+    if (!this._loaded) return 'not-ready' // Don't try to access the engine before loaded
     try {
       return this._engine.makeBibliography()
     } catch (e) {

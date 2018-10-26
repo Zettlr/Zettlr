@@ -203,6 +203,7 @@ class ZettlrEditor {
         if (this._timeout) {
           clearTimeout(this._timeout)
         }
+        if (this._citationTimeout) clearTimeout(this._citationTimeout)
 
         // This timeout can be used for everything that takes some time and
         // makes the writing feel laggy (such as generating a bunch of
@@ -211,6 +212,11 @@ class ZettlrEditor {
           this._renderer.saveFile()
           this.updateCitations()
         }, SAVE_TIMOUT)
+
+        // Always run an update-citations command each time there have been changes
+        this._citationTimeout = setTimeout((e) => {
+          this.updateCitations()
+        }, 500)
       }
     })
 
@@ -361,6 +367,9 @@ class ZettlrEditor {
     // Last but not least: If there are any search results currently
     // display, mark the respective positions.
     this.markResults(file)
+
+    // Finally, set a timeout for a first run of citation rendering
+    setTimeout(() => { this.updateCitations() }, 1000)
 
     return this
   }
@@ -953,13 +962,13 @@ class ZettlrEditor {
           needRefresh = true
         } else {
           let newCite = global.citeproc.getCitation(item)
-          if (newCite) {
+          if (typeof newCite === 'string' && newCite !== 'not-ready') {
             elem.html(newCite).removeClass('error').attr('data-rendered', 'yes')
             this._citationBuffer[id] = newCite
             needRefresh = true
-          } else {
+          } else if (newCite === false) {
             elem.addClass('error')
-          }
+          } // else: Engine wasn't ready yet
         }
       }
     })
@@ -971,8 +980,13 @@ class ZettlrEditor {
     if (somethingUpdated) {
       // Need to update
       // We need to update the items first!
-      if (global.citeproc.updateItems(Object.keys(this._lastKnownCitationCluster))) {
+      let bib = global.citeproc.updateItems(Object.keys(this._lastKnownCitationCluster))
+      if (bib === true) {
         global.citeproc.makeBibliography() // Trigger a new bibliography build
+      } else if (bib === 'not-ready') {
+        this._renderer.setBibliography('Engine is still booting ...')
+        // Unset so that the update process is triggered again next time
+        this._lastKnownCitationCluster = Object.create(null)
       } else {
         this._renderer.setBibliography('Could not update bibliography!')
       }

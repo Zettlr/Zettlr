@@ -57,7 +57,6 @@
         if (match[1]) {
           let cite = match[1].split(';') // First extract all citations in this thing
           for (let c of cite) {
-            console.log(`Going through ${c}`)
             // Loop through all array items and deconstruct them. They can look like this:
             /*
             [see @doe99, pp. 33-35; also @smith04, chap. 1]
@@ -125,24 +124,30 @@
         // The attribute will be taken by the citation updater to update the citations
         span.setAttribute('data-citeproc-cite-item', JSON.stringify(realCitations))
         // Apply TextMarker
-        let textMarker = cm.markText(
-          curFrom, curTo,
-          {
-            'clearOnEnter': true,
-            'replacedWith': span,
-            'inclusiveLeft': false,
-            'inclusiveRight': false
+        try {
+          let textMarker = cm.markText(
+            curFrom, curTo,
+            {
+              'clearOnEnter': true,
+              'replacedWith': span,
+              'inclusiveLeft': false,
+              'inclusiveRight': false
+            }
+          )
+
+          span.onclick = (e) => {
+            textMarker.clear()
+            cm.setCursor(cm.coordsChar({ 'left': e.clientX, 'top': e.clientY }))
+            cm.focus()
           }
-        )
 
-        span.onclick = (e) => {
-          textMarker.clear()
-          cm.setCursor(cm.coordsChar({ 'left': e.clientX, 'top': e.clientY }))
-          cm.focus()
+          // Finally push the marker into the array
+          citeMarkers.push(textMarker)
+        } catch (e) {
+          // CodeMirror throws errors if one tries to paper over an existing
+          // mark with a new marker. In this case, don't mark the text and simply
+          // do nothing.
         }
-
-        // Finally push the marker into the array
-        citeMarkers.push(textMarker)
       }
     }
   }

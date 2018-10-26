@@ -62,8 +62,8 @@ class ZettlrIPC {
       })
 
       // Citeproc calls (either single citation or a whole cluster)
-      this._ipc.on('getCitation', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.getCitation(idList) : false })
-      this._ipc.on('updateItems', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.updateItems(idList) : false })
+      this._ipc.on('getCitation', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.getCitation(idList) : 'not-ready' })
+      this._ipc.on('updateItems', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.updateItems(idList) : 'not-ready' })
 
       // Increase the event listener cap to 20. Normally we have 11, which is a
       // result of the wrappers electron puts around the node objects, I guess.
