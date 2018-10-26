@@ -29,7 +29,7 @@ class ZettlrAttachments {
     this._fileContainer = $('<div>').prop('id', 'files')
     this._bibliographyContainer = $('<div>').prop('id', 'bibliography')
     this._container.append(this._fileContainer)
-    this._container.append($('<h1>').text('Bibliography'))
+    this._container.append($('<h1>').text(trans('gui.citeproc.references_heading')))
     this._container.append(this._bibliographyContainer)
     $('body').append(this._container)
     this._open = false

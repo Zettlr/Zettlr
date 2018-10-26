@@ -19,6 +19,7 @@ const showdown = require('showdown')
 const tippy = require('tippy.js')
 const { clipboard } = require('electron')
 const { generateId, hash } = require('../common/zettlr-helpers.js')
+const { trans } = require('../common/lang/i18n.js')
 
 // 1. Mode addons
 require('codemirror/addon/mode/overlay')
@@ -974,7 +975,7 @@ class ZettlrEditor {
     })
 
     if (Object.keys(this._lastKnownCitationCluster).length === 0) {
-      return this._renderer.setBibliography('There are no citations in this document.')
+      return this._renderer.setBibliography(trans('gui.citeproc.references_none'))
     }
 
     if (somethingUpdated) {
@@ -984,11 +985,11 @@ class ZettlrEditor {
       if (bib === true) {
         global.citeproc.makeBibliography() // Trigger a new bibliography build
       } else if (bib === 'not-ready') {
-        this._renderer.setBibliography('Engine is still booting ...')
+        this._renderer.setBibliography(trans('gui.citeproc.references_booting'))
         // Unset so that the update process is triggered again next time
         this._lastKnownCitationCluster = Object.create(null)
       } else {
-        this._renderer.setBibliography('Could not update bibliography!')
+        this._renderer.setBibliography(trans('gui.citeproc.references_error'))
       }
     }
 

@@ -41,6 +41,12 @@
             "divider": "Divider",
             "footnote": "Footnote",
             "remove_footnote": "Remove footnote"
+        },
+        "citeproc": {
+          "references_heading": "References",
+          "references_none": "There are no citations in this document.",
+          "references_booting": "The citeproc engine is still booting up …",
+          "references_error": "Could not update bibliography!"
         }
     },
     "validation": {

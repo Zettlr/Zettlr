@@ -41,6 +41,12 @@
             "divider": "Séparateur",
             "footnote": "Note en bas de page",
             "remove_footnote": "Éliminer la note"
+        },
+        "citeproc": {
+          "references_heading": "Bibliographie",
+          "references_none": "Il-y-a pas des citations dans ce document.",
+          "references_booting": "Le moteur citeproc est en cours de démarrage …",
+          "references_error": "Impossible de mettre à jour la bibliographie."
         }
     },
     "validation": {

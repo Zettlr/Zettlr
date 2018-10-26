@@ -41,6 +41,12 @@
             "divider": "Trennstrich",
             "footnote": "Fußnote",
             "remove_footnote": "Fußnote entfernen"
+        },
+        "citeproc": {
+          "references_heading": "Literatur",
+          "references_none": "In diesem Dokument wurden keine Zitationen gefunden.",
+          "references_booting": "Die Citeproc-Engine ist noch nicht geladen …",
+          "references_error": "Beim Erstellen der Bibliographie ist ein Fehler aufgetreten!"
         }
     },
     "validation": {
