@@ -731,9 +731,9 @@ code-point-at@^1.0.0:
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
 codemirror@^5.39.0:
-  version "5.40.2"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.40.2.tgz#f4a41fee2d84e679543591b3680af259d903330b"
-  integrity sha512-yoWuvEiD3v5vTwdoMc/wu/Ld6dh9K/yEiEBTKOPGM+/pN0gTAqFNtrLHv1IJ1UJvzFpNRvMi92XCi3+8/iIaEw==
+  version "5.41.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.41.0.tgz#57e245be197643c39440d2840236d3edc4bb1162"
+  integrity sha512-mkCwbneCx2WHg1MNCYrI+8Zuq0KMMaZ5yTFpQlAZazy3yxME8bHcuSc9WUFzgPZ114WqWu1FIHlx8CavLzBDIg==
 
 collection-visit@^1.0.0:
   version "1.0.0"
@@ -1221,9 +1221,9 @@ electron-publish@20.28.3:
     mime "^2.3.1"
 
 electron@^3.0.2:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-3.0.5.tgz#5a6f105af3b6314636c7c27a25312602dd36eae6"
-  integrity sha512-rcHNbhSGfj80Av5p06LgIUxN8wQbrdx8yblikJamDezqxe0B11CJSEJuidz6TJoCRDZuWHt+P5xMAEhp92ZUcA==
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-3.0.6.tgz#2d7b4ed521e90c69d83ffe5696db173b0e7b2473"
+  integrity sha512-MqwvA6IM0IDvUgPo/zHasmLMn3eYhMJ2I0qTNfQtxwqdoo762UlFS+upmMgcnCXPcGMGDWi3wtZhNir9nEw1kA==
   dependencies:
     "@types/node" "^8.0.24"
     electron-download "^4.1.0"

@@ -956,7 +956,6 @@ class ZettlrEditor {
       if (elem.attr('data-rendered') !== 'yes') {
         let item = elem.attr('data-citeproc-cite-item')
         let id = hash(item)
-        console.log(`Pass element ID ${id}`)
         item = JSON.parse(item)
         if (this._citationBuffer[id] !== undefined) {
           elem.html(this._citationBuffer[id]).removeClass('error').attr('data-rendered', 'yes')

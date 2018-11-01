@@ -12,14 +12,9 @@
 })(function (CodeMirror) {
   'use strict'
 
-  // This regular expression matches three different kinds of URLs:
-  // 1. Markdown URLs in the format [Caption](www.link-target.tld)
-  // 2. Standalone links, either beginning with http(s):// or www.
-  // 3. Email addresses.
   // Should match everything permittible -- first alternative are the huge
   // blocks, second alternative are the simple @ID-things, both recognised by
-  // Pandoc.
-  // var citationRE = /\[([\w -]*@[\w-]+.*)\]|@([a-z0-9_:.#$%&\-+?<>~/]+)/gi
+  // Pandoc citeproc.
   var citationRE = /\[([^[\]]*@[^[\]]+)\]|@([a-z0-9_:.#$%&\-+?<>~/]+)/gi
   var citeMarkers = [] // CiteMarkers
 
