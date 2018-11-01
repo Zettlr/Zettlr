@@ -49,6 +49,7 @@ class ZettlrProject {
         'margin_unit': 'cm',
         'lineheight': '1.2',
         'mainfont': 'Times New Roman',
+        'sansfont': 'Arial',
         'fontsize': 12,
         'toc': true, // Default: generate table of contents
         'tocDepth': 2, // Default: evaluate until level 2

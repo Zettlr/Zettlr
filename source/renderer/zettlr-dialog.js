@@ -248,6 +248,7 @@ class ZettlrDialog {
         replacements.push('%PREFS_BMARGIN%|' + obj.pdf.bmargin)
         replacements.push('%PREFS_LMARGIN%|' + obj.pdf.lmargin)
         replacements.push('%PREFS_MAINFONT%|' + obj.pdf.mainfont)
+        replacements.push('%PREFS_SANSFONT%|' + obj.pdf.sansfont)
         replacements.push('%PREFS_FONTSIZE%|' + obj.pdf.fontsize)
         replacements.push('%PREFS_LINEHEIGHT%|' + obj.pdf.lineheight * 100) // Convert to percent
         let papertypes = ''

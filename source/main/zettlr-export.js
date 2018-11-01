@@ -227,6 +227,7 @@ class ZettlrExport {
 
     // Font setup
     cnt = cnt.replace('%MAIN_FONT%', pdf.mainfont)
+    cnt = cnt.replace('%SANS_FONT%', pdf.sansfont)
     cnt = cnt.replace('%LINE_SPACING%', pdf.lineheight)
     cnt = cnt.replace('%FONT_SIZE%', pdf.fontsize + 'pt')
 

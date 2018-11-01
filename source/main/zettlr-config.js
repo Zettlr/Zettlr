@@ -102,6 +102,7 @@ class ZettlrConfig {
         'margin_unit': 'cm',
         'lineheight': '1.5', // Default: 150% line height
         'mainfont': 'Times New Roman', // Main font
+        'sansfont': 'Arial', // Sans font, used, e.g. for headings
         'fontsize': 12 // Will be translated to pt
       },
       // Zettelkasten stuff (IDs, as well as link matchers)
