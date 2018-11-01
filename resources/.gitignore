@@ -5,4 +5,5 @@
 !pandoc
 !less
 !screenshots
+!handlebars-tpl
 !.gitignore

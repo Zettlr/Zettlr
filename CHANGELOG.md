@@ -34,6 +34,7 @@
 - Removed an additional openPaths-update during the renaming of root files.
 - Now the current directory is re-set correctly after renaming the current directory.
 - Refactored the context menu to resemble the same structure as the application menu.
+- Switched to the `handlebars.js` templating engine.
 
 # 0.20.0
 

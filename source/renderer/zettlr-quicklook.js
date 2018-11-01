@@ -13,8 +13,7 @@
  * END HEADER
  */
 
-const fs = require('fs')
-const path = require('path')
+const handlebars = require('./assets/handlebars-runtime/handlebars.runtime.js')
 const { trans } = require('../common/lang/i18n.js')
 
 // CodeMirror related includes
@@ -122,8 +121,9 @@ class ZettlrQuicklook {
     * Load the Quicklook template and prepare everything
     */
   _load () {
-    let qlcontent = fs.readFileSync(path.join(__dirname, 'assets', 'tpl', 'quicklook.htm'), 'utf8')
-    qlcontent = qlcontent.replace('%FIND%', trans('gui.find_placeholder'))
+    let precompiled = require(`./assets/handlebars-tpl/quicklook.handlebars.js`)
+    // Process the template and directly call it to only return the HTML
+    let qlcontent = handlebars.template(precompiled)({ 'findPlaceholder': trans('gui.find_placeholder') })
     this._window = $(qlcontent)
 
     this._cm = CodeMirror.fromTextArea(this._window.find('textarea')[0], {

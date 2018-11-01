@@ -13,9 +13,8 @@
  * END HEADER
  */
 
-const fs = require('fs')
-const path = require('path')
 const tippy = require('tippy.js')
+const handlebars = require('./assets/handlebars-runtime/handlebars.runtime.js')
 const Chart = require('chart.js')
 const { trans } = require('../common/lang/i18n.js')
 const SUPPORTED_PAPERTYPES = require('../common/data.json').papertypes
@@ -55,6 +54,37 @@ class ZettlrDialog {
     this._dlg = null
     this._statsData = []
     this._statsLabels = []
+
+    // Allow easy translation
+    handlebars.registerHelper('i18n', function (str, str2 = undefined) {
+      // Return a SafeString, so that handlebars doesn't escape potential strong-tags etc.
+      let second = (str2 && typeof str2 === 'string') ? str2 : ''
+      return new handlebars.SafeString(trans(`dialog.${str}${second}`))
+    })
+
+    // Allow operator if-clauses, thanks to https://stackoverflow.com/a/16315366!
+    handlebars.registerHelper('ifCond', function (v1, op, v2, options) {
+      switch (op) {
+        case '=':
+          return (v1 === v2) ? options.fn(this) : options.inverse(this)
+        case '!=':
+          return (v1 !== v2) ? options.fn(this) : options.inverse(this)
+        case '<':
+          return (v1 < v2) ? options.fn(this) : options.inverse(this)
+        case '<=':
+          return (v1 <= v2) ? options.fn(this) : options.inverse(this)
+        case '>':
+          return (v1 > v2) ? options.fn(this) : options.inverse(this)
+        case '>=':
+          return (v1 >= v2) ? options.fn(this) : options.inverse(this)
+        case '&&':
+          return (v1 && v2) ? options.fn(this) : options.inverse(this)
+        case '||':
+          return (v1 || v2) ? options.fn(this) : options.inverse(this)
+        default:
+          return options.inverse(this)
+      }
+    })
   }
 
   /**
@@ -128,11 +158,11 @@ class ZettlrDialog {
 
     this._dlg = dialog
 
-    let replacements = []
+    // Some preparations for the dialogs
     switch (dialog) {
       case 'about':
-        replacements.push('%PKGVER%|' + require('../package.json').version)
-        replacements.push('%UUID%|' + global.config.get('uuid'))
+        obj.version = require('../package.json').version
+        obj.uuid = global.config.get('uuid')
         break
 
       case 'statistics':
@@ -145,162 +175,45 @@ class ZettlrDialog {
         break
 
       case 'preferences':
-        let dark = (obj.darkTheme) ? 'checked="checked"' : ''
-        let snippets = (obj.snippets) ? 'checked="checked"' : ''
-        let debug = (obj.debug) ? 'checked="checked"' : ''
-        let autoCloseBrackets = (obj.editor.autoCloseBrackets) ? 'checked="checked"' : ''
-        let exportTemp = (obj.export.dir === 'temp') ? 'checked="checked"' : ''
-        let exportCwd = (obj.export.dir === 'cwd') ? 'checked="checked"' : ''
-        let stripID = (obj.export.stripIDs) ? 'checked="checked"' : ''
-        let stripTags = (obj.export.stripTags) ? 'checked="checked"' : ''
-        let stripLinksFull = (obj.export.stripLinks === 'full') ? 'checked="checked"' : ''
-        let stripLinksUnlink = (obj.export.stripLinks === 'unlink') ? 'checked="checked"' : ''
-        let stripLinksNo = (obj.export.stripLinks === 'no') ? 'checked="checked"' : ''
-        let mute = (obj.muteLines) ? 'checked="checked"' : ''
-        let cmbStateExp = (obj.combinerState === 'expanded') ? 'checked="checked"' : ''
-        let cmbStateCol = (obj.combinerState === 'collapsed') ? 'checked="checked"' : ''
-        replacements.push('%DARK%|' + dark)
-        replacements.push('%SNIPPETS%|' + snippets)
-        replacements.push('%COMBINER_EXPANDED%|' + cmbStateExp)
-        replacements.push('%COMBINER_COLLAPSED%|' + cmbStateCol)
-        replacements.push('%MUTE_LINES%|' + mute)
-        replacements.push('%DEBUG%|' + debug)
-        replacements.push('%AUTOCLOSEBRACKETS%|' + autoCloseBrackets)
-        replacements.push('%EXPORT_DEST_TEMP%|' + exportTemp)
-        replacements.push('%EXPORT_DEST_CWD%|' + exportCwd)
-        replacements.push('%EXPORT_STRIP_ID%|' + stripID)
-        replacements.push('%EXPORT_STRIP_TAGS%|' + stripTags)
-        replacements.push('%EXPORT_STRIP_LINKS_FULL%|' + stripLinksFull)
-        replacements.push('%EXPORT_STRIP_LINKS_UNLINK%|' + stripLinksUnlink)
-        replacements.push('%EXPORT_STRIP_LINKS_NO%|' + stripLinksNo)
-        replacements.push('%PANDOC%|' + obj.pandoc)
-        replacements.push('%XELATEX%|' + obj.xelatex)
-        replacements.push('%ZKN_ID%|' + obj.zkn.idRE)
-        replacements.push('%ZKN_LINKSTART%|' + obj.zkn.linkStart)
-        replacements.push('%ZKN_LINKEND%|' + obj.zkn.linkEnd)
-        replacements.push('%ZKN_IDGEN%|' + obj.zkn.idGen)
-        replacements.push('%CSLLIBRARY%|' + obj.export.cslLibrary)
-        replacements.push('%CSLSTYLE%|' + obj.export.cslStyle)
-        let spellcheck = ''
-        let spellcheckLabel = ''
-        for (let l of obj.selectedDicts) {
-          // Prevent ugly language labels in the spellchecker selection.
-          spellcheckLabel = trans('dialog.preferences.app_lang.' + l)
-          spellcheckLabel = (spellcheckLabel === 'dialog.preferences.app_lang.' + l) ? l : spellcheckLabel
-          spellcheck += `\n<div class="selected-dict"><input type="hidden" value="${l}" name="selectedDicts" id="${l}">${spellcheckLabel}</div>`
-        }
-        replacements.push('%SPELLCHECK%|' + spellcheck)
-        let avail = ''
         for (let l of obj.availableDicts) {
           if (obj.selectedDicts.includes(l)) {
-            continue // Don't include already selected in the list.
-          }
-          // Prevent ugly language labels in the spellchecker selection.
-          spellcheckLabel = trans('dialog.preferences.app_lang.' + l)
-          spellcheckLabel = (spellcheckLabel === 'dialog.preferences.app_lang.' + l) ? l : spellcheckLabel
-          avail += `\n<li data-value="${l}" class="dicts-list-item">${spellcheckLabel}</li>`
-        }
-        replacements.push('%AVAILABLE_DICTS%|' + avail)
-        let langSelection = ''
-        for (let l of obj.supportedLangs) {
-          // Prevent ugly language labels in the app language selection.
-          let langLabel = trans('dialog.preferences.app_lang.' + l)
-          langLabel = (langLabel === 'dialog.preferences.app_lang.' + l) ? l : langLabel
-          if (l === this._parent.getLocale()) {
-            langSelection += `<option value="${l}" selected="selected">${langLabel}</option>`
-          } else {
-            langSelection += `<option value="${l}">${langLabel}</option>`
+            // Remove already selected dictionaries from the list
+            obj.availableDicts.splice(obj.availableDicts.indexOf(l), 1)
           }
         }
-        replacements.push('%APP_LANG%|' + langSelection)
-        replacements.push('%ATTACHMENT_EXTENSIONS%|' + obj.attachmentExtensions.join(', '))
+        // The template expects a simple string
+        obj.attachmentExtensions = obj.attachmentExtensions.join(', ')
         break
 
       case 'project-properties':
-        let hash = obj.hash // In this case, the object also contains a hash we need.
+        let hash = obj.hash
         obj = obj.properties
-        let genToc = (obj.pdf.toc) ? 'checked="checked"' : ''
-        let genTitle = (obj.pdf.titlepage) ? 'checked="checked"' : ''
-        let tocdepth = ''
-        for (let i = 1; i < 7; i++) {
-          tocdepth += `<option value="${i}" ` + ((parseInt(obj.pdf.tocDepth) === i) ? 'selected="selected"' : '') + `>${i}</option>`
-        }
-        let formats = ''
-        for (let format of ['pdf', 'docx', 'odt', 'html']) {
-          formats += `<option value="${format}"` + ((obj.format === format) ? 'selected="selected"' : '') + `>${format.toUpperCase()}</option>`
-        }
-        replacements.push('%FORMAT%|' + formats)
+        obj.hash = hash
+        obj.availableTocLevels = ['1', '2', '3', '4', '5', '6']
+        obj.availableExportFormats = ['pdf', 'docx', 'odt', 'html']
+        obj.projectDirectory = this._parent.getRenderer().findObject(obj.hash).name
         // Project properties are a superset of the pdf preferences, so we
         // don't add a break here, because we need them as well.
-        replacements.push('%PREFS_TITLE%|' + obj.title)
-        replacements.push('%PROJECT_DIRECTORY%|' + this._parent.getRenderer().findObject(hash).name)
-        replacements.push('%HASH%|' + hash)
-        replacements.push('%GENERATE_TOC%|' + genToc)
-        replacements.push('%GENERATE_TITLEPAGE%|' + genTitle)
-        replacements.push('%TOCDEPTH%|' + tocdepth)
-        replacements.push('%CSLSTYLE%|' + obj.cslStyle)
         // fall through to continue processing the more general pdf preferences
       case 'pdf-preferences':
-        replacements.push('%PREFS_AUTHOR%|' + obj.pdf.author)
-        replacements.push('%PREFS_KEYWORDS%|' + obj.pdf.keywords)
-        replacements.push('%PREFS_TMARGIN%|' + obj.pdf.tmargin)
-        replacements.push('%PREFS_RMARGIN%|' + obj.pdf.rmargin)
-        replacements.push('%PREFS_BMARGIN%|' + obj.pdf.bmargin)
-        replacements.push('%PREFS_LMARGIN%|' + obj.pdf.lmargin)
-        replacements.push('%PREFS_MAINFONT%|' + obj.pdf.mainfont)
-        replacements.push('%PREFS_SANSFONT%|' + obj.pdf.sansfont)
-        replacements.push('%PREFS_FONTSIZE%|' + obj.pdf.fontsize)
-        replacements.push('%PREFS_LINEHEIGHT%|' + obj.pdf.lineheight * 100) // Convert to percent
-        let papertypes = ''
-        for (let pt of SUPPORTED_PAPERTYPES) {
-          papertypes += `<option value="${pt}"`
-          if (pt === obj.pdf.papertype) {
-            papertypes += ' selected="selected"'
-          }
-          papertypes += `>${PAPERNAMES[pt]}</option>\n`
-        }
-        replacements.push('%PAPERTYPES%|' + papertypes)
-        let marginUnits = ''
-        for (let u of ['cm', 'mm', 'pt']) {
-          marginUnits += `<option value="${u}"`
-          if (u === obj.pdf.margin_unit) {
-            marginUnits += ' selected="selected"'
-          }
-          marginUnits += `>${u}</option>\n`
-        }
-        replacements.push('%MARGIN_UNITS%|' + marginUnits)
-        let pagenumbering = ''
-        for (let n of ['arabic', 'alph', 'Alph', 'roman', 'Roman', 'gobble']) {
-          pagenumbering += `<option value="${n}"`
-          if (n === obj.pdf.pagenumbering) {
-            pagenumbering += ' selected="selected"'
-          }
-          pagenumbering += `>${trans('dialog.preferences.pdf.pagenumbering_' + n)}</option>\n`
-        }
-        replacements.push('%PAGENUMBERING%|' + pagenumbering)
+        obj.pdf.lineheight = obj.pdf.lineheight * 100
+        obj.supportedPapertypes = SUPPORTED_PAPERTYPES
+        obj.papertypeNames = PAPERNAMES
+        obj.availableMarginUnits = ['cm', 'mm', 'pt']
+        obj.availablePageNumberingSystems = ['arabic', 'alph', 'Alph', 'roman', 'Roman', 'gobble']
         break
 
       case 'tags-preferences':
-        let t = ''
-        for (let tag of obj) {
-          t += `<div><input type="text" name="prefs-tags-name" value="${tag.name}">`
-          t += `<input type="color" name="prefs-tags-color" value="${tag.color}">`
-          t += `<input type="text" name="prefs-tags-desc" value="${tag.desc}">`
-          t += `<button type="button" onclick="$(this).parent().detach()">-</button></div>\n`
-        }
-        replacements.push('%TAGS%|' + t)
         break
 
       case 'update':
-        replacements.push('%NEWVER%|' + obj.newVer)
-        replacements.push('%CURVER%|' + obj.curVer)
-        replacements.push('%CHANGELOG%|' + obj.changelog)
+        obj.downloadLink = 'https://www.zettlr.com/download/?pk_campaign=RecurringUsers&pk_source=app&pk_medium=ZettlrUpdater'
         if ($('body').hasClass('darwin')) {
-          replacements.push('%RELEASEURL%|' + 'https://www.zettlr.com/download/macos?pk_campaign=RecurringUsers&pk_source=app&pk_medium=ZettlrUpdater')
+          obj.downloadLink = 'https://www.zettlr.com/download/macos?pk_campaign=RecurringUsers&pk_source=app&pk_medium=ZettlrUpdater'
         } else if ($('body').hasClass('win32')) {
-          replacements.push('%RELEASEURL%|' + 'https://www.zettlr.com/download/win32?pk_campaign=RecurringUsers&pk_source=app&pk_medium=ZettlrUpdater')
+          obj.downloadLink = 'https://www.zettlr.com/download/win32?pk_campaign=RecurringUsers&pk_source=app&pk_medium=ZettlrUpdater'
         } else if ($('body').hasClass('linux')) {
-          replacements.push('%RELEASEURL%|' + 'https://www.zettlr.com/download/linux?pk_campaign=RecurringUsers&pk_source=app&pk_medium=ZettlrUpdater')
+          obj.downloadLink = 'https://www.zettlr.com/download/linux?pk_campaign=RecurringUsers&pk_source=app&pk_medium=ZettlrUpdater'
         }
         break
 
@@ -308,7 +221,9 @@ class ZettlrDialog {
         throw new DialogError(trans('dialog.error.unknown_dialog', dialog))
     }
 
-    this._modal.html(this._get('dialog-' + dialog, replacements))
+    console.log(obj)
+
+    this._modal.html(this._get(dialog, obj))
 
     return this
   }
@@ -413,27 +328,11 @@ class ZettlrDialog {
     * @return {String}                   Returns the template with replaced vars.
     */
   _get (template, replacements = []) {
-    let p = path.join(__dirname, 'assets', 'tpl', template + '.htm')
-
-    try {
-      fs.lstatSync(p)
-    } catch (e) {
-      throw new DialogError(trans('dialog.error.no_template', template))
-    }
-
-    let cnt = fs.readFileSync(p, { encoding: 'utf8' })
-
-    // Translation-strings:
-    let i18n = this._getLanguageTable(cnt)
-    replacements = i18n.concat(replacements)
-
-    // Replace variables
-    for (let r of replacements) {
-      r = r.split('|')
-      cnt = cnt.replace(new RegExp(r[0], 'g'), r[1])
-    }
-
-    return cnt
+    // Require the template and process it. Then we only need to call tpl with
+    // our preferences object, et voilà!
+    let precompiled = require(`./assets/handlebars-tpl/dialog-${template}.handlebars.js`)
+    // Process the template and directly call it to only return the HTML
+    return handlebars.template(precompiled)(replacements)
   }
 
   /**

@@ -1,9 +1,9 @@
 <div class="dialog">
     <img src="img/zettlr-official-logo.png" alt="Zettlr Logo" style="width:20%; float:left;">
-    <h1>%i18n.about.title% <small>Version %PKGVER%</small></h1>
-    <span class="uuid">Application ID: %UUID%</span>
+    <h1>{{i18n "about.title"}} <small>Version {{version}}</small></h1>
+    <span class="uuid">Application ID: {{uuid}}</span>
     <p>
-        %i18n.about.lead%
+      {{i18n "about.lead"}}
     </p>
     <hr style="clear:left;">
     <div class="projects">
@@ -33,23 +33,23 @@
         <div class="flex"></div>
     </div>
     <p>
-        %i18n.about.other_projects%
+        {{i18n "about.other_projects"}}
     </p>
     <div class="other-projects">
         <ul>
-            <li><a href="#" onclick="require('electron').shell.openExternal('https://jquery.com/')">jQuery &amp; jQuery UI</a> &mdash; %i18n.about.jquery%</li>
-            <li><a href="#" onclick="require('electron').shell.openExternal('https://github.com/paulmillr/chokidar')">Chokidar</a> &mdash; %i18n.about.chokidar%</li>
-            <li><a href="#" onclick="require('electron').shell.openExternal('https://github.com/cfinke/Typo.js/')">Typo.js</a> &mdash; %i18n.about.typojs%</li>
-            <li><a href="#" onclick="require('electron').shell.openExternal('http://showdownjs.com/')">Showdown.js</a> &mdash; %i18n.about.showdownjs%</li>
-            <li><a href="#" onclick="require('electron').shell.openExternal('https://esdoc.org/')">ESDoc</a> &mdash; %i18n.about.esdoc%</li>
-            <li><a href="#" onclick="require('electron').shell.openExternal('http://lesscss.org/')">Less.js</a> &mdash; %i18n.about.lessjs%</li>
-            <li><a href="#" onclick="require('electron').shell.openExternal('https://clusterize.js.org/')">Clusterize.js</a> &mdash; %i18n.about.clusterizejs%</li>
-            <li><a href="#" onclick="require('electron').shell.openExternal('https://atomiks.github.io/tippyjs/')">Tippy.js</a> &mdash; %i18n.about.tippyjs%</li>
+            <li><a href="#" onclick="require('electron').shell.openExternal('https://jquery.com/')">jQuery &amp; jQuery UI</a> &mdash; {{i18n "about.jquery"}}</li>
+            <li><a href="#" onclick="require('electron').shell.openExternal('https://github.com/paulmillr/chokidar')">Chokidar</a> &mdash; {{i18n "about.chokidar"}}</li>
+            <li><a href="#" onclick="require('electron').shell.openExternal('https://github.com/cfinke/Typo.js/')">Typo.js</a> &mdash; {{i18n "about.typojs"}}</li>
+            <li><a href="#" onclick="require('electron').shell.openExternal('http://showdownjs.com/')">Showdown.js</a> &mdash; {{i18n "about.showdownjs"}}</li>
+            <li><a href="#" onclick="require('electron').shell.openExternal('https://esdoc.org/')">ESDoc</a> &mdash; {{i18n "about.esdoc"}}</li>
+            <li><a href="#" onclick="require('electron').shell.openExternal('http://lesscss.org/')">Less.js</a> &mdash; {{i18n "about.lessjs"}}</li>
+            <li><a href="#" onclick="require('electron').shell.openExternal('https://clusterize.js.org/')">Clusterize.js</a> &mdash; {{i18n "about.clusterizejs"}}</li>
+            <li><a href="#" onclick="require('electron').shell.openExternal('https://atomiks.github.io/tippyjs/')">Tippy.js</a> &mdash; {{i18n "about.tippyjs"}}</li>
         </ul>
     </div>
     <hr>
     <p>
-        %i18n.about.trademark%
+        {{i18n "about.trademark"}}
     </p>
-    <button id="abort">%i18n.about.close%</button>
+    <button id="abort">{{i18n "about.close"}}</button>
 </div>
