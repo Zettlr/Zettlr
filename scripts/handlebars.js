@@ -3,13 +3,33 @@
 // be shipped to save space).
 
 const log = require('./console-colour.js') // Colourful output
+const copyRecursive = require('./copy-recoursive.js')
 const fs = require('fs')
 const path = require('path')
 const handlebars = require('handlebars')
 
-// What to copy? We only need the CommonJS-library.
+/** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                          VARIABLES AND PREPARATION                         *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
+
+// First the directories of the handlebars runtime.
 let runtimeInput = path.join(__dirname, '..', 'node_modules/handlebars/dist/cjs')
 let runtimeOutput = path.join(__dirname, '..', 'source/renderer/assets/handlebars/')
+
+// An array of all ins and outs where handlebar-templates reside and where to put them
+let tplPaths = []
+tplPaths.push(
+  // Dialog templates
+  {
+    'input': path.join(__dirname, '..', 'resources/dialog-tpl-source'),
+    'output': path.join(__dirname, '..', 'source/renderer/assets/dialog-tpl')
+  }
+  // TODO: Popup templates
+)
+
+/** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                              BEGIN PROCESSING                              *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 
 log.info(`Starting Handlebars distribution ...`)
 log.info(`CWD: ${__dirname}\n`)
@@ -40,46 +60,6 @@ try {
 }
 
 // Step 3: Copy!
-function copyRecursive (from, to) {
-  // First check that we have a valid path
-  let stat
-  try {
-    stat = fs.lstatSync(from)
-    if (!stat.isDirectory() && !stat.isFile()) throw new Error(`${from} is not a valid file or directory!`)
-  } catch (e) {
-    log.error(e.message)
-    return
-  }
-
-  if (stat && stat.isFile()) {
-    // We have a file to copy over.
-    try {
-      fs.copyFileSync(from, path.join(to, path.basename(from)))
-      log.success(`Copied ${path.basename(from)}`)
-    } catch (e) {
-      log.error(`Error on copying ${path.basename(from)}!`)
-    }
-  } else if (stat && stat.isDirectory()) {
-    // Create the respective directory in the target.
-    try {
-      fs.lstatSync(path.join(to, path.basename(from)))
-    } catch (e) {
-      log.info(`Creating directory ${path.basename(from)} ...`)
-      try {
-        fs.mkdirSync(path.join(to, path.basename(from)))
-        log.success(`Created ${path.basename(from)}`)
-      } catch (e) {
-        log.error(`Error on creating ${path.basename(from)}!`)
-      }
-    }
-
-    // Now copy over the directory
-    let dir = fs.readdirSync(from)
-    for (let p of dir) {
-      copyRecursive(path.join(from, p), path.join(to, path.basename(from)))
-    }
-  }
-}
 
 // Hehe, the actual copying begins here.
 log.info('Copying files recursively to destination ...')
@@ -92,26 +72,37 @@ log.success(`Done copying!`)
 
 // Now precompile all templates.
 log.info(`Compiling templates ...`)
-let input = path.join(__dirname, '..', 'resources/dialog-tpl-source')
-let output = path.join(__dirname, '..', 'source/renderer/assets/dialog-tpl')
 
-let templates = fs.readdirSync(input)
+for (let tupel of tplPaths) {
+  let input = tupel.input
+  let output = tupel.output
 
-for (let tpl of templates) {
-  if (path.extname(tpl) !== '.handlebars') continue // Only compile handlebars
+  // Make sure the output dir exists so that node doesn't cry
   try {
-    // Read the file
-    let inTpl = fs.readFileSync(path.join(input, tpl), 'utf8')
-    // Compile
-    let compiled = handlebars.precompile(inTpl)
-    // The resultant file is basically a JavaScript function so to prevent strange
-    // effects simply append a ".js".
-    // ATTENTION! As the NodeJS function does NOT generate standalone files, we
-    // have to wrap this with module.exports to ensure it is possible to require
-    // the template at runtime!
-    fs.writeFileSync(path.join(output, `${tpl}.js`), `module.exports = ${compiled}`, 'utf8')
-    log.success(`Compiled ${tpl}!`)
+    fs.lstatSync(output)
   } catch (e) {
-    log.error(`Error compiling ${tpl}: ${e.message}`)
+    log.info(`Creating directory ${output} ...`)
+    fs.mkdirSync(output)
+  }
+
+  let templates = fs.readdirSync(input)
+
+  for (let tpl of templates) {
+    if (path.extname(tpl) !== '.handlebars') continue // Only compile handlebars
+    try {
+      // Read the file
+      let inTpl = fs.readFileSync(path.join(input, tpl), 'utf8')
+      // Compile
+      let compiled = handlebars.precompile(inTpl)
+      // The resultant file is basically a JavaScript function so to prevent strange
+      // effects simply append a ".js".
+      // ATTENTION! As the NodeJS function does NOT generate standalone files, we
+      // have to wrap this with module.exports to ensure it is possible to require
+      // the template at runtime!
+      fs.writeFileSync(path.join(output, `${tpl}.js`), `module.exports = ${compiled}`, 'utf8')
+      log.success(`Compiled ${tpl}!`)
+    } catch (e) {
+      log.error(`Error compiling ${tpl}: ${e.message}`)
+    }
   }
 }
