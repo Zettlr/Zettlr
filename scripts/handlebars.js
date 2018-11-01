@@ -7,9 +7,9 @@ const fs = require('fs')
 const path = require('path')
 const handlebars = require('handlebars')
 
-// What to copy?
+// What to copy? We only need the CommonJS-library.
 let runtimeInput = path.join(__dirname, '..', 'node_modules/handlebars/dist/cjs')
-let runtimeOutput = path.join(__dirname, '..', 'source/renderer/assets/handlebars-runtime/')
+let runtimeOutput = path.join(__dirname, '..', 'source/renderer/assets/handlebars/')
 
 log.info(`Starting Handlebars distribution ...`)
 log.info(`CWD: ${__dirname}\n`)
@@ -92,8 +92,8 @@ log.success(`Done copying!`)
 
 // Now precompile all templates.
 log.info(`Compiling templates ...`)
-let input = path.join(__dirname, '..', 'resources/handlebars-tpl')
-let output = path.join(__dirname, '..', 'source/renderer/assets/handlebars-tpl')
+let input = path.join(__dirname, '..', 'resources/dialog-tpl-source')
+let output = path.join(__dirname, '..', 'source/renderer/assets/dialog-tpl')
 
 let templates = fs.readdirSync(input)
 

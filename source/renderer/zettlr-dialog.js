@@ -14,7 +14,7 @@
  */
 
 const tippy = require('tippy.js')
-const handlebars = require('./assets/handlebars-runtime/handlebars.runtime.js')
+const handlebars = require('./assets/handlebars/handlebars.runtime.js')
 const Chart = require('chart.js')
 const { trans } = require('../common/lang/i18n.js')
 const SUPPORTED_PAPERTYPES = require('../common/data.json').papertypes
@@ -330,7 +330,7 @@ class ZettlrDialog {
   _get (template, replacements = []) {
     // Require the template and process it. Then we only need to call tpl with
     // our preferences object, et voilà!
-    let precompiled = require(`./assets/handlebars-tpl/dialog-${template}.handlebars.js`)
+    let precompiled = require(`./assets/dialog-tpl/${template}.handlebars.js`)
     // Process the template and directly call it to only return the HTML
     return handlebars.template(precompiled)(replacements)
   }
