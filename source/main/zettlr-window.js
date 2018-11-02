@@ -315,7 +315,7 @@ class ZettlrWindow {
     * The currently opened file's contents have changed on disk -- reload?
     * @return {Integer} 0 (Do not replace the file) or 1 (Replace the file)
     */
-  askReplaceFile () {
+  askReplaceFile (callback) {
     let options = {
       type: 'question',
       title: trans('system.replace_file_title'),
@@ -328,15 +328,8 @@ class ZettlrWindow {
       defaultId: 1
     }
 
-    let ret = dialog.showMessageBox(this._win, options)
-
-    // ret can have three status: cancel = 0, save = 1, omit = 2.
-    // To keep up with semantics, the function "askSaveChanges" would
-    // naturally return "true" if the user wants to save changes and "false"
-    // - so how deal with "omit" changes?
-    // Well I don't want to create some constants so let's just leave it
-    // with these three values.
-    return (ret === 1)
+    // Asynchronous message box to not block the main process
+    dialog.showMessageBox(this._win, options, callback)
   }
 
   /**

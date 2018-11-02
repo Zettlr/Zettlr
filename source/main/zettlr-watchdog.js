@@ -49,9 +49,10 @@ class ZettlrWatchdog {
     this._paths = paths
     this._bootuppaths = []
 
-    // Inject a global function for ease of access
+    // Inject global functions for ease of access
     global.watchdog = {
-      addPath: (p) => { this.addPath(p) }
+      addPath: (p) => { this.addPath(p) },
+      ignoreNext: (event, path) => { this.ignoreNext(event, path) }
     }
   }
 

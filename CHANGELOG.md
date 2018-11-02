@@ -37,6 +37,7 @@
 - Now the current directory is re-set correctly after renaming the current directory.
 - Refactored the context menu to resemble the same structure as the application menu.
 - Switched to the `handlebars.js` templating engine.
+- The `askSaveFile()`-dialog is now non-blocking.
 
 # 0.20.0
 

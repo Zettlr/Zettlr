@@ -70,7 +70,7 @@ class ZettlrFile {
 
     if (this.isRoot()) {
       // We have to add our file to the watchdog
-      this.parent.getWatchdog().addPath(this.path)
+      global.watchdog.addPath(this.path)
     }
   }
 
@@ -307,10 +307,9 @@ class ZettlrFile {
   /**
     * Renames the file on disk
     * @param  {string} name The new name (not path!)
-    * @param {ZettlrWatchdog} [watchdog=null] The watchdog instance to ignore the events if possible
     * @return {ZettlrFile}      this for chainability.
     */
-  rename (name, watchdog = null) {
+  rename (name) {
     name = sanitize(name, { replacement: '-' })
 
     // Rename this file.
@@ -327,11 +326,8 @@ class ZettlrFile {
     this.name = name
     let newpath = path.join(path.dirname(this.path), this.name)
 
-    // If the watchdog is given, ignore the generated events pre-emptively
-    if (watchdog != null) {
-      watchdog.ignoreNext('unlink', this.path)
-      watchdog.ignoreNext('add', newpath)
-    }
+    global.watchdog.ignoreNext('unlink', this.path)
+    global.watchdog.ignoreNext('add', newpath)
     fs.renameSync(this.path, newpath)
     this.path = newpath
     this.hash = hash(this.path)

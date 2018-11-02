@@ -59,11 +59,7 @@ class Zettlr {
     this._openPaths = []
 
     // INTERNAL OBJECTS
-    this.window = null // Display content
-    this.ipc = null // Communicate with said content
     this.app = parentApp // Internal pointer to app object
-    this.config = null // Configuration file handler
-    this.watchdog = null // Watchdog object
 
     this.config = new ZettlrConfig(this)
     // Init translations
@@ -126,12 +122,18 @@ class Zettlr {
             } else if (isCurrentFile && (e === 'change') && changed) {
               // Current file has changed -> ask to replace and do
               // as the user wishes)
-              if (this.getWindow().askReplaceFile()) {
-                this.ipc.send('file-open', this.getCurrentFile().withContent())
-              }
-            }
-          }
-        }
+              this.getWindow().askReplaceFile((ret) => {
+                // ret can have three status: cancel = 0, save = 1, omit = 2.
+                // To keep up with semantics, the function "askSaveChanges" would
+                // naturally return "true" if the user wants to save changes and "false"
+                // - so how deal with "omit" changes?
+                // Well I don't want to create some constants so let's just leave it
+                // with these three values.
+                if (ret === 1) this.ipc.send('file-open', this.getCurrentFile().withContent())
+              })
+            } // end if current file changed
+          } // end if is scope
+        } // end for
       })
 
       // flush all changes so they aren't processed again next cycle
@@ -307,7 +309,7 @@ class Zettlr {
 
     // Create the file
     try {
-      file = dir.newfile(arg.name, this.watchdog)
+      file = dir.newfile(arg.name)
     } catch (e) {
       return this.window.prompt({
         type: 'error',
@@ -337,7 +339,7 @@ class Zettlr {
     }
 
     try {
-      dir = curdir.newdir(arg.name, this.watchdog)
+      dir = curdir.newdir(arg.name)
     } catch (e) {
       return this.window.prompt({
         type: 'error',
@@ -648,7 +650,7 @@ class Zettlr {
       // Current file should be renamed.
       file = this.getCurrentFile()
       oldpath = file.path
-      file.rename(arg.name, this.getWatchdog())
+      file.rename(arg.name)
 
       // Adapt window title (manually trigger a fileUpdate)
       this.window.fileUpdate()
@@ -656,7 +658,7 @@ class Zettlr {
       // Non-open file should be renamed.
       file = this.findFile({ 'hash': parseInt(arg.hash) })
       oldpath = file.path
-      file.rename(arg.name, this.getWatchdog()) // Done.
+      file.rename(arg.name) // Done.
     }
 
     // A root has been renamed -> reflect in openPaths
@@ -868,7 +870,7 @@ class Zettlr {
         }
         return
       }
-      file = this.getCurrentDir().newfile(null, this.watchdog)
+      file = this.getCurrentDir().newfile(null)
     } else {
       let f = this.getCurrentFile()
       if (f == null) {

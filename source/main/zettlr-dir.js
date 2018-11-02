@@ -85,7 +85,7 @@ class ZettlrDir {
 
     if (this.isRoot()) {
       // We have to add our dir to the watchdog
-      this.parent.getWatchdog().addPath(this.path)
+      global.watchdog.addPath(this.path)
     }
   }
 
@@ -240,10 +240,9 @@ class ZettlrDir {
   /**
     * Create a new file in this directory.
     * @param  {String} name The new name, if given
-    * @param {ZettlrWatchdog} [watchdog=null] The optional watchdog instance
     * @return {ZettlrFile}             The newly created file.
     */
-  newfile (name, watchdog = null) {
+  newfile (name) {
     if (name == null) {
       // Generate a unique new name
       name = generateName()
@@ -265,10 +264,8 @@ class ZettlrDir {
       throw new DirectoryError(trans('system.error.file_exists'))
     }
 
-    // If we got the watchdog instance, ignore the creation event
-    if (typeof watchdog === 'object' && watchdog.hasOwnProperty('ignoreNext')) {
-      watchdog.ignoreNext('add', path.join(this.path, name))
-    }
+    // Ignore the creation event
+    global.watchdog.ignoreNext('add', path.join(this.path, name))
 
     // Create a new file.
     let f = new ZettlrFile(this, path.join(this.path, name))
