@@ -38,6 +38,7 @@
 - Refactored the context menu to resemble the same structure as the application menu.
 - Switched to the `handlebars.js` templating engine.
 - The `askSaveFile()`-dialog is now non-blocking.
+- `ZettlrFile` objects won't forcefully try to move a file to trash while handling watchdog events anymore.
 
 # 0.20.0
 

@@ -464,7 +464,7 @@ class Zettlr {
       // Tell main & renderer to close file references
       this.setCurrentFile(null)
     }
-    file.remove()
+    file.remove(true) // Also move the file to the trash
     this.ipc.send('paths-update', this.getPathDummies())
   }
 

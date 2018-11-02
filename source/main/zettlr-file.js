@@ -294,10 +294,11 @@ class ZettlrFile {
 
   /**
     * Removes the file from disk and also from containing dir.
+    * @param {Boolean} force Should the model also move the file to the trash?
     * @return {Boolean} The return value of the remove operation on parent
     */
-  remove () {
-    shell.moveItemToTrash(this.path)
+  remove (force = false) {
+    if (force) shell.moveItemToTrash(this.path)
     // Notify the virtual directories that this file is now in the trash
     // (also a virtual directory, but not quite the same).
     this.removeFromVD()
