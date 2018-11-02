@@ -1,0 +1,28 @@
+<table>
+  <tr>
+    <td style="text-align:right"><strong>{{words}}</strong></td>
+    <td>{{i18n 'gui.file_words'}}</td>
+  </tr>
+  <tr>
+    <td style="text-align:right"><strong>{{chars}}</strong></td>
+    <td>{{i18n 'gui.file_chars'}}</td>
+  </tr>
+  <tr>
+    <td style="text-align:right"><strong>{{chars_wo_spaces}}</strong></td>
+    <td>{{i18n 'gui.file_chars_wo_spaces'}}</td>
+  </tr>
+
+  {{#if words_sel}}
+  <tr>
+    <td style="text-align:right"><strong>{{words_sel}}</strong></td>
+    <td>{{i18n 'gui.file_words_sel'}}</td>
+  </tr>
+  {{/if}}
+
+  {{#if chars_sel}}
+  <tr>
+    <td style="text-align:right"><strong>{{chars_sel}}</strong></td>
+    <td>{{i18n 'gui.file_chars_sel'}}</td>
+  </tr>
+  {{/if}}
+</table>

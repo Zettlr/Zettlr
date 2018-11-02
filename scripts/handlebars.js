@@ -3,7 +3,7 @@
 // be shipped to save space).
 
 const log = require('./console-colour.js') // Colourful output
-const copyRecursive = require('./copy-recoursive.js')
+const copyRecursive = require('./copy-recursive.js')
 const fs = require('fs')
 const path = require('path')
 const handlebars = require('handlebars')
@@ -21,8 +21,16 @@ let tplPaths = []
 tplPaths.push(
   // Dialog templates
   {
-    'input': path.join(__dirname, '..', 'resources/dialog-tpl-source'),
-    'output': path.join(__dirname, '..', 'source/renderer/assets/dialog-tpl')
+    'input': path.join(__dirname, '..', 'resources/templates/dialog'),
+    'output': path.join(__dirname, '..', 'source/renderer/assets/tpl/dialog')
+  },
+  {
+    'input': path.join(__dirname, '..', 'resources/templates/other'),
+    'output': path.join(__dirname, '..', 'source/renderer/assets/tpl/other')
+  },
+  {
+    'input': path.join(__dirname, '..', 'resources/templates/popup'),
+    'output': path.join(__dirname, '..', 'source/renderer/assets/tpl/popup')
   }
   // TODO: Popup templates
 )

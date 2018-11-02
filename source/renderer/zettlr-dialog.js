@@ -14,7 +14,7 @@
  */
 
 const tippy = require('tippy.js')
-const handlebars = require('./assets/handlebars/handlebars.runtime.js')
+const makeTemplate = require('./zettlr-template.js')
 const Chart = require('chart.js')
 const { trans } = require('../common/lang/i18n.js')
 const SUPPORTED_PAPERTYPES = require('../common/data.json').papertypes
@@ -54,37 +54,6 @@ class ZettlrDialog {
     this._dlg = null
     this._statsData = []
     this._statsLabels = []
-
-    // Allow easy translation
-    handlebars.registerHelper('i18n', function (str, str2 = undefined) {
-      // Return a SafeString, so that handlebars doesn't escape potential strong-tags etc.
-      let second = (str2 && typeof str2 === 'string') ? str2 : ''
-      return new handlebars.SafeString(trans(`dialog.${str}${second}`))
-    })
-
-    // Allow operator if-clauses, thanks to https://stackoverflow.com/a/16315366!
-    handlebars.registerHelper('ifCond', function (v1, op, v2, options) {
-      switch (op) {
-        case '=':
-          return (v1 === v2) ? options.fn(this) : options.inverse(this)
-        case '!=':
-          return (v1 !== v2) ? options.fn(this) : options.inverse(this)
-        case '<':
-          return (v1 < v2) ? options.fn(this) : options.inverse(this)
-        case '<=':
-          return (v1 <= v2) ? options.fn(this) : options.inverse(this)
-        case '>':
-          return (v1 > v2) ? options.fn(this) : options.inverse(this)
-        case '>=':
-          return (v1 >= v2) ? options.fn(this) : options.inverse(this)
-        case '&&':
-          return (v1 && v2) ? options.fn(this) : options.inverse(this)
-        case '||':
-          return (v1 || v2) ? options.fn(this) : options.inverse(this)
-        default:
-          return options.inverse(this)
-      }
-    })
   }
 
   /**
@@ -221,9 +190,16 @@ class ZettlrDialog {
         throw new DialogError(trans('dialog.error.unknown_dialog', dialog))
     }
 
-    console.log(obj)
+    let tpl = makeTemplate('dialog', dialog, obj)
 
-    this._modal.html(this._get(dialog, obj))
+    // It may be that something goes wrong requiring the template. In this case
+    // fail silently.
+    if (!tpl) {
+      console.error(`Could not load template for dialog ${dialog}!`)
+      return this.close()
+    }
+
+    this._modal.html(tpl)
 
     return this
   }
@@ -319,64 +295,6 @@ class ZettlrDialog {
     } // END initiate canvas
 
     return this
-  }
-
-  /**
-    * Reads and return a template file, applying replacements if given
-    * @param  {String} template          The template to load
-    * @param  {Array}  [replacements=[]] Replacement table for variables
-    * @return {String}                   Returns the template with replaced vars.
-    */
-  _get (template, replacements = []) {
-    // Require the template and process it. Then we only need to call tpl with
-    // our preferences object, et voilà!
-    let precompiled = require(`./assets/dialog-tpl/${template}.handlebars.js`)
-    // Process the template and directly call it to only return the HTML
-    return handlebars.template(precompiled)(replacements)
-  }
-
-  /**
-    * This function creates a replacement table for all language strings that
-    * should be translated.
-    * @param  {String} text The string in which i18n strings should be replaced.
-    * @return {String}      The text with translation strings replaced.
-    */
-  _getLanguageTable (text) {
-    // How it works: In the template files are replacement strings in the
-    // following format:
-    // %i18n.<dialog>.<stringidentifier>%
-    // Benefit: We can programmatically create the array based on the
-    // JSON values of trans, because the i18n-placeholder exactly matches
-    // a string!
-
-    let replacements = []
-
-    // First find all i18n-strings
-    let regex = /%i18n\.(.+?)%/g
-    let result
-    let i18nStrings = []
-    while ((result = regex.exec(text)) != null) {
-      i18nStrings.push(result[0])
-    }
-
-    for (let str of i18nStrings) {
-      let langOpt = str.substr(0, str.length - 1).split('.').slice(1) // Omit first index
-      let obj = global.i18n.dialog
-
-      for (let x of langOpt) {
-        // Navigate into the object
-        if (obj.hasOwnProperty(x)) {
-          obj = obj[x]
-        } else {
-          // Doesn't exist, throw back the string itself
-          obj = langOpt.join('.')
-          break
-        }
-      }
-      replacements.push(str + '|' + obj)
-    }
-
-    return replacements
   }
 
   /**

@@ -5,5 +5,5 @@
 !pandoc
 !less
 !screenshots
-!dialog-tpl-source
+!templates
 !.gitignore

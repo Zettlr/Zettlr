@@ -5,83 +5,83 @@ pdf.lmargin<div class="dialog">
         <input type="hidden" name="projectHash" value="{{hash}}">
         <div id="prefs-tabs" class="clear">
             <ul>
-                <li><a href="#prefs-tabs-general">{{i18n "preferences.pdf.metadata"}}</a></li>
-                <li><a href="#prefs-tabs-page">{{i18n "preferences.pdf.page"}}</a></li>
-                <li><a href="#prefs-tabs-font">{{i18n "preferences.pdf.font"}}</a></li>
+                <li><a href="#prefs-tabs-general">{{i18n "dialog.preferences.pdf.metadata"}}</a></li>
+                <li><a href="#prefs-tabs-page">{{i18n "dialog.preferences.pdf.page"}}</a></li>
+                <li><a href="#prefs-tabs-font">{{i18n "dialog.preferences.pdf.font"}}</a></li>
             </ul>
             <!-- Metadata for PDF files -->
             <div id="prefs-tabs-general">
-                <p>{{i18n "preferences.pdf.metadata_intro"}}</p>
+                <p>{{i18n "dialog.preferences.pdf.metadata_intro"}}</p>
                 <div class="box-left">
-                    <label for="title">{{i18n "preferences.project.title_label"}}</label>
-                    <input type="text" name="title" id="title" value="{{title}}" placeholder="{{i18n "preferences.project.title_label"}}">
-                    <label for="pdf.author">{{i18n "preferences.pdf.author_label"}}</label>
-                    <input type="text" name="pdf.author" id="pdf.author" value="{{pdf.author}}" placeholder="{{i18n "preferences.pdf.author"}}">
-                    <label for="pdf.keywords">{{i18n "preferences.pdf.keywords_label"}}</label>
-                    <input type="text" name="pdf.keywords" if="pdf.keywords" value="{{pdf.keywords}}" placeholder="{{i18n "preferences.pdf.keywords"}}">
+                    <label for="title">{{i18n "dialog.preferences.project.title_label"}}</label>
+                    <input type="text" name="title" id="title" value="{{title}}" placeholder="{{i18n "dialog.preferences.project.title_label"}}">
+                    <label for="pdf.author">{{i18n "dialog.preferences.pdf.author_label"}}</label>
+                    <input type="text" name="pdf.author" id="pdf.author" value="{{pdf.author}}" placeholder="{{i18n "dialog.preferences.pdf.author"}}">
+                    <label for="pdf.keywords">{{i18n "dialog.preferences.pdf.keywords_label"}}</label>
+                    <input type="text" name="pdf.keywords" if="pdf.keywords" value="{{pdf.keywords}}" placeholder="{{i18n "dialog.preferences.pdf.keywords"}}">
                 </div>
                 <div class="box-right">
                   <label class="cb-toggle">
                     <input type="checkbox" value="yes" name="pdf.titlepage" id="pdf.titlepage" {{#if pdf.titlepage}}checked="checked"{{/if}}>
                     <div class="toggle"></div>
                   </label>
-                    <label for="pdf.titlepage">{{i18n "preferences.pdf.titlepage_label"}}</label>
+                    <label for="pdf.titlepage">{{i18n "dialog.preferences.pdf.titlepage_label"}}</label>
                     <div class="clearfix"></div>
                     <label class="cb-toggle">
                       <input type="checkbox" value="yes" name="pdf.toc" id="pdf.toc" {{#if pdf.toc}}checked="checked"{{/if}}>
                       <div class="toggle"></div>
                     </label>
-                    <label for="pdf.toc">{{i18n "preferences.pdf.toc_label"}}</label>
+                    <label for="pdf.toc">{{i18n "dialog.preferences.pdf.toc_label"}}</label>
                     <select name="pdf.tocDepth">
                       {{#each availableTocLevels}}
                         <option value="{{this}}" {{#ifCond this '=' ../pdf.tocDepth}}selected="selected"{{/ifCond}}>{{this}}</option>
                       {{/each}}
                     </select>
                     <hr>
-                    <label for="format">{{i18n "preferences.project.format"}}</label>
+                    <label for="format">{{i18n "dialog.preferences.project.format"}}</label>
                     <select name="format">
                       {{#each availableExportFormats}}
                         <option value="{{this}}" {{#ifCond this '=' ../format}}selected="selected"{{/ifCond}}>{{this}}</option>
                       {{/each}}
                     </select>
                     <hr>
-                    <label for="cslStyle">{{i18n "preferences.project.csl_style"}}</label>
+                    <label for="cslStyle">{{i18n "dialog.preferences.project.csl_style"}}</label>
                     <input type="text" name="cslStyle" id="cslStyle" value="{{cslStyle}}">
                     <div class="clearfix"></div>
                 </div>
             </div>
             <!-- Page layout -->
             <div id="prefs-tabs-page">
-                <p>{{i18n "preferences.pdf.page_intro"}}</p>
+                <p>{{i18n "dialog.preferences.pdf.page_intro"}}</p>
                 <hr>
                 <div class="clear"></div>
                 <div class="box-left">
                     <div class="paper a4paper">
-                        <input class="tmargin" type="number" min="0" max="9999" step="0.1" name="pdf.tmargin" id="pdf.tmargin" value="{{pdf.tmargin}}" placeholder="{{i18n "preferences.pdf.tmargin"}}" data-tippy-content="{{i18n "preferences.pdf.tmargin_label"}}">
-                        <input class="rmargin" type="number" min="0" max="9999" step="0.1" name="pdf.rmargin" id="pdf.rmargin" value="{{pdf.rmargin}}" placeholder="{{i18n "preferences.pdf.rmargin"}}" data-tippy-content="{{i18n "preferences.pdf.rmargin_label"}}">
-                        <input class="bmargin" type="number" min="0" max="9999" step="0.1" name="pdf.bmargin" id="pdf.bmargin" value="{{pdf.bmargin}}" placeholder="{{i18n "preferences.pdf.bmargin"}}" data-tippy-content="{{i18n "preferences.pdf.bmargin_label"}}">
-                        <input class="lmargin" type="number" min="0" max="9999" step="0.1" name="pdf.lmargin" id="pdf.lmargin" value="{{pdf.lmargin}}" placeholder="{{i18n "preferences.pdf.lmargin"}}" data-tippy-content="{{i18n "preferences.pdf.lmargin_label"}}">
+                        <input class="tmargin" type="number" min="0" max="9999" step="0.1" name="pdf.tmargin" id="pdf.tmargin" value="{{pdf.tmargin}}" placeholder="{{i18n "dialog.preferences.pdf.tmargin"}}" data-tippy-content="{{i18n "dialog.preferences.pdf.tmargin_label"}}">
+                        <input class="rmargin" type="number" min="0" max="9999" step="0.1" name="pdf.rmargin" id="pdf.rmargin" value="{{pdf.rmargin}}" placeholder="{{i18n "dialog.preferences.pdf.rmargin"}}" data-tippy-content="{{i18n "dialog.preferences.pdf.rmargin_label"}}">
+                        <input class="bmargin" type="number" min="0" max="9999" step="0.1" name="pdf.bmargin" id="pdf.bmargin" value="{{pdf.bmargin}}" placeholder="{{i18n "dialog.preferences.pdf.bmargin"}}" data-tippy-content="{{i18n "dialog.preferences.pdf.bmargin_label"}}">
+                        <input class="lmargin" type="number" min="0" max="9999" step="0.1" name="pdf.lmargin" id="pdf.lmargin" value="{{pdf.lmargin}}" placeholder="{{i18n "dialog.preferences.pdf.lmargin"}}" data-tippy-content="{{i18n "dialog.preferences.pdf.lmargin_label"}}">
                     </div>
                 </div>
                 <div class="box-right">
-                    <label for="pdf.margin_unit">{{i18n "preferences.pdf.unit_label"}}</label>
+                    <label for="pdf.margin_unit">{{i18n "dialog.preferences.pdf.unit_label"}}</label>
                     <select name="pdf.margin_unit" id="pdf.margin_unit">
                       {{#each availableMarginUnits}}
                         <option value="{{this}}" {{#ifCond this '=' ../pdf.margin_unit}}selected="selected"{{/ifCond}}>{{this}}</option>
                       {{/each}}
                     </select>
                     <hr>
-                    <label for="pdf.papertype">{{i18n "preferences.pdf.papertype"}}</label>
+                    <label for="pdf.papertype">{{i18n "dialog.preferences.pdf.papertype"}}</label>
                     <select name="pdf.papertype">
                       {{#each supportedPapertypes}}
                         <option value="{{this}}" {{#ifCond this '=' ../pdf.papertype}}selected="selected"{{/ifCond}}>{{this}}</option>
                       {{/each}}
                     </select>
                     <hr>
-                    <label for="pdf.pagenumbering">{{i18n "preferences.pdf.pagenumbering_label"}}</label>
+                    <label for="pdf.pagenumbering">{{i18n "dialog.preferences.pdf.pagenumbering_label"}}</label>
                     <select name="pdf.pagenumbering">
                       {{#each availablePageNumberingSystems}}
-                        <option value="{{this}}" {{#ifCond this '=' ../pdf.pagenumbering}}selected="selected"{{/ifCond}}>{{i18n "preferences.pdf.pagenumbering_" this }}</option>
+                        <option value="{{this}}" {{#ifCond this '=' ../pdf.pagenumbering}}selected="selected"{{/ifCond}}>{{i18n "dialog.preferences.pdf.pagenumbering_" this }}</option>
                       {{/each}}
                     </select>
                 </div>
@@ -89,16 +89,16 @@ pdf.lmargin<div class="dialog">
             </div>
             <!-- Font options -->
             <div id="prefs-tabs-font">
-                <p>{{i18n "preferences.pdf.font_intro"}}</p>
+                <p>{{i18n "dialog.preferences.pdf.font_intro"}}</p>
                 <div class="box-left">
-                    <label for="pdf.mainfont">{{i18n "preferences.pdf.mainfont_label"}}</label>
-                    <input type="text" name="pdf.mainfont" id="mainfont" value="{{pdf.mainfont}}" placeholder="{{i18n "preferences.pdf.mainfont"}}">
-                    <label for="pdf.sansfont">{{i18n "preferences.pdf.sansfont_label"}}</label>
-                    <input type="text" name="pdf.sansfont" id="sansfont" value="{{pdf.sansfont}}" placeholder="{{i18n "preferences.pdf.sansfont"}}">
-                    <label for="pdf.fontsize">{{i18n "preferences.pdf.fontsize_label"}}</label>
-                    <input type="number" min="0" max="10000" step="1" name="pdf.fontsize" id="fontsize" value="{{pdf.fontsize}}" placeholder="{{i18n "preferences.pdf.fontsize"}}">
-                    <label for="pdf.lineheight">{{i18n "preferences.pdf.lineheight_label"}}</label>
-                    <input type="number" min="0" max="1000" step="1" name="pdf.lineheight" id="lineheight" value="{{pdf.lineheight}}" placeholder="{{i18n "preferences.pdf.lineheight"}}">
+                    <label for="pdf.mainfont">{{i18n "dialog.preferences.pdf.mainfont_label"}}</label>
+                    <input type="text" name="pdf.mainfont" id="mainfont" value="{{pdf.mainfont}}" placeholder="{{i18n "dialog.preferences.pdf.mainfont"}}">
+                    <label for="pdf.sansfont">{{i18n "dialog.preferences.pdf.sansfont_label"}}</label>
+                    <input type="text" name="pdf.sansfont" id="sansfont" value="{{pdf.sansfont}}" placeholder="{{i18n "dialog.preferences.pdf.sansfont"}}">
+                    <label for="pdf.fontsize">{{i18n "dialog.preferences.pdf.fontsize_label"}}</label>
+                    <input type="number" min="0" max="10000" step="1" name="pdf.fontsize" id="fontsize" value="{{pdf.fontsize}}" placeholder="{{i18n "dialog.preferences.pdf.fontsize"}}">
+                    <label for="pdf.lineheight">{{i18n "dialog.preferences.pdf.lineheight_label"}}</label>
+                    <input type="number" min="0" max="1000" step="1" name="pdf.lineheight" id="lineheight" value="{{pdf.lineheight}}" placeholder="{{i18n "dialog.preferences.pdf.lineheight"}}">
                 </div>
                 <div class="box-right">
                     <!-- This is the preview tab. It shows how everything will look afterwards. -->
@@ -118,8 +118,8 @@ pdf.lmargin<div class="dialog">
             </div>
         </div>
         <div class="clearfix">
-            <button type="submit" id="pref-save">{{i18n "preferences.save"}}</button>
-            <button id="abort">{{i18n "preferences.cancel"}}</button>
+            <button type="submit" id="pref-save">{{i18n "dialog.preferences.save"}}</button>
+            <button id="abort">{{i18n "dialog.preferences.cancel"}}</button>
             <span class="error-info"></span>
         </div>
     </form>

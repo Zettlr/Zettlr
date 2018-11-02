@@ -21,6 +21,7 @@ const ZettlrQuicklook = require('./zettlr-quicklook.js')
 const ZettlrNotification = require('./zettlr-notification.js')
 const ZettlrValidation = require('../common/zettlr-validation.js')
 const popup = require('./zettlr-popup.js')
+const makeTemplate = require('./zettlr-template.js')
 
 const { trans } = require('../common/lang/i18n.js')
 const { localiseNumber } = require('../common/zettlr-helpers.js')
@@ -87,11 +88,10 @@ class ZettlrBody {
       return // No directory selected.
     }
 
-    let cnt = $('<div>').html(
-      `<form action="#" method="GET">
-        <input type="text" class="small" value="${trans('dialog.file_new.value')}" placeholder="${trans('dialog.file_new.placeholder')}" name="name" required>
-      </form>`
-    )
+    let cnt = makeTemplate('popup', 'textfield', {
+      'val': trans('dialog.file_new.value'),
+      'placeholder': trans('dialog.file_new.placeholder')
+    })
 
     popup($('.button.file-new'), cnt, (form) => {
       if (form) {
@@ -110,11 +110,10 @@ class ZettlrBody {
       return // No directory selected.
     }
 
-    let cnt = $('<div>').html(
-      `<form action="#" method="GET">
-        <input type="text" class="small" value="${trans('dialog.dir_new.value')}" placeholder="${trans('dialog.dir_new.placeholder')}" name="name" required>
-      </form>`
-    )
+    let cnt = makeTemplate('popup', 'textfield', {
+      'val': trans('dialog.dir_new.value'),
+      'placeholder': trans('dialog.dir_new.placeholder')
+    })
 
     popup($('.button.directory-new'), cnt, (form) => {
       if (form) {
@@ -133,11 +132,10 @@ class ZettlrBody {
       return // No directory selected.
     }
 
-    let cnt = $('<div>').html(
-      `<form action="#" method="GET">
-        <input type="text" class="small" value="${trans('dialog.dir_new.value')}" placeholder="${trans('dialog.dir_new.placeholder')}" name="name" required>
-      </form>`
-    )
+    let cnt = makeTemplate('popup', 'textfield', {
+      'val': trans('dialog.dir_new.value'),
+      'placeholder': trans('dialog.dir_new.placeholder')
+    })
 
     popup($(`[data-hash=${dir.hash}]`), cnt, (form) => {
       if (form) {
@@ -153,11 +151,10 @@ class ZettlrBody {
     */
   requestNewDirName (dir) {
     let elem = $('#directories').find('li[data-hash="' + dir.hash + '"]').first()
-    let cnt = $('<div>').html(
-      `<form action="#" method="GET">
-        <input type="text" class="small" value="${dir.name}" placeholder="${trans('dialog.dir_rename.placeholder')}" name="name" required>
-      </form>`
-    )
+    let cnt = makeTemplate('popup', 'textfield', {
+      'val': dir.name,
+      'placeholder': trans('dialog.dir_rename.placeholder')
+    })
 
     popup(elem, cnt, (form) => {
       if (form) {
@@ -183,11 +180,10 @@ class ZettlrBody {
       }
     }
 
-    let cnt = $('<div>').html(
-      `<form action="#" method="GET">
-        <input type="text" class="small" value="${file.name}" placeholder="${trans('dialog.file_rename.placeholder')}" name="name" required>
-      </form>`
-    )
+    let cnt = makeTemplate('popup', 'textfield', {
+      'val': file.name,
+      'placeholder': trans('dialog.file_rename.placeholder')
+    })
 
     popup(elem, cnt, (form) => {
       if (form) {
@@ -202,30 +198,16 @@ class ZettlrBody {
     */
   showFileInfo () {
     let info = this._renderer.getEditor().getFileInfo()
-    let cnt = `
-        <table>
-        <tr>
-            <td style="text-align:right"><strong>${localiseNumber(info.words)}</strong></td><td>${trans('gui.file_words')}</td>
-        </tr>
-        <tr>
-            <td style="text-align:right"><strong>${localiseNumber(info.chars)}</strong></td><td>${trans('gui.file_chars')}</td>
-        </tr>
-        <tr>
-            <td style="text-align:right"><strong>${localiseNumber(info.chars_wo_spaces)}</strong></td><td>${trans('gui.file_chars_wo_spaces')}</td>
-        </tr>`
 
-    if (info.words_sel && info.chars_sel) {
-      cnt += `
-            <tr>
-                <td style="text-align:right"><strong>${localiseNumber(info.words_sel)}</strong></td><td>${trans('gui.file_words_sel')}</td>
-            </tr>
-            <tr>
-                <td style="text-align:right"><strong>${localiseNumber(info.chars_sel)}</strong></td><td>${trans('gui.file_chars_sel')}</td>
-            </tr>`
+    let data = {
+      'words': localiseNumber(info.words),
+      'chars': localiseNumber(info.chars),
+      'chars_wo_spaces': localiseNumber(info.chars_wo_spaces),
+      'words_sel': (info.words_sel) ? localiseNumber(info.words_sel) : null,
+      'chars_sel': (info.chars_sel) ? localiseNumber(info.chars_sel) : null
     }
 
-    cnt += `</table>`
-
+    let cnt = makeTemplate('popup', 'file-info', data)
     return popup($('#toolbar .file-info'), cnt)
   }
 
@@ -233,15 +215,7 @@ class ZettlrBody {
     * Display a popup containing the list of the most recent documents used during this session
     */
   showRecentDocuments () {
-    if (this._recentDocs.length === 0) {
-      return popup($('#toolbar .recent-docs'), '<p>' + trans('gui.no_recent_docs') + '</p>')
-    }
-
-    let cnt = '<div class="recent-docs">\n'
-    for (let doc of this._recentDocs) {
-      cnt += `<a href="#" data-hash="${doc.hash}" title="${doc.name}">${doc.name}</a>\n`
-    }
-    cnt += '</div>'
+    let cnt = makeTemplate('popup', 'recent-docs', this._recentDocs)
 
     let p = popup($('#toolbar .recent-docs'), cnt)
 
@@ -350,47 +324,14 @@ class ZettlrBody {
   /**
     * Opens the exporting popup
     * @param  {ZettlrFile} file Which file should be exported?
-    * @return {void}      Nothing to return.
+    * @return {ZettlrBody}      Chainability.
     */
   displayExport (file) {
     // Create a popup
-    let cnt = $('<div>').html(
-      `
-      <div class="row">
-          <div class="btn-share htm" title="${trans('dialog.export.alt_html')}" data-ext="html" data-hash="${file.hash}">HTML</div>
-          <div class="btn-share pdf" title="${trans('dialog.export.alt_pdf')}" data-ext="pdf" data-hash="${file.hash}">PDF</div>
-          <div class="btn-share odt" title="${trans('dialog.export.alt_odt')}" data-ext="odt" data-hash="${file.hash}">ODT</div>
-          <div class="btn-share docx" title="${trans('dialog.export.alt_docx')}" data-ext="docx" data-hash="${file.hash}">DOCX</div>
-      </div>
-      <div class="row">
-          <div class="btn-share revealjs" title="reveal.js Presentation"></div>
-          <div class="btn-share rst" title="reStructuredText" data-ext="rst" data-hash="${file.hash}">rST</div>
-          <div class="btn-share rtf" title="Rich Text Format" data-ext="rtf" data-hash="${file.hash}">RTF</div>
-          <div class="btn-share tex" title="LaTeX" data-ext="latex" data-hash="${file.hash}">TeX</div>
-      </div>
-      <!-- This row's visibility will be toggled by clicking the reveal.js button -->
-      <div id="reveal-themes" class="hidden">
-          <div class="row">
-              <div class="btn-share revealjs-black" title="Black" data-ext="revealjs-black" data-hash="${file.hash}"></div>
-              <div class="btn-share revealjs-moon" title="Moon" data-ext="revealjs-moon" data-hash="${file.hash}"></div>
-              <div class="btn-share revealjs-league" title="League" data-ext="revealjs-league" data-hash="${file.hash}"></div>
-              <div class="btn-share revealjs-sky" title="Sky" data-ext="revealjs-sky" data-hash="${file.hash}"></div>
-          </div>
-          <div class="row">
-              <div class="btn-share revealjs-beige" title="Beige" data-ext="revealjs-beige" data-hash="${file.hash}"></div>
-              <div class="btn-share revealjs-solarized" title="Solarized" data-ext="revealjs-solarized" data-hash="${file.hash}"></div>
-              <div class="btn-share revealjs-serif" title="Serif" data-ext="revealjs-serif" data-hash="${file.hash}"></div>
-              <div class="btn-share revealjs-white" title="White" data-ext="revealjs-white" data-hash="${file.hash}"></div>
-          </div>
-      </div> <!-- END #reveal-themes -->
-      <div class="row">
-          <div class="btn-share plain" title="Text" data-ext="plain" data-hash="${file.hash}">TXT</div>
-          <div class="btn-share org" title="Emacs Org" data-ext="org" data-hash="${file.hash}">ORG</div>
-          <div class="btn-share textile" title="Textile" data-ext="textile" data-hash="${file.hash}">Txtl</div>
-          <div class="btn-share mediawiki" title="MediaWiki" data-ext="mediawiki" data-hash="${file.hash}">mWiki</div>
-      </div>
-      `
-    )
+
+    let cnt = makeTemplate('popup', 'export', { 'hash': file.hash })
+    if (!cnt) return this
+
     let p = popup($('.button.share'), cnt)
 
     $('.btn-share').click((e) => {
@@ -471,8 +412,7 @@ class ZettlrBody {
       return
     }
 
-    let cnt = `<form class="search"><input type="text" placeholder="${trans('gui.find_placeholder')}" value="" id="searchWhat"><button id="searchNext">${trans('gui.find_label')}</button><br>
-        <input type="text" placeholder="${trans('gui.replace_placeholder')}" value="" id="replaceWhat"><button id="replaceNext">${trans('gui.replace_label')}</button><button id="replaceAll">${trans('gui.replace_all_label')}</button></form>`
+    let cnt = makeTemplate('popup', 'find')
 
     // This must be a persistent popup
     popup($('.button.find'), cnt, (x) => {
@@ -516,33 +456,7 @@ class ZettlrBody {
     * Displays a popup containing all formattings
     */
   displayFormatting () {
-    let cnt = `
-        <div class="formatting">
-        <a href="#" class="markdownHeading1" id="header-formatting">
-        <span class="markdownHeading1">#</span>
-        <span class="markdownHeading2">#</span>
-        <span class="markdownHeading3">#</span>
-        <span class="markdownHeading4">#</span>
-        <span class="markdownHeading5">#</span>
-        <span class="markdownHeading6">#</span>
-        </a>
-        <hr>
-        <a href="#" class="markdownBold">${trans('gui.formatting.bold')}</a>
-        <a href="#" class="markdownItalic">${trans('gui.formatting.italic')}</a>
-        <a href="#" class="markdownCode">${trans('gui.formatting.code')}</a>
-        <hr>
-        <a href="#" class="markdownLink">${trans('gui.formatting.link')}</a>
-        <a href="#" class="markdownImage">${trans('gui.formatting.image')}</a>
-        <hr>
-        <a href="#" class="markdownBlockquote">${trans('gui.formatting.blockquote')}</a>
-        <a href="#" class="markdownMakeOrderedList">${trans('gui.formatting.ol')}</a>
-        <a href="#" class="markdownMakeUnorderedList">${trans('gui.formatting.ul')}</a>
-        <hr>
-        <a href="#" class="markdownDivider">${trans('gui.formatting.divider')}</a>
-        <hr>
-        <a href="#" class="insertFootnote">${trans('gui.formatting.footnote')}</a>
-        <a href="#" class="removeFootnote">${trans('gui.formatting.remove_footnote')}</a>
-        </div>`
+    let cnt = makeTemplate('popup', 'format')
     let p = popup($('.button.formatting'), cnt)
 
     $('.formatting #header-formatting').on('mousemove', (e) => {
@@ -593,18 +507,6 @@ class ZettlrBody {
     let ext = $(elem).attr('data-ext')
     let hash = $(elem).attr('data-hash')
     this._renderer.requestExport(hash, ext)
-  }
-
-  /**
-    * Simply set the spellchecking languages. Needed for the preferences.
-    * @param {array} langs An array containing all supported languages.
-    */
-  setSpellcheckLangs (langs) {
-    this._spellcheckLangs = {}
-    for (let l in langs) {
-      // Default to false, will only be overwritten if a language is checked
-      this._spellcheckLangs[l] = false
-    }
   }
 
   // This function gets only called by the dialog class with an array
@@ -716,7 +618,6 @@ class ZettlrBody {
       return // Don't try to update falsy settings.
     }
 
-    // TODO tomorrow: Make main handle these new things correctly!
     // Send the ready configuration back to main.
     if (dialog === 'preferences') {
       this._renderer.saveSettings(cfg)

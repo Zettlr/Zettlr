@@ -33,7 +33,7 @@ class ZettlrToolbar {
     this._div = $('#toolbar')
     this._build()
     this._searchbar = this._div.find('.searchbar').first().find('input').first()
-    this._searchbar.attr('placeholder', trans('gui.find_placeholder'))
+    this._searchbar.attr('placeholder', trans('dialog.find.find_placeholder'))
     this._fileInfo = this._div.find('.file-info')
 
     // Create the progress indicator circle and insert it hidden

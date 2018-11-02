@@ -1,0 +1,7 @@
+<div class="recent-docs">
+  {{#each this}}
+  <a href="#" data-hash="{{hash}}" title="{{name}}">{{name}}</a>
+  {{else}}
+  <p>{{i18n 'gui.no_recent_docs'}}</p>
+  {{/each}}
+</div>

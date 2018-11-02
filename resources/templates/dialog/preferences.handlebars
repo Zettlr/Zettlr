@@ -1,21 +1,21 @@
 <div class="dialog">
-  <h1>{{i18n "preferences.title"}}</h1>
+  <h1>{{i18n "dialog.preferences.title"}}</h1>
   <form  action="" method="GET" id="dialog">
     <div id="prefs-tabs">
       <ul>
-        <li><a href="#prefs-tabs-general">{{i18n "preferences.general"}}</a></li>
-        <li><a href="#prefs-tabs-editor">{{i18n "preferences.editor"}}</a></li>
-        <li><a href="#prefs-tabs-export">{{i18n "preferences.export.title"}}</a></li>
-        <li><a href="#prefs-tabs-zkn">{{i18n "preferences.zkn.title"}}</a></li>
-        <li><a href="#prefs-tabs-advanced">{{i18n "preferences.advanced"}}</a></li>
+        <li><a href="#prefs-tabs-general">{{i18n "dialog.preferences.general"}}</a></li>
+        <li><a href="#prefs-tabs-editor">{{i18n "dialog.preferences.editor"}}</a></li>
+        <li><a href="#prefs-tabs-export">{{i18n "dialog.preferences.export.title"}}</a></li>
+        <li><a href="#prefs-tabs-zkn">{{i18n "dialog.preferences.zkn.title"}}</a></li>
+        <li><a href="#prefs-tabs-advanced">{{i18n "dialog.preferences.advanced"}}</a></li>
       </ul>
       <!-- General settings -->
       <div id="prefs-tabs-general">
-        <label for="app-lang">{{i18n "preferences.app_lang.title"}}
+        <label for="app-lang">{{i18n "dialog.preferences.app_lang.title"}}
         </label>
         <select name="app_lang" id="app-lang">
           {{#each supportedLangs}}
-            <option value="{{this}}" {{#ifCond this '=' ../app_lang}}selected="selected"{{/ifCond}}>{{i18n "preferences.app_lang." this}}</option>
+            <option value="{{this}}" {{#ifCond this '=' ../app_lang}}selected="selected"{{/ifCond}}>{{i18n "dialog.preferences.app_lang." this}}</option>
           {{/each}}
         </select>
         <div class="cb-group">
@@ -23,50 +23,50 @@
             <input type="checkbox" name="darkTheme" value="yes" id="darkTheme" {{#if darkTheme}}checked="checked"{{/if}}>
             <div class="toggle"></div>
           </label>
-          <label for="darkTheme">{{i18n "preferences.nightmode"}}</label>
+          <label for="darkTheme">{{i18n "dialog.preferences.nightmode"}}</label>
         </div>
         <div class="cb-group">
           <label class="cb-toggle">
             <input type="checkbox" name="snippets" value="yes" id="snippets" {{#if snippets}}checked="checked"{{/if}}>
             <div class="toggle"></div>
           </label>
-          <label for="snippets">{{i18n "preferences.snippets"}}</label>
+          <label for="snippets">{{i18n "dialog.preferences.snippets"}}</label>
         </div>
         <hr>
         <p>
-          {{i18n "preferences.combiner_explanation"}}
+          {{i18n "dialog.preferences.combiner_explanation"}}
         </p>
         <div class="cb-group">
           <input type="radio" name="combinerState" value="collapsed" id="pref-comb-state-coll" {{#ifCond combinerState '=' 'collapsed'}}checked="checked"{{/ifCond}}>
-          <label for="pref-comb-state-coll">{{i18n "preferences.combiner_collapsed"}}</label>
+          <label for="pref-comb-state-coll">{{i18n "dialog.preferences.combiner_collapsed"}}</label>
         </div>
         <div class="cb-group">
           <input type="radio" name="combinerState" value="expanded" id="pref-comb-state-exp" {{#ifCond combinerState '=' 'expanded'}}checked="checked"{{/ifCond}}>
-          <label for="pref-comb-state-exp">{{i18n "preferences.combiner_expanded"}}</label>
+          <label for="pref-comb-state-exp">{{i18n "dialog.preferences.combiner_expanded"}}</label>
         </div>
       </div>
       <!-- Editor related options -->
       <div id="prefs-tabs-editor">
         <div class="clear"></div>
         <div class="box-left">
-          <input type="text" class="dicts-list-search" placeholder="{{i18n "preferences.spellcheck_search_placeholder"}}">
+          <input type="text" class="dicts-list-search" placeholder="{{i18n "dialog.preferences.spellcheck_search_placeholder"}}">
           <ul class="dicts-list">
             {{#each availableDicts}}
-              <li data-value="{{this}}" class="dicts-list-item">{{i18n "preferences.app_lang." this}}</li>
+              <li data-value="{{this}}" class="dicts-list-item">{{i18n "dialog.preferences.app_lang." this}}</li>
             {{/each}}
           </ul>
         </div>
         <div class="box-right">
           <p>
-            {{i18n "preferences.spellcheck"}}
+            {{i18n "dialog.preferences.spellcheck"}}
           </p>
           <p>
-            {{i18n "preferences.spellcheck_warning"}}
+            {{i18n "dialog.preferences.spellcheck_warning"}}
           </p>
           <hr>
           <div class="selected-dictionaries">
             {{#each selectedDicts}}
-              <div class="selected-dict"><input type="hidden" value="{{this}}" name="selectedDicts" id="{{this}}">{{i18n "preferences.app_lang." this}}</div>
+              <div class="selected-dict"><input type="hidden" value="{{this}}" name="selectedDicts" id="{{this}}">{{i18n "dialog.preferences.app_lang." this}}</div>
             {{/each}}
           </div>
         </div>
@@ -77,48 +77,48 @@
             <input type="checkbox" name="muteLines" value="yes" id="muteLines" {{#if muteLines}}checked="checked"{{/if}}>
             <div class="toggle"></div>
           </label>
-          <label for="muteLines">{{i18n "preferences.mute_lines"}}</label>
+          <label for="muteLines">{{i18n "dialog.preferences.mute_lines"}}</label>
         </div>
         <div class="cb-group">
           <label class="cb-toggle">
             <input type="checkbox" name="editor.autoCloseBrackets" value="yes" id="autoCloseBrackets" {{#if editor.autoCloseBrackets}}checked="checked"{{/if}}>
             <div class="toggle"></div>
           </label>
-          <label for="autoCloseBrackets">{{i18n "preferences.autoCloseBrackets"}}</label>
+          <label for="autoCloseBrackets">{{i18n "dialog.preferences.autoCloseBrackets"}}</label>
         </div>
       </div>
       <!-- Export related options (except pandoc+xelatex) -->
       <div id="prefs-tabs-export">
         <div class="box-left">
-          <p>{{i18n "preferences.export.stripping"}}</p>
+          <p>{{i18n "dialog.preferences.export.stripping"}}</p>
           <p>
             <div class="cb-group">
               <label class="cb-toggle">
                 <input type="checkbox" name="export.stripIDs" value="yes" id="export.stripIDs" {{#if export.stripIDs}}checked="checked"{{/if}}>
                 <div class="toggle"></div>
               </label>
-              <label for="export.stripIDs">{{i18n "preferences.export.strip_id_label"}}</label>
+              <label for="export.stripIDs">{{i18n "dialog.preferences.export.strip_id_label"}}</label>
             </div>
             <div class="cb-group">
               <label class="cb-toggle">
                 <input type="checkbox" name="export.stripTags" value="yes" id="export.stripTags" {{#if export.stripTags}}checked="checked"{{/if}}>
                 <div class="toggle"></div>
               </label>
-              <label for="export.stripTags">{{i18n "preferences.export.strip_tags_label"}}</label>
+              <label for="export.stripTags">{{i18n "dialog.preferences.export.strip_tags_label"}}</label>
             </div>
           </p>
           <hr>
           <div class="cb-group">
             <input type="radio" name="export.stripLinks" value="full" id="pref-export-strip-link-full" {{#ifCond export.stripLinks '=' 'full'}}checked="checked"{{/ifCond}}>
-            <label for="pref-export-strip-link-full">{{i18n "preferences.export.strip_links_full_label"}}</label>
+            <label for="pref-export-strip-link-full">{{i18n "dialog.preferences.export.strip_links_full_label"}}</label>
           </div>
           <div class="cb-group">
             <input type="radio" name="export.stripLinks" value="unlink" id="pref-export-strip-link-unlink" {{#ifCond export.stripLinks '=' 'unlink'}}checked="checked"{{/ifCond}}>
-            <label for="pref-export-strip-link-unlink">{{i18n "preferences.export.strip_links_unlink_label"}}</label>
+            <label for="pref-export-strip-link-unlink">{{i18n "dialog.preferences.export.strip_links_unlink_label"}}</label>
           </div>
           <div class="cb-group">
             <input type="radio" name="export.stripLinks" value="no" id="pref-export-strip-link-no" {{#ifCond export.stripLinks '=' 'no'}}checked="checked"{{/ifCond}}>
-            <label for="pref-export-strip-link-no">{{i18n "preferences.export.strip_links_no_label"}}</label>
+            <label for="pref-export-strip-link-no">{{i18n "dialog.preferences.export.strip_links_no_label"}}</label>
           </div>
         </div>
         <div class="box-right">
@@ -127,71 +127,71 @@
           </p>
           <div class="cb-group">
             <input type="radio" name="export.dir" value="temp" id="pref-export-temp" {{#ifCond export.dir '=' 'temp'}}checked="checked"{{/ifCond}}>
-            <label for="pref-export-temp">{{i18n "preferences.export.dest_temp_label"}}</label>
+            <label for="pref-export-temp">{{i18n "dialog.preferences.export.dest_temp_label"}}</label>
           </div>
           <div class="cb-group">
             <input type="radio" name="export.dir" value="cwd" id="pref-export-cwd" {{#ifCond export.dir '=' 'cwd'}}checked="checked"{{/ifCond}}>
-            <label for="pref-export-cwd">{{i18n "preferences.export.dest_cwd_label"}}</label>
+            <label for="pref-export-cwd">{{i18n "dialog.preferences.export.dest_cwd_label"}}</label>
           </div>
           <hr>
-          <label for="cslLibrary">{{i18n "preferences.csl_database"}}</label>
+          <label for="cslLibrary">{{i18n "dialog.preferences.csl_database"}}</label>
           <input type="text" name="export.cslLibrary" id="cslLibrary" value="{{export.cslLibrary}}">
-          <label for="cslStyle">{{i18n "preferences.project.csl_style"}}</label>
+          <label for="cslStyle">{{i18n "dialog.preferences.project.csl_style"}}</label>
           <input type="text" name="export.cslStyle" id="cslStyle" value="{{export.cslStyle}}">
         </div>
       </div>
       <!-- Zettelkasten options -->
       <div id="prefs-tabs-zkn">
         <div class="box-left form-inline-buttons">
-          <label for="pref-zkn-free-id">{{i18n "preferences.zkn.id_label"}}</label>
+          <label for="pref-zkn-free-id">{{i18n "dialog.preferences.zkn.id_label"}}</label>
           <input type="text" id="pref-zkn-free-id" value="{{zkn.idRE}}" name="zkn.idRE">
-          <button type="button" id="reset-id-regex" data-tippy-content="{{i18n "preferences.zkn.reset_default_id"}}">&#9003;</button>
-          <label for="pref-zkn-free-linkstart">{{i18n "preferences.zkn.linkstart_label"}}</label>
+          <button type="button" id="reset-id-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_id"}}">&#9003;</button>
+          <label for="pref-zkn-free-linkstart">{{i18n "dialog.preferences.zkn.linkstart_label"}}</label>
           <input type="text" id="pref-zkn-free-linkstart" value="{{zkn.linkStart}}" name="zkn.linkStart">
-          <button type="button" id="reset-linkstart-regex" data-tippy-content="{{i18n "preferences.zkn.reset_default_linkstart"}}">&#9003;</button>
-          <label for="pref-zkn-free-linkend">{{i18n "preferences.zkn.linkend_label"}}</label>
+          <button type="button" id="reset-linkstart-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_linkstart"}}">&#9003;</button>
+          <label for="pref-zkn-free-linkend">{{i18n "dialog.preferences.zkn.linkend_label"}}</label>
           <input type="text" id="pref-zkn-free-linkend" value="{{zkn.linkEnd}}" name="zkn.linkEnd">
-          <button type="button" id="reset-linkend-regex" data-tippy-content="{{i18n "preferences.zkn.reset_default_linkend"}}">&#9003;</button>
-          <label for="pref-zkn-id-gen">{{i18n "preferences.zkn.id_generator_label"}}</label>
+          <button type="button" id="reset-linkend-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_linkend"}}">&#9003;</button>
+          <label for="pref-zkn-id-gen">{{i18n "dialog.preferences.zkn.id_generator_label"}}</label>
           <input type="text" id="pref-zkn-id-gen" value="{{zkn.idGen}}" name="zkn.idGen">
-          <button type="button" id="reset-id-generator" data-tippy-content="{{i18n "preferences.zkn.reset_default_generator"}}">&#9003;</button>
+          <button type="button" id="reset-id-generator" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_generator"}}">&#9003;</button>
           <hr>
           <p>
-            <button type="button" id="generate-id">{{i18n "preferences.zkn.test_id_generator"}}</button>
+            <button type="button" id="generate-id">{{i18n "dialog.preferences.zkn.test_id_generator"}}</button>
           </p>
-          <p>{{i18n "preferences.zkn.generated_id"}}: <strong><span id="generator-tester"></span></strong></p>
+          <p>{{i18n "dialog.preferences.zkn.generated_id"}}: <strong><span id="generator-tester"></span></strong></p>
           <p><span id="pass-check"></span></p>
         </div>
         <div class="box-right">
           <p>
-            {{i18n "preferences.zkn.intro"}}
+            {{i18n "dialog.preferences.zkn.intro"}}
             <ul>
-              <li><strong>%Y</strong>: {{i18n "preferences.zkn.var_year"}}</li>
-              <li><strong>%M</strong>: {{i18n "preferences.zkn.var_month"}}</li>
-              <li><strong>%D</strong>: {{i18n "preferences.zkn.var_day"}}</li>
-              <li><strong>%h</strong>: {{i18n "preferences.zkn.var_hour"}}</li>
-              <li><strong>%m</strong>: {{i18n "preferences.zkn.var_minute"}}</li>
-              <li><strong>%s</strong>: {{i18n "preferences.zkn.var_second"}}</li>
+              <li><strong>%Y</strong>: {{i18n "dialog.preferences.zkn.var_year"}}</li>
+              <li><strong>%M</strong>: {{i18n "dialog.preferences.zkn.var_month"}}</li>
+              <li><strong>%D</strong>: {{i18n "dialog.preferences.zkn.var_day"}}</li>
+              <li><strong>%h</strong>: {{i18n "dialog.preferences.zkn.var_hour"}}</li>
+              <li><strong>%m</strong>: {{i18n "dialog.preferences.zkn.var_minute"}}</li>
+              <li><strong>%s</strong>: {{i18n "dialog.preferences.zkn.var_second"}}</li>
             </ul>
           </p>
         </div>
       </div>
       <!-- Export/seldomly used options -->
       <div id="prefs-tabs-advanced">
-        <p>{{i18n "preferences.attachments_info"}}</p>
+        <p>{{i18n "dialog.preferences.attachments_info"}}</p>
         <textarea id="attachmentExtensions" name="attachmentExtensions">{{attachmentExtensions}}</textarea>
 
         <hr>
 
         <label for="pandoc">
-          {{i18n "preferences.pandoc"}}
+          {{i18n "dialog.preferences.pandoc"}}
         </label>
-        <input type="text" id="pandoc" name="pandoc" placeholder="{{i18n "preferences.pandoc_default"}}" value="{{pandoc}}">
+        <input type="text" id="pandoc" name="pandoc" placeholder="{{i18n "dialog.preferences.pandoc_default"}}" value="{{pandoc}}">
 
         <label for="xelatex">
-          {{i18n "preferences.xelatex"}}
+          {{i18n "dialog.preferences.xelatex"}}
         </label>
-        <input type="text" id="xelatex" name="xelatex" placeholder="{{i18n "preferences.xelatex_default"}}" value="{{xelatex}}">
+        <input type="text" id="xelatex" name="xelatex" placeholder="{{i18n "dialog.preferences.xelatex_default"}}" value="{{xelatex}}">
 
         <hr>
 
@@ -200,13 +200,13 @@
             <input type="checkbox" name="debug" value="yes" id="debug" {{#if debug}}checked="checked"{{/if}}>
             <div class="toggle"></div>
           </label>
-          <label for="debug">{{i18n "preferences.debug"}}</label>
+          <label for="debug">{{i18n "dialog.preferences.debug"}}</label>
         </div>
       </div>
     </div>
     <div class="prefs-submit-group">
-      <button type="submit" id="pref-save">{{i18n "preferences.save"}}</button>
-      <button id="abort">{{i18n "preferences.cancel"}}</button>
+      <button type="submit" id="pref-save">{{i18n "dialog.preferences.save"}}</button>
+      <button id="abort">{{i18n "dialog.preferences.cancel"}}</button>
       <span class="error-info"></span>
     </div>
   </form>
@@ -276,9 +276,9 @@ $('#generate-id').on('click', (e) => {
   let re = new RegExp('^' + $('#pref-zkn-free-id').val() + '$')
   $('#generator-tester').text(id)
   if (re.test(id)) {
-    $('#pass-check').text('{{i18n "preferences.zkn.pass_check_yes"}}')
+    $('#pass-check').text('{{i18n "dialog.preferences.zkn.pass_check_yes"}}')
   } else {
-    $('#pass-check').text('{{i18n "preferences.zkn.pass_check_no"}}')
+    $('#pass-check').text('{{i18n "dialog.preferences.zkn.pass_check_no"}}')
   }
 })
 
