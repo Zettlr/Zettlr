@@ -423,27 +423,6 @@ class ZettlrRenderer {
     }
   }
 
-  /**
-   * Returns an array of suggested correct spellings of a word.
-   * @param  {String} word The word to get suggestions for.
-   * @return {Array}      An array of strings containing suggestions.
-   */
-  typoSuggest (word) {
-    if (!this._typoReady) {
-      return []
-    }
-
-    let ret = []
-
-    for (let lang of this._typo) {
-      ret = ret.concat(lang.suggest(word))
-    }
-
-    return ret
-  }
-
-  // END SPELLCHECKER
-
   // SEARCH FUNCTIONS
   // This class only acts as a pass-through
 
@@ -782,18 +761,6 @@ class ZettlrRenderer {
    * @param {String} lang locale code
    */
   setLocale (lang) { this._lang = lang }
-
-  /**
-   * Sets the Aff-File contents
-   * @param {String} affFile The file contents
-   */
-  setAff (affFile) { this._typoAff = affFile }
-
-  /**
-   * Sets the Dic-File contents
-   * @param {String} dicFile The file contents
-   */
-  setDic (dicFile) { this._typoDic = dicFile }
 
   /**
    * Returns the toolbar object

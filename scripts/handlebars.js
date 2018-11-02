@@ -32,7 +32,6 @@ tplPaths.push(
     'input': path.join(__dirname, '..', 'resources/templates/popup'),
     'output': path.join(__dirname, '..', 'source/renderer/assets/tpl/popup')
   }
-  // TODO: Popup templates
 )
 
 /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
