@@ -196,6 +196,13 @@ class ZettlrEditor {
       // Update wordcount
       this._renderer.updateWordCount(this.getWordCount())
 
+      if (changeObj.origin === 'paste' && changeObj.text.join(' ').split(' ').length > 10) {
+        // In case the user pasted more than ten words don't let these count towards
+        // the word counter. Simply update the word count before the save function
+        // is triggered. This way none of the just pasted words will count.
+        this.getWrittenWords()
+      }
+
       if (changeObj.origin !== 'setValue') {
         // If origin is setValue this means that the contents have been
         // programatically changed -> no need to flag any modification!

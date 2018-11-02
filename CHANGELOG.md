@@ -19,6 +19,7 @@
 - Fixes in design: Now the selections of text don't reach until the edge of the screen but stay where the text stays. **This may have bad effects on very huge documents, so make sure you don't smash whole books in single Markdown files!**
 - Added an option to change the `sansfont` property of `LaTeX`-documents, used mainly for headings.
 - The Pomodoro timer now remembers your settings on a per-session basis.
+- Added an additional check to see whether or not a huge number of words has been pasted into the editor. If so, the word counter won't count these towards the overall counter. So if you need to paste in whole documents, this won't raise your word counter absurdly high.
 
 ## Under the hood
 
