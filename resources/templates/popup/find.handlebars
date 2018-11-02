@@ -1,9 +1,13 @@
 <div>
   <form class="search">
-    <input type="text" placeholder="{{i18n 'dialog.find.find_placeholder'}}" value="" id="searchWhat">
-    <button id="searchNext">{{i18n 'dialog.find.find_label'}}</button><br>
-    <input type="text" placeholder="{{i18n 'dialog.find.replace_placeholder'}}" value="" id="replaceWhat">
-    <button id="replaceNext">{{i18n 'dialog.find.replace_label'}}</button>
-    <button id="replaceAll">{{i18n 'dialog.find.replace_all_label'}}</button>
+    <div class="row">
+      <input type="text" placeholder="{{i18n 'dialog.find.find_placeholder'}}" value="" id="searchWhat">
+      <button id="searchNext">{{i18n 'dialog.find.find_label'}}</button>
+    </div>
+    <div class="row">
+      <input type="text" placeholder="{{i18n 'dialog.find.replace_placeholder'}}" value="" id="replaceWhat">
+      <button id="replaceNext">{{i18n 'dialog.find.replace_label'}}</button>
+      <button id="replaceAll">{{i18n 'dialog.find.replace_all_label'}}</button>
+    </div>
   </form>
 </div>

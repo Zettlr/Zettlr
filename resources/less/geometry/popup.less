@@ -304,10 +304,15 @@
 
     // SEARCH POPUP
     .search {
+      .row { display: flex; }
         input {
+          /** flex layout of the search popup:
+           * 6 4
+           * 6 3 1
+           */
             font-size:100%;
+            flex: 0 6 auto; // 60 percent width -- set first param to 0 for alignment
             text-align:left;
-            display:inline;
             width:60%;
             background-color: transparent;
             color:inherit;
@@ -324,11 +329,10 @@
             margin:0px;
             border-radius:2px;
             overflow:hidden;
-            display:inline;
 
-            &#searchNext { width:40%; }
-            &#replaceNext { width:28%; }
-            &#replaceAll { width:12%; }
+            &#searchNext { flex: 4 4 auto; } // 40 percent width
+            &#replaceNext { flex: 3 3 auto; } // 30 percent width
+            &#replaceAll { flex: 1 1 auto; } // 10 percent width
         }
     }
 

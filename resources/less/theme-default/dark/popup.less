@@ -25,7 +25,12 @@
     }
 
     .formatting a:hover { background-color:@grey-3; }
-    .search button { background-color: @popup-dark-color; }
+    .search {
+      button {
+        background-color: @popup-dark-color;
+        &:hover { background-color: lighten(@popup-dark-color, 10%); }
+      }
+    }
     .recent-docs a:hover { background-color:@grey-3; }
 }
 
