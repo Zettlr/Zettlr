@@ -14,6 +14,7 @@
  */
 
 const popup = require('./zettlr-popup.js')
+const makeTemplate = require('./zettlr-template.js')
 
 const { trans } = require('../common/lang/i18n.js')
 
@@ -64,25 +65,6 @@ class ZettlrPomodoro {
     this._sound = new window.Audio()
     this._sound.volume = 1
     this._sound.src = `file://${__dirname}/assets/glass.ogg`
-
-    // Preferences popup
-    this._form = $('<form>').addClass('pomodoro').prop('method', 'GET').prop('action', '#')
-    this._form.html(
-      `
-      <input type="number" class="pomodoro-task" value="${this._duration.task / 60}" name="task" min="1" max="100" required>
-      <input type="number" class="pomodoro-short" value="${this._duration.short / 60}" name="short" min="1" max="100" required>
-      <input type="number" class="pomodoro-long" value="${this._duration.long / 60}" name="long" min="1" max="100" required>
-      <div class="cb-group">
-      <label class="cb-toggle">
-      <input type="checkbox" name="mute" id="mute">
-      <div class="toggle"></div>
-      </label>
-      <label for="mute">${trans('pomodoro.mute')}</label>
-      </div>
-      <input type="range" name="volume" min="0" max="100" value="${this._sound.volume * 100}">
-      <input type="submit" value="${trans('pomodoro.start')}">
-      `
-    )
   }
 
   /**
@@ -191,7 +173,15 @@ class ZettlrPomodoro {
     // Display the small settings popup
     if (this._pref == null) {
       if (!this.isRunning()) {
-        this._pref = popup($('.button.pomodoro'), this._form, (form) => {
+        // Preferences popup
+        let data = {
+          'duration_task': this._duration.task / 60,
+          'duration_short': this._duration.short / 60,
+          'duration_long': this._duration.long / 60,
+          'volume': this._sound.volume * 100,
+          'mute': !this._playSound
+        }
+        this._pref = popup($('.button.pomodoro'), makeTemplate('popup', 'pomodoro-settings', data), (form) => {
           // Callback
           this._pref = null
           if (!form) {
@@ -222,12 +212,11 @@ class ZettlrPomodoro {
         if (sec < 10) {
           sec = '0' + sec
         }
-        let time = Math.floor((this._phase.max - this._phase.cur) / 60) + ':' + sec
-        this._pref = popup($('.button.pomodoro'), $('<div class="pomodoro">').html(
-          `<p><span id="pomodoro-phase-type">${trans('pomodoro.phase.' + this._phase.type)}</span></p>
-          <p><span id="pomodoro-time-remaining">${time}</span></p>
-          <button id="pomodoro-stop-button">${trans('pomodoro.stop')}</button>`
-        ), (form) => {
+        let data = {
+          'time': Math.floor((this._phase.max - this._phase.cur) / 60) + ':' + sec,
+          'type': trans('pomodoro.phase.' + this._phase.type)
+        }
+        this._pref = popup($('.button.pomodoro'), makeTemplate('popup', 'pomodoro-status', data), (form) => {
           // Callback
           this._pref = null
         })
