@@ -508,7 +508,7 @@ class Zettlr {
     // Now that we are save, let's move the current directory to trash.
     this.watchdog.ignoreNext('unlinkDir', dir.path)
 
-    dir.remove()
+    dir.remove(dir, true)
 
     this.ipc.send('paths-update', this.getPathDummies())
   }

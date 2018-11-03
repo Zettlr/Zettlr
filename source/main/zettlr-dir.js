@@ -296,16 +296,17 @@ class ZettlrDir {
   /**
     * Removes either a child or this directory.
     * @param  {Mixed} [obj=this] Either ZettlrDir or ZettlrFile
+    * @param {Boolean} [force=false] Should the directory itself be deleted as well?
     * @return {Boolean}            Whether or not the operation completed successfully.
     */
-  remove (obj = this) {
+  remove (obj = this, force = false) {
     if (obj === this) {
       this.shutdown()
 
       // It may be that this method returns false. Mostly, because the
       // directory has been deleted and this object is only removed to
       // reflect changes on the disk that have been reported by chokidar
-      shell.moveItemToTrash(this.path)
+      if (force) shell.moveItemToTrash(this.path)
       this.parent.remove(this)
     } else {
       // Remove a file (function was called by a children)
