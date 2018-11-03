@@ -163,7 +163,6 @@ class ZettlrEditor {
       lineWrapping: true,
       indentUnit: 4, // Indent lists etc. by 4, not 2 spaces (necessary, e.g., for pandoc)
       // inputStyle: "contenteditable", // Will enable this in a future version
-      viewportMargin: Infinity, // Always render the whole file
       autoCloseBrackets: AUTOCLOSEBRACKETS,
       markdownImageBasePath: '', // The base path used to render the image in case of relative URLs
       markdownOnLinkOpen: function (url) { require('electron').shell.openExternal(url) }, // Action for ALT-Clicks

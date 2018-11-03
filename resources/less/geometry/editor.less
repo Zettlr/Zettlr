@@ -19,37 +19,50 @@
     .ui-resizable-w { cursor: ew-resize; width: 10px; left: 0px; top: 0; height: 100%; }
 
     .CodeMirror {
-        height:auto;
+        height:100%;
         cursor:text;
         font-family: inherit;
-        margin: 0 0.5em;
+        margin-left: 0.5em;
 
-        @media(min-width: 1024px) { margin: 0 2.5em; }
-        @media(min-width: 900px) { margin: 0 1em; }
+        @media(min-width: 1024px) { margin-left: 2.5em; }
+        @media(min-width: 900px) { margin-left: 1em; }
     }
 
     .CodeMirror-code {
         margin:5em 0em;
-        @media(max-width: 1024px) { margin: 0.5em 0em; }
+        @media(max-width: 1024px) { margin: 3em 0em; }
 
         .mute { opacity:0.2; }
     }
 
     .CodeMirror-scroll {
-      height: auto;
-      overflow-x:hidden !important; // Necessary to hide the horizontal scrollbar
+        padding-right: 5em;
+        @media(max-width: 1200px) { padding-right: 2.5em; }
+        @media(max-width: 1024px) { padding-right: 1em; }
+        @media(max-width: 900px) { padding-right: 0.5em; }
+        overflow-x:hidden !important; // Necessary to hide the horizontal scrollbar
     }
 }
 
 
 // CodeMirror fullscreen
 .CodeMirror-fullscreen {
+  position: fixed !important; // Have to override another relative
+  top: @toolbar-height; left: 0; right: 0; bottom: 0;
   height: auto;
   z-index: 500;
-  margin: 0 0.5em;
 
-  @media(min-width:  800px) { margin: 0 2.5em !important; }
-  @media(min-width: 1000px) { margin: 0 7.5em !important; }
-  @media(min-width: 1100px) { margin: 0 10em  !important; }
-  @media(min-width: 1300px) { margin: 0 20em  !important; }
+  @media(min-width: 1301px) { margin-left: 20em  !important; }
+  @media(max-width: 1300px) { margin-left: 10em  !important; }
+  @media(max-width:1100px)  { margin-left: 7.5em !important; }
+  @media(max-width:1000px)  { margin-left: 5em   !important; }
+  @media(max-width:800px)   { margin-left: 2.5em !important; }
+
+  .CodeMirror-scroll {
+      @media(min-width: 1301px) { padding-right: 20em  !important; }
+      @media(max-width: 1300px) { padding-right: 10em  !important; }
+      @media(max-width:1100px)  { padding-right: 7.5em !important; }
+      @media(max-width:1000px)  { padding-right: 5em   !important; }
+      @media(max-width:800px)   { padding-right: 2.5em !important; }
+  }
 }
