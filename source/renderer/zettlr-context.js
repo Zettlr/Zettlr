@@ -97,6 +97,7 @@ class ZettlrCon {
     let hash = null
     let vdfile = false // Is this file part of a virtual directory?
     let vdhash = null
+    let typoPrefix = []
 
     // Used to hold the scopes
     let scopes = []
@@ -153,22 +154,22 @@ class ZettlrCon {
           // Select the word under the cursor if there are suggestions.
           // Makes it easier to replace them
           this._body.getRenderer().getEditor().selectWordUnderCursor()
-          let self = this
+          // let self = this
           for (let sug of suggestions) {
-            this._menu.append(new MenuItem({
+            typoPrefix.push({
               'label': sug,
-              click (item, win) {
-                self._body.getRenderer().getEditor().replaceWord(sug)
+              'click': (item, win) => {
+                this._body.getRenderer().getEditor().replaceWord(sug)
               }
-            }))
+            })
           }
-          this._menu.append(new MenuItem({ type: 'separator' }))
+          typoPrefix.push({ type: 'separator' })
         } else {
-          this._menu.append(new MenuItem({
+          typoPrefix.push({
             'label': trans('menu.no_suggestions'),
             enabled: 'false'
-          }))
-          this._menu.append(new MenuItem({ type: 'separator' }))
+          })
+          typoPrefix.push({ type: 'separator' })
         }
       }
       menupath = 'editor.json'
@@ -179,6 +180,7 @@ class ZettlrCon {
     // Now build with all information we have gathered.
     this._menu = new Menu()
     this._menu = this._buildFromSource(require('./assets/context/' + menupath), hash, vdhash, scopes)
+    if (elem.hasClass('cm-spell-error')) this._menu = typoPrefix.concat(this._menu)
     this._menu = Menu.buildFromTemplate(this._menu)
   }
 
