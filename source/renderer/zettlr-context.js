@@ -15,7 +15,7 @@
  */
 
 const { remote } = require('electron')
-const { Menu, MenuItem } = remote
+const { Menu } = remote
 const { trans } = require('../common/lang/i18n.js')
 
 /**
