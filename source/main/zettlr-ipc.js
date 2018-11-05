@@ -36,7 +36,6 @@ class ZettlrIPC {
     // Beginn listening to messages
     this._ipc.on('message', (event, arg) => {
       if (arg.hasOwnProperty('command') && arg.command === 'file-drag-start') {
-        console.log(`Starting drag with arg:`, arg)
         event.sender.startDrag({
           'file': this._app.findFile({ hash: parseInt(arg.content.hash) }).path,
           'icon': require('path').join(__dirname, '/assets/dragicon.png')

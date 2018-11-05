@@ -50,7 +50,6 @@ class ZettlrCon {
     if (!menutpl) {
       throw new Error('No menutpl detected!')
     }
-    console.log(`Building menu with hash=${hash}, vdhash=${vdhash}, scopes=${scopes.join(',')}`)
 
     let menu = []
 
