@@ -52,6 +52,8 @@
         if (match[1]) {
           let cite = match[1].split(';') // First extract all citations in this thing
           for (let c of cite) {
+            // It could be that the user just ended his/her citation with a ;
+            if (c === '') continue
             // Loop through all array items and deconstruct them. They can look like this:
             /*
             [see @doe99, pp. 33-35; also @smith04, chap. 1]
