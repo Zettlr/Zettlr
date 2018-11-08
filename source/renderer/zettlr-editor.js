@@ -276,7 +276,7 @@ class ZettlrEditor {
 
     // Thanks for this to https://discuss.codemirror.net/t/hanging-indent/243/2
     this._cm.on('renderLine', (cm, line, elt) => {
-      let charWidth = cm.defaultCharWidth() - 2
+      let charWidth = cm.defaultCharWidth() + 3
       let basePadding = 4
       // Show continued list/qoute lines aligned to start of text rather
       // than first non-space char.  MINOR BUG: also does this inside
