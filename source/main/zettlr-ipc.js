@@ -17,6 +17,7 @@
  */
 
 const { trans } = require('../common/lang/i18n.js')
+const ipc = require('electron').ipcMain
 
 /**
  * This class acts as the interface between the main process and the renderer.
@@ -31,10 +32,30 @@ class ZettlrIPC {
     */
   constructor (zettlrObj) {
     this._app = zettlrObj
-    this._ipc = require('electron').ipcMain
+
+    // Listen for synchronous messages from the renderer process to access
+    // config options.
+    ipc.on('config', (event, key) => {
+      // We have received a config event -> simply return back the respective
+      // key.
+      event.returnValue = global.config.get(key)
+    })
+
+    // Listen for synchronous messages from the renderer process for typos.
+    ipc.on('typo', (event, message) => {
+      if (message.type === 'check') {
+        event.returnValue = (this._app.dict) ? this._app.dict.check(message.term) : 'not-ready'
+      } else if (message.type === 'suggest') {
+        event.returnValue = (this._app.dict) ? this._app.dict.suggest(message.term) : []
+      }
+    })
+
+    // Citeproc calls (either single citation or a whole cluster)
+    ipc.on('getCitation', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.getCitation(idList) : 'not-ready' })
+    ipc.on('updateItems', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.updateItems(idList) : 'not-ready' })
 
     // Beginn listening to messages
-    this._ipc.on('message', (event, arg) => {
+    ipc.on('message', (event, arg) => {
       if (arg.hasOwnProperty('command') && arg.command === 'file-drag-start') {
         event.sender.startDrag({
           'file': this._app.findFile({ hash: parseInt(arg.content.hash) }).path,
@@ -42,31 +63,6 @@ class ZettlrIPC {
         })
         return // Don't dispatch further
       }
-
-      // Listen for synchronous messages from the renderer process to access
-      // config options.
-      this._ipc.on('config', (event, key) => {
-        // We have received a config event -> simply return back the respective
-        // key.
-        event.returnValue = global.config.get(key)
-      })
-
-      // Listen for synchronous messages from the renderer process for typos.
-      this._ipc.on('typo', (event, message) => {
-        if (message.type === 'check') {
-          event.returnValue = (this._app.dict) ? this._app.dict.check(message.term) : 'not-ready'
-        } else if (message.type === 'suggest') {
-          event.returnValue = (this._app.dict) ? this._app.dict.suggest(message.term) : []
-        }
-      })
-
-      // Citeproc calls (either single citation or a whole cluster)
-      this._ipc.on('getCitation', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.getCitation(idList) : 'not-ready' })
-      this._ipc.on('updateItems', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.updateItems(idList) : 'not-ready' })
-
-      // Increase the event listener cap to 20. Normally we have 11, which is a
-      // result of the wrappers electron puts around the node objects, I guess.
-      this._ipc.setMaxListeners(250)
 
       // In all other occasions omit the event.
       this.dispatch(arg)
