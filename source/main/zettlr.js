@@ -568,8 +568,19 @@ class Zettlr {
       return this.notify(trans('system.import_no_directory'))
     }
 
+    // Prepare the list of file filters
+    let formats = require('../common/data.json').import_files
+    let fltr = []
+    for (let f of formats) {
+      // The import_files array has the structure "pandoc format" "readable format" "extensions"...
+      // Here we set index 1 as readable name and all following elements (without leading dots)
+      // as extensions
+      fltr.push({ 'name': f[1], 'extensions': f.slice(2).map((val) => { return val.substr(1) }) })
+    }
+    fltr.push({ 'name': trans('system.all_files'), 'extensions': [ '*' ] })
+
     // First ask the user for a fileList
-    let fileList = this.window.askFile()
+    let fileList = this.window.askFile(fltr, true)
     if (!fileList || fileList.length === 0) {
       // The user seems to have decided not to import anything. Gracefully
       // fail. Not like the German SPD.

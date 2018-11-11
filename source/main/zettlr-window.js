@@ -360,34 +360,33 @@ class ZettlrWindow {
   }
 
   /**
-    * Shows the dialog for importing files from the disk.
-    * @return {Array}          An array containing all selected paths or undefined.
-    */
-  askFile () {
-    let startDir = app.getPath('documents')
-    if (isDir(global.config.get('dialogPaths.askFileDialog'))) {
-      startDir = global.config.get('dialogPaths.askFileDialog')
-    }
+   * Shows the dialog for importing files from the disk.
+   * @param  {Array}  [filters=null]   An array of extension filters.
+   * @param  {Boolean} [multiSel=false] Determines if multiple files are allowed
+   * @param {String} [startDir]       The starting directory
+   * @return {Array}                   An array containing all selected files.
+   */
+  askFile (filters = null, multiSel = false, startDir = global.config.get('dialogPaths.askFileDialog')) {
+    // Sanity check for default start directory.
+    if (!isDir(startDir)) startDir = app.getPath('documents')
 
-    let formats = require('../common/data.json').import_files
-    let fltr = []
-    for (let f of formats) {
-      // The import_files array has the structure "pandoc format" "readable format" "extensions"...
-      // Here we set index 1 as readable name and all following elements (without leading dots)
-      // as extensions
-      fltr.push({ 'name': f[1], 'extensions': f.slice(2).map((val) => { return val.substr(1) }) })
-    }
-    fltr.push({ 'name': trans('system.all_files'), 'extensions': [ '*' ] })
+    // Fallback filter: All files
+    if (!filters) filters = [{ 'name': trans('system.all_files'), 'extensions': ['*'] }]
 
-    let ret = dialog.showOpenDialog(this._win, {
+    // Prepare options
+    let opt = {
       'title': trans('system.open_file'),
       'defaultPath': startDir,
       'properties': [
-        'openFile',
-        'multiSelections'
+        'openFile'
       ],
-      'filters': fltr
-    }) || [] // In case the dialog spits out an undefined we need a default array
+      'filters': filters
+    }
+
+    // Should multiple selections be allowed?
+    if (multiSel) opt.properties.push('multiSelections')
+
+    let ret = dialog.showOpenDialog(this._win, opt) || [] // In case the dialog spits out an undefined we need a default array
 
     // Save the path of the containing dir of the first file into the config
     if (ret.length > 0 && isDir(path.dirname(ret[0]))) {

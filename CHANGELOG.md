@@ -41,6 +41,7 @@
 - The `askSaveFile()`-dialog is now non-blocking.
 - `ZettlrFile` objects won't forcefully try to move a file to trash while handling watchdog events anymore.
 - `ZettlrRendererIPC` and `ZettlrIPC` now access the `ipc`-modules consistent with all other classes.
+- Generalised the `askFile()` function in `ZettlrWindow` for further purposes.
 
 # 0.20.0
 
