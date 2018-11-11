@@ -430,6 +430,7 @@
       "dnf_title": "Directory not found",
       "dnf_message": "The requested directory was not found.",
       "could_not_create_file": "Could not create file",
+      "could_not_create_dir": "Could not create directory",
       "file_exists": "The file already exists.",
       "no_allowed_chars": "The provided name did not contain any allowed letters.",
       "delete_root_title": "Cannot remove root",
