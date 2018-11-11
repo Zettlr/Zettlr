@@ -214,10 +214,9 @@ class ZettlrDir {
   /**
     * Creates a new subdirectory and returns it.
     * @param  {String} name The name (not path!) for the subdirectory.
-    * @param  {ZettlrWatchdog} [watchdog=null] The optional watchdog instance
     * @return {ZettlrDir}      The newly created directory.
     */
-  newdir (name, watchdog = null) {
+  newdir (name) {
     // Remove unallowed characters.
     name = sanitize(name, { replacement: '-' })
     if ((name === '') || (name === null)) {
@@ -225,9 +224,8 @@ class ZettlrDir {
     }
     let newpath = path.join(this.path, name)
 
-    if (typeof watchdog === 'object' && watchdog.hasOwnProperty('ignoreNext')) {
-      this.watchdog.ignoreNext('addDir', newpath)
-    }
+    // Ignore the add event in the watchdog.
+    global.watchdog.ignoreNext('addDir', newpath)
 
     let dir = new ZettlrDir(this, newpath)
     this.children.push(dir)
