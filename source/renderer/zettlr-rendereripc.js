@@ -17,6 +17,7 @@
 */
 
 const { trans } = require('../common/lang/i18n.js')
+const ipc = require('electron').ipcRenderer
 
 // The following commands are sent from the renderer and can potentially close
 // the current file. In that case we have to save the file first and then send
@@ -44,8 +45,7 @@ class ZettlrRendererIPC {
   */
   constructor (zettlrObj) {
     this._app = zettlrObj
-    this._ipc = require('electron').ipcRenderer
-    this._ipc.on('message', (event, arg) => {
+    ipc.on('message', (event, arg) => {
       // Omit the event immediately
       this.dispatch(arg)
     })
@@ -74,7 +74,7 @@ class ZettlrRendererIPC {
         // immediately receive the config value we need. Basically we are pulling
         // the get()-handler from main using the "remote" feature, but we'll
         // implement it ourselves.
-        return this._ipc.sendSync('config', key)
+        return ipc.sendSync('config', key)
       }
     }
 
@@ -86,22 +86,22 @@ class ZettlrRendererIPC {
         if (this._typoCache[term] !== undefined) return this._typoCache[term]
         // Save into the corresponding cache and return the query result
         // Return the query result
-        let correct = this._ipc.sendSync('typo', { 'type': 'check', 'term': term })
+        let correct = ipc.sendSync('typo', { 'type': 'check', 'term': term })
         if (correct === 'not-ready') return true // Don't check unless its ready
         this._typoCache[term] = correct
         return correct
       },
       suggest: (term) => {
-        return this._ipc.sendSync('typo', { 'type': 'suggest', 'term': term })
+        return ipc.sendSync('typo', { 'type': 'suggest', 'term': term })
       }
     }
 
     // Sends an array of IDs to main. If they are found in the JSON, cool! Otherwise
     // this will return false.
     global.citeproc = {
-      getCitation: (idList) => { return this._ipc.sendSync('getCitation', idList) },
-      updateItems: (idList) => { return this._ipc.sendSync('updateItems', idList) },
-      makeBibliography: () => { return this.send('citeproc-make-bibliography') }
+      getCitation: (idList) => { return ipc.sendSync('getCitation', idList) },
+      updateItems: (idList) => { return ipc.sendSync('updateItems', idList) },
+      makeBibliography: () => { this.send('citeproc-make-bibliography') }
     }
   }
 
@@ -141,7 +141,7 @@ class ZettlrRendererIPC {
       return
     }
 
-    this._ipc.send('message', {
+    ipc.send('message', {
       'command': command,
       'content': arg
     })
