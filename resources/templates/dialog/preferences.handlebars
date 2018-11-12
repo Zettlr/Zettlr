@@ -135,9 +135,21 @@
           </div>
           <hr>
           <label for="cslLibrary">{{i18n "dialog.preferences.csl_database"}}</label>
-          <input type="text" name="export.cslLibrary" id="cslLibrary" value="{{export.cslLibrary}}">
+          <div class="file-select-group">
+            <input type="text" name="export.cslLibrary" id="cslLibrary" value="{{export.cslLibrary}}">
+            <button type="button" class="request-file"
+              data-request-name="Citation Style Language JSON Data File"
+              data-request-ext="json"
+              data-request-target="#cslLibrary"></button>
+          </div>
           <label for="cslStyle">{{i18n "dialog.preferences.project.csl_style"}}</label>
-          <input type="text" name="export.cslStyle" id="cslStyle" value="{{export.cslStyle}}">
+          <div class="file-select-group">
+            <input type="text" name="export.cslStyle" id="cslStyle" value="{{export.cslStyle}}">
+            <button type="button" class="request-file"
+              data-request-name="Citation Style Language File"
+              data-request-ext="csl"
+              data-request-target="#cslStyle"></button>
+          </div>
         </div>
       </div>
       <!-- Zettelkasten options -->

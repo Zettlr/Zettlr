@@ -252,6 +252,26 @@ class ZettlrDialog {
       this._place()
     })
 
+    // Are there any open-file-buttons? If so enable the request for a file by
+    // clicking them.
+    this._modal.find('.request-file').on('click', (event) => {
+      let elem = $(event.target)
+      let payload = {}
+      // Only one filter possible for brevity reasons
+      payload.filters = [{
+        'name': elem.attr('data-request-name'),
+        'extensions': elem.attr('data-request-ext').split(',')
+      }]
+      payload.multiSel = false
+
+      // After all is done send an async callback message
+      global.ipc.send('request-files', payload, (ret) => {
+        // Write the return value into the data-request-target of the clicked
+        // button, because each button has a designated text field.
+        $(elem.attr('data-request-target')).val(ret[0])
+      })
+    })
+
     // After we are done (also included tabs and stuff), we can finally
     // detect the right margins.
     this._place()

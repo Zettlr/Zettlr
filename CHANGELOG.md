@@ -21,6 +21,7 @@
 - The Pomodoro timer now remembers your settings on a per-session basis.
 - Added an additional check to see whether or not a huge number of words has been pasted into the editor. If so, the word counter won't count these towards the overall counter. So if you need to paste in whole documents, this won't raise your word counter absurdly high.
 - Fixed a bug that rendered unwanted Math previews.
+- Added file-open buttons. Now, whenever you are required to select a normal file, Zettlr provides you with a button that lets you choose the file comfortably.
 
 ## Under the hood
 

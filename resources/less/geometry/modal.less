@@ -96,6 +96,34 @@
             text-decoration:none;
         }
 
+        // Special treatment for the open-file-buttons
+        button.request-file {
+          margin: 0;
+          line-height: 140%;
+          &:before {
+            font-family: @font-icon;
+            content: "\f41a";
+          }
+        }
+
+        // The inputs need to be smaller in size to let the request-file buttons
+        // fit on the same line
+        div.file-select-group {
+          display: flex;
+          margin-bottom: 1em;
+          input {
+            flex: 0 5 auto;
+            margin-bottom: 0; // Remove the standard margin and apply it to the box
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+          }
+          button {
+            flex: 0 1 auto;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+          }
+        }
+
         .changelog {
             max-height:300px;
             overflow-y:auto;

@@ -46,11 +46,22 @@ class ZettlrRendererIPC {
   constructor (zettlrObj) {
     this._app = zettlrObj
     ipc.on('message', (event, arg) => {
-      // Omit the event immediately
+      // Do we have an asynchronous callback?
+      if (arg.hasOwnProperty('cypher') && arg.cypher !== '') {
+        // Find the callback, call it and remove it from the buffer.
+        if (this._callbackBuffer[arg.cypher]) {
+          this._callbackBuffer[arg.cypher](arg.returnValue)
+          this._callbackBuffer[arg.cypher] = undefined
+          return
+        }
+      }
+
+      // Dispatch the message further down the array.
       this.dispatch(arg)
     })
 
     this._bufferedMessage = null
+    this._callbackBuffer = {}
 
     // This is an object that will hold all previously checked words in the form
     // of word: correct?
@@ -102,6 +113,28 @@ class ZettlrRendererIPC {
       getCitation: (idList) => { return ipc.sendSync('getCitation', idList) },
       updateItems: (idList) => { return ipc.sendSync('updateItems', idList) },
       makeBibliography: () => { this.send('citeproc-make-bibliography') }
+    }
+
+    global.ipc = {
+      // Sends a message and and saves the callback
+      send: (cmd, cnt, callback) => {
+        // A number between 0 and 50.000 should suffice
+        // TODO: Big question: Does it really suffice? :O
+        let cypher
+        do {
+          cypher = Math.round(Math.random() * 50000).toString()
+        } while (this._callbackBuffer[cypher])
+        // Prepare the payload
+        let payload = {
+          'command': cmd,
+          'content': cnt,
+          'cypher': cypher
+        }
+        // Save the callback for later
+        this._callbackBuffer[cypher] = callback
+        // Send!
+        ipc.send('message', payload)
+      }
     }
   }
 

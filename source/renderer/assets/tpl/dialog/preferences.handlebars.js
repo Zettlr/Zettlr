@@ -119,13 +119,13 @@ module.exports = {"1":function(container,depth0,helpers,partials,data,blockParam
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.export.dest_cwd_label",{"name":"i18n","hash":{},"data":data}))
     + "</label>\n          </div>\n          <hr>\n          <label for=\"cslLibrary\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.csl_database",{"name":"i18n","hash":{},"data":data}))
-    + "</label>\n          <input type=\"text\" name=\"export.cslLibrary\" id=\"cslLibrary\" value=\""
+    + "</label>\n          <div class=\"file-select-group\">\n            <input type=\"text\" name=\"export.cslLibrary\" id=\"cslLibrary\" value=\""
     + alias3(alias4(((stack1 = (depth0 != null ? depth0["export"] : depth0)) != null ? stack1.cslLibrary : stack1), depth0))
-    + "\">\n          <label for=\"cslStyle\">"
+    + "\">\n            <button type=\"button\" class=\"request-file\"\n              data-request-name=\"Citation Style Language JSON Data File\"\n              data-request-ext=\"json\"\n              data-request-target=\"#cslLibrary\"></button>\n          </div>\n          <label for=\"cslStyle\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.project.csl_style",{"name":"i18n","hash":{},"data":data}))
-    + "</label>\n          <input type=\"text\" name=\"export.cslStyle\" id=\"cslStyle\" value=\""
+    + "</label>\n          <div class=\"file-select-group\">\n            <input type=\"text\" name=\"export.cslStyle\" id=\"cslStyle\" value=\""
     + alias3(alias4(((stack1 = (depth0 != null ? depth0["export"] : depth0)) != null ? stack1.cslStyle : stack1), depth0))
-    + "\">\n        </div>\n      </div>\n      <!-- Zettelkasten options -->\n      <div id=\"prefs-tabs-zkn\">\n        <div class=\"box-left form-inline-buttons\">\n          <label for=\"pref-zkn-free-id\">"
+    + "\">\n            <button type=\"button\" class=\"request-file\"\n              data-request-name=\"Citation Style Language File\"\n              data-request-ext=\"csl\"\n              data-request-target=\"#cslStyle\"></button>\n          </div>\n        </div>\n      </div>\n      <!-- Zettelkasten options -->\n      <div id=\"prefs-tabs-zkn\">\n        <div class=\"box-left form-inline-buttons\">\n          <label for=\"pref-zkn-free-id\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.zkn.id_label",{"name":"i18n","hash":{},"data":data}))
     + "</label>\n          <input type=\"text\" id=\"pref-zkn-free-id\" value=\""
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.zkn : depth0)) != null ? stack1.idRE : stack1), depth0))

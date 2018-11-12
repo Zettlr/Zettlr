@@ -64,6 +64,18 @@ class ZettlrIPC {
         return // Don't dispatch further
       }
 
+      // Next possibility: An asynchronous callback from the renderer.
+      if (arg.hasOwnProperty('cypher') && arg.cypher !== '') {
+        // In this case we have to run whatever is wanted and immediately return
+        // (Don't let yourselves be fooled by how I named this argument. This is
+        // only to confuse myself in some months when I will stumble back upon
+        // this piece of code and wonder why I have to send/return the thing
+        // twice.)
+        arg.returnValue = this.runCall(arg.command, arg.content)
+        event.sender.send('message', arg)
+        return // Also, don't dispatch further
+      }
+
       // In all other occasions omit the event.
       this.dispatch(arg)
     })
@@ -388,6 +400,24 @@ class ZettlrIPC {
       default:
         console.log(trans('system.unknown_command', cmd))
         break
+    }
+  }
+
+  /**
+   * Literally the same as dispatch(), only with returns
+   * @param  {string} cmd The Command
+   * @param  {Object} arg The payload
+   * @return {Mixed}     Whatever is registered in runCall to return for a given cmd.
+   */
+  runCall (cmd, arg) {
+    switch (cmd) {
+      // We should show the askFile dialog to the user and return its result.
+      case 'request-files':
+        // The client only can choose what and how much it wants to get
+        return this._app.getWindow().askFile(arg.filters, arg.multiSel)
+      default:
+        console.log(trans('system.unknown_command', cmd))
+        return null
     }
   }
 }
