@@ -42,7 +42,8 @@
       "references_none": "Il-y-a pas des citations dans ce document.",
       "references_booting": "Le moteur citeproc est en cours de démarrage …",
       "references_error": "Impossible de mettre à jour la bibliographie.",
-      "reloading": "Le fichier du bibliographie à changé. Redémarrager …"
+      "reloading": "Le fichier du bibliographie à changé. Redémarrager …",
+      "no_db": "Pas de fichier du bibliographie."
     }
   },
   "validation": {

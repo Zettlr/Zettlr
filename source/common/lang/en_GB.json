@@ -42,7 +42,8 @@
       "references_none": "There are no citations in this document.",
       "references_booting": "The citeproc engine is still booting up …",
       "references_error": "Could not update bibliography!",
-      "reloading": "Changes to the library file detected. Reloading …"
+      "reloading": "Changes to the library file detected. Reloading …",
+      "no_db": "No library file loaded."
     }
   },
   "validation": {

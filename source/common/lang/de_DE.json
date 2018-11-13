@@ -42,7 +42,8 @@
       "references_none": "In diesem Dokument wurden keine Zitationen gefunden.",
       "references_booting": "Die Citeproc-Engine ist noch nicht geladen …",
       "references_error": "Beim Erstellen der Bibliographie ist ein Fehler aufgetreten!",
-      "reloading": "Änderung in der Bibliothek entdeckt. Lade neu …"
+      "reloading": "Änderung in der Bibliothek entdeckt. Lade neu …",
+      "no_db": "Keine Bibliotheks-Datei geladen."
     }
   },
   "validation": {

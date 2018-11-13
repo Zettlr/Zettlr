@@ -969,11 +969,11 @@ class ZettlrEditor {
           needRefresh = true
         } else {
           let newCite = global.citeproc.getCitation(item)
-          if (typeof newCite === 'string' && newCite !== 'not-ready') {
+          if (newCite !== 4) { // 4 is the number assigned to READY state of citeproc
             elem.html(newCite).removeClass('error').attr('data-rendered', 'yes')
             this._citationBuffer[id] = newCite
             needRefresh = true
-          } else if (newCite === false) {
+          } else if (newCite === false || newCite === 3) { // 3 means error in the engine
             elem.addClass('error')
           } // else: Engine wasn't ready yet
         }
@@ -990,12 +990,14 @@ class ZettlrEditor {
       let bib = global.citeproc.updateItems(Object.keys(this._lastKnownCitationCluster))
       if (bib === true) {
         global.citeproc.makeBibliography() // Trigger a new bibliography build
-      } else if (bib === 'not-ready') {
+      } else if (bib === 1) { // 1 means booting
         this._renderer.setBibliography(trans('gui.citeproc.references_booting'))
         // Unset so that the update process is triggered again next time
         this._lastKnownCitationCluster = Object.create(null)
-      } else {
+      } else if (bib === 3) { // There was an error
         this._renderer.setBibliography(trans('gui.citeproc.references_error'))
+      } else if (bib === 2) { // No database loaded
+        this._renderer.setBibliography(trans('gui.citeproc.no_db'))
       }
     }
 

@@ -44,6 +44,7 @@
 - `ZettlrRendererIPC` and `ZettlrIPC` now access the `ipc`-modules consistent with all other classes.
 - Generalised the `askFile()` function in `ZettlrWindow` for further purposes.
 - The `ZettlrConfig` now acts as an event emitter and emits `update`-events, whenever the configuration object changes. It can be subscribed to using `global.config.on` (to unsubscribe use `global.config.off`).
+- Added a `global.ipc.notify`-function to easily send notifications to the renderer.
 
 # 0.20.0
 
