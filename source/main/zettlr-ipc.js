@@ -79,6 +79,12 @@ class ZettlrIPC {
       // In all other occasions omit the event.
       this.dispatch(arg)
     })
+
+    // Enable some globals for sending to the renderer
+    global.ipc = {
+      // Send a notification to the renderer process
+      notify: (msg) => { this.send('notify', msg) }
+    }
   }
 
   /**

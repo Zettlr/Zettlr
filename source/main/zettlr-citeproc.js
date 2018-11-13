@@ -21,6 +21,7 @@ const citeproc = require('citeproc')
 const chokidar = require('chokidar') // We'll just use the one-liner to watch the library file.
 const fs = require('fs')
 const path = require('path')
+const { trans } = require('../common/lang/i18n.js')
 
 // Statuses the engine can be in
 const NOT_LOADED = 0
@@ -88,6 +89,7 @@ class ZettlrCiteproc {
         // Reload the whole thing. But do it after a timeout to let Zotero time
         // to complete writing the file.
         setTimeout(() => { this.load() }, 2000)
+        global.ipc.notify(trans('gui.citeproc.reloading'))
       })
     } else {
       // Watcher is already running, so simply exchange the path.
