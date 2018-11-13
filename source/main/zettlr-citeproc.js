@@ -235,8 +235,10 @@ class ZettlrCiteproc {
   unload () {
     this._status = NOT_LOADED
     this._engine = null
-    this._watcher.close()
-    this._watcher = null
+    if (this._watcher != null) {
+      this._watcher.close()
+      this._watcher = null
+    }
     return this
   }
 
