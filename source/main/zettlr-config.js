@@ -19,6 +19,7 @@
 const fs = require('fs')
 const path = require('path')
 const uuid = require('uuid/v5')
+const EventEmitter = require('events')
 const ZettlrValidation = require('../common/zettlr-validation.js')
 const { app } = require('electron')
 const { ignoreFile, isDir, isDictAvailable } = require('../common/zettlr-helpers.js')
@@ -30,12 +31,13 @@ const COMMON_DATA = require('../common/data.json')
  * variables. Basically, this class tells Zettlr what the user wants and what
  * the environment Zettlr is running in is capable of.
  */
-class ZettlrConfig {
+class ZettlrConfig extends EventEmitter {
   /**
     * Preset sane defaults, then load the config and perform a system check.
     * @param {Zettlr} parent Parent Zettlr object.
     */
   constructor (parent) {
+    super() // Initiate the emitter
     this.parent = parent
     this.configPath = app.getPath('userData')
     this.configFile = path.join(this.configPath, 'config.json')
@@ -151,6 +153,14 @@ class ZettlrConfig {
       // The setter is a simply pass-through
       set: (key, val) => {
         return this.set(key, val)
+      },
+      // Enable global event listening to updates of the config
+      on: (evt, callback) => {
+        this.on(evt, callback)
+      },
+      // Also do the same for the removal of listeners
+      off: (evt, callback) => {
+        this.off(evt, callback)
       }
     }
   }
@@ -464,6 +474,7 @@ class ZettlrConfig {
     // Don't add non-existent options
     if (this.config.hasOwnProperty(option) && this._validate(option, value)) {
       this.config[option] = value
+      this.emit('update') // Emit an event to all listeners
       return true
     }
 
@@ -483,6 +494,7 @@ class ZettlrConfig {
       // Set the nested property
       if (cfg.hasOwnProperty(prop) && this._validate(option, value)) {
         cfg[prop] = value
+        this.emit('update') // Emit an event to all listeners
         return true
       }
     }
@@ -527,6 +539,8 @@ class ZettlrConfig {
         }
       }
     }
+
+    this.emit('update') // Emit an event to all listeners
   }
 
   /**

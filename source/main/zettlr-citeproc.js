@@ -71,6 +71,11 @@ class ZettlrCiteproc {
       makeBibliography: () => { return this.makeBibliography() }
     }
 
+    // Be notified of potential updates
+    global.config.on('update', () => {
+      this._onConfigUpdate()
+    })
+
     // Read in the main library
     this.load()
   }
@@ -95,6 +100,16 @@ class ZettlrCiteproc {
       // Watcher is already running, so simply exchange the path.
       this._watcher.close() // Remove all event listeners
       this._watcher.add(this._mainLibrary) // Add the (potentially changed lib)
+    }
+  }
+
+  /**
+   * There has been a config update. In case the main library has changed, reload
+   */
+  _onConfigUpdate () {
+    console.log('Received a config update')
+    if (global.config.get('export.cslLibrary') !== this._mainLibrary) {
+      this.load()
     }
   }
 
