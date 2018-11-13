@@ -75,6 +75,12 @@ class Zettlr {
     // Statistics
     this.stats = new ZettlrStats(this)
 
+    // Citeproc
+    this._citeproc = new ZettlrCiteproc()
+
+    // The updater
+    this._updater = new ZettlrUpdater(this)
+
     // And the window.
     this.window = new ZettlrWindow(this)
     this.openWindow()
@@ -85,16 +91,12 @@ class Zettlr {
     // If there are any, open argv-files
     this.handleAddRoots(global.filesToOpen)
 
-    this._updater = new ZettlrUpdater(this)
-
     // Initiate regular polling
     setTimeout(() => {
-      // Begin loading the dictionaries and the citations in the background
       // We have to push this into the background, because otherwise the window
       // won't open. As usual: Everything time-consuming shouldn't be done in the
       // first tick of the app.
       this.dict = new ZettlrDictionary()
-      this._citeproc = new ZettlrCiteproc()
       this.poll()
     }, POLL_TIME)
   }

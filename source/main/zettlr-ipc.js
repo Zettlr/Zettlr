@@ -51,8 +51,8 @@ class ZettlrIPC {
     })
 
     // Citeproc calls (either single citation or a whole cluster)
-    ipc.on('getCitation', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.getCitation(idList) : 'not-ready' })
-    ipc.on('updateItems', (event, idList) => { event.returnValue = (global.citeproc) ? global.citeproc.updateItems(idList) : 'not-ready' })
+    ipc.on('getCitation', (event, idList) => { event.returnValue = global.citeproc.getCitation(idList) })
+    ipc.on('updateItems', (event, idList) => { event.returnValue = global.citeproc.updateItems(idList) })
 
     // Beginn listening to messages
     ipc.on('message', (event, arg) => {
@@ -394,7 +394,7 @@ class ZettlrIPC {
 
       // The renderer requested an updated bibliography
       case 'citeproc-make-bibliography':
-        this.send('citeproc-bibliography', (global.citeproc) ? global.citeproc.makeBibliography() : '')
+        this.send('citeproc-bibliography', global.citeproc.makeBibliography())
         break
 
       default:

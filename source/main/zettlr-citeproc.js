@@ -18,15 +18,23 @@
 */
 
 const citeproc = require('citeproc')
+const chokidar = require('chokidar') // We'll just use the one-liner to watch the library file.
 const fs = require('fs')
 const path = require('path')
+
+// Statuses the engine can be in
+const NOT_LOADED = 0
+const BOOTING = 1
+const NO_DB = 2
+const ERROR = 3
+const READY = 4
 
 class ZettlrCiteproc {
   /**
    * Initialises ZettlrCiteproc and also directly tries to boot the engine.
    */
   constructor () {
-    this._mainLibrary = global.config.get('export.cslLibrary')
+    this._mainLibrary = ''
     // The Zettlr internal preview of these citations will always use Chicago,
     // because (a) it's just a preview, and (b) Chicago is the default of Pandoc.
     this._styleID = 'chicago-author-date'
@@ -36,21 +44,55 @@ class ZettlrCiteproc {
     this._cslData = null // Holds the parsed CSL data (JSON)
     this._items = {} // ID-accessible CSL data array.
     this._ids = Object.create(null) // Database index array
-    this._loaded = false // Is the engine ready?
+    this._watcher = null
+
+    // Status can have four properties:
+    // pre-boot: We're just out of the constructor
+    // booting: Trying to locate a database
+    // no-db: No database found, so not available
+    // ready: GIMME YOUR IDS
+    this._status = NOT_LOADED
+    // this._loaded = false // Is the engine ready?
     // The sys object is required by the citeproc processor
     this._sys = {
       retrieveLocale: (lang) => { return this._getLocale(lang) },
       retrieveItem: (id) => { return this._items[id] }
     }
-    // Read in the main library
-    this._read()
 
     // Create a global object so that we can easily pass rendered citations
     global.citeproc = {
-      getIDs: () => { return JSON.parse(JSON.stringify(this._ids)) },
+      getIDs: () => {
+        if (this._status !== 'ready') return this._status
+        return JSON.parse(JSON.stringify(this._ids))
+      },
       getCitation: (idList) => { return this.getCitation(idList) },
       updateItems: (idList) => { return this.updateItems(idList) },
       makeBibliography: () => { return this.makeBibliography() }
+    }
+
+    // Read in the main library
+    this.load()
+  }
+
+  /**
+   * Initiates the watching of the main library and changes it if applicable.
+   * @return {void} Doesn't return
+   */
+  _watchLib () {
+    if (!this._watcher) {
+      this._watcher = chokidar.watch(this._mainLibrary, {
+        ignored: /(^|[/\\])\../,
+        persistent: true,
+        ignoreInitial: true
+      }).on('all', (event, path) => {
+        // Reload the whole thing. But do it after a timeout to let Zotero time
+        // to complete writing the file.
+        setTimeout(() => { this.load() }, 2000)
+      })
+    } else {
+      // Watcher is already running, so simply exchange the path.
+      this._watcher.close() // Remove all event listeners
+      this._watcher.add(this._mainLibrary) // Add the (potentially changed lib)
     }
   }
 
@@ -59,14 +101,21 @@ class ZettlrCiteproc {
    * @return {void} Does not return.
    */
   _read () {
+    this._mainLibrary = global.config.get('export.cslLibrary')
     try {
-      fs.lstatSync(this._mainLibrary)
       fs.readFile(this._mainLibrary, 'utf8', (err, data) => {
-        if (err) return // TODO: Error handling
+        if (err) {
+          this._status = NO_DB
+          return
+        }
+        // Now we are booting
+        this._status = BOOTING
+        // First make sure to watch the file for changes
+        this._watchLib()
         this._parse(data)
       })
     } catch (e) {
-      // Couldn't find library! TODO: Error handling
+      this._status = NO_DB
     }
   }
 
@@ -76,18 +125,22 @@ class ZettlrCiteproc {
    * @return {void}         Does not return.
    */
   _parse (cslData) {
-    this._cslData = JSON.parse(cslData)
+    try {
+      this._cslData = JSON.parse(cslData)
+    } catch (e) {
+      this._status = ERROR
+      return
+    }
     // First we need to reorder the read data so that it can be passed to the
     // sys object
     for (let i = 0, ilen = this._cslData.length; i < ilen; i++) {
       let item = this._cslData[i]
       if (!item.issued) continue
-      // if (item.URL) delete item.URL
       let id = item.id
       this._items[id] = item
       this._ids[id] = true // Create a fast accessible object (instead of slow array)
     }
-    // Now we are ready. Initiate the processor
+    // Now we are ready. Initiate the processor.
     this._initProcessor()
   }
 
@@ -103,9 +156,9 @@ class ZettlrCiteproc {
       // is only for preview purposes, it should follow the language like the
       // rest of the interface.
       this._engine = new citeproc.Engine(this._sys, this._mainStyle, this._lang)
-      this._loaded = true
+      this._status = READY
     } catch (e) {
-      console.log(e)
+      this._status = ERROR
     }
   }
 
@@ -137,6 +190,7 @@ class ZettlrCiteproc {
    */
   _sanitiseItemList (list) {
     if (!Array.isArray(list)) list = [list] // Assume single ID
+    if (list.length === 0) return list // Empty list
     if (typeof list[0] === 'string') {
       // ID only list
       return list.filter(id => (this._sys.retrieveItem(id) !== undefined))
@@ -154,12 +208,39 @@ class ZettlrCiteproc {
   }
 
   /**
+   * PUBLIC FUNCTIONS
+   */
+
+  /**
+   * Unloads the complete engine
+   * @return {ZettlrCiteproc} Chainability
+   */
+  unload () {
+    this._status = NOT_LOADED
+    this._engine = null
+    this._watcher.close()
+    this._watcher = null
+    return this
+  }
+
+  /**
+   * (Re-)loads the complete engine
+   * @return {ZettlrCiteproc} Chainability
+   */
+  load () {
+    // First unload the engine if not already
+    if (this._status !== NOT_LOADED) this.unload()
+    // Commence the loading procedure
+    this._read()
+  }
+
+  /**
    * Takes IDs as set in Zotero and returns Author-Date citations for them.
    * @param  {Array} citeIDs Array containing the IDs to be returned
    * @return {String}         The rendered string
    */
   getCitation (citeIDs) {
-    if (!this._loaded) return 'not-ready' // Don't try to access the engine before loaded
+    if (this._status !== READY) return this._status // Don't try to access the engine before loaded
     citeIDs = this._sanitiseItemList(citeIDs)
     if (citeIDs.length === 0) return false // Nothing to render
     try {
@@ -176,7 +257,7 @@ class ZettlrCiteproc {
    * @return {Boolean}        An indicator whether or not the call succeeded and the registry has been updated.
    */
   updateItems (idList) {
-    if (!this._loaded) return 'not-ready' // Don't try to access the engine before loaded
+    if (this._status !== READY) return this._status // Don't try to access the engine before loaded
     try {
       idList = this._sanitiseItemList(idList)
       this._engine.updateItems(idList)
@@ -193,13 +274,31 @@ class ZettlrCiteproc {
    * @return {CSLBibTex} A CSL object containing the bibliography.
    */
   makeBibliography () {
-    if (!this._loaded) return 'not-ready' // Don't try to access the engine before loaded
+    if (this._status !== READY) return this._status // Don't try to access the engine before loaded
     try {
       return this._engine.makeBibliography()
     } catch (e) {
       return false // Something went wrong (e.g. falsy items in the registry)
     }
   }
+
+  /**
+   * Can be used to queue whether or not the engine is ready
+   * @return {Boolean} The status of the engine
+   */
+  isReady () { return this._status === READY }
+
+  /**
+   * Has there been an error during boot?
+   * @return {Boolean} True, if there was an error.
+   */
+  hasError () { return this._status === ERROR }
+
+  /**
+   * Is a database available?
+   * @return {Boolean} True, if no database has been found.
+   */
+  hasNoDB () { return this._status === NO_DB }
 }
 
 module.exports = ZettlrCiteproc
