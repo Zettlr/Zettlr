@@ -349,6 +349,7 @@
       "debug": "Debug",
       "autoCloseBrackets": "Automatically close the following character pairs: ()[]{}'\"\"»«„““”‘’__``",
       "csl_database": "CSL JSON Database",
+      "choose_file": "Choose file …",
       "save": "Save",
       "cancel": "Cancel"
     },

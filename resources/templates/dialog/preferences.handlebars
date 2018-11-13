@@ -123,7 +123,7 @@
         </div>
         <div class="box-right">
           <p>
-            {{i18n "preferencces.export.dest"}}
+            {{i18n "dialog.preferences.export.dest"}}
           </p>
           <div class="cb-group">
             <input type="radio" name="export.dir" value="temp" id="pref-export-temp" {{#ifCond export.dir '=' 'temp'}}checked="checked"{{/ifCond}}>
@@ -138,6 +138,7 @@
           <div class="file-select-group">
             <input type="text" name="export.cslLibrary" id="cslLibrary" value="{{export.cslLibrary}}">
             <button type="button" class="request-file"
+              data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
               data-request-name="Citation Style Language JSON Data File"
               data-request-ext="json"
               data-request-target="#cslLibrary"></button>
@@ -146,6 +147,7 @@
           <div class="file-select-group">
             <input type="text" name="export.cslStyle" id="cslStyle" value="{{export.cslStyle}}">
             <button type="button" class="request-file"
+              data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
               data-request-name="Citation Style Language File"
               data-request-ext="csl"
               data-request-target="#cslStyle"></button>

@@ -349,6 +349,7 @@
       "debug": "Entwicklermodus",
       "autoCloseBrackets": "Schließe automatisch die folgenden Zeichenpaare: ()[]{}'\"\"»«„““”‘’__``",
       "csl_database": "CSL JSON-Datenbankdatei",
+      "choose_file": "Datei wählen …",
       "save": "Speichern",
       "cancel": "Abbrechen"
     },

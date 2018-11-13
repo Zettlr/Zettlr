@@ -349,6 +349,7 @@
       "debug": "Debug",
       "autoCloseBrackets": "Fermer les pairs du caractères suivants: ()[]{}'\"\"»«„““”‘’__``",
       "csl_database": "Base de données CSL JSON",
+      "choose_file": "Choisier le fichier …",
       "save": "Enregistrer",
       "cancel": "Annuler"
     },

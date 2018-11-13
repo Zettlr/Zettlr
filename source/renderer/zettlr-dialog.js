@@ -266,6 +266,9 @@ class ZettlrDialog {
 
       // After all is done send an async callback message
       global.ipc.send('request-files', payload, (ret) => {
+        // Don't update to empty paths.
+        if (!ret || ret.length === 0 || ret[0] === '') return
+        console.log(ret)
         // Write the return value into the data-request-target of the clicked
         // button, because each button has a designated text field.
         $(elem.attr('data-request-target')).val(ret[0])
