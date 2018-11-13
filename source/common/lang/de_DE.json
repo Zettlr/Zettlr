@@ -335,6 +335,12 @@
         "var_minute": "Minuten (führende Null)",
         "var_second": "Sekunden (führende Null)"
       },
+      "display": {
+        "title": "Anzeige",
+        "info": "Bestimme hier, wie Zettlr aussieht.",
+        "image_width": "Maximale Breite der Vorschau-Bilder (relativ zur Breite des Textes)",
+        "image_height": "Maximale Höhe der Vorschau Bilder (relativ zur Höhe des Fensters; 100 bedeutet keine Einschränkung)"
+      },
       "pandoc": "Pfad zum Pandoc-Programm. Bitte ändere dies nur, wenn Zettlr Pandoc nicht automatisch findet.",
       "xelatex": "Pfad zum XeLaTeX-Programm. Bitte ändere dies nur, wenn Pandoc einen Fehler ausgibt, dass er die Bibliothek nicht finden kann.",
       "pandoc_default": "Standard: pandoc",

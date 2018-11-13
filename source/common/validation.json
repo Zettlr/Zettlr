@@ -33,5 +33,7 @@
    "pdf.sansfont": "required|string|min:3|default:Arial",
    "pdf.fontsize": "required|number|min:4|default:12",
    "pdf.lineheight": "required|number|default:1.5",
-   "cslLibrary": "optional|string|default:"
+   "cslLibrary": "optional|string|default:",
+   "display.imageWidth": "required|number|min:1|max:100|default:100",
+   "display.imageHeight": "required|number|min:1|max:100|default:100"
 }

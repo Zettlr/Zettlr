@@ -22,6 +22,8 @@
 - Added an additional check to see whether or not a huge number of words has been pasted into the editor. If so, the word counter won't count these towards the overall counter. So if you need to paste in whole documents, this won't raise your word counter absurdly high.
 - Fixed a bug that rendered unwanted Math previews.
 - Added file-open buttons. Now, whenever you are required to select a normal file, Zettlr provides you with a button that lets you choose the file comfortably.
+- Zettlr now features an additional "Display" preferences tab, which lets you control all things that define Zettlr's appearance.
+- You can now constrain the maximum size of images in the editor, separated by maximum width and maximum height.
 
 ## Under the hood
 

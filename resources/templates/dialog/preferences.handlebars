@@ -7,6 +7,7 @@
         <li><a href="#prefs-tabs-editor">{{i18n "dialog.preferences.editor"}}</a></li>
         <li><a href="#prefs-tabs-export">{{i18n "dialog.preferences.export.title"}}</a></li>
         <li><a href="#prefs-tabs-zkn">{{i18n "dialog.preferences.zkn.title"}}</a></li>
+        <li><a href="#prefs-tabs-display">{{i18n "dialog.preferences.display.title"}}</a></li>
         <li><a href="#prefs-tabs-advanced">{{i18n "dialog.preferences.advanced"}}</a></li>
       </ul>
       <!-- General settings -->
@@ -188,6 +189,18 @@
               <li><strong>%s</strong>: {{i18n "dialog.preferences.zkn.var_second"}}</li>
             </ul>
           </p>
+        </div>
+      </div>
+      <!-- Display options -->
+      <div id="prefs-tabs-display">
+        <p>{{i18n "dialog.preferences.display.info"}}</p>
+        <div class="box-left">
+          <label for="imageWidth">{{i18n "dialog.preferences.display.image_width"}}</label>
+          <input type="range" min="1" max="100" id="imageWidth" name="display.imageWidth" value="{{display.imageWidth}}">
+          <label for="imageHeight">{{i18n "dialog.preferences.display.image_height"}}</label>
+          <input type="range" min="1" max="100" id="imageHeight" name="display.imageHeight" value="{{display.imageHeight}}">
+        </div>
+        <div class="box-right">
         </div>
       </div>
       <!-- Export/seldomly used options -->

@@ -118,6 +118,10 @@ class ZettlrConfig extends EventEmitter {
       'editor': {
         'autoCloseBrackets': true
       },
+      'display': {
+        'imageWidth': 100,
+        'imageHeight': 100
+      },
       // Language
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.
       'app_lang': this.getLocale(),

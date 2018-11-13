@@ -335,6 +335,12 @@
         "var_minute": "Minutes (zéros en tête)",
         "var_second": "Secondes (zéros en tête)"
       },
+      "display": {
+        "title": "Visualisation",
+        "info": "Contrôler le visualisation de Zettlr.",
+        "image_width": "Largeur maximale des vignettes (par rapport à la largeur du texte)",
+        "image_height": "Hauteur maximale des vignettes (par rapport à la hauteur de la fenêtre; 100 signifie pas de restriction)"
+      },
       "pandoc": "Chemin d'accès à Pandoc. Seulement changer le, si Zettlr est dans l'impossibilité de faire trouver le programme.",
       "xelatex": "Chemin d'accès à xelatex. Seulement changer le, si Zettlr est dans l'impossibilité de faire trouver le programme.",
       "pandoc_default": "Standard: pandoc",

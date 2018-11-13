@@ -143,6 +143,11 @@ class ZettlrRenderer {
     // muteLines initial setting
     this.getEditor().setMuteLines(global.config.get('muteLines'))
     this.getEditor().setAutoCloseBrackets(global.config.get('editor.autoCloseBrackets'))
+    // preview image constraints
+    this.getEditor().setImagePreviewConstraints(
+      global.config.get('display.imageWidth'),
+      global.config.get('display.imageHeight')
+    )
 
     // Set the correct combiner state
     switch (global.config.get('combinerState')) {

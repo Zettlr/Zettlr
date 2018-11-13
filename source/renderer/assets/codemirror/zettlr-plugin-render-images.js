@@ -118,8 +118,11 @@
         // Try it
         img.src = rel
       }
-      img.style.maxWidth = '100%'
-      img.style.maxHeight = '100%'
+      // Retrieve the size constraints
+      let width = (cm.getOption('imagePreviewWidth')) ? cm.getOption('imagePreviewWidth') + '%' : '100%'
+      let height = (cm.getOption('imagePreviewHeight') && cm.getOption('imagePreviewHeight') < 100) ? cm.getOption('imagePreviewHeight') + 'vh' : ''
+      img.style.maxWidth = width
+      img.style.maxHeight = height
       img.style.cursor = 'default' // Nicer cursor
       img.src = url
       img.onclick = (e) => { textMarker.clear() }

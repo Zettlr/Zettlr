@@ -503,6 +503,16 @@ class ZettlrEditor {
   }
 
   /**
+   * Apply constraints to the preview image size
+   * @param {number} width  The maximum width
+   * @param {number} height The maximum height
+   */
+  setImagePreviewConstraints (width, height) {
+    this._cm.setOption('imagePreviewWidth', width)
+    this._cm.setOption('imagePreviewHeight', height)
+  }
+
+  /**
    * This sets the tag database necessary for the tag autocomplete.
    * @param {Object} tagDB An object (here with prototype due to JSON) containing tags
    */
