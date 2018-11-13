@@ -107,7 +107,6 @@ class ZettlrCiteproc {
    * There has been a config update. In case the main library has changed, reload
    */
   _onConfigUpdate () {
-    console.log('Received a config update')
     if (global.config.get('export.cslLibrary') !== this._mainLibrary) {
       this.load()
     }
