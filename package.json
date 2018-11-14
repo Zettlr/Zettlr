@@ -93,10 +93,10 @@
         },
         "deb": {
             "priority": "optional",
-            "compression": "gz"
+            "compression": "xz"
         },
         "rpm": {
-            "compression": "gz"
+            "compression": "xz"
         }
     },
     "dependencies": {
