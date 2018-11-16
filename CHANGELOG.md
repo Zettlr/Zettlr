@@ -24,6 +24,7 @@
 - Added file-open buttons. Now, whenever you are required to select a normal file, Zettlr provides you with a button that lets you choose the file comfortably.
 - Zettlr now features an additional "Display" preferences tab, which lets you control all things that define Zettlr's appearance.
 - You can now constrain the maximum size of images in the editor, separated by maximum width and maximum height.
+- Updated the about dialog to now feature a tabbed interface containing main projects with licenses for the four big projects Zettlr use (Electron, Node.js, CodeMirror, and CitationStyleLanguage), all complementary projects, and the license of Zettlr itself.
 
 ## Under the hood
 

@@ -384,6 +384,9 @@
     },
     "about": {
       "title": "About Zettlr",
+      "main": "Main Projects",
+      "projects": "Other projects",
+      "license": "License",
       "lead": "Zettlr is a project by Hendrik Erz, licenced under the GNU GPL v3 licence. It is Open Source, free of charge and based upon the Electron framework. Zettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Zettlr would not be possible. Below you can find all projects that Zettlr uses.",
       "other_projects": "Zettlr also makes use of these projects:",
       "jquery": "Makes it easy to render the whole user interface",
@@ -394,7 +397,11 @@
       "lessjs": "Helps a lot in writing the styles for Zettlr",
       "clusterizejs": "Displays even the longest file lists reliably",
       "tippyjs": "That's where the nice tooltips come from",
+      "citeproc": "Renders correct citations for all works",
+      "chartjs": "Displays your writing statistics in a nice chart",
+      "katex": "Renders LaTeX-formulae in the editor",
       "trademark": "All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc.",
+      "citationstyle": "Zettlr makes use of citeproc to display citations directly in the editor. To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:",
       "close": "Close"
     },
     "statistics": {
