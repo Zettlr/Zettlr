@@ -112,6 +112,14 @@
   CodeMirror.defineMode('markdown-zkn', function (config, parserConfig) {
     var markdownZkn = {
       token: function (stream, state) {
+        // Immediately check for escape characters
+        // Escape characters need to be greyed out, but not the characters themselves.
+        if (stream.peek() === '\\') {
+          stream.next()
+          return 'escape-char'
+        }
+
+        // Now dig deeper for more tokens
         let zknIDRE = ''
         if (config.hasOwnProperty('zkn') && config.zkn.hasOwnProperty('idRE')) {
           zknIDRE = new RegExp(config.zkn.idRE)
@@ -153,7 +161,8 @@
         while (stream.next() != null &&
                 !stream.match(zknTagRE, false) &&
                 !stream.match(zknIDRE, false) &&
-                !stream.match(zknLinkRE, false)) { }
+                !stream.match(zknLinkRE, false) &&
+                !stream.match(/\\/, false)) { }
 
         return null
       }

@@ -24,6 +24,7 @@
 - Zettlr now features an additional "Display" preferences tab, which lets you control all things that define Zettlr's appearance.
 - You can now constrain the maximum size of images in the editor, separated by maximum width and maximum height.
 - Updated the about dialog to now feature a tabbed interface containing main projects with licenses for the four big projects Zettlr use (Electron, Node.js, CodeMirror, and CitationStyleLanguage), all complementary projects, and the license of Zettlr itself.
+- Now only escaping characters are formatted, not the characters following them.
 
 ## Under the hood
 
