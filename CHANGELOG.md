@@ -25,6 +25,7 @@
 - You can now constrain the maximum size of images in the editor, separated by maximum width and maximum height.
 - Updated the about dialog to now feature a tabbed interface containing main projects with licenses for the four big projects Zettlr use (Electron, Node.js, CodeMirror, and CitationStyleLanguage), all complementary projects, and the license of Zettlr itself.
 - Now only escaping characters are formatted, not the characters following them.
+- Fixed a bug that would prevent you from being able to modify an already loaded image without restarting Zettlr, because it would cache the image and not reload the modified version of it.
 
 ## Under the hood
 
@@ -48,6 +49,7 @@
 - Generalised the `askFile()` function in `ZettlrWindow` for further purposes.
 - The `ZettlrConfig` now acts as an event emitter and emits `update`-events, whenever the configuration object changes. It can be subscribed to using `global.config.on` (to unsubscribe use `global.config.off`).
 - Added a `global.ipc.notify`-function to easily send notifications to the renderer.
+- Added a "cachebreaker" to the preview images in Zettlr.
 
 # 0.20.0
 
