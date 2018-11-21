@@ -525,7 +525,13 @@ class ZettlrEditor {
    * @param {Array} idList An array containing the new IDs
    */
   setCiteprocIDs (idList) {
-    this._citeprocIDs = idList
+    if (typeof idList !== 'object' || idList === null) {
+      // Create an empty object.
+      this._citeprocIDs = Object.create(null)
+    } else {
+      // Overwrite existing array
+      this._citeprocIDs = idList
+    }
   }
 
   /**

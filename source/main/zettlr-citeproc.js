@@ -63,8 +63,11 @@ class ZettlrCiteproc {
     // Create a global object so that we can easily pass rendered citations
     global.citeproc = {
       getIDs: () => {
-        if (this._status !== 'ready') return this._status
-        return JSON.parse(JSON.stringify(this._ids))
+        // Always include the status in the return.
+        return {
+          'ids': JSON.parse(JSON.stringify(this._ids)),
+          'status': this._status
+        }
       },
       getCitation: (idList) => { return this.getCitation(idList) },
       updateItems: (idList) => { return this.updateItems(idList) },

@@ -508,7 +508,10 @@ class ZettlrRendererIPC {
 
       // Return to the app a fresh list of IDs available.
       case 'citeproc-ids':
-        this._app.setCiteprocIDs(cnt)
+        // Set a timeout to re-send the command in case the citeproc was not
+        // ready yet. Do not re-send the command if there was not db or an error
+        if (cnt.status === 0 || cnt.status === 1) setTimeout(() => { this.send('citeproc-get-ids') }, 1000)
+        this._app.setCiteprocIDs(cnt.ids)
         break
 
       // The argument contains a new bibliography object
