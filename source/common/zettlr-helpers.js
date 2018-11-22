@@ -72,10 +72,10 @@ function flattenDirectoryTree (tree, newarr = []) {
 }
 
 /**
- * Helper function to sort strings by ascii characters
+ * Helper function to sort files by ascii characters
  * @param  {ZettlrFile} a A ZettlrFile exposing a name property
  * @param  {ZettlrFile} b A ZettlrFile exposing a name property
- * @return {number}   0, 1, or -1, depending upon what the comparision is.
+ * @return {number}   0, 1, or -1, depending upon what the comparision yields.
  */
 function asciiSorting (a, b) {
   // Negative return: a is smaller b (case insensitive)
@@ -89,10 +89,10 @@ function asciiSorting (a, b) {
 }
 
 /**
- * Helper function to sort strings by ascii characters
- * @param  {ZettlrFile} a A ZettlrFile exposing a name property
- * @param  {ZettlrFile} b A ZettlrFile exposing a name property
- * @return {number}   0, 1, or -1, depending upon what the comparision is.
+ * Helper function to sort files by modification time
+ * @param  {ZettlrFile} a A ZettlrFile exposing a modtime property
+ * @param  {ZettlrFile} b A ZettlrFile exposing a modtime property
+ * @return {number}   0, 1, or -1, depending upon what the comparision yields.
  */
 function dateSorting (a, b) {
   if (a.modtime < b.modtime) {
