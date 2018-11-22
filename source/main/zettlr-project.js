@@ -53,7 +53,8 @@ class ZettlrProject {
         'fontsize': 12,
         'toc': true, // Default: generate table of contents
         'tocDepth': 2, // Default: evaluate until level 2
-        'titlepage': true // Generate a title page by default
+        'titlepage': true, // Generate a title page by default
+        'textpl': '' // Can be used to store a custom TeX template
       },
       'title': this._dir.name, // Default project title is the directory's name
       'format': 'pdf', // Default export format: pdf.

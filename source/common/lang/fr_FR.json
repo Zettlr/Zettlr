@@ -245,7 +245,8 @@
         "fontsize": "Taille du font",
         "lineheight_label": "Interligne (en percent, par ex.: 150% est égale à 1.5 lignes)",
         "lineheight": "Interligne",
-        "papertype": "Format du page"
+        "papertype": "Format du page",
+        "textpl": "Modèle du TeX personnalisé"
       },
       "app_lang": {
         "title": "La langue de l'app (<strong>Redémmarage indispensable</strong>)",

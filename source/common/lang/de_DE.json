@@ -245,7 +245,8 @@
         "fontsize": "Schriftgröße",
         "lineheight_label": "Zeilenabstand (relativ zur Schriftgröße; 150% entsprechen anderthalbfachem Abstand)",
         "lineheight": "Zeilenabstand",
-        "papertype": "Seite"
+        "papertype": "Seite",
+        "textpl": "Benutzerdefiniertes TeX-Template"
       },
       "app_lang": {
         "title": "Anwendungssprache (<strong>Neustart erforderlich!</strong>)",

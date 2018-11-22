@@ -245,7 +245,8 @@
         "fontsize": "Font size",
         "lineheight_label": "Line height (in percent relative to font size, i.e.: 150% equals 1.5 lines spacing)",
         "lineheight": "Line height",
-        "papertype": "Page format"
+        "papertype": "Page format",
+        "textpl": "Custom TeX-template"
       },
       "app_lang": {
         "title": "Application language (<strong>Restart required!</strong>)",

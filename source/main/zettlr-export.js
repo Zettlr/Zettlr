@@ -212,8 +212,14 @@ class ZettlrExport {
    */
   _buildLatexTpl () {
     this.textpl = path.join(this.options.dest, 'template.latex')
+    let file = path.join(__dirname, './assets/export.tex')
     let pdf = this.options.pdf // Retrieve the PDF options
-    let cnt = fs.readFileSync(path.join(__dirname, './assets/export.tex'), 'utf8')
+
+    // If a textpl is given, read this instead of the builtin template
+    if (pdf.hasOwnProperty('textpl') && isFile(pdf.textpl)) {
+      file = pdf.textpl
+    }
+    let cnt = fs.readFileSync(file, 'utf8')
     // Do updates to the template
     // General options
     cnt = cnt.replace('%PAGE_NUMBERING%', pdf.pagenumbering)

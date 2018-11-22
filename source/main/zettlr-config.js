@@ -105,7 +105,8 @@ class ZettlrConfig extends EventEmitter {
         'lineheight': '1.5', // Default: 150% line height
         'mainfont': 'Times New Roman', // Main font
         'sansfont': 'Arial', // Sans font, used, e.g. for headings
-        'fontsize': 12 // Will be translated to pt
+        'fontsize': 12, // Will be translated to pt
+        'textpl': '' // Can be used to store a custom TeX template
       },
       // Zettelkasten stuff (IDs, as well as link matchers)
       'zkn': {

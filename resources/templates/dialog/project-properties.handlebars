@@ -19,6 +19,16 @@
           <input type="text" name="pdf.author" id="pdf.author" value="{{pdf.author}}" placeholder="{{i18n "dialog.preferences.pdf.author"}}">
           <label for="pdf.keywords">{{i18n "dialog.preferences.pdf.keywords_label"}}</label>
           <input type="text" name="pdf.keywords" if="pdf.keywords" value="{{pdf.keywords}}" placeholder="{{i18n "dialog.preferences.pdf.keywords"}}">
+          <hr>
+          <label for="textpl">{{i18n "dialog.preferences.pdf.textpl"}}</label>
+          <div class="file-select-group">
+            <input type="text" name="pdf.textpl" id="textpl" value="{{pdf.textpl}}">
+            <button type="button" class="request-file"
+            data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
+            data-request-name="TeX Template File"
+            data-request-ext="tex"
+            data-request-target="#textpl"></button>
+          </div>
         </div>
         <div class="box-right">
           <label class="cb-toggle">

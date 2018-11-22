@@ -55,7 +55,13 @@ module.exports = {"1":function(container,depth0,helpers,partials,data,blockParam
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.pdf : depth0)) != null ? stack1.keywords : stack1), depth0))
     + "\" placeholder=\""
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.pdf.keywords",{"name":"i18n","hash":{},"data":data}))
-    + "\">\n            </div>\n            <!-- Page layout -->\n            <div id=\"prefs-tabs-page\">\n                <p>"
+    + "\">\n                <hr>\n                <label for=\"textpl\">"
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.pdf.textpl",{"name":"i18n","hash":{},"data":data}))
+    + "</label>\n                <div class=\"file-select-group\">\n                  <input type=\"text\" name=\"pdf.textpl\" id=\"textpl\" value=\""
+    + alias3(alias4(((stack1 = (depth0 != null ? depth0.pdf : depth0)) != null ? stack1.textpl : stack1), depth0))
+    + "\">\n                  <button type=\"button\" class=\"request-file\"\n                  data-tippy-content=\""
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.choose_file",{"name":"i18n","hash":{},"data":data}))
+    + "\"\n                  data-request-name=\"TeX Template File\"\n                  data-request-ext=\"tex\"\n                  data-request-target=\"#textpl\"></button>\n                </div>\n            </div>\n            <!-- Page layout -->\n            <div id=\"prefs-tabs-page\">\n                <p>"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.pdf.page_intro",{"name":"i18n","hash":{},"data":data}))
     + "</p>\n                <hr>\n                <div class=\"clear\"></div>\n                <div class=\"box-left\">\n                    <div class=\"paper a4paper\">\n                        <input class=\"tmargin\" type=\"number\" min=\"0\" max=\"9999\" step=\"0.1\" name=\"pdf.tmargin\" id=\"pdf.tmargin\" value=\""
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.pdf : depth0)) != null ? stack1.tmargin : stack1), depth0))
