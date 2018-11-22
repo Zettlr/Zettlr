@@ -272,16 +272,11 @@ class ZettlrPreview {
     // First of all, focus the listcontainer to enable keyboard navigation
     this._listContainer.focus()
 
-    // In case the body has become focus (other elements may retain their
-    // focus!) re-focus the list container
-    this._listContainer.on('blur', (e) => {
-      if (document.activeElement === document.getElementByTagName('body')) {
-        this._listContainer.focus()
-      }
-    })
-
     // Activate directories and files respectively.
     this._listContainer.on('click', 'li', (e) => {
+      // focus the listContainer again! (in case it has lost focus to the editor)
+      this._listContainer.focus()
+
       let elem = $(e.target)
       while (!elem.is('li') && !elem.is('body')) {
         // Click may have occurred on a span or strong
