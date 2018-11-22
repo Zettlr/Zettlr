@@ -363,7 +363,8 @@ class ZettlrPreview {
     this._listContainer.on('click', '.taglist .tag', (e) => {
       // Initiate tag searches when the user clicks a tag.
       this._renderer.triggerGlobalSearch('#' + $(e.target).attr('data-tag'))
-      e.target._tippy.hide().destroy() // Also hide the tooltip
+      // Also hide the tooltip if it is still shown
+      if (e.target.hasOwnProperty('_tippy')) e.target._tippy.hide().destroy()
       e.stopPropagation() // Prevent the file itself from being clicked
     })
 
