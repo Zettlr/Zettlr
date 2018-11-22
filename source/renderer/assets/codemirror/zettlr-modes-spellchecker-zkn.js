@@ -141,7 +141,20 @@
         }
 
         // First: Tags, in the format of Twitter
-        if (stream.match(zknTagRE)) {
+        if (stream.match(zknTagRE, false)) {
+          // It may be that the tag has been escaped. Due to the nature of this
+          // stream we must back up and advance again, because lookbehinds won't
+          // work here.
+          if (!stream.sol()) {
+            stream.backUp(1)
+            if (stream.next() === '\\') {
+              stream.match(zknTagRE)
+              return null
+            }
+          }
+
+          // At this point we can be sure that this is a tag and not escaped.
+          stream.match(zknTagRE)
           return 'zkn-tag'
         }
 
