@@ -16,7 +16,7 @@
         </label>
         <select name="app_lang" id="app-lang">
           {{#each supportedLangs}}
-            <option value="{{this}}" {{#ifCond this '=' ../app_lang}}selected="selected"{{/ifCond}}>{{i18n "dialog.preferences.app_lang." this}}</option>
+          <option value="{{this}}" {{#ifCond this '=' ../app_lang}}selected="selected"{{/ifCond}}>{{i18n "dialog.preferences.app_lang." this}}</option>
           {{/each}}
         </select>
         <div class="cb-group">
@@ -38,11 +38,17 @@
           {{i18n "dialog.preferences.combiner_explanation"}}
         </p>
         <div class="cb-group">
-          <input type="radio" name="combinerState" value="collapsed" id="pref-comb-state-coll" {{#ifCond combinerState '=' 'collapsed'}}checked="checked"{{/ifCond}}>
+          <label class="radio-toggle">
+            <input type="radio" name="combinerState" value="collapsed" id="pref-comb-state-coll" {{#ifCond combinerState '=' 'collapsed'}}checked="checked"{{/ifCond}}>
+            <div class="toggle"></div>
+          </label>
           <label for="pref-comb-state-coll">{{i18n "dialog.preferences.combiner_collapsed"}}</label>
         </div>
         <div class="cb-group">
-          <input type="radio" name="combinerState" value="expanded" id="pref-comb-state-exp" {{#ifCond combinerState '=' 'expanded'}}checked="checked"{{/ifCond}}>
+          <label class="radio-toggle">
+            <input type="radio" name="combinerState" value="expanded" id="pref-comb-state-exp" {{#ifCond combinerState '=' 'expanded'}}checked="checked"{{/ifCond}}>
+            <div class="toggle"></div>
+          </label>
           <label for="pref-comb-state-exp">{{i18n "dialog.preferences.combiner_expanded"}}</label>
         </div>
       </div>
@@ -53,7 +59,7 @@
           <input type="text" class="dicts-list-search" placeholder="{{i18n "dialog.preferences.spellcheck_search_placeholder"}}">
           <ul class="dicts-list">
             {{#each availableDicts}}
-              <li data-value="{{this}}" class="dicts-list-item">{{i18n "dialog.preferences.app_lang." this}}</li>
+            <li data-value="{{this}}" class="dicts-list-item">{{i18n "dialog.preferences.app_lang." this}}</li>
             {{/each}}
           </ul>
         </div>
@@ -67,7 +73,7 @@
           <hr>
           <div class="selected-dictionaries">
             {{#each selectedDicts}}
-              <div class="selected-dict"><input type="hidden" value="{{this}}" name="selectedDicts" id="{{this}}">{{i18n "dialog.preferences.app_lang." this}}</div>
+            <div class="selected-dict"><input type="hidden" value="{{this}}" name="selectedDicts" id="{{this}}">{{i18n "dialog.preferences.app_lang." this}}</div>
             {{/each}}
           </div>
         </div>
@@ -110,15 +116,24 @@
           </p>
           <hr>
           <div class="cb-group">
-            <input type="radio" name="export.stripLinks" value="full" id="pref-export-strip-link-full" {{#ifCond export.stripLinks '=' 'full'}}checked="checked"{{/ifCond}}>
+            <label class="radio-toggle">
+              <input type="radio" name="export.stripLinks" value="full" id="pref-export-strip-link-full" {{#ifCond export.stripLinks '=' 'full'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
             <label for="pref-export-strip-link-full">{{i18n "dialog.preferences.export.strip_links_full_label"}}</label>
           </div>
           <div class="cb-group">
-            <input type="radio" name="export.stripLinks" value="unlink" id="pref-export-strip-link-unlink" {{#ifCond export.stripLinks '=' 'unlink'}}checked="checked"{{/ifCond}}>
+            <label class="radio-toggle">
+              <input type="radio" name="export.stripLinks" value="unlink" id="pref-export-strip-link-unlink" {{#ifCond export.stripLinks '=' 'unlink'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
             <label for="pref-export-strip-link-unlink">{{i18n "dialog.preferences.export.strip_links_unlink_label"}}</label>
           </div>
           <div class="cb-group">
-            <input type="radio" name="export.stripLinks" value="no" id="pref-export-strip-link-no" {{#ifCond export.stripLinks '=' 'no'}}checked="checked"{{/ifCond}}>
+            <label class="radio-toggle">
+              <input type="radio" name="export.stripLinks" value="no" id="pref-export-strip-link-no" {{#ifCond export.stripLinks '=' 'no'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
             <label for="pref-export-strip-link-no">{{i18n "dialog.preferences.export.strip_links_no_label"}}</label>
           </div>
         </div>
@@ -127,11 +142,17 @@
             {{i18n "dialog.preferences.export.dest"}}
           </p>
           <div class="cb-group">
-            <input type="radio" name="export.dir" value="temp" id="pref-export-temp" {{#ifCond export.dir '=' 'temp'}}checked="checked"{{/ifCond}}>
+            <label class="radio-toggle">
+              <input type="radio" name="export.dir" value="temp" id="pref-export-temp" {{#ifCond export.dir '=' 'temp'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
             <label for="pref-export-temp">{{i18n "dialog.preferences.export.dest_temp_label"}}</label>
           </div>
           <div class="cb-group">
-            <input type="radio" name="export.dir" value="cwd" id="pref-export-cwd" {{#ifCond export.dir '=' 'cwd'}}checked="checked"{{/ifCond}}>
+            <label class="radio-toggle">
+              <input type="radio" name="export.dir" value="cwd" id="pref-export-cwd" {{#ifCond export.dir '=' 'cwd'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
             <label for="pref-export-cwd">{{i18n "dialog.preferences.export.dest_cwd_label"}}</label>
           </div>
           <hr>
@@ -139,19 +160,19 @@
           <div class="file-select-group">
             <input type="text" name="export.cslLibrary" id="cslLibrary" value="{{export.cslLibrary}}">
             <button type="button" class="request-file"
-              data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
-              data-request-name="Citation Style Language JSON Data File"
-              data-request-ext="json"
-              data-request-target="#cslLibrary"></button>
+            data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
+            data-request-name="Citation Style Language JSON Data File"
+            data-request-ext="json"
+            data-request-target="#cslLibrary"></button>
           </div>
           <label for="cslStyle">{{i18n "dialog.preferences.project.csl_style"}}</label>
           <div class="file-select-group">
             <input type="text" name="export.cslStyle" id="cslStyle" value="{{export.cslStyle}}">
             <button type="button" class="request-file"
-              data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
-              data-request-name="Citation Style Language File"
-              data-request-ext="csl"
-              data-request-target="#cslStyle"></button>
+            data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
+            data-request-name="Citation Style Language File"
+            data-request-ext="csl"
+            data-request-target="#cslStyle"></button>
           </div>
         </div>
       </div>

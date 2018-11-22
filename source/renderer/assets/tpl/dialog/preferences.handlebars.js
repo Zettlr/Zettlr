@@ -1,7 +1,7 @@
 module.exports = {"1":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.escapeExpression, alias2=depth0 != null ? depth0 : (container.nullContext || {}), alias3=helpers.helperMissing;
 
-  return "            <option value=\""
+  return "          <option value=\""
     + alias1(container.lambda(depth0, depth0))
     + "\" "
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias3).call(alias2,depth0,"=",(depths[1] != null ? depths[1].app_lang : depths[1]),{"name":"ifCond","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -15,7 +15,7 @@ module.exports = {"1":function(container,depth0,helpers,partials,data,blockParam
 },"6":function(container,depth0,helpers,partials,data) {
     var alias1=container.escapeExpression;
 
-  return "              <li data-value=\""
+  return "            <li data-value=\""
     + alias1(container.lambda(depth0, depth0))
     + "\" class=\"dicts-list-item\">"
     + alias1((helpers.i18n || (depth0 && depth0.i18n) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"dialog.preferences.app_lang.",depth0,{"name":"i18n","hash":{},"data":data}))
@@ -23,7 +23,7 @@ module.exports = {"1":function(container,depth0,helpers,partials,data,blockParam
 },"8":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "              <div class=\"selected-dict\"><input type=\"hidden\" value=\""
+  return "            <div class=\"selected-dict\"><input type=\"hidden\" value=\""
     + alias2(alias1(depth0, depth0))
     + "\" name=\"selectedDicts\" id=\""
     + alias2(alias1(depth0, depth0))
@@ -61,13 +61,13 @@ module.exports = {"1":function(container,depth0,helpers,partials,data,blockParam
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.snippets",{"name":"i18n","hash":{},"data":data}))
     + "</label>\n        </div>\n        <hr>\n        <p>\n          "
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.combiner_explanation",{"name":"i18n","hash":{},"data":data}))
-    + "\n        </p>\n        <div class=\"cb-group\">\n          <input type=\"radio\" name=\"combinerState\" value=\"collapsed\" id=\"pref-comb-state-coll\" "
+    + "\n        </p>\n        <div class=\"cb-group\">\n          <label class=\"radio-toggle\">\n            <input type=\"radio\" name=\"combinerState\" value=\"collapsed\" id=\"pref-comb-state-coll\" "
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.combinerState : depth0),"=","collapsed",{"name":"ifCond","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">\n          <label for=\"pref-comb-state-coll\">"
+    + ">\n            <div class=\"toggle\"></div>\n          </label>\n          <label for=\"pref-comb-state-coll\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.combiner_collapsed",{"name":"i18n","hash":{},"data":data}))
-    + "</label>\n        </div>\n        <div class=\"cb-group\">\n          <input type=\"radio\" name=\"combinerState\" value=\"expanded\" id=\"pref-comb-state-exp\" "
+    + "</label>\n        </div>\n        <div class=\"cb-group\">\n          <label class=\"radio-toggle\">\n            <input type=\"radio\" name=\"combinerState\" value=\"expanded\" id=\"pref-comb-state-exp\" "
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.combinerState : depth0),"=","expanded",{"name":"ifCond","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">\n          <label for=\"pref-comb-state-exp\">"
+    + ">\n            <div class=\"toggle\"></div>\n          </label>\n          <label for=\"pref-comb-state-exp\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.combiner_expanded",{"name":"i18n","hash":{},"data":data}))
     + "</label>\n        </div>\n      </div>\n      <!-- Editor related options -->\n      <div id=\"prefs-tabs-editor\">\n        <div class=\"clear\"></div>\n        <div class=\"box-left\">\n          <input type=\"text\" class=\"dicts-list-search\" placeholder=\""
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.spellcheck_search_placeholder",{"name":"i18n","hash":{},"data":data}))
@@ -97,41 +97,41 @@ module.exports = {"1":function(container,depth0,helpers,partials,data,blockParam
     + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0["export"] : depth0)) != null ? stack1.stripTags : stack1),{"name":"if","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">\n                <div class=\"toggle\"></div>\n              </label>\n              <label for=\"export.stripTags\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.export.strip_tags_label",{"name":"i18n","hash":{},"data":data}))
-    + "</label>\n            </div>\n          </p>\n          <hr>\n          <div class=\"cb-group\">\n            <input type=\"radio\" name=\"export.stripLinks\" value=\"full\" id=\"pref-export-strip-link-full\" "
+    + "</label>\n            </div>\n          </p>\n          <hr>\n          <div class=\"cb-group\">\n            <label class=\"radio-toggle\">\n              <input type=\"radio\" name=\"export.stripLinks\" value=\"full\" id=\"pref-export-strip-link-full\" "
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0["export"] : depth0)) != null ? stack1.stripLinks : stack1),"=","full",{"name":"ifCond","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">\n            <label for=\"pref-export-strip-link-full\">"
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"pref-export-strip-link-full\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.export.strip_links_full_label",{"name":"i18n","hash":{},"data":data}))
-    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <input type=\"radio\" name=\"export.stripLinks\" value=\"unlink\" id=\"pref-export-strip-link-unlink\" "
+    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <label class=\"radio-toggle\">\n              <input type=\"radio\" name=\"export.stripLinks\" value=\"unlink\" id=\"pref-export-strip-link-unlink\" "
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0["export"] : depth0)) != null ? stack1.stripLinks : stack1),"=","unlink",{"name":"ifCond","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">\n            <label for=\"pref-export-strip-link-unlink\">"
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"pref-export-strip-link-unlink\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.export.strip_links_unlink_label",{"name":"i18n","hash":{},"data":data}))
-    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <input type=\"radio\" name=\"export.stripLinks\" value=\"no\" id=\"pref-export-strip-link-no\" "
+    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <label class=\"radio-toggle\">\n              <input type=\"radio\" name=\"export.stripLinks\" value=\"no\" id=\"pref-export-strip-link-no\" "
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0["export"] : depth0)) != null ? stack1.stripLinks : stack1),"=","no",{"name":"ifCond","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">\n            <label for=\"pref-export-strip-link-no\">"
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"pref-export-strip-link-no\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.export.strip_links_no_label",{"name":"i18n","hash":{},"data":data}))
     + "</label>\n          </div>\n        </div>\n        <div class=\"box-right\">\n          <p>\n            "
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.export.dest",{"name":"i18n","hash":{},"data":data}))
-    + "\n          </p>\n          <div class=\"cb-group\">\n            <input type=\"radio\" name=\"export.dir\" value=\"temp\" id=\"pref-export-temp\" "
+    + "\n          </p>\n          <div class=\"cb-group\">\n            <label class=\"radio-toggle\">\n              <input type=\"radio\" name=\"export.dir\" value=\"temp\" id=\"pref-export-temp\" "
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0["export"] : depth0)) != null ? stack1.dir : stack1),"=","temp",{"name":"ifCond","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">\n            <label for=\"pref-export-temp\">"
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"pref-export-temp\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.export.dest_temp_label",{"name":"i18n","hash":{},"data":data}))
-    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <input type=\"radio\" name=\"export.dir\" value=\"cwd\" id=\"pref-export-cwd\" "
+    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <label class=\"radio-toggle\">\n              <input type=\"radio\" name=\"export.dir\" value=\"cwd\" id=\"pref-export-cwd\" "
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,((stack1 = (depth0 != null ? depth0["export"] : depth0)) != null ? stack1.dir : stack1),"=","cwd",{"name":"ifCond","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">\n            <label for=\"pref-export-cwd\">"
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"pref-export-cwd\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.export.dest_cwd_label",{"name":"i18n","hash":{},"data":data}))
     + "</label>\n          </div>\n          <hr>\n          <label for=\"cslLibrary\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.csl_database",{"name":"i18n","hash":{},"data":data}))
     + "</label>\n          <div class=\"file-select-group\">\n            <input type=\"text\" name=\"export.cslLibrary\" id=\"cslLibrary\" value=\""
     + alias3(alias4(((stack1 = (depth0 != null ? depth0["export"] : depth0)) != null ? stack1.cslLibrary : stack1), depth0))
-    + "\">\n            <button type=\"button\" class=\"request-file\"\n              data-tippy-content=\""
+    + "\">\n            <button type=\"button\" class=\"request-file\"\n            data-tippy-content=\""
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.choose_file",{"name":"i18n","hash":{},"data":data}))
-    + "\"\n              data-request-name=\"Citation Style Language JSON Data File\"\n              data-request-ext=\"json\"\n              data-request-target=\"#cslLibrary\"></button>\n          </div>\n          <label for=\"cslStyle\">"
+    + "\"\n            data-request-name=\"Citation Style Language JSON Data File\"\n            data-request-ext=\"json\"\n            data-request-target=\"#cslLibrary\"></button>\n          </div>\n          <label for=\"cslStyle\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.project.csl_style",{"name":"i18n","hash":{},"data":data}))
     + "</label>\n          <div class=\"file-select-group\">\n            <input type=\"text\" name=\"export.cslStyle\" id=\"cslStyle\" value=\""
     + alias3(alias4(((stack1 = (depth0 != null ? depth0["export"] : depth0)) != null ? stack1.cslStyle : stack1), depth0))
-    + "\">\n            <button type=\"button\" class=\"request-file\"\n              data-tippy-content=\""
+    + "\">\n            <button type=\"button\" class=\"request-file\"\n            data-tippy-content=\""
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.choose_file",{"name":"i18n","hash":{},"data":data}))
-    + "\"\n              data-request-name=\"Citation Style Language File\"\n              data-request-ext=\"csl\"\n              data-request-target=\"#cslStyle\"></button>\n          </div>\n        </div>\n      </div>\n      <!-- Zettelkasten options -->\n      <div id=\"prefs-tabs-zkn\">\n        <div class=\"box-left form-inline-buttons\">\n          <label for=\"pref-zkn-free-id\">"
+    + "\"\n            data-request-name=\"Citation Style Language File\"\n            data-request-ext=\"csl\"\n            data-request-target=\"#cslStyle\"></button>\n          </div>\n        </div>\n      </div>\n      <!-- Zettelkasten options -->\n      <div id=\"prefs-tabs-zkn\">\n        <div class=\"box-left form-inline-buttons\">\n          <label for=\"pref-zkn-free-id\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.zkn.id_label",{"name":"i18n","hash":{},"data":data}))
     + "</label>\n          <input type=\"text\" id=\"pref-zkn-free-id\" value=\""
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.zkn : depth0)) != null ? stack1.idRE : stack1), depth0))

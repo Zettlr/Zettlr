@@ -26,6 +26,7 @@
 - Updated the about dialog to now feature a tabbed interface containing main projects with licenses for the four big projects Zettlr use (Electron, Node.js, CodeMirror, and CitationStyleLanguage), all complementary projects, and the license of Zettlr itself.
 - Now only escaping characters are formatted, not the characters following them.
 - Fixed a bug that would prevent you from being able to modify an already loaded image without restarting Zettlr, because it would cache the image and not reload the modified version of it.
+- Updated the styling of form elements: Now ranges and radio buttons are also displayed in the Zettlr design.
 
 ## Under the hood
 
