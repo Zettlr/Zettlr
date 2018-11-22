@@ -72,6 +72,39 @@ function flattenDirectoryTree (tree, newarr = []) {
 }
 
 /**
+ * Helper function to sort strings by ascii characters
+ * @param  {ZettlrFile} a A ZettlrFile exposing a name property
+ * @param  {ZettlrFile} b A ZettlrFile exposing a name property
+ * @return {number}   0, 1, or -1, depending upon what the comparision is.
+ */
+function asciiSorting (a, b) {
+  // Negative return: a is smaller b (case insensitive)
+  if (a.name.toLowerCase() < b.name.toLowerCase()) {
+    return -1
+  } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
+    return 1
+  } else {
+    return 0
+  }
+}
+
+/**
+ * Helper function to sort strings by ascii characters
+ * @param  {ZettlrFile} a A ZettlrFile exposing a name property
+ * @param  {ZettlrFile} b A ZettlrFile exposing a name property
+ * @return {number}   0, 1, or -1, depending upon what the comparision is.
+ */
+function dateSorting (a, b) {
+  if (a.modtime < b.modtime) {
+    return -1
+  } else if (a.modtime > b.modtime) {
+    return 1
+  } else {
+    return 0
+  }
+}
+
+/**
 * This function can sort an array of ZettlrFile and ZettlrDir objects
 * @param  {Array} arr An array containing only ZettlrFile, ZettlrVirtualDirectory and ZettlrDir objects
 * @param {String} [type='name-up'] The type of sorting - can be time-up, time-down, name-up or name-down
@@ -83,76 +116,54 @@ function sort (arr, type = 'name-up') {
   let d = []
   let vd = []
 
+  // Should we use natural sorting or ascii?
+  let useNatural = (global.config && global.config.get('sorting') === 'natural')
+
+  // Create a collator for long lists, using the app-lang in BCP-47, and en as fallback
+  let coll = new Intl.Collator([ global.config.get('app_lang').replace(/_/, '-'), 'en' ])
+
+  // We need a buffer function because compare() expects strings, not objects
+  let naturalSorting = (a, b) => { return coll.compare(a.name, b.name) }
+
+  // Write in the sortingFunc whatever we should be using
+  let sortingFunc = (useNatural) ? naturalSorting : asciiSorting
+
+  // Split up the children list
   for (let c of arr) {
-    if (c.type === 'file') {
-      f.push(c)
-    } else if (c.type === 'directory') {
-      d.push(c)
-    } else if (c.type === 'virtual-directory') {
-      vd.push(c)
+    switch (c.type) {
+      case 'file':
+        f.push(c)
+        break
+      case 'directory':
+        d.push(c)
+        break
+      case 'virtual-directory':
+        vd.push(c)
+        break
     }
   }
 
-  // Then sort the directories (always based on name)
-  d.sort((a, b) => {
-    // Negative return: a is smaller b (case insensitive)
-    if (a.name.toLowerCase() < b.name.toLowerCase()) {
-      return -1
-    } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
-      return 1
-    } else {
-      return 0
-    }
-  })
+  // Sort the directories (always based on name)
+  d.sort(sortingFunc)
 
-  // The virtual directories (also by name)
-  vd.sort((a, b) => {
-    // Negative return: a is smaller b (case insensitive)
-    if (a.name.toLowerCase() < b.name.toLowerCase()) {
-      return -1
-    } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
-      return 1
-    } else {
-      return 0
-    }
-  })
+  // Then virtual directories (also by name)
+  vd.sort(sortingFunc)
 
-  // Now sort the files according to the type
-  f.sort((a, b) => {
-    if (type === 'name-up') {
-      if (a.name.toLowerCase() < b.name.toLowerCase()) {
-        return -1
-      } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
-        return 1
-      } else {
-        return 0
-      }
-    } else if (type === 'name-down') {
-      if (a.name.toLowerCase() < b.name.toLowerCase()) {
-        return 1
-      } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
-        return -1
-      } else {
-        return 0
-      }
-    } else if (type === 'time-up') {
-      if (a.modtime < b.modtime) {
-        return -1
-      } else if (a.modtime > b.modtime) {
-        return 1
-      } else {
-        return 0
-      }
-    } else if (type === 'time-down') {
-      if (a.modtime < b.modtime) {
-        return 1
-      } else if (a.modtime > b.modtime) {
-        return -1
-      } else {
-        return 0
-      }
-    }
-  })
+  // Now sort the files according to the type of sorting
+  switch (type) {
+    case 'name-up':
+      f.sort(sortingFunc)
+      break
+    case 'name-down':
+      f.sort(sortingFunc).reverse()
+      break
+    case 'time-up':
+      f.sort(dateSorting)
+      break
+    case 'time-down':
+      f.sort(dateSorting).reverse()
+      break
+  }
 
   // Return sorted array files -> virtual directories -> directories
   return f.concat(vd).concat(d)

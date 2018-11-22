@@ -29,6 +29,7 @@
 - Updated the styling of form elements: Now ranges and radio buttons are also displayed in the Zettlr design.
 - Added an option to set a custom TeX template for PDF exports both in the general PDF preferences as well as on a per-project setting.
 - Restored the functionality to quickly navigate the files in the preview container using the arrow keys `Up` and `Down`. Also you can once again jump to the end of the list by pressing an arrow key while holding `Cmd/Ctrl`.
+- Zettlr now sorts your files based on a natural sorting order. You can restore the ASCII-sorting (the sorting as it has been until now) in the settings.
 
 ## Under the hood
 

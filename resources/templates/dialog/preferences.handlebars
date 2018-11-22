@@ -12,44 +12,66 @@
       </ul>
       <!-- General settings -->
       <div id="prefs-tabs-general">
-        <label for="app-lang">{{i18n "dialog.preferences.app_lang.title"}}
-        </label>
-        <select name="app_lang" id="app-lang">
-          {{#each supportedLangs}}
-          <option value="{{this}}" {{#ifCond this '=' ../app_lang}}selected="selected"{{/ifCond}}>{{i18n "dialog.preferences.app_lang." this}}</option>
-          {{/each}}
-        </select>
-        <div class="cb-group">
-          <label class="cb-toggle">
-            <input type="checkbox" name="darkTheme" value="yes" id="darkTheme" {{#if darkTheme}}checked="checked"{{/if}}>
-            <div class="toggle"></div>
+        <div class="box-left">
+          <label for="app-lang">{{i18n "dialog.preferences.app_lang.title"}}
           </label>
-          <label for="darkTheme">{{i18n "dialog.preferences.nightmode"}}</label>
+          <select name="app_lang" id="app-lang">
+            {{#each supportedLangs}}
+            <option value="{{this}}" {{#ifCond this '=' ../app_lang}}selected="selected"{{/ifCond}}>{{i18n "dialog.preferences.app_lang." this}}</option>
+            {{/each}}
+          </select>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="darkTheme" value="yes" id="darkTheme" {{#if darkTheme}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="darkTheme">{{i18n "dialog.preferences.nightmode"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="snippets" value="yes" id="snippets" {{#if snippets}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="snippets">{{i18n "dialog.preferences.snippets"}}</label>
+          </div>
         </div>
-        <div class="cb-group">
-          <label class="cb-toggle">
-            <input type="checkbox" name="snippets" value="yes" id="snippets" {{#if snippets}}checked="checked"{{/if}}>
-            <div class="toggle"></div>
-          </label>
-          <label for="snippets">{{i18n "dialog.preferences.snippets"}}</label>
-        </div>
-        <hr>
-        <p>
-          {{i18n "dialog.preferences.combiner_explanation"}}
-        </p>
-        <div class="cb-group">
-          <label class="radio-toggle">
-            <input type="radio" name="combinerState" value="collapsed" id="pref-comb-state-coll" {{#ifCond combinerState '=' 'collapsed'}}checked="checked"{{/ifCond}}>
-            <div class="toggle"></div>
-          </label>
-          <label for="pref-comb-state-coll">{{i18n "dialog.preferences.combiner_collapsed"}}</label>
-        </div>
-        <div class="cb-group">
-          <label class="radio-toggle">
-            <input type="radio" name="combinerState" value="expanded" id="pref-comb-state-exp" {{#ifCond combinerState '=' 'expanded'}}checked="checked"{{/ifCond}}>
-            <div class="toggle"></div>
-          </label>
-          <label for="pref-comb-state-exp">{{i18n "dialog.preferences.combiner_expanded"}}</label>
+        <div class="box-right">
+          <p>
+            {{i18n "dialog.preferences.combiner_explanation"}}
+          </p>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="combinerState" value="collapsed" id="pref-comb-state-coll" {{#ifCond combinerState '=' 'collapsed'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-comb-state-coll">{{i18n "dialog.preferences.combiner_collapsed"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="combinerState" value="expanded" id="pref-comb-state-exp" {{#ifCond combinerState '=' 'expanded'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-comb-state-exp">{{i18n "dialog.preferences.combiner_expanded"}}</label>
+          </div>
+          <hr>
+          <!-- Sorting stuff -->
+          <p>
+            {{i18n "dialog.preferences.sorting_explanation"}}
+          </p>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="sorting" value="natural" id="pref-sorting-natural" {{#ifCond sorting '=' 'natural'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-sorting-natural">{{i18n "dialog.preferences.sorting_natural"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="sorting" value="ascii" id="pref-sorting-ascii" {{#ifCond sorting '=' 'ascii'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-sorting-ascii">{{i18n "dialog.preferences.sorting_ascii"}}</label>
+          </div>
         </div>
       </div>
       <!-- Editor related options -->

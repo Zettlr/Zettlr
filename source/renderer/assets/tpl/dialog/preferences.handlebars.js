@@ -1,7 +1,7 @@
 module.exports = {"1":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1, alias1=container.escapeExpression, alias2=depth0 != null ? depth0 : (container.nullContext || {}), alias3=helpers.helperMissing;
 
-  return "          <option value=\""
+  return "            <option value=\""
     + alias1(container.lambda(depth0, depth0))
     + "\" "
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias3).call(alias2,depth0,"=",(depths[1] != null ? depths[1].app_lang : depths[1]),{"name":"ifCond","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -47,29 +47,39 @@ module.exports = {"1":function(container,depth0,helpers,partials,data,blockParam
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.display.title",{"name":"i18n","hash":{},"data":data}))
     + "</a></li>\n        <li><a href=\"#prefs-tabs-advanced\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.advanced",{"name":"i18n","hash":{},"data":data}))
-    + "</a></li>\n      </ul>\n      <!-- General settings -->\n      <div id=\"prefs-tabs-general\">\n        <label for=\"app-lang\">"
+    + "</a></li>\n      </ul>\n      <!-- General settings -->\n      <div id=\"prefs-tabs-general\">\n        <div class=\"box-left\">\n          <label for=\"app-lang\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.app_lang.title",{"name":"i18n","hash":{},"data":data}))
-    + "\n        </label>\n        <select name=\"app_lang\" id=\"app-lang\">\n"
+    + "\n          </label>\n          <select name=\"app_lang\" id=\"app-lang\">\n"
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.supportedLangs : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "        </select>\n        <div class=\"cb-group\">\n          <label class=\"cb-toggle\">\n            <input type=\"checkbox\" name=\"darkTheme\" value=\"yes\" id=\"darkTheme\" "
+    + "          </select>\n          <div class=\"cb-group\">\n            <label class=\"cb-toggle\">\n              <input type=\"checkbox\" name=\"darkTheme\" value=\"yes\" id=\"darkTheme\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.darkTheme : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">\n            <div class=\"toggle\"></div>\n          </label>\n          <label for=\"darkTheme\">"
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"darkTheme\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.nightmode",{"name":"i18n","hash":{},"data":data}))
-    + "</label>\n        </div>\n        <div class=\"cb-group\">\n          <label class=\"cb-toggle\">\n            <input type=\"checkbox\" name=\"snippets\" value=\"yes\" id=\"snippets\" "
+    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <label class=\"cb-toggle\">\n              <input type=\"checkbox\" name=\"snippets\" value=\"yes\" id=\"snippets\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.snippets : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">\n            <div class=\"toggle\"></div>\n          </label>\n          <label for=\"snippets\">"
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"snippets\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.snippets",{"name":"i18n","hash":{},"data":data}))
-    + "</label>\n        </div>\n        <hr>\n        <p>\n          "
+    + "</label>\n          </div>\n        </div>\n        <div class=\"box-right\">\n          <p>\n            "
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.combiner_explanation",{"name":"i18n","hash":{},"data":data}))
-    + "\n        </p>\n        <div class=\"cb-group\">\n          <label class=\"radio-toggle\">\n            <input type=\"radio\" name=\"combinerState\" value=\"collapsed\" id=\"pref-comb-state-coll\" "
+    + "\n          </p>\n          <div class=\"cb-group\">\n            <label class=\"radio-toggle\">\n              <input type=\"radio\" name=\"combinerState\" value=\"collapsed\" id=\"pref-comb-state-coll\" "
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.combinerState : depth0),"=","collapsed",{"name":"ifCond","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">\n            <div class=\"toggle\"></div>\n          </label>\n          <label for=\"pref-comb-state-coll\">"
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"pref-comb-state-coll\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.combiner_collapsed",{"name":"i18n","hash":{},"data":data}))
-    + "</label>\n        </div>\n        <div class=\"cb-group\">\n          <label class=\"radio-toggle\">\n            <input type=\"radio\" name=\"combinerState\" value=\"expanded\" id=\"pref-comb-state-exp\" "
+    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <label class=\"radio-toggle\">\n              <input type=\"radio\" name=\"combinerState\" value=\"expanded\" id=\"pref-comb-state-exp\" "
     + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.combinerState : depth0),"=","expanded",{"name":"ifCond","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ">\n            <div class=\"toggle\"></div>\n          </label>\n          <label for=\"pref-comb-state-exp\">"
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"pref-comb-state-exp\">"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.combiner_expanded",{"name":"i18n","hash":{},"data":data}))
-    + "</label>\n        </div>\n      </div>\n      <!-- Editor related options -->\n      <div id=\"prefs-tabs-editor\">\n        <div class=\"clear\"></div>\n        <div class=\"box-left\">\n          <input type=\"text\" class=\"dicts-list-search\" placeholder=\""
+    + "</label>\n          </div>\n          <hr>\n          <!-- Sorting stuff -->\n          <p>\n            "
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.sorting_explanation",{"name":"i18n","hash":{},"data":data}))
+    + "\n          </p>\n          <div class=\"cb-group\">\n            <label class=\"radio-toggle\">\n              <input type=\"radio\" name=\"sorting\" value=\"natural\" id=\"pref-sorting-natural\" "
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.sorting : depth0),"=","natural",{"name":"ifCond","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"pref-sorting-natural\">"
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.sorting_natural",{"name":"i18n","hash":{},"data":data}))
+    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <label class=\"radio-toggle\">\n              <input type=\"radio\" name=\"sorting\" value=\"ascii\" id=\"pref-sorting-ascii\" "
+    + ((stack1 = (helpers.ifCond || (depth0 && depth0.ifCond) || alias2).call(alias1,(depth0 != null ? depth0.sorting : depth0),"=","ascii",{"name":"ifCond","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"pref-sorting-ascii\">"
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.sorting_ascii",{"name":"i18n","hash":{},"data":data}))
+    + "</label>\n          </div>\n        </div>\n      </div>\n      <!-- Editor related options -->\n      <div id=\"prefs-tabs-editor\">\n        <div class=\"clear\"></div>\n        <div class=\"box-left\">\n          <input type=\"text\" class=\"dicts-list-search\" placeholder=\""
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.spellcheck_search_placeholder",{"name":"i18n","hash":{},"data":data}))
     + "\">\n          <ul class=\"dicts-list\">\n"
     + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.availableDicts : depth0),{"name":"each","hash":{},"fn":container.program(6, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
