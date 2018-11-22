@@ -239,6 +239,8 @@
         "pagenumbering_gobble": "Page numbers off",
         "mainfont_label": "Main font (must match exactly a font installed on your computer)",
         "mainfont": "Main font",
+        "sansfont_label": "Secondary font (must match exactly a font installed on your computer)",
+        "sansfont": "Secondary font",
         "fontsize_label": "Font size (in pt)",
         "fontsize": "Font size",
         "lineheight_label": "Line height (in percent relative to font size, i.e.: 150% equals 1.5 lines spacing)",

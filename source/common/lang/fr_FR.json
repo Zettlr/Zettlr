@@ -239,6 +239,8 @@
         "pagenumbering_gobble": "Sans Pagination",
         "mainfont_label": "Font principale (il faut exister à ton ordinateur)",
         "mainfont": "Font principale",
+        "sansfont_label": "Font secondaire (il faut exister à ton ordinateur)",
+        "sansfont": "Font secondaire",
         "fontsize_label": "Taille du font (dans pt)",
         "fontsize": "Taille du font",
         "lineheight_label": "Interligne (en percent, par ex.: 150% est égale à 1.5 lignes)",

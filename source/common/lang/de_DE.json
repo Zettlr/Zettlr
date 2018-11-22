@@ -239,6 +239,8 @@
         "pagenumbering_gobble": "Nummerierung aus",
         "mainfont_label": "Hauptschriftart (muss auf dem Computer installiert sein)",
         "mainfont": "Hauptschrift",
+        "sansfont_label": "Sekundärschriftart (muss auf dem Computer installiert sein)",
+        "sansfont": "Sekundärschrift",
         "fontsize_label": "Schriftgröße (in Punkt)",
         "fontsize": "Schriftgröße",
         "lineheight_label": "Zeilenabstand (relativ zur Schriftgröße; 150% entsprechen anderthalbfachem Abstand)",

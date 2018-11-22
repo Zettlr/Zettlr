@@ -56,7 +56,7 @@ module.exports = {"1":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3=container.escapeExpression, alias4="function", alias5=container.lambda;
 
   return "<div class=\"dialog\">\n  <h1>"
-    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"preferences.project.title",{"name":"i18n","hash":{},"data":data}))
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.project.title",{"name":"i18n","hash":{},"data":data}))
     + ": "
     + alias3(((helper = (helper = helpers.projectDirectory || (depth0 != null ? depth0.projectDirectory : depth0)) != null ? helper : alias2),(typeof helper === alias4 ? helper.call(alias1,{"name":"projectDirectory","hash":{},"data":data}) : helper)))
     + "</h1>\n  <form action=\"\" method=\"GET\" id=\"dialog\">\n    <!-- Transmit the project's hash as well. -->\n    <input type=\"hidden\" name=\"projectHash\" value=\""
