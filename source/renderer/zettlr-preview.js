@@ -367,6 +367,37 @@ class ZettlrPreview {
       e.stopPropagation() // Prevent the file itself from being clicked
     })
 
+    // Enable arrow key navigation
+    this._listContainer.on('keydown', (e) => {
+      if (e.which === 38 || e.which === 40) {
+        // First determine the index of the currently selected element.
+        let index = this._data.findIndex((elem) => { return elem.hash === this._selectedFile })
+
+        let direction = (e.which === 40) ? 1 : -1
+        let toEnd = ((process.platform === 'darwin' && e.metaKey) || (process.platform !== 'darwin' && e.ctrlKey))
+        // In case the user wants to go to the end of the list, reset the index
+        // and reverse the search direction
+        if (toEnd) {
+          if (direction === 1) {
+            index = this._data.length // Index must be 1 higher because it WILL be reduced
+            direction = -1
+          } else {
+            index = -1 // Index must be 1 lower because it WILL be increased
+            direction = 1
+          }
+        }
+
+        do {
+          index += direction
+        } while (this._data[index] && this._data[index].type !== 'file')
+        // Finally request the file
+        if (this._data[index]) {
+          // Request this file
+          this._renderer.requestFile(this._data[index].hash)
+        }
+      }
+    })
+
     // Show the arrow button once the mouse pointer gets high enough
     this._div.on('mousemove', (e) => {
       if ($('#combiner').hasClass('expanded')) {

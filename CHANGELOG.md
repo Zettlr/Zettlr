@@ -28,6 +28,7 @@
 - Fixed a bug that would prevent you from being able to modify an already loaded image without restarting Zettlr, because it would cache the image and not reload the modified version of it.
 - Updated the styling of form elements: Now ranges and radio buttons are also displayed in the Zettlr design.
 - Added an option to set a custom TeX template for PDF exports both in the general PDF preferences as well as on a per-project setting.
+- Restored the functionality to quickly navigate the files in the preview container using the arrow keys `Up` and `Down`. Also you can once again jump to the end of the list by pressing an arrow key while holding `Cmd/Ctrl`.
 
 ## Under the hood
 
