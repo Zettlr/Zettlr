@@ -32,6 +32,7 @@
 - Zettlr now sorts your files based on a natural sorting order. You can restore the ASCII-sorting (the sorting as it has been until now) in the settings.
 - Tags can now be escaped with a backslash (`\`) to make sure they won't show up in the tag dropdown list and also won't render as tags.
 - Keyboard navigation is much more reliable.
+- Fixed creation of new files while writing in the editor with no file open.
 
 ## Under the hood
 

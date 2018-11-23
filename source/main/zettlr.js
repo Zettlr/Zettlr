@@ -860,6 +860,10 @@ class Zettlr {
 
     let cnt = file.content
 
+    // It may be that we have to create a file. In this case, a paths update is
+    // necessary, which must be sent after this function's run.
+    let pathsUpdateNecessary = false
+
     // Update word count
     this.stats.updateWordCount(file.wordcount || 0)
 
@@ -884,6 +888,7 @@ class Zettlr {
         return
       }
       file = this.getCurrentDir().newfile(null)
+      pathsUpdateNecessary = true
     } else {
       let f = this.getCurrentFile()
       if (f == null) {
@@ -900,9 +905,17 @@ class Zettlr {
     this.watchdog.ignoreNext('change', file.path)
     file.save(cnt)
     this.clearModified()
-    // Immediately update the paths in renderer so that it is able to find
-    // the file to (re)-select it.
-    this.ipc.send('file-update', file.getMetadata())
+
+    // Now it can be that a paths update is necessary. We have to send the
+    // update instead of the file-update to make sure the correct file is in
+    // the renderer.
+    if (pathsUpdateNecessary) {
+      this.ipc.send('paths-update', this.getPathDummies())
+    } else {
+      // Immediately update the paths in renderer so that it is able to find
+      // the file to (re)-select it.
+      this.ipc.send('file-update', file.getMetadata())
+    }
 
     // Switch to newly created file (only happens before a file is selected)
     if (this.getCurrentFile() == null) {
