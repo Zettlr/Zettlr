@@ -36,6 +36,7 @@
 - The search functionality in both editor and Quicklook windows has been enhanced. It is now faster and you have to explicitly request a regular expression search by typing it literally. This means: Searching for `/\w/` will select all words inside the editor, while `\w` will literally search for that string.
 - Zettlr now supports internal links. If you place a pandoc-compatible identifier inside a markdown link, it will try to jump to the respective line. E.g., the identifier `#tangos-photography-and-film` will match the heading `# Tangos, Photography, and Film`. Simply use a standard Markdown link: `[Go to Tangos, Photography, and Film](#tangos-photography-and-film)`.
 - Zettlr keeps some margin between the cursor where you are writing and the window edges, i.e. it won't touch the window edges anymore, but keep a nice distance.
+- Quicklook windows can now be "popped out" so that they are no longer bound to the main window but can be dragged onto different displays, etc.
 
 ## Under the hood
 
@@ -60,6 +61,7 @@
 - The `ZettlrConfig` now acts as an event emitter and emits `update`-events, whenever the configuration object changes. It can be subscribed to using `global.config.on` (to unsubscribe use `global.config.off`).
 - Added a `global.ipc.notify`-function to easily send notifications to the renderer.
 - Added a "cachebreaker" to the preview images in Zettlr.
+- Moved a lot of files around: The CSS, Fonts, JavaScript and the template files are now in the `common` directory, so that it makes sense that there can be multiple windows that share those files.
 
 # 0.20.0
 

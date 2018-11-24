@@ -171,6 +171,10 @@ class ZettlrWindow {
     this._menu = new ZettlrMenu(this)
     this._menu.set()
 
+    // Push the window into the globals that the menu for instance can access it
+    // to send commands.
+    global.mainWindow = this._win
+
     return this
   }
   // END this.open

@@ -14,7 +14,7 @@
  */
 
 const popup = require('./zettlr-popup.js')
-const makeTemplate = require('./zettlr-template.js')
+const makeTemplate = require('../common/zettlr-template.js')
 
 const { trans } = require('../common/lang/i18n.js')
 

@@ -119,7 +119,6 @@ class ZettlrRendererIPC {
       // Sends a message and and saves the callback
       send: (cmd, cnt, callback) => {
         // A number between 0 and 50.000 should suffice
-        // TODO: Big question: Does it really suffice? :O
         let cypher
         do {
           cypher = Math.round(Math.random() * 50000).toString()

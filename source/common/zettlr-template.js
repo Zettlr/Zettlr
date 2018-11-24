@@ -14,7 +14,7 @@
  */
 
 const handlebars = require('./assets/handlebars/handlebars.runtime.js')
-const { trans } = require('../common/lang/i18n.js')
+const { trans } = require('./lang/i18n.js')
 
 function makeTemplate (cat, tpl, data = {}) {
   handlebars.registerHelper('i18n', function (str, str2 = undefined) {
@@ -52,6 +52,7 @@ function makeTemplate (cat, tpl, data = {}) {
     let precompiled = require(`./assets/tpl/${cat}/${tpl}.handlebars.js`)
     return handlebars.template(precompiled)(data)
   } catch (e) {
+    console.error(e)
     return false
   }
 }

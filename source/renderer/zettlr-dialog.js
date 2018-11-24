@@ -14,7 +14,7 @@
  */
 
 const tippy = require('tippy.js')
-const makeTemplate = require('./zettlr-template.js')
+const makeTemplate = require('../common/zettlr-template.js')
 const Chart = require('chart.js')
 const { trans } = require('../common/lang/i18n.js')
 const SUPPORTED_PAPERTYPES = require('../common/data.json').papertypes

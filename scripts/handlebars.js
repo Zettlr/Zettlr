@@ -14,7 +14,7 @@ const handlebars = require('handlebars')
 
 // First the directories of the handlebars runtime.
 let runtimeInput = path.join(__dirname, '..', 'node_modules/handlebars/dist/cjs')
-let runtimeOutput = path.join(__dirname, '..', 'source/renderer/assets/handlebars/')
+let runtimeOutput = path.join(__dirname, '..', 'source/common/assets/handlebars/')
 
 // An array of all ins and outs where handlebar-templates reside and where to put them
 let tplPaths = []
@@ -22,15 +22,15 @@ tplPaths.push(
   // Dialog templates
   {
     'input': path.join(__dirname, '..', 'resources/templates/dialog'),
-    'output': path.join(__dirname, '..', 'source/renderer/assets/tpl/dialog')
+    'output': path.join(__dirname, '..', 'source/common/assets/tpl/dialog')
   },
   {
     'input': path.join(__dirname, '..', 'resources/templates/other'),
-    'output': path.join(__dirname, '..', 'source/renderer/assets/tpl/other')
+    'output': path.join(__dirname, '..', 'source/common/assets/tpl/other')
   },
   {
     'input': path.join(__dirname, '..', 'resources/templates/popup'),
-    'output': path.join(__dirname, '..', 'source/renderer/assets/tpl/popup')
+    'output': path.join(__dirname, '..', 'source/common/assets/tpl/popup')
   }
 )
 

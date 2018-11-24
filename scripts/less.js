@@ -16,9 +16,9 @@ log.info(`Current working directory: ${__dirname}`)
 // the filename of the main file. less will handle all the processing of the
 // imports.
 let geometryFile = path.join(__dirname, '../resources/less/geometry/geometry-main.less')
-let geometryTarget = path.join(__dirname, '../source/renderer/assets/css/geometry.css')
+let geometryTarget = path.join(__dirname, '../source/common/assets/css/geometry.css')
 let themeFile = path.join(__dirname, '../resources/less/theme-default/theme-main.less')
-let themeTarget = path.join(__dirname, '../source/renderer/assets/css/theme.css')
+let themeTarget = path.join(__dirname, '../source/common/assets/css/theme.css')
 let geometryLess = ''
 let themeLess = ''
 

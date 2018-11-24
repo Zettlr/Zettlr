@@ -21,7 +21,7 @@ const ZettlrQuicklook = require('./zettlr-quicklook.js')
 const ZettlrNotification = require('./zettlr-notification.js')
 const ZettlrValidation = require('../common/zettlr-validation.js')
 const popup = require('./zettlr-popup.js')
-const makeTemplate = require('./zettlr-template.js')
+const makeTemplate = require('../common/zettlr-template.js')
 
 const { trans } = require('../common/lang/i18n.js')
 const { localiseNumber } = require('../common/zettlr-helpers.js')
@@ -251,7 +251,8 @@ class ZettlrBody {
     * @return {void}      Nothing to return.
     */
   quicklook (file) {
-    this._ql.push(new ZettlrQuicklook(this, file))
+    // False = no standalone window
+    this._ql.push(new ZettlrQuicklook(this, file, false))
   }
 
   /**

@@ -76,6 +76,14 @@ class ZettlrIPC {
         return // Also, don't dispatch further
       }
 
+      // Last possibility: A quicklook window has requested a file. In this case
+      // we mustn't obliterate the "event" because this way we don't need to
+      // search for the window.
+      if (arg.hasOwnProperty('command') && arg.command === 'ql-get-file') {
+        event.sender.send('file', this._app.findFile({ 'hash': arg.content }).withContent())
+        return
+      }
+
       // In all other occasions omit the event.
       this.dispatch(arg)
     })
@@ -421,6 +429,11 @@ class ZettlrIPC {
       case 'request-files':
         // The client only can choose what and how much it wants to get
         return this._app.getWindow().askFile(arg.filters, arg.multiSel)
+
+      // A quicklook window wants to pop-out of the main window
+      case 'make-standalone':
+        this._app.openQL(arg)
+        return true
       default:
         console.log(trans('system.unknown_command', cmd))
         return null

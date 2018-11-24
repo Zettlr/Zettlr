@@ -21,6 +21,7 @@ const path = require('path')
 // Internal classes
 const ZettlrIPC = require('./zettlr-ipc.js')
 const ZettlrWindow = require('./zettlr-window.js')
+const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
 const ZettlrConfig = require('./zettlr-config.js')
 const ZettlrTags = require('./zettlr-tags.js')
 const ZettlrDir = require('./zettlr-dir.js')
@@ -90,6 +91,9 @@ class Zettlr {
 
     // If there are any, open argv-files
     this.handleAddRoots(global.filesToOpen)
+
+    // Load in the Quicklook window handler class
+    this._ql = new ZettlrQLStandalone()
 
     // Initiate regular polling
     setTimeout(() => {
@@ -161,8 +165,12 @@ class Zettlr {
     * @return {void} Does not return anything.
     */
   shutdown () {
+    // Close all Quicklook Windows
+    this._ql.closeAll()
+    // Save the config and stats
     this.config.save()
     this.stats.save()
+    // Stop the watchdog
     this.watchdog.stop()
     // Perform closing activity in the path.
     for (let p of this._openPaths) {
@@ -787,6 +795,13 @@ class Zettlr {
       this.setCurrentFile(from.findFile({ 'hash': newPath }))
     }
   }
+
+  /**
+   * Opens a standalone quicklook window when the renderer requests it
+   * @param  {number} hash The hash of the file to be displayed in the window
+   * @return {void}      No return.
+   */
+  openQL (hash) { this._ql.openQuicklook(this.findFile({ 'hash': hash })) }
 
   /****************************************************************************
    **                                                                        **
