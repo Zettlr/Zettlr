@@ -903,6 +903,10 @@ class ZettlrEditor {
     return this
   }
 
+  /**
+   * Enables the resizable between editor and sidebar.
+   * @return {void} Does not return.
+   */
   enableResizable () {
     // Make preview and editor resizable
     this._div.resizable({
@@ -922,6 +926,10 @@ class ZettlrEditor {
     })
   }
 
+  /**
+   * Disables the resizing functionality between the sidebar and the editor.
+   * @return {void} This function does not return.
+   */
   disableResizable () {
     $('#editor').resizable('destroy')
     $('#editor').prop('style', '') // Remove the left and width things
