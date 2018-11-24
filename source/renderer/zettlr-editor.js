@@ -165,7 +165,23 @@ class ZettlrEditor {
       // inputStyle: "contenteditable", // Will enable this in a future version
       autoCloseBrackets: AUTOCLOSEBRACKETS,
       markdownImageBasePath: '', // The base path used to render the image in case of relative URLs
-      markdownOnLinkOpen: function (url) { require('electron').shell.openExternal(url) }, // Action for ALT-Clicks
+      markdownOnLinkOpen: (url) => {
+        if (url[0] === '#') {
+          // We should open an internal link
+          let re = new RegExp('#\\s[^\\r\\n]*?' +
+          url.replace(/-/g, '[^\\r\\n]+?').replace(/^#/, ''), 'i')
+          // The new regex should now match the corresponding heading in the document
+          for (let i = 0; i < this._cm.lineCount(); i++) {
+            let line = this._cm.getLine(i)
+            if (re.test(line)) {
+              this.jtl(i)
+              break
+            }
+          }
+        } else {
+          require('electron').shell.openExternal(url)
+        }
+      }, // Action for ALT-Clicks
       zkn: {
         idRE: '(\\d{14})', // What do the IDs look like?
         linkStart: '\\[\\[', // Start of links?

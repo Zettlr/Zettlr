@@ -34,6 +34,7 @@
 - Keyboard navigation is much more reliable.
 - Fixed creation of new files while writing in the editor with no file open.
 - The search functionality in both editor and Quicklook windows has been enhanced. It is now faster and you have to explicitly request a regular expression search by typing it literally. This means: Searching for `/\w/` will select all words inside the editor, while `\w` will literally search for that string.
+- Zettlr now supports internal links. If you place a pandoc-compatible identifier inside a markdown link, it will try to jump to the respective line. E.g., the identifier `#tangos-photography-and-film` will match the heading `# Tangos, Photography, and Film`. Simply use a standard Markdown link: `[Go to Tangos, Photography, and Film](#tangos-photography-and-film)`.
 
 ## Under the hood
 
