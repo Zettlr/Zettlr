@@ -14,6 +14,7 @@
  */
 
 const makeTemplate = require('./zettlr-template.js')
+const { makeSearchRegEx } = require('../common/zettlr-helpers.js')
 
 // CodeMirror related includes
 
@@ -301,14 +302,11 @@ class ZettlrQuicklook {
       this.startSearch(term)
     }
 
-    // We need a regex because only this way we can case-insensitively search
-    term = new RegExp(term, 'i')
-
     if (this._searchCursor.findNext()) {
       this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
     } else {
       // Start from beginning
-      this._searchCursor = this._cm.getSearchCursor(term, { 'line': 0, 'ch': 0 })
+      this._searchCursor = this._cm.getSearchCursor(makeSearchRegEx(term), { 'line': 0, 'ch': 0 })
       if (this._searchCursor.findNext()) {
         this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
       }
@@ -323,11 +321,11 @@ class ZettlrQuicklook {
     */
   startSearch (term) {
     // Create a new search cursor
-    this._searchCursor = this._cm.getSearchCursor(new RegExp(term, 'i'), this._cm.getCursor())
+    this._searchCursor = this._cm.getSearchCursor(makeSearchRegEx(term), this._cm.getCursor())
     this._currentLocalSearch = term
 
     // Find all matches
-    let tRE = new RegExp(term, 'gi')
+    let tRE = makeSearchRegEx(term, 'gi')
     let res = []
     let match = null
     for (let i = 0; i < this._cm.lineCount(); i++) {

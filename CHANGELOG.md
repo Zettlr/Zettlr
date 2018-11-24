@@ -33,6 +33,7 @@
 - Tags can now be escaped with a backslash (`\`) to make sure they won't show up in the tag dropdown list and also won't render as tags.
 - Keyboard navigation is much more reliable.
 - Fixed creation of new files while writing in the editor with no file open.
+- The search functionality in both editor and Quicklook windows has been enhanced. It is now faster and you have to explicitly request a regular expression search by typing it literally. This means: Searching for `/\w/` will select all words inside the editor, while `\w` will literally search for that string.
 
 ## Under the hood
 

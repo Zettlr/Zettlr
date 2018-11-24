@@ -18,7 +18,7 @@ const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const tippy = require('tippy.js')
 const { clipboard } = require('electron')
-const { generateId, hash } = require('../common/zettlr-helpers.js')
+const { generateId, hash, makeSearchRegEx } = require('../common/zettlr-helpers.js')
 const { trans } = require('../common/lang/i18n.js')
 
 // 1. Mode addons
@@ -516,9 +516,7 @@ class ZettlrEditor {
    * This sets the tag database necessary for the tag autocomplete.
    * @param {Object} tagDB An object (here with prototype due to JSON) containing tags
    */
-  setTagDatabase (tagDB) {
-    this._tagDB = tagDB
-  }
+  setTagDatabase (tagDB) { this._tagDB = tagDB }
 
   /**
    * Sets the citeprocIDs available to autocomplete to a new list
@@ -804,14 +802,11 @@ class ZettlrEditor {
       this.startSearch(term)
     }
 
-    // We need a regex because only this way we can case-insensitively search
-    term = new RegExp(term, 'i')
-
     if (this._searchCursor.findNext()) {
       this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
     } else {
       // Start from beginning
-      this._searchCursor = this._cm.getSearchCursor(term, { 'line': 0, 'ch': 0 })
+      this._searchCursor = this._cm.getSearchCursor(makeSearchRegEx(term), { 'line': 0, 'ch': 0 })
       if (this._searchCursor.findNext()) {
         this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
       }
@@ -825,12 +820,14 @@ class ZettlrEditor {
     * @return {ZettlrEditor}      This for chainability.
     */
   startSearch (term) {
-    // Create a new search cursor
-    this._searchCursor = this._cm.getSearchCursor(new RegExp(term, 'i'), this._cm.getCursor())
+    // First transform the term based upon what the user has entered
     this._currentLocalSearch = term
+    // Create a new search cursor
+    this._searchCursor = this._cm.getSearchCursor(makeSearchRegEx(term), this._cm.getCursor())
 
     // Find all matches
-    let tRE = new RegExp(term, 'gi')
+    // For this single instance we need a global modifier
+    let tRE = makeSearchRegEx(term, 'gi')
     let res = []
     let match = null
     for (let i = 0; i < this._cm.lineCount(); i++) {
@@ -839,7 +836,7 @@ class ZettlrEditor {
       while ((match = tRE.exec(l)) != null) {
         res.push({
           'from': { 'line': i, 'ch': match.index },
-          'to': { 'line': i, 'ch': match.index + term.length }
+          'to': { 'line': i, 'ch': match.index + match[0].length }
         })
       }
     }
@@ -863,7 +860,7 @@ class ZettlrEditor {
 
   /**
     * Replace the next occurrence with 'replacement'
-    * @param  {String} str_replace The string with which the next occurrence of the search cursor term will be replaced
+    * @param  {String} replacement The string with which the next occurrence of the search cursor term will be replaced
     * @return {Boolean} Whether or not a string has been replaced.
     */
   replaceNext (replacement) {
@@ -880,12 +877,19 @@ class ZettlrEditor {
     * @param  {String} replaceWhat Replace with this string
     */
   replaceAll (searchWhat, replaceWhat) {
-    searchWhat = new RegExp(searchWhat, 'i')
-    this._searchCursor = this._cm.getSearchCursor(searchWhat, { 'line': 0, 'ch': 0 })
-    while (this._searchCursor.findNext()) {
-      this._searchCursor.replace(replaceWhat)
-    }
-    this._searchCursor = null
+    searchWhat = makeSearchRegEx(searchWhat)
+    // First select all matches
+    let ranges = []
+    let cur = this._cm.getSearchCursor(searchWhat, { 'line': 0, 'ch': 0 })
+    while (cur.findNext()) { ranges.push({ 'anchor': cur.from(), 'head': cur.to() }) }
+    if (ranges.length) this._cm.setSelections(ranges, 0)
+    // Create a new array with the same size as all selections
+    let repl = new Array(this._cm.getSelections().length)
+    // Fill it with the replace value (to replace every single selection with
+    // the same term)
+    repl = repl.fill(replaceWhat)
+    // Aaaand do it
+    this._cm.replaceSelections(repl)
   }
 
   /**
