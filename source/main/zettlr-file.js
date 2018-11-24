@@ -425,16 +425,16 @@ class ZettlrFile {
   search (terms) {
     let matches = 0
 
-    // First match the title (faster results)
+    // First match the title and tags (faster results)
     for (let t of terms) {
       if (t.operator === 'AND') {
-        if (this.name.indexOf(t.word) > -1) {
+        if (this.name.indexOf(t.word) > -1 || this.tags.includes(t.word)) {
           matches++
         }
       } else {
         // OR operator
         for (let wd of t.word) {
-          if (this.name.indexOf(wd) > -1) {
+          if (this.name.indexOf(wd) > -1 || this.tags.includes(wd)) {
             matches++
             // Break because only one match necessary
             break
@@ -443,7 +443,7 @@ class ZettlrFile {
       }
     }
 
-    // Return immediately with an object of line -1 (indicating filename) and a huge weight
+    // Return immediately with an object of line -1 (indicating filename or tag matches) and a huge weight
     if (matches === terms.length) { return [{ line: -1, restext: this.name, 'weight': 2 }] }
 
     // Do a full text search.
