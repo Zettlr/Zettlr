@@ -140,6 +140,7 @@ class ZettlrEditor {
       theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
       autofocus: false,
       foldGutter: true,
+      cursorScrollMargin: 60, // Keep the cursor 60px below/above editor edges
       gutters: ['CodeMirror-foldgutter'],
       foldOptions: {
         'widget': '\u00A0\u2026\u00A0' // nbsp ellipse nbsp
