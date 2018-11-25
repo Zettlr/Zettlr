@@ -101,8 +101,11 @@ class ZettlrMenu {
       // Commands need to be simply sent to the renderer
       if (item.hasOwnProperty('command')) {
         builtItem.click = function (menuitem, focusedWindow) {
-          if (global.mainWindow) global.mainWindow.webContents.send('message', { 'command': item.command })
-          if (focusedWindow) focusedWindow.webContents.send('message', { 'command': item.command })
+          if (global.mainWindow) {
+            global.mainWindow.webContents.send('message', { 'command': item.command })
+          } else if (focusedWindow) {
+            focusedWindow.webContents.send('message', { 'command': item.command })
+          }
         }
       }
 
@@ -162,9 +165,14 @@ class ZettlrMenu {
         label: trans('menu.quit'),
         accelerator: 'CmdOrCtrl+Q',
         click (item, focusedWindow) {
-          if (global.mainWindow) global.mainWindow.send('message', { 'command': 'app-quit' })
-          else if (focusedWindow) focusedWindow.webContents.send('message', { 'command': 'app-quit' })
-          else app.quit() // If this part is executed it means there's no window, so simply quit.
+          if (global.mainWindow) {
+            global.mainWindow.send('message', { 'command': 'app-quit' })
+          } else if (focusedWindow) {
+            focusedWindow.webContents.send('message', { 'command': 'app-quit' })
+          } else {
+            // If this part is executed it means there's no window, so simply quit.
+            app.quit()
+          }
         }
       })
 
