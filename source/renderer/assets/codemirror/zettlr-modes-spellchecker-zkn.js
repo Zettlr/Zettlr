@@ -283,8 +283,13 @@
         innerStyle: 'fenced-code'
       },
       {
-        open: '```yaml',
-        close: '```',
+        // open: '```yaml',
+        // close: '```',
+        // We need regular expressions to keep the YAML mode simple. It now
+        // matches normal YAML blocks as fenced code as well as the Pandoc
+        // metadata blocks
+        open: /`{3}yaml|\n\n-{3}|^-{3}/,
+        close: /`{3}|-{3}|\.{3}/,
         mode: CodeMirror.getMode(config, 'text/x-yaml'),
         delimStyle: 'formatting-code-block',
         innerStyle: 'fenced-code'
