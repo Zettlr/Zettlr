@@ -1014,13 +1014,19 @@ class ZettlrEditor {
           needRefresh = true
         } else {
           let newCite = global.citeproc.getCitation(item)
-          if (newCite !== 4) { // 4 is the number assigned to READY state of citeproc
-            elem.html(newCite).removeClass('error').attr('data-rendered', 'yes')
-            this._citationBuffer[id] = newCite
-            needRefresh = true
-          } else if (newCite === false || newCite === 3) { // 3 means error in the engine
-            elem.addClass('error')
-          } // else: Engine wasn't ready yet
+          switch (newCite.status) {
+            case 4: // Engine was ready, newCite.citation contains the citation
+              elem.html(newCite.citation).removeClass('error').attr('data-rendered', 'yes')
+              this._citationBuffer[id] = newCite.citation
+              needRefresh = true
+              break
+            case 3: // There was an error loading the database
+              elem.addClass('error')
+              break
+            case 2: // There was no database, so don't do anything.
+              elem.attr('data-rendered', 'yes')
+              break
+          }
         }
       }
     })

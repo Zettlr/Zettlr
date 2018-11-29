@@ -69,7 +69,12 @@ class ZettlrCiteproc {
           'status': this._status
         }
       },
-      getCitation: (idList) => { return this.getCitation(idList) },
+      getCitation: (idList) => {
+        return {
+          'citation': this.getCitation(idList),
+          'status': this._status
+        }
+      },
       updateItems: (idList) => { return this.updateItems(idList) },
       makeBibliography: () => { return this.makeBibliography() }
     }
@@ -261,13 +266,13 @@ class ZettlrCiteproc {
    * @return {String}         The rendered string
    */
   getCitation (citeIDs) {
-    if (this._status !== READY) return this._status // Don't try to access the engine before loaded
+    if (this._status !== READY) return undefined // Don't try to access the engine before loaded
     citeIDs = this._sanitiseItemList(citeIDs)
-    if (citeIDs.length === 0) return false // Nothing to render
+    if (citeIDs.length === 0) return undefined // Nothing to render
     try {
       return this._engine.makeCitationCluster(citeIDs)
     } catch (e) {
-      return false
+      return undefined
     }
   }
 
