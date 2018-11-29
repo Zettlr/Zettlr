@@ -23,6 +23,17 @@ class ZettlrQLStandalone {
    */
   constructor () {
     this._ql = []
+    this._darkMode = global.config.get('darkTheme')
+
+    // Enable listening to config changes
+    global.config.on('update', (e) => {
+      if (global.config.get('darkTheme') !== this._darkMode) {
+        this._darkMode = global.config.get('darkTheme')
+        for (let ql of this._ql) {
+          if (ql) ql.webContents.send('toggle-theme')
+        }
+      }
+    })
   }
 
   /**
@@ -51,7 +62,7 @@ class ZettlrQLStandalone {
       pathname: path.join(__dirname, '../quicklook/index.htm'),
       protocol: 'file:',
       slashes: true,
-      search: `file=${file.hash}`
+      search: `file=${file.hash}&darkMode=${global.config.get('darkTheme')}`
     }))
     // Only show window once it is completely initialized
     win.once('ready-to-show', () => { win.show() })

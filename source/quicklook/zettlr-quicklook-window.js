@@ -1,4 +1,4 @@
-/* global */
+/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -44,6 +44,13 @@ class ZettlrQuicklookWindow {
     setTimeout(() => { ipc.send('message', { 'command': 'ql-get-file', 'content': hash }) }, 10)
     // Listen for the file event to receive the file to display from main.
     ipc.on('file', (e, file) => { this.init(file) })
+
+    // Also we need to know whether or not we should initiate in darkMode.
+    let dm = url.searchParams.get('darkMode')
+    if (dm === 'true') $('body').addClass('dark')
+
+    // Toggle the theme if there's an appropriate event
+    ipc.on('toggle-theme', (e) => { $('body').toggleClass('dark') })
   }
 
   init (file) {
