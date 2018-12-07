@@ -51,6 +51,9 @@ class ZettlrQuicklookWindow {
 
     // Toggle the theme if there's an appropriate event
     ipc.on('toggle-theme', (e) => { $('body').toggleClass('dark') })
+
+    // activate event listeners for the window
+    this._act()
   }
 
   init (file) {
@@ -65,6 +68,13 @@ class ZettlrQuicklookWindow {
   qlsplice (ql) {
     // The window has closed itself -> close the whole window.
     ipc.send('ql-close') // Request closing
+  }
+
+  _act () {
+    // Activate the window controls.
+    $('.title div.close').click((e) => { ipc.send('message', { 'command': 'win-close', content: {} }) })
+    $('.title div.max').click((e) => { ipc.send('message', { 'command': 'win-maximise', content: {} }) })
+    $('.title div.min').click((e) => { ipc.send('message', { 'command': 'win-minimise', content: {} }) })
   }
 }
 

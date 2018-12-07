@@ -49,6 +49,7 @@ class ZettlrQLStandalone {
       show: false,
       icon: 'icons/png/64x64.png',
       backgroundColor: '#fff',
+      frame: false, // No frame for quicklook windows. Mainly prevents the menu bar to be shown on win+linux
       scrollBounce: true, // The nice scrolling effect for macOS
       defaultEncoding: 'utf8' // Why the hell does this default to ISO?
     }

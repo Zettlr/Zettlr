@@ -38,9 +38,22 @@
           }
         }
 
+        .min, .max {
+          flex-grow: 0.5;
+          cursor: pointer;
+          &:before {
+            font-family: @font-icon;
+            line-height: @title-bar-height;
+            margin: 0.2em;
+          }
+        }
+
+        .min:before { content: '\2212'; }
+        .max:before { content: '\f30f'; }
+
         .close {
-          flex-grow: 1;
-            &::before {
+          flex-grow: 0.5;
+            &:before {
                 font-family: @font-icon;
                 font-weight:light;
                 content: "\00d7";
@@ -106,6 +119,7 @@
 .quicklook-standalone {
   // Standalone options
   .title {
+    -webkit-app-region: drag;
     position: fixed;
     top: 0;
     left: 0;

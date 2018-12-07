@@ -18,6 +18,7 @@
 
 const { trans } = require('../common/lang/i18n.js')
 const ipc = require('electron').ipcMain
+const BrowserWindow = require('electron').BrowserWindow // Needed for close and maximise commands
 
 /**
  * This class acts as the interface between the main process and the renderer.
@@ -156,6 +157,26 @@ class ZettlrIPC {
 
       case 'app-maximise':
         this._app.getWindow().toggleMaximise()
+        break
+
+      // Window controls for the Quicklook windows must use IPC calls
+      case 'win-maximise':
+        if (BrowserWindow.getFocusedWindow()) {
+          // Implements maximise-toggling for windows
+          if (BrowserWindow.getFocusedWindow().isMaximized()) {
+            BrowserWindow.getFocusedWindow().unmaximize()
+          } else {
+            BrowserWindow.getFocusedWindow().maximize()
+          }
+        }
+        break
+
+      case 'win-minimise':
+        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().minimize()
+        break
+
+      case 'win-close':
+        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().close()
         break
 
       case 'get-paths':
