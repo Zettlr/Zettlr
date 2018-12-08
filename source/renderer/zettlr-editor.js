@@ -641,7 +641,32 @@ class ZettlrEditor {
 
     let cur = this._cm.getCursor()
     let sel = this._cm.findWordAt(cur)
-    this._cm.setSelection(sel.anchor, sel.head)
+    // Now we have a word at this position. We only have one problem: CodeMirror
+    // does not accept apostrophes (') to be inside words. Therefore, a lot of
+    // languages do have problems (I'm looking at you, French). Therefore check
+    // two conditions: First: There's an apostrophe and a letter directly in
+    // front of this selection - or behind it!
+    let line = this._cm.getLine(sel.anchor.line)
+    if (sel.anchor.ch >= 2 && /[^\s]'/.test(line.substr(sel.anchor.ch - 2, 2))) {
+      // There's a part of the word in front of the current selection ->
+      // move back until we found it.
+      do {
+        sel.anchor.ch--
+      } while (sel.anchor.ch >= 0 && !/\s/.test(line.substr(sel.anchor.ch, 1)))
+
+      if (line[sel.anchor.ch] === ' ') sel.anchor.ch++
+    }
+
+    // Now the same for the back
+    if (sel.head < line.length - 1 && /'[^\s]/.test(line.substr(sel.head.ch, 2))) {
+      do {
+        sel.head.ch++
+      } while (sel.head <= line.length && !/\s/.test(line.substr(sel.head.ch, 1)))
+      if (line[sel.head.ch] === ' ') sel.head.ch--
+    }
+
+    // Now we should be all set.
+    this._cm.setSelection(sel.anchor, sel.head) // It's on line 666! This has a meaning, I'm sure!
   }
 
   /**
