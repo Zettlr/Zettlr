@@ -1,6 +1,14 @@
 {
     "toolbar": [
         {
+          "role": "button",
+          "class": "menu-popup",
+          "context": [ "windows", "linux" ],
+          "command": "win-menu",
+          "content": "{ 'x': 15, 'y': 15 }",
+          "title": "toolbar.show_menu"
+        },
+        {
             "role": "button",
             "class": "dir-open",
             "command": "dir-open",

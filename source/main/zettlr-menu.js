@@ -188,6 +188,19 @@ class ZettlrMenu {
     Menu.setApplicationMenu(this._prebuilt)
     this._prebuilt = null
   }
+
+  /**
+   * Instead of setting the application menu, this "pops up" the menu at the
+   * specified coordinates.
+   * @param  {integer} x The x position of the menu
+   * @param  {integer} y The y position of the menu
+   * @return {void}   Does not return.
+   */
+  popup (x = 15, y = 15) {
+    if (!this._prebuilt) this._build()
+    this._prebuilt.popup({ 'x': x, 'y': y })
+    this._prebuilt = null
+  }
 }
 
 module.exports = ZettlrMenu

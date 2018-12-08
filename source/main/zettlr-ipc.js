@@ -155,10 +155,6 @@ class ZettlrIPC {
         require('electron').app.quit()
         break
 
-      case 'app-maximise':
-        this._app.getWindow().toggleMaximise()
-        break
-
       // Window controls for the Quicklook windows must use IPC calls
       case 'win-maximise':
         if (BrowserWindow.getFocusedWindow()) {
@@ -177,6 +173,11 @@ class ZettlrIPC {
 
       case 'win-close':
         if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().close()
+        break
+
+      // Also the application menu must be shown on request
+      case 'win-menu':
+        this._app.getWindow().popupMenu(cnt.x, cnt.y)
         break
 
       case 'get-paths':
@@ -446,6 +447,27 @@ class ZettlrIPC {
    */
   runCall (cmd, arg) {
     switch (cmd) {
+      // Window controls actions can be send either as callback IPC calls or as
+      // normals (which is why they are present both in runCall and handleEvent)
+      case 'win-maximise':
+        if (BrowserWindow.getFocusedWindow()) {
+          // Implements maximise-toggling for windows
+          if (BrowserWindow.getFocusedWindow().isMaximized()) {
+            BrowserWindow.getFocusedWindow().unmaximize()
+          } else {
+            BrowserWindow.getFocusedWindow().maximize()
+          }
+        }
+        break
+
+      case 'win-minimise':
+        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().minimize()
+        break
+
+      case 'win-close':
+        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().close()
+        break
+
       // We should show the askFile dialog to the user and return its result.
       case 'request-files':
         // The client only can choose what and how much it wants to get

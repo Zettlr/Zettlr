@@ -196,9 +196,22 @@ class ZettlrRendererIPC {
         this.send('app-quit')
         break
 
-      // Tell the main process to maximise the window
-      case 'app-maximise':
-        this.send('app-maximise')
+      // Tell the main process to maximise, minimise, or close the window
+      case 'win-maximise':
+        this.send('win-maximise')
+        break
+
+      case 'win-minimise':
+        this.send('win-minimise')
+        break
+
+      case 'win-close':
+        this.send('win-close')
+        break
+
+      // Tell main to open the menu
+      case 'win-menu':
+        this.send('win-menu', cnt)
         break
 
       case 'paths-update':

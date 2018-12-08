@@ -84,6 +84,11 @@ class ZettlrWindow {
       winConf.titleBarStyle = 'hiddenInset'
     }
 
+    // Remove the frame on Linux and Windows
+    if (process.platform === 'linux' || process.platform === 'windows') {
+      winConf.frame = false
+    }
+
     // First create a new browserWindow
     this._win = new BrowserWindow(winConf)
 
@@ -229,6 +234,16 @@ class ZettlrWindow {
     }
 
     return this
+  }
+
+  /**
+   * Shows a popup application menu at the specified coordinates
+   * @param  {number} x The x-position of the menu
+   * @param  {number} y The y-position of the menu
+   * @return {void}   Does not return
+   */
+  popupMenu (x, y) {
+    this._menu.popup(x, y)
   }
 
   /**
