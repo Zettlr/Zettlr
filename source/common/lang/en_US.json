@@ -419,6 +419,7 @@
     }
   },
   "toolbar": {
+    "show_menu": "Show application menu",
     "dir_open": "Open new root directory",
     "dir_new": "Create a new directory",
     "file_new": "Create a new file",

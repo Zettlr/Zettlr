@@ -419,6 +419,7 @@
     }
   },
   "toolbar": {
+    "show_menu": "Menü anzeigen",
     "dir_open": "Neues Wurzelverzeichnis öffnen",
     "dir_new": "Neues Verzeichnis erstellen",
     "file_new": "Neue Datei erstellen",

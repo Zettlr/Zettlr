@@ -419,6 +419,7 @@
     }
   },
   "toolbar": {
+    "show_menu": "Ouvrir le menu d'application",
     "dir_open": "Ouvrir un dossier",
     "dir_new": "Créer un dossier",
     "file_new": "Créer un fichier",
