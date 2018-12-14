@@ -54,6 +54,16 @@ class ZettlrQLStandalone {
       defaultEncoding: 'utf8' // Why the hell does this default to ISO?
     }
 
+    // On macOS create a chromeless window with the window controls.
+    if (process.platform === 'darwin') {
+      winConf.titleBarStyle = 'hiddenInset'
+    }
+
+    // Remove the frame on Linux and Windows
+    if (process.platform === 'linux' || process.platform === 'windows') {
+      winConf.frame = false
+    }
+
     // First create a new browserWindow
     let win = new BrowserWindow(winConf)
 

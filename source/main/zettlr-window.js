@@ -110,6 +110,7 @@ class ZettlrWindow {
 
     // Emitted when the window is closed.
     this._win.on('closed', () => {
+      global.mainWindow = null // Unset the global
       this.close()
     })
 

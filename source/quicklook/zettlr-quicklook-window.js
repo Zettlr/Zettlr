@@ -37,6 +37,9 @@ class ZettlrQuicklookWindow {
     // care of specifics such as getting the translation strings, etc.
     global.i18n = JSON.parse(JSON.stringify(require('electron').remote.getGlobal('i18n')))
 
+    // Directly inject the correct body class
+    $('body').addClass(process.platform)
+
     // Find out which file we should request
     let url = new URL(window.location.href)
     let hash = url.searchParams.get('file')
@@ -72,9 +75,13 @@ class ZettlrQuicklookWindow {
 
   _act () {
     // Activate the window controls.
-    $('.title div.close').click((e) => { ipc.send('message', { 'command': 'win-close', content: {} }) })
-    $('.title div.max').click((e) => { ipc.send('message', { 'command': 'win-maximise', content: {} }) })
-    $('.title div.min').click((e) => { ipc.send('message', { 'command': 'win-minimise', content: {} }) })
+    $('.windows-window-controls .close').click((e) => { ipc.send('message', { 'command': 'win-close', content: {} }) })
+    $('.windows-window-controls .resize').click((e) => { ipc.send('message', { 'command': 'win-maximise', content: {} }) })
+    $('.windows-window-controls .minimise').click((e) => { ipc.send('message', { 'command': 'win-minimise', content: {} }) })
+
+    $('.linux-window-controls .close').click((e) => { ipc.send('message', { 'command': 'win-close', content: {} }) })
+    $('.linux-window-controls .maximise').click((e) => { ipc.send('message', { 'command': 'win-maximise', content: {} }) })
+    $('.linux-window-controls .minimise').click((e) => { ipc.send('message', { 'command': 'win-minimise', content: {} }) })
   }
 }
 
