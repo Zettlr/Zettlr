@@ -95,6 +95,7 @@
     "redo": "Redo",
     "cut": "Cut",
     "copy": "Copy",
+    "copy_id": "Copy ID",
     "copy_html": "Copy as HTML",
     "paste": "Paste",
     "select_all": "Select all",

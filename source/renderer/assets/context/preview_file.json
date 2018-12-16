@@ -16,6 +16,11 @@
     "type": "separator"
   },
   {
+    "attribute": "data-id",
+    "label": "menu.copy_id",
+    "command": "copy-to-clipboard"
+  },
+  {
     "label": "menu.quicklook",
     "command": "quicklook"
   }

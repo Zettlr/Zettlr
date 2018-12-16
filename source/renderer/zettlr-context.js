@@ -44,9 +44,10 @@ class ZettlrCon {
    * @param  {integer} [hash=null]   The hash, or null if not necessary.
    * @param  {integer} [vdhash=null] The vdhash, or null if not given.
    * @param  {Array}  [scopes=[]]   An array of scope-names ("root", "directory", etc.)
+   * @param  {Array}  [attributes=[]]   An array of all attributes of the emanating element
    * @return {Array}               An array containing the generated items.
    */
-  _buildFromSource (menutpl, hash = null, vdhash = null, scopes = []) {
+  _buildFromSource (menutpl, hash = null, vdhash = null, scopes = [], attributes = []) {
     if (!menutpl) {
       throw new Error('No menutpl detected!')
     }
@@ -57,6 +58,8 @@ class ZettlrCon {
     for (let item of menutpl) {
       // If an item is scoped and the scope does not apply here, don't include it.
       if (item.hasOwnProperty('scope') && !scopes.includes(item.scope)) continue
+      // If an item is scoped by attribute and the attribute is not included, continue.
+      if (item.hasOwnProperty('attribute') && !attributes.find(elem => elem.name === item.attribute)) continue
       let builtItem = {}
       // Simple copying of trivial attributes
       if (item.hasOwnProperty('label')) builtItem.label = trans(item.label)
@@ -74,6 +77,8 @@ class ZettlrCon {
         builtItem.click = function (menuitem, focusedWindow) {
           let content = (item.hasOwnProperty('content')) ? item.content : { 'hash': hash }
           if (vdhash) content.virtualdir = vdhash
+          // Set the content to the attribute's value, if given
+          if (item.hasOwnProperty('attribute')) content = attributes.find(elem => elem.name === item.attribute).value
           that._body.getRenderer().handleEvent(item.command, content)
         }
       }
@@ -100,6 +105,8 @@ class ZettlrCon {
 
     // Used to hold the scopes
     let scopes = []
+    // Used to hold the attributes
+    let attr = []
     // Path to the template file to use.
     let menupath = ''
 
@@ -119,6 +126,11 @@ class ZettlrCon {
       if (vdfile) vdhash = elem.attr('data-vd-hash')
       // Now determine the scope
       if (vdfile) scopes.push('virtual-directory')
+      // Push all attributes into the attributes array
+      for (let i = 0, nodes = elem[0].attributes; i < elem[0].attributes.length; i++) {
+        // The attributes are a NamedNodeMap, so we have to use weird function calling to retrieve them
+        attr.push({ 'name': nodes.item(i).nodeName, 'value': nodes.item(i).nodeValue })
+      }
       menupath = 'preview_file.json'
     } else if (elem.parents('#directories').length > 0) {
       // In case of directories, our wanted elements are: Only the <li>s
@@ -178,7 +190,7 @@ class ZettlrCon {
 
     // Now build with all information we have gathered.
     this._menu = new Menu()
-    this._menu = this._buildFromSource(require('./assets/context/' + menupath), hash, vdhash, scopes)
+    this._menu = this._buildFromSource(require('./assets/context/' + menupath), hash, vdhash, scopes, attr)
     if (elem.hasClass('cm-spell-error')) this._menu = typoPrefix.concat(this._menu)
     this._menu = Menu.buildFromTemplate(this._menu)
   }

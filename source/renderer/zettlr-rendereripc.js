@@ -17,6 +17,7 @@
 */
 
 const { trans } = require('../common/lang/i18n.js')
+const { clipboard } = require('electron')
 const ipc = require('electron').ipcRenderer
 
 // The following commands are sent from the renderer and can potentially close
@@ -529,6 +530,11 @@ class ZettlrRendererIPC {
       // The argument contains a new bibliography object
       case 'citeproc-bibliography':
         this._app.setBibliography(cnt)
+        break
+
+      case 'copy-to-clipboard':
+        // Simply copy the content to the clipboard as text
+        clipboard.writeText(cnt)
         break
 
       default:

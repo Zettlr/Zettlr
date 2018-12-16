@@ -95,6 +95,7 @@
     "redo": "Repeter",
     "cut": "Couper",
     "copy": "Copier",
+    "copy_id": "Copier ID",
     "copy_html": "Copier en HTML",
     "paste": "Coller",
     "select_all": "Sélectionner tous",
