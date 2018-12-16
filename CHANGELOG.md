@@ -37,7 +37,6 @@
 - Zettlr now supports internal links. If you place a pandoc-compatible identifier inside a markdown link, it will try to jump to the respective line. E.g., the identifier `#tangos-photography-and-film` will match the heading `# Tangos, Photography, and Film`. Simply use a standard Markdown link: `[Go to Tangos, Photography, and Film](#tangos-photography-and-film)`.
 - Zettlr keeps some margin between the cursor where you are writing and the window edges, i.e. it won't touch the window edges anymore, but keep a nice distance.
 - Quicklook windows can now be "popped out" so that they are no longer bound to the main window but can be dragged onto different displays, etc.
-- Zettlr will now highlight YAML blocks at the beginning of Markdown files if they resemble the format of Pandoc metadata blocks.
 - Windows and Linux windows now follow macOS in having no native window frame, but instead they employ the same strategy as macOS: The toolbar is the top element inside the main window of Zettlr, featuring window controls and, additionally, a button to open the application menu from the toolbar.
 - Zettlr correctly selects words containing apostrophs so that you can correct them adequately without the app "forgetting" the l' or 'll-part (or similar) of the word.
 
