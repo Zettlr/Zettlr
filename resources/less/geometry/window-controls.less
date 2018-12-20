@@ -4,14 +4,11 @@
  * display the traffic lights even with no other chrome around the window.
  */
 
-body.darwin {
-  .linux-window-controls { display: none; }
-  .windows-window-controls { display: none; }
-}
+// Hide all controls initially
+.linux-window-controls,
+.windows-window-controls { display: none; }
 
  body.win32 {
-   .linux-window-controls { display: none; }
-
    .windows-window-controls {
      display: block;
      position: absolute;
@@ -49,7 +46,6 @@ body.darwin {
 }
 
 body.linux {
-  .windows-window-controls { display: none; }
   .linux-window-controls {
     display: block;
     position: absolute;
