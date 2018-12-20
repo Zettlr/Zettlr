@@ -1,0 +1,5 @@
+# Ignore all compiled template files
+/*
+
+# The .gitignore needs to be pushed to the repository
+!.gitignore
