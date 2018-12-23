@@ -74,6 +74,11 @@ class ZettlrWindow {
       minHeight: 450,
       show: false,
       icon: 'icons/png/64x64.png',
+      webPreferences: {
+        // Zettlr needs all the node features, so in preparation for Electron
+        // 5.0 we'll need to explicitly request it.
+        nodeIntegration: true
+      },
       backgroundColor: '#fff',
       scrollBounce: true, // The nice scrolling effect for macOS
       defaultEncoding: 'utf8' // Why the hell does this default to ISO?
