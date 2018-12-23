@@ -18,7 +18,7 @@ const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const tippy = require('tippy.js')
 const { clipboard } = require('electron')
-const { generateId, hash, makeSearchRegEx } = require('../common/zettlr-helpers.js')
+const { hash, makeSearchRegEx } = require('../common/zettlr-helpers.js')
 const { trans } = require('../common/lang/i18n.js')
 
 // 1. Mode addons
@@ -709,26 +709,6 @@ class ZettlrEditor {
 
     // Replace word and select new word
     this._cm.replaceSelection(word, 'around')
-  }
-
-  /**
-     * Inserts a new ID at the current cursor position
-     */
-  insertId () {
-    if (!this._cm.somethingSelected()) {
-    // Don't replace selections
-      this._cm.replaceSelection(generateId(this._cm.getOption('zkn').idGen))
-      this._cm.focus()
-    } else {
-      // Save and afterwards retain the selections
-      let sel = this._cm.doc.listSelections()
-      this._cm.setCursor({
-        'line': this._cm.doc.lastLine(),
-        'ch': this._cm.doc.getLine(this._cm.doc.lastLine()).length
-      })
-      this._cm.replaceSelection('\n\n' + generateId(this._cm.getOption('zkn').idGen)) // Insert at the end of document
-      this._cm.doc.setSelections(sel)
-    }
   }
 
   /**

@@ -501,7 +501,7 @@ class ZettlrRendererIPC {
 
       // Generate a new ID
       case 'insert-id':
-        this._app.getEditor().insertId()
+        this._app.genId()
         break
 
       // Import a language file

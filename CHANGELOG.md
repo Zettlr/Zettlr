@@ -45,6 +45,7 @@
 - Added controls to determine which elements are rendered inside Markdown documents.
 - Simplified the attachment file handling and enabled dragging the paths of the files into the editor (e.g., to insert images).
 - Now the ID- and tag-search is case-insensitive.
+- Changes to the ID generation: Now if you press `Cmd/Ctrl+L`, the generated ID will be pasted wherever your cursor is currently (e.g. inside all text fields). Zettlr tries to back up your clipboard's contents and restore them afterwards.
 
 ## Under the hood
 
