@@ -193,7 +193,33 @@ module.exports = {"1":function(container,depth0,helpers,partials,data,blockParam
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.display : depth0)) != null ? stack1.imageWidth : stack1), depth0))
     + "% &times; "
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.display : depth0)) != null ? stack1.imageHeight : stack1), depth0))
-    + "%</div>\n          </div>\n        </div>\n        <div class=\"box-right\">\n        </div>\n      </div>\n      <!-- Export/seldomly used options -->\n      <div id=\"prefs-tabs-advanced\">\n        <p>"
+    + "%</div>\n          </div>\n        </div>\n        <div class=\"box-right\">\n          <p>"
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.display.preview_info",{"name":"i18n","hash":{},"data":data}))
+    + "</p>\n          <div class=\"cb-group\">\n            <label class=\"cb-toggle\">\n              <input type=\"checkbox\" name=\"display.renderCitations\" value=\"yes\" id=\"display.renderCitations\" "
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.display : depth0)) != null ? stack1.renderCitations : stack1),{"name":"if","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"display.renderCitations\">"
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.display.render_citations",{"name":"i18n","hash":{},"data":data}))
+    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <label class=\"cb-toggle\">\n              <input type=\"checkbox\" name=\"display.renderIframes\" value=\"yes\" id=\"export.stripIDs\" "
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.display : depth0)) != null ? stack1.renderIframes : stack1),{"name":"if","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"display.renderIframes\">"
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.display.render_iframes",{"name":"i18n","hash":{},"data":data}))
+    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <label class=\"cb-toggle\">\n              <input type=\"checkbox\" name=\"display.renderImages\" value=\"yes\" id=\"display.renderImages\" "
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.display : depth0)) != null ? stack1.renderImages : stack1),{"name":"if","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"display.renderImages\">"
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.display.render_images",{"name":"i18n","hash":{},"data":data}))
+    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <label class=\"cb-toggle\">\n              <input type=\"checkbox\" name=\"display.renderLinks\" value=\"yes\" id=\"display.renderLinks\" "
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.display : depth0)) != null ? stack1.renderLinks : stack1),{"name":"if","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"display.renderLinks\">"
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.display.render_links",{"name":"i18n","hash":{},"data":data}))
+    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <label class=\"cb-toggle\">\n              <input type=\"checkbox\" name=\"display.renderMath\" value=\"yes\" id=\"display.renderMath\" "
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.display : depth0)) != null ? stack1.renderMath : stack1),{"name":"if","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"display.renderMath\">"
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.display.render_math",{"name":"i18n","hash":{},"data":data}))
+    + "</label>\n          </div>\n          <div class=\"cb-group\">\n            <label class=\"cb-toggle\">\n              <input type=\"checkbox\" name=\"display.renderTasks\" value=\"yes\" id=\"display.renderTasks\" "
+    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.display : depth0)) != null ? stack1.renderTasks : stack1),{"name":"if","hash":{},"fn":container.program(4, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">\n              <div class=\"toggle\"></div>\n            </label>\n            <label for=\"display.renderTasks\">"
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.display.render_tasks",{"name":"i18n","hash":{},"data":data}))
+    + "</label>\n          </div>\n        </div>\n      </div>\n      <!-- Export/seldomly used options -->\n      <div id=\"prefs-tabs-advanced\">\n        <p>"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.attachments_info",{"name":"i18n","hash":{},"data":data}))
     + "</p>\n        <textarea id=\"attachmentExtensions\" name=\"attachmentExtensions\">"
     + alias3(((helper = (helper = helpers.attachmentExtensions || (depth0 != null ? depth0.attachmentExtensions : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"attachmentExtensions","hash":{},"data":data}) : helper)))

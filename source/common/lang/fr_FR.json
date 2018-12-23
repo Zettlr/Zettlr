@@ -341,7 +341,14 @@
       },
       "display": {
         "title": "Visualisation",
-        "image_size_info": "Contrôler la hauteur et le large de les aperçus images."
+        "image_size_info": "Contrôler la hauteur et le large de les aperçus images.",
+        "preview_info": "Contrôler les elements quelles sont visualisés dans votre documents.",
+        "render_citations": "Visualiser des citations",
+        "render_iframes": "Visualiser des iframes",
+        "render_images": "Visualiser des images",
+        "render_links": "Visualiser des liens",
+        "render_math": "Visualiser des formules",
+        "render_tasks": "Visualiser des tasks"
       },
       "pandoc": "Chemin d'accès à Pandoc. Seulement changer le, si Zettlr est dans l'impossibilité de faire trouver le programme.",
       "xelatex": "Chemin d'accès à xelatex. Seulement changer le, si Zettlr est dans l'impossibilité de faire trouver le programme.",

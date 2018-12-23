@@ -246,6 +246,49 @@
           </div>
         </div>
         <div class="box-right">
+          <p>{{i18n "dialog.preferences.display.preview_info"}}</p>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="display.renderCitations" value="yes" id="display.renderCitations" {{#if display.renderCitations}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="display.renderCitations">{{i18n "dialog.preferences.display.render_citations"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="display.renderIframes" value="yes" id="export.stripIDs" {{#if display.renderIframes}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="display.renderIframes">{{i18n "dialog.preferences.display.render_iframes"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="display.renderImages" value="yes" id="display.renderImages" {{#if display.renderImages}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="display.renderImages">{{i18n "dialog.preferences.display.render_images"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="display.renderLinks" value="yes" id="display.renderLinks" {{#if display.renderLinks}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="display.renderLinks">{{i18n "dialog.preferences.display.render_links"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="display.renderMath" value="yes" id="display.renderMath" {{#if display.renderMath}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="display.renderMath">{{i18n "dialog.preferences.display.render_math"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="display.renderTasks" value="yes" id="display.renderTasks" {{#if display.renderTasks}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="display.renderTasks">{{i18n "dialog.preferences.display.render_tasks"}}</label>
+          </div>
         </div>
       </div>
       <!-- Export/seldomly used options -->

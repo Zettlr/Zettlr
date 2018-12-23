@@ -121,8 +121,14 @@ class ZettlrConfig extends EventEmitter {
         'autoCloseBrackets': true
       },
       'display': {
-        'imageWidth': 100,
-        'imageHeight': 100
+        'imageWidth': 100, // Maximum preview image width
+        'imageHeight': 100, // Maximum preview image height
+        'renderCitations': true,
+        'renderIframes': true,
+        'renderImages': true,
+        'renderLinks': true,
+        'renderMath': true,
+        'renderTasks': true
       },
       // Language
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.

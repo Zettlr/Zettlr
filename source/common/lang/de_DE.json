@@ -341,7 +341,14 @@
       },
       "display": {
         "title": "Anzeige",
-        "image_size_info": "Hiermit bestimmst du die maximale Größe der Bildvorschauen"
+        "image_size_info": "Hiermit bestimmst du die maximale Größe der Bildvorschauen",
+        "preview_info": "Hiermit bestimmst du, welche Elemente Zettlr darstellt",
+        "render_citations": "Zitationen darstellen",
+        "render_iframes": "iframe-Elemente darstellen",
+        "render_images": "Bilder darstellen",
+        "render_links": "Links darstellen",
+        "render_math": "Formeln darstellen",
+        "render_tasks": "Tasks darstellen"
       },
       "pandoc": "Pfad zum Pandoc-Programm. Bitte ändere dies nur, wenn Zettlr Pandoc nicht automatisch findet.",
       "xelatex": "Pfad zum XeLaTeX-Programm. Bitte ändere dies nur, wenn Pandoc einen Fehler ausgibt, dass er die Bibliothek nicht finden kann.",

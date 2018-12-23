@@ -42,6 +42,7 @@
 - There's now an option to copy a file's ID to clipboard, if the file has one.
 - We've updated the Zettlr icon! It now matches the brand colour and has a modern look.
 - The image size constrainers look nicer and more intuitive now.
+- Added controls to determine which elements are rendered inside Markdown documents.
 
 ## Under the hood
 

@@ -548,6 +548,15 @@ class ZettlrBody {
       cfg['export.stripIDs'] = (res.find(elem => elem.name === 'export.stripIDs') !== undefined)
       cfg['export.stripTags'] = (res.find(elem => elem.name === 'export.stripTags') !== undefined)
       cfg['debug'] = (res.find(elem => elem.name === 'debug') !== undefined)
+
+      // Display checkboxes
+      cfg['display.renderCitations'] = (res.find(elem => elem.name === 'display.renderCitations') !== undefined)
+      cfg['display.renderIframes'] = (res.find(elem => elem.name === 'display.renderIframes') !== undefined)
+      cfg['display.renderImages'] = (res.find(elem => elem.name === 'display.renderImages') !== undefined)
+      cfg['display.renderLinks'] = (res.find(elem => elem.name === 'display.renderLinks') !== undefined)
+      cfg['display.renderMath'] = (res.find(elem => elem.name === 'display.renderMath') !== undefined)
+      cfg['display.renderTasks'] = (res.find(elem => elem.name === 'display.renderTasks') !== undefined)
+
       cfg['editor.autoCloseBrackets'] = (res.find(elem => elem.name === 'editor.autoCloseBrackets') !== undefined)
       // Extract selected dictionaries
       cfg['selectedDicts'] = res.filter(elem => elem.name === 'selectedDicts').map(elem => elem.value)

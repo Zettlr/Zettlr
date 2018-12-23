@@ -122,6 +122,14 @@ class ZettlrEditor {
     this._citeprocIDs = null // Holds all available IDs for autocomplete
     this._currentDatabase = null // Points either to the tagDB or the ID database
 
+    // What elements should be rendered?
+    this._renderCitations = false
+    this._renderIframes = false
+    this._renderImages = false
+    this._renderLinks = false
+    this._renderMath = false
+    this._renderTasks = false
+
     // The last array of IDs as fetched from the document
     this._lastKnownCitationCluster = []
 
@@ -251,12 +259,12 @@ class ZettlrEditor {
     this._cm.on('cursorActivity', (cm) => {
       // This event fires on either editor changes (because, obviously the
       // cursor changes its position as well then) or when the cursor moves.
-      this._cm.execCommand('markdownRenderImages') // Render images
-      this._cm.execCommand('markdownRenderIframes') // Render iFrames
-      this._cm.execCommand('markdownRenderMath') // Render equations
-      this._cm.execCommand('markdownRenderLinks') // Render links
-      this._cm.execCommand('markdownRenderCitations') // Render citations
-      this._cm.execCommand('markdownRenderTasks') // Render tasks
+      if (this._renderImages) this._cm.execCommand('markdownRenderImages') // Render images
+      if (this._renderIframes) this._cm.execCommand('markdownRenderIframes') // Render iFrames
+      if (this._renderMath) this._cm.execCommand('markdownRenderMath') // Render equations
+      if (this._renderLinks) this._cm.execCommand('markdownRenderLinks') // Render links
+      if (this._renderCitations) this._cm.execCommand('markdownRenderCitations') // Render citations
+      if (this._renderTasks) this._cm.execCommand('markdownRenderTasks') // Render tasks
       this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
       if (this._cm.getOption('fullScreen') && this._mute) {
         this._muteLines()
@@ -527,6 +535,24 @@ class ZettlrEditor {
   setImagePreviewConstraints (width, height) {
     this._cm.setOption('imagePreviewWidth', width)
     this._cm.setOption('imagePreviewHeight', height)
+  }
+
+  /**
+   * Applies options to determine which elements are rendered in documents.
+   * @param {Boolean} cite   Should citations be rendered?
+   * @param {Boolean} iframe Should iFrames be rendered?
+   * @param {Boolean} img    Should images be rendered?
+   * @param {Boolean} link   Should Links be rendered?
+   * @param {Boolean} math   Should math formulae be rendered?
+   * @param {Boolean} task   Should tasks be rendered?
+   */
+  setRenderOptions (cite, iframe, img, link, math, task) {
+    this._renderCitations = cite
+    this._renderIframes = iframe
+    this._renderImages = img
+    this._renderLinks = link
+    this._renderMath = math
+    this._renderTasks = task
   }
 
   /**

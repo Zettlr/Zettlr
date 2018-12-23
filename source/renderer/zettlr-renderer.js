@@ -149,6 +149,16 @@ class ZettlrRenderer {
       global.config.get('display.imageHeight')
     )
 
+    // Tell the editor which elements should be rendered inside documents.
+    this.getEditor().setRenderOptions(
+      global.config.get('display.renderCitations'),
+      global.config.get('display.renderIframes'),
+      global.config.get('display.renderImages'),
+      global.config.get('display.renderLinks'),
+      global.config.get('display.renderMath'),
+      global.config.get('display.renderTasks')
+    )
+
     // Set the correct combiner state
     switch (global.config.get('combinerState')) {
       case 'expanded':
