@@ -158,7 +158,7 @@ class ZettlrEditor {
         hint: (cm, opt) => {
           let term = cm.getRange(this._autoCompleteStart, cm.getCursor())
           let completionObject = {
-            'list': Object.keys(this._currentDatabase).filter(elem => elem.indexOf(term) === 0),
+            'list': Object.keys(this._currentDatabase).filter(elem => elem.toLowerCase().indexOf(term.toLowerCase()) === 0),
             'from': this._autoCompleteStart,
             'to': cm.getCursor()
           }
