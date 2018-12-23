@@ -106,7 +106,7 @@ class ZettlrBody {
 
     popup($('.button.file-new'), cnt, (form) => {
       if (form) {
-        this._renderer.requestNewFile(form[0].value, dir.hash)
+        global.ipc.send('file-new', { 'name': form[0].value, 'hash': dir.hash })
       }
     })
   }
@@ -128,7 +128,7 @@ class ZettlrBody {
 
     popup($('.button.directory-new'), cnt, (form) => {
       if (form) {
-        this._renderer.requestNewDir(form[0].value, dir.hash)
+        global.ipc.send('dir-new', { 'name': form[0].value, 'hash': dir.hash })
       }
     })
   }
@@ -150,7 +150,7 @@ class ZettlrBody {
 
     popup($(`[data-hash=${dir.hash}]`), cnt, (form) => {
       if (form) {
-        this._renderer.requestNewVirtualDir(form[0].value, dir.hash)
+        global.ipc.send('dir-new-vd', { 'name': form[0].value, 'hash': dir.hash })
       }
     })
   }
@@ -169,7 +169,7 @@ class ZettlrBody {
 
     popup(elem, cnt, (form) => {
       if (form) {
-        this._renderer.requestDirRename(form[0].value, dir.hash)
+        global.ipc.send('dir-rename', { 'name': form[0].value, 'hash': dir.hash })
       }
     })
   }
@@ -198,7 +198,7 @@ class ZettlrBody {
 
     popup(elem, cnt, (form) => {
       if (form) {
-        this._renderer.requestFileRename(form[0].value, file.hash)
+        global.ipc.send('file-rename', { 'name': form[0].value, 'hash': file.hash })
       }
     })
   }

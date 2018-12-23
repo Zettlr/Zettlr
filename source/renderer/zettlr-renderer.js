@@ -597,52 +597,12 @@ class ZettlrRenderer {
   sortDir (hash, type) { this._ipc.send('dir-sort', { 'hash': hash, 'type': type }) }
 
   /**
-   * Executed when a user has finished typing a new file name.
-   * @param  {String} name The new name
-   * @param  {Integer} hash The containing dir's hash
-   * @return {void}      Nothing to return.
-   */
-  requestNewFile (name, hash) { this._ipc.send('file-new', { 'name': name, 'hash': hash }) }
-
-  /**
-   * Executed when a user has finished typing a new dir name.
-   * @param  {String} name The new name
-   * @param  {Integer} hash The containing dir's hash
-   * @return {void}      Nothing to return.
-   */
-  requestNewDir (name, hash) { this._ipc.send('dir-new', { 'name': name, 'hash': hash }) }
-
-  /**
-   * Executed when a user has finished typing a new virtual directory name.
-   * @param  {String} name The virtual directory's name
-   * @param  {Integer} hash The parent directory's hash
-   * @return {void}      No return.
-   */
-  requestNewVirtualDir (name, hash) { this._ipc.send('dir-new-vd', { 'name': name, 'hash': hash }) }
-
-  /**
    * Executed when the user clicks on a filetype to export to.
    * @param  {Integer} hash The hash of the file to be exported
    * @param  {String} ext  Either "odt", "docx", "html" or "pdf".
    * @return {void}      Nothing to return.
    */
   requestExport (hash, ext) { this._ipc.send('export', { 'hash': hash, 'ext': ext }) }
-
-  /**
-   * Requests a rename of a directory.
-   * @param  {String} val  The new name.
-   * @param  {Integer} hash The directory's identifier.
-   * @return {void}      Nothing to return.
-   */
-  requestDirRename (val, hash) { this._ipc.send('dir-rename', { 'hash': hash, 'name': val }) }
-
-  /**
-   * Request a rename of a file.
-   * @param  {String} val  The new name
-   * @param  {Integer} hash The identifier of the file.
-   * @return {void}      Nothing to return.
-   */
-  requestFileRename (val, hash) { this._ipc.send('file-rename', { 'hash': hash, 'name': val }) }
 
   /**
    * Called by the dialog when the user saves the settings.

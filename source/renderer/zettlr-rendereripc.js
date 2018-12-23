@@ -117,9 +117,21 @@ class ZettlrRendererIPC {
     }
 
     global.ipc = {
-      // Sends a message and and saves the callback
-      send: (cmd, cnt, callback) => {
-        // A number between 0 and 50.000 should suffice
+      /**
+       * Sends a message and and saves the callback.
+       * @param  {string} cmd             The command to be sent
+       * @param  {Object} [cnt={}]        The payload for the command
+       * @param  {Callable} [callback=null] An optional callback
+       * @return {void}                 This function does not return.
+       */
+      send: (cmd, cnt = {}, callback = null) => {
+        // If no callback was provided we don't need to go through the hassle of
+        // generating and saving a cypher, but we can instead just send the
+        // message to main.
+        if (!callback) return this.send(cmd, cnt)
+
+        // A number between 0 and 50.000 should suffice for a unique key to
+        // find the callback when the return comes from main.
         let cypher
         do {
           cypher = Math.round(Math.random() * 50000).toString()
