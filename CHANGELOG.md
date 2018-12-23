@@ -48,6 +48,7 @@
 - Changes to the ID generation: Now if you press `Cmd/Ctrl+L`, the generated ID will be pasted wherever your cursor is currently (e.g. inside all text fields). Zettlr tries to back up your clipboard's contents and restore them afterwards.
 - Zettlr recognises IDs inside the name of a file. **If the ID pattern returns a match in the file name, this ID takes precedence over any ID that may be in the file's content!**
 - Added context menu entry to open link in the browser.
+- Images can now be dragged from the attachment pane onto the editor and will automatically be converted into valid Markdown links.
 
 ## Under the hood
 

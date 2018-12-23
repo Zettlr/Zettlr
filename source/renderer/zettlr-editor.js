@@ -87,6 +87,8 @@ const AUTOCLOSEBRACKETS = {
   override: true
 }
 
+const IMAGE_REGEX = /(jpg|jpeg|png|gif|svg|tiff|tif)$/i
+
 /**
 * This class propably has the most `require`s in it, because it loads all
 * functionality concerning the CodeMirror editor. It loads them, initializes
@@ -205,6 +207,25 @@ class ZettlrEditor {
       }
     })
 
+    /**
+     * Listen to the beforeChange event to modify pasted image paths into real
+     * markdown images.
+     * @type {function}
+     */
+    this._cm.on('beforeChange', (cm, changeObj) => {
+      if (changeObj.origin === 'paste') {
+        let newtext = []
+        for (let i in changeObj.text) {
+          if (changeObj.text[i].indexOf('file://') === 0 && IMAGE_REGEX.test(changeObj.text[i])) {
+            newtext[i] = `![${path.basename(changeObj.text[i])}](${changeObj.text[i]})`
+          } else {
+            newtext[i] = changeObj.text[i]
+          }
+        }
+        changeObj.update(changeObj.from, changeObj.to, newtext)
+      }
+    })
+
     this._cm.on('change', (cm, changeObj) => {
       // Show tag autocompletion window, if applicable (or close it)
       if (changeObj.text[0] === '#') {
@@ -277,7 +298,7 @@ class ZettlrEditor {
         event.codemirrorIgnore = true
         let imagesToInsert = []
         for (let x of event.dataTransfer.files) {
-          if (/(jpg|jpeg|png|gif|svg|tiff|tif)$/i.test(x.path)) {
+          if (IMAGE_REGEX.test(x.path)) {
             imagesToInsert.push(x.path)
           }
         }
