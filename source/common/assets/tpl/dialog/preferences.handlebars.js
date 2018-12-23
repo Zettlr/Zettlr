@@ -183,17 +183,17 @@ module.exports = {"1":function(container,depth0,helpers,partials,data,blockParam
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.zkn.var_minute",{"name":"i18n","hash":{},"data":data}))
     + "</li>\n              <li><strong>%s</strong>: "
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.zkn.var_second",{"name":"i18n","hash":{},"data":data}))
-    + "</li>\n            </ul>\n          </p>\n        </div>\n      </div>\n      <!-- Display options -->\n      <div id=\"prefs-tabs-display\">\n        <p>"
-    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.display.info",{"name":"i18n","hash":{},"data":data}))
-    + "</p>\n        <div class=\"box-left\">\n          <label for=\"imageWidth\">"
-    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.display.image_width",{"name":"i18n","hash":{},"data":data}))
-    + "</label>\n          <input type=\"range\" min=\"1\" max=\"100\" id=\"imageWidth\" name=\"display.imageWidth\" value=\""
+    + "</li>\n            </ul>\n          </p>\n        </div>\n      </div>\n      <!-- Display options -->\n      <div id=\"prefs-tabs-display\">\n        <div class=\"box-left\">\n          <p>"
+    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.display.image_size_info",{"name":"i18n","hash":{},"data":data}))
+    + "</p>\n          <div class=\"image-size\">\n            <div class=\"image\"></div>\n            <input type=\"range\" min=\"1\" max=\"100\" id=\"imageWidth\" name=\"display.imageWidth\" value=\""
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.display : depth0)) != null ? stack1.imageWidth : stack1), depth0))
-    + "\">\n          <label for=\"imageHeight\">"
-    + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.display.image_height",{"name":"i18n","hash":{},"data":data}))
-    + "</label>\n          <input type=\"range\" min=\"1\" max=\"100\" id=\"imageHeight\" name=\"display.imageHeight\" value=\""
+    + "\">\n            <input type=\"range\" min=\"1\" max=\"100\" id=\"imageHeight\" name=\"display.imageHeight\" value=\""
     + alias3(alias4(((stack1 = (depth0 != null ? depth0.display : depth0)) != null ? stack1.imageHeight : stack1), depth0))
-    + "\">\n        </div>\n        <div class=\"box-right\">\n        </div>\n      </div>\n      <!-- Export/seldomly used options -->\n      <div id=\"prefs-tabs-advanced\">\n        <p>"
+    + "\">\n            <div id=\"preview-image-sizes\">"
+    + alias3(alias4(((stack1 = (depth0 != null ? depth0.display : depth0)) != null ? stack1.imageWidth : stack1), depth0))
+    + "% &times; "
+    + alias3(alias4(((stack1 = (depth0 != null ? depth0.display : depth0)) != null ? stack1.imageHeight : stack1), depth0))
+    + "%</div>\n          </div>\n        </div>\n        <div class=\"box-right\">\n        </div>\n      </div>\n      <!-- Export/seldomly used options -->\n      <div id=\"prefs-tabs-advanced\">\n        <p>"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.attachments_info",{"name":"i18n","hash":{},"data":data}))
     + "</p>\n        <textarea id=\"attachmentExtensions\" name=\"attachmentExtensions\">"
     + alias3(((helper = (helper = helpers.attachmentExtensions || (depth0 != null ? depth0.attachmentExtensions : depth0)) != null ? helper : alias2),(typeof helper === alias5 ? helper.call(alias1,{"name":"attachmentExtensions","hash":{},"data":data}) : helper)))
@@ -221,5 +221,5 @@ module.exports = {"1":function(container,depth0,helpers,partials,data,blockParam
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.zkn.pass_check_yes",{"name":"i18n","hash":{},"data":data}))
     + "')\n  } else {\n    $('#pass-check').text('"
     + alias3((helpers.i18n || (depth0 && depth0.i18n) || alias2).call(alias1,"dialog.preferences.zkn.pass_check_no",{"name":"i18n","hash":{},"data":data}))
-    + "')\n  }\n})\n\n</script>\n";
+    + "')\n  }\n})\n\n// BEGIN functionality for the image constraining options\n$('#imageWidth, #imageHeight').on('input', (e) => {\n  $('#preview-image-sizes').html($('#imageWidth').val() + '% &times; ' + $('#imageHeight').val() + '%')\n})\n\n</script>\n";
 },"useData":true,"useDepths":true}

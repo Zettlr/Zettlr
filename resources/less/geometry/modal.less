@@ -170,6 +170,46 @@
             .lmargin { left: -4.2em;  top: 2.5em;      }
         }
 
+        // Positioning of the image size constraint sliders
+        div.image-size {
+          position: relative;
+          height: 8em;
+          width: 8em;
+          margin: 0 auto; // Center the element
+
+          .image {
+            width: 6em;
+            height: 6em;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-image: url("../img/image-preview.png");
+            background-size: contain;
+          }
+
+          #imageWidth {
+            width: 6em;
+            position: absolute;
+            bottom: -10px;
+          }
+
+          #imageHeight {
+            width: 6em;
+            transform: rotateZ(-90deg);
+            position: absolute;
+            top: 2.5em;
+            left: 4em;
+          }
+
+          #preview-image-sizes {
+            display: block;
+            position: absolute;
+            bottom: -1em;
+            left: 1em;
+            font-weight: bold;
+          }
+        }
+
         // This is the paragraph needed for previewing of changes to PDF preferences.
         .pdf-preview {
             max-height:100%;
