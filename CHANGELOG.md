@@ -46,6 +46,7 @@
 - Simplified the attachment file handling and enabled dragging the paths of the files into the editor (e.g., to insert images).
 - Now the ID- and tag-search is case-insensitive.
 - Changes to the ID generation: Now if you press `Cmd/Ctrl+L`, the generated ID will be pasted wherever your cursor is currently (e.g. inside all text fields). Zettlr tries to back up your clipboard's contents and restore them afterwards.
+- Zettlr recognises IDs inside the name of a file. **If the ID pattern returns a match in the file name, this ID takes precedence over any ID that may be in the file's content!**
 
 ## Under the hood
 

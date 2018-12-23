@@ -173,7 +173,14 @@ class ZettlrFile {
 
     // Search for an ID
     this.id = ''
-    if ((match = idRE.exec(cnt)) == null) {
+
+    // Assume an ID in the file name (takes precedence over IDs in the file's
+    // content)
+    if ((match = idRE.exec(this.name)) != null) {
+      this.id = match[1] || ''
+      return cnt
+    } else if ((match = idRE.exec(cnt)) == null) {
+      // No ID found in the content either
       return cnt
     }
 
