@@ -75,6 +75,7 @@
 - Moved a lot of files around: The CSS, Fonts, JavaScript and the template files are now in the `common` directory, so that it makes sense that there can be multiple windows that share those files.
 - **ATTENTION: We've stopped committing the compiled Handlebars templates and CSS files to the repository, so even if you don't develop styles or templates, you now need to run `yarn/npm less` and `yarn/npm handlebars` before you run the application!**
 - Removed a bunch of superfluous pass-through functions from the `ZettlrRenderer` class.
+- Bugfixes in the `ZettlrExport` class.
 
 # 0.20.0
 

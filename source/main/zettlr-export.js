@@ -90,6 +90,10 @@ class ZettlrExport {
     // If we have PDF export, we need a template file
     this.textpl = ''
 
+    // Prevent errors if the PDF formats are not given (b/c one only wants to
+    // export to non-pdf formats)
+    if (!this.options.hasOwnProperty('pdf')) this.options.pdf = {}
+
     // Second make sure pandoc is installed. Without, only HTML is possible
     // through showdown.
     if (!commandExists('pandoc') && this.options.format !== 'html') {
@@ -405,7 +409,12 @@ class ZettlrExport {
       fs.writeFileSync(this.targetFile, tpl, 'utf8')
     }
 
-    require('electron').shell.openItem(this.targetFile)
+    // The user may pass an optional autoOpen property. If not present or set to
+    // true, the file will be opened automatically. If present and set to false,
+    // it'll do nothing.
+    if (!this.options.hasOwnProperty('autoOpen') || this.options.autoOpen) {
+      require('electron').shell.openItem(this.targetFile)
+    }
   }
 }
 
