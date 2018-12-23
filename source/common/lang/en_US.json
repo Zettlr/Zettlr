@@ -91,6 +91,7 @@
     "delete_file": "Delete file",
     "delete_from_vd": "Delete from virtual directory",
     "delete_dir": "Delete directory",
+    "open_link": "Open Link",
     "undo": "Undo",
     "redo": "Redo",
     "cut": "Cut",

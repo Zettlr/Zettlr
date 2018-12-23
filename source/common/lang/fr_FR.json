@@ -91,6 +91,7 @@
     "delete_file": "Supprimer le fichier",
     "delete_from_vd": "Supprimer du dossier virtuel",
     "delete_dir": "Supprimer le dossier",
+    "open_link": "Ouvrir le lien",
     "undo": "Annuler",
     "redo": "Repeter",
     "cut": "Couper",

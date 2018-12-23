@@ -192,6 +192,18 @@ class ZettlrCon {
     this._menu = new Menu()
     this._menu = this._buildFromSource(require('./assets/context/' + menupath), hash, vdhash, scopes, attr)
     if (elem.hasClass('cm-spell-error')) this._menu = typoPrefix.concat(this._menu)
+
+    // If the element is a link, add an "open link" context menu entry
+    if (elem.hasClass('cma')) {
+      this._menu.unshift({
+        'label': trans('menu.open_link'),
+        'click': (item, win) => {
+          require('electron').shell.openExternal(elem.attr('title'))
+        }
+      }, {
+        'type': 'separator'
+      })
+    }
     this._menu = Menu.buildFromTemplate(this._menu)
   }
 
