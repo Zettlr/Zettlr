@@ -344,11 +344,11 @@
         "image_size_info": "With these controls you can constrain the image previews.",
         "preview_info": "These options determine which elements are rendered in documents.",
         "render_citations": "Render Citations",
-        "render_iframes": "Render iframes",
-        "render_images": "Render images",
-        "render_links": "Render links",
-        "render_math": "Render formulae",
-        "render_tasks": "Render tasks"
+        "render_iframes": "Render Iframes",
+        "render_images": "Render Images",
+        "render_links": "Render Links",
+        "render_math": "Render Formulae",
+        "render_tasks": "Render Tasks"
       },
       "pandoc": "Path to pandoc executable. Please only change, if Zettlr is unable to locate pandoc.",
       "xelatex": "Path to xelatex executable. Please only change, if Zettlr is unable to locate it.",
