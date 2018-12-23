@@ -71,7 +71,7 @@ class ZettlrAttachments {
     } else {
       this._attachments = this._renderer.getCurrentDir().attachments
       for (let a of this._attachments) {
-        this._fileContainer.append($('<a>').text(a.name).attr('href', '#').attr('data-hash', a.hash))
+        this._fileContainer.append($('<a>').text(a.name).attr('href', a.path).attr('data-hash', a.hash))
       }
     }
 
@@ -94,12 +94,9 @@ class ZettlrAttachments {
   _act () {
     $('#attachments a').click((e) => {
       let elem = $(e.target)
-      for (let a of this._attachments) {
-        if (a.hash === parseInt(elem.attr('data-hash'))) {
-          shell.openItem(a.path)
-          break
-        }
-      }
+      if (elem.attr('href')) shell.openItem(elem.attr('href'))
+      e.preventDefault() // Don't follow the link
+      e.stopPropagation()
     })
 
     $('#attachments #open-dir-external').click((e) => {

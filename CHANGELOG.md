@@ -43,6 +43,7 @@
 - We've updated the Zettlr icon! It now matches the brand colour and has a modern look.
 - The image size constrainers look nicer and more intuitive now.
 - Added controls to determine which elements are rendered inside Markdown documents.
+- Simplified the attachment file handling and enabled dragging the paths of the files into the editor (e.g., to insert images).
 
 ## Under the hood
 
