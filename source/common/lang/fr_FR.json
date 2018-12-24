@@ -406,7 +406,7 @@
       "chokidar": "Voir les modifications sur les fichiers à l'extérieur de l'app",
       "typojs": "Alimenter le correcteur d'orthographe sur l'app",
       "showdownjs": "Présenter le Changelog, qui tu vois pour les updates",
-      "esdoc": "Engendrer le manuel de l'API ici: http://dev.zettlr.com/api",
+      "documentationjs": "Engendrer le manuel de l'API ici: http://dev.zettlr.com/api",
       "lessjs": "Un aide pour écrire le design",
       "clusterizejs": "Présente même les listes trop longues",
       "tippyjs": "Responsible pour les belles infobulles",

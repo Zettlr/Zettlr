@@ -30,10 +30,10 @@ const NO_DB = 2
 const ERROR = 3
 const READY = 4
 
+/**
+ * This class enables to export citations from a CSL JSON file to HTML.
+ */
 class ZettlrCiteproc {
-  /**
-   * Initialises ZettlrCiteproc and also directly tries to boot the engine.
-   */
   constructor () {
     this._mainLibrary = ''
     // The Zettlr internal preview of these citations will always use Chicago,

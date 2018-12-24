@@ -17,11 +17,12 @@ const { shell } = require('electron')
 
 const { trans } = require('../common/lang/i18n.js')
 
+/**
+  * Handles both display of files in the attachment sidebar and the list of
+  * references, if applicable.
+  * @param {ZettlrRenderer} parent The renderer.
+  */
 class ZettlrAttachments {
-  /**
-    * Create and append the attachment pane.
-    * @param {ZettlrRenderer} parent The renderer.
-    */
   constructor (parent) {
     this._renderer = parent
     this._container = $('<div>').prop('id', 'attachments').css('display', 'none')

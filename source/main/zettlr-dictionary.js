@@ -17,6 +17,11 @@ const Typo = require('typo-js')
 const path = require('path')
 const fs = require('fs')
 
+/**
+ * This class loads and unloads dictionaries according to the configuration set
+ * by the user on runtime. It provides functions that allow to search all
+ * loaded dictionaries for words and even change the dictionaries during runtime.
+ */
 class ZettlrDictionary {
   constructor () {
     this._typos = []

@@ -406,7 +406,7 @@
       "chokidar": "Detects any changes you make to your files outside the app",
       "typojs": "Provides Zettlr with spellchecking abilities",
       "showdownjs": "Renders the Changelog so that you can see what's changed in an update",
-      "esdoc": "Used to generate the API documentation at http://dev.zettlr.com/api",
+      "documentationjs": "Used to generate the API documentation at http://dev.zettlr.com/api",
       "lessjs": "Helps a lot in writing the styles for Zettlr",
       "clusterizejs": "Displays even the longest file lists reliably",
       "tippyjs": "That's where the nice tooltips come from",

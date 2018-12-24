@@ -27,12 +27,9 @@ const { trans } = require('../common/lang/i18n.js')
  * a future version, the context menu should be moved to ... like the renderer.
  * Or, even better: the main process (because then it does not lock the renderer
  * on generation, making the experience smoother.)
+ * @param {ZettlrBody} parent Body element.
  */
 class ZettlrCon {
-  /**
-    * Create the object.
-    * @param {ZettlrBody} parent Body element.
-    */
   constructor (parent) {
     this._body = parent
     this._menu = new Menu()

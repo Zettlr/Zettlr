@@ -417,6 +417,11 @@ class ZettlrExport {
   }
 }
 
+/**
+ * Returns a new object of class ZettlrExport.
+ * @param  {Object} options An options object compatible to ZettlrExport.
+ * @return {ZettlrExport}         An exporter instance
+ */
 function makeExport (options) {
   return new ZettlrExport(options)
 }
