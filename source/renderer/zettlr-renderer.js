@@ -575,56 +575,6 @@ class ZettlrRenderer {
   }
 
   /**
-   * Triggered when a file or dir is dropped on a dir.
-   * @param  {Integer} from Hash of the source file/dir.
-   * @param  {Integer} to   Where to move? (Hash)
-   * @return {void}      Nothing to return.
-   */
-  requestMove (from, to) { this._ipc.send('request-move', { 'from': from, 'to': to }) }
-
-  /**
-   * Requests the opening of another file in editor.
-   * @param  {Integer} hash The hash of the file to be loaded.
-   * @return {void}      Nothing to return.
-   */
-  requestFile (hash) { this._ipc.send('file-get', hash) }
-
-  /**
-   * Tells the main to tell the directory to sort itself
-   * @param  {Number} hash The hash of the directory to be sorted
-   * @param  {String} type Either time or name
-   */
-  sortDir (hash, type) { this._ipc.send('dir-sort', { 'hash': hash, 'type': type }) }
-
-  /**
-   * Executed when the user clicks on a filetype to export to.
-   * @param  {Integer} hash The hash of the file to be exported
-   * @param  {String} ext  Either "odt", "docx", "html" or "pdf".
-   * @return {void}      Nothing to return.
-   */
-  requestExport (hash, ext) { this._ipc.send('export', { 'hash': hash, 'ext': ext }) }
-
-  /**
-   * Called by the dialog when the user saves the settings.
-   * @param  {Object} cfg A correct configuration object to be sent to main.
-   * @return {void}     Nothing to return.
-   */
-  saveSettings (cfg) { this._ipc.send('update-config', cfg) }
-
-  /**
-   * Called by the dialog when the user saves the settings.
-   * @param  {Object} cfg An object to be sent to main, containing properties and hash attributes.
-   * @return {void}     Nothing to return.
-   */
-  saveProjectSettings (cfg) { this._ipc.send('update-project-properties', cfg) }
-
-  /**
-   * Sends the new tag-object to main.
-   * @param  {Object} tags The tags to be sent
-   */
-  saveTags (tags) { this._ipc.send('update-tags', tags) }
-
-  /**
    * Opens a new file
    * @param  {ZettlrFile} f The file to be opened
    */
@@ -883,13 +833,6 @@ class ZettlrRenderer {
       this.showPreview()
     }
   }
-
-  /**
-   * Sends a command to Main (only used in ZettlrPreview for searching)
-   * @param  {String} command The command to be sent
-   * @param  {Mixed} [content={}] The content belonging to the sent command, can be empty
-   */
-  send (command, content = {}) { this._ipc.send(command, content) }
 
   /**
    * Updates the list of IDs available for autocomplete

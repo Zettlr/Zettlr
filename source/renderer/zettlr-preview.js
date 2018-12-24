@@ -232,7 +232,7 @@ class ZettlrPreview {
           while (!elem.is('li')) {
             elem = elem.parent()
           }
-          this._renderer.send('file-drag-start', { 'hash': elem.attr('data-hash') })
+          global.ipc.send('file-drag-start', { 'hash': elem.attr('data-hash') })
           return false // Return false to cancel the current drag operation
         }
       }
@@ -311,7 +311,9 @@ class ZettlrPreview {
         // Don't re-select an already selected file.
         return
       }
-      this.requestFile(elem.attr('data-hash'))
+
+      // Request the clicked file
+      global.ipc.send('file-get', elem.attr('data-hash'))
     })
 
     this._listContainer.on('mouseenter', 'li.directory', (e) => {
@@ -350,14 +352,15 @@ class ZettlrPreview {
         // We need the hex charcode as HTML entity. jQuery is not as
         // nice as to give it back to us itself.
         let sort = '&#x' + elem.text().charCodeAt(0).toString(16) + ';'
+        let hash = elem.parent().parent().attr('data-hash')
         if (sort === SORT_NAME_UP) {
-          this.sortDir(elem.parent().parent().attr('data-hash'), 'name-down')
+          global.ipc.send('dir-sort', { 'hash': hash, 'type': 'name-down' })
         } else if (sort === SORT_TIME_UP) {
-          this.sortDir(elem.parent().parent().attr('data-hash'), 'time-down')
+          global.ipc.send('dir-sort', { 'hash': hash, 'type': 'time-down' })
         } else if (sort === SORT_NAME_DOWN) {
-          this.sortDir(elem.parent().parent().attr('data-hash'), 'name-up')
+          global.ipc.send('dir-sort', { 'hash': hash, 'type': 'name-up' })
         } else if (sort === SORT_TIME_DOWN) {
-          this.sortDir(elem.parent().parent().attr('data-hash'), 'time-up')
+          global.ipc.send('dir-sort', { 'hash': hash, 'type': 'time-up' })
         }
       })
       $(e.target).append(sortingHeader)
@@ -470,23 +473,6 @@ class ZettlrPreview {
       this._scrollIntoView(i)
     }
   }
-
-  /**
-    * Needed for bubbling up the request of a new file
-    * @param  {Integer} hash The hash of the file that's being requested
-    * @return {void}      Nothing to return.
-    */
-  requestFile (hash) {
-    // Request a file from the renderer
-    this._renderer.requestFile(hash)
-  }
-
-  /**
-    * Passes the sorting request to the renderer
-    * @param  {Number} hash The hash of the dir to be sorted
-    * @param  {String} type Either name or time
-    */
-  sortDir (hash, type) { this._renderer.sortDir(hash, type) }
 
   /**
     * Is the preview pane currently hidden?
@@ -648,9 +634,8 @@ class ZettlrPreview {
 
     this._renderer.searchProgress(this._currentSearchIndex, this._hashes.length)
 
-    // TODO: Move out send-methods from all files except renderer!
     // Send a request to the main process and handle it afterwards.
-    this._renderer.send('file-search', {
+    global.ipc.send('file-search', {
       'hash': this._hashes[this._currentSearchIndex],
       'terms': this._currentSearch
     })

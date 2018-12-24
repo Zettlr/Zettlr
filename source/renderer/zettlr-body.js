@@ -353,7 +353,10 @@ class ZettlrBody {
         $('#reveal-themes').toggleClass('hidden')
         return
       }
-      this.requestExport(e.target)
+
+      let ext = $(e.target).attr('data-ext')
+      let hash = $(e.target).attr('data-hash')
+      global.ipc.send('export', { 'hash': hash, 'ext': ext })
       p.close()
     })
   }
@@ -508,19 +511,6 @@ class ZettlrBody {
     })
   }
 
-  /**
-    * Requests the export of a file. Is called by the exporting buttons.
-    * @param  {jQuery} elem A jQuery object representing the clicked button.
-    * @return {void}      Nothing to return.
-    */
-  requestExport (elem) {
-    // The element contains data-attributes containing all necessary
-    // data for export.
-    let ext = $(elem).attr('data-ext')
-    let hash = $(elem).attr('data-hash')
-    this._renderer.requestExport(hash, ext)
-  }
-
   // This function gets only called by the dialog class with an array
   // containing all serialized form inputs and the dialog type
   /**
@@ -641,15 +631,16 @@ class ZettlrBody {
 
     // Send the ready configuration back to main.
     if (dialog === 'preferences') {
-      this._renderer.saveSettings(cfg)
+      // this._renderer.saveSettings(cfg)
+      global.ipc.send('update-config', cfg)
     } else if (dialog === 'project-properties') {
       // Add additional properties for the project settings.
-      this._renderer.saveProjectSettings({ 'properties': cfg, 'hash': hash })
+      global.ipc.send('update-project-properties', { 'properties': cfg, 'hash': hash })
     } else if (dialog === 'pdf-preferences') {
       // pdf preferences
-      this._renderer.saveSettings(cfg)
+      global.ipc.send('update-config', cfg)
     } else if (dialog === 'tags-preferences') {
-      this._renderer.saveTags(cfg['tags'])
+      global.ipc.send('update-tags', cfg['tags'])
     }
 
     // Finally close the dialog!
