@@ -34,7 +34,6 @@ function ExportError (msg, name = 'Exporting error') {
 
 /**
  * ZettlrExport is a stateless class that gets invoked via the constructor.
- * TODO: Failsafe-checks for options!
  */
 class ZettlrExport {
   /**
