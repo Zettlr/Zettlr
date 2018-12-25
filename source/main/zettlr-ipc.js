@@ -477,6 +477,11 @@ class ZettlrIPC {
       case 'make-standalone':
         this._app.openQL(arg)
         return true
+
+      // Send the global tag database to the renderer process.
+      case 'get-tags-database':
+        return global.tags.get()
+
       default:
         console.log(trans('system.unknown_command', cmd))
         return null

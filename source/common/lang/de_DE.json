@@ -155,6 +155,11 @@
       "replace_label": "Ersetzen",
       "replace_all_label": "Alle"
     },
+    "tag_cloud": {
+      "title": "Tag Cloud",
+      "info": "Hier siehst du alle Schlagworte, die du in deinen Dateien verwendet hast. Du kannst die gesamte Liste in die Zwischenablage kopieren. Fahre mit der Maus über die Tags, um zu sehen, wie oft sie verwandt wurden.",
+      "copy": "In die Zwischenablage kopieren"
+    },
     "error": {
       "name": "Dialog-Fehler",
       "message": "Konnte den Dialog %s nicht generieren!",
@@ -431,6 +436,7 @@
     "dir_new": "Neues Verzeichnis erstellen",
     "file_new": "Neue Datei erstellen",
     "stats": "Statistiken anzeigen",
+    "tag_cloud": "Schlagworte",
     "preferences": "Einstellungen anzeigen",
     "recent_docs": "Kürzlich verwendete Dokumente",
     "file_save": "Änderungen an der Datei speichern",

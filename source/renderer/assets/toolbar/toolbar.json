@@ -37,6 +37,13 @@
             "title": "toolbar.stats"
         },
         {
+          "role": "button",
+          "class": "tag-cloud",
+          "command": "show-tag-cloud",
+          "content": "{}",
+          "title": "toolbar.tag_cloud"
+        },
+        {
             "role": "button",
             "class": "preferences",
             "command": "open-preferences",

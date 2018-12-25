@@ -434,6 +434,11 @@ class ZettlrRendererIPC {
         this._app.getEditor().setTagDatabase(cnt)
         break
 
+      // Display the informative tag cloud
+      case 'show-tag-cloud':
+        this._app.getBody().displayTagCloud()
+        break
+
       // Execute a command with CodeMirror (Bold, Italic, Link, etc)
       case 'cm-command':
         this._app.getEditor().runCommand(cnt)

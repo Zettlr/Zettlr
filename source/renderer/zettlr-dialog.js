@@ -15,6 +15,7 @@
 
 const tippy = require('tippy.js')
 const makeTemplate = require('../common/zettlr-template.js')
+const { clipboard } = require('electron')
 const Chart = require('chart.js')
 const { trans } = require('../common/lang/i18n.js')
 const SUPPORTED_PAPERTYPES = require('../common/data.json').papertypes
@@ -175,6 +176,11 @@ class ZettlrDialog {
       case 'tags-preferences':
         break
 
+      case 'tag-cloud':
+        obj.tags = Object.keys(obj).map(key => obj[key])
+        obj.tag_list = Object.keys(obj).join('\n')
+        break
+
       case 'update':
         obj.downloadLink = 'https://www.zettlr.com/download/?pk_campaign=RecurringUsers&pk_source=app&pk_medium=ZettlrUpdater'
         if ($('body').hasClass('darwin')) {
@@ -273,6 +279,10 @@ class ZettlrDialog {
         // button, because each button has a designated text field.
         $(elem.attr('data-request-target')).val(ret[0])
       })
+    })
+
+    this._modal.find('.copy-clipboard').on('click', (event) => {
+      clipboard.writeText($(event.target).attr('data-copy-clipboard'))
     })
 
     // After we are done (also included tabs and stuff), we can finally

@@ -155,6 +155,11 @@
       "replace_label": "Subst.",
       "replace_all_label": "Tout"
     },
+    "tag_cloud": {
+      "title": "Nuage de mots-clés",
+      "info": "Vous trouverez ici toutes les mots-clés que vous avez utilisées quelque part dans vos fichiers. Vous pouvez copier la liste complète dans le presse-papiers. Survolez les mots-clés pour voir le nombre de fois où vous les avez utilisées.",
+      "copy": "Copier dans le presse-papier"
+    },
     "error": {
       "name": "L'erreur du dialogue",
       "message": "N'été pouvoir pas engendrer le dialogue %s!",
@@ -431,6 +436,7 @@
     "dir_new": "Créer un dossier",
     "file_new": "Créer un fichier",
     "stats": "Voir la statistique",
+    "tag_cloud": "Mots-clés",
     "preferences": "Ouvrir les paramètres",
     "recent_docs": "Fichiers récents",
     "file_save": "Enregistrer les modifications",

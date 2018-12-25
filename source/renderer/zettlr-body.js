@@ -392,6 +392,18 @@ class ZettlrBody {
   }
 
   /**
+   * Display the tag cloud dialog.
+   * @param  {Object} tags The array containing all tags
+   * @return {void}      Nothing to return.
+   */
+  displayTagCloud () {
+    global.ipc.send('get-tags-database', {}, (ret) => {
+      this._dialog.init('tag-cloud', ret)
+      this._dialog.open()
+    })
+  }
+
+  /**
     * Displays project properties for a given project.
     * @param  {Object} prefs The project's preferences.
     * @return {void}       Nothing to return.

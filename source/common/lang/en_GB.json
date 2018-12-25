@@ -155,6 +155,11 @@
       "replace_label": "Replace",
       "replace_all_label": "All"
     },
+    "tag_cloud": {
+      "title": "Tag Cloud",
+      "info": "Here you find all tags that you've used somewhere in your files. You can copy the whole list to the clipboard. Hover over the tags to see the number of times you've used them.",
+      "copy": "Copy to clipboard"
+    },
     "error": {
       "name": "Dialog Error",
       "message": "Could not generate dialog! %s",
@@ -431,6 +436,7 @@
     "dir_new": "Create a new directory",
     "file_new": "Create a new file",
     "stats": "View stats",
+    "tag_cloud": "Tags",
     "preferences": "Open the settings dialog",
     "recent_docs": "Recently used documents",
     "file_save": "Save the current file",
