@@ -39,15 +39,22 @@ To start developing, simply `git clone` and `npm install` the app on your local 
 
 `$ git clone https://github.com/Zettlr/Zettlr.git`\
 `$ cd Zettlr`\
-`$ npm install`\
+`$ yarn install`\
 `$ cd source`\
-`$ npm install`
+`$ yarn install`
 
-_(Please note the second `npm install` in the source directory. This is necessary if you want to build the app locally.)_
+_(Please note the second `yarn install` in the source directory. This is necessary if you want to build the app locally.)_
 
-If you use `yarn`, this is also supported.
+If you use `npm`, this is also supported.
 
-If you want to explore the functionality and inner workings of the app, [head over to our development documentation!](http://dev.zettlr.com/api/)
+To explore the functionality and inner workings of the app, [head over to our development documentation!](http://dev.zettlr.com/api/)
+
+**Before your first `yarn start`** and everytime you've made changes to either the `LESS`-files or the templates, you need to run:
+
+`$ yarn less`\
+`$ yarn handlebars`
+
+to compile both the style sheets and the precompiled `handlebars.js` templates.
 
 ## License
 
