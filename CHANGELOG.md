@@ -50,6 +50,7 @@
 - Added context menu entry to open link in the browser.
 - Images can now be dragged from the attachment pane onto the editor and will automatically be converted into valid Markdown links.
 - The tooltip that displays footnote texts when you hover over footnote references now displays formatted text, and not raw Markdown.
+- The zoom level of the editor's text is not lost on toggling the distraction-free mode anymore.
 
 ## Under the hood
 

@@ -524,6 +524,10 @@ class ZettlrEditor {
       this.disableResizable()
     }
 
+    // We have to re-apply the font-size to the editor because this style gets
+    // overwritten by one of the above operations.
+    if (this._fontsize !== 100) this._div.css('font-size', this._fontsize + '%')
+
     // Refresh to reflect the size changes
     this._cm.refresh()
   }
