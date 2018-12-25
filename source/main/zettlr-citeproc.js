@@ -104,7 +104,6 @@ class ZettlrCiteproc {
         // to complete writing the file.
         setTimeout(() => { this.load() }, 2000)
         global.ipc.notify(trans('gui.citeproc.reloading'))
-        this._loadIdHint()
       })
     } else {
       // Watcher is already running, so simply exchange the path.
@@ -183,7 +182,7 @@ class ZettlrCiteproc {
       // rest of the interface.
       this._engine = new citeproc.Engine(this._sys, this._mainStyle, this._lang)
       this._status = READY
-      setTimeout(() => { this._loadIdHint() }, 10000)
+      this._loadIdHint()
     } catch (e) {
       this._status = ERROR
     }
