@@ -132,6 +132,11 @@ class ZettlrEditor {
     this._renderMath = false
     this._renderTasks = false
 
+    // This Markdown to HTML converter is used in various parts of the
+    // class to perform converting operations.
+    this._showdown = new showdown.Converter()
+    this._showdown.setFlavor('github')
+
     // The last array of IDs as fetched from the document
     this._lastKnownCitationCluster = []
 
@@ -763,10 +768,16 @@ class ZettlrEditor {
       }
     }
 
+    // TODO translate this message!
+    fnref = (fnref && fnref !== '') ? fnref : '_No reference text_'
+
+    // For preview we should convert the footnote text to HTML.
+    fnref = this._showdown.makeHtml(fnref)
+
     // Now we either got a match or an empty fnref. So create a tippy
     // instance
     tippy.one(element[0], {
-      'content': (fnref && fnref !== '') ? fnref : 'no reference text',
+      'content': fnref,
       onHidden (instance) {
         instance.destroy() // Destroy the tippy instance.
       },
@@ -968,9 +979,7 @@ class ZettlrEditor {
   copyAsHTML () {
     if (this._cm.somethingSelected()) {
       let md = this._cm.getSelections().join(' ')
-      let conv = new showdown.Converter()
-      conv.setFlavor('github')
-      let html = conv.makeHtml(md)
+      let html = this._showdown.makeHtml(md)
       clipboard.writeHTML(html)
     }
     return this

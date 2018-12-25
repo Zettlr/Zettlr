@@ -49,6 +49,7 @@
 - Zettlr recognises IDs inside the name of a file. **If the ID pattern returns a match in the file name, this ID takes precedence over any ID that may be in the file's content!**
 - Added context menu entry to open link in the browser.
 - Images can now be dragged from the attachment pane onto the editor and will automatically be converted into valid Markdown links.
+- The tooltip that displays footnote texts when you hover over footnote references now displays formatted text, and not raw Markdown.
 
 ## Under the hood
 
