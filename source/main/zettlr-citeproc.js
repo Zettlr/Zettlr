@@ -45,6 +45,7 @@ class ZettlrCiteproc {
     this._cslData = null // Holds the parsed CSL data (JSON)
     this._items = {} // ID-accessible CSL data array.
     this._ids = Object.create(null) // Database index array
+    this._idHint = Object.create(null) // The IDs that can be used for autocompletion
     this._watcher = null
 
     // Status can have four properties:
@@ -65,7 +66,7 @@ class ZettlrCiteproc {
       getIDs: () => {
         // Always include the status in the return.
         return {
-          'ids': JSON.parse(JSON.stringify(this._ids)),
+          'ids': JSON.parse(JSON.stringify(this._idHint)),
           'status': this._status
         }
       },
@@ -103,6 +104,7 @@ class ZettlrCiteproc {
         // to complete writing the file.
         setTimeout(() => { this.load() }, 2000)
         global.ipc.notify(trans('gui.citeproc.reloading'))
+        this._loadIdHint()
       })
     } else {
       // Watcher is already running, so simply exchange the path.
@@ -181,9 +183,31 @@ class ZettlrCiteproc {
       // rest of the interface.
       this._engine = new citeproc.Engine(this._sys, this._mainStyle, this._lang)
       this._status = READY
+      setTimeout(() => { this._loadIdHint() }, 10000)
     } catch (e) {
       this._status = ERROR
     }
+  }
+
+  /**
+   * Loads the object that contains the correct citations for all items
+   * @return {Object} An Array containing the correct texts and displayTexts.
+   */
+  _loadIdHint () {
+    // Now create the array that can be used by the editor's autocomplete
+    this._idHint = Object.keys(this._ids).map((key) => {
+      let dt = this.getCitation([{ 'id': key }]).replace(/[()]|<i>|<\/i>/g, '') // Remove the braces
+      let title = this._sys.retrieveItem(key).title
+
+      // Add the title if it hasn't been assumed the author by the citeproc engine
+      if (dt.indexOf(title) < 0) dt += ': ' + title
+
+      // Return the correct object
+      return {
+        'text': key,
+        'displayText': dt
+      }
+    })
   }
 
   /**
@@ -272,6 +296,7 @@ class ZettlrCiteproc {
     try {
       return this._engine.makeCitationCluster(citeIDs)
     } catch (e) {
+      console.error(e)
       return undefined
     }
   }

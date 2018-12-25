@@ -51,6 +51,7 @@
 - Images can now be dragged from the attachment pane onto the editor and will automatically be converted into valid Markdown links.
 - The tooltip that displays footnote texts when you hover over footnote references now displays formatted text, and not raw Markdown.
 - The zoom level of the editor's text is not lost on toggling the distraction-free mode anymore.
+- Update to the citeproc search. If you type an `@` and begin searching for a work to cite, you can now also search through the title and don't necessarily have to know the ID anymore!
 
 ## Under the hood
 

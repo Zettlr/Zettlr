@@ -36,14 +36,28 @@ class ZettlrTags {
 
     // Register a global helper for the tag database
     global.tags = {
+      /**
+       * Adds an array of tags to the database
+       * @param  {Array} tagArray An array containing the tags to be added
+       * @return {[type]}          [description]
+       */
       report: (tagArray) => {
-        // Add the tags to the database
         for (let tag of tagArray) {
           // Either init with one or increment the tag counter.
-          if (this._globalTagDatabase[tag] === undefined) this._globalTagDatabase[tag] = 1
-          else this._globalTagDatabase[tag] += 1
+          if (this._globalTagDatabase[tag] === undefined) {
+            this._globalTagDatabase[tag] = { 'text': tag, 'count': 1 }
+            let cInfo = this._tags.find(e => e.name === tag)
+            // Set a special class to all tags that have a highlight colour
+            this._globalTagDatabase[tag].className = (cInfo) ? 'cm-hint-colour' : ''
+          } else {
+            this._globalTagDatabase[tag].count += 1
+          }
         }
       },
+      /**
+       * Returns the global tag database
+       * @return {Object} An object containing all tags.
+       */
       get: () => {
         return JSON.parse(JSON.stringify(this._globalTagDatabase))
       }

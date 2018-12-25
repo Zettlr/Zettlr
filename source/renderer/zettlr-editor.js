@@ -163,9 +163,16 @@ class ZettlrEditor {
       hintOptions: {
         completeSingle: false, // Don't auto-complete, even if there's only one word available
         hint: (cm, opt) => {
-          let term = cm.getRange(this._autoCompleteStart, cm.getCursor())
+          let term = cm.getRange(this._autoCompleteStart, cm.getCursor()).toLowerCase()
           let completionObject = {
-            'list': Object.keys(this._currentDatabase).filter(elem => elem.toLowerCase().indexOf(term.toLowerCase()) === 0),
+            'list': Object.keys(this._currentDatabase).filter((key) => {
+              // First search the ID. Second, search the displayText, if available.
+              // Third: return false if nothing else has matched.
+              if (this._currentDatabase[key].text.toLowerCase().indexOf(term) === 0) return true
+              if (this._currentDatabase[key].hasOwnProperty('displayText') && this._currentDatabase[key].displayText.toLowerCase().indexOf(term) >= 0) return true
+              return false
+            })
+              .map(key => this._currentDatabase[key]),
             'from': this._autoCompleteStart,
             'to': cm.getCursor()
           }
