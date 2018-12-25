@@ -6,7 +6,10 @@
 
 // Hide all controls initially
 .linux-window-controls,
-.windows-window-controls { display: none; }
+.windows-window-controls {
+  display: none;
+  -webkit-app-region: no-drag;
+}
 
  body.win32 {
    .windows-window-controls {
