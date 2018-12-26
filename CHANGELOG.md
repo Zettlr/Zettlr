@@ -53,6 +53,7 @@
 - The zoom level of the editor's text is not lost on toggling the distraction-free mode anymore.
 - Update to the citeproc search. If you type an `@` and begin searching for a work to cite, you can now also search through the title and don't necessarily have to know the ID anymore!
 - Added basic tag cloud functionality. You have now a new button in your toolbar that shows you all the tags that you've used somewhere in your files. You can also copy the full list into the clipboard!
+- Updates to the search functionality: Now the AND operator works as a requirement again (until now files have also reported search results if one or two of the search terms have matched, even if they were all required). Additionally, the tag search within files now accounts for a hashtag in front of the search term.
 
 ## Under the hood
 

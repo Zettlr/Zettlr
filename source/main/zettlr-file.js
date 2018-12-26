@@ -437,6 +437,9 @@ class ZettlrFile {
       if (t.operator === 'AND') {
         if (this.name.indexOf(t.word) > -1 || this.tags.includes(t.word)) {
           matches++
+        } else if (t.word[0] === '#' && this.tags.includes(t.word.substr(1))) {
+          // Account for a potential # in front of the tag
+          matches++
         }
       } else {
         // OR operator
@@ -444,6 +447,10 @@ class ZettlrFile {
           if (this.name.indexOf(wd) > -1 || this.tags.includes(wd)) {
             matches++
             // Break because only one match necessary
+            break
+          } else if (wd[0] === '#' && this.tags.includes(wd.substr(1))) {
+            // Account for a potential # in front of the tag
+            matches++
             break
           }
         }
@@ -460,8 +467,10 @@ class ZettlrFile {
     let lines = cnt.split('\n')
     let linesLower = cntLower.split('\n')
     matches = []
+    let termsMatched = 0
 
     for (let t of terms) {
+      let hasTermMatched = false
       if (t.operator === 'AND') {
         for (let index in lines) {
           // Try both normal and lowercase
@@ -478,6 +487,7 @@ class ZettlrFile {
               },
               'weight': 1 // Weight indicates that this was an exact match
             })
+            hasTermMatched = true
           } else if (linesLower[index].indexOf(t.word) > -1) {
             matches.push({
               'term': t.word,
@@ -491,8 +501,10 @@ class ZettlrFile {
               },
               'weight': 0.5 // Weight indicates that this was an approximate match
             })
+            hasTermMatched = true
           }
         }
+        // End AND operator
       } else {
         // OR operator.
         for (let wd of t.word) {
@@ -512,6 +524,7 @@ class ZettlrFile {
                 },
                 'weight': 1 // Weight indicates that this was an exact match
               })
+              hasTermMatched = true
               br = true
             } else if (linesLower[index].indexOf(wd) > -1) {
               matches.push({
@@ -526,15 +539,18 @@ class ZettlrFile {
                 },
                 'weight': 1 // Weight indicates that this was an exact match
               })
+              hasTermMatched = true
               br = true
             }
           }
           if (br) break
         }
-      }
+      } // End OR operator
+      if (hasTermMatched) termsMatched++
     }
 
-    return matches
+    if (termsMatched === terms.length) return matches
+    return [] // Empty array indicating that not all required terms have matched
   }
 
   /**
