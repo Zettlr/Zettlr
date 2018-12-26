@@ -275,7 +275,7 @@ class ZettlrIPC {
 
       case 'dir-open':
         // Client requested a totally different folder.
-        this._app.open('dir')
+        this._app.open()
         break
 
       case 'file-delete':
