@@ -7,12 +7,18 @@
 * Maintainer:      Hendrik Erz
 * License:         GNU GPL v3
 *
-* Description:     Handles communication with the main process.
+* Description:     Handles communication with the main process. There are
+*                  three channels that are used for communication:
+*                  - message: The default channel for most of the stuff (async)
+*                  - config: Retrieve configuration values (sync)
+*                  - typo: Retrieve dictionary functions (sync)
 *
 * END HEADER
 */
 
 const { trans } = require('../common/lang/i18n.js')
+const { clipboard } = require('electron')
+const ipc = require('electron').ipcRenderer
 
 // The following commands are sent from the renderer and can potentially close
 // the current file. In that case we have to save the file first and then send
@@ -40,13 +46,31 @@ class ZettlrRendererIPC {
   */
   constructor (zettlrObj) {
     this._app = zettlrObj
-    this._ipc = require('electron').ipcRenderer
-    this._ipc.on('message', (event, arg) => {
-      // Omit the event immediately
+    ipc.on('message', (event, arg) => {
+      // Do we have an asynchronous callback?
+      if (arg.hasOwnProperty('cypher') && arg.cypher !== '') {
+        // Find the callback, call it and remove it from the buffer.
+        if (this._callbackBuffer[arg.cypher]) {
+          this._callbackBuffer[arg.cypher](arg.returnValue)
+          this._callbackBuffer[arg.cypher] = undefined
+          return
+        }
+      }
+
+      // Dispatch the message further down the array.
       this.dispatch(arg)
     })
 
     this._bufferedMessage = null
+    this._callbackBuffer = {}
+
+    // This is an object that will hold all previously checked words in the form
+    // of word: correct?
+    // We are explicitly omitting the prototype stuff, as we don't access this.
+    this._typoCache = Object.create(null)
+    this._typoCheck = false
+    // Activate typocheck after 2 seconds to speed up the app's start
+    setTimeout(() => { this._typoCheck = true }, 2000)
 
     // What we are doing here is setting up a special communications channel
     // with the main process to receive config values. This way it is much
@@ -62,7 +86,66 @@ class ZettlrRendererIPC {
         // immediately receive the config value we need. Basically we are pulling
         // the get()-handler from main using the "remote" feature, but we'll
         // implement it ourselves.
-        return this._ipc.sendSync('config', key)
+        return ipc.sendSync('config', key)
+      }
+    }
+
+    // Inject typo spellcheck and suggest functions into the globals
+    global.typo = {
+      check: (term) => {
+        if (!this._typoCheck) return true // Give the dictionaries some time to heat up
+        // Return cache if possible
+        if (this._typoCache[term] !== undefined) return this._typoCache[term]
+        // Save into the corresponding cache and return the query result
+        // Return the query result
+        let correct = ipc.sendSync('typo', { 'type': 'check', 'term': term })
+        if (correct === 'not-ready') return true // Don't check unless its ready
+        this._typoCache[term] = correct
+        return correct
+      },
+      suggest: (term) => {
+        return ipc.sendSync('typo', { 'type': 'suggest', 'term': term })
+      }
+    }
+
+    // Sends an array of IDs to main. If they are found in the JSON, cool! Otherwise
+    // this will return false.
+    global.citeproc = {
+      getCitation: (idList) => { return ipc.sendSync('getCitation', idList) },
+      updateItems: (idList) => { return ipc.sendSync('updateItems', idList) },
+      makeBibliography: () => { this.send('citeproc-make-bibliography') }
+    }
+
+    global.ipc = {
+      /**
+       * Sends a message and and saves the callback.
+       * @param  {string} cmd             The command to be sent
+       * @param  {Object} [cnt={}]        The payload for the command
+       * @param  {Callable} [callback=null] An optional callback
+       * @return {void}                 This function does not return.
+       */
+      send: (cmd, cnt = {}, callback = null) => {
+        // If no callback was provided we don't need to go through the hassle of
+        // generating and saving a cypher, but we can instead just send the
+        // message to main.
+        if (!callback) return this.send(cmd, cnt)
+
+        // A number between 0 and 50.000 should suffice for a unique key to
+        // find the callback when the return comes from main.
+        let cypher
+        do {
+          cypher = Math.round(Math.random() * 50000).toString()
+        } while (this._callbackBuffer[cypher])
+        // Prepare the payload
+        let payload = {
+          'command': cmd,
+          'content': cnt,
+          'cypher': cypher
+        }
+        // Save the callback for later
+        this._callbackBuffer[cypher] = callback
+        // Send!
+        ipc.send('message', payload)
       }
     }
   }
@@ -103,7 +186,7 @@ class ZettlrRendererIPC {
       return
     }
 
-    this._ipc.send('message', {
+    ipc.send('message', {
       'command': command,
       'content': arg
     })
@@ -126,9 +209,22 @@ class ZettlrRendererIPC {
         this.send('app-quit')
         break
 
-      // Tell the main process to maximise the window
-      case 'app-maximise':
-        this.send('app-maximise')
+      // Tell the main process to maximise, minimise, or close the window
+      case 'win-maximise':
+        // this.send('win-maximise')
+        break
+
+      case 'win-minimise':
+        // this.send('win-minimise')
+        break
+
+      case 'win-close':
+        this.send('win-close')
+        break
+
+      // Tell main to open the menu
+      case 'win-menu':
+        this.send('win-menu', cnt)
         break
 
       case 'paths-update':
@@ -333,6 +429,16 @@ class ZettlrRendererIPC {
         this._app.getPreview().setTags(cnt)
         break
 
+      // Update the editor's tag database
+      case 'tags-database':
+        this._app.getEditor().setTagDatabase(cnt)
+        break
+
+      // Display the informative tag cloud
+      case 'show-tag-cloud':
+        this._app.getBody().displayTagCloud()
+        break
+
       // Execute a command with CodeMirror (Bold, Italic, Link, etc)
       case 'cm-command':
         this._app.getEditor().runCommand(cnt)
@@ -346,28 +452,6 @@ class ZettlrRendererIPC {
         this._app.getBody().displayFormatting()
         break
 
-      // SPELLCHECKING EVENTS
-      case 'typo-lang':
-        // cnt holds an array of all languages that should be initialised.
-        this._app.setSpellcheck(cnt)
-        // Also pass down the languages to the body so that it can display
-        // them in the preferences dialog
-        this._app.getBody().setSpellcheckLangs(cnt)
-        break
-
-      // Receive the typo aff!
-      case 'typo-aff':
-        this._app.setAff(cnt)
-        this._app.requestLang('dic')
-        break
-
-      // Receive the typo dic!
-      case 'typo-dic':
-        this._app.setDic(cnt)
-        // Now we can finally initialize spell check:
-        this._app.initTypo()
-        break
-
       case 'quicklook':
         this.send('file-get-quicklook', cnt.hash)
         break
@@ -377,7 +461,7 @@ class ZettlrRendererIPC {
         break
 
       case 'notify':
-        this._app.getBody().notify(cnt)
+        global.notify(cnt)
         break
 
       case 'toc':
@@ -434,7 +518,7 @@ class ZettlrRendererIPC {
 
       // Generate a new ID
       case 'insert-id':
-        this._app.getEditor().insertId()
+        this._app.genId()
         break
 
       // Import a language file
@@ -450,6 +534,24 @@ class ZettlrRendererIPC {
       // Copy a selection as HTML
       case 'copy-as-html':
         this._app.getEditor().copyAsHTML()
+        break
+
+      // Return to the app a fresh list of IDs available.
+      case 'citeproc-ids':
+        // Set a timeout to re-send the command in case the citeproc was not
+        // ready yet. Do not re-send the command if there was not db or an error
+        if (cnt.status === 0 || cnt.status === 1) setTimeout(() => { this.send('citeproc-get-ids') }, 1000)
+        this._app.setCiteprocIDs(cnt.ids)
+        break
+
+      // The argument contains a new bibliography object
+      case 'citeproc-bibliography':
+        this._app.setBibliography(cnt)
+        break
+
+      case 'copy-to-clipboard':
+        // Simply copy the content to the clipboard as text
+        clipboard.writeText(cnt)
         break
 
       default:

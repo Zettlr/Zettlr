@@ -70,7 +70,7 @@ class ZettlrFile {
 
     if (this.isRoot()) {
       // We have to add our file to the watchdog
-      this.parent.getWatchdog().addPath(this.path)
+      global.watchdog.addPath(this.path)
     }
   }
 
@@ -131,7 +131,7 @@ class ZettlrFile {
     let idRE = new RegExp(idStr, 'g') // /@ID:([^\s]*)/g
     let linkStart = global.config.get('zkn.linkStart')
     let linkEnd = global.config.get('zkn.linkEnd')
-    let tagRE = /#(#?[A-Z0-9-_]+#?)/gi
+    let tagRE = /(?<!\\)#(#?[A-Z0-9-_]+#?)/gi // Negative lookbehind to exclude escaped tags
     let match
     // (Re-)read content of file
     let cnt = fs.readFileSync(this.path, { encoding: 'utf8' })
@@ -150,6 +150,12 @@ class ZettlrFile {
       cnt = makeImgPathsAbsolute(path.dirname(this.path), cnt)
     }
 
+    // Makes footnotes unique by prefixing them with this file's hash (which is unique)
+    // Pandoc will make sure the footnotes are numbered correctly.
+    if (options.hasOwnProperty('uniqueFootnotes') && options.uniqueFootnotes === true) {
+      cnt = cnt.replace(/\[\^([\w]+?)\]/gm, (match, p1, offset, string) => `[^${String(this.hash)}${p1}]`)
+    }
+
     // Now read all tags
     this.tags = []
     while ((match = tagRE.exec(cnt)) != null) {
@@ -162,8 +168,19 @@ class ZettlrFile {
     // Remove duplicates
     this.tags = [...new Set(this.tags)]
 
+    // Report the tags to the global database
+    if (global.tags && global.tags.hasOwnProperty('report') && this.tags.length > 0) global.tags.report(this.tags)
+
     // Search for an ID
-    if ((match = idRE.exec(cnt)) == null) {
+    this.id = ''
+
+    // Assume an ID in the file name (takes precedence over IDs in the file's
+    // content)
+    if ((match = idRE.exec(this.name)) != null) {
+      this.id = match[1] || ''
+      return cnt
+    } else if ((match = idRE.exec(cnt)) == null) {
+      // No ID found in the content either
       return cnt
     }
 
@@ -284,10 +301,11 @@ class ZettlrFile {
 
   /**
     * Removes the file from disk and also from containing dir.
+    * @param {Boolean} force Should the model also move the file to the trash?
     * @return {Boolean} The return value of the remove operation on parent
     */
-  remove () {
-    shell.moveItemToTrash(this.path)
+  remove (force = false) {
+    if (force) shell.moveItemToTrash(this.path)
     // Notify the virtual directories that this file is now in the trash
     // (also a virtual directory, but not quite the same).
     this.removeFromVD()
@@ -297,10 +315,9 @@ class ZettlrFile {
   /**
     * Renames the file on disk
     * @param  {string} name The new name (not path!)
-    * @param {ZettlrWatchdog} [watchdog=null] The watchdog instance to ignore the events if possible
     * @return {ZettlrFile}      this for chainability.
     */
-  rename (name, watchdog = null) {
+  rename (name) {
     name = sanitize(name, { replacement: '-' })
 
     // Rename this file.
@@ -317,11 +334,8 @@ class ZettlrFile {
     this.name = name
     let newpath = path.join(path.dirname(this.path), this.name)
 
-    // If the watchdog is given, ignore the generated events pre-emptively
-    if (watchdog != null) {
-      watchdog.ignoreNext('unlink', this.path)
-      watchdog.ignoreNext('add', newpath)
-    }
+    global.watchdog.ignoreNext('unlink', this.path)
+    global.watchdog.ignoreNext('add', newpath)
     fs.renameSync(this.path, newpath)
     this.path = newpath
     this.hash = hash(this.path)
@@ -418,25 +432,32 @@ class ZettlrFile {
   search (terms) {
     let matches = 0
 
-    // First match the title (faster results)
+    // First match the title and tags (faster results)
     for (let t of terms) {
       if (t.operator === 'AND') {
-        if (this.name.indexOf(t.word) > -1) {
+        if (this.name.indexOf(t.word) > -1 || this.tags.includes(t.word)) {
+          matches++
+        } else if (t.word[0] === '#' && this.tags.includes(t.word.substr(1))) {
+          // Account for a potential # in front of the tag
           matches++
         }
       } else {
         // OR operator
         for (let wd of t.word) {
-          if (this.name.indexOf(wd) > -1) {
+          if (this.name.indexOf(wd) > -1 || this.tags.includes(wd)) {
             matches++
             // Break because only one match necessary
+            break
+          } else if (wd[0] === '#' && this.tags.includes(wd.substr(1))) {
+            // Account for a potential # in front of the tag
+            matches++
             break
           }
         }
       }
     }
 
-    // Return immediately with an object of line -1 (indicating filename) and a huge weight
+    // Return immediately with an object of line -1 (indicating filename or tag matches) and a huge weight
     if (matches === terms.length) { return [{ line: -1, restext: this.name, 'weight': 2 }] }
 
     // Do a full text search.
@@ -446,8 +467,10 @@ class ZettlrFile {
     let lines = cnt.split('\n')
     let linesLower = cntLower.split('\n')
     matches = []
+    let termsMatched = 0
 
     for (let t of terms) {
+      let hasTermMatched = false
       if (t.operator === 'AND') {
         for (let index in lines) {
           // Try both normal and lowercase
@@ -464,6 +487,7 @@ class ZettlrFile {
               },
               'weight': 1 // Weight indicates that this was an exact match
             })
+            hasTermMatched = true
           } else if (linesLower[index].indexOf(t.word) > -1) {
             matches.push({
               'term': t.word,
@@ -477,8 +501,10 @@ class ZettlrFile {
               },
               'weight': 0.5 // Weight indicates that this was an approximate match
             })
+            hasTermMatched = true
           }
         }
+        // End AND operator
       } else {
         // OR operator.
         for (let wd of t.word) {
@@ -498,6 +524,7 @@ class ZettlrFile {
                 },
                 'weight': 1 // Weight indicates that this was an exact match
               })
+              hasTermMatched = true
               br = true
             } else if (linesLower[index].indexOf(wd) > -1) {
               matches.push({
@@ -512,15 +539,38 @@ class ZettlrFile {
                 },
                 'weight': 1 // Weight indicates that this was an exact match
               })
+              hasTermMatched = true
               br = true
             }
           }
           if (br) break
         }
-      }
+      } // End OR operator
+      if (hasTermMatched) termsMatched++
     }
 
-    return matches
+    if (termsMatched === terms.length) return matches
+    return [] // Empty array indicating that not all required terms have matched
+  }
+
+  /**
+   * Returns the file's metadata
+   * @return {Object} An object containing only the metadata fields
+   */
+  getMetadata (parent = true) {
+    return {
+      'parent': (this.isRoot()) ? null : (parent) ? this.parent.getMetadata(false) : null,
+      'dir': this.dir,
+      'path': this.path,
+      'name': this.name,
+      'hash': this.hash,
+      'ext': this.ext,
+      'id': this.id,
+      'tags': JSON.parse(JSON.stringify(this.tags)), // Simple copy
+      'type': this.type,
+      'modtime': this.modtime,
+      'linefeed': this.linefeed
+    }
   }
 
   /**

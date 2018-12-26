@@ -85,7 +85,7 @@ class ZettlrDir {
 
     if (this.isRoot()) {
       // We have to add our dir to the watchdog
-      this.parent.getWatchdog().addPath(this.path)
+      global.watchdog.addPath(this.path)
     }
   }
 
@@ -214,10 +214,9 @@ class ZettlrDir {
   /**
     * Creates a new subdirectory and returns it.
     * @param  {String} name The name (not path!) for the subdirectory.
-    * @param  {ZettlrWatchdog} [watchdog=null] The optional watchdog instance
     * @return {ZettlrDir}      The newly created directory.
     */
-  newdir (name, watchdog = null) {
+  newdir (name) {
     // Remove unallowed characters.
     name = sanitize(name, { replacement: '-' })
     if ((name === '') || (name === null)) {
@@ -225,9 +224,8 @@ class ZettlrDir {
     }
     let newpath = path.join(this.path, name)
 
-    if (typeof watchdog === 'object' && watchdog.hasOwnProperty('ignoreNext')) {
-      this.watchdog.ignoreNext('addDir', newpath)
-    }
+    // Ignore the add event in the watchdog.
+    global.watchdog.ignoreNext('addDir', newpath)
 
     let dir = new ZettlrDir(this, newpath)
     this.children.push(dir)
@@ -240,10 +238,9 @@ class ZettlrDir {
   /**
     * Create a new file in this directory.
     * @param  {String} name The new name, if given
-    * @param {ZettlrWatchdog} [watchdog=null] The optional watchdog instance
     * @return {ZettlrFile}             The newly created file.
     */
-  newfile (name, watchdog = null) {
+  newfile (name) {
     if (name == null) {
       // Generate a unique new name
       name = generateName()
@@ -265,10 +262,8 @@ class ZettlrDir {
       throw new DirectoryError(trans('system.error.file_exists'))
     }
 
-    // If we got the watchdog instance, ignore the creation event
-    if (typeof watchdog === 'object' && watchdog.hasOwnProperty('ignoreNext')) {
-      watchdog.ignoreNext('add', path.join(this.path, name))
-    }
+    // Ignore the creation event
+    global.watchdog.ignoreNext('add', path.join(this.path, name))
 
     // Create a new file.
     let f = new ZettlrFile(this, path.join(this.path, name))
@@ -299,16 +294,17 @@ class ZettlrDir {
   /**
     * Removes either a child or this directory.
     * @param  {Mixed} [obj=this] Either ZettlrDir or ZettlrFile
+    * @param {Boolean} [force=false] Should the directory itself be deleted as well?
     * @return {Boolean}            Whether or not the operation completed successfully.
     */
-  remove (obj = this) {
+  remove (obj = this, force = false) {
     if (obj === this) {
       this.shutdown()
 
       // It may be that this method returns false. Mostly, because the
       // directory has been deleted and this object is only removed to
       // reflect changes on the disk that have been reported by chokidar
-      shell.moveItemToTrash(this.path)
+      if (force) shell.moveItemToTrash(this.path)
       this.parent.remove(this)
     } else {
       // Remove a file (function was called by a children)
@@ -344,6 +340,9 @@ class ZettlrDir {
       this.parent.sort()
     }
 
+    // Determine if this is just a rename or a move
+    let rename = (newpath === path.dirname(this.path))
+
     let oldPath = this.path
     this.path = path.join(newpath, this.name)
     this.hash = hash(this.path)
@@ -364,8 +363,8 @@ class ZettlrDir {
     // Move
     fs.renameSync(oldPath, this.path)
 
-    // Now detach from parent, because it's no longer in there
-    this.detach()
+    // Detach from parent if not only renamed, because it's no longer in there
+    if (!rename) this.detach()
 
     // Reset the interface
     this._vdInterface = new ZettlrInterface(path.join(this.path, '.ztr-virtual-directories'))
@@ -686,6 +685,27 @@ class ZettlrDir {
     } else {
       // Already exists!
       this.notifyChange(trans('system.error.virtual_dir_exists', n))
+    }
+  }
+
+  /**
+   * Returns the directory's metadata
+   * @return {Object} An object containing only the metadata fields
+   */
+  getMetadata (children = true) {
+    // Don't pull in the children twice to prevent an infinite loop
+    return {
+      'parent': (this.isRoot()) ? null : this.parent.getMetadata(false),
+      'path': this.path,
+      'name': this.name,
+      'hash': this.hash,
+      // The project itself is not needed, renderer only checks if it equals
+      // null, or not (then it means there is a project)
+      'project': (this.project) ? true : null,
+      'children': (children) ? this.children.map(elem => elem.getMetadata()) : [],
+      'attachments': this.attachments.map(elem => elem.getMetadata()),
+      'type': this.type,
+      'sorting': this.sorting
     }
   }
 

@@ -15,9 +15,7 @@ I have no special requirements on how to commit to Zettlr yet. But some basic ex
 If you want to contribute translations please make sure that your pull request contains the following:
 
 * Your (updated or new) translation file in `source/common/lang`.
-* The language has been added to `this.supportedLangs` in `source/main/zettlr-config.js`
 * To save me time, please also add the according hunspell dictionary's .AFF and .DIC files to `source/renderer/assets/dict` in the respective directory structure ([Link to the Github repository](https://github.com/wooorm/dictionaries))
-* Then make sure that you also update the property `this.cfgtpl.spellcheck`-object accordingly
 
 ## Contributing code
 

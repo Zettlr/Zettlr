@@ -7,12 +7,18 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This class is basically the postmaster of the app.
+ * Description:     This class is basically the postmaster of the app. There are
+ *                  three channels that are used for communication:
+ *                  - message: The default channel for most of the stuff (async)
+ *                  - config: Retrieve configuration values (sync)
+ *                  - typo: Retrieve dictionary functions (sync)
  *
  * END HEADER
  */
 
 const { trans } = require('../common/lang/i18n.js')
+const ipc = require('electron').ipcMain
+const BrowserWindow = require('electron').BrowserWindow // Needed for close and maximise commands
 
 /**
  * This class acts as the interface between the main process and the renderer.
@@ -27,12 +33,31 @@ class ZettlrIPC {
     */
   constructor (zettlrObj) {
     this._app = zettlrObj
-    this._ipc = require('electron').ipcMain
+
+    // Listen for synchronous messages from the renderer process to access
+    // config options.
+    ipc.on('config', (event, key) => {
+      // We have received a config event -> simply return back the respective
+      // key.
+      event.returnValue = global.config.get(key)
+    })
+
+    // Listen for synchronous messages from the renderer process for typos.
+    ipc.on('typo', (event, message) => {
+      if (message.type === 'check') {
+        event.returnValue = (this._app.dict) ? this._app.dict.check(message.term) : 'not-ready'
+      } else if (message.type === 'suggest') {
+        event.returnValue = (this._app.dict) ? this._app.dict.suggest(message.term) : []
+      }
+    })
+
+    // Citeproc calls (either single citation or a whole cluster)
+    ipc.on('getCitation', (event, idList) => { event.returnValue = global.citeproc.getCitation(idList) })
+    ipc.on('updateItems', (event, idList) => { event.returnValue = global.citeproc.updateItems(idList) })
 
     // Beginn listening to messages
-    this._ipc.on('message', (event, arg) => {
+    ipc.on('message', (event, arg) => {
       if (arg.hasOwnProperty('command') && arg.command === 'file-drag-start') {
-        console.log(`Starting drag with arg:`, arg)
         event.sender.startDrag({
           'file': this._app.findFile({ hash: parseInt(arg.content.hash) }).path,
           'icon': require('path').join(__dirname, '/assets/dragicon.png')
@@ -40,17 +65,35 @@ class ZettlrIPC {
         return // Don't dispatch further
       }
 
-      // Listen for synchronous messages from the renderer process to access
-      // config options.
-      this._ipc.on('config', (event, key) => {
-        // We have received a config event -> simply return back the respective
-        // key.
-        event.returnValue = global.config.get(key)
-      })
+      // Next possibility: An asynchronous callback from the renderer.
+      if (arg.hasOwnProperty('cypher') && arg.cypher !== '') {
+        // In this case we have to run whatever is wanted and immediately return
+        // (Don't let yourselves be fooled by how I named this argument. This is
+        // only to confuse myself in some months when I will stumble back upon
+        // this piece of code and wonder why I have to send/return the thing
+        // twice.)
+        arg.returnValue = this.runCall(arg.command, arg.content)
+        event.sender.send('message', arg)
+        return // Also, don't dispatch further
+      }
+
+      // Last possibility: A quicklook window has requested a file. In this case
+      // we mustn't obliterate the "event" because this way we don't need to
+      // search for the window.
+      if (arg.hasOwnProperty('command') && arg.command === 'ql-get-file') {
+        event.sender.send('file', this._app.findFile({ 'hash': arg.content }).withContent())
+        return
+      }
 
       // In all other occasions omit the event.
       this.dispatch(arg)
     })
+
+    // Enable some globals for sending to the renderer
+    global.ipc = {
+      // Send a notification to the renderer process
+      notify: (msg) => { this.send('notify', msg) }
+    }
   }
 
   /**
@@ -81,7 +124,6 @@ class ZettlrIPC {
     if (!this._app.window.getWindow()) {
       return this // Fail gracefully
     }
-
     let sender = this._app.window.getWindow().webContents
     sender.send('message', {
       'command': command,
@@ -113,13 +155,34 @@ class ZettlrIPC {
         require('electron').app.quit()
         break
 
-      case 'app-maximise':
-        this._app.getWindow().toggleMaximise()
+      // Window controls for the Quicklook windows must use IPC calls
+      case 'win-maximise':
+        if (BrowserWindow.getFocusedWindow()) {
+          // Implements maximise-toggling for windows
+          if (BrowserWindow.getFocusedWindow().isMaximized()) {
+            BrowserWindow.getFocusedWindow().unmaximize()
+          } else {
+            BrowserWindow.getFocusedWindow().maximize()
+          }
+        }
+        break
+
+      case 'win-minimise':
+        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().minimize()
+        break
+
+      case 'win-close':
+        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().close()
+        break
+
+      // Also the application menu must be shown on request
+      case 'win-menu':
+        this._app.getWindow().popupMenu(cnt.x, cnt.y)
         break
 
       case 'get-paths':
         // The child process requested the current paths and files
-        this.send('paths-update', this._app.getPaths())
+        this.send('paths-update', this._app.getPathDummies())
         // Also set the current file and dir correctly immediately
         this.send('file-set-current', (this._app.getCurrentFile()) ? this._app.getCurrentFile().hash : null)
         this.send('dir-set-current', (this._app.getCurrentDir()) ? this._app.getCurrentDir().hash : null)
@@ -169,7 +232,7 @@ class ZettlrIPC {
         dir = this._app.findDir(cnt)
         if (dir) {
           dir.makeProject()
-          this.send('paths-update', this._app.getPaths())
+          this.send('paths-update', this._app.getPathDummies())
         }
         break
 
@@ -177,7 +240,7 @@ class ZettlrIPC {
         dir = this._app.findDir(cnt)
         if (dir) {
           dir.removeProject()
-          this.send('paths-update', this._app.getPaths())
+          this.send('paths-update', this._app.getPathDummies())
         }
         break
 
@@ -212,7 +275,7 @@ class ZettlrIPC {
 
       case 'dir-open':
         // Client requested a totally different folder.
-        this._app.open('dir')
+        this._app.open()
         break
 
       case 'file-delete':
@@ -315,6 +378,8 @@ class ZettlrIPC {
       case 'update-config':
         this._app.getConfig().bulkSet(cnt)
         this.send('config-update')
+        // Reload the dictionaries based on the user's selection
+        this._app.dict.reload()
         break
 
       case 'update-tags':
@@ -322,22 +387,15 @@ class ZettlrIPC {
         this.send('set-tags', cnt) // Send back to renderer so preview knows about this
         break
 
+      // Send the database of tags to display explicitly in the preview pane to
+      // the renderer.
       case 'get-tags':
         this.send('set-tags', this._app.getTags().get())
         break
 
-      // SPELLCHECKING EVENTS
-      case 'typo-request-lang':
-        // Send the renderer all activated spellchecking dictionaries.
-        this.send('typo-lang', this._app.getConfig().get('selectedDicts'))
-        break
-
-      case 'typo-request-aff':
-        this._app.retrieveDictFile('aff', cnt)
-        break
-
-      case 'typo-request-dic':
-        this._app.retrieveDictFile('dic', cnt)
+      // Send the global tag database to the renderer process.
+      case 'get-tags-database':
+        this.send('tags-database', global.tags.get())
         break
 
       // UPDATE
@@ -365,9 +423,68 @@ class ZettlrIPC {
         this._app.importFile()
         break
 
+      // Return a list of all available IDs in the currently loaded database
+      case 'citeproc-get-ids':
+        this.send('citeproc-ids', (global.citeproc) ? global.citeproc.getIDs() : [])
+        break
+
+      // The renderer requested an updated bibliography
+      case 'citeproc-make-bibliography':
+        this.send('citeproc-bibliography', global.citeproc.makeBibliography())
+        break
+
       default:
         console.log(trans('system.unknown_command', cmd))
         break
+    }
+  }
+
+  /**
+   * Literally the same as dispatch(), only with returns
+   * @param  {string} cmd The Command
+   * @param  {Object} arg The payload
+   * @return {Mixed}     Whatever is registered in runCall to return for a given cmd.
+   */
+  runCall (cmd, arg) {
+    switch (cmd) {
+      // Window controls actions can be send either as callback IPC calls or as
+      // normals (which is why they are present both in runCall and handleEvent)
+      case 'win-maximise':
+        if (BrowserWindow.getFocusedWindow()) {
+          // Implements maximise-toggling for windows
+          if (BrowserWindow.getFocusedWindow().isMaximized()) {
+            BrowserWindow.getFocusedWindow().unmaximize()
+          } else {
+            BrowserWindow.getFocusedWindow().maximize()
+          }
+        }
+        break
+
+      case 'win-minimise':
+        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().minimize()
+        break
+
+      case 'win-close':
+        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().close()
+        break
+
+      // We should show the askFile dialog to the user and return its result.
+      case 'request-files':
+        // The client only can choose what and how much it wants to get
+        return this._app.getWindow().askFile(arg.filters, arg.multiSel)
+
+      // A quicklook window wants to pop-out of the main window
+      case 'make-standalone':
+        this._app.openQL(arg)
+        return true
+
+      // Send the global tag database to the renderer process.
+      case 'get-tags-database':
+        return global.tags.get()
+
+      default:
+        console.log(trans('system.unknown_command', cmd))
+        return null
     }
   }
 }

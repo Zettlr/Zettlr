@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const fs = require('fs')
-const path = require('path')
+const makeTemplate = require('../common/zettlr-template.js')
+const { makeSearchRegEx } = require('../common/zettlr-helpers.js')
 const { trans } = require('../common/lang/i18n.js')
 
 // CodeMirror related includes
@@ -78,9 +78,10 @@ class ZettlrQuicklook {
     * @param {ZettlrBody} parent   Calling object
     * @param {ZettlrFile} file     The file whose content should be displayed
     */
-  constructor (parent, file) {
-    this._body = parent
+  constructor (parent, file, standalone = false) {
+    this._parent = parent
     this._file = file
+    this._standalone = standalone
     this._cm = null
     this._window = null
     this._findTimeout = null // Timeout to begin search after
@@ -122,9 +123,13 @@ class ZettlrQuicklook {
     * Load the Quicklook template and prepare everything
     */
   _load () {
-    let qlcontent = fs.readFileSync(path.join(__dirname, 'assets', 'tpl', 'quicklook.htm'), 'utf8')
-    qlcontent = qlcontent.replace('%FIND%', trans('gui.find_placeholder'))
-    this._window = $(qlcontent)
+    if (this._standalone) {
+      this._window = $('body')
+    } else {
+      // Process the template and directly call it to only return the HTML
+      let qlcontent = makeTemplate('other', 'quicklook')
+      this._window = $(qlcontent)
+    }
 
     this._cm = CodeMirror.fromTextArea(this._window.find('textarea')[0], {
       readOnly: true,
@@ -143,68 +148,15 @@ class ZettlrQuicklook {
     // Apply heading line classes immediately
     this._cm.execCommand('markdownHeaderClasses')
 
-    let toolbarheight = $('#toolbar').outerHeight()
+    if (!this._standalone) {
+      this._makeOverlayWindow()
+    }
 
-    this._window.draggable({
-      handle: 'div.title',
-      containment: 'document',
-      cursor: '-webkit-grabbing',
-      stack: '.quicklook',
-      drag: (e, ui) => {
-        if (ui.position.top < toolbarheight) {
-          ui.position.top = toolbarheight
-        }
-      },
-      stop: (e, ui) => {
-        this._cm.focus()
-      }
-    })
-
-    this._window.resizable({
-      handles: 'e, se, s, sw, w',
-      containment: 'document',
-      minHeight: 400,
-      minWidth: 400,
-      resize: (e, ui) => {
-        let bar = this._window.find('.title')
-        this._window.find('.body').css('height', (ui.size.height - bar.outerHeight()) + 'px')
-        this._cm.refresh()
-      },
-      stop: (e, ui) => {
-        // Refresh the editor to account for changes in the size.
-        this._cm.refresh()
-        this._cm.focus()
-      }
-    })
+    this._window.find('#searchWhat').attr('placeholder', trans('dialog.find.find_placeholder'))
 
     this._window.find('.close').first().on('click', (e) => {
       e.stopPropagation()
       this.close()
-    })
-
-    this._window.find('.find').first().on('click', (e) => {
-      e.stopPropagation()
-      this._cm.execCommand('showFind')
-    })
-
-    this._window.find('.title').first().on('dblclick', (e) => {
-      this.toggleWindow()
-    })
-
-    // Bring quicklook window to front on click on the title
-    this._window.find('.title').first().on('click', (e) => {
-      let max
-      let group = $('.quicklook')
-
-      if (group.length < 1) return
-      max = parseInt(group[0].style.zIndex, 10) || 0
-      $(group).each(function (i) {
-        if (parseInt(this.style.zIndex, 10) > max) {
-          max = parseInt(this.style.zIndex, 10)
-        }
-      })
-
-      this._window.css({ 'zIndex': max + 1 })
     })
   }
 
@@ -213,6 +165,12 @@ class ZettlrQuicklook {
     * @return {ZettlrQuicklook} Chainability.
     */
   show () {
+    // Standalone windows are pretty easy.
+    if (this._standalone) {
+      $('body').append(this._window)
+      this._cm.refresh()
+      return this
+    }
     let height = $(window).height()
     let width = $(window).width()
     let qlh = height * 0.66 // Two thirds of screen
@@ -247,6 +205,75 @@ class ZettlrQuicklook {
     )
     this._cm.refresh()
     return this
+  }
+
+  /**
+   * Makes a quicklook window an overlay
+   * @return {void} No return.
+   */
+  _makeOverlayWindow () {
+    // Draggable stuff and resizing is only necessary for not-standalone windows.
+    let toolbarheight = $('#toolbar').outerHeight()
+
+    this._window.draggable({
+      handle: 'div.title',
+      containment: 'document',
+      cursor: '-webkit-grabbing',
+      stack: '.quicklook',
+      drag: (e, ui) => {
+        if (ui.position.top < toolbarheight) {
+          ui.position.top = toolbarheight
+        }
+      },
+      stop: (e, ui) => {
+        this._cm.focus()
+      }
+    })
+
+    this._window.resizable({
+      handles: 'e, se, s, sw, w',
+      containment: 'document',
+      minHeight: 400,
+      minWidth: 400,
+      resize: (e, ui) => {
+        let bar = this._window.find('.title')
+        this._window.find('.body').css('height', (ui.size.height - bar.outerHeight()) + 'px')
+        this._cm.refresh()
+      },
+      stop: (e, ui) => {
+        // Refresh the editor to account for changes in the size.
+        this._cm.refresh()
+        this._cm.focus()
+      }
+    })
+
+    // Bring quicklook window to front on click on the title
+    this._window.find('.title').first().on('click', (e) => {
+      let max
+      let group = $('.quicklook')
+
+      if (group.length < 1) return
+      max = parseInt(group[0].style.zIndex, 10) || 0
+      $(group).each(function (i) {
+        if (parseInt(this.style.zIndex, 10) > max) {
+          max = parseInt(this.style.zIndex, 10)
+        }
+      })
+
+      this._window.css({ 'zIndex': max + 1 })
+    })
+
+    this._window.find('.title').first().on('dblclick', (e) => {
+      this.toggleWindow()
+    })
+
+    // Activate the event listener to pop-out this window
+    this._window.find('.make-standalone').first().on('click', (e) => {
+      global.ipc.send('make-standalone', this._file.hash, (ret) => {
+        // If the new window was successfully opened, close this one.
+        if (ret) this.close()
+      })
+    })
   }
 
   /**
@@ -287,7 +314,7 @@ class ZettlrQuicklook {
     this._window.detach()
     this._cm = null
     this._window = null
-    this._body.qlsplice(this) // Remove from ql-list in ZettlrBody
+    this._parent.qlsplice(this) // Remove from ql-list in ZettlrBody
   }
 
   // SEARCH FUNCTIONS STOLEN FROM THE ZETTLREDITOR CLASS
@@ -303,14 +330,11 @@ class ZettlrQuicklook {
       this.startSearch(term)
     }
 
-    // We need a regex because only this way we can case-insensitively search
-    term = new RegExp(term, 'i')
-
     if (this._searchCursor.findNext()) {
       this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
     } else {
       // Start from beginning
-      this._searchCursor = this._cm.getSearchCursor(term, { 'line': 0, 'ch': 0 })
+      this._searchCursor = this._cm.getSearchCursor(makeSearchRegEx(term), { 'line': 0, 'ch': 0 })
       if (this._searchCursor.findNext()) {
         this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
       }
@@ -325,11 +349,11 @@ class ZettlrQuicklook {
     */
   startSearch (term) {
     // Create a new search cursor
-    this._searchCursor = this._cm.getSearchCursor(new RegExp(term, 'i'), this._cm.getCursor())
+    this._searchCursor = this._cm.getSearchCursor(makeSearchRegEx(term), this._cm.getCursor())
     this._currentLocalSearch = term
 
     // Find all matches
-    let tRE = new RegExp(term, 'gi')
+    let tRE = makeSearchRegEx(term, 'gi')
     let res = []
     let match = null
     for (let i = 0; i < this._cm.lineCount(); i++) {

@@ -5,10 +5,13 @@
     top:@toolbar-height;
     right:0;
     bottom:0;
-    width:80%;
+    left: 20%;
     overflow-x:hidden;
+    overflow-y: auto;
+    padding-left: 10px; // Don't include the resize-marker (needed to make the gutters work)
 
-    &.collapsed { width:60%; }
+    &.collapsed { left: 40%; }
+    &.fullscreen { left: 0%; padding-left: 0px; }
 
     // JQUERY UI - THEME (necessary for resizable to work)
     .ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }
@@ -19,20 +22,24 @@
         height:100%;
         cursor:text;
         font-family: inherit;
+        margin-left: 0.5em;
+
+        @media(min-width: 1024px) { margin-left: 2.5em; }
+        @media(min-width: 900px) { margin-left: 1em; }
     }
 
     .CodeMirror-code {
         margin:5em 0em;
-        @media(max-width: 1024px) { margin: 0.5em 0em; }
+        @media(max-width: 1024px) { margin: 3em 0em; }
 
         .mute { opacity:0.2; }
     }
 
     .CodeMirror-scroll {
-        padding:0em 5em;
-        @media(max-width: 1200px) { padding: 0 2.5em; }
-        @media(max-width: 1024px) { padding: 0 1em; }
-        @media(max-width: 900px) { padding: 0 0.5em; }
+        padding-right: 5em;
+        @media(max-width: 1200px) { padding-right: 2.5em; }
+        @media(max-width: 1024px) { padding-right: 1em; }
+        @media(max-width: 900px) { padding-right: 0.5em; }
         overflow-x:hidden !important; // Necessary to hide the horizontal scrollbar
     }
 }
@@ -45,11 +52,17 @@
   height: auto;
   z-index: 500;
 
+  @media(min-width: 1301px) { margin-left: 20em  !important; }
+  @media(max-width: 1300px) { margin-left: 10em  !important; }
+  @media(max-width:1100px)  { margin-left: 7.5em !important; }
+  @media(max-width:1000px)  { margin-left: 5em   !important; }
+  @media(max-width:800px)   { margin-left: 2.5em !important; }
+
   .CodeMirror-scroll {
-      @media(min-width: 1301px) { padding:0em 20em  !important; }
-      @media(max-width: 1300px) { padding:0em 10em  !important; }
-      @media(max-width:1100px)  { padding:0em 7.5em !important; }
-      @media(max-width:1000px)  { padding:0em 5em   !important; }
-      @media(max-width:800px)   { padding:0em 2.5em !important; }
+      @media(min-width: 1301px) { padding-right: 20em  !important; }
+      @media(max-width: 1300px) { padding-right: 10em  !important; }
+      @media(max-width:1100px)  { padding-right: 7.5em !important; }
+      @media(max-width:1000px)  { padding-right: 5em   !important; }
+      @media(max-width:800px)   { padding-right: 2.5em !important; }
   }
 }

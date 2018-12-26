@@ -104,8 +104,10 @@ class TreeView {
       'tolerance': 'pointer', // The pointer must be over the droppable
       'drop': (e, ui) => {
         this._dir.removeClass('highlight')
-        // requestMove: From, to
-        this._parent.requestMove(parseInt(ui.draggable.attr('data-hash')), this.getHash())
+        global.ipc.send('request-move', {
+          'from': parseInt(ui.draggable.attr('data-hash')),
+          'to': this.getHash()
+        })
       },
       'over': (e, ui) => {
         this._dir.addClass('highlight')

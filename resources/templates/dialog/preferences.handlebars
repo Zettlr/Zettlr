@@ -1,0 +1,405 @@
+<div class="dialog">
+  <h1>{{i18n "dialog.preferences.title"}}</h1>
+  <form  action="" method="GET" id="dialog">
+    <div id="prefs-tabs">
+      <ul>
+        <li><a href="#prefs-tabs-general">{{i18n "dialog.preferences.general"}}</a></li>
+        <li><a href="#prefs-tabs-editor">{{i18n "dialog.preferences.editor"}}</a></li>
+        <li><a href="#prefs-tabs-export">{{i18n "dialog.preferences.export.title"}}</a></li>
+        <li><a href="#prefs-tabs-zkn">{{i18n "dialog.preferences.zkn.title"}}</a></li>
+        <li><a href="#prefs-tabs-display">{{i18n "dialog.preferences.display.title"}}</a></li>
+        <li><a href="#prefs-tabs-advanced">{{i18n "dialog.preferences.advanced"}}</a></li>
+      </ul>
+      <!-- General settings -->
+      <div id="prefs-tabs-general">
+        <div class="box-left">
+          <label for="app-lang">{{i18n "dialog.preferences.app_lang.title"}}
+          </label>
+          <select name="app_lang" id="app-lang">
+            {{#each supportedLangs}}
+            <option value="{{this}}" {{#ifCond this '=' ../app_lang}}selected="selected"{{/ifCond}}>{{i18n "dialog.preferences.app_lang." this}}</option>
+            {{/each}}
+          </select>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="darkTheme" value="yes" id="darkTheme" {{#if darkTheme}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="darkTheme">{{i18n "dialog.preferences.nightmode"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="snippets" value="yes" id="snippets" {{#if snippets}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="snippets">{{i18n "dialog.preferences.snippets"}}</label>
+          </div>
+        </div>
+        <div class="box-right">
+          <p>
+            {{i18n "dialog.preferences.combiner_explanation"}}
+          </p>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="combinerState" value="collapsed" id="pref-comb-state-coll" {{#ifCond combinerState '=' 'collapsed'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-comb-state-coll">{{i18n "dialog.preferences.combiner_collapsed"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="combinerState" value="expanded" id="pref-comb-state-exp" {{#ifCond combinerState '=' 'expanded'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-comb-state-exp">{{i18n "dialog.preferences.combiner_expanded"}}</label>
+          </div>
+          <hr>
+          <!-- Sorting stuff -->
+          <p>
+            {{i18n "dialog.preferences.sorting_explanation"}}
+          </p>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="sorting" value="natural" id="pref-sorting-natural" {{#ifCond sorting '=' 'natural'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-sorting-natural">{{i18n "dialog.preferences.sorting_natural"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="sorting" value="ascii" id="pref-sorting-ascii" {{#ifCond sorting '=' 'ascii'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-sorting-ascii">{{i18n "dialog.preferences.sorting_ascii"}}</label>
+          </div>
+        </div>
+      </div>
+      <!-- Editor related options -->
+      <div id="prefs-tabs-editor">
+        <div class="clear"></div>
+        <div class="box-left">
+          <input type="text" class="dicts-list-search" placeholder="{{i18n "dialog.preferences.spellcheck_search_placeholder"}}">
+          <ul class="dicts-list">
+            {{#each availableDicts}}
+            <li data-value="{{this}}" class="dicts-list-item">{{i18n "dialog.preferences.app_lang." this}}</li>
+            {{/each}}
+          </ul>
+        </div>
+        <div class="box-right">
+          <p>
+            {{i18n "dialog.preferences.spellcheck"}}
+          </p>
+          <p>
+            {{i18n "dialog.preferences.spellcheck_warning"}}
+          </p>
+          <hr>
+          <div class="selected-dictionaries">
+            {{#each selectedDicts}}
+            <div class="selected-dict"><input type="hidden" value="{{this}}" name="selectedDicts" id="{{this}}">{{i18n "dialog.preferences.app_lang." this}}</div>
+            {{/each}}
+          </div>
+        </div>
+        <div class="clear"></div>
+        <hr>
+        <div class="cb-group">
+          <label class="cb-toggle">
+            <input type="checkbox" name="muteLines" value="yes" id="muteLines" {{#if muteLines}}checked="checked"{{/if}}>
+            <div class="toggle"></div>
+          </label>
+          <label for="muteLines">{{i18n "dialog.preferences.mute_lines"}}</label>
+        </div>
+        <div class="cb-group">
+          <label class="cb-toggle">
+            <input type="checkbox" name="editor.autoCloseBrackets" value="yes" id="autoCloseBrackets" {{#if editor.autoCloseBrackets}}checked="checked"{{/if}}>
+            <div class="toggle"></div>
+          </label>
+          <label for="autoCloseBrackets">{{i18n "dialog.preferences.autoCloseBrackets"}}</label>
+        </div>
+      </div>
+      <!-- Export related options (except pandoc+xelatex) -->
+      <div id="prefs-tabs-export">
+        <div class="box-left">
+          <p>{{i18n "dialog.preferences.export.stripping"}}</p>
+          <p>
+            <div class="cb-group">
+              <label class="cb-toggle">
+                <input type="checkbox" name="export.stripIDs" value="yes" id="export.stripIDs" {{#if export.stripIDs}}checked="checked"{{/if}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="export.stripIDs">{{i18n "dialog.preferences.export.strip_id_label"}}</label>
+            </div>
+            <div class="cb-group">
+              <label class="cb-toggle">
+                <input type="checkbox" name="export.stripTags" value="yes" id="export.stripTags" {{#if export.stripTags}}checked="checked"{{/if}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="export.stripTags">{{i18n "dialog.preferences.export.strip_tags_label"}}</label>
+            </div>
+          </p>
+          <hr>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="export.stripLinks" value="full" id="pref-export-strip-link-full" {{#ifCond export.stripLinks '=' 'full'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-export-strip-link-full">{{i18n "dialog.preferences.export.strip_links_full_label"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="export.stripLinks" value="unlink" id="pref-export-strip-link-unlink" {{#ifCond export.stripLinks '=' 'unlink'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-export-strip-link-unlink">{{i18n "dialog.preferences.export.strip_links_unlink_label"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="export.stripLinks" value="no" id="pref-export-strip-link-no" {{#ifCond export.stripLinks '=' 'no'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-export-strip-link-no">{{i18n "dialog.preferences.export.strip_links_no_label"}}</label>
+          </div>
+        </div>
+        <div class="box-right">
+          <p>
+            {{i18n "dialog.preferences.export.dest"}}
+          </p>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="export.dir" value="temp" id="pref-export-temp" {{#ifCond export.dir '=' 'temp'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-export-temp">{{i18n "dialog.preferences.export.dest_temp_label"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="export.dir" value="cwd" id="pref-export-cwd" {{#ifCond export.dir '=' 'cwd'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-export-cwd">{{i18n "dialog.preferences.export.dest_cwd_label"}}</label>
+          </div>
+          <hr>
+          <label for="cslLibrary">{{i18n "dialog.preferences.csl_database"}}</label>
+          <div class="file-select-group">
+            <input type="text" name="export.cslLibrary" id="cslLibrary" value="{{export.cslLibrary}}">
+            <button type="button" class="request-file"
+            data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
+            data-request-name="Citation Style Language JSON Data File"
+            data-request-ext="json"
+            data-request-target="#cslLibrary"></button>
+          </div>
+          <label for="cslStyle">{{i18n "dialog.preferences.project.csl_style"}}</label>
+          <div class="file-select-group">
+            <input type="text" name="export.cslStyle" id="cslStyle" value="{{export.cslStyle}}">
+            <button type="button" class="request-file"
+            data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
+            data-request-name="Citation Style Language File"
+            data-request-ext="csl"
+            data-request-target="#cslStyle"></button>
+          </div>
+        </div>
+      </div>
+      <!-- Zettelkasten options -->
+      <div id="prefs-tabs-zkn">
+        <div class="box-left form-inline-buttons">
+          <label for="pref-zkn-free-id">{{i18n "dialog.preferences.zkn.id_label"}}</label>
+          <input type="text" id="pref-zkn-free-id" value="{{zkn.idRE}}" name="zkn.idRE">
+          <button type="button" id="reset-id-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_id"}}">&#9003;</button>
+          <label for="pref-zkn-free-linkstart">{{i18n "dialog.preferences.zkn.linkstart_label"}}</label>
+          <input type="text" id="pref-zkn-free-linkstart" value="{{zkn.linkStart}}" name="zkn.linkStart">
+          <button type="button" id="reset-linkstart-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_linkstart"}}">&#9003;</button>
+          <label for="pref-zkn-free-linkend">{{i18n "dialog.preferences.zkn.linkend_label"}}</label>
+          <input type="text" id="pref-zkn-free-linkend" value="{{zkn.linkEnd}}" name="zkn.linkEnd">
+          <button type="button" id="reset-linkend-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_linkend"}}">&#9003;</button>
+          <label for="pref-zkn-id-gen">{{i18n "dialog.preferences.zkn.id_generator_label"}}</label>
+          <input type="text" id="pref-zkn-id-gen" value="{{zkn.idGen}}" name="zkn.idGen">
+          <button type="button" id="reset-id-generator" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_generator"}}">&#9003;</button>
+          <hr>
+          <p>
+            <button type="button" id="generate-id">{{i18n "dialog.preferences.zkn.test_id_generator"}}</button>
+          </p>
+          <p>{{i18n "dialog.preferences.zkn.generated_id"}}: <strong><span id="generator-tester"></span></strong></p>
+          <p><span id="pass-check"></span></p>
+        </div>
+        <div class="box-right">
+          <p>
+            {{i18n "dialog.preferences.zkn.intro"}}
+            <ul>
+              <li><strong>%Y</strong>: {{i18n "dialog.preferences.zkn.var_year"}}</li>
+              <li><strong>%M</strong>: {{i18n "dialog.preferences.zkn.var_month"}}</li>
+              <li><strong>%D</strong>: {{i18n "dialog.preferences.zkn.var_day"}}</li>
+              <li><strong>%h</strong>: {{i18n "dialog.preferences.zkn.var_hour"}}</li>
+              <li><strong>%m</strong>: {{i18n "dialog.preferences.zkn.var_minute"}}</li>
+              <li><strong>%s</strong>: {{i18n "dialog.preferences.zkn.var_second"}}</li>
+            </ul>
+          </p>
+        </div>
+      </div>
+      <!-- Display options -->
+      <div id="prefs-tabs-display">
+        <div class="box-left">
+          <p>{{i18n "dialog.preferences.display.image_size_info"}}</p>
+          <div class="image-size">
+            <div class="image"></div>
+            <input type="range" min="1" max="100" id="imageWidth" name="display.imageWidth" value="{{display.imageWidth}}">
+            <input type="range" min="1" max="100" id="imageHeight" name="display.imageHeight" value="{{display.imageHeight}}">
+            <div id="preview-image-sizes">{{display.imageWidth}}% &times; {{display.imageHeight}}%</div>
+          </div>
+        </div>
+        <div class="box-right">
+          <p>{{i18n "dialog.preferences.display.preview_info"}}</p>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="display.renderCitations" value="yes" id="display.renderCitations" {{#if display.renderCitations}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="display.renderCitations">{{i18n "dialog.preferences.display.render_citations"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="display.renderIframes" value="yes" id="export.stripIDs" {{#if display.renderIframes}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="display.renderIframes">{{i18n "dialog.preferences.display.render_iframes"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="display.renderImages" value="yes" id="display.renderImages" {{#if display.renderImages}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="display.renderImages">{{i18n "dialog.preferences.display.render_images"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="display.renderLinks" value="yes" id="display.renderLinks" {{#if display.renderLinks}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="display.renderLinks">{{i18n "dialog.preferences.display.render_links"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="display.renderMath" value="yes" id="display.renderMath" {{#if display.renderMath}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="display.renderMath">{{i18n "dialog.preferences.display.render_math"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="display.renderTasks" value="yes" id="display.renderTasks" {{#if display.renderTasks}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="display.renderTasks">{{i18n "dialog.preferences.display.render_tasks"}}</label>
+          </div>
+        </div>
+      </div>
+      <!-- Export/seldomly used options -->
+      <div id="prefs-tabs-advanced">
+        <p>{{i18n "dialog.preferences.attachments_info"}}</p>
+        <textarea id="attachmentExtensions" name="attachmentExtensions">{{attachmentExtensions}}</textarea>
+
+        <hr>
+
+        <label for="pandoc">
+          {{i18n "dialog.preferences.pandoc"}}
+        </label>
+        <input type="text" id="pandoc" name="pandoc" placeholder="{{i18n "dialog.preferences.pandoc_default"}}" value="{{pandoc}}">
+
+        <label for="xelatex">
+          {{i18n "dialog.preferences.xelatex"}}
+        </label>
+        <input type="text" id="xelatex" name="xelatex" placeholder="{{i18n "dialog.preferences.xelatex_default"}}" value="{{xelatex}}">
+
+        <hr>
+
+        <div class="cb-group">
+          <label class="cb-toggle">
+            <input type="checkbox" name="debug" value="yes" id="debug" {{#if debug}}checked="checked"{{/if}}>
+            <div class="toggle"></div>
+          </label>
+          <label for="debug">{{i18n "dialog.preferences.debug"}}</label>
+        </div>
+      </div>
+    </div>
+    <div class="prefs-submit-group">
+      <button type="submit" id="pref-save">{{i18n "dialog.preferences.save"}}</button>
+      <button id="abort">{{i18n "dialog.preferences.cancel"}}</button>
+      <span class="error-info"></span>
+    </div>
+  </form>
+</div>
+<script type="text/javascript">
+/* global $ */
+// Functions for the search field of the dictionary list.
+$('.dicts-list-search').on('keyup', (e) => {
+  let val = $('.dicts-list-search').val().toLowerCase()
+  $('.dicts-list').find('li').each(function (i) {
+    if ($(this).text().toLowerCase().indexOf(val) === -1) {
+      $(this).hide()
+    } else {
+      $(this).show()
+    }
+  })
+})
+
+$('.dicts-list').on('click', (e) => {
+  let elem = $(e.target)
+  if (elem.is('li') && elem.hasClass('dicts-list-item')) {
+    let selection = $(`<div class="selected-dict"><input type="hidden" value="${elem.attr('data-value')}" name="selectedDicts" id="${elem.attr('data-value')}">${elem.text()}</div>`)
+    $('.selected-dictionaries').append(selection)
+    elem.detach()
+    $('.dicts-list-search').val('').focus().trigger('keyup') // Next search
+  }
+})
+
+$('.selected-dictionaries').on('click', (e) => {
+  let elem = $(e.target)
+  if (elem.is('div') && elem.hasClass('selected-dict')) {
+    let selection = $(`<li data-value="${elem.children('input').first().val()}" class="dicts-list-item">${elem.text()}</li>`)
+    let length = $('.dicts-list').find('li').length
+    if (length === 0) {
+      $('.dicts-list').append(selection)
+    } else {
+      $('.dicts-list').find('li').each(function (i) {
+        if ($(this).text() > elem.text()) {
+          selection.insertBefore($(this))
+          return false // Break out of the loop
+        } else if (i === length - 1) {
+          selection.insertAfter($(this))
+        }
+      })
+    }
+    elem.detach()
+  }
+})
+// END searchfield functions.
+
+// Begin: functions for the zkn regular expression fields
+$('#reset-id-regex').on('click', (e) => {
+  $('#pref-zkn-free-id').val('(\\d{14})')
+})
+$('#reset-linkstart-regex').on('click', (e) => {
+  $('#pref-zkn-free-linkstart').val('[[')
+})
+$('#reset-linkend-regex').on('click', (e) => {
+  $('#pref-zkn-free-linkend').val(']]')
+})
+$('#reset-id-generator').on('click', (e) => {
+  $('#pref-zkn-id-gen').val('%Y%M%D%h%m%s')
+})
+
+$('#generate-id').on('click', (e) => {
+  let id = require('../../common/zettlr-helpers.js').generateId($('#pref-zkn-id-gen').val())
+  let re = new RegExp('^' + $('#pref-zkn-free-id').val() + '$')
+  $('#generator-tester').text(id)
+  if (re.test(id)) {
+    $('#pass-check').text('{{i18n "dialog.preferences.zkn.pass_check_yes"}}')
+  } else {
+    $('#pass-check').text('{{i18n "dialog.preferences.zkn.pass_check_no"}}')
+  }
+})
+
+// BEGIN functionality for the image constraining options
+$('#imageWidth, #imageHeight').on('input', (e) => {
+  $('#preview-image-sizes').html($('#imageWidth').val() + '% &times; ' + $('#imageHeight').val() + '%')
+})
+
+</script>

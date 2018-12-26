@@ -1,0 +1,93 @@
+toc:
+  - name: Zettlr
+    file: README.md
+  - name: Main Classes
+    description: |
+      These classes handle the core functionality of Zettlr.
+    children:
+      - Zettlr
+      - ZettlrRenderer
+      - ZettlrConfig
+      - ZettlrWindow
+  - name: Inter-Process Communication
+    description: |
+      These classes handle the IPC between the main widnow and the main process.
+    children:
+      - ZettlrIPC
+      - ZettlrRendererIPC
+  - name: File Classes
+    description: |
+      These classes read in all directories and files for the app to use.
+    children:
+      - ZettlrDir
+      - ZettlrFile
+      - ZettlrAttachment
+      - ZettlrVirtualDirectory
+      - ZettlrProject
+      - ZettlrImport
+      - ZettlrExport
+      - makeExport
+      - ZettlrInterface
+  - name: Writing Aid Classes
+    description: |
+      These classes handle various tasks that aid the writing process, such as
+      citing correctly, checking for potential typos, enable tag autocompletion
+      and some statistics.
+    children:
+      - ZettlrCiteproc
+      - ZettlrDictionary
+      - ZettlrTags
+      - ZettlrStats
+  - name: GUI Classes
+    description: |
+      These classes obviously control various elements inside the graphical user
+      interface.
+    children:
+      - ZettlrBody
+      - ZettlrEditor
+      - ZettlrToolbar
+      - ZettlrQuicklook
+      - ZettlrDialog
+      - ZettlrPopup
+      - ZettlrPreview
+      - ZettlrDirectories
+      - TreeView
+      - FileView
+      - ZettlrPomodoro
+      - ZettlrStatsView
+      - ZettlrAttachments
+      - ZettlrCon
+      - ZettlrNotification
+      - EmptyPaths
+  - name: Helper Functions
+    description: |
+      These functions provide helper functionality that is used in various
+      places around the app.
+    children:
+      - hash
+      - flattenDirectoryTree
+      - asciiSorting
+      - dateSorting
+      - sort
+      - generateName
+      - generateId
+      - formatDate
+      - ignoreDir
+      - ignoreFile
+      - isDir
+      - isFile
+      - isAttachment
+      - isDictAvailable
+      - localiseNumber
+      - makeImgPathsAbsolute
+      - makeSearchRegEx
+      - trans
+  - name: Other Classes
+    description: |
+      These classes serve complex helper functionality, e.g. they combine too
+      much functionality for simple functions, but are not specialised to one of
+      the other categories here.
+    children:
+      - ZettlrWatchdog
+      - ZettlrUpdater
+      - ZettlrMenu

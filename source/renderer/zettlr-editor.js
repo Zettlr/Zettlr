@@ -18,7 +18,8 @@ const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const tippy = require('tippy.js')
 const { clipboard } = require('electron')
-const { generateId } = require('../common/zettlr-helpers.js')
+const { hash, makeSearchRegEx } = require('../common/zettlr-helpers.js')
+const { trans } = require('../common/lang/i18n.js')
 
 // 1. Mode addons
 require('codemirror/addon/mode/overlay')
@@ -53,22 +54,40 @@ require('codemirror/mode/sql/sql')
 require('codemirror/mode/swift/swift')
 require('codemirror/mode/yaml/yaml')
 
+// 7. The folding addon
+require('codemirror/addon/fold/foldcode')
+require('codemirror/addon/fold/foldgutter')
+require('codemirror/addon/fold/brace-fold')
+require('codemirror/addon/fold/indent-fold')
+require('codemirror/addon/fold/markdown-fold')
+require('codemirror/addon/fold/comment-fold')
+
+// 8. Hinting (tag autocompletion, e.g.)
+require('codemirror/addon/hint/show-hint')
+
 // Zettlr specific addons
 require('./assets/codemirror/zettlr-plugin-markdown-shortcuts.js')
 require('./assets/codemirror/zettlr-modes-spellchecker-zkn.js')
 require('./assets/codemirror/zettlr-plugin-footnotes.js')
 require('./assets/codemirror/zettlr-plugin-render-images.js')
 require('./assets/codemirror/zettlr-plugin-render-links.js')
+require('./assets/codemirror/zettlr-plugin-render-citations.js')
 require('./assets/codemirror/zettlr-plugin-render-tasks.js')
 require('./assets/codemirror/zettlr-plugin-render-iframes.js')
 require('./assets/codemirror/zettlr-plugin-render-math.js')
 require('./assets/codemirror/zettlr-plugin-markdown-header-classes.js')
 
-// Finally CodeMirror itself
+// 8. Finally CodeMirror itself
 const CodeMirror = require('codemirror')
 
 // The timeout after which a "save"-command is triggered to automatically save changes
 const SAVE_TIMOUT = require('../common/data.json').poll_time
+const AUTOCLOSEBRACKETS = {
+  pairs: '()[]{}\'\'""»«„““”‘’__``', // Autoclose markdown specific stuff
+  override: true
+}
+
+const IMAGE_REGEX = /(jpg|jpeg|png|gif|svg|tiff|tif)$/i
 
 /**
 * This class propably has the most `require`s in it, because it loads all
@@ -99,6 +118,31 @@ class ZettlrEditor {
     this._scrollbarAnnotations = null // Contains an object to mark search results on the scrollbar
     this._searchCursor = null // A search cursor while searching
 
+    // The starting position for a tag autocomplete.
+    this._autoCompleteStart = null
+    this._tagDB = null // Holds all available tags for autocomplete
+    this._citeprocIDs = null // Holds all available IDs for autocomplete
+    this._currentDatabase = null // Points either to the tagDB or the ID database
+
+    // What elements should be rendered?
+    this._renderCitations = false
+    this._renderIframes = false
+    this._renderImages = false
+    this._renderLinks = false
+    this._renderMath = false
+    this._renderTasks = false
+
+    // This Markdown to HTML converter is used in various parts of the
+    // class to perform converting operations.
+    this._showdown = new showdown.Converter()
+    this._showdown.setFlavor('github')
+
+    // The last array of IDs as fetched from the document
+    this._lastKnownCitationCluster = []
+
+    // All individual citations fetched during this session.
+    this._citationBuffer = Object.create(null)
+
     this._mute = true // Should the editor mute lines while in distraction-free mode?
 
     // These are used for calculating a correct word count
@@ -110,15 +154,57 @@ class ZettlrEditor {
       },
       theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
       autofocus: false,
+      foldGutter: true,
+      cursorScrollMargin: 60, // Keep the cursor 60px below/above editor edges
+      gutters: ['CodeMirror-foldgutter'],
+      foldOptions: {
+        'widget': '\u00A0\u2026\u00A0' // nbsp ellipse nbsp
+      },
+      hintOptions: {
+        completeSingle: false, // Don't auto-complete, even if there's only one word available
+        hint: (cm, opt) => {
+          let term = cm.getRange(this._autoCompleteStart, cm.getCursor()).toLowerCase()
+          let completionObject = {
+            'list': Object.keys(this._currentDatabase).filter((key) => {
+              // First search the ID. Second, search the displayText, if available.
+              // Third: return false if nothing else has matched.
+              if (this._currentDatabase[key].text.toLowerCase().indexOf(term) === 0) return true
+              if (this._currentDatabase[key].hasOwnProperty('displayText') && this._currentDatabase[key].displayText.toLowerCase().indexOf(term) >= 0) return true
+              return false
+            })
+              .map(key => this._currentDatabase[key]),
+            'from': this._autoCompleteStart,
+            'to': cm.getCursor()
+          }
+          // Set the autocomplete to false as soon as the user has actively selected something.
+          CodeMirror.on(completionObject, 'pick', () => {
+            this._autoCompleteStart = null
+          })
+          return completionObject
+        }
+      },
       lineWrapping: true,
       indentUnit: 4, // Indent lists etc. by 4, not 2 spaces (necessary, e.g., for pandoc)
       // inputStyle: "contenteditable", // Will enable this in a future version
-      autoCloseBrackets: {
-        pairs: '()[]{}\'\'""»«„““”‘’__``', // Autoclose markdown specific stuff
-        override: true
-      },
+      autoCloseBrackets: AUTOCLOSEBRACKETS,
       markdownImageBasePath: '', // The base path used to render the image in case of relative URLs
-      markdownOnLinkOpen: function (url) { require('electron').shell.openExternal(url) }, // Action for ALT-Clicks
+      markdownOnLinkOpen: (url) => {
+        if (url[0] === '#') {
+          // We should open an internal link
+          let re = new RegExp('#\\s[^\\r\\n]*?' +
+          url.replace(/-/g, '[^\\r\\n]+?').replace(/^#/, ''), 'i')
+          // The new regex should now match the corresponding heading in the document
+          for (let i = 0; i < this._cm.lineCount(); i++) {
+            let line = this._cm.getLine(i)
+            if (re.test(line)) {
+              this.jtl(i)
+              break
+            }
+          }
+        } else {
+          require('electron').shell.openExternal(url)
+        }
+      }, // Action for ALT-Clicks
       zkn: {
         idRE: '(\\d{14})', // What do the IDs look like?
         linkStart: '\\[\\[', // Start of links?
@@ -133,9 +219,46 @@ class ZettlrEditor {
       }
     })
 
+    /**
+     * Listen to the beforeChange event to modify pasted image paths into real
+     * markdown images.
+     * @type {function}
+     */
+    this._cm.on('beforeChange', (cm, changeObj) => {
+      if (changeObj.origin === 'paste') {
+        let newtext = []
+        for (let i in changeObj.text) {
+          if (changeObj.text[i].indexOf('file://') === 0 && IMAGE_REGEX.test(changeObj.text[i])) {
+            newtext[i] = `![${path.basename(changeObj.text[i])}](${changeObj.text[i]})`
+          } else {
+            newtext[i] = changeObj.text[i]
+          }
+        }
+        changeObj.update(changeObj.from, changeObj.to, newtext)
+      }
+    })
+
     this._cm.on('change', (cm, changeObj) => {
+      // Show tag autocompletion window, if applicable (or close it)
+      if (changeObj.text[0] === '#') {
+        this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
+        this._currentDatabase = this._tagDB
+        this._cm.showHint()
+      } else if (changeObj.text[0] === '@') {
+        this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
+        this._currentDatabase = this._citeprocIDs
+        this._cm.showHint()
+      }
+
       // Update wordcount
       this._renderer.updateWordCount(this.getWordCount())
+
+      if (changeObj.origin === 'paste' && changeObj.text.join(' ').split(' ').length > 10) {
+        // In case the user pasted more than ten words don't let these count towards
+        // the word counter. Simply update the word count before the save function
+        // is triggered. This way none of the just pasted words will count.
+        this.getWrittenWords()
+      }
 
       if (changeObj.origin !== 'setValue') {
         // If origin is setValue this means that the contents have been
@@ -146,8 +269,20 @@ class ZettlrEditor {
         if (this._timeout) {
           clearTimeout(this._timeout)
         }
+        if (this._citationTimeout) clearTimeout(this._citationTimeout)
 
-        this._timeout = setTimeout((e) => { this._renderer.saveFile() }, SAVE_TIMOUT)
+        // This timeout can be used for everything that takes some time and
+        // makes the writing feel laggy (such as generating a bunch of
+        // bibliography entries.)
+        this._timeout = setTimeout((e) => {
+          this._renderer.saveFile()
+          this.updateCitations()
+        }, SAVE_TIMOUT)
+
+        // Always run an update-citations command each time there have been changes
+        this._citationTimeout = setTimeout((e) => {
+          this.updateCitations()
+        }, 500)
       }
     })
 
@@ -157,11 +292,12 @@ class ZettlrEditor {
     this._cm.on('cursorActivity', (cm) => {
       // This event fires on either editor changes (because, obviously the
       // cursor changes its position as well then) or when the cursor moves.
-      this._cm.execCommand('markdownRenderImages') // Render images
-      this._cm.execCommand('markdownRenderIframes') // Render iFrames
-      this._cm.execCommand('markdownRenderMath') // Render equations
-      this._cm.execCommand('markdownRenderLinks') // Render links
-      this._cm.execCommand('markdownRenderTasks') // Render tasks
+      if (this._renderImages) this._cm.execCommand('markdownRenderImages') // Render images
+      if (this._renderIframes) this._cm.execCommand('markdownRenderIframes') // Render iFrames
+      if (this._renderMath) this._cm.execCommand('markdownRenderMath') // Render equations
+      if (this._renderLinks) this._cm.execCommand('markdownRenderLinks') // Render links
+      if (this._renderCitations) this._cm.execCommand('markdownRenderCitations') // Render citations
+      if (this._renderTasks) this._cm.execCommand('markdownRenderTasks') // Render tasks
       this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
       if (this._cm.getOption('fullScreen') && this._mute) {
         this._muteLines()
@@ -174,7 +310,7 @@ class ZettlrEditor {
         event.codemirrorIgnore = true
         let imagesToInsert = []
         for (let x of event.dataTransfer.files) {
-          if (/(jpg|jpeg|png|gif|svg|tiff|tif)$/i.test(x.path)) {
+          if (IMAGE_REGEX.test(x.path)) {
             imagesToInsert.push(x.path)
           }
         }
@@ -239,6 +375,18 @@ class ZettlrEditor {
 
     this._cm.refresh()
 
+    // Enable resizing of the editor
+    this.enableResizable()
+    // Update resize options on window resize
+    window.addEventListener('resize', (e) => {
+      if (this._div.hasClass('fullscreen')) return // Don't handle
+      this._div.resizable('option', 'minWidth', Math.round($(window).width() * 0.4))
+      this._div.resizable('option', 'maxWidth', Math.round($(window).width() * 0.9))
+
+      // Also we have to resize the editor to the correct width again
+      $('#editor').css('width', $(window).innerWidth() - $('#combiner').outerWidth() + 'px')
+    })
+
     // Finally create the annotateScrollbar object to be able to annotate the scrollbar with search results.
     this._scrollbarAnnotations = this._cm.annotateScrollbar('sb-annotation')
     this._scrollbarAnnotations.update([])
@@ -285,6 +433,9 @@ class ZettlrEditor {
     // Last but not least: If there are any search results currently
     // display, mark the respective positions.
     this.markResults(file)
+
+    // Finally, set a timeout for a first run of citation rendering
+    setTimeout(() => { this.updateCitations() }, 1000)
 
     return this
   }
@@ -372,9 +523,20 @@ class ZettlrEditor {
     this._cm.setOption('fullScreen', !this._cm.getOption('fullScreen'))
     if (!this._cm.getOption('fullScreen')) {
       this._unmuteLines()
-    } else if (this._mute) {
-      this._muteLines()
+      this._div.removeClass('fullscreen')
+      this.enableResizable()
+    } else {
+      if (this._mute) this._muteLines()
+      this._div.addClass('fullscreen')
+      this.disableResizable()
     }
+
+    // We have to re-apply the font-size to the editor because this style gets
+    // overwritten by one of the above operations.
+    if (this._fontsize !== 100) this._div.css('font-size', this._fontsize + '%')
+
+    // Refresh to reflect the size changes
+    this._cm.refresh()
   }
 
   /**
@@ -387,6 +549,66 @@ class ZettlrEditor {
       this._unmuteLines() // Unmute
     } else if (this._cm.getOption('fullScreen') && this._mute) {
       this._muteLines() // Mute
+    }
+  }
+
+  /**
+   * Sets the autoCloseBrackets command of the editor to the respective value.
+   * @param {Boolean} state True, if brackets should be autoclosed, or false.
+   */
+  setAutoCloseBrackets (state) {
+    if (state) {
+      this._cm.setOption('autoCloseBrackets', AUTOCLOSEBRACKETS)
+    } else {
+      this._cm.setOption('autoCloseBrackets', false)
+    }
+  }
+
+  /**
+   * Apply constraints to the preview image size
+   * @param {number} width  The maximum width
+   * @param {number} height The maximum height
+   */
+  setImagePreviewConstraints (width, height) {
+    this._cm.setOption('imagePreviewWidth', width)
+    this._cm.setOption('imagePreviewHeight', height)
+  }
+
+  /**
+   * Applies options to determine which elements are rendered in documents.
+   * @param {Boolean} cite   Should citations be rendered?
+   * @param {Boolean} iframe Should iFrames be rendered?
+   * @param {Boolean} img    Should images be rendered?
+   * @param {Boolean} link   Should Links be rendered?
+   * @param {Boolean} math   Should math formulae be rendered?
+   * @param {Boolean} task   Should tasks be rendered?
+   */
+  setRenderOptions (cite, iframe, img, link, math, task) {
+    this._renderCitations = cite
+    this._renderIframes = iframe
+    this._renderImages = img
+    this._renderLinks = link
+    this._renderMath = math
+    this._renderTasks = task
+  }
+
+  /**
+   * This sets the tag database necessary for the tag autocomplete.
+   * @param {Object} tagDB An object (here with prototype due to JSON) containing tags
+   */
+  setTagDatabase (tagDB) { this._tagDB = tagDB }
+
+  /**
+   * Sets the citeprocIDs available to autocomplete to a new list
+   * @param {Array} idList An array containing the new IDs
+   */
+  setCiteprocIDs (idList) {
+    if (typeof idList !== 'object' || idList === null) {
+      // Create an empty object.
+      this._citeprocIDs = Object.create(null)
+    } else {
+      // Overwrite existing array
+      this._citeprocIDs = idList
     }
   }
 
@@ -482,7 +704,32 @@ class ZettlrEditor {
 
     let cur = this._cm.getCursor()
     let sel = this._cm.findWordAt(cur)
-    this._cm.setSelection(sel.anchor, sel.head)
+    // Now we have a word at this position. We only have one problem: CodeMirror
+    // does not accept apostrophes (') to be inside words. Therefore, a lot of
+    // languages do have problems (I'm looking at you, French). Therefore check
+    // two conditions: First: There's an apostrophe and a letter directly in
+    // front of this selection - or behind it!
+    let line = this._cm.getLine(sel.anchor.line)
+    if (sel.anchor.ch >= 2 && /[^\s]'/.test(line.substr(sel.anchor.ch - 2, 2))) {
+      // There's a part of the word in front of the current selection ->
+      // move back until we found it.
+      do {
+        sel.anchor.ch--
+      } while (sel.anchor.ch >= 0 && !/\s/.test(line.substr(sel.anchor.ch, 1)))
+
+      if (line[sel.anchor.ch] === ' ') sel.anchor.ch++
+    }
+
+    // Now the same for the back
+    if (sel.head < line.length - 1 && /'[^\s]/.test(line.substr(sel.head.ch, 2))) {
+      do {
+        sel.head.ch++
+      } while (sel.head <= line.length && !/\s/.test(line.substr(sel.head.ch, 1)))
+      if (line[sel.head.ch] === ' ') sel.head.ch--
+    }
+
+    // Now we should be all set.
+    this._cm.setSelection(sel.anchor, sel.head) // It's on line 666! This has a meaning, I'm sure!
   }
 
   /**
@@ -499,26 +746,6 @@ class ZettlrEditor {
 
     // Replace word and select new word
     this._cm.replaceSelection(word, 'around')
-  }
-
-  /**
-     * Inserts a new ID at the current cursor position
-     */
-  insertId () {
-    if (!this._cm.somethingSelected()) {
-    // Don't replace selections
-      this._cm.replaceSelection(generateId(this._cm.getOption('zkn').idGen))
-      this._cm.focus()
-    } else {
-      // Save and afterwards retain the selections
-      let sel = this._cm.doc.listSelections()
-      this._cm.setCursor({
-        'line': this._cm.doc.lastLine(),
-        'ch': this._cm.doc.getLine(this._cm.doc.lastLine()).length
-      })
-      this._cm.replaceSelection('\n\n' + generateId(this._cm.getOption('zkn').idGen)) // Insert at the end of document
-      this._cm.doc.setSelections(sel)
-    }
   }
 
   /**
@@ -552,10 +779,16 @@ class ZettlrEditor {
       }
     }
 
+    // TODO translate this message!
+    fnref = (fnref && fnref !== '') ? fnref : '_No reference text_'
+
+    // For preview we should convert the footnote text to HTML.
+    fnref = this._showdown.makeHtml(fnref)
+
     // Now we either got a match or an empty fnref. So create a tippy
     // instance
     tippy.one(element[0], {
-      'content': (fnref && fnref !== '') ? fnref : 'no reference text',
+      'content': fnref,
       onHidden (instance) {
         instance.destroy() // Destroy the tippy instance.
       },
@@ -660,14 +893,11 @@ class ZettlrEditor {
       this.startSearch(term)
     }
 
-    // We need a regex because only this way we can case-insensitively search
-    term = new RegExp(term, 'i')
-
     if (this._searchCursor.findNext()) {
       this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
     } else {
       // Start from beginning
-      this._searchCursor = this._cm.getSearchCursor(term, { 'line': 0, 'ch': 0 })
+      this._searchCursor = this._cm.getSearchCursor(makeSearchRegEx(term), { 'line': 0, 'ch': 0 })
       if (this._searchCursor.findNext()) {
         this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
       }
@@ -681,12 +911,14 @@ class ZettlrEditor {
     * @return {ZettlrEditor}      This for chainability.
     */
   startSearch (term) {
-    // Create a new search cursor
-    this._searchCursor = this._cm.getSearchCursor(new RegExp(term, 'i'), this._cm.getCursor())
+    // First transform the term based upon what the user has entered
     this._currentLocalSearch = term
+    // Create a new search cursor
+    this._searchCursor = this._cm.getSearchCursor(makeSearchRegEx(term), this._cm.getCursor())
 
     // Find all matches
-    let tRE = new RegExp(term, 'gi')
+    // For this single instance we need a global modifier
+    let tRE = makeSearchRegEx(term, 'gi')
     let res = []
     let match = null
     for (let i = 0; i < this._cm.lineCount(); i++) {
@@ -695,7 +927,7 @@ class ZettlrEditor {
       while ((match = tRE.exec(l)) != null) {
         res.push({
           'from': { 'line': i, 'ch': match.index },
-          'to': { 'line': i, 'ch': match.index + term.length }
+          'to': { 'line': i, 'ch': match.index + match[0].length }
         })
       }
     }
@@ -719,7 +951,7 @@ class ZettlrEditor {
 
   /**
     * Replace the next occurrence with 'replacement'
-    * @param  {String} str_replace The string with which the next occurrence of the search cursor term will be replaced
+    * @param  {String} replacement The string with which the next occurrence of the search cursor term will be replaced
     * @return {Boolean} Whether or not a string has been replaced.
     */
   replaceNext (replacement) {
@@ -736,12 +968,19 @@ class ZettlrEditor {
     * @param  {String} replaceWhat Replace with this string
     */
   replaceAll (searchWhat, replaceWhat) {
-    searchWhat = new RegExp(searchWhat, 'i')
-    this._searchCursor = this._cm.getSearchCursor(searchWhat, { 'line': 0, 'ch': 0 })
-    while (this._searchCursor.findNext()) {
-      this._searchCursor.replace(replaceWhat)
-    }
-    this._searchCursor = null
+    searchWhat = makeSearchRegEx(searchWhat)
+    // First select all matches
+    let ranges = []
+    let cur = this._cm.getSearchCursor(searchWhat, { 'line': 0, 'ch': 0 })
+    while (cur.findNext()) { ranges.push({ 'anchor': cur.from(), 'head': cur.to() }) }
+    if (ranges.length) this._cm.setSelections(ranges, 0)
+    // Create a new array with the same size as all selections
+    let repl = new Array(this._cm.getSelections().length)
+    // Fill it with the replace value (to replace every single selection with
+    // the same term)
+    repl = repl.fill(replaceWhat)
+    // Aaaand do it
+    this._cm.replaceSelections(repl)
   }
 
   /**
@@ -751,12 +990,143 @@ class ZettlrEditor {
   copyAsHTML () {
     if (this._cm.somethingSelected()) {
       let md = this._cm.getSelections().join(' ')
-      let conv = new showdown.Converter()
-      conv.setFlavor('github')
-      let html = conv.makeHtml(md)
+      let html = this._showdown.makeHtml(md)
       clipboard.writeHTML(html)
     }
     return this
+  }
+
+  /**
+   * Enables the resizable between editor and sidebar.
+   * @return {void} Does not return.
+   */
+  enableResizable () {
+    // Make preview and editor resizable
+    this._div.resizable({
+      'handles': 'w',
+      'resize': (e, ui) => {
+        // We need to account for the 10 pixels padding in the editor somehow.
+        $('#combiner').css('width', ($(window).width() - ui.size.width - 10) + 'px')
+        this._div.css('width', '')
+      },
+      'stop': (e, ui) => {
+        this._renderer.getEditor().refresh() // Refresh the editor to update lines and cursor positions.
+        $('body').css('cursor', '') // Why does jQueryUI ALWAYS do this to me?
+        this._div.css('width', '')
+      },
+      'minWidth': Math.round($(window).width() * 0.4),
+      'maxWidth': Math.round($(window).width() * 0.9)
+    })
+  }
+
+  /**
+   * Disables the resizing functionality between the sidebar and the editor.
+   * @return {void} This function does not return.
+   */
+  disableResizable () {
+    $('#editor').resizable('destroy')
+    $('#editor').prop('style', '') // Remove the left and width things
+    $('#combiner').prop('style', '')
+    // TODO save these variables!
+  }
+
+  /**
+   * This method updates both the in-text citations as well as the bibliography.
+   * @return {void} Does not return.
+   */
+  updateCitations () {
+    // This function searches for all elements with class .citeproc-citation and
+    // updates the contents of these elements based upon the ID.
+
+    // NEVER use jQuery to always query all citeproc-citations, because CodeMirror
+    // does NOT always print them! We have to manually go through the value of
+    // the code ...
+    let cnt = this._cm.getValue()
+    let totalIDs = Object.create(null)
+    let match
+    let citeprocIDRE = /@([a-z0-9_:.#$%&\-+?<>~/]+)/gi
+    let somethingUpdated = false // This flag indicates if anything has changed and justifies a new bibliography.
+    let needRefresh = false // Do we need to refresh CodeMirror?
+    while ((match = citeprocIDRE.exec(cnt)) != null) {
+      let id = match[1]
+      totalIDs[id] = this._lastKnownCitationCluster[id] // Could be undefined.
+    }
+
+    // Now we have the correct amount of IDs in our cluster. Now fetch all
+    // citations of new ones.
+    for (let id in totalIDs) {
+      if (totalIDs[id] === undefined) {
+        totalIDs[id] = true
+        somethingUpdated = true // We have to fetch a new citation
+      }
+    }
+
+    // Check if there are some citations _missing_ from the new array
+    for (let id in this._lastKnownCitationCluster) {
+      if (totalIDs[id] === undefined) {
+        somethingUpdated = true // We only need one entry to justify an update
+        break
+      }
+    }
+
+    // Swap
+    this._lastKnownCitationCluster = totalIDs
+
+    // Now everything is set -> Go through all rendered spans and update if
+    // necessary
+    let elements = $('.CodeMirror .citeproc-citation')
+    elements.each((index, elem) => {
+      elem = $(elem)
+      if (elem.attr('data-rendered') !== 'yes') {
+        let item = elem.attr('data-citeproc-cite-item')
+        let id = hash(item)
+        item = JSON.parse(item)
+        if (this._citationBuffer[id] !== undefined) {
+          elem.html(this._citationBuffer[id]).removeClass('error').attr('data-rendered', 'yes')
+          needRefresh = true
+        } else {
+          let newCite = global.citeproc.getCitation(item)
+          switch (newCite.status) {
+            case 4: // Engine was ready, newCite.citation contains the citation
+              elem.html(newCite.citation).removeClass('error').attr('data-rendered', 'yes')
+              this._citationBuffer[id] = newCite.citation
+              needRefresh = true
+              break
+            case 3: // There was an error loading the database
+              elem.addClass('error')
+              break
+            case 2: // There was no database, so don't do anything.
+              elem.attr('data-rendered', 'yes')
+              break
+          }
+        }
+      }
+    })
+
+    if (Object.keys(this._lastKnownCitationCluster).length === 0) {
+      return this._renderer.setBibliography(trans('gui.citeproc.references_none'))
+    }
+
+    if (somethingUpdated) {
+      // Need to update
+      // We need to update the items first!
+      let bib = global.citeproc.updateItems(Object.keys(this._lastKnownCitationCluster))
+      if (bib === true) {
+        global.citeproc.makeBibliography() // Trigger a new bibliography build
+      } else if (bib === 1) { // 1 means booting
+        this._renderer.setBibliography(trans('gui.citeproc.references_booting'))
+        // Unset so that the update process is triggered again next time
+        this._lastKnownCitationCluster = Object.create(null)
+      } else if (bib === 3) { // There was an error
+        this._renderer.setBibliography(trans('gui.citeproc.references_error'))
+      } else if (bib === 2) { // No database loaded
+        this._renderer.setBibliography(trans('gui.citeproc.no_db'))
+      }
+    }
+
+    // We need to refresh the editor, because the updating process has certainly
+    // altered the widths of the spans.
+    if (needRefresh) this._cm.refresh()
   }
 
   /**

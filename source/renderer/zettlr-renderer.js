@@ -18,18 +18,18 @@ const ZettlrDirectories = require('./zettlr-directories.js')
 const ZettlrPreview = require('./zettlr-preview.js')
 const ZettlrEditor = require('./zettlr-editor.js')
 const ZettlrBody = require('./zettlr-body.js')
-const ZettlrOverlay = require('./zettlr-overlay.js')
 const ZettlrToolbar = require('./zettlr-toolbar.js')
 const ZettlrPomodoro = require('./zettlr-pomodoro.js')
 const popup = require('./zettlr-popup.js')
 const ZettlrStatsView = require('./zettlr-stats-view.js')
 const ZettlrAttachments = require('./zettlr-attachments.js')
 
-const Typo = require('typo-js')
-const remote = require('electron').remote
-const path = require('path')
+const { remote } = require('electron')
+const { clipboard } = require('electron')
 
-const { trans } = require('../common/lang/i18n.js')
+const { generateId } = require('../common/zettlr-helpers.js')
+
+const path = require('path')
 
 // Pull the poll-time from the data
 const POLL_TIME = require('../common/data.json').poll_time
@@ -52,13 +52,6 @@ class ZettlrRenderer {
     this._paths = null
     this._lang = 'en_US' // Default fallback
 
-    // Spellchecking vars
-    this._typoReady = false // Flag indicating whether Typo has already loaded
-    this._typoLang = {} // Which language(s) are we spellchecking?
-    this._typoAff = null // Contains the Aff-file data
-    this._typoDic = null // Contains the dic-file data
-    this._typo = [] // Contains the Typo object to check with
-
     // Write translation data into renderer process's global var
     // Why do we have to stringify and parse it? Because otherwise the
     // renderer's global.i18n-variable will simply be a huge object calling
@@ -78,7 +71,6 @@ class ZettlrRenderer {
     this._preview = new ZettlrPreview(this)
     this._editor = new ZettlrEditor(this)
     this._body = new ZettlrBody(this)
-    this._overlay = new ZettlrOverlay(this)
     this._toolbar = new ZettlrToolbar(this)
     this._pomodoro = new ZettlrPomodoro(this)
     this._stats = new ZettlrStatsView(this)
@@ -93,27 +85,20 @@ class ZettlrRenderer {
     * @return {void} Nothing to return.
     */
   init () {
-    this._overlay.show(trans('init.welcome'))
-
     // We have to carve out the initial configuration of the renderer from the
     // first tick of the renderer event loop, because at this early stage (init
     // is called right after the DOM has loaded) the ipc is not yet ready. This
     // short delay gives us the time the IPC needs to get ready.
     setTimeout(() => { this.configChange() }, 10) // 10ms should suffice - the number is irrelevant. The important part is that it's out of the first tick of the app.
 
-    this._ipc.send('get-tags') // Receive initial list of tags to display
+    // Receive an initial list of tags to display in the preview list
+    this._ipc.send('get-tags')
+    // Additionally, request the full database of already existing tags inside files.
+    this._ipc.send('get-tags-database')
 
     // Request a first batch of files
     this._ipc.send('get-paths', {})
 
-    // Also, request the typo things
-    this._ipc.send('typo-request-lang', {})
-  }
-
-  /**
-    * This function gets called when the renderer finishes its startup.
-    */
-  finishStartup () {
     // Here we can init actions and stuff to be done after the startup has finished
     setTimeout(() => { this.poll() }, POLL_TIME) // Poll every POLL_TIME seconds
 
@@ -125,9 +110,13 @@ class ZettlrRenderer {
     * This function is called every POLL_TIME seconds to execute recurring tasks.
     */
   poll () {
-    // This poll is useful. You may not see it now, but someday it's gonna
-    // be tremendous!
-
+    // The updating of both the IDs available for citation as well as updating
+    // the citations of a whole book you may have written costs a lot of time,
+    // we'll do this outside of the normal run of the application, every
+    // POLL_TIME seconds. This way, it might feel "laggy", but after all the
+    // writing itself does not seem laggy, and this is the main aim. Nobody can
+    // seriously complain that the citations update "slowly".
+    this._ipc.send('citeproc-get-ids')
     // Set next timeout
     setTimeout(() => { this.poll() }, POLL_TIME)
   }
@@ -157,6 +146,22 @@ class ZettlrRenderer {
     this.setLocale(global.config.get('app_lang'))
     // muteLines initial setting
     this.getEditor().setMuteLines(global.config.get('muteLines'))
+    this.getEditor().setAutoCloseBrackets(global.config.get('editor.autoCloseBrackets'))
+    // preview image constraints
+    this.getEditor().setImagePreviewConstraints(
+      global.config.get('display.imageWidth'),
+      global.config.get('display.imageHeight')
+    )
+
+    // Tell the editor which elements should be rendered inside documents.
+    this.getEditor().setRenderOptions(
+      global.config.get('display.renderCitations'),
+      global.config.get('display.renderIframes'),
+      global.config.get('display.renderImages'),
+      global.config.get('display.renderLinks'),
+      global.config.get('display.renderMath'),
+      global.config.get('display.renderTasks')
+    )
 
     // Set the correct combiner state
     switch (global.config.get('combinerState')) {
@@ -172,6 +177,35 @@ class ZettlrRenderer {
 
     // And last but not least the zkn options
     this.getEditor().getEditor().setOption('zkn', global.config.get('zkn'))
+  }
+
+  /**
+   * Generates an ID based upon the configured pattern, writes it into the
+   * clipboard and then triggers the paste command on these webcontents.
+   * @return {void} Does not return.
+   */
+  genId () {
+    // First we need to backup the existing clipboard contents so that they are
+    // not lost during the operation.
+    let text = clipboard.readText()
+    let html = clipboard.readHTML()
+    let image = clipboard.readImage()
+    let rtf = clipboard.readRTF()
+
+    // Write an ID to the clipboard
+    clipboard.writeText(generateId(global.config.get('zkn.idGen')))
+    // Paste the ID
+    remote.getCurrentWebContents().paste()
+
+    // Now restore the clipboard's original contents
+    setTimeout((e) => {
+      clipboard.write({
+        'text': text,
+        'html': html,
+        'image': image,
+        'rtf': rtf
+      })
+    }, 10) // Why do a timeout? Because the paste event is asynchronous.
   }
 
   /**
@@ -401,7 +435,6 @@ class ZettlrRenderer {
       // update.
       let f = this.getCurrentFile()
       f.modtime = file.modtime
-      f.snippet = file.snippet
       f.tags = file.tags
       f.id = file.id
       // Trigger a redraw of this specific file in the preview list.
@@ -437,137 +470,6 @@ class ZettlrRenderer {
       this._directories.refresh()
     }
   }
-
-  // SPELLCHECKER FUNCTIONS
-
-  /**
-   * Is called when we receive the array of enabled spellchecking langs. This
-   * begins fetching all of them by requesting the first aff-file.
-   * @param {Array} langs The array from main with correct info about the spellchecker.
-   */
-  setSpellcheck (langs) {
-    this._overlay.update(trans('init.spellcheck.get_lang'))
-
-    // Save all languages in _typoLang. They will be spliced out as soon as
-    // they are loaded.
-    this._typoLang = langs
-
-    if (this._typoLang.length > 0) {
-      this.requestLang('aff')
-    } else {
-      // We're already done!
-      this._overlay.close()
-      // Finish and cleanup from startup
-      this.finishStartup()
-    }
-  }
-
-  /**
-   * Requests a language file (either aff or dic)
-   * @param  {String} type The type of file, either "aff" or "dic"
-   * @return {void}      Nothing to return.
-   */
-  requestLang (type) {
-    // Fetch from first upwards. As we splice the successfully loaded langs,
-    // 0 will always refer to the next language to be loaded.
-    this._overlay.update(
-      trans(
-        'init.spellcheck.request_file',
-        trans('dialog.preferences.app_lang.' + this._typoLang[0])
-      )
-    )
-
-    // Load the first lang (first aff, then dic)
-    this._ipc.send('typo-request-' + type, this._typoLang[0])
-  }
-
-  /**
-   * This function checks for existence of Aff and Dic files and then inits
-   * the given language using the dictionaries.
-   * @return {void} Nothing to return.
-   */
-  initTypo () {
-    if (!this._typoLang) { return }
-    if (!this._typoAff) { return }
-    if (!this._typoDic) { return }
-
-    this._overlay.update(
-      trans(
-        'init.spellcheck.init',
-        trans('dialog.preferences.app_lang.' + this._typoLang[0])
-      )
-    )
-
-    // Initialize typo and we're set!
-    this._typo.push(new Typo(this._typoLang[0], this._typoAff, this._typoDic))
-
-    // Shift out the first index while transmitting the "loaded!" message,
-    // as the return value of shift() is precisely the removed item.
-    this._overlay.update(
-      trans(
-        'init.spellcheck.init_done',
-        trans('dialog.preferences.app_lang.' + this._typoLang.shift())
-      )
-    )
-
-    // Free memory
-    this._typoAff = null
-    this._typoDic = null
-
-    if (this._typoLang.length > 0) {
-      // There is still at least one language to load. -> request next aff
-      this.requestLang('aff')
-    } else {
-      // Done - enable language checking
-      this._typoReady = true
-      this._overlay.close() // Done!
-      // Finish and cleanup from startup
-      this.finishStartup()
-    }
-  }
-
-  /**
-   * This function returns either true or false based on whether or not the
-   * word given has been found in any of the dictionaries.
-   * @param  {String} word The word to check
-   * @return {Boolean}      True, if it has been found, or false if no language recognizes it.
-   */
-  typoCheck (word) {
-    if (!this._typoReady) {
-      return true // true means: No wrong spelling detected
-    }
-
-    for (let lang of this._typo) {
-      if (lang.check(word)) {
-        // As soon as the word is correct in any lang, break and return true
-        return true
-      }
-    }
-
-    // No language reported the word exists
-    return false
-  }
-
-  /**
-   * Returns an array of suggested correct spellings of a word.
-   * @param  {String} word The word to get suggestions for.
-   * @return {Array}      An array of strings containing suggestions.
-   */
-  typoSuggest (word) {
-    if (!this._typoReady) {
-      return []
-    }
-
-    let ret = []
-
-    for (let lang of this._typo) {
-      ret = ret.concat(lang.suggest(word))
-    }
-
-    return ret
-  }
-
-  // END SPELLCHECKER
 
   // SEARCH FUNCTIONS
   // This class only acts as a pass-through
@@ -671,96 +573,6 @@ class ZettlrRenderer {
       this.showPreview()
     }
   }
-
-  /**
-   * Triggered when a file or dir is dropped on a dir.
-   * @param  {Integer} from Hash of the source file/dir.
-   * @param  {Integer} to   Where to move? (Hash)
-   * @return {void}      Nothing to return.
-   */
-  requestMove (from, to) { this._ipc.send('request-move', { 'from': from, 'to': to }) }
-
-  /**
-   * Requests the opening of another file in editor.
-   * @param  {Integer} hash The hash of the file to be loaded.
-   * @return {void}      Nothing to return.
-   */
-  requestFile (hash) { this._ipc.send('file-get', hash) }
-
-  /**
-   * Tells the main to tell the directory to sort itself
-   * @param  {Number} hash The hash of the directory to be sorted
-   * @param  {String} type Either time or name
-   */
-  sortDir (hash, type) { this._ipc.send('dir-sort', { 'hash': hash, 'type': type }) }
-
-  /**
-   * Executed when a user has finished typing a new file name.
-   * @param  {String} name The new name
-   * @param  {Integer} hash The containing dir's hash
-   * @return {void}      Nothing to return.
-   */
-  requestNewFile (name, hash) { this._ipc.send('file-new', { 'name': name, 'hash': hash }) }
-
-  /**
-   * Executed when a user has finished typing a new dir name.
-   * @param  {String} name The new name
-   * @param  {Integer} hash The containing dir's hash
-   * @return {void}      Nothing to return.
-   */
-  requestNewDir (name, hash) { this._ipc.send('dir-new', { 'name': name, 'hash': hash }) }
-
-  /**
-   * Executed when a user has finished typing a new virtual directory name.
-   * @param  {String} name The virtual directory's name
-   * @param  {Integer} hash The parent directory's hash
-   * @return {void}      No return.
-   */
-  requestNewVirtualDir (name, hash) { this._ipc.send('dir-new-vd', { 'name': name, 'hash': hash }) }
-
-  /**
-   * Executed when the user clicks on a filetype to export to.
-   * @param  {Integer} hash The hash of the file to be exported
-   * @param  {String} ext  Either "odt", "docx", "html" or "pdf".
-   * @return {void}      Nothing to return.
-   */
-  requestExport (hash, ext) { this._ipc.send('export', { 'hash': hash, 'ext': ext }) }
-
-  /**
-   * Requests a rename of a directory.
-   * @param  {String} val  The new name.
-   * @param  {Integer} hash The directory's identifier.
-   * @return {void}      Nothing to return.
-   */
-  requestDirRename (val, hash) { this._ipc.send('dir-rename', { 'hash': hash, 'name': val }) }
-
-  /**
-   * Request a rename of a file.
-   * @param  {String} val  The new name
-   * @param  {Integer} hash The identifier of the file.
-   * @return {void}      Nothing to return.
-   */
-  requestFileRename (val, hash) { this._ipc.send('file-rename', { 'hash': hash, 'name': val }) }
-
-  /**
-   * Called by the dialog when the user saves the settings.
-   * @param  {Object} cfg A correct configuration object to be sent to main.
-   * @return {void}     Nothing to return.
-   */
-  saveSettings (cfg) { this._ipc.send('update-config', cfg) }
-
-  /**
-   * Called by the dialog when the user saves the settings.
-   * @param  {Object} cfg An object to be sent to main, containing properties and hash attributes.
-   * @return {void}     Nothing to return.
-   */
-  saveProjectSettings (cfg) { this._ipc.send('update-project-properties', cfg) }
-
-  /**
-   * Sends the new tag-object to main.
-   * @param  {Object} tags The tags to be sent
-   */
-  saveTags (tags) { this._ipc.send('update-tags', tags) }
 
   /**
    * Opens a new file
@@ -909,18 +721,6 @@ class ZettlrRenderer {
   setLocale (lang) { this._lang = lang }
 
   /**
-   * Sets the Aff-File contents
-   * @param {String} affFile The file contents
-   */
-  setAff (affFile) { this._typoAff = affFile }
-
-  /**
-   * Sets the Dic-File contents
-   * @param {String} dicFile The file contents
-   */
-  setDic (dicFile) { this._typoDic = dicFile }
-
-  /**
    * Returns the toolbar object
    * @return {ZettlrToolbar} The current toolbar
    */
@@ -1035,11 +835,17 @@ class ZettlrRenderer {
   }
 
   /**
-   * Sends a command to Main (only used in ZettlrPreview for searching)
-   * @param  {String} command The command to be sent
-   * @param  {Mixed} [content={}] The content belonging to the sent command, can be empty
+   * Updates the list of IDs available for autocomplete
+   * @param {Array} idList An array containing all available IDs.
    */
-  send (command, content = {}) { this._ipc.send(command, content) }
+  setCiteprocIDs (idList) { this._editor.setCiteprocIDs(idList) }
+
+  /**
+   * Gets called whenever a new bibliography comes from main, and we need to
+   * update it here.
+   * @param {Object} bib A new citeproc bibliography object.
+   */
+  setBibliography (bib) { this._attachments.refreshBibliography(bib) }
 
   /**
    * Simply indicates to main to set the modified flag.

@@ -19,6 +19,8 @@
 const fs = require('fs')
 const path = require('path')
 const uuid = require('uuid/v5')
+const EventEmitter = require('events')
+const ZettlrValidation = require('../common/zettlr-validation.js')
 const { app } = require('electron')
 const { ignoreFile, isDir, isDictAvailable } = require('../common/zettlr-helpers.js')
 const COMMON_DATA = require('../common/data.json')
@@ -29,19 +31,18 @@ const COMMON_DATA = require('../common/data.json')
  * variables. Basically, this class tells Zettlr what the user wants and what
  * the environment Zettlr is running in is capable of.
  */
-class ZettlrConfig {
+class ZettlrConfig extends EventEmitter {
   /**
     * Preset sane defaults, then load the config and perform a system check.
     * @param {Zettlr} parent Parent Zettlr object.
     */
   constructor (parent) {
+    super() // Initiate the emitter
     this.parent = parent
     this.configPath = app.getPath('userData')
     this.configFile = path.join(this.configPath, 'config.json')
     this.config = null
-
-    // Environment variables
-    this.env = {}
+    this._rules = [] // This array holds all validation rules
 
     // Additional environmental paths (for locating LaTeX and Pandoc)
     if (process.platform === 'win32') {
@@ -77,6 +78,7 @@ class ZettlrConfig {
       // UI related options
       'darkTheme': false,
       'snippets': false,
+      'sorting': 'natural', // Can be natural or based on ASCII values
       'muteLines': true, // Should the editor mute lines in distraction free mode?
       'combinerState': 'collapsed', // collapsed = Preview or directories visible --- expanded = both visible
       // Export options
@@ -86,7 +88,9 @@ class ZettlrConfig {
         'dir': 'temp', // Can either be "temp" or "cwd" (current working directory)
         'stripIDs': true, // Strip ZKN IDs such as @ID:<id>
         'stripTags': false, // Strip tags a.k.a. #tag
-        'stripLinks': 'full' // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
+        'stripLinks': 'full', // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
+        'cslLibrary': '', // Path to a CSL JSON library file
+        'cslStyle': '' // Path to a CSL Style file
       },
       // PDF options (for all documents; projects will copy this object over)
       'pdf': {
@@ -101,7 +105,9 @@ class ZettlrConfig {
         'margin_unit': 'cm',
         'lineheight': '1.5', // Default: 150% line height
         'mainfont': 'Times New Roman', // Main font
-        'fontsize': 12 // Will be translated to pt
+        'sansfont': 'Arial', // Sans font, used, e.g. for headings
+        'fontsize': 12, // Will be translated to pt
+        'textpl': '' // Can be used to store a custom TeX template
       },
       // Zettelkasten stuff (IDs, as well as link matchers)
       'zkn': {
@@ -109,6 +115,20 @@ class ZettlrConfig {
         'idGen': '%Y%M%D%h%m%s',
         'linkStart': '[[',
         'linkEnd': ']]'
+      },
+      // Editor related stuff
+      'editor': {
+        'autoCloseBrackets': true
+      },
+      'display': {
+        'imageWidth': 100, // Maximum preview image width
+        'imageHeight': 100, // Maximum preview image height
+        'renderCitations': true,
+        'renderIframes': true,
+        'renderImages': true,
+        'renderLinks': true,
+        'renderMath': true,
+        'renderTasks': true
       },
       // Language
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.
@@ -126,6 +146,12 @@ class ZettlrConfig {
     // Remove potential dead links to non-existent files and dirs
     this.checkPaths()
 
+    // Boot up the validation rules
+    let rules = require('../common/validation.json')
+    for (let key in rules) {
+      this._rules.push(new ZettlrValidation(key, rules[key]))
+    }
+
     // Put the attachment extensions into the global so that the helper
     // function isAttachment() can grab them
     global.attachmentExtensions = this.config.attachmentExtensions
@@ -139,6 +165,14 @@ class ZettlrConfig {
       // The setter is a simply pass-through
       set: (key, val) => {
         return this.set(key, val)
+      },
+      // Enable global event listening to updates of the config
+      on: (evt, callback) => {
+        this.on(evt, callback)
+      },
+      // Also do the same for the removal of listeners
+      off: (evt, callback) => {
+        this.off(evt, callback)
       }
     }
   }
@@ -223,23 +257,6 @@ class ZettlrConfig {
         process.env.PATH += delim + path.dirname(this.get('pandoc'))
       }
     }
-
-    // This function returns the platform specific template dir for pandoc
-    // template files. This is based on the electron-builder options
-    // See https://www.electron.build/configuration/contents#extraresources
-    // Quote: "Contents/Resources for MacOS, resources for Linux and Windows"
-    let dir = path.dirname(app.getPath('exe')) // Get application directory
-
-    if (process.platform === 'darwin') {
-      // The executable lies in Contents/MacOS --> navigate up a second time
-      // macos is capitalized "Resources", not "resources" in lowercase
-      dir = path.join(path.dirname(dir), 'Resources')
-    } else {
-      dir = path.join(dir, 'resources')
-    }
-
-    // Write the templateDir into the environment variables
-    this.env.templateDir = path.join(dir, 'pandoc')
 
     // Finally, check whether or not a UUID exists, and, if not, generate one.
     if (!this.config.uuid) {
@@ -357,19 +374,6 @@ class ZettlrConfig {
   }
 
   /**
-    * Returns an environment variable
-    * @param  {String} attr The environment variable to be returned.
-    * @return {Mixed}      Either the variable's value or null.
-    */
-  getEnv (attr) {
-    if (this.env.hasOwnProperty(attr)) {
-      return this.env[attr]
-    } else {
-      return null
-    }
-  }
-
-  /**
     * Returns the language (but always specified in the form <main>_<sub>,
     * b/c we rely on it). If no "sub language" is given (e.g. only en, fr or de),
     * then we assume the primary language (e.g. this function returns en_US for en,
@@ -445,7 +449,7 @@ class ZettlrConfig {
     */
   getDictionaries () {
     // First dynamically enumerate all files that come shipped with the app.
-    let scanfolder = path.join(__dirname, '../renderer/assets/dict')
+    let scanfolder = path.join(__dirname, './assets/dict')
     let dirs = fs.readdirSync(scanfolder)
     let dictLangs = []
     for (let d of dirs) {
@@ -480,8 +484,9 @@ class ZettlrConfig {
     */
   set (option, value) {
     // Don't add non-existent options
-    if (this.config.hasOwnProperty(option)) {
+    if (this.config.hasOwnProperty(option) && this._validate(option, value)) {
       this.config[option] = value
+      this.emit('update') // Emit an event to all listeners
       return true
     }
 
@@ -499,8 +504,9 @@ class ZettlrConfig {
       }
 
       // Set the nested property
-      if (cfg.hasOwnProperty(prop)) {
+      if (cfg.hasOwnProperty(prop) && this._validate(option, value)) {
         cfg[prop] = value
+        this.emit('update') // Emit an event to all listeners
         return true
       }
     }
@@ -545,6 +551,8 @@ class ZettlrConfig {
         }
       }
     }
+
+    this.emit('update') // Emit an event to all listeners
   }
 
   /**
@@ -566,6 +574,20 @@ class ZettlrConfig {
     this.config['openPaths'] = f.concat(d)
 
     return this
+  }
+
+  /**
+   * Validates a key's value based upon previously set up validation rules
+   * @param  {string} key   The key (can be dotted) to be validated
+   * @param  {mixed} value The value to be validated
+   * @return {Boolean}       False, if a given validation failed, otherwise true.
+   */
+  _validate (key, value) {
+    let rule = this._rules.find(elem => elem.getKey() === key)
+    if (rule) { // There is a rule for this key, so validate
+      return rule.validate(value)
+    }
+    return true // There are some options for which there is no validation.
   }
 }
 

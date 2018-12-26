@@ -74,6 +74,11 @@ class ZettlrWindow {
       minHeight: 450,
       show: false,
       icon: 'icons/png/64x64.png',
+      webPreferences: {
+        // Zettlr needs all the node features, so in preparation for Electron
+        // 5.0 we'll need to explicitly request it.
+        nodeIntegration: true
+      },
       backgroundColor: '#fff',
       scrollBounce: true, // The nice scrolling effect for macOS
       defaultEncoding: 'utf8' // Why the hell does this default to ISO?
@@ -82,6 +87,11 @@ class ZettlrWindow {
     // On macOS create a chromeless window with the window controls.
     if (process.platform === 'darwin') {
       winConf.titleBarStyle = 'hiddenInset'
+    }
+
+    // Remove the frame on Linux and Windows
+    if (process.platform === 'linux' || process.platform === 'win32') {
+      winConf.frame = false
     }
 
     // First create a new browserWindow
@@ -105,6 +115,7 @@ class ZettlrWindow {
 
     // Emitted when the window is closed.
     this._win.on('closed', () => {
+      global.mainWindow = null // Unset the global
       this.close()
     })
 
@@ -169,6 +180,11 @@ class ZettlrWindow {
 
     // Set the application menu
     this._menu = new ZettlrMenu(this)
+    this._menu.set()
+
+    // Push the window into the globals that the menu for instance can access it
+    // to send commands.
+    global.mainWindow = this._win
 
     return this
   }
@@ -224,6 +240,16 @@ class ZettlrWindow {
     }
 
     return this
+  }
+
+  /**
+   * Shows a popup application menu at the specified coordinates
+   * @param  {number} x The x-position of the menu
+   * @param  {number} y The y-position of the menu
+   * @return {void}   Does not return
+   */
+  popupMenu (x, y) {
+    this._menu.popup(x, y)
   }
 
   /**
@@ -314,7 +340,7 @@ class ZettlrWindow {
     * The currently opened file's contents have changed on disk -- reload?
     * @return {Integer} 0 (Do not replace the file) or 1 (Replace the file)
     */
-  askReplaceFile () {
+  askReplaceFile (callback) {
     let options = {
       type: 'question',
       title: trans('system.replace_file_title'),
@@ -327,15 +353,8 @@ class ZettlrWindow {
       defaultId: 1
     }
 
-    let ret = dialog.showMessageBox(this._win, options)
-
-    // ret can have three status: cancel = 0, save = 1, omit = 2.
-    // To keep up with semantics, the function "askSaveChanges" would
-    // naturally return "true" if the user wants to save changes and "false"
-    // - so how deal with "omit" changes?
-    // Well I don't want to create some constants so let's just leave it
-    // with these three values.
-    return (ret === 1)
+    // Asynchronous message box to not block the main process
+    dialog.showMessageBox(this._win, options, callback)
   }
 
   /**
@@ -366,34 +385,33 @@ class ZettlrWindow {
   }
 
   /**
-    * Shows the dialog for importing files from the disk.
-    * @return {Array}          An array containing all selected paths or undefined.
-    */
-  askFile () {
-    let startDir = app.getPath('documents')
-    if (isDir(global.config.get('dialogPaths.askFileDialog'))) {
-      startDir = global.config.get('dialogPaths.askFileDialog')
-    }
+   * Shows the dialog for importing files from the disk.
+   * @param  {Array}  [filters=null]   An array of extension filters.
+   * @param  {Boolean} [multiSel=false] Determines if multiple files are allowed
+   * @param {String} [startDir]       The starting directory
+   * @return {Array}                   An array containing all selected files.
+   */
+  askFile (filters = null, multiSel = false, startDir = global.config.get('dialogPaths.askFileDialog')) {
+    // Sanity check for default start directory.
+    if (!isDir(startDir)) startDir = app.getPath('documents')
 
-    let formats = require('../common/data.json').import_files
-    let fltr = []
-    for (let f of formats) {
-      // The import_files array has the structure "pandoc format" "readable format" "extensions"...
-      // Here we set index 1 as readable name and all following elements (without leading dots)
-      // as extensions
-      fltr.push({ 'name': f[1], 'extensions': f.slice(2).map((val) => { return val.substr(1) }) })
-    }
-    fltr.push({ 'name': trans('system.all_files'), 'extensions': [ '*' ] })
+    // Fallback filter: All files
+    if (!filters) filters = [{ 'name': trans('system.all_files'), 'extensions': ['*'] }]
 
-    let ret = dialog.showOpenDialog(this._win, {
+    // Prepare options
+    let opt = {
       'title': trans('system.open_file'),
       'defaultPath': startDir,
       'properties': [
-        'openFile',
-        'multiSelections'
+        'openFile'
       ],
-      'filters': fltr
-    }) || [] // In case the dialog spits out an undefined we need a default array
+      'filters': filters
+    }
+
+    // Should multiple selections be allowed?
+    if (multiSel) opt.properties.push('multiSelections')
+
+    let ret = dialog.showOpenDialog(this._win, opt) || [] // In case the dialog spits out an undefined we need a default array
 
     // Save the path of the containing dir of the first file into the config
     if (ret.length > 0 && isDir(path.dirname(ret[0]))) {

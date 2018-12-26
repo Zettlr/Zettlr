@@ -1,0 +1,22 @@
+// Dark input styles
+
+// As :not(.dialog) doesn't seem to work, let's simply namespace the dark inputs
+// to the popup windows, because there won't be any … wait, there SHOULDN'T be
+// anything outside of these. Except checkboxes in the editor, but these should
+// stay default-styled (nobody needs a switch-todo list, amirite?).
+.popup {
+  .cb-toggle {
+    .toggle {
+      background-color: @grey-6;
+      &:before { background-color: @grey-4; }
+    }
+    input:checked + .toggle { background-color: darken(@green-0, 10%); }
+  }
+
+  // Dark slider styles
+  input[type=range] {
+    &::-webkit-slider-runnable-track { background: @grey-6; }
+    &::-webkit-slider-thumb { background: darken(@green-0, 10%); }
+    &:focus::-webkit-slider-runnable-track { background: @grey-6; }
+ }
+}

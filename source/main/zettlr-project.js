@@ -49,12 +49,16 @@ class ZettlrProject {
         'margin_unit': 'cm',
         'lineheight': '1.2',
         'mainfont': 'Times New Roman',
+        'sansfont': 'Arial',
         'fontsize': 12,
         'toc': true, // Default: generate table of contents
         'tocDepth': 2, // Default: evaluate until level 2
-        'titlepage': true // Generate a title page by default
+        'titlepage': true, // Generate a title page by default
+        'textpl': '' // Can be used to store a custom TeX template
       },
-      'title': this._dir.name // Default project title is the directory's name
+      'title': this._dir.name, // Default project title is the directory's name
+      'format': 'pdf', // Default export format: pdf.
+      'cslStyle': '' // A CSL style file, if applicable.
     }
     this._cfg = null
     this._projectFile = path.join(this._dir.path, PROJECT_FILE)
@@ -102,8 +106,12 @@ class ZettlrProject {
     for (let file of files) {
       // Directly make all image paths absolute to prevent errors if used
       // in nested project directories (in which this._dir.path is not the
-      // same for all files).
-      contents.push(file.read({ 'absoluteImagePaths': true }))
+      // same for all files). Also make the footnotes unique to prevent
+      // assigning errors.
+      contents.push(file.read({
+        'absoluteImagePaths': true,
+        'uniqueFootnotes': true
+      }))
     }
 
     // Make one string
@@ -118,7 +126,7 @@ class ZettlrProject {
 
     // Start up the Exporter
     let opt = {
-      'format': 'pdf', // Which format: "html", "docx", "odt", "pdf"
+      'format': this._cfg.format, // Which format: "html", "docx", "odt", "pdf"
       'file': tempfile, // The file to be exported
       'dest': this._dir.path, // On project exports, always dir path
       'stripIDs': true,
@@ -127,7 +135,8 @@ class ZettlrProject {
       'pdf': this._cfg.pdf,
       'title': this._cfg.title,
       'author': this._cfg.pdf.author,
-      'keywords': this._cfg.pdf.keywords
+      'keywords': this._cfg.pdf.keywords,
+      'cslStyle': this._cfg.cslStyle
     }
 
     try {

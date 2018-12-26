@@ -14,7 +14,7 @@
  */
 
 const { trans } = require('../common/lang/i18n.js')
-const { formatDate } = require('../common/zettlr-helpers.js')
+const { formatDate, isFile } = require('../common/zettlr-helpers.js')
 const { exec } = require('child_process')
 const commandExists = require('command-exists').sync // Need to use here because we cannot rely on the config's availability
 const path = require('path')
@@ -34,7 +34,6 @@ function ExportError (msg, name = 'Exporting error') {
 
 /**
  * ZettlrExport is a stateless class that gets invoked via the constructor.
- * TODO: Failsafe-checks for options!
  */
 class ZettlrExport {
   /**
@@ -90,6 +89,10 @@ class ZettlrExport {
     // If we have PDF export, we need a template file
     this.textpl = ''
 
+    // Prevent errors if the PDF formats are not given (b/c one only wants to
+    // export to non-pdf formats)
+    if (!this.options.hasOwnProperty('pdf')) this.options.pdf = {}
+
     // Second make sure pandoc is installed. Without, only HTML is possible
     // through showdown.
     if (!commandExists('pandoc') && this.options.format !== 'html') {
@@ -112,6 +115,16 @@ class ZettlrExport {
       this.options.pdf.titlepage = false
     }
 
+    // Check the citeproc availability
+    this._citeprocOptions = ''
+    if (isFile(global.config.get('export.cslLibrary'))) {
+      this._citeprocOptions += `--filter pandoc-citeproc --bibliography "${global.config.get('export.cslLibrary')}"`
+    }
+
+    if (this.options.hasOwnProperty('cslStyle') && isFile(this.options.cslStyle)) {
+      this._citeprocOptions += ` --csl "${this.options.cslStyle}"`
+    }
+
     //  Third prepare the export (e.g., strip IDs, tags or other unnecessary stuff)
     this._prepareFile()
 
@@ -123,10 +136,6 @@ class ZettlrExport {
     switch (this.options.format) {
       case 'html':
         this._prepareHTML()
-        break
-      case 'odt':
-      case 'docx':
-        this._prepareWordProcessor()
         break
       case 'pdf':
         this._preparePDF()
@@ -151,6 +160,8 @@ class ZettlrExport {
       case 'org':
       case 'textile':
       case 'mediawiki':
+      case 'docx':
+      case 'odt':
         this._prepareStandardExport()
         break
       default:
@@ -204,8 +215,14 @@ class ZettlrExport {
    */
   _buildLatexTpl () {
     this.textpl = path.join(this.options.dest, 'template.latex')
+    let file = path.join(__dirname, './assets/export.tex')
     let pdf = this.options.pdf // Retrieve the PDF options
-    let cnt = fs.readFileSync(path.join(__dirname, './assets/export.tex'), 'utf8')
+
+    // If a textpl is given, read this instead of the builtin template
+    if (pdf.hasOwnProperty('textpl') && isFile(pdf.textpl)) {
+      file = pdf.textpl
+    }
+    let cnt = fs.readFileSync(file, 'utf8')
     // Do updates to the template
     // General options
     cnt = cnt.replace('%PAGE_NUMBERING%', pdf.pagenumbering)
@@ -219,6 +236,7 @@ class ZettlrExport {
 
     // Font setup
     cnt = cnt.replace('%MAIN_FONT%', pdf.mainfont)
+    cnt = cnt.replace('%SANS_FONT%', pdf.sansfont)
     cnt = cnt.replace('%LINE_SPACING%', pdf.lineheight)
     cnt = cnt.replace('%FONT_SIZE%', pdf.fontsize + 'pt')
 
@@ -257,15 +275,6 @@ class ZettlrExport {
   }
 
   /**
-   * Prepares the export via pandoc using a reference document (e.g., odt or docx)
-   */
-  _prepareWordProcessor () {
-    // -s is the standalone flag
-    this.tpl = '--reference-doc="' + path.join(this.options.tplDir, 'template.' + this.options.format) + '" -s'
-    this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} -t ${this.options.format} -o "${this.targetFile}"`
-  }
-
-  /**
    * This prepares all file exports except HTML, PDF, DOCX, and ODT.
    */
   _prepareStandardExport () {
@@ -277,6 +286,8 @@ class ZettlrExport {
         this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + '.revealjs.htm')
         break
       case 'rtf':
+      case 'odt':
+      case 'docx':
         standalone = '-s' // Must produce a standalone
         break
       case 'latex':
@@ -287,8 +298,7 @@ class ZettlrExport {
         this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + '.txt')
         break
     }
-
-    this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} -t ${this.options.format} ${standalone} -o "${this.targetFile}"`
+    this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${this._citeprocOptions} -t ${this.options.format} ${standalone} -o "${this.targetFile}"`
   }
 
   /**
@@ -302,7 +312,7 @@ class ZettlrExport {
     // through the xelatex engine manually and can let pandoc do the work.
     let toc = (this.options.pdf.toc) ? '--toc' : ''
     let tocdepth = (this.options.pdf.tocDepth) ? '--toc-depth=' + this.options.pdf.tocDepth : ''
-    this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${toc} ${tocdepth} --pdf-engine=xelatex -o "${this.targetFile}"`
+    this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${toc} ${tocdepth} ${this._citeprocOptions} --pdf-engine=xelatex -o "${this.targetFile}"`
   }
 
   /**
@@ -398,10 +408,20 @@ class ZettlrExport {
       fs.writeFileSync(this.targetFile, tpl, 'utf8')
     }
 
-    require('electron').shell.openItem(this.targetFile)
+    // The user may pass an optional autoOpen property. If not present or set to
+    // true, the file will be opened automatically. If present and set to false,
+    // it'll do nothing.
+    if (!this.options.hasOwnProperty('autoOpen') || this.options.autoOpen) {
+      require('electron').shell.openItem(this.targetFile)
+    }
   }
 }
 
+/**
+ * Returns a new object of class ZettlrExport.
+ * @param  {Object} options An options object compatible to ZettlrExport.
+ * @return {ZettlrExport}         An exporter instance
+ */
 function makeExport (options) {
   return new ZettlrExport(options)
 }

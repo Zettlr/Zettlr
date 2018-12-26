@@ -29,7 +29,7 @@ class ZettlrAttachment {
    * @param {String} fname  The full path to the attachment.
    */
   constructor (parent, fname) {
-    this.dir = parent
+    this.parent = parent
     this.path = fname
     this.name = path.basename(this.path)
     this.hash = hash(this.path)
@@ -75,6 +75,21 @@ class ZettlrAttachment {
     }
 
     return false
+  }
+
+  /**
+   * Returns the attachment's metadata
+   * @return {Object} An object containing only the metadata fields
+   */
+  getMetadata () {
+    return {
+      'parent': null, // No parent needed for attachments, b/c never accessed in the renderer
+      'path': this.path,
+      'name': this.name,
+      'hash': this.hash,
+      'ext': this.ext,
+      'canDrag': this.canDrag
+    }
   }
 
   /**

@@ -145,10 +145,11 @@ class ZettlrPreview {
 
       let sort = (d.type === 'directory' || d.type === 'virtual-directory') ? `data-sorting="${d.sorting}" ` : ''
       let selected = (this._selectedFile && this._selectedFile === d.hash) ? ` selected` : ''
+      let id = (d.id) ? `data-id=${d.id}` : ''
       let snippets = (this._snippets) ? ' snippets' : ''
       let vdclass = (inVirtualDir) ? ' vd-file' : '' // File is not actually present in this "dir"
       let vdhashAttr = (inVirtualDir && vdhash) ? ' data-vd-hash="' + vdhash + '"' : '' // For context menu actions we need to pass vd-hash, b/c accessing parent will not work.
-      let elem = `<li class="${d.type}${selected}${snippets}${vdclass}" data-hash="${d.hash}" ${sort}${bgcolor}${vdhashAttr}>`
+      let elem = `<li class="${d.type}${selected}${snippets}${vdclass}" ${id} data-hash="${d.hash}" ${sort}${bgcolor}${vdhashAttr}>`
       if (d.type === 'directory' || d.type === 'virtual-directory') {
         // Render a directory
         elem += d.name
@@ -163,7 +164,7 @@ class ZettlrPreview {
           <span class="virtual-directories">
             ${d.children.filter(e => e.type === 'virtual-directory').length} ${trans('gui.virtual_dirs')}
           </span>
-          </p>` // TODO TRANSLATE
+          </p>`
         }
       } else if (d.type === 'file') {
         // Retrieve all tags the file got.
@@ -180,7 +181,8 @@ class ZettlrPreview {
         elem += `<p class="filename">${d.name.substr(0, d.name.lastIndexOf('.'))}</p>${tl}`
 
         if (this._snippets) {
-          elem += `<p class="snippet">
+          let extindicator = (d.ext === '.tex') ? '<span class="tex-indicator">TeX</span>' : ''
+          elem += `<p class="snippet">${extindicator}
           <span class="date">${formatDate(new Date(d.modtime))}</span>`
           if (d.id) elem += ` <span class="id">${d.id}</span>`
           if (d.tags.length > 0) elem += ` <span class="tags" data-tippy-content="${d.tags.join(',\n')}">#${d.tags.length}</span>`
@@ -230,7 +232,7 @@ class ZettlrPreview {
           while (!elem.is('li')) {
             elem = elem.parent()
           }
-          this._renderer.send('file-drag-start', { 'hash': elem.attr('data-hash') })
+          global.ipc.send('file-drag-start', { 'hash': elem.attr('data-hash') })
           return false // Return false to cancel the current drag operation
         }
       }
@@ -268,8 +270,14 @@ class ZettlrPreview {
     * @return {void} No return.
     */
   _act () {
+    // First of all, focus the listcontainer to enable keyboard navigation
+    this._listContainer.focus()
+
     // Activate directories and files respectively.
     this._listContainer.on('click', 'li', (e) => {
+      // focus the listContainer again! (in case it has lost focus to the editor)
+      this._listContainer.focus()
+
       let elem = $(e.target)
       while (!elem.is('li') && !elem.is('body')) {
         // Click may have occurred on a span or strong
@@ -288,7 +296,7 @@ class ZettlrPreview {
             let parentHash = hash(require('path').dirname(par.path))
             this._renderer.requestDir(parentHash)
           }
-        } else {
+        } else if (elem.hasClass('file')) {
           this._renderer.handleEvent('quicklook', { 'hash': elem.attr('data-hash') })
         }
         return
@@ -303,7 +311,9 @@ class ZettlrPreview {
         // Don't re-select an already selected file.
         return
       }
-      this.requestFile(elem.attr('data-hash'))
+
+      // Request the clicked file
+      global.ipc.send('file-get', elem.attr('data-hash'))
     })
 
     this._listContainer.on('mouseenter', 'li.directory', (e) => {
@@ -342,14 +352,15 @@ class ZettlrPreview {
         // We need the hex charcode as HTML entity. jQuery is not as
         // nice as to give it back to us itself.
         let sort = '&#x' + elem.text().charCodeAt(0).toString(16) + ';'
+        let hash = elem.parent().parent().attr('data-hash')
         if (sort === SORT_NAME_UP) {
-          this.sortDir(elem.parent().parent().attr('data-hash'), 'name-down')
+          global.ipc.send('dir-sort', { 'hash': hash, 'type': 'name-down' })
         } else if (sort === SORT_TIME_UP) {
-          this.sortDir(elem.parent().parent().attr('data-hash'), 'time-down')
+          global.ipc.send('dir-sort', { 'hash': hash, 'type': 'time-down' })
         } else if (sort === SORT_NAME_DOWN) {
-          this.sortDir(elem.parent().parent().attr('data-hash'), 'name-up')
+          global.ipc.send('dir-sort', { 'hash': hash, 'type': 'name-up' })
         } else if (sort === SORT_TIME_DOWN) {
-          this.sortDir(elem.parent().parent().attr('data-hash'), 'time-up')
+          global.ipc.send('dir-sort', { 'hash': hash, 'type': 'time-up' })
         }
       })
       $(e.target).append(sortingHeader)
@@ -362,8 +373,40 @@ class ZettlrPreview {
     this._listContainer.on('click', '.taglist .tag', (e) => {
       // Initiate tag searches when the user clicks a tag.
       this._renderer.triggerGlobalSearch('#' + $(e.target).attr('data-tag'))
-      e.target._tippy.hide().destroy() // Also hide the tooltip
+      // Also hide the tooltip if it is still shown
+      if (e.target.hasOwnProperty('_tippy')) e.target._tippy.hide().destroy()
       e.stopPropagation() // Prevent the file itself from being clicked
+    })
+
+    // Enable arrow key navigation
+    this._listContainer.on('keydown', (e) => {
+      if (e.which === 38 || e.which === 40) {
+        // First determine the index of the currently selected element.
+        let index = this._data.findIndex((elem) => { return elem.hash === this._selectedFile })
+
+        let direction = (e.which === 40) ? 1 : -1
+        let toEnd = ((process.platform === 'darwin' && e.metaKey) || (process.platform !== 'darwin' && e.ctrlKey))
+        // In case the user wants to go to the end of the list, reset the index
+        // and reverse the search direction
+        if (toEnd) {
+          if (direction === 1) {
+            index = this._data.length // Index must be 1 higher because it WILL be reduced
+            direction = -1
+          } else {
+            index = -1 // Index must be 1 lower because it WILL be increased
+            direction = 1
+          }
+        }
+
+        do {
+          index += direction
+        } while (this._data[index] && this._data[index].type !== 'file')
+        // Finally request the file
+        if (this._data[index]) {
+          // Request this file
+          this._renderer.requestFile(this._data[index].hash)
+        }
+      }
     })
 
     // Show the arrow button once the mouse pointer gets high enough
@@ -430,23 +473,6 @@ class ZettlrPreview {
       this._scrollIntoView(i)
     }
   }
-
-  /**
-    * Needed for bubbling up the request of a new file
-    * @param  {Integer} hash The hash of the file that's being requested
-    * @return {void}      Nothing to return.
-    */
-  requestFile (hash) {
-    // Request a file from the renderer
-    this._renderer.requestFile(hash)
-  }
-
-  /**
-    * Passes the sorting request to the renderer
-    * @param  {Number} hash The hash of the dir to be sorted
-    * @param  {String} type Either name or time
-    */
-  sortDir (hash, type) { this._renderer.sortDir(hash, type) }
 
   /**
     * Is the preview pane currently hidden?
@@ -608,9 +634,8 @@ class ZettlrPreview {
 
     this._renderer.searchProgress(this._currentSearchIndex, this._hashes.length)
 
-    // TODO: Move out send-methods from all files except renderer!
     // Send a request to the main process and handle it afterwards.
-    this._renderer.send('file-search', {
+    global.ipc.send('file-search', {
       'hash': this._hashes[this._currentSearchIndex],
       'terms': this._currentSearch
     })

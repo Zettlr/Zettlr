@@ -72,6 +72,39 @@ function flattenDirectoryTree (tree, newarr = []) {
 }
 
 /**
+ * Helper function to sort files by ascii characters
+ * @param  {ZettlrFile} a A ZettlrFile exposing a name property
+ * @param  {ZettlrFile} b A ZettlrFile exposing a name property
+ * @return {number}   0, 1, or -1, depending upon what the comparision yields.
+ */
+function asciiSorting (a, b) {
+  // Negative return: a is smaller b (case insensitive)
+  if (a.name.toLowerCase() < b.name.toLowerCase()) {
+    return -1
+  } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
+    return 1
+  } else {
+    return 0
+  }
+}
+
+/**
+ * Helper function to sort files by modification time
+ * @param  {ZettlrFile} a A ZettlrFile exposing a modtime property
+ * @param  {ZettlrFile} b A ZettlrFile exposing a modtime property
+ * @return {number}   0, 1, or -1, depending upon what the comparision yields.
+ */
+function dateSorting (a, b) {
+  if (a.modtime < b.modtime) {
+    return -1
+  } else if (a.modtime > b.modtime) {
+    return 1
+  } else {
+    return 0
+  }
+}
+
+/**
 * This function can sort an array of ZettlrFile and ZettlrDir objects
 * @param  {Array} arr An array containing only ZettlrFile, ZettlrVirtualDirectory and ZettlrDir objects
 * @param {String} [type='name-up'] The type of sorting - can be time-up, time-down, name-up or name-down
@@ -83,76 +116,54 @@ function sort (arr, type = 'name-up') {
   let d = []
   let vd = []
 
+  // Should we use natural sorting or ascii?
+  let useNatural = (global.config && global.config.get('sorting') === 'natural')
+
+  // Create a collator for long lists, using the app-lang in BCP-47, and en as fallback
+  let coll = new Intl.Collator([ global.config.get('app_lang').replace(/_/, '-'), 'en' ], { 'numeric': true })
+
+  // We need a buffer function because compare() expects strings, not objects
+  let naturalSorting = (a, b) => { return coll.compare(a.name, b.name) }
+
+  // Write in the sortingFunc whatever we should be using
+  let sortingFunc = (useNatural) ? naturalSorting : asciiSorting
+
+  // Split up the children list
   for (let c of arr) {
-    if (c.type === 'file') {
-      f.push(c)
-    } else if (c.type === 'directory') {
-      d.push(c)
-    } else if (c.type === 'virtual-directory') {
-      vd.push(c)
+    switch (c.type) {
+      case 'file':
+        f.push(c)
+        break
+      case 'directory':
+        d.push(c)
+        break
+      case 'virtual-directory':
+        vd.push(c)
+        break
     }
   }
 
-  // Then sort the directories (always based on name)
-  d.sort((a, b) => {
-    // Negative return: a is smaller b (case insensitive)
-    if (a.name.toLowerCase() < b.name.toLowerCase()) {
-      return -1
-    } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
-      return 1
-    } else {
-      return 0
-    }
-  })
+  // Sort the directories (always based on name)
+  d.sort(sortingFunc)
 
-  // The virtual directories (also by name)
-  vd.sort((a, b) => {
-    // Negative return: a is smaller b (case insensitive)
-    if (a.name.toLowerCase() < b.name.toLowerCase()) {
-      return -1
-    } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
-      return 1
-    } else {
-      return 0
-    }
-  })
+  // Then virtual directories (also by name)
+  vd.sort(sortingFunc)
 
-  // Now sort the files according to the type
-  f.sort((a, b) => {
-    if (type === 'name-up') {
-      if (a.name.toLowerCase() < b.name.toLowerCase()) {
-        return -1
-      } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
-        return 1
-      } else {
-        return 0
-      }
-    } else if (type === 'name-down') {
-      if (a.name.toLowerCase() < b.name.toLowerCase()) {
-        return 1
-      } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
-        return -1
-      } else {
-        return 0
-      }
-    } else if (type === 'time-up') {
-      if (a.modtime < b.modtime) {
-        return -1
-      } else if (a.modtime > b.modtime) {
-        return 1
-      } else {
-        return 0
-      }
-    } else if (type === 'time-down') {
-      if (a.modtime < b.modtime) {
-        return 1
-      } else if (a.modtime > b.modtime) {
-        return -1
-      } else {
-        return 0
-      }
-    }
-  })
+  // Now sort the files according to the type of sorting
+  switch (type) {
+    case 'name-up':
+      f.sort(sortingFunc)
+      break
+    case 'name-down':
+      f.sort(sortingFunc).reverse()
+      break
+    case 'time-up':
+      f.sort(dateSorting)
+      break
+    case 'time-down':
+      f.sort(dateSorting).reverse()
+      break
+  }
 
   // Return sorted array files -> virtual directories -> directories
   return f.concat(vd).concat(d)
@@ -314,7 +325,7 @@ function isAttachment (p) {
  * @return {Boolean}      True, if a valid hunspell dict was found, otherwise false.
  */
 function isDictAvailable (lang) {
-  let p = path.join(__dirname, '../renderer/assets/dict', lang)
+  let p = path.join(__dirname, '../main/assets/dict', lang)
   try {
     fs.lstatSync(p)
   } catch (e) {
@@ -390,6 +401,38 @@ function makeImgPathsAbsolute (basePath, mdstring) {
   })
 }
 
+/**
+ * Creates a search term (always suitable to be used in new RegExp())
+ * @param  {string} term A string that may contain a regular expression
+ * @param {Array} [injectFlags=['i']] Flags to be injected into the expression
+ * @return {Object}      A search term object with props term and flags.
+ */
+function makeSearchRegEx (term, injectFlags = ['i']) {
+  let re = {}
+
+  // For ease of access you can simply pass the injectFlags as a string of characters
+  if (typeof injectFlags === 'string') injectFlags = injectFlags.split('')
+  // Failesafe
+  if (!Array.isArray(injectFlags)) injectFlags = [injectFlags]
+
+  // Test if we have a regular expression
+  if (/^\/.+?\/.*?/g.test(term)) {
+    // The user wants to do a regex search -> transform
+    let r = term.split('/') // 0 is empty, 1 contains the expression, 2 the flags
+    re.term = r[1]
+    re.flags = r[2].split('').concat(injectFlags)
+  } else {
+    // User wants to do a simple search. Careful: Escape all raw regex chars!
+    // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
+    re.term = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    re.flags = injectFlags
+  }
+
+  // The flags need to be unique
+  re.flags = [...new Set(re.flags)]
+  return new RegExp(re.term, re.flags.join(''))
+}
+
 module.exports = {
   hash,
   flattenDirectoryTree,
@@ -404,5 +447,6 @@ module.exports = {
   isAttachment,
   localiseNumber,
   isDictAvailable,
-  makeImgPathsAbsolute
+  makeImgPathsAbsolute,
+  makeSearchRegEx
 }

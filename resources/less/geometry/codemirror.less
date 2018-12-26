@@ -4,68 +4,125 @@
 .CodeMirror-vscrollbar { cursor:default; }
 
 .CodeMirror {
-    line-height:1.4375;
-    user-select:text;
+  line-height:1.4375;
+  user-select:text;
 
-    pre { padding:0; }
+  pre { padding:0; }
 
-    a.cma {
-        cursor: pointer;
-        &:hover { text-decoration: underline; }
-    }
+  a.cma {
+    cursor: pointer;
+    &:hover { text-decoration: underline; }
+  }
 
-    input[type="checkbox"] {
-        transform: scale(1.2);
-        margin:0.2em;
-    }
+  input[type="checkbox"] {
+    transform: scale(1.2);
+    margin:0.2em;
+  }
 
-    .search-result { background-color: yellow; }
+  .search-result { background-color: yellow; }
 
-    .cm-table {
-        font-family: @font-mono;
-        font-size: @font-mono-size;
-        font-weight:bold;
-    }
+  .cm-table {
+    font-family: @font-mono;
+    font-size: @font-mono-size;
+    font-weight:bold;
+  }
 
-    .size-header-1 { font-size:2em; }
-    .size-header-2 { font-size:1.8em; }
-    .size-header-3 { font-size:1.5em; }
-    .size-header-4 { font-size:1.3em; }
-    .size-header-5 { font-size:1em; }
-    .size-header-6 { font-size:1em; }
+  .size-header-1 {
+    font-size:2em;
+    .CodeMirror-gutter-elt { line-height: 1.5em; }
+  }
+  .size-header-2 {
+    font-size:1.8em;
+    .CodeMirror-gutter-elt { line-height: 1.5em; }
+  }
+  .size-header-3 {
+    font-size:1.5em;
+    .CodeMirror-gutter-elt { line-height: 1.4em; }
+  }
+  .size-header-4 {
+    font-size:1.3em;
+    .CodeMirror-gutter-elt { line-height: 1.3em; }
+  }
+  .size-header-5 { font-size:1em; }
+  .size-header-6 { font-size:1em; }
 
-    .cm-comment,
-    .cm-formatting-task,
-    .cm-fenced-code { font-family: @font-mono; font-size: @font-mono-size; }
+  .cm-comment,
+  .cm-formatting-task,
+  .cm-fenced-code { font-family: @font-mono; font-size: @font-mono-size; }
 
-    .CodeMirror-cursor {
-        width: 2px;
-        border: 0;
-        z-index: 1;
-    }
+  .CodeMirror-cursor {
+    width: 2px;
+    border: 0;
+    z-index: 1;
+  }
 
-    /* Make the formatting characters and escape sequences nearly invisible */
-    .cm-formatting-code,
-    .cm-formatting-code-block,
-    .cm-formatting-quote,
-    .cm-formatting-strong,
-    .cm-formatting-em,
-    .cm-formatting-escape { opacity:.3; }
+  /* Make the formatting characters and escape sequences nearly invisible */
+  .cm-formatting-code,
+  .cm-formatting-code-block,
+  .cm-formatting-quote,
+  .cm-formatting-strong,
+  .cm-formatting-em,
+  .cm-escape-char { opacity:.3; }
 
-    .cm-formatting-list-ul,
-    .cm-formatting-list-ol {
-        font-family: @font-mono;
-        font-size: @font-mono-size;
-    }
+  .cm-formatting-list-ul,
+  .cm-formatting-list-ol {
+    font-family: @font-mono;
+    font-size: @font-mono-size;
+  }
 
-    .cm-url, .cm-link { text-decoration: none; }
+  .cm-url, .cm-link { text-decoration: none; }
 
-    .cm-url.shift, .cm-link.shift { cursor: pointer; }
+  .cm-url.shift, .cm-link.shift { cursor: pointer; }
 
-    .cm-zkn-tag { font-weight:bold; }
+  .cm-zkn-tag { font-weight:bold; }
 
-    .cm-zkn-tag:hover, .cm-zkn-link:hover {
-        text-decoration: underline;
-        cursor:pointer;
-    }
+  .cm-zkn-tag:hover, .cm-zkn-link:hover {
+    text-decoration: underline;
+    cursor:pointer;
+  }
+
+  // Text-folding related stuff
+  .CodeMirror-gutters {
+    background-color: transparent;
+    border: none;
+    left: 0 !important;
+  }
+  .CodeMirror-foldgutter { width: .7em; }
+  .CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
+    cursor: pointer;
+    font-size: 18px;
+  }
+  .CodeMirror-foldgutter-open:after { content: "\25BE"; }
+  .CodeMirror-foldgutter-folded:after { content: "\25B8"; }
+
+  .CodeMirror-foldmarker {
+    border-radius:@border-radius;
+    display: inline-block;
+    font-size: 75%;
+    margin-left: 10px;
+    padding:2px;
+    cursor: pointer;
+    vertical-align: baseline;
+  }
+}
+
+// Hints (tag autocompletion, etc.)
+.CodeMirror-hints {
+  position: absolute;
+  z-index: 10;
+  overflow: hidden;
+  list-style: none;
+
+  margin: 0;
+  padding: 0px;
+
+  max-height: 20em;
+  overflow-y: auto;
+  li.CodeMirror-hint {
+    margin: 0;
+    white-space: pre;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 150%;
+  }
 }

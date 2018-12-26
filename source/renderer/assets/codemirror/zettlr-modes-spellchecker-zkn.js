@@ -85,7 +85,7 @@
           word = word.substr(0, word.length - 1)
         }
 
-        if (window.renderer && !window.renderer.typoCheck(word)) {
+        if (global.typo && !global.typo.check(word)) {
           return 'spell-error' // CSS class: cm-spell-error
         }
 
@@ -112,6 +112,14 @@
   CodeMirror.defineMode('markdown-zkn', function (config, parserConfig) {
     var markdownZkn = {
       token: function (stream, state) {
+        // Immediately check for escape characters
+        // Escape characters need to be greyed out, but not the characters themselves.
+        if (stream.peek() === '\\') {
+          stream.next()
+          return 'escape-char'
+        }
+
+        // Now dig deeper for more tokens
         let zknIDRE = ''
         if (config.hasOwnProperty('zkn') && config.zkn.hasOwnProperty('idRE')) {
           zknIDRE = new RegExp(config.zkn.idRE)
@@ -133,7 +141,20 @@
         }
 
         // First: Tags, in the format of Twitter
-        if (stream.match(zknTagRE)) {
+        if (stream.match(zknTagRE, false)) {
+          // It may be that the tag has been escaped. Due to the nature of this
+          // stream we must back up and advance again, because lookbehinds won't
+          // work here.
+          if (!stream.sol()) {
+            stream.backUp(1)
+            if (stream.next() === '\\') {
+              stream.match(zknTagRE)
+              return null
+            }
+          }
+
+          // At this point we can be sure that this is a tag and not escaped.
+          stream.match(zknTagRE)
           return 'zkn-tag'
         }
 
@@ -153,7 +174,8 @@
         while (stream.next() != null &&
                 !stream.match(zknTagRE, false) &&
                 !stream.match(zknIDRE, false) &&
-                !stream.match(zknLinkRE, false)) { }
+                !stream.match(zknLinkRE, false) &&
+                !stream.match(/\\/, false)) { }
 
         return null
       }
@@ -263,6 +285,11 @@
       {
         open: '```yaml',
         close: '```',
+        // We need regular expressions to keep the YAML mode simple. It now
+        // matches normal YAML blocks as fenced code as well as the Pandoc
+        // metadata blocks
+        // open: /(?<!.)(`{3}yaml|-{3})$/gm,
+        // close: /(?<!.)(`{3}|\.{3})$/gm,
         mode: CodeMirror.getMode(config, 'text/x-yaml'),
         delimStyle: 'formatting-code-block',
         innerStyle: 'fenced-code'

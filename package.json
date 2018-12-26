@@ -9,26 +9,28 @@
         "type": "git",
         "url": "git://github.com/Zettlr/Zettlr.git"
     },
-    "version": "0.20.0",
+    "version": "1.0.0-beta.2",
     "license": "GPL-3.0",
-    "description": "A powerful Markdown Editor with integrated tree view",
+    "description": "A powerful Markdown editor for researchers.",
     "main": "./source/main.js",
     "scripts": {
         "postinstall": "electron-builder install-app-deps",
         "start": "electron .",
         "build:quick": "electron-builder --dir",
         "release:this": "electron-builder",
-        "release:mac": "electron-builder --mac dmg",
-        "release:win": "electron-builder --win nsis",
-        "release:linux": "electron-builder --linux deb rpm",
+        "release:mac": "electron-builder --mac",
+        "release:win": "electron-builder --win",
+        "release:linux": "electron-builder --linux",
         "less": "node scripts/less.js",
-        "docs:build": "esdoc"
+        "handlebars": "node scripts/handlebars.js",
+        "docs:build": "node scripts/docs.js",
+        "docs": "documentation build ./source/main.js -f html -o resources/docs"
     },
     "build": {
-        "appId": "com.zettlr.www",
+        "appId": "com.zettlr.app",
         "productName": "Zettlr",
         "npmRebuild": false,
-        "copyright": "This program is licensed under the GNU GPL v3 license.",
+        "copyright": "Zettlr is licensed under GNU GPL v3.",
         "fileAssociations": [
             {
                 "ext": [
@@ -36,6 +38,7 @@
                     "markdown"
                 ],
                 "name": "Markdown",
+                "mimeType": "text/markdown",
                 "description": "Markdown document",
                 "role": "Editor",
                 "isPackage": false
@@ -48,79 +51,69 @@
         "mac": {
             "category": "public.app-category.productivity",
             "target": "dmg",
-            "icon": "resources/icons/icns/icon.icns",
-            "asar": true,
-            "extraResources": [
-                {
-                    "from": "resources/pandoc",
-                    "to": "pandoc",
-                    "filter": [
-                        "**/*"
-                    ]
-                }
-            ]
+            "artifactName": "Zettlr-macos-x64-${version}.${ext}",
+            "icon": "resources/icons/icns/icon.icns"
         },
         "win": {
             "target": "nsis",
-            "icon": "resources/icons/ico/icon.ico",
-            "asar": true,
-            "extraResources": [
-                {
-                    "from": "resources/pandoc",
-                    "to": "pandoc",
-                    "filter": [
-                        "**/*"
-                    ]
-                }
-            ]
+            "artifactName": "Zettlr-win32-x64-${version}.${ext}",
+            "icon": "resources/icons/ico/icon.ico"
         },
         "linux": {
-            "target": "deb",
+            "target": [
+                "deb",
+                "rpm"
+            ],
+            "artifactName": "Zettlr-linux-x64-${version}.${ext}",
             "synopsis": "Markdown editor",
             "category": "Office",
-            "icon": "resources/icons/png",
-            "asar": true,
-            "extraResources": [
-                {
-                    "from": "resources/pandoc",
-                    "to": "pandoc",
-                    "filter": [
-                        "**/*"
-                    ]
-                }
-            ]
+            "icon": "resources/icons/png"
         },
         "dmg": {
-            "backgroundColor": "rgba(200, 240, 170, 1)",
-            "icon": "resources/icons/icns/icon.icns"
+            "background": "resources/icons/dmg/dmg_back.tiff",
+            "icon": "resources/icons/icns/icon.icns",
+            "contents": [
+                {
+                    "x": 130,
+                    "y": 220
+                },
+                {
+                    "x": 410,
+                    "y": 220,
+                    "type": "link",
+                    "path": "/Applications"
+                }
+            ]
         },
         "nsis": {
             "oneClick": false,
             "perMachine": false,
             "allowElevation": true,
-            "allowToChangeInstallationDirectory": true
+            "allowToChangeInstallationDirectory": true,
+            "uninstallDisplayName": "${productName}"
         },
         "deb": {
             "priority": "optional",
-            "compression": "gz"
+            "compression": "xz"
         },
         "rpm": {
-            "compression": "gz"
+            "compression": "xz"
         }
     },
     "dependencies": {
         "chart.js": "^2.7.2",
         "chokidar": "^2.0.4",
+        "citeproc": "^2.1.210",
         "clusterize.js": "^0.18.1",
-        "codemirror": "^5.39.0",
+        "codemirror": "^5.42.2",
         "command-exists": "^1.2.7",
-        "got": "^9.1.0",
+        "got": "^9.5.0",
         "jquery": "^3.3.1",
-        "katex": "^0.10.0-rc.1",
+        "katex": "^0.10.0",
         "sanitize-filename": "^1.6.1",
-        "semver": "^5.5.0",
+        "semver": "^5.6.0",
         "showdown": "^1.8.6",
-        "tippy.js": "^3.0.0",
+        "tippy.js": "^3.3.0",
         "typo": "^1.0.6",
         "typo-js": "^1.0.3",
         "uuid": "^3.3.2"
@@ -128,10 +121,10 @@
     "devDependencies": {
         "chalk": "^2.4.1",
         "csso": "^3.5.1",
-        "electron": "^3.0.2",
-        "electron-builder": "^20.19.2",
-        "esdoc": "^1.1.0",
-        "esdoc-standard-plugin": "^1.0.0",
-        "less": "^3.5.3"
+        "documentation": "^9.1.1",
+        "electron": "^4.0.0",
+        "electron-builder": "^20.38.2",
+        "handlebars": "^4.0.12",
+        "less": "^3.9.0"
     }
 }

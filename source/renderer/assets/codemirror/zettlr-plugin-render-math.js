@@ -12,7 +12,8 @@
 })(function (CodeMirror) {
   'use strict'
 
-  var mathRE = /^\$\$(.+?)\$\$$|\$(.+?)\$/g // Matches all math blocks and inlines
+  // var mathRE = /^\$\$(.+?)\$\$$|\$(.+?)\$/g // Matches all math blocks and inlines
+  var mathRE = /^\$\$(.+?[^\\])\$\$|(?<=[^\\])\$\$(.+?[^\\])\$\$/g // Matches all inlines with non-escaped double-dollar-signs.
   var mathMarkers = []
 
   CodeMirror.commands.markdownRenderMath = function (cm) {
@@ -52,7 +53,6 @@
       // First get the line and test if the contents contain a math element
       let line = cm.getLine(i)
       if (line === '$$') {
-        console.log(`Found a multiline!`)
         j++
         // Multiline equation
         while (j < cm.lineCount() && cm.getLine(j) !== '$$') {

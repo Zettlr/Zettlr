@@ -116,12 +116,15 @@
         img.onerror = (e) => { img.src = img404 }
 
         // Try it
-        img.src = rel
+        img.src = rel + `?${new Date().getTime()}` // Add a "cachebreaker", thanks to https://stackoverflow.com/a/1077051
       }
-      img.style.maxWidth = '100%'
-      img.style.maxHeight = '100%'
+      // Retrieve the size constraints
+      let width = (cm.getOption('imagePreviewWidth')) ? cm.getOption('imagePreviewWidth') + '%' : '100%'
+      let height = (cm.getOption('imagePreviewHeight') && cm.getOption('imagePreviewHeight') < 100) ? cm.getOption('imagePreviewHeight') + 'vh' : ''
+      img.style.maxWidth = width
+      img.style.maxHeight = height
       img.style.cursor = 'default' // Nicer cursor
-      img.src = url
+      img.src = url + `?${new Date().getTime()}` // Add a "cachebreaker", thanks to https://stackoverflow.com/a/1077051
       img.onclick = (e) => { textMarker.clear() }
 
       // Update the image caption on load to retrieve the real image size.

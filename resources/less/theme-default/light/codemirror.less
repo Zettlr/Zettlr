@@ -5,10 +5,8 @@
     background-color:#ffffff;
     color:rgb(46, 56, 60);
 
-    // TODO: Ugly repetition
     &.cm-stex-mode {
-        font-family: @font-mono;
-        font-size: 100%;
+      font-family: @font-mono;
         .cm-comment    { color: @grey-2; }
         .cm-attribute  { color: @blue-0; }
         .cm-string     { color: @green-0; }
@@ -32,6 +30,7 @@
 .cm-comment, .cm-fenced-code { color:@grey-3; }
 
 .cm-fenced-code, .cm-stex-mode {
+  font-family: @font-mono;
     &.cm-comment    { color: @grey-2; }
     &.cm-attribute  { color: @blue-0; }
     &.cm-string     { color: @green-0; }
@@ -70,11 +69,50 @@
 // cma = code-mirror-anchor
 .cma { color: @blue-0; font-weight: inherit; }
 
-.cm-formatting-escape { color:@grey-3; }
+// citations
+.citeproc-citation {
+  background-color: @grey-0;
+  &.error { color: @fg-error; }
+}
+
+.cm-escape-char { color:@grey-3; }
 
 // Horizontal ruler
 .cm-hr {
   color: @green-0;
   font-family: @font-mono;
   font-weight: bold;
+}
+
+.CodeMirror-foldmarker {
+  background-color: @grey-0;
+  color: @grey-3;
+
+  &:hover { background-color: @grey-1; }
+}
+
+.CodeMirror-guttermarker-subtle { color: #dadada; }
+
+// Hint related stuff
+.CodeMirror-hints {
+  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  border-radius: @border-radius;
+  border: 1px solid @grey-1;
+
+  background: white;
+  font-size: 90%;
+  li.CodeMirror-hint {
+    color: @grey-7;
+
+    &:hover { background-color: @grey-0; }
+  }
+
+  li.CodeMirror-hint-active {
+    background: @green-0;
+    color: @grey-0;
+
+    &:hover { background-color: darken(@green-0, 10%); }
+  }
 }

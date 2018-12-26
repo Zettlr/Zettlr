@@ -33,7 +33,7 @@ class ZettlrToolbar {
     this._div = $('#toolbar')
     this._build()
     this._searchbar = this._div.find('.searchbar').first().find('input').first()
-    this._searchbar.attr('placeholder', trans('gui.find_placeholder'))
+    this._searchbar.attr('placeholder', trans('dialog.find.find_placeholder'))
     this._fileInfo = this._div.find('.file-info')
 
     // Create the progress indicator circle and insert it hidden
@@ -109,8 +109,7 @@ class ZettlrToolbar {
 
     // Enable maximise window only on double-click of the toolbar
     this._div.on('dblclick', (e) => {
-      this._renderer.handleEvent('app-maximise')
-      // console.log(`Doubleclick requested!`)
+      this._renderer.handleEvent('win-maximise')
     })
 
     // Tippify all buttons
@@ -131,6 +130,10 @@ class ZettlrToolbar {
 
     // Append everything to the div.
     for (let elem of tpl) {
+      // Some buttons are only for certain platforms, so don't show them on the
+      // wrong one.
+      if (elem.context && !elem.context.includes(process.platform)) continue
+
       let child = $('<div>').addClass(elem.role)
       if (elem.role === 'button') {
         child.addClass(elem.class)

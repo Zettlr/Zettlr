@@ -16,7 +16,7 @@
   // 1. Markdown URLs in the format [Caption](www.link-target.tld)
   // 2. Standalone links, either beginning with http(s):// or www.
   // 3. Email addresses.
-  var linkRE = /\[(.+?)\]\((.+?)\)|(https?:\/\/\S+|www\.\S+)|([a-z0-9.\-_+]+?@[a-z0-9.\-_+]+\.[a-z]{2,7})/gi
+  var linkRE = /\[([^\]]+?)\]\(([^)]+?)\)|(https?:\/\/\S+|www\.\S+)|([a-z0-9.\-_+]+?@[a-z0-9.\-_+]+\.[a-z]{2,7})/gi
   // Matches [Link](www.xyz.tld) and simple links
   var linkMarkers = []
 

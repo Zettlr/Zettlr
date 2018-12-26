@@ -21,6 +21,7 @@ const path = require('path')
 // Internal classes
 const ZettlrIPC = require('./zettlr-ipc.js')
 const ZettlrWindow = require('./zettlr-window.js')
+const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
 const ZettlrConfig = require('./zettlr-config.js')
 const ZettlrTags = require('./zettlr-tags.js')
 const ZettlrDir = require('./zettlr-dir.js')
@@ -30,6 +31,8 @@ const ZettlrStats = require('./zettlr-stats.js')
 const ZettlrUpdater = require('./zettlr-updater.js')
 const makeExport = require('./zettlr-export.js')
 const ZettlrImport = require('./zettlr-import.js')
+const ZettlrDictionary = require('./zettlr-dictionary.js')
+const ZettlrCiteproc = require('./zettlr-citeproc.js')
 const { i18n, trans } = require('../common/lang/i18n.js')
 const { hash, ignoreDir,
   ignoreFile, isFile, isDir } = require('../common/zettlr-helpers.js')
@@ -57,11 +60,7 @@ class Zettlr {
     this._openPaths = []
 
     // INTERNAL OBJECTS
-    this.window = null // Display content
-    this.ipc = null // Communicate with said content
     this.app = parentApp // Internal pointer to app object
-    this.config = null // Configuration file handler
-    this.watchdog = null // Watchdog object
 
     this.config = new ZettlrConfig(this)
     // Init translations
@@ -77,6 +76,12 @@ class Zettlr {
     // Statistics
     this.stats = new ZettlrStats(this)
 
+    // Citeproc
+    this._citeproc = new ZettlrCiteproc()
+
+    // The updater
+    this._updater = new ZettlrUpdater(this)
+
     // And the window.
     this.window = new ZettlrWindow(this)
     this.openWindow()
@@ -87,10 +92,15 @@ class Zettlr {
     // If there are any, open argv-files
     this.handleAddRoots(global.filesToOpen)
 
-    this._updater = new ZettlrUpdater(this)
+    // Load in the Quicklook window handler class
+    this._ql = new ZettlrQLStandalone()
 
     // Initiate regular polling
     setTimeout(() => {
+      // We have to push this into the background, because otherwise the window
+      // won't open. As usual: Everything time-consuming shouldn't be done in the
+      // first tick of the app.
+      this.dict = new ZettlrDictionary()
       this.poll()
     }, POLL_TIME)
   }
@@ -118,18 +128,24 @@ class Zettlr {
             } else if (isCurrentFile && (e === 'change') && changed) {
               // Current file has changed -> ask to replace and do
               // as the user wishes)
-              if (this.getWindow().askReplaceFile()) {
-                this.ipc.send('file-open', this.getCurrentFile().withContent())
-              }
-            }
-          }
-        }
+              this.getWindow().askReplaceFile((ret) => {
+                // ret can have three status: cancel = 0, save = 1, omit = 2.
+                // To keep up with semantics, the function "askSaveChanges" would
+                // naturally return "true" if the user wants to save changes and "false"
+                // - so how deal with "omit" changes?
+                // Well I don't want to create some constants so let's just leave it
+                // with these three values.
+                if (ret === 1) this.ipc.send('file-open', this.getCurrentFile().withContent())
+              })
+            } // end if current file changed
+          } // end if is scope
+        } // end for
       })
 
       // flush all changes so they aren't processed again next cycle
       this.watchdog.flush()
       // Send a paths update to the renderer to reflect the changes.
-      this.ipc.send('paths-update', this.getPaths())
+      this.ipc.send('paths-update', this.getPathDummies())
     }
 
     setTimeout(() => { this.poll() }, POLL_TIME)
@@ -140,7 +156,7 @@ class Zettlr {
     * @param  {String} msg The message to be sent
     */
   notifyChange (msg) {
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
     this.notify(msg)
   }
 
@@ -149,8 +165,12 @@ class Zettlr {
     * @return {void} Does not return anything.
     */
   shutdown () {
+    // Close all Quicklook Windows
+    this._ql.closeAll()
+    // Save the config and stats
     this.config.save()
     this.stats.save()
+    // Stop the watchdog
     this.watchdog.stop()
     // Perform closing activity in the path.
     for (let p of this._openPaths) {
@@ -272,7 +292,7 @@ class Zettlr {
 
     dir.toggleSorting(arg.type)
 
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
   }
 
   /**
@@ -299,7 +319,7 @@ class Zettlr {
 
     // Create the file
     try {
-      file = dir.newfile(arg.name, this.watchdog)
+      file = dir.newfile(arg.name)
     } catch (e) {
       return this.window.prompt({
         type: 'error',
@@ -309,7 +329,7 @@ class Zettlr {
     }
 
     // Send the new paths and open the respective file.
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
     this.setCurrentFile(file)
     this.ipc.send('file-open', file.withContent())
   }
@@ -329,7 +349,7 @@ class Zettlr {
     }
 
     try {
-      dir = curdir.newdir(arg.name, this.watchdog)
+      dir = curdir.newdir(arg.name)
     } catch (e) {
       return this.window.prompt({
         type: 'error',
@@ -340,7 +360,7 @@ class Zettlr {
 
     // Re-render the directories, and then as well the file-list of the
     // current folder.
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
 
     // Switch to newly created directory.
     this.setCurrentDir(dir)
@@ -360,7 +380,7 @@ class Zettlr {
 
     // Create the vd
     let vd = dir.addVirtualDir(arg.name)
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
     this.setCurrentDir(vd)
   }
 
@@ -425,7 +445,7 @@ class Zettlr {
     }
 
     this._sortPaths()
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
     // Open the newly added path(s) directly.
     if (newDir) { this.setCurrentDir(newDir) }
     if (newFile) { this.sendFile(newFile.hash) }
@@ -454,8 +474,8 @@ class Zettlr {
       // Tell main & renderer to close file references
       this.setCurrentFile(null)
     }
-    file.remove()
-    this.ipc.send('paths-update', this.getPaths())
+    file.remove(true) // Also move the file to the trash
+    this.ipc.send('paths-update', this.getPathDummies())
   }
 
   /**
@@ -498,9 +518,9 @@ class Zettlr {
     // Now that we are save, let's move the current directory to trash.
     this.watchdog.ignoreNext('unlinkDir', dir.path)
 
-    dir.remove()
+    dir.remove(dir, true)
 
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
   }
 
   /**
@@ -515,7 +535,7 @@ class Zettlr {
     }
     if (vd && file) {
       vd.remove(file)
-      this.ipc.send('paths-update', this.getPaths())
+      this.ipc.send('paths-update', this.getPathDummies())
     }
   }
 
@@ -530,14 +550,14 @@ class Zettlr {
       'format': arg.ext, // Which format: "html", "docx", "odt", "pdf"
       'file': file, // The file to be exported
       'dest': (this.config.get('export.dir') === 'temp') ? app.getPath('temp') : file.parent.path, // Either temp or cwd
-      'tplDir': this.config.getEnv('templateDir'),
       'stripIDs': this.config.get('export.stripIDs'),
       'stripTags': this.config.get('export.stripTags'),
       'stripLinks': this.config.get('export.stripLinks'),
       'pdf': this.config.get('pdf'),
       'title': file.name.substr(0, file.name.lastIndexOf('.')),
       'author': this.config.get('pdf').author,
-      'keywords': this.config.get('pdf').keywords
+      'keywords': this.config.get('pdf').keywords,
+      'cslStyle': this.config.get('export.cslStyle')
     }
 
     // Call the exporter.
@@ -558,8 +578,19 @@ class Zettlr {
       return this.notify(trans('system.import_no_directory'))
     }
 
+    // Prepare the list of file filters
+    let formats = require('../common/data.json').import_files
+    let fltr = []
+    for (let f of formats) {
+      // The import_files array has the structure "pandoc format" "readable format" "extensions"...
+      // Here we set index 1 as readable name and all following elements (without leading dots)
+      // as extensions
+      fltr.push({ 'name': f[1], 'extensions': f.slice(2).map((val) => { return val.substr(1) }) })
+    }
+    fltr.push({ 'name': trans('system.all_files'), 'extensions': [ '*' ] })
+
     // First ask the user for a fileList
-    let fileList = this.window.askFile()
+    let fileList = this.window.askFile(fltr, true)
     if (!fileList || fileList.length === 0) {
       // The user seems to have decided not to import anything. Gracefully
       // fail. Not like the German SPD.
@@ -614,23 +645,9 @@ class Zettlr {
     // Move to same location with different name
     dir.move(oldDir, arg.name)
 
-    // A root has been renamed -> reflect in openPaths
-    if (this.getPaths().includes(dir)) {
-      let oP = this.getConfig().get('openPaths')
-      for (let i = 0; i < oP.length; i++) {
-        if (oP[i] === oldPath) {
-          oP[i] = dir.path
-          this.getConfig().set('openPaths', oP)
-          break
-        }
-      }
-    }
+    this.ipc.send('paths-update', this.getPathDummies())
 
-    this.ipc.send('paths-update', this.getPaths())
-
-    if (isCurDir) {
-      this.ipc.send('set-current-dir', dir)
-    }
+    if (isCurDir) this.setCurrentDir(dir)
 
     if (oldPath != null) {
       // Re-set current file in the client
@@ -654,7 +671,7 @@ class Zettlr {
       // Current file should be renamed.
       file = this.getCurrentFile()
       oldpath = file.path
-      file.rename(arg.name, this.getWatchdog())
+      file.rename(arg.name)
 
       // Adapt window title (manually trigger a fileUpdate)
       this.window.fileUpdate()
@@ -662,7 +679,7 @@ class Zettlr {
       // Non-open file should be renamed.
       file = this.findFile({ 'hash': parseInt(arg.hash) })
       oldpath = file.path
-      file.rename(arg.name, this.getWatchdog()) // Done.
+      file.rename(arg.name) // Done.
     }
 
     // A root has been renamed -> reflect in openPaths
@@ -678,9 +695,9 @@ class Zettlr {
     }
 
     // Replace all relevant properties of the renamed file in renderer.
-    this.ipc.send('file-replace', { 'hash': parseInt(arg.hash), 'file': file })
+    this.ipc.send('file-replace', { 'hash': parseInt(arg.hash), 'file': file.getMetadata() })
 
-    if (this.getCurrentFile().hash === parseInt(arg.hash)) {
+    if (this.getCurrentFile() && this.getCurrentFile().hash === parseInt(arg.hash)) {
       // Also "re-set" the current file to trigger some additional actions
       // necessary to reflect the changes throughout the app.
       this.setCurrentFile(this.getCurrentFile())
@@ -725,7 +742,7 @@ class Zettlr {
       // Then simply attach.
       to.attach(from)
       // And, of course, refresh the renderer.
-      this.ipc.send('paths-update', this.getPaths())
+      this.ipc.send('paths-update', this.getPathDummies())
       return
     }
 
@@ -744,7 +761,7 @@ class Zettlr {
       // We have to set current dir (the to-dir) and current file AND
       // select it.
       this.setCurrentDir(to) // Current file is still correctly set
-      this.ipc.send('paths-update', this.getPaths())
+      this.ipc.send('paths-update', this.getPathDummies())
       return
     } else if ((this.getCurrentFile() !== null) &&
     (from.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
@@ -771,7 +788,7 @@ class Zettlr {
     // Add directory or file to target dir
     to.attach(from)
 
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
 
     if (newPath != null) {
       // Find the current file and reset the pointers to it.
@@ -779,42 +796,12 @@ class Zettlr {
     }
   }
 
-  // SPELLCHECKING RELATED FUNCTIONS
-
   /**
-    * Loads a DIC or AFF file and sends it to the renderer.
-    * @param  {String} type Either 'dic' or 'aff'
-    * @param  {String} lang Which language dic/aff to load?
-    * @return {void}      This function does not return.
-    */
-  retrieveDictFile (type, lang) {
-    let p = path.join(
-      path.dirname(__dirname),
-      'renderer',
-      'assets',
-      'dict',
-      lang,
-      lang + '.' + type
-    )
-
-    try {
-      fs.lstatSync(p)
-    } catch (e) {
-      // Try the custom folder
-      p = path.join(app.getPath('userData'), '/dict', lang, lang + '.' + type)
-      try {
-        fs.lstatSync(p)
-      } catch (e) {
-        return
-      }
-    }
-
-    fs.readFile(p, 'utf8', (err, data) => {
-      if (err) console.error(err)
-      // Send the data directly back to the client once it has been read
-      this.ipc.send('typo-' + type, data)
-    })
-  }
+   * Opens a standalone quicklook window when the renderer requests it
+   * @param  {number} hash The hash of the file to be displayed in the window
+   * @return {void}      No return.
+   */
+  openQL (hash) { this._ql.openQuicklook(this.findFile({ 'hash': hash })) }
 
   /****************************************************************************
    **                                                                        **
@@ -836,7 +823,7 @@ class Zettlr {
     // and therefore want to remove themselves. This means we simply have
     // to splice the object from our paths array.
     this.getPaths().splice(this.getPaths().indexOf(obj), 1)
-    this.ipc.send('paths-update', this.getPaths())
+    this.ipc.send('paths-update', this.getPathDummies())
   }
 
   /**
@@ -888,6 +875,10 @@ class Zettlr {
 
     let cnt = file.content
 
+    // It may be that we have to create a file. In this case, a paths update is
+    // necessary, which must be sent after this function's run.
+    let pathsUpdateNecessary = false
+
     // Update word count
     this.stats.updateWordCount(file.wordcount || 0)
 
@@ -911,7 +902,8 @@ class Zettlr {
         }
         return
       }
-      file = this.getCurrentDir().newfile(null, this.watchdog)
+      file = this.getCurrentDir().newfile(null)
+      pathsUpdateNecessary = true
     } else {
       let f = this.getCurrentFile()
       if (f == null) {
@@ -928,9 +920,17 @@ class Zettlr {
     this.watchdog.ignoreNext('change', file.path)
     file.save(cnt)
     this.clearModified()
-    // Immediately update the paths in renderer so that it is able to find
-    // the file to (re)-select it.
-    this.ipc.send('file-update', file)
+
+    // Now it can be that a paths update is necessary. We have to send the
+    // update instead of the file-update to make sure the correct file is in
+    // the renderer.
+    if (pathsUpdateNecessary) {
+      this.ipc.send('paths-update', this.getPathDummies())
+    } else {
+      // Immediately update the paths in renderer so that it is able to find
+      // the file to (re)-select it.
+      this.ipc.send('file-update', file.getMetadata())
+    }
 
     // Switch to newly created file (only happens before a file is selected)
     if (this.getCurrentFile() == null) {
@@ -1032,7 +1032,7 @@ class Zettlr {
         }
         this.getConfig().removePath(p.getPath())
         this.getPaths().splice(this.getPaths().indexOf(p), 1)
-        this.ipc.send('paths-update', this.getPaths())
+        this.ipc.send('paths-update', this.getPathDummies())
         break
       }
     }
@@ -1187,10 +1187,14 @@ class Zettlr {
   getIPC () { return this.ipc }
 
   /**
-    * Returns the directory tree.
+    * Returns the directory tree. Thid does _not_, however, leave the paths
+    * unchanged. It re-maps them and removes from the roots the pointer to this
+    * object to prevent strange crashes of the app.
     * @return {ZettlrDir} The root directory pointer.
     */
   getPaths () { return this._openPaths }
+
+  getPathDummies () { return this._openPaths.map(elem => elem.getMetadata()) }
 
   /**
     * Returns the ZettlrConfig object

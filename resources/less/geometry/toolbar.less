@@ -10,6 +10,13 @@
     display:flex;
     align-items:center;
 
+    // We don't have window chrome, so we need the toolbar to be draggable.
+    -webkit-app-region: drag;
+
+    & > .searchbar, & > .file-info, & > .button, & > svg:not(#search-progress-indicator) {
+      -webkit-app-region: no-drag;
+    }
+
     .button {
         flex-grow:0.1;
         outline: 0;
@@ -25,10 +32,12 @@
         &:first-child { margin-left:@toolbar-margin * 2; }
         &:last-child { margin-right:@toolbar-margin * 2; }
 
+        &.menu-popup::before         { content: "\f127"; }
         &.dir-open::before           { content: "\f73e"; }
         &.directory-new::before      { content: "\f0da"; }
         &.file-new::before           { content: "\f0c6"; }
         &.stats::before              { content: "\f6b8"; }
+        &.tag-cloud::before          { content: "\f482"; }
         &.preferences::before        { content: "\f00f"; }
         &.recent-docs::before        { content: "\f0c2"; }
         &.file-save::before          { content: "\f0c8"; }
@@ -105,9 +114,9 @@
 // For macOS, we need to add some more margin
 body.darwin #toolbar {
   padding-left: 70px;
-  -webkit-app-region: drag;
+}
 
-  & > .searchbar, & > .file-info, & > .button, & > svg:not(#search-progress-indicator) {
-    -webkit-app-region: no-drag;
-  }
+// For Windows and Linux the same, only on the other side
+body.win32 #toolbar, body.linux #toolbar {
+  padding-right: 140px; // Windows window controls are ... huge.
 }

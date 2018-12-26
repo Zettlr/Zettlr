@@ -28,6 +28,11 @@
           margin-bottom: 0.5em;
         }
 
+        // The error span inside dialogs (inside the submit button group)
+        span.error-info {
+          color: @fg-error;
+        }
+
         hr {
             border-bottom:1px solid @grey-4;
             width: 80%;
@@ -192,6 +197,26 @@
                     color:@green-2;
                 }
             }
+        }
+
+        // Tag cloud related stuff
+        .tag {
+          display: inline-block;
+          background-color: lighten(@green-0, 10%);
+          font-weight: bold;
+          cursor: pointer;
+          border-radius: @border-radius;
+          border-bottom: 3px solid @green-0;
+          border-right: 3px solid @green-0;
+          color: @grey-8;
+          padding: 5px;
+          margin: 5px;
+          transition: 0.1s all ease;
+
+          &:hover {
+            background-color: @green-0;
+            border-color: darken(@green-0, 10%);
+          }
         }
 
     } // END .dialog

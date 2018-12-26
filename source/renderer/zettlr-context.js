@@ -15,7 +15,7 @@
  */
 
 const { remote } = require('electron')
-const { Menu, MenuItem } = remote
+const { Menu } = remote
 const { trans } = require('../common/lang/i18n.js')
 
 /**
@@ -27,15 +27,63 @@ const { trans } = require('../common/lang/i18n.js')
  * a future version, the context menu should be moved to ... like the renderer.
  * Or, even better: the main process (because then it does not lock the renderer
  * on generation, making the experience smoother.)
+ * @param {ZettlrBody} parent Body element.
  */
 class ZettlrCon {
-  /**
-    * Create the object.
-    * @param {ZettlrBody} parent Body element.
-    */
   constructor (parent) {
     this._body = parent
     this._menu = new Menu()
+  }
+
+  /**
+   * Builds a context menu based on a given menutpl and some scoping vars.
+   * @param  {Array} menutpl       The array containing the blueprints.
+   * @param  {integer} [hash=null]   The hash, or null if not necessary.
+   * @param  {integer} [vdhash=null] The vdhash, or null if not given.
+   * @param  {Array}  [scopes=[]]   An array of scope-names ("root", "directory", etc.)
+   * @param  {Array}  [attributes=[]]   An array of all attributes of the emanating element
+   * @return {Array}               An array containing the generated items.
+   */
+  _buildFromSource (menutpl, hash = null, vdhash = null, scopes = [], attributes = []) {
+    if (!menutpl) {
+      throw new Error('No menutpl detected!')
+    }
+
+    let menu = []
+
+    // Traverse the submenu and apply
+    for (let item of menutpl) {
+      // If an item is scoped and the scope does not apply here, don't include it.
+      if (item.hasOwnProperty('scope') && !scopes.includes(item.scope)) continue
+      // If an item is scoped by attribute and the attribute is not included, continue.
+      if (item.hasOwnProperty('attribute') && !attributes.find(elem => elem.name === item.attribute)) continue
+      let builtItem = {}
+      // Simple copying of trivial attributes
+      if (item.hasOwnProperty('label')) builtItem.label = trans(item.label)
+      if (item.hasOwnProperty('type')) builtItem.type = item.type
+      if (item.hasOwnProperty('role')) builtItem.role = item.role
+
+      // Higher-order attributes
+
+      // Accelerators may be system specific for macOS
+      if (item.hasOwnProperty('accelerator')) builtItem.accelerator = item.accelerator
+
+      // Commands need to be simply sent to the renderer
+      let that = this
+      if (item.hasOwnProperty('command')) {
+        builtItem.click = function (menuitem, focusedWindow) {
+          let content = (item.hasOwnProperty('content')) ? item.content : { 'hash': hash }
+          if (vdhash) content.virtualdir = vdhash
+          // Set the content to the attribute's value, if given
+          if (item.hasOwnProperty('attribute')) content = attributes.find(elem => elem.name === item.attribute).value
+          that._body.getRenderer().handleEvent(item.command, content)
+        }
+      }
+      // Finally append the menu item
+      menu.push(builtItem)
+    }
+
+    return menu
   }
 
   /**
@@ -44,77 +92,43 @@ class ZettlrCon {
     * @return {void}       Nothing to return.
     */
   _build (event) {
-    delete this._menu
-    this._menu = new Menu()
     let elem = $(event.target)
-    let hash
-
     // No context menu for sorters
-    if (elem.hasClass('sorter')) {
-      return
-    }
+    if (elem.hasClass('sorter') || elem.parents('sorter').length > 0) return
+    let hash = null
+    let vdfile = false // Is this file part of a virtual directory?
+    let vdhash = null
+    let typoPrefix = []
+
+    // Used to hold the scopes
+    let scopes = []
+    // Used to hold the attributes
+    let attr = []
+    // Path to the template file to use.
+    let menupath = ''
 
     // First: determine where the click happened (preview pane, directories or editor)
     if (elem.parents('#preview').length > 0) {
-      if (elem.hasClass('directory')) {
-        // No context menus for directories
-        return
-      }
       // In case of preview, our wanted elements are: the p.filename-tag (containing
       // the name) inside the <li> and the data-hash attr inside the <li>
-      let vdfile = false // Is this file part of a virtual directory?
-      let vdhash
-      if (elem.is('li')) {
-        // Already got it
-        hash = elem.attr('data-hash')
-        vdfile = elem.hasClass('vd-file')
-        if (vdfile) {
-          vdhash = elem.attr('data-vd-hash')
-        }
-      } else if (elem.is('p') && elem.hasClass('filename')) {
-        hash = elem.parent().attr('data-hash')
-        vdfile = elem.parent().hasClass('vd-file')
-        if (vdfile) {
-          vdhash = elem.parent().attr('data-vd-hash')
-        }
+      if (elem.hasClass('filename') || elem.hasClass('snippet') || elem.hasClass('taglist')) {
+        elem = elem.parent()
       } else if (elem.is('span')) {
-        hash = elem.parent().attr('data-hash')
-        vdfile = elem.parent().hasClass('vd-file')
-        if (vdfile) {
-          vdhash = elem.parent().attr('data-vd-hash')
-        }
+        elem = elem.parent().parent()
       }
+      if (elem.hasClass('directory')) return
 
-      // Now build
-      let that = this
-      this._menu.append(new MenuItem({
-        'label': trans('menu.rename_file'),
-        click (item, win) {
-          that._body.getRenderer().handleEvent('file-rename', { 'hash': hash })
-        }
-      }))
-      this._menu.append(new MenuItem({
-        'label': trans('menu.delete_file'),
-        click (item, win) {
-          that._body.getRenderer().handleEvent('file-delete', { 'hash': hash })
-        }
-      }))
-      // Enable removal of files from virtual directories
-      if (vdfile) {
-        this._menu.append(new MenuItem({
-          'label': trans('menu.delete_from_vd'),
-          click (item, win) {
-            that._body.getRenderer().handleEvent('file-delete-from-vd', { 'hash': hash, 'virtualdir': vdhash })
-          }
-        }))
+      hash = elem.attr('data-hash')
+      vdfile = elem.hasClass('vd-file')
+      if (vdfile) vdhash = elem.attr('data-vd-hash')
+      // Now determine the scope
+      if (vdfile) scopes.push('virtual-directory')
+      // Push all attributes into the attributes array
+      for (let i = 0, nodes = elem[0].attributes; i < elem[0].attributes.length; i++) {
+        // The attributes are a NamedNodeMap, so we have to use weird function calling to retrieve them
+        attr.push({ 'name': nodes.item(i).nodeName, 'value': nodes.item(i).nodeValue })
       }
-      this._menu.append(new MenuItem({ 'type': 'separator' }))
-      this._menu.append(new MenuItem({
-        'label': trans('menu.quicklook'),
-        click (item, win) {
-          that._body.getRenderer().handleEvent('quicklook', { 'hash': hash })
-        }
-      }))
+      menupath = 'preview_file.json'
     } else if (elem.parents('#directories').length > 0) {
       // In case of directories, our wanted elements are: Only the <li>s
       if (elem.is('li') || elem.is('span')) {
@@ -124,195 +138,70 @@ class ZettlrCon {
 
         hash = elem.attr('data-hash')
 
-        // Now build
-        let that = this
-
-        // Directory operations
-        this._menu.append(new MenuItem({
-          'label': trans('menu.rename_dir'),
-          click (item, win) {
-            that._body.getRenderer().handleEvent('dir-rename', { 'hash': hash })
-          }
-        }))
-        this._menu.append(new MenuItem({
-          'label': trans('menu.delete_dir'),
-          click (item, win) {
-            that._body.getRenderer().handleEvent('dir-delete', { 'hash': hash })
-          }
-        }))
-        this._menu.append(new MenuItem({ 'type': 'separator' }))
-
-        this._menu.append(new MenuItem({
-          'label': trans('menu.new_file'),
-          click (item, win) {
-            that._body.getRenderer().handleEvent('file-new', { 'hash': hash })
-          }
-        }))
-        this._menu.append(new MenuItem({
-          'label': trans('menu.new_dir'),
-          click (item, win) {
-            that._body.getRenderer().handleEvent('dir-new', { 'hash': hash })
-          }
-        }))
-        this._menu.append(new MenuItem({
-          'label': trans('menu.new_vd'),
-          click (item, win) {
-            that._body.getRenderer().handleEvent('dir-new-vd', { 'hash': hash })
-          }
-        }))
-
-        // Project options
-        this._menu.append(new MenuItem({ 'type': 'separator' }))
+        // Determine the scopes
         if (elem.hasClass('project')) {
-          this._menu.append(new MenuItem({
-            'label': trans('menu.remove_project'),
-            click (item, win) {
-              that._body.getRenderer().handleEvent('dir-remove-project', { 'hash': hash })
-            }
-          }))
-          this._menu.append(new MenuItem({
-            'label': trans('menu.project_properties'),
-            click (item, win) {
-              that._body.getRenderer().handleEvent('dir-project-properties', { 'hash': hash })
-            }
-          }))
-          this._menu.append(new MenuItem({
-            'label': trans('menu.project_build'),
-            click (item, win) {
-              that._body.getRenderer().handleEvent('dir-project-export', { 'hash': hash })
-            }
-          }))
-        } else {
-          this._menu.append(new MenuItem({
-            'label': trans('menu.new_project'),
-            click (item, win) {
-              that._body.getRenderer().handleEvent('dir-new-project', { 'hash': hash })
-            }
-          }))
+          scopes.push('project')
+        } else if (elem.hasClass('directory')) {
+          scopes.push('no-project')
         }
 
-        if (elem.hasClass('root')) {
-          // Root dirs can be closed
-          this._menu.append(new MenuItem({ 'type': 'separator' }))
-          this._menu.append(new MenuItem({
-            'label': trans('menu.close_dir'),
-            click (item, win) {
-              that._body.getRenderer().handleEvent('root-close', { 'hash': hash })
-            }
-          }))
-        }
+        if (elem.hasClass('directory')) scopes.push('directory')
+
+        if (elem.hasClass('root')) scopes.push('root')
+        menupath = 'directories_directory.json'
       } else if (elem.is('div') && elem.hasClass('file')) {
         // Standalone root file selected
         hash = elem.attr('data-hash')
-        let that = this
-        this._menu.append(new MenuItem({
-          'label': trans('menu.rename_file'),
-          click (item, win) {
-            that._body.getRenderer().handleEvent('file-rename', { 'hash': hash })
-          }
-        }))
-        this._menu.append(new MenuItem({
-          'label': trans('menu.delete_file'),
-          click (item, win) {
-            that._body.getRenderer().handleEvent('file-delete', { 'hash': hash })
-          }
-        }))
-        this._menu.append(new MenuItem({ 'type': 'separator' }))
-        this._menu.append(new MenuItem({
-          'label': trans('menu.close_file'),
-          click (item, win) {
-            that._body.getRenderer().handleEvent('root-close', { 'hash': hash })
-          }
-        }))
+        menupath = 'directories_file.json'
       }
     } else if (elem.parents('#editor').length > 0) {
       // If the word is spelled wrong, request suggestions
       if (elem.hasClass('cm-spell-error')) {
-        let suggestions = this._body.getRenderer().typoSuggest(elem.text())
+        let suggestions = global.typo.suggest(elem.text())
         if (suggestions.length > 0) {
           // Select the word under the cursor if there are suggestions.
           // Makes it easier to replace them
           this._body.getRenderer().getEditor().selectWordUnderCursor()
-          let self = this
+          // let self = this
           for (let sug of suggestions) {
-            this._menu.append(new MenuItem({
+            typoPrefix.push({
               'label': sug,
-              click (item, win) {
-                self._body.getRenderer().getEditor().replaceWord(sug)
+              'click': (item, win) => {
+                this._body.getRenderer().getEditor().replaceWord(sug)
               }
-            }))
+            })
           }
-          this._menu.append(new MenuItem({ type: 'separator' }))
+          typoPrefix.push({ type: 'separator' })
         } else {
-          this._menu.append(new MenuItem({
+          typoPrefix.push({
             'label': trans('menu.no_suggestions'),
             enabled: 'false'
-          }))
-          this._menu.append(new MenuItem({ type: 'separator' }))
+          })
+          typoPrefix.push({ type: 'separator' })
         }
       }
-
-      let that = this
-      // Just build -- these menu items will only trigger CodeMirror actions
-      this._menu.append(new MenuItem({
-        'label': trans('menu.bold'),
-        accelerator: 'CmdOrCtrl+B',
-        click (item, win) {
-          that._body.getRenderer().handleEvent('cm-command', 'markdownBold')
-        } }))
-      this._menu.append(new MenuItem({
-        'label': trans('menu.italic'),
-        accelerator: 'CmdOrCtrl+I',
-        click (item, win) {
-          that._body.getRenderer().handleEvent('cm-command', 'markdownItalic')
-        } }))
-      this._menu.append(new MenuItem({ type: 'separator' }))
-      this._menu.append(new MenuItem({
-        'label': trans('menu.insert_link'),
-        accelerator: 'CmdOrCtrl+K',
-        click (item, win) {
-          that._body.getRenderer().handleEvent('cm-command', 'markdownLink')
-        } }))
-
-      this._menu.append(new MenuItem({
-        'label': trans('menu.insert_ol'),
-        click (item, win) {
-          that._body.getRenderer().handleEvent('cm-command', 'markdownMakeOrderedList')
-        }
-      }))
-      this._menu.append(new MenuItem({
-        'label': trans('menu.insert_ul'),
-        click (item, win) {
-          that._body.getRenderer().handleEvent('cm-command', 'markdownMakeUnorderedList')
-        }
-      }))
-      this._menu.append(new MenuItem({
-        'label': trans('gui.formatting.blockquote'),
-        click (item, win) {
-          that._body.getRenderer().handleEvent('cm-command', 'markdownBlockquote')
-        }
-      }))
-      this._menu.append(new MenuItem({ type: 'separator' }))
-      this._menu.append(new MenuItem({ 'label': trans('menu.cut'), role: 'cut', accelerator: 'CmdOrCtrl+X' }))
-      this._menu.append(new MenuItem({ 'label': trans('menu.copy'), role: 'copy', accelerator: 'CmdOrCtrl+C' }))
-      this._menu.append(new MenuItem({
-        'label': trans('menu.copy_html'),
-        'accelerator': 'CmdOrCtrl+Alt+C',
-        click (item, win) {
-          that._body.getRenderer().handleEvent('copy-as-html')
-        }
-      }))
-      this._menu.append(new MenuItem({ 'label': trans('menu.paste'), role: 'paste', accelerator: 'CmdOrCtrl+V' }))
-      this._menu.append(new MenuItem({ type: 'separator' }))
-      this._menu.append(new MenuItem({ 'label': trans('menu.select_all'), role: 'selectall', accelerator: 'CmdOrCtrl+A' }))
+      menupath = 'editor.json'
     } else if (elem.is('input[type="text"]') || elem.is('textarea')) {
-      // Generate default text context menu
-      this._menu.append(new MenuItem({ 'label': trans('menu.cut'), role: 'cut', accelerator: 'CmdOrCtrl+X' }))
-      this._menu.append(new MenuItem({ 'label': trans('menu.copy'), role: 'copy', accelerator: 'CmdOrCtrl+C' }))
-      this._menu.append(new MenuItem({ 'label': trans('menu.paste'), role: 'paste', accelerator: 'CmdOrCtrl+V' }))
-      this._menu.append(new MenuItem({ type: 'separator' }))
-      this._menu.append(new MenuItem({ 'label': trans('menu.select_all'), role: 'selectall', accelerator: 'CmdOrCtrl+A' }))
+      menupath = 'text.json'
     }
+
+    // Now build with all information we have gathered.
+    this._menu = new Menu()
+    this._menu = this._buildFromSource(require('./assets/context/' + menupath), hash, vdhash, scopes, attr)
+    if (elem.hasClass('cm-spell-error')) this._menu = typoPrefix.concat(this._menu)
+
+    // If the element is a link, add an "open link" context menu entry
+    if (elem.hasClass('cma')) {
+      this._menu.unshift({
+        'label': trans('menu.open_link'),
+        'click': (item, win) => {
+          require('electron').shell.openExternal(elem.attr('title'))
+        }
+      }, {
+        'type': 'separator'
+      })
+    }
+    this._menu = Menu.buildFromTemplate(this._menu)
   }
 
   /**
@@ -321,11 +210,13 @@ class ZettlrCon {
     * @return {void}       Nothing to return.
     */
   popup (event) {
-    this._build(event)
-    if (this._menu.items.length > 0) {
-      // Open at click coords even the user may have moved the mouse
-      this._menu.popup({ 'x': event.clientX, 'y': event.clientY })
-    }
+    try {
+      this._build(event)
+      if (this._menu.items.length > 0) {
+        // Open at click coords even the user may have moved the mouse
+        this._menu.popup({ 'x': event.clientX, 'y': event.clientY })
+      }
+    } catch (e) { /* Fail silently */ }
   }
 }
 
