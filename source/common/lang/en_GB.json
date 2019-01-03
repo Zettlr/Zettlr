@@ -1,4 +1,10 @@
 {
+  "metadata": {
+    "authors": [
+      "Hendrik Erz <zettlr@mailbox.org>"
+    ],
+    "license": "GNU GPL v3"
+  },
   "localise": {
     "thousand_delimiter": ",",
     "decimal_delimiter": "."
