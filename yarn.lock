@@ -3885,6 +3885,13 @@ npmlog@^4.0.2:
     gauge "~2.7.3"
     set-blocking "~2.0.0"
 
+nspell@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/nspell/-/nspell-2.1.1.tgz#42a54e12812137b3e2e919d76da62541b56b8cd0"
+  integrity sha512-ubFjxhpFSHbYVAKFgRarIPQ5H5GfFNVQAjv0bYd+vnG+O2nXZJg8o9rXyIzyXdsOZDEhR/PC/GcINXaW7PEnNw==
+  dependencies:
+    is-buffer "^2.0.0"
+
 nugget@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/nugget/-/nugget-2.0.1.tgz#201095a487e1ad36081b3432fa3cada4f8d071b0"

@@ -13,7 +13,8 @@
  * END HEADER
  */
 
-const Typo = require('typo-js')
+// const Typo = require('typo-js')
+const NSpell = require('nspell')
 const path = require('path')
 const fs = require('fs')
 
@@ -65,7 +66,8 @@ class ZettlrDictionary {
               this._toLoad--
             } else if (dicData) {
               // Finally push the typo!
-              this._typos.push(new Typo(dict, affData, dicData, {}))
+              // this._typos.push(new Typo(dict, affData, dicData, {}))
+              this._typos.push(new NSpell(affData, dicData))
               this._loadedDicts.push(dict)
             } // END second else if
           }) // END second readFile
@@ -85,7 +87,8 @@ class ZettlrDictionary {
 
     let correct = false
     for (let typo of this._typos) {
-      if (typo.check(term)) correct = true
+      // if (typo.check(term)) correct = true
+      if (typo.correct(term)) correct = true
     }
 
     return correct

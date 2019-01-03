@@ -742,6 +742,11 @@ is-buffer@^1.1.5:
   resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
   integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
 
+is-buffer@^2.0.0:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-2.0.3.tgz#4ecf3fcf749cbd1e472689e109ac66261a25e725"
+  integrity sha512-U15Q7MXTuZlrbymiz95PJpZxu8IlipAp4dtS3wOdgPXx3mqBnslrWU14kxfHB+Py/+2PVKSr37dMAgM2A4uArw==
+
 is-data-descriptor@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/is-data-descriptor/-/is-data-descriptor-0.1.4.tgz#0b5ee648388e2c860282e793f1856fec3f301b56"
@@ -1163,6 +1168,13 @@ npmlog@^4.0.2:
     console-control-strings "~1.1.0"
     gauge "~2.7.3"
     set-blocking "~2.0.0"
+
+nspell@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/nspell/-/nspell-2.1.1.tgz#42a54e12812137b3e2e919d76da62541b56b8cd0"
+  integrity sha512-ubFjxhpFSHbYVAKFgRarIPQ5H5GfFNVQAjv0bYd+vnG+O2nXZJg8o9rXyIzyXdsOZDEhR/PC/GcINXaW7PEnNw==
+  dependencies:
+    is-buffer "^2.0.0"
 
 number-is-nan@^1.0.0:
   version "1.0.1"
