@@ -131,7 +131,12 @@ class ZettlrFile {
     let idRE = new RegExp(idStr, 'g') // /@ID:([^\s]*)/g
     let linkStart = global.config.get('zkn.linkStart')
     let linkEnd = global.config.get('zkn.linkEnd')
-    let tagRE = /(?<!\\)#(#?[A-Z0-9-_]+#?)/gi // Negative lookbehind to exclude escaped tags
+    // To detect tags in accordance with what the engine will render as tags,
+    // we need to exclude everything that is not preceded by either a newline
+    // or a space.
+    // Positive lookbehind: Assert either a space, a newline or the start of the
+    // string.
+    let tagRE = /(?<= |\n|^)#(#?[A-Z0-9-_]+#?)/gi
     let match
     // (Re-)read content of file
     let cnt = fs.readFileSync(this.path, { encoding: 'utf8' })

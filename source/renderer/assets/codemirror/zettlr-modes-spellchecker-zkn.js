@@ -142,12 +142,16 @@
 
         // First: Tags, in the format of Twitter
         if (stream.match(zknTagRE, false)) {
-          // It may be that the tag has been escaped. Due to the nature of this
-          // stream we must back up and advance again, because lookbehinds won't
-          // work here.
+          // As lookbehinds and other nice inventions of regular expressions
+          // won't work here because it is a stream of characters rather than
+          // one long string, we have to manually check that the tag can be
+          // rendered as such. The only way where this should happen is, if the
+          // tag is either on a newline or preceeded by a space. This is why we
+          // don't have to manually check for escape characters - as these are
+          // no spaces, they'll also match our if-condition below.
           if (!stream.sol()) {
             stream.backUp(1)
-            if (stream.next() === '\\') {
+            if (stream.next() !== ' ') {
               stream.match(zknTagRE)
               return null
             }

@@ -1,3 +1,13 @@
+# (no version assigned)
+
+## GUI and Functionality
+
+- Tags are now only rendered as such and detected by the internal engine, if they are preceeded by a newline or a space. This will prevent page anchors inside links (e.g. `example.com/page#anchor-name`) or words with hashes in them from being detected as tags.
+
+## Under the Hood
+
+(nothing here)
+
 # 1.0.0
 
 ## GUI and functionality
