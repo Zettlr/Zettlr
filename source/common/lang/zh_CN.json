@@ -5,18 +5,18 @@
   },
   "gui": {
     "no_recent_docs": "无近期文件",
-    "words": "%s 词",
-    "words_last_month": "上个月词数",
-    "file_words": "词",
-    "file_chars": "字",
-    "file_chars_wo_spaces": "字(不含空白字符)",
-    "file_words_sel": "词 (选中)",
-    "file_chars_sel": "字 (选中)",
-    "avg_words": "日均词数",
-    "today_words": "今日词数",
+    "words": "%s 字",
+    "words_last_month": "上个月字数",
+    "file_words": "字",
+    "file_chars": "字符",
+    "file_chars_wo_spaces": "字符(不含空白字符)",
+    "file_words_sel": "字 (选中)",
+    "file_chars_sel": "字符 (选中)",
+    "avg_words": "日均字数",
+    "today_words": "今日字数",
     "avg_surpassed": "🔥 你超越了极限！",
-    "avg_close_to": "💪 即将达到日均词数!",
-    "avg_not_reached": "✍🏼 距离日均词数还很远。",
+    "avg_close_to": "💪 即将达到日均字数!",
+    "avg_not_reached": "✍🏼 距离日均字数还很远。",
     "empty_directories": "无打开的文件或目录",
     "attachments": "附件",
     "no_attachments": "无附件",
@@ -384,7 +384,7 @@
       "description": "你可以给标签设置不同的颜色。如果文件中发现标签，预览列表中将会获得一个颜色指示器。描述会在鼠标悬停时显示。",
       "name_desc": "标签(去掉#)",
       "color_desc": "颜色(比如#ff0000或者rgb(255, 0, 0))",
-      "desc_desc": "一个简短且精确的描述。(最多 100字符)"
+      "desc_desc": "一个简短且精确的描述。(最多100字符)"
     },
     "update": {
       "title": "新升级可用",
@@ -424,9 +424,9 @@
     },
     "statistics": {
       "title": "写作统计",
-      "intro": "显示你写作的额外统计数据，比如你每天写作多少词的图表。",
-      "words_per_day": "每日词数",
-      "words": "词数",
+      "intro": "显示你写作的额外统计数据，比如你每天写作多少字的图表。",
+      "words_per_day": "每日字数",
+      "words": "字数",
       "day": "日期"
     }
   },
