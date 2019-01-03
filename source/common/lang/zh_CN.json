@@ -144,7 +144,7 @@
     "insert_ol": "插入有序列表",
     "insert_ul": "插入无序列表",
     "no_suggestions": "关闭建议",
-    "quicklook": "概览",
+    "quicklook": "快速查看",
     "donate": "捐助Zettlr"
   },
   "dialog": {
@@ -420,6 +420,7 @@
       "katex": "Renders LaTeX-formulae in the editor",
       "trademark": "All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc.",
       "citationstyle": "Zettlr makes use of citeproc to display citations directly in the editor. To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:",
+      "translator":"en_US(nathanlesage),de_DE(nathanlesage),en_GB(nathanlesage),fr_FR(nathanlesage),zh_cn(Rong)",
       "close": "关闭"
     },
     "statistics": {
