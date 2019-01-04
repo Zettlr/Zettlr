@@ -182,10 +182,6 @@
       "placeholder": "Verzeichnis"
     },
     "export": {
-      "alt_html": "Als HTML exportieren",
-      "alt_odt": "Als ODT exportieren",
-      "alt_docx": "Als DOCX exportieren",
-      "alt_pdf": "Als PDF exportieren",
       "no_xelatex": "Es wurde keine XeLaTeX-Datei auf diesem System gefunden. Pandoc nutzt sie, um Dateien nach PDF exportieren zu können. Bitte installiere eine Version von LaTeX, die für dein System gemacht ist.",
       "no_pandoc": "Pandoc wurde auf diesem System nicht gefunden! Um Dateien exportieren zu können, musst du zunächst Pandoc installieren. Pandoc ist frei und quelloffen!"
     },

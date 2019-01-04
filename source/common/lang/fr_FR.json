@@ -182,10 +182,6 @@
       "placeholder": "Le nom du dossier"
     },
     "export": {
-      "alt_html": "Exporter dans HTML",
-      "alt_odt": "Exporter dans ODT",
-      "alt_docx": "Exporter dans DOCX",
-      "alt_pdf": "Exporter dans PDF",
       "no_xelatex": "Il-y-a pas de xelatex, qui l'app peut trouver. Pandoc c'utiliser pour exporter dans PDF. Installer une distribution de LaTeX pour enabler l'export dans PDF.",
       "no_pandoc": "Il est impossible de trouver Pandoc, mais c'est essentiel pour exporter les fichiers. Installer une distribution de Pandoc pour enabler l'export. Il est gratuit et open source!"
     },

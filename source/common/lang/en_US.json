@@ -182,10 +182,6 @@
       "placeholder": "Directory"
     },
     "export": {
-      "alt_html": "Export as HTML",
-      "alt_odt": "Export as ODT",
-      "alt_docx": "Export as DOCX",
-      "alt_pdf": "Export as PDF",
       "no_xelatex": "Could not find the xelatex executable on your system. Please make sure to install LaTeX to be able to export to PDF.",
       "no_pandoc": "Could not find pandoc. Please install pandoc to enable the file exporting options!"
     },
