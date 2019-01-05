@@ -178,7 +178,7 @@ class ZettlrDirectories {
     * If the user clicks one of the standalone files
     * @param  {Number} hash The hash of the file to be opened
     */
-  requestFile (hash) { this._renderer.requestFile(hash) }
+  requestFile (hash) { global.ipc.send('file-get', hash) }
 
   /**
     * Needed for bubbling up of selections

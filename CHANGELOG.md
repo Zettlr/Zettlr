@@ -5,6 +5,7 @@
 - Tags are now only rendered as such and detected by the internal engine, if they are preceeded by a newline or a space. This will prevent page anchors inside links (e.g. `example.com/page#anchor-name`) or words with hashes in them from being detected as tags.
 - Switched from `Droid Mono` to `Liberation Mono` for displaying monospaced code and comment blocks because of better support for glyphs in the latter font.
 - Fixed an issue with the titles of the exporting buttons for HTML, docx, odt and PDF.
+- Fixed a small bug that made it unable to open standalone files from the directory list.
 
 ## Under the Hood
 
