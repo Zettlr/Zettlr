@@ -6,6 +6,7 @@
 - Switched from `Droid Mono` to `Liberation Mono` for displaying monospaced code and comment blocks because of better support for glyphs in the latter font.
 - Fixed an issue with the titles of the exporting buttons for HTML, docx, odt and PDF.
 - Fixed a small bug that made it unable to open standalone files from the directory list.
+- Small fix to the margins of switches.
 
 ## Under the Hood
 
