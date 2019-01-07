@@ -7,6 +7,7 @@
 - Fixed an issue with the titles of the exporting buttons for HTML, docx, odt and PDF.
 - Fixed a small bug that made it unable to open standalone files from the directory list.
 - Small fix to the margins of switches.
+- Fixed a bug that led to files reporting the same tags more than once.
 
 ## Under the Hood
 

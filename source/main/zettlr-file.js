@@ -161,6 +161,10 @@ class ZettlrFile {
       cnt = cnt.replace(/\[\^([\w]+?)\]/gm, (match, p1, offset, string) => `[^${String(this.hash)}${p1}]`)
     }
 
+    // Remove the current tags from the database. The new tags will be reported
+    // later on.
+    if (global.tags && global.tags.hasOwnProperty('remove') && this.tags.length > 0) global.tags.remove(this.tags)
+
     // Now read all tags
     this.tags = []
     while ((match = tagRE.exec(cnt)) != null) {

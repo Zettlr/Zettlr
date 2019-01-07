@@ -39,7 +39,7 @@ class ZettlrTags {
       /**
        * Adds an array of tags to the database
        * @param  {Array} tagArray An array containing the tags to be added
-       * @return {[type]}          [description]
+       * @return {void}          Does not return.
        */
       report: (tagArray) => {
         for (let tag of tagArray) {
@@ -51,6 +51,24 @@ class ZettlrTags {
             this._globalTagDatabase[tag].className = (cInfo) ? 'cm-hint-colour' : ''
           } else {
             this._globalTagDatabase[tag].count += 1
+          }
+        }
+      },
+      /**
+       * Removes the given tagArray from the database, i.e. decreases the
+       * counter until zero and then removes the tag.
+       * @param  {Array} tagArray The tags to remove from the database
+       * @return {void}          Does not return.
+       */
+      remove: (tagArray) => {
+        for (let tag of tagArray) {
+          if (this._globalTagDatabase[tag]) {
+            if (this._globalTagDatabase[tag].count > 0) {
+              this._globalTagDatabase[tag].count--
+            } else {
+              // Remove the tag altogether if its count is zero.
+              this._globalTagDatabase[tag] = undefined
+            }
           }
         }
       },
