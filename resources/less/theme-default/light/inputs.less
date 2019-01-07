@@ -1,9 +1,5 @@
 // Input styling
 
-// Helper variables for the checkbox controls
-@input-size: 36px;
-@input-margin: 2px;
-
 /*
 * CHECKBOXES
 */
@@ -11,85 +7,22 @@
 // Apply this class to elements that should represent toggles instead of
 // regular checkboxes.
 .cb-toggle {
-  position: relative;
-  display: inline-block !important;
-  width: @input-size;
-  height: @input-size / 2;
-  margin:0 !important;
-  padding: 0;
-
-  input { display: none !important; }
-
   .toggle {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     background-color: @grey-1;
-    transition: .4s;
-    border-radius: @input-size / 3 - @input-margin;
 
-    &:before {
-      position: absolute;
-      content: "";
-      height: @input-size / 2 - @input-margin * 2; // Fancy equations here!
-      width: @input-size / 2 - @input-margin * 2;
-      left: @input-margin;
-      bottom: @input-margin;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
+    &:before { background-color: white; }
   }
   input:checked + .toggle { background-color: @green-0; }
-  input:checked + .toggle:before { transform: translateX(@input-size / 2); }
 }
 
 .radio-toggle {
-  position: relative;
-  display: inline-block !important;
-  width: @input-size / 2;
-  height: @input-size / 2;
-  margin:0 !important;
-  padding: 0;
-
-  input { display: none !important; }
-
   .toggle {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     background-color: @grey-1;
-    border-radius: @input-size / 3 - @input-margin;
 
     // Inner part
-    &:before {
-      position: absolute;
-      content: "";
-      height: @input-size / 2 - @input-margin * 4; // Fancy equations here!
-      width: @input-size / 2 - @input-margin * 4;
-      left: @input-margin * 2;
-      bottom: @input-margin * 2;
-      background-color: transparent;
-      border-radius: 50%;
-      transition: .4s;
-    }
+    &:before { background-color: transparent; }
   }
   input:checked + .toggle:before { background-color: @green-0; }
-}
-
-// This class can be applied to the wrapper div of a checkbox-toggle to
-// make the label and the toggle align on the same level.
-.cb-group {
-  margin: 5px;
-  & > label { line-height: @input-size / 2 + @input-margin * 2; vertical-align: middle; }
-  & > input[type="radio"] { margin:0 !important; }
-  & > .cb-toggle { margin-right:0.2em; }
 }
 
 /*
@@ -97,29 +30,7 @@
  */
 
  input[type=range] {
-     -webkit-appearance: none;
-     width: 100%;
-
-   &:focus { outline: none; }
-   &::-webkit-slider-runnable-track {
-     width: 100%;
-     height: @input-size / 2;
-     cursor: pointer;
-     background: @grey-1;
-     border-radius: @input-size / 4 + @input-margin;
-     padding: @input-margin;
-   }
-
-   &::-webkit-slider-thumb {
-     height: @input-size / 2 - @input-margin * 2;
-     width: @input-size / 2 - @input-margin * 2;
-     border-radius: 100%; // Round thumb
-     background: @green-0;
-     cursor: pointer;
-     -webkit-appearance: none;
-     margin-top: 0px;
-   }
-   &:focus::-webkit-slider-runnable-track {
-     background: @grey-1;
-   }
+   &::-webkit-slider-runnable-track { background: @grey-1; }
+   &::-webkit-slider-thumb { background: @green-0; }
+   &:focus::-webkit-slider-runnable-track { background: @grey-1; }
 }

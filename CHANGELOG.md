@@ -6,12 +6,12 @@
 - Switched from `Droid Mono` to `Liberation Mono` for displaying monospaced code and comment blocks because of better support for glyphs in the latter font.
 - Fixed an issue with the titles of the exporting buttons for HTML, docx, odt and PDF.
 - Fixed a small bug that made it unable to open standalone files from the directory list.
-- Small fix to the margins of switches.
+- Small fix to the margins of switches. General fixes to the colours of the input controls in dark mode.
 - Fixed a bug that led to files reporting the same tags more than once.
 
 ## Under the Hood
 
-(nothing here)
+- Moved the input styling to the geometry section and only left the colouring in place.
 
 # 1.0.0
 
