@@ -8,6 +8,7 @@
 - Fixed a small bug that made it unable to open standalone files from the directory list.
 - Small fix to the margins of switches. General fixes to the colours of the input controls in dark mode.
 - Fixed a bug that led to files reporting the same tags more than once.
+- Search results are now readable even in dark mode.
 
 ## Under the Hood
 
