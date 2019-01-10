@@ -154,6 +154,12 @@
     "donate": "Unterstützen"
   },
   "dialog": {
+    "button": {
+      "close": "Schließen",
+      "choose_path": "Verzeichnis auswählen …",
+      "save": "Speichern",
+      "cancel": "Abbrechen"
+    },
     "find": {
       "find_placeholder": "Finden…",
       "replace_placeholder": "Ersetzen mit",
@@ -377,9 +383,7 @@
       "debug": "Entwicklermodus",
       "autoCloseBrackets": "Schließe automatisch die folgenden Zeichenpaare: ()[]{}'\"\"»«„““”‘’__``",
       "csl_database": "CSL JSON-Datenbankdatei",
-      "choose_file": "Datei wählen …",
-      "save": "Speichern",
-      "cancel": "Abbrechen"
+      "choose_file": "Datei wählen …"
     },
     "tags": {
       "title": "Schlagwörter",
@@ -392,7 +396,6 @@
       "title": "Neue Version",
       "notification": "Eine neue Version von Zettlr steht zum Download bereit. Bitte lies die Änderungsdatei unten.",
       "release_url": "Zum Download",
-      "close": "Schließen",
       "no_update": "Du nutzt die aktuelle Version von Zettlr",
       "current_version": "Deine Version",
       "server_error": "Konnte nicht nach Updates suchen: Server Error (Statuscode: %s)",
@@ -421,8 +424,7 @@
       "chartjs": "Bereitet deine Schreibstatistiken grafisch auf",
       "katex": "Stellt LaTeX-Formeln im Editor dar",
       "trademark": "Alle Logos und Markennamen gehören ihren rechtmäßigen Besitzern. Außer durch die Nutzung ihres Codes ist Zettlr auf keine Weise mit diesen Projekten verbunden. Node.js ist ein eingetragenes Warenzeichen von Joyent, Inc.",
-      "citationstyle": "Zettlr verwendet citeproc, um Zitationen direkt im Editor anzuzeigen. Hierzu verwendet Zettlr die CitationStyleLanguage (CSL) Sprachdateien sowie Stile. Die Dateien wurden unverändert mit Autorenangaben ausgeliefert. Weitere Informationen: ",
-      "close": "Schließen"
+      "citationstyle": "Zettlr verwendet citeproc, um Zitationen direkt im Editor anzuzeigen. Hierzu verwendet Zettlr die CitationStyleLanguage (CSL) Sprachdateien sowie Stile. Die Dateien wurden unverändert mit Autorenangaben ausgeliefert. Weitere Informationen: "
     },
     "statistics": {
       "title": "Schreibstatistiken",
@@ -430,6 +432,12 @@
       "words_per_day": "Wörter pro Tag",
       "words": "Wörter",
       "day": "Datum"
+    },
+    "paste_image": {
+      "title": "Bild einfügen",
+      "info": "Hier siehst du eine Vorschau des Bildes, welches in die Datei eingefügt werden wird. Drücke Eingabe, um das Bild im aktuell ausgewählten Verzeichnis zu speichern, oder wähle ein benutzerdefiniertes Verzeichnis aus.",
+      "dimensions": "Bildmaße",
+      "save_cwd": "Im aktuellen Verzeichnis speichern"
     }
   },
   "toolbar": {

@@ -154,6 +154,12 @@
     "donate": "Supporter Zettlr"
   },
   "dialog": {
+    "button": {
+      "close": "Fermer",
+      "choose_path": "Choisier le dossier …",
+      "save": "Enregistrer",
+      "cancel": "Annuler"
+    },
     "find": {
       "find_placeholder": "Trouver…",
       "replace_placeholder": "Substituer à",
@@ -377,9 +383,7 @@
       "debug": "Debug",
       "autoCloseBrackets": "Fermer les pairs du caractères suivants: ()[]{}'\"\"»«„““”‘’__``",
       "csl_database": "Base de données CSL JSON",
-      "choose_file": "Choisier le fichier …",
-      "save": "Enregistrer",
-      "cancel": "Annuler"
+      "choose_file": "Choisier le fichier …"
     },
     "tags": {
       "title": "Ajuster les mots-clés",
@@ -392,7 +396,6 @@
       "title": "Nouveau version",
       "notification": "Un nouveau version de Zettlr est preparée à téléchargement. Lire le changelog en bas.",
       "release_url": "Telecharger",
-      "close": "Fermer",
       "no_update": "Tu as la version derniere de Zettlr",
       "current_version": "Ta version",
       "server_error": "Impossible de rechercher la mise à jour: Server Error (Status code: %s)",
@@ -421,8 +424,7 @@
       "chartjs": "Présente la statistique du écrire dans un graphe",
       "katex": "Présente les formules LaTeX",
       "trademark": "Tous les logos et les noms de marque sont soumis à leurs propriétaires légitimes. En plus d'utiliser leur code, Zettlr n'est aucunement affilié à aucun de ces projets. Node.js est une marque de commerce de Joyent, Inc.",
-      "citationstyle": "Zettlr utilise citeproc pour présenter des citations dans l'editeur. Pour cette objectif, Zettlr utiliser les fichiers langue et style de CitationStyleLanguage (CSL). Ces fichiers sont disperse inaltéré, avec les métadonnées des autheurs. Plus d'information:",
-      "close": "Fermer"
+      "citationstyle": "Zettlr utilise citeproc pour présenter des citations dans l'editeur. Pour cette objectif, Zettlr utiliser les fichiers langue et style de CitationStyleLanguage (CSL). Ces fichiers sont disperse inaltéré, avec les métadonnées des autheurs. Plus d'information:"
     },
     "statistics": {
       "title": "Statistique d'écrirer",
@@ -430,6 +432,12 @@
       "words_per_day": "Mots par jour",
       "words": "Mots",
       "day": "Date"
+    },
+    "paste_image": {
+      "title": "Inserte l'image à partir de presse-papiers.",
+      "info": "Ici il-y-a une avant-prèmiere de l'image dans le presse-papiers. Presse return pour inserter l'image, ou choisier un dossier coutume.",
+      "dimensions": "Dimensions de l'image",
+      "save_cwd": "Enregistrer dans le dossier courant"
     }
   },
   "toolbar": {

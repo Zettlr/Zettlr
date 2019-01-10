@@ -226,6 +226,16 @@ class ZettlrEditor {
      */
     this._cm.on('beforeChange', (cm, changeObj) => {
       if (changeObj.origin === 'paste') {
+        // First check if there's an image in the clipboard. In this case we
+        // need to cancel the paste event and handle the image ourselves.
+        let image = clipboard.readImage()
+        if (!image.isEmpty()) {
+          // We've got an image. So we need to handle it.
+          this._renderer.handleEvent('paste-image')
+          return changeObj.cancel() // Cancel handling of the event
+        }
+
+        // Continue with checking for potential images.
         let newtext = []
         for (let i in changeObj.text) {
           if (changeObj.text[i].indexOf('file://') === 0 && IMAGE_REGEX.test(changeObj.text[i])) {
@@ -373,6 +383,20 @@ class ZettlrEditor {
       } else if (elem.hasClass('cm-link') && elem.text().indexOf('^') === 0) {
         // We've got a footnote
         this._editFootnote(elem)
+      }
+    })
+
+    this._cm.getWrapperElement().addEventListener('paste', (e) => {
+      let image = clipboard.readImage()
+      // Trigger the insertion process from here only if there is no text in the
+      // clipboard (because then CodeMirror will not do anything). If there is
+      // text in the clipboard, do not try to trigger the process from here
+      // because this way two dialogs would be opened -- first from the
+      // beforeChange handler of CodeMirror, and, after the event has bubbled
+      // to the wrapper, from here.
+      if (!image.isEmpty() && clipboard.readText().length === 0) {
+        // We've got an image. So we need to handle it.
+        this._renderer.handleEvent('paste-image')
       }
     })
 

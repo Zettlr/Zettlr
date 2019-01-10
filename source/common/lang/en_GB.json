@@ -154,6 +154,12 @@
     "donate": "Support Zettlr"
   },
   "dialog": {
+    "button": {
+      "close": "Close",
+      "choose_path": "Choose directory …",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
     "find": {
       "find_placeholder": "Find…",
       "replace_placeholder": "Replace with",
@@ -377,9 +383,7 @@
       "debug": "Debug",
       "autoCloseBrackets": "Automatically close the following character pairs: ()[]{}'\"\"»«„““”‘’__``",
       "csl_database": "CSL JSON Database",
-      "choose_file": "Choose file …",
-      "save": "Save",
-      "cancel": "Cancel"
+      "choose_file": "Choose file …"
     },
     "tags": {
       "title": "Manage tags",
@@ -392,7 +396,6 @@
       "title": "New update available",
       "notification": "There is a new version of Zettlr available to download. Please read the changelog below.",
       "release_url": "Open download page",
-      "close": "Close",
       "no_update": "You got the newest version of Zettlr",
       "current_version": "Your version",
       "server_error": "Could not check for updates: Server Error (Status code: %s)",
@@ -421,8 +424,7 @@
       "chartjs": "Displays your writing statistics in a nice chart",
       "katex": "Renders LaTeX-formulae in the editor",
       "trademark": "All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc.",
-      "citationstyle": "Zettlr makes use of citeproc to display citations directly in the editor. To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:",
-      "close": "Close"
+      "citationstyle": "Zettlr makes use of citeproc to display citations directly in the editor. To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:"
     },
     "statistics": {
       "title": "Writing statistics",
@@ -430,6 +432,12 @@
       "words_per_day": "Words per day",
       "words": "Words",
       "day": "Date"
+    },
+    "paste_image": {
+      "title": "Insert Image from Clipboard",
+      "info": "Here is a preview of the image that is currently in your clipboard. Hit return to save it to the current directory, or choose a custom directory.",
+      "dimensions": "Image size",
+      "save_cwd": "Save to current directory"
     }
   },
   "toolbar": {

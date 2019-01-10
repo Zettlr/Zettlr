@@ -1,0 +1,14 @@
+<div class="dialog">
+    <h1>{{i18n "dialog.paste_image.title" }}</h1>
+    <p>{{i18n "dialog.paste_image.info" }}</p>
+    <p>
+      <img class="image-preview" src="{{ img }}">
+    </p>
+    <p>
+      {{i18n "dialog.paste_image.dimensions"}}: <strong>{{ size.width }}&times;{{ size.height }}px</strong>
+      <input type="text" name="name" value="{{ imageName }}" placeholder="{{i18n "dialog.paste_image.name_placeholder"}}">
+    </p>
+    <button id="save-cwd" class="btn-default" data-default-action="data-default-action">{{i18n "dialog.paste_image.save_cwd"}}</button>
+    <button id="save-other">{{i18n "dialog.button.choose_path"}}</button>
+    <button id="abort">{{i18n "dialog.button.close"}}</button>
+</div>

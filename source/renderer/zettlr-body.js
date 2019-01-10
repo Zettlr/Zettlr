@@ -431,6 +431,14 @@ class ZettlrBody {
   }
 
   /**
+   * This dialog is shown when the user has pasted an image from the clipboard.
+   */
+  displayPasteImage () {
+    this._dialog.init('paste-image')
+    this._dialog.open()
+  }
+
+  /**
     * Displays the find-in-file popup.
     * @return {void} Nothing to return.
     */

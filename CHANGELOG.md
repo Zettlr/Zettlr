@@ -10,10 +10,14 @@
 - Fixed a bug that led to files reporting the same tags more than once.
 - Search results are now readable even in dark mode.
 - Fixed a bug that would not correctly transform the links of images dragged from the attachment sidebar onto the editor, causing errors by pandoc when trying to export the file.
+- Added support for pasting images. Now you can hit `Cmd/Ctrl+V` with an image in the clipboard to trigger a dialog that lets you choose what to do with the image. In case you want to save it as-is in the currently selected directory, you can simply hit enter. Otherwise you may choose a different directory to save it in.
 
 ## Under the Hood
 
 - Moved the input styling to the geometry section and only left the colouring in place.
+- Added a `data-default-action` support for Dialogs. Now there can be a button with the attribute `data-default-action="data-default-action"` (repetition necessary for ensuring a correct DOM structure) in each dialog that will be focused on instantiation of the dialog, thereby enabling a simple "default action".
+- Small changes to the translation files to remove some duplicates.
+- Added `md5` for generating simple hashes.
 
 # 1.0.0
 

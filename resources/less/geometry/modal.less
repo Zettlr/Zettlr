@@ -48,6 +48,16 @@
         img {
             max-width:100%;
             max-height:100%;
+
+            // The following class is used in the paste-image dialog.
+            &.image-preview {
+              // Restrict preview images to a smaller height. They only should be
+              // previewed, after all.
+              max-height: 50vh;
+              // Center the previews
+              display: block;
+              margin: 0 auto;
+            }
         }
 
         // Forms

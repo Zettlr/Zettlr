@@ -16,6 +16,8 @@
 const tippy = require('tippy.js')
 const makeTemplate = require('../common/zettlr-template.js')
 const { clipboard } = require('electron')
+const path = require('path')
+const md5 = require('md5')
 const Chart = require('chart.js')
 const { trans } = require('../common/lang/i18n.js')
 const SUPPORTED_PAPERTYPES = require('../common/data.json').papertypes
@@ -192,6 +194,21 @@ class ZettlrDialog {
         }
         break
 
+      case 'paste-image':
+        // Write the image as a data stream into the img variable. This way it
+        // can be previewed before it is decided what to do with it.
+        obj.img = clipboard.readImage().toDataURL()
+        obj.size = clipboard.readImage().getSize()
+        if (clipboard.readText().length > 0) {
+          obj.imageName = path.basename(clipboard.readText(), path.extname(clipboard.readText()))
+        } else {
+          // In case there is no potential basename we could extract, simply
+          // hash the dataURL. This way we can magically also prevent the same
+          // image to be saved twice in the same directory. Such efficiency!
+          obj.imageName = md5('img' + obj.img)
+        }
+        break
+
       default:
         throw new DialogError(trans('dialog.error.unknown_dialog', dialog))
     }
@@ -231,6 +248,11 @@ class ZettlrDialog {
     this._modal.find('#abort').on('click', (e) => {
       this.close()
     })
+
+    // Integration of default action: If there isa data-default-action button
+    // in the dialog, focus it so that the user by pressing return can immediately
+    // issue the command.
+    this._modal.find('button[data-default-action="data-default-action"]').focus()
 
     // Don't bubble so that the user may click on the dialog without
     // closing the whole modal.
