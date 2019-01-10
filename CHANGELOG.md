@@ -9,6 +9,7 @@
 - Small fix to the margins of switches. General fixes to the colours of the input controls in dark mode.
 - Fixed a bug that led to files reporting the same tags more than once.
 - Search results are now readable even in dark mode.
+- Fixed a bug that would not correctly transform the links of images dragged from the attachment sidebar onto the editor, causing errors by pandoc when trying to export the file.
 
 ## Under the Hood
 

@@ -391,7 +391,7 @@ function makeImgPathsAbsolute (basePath, mdstring) {
   let imgRE = /^!\[(.*?)\]\((.+?)\)({.*})?$/gmi
   return mdstring.replace(imgRE, (match, p1, p2, p3, offset, string) => {
     // Check if the path (p2) contains the absolute path
-    if (p2.indexOf(basePath) === 0 || p2.indexOf('http') === 0) {
+    if (p2.indexOf(basePath) === 0 || p2.indexOf('http') === 0 || isFile(p2)) {
       // It's already absolute (either local or remote)
       return `![${p1}](${p2})${(p3 != null) ? p3 : ''}`
     } else {
