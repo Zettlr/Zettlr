@@ -14,6 +14,7 @@
 - Added support for pasting images. Now you can hit `Cmd/Ctrl+V` with an image in the clipboard to trigger a dialog that lets you choose what to do with the image. In case you want to save it as-is in the currently selected directory, you can simply hit enter. Otherwise you may choose a different directory to save it in.
 - Task list items are now rendered directly after you leave the formatting. You don't have to leave the line anymore.
 - Special tags that you've assigned a colour to are now displayed distinct from other tags in the tag dropdown list.
+- Now changing dictionaries during runtime yields the expected effects: The full word buffer will be invalidated so that formerly-wrong and formerly-correct words are checked against the new dictionaries.
 
 ## Under the Hood
 
@@ -21,6 +22,7 @@
 - Added a `data-default-action` support for Dialogs. Now there can be a button with the attribute `data-default-action="data-default-action"` (repetition necessary for ensuring a correct DOM structure) in each dialog that will be focused on instantiation of the dialog, thereby enabling a simple "default action".
 - Small changes to the translation files to remove some duplicates.
 - Added `md5` for generating simple hashes.
+- The `ZettlrDictionary`-class is now an `EventEmitter` and emits `update`-events whenever the composition of the loaded dictionaries changes.
 
 # 1.0.0
 

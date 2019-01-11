@@ -102,6 +102,12 @@ class Zettlr {
       // won't open. As usual: Everything time-consuming shouldn't be done in the
       // first tick of the app.
       this.dict = new ZettlrDictionary()
+
+      // Begin to listen to events emitted by the dictionary
+      this.dict.on('update', (event, loadedDicts) => {
+        // Send an invalidation message to the renderer
+        this.ipc.send('invalidate-dict')
+      })
       this.poll()
     }, POLL_TIME)
   }

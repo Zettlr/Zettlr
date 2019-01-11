@@ -67,7 +67,7 @@ class ZettlrRendererIPC {
     // This is an object that will hold all previously checked words in the form
     // of word: correct?
     // We are explicitly omitting the prototype stuff, as we don't access this.
-    this._typoCache = Object.create(null)
+    this._invalidateDictionaryBuffer()
     this._typoCheck = false
     // Activate typocheck after 2 seconds to speed up the app's start
     setTimeout(() => { this._typoCheck = true }, 2000)
@@ -193,6 +193,15 @@ class ZettlrRendererIPC {
   }
 
   /**
+   * Invalidates the complete dictionary buffer. Necessary to retrieve accurate
+   * messages whenever the dictionaries change during runtime.
+   * @return {void} Does not return.
+   */
+  _invalidateDictionaryBuffer () {
+    this._typoCache = Object.create(null)
+  }
+
+  /**
   * Switch over the received message.
   * @param {String} cmd The command
   * @param  {Object} cnt   The message's body
@@ -201,6 +210,13 @@ class ZettlrRendererIPC {
   */
   handleEvent (cmd, cnt) {
     switch (cmd) {
+      // This message is sent by the main process and directs the renderer to
+      // flush the complete dictionary buffer so that message are being fetched
+      // from main again.
+      case 'invalidate-dict':
+        this._invalidateDictionaryBuffer()
+        break
+
       case 'app-quit':
         // In this case we simply "re-send" that command. This will internally
         // trigger a closing-command buffer, which saves the file before actually

@@ -14,6 +14,7 @@
  */
 
 // const Typo = require('typo-js')
+const EventEmitter = require('events')
 const NSpell = require('nspell')
 const path = require('path')
 const fs = require('fs')
@@ -23,12 +24,19 @@ const fs = require('fs')
  * by the user on runtime. It provides functions that allow to search all
  * loaded dictionaries for words and even change the dictionaries during runtime.
  */
-class ZettlrDictionary {
+class ZettlrDictionary extends EventEmitter {
   constructor () {
+    super()
     this._typos = []
     this._toLoad = 0 // If this number equals the length of the _typos array, all are loaded
     this._loadedDicts = [] // Array containing the language codes for which checking currently works
     this._load()
+
+    // Inject global methods
+    global.dict = {
+      on: (message, callback) => { this.on(message, callback) },
+      off: (message, callback) => { this.off(message, callback) }
+    }
   }
 
   _load () {
@@ -74,6 +82,9 @@ class ZettlrDictionary {
         } // END first else if
       }) // END first readFile
     } // END for
+
+    // Finally emit the update event
+    this.emit('update', this._loadedDicts)
   }
 
   check (term) {
