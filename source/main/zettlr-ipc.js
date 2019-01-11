@@ -433,6 +433,12 @@ class ZettlrIPC {
         this.send('citeproc-bibliography', global.citeproc.makeBibliography())
         break
 
+      case 'save-image-from-clipboard':
+        // cnt either contains save-cwd (save in current working directory) or
+        // save-other (save to a path that has to be chosen by the user)
+        this._app.saveImageFromClipboard(cnt)
+        break
+
       default:
         console.log(trans('system.unknown_command', cmd))
         break

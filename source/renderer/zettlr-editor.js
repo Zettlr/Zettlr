@@ -1163,6 +1163,14 @@ class ZettlrEditor {
   getValue () { return this._cm.getValue() }
 
   /**
+   * This method can be used to insert some text at the current cursor position.
+   * ATTENTION: It WILL overwrite any given selection!
+   * @param  {String} text The text to insert
+   * @return {void}      Does not return.
+   */
+  insertText (text) { this._cm.replaceSelection(text) }
+
+  /**
     * Mark clean the CodeMirror instance
     * @return {void} Nothing to return.
     */

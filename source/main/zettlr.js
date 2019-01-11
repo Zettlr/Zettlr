@@ -14,9 +14,10 @@
  * END HEADER
  */
 
-const { app } = require('electron')
+const { app, clipboard } = require('electron')
 const fs = require('fs')
 const path = require('path')
+const sanitize = require('sanitize-filename')
 
 // Internal classes
 const ZettlrIPC = require('./zettlr-ipc.js')
@@ -802,6 +803,60 @@ class Zettlr {
    * @return {void}      No return.
    */
   openQL (hash) { this._ql.openQuicklook(this.findFile({ 'hash': hash })) }
+
+  saveImageFromClipboard (target) {
+    // If no directory is selected currently, we can't save to cwd.
+    if (target.mode === 'save-cwd' && !this.getCurrentDir()) {
+      return this.notify(trans('system.error.dnf_message'))
+    }
+
+    // Check the name for sanity
+    target.name = sanitize(target.name, '-')
+    if (target.name === '') {
+      return this.notify(trans('system.error.no_allowed_chars'))
+    }
+
+    // Now check the extension of the name (some users may prefer to choose to
+    // provide it already)
+    if (path.extname(target.name) !== '.png') target.name += '.png'
+
+    // Retrieve the directory
+    let p = null
+    if (target.mode === 'save-cwd') {
+      p = this.getCurrentDir().path
+    } else if (target.mode === 'save-other') {
+      p = this.getWindow().askDir()[0] // We only take one directory
+    }
+
+    // If something went wrong or the user did not provide a directory, abort
+    if (!isDir(p)) return this.notify(trans('system.error.dnf_message'))
+
+    p = path.join(p, target.name)
+
+    // Save the image!
+    let image = clipboard.readImage()
+
+    // Somebody may have remotely overwritten the clipboard in the meantime
+    if (image.isEmpty()) return this.notify(trans('system.error.could_not_save_image'))
+
+    // A final step: It may be that the user wanted to resize the image (b/c
+    // it's too large or so). In this case, there are width and height
+    // properties provided in target.
+    if (parseInt(target.width) > 0 && parseInt(target.height) > 0) {
+      // The resize function requires real integers
+      image = image.resize({
+        'width': parseInt(target.width),
+        'height': parseInt(target.height)
+      })
+    }
+
+    fs.writeFile(p, image.toPNG(), (err) => {
+      if (err) return this.notify(trans('system.error.could_not_save_image'))
+      // Everything worked out - now tell the editor to insert some text
+      this.ipc.send('insert-text', `![${target.name}](${p})\n`)
+      // Tada!
+    })
+  }
 
   /****************************************************************************
    **                                                                        **

@@ -437,6 +437,8 @@
       "title": "Inserte l'image à partir de presse-papiers.",
       "info": "Ici il-y-a une avant-prèmiere de l'image dans le presse-papiers. Presse return pour inserter l'image, ou choisier un dossier coutume.",
       "dimensions": "Dimensions de l'image",
+      "name_label": "Nom de fichier",
+      "retain_aspect_label": "Maintenir les proportions",
       "save_cwd": "Enregistrer dans le dossier courant"
     }
   },
@@ -476,6 +478,7 @@
       "dnf_title": "N'été trouver pas le dossier",
       "dnf_message": "Le dossier n'était peut trouver pas.",
       "could_not_create_file": "Erreur lors de création du fichier",
+      "could_not_save_image": "Erreur lors de création de l'image",
       "could_not_create_dir": "Erreur lors de création du dossier",
       "file_exists": "Le fichier existe déjà.",
       "no_allowed_chars": "Le nom ne contenu pas des lettres permis.",

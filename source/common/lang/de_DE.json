@@ -437,6 +437,8 @@
       "title": "Bild einfügen",
       "info": "Hier siehst du eine Vorschau des Bildes, welches in die Datei eingefügt werden wird. Drücke Eingabe, um das Bild im aktuell ausgewählten Verzeichnis zu speichern, oder wähle ein benutzerdefiniertes Verzeichnis aus.",
       "dimensions": "Bildmaße",
+      "name_label": "Dateiname",
+      "retain_aspect_label": "Seitenverhältnis beibehalten",
       "save_cwd": "Im aktuellen Verzeichnis speichern"
     }
   },
@@ -476,6 +478,7 @@
       "dnf_title": "Verzeichnis nicht gefunden",
       "dnf_message": "Das angefragte Verzeichnis wurde nicht gefunden.",
       "could_not_create_file": "Konnte Datei nicht erstellen",
+      "could_not_save_image": "Konnte Bild nicht speichern",
       "could_not_create_dir": "Konnte Verzeichnis nicht erstellen",
       "file_exists": "Die Datei existiert bereits.",
       "no_allowed_chars": "Der Name enthielt keine erlaubten Zeichen.",

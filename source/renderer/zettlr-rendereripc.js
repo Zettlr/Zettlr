@@ -521,6 +521,11 @@ class ZettlrRendererIPC {
         this._app.genId()
         break
 
+      // Insert arbitrary text into the CodeMirror instance
+      case 'insert-text':
+        this._app.getEditor().insertText(cnt)
+        break
+
       // Import a language file
       case 'import-lang-file':
         this.send('import-lang-file')
