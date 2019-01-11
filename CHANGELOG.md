@@ -12,6 +12,7 @@
 - Search results are now readable even in dark mode.
 - Fixed a bug that would not correctly transform the links of images dragged from the attachment sidebar onto the editor, causing errors by pandoc when trying to export the file.
 - Added support for pasting images. Now you can hit `Cmd/Ctrl+V` with an image in the clipboard to trigger a dialog that lets you choose what to do with the image. In case you want to save it as-is in the currently selected directory, you can simply hit enter. Otherwise you may choose a different directory to save it in.
+- Task list items are now rendered directly after you leave the formatting. You don't have to leave the line anymore.
 
 ## Under the Hood
 

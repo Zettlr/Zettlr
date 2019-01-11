@@ -48,7 +48,7 @@
       }
       let leadingSpaces = match[1].length || 0
 
-      if (cm.getCursor('from').line === i && leadingSpaces < cm.getCursor('from').ch < 5 + leadingSpaces) {
+      if (cm.getCursor('from').line === i && cm.getCursor('from').ch < 5 + leadingSpaces) {
         // We're directly in the formatting so don't render.
         continue
       }
