@@ -155,7 +155,6 @@ class ZettlrDialog {
         }
         // The template expects a simple string
         obj.attachmentExtensions = obj.attachmentExtensions.join(', ')
-        console.log(obj)
         break
 
       case 'project-properties':
@@ -301,7 +300,6 @@ class ZettlrDialog {
       global.ipc.send('request-files', payload, (ret) => {
         // Don't update to empty paths.
         if (!ret || ret.length === 0 || ret[0] === '') return
-        console.log(ret)
         // Write the return value into the data-request-target of the clicked
         // button, because each button has a designated text field.
         $(elem.attr('data-request-target')).val(ret[0])

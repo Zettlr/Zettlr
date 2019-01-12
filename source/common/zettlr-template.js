@@ -38,7 +38,6 @@ function makeTemplate (cat, tpl, data = {}) {
   handlebars.registerHelper('transDict', function (lang) {
     let query = 'dialog.preferences.app_lang.' + lang
     let ret = trans(query)
-    console.log(ret)
     // If the language has not been translated return the language code
     if (ret === query) return lang
     // Please note that we are not returning SafeStrings as this is unnecessary.

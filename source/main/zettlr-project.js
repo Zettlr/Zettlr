@@ -143,8 +143,6 @@ class ZettlrProject {
       makeExport(opt) // Aaaand export
     } catch (err) {
       throw err
-      // console.log(err.name + ': ' + err.message);
-      // this.notify(err.name + ': ' + err.message); // Error may be thrown
     }
   }
 
