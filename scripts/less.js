@@ -75,7 +75,7 @@ less.render(geometryLess, {
     fs.writeFileSync(geometryTarget, output.css, { encoding: 'utf8' })
     log.success(`Done writing CSS to file ${geometryTarget}!`)
     log.info(`Sourcemap: ${output.map}`)
-    log.info(`Imported files: [\n   ${output.imports.join(',\n    ')}\n]`)
+    log.info(`Imported files: [\n    ${output.imports.join(',\n    ')}\n]`)
   } catch (e) {
     log.error(`ERROR: Error on writing ${geometryTarget}: ${e.name}`)
     log.error(e.message)
@@ -102,7 +102,7 @@ for (let theme of themes) {
       fs.writeFileSync(theme.target, output.css, { encoding: 'utf8' })
       log.success(`Done writing CSS to file ${theme.target}`)
       log.info(`Sourcemap: ${output.map}`)
-      log.info(`Imported files: [\n   ${output.imports.join(',\n    ')}\n]`)
+      log.info(`Imported files: [\n    ${output.imports.join(',\n    ')}\n]`)
     } catch (err) {
       log.error(`ERROR: Could not write ${theme.target}: ${err.name}`)
       log.error(err.message)
