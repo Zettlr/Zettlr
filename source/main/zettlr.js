@@ -65,7 +65,12 @@ class Zettlr {
 
     this.config = new ZettlrConfig(this)
     // Init translations
-    i18n(this.config.get('app_lang'))
+    let metadata = i18n(this.config.get('appLang'))
+
+    // It may be that only a fallback has been provided or else. In this case we
+    // must update the config to reflect this.
+    if (metadata.tag !== this.config.get('appLang')) this.config.set('appLang', metadata.tag)
+
     this.ipc = new ZettlrIPC(this)
 
     // Initiate tags

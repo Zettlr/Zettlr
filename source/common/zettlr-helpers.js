@@ -120,7 +120,7 @@ function sort (arr, type = 'name-up') {
   let useNatural = (global.config && global.config.get('sorting') === 'natural')
 
   // Create a collator for long lists, using the app-lang in BCP-47, and en as fallback
-  let coll = new Intl.Collator([ global.config.get('app_lang').replace(/_/, '-'), 'en' ], { 'numeric': true })
+  let coll = new Intl.Collator([ global.config.get('appLang'), 'en' ], { 'numeric': true })
 
   // We need a buffer function because compare() expects strings, not objects
   let naturalSorting = (a, b) => { return coll.compare(a.name, b.name) }

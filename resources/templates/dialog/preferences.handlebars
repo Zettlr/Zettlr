@@ -15,9 +15,9 @@
         <div class="box-left">
           <label for="app-lang">{{i18n "dialog.preferences.app_lang.title"}}
           </label>
-          <select name="app_lang" id="app-lang">
+          <select name="appLang" id="app-lang">
             {{#each supportedLangs}}
-            <option value="{{this}}" {{#ifCond this '=' ../app_lang}}selected="selected"{{/ifCond}}>{{i18n "dialog.preferences.app_lang." this}}</option>
+            <option value="{{this}}" {{#ifCond this '=' ../appLang}}selected="selected"{{/ifCond}}>{{i18n "dialog.preferences.app_lang." this}}</option>
             {{/each}}
           </select>
           <div class="cb-group">
@@ -81,7 +81,7 @@
           <input type="text" class="dicts-list-search" placeholder="{{i18n "dialog.preferences.spellcheck_search_placeholder"}}">
           <ul class="dicts-list">
             {{#each availableDicts}}
-            <li data-value="{{this}}" class="dicts-list-item">{{i18n "dialog.preferences.app_lang." this}}</li>
+            <li data-value="{{this}}" class="dicts-list-item">{{transDict this}}</li>
             {{/each}}
           </ul>
         </div>
@@ -391,9 +391,9 @@ $('#generate-id').on('click', (e) => {
   let re = new RegExp('^' + $('#pref-zkn-free-id').val() + '$')
   $('#generator-tester').text(id)
   if (re.test(id)) {
-    $('#pass-check').text('{{i18n "dialog.preferences.zkn.pass_check_yes"}}')
+    $('#pass-check').text("{{i18n "dialog.preferences.zkn.pass_check_yes"}}")
   } else {
-    $('#pass-check').text('{{i18n "dialog.preferences.zkn.pass_check_no"}}')
+    $('#pass-check').text("{{i18n "dialog.preferences.zkn.pass_check_no"}}")
   }
 })
 

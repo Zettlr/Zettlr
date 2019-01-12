@@ -1182,6 +1182,15 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
+bcp-47@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/bcp-47/-/bcp-47-1.0.4.tgz#8bee5d1f384fa12b3378b1a4a90dc8418764759d"
+  integrity sha512-KquGHKBVXDBnOOntjqkqINNyNX0eKhDXYbK+83pDJXWO7lV6D7Ey1IQNIDbVQOHxNv6rdynnfS/RfPLVz5X0WA==
+  dependencies:
+    is-alphabetical "^1.0.0"
+    is-alphanumerical "^1.0.0"
+    is-decimal "^1.0.0"
+
 bcrypt-pbkdf@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.2.tgz#a4301d389b6a43f9b67ff3ca11a3f6637e360e9e"

@@ -1,7 +1,7 @@
 {
    "darkTheme": "required|boolean|default:false",
    "snippets": "required|boolean|default:false",
-   "app_lang": "required|string|min:5|max:7|default:en_US",
+   "appLang": "required|string|min:5|max:7|default:en_US",
    "combinerState": "required|string|in:collapsed,expanded|default:collapsed",
    "muteLines": "required|boolean|default:false",
    "export.dir": "required|string|in:temp,cwd|default:temp",

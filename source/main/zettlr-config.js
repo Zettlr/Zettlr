@@ -20,9 +20,11 @@ const fs = require('fs')
 const path = require('path')
 const uuid = require('uuid/v5')
 const EventEmitter = require('events')
+const bcp47 = require('bcp-47')
 const ZettlrValidation = require('../common/zettlr-validation.js')
 const { app } = require('electron')
 const { ignoreFile, isDir, isDictAvailable } = require('../common/zettlr-helpers.js')
+const { enumDictFiles, enumLangFiles, getLanguageFile } = require('../common/lang/i18n.js')
 const COMMON_DATA = require('../common/data.json')
 
 /**
@@ -132,7 +134,7 @@ class ZettlrConfig extends EventEmitter {
       },
       // Language
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.
-      'app_lang': this.getLocale(),
+      'appLang': this.getLocale(),
       'debug': false,
       'uuid': null // The app's unique anonymous identifier
     }
@@ -374,42 +376,18 @@ class ZettlrConfig extends EventEmitter {
   }
 
   /**
-    * Returns the language (but always specified in the form <main>_<sub>,
-    * b/c we rely on it). If no "sub language" is given (e.g. only en, fr or de),
-    * then we assume the primary language (e.g. this function returns en_US for en,
-    * fr_FR for fr and de_DE for de. And yes, I know that British people won't
-    * like me for that. I'm sorry.)
+    * Returns the language of the application but makes sure it's a language
+    * installed on the system.
     * @return {String} The user's locale
     */
   getLocale () {
-    let lang = app.getLocale()
-    let mainlang = null
+    let locale = app.getLocale()
+    let locSchema = bcp47.parse(locale)
+    // Fail if the string was malformed
+    if (!locSchema.language) return 'en-US'
 
-    if (lang.indexOf('-') > -1) {
-      // Specific sub-lang
-      mainlang = lang.split('-')[0]
-      lang = lang.split('-')[1]
-    } else {
-      // Only mainlang
-      mainlang = lang
-      lang = null
-    }
-
-    for (let sup of this.getSupportedLangs()) {
-      let ml = sup.split('_')[0]
-      let sl = sup.split('_')[1]
-      if (ml === mainlang) {
-        if (lang === null) {
-          return sup
-        } else {
-          if (sl === lang) {
-            return sup
-          }
-        }
-      }
-    }
-
-    return 'en_US' // Fallback default
+    // Return the best match that the app can find (only the tag).
+    return getLanguageFile(locale).tag
   }
 
   /**
@@ -417,30 +395,7 @@ class ZettlrConfig extends EventEmitter {
     * @return {Array} An array containing all allowed language codes.
     */
   getSupportedLangs () {
-    // First dynamically enumerate all files that come shipped with the app.
-    let files = fs.readdirSync(path.join(__dirname, '../common/lang'))
-    let languageFiles = []
-    for (let f of files) {
-      if (/[a-z]{1,3}_[A-Z]{1,3}\.json/.test(f)) { // Minimum: aa_AA.json, maximum: aaa_AAA.json
-        // It's a language file!
-        languageFiles.push(f.substr(0, f.lastIndexOf('.')))
-      }
-    }
-
-    // Secondly, enumerate all user translations. Path: APP_DATA/lang
-    try {
-      files = fs.readdirSync(path.join(this.configPath, '/lang'))
-      for (let f of files) {
-        if (/[a-z]{1,3}_[A-Z]{1,3}\.json/.test(f)) {
-          // It's a language file!
-          languageFiles.push(f.substr(0, f.lastIndexOf('.')))
-        }
-      }
-    } catch (e) {
-      // If something goes wrong, simply don't include any user files.
-    }
-
-    return languageFiles
+    return enumLangFiles().map(elem => elem.tag)
   }
 
   /**
@@ -448,32 +403,7 @@ class ZettlrConfig extends EventEmitter {
     * @return {Array} An array containing all language codes available.
     */
   getDictionaries () {
-    // First dynamically enumerate all files that come shipped with the app.
-    let scanfolder = path.join(__dirname, './assets/dict')
-    let dirs = fs.readdirSync(scanfolder)
-    let dictLangs = []
-    for (let d of dirs) {
-      if (/^[a-z]{1,3}_[A-Z]{1,3}$/.test(d) && isDir(path.join(scanfolder, d)) && isDictAvailable(d)) {
-        // It's a dict dir!
-        dictLangs.push(d)
-      }
-    }
-
-    // Secondly, enumerate all custom dicts. Path: APP_DATA/dict
-    try {
-      scanfolder = path.join(this.configPath, '/dict')
-      dirs = fs.readdirSync(scanfolder)
-      for (let d of dirs) {
-        if (/^[a-z]{1,3}_[A-Z]{1,3}$/.test(d) && isDir(path.join(scanfolder, d)) && isDictAvailable(d)) {
-          // It's a dict dir!
-          dictLangs.push(d)
-        }
-      }
-    } catch (e) {
-      // If something goes wrong, simply don't include any user files.
-    }
-
-    return dictLangs
+    return enumDictFiles().map(elem => elem.tag)
   }
 
   /**

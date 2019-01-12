@@ -101,6 +101,7 @@
         }
     },
     "dependencies": {
+        "bcp-47": "^1.0.4",
         "chart.js": "^2.7.2",
         "chokidar": "^2.0.4",
         "citeproc": "^2.1.210",

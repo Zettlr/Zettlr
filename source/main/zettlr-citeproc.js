@@ -39,7 +39,7 @@ class ZettlrCiteproc {
     // The Zettlr internal preview of these citations will always use Chicago,
     // because (a) it's just a preview, and (b) Chicago is the default of Pandoc.
     this._styleID = 'chicago-author-date'
-    this._lang = global.config.get('app_lang').replace('_', '-')
+    this._lang = global.config.get('appLang')
     this._mainStyle = fs.readFileSync(path.join(__dirname, `./assets/csl-styles/${this._styleID}.csl`), 'utf8')
     this._engine = null // Holds the CSL engine
     this._cslData = null // Holds the parsed CSL data (JSON)

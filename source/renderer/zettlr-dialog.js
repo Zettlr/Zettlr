@@ -155,6 +155,7 @@ class ZettlrDialog {
         }
         // The template expects a simple string
         obj.attachmentExtensions = obj.attachmentExtensions.join(', ')
+        console.log(obj)
         break
 
       case 'project-properties':

@@ -16,8 +16,8 @@
 // const Typo = require('typo-js')
 const EventEmitter = require('events')
 const NSpell = require('nspell')
-const path = require('path')
 const fs = require('fs')
+const { getDictionaryFile } = require('../common/lang/i18n.js')
 
 /**
  * This class loads and unloads dictionaries according to the configuration set
@@ -41,7 +41,6 @@ class ZettlrDictionary extends EventEmitter {
 
   _load () {
     let selectedDicts = global.config.get('selectedDicts')
-    let dictPath = path.join(__dirname, 'assets/dict')
     let dictsToLoad = []
 
     // This function can also be called during runtime to exchange some dicts,
@@ -64,12 +63,15 @@ class ZettlrDictionary extends EventEmitter {
     this._toLoad = this._typos.length
 
     for (let dict of dictsToLoad) {
+      // First request a dictionary.
+      let dictMeta = getDictionaryFile(dict)
+      if (dictMeta.status !== 'exact') continue // Only consider exact matches
       this._toLoad++
-      fs.readFile(path.join(dictPath, dict, `${dict}.aff`), 'utf8', (err, affData) => {
+      fs.readFile(dictMeta.aff, 'utf8', (err, affData) => {
         if (err) {
           this._toLoad-- // Decrement so that Zettlr checks with less dictionaries
         } else if (affData) {
-          fs.readFile(path.join(dictPath, dict, `${dict}.dic`), 'utf8', (err, dicData) => {
+          fs.readFile(dictMeta.dic, 'utf8', (err, dicData) => {
             if (err) {
               this._toLoad--
             } else if (dicData) {

@@ -143,7 +143,7 @@ class ZettlrRenderer {
     // Set snippets
     this.getPreview().snippets(global.config.get('snippets'))
     // Receive the application language
-    this.setLocale(global.config.get('app_lang'))
+    this.setLocale(global.config.get('appLang'))
     // muteLines initial setting
     this.getEditor().setMuteLines(global.config.get('muteLines'))
     this.getEditor().setAutoCloseBrackets(global.config.get('editor.autoCloseBrackets'))
