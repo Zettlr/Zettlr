@@ -1,0 +1,223 @@
+// Modal styles
+// These are loaded within the theme-main.less, because they won't change with
+// theme changing
+
+.modal {
+    background-color:rgba(0,0,0,.5);
+
+    .dialog {
+        background-color:white;
+        border-radius:@border-radius;
+        box-shadow: 20px 20px 40px 0px rgba(0, 0, 0, 0.45);
+
+        // General typography
+        h1 {
+            font-size: 1.5em;
+            margin-bottom: 0.2em;
+            color: @grey-5;
+
+            small {
+                font-size:75%;
+                color:@grey-3;
+            }
+        }
+
+        span.uuid {
+          color: @grey-3;
+          margin-top: -0.5em;
+          margin-bottom: 0.5em;
+        }
+
+        // The error span inside dialogs (inside the submit button group)
+        span.error-info {
+          color: @fg-error;
+        }
+
+        hr {
+            border-bottom:1px solid @grey-4;
+            width: 80%;
+        }
+
+        code {
+            background-color:@grey-0;
+            border-radius:2px;
+            font-weight: bold;
+            padding: 2px 5px;
+        }
+
+        // Forms
+
+        label {
+          color:@grey-4;
+          margin-bottom:0.2em;
+          padding-bottom:0;
+          vertical-align: middle;
+        }
+
+        input {
+          line-height: 150%;
+          font-size: inherit;
+
+          &.has-error { background-color: @bg-error !important; }
+        }
+
+        input[type="text"], input[type="number"], button, a.button, textarea, select {
+          line-height: 150%;
+          border: none;
+          border-radius: @border-radius;
+          padding: 2px 10px;
+          background-color: @grey-0;
+          color: @grey-5;
+          border-radius: @border-radius;
+        }
+
+        button, a.button {
+          background-color: @grey-1;
+          color: @grey-7;
+          transition: 0.2s all ease;
+          outline:0;
+          &:hover, &:focus { background-color:@green-0; color: white; }
+        }
+
+        // This class can be used for the combination of a label with an input
+        // text and a button (e.g. to reset). If applied to the parent container
+        // it will change the appearance of these three elements.
+        .form-inline-buttons {
+          label { display: block; margin-bottom:0.2em; }
+          input[type="text"] { width: 80%; margin:0; }
+          button, a.button { margin:0; }
+        }
+
+        // The wrapper for the preferences submit & cancel buttons
+        .prefs-submit-group { clear: both; }
+
+        .changelog {
+            border:1px solid @grey-4;
+            border-radius:2px;
+        }
+
+        // Positioning of the paper margin text elements
+        div.paper {
+            position:relative;
+            &.a4paper { border: 1px solid black; }
+
+            .error {
+                background-color:@bg-error;
+                color: @fg-error;
+                border:1px solid @fg-error;
+                border-radius:5px;
+            }
+        }
+
+        // Tabs styles
+        .ui-tabs-nav {
+            border-bottom:1px solid @grey-1;
+
+            .ui-tabs-tab {
+                line-height:200%;
+                border-top-left-radius: @border-radius;
+                border-top-right-radius: @border-radius;
+
+                &.ui-tabs-active {
+                  background-color:@green-0;
+                  a { color: white; }
+                }
+
+                a, &.ui-tabs-active:hover a {
+                    color:black;
+                    text-decoration:none;
+                    text-align:center;
+                }
+
+                &:hover { background-color:@grey-1; }
+            }
+        }
+
+        // Dictionary list styles
+        ul.dicts-list {
+            margin:0px;
+            border:1px solid @grey-2;
+            padding:0;
+            border-radius:5px;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+
+            li.dicts-list-item {
+                padding:10px;
+                font-weight: bold;
+                margin:0;
+                background-color: white;
+                border-bottom:1px solid @grey-2;
+                &:hover {
+                    background-color:@grey-0;
+                }
+
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
+        }
+
+        input.dicts-list-search {
+            border:1px solid @grey-2;
+            background-color: white;
+            border-bottom:none;
+            font-size: inherit;
+            display:block;
+            margin:0;
+            padding:10px;
+            border-radius: 5px;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+        }
+
+        .selected-dict {
+            color: white;
+            cursor: pointer;
+            background-color: @green-0;
+            border-radius:5px;
+            padding:5px 10px;
+            margin:5px;
+            border:1px solid @green-1;
+
+            &:after {
+                content: "\00d7"; // &times;
+                font-size:150%;
+                padding:0px 5px;
+                color:@green-1;
+                line-height: 50%;
+                vertical-align: baseline;
+            }
+
+            &:hover {
+                background-color:@green-1;
+                border-color:@green-2;
+
+                &:after {
+                    color:@green-2;
+                }
+            }
+        }
+
+        // Tag cloud related stuff
+        .tag {
+          display: inline-block;
+          background-color: lighten(@green-0, 10%);
+          font-weight: bold;
+          cursor: pointer;
+          border-radius: @border-radius;
+          border-bottom: 3px solid @green-0;
+          border-right: 3px solid @green-0;
+          color: @grey-8;
+          padding: 5px;
+          margin: 5px;
+          transition: 0.1s all ease;
+
+          &:hover {
+            background-color: @green-0;
+            border-color: darken(@green-0, 10%);
+          }
+        }
+
+    } // END .dialog
+} // END .modal

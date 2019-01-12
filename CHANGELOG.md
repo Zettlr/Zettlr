@@ -23,6 +23,8 @@
 - Small changes to the translation files to remove some duplicates.
 - Added `md5` for generating simple hashes.
 - The `ZettlrDictionary`-class is now an `EventEmitter` and emits `update`-events whenever the composition of the loaded dictionaries changes.
+- Renamed the default theme to its correct name: **Berlin**.
+- Small changes to enable on-the-fly theme CSS replacement.
 
 # 1.0.0
 

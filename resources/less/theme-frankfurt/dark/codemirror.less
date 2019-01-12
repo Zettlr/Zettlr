@@ -1,0 +1,95 @@
+// Dark codemirror theming
+
+#editor .CodeMirror, .quicklook .body .CodeMirror {
+    background-color:@grey-7;
+    color:@grey-0;
+}
+
+.CodeMirror-selected { background-color:@green-2 !important; }
+
+.CodeMirror-cursor { background: @green-0; }
+
+.CodeMirror-dialog {
+    background-color: @blue-selection-dark;
+    input { color: @blue-selection; }
+}
+
+// First the code blocks
+.cm-comment, .cm-fenced-code { color:@grey-1; }
+.cm-fenced-code {
+    &.cm-comment    { color: @grey-3; }
+    &.cm-attribute  { color: @blue-3; }
+    &.cm-string     { color: @green-0; }
+    &.cm-string-2   { color: @gold-selection-dark; }
+    &.cm-variable   { color: @grey-1; }
+    &.cm-variable-2 { color: @blue-0; }
+    &.cm-keyword    { color: @purple-selection; }
+    &.cm-property   { color: @orange-1; }
+    &.cm-atom       { color: @green-selection-dark; }
+    &.cm-number     { color: @blue-3; }
+}
+
+// HTML tags
+.cm-tag       { color: @orange-2; }
+.cm-attribute { color: @blue-3; }
+.cm-bracket   { color: @grey-1; }
+.cm-string    { color: @green-0; }
+
+// TYPOGRAPHY
+.cm-formatting-header-1, .cm-formatting-header-2, .cm-formatting-header-3,
+.cm-formatting-header-4, .cm-formatting-header-5, .cm-formatting-header-6,
+.cm-url { color: @green-0; }
+
+/* LISTS */
+.cm-formatting-list-ul,
+.cm-formatting-list-ol { color: @green-0; }
+
+/* TYPOGRAPHY */
+.cm-quote, .cm-link, .cm-strong, .cm-em { color:@blue-3; }
+.cm-spell-error { border-bottom:2px dotted @bg-error; }
+.cm-zkn-tag, .cm-zkn-id, .cm-zkn-link { color:@green-0; }
+.cma { color: @blue-selection; }
+
+// citations
+.citeproc-citation {
+  background-color: @grey-5;
+  &.error { color: @bg-error; }
+}
+
+.cm-formatting-escape { color:@grey-0; }
+
+.CodeMirror-foldmarker {
+  background-color: @grey-5;
+  color: @grey-2;
+
+  &:hover { background-color: @grey-4; }
+}
+
+.CodeMirror-guttermarker-subtle { color: #464646; }
+
+// Hint related stuff
+.CodeMirror-hints {
+  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  border: 1px solid @grey-5;
+
+  background: @grey-7;
+  li.CodeMirror-hint {
+    color: @grey-0;
+
+    &:hover { background-color: @grey-5; }
+  }
+
+  li.CodeMirror-hint-active {
+    background-color: darken(@green-0, 10%);
+    color: @grey-0;
+
+    &:hover { background-color: @green-0; }
+  }
+
+  .cm-hint-colour {
+    color: @grey-3;
+    background-color: @grey-5;
+  }
+}

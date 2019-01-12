@@ -1,0 +1,30 @@
+/**
+ * MAIN CSS FOR LIGHT THEMING
+ */
+
+// CodeMirror scrollbar annotations
+.sb-annotation { background-color:@orange-2; }
+
+::-webkit-scrollbar-track { background-color:rgba(240,240,240,1); }
+::-webkit-scrollbar-thumb { background-color:@green-0; }
+::-webkit-scrollbar-thumb:window-inactive { background-color: lighten(@green-0, 40%); }
+
+// Now all "bigger" styles
+
+@import "attachments.less";
+
+@import "codemirror.less";
+
+@import "directories.less";
+
+@import "preview.less";
+
+@import "editor.less";
+
+@import "popup.less";
+
+@import "quicklook.less";
+
+@import "toolbar.less";
+
+@import "inputs.less";

@@ -1,0 +1,14 @@
+// Geometry for the font mainly
+
+.CodeMirror { font-size:@font-size-big; }
+
+// Fenced code is applied to ALL tokens inside, so that we can maintain monospace
+.cm-fenced-code, .cm-formatting-code-block {
+    font-family: @font-mono;
+    font-size: @font-mono-size;
+
+    &.cm-comment { font-style:italic; }
+}
+
+// These types have the same color, but a different weight
+.cm-meta, .cm-def { font-weight: bold; }

@@ -17,23 +17,26 @@ log.info(`Current working directory: ${__dirname}`)
 // imports.
 let geometryFile = path.join(__dirname, '../resources/less/geometry/geometry-main.less')
 let geometryTarget = path.join(__dirname, '../source/common/assets/css/geometry.css')
-let themeFile = path.join(__dirname, '../resources/less/theme-default/theme-main.less')
-let themeTarget = path.join(__dirname, '../source/common/assets/css/theme.css')
 let geometryLess = ''
-let themeLess = ''
+
+let themes = [
+  {
+    source: path.join(__dirname, '../resources/less/theme-berlin/theme-main.less'),
+    target: path.join(__dirname, '../source/common/assets/css/theme-berlin.css'),
+    less: '' // Holds the read input
+  },
+  {
+    source: path.join(__dirname, '../resources/less/theme-frankfurt/theme-main.less'),
+    target: path.join(__dirname, '../source/common/assets/css/theme-frankfurt.css'),
+    less: ''
+  }
+]
 
 log.info(`Reading input files ...`)
 
 // First read both the theme and the geometry file into memory.
-try {
-  themeLess = fs.readFileSync(themeFile, { encoding: 'utf8' })
-  log.success(`Successfully read ${themeFile}`)
-} catch (e) {
-  log.error(`ERROR: Could not read ${themeFile}: ${e.name}`)
-  log.error(e.message)
-  process.exit(-1)
-}
 
+// Geometry
 try {
   geometryLess = fs.readFileSync(geometryFile, { encoding: 'utf8' })
   log.success(`Successfully read ${geometryFile}`)
@@ -43,34 +46,18 @@ try {
   process.exit(-1)
 }
 
-/*
- * THEME
- */
-
-log.info(`Compiling ${themeFile} ...`)
-less.render(themeLess, {
-  'filename': themeFile
-}).then(function (output) {
-  log.success(`Done compiling ${themeFile}! Minimising ...`)
-  // Overwrite output.css with a minified version.
-  output.css = csso.minify(output.css).css
-  log.success(`Done minimising ${themeFile}! Writing to target file ...`)
+// All themes
+for (let theme of themes) {
   try {
-    fs.writeFileSync(themeTarget, output.css, { encoding: 'utf8' })
-    log.success(`Done writing CSS to file ${themeTarget}!`)
-    log.info(`Sourcemap: ${output.map}`)
-    log.info(`Imported files: [\n   ${output.imports.join(',\n    ')}\n]`)
+    theme.less = fs.readFileSync(theme.source, { encoding: 'utf8' })
+    log.success(`Successfully read ${theme.source}`)
   } catch (e) {
-    log.error(`ERROR: Error on writing ${themeFile}: ${e.name}`)
+    log.error(`ERROR: Could not read ${theme.source}: ${e.name}`)
     log.error(e.message)
   }
-},
-function (error) {
-  if (error) {
-    log.error(`ERROR: Could not compile ${themeFile}: ${error.name}`)
-    log.error(error.message)
-  }
-})
+}
+
+// NOW THE COMPILING WORK
 
 /*
  * GEOMETRY
@@ -100,3 +87,30 @@ function (error) {
     log.error(error.message)
   }
 })
+
+/*
+ * THEMES
+ */
+
+for (let theme of themes) {
+  log.info(`Compiling ${theme.source} ...`)
+  less.render(theme.less, {
+    'filename': theme.source
+  }).then(function (output) {
+    log.success(`Done minimising ${theme.source}! Writing to target file ...`)
+    try {
+      fs.writeFileSync(theme.target, output.css, { encoding: 'utf8' })
+      log.success(`Done writing CSS to file ${theme.target}`)
+      log.info(`Sourcemap: ${output.map}`)
+      log.info(`Imported files: [\n   ${output.imports.join(',\n    ')}\n]`)
+    } catch (err) {
+      log.error(`ERROR: Could not write ${theme.target}: ${err.name}`)
+      log.error(err.message)
+    }
+  }, function (err) {
+    if (err) {
+      log.error(`ERROR: Could not compile ${theme.source}: ${err.name}`)
+      log.error(err.message)
+    }
+  })
+}

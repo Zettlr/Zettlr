@@ -1,0 +1,25 @@
+// Toolbar styling
+
+#toolbar {
+    color:@grey-1;
+    background-color: @grey-8;
+
+    .button {
+        transition:@fast-transition all ease;
+        &:not(.pomodoro):hover {
+            background-color: @grey-6;
+        }
+    }
+
+    .searchbar {
+        input {
+            &::placeholder {
+                color: @grey-4;
+            }
+            color:inherit;
+            background-color: black;
+            border:1px solid black;
+            &:focus { border-color: @grey-7; }
+        }
+    }
+}

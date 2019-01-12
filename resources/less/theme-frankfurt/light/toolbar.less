@@ -1,0 +1,52 @@
+// Toolbar styling
+
+#toolbar {
+    background-color: @grey-0;
+    color:@grey-4;
+    box-shadow:0px 0px 5px 5px 15px rgba(0,0,0,.25);
+
+    &.mute {
+        // border-bottom:none;
+    }
+
+    .button {
+        transition:@fast-transition all ease;
+
+        &:not(.pomodoro):hover {
+            background-color: @grey-1;
+            transition:@fast-transition all ease;
+        }
+
+        // Pomodoro meter
+        &.pomodoro svg {
+            // Colours for the pomodoro counter
+            .pomodoro-meter       { fill: @grey-2; }
+            .pomodoro-value.task  { fill: @orange-2; }
+            .pomodoro-value.short { fill: @gold-selection-dark; }
+            .pomodoro-value.long  { fill: @green-selection-dark; }
+        }
+    }
+
+    .file-info { font-size:@font-size-small * 0.8; }
+
+    svg#search-progress-indicator {
+      opacity: 1;
+      transition: 0.2s opacity ease;
+      .indicator-meter { fill: @grey-2; }
+      .indicator-value { fill: @green-0; }
+
+      &.hidden { opacity: 0; }
+    }
+
+    .searchbar input {
+        color:inherit;
+        background-color:white;
+        border:1px solid white;
+        font-size:@font-size-small * 0.8;
+        transition:0.5s border-color ease;
+
+        &:focus {
+            border-color: @grey-1;
+        }
+    }
+}
