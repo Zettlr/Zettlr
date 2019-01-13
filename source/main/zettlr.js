@@ -28,6 +28,7 @@ const ZettlrTags = require('./zettlr-tags.js')
 const ZettlrDir = require('./zettlr-dir.js')
 const ZettlrFile = require('./zettlr-file.js')
 const ZettlrWatchdog = require('./zettlr-watchdog.js')
+const ZettlrTargets = require('./zettlr-targets.js')
 const ZettlrStats = require('./zettlr-stats.js')
 const ZettlrUpdater = require('./zettlr-updater.js')
 const makeExport = require('./zettlr-export.js')
@@ -92,11 +93,19 @@ class Zettlr {
     this.window = new ZettlrWindow(this)
     this.openWindow()
 
+    // We have to instantiate the writing target class BEFORE we load in any
+    // paths ...
+    this._targets = new ZettlrTargets(this)
+
     // Read all paths into the app
     this.refreshPaths()
 
     // If there are any, open argv-files
     this.handleAddRoots(global.filesToOpen)
+
+    // ... but afterwards, we have to check the integrity to remove any remnants
+    // from previous files/folders.
+    this._targets.verify()
 
     // Load in the Quicklook window handler class
     this._ql = new ZettlrQLStandalone()

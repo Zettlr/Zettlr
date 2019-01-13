@@ -1,0 +1,8 @@
+<form action="#" method="GET" class="set-target">
+  <input type="number" min="0" name="count" value="{{ count }}">
+  <select name="mode">
+    <option value="words"{{#ifCond mode '=' 'words'}} selected="selected"{{/ifCond}}>{{i18n "dialog.target.words"}}</option>
+    <option value="chars"{{#ifCond mode '=' 'chars'}} selected="selected"{{/ifCond}}>{{i18n "dialog.target.chars"}}</option>
+  </select>
+  <button type="submit" class="button">{{i18n "dialog.target.set"}}</button>
+</form>

@@ -18,7 +18,7 @@ const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const tippy = require('tippy.js')
 const { clipboard } = require('electron')
-const { hash, makeSearchRegEx } = require('../common/zettlr-helpers.js')
+const { hash, makeSearchRegEx, countWords } = require('../common/zettlr-helpers.js')
 const { trans } = require('../common/lang/i18n.js')
 
 // 1. Mode addons
@@ -145,9 +145,6 @@ class ZettlrEditor {
 
     this._mute = true // Should the editor mute lines while in distraction-free mode?
 
-    // These are used for calculating a correct word count
-    this._blockElements = require('../common/data.json').block_elements
-
     this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
       mode: {
         name: 'multiplex' // This will automatically pull in all other overlays
@@ -264,7 +261,7 @@ class ZettlrEditor {
       }
 
       // Update wordcount
-      this._renderer.updateWordCount(this.getWordCount())
+      this._renderer.updateWordCount(countWords(this._cm.getValue()))
 
       if (changeObj.origin === 'paste' && changeObj.text.join(' ').split(' ').length > 10) {
         // In case the user pasted more than ten words don't let these count towards
@@ -444,7 +441,7 @@ class ZettlrEditor {
     // later in this function)
     $('.CodeMirror-vscrollbar').scrollTop(0)
     this._currentHash = 'hash' + file.hash
-    this._words = this.getWordCount()
+    this._words = countWords(this._cm.getValue())
 
     // Mark clean, because now we got a new (and therefore unmodified) file
     this._cm.markClean()
@@ -662,42 +659,18 @@ class ZettlrEditor {
   }
 
   /**
-    * Returns the current word count in the editor.
-    * @param {String} [words=this._cm.getValue()] The string to be counted
-    * @return {Integer} The word count.
-    */
-  getWordCount (words = this._cm.getValue()) {
-    if (words === '') return 0
-
-    words = words.split(/[\s ]+/)
-
-    let i = 0
-
-    // Remove block elements from word count to get a more accurate count.
-    while (i < words.length) {
-      if (this._blockElements.includes(words[i])) {
-        words.splice(i, 1)
-      } else {
-        i++
-      }
-    }
-
-    return words.length
-  }
-
-  /**
     * Returns an object containing info about the opened file.
     * @return {Objet} An object containing words, chars, chars_wo_spaces, if selection: words_sel and chars_sel
     */
   getFileInfo () {
     let ret = {
-      'words': this.getWordCount(),
+      'words': countWords(this._cm.getValue()),
       'chars': this._cm.getValue().length,
       'chars_wo_spaces': this._cm.getValue().replace(/[\s ]+/g, '').length
     }
 
     if (this._cm.somethingSelected()) {
-      ret.words_sel = this.getWordCount(this._cm.getSelections().join(' '))
+      ret.words_sel = countWords(this._cm.getSelections().join(' '))
       ret.chars_sel = this._cm.getSelections().join('').length
     }
 
@@ -711,8 +684,8 @@ class ZettlrEditor {
     */
   getWrittenWords () {
     // Return the additional written words
-    let nbr = this.getWordCount() - this._words
-    this._words = this.getWordCount()
+    let nbr = countWords(this._cm.getValue()) - this._words
+    this._words = countWords(this._cm.getValue())
     return nbr
   }
 

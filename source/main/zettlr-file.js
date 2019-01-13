@@ -17,7 +17,7 @@ const fs = require('fs')
 const path = require('path')
 const sanitize = require('sanitize-filename')
 const { shell } = require('electron')
-const { hash, ignoreFile, makeImgPathsAbsolute } = require('../common/zettlr-helpers.js')
+const { hash, ignoreFile, makeImgPathsAbsolute, countWords } = require('../common/zettlr-helpers.js')
 const { trans } = require('../common/lang/i18n.js')
 
 /**
@@ -50,6 +50,9 @@ class ZettlrFile {
     this.id = '' // The ID, if there is one inside the file.
     this.tags = [] // All tags that are to be found inside the file's contents.
     this.type = 'file'
+    this.wordCount = 0
+    this.charCount = 0
+    this.target = null // Contains the target object
     this.modtime = 0
     this.linefeed = '\n'
     // This variable is only used to transfer the file contents to and from
@@ -72,6 +75,21 @@ class ZettlrFile {
       // We have to add our file to the watchdog
       global.watchdog.addPath(this.path)
     }
+
+    // Last but not least check if there's a writing target and listen for
+    // change events.
+    this.target = global.targets.get(this.hash)
+    global.targets.on('update', (hash) => {
+      if (this.hash !== hash) return // Not our business
+      // Simply pull in the new target
+      this.target = global.targets.get(this.hash)
+      global.ipc.updateFile(this) // Send a fresh version of this file to the renderer.
+    })
+    global.targets.on('remove', (hash) => {
+      if (this.hash !== hash) return // Also not our business
+      this.target = undefined // Reset
+      global.ipc.updateFile(this) // Send a fresh version of this file to the renderer.
+    })
   }
 
   /**
@@ -140,6 +158,10 @@ class ZettlrFile {
     let match
     // (Re-)read content of file
     let cnt = fs.readFileSync(this.path, { encoding: 'utf8' })
+
+    // Get the word and character count
+    this.wordCount = countWords(cnt)
+    this.charCount = cnt.length
 
     // Determine linefeed to preserve on saving so that version control
     // systems don't complain.
@@ -577,6 +599,9 @@ class ZettlrFile {
       'id': this.id,
       'tags': JSON.parse(JSON.stringify(this.tags)), // Simple copy
       'type': this.type,
+      'wordCount': this.wordCount,
+      'charCount': this.charCount,
+      'target': this.target,
       'modtime': this.modtime,
       'linefeed': this.linefeed
     }

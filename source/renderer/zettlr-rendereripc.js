@@ -335,6 +335,11 @@ class ZettlrRendererIPC {
         this._app.replaceFile(cnt.hash, cnt.file)
         break
 
+      // Show the popup to set a file's target
+      case 'set-target':
+        this._app.getBody().setTarget(cnt)
+        break
+
       case 'mark-clean':
         this._app.getEditor().markClean()
         // If we have a buffered message, send that and afterwards clean up

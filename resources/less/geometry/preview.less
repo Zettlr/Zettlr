@@ -46,10 +46,18 @@
               white-space: nowrap;
 
               // Small info blocks inside the snippets
-              .date, .id, .tags, .directories, .files, .virtual-directories, .tex-indicator {
+              .date, .id, .tags, .directories, .files, .virtual-directories,
+              .tex-indicator {
                 font-size:75%;
                 border-radius:4px;
                 padding:2px 4px;
+              }
+
+              // Optional target progress meter, if a target has been set
+              .target-progress-indicator {
+                vertical-align: bottom;
+                margin: 0 4px;
+                transform: rotateZ(-90deg); // Beginning must be at the top
               }
 
               .directories, .files, .virtual-directories {

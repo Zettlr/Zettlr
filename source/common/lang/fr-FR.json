@@ -86,6 +86,7 @@
     "remove_project": "Supprimer le Projet",
     "project_properties": "Paramètres de Projet…",
     "project_build": "Exporter le Projet",
+    "set_target": "Définir la cible d'écriture…",
     "open": "Ouvrier…",
     "save": "Enregistrer",
     "export": "Exporter…",
@@ -197,6 +198,11 @@
     },
     "file_rename": {
       "placeholder": "Le nom du fichier"
+    },
+    "target": {
+      "words": "Mots",
+      "chars": "Lettres",
+      "set": "Ok"
     },
     "preferences": {
       "title": "Paramètres",

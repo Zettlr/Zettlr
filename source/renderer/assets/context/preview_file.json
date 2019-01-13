@@ -23,5 +23,13 @@
   {
     "label": "menu.quicklook",
     "command": "quicklook"
+  },
+  {
+    "type": "separator"
+  },
+  {
+    "attribute": "data-hash",
+    "label": "menu.set_target",
+    "command": "set-target"
   }
 ]

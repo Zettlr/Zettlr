@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const { trans } = require('../common/lang/i18n.js')
 const { localiseNumber } = require('../common/zettlr-helpers.js')
+const { trans } = require('../common/lang/i18n.js')
 const tippy = require('tippy.js')
 
 /**

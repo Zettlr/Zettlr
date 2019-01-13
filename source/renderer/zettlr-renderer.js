@@ -436,6 +436,9 @@ class ZettlrRenderer {
       let f = this.getCurrentFile()
       f.modtime = file.modtime
       f.tags = file.tags
+      f.wordCount = file.wordCount
+      f.charCount = file.charCount
+      f.target = file.target
       f.id = file.id
       // Trigger a redraw of this specific file in the preview list.
       this._preview.refresh()
@@ -462,6 +465,9 @@ class ZettlrRenderer {
       oldFile.hash = file.hash
       oldFile.id = file.id
       oldFile.tags = file.tags
+      oldFile.target = file.target
+      oldFile.wordCount = file.wordCount
+      oldFile.charCount = file.charCount
       oldFile.ext = file.ext
       oldFile.modtime = file.modtime
 

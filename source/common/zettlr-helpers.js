@@ -19,8 +19,17 @@ const filetypes = require('./data.json').filetypes
 // Ignored directory patterns
 const ignoreDirs = require('./data.json').ignoreDirs
 
+// An array of Markdown block elements
+const BLOCK_ELEMENTS = require('../common/data.json').block_elements
+
 // Translation functions
-const { trans } = require('./lang/i18n.js')
+// Commented out, b/c requiring it here creates a circular reference and returns
+// an empty object. The only question that remains: y tho? Found the answer,
+// look into the i18n to see why. At the moment the zettlr helpers are first
+// instantiated, they will not have access to the i18n module.exports, because
+// zettlr helpers is instantiated with the first call to require i18n, at which
+// point the module.exports of i18n have not yet been declared.
+// const { trans } = require('./lang/i18n.js')
 
 // Include modules
 const path = require('path')
@@ -360,7 +369,9 @@ function localiseNumber (number) {
     return number
   }
 
-  let delim = trans('localise.thousand_delimiter')
+  // We have to require the trans function here because requiring on load will
+  // create a circular reference.
+  let delim = require('./lang/i18n.js').trans('localise.thousand_delimiter')
   if (delim.length > 1) {
     // No delimiter available -> fallback
     delim = '.'
@@ -433,6 +444,30 @@ function makeSearchRegEx (term, injectFlags = ['i']) {
   return new RegExp(re.term, re.flags.join(''))
 }
 
+/**
+ * Returns an accurate word count.
+ * @param  {String} words The Markdown text to count
+ * @return {Number}       The number of words in the file.
+ */
+function countWords (words) {
+  if (!words || typeof words !== 'string') return 0
+
+  words = words.split(/[\s ]+/)
+
+  let i = 0
+
+  // Remove block elements from word count to get a more accurate count.
+  while (i < words.length) {
+    if (BLOCK_ELEMENTS.includes(words[i])) {
+      words.splice(i, 1)
+    } else {
+      i++
+    }
+  }
+
+  return words.length
+}
+
 module.exports = {
   hash,
   flattenDirectoryTree,
@@ -448,5 +483,6 @@ module.exports = {
   localiseNumber,
   isDictAvailable,
   makeImgPathsAbsolute,
-  makeSearchRegEx
+  makeSearchRegEx,
+  countWords
 }

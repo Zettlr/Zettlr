@@ -204,6 +204,39 @@ class ZettlrBody {
   }
 
   /**
+   * Shows the popup to set or update a target on a file.
+   * @param {number} hash The hash for which the popup should be shown.
+   */
+  setTarget (hash) {
+    let file = this._renderer.findObject(hash)
+    if (!file) return // No file given
+
+    let targetMode = 'words'
+    let targetCount = 0
+
+    if (file.hasOwnProperty('target')) {
+      // Overwrite the properties with the ones given
+      targetMode = file.target.mode
+      targetCount = file.target.count
+    }
+
+    let cnt = makeTemplate('popup', 'target', {
+      'mode': targetMode,
+      'count': targetCount
+    })
+
+    popup($(`[data-hash=${hash}]`), cnt, (form) => {
+      if (form) {
+        global.ipc.send('set-target', {
+          'hash': parseInt(hash),
+          'mode': form[1].value,
+          'count': parseInt(form[0].value)
+        })
+      }
+    })
+  }
+
+  /**
     * Displays file information (such as word count etc)
     * @return {ZettlrPopup} The popup that is shown.
     */

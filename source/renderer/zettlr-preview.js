@@ -15,7 +15,7 @@
 
 const Clusterize = require('clusterize.js')
 const tippy = require('tippy.js')
-const { formatDate, flattenDirectoryTree, hash } = require('../common/zettlr-helpers.js')
+const { formatDate, flattenDirectoryTree, hash, localiseNumber } = require('../common/zettlr-helpers.js')
 const { trans } = require('../common/lang/i18n.js')
 // Sorting icons (WebHostingHub-Glyphs)
 const SORT_NAME_UP = '&#xf1c2;'
@@ -186,6 +186,22 @@ class ZettlrPreview {
           <span class="date">${formatDate(new Date(d.modtime))}</span>`
           if (d.id) elem += ` <span class="id">${d.id}</span>`
           if (d.tags.length > 0) elem += ` <span class="tags" data-tippy-content="${d.tags.join(',\n')}">#${d.tags.length}</span>`
+
+          // Finally, set a target progress indicator, if there is a target.
+          if (d.target) {
+            let count = (d.target.mode === 'words') ? d.wordCount : d.charCount
+            let progress = count / d.target.count
+            let large = (progress > 0.5) ? 1 : 0
+            if (progress > 1) progress = 1 // Never exceed 100 %
+            let x = Math.cos(2 * Math.PI * progress)
+            let y = Math.sin(2 * Math.PI * progress)
+            elem += `<svg class="target-progress-indicator"
+            width="16" height="16" viewBox="-1 -1 2 2"
+            data-tippy-content="${localiseNumber(count)} / ${localiseNumber(d.target.count)} (${Math.round(progress * 100)} %)">
+            <circle class="indicator-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle>
+            <path d="M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0" fill="" class="indicator-value" shape-rendering="geometricPrecision"></path>
+            </svg>`
+          }
           elem += `</p>`
         }
       }
@@ -246,8 +262,8 @@ class ZettlrPreview {
       flip: true
     })
 
-    // Also tippify the tag list of each file
-    tippy('#preview .snippet .tags', {
+    // Also tippify the tag list of each file as well as a potential progress meter.
+    tippy('#preview .snippet .tags, #preview .snippet .target-progress-indicator', {
       delay: 100,
       arrow: true,
       duration: 100,

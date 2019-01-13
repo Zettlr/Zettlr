@@ -91,8 +91,20 @@ class ZettlrIPC {
 
     // Enable some globals for sending to the renderer
     global.ipc = {
-      // Send a notification to the renderer process
-      notify: (msg) => { this.send('notify', msg) }
+      /**
+       * Sends a message to the renderer and displays it as a notification.
+       * @param  {String} msg The message to be sent.
+       * @return {void}       Does not return.
+       */
+      notify: (msg) => { this.send('notify', msg) },
+      /**
+       * Replaces the given file in the renderer. Can be used by any file to
+       * update itself in the renderer without having to issue a full path
+       * update.
+       * @param  {ZettlrFile} file A file which should be updated
+       * @return {void}       Does not return.
+       */
+      updateFile: (file) => { this.send('file-replace', { 'hash': file.hash, 'file': file.getMetadata() }) }
     }
   }
 
@@ -215,6 +227,11 @@ class ZettlrIPC {
       case 'file-new':
         // Client has requested a new file.
         this._app.newFile(cnt)
+        break
+
+      // Set or update a target
+      case 'set-target':
+        global.targets.set(cnt)
         break
 
       case 'dir-new':

@@ -365,4 +365,36 @@
             &:focus { outline:0; }
         }
     }
+
+    // Writing target popup
+    .set-target {
+      input[type="number"] {
+        display: inline-block;
+        font-size: 150%;
+        width: 30%;
+
+        // Remove the up/down counter
+        &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+      }
+
+      select {
+        display: inline-block;
+        width: 45%;
+        font-size: 150%;
+        border: none;
+        border-radius: 0px;
+        background-color: transparent;
+        color: inherit;
+      }
+
+      button[type="submit"] {
+        display: inline-block;
+        width: 20%;
+        font-size: 150%;
+        margin: 0 auto;
+      }
+    }
 }

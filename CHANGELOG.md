@@ -4,6 +4,7 @@
 
 - **Attention!** Installing this update will reset the application language to the detected system locale and reset all spellcheck choices (i.e. you will have to re-select the dictionaries using the preferences window). The reason for this is that Zettlr is now compliant with the regulations for language codes as laid out in the Best Current Practices No. 47 ([BCP 47](https://tools.ietf.org/html/bcp47)). To achieve this, all mechanisms of finding and loading translation files and dictionary files had to be modified.
 - **New Feature: Paste Images**. From now on it is possible to copy images directly to the clipboard, then press `Cmd/Ctrl+V` in the editor and Zettlr will ask how to proceed. By pressing `Return` the default action will be taken: The image will be saved into the currently selected directory using either the original filename or a simple hash (for instance if you took a screenshot and there's no associated URL available), and it will be inserted at the current cursor position as a standard Markdown image tag, using the filename as title. If you don't press `Return` directly, you can adapt some options, such as the file size and the filename, and also choose a custom directory alternatively.
+- **New Feature: Set writing targets**. You can set writing targets for files by right-clicking them in the preview list. Each file that has a writing target will display its progress in the snippets section. **Set an existing target to 0 to remove it.**
 - Tags are now only rendered as such and detected by the internal engine, if they are preceeded by a newline or a space. This will prevent page anchors inside links (e.g. `example.com/page#anchor-name`) or words with hashes in them from being detected as tags.
 - Switched from `Droid Mono` to `Liberation Mono` for displaying monospaced code and comment blocks because of better support for glyphs in the latter font.
 - Fixed an issue with the titles of the exporting buttons for HTML, docx, odt and PDF.
@@ -30,6 +31,8 @@
 - Small changes to enable on-the-fly theme CSS replacement.
 - Better escaping of some feedback strings in the preferences template.
 - **The app is now BCP 47 compatible. This means that it should be possible to load every translation file and every dictionary folder using the correct language tag, instead of having to fall back to the crude xx_XX-type Zettlr used until now.**
+- Moved the editor-specific `getWordCount` function out as a helper function.
+- Added an `updateFile` method to the `global.ipc` to enable files to update themselves silently if something changed.
 
 # 1.0.0
 
