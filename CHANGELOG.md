@@ -19,6 +19,7 @@
 - Fixed a small bug that would cause users with French localisation to not be able to use the preferences dialog as it was intended.
 - Fixed a bug that made it impossible to load new dictionaries from the user directory.
 - Fixed a small issue that would display the full translation strings for dictionaries and languages that were not translated in the currently loaded translation, instead of just the language codes.
+- Fixed a small bug that would, on some Linux distributions, lead to the operating system opening up loads of file explorer windows when the "Open Directory"-button in the attachments sidebar was clicked.
 
 ## Under the Hood
 

@@ -36,6 +36,18 @@ class ZettlrAttachments {
     this._open = false
     this._attachments = []
 
+    // We cannot activate the event listener for the directory opening button
+    // in the act method, because the act method gets called everytime the user
+    // changes the directory. Therefore, we would bind a new event listener
+    // every time the user switches directories. This leads to unnecessary lags
+    // an macOS and Windows, and may open the exact amount of new file explorer
+    // windows on Linux distributions (see issue #87).
+    $('#attachments #open-dir-external').click((e) => {
+      if (this._renderer.getCurrentDir()) {
+        shell.openItem(this._renderer.getCurrentDir().path)
+      }
+    })
+
     this.refresh()
   }
 
@@ -98,12 +110,6 @@ class ZettlrAttachments {
       if (elem.attr('href')) shell.openItem(elem.attr('href'))
       e.preventDefault() // Don't follow the link
       e.stopPropagation()
-    })
-
-    $('#attachments #open-dir-external').click((e) => {
-      if (this._renderer.getCurrentDir()) {
-        shell.openItem(this._renderer.getCurrentDir().path)
-      }
     })
   }
 }
