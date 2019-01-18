@@ -95,9 +95,11 @@ class ZettlrBody {
     * @return {void}     Nothing to return.
     */
   requestFileName (dir) {
-    if (!dir) {
-      return // No directory selected.
-    }
+    // No directory selected.
+    if (!dir) return
+
+    // It was a virtual directory, not an actual directory.
+    if (dir.type !== 'directory') return
 
     let cnt = makeTemplate('popup', 'textfield', {
       'val': trans('dialog.file_new.value'),
@@ -117,9 +119,11 @@ class ZettlrBody {
     * @return {void}     Nothing to return.
     */
   requestDirName (dir) {
-    if (!dir) {
-      return // No directory selected.
-    }
+    // No directory selected.
+    if (!dir) return
+
+    // It was a virtual directory, not an actual directory.
+    if (dir.type !== 'directory') return
 
     let cnt = makeTemplate('popup', 'textfield', {
       'val': trans('dialog.dir_new.value'),
