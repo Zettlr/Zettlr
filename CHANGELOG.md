@@ -35,6 +35,7 @@
 - **The app is now BCP 47 compatible. This means that it should be possible to load every translation file and every dictionary folder using the correct language tag, instead of having to fall back to the crude xx_XX-type Zettlr used until now.**
 - Moved the editor-specific `getWordCount` function out as a helper function.
 - Added an `updateFile` method to the `global.ipc` to enable files to update themselves silently if something changed.
+- Moved the calculating functionality of the `ZettlrStatsView` class to the main process's `ZettlrStats` class.
 
 # 1.0.0
 

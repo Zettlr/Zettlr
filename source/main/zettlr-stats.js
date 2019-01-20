@@ -47,7 +47,38 @@ class ZettlrStats {
    * @return {Object} All statistical data.
    */
   getData () {
-    return this.stats
+    return JSON.parse(JSON.stringify(this.stats))
+  }
+
+  /**
+   * Returns an object containing all calculated stats.
+   * @return {Object} An object exposing the statistical parameters.
+   */
+  getStats () {
+    let ret = {
+      'wordCount': this.getData().wordCount, // All words for the graph
+      'avgMonth': 0, // Monthly average
+      'today': 0, // Today's word count
+      'sumMonth': 0 // Overall sum for the past month
+    }
+
+    // Compute average
+    let allwords = []
+    for (let day in ret.wordCount) {
+      // hasOwnProperty only returns "true" if the prop is not a default
+      // prop that every object has.
+      if (ret.wordCount.hasOwnProperty(day)) allwords.push(ret.wordCount[day])
+    }
+    allwords = allwords.reverse().slice(0, 30) // We only want the last 30 days.
+
+    // Now summarize the last 30 days. Should never exceed 100k.
+    for (let i = 0; i < allwords.length; i++) ret.sumMonth += allwords[i]
+
+    // Average last month
+    ret.avgMonth = Math.round(ret.sumMonth / allwords.length)
+    ret.today = ret.wordCount[this.getDate()] || 0
+
+    return ret
   }
 
   /**
@@ -86,9 +117,8 @@ class ZettlrStats {
       this.stats['wordCount'] = {}
     }
 
-    if (val < 0) {
-      val = 0 // Don't substract words
-    }
+    // Don't substract words
+    if (val < 0) val = 0
 
     // For now we only need a word count
     if (!this.stats.wordCount.hasOwnProperty(this.getDate())) {
@@ -113,11 +143,11 @@ class ZettlrStats {
   }
 
   /**
-   * Return today's date in the form YYYY-MM-DD
+   * Return the given date as a string in the form YYYY-MM-DD
+   * @param {Date} [d = new Date()] The date which should be converted. Defaults to now.
    * @return {String} Today's date in international standard form.
    */
-  getDate () {
-    let d = new Date()
+  getDate (d = new Date()) {
     let yyyy = d.getFullYear()
     let mm = d.getMonth() + 1
     if (mm <= 9) mm = '0' + mm

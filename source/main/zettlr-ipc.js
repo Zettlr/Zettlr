@@ -427,7 +427,7 @@ class ZettlrIPC {
 
       // Statistics
       case 'request-stats-data':
-        this.send('stats-data', this._app.getStats().getData())
+        this.send('stats-data', this._app.getStats().getStats())
         break
 
       // Language file import
