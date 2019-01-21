@@ -116,6 +116,9 @@ class ZettlrRenderer {
     // POLL_TIME seconds. This way, it might feel "laggy", but after all the
     // writing itself does not seem laggy, and this is the main aim. Nobody can
     // seriously complain that the citations update "slowly".
+
+    // TODO Jan 21 2019: This is bullshit. Use proper events, like a grown up.
+    // This definitely does not have to happen every few seconds.
     this._ipc.send('citeproc-get-ids')
     // Set next timeout
     setTimeout(() => { this.poll() }, POLL_TIME)

@@ -18,7 +18,7 @@ const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const tippy = require('tippy.js')
 const { clipboard } = require('electron')
-const { hash, makeSearchRegEx, countWords } = require('../common/zettlr-helpers.js')
+const { hash, makeSearchRegEx, countWords, flattenDirectoryTree } = require('../common/zettlr-helpers.js')
 const { trans } = require('../common/lang/i18n.js')
 
 // 1. Mode addons
@@ -252,13 +252,36 @@ class ZettlrEditor {
     this._cm.on('change', (cm, changeObj) => {
       // Show tag autocompletion window, if applicable (or close it)
       if (changeObj.text[0] === '#') {
+        // Tag autocompletion
         this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
         this._currentDatabase = this._tagDB
         this._cm.showHint()
       } else if (changeObj.text[0] === '@') {
+        // citeproc-ID autocompletion
         this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
         this._currentDatabase = this._citeprocIDs
         this._cm.showHint()
+      } else if (changeObj.text[0].charAt(0) === '[' && cm.getCursor().ch > 1) {
+        let cur = cm.getCursor()
+        // File name autocompletion
+        // Only match the first character to account for both autocomplete
+        // brackets and if the setting is off
+        if (cm.getLine(cur.line).charAt(cur.ch - 2) === '[' && this._renderer.getCurrentDir() != null) {
+          // Only trigger, if the char before is existent and also a square brace
+          this._autoCompleteStart = JSON.parse(JSON.stringify(cur))
+          // Build the database in the correct format
+          let db = {}
+          for (let file of flattenDirectoryTree(this._renderer.getCurrentDir())) {
+            if (file.type !== 'file') continue
+            let fname = path.basename(file.name, path.extname(file.name))
+            db[fname] = {
+              'text': file.id || fname, // Use the ID, if given, or the filename
+              'displayText': fname // Always display the filename
+            }
+          }
+          this._currentDatabase = db
+          this._cm.showHint()
+        }
       }
 
       // Update wordcount

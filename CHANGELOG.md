@@ -23,6 +23,7 @@
 - Now it's not possible anymore to try to create files and directories within virtual directories.
 - The cursor blinks now smoothly.
 - Changes to the word-count chart: Now numbers are localised and the date is not in the ugly ISO format anymore.
+- You can now easily search for a file to link with the newly implemented autocompletion list that will pop up if you begin writing an internal link (i.e. type `[[`). After accepting an autocomplete suggestion, Zettlr will either put the ID between the brackets, or the filename, if there is no ID.
 
 ## Under the Hood
 
