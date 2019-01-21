@@ -21,6 +21,7 @@
 - Fixed a small issue that would display the full translation strings for dictionaries and languages that were not translated in the currently loaded translation, instead of just the language codes.
 - Fixed a small bug that would, on some Linux distributions, lead to the operating system opening up loads of file explorer windows when the "Open Directory"-button in the attachments sidebar was clicked.
 - Now it's not possible anymore to try to create files and directories within virtual directories.
+- The cursor blinks now smoothly.
 
 ## Under the Hood
 

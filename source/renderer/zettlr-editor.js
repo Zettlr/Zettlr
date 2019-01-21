@@ -153,6 +153,7 @@ class ZettlrEditor {
       autofocus: false,
       foldGutter: true,
       cursorScrollMargin: 60, // Keep the cursor 60px below/above editor edges
+      cursorBlinkRate: 0, // Disable cursor blinking (we'll do this with a @keyframes animation)
       gutters: ['CodeMirror-foldgutter'],
       foldOptions: {
         'widget': '\u00A0\u2026\u00A0' // nbsp ellipse nbsp
