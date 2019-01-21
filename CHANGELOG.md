@@ -22,6 +22,7 @@
 - Fixed a small bug that would, on some Linux distributions, lead to the operating system opening up loads of file explorer windows when the "Open Directory"-button in the attachments sidebar was clicked.
 - Now it's not possible anymore to try to create files and directories within virtual directories.
 - The cursor blinks now smoothly.
+- Changes to the word-count chart: Now numbers are localised and the date is not in the ugly ISO format anymore.
 
 ## Under the Hood
 

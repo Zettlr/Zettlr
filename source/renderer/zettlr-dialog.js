@@ -19,6 +19,7 @@ const { clipboard } = require('electron')
 const path = require('path')
 const md5 = require('md5')
 const Chart = require('chart.js')
+const { localiseNumber } = require('../common/zettlr-helpers.js')
 const { trans } = require('../common/lang/i18n.js')
 const SUPPORTED_PAPERTYPES = require('../common/data.json').papertypes
 const PAPERNAMES = require('../common/data.json').papernames
@@ -340,11 +341,48 @@ class ZettlrDialog {
           elements: { line: { tension: 0 } },
           responsive: true,
           title: { display: true, text: trans('dialog.statistics.words_per_day') },
-          tooltips: { mode: 'index', intersect: false },
+          tooltips: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: (item, data) => {
+                // Localise the individual word counts
+                var label = data.datasets[item.datasetIndex].label || ''
+                if (label) label += ': '
+                label += localiseNumber(item.yLabel)
+                return label
+              }
+            }
+          },
           hover: { mode: 'nearest', intersect: true },
           scales: {
-            xAxes: [{ display: true, scaleLabel: { display: true, labelString: trans('dialog.statistics.day') } }],
-            yAxes: [{ display: true, scaleLabel: { display: true, labelString: trans('dialog.statistics.words') } }]
+            xAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: trans('dialog.statistics.day')
+              },
+              ticks: {
+                // We need to convert the dates back from the YYYY-MM-DD format
+                // For now make them a little bit prettier. TODO: Remember those
+                // localisation options for dates (see zettlr-helpers).
+                callback: (val, i, vals) => {
+                  // Such magic wow
+                  return val.split('-').reverse().join('.')
+                }
+              }
+            }],
+            yAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: trans('dialog.statistics.words')
+              },
+              ticks: {
+                // Localise the word counts on the y-axis
+                callback: (val, i, vals) => { return localiseNumber(val) }
+              }
+            }]
           },
           onResize: () => { this._place() }
         }
