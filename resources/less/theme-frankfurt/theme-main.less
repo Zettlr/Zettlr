@@ -58,17 +58,18 @@ body {
     .taglist .tagspacer:only-child .tag { border:2px solid white; }
 
     // Fallback for all systems not identified as win32, darwin, or linux.
-    font-family: @font-serif;
+    font-family: @font-sans;
+    font-size: 1em;
 
     &.win32 {
         // Lato on Windows looks bad b/c of very strange font antialiasing,
         // therefore we have to use Segoe UI, if available.
-        font-family: @font-serif;
+        font-family: @font-sans-win;
     }
 
     &.darwin, &.linux {
         // Use built-in Lato for other systems.
-        font-family: @font-serif;
+        font-family: @font-sans;
     }
 
 }
