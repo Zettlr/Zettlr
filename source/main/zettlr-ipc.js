@@ -396,7 +396,9 @@ class ZettlrIPC {
         this._app.getConfig().bulkSet(cnt)
         this.send('config-update')
         // Reload the dictionaries based on the user's selection
-        this._app.dict.reload()
+        // The dict property will not be preset if there were not dictionaries
+        // loaded.
+        if (this._app.dict) this._app.dict.reload()
         break
 
       case 'update-tags':

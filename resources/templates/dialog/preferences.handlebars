@@ -293,29 +293,28 @@
       </div>
       <!-- Export/seldomly used options -->
       <div id="prefs-tabs-advanced">
-        <p>{{i18n "dialog.preferences.attachments_info"}}</p>
-        <textarea id="attachmentExtensions" name="attachmentExtensions">{{attachmentExtensions}}</textarea>
-
-        <hr>
-
-        <label for="pandoc">
-          {{i18n "dialog.preferences.pandoc"}}
-        </label>
-        <input type="text" id="pandoc" name="pandoc" placeholder="{{i18n "dialog.preferences.pandoc_default"}}" value="{{pandoc}}">
-
-        <label for="xelatex">
-          {{i18n "dialog.preferences.xelatex"}}
-        </label>
-        <input type="text" id="xelatex" name="xelatex" placeholder="{{i18n "dialog.preferences.xelatex_default"}}" value="{{xelatex}}">
-
-        <hr>
-
-        <div class="cb-group">
-          <label class="cb-toggle">
-            <input type="checkbox" name="debug" value="yes" id="debug" {{#if debug}}checked="checked"{{/if}}>
-            <div class="toggle"></div>
+        <div class="box-left">
+          <label for="pandoc">
+            {{i18n "dialog.preferences.pandoc"}}
           </label>
-          <label for="debug">{{i18n "dialog.preferences.debug"}}</label>
+          <input type="text" id="pandoc" name="pandoc" placeholder="{{i18n "dialog.preferences.pandoc_default"}}" value="{{pandoc}}">
+
+          <label for="xelatex">
+            {{i18n "dialog.preferences.xelatex"}}
+          </label>
+          <input type="text" id="xelatex" name="xelatex" placeholder="{{i18n "dialog.preferences.xelatex_default"}}" value="{{xelatex}}">
+          <hr>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="debug" value="yes" id="debug" {{#if debug}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="debug">{{i18n "dialog.preferences.debug"}}</label>
+          </div>
+        </div>
+        <div class="box-right">
+          <p>{{i18n "dialog.preferences.attachments_info"}}</p>
+          <textarea id="attachmentExtensions" name="attachmentExtensions" rows="4">{{attachmentExtensions}}</textarea>
         </div>
       </div>
     </div>

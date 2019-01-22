@@ -24,6 +24,7 @@
 - The cursor blinks now smoothly.
 - Changes to the word-count chart: Now numbers are localised and the date is not in the ugly ISO format anymore.
 - You can now easily search for a file to link with the newly implemented autocompletion list that will pop up if you begin writing an internal link (i.e. type `[[`). After accepting an autocomplete suggestion, Zettlr will either put the ID between the brackets, or the filename, if there is no ID.
+- Fixed a bug that would throw an error if updating the config with no dictionary loaded on app boot.
 
 ## Under the Hood
 
@@ -39,6 +40,9 @@
 - Moved the editor-specific `getWordCount` function out as a helper function.
 - Added an `updateFile` method to the `global.ipc` to enable files to update themselves silently if something changed.
 - Moved the calculating functionality of the `ZettlrStatsView` class to the main process's `ZettlrStats` class.
+- Removed the `ZettlrStatsView` class and moved the triggering functionality to the `ZettlrBody` class accordingly with the other popups/dialogs.
+- Branched out the `ZettlrDialog` class so that all functionality is now provided by specialised dialog classes that inherit from the base class.
+- Rearranged the options within the "Advanced" tab in the preferences dialog.
 
 # 1.0.0
 

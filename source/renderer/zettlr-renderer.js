@@ -21,7 +21,6 @@ const ZettlrBody = require('./zettlr-body.js')
 const ZettlrToolbar = require('./zettlr-toolbar.js')
 const ZettlrPomodoro = require('./zettlr-pomodoro.js')
 const popup = require('./zettlr-popup.js')
-const ZettlrStatsView = require('./zettlr-stats-view.js')
 const ZettlrAttachments = require('./zettlr-attachments.js')
 
 const { remote } = require('electron')
@@ -73,7 +72,6 @@ class ZettlrRenderer {
     this._body = new ZettlrBody(this)
     this._toolbar = new ZettlrToolbar(this)
     this._pomodoro = new ZettlrPomodoro(this)
-    this._stats = new ZettlrStatsView(this)
     this._attachments = new ZettlrAttachments(this)
 
     this._directoriesLocked = false // Is the directory tree view currently locked?

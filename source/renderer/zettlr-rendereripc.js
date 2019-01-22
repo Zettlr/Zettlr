@@ -529,7 +529,7 @@ class ZettlrRendererIPC {
         break
 
       case 'stats-data':
-        this._app.getStatsView().show(cnt)
+        this._app.getBody().displayStats(cnt)
         break
 
       // Recent documents

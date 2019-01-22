@@ -16,12 +16,21 @@
  */
 
 const ZettlrCon = require('./zettlr-context.js')
-const ZettlrDialog = require('./zettlr-dialog.js')
 const ZettlrQuicklook = require('./zettlr-quicklook.js')
 const ZettlrNotification = require('./zettlr-notification.js')
-const ZettlrValidation = require('../common/zettlr-validation.js')
 const popup = require('./zettlr-popup.js')
 const makeTemplate = require('../common/zettlr-template.js')
+
+// Dialogs
+const StatsDialog = require('./dialog/stats.js')
+const TagCloud = require('./dialog/tag-cloud.js')
+const UpdateDialog = require('./dialog/update.js')
+const AboutDialog = require('./dialog/about.js')
+const PasteImage = require('./dialog/paste-image.js')
+const PreferencesDialog = require('./dialog/preferences.js')
+const PDFPreferences = require('./dialog/pdf-preferences.js')
+const TagsPreferences = require('./dialog/tags-preferences.js')
+const ProjectProperties = require('./dialog/project-properties.js')
 
 const { trans } = require('../common/lang/i18n.js')
 const { localiseNumber } = require('../common/zettlr-helpers.js')
@@ -40,7 +49,6 @@ class ZettlrBody {
   constructor (parent) {
     this._renderer = parent
     this._menu = new ZettlrCon(this)
-    this._dialog = new ZettlrDialog(this)
     this._spellcheckLangs = null // This holds all available languages
     this._ql = [] // This holds all open quicklook windows
     this._n = [] // Holds all notifications currently displaying
@@ -404,8 +412,8 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayPreferences (prefs) {
-    this._dialog.init('preferences', prefs)
-    this._dialog.open()
+    let d = new PreferencesDialog()
+    d.init(prefs).open()
   }
 
   /**
@@ -414,8 +422,8 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayPDFPreferences (prefs) {
-    this._dialog.init('pdf-preferences', prefs)
-    this._dialog.open()
+    let d = new PDFPreferences()
+    d.init(prefs).open()
   }
 
   /**
@@ -424,8 +432,8 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayTagsPreferences (prefs) {
-    this._dialog.init('tags-preferences', prefs)
-    this._dialog.open()
+    let d = new TagsPreferences()
+    d.init(prefs).open()
   }
 
   /**
@@ -435,8 +443,8 @@ class ZettlrBody {
    */
   displayTagCloud () {
     global.ipc.send('get-tags-database', {}, (ret) => {
-      this._dialog.init('tag-cloud', ret)
-      this._dialog.open()
+      let dialog = new TagCloud()
+      dialog.init(ret).open()
     })
   }
 
@@ -446,8 +454,10 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayProjectProperties (prefs) {
-    this._dialog.init('project-properties', prefs)
-    this._dialog.open()
+    let d = new ProjectProperties()
+    // We need the project directory's name as a default value
+    prefs.projectDirectory = this.getRenderer().findObject(prefs.hash).name
+    d.init(prefs).open()
   }
 
   /**
@@ -455,24 +465,51 @@ class ZettlrBody {
     * @param  {Object} cnt An object containing information on the update.
     */
   displayUpdate (cnt) {
-    this._dialog.init('update', cnt)
-    this._dialog.open()
+    let d = new UpdateDialog()
+    d.init(cnt).open()
   }
 
   /**
     * Displays the about dialog
     */
   displayAbout () {
-    this._dialog.init('about')
-    this._dialog.open()
+    let d = new AboutDialog()
+    d.init().open()
   }
 
   /**
    * This dialog is shown when the user has pasted an image from the clipboard.
    */
   displayPasteImage () {
-    this._dialog.init('paste-image')
-    this._dialog.open()
+    let d = new PasteImage()
+    d.init().open()
+  }
+
+  /**
+   * Displays the stats popup.
+   * @param  {Object} data The statistical data to be shown
+   * @return {void}      No return.
+   */
+  displayStats (data) {
+    let context = {
+      'displaySum': (data.sumMonth > 99999) ? '>100k' : localiseNumber(data.sumMonth),
+      'avgMonth': localiseNumber(data.avgMonth),
+      'today': localiseNumber(data.today),
+      'cmpToday': data.today,
+      'cmpAvg': data.avgMonth,
+      'cmpAvgHalf': data.avgMonth / 2
+    }
+    let cnt = makeTemplate('popup', 'stats', context)
+    let p = popup($('#toolbar .stats'), cnt)
+    $('#more-stats').on('click', (e) => {
+      // Theres no form but the user has clicked the more button
+      let dialog = new StatsDialog()
+      dialog.init(data.wordCount)
+      dialog.open()
+      // After opening the dialog, close the popup. The user probably doesn't
+      // want to click twice to continue writing.
+      p.close()
+    })
   }
 
   /**
@@ -566,142 +603,6 @@ class ZettlrBody {
       this._renderer.handleEvent('cm-command', e.target.className)
       p.close()
     })
-  }
-
-  // This function gets only called by the dialog class with an array
-  // containing all serialized form inputs and the dialog type
-  /**
-    * This function is called by the dialog class when the user saves settings.
-    * @param  {String} dialog    The opened dialog.
-    * @param  {Array} res       An array containing all settings
-    * @return {void}           Nothing to return.
-    */
-  proceed (dialog, res) {
-    // First remove potential error-classes
-    this._dialog.getModal().find(`input`).removeClass('has-error')
-
-    let props = Object.keys(require('../common/validation.json'))
-    let validate = Object.values(require('../common/validation.json'))
-    let cfg = {}
-    let hash
-
-    // There are some values that are set using checkboxes. If true, they are
-    // present and "yes" (not true), if false, they are simply missing.
-    if (dialog === 'preferences') {
-      // Standard preferences
-      cfg['darkTheme'] = (res.find(elem => elem.name === 'darkTheme') !== undefined)
-      cfg['snippets'] = (res.find(elem => elem.name === 'snippets') !== undefined)
-      cfg['muteLines'] = (res.find(elem => elem.name === 'muteLines') !== undefined)
-      cfg['export.stripIDs'] = (res.find(elem => elem.name === 'export.stripIDs') !== undefined)
-      cfg['export.stripTags'] = (res.find(elem => elem.name === 'export.stripTags') !== undefined)
-      cfg['debug'] = (res.find(elem => elem.name === 'debug') !== undefined)
-
-      // Display checkboxes
-      cfg['display.renderCitations'] = (res.find(elem => elem.name === 'display.renderCitations') !== undefined)
-      cfg['display.renderIframes'] = (res.find(elem => elem.name === 'display.renderIframes') !== undefined)
-      cfg['display.renderImages'] = (res.find(elem => elem.name === 'display.renderImages') !== undefined)
-      cfg['display.renderLinks'] = (res.find(elem => elem.name === 'display.renderLinks') !== undefined)
-      cfg['display.renderMath'] = (res.find(elem => elem.name === 'display.renderMath') !== undefined)
-      cfg['display.renderTasks'] = (res.find(elem => elem.name === 'display.renderTasks') !== undefined)
-
-      cfg['editor.autoCloseBrackets'] = (res.find(elem => elem.name === 'editor.autoCloseBrackets') !== undefined)
-      // Extract selected dictionaries
-      cfg['selectedDicts'] = res.filter(elem => elem.name === 'selectedDicts').map(elem => elem.value)
-    } else if (dialog === 'pdf-preferences') {
-      // PDF preferences
-      cfg['pdf.titlepage'] = (res.find(elem => elem.name === 'pdf.titlepage') !== undefined)
-      cfg['pdf.toc'] = (res.find(elem => elem.name === 'pdf.toc') !== undefined)
-    } else if (dialog === 'tags-preferences') {
-      // Tags preferences
-      let tags = {
-        'name': res.filter(elem => elem.name === 'prefs-tags-name').map(elem => elem.value.toLowerCase()),
-        'color': res.filter(elem => elem.name === 'prefs-tags-color').map(elem => elem.value),
-        'desc': res.filter(elem => elem.name === 'prefs-tags-desc').map(elem => elem.value)
-      }
-      cfg['tags'] = []
-      for (let i = 0; i < tags.name.length; i++) {
-        cfg['tags'].push({ 'name': tags.name[i], 'color': tags.color[i], 'desc': tags.desc[i] })
-      }
-    } else if (dialog === 'project-properties') {
-      hash = res.find(elem => elem.name === 'projectHash').value
-      cfg['pdf.titlepage'] = (res.find(elem => elem.name === 'pdf.titlepage') !== undefined)
-      cfg['pdf.toc'] = (res.find(elem => elem.name === 'pdf.toc') !== undefined)
-    }
-
-    // Copy over all other field values from the result set.
-    for (let r of res) {
-      // Only non-missing to not overwrite the checkboxes that ARE checked with a "yes"
-      if (!cfg.hasOwnProperty(r.name)) {
-        // Convert numbers to prevent validation errors.
-        if (!isNaN(r.value) && r.value !== '') r.value = Number(r.value)
-        cfg[r.name] = r.value
-      }
-    }
-
-    // Potential other adaptions
-    if (cfg.hasOwnProperty('pdf.lineheight')) cfg['pdf.lineheight'] = cfg['pdf.lineheight'] / 100 // We need a floating point scale
-
-    // Now finally the attachment extensions.
-    if (cfg.hasOwnProperty('attachmentExtensions')) {
-      let attachments = cfg['attachmentExtensions'].split(',')
-      for (let i = 0; i < attachments.length; i++) {
-        attachments[i] = attachments[i].trim().replace(/[\s]/g, '')
-        if (attachments[i].length < 2) {
-          attachments.splice(i, 1)
-          i--
-          continue
-        }
-        if (attachments[i].charAt(0) !== '.') {
-          attachments[i] = '.' + attachments[i]
-        }
-      }
-      cfg['attachmentExtensions'] = attachments
-    }
-
-    // Validate dat shit.
-    let unvalidated = []
-    for (let key in cfg) {
-      // We have some checkboxes that are either present or missing, and if present,
-      // they are a "yes". We have to account for that, b/c they should be validated
-      // as boolean.
-      if (props.includes(key)) {
-        let rule = validate[props.indexOf(key)]
-        let val = new ZettlrValidation(key, rule)
-        if (!val.validate(cfg[key])) {
-          unvalidated.push({
-            'key': key,
-            'reason': val.why()
-          })
-        }
-      }
-    }
-
-    if (unvalidated.length > 0) {
-      // For brevity reasons only show one at a time (they have to be resolved either way)
-      this._dialog.getModal().find('.error-info').text(unvalidated[0].reason)
-      for (let prop of unvalidated) {
-        // Indicate which ones were wrong.
-        this._dialog.getModal().find(`input[name="${prop.key}"]`).first().addClass('has-error')
-      }
-      return // Don't try to update falsy settings.
-    }
-
-    // Send the ready configuration back to main.
-    if (dialog === 'preferences') {
-      // this._renderer.saveSettings(cfg)
-      global.ipc.send('update-config', cfg)
-    } else if (dialog === 'project-properties') {
-      // Add additional properties for the project settings.
-      global.ipc.send('update-project-properties', { 'properties': cfg, 'hash': hash })
-    } else if (dialog === 'pdf-preferences') {
-      // pdf preferences
-      global.ipc.send('update-config', cfg)
-    } else if (dialog === 'tags-preferences') {
-      global.ipc.send('update-tags', cfg['tags'])
-    }
-
-    // Finally close the dialog!
-    this._dialog.close()
   }
 
   /**
