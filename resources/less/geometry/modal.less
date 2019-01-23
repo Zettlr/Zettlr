@@ -259,6 +259,19 @@
             }
         }
 
+        span#prev-sheet, span#next-sheet {
+          font-family: @font-icon;
+          font-size:@font-size-small * 0.8;
+        }
+
+        span#prev-sheet::before {
+          content: '\f489';
+        }
+
+        span#next-sheet::before {
+          content: '\f488';
+        }
+
         // Tabs styles
         .ui-tabs-nav {
             display:flex;

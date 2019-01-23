@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TagCloud class
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This dialog lets you review all your tags inside your files.
+ *
+ * END HEADER
+ */
+
 const ZettlrDialog = require('./zettlr-dialog.js')
 
 class TagCloud extends ZettlrDialog {

@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TagsPreferences class
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This class lets you manage your special coloured tags.
+ *
+ * END HEADER
+ */
+
 const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
 

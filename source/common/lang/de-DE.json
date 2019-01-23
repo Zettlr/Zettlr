@@ -436,8 +436,14 @@
       "title": "Schreibstatistiken",
       "intro": "Hier findest du erweiterte Statistiken über dein Schreibverhalten.",
       "words_per_day": "Wörter pro Tag",
-      "words": "Wörter",
-      "day": "Datum"
+      "words_per_week": "Wörter pro Woche",
+      "this_frame": "Aktueller Zeitabschnitt",
+      "previous_frame": "Vorhergehender Zeitabschnitt",
+      "day": "Datum",
+      "week": "Woche",
+      "month": "Monat",
+      "year": "Jahr",
+      "compare": "Mit vorigem Zeitabschnitt vergleichen"
     },
     "paste_image": {
       "title": "Bild einfügen",

@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        PreferencesDialog class
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This class ensures all the preferences of Zettlr can be
+ *                  customised to your likings.
+ *
+ * END HEADER
+ */
+
 const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
 

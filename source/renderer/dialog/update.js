@@ -1,4 +1,18 @@
 /* global $ */
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        UpdateDialog class
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     If there's a new update, this dialog lets you download it.
+ *
+ * END HEADER
+ */
+
 const ZettlrDialog = require('./zettlr-dialog.js')
 
 class UpdateDialog extends ZettlrDialog {

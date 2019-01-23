@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        PasteImage class
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This dialog displays a preview of the image currently in the
+ *                  clipboard and lets you choose different options.
+ *
+ * END HEADER
+ */
+
 const ZettlrDialog = require('./zettlr-dialog.js')
 const { clipboard } = require('electron')
 const path = require('path')

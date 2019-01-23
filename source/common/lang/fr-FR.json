@@ -436,8 +436,14 @@
       "title": "Statistique d'écrirer",
       "intro": "Ici il-y-a les statistiques élargi d'écrirer.",
       "words_per_day": "Mots par jour",
-      "words": "Mots",
-      "day": "Date"
+      "words_per_week": "Mots par semaine",
+      "this_frame": "Période courant",
+      "previous_frame": "Période avant",
+      "day": "Date",
+      "week": "Jour",
+      "month": "Mois",
+      "year": "An",
+      "compare": "Comparer à la période avant"
     },
     "paste_image": {
       "title": "Inserte l'image à partir de presse-papiers.",

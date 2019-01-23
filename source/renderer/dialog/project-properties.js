@@ -1,3 +1,18 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        ZettlrDialog class
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Have some projects? This dialog lets you customise the
+ *                  export options for these.
+ *
+ * END HEADER
+ */
+
 const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
 const SUPPORTED_PAPERTYPES = require('../../common/data.json').papertypes

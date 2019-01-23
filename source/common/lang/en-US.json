@@ -436,8 +436,14 @@
       "title": "Writing statistics",
       "intro": "Here you can find extended statistics on your writing behavior, such as a detailed graph of your words per day.",
       "words_per_day": "Words per day",
-      "words": "Words",
-      "day": "Date"
+      "words_per_week": "Words per week",
+      "this_frame": "Current Timeframe",
+      "previous_frame": "Previous Timeframe",
+      "day": "Date",
+      "week": "Week",
+      "month": "Month",
+      "year": "Year",
+      "compare": "Compare with previous time frame"
     },
     "paste_image": {
       "title": "Insert Image from Clipboard",
