@@ -44,6 +44,7 @@
 - Removed the `ZettlrStatsView` class and moved the triggering functionality to the `ZettlrBody` class accordingly with the other popups/dialogs.
 - Branched out the `ZettlrDialog` class so that all functionality is now provided by specialised dialog classes that inherit from the base class.
 - Rearranged the options within the "Advanced" tab in the preferences dialog.
+- Moved out all CodeMirror `require()` to a new file called `autoload.js` in the assets directory to save space in the main `ZettlrEditor` class.
 
 # 1.0.0
 
