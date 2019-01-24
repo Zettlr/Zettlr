@@ -172,6 +172,12 @@ class ZettlrExport {
   }
 
   /**
+   * Returns the target file after the export has succeeded.
+   * @return {String} The exported file path.
+   */
+  getFile () { return this.targetFile }
+
+  /**
    * Perform necessary steps on the file such as replacing IDs or tags, if
    * wanted.
    */

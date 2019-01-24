@@ -243,6 +243,11 @@ class ZettlrRendererIPC {
         this.send('win-menu', cnt)
         break
 
+      // Print the current file
+      case 'print':
+        this.send('print')
+        break
+
       case 'paths-update':
         // Update the paths
         this._app.refresh(cnt)

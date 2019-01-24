@@ -23,6 +23,7 @@ const sanitize = require('sanitize-filename')
 const ZettlrIPC = require('./zettlr-ipc.js')
 const ZettlrWindow = require('./zettlr-window.js')
 const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
+const ZettlrPrint = require('./zettlr-print.js')
 const ZettlrConfig = require('./zettlr-config.js')
 const ZettlrTags = require('./zettlr-tags.js')
 const ZettlrDir = require('./zettlr-dir.js')
@@ -109,6 +110,9 @@ class Zettlr {
 
     // Load in the Quicklook window handler class
     this._ql = new ZettlrQLStandalone()
+
+    // Load the print window handler class
+    this._printWindow = new ZettlrPrint()
 
     // Initiate regular polling
     setTimeout(() => {
@@ -876,6 +880,36 @@ class Zettlr {
       this.ipc.send('insert-text', `![${target.name}](${p})\n`)
       // Tada!
     })
+  }
+
+  print () {
+    // First we need to export the current file as HTML.
+    let file = this.getCurrentFile()
+    if (!file) return // No file open.
+    let opt = {
+      'format': 'html',
+      'file': file, // The file to be exported
+      'dest': app.getPath('temp'), // Export to temporary directory
+      'stripIDs': this.config.get('export.stripIDs'),
+      'stripTags': this.config.get('export.stripTags'),
+      'stripLinks': this.config.get('export.stripLinks'),
+      'pdf': this.config.get('pdf'),
+      'title': file.name.substr(0, file.name.lastIndexOf('.')),
+      'author': this.config.get('pdf').author,
+      'keywords': this.config.get('pdf').keywords,
+      'cslStyle': this.config.get('export.cslStyle'),
+      'autoOpen': false // Do not automatically open the file after export
+    }
+
+    // Call the exporter.
+    try {
+      let e = makeExport(opt)
+      let file = e.getFile()
+      // Now we'll need to open the print window.
+      this._printWindow.openPrint(file)
+    } catch (err) {
+      this.notify(err.name + ': ' + err.message) // Error may be thrown
+    }
   }
 
   /****************************************************************************

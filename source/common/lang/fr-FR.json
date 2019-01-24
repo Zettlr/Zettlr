@@ -93,6 +93,7 @@
     "import_files": "Importer des fichiers…",
     "import_lang_file": "Importer un fichier du traduction…",
     "import_dict_file": "Importer une bibliothèque…",
+    "print": "Imprimer…",
     "rename_file": "Renommer le fichier",
     "rename_dir": "Renommer le dossier",
     "delete_file": "Supprimer le fichier",

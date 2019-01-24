@@ -40,6 +40,11 @@
       "accelerator": "CmdOrCtrl+E",
       "command": "export"
     },
+    {
+      "label": "menu.print",
+      "accelerator": "CmdOrCtrl+P",
+      "command": "print"
+    },
     { "type": "separator" },
     { "label": "menu.import_lang_file", "command": "import-lang-file" },
     { "label": "menu.import_dict_file", "method": "openDictData" },

@@ -1,9 +1,21 @@
-// Quicklook window options
+// Quicklook and Print window options
 
-.quicklook, .quicklook-standalone {
+.quicklook, .quicklook-standalone, .print-window {
     position:fixed;
 
     &.minimize { height:@title-bar-height; }
+
+    #init-print {
+      padding: @title-bar-height * 0.4;
+      cursor: pointer;
+      width: 20px;
+      height: @title-bar-height;
+      &::before {
+        font-family: @font-icon;
+        font-size: @title-bar-height * 0.6;
+        content: '\f125';
+      }
+    }
 
     .title {
         // Title bar options
@@ -107,7 +119,7 @@
 }
 
 // Reset some things for the standalone version
-.quicklook-standalone {
+.quicklook-standalone, .print-window {
   .title {
     -webkit-app-region: drag;
     position: fixed;
@@ -123,11 +135,16 @@
 
   // CodeMirror inside Quicklook standalone windows need another top-distance
   .quicklook-standalone #editor { top: @toolbar-height; }
+  .print-window .content {
+    top: @toolbar-height;
+    width: 100%;
+    height:100%;
+  }
 }
 
 // Custom margins for different platforms
 body {
-  &.darwin .quicklook-standalone .title { padding-left: 70px; }
-  &.win32 .quicklook-standalone .title { padding-right: 140px; }
-  &.linux .quicklook-standalone .title { padding-right: 100px; }
+  &.darwin .quicklook-standalone .title, &.darwin .print-window .title { padding-left: 70px; }
+  &.win32 .quicklook-standalone .title, &.win32 .print-window .title { padding-right: 140px; }
+  &.linux .quicklook-standalone .title, &.linux .print-window .title { padding-right: 100px; }
 }

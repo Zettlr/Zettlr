@@ -93,6 +93,7 @@
     "import_files": "Import files…",
     "import_lang_file": "Import translation…",
     "import_dict_file": "Import dictionary…",
+    "print": "Print…",
     "rename_file": "Rename file",
     "rename_dir": "Rename directory",
     "delete_file": "Delete file",

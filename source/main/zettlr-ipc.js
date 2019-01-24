@@ -192,6 +192,11 @@ class ZettlrIPC {
         this._app.getWindow().popupMenu(cnt.x, cnt.y)
         break
 
+      // Print the current file
+      case 'print':
+        this._app.print()
+        break
+
       case 'get-paths':
         // The child process requested the current paths and files
         this.send('paths-update', this._app.getPathDummies())

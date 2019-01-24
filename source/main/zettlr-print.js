@@ -2,13 +2,12 @@
   * @ignore
   * BEGIN HEADER
   *
-  * Contains:        ZettlrQLStandalone class
+  * Contains:        ZettlrPrint class
   * CVM-Role:        Controller
   * Maintainer:      Hendrik Erz
   * License:         GNU GPL v3
   *
-  * Description:     A wrapper around the BrowserWindows used for standalone
-  *                  Quicklooks.
+  * Description:     A wrapper around the BrowserWindows used for printing.
   *
   * END HEADER
   */
@@ -17,31 +16,31 @@ const path = require('path')
 const url = require('url')
 const { BrowserWindow } = require('electron')
 
-class ZettlrQLStandalone {
+class ZettlrPrint {
   /**
-   * Initates the Quicklook Window reference array.
+   * Initates the print Window reference array.
    */
   constructor () {
-    this._ql = []
+    this._win = null
     this._darkMode = global.config.get('darkTheme')
 
     // Enable listening to config changes
     global.config.on('update', (e) => {
       if (global.config.get('darkTheme') !== this._darkMode) {
         this._darkMode = global.config.get('darkTheme')
-        for (let ql of this._ql) {
-          if (ql) ql.webContents.send('toggle-theme')
-        }
+        this._win.webContents.send('toggle-theme')
       }
     })
   }
 
   /**
-   * Opens a Quicklook window with a specific file
-   * @param  {ZettlrFile} file The file to be opened
+   * Opens a printing window with a specific file
+   * @param  {string} file The file to be opened
    * @return {void}      No return.
    */
-  openQuicklook (file) {
+  openPrint (file) {
+    if (this._win) return this._win.focus() // Only one print window
+
     let winConf = {
       acceptFirstMouse: true,
       minWidth: 300,
@@ -75,42 +74,18 @@ class ZettlrQLStandalone {
     // Then activate listeners.
     // and load the index.html of the app.
     win.loadURL(url.format({
-      pathname: path.join(__dirname, '../quicklook/index.htm'),
+      pathname: path.join(__dirname, '../print/index.htm'),
       protocol: 'file:',
       slashes: true,
-      search: `file=${file.hash}&darkMode=${global.config.get('darkTheme')}`
+      search: `file=${file}&darkMode=${global.config.get('darkTheme')}`
     }))
     // Only show window once it is completely initialized
     win.once('ready-to-show', () => { win.show() })
-    // As soon as the window is closed, remove it from our array.
-    win.on('closed', () => { this.closeQuicklook(win, true) })
+    // As soon as the window is closed, reset it to null.
+    win.on('closed', () => { this._win = null })
 
-    this._ql.push(win)
-  }
-
-  /**
-   * Closes a specific quicklook window
-   * @param  {BrowserWindow}  win           The reference to a BrowserWindow
-   * @param  {Boolean} [alreadyClosed=false] Whether or not the window is already closed
-   * @return {void}                        No return.
-   */
-  closeQuicklook (win, alreadyClosed = false) {
-    let found = this._ql.find((elem) => elem === win)
-    if (found) {
-      if (!alreadyClosed) found.close()
-      this._ql.splice(this._ql.indexOf(found), 1)
-    }
-  }
-
-  /**
-   * Closes all Quicklook windows.
-   * @return {void} No return.
-   */
-  closeAll () {
-    for (let win of this._ql) {
-      win.close()
-    }
+    this._win = win
   }
 }
 
-module.exports = ZettlrQLStandalone
+module.exports = ZettlrPrint
