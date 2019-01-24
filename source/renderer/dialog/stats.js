@@ -250,6 +250,33 @@ class StatsDialog extends ZettlrDialog {
     // Set the axis scale
     this._chart.options.scales.xAxes[0].time.unit = (this._mode === 'year') ? 'week' : 'day'
 
+    if (this._compare) {
+      // Reset the min/max in comparing mode, because otherwise the dates will
+      // be fubar.
+      this._chart.options.scales.xAxes[0].time.min = undefined
+      this._chart.options.scales.xAxes[0].time.max = undefined
+    } else {
+      // Set the min/max to according values (beginning/end of week, month, or year)
+      let min = moment(Object.keys(this._backgroundData[this._currentSheet])[0])
+      let max = moment(Object.keys(this._backgroundData[this._currentSheet]).reverse()[0])
+      if (this._mode === 'year') {
+        let y = min.format('YYYY')
+        min = `${y}-01-01`
+        max = `${y}-12-31`
+      } else if (this._mode === 'month') {
+        min = min.date(1).format('YYYY-MM-DD')
+        // date(0) will overflow the constructor and instead substract, see
+        // https://github.com/moment/moment/issues/242#issuecomment-4862775
+        max = max.add(1, 'months').date(0).format('YYYY-MM-DD')
+      } else if (this._mode === 'week') {
+        min = min.isoWeekday(1).format('YYYY-MM-DD')
+        max = max.isoWeekday(7).format('YYYY-MM-DD')
+      }
+
+      this._chart.options.scales.xAxes[0].time.min = min
+      this._chart.options.scales.xAxes[0].time.max = max
+    }
+
     // Pre-set the progress bar
     $('#current-sheet-info').attr('max', this._backgroundData.length - 1)
 
