@@ -26,6 +26,7 @@ class ZettlrPrint {
 
     // Enable listening to config changes
     global.config.on('update', (e) => {
+      if (!this._win) return // There's no window to alter
       if (global.config.get('darkTheme') !== this._darkMode) {
         this._darkMode = global.config.get('darkTheme')
         this._win.webContents.send('toggle-theme')
