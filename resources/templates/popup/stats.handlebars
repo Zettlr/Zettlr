@@ -28,9 +28,13 @@
 {{#ifCond cmpToday '>' cmpAvg}}
 <p><strong>{{i18n "gui.avg_surpassed"}}</strong></p>
 {{/ifCond}}
+
 {{#ifCond cmpToday '>' cmpAvgHalf}}
+{{#ifCond cmpToday '<=' cmpAvg}}
 <p><strong>{{i18n "gui.avg_close_to"}}</strong></p>
 {{/ifCond}}
+{{/ifCond}}
+
 {{#ifCond cmpToday '<=' cmpAvgHalf}}
 <p><strong>{{i18n "gui.avg_not_reached"}}</strong></p>
 {{/ifCond}}

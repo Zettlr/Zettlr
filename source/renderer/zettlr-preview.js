@@ -228,12 +228,19 @@ class ZettlrPreview {
       'scroll': false,
       'helper': function () {
         // Return a dragger element containing the filename
-        return $('<div>').addClass('dragger').text($(this).children('p').first().text()).appendTo('body')
-        // Why 'li'? b/c the directories only accept lis.
+        let helper = $('<div>').addClass('dragger')
+        helper.text($(this).children('p').first().text())
+        helper.appendTo('body')
+        return helper
       },
       'revert': 'invalid', // Only revert if target was invalid
       'revertDuration': 200,
       'distance': 5,
+      // Tell jQuery to update the draggable & droppable positions on each
+      // mousemove. This is necessary for the compact view as the two containers
+      // will swap shortly after drag begins, so the positions of the droppables
+      // are rather different from their positions before the start.
+      refreshPositions: true,
       // We have to lock/unlock directories on dragging, so that not
       // suddenly the preview list reappears and dropping becomes impossible
       'start': (e, ui) => { this._renderer.lockDirectories() },
@@ -243,7 +250,8 @@ class ZettlrPreview {
         $('body').css('cursor', '')
       },
       'drag': (e, ui) => {
-        if (e.clientX <= 0 || e.clientX >= $(window).innerWidth() || e.clientY <= 0 || e.clientY >= $(window).innerHeight()) {
+        if (e.clientX <= 0 || e.clientX >= $(window).innerWidth() ||
+        e.clientY <= 0 || e.clientY >= $(window).innerHeight()) {
           let elem = $(e.target)
           while (!elem.is('li')) {
             elem = elem.parent()

@@ -27,6 +27,8 @@
 - Changes to the word-count chart: Now numbers are localised and the date is not in the ugly ISO format anymore.
 - You can now easily search for a file to link with the newly implemented autocompletion list that will pop up if you begin writing an internal link (i.e. type `[[`). After accepting an autocomplete suggestion, Zettlr will either put the ID between the brackets, or the filename, if there is no ID.
 - Fixed a bug that would throw an error if updating the config with no dictionary loaded on app boot.
+- Fixed a bug that would move a file to a random directory instead of enabling you to actually copy said file outside the app, if you dragged the file out of the app and passed the directory list.
+- Fixed the highlighting effect on drag operations. Now even if you use the thin sidebar mode, the directories where you can drop files will receive the highlighting shimmer.
 
 ## Under the Hood
 
@@ -46,6 +48,7 @@
 - Branched out the `ZettlrDialog` class so that all functionality is now provided by specialised dialog classes that inherit from the base class.
 - Rearranged the options within the "Advanced" tab in the preferences dialog.
 - Moved out all CodeMirror `require()` to a new file called `autoload.js` in the assets directory to save space in the main `ZettlrEditor` class.
+- Added a security pass to the droppable directories to make sure they don't accidentally accept the file and direct the main process to move it out of the app instead of moving it to themselves.
 
 # 1.0.0
 

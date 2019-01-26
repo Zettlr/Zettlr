@@ -103,11 +103,30 @@ class TreeView {
       'accept': 'li', // Only accept dragger-divs (the helper elements)
       'tolerance': 'pointer', // The pointer must be over the droppable
       'drop': (e, ui) => {
-        this._dir.removeClass('highlight')
-        global.ipc.send('request-move', {
-          'from': parseInt(ui.draggable.attr('data-hash')),
-          'to': this.getHash()
-        })
+        // Before handling the drop event, we need to make sure the user didn't
+        // want to drag the file *out* of the app. As long as the user is not
+        // over a droppable element, the draggable itself will be able to cancel
+        // the drop operation by itself, but if someone wants to drag the file
+        // out to the left of the app, where the directories are, it is very
+        // possible that the user is over a droppable area when the cursor
+        // leaves the app. As of the way the droppable is built, the droppable
+        // will first receive the drop event before the main process becomes
+        // aware of the drag-out operation. Therefore we have to duplicate the
+        // "check if outside of app"-code to make sure no droppable accidentally
+        // accepts a file that is supposed to be dragged outside.
+        if (e.clientX <= 0 || e.clientX >= $(window).innerWidth() ||
+        e.clientY <= 0 || e.clientY >= $(window).innerHeight()) {
+          global.ipc.send('file-drag-start', {
+            'hash': ui.draggable.attr('data-hash')
+          })
+          return false
+        } else {
+          this._dir.removeClass('highlight')
+          global.ipc.send('request-move', {
+            'from': parseInt(ui.draggable.attr('data-hash')),
+            'to': this.getHash()
+          })
+        }
       },
       'over': (e, ui) => {
         this._dir.addClass('highlight')
