@@ -12,7 +12,7 @@
 
     &:before { background-color: white; }
   }
-  input:checked + .toggle { background-color: @green-0; }
+  input:checked + .toggle { background-color: @blue-0; }
 }
 
 .radio-toggle {
@@ -22,15 +22,32 @@
     // Inner part
     &:before { background-color: transparent; }
   }
-  input:checked + .toggle:before { background-color: @green-0; }
+  input:checked + .toggle:before { background-color: @blue-0; }
 }
 
 /*
- * SLIDERS / RANGES
- */
+* SLIDERS / RANGES
+*/
 
- input[type=range] {
-   &::-webkit-slider-runnable-track { background: @grey-1; }
-   &::-webkit-slider-thumb { background: @green-0; }
-   &:focus::-webkit-slider-runnable-track { background: @grey-1; }
+input[type=range] {
+  &::-webkit-slider-runnable-track { background: @grey-1; }
+  &::-webkit-slider-thumb { background: @blue-0; }
+  &:focus::-webkit-slider-runnable-track { background: @grey-1; }
+}
+
+progress {
+  border: 0;
+  height: 18px;
+  border-radius: @border-radius;
+
+  &::-webkit-progress-bar {
+    background-color: @grey-1;
+    border-radius: @border-radius;
+  }
+
+  &::-webkit-progress-value {
+    background-color: @blue-0;
+    border-radius: @border-radius;
+    transition: 0.4s all ease; // Ease out the value changes
+  }
 }

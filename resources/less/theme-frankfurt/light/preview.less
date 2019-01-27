@@ -1,15 +1,15 @@
 // Preview styling
 
 #preview {
+
     border-right:1px solid @grey-2;
-    background-color:inherit;
-    font-size: @font-size-small;
     background-color: @sepia-1;
+    font-size: @font-size-small;
 
     ul {
         background-color:inherit;
 
-        .selected { background-color:@green-selection; }
+        .selected { background-color:@blue-selection; }
 
         li {
             border-bottom:1px solid @grey-2;
@@ -18,11 +18,11 @@
 
             // File is displayed as part of a virtual directory -> actually
             // some kind of a "ghost" file
-            &.vd-file { background-color:lighten(@purple-selection, 10%); }
+            &.vd-file { background-color:lighten(@orange-1, 10%); }
 
             &.file:hover {
                 // important is needed to not mess with the heatmap styles
-                background-color:@grey-0 !important;
+                background-color:@grey-2 !important;
             }
 
             p.filename {
@@ -35,8 +35,8 @@
             .taglist:hover .tag { border:2px solid white; }
 
             &.directory, &.virtual-directory {
-                background-color:@grey-1;
-                color:@green-0;
+                background-color:@sepia-4;
+                color:@blue-0;
 
                 span.sortTime, span.sortName {
                     background-color:@grey-1;
@@ -45,20 +45,25 @@
                 }
             }
 
-            &.virtual-directory { color:@purple-selection-dark; }
+            &.virtual-directory { color:@orange-1; }
 
             p.snippet {
               .excerpt { color: @grey-3; }
 
               .date, .id, .tags, .directories, .files, .virtual-directories {
-                background-color:@grey-1;
+                background-color:@sepia-2;
                 color: @grey-3;
               }
 
               .tex-indicator {
                 color: @grey-0;
                 font-family: @font-mono;
-                background-color: @green-0;
+                background-color: @blue-0;
+              }
+
+              .target-progress-indicator {
+                circle { fill: @grey-0; }
+                path { fill: @blue-0; }
               }
             }
         }

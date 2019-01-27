@@ -2,12 +2,11 @@
 
 #directories {
     border-right:1px solid @grey-2;
+    background-color: @sepia-1;
     color: @grey-4;
     font-size:@font-size-small;
-    background-color: @sepia-1;
 
     // Direct descendants need some margin to the files and to other roots
-    // &//  > ul:not(:first-child) { border-top:1px solid @grey-2; }
     #directories-dirs-header, #directories-files-header {
       border-bottom:1px solid @grey-2;
       color: @grey-2;
@@ -17,7 +16,7 @@
 
     ul {
         .selected {
-            background-color:@green-0;
+            background-color:@blue-0;
             color:white;
 
             &:before { color:white; }
@@ -27,7 +26,7 @@
             &:hover { background-color:@grey-1; }
 
             &.highlight {
-                box-shadow: 0px 0px 1px 2px @green-selection;
+                box-shadow: 0px 0px 1px 2px @blue-selection;
 
                 // Prevent hovering effect on drag'n'drop actions
                 &:hover  { background-color:inherit; }
@@ -37,7 +36,7 @@
 
     .file {
         &.selected {
-            background-color:@green-0;
+            background-color:@blue-0;
             color:white;
         }
 
@@ -47,7 +46,7 @@
         }
     }
 
-    .virtual-directory { color: @purple-selection; }
+    .virtual-directory { color: @orange-1; }
 
     .project { color: @fg-error; }
 

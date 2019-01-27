@@ -76,7 +76,7 @@
           color: @grey-7;
           transition: 0.2s all ease;
           outline:0;
-          &:hover, &:focus { background-color:@green-0; color: white; }
+          &:hover, &:focus { background-color:@blue-0; color: white; }
         }
 
         // This class can be used for the combination of a label with an input
@@ -119,7 +119,7 @@
                 border-top-right-radius: @border-radius;
 
                 &.ui-tabs-active {
-                  background-color:@green-0;
+                  background-color:@blue-0;
                   a { color: white; }
                 }
 
@@ -174,27 +174,27 @@
         .selected-dict {
             color: white;
             cursor: pointer;
-            background-color: @green-0;
+            background-color: @blue-0;
             border-radius:5px;
             padding:5px 10px;
             margin:5px;
-            border:1px solid @green-1;
+            border:1px solid @blue-1;
 
             &:after {
                 content: "\00d7"; // &times;
                 font-size:150%;
                 padding:0px 5px;
-                color:@green-1;
+                color:@blue-1;
                 line-height: 50%;
                 vertical-align: baseline;
             }
 
             &:hover {
-                background-color:@green-1;
-                border-color:@green-2;
+                background-color:@blue-1;
+                border-color:@blue-2;
 
                 &:after {
-                    color:@green-2;
+                    color:@blue-2;
                 }
             }
         }
@@ -202,20 +202,20 @@
         // Tag cloud related stuff
         .tag {
           display: inline-block;
-          background-color: lighten(@green-0, 10%);
+          background-color: lighten(@blue-0, 10%);
           font-weight: bold;
           cursor: pointer;
           border-radius: @border-radius;
-          border-bottom: 3px solid @green-0;
-          border-right: 3px solid @green-0;
+          border-bottom: 3px solid @blue-0;
+          border-right: 3px solid @blue-0;
           color: @grey-8;
           padding: 5px;
           margin: 5px;
           transition: 0.1s all ease;
 
           &:hover {
-            background-color: @green-0;
-            border-color: darken(@green-0, 10%);
+            background-color: @blue-0;
+            border-color: darken(@blue-0, 10%);
           }
         }
 

@@ -4,7 +4,7 @@
 @font-sans: 'Lato', 'Helvetica', 'Liberation Sans', Arial, sans-serif;
 @font-sans-size: 100%; // We need to adapt the sizes of the fonts
 @font-sans-win: 'Segoe UI', 'Liberation Sans', Arial, sans-serif; // Windows fallback
-@font-serif: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+@font-serif: 'Crimson', 'Georgia', 'Times New Roman', serif;
 @font-serif-size: 100%;
 @font-mono: 'Liberation Mono', monospace;
 @font-mono-size: 100%;
@@ -47,6 +47,37 @@
 @font-face {
     font-family: 'Lato';
     src: url('../fonts/lato/Lato-HeavyItalic.woff2') format('woff2');
+    font-style: italic;
+    font-weight: bold;
+    text-rendering: optimizeLegibility;
+}
+
+// Crimson (serif)
+@font-face {
+    font-family: 'Crimson';
+    src: url('../fonts/crimson/Crimson-Roman.otf') format('otf');
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: 'Crimson';
+    src: url('../fonts/crimson/Crimson-Italic.otf') format('otf');
+    font-style: italic;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
+
+@font-face {
+    font-family: 'Crimson';
+    src: url('../fonts/crimson/Crimson-Bold.otf') format('otf');
+    font-style: normal;
+    font-weight: bold;
+    text-rendering: optimizeLegibility;
+}
+@font-face {
+    font-family: 'Crimson';
+    src: url('../fonts/crimson/Crimson-BoldItalic.otf') format('otf');
     font-style: italic;
     font-weight: bold;
     text-rendering: optimizeLegibility;

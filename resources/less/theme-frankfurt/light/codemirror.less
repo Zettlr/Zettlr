@@ -2,8 +2,8 @@
 
 // Editor styling
 #editor .CodeMirror, .quicklook .body .CodeMirror {
-    background-color: white;
-    font-family: @font-serif;
+  font-family: @font-serif;
+    background-color:transparent;
     color:rgb(46, 56, 60);
 
     &.cm-stex-mode {
@@ -23,7 +23,7 @@
 }
 
 .CodeMirror-selected { background-color:@green-selection !important; }
-.CodeMirror-cursor { background: @green-0; }
+.CodeMirror-cursor { background: @blue-0; }
 
 // Now general styling for variables
 
@@ -54,14 +54,14 @@
 // TYPOGRAPHY
 .cm-formatting-header-1, .cm-formatting-header-2, .cm-formatting-header-3,
 .cm-formatting-header-4, .cm-formatting-header-5, .cm-formatting-header-6,
-.cm-url { color: @green-0; }
+.cm-url { color: @blue-0; }
 
 .size-header-1, .size-header-2, .size-header-3,
 .size-header-4, .size-header-5, .size-header-6 { font-weight: bold; }
 
 /* LISTS */
 .cm-formatting-list-ul,
-.cm-formatting-list-ol { color: @green-0; }
+.cm-formatting-list-ol { color: @blue-0; }
 
 /* TYPOGRAPHY */
 .cm-quote, .cm-link, .cm-strong, .cm-em { color:@blue-0; }
@@ -80,7 +80,7 @@
 
 // Horizontal ruler
 .cm-hr {
-  color: @green-0;
+  color: @blue-0;
   font-family: @font-mono;
   font-weight: bold;
 }
@@ -111,10 +111,10 @@
   }
 
   li.CodeMirror-hint-active {
-    background: @green-0;
+    background: @blue-0;
     color: @grey-0;
 
-    &:hover { background-color: darken(@green-0, 10%); }
+    &:hover { background-color: darken(@blue-0, 10%); }
   }
 
   // Special tags

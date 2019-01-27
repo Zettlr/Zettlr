@@ -5,14 +5,9 @@
     color:@grey-0;
 }
 
-.CodeMirror-selected { background-color:@green-2 !important; }
+.CodeMirror-selected { background-color:@blue-2 !important; }
 
-.CodeMirror-cursor { background: @green-0; }
-
-.CodeMirror-dialog {
-    background-color: @blue-selection-dark;
-    input { color: @blue-selection; }
-}
+.CodeMirror-cursor { background: @blue-0; }
 
 // First the code blocks
 .cm-comment, .cm-fenced-code { color:@grey-1; }
@@ -38,16 +33,16 @@
 // TYPOGRAPHY
 .cm-formatting-header-1, .cm-formatting-header-2, .cm-formatting-header-3,
 .cm-formatting-header-4, .cm-formatting-header-5, .cm-formatting-header-6,
-.cm-url { color: @green-0; }
+.cm-url { color: @blue-0; }
 
 /* LISTS */
 .cm-formatting-list-ul,
-.cm-formatting-list-ol { color: @green-0; }
+.cm-formatting-list-ol { color: @blue-0; }
 
 /* TYPOGRAPHY */
 .cm-quote, .cm-link, .cm-strong, .cm-em { color:@blue-3; }
 .cm-spell-error { border-bottom:2px dotted @bg-error; }
-.cm-zkn-tag, .cm-zkn-id, .cm-zkn-link { color:@green-0; }
+.cm-zkn-tag, .cm-zkn-id, .cm-zkn-link { color:@blue-0; }
 .cma { color: @blue-selection; }
 
 // citations
@@ -82,10 +77,10 @@
   }
 
   li.CodeMirror-hint-active {
-    background-color: darken(@green-0, 10%);
+    background-color: darken(@blue-0, 10%);
     color: @grey-0;
 
-    &:hover { background-color: @green-0; }
+    &:hover { background-color: @blue-0; }
   }
 
   .cm-hint-colour {
