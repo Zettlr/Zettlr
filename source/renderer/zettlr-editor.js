@@ -80,6 +80,7 @@ class ZettlrEditor {
     this._renderLinks = false
     this._renderMath = false
     this._renderTasks = false
+    this._renderHTags = false
 
     // This Markdown to HTML converter is used in various parts of the
     // class to perform converting operations.
@@ -281,6 +282,7 @@ class ZettlrEditor {
       if (this._renderLinks) this._cm.execCommand('markdownRenderLinks') // Render links
       if (this._renderCitations) this._cm.execCommand('markdownRenderCitations') // Render citations
       if (this._renderTasks) this._cm.execCommand('markdownRenderTasks') // Render tasks
+      if (this._renderHTags) this._cm.execCommand('markdownRenderHTags') // Render heading levels
       this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
       if (this._cm.getOption('fullScreen') && this._mute) {
         this._muteLines()
@@ -580,13 +582,14 @@ class ZettlrEditor {
    * @param {Boolean} math   Should math formulae be rendered?
    * @param {Boolean} task   Should tasks be rendered?
    */
-  setRenderOptions (cite, iframe, img, link, math, task) {
+  setRenderOptions (cite, iframe, img, link, math, task, hTag) {
     this._renderCitations = cite
     this._renderIframes = iframe
     this._renderImages = img
     this._renderLinks = link
     this._renderMath = math
     this._renderTasks = task
+    this._renderHTags = hTag
   }
 
   /**

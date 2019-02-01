@@ -130,7 +130,8 @@ class ZettlrConfig extends EventEmitter {
         'renderImages': true,
         'renderLinks': true,
         'renderMath': true,
-        'renderTasks': true
+        'renderTasks': true,
+        'renderHTags': false
       },
       // Language
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.

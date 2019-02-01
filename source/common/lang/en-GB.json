@@ -369,7 +369,8 @@
         "render_images": "Render Images",
         "render_links": "Render Links",
         "render_math": "Render Formulae",
-        "render_tasks": "Render Tasks"
+        "render_tasks": "Render Tasks",
+        "render_htags": "Hide heading characters"
       },
       "pandoc": "Path to pandoc executable. Please only change, if Zettlr is unable to locate pandoc.",
       "xelatex": "Path to xelatex executable. Please only change, if Zettlr is unable to locate it.",

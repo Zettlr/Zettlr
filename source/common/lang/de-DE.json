@@ -369,7 +369,8 @@
         "render_images": "Bilder darstellen",
         "render_links": "Links darstellen",
         "render_math": "Formeln darstellen",
-        "render_tasks": "Tasks darstellen"
+        "render_tasks": "Tasks darstellen",
+        "render_htags": "Überschrift-Zeichen verstecken"
       },
       "pandoc": "Pfad zum Pandoc-Programm. Bitte ändere dies nur, wenn Zettlr Pandoc nicht automatisch findet.",
       "xelatex": "Pfad zum XeLaTeX-Programm. Bitte ändere dies nur, wenn Pandoc einen Fehler ausgibt, dass er die Bibliothek nicht finden kann.",

@@ -29,6 +29,7 @@
 - Fixed a bug that would throw an error if updating the config with no dictionary loaded on app boot.
 - Fixed a bug that would move a file to a random directory instead of enabling you to actually copy said file outside the app, if you dragged the file out of the app and passed the directory list.
 - Fixed the highlighting effect on drag operations. Now even if you use the thin sidebar mode, the directories where you can drop files will receive the highlighting shimmer.
+- Added an option to hide the heading characters and replace them with a small tag indicating the heading level (`h1`, `h2`, etc). Off by default.
 
 ## Under the Hood
 

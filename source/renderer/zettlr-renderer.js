@@ -161,7 +161,8 @@ class ZettlrRenderer {
       global.config.get('display.renderImages'),
       global.config.get('display.renderLinks'),
       global.config.get('display.renderMath'),
-      global.config.get('display.renderTasks')
+      global.config.get('display.renderTasks'),
+      global.config.get('display.renderHTags')
     )
 
     // Set the correct combiner state

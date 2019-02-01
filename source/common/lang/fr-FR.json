@@ -369,7 +369,8 @@
         "render_images": "Visualiser des images",
         "render_links": "Visualiser des liens",
         "render_math": "Visualiser des formules",
-        "render_tasks": "Visualiser des tasks"
+        "render_tasks": "Visualiser des tasks",
+        "render_htags": "Cacher les signes de les titres"
       },
       "pandoc": "Chemin d'accès à Pandoc. Seulement changer le, si Zettlr est dans l'impossibilité de faire trouver le programme.",
       "xelatex": "Chemin d'accès à xelatex. Seulement changer le, si Zettlr est dans l'impossibilité de faire trouver le programme.",

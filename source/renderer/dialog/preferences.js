@@ -67,6 +67,7 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['display.renderLinks'] = (data.find(elem => elem.name === 'display.renderLinks') !== undefined)
     cfg['display.renderMath'] = (data.find(elem => elem.name === 'display.renderMath') !== undefined)
     cfg['display.renderTasks'] = (data.find(elem => elem.name === 'display.renderTasks') !== undefined)
+    cfg['display.renderHTags'] = (data.find(elem => elem.name === 'display.renderHTags') !== undefined)
 
     cfg['editor.autoCloseBrackets'] = (data.find(elem => elem.name === 'editor.autoCloseBrackets') !== undefined)
     // Extract selected dictionaries
