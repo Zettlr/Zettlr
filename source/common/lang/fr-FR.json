@@ -422,7 +422,7 @@
       "other_projects": "Zettlr est basé également sur:",
       "jquery": "Un indispensable aide pour présenter le UX",
       "chokidar": "Voir les modifications sur les fichiers à l'extérieur de l'app",
-      "typojs": "Alimenter le correcteur d'orthographe sur l'app",
+      "nspell": "Alimenter le correcteur d'orthographe sur l'app",
       "showdownjs": "Présenter le Changelog, qui tu vois pour les updates",
       "documentationjs": "Engendrer le manuel de l'API ici: http://dev.zettlr.com/api",
       "lessjs": "Un aide pour écrire le design",

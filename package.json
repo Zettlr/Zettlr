@@ -119,14 +119,13 @@
         "showdown": "^1.8.6",
         "tippy.js": "^3.4.1",
         "typo": "^1.0.6",
-        "typo-js": "^1.0.3",
         "uuid": "^3.3.2"
     },
     "devDependencies": {
         "chalk": "^2.4.2",
         "csso": "^3.5.1",
         "documentation": "^9.1.1",
-        "electron": "^4.0.2",
+        "electron": "^3.1.3",
         "electron-builder": "^20.38.5",
         "handlebars": "^4.0.12",
         "less": "^3.9.0"

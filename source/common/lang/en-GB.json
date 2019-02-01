@@ -422,7 +422,7 @@
       "other_projects": "Zettlr also makes use of these projects:",
       "jquery": "Makes it easy to render the whole user interface",
       "chokidar": "Detects any changes you make to your files outside the app",
-      "typojs": "Provides Zettlr with spellchecking abilities",
+      "nspell": "Provides Zettlr with spellchecking abilities",
       "showdownjs": "Renders the Changelog so that you can see what's changed in an update",
       "documentationjs": "Used to generate the API documentation at http://dev.zettlr.com/api",
       "lessjs": "Helps a lot in writing the styles for Zettlr",

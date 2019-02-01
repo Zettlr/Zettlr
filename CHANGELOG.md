@@ -51,6 +51,8 @@
 - Rearranged the options within the "Advanced" tab in the preferences dialog.
 - Moved out all CodeMirror `require()` to a new file called `autoload.js` in the assets directory to save space in the main `ZettlrEditor` class.
 - Added a security pass to the droppable directories to make sure they don't accidentally accept the file and direct the main process to move it out of the app instead of moving it to themselves.
+- **Switched back to `electron 3` for the time being, as `electron 4` still has a nasty bug that renders the toolbar unusable when exiting fullscreen on macOS (see https://github.com/electron/electron/issues/16418 ).**
+- Switched to `nspell` for spellchecking, as the correction-finding algorithm works smoother and the repository is not as old as `Typo.js`.
 
 # 1.0.0
 

@@ -422,7 +422,7 @@
       "other_projects": "Zettlr nutzt auch die folgenden Projekte:",
       "jquery": "Unersetzlich für die Darstellung des Nutzer-Interfaces",
       "chokidar": "Erkennt alle Änderung an den Dateien von außerhalb und stellt sie dar",
-      "typojs": "Ermöglicht die eingebaute Rechtschreibprüfung",
+      "nspell": "Ermöglicht die eingebaute Rechtschreibprüfung",
       "showdownjs": "Übersetzt das in Markdown geschriebene Changelog im Update-Dialog",
       "documentationjs": "Mit documentation.js generieren wir die Entwicklerdokumentation unter http://dev.zettlr.com/api",
       "lessjs": "Kompiliert die Design-Richtlinien für die App",

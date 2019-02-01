@@ -1772,11 +1772,6 @@ truncate-utf8-bytes@^1.0.0:
   dependencies:
     utf8-byte-length "^1.0.1"
 
-typo-js@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/typo-js/-/typo-js-1.0.3.tgz#54d8ebc7949f1a7810908b6002c6841526c99d5a"
-  integrity sha1-VNjrx5SfGngQkItgAsaEFSbJnVo=
-
 typo@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/typo/-/typo-1.0.6.tgz#fafff9affa9b40a548283276ee650689109f4747"
