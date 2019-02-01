@@ -100,7 +100,12 @@
           url = 'mailto:' + email
         } else {
           // Markdown URL
-          a.innerHTML = caption // TODO: Better testing against HTML entities!
+          caption = caption.replace(/\*\*([^*]+?)\*\*/g, `<strong>$1</strong>`)
+          caption = caption.replace(/__([^_]+?)__/g, `<strong>$1</strong>`)
+          caption = caption.replace(/\*([^*]+?)\*/g, `<em>$1</em>`)
+          caption = caption.replace(/_([^_]+?)_/g, `<em>$1</em>`)
+          caption = caption.replace(/~~([^~]+?)~~/g, `<del>$1</del>`)
+          a.innerHTML = caption
           a.title = url // Set the url as title to let users see where they're going
         }
         a.className = 'cma' // CodeMirrorAnchors
