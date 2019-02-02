@@ -22,7 +22,7 @@
     }
 }
 
-.CodeMirror-selected { background-color:@green-selection !important; }
+.CodeMirror-selected { background-color:@blue-selection !important; }
 .CodeMirror-cursor { background: @blue-0; }
 
 // Now general styling for variables
@@ -93,6 +93,15 @@
 }
 
 .CodeMirror-guttermarker-subtle { color: #dadada; }
+
+// Heading tags
+.heading-tag {
+  color: @sepia-3;
+  transition: 0.2s all ease;
+  &:hover {
+    background-color: @sepia-2;
+  }
+}
 
 // Hint related stuff
 .CodeMirror-hints {
