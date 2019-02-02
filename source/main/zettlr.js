@@ -828,6 +828,12 @@ class Zettlr {
    */
   openQL (hash) { this._ql.openQuicklook(this.findFile({ 'hash': hash })) }
 
+  /**
+   * Saves the image that is currently in the clipboard to file and sends an
+   * insert command to the renderer, telling it to linke the image.
+   * @param  {Object} target Options on the image
+   * @return {void}        Does not return.
+   */
   saveImageFromClipboard (target) {
     // If no directory is selected currently, we can't save to cwd.
     if (target.mode === 'save-cwd' && !this.getCurrentDir()) {

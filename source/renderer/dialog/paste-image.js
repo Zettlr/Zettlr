@@ -1,17 +1,18 @@
+/* global $ */
 /**
- * @ignore
- * BEGIN HEADER
- *
- * Contains:        PasteImage class
- * CVM-Role:        View
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     This dialog displays a preview of the image currently in the
- *                  clipboard and lets you choose different options.
- *
- * END HEADER
- */
+* @ignore
+* BEGIN HEADER
+*
+* Contains:        PasteImage class
+* CVM-Role:        View
+* Maintainer:      Hendrik Erz
+* License:         GNU GPL v3
+*
+* Description:     This dialog displays a preview of the image currently in the
+*                  clipboard and lets you choose different options.
+*
+* END HEADER
+*/
 
 const ZettlrDialog = require('./zettlr-dialog.js')
 const { clipboard } = require('electron')
@@ -42,6 +43,26 @@ class PasteImage extends ZettlrDialog {
       data.imageName = md5('img' + data.img)
     }
     return data
+  }
+
+  postAct () {
+    // Activate the sending buttons
+    $('#save-cwd, #save-other').on('click', (e) => {
+      // The content is either save-cwd or save-other
+      global.ipc.send('save-image-from-clipboard', {
+        'mode': $(e.target).attr('id'),
+        'name': $('#img-name').val(),
+        'width': parseInt($('#img-width').val() || 0), // Resize to width, 0 indicates no change
+        'height': parseInt($('#img-height').val() || 0) // Resize to height, 0 indicates no change
+      })
+
+      // Now close the dialog
+      this.close()
+    }) // End activate buttons
+
+    // We need to trigger a replace manually, b/c pasting raw image data into
+    // the src-attribute of an img does not trigger the onLoad-event listener.
+    setTimeout(() => { this._place() }, 10)
   }
 }
 
