@@ -452,6 +452,7 @@
       "info": "Here is a preview of the image that is currently in your clipboard. Hit return to save it to the current directory, or choose a custom directory.",
       "dimensions": "Image size",
       "name_label": "Filename",
+      "name_placeholder": "A unique filename",
       "retain_aspect_label": "Retain aspect ratio",
       "save_cwd": "Save to current directory"
     }

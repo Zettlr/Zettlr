@@ -452,6 +452,7 @@
       "info": "Ici il-y-a une avant-prèmiere de l'image dans le presse-papiers. Presse return pour inserter l'image, ou choisier un dossier coutume.",
       "dimensions": "Dimensions de l'image",
       "name_label": "Nom de fichier",
+      "name_placeholder": "Le nom de fichier",
       "retain_aspect_label": "Maintenir les proportions",
       "save_cwd": "Enregistrer dans le dossier courant"
     }

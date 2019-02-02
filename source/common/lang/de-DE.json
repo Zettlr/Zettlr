@@ -452,6 +452,7 @@
       "info": "Hier siehst du eine Vorschau des Bildes, welches in die Datei eingefügt werden wird. Drücke Eingabe, um das Bild im aktuell ausgewählten Verzeichnis zu speichern, oder wähle ein benutzerdefiniertes Verzeichnis aus.",
       "dimensions": "Bildmaße",
       "name_label": "Dateiname",
+      "name_placeholder": "Ein eindeutiger Dateiname",
       "retain_aspect_label": "Seitenverhältnis beibehalten",
       "save_cwd": "Im aktuellen Verzeichnis speichern"
     }
