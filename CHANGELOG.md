@@ -31,6 +31,7 @@
 - Fixed the highlighting effect on drag operations. Now even if you use the thin sidebar mode, the directories where you can drop files will receive the highlighting shimmer.
 - Added an option to hide the heading characters and replace them with a small tag indicating the heading level (`h1`, `h2`, etc). Off by default.
 - Refined the rendering of links. Now, inline elements will be also rendered correctly inside rendered links.
+- The app will now correctly scroll to the selected file again (if any).
 
 ## Under the Hood
 

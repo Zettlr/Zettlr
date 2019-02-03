@@ -87,6 +87,18 @@ class ZettlrPreview {
     this._list.update(this._tags)
     // Afterwards, update the draggables
     this._updateDraggable()
+
+    // If there is no file selected we are done
+    if (!this._selectedFile) return this
+
+    // Else: Scroll the currently selected file into view
+    let i = this._data.find((elem) => { return (elem.hash === this._selectedFile) })
+    if (i) {
+      i = this._data.indexOf(i)
+      console.log(`Scrolling into view: ${i}`)
+      this._scrollIntoView(i)
+    }
+
     return this
   }
 
@@ -470,9 +482,8 @@ class ZettlrPreview {
     */
   select (hash) {
     if (typeof hash !== 'number') hash = parseInt(hash)
-    if (!hash) {
-      return
-    }
+    if (!hash) return
+
     this._selectedFile = hash
     // First deselect all
     this._listContainer.find('li.file').removeClass('selected')
@@ -724,23 +735,15 @@ class ZettlrPreview {
 
   /**
     * Scrolls the element given by index into view.
-    * @param  {Number} index The index (as referring to _data).
+    * @param  {Number} index The index (as referring to the generated tags).
     * @return {Boolean} True if the call succeeded, false if not.
     */
   _scrollIntoView (index) {
-    // TODO: Not working currently
-    let el = this._tags.find((elem) => { return ($(elem).attr('data-hash') === this._data[index]) })
-    // First let's see if the data thingy has been rendered (should have been
-    // on each call of this, so this is only to be sure.)
-    if (!el) {
-      return false // Not in list
-    }
-
-    let totalHeight = $('#filelist').innerHeight() // Returns the total height
-    let elemHeight = totalHeight / this._tags.length
-    let scrollPos = elemHeight * this._tags.indexOf(el)
-
-    this._div.scrollTop(scrollPos) // Scroll it into view
+    let height = (this._snippets) ? 60 : 30
+    // We need to substract the file at index to make it visible
+    let scrollTo = (index * height) - height
+    if (scrollTo < 0) return false // Never scroll to negative values
+    this._div.scrollTop(scrollTo) // Scroll it into view
     return true
   }
 
