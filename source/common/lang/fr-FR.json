@@ -85,6 +85,7 @@
     "new_project": "Nouveau Projet",
     "remove_project": "Supprimer le Projet",
     "project_properties": "Paramètres de Projet…",
+    "custom_css": "CSS Personnalisé…",
     "project_build": "Exporter le Projet",
     "set_target": "Définir la cible d'écriture…",
     "open": "Ouvrier…",
@@ -204,6 +205,10 @@
       "words": "Mots",
       "chars": "Lettres",
       "set": "Ok"
+    },
+    "custom_css": {
+      "title": "CSS Personnalisé",
+      "info": "Ici tu peux modifier l'apparence de l'app. <strong>Attention: Ce fichier peut écrase tout les directives de CSS! Jamais modifiér la géométrie des elements, sinon l'app peut montrer une conduite indesirable!</strong>"
     },
     "preferences": {
       "title": "Paramètres",

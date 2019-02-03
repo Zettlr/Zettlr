@@ -439,6 +439,10 @@ class ZettlrRendererIPC {
         this.send('get-tags-preferences')
         break
 
+      case 'open-custom-css':
+        this._app.getBody().displayCustomCss()
+        break
+
       case 'preferences':
         this._app.getBody().displayPreferences(cnt)
         break

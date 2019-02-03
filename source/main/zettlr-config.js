@@ -43,6 +43,10 @@ class ZettlrConfig extends EventEmitter {
     this.parent = parent
     this.configPath = app.getPath('userData')
     this.configFile = path.join(this.configPath, 'config.json')
+    // The custom user CSS file. This is handled by the config b/c it's easier
+    // and it makes sense from a logical standpoint.
+    this.styleFile = path.join(this.configPath, 'custom.css')
+
     this.config = null
     this._rules = [] // This array holds all validation rules
 
@@ -259,6 +263,15 @@ class ZettlrConfig extends EventEmitter {
       if (process.env.PATH.indexOf(path.dirname(this.get('pandoc'))) === -1) {
         process.env.PATH += delim + path.dirname(this.get('pandoc'))
       }
+    }
+
+    // Check for the existence of the custom CSS file. If it is not existent,
+    // create an empty one.
+    try {
+      fs.lstatSync(this.styleFile)
+    } catch (e) {
+      // Create an empty file with a nice initial comment in it.
+      fs.writeFileSync(this.styleFile, `/* Enter your custom CSS here */\n\n`)
     }
 
     // Finally, check whether or not a UUID exists, and, if not, generate one.
@@ -484,6 +497,35 @@ class ZettlrConfig extends EventEmitter {
     }
 
     this.emit('update') // Emit an event to all listeners
+  }
+
+  /**
+   * Retrieves the content of the custom CSS file
+   * @return {String} The custom CSS
+   */
+  getCustomCSS () {
+    let file = fs.readFileSync(this.styleFile)
+    return file
+  }
+
+  /**
+   * The renderer will need this path to dynamically load it in.
+   * @return {String} The fully qualified path to the CSS file.
+   */
+  getCustomCSSPath () { return this.styleFile }
+
+  /**
+   * Writes new data to the custom CSS file, and returns if the call succeeded.
+   * @param {String} newContent The new contents
+   * @return {Boolean} Whether or not the call succeeded.
+   */
+  setCustomCSS (newContent) {
+    try {
+      fs.writeFileSync(this.styleFile, newContent)
+      return true
+    } catch (e) {
+      return false
+    }
   }
 
   /**

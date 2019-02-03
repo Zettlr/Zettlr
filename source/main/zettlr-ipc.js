@@ -512,6 +512,18 @@ class ZettlrIPC {
       case 'get-tags-database':
         return global.tags.get()
 
+      // Returns the custom CSS's file contents
+      case 'get-custom-css':
+        return this._app.getConfig().getCustomCSS()
+
+      // Returns the custm CSS's file name
+      case 'get-custom-css-path':
+        return this._app.getConfig().getCustomCSSPath()
+
+      // Updates the file contents
+      case 'set-custom-css':
+        return this._app.getConfig().setCustomCSS(arg)
+
       default:
         console.log(trans('system.unknown_command', cmd))
         return null

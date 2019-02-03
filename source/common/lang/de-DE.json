@@ -86,6 +86,7 @@
     "remove_project": "Projekt entfernen",
     "project_properties": "Projekteinstellungen…",
     "project_build": "Projekt exportieren",
+    "custom_css": "Benutzerdefiniertes CSS…",
     "set_target": "Schreibziel setzen…",
     "open": "Öffnen…",
     "save": "Speichern",
@@ -204,6 +205,10 @@
       "words": "Wörter",
       "chars": "Zeichen",
       "set": "Ok"
+    },
+    "custom_css": {
+      "title": "Benutzerdefiniertes CSS",
+      "info": "Hier kannst du verschiedene Stile von Zettlr überschreiben und damit die App noch weiter anpassen. <strong>Achtung: Diese Datei überschreibt sämtliche CSS-Direktiven! Ändere daher niemals die Geometrie von Elementen, anderenfalls könnte Zettlr unerwartetes Verhalten zeigen!</strong>"
     },
     "preferences": {
       "title": "Einstellungen",

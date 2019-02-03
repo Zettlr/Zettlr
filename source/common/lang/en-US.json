@@ -85,6 +85,7 @@
     "new_project": "Create Project",
     "remove_project": "Remove Project",
     "project_properties": "Project Settings…",
+    "custom_css": "Custom CSS…",
     "project_build": "Export Project",
     "set_target": "Set writing target…",
     "open": "Open…",
@@ -204,6 +205,10 @@
       "words": "Words",
       "chars": "Characters",
       "set": "Set"
+    },
+    "custom_css": {
+      "title": "Custom CSS",
+      "info": "Here you can override the styles of Zettlr to customize it even further. <strong>Attention: This file overrides all CSS directives! Never alter the geometry of elements, otherwise the app may expose unwanted behavior!</strong>"
     },
     "preferences": {
       "title": "Preferences",

@@ -89,6 +89,19 @@ class ZettlrRenderer {
     // short delay gives us the time the IPC needs to get ready.
     setTimeout(() => { this.configChange() }, 10) // 10ms should suffice - the number is irrelevant. The important part is that it's out of the first tick of the app.
 
+    // Requesting the CSS file path obviously also needs to be out of the first
+    // tick.
+    setTimeout(() => {
+      // Apply the custom CSS stylesheet to the head element
+      global.ipc.send('get-custom-css-path', {}, (ret) => {
+        let lnk = $('<link>').attr('rel', 'stylesheet')
+        lnk.attr('href', 'file://' + ret + '?' + Date.now())
+        lnk.attr('type', 'text/css')
+        lnk.attr('id', 'custom-css-link')
+        $('head').first().append(lnk)
+      })
+    }, 10)
+
     // Receive an initial list of tags to display in the preview list
     this._ipc.send('get-tags')
     // Additionally, request the full database of already existing tags inside files.

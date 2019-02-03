@@ -1,19 +1,22 @@
 // Light theme for CodeMirror
 
 // Editor styling
-#editor .CodeMirror, .quicklook .body .CodeMirror {
+// Three editor instances can be styled: The main editor, the quicklook editor
+// and the custom CSS editor
+#editor .CodeMirror, .quicklook .body .CodeMirror, .dialog .CodeMirror {
     background-color:#ffffff;
     color:rgb(46, 56, 60);
 
-    &.cm-stex-mode {
+    &.cm-stex-mode, &.cm-css-mode {
       font-family: @font-mono;
         .cm-comment    { color: @grey-2; }
         .cm-attribute  { color: @blue-0; }
+        .cm-builtin    { color: @blue-0; } // CSS mode IDs
         .cm-string     { color: @green-0; }
         .cm-string-2   { color: @gold-selection-dark; }
         .cm-variable   { color: @grey-6; }
         .cm-variable-2 { color: @green-selection-dark; }
-        .cm-keyword    { color: @purple-selection-dark; }
+        .cm-keyword    { color: @purple-selection; }
         .cm-property   { color: @orange-2; }
         .cm-type       { color: @orange-2; }
         .cm-atom       { color: @green-0; }

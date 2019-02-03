@@ -31,6 +31,7 @@ const PreferencesDialog = require('./dialog/preferences.js')
 const PDFPreferences = require('./dialog/pdf-preferences.js')
 const TagsPreferences = require('./dialog/tags-preferences.js')
 const ProjectProperties = require('./dialog/project-properties.js')
+const CustomCSS = require('./dialog/custom-css.js')
 
 const { trans } = require('../common/lang/i18n.js')
 const { localiseNumber } = require('../common/zettlr-helpers.js')
@@ -483,6 +484,16 @@ class ZettlrBody {
   displayPasteImage () {
     let d = new PasteImage()
     d.init().open()
+  }
+
+  /**
+   * This dialog lets the user edit his/her custom CSS
+   */
+  displayCustomCss () {
+    global.ipc.send('get-custom-css', {}, (ret) => {
+      let d = new CustomCSS()
+      d.init(ret).open()
+    })
   }
 
   /**

@@ -220,7 +220,8 @@
         "accelerator": "CmdOrCtrl+Alt+,",
         "command": "open-pdf-preferences"
       },
-      { "label": "menu.tags", "command": "open-tags-preferences" }
+      { "label": "menu.tags", "command": "open-tags-preferences" },
+      { "label": "menu.custom_css", "command": "open-custom-css" }
     ]
   },
   "mixin_speech": {
