@@ -95,7 +95,6 @@ class ZettlrPreview {
     let i = this._data.find((elem) => { return (elem.hash === this._selectedFile) })
     if (i) {
       i = this._data.indexOf(i)
-      console.log(`Scrolling into view: ${i}`)
       this._scrollIntoView(i)
     }
 
