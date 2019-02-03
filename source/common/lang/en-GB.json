@@ -383,6 +383,7 @@
       "xelatex_default": "Default: xelatex",
       "nightmode": "Night mode",
       "snippets": "Text snippets",
+      "hide_dirs": "Hide directories during global search",
       "combiner_explanation": "Side pane mode",
       "combiner_expanded": "Extended &mdash; Show both preview and tree view",
       "combiner_collapsed": "Thin &mdash; Show either preview or tree view",

@@ -34,6 +34,13 @@
             </label>
             <label for="snippets">{{i18n "dialog.preferences.snippets"}}</label>
           </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="hideDirs" value="yes" id="hideDirs" {{#if hideDirs}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="hideDirs">{{i18n "dialog.preferences.hide_dirs"}}</label>
+          </div>
         </div>
         <div class="box-right">
           <p>

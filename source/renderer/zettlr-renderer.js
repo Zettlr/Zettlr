@@ -156,6 +156,7 @@ class ZettlrRenderer {
     this.darkTheme(global.config.get('darkTheme'))
     // Set snippets
     this.getPreview().snippets(global.config.get('snippets'))
+    this.getPreview().hideDirs(global.config.get('hideDirs'))
     // Receive the application language
     this.setLocale(global.config.get('appLang'))
     // muteLines initial setting

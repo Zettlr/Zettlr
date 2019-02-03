@@ -37,6 +37,7 @@ class ZettlrPreview {
   constructor (parent) {
     this._renderer = parent
     this._snippets = false
+    this._hideDirs = false
     this._selectedFile = null
 
     this._data = [] // The whole data (as returned by _renderer.getCurrentDir())
@@ -132,6 +133,10 @@ class ZettlrPreview {
         // Don't include no-result-rows in the next list.
         continue
       }
+
+      // If the user wishes to not show directories (both real and virtual ones),
+      // continue and step over this row.
+      if (this._showSearchResults && this._hideDirs && d.type !== 'file') continue
 
       // Only change the indicator with different directory types
       if (d.type === 'virtual-directory') {
@@ -531,6 +536,18 @@ class ZettlrPreview {
    */
   snippets (val) {
     this._snippets = Boolean(val)
+    this.refresh()
+    return this
+  }
+
+  /**
+   * Indicates whether or not the directories should be displayed during a
+   * global search.
+   * @param  {Boolean} val Whether or not to hide directories.
+   * @return {ZettlrPreview}     This for chainability.
+   */
+  hideDirs (val) {
+    this._hideDirs = Boolean(val)
     this.refresh()
     return this
   }

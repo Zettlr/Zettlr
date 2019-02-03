@@ -383,6 +383,7 @@
       "xelatex_default": "Standard: xelatex",
       "nightmode": "Dunkles Thema",
       "snippets": "Textfragmente anzeigen",
+      "hide_dirs": "Verstecke Verzeichnisse während globaler Suchen",
       "combiner_explanation": "Modus der Seitenleiste",
       "combiner_expanded": "Erweitert &mdash; zeige sowohl Preview als auch Verzeichnisse",
       "combiner_collapsed": "Schmal &mdash; zeige entweder Preview oder Verzeichnisse",

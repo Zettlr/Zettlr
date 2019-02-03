@@ -1,4 +1,4 @@
-# (no version assigned)
+# 1.1.0
 
 ## GUI and Functionality
 
@@ -33,6 +33,7 @@
 - Added an option to hide the heading characters and replace them with a small tag indicating the heading level (`h1`, `h2`, etc). Off by default.
 - Refined the rendering of links. Now, inline elements will be also rendered correctly inside rendered links.
 - The app will now correctly scroll to the selected file again (if any).
+- Added an option to hide directories from the preview list while performing a global search.
 
 ## Under the Hood
 

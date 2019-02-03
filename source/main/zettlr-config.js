@@ -84,6 +84,7 @@ class ZettlrConfig extends EventEmitter {
       // UI related options
       'darkTheme': false,
       'snippets': false,
+      'hideDirs': false, // Should the app hide directories during global search?
       'sorting': 'natural', // Can be natural or based on ASCII values
       'muteLines': true, // Should the editor mute lines in distraction free mode?
       'combinerState': 'collapsed', // collapsed = Preview or directories visible --- expanded = both visible
