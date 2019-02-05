@@ -7,6 +7,11 @@
   line-height:1.4375;
   user-select:text;
 
+  // This directive prevents strange colour artifacts when a document is open
+  // that has less lines of code than fit into the window (especially notable
+  // in dark mode, as the sizer is visible with a small green halo).
+  .CodeMirror-sizer { height: 100%; }
+
   pre { padding:0; }
 
   a.cma {
