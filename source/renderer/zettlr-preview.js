@@ -755,12 +755,20 @@ class ZettlrPreview {
     * @return {Boolean} True if the call succeeded, false if not.
     */
   _scrollIntoView (index) {
-    let height = (this._snippets) ? 60 : 30
-    // We need to substract the file at index to make it visible
-    let scrollTo = (index * height) - height
-    if (scrollTo < 0) return false // Never scroll to negative values
-    this._div.scrollTop(scrollTo) // Scroll it into view
-    return true
+    let listHeight = $('#preview ul#filelist').height()
+    let frameSize = this._div.innerHeight()
+    let elemHeight = listHeight / this._tags.length
+    let containerTop = this._div.scrollTop()
+    let containerBottom = containerTop + frameSize
+    let elemTop = index * elemHeight
+    let elemBottom = elemTop + elemHeight
+    // The number 20 is completely arbitrary, because I do not know why it's all
+    // so much off. Clusterize seems to produce a clusterf***.
+    if (elemTop < containerTop + 20) {
+      this._div.scrollTop(elemTop - 20)
+    } else if (elemBottom > containerBottom) {
+      this._div.scrollTop(elemTop - frameSize + elemHeight)
+    }
   }
 
   /**
