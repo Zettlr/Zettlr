@@ -22,6 +22,7 @@
         "release:win": "electron-builder --win",
         "release:linux": "electron-builder --linux",
         "less": "node scripts/less.js",
+        "less:extract": "node scripts/extract-css.js",
         "handlebars": "node scripts/handlebars.js",
         "docs:build": "node scripts/docs.js",
         "docs": "documentation build ./source/main.js -f html -o resources/docs"
@@ -128,6 +129,7 @@
         "electron": "^3.1.3",
         "electron-builder": "^20.38.5",
         "handlebars": "^4.0.12",
-        "less": "^3.9.0"
+        "less": "^3.9.0",
+        "string-extract-class-names": "^5.8.6"
     }
 }

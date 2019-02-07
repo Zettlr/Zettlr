@@ -5231,6 +5231,11 @@ strict-uri-encode@^1.0.0:
   resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
   integrity sha1-J5siXfHVgrH1TmWt3UNS4Y+qBxM=
 
+string-extract-class-names@^5.8.6:
+  version "5.8.6"
+  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.8.6.tgz#c180f7b8cc85b6ed86db264460a2709d633ee427"
+  integrity sha512-Fdd2L06Oy7JvTrotHZpV+5mFPkk5/z0LgTtI2pC10aU/j0H3zXfPoxfOnAnltazJjJdQoEQDsJQFJfbK7ITU+g==
+
 string-template@~0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/string-template/-/string-template-0.2.1.tgz#42932e598a352d01fc22ec3367d9d84eec6c9add"

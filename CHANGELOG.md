@@ -60,6 +60,7 @@
 - **Switched back to `electron 3` for the time being, as `electron 4` still has a nasty bug that renders the toolbar unusable when exiting fullscreen on macOS (see https://github.com/electron/electron/issues/16418 ).**
 - Switched to `nspell` for spellchecking, as the correction-finding algorithm works smoother and the repository is not as old as `Typo.js`.
 - `makeExport` now returns a Promise instead of the Exporter object. The exporter is now only returned if it's call succeeded (by passing it to `resolve`).
+- There is now the yarn command `yarn less:extract` available which extracts the CSS class names and IDs from the prebuilt styles. _Please note that you must run the `yarn less` command beforehand._
 
 # 1.0.0
 
