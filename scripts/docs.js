@@ -5,11 +5,12 @@ const documentation = require('documentation')
 const streamArray = require('stream-array')
 const vfs = require('vinyl-fs')
 
+console.log(`Building API documentation. This can take a few moments ...`)
 documentation.build([
   'source/main.js',
   'source/renderer/zettlr-renderer.js'
 ], {
-  config: 'documentation.yml',
+  // config: 'documentation.yml',
   projectName: 'Zettlr',
   projectHomepage: 'https://www.zettlr.com'
 })
