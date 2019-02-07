@@ -35,6 +35,7 @@
 - The app will now correctly scroll to the selected file again (if any).
 - Added an option to hide directories from the preview list while performing a global search.
 - Fixed a small error that would strip false positive tags on export (i.e. that would also strip escaped tags).
+- Massive updates to the notification service provider. If a message is too long, it will be truncated when it is first shown to you. If you then click on the notification, it will expand itself so that you can read the full message. Click on it again to hide it. Additionally, the notifications are now the same height and move smoothly as soon as new notifications arrive or old ones get removed.
 
 ## Under the Hood
 
