@@ -34,6 +34,7 @@
 - Refined the rendering of links. Now, inline elements will be also rendered correctly inside rendered links.
 - The app will now correctly scroll to the selected file again (if any).
 - Added an option to hide directories from the preview list while performing a global search.
+- Fixed a small error that would strip false positive tags on export (i.e. that would also strip escaped tags).
 
 ## Under the Hood
 

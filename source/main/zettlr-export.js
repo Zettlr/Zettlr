@@ -105,15 +105,9 @@ class ZettlrExport {
     }
 
     // Necessary evaluations
-    if (!this.options.pdf.hasOwnProperty('toc')) {
-      this.options.pdf.toc = false
-    }
-    if (!this.options.pdf.hasOwnProperty('tocDepth')) {
-      this.options.pdf.tocDepth = 0
-    }
-    if (!this.options.pdf.hasOwnProperty('titlepage')) {
-      this.options.pdf.titlepage = false
-    }
+    if (!this.options.pdf.hasOwnProperty('toc')) this.options.pdf.toc = false
+    if (!this.options.pdf.hasOwnProperty('tocDepth')) this.options.pdf.tocDepth = 0
+    if (!this.options.pdf.hasOwnProperty('titlepage')) this.options.pdf.titlepage = false
 
     // Check the citeproc availability
     this._citeprocOptions = ''
@@ -128,9 +122,7 @@ class ZettlrExport {
     //  Third prepare the export (e.g., strip IDs, tags or other unnecessary stuff)
     this._prepareFile()
 
-    if (this.options.format === 'pdf') {
-      this._buildLatexTpl()
-    }
+    if (this.options.format === 'pdf') this._buildLatexTpl()
 
     // Fourth defer to the respective functions.
     switch (this.options.format) {
@@ -188,7 +180,7 @@ class ZettlrExport {
     // Second strip tags if necessary
     if (this.options.stripTags) {
       // Strip all tags
-      cnt = cnt.replace(/#[\d\w-]+/g, '')
+      cnt = cnt.replace(/(?<= |\n|^)#(#?[A-Z0-9-_]+#?)/gi, '') // cnt.replace(/#[\d\w-]+/g, '')
     }
 
     // Second remove or unlink links.
