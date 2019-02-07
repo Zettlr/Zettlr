@@ -227,7 +227,7 @@ class ZettlrBody {
     let targetMode = 'words'
     let targetCount = 0
 
-    if (file.hasOwnProperty('target')) {
+    if (file.hasOwnProperty('target') && file.target.mode && file.target.count) {
       // Overwrite the properties with the ones given
       targetMode = file.target.mode
       targetCount = file.target.count
