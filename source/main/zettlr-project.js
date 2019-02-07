@@ -139,11 +139,10 @@ class ZettlrProject {
       'cslStyle': this._cfg.cslStyle
     }
 
-    try {
-      makeExport(opt) // Aaaand export
-    } catch (err) {
-      throw err
-    }
+    // Aaaand export.
+    makeExport(opt)
+      .then((exporter) => { /* Nothing to do */ })
+      .catch((err) => { global.ipc.notifyError(err) })
   }
 
   /**

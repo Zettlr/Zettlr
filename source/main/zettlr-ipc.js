@@ -98,6 +98,15 @@ class ZettlrIPC {
        */
       notify: (msg) => { this.send('notify', msg) },
       /**
+       * Sends an error to the renderer process that should be displayed using
+       * a dedicated dialog window (is used, e.g., during export when Pandoc
+       * throws potentially a lot of useful information for fixing problems in
+       * the source files).
+       * @param  {Object} msg        The error object
+       * @return {void}            Does not return.
+       */
+      notifyError: (msg) => { this.send('notify-error', msg) },
+      /**
        * Replaces the given file in the renderer. Can be used by any file to
        * update itself in the renderer without having to issue a full path
        * update.

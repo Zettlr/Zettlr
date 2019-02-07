@@ -32,6 +32,7 @@ const PDFPreferences = require('./dialog/pdf-preferences.js')
 const TagsPreferences = require('./dialog/tags-preferences.js')
 const ProjectProperties = require('./dialog/project-properties.js')
 const CustomCSS = require('./dialog/custom-css.js')
+const ErrorDialog = require('./dialog/error-dialog.js')
 
 const { trans } = require('../common/lang/i18n.js')
 const { localiseNumber } = require('../common/zettlr-helpers.js')
@@ -81,10 +82,9 @@ class ZettlrBody {
       return false
     }, false)
 
-    // Inject a global notify function
-    global.notify = (msg) => {
-      this.notify(msg)
-    }
+    // Inject a global notify and notifyError function
+    global.notify = (msg) => { this.notify(msg) }
+    global.notifyError = (msg) => { this.notifyError(msg) }
 
     // Afterwards, activate the event listeners of the window controls
     $('.windows-window-controls .minimise, .linux-window-controls .minimise').click((e) => {
@@ -347,25 +347,31 @@ class ZettlrBody {
     * n {ZettlrBody}         Chainability.
     */
   notify (message) {
-    this._n.push(new ZettlrNotification(this, message, this._n.length))
+    this._n.push(new ZettlrNotification(this, message))
     return this
   }
 
   /**
-    * Remove a notification from the array.
+    * Remove a notification from the array and tell the others to re-place
+    * themselves.
     * @param  {ZettlrNotification} ntf  The notification that wants itself removed.
-    * @param  {Integer} oldH The old height of the notification.
     * @return {void}      Nothing to return.
     */
-  notifySplice (ntf, oldH) {
+  notifySplice (ntf) {
     let index = this._n.indexOf(ntf)
-    if (index > -1) {
-      this._n.splice(index, 1)
-    }
+    if (index > -1) this._n.splice(index, 1)
+    for (let msg of this._n) msg.moveUp()
+  }
 
-    for (let msg of this._n) {
-      msg.moveUp(oldH)
-    }
+  /**
+   * Displays a dedicated dialog. Should not be used for all errors, but only
+   * for those where the error information is large.
+   * @param  {Error} message The error object
+   * @return {void}         Does not return.
+   */
+  notifyError (message) {
+    let d = new ErrorDialog()
+    d.init(message).open()
   }
 
   /**

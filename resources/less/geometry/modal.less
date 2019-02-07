@@ -134,12 +134,22 @@
           }
         }
 
-        .changelog {
+        // Why the .code-class? Because sometimes we have a small code area,
+        // sometimes it's the only content of the dialog (in which case we
+        // need to constrain its size in the geometry part)
+        .changelog, .code {
             max-height:300px;
             overflow-y:auto;
             border-radius:2px;
             padding:10px;
             margin:10px 0px;
+            user-select: text; // The code contents may be copied
+        }
+
+        /* Mock a <pre>-tag */
+        .code {
+          white-space: pre;
+          font-family: @font-mono;
         }
 
         div.clear { clear:both; }

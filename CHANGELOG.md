@@ -36,6 +36,7 @@
 - Added an option to hide directories from the preview list while performing a global search.
 - Fixed a small error that would strip false positive tags on export (i.e. that would also strip escaped tags).
 - Massive updates to the notification service provider. If a message is too long, it will be truncated when it is first shown to you. If you then click on the notification, it will expand itself so that you can read the full message. Click on it again to hide it. Additionally, the notifications are now the same height and move smoothly as soon as new notifications arrive or old ones get removed.
+- Gave the exporter an update: Now, if Pandoc experiences an error during export, you will be presented with a better error dialog which even lets you select portions of the error message for you to google them.
 
 ## Under the Hood
 
@@ -58,6 +59,7 @@
 - Added a security pass to the droppable directories to make sure they don't accidentally accept the file and direct the main process to move it out of the app instead of moving it to themselves.
 - **Switched back to `electron 3` for the time being, as `electron 4` still has a nasty bug that renders the toolbar unusable when exiting fullscreen on macOS (see https://github.com/electron/electron/issues/16418 ).**
 - Switched to `nspell` for spellchecking, as the correction-finding algorithm works smoother and the repository is not as old as `Typo.js`.
+- `makeExport` now returns a Promise instead of the Exporter object. The exporter is now only returned if it's call succeeded (by passing it to `resolve`).
 
 # 1.0.0
 

@@ -585,13 +585,18 @@ class Zettlr {
       'cslStyle': this.config.get('export.cslStyle')
     }
 
-    // Call the exporter.
-    try {
-      makeExport(opt)
-      this.notify(trans('system.export_success', opt.format.toUpperCase()))
-    } catch (err) {
-      this.notify(err.name + ': ' + err.message) // Error may be thrown
-    }
+    // Call the exporter. Don't throw the "big" error as this is single-file export
+    makeExport(opt)
+      .then((stdout) => { this.notify(trans('system.export_success', opt.format.toUpperCase())) })
+      .catch((err) => {
+        // Error may be thrown. If there's additional info, spit out an extended
+        // dialog.
+        if (err.additionalInfo) {
+          this.notify(err.name + ': ' + err.message)
+        } else {
+          this.notify(err.name + ': ' + err.message)
+        }
+      })
   }
 
   /**
@@ -908,14 +913,13 @@ class Zettlr {
     }
 
     // Call the exporter.
-    try {
-      let e = makeExport(opt)
-      let file = e.getFile()
-      // Now we'll need to open the print window.
-      this._printWindow.openPrint(file)
-    } catch (err) {
-      this.notify(err.name + ': ' + err.message) // Error may be thrown
-    }
+    makeExport(opt)
+      .then((exporter) => {
+        let file = exporter.getFile()
+        // Now we'll need to open the print window.
+        this._printWindow.openPrint(file)
+      })
+      .catch((err) => { this.notify(err.name + ': ' + err.message) }) // Error may be thrown
   }
 
   /****************************************************************************

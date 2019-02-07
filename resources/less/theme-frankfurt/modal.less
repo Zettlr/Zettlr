@@ -38,8 +38,12 @@
             width: 80%;
         }
 
-        code {
+        // Why the .code-class? Because sometimes we have a small code area,
+        // sometimes it's the only content of the dialog (in which case we
+        // need to constrain its size in the geometry part)
+        code, .code {
             background-color:@grey-0;
+            color: @grey-5;
             border-radius:2px;
             font-weight: bold;
             padding: 2px 5px;

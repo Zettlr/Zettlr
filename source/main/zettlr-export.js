@@ -22,17 +22,6 @@ const fs = require('fs')
 const showdown = require('showdown')
 
 /**
- * Error object constructor.
- * @param       {String} msg              The message
- * @param       {String} [name='Exporting error']       The name of the error.
- * @constructor
- */
-function ExportError (msg, name = 'Exporting error') {
-  this.name = name
-  this.message = msg
-}
-
-/**
  * ZettlrExport is a stateless class that gets invoked via the constructor.
  */
 class ZettlrExport {
@@ -74,13 +63,14 @@ class ZettlrExport {
    * }
    * @param {Object} options An object containing necessary configuration to export
    */
-  constructor (options) {
+  constructor (options, callback = null) {
     // First: Initialise the engine
     // Make the variables available to all functions
     this.options = options
     this.tpl = ''
     this.command = ''
     this.showdown = null
+    this._callback = callback // If given, will be called after export
     // We already know where the file will end up (on some exports this will
     // be overwritten by the prepare-command).
     this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + '.' + this.options.format)
@@ -96,12 +86,12 @@ class ZettlrExport {
     // Second make sure pandoc is installed. Without, only HTML is possible
     // through showdown.
     if (!commandExists('pandoc') && this.options.format !== 'html') {
-      throw new ExportError(trans('system.error.no_pandoc_message'), trans('system.error.no_pandoc_title'))
+      throw new Error(trans('system.error.no_pandoc_message'), trans('system.error.no_pandoc_title'))
     }
 
     // No matter what, for pdf we always need pandoc + latex installed.
     if ((this.options.format === 'pdf') && !commandExists('xelatex')) {
-      throw new ExportError(trans('system.error.no_xelatex_message'), trans('system.error.no_xelatex_title'))
+      throw new Error(trans('system.error.no_xelatex_message'), trans('system.error.no_xelatex_title'))
     }
 
     // Necessary evaluations
@@ -157,7 +147,7 @@ class ZettlrExport {
         this._prepareStandardExport()
         break
       default:
-        throw ExportError('Unknown format: ' + this.options.format)
+        throw new Error('Unknown format: ' + this.options.format)
     }
 
     this._make()
@@ -349,13 +339,13 @@ class ZettlrExport {
 
     if (!this.command || this.command.length === 0) {
       // No command given -> abort
-      throw new ExportError('Exporting command was empty')
+      throw new Error('Exporting command was empty')
     }
 
     exec(this.command, { 'cwd': this.options.dest }, (error, stdout, stderr) => {
       this._cleanup() // Has to be done even on error
       if (error) {
-        return this._abort(error)
+        return this._abort(error, stderr)
       }
 
       this._finish()
@@ -363,11 +353,25 @@ class ZettlrExport {
   }
 
   /**
-   * Abort by showing an error prompt
-   * @param  {String} [error=''] The error, if given
+   * Abort the operation and optionally show an error dialog
+   * @param  {Error} error  The error object
+   * @param  {String} [stdout=''] Additional console information
+   * @return {void}        Only throws.
    */
-  _abort (error = '') {
-    throw new ExportError(trans('system.error.export_error_message', error), trans('system.error.export_error_title'))
+  _abort (error, stdout = '') {
+    // Shorten the error message to a manageable format, b/c exec() tends to
+    // append the whole stderr to the message
+    if (/\n/.test(error.message)) error.message = error.message.split('\n')[0]
+
+    if (this._callback) {
+      this._callback({
+        title: trans('system.error.export_error_title'),
+        message: error.message,
+        additionalInfo: stdout
+      })
+    } else {
+      throw new Error(trans('system.error.export_error_message', error.message), trans('system.error.export_error_title'))
+    }
   }
 
   /**
@@ -378,7 +382,7 @@ class ZettlrExport {
     // a notification that the export is complete.
     fs.unlink(this.tempfile, (err) => {
       if (err) {
-        throw new ExportError(trans('system.error.export_temp_file', this.tempfile))
+        this._abort(new Error(trans('system.error.export_temp_file', this.tempfile)))
       }
     })
 
@@ -386,7 +390,7 @@ class ZettlrExport {
     if (this.options.format === 'pdf') {
       fs.unlink(this.textpl, (err) => {
         if (err) {
-          throw new ExportError(trans('system.error.export_temp_file', this.textpl))
+          this._abort(new Error(trans('system.error.export_temp_file', this.textpl)))
         }
       })
     }
@@ -412,16 +416,28 @@ class ZettlrExport {
     if (!this.options.hasOwnProperty('autoOpen') || this.options.autoOpen) {
       require('electron').shell.openItem(this.targetFile)
     }
+
+    // After everything is done, call the callback
+    this._callback(null) // null means no error
   }
 }
 
 /**
- * Returns a new object of class ZettlrExport.
+ * Returns a Promise that resolves or rejects depending on the outcome of the export.
  * @param  {Object} options An options object compatible to ZettlrExport.
- * @return {ZettlrExport}         An exporter instance
+ * @return {Promise}         A promise
  */
 function makeExport (options) {
-  return new ZettlrExport(options)
+  return new Promise((resolve, reject) => {
+    try {
+      let e = new ZettlrExport(options, (err, stdout = '') => {
+        if (err) reject(err)
+        resolve(e)
+      })
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
 module.exports = makeExport

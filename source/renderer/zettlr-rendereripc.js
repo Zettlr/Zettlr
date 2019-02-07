@@ -490,8 +490,14 @@ class ZettlrRendererIPC {
         this._app.getBody().quicklook(cnt)
         break
 
+      // Small notification
       case 'notify':
         global.notify(cnt)
+        break
+
+      // Dedicated dialog window for the error
+      case 'notify-error':
+        global.notifyError(cnt)
         break
 
       case 'toc':
