@@ -64,8 +64,9 @@ class Zettlr {
 
     // INTERNAL OBJECTS
     this.app = parentApp // Internal pointer to app object
-
+    console.log(`Booting config`)
     this.config = new ZettlrConfig(this)
+    console.log(`Config done. booting i18n`)
     // Init translations
     let metadata = i18n(this.config.get('appLang'))
 

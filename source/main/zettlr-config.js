@@ -61,6 +61,11 @@ class ZettlrConfig extends EventEmitter {
       this._additional_paths = [] // Fallback: No additional paths
     }
 
+    // This function makes sure necessary files and folders exist for the app to
+    // start up smoothly. These paths should exist before any deeper logic is
+    // executed.
+    this._assertPaths()
+
     // Config Template providing all necessary arguments
     this.cfgtpl = {
       // Root directories
@@ -186,19 +191,32 @@ class ZettlrConfig extends EventEmitter {
   }
 
   /**
+   * Makes sure absolutely essential paths of the app exist.
+   */
+  _assertPaths () {
+    let pathToCheck = [
+      this.configPath, // Main config directory
+      path.join(this.configPath, 'dict'), // Custom dictionary path
+      path.join(this.configPath, 'lang') // Custom translation path
+    ]
+
+    // Make sure each path exists
+    for (let p of pathToCheck) {
+      try {
+        fs.lstatSync(p)
+      } catch (e) {
+        fs.mkdirSync(p)
+      }
+    }
+  }
+
+  /**
     * This function only (re-)reads the configuration file if present
     * @return {ZettlrConfig} This for chainability.
     */
   load () {
     this.config = this.cfgtpl
     let readConfig = {}
-
-    // Check if dir exists. If not, create.
-    try {
-      fs.lstatSync(this.configPath)
-    } catch (e) {
-      fs.mkdirSync(this.configPath)
-    }
 
     // Does the file already exist?
     try {
@@ -289,13 +307,6 @@ class ZettlrConfig extends EventEmitter {
     * @return {void} Nothing to return.
     */
   checkPaths () {
-    // First check if the dict directory exists and create, if not.
-    try {
-      fs.lstatSync(path.join(this.configPath, 'dict'))
-    } catch (e) {
-      fs.mkdirSync(path.join(this.configPath, 'dict'))
-    }
-
     for (let i = 0; i < this.config['openPaths'].length; i++) {
       try {
         fs.lstatSync(this.config['openPaths'][i])
