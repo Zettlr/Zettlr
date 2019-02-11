@@ -1,3 +1,13 @@
+# 1.1.1
+
+## GUI and Functionality
+
+- Removed the Speech submenu from Windows and Linux, as it is only used on macOS.
+
+## Under the Hood
+
+- Fixed a small logical error in the menu buildup process
+
 # 1.1.0
 
 ## GUI and Functionality

@@ -66,7 +66,7 @@ class ZettlrMenu {
             if (process.platform !== 'darwin') menu.submenu = menu.submenu.concat(this._buildFromSource(this._blueprint.mixin_preferences).submenu)
             break
           case 'darwin_speech':
-            menu.submenu = menu.submenu.concat(this._buildFromSource(this._blueprint.mixin_speech).submenu)
+            if (process.platform === 'darwin') menu.submenu = menu.submenu.concat(this._buildFromSource(this._blueprint.mixin_speech).submenu)
             break
         }
         continue // No need to process further; mixins only have the mixin attribute
