@@ -18,7 +18,7 @@
 
 const { trans } = require('../common/lang/i18n.js')
 const ipc = require('electron').ipcMain
-const BrowserWindow = require('electron').BrowserWindow // Needed for close and maximise commands
+const { BrowserWindow } = require('electron') // Needed for close and maximise commands
 
 /**
  * This class acts as the interface between the main process and the renderer.
@@ -57,7 +57,13 @@ class ZettlrIPC {
 
     // Beginn listening to messages
     ipc.on('message', (event, arg) => {
-      if (arg.hasOwnProperty('command') && arg.command === 'file-drag-start') {
+      // We always need a command
+      if (!arg.hasOwnProperty('command')) {
+        console.error(trans('system.no_command'), arg)
+        return
+      }
+
+      if (arg.command === 'file-drag-start') {
         event.sender.startDrag({
           'file': this._app.findFile({ hash: parseInt(arg.content.hash) }).path,
           'icon': require('path').join(__dirname, '/assets/dragicon.png')
@@ -80,7 +86,7 @@ class ZettlrIPC {
       // Last possibility: A quicklook window has requested a file. In this case
       // we mustn't obliterate the "event" because this way we don't need to
       // search for the window.
-      if (arg.hasOwnProperty('command') && arg.command === 'ql-get-file') {
+      if (arg.command === 'ql-get-file') {
         event.sender.send('file', this._app.findFile({ 'hash': arg.content }).withContent())
         return
       }
@@ -123,15 +129,9 @@ class ZettlrIPC {
     * @return {void}       Does not return anything.
     */
   dispatch (arg) {
-  // handleEvent expects arg to contain at least 'command' and 'content'
-  // properties
-    if (!arg.hasOwnProperty('command')) {
-      console.error(trans('system.no_command'), arg)
-      return
-    }
-    if (!arg.hasOwnProperty('content')) {
-      arg.content = {}
-    }
+    // handleEvent expects arg to contain at least 'command' and 'content'
+    // properties. That 'command' exists is checked by the message handler
+    if (!arg.hasOwnProperty('content')) arg.content = {}
     this.handleEvent(arg.command, arg.content)
   }
 
