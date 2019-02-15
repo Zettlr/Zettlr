@@ -5,11 +5,14 @@
 - Removed the Speech submenu from Windows and Linux, as it is only used on macOS.
 - Added an "Inspect Element" context menu item if the debug mode is enabled.
 - The context menu doesn't show up on directory items in the file list anymore, which it wasn't supposed to anyway.
+- Fixes in the math rendering. Now the app will correctly render all equations, be they inline or multiline.
 
 ## Under the Hood
 
 - Fixed a small logical error in the menu buildup process.
 - The context menu in the `ZettlrBody` class is now always instantiated anew.
+- Rewrote the logic of detecting and rendering mathematical equations.
+- Updated the `KaTeX.css` stylesheet to the newest version and removed some errors (thanks to @Wieke for doing this).
 
 # 1.1.0
 

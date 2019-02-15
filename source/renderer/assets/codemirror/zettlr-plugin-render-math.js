@@ -36,83 +36,95 @@
     } while (i < mathMarkers.length)
 
     // Now render all potential new Math elements
+    let isMultiline = false // Are we inside a multiline?
+    let eq = ''
+    let fromLine = i
+
     for (let i = 0; i < cm.lineCount(); i++) {
       if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
-      if (cm.getCursor('from').line === i) {
-        // We're directly in the formatting so don't render.
+
+      // This array holds all markers to be inserted (either one in case of the
+      // final line of a multiline-equation or multiple in case of several
+      // inline equations).
+      let newMarkers = []
+
+      let line = cm.getLine(i)
+      if (!isMultiline && line === '$$') {
+        isMultiline = true
+        fromLine = i
+        eq = ''
+      } else if (isMultiline && line !== '$$') {
+        // Simply add the line to the equation and continue
+        eq += line + '\n'
         continue
+      } else if (isMultiline && line === '$$') {
+        // We have left the multiline equation and can render it now.
+        isMultiline = false
+        newMarkers.push({
+          'curFrom': { 'ch': 0, 'line': fromLine },
+          'curTo': { 'ch': 2, 'line': i },
+          'eq': eq
+        })
+        eq = '' // Reset the equation
+      } else {
+        // Else: No multiline. Search for inlines.
+        while ((match = mathRE.exec(line)) != null) {
+          newMarkers.push({
+            'curFrom': { 'ch': match.index, 'line': i },
+            'curTo': { 'ch': match.index + match[0].length, 'line': i },
+            'eq': match[1] || match[2]
+          })
+        }
       }
 
-      let j = i
-      let fromCh = 0
-      let fromLine = i
-      let toCh = 0
-      let toLine = j
-      let eq = ''
-
-      // First get the line and test if the contents contain a math element
-      let line = cm.getLine(i)
-      if (line === '$$') {
-        j++
-        // Multiline equation
-        while (j < cm.lineCount() && cm.getLine(j) !== '$$') {
-          eq += cm.getLine(j) + '\n'
-          j++
-        }
-        // If the following if becomes true, there was no matching element in
-        // the whole document -> don't render!
-        if (cm.getLine(j) !== '$$') continue
-        i = j // After this excursus continue with the next line
-        toLine = j
-        toCh = 2 // Include the closing characters ($$)
-        // Is the cursor here somewhere?
-        if (cm.getCursor('from').line >= fromLine && toLine >= cm.getCursor('from').line) {
+      // Now cycle through all new markers and insert them, if they weren't
+      // already
+      for (let myMarker of newMarkers) {
+        let cur = cm.getCursor('from')
+        let isMulti = myMarker.curFrom.line !== myMarker.curTo.line
+        if (isMulti && cur.line >= myMarker.curFrom.line && cur.line <= myMarker.curTo.line) {
+          // We're directly in the multiline equation, so don't render.
+          continue
+        } else if (!isMulti && cur.line === myMarker.curFrom.line && cur.ch >= myMarker.curFrom.ch && cur.ch <= myMarker.curTo.ch) {
+          // Again, we're right in the middle of an inline-equation, so don't render.
           continue
         }
-      } else if ((match = mathRE.exec(line)) != null) {
-        fromCh = match.index
-        toCh = match.index + match[0].length
-        eq = match[1] || match[2]
-      } else {
-        // Found neither multiline nor single line
-        continue
-      }
 
-      let curFrom = { 'line': fromLine, 'ch': fromCh }
-      let curTo = { 'line': toLine, 'ch': toCh }
-
-      let isRendered = false
-      let marks = cm.findMarks(curFrom, curTo)
-      for (let marx of marks) {
-        if (mathMarkers.includes(marx)) {
-          isRendered = true
-          break
+        let isRendered = false
+        let marks = cm.findMarks(myMarker.curFrom, myMarker.curTo)
+        for (let marx of marks) {
+          if (mathMarkers.includes(marx)) {
+            isRendered = true
+            break
+          }
         }
-      }
 
-      // Also in this case simply skip.
-      if (isRendered) continue
+        // Also in this case simply skip.
+        if (isRendered) continue
 
-      // Use jQuery for simple creation of the DOM element
-      let elem = $(`<span class="preview-math"></span>`)[0]
+        // Use jQuery for simple creation of the DOM element
+        let elem = $(`<span class="preview-math"></span>`)[0]
 
-      let textMarker = cm.markText(
-        curFrom, curTo,
-        {
-          'clearOnEnter': true,
-          'replacedWith': elem,
-          'inclusiveLeft': false,
-          'inclusiveRight': false
-        }
-      )
+        let textMarker = cm.markText(
+          myMarker.curFrom, myMarker.curTo,
+          {
+            'clearOnEnter': true,
+            'replacedWith': elem,
+            'inclusiveLeft': false,
+            'inclusiveRight': false
+          }
+        )
 
-      // It's match[2] if it was inline.
-      require('katex').render(eq, elem, {
-        throwOnError: false
-      })
-      textMarker.changed()
+        require('katex').render(myMarker.eq, elem, {
+          throwOnError: false
+        })
 
-      mathMarkers.push(textMarker)
-    }
-  }
+        // Now the marker has obviously changed
+        textMarker.changed()
+
+        // Finally push the marker
+        mathMarkers.push(textMarker)
+      } // End for all markers
+    } // End for lines
+  } // End command
 })
