@@ -166,7 +166,13 @@ class ZettlrIPC {
 
     // This class can handle some events by itself, because they don't involve
     // a lot of code and it saves space doing it here. Therefore we need some vars.
-    let dir = null
+
+    try {
+      this._app.runCommand(cmd, cnt)
+      return // In case the command has run don't run it twice because it's present here as well.
+    } catch (e) {
+      console.log(`Unknown command: ${cmd}`)
+    }
 
     switch (cmd) {
       case 'app-quit':
@@ -238,19 +244,9 @@ class ZettlrIPC {
         this._app.setModified()
         break
 
-      case 'file-new':
-        // Client has requested a new file.
-        this._app.newFile(cnt)
-        break
-
       // Set or update a target
       case 'set-target':
         global.targets.set(cnt)
-        break
-
-      case 'dir-new':
-        // Client has requested a new folder.
-        this._app.newDir(cnt)
         break
 
       case 'dir-new-vd':
@@ -259,45 +255,6 @@ class ZettlrIPC {
         break
 
       // PROJECTS
-      case 'dir-new-project':
-        dir = this._app.findDir(cnt)
-        if (dir) {
-          dir.makeProject()
-          this.send('paths-update', this._app.getPathDummies())
-        }
-        break
-
-      case 'dir-remove-project':
-        dir = this._app.findDir(cnt)
-        if (dir) {
-          dir.removeProject()
-          this.send('paths-update', this._app.getPathDummies())
-        }
-        break
-
-      case 'dir-project-properties':
-        dir = this._app.findDir(cnt)
-        if (dir) {
-          cnt.properties = dir.getProject().getProperties()
-          this.send('project-properties', cnt) // Now cnt not only contains hash, but also the properties
-        }
-        break
-
-      case 'update-project-properties':
-        dir = this._app.findDir(cnt) // Contains a hash property
-        if (dir) {
-          dir.getProject().bulkSet(cnt.properties)
-        }
-        break
-
-      case 'dir-project-export':
-        dir = this._app.findDir(cnt) // Contains a hash propety
-        if (dir) {
-          dir.getProject().build()
-          this.send('notify', 'Building project ...')
-        }
-        break
-
       case 'file-save':
         // Client has requested a save-action.
         // arg contains the contents of CM and maybe also a hash.
@@ -307,28 +264,6 @@ class ZettlrIPC {
       case 'dir-open':
         // Client requested a totally different folder.
         this._app.open()
-        break
-
-      case 'file-delete':
-        if (cnt.hasOwnProperty('hash')) {
-          this._app.removeFile(cnt.hash)
-        } else if (this._app.getCurrentFile() != null) {
-          this._app.removeFile()
-        }
-        break
-
-      case 'file-delete-from-vd':
-        if (cnt.hasOwnProperty('hash') && cnt.hasOwnProperty('virtualdir')) {
-          this._app.removeFromVirtualDir(cnt)
-        }
-        break
-
-      case 'dir-delete':
-        if (cnt.hasOwnProperty('hash')) {
-          this._app.removeDir(cnt.hash)
-        } else if (this._app.getCurrentDir() != null) {
-          this._app.removeDir()
-        }
         break
 
       case 'close-root':
@@ -367,20 +302,6 @@ class ZettlrIPC {
 
       case 'export':
         this._app.exportFile(cnt)
-        break
-
-      // Rename a directory (arg.hash + arg.(new)name)
-      case 'dir-rename':
-        this._app.renameDir(cnt)
-        break
-
-      case 'file-rename':
-        this._app.renameFile(cnt)
-        break
-
-      // Client requested a directory move
-      case 'request-move':
-        this._app.requestMove(cnt)
         break
 
       case 'get-preferences':

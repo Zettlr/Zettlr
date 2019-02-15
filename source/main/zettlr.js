@@ -40,6 +40,8 @@ const { i18n, trans } = require('../common/lang/i18n.js')
 const { hash, ignoreDir,
   ignoreFile, isFile, isDir } = require('../common/zettlr-helpers.js')
 
+const loadCommands = require('./commands/_autoload')
+
 const POLL_TIME = require('../common/data.json').poll_time
 
 /**
@@ -61,6 +63,15 @@ class Zettlr {
     this.currentDir = null // Current working directory (object)
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = []
+
+    this._commands = [] // This array holds all commands that can be performed
+    loadCommands(this).then((cmd) => {
+      this._commands = cmd
+    }).catch((e) => {
+      // TODO: In case the commands can't be loaded we should definitely shut
+      // down the app
+      console.error(e)
+    })
 
     // INTERNAL OBJECTS
     this.app = parentApp // Internal pointer to app object
@@ -243,6 +254,26 @@ class Zettlr {
     }
   }
 
+  runCommand (evt, arg) {
+    // This function will be called from IPC with a command and an arg.
+    // First find the command
+    let cmd = this._commands.find((elem) => { return (elem.getEventName() === evt) })
+
+    if (cmd) {
+      // Return the return value of the command, if there is any
+      try {
+        return cmd.run(arg)
+      } catch (e) {
+        console.log(e)
+      }
+    } else {
+      console.log(`Nothing for event ${evt}. Possible events: ${this._commands.map((elem) => elem.getEventName()).join(', ')}`)
+      // We need to throw, because the return value of a successful command run
+      // may very well also evaluate to null, undefined, false or anything else.
+      throw new Error('Unknown command!')
+    }
+  }
+
   /****************************************************************************
    **                                                                        **
    **                                                                        **
@@ -317,77 +348,6 @@ class Zettlr {
     dir.toggleSorting(arg.type)
 
     this.ipc.send('paths-update', this.getPathDummies())
-  }
-
-  /**
-    * Create a new file.
-    * @param  {Object} arg An object containing a hash of containing directory and a file name.
-    * @return {void}     This function does not return anything.
-    */
-  newFile (arg) {
-    // If the user ONLY decided to use special chars
-    // or did not input anything abort the process.
-    if (!this.canClose()) {
-      return
-    }
-
-    let dir = null
-    let file = null
-
-    // There should be also a hash in the argument.
-    if (arg.hasOwnProperty('hash')) {
-      dir = this.findDir({ 'hash': parseInt(arg.hash) })
-    } else {
-      dir = this.getCurrentDir()
-    }
-
-    // Create the file
-    try {
-      file = dir.newfile(arg.name)
-    } catch (e) {
-      return this.window.prompt({
-        type: 'error',
-        title: trans('system.error.could_not_create_file'),
-        message: e.message
-      })
-    }
-
-    // Send the new paths and open the respective file.
-    this.ipc.send('paths-update', this.getPathDummies())
-    this.setCurrentFile(file)
-    this.ipc.send('file-open', file.withContent())
-  }
-
-  /**
-    * Create a new directory.
-    * @param  {Object} arg An object containing hash of containing and name of new dir.
-    */
-  newDir (arg) {
-    let dir = null
-    let curdir = null
-
-    if (arg.hasOwnProperty('hash')) {
-      curdir = this.findDir({ 'hash': parseInt(arg.hash) })
-    } else {
-      curdir = this.getCurrentDir()
-    }
-
-    try {
-      dir = curdir.newdir(arg.name)
-    } catch (e) {
-      return this.window.prompt({
-        type: 'error',
-        title: trans('system.error.could_not_create_dir'),
-        message: e.message
-      })
-    }
-
-    // Re-render the directories, and then as well the file-list of the
-    // current folder.
-    this.ipc.send('paths-update', this.getPathDummies())
-
-    // Switch to newly created directory.
-    this.setCurrentDir(dir)
   }
 
   /**
@@ -476,94 +436,6 @@ class Zettlr {
   }
 
   /**
-    * Removes a file.
-    * @param  {number} [hash=this.getCurrentFile().hash] The hash of the file to be deleted.
-    * @return {void}                                   This function does not return.
-    */
-  removeFile (hash = this.getCurrentFile().hash) {
-    // First determine if this is modified.
-    if (!this.canClose()) {
-      return
-    }
-
-    let file = this.findFile({ 'hash': parseInt(hash) })
-
-    if (!this.window.confirmRemove(file)) {
-      return
-    }
-
-    // Now that we are save, let's move the current file to trash.
-    if (this.getCurrentFile() && (file.hash === this.getCurrentFile().hash)) {
-      this.ipc.send('file-close', {})
-      // Tell main & renderer to close file references
-      this.setCurrentFile(null)
-    }
-    file.remove(true) // Also move the file to the trash
-    this.ipc.send('paths-update', this.getPathDummies())
-  }
-
-  /**
-    * Remove a directory.
-    * @param  {Integer} [hash=this.getCurrentDir().hash] The hash of dir to be deleted.
-    * @return {void}                                  This function does not return anything.
-    */
-  removeDir (hash = this.getCurrentDir().hash) {
-    let filedir = null
-    let dir = null
-
-    // First determine if this is modified.
-    if (this.getCurrentFile() == null) {
-      filedir = ''
-    } else {
-      filedir = this.getCurrentFile().parent // Oh I knew this would be clever :>
-    }
-
-    dir = this.findDir({ 'hash': parseInt(hash) })
-
-    if (filedir === dir && !this.canClose()) {
-      return
-    }
-
-    if (!this.window.confirmRemove(dir)) {
-      return
-    }
-
-    // Close the current file, if there is one open
-    if ((this.getCurrentFile() != null) && dir.contains(this.getCurrentFile())) {
-      this.closeFile()
-    }
-
-    if (dir === this.getCurrentDir() && !this.getCurrentDir().isRoot()) {
-      this.setCurrentDir(dir.parent) // Move up one level
-    } else if (dir === this.getCurrentDir() && this.getCurrentDir().isRoot()) {
-      this.setCurrentDir(null) // Simply reset the current dir pointer
-    }
-
-    // Now that we are save, let's move the current directory to trash.
-    this.watchdog.ignoreNext('unlinkDir', dir.path)
-
-    dir.remove(dir, true)
-
-    this.ipc.send('paths-update', this.getPathDummies())
-  }
-
-  /**
-    * Removes a file from the index of a virtual directory.
-    * @param  {Object} cnt Should contain both hash and virtualdir (also a hash)
-    */
-  removeFromVirtualDir (cnt) {
-    let vd = this.findDir({ 'hash': parseInt(cnt.virtualdir) })
-    let file = null
-    if (vd) {
-      file = vd.findFile({ 'hash': parseInt(cnt.hash) })
-    }
-    if (vd && file) {
-      vd.remove(file)
-      this.ipc.send('paths-update', this.getPathDummies())
-    }
-  }
-
-  /**
     * Export a file to another format.
     * @param  {Object} arg An object containing hash and wanted extension.
     * @return {void}     Does not return.
@@ -645,183 +517,6 @@ class Zettlr {
       // There has been an error on importing (e.g. Pandoc was not found)
       // This catches this and displays it.
       this.notify(e.message)
-    }
-  }
-
-  /**
-    * Renames a directory.
-    * @param  {Object} arg An object containing a hash.
-    * @return {void}     This function does not return anything.
-    */
-  renameDir (arg) {
-    // { 'hash': hash, 'name': val }
-    let dir = this.findDir({ 'hash': parseInt(arg.hash) })
-
-    let oldDir = path.dirname(dir.path)
-
-    // Save for later whether this is the currentDir (have to re-send dir list)
-    let isCurDir = ((this.getCurrentDir() != null) && (dir.hash === this.getCurrentDir().hash))
-    let oldPath = null
-
-    if ((this.getCurrentFile() !== null) && (dir.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
-      // The current file is in said dir so we need to trick a little bit
-      oldPath = this.getCurrentFile().path
-      let relative = oldPath.replace(dir.path, '') // Remove old directory to get relative path
-      // Re-merge:
-      oldPath = path.join(oldDir, arg.name, relative) // New path now
-    }
-
-    // Move to same location with different name
-    dir.move(oldDir, arg.name)
-
-    this.ipc.send('paths-update', this.getPathDummies())
-
-    if (isCurDir) this.setCurrentDir(dir)
-
-    if (oldPath != null) {
-      // Re-set current file in the client
-      let nfile = dir.findFile({ 'hash': hash(oldPath) })
-      this.setCurrentFile(nfile)
-    }
-  }
-
-  /**
-    * Renames a file.
-    * @param  {Object} arg An object containing hash and name.
-    * @return {void}     This function does not return.
-    */
-  renameFile (arg) {
-    // { 'hash': hash, 'name': val }
-    let file = null
-    let oldpath = ''
-
-    // Possibilities: Non-opened file or opened file
-    if (this.getCurrentFile() && (this.getCurrentFile().hash === parseInt(arg.hash))) {
-      // Current file should be renamed.
-      file = this.getCurrentFile()
-      oldpath = file.path
-      file.rename(arg.name)
-
-      // Adapt window title (manually trigger a fileUpdate)
-      this.window.fileUpdate()
-    } else {
-      // Non-open file should be renamed.
-      file = this.findFile({ 'hash': parseInt(arg.hash) })
-      oldpath = file.path
-      file.rename(arg.name) // Done.
-    }
-
-    // A root has been renamed -> reflect in openPaths
-    if (this.getPaths().includes(file)) {
-      let oP = this.getConfig().get('openPaths')
-      for (let i = 0; i < oP.length; i++) {
-        if (oP[i] === oldpath) {
-          oP[i] = file.path
-          this.getConfig().set('openPaths', oP)
-          break
-        }
-      }
-    }
-
-    // Replace all relevant properties of the renamed file in renderer.
-    this.ipc.send('file-replace', { 'hash': parseInt(arg.hash), 'file': file.getMetadata() })
-
-    if (this.getCurrentFile() && this.getCurrentFile().hash === parseInt(arg.hash)) {
-      // Also "re-set" the current file to trigger some additional actions
-      // necessary to reflect the changes throughout the app.
-      this.setCurrentFile(this.getCurrentFile())
-    }
-  }
-
-  /**
-    * Move a directory or a file.
-    * @param  {Object} arg An object containing the hash of source and destination
-    * @return {void}     This function does not return anything.
-    */
-  requestMove (arg) {
-    // arg contains from and to
-    let from = this.findDir({ 'hash': parseInt(arg.from) })
-    if (from == null) {
-      // Obviously a file!
-      from = this.findFile({ 'hash': parseInt(arg.from) })
-    }
-
-    let to = this.findDir({ 'hash': parseInt(arg.to) })
-
-    // Let's check that:
-    if (from.contains(to)) {
-      return this.window.prompt({
-        type: 'error',
-        title: trans('system.error.move_into_child_title'),
-        message: trans('system.error.move_into_child_message')
-      })
-    }
-
-    // Now check if there already is a directory/file with the same name
-    if (to.hasChild({ 'name': from.name })) {
-      return this.window.prompt({
-        type: 'error',
-        title: trans('system.error.already_exists_title'),
-        message: trans('system.error.already_exists_message', from.name)
-      })
-    }
-
-    // Now check if we've actually gotten a virtual directory
-    if (to.isVirtualDirectory() && from.isFile()) {
-      // Then simply attach.
-      to.attach(from)
-      // And, of course, refresh the renderer.
-      this.ipc.send('paths-update', this.getPathDummies())
-      return
-    }
-
-    let newPath = null
-
-    if (from.isFile() && (this.getCurrentFile() != null) && (from.hash === this.getCurrentFile().hash)) {
-      // Current file is to be moved
-      // So move the file and immediately retrieve the new path
-      this.watchdog.ignoreNext('unlink', from.path)
-      this.watchdog.ignoreNext('add', path.join(to.path, from.name))
-      from.move(to.path)
-      to.attach(from)
-
-      // Now our current file has been successfully moved and will
-      // save correctly. Problem? The client needs it as well.
-      // We have to set current dir (the to-dir) and current file AND
-      // select it.
-      this.setCurrentDir(to) // Current file is still correctly set
-      this.ipc.send('paths-update', this.getPathDummies())
-      return
-    } else if ((this.getCurrentFile() !== null) &&
-    (from.findFile({ 'hash': this.getCurrentFile().hash }) !== null)) {
-      // The current file is in said dir so we need to trick a little bit
-      newPath = this.getCurrentFile().path
-      let relative = newPath.replace(from.path, '') // Remove old directory to get relative path
-      // Re-merge:
-      newPath = path.join(to.path, from.name, relative) // New path now
-      // Hash it
-      newPath = hash(newPath)
-    }
-
-    if (from.isDirectory()) {
-      // TODO: Think of something to ignore _all_ events emanating from
-      // the directory (every file will also trigger an unlink/add-couple)
-      this.watchdog.ignoreNext('unlinkDir', from.path)
-      this.watchdog.ignoreNext('addDir', path.join(to.path, from.name))
-    } else if (from.isFile()) {
-      this.watchdog.ignoreNext('unlink', from.path)
-      this.watchdog.ignoreNext('add', path.join(to.path, from.name))
-    }
-
-    from.move(to.path)
-    // Add directory or file to target dir
-    to.attach(from)
-
-    this.ipc.send('paths-update', this.getPathDummies())
-
-    if (newPath != null) {
-      // Find the current file and reset the pointers to it.
-      this.setCurrentFile(from.findFile({ 'hash': newPath }))
     }
   }
 
