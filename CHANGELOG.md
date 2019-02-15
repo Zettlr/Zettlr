@@ -4,10 +4,12 @@
 
 - Removed the Speech submenu from Windows and Linux, as it is only used on macOS.
 - Added an "Inspect Element" context menu item if the debug mode is enabled.
+- The context menu doesn't show up on directory items in the file list anymore, which it wasn't supposed to anyway.
 
 ## Under the Hood
 
 - Fixed a small logical error in the menu buildup process.
+- The context menu in the `ZettlrBody` class is now always instantiated anew.
 
 # 1.1.0
 

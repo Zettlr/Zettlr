@@ -50,7 +50,6 @@ class ZettlrBody {
     */
   constructor (parent) {
     this._renderer = parent
-    this._menu = new ZettlrCon(this)
     this._spellcheckLangs = null // This holds all available languages
     this._ql = [] // This holds all open quicklook windows
     this._n = [] // Holds all notifications currently displaying
@@ -61,7 +60,8 @@ class ZettlrBody {
     window.addEventListener('contextmenu', (e) => {
       e.preventDefault()
       e.stopPropagation()
-      this._menu.popup(e)
+      let menu = new ZettlrCon(this)
+      menu.popup(e)
     }, false)
 
     document.addEventListener('dragover', function (event) {
