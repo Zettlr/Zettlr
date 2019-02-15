@@ -3,10 +3,11 @@
 ## GUI and Functionality
 
 - Removed the Speech submenu from Windows and Linux, as it is only used on macOS.
+- Added an "Inspect Element" context menu item if the debug mode is enabled.
 
 ## Under the Hood
 
-- Fixed a small logical error in the menu buildup process
+- Fixed a small logical error in the menu buildup process.
 
 # 1.1.0
 

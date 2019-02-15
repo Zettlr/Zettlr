@@ -33,6 +33,8 @@ class ZettlrCon {
   constructor (parent) {
     this._body = parent
     this._menu = new Menu()
+    // Where did the context menu handler appear?
+    this._pos = { 'x': 0, 'y': 0 }
   }
 
   /**
@@ -81,6 +83,18 @@ class ZettlrCon {
       }
       // Finally append the menu item
       menu.push(builtItem)
+    }
+
+    // As a last check, let's see if debug mode is on. If so, add the "Inspect
+    // element" menu item.
+    if (global.config.get('debug')) {
+      menu.push({ 'type': 'separator' })
+      menu.push({
+        label: 'Inspect Element',
+        click: () => {
+          require('electron').remote.getCurrentWindow().inspectElement(this._pos.x, this._pos.y)
+        }
+      })
     }
 
     return menu
@@ -211,10 +225,11 @@ class ZettlrCon {
     */
   popup (event) {
     try {
+      this._pos = { 'x': event.clientX, 'y': event.clientY }
       this._build(event)
       if (this._menu.items.length > 0) {
         // Open at click coords even the user may have moved the mouse
-        this._menu.popup({ 'x': event.clientX, 'y': event.clientY })
+        this._menu.popup(this._pos)
       }
     } catch (e) { /* Fail silently */ }
   }
