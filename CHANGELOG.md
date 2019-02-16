@@ -8,7 +8,7 @@
 - Fixes in the math rendering. Now the app will correctly render all equations, be they inline or multiline.
 - Added a flag to let the app know if you want to receive beta release notifications. If you tick the checkbox, Zettlr will also present you with beta releases, so that you can stay up to date.
 - When importing files, the "All Files" filter is now at the top and should be selected by default.
-- Zettlr can now import both `textbundle` and `textpack` files. Refer to [textbundle.org](http://textbundle.org/) for more information.
+- Zettlr can now import and export both `textbundle` and `textpack` files. Refer to [textbundle.org](http://textbundle.org/) for more information.
 
 ## Under the Hood
 

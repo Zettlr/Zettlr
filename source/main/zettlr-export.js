@@ -20,6 +20,8 @@ const commandExists = require('command-exists').sync // Need to use here because
 const path = require('path')
 const fs = require('fs')
 const showdown = require('showdown')
+const ZIP = require('adm-zip')
+const rimraf = require('rimraf')
 
 /**
  * ZettlrExport is a stateless class that gets invoked via the constructor.
@@ -116,6 +118,9 @@ class ZettlrExport {
 
     // Fourth defer to the respective functions.
     switch (this.options.format) {
+      case 'textbundle':
+      case 'textpack':
+        return this._makeBundle() // Special exporter
       case 'html':
         this._prepareHTML()
         break
@@ -158,6 +163,96 @@ class ZettlrExport {
    * @return {String} The exported file path.
    */
   getFile () { return this.targetFile }
+
+  _makeBundle () {
+    /*
+     * We have to do the following (in order):
+     * 1. Find all images in the Markdown file.
+     * 2. Replace all Markdown images with the URL assets/<filename>.<ext>
+     * 3. Create a textbundle folder with the Markdown filename
+     * 4. Move that file into the bundle
+     * 5. Create the assets subfolder
+     * 6. Move all images into the assets subfolder.
+     * 7. In case of a textpack, zip it and remove the original bundle.
+     * 8. Don't open the file, but merely the containing folder.
+     */
+
+    // First of all we must make sure that the generated file is actually a
+    // textbundle, and not a textpack.
+    if (this.options.format === 'textpack') {
+      this.targetFile = this.targetFile.replace('.textpack', '.textbundle')
+    }
+
+    // Load in the tempfile
+    let cnt = fs.readFileSync(this.tempfile, 'utf8')
+    let imgRE = /!\[.*?\]\(([^)]+)\)/g
+    let match
+    let images = []
+
+    while ((match = imgRE.exec(cnt)) !== null) {
+      // We only care about images that are currently present on the filesystem.
+      if (isFile(match[1])) {
+        images.push({
+          'old': match[1],
+          'new': path.join('assets', path.basename(match[1]))
+        })
+      }
+    }
+
+    // Now replace all image filenames with the new ones
+    for (let image of images) {
+      cnt = cnt.replace(image.old, image.new)
+    }
+
+    // Create the textbundle folder
+    try {
+      fs.lstatSync(this.targetFile)
+    } catch (e) {
+      fs.mkdirSync(this.targetFile)
+    }
+
+    // Write the markdown file
+    fs.writeFileSync(path.join(this.targetFile, 'text.md'), cnt, 'utf8')
+
+    // Create the assets folder
+    try {
+      fs.lstatSync(path.join(this.targetFile, 'assets'))
+    } catch (e) {
+      fs.mkdirSync(path.join(this.targetFile, 'assets'))
+    }
+
+    // Copy over all images
+    for (let image of images) {
+      fs.copyFileSync(image.old, path.join(this.targetFile, image.new))
+    }
+
+    // Finally, create the info.json
+    fs.writeFileSync(path.join(this.targetFile, 'info.json'), JSON.stringify({
+      'version': 2,
+      'type': 'net.daringfireball.markdown',
+      'creatorIdentifier': 'com.zettlr.app',
+      'sourceURL': this.options.file.path
+    }), 'utf8')
+
+    // As a last step, check whether or not we should actually create a textpack
+    if (this.options.format === 'textpack') {
+      // Zip dat shit!
+      let archive = new ZIP()
+      let zipName = this.targetFile.replace('.textbundle', '.textpack')
+      // From the docs: If you want to create a directory the entryName must end
+      // in / and a null buffer should be provided.
+      let root = path.basename(this.targetFile)
+      if (root.charAt(root.length - 1) !== '/') root += '/'
+      archive.addFile(root, Buffer.alloc(0))
+      archive.addLocalFolder(this.targetFile, path.basename(this.targetFile))
+      archive.writeZip(zipName)
+      // Afterwards remove the source file
+      rimraf(this.targetFile, () => { /* Nothing to do */ })
+    }
+
+    // Afterwards, open the containing directory
+    require('electron').shell.openItem(path.dirname(this.targetFile))
+  }
 
   /**
    * Perform necessary steps on the file such as replacing IDs or tags, if

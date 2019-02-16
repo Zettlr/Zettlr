@@ -95,6 +95,7 @@ function importTextbundle (bundle, target) {
   if (bundle.knownFormat === 'textpack') {
     // We need to unzip it before importing.
     let file = new ZIP(bundle.path)
+    file.getEntries().forEach((e) => console.log(e.entryName))
     file.extractAllTo(app.getPath('temp'), true) // Extract everything
 
     // Now modify the bundle so that the importer can do something with it
@@ -117,6 +118,7 @@ function importTextbundle (bundle, target) {
       break
     }
   }
+  console.log(bundle.path)
 
   if (!foundMDFile) throw new Error(trans('system.error.malformed_textbundle', path.basename(bundle.path)))
 

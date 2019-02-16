@@ -39,6 +39,7 @@ class Export extends ZettlrCommand {
     makeExport(opt)
       .then((exporter) => { global.ipc.notify(trans('system.export_success', opt.format.toUpperCase())) })
       .catch((err) => {
+        console.log(err)
         // Error may be thrown. If there's additional info, spit out an extended
         // dialog.
         if (err.additionalInfo) {
