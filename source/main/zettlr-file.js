@@ -134,19 +134,14 @@ class ZettlrFile {
     let stat = fs.lstatSync(this.path)
     this.modtime = stat.mtime.getTime()
 
-    // We cannot use RegEx, as negative lookbehind is not supported (yet,
-    // so we have to do it the ugly way: ITERATE OVER THE TEXT!)
-    //
-    // For further reference (as soon as it gets implemented; the proposal
-    // is from March 21, 2018 (lel), here the correct regex needed:)
-    // let idRE = /(?<!\[\[)@ID:(.*)(?!\]\])/g
+    // Get the ID regex from the config
     let idStr = global.config.get('zkn.idRE')
     // Make sure the ID definitely has at least one capturing group to not produce
     // errors.
     if (!/\(.+?\)/.test(idStr)) {
       idStr = `(${idStr})`
     }
-    let idRE = new RegExp(idStr, 'g') // /@ID:([^\s]*)/g
+    let idRE = new RegExp(idStr, 'g')
     let linkStart = global.config.get('zkn.linkStart')
     let linkEnd = global.config.get('zkn.linkEnd')
     // To detect tags in accordance with what the engine will render as tags,
