@@ -394,7 +394,8 @@
       "spellcheck_warning": "<em>Attention:</em> Si le trop bibliothèques sont activer en même temps, il est possible, que Zettlr devenir lent. Tenter n'activer plus de trois bibliothèques.",
       "spellcheck_search_placeholder": "Chercher les bibliothèques &hellip;",
       "mute_lines": "Masquer les lignes dans la mode sans distraction",
-      "debug": "Debug",
+      "debug": "Activer le mode debug",
+      "checkForBeta": "Notifier-moi à propos des versions bêta.",
       "autoCloseBrackets": "Fermer les pairs du caractères suivants: ()[]{}'\"\"»«„““”‘’__``",
       "csl_database": "Base de données CSL JSON",
       "choose_file": "Choisier le fichier …"

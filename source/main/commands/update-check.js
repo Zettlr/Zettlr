@@ -75,9 +75,17 @@ class UpdateCheck extends ZettlrCommand {
     // First we need to deal with it.
     this._response = JSON.parse(this._response)
 
+    // Determine if we should accept this release if it is a beta.
+    let acceptRelease = global.config.get('checkForBeta')
+    if (!acceptRelease) {
+      // The user does not want beta releases, so only give it to him if it's
+      // not a beta release.
+      acceptRelease = !this._response[0].prerelease
+    }
+
     // Check if (1) our app is less than and (2) the new release is _not_ a draft
-    // and (3) the new release is _not_ a prerelease (only stable for this updater)
-    if (semver.lt(CUR_VER, this._response[0].tag_name) && !this._response[0].draft && !this._response[0].prerelease) {
+    // and (3) the new release is _not_ a prerelease if not wanted.
+    if (semver.lt(CUR_VER, this._response[0].tag_name) && acceptRelease && !this._response[0].draft) {
       let conv = new showdown.Converter({
         'headerLevelStart': 2
       })
@@ -97,6 +105,7 @@ class UpdateCheck extends ZettlrCommand {
         'curVer': CUR_VER,
         'changelog': html,
         'releaseURL': this._response[0].html_url,
+        'isBeta': this._response[0].prerelease,
         'downloadURL': ''
       }
     } else {

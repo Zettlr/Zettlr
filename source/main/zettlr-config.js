@@ -147,6 +147,7 @@ class ZettlrConfig extends EventEmitter {
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.
       'appLang': this.getLocale(),
       'debug': false,
+      'checkForBeta': false, // Should the user be notified of beta releases?
       'uuid': null // The app's unique anonymous identifier
     }
 

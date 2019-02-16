@@ -325,6 +325,13 @@
             </label>
             <label for="debug">{{i18n "dialog.preferences.debug"}}</label>
           </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="checkForBeta" value="yes" id="checkForBeta" {{#if checkForBeta}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="checkForBeta">{{i18n "dialog.preferences.checkForBeta"}}</label>
+          </div>
         </div>
         <div class="box-right">
           <p>{{i18n "dialog.preferences.attachments_info"}}</p>

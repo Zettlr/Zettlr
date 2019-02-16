@@ -60,6 +60,7 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['export.stripIDs'] = (data.find(elem => elem.name === 'export.stripIDs') !== undefined)
     cfg['export.stripTags'] = (data.find(elem => elem.name === 'export.stripTags') !== undefined)
     cfg['debug'] = (data.find(elem => elem.name === 'debug') !== undefined)
+    cfg['checkForBeta'] = (data.find(elem => elem.name === 'checkForBeta') !== undefined)
 
     // Display checkboxes
     cfg['display.renderCitations'] = (data.find(elem => elem.name === 'display.renderCitations') !== undefined)

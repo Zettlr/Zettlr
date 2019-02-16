@@ -4,6 +4,11 @@
     <p>
         {{i18n "dialog.update.notification"}}
     </p>
+    {{#if isBeta }}
+    <div class="alert warning">
+      This is a beta release.
+    </div>
+    {{/if}}
     <div class="changelog">
         {{{changelog}}}
     </div>

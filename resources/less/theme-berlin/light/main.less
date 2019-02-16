@@ -9,6 +9,35 @@
 ::-webkit-scrollbar-thumb { background-color:@green-0; }
 ::-webkit-scrollbar-thumb:window-inactive { background-color: lighten(@green-0, 40%); }
 
+// Alerts
+
+.alert {
+  display: block;
+  padding: 10px;
+  border-radius: @border-radius;
+  border-width: 1px;
+  border-style: solid;
+  font-weight: bold;
+
+  &.success {
+    background-color: @green-selection;
+    color: @green-selection-dark;
+    border-color: @green-selection-dark;
+  }
+
+  &.warning {
+    background-color: @gold-selection;
+    color: @gold-selection-dark;
+    border-color: @gold-selection-dark;
+  }
+
+  &.error {
+    background-color: @bg-error;
+    color: @fg-error;
+    border-color: @fg-error;
+  }
+}
+
 // Now all "bigger" styles
 
 @import "attachments.less";

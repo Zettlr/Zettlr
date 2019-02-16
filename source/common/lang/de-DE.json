@@ -394,7 +394,8 @@
       "spellcheck_warning": "<em>Vorsicht:</em> Zu viele gleichzeitig aktivierte Bibliotheken verlangsamen die App spürbar! Versuche, nicht mehr als drei gleichzeitig zu aktivieren!",
       "spellcheck_search_placeholder": "Suche nach Wörterbüchern &hellip;",
       "mute_lines": "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab",
-      "debug": "Entwicklermodus",
+      "debug": "Entwicklermodus aktivieren",
+      "checkForBeta": "Informiere mich über Beta-Releases",
       "autoCloseBrackets": "Schließe automatisch die folgenden Zeichenpaare: ()[]{}'\"\"»«„““”‘’__``",
       "csl_database": "CSL JSON-Datenbankdatei",
       "choose_file": "Datei wählen …"
