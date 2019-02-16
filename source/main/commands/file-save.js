@@ -44,7 +44,7 @@ class SaveFile extends ZettlrCommand {
           case 1: // Save changes
           case 0: // cancel
             // Abort saving process to let the user choose a dir
-            this._app.notify(trans('system.save_changes_select_dir'))
+            global.ipc.notify(trans('system.save_changes_select_dir'))
             break
         }
         return false

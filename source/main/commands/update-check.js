@@ -22,7 +22,7 @@ class UpdateCheck extends ZettlrCommand {
   run () {
     this._check().then((res) => {
       this._app.ipc.send('update-available', res)
-    }).catch((e) => this._app.notify(e.message))
+    }).catch((e) => global.ipc.notify(e.message))
     return true
   }
 

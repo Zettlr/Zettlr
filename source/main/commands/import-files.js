@@ -14,7 +14,7 @@ class ImportFiles extends ZettlrCommand {
     */
   run () {
     if (!this._app.getCurrentDir()) {
-      return this._app.notify(trans('system.import_no_directory'))
+      return global.ipc.notify(trans('system.import_no_directory'))
     }
 
     // Prepare the list of file filters
@@ -37,24 +37,24 @@ class ImportFiles extends ZettlrCommand {
     }
 
     // Now import.
-    this._app.notify(trans('system.import_status'))
+    global.ipc.notify(trans('system.import_status'))
     try {
       let ret = ZettlrImport(fileList, this._app.getCurrentDir(), (file, error) => {
         // This callback gets called whenever there is an error while running pandoc.
-        this._app.notify(trans('system.import_error', path.basename(file)))
+        global.ipc.notify(trans('system.import_error', path.basename(file)))
       }, (file) => {
         // And this on each success!
-        this._app.notify(trans('system.import_success', path.basename(file)))
+        global.ipc.notify(trans('system.import_success', path.basename(file)))
       })
 
       if (ret.length > 0) {
         // Some files failed to import.
-        this._app.notify(trans('system.import_fail', ret.length, ret.map((x) => { return path.basename(x) }).join(', ')))
+        global.ipc.notify(trans('system.import_fail', ret.length, ret.map((x) => { return path.basename(x) }).join(', ')))
       }
     } catch (e) {
       // There has been an error on importing (e.g. Pandoc was not found)
       // This catches this and displays it.
-      this._app.notify(e.message)
+      global.ipc.notify(e.message)
     }
   }
 }

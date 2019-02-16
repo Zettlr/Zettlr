@@ -180,7 +180,7 @@ class Zettlr {
     */
   notifyChange (msg) {
     this.ipc.send('paths-update', this.getPathDummies())
-    this.notify(msg)
+    global.ipc.notify(msg)
   }
 
   /**
@@ -374,7 +374,7 @@ class Zettlr {
           this._openPaths.push(newDir)
         }
       } else {
-        this.notify(trans('system.error.open_root_error', path.basename(f)))
+        global.ipc.notify(trans('system.error.open_root_error', path.basename(f)))
       }
     }
 
@@ -433,14 +433,6 @@ class Zettlr {
     this.setCurrentDir(this.findDir({ 'hash': parseInt(this.config.get('lastDir')) }))
     this.setCurrentFile(this.findFile({ 'hash': parseInt(this.config.get('lastFile')) }))
     this.window.fileUpdate() // Preset the window's title with the current file, if applicable
-  }
-
-  /**
-    * Simple wrapper for notifications.
-    * @param  {String} message The message to be sent to the renderer.
-    */
-  notify (message) {
-    this.ipc.send('notify', message)
   }
 
   /**

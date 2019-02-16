@@ -40,7 +40,7 @@ class Print extends ZettlrCommand {
         // Now we'll need to open the print window.
         this._printWindow.openPrint(file)
       })
-      .catch((err) => { this._app.notify(err.name + ': ' + err.message) }) // Error may be thrown
+      .catch((err) => { global.ipc.notify(err.name + ': ' + err.message) }) // Error may be thrown
   }
 }
 

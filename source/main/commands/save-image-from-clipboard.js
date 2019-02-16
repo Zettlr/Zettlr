@@ -24,13 +24,13 @@ class SaveImage extends ZettlrCommand {
     // "save-other" (save to a path that has to be chosen by the user)
     // If no directory is selected currently, we can't save to cwd.
     if (target.mode === 'save-cwd' && !this._app.getCurrentDir()) {
-      return this._app.notify(trans('system.error.dnf_message'))
+      return global.ipc.notify(trans('system.error.dnf_message'))
     }
 
     // Check the name for sanity
     target.name = sanitize(target.name, '-')
     if (target.name === '') {
-      return this._app.notify(trans('system.error.no_allowed_chars'))
+      return global.ipc.notify(trans('system.error.no_allowed_chars'))
     }
 
     // Now check the extension of the name (some users may prefer to choose to
@@ -46,7 +46,7 @@ class SaveImage extends ZettlrCommand {
     }
 
     // If something went wrong or the user did not provide a directory, abort
-    if (!isDir(p)) return this._app.notify(trans('system.error.dnf_message'))
+    if (!isDir(p)) return global.ipc.notify(trans('system.error.dnf_message'))
 
     p = path.join(p, target.name)
 
@@ -54,7 +54,7 @@ class SaveImage extends ZettlrCommand {
     let image = clipboard.readImage()
 
     // Somebody may have remotely overwritten the clipboard in the meantime
-    if (image.isEmpty()) return this._app.notify(trans('system.error.could_not_save_image'))
+    if (image.isEmpty()) return global.ipc.notify(trans('system.error.could_not_save_image'))
 
     // A final step: It may be that the user wanted to resize the image (b/c
     // it's too large or so). In this case, there are width and height
@@ -68,7 +68,7 @@ class SaveImage extends ZettlrCommand {
     }
 
     fs.writeFile(p, image.toPNG(), (err) => {
-      if (err) return this._app.notify(trans('system.error.could_not_save_image'))
+      if (err) return global.ipc.notify(trans('system.error.could_not_save_image'))
       // Everything worked out - now tell the editor to insert some text
       this._app.ipc.send('insert-text', `![${target.name}](${p})\n`)
       // Tada!
