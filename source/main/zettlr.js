@@ -14,16 +14,13 @@
  * END HEADER
  */
 
-const { app, clipboard } = require('electron')
-const fs = require('fs')
+const { app } = require('electron')
 const path = require('path')
-const sanitize = require('sanitize-filename')
 
 // Internal classes
 const ZettlrIPC = require('./zettlr-ipc.js')
 const ZettlrWindow = require('./zettlr-window.js')
 const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
-const ZettlrPrint = require('./zettlr-print.js')
 const ZettlrConfig = require('./zettlr-config.js')
 const ZettlrTags = require('./zettlr-tags.js')
 const ZettlrDir = require('./zettlr-dir.js')
@@ -31,9 +28,6 @@ const ZettlrFile = require('./zettlr-file.js')
 const ZettlrWatchdog = require('./zettlr-watchdog.js')
 const ZettlrTargets = require('./zettlr-targets.js')
 const ZettlrStats = require('./zettlr-stats.js')
-const ZettlrUpdater = require('./zettlr-updater.js')
-const makeExport = require('./zettlr-export.js')
-const ZettlrImport = require('./zettlr-import.js')
 const ZettlrDictionary = require('./zettlr-dictionary.js')
 const ZettlrCiteproc = require('./zettlr-citeproc.js')
 const { i18n, trans } = require('../common/lang/i18n.js')
@@ -97,9 +91,6 @@ class Zettlr {
     // Citeproc
     this._citeproc = new ZettlrCiteproc()
 
-    // The updater
-    this._updater = new ZettlrUpdater(this)
-
     // And the window.
     this.window = new ZettlrWindow(this)
     this.openWindow()
@@ -120,9 +111,6 @@ class Zettlr {
 
     // Load in the Quicklook window handler class
     this._ql = new ZettlrQLStandalone()
-
-    // Load the print window handler class
-    this._printWindow = new ZettlrPrint()
 
     // Initiate regular polling
     setTimeout(() => {
@@ -267,7 +255,6 @@ class Zettlr {
         console.log(e)
       }
     } else {
-      console.log(`Nothing for event ${evt}. Possible events: ${this._commands.map((elem) => elem.getEventName()).join(', ')}`)
       // We need to throw, because the return value of a successful command run
       // may very well also evaluate to null, undefined, false or anything else.
       throw new Error('Unknown command!')
@@ -329,43 +316,6 @@ class Zettlr {
         message: trans('system.error.dnf_message')
       })
     }
-  }
-
-  /**
-    * Sorts a directory according to the argument
-    * @param  {Object} arg An object containing both a hash and a sorting type
-    */
-  sortDir (arg) {
-    if (!arg.hasOwnProperty('hash') || !arg.hasOwnProperty('type')) {
-      return
-    }
-
-    let dir = this.findDir({ 'hash': parseInt(arg.hash) })
-    if (dir === null) {
-      return
-    }
-
-    dir.toggleSorting(arg.type)
-
-    this.ipc.send('paths-update', this.getPathDummies())
-  }
-
-  /**
-    * Creates a new virtual directory
-    * @param  {Object} arg The argument, containing both the containing hash and the new name
-    */
-  newVirtualDir (arg) {
-    let dir = null
-    if (arg.hasOwnProperty('hash')) {
-      dir = this.findDir({ 'hash': parseInt(arg.hash) })
-    } else {
-      dir = this.getCurrentDir()
-    }
-
-    // Create the vd
-    let vd = dir.addVirtualDir(arg.name)
-    this.ipc.send('paths-update', this.getPathDummies())
-    this.setCurrentDir(vd)
   }
 
   /**
@@ -436,185 +386,11 @@ class Zettlr {
   }
 
   /**
-    * Export a file to another format.
-    * @param  {Object} arg An object containing hash and wanted extension.
-    * @return {void}     Does not return.
-    */
-  exportFile (arg) {
-    let file = this.findFile({ 'hash': parseInt(arg.hash) })
-    let opt = {
-      'format': arg.ext, // Which format: "html", "docx", "odt", "pdf"
-      'file': file, // The file to be exported
-      'dest': (this.config.get('export.dir') === 'temp') ? app.getPath('temp') : file.parent.path, // Either temp or cwd
-      'stripIDs': this.config.get('export.stripIDs'),
-      'stripTags': this.config.get('export.stripTags'),
-      'stripLinks': this.config.get('export.stripLinks'),
-      'pdf': this.config.get('pdf'),
-      'title': file.name.substr(0, file.name.lastIndexOf('.')),
-      'author': this.config.get('pdf').author,
-      'keywords': this.config.get('pdf').keywords,
-      'cslStyle': this.config.get('export.cslStyle')
-    }
-
-    // Call the exporter. Don't throw the "big" error as this is single-file export
-    makeExport(opt)
-      .then((stdout) => { this.notify(trans('system.export_success', opt.format.toUpperCase())) })
-      .catch((err) => {
-        // Error may be thrown. If there's additional info, spit out an extended
-        // dialog.
-        if (err.additionalInfo) {
-          this.notify(err.name + ': ' + err.message)
-        } else {
-          this.notify(err.name + ': ' + err.message)
-        }
-      })
-  }
-
-  /**
-    * This function asks the user for a list of files and then imports them.
-    * @return {void} Does not return.
-    */
-  importFile () {
-    if (!this.getCurrentDir()) {
-      return this.notify(trans('system.import_no_directory'))
-    }
-
-    // Prepare the list of file filters
-    let formats = require('../common/data.json').import_files
-    let fltr = []
-    for (let f of formats) {
-      // The import_files array has the structure "pandoc format" "readable format" "extensions"...
-      // Here we set index 1 as readable name and all following elements (without leading dots)
-      // as extensions
-      fltr.push({ 'name': f[1], 'extensions': f.slice(2).map((val) => { return val.substr(1) }) })
-    }
-    fltr.push({ 'name': trans('system.all_files'), 'extensions': [ '*' ] })
-
-    // First ask the user for a fileList
-    let fileList = this.window.askFile(fltr, true)
-    if (!fileList || fileList.length === 0) {
-      // The user seems to have decided not to import anything. Gracefully
-      // fail. Not like the German SPD.
-      return
-    }
-
-    // Now import.
-    this.notify(trans('system.import_status'))
-    try {
-      let ret = ZettlrImport(fileList, this.getCurrentDir(), (file, error) => {
-        // This callback gets called whenever there is an error while running pandoc.
-        this.notify(trans('system.import_error', path.basename(file)))
-      }, (file) => {
-        // And this on each success!
-        this.notify(trans('system.import_success', path.basename(file)))
-      })
-
-      if (ret.length > 0) {
-        // Some files failed to import.
-        this.notify(trans('system.import_fail', ret.length, ret.map((x) => { return path.basename(x) }).join(', ')))
-      }
-    } catch (e) {
-      // There has been an error on importing (e.g. Pandoc was not found)
-      // This catches this and displays it.
-      this.notify(e.message)
-    }
-  }
-
-  /**
    * Opens a standalone quicklook window when the renderer requests it
    * @param  {number} hash The hash of the file to be displayed in the window
    * @return {void}      No return.
    */
   openQL (hash) { this._ql.openQuicklook(this.findFile({ 'hash': hash })) }
-
-  /**
-   * Saves the image that is currently in the clipboard to file and sends an
-   * insert command to the renderer, telling it to linke the image.
-   * @param  {Object} target Options on the image
-   * @return {void}        Does not return.
-   */
-  saveImageFromClipboard (target) {
-    // If no directory is selected currently, we can't save to cwd.
-    if (target.mode === 'save-cwd' && !this.getCurrentDir()) {
-      return this.notify(trans('system.error.dnf_message'))
-    }
-
-    // Check the name for sanity
-    target.name = sanitize(target.name, '-')
-    if (target.name === '') {
-      return this.notify(trans('system.error.no_allowed_chars'))
-    }
-
-    // Now check the extension of the name (some users may prefer to choose to
-    // provide it already)
-    if (path.extname(target.name) !== '.png') target.name += '.png'
-
-    // Retrieve the directory
-    let p = null
-    if (target.mode === 'save-cwd') {
-      p = this.getCurrentDir().path
-    } else if (target.mode === 'save-other') {
-      p = this.getWindow().askDir()[0] // We only take one directory
-    }
-
-    // If something went wrong or the user did not provide a directory, abort
-    if (!isDir(p)) return this.notify(trans('system.error.dnf_message'))
-
-    p = path.join(p, target.name)
-
-    // Save the image!
-    let image = clipboard.readImage()
-
-    // Somebody may have remotely overwritten the clipboard in the meantime
-    if (image.isEmpty()) return this.notify(trans('system.error.could_not_save_image'))
-
-    // A final step: It may be that the user wanted to resize the image (b/c
-    // it's too large or so). In this case, there are width and height
-    // properties provided in target.
-    if (parseInt(target.width) > 0 && parseInt(target.height) > 0) {
-      // The resize function requires real integers
-      image = image.resize({
-        'width': parseInt(target.width),
-        'height': parseInt(target.height)
-      })
-    }
-
-    fs.writeFile(p, image.toPNG(), (err) => {
-      if (err) return this.notify(trans('system.error.could_not_save_image'))
-      // Everything worked out - now tell the editor to insert some text
-      this.ipc.send('insert-text', `![${target.name}](${p})\n`)
-      // Tada!
-    })
-  }
-
-  print () {
-    // First we need to export the current file as HTML.
-    let file = this.getCurrentFile()
-    if (!file) return // No file open.
-    let opt = {
-      'format': 'html',
-      'file': file, // The file to be exported
-      'dest': app.getPath('temp'), // Export to temporary directory
-      'stripIDs': this.config.get('export.stripIDs'),
-      'stripTags': this.config.get('export.stripTags'),
-      'stripLinks': this.config.get('export.stripLinks'),
-      'pdf': this.config.get('pdf'),
-      'title': file.name.substr(0, file.name.lastIndexOf('.')),
-      'author': this.config.get('pdf').author,
-      'keywords': this.config.get('pdf').keywords,
-      'cslStyle': this.config.get('export.cslStyle'),
-      'autoOpen': false // Do not automatically open the file after export
-    }
-
-    // Call the exporter.
-    makeExport(opt)
-      .then((exporter) => {
-        let file = exporter.getFile()
-        // Now we'll need to open the print window.
-        this._printWindow.openPrint(file)
-      })
-      .catch((err) => { this.notify(err.name + ': ' + err.message) }) // Error may be thrown
-  }
 
   /****************************************************************************
    **                                                                        **
@@ -660,97 +436,11 @@ class Zettlr {
   }
 
   /**
-    * Initiates the search for an update.
-    */
-  checkForUpdate () {
-    this._updater.check()
-  }
-
-  /**
     * Simple wrapper for notifications.
     * @param  {String} message The message to be sent to the renderer.
     */
   notify (message) {
     this.ipc.send('notify', message)
-  }
-
-  /**
-    * Saves a file. A file MUST be given, for the content is needed to write to
-    * a file. Content is always freshly grabbed from the CodeMirror content.
-    * @param  {Object} file An object containing some properties of the file.
-    * @return {void}      This function does not return.
-    */
-  saveFile (file) {
-    if ((file == null) || !file.hasOwnProperty('content')) {
-      // No file given -> abort saving process
-      return
-    }
-
-    let cnt = file.content
-
-    // It may be that we have to create a file. In this case, a paths update is
-    // necessary, which must be sent after this function's run.
-    let pathsUpdateNecessary = false
-
-    // Update word count
-    this.stats.updateWordCount(file.wordcount || 0)
-
-    // This function saves a file to disk.
-    // But: The hash is "null", if someone just
-    // started typing with no file open.
-    if (!file.hasOwnProperty('hash') || file.hash == null) {
-      // For ease create a new file in current directory.
-      if (this.getCurrentDir() == null) {
-        switch (this.window.askSaveChanges()) {
-          case 2: // Omit changes
-            // Mark clean and force-close
-            this.ipc.send('file-close', {})
-            this.clearModified()
-            break
-          case 1: // Save changes
-          case 0: // cancel
-            // Abort saving process to let the user choose a dir
-            this.notify(trans('system.save_changes_select_dir'))
-            break
-        }
-        return
-      }
-      file = this.getCurrentDir().newfile(null)
-      pathsUpdateNecessary = true
-    } else {
-      let f = this.getCurrentFile()
-      if (f == null) {
-        return this.window.prompt({
-          type: 'error',
-          title: trans('system.error.fnf_title'),
-          message: trans('system.error.fnf_message')
-        })
-      }
-      file = f
-    }
-
-    // Ignore the next change for this specific file
-    this.watchdog.ignoreNext('change', file.path)
-    file.save(cnt)
-    this.clearModified()
-
-    // Now it can be that a paths update is necessary. We have to send the
-    // update instead of the file-update to make sure the correct file is in
-    // the renderer.
-    if (pathsUpdateNecessary) {
-      this.ipc.send('paths-update', this.getPathDummies())
-    } else {
-      // Immediately update the paths in renderer so that it is able to find
-      // the file to (re)-select it.
-      this.ipc.send('file-update', file.getMetadata())
-    }
-
-    // Switch to newly created file (only happens before a file is selected)
-    if (this.getCurrentFile() == null) {
-      this.setCurrentFile(file)
-      // "Open" this file.
-      this.sendFile(file.hash)
-    }
   }
 
   /**
@@ -953,36 +643,6 @@ class Zettlr {
     this.window.clearModified()
     this.editFlag = false
     this.ipc.send('mark-clean')
-  }
-
-  /**
-    * Imports language files into the application's data directory.
-    */
-  importLangFile () {
-    let files = this.getWindow().askLangFile()
-    let langDir = path.join(app.getPath('userData'), '/lang/')
-
-    // First test if the lang directory already exists
-    try {
-      fs.lstatSync(langDir)
-    } catch (e) {
-      // Create
-      fs.mkdirSync(langDir)
-    }
-
-    for (let f of files) {
-      if (/[a-z]{1,3}_[A-Z]{1,3}\.json/.test(path.basename(f))) {
-        // It's a language file!
-        try {
-          fs.copyFileSync(f, path.join(langDir, path.basename(f)))
-          this.notify(trans('system.lang_import_success', path.basename(f)))
-        } catch (e) {
-          this.notify(trans('system.lang_import_error', path.basename(f)))
-        }
-      } else {
-        this.notify(trans('system.lang_import_error', path.basename(f)))
-      }
-    }
   }
 
   // Getters

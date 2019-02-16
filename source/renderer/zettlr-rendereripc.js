@@ -526,6 +526,7 @@ class ZettlrRendererIPC {
         break
 
       case 'update-available':
+        console.log(cnt)
         this._app.getBody().displayUpdate(cnt)
         break
 

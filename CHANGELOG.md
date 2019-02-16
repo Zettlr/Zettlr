@@ -1,4 +1,4 @@
-# 1.1.1
+# 1.2.0
 
 ## GUI and Functionality
 
@@ -13,6 +13,7 @@
 - The context menu in the `ZettlrBody` class is now always instantiated anew.
 - Rewrote the logic of detecting and rendering mathematical equations.
 - Updated the `KaTeX.css` stylesheet to the newest version and removed some errors (thanks to @Wieke for doing this).
+- Rewrote the complete command structure of the app and branched it out into standalone files. Thereby the system becomes extremely modular and new commands can be written with ease. Additionally, it becomes possible to create shortcuts for certain commands.
 
 # 1.1.0
 

@@ -168,10 +168,10 @@ class ZettlrIPC {
     // a lot of code and it saves space doing it here. Therefore we need some vars.
 
     try {
-      this._app.runCommand(cmd, cnt)
-      return // In case the command has run don't run it twice because it's present here as well.
+      let res = this._app.runCommand(cmd, cnt)
+      return res // In case the command has run there's no need to handle it.
     } catch (e) {
-      console.log(`Unknown command: ${cmd}`)
+      // Simple fall through
     }
 
     switch (cmd) {
@@ -207,11 +207,6 @@ class ZettlrIPC {
         this._app.getWindow().popupMenu(cnt.x, cnt.y)
         break
 
-      // Print the current file
-      case 'print':
-        this._app.print()
-        break
-
       case 'get-paths':
         // The child process requested the current paths and files
         this.send('paths-update', this._app.getPathDummies())
@@ -235,10 +230,6 @@ class ZettlrIPC {
         this._app.selectDir(cnt)
         break
 
-      case 'dir-sort':
-        this._app.sortDir(cnt)
-        break
-
       case 'file-modified':
         // Just set the modification flags.
         this._app.setModified()
@@ -247,18 +238,6 @@ class ZettlrIPC {
       // Set or update a target
       case 'set-target':
         global.targets.set(cnt)
-        break
-
-      case 'dir-new-vd':
-        // Client has requested a new virtual directory
-        this._app.newVirtualDir(cnt)
-        break
-
-      // PROJECTS
-      case 'file-save':
-        // Client has requested a save-action.
-        // arg contains the contents of CM and maybe also a hash.
-        this._app.saveFile(cnt)
         break
 
       case 'dir-open':
@@ -290,23 +269,19 @@ class ZettlrIPC {
 
       // Change theme in config
       case 'toggle-theme':
-        this._app.getConfig().set('darkTheme', !this._app.getConfig().get('darkTheme'))
+        global.config.set('darkTheme', !global.config.get('darkTheme'))
         this.send('config-update')
         break
 
       // Change snippet setting in config
       case 'toggle-snippets':
-        this._app.getConfig().set('snippets', !this._app.getConfig().get('snippets'))
+        global.config.set('snippets', !global.config.get('snippets'))
         this.send('config-update')
-        break
-
-      case 'export':
-        this._app.exportFile(cnt)
         break
 
       case 'get-preferences':
       // Duplicate the object
-        let toSend = Object.assign({}, this._app.getConfig().getConfig())// JSON.parse(JSON.stringify(this._app.getConfig().getConfig()));
+        let toSend = Object.assign({}, this._app.getConfig().getConfig())
         // Add available translations and dictionaries
         toSend.supportedLangs = this._app.getConfig().getSupportedLangs()
         toSend.availableDicts = this._app.getConfig().getDictionaries()
@@ -352,11 +327,6 @@ class ZettlrIPC {
         this.send('tags-database', global.tags.get())
         break
 
-      // UPDATE
-      case 'update-check':
-        this._app.checkForUpdate()
-        break
-
       // Handle dropped files/folders
       case 'handle-drop':
         this._app.handleAddRoots(cnt)
@@ -367,16 +337,6 @@ class ZettlrIPC {
         this.send('stats-data', this._app.getStats().getStats())
         break
 
-      // Language file import
-      case 'import-lang-file':
-        this._app.importLangFile()
-        break
-
-      // Import files and folders
-      case 'import-files':
-        this._app.importFile()
-        break
-
       // Return a list of all available IDs in the currently loaded database
       case 'citeproc-get-ids':
         this.send('citeproc-ids', (global.citeproc) ? global.citeproc.getIDs() : [])
@@ -385,12 +345,6 @@ class ZettlrIPC {
       // The renderer requested an updated bibliography
       case 'citeproc-make-bibliography':
         this.send('citeproc-bibliography', global.citeproc.makeBibliography())
-        break
-
-      case 'save-image-from-clipboard':
-        // cnt either contains save-cwd (save in current working directory) or
-        // save-other (save to a path that has to be chosen by the user)
-        this._app.saveImageFromClipboard(cnt)
         break
 
       default:
