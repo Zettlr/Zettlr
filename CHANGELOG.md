@@ -7,6 +7,7 @@
 - The context menu doesn't show up on directory items in the file list anymore, which it wasn't supposed to anyway.
 - Fixes in the math rendering. Now the app will correctly render all equations, be they inline or multiline.
 - Added a flag to let the app know if you want to receive beta release notifications. If you tick the checkbox, Zettlr will also present you with beta releases, so that you can stay up to date.
+- When importing files, the "All Files" filter is now at the top and should be selected by default.
 
 ## Under the Hood
 
