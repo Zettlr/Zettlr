@@ -19,7 +19,9 @@ const path = require('path')
 const { exec } = require('child_process')
 const { isDir, isFile } = require('../common/zettlr-helpers.js')
 const { trans } = require('../common/lang/i18n.js')
+const { app } = require('electron')
 const fs = require('fs')
+const ZIP = require('adm-zip')
 
 const FILES = require('../common/data.json').import_files
 
@@ -32,8 +34,8 @@ const FILES = require('../common/data.json').import_files
  */
 function checkImportIntegrity (fileList) {
   // Security checks
-  if (!Array.isArray(fileList) && isDir(fileList)) {
-    // We have to read in the directory if it is one.
+  if (!Array.isArray(fileList) && isDir(fileList) && path.extname(fileList) !== '.textbundle') {
+    // We have to read in the directory if it is one. (And make sure to account for textbundles)
     // (Re-)Reads this directory.
     try {
       fs.lstatSync(fileList)
@@ -61,8 +63,8 @@ function checkImportIntegrity (fileList) {
   let resList = []
 
   for (let file of fileList) {
-    // Is this a standard file?
-    if (!isFile(file)) {
+    // Is this a standard file? Textbundle is a directory, so make sure we check for that.
+    if (!isFile(file) && path.extname(file) !== '.textbundle') {
       continue
     }
 
@@ -80,8 +82,68 @@ function checkImportIntegrity (fileList) {
 
     resList.push(detectedFile)
   }
-
   return resList
+}
+
+/**
+ * Imports both textpacks and textbundles to the target directory.
+ * @param  {Object} bundle The file object as returned by the integrity checker
+ * @param  {String} target The destination directory
+ * @return {void}        This thing only throws up.
+ */
+function importTextbundle (bundle, target) {
+  if (bundle.knownFormat === 'textpack') {
+    // We need to unzip it before importing.
+    let file = new ZIP(bundle.path)
+    file.extractAllTo(app.getPath('temp'), true) // Extract everything
+
+    // Now modify the bundle so that the importer can do something with it
+    bundle.path = path.join(app.getPath('temp'), file.getEntries()[0].entryName)
+    bundle.knownFormat = 'textbundle'
+  }
+
+  // Now we have for sure a textbundle which we can extract.
+  let mdName = path.join(target.path, path.basename(bundle.path, path.extname(bundle.path))) + '.md'
+  let assets = path.join(target.path, 'assets')
+
+  // First copy over the markdown file (which may have ANY extension)
+  let bdl = fs.readdirSync(bundle.path)
+  let foundMDFile = false
+  for (let f of bdl) {
+    if (f.indexOf('text.') === 0) {
+      foundMDFile = true
+      // Gotcha
+      fs.copyFileSync(path.join(bundle.path, f), mdName)
+      break
+    }
+  }
+
+  if (!foundMDFile) throw new Error(trans('system.error.malformed_textbundle', path.basename(bundle.path)))
+
+  // Now the assets
+  try {
+    bdl = fs.readdirSync(path.join(bundle.path, 'assets'))
+  } catch (e) {
+    throw new Error(trans('system.error.malformed_textbundle', path.basename(bundle.path)))
+  }
+
+  if (bdl.length > 0) {
+    // If there are assets to be copied, make sure the directory exists
+    try {
+      fs.lstatSync(assets)
+    } catch (e) {
+      fs.mkdirSync(assets)
+    }
+  }
+
+  // Now simply copy over all files
+  for (let f of bdl) {
+    if (isFile(path.join(bundle.path, 'assets', f))) {
+      fs.copyFileSync(path.join(bundle.path, 'assets', f), path.join(assets, f))
+    }
+  }
+
+  // Import should be complete now
 }
 
 /**
@@ -106,7 +168,11 @@ function ZettlrImport (fileOrFolder, dirToImport, errorCallback = null, successC
   // these processes will come in asynchronously, so we can let chokidar handle
   // the detection.
   for (let file of files) {
-    if (file.knownFormat) {
+    // There are two files that we cannot import using pandoc: textbundle and textpack.
+    if (file.knownFormat === 'textbundle' || file.knownFormat === 'textpack') {
+      // We need to import using a special importer.
+      importTextbundle(file, dirToImport)
+    } else if (file.knownFormat) {
       // The file is known -> let's import it!
       let newName = path.join(dirToImport.path, path.basename(file.path, path.extname(file.path))) + '.md'
       let cmd = `pandoc -f ${file.knownFormat} -t markdown -o "${newName}" --wrap=none --atx-headers "${file.path}"`

@@ -14,6 +14,7 @@
     "license": "GPL-3.0",
     "main": "main.js",
     "dependencies": {
+        "adm-zip": "^0.4.13",
         "bcp-47": "^1.0.4",
         "chart.js": "^2.7.2",
         "chokidar": "^2.1.1",

@@ -14,7 +14,8 @@ class ImportFiles extends ZettlrCommand {
     */
   run () {
     if (!this._app.getCurrentDir()) {
-      return global.ipc.notify(trans('system.import_no_directory'))
+      global.ipc.notify(trans('system.import_no_directory'))
+      return false
     }
 
     // Prepare the list of file filters
@@ -33,7 +34,7 @@ class ImportFiles extends ZettlrCommand {
     if (!fileList || fileList.length === 0) {
       // The user seems to have decided not to import anything. Gracefully
       // fail. Not like the German SPD.
-      return
+      return false
     }
 
     // Now import.

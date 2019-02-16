@@ -512,6 +512,7 @@
       "pandoc_error_message": "Pandoc reported an error: %s",
       "no_pandoc_title": "Pandoc not found",
       "no_pandoc_message": "Pandoc has not been found on this system. Please install Pandoc prior to exporting or importing files.",
+      "malformed_textbundle": "Malformed Textbundle: %s",
       "no_xelatex_title": "LaTeX not found",
       "no_xelatex_message": "Zettlr couldn't detect a LaTeX-distribution on this system. Please install LaTeX prior to exporting to PDF.",
       "cancel_remove": "Cancel",
