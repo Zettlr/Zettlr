@@ -36,19 +36,9 @@ class ZettlrAttachments {
     this._open = false
     this._attachments = []
 
-    // We cannot activate the event listener for the directory opening button
-    // in the act method, because the act method gets called everytime the user
-    // changes the directory. Therefore, we would bind a new event listener
-    // every time the user switches directories. This leads to unnecessary lags
-    // an macOS and Windows, and may open the exact amount of new file explorer
-    // windows on Linux distributions (see issue #87).
-    $('#attachments #open-dir-external').click((e) => {
-      if (this._renderer.getCurrentDir()) {
-        shell.openItem(this._renderer.getCurrentDir().path)
-      }
-    })
-
     this.refresh()
+
+    this._act() // Activate both the directory toggle and the link
   }
 
   /**
@@ -84,11 +74,9 @@ class ZettlrAttachments {
     } else {
       this._attachments = this._renderer.getCurrentDir().attachments
       for (let a of this._attachments) {
-        this._fileContainer.append($('<a>').text(a.name).attr('href', a.path).attr('data-hash', a.hash))
+        this._fileContainer.append($('<a>').text(a.name).attr('data-link', a.path).attr('data-hash', a.hash))
       }
     }
-
-    this._act() // Activate both the directory toggle and the link
   }
 
   /**
@@ -105,11 +93,17 @@ class ZettlrAttachments {
     * Activates the event listeners on the attachment pane.
     */
   _act () {
-    $('#attachments a').click((e) => {
+    $('#attachments').on('click', 'a', (e) => {
       let elem = $(e.target)
-      if (elem.attr('href')) shell.openItem(elem.attr('href'))
+      if (elem.attr('data-link')) shell.openItem(elem.attr('data-link'))
       e.preventDefault() // Don't follow the link
       e.stopPropagation()
+    })
+
+    $('#attachments #open-dir-external').click((e) => {
+      if (this._renderer.getCurrentDir()) {
+        shell.openItem(this._renderer.getCurrentDir().path)
+      }
     })
   }
 }
