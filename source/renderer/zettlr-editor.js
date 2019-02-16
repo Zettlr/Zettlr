@@ -781,12 +781,11 @@ class ZettlrEditor {
 
     // Now we either got a match or an empty fnref. So create a tippy
     // instance
-    tippy.one(element[0], {
+    tippy(element[0], {
       'content': fnref,
       onHidden (instance) {
         instance.destroy() // Destroy the tippy instance.
       },
-      'performance': true,
       flip: true,
       arrow: true
     }).show() // Immediately show the tooltip
