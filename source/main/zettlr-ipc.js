@@ -249,16 +249,6 @@ class ZettlrIPC {
         this._app.close(cnt)
         break
 
-      case 'file-search':
-        // arg.content contains a hash of the file to be searched
-        // and the prepared terms.
-        let ret = this._app.findFile({ 'hash': cnt.hash }).search(cnt.terms)
-        this.send('file-search-result', {
-          'hash': cnt.hash,
-          'result': ret
-        })
-        break
-
       // Force-open is basically a search and immediate return.
       case 'force-open':
         let open = this._app.findExact(cnt) // Find an exact match

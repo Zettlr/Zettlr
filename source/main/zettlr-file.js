@@ -453,7 +453,7 @@ class ZettlrFile {
   /**
     * Search the file's content and name according to the terms-object
     * @param  {object} terms An object containing the search terms and properties
-    * @return {Boolean}       true if this file matches terms or false
+    * @return {Array}       An array containing all search results
     */
   search (terms) {
     let matches = 0
