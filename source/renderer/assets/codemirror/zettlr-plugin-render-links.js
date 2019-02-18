@@ -109,6 +109,18 @@
           a.title = url // Set the url as title to let users see where they're going
         }
         a.className = 'cma' // CodeMirrorAnchors
+
+        // Retain the outer formatting, if applicable
+        let tk = cm.getTokenAt(curFrom, true).type
+        if (tk) {
+          tk = tk.split(' ')
+          let strong = tk.includes('strong')
+          let em = tk.includes('em')
+          if (strong && em) a.innerHTML = `<strong><em>${a.innerHTML}</em></strong>`
+          else if (strong) a.innerHTML = `<strong>${a.innerHTML}</strong>`
+          else if (em) a.innerHTML = `<em>${a.innerHTML}</em>`
+        }
+
         // Apply TextMarker
         let textMarker = cm.markText(
           curFrom, curTo,
