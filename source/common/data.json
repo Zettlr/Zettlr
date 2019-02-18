@@ -7,7 +7,8 @@
     ],
     "ignoreDirs": [
         "^\\.",
-        ".+?\\.app"
+        ".+?\\.app",
+        ".+?\\.textbundle"
     ],
     "poll_time": 5000,
     "repo_url": "https://api.github.com/repos/Zettlr/Zettlr/",

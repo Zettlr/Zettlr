@@ -251,7 +251,7 @@ class ZettlrExport {
     }
 
     // Afterwards, open the containing directory
-    require('electron').shell.openItem(path.dirname(this.targetFile))
+    require('electron').shell.showItemInFolder(this.targetFile)
   }
 
   /**
