@@ -170,7 +170,18 @@ class ZettlrEditor {
         'Ctrl-F': false,
         'Enter': 'newlineAndIndentContinueMarkdownList',
         'Tab': 'autoIndentMarkdownList',
-        'Shift-Tab': 'autoUnindentMarkdownList'
+        'Shift-Tab': 'autoUnindentMarkdownList',
+        'Ctrl-Enter': (cm) => {
+          // Implement middle-of-line insert line below behaviour (see #101)
+          CodeMirror.commands['goLineEnd'](cm)
+          CodeMirror.commands['newlineAndIndent'](cm)
+        },
+        'Shift-Ctrl-Enter': (cm) => {
+          // Implement middle-of-line insert line above behaviour (see #101)
+          CodeMirror.commands['goLineUp'](cm)
+          CodeMirror.commands['goLineEnd'](cm)
+          CodeMirror.commands['newlineAndIndent'](cm)
+        }
       }
     })
 
