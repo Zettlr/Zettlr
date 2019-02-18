@@ -3,6 +3,7 @@
 const ZettlrCommand = require('./zettlr-command')
 const ZettlrPrint = require('../zettlr-print.js')
 const { app } = require('electron')
+const path = require('path')
 const makeExport = require('../zettlr-export')
 const { trans } = require('../../common/lang/i18n')
 
@@ -21,10 +22,23 @@ class Export extends ZettlrCommand {
     */
   run (arg) {
     let file = this._app.findFile({ 'hash': parseInt(arg.hash) })
+    let dest
+    if (global.config.get('export.dir') === 'temp') {
+      // The user wants the file saved to the temporary directory.
+      dest = app.getPath('temp')
+    } else if (file.parent.path) {
+      // The user wants the file saved in the file's directory, and it is not a
+      // root file.
+      dest = file.parent.path
+    } else {
+      // The user wants the file saved in the file's directory, and it is a root
+      // file.
+      dest = path.dirname(file.path)
+    }
     let opt = {
       'format': arg.ext, // Which format: "html", "docx", "odt", "pdf"
       'file': file, // The file to be exported
-      'dest': (global.config.get('export.dir') === 'temp') ? app.getPath('temp') : file.parent.path, // Either temp or cwd
+      'dest': dest,
       'stripIDs': global.config.get('export.stripIDs'),
       'stripTags': global.config.get('export.stripTags'),
       'stripLinks': global.config.get('export.stripLinks'),

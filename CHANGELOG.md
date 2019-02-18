@@ -9,6 +9,7 @@
 - Added a flag to let the app know if you want to receive beta release notifications. If you tick the checkbox, Zettlr will also present you with beta releases, so that you can stay up to date.
 - When importing files, the "All Files" filter is now at the top and should be selected by default.
 - Zettlr can now import and export both `textbundle` and `textpack` files. Refer to [textbundle.org](http://textbundle.org/) for more information.
+- Fixed a small bug that would render exporting of standalone files impossible.
 
 ## Under the Hood
 
