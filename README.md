@@ -1,37 +1,39 @@
-<p align="center">
-    <img src="https://github.com/Zettlr/Zettlr/raw/master/resources/icons/png/512x512.png" alt="Zettlr Logo" width="25%" height="25%" />
-</p>
-
 # Zettlr [_ˈset·lər_]
 
-Zettlr is a powerful Markdown editor designed for people who work with text in a structured way and need to retain control over millions of words in thousands of files.
+<div style="text-align: center;">
+    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/BJ27r6YGpAs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+With Zettlr, writing professional texts is easy and motivating: Whether you are a college student, a researcher, a journalist, or an author — Zettlr has the right tools for you. Watch the video or continue reading to see what they are!
 
 [Visit the Website.](https://zettlr.com/)
 
-![The central window of Zettlr](/resources/screenshots/zettlr_view.png)
-
 ## Features
 
-* File-agnostic writing: No fuzz from the app for your files!
-* Keep all your notes and texts in one place — searchable and without unnecessary extras!
-* Write text in a clean environment!
-* Enjoy writing at night with a built-in dark theme!
-* Browse through your files quickly using the integrated list of directories and the file list!
-* Do global searches to find exactly what you need!
-* Export your texts using [Pandoc](https://pandoc.org/) and [LaTeX](https://www.latex-project.org/) to get beautiful files to share!
-* Use modern Zettelkasten methods to get the maximum out of your thoughts and notes!
+- File-agnostic writing: Enjoy **full control over your own files**
+- Keep all your notes and texts **in one place** — searchable and accessible
+- **Night Mode** support
+- **Cite with Zettlr** using `citeproc` and your existing literature database
+- **Code highlighting** for most contemporary programming languages
+- Simple and beautiful **exports** with [Pandoc](https://pandoc.org/), [LaTeX](https://www.latex-project.org/), and [Textbundle](http://textbundle.org/)
+- Support for state of the art knowledge management techniques (**Zettelkasten**)
+- A revolutionary **search algorithm** with integrated heatmap
 
-… and the best is: **Zettlr is Open Source!**
+… and the best is: **Zettlr is [Open Source](https://en.wikipedia.org/wiki/Free_and_open-source_software)!**
+
+![The central window of Zettlr](/resources/screenshots/zettlr_view.png)
 
 ## Get Zettlr
 
-To install Zettlr, just [download the latest release](https://github.com/Zettlr/Zettlr/releases/latest) for your operating system! Currently supported are macOS, Windows, and Debian- and Fedora-based Linux systems. (And every other system _electron_ runs on, if you build the app yourself).
+To install Zettlr, just [download the latest release](https://www.zettlr.com/download/) for your operating system! Currently supported are macOS, Windows, and Debian- and Fedora-based Linux systems. (And every other system _electron_ runs on, if you build the app yourself).
 
-![The central window of Zettlr in its dark version](/resources/screenshots/zettlr_view_dark.png)
+**Please also consider a [donation](https://paypal.me/hendrikerz)!**
 
 ## What next?
 
 If you have downloaded Zettlr, [head over to our website](https://zettlr.com/docs) to get to know Zettlr. Refer to the [Quick Start Guide](https://zettlr.com/docs/quick-start), if you prefer to use software heads-on.
+
+![The central window of Zettlr using the Night Theme](/resources/screenshots/zettlr_view_dark.png)
 
 ## Developing
 
