@@ -1,10 +1,8 @@
 # Zettlr [_ˈset·lər_]
 
-<div style="text-align: center;">
-    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/BJ27r6YGpAs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</div>
+![The central window of Zettlr](/resources/screenshots/zettlr_view.png)
 
-With Zettlr, writing professional texts is easy and motivating: Whether you are a college student, a researcher, a journalist, or an author — Zettlr has the right tools for you. Watch the video or continue reading to see what they are!
+With Zettlr, writing professional texts is easy and motivating: Whether you are a college student, a researcher, a journalist, or an author — Zettlr has the right tools for you. [Watch the video](https://www.youtube.com/watch?v=BJ27r6YGpAs) or continue reading to see what they are!
 
 [Visit the Website.](https://zettlr.com/)
 
@@ -20,8 +18,6 @@ With Zettlr, writing professional texts is easy and motivating: Whether you are 
 - A revolutionary **search algorithm** with integrated heatmap
 
 … and the best is: **Zettlr is [Open Source](https://en.wikipedia.org/wiki/Free_and_open-source_software)!**
-
-![The central window of Zettlr](/resources/screenshots/zettlr_view.png)
 
 ## Get Zettlr
 
