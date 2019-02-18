@@ -308,38 +308,31 @@ class ZettlrExport {
     let cnt = fs.readFileSync(file, 'utf8')
     // Do updates to the template
     // General options
-    cnt = cnt.replace('%PAGE_NUMBERING%', pdf.pagenumbering)
-
-    // Page setup
-    cnt = cnt.replace('%PAPER_TYPE%', pdf.papertype)
-    cnt = cnt.replace('%TOP_MARGIN%', pdf.tmargin + pdf.margin_unit)
-    cnt = cnt.replace('%RIGHT_MARGIN%', pdf.rmargin + pdf.margin_unit)
-    cnt = cnt.replace('%BOTTOM_MARGIN%', pdf.bmargin + pdf.margin_unit)
-    cnt = cnt.replace('%LEFT_MARGIN%', pdf.lmargin + pdf.margin_unit)
-
-    // Font setup
-    cnt = cnt.replace('%MAIN_FONT%', pdf.mainfont)
-    cnt = cnt.replace('%SANS_FONT%', pdf.sansfont)
-    cnt = cnt.replace('%LINE_SPACING%', pdf.lineheight)
-    cnt = cnt.replace('%FONT_SIZE%', pdf.fontsize + 'pt')
-
-    // Metadata
-    cnt = cnt.replace(/%PDF_TITLE%/g, this.options.title)
-    cnt = cnt.replace('%PDF_SUBJECT%', this.options.title)
-    cnt = cnt.replace(/%PDF_AUTHOR%/g, this.options.author)
-    cnt = cnt.replace(/%PDF_KEYWORDS%/g, this.options.keywords)
-
-    if (this.options.pdf.titlepage) {
-      cnt = cnt.replace('%TITLEPAGE%', '\\maketitle\n\\pagebreak\n')
-    } else {
-      cnt = cnt.replace('%TITLEPAGE%', '')
+    let variables = {
+      // Page setup
+      'PAGE_NUMBERING': pdf.pagenumbering,
+      'PAPER_TYPE': pdf.papertype,
+      'TOP_MARGIN': pdf.tmargin + pdf.margin_unit,
+      'RIGHT_MARGIN': pdf.rmargin + pdf.margin_unit,
+      'BOTTOM_MARGIN': pdf.bmargin + pdf.margin_unit,
+      'LEFT_MARGIN': pdf.lmargin + pdf.margin_unit,
+      // Font setup
+      'MAIN_FONT': pdf.mainfont,
+      'SANS_FONT': pdf.sansfont,
+      'LINE_SPACING': pdf.lineheight,
+      'FONT_SIZE': pdf.fontsize + 'pt',
+      // Metadata
+      'PDF_TITLE': this.options.title,
+      'PDF_SUBJECT': this.options.title,
+      'PDF_AUTHOR': this.options.author,
+      'PDF_KEYWORDS': this.options.keywords,
+      // Project settings
+      'TITLEPAGE': (pdf.titlepage) ? '\\maketitle\n\\pagebreak\n' : '',
+      'GENERATE_TOC': (pdf.toc) ? `\\setcounter{tocdepth}{${pdf.tocDepth}}\n\\tableofcontents\n\\pagebreak\n` : ''
     }
 
-    if (this.options.pdf.toc) {
-      // Also generate a table of contents
-      cnt = cnt.replace('%GENERATE_TOC%', '\\setcounter{tocdepth}{' + this.options.pdf.tocDepth + '}\n\\tableofcontents\n\\pagebreak\n')
-    } else {
-      cnt = cnt.replace('%GENERATE_TOC%', '')
+    for (let key in variables) {
+      cnt = cnt.replace(new RegExp('\\$' + key + '\\$', 'g'), variables[key])
     }
 
     fs.writeFileSync(this.textpl, cnt, 'utf8')
