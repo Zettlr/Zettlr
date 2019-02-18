@@ -50,6 +50,8 @@ class ZettlrConfig extends EventEmitter {
     this.config = null
     this._rules = [] // This array holds all validation rules
 
+    this._recentDocs = [] // This array holds all recent documents
+
     // Additional environmental paths (for locating LaTeX and Pandoc)
     if (process.platform === 'win32') {
       this._additional_paths = COMMON_DATA.additional_paths.win32
@@ -187,7 +189,51 @@ class ZettlrConfig extends EventEmitter {
       // Also do the same for the removal of listeners
       off: (evt, callback) => {
         this.off(evt, callback)
-      }
+      },
+      /**
+       * Add a document to the list of recently opened documents
+       * @param {Object} doc A document exposing at least the metadata of the file
+       */
+      addRecentDoc: (doc) => {
+        let found = this._recentDocs.find((e) => e.hash === doc.hash)
+        if (found) this._recentDocs.splice(this._recentDocs.indexOf(found), 1)
+
+        // Push the file into the global array (to the beginning)
+        this._recentDocs.unshift(doc)
+
+        // Make sure we never exceed 100 recent docs
+        this._recentDocs = this._recentDocs.slice(0, 100)
+
+        // Afterwards, refresh the menu
+        global.refreshMenu()
+
+        // Finally, announce the fact that the list of recent documents has
+        // changed to whomever it may concern
+        this.emit('recent-docs-updated')
+      },
+      /**
+       * Clears out the list of recent files
+       * @return {Boolean} True if the call succeeded
+       */
+      clearRecentDocs: () => {
+        this._recentDocs = []
+        global.refreshMenu()
+        // Announce that the list of recent docs has changed
+        this.emit('recent-docs-updated')
+        return true
+      },
+      /**
+       * Retrieve the list of recent documents
+       * @return {Array} A list containing all documents in the recent list
+       */
+      getRecentDocs: () => {
+        return JSON.parse(JSON.stringify(this._recentDocs))
+      },
+      /**
+       * Queries the list of recent documents
+       * @return {Boolean} Returns true if there is at least one recent document.
+       */
+      hasRecentDocs: () => { return this._recentDocs.length > 0 }
     }
   }
 

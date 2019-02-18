@@ -58,8 +58,6 @@ class Zettlr {
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = []
 
-    global.recentFiles = [] // This array holds all files that have been opened
-
     this._commands = [] // This array holds all commands that can be performed
     loadCommands(this).then((cmd) => {
       this._commands = cmd
@@ -290,17 +288,8 @@ class Zettlr {
     if (file != null) {
       this.setCurrentFile(file)
       this.ipc.send('file-open', file.withContent())
-      // Remove this file if it's present in the list
-      let found = global.recentFiles.find((e) => e.hash === file.hash)
-      if (found) global.recentFiles.splice(global.recentFiles.indexOf(found), 1)
-
-      // Push the file into the global array (to the beginning)
-      global.recentFiles.unshift({
-        'hash': file.hash,
-        'name': file.name
-      })
-      // Afterwards, refresh the menu
-      this.window._menu.set()
+      // Add the file's metadata object to the recent docs
+      global.config.addRecentDoc(file.getMetadata())
     } else {
       this.window.prompt({
         type: 'error',

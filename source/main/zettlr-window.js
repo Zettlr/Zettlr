@@ -186,6 +186,9 @@ class ZettlrWindow {
     // to send commands.
     global.mainWindow = this._win
 
+    // Enable classes from within the app to update the menu
+    global.refreshMenu = () => { this._menu.set() }
+
     return this
   }
   // END this.open
