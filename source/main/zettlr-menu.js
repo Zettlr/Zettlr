@@ -31,6 +31,10 @@ class ZettlrMenu {
     // Load the blueprint
     this._blueprint = require('./assets/menu.tpl.json')
     this._prebuilt = null
+
+    // Begin listening to configuration update events that announce a change in
+    // the recent docs list so that we can make sure the menu is always updated.
+    global.config.on('recent-docs-updated', () => { this.set() })
   }
 
   /**
