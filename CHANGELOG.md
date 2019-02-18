@@ -11,6 +11,7 @@
 - Zettlr can now import and export both `textbundle` and `textpack` files. Refer to [textbundle.org](http://textbundle.org/) for more information.
 - Fixed a small bug that would render exporting of standalone files impossible.
 - Rendered Markdown links now retain the outer formatting (e.g., if you wrapped the whole link inside bold or emphasis).
+- The Zettlr default `tex`-template now doesn't break checkbox exports by including the `amsmath` and `amssymb`-packages.
 
 ## Under the Hood
 
