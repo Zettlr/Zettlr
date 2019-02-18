@@ -269,21 +269,6 @@ class ZettlrBody {
   }
 
   /**
-    * Display a popup containing the list of the most recent documents used during this session
-    */
-  showRecentDocuments () {
-    let cnt = makeTemplate('popup', 'recent-docs', this._recentDocs)
-
-    let p = popup($('#toolbar .recent-docs'), cnt)
-
-    $('.popup .recent-docs a').click((e) => {
-      let hash = $(e.target).attr('data-hash')
-      this._renderer.requestFile(hash)
-      p.close()
-    })
-  }
-
-  /**
     * Add a new document to the list of recent documents, unless it already exists
     * @param {ZettlrFile} file The file to be added
     */

@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Removed the Speech submenu from Windows and Linux, as it is only used on macOS.
+- **Attention**: The recent documents submenu is now to be found in the `File` menu! It resides no longer in the toolbar.
 - Added an "Inspect Element" context menu item if the debug mode is enabled.
 - The context menu doesn't show up on directory items in the file list anymore, which it wasn't supposed to anyway.
 - Fixes in the math rendering. Now the app will correctly render all equations, be they inline or multiline.

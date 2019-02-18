@@ -118,8 +118,9 @@ class ZettlrMenu {
       }
 
       // Methods are specialised commands that need to be hardcoded here.
-      if (item.hasOwnProperty('method')) {
-        switch (item.method) {
+      if (item.hasOwnProperty('id')) {
+        builtItem.id = item.id // Save it to the menu for potential recovery
+        switch (item.id) {
           case 'reloadWindow':
             builtItem.click = function (menuitem, focusedWindow) {
               if (focusedWindow) focusedWindow.reload()
@@ -133,6 +134,29 @@ class ZettlrMenu {
           case 'openDictData':
             builtItem.click = function (menuitem, focusedWindow) {
               require('electron').shell.openItem(require('path').join(require('electron').app.getPath('userData'), '/dict'))
+            }
+            break
+          // Enumerate the recent docs
+          case 'recent-docs':
+            builtItem.submenu = [{
+              'label': trans('menu.clear_recent_docs'),
+              // Well, well. Simply clear out the recentFiles array and re-"set" the menu
+              'click': (item, win) => { global.recentFiles = []; this.set() }
+            }, { 'type': 'separator' }]
+            // Disable if there are no recent docs
+            if (global.recentFiles.length === 0) builtItem.submenu[0].enabled = false
+            // Get the most recent 10 documents
+            for (let recent of global.recentFiles.slice(0, 10)) {
+              builtItem.submenu.push({
+                'label': recent.name,
+                'click': function (menuitem, focusedWindow) {
+                  if (global.mainWindow) {
+                    global.mainWindow.webContents.send('message', { 'command': 'file-get', 'content': recent.hash })
+                  } else if (focusedWindow) {
+                    focusedWindow.webContents.send('message', { 'command': 'file-get', 'content': recent.hash })
+                  }
+                }
+              })
             }
             break
         }

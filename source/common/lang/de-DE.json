@@ -10,7 +10,6 @@
     "decimal_delimiter": ","
   },
   "gui": {
-    "no_recent_docs": "Keine kürzlich verwendeten Dateien",
     "words": "%s Wörter",
     "words_last_month": "Wörter (Monat)",
     "file_words": "Wörter",
@@ -89,6 +88,8 @@
     "custom_css": "Benutzerdefiniertes CSS…",
     "set_target": "Schreibziel setzen…",
     "open": "Öffnen…",
+    "recent_docs": "Kürzlich verwendete Dokumente",
+    "clear_recent_docs": "Liste leeren",
     "save": "Speichern",
     "export": "Exportieren…",
     "import_files": "Dateien importieren…",
@@ -472,7 +473,6 @@
     "stats": "Statistiken anzeigen",
     "tag_cloud": "Schlagworte",
     "preferences": "Einstellungen anzeigen",
-    "recent_docs": "Kürzlich verwendete Dokumente",
     "file_save": "Änderungen an der Datei speichern",
     "share": "Aktuelle Datei nach HTML, DOCX, ODT oder PDF exportieren",
     "file_rename": "Datei umbenennen",

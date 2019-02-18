@@ -33,7 +33,11 @@
       "label": "menu.save",
       "accelerator": "CmdOrCtrl+S",
       "command": "file-save"
-    },{ "type": "separator" },
+    }, {
+      "label": "menu.recent_docs",
+      "id": "recent-docs"
+    },
+    { "type": "separator" },
     { "label": "menu.import_files", "command": "import-files" },
     {
       "label": "menu.export",
@@ -47,7 +51,7 @@
     },
     { "type": "separator" },
     { "label": "menu.import_lang_file", "command": "import-lang-file" },
-    { "label": "menu.import_dict_file", "method": "openDictData" },
+    { "label": "menu.import_dict_file", "id": "openDictData" },
     { "type": "separator" },
     {
       "label": "menu.rename_file",
@@ -202,11 +206,11 @@
     {
       "label": "menu.reload",
       "accelerator": "F5",
-      "method": "reloadWindow"
+      "id": "reloadWindow"
     }, {
       "label": "menu.toggle_devtools",
       "accelerator": { "darwin": "Alt+Command+I", "other": "Ctrl+Shift+I" },
-      "method": "toggleDevTools"
+      "id": "toggleDevTools"
     }
   ]},
   "mixin_preferences": {

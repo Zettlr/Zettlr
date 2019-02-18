@@ -210,6 +210,11 @@ class ZettlrRendererIPC {
   */
   handleEvent (cmd, cnt) {
     switch (cmd) {
+      // The main process can request the renderer to retrieve another file
+      case 'file-get':
+        this.send(cmd, cnt)
+        break
+
       // This message is sent by the main process and directs the renderer to
       // flush the complete dictionary buffer so that message are being fetched
       // from main again.
@@ -546,11 +551,6 @@ class ZettlrRendererIPC {
 
       case 'stats-data':
         this._app.getBody().displayStats(cnt)
-        break
-
-      // Recent documents
-      case 'show-docs':
-        this._app.getBody().showRecentDocuments()
         break
 
       // Generate a new ID

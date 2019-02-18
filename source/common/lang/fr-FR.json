@@ -10,7 +10,6 @@
     "decimal_delimiter": ","
   },
   "gui": {
-    "no_recent_docs": "Pas des fichiers récents",
     "words": "%s mots",
     "words_last_month": "mots dernièr mois",
     "file_words": "mots",
@@ -89,6 +88,8 @@
     "project_build": "Exporter le Projet",
     "set_target": "Définir la cible d'écriture…",
     "open": "Ouvrier…",
+    "recent_docs": "Fichiers récents",
+    "clear_recent_docs": "Vider la liste",
     "save": "Enregistrer",
     "export": "Exporter…",
     "import_files": "Importer des fichiers…",
@@ -472,7 +473,6 @@
     "stats": "Voir la statistique",
     "tag_cloud": "Mots-clés",
     "preferences": "Ouvrir les paramètres",
-    "recent_docs": "Fichiers récents",
     "file_save": "Enregistrer les modifications",
     "share": "Exporter le fichier dans HTML, DOCX, ODT, ou PDF",
     "file_rename": "Changer le nom de fichier",
