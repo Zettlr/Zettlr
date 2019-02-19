@@ -13,7 +13,7 @@
 - Fixed a small bug that would render exporting of standalone files impossible.
 - Rendered Markdown links now retain the outer formatting (e.g., if you wrapped the whole link inside bold or emphasis).
 - The Zettlr default `tex`-template now doesn't break checkbox exports by including the `amsmath` and `amssymb`-packages.
-- New shortcuts: Pressing `Ctrl+Enter` will insert a new line above the one in which you are currently, placing your cursor there. Pressing `Ctrl+Shift+Enter` will do the same but below the current line.
+- New shortcuts: Pressing `Ctrl+Enter` will insert a new line below the one in which you are currently, placing your cursor there. Pressing `Ctrl+Shift+Enter` will do the same but above the current line.
 
 ## Under the Hood
 
