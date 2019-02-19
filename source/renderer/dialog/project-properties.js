@@ -1,3 +1,4 @@
+/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -47,6 +48,27 @@ class ProjectDialog extends ZettlrDialog {
       // Form: dialog type, values, the originally passed object
       this.proceed(form.serializeArray())
     })
+
+    // These scripts only are used to update the preview paragraph
+    $('#lineheight').change((e) => {
+      $('p.pdf-preview').css('line-height', $(e.target).val() + '%')
+    })
+    $('#fontsize').change((e) => {
+      // 1pt is approx. 1.333333 px
+      $('p.pdf-preview').css('font-size', ($(e.target).val() * 1.3) + 'px')
+    })
+    $('#mainfont').change((e) => {
+      $('p.pdf-preview').css('font-family', $(e.target).val())
+    })
+    $('#sansfont').change((e) => {
+      $('h1.pdf-preview').css('font-family', $(e.target).val())
+    })
+
+    // Initial changing of CSS
+    $('p.pdf-preview').css('line-height', $('#lineheight').val() + '%')
+    $('p.pdf-preview').css('font-size', ($('#fontsize').val() * 1.3) + 'px')
+    $('p.pdf-preview').css('font-family', $('#mainfont').val())
+    $('h1.pdf-preview').css('font-family', $('#sansfont').val())
   }
 
   proceed (data) {

@@ -1,3 +1,4 @@
+/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -15,6 +16,7 @@
 
 const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
+const { trans } = require('../../common/lang/i18n')
 
 class PreferencesDialog extends ZettlrDialog {
   constructor () {
@@ -43,6 +45,80 @@ class PreferencesDialog extends ZettlrDialog {
       // Give the ZettlrBody object the results
       // Form: dialog type, values, the originally passed object
       this.proceed(form.serializeArray())
+    })
+
+    // Functions for the search field of the dictionary list.
+    $('.dicts-list-search').on('keyup', (e) => {
+      let val = $('.dicts-list-search').val().toLowerCase()
+      $('.dicts-list').find('li').each(function (i) {
+        if ($(this).text().toLowerCase().indexOf(val) === -1) {
+          $(this).hide()
+        } else {
+          $(this).show()
+        }
+      })
+    })
+
+    $('.dicts-list').on('click', (e) => {
+      let elem = $(e.target)
+      if (elem.is('li') && elem.hasClass('dicts-list-item')) {
+        let selection = $(`<div class="selected-dict"><input type="hidden" value="${elem.attr('data-value')}" name="selectedDicts" id="${elem.attr('data-value')}">${elem.text()}</div>`)
+        $('.selected-dictionaries').append(selection)
+        elem.detach()
+        $('.dicts-list-search').val('').focus().trigger('keyup') // Next search
+      }
+    })
+
+    $('.selected-dictionaries').on('click', (e) => {
+      let elem = $(e.target)
+      if (elem.is('div') && elem.hasClass('selected-dict')) {
+        let selection = $(`<li data-value="${elem.children('input').first().val()}" class="dicts-list-item">${elem.text()}</li>`)
+        let length = $('.dicts-list').find('li').length
+        if (length === 0) {
+          $('.dicts-list').append(selection)
+        } else {
+          $('.dicts-list').find('li').each(function (i) {
+            if ($(this).text() > elem.text()) {
+              selection.insertBefore($(this))
+              return false // Break out of the loop
+            } else if (i === length - 1) {
+              selection.insertAfter($(this))
+            }
+          })
+        }
+        elem.detach()
+      }
+    })
+    // END searchfield functions.
+
+    // Begin: functions for the zkn regular expression fields
+    $('#reset-id-regex').on('click', (e) => {
+      $('#pref-zkn-free-id').val('(\\d{14})')
+    })
+    $('#reset-linkstart-regex').on('click', (e) => {
+      $('#pref-zkn-free-linkstart').val('[[')
+    })
+    $('#reset-linkend-regex').on('click', (e) => {
+      $('#pref-zkn-free-linkend').val(']]')
+    })
+    $('#reset-id-generator').on('click', (e) => {
+      $('#pref-zkn-id-gen').val('%Y%M%D%h%m%s')
+    })
+
+    $('#generate-id').on('click', (e) => {
+      let id = require('../../common/zettlr-helpers.js').generateId($('#pref-zkn-id-gen').val())
+      let re = new RegExp('^' + $('#pref-zkn-free-id').val() + '$')
+      $('#generator-tester').text(id)
+      if (re.test(id)) {
+        $('#pass-check').text(trans('dialog.preferences.zkn.pass_check_yes'))
+      } else {
+        $('#pass-check').text(trans('dialog.preferences.zkn.pass_check_no'))
+      }
+    })
+
+    // BEGIN functionality for the image constraining options
+    $('#imageWidth, #imageHeight').on('input', (e) => {
+      $('#preview-image-sizes').html($('#imageWidth').val() + '% &times; ' + $('#imageHeight').val() + '%')
     })
   }
 

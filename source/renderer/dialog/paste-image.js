@@ -63,6 +63,21 @@ class PasteImage extends ZettlrDialog {
     // We need to trigger a replace manually, b/c pasting raw image data into
     // the src-attribute of an img does not trigger the onLoad-event listener.
     setTimeout(() => { this._place() }, 10)
+
+    // Enable the custom javascript actions
+    $('#img-width').on('change', (e) => {
+      let aspect = $('#aspect-ratio').val()
+      if ($('#aspect').prop('checked')) {
+        $('#img-height').val(Math.round($('#img-width').val() / aspect))
+      }
+    })
+
+    $('#img-height').on('change', (e) => {
+      let aspect = $('#aspect-ratio').val()
+      if ($('#aspect').prop('checked')) {
+        $('#img-width').val(Math.round($('#img-height').val() * aspect))
+      }
+    })
   }
 }
 

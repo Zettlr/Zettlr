@@ -1,3 +1,4 @@
+/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -14,6 +15,7 @@
 
 const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
+const { trans } = require('../../common/lang/i18n')
 
 class TagsPreferences extends ZettlrDialog {
   constructor () {
@@ -29,6 +31,17 @@ class TagsPreferences extends ZettlrDialog {
       // Give the ZettlrBody object the results
       // Form: dialog type, values, the originally passed object
       this.proceed(form.serializeArray())
+    })
+
+    $('#addTagLine').click((e) => {
+      $('#prefs-taglist').append(
+        `<div>
+            <input type="text" name="prefs-tags-name" placeholder="${trans('dialog.tags.name_desc')}">
+            <input type="color" name="prefs-tags-color" placeholder="${trans('dialog.tags.color_desc')}">
+            <input type="text" name="prefs-tags-desc" placeholder="${trans('dialog.tags.desc_desc')}">
+            <button type="button" onclick="$(this).parent().detach()">-</button>
+            </div>`
+      )
     })
   }
 

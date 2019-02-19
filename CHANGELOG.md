@@ -24,6 +24,7 @@
 - Rewrote the complete command structure of the app and branched it out into standalone files. Thereby the system becomes extremely modular and new commands can be written with ease. Additionally, it becomes possible to create shortcuts for certain commands.
 - Fixed a small possibility of running into an error while performing a global search.
 - Exchanged the variables for usage in `TeX`-templates with Pandoc-Style $-variables. Additionally, now all occurrences will be replaced with the correct value.
+- Moved the JavaScript bits out of the Handlebars templates and added them to the Dialog handler classes.
 
 # 1.1.0
 

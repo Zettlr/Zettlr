@@ -32,19 +32,3 @@
     <button id="abort">{{i18n "dialog.button.close"}}</button>
   </div>
 </div>
-<script>
-/* global $ */
-$('#img-width').on('change', (e) => {
-  let aspect = $('#aspect-ratio').val()
-  if ($('#aspect').prop('checked')) {
-    $('#img-height').val(Math.round($('#img-width').val() / aspect))
-  }
-})
-
-$('#img-height').on('change', (e) => {
-  let aspect = $('#aspect-ratio').val()
-  if ($('#aspect').prop('checked')) {
-    $('#img-width').val(Math.round($('#img-height').val() * aspect))
-  }
-})
-</script>
