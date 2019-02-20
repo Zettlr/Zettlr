@@ -12,8 +12,8 @@
 })(function (CodeMirror) {
   'use strict'
 
-  // var mathRE = /^\$\$(.+?)\$\$$|\$(.+?)\$/g // Matches all math blocks and inlines
-  var mathRE = /^\$\$(.+?[^\\])\$\$|(?<=[^\\])\$\$(.+?[^\\])\$\$/g // Matches all inlines with non-escaped double-dollar-signs.
+  // Matches all inlines and displays with non-escaped (double-)dollar-signs.
+  var mathRE = /^\${1,2}(.+?[^\\])\${1,2}|(?<=[^\\])\${1,2}(.+?[^\\])\${1,2}/g
   var mathMarkers = []
 
   CodeMirror.commands.markdownRenderMath = function (cm) {
