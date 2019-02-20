@@ -13,7 +13,12 @@
   'use strict'
 
   // Matches all inlines and displays with non-escaped (double-)dollar-signs.
-  var mathRE = /^\${1,2}(.+?[^\\])\${1,2}|(?<=[^\\])\${1,2}(.+?[^\\])\${1,2}/g
+  // Alternatives:
+  // 1. Inline Math Equation, beginning at char 0
+  // 2. Inline Math Equation within a paragraph (preceeded by other chars)
+  // 3. Display Math Equation, beginning at char 0
+  // 4. Display Math Equation within a paragraph (preceeded by other chars)
+  var mathRE = /^\$(.+?[^\\])\$|(?<=[^\\])\$(.+?[^\\])\$|^\$\$(.+?[^\\])\$\$|(?<=[^\\])\$\$(.+?[^\\])\$\$/g
   var mathMarkers = []
 
   CodeMirror.commands.markdownRenderMath = function (cm) {
