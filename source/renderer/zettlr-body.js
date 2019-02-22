@@ -53,8 +53,8 @@ class ZettlrBody {
     this._spellcheckLangs = null // This holds all available languages
     this._ql = [] // This holds all open quicklook windows
     this._n = [] // Holds all notifications currently displaying
-    this._recentDocs = [] // All documents, up to twenty that have been opened on a per-session basis
-    this._numRecentDocs = 10 // No more than 10 docs in the list
+    // Holds the currently displayed dialog. Prevents multiple dialogs from appearing.
+    this._currentDialog = null
 
     // Event listener for the context menu
     window.addEventListener('contextmenu', (e) => {
@@ -269,25 +269,6 @@ class ZettlrBody {
   }
 
   /**
-    * Add a new document to the list of recent documents, unless it already exists
-    * @param {ZettlrFile} file The file to be added
-    */
-  addRecentDocument (file) {
-    let found = this._recentDocs.find((elem) => { return (elem.hash === file.hash) })
-    if (found !== undefined) {
-      this._recentDocs.splice(this._recentDocs.indexOf(found), 1)
-      this._recentDocs.push(found)
-      return
-    }
-
-    while (this._recentDocs.length > this._numRecentDocs - 1) {
-      this._recentDocs.shift()
-    }
-
-    this._recentDocs.push({ 'hash': file.hash, 'name': file.name })
-  }
-
-  /**
     * Opens a quicklook window for a given file.
     * @param  {ZettlrFile} file The file to be loaded into the QuickLook
     * @return {void}      Nothing to return.
@@ -404,8 +385,10 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayPreferences (prefs) {
-    let d = new PreferencesDialog()
-    d.init(prefs).open()
+    if (this._currentDialog !== null) return // Only one dialog at a time
+    this._currentDialog = new PreferencesDialog()
+    this._currentDialog.init(prefs).open()
+    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
 
   /**
@@ -414,8 +397,10 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayPDFPreferences (prefs) {
-    let d = new PDFPreferences()
-    d.init(prefs).open()
+    if (this._currentDialog !== null) return // Only one dialog at a time
+    this._currentDialog = new PDFPreferences()
+    this._currentDialog.init(prefs).open()
+    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
 
   /**
@@ -424,8 +409,10 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayTagsPreferences (prefs) {
-    let d = new TagsPreferences()
-    d.init(prefs).open()
+    if (this._currentDialog !== null) return // Only one dialog at a time
+    this._currentDialog = new TagsPreferences()
+    this._currentDialog.init(prefs).open()
+    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
 
   /**
@@ -434,9 +421,11 @@ class ZettlrBody {
    * @return {void}      Nothing to return.
    */
   displayTagCloud () {
+    if (this._currentDialog !== null) return // Only one dialog at a time
     global.ipc.send('get-tags-database', {}, (ret) => {
-      let dialog = new TagCloud()
-      dialog.init(ret).open()
+      this._currentDialog = new TagCloud()
+      this._currentDialog.init(ret).open()
+      this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
     })
   }
 
@@ -446,10 +435,12 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayProjectProperties (prefs) {
-    let d = new ProjectProperties()
+    if (this._currentDialog !== null) return // Only one dialog at a time
+    this._currentDialog = new ProjectProperties()
     // We need the project directory's name as a default value
     prefs.projectDirectory = this.getRenderer().findObject(prefs.hash).name
-    d.init(prefs).open()
+    this._currentDialog.init(prefs).open()
+    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
 
   /**
@@ -457,33 +448,41 @@ class ZettlrBody {
     * @param  {Object} cnt An object containing information on the update.
     */
   displayUpdate (cnt) {
-    let d = new UpdateDialog()
-    d.init(cnt).open()
+    if (this._currentDialog !== null) return // Only one dialog at a time
+    this._currentDialog = new UpdateDialog()
+    this._currentDialog.init(cnt).open()
+    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
 
   /**
     * Displays the about dialog
     */
   displayAbout () {
-    let d = new AboutDialog()
-    d.init().open()
+    if (this._currentDialog !== null) return // Only one dialog at a time
+    this._currentDialog = new AboutDialog()
+    this._currentDialog.init().open()
+    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
 
   /**
    * This dialog is shown when the user has pasted an image from the clipboard.
    */
   displayPasteImage () {
-    let d = new PasteImage()
-    d.init().open()
+    if (this._currentDialog !== null) return // Only one dialog at a time
+    this._currentDialog = new PasteImage()
+    this._currentDialog.init().open()
+    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
 
   /**
    * This dialog lets the user edit his/her custom CSS
    */
   displayCustomCss () {
+    if (this._currentDialog !== null) return // Only one dialog at a time
     global.ipc.send('get-custom-css', {}, (ret) => {
-      let d = new CustomCSS()
-      d.init(ret).open()
+      this._currentDialog = new CustomCSS()
+      this._currentDialog.init(ret).open()
+      this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
     })
   }
 
@@ -493,6 +492,7 @@ class ZettlrBody {
    * @return {void}      No return.
    */
   displayStats (data) {
+    if (this._currentDialog !== null) return // Only one dialog at a time
     let context = {
       'displaySum': (data.sumMonth > 99999) ? '>100k' : localiseNumber(data.sumMonth),
       'avgMonth': localiseNumber(data.avgMonth),
@@ -505,9 +505,9 @@ class ZettlrBody {
     let p = popup($('#toolbar .stats'), cnt)
     $('#more-stats').on('click', (e) => {
       // Theres no form but the user has clicked the more button
-      let dialog = new StatsDialog()
-      dialog.init(data.wordCount)
-      dialog.open()
+      this._currentDialog = new StatsDialog()
+      this._currentDialog.init(data.wordCount).open()
+      this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
       // After opening the dialog, close the popup. The user probably doesn't
       // want to click twice to continue writing.
       p.close()

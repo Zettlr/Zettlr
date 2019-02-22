@@ -16,6 +16,7 @@
 - New shortcuts: Pressing `Ctrl+Enter` will insert a new line below the one in which you are currently, placing your cursor there. Pressing `Ctrl+Shift+Enter` will do the same but above the current line.
 - Added context menu entries to copy mail addresses and links to clipboard.
 - For compatibility reasons with some Linux distributions that reserve the `Alt`-key for dragging windows around it is now also possible to press the control key to follow links and initiate searches.
+- Removed a bug that would allow multiple dialogs to be shown as some kind of "overlays" on top of each other.
 
 ## Under the Hood
 
@@ -27,6 +28,7 @@
 - Fixed a small possibility of running into an error while performing a global search.
 - Exchanged the variables for usage in `TeX`-templates with Pandoc-Style $-variables. Additionally, now all occurrences will be replaced with the correct value.
 - Moved the JavaScript bits out of the Handlebars templates and added them to the Dialog handler classes.
+- Code cleanup.
 
 # 1.1.0
 

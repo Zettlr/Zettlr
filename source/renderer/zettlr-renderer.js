@@ -604,9 +604,8 @@ class ZettlrRenderer {
     // We have received a new file. So close the old and open the new
     this._editor.close()
     // Select the file either in the preview list or in the directory tree
-    // this._preview.select(f.hash);
+    this._preview.select(f.hash)
     this._editor.open(f)
-    this._body.addRecentDocument(f)
   }
 
   /**

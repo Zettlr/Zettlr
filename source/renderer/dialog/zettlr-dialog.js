@@ -15,6 +15,7 @@
  */
 
 const tippy = require('tippy.js')
+const EventEmitter = require('events')
 const makeTemplate = require('../../common/zettlr-template.js')
 const { clipboard } = require('electron')
 const { trans } = require('../../common/lang/i18n.js')
@@ -29,11 +30,12 @@ const { trans } = require('../../common/lang/i18n.js')
  * added, is the About window. And maybe something else. But as I said, first,
  * it needs a revamp.
  */
-class ZettlrDialog {
+class ZettlrDialog extends EventEmitter {
   /**
     * Prepare the dialog
     */
   constructor () {
+    super()
     // Used to retrieve some configuration options
     this._body = $('body')
     this._container = $('#container')
@@ -83,9 +85,11 @@ class ZettlrDialog {
     * @return {ZettlrDialog} Chainability.
     */
   close () {
+    this.emit('beforeClose') // Notify listeners that the dialog will be closed.
     this._modal.detach()
     this._container.removeClass('blur')
     this._modal.html('')
+    this.emit('afterClose') // Notify listeners that the dialog is now closed.
     return this
   }
 
