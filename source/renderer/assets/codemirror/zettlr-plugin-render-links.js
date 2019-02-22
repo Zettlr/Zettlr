@@ -114,15 +114,8 @@
         let tk = cm.getTokenAt(curFrom, true).type
         if (tk) {
           tk = tk.split(' ')
-          let strong = tk.includes('strong')
-          let em = tk.includes('em')
-          if (strong && em) {
-            a.style.fontWeight = 'bold'; a.style.fontStyle = 'italic'
-          } else if (strong) {
-            a.style.fontWeight = 'bold'
-          } else if (em) {
-            a.style.fontStyle = 'italic'
-          }
+          if (tk.includes('strong')) a.style.fontWeight = 'bold'
+          if (tk.includes('em')) a.style.fontStyle = 'italic'
         }
 
         // Apply TextMarker
