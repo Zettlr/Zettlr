@@ -102,6 +102,8 @@
     "delete_from_vd": "Delete from virtual directory",
     "delete_dir": "Delete directory",
     "open_link": "Open Link",
+    "copy_link": "Copy Link",
+    "copy_mail": "Copy Mail Address",
     "undo": "Undo",
     "redo": "Redo",
     "cut": "Cut",

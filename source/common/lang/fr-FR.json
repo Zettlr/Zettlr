@@ -102,6 +102,8 @@
     "delete_from_vd": "Supprimer du dossier virtuel",
     "delete_dir": "Supprimer le dossier",
     "open_link": "Ouvrir le lien",
+    "copy_link": "Copier le lien",
+    "copy_mail": "Copier l'émail",
     "undo": "Annuler",
     "redo": "Repeter",
     "cut": "Couper",

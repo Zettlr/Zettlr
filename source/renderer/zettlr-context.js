@@ -206,10 +206,18 @@ class ZettlrCon {
 
     // If the element is a link, add an "open link" context menu entry
     if (elem.hasClass('cma')) {
+      let url = elem.attr('title')
       this._menu.unshift({
         'label': trans('menu.open_link'),
         'click': (item, win) => {
-          require('electron').shell.openExternal(elem.attr('title'))
+          require('electron').shell.openExternal(url)
+        }
+      }, {
+        // It's either "Copy Link" or "Copy Mail"
+        'label': (url.indexOf('mailto:') === 0) ? trans('menu.copy_mail') : trans('menu.copy_link'),
+        'click': (item, win) => {
+          let toCopy = (url.indexOf('mailto:') === 0) ? url.substr(7) : url
+          require('electron').clipboard.writeText(toCopy)
         }
       }, {
         'type': 'separator'

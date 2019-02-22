@@ -102,6 +102,8 @@
     "delete_from_vd": "Aus virtuellem Verzeichnis löschen",
     "delete_dir": "Verzeichnis löschen",
     "open_link": "Link öffnen",
+    "copy_link": "Link kopieren",
+    "copy_mail": "Email-Adresse kopieren",
     "undo": "Rückgängig",
     "redo": "Wiederholen",
     "cut": "Ausschneiden",

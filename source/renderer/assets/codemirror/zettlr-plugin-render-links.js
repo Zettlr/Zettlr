@@ -87,6 +87,7 @@
         if (con) continue // Skip this match
 
         let a = document.createElement('a')
+        a.className = 'cma' // CodeMirrorAnchors
         if (standalone) {
           // In case of a standalone link, all is the same
           a.innerHTML = standalone
@@ -96,7 +97,7 @@
           // In case of an email, the same except the URL (which gets
           // an added mailto protocol handler).
           a.innerHTML = email
-          a.title = email
+          a.title = 'mailto:' + email
           url = 'mailto:' + email
         } else {
           // Markdown URL
@@ -108,7 +109,6 @@
           a.innerHTML = caption
           a.title = url // Set the url as title to let users see where they're going
         }
-        a.className = 'cma' // CodeMirrorAnchors
 
         // Retain the outer formatting, if applicable
         let tk = cm.getTokenAt(curFrom, true).type
@@ -116,9 +116,13 @@
           tk = tk.split(' ')
           let strong = tk.includes('strong')
           let em = tk.includes('em')
-          if (strong && em) a.innerHTML = `<strong><em>${a.innerHTML}</em></strong>`
-          else if (strong) a.innerHTML = `<strong>${a.innerHTML}</strong>`
-          else if (em) a.innerHTML = `<em>${a.innerHTML}</em>`
+          if (strong && em) {
+            a.style.fontWeight = 'bold'; a.style.fontStyle = 'italic'
+          } else if (strong) {
+            a.style.fontWeight = 'bold'
+          } else if (em) {
+            a.style.fontStyle = 'italic'
+          }
         }
 
         // Apply TextMarker
