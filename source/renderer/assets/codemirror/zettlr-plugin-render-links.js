@@ -130,8 +130,8 @@
         )
 
         a.onclick = (e) => {
-          // Only open ALT-clicks (Doesn't select and also is not used elsewhere)
-          if (e.altKey) {
+          // Only open while either Alt or Ctrl is pressed.
+          if (e.altKey || e.ctrlKey) {
             e.preventDefault()
             // On ALT-Clicks, use the callback to have the user decide
             // what should happen when they click on links, defined

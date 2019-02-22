@@ -15,6 +15,7 @@
 - The Zettlr default `tex`-template now doesn't break checkbox exports by including the `amsmath` and `amssymb`-packages.
 - New shortcuts: Pressing `Ctrl+Enter` will insert a new line below the one in which you are currently, placing your cursor there. Pressing `Ctrl+Shift+Enter` will do the same but above the current line.
 - Added context menu entries to copy mail addresses and links to clipboard.
+- For compatibility reasons with some Linux distributions that reserve the `Alt`-key for dragging windows around it is now also possible to press the control key to follow links and initiate searches.
 
 ## Under the Hood
 

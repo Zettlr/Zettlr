@@ -365,9 +365,9 @@ class ZettlrEditor {
     })
 
     this._cm.getWrapperElement().addEventListener('click', (e) => {
-      if (!e.altKey) { // Such links open on ALT-Click (b/c CodeMirror handles Ctrl+Cmd)
-        return true // Stop handling event.
-      }
+      // Open links on both Alt and Ctrl clicks - otherwise stop handling event
+      if (!(e.altKey || e.ctrlKey)) return true
+
       e.preventDefault()
 
       let elem = $(e.target)
