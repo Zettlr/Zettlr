@@ -47,6 +47,8 @@
 
     for (let i = 0; i < cm.lineCount(); i++) {
       if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      // Reset the index of the expression everytime we enter a new line.
+      mathRE.lastIndex = 0
 
       // This array holds all markers to be inserted (either one in case of the
       // final line of a multiline-equation or multiple in case of several
@@ -74,10 +76,12 @@
       } else {
         // Else: No multiline. Search for inlines.
         while ((match = mathRE.exec(line)) != null) {
+          console.log(match)
           newMarkers.push({
             'curFrom': { 'ch': match.index, 'line': i },
             'curTo': { 'ch': match.index + match[0].length, 'line': i },
-            'eq': match[1] || match[2]
+            // An equation may be found in any of the four capturing groups
+            'eq': match[1] || match[2] || match[3] || match[4] || ''
           })
         }
       }
@@ -120,9 +124,7 @@
           }
         )
 
-        require('katex').render(myMarker.eq, elem, {
-          throwOnError: false
-        })
+        require('katex').render(myMarker.eq, elem, { throwOnError: false })
 
         // Now the marker has obviously changed
         textMarker.changed()
