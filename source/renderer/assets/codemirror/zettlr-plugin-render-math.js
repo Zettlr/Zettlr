@@ -76,7 +76,6 @@
       } else {
         // Else: No multiline. Search for inlines.
         while ((match = mathRE.exec(line)) != null) {
-          console.log(match)
           newMarkers.push({
             'curFrom': { 'ch': match.index, 'line': i },
             'curTo': { 'ch': match.index + match[0].length, 'line': i },
