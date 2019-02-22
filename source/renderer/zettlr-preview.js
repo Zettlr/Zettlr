@@ -324,7 +324,7 @@ class ZettlrPreview {
         elem = elem.parent()
       }
 
-      if (e.altKey) {
+      if (e.altKey || e.ctrlKey) {
         // Request a quicklook for that thing. Or to enter that dir.
         if (elem.hasClass('directory')) {
           let par = this._renderer.findObject(parseInt(elem.attr('data-hash')))
