@@ -29,6 +29,7 @@
 - Exchanged the variables for usage in `TeX`-templates with Pandoc-Style $-variables. Additionally, now all occurrences will be replaced with the correct value.
 - Moved the JavaScript bits out of the Handlebars templates and added them to the Dialog handler classes.
 - Code cleanup.
+- Removed the complete KaTeX dist files from the Zettlr source and switched to using the shipped files provided by the KaTeX module, reducing the binary sizes, maintenance effort and code clutter at once.
 
 # 1.1.0
 
