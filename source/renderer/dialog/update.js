@@ -31,6 +31,11 @@ class UpdateDialog extends ZettlrDialog {
     } else if ($('body').hasClass('linux')) {
       data.downloadLink = 'https://www.zettlr.com/download/linux' + matomoData
     }
+
+    // In case we've got a beta release, provide the release URL at GitHub, as
+    // the Zettlr homepage won't spit out beta releases.
+    if (data.isBeta) data.downloadLink = data.releaseURL
+
     return data
   }
 }
