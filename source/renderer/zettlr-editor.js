@@ -58,13 +58,6 @@ class ZettlrEditor {
     this._positions = [] // Saves the positions of the editor
     this._currentHash = null // Needed for positions
 
-    // TODO / BUG: This variable holds information on whether an image paste has
-    // already been handled by the window event listener, because CodeMirror
-    // wrongly attaches a "paste" event origin to the changeObject. This monkey
-    // patch will be gone in the next release, b/c Marijn has already fixed this
-    // (but not yet released).
-    this._pasteAlreadyHandled = false
-
     this._words = 0 // Currently written words
     this._fontsize = 100 // Font size (used for zooming)
     this._timeout = null // Stores a current timeout for a save-command
@@ -196,15 +189,9 @@ class ZettlrEditor {
         // need to cancel the paste event and handle the image ourselves.
         let image = clipboard.readImage()
         if (!image.isEmpty()) {
-          // TODO / BUG Remove this if clause as soon as the next CodeMirror
-          // version is out
-          if (this._pasteAlreadyHandled) {
-            this._pasteAlreadyHandled = false
-          } else {
-            // We've got an image. So we need to handle it.
-            this._renderer.handleEvent('paste-image')
-            return changeObj.cancel() // Cancel handling of the event
-          }
+          // We've got an image. So we need to handle it.
+          this._renderer.handleEvent('paste-image')
+          return changeObj.cancel() // Cancel handling of the event
         }
 
         // Continue with checking for potential images.
@@ -392,11 +379,6 @@ class ZettlrEditor {
       // to the wrapper, from here.
       if (!image.isEmpty() && clipboard.readText().length === 0) {
         // We've got an image. So we need to handle it.
-
-        // TODO / BUG Remove this if clause as soon as the next CodeMirror
-        // version is out
-        this._pasteAlreadyHandled = true
-
         this._renderer.handleEvent('paste-image')
       }
     })
