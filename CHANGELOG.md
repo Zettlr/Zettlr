@@ -17,6 +17,7 @@
 - Added context menu entries to copy mail addresses and links to clipboard.
 - For compatibility reasons with some Linux distributions that reserve the `Alt`-key for dragging windows around it is now also possible to press the control key to follow links and initiate searches.
 - Removed a bug that would allow multiple dialogs to be shown as some kind of "overlays" on top of each other.
+- Updates to the design of the editor. Now the margins of the editor don't resize as soon as you change the font size.
 
 ## Under the Hood
 
