@@ -18,6 +18,7 @@
 - For compatibility reasons with some Linux distributions that reserve the `Alt`-key for dragging windows around it is now also possible to press the control key to follow links and initiate searches.
 - Removed a bug that would allow multiple dialogs to be shown as some kind of "overlays" on top of each other.
 - Updates to the design of the editor. Now the margins of the editor don't resize as soon as you change the font size.
+- Updates to the zooming of the editor's font: Now it'll stop at both 30 percent and 400 percent for lower and upper limits. Exceeding these may yield very weird errors.
 
 ## Under the Hood
 
