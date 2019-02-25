@@ -100,10 +100,10 @@ class ZettlrTargets extends EventEmitter {
 
   /**
    * Simply writes the tag data to disk.
-   * @return {ZettlrTags} This for chainability.
+   * @return {ZettlrTargets} This for chainability.
    */
   _save () {
-    // (Over-)write the tags
+    // (Over-)write the targets
     fs.writeFileSync(this._file, JSON.stringify(this._targets), { encoding: 'utf8' })
 
     return this
