@@ -71,11 +71,11 @@ class Zettlr {
     this.app = parentApp // Internal pointer to app object
     this.config = new ZettlrConfig(this)
     // Init translations
-    let metadata = i18n(this.config.get('appLang'))
+    let metadata = i18n(global.config.get('appLang'))
 
     // It may be that only a fallback has been provided or else. In this case we
     // must update the config to reflect this.
-    if (metadata.tag !== this.config.get('appLang')) this.config.set('appLang', metadata.tag)
+    if (metadata.tag !== global.config.get('appLang')) global.config.set('appLang', metadata.tag)
 
     this.ipc = new ZettlrIPC(this)
 
@@ -191,7 +191,7 @@ class Zettlr {
     // Close all Quicklook Windows
     this._ql.closeAll()
     // Save the config and stats
-    this.config.save()
+    global.config.save()
     this.stats.save()
     // Stop the watchdog
     this.watchdog.stop()
@@ -424,7 +424,7 @@ class Zettlr {
   refreshPaths () {
     this._openPaths = []
     // Reload all opened files, garbage collect will get the old ones.
-    for (let p of this.getConfig().get('openPaths')) {
+    for (let p of global.config.get('openPaths')) {
       if (isFile(p)) {
         this._openPaths.push(new ZettlrFile(this, p))
       } else if (isDir(p)) {
@@ -432,8 +432,8 @@ class Zettlr {
       }
     }
     // Set the pointers either to null or last opened dir/file
-    this.setCurrentDir(this.findDir({ 'hash': parseInt(this.config.get('lastDir')) }))
-    this.setCurrentFile(this.findFile({ 'hash': parseInt(this.config.get('lastFile')) }))
+    this.setCurrentDir(this.findDir({ 'hash': parseInt(global.config.get('lastDir')) }))
+    this.setCurrentFile(this.findFile({ 'hash': parseInt(global.config.get('lastFile')) }))
     this.window.fileUpdate() // Preset the window's title with the current file, if applicable
   }
 
@@ -587,7 +587,7 @@ class Zettlr {
   setCurrentFile (f) {
     this.currentFile = f
     this.ipc.send('file-set-current', (f && f.hasOwnProperty('hash')) ? f.hash : null)
-    this.config.set('lastFile', (f && f.hasOwnProperty('hash')) ? f.hash : null)
+    global.config.set('lastFile', (f && f.hasOwnProperty('hash')) ? f.hash : null)
 
     // Always adapt the window title
     if (this.window) this.window.fileUpdate()
@@ -608,7 +608,7 @@ class Zettlr {
     // paths each time we change them. So renderer should always be on the
     // newest update.
     this.ipc.send('dir-set-current', (d && d.hasOwnProperty('hash')) ? d.hash : null)
-    this.config.set('lastDir', (d && d.hasOwnProperty('hash')) ? d.hash : null)
+    global.config.set('lastDir', (d && d.hasOwnProperty('hash')) ? d.hash : null)
   }
 
   /**

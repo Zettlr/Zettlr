@@ -182,6 +182,14 @@ class ZettlrConfig extends EventEmitter {
       set: (key, val) => {
         return this.set(key, val)
       },
+      /**
+       * Set multiple config keys at once.
+       * @param  {Object} obj An object containing key/value-pairs to set.
+       * @return {Boolean}     Whether or not the call succeeded.
+       */
+      bulkSet: (obj) => {
+        return this.bulkSet(obj)
+      },
       // Enable global event listening to updates of the config
       on: (evt, callback) => {
         this.on(evt, callback)
@@ -233,7 +241,12 @@ class ZettlrConfig extends EventEmitter {
        * Queries the list of recent documents
        * @return {Boolean} Returns true if there is at least one recent document.
        */
-      hasRecentDocs: () => { return this._recentDocs.length > 0 }
+      hasRecentDocs: () => { return this._recentDocs.length > 0 },
+      /**
+       * Persists the current configuration to disk
+       * @return {void} Does not return
+       */
+      save: () => { this.save() }
     }
   }
 

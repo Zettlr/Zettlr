@@ -270,8 +270,7 @@ class ZettlrIPC {
         break
 
       case 'get-preferences':
-      // Duplicate the object
-        let toSend = Object.assign({}, this._app.getConfig().getConfig())
+        let toSend = global.config.get() // get() with no arguments returns the whole config
         // Add available translations and dictionaries
         toSend.supportedLangs = this._app.getConfig().getSupportedLangs()
         toSend.availableDicts = this._app.getConfig().getDictionaries()
@@ -284,7 +283,7 @@ class ZettlrIPC {
         // settings are a superset of PDF, so to save space, we'll re-use
         // their code, but to unify it we need these settings to access
         // obj.pdf instead of obj.
-        this.send('pdf-preferences', this._app.getConfig().getConfig())
+        this.send('pdf-preferences', global.config.get())
         break
 
       case 'get-tags-preferences':
@@ -293,7 +292,7 @@ class ZettlrIPC {
 
       // Got a new config object
       case 'update-config':
-        this._app.getConfig().bulkSet(cnt)
+        global.config.bulkSet(cnt)
         this.send('config-update')
         // Reload the dictionaries based on the user's selection
         // The dict property will not be preset if there were not dictionaries
