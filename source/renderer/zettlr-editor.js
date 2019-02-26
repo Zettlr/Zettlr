@@ -158,6 +158,7 @@ class ZettlrEditor {
         linkStart: '\\[\\[', // Start of links?
         linkEnd: '\\]\\]' // End of links?
       },
+      continuelistModes: [ 'markdown', 'markdown-zkn' ],
       extraKeys: {
         'Cmd-F': false,
         'Ctrl-F': false,

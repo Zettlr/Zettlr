@@ -185,12 +185,11 @@
       }
     }
 
-    let mode = CodeMirror.getMode(config, {
-      name: 'spellchecker',
-      highlightFormatting: true
-    })
-    return CodeMirror.overlayMode(mode, markdownZkn, true)
+    return CodeMirror.overlayMode(CodeMirror.getMode(config, 'spellchecker'), markdownZkn, true)
   })
+
+  // Define the corresponding MIME
+  CodeMirror.defineMIME('text/x-markdown', 'markdown-zkn')
 
   /**
     * MULTIPLEX MODE: This will by default load our internal mode cascade
