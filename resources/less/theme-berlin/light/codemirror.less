@@ -10,7 +10,7 @@
       font-family: @font-mono;
         .cm-comment    { color: @grey-2; }
         .cm-attribute  { color: @blue-0; }
-        .cm-builtin    { color: @blue-0; } // CSS mode IDs
+        .cm-builtin    { color: @blue-0; } // Some modes use this for keywords
         .cm-string     { color: @green-0; }
         .cm-string-2   { color: @gold-selection-dark; }
         .cm-variable   { color: @grey-6; }
@@ -35,6 +35,7 @@
   font-family: @font-mono;
     &.cm-comment    { color: @grey-2; }
     &.cm-attribute  { color: @blue-0; }
+    &.cm-builtin    { color: @blue-0; } // Some modes use this for keywords
     &.cm-string     { color: @green-0; }
     &.cm-string-2   { color: @gold-selection-dark; }
     &.cm-variable   { color: @grey-6; }

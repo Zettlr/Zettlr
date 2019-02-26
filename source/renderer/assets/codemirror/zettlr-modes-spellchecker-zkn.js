@@ -287,6 +287,13 @@
         innerStyle: 'fenced-code'
       },
       {
+        open: /```shell|```bash/gm, // highlight.js differs between shell and bash
+        close: '```',
+        mode: CodeMirror.getMode(config, 'text/x-sh'),
+        delimStyle: 'formatting-code-block',
+        innerStyle: 'fenced-code'
+      },
+      {
         open: '```yaml',
         close: '```',
         // We need regular expressions to keep the YAML mode simple. It now
