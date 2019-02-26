@@ -444,7 +444,7 @@ class ZettlrPreview {
         // Finally request the file
         if (this._data[index]) {
           // Request this file
-          this._renderer.requestFile(this._data[index].hash)
+          global.ipc.send('file-get', this._data[index].hash)
         }
       }
     })
