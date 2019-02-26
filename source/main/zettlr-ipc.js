@@ -387,15 +387,15 @@ class ZettlrIPC {
 
       // Returns the custom CSS's file contents
       case 'get-custom-css':
-        return this._app.getConfig().getCustomCSS()
+        return global.css.get()
 
       // Returns the custm CSS's file name
       case 'get-custom-css-path':
-        return this._app.getConfig().getCustomCSSPath()
+        return global.css.getPath()
 
       // Updates the file contents
       case 'set-custom-css':
-        return this._app.getConfig().setCustomCSS(arg)
+        return global.css.set(arg)
 
       default:
         console.log(trans('system.unknown_command', cmd))

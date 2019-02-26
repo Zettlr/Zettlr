@@ -57,6 +57,7 @@ class Zettlr {
     this.currentDir = null // Current working directory (object)
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = []
+    this._providers = {} // Holds all app providers (as properties of this object)
 
     this._commands = [] // This array holds all commands that can be performed
     loadCommands(this).then((cmd) => {
@@ -69,6 +70,10 @@ class Zettlr {
 
     // INTERNAL OBJECTS
     this.app = parentApp // Internal pointer to app object
+
+    // First thing that has to be done is to load the service providers
+    this._bootServiceProviders()
+
     this.config = new ZettlrConfig(this)
     // Init translations
     let metadata = i18n(global.config.get('appLang'))
@@ -126,6 +131,17 @@ class Zettlr {
       })
       this.poll()
     }, POLL_TIME)
+  }
+
+  /**
+   * Boots the service providers
+   * @return {void} Doesn't return
+   */
+  _bootServiceProviders () {
+    // The order is important, we'll just save them to this object
+    this._providers = {
+      'css': require('./providers/css-provider.js')
+    }
   }
 
   /**
