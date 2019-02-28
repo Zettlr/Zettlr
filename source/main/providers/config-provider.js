@@ -21,11 +21,11 @@ const path = require('path')
 const uuid = require('uuid/v5')
 const EventEmitter = require('events')
 const bcp47 = require('bcp-47')
-const ZettlrValidation = require('../common/zettlr-validation.js')
+const ZettlrValidation = require('../../common/zettlr-validation.js')
 const { app } = require('electron')
-const { ignoreFile, isDir, isDictAvailable } = require('../common/zettlr-helpers.js')
-const { enumDictFiles, enumLangFiles, getLanguageFile } = require('../common/lang/i18n.js')
-const COMMON_DATA = require('../common/data.json')
+const { ignoreFile, isDir, isDictAvailable } = require('../../common/zettlr-helpers.js')
+const { getLanguageFile } = require('../../common/lang/i18n.js')
+const COMMON_DATA = require('../../common/data.json')
 
 /**
  * This class represents the configuration of Zettlr, represented by the
@@ -33,14 +33,13 @@ const COMMON_DATA = require('../common/data.json')
  * variables. Basically, this class tells Zettlr what the user wants and what
  * the environment Zettlr is running in is capable of.
  */
-class ZettlrConfig extends EventEmitter {
+class ConfigProvider extends EventEmitter {
   /**
     * Preset sane defaults, then load the config and perform a system check.
     * @param {Zettlr} parent Parent Zettlr object.
     */
-  constructor (parent) {
+  constructor () {
     super() // Initiate the emitter
-    this.parent = parent
     this.configPath = app.getPath('userData')
     this.configFile = path.join(this.configPath, 'config.json')
 
@@ -160,7 +159,7 @@ class ZettlrConfig extends EventEmitter {
     this.checkPaths()
 
     // Boot up the validation rules
-    let rules = require('../common/validation.json')
+    let rules = require('../../common/validation.json')
     for (let key in rules) {
       this._rules.push(new ZettlrValidation(key, rules[key]))
     }
@@ -243,7 +242,19 @@ class ZettlrConfig extends EventEmitter {
        * Persists the current configuration to disk
        * @return {void} Does not return
        */
-      save: () => { this.save() }
+      save: () => { this.save() },
+      /**
+       * Adds a path to the startup path array
+       * @param {String} p The path to add
+       * @return {Boolean} Whether or not the call succeeded
+       */
+      addPath: (p) => { return this.addPath(p) },
+      /**
+       * Removes a path from the startup path array
+       * @param  {String} p The path to remove
+       * @return {Boolean}   Whether or not the call succeeded
+       */
+      removePath: (p) => { return this.removePath(p) }
     }
   }
 
@@ -400,11 +411,14 @@ class ZettlrConfig extends EventEmitter {
   /**
     * Removes a path from the startup paths
     * @param  {String} p The path to be removed
+    * @return {Boolean} Whether or not the call succeeded.
     */
   removePath (p) {
     if (this.config['openPaths'].includes(p)) {
       this.config['openPaths'].splice(this.config['openPaths'].indexOf(p), 1)
+      return true
     }
+    return false
   }
 
   /**
@@ -462,22 +476,6 @@ class ZettlrConfig extends EventEmitter {
 
     // Return the best match that the app can find (only the tag).
     return getLanguageFile(locale).tag
-  }
-
-  /**
-    * Return all supported languages.
-    * @return {Array} An array containing all allowed language codes.
-    */
-  getSupportedLangs () {
-    return enumLangFiles().map(elem => elem.tag)
-  }
-
-  /**
-    * This function dynamically generates an array of all available dictionaries.
-    * @return {Array} An array containing all language codes available.
-    */
-  getDictionaries () {
-    return enumDictFiles().map(elem => elem.tag)
   }
 
   /**
@@ -595,4 +593,4 @@ class ZettlrConfig extends EventEmitter {
   }
 }
 
-module.exports = ZettlrConfig
+module.exports = new ConfigProvider()

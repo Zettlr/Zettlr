@@ -21,7 +21,6 @@ const path = require('path')
 const ZettlrIPC = require('./zettlr-ipc.js')
 const ZettlrWindow = require('./zettlr-window.js')
 const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
-const ZettlrConfig = require('./zettlr-config.js')
 const ZettlrTags = require('./zettlr-tags.js')
 const ZettlrDir = require('./zettlr-dir.js')
 const ZettlrFile = require('./zettlr-file.js')
@@ -74,7 +73,6 @@ class Zettlr {
     // First thing that has to be done is to load the service providers
     this._bootServiceProviders()
 
-    this.config = new ZettlrConfig(this)
     // Init translations
     let metadata = i18n(global.config.get('appLang'))
 
@@ -140,6 +138,7 @@ class Zettlr {
   _bootServiceProviders () {
     // The order is important, we'll just save them to this object
     this._providers = {
+      'config': require('./providers/config-provider.js'),
       'css': require('./providers/css-provider.js')
     }
   }
@@ -383,7 +382,7 @@ class Zettlr {
         newDir = newFile.parent
       } else if ((newDir = this.findDir({ 'path': f })) != null) {
         // Do nothing
-      } else if (this.getConfig().addPath(f)) {
+      } else if (global.config.addPath(f)) {
         if (isFile(f)) {
           newFile = new ZettlrFile(this, f)
           this._openPaths.push(newFile)
@@ -543,7 +542,7 @@ class Zettlr {
         if (p === this.getCurrentDir()) {
           this.setCurrentDir(null)
         }
-        this.getConfig().removePath(p.getPath())
+        global.config.removePath(p.getPath())
         this.getPaths().splice(this.getPaths().indexOf(p), 1)
         this.ipc.send('paths-update', this.getPathDummies())
         break
@@ -678,12 +677,6 @@ class Zettlr {
   getPaths () { return this._openPaths }
 
   getPathDummies () { return this._openPaths.map(elem => elem.getMetadata()) }
-
-  /**
-    * Returns the ZettlrConfig object
-    * @return {ZettlrConfig} The configuration
-    */
-  getConfig () { return this.config }
 
   /**
     * Returns the ZettlrTags object

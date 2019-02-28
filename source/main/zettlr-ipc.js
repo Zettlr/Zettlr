@@ -98,6 +98,13 @@ class ZettlrIPC {
     // Enable some globals for sending to the renderer
     global.ipc = {
       /**
+       * Sends an arbitrary message to the renderer.
+       * @param  {String} cmd The command to be sent
+       * @param  {Object} arg An optional object with data.
+       * @return {void}     Does not return.
+       */
+      send: (cmd, arg) => { this.send(cmd, arg) },
+      /**
        * Sends a message to the renderer and displays it as a notification.
        * @param  {String} msg The message to be sent.
        * @return {void}       Does not return.
@@ -163,10 +170,6 @@ class ZettlrIPC {
     */
   handleEvent (cmd, cnt) {
     // We received a new event and need to handle it.
-
-    // This class can handle some events by itself, because they don't involve
-    // a lot of code and it saves space doing it here. Therefore we need some vars.
-
     try {
       let res = this._app.runCommand(cmd, cnt)
       return res // In case the command has run there's no need to handle it.
@@ -267,14 +270,6 @@ class ZettlrIPC {
       case 'toggle-snippets':
         global.config.set('snippets', !global.config.get('snippets'))
         this.send('config-update')
-        break
-
-      case 'get-preferences':
-        let toSend = global.config.get() // get() with no arguments returns the whole config
-        // Add available translations and dictionaries
-        toSend.supportedLangs = this._app.getConfig().getSupportedLangs()
-        toSend.availableDicts = this._app.getConfig().getDictionaries()
-        this.send('preferences', toSend)
         break
 
       case 'get-pdf-preferences':
