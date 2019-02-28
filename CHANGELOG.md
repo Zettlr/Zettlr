@@ -22,6 +22,7 @@
 - The cursor over the Quicklook windows' window controls is now the default, not the dragging.
 - Added `shell` syntax highlighting (using keyword: `shell` or `bash` [for compatibility with Highlight.js]).
 - Adapted the styles - now the filenames stay readable even during global searches.
+- If you drag a file out of the app and cross a directory, it won't retain its highlighted state after you finish your drag&drop-operation.
 
 ## Under the Hood
 

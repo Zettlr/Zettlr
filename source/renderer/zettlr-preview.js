@@ -275,6 +275,8 @@ class ZettlrPreview {
             elem = elem.parent()
           }
           global.ipc.send('file-drag-start', { 'hash': elem.attr('data-hash') })
+          // Remove the highlight class over directories.
+          $('#directories ul li').removeClass('highlight')
           return false // Return false to cancel the current drag operation
         }
       }

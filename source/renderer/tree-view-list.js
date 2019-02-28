@@ -119,6 +119,7 @@ class TreeView {
           global.ipc.send('file-drag-start', {
             'hash': ui.draggable.attr('data-hash')
           })
+          this._dir.removeClass('highlight')
           return false
         } else {
           this._dir.removeClass('highlight')
