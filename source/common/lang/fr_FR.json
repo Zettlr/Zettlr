@@ -479,7 +479,7 @@
       "export_temp_file": "Impossible de supprimer le fichier temporaire &quot;%s&quot;. Supprimer manuell, s'il vous plaît.",
       "export_error_title": "Impossible d'exporter",
       "export_error_message": "N'été pas exporter: %s",
-      "open_root_error": "Impossibler d'ouvrir %s"
+      "open_root_error": "Impossible d'ouvrir %s"
     },
     "save_changes_title": "Annuler des modifications?",
     "save_changes_message": "Le fichier contient modifications n'enregistrais pas. Annuler ou enregistrer?",
