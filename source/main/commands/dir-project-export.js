@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        DirProjectExport command
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This command exports a directory as project.
+ *
+ * END HEADER
+ */
+
 const ZettlrCommand = require('./zettlr-command')
 
 class DirProjectExport extends ZettlrCommand {

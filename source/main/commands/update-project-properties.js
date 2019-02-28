@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        UpdateProjectProperties command
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This command updates one or more project properties.
+ *
+ * END HEADER
+ */
+
 const ZettlrCommand = require('./zettlr-command')
 
 class UpdateProjectProperties extends ZettlrCommand {

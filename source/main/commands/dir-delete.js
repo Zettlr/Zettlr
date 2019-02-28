@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        DirDelete command
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This command deletes a directory.
+ *
+ * END HEADER
+ */
+
 const ZettlrCommand = require('./zettlr-command')
 
 class DirDelete extends ZettlrCommand {

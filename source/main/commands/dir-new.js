@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        DirNew command
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This command creates a new directory.
+ *
+ * END HEADER
+ */
+
 const ZettlrCommand = require('./zettlr-command')
 const { trans } = require('../../common/lang/i18n')
 

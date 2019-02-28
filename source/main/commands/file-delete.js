@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        FileDelete command
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This command deletes a file.
+ *
+ * END HEADER
+ */
+
 const ZettlrCommand = require('./zettlr-command')
 
 class FileDelete extends ZettlrCommand {

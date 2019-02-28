@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        DirNewProject command
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This command creates a new project
+ *
+ * END HEADER
+ */
+
 const ZettlrCommand = require('./zettlr-command')
 
 class DirNewProject extends ZettlrCommand {

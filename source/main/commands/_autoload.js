@@ -1,6 +1,16 @@
 /**
- * This is the autoloader function that retrieves and returns all commands
- * placed in this folder.
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        autoloader
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This function loads all commands from this directory and
+ *                  returns them.
+ *
+ * END HEADER
  */
 
 const fs = require('fs')

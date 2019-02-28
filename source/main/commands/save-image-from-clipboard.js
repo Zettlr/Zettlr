@@ -1,4 +1,16 @@
-// This command saves an image from clipboard
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        SaveImage command
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This command saves an image from clipboard.
+ *
+ * END HEADER
+ */
 
 const ZettlrCommand = require('./zettlr-command')
 const { trans } = require('../../common/lang/i18n')

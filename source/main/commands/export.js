@@ -1,4 +1,16 @@
-// This command saves an image from clipboard
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Export command
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This command exports a single file.
+ *
+ * END HEADER
+ */
 
 const ZettlrCommand = require('./zettlr-command')
 const ZettlrPrint = require('../zettlr-print.js')

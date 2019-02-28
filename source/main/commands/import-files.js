@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        ImportFiles command
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This command imports files into the app.
+ *
+ * END HEADER
+ */
+
 const ZettlrCommand = require('./zettlr-command')
 const { trans } = require('../../common/lang/i18n')
 const ZettlrImport = require('../zettlr-import')

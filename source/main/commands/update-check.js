@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        UpdateCheck command
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This command performs an update check.
+ *
+ * END HEADER
+ */
+
 const ZettlrCommand = require('./zettlr-command')
 const got = require('got')
 const semver = require('semver')

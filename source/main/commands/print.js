@@ -1,4 +1,16 @@
-// This command saves an image from clipboard
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Print command
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This command shows the print window.
+ *
+ * END HEADER
+ */
 
 const ZettlrCommand = require('./zettlr-command')
 const ZettlrPrint = require('../zettlr-print.js')

@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        DirRename command
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This command renames a directory.
+ *
+ * END HEADER
+ */
+
 const ZettlrCommand = require('./zettlr-command')
 const path = require('path')
 const { hash } = require('../../common/zettlr-helpers.js')
