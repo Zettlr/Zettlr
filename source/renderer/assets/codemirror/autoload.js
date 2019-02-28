@@ -10,8 +10,9 @@ require('codemirror/addon/mode/overlay')
 require('codemirror/addon/mode/multiplex') // Multiplex needed for syntax highlighting
 
 // 2. Editing addons
-require('codemirror/addon/edit/continuelist')
+// require('codemirror/addon/edit/continuelist')
 require('codemirror/addon/edit/closebrackets')
+require('./continuelist.js')
 require('./indentlist.js')
 
 // 3. Display addons
