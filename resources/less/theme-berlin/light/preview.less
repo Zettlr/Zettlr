@@ -23,13 +23,10 @@
             &.file:hover {
                 // important is needed to not mess with the heatmap styles
                 background-color:@grey-0 !important;
+                p.filename { color: @grey-7 !important; }
             }
 
-            p.filename {
-                background-image:linear-gradient(90deg, @grey-7 0%, @grey-7 90%, transparent 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
+            p.filename { color: @grey-7; }
 
             /* Taglist stuff */
             .taglist:hover .tag { border:2px solid white; }

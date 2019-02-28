@@ -149,6 +149,7 @@ class ZettlrPreview {
 
       // Calculate search result bg color, in the style of a heat map.
       let bgcolor = ''
+      let color = ''
       if (this._showSearchResults && d.type === 'file') {
         let res = this._results.find((elem) => { return (elem.hash === d.hash) })
         let w = 0
@@ -156,7 +157,8 @@ class ZettlrPreview {
           w += r.weight
         }
         w = Math.round(w / this._maxWeight * 100) // Percentage
-        bgcolor = ` style="background-color:hsla(159, ${w}%, 50%, ${w / 100});"` // hue of 159 corresponds to @green-0
+        bgcolor = ` style="background-color:hsl(159, ${w}%, 50%);"` // hue of 159 corresponds to @green-0
+        color = ` style="color: ${(w > 50) ? 'black' : 'white'};"`
       }
 
       let sort = (d.type === 'directory' || d.type === 'virtual-directory') ? `data-sorting="${d.sorting}" ` : ''
@@ -194,7 +196,7 @@ class ZettlrPreview {
         }
         tl += `</div>`
 
-        elem += `<p class="filename">${d.name.substr(0, d.name.lastIndexOf('.'))}</p>${tl}`
+        elem += `<p class="filename"${color}>${d.name.substr(0, d.name.lastIndexOf('.'))}</p>${tl}`
 
         if (this._snippets) {
           let extindicator = (d.ext === '.tex') ? '<span class="tex-indicator">TeX</span>' : ''

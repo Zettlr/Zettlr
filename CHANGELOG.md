@@ -21,6 +21,7 @@
 - Updates to the zooming of the editor's font: Now it'll stop at both 30 percent and 400 percent for lower and upper limits. Exceeding these may yield very weird errors.
 - The cursor over the Quicklook windows' window controls is now the default, not the dragging.
 - Added `shell` syntax highlighting (using keyword: `shell` or `bash` [for compatibility with Highlight.js]).
+- Adapted the styles - now the filenames stay readable even during global searches.
 
 ## Under the Hood
 
