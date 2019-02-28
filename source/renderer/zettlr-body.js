@@ -82,6 +82,17 @@ class ZettlrBody {
       return false
     }, false)
 
+    // Apply certain classes when the meta keys that trigger special actions are
+    // pressed.
+    $(document).on('keydown keyup', (event) => {
+      let metaElements = $('#editor .CodeMirror .cm-zkn-tag, #editor .CodeMirror .cm-zkn-link, #editor .CodeMirror .cma')
+      if (event.ctrlKey || event.altKey) {
+        metaElements.addClass('meta-key')
+      } else {
+        metaElements.removeClass('meta-key')
+      }
+    })
+
     // Inject a global notify and notifyError function
     global.notify = (msg) => { this.notify(msg) }
     global.notifyError = (msg) => { this.notifyError(msg) }

@@ -15,11 +15,6 @@
 
   pre { padding:0; }
 
-  a.cma {
-    cursor: pointer;
-    &:hover { text-decoration: underline; }
-  }
-
   input[type="checkbox"] {
     transform: scale(1.2);
     margin:0.2em;
@@ -82,14 +77,13 @@
 
   .cm-url, .cm-link { text-decoration: none; }
 
-  .cm-url.shift, .cm-link.shift { cursor: pointer; }
+  // Meta-key adaptions
+  .cm-zkn-tag.meta-key, .cm-zkn-link.meta-key, .cma.meta-key { cursor: pointer; }
+  .cm-zkn-tag.meta-key:hover,
+  .cm-zkn-link.meta-key:hover,
+  a.cma.meta-key:hover { text-decoration: underline; }
 
   .cm-zkn-tag { font-weight:bold; }
-
-  .cm-zkn-tag:hover, .cm-zkn-link:hover {
-    text-decoration: underline;
-    cursor:pointer;
-  }
 
   // Text-folding related stuff
   .CodeMirror-gutters {

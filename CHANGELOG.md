@@ -23,6 +23,7 @@
 - Added `shell` syntax highlighting (using keyword: `shell` or `bash` [for compatibility with Highlight.js]).
 - Adapted the styles - now the filenames stay readable even during global searches.
 - If you drag a file out of the app and cross a directory, it won't retain its highlighted state after you finish your drag&drop-operation.
+- Tags, internal links and normal links now only have a pointer cursor when one of the meta keys (currently: `Alt` or `Ctrl`) is pressed.
 
 ## Under the Hood
 
