@@ -40,6 +40,7 @@
 - The Custom CSS is now a service provider.
 - The configuration is now a service provider.
 - The tags handler class is now a service provider.
+- Removed the superfluous `getLocale`-functions from `ZettlrBody` and `ZettlrRenderer`.
 
 # 1.1.0
 

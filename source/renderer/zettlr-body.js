@@ -619,12 +619,6 @@ class ZettlrBody {
   }
 
   /**
-    * Needed by the dialog
-    * @return {String} The locale String from ZettlrRenderer
-    */
-  getLocale () { return this._renderer.getLocale() }
-
-  /**
     * Returns the renderer
     * @return {ZettlrRenderer} The renderer object
     */

@@ -730,12 +730,6 @@ class ZettlrRenderer {
   getCurrentDir () { return this._currentDir }
 
   /**
-   * Returns the language of the GUI.
-   * @return {String} The language code.
-   */
-  getLocale () { return this._lang }
-
-  /**
    * Sets the GUI language
    * @param {String} lang locale code
    */
