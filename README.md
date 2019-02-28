@@ -1,4 +1,5 @@
 # Zettlr [_ˈset·lər_]
+<a href="https://zenodo.org/badge/latestdoi/115446081"><img src="https://zenodo.org/badge/115446081.svg" alt="DOI"></a>
 
 ![The central window of Zettlr](/resources/screenshots/zettlr_view.png)
 
