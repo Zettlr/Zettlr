@@ -2,12 +2,12 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ZettlrTags class
- * CVM-Role:        Model
+ * Contains:        TagProvider class
+ * CVM-Role:        Service Provider
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     Just some basic tag-color-description relationships. Pretty basic.
+ * Description:     Handles everything tag related that's going on in the app.
  *
  * END HEADER
  */
@@ -19,13 +19,11 @@ const path = require('path')
  * This class manages the coloured tags of the app. It reads the tags on each
  * start of the app and writes them after they have been changed.
  */
-class ZettlrTags {
+class TagProvider {
   /**
    * Create the instance on program start and initially load the tags.
-   * @param {Zettlr} parent The main app object.
    */
-  constructor (parent) {
-    this._app = parent
+  constructor () {
     this._file = path.join(require('electron').app.getPath('userData'), 'tags.json')
     this._tags = []
     // The global tag database; it contains all tags that are used in any of the
@@ -76,9 +74,21 @@ class ZettlrTags {
        * Returns the global tag database
        * @return {Object} An object containing all tags.
        */
-      get: () => {
+      getTagDatabase: () => {
         return JSON.parse(JSON.stringify(this._globalTagDatabase))
-      }
+      },
+      /**
+       * Returns the special (= coloured) tags
+       * @param  {String} name An optional name to get one. Otherwise, will return all.
+       * @return {Array}      The special tag array.
+       */
+      getSpecialTags: (name) => { return this.get(name) },
+      /**
+       * Updates the special tags with an array of new ones.
+       * @param  {Array} newTags An array containing the tags to be set.
+       * @return {Boolean} True if all succeeded, false if at least one failed.
+       */
+      update: (newTags) => { return this.update(newTags) }
     }
   }
 
@@ -187,21 +197,24 @@ class ZettlrTags {
   /**
    * Updates all tags (i.e. replaces them)
    * @param  {Array} tags The new tags as an array
-   * @return {ZettlrTags} This for chainability.
+   * @return {Boolean} Whether or not all tags succeeded.
    */
   update (tags) {
     this._tags = []
+    let retVal = true
     for (let t of tags) {
       // Only update correctly set tags
       if (t.hasOwnProperty('name') && t.hasOwnProperty('color') && t.hasOwnProperty('desc')) {
         this.set(t.name, t.color, t.desc)
+      } else {
+        retVal = false
       }
     }
 
     this._save()
 
-    return this
+    return retVal
   }
 }
 
-module.exports = ZettlrTags
+module.exports = new TagProvider()

@@ -21,7 +21,6 @@ const path = require('path')
 const ZettlrIPC = require('./zettlr-ipc.js')
 const ZettlrWindow = require('./zettlr-window.js')
 const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
-const ZettlrTags = require('./zettlr-tags.js')
 const ZettlrDir = require('./zettlr-dir.js')
 const ZettlrFile = require('./zettlr-file.js')
 const ZettlrWatchdog = require('./zettlr-watchdog.js')
@@ -82,9 +81,6 @@ class Zettlr {
 
     this.ipc = new ZettlrIPC(this)
 
-    // Initiate tags
-    this._tags = new ZettlrTags(this)
-
     // Initiate the watchdog
     this.watchdog = new ZettlrWatchdog()
 
@@ -139,6 +135,7 @@ class Zettlr {
     // The order is important, we'll just save them to this object
     this._providers = {
       'config': require('./providers/config-provider.js'),
+      'tags': require('./providers/tag-provider.js'),
       'css': require('./providers/css-provider.js')
     }
   }
@@ -677,12 +674,6 @@ class Zettlr {
   getPaths () { return this._openPaths }
 
   getPathDummies () { return this._openPaths.map(elem => elem.getMetadata()) }
-
-  /**
-    * Returns the ZettlrTags object
-    * @return {ZettlrTags} The tags object
-    */
-  getTags () { return this._tags }
 
   /**
     * Returns the updater

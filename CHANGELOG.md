@@ -36,7 +36,9 @@
 - Moved the JavaScript bits out of the Handlebars templates and added them to the Dialog handler classes.
 - Code cleanup.
 - Removed the complete KaTeX dist files from the Zettlr source and switched to using the shipped files provided by the KaTeX module, reducing the binary sizes, maintenance effort and code clutter at once.
+- The Custom CSS is now a service provider.
 - The configuration is now a service provider.
+- The tags handler class is now a service provider.
 
 # 1.1.0
 

@@ -282,7 +282,7 @@ class ZettlrIPC {
         break
 
       case 'get-tags-preferences':
-        this.send('tags-preferences', this._app.getTags().get())
+        this.send('tags-preferences', global.tags.getSpecialTags())
         break
 
       // Got a new config object
@@ -296,19 +296,15 @@ class ZettlrIPC {
         break
 
       case 'update-tags':
-        this._app.getTags().update(cnt)
-        this.send('set-tags', cnt) // Send back to renderer so preview knows about this
-        break
-
-      // Send the database of tags to display explicitly in the preview pane to
-      // the renderer.
+        global.tags.update(cnt)
+        // fall through
       case 'get-tags':
-        this.send('set-tags', this._app.getTags().get())
+        this.send('set-tags', global.tags.getSpecialTags())
         break
 
       // Send the global tag database to the renderer process.
       case 'get-tags-database':
-        this.send('tags-database', global.tags.get())
+        this.send('tags-database', global.tags.getTagDatabase())
         break
 
       // Handle dropped files/folders
@@ -378,7 +374,7 @@ class ZettlrIPC {
 
       // Send the global tag database to the renderer process.
       case 'get-tags-database':
-        return global.tags.get()
+        return global.tags.getTagDatabase()
 
       // Returns the custom CSS's file contents
       case 'get-custom-css':
