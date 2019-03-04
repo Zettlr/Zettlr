@@ -195,6 +195,20 @@ class ZettlrEditor {
           return changeObj.cancel() // Cancel handling of the event
         }
 
+        // Next possibility: There's HTML formatted text in the clipboard. In
+        // this case we'll be sneaky and simply exchange the plain text with
+        // the Markdown formatted version.
+        let html = clipboard.readHTML()
+        if (html && html.length > 0) {
+          // We've got HTML, so let's fire up Showdown.js
+          let plain = this._showdown.makeMarkdown(html)
+          // Let's update the (very likely plain) HTML text with some Markdown
+          // that retains the formatting. PLEASE NOTE that we have to split the
+          // resulting string as the update method expects an Array of lines,
+          // not a complete string with line breaks.
+          return changeObj.update(changeObj.from, changeObj.to, plain.split('\n'))
+        }
+
         // Continue with checking for potential images.
         let newtext = []
         for (let i in changeObj.text) {
