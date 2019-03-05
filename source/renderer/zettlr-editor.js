@@ -198,10 +198,10 @@ class ZettlrEditor {
         // Next possibility: There's HTML formatted text in the clipboard. In
         // this case we'll be sneaky and simply exchange the plain text with
         // the Markdown formatted version. We need an additional check to make
-        // sure the HTML version is indeed different than the plain text version,
-        // as some apps may write the same plain text stuff into the HTML part
-        // of the clipboard, in which case dragging it through the converter
-        // will result in unwanted behaviour.
+        // sure the HTML version is indeed different than the plain text
+        // version, as some apps may write the same plain text stuff into the
+        // HTML part of the clipboard, in which case dragging it through the
+        // converter will result in unwanted behaviour (including Electron).
         let html = clipboard.readHTML()
         let plain = clipboard.readText()
         if (html && html.length > 0 && plain && html !== plain) {
