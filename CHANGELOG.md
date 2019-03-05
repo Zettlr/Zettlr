@@ -25,6 +25,7 @@
 - If you drag a file out of the app and cross a directory, it won't retain its highlighted state after you finish your drag&drop-operation.
 - Tags, internal links and normal links now only have a pointer cursor when one of the meta keys (currently: `Alt` or `Ctrl`) is pressed.
 - Implemented formatting support for HTML paste operations. If there's HTML in the clipboard as you paste, it will be converted to Markdown so that the formatting is retained.
+- Removed the minimum window size constraint so that the application window will be resizable to half a screen even on smaller devices.
 
 ## Under the Hood
 

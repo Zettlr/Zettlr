@@ -70,8 +70,6 @@ class ZettlrWindow {
       x: winX,
       y: winY,
       acceptFirstMouse: true,
-      minWidth: 800,
-      minHeight: 450,
       show: false,
       icon: 'icons/png/64x64.png',
       webPreferences: {
