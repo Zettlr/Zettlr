@@ -44,6 +44,22 @@ global.filesToOpen = []
  * @type {Boolean}
  */
 let isFirstInstance = app.requestSingleInstanceLock()
+
+/**
+ * Exit immediately if this is a second instance of Zettlr.
+ * @param  {Boolean} isFirstInstance Whether or not this is a second instance.
+ */
+if (!isFirstInstance) {
+  app.exit(0)
+}
+
+/**
+ * This event will be called if another instance of Zettlr has been opened with
+ * the argv of that instance.
+ * @param {Object} event The instance event
+ * @param {Array} argv The arguments the second instance had received
+ * @param {String} cwd The current working directory
+ */
 app.on('second-instance', (event, argv, cwd) => {
   // Retrieve all potential files from the list of arguments. Thanks to
   // Abricotine for this logic!
@@ -128,11 +144,3 @@ process.on('unhandledRejection', (err) => {
   // Just log to console.
   console.error('Received an unhandled rejection: ' + err.message)
 })
-
-/**
- * Quit if this is a second instance of Zettlr.
- * @param  {Boolean} isFirstInstance Whether or not this is a second instance.
- */
-if (!isFirstInstance) {
-  app.quit()
-}

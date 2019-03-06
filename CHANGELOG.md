@@ -27,6 +27,7 @@
 - Implemented formatting support for HTML paste operations. If there's HTML in the clipboard as you paste, it will be converted to Markdown so that the formatting is retained.
 - Removed the minimum window size constraint so that the application window will be resizable to half a screen even on smaller devices.
 - Restored the window maximise/minimise-functionality by double-clicking on the toolbar.
+- Fixed a small bug that would throw errors on Windows and Linux if you would open a file in Zettlr by double-clicking it in the file browser while Zettlr was already running.
 
 ## Under the Hood
 
