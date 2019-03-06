@@ -26,6 +26,7 @@
 - Tags, internal links and normal links now only have a pointer cursor when one of the meta keys (currently: `Alt` or `Ctrl`) is pressed.
 - Implemented formatting support for HTML paste operations. If there's HTML in the clipboard as you paste, it will be converted to Markdown so that the formatting is retained.
 - Removed the minimum window size constraint so that the application window will be resizable to half a screen even on smaller devices.
+- Restored the window maximise/minimise-functionality by double-clicking on the toolbar.
 
 ## Under the Hood
 

@@ -107,9 +107,9 @@ class ZettlrToolbar {
       this._renderer.handleEvent(command, content)
     })
 
-    // Enable maximise window only on double-click of the toolbar
+    // Toggle the maximisation status of the main window
     this._div.on('dblclick', (e) => {
-      this._renderer.handleEvent('win-maximise')
+      global.ipc.send('win-maximise')
     })
 
     // Tippify all buttons
