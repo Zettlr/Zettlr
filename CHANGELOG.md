@@ -28,6 +28,7 @@
 - Removed the minimum window size constraint so that the application window will be resizable to half a screen even on smaller devices.
 - Restored the window maximise/minimise-functionality by double-clicking on the toolbar.
 - Fixed a small bug that would throw errors on Windows and Linux if you would open a file in Zettlr by double-clicking it in the file browser while Zettlr was already running.
+- Links are now correctly detected by the preview algorithm.
 
 ## Under the Hood
 
@@ -45,6 +46,7 @@
 - The configuration is now a service provider.
 - The tags handler class is now a service provider.
 - Removed the superfluous `getLocale`-functions from `ZettlrBody` and `ZettlrRenderer`.
+- Pulled in the URL regular expression from the GFM CodeMirror mode so that the pre-rendered links by the command are the same as those detected by the GFM mode.
 
 # 1.1.0
 
