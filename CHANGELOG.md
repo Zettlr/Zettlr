@@ -2,6 +2,7 @@
 
 ## GUI and Functionality
 
+- **New Feature**: Zettlr can now import and export both `textbundle` and `textpack` files. Refer to [textbundle.org](http://textbundle.org/) for more information.
 - Removed the Speech submenu from Windows and Linux, as it is only used on macOS.
 - **Attention**: The recent documents submenu is now to be found in the `File` menu! It resides no longer in the toolbar.
 - Added an "Inspect Element" context menu item if the debug mode is enabled.
@@ -9,7 +10,6 @@
 - Fixes in the math rendering. Now the app will correctly render all equations, be they inline or multiline.
 - Added a flag to let the app know if you want to receive beta release notifications. If you tick the checkbox, Zettlr will also present you with beta releases, so that you can stay up to date.
 - When importing files, the "All Files" filter is now at the top and should be selected by default.
-- Zettlr can now import and export both `textbundle` and `textpack` files. Refer to [textbundle.org](http://textbundle.org/) for more information.
 - Fixed a small bug that would render exporting of standalone files impossible.
 - Rendered Markdown links now retain the outer formatting (e.g., if you wrapped the whole link inside bold or emphasis).
 - The Zettlr default `tex`-template now doesn't break checkbox exports by including the `amsmath` and `amssymb`-packages.
