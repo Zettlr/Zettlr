@@ -88,6 +88,11 @@
       "command": "copy-as-html"
     },
     { "label": "menu.paste", "role": "paste" },
+    {
+      "label": "menu.paste_plain",
+      "accelerator": "CmdOrCtrl+Shift+V",
+      "command": "paste-as-plain"
+    },
     { "label": "menu.select_all", "role": "selectall" },
     { "type": "separator" },
     {

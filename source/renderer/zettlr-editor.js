@@ -1007,6 +1007,22 @@ class ZettlrEditor {
   }
 
   /**
+   * This function pastes a clipboard selection as plain text regardless of what
+   * the formatted HTML contents say.
+   * @return {ZettlrEditor} Chainability.
+   */
+  pasteAsPlain () {
+    // Simply overwrite the clipboard's HTML with the plain text contents to
+    // make it appear we've "matched style" lol
+    let plain = clipboard.readText()
+
+    // Simple programmatical paste.
+    if (plain && plain.length > 0) this.insertText(plain)
+
+    return this
+  }
+
+  /**
    * Enables the resizable between editor and sidebar.
    * @return {void} Does not return.
    */

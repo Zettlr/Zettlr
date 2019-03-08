@@ -24,7 +24,7 @@
 - Adapted the styles - now the filenames stay readable even during global searches.
 - If you drag a file out of the app and cross a directory, it won't retain its highlighted state after you finish your drag&drop-operation.
 - Tags, internal links and normal links now only have a pointer cursor when one of the meta keys (currently: `Alt` or `Ctrl`) is pressed.
-- Implemented formatting support for HTML paste operations. If there's HTML in the clipboard as you paste, it will be converted to Markdown so that the formatting is retained.
+- Implemented formatting support for HTML paste operations. If there's HTML in the clipboard as you paste, it will be converted to Markdown so that the formatting is retained. If you do not want to keep the formatting, simply hold down `Shift` before you paste, so that the formatting will not be kept.
 - Removed the minimum window size constraint so that the application window will be resizable to half a screen even on smaller devices.
 - Restored the window maximise/minimise-functionality by double-clicking on the toolbar.
 - Fixed a small bug that would throw errors on Windows and Linux if you would open a file in Zettlr by double-clicking it in the file browser while Zettlr was already running.

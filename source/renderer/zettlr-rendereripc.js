@@ -569,6 +569,11 @@ class ZettlrRendererIPC {
         this._app.getEditor().copyAsHTML()
         break
 
+      // Paste the current clipboard selection as plain text
+      case 'paste-as-plain':
+        this._app.getEditor().pasteAsPlain()
+        break
+
       // Return to the app a fresh list of IDs available.
       case 'citeproc-ids':
         // Set a timeout to re-send the command in case the citeproc was not

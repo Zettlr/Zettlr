@@ -111,6 +111,7 @@
     "copy_id": "Copy ID",
     "copy_html": "Copy as HTML",
     "paste": "Paste",
+    "paste_plain": "Paste without style",
     "select_all": "Select all",
     "find_file": "Find in file",
     "find_dir": "Find in directory",

@@ -59,6 +59,11 @@
     "role": "paste"
   },
   {
+    "label": "menu.paste_plain",
+    "accelerator": "CmdOrCtrl+Shift+V",
+    "command": "paste-as-plain"
+  },
+  {
     "type": "separator"
   },
   {
