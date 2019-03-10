@@ -18,49 +18,10 @@ const { makeSearchRegEx } = require('../common/zettlr-helpers.js')
 const { trans } = require('../common/lang/i18n.js')
 
 // CodeMirror related includes
-
-// 1. Mode addons
-require('codemirror/addon/mode/overlay')
-require('codemirror/addon/mode/multiplex') // Multiplex needed for syntax highlighting
-
-// 2. Editing addons
-require('codemirror/addon/edit/continuelist')
-require('codemirror/addon/edit/closebrackets')
-require('./assets/codemirror/indentlist.js')
-
-// 3. Display addons
-require('codemirror/addon/display/fullscreen')
-
-// 4. Search addons
-require('codemirror/addon/search/searchcursor')
-require('codemirror/addon/scroll/annotatescrollbar')
-
-// 5. Central modes
-require('codemirror/mode/markdown/markdown')
-require('codemirror/mode/gfm/gfm')
-require('codemirror/mode/stex/stex')
-
-// 6. Code highlighting modes
-require('codemirror/mode/javascript/javascript')
-require('codemirror/mode/clike/clike')
-require('codemirror/mode/css/css')
-require('codemirror/mode/php/php')
-require('codemirror/mode/python/python')
-require('codemirror/mode/r/r')
-require('codemirror/mode/ruby/ruby')
-require('codemirror/mode/sql/sql')
-require('codemirror/mode/swift/swift')
-require('codemirror/mode/yaml/yaml')
-
-// Zettlr specific addons
-require('./assets/codemirror/zettlr-plugin-markdown-shortcuts.js')
-require('./assets/codemirror/zettlr-modes-spellchecker-zkn.js')
-require('./assets/codemirror/zettlr-plugin-footnotes.js')
-require('./assets/codemirror/zettlr-plugin-render-images.js')
-require('./assets/codemirror/zettlr-plugin-render-links.js')
-require('./assets/codemirror/zettlr-plugin-render-tasks.js')
-require('./assets/codemirror/zettlr-plugin-render-iframes.js')
-require('./assets/codemirror/zettlr-plugin-markdown-header-classes.js')
+// The autoloader requires all necessary CodeMirror addons and modes that are
+// used by the main class. It simply folds about 70 lines of code into an extra
+// file.
+require('./assets/codemirror/autoload.js')
 
 // Finally CodeMirror itself
 const CodeMirror = require('codemirror')

@@ -7,6 +7,7 @@
 ## Under the Hood
 
 - Bumped dependencies.
+- The Quicklook-windows will now also load the correct CodeMirror-plugins from the autoload file.
 
 # 1.2.0
 
