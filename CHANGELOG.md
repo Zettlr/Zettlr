@@ -1,3 +1,13 @@
+# (no version assigned)
+
+## GUI and Functionality
+
+(nothing here)
+
+## Under the Hood
+
+- Bumped dependencies.
+
 # 1.2.0
 
 ## GUI and Functionality

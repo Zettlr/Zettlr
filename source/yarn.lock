@@ -264,10 +264,10 @@ chownr@^1.1.1:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.1.tgz#54726b8b8fff4df053c42187e801fb4412df1494"
   integrity sha512-j38EvO5+LHX84jlo6h4UzmOwi0UgW61WRyPtJz4qaadK5eY3BTS5TY/S1Stc3Uk2lIM6TPevAlULiEJwie860g==
 
-citeproc@^2.1.214:
-  version "2.1.214"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.1.214.tgz#f5204b0c4f44501c54b05092e3e95d1cef766adb"
-  integrity sha512-Aiex/efdxneSd6T/+duWiwug2WHU4rXk6HGg6FAnNlymbSCYiXt6wKBOVtCyopBr0PuDTkLPa2XEe/EFwKBzrA==
+citeproc@^2.1.220:
+  version "2.1.220"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.1.220.tgz#f4252267d91f2403f6d594d8c464da0f5265c544"
+  integrity sha512-P3xyU9lP2SytSvLU+R6yhepZTGFTBGc8w6JBr9eo7gxibHNNB78nMpdhDsE6+UhCqt7CFdiEhapPeAz4O3hvyg==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -1210,9 +1210,9 @@ npmlog@^4.0.2:
     set-blocking "~2.0.0"
 
 nspell@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/nspell/-/nspell-2.1.1.tgz#42a54e12812137b3e2e919d76da62541b56b8cd0"
-  integrity sha512-ubFjxhpFSHbYVAKFgRarIPQ5H5GfFNVQAjv0bYd+vnG+O2nXZJg8o9rXyIzyXdsOZDEhR/PC/GcINXaW7PEnNw==
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/nspell/-/nspell-2.1.2.tgz#429a1bcd4288e93bd0989e8fa5d4ab2c3950e00a"
+  integrity sha512-j79L4A5aJSiswMUJ/6BW8+7ytgBUVce5BJX6xq8LtvKQpU96CMB340/yMeREH9U+gB/8dk4ctTn62DLiPMAXsA==
   dependencies:
     is-buffer "^2.0.0"
 
@@ -1701,10 +1701,10 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
 
-tippy.js@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-4.0.3.tgz#fc1bdb1f995616099bd1007e42d9dbb66d081797"
-  integrity sha512-an3hGGD29DruVArvST9LhiqrFEK8Lf7/nvhUir2Z/D8LmsmrO3Folw3YoG0ha2QUqbmAMKxpcSOvnHWi3rdl2Q==
+tippy.js@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-4.0.4.tgz#1cfd83fc6cfd1c459bb7e08b5ad9bc97008f61bb"
+  integrity sha512-VXwJ2PXUvSTqV0RA5n5jzAdXsXnhMNX/aBYhC2j2YLg1/gekFWqVffbUQMVvwrqT4zmpm4Bp7tO8MVkvaaZ5Pg==
   dependencies:
     popper.js "^1.14.7"
 

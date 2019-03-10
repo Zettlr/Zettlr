@@ -915,10 +915,10 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-"@types/node@^8.0.24":
-  version "8.10.39"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.39.tgz#e7e87ad00364dd7bc485c940926345b8ec1a26ca"
-  integrity sha512-rE7fktr02J8ybFf6eysife+WF+L4sAHWzw09DgdCebEu+qDwMvv4zl6Bc+825ttGZP73kCKxa3dhJOoGJ8+5mA==
+"@types/node@^10.12.18":
+  version "10.12.30"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.30.tgz#4c2b4f0015f214f8158a347350481322b3b29b2f"
+  integrity sha512-nsqTN6zUcm9xtdJiM9OvOJ5EF0kOI8f1Zuug27O/rgtxCRJHGqncSWfCMZUP852dCKPsDsYXGvBhxfRjDBkF5Q==
 
 JSONStream@^1.0.3:
   version "1.3.5"
@@ -1565,10 +1565,10 @@ ci-info@^2.0.0:
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-2.0.0.tgz#67a9e964be31a51e15e5010d58e6f12834002f46"
   integrity sha512-5tK7EtrZ0N+OLFMthtqOj4fI2Jeb88C4CAZPu25LDVUgXJ0A3Js4PMGqrn0JU1W0Mh1/Z8wZzYPxqUrXeBboCQ==
 
-citeproc@^2.1.214:
-  version "2.1.214"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.1.214.tgz#f5204b0c4f44501c54b05092e3e95d1cef766adb"
-  integrity sha512-Aiex/efdxneSd6T/+duWiwug2WHU4rXk6HGg6FAnNlymbSCYiXt6wKBOVtCyopBr0PuDTkLPa2XEe/EFwKBzrA==
+citeproc@^2.1.220:
+  version "2.1.220"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.1.220.tgz#f4252267d91f2403f6d594d8c464da0f5265c544"
+  integrity sha512-P3xyU9lP2SytSvLU+R6yhepZTGFTBGc8w6JBr9eo7gxibHNNB78nMpdhDsE6+UhCqt7CFdiEhapPeAz4O3hvyg==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -2008,10 +2008,10 @@ doctrine-temporary-fork@2.0.1:
   dependencies:
     esutils "^2.0.2"
 
-documentation@^9.1.1:
-  version "9.2.0"
-  resolved "https://registry.yarnpkg.com/documentation/-/documentation-9.2.0.tgz#e4e92e68018dab363f8f8d8b995b5fa417e41c06"
-  integrity sha512-5xCqzC3QGSbf3DBufbJtZA3xEfqfyRnoPo65r4z7i5XUlqRN6H5XjUjdK+K4XuZMgdL3z++p7zB07C+SsuFAXg==
+documentation@^9.3.0:
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/documentation/-/documentation-9.3.0.tgz#c69ff7746786fb23c5e044b64a3457c2e4e7fdbb"
+  integrity sha512-HGHuYATpJz2VKI7TjuAnUFrE+xzLWzp2ttz1oRBPVYPTtzGCSZE6RDiYYCyErOW18BtxCA8o7jzt+VpcWv/ZCg==
   dependencies:
     "@babel/core" "^7.1.2"
     "@babel/generator" "^7.1.3"
@@ -2050,7 +2050,7 @@ documentation@^9.1.1:
     github-slugger "1.2.0"
     glob "^7.1.2"
     globals-docs "^2.4.0"
-    highlight.js "^9.12.0"
+    highlight.js "^9.15.5"
     js-yaml "^3.10.0"
     lodash "^4.17.10"
     mdast-util-inject "^1.1.0"
@@ -2195,12 +2195,12 @@ electron-to-chromium@^1.3.103:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.113.tgz#b1ccf619df7295aea17bc6951dc689632629e4a9"
   integrity sha512-De+lPAxEcpxvqPTyZAXELNpRZXABRxf+uL/rSykstQhzj/B0l1150G/ExIIxKc16lI89Hgz81J0BHAcbTqK49g==
 
-electron@^3.1.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-3.1.3.tgz#848fa0fc62d131978cde15ec04ce195a08dc4155"
-  integrity sha512-Y1TbV5py2O0br0JVYh+ew1cW4cIOOgRNRMzwTwWuZNMZ9fK/XLlqsbZr1GpYHdiN2yIU1koO+g4Cw8VuW86NXQ==
+electron@^4.0.0:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-4.0.8.tgz#b7998b16543d2094f081757a0c5afdb8875ea510"
+  integrity sha512-FOBJIHkuv8wc15N+ZyqwDzPavYVu5CHMBEf14jHDWv7QW2vkEIpJjVK+PIT31kfZfvjsIP0j2wvA/FBsiqB7pw==
   dependencies:
-    "@types/node" "^8.0.24"
+    "@types/node" "^10.12.18"
     electron-download "^4.1.0"
     extract-zip "^1.0.3"
 
@@ -2789,10 +2789,10 @@ he@^1.1.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
-highlight.js@^9.12.0:
-  version "9.14.2"
-  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.14.2.tgz#efbfb22dc701406e4da406056ef8c2b70ebe5b26"
-  integrity sha512-Nc6YNECYpxyJABGYJAyw7dBAYbXEuIzwzkqoJnwbc1nIpCiN+3ioYf0XrBnLiyyG0JLuJhpPtt2iTSbXiKLoyA==
+highlight.js@^9.15.5:
+  version "9.15.6"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.15.6.tgz#72d4d8d779ec066af9a17cb14360c3def0aa57c4"
+  integrity sha512-zozTAWM1D6sozHo8kqhfYgsac+B+q0PmsjXeyDrYIHHcBN0zTVT66+s2GW1GZv7DbyaROdLXKdabwS/WqPyIdQ==
 
 hosted-git-info@^2.1.4, hosted-git-info@^2.7.1:
   version "2.7.1"
@@ -3954,9 +3954,9 @@ npmlog@^4.0.2:
     set-blocking "~2.0.0"
 
 nspell@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/nspell/-/nspell-2.1.1.tgz#42a54e12812137b3e2e919d76da62541b56b8cd0"
-  integrity sha512-ubFjxhpFSHbYVAKFgRarIPQ5H5GfFNVQAjv0bYd+vnG+O2nXZJg8o9rXyIzyXdsOZDEhR/PC/GcINXaW7PEnNw==
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/nspell/-/nspell-2.1.2.tgz#429a1bcd4288e93bd0989e8fa5d4ab2c3950e00a"
+  integrity sha512-j79L4A5aJSiswMUJ/6BW8+7ytgBUVce5BJX6xq8LtvKQpU96CMB340/yMeREH9U+gB/8dk4ctTn62DLiPMAXsA==
   dependencies:
     is-buffer "^2.0.0"
 
@@ -5229,9 +5229,9 @@ strict-uri-encode@^1.0.0:
   integrity sha1-J5siXfHVgrH1TmWt3UNS4Y+qBxM=
 
 string-extract-class-names@^5.8.7:
-  version "5.8.7"
-  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.8.7.tgz#29a0c0f1855cb6f41382903a77a8e4236de91ed0"
-  integrity sha512-KTZPbKM5rPHG6JIDF6xd1R1FvnD41+hqtqrz8lPGn6IIpuJvz0PfLUeKD91fMU5rSgwUutcD2Z5eGElxPlzhnw==
+  version "5.8.9"
+  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.8.9.tgz#51e2d7faf5c1dc10260f5d9fb3e92603c8078cfc"
+  integrity sha512-HN1RFRcVqe0PXsMyaXO7ziETMlxDsB5aHEECnFpfhwdmJ6cHwHzrj+zJ4VwKjxxWYDHer+jHcepJBZrlqY0/qw==
 
 string-template@~0.2.1:
   version "0.2.1"
@@ -5426,10 +5426,10 @@ tiny-lr@^1.1.0:
     object-assign "^4.1.0"
     qs "^6.4.0"
 
-tippy.js@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-4.0.3.tgz#fc1bdb1f995616099bd1007e42d9dbb66d081797"
-  integrity sha512-an3hGGD29DruVArvST9LhiqrFEK8Lf7/nvhUir2Z/D8LmsmrO3Folw3YoG0ha2QUqbmAMKxpcSOvnHWi3rdl2Q==
+tippy.js@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-4.0.4.tgz#1cfd83fc6cfd1c459bb7e08b5ad9bc97008f61bb"
+  integrity sha512-VXwJ2PXUvSTqV0RA5n5jzAdXsXnhMNX/aBYhC2j2YLg1/gekFWqVffbUQMVvwrqT4zmpm4Bp7tO8MVkvaaZ5Pg==
   dependencies:
     popper.js "^1.14.7"
 
