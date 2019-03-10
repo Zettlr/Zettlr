@@ -23,7 +23,9 @@
 \usepackage{calc}
 
 % ulem is needed for underlining and strikethrough text commands.
-\usepackage{ulem}
+% the option "normalem" is needed to preserve _italics_. Without the option,
+% _italics_ will become underlines, which is not desirable.
+\usepackage[normalem]{ulem}
 
 % Pandoc uses includegraphics. But as some images may be too big, we have to
 % replace the command with another one that ensures proper scaling of images.

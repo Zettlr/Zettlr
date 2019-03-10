@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Fixed a small bug that would render emphasised text underlined instead of italic.
 
 ## Under the Hood
 
