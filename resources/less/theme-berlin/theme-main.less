@@ -55,6 +55,15 @@ body {
         box-shadow:5px 5px 15px 0px rgba(0,0,0,.25);
     }
 
+    // Fixes the non-readable blue colour of the links and prevents them from
+    // breaking out of the container.
+    .tippy-popper {
+      a {
+        color: white;
+        word-wrap: break-word;
+      }
+    }
+
     .taglist .tagspacer:only-child .tag { border:2px solid white; }
 
     // Fallback for all systems not identified as win32, darwin, or linux.
