@@ -477,7 +477,7 @@
     "tag_cloud": "Tags",
     "preferences": "Open the settings dialog",
     "file_save": "Save the current file",
-    "share": "Share the current file as HTML, DOCX, ODT or PDF",
+    "share": "Share current file",
     "file_rename": "Rename the current file",
     "file_delete": "Remove the current file",
     "insert_image": "Insert an image",
