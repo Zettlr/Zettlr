@@ -544,7 +544,7 @@
     "directory_removed": "Das Verzeichnis %s wurde entfernt.",
     "file_removed": "Datei %s wurde entfernt.",
     "file_changed": "Datei %s wurde außerhalb bearbeitet.",
-    "export_success": "Exportiere nach %s",
+    "export_success": "Export nach %s erfolgreich!",
     "import_no_directory": "Du musst ein Verzeichnis auswählen, in das die Dateien importiert werden.",
     "import_status": "Importiere. Bitte einen Moment Geduld …",
     "import_error": "Konnte %s nicht importieren.",

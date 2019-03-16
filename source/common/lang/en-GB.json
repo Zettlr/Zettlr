@@ -544,7 +544,7 @@
     "directory_removed": "Directory %s has been removed.",
     "file_removed": "File %s has been removed.",
     "file_changed": "File %s has changed remotely.",
-    "export_success": "Exporting to %s",
+    "export_success": "Export to %s complete!",
     "import_no_directory": "You have to select a directory to import to.",
     "import_status": "Importing. Please wait …",
     "import_error": "Couldn't import %s.",

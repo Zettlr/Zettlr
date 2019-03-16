@@ -544,7 +544,7 @@
     "directory_removed": "Le dossier %s a été supprimer.",
     "file_removed": "Le fichier %s a été supprimer.",
     "file_changed": "Le fichier %s a modifié loin.",
-    "export_success": "Exporter à %s",
+    "export_success": "Exporté à %s",
     "import_no_directory": "Tu devoir selectionner un dossier à importer des fichiers.",
     "import_status": "Importe des fichiers. Un moment s'il te plaît …",
     "import_error": "Ne pouvoir pas importer %s.",
