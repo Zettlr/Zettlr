@@ -65,12 +65,7 @@ class ZettlrQuicklookWindow {
     document.title = file.name // Update the window's title
     // Quicklook windows open themselves automatically. We only have to indicate
     // that this thing is a standalone.
-    this._ql = new ZettlrQuicklook(this, this._file, true)
-  }
-
-  qlsplice (ql) {
-    // The window has closed itself -> close the whole window.
-    ipc.send('ql-close') // Request closing
+    this._ql = new ZettlrQuicklook(this, this._file)
   }
 
   _act () {

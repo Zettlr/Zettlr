@@ -21,8 +21,9 @@
     "command": "copy-to-clipboard"
   },
   {
+    "attribute": "data-hash",
     "label": "menu.quicklook",
-    "command": "quicklook"
+    "command": "open-quicklook"
   },
   {
     "type": "separator"

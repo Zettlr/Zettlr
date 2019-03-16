@@ -219,10 +219,6 @@ class ZettlrIPC {
         if (this._app.getCurrentFile()) this.send('file-open', this._app.getCurrentFile().withContent())
         break
 
-      case 'file-get-quicklook':
-        this.send('file-quicklook', this._app.findFile({ 'hash': cnt }).withContent())
-        break
-
       case 'file-get':
         // The client requested a different file.
         this._app.sendFile(cnt)
@@ -327,6 +323,10 @@ class ZettlrIPC {
         this.send('citeproc-bibliography', global.citeproc.makeBibliography())
         break
 
+      case 'open-quicklook':
+        this._app.openQL(cnt)
+        return true
+
       default:
         console.log(trans('system.unknown_command', cmd))
         break
@@ -369,6 +369,7 @@ class ZettlrIPC {
 
       // A quicklook window wants to pop-out of the main window
       case 'make-standalone':
+      case 'open-quicklook':
         this._app.openQL(arg)
         return true
 

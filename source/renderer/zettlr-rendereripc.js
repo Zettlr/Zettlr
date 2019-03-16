@@ -244,6 +244,11 @@ class ZettlrRendererIPC {
         this.send('print')
         break
 
+      // The context menu triggers this action, so send it to the main process.
+      case 'open-quicklook':
+        this.send('open-quicklook', cnt)
+        break
+
       case 'paths-update':
         // Update the paths
         this._app.refresh(cnt)
@@ -476,14 +481,6 @@ class ZettlrRendererIPC {
       // Show the format option table
       case 'formatting':
         this._app.getBody().displayFormatting()
-        break
-
-      case 'quicklook':
-        this.send('file-get-quicklook', cnt.hash)
-        break
-
-      case 'file-quicklook':
-        this._app.getBody().quicklook(cnt)
         break
 
       // Small notification

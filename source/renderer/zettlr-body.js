@@ -16,7 +16,6 @@
  */
 
 const ZettlrCon = require('./zettlr-context.js')
-const ZettlrQuicklook = require('./zettlr-quicklook.js')
 const ZettlrNotification = require('./zettlr-notification.js')
 const popup = require('./zettlr-popup.js')
 const makeTemplate = require('../common/zettlr-template.js')
@@ -39,9 +38,9 @@ const { localiseNumber } = require('../common/zettlr-helpers.js')
 
 /**
  * This class's duty is to handle everything that affects (or can potentially
- * occur over) the whole app window, such as dialogs (preferences), Quicklook
- * windows or popups. Among the tasks of this class is to bundle these together
- * for easy access so that we always know where to put such things.
+ * occur over) the whole app window, such as dialogs or popups. Among the task
+ * of this class is to bundle these together for easy access so that we always
+ * know where to put such things.
  */
 class ZettlrBody {
   /**
@@ -51,7 +50,6 @@ class ZettlrBody {
   constructor (parent) {
     this._renderer = parent
     this._spellcheckLangs = null // This holds all available languages
-    this._ql = [] // This holds all open quicklook windows
     this._n = [] // Holds all notifications currently displaying
     // Holds the currently displayed dialog. Prevents multiple dialogs from appearing.
     this._currentDialog = null
@@ -277,45 +275,6 @@ class ZettlrBody {
 
     let cnt = makeTemplate('popup', 'file-info', data)
     return popup($('#toolbar .file-info'), cnt)
-  }
-
-  /**
-    * Opens a quicklook window for a given file.
-    * @param  {ZettlrFile} file The file to be loaded into the QuickLook
-    * @return {void}      Nothing to return.
-    */
-  quicklook (file) {
-    // False = no standalone window
-    this._ql.push(new ZettlrQuicklook(this, file, false))
-  }
-
-  /**
-    * This function is called by Quicklook windows on their destruction to
-    * remove them from this array.
-    * @param  {ZettlrQuicklook} zql The Quicklook that has requested its removal.
-    * @return {Boolean}     True, if the call succeeded, or false.
-    */
-  qlsplice (zql) {
-    let index = this._ql.indexOf(zql)
-    if (index > -1) {
-      this._ql.splice(index, 1)
-      return true
-    }
-
-    return false
-  }
-
-  /**
-    * Closes all quicklooks.
-    * @return {ZettlrBody} Chainability.
-    */
-  closeQuicklook () {
-    while (this._ql.length > 0) {
-      // QuickLooks splice themselves from the array -> always close first
-      this._ql[0].close()
-    }
-
-    return this
   }
 
   /**

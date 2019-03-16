@@ -341,7 +341,8 @@ class ZettlrPreview {
             this._renderer.requestDir(parentHash)
           }
         } else if (elem.hasClass('file')) {
-          this._renderer.handleEvent('quicklook', { 'hash': elem.attr('data-hash') })
+          // Ditch the quicklook overlays completely.
+          global.ipc.send('open-quicklook', elem.attr('data-hash'))
         }
         return
       }
