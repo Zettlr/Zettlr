@@ -5,6 +5,7 @@
 - Fixed a small bug that would render emphasised text underlined instead of italic.
 - Fixed the links inside the footnote tooltips. Now they are readable and don't break out of the tooltip anymore.
 - Improvements to the default PDF template.
+- Fixed an error that prevented Zettlr from being able to automatically import language files.
 
 ## Under the Hood
 

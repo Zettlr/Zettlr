@@ -17,7 +17,8 @@ const path = require('path')
 const fs = require('fs')
 const bcp47 = require('bcp-47')
 const { trans } = require('../../common/lang/i18n')
-const { app } = require('electron')
+const { isDir } = require('../../common/zettlr-helpers')
+const { app, dialog } = require('electron')
 
 class ImportLangFile extends ZettlrCommand {
   constructor (app) {
@@ -28,7 +29,13 @@ class ImportLangFile extends ZettlrCommand {
     * Imports language files into the application's data directory.
     */
   run () {
-    let files = this.getWindow().askLangFile()
+    let files
+    try {
+      files = this.askLangFile()
+    } catch (err) {
+      return false // The main window is not open
+    }
+
     let langDir = path.join(app.getPath('userData'), '/lang/')
 
     // First test if the lang directory already exists
@@ -40,7 +47,8 @@ class ImportLangFile extends ZettlrCommand {
     }
 
     for (let f of files) {
-      let schema = bcp47.parse(f)
+      // Let's see if the filename resembles a bcp47 language tag
+      let schema = bcp47.parse(path.basename(f, path.extname(f)))
       if (schema.language) {
         // It's a language file!
         try {
@@ -53,6 +61,37 @@ class ImportLangFile extends ZettlrCommand {
         global.ipc.notify(trans('system.lang_import_error', path.basename(f)))
       }
     }
+  }
+
+  /**
+    * Asks for a language file to be imported to the app.
+    * @return {[type]} [description]
+    */
+  askLangFile () {
+    if (!global.mainWindow) throw new Error('Main Window not open!')
+
+    let startDir = app.getPath('desktop')
+    if (isDir(global.config.get('dialogPaths.askLangFileDialog'))) {
+      startDir = global.config.get('dialogPaths.askLangFileDialog')
+    }
+
+    let ret = dialog.showOpenDialog(global.mainWindow, {
+      'title': trans('system.import_lang_file'),
+      'defaultPath': startDir,
+      'filters': [
+        { name: 'JSON File', extensions: ['json'] }
+      ],
+      'properties': [
+        'openFile'
+      ]
+    }) || [] // In case the dialog spits out an undefined we need a default array
+
+    // Save the path of the containing dir of the first file into the config
+    if (ret.length > 0 && isDir(path.dirname(ret[0]))) {
+      global.config.set('dialogPaths.askLangFileDialog', ret[0])
+    }
+
+    return ret
   }
 }
 

@@ -425,35 +425,6 @@ class ZettlrWindow {
   }
 
   /**
-    * Asks for a language file to be imported to the app.
-    * @return {[type]} [description]
-    */
-  askLangFile () {
-    let startDir = app.getPath('desktop')
-    if (isDir(global.config.get('dialogPaths.askLangFileDialog'))) {
-      startDir = global.config.get('dialogPaths.askLangFileDialog')
-    }
-
-    let ret = dialog.showOpenDialog(this._win, {
-      'title': trans('system.import_lang_file'),
-      'defaultPath': startDir,
-      'filters': [
-        { name: 'JSON File', extensions: ['json'] }
-      ],
-      'properties': [
-        'openFile'
-      ]
-    }) || [] // In case the dialog spits out an undefined we need a default array
-
-    // Save the path of the containing dir of the first file into the config
-    if (ret.length > 0 && isDir(path.dirname(ret[0]))) {
-      global.config.set('dialogPaths.askLangFileDialog', ret[0])
-    }
-
-    return ret
-  }
-
-  /**
     * This function prompts the user with information.
     * @param  {Object} options Necessary informations for displaying the prompt
     * @return {ZettlrWindow}         This for chainability.
