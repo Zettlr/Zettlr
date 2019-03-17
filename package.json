@@ -128,7 +128,7 @@
         "chalk": "^2.4.2",
         "csso": "^3.5.1",
         "documentation": "^9.3.0",
-        "electron": "^4.1.0",
+        "electron": "^5.0.0-beta",
         "electron-builder": "^20.38.5",
         "handlebars": "^4.0.12",
         "less": "^3.9.0",

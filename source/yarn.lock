@@ -218,26 +218,26 @@ charenc@~0.0.1:
   integrity sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=
 
 chart.js@^2.7.2:
-  version "2.7.3"
-  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.7.3.tgz#cdb61618830bf216dc887e2f7b1b3c228b73c57e"
-  integrity sha512-3+7k/DbR92m6BsMUYP6M0dMsMVZpMnwkUyNSAbqolHKsbIzH2Q4LWVEHHYq7v0fmEV8whXE0DrjANulw9j2K5g==
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.8.0.tgz#b703b10d0f4ec5079eaefdcd6ca32dc8f826e0e9"
+  integrity sha512-Di3wUL4BFvqI5FB5K26aQ+hvWh8wnP9A3DWGvXHVkO13D3DSnaSsdZx29cXlEsYKVkn1E2az+ZYFS4t0zi8x0w==
   dependencies:
     chartjs-color "^2.1.0"
     moment "^2.10.2"
 
-chartjs-color-string@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/chartjs-color-string/-/chartjs-color-string-0.5.0.tgz#8d3752d8581d86687c35bfe2cb80ac5213ceb8c1"
-  integrity sha512-amWNvCOXlOUYxZVDSa0YOab5K/lmEhbFNKI55PWc4mlv28BDzA7zaoQTGxSBgJMHIW+hGX8YUrvw/FH4LyhwSQ==
+chartjs-color-string@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/chartjs-color-string/-/chartjs-color-string-0.6.0.tgz#1df096621c0e70720a64f4135ea171d051402f71"
+  integrity sha512-TIB5OKn1hPJvO7JcteW4WY/63v6KwEdt6udfnDE9iCAZgy+V4SrbSxoIbTw/xkUIapjEI4ExGtD0+6D3KyFd7A==
   dependencies:
     color-name "^1.0.0"
 
 chartjs-color@^2.1.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/chartjs-color/-/chartjs-color-2.2.0.tgz#84a2fb755787ed85c39dd6dd8c7b1d88429baeae"
-  integrity sha1-hKL7dVeH7YXDndbdjHsdiEKbrq4=
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/chartjs-color/-/chartjs-color-2.3.0.tgz#0e7e1e8dba37eae8415fd3db38bf572007dd958f"
+  integrity sha512-hEvVheqczsoHD+fZ+tfPUE+1+RbV6b+eksp2LwAhwRTVXEjCSEavvk+Hg3H6SZfGlPh/UfmWKGIvZbtobOEm3g==
   dependencies:
-    chartjs-color-string "^0.5.0"
+    chartjs-color-string "^0.6.0"
     color-convert "^0.5.3"
 
 chokidar@^2.1.2:
@@ -265,9 +265,9 @@ chownr@^1.1.1:
   integrity sha512-j38EvO5+LHX84jlo6h4UzmOwi0UgW61WRyPtJz4qaadK5eY3BTS5TY/S1Stc3Uk2lIM6TPevAlULiEJwie860g==
 
 citeproc@^2.1.220:
-  version "2.1.220"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.1.220.tgz#f4252267d91f2403f6d594d8c464da0f5265c544"
-  integrity sha512-P3xyU9lP2SytSvLU+R6yhepZTGFTBGc8w6JBr9eo7gxibHNNB78nMpdhDsE6+UhCqt7CFdiEhapPeAz4O3hvyg==
+  version "2.1.221"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.1.221.tgz#1b3558c4a91fd21610b09ac7d348c5ea7406cd35"
+  integrity sha512-IEeQoR7JUbe0SMBQmP0bfPYHYF8cEkO3ahCm0QiP+RfPhnB2rDa2Nc1JgLYWWgDquh01FqBSKNdq2JlwPnYAsw==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -1092,12 +1092,7 @@ mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
-moment@^2.10.2:
-  version "2.22.2"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
-  integrity sha1-PCV/mDn8DpP/UxSWMiOeuQeD/2Y=
-
-moment@^2.24.0:
+moment@^2.10.2, moment@^2.24.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
@@ -1702,9 +1697,9 @@ tar@^4:
     yallist "^3.0.2"
 
 tippy.js@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-4.0.4.tgz#1cfd83fc6cfd1c459bb7e08b5ad9bc97008f61bb"
-  integrity sha512-VXwJ2PXUvSTqV0RA5n5jzAdXsXnhMNX/aBYhC2j2YLg1/gekFWqVffbUQMVvwrqT4zmpm4Bp7tO8MVkvaaZ5Pg==
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-4.2.0.tgz#68387485cbc5d30ad5416bb01a20e63548898145"
+  integrity sha512-+WZRGtpIusZeJdZB2W5/rmOsT+6t3ASiQP0gln/OW1c+Goc6lx4vf+3i3KAJO875y7Vc1hGmFgyAMHor/eISBQ==
   dependencies:
     popper.js "^1.14.7"
 
