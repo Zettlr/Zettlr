@@ -7,11 +7,13 @@
 - Improvements to the default PDF template.
 - Fixed an error that prevented Zettlr from being able to automatically import language files.
 - Removed the Quicklook overlay windows. Quicklooks now directly become standalone windows.
+- On Windows and macOS, Zettlr now also fills up the recent document list in the Taskbar/Dock.
 
 ## Under the Hood
 
 - Bumped dependencies.
 - The Quicklook-windows will now also load the correct CodeMirror-plugins from the autoload file.
+- Moved out the recent files to its own provider.
 
 # 1.2.0
 

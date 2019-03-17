@@ -135,6 +135,7 @@ class Zettlr {
     // The order is important, we'll just save them to this object
     this._providers = {
       'config': require('./providers/config-provider.js'),
+      'recentDocs': require('./providers/recent-docs-provider.js'),
       'tags': require('./providers/tag-provider.js'),
       'css': require('./providers/css-provider.js')
     }
@@ -301,7 +302,7 @@ class Zettlr {
       this.setCurrentFile(file)
       this.ipc.send('file-open', file.withContent())
       // Add the file's metadata object to the recent docs
-      global.config.addRecentDoc(file.getMetadata())
+      global.recentDocs.add(file.getMetadata())
     } else {
       this.window.prompt({
         type: 'error',

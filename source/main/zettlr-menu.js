@@ -144,12 +144,12 @@ class ZettlrMenu {
           case 'recent-docs':
             builtItem.submenu = [{
               'label': trans('menu.clear_recent_docs'),
-              'click': (item, win) => { global.config.clearRecentDocs() }
+              'click': (item, win) => { global.recentDocs.clear() }
             }, { 'type': 'separator' }]
             // Disable if there are no recent docs
-            if (!global.config.hasRecentDocs()) builtItem.submenu[0].enabled = false
+            if (!global.recentDocs.hasDocs()) builtItem.submenu[0].enabled = false
             // Get the most recent 10 documents
-            for (let recent of global.config.getRecentDocs().slice(0, 10)) {
+            for (let recent of global.recentDocs.get().slice(0, 10)) {
               builtItem.submenu.push({
                 'label': recent.name,
                 'click': function (menuitem, focusedWindow) {
