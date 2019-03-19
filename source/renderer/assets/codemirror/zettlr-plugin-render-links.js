@@ -64,7 +64,7 @@
         let caption = match[1] || ''
         let url = match[2] || ''
         let standalone = match[3] || ''
-        let email = match[4] || ''
+        let email = match[5] || ''
 
         // Now get the precise beginning of the match and its end
         let curFrom = { 'line': i, 'ch': match.index }
