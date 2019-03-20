@@ -79,6 +79,12 @@ class ZettlrPrintWindow {
       this._reposition()
     })
 
+    // Toggle the maximisation of the window by double clicking. (Windows will
+    // take care of this already, but not Linux and macOS.)
+    $('.title').on('dblclick', (e) => {
+      ipc.send('message', { 'command': 'win-maximise', 'content': '{}' })
+    })
+
     // Issue a print command for the frame.
     $('#init-print').click((e) => {
       window.frames[0].print()

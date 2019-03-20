@@ -8,7 +8,8 @@
 - Fixed an error that prevented Zettlr from being able to automatically import language files.
 - Removed the Quicklook overlay windows. Quicklooks now directly become standalone windows.
 - On Windows and macOS, Zettlr now also fills up the recent document list in the Taskbar/Dock.
-- Fixed the bug causing emails not to render.
+- Fixed a bug causing emails not to render.
+- Fixed a bug preventing you from clicking the "Print" icon on Windows.
 
 ## Under the Hood
 
