@@ -1,9 +1,7 @@
 // Quicklook and Print window options
 
-.quicklook, .quicklook-standalone, .print-window {
+.quicklook-standalone, .print-window {
     position:fixed;
-
-    &.minimize { height:@title-bar-height; }
 
     #init-print {
       padding: @title-bar-height * 0.4;
@@ -13,19 +11,27 @@
       &::before {
         font-family: @font-icon;
         font-size: @title-bar-height * 0.6;
+        line-height: 0px; // Necessary to center the Icon on the title bar
         content: '\f125';
+        -webkit-app-region: no-drag;
       }
     }
 
     .title {
         // Title bar options
         cursor:-webkit-grab;
-        height:@title-bar-height;
+        -webkit-app-region: drag;
+
+        height: @title-bar-height;
         border-top-left-radius: @border-radius;
         border-top-right-radius: @border-radius;
         display: flex;
         padding:0;
         margin:0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
 
         h1 {
             flex-grow:5;
@@ -38,6 +44,7 @@
         }
 
         .find {
+          -webkit-app-region: no-drag;
           flex-grow:4;
           display: inline-block;
           width:30%;
@@ -70,76 +77,14 @@
 
     .CodeMirror-scroll .CodeMirror-sizer { margin-bottom:1em; }
 
-    // JQUERY UI - THEME (necessary for resizable to work)
-    .ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }
-    .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
-    .ui-resizable-n { cursor: n-resize; height: 15px; width: 100%; top: -15px; left: 0; }
-    .ui-resizable-s { cursor: s-resize; height: 15px; width: 100%; bottom: -15px; left: 0; }
-    .ui-resizable-e { cursor: e-resize; width: 15px; right: -15px; top: 0; height: 100%; }
-    .ui-resizable-w { cursor: w-resize; width: 15px; left: -15px; top: 0; height: 100%; }
-    .ui-resizable-se { cursor: se-resize; width: 15px; height: 15px; right: -15px; bottom: -15px; }
-    .ui-resizable-sw { cursor: sw-resize; width: 15px; height: 15px; left: -15px; bottom: -15px; }
-    .ui-resizable-nw { cursor: nw-resize; width: 15px; height: 15px; left: -15px; top: -15px; }
-    .ui-resizable-ne { cursor: ne-resize; width: 15px; height: 15px; right: -15px; top: -15px;}
-}
+    // CodeMirror inside Quicklook standalone windows need another top-distance
+    .quicklook-standalone #editor { top: @toolbar-height; }
 
-// Some things that only apply to the overlay windows
-.quicklook {
-  .make-standalone {
-    flex-grow: 1;
-    cursor: pointer;
-    display: inline-block;
-    text-align: center;
-    width:@title-bar-height;
-    height:@title-bar-height;
-    &:before {
-      font-family: @font-icon;
-      content: "\f332";
-      line-height: @title-bar-height;
+    .print-window .content {
+      top: @toolbar-height;
+      width: 100%;
+      height:100%;
     }
-  }
-
-  .close {
-    flex-grow: 0.5;
-      &:before {
-          font-family: @font-icon;
-          font-weight:light;
-          content: "\00d7";
-          line-height:@title-bar-height;
-          margin:0.2em;
-      }
-      display:inline-block;
-      cursor:pointer;
-      float:right;
-      text-align:center;
-      width:@title-bar-height;
-      height:@title-bar-height;
-      border-radius:50px;
-  }
-}
-
-// Reset some things for the standalone version
-.quicklook-standalone, .print-window {
-  .title {
-    -webkit-app-region: drag;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: @toolbar-height;
-
-    h1 { line-height: @toolbar-height; }
-
-    .find, #init-print::before { -webkit-app-region: no-drag; }
-  }
-
-  // CodeMirror inside Quicklook standalone windows need another top-distance
-  .quicklook-standalone #editor { top: @toolbar-height; }
-  .print-window .content {
-    top: @toolbar-height;
-    width: 100%;
-    height:100%;
-  }
 }
 
 // Custom margins for different platforms

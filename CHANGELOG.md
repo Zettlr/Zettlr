@@ -16,6 +16,7 @@
 - Bumped dependencies.
 - The Quicklook-windows will now also load the correct CodeMirror-plugins from the autoload file.
 - Moved out the recent files to its own provider.
+- Design cleanup.
 
 # 1.2.0
 

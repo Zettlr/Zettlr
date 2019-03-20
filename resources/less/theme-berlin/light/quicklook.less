@@ -1,9 +1,8 @@
 // Quicklook styling
 
-.quicklook, .quicklook-standalone, .print-window {
+.quicklook-standalone, .print-window {
   color:@grey-4;
   background-color: #ffffff;
-  box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.75);
   cursor:default;
 
   .title {
@@ -18,15 +17,11 @@
     }
   }
 
+  #init-print:hover::before { color: @green-0; }
+
   .body .CodeMirror {
     cursor:text;
     font-size:1em;
     font-family: inherit;
   }
-}
-
-.quicklook .close, .make-standalone {
-  text-align:center;
-  border-radius:50px;
-  &:hover { color: @bg-error; }
 }
