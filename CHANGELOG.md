@@ -1,19 +1,20 @@
-# (no version assigned)
+# 1.2.1
 
 ## GUI and Functionality
 
-- Fixed a small bug that would render emphasised text underlined instead of italic.
-- Fixed the links inside the footnote tooltips. Now they are readable and don't break out of the tooltip anymore.
-- Improvements to the default PDF template.
+- Fixed a small bug in the PDF template that would render emphasised text underlined instead of italic in exported PDF files.
+- Fixed the links inside footnote tooltips. Now they are readable and don't break out of the tooltip anymore.
 - Fixed an error that prevented Zettlr from being able to automatically import language files.
 - Removed the Quicklook overlay windows. Quicklooks now directly become standalone windows.
-- On Windows and macOS, Zettlr now also fills up the recent document list in the Taskbar/Dock.
 - Fixed a bug causing emails not to render.
 - Fixed a bug preventing you from clicking the "Print" icon on Windows.
+- Fixed double-clicking the Quicklook and Print window title bar on macOS and Linux.
+- General improvements to the default PDF template.
+- On Windows and macOS, Zettlr now also fills up the recent document list in the Taskbar/Dock.
 
 ## Under the Hood
 
-- Bumped dependencies.
+- Bumped dependencies. **Switched to `Electron 5` Beta**.
 - The Quicklook-windows will now also load the correct CodeMirror-plugins from the autoload file.
 - Moved out the recent files to its own provider.
 - Design cleanup.

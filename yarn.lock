@@ -1550,10 +1550,10 @@ ci-info@^2.0.0:
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-2.0.0.tgz#67a9e964be31a51e15e5010d58e6f12834002f46"
   integrity sha512-5tK7EtrZ0N+OLFMthtqOj4fI2Jeb88C4CAZPu25LDVUgXJ0A3Js4PMGqrn0JU1W0Mh1/Z8wZzYPxqUrXeBboCQ==
 
-citeproc@^2.1.220:
-  version "2.1.221"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.1.221.tgz#1b3558c4a91fd21610b09ac7d348c5ea7406cd35"
-  integrity sha512-IEeQoR7JUbe0SMBQmP0bfPYHYF8cEkO3ahCm0QiP+RfPhnB2rDa2Nc1JgLYWWgDquh01FqBSKNdq2JlwPnYAsw==
+citeproc@^2.1.222:
+  version "2.1.222"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.1.222.tgz#c1675b492cdfb87465a182236147007b2af7173a"
+  integrity sha512-/DlkYp+ijbWDL9JoIEXysQnsBlTimgC3JqZsYNNLP53IWu6wPjXyHnK/7h73gfQOtETB18fa5lKxugtGyQuk+g==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -1620,10 +1620,10 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-codemirror@^5.44.0:
-  version "5.44.0"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.44.0.tgz#80dc2a231eeb7aab25ec2405cdca37e693ccf9cc"
-  integrity sha512-3l42syTNakCdCQuYeZJXTyxina6Y9i4V0ighSJXNCQtRbaCN76smKKLu1ZHPHQon3rnzC7l4i/0r4gp809K1wg==
+codemirror@^5.45.0:
+  version "5.45.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.45.0.tgz#db5ebbb3bf44028c684053f3954d011efcec27ad"
+  integrity sha512-c19j644usCE8gQaXa0jqn2B/HN9MnB2u6qPIrrhrMkB+QAP42y8G4QnTwuwbVSoUS1jEl7JU9HZMGhCDL0nsAw==
 
 collapse-white-space@^1.0.0, collapse-white-space@^1.0.2:
   version "1.0.4"
@@ -2166,10 +2166,10 @@ electron-to-chromium@^1.3.113:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.116.tgz#1dbfee6a592a0c14ade77dbdfe54fef86387d702"
   integrity sha512-NKwKAXzur5vFCZYBHpdWjTMO8QptNLNP80nItkSIgUOapPAo9Uia+RvkCaZJtO7fhQaVElSvBPWEc2ku6cKsPA==
 
-electron@^5.0.0-beta:
-  version "5.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-5.0.0-beta.5.tgz#0b3cc7417a75b36483943f67987fdb4aea27f3a7"
-  integrity sha512-sBYm1WJ4GwC6KLo8EQKdqY0vGmKf+d1VUt79zKtqnKK19FZ1TktMPpLo8hOBesrxjx19qeX9RYF8z2rP5viKmw==
+electron@^5.0.0-beta.6:
+  version "5.0.0-beta.6"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-5.0.0-beta.6.tgz#8a7443a3f5f572d87302c7933be0cb96f4b4c997"
+  integrity sha512-tqjCa7EnUqkZQ0uazzhQczcHlBTxV0RBbYdOd5ieIz9wvqctSqHJ7RbbAuE5pfxZRs1QHBKQD58oGBXK1T34Dg==
   dependencies:
     "@types/node" "^10.12.18"
     electron-download "^4.1.0"
@@ -5169,9 +5169,9 @@ strict-uri-encode@^1.0.0:
   integrity sha1-J5siXfHVgrH1TmWt3UNS4Y+qBxM=
 
 string-extract-class-names@^5.8.7:
-  version "5.8.13"
-  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.8.13.tgz#c3e0f20b9f66dedf4f914f1a14e8dbffbd905947"
-  integrity sha512-3h7+apa+3XMYqV96vXNex95rD5puGMBEKkHhuUWCg7PkB4I956gplgk/zCAGT3bDCSrJ7IkHKRpltu3811ny1A==
+  version "5.8.17"
+  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.8.17.tgz#74d00996e7176782d958e31383c8ac069804e33c"
+  integrity sha512-opaVWTsf3WaHhmIXjjop8XFNTBITWb8EjELaaqh+ukIDXFcyZijofNbXIwMHt4Njc6tIVHKLkGekkqqLCn+ycw==
 
 string-template@~0.2.1:
   version "0.2.1"
