@@ -23,10 +23,11 @@ class SaveFile extends ZettlrCommand {
   /**
     * Saves a file. A file MUST be given, for the content is needed to write to
     * a file. Content is always freshly grabbed from the CodeMirror content.
+    * @param {String} evt The event name
     * @param  {Object} file An object containing some properties of the file.
     * @return {void}      This function does not return.
     */
-  run (file) {
+  run (evt, file) {
     if ((file == null) || !file.hasOwnProperty('content')) {
       // No file given -> abort saving process
       return false

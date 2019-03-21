@@ -22,8 +22,10 @@ class GetPreferences extends ZettlrCommand {
 
   /**
     * Send the global preferences to the renderer
+    * @param {String} evt The event name.
+    * @param {Object} arg The argument given to the command.
     */
-  run () {
+  run (evt, arg) {
     // get() with no arguments returns the whole config
     let toSend = global.config.get()
     // Add available translations and dictionaries

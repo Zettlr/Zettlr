@@ -28,10 +28,11 @@ class SaveImage extends ZettlrCommand {
   /**
    * Saves the image that is currently in the clipboard to file and sends an
    * insert command to the renderer, telling it to link the image.
+   * @param {String} evt The event name
    * @param  {Object} target Options on the image
    * @return {void}        Does not return.
    */
-  run (target) {
+  run (evt, target) {
     // target either contains "save-cwd" (save in current working directory) or
     // "save-other" (save to a path that has to be chosen by the user)
     // If no directory is selected currently, we can't save to cwd.

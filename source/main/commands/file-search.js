@@ -21,10 +21,11 @@ class FileSearch extends ZettlrCommand {
 
   /**
    * Search a file and return the results to the renderer.
+   * @param {String} evt The event name
    * @param  {Object} arg An object containing a hash of a file to be searched
    * @return {Boolean}     Whether the call succeeded.
    */
-  run (arg) {
+  run (evt, arg) {
     // arg.content contains a hash of the file to be searched
     // and the prepared terms.
     let file = this._app.findFile({ 'hash': arg.hash })

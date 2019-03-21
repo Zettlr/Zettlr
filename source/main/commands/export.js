@@ -29,10 +29,11 @@ class Export extends ZettlrCommand {
 
   /**
     * Export a file to another format.
+    * @param {String} evt The event name
     * @param  {Object} arg An object containing hash and wanted extension.
     * @return {Boolean}     Whether or not the call succeeded.
     */
-  run (arg) {
+  run (evt, arg) {
     let file = this._app.findFile({ 'hash': parseInt(arg.hash) })
     let dest
     if (global.config.get('export.dir') === 'temp') {

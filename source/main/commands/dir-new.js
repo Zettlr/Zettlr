@@ -22,9 +22,10 @@ class DirNew extends ZettlrCommand {
 
   /**
     * Create a new directory.
+    * @param {String} evt The event name
     * @param  {Object} arg An object containing hash of containing and name of new dir.
     */
-  run (arg) {
+  run (evt, arg) {
     let dir = null
     let curdir = null
 

@@ -24,9 +24,11 @@ class ImportFiles extends ZettlrCommand {
 
   /**
     * This function asks the user for a list of files and then imports them.
+    * @param {String} evt The event name
+    * @param {Object} arg The command arguments.
     * @return {void} Does not return.
     */
-  run () {
+  run (evt, arg) {
     if (!this._app.getCurrentDir()) {
       global.ipc.notify(trans('system.import_no_directory'))
       return false

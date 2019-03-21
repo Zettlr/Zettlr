@@ -24,10 +24,11 @@ class RequestMove extends ZettlrCommand {
 
   /**
    * Move a directory around. Or a file.
+   * @param {String} evt The event name
    * @param  {Object} arg The origin and the destination
    * @return {Boolean}     Whether or not the command succeeded.
    */
-  run (arg) {
+  run (evt, arg) {
     // arg contains from and to
     let from = this._app.findDir({ 'hash': parseInt(arg.from) })
     if (from == null) {

@@ -21,10 +21,11 @@ class FileDelete extends ZettlrCommand {
 
   /**
     * Removes a file.
+    * @param {String} evt The event name
     * @param  {Object} arg the parameters of the file to be deleted
     * @return {Boolean} Whether the file was successfully deleted.
     */
-  run (arg) {
+  run (evt, arg) {
     // First determine if this is modified.
     if (!this._app.canClose()) return false
 

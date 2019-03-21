@@ -21,9 +21,10 @@ class DirProjectProperties extends ZettlrCommand {
 
   /**
     * Display the project settings
+    * @param {String} evt The event name
     * @param  {Object} arg The hash of a directory.
     */
-  run (arg) {
+  run (evt, arg) {
     let dir = this._app.findDir(arg)
     if (dir) {
       arg.properties = dir.getProject().getProperties()

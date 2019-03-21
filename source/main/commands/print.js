@@ -27,9 +27,11 @@ class Print extends ZettlrCommand {
 
   /**
    * Prints the current file (in: opening the print window)
+   * @param {String} evt The event name
+   * @param {Object} arg The argument
    * @return {Boolean} Whether the command ran successful
    */
-  run () {
+  run (evt, arg) {
     // First we need to export the current file as HTML.
     let file = this._app.getCurrentFile()
     if (!file) return // No file open.

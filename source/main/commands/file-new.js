@@ -22,10 +22,11 @@ class FileNew extends ZettlrCommand {
 
   /**
    * Create a new file.
+   * @param {String} evt The event name
    * @param  {Object} arg An object containing a hash of containing directory and a file name.
    * @return {void}     This function does not return anything.
    */
-  run (arg) {
+  run (evt, arg) {
     // This command closes the current file
     if (!this._app.canClose()) return
 

@@ -27,8 +27,10 @@ class ImportLangFile extends ZettlrCommand {
 
   /**
     * Imports language files into the application's data directory.
+    * @param {String} evt The event name
+    * @param {Object} arg The arguments
     */
-  run () {
+  run (evt, arg) {
     let files
     try {
       files = this.askLangFile()

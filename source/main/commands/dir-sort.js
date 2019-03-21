@@ -21,9 +21,10 @@ class DirSort extends ZettlrCommand {
 
   /**
     * Sorts a directory according to the argument
+    * @param {String} evt The event name
     * @param  {Object} arg An object containing both a hash and a sorting type
     */
-  run (arg) {
+  run (evt, arg) {
     if (!arg.hasOwnProperty('hash') || !arg.hasOwnProperty('type')) {
       return false
     }

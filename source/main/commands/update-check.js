@@ -31,9 +31,11 @@ class UpdateCheck extends ZettlrCommand {
   /**
    * Runs an update check and either notifies the user that there's no update,
    * or transmits the update data.
+   * @param {String} evt The event name
+   * @param {Object} arg The arguments.
    * @return {Boolean} Always true, as long as we can't make these things async.
    */
-  run () {
+  run (evt, arg) {
     this._check().then((res) => {
       this._app.ipc.send('update-available', res)
     }).catch((e) => global.ipc.notify(e.message))

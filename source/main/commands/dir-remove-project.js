@@ -21,9 +21,10 @@ class DirRemoveProject extends ZettlrCommand {
 
   /**
     * Remove the project of a directory
+    * @param {String} evt The event name
     * @param  {Object} arg The hash of a directory.
     */
-  run (arg) {
+  run (evt, arg) {
     let dir = this._app.findDir(arg)
     if (dir) {
       dir.removeProject()

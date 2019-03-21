@@ -21,9 +21,10 @@ class DirDelete extends ZettlrCommand {
 
   /**
     * Create a new directory.
+    * @param {String} evt The event name
     * @param  {Object} arg An object containing hash of containing and name of new dir.
     */
-  run (arg) {
+  run (evt, arg) {
     let hash = arg.hasOwnProperty('hash') ? arg.hash : this._app.getCurrentFile().hash
     let filedir = null
     let dir = null

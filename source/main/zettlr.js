@@ -258,12 +258,12 @@ class Zettlr {
   runCommand (evt, arg) {
     // This function will be called from IPC with a command and an arg.
     // First find the command
-    let cmd = this._commands.find((elem) => { return (elem.getEventName() === evt) })
+    let cmd = this._commands.find(elem => elem.respondsTo(evt))
 
     if (cmd) {
       // Return the return value of the command, if there is any
       try {
-        return cmd.run(arg)
+        return cmd.run(evt, arg)
       } catch (e) {
         console.log(e)
       }

@@ -21,9 +21,10 @@ class FileDeleteFromVD extends ZettlrCommand {
 
   /**
    * Remove a file from a virtual directory
+   * @param {String} evt The event name
    * @param  {Object} arg An object containing hash of containing and name of new dir.
    */
-  run (arg) {
+  run (evt, arg) {
     if (arg.hasOwnProperty('hash') && arg.hasOwnProperty('virtualdir')) return false
     let vd = this.findDir({ 'hash': parseInt(arg.virtualdir) })
     let file = null

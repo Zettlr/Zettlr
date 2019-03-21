@@ -21,43 +21,57 @@ class ZettlrCommand {
     this._app = app
 
     // The bind event is the event that is sent from the renderer
+    if (!bindEvent) throw new Error(`The binding event name must be given!`)
+    if (!Array.isArray(bindEvent)) bindEvent = [bindEvent]
     this._bind = bindEvent
 
-    // Can be optionally used to bind a shortcut to it
-    this._shortcut = null
-
-    // Indicates whether or not this command can be assigned a shortcut
-    this._canHaveShortcut = false
+    // Can be optionally used to bind shortcuts to the bind events.
+    this._shortcuts = []
   }
 
   /**
    * Returns the event name this thing binds to
    * @return {String} The event name
    */
-  getEventName () { return this._bind }
+  getEvents () { return this._bind }
 
   /**
-   * Returns the shortcut currently assigned to this command.
-   * @return {String} The shortcut as text (or null, if unset)
+   * Returns true, if this command responds to the given event name
+   * @param  {String} evt The event name.
+   * @return {Boolean}     True or false, depending on the bind events.
    */
-  getShortcut () { return (this.isShortcutable()) ? this._shortcut : null }
+  respondsTo (evt) { return this._bind.includes(evt) }
 
   /**
-   * Sets the shortcut for this command
+   * Returns the shortcuts currently assigned to this command.
+   * @return {Array} All shortcuts.
+   */
+  getShortcuts () { return JSON.decode(JSON.stringify(this._shortcuts)) }
+
+  /**
+   * Sets the shortcut for an event this command responds to
    * @param {String} shortcut The shortcut
+   * @return {Boolean} Whether or not the shortcut was set
    */
-  setShortcut (shortcut) { if (this.isShortcutable()) this._shortcut = shortcut }
+  setShortcut (evt, shortcut) {
+    // Does this command respond to the given shortcut?
+    if (!this.respondsTo(evt)) return false
+    // Is there already a shortcut for the event?
+    if (this.getShortcuts().includes(evt)) return false
+
+    this._shortcuts.push({
+      'event': evt,
+      'shortcut': shortcut
+    })
+
+    return true
+  }
 
   /**
-   * Activates or deactivates the shortcut function
-   * @param {Boolean} flag Whether or not this command should have a shortcut.
-   */
-  setShortcutable (flag) { this._canHaveShortcut = flag }
-  /**
-   * Indicates whether or not a shortcut may be set for this command.
+   * Indicates whether or not a shortcut is available for this command.
    * @return {Boolean} True or false, depending on the state.
    */
-  isShortcutable () { return this._canHaveShortcut }
+  hasShortcuts () { return (this._shortcuts.length > 0) }
 }
 
 module.exports = ZettlrCommand

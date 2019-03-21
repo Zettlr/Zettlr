@@ -21,9 +21,10 @@ class DirNewVD extends ZettlrCommand {
 
   /**
     * Creates a new virtual directory
+    * @param {String} evt The event name
     * @param  {Object} arg The argument, containing both the containing hash and the new name
     */
-  run (arg) {
+  run (evt, arg) {
     let dir
     if (arg.hasOwnProperty('hash')) {
       dir = this._app.findDir({ 'hash': parseInt(arg.hash) })

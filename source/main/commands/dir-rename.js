@@ -23,9 +23,10 @@ class DirRename extends ZettlrCommand {
 
   /**
    * Rename a directory
+   * @param {String} evt The event name
    * @param  {Object} arg An object containing hash of containing and name of new dir.
    */
-  run (arg) {
+  run (evt, arg) {
     // { 'hash': hash, 'name': val }
     let dir = this._app.findDir({ 'hash': parseInt(arg.hash) })
 
