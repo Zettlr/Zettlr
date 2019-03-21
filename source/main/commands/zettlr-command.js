@@ -27,13 +27,16 @@ class ZettlrCommand {
 
     // Can be optionally used to bind shortcuts to the bind events.
     this._shortcuts = []
+
+    // Contains a list of all event names for that user shortcuts are accepted.
+    this._userDefinedShortcuts = []
   }
 
   /**
    * Returns the event name this thing binds to
    * @return {String} The event name
    */
-  getEvents () { return this._bind }
+  getEvents () { return JSON.decode(JSON.stringify(this._bind)) }
 
   /**
    * Returns true, if this command responds to the given event name
@@ -41,6 +44,21 @@ class ZettlrCommand {
    * @return {Boolean}     True or false, depending on the bind events.
    */
   respondsTo (evt) { return this._bind.includes(evt) }
+
+  /**
+   * Defines the given array of events to be user-shortcutable events.
+   * @param {Array} events An array of events that receive user defined shortcuts.
+   */
+  setCustomShortcuts (events) {
+    if (!Array.isArray(events)) events = [events]
+    this._userDefinedShortcuts = events
+  }
+
+  /**
+   * Returns the list of user definable shortcuts
+   * @return {Array} The list of shortcuts
+   */
+  getCustomShortcuts () { return JSON.decode(JSON.stringify(this._userDefinedShortcuts)) }
 
   /**
    * Returns the shortcuts currently assigned to this command.
@@ -53,7 +71,7 @@ class ZettlrCommand {
    * @param {String} shortcut The shortcut
    * @return {Boolean} Whether or not the shortcut was set
    */
-  setShortcut (evt, shortcut) {
+  registerShortcut (evt, shortcut) {
     // Does this command respond to the given shortcut?
     if (!this.respondsTo(evt)) return false
     // Is there already a shortcut for the event?
@@ -65,6 +83,22 @@ class ZettlrCommand {
     })
 
     return true
+  }
+
+  /**
+   * Unregisters a shortcut from this command.
+   * @param  {String} evt The event, whose shortcut the caller wants to unregister.
+   * @return {Boolean}     Whether or not the shortcut was unset.
+   */
+  unregisterShortcut (evt) {
+    let found = this._shortcuts.find(elem => elem.event === evt)
+
+    if (found) {
+      this._shortcuts.splice(this._shortcuts.indexOf(found), 1)
+      return true
+    }
+
+    return false
   }
 
   /**
