@@ -70,7 +70,7 @@ body {
     .taglist .tagspacer:only-child .tag { border:2px solid white; }
 
     // Fallback for all systems not identified as win32, darwin, or linux.
-    font-family: @font-sans;
+    font-family: @font-main;
 
     &.win32 {
         // Lato on Windows looks bad b/c of very strange font antialiasing,
@@ -80,7 +80,7 @@ body {
 
     &.darwin, &.linux {
         // Use built-in Lato for other systems.
-        font-family: @font-sans;
+        font-family: @font-main;
     }
 
 }

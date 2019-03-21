@@ -7,7 +7,7 @@
     color:rgb(46, 56, 60);
 
     &.cm-stex-mode, &.cm-css-mode {
-      font-family: @font-mono;
+      font-family: @font-code;
         .cm-comment    { color: @grey-2; }
         .cm-attribute  { color: @blue-0; }
         .cm-builtin    { color: @blue-0; } // Some modes use this for keywords
@@ -32,7 +32,7 @@
 .cm-comment, .cm-fenced-code { color:@grey-3; }
 
 .cm-fenced-code, .cm-stex-mode {
-  font-family: @font-mono;
+  font-family: @font-code;
     &.cm-comment    { color: @grey-2; }
     &.cm-attribute  { color: @blue-0; }
     &.cm-builtin    { color: @blue-0; } // Some modes use this for keywords
@@ -48,10 +48,10 @@
 }
 
 // HTML tags
-.cm-tag       { font-family: @font-mono; font-size: @font-mono-size; color: @orange-2; }
-.cm-attribute { font-family: @font-mono; font-size: @font-mono-size; color: @blue-0; }
-.cm-string    { font-family: @font-mono; font-size: @font-mono-size; color: @green-0; }
-.cm-bracket   { font-family: @font-mono; font-size: @font-mono-size; color: @grey-5; }
+.cm-tag       { font-family: @font-code; font-size: @font-mono-size; color: @orange-2; }
+.cm-attribute { font-family: @font-code; font-size: @font-mono-size; color: @blue-0; }
+.cm-string    { font-family: @font-code; font-size: @font-mono-size; color: @green-0; }
+.cm-bracket   { font-family: @font-code; font-size: @font-mono-size; color: @grey-5; }
 
 // TYPOGRAPHY
 .cm-formatting-header-1, .cm-formatting-header-2, .cm-formatting-header-3,
@@ -83,7 +83,7 @@
 // Horizontal ruler
 .cm-hr {
   color: @c-primary;
-  font-family: @font-mono;
+  font-family: @font-code;
   font-weight: bold;
 }
 
