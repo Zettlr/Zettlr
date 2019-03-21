@@ -3,11 +3,11 @@
  */
 
 // CodeMirror scrollbar annotations
-.sb-annotation { background-color:@orange-2; }
+.sb-annotation { background-color:@bg-annotation; }
 
 ::-webkit-scrollbar-track { background-color:rgba(240,240,240,1); }
-::-webkit-scrollbar-thumb { background-color:@green-0; }
-::-webkit-scrollbar-thumb:window-inactive { background-color: lighten(@green-0, 40%); }
+::-webkit-scrollbar-thumb { background-color:@c-primary; }
+::-webkit-scrollbar-thumb:window-inactive { background-color: lighten(@c-primary, 40%); }
 
 // Alerts
 
@@ -20,21 +20,21 @@
   font-weight: bold;
 
   &.success {
-    background-color: @green-selection;
-    color: @green-selection-dark;
-    border-color: @green-selection-dark;
+    background-color: @c-alert-success;
+    color: @c-alert-success-shade;
+    border-color: @c-alert-success-shade;
   }
 
   &.warning {
-    background-color: @gold-selection;
-    color: @gold-selection-dark;
-    border-color: @gold-selection-dark;
+    background-color: @c-alert-warning;
+    color: @c-alert-warning-shade;
+    border-color: @c-alert-warning-shade;
   }
 
   &.error {
-    background-color: @bg-error;
-    color: @fg-error;
-    border-color: @fg-error;
+    background-color: @c-alert-error;
+    color: @c-alert-error-shade;
+    border-color: @c-alert-error-shade;
   }
 }
 

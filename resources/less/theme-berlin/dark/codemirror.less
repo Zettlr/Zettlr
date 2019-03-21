@@ -4,14 +4,9 @@
     color:@grey-0;
 }
 
-.CodeMirror-selected { background-color:@green-2 !important; }
+.CodeMirror-selected { background-color:@selection-dark !important; }
 
-.CodeMirror-cursor { background: @green-0; }
-
-.CodeMirror-dialog {
-    background-color: @blue-selection-dark;
-    input { color: @blue-selection; }
-}
+.CodeMirror-cursor { background: @c-primary; }
 
 // First the code blocks
 .cm-comment, .cm-fenced-code { color:@grey-1; }
@@ -38,17 +33,17 @@
 // TYPOGRAPHY
 .cm-formatting-header-1, .cm-formatting-header-2, .cm-formatting-header-3,
 .cm-formatting-header-4, .cm-formatting-header-5, .cm-formatting-header-6,
-.cm-url { color: @green-0; }
+.cm-url { color: @c-primary; }
 
 /* LISTS */
 .cm-formatting-list-ul,
-.cm-formatting-list-ol { color: @green-0; }
+.cm-formatting-list-ol { color: @c-primary; }
 
 /* TYPOGRAPHY */
 .cm-quote, .cm-link, .cm-strong, .cm-em { color:@blue-3; }
 .cm-spell-error { border-bottom:2px dotted @bg-error; }
-.cm-zkn-tag, .cm-zkn-id, .cm-zkn-link { color:@green-0; }
-.cma { color: @blue-selection; }
+.cm-zkn-tag, .cm-zkn-id, .cm-zkn-link { color:@c-primary; }
+.cma { color: @c-primary-shade; }
 
 // citations
 .citeproc-citation {
@@ -82,10 +77,10 @@
   }
 
   li.CodeMirror-hint-active {
-    background-color: darken(@green-0, 10%);
+    background-color: @c-primary-shade;
     color: @grey-0;
 
-    &:hover { background-color: @green-0; }
+    &:hover { background-color: @c-primary; }
   }
 
   .cm-hint-colour {

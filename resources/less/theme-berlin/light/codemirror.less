@@ -23,8 +23,8 @@
     }
 }
 
-.CodeMirror-selected { background-color:@green-selection !important; }
-.CodeMirror-cursor { background: @green-0; }
+.CodeMirror-selected { background-color:@selection-light !important; }
+.CodeMirror-cursor { background: @c-primary; }
 
 // Now general styling for variables
 
@@ -56,21 +56,21 @@
 // TYPOGRAPHY
 .cm-formatting-header-1, .cm-formatting-header-2, .cm-formatting-header-3,
 .cm-formatting-header-4, .cm-formatting-header-5, .cm-formatting-header-6,
-.cm-url { color: @green-0; }
+.cm-url { color: @c-primary; }
 
 .size-header-1, .size-header-2, .size-header-3,
 .size-header-4, .size-header-5, .size-header-6 { font-weight: bold; }
 
 /* LISTS */
 .cm-formatting-list-ul,
-.cm-formatting-list-ol { color: @green-0; }
+.cm-formatting-list-ol { color: @c-primary; }
 
 /* TYPOGRAPHY */
-.cm-quote, .cm-link, .cm-strong, .cm-em { color:@blue-0; }
+.cm-quote, .cm-link, .cm-strong, .cm-em { color:@c-secondary; }
 .cm-spell-error { border-bottom:2px dotted @orange-2; }
-.cm-zkn-tag, .cm-zkn-id, .cm-zkn-link { color:@green-0; }
+.cm-zkn-tag, .cm-zkn-id, .cm-zkn-link { color:@c-primary; }
 // cma = code-mirror-anchor
-.cma { color: @blue-0; font-weight: inherit; }
+.cma { color: @c-secondary; font-weight: inherit; }
 
 // citations
 .citeproc-citation {
@@ -82,7 +82,7 @@
 
 // Horizontal ruler
 .cm-hr {
-  color: @green-0;
+  color: @c-primary;
   font-family: @font-mono;
   font-weight: bold;
 }
@@ -123,10 +123,10 @@
   }
 
   li.CodeMirror-hint-active {
-    background: @green-0;
+    background: @c-primary;
     color: @grey-0;
 
-    &:hover { background-color: darken(@green-0, 10%); }
+    &:hover { background-color: @c-primary-shade; }
   }
 
   // Special tags

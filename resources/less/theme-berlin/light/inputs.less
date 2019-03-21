@@ -12,7 +12,7 @@
 
     &:before { background-color: white; }
   }
-  input:checked + .toggle { background-color: @green-0; }
+  input:checked + .toggle { background-color: @c-primary; }
 }
 
 .radio-toggle {
@@ -22,7 +22,7 @@
     // Inner part
     &:before { background-color: transparent; }
   }
-  input:checked + .toggle:before { background-color: @green-0; }
+  input:checked + .toggle:before { background-color: @c-primary; }
 }
 
 /*
@@ -31,7 +31,7 @@
 
 input[type=range] {
   &::-webkit-slider-runnable-track { background: @grey-1; }
-  &::-webkit-slider-thumb { background: @green-0; }
+  &::-webkit-slider-thumb { background: @c-primary; }
   &:focus::-webkit-slider-runnable-track { background: @grey-1; }
 }
 
@@ -46,7 +46,7 @@ progress {
   }
 
   &::-webkit-progress-value {
-    background-color: @green-0;
+    background-color: @c-primary;
     border-radius: @border-radius;
     transition: 0.4s all ease; // Ease out the value changes
   }

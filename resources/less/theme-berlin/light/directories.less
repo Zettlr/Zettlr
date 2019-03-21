@@ -16,7 +16,7 @@
 
     ul {
         .selected {
-            background-color:@green-0;
+            background-color:@c-primary;
             color:white;
 
             &:before { color:white; }
@@ -26,7 +26,7 @@
             &:hover { background-color:@grey-1; }
 
             &.highlight {
-                box-shadow: 0px 0px 1px 2px @green-selection;
+                box-shadow: 0px 0px 1px 2px @selection-light;
 
                 // Prevent hovering effect on drag'n'drop actions
                 &:hover  { background-color:inherit; }
@@ -36,7 +36,7 @@
 
     .file {
         &.selected {
-            background-color:@green-0;
+            background-color:@c-primary;
             color:white;
         }
 
@@ -46,9 +46,9 @@
         }
     }
 
-    .virtual-directory { color: @purple-selection; }
+    .virtual-directory { color: @c-virtual-directory; }
 
-    .project { color: @fg-error; }
+    .project { color: @c-project; }
 
     .emptyPaths {
         background-color:@grey-0;

@@ -21,9 +21,9 @@
         &.pomodoro svg {
             // Colours for the pomodoro counter
             .pomodoro-meter       { fill: @grey-2; }
-            .pomodoro-value.task  { fill: @orange-2; }
-            .pomodoro-value.short { fill: @gold-selection-dark; }
-            .pomodoro-value.long  { fill: @green-selection-dark; }
+            .pomodoro-value.task  { fill: @pomodoro-task; }
+            .pomodoro-value.short { fill: @pomodoro-short; }
+            .pomodoro-value.long  { fill: @pomodoro-long; }
         }
     }
 
@@ -33,7 +33,7 @@
       opacity: 1;
       transition: 0.2s opacity ease;
       .indicator-meter { fill: @grey-2; }
-      .indicator-value { fill: @green-0; }
+      .indicator-value { fill: @c-primary; }
 
       &.hidden { opacity: 0; }
     }

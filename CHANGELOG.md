@@ -17,7 +17,7 @@
 - Bumped dependencies. **Switched to `Electron 5` Beta**.
 - The Quicklook-windows will now also load the correct CodeMirror-plugins from the autoload file.
 - Moved out the recent files to its own provider.
-- Design cleanup.
+- Design cleanup. Many variables have been renamed to make it possible to create new themes based upon the Berlin theme.
 - The renderer does not constantly query the main process for up-to-date citations anymore, which both reduces CPU power and increases battery life.
 
 # 1.2.0
