@@ -69,8 +69,8 @@ class ZettlrEditor {
 
     // The starting position for a tag autocomplete.
     this._autoCompleteStart = null
-    this._tagDB = null // Holds all available tags for autocomplete
-    this._citeprocIDs = null // Holds all available IDs for autocomplete
+    this._tagDB = [] // Holds all available tags for autocomplete
+    this._citeprocIDs = [] // Holds all available IDs for autocomplete
     this._currentDatabase = null // Points either to the tagDB or the ID database
 
     // What elements should be rendered?

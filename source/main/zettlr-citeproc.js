@@ -207,6 +207,13 @@ class ZettlrCiteproc {
         'displayText': dt
       }
     })
+
+    // Now the whole library is fully loaded. Let's send the citeproc-IDs to the
+    // renderer.
+    global.ipc.send('citeproc-ids', {
+      'ids': JSON.parse(JSON.stringify(this._idHint)),
+      'status': this._status
+    })
   }
 
   /**

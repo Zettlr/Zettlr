@@ -110,6 +110,9 @@ class ZettlrRenderer {
     // Request a first batch of files
     this._ipc.send('get-paths', {})
 
+    // Send an initial request to the reference database.
+    this._ipc.send('citeproc-get-ids')
+
     // Here we can init actions and stuff to be done after the startup has finished
     setTimeout(() => { this.poll() }, POLL_TIME) // Poll every POLL_TIME seconds
 
@@ -121,16 +124,8 @@ class ZettlrRenderer {
     * This function is called every POLL_TIME seconds to execute recurring tasks.
     */
   poll () {
-    // The updating of both the IDs available for citation as well as updating
-    // the citations of a whole book you may have written costs a lot of time,
-    // we'll do this outside of the normal run of the application, every
-    // POLL_TIME seconds. This way, it might feel "laggy", but after all the
-    // writing itself does not seem laggy, and this is the main aim. Nobody can
-    // seriously complain that the citations update "slowly".
+    // Nothing to do currently
 
-    // TODO Jan 21 2019: This is bullshit. Use proper events, like a grown up.
-    // This definitely does not have to happen every few seconds.
-    this._ipc.send('citeproc-get-ids')
     // Set next timeout
     setTimeout(() => { this.poll() }, POLL_TIME)
   }
