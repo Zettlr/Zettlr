@@ -30,6 +30,10 @@
 
 // First generic variables
 .cm-comment, .cm-fenced-code { color:@grey-3; }
+.cm-comment:not(.cm-formatting):not(.cm-fenced-code) {
+  background-color: @grey-0;
+  border-radius: @border-radius;
+}
 
 .cm-fenced-code, .cm-stex-mode {
   font-family: @font-code;

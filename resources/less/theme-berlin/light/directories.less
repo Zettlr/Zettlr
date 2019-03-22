@@ -1,12 +1,12 @@
 // Directory styling
 
 #directories {
-    border-right:1px solid @grey-2;
+    // border-right:1px solid @grey-2;
+    background-color: @bg-directories;
     color: @grey-4;
     font-size:@font-size-small;
 
     // Direct descendants need some margin to the files and to other roots
-    // &//  > ul:not(:first-child) { border-top:1px solid @grey-2; }
     #directories-dirs-header, #directories-files-header {
       border-bottom:1px solid @grey-2;
       color: @grey-2;
@@ -23,7 +23,10 @@
         }
 
         li {
-            &:hover { background-color:@grey-1; }
+            &:hover {
+              color: @grey-4;
+              background-color:@grey-1;
+            }
 
             &.highlight {
                 box-shadow: 0px 0px 1px 2px @selection-light;
@@ -54,4 +57,10 @@
         background-color:@grey-0;
         color:@grey-4;
     }
+}
+
+// When both directories and preview list are visible, we need a visible border
+// between both so that it does not look weird.
+#combiner.expanded #directories {
+  border-right: 1px solid @grey-2;
 }

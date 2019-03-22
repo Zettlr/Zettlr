@@ -17,13 +17,6 @@
         },
         {
             "role": "button",
-            "class": "directory-new",
-            "command": "dir-new",
-            "content": "{}",
-            "title": "toolbar.dir_new"
-        },
-        {
-            "role": "button",
             "class":  "file-new",
             "command": "file-new",
             "content": "{}",

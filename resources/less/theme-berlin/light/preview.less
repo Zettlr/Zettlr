@@ -1,15 +1,17 @@
 // Preview styling
 
 #preview {
-
-    border-right:1px solid @grey-2;
-    background-color:inherit;
+    // border-right:1px solid @grey-2;
+    background-color: @bg-preview;
     font-size: @font-size-small;
 
     ul {
         background-color:inherit;
 
-        .selected { background-color:@selection-light; }
+        .selected {
+          background-color: @c-primary;
+          color: white;
+        }
 
         li {
             border-bottom:1px solid @grey-2;
@@ -25,8 +27,6 @@
                 background-color:@grey-0 !important;
                 p.filename { color: @grey-7 !important; }
             }
-
-            p.filename { color: @grey-7; }
 
             /* Taglist stuff */
             .taglist:hover .tag { border:2px solid white; }

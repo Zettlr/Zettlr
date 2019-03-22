@@ -2,15 +2,17 @@
 
 ## GUI and Functionality
 
+- Removed the Quicklook overlay windows. Quicklooks now directly become standalone windows.
+- General improvements to the default PDF template.
+- On Windows and macOS, Zettlr now also fills up the recent document list in the Taskbar/Dock.
+- Huge UX improvements.
+- We're removed the "Create new Directory" button from the toolbar, and made the "Create new File" button more visible by replacing the icon with a huge "Plus" sign.
 - Fixed a small bug in the PDF template that would render emphasised text underlined instead of italic in exported PDF files.
 - Fixed the links inside footnote tooltips. Now they are readable and don't break out of the tooltip anymore.
 - Fixed an error that prevented Zettlr from being able to automatically import language files.
-- Removed the Quicklook overlay windows. Quicklooks now directly become standalone windows.
 - Fixed a bug causing emails not to render.
 - Fixed a bug preventing you from clicking the "Print" icon on Windows.
 - Fixed double-clicking the Quicklook and Print window title bar on macOS and Linux.
-- General improvements to the default PDF template.
-- On Windows and macOS, Zettlr now also fills up the recent document list in the Taskbar/Dock.
 
 ## Under the Hood
 
