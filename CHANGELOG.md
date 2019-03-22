@@ -6,6 +6,7 @@
 - General improvements to the default PDF template.
 - On Windows and macOS, Zettlr now also fills up the recent document list in the Taskbar/Dock.
 - Huge UX improvements.
+- Improvements to the spellchecking engine. Now, it won't check inline code.
 - We're removed the "Create new Directory" button from the toolbar, and made the "Create new File" button more visible by replacing the icon with a huge "Plus" sign.
 - Fixed the misbehaving markdown shortcuts in the formatting toolbar. Now block formats are replaced, not left in place when changing the formatting of a paragraph.
 - Fixed a small bug in the PDF template that would render emphasised text underlined instead of italic in exported PDF files.

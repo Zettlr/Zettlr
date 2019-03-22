@@ -14,6 +14,7 @@
 
   var delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚'
   var zknTagRE = /##?[A-Z0-9-_]+#?/i
+  var codeRE = /`.*?`/i
   var tableRE = /^\|.+\|$/i
 
   /**
@@ -50,9 +51,10 @@
         }
 
         // Don't spellcheck tags
-        if (stream.match(zknTagRE)) {
-          return null
-        }
+        if (stream.match(zknTagRE)) return null
+
+        // Don't spellcheck inline code
+        if (stream.match(codeRE)) return null
 
         if (delim.includes(ch)) {
           stream.next()
