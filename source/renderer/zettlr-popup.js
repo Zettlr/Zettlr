@@ -190,10 +190,15 @@ class ZettlrPopup {
   makePersistent () {
     this._persistent = true
   }
+
+  /**
+   * Can be called programmatically to indicate that the size of the popup may
+   * have changed.
+   * @return {void} Does not return.
+   */
+  change () { this._place() }
 }
 
-function popup (element, content, callback = null) {
+module.exports = function (element, content, callback = null) {
   return new ZettlrPopup(element, content, callback)
 }
-
-module.exports = popup

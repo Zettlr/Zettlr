@@ -8,6 +8,8 @@
 - Huge UX improvements.
 - Improvements to the spellchecking engine. Now, it won't check inline code.
 - We're removed the "Create new Directory" button from the toolbar, and made the "Create new File" button more visible by replacing the icon with a huge "Plus" sign.
+- The Pomodoro timer now sends out notifications when a task has ended so that you'll always know what's up next!
+- Fixed the position of the popups. Now they won't cover the toolbar.
 - Fixed the misbehaving markdown shortcuts in the formatting toolbar. Now block formats are replaced, not left in place when changing the formatting of a paragraph.
 - Fixed a small bug in the PDF template that would render emphasised text underlined instead of italic in exported PDF files.
 - Fixed the links inside footnote tooltips. Now they are readable and don't break out of the tooltip anymore.
@@ -23,6 +25,7 @@
 - Moved out the recent files to its own provider.
 - Design cleanup. Many variables have been renamed to make it possible to create new themes based upon the Berlin theme.
 - The renderer does not constantly query the main process for up-to-date citations anymore, which both reduces CPU power and increases battery life.
+- The popups can now be told if their contents have changed so that they re-place themselves correctly.
 
 # 1.2.0
 

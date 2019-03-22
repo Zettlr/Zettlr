@@ -14,6 +14,7 @@
  */
 
 const MARGIN = 10 // 10 px margin between all notifications
+const OFFSET = 49 // The offset from the top of the window (toolbar + margin)
 
 /**
  * This is one of the shortest classes in Zettlr, as it only displays small
@@ -82,7 +83,7 @@ class ZettlrNotification {
 
   _place () {
     // First find out where we should put ourselves.
-    let h = MARGIN // Begin with the initial margin (from the top of the window)
+    let h = OFFSET // Begin with the initial margin (from the top of the window)
     let thisElem = this._div[0]
     $('body').children('.notify').each(function (index) {
       if (this !== thisElem) {
@@ -94,7 +95,7 @@ class ZettlrNotification {
 
     // Place it! If it's the first notification (h = Margin), simply show it.
     // Otherwise, move it down. Use the default duration of 400ms.
-    if (h === MARGIN && parseInt(this._div.css('top')) <= MARGIN) {
+    if (h === OFFSET && parseInt(this._div.css('top')) <= OFFSET) {
       this._div.css('top', h + 'px')
     } else {
       this._div.animate({ 'top': h + 'px' })

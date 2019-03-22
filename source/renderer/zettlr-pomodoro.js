@@ -126,6 +126,8 @@ class ZettlrPomodoro {
       // Set the class of the value accordingly
       this._progressValue.addClass(this._phase.type)
       $('#pomodoro-phase-type').text(trans('pomodoro.phase.' + this._phase.type))
+      if (this._pref) this._pref.change() // Indicate a possible change in the popup's size.
+      global.notify('Pomodoro: <strong>' + trans('pomodoro.phase.' + this._phase.type) + '</strong>')
     }
 
     // Visualise the progress using the Pomodoro circle.
