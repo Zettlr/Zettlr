@@ -9,6 +9,8 @@
 - Improvements to the spellchecking engine. Now, it won't check inline code.
 - We're removed the "Create new Directory" button from the toolbar, and made the "Create new File" button more visible by replacing the icon with a huge "Plus" sign.
 - The Pomodoro timer now sends out notifications when a task has ended so that you'll always know what's up next!
+- The find popup detects when you start to type a regular expression. If it's a valid regular expression, it will switch to a monospaced font, helping you to write the expression correctly.
+- The find popup now remembers your search term on a per-session basis.
 - Fixed the position of the popups. Now they won't cover the toolbar.
 - Fixed the misbehaving markdown shortcuts in the formatting toolbar. Now block formats are replaced, not left in place when changing the formatting of a paragraph.
 - Fixed a small bug in the PDF template that would render emphasised text underlined instead of italic in exported PDF files.

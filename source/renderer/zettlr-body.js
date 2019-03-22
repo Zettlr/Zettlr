@@ -54,6 +54,10 @@ class ZettlrBody {
     // Holds the currently displayed dialog. Prevents multiple dialogs from appearing.
     this._currentDialog = null
 
+    // This object caches the values of search and replace value, so they stay
+    // persistent on a per-session basis.
+    this._findPopup = { 'searchVal': '', 'replaceVal': '' }
+
     // Event listener for the context menu
     window.addEventListener('contextmenu', (e) => {
       e.preventDefault()
@@ -489,19 +493,39 @@ class ZettlrBody {
     * @return {void} Nothing to return.
     */
   displayFind () {
-    if (this._renderer.getCurrentFile() === null) {
-      return
-    }
+    if (this._renderer.getCurrentFile() === null) return
+    let regexRE = /^\/.*\/[gimy]{0,4}$/ // It's meta, dude!
 
-    let cnt = makeTemplate('popup', 'find')
+    // Create the popup template. Make sure we pre-set the value, if given.
+    let cnt = makeTemplate('popup', 'find', {
+      'search': this._findPopup.searchVal || '',
+      'replace': this._findPopup.replaceVal || ''
+    })
 
     // This must be a persistent popup
     popup($('.button.find'), cnt, (x) => {
+      // Cache the current values.
+      this._findPopup = {
+        'searchVal': $('#searchWhat').val(),
+        'replaceVal': $('#replaceWhat').val()
+      }
       // Remove search cursor once the popup is closed
       this._renderer.getEditor().stopSearch()
     }).makePersistent()
 
+    // If a regular expression was restored to the find popup, make sure to set
+    // the respective class.
+    if (regexRE.test($('#searchWhat').val())) {
+      $('#searchWhat').addClass('regexp')
+    }
+
     $('#searchWhat').on('keyup', (e) => {
+      if (regexRE.test($(e.target).val())) {
+        $(e.target).addClass('regexp')
+      } else {
+        $(e.target).removeClass('regexp')
+      }
+
       if (e.which === 13) { // Enter
         e.preventDefault()
       }
