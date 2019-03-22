@@ -22,6 +22,29 @@ const { clipboard } = require('electron');
 
   var reservedChars = '+.*_/\\[](){}?^$'.split('')
   var urlRE = /^[-a-z0-9@:%_+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-z0-9@:%_+.~#?&//=]*)?$/i
+  // First capturing group: preceding whitespace. Second cap.: line contents
+  // Non-capturing group in the middle: all block elements.
+  // Non-capturing group afterwards: catches all whitespace
+  var blockRE = /^(\s*?)(?:#{1,6}|>|\*|\+|-|\d{1,5}\.)(?:\s*)(.*)$/
+
+  /**
+   * This function undoes a block formatting and then re-applies another one.
+   * @param  {String} line A line with possible block formattings.
+   * @param {String} formatting The formatting mark to be applied
+   * @return {String}      The line without Markdown block formattings.
+   */
+  function applyBlock (line, formatting) {
+    // Only add a space if there is a formatting passed to the function
+    formatting = (formatting) ? formatting + ' ' : ''
+
+    // Return the unaltered line if there is no block element contained
+    if (!blockRE.test(line)) return formatting + line
+
+    // Return the match, extracting the formatting.
+    let match = blockRE.exec(line)
+    // Replace all whitespace between formatting mark and line contents
+    return match[1] + formatting + match[2]
+  }
 
   /**
    * Converts selection into a markdown inline element (or removes formatting)
@@ -121,7 +144,6 @@ const { clipboard } = require('electron');
       // Just jump to the beginning of the line and insert a mark
       let cur = cm.getCursor()
       cur.ch = 0
-      cm.setCursor(cur)
       let line = cm.doc.getLineHandle(cur.line)
       if (re.test(line.text)) {
         let match = re.exec(line.text)
@@ -129,13 +151,13 @@ const { clipboard } = require('electron');
         // Line already contains the formatting -> remove
         cm.doc.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
         // Replace only with the first capturing group
-        cm.doc.replaceSelection(match[1])
+        cm.doc.replaceSelection(match[1].trim())
       } else {
         // Line is not formatted -> insert a mark
         cm.doc.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
-        cm.doc.replaceSelection(mark + ' ' + line.text)
+        cm.doc.replaceSelection(applyBlock(line.text, mark))
       }
-      return
+      return // Done with formatting
     }
 
     // We've got at least one selection. So first get all line numbers inside
@@ -153,9 +175,8 @@ const { clipboard } = require('electron');
     // Second: Unique-ify the lines array (one selection may start at a line
     // where another ends)
     lines = [...new Set(lines)]
-    if (lines.length === 0) {
-      return
-    }
+
+    if (lines.length === 0) return // Nothing to do
 
     // Third: Convert all lines into single selections.
     let finalCursor = { 'line': 0, 'ch': 0 }
@@ -176,10 +197,10 @@ const { clipboard } = require('electron');
       if (re.test(line)) {
         let match = re.exec(line)
         // Line already contains the formatting -> remove
-        replacements.push(match[1])
+        replacements.push(match[1].trim())
       } else {
         // Line is not formatted -> insert a mark
-        replacements.push(mark + ' ' + line)
+        replacements.push(applyBlock(line, mark))
       }
     }
 

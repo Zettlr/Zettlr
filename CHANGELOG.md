@@ -7,6 +7,7 @@
 - On Windows and macOS, Zettlr now also fills up the recent document list in the Taskbar/Dock.
 - Huge UX improvements.
 - We're removed the "Create new Directory" button from the toolbar, and made the "Create new File" button more visible by replacing the icon with a huge "Plus" sign.
+- Fixed the misbehaving markdown shortcuts in the formatting toolbar. Now block formats are replaced, not left in place when changing the formatting of a paragraph.
 - Fixed a small bug in the PDF template that would render emphasised text underlined instead of italic in exported PDF files.
 - Fixed the links inside footnote tooltips. Now they are readable and don't break out of the tooltip anymore.
 - Fixed an error that prevented Zettlr from being able to automatically import language files.
