@@ -38,8 +38,8 @@
 @bg-annotation: @orange-2;
 @bg-annotation-dark: yellow;
 
-@selection-light: @green-selection;
-@selection-dark: @green-selection-dark;
+@selection-light: @blue-selection;
+@selection-dark: @blue-selection-dark;
 
 /**
  * ALERTS
@@ -61,8 +61,9 @@
 @pomodoro-long: @green-selection-dark;
 
 /**
- * FONTS
+ * Change editor font
  */
-@font-main: @font-crimson;
-@font-secondary: @font-lato;
-@font-code: @font-liberation;
+#editor .CodeMirror {
+  font-family: 'Merriweather';
+  font-size: 1.5em;
+}
