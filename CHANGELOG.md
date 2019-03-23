@@ -1,3 +1,13 @@
+# 1.2.2
+
+## GUI and Functionality
+
+- Fixed a bug preventing you from creating Writing Targets.
+
+## Under the Hood
+
+- Fixed a logical error in a failcheck if there was no writing target assigned to a file previously.
+
 # 1.2.1
 
 ## GUI and Functionality
