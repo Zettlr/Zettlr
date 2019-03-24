@@ -149,7 +149,7 @@ class ZettlrFile {
     // or a space.
     // Positive lookbehind: Assert either a space, a newline or the start of the
     // string.
-    let tagRE = /(?<= |\n|^)#(#?[A-Z0-9-_]+#?)/gi
+    let tagRE = /(?<= |\n|^)#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?)/g
     let match
     // (Re-)read content of file
     let cnt = fs.readFileSync(this.path, { encoding: 'utf8' })
