@@ -48,11 +48,13 @@ class UpdateCheck extends ZettlrCommand {
    */
   async _check () {
     try {
-      this._response = await got(REPO_URL + 'releases', {
-        followRedirect: false, // Prevent intrusions
-        headers: {
-          'accept': 'application/vnd.github.v3+json'
-        }
+      this._response = await got(REPO_URL, {
+        method: 'GET',
+        query: new URLSearchParams([
+          ['uuid', global.config.get('uuid')],
+          ['accept-beta', global.config.get('checkForBeta')],
+          ['platform', process.platform]
+        ]).toString()
       })
       // Alright, we only need the body
       this._response = this._response.body
@@ -91,22 +93,11 @@ class UpdateCheck extends ZettlrCommand {
     // First we need to deal with it.
     this._response = JSON.parse(this._response)
 
-    // Determine if we should accept this release if it is a beta.
-    let acceptRelease = global.config.get('checkForBeta')
-    if (!acceptRelease) {
-      // The user does not want beta releases, so only give it to him if it's
-      // not a beta release.
-      acceptRelease = !this._response[0].prerelease
-    }
-
-    // Check if (1) our app is less than and (2) the new release is _not_ a draft
-    // and (3) the new release is _not_ a prerelease if not wanted.
-    if (semver.lt(CUR_VER, this._response[0].tag_name) && acceptRelease && !this._response[0].draft) {
-      let conv = new showdown.Converter({
-        'headerLevelStart': 2
-      })
+    // Check if (1) our app is less than the current best version.
+    if (semver.lt(CUR_VER, this._response.tag_name)) {
+      let conv = new showdown.Converter({ 'headerLevelStart': 2 })
       conv.setFlavor('github')
-      let html = conv.makeHtml(this._response[0].body)
+      let html = conv.makeHtml(this._response.body)
 
       // Convert links, so that they remain but do not open in the same
       // window. Security fallback: target="_blank" (then at least they "only"
@@ -115,13 +106,14 @@ class UpdateCheck extends ZettlrCommand {
       html = html.replace(aRE, function (match, p1, p2, offset, string) {
         return `<a${p1} onclick="require('electron').shell.openExternal(this.getAttribute('href')); return false;" target="_blank">${p2}</a>`
       })
+      console.log(this._response)
 
       return {
-        'newVer': this._response[0].tag_name,
+        'newVer': this._response.tag_name,
         'curVer': CUR_VER,
         'changelog': html,
-        'releaseURL': this._response[0].html_url,
-        'isBeta': this._response[0].prerelease,
+        'releaseURL': this._response.html_url,
+        'isBeta': this._response.prerelease,
         'downloadURL': ''
       }
     } else {

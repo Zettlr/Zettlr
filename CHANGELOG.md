@@ -8,6 +8,7 @@
 ## Under the Hood
 
 - Fixed a logical error in a failcheck if there was no writing target assigned to a file previously.
+- Switched to the Zettlr API for update checks to avoid hitting the GitHub rate limits.
 
 # 1.2.1
 

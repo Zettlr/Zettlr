@@ -11,7 +11,7 @@
         ".+?\\.textbundle"
     ],
     "poll_time": 5000,
-    "repo_url": "https://api.github.com/repos/Zettlr/Zettlr/",
+    "repo_url": "https://api.zettlr.com/v1/releases/latest",
     "additional_paths": {
         "win32": [],
         "linux": [
