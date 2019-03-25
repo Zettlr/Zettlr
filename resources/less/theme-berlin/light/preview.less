@@ -3,6 +3,7 @@
 #preview {
     // border-right:1px solid @grey-2;
     background-color: @bg-preview;
+    transition: @mode-transition background-color ease;
     font-size: @font-size-small;
 
     ul {
@@ -33,6 +34,7 @@
 
             &.directory, &.virtual-directory {
                 background-color:@grey-1;
+                transition: @mode-transition background-color ease;
                 color:@c-primary;
 
                 span.sortTime, span.sortName {
