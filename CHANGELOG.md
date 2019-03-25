@@ -4,6 +4,7 @@
 
 - Fixed a bug preventing you from creating Writing Targets.
 - Allow all unicode characters to be part of a tag.
+- The Scrollbars are now bigger.
 
 ## Under the Hood
 
