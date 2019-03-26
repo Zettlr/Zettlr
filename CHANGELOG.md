@@ -7,6 +7,7 @@
 - The Scrollbars are now bigger.
 - The change between dark and light mode is now much smoother.
 - Fixed the "Paste as Plain text" command behaviour when CodeMirror is focused.
+- Dialogs now fit better on smaller screens.
 
 ## Under the Hood
 

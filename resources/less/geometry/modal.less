@@ -1,330 +1,338 @@
 // Geometry for the renderer modals
 
 .modal {
-    position:fixed;
-    top:0;
-    bottom:0;
-    left:0;
-    right:0;
-    z-index:1000;
-    overflow-x:hidden; /* For longer settings(?) and stuff dialogs */
-    overflow-y:auto;
+  position:fixed;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:1000;
+  overflow-x:hidden; /* For longer settings(?) and stuff dialogs */
+  overflow-y:auto;
 
-    .dialog {
-        margin:0 15%;
-        padding:20px;
+  .dialog {
+    margin:0 15%;
+    padding:20px;
 
-        // General typography
-        h1 {
-            font-size: 1.5em;
-            margin-bottom:1.5em;
+    // General typography
+    h1 {
+      font-size: 1.5em;
+      margin-bottom:1.5em;
 
-            small { font-size:75%; }
+      small { font-size:75%; }
+    }
+
+    span.uuid {
+      display:block;
+      margin-top: -3em; // Place directly underneath the heading
+      margin-bottom: 1em;
+      font-size: 75%;
+      user-select: text; // The UUID may be copied
+      cursor: text;
+    }
+
+    h2, h3, h4, h5, h6 { margin-bottom:1em; }
+
+    p, li { line-height:150%; }
+
+    ul, ol, p, li { margin-bottom:0.5em; }
+
+    hr {
+      border:none;
+      border-bottom-style: solid;
+      border-bottom-width: 1px;
+      width:80%;
+      margin:1em 10%;
+    }
+
+    img {
+      max-width:100%;
+      max-height:100%;
+
+      // The following class is used in the paste-image dialog.
+      &.image-preview {
+        // Restrict preview images to a smaller height. They only should be
+        // previewed, after all.
+        max-height: 50vh;
+        // Center the previews
+        display: block;
+        margin: 0 auto;
+      }
+    }
+
+    // Forms
+
+    label {
+      margin:1em 0.5em 0.5em 0em;
+      display:block;
+      cursor:pointer;
+      display:inline;
+    }
+
+    input {
+      width: 100%;
+      line-height: 150%;
+      font-size: inherit;
+      outline:none;
+      margin-bottom:1em;
+    }
+
+    select {
+      line-height: 200%;
+      font-size: inherit;
+      padding:0.5em;
+      margin:0.5em;
+    }
+
+    input[type="checkbox"], input[type="radio"] {
+      margin:0.5em;
+      width:auto;
+      display:inline;
+    }
+
+    textarea {
+      font-size:inherit;
+      width:100%;
+      padding:1em;
+      border-radius: @border-radius;
+    }
+
+    button, a.button {
+      display:inline-block;
+      font-size:1em;
+      margin:1em;
+      padding:0.5em 1em;
+      cursor:pointer;
+      text-decoration:none;
+    }
+
+    // Special treatment for the open-file-buttons
+    button.request-file {
+      margin: 0;
+      line-height: 140%;
+      &:before {
+        font-family: @font-icon;
+        content: "\f41a";
+      }
+    }
+
+    // The inputs need to be smaller in size to let the request-file buttons
+    // fit on the same line
+    div.file-select-group {
+      display: flex;
+      margin-bottom: 1em;
+      input {
+        flex: 0 5 auto;
+        margin-bottom: 0; // Remove the standard margin and apply it to the box
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      button {
+        flex: 0 1 auto;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+
+    // Why the .code-class? Because sometimes we have a small code area,
+    // sometimes it's the only content of the dialog (in which case we
+    // need to constrain its size in the geometry part)
+    .changelog, .code {
+      max-height:300px;
+      overflow-y:auto;
+      border-radius:2px;
+      padding:10px;
+      margin:10px 0px;
+      user-select: text; // The code contents may be copied
+    }
+
+    /* Mock a <pre>-tag */
+    .code {
+      white-space: pre;
+      font-family: @font-code;
+    }
+
+    div.clear { clear:both; }
+
+    // box-left and box-right are used on normal fullscreen to display content
+    // side-by-side, while on smaller screens (i.e. less than 800px) for the
+    // sake of readability it will be displayed full width on the modals.
+    div.box-left, div.box-right {
+      width: 100%;
+      padding:2%;
+    }
+
+    // On larger screens, box-left and box-right are displayed next to each other.
+    @media(min-width: 800px) {
+      div.box-left,
+      div.box-right { width:50%; }
+      div.box-left  { float:left; }
+      div.box-right { float:right; }
+    }
+
+    // Positioning of the paper margin text elements
+    div.paper {
+      position:relative;
+
+      &.a4paper {
+        width: 5em; // Approx. aspect ratio is 5em/7em
+        height: 7em;
+        margin: 1em auto;
+        border: 1px solid black;
+      }
+
+      input[type="number"] {
+        text-align:center;
+        width:4em;
+
+        &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
         }
+      }
 
-        span.uuid {
-          display:block;
-          margin-top: -3em; // Place directly underneath the heading
-          margin-bottom: 1em;
-          font-size: 75%;
-          user-select: text; // The UUID may be copied
-          cursor: text;
+      .tmargin, .rmargin, .bmargin, .lmargin { position:absolute; }
+      .tmargin { top: -2em;     margin: 0 0.5em; }
+      .rmargin { right: -4.1em; top: 2.5em;      }
+      .bmargin { bottom: -2em;  margin: 0 0.5em; }
+      .lmargin { left: -4.2em;  top: 2.5em;      }
+    }
+
+    // Positioning of the image size constraint sliders
+    div.image-size {
+      position: relative;
+      height: 8em;
+      width: 8em;
+      margin: 0 auto; // Center the element
+
+      .image {
+        width: 6em;
+        height: 6em;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-image: url("../img/image-preview.png");
+        background-size: contain;
+      }
+
+      #imageWidth {
+        width: 6em;
+        position: absolute;
+        bottom: -10px;
+      }
+
+      #imageHeight {
+        width: 6em;
+        transform: rotateZ(-90deg);
+        position: absolute;
+        top: 2.5em;
+        left: 4em;
+      }
+
+      #preview-image-sizes {
+        display: block;
+        position: absolute;
+        bottom: -1em;
+        left: 1em;
+        font-weight: bold;
+      }
+    }
+
+    // This is the paragraph needed for previewing of changes to PDF preferences.
+    .pdf-preview {
+      max-height:100%;
+      overflow-y:auto;
+    }
+
+    .error {
+      border-radius:5px;
+      margin:0.5em;
+      padding:1em;
+    }
+
+    div#prefs-taglist {
+      div {
+        display:flex;
+
+        input, button {
+          flex-grow:1;
+          display:inline;
+          margin:0.5em;
         }
+      }
+    }
 
-        h2, h3, h4, h5, h6 { margin-bottom:1em; }
+    // About projects section
+    .projects {
+      display: flex;
 
-        p, li { line-height:150%; }
-
-        ul, ol, p, li { margin-bottom:0.5em; }
-
-        hr {
-            border:none;
-            border-bottom-style: solid;
-            border-bottom-width: 1px;
-            width:80%;
-            margin:1em 10%;
-        }
+      .flex {
+        flex: 1;
+        padding:1em;
 
         img {
-            max-width:100%;
-            max-height:100%;
-
-            // The following class is used in the paste-image dialog.
-            &.image-preview {
-              // Restrict preview images to a smaller height. They only should be
-              // previewed, after all.
-              max-height: 50vh;
-              // Center the previews
-              display: block;
-              margin: 0 auto;
-            }
+          width:100%;
+          max-height:100%;
         }
+      }
+    }
 
-        // Forms
+    span#prev-sheet, span#next-sheet {
+      font-family: @font-icon;
+      font-size:@font-size-small * 0.8;
+    }
 
-        label {
-            margin:1em 0.5em 0.5em 0em;
-            display:block;
-            cursor:pointer;
-            display:inline;
+    span#prev-sheet::before {
+      content: '\f489';
+    }
+
+    span#next-sheet::before {
+      content: '\f488';
+    }
+
+    // Tabs styles
+    .ui-tabs-nav {
+      display:flex;
+      padding:0;
+      margin-bottom:20px;
+
+      .ui-tabs-tab {
+        flex: 1;
+        display:inline-block;
+        line-height:200%;
+        list-style-type: none;
+        margin-bottom:0;
+
+        a {
+          text-decoration:none;
+          display:inline-block;
+          width:100%;
+          text-align:center;
+          outline:none;
         }
+      }
+      } // END tabs styles
 
-        input {
-            width: 100%;
-            line-height: 150%;
-            font-size: inherit;
-            outline:none;
-            margin-bottom:1em;
+      // Dictionary list geometry
+      ul.dicts-list {
+        list-style-type: none;
+        max-height:300px;
+        overflow-y:auto;
+
+        li.dicts-list-item {
+          display: block;
+          cursor: pointer;
+          line-height:1.5em;
         }
+      }
 
-        select {
-            line-height: 200%;
-            font-size: inherit;
-            padding:0.5em;
-            margin:0.5em;
-        }
+      input.dicts-list-search {
+        line-height: 200%;
+      }
 
-        input[type="checkbox"], input[type="radio"] {
-            margin:0.5em;
-            width:auto;
-            display:inline;
-        }
+      .selected-dict {
+        display: inline-block;
+      }
 
-        textarea {
-            font-size:inherit;
-            width:100%;
-            padding:1em;
-            border-radius: @border-radius;
-        }
-
-        button, a.button {
-            display:inline-block;
-            font-size:1em;
-            margin:1em;
-            padding:0.5em 1em;
-            cursor:pointer;
-            text-decoration:none;
-        }
-
-        // Special treatment for the open-file-buttons
-        button.request-file {
-          margin: 0;
-          line-height: 140%;
-          &:before {
-            font-family: @font-icon;
-            content: "\f41a";
-          }
-        }
-
-        // The inputs need to be smaller in size to let the request-file buttons
-        // fit on the same line
-        div.file-select-group {
-          display: flex;
-          margin-bottom: 1em;
-          input {
-            flex: 0 5 auto;
-            margin-bottom: 0; // Remove the standard margin and apply it to the box
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-          }
-          button {
-            flex: 0 1 auto;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-          }
-        }
-
-        // Why the .code-class? Because sometimes we have a small code area,
-        // sometimes it's the only content of the dialog (in which case we
-        // need to constrain its size in the geometry part)
-        .changelog, .code {
-            max-height:300px;
-            overflow-y:auto;
-            border-radius:2px;
-            padding:10px;
-            margin:10px 0px;
-            user-select: text; // The code contents may be copied
-        }
-
-        /* Mock a <pre>-tag */
-        .code {
-          white-space: pre;
-          font-family: @font-code;
-        }
-
-        div.clear { clear:both; }
-
-        div.box-left, div.box-right {
-            width:50%;
-            padding:2%;
-            float:left;
-        }
-
-        div.box-right { float:right; }
-
-        // Positioning of the paper margin text elements
-        div.paper {
-            position:relative;
-
-            &.a4paper {
-                width: 5em; // Approx. aspect ratio is 5em/7em
-                height: 7em;
-                margin: 1em auto;
-                border: 1px solid black;
-            }
-
-            input[type="number"] {
-                text-align:center;
-                width:4em;
-
-                &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
-                    -webkit-appearance: none;
-                    margin: 0;
-                }
-            }
-
-            .tmargin, .rmargin, .bmargin, .lmargin { position:absolute; }
-            .tmargin { top: -2em;     margin: 0 0.5em; }
-            .rmargin { right: -4.1em; top: 2.5em;      }
-            .bmargin { bottom: -2em;  margin: 0 0.5em; }
-            .lmargin { left: -4.2em;  top: 2.5em;      }
-        }
-
-        // Positioning of the image size constraint sliders
-        div.image-size {
-          position: relative;
-          height: 8em;
-          width: 8em;
-          margin: 0 auto; // Center the element
-
-          .image {
-            width: 6em;
-            height: 6em;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background-image: url("../img/image-preview.png");
-            background-size: contain;
-          }
-
-          #imageWidth {
-            width: 6em;
-            position: absolute;
-            bottom: -10px;
-          }
-
-          #imageHeight {
-            width: 6em;
-            transform: rotateZ(-90deg);
-            position: absolute;
-            top: 2.5em;
-            left: 4em;
-          }
-
-          #preview-image-sizes {
-            display: block;
-            position: absolute;
-            bottom: -1em;
-            left: 1em;
-            font-weight: bold;
-          }
-        }
-
-        // This is the paragraph needed for previewing of changes to PDF preferences.
-        .pdf-preview {
-            max-height:100%;
-            overflow-y:auto;
-        }
-
-        .error {
-            border-radius:5px;
-            margin:0.5em;
-            padding:1em;
-        }
-
-        div#prefs-taglist {
-            div {
-                display:flex;
-
-                input, button {
-                    flex-grow:1;
-                    display:inline;
-                    margin:0.5em;
-                }
-            }
-        }
-
-        // About projects section
-        .projects {
-            display: flex;
-
-            .flex {
-                flex: 1;
-                padding:1em;
-
-                img {
-                    width:100%;
-                    max-height:100%;
-                }
-            }
-        }
-
-        span#prev-sheet, span#next-sheet {
-          font-family: @font-icon;
-          font-size:@font-size-small * 0.8;
-        }
-
-        span#prev-sheet::before {
-          content: '\f489';
-        }
-
-        span#next-sheet::before {
-          content: '\f488';
-        }
-
-        // Tabs styles
-        .ui-tabs-nav {
-            display:flex;
-            padding:0;
-            margin-bottom:20px;
-
-            .ui-tabs-tab {
-                flex: 1;
-                display:inline-block;
-                line-height:200%;
-                list-style-type: none;
-                margin-bottom:0;
-
-                a {
-                    text-decoration:none;
-                    display:inline-block;
-                    width:100%;
-                    text-align:center;
-                    outline:none;
-                }
-            }
-        } // END tabs styles
-
-        // Dictionary list geometry
-        ul.dicts-list {
-            list-style-type: none;
-            max-height:300px;
-            overflow-y:auto;
-
-            li.dicts-list-item {
-                display: block;
-                cursor: pointer;
-                line-height:1.5em;
-            }
-        }
-
-        input.dicts-list-search {
-            line-height: 200%;
-        }
-
-        .selected-dict {
-            display: inline-block;
-        }
-
-    } // END dialog styles
-} // END modal styles
+      } // END dialog styles
+      } // END modal styles
