@@ -6,6 +6,7 @@
 - Allow all unicode characters to be part of a tag.
 - The Scrollbars are now bigger.
 - The change between dark and light mode is now much smoother.
+- Fixed the "Paste as Plain text" command behaviour when CodeMirror is focused.
 
 ## Under the Hood
 

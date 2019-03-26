@@ -159,7 +159,7 @@ class ZettlrEditor {
         linkEnd: '\\]\\]' // End of links?
       },
       continuelistModes: [ 'markdown', 'markdown-zkn' ],
-      extraKeys: {
+      extraKeys: CodeMirror.normalizeKeyMap({
         'Cmd-F': false,
         'Ctrl-F': false,
         'Enter': 'newlineAndIndentContinueMarkdownList',
@@ -175,8 +175,11 @@ class ZettlrEditor {
           CodeMirror.commands['goLineUp'](cm)
           CodeMirror.commands['goLineEnd'](cm)
           CodeMirror.commands['newlineAndIndent'](cm)
-        }
-      }
+        },
+        // We need to override the default behaviour
+        'Ctrl-Shift-V': (cm) => { if (process.platform === 'darwin') return; this.pasteAsPlain() },
+        'Cmd-Shift-V': (cm) => { this.pasteAsPlain() }
+      })
     })
 
     /**
