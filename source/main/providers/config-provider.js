@@ -18,7 +18,7 @@
 
 const fs = require('fs')
 const path = require('path')
-const uuid = require('uuid/v5')
+const uuid = require('uuid/v4')
 const EventEmitter = require('events')
 const bcp47 = require('bcp-47')
 const ZettlrValidation = require('../../common/zettlr-validation.js')
@@ -308,7 +308,12 @@ class ConfigProvider extends EventEmitter {
 
     // Finally, check whether or not a UUID exists, and, if not, generate one.
     if (!this.config.uuid) {
-      this.config.uuid = uuid('com.zettlr.app', uuid.DNS)
+      this.config.uuid = uuid()
+    }
+
+    // Small bugfix b/c of me completely misunderstanding the UUID package
+    if (this.config.uuid === 'ebc1e1d7-0e27-59dd-b348-32a6ba99c952') {
+      this.config.uuid = uuid()
     }
 
     return this
