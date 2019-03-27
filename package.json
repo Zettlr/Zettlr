@@ -53,7 +53,8 @@
             "category": "public.app-category.productivity",
             "target": "dmg",
             "artifactName": "Zettlr-macos-x64-${version}.${ext}",
-            "icon": "resources/icons/icns/icon.icns"
+            "icon": "resources/icons/icns/icon.icns",
+            "darkModeSupport": true
         },
         "win": {
             "target": "nsis",
