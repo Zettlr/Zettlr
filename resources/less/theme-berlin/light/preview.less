@@ -1,70 +1,72 @@
 // Preview styling
 
 #preview {
-    // border-right:1px solid @grey-2;
-    background-color: @bg-preview;
-    transition: @mode-transition all ease;
-    font-size: @font-size-small;
+  // border-right:1px solid @grey-2;
+  background-color: @bg-preview;
+  transition: @mode-transition all ease;
+  font-size: @font-size-small;
 
-    ul {
-        background-color:inherit;
+  ul {
+    background-color:inherit;
 
-        .selected {
-          background-color: @c-primary;
-          color: white;
-        }
+    &#filelist { outline: 0; }
 
-        li {
-            border-bottom:1px solid @grey-2;
-            border-top:1px solid @grey-2;
-            background-color:inherit;
-
-            // File is displayed as part of a virtual directory -> actually
-            // some kind of a "ghost" file
-            &.vd-file { background-color: @bg-virtual-directory; }
-
-            &.file:hover {
-                // important is needed to not mess with the heatmap styles
-                background-color:@grey-0 !important;
-                p.filename { color: @grey-7 !important; }
-            }
-
-            /* Taglist stuff */
-            .taglist:hover .tag { border:2px solid white; }
-
-            &.directory, &.virtual-directory {
-                background-color:@grey-1;
-                transition: @mode-transition background-color ease;
-                color:@c-primary;
-
-                span.sortTime, span.sortName {
-                    background-color:@grey-1;
-
-                    &:hover { color:@grey-5; }
-                }
-            }
-
-            &.virtual-directory { color:@c-virtual-directory; }
-
-            p.snippet {
-              .excerpt { color: @grey-3; }
-
-              .date, .id, .tags, .directories, .files, .virtual-directories {
-                background-color:@grey-1;
-                color: @grey-3;
-              }
-
-              .tex-indicator {
-                color: @grey-0;
-                font-family: @font-code;
-                background-color: @c-primary;
-              }
-
-              .target-progress-indicator {
-                circle { fill: @grey-0; }
-                path { fill: @c-primary; }
-              }
-            }
-        }
+    .selected {
+      background-color: @c-primary;
+      color: white;
     }
+
+    li {
+      border-bottom:1px solid @grey-2;
+      border-top:1px solid @grey-2;
+      background-color:inherit;
+
+      // File is displayed as part of a virtual directory -> actually
+      // some kind of a "ghost" file
+      &.vd-file { background-color: @bg-virtual-directory; }
+
+      &.file:hover {
+        // important is needed to not mess with the heatmap styles
+        background-color:@grey-0 !important;
+        p.filename { color: @grey-7 !important; }
+      }
+
+      /* Taglist stuff */
+      .taglist:hover .tag { border:2px solid white; }
+
+      &.directory, &.virtual-directory {
+        background-color:@grey-1;
+        transition: @mode-transition background-color ease;
+        color:@c-primary;
+
+        span.sortTime, span.sortName {
+          background-color:@grey-1;
+
+          &:hover { color:@grey-5; }
+        }
+      }
+
+      &.virtual-directory { color:@c-virtual-directory; }
+
+      p.snippet {
+        .excerpt { color: @grey-3; }
+
+        .date, .id, .tags, .directories, .files, .virtual-directories {
+          background-color:@grey-1;
+          color: @grey-3;
+        }
+
+        .tex-indicator {
+          color: @grey-0;
+          font-family: @font-code;
+          background-color: @c-primary;
+        }
+
+        .target-progress-indicator {
+          circle { fill: @grey-0; }
+          path { fill: @c-primary; }
+        }
+      }
+    }
+  }
 }
