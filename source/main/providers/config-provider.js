@@ -84,8 +84,8 @@ class ConfigProvider extends EventEmitter {
       'attachmentExtensions': COMMON_DATA.attachmentExtensions,
       // UI related options
       'darkTheme': false,
-      'snippets': false,
-      'hideDirs': false, // Should the app hide directories during global search?
+      'snippets': true,
+      'hideDirs': true, // Should the app hide directories during global search?
       'sorting': 'natural', // Can be natural or based on ASCII values
       'muteLines': true, // Should the editor mute lines in distraction free mode?
       'combinerState': 'collapsed', // collapsed = Preview or directories visible --- expanded = both visible
@@ -94,7 +94,7 @@ class ConfigProvider extends EventEmitter {
       'xelatex': 'xelatex',
       'export': {
         'dir': 'temp', // Can either be "temp" or "cwd" (current working directory)
-        'stripIDs': true, // Strip ZKN IDs such as @ID:<id>
+        'stripIDs': false, // Strip ZKN IDs such as @ID:<id>
         'stripTags': false, // Strip tags a.k.a. #tag
         'stripLinks': 'full', // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
         'cslLibrary': '', // Path to a CSL JSON library file
@@ -130,8 +130,8 @@ class ConfigProvider extends EventEmitter {
       },
       'display': {
         'imageWidth': 100, // Maximum preview image width
-        'imageHeight': 100, // Maximum preview image height
-        'renderCitations': true,
+        'imageHeight': 50, // Maximum preview image height
+        'renderCitations': false,
         'renderIframes': true,
         'renderImages': true,
         'renderLinks': true,
