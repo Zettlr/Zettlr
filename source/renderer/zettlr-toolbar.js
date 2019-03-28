@@ -77,6 +77,8 @@ class ZettlrToolbar {
       }
     })
 
+    this._searchbar.on('dblclick', (e) => { e.stopPropagation() })
+
     this._div.find('.end-search').on('click', (e) => {
       this._searchbar.blur()
       this._searchbar.val('')
