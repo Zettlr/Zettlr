@@ -8,6 +8,7 @@
 - The change between dark and light mode is now much smoother.
 - Fixed the "Paste as Plain text" command behaviour when CodeMirror is focused.
 - Dialogs now fit better on smaller screens.
+- Added icons to the export options HTML, PDF, DOCX, and ODT.
 
 ## Under the Hood
 
