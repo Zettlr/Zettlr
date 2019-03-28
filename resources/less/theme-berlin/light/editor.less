@@ -5,3 +5,18 @@
   background-color: #ffffff;
   transition: @mode-transition background-color ease;
 }
+
+#editor .ui-resizable-handle.ui-resizable-w {
+  &::after {
+    background-color: rgba(0, 0, 0, .4);
+    border-radius:10px;
+    transition: @mode-transition opacity ease;
+    opacity: 0;
+  }
+
+  &:hover {
+    &::after {
+      opacity: 1;
+    }
+  }
+}
