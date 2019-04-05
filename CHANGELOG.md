@@ -1,3 +1,13 @@
+# 1.2.3
+
+## GUI and Functionality
+
+- Restore the "New Directory …" functionality.
+
+## Under the Hood
+
+- Made sure a popup will always be displayed, even if the pivot element cannot be found.
+
 # 1.2.2
 
 ## GUI and Functionality

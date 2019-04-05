@@ -147,12 +147,29 @@ class ZettlrBody {
     // It was a virtual directory, not an actual directory.
     if (dir.type !== 'directory') return
 
+    let elem
+
+    // Selection method stolen from requestNewDirName
+    if (!$('#combiner').hasClass('expanded') && $('#directories').hasClass('hidden')) {
+      // The combiner is in thin mode and directories is hidden, so the file list
+      // is visible -> find the div in there. (Should be the top containing dir)
+      elem = $('#preview').find('li[data-hash="' + dir.hash + '"]').first()
+    } else {
+      // The combiner is in extended mode and/or the tree view is visible.
+      elem = $('#directories').find('li[data-hash="' + dir.hash + '"]').first()
+    }
+
+    // In case the combiner was not in an extended mode and the preview list did
+    // not contain the directory fall back to the combiner element itself. But
+    // this should normally never happen.
+    if (elem.length === 0) elem = $('#combiner')
+
     let cnt = makeTemplate('popup', 'textfield', {
       'val': trans('dialog.dir_new.value'),
       'placeholder': trans('dialog.dir_new.placeholder')
     })
 
-    popup($('.button.directory-new'), cnt, (form) => {
+    popup(elem, cnt, (form) => {
       if (form) {
         global.ipc.send('dir-new', { 'name': form[0].value, 'hash': dir.hash })
       }

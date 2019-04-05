@@ -40,6 +40,13 @@ class ZettlrPopup {
     this._elem = elem
     this._persistent = false // Should the popup stay open even on form submit?
 
+    // We need to be able to compute an offset. It may be that the given element
+    // is non existent (jQuery will always at least return an object that evals
+    // to true), so check that we can compute an offset, and if we can't, fall
+    // back to the toolbar, so that the popup is displayed centered where the
+    // user will be able to find it either way.
+    if (!this._elem.offset()) this._elem = $('#toolbar')
+
     // Where the small arrow should point to.
     this._x = 0
     this._y = 0
