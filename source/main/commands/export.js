@@ -13,7 +13,6 @@
  */
 
 const ZettlrCommand = require('./zettlr-command')
-const ZettlrPrint = require('../zettlr-print.js')
 const { app } = require('electron')
 const path = require('path')
 const makeExport = require('../zettlr-export')
@@ -22,9 +21,6 @@ const { trans } = require('../../common/lang/i18n')
 class Export extends ZettlrCommand {
   constructor (app) {
     super(app, 'export')
-
-    // Load the print window handler class
-    this._printWindow = new ZettlrPrint()
   }
 
   /**

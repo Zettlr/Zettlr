@@ -3,11 +3,13 @@
 ## GUI and Functionality
 
 - Restore the "New Directory …" functionality.
+- Fixed an error when trying to run the app on some Linux distributions.
 
 ## Under the Hood
 
 - Made sure a popup will always be displayed, even if the pivot element cannot be found.
 - Bump dependencies.
+- Apply `chmod`-fix to the Linux distribution (see #134 for more information).
 
 # 1.2.2
 

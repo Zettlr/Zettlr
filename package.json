@@ -49,6 +49,7 @@
             "output": "release",
             "app": "source"
         },
+        "afterPack": "./scripts/afterPack.js",
         "mac": {
             "category": "public.app-category.productivity",
             "target": "dmg",
