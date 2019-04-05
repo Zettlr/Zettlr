@@ -4,6 +4,7 @@
 
 - Restore the "New Directory …" functionality.
 - Fixed an error when trying to run the app on some Linux distributions.
+- Added a link to download more translations for the app.
 
 ## Under the Hood
 

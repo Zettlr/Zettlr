@@ -20,6 +20,10 @@
             <option value="{{this}}" {{#ifCond this '=' ../appLang}}selected="selected"{{/ifCond}}>{{i18n "dialog.preferences.app_lang." this}}</option>
             {{/each}}
           </select>
+          <p>
+            <a href="#" onclick="require('electron').shell.openExternal('https://translate.zettlr.com/')">Get more languages &hellip;</a>
+          </p>
+          <hr>
           <div class="cb-group">
             <label class="cb-toggle">
               <input type="checkbox" name="darkTheme" value="yes" id="darkTheme" {{#if darkTheme}}checked="checked"{{/if}}>
