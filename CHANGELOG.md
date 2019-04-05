@@ -7,6 +7,7 @@
 ## Under the Hood
 
 - Made sure a popup will always be displayed, even if the pivot element cannot be found.
+- Bump dependencies.
 
 # 1.2.2
 
