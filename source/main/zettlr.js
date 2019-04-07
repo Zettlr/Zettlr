@@ -266,6 +266,8 @@ class Zettlr {
         return cmd.run(evt, arg)
       } catch (e) {
         console.log(e)
+        // Re-throw for the IPC to handle a fall-through
+        throw e
       }
     } else {
       // We need to throw, because the return value of a successful command run

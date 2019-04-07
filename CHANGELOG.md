@@ -1,3 +1,13 @@
+# (no version assigned)
+
+## GUI and Functionality
+
+- Display contributors tab on the about dialog containing the names of all authors of the translation files.
+
+## Under the Hood
+
+- Re-throw errors during command run in Zettlr main class.
+
 # 1.2.3
 
 ## GUI and Functionality

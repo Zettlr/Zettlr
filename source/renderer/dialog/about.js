@@ -14,6 +14,7 @@
  */
 
 const ZettlrDialog = require('./zettlr-dialog.js')
+const { trans } = require('../../common/lang/i18n')
 
 class AboutDialog extends ZettlrDialog {
   constructor () {
@@ -25,6 +26,24 @@ class AboutDialog extends ZettlrDialog {
     data.version = require('../../package.json').version
     data.uuid = global.config.get('uuid')
     return data
+  }
+
+  postAct () {
+    // Retrieve additional data from main
+    global.ipc.send('get-translation-metadata', {}, (data) => {
+      // List all contributors to translations
+      let html = ''
+      for (let lang of data) {
+        let failsafe = 'dialog.preferences.app_lang.' + lang.bcp47
+        let name = trans(failsafe)
+        if (name === failsafe) name = lang.bcp47
+        html += `<p><strong>${name}</strong></p>`
+        html += `<ul>`
+        for (let author of lang.authors) html += `<li>${author.replace(/<(.+)>/g, '<small>(<a href="mailto:$1">$1</a>)</small>')}</li>`
+        html += `</ul>`
+      }
+      document.getElementById('contrib').innerHTML = html
+    })
   }
 }
 

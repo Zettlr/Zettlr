@@ -6,6 +6,7 @@
         <ul>
             <li><a href="#about-tabs-main">{{i18n "dialog.about.main"}}</a></li>
             <li><a href="#about-tabs-projects">{{i18n "dialog.about.projects"}}</a></li>
+            <li><a href="#about-tabs-contributors">{{i18n "dialog.about.contributors"}}</a></li>
             <li><a href="#about-tabs-license">{{i18n "dialog.about.license"}}</a></li>
         </ul>
         <div id="about-tabs-main">
@@ -65,6 +66,12 @@
             <li><a href="#" onclick="require('electron').shell.openExternal('https://atomiks.github.io/tippyjs/')">Tippy.js</a> &mdash; {{i18n "dialog.about.tippyjs"}}</li>
             <li><a href="#" onclick="require('electron').shell.openExternal('https://github.com/wooorm/nspell/')">nspell</a> &mdash; {{i18n "dialog.about.nspell"}}</li>
         </ul>
+    </div>
+  </div>
+  <div id="about-tabs-contributors">
+    <h1>{{i18n "dialog.about.contributors"}}</h1>
+    <div id="contrib" class="changelog">
+      <!-- The Contributors will be dynamically loaded -->
     </div>
   </div>
   <div id="about-tabs-license">

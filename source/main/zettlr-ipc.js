@@ -340,6 +340,14 @@ class ZettlrIPC {
    * @return {Mixed}     Whatever is registered in runCall to return for a given cmd.
    */
   runCall (cmd, arg) {
+    // We received a new event and need to handle it.
+    try {
+      let res = this._app.runCommand(cmd, arg)
+      return res // In case the command has run there's no need to handle it.
+    } catch (e) {
+      // Simple fall through
+    }
+
     switch (cmd) {
       // Window controls actions can be send either as callback IPC calls or as
       // normals (which is why they are present both in runCall and handleEvent)

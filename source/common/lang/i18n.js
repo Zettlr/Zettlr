@@ -223,6 +223,32 @@ function findLangCandidates (lang, candidates) {
 }
 
 /**
+ * Asynchronous function to retrieve the metadata from all available languages
+ * @param  {Array}  [paths=[ __dirname,    path.join(app.getPath('userData'] Paths to be searched for
+ * @return {Array}          An array containing the language metadata (keys = bcp-47 tags)
+ */
+function getTranslationMetadata (paths = [ __dirname, path.join(app.getPath('userData'), '/lang') ]) {
+  let metadata = []
+
+  // First get all translations available
+  let files = enumLangFiles(paths).map(elem => elem.path)
+  // Now loop through them and extract the metadata section
+  for (let f of files) {
+    let lang = path.basename(f, path.extname(f)) // bcp-47 tag
+    let data = fs.readFileSync(f, 'utf-8')
+    data = JSON.parse(data)
+    if (!data.hasOwnProperty('metadata')) {
+      metadata.push({ 'bcp47': lang }) // Only the language tag
+    } else {
+      data.metadata['bcp47'] = lang // Add language tag
+      metadata.push(data.metadata)
+    }
+  }
+
+  return metadata
+}
+
+/**
  * Enumerates all language files available to load, based on the given search paths.
  * @param  {Array} [paths=[]] An array of paths to search for. Optional.
  * @return {Array}       An array containing metadata for all found files.
@@ -285,5 +311,6 @@ module.exports = {
   getDictionaryFile,
   getLanguageFile,
   enumLangFiles,
-  enumDictFiles
+  enumDictFiles,
+  getTranslationMetadata
 }
