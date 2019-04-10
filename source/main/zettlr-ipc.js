@@ -16,7 +16,7 @@
  * END HEADER
  */
 
-const { trans } = require('../common/lang/i18n.js')
+const { trans, getTranslationMetadata } = require('../common/lang/i18n.js')
 const ipc = require('electron').ipcMain
 const { BrowserWindow } = require('electron') // Needed for close and maximise commands
 
@@ -341,12 +341,6 @@ class ZettlrIPC {
    */
   runCall (cmd, arg) {
     // We received a new event and need to handle it.
-    try {
-      let res = this._app.runCommand(cmd, arg)
-      return res // In case the command has run there's no need to handle it.
-    } catch (e) {
-      // Simple fall through
-    }
 
     switch (cmd) {
       // Window controls actions can be send either as callback IPC calls or as
@@ -376,10 +370,13 @@ class ZettlrIPC {
         return this._app.getWindow().askFile(arg.filters, arg.multiSel)
 
       // A quicklook window wants to pop-out of the main window
-      case 'make-standalone':
       case 'open-quicklook':
         this._app.openQL(arg)
         return true
+
+      // Return the metadata for the translation files
+      case 'get-translation-metadata':
+        return getTranslationMetadata()
 
       // Send the global tag database to the renderer process.
       case 'get-tags-database':
