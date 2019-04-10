@@ -2,8 +2,8 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ZettlrDictionary class
- * CVM-Role:        Model
+ * Contains:        DictionaryProvider class
+ * CVM-Role:        Provider
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
@@ -16,27 +16,48 @@
 const EventEmitter = require('events')
 const NSpell = require('nspell')
 const fs = require('fs')
-const { getDictionaryFile } = require('../common/lang/i18n.js')
+const ipc = require('electron').ipcMain
+const { getDictionaryFile } = require('../../common/lang/i18n.js')
 
 /**
  * This class loads and unloads dictionaries according to the configuration set
  * by the user on runtime. It provides functions that allow to search all
  * loaded dictionaries for words and even change the dictionaries during runtime.
  */
-class ZettlrDictionary extends EventEmitter {
+class DictionaryProvider extends EventEmitter {
   constructor () {
     super()
     this._typos = []
     this._toLoad = 0 // If this number equals the length of the _typos array, all are loaded
     this._loadedDicts = [] // Array containing the language codes for which checking currently works
-    this._load()
 
     // Inject global methods
     global.dict = {
       on: (message, callback) => { this.on(message, callback) },
       off: (message, callback) => { this.off(message, callback) }
     }
+
+    // Listen for synchronous messages from the renderer process for typos.
+    ipc.on('typo', (event, message) => {
+      if (message.type === 'check') {
+        event.returnValue = this.check(message.term)
+      } else if (message.type === 'suggest') {
+        event.returnValue = this.suggest(message.term)
+      }
+    })
+
+    // Reload as soon as the config has been updated
+    global.config.on('update', () => { this.reload() })
+
+    // Afterwards, set the timeout for loading the dictionaries
+    setTimeout(() => { this._load() }, 2000)
   }
+
+  /**
+   * Shuts down the provider
+   * @return {Boolean} Whether or not the shutdown was successful
+   */
+  shutdown () { return true }
 
   _load () {
     let selectedDicts = global.config.get('selectedDicts')
@@ -85,6 +106,9 @@ class ZettlrDictionary extends EventEmitter {
 
     // Finally emit the update event
     this.emit('update', this._loadedDicts)
+
+    // Send an invalidation message to the renderer
+    global.ipc.send('invalidate-dict')
   }
 
   check (term) {
@@ -137,4 +161,4 @@ class ZettlrDictionary extends EventEmitter {
   checks (lang) { return this._loadedDicts.includes(lang) }
 }
 
-module.exports = ZettlrDictionary
+module.exports = new DictionaryProvider()

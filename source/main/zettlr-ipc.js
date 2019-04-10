@@ -42,15 +42,6 @@ class ZettlrIPC {
       event.returnValue = global.config.get(key)
     })
 
-    // Listen for synchronous messages from the renderer process for typos.
-    ipc.on('typo', (event, message) => {
-      if (message.type === 'check') {
-        event.returnValue = (this._app.dict) ? this._app.dict.check(message.term) : 'not-ready'
-      } else if (message.type === 'suggest') {
-        event.returnValue = (this._app.dict) ? this._app.dict.suggest(message.term) : []
-      }
-    })
-
     // Citeproc calls (either single citation or a whole cluster)
     ipc.on('getCitation', (event, idList) => { event.returnValue = global.citeproc.getCitation(idList) })
     ipc.on('updateItems', (event, idList) => { event.returnValue = global.citeproc.updateItems(idList) })
@@ -285,10 +276,6 @@ class ZettlrIPC {
       case 'update-config':
         global.config.bulkSet(cnt)
         this.send('config-update')
-        // Reload the dictionaries based on the user's selection
-        // The dict property will not be preset if there were not dictionaries
-        // loaded.
-        if (this._app.dict) this._app.dict.reload()
         break
 
       case 'update-tags':

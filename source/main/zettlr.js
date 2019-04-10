@@ -26,7 +26,6 @@ const ZettlrFile = require('./zettlr-file.js')
 const ZettlrWatchdog = require('./zettlr-watchdog.js')
 const ZettlrTargets = require('./zettlr-targets.js')
 const ZettlrStats = require('./zettlr-stats.js')
-const ZettlrDictionary = require('./zettlr-dictionary.js')
 const ZettlrCiteproc = require('./zettlr-citeproc.js')
 const { i18n, trans } = require('../common/lang/i18n.js')
 const { hash, ignoreDir,
@@ -113,16 +112,6 @@ class Zettlr {
 
     // Initiate regular polling
     setTimeout(() => {
-      // We have to push this into the background, because otherwise the window
-      // won't open. As usual: Everything time-consuming shouldn't be done in the
-      // first tick of the app.
-      this.dict = new ZettlrDictionary()
-
-      // Begin to listen to events emitted by the dictionary
-      this.dict.on('update', (event, loadedDicts) => {
-        // Send an invalidation message to the renderer
-        this.ipc.send('invalidate-dict')
-      })
       this.poll()
     }, POLL_TIME)
   }
@@ -135,6 +124,7 @@ class Zettlr {
     // The order is important, we'll just save them to this object
     this._providers = {
       'config': require('./providers/config-provider.js'),
+      'dictionary': require('./providers/dictionary-provider.js'),
       'recentDocs': require('./providers/recent-docs-provider.js'),
       'tags': require('./providers/tag-provider.js'),
       'css': require('./providers/css-provider.js')

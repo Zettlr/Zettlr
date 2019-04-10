@@ -7,6 +7,7 @@
 ## Under the Hood
 
 - Re-throw errors during command run in Zettlr main class.
+- Moved the dictionary to its own dedicated provider for more versatility.
 
 # 1.2.3
 
