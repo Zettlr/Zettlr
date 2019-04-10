@@ -18,6 +18,8 @@ const NSpell = require('nspell')
 const fs = require('fs')
 const ipc = require('electron').ipcMain
 const { getDictionaryFile } = require('../../common/lang/i18n.js')
+const { promisify } = require('util')
+const readFile = promisify(fs.readFile)
 
 /**
  * This class loads and unloads dictionaries according to the configuration set
@@ -59,7 +61,7 @@ class DictionaryProvider extends EventEmitter {
    */
   shutdown () { return true }
 
-  _load () {
+  async _load () {
     let selectedDicts = global.config.get('selectedDicts')
     let dictsToLoad = []
 
@@ -86,22 +88,26 @@ class DictionaryProvider extends EventEmitter {
       // First request a dictionary.
       let dictMeta = getDictionaryFile(dict)
       if (dictMeta.status !== 'exact') continue // Only consider exact matches
+      let aff = null
+      let dic = null
       this._toLoad++
-      fs.readFile(dictMeta.aff, 'utf8', (err, affData) => {
-        if (err) {
-          this._toLoad-- // Decrement so that Zettlr checks with less dictionaries
-        } else if (affData) {
-          fs.readFile(dictMeta.dic, 'utf8', (err, dicData) => {
-            if (err) {
-              this._toLoad--
-            } else if (dicData) {
-              // Finally push the typo!
-              this._typos.push(new NSpell(affData, dicData))
-              this._loadedDicts.push(dict)
-            } // END second else if
-          }) // END second readFile
-        } // END first else if
-      }) // END first readFile
+
+      try {
+        aff = await readFile(dictMeta.aff, 'utf8')
+      } catch (e) {
+        this._toLoad--
+        continue
+      }
+
+      try {
+        dic = await readFile(dictMeta.dic, 'utf8')
+      } catch (e) {
+        this._toLoad--
+        continue
+      }
+
+      this._typos.push(new NSpell(aff, dic))
+      this._loadedDicts.push(dict)
     } // END for
 
     // Finally emit the update event
