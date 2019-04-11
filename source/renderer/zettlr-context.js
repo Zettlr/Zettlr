@@ -16,6 +16,7 @@
 
 const { remote } = require('electron')
 const { Menu } = remote
+const ipc = require('electron').ipcRenderer
 const { trans } = require('../common/lang/i18n.js')
 
 /**
@@ -185,14 +186,28 @@ class ZettlrCon {
               }
             })
           }
-          typoPrefix.push({ type: 'separator' })
         } else {
           typoPrefix.push({
             'label': trans('menu.no_suggestions'),
             enabled: 'false'
           })
-          typoPrefix.push({ type: 'separator' })
         }
+
+        typoPrefix.push({ type: 'separator' })
+        // Always add an option to add a word to the user dictionary
+        typoPrefix.push({
+          'label': trans('menu.add_to_dictionary'),
+          'click': (item, win) => {
+            // elem.text() contains the misspelled word
+            ipc.sendSync('typo', {
+              'type': 'add',
+              'term': elem.text()
+            })
+            // IPC send: add to dict TODO
+          }
+        })
+        // Final separator
+        typoPrefix.push({ type: 'separator' })
       }
       menupath = 'editor.json'
     } else if (elem.is('input[type="text"]') || elem.is('textarea')) {

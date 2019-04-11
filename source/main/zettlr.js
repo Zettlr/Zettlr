@@ -132,6 +132,15 @@ class Zettlr {
   }
 
   /**
+   * Shuts down all service providers.
+   */
+  _shutdownServiceProviders () {
+    for (let provider in this._providers) {
+      this._providers[provider].shutdown()
+    }
+  }
+
+  /**
     * Performs recurring tasks such as polling the watchdog every five secs.
     * @return {void} Returns nothing.
     * @deprecated The watchdog polls will be put into an event listening system
@@ -191,6 +200,7 @@ class Zettlr {
     * @return {void} Does not return anything.
     */
   shutdown () {
+    console.log(`Shutting down!`)
     // Close all Quicklook Windows
     this._ql.closeAll()
     // Save the config and stats
@@ -202,6 +212,9 @@ class Zettlr {
     for (let p of this._openPaths) {
       p.shutdown()
     }
+
+    // Finally, shut down the service providers
+    this._shutdownServiceProviders()
   }
 
   /**

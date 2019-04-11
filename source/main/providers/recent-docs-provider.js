@@ -87,6 +87,12 @@ class RecentDocsProvider extends EventEmitter {
       hasDocs: () => { return this._recentDocs.length > 0 }
     }
   }
+
+  /**
+   * Shuts down the provider
+   * @return {Boolean} Always returns true
+   */
+  shutdown () { return true }
 }
 
 module.exports = new RecentDocsProvider()

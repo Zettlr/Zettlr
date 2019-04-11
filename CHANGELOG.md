@@ -2,6 +2,7 @@
 
 ## GUI and Functionality
 
+- **New Feature**: Add words to the user defined dictionary.
 - Display contributors tab on the about dialog containing the names of all authors of the translation files.
 - The dictionary loading mechanism works far more reliably now.
 

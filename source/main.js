@@ -39,7 +39,7 @@ let zettlr
 global.filesToOpen = []
 
 /**
- * This variable is false, if this process is the only one, or if there is
+ * This variable is true, if this process is the only one, or false if there is
  * already one running on this system.
  * @type {Boolean}
  */
@@ -116,17 +116,21 @@ app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
-    // Save config before exit.
+    // Shutdown the app before quitting
     zettlr.shutdown()
     app.quit()
   }
 })
 
 /**
- * On macOS also hook into the will-quit event to save config.json and stats.JSON
+ * Hook into the will-quit event to make sure we are able to shut down our app
+ * properly.
  */
-app.on('will-quit', function () {
-  if (zettlr) zettlr.shutdown()
+app.on('will-quit', function (event) {
+  if (zettlr) {
+    zettlr.shutdown()
+    app.quit()
+  }
 })
 
 /**

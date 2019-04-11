@@ -93,6 +93,15 @@ class TagProvider {
   }
 
   /**
+   * Shuts down the service provider
+   * @return {Boolean} Returns true after successful shutdown
+   */
+  shutdown () {
+    this._save()
+    return true
+  }
+
+  /**
    * This function only (re-)reads the tags on disk.
    * @return {ZettlrTags} This for chainability.
    */

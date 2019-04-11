@@ -213,6 +213,15 @@ class ConfigProvider extends EventEmitter {
   }
 
   /**
+   * Shutdown the service provider -- here save the config to disk
+   * @return {Boolean} Returns true after successful shutdown.
+   */
+  shutdown () {
+    this.save()
+    return true
+  }
+
+  /**
    * Makes sure absolutely essential paths of the app exist.
    */
   _assertPaths () {
@@ -444,7 +453,6 @@ class ConfigProvider extends EventEmitter {
     * @return {Boolean} Whether or not the option was successfully set.
     */
   set (option, value) {
-    console.log(`Received SET with ${option}`)
     // Don't add non-existent options
     if (this.config.hasOwnProperty(option) && this._validate(option, value)) {
       // Do not set the option if it already has the requested value
