@@ -46,6 +46,8 @@ class ConfigProvider extends EventEmitter {
     this.config = null
     this._rules = [] // This array holds all validation rules
 
+    this._bulkSetInProgress = false // As long as this is true, a bulk set happens
+
     // Additional environmental paths (for locating LaTeX and Pandoc)
     if (process.platform === 'win32') {
       this._additional_paths = COMMON_DATA.additional_paths.win32
@@ -83,7 +85,10 @@ class ConfigProvider extends EventEmitter {
       // Visible attachment filetypes
       'attachmentExtensions': COMMON_DATA.attachmentExtensions,
       // UI related options
-      'darkTheme': false,
+      'darkTheme': false, // TODO DEPRECATED to be renamed to darkMode
+      'autoDarkMode': 'off', // Possible values: 'off', 'system', 'schedule', 'auto'
+      'autoDarkModeStart': '22:00', // Switch into dark mode at this time
+      'autoDarkModeEnd': '06:00', // Switch to light mode at this time
       'snippets': true,
       'hideDirs': true, // Should the app hide directories during global search?
       'sorting': 'natural', // Can be natural or based on ASCII values
@@ -461,6 +466,7 @@ class ConfigProvider extends EventEmitter {
       // Set the new value and inform the listeners
       this.config[option] = value
       this.emit('update', option) // Pass the option for info
+      if (!this._bulkSetInProgress) global.ipc.send('config-update') // Notify renderer process
       return true
     }
 
@@ -485,6 +491,7 @@ class ConfigProvider extends EventEmitter {
         // Set the new value and inform the listeners
         cfg[prop] = value
         this.emit('update', option) // Pass the option for info
+        if (!this._bulkSetInProgress) global.ipc.send('config-update') // Notify renderer process
         return true
       }
     }
@@ -501,9 +508,14 @@ class ConfigProvider extends EventEmitter {
   bulkSet (cfgObj) {
     // Iterate and return whether there was a mistake.
     let ret = true
+    this._bulkSetInProgress = true
     for (let opt in cfgObj) {
       if (!this.set(opt, cfgObj[opt])) ret = false
     }
+
+    // Notify renderer afterwards
+    this._bulkSetInProgress = false
+    global.ipc.send('config-update')
 
     return ret
   }

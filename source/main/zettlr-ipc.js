@@ -250,13 +250,11 @@ class ZettlrIPC {
       // Change theme in config
       case 'toggle-theme':
         global.config.set('darkTheme', !global.config.get('darkTheme'))
-        this.send('config-update')
         break
 
       // Change snippet setting in config
       case 'toggle-snippets':
         global.config.set('snippets', !global.config.get('snippets'))
-        this.send('config-update')
         break
 
       case 'get-pdf-preferences':
@@ -275,7 +273,6 @@ class ZettlrIPC {
       // Got a new config object
       case 'update-config':
         global.config.bulkSet(cnt)
-        this.send('config-update')
         break
 
       case 'update-tags':

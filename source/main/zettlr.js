@@ -124,6 +124,7 @@ class Zettlr {
     // The order is important, we'll just save them to this object
     this._providers = {
       'config': require('./providers/config-provider.js'),
+      'appearance': require('./providers/appearance-provider.js'),
       'dictionary': require('./providers/dictionary-provider.js'),
       'recentDocs': require('./providers/recent-docs-provider.js'),
       'tags': require('./providers/tag-provider.js'),
