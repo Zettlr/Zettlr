@@ -30,7 +30,6 @@ class DictionaryProvider extends EventEmitter {
   constructor () {
     super()
     this._typos = []
-    this._toLoad = 0 // If this number equals the length of the _typos array, all are loaded
     this._loadedDicts = [] // Array containing the language codes for which checking currently works
 
     // Inject global methods
@@ -49,10 +48,14 @@ class DictionaryProvider extends EventEmitter {
     })
 
     // Reload as soon as the config has been updated
-    global.config.on('update', () => { this.reload() })
+    global.config.on('update', (opt) => {
+      // We are only interested in changes to the selectedDicts option
+      if (opt !== 'selectedDicts') return
+      this.reload()
+    })
 
     // Afterwards, set the timeout for loading the dictionaries
-    setTimeout(() => { this._load() }, 2000)
+    setTimeout(() => { this.reload() }, 5000)
   }
 
   /**
@@ -61,6 +64,10 @@ class DictionaryProvider extends EventEmitter {
    */
   shutdown () { return true }
 
+  /**
+   * (Re)Loads the dictionaries efficiently based upon the selected dictionaries
+   * @return {Promise} Does not throw, as we catch errors. TODO: Log misloads!
+   */
   async _load () {
     let selectedDicts = global.config.get('selectedDicts')
     let dictsToLoad = []
@@ -81,28 +88,22 @@ class DictionaryProvider extends EventEmitter {
       }
     }
 
-    // Now set the toLoad variable to the length of the remaining dicts
-    this._toLoad = this._typos.length
-
     for (let dict of dictsToLoad) {
       // First request a dictionary.
       let dictMeta = getDictionaryFile(dict)
       if (dictMeta.status !== 'exact') continue // Only consider exact matches
       let aff = null
       let dic = null
-      this._toLoad++
 
       try {
         aff = await readFile(dictMeta.aff, 'utf8')
       } catch (e) {
-        this._toLoad--
         continue
       }
 
       try {
         dic = await readFile(dictMeta.dic, 'utf8')
       } catch (e) {
-        this._toLoad--
         continue
       }
 
@@ -117,9 +118,18 @@ class DictionaryProvider extends EventEmitter {
     global.ipc.send('invalidate-dict')
   }
 
+  /**
+   * Checks the given term against the dictionaries and determines whether its
+   * accurate.
+   * @param  {String} term The word/term to check
+   * @return {Boolean}      True if the word was confirmed by any dictionary, or false.
+   */
   check (term) {
     // Don't check until all are loaded
-    if (this._toLoad > this._typos.length) return 'not-ready'
+    if (global.config.get('selectedDicts').length !== this._typos.length) {
+      return 'not-ready'
+    }
+
     // We need to differentiate between not ready and ready, but there are no
     // dictionaries. Because in the latter case, returning true means to let the
     // renderer save the words anyway. Object indexing is still more efficient
@@ -134,9 +144,15 @@ class DictionaryProvider extends EventEmitter {
     return correct
   }
 
+  /**
+   * Returns an array of possible suggestions for the given word.
+   * @param  {String} term The term or word to check for.
+   * @return {Array}      An array containing all returned possible alternatives.
+   */
   suggest (term) {
     // Return no suggestions
-    if (this._toLoad > this._typos.length || this._typos.length === 0) return []
+    if (global.config.get('selectedDicts').length !== this._typos.length) return []
+    if (this._typos.length === 0) return []
 
     let suggestions = []
     for (let typo of this._typos) {
@@ -146,6 +162,10 @@ class DictionaryProvider extends EventEmitter {
     return suggestions
   }
 
+  /**
+   * Initiates a full reload of the loaded dictionaries.
+   * @return {void} Does not return.
+   */
   reload () {
     if (global.config.get('selectedDicts') === this._loadedDicts) return
 

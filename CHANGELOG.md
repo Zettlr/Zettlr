@@ -3,11 +3,12 @@
 ## GUI and Functionality
 
 - Display contributors tab on the about dialog containing the names of all authors of the translation files.
+- The dictionary loading mechanism works far more reliably now.
 
 ## Under the Hood
 
 - Re-throw errors during command run in Zettlr main class.
-- Moved the dictionary to its own dedicated provider for more versatility.
+- Moved the dictionary to its own dedicated provider for more versatility and improved upon its functionality.
 
 # 1.2.3
 

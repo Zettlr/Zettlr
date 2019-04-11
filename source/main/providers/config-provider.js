@@ -444,10 +444,15 @@ class ConfigProvider extends EventEmitter {
     * @return {Boolean} Whether or not the option was successfully set.
     */
   set (option, value) {
+    console.log(`Received SET with ${option}`)
     // Don't add non-existent options
     if (this.config.hasOwnProperty(option) && this._validate(option, value)) {
+      // Do not set the option if it already has the requested value
+      if (this.config[option] === value) return true
+
+      // Set the new value and inform the listeners
       this.config[option] = value
-      this.emit('update') // Emit an event to all listeners
+      this.emit('update', option) // Pass the option for info
       return true
     }
 
@@ -466,8 +471,12 @@ class ConfigProvider extends EventEmitter {
 
       // Set the nested property
       if (cfg.hasOwnProperty(prop) && this._validate(option, value)) {
+        // Do not set the option if it already has the requested value
+        if (cfg[prop] === value) return true
+
+        // Set the new value and inform the listeners
         cfg[prop] = value
-        this.emit('update') // Emit an event to all listeners
+        this.emit('update', option) // Pass the option for info
         return true
       }
     }
