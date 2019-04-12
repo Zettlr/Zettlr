@@ -34,6 +34,9 @@ class PreferencesDialog extends ZettlrDialog {
     }
     // The template expects a simple string
     data.attachmentExtensions = data.attachmentExtensions.join(', ')
+
+    // Determine the ability of the OS to switch to dark mode
+    data.hasOSDarkMode = (process.platform === 'darwin')
     return data
   }
 

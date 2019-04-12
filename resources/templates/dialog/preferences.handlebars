@@ -83,7 +83,41 @@
             </label>
             <label for="pref-sorting-ascii">{{i18n "dialog.preferences.sorting_ascii"}}</label>
           </div>
-        </div>
+          <hr>
+          <!-- Now the auto dark mode settings -->
+          <p>
+            {{i18n "dialog.preferences.auto_dark_mode_explanation"}}
+          </p>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="autoDarkMode" value="off" id="auto-dark-mode-off" {{#ifCond autoDarkMode '=' 'off'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="auto-dark-mode-off">{{i18n "dialog.preferences.auto_dark_mode_off"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="autoDarkMode" value="schedule" id="auto-dark-mode-schedule" {{#ifCond autoDarkMode '=' 'schedule'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="auto-dark-mode-schedule">
+              {{i18n "dialog.preferences.auto_dark_mode_schedule"}}
+              <input type="text" class="inline time" pattern="\d{2}:\d{2}" title="{{i18n "dialog.preferences.auto_dark_mode_schedule_format"}}" value="{{ autoDarkModeStart }}" name="autoDarkModeStart">
+              &mdash;
+              <input type="text" class="inline time" pattern="\d{2}:\d{2}" title="{{i18n "dialog.preferences.auto_dark_mode_schedule_format"}}" value="{{ autoDarkModeEnd }}" name="autoDarkModeEnd">
+            </label>
+          </div>
+          {{#if hasOSDarkMode}}
+          <!-- Only for macOS: Enable system switching -->
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="autoDarkMode" value="system" id="auto-dark-mode-system" {{#ifCond autoDarkMode '=' 'system'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="auto-dark-mode-system">{{i18n "dialog.preferences.auto_dark_mode_system"}}</label>
+          </div>
+          {{/if}}
+        </div> <!-- End box right -->
       </div>
       <!-- Editor related options -->
       <div id="prefs-tabs-editor">

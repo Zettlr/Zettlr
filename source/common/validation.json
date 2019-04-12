@@ -1,5 +1,6 @@
 {
    "darkTheme": "required|boolean|default:false",
+   "autoDarkMode": "required|string|in:off,system,schedule,auto|default:off",
    "snippets": "required|boolean|default:false",
    "appLang": "required|string|min:5|max:7|default:en_US",
    "combinerState": "required|string|in:collapsed,expanded|default:collapsed",

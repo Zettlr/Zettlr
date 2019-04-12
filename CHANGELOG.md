@@ -1,7 +1,8 @@
-# (no version assigned)
+# 1.3.0
 
 ## GUI and Functionality
 
+- **New Feature**: Zettlr can now automatically switch between light and dark mode either based on a fixed schedule or, if you are using macOS, based on the appearance of the operating system.
 - **New Feature**: Add words to the user defined dictionary.
 - Display contributors tab on the about dialog containing the names of all authors of the translation files.
 - The dictionary loading mechanism works far more reliably now.
@@ -10,6 +11,7 @@
 
 - Re-throw errors during command run in Zettlr main class.
 - Moved the dictionary to its own dedicated provider for more versatility and improved upon its functionality.
+- Created an appearance provider which takes care of switching the Zettlr theming based upon user choices.
 
 # 1.2.3
 

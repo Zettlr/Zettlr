@@ -75,6 +75,18 @@
       font-size: inherit;
       outline:none;
       margin-bottom:1em;
+
+      &.inline {
+        width: auto;
+        display: inline-block;
+        margin-bottom: 0;
+      }
+
+      &.time {
+        // Time fields can be extra narrow
+        width: 70px;
+        text-align: center;
+      }
     }
 
     select {
