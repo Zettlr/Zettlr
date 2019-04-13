@@ -53,6 +53,14 @@ class AppearanceProvider extends EventEmitter {
         // Set the var accordingly
         global.config.set('darkTheme', systemPreferences.isDarkMode())
       })
+    } else if (process.platform === 'win32') {
+      // On Windows, we achieve the same effect by listening for inverted colour
+      // scheme changes.
+      systemPreferences.on('inverted-color-scheme-changed', (event, invertedColorScheme) => {
+        if (this._mode !== 'system') return
+        // Also set the var accordingly
+        global.config.set('darkTheme', invertedColorScheme)
+      })
     }
 
     // Subscribe to configuration updates
