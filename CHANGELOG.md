@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-**Attention, this update breaks three shortcuts: To view the file list, the tree view, and the attachment sidebar, you need to use `Cmd/Ctrl+Shift+1`, `Cmd/Ctrl+Shift+2`, and `Cmd/Ctrl+Shift+3` respectively. The shortcuts for `Cmd/Ctrl+[number]` are now reserved for recent documents!**
+**Attention, this update breaks three shortcuts: To view the file list, the tree view, and the attachment sidebar, you need to use `Cmd/Ctrl+Shift+1` (for toggling the sidebar), and `Cmd/Ctrl+?` for toggling the attachments. The shortcuts for `Cmd/Ctrl+[number]` are now reserved for recent documents!**
 
 - **New Feature**: Zettlr can now automatically switch between light and dark mode either based on a fixed schedule or, if you are using macOS or Windows, based on the appearance of the operating system.
 - **New Feature**: Add words to the user defined dictionary.

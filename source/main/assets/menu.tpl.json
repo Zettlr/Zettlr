@@ -136,16 +136,12 @@
     },
     { "type": "separator" },
     {
-      "label": "menu.toggle_directories",
+      "label": "menu.toggle_sidebar",
       "accelerator": "CmdOrCtrl+Shift+1",
       "command": "toggle-directories"
     }, {
-      "label": "menu.toggle_preview",
-      "accelerator": "CmdOrCtrl+Shift+2",
-      "command": "toggle-preview"
-    }, {
       "label": "menu.toggle_attachments",
-      "accelerator": "CmdOrCtrl+Shift+3",
+      "accelerator": "CmdOrCtrl+?",
       "command": "toggle-attachments"
     },
     { "type": "separator" },
