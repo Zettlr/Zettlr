@@ -149,9 +149,12 @@ class ZettlrMenu {
             // Disable if there are no recent docs
             if (!global.recentDocs.hasDocs()) builtItem.submenu[0].enabled = false
             // Get the most recent 10 documents
+            let i = 0
             for (let recent of global.recentDocs.get().slice(0, 10)) {
+              i++
               builtItem.submenu.push({
                 'label': recent.name,
+                'accelerator': (i === 10) ? 'CmdOrCtrl+0' : `CmdOrCtrl+${i}`,
                 'click': function (menuitem, focusedWindow) {
                   if (global.mainWindow) {
                     global.mainWindow.webContents.send('message', { 'command': 'file-get', 'content': recent.hash })
