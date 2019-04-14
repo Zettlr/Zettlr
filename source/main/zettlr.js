@@ -201,7 +201,6 @@ class Zettlr {
     * @return {void} Does not return anything.
     */
   shutdown () {
-    console.log(`Shutting down!`)
     // Close all Quicklook Windows
     this._ql.closeAll()
     // Save the config and stats
@@ -451,8 +450,12 @@ class Zettlr {
       }
     }
     // Set the pointers either to null or last opened dir/file
-    this.setCurrentDir(this.findDir({ 'hash': parseInt(global.config.get('lastDir')) }))
-    this.setCurrentFile(this.findFile({ 'hash': parseInt(global.config.get('lastFile')) }))
+    let lastDir = this.findDir({ 'hash': parseInt(global.config.get('lastDir')) })
+    let lastFile = this.findFile({ 'hash': parseInt(global.config.get('lastFile')) })
+    this.setCurrentDir(lastDir)
+    this.setCurrentFile(lastFile)
+    // Also add the last file to the list of recent documents.
+    global.recentDocs.add(lastFile.getMetadata())
     this.window.fileUpdate() // Preset the window's title with the current file, if applicable
   }
 
