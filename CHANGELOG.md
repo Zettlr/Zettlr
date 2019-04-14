@@ -6,6 +6,7 @@
 - **New Feature**: Add words to the user defined dictionary.
 - Display contributors tab on the about dialog containing the names of all authors of the translation files.
 - The dictionary loading mechanism works far more reliably now.
+- Fixed a bug that would, on certain actions, lead to unwanted behaviour when using the menu items for these actions instead of the shortcut.
 
 ## Under the Hood
 

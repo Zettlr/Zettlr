@@ -109,6 +109,19 @@ class ZettlrToolbar {
       this._renderer.handleEvent(command, content)
     })
 
+    // On platforms other than darwin, a menu button is used to show the app's
+    // menu, so the button will receive focus and thereby draw it from any other
+    // element currently focused. Normally, the workflow for actions requiring
+    // textareas/inputs to be focused, will be: click the respective input ->
+    // click the respective menu action. Here, we make sure this succeeds, as we
+    // re-focus any formerly focused element if the menu button receives focus
+    // to make sure, for instance, the paste event for new file IDs will have a
+    // receiving end for the paste action.
+    this._div.find('.menu-popup').on('focus', (e) => {
+      // Re-focus the former element
+      $(e.relatedTarget).focus()
+    })
+
     // Toggle the maximisation status of the main window
     this._div.on('dblclick', (e) => {
       global.ipc.send('win-maximise')
