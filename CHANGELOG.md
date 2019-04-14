@@ -8,6 +8,7 @@
 - The dictionary loading mechanism works far more reliably now.
 - Fixed a bug that would, on certain actions, lead to unwanted behaviour when using the menu items for these actions instead of the shortcut.
 - The last opened file will now be added to the recent documents on start up.
+- The window's title will now only contain the currently opened file's name, and never the full path, even for root files.
 
 ## Under the Hood
 

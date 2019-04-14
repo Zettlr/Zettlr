@@ -216,8 +216,6 @@ class ZettlrWindow {
     let curFile = this._app.getCurrentFile()
     if (curFile == null) {
       this.setTitle()
-    } else if (curFile.isRoot()) {
-      this.setTitle(curFile.path)
     } else {
       this.setTitle(curFile.name)
     }

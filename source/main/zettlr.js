@@ -449,14 +449,18 @@ class Zettlr {
         this._openPaths.push(new ZettlrDir(this, p))
       }
     }
+
     // Set the pointers either to null or last opened dir/file
     let lastDir = this.findDir({ 'hash': parseInt(global.config.get('lastDir')) })
     let lastFile = this.findFile({ 'hash': parseInt(global.config.get('lastFile')) })
     this.setCurrentDir(lastDir)
     this.setCurrentFile(lastFile)
+
     // Also add the last file to the list of recent documents.
     global.recentDocs.add(lastFile.getMetadata())
-    this.window.fileUpdate() // Preset the window's title with the current file, if applicable
+
+    // Preset the window's title with the current file, if applicable
+    this.window.fileUpdate()
   }
 
   /**
