@@ -122,7 +122,11 @@ class ZettlrExport {
       case 'textpack':
         return this._makeBundle() // Special exporter
       case 'html':
-        this._prepareHTML()
+        if (commandExists('pandoc')) {
+          this._prepareStandardExport()
+        } else {
+          this._prepareHTML()
+        }
         break
       case 'pdf':
         this._preparePDF()
@@ -362,6 +366,7 @@ class ZettlrExport {
         this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + '.revealjs.htm')
         break
       case 'rtf':
+      case 'html':
       case 'odt':
       case 'docx':
         standalone = '-s' // Must produce a standalone
@@ -396,6 +401,8 @@ class ZettlrExport {
    * respective viewer.
    */
   _make () {
+    // If pandoc is available, Export won't have prepared showdown, so showdown
+    // will be null, meaning Export will call pandoc regularly.
     if (this.options.format === 'html' && this.showdown != null) {
       // Simply write the target file ourselves. Therefore first convert
       // to HTML and insert into the template, then replace the variables.
