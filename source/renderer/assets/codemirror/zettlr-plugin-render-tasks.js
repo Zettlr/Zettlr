@@ -90,6 +90,13 @@
       cbox.onclick = (e) => {
         if (cm.getOption('disableInput')) return // Don't do anything
 
+        // First, recalculate where the checkbox actually is.
+        let markerLine = textMarker.find().from.line
+        let m = taskRE.exec(cm.getLine(markerLine))
+        let leadingSpaces = m[1].length || 0
+        let curFrom = { 'line': markerLine, 'ch': 0 + leadingSpaces }
+        let curTo = { 'line': markerLine, 'ch': 5 + leadingSpaces }
+
         // Check or uncheck it
         // Check the checkbox, alter the underlying text and replace the
         // text marker in the list of checkboxes.

@@ -17,6 +17,7 @@
 - Add shortcuts for easier access of the recent documents.
 - HTML export now relies on Pandoc, if available, and only falls back to Showdown if Pandoc hasn't been found on the system.
 - You can now edit Math formulae by clicking on them.
+- Fixed a bug with checking and unchecking task items in the editor.
 
 ## Under the Hood
 
