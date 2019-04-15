@@ -327,6 +327,10 @@ class ZettlrExport {
     let file = path.join(__dirname, './assets/export.tex')
     let pdf = this.options.pdf // Retrieve the PDF options
 
+    // Replace the pagenumbering if applicable
+    if (pdf.pagenumbering === 'alph_upper') pdf.pagenumbering = 'Alph'
+    if (pdf.pagenumbering === 'roman_upper') pdf.pagenumbering = 'Roman'
+
     // If a textpl is given, read this instead of the builtin template
     if (pdf.hasOwnProperty('textpl') && isFile(pdf.textpl)) {
       file = pdf.textpl

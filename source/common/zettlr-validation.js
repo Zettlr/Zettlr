@@ -208,6 +208,9 @@ class ZettlrValidation {
    */
   isValueCorrect () {
     if (this._in === undefined) return true
+
+    // includes() returns false if the types don't match. We allow for this here.
+    if (this._type !== 'string') return this._in.includes(`${this._input}`)
     return this._in.includes(this._input)
   }
 

@@ -29,7 +29,7 @@
    "pdf.lmargin": "required|number|default:0",
    "pdf.margin_unit": "required|string|in:cm,mm,pt|default:cm",
    "pdf.papertype": "required|string|in:a0paper,a1paper,a2paper,a3paper,a4paper,a5paper,a6paper,b0paper,b1paper,b2paper,b3paper,b4paper,b5paper,b6paper,c0paper,c1paper,c2paper,c3paper,c4paper,c5paper,c6paper,letterpaper,executivepaper,legalpaper|default:a4paper",
-   "pdf.pagenumbering": "required|string|in:arabic,alph,Alph,roman,Roman,gobble|default:gobble",
+   "pdf.pagenumbering": "required|string|in:arabic,alph,alph_upper,roman,roman_upper,gobble|default:gobble",
    "pdf.mainfont": "required|string|min:3|default:Times New Roman",
    "pdf.sansfont": "required|string|min:3|default:Arial",
    "pdf.fontsize": "required|number|min:4|default:12",

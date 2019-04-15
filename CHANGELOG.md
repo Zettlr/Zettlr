@@ -20,6 +20,7 @@
 - You can now edit Math formulae by clicking on them.
 - Fixed a bug with checking and unchecking task items in the editor.
 - Fixed an error in option validation.
+- Fixed the translations for the pagenumbering sections in the PDF preferences and project settings.
 
 ## Under the Hood
 
