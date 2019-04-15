@@ -457,7 +457,7 @@ class Zettlr {
     this.setCurrentFile(lastFile)
 
     // Also add the last file to the list of recent documents.
-    global.recentDocs.add(lastFile.getMetadata())
+    if (lastFile !== null) global.recentDocs.add(lastFile.getMetadata())
 
     // Preset the window's title with the current file, if applicable
     this.window.fileUpdate()
