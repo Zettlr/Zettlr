@@ -16,6 +16,7 @@
 - The window's title will now only contain the currently opened file's name, and never the full path, even for root files.
 - Add shortcuts for easier access of the recent documents.
 - HTML export now relies on Pandoc, if available, and only falls back to Showdown if Pandoc hasn't been found on the system.
+- You can now edit Math formulae by clicking on them.
 
 ## Under the Hood
 
