@@ -295,6 +295,20 @@
         innerStyle: 'fenced-code'
       },
       {
+        open: '```kotlin',
+        close: '```',
+        mode: CodeMirror.getMode(config, 'text/x-kotlin'),
+        delimStyle: 'formatting-code-block',
+        innerStyle: 'fenced-code'
+      },
+      {
+        open: '```go',
+        close: '```',
+        mode: CodeMirror.getMode(config, 'text/x-go'),
+        delimStyle: 'formatting-code-block',
+        innerStyle: 'fenced-code'
+      },
+      {
         open: '```yaml',
         close: '```',
         // We need regular expressions to keep the YAML mode simple. It now

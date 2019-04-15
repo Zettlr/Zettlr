@@ -39,6 +39,7 @@ require('codemirror/mode/sql/sql')
 require('codemirror/mode/swift/swift')
 require('codemirror/mode/shell/shell')
 require('codemirror/mode/yaml/yaml')
+require('codemirror/mode/go/go')
 
 // 7. The folding addon
 require('codemirror/addon/fold/foldcode')
