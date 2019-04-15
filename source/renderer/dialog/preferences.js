@@ -108,6 +108,11 @@ class PreferencesDialog extends ZettlrDialog {
       $('#pref-zkn-id-gen').val('%Y%M%D%h%m%s')
     })
 
+    // Reset the pandoc command
+    $('#reset-pandoc-command').on('click', (e) => {
+      $('#pandocCommand').val('pandoc "$infile$" -f markdown $outformat$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex -o "$outfile$"')
+    })
+
     $('#generate-id').on('click', (e) => {
       let id = require('../../common/zettlr-helpers.js').generateId($('#pref-zkn-id-gen').val())
       let re = new RegExp('^' + $('#pref-zkn-free-id').val() + '$')

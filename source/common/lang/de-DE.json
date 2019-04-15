@@ -385,6 +385,8 @@
       },
       "pandoc": "Pfad zum Pandoc-Programm. Bitte ändere dies nur, wenn Zettlr Pandoc nicht automatisch findet.",
       "xelatex": "Pfad zum XeLaTeX-Programm. Bitte ändere dies nur, wenn Pandoc einen Fehler ausgibt, dass er die Bibliothek nicht finden kann.",
+      "pandoc_command": "Pandoc-Befehl. <strong>Nur für erfahrene Benutzer!</strong>",
+      "reset_pandoc_command": "Pandoc-Befehl auf Werkseinstellungen zurücksetzen",
       "pandoc_default": "Standard: pandoc",
       "xelatex_default": "Standard: xelatex",
       "nightmode": "Dunkles Thema",

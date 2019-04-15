@@ -374,6 +374,17 @@
         <div class="box-right">
           <p>{{i18n "dialog.preferences.attachments_info"}}</p>
           <textarea id="attachmentExtensions" name="attachmentExtensions" rows="4">{{attachmentExtensions}}</textarea>
+
+          <!-- Pandoc command resides here, because here's more space for it -->
+          <hr>
+          <label for="pandocCommand">
+            {{i18n "dialog.preferences.pandoc_command"}}
+          </label>
+          <div class="form-inline-buttons">
+            <input type="text" id="pandocCommand" name="pandocCommand" placeholder="pandoc &quot;$infile$&quot; -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex -o &quot;$outfile$&quot;" value="{{ pandocCommand }}">
+            <button type="button" id="reset-pandoc-command" data-tippy-content="{{i18n "dialog.preferences.reset_pandoc_command"}}">&#9003;</button>
+          </div>
+          <span class="info">Variables: $citeproc$, $format$, $infile$, $outfile$, $outflag$, $standalone$, $toc$, $tocdepth$, $tpl$</span>
         </div>
       </div>
     </div>

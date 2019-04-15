@@ -195,6 +195,7 @@
             "mute_lines": "Masquer les lignes dans la mode sans distraction",
             "nightmode": "Mode sombre",
             "pandoc": "Chemin d'acc\u00e8s \u00e0 Pandoc. Seulement changer le, si Zettlr est dans l'impossibilit\u00e9 de faire trouver le programme.",
+            "pandoc_command": "Commande pandoc. \u003Cstrong\u003ESeulement pour les utilisateurs avanc\u00e9s!\u003C/strong\u003E",
             "pandoc_default": "Standard: pandoc",
             "pdf": {
                 "author": "Auteur",
@@ -243,6 +244,7 @@
                 "title": "Param\u00e8tres du projet",
                 "title_label": "Titre du projet"
             },
+            "reset_pandoc_command": "R\u00e9initialiser la commande Pandoc",
             "snippets": "Fragments du texte",
             "sorting_ascii": "S\u00e9quence ASCII (2 apr\u00e8s 10)",
             "sorting_explanation": "Sequence du triage (pour fichiers)",
@@ -447,6 +449,7 @@
         "toggle_distraction_free": "Mode sans distraction",
         "toggle_fullscreen": "Plein \u00e9cran",
         "toggle_preview": "Commuter les fichiers",
+        "toggle_sidebar": "Commuter la barre lat\u00e9rale",
         "toggle_snippets": "Fragment de texte",
         "toggle_theme": "Mode sombre",
         "undo": "Annuler",

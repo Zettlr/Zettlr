@@ -71,6 +71,27 @@ class ZettlrExport {
     this.options = options
     this.tpl = ''
     this.command = ''
+    /*
+     Possible values:
+     $tpl$: --template="template"
+     $infile$: The input file
+     $toc$: Generate a toc or not
+     $tocdepth$: Generate a toc up to level ...
+     $citeproc$: The citeproc options
+     $outfile$: The output file
+     $outformat$: The output format
+     */
+    this.pandocFlags = {
+      'tpl': '',
+      'infile': '',
+      'toc': '',
+      'tocdepth': '',
+      'citeproc': '',
+      'outfile': '',
+      'outflag': '',
+      'format': '',
+      'standalone': ''
+    } // Pandoc flags to be passed to the compiler
     this.showdown = null
     this._callback = callback // If given, will be called after export
     // We already know where the file will end up (on some exports this will
@@ -114,6 +135,7 @@ class ZettlrExport {
     //  Third prepare the export (e.g., strip IDs, tags or other unnecessary stuff)
     this._prepareFile()
 
+    // If exporting to PDF, build the necessary template beforehand
     if (this.options.format === 'pdf') this._buildLatexTpl()
 
     // Fourth defer to the respective functions.
@@ -360,7 +382,7 @@ class ZettlrExport {
   _prepareStandardExport () {
     // First override the tempfile in case the markdown input format differs
     // from the file format (e.g. revealjs results in an HTML file).
-    let standalone = ''
+    // let standalone = ''
     switch (this.options.format) {
       case 'revealjs':
         this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + '.revealjs.htm')
@@ -369,7 +391,8 @@ class ZettlrExport {
       case 'html':
       case 'odt':
       case 'docx':
-        standalone = '-s' // Must produce a standalone
+        this.pandocFlags['standalone'] = '-s'
+        // standalone = '-s' // Must produce a standalone
         break
       case 'latex':
         // I don't like the .latex ending Pandoc uses.
@@ -379,7 +402,12 @@ class ZettlrExport {
         this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + '.txt')
         break
     }
-    this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${this._citeprocOptions} -t ${this.options.format} ${standalone} -o "${this.targetFile}"`
+    this.pandocFlags['infile'] = this.tempfile
+    this.pandocFlags['outfile'] = this.targetFile
+    this.pandocFlags['citeproc'] = this._citeprocOptions
+    this.pandocFlags['tpl'] = this.tpl
+    this.pandocFlags['outflag'] = `-t ${this.options.format}`
+    // this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${this._citeprocOptions} -t ${this.options.format} ${standalone} -o "${this.targetFile}"`
   }
 
   /**
@@ -391,9 +419,16 @@ class ZettlrExport {
     // It is necessary to tell Pandoc to generate a toc explicitly, b/c then
     // we don't need to grab the pre-rendered tex-file prior and chase it
     // through the xelatex engine manually and can let pandoc do the work.
-    let toc = (this.options.pdf.toc) ? '--toc' : ''
-    let tocdepth = (this.options.pdf.tocDepth) ? '--toc-depth=' + this.options.pdf.tocDepth : ''
-    this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${toc} ${tocdepth} ${this._citeprocOptions} --pdf-engine=xelatex -o "${this.targetFile}"`
+
+    // let toc = (this.options.pdf.toc) ? '--toc' : ''
+    // let tocdepth = (this.options.pdf.tocDepth) ? '--toc-depth=' + this.options.pdf.tocDepth : ''
+    this.pandocFlags['toc'] = (this.options.pdf.toc) ? '--toc' : ''
+    this.pandocFlags['tocdepth'] = (this.options.pdf.tocDepth) ? '--toc-depth=' + this.options.pdf.tocDepth : ''
+    this.pandocFlags['infile'] = this.tempfile
+    this.pandocFlags['outfile'] = this.targetFile
+    this.pandocFlags['citeproc'] = this._citeprocOptions
+    this.pandocFlags['tpl'] = this.tpl
+    // this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${toc} ${tocdepth} ${this._citeprocOptions} --pdf-engine=xelatex -o "${this.targetFile}"`
   }
 
   /**
@@ -431,6 +466,9 @@ class ZettlrExport {
       })
       return
     }
+
+    // Build the command before running it
+    this._makeCommand()
 
     if (!this.command || this.command.length === 0) {
       // No command given -> abort
@@ -515,6 +553,27 @@ class ZettlrExport {
     // After everything is done, call the callback
     this._callback(null) // null means no error
   }
+
+  /**
+   * Thishelper function creates a command based on the given options
+   * @param  {Object} options An object containing the possible values
+   * @return {String}         The ready made command.
+   */
+  _makeCommand (options) {
+    // Pull in the pandoc command from config
+    this.command = global.config.get('pandocCommand')
+
+    // Set the out format. As the format may be altered on revealJS export, we
+    // must set it at this point.
+    this.pandocFlags['format'] = this.options.format
+
+    // Recursively replace all flags in the command
+    for (let key in this.pandocFlags) {
+      this.command = this.command.replace(new RegExp('\\$' + key + '\\$', 'g'), this.pandocFlags[key])
+    }
+
+    // pandoc "$infile$" -f markdown $tpl$ $citeproc$ -t $outformat$ ${standalone} -o "${this.targetFile}
+  }
 }
 
 /**
@@ -530,6 +589,7 @@ function makeExport (options) {
         resolve(e)
       })
     } catch (err) {
+      console.error(err)
       reject(err)
     }
   })

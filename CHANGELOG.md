@@ -7,6 +7,7 @@
 - **New Feature**: Zettlr can now automatically switch between light and dark mode either based on a fixed schedule or, if you are using macOS or Windows, based on the appearance of the operating system.
 - **New Feature**: Add words to the user defined dictionary.
 - Display contributors tab on the about dialog containing the names of all authors of the translation files.
+- You can now customize the pandoc command to your liking using several variables.
 - Added syntax highlighting for
   - Go (keyword: "go")
   - Kotlin (keyword: "kotlin")
