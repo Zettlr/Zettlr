@@ -103,7 +103,7 @@ class ZettlrValidation {
         // Predefined values
         case 'in':
           if (!rule[1] || rule[1].length === 0) throw Error('Found in-rule, but no value!')
-          this._in = rule[1]
+          this._in = rule[1].split(',')
           break
         // Assigned default value
         case 'default':
@@ -218,7 +218,7 @@ class ZettlrValidation {
   why () {
     // Returns a message explaining why the validation failed.
     if (!this.isTypeCorrect()) return trans('validation.error_type', this._option, this._type)
-    if (!this.isValueCorrect()) return trans('validation_error_value', this._option, this._in.join(', '))
+    if (!this.isValueCorrect()) return trans('validation.error_value', this._option, this._in.join(', '))
     if (!this.isInRange() && this._min && this._max) return trans('validation.error_range_both', this._option, this._min, this._max)
     if (!this.isInRange() && !this._min && this._max) return trans('validation.error_range_max', this._option, this._max)
     if (!this.isInRange() && this._min && !this._max) return trans('validation.error_range_min', this._option, this._min)
