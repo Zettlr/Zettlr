@@ -514,16 +514,16 @@ class ZettlrFile {
               'weight': 1 // Weight indicates that this was an exact match
             })
             hasTermMatched = true
-          } else if (linesLower[index].indexOf(t.word) > -1) {
+          } else if (linesLower[index].indexOf(t.word.toLowerCase()) > -1) {
             matches.push({
               'term': t.word,
               'from': {
                 'line': parseInt(index),
-                'ch': linesLower[index].indexOf(t.word)
+                'ch': linesLower[index].indexOf(t.word.toLowerCase())
               },
               'to': {
                 'line': parseInt(index),
-                'ch': linesLower[index].indexOf(t.word) + t.word.length
+                'ch': linesLower[index].indexOf(t.word.toLowerCase()) + t.word.length
               },
               'weight': 0.5 // Weight indicates that this was an approximate match
             })
@@ -552,16 +552,16 @@ class ZettlrFile {
               })
               hasTermMatched = true
               br = true
-            } else if (linesLower[index].indexOf(wd) > -1) {
+            } else if (linesLower[index].indexOf(wd.toLowerCase()) > -1) {
               matches.push({
                 'term': wd,
                 'from': {
                   'line': parseInt(index),
-                  'ch': linesLower[index].indexOf(wd)
+                  'ch': linesLower[index].indexOf(wd.toLowerCase())
                 },
                 'to': {
                   'line': parseInt(index),
-                  'ch': linesLower[index].indexOf(wd) + wd.length
+                  'ch': linesLower[index].indexOf(wd.toLowerCase()) + wd.length
                 },
                 'weight': 1 // Weight indicates that this was an exact match
               })

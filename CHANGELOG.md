@@ -21,6 +21,7 @@
 - Fixed a bug with checking and unchecking task items in the editor.
 - Fixed an error in option validation.
 - Fixed the translations for the pagenumbering sections in the PDF preferences and project settings.
+- Fixed a small bug concerning case insensitive searching.
 
 ## Under the Hood
 
