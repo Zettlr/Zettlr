@@ -18,7 +18,7 @@
   // 2. Inline Math Equation within a paragraph (preceeded by other chars)
   // 3. Display Math Equation, beginning at char 0
   // 4. Display Math Equation within a paragraph (preceeded by other chars)
-  var mathRE = /^\$\$(.+?[^\\])\$\$|(?<=[^\\])\$\$(.+?[^\\])\$\$|^\$(.+?[^\\])\$|(?<=[^\\])\$(.+?[^\\])\$/g
+  var mathRE = /^\$\$(.*?[^\\$]+?)\$\$|(?<=[^\\$])\$\$(.*?[^\\$]+?)\$\$|^\$(.*?[^\\$]+?)\$|(?<=[^\\])\$(.*?[^\\$]+?)\$/g
   var mathMarkers = []
 
   CodeMirror.commands.markdownRenderMath = function (cm) {

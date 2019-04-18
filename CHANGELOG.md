@@ -22,6 +22,7 @@
 - Fixed an error in option validation.
 - Fixed the translations for the pagenumbering sections in the PDF preferences and project settings.
 - Fixed a small bug concerning case insensitive searching.
+- Fix for single-letter Math preview.
 
 ## Under the Hood
 
