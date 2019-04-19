@@ -1,5 +1,7 @@
 // Geometry for the renderer modals
 
+@dialog-breakpoint: 800px;
+
 .modal {
   position:fixed;
   top:0;
@@ -175,7 +177,7 @@
     }
 
     // On larger screens, box-left and box-right are displayed next to each other.
-    @media(min-width: 800px) {
+    @media(min-width: @dialog-breakpoint) {
       div.box-left,
       div.box-right { width:50%; }
       div.box-left  { float:left; }
@@ -304,47 +306,50 @@
 
     // Tabs styles
     .ui-tabs-nav {
-      display:flex;
-      padding:0;
-      margin-bottom:20px;
+      display: flex;
+      flex-wrap: wrap;
+      padding: 0;
+      margin-bottom: 20px;
 
       .ui-tabs-tab {
         flex: 1;
         display:inline-block;
         line-height:200%;
         list-style-type: none;
-        margin-bottom:0;
+        margin-bottom: 0;
 
         a {
-          text-decoration:none;
-          display:inline-block;
-          width:100%;
-          text-align:center;
-          outline:none;
+          text-decoration: none;
+          display: inline-block;
+          width: 100%;
+          text-align: center;
+          outline: none;
         }
       }
-      } // END tabs styles
+      // END tabs styles
+    }
 
-      // Dictionary list geometry
-      ul.dicts-list {
-        list-style-type: none;
-        max-height:300px;
-        overflow-y:auto;
+    // Dictionary list geometry
+    ul.dicts-list {
+      list-style-type: none;
+      max-height:300px;
+      overflow-y:auto;
 
-        li.dicts-list-item {
-          display: block;
-          cursor: pointer;
-          line-height:1.5em;
-        }
+      li.dicts-list-item {
+        display: block;
+        cursor: pointer;
+        line-height:1.5em;
       }
+    }
 
-      input.dicts-list-search {
-        line-height: 200%;
-      }
+    input.dicts-list-search {
+      line-height: 200%;
+    }
 
-      .selected-dict {
-        display: inline-block;
-      }
-
-      } // END dialog styles
-      } // END modal styles
+    .selected-dict {
+      display: inline-block;
+    }
+    // END dialog styles
+  }
+  // END modal styles
+}

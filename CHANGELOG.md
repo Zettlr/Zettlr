@@ -29,6 +29,7 @@
 - Fixed a small bug concerning case insensitive searching.
 - Fix for single-letter Math preview.
 - Fixed the "remove from virtual directory" command.
+- Design fix for dialog tabs on small screens.
 
 ## Under the Hood
 
