@@ -11,13 +11,17 @@
 - Added syntax highlighting for
   - Go (keyword: "go")
   - Kotlin (keyword: "kotlin")
-- The dictionary loading mechanism works far more reliably now.
-- Fixed a bug that would, on certain actions, lead to unwanted behaviour when using the menu items for these actions instead of the shortcut.
-- The last opened file will now be added to the recent documents on start up.
-- The window's title will now only contain the currently opened file's name, and never the full path, even for root files.
 - Add shortcuts for easier access of the recent documents.
 - HTML export now relies on Pandoc, if available, and only falls back to Showdown if Pandoc hasn't been found on the system.
 - You can now edit Math formulae by clicking on them.
+- The tag count is now shown next to the tags in the tag cloud.
+
+### Fixes
+
+- Fixed a bug that would, on certain actions, lead to unwanted behaviour when using the menu items for these actions instead of the shortcut.
+- The last opened file will now be added to the recent documents on start up.
+- The window's title will now only contain the currently opened file's name, and never the full path, even for root files.
+- The dictionary loading mechanism works far more reliably now.
 - Fixed a bug with checking and unchecking task items in the editor.
 - Fixed an error in option validation.
 - Fixed the translations for the pagenumbering sections in the PDF preferences and project settings.
