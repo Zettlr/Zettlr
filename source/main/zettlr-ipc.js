@@ -54,8 +54,6 @@ class ZettlrIPC {
         return
       }
 
-      console.log(arg.command)
-
       if (arg.command === 'file-drag-start') {
         event.sender.startDrag({
           'file': this._app.findFile({ hash: parseInt(arg.content.hash) }).path,

@@ -116,6 +116,9 @@ class ZettlrPreview {
     // Reset the tags.
     this._tags = []
 
+    // Holds all files displayed during search results to prevent duplicates
+    let filesShown = []
+
     let keywords = []
     for (let kw of this._keywords) {
       keywords.push(kw.name) // For quicker access during huge list builds
@@ -137,6 +140,12 @@ class ZettlrPreview {
       // If the user wishes to not show directories (both real and virtual ones),
       // continue and step over this row.
       if (this._showSearchResults && this._hideDirs && d.type !== 'file') continue
+
+      if (this._showSearchResults && filesShown.indexOf(d.hash) === -1) {
+        filesShown.push(d.hash)
+      } else if (filesShown.indexOf(d.hash) > -1) {
+        continue // Already displayed once, so this must be a virtual directory file
+      }
 
       // Only change the indicator with different directory types
       if (d.type === 'virtual-directory') {
