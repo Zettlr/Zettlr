@@ -133,7 +133,8 @@ class ConfigProvider extends EventEmitter {
       },
       // Editor related stuff
       'editor': {
-        'autoCloseBrackets': true
+        'autoCloseBrackets': true,
+        'defaultSaveImagePath': ''
       },
       'display': {
         'imageWidth': 100, // Maximum preview image width

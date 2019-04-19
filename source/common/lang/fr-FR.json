@@ -165,6 +165,7 @@
             "combiner_explanation": "Mode du barre de c\u00f4t\u00e9",
             "csl_database": "Base de donn\u00e9es CSL JSON",
             "debug": "Activer le mode debug",
+            "default_image_save_path": "Chemin d'acc\u00e8s standard des l'images (relatif ou absolu)",
             "display": {
                 "image_size_info": "Contr\u00f4ler la hauteur et le large de les aper\u00e7us images.",
                 "preview_info": "Contr\u00f4ler les elements quelles sont visualis\u00e9s dans votre documents.",

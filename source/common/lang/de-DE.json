@@ -411,7 +411,8 @@
       "checkForBeta": "Informiere mich über Beta-Releases",
       "autoCloseBrackets": "Schließe automatisch die folgenden Zeichenpaare: ()[]{}'\"\"»«„““”‘’__``",
       "csl_database": "CSL JSON-Datenbankdatei",
-      "choose_file": "Datei wählen …"
+      "choose_file": "Datei wählen …",
+      "default_image_save_path": "Standard-Bildspeicherort (relativ oder absolut)"
     },
     "tags": {
       "title": "Schlagwörter",

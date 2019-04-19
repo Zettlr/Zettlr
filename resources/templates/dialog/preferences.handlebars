@@ -131,6 +131,10 @@
           </ul>
         </div>
         <div class="box-right">
+          <label for="editor.defaultSaveImagePath">
+            {{i18n "dialog.preferences.default_image_save_path"}}
+          </label>
+          <input type="text" name="editor.defaultSaveImagePath" id="editor.defaultSaveImagePath" value="{{ editor.defaultSaveImagePath }}">
           <p>
             {{i18n "dialog.preferences.spellcheck"}}
           </p>
@@ -301,7 +305,7 @@
           </div>
           <div class="cb-group">
             <label class="cb-toggle">
-              <input type="checkbox" name="display.renderIframes" value="yes" id="export.stripIDs" {{#if display.renderIframes}}checked="checked"{{/if}}>
+              <input type="checkbox" name="display.renderIframes" value="yes" id="export.renderIframes" {{#if display.renderIframes}}checked="checked"{{/if}}>
               <div class="toggle"></div>
             </label>
             <label for="display.renderIframes">{{i18n "dialog.preferences.display.render_iframes"}}</label>

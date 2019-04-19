@@ -33,37 +33,59 @@ class SaveImage extends ZettlrCommand {
    * @return {void}        Does not return.
    */
   run (evt, target) {
-    // target either contains "save-cwd" (save in current working directory) or
-    // "save-other" (save to a path that has to be chosen by the user)
-    // If no directory is selected currently, we can't save to cwd.
-    if (target.mode === 'save-cwd' && !this._app.getCurrentDir()) {
-      return global.ipc.notify(trans('system.error.dnf_message'))
-    }
-
-    // Check the name for sanity
+    // First check the name for sanity
     target.name = sanitize(target.name, '-')
     if (target.name === '') {
       return global.ipc.notify(trans('system.error.no_allowed_chars'))
     }
 
-    // Now check the extension of the name (some users may prefer to choose to
-    // provide it already)
+    // A file must be opened
+    if (!this._app.getCurrentFile()) return global.ipc.notify(trans('system.error.fnf_message'))
+
+    // Now check the extension of the name (some users may
+    // prefer to choose to provide it already)
     if (path.extname(target.name) !== '.png') target.name += '.png'
 
-    // Retrieve the directory
-    let p = null
-    if (target.mode === 'save-cwd') {
-      p = this._app.getCurrentDir().path
-    } else if (target.mode === 'save-other') {
-      p = this._app.getWindow().askDir()[0] // We only take one directory
+    // Do we store the image to a relative path?
+    let isCwd = (target.mode === 'save-cwd')
+    let isRelativePath = false // Does the defaultPath contain a relative path?
+    let currentFilePath = path.dirname(this._app.getCurrentFile().path)
+
+    // Preset the default CWD path
+    let defaultPath = global.config.get('editor.defaultSaveImagePath') || ''
+
+    // Set default path to current file's dir, if the config path is empty.
+    if (isCwd && defaultPath.trim() === '') {
+      isRelativePath = true // If we save it into the current file, we are indeed relative
+      defaultPath = currentFilePath
+    }
+
+    // Did the user want to choose the directory for this one? Then let's ask him!
+    if (target.mode === 'save-other') {
+      isRelativePath = false
+      defaultPath = this._app.getWindow().askDir()[0] // We only take one directory
+    }
+
+    if (!path.isAbsolute(defaultPath)) {
+      isRelativePath = true
+      // Resolve the path to an absolute one
+      defaultPath = path.resolve(currentFilePath, defaultPath)
+    }
+
+    // Now we need to make sure the directory exists.
+    try {
+      fs.lstatSync(defaultPath)
+    } catch (e) {
+      fs.mkdirSync(defaultPath, { recursive: true })
     }
 
     // If something went wrong or the user did not provide a directory, abort
-    if (!isDir(p)) return global.ipc.notify(trans('system.error.dnf_message'))
+    if (!isDir(defaultPath)) return global.ipc.notify(trans('system.error.dnf_message'))
 
-    p = path.join(p, target.name)
+    // Build the correct path
+    let imagePath = path.join(defaultPath, target.name)
 
-    // Save the image!
+    // And now save the image
     let image = clipboard.readImage()
 
     // Somebody may have remotely overwritten the clipboard in the meantime
@@ -80,10 +102,15 @@ class SaveImage extends ZettlrCommand {
       })
     }
 
-    fs.writeFile(p, image.toPNG(), (err) => {
+    fs.writeFile(imagePath, image.toPNG(), (err) => {
       if (err) return global.ipc.notify(trans('system.error.could_not_save_image'))
+      let pathToInsert = imagePath
+      if (isRelativePath) {
+        // Insert a relative path instead of an absolute one
+        pathToInsert = path.relative(currentFilePath, imagePath)
+      }
       // Everything worked out - now tell the editor to insert some text
-      this._app.ipc.send('insert-text', `![${target.name}](${p})\n`)
+      this._app.ipc.send('insert-text', `![${target.name}](${pathToInsert})\n`)
       // Tada!
     })
 

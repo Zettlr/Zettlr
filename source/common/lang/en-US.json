@@ -411,7 +411,8 @@
       "checkForBeta": "Notify me about beta releases",
       "autoCloseBrackets": "Automatically close the following character pairs: ()[]{}'\"\"»«„““”‘’__``",
       "csl_database": "CSL JSON Database",
-      "choose_file": "Choose file …"
+      "choose_file": "Choose file …",
+      "default_image_save_path": "Default image path (relative or absolute)"
     },
     "tags": {
       "title": "Manage tags",
