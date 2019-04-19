@@ -26,11 +26,13 @@ class PasteImage extends ZettlrDialog {
   }
 
   preInit (data) {
-    // Write the image as a data stream into the img variable. This way it
-    // can be previewed before it is decided what to do with it.
-    data.img = clipboard.readImage().toDataURL()
-    data.size = clipboard.readImage().getSize()
-    data.aspect = clipboard.readImage().getAspectRatio()
+    data.size = clipboard.readImage().getSize() // First get the original size
+    data.aspect = clipboard.readImage().getAspectRatio() // Then the aspect
+
+    // Now reduce the image size and write the image into a data url to speed
+    // up image preview rendering.
+    data.img = clipboard.readImage().resize({ 'height': 600 }).toDataURL()
+
     if (clipboard.readText().length > 0) {
       // If you copy an image from the web, the browser sometimes inserts
       // the original URL to it as text into the clipboard. In this case
