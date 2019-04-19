@@ -27,6 +27,7 @@
 - Fixed the translations for the pagenumbering sections in the PDF preferences and project settings.
 - Fixed a small bug concerning case insensitive searching.
 - Fix for single-letter Math preview.
+- Fixed the "remove from virtual directory" command.
 
 ## Under the Hood
 
