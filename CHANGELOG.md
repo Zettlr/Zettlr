@@ -30,6 +30,7 @@
 - Fix for single-letter Math preview.
 - Fixed the "remove from virtual directory" command.
 - Design fix for dialog tabs on small screens.
+- Fix automatic rendering of Markdown links containing brackets (especially a problem for Wikipedia links)
 
 ## Under the Hood
 
