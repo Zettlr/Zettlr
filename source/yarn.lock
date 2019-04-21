@@ -264,10 +264,10 @@ chownr@^1.1.1:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.1.tgz#54726b8b8fff4df053c42187e801fb4412df1494"
   integrity sha512-j38EvO5+LHX84jlo6h4UzmOwi0UgW61WRyPtJz4qaadK5eY3BTS5TY/S1Stc3Uk2lIM6TPevAlULiEJwie860g==
 
-citeproc@^2.1.235:
-  version "2.1.235"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.1.235.tgz#54e3c75bf88eab788147307ecdfe77551ac51f69"
-  integrity sha512-GcBjsNjIi1MOVccsSXtNT7AmNBETFAtgkvqwg1C6gGpJWtdpUBwyAomRLvmjiCoh66WkQzIGhC0WpukihDuF0g==
+citeproc@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.1.tgz#c396b4d898e6fb132c4431acdf463f801d664d9a"
+  integrity sha512-aS6aplmB2KPuAu02UOJzNq2hjUqhx/10o6uC9mEyRUwKlscXgUlUTSqNvy0TcphPnnjloCGzHLXsnrcRb15XMA==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -907,10 +907,10 @@ isobject@^3.0.0, isobject@^3.0.1:
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
   integrity sha1-TkMekrEalzFjaqH5yNHMvP2reN8=
 
-jquery@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
-  integrity sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg==
+jquery@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.0.tgz#8de513fa0fa4b2c7d2e48a530e26f0596936efdf"
+  integrity sha512-ggRCXln9zEqv6OqAGXFEcshF5dSBvCkzj6Gm2gzuR5fWawaX8t7cxKVkkygKODrDAzKdoYw3l/e3pm3vlT4IbQ==
 
 js-tokens@^3.0.2:
   version "3.0.2"

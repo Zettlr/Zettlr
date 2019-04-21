@@ -1569,10 +1569,10 @@ ci-info@^2.0.0:
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-2.0.0.tgz#67a9e964be31a51e15e5010d58e6f12834002f46"
   integrity sha512-5tK7EtrZ0N+OLFMthtqOj4fI2Jeb88C4CAZPu25LDVUgXJ0A3Js4PMGqrn0JU1W0Mh1/Z8wZzYPxqUrXeBboCQ==
 
-citeproc@^2.1.235:
-  version "2.1.235"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.1.235.tgz#54e3c75bf88eab788147307ecdfe77551ac51f69"
-  integrity sha512-GcBjsNjIi1MOVccsSXtNT7AmNBETFAtgkvqwg1C6gGpJWtdpUBwyAomRLvmjiCoh66WkQzIGhC0WpukihDuF0g==
+citeproc@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.1.tgz#c396b4d898e6fb132c4431acdf463f801d664d9a"
+  integrity sha512-aS6aplmB2KPuAu02UOJzNq2hjUqhx/10o6uC9mEyRUwKlscXgUlUTSqNvy0TcphPnnjloCGzHLXsnrcRb15XMA==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -1991,17 +1991,17 @@ dmg-builder@6.6.0:
     parse-color "^1.0.0"
     sanitize-filename "^1.6.1"
 
-doctrine-temporary-fork@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/doctrine-temporary-fork/-/doctrine-temporary-fork-2.0.1.tgz#23f0b6275c65f48893324b02338178e496b2e4bf"
-  integrity sha512-+GQh3niRkKtSr7cKDo8po+NHkJZyC2Ebwvjz9fvq0ReQr9kIDS6BY9MDrzx+KbbLxvSj3vD/eUaeIoURHzEAFQ==
+doctrine-temporary-fork@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/doctrine-temporary-fork/-/doctrine-temporary-fork-2.1.0.tgz#36f2154f556ee4f1e60311d391cd23de5187ed57"
+  integrity sha512-nliqOv5NkE4zMON4UA6AMJE6As35afs8aYXATpU4pTUdIKiARZwrJVEP1boA3Rx1ZXHVkwxkhcq4VkqvsuRLsA==
   dependencies:
     esutils "^2.0.2"
 
-documentation@^9.3.0:
-  version "9.3.1"
-  resolved "https://registry.yarnpkg.com/documentation/-/documentation-9.3.1.tgz#2f0598e208bb689cfefc351bf6cd26a58ef2f022"
-  integrity sha512-egP7WcZLCNjYwIo97iArQ51/bCpLTOKEQaqPrvGVM2q0zo+JMy5tc+BpuVDtswW39YvP083L7EHrvyhfjol7ww==
+documentation@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/documentation/-/documentation-10.0.0.tgz#8e285529aba6d7396252289bf0693d4a3ad7e303"
+  integrity sha512-krCLVxobxphAFs8wktfCw1bZtZ6MPux/pt5HJHdm2NA5qX45Gra7m9SqGYWyeOAkfsZs9C9/Qk0xEQ/cekphYg==
   dependencies:
     "@babel/core" "^7.1.2"
     "@babel/generator" "^7.1.3"
@@ -2034,7 +2034,7 @@ documentation@^9.3.0:
     chokidar "^2.0.4"
     concat-stream "^1.6.0"
     disparity "^2.0.0"
-    doctrine-temporary-fork "2.0.1"
+    doctrine-temporary-fork "2.1.0"
     get-port "^4.0.0"
     git-url-parse "^10.0.1"
     github-slugger "1.2.0"
@@ -2185,10 +2185,10 @@ electron-to-chromium@^1.3.113:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.116.tgz#1dbfee6a592a0c14ade77dbdfe54fef86387d702"
   integrity sha512-NKwKAXzur5vFCZYBHpdWjTMO8QptNLNP80nItkSIgUOapPAo9Uia+RvkCaZJtO7fhQaVElSvBPWEc2ku6cKsPA==
 
-electron@^5.0.0-beta.8:
-  version "5.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-5.0.0-beta.8.tgz#f8f7e8a128ab91d69b4cc7c77b83b5c19fc0a2f7"
-  integrity sha512-fjnxYGSOttNDwL6en5mBRTOHi+dXQBfkQrxpl6964hrvGG6/TicpsYzhD9dYSO2f7ZYapby/buFzYgpYcoCFHg==
+electron@^5.0.0-beta.9:
+  version "5.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-5.0.0-beta.9.tgz#dc429c418e11e7c6886fd8bda60db8a5a2143773"
+  integrity sha512-9NV36qvnkJs9N2vS0lwq6jvFfHs3LSUyLKKIXltFpwgDt7VOcDZh4BPvO8A7S/XemTCsyCTsHGEiDSfSWLfUHg==
   dependencies:
     "@types/node" "^10.12.18"
     electron-download "^4.1.0"
@@ -2674,10 +2674,10 @@ graceful-fs@^4.0.0, graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.15.tgz#ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
   integrity sha512-6uHUhOPEBgQ24HM+r6b/QwWfZq+yiFcipKFrOFiBEnWdy5sdzYoi+pJeQaPI5qOLRFqWmAXUPQNsielzdLoecA==
 
-handlebars@^4.0.12:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.1.1.tgz#6e4e41c18ebe7719ae4d38e5aca3d32fa3dd23d3"
-  integrity sha512-3Zhi6C0euYZL5sM0Zcy7lInLXKQ+YLcF/olbN010mzGQ4XVm50JeyBnMqofHh696GrciGruC7kCcApPDJvVgwA==
+handlebars@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.1.2.tgz#b6b37c1ced0306b221e094fc7aca3ec23b131b67"
+  integrity sha512-nvfrjqvt9xQ8Z/w0ijewdD/vvWDTOweBUm96NTr66Wfvo1mJenBLwcYmPs3TIBP5ruzYGD7Hx/DaM9RmhroGPw==
   dependencies:
     neo-async "^2.6.0"
     optimist "^0.6.1"
@@ -3221,10 +3221,10 @@ isstream@~0.1.2:
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
   integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
 
-jquery@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
-  integrity sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg==
+jquery@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.0.tgz#8de513fa0fa4b2c7d2e48a530e26f0596936efdf"
+  integrity sha512-ggRCXln9zEqv6OqAGXFEcshF5dSBvCkzj6Gm2gzuR5fWawaX8t7cxKVkkygKODrDAzKdoYw3l/e3pm3vlT4IbQ==
 
 js-levenshtein@^1.1.3:
   version "1.1.6"
@@ -5192,10 +5192,10 @@ strict-uri-encode@^1.0.0:
   resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
   integrity sha1-J5siXfHVgrH1TmWt3UNS4Y+qBxM=
 
-string-extract-class-names@^5.8.19:
-  version "5.8.19"
-  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.8.19.tgz#a637d887152970441f9f2ca9127c285db73cb336"
-  integrity sha512-jAKc8BzCxqTjWPnKt+/F8skmNQdEdhMQ9OMn6Q4vv2385FQJOXDs8arT5CejxSgdHN51pOcJILjpvWV6sU7KRQ==
+string-extract-class-names@^5.8.21:
+  version "5.8.21"
+  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.8.21.tgz#833a3dacaee8c979d1aba8763a44861fbfe8e04c"
+  integrity sha512-b7fWeoYiHp9fCieCkoN703nQZB7gsgkJdyMNyUM9I43STepXvxitDCA5/FP3S9UfL2FpDI9l+79Bvjk7KAUpnQ==
 
 string-template@~0.2.1:
   version "0.2.1"

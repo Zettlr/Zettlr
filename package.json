@@ -32,12 +32,12 @@
         "bcp-47": "^1.0.4",
         "chart.js": "^2.7.2",
         "chokidar": "^2.1.5",
-        "citeproc": "^2.1.235",
+        "citeproc": "^2.2.1",
         "clusterize.js": "^0.18.1",
         "codemirror": "^5.45.0",
         "command-exists": "^1.2.7",
         "got": "^9.6.0",
-        "jquery": "^3.3.1",
+        "jquery": "^3.4.0",
         "katex": "^0.10.0",
         "md5": "^2.2.1",
         "moment": "^2.24.0",
@@ -53,11 +53,11 @@
     "devDependencies": {
         "chalk": "^2.4.2",
         "csso": "^3.5.1",
-        "documentation": "^9.3.0",
-        "electron": "^5.0.0-beta.8",
+        "documentation": "^10.0.0",
+        "electron": "^5.0.0-beta.9",
         "electron-builder": "^20.38.5",
-        "handlebars": "^4.0.12",
+        "handlebars": "^4.1.2",
         "less": "^3.9.0",
-        "string-extract-class-names": "^5.8.19"
+        "string-extract-class-names": "^5.8.21"
     }
 }
