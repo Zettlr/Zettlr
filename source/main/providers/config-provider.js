@@ -469,7 +469,7 @@ class ConfigProvider extends EventEmitter {
       // Set the new value and inform the listeners
       this.config[option] = value
       this.emit('update', option) // Pass the option for info
-      if (!this._bulkSetInProgress) global.ipc.send('config-update') // Notify renderer process
+      if (!this._bulkSetInProgress && global.hasOwnProperty('ipc')) global.ipc.send('config-update') // Notify renderer process
       return true
     }
 
@@ -518,7 +518,7 @@ class ConfigProvider extends EventEmitter {
 
     // Notify renderer afterwards
     this._bulkSetInProgress = false
-    global.ipc.send('config-update')
+    if (global.hasOwnProperty('ipc')) global.ipc.send('config-update')
 
     return ret
   }
