@@ -16,92 +16,16 @@
     "scripts": {
         "postinstall": "electron-builder install-app-deps",
         "start": "electron .",
-        "build:quick": "electron-builder --dir",
-        "release:this": "electron-builder",
-        "release:mac": "electron-builder --mac",
-        "release:win": "electron-builder --win",
-        "release:linux": "electron-builder --linux",
+        "build:quick": "node scripts/build-app.js --dir",
+        "release:this": "node scripts/build-app.js",
+        "release:mac": "node scripts/build-app.js --mac",
+        "release:win": "node scripts/build-app.js --win",
+        "release:linux": "node scripts/build-app.js --linux",
         "less": "node scripts/less.js",
         "less:extract": "node scripts/extract-css.js",
         "handlebars": "node scripts/handlebars.js",
         "docs:build": "node scripts/docs.js",
         "docs": "documentation build ./source/main.js -f html -o resources/docs"
-    },
-    "build": {
-        "appId": "com.zettlr.app",
-        "productName": "Zettlr",
-        "npmRebuild": false,
-        "copyright": "Zettlr is licensed under GNU GPL v3.",
-        "fileAssociations": [
-            {
-                "ext": [
-                    "md",
-                    "markdown"
-                ],
-                "name": "Markdown",
-                "mimeType": "text/markdown",
-                "description": "Markdown document",
-                "role": "Editor",
-                "isPackage": false
-            }
-        ],
-        "directories": {
-            "output": "release",
-            "app": "source"
-        },
-        "afterPack": "./scripts/afterPack.js",
-        "mac": {
-            "category": "public.app-category.productivity",
-            "target": "dmg",
-            "artifactName": "Zettlr-macos-x64-${version}.${ext}",
-            "icon": "resources/icons/icns/icon.icns",
-            "darkModeSupport": true
-        },
-        "win": {
-            "target": "nsis",
-            "artifactName": "Zettlr-win32-x64-${version}.${ext}",
-            "icon": "resources/icons/ico/icon.ico"
-        },
-        "linux": {
-            "target": [
-                "deb",
-                "rpm"
-            ],
-            "artifactName": "Zettlr-linux-x64-${version}.${ext}",
-            "synopsis": "Markdown editor",
-            "category": "Office",
-            "icon": "resources/icons/png"
-        },
-        "dmg": {
-            "background": "resources/icons/dmg/dmg_back.tiff",
-            "icon": "resources/icons/icns/icon.icns",
-            "contents": [
-                {
-                    "x": 130,
-                    "y": 220
-                },
-                {
-                    "x": 410,
-                    "y": 220,
-                    "type": "link",
-                    "path": "/Applications"
-                }
-            ]
-        },
-        "nsis": {
-            "oneClick": false,
-            "perMachine": false,
-            "allowElevation": true,
-            "allowToChangeInstallationDirectory": true,
-            "uninstallDisplayName": "${productName}"
-        },
-        "deb": {
-            "priority": "optional",
-            "compression": "xz"
-        },
-        "rpm": {
-            "compression": "xz"
-        }
     },
     "dependencies": {
         "adm-zip": "^0.4.13",
