@@ -12,7 +12,7 @@
 - Added syntax highlighting for
   - Go (keyword: "go")
   - Kotlin (keyword: "kotlin")
-- Add shortcuts for easier access of the recent documents.
+- Add shortcuts for easier access to the recent documents.
 - HTML export now relies on Pandoc, if available, and only falls back to Showdown if Pandoc hasn't been found on the system.
 - You can now edit Math formulae by clicking on them.
 - The tag count is now shown next to the tags in the tag cloud.
