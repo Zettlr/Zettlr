@@ -1,0 +1,4 @@
+---
+rules:
+  # Only warn in case there are templates in strings
+  no-template-curly-in-string: 1

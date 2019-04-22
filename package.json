@@ -51,10 +51,11 @@
         "uuid": "^3.3.2"
     },
     "devDependencies": {
+        "asar": "^1.0.0",
         "chalk": "^2.4.2",
         "csso": "^3.5.1",
         "documentation": "^10.0.0",
-        "electron": "^5.0.0-beta.9",
+        "electron": "^5.0.0-beta.8",
         "electron-builder": "^20.38.5",
         "handlebars": "^4.1.2",
         "less": "^3.9.0",

@@ -5,6 +5,7 @@
 const builder = require('electron-builder')
 const Platform = builder.Platform
 const log = require('./console-colour.js')
+const path = require('path')
 
 /**
 * POSSIBLE ARGUMENTS
@@ -17,6 +18,10 @@ const log = require('./console-colour.js')
 let flags = process.argv // Contains the CLI flags
 let buildTargets // Contains all build targets
 let onlyDir = false // Is set to true, if --dir flag is given on command line
+
+// Set the current working directory to the app's root.
+process.chdir(path.resolve(__dirname, '../'))
+log.info(`CWD is: ${process.cwd()}`)
 
 if (flags.length > 2) {
   // There is at least one flag given on the command line
