@@ -78,18 +78,18 @@ const config = {
   mac: {
     category: 'public.app-category.productivity',
     target: (onlyDir) ? 'dir' : 'dmg',
-    artifactName: 'Zettlr-macos-x64-${version}.${ext}',
+    artifactName: 'Zettlr-macos-x64-${version}.${ext}', // eslint-disable-line
     icon: 'resources/icons/icns/icon.icns',
     darkModeSupport: true
   },
   win: {
     target: (onlyDir) ? 'dir' : 'nsis',
-    artifactName: 'Zettlr-win32-x64-${version}.${ext}',
+    artifactName: 'Zettlr-win32-x64-${version}.${ext}', // eslint-disable-line
     icon: 'resources/icons/ico/icon.ico'
   },
   linux: {
     target: (onlyDir) ? 'dir' : [ 'deb', 'rpm' ],
-    artifactName: 'Zettlr-linux-x64-${version}.${ext}',
+    artifactName: 'Zettlr-linux-x64-${version}.${ext}', // eslint-disable-line
     synopsis: 'Markdown editor',
     category: 'Office',
     icon: 'resources/icons/png'
@@ -115,7 +115,7 @@ const config = {
     perMachine: false,
     allowElevation: true,
     allowToChangeInstallationDirectory: true,
-    uninstallDisplayName: '${productName}'
+    uninstallDisplayName: '${productName}' // eslint-disable-line
   },
   deb: {
     priority: 'optional',
