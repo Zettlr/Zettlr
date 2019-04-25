@@ -738,8 +738,13 @@ class ZettlrEditor {
       if (line[sel.head.ch] === ' ') sel.head.ch--
     }
 
+    // Last but not least check for formatting marks at the beginning or end
+    let formatting = '_*[](){}'.split('')
+    while (formatting.includes(line.substr(sel.anchor.ch, 1)) && sel.anchor.ch < sel.head.ch) sel.anchor.ch++
+    while (formatting.includes(line.substr(sel.head.ch - 1, 1)) && sel.head.ch > sel.anchor.ch) sel.head.ch--
+
     // Now we should be all set.
-    this._cm.setSelection(sel.anchor, sel.head) // It's on line 666! This has a meaning, I'm sure!
+    this._cm.setSelection(sel.anchor, sel.head)
   }
 
   /**
