@@ -17,7 +17,7 @@ const path = require('path')
 const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const tippy = require('tippy.js')
-const { clipboard } = require('electron')
+const { clipboard, shell } = require('electron')
 const { hash, makeSearchRegEx, countWords, flattenDirectoryTree } = require('../common/zettlr-helpers.js')
 const { trans } = require('../common/lang/i18n.js')
 
@@ -150,7 +150,14 @@ class ZettlrEditor {
             }
           }
         } else {
-          require('electron').shell.openExternal(url)
+          // Make sure there's a protocol, and if it's not, set the default //
+          // protocol (to make sure we don't presuppose https on an http-only
+          // server (which you shouldn't do either way, but just to be sure))
+          if (!/:\/\//.test(url)) url = 'https://' + url
+          shell.openExternal(url).catch((e) => {
+            // Notify the user that we couldn't open the URL
+            if (e) global.notify(trans('system.error.open_url_error', url))
+          })
         }
       }, // Action for ALT-Clicks
       zkn: {

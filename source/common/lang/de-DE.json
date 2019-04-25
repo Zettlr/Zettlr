@@ -542,7 +542,8 @@
       "export_temp_file": "Konnte temporäre Datei &quot;%s&quot; nicht entfernen. Bitte manuell entfernen.",
       "export_error_title": "Export fehlgeschlagen",
       "export_error_message": "Ein Fehler ist beim Export aufgetreten: %s",
-      "open_root_error": "Konnte Datei %s nicht öffnen"
+      "open_root_error": "Konnte Datei %s nicht öffnen",
+      "open_url_error": "Konnte %s nicht öffnen"
     },
     "save_changes_title": "Änderungen verwerfen?",
     "save_changes_message": "Die Datei enthält ungespeicherte Änderungen. Verwerfen oder speichern?",

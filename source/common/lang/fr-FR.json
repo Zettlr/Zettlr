@@ -504,6 +504,7 @@
             "no_xelatex_message": "LaTeX n'\u00e8t\u00e9 trouver pas dans l'ordinateur. T\u00e9l\u00e9charger LaTeX pour exporter les fichiers \u00e0 PDF.",
             "no_xelatex_title": "Impossible de trouver LaTeX",
             "open_root_error": "Impossible d'ouvrir %s",
+            "open_url_error": "Impossible d'ouvrir %s",
             "pandoc_error_message": "Pandoc a lanc\u00e9 une erreur: %s",
             "pandoc_error_title": "Erreur lors d'exporter",
             "remove_message": "Supprimer %s r\u00e9ellement?",

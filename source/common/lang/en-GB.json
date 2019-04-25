@@ -542,7 +542,8 @@
       "export_temp_file": "Could not remove the temporary file &quot;%s&quot;. Please remove it manually.",
       "export_error_title": "Export failed",
       "export_error_message": "An error occurred on export: %s",
-      "open_root_error": "Could not open %s"
+      "open_root_error": "Could not open %s",
+      "open_url_error": "Could not open %s"
     },
     "save_changes_title": "Omit unsaved changes?",
     "save_changes_message": "There are unsaved changes to the current file. Do you want to omit them or save?",
