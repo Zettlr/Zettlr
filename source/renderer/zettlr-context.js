@@ -115,6 +115,17 @@ class ZettlrCon {
     let vdhash = null
     let typoPrefix = []
 
+    // If the user has right-clicked a link, select the link contents to make it
+    // look better and give visual feedback that the user is indeed about to copy
+    // the whole link into the clipboard, not a part of it.
+    if (elem.hasClass('cma')) {
+      let selection = window.getSelection()
+      let range = document.createRange()
+      range.selectNodeContents(elem[0])
+      selection.removeAllRanges()
+      selection.addRange(range)
+    }
+
     // Used to hold the scopes
     let scopes = []
     // Used to hold the attributes

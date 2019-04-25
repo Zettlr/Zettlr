@@ -21,6 +21,7 @@
 - Using the Debug menu, you can now test the new themes (Berlin, Frankfurt, and Bielefeld) during beta to help us finalise them!
 - Formatting marks at the beginning or end of a misspelled word are now excluded from the selection.
 - Now, if trying to follow a link without a protocol (e.g. `www.google.com` instead of `https://www.google.com`), Zettlr will automatically assume `https` as the protocol to make sure it can be opened by the web browser. Correctly configured servers should automatically redirect you to `http`, if applicable.
+- Zettlr now highlights the full link when you right-click it to give visual feedback that the context menu options "Copy Link" or "Open Link" will indeed use the full link, and not just a part of it.
 
 ### Fixes
 
