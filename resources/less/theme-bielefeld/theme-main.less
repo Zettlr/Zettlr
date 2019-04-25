@@ -1,7 +1,7 @@
 /*!
  * BEGIN HEADER
  *
- * Contains:        Base Theme CSS
+ * Contains:        Bielefeld Theme CSS
  * CVM-Role:        Theme
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -18,8 +18,8 @@
 @import "../theme-berlin/theme-main.less";
 
 // Now adapt
-@c-primary: @blue-0;
-@c-primary-shade: @blue-1;
+@c-primary: @dark-orange;
+@c-primary-shade: @orange-2;
 
 @c-secondary: @green-0;
 @c-secondary-shade: @green-1;
@@ -38,8 +38,8 @@
 @bg-annotation: @orange-2;
 @bg-annotation-dark: yellow;
 
-@selection-light: @blue-selection;
-@selection-dark: @blue-selection-dark;
+@selection-light: @gold-selection;
+@selection-dark: @gold-selection-dark;
 
 /**
  * ALERTS
@@ -61,21 +61,28 @@
 @pomodoro-long: @green-selection-dark;
 
 /**
- * Change editor font
+ * FONTS
  */
-#editor .CodeMirror {
-  font-family: @font-crimson;
-  font-size: 1.5em;
-}
+@font-main: @font-liberation;
+@font-secondary: @font-lato;
+@font-code: @font-liberation;
+
+/**
+ * ADDITIONAL STUFF
+ */
 
 body {
+  #editor { background-color: @beige-0; }
+  #directories { background-color: @beige-1; }
+  #preview { background-color: @beige-1; }
+
   // The scrollbars are too bright using the default primary colour, so we have
   // to adapt them
-  ::-webkit-scrollbar-thumb { background-color:@blue-0; }
+  ::-webkit-scrollbar-thumb { background-color:@apricot; }
   ::-webkit-scrollbar-thumb:window-inactive { background-color: white; }
 }
 
 body.dark {
-  ::-webkit-scrollbar-thumb { background-color:@blue-selection-dark; }
-  ::-webkit-scrollbar-thumb:window-inactive { background-color: @blue-selection; }
+  ::-webkit-scrollbar-thumb { background-color:@deep-orange; }
+  ::-webkit-scrollbar-thumb:window-inactive { background-color: @apricot; }
 }

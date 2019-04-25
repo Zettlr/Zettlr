@@ -29,6 +29,11 @@ let themes = [
     source: path.join(__dirname, '../resources/less/theme-frankfurt/theme-main.less'),
     target: path.join(__dirname, '../source/common/assets/css/theme-frankfurt.css'),
     less: ''
+  },
+  {
+    source: path.join(__dirname, '../resources/less/theme-bielefeld/theme-main.less'),
+    target: path.join(__dirname, '../source/common/assets/css/theme-bielefeld.css'),
+    less: ''
   }
 ]
 
