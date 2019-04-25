@@ -137,6 +137,7 @@ class ConfigProvider extends EventEmitter {
         'defaultSaveImagePath': ''
       },
       'display': {
+        'theme': 'berlin', // The theme used by the app, can be berlin, frankfurt, bielefeld
         'imageWidth': 100, // Maximum preview image width
         'imageHeight': 50, // Maximum preview image height
         'renderCitations': false,

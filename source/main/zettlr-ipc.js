@@ -311,6 +311,14 @@ class ZettlrIPC {
         this._app.openQL(cnt)
         return true
 
+      // DEBUG TODO
+      case 'switch-theme-berlin':
+      case 'switch-theme-bielefeld':
+      case 'switch-theme-frankfurt':
+        // Set the theme accordingly
+        global.config.set('display.theme', cmd.substr(13))
+        break
+
       default:
         console.log(trans('system.unknown_command', cmd))
         break

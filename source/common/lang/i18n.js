@@ -73,7 +73,9 @@ function i18n (lang = 'en-US') {
  */
 function trans (string, ...args) {
   if (string.indexOf('.') === -1) {
-    throw new Error('The translation string was malformed: ' + string + '!')
+    // Wtf? But alright, return the string and log an error
+    console.error('The translation string was malformed: ' + string + '!')
+    return string
   }
 
   // Split the string by dots

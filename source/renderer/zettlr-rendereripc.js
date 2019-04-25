@@ -519,7 +519,6 @@ class ZettlrRendererIPC {
         break
 
       case 'update-available':
-        console.log(cnt)
         this._app.getBody().displayUpdate(cnt)
         break
 
@@ -590,6 +589,13 @@ class ZettlrRendererIPC {
         // An image has been pasted onto the editor. Show the dialog to
         // determine what to do.
         this._app.getBody().displayPasteImage()
+        break
+
+      // DEBUG TODO
+      case 'switch-theme-berlin':
+      case 'switch-theme-bielefeld':
+      case 'switch-theme-frankfurt':
+        this.send(cmd) // Resend the command to the main process to switch theme
         break
 
       default:

@@ -212,6 +212,17 @@
       "label": "menu.toggle_devtools",
       "accelerator": { "darwin": "Alt+Command+I", "other": "Ctrl+Shift+I" },
       "id": "toggleDevTools"
+    }, {
+      "type": "separator"
+    }, {
+      "label": "Use Berlin Theme",
+      "command": "switch-theme-berlin"
+    }, {
+      "label": "Use Frankfurt Theme",
+      "command": "switch-theme-frankfurt"
+    }, {
+      "label": "Use Bielefeld Theme",
+      "command": "switch-theme-bielefeld"
     }
   ]},
   "mixin_preferences": {

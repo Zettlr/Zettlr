@@ -112,6 +112,17 @@ class ZettlrBody {
   }
 
   /**
+   * Is called by the app on a configuration change so that the body can make
+   * necessary adjustments.
+   */
+  configChange () {
+    // On config change, change the theme according to the settings
+    let href = $('link#theme-css').attr('href')
+    href = href.replace(/bielefeld|berlin|frankfurt/, global.config.get('display.theme'))
+    $('link#theme-css').attr('href', href)
+  }
+
+  /**
     * Display a small popup to ask for a new file name
     * @param  {ZettlrDir} dir A directory object
     * @return {void}     Nothing to return.

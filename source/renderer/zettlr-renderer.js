@@ -163,6 +163,9 @@ class ZettlrRenderer {
       global.config.get('display.imageHeight')
     )
 
+    // Tell the body that the config has changed
+    this.getBody().configChange()
+
     // Tell the editor which elements should be rendered inside documents.
     this.getEditor().setRenderOptions(
       global.config.get('display.renderCitations'),

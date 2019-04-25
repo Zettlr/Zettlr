@@ -18,6 +18,7 @@
 - The tag count is now shown next to the tags in the tag cloud.
 - During global search, the search results will include all files once at most, so files within virtual directories, for example, will be excluded to prevent duplicate files.
 - The preview images when pasting an image from clipboard load faster.
+- Using the Debug menu, you can now test the new themes (Berlin, Frankfurt, and Bielefeld) during beta to help us finalise them!
 
 ### Fixes
 
