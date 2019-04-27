@@ -123,47 +123,45 @@
       <div id="prefs-tabs-editor">
         <div class="clear"></div>
         <div class="box-left">
+          <p>{{i18n "dialog.preferences.spellcheck"}}</p>
+          <p>{{i18n "dialog.preferences.spellcheck_warning"}}</p>
           <input type="text" class="dicts-list-search" placeholder="{{i18n "dialog.preferences.spellcheck_search_placeholder"}}">
           <ul class="dicts-list">
             {{#each availableDicts}}
-            <li data-value="{{this}}" class="dicts-list-item">{{transDict this}}</li>
+            <li class="cb-group dicts-list-item">
+              <label class="cb-toggle">
+                <input type="checkbox" name="selectedDicts" value="{{this}}" id="{{this}}" {{#ifIn this ../selectedDicts}}checked="checked"{{/ifIn}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="{{this}}">{{transDict this}}</label>
+            </li>
             {{/each}}
           </ul>
         </div>
         <div class="box-right">
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="muteLines" value="yes" id="muteLines" {{#if muteLines}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="muteLines">{{i18n "dialog.preferences.mute_lines"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="editor.autoCloseBrackets" value="yes" id="autoCloseBrackets" {{#if editor.autoCloseBrackets}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="autoCloseBrackets">{{i18n "dialog.preferences.autoCloseBrackets"}}</label>
+          </div>
+          <hr>
           <label for="editor.defaultSaveImagePath">
             {{i18n "dialog.preferences.default_image_save_path"}}
           </label>
           <input type="text" name="editor.defaultSaveImagePath" id="editor.defaultSaveImagePath" value="{{ editor.defaultSaveImagePath }}">
-          <p>
-            {{i18n "dialog.preferences.spellcheck"}}
-          </p>
-          <p>
-            {{i18n "dialog.preferences.spellcheck_warning"}}
-          </p>
           <hr>
-          <div class="selected-dictionaries">
-            {{#each selectedDicts}}
-            <div class="selected-dict"><input type="hidden" value="{{this}}" name="selectedDicts" id="{{this}}">{{i18n "dialog.preferences.app_lang." this}}</div>
-            {{/each}}
-          </div>
+          <!-- Here come the custom user dictionary words! -->
         </div>
         <div class="clear"></div>
-        <hr>
-        <div class="cb-group">
-          <label class="cb-toggle">
-            <input type="checkbox" name="muteLines" value="yes" id="muteLines" {{#if muteLines}}checked="checked"{{/if}}>
-            <div class="toggle"></div>
-          </label>
-          <label for="muteLines">{{i18n "dialog.preferences.mute_lines"}}</label>
-        </div>
-        <div class="cb-group">
-          <label class="cb-toggle">
-            <input type="checkbox" name="editor.autoCloseBrackets" value="yes" id="autoCloseBrackets" {{#if editor.autoCloseBrackets}}checked="checked"{{/if}}>
-            <div class="toggle"></div>
-          </label>
-          <label for="autoCloseBrackets">{{i18n "dialog.preferences.autoCloseBrackets"}}</label>
-        </div>
       </div>
       <!-- Export related options (except pandoc+xelatex) -->
       <div id="prefs-tabs-export">

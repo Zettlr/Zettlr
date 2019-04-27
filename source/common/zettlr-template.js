@@ -30,6 +30,22 @@ function makeTemplate (cat, tpl, data = {}) {
   })
 
   /**
+   * Checks if an element is contained in the given array.
+   * @param  {Mixed} elem    The element to be searched for.
+   * @param  {Array} arr     The array in which the element should be found.
+   * @param  {Object} options The context object.
+   * @return {Mixed}         Either fn (= true) or inverse (= false).
+   */
+  handlebars.registerHelper('ifIn', function (elem, arr, options) {
+    // Check if we've got an array
+    if (!Array.isArray(arr)) return options.inverse(this)
+
+    // Now perform the check
+    if (arr.indexOf(elem) > -1) return options.fn(this)
+    return options.inverse(this)
+  })
+
+  /**
    * Does not return the full string if the language is not found, but rather the
    * last part (in this case: the BCP 47 language string).
    * @param  {String} lang             The language code to be localised

@@ -26,12 +26,6 @@ class PreferencesDialog extends ZettlrDialog {
   }
 
   preInit (data) {
-    for (let l of data.availableDicts) {
-      if (data.selectedDicts.includes(l)) {
-        // Remove already selected dictionaries from the list
-        data.availableDicts.splice(data.availableDicts.indexOf(l), 1)
-      }
-    }
     // The template expects a simple string
     data.attachmentExtensions = data.attachmentExtensions.join(', ')
 
@@ -63,33 +57,12 @@ class PreferencesDialog extends ZettlrDialog {
     })
 
     $('.dicts-list').on('click', (e) => {
+      // If the user simply clicks anywhere on the li (and not on the label),
+      // switch the checkbox state via javascript
       let elem = $(e.target)
       if (elem.is('li') && elem.hasClass('dicts-list-item')) {
-        let selection = $(`<div class="selected-dict"><input type="hidden" value="${elem.attr('data-value')}" name="selectedDicts" id="${elem.attr('data-value')}">${elem.text()}</div>`)
-        $('.selected-dictionaries').append(selection)
-        elem.detach()
-        $('.dicts-list-search').val('').focus().trigger('keyup') // Next search
-      }
-    })
-
-    $('.selected-dictionaries').on('click', (e) => {
-      let elem = $(e.target)
-      if (elem.is('div') && elem.hasClass('selected-dict')) {
-        let selection = $(`<li data-value="${elem.children('input').first().val()}" class="dicts-list-item">${elem.text()}</li>`)
-        let length = $('.dicts-list').find('li').length
-        if (length === 0) {
-          $('.dicts-list').append(selection)
-        } else {
-          $('.dicts-list').find('li').each(function (i) {
-            if ($(this).text() > elem.text()) {
-              selection.insertBefore($(this))
-              return false // Break out of the loop
-            } else if (i === length - 1) {
-              selection.insertAfter($(this))
-            }
-          })
-        }
-        elem.detach()
+        let cb = elem.find('input[type="checkbox"]').first()
+        cb.prop('checked', !cb.prop('checked'))
       }
     })
     // END searchfield functions.
