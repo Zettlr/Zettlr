@@ -7,9 +7,9 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This file is the only procedural file in the app. It is the
- *                  main entry point for the application. What it does: Listen
- *                  to app-Events and initialize the Zettlr object.
+ * Description:     This file is the procedural file for the main process. It is
+ *                  the main entry point for the application. What it does:
+ *                  Listen to app-Events and initialize the Zettlr object.
  *
  * END HEADER
  */

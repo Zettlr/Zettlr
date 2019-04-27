@@ -38,6 +38,7 @@
 - Design fix for dialog tabs on small screens.
 - Fix automatic rendering of Markdown links containing brackets (especially a problem for Wikipedia links)
 - Improved performance during window resizing and moving.
+- Removed all inline-javascript from the `index.htm` and moved it to a new `main.js` in the renderer process.
 
 ## Under the Hood
 
