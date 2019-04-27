@@ -37,6 +37,7 @@
 - Fixed the "remove from virtual directory" command.
 - Design fix for dialog tabs on small screens.
 - Fix automatic rendering of Markdown links containing brackets (especially a problem for Wikipedia links)
+- Improved performance during window resizing and moving.
 
 ## Under the Hood
 

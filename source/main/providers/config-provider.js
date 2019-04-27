@@ -27,6 +27,11 @@ const { ignoreFile, isDir, isDictAvailable } = require('../../common/zettlr-help
 const { getLanguageFile } = require('../../common/lang/i18n.js')
 const COMMON_DATA = require('../../common/data.json')
 
+// Suppress notifications on modification of the following settings
+const SUPPRESS_NOTIFICATION = [
+  'window.x', 'window.y', 'window.width', 'window.height', 'window.max'
+]
+
 /**
  * This class represents the configuration of Zettlr, represented by the
  * config.json file in the user's data directory as well as some environment
@@ -469,8 +474,10 @@ class ConfigProvider extends EventEmitter {
 
       // Set the new value and inform the listeners
       this.config[option] = value
-      this.emit('update', option) // Pass the option for info
-      if (!this._bulkSetInProgress && global.hasOwnProperty('ipc')) global.ipc.send('config-update') // Notify renderer process
+      if (!SUPPRESS_NOTIFICATION.includes(option)) {
+        this.emit('update', option) // Pass the option for info
+        if (!this._bulkSetInProgress && global.hasOwnProperty('ipc')) global.ipc.send('config-update') // Notify renderer process
+      }
       return true
     }
 
@@ -494,8 +501,10 @@ class ConfigProvider extends EventEmitter {
 
         // Set the new value and inform the listeners
         cfg[prop] = value
-        this.emit('update', option) // Pass the option for info
-        if (!this._bulkSetInProgress) global.ipc.send('config-update') // Notify renderer process
+        if (!SUPPRESS_NOTIFICATION.includes(option)) {
+          this.emit('update', option) // Pass the option for info
+          if (!this._bulkSetInProgress) global.ipc.send('config-update') // Notify renderer process
+        }
         return true
       }
     }
