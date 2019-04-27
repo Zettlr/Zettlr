@@ -31,6 +31,7 @@ class GetPreferences extends ZettlrCommand {
     // Add available translations and dictionaries
     toSend.supportedLangs = enumLangFiles().map(elem => elem.tag)
     toSend.availableDicts = enumDictFiles().map(elem => elem.tag)
+    toSend.userDictionary = global.dict.getUserDictionary()
     global.ipc.send('preferences', toSend)
   }
 }

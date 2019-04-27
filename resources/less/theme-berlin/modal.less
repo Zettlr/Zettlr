@@ -170,6 +170,28 @@
             }
         }
 
+        ul.user-dict {
+          margin:0px;
+          border:1px solid @grey-2;
+          padding:0;
+          border-radius:5px;
+
+          li.user-dict-item {
+            position: relative;
+            border-bottom: 1px solid @grey-2;
+
+            &::after {
+              content: "\00d7";
+              position: absolute;
+              right: 5px;
+              font-weight: bold;
+              color: @red-5;
+            }
+
+            &:hover { background-color: @red-0; color: white; }
+          }
+        }
+
         input.dicts-list-search {
             border:1px solid @grey-2;
             background-color: white;

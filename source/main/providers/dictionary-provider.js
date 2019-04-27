@@ -37,11 +37,30 @@ class DictionaryProvider extends EventEmitter {
     this._loadedDicts = []
     // Path to the user dictionary
     this._userDictionaryPath = path.join(app.getPath('userData'), 'user.dic')
+    // The user dictionary
+    this._userDictionary = ''
 
     // Inject global methods
     global.dict = {
       on: (message, callback) => { this.on(message, callback) },
-      off: (message, callback) => { this.off(message, callback) }
+      off: (message, callback) => { this.off(message, callback) },
+      /**
+       * Returns a copy of the full user dictionary.
+       * @return {Array} The user dictionary.
+       */
+      getUserDictionary: () => { return JSON.parse(JSON.stringify(this._userDictionary)) },
+      /**
+       * Replaces the current user dictionary with a new one
+       * @param {Array} dict The new dictionary.
+       * @return {Boolean} Whether or not the call succeeded.
+       */
+      setUserDictionary: (dict) => {
+        if (!Array.isArray(dict)) return false
+        this._userDictionary = dict
+        // Send an invalidation message to the renderer
+        global.ipc.send('invalidate-dict')
+        return true
+      }
     }
 
     // Listen for synchronous messages from the renderer process for typos.

@@ -406,6 +406,7 @@
       "spellcheck": "Wähle die Sprachen aus, für welche du die Rechtschreibprüfung einschalten möchtest.",
       "spellcheck_warning": "<em>Vorsicht:</em> Zu viele gleichzeitig aktivierte Bibliotheken verlangsamen die App spürbar! Versuche, nicht mehr als drei gleichzeitig zu aktivieren!",
       "spellcheck_search_placeholder": "Suche nach Wörterbüchern &hellip;",
+      "user_dictionary": "Benutzerdefiniertes Wörterbuch. Entferne Wörter mittels Klick.",
       "mute_lines": "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab",
       "debug": "Entwicklermodus aktivieren",
       "checkForBeta": "Informiere mich über Beta-Releases",

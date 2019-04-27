@@ -22,7 +22,6 @@ class PreferencesDialog extends ZettlrDialog {
   constructor () {
     super()
     this._dialog = 'preferences'
-    // TODO: Implement the proceed functionality.
   }
 
   preInit (data) {
@@ -67,6 +66,16 @@ class PreferencesDialog extends ZettlrDialog {
     })
     // END searchfield functions.
 
+    // Remove the list items on click
+    $('.user-dict-item').on('click', (e) => {
+      let elem = $(e.target)
+      elem.animate({
+        'height': '0px'
+      }, 500, function () {
+        $(this).detach()
+      })
+    })
+
     // Begin: functions for the zkn regular expression fields
     $('#reset-id-regex').on('click', (e) => {
       $('#pref-zkn-free-id').val('(\\d{14})')
@@ -108,6 +117,7 @@ class PreferencesDialog extends ZettlrDialog {
     this.getModal().find(`input`).removeClass('has-error')
 
     let cfg = {}
+    console.log(data)
 
     // Standard preferences
     cfg['darkTheme'] = (data.find(elem => elem.name === 'darkTheme') !== undefined)
@@ -171,6 +181,11 @@ class PreferencesDialog extends ZettlrDialog {
       }
       return // Don't try to update falsy settings.
     }
+
+    // We're done. But before sending retrieve all remaining user dictionary words ...
+    let userDictionary = data.filter(elem => elem.name === 'userDictionary').map(elem => elem.value)
+    // ... and send them to main separately
+    global.ipc.send('update-user-dictionary', userDictionary)
 
     // Finally send and close this dialog.
     global.ipc.send('update-config', cfg)

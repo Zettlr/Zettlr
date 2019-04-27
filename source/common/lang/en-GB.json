@@ -406,6 +406,7 @@
       "spellcheck": "Select the languages for which you want to enable automatic spell checking.",
       "spellcheck_warning": "<em>Attention:</em> Too many active spell check libraries may slow the app down significanty! Try to stick with three at maximum.",
       "spellcheck_search_placeholder": "Search for dictionaries &hellip;",
+      "user_dictionary": "User dictionary. Remove words by clicking them.",
       "mute_lines": "Mute non-focused lines in distraction-free mode",
       "debug": "Enable debug mode",
       "checkForBeta": "Notify me about beta releases",
