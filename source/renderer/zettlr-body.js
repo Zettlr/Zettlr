@@ -53,6 +53,7 @@ class ZettlrBody {
     this._n = [] // Holds all notifications currently displaying
     // Holds the currently displayed dialog. Prevents multiple dialogs from appearing.
     this._currentDialog = null
+    this._currentTheme = 'berlin' // Default theme is Berlin
 
     // This object caches the values of search and replace value, so they stay
     // persistent on a per-session basis.
@@ -116,10 +117,16 @@ class ZettlrBody {
    * necessary adjustments.
    */
   configChange () {
+    let newTheme = global.config.get('display.theme')
+    // Check if we really need to replace the style to prevent ugly flickering
+    // when replacing the same theme with the same.
+    if (this._currentTheme === newTheme) return
+
     // On config change, change the theme according to the settings
     let href = $('link#theme-css').attr('href')
-    href = href.replace(/bielefeld|berlin|frankfurt/, global.config.get('display.theme'))
+    href = href.replace(/bielefeld|berlin|frankfurt/, newTheme)
     $('link#theme-css').attr('href', href)
+    this._currentTheme = newTheme
   }
 
   /**
