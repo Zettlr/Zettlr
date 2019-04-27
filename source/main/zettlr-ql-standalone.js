@@ -27,10 +27,20 @@ class ZettlrQLStandalone {
 
     // Enable listening to config changes
     global.config.on('update', (e) => {
-      if (global.config.get('darkTheme') !== this._darkMode) {
-        this._darkMode = global.config.get('darkTheme')
+      let darkMode = global.config.get('darkTheme')
+      let theme = global.config.get('display.theme')
+
+      if (darkMode !== this._darkMode) {
+        this._darkMode = darkMode
         for (let ql of this._ql) {
           if (ql) ql.webContents.send('toggle-theme')
+        }
+      }
+
+      if (theme !== this._currentTheme) {
+        this._currentTheme = theme
+        for (let ql of this._ql) {
+          if (ql) ql.webContents.send('switch-theme', theme)
         }
       }
     })
@@ -78,7 +88,7 @@ class ZettlrQLStandalone {
       pathname: path.join(__dirname, '../quicklook/index.htm'),
       protocol: 'file:',
       slashes: true,
-      search: `file=${file.hash}&darkMode=${global.config.get('darkTheme')}`
+      search: `file=${file.hash}&darkMode=${global.config.get('darkTheme')}&theme=${global.config.get('display.theme')}`
     }))
     // Only show window once it is completely initialized
     win.once('ready-to-show', () => { win.show() })

@@ -48,12 +48,21 @@ class ZettlrQuicklookWindow {
     // Listen for the file event to receive the file to display from main.
     ipc.on('file', (e, file) => { this.init(file) })
 
-    // Also we need to know whether or not we should initiate in darkMode.
+    // Also we need to know whether or not we should initiate in darkMode, and
+    // which theme to use initially.
     let dm = url.searchParams.get('darkMode')
+    let theme = url.searchParams.get('theme')
     if (dm === 'true') $('body').addClass('dark')
+    $('link#theme-css').attr('href', $('link#theme-css').attr('href').replace(/bielefeld|berlin|frankfurt/, theme))
 
-    // Toggle the theme if there's an appropriate event
+    // Toggle the theme (or mode) if there's an appropriate event
     ipc.on('toggle-theme', (e) => { $('body').toggleClass('dark') })
+    ipc.on('switch-theme', (e, theme) => {
+      $('link#theme-css').attr(
+        'href',
+        $('link#theme-css').attr('href').replace(/bielefeld|berlin|frankfurt/, theme)
+      )
+    })
 
     // activate event listeners for the window
     this._act()
