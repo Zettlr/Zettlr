@@ -20,7 +20,7 @@
         "chokidar": "^2.1.5",
         "citeproc": "^2.2.1",
         "clusterize.js": "^0.18.1",
-        "codemirror": "^5.45.0",
+        "codemirror": "^5.46.0",
         "command-exists": "^1.2.7",
         "got": "^9.6.0",
         "jquery": "^3.4.0",
@@ -32,7 +32,7 @@
         "sanitize-filename": "^1.6.1",
         "semver": "^6.0.0",
         "showdown": "^1.8.6",
-        "tippy.js": "^4.2.1",
+        "tippy.js": "^4.3.0",
         "typo": "^1.0.6",
         "uuid": "^3.3.2"
     },

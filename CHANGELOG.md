@@ -49,6 +49,7 @@
 - Moved the dictionary to its own dedicated provider for more versatility and improved upon its functionality.
 - Created an appearance provider which takes care of switching the Zettlr theming based upon user choices.
 - Switched from the `build`-property `electron-build` toolchain to the API.
+- Switched to `Electron 5.0.0`.
 
 # 1.2.3
 
