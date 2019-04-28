@@ -18,6 +18,7 @@ const { formatDate, isFile } = require('../common/zettlr-helpers.js')
 const { exec } = require('child_process')
 const commandExists = require('command-exists').sync // Need to use here because we cannot rely on the config's availability
 const path = require('path')
+const { app } = require('electron')
 const fs = require('fs')
 const showdown = require('showdown')
 const ZIP = require('adm-zip')
@@ -381,7 +382,7 @@ class ZettlrExport {
   }
 
   /**
-   * This prepares all file exports except HTML, PDF, DOCX, and ODT.
+   * This prepares most file exports
    */
   _prepareStandardExport () {
     // First override the tempfile in case the markdown input format differs
@@ -391,8 +392,16 @@ class ZettlrExport {
       case 'revealjs':
         this.targetFile = path.join(this.options.dest, path.basename(this.options.file.path, path.extname(this.options.file.path)) + '.revealjs.htm')
         break
-      case 'rtf':
       case 'html':
+        // In this case we need to give Pandoc a better template than its own.
+        // Therefore, copy the template out of the ASAR and into the temporary
+        // directory.
+        let tmpPath = path.join(app.getPath('temp'), 'zettlr-export.htm')
+        console.log(__dirname)
+        fs.copyFileSync(path.join(__dirname, './assets/export.tpl'), tmpPath)
+        this.tpl = `--template="${tmpPath}"`
+        // fall through
+      case 'rtf':
       case 'odt':
       case 'docx':
         this.pandocFlags['standalone'] = '-s'
@@ -447,9 +456,13 @@ class ZettlrExport {
       // to HTML and insert into the template, then replace the variables.
       let file = fs.readFileSync(this.tempfile, 'utf8')
       file = this.showdown.makeHtml(file)
-      file = fs.readFileSync(path.join(__dirname, './assets/export.tpl'), 'utf8').replace('%BODY%', file)
-      file = file.replace('%TITLE%', this.options.file.name)
-      file = file.replace('%DATE%', formatDate(new Date()))
+      file = fs.readFileSync(path.join(__dirname, './assets/export.tpl'), 'utf8').replace('$body$', file)
+      file = file.replace('$title$', this.options.file.name)
+      file = file.replace('$date$', formatDate(new Date()))
+      // Replace TOC variable with empty string b/c with showdown we don't do
+      // a Table of Contents. Note the s-modifier telling the engine that the
+      // dot should also match newlines.
+      file = file.replace(/\$if(toc)\$(.+)\$endif\$/ms, '')
       // Replace footnotes. As HTML is only meant for preview & quick prints,
       // it doesn't matter how exact it is. Doesn't need to get to pandoc's
       // abilities.
