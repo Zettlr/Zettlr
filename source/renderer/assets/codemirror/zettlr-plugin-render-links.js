@@ -73,8 +73,8 @@
         // Do not render if it's inside a comment (in this case the mode will be
         // markdown, but comments shouldn't be included in rendering)
         if (
-          cm.getTokenAt(curFrom, true).type === 'comment' ||
-          cm.getTokenAt(curTo, true).type === 'comment'
+          cm.getTokenAt(curFrom).type === 'comment' ||
+          cm.getTokenAt(curTo).type === 'comment'
         ) {
           continue
         }
