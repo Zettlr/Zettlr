@@ -397,7 +397,6 @@ class ZettlrExport {
         // Therefore, copy the template out of the ASAR and into the temporary
         // directory.
         let tmpPath = path.join(app.getPath('temp'), 'zettlr-export.htm')
-        console.log(__dirname)
         fs.copyFileSync(path.join(__dirname, './assets/export.tpl'), tmpPath)
         this.tpl = `--template="${tmpPath}"`
         // fall through
