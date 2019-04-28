@@ -413,6 +413,14 @@ class ZettlrEditor {
       }
     })
 
+    // When the user demands a context menu, pre-emptively select the word
+    // under the cursor.
+    this._cm.getWrapperElement().addEventListener('contextmenu', (e) => {
+      // We cannot run the command using the runCommand() function as that would
+      // reset the selection
+      CodeMirror.commands['selectWordUnderCursor'](this._cm)
+    })
+
     this._cm.refresh()
 
     // Enable resizing of the editor
@@ -704,54 +712,6 @@ class ZettlrEditor {
     let nbr = countWords(this._cm.getValue()) - this._words
     this._words = countWords(this._cm.getValue())
     return nbr
-  }
-
-  /**
-    * Selects a word that is under the current cursor.
-    * Currently, this function is only called by the context menu class to
-    * select a word. This function only selects the word if nothing else is
-    * selected (to not fuck up some copy action someone tried to do)
-    * @return {void} Nothing to return.
-    */
-  selectWordUnderCursor () {
-    // Don't overwrite selections.
-    if (this._cm.somethingSelected()) {
-      return
-    }
-
-    let cur = this._cm.getCursor()
-    let sel = this._cm.findWordAt(cur)
-    // Now we have a word at this position. We only have one problem: CodeMirror
-    // does not accept apostrophes (') to be inside words. Therefore, a lot of
-    // languages do have problems (I'm looking at you, French). Therefore check
-    // two conditions: First: There's an apostrophe and a letter directly in
-    // front of this selection - or behind it!
-    let line = this._cm.getLine(sel.anchor.line)
-    if (sel.anchor.ch >= 2 && /[^\s]'/.test(line.substr(sel.anchor.ch - 2, 2))) {
-      // There's a part of the word in front of the current selection ->
-      // move back until we found it.
-      do {
-        sel.anchor.ch--
-      } while (sel.anchor.ch >= 0 && !/\s/.test(line.substr(sel.anchor.ch, 1)))
-
-      if (line[sel.anchor.ch] === ' ') sel.anchor.ch++
-    }
-
-    // Now the same for the back
-    if (sel.head < line.length - 1 && /'[^\s]/.test(line.substr(sel.head.ch, 2))) {
-      do {
-        sel.head.ch++
-      } while (sel.head <= line.length && !/\s/.test(line.substr(sel.head.ch, 1)))
-      if (line[sel.head.ch] === ' ') sel.head.ch--
-    }
-
-    // Last but not least check for formatting marks at the beginning or end
-    let formatting = '_*[](){}'.split('')
-    while (formatting.includes(line.substr(sel.anchor.ch, 1)) && sel.anchor.ch < sel.head.ch) sel.anchor.ch++
-    while (formatting.includes(line.substr(sel.head.ch - 1, 1)) && sel.head.ch > sel.anchor.ch) sel.head.ch--
-
-    // Now we should be all set.
-    this._cm.setSelection(sel.anchor, sel.head)
   }
 
   /**

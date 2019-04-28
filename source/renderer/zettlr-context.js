@@ -185,14 +185,11 @@ class ZettlrCon {
       if (elem.hasClass('cm-spell-error')) {
         let suggestions = global.typo.suggest(elem.text())
         if (suggestions.length > 0) {
-          // Select the word under the cursor if there are suggestions.
-          // Makes it easier to replace them
-          this._body.getRenderer().getEditor().selectWordUnderCursor()
-          // let self = this
           for (let sug of suggestions) {
             typoPrefix.push({
               'label': sug,
               'click': (item, win) => {
+                // TODO this is ugly!
                 this._body.getRenderer().getEditor().replaceWord(sug)
               }
             })
