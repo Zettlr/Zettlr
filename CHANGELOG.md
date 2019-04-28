@@ -40,6 +40,7 @@
 - Fix automatic rendering of Markdown links containing brackets (especially a problem for Wikipedia links)
 - Improved performance during window resizing and moving.
 - Removed all inline-javascript from the `index.htm` and moved it to a new `main.js` in the renderer process.
+- Links will not be rendered within comments anymore so that you can escape Markdown links as expected using backticks.
 
 ## Under the Hood
 

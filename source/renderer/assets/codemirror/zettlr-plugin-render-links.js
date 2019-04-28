@@ -70,9 +70,20 @@
         let curFrom = { 'line': i, 'ch': match.index }
         let curTo = { 'line': i, 'ch': match.index + match[0].length }
 
+        // Do not render if it's inside a comment (in this case the mode will be
+        // markdown, but comments shouldn't be included in rendering)
+        if (
+          cm.getTokenAt(curFrom, true).type === 'comment' ||
+          cm.getTokenAt(curTo, true).type === 'comment'
+        ) {
+          continue
+        }
+
         let cur = cm.getCursor('from')
-        if (cur.line === curFrom.line && cur.ch >= curFrom.ch && cur.ch <= curTo.ch) {
-          // Cursor is in selection: Do not render.
+        if (cur.line === curFrom.line && cur.ch >= curFrom.ch && cur.ch <= curTo.ch + 1) {
+          // Cursor is in selection: Do not render. Also include the adjacent
+          // character, because otherwise impartial links will also be detected
+          // and rendered before the user has finished typing them.
           continue
         }
 
