@@ -2,6 +2,7 @@
     "metadata": {
         "authors": [
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E",
+            "Nicolas Girard \u003Cgirard.nicolas@gmail.com\u003E",
             "metal3d"
         ],
         "license": "GNU GPL v3"
@@ -13,14 +14,14 @@
             "citationstyle": "Zettlr utilise citeproc pour pr\u00e9senter des citations dans l'editeur. Pour cette objectif, Zettlr utiliser les fichiers langue et style de CitationStyleLanguage (CSL). Ces fichiers sont disperse inalt\u00e9r\u00e9, avec les m\u00e9tadonn\u00e9es des autheurs. Plus d'information:",
             "citeproc": "Pr\u00e9sente les citations pour votre sources",
             "clusterizejs": "Pr\u00e9sente m\u00eame les listes trop longues",
-            "contributors": "Coop\u00e9rateurs",
+            "contributors": "Contributeurs",
             "documentationjs": "Engendrer le manuel de l'API ici: http://dev.zettlr.com/api",
             "jquery": "Un indispensable aide pour pr\u00e9senter le UX",
             "katex": "Pr\u00e9sente les formules LaTeX",
             "lead": "Zettlr est un projet Open Source par Hendrik Erz, sous licence GNU GPL v3. Il est bas\u00e9 sur le framework Electron. Zettlr voule rendre gr\u00e2ce \u00e0 les developpeurs de Electron, Node.js et CodeMirror. Sans ils, Zettlr n'est pas possible. Ici tu trouve tous projets qui Zettlr est bas\u00e9 sur.",
             "lessjs": "Un aide pour \u00e9crire le design",
             "license": "Licence",
-            "main": "Projets Principale",
+            "main": "C\u0153ur du logiciel",
             "nspell": "Alimenter le correcteur d'orthographe sur l'app",
             "other_projects": "Zettlr est bas\u00e9 \u00e9galement sur:",
             "projects": "Projets compl\u00e9mentaire",
@@ -254,6 +255,7 @@
             "spellcheck_search_placeholder": "Chercher les biblioth\u00e8ques &hellip;",
             "spellcheck_warning": "\u003Cem\u003EAttention:\u003C/em\u003E Si le trop biblioth\u00e8ques sont activer en m\u00eame temps, il est possible, que Zettlr devenir lent. Tenter n'activer plus de trois biblioth\u00e8ques.",
             "title": "Param\u00e8tres",
+            "user_dictionary": "Dictionnaire personnalis\u00e9. Enlever des mots avec un clic.",
             "xelatex": "Chemin d'acc\u00e8s \u00e0 xelatex. Seulement changer le, si Zettlr est dans l'impossibilit\u00e9 de faire trouver le programme.",
             "xelatex_default": "Standard: xelatex",
             "zkn": {
@@ -350,6 +352,7 @@
             "blockquote": "Citation",
             "bold": "Gras",
             "code": "Code",
+            "comment": "Commentaire",
             "divider": "S\u00e9parateur",
             "footnote": "Note en bas de page",
             "image": "Image",

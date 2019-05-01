@@ -24,6 +24,7 @@
 - Zettlr now highlights the full link when you right-click it to give visual feedback that the context menu options "Copy Link" or "Open Link" will indeed use the full link, and not just a part of it.
 - The dictionary selection is now more compact than before.
 - The editor automatically selects the word under cursor on requesting a context menu, making both the code more clean and enabling you to simply right-click a word to make it, for instance, bold.
+- Now you can comment out selections of text using the new shortcut `Cmd/Ctrl+Shift+C`.
 
 ### Fixes
 

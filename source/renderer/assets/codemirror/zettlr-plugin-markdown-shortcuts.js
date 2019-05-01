@@ -227,6 +227,13 @@ const { clipboard } = require('electron');
     markdownInline(cm, '`', '`', 'comment')
   }
 
+  // Commenting
+  CodeMirror.commands.markdownComment = function (cm) {
+    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    // Add spaces so that the commenting out looks nicer
+    markdownInline(cm, '<!-- ', ' -->', 'comment')
+  }
+
   // Headings 1-6
   CodeMirror.commands.markdownHeading1 = function (cm) {
     if (cm.getOption('disableInput')) return CodeMirror.Pass
@@ -511,6 +518,8 @@ const { clipboard } = require('electron');
   CodeMirror.keyMap['default']['Ctrl-I'] = 'markdownItalic'
   CodeMirror.keyMap['default']['Cmd-K'] = 'markdownLink'
   CodeMirror.keyMap['default']['Ctrl-K'] = 'markdownLink'
-  CodeMirror.keyMap['default']['Cmd-Shift-I'] = 'markdownImage'
-  CodeMirror.keyMap['default']['Ctrl-Shift-I'] = 'markdownImage'
+  CodeMirror.keyMap['default']['Shift-Cmd-I'] = 'markdownImage'
+  CodeMirror.keyMap['default']['Shift-Ctrl-I'] = 'markdownImage'
+  CodeMirror.keyMap['default']['Shift-Cmd-C'] = 'markdownComment'
+  CodeMirror.keyMap['default']['Shift-Ctrl-C'] = 'markdownComment'
 })
