@@ -150,15 +150,26 @@ class ZettlrEditor {
             }
           }
         } else {
-          // Make sure there's a protocol, and if it's not, set the default //
-          // protocol (to make sure we don't presuppose https on an http-only
-          // server (which you shouldn't do either way, but just to be sure))
-          if (!/:\/\//.test(url)) url = 'https://' + url
+          // First try to open the URL itself
           shell.openExternal(url).catch((e) => {
-            // Notify the user that we couldn't open the URL
-            if (e) global.notify(trans('system.error.open_url_error', url))
-          })
-        }
+            if (e) {
+              // Okay, didn't work. Let's try a local file (trying to open https
+              // will always work, but the browser may complain that
+              // https://my-file.pdf won't exist). Always join with the file's
+              // base path, as an absolute URL would've been opened.
+              shell.openExternal('file://' + path.join(this._cm.getOption('markdownImageBasePath'), url)).catch((e) => {
+                if (e) {
+                  // Chrome, do your job!
+                  if (!/:\/\//.test(url)) url = 'https://' + url
+                  shell.openExternal(url).catch((e) => {
+                    // Notify the user that we couldn't open the URL
+                    if (e) global.notify(trans('system.error.open_url_error', url))
+                  })
+                }
+              })
+            }
+          }) // P.S.: Did someone notice the sudden callback hell?
+        } // End else
       }, // Action for ALT-Clicks
       zkn: {
         idRE: '(\\d{14})', // What do the IDs look like?
