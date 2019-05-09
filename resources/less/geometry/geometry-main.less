@@ -48,6 +48,9 @@ body {
     }
 }
 
+// Reset those ugly outlines
+input, select, textarea, button { &:focus { outline: 0; } }
+
 #container.blur {
     /* This is applied when a modal is shown */
     // Currently the filter drains too much energy so I've disabled it. Maybe we

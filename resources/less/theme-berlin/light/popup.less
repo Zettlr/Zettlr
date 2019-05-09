@@ -1,17 +1,17 @@
 // Popup styling
 
 .popup-arrow {
-    &.up { border-bottom-color: @popup-light-color; }
-    &.down { border-top-color: @popup-light-color; }
-    &.left { border-right-color: @popup-light-color; }
-    &.right { border-left-color: @popup-light-color; }
+    &.up { border-bottom-color: @popup-light-shade; }
+    &.down { border-top-color: @popup-light-shade; }
+    &.left { border-right-color: @popup-light-shade; }
+    &.right { border-left-color: @popup-light-shade; }
 }
 
 .popup {
     background-color: @popup-light-color;
     color: @popup-light-text;
-    box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.5);
-    border-radius:2px;
+    border-radius: @border-radius;
+    border: 1px solid @popup-light-shade;
 
     // Generic links
     a.button {
@@ -24,19 +24,16 @@
       border-radius: @border-radius;
       outline:0;
       transition: 0.2s all ease;
-      &:hover { background-color:@c-primary; color: @bg-primary; }
+      &:hover { background-color: @c-primary; color: @bg-primary; }
     }
 
     // TOC links
     a.toc-link {
         color: @popup-light-text;
-        transition:0.4s all ease;
+        transition: @fast-transition background-color ease;
         text-decoration:none;
         line-height:150%;
-        &:hover {
-            background-color:@grey-0;
-            transition:0.4s all ease;
-        }
+        &:hover { background-color: @grey-2; }
     }
 
     p {text-align:center; }
@@ -51,16 +48,13 @@
 
     // Elements inside popups
     form {
-        input {
+        input, button {
             background-color: transparent;
-            color:inherit;
-            font-size:200%;
-            border:none;
-            text-align:center;
+            color: inherit;
+            transition: @fast-transition background-color ease;
 
-            &.small {
-                font-size:140%;
-                text-align:left;
+            &[type="submit"]:hover {
+              background-color: darken(@popup-light-color, 10%);
             }
         }
     }
@@ -70,8 +64,9 @@
         a {
             text-decoration:none;
             color:inherit;
+            transition: @fast-transition background-color ease;
 
-            &:hover { background-color:@grey-0; }
+            &:hover { background-color: @grey-2; }
 
             &#header-formatting:hover { background-color:transparent; }
 
@@ -98,8 +93,13 @@
             &.regexp { color: @c-primary; }
         }
 
-        .row:first-child input:first-child {
-          border-bottom:1px solid @grey-5;
+        input#searchWhat {
+          border-bottom: 1px solid @grey-5;
+          border-right: 1px solid @grey-5;
+        }
+
+        input#replaceWhat {
+          border-right: 1px solid @grey-5;
         }
 
         button {
@@ -122,6 +122,6 @@
     .footnote-edit textarea {
         background-color:transparent;
         color:inherit;
-        font-size:@font-size-base;
+        font-family: inherit;
     }
 }
