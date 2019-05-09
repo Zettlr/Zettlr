@@ -27,6 +27,7 @@
 - The editor automatically selects the word under cursor on requesting a context menu, making both the code more clean and enabling you to simply right-click a word to make it, for instance, bold.
 - Now you can comment out selections of text using the new shortcut `Cmd/Ctrl+Shift+C`.
 - You can now also link to files on your local filesystem from within Markdown files. Zettlr will try to open them. The following algorithm is applied internally: First, try to open the link just like that. Second, try to open the current file's folder plus the link. Third, try to open https://\<link\>. If all three methods don't yield a result, Zettlr will show you a notification.
+- The GUI is not locked anymore while a popup is shown.
 
 ### Fixes
 
@@ -54,6 +55,7 @@
 - Switched from the `build`-property `electron-build` toolchain to the API.
 - Switched to `Electron 5.0.0`.
 - Some CSS cleanup, again.
+- Changed the way popups are closed from an invisible barrier div to a simple click detection handler.
 
 # 1.2.3
 

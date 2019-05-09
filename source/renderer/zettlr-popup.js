@@ -51,16 +51,24 @@ class ZettlrPopup {
     this._x = 0
     this._y = 0
 
-    this._modal = $('<div>').css('top', '0').css('left', '0').css('bottom', '0').css('right', '0').css('position', 'absolute')
+    $(document).on('click contextmenu', (event) => {
+      // The popup is initiated before the menu has bubbled up. This means
+      // the first click we will detect will be the click that created the
+      // popup in the first place; that is the click on the element itself.
+      if (event.target === this._elem[0]) return
+      let x = event.clientX
+      let y = event.clientY
 
-    // Close the popup either on left or right mouse click
-    this._modal.on('click', (e) => {
-      this.close(true)
-      // Simulate a click-through after the close
-      document.elementFromPoint(e.clientX, e.clientY).click()
-    })
-    this._modal.on('contextmenu', (e) => {
-      this.close(true)
+      // Now determine where the popup is
+      let minX = this._popup.offset().left
+      let maxX = minX + this._popup.outerWidth()
+      let minY = this._popup.offset().top
+      let maxY = minY + this._popup.outerHeight()
+
+      if (x < minX || maxX < x || y < minY || maxY < y) {
+        // Clicked outside the popup -> close it
+        this.close(true)
+      }
     })
 
     // Keep the popup relative to parent element even on resize
@@ -71,7 +79,6 @@ class ZettlrPopup {
     this._popup = $('<div>').addClass('popup').css('opacity', '0')
     this._arrow = $('<div>').addClass('popup-arrow')
     this._popup.append(this._cnt)
-    $('body').append(this._modal)
     $('body').append(this._popup)
     $('body').append(this._arrow)
 
@@ -184,7 +191,6 @@ class ZettlrPopup {
       }
     }
 
-    this._modal.detach()
     this._arrow.detach()
     this._popup.animate({ 'opacity': '0' }, 200, 'swing', () => {
       this._popup.detach()
