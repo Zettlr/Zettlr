@@ -81,11 +81,14 @@ class ZettlrEditor {
     this._renderMath = false
     this._renderTasks = false
     this._renderHTags = false
+    this._wysiwyg = false // TODO TESTING
 
     // This Markdown to HTML converter is used in various parts of the
     // class to perform converting operations.
     this._showdown = new showdown.Converter()
     this._showdown.setFlavor('github')
+    this._showdown.setOption('strikethrough', true)
+    this._showdown.setOption('tables', true)
 
     // The last array of IDs as fetched from the document
     this._lastKnownCitationCluster = []
@@ -335,6 +338,7 @@ class ZettlrEditor {
       if (this._renderCitations) this._cm.execCommand('markdownRenderCitations') // Render citations
       if (this._renderTasks) this._cm.execCommand('markdownRenderTasks') // Render tasks
       if (this._renderHTags) this._cm.execCommand('markdownRenderHTags') // Render heading levels
+      if (this._wysiwyg) this._cm.execCommand('markdownWYSIWYG') // Render all other elements
       this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
       if (this._cm.getOption('fullScreen') && this._mute) {
         this._muteLines()

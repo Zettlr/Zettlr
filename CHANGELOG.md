@@ -56,6 +56,7 @@
 - Switched to `Electron 5.0.0`.
 - Some CSS cleanup, again.
 - Changed the way popups are closed from an invisible barrier div to a simple click detection handler.
+- Added Table and Strikethrough support to the copy & paste operations.
 
 # 1.2.3
 
