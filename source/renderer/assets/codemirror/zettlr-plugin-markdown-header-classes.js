@@ -20,34 +20,41 @@
    * @return {void}    Commands do not return.
    */
   CodeMirror.commands.markdownHeaderClasses = function (cm) {
-    let line = ''
+    let wrapperClass = ''
+    let needsRefresh = false // Will be set to true if at least one line has been altered
     for (let i = 0; i < cm.lineCount(); i++) {
-      // First remove all header styles
-      cm.removeLineClass(i, 'wrap', 'size-header-1')
-      cm.removeLineClass(i, 'wrap', 'size-header-2')
-      cm.removeLineClass(i, 'wrap', 'size-header-3')
-      cm.removeLineClass(i, 'wrap', 'size-header-4')
-      cm.removeLineClass(i, 'wrap', 'size-header-5')
-      cm.removeLineClass(i, 'wrap', 'size-header-6')
+      let oldClass = ''
 
-      // Then only re-add if allowed.
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      // Retrieve the wrapper class
+      wrapperClass = cm.lineInfo(i).wrapClass
 
-      // Then re-add them as necessary.
-      line = cm.getLine(i)
-      if (/^# /.test(line)) {
-        cm.addLineClass(i, 'wrap', 'size-header-1')
-      } else if (/^## /.test(line)) {
-        cm.addLineClass(i, 'wrap', 'size-header-2')
-      } else if (/^### /.test(line)) {
-        cm.addLineClass(i, 'wrap', 'size-header-3')
-      } else if (/^#### /.test(line)) {
-        cm.addLineClass(i, 'wrap', 'size-header-4')
-      } else if (/^##### /.test(line)) {
-        cm.addLineClass(i, 'wrap', 'size-header-5')
-      } else if (/^###### /.test(line)) {
-        cm.addLineClass(i, 'wrap', 'size-header-6')
+      // Save the old class name
+      if (/size-header-\d/.test(wrapperClass)) {
+        oldClass = /(size-header-\d)/.exec(wrapperClass)[1]
+      }
+
+      // Then remove all header styles
+      for (let x = 1; x < 7; x++) cm.removeLineClass(i, 'wrap', `size-header-${x}`)
+
+      // Only re-apply a header class if allowed.
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') {
+        // Indicate a refresh if necessary
+        if (oldClass !== '') needsRefresh = true
+        continue
+      }
+
+      // Then re-add the header classes as appropriate.
+      let match = /^(#{1,6}) /.exec(cm.getLine(i))
+      if (match) {
+        cm.addLineClass(i, 'wrap', `size-header-${match[1].length}`)
+        // If the new header class is different than the old one, indicate a
+        // refresh.
+        if (oldClass !== `size-header-${match[1].length}`) needsRefresh = true
       }
     }
+
+    // If at least one header class has been altered, refresh the codemirror
+    // instance as the sizes won't match up in that case.
+    if (needsRefresh) cm.refresh()
   }
 })

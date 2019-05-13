@@ -46,6 +46,7 @@
 - Improved performance during window resizing and moving.
 - Removed all inline-javascript from the `index.htm` and moved it to a new `main.js` in the renderer process.
 - Links will not be rendered within comments anymore so that you can escape Markdown links as expected using backticks.
+- Fixed wrong cursor positioning after the headings have been altered.
 
 ## Under the Hood
 
