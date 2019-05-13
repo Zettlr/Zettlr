@@ -197,7 +197,7 @@
     }, {
       "label": "menu.docs",
       "accelerator": "F1",
-      "target": "https://www.zettlr.com/docs"
+      "target": "https://docs.zettlr.com/"
     },
     { "label": "menu.update", "command": "update-check" }
   ]},
