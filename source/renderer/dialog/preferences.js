@@ -110,6 +110,13 @@ class PreferencesDialog extends ZettlrDialog {
     $('#imageWidth, #imageHeight').on('input', (e) => {
       $('#preview-image-sizes').html($('#imageWidth').val() + '% &times; ' + $('#imageHeight').val() + '%')
     })
+
+    // BEGIN functionality for theme switching
+    $('.theme-mockup').on('click', function (e) {
+      let elem = $(this).attr('data-theme')
+      // Simply send the respective command to main and let the magic happen!
+      global.ipc.send(`switch-theme-${elem}`)
+    })
   }
 
   proceed (data) {
