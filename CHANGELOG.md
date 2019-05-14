@@ -7,6 +7,10 @@
 - **New Feature**: Zettlr can now automatically switch between light and dark mode either based on a fixed schedule or, if you are using macOS or Windows, based on the appearance of the operating system.
 - **New Feature**: Add words to the user defined dictionary. You can remove words by removing them in the "Editor" tab in the preferences.
 - **New Feature**: You can now provide a default path for images that you paste onto the editor in the preferences. If you provide a relative path, it'll be relative to the file.
+- **New Feature**: In the preferences you can now switch between the three themes of the app:
+  - _Berlin_: A modern sans-serif theme, the default.
+  - _Frankfurt_: A clean serif-based theme with royal blue highlights.
+  - _Bielefeld_: For Markdown purists, this theme features creme colours and a monospaced font.
 - Popup redesign: Now the popups aren't semi-transparent anymore, have rounded edges and are much more crisp. Therefore it's even easier to read them.
 - Display contributors tab on the about dialog containing the names of all authors of the translation files.
 - You can now customize the pandoc command to your liking using several variables.

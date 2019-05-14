@@ -384,6 +384,10 @@
         "render_tasks": "Render Tasks",
         "render_htags": "Hide heading characters"
       },
+      "theme": {
+        "title": "Theme",
+        "info": "Here you can choose the theme for the app."
+      },
       "pandoc": "Path to pandoc executable. Please only change, if Zettlr is unable to locate pandoc.",
       "xelatex": "Path to xelatex executable. Please only change, if Zettlr is unable to locate it.",
       "pandoc_command": "Pandoc command. <strong>Only for advanced users!</strong>",

@@ -1,17 +1,17 @@
 {
     "metadata": {
         "authors": [
-            "Hendrik Erz \u003Cinfo@zettlr.com\u003E",
             "Nicolas Girard \u003Cgirard.nicolas@gmail.com\u003E",
+            "Hendrik Erz \u003Cinfo@zettlr.com\u003E",
             "metal3d"
         ],
         "license": "GNU GPL v3"
     },
     "dialog": {
         "about": {
-            "chartjs": "Pr\u00e9sente la statistique du \u00e9crire dans un graphe",
-            "chokidar": "Voir les modifications sur les fichiers \u00e0 l'ext\u00e9rieur de l'app",
-            "citationstyle": "Zettlr utilise citeproc pour pr\u00e9senter des citations dans l'editeur. Pour cette objectif, Zettlr utiliser les fichiers langue et style de CitationStyleLanguage (CSL). Ces fichiers sont disperse inalt\u00e9r\u00e9, avec les m\u00e9tadonn\u00e9es des autheurs. Plus d'information:",
+            "chartjs": "Affiche un graphique avec vos statistiques d'\u00e9criture",
+            "chokidar": "D\u00e9tecte les changements apport\u00e9s aux fichiers par des programmes ext\u00e9rieurs",
+            "citationstyle": "Zettlr a recours \u00e0 Citeproc pour afficher les citations et les r\u00e9f\u00e9rences bibliographiques directement dans l'\u00e9diteur. \u00c0 cet effet, Zettlr utilise des fichiers de directive au format CSL (Citation Style Language). Ces fichiers sont fournis tels quels, avec les coordonn\u00e9es des auteurs. Pour plus d'informations:",
             "citeproc": "Pr\u00e9sente les citations pour votre sources",
             "clusterizejs": "Pr\u00e9sente m\u00eame les listes trop longues",
             "contributors": "Contributeurs",
@@ -23,16 +23,16 @@
             "license": "Licence",
             "main": "C\u0153ur du logiciel",
             "nspell": "Alimenter le correcteur d'orthographe sur l'app",
-            "other_projects": "Zettlr est bas\u00e9 \u00e9galement sur:",
-            "projects": "Projets compl\u00e9mentaire",
+            "other_projects": "Zettlr utilise \u00e9galement ces logiciels tiers",
+            "projects": "Logiciels tiers",
             "showdownjs": "Pr\u00e9senter le Changelog, qui tu vois pour les updates",
             "tippyjs": "Responsible pour les belles infobulles",
-            "title": "Sur Zettlr",
+            "title": "\u00c0 propos de Zettlr",
             "trademark": "Tous les logos et les noms de marque sont soumis \u00e0 leurs propri\u00e9taires l\u00e9gitimes. En plus d'utiliser leur code, Zettlr n'est aucunement affili\u00e9 \u00e0 aucun de ces projets. Node.js est une marque de commerce de Joyent, Inc."
         },
         "button": {
             "cancel": "Annuler",
-            "choose_path": "Choisier le dossier \u2026",
+            "choose_path": "Choisir un dossier",
             "close": "Fermer",
             "save": "Enregistrer"
         },
@@ -179,7 +179,7 @@
                 "render_tasks": "Visualiser des tasks",
                 "title": "Visualisation"
             },
-            "editor": "Editeur",
+            "editor": "\u00c9diteur",
             "export": {
                 "dest": "Dossier de destination pour les fichiers export\u00e9s. \u003Cem\u003EAttention\u003C/em\u003E les fichiers sont remplac\u00e9s si vous choisissez \u00ab dossier en cours \u00bb !",
                 "dest_cwd_label": "Dossier en cours, les fichiers sont export\u00e9s dans le dossier courant",
@@ -254,6 +254,10 @@
             "spellcheck": "Choisier les langues, pour quelles tu veux activer la correcteur orthographique.",
             "spellcheck_search_placeholder": "Chercher les biblioth\u00e8ques &hellip;",
             "spellcheck_warning": "\u003Cem\u003EAttention:\u003C/em\u003E Si le trop biblioth\u00e8ques sont activer en m\u00eame temps, il est possible, que Zettlr devenir lent. Tenter n'activer plus de trois biblioth\u00e8ques.",
+            "theme": {
+                "info": "Choisir le th\u00e8me de l'application.",
+                "title": "Th\u00e8me"
+            },
             "title": "Param\u00e8tres",
             "user_dictionary": "Dictionnaire personnalis\u00e9. Enlever des mots avec un clic.",
             "xelatex": "Chemin d'acc\u00e8s \u00e0 xelatex. Seulement changer le, si Zettlr est dans l'impossibilit\u00e9 de faire trouver le programme.",
