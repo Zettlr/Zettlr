@@ -318,7 +318,9 @@ class ZettlrRenderer {
       return
     }
 
-    let cnt = $('<div>')
+    let idUniquifier = Date.now()
+
+    let cnt = $('<div id="toc-container-' + idUniquifier + '">')
     let h1 = 0
     let h2 = 0
     let h3 = 0
@@ -366,12 +368,37 @@ class ZettlrRenderer {
       )
     }
 
-    popup($('.button.show-toc'), cnt)
+    let tocPopup = popup($('.button.show-toc'), cnt)
 
     // On click jump to line
     $('.toc-link').click((event) => {
       let elem = $(event.target)
       this._editor.jtl(elem.attr('data-line'))
+    })
+
+    // Sortable
+    $('#toc-container-' + idUniquifier).sortable({
+      axis: 'y',
+      items: '> .toc-link',
+      update: (event, ui) => {
+        // The user has dropped the item someplace else.
+        let newIndex = ui.item.index()
+        let originalLine = parseInt(ui.item.attr('data-line'))
+        let sumLength = $('#toc-container-' + idUniquifier + ' > .toc-link').length
+        if (newIndex < sumLength - 1) {
+          let elementBelow = $('#toc-container-' + idUniquifier + ' > .toc-link').eq(newIndex + 1)
+          let aboveLine = parseInt(elementBelow.attr('data-line'))
+          this._editor.moveSection(originalLine, aboveLine)
+        } else {
+          this._editor.moveSection(originalLine, -1)
+        }
+
+        // Cool, now destroy the sortable, rebuild the TOC, and re-fill the div
+        // again.
+        $('#toc-container-' + idUniquifier).sortable('destroy')
+        tocPopup.close()
+        this.toc()
+      }
     })
   }
 

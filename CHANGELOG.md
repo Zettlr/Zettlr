@@ -11,6 +11,7 @@
   - _Berlin_: A modern sans-serif theme, the default.
   - _Frankfurt_: A clean serif-based theme with royal blue highlights.
   - _Bielefeld_: For Markdown purists, this theme features creme colours and a monospaced font.
+- **New Feature**: Rearrange sections in your documents by dragging the headings in the Table of Contents popup around (_Note: Only works with ATX-Style headings!_). Please note that the last section will always count until the very last line, therefore including footnotes and references.
 - Popup redesign: Now the popups aren't semi-transparent anymore, have rounded edges and are much more crisp. Therefore it's even easier to read them.
 - Display contributors tab on the about dialog containing the names of all authors of the translation files.
 - You can now customize the pandoc command to your liking using several variables.
