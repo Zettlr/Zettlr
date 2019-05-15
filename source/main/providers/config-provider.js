@@ -54,14 +54,19 @@ class ConfigProvider extends EventEmitter {
     this._bulkSetInProgress = false // As long as this is true, a bulk set happens
 
     // Additional environmental paths (for locating LaTeX and Pandoc)
-    if (process.platform === 'win32') {
-      this._additional_paths = COMMON_DATA.additional_paths.win32
-    } else if (process.platform === 'linux') {
-      this._additional_paths = COMMON_DATA.additional_paths.linux
-    } else if (process.platform === 'darwin') {
-      this._additional_paths = COMMON_DATA.additional_paths.macos
-    } else {
-      this._additional_paths = [] // Fallback: No additional paths
+    switch (process.platform) {
+      case 'win32':
+        this._additional_paths = COMMON_DATA.additional_paths.win32
+        break
+      case 'linux':
+        this._additional_paths = COMMON_DATA.additional_paths.linux
+        break
+      case 'darwin':
+        this._additional_paths = COMMON_DATA.additional_paths.macos
+        break
+      default:
+        this._additional_paths = [] // Fallback: No additional paths
+        break
     }
 
     // This function makes sure necessary files and folders exist for the app to
