@@ -87,7 +87,7 @@ class ZettlrFile {
     })
     global.targets.on('remove', (hash) => {
       if (this.hash !== hash) return // Also not our business
-      this.target = undefined // Reset
+      this.target = null // Reset
       global.ipc.updateFile(this) // Send a fresh version of this file to the renderer.
     })
   }
