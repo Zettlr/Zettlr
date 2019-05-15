@@ -122,11 +122,11 @@
       "checked": "darkTheme",
       "command": "toggle-theme"
     }, {
-      "label": "menu.toggle_snippets",
+      "label": "menu.toggle_file_meta",
       "accelerator": "CmdOrCtrl+Alt+S",
       "type": "checkbox",
-      "checked": "snippets",
-      "command": "toggle-snippets"
+      "checked": "fileMeta",
+      "command": "toggle-file-meta"
     }, {
       "label": "menu.toggle_distraction_free",
       "accelerator": "CmdOrCtrl+J",

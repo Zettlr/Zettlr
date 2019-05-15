@@ -4,6 +4,8 @@
 
 **Attention, this update breaks three shortcuts: To view the file list, the tree view, and the attachment sidebar, you need to use `Cmd/Ctrl+Shift+1` (for toggling the sidebar), and `Cmd/Ctrl+?` for toggling the attachments. The shortcuts for `Cmd/Ctrl+[number]` are now reserved for recent documents!**
 
+**Attention: Due to changes in the configuration, this update resets your setting concerning text snippets. They are now called "file information" and the corresponding setting will be set to "Show", regardless of your current setting.**
+
 - **New Feature**: Zettlr can now automatically switch between light and dark mode either based on a fixed schedule or, if you are using macOS or Windows, based on the appearance of the operating system.
 - **New Feature**: Add words to the user defined dictionary. You can remove words by removing them in the "Editor" tab in the preferences.
 - **New Feature**: You can now provide a default path for images that you paste onto the editor in the preferences. If you provide a relative path, it'll be relative to the file.
@@ -52,6 +54,7 @@
 - Removed all inline-javascript from the `index.htm` and moved it to a new `main.js` in the renderer process.
 - Links will not be rendered within comments anymore so that you can escape Markdown links as expected using backticks.
 - Fixed wrong cursor positioning after the headings have been altered.
+- Finally exchanged all mentions of "snippets" with "File metadata" or information, respectively, to reflect the fact that text fragments (a.k.a. "snippets") have been ditched several months ago.
 
 ## Under the Hood
 

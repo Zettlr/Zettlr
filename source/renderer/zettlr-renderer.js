@@ -149,8 +149,8 @@ class ZettlrRenderer {
   configChange () {
     // Set dark theme
     this.darkTheme(global.config.get('darkTheme'))
-    // Set snippets
-    this.getPreview().snippets(global.config.get('snippets'))
+    // Set file meta
+    this.getPreview().fileMeta(global.config.get('fileMeta'))
     this.getPreview().hideDirs(global.config.get('hideDirs'))
     // Receive the application language
     this.setLocale(global.config.get('appLang'))
@@ -472,7 +472,7 @@ class ZettlrRenderer {
     if (this.getCurrentFile()) {
       // The only things that could've changed and that are immediately
       // visible to the user (which is why we need to update them) are:
-      // modtime, snippet, tags, id. The rest can wait until the next big
+      // modtime, file meta, tags, id. The rest can wait until the next big
       // update.
       let f = this.getCurrentFile()
       f.modtime = file.modtime

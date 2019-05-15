@@ -252,9 +252,9 @@ class ZettlrIPC {
         global.config.set('darkTheme', !global.config.get('darkTheme'))
         break
 
-      // Change snippet setting in config
-      case 'toggle-snippets':
-        global.config.set('snippets', !global.config.get('snippets'))
+      // Change file meta setting in config
+      case 'toggle-file-meta':
+        global.config.set('fileMeta', !global.config.get('fileMeta'))
         break
 
       case 'get-pdf-preferences':

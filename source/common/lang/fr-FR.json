@@ -164,7 +164,7 @@
             "combiner_collapsed": "\u00c9troit &mdash; Remontrer Preview ou Tree View",
             "combiner_expanded": "\u00c9largi &mdash; Remontrer Preview et Tree View",
             "combiner_explanation": "Mode du barre de c\u00f4t\u00e9",
-            "csl_database": "Base de donn\u00e9es CSL JSON",
+            "csl_database": "Fichier de r\u00e9f\u00e9rences bibliographiques (au format CSL JSON)",
             "debug": "Activer le mode debug",
             "default_image_save_path": "Chemin d'acc\u00e8s standard des l'images (relatif ou absolu)",
             "display": {
@@ -192,6 +192,7 @@
                 "stripping": "Param\u00e8tres pour des elements Zettelkasten (ZKN)",
                 "title": "Exporter"
             },
+            "file_meta": "Voir la m\u00e9ta de fichier",
             "general": "G\u00e9n\u00e9ral",
             "hide_dirs": "Cacher les dossiers durant la recherche globale",
             "mute_lines": "Masquer les lignes dans la mode sans distraction",
@@ -455,6 +456,7 @@
         "toggle_devtools": "Outils du d\u00e9veloppeur",
         "toggle_directories": "Commuter les dossiers",
         "toggle_distraction_free": "Mode sans distraction",
+        "toggle_file_meta": "M\u00e9ta de fichier",
         "toggle_fullscreen": "Plein \u00e9cran",
         "toggle_preview": "Commuter les fichiers",
         "toggle_sidebar": "Commuter la barre lat\u00e9rale",

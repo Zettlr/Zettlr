@@ -137,7 +137,7 @@ class ZettlrCon {
     if (elem.parents('#preview').length > 0) {
       // In case of preview, our wanted elements are: the p.filename-tag (containing
       // the name) inside the <li> and the data-hash attr inside the <li>
-      if (elem.hasClass('filename') || elem.hasClass('snippet') || elem.hasClass('taglist')) {
+      if (elem.hasClass('filename') || elem.hasClass('file-meta') || elem.hasClass('taglist')) {
         elem = elem.parent()
       } else if (elem.is('span')) {
         elem = elem.parent().parent()

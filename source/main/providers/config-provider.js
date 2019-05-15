@@ -99,7 +99,7 @@ class ConfigProvider extends EventEmitter {
       'autoDarkMode': 'off', // Possible values: 'off', 'system', 'schedule', 'auto'
       'autoDarkModeStart': '22:00', // Switch into dark mode at this time
       'autoDarkModeEnd': '06:00', // Switch to light mode at this time
-      'snippets': true,
+      'fileMeta': true,
       'hideDirs': true, // Should the app hide directories during global search?
       'sorting': 'natural', // Can be natural or based on ASCII values
       'muteLines': true, // Should the editor mute lines in distraction free mode?

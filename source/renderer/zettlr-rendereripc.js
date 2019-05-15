@@ -387,13 +387,13 @@ class ZettlrRendererIPC {
         this._app.getPreview().handleSearchResult(cnt)
         break
 
-      // Toggle theme or snippets, main will automatically trigger a configuration change.
+      // Toggle theme or file meta, main will automatically trigger a configuration change.
       case 'toggle-theme':
         this.send('toggle-theme') // Notify host process for configuration save
         break
 
-      case 'toggle-snippets':
-        this.send('toggle-snippets')
+      case 'toggle-file-meta':
+        this.send('toggle-file-meta')
         break
 
       case 'toggle-distraction-free':

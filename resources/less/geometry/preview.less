@@ -25,8 +25,8 @@
             padding-left:6px;
             position:relative;
 
-            // Bigger size when snippets are on.
-            &.snippets {
+            // Bigger size when file meta is shown.
+            &.file-meta {
                 height:@tile-height-full - (2*@pane-padding); // Remove top/bottom padding
                 padding:@pane-padding;
                 line-height:inherit;
@@ -41,11 +41,11 @@
                 overflow: hidden;
             }
 
-            p.snippet {
+            p.file-meta {
               margin-top: 5px;
               white-space: nowrap;
 
-              // Small info blocks inside the snippets
+              // Small info blocks inside the file meta
               .date, .id, .tags, .directories, .files, .virtual-directories,
               .tex-indicator {
                 font-size:75%;

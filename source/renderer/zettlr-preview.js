@@ -41,7 +41,7 @@ class ZettlrPreview {
     */
   constructor (parent) {
     this._renderer = parent
-    this._snippets = false
+    this._fileMeta = false
     this._hideDirs = false
     this._selectedFile = null
 
@@ -180,15 +180,15 @@ class ZettlrPreview {
       let sort = (d.type === 'directory' || d.type === 'virtual-directory') ? `data-sorting="${d.sorting}" ` : ''
       let selected = (this._selectedFile && this._selectedFile === d.hash) ? ` selected` : ''
       let id = (d.id) ? `data-id=${d.id}` : ''
-      let snippets = (this._snippets) ? ' snippets' : ''
+      let fileMeta = (this._fileMeta) ? ' file-meta' : ''
       let vdclass = (inVirtualDir) ? ' vd-file' : '' // File is not actually present in this "dir"
       let vdhashAttr = (inVirtualDir && vdhash) ? ' data-vd-hash="' + vdhash + '"' : '' // For context menu actions we need to pass vd-hash, b/c accessing parent will not work.
-      let elem = `<li class="${d.type}${selected}${snippets}${vdclass}" ${id} data-hash="${d.hash}" ${sort}${bgcolor}${vdhashAttr}>`
+      let elem = `<li class="${d.type}${selected}${fileMeta}${vdclass}" ${id} data-hash="${d.hash}" ${sort}${bgcolor}${vdhashAttr}>`
       if (d.type === 'directory' || d.type === 'virtual-directory') {
         // Render a directory
         elem += d.name
-        if (this._snippets) {
-          elem += `<p class="snippet">
+        if (this._fileMeta) {
+          elem += `<p class="file-meta">
           <span class="directories">
             ${d.children.filter(e => e.type === 'directory').length} ${trans('gui.dirs')}
           </span>
@@ -214,9 +214,9 @@ class ZettlrPreview {
 
         elem += `<p class="filename"${color}>${d.name.substr(0, d.name.lastIndexOf('.'))}</p>${tl}`
 
-        if (this._snippets) {
+        if (this._fileMeta) {
           let extindicator = (d.ext === '.tex') ? '<span class="tex-indicator">TeX</span>' : ''
-          elem += `<p class="snippet">${extindicator}
+          elem += `<p class="file-meta">${extindicator}
           <span class="date">${formatDate(new Date(d.modtime))}</span>`
           if (d.id) elem += ` <span class="id">${d.id}</span>`
           if (d.tags.length > 0) elem += ` <span class="tags" data-tippy-content="${d.tags.join(',\n')}">#${d.tags.length}</span>`
@@ -308,7 +308,7 @@ class ZettlrPreview {
     })
 
     // Also tippify the tag list of each file as well as a potential progress meter.
-    tippy('#preview .snippet .tags, #preview .snippet .target-progress-indicator', {
+    tippy('#preview .file-meta .tags, #preview .file-meta .target-progress-indicator', {
       delay: 100,
       arrow: true,
       duration: 100,
@@ -553,12 +553,12 @@ class ZettlrPreview {
   hide () { this._div.addClass('hidden') }
 
   /**
-   * Set the snippets to true or false depending on val.
+   * Set the file meta to true or false depending on val.
    * @param  {Boolean} val Either true or false.
    * @return {ZettlrPreview}     This for chainability.
    */
-  snippets (val) {
-    this._snippets = Boolean(val)
+  fileMeta (val) {
+    this._fileMeta = Boolean(val)
     this.refresh()
     return this
   }
