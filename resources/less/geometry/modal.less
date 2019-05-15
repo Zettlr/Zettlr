@@ -269,10 +269,13 @@
         display:flex;
 
         input, button {
-          flex-grow:1;
+          flex:5;
           display:inline;
           margin:0.5em;
         }
+
+        input[type="color"] { flex: 1; }
+        button { flex: 1; }
       }
     }
 
