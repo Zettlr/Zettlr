@@ -427,7 +427,7 @@ function makeSearchRegEx (term, injectFlags = ['i']) {
   if (!Array.isArray(injectFlags)) injectFlags = [injectFlags]
 
   // Test if we have a regular expression
-  if (/^\/.+?\/.*?/g.test(term)) {
+  if (/^\/.*\/[gimy]{0,4}$/.test(term)) {
     // The user wants to do a regex search -> transform
     let r = term.split('/') // 0 is empty, 1 contains the expression, 2 the flags
     re.term = r[1]

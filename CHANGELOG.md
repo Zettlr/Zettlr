@@ -57,6 +57,7 @@
 - Fixed wrong cursor positioning after the headings have been altered.
 - Finally exchanged all mentions of "snippets" with "File metadata" or information, respectively, to reflect the fact that text fragments (a.k.a. "snippets") have been ditched several months ago.
 - Fixed an issue that prevented from re-creating writing targets after deleting them without a restart of the app.
+- Fixed inconsistent behaviour with the document search.
 
 ## Under the Hood
 

@@ -554,6 +554,9 @@ class ZettlrBody {
       $('#searchWhat').addClass('regexp')
     }
 
+    // Select the search input for convenience
+    $('#searchWhat').select()
+
     $('#searchWhat').on('keyup', (e) => {
       if (regexRE.test($(e.target).val())) {
         $(e.target).addClass('regexp')
@@ -562,7 +565,7 @@ class ZettlrBody {
       }
 
       if (e.which === 13) { // Enter
-        e.preventDefault()
+        $('#searchNext').click()
       }
     })
 
