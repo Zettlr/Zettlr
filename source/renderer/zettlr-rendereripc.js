@@ -29,6 +29,7 @@ const CLOSING_COMMANDS = [
   'file-delete',
   'close-root',
   'force-open',
+  'win-close',
   'app-quit',
   'export' // Doesn't force-close, but this way the export is ensured to be the newest version
 ]
@@ -231,6 +232,9 @@ class ZettlrRendererIPC {
         break
 
       case 'win-close':
+        // In this case we simply "re-send" that command. As above, this will
+        // internally trigger a closing-command buffer, saving the file before
+        // actually sending the quit command.
         this.send('win-close')
         break
 

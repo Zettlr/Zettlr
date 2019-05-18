@@ -58,6 +58,7 @@
 - Finally exchanged all mentions of "snippets" with "File metadata" or information, respectively, to reflect the fact that text fragments (a.k.a. "snippets") have been ditched several months ago.
 - Fixed an issue that prevented from re-creating writing targets after deleting them without a restart of the app.
 - Fixed inconsistent behaviour with the document search.
+- When trying to close the main window immediately after modifying the open document, you will now not be prompted to save the document anymore. All changes will be saved automatically.
 
 ## Under the Hood
 

@@ -122,10 +122,12 @@ class ZettlrWindow {
     // Emitted when the user wants to close the window.
     this._win.on('close', (event) => {
       // Only check, if we can close. Unless we can, abort closing process.
-      if (!this.canClose()) {
+      if (this._app.isModified()) {
+        // The current document is modified, so send a win-close event to the
+        // renderer, triggering a save command prior to actually closing the
+        // window.
         event.preventDefault()
-        // Parent's (ZettlrWindow) parent (Zettlr)
-        this._app.saveAndClose()
+        global.ipc.send('win-close')
       } else {
         // We can close - so clear down the cache in any case
         let ses = this._win.webContents.session
