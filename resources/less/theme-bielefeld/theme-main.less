@@ -18,8 +18,8 @@
 @import "../theme-berlin/theme-main.less";
 
 // Now adapt
-@c-primary: @dark-orange;
-@c-primary-shade: @orange-2;
+@c-primary: @orange-0;
+@c-primary-shade: @orange-1;
 
 @c-secondary: @green-0;
 @c-secondary-shade: @green-1;
@@ -38,8 +38,8 @@
 @bg-annotation: @orange-2;
 @bg-annotation-dark: yellow;
 
-@selection-light: @gold-selection;
-@selection-dark: @gold-selection-dark;
+@selection-light: @beige-2;
+@selection-dark: @grey-6;
 
 /**
  * ALERTS
@@ -61,21 +61,23 @@
 @pomodoro-long: @green-selection-dark;
 
 /**
- * FONTS
- */
-@font-main: @font-liberation;
-@font-secondary: @font-lato;
-@font-code: @font-liberation;
-@font-main-win: @font-liberation;
-
-/**
  * ADDITIONAL STUFF
  */
 
 body {
-  #editor { background-color: @beige-0; }
+  #editor {
+    background-color: @beige-0;
+    // We only need to change the editor's font
+    font-family: @font-liberation;
+  }
+
   #directories { background-color: @beige-1; }
-  #preview { background-color: @beige-1; }
+  #preview {
+    background-color: @beige-1;
+    ul li.directory, li.virtual-directory {
+      color: @orange-1;
+    }
+}
 
   // The scrollbars are too bright using the default primary colour, so we have
   // to adapt them

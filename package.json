@@ -53,7 +53,6 @@
     "devDependencies": {
         "chalk": "^2.4.2",
         "csso": "^3.5.1",
-        "documentation": "^10.1.0",
         "electron": "^5.0.1",
         "electron-builder": "^20.40.2",
         "handlebars": "^4.1.2",
