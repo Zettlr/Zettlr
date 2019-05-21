@@ -106,7 +106,6 @@ class UpdateCheck extends ZettlrCommand {
       html = html.replace(aRE, function (match, p1, p2, offset, string) {
         return `<a${p1} onclick="require('electron').shell.openExternal(this.getAttribute('href')); return false;" target="_blank">${p2}</a>`
       })
-      console.log(this._response)
 
       return {
         'newVer': this._response.tag_name,
