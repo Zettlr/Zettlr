@@ -102,6 +102,10 @@ class ZettlrToolbar {
     // Activate buttons
     // -- so beautifully DRY <3
     this._div.find('.button').on('click', (e) => {
+      // Don't let the event bubble up to the document. Why? Because if a popup
+      // opens up and the event reaches the document element this will cause the
+      // popup to think it should close itself again.
+      e.stopPropagation()
       let elem = $(e.currentTarget)
       let command = elem.attr('data-command') || 'unknown-command'
       let content = elem.attr('data-content') || {}
