@@ -275,10 +275,10 @@ class ZettlrBody {
     let targetMode = 'words'
     let targetCount = 0
 
-    if (file.hasOwnProperty('target') && file.target !== null) {
+    if (file.hasOwnProperty('target') && file.target != null) {
       // Overwrite the properties with the ones given
-      targetMode = file.target.mode
-      targetCount = file.target.count
+      targetMode = file.target.mode || 'words' // Fallback
+      targetCount = file.target.count || 0
     }
 
     let cnt = makeTemplate('popup', 'target', {
