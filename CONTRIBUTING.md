@@ -12,10 +12,23 @@ I have no special requirements on how to commit to Zettlr yet. But some basic ex
 
 ## Contributing translations
 
-If you want to contribute translations please make sure that your pull request contains the following:
+Translations for all languages are welcome. To see the status of the current
+translations, head over to our
+[translation service](https://translate.zettlr.com/). There a list of all
+languages currently available. You have the following options concerning
+translations:
 
-* Your (updated or new) translation file in `source/common/lang`.
-* To save me time, please also add the according hunspell dictionary's .AFF and .DIC files to `source/renderer/assets/dict` in the respective directory structure ([Link to the Github repository](https://github.com/wooorm/dictionaries))
+* Translate localisation strings that haven't yet been translated in a
+language.
+* Approve already translated strings, especially if there are multiple
+suggestions — choose the one you think is right.
+* Suggest a new translation for a given localisation string if you think the
+existing ones are all not correct.
+
+The service works using a community-guided algorithm, so in a final
+translation file only the string that has received the most approval will be
+included. You can read more about how the system works prior to
+registering [here](https://translate.zettlr.com/welcome).
 
 ## Contributing code
 
