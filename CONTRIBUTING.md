@@ -12,23 +12,13 @@ I have no special requirements on how to commit to Zettlr yet. But some basic ex
 
 ## Contributing translations
 
-Translations for all languages are welcome. To see the status of the current
-translations, head over to our
-[translation service](https://translate.zettlr.com/). There a list of all
-languages currently available. You have the following options concerning
-translations:
+Translations for all languages are welcome. To see the status of the current translations, head over to our [translation service](https://translate.zettlr.com/). There a list of all languages currently available. You have the following options concerning translations:
 
-* Translate localisation strings that haven't yet been translated in a
-language.
-* Approve already translated strings, especially if there are multiple
-suggestions — choose the one you think is right.
-* Suggest a new translation for a given localisation string if you think the
-existing ones are all not correct.
+* Translate localisation strings that haven't yet been translated in a language.
+* Approve already translated strings, especially if there are multiple suggestions — choose the one you think is right.
+* Suggest a new translation for a given localisation string if you think the existing ones are all not correct.
 
-The service works using a community-guided algorithm, so in a final
-translation file only the string that has received the most approval will be
-included. You can read more about how the system works prior to
-registering [here](https://translate.zettlr.com/welcome).
+The service works using a community-guided algorithm, so in a final translation file only the string that has received the most approval will be included. You can read more about how the system works prior to registering [here](https://translate.zettlr.com/welcome).
 
 ## Contributing code
 
