@@ -186,6 +186,10 @@ class ZettlrEditor {
         'Enter': 'newlineAndIndentContinueMarkdownList',
         'Tab': 'autoIndentMarkdownList',
         'Shift-Tab': 'autoUnindentMarkdownList',
+        // On Windows, default CodeMirror behaviour for Home/End is paragraph
+        // start/end, not line start/end
+        'Home': 'goLineLeftSmart',
+        'End': 'goLineRight',
         'Ctrl-Enter': (cm) => {
           // Implement middle-of-line insert line below behaviour (see #101)
           CodeMirror.commands['goLineEnd'](cm)
