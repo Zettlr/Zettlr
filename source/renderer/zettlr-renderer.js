@@ -154,28 +154,12 @@ class ZettlrRenderer {
     this.getPreview().hideDirs(global.config.get('hideDirs'))
     // Receive the application language
     this.setLocale(global.config.get('appLang'))
-    // muteLines initial setting
-    this.getEditor().setMuteLines(global.config.get('muteLines'))
-    this.getEditor().setAutoCloseBrackets(global.config.get('editor.autoCloseBrackets'))
-    // preview image constraints
-    this.getEditor().setImagePreviewConstraints(
-      global.config.get('display.imageWidth'),
-      global.config.get('display.imageHeight')
-    )
 
     // Tell the body that the config has changed
     this.getBody().configChange()
 
-    // Tell the editor which elements should be rendered inside documents.
-    this.getEditor().setRenderOptions(
-      global.config.get('display.renderCitations'),
-      global.config.get('display.renderIframes'),
-      global.config.get('display.renderImages'),
-      global.config.get('display.renderLinks'),
-      global.config.get('display.renderMath'),
-      global.config.get('display.renderTasks'),
-      global.config.get('display.renderHTags')
-    )
+    // Tell the editor that the config has changed
+    this.getEditor().configChange()
 
     // Set the correct combiner state
     switch (global.config.get('combinerState')) {
@@ -188,9 +172,6 @@ class ZettlrRenderer {
         $('#combiner').removeClass('expanded')
         break
     }
-
-    // And last but not least the zkn options
-    this.getEditor().getEditor().setOption('zkn', global.config.get('zkn'))
   }
 
   /**

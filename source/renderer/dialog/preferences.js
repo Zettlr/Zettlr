@@ -146,6 +146,7 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['display.renderHTags'] = (data.find(elem => elem.name === 'display.renderHTags') !== undefined)
 
     cfg['editor.autoCloseBrackets'] = (data.find(elem => elem.name === 'editor.autoCloseBrackets') !== undefined)
+    cfg['editor.homeEndBehaviour'] = (data.find(elem => elem.name === 'editor.homeEndBehaviour') !== undefined)
     // Extract selected dictionaries
     cfg['selectedDicts'] = data.filter(elem => elem.name === 'selectedDicts').map(elem => elem.value)
 

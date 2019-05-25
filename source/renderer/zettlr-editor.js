@@ -20,6 +20,7 @@ const tippy = require('tippy.js')
 const { clipboard, shell } = require('electron')
 const { hash, makeSearchRegEx, countWords, flattenDirectoryTree } = require('../common/zettlr-helpers.js')
 const { trans } = require('../common/lang/i18n.js')
+const generateKeymap = require('./assets/codemirror/generate-keymap.js')
 
 // The autoloader requires all necessary CodeMirror addons and modes that are
 // used by the main class. It simply folds about 70 lines of code into an extra
@@ -180,31 +181,7 @@ class ZettlrEditor {
         linkEnd: '\\]\\]' // End of links?
       },
       continuelistModes: [ 'markdown', 'markdown-zkn' ],
-      extraKeys: CodeMirror.normalizeKeyMap({
-        'Cmd-F': false,
-        'Ctrl-F': false,
-        'Enter': 'newlineAndIndentContinueMarkdownList',
-        'Tab': 'autoIndentMarkdownList',
-        'Shift-Tab': 'autoUnindentMarkdownList',
-        // On Windows, default CodeMirror behaviour for Home/End is paragraph
-        // start/end, not line start/end
-        'Home': 'goLineLeftSmart',
-        'End': 'goLineRight',
-        'Ctrl-Enter': (cm) => {
-          // Implement middle-of-line insert line below behaviour (see #101)
-          CodeMirror.commands['goLineEnd'](cm)
-          CodeMirror.commands['newlineAndIndent'](cm)
-        },
-        'Shift-Ctrl-Enter': (cm) => {
-          // Implement middle-of-line insert line above behaviour (see #101)
-          CodeMirror.commands['goLineUp'](cm)
-          CodeMirror.commands['goLineEnd'](cm)
-          CodeMirror.commands['newlineAndIndent'](cm)
-        },
-        // We need to override the default behaviour
-        'Ctrl-Shift-V': (cm) => { if (process.platform === 'darwin') return; this.pasteAsPlain() },
-        'Cmd-Shift-V': (cm) => { this.pasteAsPlain() }
-      })
+      extraKeys: generateKeymap(this)
     })
 
     /**
@@ -607,57 +584,48 @@ class ZettlrEditor {
   }
 
   /**
-    * Sets the variable that controls the muting of lines
-    * @param {Boolean} state True or false, depending on whether or not we should mute the lines in distraction free mode
-    */
-  setMuteLines (state) {
-    this._mute = state
+   * Gets called by the Renderer everytime the configuration changes so that the
+   * editor can reload all defaults
+   * @return {ZettlrEditor} Chainability
+   */
+  configChange () {
+    // The configuration has changed, so reload everything
+
+    // Re-generate the keymap
+    this._cm.setOption('extraKeys', generateKeymap(this))
+
+    // Should lines be muted in distraction free?
+    this._mute = global.config.get('muteLines')
     if (this._cm.getOption('fullScreen') && !this._mute) {
       this._unmuteLines() // Unmute
     } else if (this._cm.getOption('fullScreen') && this._mute) {
       this._muteLines() // Mute
     }
-  }
 
-  /**
-   * Sets the autoCloseBrackets command of the editor to the respective value.
-   * @param {Boolean} state True, if brackets should be autoclosed, or false.
-   */
-  setAutoCloseBrackets (state) {
-    if (state) {
+    // Set the autoCloseBrackets option
+    if (global.config.get('editor.autoCloseBrackets')) {
       this._cm.setOption('autoCloseBrackets', AUTOCLOSEBRACKETS)
     } else {
       this._cm.setOption('autoCloseBrackets', false)
     }
-  }
 
-  /**
-   * Apply constraints to the preview image size
-   * @param {number} width  The maximum width
-   * @param {number} height The maximum height
-   */
-  setImagePreviewConstraints (width, height) {
-    this._cm.setOption('imagePreviewWidth', width)
-    this._cm.setOption('imagePreviewHeight', height)
-  }
+    // Set the image dimension constraints
+    this._cm.setOption('imagePreviewWidth', global.config.get('display.imageWidth'))
+    this._cm.setOption('imagePreviewHeight', global.config.get('display.imageHeight'))
 
-  /**
-   * Applies options to determine which elements are rendered in documents.
-   * @param {Boolean} cite   Should citations be rendered?
-   * @param {Boolean} iframe Should iFrames be rendered?
-   * @param {Boolean} img    Should images be rendered?
-   * @param {Boolean} link   Should Links be rendered?
-   * @param {Boolean} math   Should math formulae be rendered?
-   * @param {Boolean} task   Should tasks be rendered?
-   */
-  setRenderOptions (cite, iframe, img, link, math, task, hTag) {
-    this._renderCitations = cite
-    this._renderIframes = iframe
-    this._renderImages = img
-    this._renderLinks = link
-    this._renderMath = math
-    this._renderTasks = task
-    this._renderHTags = hTag
+    // Set the preview options
+    this._renderCitations = global.config.get('display.renderCitations')
+    this._renderIframes = global.config.get('display.renderIframes')
+    this._renderImages = global.config.get('display.renderImages')
+    this._renderLinks = global.config.get('display.renderLinks')
+    this._renderMath = global.config.get('display.renderMath')
+    this._renderTasks = global.config.get('display.renderTasks')
+    this._renderHTags = global.config.get('display.renderHTags')
+
+    // Last but not least set the Zettelkasten options
+    this._cm.setOption('zkn', global.config.get('zkn'))
+
+    return this
   }
 
   /**

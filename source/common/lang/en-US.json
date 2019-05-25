@@ -193,6 +193,7 @@
             "file_meta": "Show file information",
             "general": "General",
             "hide_dirs": "Hide directories during global search",
+            "homeEndBehaviour": "Use the CodeMirror default actions for \u003Ckbd\u003EHome\u003C/kbd\u003E and \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "mute_lines": "Mute non-focused lines in distraction-free mode",
             "nightmode": "Night mode",
             "pandoc": "Path to pandoc executable. Please only change, if Zettlr is unable to locate pandoc.",

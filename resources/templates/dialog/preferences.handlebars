@@ -120,6 +120,8 @@
           {{/if}}
         </div> <!-- End box right -->
       </div>
+
+
       <!-- Editor related options -->
       <div id="prefs-tabs-editor">
         <div class="clear"></div>
@@ -153,6 +155,13 @@
               <div class="toggle"></div>
             </label>
             <label for="autoCloseBrackets">{{i18n "dialog.preferences.autoCloseBrackets"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="editor.homeEndBehaviour" value="yes" id="homeEndBehaviour" {{#if editor.homeEndBehaviour}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="homeEndBehaviour">{{i18n "dialog.preferences.homeEndBehaviour"}}</label>
           </div>
           <hr>
           <label for="editor.defaultSaveImagePath">
