@@ -36,6 +36,7 @@
 - You can now also link to files on your local filesystem from within Markdown files. Zettlr will try to open them. The following algorithm is applied internally: First, try to open the link just like that. Second, try to open the current file's folder plus the link. Third, try to open https://\<link\>. If all three methods don't yield a result, Zettlr will show you a notification.
 - The GUI is not locked anymore while a popup is shown.
 - The tag preferences have been updated.
+- CodeMirror by default sets the cursor to the beginning or end of a whole line (with line wrapping). You can now change that behaviour, so that the `Home` and `End` buttons bring you to the beginning and end of the _visible_ lines, not the logical lines.
 
 ### Fixes
 
