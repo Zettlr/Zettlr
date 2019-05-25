@@ -25,7 +25,8 @@
         "less:extract": "node scripts/extract-css.js",
         "handlebars": "node scripts/handlebars.js",
         "docs:build": "node scripts/docs.js",
-        "docs": "documentation build ./source/main.js -f html -o resources/docs"
+        "docs": "documentation build ./source/main.js -f html -o resources/docs",
+        "lang:refresh": "node scripts/refresh-language.js"
     },
     "dependencies": {
         "adm-zip": "^0.4.13",
