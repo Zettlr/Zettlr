@@ -61,6 +61,7 @@
 - When trying to close the main window immediately after modifying the open document, you will now not be prompted to save the document anymore. All changes will be saved automatically.
 - Now files with more than one tag will have tag indicators more consistent to files with only one tag.
 - On rare occasions, Zettlr instances run on Windows can enter a zombie state where the main process is still running albeit the main window has been closed. Trying to run Zettlr anew will fail with an error due to the (now non-existing) window being accessed during the `on-second-instance` event. This fix makes sure a window will be opened in any case if there is none prior to restoring Zettlr.
+- Fixed the placement of the popups, so they should now be visible.
 
 ## Under the Hood
 
@@ -72,6 +73,7 @@
 - Some CSS cleanup, again.
 - Changed the way popups are closed from an invisible barrier div to a simple click detection handler.
 - Added Table and Strikethrough support to the copy & paste operations.
+- Moved the Table-of-Contents-popup to the ZettlrBody class.
 
 # 1.2.3
 

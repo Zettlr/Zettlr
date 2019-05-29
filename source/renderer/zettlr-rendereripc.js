@@ -498,7 +498,7 @@ class ZettlrRendererIPC {
         break
 
       case 'toc':
-        this._app.toc()
+        this._app.getBody().displayTOC()
         break
 
       // Pomodoro timer toggle

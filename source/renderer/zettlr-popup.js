@@ -68,6 +68,8 @@ class ZettlrPopup {
       if (x < minX || maxX < x || y < minY || maxY < y) {
         // Clicked outside the popup -> close it
         this.close(true)
+      } else {
+        console.log(`Detected a click at ${x}:${y}, but not closing. Boundaries are: ${minX}:${minY} and ${maxX}:${maxY}`)
       }
     })
 
@@ -116,13 +118,6 @@ class ZettlrPopup {
     let height = this._popup.outerHeight()
     let width = this._popup.outerWidth()
 
-    // Ensure the popup is not heigher than the window itself (can happen,
-    // e.g., with the formatting popup)
-    if (height > window.innerHeight - 20 - this._y) {
-      this._popup.css('height', (window.innerHeight - 20 - this._y) + 'px')
-      height = this._popup.outerHeight()
-    }
-
     // First find on which side there is the most space.
     let top = this._elem.offset().top
     let left = this._elem.offset().left
@@ -130,7 +125,7 @@ class ZettlrPopup {
     let bottom = window.innerHeight - top - this._elem.outerHeight()
 
     // 10px: arrow plus the safety-margin
-    if (bottom > height + 10) {
+    if (bottom > height + 10 || this._elem.offset().top < 50) {
       // Below element
       this._arrow.addClass('up')
       this._popup.css('top', (this._y + 5) + 'px') // 5px margin for arrow
@@ -143,7 +138,21 @@ class ZettlrPopup {
       }
       this._arrow.css('top', (top + this._elem.outerHeight()) + 'px')
       this._arrow.css('left', (left + this._elem.outerWidth() / 2 - this._arrow.outerWidth() / 2) + 'px')
-    } else if (right > width + 10) {
+
+      // Ensure the popup is completely visible (move inside the document if it's at an edge)
+      if (this._popup.offset().left + this._popup.outerWidth() > window.innerWidth - 10) {
+        this._popup.css('left', (window.innerWidth - this._popup.outerWidth() - 10) + 'px')
+      } if (this._popup.offset().left < 10) {
+        this._popup.css('left', '10px')
+      }
+
+      // Ensure the popup is not higher than the window itself (can happen,
+      // e.g., with the formatting popup)
+      if (height > window.innerHeight - 20 - this._y) {
+        this._popup.css('height', (window.innerHeight - 20 - this._y) + 'px')
+        height = this._popup.outerHeight()
+      }
+    } else if (right > width + 10 && height <= window.innerHeight - 20 - this._y) {
       // We can place it right of the element
       // Therefore re-compute x and y
       this._x = this._elem.offset().left + this._elem.outerWidth()
@@ -157,6 +166,13 @@ class ZettlrPopup {
       }
       this._arrow.css('left', (left + this._elem.outerWidth()) + 'px')
       this._arrow.css('top', (top + this._elem.outerHeight() / 2 - this._arrow.outerHeight() / 2) + 'px')
+
+      // Ensure the popup is completely visible (move inside the document if it's at an edge)
+      if (this._popup.offset().top + this._popup.outerHeight() > window.innerHeight - 10) {
+        this._popup.css('top', (window.innerHeight - this._popup.outerHeight() - 10) + 'px')
+      } if (this._popup.offset().top < 10) {
+        this._popup.css('top', '10px')
+      }
     } else {
       // Above
       // Therefore re-compute x and y
@@ -169,8 +185,15 @@ class ZettlrPopup {
       } else {
         this._popup.css('left', (this._x - width / 2) + 'px')
       }
-      this._arrow.css('top', top + 'px')
+      this._arrow.css('top', top - 5 + 'px')
       this._arrow.css('left', (left + this._elem.outerWidth() / 2 - this._arrow.outerWidth() / 2) + 'px')
+
+      // Ensure the popup is completely visible (move inside the document if it's at an edge)
+      if (this._popup.offset().left + this._popup.outerWidth() > window.innerWidth - 10) {
+        this._popup.css('left', (window.innerWidth - this._popup.outerWidth() - 10) + 'px')
+      } if (this._popup.offset().left < 10) {
+        this._popup.css('left', '10px')
+      }
     }
   }
 

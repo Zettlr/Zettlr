@@ -140,7 +140,7 @@ class ZettlrBody {
     // No directory selected.
     if (!dir) return
     // Don't open multiple popups
-    if (this._currentPopup) return
+    if (this._currentPopup) this._currentPopup.close(true)
 
     // It was a virtual directory, not an actual directory.
     if (dir.type !== 'directory') return
@@ -167,7 +167,7 @@ class ZettlrBody {
     // No directory selected.
     if (!dir) return
     // Prevent multiple popups
-    if (this._currentPopup) return
+    if (this._currentPopup) this._currentPopup.close(true)
 
     // It was a virtual directory, not an actual directory.
     if (dir.type !== 'directory') return
@@ -232,7 +232,7 @@ class ZettlrBody {
     * @return {void}     Nothing to return.
     */
   requestNewDirName (dir) {
-    if (this._currentPopup) return // Prevent multiple instances
+    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
     let elem = $('#directories').find('li[data-hash="' + dir.hash + '"]').first()
     let cnt = makeTemplate('popup', 'textfield', {
       'val': dir.name,
@@ -253,7 +253,7 @@ class ZettlrBody {
     * @return {void}      Nothing to return.
     */
   requestNewFileName (file) {
-    if (this._currentPopup) return // Prevent multiple popups
+    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
     let elem = ''
     if (this._renderer.getCurrentFile() != null && this._renderer.getCurrentFile().hash === file.hash) {
       elem = $('.button.file-rename')
@@ -283,7 +283,7 @@ class ZettlrBody {
    * @param {number} hash The hash for which the popup should be shown.
    */
   setTarget (hash) {
-    if (this._currentPopup) return // Prevent multiple popups
+    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
     let file = this._renderer.findObject(hash)
     if (!file) return // No file given
 
@@ -319,7 +319,7 @@ class ZettlrBody {
     * @return {ZettlrPopup} The popup that is shown.
     */
   showFileInfo () {
-    if (this._currentPopup) return // Prevent multiple popups
+    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
 
     let info = this._renderer.getEditor().getFileInfo()
 
@@ -388,7 +388,7 @@ class ZettlrBody {
     * @return {ZettlrBody}      Chainability.
     */
   displayExport (file) {
-    if (this._currentPopup) return this // Prevent multiple popups
+    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
     // Create a popup
 
     let cnt = makeTemplate('popup', 'export', { 'hash': file.hash })
@@ -526,7 +526,7 @@ class ZettlrBody {
    */
   displayStats (data) {
     if (this._currentDialog !== null) return // Only one dialog at a time
-    if (this._currentPopup) return // Prevent multiple instances
+    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
     let context = {
       'displaySum': (data.sumMonth > 99999) ? '>100k' : localiseNumber(data.sumMonth),
       'avgMonth': localiseNumber(data.avgMonth),
@@ -554,7 +554,7 @@ class ZettlrBody {
     * @return {void} Nothing to return.
     */
   displayFind () {
-    if (this._currentPopup) return
+    if (this._currentPopup) this._currentPopup.close(true)
     if (this._renderer.getCurrentFile() === null) return
     let regexRE = /^\/.*\/[gimy]{0,4}$/ // It's meta, dude!
 
@@ -627,7 +627,7 @@ class ZettlrBody {
     * Displays a popup containing all formattings
     */
   displayFormatting () {
-    if (this._currentPopup) return // Prevent multiple instances
+    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
     let cnt = makeTemplate('popup', 'format')
     this._currentPopup = popup($('.button.formatting'), cnt)
 
@@ -666,6 +666,105 @@ class ZettlrBody {
       this._renderer.handleEvent('cm-command', e.target.className)
       this._currentPopup.close()
       this._currentPopup = null
+    })
+  }
+
+  /**
+    * Displays a table of content.
+    * @return {void} (Point of) No return.
+    */
+  displayTOC () {
+    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
+    if (this._renderer.getCurrentFile() === null) return
+
+    let toc = this._renderer.getEditor().buildTOC()
+
+    if (toc.length === 0) {
+      return
+    }
+
+    let idUniquifier = Date.now()
+
+    let cnt = $('<div id="toc-container-' + idUniquifier + '">')
+    let h1 = 0
+    let h2 = 0
+    let h3 = 0
+    let h4 = 0
+    let h5 = 0
+    let h6 = 0
+    for (let entry of toc) {
+      let level = ''
+      switch (entry.level) {
+        case 1:
+          h1++
+          h2 = h3 = h4 = h5 = h6 = 0
+          level = h1
+          break
+        case 2:
+          h2++
+          h3 = h4 = h5 = h6 = 0
+          level = [h1, h2].join('.')
+          break
+        case 3:
+          h3++
+          h4 = h5 = h6 = 0
+          level = [h1, h2, h3].join('.')
+          break
+        case 4:
+          h4++
+          h5 = h6 = 0
+          level = [h1, h2, h3, h4].join('.')
+          break
+        case 5:
+          h5++
+          h6 = 0
+          level = [h1, h2, h3, h4, h5].join('.')
+          break
+        case 6:
+          h6++
+          level = [h1, h2, h3, h4, h5, h6].join('.')
+      }
+
+      cnt.append(
+        $('<a>').text(level + '. ' + entry.text)
+          .attr('data-line', entry.line)
+          .attr('href', '#')
+          .addClass('toc-link')
+      )
+    }
+
+    this._currentPopup = popup($('.button.show-toc'), cnt)
+
+    // On click jump to line
+    $('.toc-link').click((event) => {
+      let elem = $(event.target)
+      this._renderer.getEditor().jtl(elem.attr('data-line'))
+    })
+
+    // Sortable
+    $('#toc-container-' + idUniquifier).sortable({
+      axis: 'y',
+      items: '> .toc-link',
+      update: (event, ui) => {
+        // The user has dropped the item someplace else.
+        let newIndex = ui.item.index()
+        let originalLine = parseInt(ui.item.attr('data-line'))
+        let sumLength = $('#toc-container-' + idUniquifier + ' > .toc-link').length
+        if (newIndex < sumLength - 1) {
+          let elementBelow = $('#toc-container-' + idUniquifier + ' > .toc-link').eq(newIndex + 1)
+          let aboveLine = parseInt(elementBelow.attr('data-line'))
+          this._renderer.getEditor().moveSection(originalLine, aboveLine)
+        } else {
+          this._renderer.getEditor().moveSection(originalLine, -1)
+        }
+
+        // Cool, now destroy the sortable, rebuild the TOC, and re-fill the div
+        // again.
+        $('#toc-container-' + idUniquifier).sortable('destroy')
+        this._currentPopup.close()
+        this._currentPopup = null
+        this.displayTOC()
+      }
     })
   }
 
