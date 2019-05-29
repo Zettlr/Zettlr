@@ -100,6 +100,7 @@ class ZettlrPomodoro {
       // Reset and start next
       this._phase.cur = 0
       if (this._phase.type === 'task') {
+        global.ipc.send('add-pomodoro') // Increase the global pomodoro count
         this._counter.task++
 
         if ((this._counter.task % 4) === 0) {

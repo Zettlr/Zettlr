@@ -36,7 +36,8 @@ class ZettlrStats {
     this.stats = null
 
     this.statstpl = {
-      'wordCount': {}
+      'wordCount': {},
+      'pomodoros': {}
     }
 
     this.load()
@@ -57,6 +58,7 @@ class ZettlrStats {
   getStats () {
     let ret = {
       'wordCount': this.getData().wordCount, // All words for the graph
+      'pomodoros': this.getData().pomodoros, // All pomodoros ever completed
       'avgMonth': 0, // Monthly average
       'today': 0, // Today's word count
       'sumMonth': 0 // Overall sum for the past month
@@ -126,6 +128,26 @@ class ZettlrStats {
     } else {
       this.stats.wordCount[this.getDate()] = this.stats.wordCount[this.getDate()] + val
     }
+
+    return this
+  }
+
+  /**
+   * Increases the pomodoros by one
+   * @return {ZettlrStats} This for chainability.
+   */
+  increasePomodoros () {
+    if (!this.stats.hasOwnProperty('pomodoros')) {
+      this.stats['pomodoros'] = {}
+    }
+
+    if (!this.stats.pomodoros.hasOwnProperty(this.getDate())) {
+      this.stats.pomodoros[this.getDate()] = 1
+    } else {
+      this.stats.pomodoros[this.getDate()] = this.stats.pomodoros[this.getDate()] + 1
+    }
+
+    return this
   }
 
   /**
