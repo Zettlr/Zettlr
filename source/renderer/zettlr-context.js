@@ -138,10 +138,13 @@ class ZettlrCon {
       // In case of preview, our wanted elements are: the p.filename-tag (containing
       // the name) inside the <li> and the data-hash attr inside the <li>
       if (elem.hasClass('filename') || elem.hasClass('file-meta') || elem.hasClass('taglist')) {
-        elem = elem.parent()
-      } else if (elem.is('span')) {
-        elem = elem.parent().parent()
+        elem = elem.parent() // Move up 1 level
+      } else if (elem.is('span') || elem.hasClass('tagspacer')) {
+        elem = elem.parent().parent() // Move up 2 levels
+      } else if (elem.hasClass('tag')) {
+        elem = elem.parent().parent().parent() // Move up 3 levels
       }
+
       if (elem.hasClass('directory')) return
 
       hash = elem.attr('data-hash')

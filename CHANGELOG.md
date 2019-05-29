@@ -62,6 +62,7 @@
 - Now files with more than one tag will have tag indicators more consistent to files with only one tag.
 - On rare occasions, Zettlr instances run on Windows can enter a zombie state where the main process is still running albeit the main window has been closed. Trying to run Zettlr anew will fail with an error due to the (now non-existing) window being accessed during the `on-second-instance` event. This fix makes sure a window will be opened in any case if there is none prior to restoring Zettlr.
 - Fixed the placement of the popups, so they should now be visible.
+- Fixed the context menu on files that have visible tags.
 
 ## Under the Hood
 
