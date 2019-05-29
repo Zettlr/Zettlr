@@ -71,10 +71,16 @@ app.on('second-instance', (event, argv, cwd) => {
 
   // Someone tried to run a second instance, so focus the main window if existing
   if (zettlr) {
+    // We need to call the open() method of ZettlrWindow to make sure there's a
+    // window, because on Windows, where this code is always executed, Zettlr
+    // instances can enter a zombie mode in which the instances still run although
+    // the Window has been closed (due to the close event not being fired in rare
+    // instances). This way we make sure there's a window open in any case before
+    // it's accessed.
+    zettlr.getWindow().open() // Will simply return if the window is already open
     let win = zettlr.getWindow().getWindow()
-    if (win.isMinimized()) {
-      win.restore()
-    }
+    // Restore the window in case it's minimised
+    if (win.isMinimized()) win.restore()
     win.focus()
 
     // In case the user wants to open a file/folder with this running instance

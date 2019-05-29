@@ -60,6 +60,7 @@
 - Fixed inconsistent behaviour with the document search.
 - When trying to close the main window immediately after modifying the open document, you will now not be prompted to save the document anymore. All changes will be saved automatically.
 - Now files with more than one tag will have tag indicators more consistent to files with only one tag.
+- On rare occasions, Zettlr instances run on Windows can enter a zombie state where the main process is still running albeit the main window has been closed. Trying to run Zettlr anew will fail with an error due to the (now non-existing) window being accessed during the `on-second-instance` event. This fix makes sure a window will be opened in any case if there is none prior to restoring Zettlr.
 
 ## Under the Hood
 

@@ -44,10 +44,8 @@ class ZettlrWindow {
     * @return {ZettlrWindow} Again this for chainability.
     */
   open () {
-    if (this._win != null) {
-      // There is still a window active, so don't do anything (one-window app)
-      return
-    }
+    // There is still a window active, so don't do anything (one-window app)
+    if (this._win != null) return this
 
     // Prepare saved attributes from the config.
     let winWidth = global.config.get('window.width')
