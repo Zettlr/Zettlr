@@ -15,6 +15,7 @@
     "main": "main.js",
     "dependencies": {
         "adm-zip": "^0.4.13",
+        "astrocite": "^0.14.0",
         "bcp-47": "^1.0.5",
         "chart.js": "^2.7.2",
         "chokidar": "^3.0.0",

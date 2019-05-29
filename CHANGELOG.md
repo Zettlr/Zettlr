@@ -14,6 +14,7 @@
   - _Frankfurt_: A clean serif-based theme with royal blue highlights.
   - _Bielefeld_: For Markdown purists, this theme features creme colours and a monospaced font.
 - **New Feature**: Rearrange sections in your documents by dragging the headings in the Table of Contents popup around (_Note: Only works with ATX-Style headings!_). Please note that the last section will always count until the very last line, therefore including footnotes and references.
+- **New Feature**: You can now also load BibTex files into Zettlr.
 - Popup redesign: Now the popups aren't semi-transparent anymore, have rounded edges and are much more crisp. Therefore it's even easier to read them.
 - Display contributors tab on the about dialog containing the names of all authors of the translation files.
 - You can now customize the pandoc command to your liking using several variables.
@@ -63,6 +64,7 @@
 - On rare occasions, Zettlr instances run on Windows can enter a zombie state where the main process is still running albeit the main window has been closed. Trying to run Zettlr anew will fail with an error due to the (now non-existing) window being accessed during the `on-second-instance` event. This fix makes sure a window will be opened in any case if there is none prior to restoring Zettlr.
 - Fixed the placement of the popups, so they should now be visible.
 - Fixed the context menu on files that have visible tags.
+- Fixed wrong citation suggestions after a change of the library file.
 
 ## Under the Hood
 
@@ -75,6 +77,7 @@
 - Changed the way popups are closed from an invisible barrier div to a simple click detection handler.
 - Added Table and Strikethrough support to the copy & paste operations.
 - Moved the Table-of-Contents-popup to the ZettlrBody class.
+- Removed excess debug code.
 
 # 1.2.3
 

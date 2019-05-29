@@ -68,8 +68,6 @@ class ZettlrPopup {
       if (x < minX || maxX < x || y < minY || maxY < y) {
         // Clicked outside the popup -> close it
         this.close(true)
-      } else {
-        console.log(`Detected a click at ${x}:${y}, but not closing. Boundaries are: ${minX}:${minY} and ${maxX}:${maxY}`)
       }
     })
 

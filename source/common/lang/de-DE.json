@@ -337,6 +337,7 @@
         "avg_surpassed": "\ud83d\udd25 Weiter so!",
         "avg_words": "durchschnittlich",
         "citeproc": {
+            "error_db": "Die Zitationsdatenbank konnte nicht geladen werden",
             "no_db": "Keine Bibliotheks-Datei geladen.",
             "references_booting": "Die Citeproc-Engine ist noch nicht geladen \u2026",
             "references_error": "Beim Erstellen der Bibliographie ist ein Fehler aufgetreten!",

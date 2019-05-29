@@ -124,7 +124,6 @@ class PreferencesDialog extends ZettlrDialog {
     this.getModal().find(`input`).removeClass('has-error')
 
     let cfg = {}
-    console.log(data)
 
     // Standard preferences
     cfg['darkTheme'] = (data.find(elem => elem.name === 'darkTheme') !== undefined)

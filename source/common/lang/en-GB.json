@@ -338,6 +338,7 @@
         "avg_surpassed": "\ud83d\udd25 You're on fire!",
         "avg_words": "daily average",
         "citeproc": {
+            "error_db": "The citation database could not be loaded",
             "no_db": "No library file loaded.",
             "references_booting": "The citeproc engine is still booting up \u2026",
             "references_error": "Could not update bibliography!",

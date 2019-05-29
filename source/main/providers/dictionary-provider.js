@@ -224,7 +224,6 @@ class DictionaryProvider extends EventEmitter {
     // Adds the given term to the user dictionary
     if (!this._userDictionary.includes(term)) {
       this._userDictionary.push(term)
-      console.log(this._userDictionary)
       // Send an invalidation message to the renderer so that it reloads all words
       global.ipc.send('invalidate-dict')
     }

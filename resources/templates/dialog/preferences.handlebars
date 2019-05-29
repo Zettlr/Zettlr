@@ -11,6 +11,9 @@
         <li><a href="#prefs-tabs-theme">{{i18n "dialog.preferences.theme.title"}}</a></li>
         <li><a href="#prefs-tabs-advanced">{{i18n "dialog.preferences.advanced"}}</a></li>
       </ul>
+
+
+
       <!-- General settings -->
       <div id="prefs-tabs-general">
         <div class="box-left">
@@ -122,6 +125,7 @@
       </div>
 
 
+
       <!-- Editor related options -->
       <div id="prefs-tabs-editor">
         <div class="clear"></div>
@@ -182,6 +186,9 @@
         </div>
         <div class="clear"></div>
       </div>
+
+
+
       <!-- Export related options (except pandoc+xelatex) -->
       <div id="prefs-tabs-export">
         <div class="box-left">
@@ -249,8 +256,8 @@
             <input type="text" name="export.cslLibrary" id="cslLibrary" value="{{export.cslLibrary}}">
             <button type="button" class="request-file"
             data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
-            data-request-name="Citation Style Language JSON Data File"
-            data-request-ext="json"
+            data-request-name="CSL JSON or BibTex"
+            data-request-ext="json,bib"
             data-request-target="#cslLibrary"></button>
           </div>
           <label for="cslStyle">{{i18n "dialog.preferences.project.csl_style"}}</label>
@@ -264,6 +271,9 @@
           </div>
         </div>
       </div>
+
+
+
       <!-- Zettelkasten options -->
       <div id="prefs-tabs-zkn">
         <div class="box-left form-inline-buttons">
@@ -300,6 +310,9 @@
           </p>
         </div>
       </div>
+
+
+
       <!-- Display options -->
       <div id="prefs-tabs-display">
         <div class="box-left">
@@ -364,6 +377,8 @@
           </div>
         </div>
       </div>
+
+
 
       <!-- THEME SWITCHING OPTIONS -->
       <div id="prefs-tabs-theme">
@@ -445,6 +460,8 @@
           </div>
         </div>
       </div>
+
+
 
       <!-- Export/seldomly used options -->
       <div id="prefs-tabs-advanced">

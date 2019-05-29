@@ -22,6 +22,7 @@ const chokidar = require('chokidar') // We'll just use the one-liner to watch th
 const fs = require('fs')
 const path = require('path')
 const { trans } = require('../common/lang/i18n.js')
+const BibTexParser = require('astrocite-bibtex')
 
 // Statuses the engine can be in
 const NOT_LOADED = 0
@@ -117,6 +118,7 @@ class ZettlrCiteproc {
    */
   _onConfigUpdate () {
     if (global.config.get('export.cslLibrary') !== this._mainLibrary) {
+      global.ipc.notify(trans('gui.citeproc.reloading'))
       this.load()
     }
   }
@@ -153,14 +155,21 @@ class ZettlrCiteproc {
     try {
       this._cslData = JSON.parse(cslData)
     } catch (e) {
-      this._status = ERROR
-      return
+      try {
+        // Didn't work, so let's try to parse it as BibTex data.
+        this._cslData = BibTexParser.parse(cslData)
+      } catch (e) {
+        // Nopey.
+        global.ipc.notify(trans('gui.citeproc.error_db'))
+        this._status = ERROR
+        return
+      }
     }
     // First we need to reorder the read data so that it can be passed to the
     // sys object
     for (let i = 0, ilen = this._cslData.length; i < ilen; i++) {
       let item = this._cslData[i]
-      if (!item.issued) continue
+      // if (!item.issued) continue
       let id = item.id
       this._items[id] = item
       this._ids[id] = true // Create a fast accessible object (instead of slow array)
@@ -272,6 +281,7 @@ class ZettlrCiteproc {
   unload () {
     this._status = NOT_LOADED
     this._engine = null
+    this._ids = Object.create(null)
     if (this._watcher != null) {
       this._watcher.close()
       this._watcher = null

@@ -200,6 +200,7 @@
             "file_meta": "Propri\u00e9t\u00e9s du fichier",
             "general": "G\u00e9n\u00e9ral",
             "hide_dirs": "Cacher les dossiers durant la recherche globale",
+            "homeEndBehaviour": "Utilise les actions par d\u00e9faut de CodeMirror pour \u003Ckbd\u003EHome\u003C/kbd\u003E et \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "mute_lines": "Masquer les lignes hors focus dans le mode sans distraction",
             "nightmode": "Mode sombre",
             "pandoc": "Chemin d'acc\u00e8s \u00e0 Pandoc. \u00c0 ne changer que si Zettlr ne parvient pas \u00e0 trouver le programme.",
@@ -343,6 +344,7 @@
         "avg_surpassed": "\ud83d\udd25 Vous \u00eates en feu !",
         "avg_words": "Moyenne quotidienne",
         "citeproc": {
+            "error_db": "Le fichier de bibliographie n'a pas \u00e9t\u00e9 charg\u00e9",
             "no_db": "Aucun fichier de bibliographie charg\u00e9.",
             "references_booting": "Le moteur citeproc est en cours de d\u00e9marrage\u2026",
             "references_error": "Impossible de mettre \u00e0 jour la bibliographie.",
@@ -417,7 +419,7 @@
         "italic": "Italique",
         "labels": {
             "debug": "D\u00e9velopper",
-            "edit": "\u00c9diter",
+            "edit": "\u00c9dition",
             "file": "Fichier",
             "help": "Aide",
             "view": "Affichage",
