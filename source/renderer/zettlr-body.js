@@ -53,6 +53,8 @@ class ZettlrBody {
     this._n = [] // Holds all notifications currently displaying
     // Holds the currently displayed dialog. Prevents multiple dialogs from appearing.
     this._currentDialog = null
+    // Holds the current popup. Prevents multiple popups from appearing.
+    this._currentPopup = null
     this._currentTheme = 'berlin' // Default theme is Berlin
 
     // This object caches the values of search and replace value, so they stay
@@ -137,6 +139,8 @@ class ZettlrBody {
   requestFileName (dir) {
     // No directory selected.
     if (!dir) return
+    // Don't open multiple popups
+    if (this._currentPopup) return
 
     // It was a virtual directory, not an actual directory.
     if (dir.type !== 'directory') return
@@ -146,10 +150,11 @@ class ZettlrBody {
       'placeholder': trans('dialog.file_new.placeholder')
     })
 
-    popup($('.button.file-new'), cnt, (form) => {
+    this._currentPopup = popup($('.button.file-new'), cnt, (form) => {
       if (form) {
         global.ipc.send('file-new', { 'name': form[0].value, 'hash': dir.hash })
       }
+      this._currentPopup = null // Reset current popup
     })
   }
 
@@ -161,6 +166,8 @@ class ZettlrBody {
   requestDirName (dir) {
     // No directory selected.
     if (!dir) return
+    // Prevent multiple popups
+    if (this._currentPopup) return
 
     // It was a virtual directory, not an actual directory.
     if (dir.type !== 'directory') return
@@ -187,10 +194,11 @@ class ZettlrBody {
       'placeholder': trans('dialog.dir_new.placeholder')
     })
 
-    popup(elem, cnt, (form) => {
+    this._currentPopup = popup(elem, cnt, (form) => {
       if (form) {
         global.ipc.send('dir-new', { 'name': form[0].value, 'hash': dir.hash })
       }
+      this._currentPopup = null // Reset current popup
     })
   }
 
@@ -200,19 +208,21 @@ class ZettlrBody {
     * @return {void}     Nothing to return.
     */
   requestVirtualDirName (dir) {
-    if (!dir) {
-      return // No directory selected.
-    }
+    if (!dir) return // No directory selected.
+
+    // Prevent multiple popups
+    if (!this._currentPopup) return
 
     let cnt = makeTemplate('popup', 'textfield', {
       'val': trans('dialog.dir_new.value'),
       'placeholder': trans('dialog.dir_new.placeholder')
     })
 
-    popup($(`[data-hash=${dir.hash}]`), cnt, (form) => {
+    this._currentPopup = popup($(`[data-hash=${dir.hash}]`), cnt, (form) => {
       if (form) {
         global.ipc.send('dir-new-vd', { 'name': form[0].value, 'hash': dir.hash })
       }
+      this._currentPopup = null
     })
   }
 
@@ -222,16 +232,18 @@ class ZettlrBody {
     * @return {void}     Nothing to return.
     */
   requestNewDirName (dir) {
+    if (this._currentPopup) return // Prevent multiple instances
     let elem = $('#directories').find('li[data-hash="' + dir.hash + '"]').first()
     let cnt = makeTemplate('popup', 'textfield', {
       'val': dir.name,
       'placeholder': trans('dialog.dir_rename.placeholder')
     })
 
-    popup(elem, cnt, (form) => {
+    this._currentPopup = popup(elem, cnt, (form) => {
       if (form) {
         global.ipc.send('dir-rename', { 'name': form[0].value, 'hash': dir.hash })
       }
+      this._currentPopup = null
     })
   }
 
@@ -241,6 +253,7 @@ class ZettlrBody {
     * @return {void}      Nothing to return.
     */
   requestNewFileName (file) {
+    if (this._currentPopup) return // Prevent multiple popups
     let elem = ''
     if (this._renderer.getCurrentFile() != null && this._renderer.getCurrentFile().hash === file.hash) {
       elem = $('.button.file-rename')
@@ -257,10 +270,11 @@ class ZettlrBody {
       'placeholder': trans('dialog.file_rename.placeholder')
     })
 
-    popup(elem, cnt, (form) => {
+    this._currentPopup = popup(elem, cnt, (form) => {
       if (form) {
         global.ipc.send('file-rename', { 'name': form[0].value, 'hash': file.hash })
       }
+      this._currentPopup = null
     })
   }
 
@@ -269,6 +283,7 @@ class ZettlrBody {
    * @param {number} hash The hash for which the popup should be shown.
    */
   setTarget (hash) {
+    if (this._currentPopup) return // Prevent multiple popups
     let file = this._renderer.findObject(hash)
     if (!file) return // No file given
 
@@ -286,7 +301,7 @@ class ZettlrBody {
       'count': targetCount
     })
 
-    popup($(`[data-hash=${hash}]`), cnt, (form) => {
+    this._currentPopup = popup($(`[data-hash=${hash}]`), cnt, (form) => {
       if (form) {
         global.ipc.send('set-target', {
           'hash': parseInt(hash),
@@ -294,6 +309,8 @@ class ZettlrBody {
           'count': parseInt(form[0].value)
         })
       }
+
+      this._currentPopup = null
     })
   }
 
@@ -302,6 +319,8 @@ class ZettlrBody {
     * @return {ZettlrPopup} The popup that is shown.
     */
   showFileInfo () {
+    if (this._currentPopup) return // Prevent multiple popups
+
     let info = this._renderer.getEditor().getFileInfo()
 
     let data = {
@@ -313,7 +332,10 @@ class ZettlrBody {
     }
 
     let cnt = makeTemplate('popup', 'file-info', data)
-    return popup($('#toolbar .file-info'), cnt)
+    this._currentPopup = popup($('#toolbar .file-info'), cnt, () => {
+      this._currentPopup = null
+    })
+    return this._currentPopup
   }
 
   /**
@@ -366,12 +388,13 @@ class ZettlrBody {
     * @return {ZettlrBody}      Chainability.
     */
   displayExport (file) {
+    if (this._currentPopup) return this // Prevent multiple popups
     // Create a popup
 
     let cnt = makeTemplate('popup', 'export', { 'hash': file.hash })
     if (!cnt) return this
 
-    let p = popup($('.button.share'), cnt)
+    this._currentPopup = popup($('.button.share'), cnt)
 
     $('.btn-share').click((e) => {
       // The revealjs-button doesn't trigger an export, but the visibility
@@ -384,7 +407,8 @@ class ZettlrBody {
       let ext = $(e.target).attr('data-ext')
       let hash = $(e.target).attr('data-hash')
       global.ipc.send('export', { 'hash': hash, 'ext': ext })
-      p.close()
+      this._currentPopup.close()
+      this._currentPopup = null
     })
   }
 
@@ -502,6 +526,7 @@ class ZettlrBody {
    */
   displayStats (data) {
     if (this._currentDialog !== null) return // Only one dialog at a time
+    if (this._currentPopup) return // Prevent multiple instances
     let context = {
       'displaySum': (data.sumMonth > 99999) ? '>100k' : localiseNumber(data.sumMonth),
       'avgMonth': localiseNumber(data.avgMonth),
@@ -511,7 +536,7 @@ class ZettlrBody {
       'cmpAvgHalf': data.avgMonth / 2
     }
     let cnt = makeTemplate('popup', 'stats', context)
-    let p = popup($('#toolbar .stats'), cnt)
+    this._currentPopup = popup($('#toolbar .stats'), cnt)
     $('#more-stats').on('click', (e) => {
       // Theres no form but the user has clicked the more button
       this._currentDialog = new StatsDialog()
@@ -519,7 +544,8 @@ class ZettlrBody {
       this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
       // After opening the dialog, close the popup. The user probably doesn't
       // want to click twice to continue writing.
-      p.close()
+      this._currentPopup.close()
+      this._currentPopup = null
     })
   }
 
@@ -528,6 +554,7 @@ class ZettlrBody {
     * @return {void} Nothing to return.
     */
   displayFind () {
+    if (this._currentPopup) return
     if (this._renderer.getCurrentFile() === null) return
     let regexRE = /^\/.*\/[gimy]{0,4}$/ // It's meta, dude!
 
@@ -538,7 +565,7 @@ class ZettlrBody {
     })
 
     // This must be a persistent popup
-    popup($('.button.find'), cnt, (x) => {
+    this._currentPopup = popup($('.button.find'), cnt, (x) => {
       // Cache the current values.
       this._findPopup = {
         'searchVal': $('#searchWhat').val(),
@@ -546,6 +573,7 @@ class ZettlrBody {
       }
       // Remove search cursor once the popup is closed
       this._renderer.getEditor().stopSearch()
+      this._currentPopup = null
     }).makePersistent()
 
     // If a regular expression was restored to the find popup, make sure to set
@@ -599,8 +627,9 @@ class ZettlrBody {
     * Displays a popup containing all formattings
     */
   displayFormatting () {
+    if (this._currentPopup) return // Prevent multiple instances
     let cnt = makeTemplate('popup', 'format')
-    let p = popup($('.button.formatting'), cnt)
+    this._currentPopup = popup($('.button.formatting'), cnt)
 
     $('.formatting #header-formatting').on('mousemove', (e) => {
       let elem = $(e.target)
@@ -635,7 +664,8 @@ class ZettlrBody {
     $('.formatting a').click((e) => {
       $('.formatting span').removeClass('active')
       this._renderer.handleEvent('cm-command', e.target.className)
-      p.close()
+      this._currentPopup.close()
+      this._currentPopup = null
     })
   }
 
