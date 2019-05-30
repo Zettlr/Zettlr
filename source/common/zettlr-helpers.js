@@ -318,12 +318,13 @@ function isDir (p) {
  * @return {Boolean}   Returns true, if the path is an attachment, or false.
  */
 function isAttachment (p) {
-  if (!global.attachmentExtensions) {
+  let ext = global.config.get('attachmentExtensions')
+  if (!ext) {
     // Something went wrong on init. Hey ZettlrConfig, are you even there?
     return false
   }
 
-  return isFile(p) && global.attachmentExtensions.includes(path.extname(p))
+  return isFile(p) && ext.includes(path.extname(p).toLowerCase())
 }
 
 /**

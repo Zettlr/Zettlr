@@ -66,6 +66,7 @@
 - Fixed the placement of the popups, so they should now be visible.
 - Fixed the context menu on files that have visible tags.
 - Fixed wrong citation suggestions after a change of the library file.
+- Fixed a bug causing the attachment extensions to be checked case-sensitive, instead of case-insensitive.
 
 ## Under the Hood
 

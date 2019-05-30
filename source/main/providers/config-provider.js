@@ -182,10 +182,6 @@ class ConfigProvider extends EventEmitter {
       this._rules.push(new ZettlrValidation(key, rules[key]))
     }
 
-    // Put the attachment extensions into the global so that the helper
-    // function isAttachment() can grab them
-    global.attachmentExtensions = this.config.attachmentExtensions
-
     // Put a global setter and getter for config keys into the globals.
     global.config = {
       get: (key) => {
