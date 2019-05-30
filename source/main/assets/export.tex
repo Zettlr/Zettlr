@@ -2,11 +2,31 @@
 
 % We have to use KOMA classes (scrartcl instead of article and scrreprt instead of report as well as scrbook instead of book)
 % More info: https://ctan.org/pkg/koma-script?lang=de
-\documentclass[$FONT_SIZE$]{scrartcl}
+\documentclass[
+$FONT_SIZE$,
+$if(lang)$
+  $babel-lang$,
+$endif$
+]{scrartcl}
 
 % The following packages are needed for the combined use of Pandoc and XeTeX engine
 \usepackage{fontspec,xltxtra,xunicode}
-\usepackage[english]{babel}
+
+% These directives are necessary for Pandoc to correctly set the language of the
+% document. If the user uses XeLaTeX (the default for Zettlr), it will use
+% polyglossia, else it will use babel. We've simply copied that from the default
+% template -- thanks to the Pandoc community at this point!
+$if(lang)$
+\ifxetex
+  \usepackage{polyglossia}
+  \setmainlanguage[$polyglossia-lang.options$]{$polyglossia-lang.name$}
+$for(polyglossia-otherlangs)$
+  \setotherlanguage[$polyglossia-otherlangs.options$]{$polyglossia-otherlangs.name$}
+$endfor$
+\else
+  \usepackage[shorthands=off,$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
+\fi
+$endif$
 
 % Captions for tables and images
 \usepackage{caption}
