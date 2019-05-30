@@ -82,7 +82,7 @@ body {
   // The scrollbars are too bright using the default primary colour, so we have
   // to adapt them
   ::-webkit-scrollbar-thumb { background-color:@apricot; }
-  ::-webkit-scrollbar-thumb:window-inactive { background-color: white; }
+  ::-webkit-scrollbar-thumb:window-inactive { background-color: lighten(@apricot, 10%); }
 }
 
 body.dark {
