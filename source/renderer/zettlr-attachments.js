@@ -74,7 +74,12 @@ class ZettlrAttachments {
     } else {
       this._attachments = this._renderer.getCurrentDir().attachments
       for (let a of this._attachments) {
-        this._fileContainer.append($('<a>').text(a.name).attr('data-link', a.path).attr('data-hash', a.hash))
+        let link = $('<a>').text(a.name)
+          .attr('data-link', a.path)
+          .attr('data-hash', a.hash)
+          .attr('title', a.path) // Make sure the user can always see the full title
+          .attr('href', a.path) // Necessary for native drag&drop functionality
+        this._fileContainer.append(link)
       }
     }
   }
