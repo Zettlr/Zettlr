@@ -34,7 +34,7 @@
         "bcp-47": "^1.0.5",
         "chart.js": "^2.7.2",
         "chokidar": "^3.0.0",
-        "citeproc": "^2.2.1",
+        "citeproc": "^2.2.6",
         "clusterize.js": "^0.18.1",
         "codemirror": "^5.47.0",
         "command-exists": "^1.2.7",
@@ -46,17 +46,16 @@
         "nspell": "^2.1.1",
         "rimraf": "^2.6.3",
         "sanitize-filename": "^1.6.1",
-        "semver": "^6.1.0",
+        "semver": "^6.1.1",
         "showdown": "^1.8.6",
         "tippy.js": "^4.3.1",
-        "typo": "^1.0.6",
         "uuid": "^3.3.2"
     },
     "devDependencies": {
         "chalk": "^2.4.2",
         "csso": "^3.5.1",
         "electron": "^5.0.2",
-        "electron-builder": "^20.40.2",
+        "electron-builder": "^20.41.0",
         "handlebars": "^4.1.2",
         "less": "^3.9.0",
         "string-extract-class-names": "^5.8.21"
