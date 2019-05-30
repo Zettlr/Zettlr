@@ -38,6 +38,7 @@
 - The tag preferences have been updated.
 - CodeMirror by default sets the cursor to the beginning or end of a whole line (with line wrapping). You can now change that behaviour, so that the `Home` and `End` buttons bring you to the beginning and end of the _visible_ lines, not the logical lines.
 - Zettlr now counts completed pomodoros.
+- The image path of pictures pasted from clipboard will now always be relative.
 
 ### Fixes
 

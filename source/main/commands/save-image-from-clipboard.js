@@ -48,7 +48,6 @@ class SaveImage extends ZettlrCommand {
 
     // Do we store the image to a relative path?
     let isCwd = (target.mode === 'save-cwd')
-    let isRelativePath = false // Does the defaultPath contain a relative path?
     let currentFilePath = path.dirname(this._app.getCurrentFile().path)
 
     // Preset the default CWD path
@@ -56,18 +55,15 @@ class SaveImage extends ZettlrCommand {
 
     // Set default path to current file's dir, if the config path is empty.
     if (isCwd && defaultPath.trim() === '') {
-      isRelativePath = true // If we save it into the current file, we are indeed relative
       defaultPath = currentFilePath
     }
 
     // Did the user want to choose the directory for this one? Then let's ask him!
     if (target.mode === 'save-other') {
-      isRelativePath = false
       defaultPath = this._app.getWindow().askDir()[0] // We only take one directory
     }
 
     if (!path.isAbsolute(defaultPath)) {
-      isRelativePath = true
       // Resolve the path to an absolute one
       defaultPath = path.resolve(currentFilePath, defaultPath)
     }
@@ -104,11 +100,9 @@ class SaveImage extends ZettlrCommand {
 
     fs.writeFile(imagePath, image.toPNG(), (err) => {
       if (err) return global.ipc.notify(trans('system.error.could_not_save_image'))
-      let pathToInsert = imagePath
-      if (isRelativePath) {
-        // Insert a relative path instead of an absolute one
-        pathToInsert = path.relative(currentFilePath, imagePath)
-      }
+      // Insert a relative path instead of an absolute one
+      let pathToInsert = path.relative(currentFilePath, imagePath)
+
       // Everything worked out - now tell the editor to insert some text
       this._app.ipc.send('insert-text', `![${target.name}](${pathToInsert})\n`)
       // Tada!
