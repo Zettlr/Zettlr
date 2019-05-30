@@ -166,6 +166,7 @@
             "auto_dark_mode_system": "Suivre le syst\u00e8me d'exploitation",
             "checkForBeta": "Me pr\u00e9venir \u00e0 propos des versions b\u00eata",
             "choose_file": "Choisir un fichier\u2026",
+            "citation_database": "Fichier de r\u00e9f\u00e9rences bibliographiques (au format CSL JSON ou BibTex)",
             "combiner_collapsed": "\u00c9troit &mdash; Remontrer Preview ou Tree View",
             "combiner_expanded": "\u00c9largi &mdash; Remontrer Preview et Tree View",
             "combiner_explanation": "Affichage du panneau lat\u00e9ral",

@@ -159,6 +159,7 @@
             "auto_dark_mode_system": "Folge Betriebssystem",
             "checkForBeta": "Informiere mich \u00fcber Beta-Releases",
             "choose_file": "Datei w\u00e4hlen \u2026",
+            "citation_database": "Zitationsdatenbank (CSL JSON oder BibTex)",
             "combiner_collapsed": "Schmal &mdash; zeige entweder Preview oder Verzeichnisse",
             "combiner_expanded": "Erweitert &mdash; zeige sowohl Preview als auch Verzeichnisse",
             "combiner_explanation": "Modus der Seitenleiste",

@@ -159,6 +159,7 @@
             "auto_dark_mode_system": "Follow Operating System",
             "checkForBeta": "Notify me about beta releases",
             "choose_file": "Choose file \u2026",
+            "citation_database": "Citation Database (CSL JSON or BibTex)",
             "combiner_collapsed": "Thin &mdash; Show either preview or tree view",
             "combiner_expanded": "Extended &mdash; Show both preview and tree view",
             "combiner_explanation": "Sidebar mode",
