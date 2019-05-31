@@ -7,6 +7,7 @@
     },
     "dialog": {
         "about": {
+            "astrocite": "Enables Zettlr to display citations from BibTex libraries",
             "chartjs": "Displays your writing statistics in a nice chart",
             "chokidar": "Detects any changes you make to your files outside the app",
             "citationstyle": "Zettlr makes use of citeproc to display citations directly in the editor. To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:",
@@ -82,6 +83,7 @@
         },
         "preferences": {
             "advanced": "Advanced",
+            "always_reload_files": "Always load remote changes to the current file",
             "app_lang": {
                 "af-ZA": "Afrikaans (South Africa)",
                 "ar-AR": "Arabic",

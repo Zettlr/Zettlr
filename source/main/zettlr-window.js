@@ -346,6 +346,8 @@ class ZettlrWindow {
       type: 'question',
       title: trans('system.replace_file_title'),
       message: trans('system.replace_file_message'),
+      checkboxLabel: trans('dialog.preferences.always_reload_files'),
+      checkboxChecked: global.config.get('alwaysReloadFiles'),
       buttons: [
         trans('system.cancel'),
         trans('system.ok')

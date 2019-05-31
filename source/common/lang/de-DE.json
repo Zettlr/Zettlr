@@ -7,6 +7,7 @@
     },
     "dialog": {
         "about": {
+            "astrocite": "Erm\u00f6glicht Zettlr die Darstellung von Zitationen aus BibTex-Dateien",
             "chartjs": "Bereitet deine Schreibstatistiken grafisch auf",
             "chokidar": "Erkennt alle \u00c4nderung an den Dateien von au\u00dferhalb und stellt sie dar",
             "citationstyle": "Zettlr verwendet citeproc, um Zitationen direkt im Editor anzuzeigen. Hierzu verwendet Zettlr die CitationStyleLanguage (CSL) Sprachdateien sowie Stile. Die Dateien wurden unver\u00e4ndert mit Autorenangaben ausgeliefert. Weitere Informationen:",
@@ -82,6 +83,7 @@
         },
         "preferences": {
             "advanced": "Erweitert",
+            "always_reload_files": "Lade externe \u00c4nderungen an der aktuellen Datei automatisch",
             "app_lang": {
                 "af-ZA": "Afrikaans (S\u00fcdafrika)",
                 "ar-AR": "Arabisch",

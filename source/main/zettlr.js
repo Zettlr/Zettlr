@@ -163,16 +163,23 @@ class Zettlr {
               this.setCurrentFile(null) // Reset file
             } else if (isCurrentFile && (e === 'change') && changed) {
               // Current file has changed -> ask to replace and do
-              // as the user wishes)
-              this.getWindow().askReplaceFile((ret) => {
-                // ret can have three status: cancel = 0, save = 1, omit = 2.
-                // To keep up with semantics, the function "askSaveChanges" would
-                // naturally return "true" if the user wants to save changes and "false"
-                // - so how deal with "omit" changes?
-                // Well I don't want to create some constants so let's just leave it
-                // with these three values.
-                if (ret === 1) this.ipc.send('file-open', this.getCurrentFile().withContent())
-              })
+              // as the user wishes
+              if (global.config.get('alwaysReloadFiles')) {
+                this.ipc.send('file-open', this.getCurrentFile().withContent())
+              } else {
+                // The user did not check this option, so ask first
+                this.getWindow().askReplaceFile((ret, alwaysReload) => {
+                  // Set the corresponding config option
+                  global.config.set('alwaysReloadFiles', alwaysReload)
+                  // ret can have three status: cancel = 0, save = 1, omit = 2.
+                  // To keep up with semantics, the function "askSaveChanges" would
+                  // naturally return "true" if the user wants to save changes and "false"
+                  // - so how deal with "omit" changes?
+                  // Well I don't want to create some constants so let's just leave it
+                  // with these three values.
+                  if (ret === 1 || alwaysReload) this.ipc.send('file-open', this.getCurrentFile().withContent())
+                })
+              }
             } // end if current file changed
           } // end if is scope
         } // end for

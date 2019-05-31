@@ -49,6 +49,13 @@
             </label>
             <label for="hideDirs">{{i18n "dialog.preferences.hide_dirs"}}</label>
           </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="alwaysReloadFiles" value="yes" id="alwaysReloadFiles" {{#if alwaysReloadFiles}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="alwaysReloadFiles">{{i18n "dialog.preferences.always_reload_files"}}</label>
+          </div>
         </div>
         <div class="box-right">
           <p>

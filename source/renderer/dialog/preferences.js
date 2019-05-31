@@ -129,6 +129,7 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['darkTheme'] = (data.find(elem => elem.name === 'darkTheme') !== undefined)
     cfg['fileMeta'] = (data.find(elem => elem.name === 'fileMeta') !== undefined)
     cfg['hideDirs'] = (data.find(elem => elem.name === 'hideDirs') !== undefined)
+    cfg['alwaysReloadFiles'] = (data.find(elem => elem.name === 'alwaysReloadFiles') !== undefined)
     cfg['muteLines'] = (data.find(elem => elem.name === 'muteLines') !== undefined)
     cfg['export.stripIDs'] = (data.find(elem => elem.name === 'export.stripIDs') !== undefined)
     cfg['export.stripTags'] = (data.find(elem => elem.name === 'export.stripTags') !== undefined)

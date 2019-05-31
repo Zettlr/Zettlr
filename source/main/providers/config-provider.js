@@ -96,6 +96,7 @@ class ConfigProvider extends EventEmitter {
       'attachmentExtensions': COMMON_DATA.attachmentExtensions,
       // UI related options
       'darkTheme': false, // TODO DEPRECATED to be renamed to darkMode
+      'alwaysReloadFiles': false, // Should Zettlr automatically load remote changes?
       'autoDarkMode': 'off', // Possible values: 'off', 'system', 'schedule', 'auto'
       'autoDarkModeStart': '22:00', // Switch into dark mode at this time
       'autoDarkModeEnd': '06:00', // Switch to light mode at this time
