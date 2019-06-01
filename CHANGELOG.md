@@ -42,6 +42,7 @@
 - You can now drag & drop attachments onto the editor.
 - The full path to an attachment will now be shown on mouse over.
 - You can now turn off the dialog asking you to load remote changes into the editor by checking the corresponding checkbox in the preferences or in the dialog.
+- Zettlr now shows the full filename after a 1 second delay if you keep your mouse over the filename.
 
 ### Fixes
 

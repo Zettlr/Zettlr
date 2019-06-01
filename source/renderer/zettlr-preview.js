@@ -432,6 +432,44 @@ class ZettlrPreview {
       this._listContainer.find('.sorter').detach()
     })
 
+    /**
+     * Show the full note's filename after a second delay.
+     */
+    this._listContainer.on('mouseenter', '.filename', (e) => {
+      this._filenamePreviewTimeout = setTimeout(() => {
+        let x = e.target.getBoundingClientRect().left
+        let y = e.target.getBoundingClientRect().top
+
+        let title = $('<div class="file-title-preview">')
+        title.text(e.target.textContent)
+        title.css('top', y - 2).css('left', x - 2).css('position', 'absolute')
+        title.css('background-color', 'white').css('padding', '2px')
+        title.css('border-radius', '2px')
+        $('body').append(title)
+      }, 1000)
+    })
+
+    // Remove the note's filename from view after leaving the filename and the
+    // preview element.
+    this._listContainer.on('mouseleave', '.filename', (e) => {
+      if (this._filenamePreviewTimeout) {
+        clearTimeout(this._filenamePreviewTimeout)
+        this._filenamePreviewTimeout = null
+      }
+      if ($('.file-title-preview').length === 0) return // No element previewed currently
+      // Don't remove the preview if the mouse is currently hovering it.
+      let { top, left } = $('.file-title-preview').offset()
+      let width = $('.file-title-preview').outerWidth()
+      let height = $('.file-title-preview').outerHeight()
+      let { clientX, clientY } = e
+      if ((clientX > left && clientX < left + width) || (clientY > top && clientY < top + height)) return
+
+      $('.file-title-preview').detach()
+    })
+
+    // Listen for mouseleave events on the preview elements to remove them.
+    $('body').on('mouseleave', '.file-title-preview', (e) => { $('.file-title-preview').detach() })
+
     this._listContainer.on('click', '.taglist .tag', (e) => {
       // Initiate tag searches when the user clicks a tag.
       this._renderer.triggerGlobalSearch('#' + $(e.target).attr('data-tag'))
