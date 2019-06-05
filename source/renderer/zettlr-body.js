@@ -566,11 +566,6 @@ class ZettlrBody {
 
     // This must be a persistent popup
     this._currentPopup = popup($('.button.find'), cnt, (x) => {
-      // Cache the current values.
-      this._findPopup = {
-        'searchVal': $('#searchWhat').val(),
-        'replaceVal': $('#replaceWhat').val()
-      }
       // Remove search cursor once the popup is closed
       this._renderer.getEditor().stopSearch()
       this._currentPopup = null
@@ -586,6 +581,7 @@ class ZettlrBody {
     $('#searchWhat').select()
 
     $('#searchWhat').on('keyup', (e) => {
+      this._findPopup.searchVal = $('#searchWhat').val()
       if (regexRE.test($(e.target).val())) {
         $(e.target).addClass('regexp')
       } else {
@@ -598,6 +594,7 @@ class ZettlrBody {
     })
 
     $('#replaceWhat').on('keyup', (e) => {
+      this._findPopup.replaceVal = $('#replaceWhat').val()
       if (e.which === 13) { // Return
         e.preventDefault()
         if (e.altKey) {
