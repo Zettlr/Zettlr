@@ -128,6 +128,7 @@ class ZettlrBody {
     let href = $('link#theme-css').attr('href')
     href = href.replace(/bielefeld|berlin|frankfurt/, newTheme)
     $('link#theme-css').attr('href', href)
+    this._renderer.getEditor().refresh()
     this._currentTheme = newTheme
   }
 
