@@ -212,7 +212,7 @@ class ZettlrBody {
     if (!dir) return // No directory selected.
 
     // Prevent multiple popups
-    if (!this._currentPopup) return
+    if (this._currentPopup) this._currentPopup.close(true)
 
     let cnt = makeTemplate('popup', 'textfield', {
       'val': trans('dialog.dir_new.value'),
@@ -570,7 +570,7 @@ class ZettlrBody {
       // Remove search cursor once the popup is closed
       this._renderer.getEditor().stopSearch()
       this._currentPopup = null
-    }).makePersistent()
+    }) // .makePersistent()
 
     // If a regular expression was restored to the find popup, make sure to set
     // the respective class.
