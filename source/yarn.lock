@@ -171,10 +171,10 @@ chartjs-color@^2.1.0:
     chartjs-color-string "^0.6.0"
     color-convert "^0.5.3"
 
-chokidar@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.0.0.tgz#6b538f0fd6d5d31d5dd2b59e05426bec0f49aa40"
-  integrity sha512-ebzWopcacB2J19Jsb5RPtMrzmjUZ5VAQnsL0Ztrix3lswozHbiDp+1Lg3AWSKHdwsps/W2vtshA/x3I827F78g==
+chokidar@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.0.1.tgz#98fe9aa476c55d9aea7841d6325ffdb30e95b40c"
+  integrity sha512-2ww34sJWehnbpV0Q4k4V5Hh7juo7po6z7LUWkcIQnSGN1lHOL8GGtLtfwabKvLFQw/hbSUQ0u6V7OgGYgBzlkQ==
   dependencies:
     anymatch "^3.0.1"
     async-each "^1.0.3"
@@ -183,7 +183,7 @@ chokidar@^3.0.0:
     is-binary-path "^2.1.0"
     is-glob "^4.0.1"
     normalize-path "^3.0.0"
-    readdirp "^3.0.1"
+    readdirp "^3.0.2"
   optionalDependencies:
     fsevents "^2.0.6"
 
@@ -690,10 +690,10 @@ pump@^3.0.0:
     end-of-stream "^1.1.0"
     once "^1.3.1"
 
-readdirp@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/readdirp/-/readdirp-3.0.1.tgz#14a8875883c5575c235579624a1e177cb0b1ec58"
-  integrity sha512-emMp13NEwWQQX1yeDgrzDNCSY7NHV6k9HTW0OhyQqOAzYacbqQhnmWiCYjxNPcqMTQ9k77oXQJp28jkytm3+jg==
+readdirp@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/readdirp/-/readdirp-3.0.2.tgz#cba63348e9e42fc1bd334b1d2ef895b6a043cbd6"
+  integrity sha512-LbyJYv48eywrhOlScq16H/VkCiGKGPC2TpOdZCJ7QXnYEjn3NN/Oblh8QEU3vqfSRBB7OGvh5x45NKiVeNujIQ==
   dependencies:
     picomatch "^2.0.4"
 
@@ -798,10 +798,10 @@ strip-eof@^1.0.0:
   resolved "https://registry.yarnpkg.com/strip-eof/-/strip-eof-1.0.0.tgz#bb43ff5598a6eb05d89b59fcd129c983313606bf"
   integrity sha1-u0P/VZim6wXYm1n80SnJgzE2Br8=
 
-tippy.js@^4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-4.3.1.tgz#ea38fa7e1a2e3448ac35faa5115ccbb8414f50aa"
-  integrity sha512-H09joePakSu6eDSL1wj5LjEWwvpEELyJQlgsts4wVH7223t4DlyzGCaZNDO8/MQAnSuic4JhKpXtgzSYGlobvg==
+tippy.js@^4.3.3:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-4.3.3.tgz#396304bea577bbff03f2700a1761329e8c1fce86"
+  integrity sha512-2fPMlquzVQxpLoOd0eJA1sPZ86/R6zD/9985wV0d2zhhX52DiO3aeg7TTS/mBrUjgFwVZh19YLb4l2c8bJkQPw==
   dependencies:
     popper.js "^1.14.7"
 
