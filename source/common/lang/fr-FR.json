@@ -4,9 +4,9 @@
             "Nicolas Girard \u003Cgirard.nicolas@gmail.com\u003E",
             "Le Monolecte \u003Cmonolecte@gmail.com\u003E",
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E",
+            "free1fox",
             "metal3d",
             "ScaredCoward",
-            "free1fox",
             "Alexis M\u00e9taireau",
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
@@ -14,6 +14,7 @@
     },
     "dialog": {
         "about": {
+            "astrocite": "Permet \u00e0 Zettlr d'afficher des citations \u00e0 partir de bases BibTeX",
             "chartjs": "Affiche un graphique avec vos statistiques d'\u00e9criture",
             "chokidar": "D\u00e9tecte les changements apport\u00e9s aux fichiers par des programmes ext\u00e9rieurs",
             "citationstyle": "Zettlr a recours \u00e0 Citeproc pour afficher les citations et les r\u00e9f\u00e9rences bibliographiques directement dans l'\u00e9diteur. \u00c0 cet effet, Zettlr utilise des fichiers de directive au format CSL (Citation Style Language). Ces fichiers sont fournis tels quels, avec les coordonn\u00e9es des auteurs. Pour plus d'informations:",
@@ -27,7 +28,7 @@
             "lessjs": "Aide beaucoup \u00e0 \u00e9crire les styles pour Zettlr",
             "license": "Licence",
             "main": "Projets principaux",
-            "nspell": "Fournit \u00e0 Zettlr un correcteur orthographique",
+            "nspell": "Permet \u00e0 Zettlr de v\u00e9rifier l\u2019orthographe",
             "other_projects": "Zettlr utilise \u00e9galement ces logiciels tiers",
             "projects": "Logiciels tiers",
             "showdownjs": "Afficher le Changelog pour visualiser les changements apport\u00e9s par une mise \u00e0 jour",
@@ -89,6 +90,7 @@
         },
         "preferences": {
             "advanced": "Param\u00e8tres avanc\u00e9s",
+            "always_reload_files": "Toujours charger dans le fichier actuel les modifications effectu\u00e9es par un programme ext\u00e9rieur",
             "app_lang": {
                 "af-ZA": "Afrikaans (Afrique du Sud)",
                 "ar-AR": "Arabe",
@@ -189,11 +191,11 @@
             "export": {
                 "dest": "Dossier de destination pour les fichiers export\u00e9s. \u003Cem\u003EAttention\u003C/em\u003E les fichiers sont remplac\u00e9s si vous choisissez \u00ab dossier en cours \u00bb !",
                 "dest_cwd_label": "Dossier en cours, les fichiers sont export\u00e9s dans le dossier courant",
-                "dest_temp_label": "Dossier temporaire : vid\u00e9 r\u00e9guli\u00e8rement",
+                "dest_temp_label": "Dossier temporaire: vid\u00e9 r\u00e9guli\u00e8rement",
                 "strip_id_label": "Supprimer les IDs ZKN des fichiers",
                 "strip_links_full_label": "Supprimer tous les liens internes",
                 "strip_links_no_label": "Ne pas modifier les liens internes",
-                "strip_links_unlink_label": "Supprimer les crocher des liens internes",
+                "strip_links_unlink_label": "Supprimer les crochets des liens internes",
                 "strip_tags_label": "Supprimer les mot-cl\u00e9s dans les fichiers",
                 "stripping": "Param\u00e8tres pour les \u00e9l\u00e9ments Zettelkasten (ZKN)",
                 "title": "Exporter"
@@ -395,7 +397,7 @@
         "close_file": "Fermer le fichier",
         "copy": "Copier",
         "copy_html": "Copier en HTML",
-        "copy_id": "Copier ID",
+        "copy_id": "Copier l\u2019identifiant",
         "copy_link": "Copier le lien",
         "copy_mail": "Copier le courriel",
         "custom_css": "CSS Personnalis\u00e9\u2026",
