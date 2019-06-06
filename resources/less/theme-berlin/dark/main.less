@@ -5,6 +5,9 @@
 // CodeMirror scrollbar annotations
 .sb-annotation { background-color: @bg-annotation-dark; }
 
+::-webkit-scrollbar-thumb { background-color:@c-primary-shade; }
+::-webkit-scrollbar-thumb:window-inactive { background-color: darken(@c-primary-shade, 20%); }
+
 .dragger {
     color:white;
     background-color:@grey-6;

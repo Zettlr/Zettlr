@@ -77,15 +77,5 @@ body {
     ul li.directory, li.virtual-directory {
       color: @orange-1;
     }
-}
-
-  // The scrollbars are too bright using the default primary colour, so we have
-  // to adapt them
-  ::-webkit-scrollbar-thumb { background-color:@apricot; }
-  ::-webkit-scrollbar-thumb:window-inactive { background-color: lighten(@apricot, 10%); }
-}
-
-body.dark {
-  ::-webkit-scrollbar-thumb { background-color:@deep-orange; }
-  ::-webkit-scrollbar-thumb:window-inactive { background-color: @apricot; }
+  }
 }

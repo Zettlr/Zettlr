@@ -67,15 +67,3 @@
   font-family: @font-crimson;
   font-size: 1.5em;
 }
-
-body {
-  // The scrollbars are too bright using the default primary colour, so we have
-  // to adapt them
-  ::-webkit-scrollbar-thumb { background-color:@blue-0; }
-  ::-webkit-scrollbar-thumb:window-inactive { background-color: @blue-selection; }
-}
-
-body.dark {
-  ::-webkit-scrollbar-thumb { background-color:@blue-selection-dark; }
-  ::-webkit-scrollbar-thumb:window-inactive { background-color: @blue-selection; }
-}
