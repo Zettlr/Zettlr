@@ -1,3 +1,13 @@
+# (no version assigned)
+
+## GUI and Functionality
+
+(nothing here)
+
+## Under the Hood
+
+(nothing here)
+
 # 1.3.0
 
 ## GUI and Functionality
