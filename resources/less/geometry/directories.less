@@ -12,12 +12,6 @@
 
     &.hidden { left:-100%; }
 
-    // Direct descendants need some margin to the files and to other roots
-    /*& > ul:not(:first-child) {
-        padding-top:@ribbon-height/2;
-        padding-bottom:@ribbon-height/2;
-    }*/
-
     #directories-dirs-header, #directories-files-header {
       height: @ribbon-height;
       vertical-align: bottom;
@@ -100,6 +94,15 @@
         vertical-align: bottom;
         display:inline-block;
         position:relative;
+    }
+
+    .dead-directory:before {
+      content: '\f5d7';
+      font-family: @font-icon;
+      font-size: @font-size-small;
+      margin-right: 5px;
+      display: inline-block;
+      position: relative;
     }
 
     .emptyPaths {

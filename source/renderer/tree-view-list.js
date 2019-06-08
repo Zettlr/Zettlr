@@ -49,6 +49,7 @@ class TreeView {
     this._children = []
     this._target = null
     this._level = level
+    this._isActivated = false
 
     // Create the elements
     this._ul = $('<ul>').addClass('collapsed')
@@ -70,9 +71,6 @@ class TreeView {
     this._ul.append(this._dir)
     this._parent.getContainer().append(this._ul)
 
-    // Activate event listeners
-    this._act()
-
     // Add children etc.
     this.refresh()
   }
@@ -82,6 +80,9 @@ class TreeView {
     * @return {ListView} Chainability.
     */
   _act () {
+    if (this._isActivated) return // Don't activate twice
+    // If this is a dead directory, we don't need to do anything.
+    if (this._paths.type === 'dead-directory') return
     // Activate event listeners
     this._dir.on('click', () => { this._parent.requestDir(this.getHash()) })
 
@@ -143,6 +144,19 @@ class TreeView {
       this.toggleCollapse()
     })
 
+    this._isActivated = true
+    return this
+  }
+
+  /**
+   * Deactivates all events this directory listens to.
+   * @return {TreeView} This for chainability.
+   */
+  _deactivate () {
+    if (this._dir.droppable('instance')) this._dir.droppable('destroy')
+    if (this._dir.draggable('instance')) this._dir.draggable('destroy')
+    this._dir.off('click')
+    this._isActivated = false
     return this
   }
 
@@ -207,6 +221,20 @@ class TreeView {
     } else {
       this._dir.removeClass('project')
     }
+
+    // Remove a potential dead-directory indicator if applicable
+    if (this._dir.hasClass('dead-directory') && this._paths.type === 'directory') {
+      this._dir.removeClass('dead-directory').addClass('directory')
+    }
+
+    // Vice versa
+    if (this._dir.hasClass('directory') && this._paths.type === 'dead-directory') {
+      this._dir.removeClass('directory').addClass('dead-directory')
+      this._deactivate() // Deactivate the event handlers accordingly
+    }
+
+    // Activate event listeners
+    this._act()
 
     return this
   }

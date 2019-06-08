@@ -23,6 +23,7 @@ const ZettlrWindow = require('./zettlr-window.js')
 const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
 const ZettlrDir = require('./zettlr-dir.js')
 const ZettlrFile = require('./zettlr-file.js')
+const ZettlrDeadDir = require('./zettlr-dead-dir.js')
 const ZettlrWatchdog = require('./zettlr-watchdog.js')
 const ZettlrTargets = require('./zettlr-targets.js')
 const ZettlrStats = require('./zettlr-stats.js')
@@ -80,6 +81,14 @@ class Zettlr {
 
     this.ipc = new ZettlrIPC(this)
 
+    /**
+     * this is a refresh timeout that is used to only send one update every 100
+     * ms. During app boot, this will be used to make sure the path update will
+     * only be sent once everything has been loaded.
+     * @type {Number}
+     */
+    this._refreshTimeout = null
+
     // Initiate the watchdog
     this.watchdog = new ZettlrWatchdog()
 
@@ -89,26 +98,33 @@ class Zettlr {
     // Citeproc
     this._citeproc = new ZettlrCiteproc()
 
+    // Instantiate the writing targets
+    this._targets = new ZettlrTargets(this)
+
+    // Load in the Quicklook window handler class
+    this._ql = new ZettlrQLStandalone()
+
     // And the window.
     this.window = new ZettlrWindow(this)
     this.openWindow()
 
-    // We have to instantiate the writing target class BEFORE we load in any
-    // paths ...
-    this._targets = new ZettlrTargets(this)
+    process.nextTick(() => {
+      // Read all paths into the app
+      this.refreshPaths().then(() => {
+        console.log(`Paths loaded!`)
+        // If there are any, open argv-files
+        this.handleAddRoots(global.filesToOpen).then(() => {
+          console.log(`New roots added!`)
 
-    // Read all paths into the app
-    this.refreshPaths()
-
-    // If there are any, open argv-files
-    this.handleAddRoots(global.filesToOpen)
-
-    // ... but afterwards, we have to check the integrity to remove any remnants
-    // from previous files/folders.
-    this._targets.verify()
-
-    // Load in the Quicklook window handler class
-    this._ql = new ZettlrQLStandalone()
+          // Verify the integrity of the targets after all paths have been loaded
+          this._targets.verify()
+        }).catch((err) => {
+          console.error('Could not add additional roots!', err)
+        })
+      }).catch((err) => {
+        console.error(`Could not load paths!`, err)
+      })
+    })
 
     // Initiate regular polling
     setTimeout(() => {
@@ -157,6 +173,7 @@ class Zettlr {
           if (root.isScope(p) !== false) {
             let changed = root.handleEvent(p, e)
             let isCurrentFile = (this.getCurrentFile() && (hash(p) === this.getCurrentFile().hash))
+            let isCurrentDir = (this.getCurrentDir() && (hash(p) === this.getCurrentDir().hash))
             if (isCurrentFile && (e === 'unlink')) {
               // We need to close the file
               this.ipc.send('file-close')
@@ -180,6 +197,10 @@ class Zettlr {
                   if (ret === 1 || alwaysReload) this.ipc.send('file-open', this.getCurrentFile().withContent())
                 })
               }
+            } else if (isCurrentDir && (e === 'unlinkDir') && root.isScope(p) === root) {
+              // The root has been removed
+              this.makeDead(this.getCurrentDir())
+              this.setCurrentDir(null) // Remove current directory
             } // end if current file changed
           } // end if is scope
         } // end for
@@ -334,7 +355,7 @@ class Zettlr {
     let obj = this.findDir({ 'hash': parseInt(arg) })
 
     // Now send it back (the GUI should by itself filter out the files)
-    if (obj != null && obj.isDirectory()) {
+    if (obj != null && obj.isDirectory() && obj.type !== 'dead-directory') {
       this.setCurrentDir(obj)
     } else {
       this.window.prompt({
@@ -379,7 +400,7 @@ class Zettlr {
     * to the app.
     * @param  {Array} filelist An array of absolute paths
     */
-  handleAddRoots (filelist) {
+  async handleAddRoots (filelist) {
     // As long as it's not a forbidden file or ignored directory, add it.
     let newFile, newDir
     for (let f of filelist) {
@@ -395,9 +416,11 @@ class Zettlr {
       } else if (global.config.addPath(f)) {
         if (isFile(f)) {
           newFile = new ZettlrFile(this, f)
+          await newFile.scan() // Asynchronously scan file contents
           this._openPaths.push(newFile)
         } else {
           newDir = new ZettlrDir(this, f)
+          await newDir.scan() // Asynchronously pull in the directory tree
           this._openPaths.push(newDir)
         }
       } else {
@@ -418,6 +441,19 @@ class Zettlr {
    * @return {void}      No return.
    */
   openQL (hash) { this._ql.openQuicklook(this.findFile({ 'hash': hash })) }
+
+  /**
+   * In case a root directory gets removed, indicate that fact by marking it
+   * dead.
+   * @param  {ZettlrDir} dir The dir to be removed
+   * @return {void}     No return.
+   */
+  makeDead (dir) {
+    let p = this.getPaths()
+    for (let i = 0; i < p.length; i++) {
+      if (p[i] === dir) p[i] = new ZettlrDeadDir(this, dir.path)
+    }
+  }
 
   /****************************************************************************
    **                                                                        **
@@ -444,18 +480,37 @@ class Zettlr {
 
   /**
     * Reloads the complete directory tree.
-    * @return {void} This function does not return anything.
+    * @return {Promise} Resolved after the paths have been re-read
     */
-  refreshPaths () {
+  async refreshPaths () {
+    console.log(`Performing path refresh ...`)
     this._openPaths = []
     // Reload all opened files, garbage collect will get the old ones.
     for (let p of global.config.get('openPaths')) {
       if (isFile(p)) {
-        this._openPaths.push(new ZettlrFile(this, p))
+        console.log(`Loading file ${p} ...`)
+        let file = new ZettlrFile(this, p)
+        await file.scan()
+        console.log(`File loaded!`)
+        this._openPaths.push(file)
       } else if (isDir(p)) {
-        this._openPaths.push(new ZettlrDir(this, p))
+        console.log(`Loading directory ${p} ...`)
+        let dir = new ZettlrDir(this, p)
+        await dir.scan()
+        console.log(`Directory loaded!`)
+        this._openPaths.push(dir)
+      } else if (path.extname(p) === '') {
+        // It's not a file (-> no extension) but it could not be found ->
+        // mark it as "dead"
+        this._openPaths.push(new ZettlrDeadDir(this, p))
       }
     }
+
+    // Now send an update containing all paths, because these need to be present
+    // in the renderer for the following setting of current dirs and files.
+    this.ipc.send('paths-update', this.getPathDummies())
+
+    console.log(`Setting current file/dir ...`)
 
     // Set the pointers either to null or last opened dir/file
     let lastDir = this.findDir({ 'hash': parseInt(global.config.get('lastDir')) })
@@ -463,11 +518,14 @@ class Zettlr {
     this.setCurrentDir(lastDir)
     this.setCurrentFile(lastFile)
 
+    console.log(`Done!`)
+
     // Also add the last file to the list of recent documents.
     if (lastFile !== null) global.recentDocs.add(lastFile.getMetadata())
 
     // Preset the window's title with the current file, if applicable
     this.window.fileUpdate()
+    console.log(`Paths refreshed!`)
   }
 
   /**

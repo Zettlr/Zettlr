@@ -92,8 +92,6 @@ class ZettlrPreview {
 
     this._gen() // Generate all tags
     this._list.update(this._tags)
-    // Afterwards, update the draggables
-    this._updateDraggable()
 
     // If there is no file selected we are done
     if (!this._selectedFile) return this

@@ -175,6 +175,8 @@ class ZettlrCon {
         }
 
         if (elem.hasClass('directory')) scopes.push('directory')
+        if (elem.hasClass('virtual-directory')) scopes.push('virtual-directory')
+        if (elem.hasClass('dead-directory')) scopes.push('dead-directory')
 
         if (elem.hasClass('root')) scopes.push('root')
         menupath = 'directories_directory.json'

@@ -79,9 +79,9 @@ class ZettlrDir {
     }
 
     // Load default files and folders
-    this.scan()
+    // this.scan()
     // Load virtual directories initially (if existent)
-    this.loadVirtualDirectories()
+    // this.loadVirtualDirectories()
 
     if (this.isRoot()) {
       // We have to add our dir to the watchdog
@@ -110,11 +110,16 @@ class ZettlrDir {
     * @return {Boolean}   Whether the event actually caused a change.
     */
   handleEvent (p, e) {
-    if ((this.isScope(p) === this) && (e === 'unlinkDir')) {
+    if ((this.isScope(p) === this) && (e === 'unlinkDir') && !this.isRoot()) {
       // This directory has been removed. Notify host process and remove.
       this.parent.notifyChange(trans('system.directory_removed', this.name))
       this.remove()
       return true
+    } else if ((this.isScope(p) === this) && (e === 'unlinkDir') && this.isRoot()) {
+      // A root directory has been removed, so indicate that fact by replacing
+      // this directory with a dead link.
+      this.parent.makeDead(this)
+      return true // Something has changed, so return true
     } else if (this.isScope(p) === true) {
       if ((path.dirname(p) === this.path) && (e === 'add' || e === 'addDir')) {
         // A new dir or a new file has been created here. Re-Scan.
@@ -372,9 +377,6 @@ class ZettlrDir {
     // Re-read
     this.scan()
 
-    // And again set up the interface with the new path
-    this.loadVirtualDirectories()
-
     // Chainability
     return this
   }
@@ -406,20 +408,37 @@ class ZettlrDir {
   /**
     * Scans the directory and adds all children that match the criteria (e.g.
     * dir or file permitted by filetypes)
-    * @return {ZettlrDir} This for chainability.
+    * @return {Promise} Resolve on successful loading
     */
-  scan () {
+  async scan () {
     // (Re-)Reads this directory.
-    try {
-      fs.lstatSync(this.path)
-    } catch (e) {
-      // Do not create directories here, only read.
-      return
-    }
 
-    // (Re-)read the directory
-    let files = fs.readdirSync(this.path)
+    return new Promise((resolve, reject) => {
+      try {
+        fs.lstatSync(this.path)
+      } catch (e) {
+        // Do not create directories here, only read.
+        resolve()
+      }
 
+      // (Re-)read the directory
+      fs.readdir(this.path, (err, files) => {
+        if (err) reject(err)
+        this.parseDirectoryContents(files).then(() => {
+          this.loadVirtualDirectories() // Also load virtual directories
+          resolve()
+        })
+      })
+    })
+  }
+
+  /**
+   * Parses the contents of the directory and fills it up with children as
+   * appropriate.
+   * @param  {Array}  files An array of all files and folders found in the dir.
+   * @return {Promise}       Resolves after the tree has been parsed recursively.
+   */
+  async parseDirectoryContents (files) {
     // Convert to absolute paths
     for (let i = 0; i < files.length; i++) {
       files[i] = path.join(this.path, files[i])
@@ -460,9 +479,13 @@ class ZettlrDir {
       } else {
         // Otherwise create new
         if (isFile(f) && !ignoreFile(f)) {
-          nChildren.push(new ZettlrFile(this, f))
+          let file = new ZettlrFile(this, f)
+          await file.scan() // Asynchronously parse the file
+          nChildren.push(file)
         } else if (isDir(f) && !ignoreDir(f)) {
-          nChildren.push(new ZettlrDir(this, f))
+          let dir = new ZettlrDir(this, f)
+          await dir.scan() // Asynchronously parse the directory
+          nChildren.push(dir)
         } else if (isAttachment(f)) {
           nAttachments.push(new ZettlrAttachment(this, f))
         }
@@ -491,8 +514,6 @@ class ZettlrDir {
       // We can reuse the function here.
       this.makeProject()
     }
-
-    return this
   }
 
   /**
@@ -622,7 +643,7 @@ class ZettlrDir {
       // assume hash
       obj.hash = obj
     } else if (obj.hasOwnProperty('path')) {
-      prop = 'path;'
+      prop = 'path'
     } else if (obj.hasOwnProperty('name')) {
       prop = 'name'
     } else if (obj.hasOwnProperty('hash')) {

@@ -69,8 +69,6 @@ class ZettlrFile {
       fs.writeFileSync(this.path, '', { encoding: 'utf8' })
     }
 
-    this.read()
-
     if (this.isRoot()) {
       // We have to add our file to the watchdog
       global.watchdog.addPath(this.path)
@@ -134,13 +132,39 @@ class ZettlrFile {
     let stat = fs.lstatSync(this.path)
     this.modtime = stat.mtime.getTime()
 
+    // (Re-)read content of file
+    let cnt = fs.readFileSync(this.path, { encoding: 'utf8' })
+
+    return this._parseFileContents(options, cnt)
+  }
+
+  /**
+   * Asynchronously scans the file's contents to not interrupt loading of the app.
+   * @return {void} Does not return.
+   */
+  scan () {
+    let stat = fs.lstatSync(this.path)
+    this.modtime = stat.mtime.getTime()
+
+    fs.readFile(this.path, { encoding: 'utf8' }, (err, content) => {
+      if (err) console.error(err)
+      this._parseFileContents({}, content)
+    })
+  }
+
+  /**
+   * Parses the file's contents and saves the results to the internal variables.
+   * @param  {Object} options Optional options (such as to revert the image paths to absolute)
+   * @param  {String} cnt     The file's content
+   * @return {String}         The file's content, potentially altered.
+   */
+  _parseFileContents (options, cnt) {
     // Get the ID regex from the config
     let idStr = global.config.get('zkn.idRE')
     // Make sure the ID definitely has at least one capturing group to not produce
     // errors.
-    if (!/\(.+?\)/.test(idStr)) {
-      idStr = `(${idStr})`
-    }
+    if (!/\(.+?\)/.test(idStr)) idStr = `(${idStr})`
+
     let idRE = new RegExp(idStr, 'g')
     let linkStart = global.config.get('zkn.linkStart')
     let linkEnd = global.config.get('zkn.linkEnd')
@@ -151,9 +175,6 @@ class ZettlrFile {
     // string.
     let tagRE = /(?<= |\n|^)#(#?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?)/g
     let match
-    // (Re-)read content of file
-    let cnt = fs.readFileSync(this.path, { encoding: 'utf8' })
-
     // Get the word and character count
     this.wordCount = countWords(cnt)
     this.charCount = cnt.length
@@ -231,7 +252,7 @@ class ZettlrFile {
     */
   update () {
     // The file has changed remotely -> re-read
-    this.read()
+    this.scan()
 
     return this
   }

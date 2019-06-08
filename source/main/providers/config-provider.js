@@ -351,6 +351,7 @@ class ConfigProvider extends EventEmitter {
     * @return {void} Nothing to return.
     */
   checkPaths () {
+    /*
     for (let i = 0; i < this.config['openPaths'].length; i++) {
       try {
         fs.lstatSync(this.config['openPaths'][i])
@@ -360,6 +361,7 @@ class ConfigProvider extends EventEmitter {
         --i
       }
     }
+    */
 
     // Remove duplicates
     this.config['openPaths'] = [...new Set(this.config['openPaths'])]

@@ -86,11 +86,14 @@ class ZettlrRenderer {
     // first tick of the renderer event loop, because at this early stage (init
     // is called right after the DOM has loaded) the ipc is not yet ready. This
     // short delay gives us the time the IPC needs to get ready.
-    setTimeout(() => { this.configChange() }, 10) // 10ms should suffice - the number is irrelevant. The important part is that it's out of the first tick of the app.
 
     // Requesting the CSS file path obviously also needs to be out of the first
     // tick.
     setTimeout(() => {
+      // 10ms should suffice - the number is irrelevant. The important part is
+      // that it's out of the first tick of the app.
+      this.configChange()
+
       // Apply the custom CSS stylesheet to the head element
       global.ipc.send('get-custom-css-path', {}, (ret) => {
         let lnk = $('<link>').attr('rel', 'stylesheet')
@@ -99,24 +102,24 @@ class ZettlrRenderer {
         lnk.attr('id', 'custom-css-link')
         $('head').first().append(lnk)
       })
-    }, 10)
 
-    // Receive an initial list of tags to display in the preview list
-    this._ipc.send('get-tags')
-    // Additionally, request the full database of already existing tags inside files.
-    this._ipc.send('get-tags-database')
+      // Receive an initial list of tags to display in the preview list
+      this._ipc.send('get-tags')
+      // Additionally, request the full database of already existing tags inside files.
+      this._ipc.send('get-tags-database')
 
-    // Request a first batch of files
-    this._ipc.send('get-paths', {})
+      // Request a first batch of files
+      this._ipc.send('get-paths')
 
-    // Send an initial request to the reference database.
-    this._ipc.send('citeproc-get-ids')
+      // Send an initial request to the reference database.
+      this._ipc.send('citeproc-get-ids')
+
+      // Send an initial check for an update
+      this._ipc.send('update-check')
+    }, 100)
 
     // Here we can init actions and stuff to be done after the startup has finished
     setTimeout(() => { this.poll() }, POLL_TIME) // Poll every POLL_TIME seconds
-
-    // Send an initial check for an update
-    this._ipc.send('update-check')
   }
 
   /**

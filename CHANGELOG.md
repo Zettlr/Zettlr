@@ -2,11 +2,12 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- The app will boot much faster now.
+- Root directories that have not been found on app start, or are removed during runtime, are indicated as "dead" in your directory tree. If they reside on a removable medium, you can now simply plug the medium into the computer and rescan the directory. You don't have to manually open it anymore.
 
 ## Under the Hood
 
-(nothing here)
+- Massive rewrite of the underlying mechanism of loading the directory trees into the app. It's now asynchronous and the app starts up way faster than before.
 
 # 1.3.0
 

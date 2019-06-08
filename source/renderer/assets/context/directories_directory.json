@@ -1,11 +1,28 @@
 [
   {
+    "scope": "directory",
     "label": "menu.rename_dir",
     "command": "dir-rename"
   },
   {
+    "scope": "directory",
     "label": "menu.delete_dir",
     "command": "dir-delete"
+  },
+  {
+    "scope": "virtual-directory",
+    "label": "menu.rename_dir",
+    "command": "dir-rename"
+  },
+  {
+    "scope": "virtual-directory",
+    "label": "menu.delete_dir",
+    "command": "dir-delete"
+  },
+  {
+    "scope": "dead-directory",
+    "label": "menu.rescan_dir",
+    "command": "dir-rescan"
   },
   {
     "type": "separator"

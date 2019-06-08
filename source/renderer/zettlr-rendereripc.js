@@ -318,6 +318,11 @@ class ZettlrRendererIPC {
         this.send('dir-project-export', cnt)
         break
 
+      // Emanates from the context menu, so simply send it to main
+      case 'dir-rescan':
+        this.send(cmd, cnt)
+        break
+
       case 'root-close':
         this.send('close-root', cnt.hash)
         break
