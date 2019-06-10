@@ -1147,9 +1147,8 @@ class ZettlrEditor {
     elements.each((index, elem) => {
       elem = $(elem)
       if (elem.attr('data-rendered') !== 'yes') {
-        let item = elem.attr('data-citeproc-cite-item')
+        let item = elem.text()
         let id = hash(item)
-        item = JSON.parse(item)
         if (this._citationBuffer[id] !== undefined) {
           elem.html(this._citationBuffer[id]).removeClass('error').attr('data-rendered', 'yes')
           needRefresh = true

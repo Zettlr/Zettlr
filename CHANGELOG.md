@@ -9,6 +9,7 @@
 ## Under the Hood
 
 - Massive rewrite of the underlying mechanism of loading the directory trees into the app. It's now asynchronous and the app starts up way faster than before.
+- Replaced the citation engine with `Citr` for more accurate results in previewing citations.
 
 # 1.3.0
 

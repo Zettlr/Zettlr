@@ -112,8 +112,8 @@ class ZettlrRendererIPC {
     // Sends an array of IDs to main. If they are found in the JSON, cool! Otherwise
     // this will return false.
     global.citeproc = {
-      getCitation: (idList) => { return ipc.sendSync('getCitation', idList) },
-      updateItems: (idList) => { return ipc.sendSync('updateItems', idList) },
+      getCitation: (citation) => { return ipc.sendSync('getCitation', citation) },
+      updateItems: (keyList) => { return ipc.sendSync('updateItems', keyList) },
       makeBibliography: () => { this.send('citeproc-make-bibliography') }
     }
 

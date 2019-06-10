@@ -43,8 +43,8 @@ class ZettlrIPC {
     })
 
     // Citeproc calls (either single citation or a whole cluster)
-    ipc.on('getCitation', (event, idList) => { event.returnValue = global.citeproc.getCitation(idList) })
-    ipc.on('updateItems', (event, idList) => { event.returnValue = global.citeproc.updateItems(idList) })
+    ipc.on('getCitation', (event, citation) => { event.returnValue = global.citeproc.getCitation(citation) })
+    ipc.on('updateItems', (event, keyList) => { event.returnValue = global.citeproc.updateItems(keyList) })
 
     // Beginn listening to messages
     ipc.on('message', (event, arg) => {

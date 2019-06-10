@@ -1,24 +1,25 @@
 /* global */
 /**
-* @ignore
-* BEGIN HEADER
-*
-* Contains:        ZettlrCiteproc
-* CVM-Role:        Model
-* Maintainer:      Hendrik Erz
-* License:         GNU GPL v3
-*
-* Description:     This class represents an interface between the citeproc-js
-*                  library, a Zotero generated BibLaTeX file (ideally in CSL
-*                  JSON) and your texts in Markdown. This class is therefore
-*                  conceptualised as a model, because it models a whole
-*                  database.
-*
-* END HEADER
-*/
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:    ZettlrCiteproc
+ * CVM-Role:    Model
+ * Maintainer:  Hendrik Erz
+ * License:     GNU GPL v3
+ *
+ * Description:     This class represents an interface between the citeproc-js
+ *      library, a Zotero generated BibLaTeX file (ideally in CSL
+ *      JSON) and your texts in Markdown. This class is therefore
+ *      conceptualised as a model, because it models a whole
+ *      database.
+ *
+ * END HEADER
+ */
 
 const citeproc = require('citeproc')
 const chokidar = require('chokidar') // We'll just use the one-liner to watch the library file.
+const Citr = require('@zettlr/citr') // Parse the citations from the renderer
 const fs = require('fs')
 const path = require('path')
 const { trans } = require('../common/lang/i18n.js')
@@ -149,7 +150,7 @@ class ZettlrCiteproc {
   /**
    * Parses the JSON data into the internal array. Afterwards, calls _initProcessor()
    * @param  {JSON} cslData The data to be parsed.
-   * @return {void}         Does not return.
+   * @return {void}     Does not return.
    */
   _parse (cslData) {
     try {
@@ -204,7 +205,7 @@ class ZettlrCiteproc {
   _loadIdHint () {
     // Now create the array that can be used by the editor's autocomplete
     this._idHint = Object.keys(this._ids).map((key) => {
-      let dt = this.getCitation([{ 'id': key }]).replace(/[()]|<i>|<\/i>/g, '') // Remove the braces
+      let dt = this.getCitation(`[@${key}]`).replace(/[()]|<i>|<\/i>/g, '') // Remove the braces
       let title = this._sys.retrieveItem(key).title
 
       // Add the title if it hasn't been assumed the author by the citeproc engine
@@ -229,7 +230,7 @@ class ZettlrCiteproc {
    * Reads in a language XML file and returns either its contents, or false (in
    * which case the engine will fall back some times until it ends with en-US)
    * @param  {string} lang The language to be loaded.
-   * @return {Mixed}      Either the contents of the XML file, or false.
+   * @return {Mixed}  Either the contents of the XML file, or false.
    */
   _getLocale (lang) {
     // Takes a lang in the format xx-XX and has to return the corresponding XML
@@ -249,7 +250,7 @@ class ZettlrCiteproc {
    * passed to the engine. See https://citeproc-js.readthedocs.io/en/latest/csl-json/markup.html
    * for all possible variants of legitimate input into the engine.
    * @param  {Array} list An array containing a list of unsanitised IDs.
-   * @return {Array}      The sanitised array, with which it is safe to call the engine
+   * @return {Array}  The sanitised array, with which it is safe to call the engine
    */
   _sanitiseItemList (list) {
     if (!Array.isArray(list)) list = [list] // Assume single ID
@@ -302,15 +303,22 @@ class ZettlrCiteproc {
 
   /**
    * Takes IDs as set in Zotero and returns Author-Date citations for them.
-   * @param  {Array} citeIDs Array containing the IDs to be returned
-   * @return {String}         The rendered string
+   * @param  {String} citation Array containing the IDs to be returned
+   * @return {String}     The rendered string
    */
-  getCitation (citeIDs) {
+  getCitation (citation) {
     if (this._status !== READY) return undefined // Don't try to access the engine before loaded
-    citeIDs = this._sanitiseItemList(citeIDs)
-    if (citeIDs.length === 0) return undefined // Nothing to render
+    let citations
     try {
-      return this._engine.makeCitationCluster(citeIDs)
+      citations = Citr.parseSingle(citation)
+    } catch (err) {
+      return undefined
+    }
+
+    citations = this._sanitiseItemList(citations)
+    if (citations.length === 0) return undefined // Nothing to render
+    try {
+      return this._engine.makeCitationCluster(citations)
     } catch (e) {
       console.error(e)
       return undefined
@@ -320,14 +328,19 @@ class ZettlrCiteproc {
   /**
    * Updates the items that the engine uses for bibliographies. Must be called
    * prior to makeBibliography()
-   * @param  {Array} idList An unsanitised array of items to be cited.
-   * @return {Boolean}        An indicator whether or not the call succeeded and the registry has been updated.
+   * @param  {Array} citations A list of IDs
+   * @return {Boolean}    An indicator whether or not the call succeeded and the registry has been updated.
    */
-  updateItems (idList) {
+  updateItems (citations) {
     if (this._status !== READY) return this._status // Don't try to access the engine before loaded
     try {
-      idList = this._sanitiseItemList(idList)
-      this._engine.updateItems(idList)
+      let passed = []
+      for (let i = 0; i < citations.length; i++) {
+        if (Citr.util.validateCitationID(citations[i])) {
+          passed.push(citations[i])
+        }
+      }
+      this._engine.updateItems(this._sanitiseItemList(passed))
       return true
     } catch (e) {
       console.log(e)

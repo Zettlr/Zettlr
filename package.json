@@ -29,6 +29,7 @@
         "lang:refresh": "node scripts/refresh-language.js"
     },
     "dependencies": {
+        "@zettlr/citr": "^1.0.0",
         "adm-zip": "^0.4.13",
         "astrocite": "^0.14.0",
         "bcp-47": "^1.0.5",
