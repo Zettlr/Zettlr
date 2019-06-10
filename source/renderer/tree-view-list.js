@@ -96,7 +96,7 @@ class TreeView {
         },
         'revert': 'invalid', // Only revert if target was invalid
         'revertDuration': 200,
-        'distance': 5
+        'distance': 10
       })
     }
     // Also make droppable

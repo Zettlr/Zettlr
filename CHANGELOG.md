@@ -4,6 +4,7 @@
 
 - The app will boot much faster now.
 - Root directories that have not been found on app start, or are removed during runtime, are indicated as "dead" in your directory tree. If they reside on a removable medium, you can now simply plug the medium into the computer and rescan the directory. You don't have to manually open it anymore.
+- Decreased the sensitivity for when a drag event should start, so that accidental drags are prevented.
 
 ## Under the Hood
 

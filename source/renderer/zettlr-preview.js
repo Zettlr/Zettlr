@@ -268,7 +268,7 @@ class ZettlrPreview {
       },
       'revert': 'invalid', // Only revert if target was invalid
       'revertDuration': 200,
-      'distance': 5,
+      'distance': 10,
       // Tell jQuery to update the draggable & droppable positions on each
       // mousemove. This is necessary for the compact view as the two containers
       // will swap shortly after drag begins, so the positions of the droppables
