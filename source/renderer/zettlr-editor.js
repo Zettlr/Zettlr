@@ -324,6 +324,16 @@ class ZettlrEditor {
       if (this._cm.getOption('fullScreen') && this._mute) {
         this._muteLines()
       }
+
+      // Additionally, render all citations that may have been newly added to
+      // the DOM by CodeMirror.
+      this.renderCitations()
+    })
+
+    // We need to update citations also on updates, as this is the moment when
+    // new spans get added to the DOM which we might have to render.
+    this._cm.on('update', (cm) => {
+      this.renderCitations()
     })
 
     this._cm.on('drop', (cm, event) => {
@@ -708,10 +718,8 @@ class ZettlrEditor {
     * @return {void}      Nothing to return.
     */
   replaceWord (word) {
-    if (!this._cm.somethingSelected()) {
-      // We obviously need a selection to replace
-      return
-    }
+    // We obviously need a selection to replace
+    if (!this._cm.somethingSelected()) return
 
     // Replace word and select new word
     this._cm.replaceSelection(word, 'around')
@@ -1100,49 +1108,11 @@ class ZettlrEditor {
   }
 
   /**
-   * This method updates both the in-text citations as well as the bibliography.
+   * Renders all citations that haven't been rendered yet.
    * @return {void} Does not return.
    */
-  updateCitations () {
-    // This function searches for all elements with class .citeproc-citation and
-    // updates the contents of these elements based upon the ID.
-
-    // NEVER use jQuery to always query all citeproc-citations, because CodeMirror
-    // does NOT always print them! We have to manually go through the value of
-    // the code ...
-    let cnt = this._cm.getValue()
-    let totalIDs = Object.create(null)
-    let match
-    let citeprocIDRE = /@([a-z0-9_:.#$%&\-+?<>~/]+)/gi
-    let somethingUpdated = false // This flag indicates if anything has changed and justifies a new bibliography.
-    let needRefresh = false // Do we need to refresh CodeMirror?
-    while ((match = citeprocIDRE.exec(cnt)) != null) {
-      let id = match[1]
-      totalIDs[id] = this._lastKnownCitationCluster[id] // Could be undefined.
-    }
-
-    // Now we have the correct amount of IDs in our cluster. Now fetch all
-    // citations of new ones.
-    for (let id in totalIDs) {
-      if (totalIDs[id] === undefined) {
-        totalIDs[id] = true
-        somethingUpdated = true // We have to fetch a new citation
-      }
-    }
-
-    // Check if there are some citations _missing_ from the new array
-    for (let id in this._lastKnownCitationCluster) {
-      if (totalIDs[id] === undefined) {
-        somethingUpdated = true // We only need one entry to justify an update
-        break
-      }
-    }
-
-    // Swap
-    this._lastKnownCitationCluster = totalIDs
-
-    // Now everything is set -> Go through all rendered spans and update if
-    // necessary
+  renderCitations () {
+    let needRefresh = false
     let elements = $('.CodeMirror .citeproc-citation')
     elements.each((index, elem) => {
       elem = $(elem)
@@ -1171,6 +1141,52 @@ class ZettlrEditor {
       }
     })
 
+    // We need to refresh the editor, because the updating process has certainly
+    // altered the widths of the spans.
+    if (needRefresh) this._cm.refresh()
+  }
+
+  /**
+   * This method updates both the in-text citations as well as the bibliography.
+   * @return {void} Does not return.
+   */
+  updateCitations () {
+    // This function searches for all elements with class .citeproc-citation and
+    // updates the contents of these elements based upon the ID.
+
+    // NEVER use jQuery to always query all citeproc-citations, because CodeMirror
+    // does NOT always print them! We have to manually go through the value of
+    // the code ...
+    let cnt = this._cm.getValue()
+    let totalIDs = Object.create(null)
+    let match
+    let citeprocIDRE = /@([a-z0-9_:.#$%&\-+?<>~/]+)/gi
+    let somethingUpdated = false // This flag indicates if anything has changed and justifies a new bibliography.
+    while ((match = citeprocIDRE.exec(cnt)) != null) {
+      let id = match[1]
+      totalIDs[id] = this._lastKnownCitationCluster[id] // Could be undefined.
+    }
+
+    // Now we have the correct amount of IDs in our cluster. Now fetch all
+    // citations of new ones.
+    for (let id in totalIDs) {
+      if (totalIDs[id] === undefined) {
+        totalIDs[id] = true
+        somethingUpdated = true // We have to fetch a new citation
+      }
+    }
+
+    // Check if there are some citations _missing_ from the new array
+    for (let id in this._lastKnownCitationCluster) {
+      if (totalIDs[id] === undefined) {
+        somethingUpdated = true // We only need one entry to justify an update
+        break
+      }
+    }
+
+    // Swap
+    this._lastKnownCitationCluster = totalIDs
+
     if (Object.keys(this._lastKnownCitationCluster).length === 0) {
       return this._renderer.setBibliography(trans('gui.citeproc.references_none'))
     }
@@ -1191,10 +1207,6 @@ class ZettlrEditor {
         this._renderer.setBibliography(trans('gui.citeproc.no_db'))
       }
     }
-
-    // We need to refresh the editor, because the updating process has certainly
-    // altered the widths of the spans.
-    if (needRefresh) this._cm.refresh()
   }
 
   /**
