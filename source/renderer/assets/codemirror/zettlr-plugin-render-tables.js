@@ -103,8 +103,9 @@ const Table = require('../../util/table-helper.js');
       let textMarker
       tbl = new Table(0, 0, {
         'onBlur': (t) => {
-          /* Blur callback. This is necessary as we need to now replace the
-          underlying Markdown text. */
+          // Don't replace some arbitrary text somewhere in the document!
+          if (!textMarker || !textMarker.find()) return
+
           let found = tables.find(elem => elem === t)
           let md = t.getMarkdownTable()
           // The markdown table has a trailing newline, which we need to
@@ -113,7 +114,8 @@ const Table = require('../../util/table-helper.js');
 
           // We'll simply replace the range with the new table. The plugin will
           // be called to re-render the table once again.
-          cm.replaceRange(md.split('\n'), curFrom, curTo)
+          let { from, to } = textMarker.find()
+          cm.replaceRange(md.split('\n'), from, to)
           // Replace the table-node to not re-render it again.
           t.getDOMElement().remove()
           // Splice the table and corresponding marker from the arrays
