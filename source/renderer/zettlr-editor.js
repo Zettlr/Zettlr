@@ -83,7 +83,7 @@ class ZettlrEditor {
     this._renderTasks = false
     this._renderHTags = false
     this._wysiwyg = false // TODO TESTING
-    this._renderTables = true // TODO TESTING
+    this._renderTables = false // TODO TESTING
 
     // This Markdown to HTML converter is used in various parts of the
     // class to perform converting operations.
@@ -337,7 +337,7 @@ class ZettlrEditor {
     this._cm.on('update', (cm) => {
       this.renderCitations()
       // Must be called to ensure all tables have active event listeners.
-      this._cm.execCommand('markdownInitiateTables')
+      if (this._renderTables) this._cm.execCommand('markdownInitiateTables')
     })
 
     this._cm.on('drop', (cm, event) => {
@@ -635,6 +635,7 @@ class ZettlrEditor {
     this._renderMath = global.config.get('display.renderMath')
     this._renderTasks = global.config.get('display.renderTasks')
     this._renderHTags = global.config.get('display.renderHTags')
+    this._renderTables = global.config.get('editor.enableTableHelper')
 
     // Last but not least set the Zettelkasten options
     this._cm.setOption('zkn', global.config.get('zkn'))

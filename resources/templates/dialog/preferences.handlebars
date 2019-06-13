@@ -151,6 +151,11 @@
             </li>
             {{/each}}
           </ul>
+          <hr>
+          <label for="editor.defaultSaveImagePath">
+            {{i18n "dialog.preferences.default_image_save_path"}}
+          </label>
+          <input type="text" name="editor.defaultSaveImagePath" id="editor.defaultSaveImagePath" value="{{ editor.defaultSaveImagePath }}">
         </div>
         <div class="box-right">
           <div class="cb-group">
@@ -174,11 +179,13 @@
             </label>
             <label for="homeEndBehaviour">{{i18n "dialog.preferences.homeEndBehaviour"}}</label>
           </div>
-          <hr>
-          <label for="editor.defaultSaveImagePath">
-            {{i18n "dialog.preferences.default_image_save_path"}}
-          </label>
-          <input type="text" name="editor.defaultSaveImagePath" id="editor.defaultSaveImagePath" value="{{ editor.defaultSaveImagePath }}">
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="editor.enableTableHelper" value="yes" id="enableTableHelper" {{#if editor.enableTableHelper}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="enableTableHelper">{{i18n "dialog.preferences.enable_table_helper"}}</label>
+          </div>
           <hr>
           <!-- Here come the custom user dictionary words! -->
           <p>{{i18n "dialog.preferences.user_dictionary"}}</p>

@@ -179,6 +179,7 @@
                 "title": "Anzeige"
             },
             "editor": "Editor",
+            "enable_table_helper": "Tabelleneditor aktivieren",
             "export": {
                 "dest": "Zielverzeichnis f\u00fcr Exporte. \u003Cem\u003EVorsicht:\u003C/em\u003E Die Auswahl &quot;Aktuelles Verzeichnis&quot; \u00fcberschreibt ohne Warnung eventuell vorhandene Dateien!",
                 "dest_cwd_label": "Aktuelles Verzeichnis: die Exporte werden im aktuell ausgew\u00e4hlten Verzeichnis gespeichert.",

@@ -180,6 +180,7 @@
                 "title": "Display"
             },
             "editor": "Editor",
+            "enable_table_helper": "Enable Table Editor",
             "export": {
                 "dest": "Target directory for exported files. \u003Cem\u003EAttention:\u003C/em\u003E Selecting the current working directory will overwrite files without warning!",
                 "dest_cwd_label": "Current working directory: exported files will be saved into the currently selected directory.",
