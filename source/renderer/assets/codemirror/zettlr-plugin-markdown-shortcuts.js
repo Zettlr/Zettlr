@@ -17,7 +17,8 @@ const { clipboard } = require('electron');
 })(function (CodeMirror) {
   'use strict'
 
-  var unorderedListRE = /(\s*)([*+-])\s/
+  var unorderedListRE = /^(\s*)([*+-])\s/
+  var taskListRE = /^(\s*)(- \[[x ]\])(\s*)/
   var orderedListRE = /^(\s*)((\d+)([.)]))(\s*)/
 
   var reservedChars = '+.*_/\\[](){}?^$'.split('')
@@ -503,6 +504,77 @@ const { clipboard } = require('electron');
           if (match) {
             // Third capturing group is the bullet char
             num = match[2]
+            olTab = match[1] // Contains the spaces (i.e. the tab position)
+          }
+        }
+        cm.doc.replaceRange(olTab + num + ' ', cur)
+      }
+    }
+  }
+
+  // Create or uncreate an unordered list
+  CodeMirror.commands.markdownMakeTaskList = function (cm) {
+    if (cm.getOption('disableInput')) return CodeMirror.Pass
+
+    // If nothing is selected we have a very short journey.
+    if (!cm.doc.somethingSelected()) {
+      // Just jump to the beginning of the line and insert a list indicator
+      let cur = cm.getCursor()
+      cur.ch = 0
+      cm.setCursor(cur)
+      let line = cm.doc.getLineHandle(cur.line)
+      if (taskListRE.test(line.text)) {
+        // Line is already unordered -> remove
+        cm.doc.setSelection(cur, { 'line': cur.line, 'ch': line.text.length })
+        cm.doc.replaceSelection(cm.doc.getSelection().replace(taskListRE, ''))
+      } else {
+        // Line is not a list -> Insert a task list item at cursor position
+        let num = '- [ ]'
+        let olTab = ''
+        if (cur.line > 0) {
+          let match = taskListRE.exec(cm.doc.getLineHandle(cur.line - 1).text)
+          if (match) {
+            // Third capturing group is the bullet char
+            olTab = match[1] // Contains the spaces (i.e. the tab position)
+          }
+        }
+        cm.doc.replaceRange(olTab + num + ' ', cur)
+      }
+      return
+    }
+
+    // Now traverse each selections and either apply a listing or remove it
+    for (let sel of cm.doc.getSelections()) {
+      if (sel.indexOf('\n') > -1) {
+        // First get the beginning cursor position (anchor)
+        let lineFrom = cm.doc.getCursor('from').line
+        // Second get the ending cursor position (head)
+        let lineTo = cm.doc.getCursor('to').line + 1 // eachLine will exclude the lineTo line
+        // Third traverse each line between both positions and add
+        // bullets to them
+        cm.doc.eachLine(lineFrom, lineTo, (line) => {
+          let no = line.lineNo()
+          if (taskListRE.test(line.text)) {
+            // Line is already a task item -> remove
+            cm.doc.setCursor(no, 0)
+            let curFrom = cm.doc.getCursor()
+            cm.doc.setSelection(curFrom, { 'line': no, 'ch': line.text.length })
+            cm.doc.replaceSelection(cm.doc.getSelection().replace(taskListRE, ''))
+          } else {
+            // Just prepend task list items
+            cm.doc.setCursor(no, 0)
+            cm.doc.replaceRange('- [ ] ', cm.doc.getCursor())
+          }
+        })
+      } else {
+        let cur = cm.doc.getCursor()
+        cur.ch = 0
+        cm.doc.setCursor(cur)
+        let num = '- [ ]'
+        let olTab = ''
+        if (cur.line > 0) {
+          let match = taskListRE.exec(cm.doc.getLineHandle(cur.line - 1).text)
+          if (match) {
             olTab = match[1] // Contains the spaces (i.e. the tab position)
           }
         }

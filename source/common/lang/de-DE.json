@@ -367,6 +367,7 @@
             "link": "Link",
             "ol": "Nummerierte Liste",
             "remove_footnote": "Fu\u00dfnote entfernen",
+            "tasklist": "Aufgabenliste",
             "ul": "Liste"
         },
         "no_attachments": "Keine Anh\u00e4nge",
@@ -410,6 +411,7 @@
         "import_lang_file": "Sprachdatei importieren\u2026",
         "insert_link": "Link einf\u00fcgen",
         "insert_ol": "Numerierte Liste einf\u00fcgen",
+        "insert_tasklist": "Aufgabenliste einf\u00fcgen",
         "insert_ul": "Ungeordnete Liste einf\u00fcgen",
         "italic": "Kursiv",
         "labels": {

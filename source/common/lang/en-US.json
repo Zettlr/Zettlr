@@ -367,6 +367,7 @@
             "link": "Link",
             "ol": "Numbered list",
             "remove_footnote": "Remove footnote",
+            "tasklist": "Tasklist",
             "ul": "Itemized list"
         },
         "no_attachments": "No attachments",
@@ -410,6 +411,7 @@
         "import_lang_file": "Import translation\u2026",
         "insert_link": "Insert link",
         "insert_ol": "Insert numbered list",
+        "insert_tasklist": "Insert tasklist",
         "insert_ul": "Insert unordered list",
         "italic": "Italic",
         "labels": {

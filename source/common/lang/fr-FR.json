@@ -374,6 +374,7 @@
             "link": "Lien",
             "ol": "Liste ordonn\u00e9e",
             "remove_footnote": "Supprimer la note de bas de page",
+            "tasklist": "Liste de t\u00e2ches",
             "ul": "Liste non ordonn\u00e9e"
         },
         "no_attachments": "Aucun annexe",
@@ -417,6 +418,7 @@
         "import_lang_file": "Importer un fichier de traduction",
         "insert_link": "Ins\u00e9rer un lien",
         "insert_ol": "Ins\u00e9rer une liste ordonn\u00e9e",
+        "insert_tasklist": "Ins\u00e9rer une liste de t\u00e2ches",
         "insert_ul": "Ins\u00e9rer une liste non ordonn\u00e9e",
         "italic": "Italique",
         "labels": {

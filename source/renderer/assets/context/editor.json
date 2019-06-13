@@ -31,6 +31,11 @@
     "content": "markdownMakeUnorderedList"
   },
   {
+    "label": "menu.insert_tasklist",
+    "command": "cm-command",
+    "content": "markdownMakeTaskList"
+  },
+  {
     "label": "gui.formatting.blockquote",
     "command": "cm-command",
     "content": "markdownBlockquote"
