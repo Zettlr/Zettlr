@@ -81,7 +81,7 @@ class ZettlrPreview {
     * @return {ListView}      Chainability.
     */
   refresh (data = this._renderer.getCurrentDir()) {
-    console.log(`Refreshing File List ...`)
+    // console.log(`Refreshing File List ...`)
     this._data = data || []
     // Potentially re-select the current file
     if (this._renderer.getCurrentFile()) {
@@ -111,7 +111,7 @@ class ZettlrPreview {
    * @return {void}            No return.
    */
   _gen () {
-    console.log(`Generating File List Tags...`)
+    // console.log(`Generating File List Tags...`)
     // Check whether the data-array is already an array. Else, flatten the
     // object tree to a one-dimensional array.
     if (!Array.isArray(this._data)) {
@@ -255,7 +255,7 @@ class ZettlrPreview {
     * @return {void} No return.
     */
   _updateDraggable () {
-    console.log(`Updating draggables ...`)
+    // console.log(`Updating draggables ...`)
     this._listContainer.find('li.file').draggable({
       'cursorAt': { 'top': 10, 'left': 10 },
       'scroll': false,
@@ -543,7 +543,7 @@ class ZettlrPreview {
     * @param  {Number} hash The hash describing the file
     */
   select (hash) {
-    console.log(`Selecting a file ...`)
+    // console.log(`Selecting a file ...`)
     if (typeof hash !== 'number') hash = parseInt(hash)
     if (!hash) return
 
@@ -814,7 +814,7 @@ class ZettlrPreview {
     * @return {Boolean} True if the call succeeded, false if not.
     */
   _scrollIntoView (index) {
-    console.log(`Scrolling a file into view at index ${index} ...`)
+    // console.log(`Scrolling a file into view at index ${index} ...`)
     let listHeight = $('#preview ul#filelist').height()
     let frameSize = this._div.innerHeight()
     let elemHeight = listHeight / this._tags.length

@@ -36,6 +36,11 @@
     "content": "markdownBlockquote"
   },
   {
+    "label": "gui.formatting.insert_table",
+    "command": "cm-command",
+    "content": "markdownInsertTable"
+  },
+  {
     "type": "separator"
   },
   {

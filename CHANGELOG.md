@@ -2,6 +2,18 @@
 
 ## GUI and Functionality
 
+- **New Feature**: Table management has just become easier. With the new table helper plugin, Zettlr enables you to circumvent manually having to edit Markdown tables. All you need to do now is keep the table helper active in the settings and just edit your tables as you would do in any other application. The table helper offers the following keyboard navigation shortcuts:
+    - **Tab**: Move to the next cell, or the first cell on the next row, if the cursor is in the last column. Adds a new table row, if the cursor is in the last row.
+    - **Shift-Tab**: Move to the previous cell, or the last cell on the previous row, if the cursor is in the first column.
+    - **Return**: Move to the same column on the next row. Adds a new table row, if the cursor is in the last row.
+    - **Arrow Up**: Move to the same cell in the previous row.
+    - **Arrow Down**: Move to the same cell in the next row.
+    - **Arrow Left**: If the cursor is at the beginning of the cell, move to the previous cell. Moves to the last cell on the previous row, if the active cell is in column 1.
+    - **Arrow Right**: If the cursor is at the end of the cell, move to the next cell. Moves to the first cell on the next row, if the active cell is in the last column.
+    - **Buttons**:
+        - **Alignment-Buttons** (top-left): Aligns the currently active column left, center, or right.
+        - **Removal-Buttons** (top-right): Removes either the current row or the current column. Does not remove the last row or column.
+        - **Add-Buttons**: Adds rows or columns to the top, left, bottom or right hand side of the table, depending on the button.
 - The app will boot much faster now.
 - Root directories that have not been found on app start, or are removed during runtime, are indicated as "dead" in your directory tree. If they reside on a removable medium, you can now simply plug the medium into the computer and rescan the directory. You don't have to manually open it anymore.
 - Decreased the sensitivity for when a drag event should start, so that accidental drags are prevented.

@@ -83,6 +83,7 @@ class ZettlrEditor {
     this._renderTasks = false
     this._renderHTags = false
     this._wysiwyg = false // TODO TESTING
+    this._renderTables = true // TODO TESTING
 
     // This Markdown to HTML converter is used in various parts of the
     // class to perform converting operations.
@@ -317,6 +318,7 @@ class ZettlrEditor {
       if (this._renderMath) this._cm.execCommand('markdownRenderMath') // Render equations
       if (this._renderLinks) this._cm.execCommand('markdownRenderLinks') // Render links
       if (this._renderCitations) this._cm.execCommand('markdownRenderCitations') // Render citations
+      if (this._renderTables) this._cm.execCommand('markdownRenderTables') // Render tables
       if (this._renderTasks) this._cm.execCommand('markdownRenderTasks') // Render tasks
       if (this._renderHTags) this._cm.execCommand('markdownRenderHTags') // Render heading levels
       if (this._wysiwyg) this._cm.execCommand('markdownWYSIWYG') // Render all other elements
@@ -334,6 +336,8 @@ class ZettlrEditor {
     // new spans get added to the DOM which we might have to render.
     this._cm.on('update', (cm) => {
       this.renderCitations()
+      // Must be called to ensure all tables have active event listeners.
+      this._cm.execCommand('markdownInitiateTables')
     })
 
     this._cm.on('drop', (cm, event) => {
