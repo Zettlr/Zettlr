@@ -19,10 +19,11 @@
 
 const citeproc = require('citeproc')
 const chokidar = require('chokidar') // We'll just use the one-liner to watch the library file.
+const { ipcMain } = require('electron')
 const Citr = require('@zettlr/citr') // Parse the citations from the renderer
 const fs = require('fs')
 const path = require('path')
-const { trans } = require('../common/lang/i18n.js')
+const { trans } = require('../../common/lang/i18n.js')
 const BibTexParser = require('astrocite-bibtex')
 
 // Statuses the engine can be in
@@ -35,14 +36,14 @@ const READY = 4
 /**
  * This class enables to export citations from a CSL JSON file to HTML.
  */
-class ZettlrCiteproc {
+class CiteprocProvider {
   constructor () {
     this._mainLibrary = ''
     // The Zettlr internal preview of these citations will always use Chicago,
     // because (a) it's just a preview, and (b) Chicago is the default of Pandoc.
     this._styleID = 'chicago-author-date'
     this._lang = global.config.get('appLang')
-    this._mainStyle = fs.readFileSync(path.join(__dirname, `./assets/csl-styles/${this._styleID}.csl`), 'utf8')
+    this._mainStyle = fs.readFileSync(path.join(__dirname, `../assets/csl-styles/${this._styleID}.csl`), 'utf8')
     this._engine = null // Holds the CSL engine
     this._cslData = null // Holds the parsed CSL data (JSON)
     this._items = {} // ID-accessible CSL data array.
@@ -85,6 +86,27 @@ class ZettlrCiteproc {
     // Be notified of potential updates
     global.config.on('update', () => {
       this._onConfigUpdate()
+    })
+
+    // Listen for synchronous citation messages from the renderer
+    // Citeproc calls (either single citation or a whole cluster)
+    ipcMain.on('cite', (event, message) => {
+      if (message.type === 'get-citation') {
+        // Return a single citation
+        event.returnValue = {
+          'citation': this.getCitation(message.content),
+          'status': this._status
+        }
+      } else if (message.type === 'update-items') {
+        // Update the items of the registry
+        event.returnValue = this.updateItems(message.content)
+      } else if (message.type === 'make-bibliography') {
+        // Make and send out a bibliography based on the state of the registry
+        event.sender.send('message', {
+          'command': 'citeproc-bibliography',
+          'content': this.makeBibliography()
+        })
+      }
     })
 
     // Read in the main library
@@ -235,7 +257,7 @@ class ZettlrCiteproc {
   _getLocale (lang) {
     // Takes a lang in the format xx-XX and has to return the corresponding XML
     // file. Let's do just that!
-    let p = path.join(__dirname, `./assets/csl-locales/locales-${lang}.xml`)
+    let p = path.join(__dirname, `../assets/csl-locales/locales-${lang}.xml`)
     try {
       fs.lstatSync(p)
       return fs.readFileSync(p, 'utf8')
@@ -381,4 +403,4 @@ class ZettlrCiteproc {
   hasNoDB () { return this._status === NO_DB }
 }
 
-module.exports = ZettlrCiteproc
+module.exports = new CiteprocProvider()

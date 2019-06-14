@@ -27,7 +27,6 @@ const ZettlrDeadDir = require('./zettlr-dead-dir.js')
 const ZettlrWatchdog = require('./zettlr-watchdog.js')
 const ZettlrTargets = require('./zettlr-targets.js')
 const ZettlrStats = require('./zettlr-stats.js')
-const ZettlrCiteproc = require('./zettlr-citeproc.js')
 const { i18n, trans } = require('../common/lang/i18n.js')
 const { hash, ignoreDir,
   ignoreFile, isFile, isDir } = require('../common/zettlr-helpers.js')
@@ -95,9 +94,6 @@ class Zettlr {
     // Statistics
     this.stats = new ZettlrStats(this)
 
-    // Citeproc
-    this._citeproc = new ZettlrCiteproc()
-
     // Instantiate the writing targets
     this._targets = new ZettlrTargets(this)
 
@@ -141,6 +137,7 @@ class Zettlr {
     this._providers = {
       'config': require('./providers/config-provider.js'),
       'appearance': require('./providers/appearance-provider.js'),
+      'citeproc': require('./providers/citeproc-provider.js'),
       'dictionary': require('./providers/dictionary-provider.js'),
       'recentDocs': require('./providers/recent-docs-provider.js'),
       'tags': require('./providers/tag-provider.js'),

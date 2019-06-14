@@ -42,10 +42,6 @@ class ZettlrIPC {
       event.returnValue = global.config.get(key)
     })
 
-    // Citeproc calls (either single citation or a whole cluster)
-    ipc.on('getCitation', (event, citation) => { event.returnValue = global.citeproc.getCitation(citation) })
-    ipc.on('updateItems', (event, keyList) => { event.returnValue = global.citeproc.updateItems(keyList) })
-
     // Beginn listening to messages
     ipc.on('message', (event, arg) => {
       // We always need a command
@@ -300,11 +296,6 @@ class ZettlrIPC {
       // Return a list of all available IDs in the currently loaded database
       case 'citeproc-get-ids':
         this.send('citeproc-ids', (global.citeproc) ? global.citeproc.getIDs() : [])
-        break
-
-      // The renderer requested an updated bibliography
-      case 'citeproc-make-bibliography':
-        this.send('citeproc-bibliography', global.citeproc.makeBibliography())
         break
 
       case 'open-quicklook':
