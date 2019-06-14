@@ -969,7 +969,7 @@ class TableHelper {
       .table-helper-add-button:hover { opacity: 1; }
       `)
 
-    $('head').find('style').prepend(link)
+    $('head').prepend(link)
   }
 
   /**

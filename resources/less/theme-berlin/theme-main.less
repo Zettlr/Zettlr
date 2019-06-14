@@ -67,6 +67,24 @@ body {
       }
     }
 
+    // The table helper injects CSS that we need to override
+    .table-helper-align-button-container,
+    .table-helper-remove-button-container,
+    .table-helper-add-button {
+      color: @c-primary;
+      background-color: @grey-2; // Make it more visible
+    }
+
+    .table-helper-align-button-line {
+      background-color: @c-primary;
+    }
+
+    .table-helper-remove-button-line { background-color: black; }
+
+    table.table-helper td:focus {
+      outline-color: @c-primary;
+    }
+
     .taglist .tagspacer:only-child .tag { border:2px solid white; }
 
     // Fallback for all systems not identified as win32, darwin, or linux.
@@ -88,4 +106,10 @@ body {
 // DARK STYLES
 body.dark {
     @import "dark/main.less";
+
+    .table-helper-align-button-container,
+    .table-helper-remove-button-container,
+    .table-helper-add-button {
+      background-color: white;
+    }
 }
