@@ -627,6 +627,9 @@ class ZettlrEditor {
     this._cm.setOption('imagePreviewWidth', global.config.get('display.imageWidth'))
     this._cm.setOption('imagePreviewHeight', global.config.get('display.imageHeight'))
 
+    // Set indent unit
+    this._cm.setOption('indentUnit', global.config.get('editor.indentUnit'))
+
     // Set the preview options
     this._renderCitations = global.config.get('display.renderCitations')
     this._renderIframes = global.config.get('display.renderIframes')

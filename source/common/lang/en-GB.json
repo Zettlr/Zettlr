@@ -199,6 +199,7 @@
             "general": "General",
             "hide_dirs": "Hide directories during global search",
             "homeEndBehaviour": "Use the CodeMirror default actions for \u003Ckbd\u003EHome\u003C/kbd\u003E and \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
+            "indent_unit": "Indent by the following number of spaces",
             "modtime": "Last modification time",
             "mute_lines": "Mute non-focused lines in distraction-free mode",
             "nightmode": "Night mode",

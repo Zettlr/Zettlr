@@ -149,7 +149,8 @@ class ConfigProvider extends EventEmitter {
         'autoCloseBrackets': true,
         'defaultSaveImagePath': '',
         'homeEndBehaviour': true, // If checked (true), CodeMirror goes to start/end of a paragraph, not a line.
-        'enableTableHelper': true // Enable the table helper plugin
+        'enableTableHelper': true, // Enable the table helper plugin
+        'indentUnit': 4 // The number of spaces to be added
       },
       'display': {
         'theme': 'berlin', // The theme used by the app, can be berlin, frankfurt, bielefeld
