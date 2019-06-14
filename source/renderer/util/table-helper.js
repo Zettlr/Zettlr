@@ -800,10 +800,7 @@ class TableHelper {
     this._colAlignment[col] = alignment
 
     // Change the visual alignment
-    let rows = this._elem.find('tr')
-    for (let i = 0; i < rows.length; i++) {
-      $(rows[i]).find('td:eq(' + col + ')').css('text-align', alignment)
-    }
+    this._elem.find('tr').find('td:eq(' + col + ')').css('text-align', alignment)
     this._signalContentChange() // Recalculate everything
   }
 

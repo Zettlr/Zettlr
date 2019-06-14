@@ -116,15 +116,13 @@ const Table = require('../../util/table-helper.js');
           // be called to re-render the table once again.
           let { from, to } = textMarker.find()
           cm.replaceRange(md.split('\n'), from, to)
-          // Replace the table-node to not re-render it again.
-          t.getDOMElement().remove()
+          // If there's still the textmarker, remove it by force to re-render
+          // the table immediately.
+          if (textMarker) textMarker.clear()
           // Splice the table and corresponding marker from the arrays
           if (found) tables.splice(found, 1)
           // Also splice it to retain synchronous arrays
           if (found) tableMarkers.splice(found, 1)
-          // If there's still the textmarker, remove it by force to re-render
-          // the table immediately.
-          if (textMarker) textMarker.clear()
         }
       }) // END constructor
       try {
