@@ -19,6 +19,7 @@
 - Decreased the sensitivity for when a drag event should start, so that accidental drags are prevented.
 - Citations in your text are now always updated, you don't have to type anything for this to work.
 - Inserting tasklists is now possible via context menu and formatting toolbar.
+- New Theme: **Karl-Marx-Stadt**.
 
 ## Under the Hood
 

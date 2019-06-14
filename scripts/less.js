@@ -34,6 +34,11 @@ let themes = [
     source: path.join(__dirname, '../resources/less/theme-bielefeld/theme-main.less'),
     target: path.join(__dirname, '../source/common/assets/css/theme-bielefeld.css'),
     less: ''
+  },
+  {
+    source: path.join(__dirname, '../resources/less/theme-karl-marx-stadt/theme-main.less'),
+    target: path.join(__dirname, '../source/common/assets/css/theme-karl-marx-stadt.css'),
+    less: ''
   }
 ]
 

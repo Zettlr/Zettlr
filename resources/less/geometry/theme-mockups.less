@@ -6,14 +6,13 @@
 
 div.theme-container {
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  flex-direction: row;
+  flex-wrap: wrap;
+  // justify-content: space-around;
+  justify-content: center;
 
   div.theme-container-item { flex: 1; width: 240px; padding: 20px; }
 }
-
-// Change from column to row on larger screens
-@media (min-width: @dialog-breakpoint) { div.theme-container { flex-direction: row; } }
 
 div.theme-mockup {
   width: 200px;
@@ -123,5 +122,12 @@ div.theme-mockup {
   &.theme-mockup { background-color: rgba(255, 255, 220, 1); }
   div.file-list { border-color: rgba(150, 150, 150, 1); }
   div.editor p { color: #333; font-family: @font-liberation; }
+  div.file-list div.file-list-item { border-color: rgba(150, 150, 150, 1); }
+}
+
+#theme-karl-marx-stadt-mockup {
+  &.theme-mockup { background-color: rgba(220,  45,  45, 1); }
+  div.file-list { border-color: rgba(150, 150, 150, 1); }
+  div.editor p { color: #ddd; font-family: @font-lato; }
   div.file-list div.file-list-item { border-color: rgba(150, 150, 150, 1); }
 }

@@ -126,7 +126,7 @@ class ZettlrBody {
 
     // On config change, change the theme according to the settings
     let href = $('link#theme-css').attr('href')
-    href = href.replace(/bielefeld|berlin|frankfurt/, newTheme)
+    href = href.replace(/bielefeld|berlin|frankfurt|karl-marx-stadt/, newTheme)
     $('link#theme-css').attr('href', href)
     this._renderer.getEditor().refresh()
     this._currentTheme = newTheme
