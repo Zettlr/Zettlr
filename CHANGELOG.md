@@ -23,6 +23,7 @@
 - Now you can choose which time to use for sorting and for displaying in the file meta: It's either the last modification time of the files or the creation time.
 - Directory sorting is now persisted during reboots.
 - Clicking on tags now initiates a search for the given tag.
+- Added three new optional variables to pass to external exporter programs: `$infile_basename$` (input filename without directory), `$outfile_basename$` (output filename without directory) and `$indir$` (the input file's directory)
 
 ## Under the Hood
 

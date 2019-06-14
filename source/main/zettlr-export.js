@@ -91,7 +91,10 @@ class ZettlrExport {
       'outfile': '',
       'outflag': '',
       'format': '',
-      'standalone': ''
+      'standalone': '',
+      'indir': '',
+      'infile_basename': '',
+      'outfile_basename': ''
     } // Pandoc flags to be passed to the compiler
     this.showdown = null
     this._callback = callback // If given, will be called after export
@@ -415,7 +418,10 @@ class ZettlrExport {
         break
     }
     this.pandocFlags['infile'] = this.tempfile
+    this.pandocFlags['indir'] = path.dirname(this.tempfile)
+    this.pandocFlags['infile_basename'] = path.basename(this.tempfile)
     this.pandocFlags['outfile'] = this.targetFile
+    this.pandocFlags['outfile_basename'] = path.basename(this.targetFile)
     this.pandocFlags['citeproc'] = this._citeprocOptions
     this.pandocFlags['tpl'] = this.tpl
     this.pandocFlags['outflag'] = `-t ${this.options.format}`
@@ -437,7 +443,10 @@ class ZettlrExport {
     this.pandocFlags['toc'] = (this.options.pdf.toc) ? '--toc' : ''
     this.pandocFlags['tocdepth'] = (this.options.pdf.tocDepth) ? '--toc-depth=' + this.options.pdf.tocDepth : ''
     this.pandocFlags['infile'] = this.tempfile
+    this.pandocFlags['indir'] = path.dirname(this.tempfile)
+    this.pandocFlags['infile_basename'] = path.basename(this.tempfile)
     this.pandocFlags['outfile'] = this.targetFile
+    this.pandocFlags['outfile_basename'] = path.basename(this.targetFile)
     this.pandocFlags['citeproc'] = this._citeprocOptions
     this.pandocFlags['tpl'] = this.tpl
     // this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${toc} ${tocdepth} ${this._citeprocOptions} --pdf-engine=xelatex -o "${this.targetFile}"`
