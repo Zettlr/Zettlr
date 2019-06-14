@@ -24,6 +24,7 @@
 - Directory sorting is now persisted during reboots.
 - Clicking on tags now initiates a search for the given tag.
 - Added three new optional variables to pass to external exporter programs: `$infile_basename$` (input filename without directory), `$outfile_basename$` (output filename without directory) and `$indir$` (the input file's directory)
+- You can now change the number of spaces to indent by in the preferences.
 
 ## Under the Hood
 
