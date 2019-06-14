@@ -1092,7 +1092,7 @@ class ZettlrEditor {
         this._div.css('width', '')
       },
       'stop': (e, ui) => {
-        this._renderer.getEditor().refresh() // Refresh the editor to update lines and cursor positions.
+        this.refresh() // Refresh the editor to update lines and cursor positions.
         $('body').css('cursor', '') // Why does jQueryUI ALWAYS do this to me?
         this._div.css('width', '')
       },
@@ -1107,8 +1107,8 @@ class ZettlrEditor {
    */
   disableResizable () {
     $('#editor').resizable('destroy')
-    $('#editor').prop('style', '') // Remove the left and width things
-    $('#combiner').prop('style', '')
+    $('#editor').attr('style', '') // Remove the left and width things
+    $('#combiner').attr('style', '')
     // TODO save these variables!
   }
 
