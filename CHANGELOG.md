@@ -25,6 +25,7 @@
 - Clicking on tags now initiates a search for the given tag.
 - Added three new optional variables to pass to external exporter programs: `$infile_basename$` (input filename without directory), `$outfile_basename$` (output filename without directory) and `$indir$` (the input file's directory)
 - You can now change the number of spaces to indent by in the preferences.
+- Images can now be put inside links on the condition that they are (a) the only element inside the link's description and (b) relative links won't work during preview.
 
 ## Under the Hood
 
