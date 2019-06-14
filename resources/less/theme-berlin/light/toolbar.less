@@ -1,9 +1,9 @@
 // Toolbar styling
 
 #toolbar {
-    background-color: @grey-0;
+    background-color: var(--grey-0);
     transition: @mode-transition background-color ease;
-    color:@grey-4;
+    color:var(--grey-4);
     box-shadow:0px 0px 5px 5px 15px rgba(0,0,0,.25);
 
     &.mute {
@@ -14,27 +14,27 @@
         transition:@fast-transition all ease;
 
         &:not(.pomodoro):hover {
-            background-color: @grey-1;
+            background-color: var(--grey-1);
             transition:@fast-transition all ease;
         }
 
         // Pomodoro meter
         &.pomodoro svg {
             // Colours for the pomodoro counter
-            .pomodoro-meter       { fill: @grey-2; }
-            .pomodoro-value.task  { fill: @pomodoro-task; }
-            .pomodoro-value.short { fill: @pomodoro-short; }
-            .pomodoro-value.long  { fill: @pomodoro-long; }
+            .pomodoro-meter       { fill: var(--grey-2); }
+            .pomodoro-value.task  { fill: var(--pomodoro-task); }
+            .pomodoro-value.short { fill: var(--pomodoro-short); }
+            .pomodoro-value.long  { fill: var(--pomodoro-long); }
         }
     }
 
-    .file-info { font-size:@font-size-small * 0.8; }
+    .file-info { font-size: @font-size-small * 0.8; }
 
     svg#search-progress-indicator {
       opacity: 1;
       transition: 0.2s opacity ease;
-      .indicator-meter { fill: @grey-2; }
-      .indicator-value { fill: @c-primary; }
+      .indicator-meter { fill: var(--grey-2); }
+      .indicator-value { fill: var(--c-primary); }
 
       &.hidden { opacity: 0; }
     }
@@ -43,11 +43,11 @@
         color:inherit;
         background-color:white;
         border:1px solid white;
-        font-size:@font-size-small * 0.8;
+        font-size: @font-size-small * 0.8;
         transition:0.5s border-color ease;
 
         &:focus {
-            border-color: @grey-1;
+            border-color: var(--grey-1);
         }
     }
 }

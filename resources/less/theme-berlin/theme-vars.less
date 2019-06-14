@@ -1,50 +1,57 @@
 // In this file we're going to set up theme-specific variables.
 
+:root {
+  --c-primary: var(--green-0);
+  --c-primary-shade: var(--green-1);
+
+  --c-secondary: var(--blue-0);
+  --c-secondary-shade: var(--blue-1);
+
+  --bg-primary: white;
+
+  // Colours for the directory list
+  --bg-directories: #eaeaea;
+  --c-virtual-directory: var(--purple-selection);
+  --bg-virtual-directory: lighten(@purple-selection, 10%);
+  --c-virtual-directory-dark: var(--purple-selection-dark);
+  --bg-virtual-directory-dark: lighten(@purple-selection-dark, 10%);
+  --c-project: var(--red-0);
+  --c-project-dark: lighten(@red-0, 10%);
+
+  // Colours for the file list
+  --bg-preview: #eaeaea;
+
+  // Scrollbar annotations
+  --bg-annotation: var(--red-0);
+  --bg-annotation-dark: yellow;
+
+  --selection-light: var(--green-selection);
+  --selection-dark: var(--green-selection-dark);
+
+  /**
+   * ALERTS
+   */
+  --c-alert-success: var(--green-selection);
+  --c-alert-success-shade: var(--green-selection-dark);
+
+  --c-alert-warning: var(--gold-selection);
+  --c-alert-warning-shade: var(--gold-selection-dark);
+
+  --c-alert-error: var(--bg-error);
+  --c-alert-error-shade: var(--fg-error);
+
+  /**
+   * POMODORO
+   */
+  --pomodoro-task: var(--orange-2);
+  --pomodoro-short: var(--gold-selection);
+  --pomodoro-long: var(--green-selection-dark);
+}
+
+// Vars that are used in internal LESS functions
 @c-primary: @green-0;
 @c-primary-shade: @green-1;
 
-@c-secondary: @blue-0;
-@c-secondary-shade: @blue-1;
-
-@bg-primary: white;
-
-// Colours for the directory list
-@bg-directories: #eaeaea;
-@c-virtual-directory: @purple-selection;
-@bg-virtual-directory: lighten(@purple-selection, 10%);
-@c-virtual-directory-dark: @purple-selection-dark;
-@bg-virtual-directory-dark: lighten(@purple-selection-dark, 10%);
-@c-project: @red-0;
-@c-project-dark: lighten(@red-0, 10%);
-
-// Colours for the file list
-@bg-preview: #eaeaea;
-
-// Scrollbar annotations
-@bg-annotation: @red-0;
-@bg-annotation-dark: yellow;
-
-@selection-light: @green-selection;
-@selection-dark: @green-selection-dark;
-
-/**
- * ALERTS
- */
-@c-alert-success: @green-selection;
-@c-alert-success-shade: @green-selection-dark;
-
-@c-alert-warning: @gold-selection;
-@c-alert-warning-shade: @gold-selection-dark;
-
-@c-alert-error: @bg-error;
-@c-alert-error-shade: @fg-error;
-
-/**
- * POMODORO
- */
-@pomodoro-task: @orange-2;
-@pomodoro-short: @gold-selection;
-@pomodoro-long: @green-selection-dark;
 
 /**
  * FONTS

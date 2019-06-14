@@ -17,45 +17,52 @@
 // First import the Berlin theme, because this mainly changes colours.
 @import "../theme-berlin/theme-main.less";
 
-// Now adapt
+:root {
+
+  // Now adapt
+  --c-primary: var(--red-1);
+  --c-primary-shade: var(--red-3);
+
+  --c-secondary: var(--orange-0);
+  --c-secondary-shade: var(--orange-1);
+
+  --bg-primary: white;
+
+  // Colours for the directory list
+  --c-virtual-directory: var(--purple-selection);
+  --bg-virtual-directory: lighten(@purple-selection, 10%);
+  --c-virtual-directory-dark: var(--purple-selection-dark);
+  --bg-virtual-directory-dark: lighten(@purple-selection-dark, 10%);
+
+  --c-project: var(--orange-2);
+
+  // Scrollbar annotations
+  --bg-annotation: var(--orange-2);
+  --bg-annotation-dark: yellow;
+
+  --selection-light: var(--tea-rose);
+  --selection-dark: var(--red-4);
+
+  /**
+   * ALERTS
+   */
+  --c-alert-success: var(--green-selection);
+  --c-alert-success-shade: var(--green-selection-dark);
+
+  --c-alert-warning: var(--gold-selection);
+  --c-alert-warning-shade: var(--gold-selection-dark);
+
+  --c-alert-error: var(--bg-error);
+  --c-alert-error-shade: var(--fg-error);
+
+  /**
+   * POMODORO
+   */
+  --pomodoro-task: var(--orange-2);
+  --pomodoro-short: var(--gold-selection-dark);
+  --pomodoro-long: var(--green-selection-dark);
+}
+
+// Additional LESS variables
 @c-primary: @red-1;
 @c-primary-shade: @red-3;
-
-@c-secondary: @grey-4;
-@c-secondary-shade: @grey-6;
-
-@bg-primary: white;
-
-// Colours for the directory list
-@c-virtual-directory: @purple-selection;
-@bg-virtual-directory: lighten(@purple-selection, 10%);
-@c-virtual-directory-dark: @purple-selection-dark;
-@bg-virtual-directory-dark: lighten(@purple-selection-dark, 10%);
-
-@c-project: @orange-2;
-
-// Scrollbar annotations
-@bg-annotation: @orange-2;
-@bg-annotation-dark: yellow;
-
-@selection-light: @tea-rose;
-@selection-dark: @red-4;
-
-/**
- * ALERTS
- */
-@c-alert-success: @green-selection;
-@c-alert-success-shade: @green-selection-dark;
-
-@c-alert-warning: @gold-selection;
-@c-alert-warning-shade: @gold-selection-dark;
-
-@c-alert-error: @bg-error;
-@c-alert-error-shade: @fg-error;
-
-/**
- * POMODORO
- */
-@pomodoro-task: @orange-2;
-@pomodoro-short: @gold-selection-dark;
-@pomodoro-long: @green-selection-dark;

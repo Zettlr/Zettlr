@@ -51,9 +51,9 @@ body {
 
     .dragger {
         // This class is applied to dragged elements
-        font-size:@font-size-small;
+        font-size: @font-size-small;
         border-radius:5px;
-        background-color:@grey-1;
+        background-color: var(--grey-1);
         padding:4px;
         box-shadow:5px 5px 15px 0px rgba(0,0,0,.25);
     }
@@ -71,18 +71,18 @@ body {
     .table-helper-align-button-container,
     .table-helper-remove-button-container,
     .table-helper-add-button {
-      color: @c-primary;
-      background-color: @grey-2; // Make it more visible
+      color: var(--c-primary);
+      background-color: var(--grey-2); // Make it more visible
     }
 
     .table-helper-align-button-line {
-      background-color: @c-primary;
+      background-color: var(--c-primary);
     }
 
     .table-helper-remove-button-line { background-color: black; }
 
     table.table-helper td:focus {
-      outline-color: @c-primary;
+      outline-color: var(--c-primary);
     }
 
     .taglist .tagspacer:only-child .tag { border:2px solid white; }

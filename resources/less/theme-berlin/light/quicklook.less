@@ -1,23 +1,23 @@
 // Quicklook styling
 
 .quicklook-standalone, .print-window {
-  color:@grey-4;
+  color:var(--grey-4);
   background-color: #ffffff;
   cursor:default;
 
   .title {
     // Title bar options
-    background-color: @grey-0;
-    color: @grey-6;
+    background-color: var(--grey-0);
+    color: var(--grey-6);
 
     h1 { font-size: @font-size-small; }
 
     .find input {
-      background-color: @grey-2;
+      background-color: var(--grey-2);
     }
   }
 
-  #init-print:hover::before { color: @c-primary; }
+  #init-print:hover::before { color: var(--c-primary); }
 
   .body .CodeMirror {
     cursor:text;

@@ -62,8 +62,8 @@ class StatsDialog extends ZettlrDialog {
         labels: [], // Preset with empty data, as we will call the update func immediately
         datasets: [{
           label: trans('dialog.statistics.this_frame'),
-          backgroundColor: 'rgba( 28, 178, 126, 1)',
-          borderColor: 'rgba( 28, 178, 126, 1)',
+          backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue('--c-primary'),
+          borderColor: window.getComputedStyle(document.documentElement).getPropertyValue('--c-primary'),
           data: [], // Preset with empty data, as we will call the update func immediately
           fill: false
         }]
@@ -238,8 +238,8 @@ class StatsDialog extends ZettlrDialog {
     if (this._compare && this._currentSheet > 0) {
       this._chart.data.datasets[1] = {
         label: trans('dialog.statistics.previous_frame'),
-        backgroundColor: 'rgba(240,  87, 52, 1)',
-        borderColor: 'rgba(240,  87, 52, 1)',
+        backgroundColor: window.getComputedStyle(document.documentElement).getPropertyValue('--c-secondary'),
+        borderColor: window.getComputedStyle(document.documentElement).getPropertyValue('--c-secondary'),
         data: Object.values(this._backgroundData[this._currentSheet - 1]),
         fill: false
       }

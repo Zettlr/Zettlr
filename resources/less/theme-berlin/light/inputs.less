@@ -8,21 +8,21 @@
 // regular checkboxes.
 .cb-toggle {
   .toggle {
-    background-color: @grey-1;
+    background-color: var(--grey-1);
 
     &:before { background-color: white; }
   }
-  input:checked + .toggle { background-color: @c-primary; }
+  input:checked + .toggle { background-color: var(--c-primary); }
 }
 
 .radio-toggle {
   .toggle {
-    background-color: @grey-1;
+    background-color: var(--grey-1);
 
     // Inner part
     &:before { background-color: transparent; }
   }
-  input:checked + .toggle:before { background-color: @c-primary; }
+  input:checked + .toggle:before { background-color: var(--c-primary); }
 }
 
 /*
@@ -30,9 +30,9 @@
 */
 
 input[type=range] {
-  &::-webkit-slider-runnable-track { background: @grey-1; }
-  &::-webkit-slider-thumb { background: @c-primary; }
-  &:focus::-webkit-slider-runnable-track { background: @grey-1; }
+  &::-webkit-slider-runnable-track { background: var(--grey-1); }
+  &::-webkit-slider-thumb { background: var(--c-primary); }
+  &:focus::-webkit-slider-runnable-track { background: var(--grey-1); }
 }
 
 progress {
@@ -41,12 +41,12 @@ progress {
   border-radius: @border-radius;
 
   &::-webkit-progress-bar {
-    background-color: @grey-1;
+    background-color: var(--grey-1);
     border-radius: @border-radius;
   }
 
   &::-webkit-progress-value {
-    background-color: @c-primary;
+    background-color: var(--c-primary);
     border-radius: @border-radius;
     transition: 0.4s all ease; // Ease out the value changes
   }

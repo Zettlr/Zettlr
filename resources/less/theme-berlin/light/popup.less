@@ -1,17 +1,17 @@
 // Popup styling
 
 .popup-arrow {
-    &.up { border-bottom-color: @popup-light-shade; }
-    &.down { border-top-color: @popup-light-shade; }
-    &.left { border-right-color: @popup-light-shade; }
-    &.right { border-left-color: @popup-light-shade; }
+    &.up { border-bottom-color: var(--popup-light-shade); }
+    &.down { border-top-color: var(--popup-light-shade); }
+    &.left { border-right-color: var(--popup-light-shade); }
+    &.right { border-left-color: var(--popup-light-shade); }
 }
 
 .popup {
-    background-color: @popup-light-color;
-    color: @popup-light-text;
+    background-color: var(--popup-light-color);
+    color: var(--popup-light-text);
     border-radius: @border-radius;
-    border: 1px solid @popup-light-shade;
+    border: 1px solid var(--popup-light-shade);
 
     // Generic links
     a.button {
@@ -19,21 +19,21 @@
       border: none;
       border-radius: @border-radius;
       padding: 2px 10px;
-      background-color: @grey-1;
-      color: @grey-7;
+      background-color: var(--grey-1);
+      color: var(--grey-7);
       border-radius: @border-radius;
       outline:0;
       transition: 0.2s all ease;
-      &:hover { background-color: @c-primary; color: @bg-primary; }
+      &:hover { background-color: var(--c-primary); color: var(--bg-primary); }
     }
 
     // TOC links
     a.toc-link {
-        color: @popup-light-text;
+        color: var(--popup-light-text);
         transition: @fast-transition background-color ease;
         text-decoration:none;
         line-height:150%;
-        &:hover { background-color: @grey-2; }
+        &:hover { background-color: var(--grey-2); }
     }
 
     p {text-align:center; }
@@ -41,8 +41,8 @@
     button {
         border:none;
         font-size:200%;
-        background-color: @popup-light-color;
-        color: @popup-light-text;
+        background-color: var(--popup-light-color);
+        color: var(--popup-light-text);
         text-align:center;
     }
 
@@ -66,7 +66,7 @@
             color:inherit;
             transition: @fast-transition background-color ease;
 
-            &:hover { background-color: @grey-2; }
+            &:hover { background-color: var(--grey-2); }
 
             &#header-formatting:hover { background-color:transparent; }
 
@@ -75,11 +75,11 @@
                 text-align:center;
                 font-weight:bold;
 
-                &.active { color:@c-primary; }
+                &.active { color:var(--c-primary); }
             }
         }
 
-        hr { border-bottom:1px solid @grey-3; }
+        hr { border-bottom:1px solid var(--grey-3); }
     }
 
     // SEARCH POPUP
@@ -90,32 +90,32 @@
             background-color: transparent;
             color:inherit;
 
-            &.regexp { color: @c-primary; }
+            &.regexp { color: var(--c-primary); }
         }
 
         input#searchWhat {
-          border-bottom: 1px solid @grey-5;
-          border-right: 1px solid @grey-5;
+          border-bottom: 1px solid var(--grey-5);
+          border-right: 1px solid var(--grey-5);
         }
 
         input#replaceWhat {
-          border-right: 1px solid @grey-5;
+          border-right: 1px solid var(--grey-5);
         }
 
         button {
             border-radius:2px;
             font-size:@font-size-small;
-            background-color:@grey-0;
+            background-color:var(--grey-0);
 
-            &:hover { background-color:@grey-1; }
+            &:hover { background-color:var(--grey-1); }
         }
     }
 
     // Pomodoro timer
     .pomodoro {
-        .pomodoro-task  { color: @pomodoro-task; }
-        .pomodoro-short { color: @pomodoro-short; }
-        .pomodoro-long  { color: @pomodoro-long; }
+        .pomodoro-task  { color: var(--pomodoro-task); }
+        .pomodoro-short { color: var(--pomodoro-short); }
+        .pomodoro-long  { color: var(--pomodoro-long); }
     }
 
     // Footnote edit popup

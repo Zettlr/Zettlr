@@ -3,17 +3,17 @@
  */
 
 // CodeMirror scrollbar annotations
-.sb-annotation { background-color: @bg-annotation-dark; }
+.sb-annotation { background-color: var(--bg-annotation-dark); }
 
-::-webkit-scrollbar-thumb { background-color:@c-primary-shade; }
+::-webkit-scrollbar-thumb { background-color:var(--c-primary-shade); }
 ::-webkit-scrollbar-thumb:window-inactive { background-color: darken(@c-primary-shade, 20%); }
 
 .dragger {
     color:white;
-    background-color:@grey-6;
+    background-color:var(--grey-6);
 }
 
-background-color:@grey-7; // To make opacity to toolbar better looking
+background-color: var(--grey-7); // To make opacity to toolbar better looking
 
 // Now all other, bigger stylings.
 

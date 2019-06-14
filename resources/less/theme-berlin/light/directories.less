@@ -1,23 +1,22 @@
 // Directory styling
 
 #directories {
-    // border-right:1px solid @grey-2;
-    background-color: @bg-directories;
+    background-color: var(--bg-directories);
     transition: @mode-transition all ease;
-    color: @grey-4;
+    color: var(--grey-4);
     font-size:@font-size-small;
 
     // Direct descendants need some margin to the files and to other roots
     #directories-dirs-header, #directories-files-header {
-      border-bottom:1px solid @grey-2;
-      color: @grey-2;
+      border-bottom:1px solid var(--grey-2);
+      color: var(--grey-2);
       font-size: @font-size-small * 0.8; // Even smaller
     }
 
 
     ul {
         .selected {
-            background-color:@c-primary;
+            background-color:var(--c-primary);
             color:white;
 
             &:before { color:white; }
@@ -25,12 +24,12 @@
 
         li {
             &:hover {
-              color: @grey-4;
-              background-color:@grey-1;
+              color: var(--grey-4);
+              background-color:var(--grey-1);
             }
 
             &.highlight {
-                box-shadow: 0px 0px 1px 2px @selection-light;
+                box-shadow: 0px 0px 1px 2px var(--selection-light);
 
                 // Prevent hovering effect on drag'n'drop actions
                 &:hover  { background-color:inherit; }
@@ -40,36 +39,36 @@
 
     .file {
         &.selected {
-            background-color:@c-primary;
+            background-color:var(--c-primary);
             color:white;
         }
 
         &:hover {
-            background-color:@grey-1;
+            background-color:var(--grey-1);
             color:inherit;
         }
     }
 
-    .virtual-directory { color: @c-virtual-directory; }
+    .virtual-directory { color: var(--c-virtual-directory); }
 
     .dead-directory {
-      color: @grey-2;
+      color: var(--grey-2);
       &:hover {
-        color: @grey-2;
+        color: var(--grey-2);
         background-color: inherit;
       }
     }
 
-    .project { color: @c-project; }
+    .project { color: var(--c-project); }
 
     .emptyPaths {
-        background-color:@grey-0;
-        color:@grey-4;
+        background-color:var(--grey-0);
+        color:var(--grey-4);
     }
 }
 
 // When both directories and preview list are visible, we need a visible border
 // between both so that it does not look weird.
 #combiner.expanded #directories {
-  border-right: 1px solid @grey-2;
+  border-right: 1px solid var(--grey-2);
 }

@@ -17,48 +17,54 @@
 // First import the Berlin theme, because this mainly changes colours.
 @import "../theme-berlin/theme-main.less";
 
-// Now adapt
+:root {
+
+  // Now adapt
+  --c-primary: var(--blue-0);
+  --c-primary-shade: var(--blue-1);
+
+  --c-secondary: var(--green-0);
+  --c-secondary-shade: var(--green-1);
+
+  --bg-primary: white;
+
+  // Colours for the directory list
+  --c-virtual-directory: var(--purple-selection);
+  --bg-virtual-directory: lighten(@purple-selection, 10%);
+  --c-virtual-directory-dark: var(--purple-selection-dark);
+  --bg-virtual-directory-dark: lighten(@purple-selection-dark, 10%);
+
+  --c-project: var(--orange-2);
+
+  // Scrollbar annotations
+  --bg-annotation: var(--orange-2);
+  --bg-annotation-dark: yellow;
+
+  --selection-light: var(--blue-selection);
+  --selection-dark: var(--blue-selection-dark);
+
+  /**
+   * ALERTS
+   */
+  --c-alert-success: var(--green-selection);
+  --c-alert-success-shade: var(--green-selection-dark);
+
+  --c-alert-warning: var(--gold-selection);
+  --c-alert-warning-shade: var(--gold-selection-dark);
+
+  --c-alert-error: var(--bg-error);
+  --c-alert-error-shade: var(--fg-error);
+
+  /**
+   * POMODORO
+   */
+  --pomodoro-task: var(--orange-2);
+  --pomodoro-short: var(--gold-selection-dark);
+  --pomodoro-long: var(--green-selection-dark);
+}
+
 @c-primary: @blue-0;
 @c-primary-shade: @blue-1;
-
-@c-secondary: @green-0;
-@c-secondary-shade: @green-1;
-
-@bg-primary: white;
-
-// Colours for the directory list
-@c-virtual-directory: @purple-selection;
-@bg-virtual-directory: lighten(@purple-selection, 10%);
-@c-virtual-directory-dark: @purple-selection-dark;
-@bg-virtual-directory-dark: lighten(@purple-selection-dark, 10%);
-
-@c-project: @orange-2;
-
-// Scrollbar annotations
-@bg-annotation: @orange-2;
-@bg-annotation-dark: yellow;
-
-@selection-light: @blue-selection;
-@selection-dark: @blue-selection-dark;
-
-/**
- * ALERTS
- */
-@c-alert-success: @green-selection;
-@c-alert-success-shade: @green-selection-dark;
-
-@c-alert-warning: @gold-selection;
-@c-alert-warning-shade: @gold-selection-dark;
-
-@c-alert-error: @bg-error;
-@c-alert-error-shade: @fg-error;
-
-/**
- * POMODORO
- */
-@pomodoro-task: @orange-2;
-@pomodoro-short: @gold-selection-dark;
-@pomodoro-long: @green-selection-dark;
 
 /**
  * Change editor font only.

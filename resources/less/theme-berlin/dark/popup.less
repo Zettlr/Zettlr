@@ -1,14 +1,14 @@
 // Modal and popup colours.
 
 .popup {
-    background-color: @popup-dark-color;
+    background-color: var(--popup-dark-color);
     box-shadow: 0px 0px 42px -10px rgba(0,0,0,0.75);
-    border-color: @popup-dark-shade;
-    color:@popup-dark-text;
+    border-color: var(--popup-dark-shade);
+    color:var(--popup-dark-text);
 
     button {
-        background-color: @popup-dark-color;
-        color: @popup-dark-text;
+        background-color: var(--popup-dark-color);
+        color: var(--popup-dark-text);
     }
 
     form input[type="submit"]:hover, form button:hover {
@@ -17,7 +17,7 @@
 
     .btn-share {
         &.odt, &.plain, &.tex {
-            color: @popup-dark-text;
+            color: var(--popup-dark-text);
             &:hover {
                 color: black;
             }
@@ -25,34 +25,34 @@
     }
 
     a.toc-link {
-        color: @popup-dark-text;
+        color: var(--popup-dark-text);
         &:hover { background-color: lighten(@popup-dark-color, 20%); }
     }
 
-    .formatting a:hover { background-color:@grey-7; }
+    .formatting a:hover { background-color:var(--grey-7); }
 
     .search {
       button {
-        background-color: @popup-dark-color;
+        background-color: var(--popup-dark-color);
         &:hover { background-color: lighten(@popup-dark-color, 20%); }
       }
 
-      input[type="text"]::placeholder { color: @grey-1; }
+      input[type="text"]::placeholder { color: var(--grey-1); }
 
       input#searchWhat {
-        border-bottom-color: @popup-dark-shade;
-        border-right-color: @popup-dark-shade;
+        border-bottom-color: var(--popup-dark-shade);
+        border-right-color: var(--popup-dark-shade);
       }
 
       input#replaceWhat {
-        border-right-color: @popup-dark-shade;
+        border-right-color: var(--popup-dark-shade);
       }
     }
 }
 
 .popup-arrow {
-    &.up    { border-bottom-color: @popup-dark-shade; }
-    &.down  { border-top-color:    @popup-dark-shade; }
-    &.left  { border-right-color:  @popup-dark-shade; }
-    &.right { border-left-color:   @popup-dark-shade; }
+    &.up    { border-bottom-color: var(--popup-dark-shade); }
+    &.down  { border-top-color:    var(--popup-dark-shade); }
+    &.left  { border-right-color:  var(--popup-dark-shade); }
+    &.right { border-left-color:   var(--popup-dark-shade); }
 }

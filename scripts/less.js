@@ -121,6 +121,7 @@ for (let theme of themes) {
     if (err) {
       log.error(`ERROR: Could not compile ${theme.source}: ${err.name}`)
       log.error(err.message)
+      console.error(err)
     }
   })
 }

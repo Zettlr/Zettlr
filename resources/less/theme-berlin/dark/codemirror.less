@@ -1,66 +1,66 @@
 // Dark codemirror theming
 
 #editor .CodeMirror, .quicklook .body .CodeMirror {
-    color:@grey-0;
+    color:var(--grey-0);
 }
 
-.CodeMirror-focused .CodeMirror-selected { background-color:@selection-dark; }
+.CodeMirror-focused .CodeMirror-selected { background-color:var(--selection-dark); }
 
-.CodeMirror-cursor { background: @c-primary-shade; }
+.CodeMirror-cursor { background: var(--c-primary-shade); }
 
 // First the code blocks
-.cm-comment, .cm-fenced-code { color:@grey-1; }
+.cm-comment, .cm-fenced-code { color:var(--grey-1); }
 .cm-fenced-code {
-    &.cm-comment    { color: @grey-3; }
-    &.cm-attribute  { color: @blue-3; }
-    &.cm-builtin    { color: @blue-3; } // Some modes use this for keywords
-    &.cm-string     { color: @green-0; }
-    &.cm-string-2   { color: @gold-selection-dark; }
-    &.cm-variable   { color: @grey-1; }
-    &.cm-variable-2 { color: @blue-0; }
-    &.cm-keyword    { color: @purple-selection; }
-    &.cm-property   { color: @orange-1; }
-    &.cm-atom       { color: @green-selection-dark; }
-    &.cm-number     { color: @blue-3; }
+    &.cm-comment    { color: var(--grey-3); }
+    &.cm-attribute  { color: var(--blue-3); }
+    &.cm-builtin    { color: var(--blue-3); } // Some modes use this for keywords
+    &.cm-string     { color: var(--green-0); }
+    &.cm-string-2   { color: var(--gold-selection-dark); }
+    &.cm-variable   { color: var(--grey-1); }
+    &.cm-variable-2 { color: var(--blue-0); }
+    &.cm-keyword    { color: var(--purple-selection); }
+    &.cm-property   { color: var(--orange-1); }
+    &.cm-atom       { color: var(--green-selection-dark); }
+    &.cm-number     { color: var(--blue-3); }
 }
 
 // HTML tags
-.cm-tag       { color: @orange-2; }
-.cm-attribute { color: @blue-3; }
-.cm-bracket   { color: @grey-1; }
-.cm-string    { color: @green-0; }
+.cm-tag       { color: var(--orange-2); }
+.cm-attribute { color: var(--blue-3); }
+.cm-bracket   { color: var(--grey-1); }
+.cm-string    { color: var(--green-0); }
 
 // Code background
-.cm-comment:not(.cm-formatting):not(.cm-fenced-code) { background-color: @grey-4; }
+.cm-comment:not(.cm-formatting):not(.cm-fenced-code) { background-color: var(--grey-4); }
 
 // TYPOGRAPHY
 .cm-formatting-header-1, .cm-formatting-header-2, .cm-formatting-header-3,
 .cm-formatting-header-4, .cm-formatting-header-5, .cm-formatting-header-6,
-.cm-url { color: @c-primary-shade; }
+.cm-url { color: var(--c-primary-shade); }
 
 /* LISTS */
 .cm-formatting-list-ul,
-.cm-formatting-list-ol { color: @c-primary-shade; }
+.cm-formatting-list-ol { color: var(--c-primary-shade); }
 
 /* TYPOGRAPHY */
-.cm-quote, .cm-link, .cm-strong, .cm-em { color:@c-primary-shade; }
-.cm-spell-error { border-bottom:2px dotted @bg-error; }
-.cm-zkn-tag, .cm-zkn-id, .cm-zkn-link { color:@c-primary-shade; }
-.cma { color: @c-primary-shade; }
+.cm-quote, .cm-link, .cm-strong, .cm-em { color:var(--c-primary-shade); }
+.cm-spell-error { border-bottom:2px dotted var(--bg-error); }
+.cm-zkn-tag, .cm-zkn-id, .cm-zkn-link { color:var(--c-primary-shade); }
+.cma { color: var(--c-primary-shade); }
 
 // citations
 .citeproc-citation {
-  background-color: @grey-5;
-  &.error { color: @bg-error; }
+  background-color: var(--grey-5);
+  &.error { color: var(--bg-error); }
 }
 
-.cm-formatting-escape { color:@grey-0; }
+.cm-formatting-escape { color:var(--grey-0); }
 
 .CodeMirror-foldmarker {
-  background-color: @grey-5;
-  color: @grey-2;
+  background-color: var(--grey-5);
+  color: var(--grey-2);
 
-  &:hover { background-color: @grey-4; }
+  &:hover { background-color: var(--grey-4); }
 }
 
 .CodeMirror-guttermarker-subtle { color: #464646; }
@@ -70,24 +70,24 @@
   -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
   -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
   box-shadow: 2px 3px 5px rgba(0,0,0,.2);
-  border: 1px solid @grey-5;
+  border: 1px solid var(--grey-5);
 
-  background: @grey-7;
+  background: var(--grey-7);
   li.CodeMirror-hint {
-    color: @grey-0;
+    color: var(--grey-0);
 
-    &:hover { background-color: @grey-5; }
+    &:hover { background-color: var(--grey-5); }
   }
 
   li.CodeMirror-hint-active {
-    background-color: @c-primary-shade;
-    color: @grey-0;
+    background-color: var(--c-primary-shade);
+    color: var(--grey-0);
 
-    &:hover { background-color: @c-primary; }
+    &:hover { background-color: var(--c-primary); }
   }
 
   .cm-hint-colour {
-    color: @grey-3;
-    background-color: @grey-5;
+    color: var(--grey-3);
+    background-color: var(--grey-5);
   }
 }

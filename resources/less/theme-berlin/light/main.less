@@ -3,9 +3,9 @@
  */
 
 // CodeMirror scrollbar annotations
-.sb-annotation { background-color:@bg-annotation; }
+.sb-annotation { background-color:var(--bg-annotation); }
 
-::-webkit-scrollbar-thumb { background-color:@c-primary; }
+::-webkit-scrollbar-thumb { background-color:var(--c-primary); }
 ::-webkit-scrollbar-thumb:window-inactive { background-color: lighten(@c-primary, 20%); }
 
 // Alerts
@@ -19,21 +19,21 @@
   font-weight: bold;
 
   &.success {
-    background-color: @c-alert-success;
-    color: @c-alert-success-shade;
-    border-color: @c-alert-success-shade;
+    background-color: var(--c-alert-success);
+    color: var(--c-alert-success-shade);
+    border-color: var(--c-alert-success-shade);
   }
 
   &.warning {
-    background-color: @c-alert-warning;
-    color: @c-alert-warning-shade;
-    border-color: @c-alert-warning-shade;
+    background-color: var(--c-alert-warning);
+    color: var(--c-alert-warning-shade);
+    border-color: var(--c-alert-warning-shade);
   }
 
   &.error {
-    background-color: @c-alert-error;
-    color: @c-alert-error-shade;
-    border-color: @c-alert-error-shade;
+    background-color: var(--c-alert-error);
+    color: var(--c-alert-error-shade);
+    border-color: var(--c-alert-error-shade);
   }
 }
 

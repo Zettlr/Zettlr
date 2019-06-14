@@ -17,65 +17,70 @@
 // First import the Berlin theme, because this mainly changes colours.
 @import "../theme-berlin/theme-main.less";
 
-// Now adapt
-@c-primary: @orange-0;
-@c-primary-shade: @orange-1;
+:root {
+  // Now adapt
+  --c-primary: var(--orange-0);
+  --c-primary-shade: var(--orange-1);
 
-@c-secondary: @green-0;
-@c-secondary-shade: @green-1;
+  --c-secondary: var(--green-0);
+  --c-secondary-shade: var(--green-1);
 
-@bg-primary: white;
+  --bg-primary: white;
 
-// Colours for the directory list
-@c-virtual-directory: @purple-selection;
-@bg-virtual-directory: lighten(@purple-selection, 10%);
-@c-virtual-directory-dark: @purple-selection-dark;
-@bg-virtual-directory-dark: lighten(@purple-selection-dark, 10%);
+  // Colours for the directory list
+  --c-virtual-directory: var(--purple-selection);
+  --bg-virtual-directory: lighten(@purple-selection, 10%);
+  --c-virtual-directory-dark: var(--purple-selection-dark);
+  --bg-virtual-directory-dark: lighten(@purple-selection-dark, 10%);
 
-@c-project: @orange-2;
+  --c-project: var(--orange-2);
 
-// Scrollbar annotations
-@bg-annotation: @orange-2;
-@bg-annotation-dark: yellow;
+  // Scrollbar annotations
+  --bg-annotation: var(--orange-2);
+  --bg-annotation-dark: yellow;
 
-@selection-light: @beige-2;
-@selection-dark: @grey-6;
+  --selection-light: var(--beige-2);
+  --selection-dark: var(--grey-6);
 
-/**
- * ALERTS
- */
-@c-alert-success: @green-selection;
-@c-alert-success-shade: @green-selection-dark;
+  /**
+   * ALERTS
+   */
+  --c-alert-success: var(--green-selection);
+  --c-alert-success-shade: var(--green-selection-dark);
 
-@c-alert-warning: @gold-selection;
-@c-alert-warning-shade: @gold-selection-dark;
+  --c-alert-warning: var(--gold-selection);
+  --c-alert-warning-shade: var(--gold-selection-dark);
 
-@c-alert-error: @bg-error;
-@c-alert-error-shade: @fg-error;
+  --c-alert-error: var(--bg-error);
+  --c-alert-error-shade: var(--fg-error);
 
-/**
- * POMODORO
- */
-@pomodoro-task: @orange-2;
-@pomodoro-short: @gold-selection-dark;
-@pomodoro-long: @green-selection-dark;
+  /**
+   * POMODORO
+   */
+  --pomodoro-task: var(--orange-2);
+  --pomodoro-short: var(--gold-selection-dark);
+  --pomodoro-long: var(--green-selection-dark);
+}
 
 /**
  * ADDITIONAL STUFF
  */
 
+ @c-primary: @orange-0;
+ @c-primary-shade: @orange-1;
+
 body {
   #editor {
-    background-color: @beige-0;
+    background-color: var(--beige-0);
     // We only need to change the editor's font
     font-family: @font-liberation;
   }
 
-  #directories { background-color: @beige-1; }
+  #directories { background-color: var(--beige-1); }
   #preview {
-    background-color: @beige-1;
+    background-color: var(--beige-1);
     ul li.directory, li.virtual-directory {
-      color: @orange-1;
+      color: var(--orange-1);
     }
   }
 }

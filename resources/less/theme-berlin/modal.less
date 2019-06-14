@@ -7,42 +7,42 @@
 
     .dialog {
         background-color:white;
-        border-radius:@border-radius;
+        border-radius: @border-radius;
         box-shadow: 20px 20px 40px 0px rgba(0, 0, 0, 0.45);
 
         // General typography
         h1 {
             font-size: 1.5em;
             margin-bottom: 0.2em;
-            color: @grey-5;
+            color: var(--grey-5);
 
             small {
                 font-size:75%;
-                color:@grey-3;
+                color: var(--grey-3);
             }
         }
 
         // The UUID span
         span.uuid {
-          color: @grey-3;
+          color: var(--grey-3);
           margin-top: -0.5em;
           margin-bottom: 0.5em;
         }
 
         // Muted info spans that can be placed somewhere on dialogs
         span.info {
-          color: @grey-3;
+          color: var(--grey-3);
           font-size: 80%;
           line-height: 90%;
         }
 
         // The error span inside dialogs (inside the submit button group)
         span.error-info {
-          color: @fg-error;
+          color: var(--fg-error);
         }
 
         hr {
-            border-bottom:1px solid @grey-4;
+            border-bottom:1px solid var(--grey-4);
             width: 80%;
         }
 
@@ -50,8 +50,8 @@
         // sometimes it's the only content of the dialog (in which case we
         // need to constrain its size in the geometry part)
         code, .code {
-            background-color:@grey-0;
-            color: @grey-5;
+            background-color: var(--grey-0);
+            color: var(--grey-5);
             border-radius:2px;
             font-weight: bold;
             padding: 2px 5px;
@@ -60,7 +60,7 @@
         // Forms
 
         label {
-          color:@grey-4;
+          color: var(--grey-4);
           margin-bottom:0.2em;
           padding-bottom:0;
           vertical-align: middle;
@@ -70,7 +70,7 @@
           line-height: 150%;
           font-size: inherit;
 
-          &.has-error { background-color: @bg-error !important; }
+          &.has-error { background-color: var(--bg-error) !important; }
         }
 
         input[type="text"], input[type="number"], button, a.button, textarea, select {
@@ -78,17 +78,17 @@
           border: none;
           border-radius: @border-radius;
           padding: 2px 10px;
-          background-color: @grey-0;
-          color: @grey-5;
+          background-color: var(--grey-0);
+          color: var(--grey-5);
           border-radius: @border-radius;
         }
 
         button, a.button {
-          background-color: @grey-1;
-          color: @grey-7;
+          background-color: var(--grey-1);
+          color: var(--grey-7);
           transition: 0.2s all ease;
           outline:0;
-          &:hover, &:focus { background-color:@c-primary; color: @bg-primary; }
+          &:hover, &:focus { background-color: var(--c-primary); color: var(--bg-primary); }
         }
 
         // This class can be used for the combination of a label with an input
@@ -104,7 +104,7 @@
         .prefs-submit-group { clear: both; }
 
         .changelog {
-            border:1px solid @grey-4;
+            border:1px solid var(--grey-4);
             border-radius:2px;
         }
 
@@ -114,16 +114,16 @@
             &.a4paper { border: 1px solid black; }
 
             .error {
-                background-color:@bg-error;
-                color: @fg-error;
-                border:1px solid @fg-error;
-                border-radius:5px;
+                background-color: var(--bg-error);
+                color: var(--fg-error);
+                border: 1px solid var(--fg-error);
+                border-radius: 5px;
             }
         }
 
         // Tabs styles
         .ui-tabs-nav {
-            border-bottom:1px solid @grey-1;
+            border-bottom:1px solid var(--grey-1);
 
             .ui-tabs-tab {
                 line-height:200%;
@@ -131,37 +131,37 @@
                 border-top-right-radius: @border-radius;
 
                 &.ui-tabs-active {
-                  background-color:@c-primary;
+                  background-color: var(--c-primary);
                   a { color: white; }
                 }
 
                 a, &.ui-tabs-active:hover a {
-                    color:black;
-                    text-decoration:none;
-                    text-align:center;
+                    color: black;
+                    text-decoration: none;
+                    text-align: center;
                 }
 
-                &:hover { background-color:@grey-1; }
+                &:hover { background-color: var(--grey-1); }
             }
         }
 
         // Dictionary list styles
         ul.dicts-list {
-            margin:0px;
-            border:1px solid @grey-2;
-            padding:0;
-            border-radius:5px;
+            margin: 0px;
+            border: 1px solid var(--grey-2);
+            padding: 0;
+            border-radius: 5px;
             border-top-left-radius: 0px;
             border-top-right-radius: 0px;
 
             li.dicts-list-item {
-                padding:10px;
+                padding: 10px;
                 font-weight: bold;
-                margin:0;
+                margin: 0;
                 background-color: white;
-                border-bottom:1px solid @grey-2;
+                border-bottom: 1px solid var(--grey-2);
                 &:hover {
-                    background-color:@grey-0;
+                    background-color: var(--grey-0);
                 }
 
                 &:last-child {
@@ -171,35 +171,35 @@
         }
 
         ul.user-dict {
-          margin:0px;
-          border:1px solid @grey-2;
-          padding:0;
-          border-radius:5px;
+          margin: 0px;
+          border: 1px solid var(--grey-2);
+          padding: 0;
+          border-radius: 5px;
 
           li.user-dict-item {
             position: relative;
-            border-bottom: 1px solid @grey-2;
+            border-bottom: 1px solid var(--grey-2);
 
             &::after {
               content: "\00d7";
               position: absolute;
               right: 5px;
               font-weight: bold;
-              color: @red-5;
+              color: var(--red-5);
             }
 
-            &:hover { background-color: @red-0; color: white; }
+            &:hover { background-color: var(--red-0); color: white; }
           }
         }
 
         input.dicts-list-search {
-            border:1px solid @grey-2;
+            border:1px solid var(--grey-2);
             background-color: white;
-            border-bottom:none;
+            border-bottom: none;
             font-size: inherit;
-            display:block;
-            margin:0;
-            padding:10px;
+            display: block;
+            margin: 0;
+            padding: 10px;
             border-radius: 5px;
             border-bottom-left-radius: 0px;
             border-bottom-right-radius: 0px;
@@ -208,27 +208,27 @@
         .selected-dict {
             color: white;
             cursor: pointer;
-            background-color: @c-primary;
-            border-radius:5px;
-            padding:5px 10px;
-            margin:5px;
-            border:1px solid @c-primary-shade;
+            background-color: var(--c-primary);
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 5px;
+            border: 1px solid var(--c-primary-shade);
 
             &:after {
                 content: "\00d7"; // &times;
-                font-size:150%;
-                padding:0px 5px;
-                color:@c-primary-shade;
+                font-size: 150%;
+                padding: 0px 5px;
+                color: var(--c-primary-shade);
                 line-height: 50%;
                 vertical-align: baseline;
             }
 
             &:hover {
-                background-color:darken(@c-primary, 10%);
-                border-color:darken(@c-primary-shade, 10%);
+                background-color: darken(@c-primary, 10%);
+                border-color: darken(@c-primary-shade, 10%);
 
                 &:after {
-                    color:darken(@c-primary-shade, 10%);
+                    color: darken(@c-primary-shade, 10%);
                 }
             }
         }
@@ -240,15 +240,15 @@
           font-weight: bold;
           cursor: pointer;
           border-radius: @border-radius;
-          border-bottom: 3px solid @c-primary;
-          border-right: 3px solid @c-primary;
-          color: @grey-8;
+          border-bottom: 3px solid var(--c-primary);
+          border-right: 3px solid var(--c-primary);
+          color: var(grey-8);
           padding: 5px;
           margin: 5px;
           transition: 0.1s all ease;
 
           &:hover {
-            background-color: @c-primary;
+            background-color: var(--c-primary);
             border-color: darken(@c-primary, 10%);
           }
 
