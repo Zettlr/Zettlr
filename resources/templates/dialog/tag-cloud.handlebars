@@ -3,7 +3,7 @@
     <p>{{i18n "dialog.tag_cloud.info" }}</p>
     <p>
         {{#each tags}}
-        <span class="tag copy-clipboard" data-copy-clipboard="{{ text }}" data-tippy-content="{{ count }}&times;">{{ text }} <small>{{ count }}x</small></span>
+        <span class="tag" data-tag="#{{ text }}">{{ text }} <small>{{ count }}x</small></span>
         {{/each}}
     </p>
     <button id="abort">{{i18n "dialog.button.close"}}</button>

@@ -1,3 +1,4 @@
+/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -24,6 +25,16 @@ class TagCloud extends ZettlrDialog {
     data.tags = Object.keys(data).map(key => data[key])
     data.tag_list = Object.keys(data).join('\n')
     return data
+  }
+
+  postAct () {
+    // Activate searches on click on the spans
+    $('span.tag').click((evt) => {
+      let elem = $(evt.target)
+      // TODO: Don't access the renderer element via window
+      window.renderer.autoSearch(elem.attr('data-tag'))
+      this.close()
+    })
   }
 }
 

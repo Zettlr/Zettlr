@@ -22,6 +22,7 @@
 - New Theme: **Karl-Marx-Stadt**.
 - Now you can choose which time to use for sorting and for displaying in the file meta: It's either the last modification time of the files or the creation time.
 - Directory sorting is now persisted during reboots.
+- Clicking on tags now initiates a search for the given tag.
 
 ## Under the Hood
 
