@@ -21,6 +21,7 @@
 - Inserting tasklists is now possible via context menu and formatting toolbar.
 - New Theme: **Karl-Marx-Stadt**.
 - Now you can choose which time to use for sorting and for displaying in the file meta: It's either the last modification time of the files or the creation time.
+- Directory sorting is now persisted during reboots.
 
 ## Under the Hood
 

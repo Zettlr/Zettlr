@@ -412,6 +412,7 @@ class ZettlrDir {
     */
   async scan () {
     // (Re-)Reads this directory.
+    await this._loadSettings() // Loads persisted settings on disk
 
     return new Promise((resolve, reject) => {
       try {
@@ -567,6 +568,9 @@ class ZettlrDir {
     } else {
       this.sorting = 'name-up'
     }
+
+    // Persist sorting
+    this._saveSettings()
 
     this.children = sort(this.children, this.sorting)
     return this
@@ -728,6 +732,41 @@ class ZettlrDir {
       'type': this.type,
       'sorting': this.sorting
     }
+  }
+
+  async _loadSettings () {
+    try {
+      fs.lstatSync(path.join(this.path, '.ztr-directory'))
+    } catch (err) {
+      // Create the file first
+      await this._saveSettings()
+    }
+
+    return new Promise((resolve, reject) => {
+      fs.readFile(path.join(this.path, '.ztr-directory'), 'utf8', (err, data) => {
+        if (err) reject(err)
+
+        data = JSON.parse(data)
+        this.sorting = data.settings.sorting
+        resolve()
+      })
+    })
+  }
+
+  async _saveSettings () {
+    return new Promise((resolve, reject) => {
+      // Prepare settings
+      let data = {
+        'settings': {
+          'sorting': this.sorting
+        }
+      }
+
+      fs.writeFile(path.join(this.path, '.ztr-directory'), JSON.stringify(data), 'utf8', (err) => {
+        if (err) reject(err)
+        resolve()
+      })
+    })
   }
 
   /**
