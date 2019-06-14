@@ -53,7 +53,8 @@ class ZettlrFile {
     this.wordCount = 0
     this.charCount = 0
     this.target = null // Contains the target object
-    this.modtime = 0
+    this.modtime = 0 // Modification time
+    this.creationtime = 0 // Creation time
     this.linefeed = '\n'
     // This variable is only used to transfer the file contents to and from
     // the renderer. It will be empty all other times, because otherwise the
@@ -131,6 +132,7 @@ class ZettlrFile {
   read (options = {}) {
     let stat = fs.lstatSync(this.path)
     this.modtime = stat.mtime.getTime()
+    this.creationtime = stat.birthtime.getTime()
 
     // (Re-)read content of file
     let cnt = fs.readFileSync(this.path, { encoding: 'utf8' })
@@ -145,6 +147,7 @@ class ZettlrFile {
   scan () {
     let stat = fs.lstatSync(this.path)
     this.modtime = stat.mtime.getTime()
+    this.creationtime = stat.birthtime.getTime()
 
     fs.readFile(this.path, { encoding: 'utf8' }, (err, content) => {
       if (err) console.error(err)
@@ -287,6 +290,7 @@ class ZettlrFile {
       'type': this.type,
       'ext': this.ext,
       'modtime': this.modtime,
+      'creationtime': this.creationtime,
       'content': this.read() // Will only be not empty when the file is modified.
     }
   }
@@ -619,6 +623,7 @@ class ZettlrFile {
       'charCount': this.charCount,
       'target': this.target,
       'modtime': this.modtime,
+      'creationtime': this.creationtime,
       'linefeed': this.linefeed
     }
   }

@@ -98,15 +98,16 @@ function asciiSorting (a, b) {
 }
 
 /**
- * Helper function to sort files by modification time
+ * Helper function to sort files by modification or creation time
  * @param  {ZettlrFile} a A ZettlrFile exposing a modtime property
  * @param  {ZettlrFile} b A ZettlrFile exposing a modtime property
  * @return {number}   0, 1, or -1, depending upon what the comparision yields.
  */
 function dateSorting (a, b) {
-  if (a.modtime < b.modtime) {
+  let prop = (global.config.get('sortingTime') === 'modtime') ? 'modtime' : 'creationtime'
+  if (a[prop] < b[prop]) {
     return -1
-  } else if (a.modtime > b.modtime) {
+  } else if (a[prop] > b[prop]) {
     return 1
   } else {
     return 0

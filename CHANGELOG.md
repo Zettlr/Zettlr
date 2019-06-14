@@ -20,6 +20,7 @@
 - Citations in your text are now always updated, you don't have to type anything for this to work.
 - Inserting tasklists is now possible via context menu and formatting toolbar.
 - New Theme: **Karl-Marx-Stadt**.
+- Now you can choose which time to use for sorting and for displaying in the file meta: It's either the last modification time of the files or the creation time.
 
 ## Under the Hood
 

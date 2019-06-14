@@ -164,6 +164,7 @@
             "combiner_collapsed": "Schmal &mdash; zeige entweder Preview oder Verzeichnisse",
             "combiner_expanded": "Erweitert &mdash; zeige sowohl Preview als auch Verzeichnisse",
             "combiner_explanation": "Modus der Seitenleiste",
+            "creationtime": "Dateierstellungszeitpunkt",
             "debug": "Entwicklermodus aktivieren",
             "default_image_save_path": "Standard-Bildspeicherort (relativ oder absolut)",
             "display": {
@@ -178,6 +179,7 @@
                 "render_tasks": "Tasks darstellen",
                 "title": "Anzeige"
             },
+            "display_time_explanation": "Zeige folgende Zeit in den Dateiinformationen an",
             "editor": "Editor",
             "enable_table_helper": "Tabelleneditor aktivieren",
             "export": {
@@ -196,6 +198,7 @@
             "general": "Allgemein",
             "hide_dirs": "Verstecke Verzeichnisse w\u00e4hrend globaler Suchen",
             "homeEndBehaviour": "Nutze die CodeMirror-Standardaktionen f\u00fcr \u003Ckbd\u003EHome\u003C/kbd\u003E und \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
+            "modtime": "Letzter Bearbeitungszeitpunkt",
             "mute_lines": "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab",
             "nightmode": "Dunkles Thema",
             "pandoc": "Pfad zum Pandoc-Programm. Bitte \u00e4ndere dies nur, wenn Zettlr Pandoc nicht automatisch findet.",
@@ -252,6 +255,7 @@
             "sorting_ascii": "ASCII-Reihenfolge (2 kommt nach 10)",
             "sorting_explanation": "Sortierreihenfolge f\u00fcr Dateien (bei Sortierung nach Dateinamen)",
             "sorting_natural": "Nat\u00fcrliche Reihenfolge (10 kommt nach 2)",
+            "sorting_time_explanation": "Wenn nach Zeit sortiert wird, sortiere nach",
             "spellcheck": "W\u00e4hle die Sprachen aus, f\u00fcr welche du die Rechtschreibpr\u00fcfung einschalten m\u00f6chtest.",
             "spellcheck_search_placeholder": "Suche nach W\u00f6rterb\u00fcchern &hellip;",
             "spellcheck_warning": "\u003Cem\u003EVorsicht:\u003C/em\u003E Zu viele gleichzeitig aktivierte Bibliotheken verlangsamen die App sp\u00fcrbar! Versuche, nicht mehr als drei gleichzeitig zu aktivieren!",

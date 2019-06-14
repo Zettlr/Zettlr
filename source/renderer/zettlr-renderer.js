@@ -154,6 +154,7 @@ class ZettlrRenderer {
     // Set file meta
     this.getPreview().fileMeta(global.config.get('fileMeta'))
     this.getPreview().hideDirs(global.config.get('hideDirs'))
+    this.getPreview().displayTime(global.config.get('fileMetaTime'))
     // Receive the application language
     this.setLocale(global.config.get('appLang'))
 

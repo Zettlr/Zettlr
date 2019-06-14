@@ -101,8 +101,10 @@ class ConfigProvider extends EventEmitter {
       'autoDarkModeStart': '22:00', // Switch into dark mode at this time
       'autoDarkModeEnd': '06:00', // Switch to light mode at this time
       'fileMeta': true,
+      'fileMetaTime': 'modtime', // The time to be displayed in file meta
       'hideDirs': true, // Should the app hide directories during global search?
       'sorting': 'natural', // Can be natural or based on ASCII values
+      'sortingTime': 'modtime', // can be modtime or creationtime
       'muteLines': true, // Should the editor mute lines in distraction free mode?
       'combinerState': 'collapsed', // collapsed = Preview or directories visible --- expanded = both visible
       // Export options

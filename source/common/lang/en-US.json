@@ -164,6 +164,7 @@
             "combiner_collapsed": "Thin &mdash; Show either preview or tree view",
             "combiner_expanded": "Extended &mdash; Show both preview and tree view",
             "combiner_explanation": "Sidebar mode",
+            "creationtime": "File creation time",
             "debug": "Enable debug mode",
             "default_image_save_path": "Default image path (relative or absolute)",
             "display": {
@@ -178,6 +179,7 @@
                 "render_tasks": "Render Tasks",
                 "title": "Display"
             },
+            "display_time_explanation": "In the file metadata display",
             "editor": "Editor",
             "enable_table_helper": "Enable Table Editor",
             "export": {
@@ -196,6 +198,7 @@
             "general": "General",
             "hide_dirs": "Hide directories during global search",
             "homeEndBehaviour": "Use the CodeMirror default actions for \u003Ckbd\u003EHome\u003C/kbd\u003E and \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
+            "modtime": "Last modification time",
             "mute_lines": "Mute non-focused lines in distraction-free mode",
             "nightmode": "Night mode",
             "pandoc": "Path to pandoc executable. Please only change, if Zettlr is unable to locate pandoc.",
@@ -252,6 +255,7 @@
             "sorting_ascii": "ASCII order (2 after 10)",
             "sorting_explanation": "Sorting order for files (used for sorting by name)",
             "sorting_natural": "Natural order (10 after 2)",
+            "sorting_time_explanation": "When sorting by time, sort by",
             "spellcheck": "Select the languages for which you want to enable automatic spell checking.",
             "spellcheck_search_placeholder": "Search for dictionaries &hellip;",
             "spellcheck_warning": "\u003Cem\u003EAttention:\u003C/em\u003E Too many active spell check libraries may slow the app down significanty! Try to stick with three at maximum.",

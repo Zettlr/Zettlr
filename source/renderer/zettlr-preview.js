@@ -43,6 +43,7 @@ class ZettlrPreview {
     this._renderer = parent
     this._fileMeta = false
     this._hideDirs = false
+    this._displayTime = 'modtime'
     this._selectedFile = null
 
     this._data = [] // The whole data (as returned by _renderer.getCurrentDir())
@@ -214,8 +215,9 @@ class ZettlrPreview {
 
         if (this._fileMeta) {
           let extindicator = (d.ext === '.tex') ? '<span class="tex-indicator">TeX</span>' : ''
+          let time = (this._displayTime === 'modtime') ? d.modtime : d.creationtime
           elem += `<p class="file-meta">${extindicator}
-          <span class="date">${formatDate(new Date(d.modtime))}</span>`
+          <span class="date">${formatDate(new Date(time))}</span>`
           if (d.id) elem += ` <span class="id">${d.id}</span>`
           if (d.tags.length > 0) elem += ` <span class="tags" data-tippy-content="${d.tags.join(',\n')}">#${d.tags.length}</span>`
 
@@ -595,6 +597,17 @@ class ZettlrPreview {
    */
   fileMeta (val) {
     this._fileMeta = Boolean(val)
+    this.refresh()
+    return this
+  }
+
+  /**
+   * Set the time that should be shown in the preview list depending on val.
+   * @param  {string} val Either "modtime" or "creationtime"
+   * @return {ZettlrPreview}     This for chainability.
+   */
+  displayTime (val) {
+    this._displayTime = val
     this.refresh()
     return this
   }
