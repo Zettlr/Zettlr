@@ -20,7 +20,7 @@
         "bcp-47": "^1.0.5",
         "chart.js": "^2.7.2",
         "chokidar": "^3.0.1",
-        "citeproc": "^2.2.6",
+        "citeproc": "^2.2.9",
         "clusterize.js": "^0.18.1",
         "codemirror": "^5.47.0",
         "command-exists": "^1.2.7",
@@ -34,7 +34,7 @@
         "sanitize-filename": "^1.6.1",
         "semver": "^6.1.1",
         "showdown": "^1.8.6",
-        "tippy.js": "^4.3.3",
+        "tippy.js": "^4.3.4",
         "uuid": "^3.3.2"
     },
     "devDependencies": {}

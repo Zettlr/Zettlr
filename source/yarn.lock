@@ -199,10 +199,10 @@ chokidar@^3.0.1:
   optionalDependencies:
     fsevents "^2.0.6"
 
-citeproc@^2.2.6:
-  version "2.2.6"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.6.tgz#89eb0380b87e3c97755963ef844432d2f1d27255"
-  integrity sha512-/VPh16Il6Z60nU8GvtgYtHXWxxxc5mjDn75V190IlHwsxhAD1h1fbvfhvUUgmdxSPI65GPHWrUK+jFFfIOtwNA==
+citeproc@^2.2.9:
+  version "2.2.9"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.9.tgz#fffd51f10f164e56c31be756da894072ba77f765"
+  integrity sha512-AKQEkro1SxiVUIg/EYUFKG/o/vYpt62L5cwopZptP1XcVXurHH/8bT4i7xbTgd4DwHjqyMIiV18e3KhDgPUjoA==
 
 cliui@^4.0.0:
   version "4.1.0"
@@ -810,10 +810,10 @@ strip-eof@^1.0.0:
   resolved "https://registry.yarnpkg.com/strip-eof/-/strip-eof-1.0.0.tgz#bb43ff5598a6eb05d89b59fcd129c983313606bf"
   integrity sha1-u0P/VZim6wXYm1n80SnJgzE2Br8=
 
-tippy.js@^4.3.3:
-  version "4.3.3"
-  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-4.3.3.tgz#396304bea577bbff03f2700a1761329e8c1fce86"
-  integrity sha512-2fPMlquzVQxpLoOd0eJA1sPZ86/R6zD/9985wV0d2zhhX52DiO3aeg7TTS/mBrUjgFwVZh19YLb4l2c8bJkQPw==
+tippy.js@^4.3.4:
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-4.3.4.tgz#9a91fd5ce8c401f181b7adaa6b2c27f3d105f3ba"
+  integrity sha512-O2ukxHOJTLVYZ/TfHjNd8WgAWoefX9uk5QiWRdHfX2PR2lBpUU4BJQLl7U2Ykc8K7o16gTeHEElpuRfgD5b0aA==
   dependencies:
     popper.js "^1.14.7"
 
