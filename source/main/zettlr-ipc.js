@@ -78,6 +78,12 @@ class ZettlrIPC {
         return
       }
 
+      if (arg.command === 'get-custom-css-path') {
+        // The main window's calls will be intercepted by having a cypher previously.
+        event.sender.send('custom-css', global.css.getPath())
+        return
+      }
+
       // In all other occasions omit the event.
       this.dispatch(arg)
     })
@@ -369,7 +375,7 @@ class ZettlrIPC {
       case 'get-custom-css':
         return global.css.get()
 
-      // Returns the custm CSS's file name
+      // Returns the custom CSS's file name
       case 'get-custom-css-path':
         return global.css.getPath()
 

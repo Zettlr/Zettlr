@@ -44,7 +44,11 @@ class ZettlrQuicklookWindow {
     let url = new URL(window.location.href)
     let hash = url.searchParams.get('file')
     // First sending must go out of the first tick of the application
-    setTimeout(() => { ipc.send('message', { 'command': 'ql-get-file', 'content': hash }) }, 10)
+    setTimeout(() => {
+      ipc.send('message', { 'command': 'ql-get-file', 'content': hash })
+      // Apply the custom CSS stylesheet to the head element
+      ipc.send('message', { 'command': 'get-custom-css-path', 'content': {} })
+    }, 10)
     // Listen for the file event to receive the file to display from main.
     ipc.on('file', (e, file) => { this.init(file) })
 
@@ -53,15 +57,24 @@ class ZettlrQuicklookWindow {
     let dm = url.searchParams.get('darkMode')
     let theme = url.searchParams.get('theme')
     if (dm === 'true') $('body').addClass('dark')
-    $('link#theme-css').attr('href', $('link#theme-css').attr('href').replace(/bielefeld|berlin|frankfurt/, theme))
+    $('link#theme-css').attr('href', $('link#theme-css').attr('href').replace(/bielefeld|berlin|frankfurt|karl-marx-stadt/, theme))
 
     // Toggle the theme (or mode) if there's an appropriate event
     ipc.on('toggle-theme', (e) => { $('body').toggleClass('dark') })
     ipc.on('switch-theme', (e, theme) => {
       $('link#theme-css').attr(
         'href',
-        $('link#theme-css').attr('href').replace(/bielefeld|berlin|frankfurt/, theme)
+        $('link#theme-css').attr('href').replace(/bielefeld|berlin|frankfurt|karl-marx-stadt/, theme)
       )
+    })
+
+    ipc.on('custom-css', (evt, cnt) => {
+      console.log('received custom css!', cnt)
+      let lnk = $('<link>').attr('rel', 'stylesheet')
+      lnk.attr('href', 'file://' + cnt + '?' + Date.now())
+      lnk.attr('type', 'text/css')
+      lnk.attr('id', 'custom-css-link')
+      $('head').first().append(lnk)
     })
 
     // activate event listeners for the window

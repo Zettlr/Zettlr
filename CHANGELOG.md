@@ -28,6 +28,7 @@
 - Images can now be put inside links on the condition that they are (a) the only element inside the link's description and (b) relative links won't work during preview.
 - You can now activate RMarkdown file support in the advanced preferences.
 - You can now tell Zettlr to count characters instead of words (e.g. for Chinese).
+- Custom CSS is now also rendered in the QuickLook windows.
 
 ## Under the Hood
 
