@@ -83,7 +83,9 @@ class ZettlrEditor {
     this._renderTasks = false
     this._renderHTags = false
     this._wysiwyg = false // TODO TESTING
-    this._renderTables = false // TODO TESTING
+    this._renderTables = false
+
+    this._countChars = false // Whether or not Zettlr should count characters as words (e.g., for Chinese)
 
     // This Markdown to HTML converter is used in various parts of the
     // class to perform converting operations.
@@ -272,7 +274,7 @@ class ZettlrEditor {
       }
 
       // Update wordcount
-      this._renderer.updateWordCount(countWords(this._cm.getValue()))
+      this._renderer.updateWordCount(countWords(this._cm.getValue(), this._countChars))
 
       if (changeObj.origin === 'paste' && changeObj.text.join(' ').split(' ').length > 10) {
         // In case the user pasted more than ten words don't let these count towards
@@ -475,7 +477,7 @@ class ZettlrEditor {
     // later in this function)
     $('.CodeMirror-vscrollbar').scrollTop(0)
     this._currentHash = 'hash' + file.hash
-    this._words = countWords(this._cm.getValue())
+    this._words = countWords(this._cm.getValue(), this._countChars)
 
     // Mark clean, because now we got a new (and therefore unmodified) file
     this._cm.markClean()
@@ -640,6 +642,8 @@ class ZettlrEditor {
     this._renderHTags = global.config.get('display.renderHTags')
     this._renderTables = global.config.get('editor.enableTableHelper')
 
+    this._countChars = global.config.get('editor.countChars')
+
     // Last but not least set the Zettelkasten options
     this._cm.setOption('zkn', global.config.get('zkn'))
 
@@ -694,13 +698,13 @@ class ZettlrEditor {
     */
   getFileInfo () {
     let ret = {
-      'words': countWords(this._cm.getValue()),
+      'words': countWords(this._cm.getValue(), this._countChars),
       'chars': this._cm.getValue().length,
       'chars_wo_spaces': this._cm.getValue().replace(/[\s ]+/g, '').length
     }
 
     if (this._cm.somethingSelected()) {
-      ret.words_sel = countWords(this._cm.getSelections().join(' '))
+      ret.words_sel = countWords(this._cm.getSelections().join(' '), this._countChars)
       ret.chars_sel = this._cm.getSelections().join('').length
     }
 
@@ -714,8 +718,8 @@ class ZettlrEditor {
     */
   getWrittenWords () {
     // Return the additional written words
-    let nbr = countWords(this._cm.getValue()) - this._words
-    this._words = countWords(this._cm.getValue())
+    let nbr = countWords(this._cm.getValue(), this._countChars) - this._words
+    this._words = countWords(this._cm.getValue(), this._countChars)
     return nbr
   }
 

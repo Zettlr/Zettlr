@@ -451,9 +451,10 @@ function makeSearchRegEx (term, injectFlags = ['i']) {
 /**
  * Returns an accurate word count.
  * @param  {String} words The Markdown text to count
+ * @param {Boolean} countChars Whether to count chars instead
  * @return {Number}       The number of words in the file.
  */
-function countWords (words) {
+function countWords (words, countChars = false) {
   if (!words || typeof words !== 'string') return 0
 
   words = words.split(/[\s ]+/)
@@ -468,6 +469,8 @@ function countWords (words) {
       i++
     }
   }
+
+  if (countChars) words = [...words.join('')]
 
   return words.length
 }

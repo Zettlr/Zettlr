@@ -164,6 +164,7 @@
             "combiner_collapsed": "Thin &mdash; Show either preview or tree view",
             "combiner_expanded": "Extended &mdash; Show both preview and tree view",
             "combiner_explanation": "Sidebar mode",
+            "count_chars": "Count characters instead of words (e.g., for Chinese)",
             "creationtime": "File creation time",
             "debug": "Enable debug mode",
             "default_image_save_path": "Default image path (relative or absolute)",

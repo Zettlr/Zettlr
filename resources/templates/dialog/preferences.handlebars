@@ -208,6 +208,13 @@
             </label>
             <label for="enableTableHelper">{{i18n "dialog.preferences.enable_table_helper"}}</label>
           </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="editor.countChars" value="yes" id="countChars" {{#if editor.countChars}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="countChars">{{i18n "dialog.preferences.count_chars"}}</label>
+          </div>
           <hr>
           <!-- Here come the custom user dictionary words! -->
           <p>{{i18n "dialog.preferences.user_dictionary"}}</p>

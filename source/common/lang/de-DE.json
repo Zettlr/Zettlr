@@ -164,6 +164,7 @@
             "combiner_collapsed": "Schmal &mdash; zeige entweder Preview oder Verzeichnisse",
             "combiner_expanded": "Erweitert &mdash; zeige sowohl Preview als auch Verzeichnisse",
             "combiner_explanation": "Modus der Seitenleiste",
+            "count_chars": "Zeichen statt W\u00f6rter z\u00e4hlen (z.B. f\u00fcr Chinesisch)",
             "creationtime": "Dateierstellungszeitpunkt",
             "debug": "Entwicklermodus aktivieren",
             "default_image_save_path": "Standard-Bildspeicherort (relativ oder absolut)",
