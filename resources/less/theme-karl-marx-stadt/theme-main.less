@@ -66,3 +66,9 @@
 // Additional LESS variables
 @c-primary: @red-1;
 @c-primary-shade: @red-3;
+
+// Exchange the colour of the preview image in the display settings to accomodate
+// for the primary colour of this theme.
+.modal .dialog div.image-size .image {
+  filter: hue-rotate(203deg) saturate(230%) contrast(164%) brightness(90%);
+}

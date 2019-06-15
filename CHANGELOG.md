@@ -29,6 +29,7 @@
 - You can now activate RMarkdown file support in the advanced preferences.
 - You can now tell Zettlr to count characters instead of words (e.g. for Chinese).
 - Custom CSS is now also rendered in the QuickLook windows.
+- The preview image colour is now adapted to the active theme.
 
 ## Under the Hood
 

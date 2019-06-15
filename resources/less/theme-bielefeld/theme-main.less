@@ -84,3 +84,9 @@ body {
     }
   }
 }
+
+// Exchange the colour of the preview image in the display settings to accomodate
+// for the primary colour of this theme.
+.modal .dialog div.image-size .image {
+  filter: hue-rotate(230deg) saturate(100%) contrast(100%) brightness(119%);
+}
