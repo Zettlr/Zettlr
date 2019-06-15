@@ -282,6 +282,8 @@ function ignoreDir (p) {
 */
 function ignoreFile (p) {
   let ext = path.extname(p)
+  // Check for RMarkdown files
+  if (ext === '.rmd' && global.config.get('enableRMarkdown')) return false
   return (!filetypes.includes(ext))
 }
 

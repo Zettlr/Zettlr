@@ -182,6 +182,7 @@
             },
             "display_time_explanation": "In the file metadata display",
             "editor": "Editor",
+            "enable_rmarkdown": "Enable RMarkdown file support",
             "enable_table_helper": "Enable Table Editor",
             "export": {
                 "dest": "Target directory for exported files. \u003Cem\u003EAttention:\u003C/em\u003E Selecting the current working directory will overwrite files without warning!",

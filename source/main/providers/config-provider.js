@@ -107,6 +107,7 @@ class ConfigProvider extends EventEmitter {
       'sortingTime': 'modtime', // can be modtime or creationtime
       'muteLines': true, // Should the editor mute lines in distraction free mode?
       'combinerState': 'collapsed', // collapsed = Preview or directories visible --- expanded = both visible
+      'enableRMarkdown': false, // Whether or not RMarkdown files should be recognised
       // Export options
       'pandoc': 'pandoc',
       'xelatex': 'xelatex',

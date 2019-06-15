@@ -181,6 +181,7 @@
             },
             "display_time_explanation": "Zeige folgende Zeit in den Dateiinformationen an",
             "editor": "Editor",
+            "enable_rmarkdown": "RMarkdown-Dateisupport aktivieren",
             "enable_table_helper": "Tabelleneditor aktivieren",
             "export": {
                 "dest": "Zielverzeichnis f\u00fcr Exporte. \u003Cem\u003EVorsicht:\u003C/em\u003E Die Auswahl &quot;Aktuelles Verzeichnis&quot; \u00fcberschreibt ohne Warnung eventuell vorhandene Dateien!",

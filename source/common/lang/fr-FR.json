@@ -186,6 +186,7 @@
                 "title": "Afficher"
             },
             "editor": "\u00c9diteur",
+            "enable_rmarkdown": "Charger les fichiers RMarkdown",
             "enable_table_helper": "Activer l'\u00e9diteur de tableau",
             "export": {
                 "dest": "Dossier de destination pour les fichiers export\u00e9s. \u003Cem\u003EAttention\u003C/em\u003E les fichiers sont remplac\u00e9s si vous choisissez \u00ab dossier en cours \u00bb !",

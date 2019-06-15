@@ -568,6 +568,13 @@
             </label>
             <label for="checkForBeta">{{i18n "dialog.preferences.checkForBeta"}}</label>
           </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="enableRMarkdown" value="yes" id="enableRMarkdown" {{#if enableRMarkdown}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="enableRMarkdown">{{i18n "dialog.preferences.enable_rmarkdown"}}</label>
+          </div>
         </div>
         <div class="box-right">
           <p>{{i18n "dialog.preferences.attachments_info"}}</p>
