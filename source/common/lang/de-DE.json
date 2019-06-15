@@ -197,6 +197,7 @@
                 "title": "Export"
             },
             "file_meta": "Zus\u00e4tzliche Dateiinformationen",
+            "formatting_characters_explanation": "W\u00e4hle die Formatierungszeichen f\u00fcr die Fett/Kursiv-Befehle aus",
             "general": "Allgemein",
             "hide_dirs": "Verstecke Verzeichnisse w\u00e4hrend globaler Suchen",
             "homeEndBehaviour": "Nutze die CodeMirror-Standardaktionen f\u00fcr \u003Ckbd\u003EHome\u003C/kbd\u003E und \u003Ckbd\u003EEnd\u003C/kbd\u003E.",

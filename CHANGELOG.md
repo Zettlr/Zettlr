@@ -30,6 +30,7 @@
 - You can now tell Zettlr to count characters instead of words (e.g. for Chinese).
 - Custom CSS is now also rendered in the QuickLook windows.
 - The preview image colour is now adapted to the active theme.
+- You can now choose the formatting characters that should be used by the formatting commands.
 
 ## Under the Hood
 

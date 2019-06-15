@@ -213,13 +213,15 @@ const { clipboard } = require('electron');
   // Bold-characters
   CodeMirror.commands.markdownBold = function (cm) {
     if (cm.getOption('disableInput')) return CodeMirror.Pass
-    markdownInline(cm, '**', '**', 'strong')
+    let boldChars = cm.getOption('markdownBoldFormatting')
+    markdownInline(cm, boldChars, boldChars, 'strong')
   }
 
   // The same for italic
   CodeMirror.commands.markdownItalic = function (cm) {
     if (cm.getOption('disableInput')) return CodeMirror.Pass
-    markdownInline(cm, '_', '_', 'em')
+    let italicChars = cm.getOption('markdownItalicFormatting')
+    markdownInline(cm, italicChars, italicChars, 'em')
   }
 
   // Code blocks

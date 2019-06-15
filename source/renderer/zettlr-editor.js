@@ -143,6 +143,8 @@ class ZettlrEditor {
       // inputStyle: "contenteditable", // Will enable this in a future version
       autoCloseBrackets: AUTOCLOSEBRACKETS,
       markdownImageBasePath: '', // The base path used to render the image in case of relative URLs
+      markdownBoldFormatting: '**', // The characters used for bold
+      markdownItalicFormatting: '_', // The characters used for italic
       markdownOnLinkOpen: (url) => {
         if (url[0] === '#') {
           // We should open an internal link
@@ -631,6 +633,10 @@ class ZettlrEditor {
 
     // Set indent unit
     this._cm.setOption('indentUnit', global.config.get('editor.indentUnit'))
+
+    // Set the bold and italic formatting characters
+    this._cm.setOption('markdownBoldFormatting', global.config.get('editor.boldFormatting'))
+    this._cm.setOption('markdownItalicFormatting', global.config.get('editor.italicFormatting'))
 
     // Set the preview options
     this._renderCitations = global.config.get('display.renderCitations')

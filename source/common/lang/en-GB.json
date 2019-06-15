@@ -198,6 +198,7 @@
                 "title": "Export"
             },
             "file_meta": "Show file information",
+            "formatting_characters_explanation": "Choose the formatting characters that the bold/emphasis commands should use",
             "general": "General",
             "hide_dirs": "Hide directories during global search",
             "homeEndBehaviour": "Use the CodeMirror default actions for \u003Ckbd\u003EHome\u003C/kbd\u003E and \u003Ckbd\u003EEnd\u003C/kbd\u003E.",

@@ -178,6 +178,45 @@
             {{i18n "dialog.preferences.indent_unit"}}
           </label>
           <input type="number" min="1" max="12" class="inline" name="editor.indentUnit" id="editor.indentUnit" value="{{ editor.indentUnit }}">
+          <hr>
+          <p>
+            {{i18n "dialog.preferences.formatting_characters_explanation"}}
+          </p>
+          <!-- It's so great that these boxes also work nested <3 CSS ftw -->
+          <div class="box-left">
+            <div class="cb-group">
+              <label class="radio-toggle">
+                <input type="radio" name="editor.boldFormatting" value="**" id="pref-bold-formatting-stars" {{#ifCond editor.boldFormatting '=' '**'}}checked="checked"{{/ifCond}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="pref-bold-formatting-stars"><strong>**{{i18n 'gui.formatting.bold'}}**</strong></label>
+            </div>
+            <div class="cb-group">
+              <label class="radio-toggle">
+                <input type="radio" name="editor.boldFormatting" value="__" id="pref-bold-formatting-underscore" {{#ifCond editor.boldFormatting '=' '__'}}checked="checked"{{/ifCond}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="pref-bold-formatting-underscore"><strong>__{{i18n 'gui.formatting.bold'}}__</strong></label>
+            </div>
+          </div>
+
+          <div class="box-right">
+            <div class="cb-group">
+              <label class="radio-toggle">
+                <input type="radio" name="editor.italicFormatting" value="*" id="pref-em-formatting-stars" {{#ifCond editor.italicFormatting '=' '*'}}checked="checked"{{/ifCond}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="pref-em-formatting-stars"><em>*{{i18n 'gui.formatting.italic'}}*</em></label>
+            </div>
+            <div class="cb-group">
+              <label class="radio-toggle">
+                <input type="radio" name="editor.italicFormatting" value="_" id="pref-em-formatting-underscore" {{#ifCond editor.italicFormatting '=' '_'}}checked="checked"{{/ifCond}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="pref-em-formatting-underscore"><em>_{{i18n 'gui.formatting.italic'}}_</em></label>
+            </div>
+          </div>
+
         </div>
         <div class="box-right">
           <div class="cb-group">
