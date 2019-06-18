@@ -85,6 +85,9 @@ class ZettlrEditor {
     this._wysiwyg = false // TODO TESTING
     this._renderTables = false
 
+    // Remembers the last mode when entering readability
+    this._lastMode = 'multiplex' // Default mode
+
     this._countChars = false // Whether or not Zettlr should count characters as words (e.g., for Chinese)
 
     // This Markdown to HTML converter is used in various parts of the
@@ -456,6 +459,40 @@ class ZettlrEditor {
   // END constructor
 
   /**
+   * Enters the readability mode
+   */
+  enterReadability () {
+    this._lastMode = this._cm.getOption('mode')
+    this._cm.setOption('mode', 'readability')
+    this._cm.refresh()
+  }
+
+  /**
+   * Exits the readability mode.
+   */
+  exitReadability () {
+    this._cm.setOption('mode', this._lastMode)
+    this._cm.refresh()
+  }
+
+  /**
+   * Returns whether or not the editor is currently in readability mode
+   * @return {Boolean} Whether or not readability mode is active.
+   */
+  isReadabilityModeActive () { return this._cm.getOption('mode') === 'readability' }
+
+  /**
+   * Toggles the readability mode on or off, depending on its state.
+   */
+  toggleReadability () {
+    if (this.isReadabilityModeActive()) {
+      this.exitReadability()
+    } else {
+      this.enterReadability()
+    }
+  }
+
+  /**
     * Opens a file, i.e. replaced the editor's content
     * @param  {ZettlrFile} file The file to be renderer
     * @return {ZettlrEditor}      Chainability.
@@ -562,6 +599,7 @@ class ZettlrEditor {
     * @return {ZettlrEditor} Chainability.
     */
   close () {
+    if (this.isReadabilityModeActive()) this.exitReadability()
     // Save current positions in case the file is being opened again later.
     if (this._currentHash != null) {
       this._positions[this._currentHash] = {

@@ -502,6 +502,11 @@ class ZettlrRendererIPC {
         this._app.getBody().displayFormatting()
         break
 
+      // Toggle the editor's readability-mode on or off.
+      case 'toggle-readability':
+        this._app.getEditor().toggleReadability()
+        break
+
       // Small notification
       case 'notify':
         global.notify(cnt)

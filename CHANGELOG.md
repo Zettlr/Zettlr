@@ -14,6 +14,7 @@
         - **Alignment-Buttons** (top-left): Aligns the currently active column left, center, or right.
         - **Removal-Buttons** (top-right): Removes either the current row or the current column. Does not remove the last row or column.
         - **Add-Buttons**: Adds rows or columns to the top, left, bottom or right hand side of the table, depending on the button.
+- **New Feature**: 1.4 introduces a **readability mode** that you can turn on. It will try to highlight your sentences based on a [simplified Dale-Chall algorithm](https://en.wikipedia.org/wiki/Readability#The_Dale%E2%80%93Chall_formula), where green means that it's readable and red means that the sentence is difficult to read. You can turn on the mode in the toolbar. Thanks to @wooorm at this point for providing the incentive of implementing the algorithm!
 - The app will boot much faster now.
 - Root directories that have not been found on app start, or are removed during runtime, are indicated as "dead" in your directory tree. If they reside on a removable medium, you can now simply plug the medium into the computer and rescan the directory. You don't have to manually open it anymore.
 - Decreased the sensitivity for when a drag event should start, so that accidental drags are prevented.

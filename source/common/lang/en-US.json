@@ -576,6 +576,7 @@
         "insert_ul": "Make an itemized list",
         "pomodoro": "Pomodoro-Timer",
         "preferences": "Open the settings dialog",
+        "readability": "Toggle readability mode",
         "remove_fn": "Remove the footnote under the cursor",
         "share": "Share the current file as HTML, DOCX, ODT or PDF",
         "show_menu": "Show application menu",

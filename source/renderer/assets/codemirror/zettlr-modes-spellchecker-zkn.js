@@ -190,8 +190,118 @@
     return CodeMirror.overlayMode(CodeMirror.getMode(config, 'spellchecker'), markdownZkn, true)
   })
 
+  /**
+    * This defines the readability mode. It will highlight sentences according
+    * to readability formulae. I don't specifically know what these formulae
+    * do, as I'm not a linguist, but I trust them. Adapted from Titus Worm's
+    * work over at github.com/wooorm. The algorithm is taken from exactly
+    * here: https://github.com/words/dale-chall-formula/blob/master/index.js#L32-L40
+    * We're only implementing it here as it's faster and more compatible than
+    * pulling it in.
+    * @param  {Object} config       The config with which the mode was loaded
+    * @param  {Object} parserConfig The previous config object
+    * @return {OverlayMode}              The loaded overlay mode.
+    */
+  CodeMirror.defineMode('readability', function (config, parserConfig) {
+    var difficultWordWeight = 0.1579 // Taken from the GitHub repo
+    var wordWeight = 0.0496
+    var difficultWordThreshold = 0.05
+    var adjustment = 3.6365
+    var sentenceEndings = '!?.:'.split('')
+
+    var readability = {
+      token: function (stream, state) {
+        // First extract a sentence, but exclude Markdown formatting.
+        let sentence = ''
+        if (delim.includes(stream.peek())) {
+          // When encountering delimiters outside of a sentence, jump over them.
+          stream.next()
+          return null
+        }
+
+        while (!stream.eol()) {
+          if (sentenceEndings.includes(stream.peek())) {
+            sentence += stream.next()
+            // Check if this really was the end of the sentence
+            if (!stream.eol() && stream.peek() === ' ') {
+              // We are done with this sentence
+              break // away!
+            } // Else: Continue to include characters.
+          } else {
+            sentence += stream.next()
+          }
+        }
+
+        // Post-production of the sentence -> remove Markdown-characters, etc
+        sentence = sentence.replace(/[*_]{1,3}[^_*]+[_*]{1,3}/g, '')
+        sentence = sentence.replace(/\[\[[^\]]+\[\[/g, '')
+        // Remove images completely
+        sentence = sentence.replace(/!\[[^\]]+\]\([^)]+\)/g, '')
+        // Make links as they would be read
+        sentence = sentence.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+
+        if (sentence.length < 2) {
+          // Don't render too short sentences.
+          return null
+        }
+
+        let difficultWords = 0
+        let mean = 0
+        let std = 0 // Standard deviation of word length
+        let wordThreshold = 0 // Will be mean + 1 * std
+        let words = sentence.trim().split(' ')
+
+        // Pluck empty strings
+        if (words[0] === '') words.shift()
+        if (words[words.length - 1] === '') words.pop()
+
+        // Now that we have the sentence, calculate the percentage of difficult
+        // words. As I am a statistician and want to keep the algorithm language
+        // agonistic, I have to pull some magic trick. I'll define "difficult
+        // words" by declaring it everything of more than two times the standard
+        // deviation of word length inside the sentence. This way we have
+        // roughly 5 percent difficult words inside sentences (but only) if the
+        // sentences accidentally prove to form a normal distribution. In most
+        // cases, the percentage of difficult words will be significantly lower
+        // (got the pun? No? Then you're safe: not a statistician).
+
+        // To do so first calculate the mean of the word lengths.
+        mean = words.join('').length / words.length // See what I did here? 8)
+
+        // Now the sum of squares (SoS)
+        let sos = 0
+        for (let word of words) sos += Math.pow(word.length - mean, 2)
+
+        // Then standard deviation
+        std = Math.sqrt(sos / (words.length - 1))
+        wordThreshold = mean + 2 * std // Tadaaa
+
+        for (let word of words) {
+          if (word.length > wordThreshold) difficultWords++
+        }
+
+        words = words.length // Replace the array
+        let percentageOfDifficultWords = difficultWords / words
+
+        let score = difficultWordWeight * percentageOfDifficultWords * 100 + (wordWeight * words)
+
+        if (percentageOfDifficultWords > difficultWordThreshold) {
+          score += adjustment
+        }
+
+        score = Math.floor(score)
+        if (score > 9) score = 10
+
+        // Now return a token corresponding to the score.
+        return 'readability-' + score
+      }
+    }
+
+    return CodeMirror.overlayMode(CodeMirror.getMode(config, 'markdown-zkn'), readability, true)
+  })
+
   // Define the corresponding MIME
-  CodeMirror.defineMIME('text/x-markdown', 'markdown-zkn')
+  CodeMirror.defineMIME('text/x-markdown-readability', 'readability')
 
   /**
     * MULTIPLEX MODE: This will by default load our internal mode cascade
