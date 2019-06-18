@@ -31,6 +31,7 @@
 - Custom CSS is now also rendered in the QuickLook windows.
 - The preview image colour is now adapted to the active theme.
 - You can now choose the formatting characters that should be used by the formatting commands.
+- You can now change the pattern used for generating new file names, and omit being asked for filenames in general.
 
 ## Under the Hood
 

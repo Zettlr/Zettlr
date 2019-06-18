@@ -34,7 +34,7 @@ const CustomCSS = require('./dialog/custom-css.js')
 const ErrorDialog = require('./dialog/error-dialog.js')
 
 const { trans } = require('../common/lang/i18n.js')
-const { localiseNumber } = require('../common/zettlr-helpers.js')
+const { localiseNumber, generateFileName } = require('../common/zettlr-helpers.js')
 
 /**
  * This class's duty is to handle everything that affects (or can potentially
@@ -140,14 +140,22 @@ class ZettlrBody {
   requestFileName (dir) {
     // No directory selected.
     if (!dir) return
+
     // Don't open multiple popups
     if (this._currentPopup) this._currentPopup.close(true)
+
+    // Check if the file should be created immediately. Do this after check for
+    // popups due to semantic reasons (this way the action always closes any
+    // other popup, which makes sense for users).
+    if (global.config.get('newFileDontPrompt')) {
+      return global.ipc.send('file-new', { 'name': generateFileName(), 'hash': dir.hash })
+    }
 
     // It was a virtual directory, not an actual directory.
     if (dir.type !== 'directory') return
 
     let cnt = makeTemplate('popup', 'textfield', {
-      'val': trans('dialog.file_new.value'),
+      'val': generateFileName(),
       'placeholder': trans('dialog.file_new.placeholder')
     })
 

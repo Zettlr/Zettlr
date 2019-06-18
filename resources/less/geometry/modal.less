@@ -91,6 +91,18 @@
       }
     }
 
+    span.info {
+      display: block;
+      margin-top: 0em;
+      margin-bottom: 1em;
+      font-size: 80%;
+      line-height: 100%;
+    }
+
+    input:not(.inline) ~ span.info {
+      margin-top: -1em; // Reset the input's margin
+    }
+
     select {
       line-height: 200%;
       font-size: inherit;

@@ -198,6 +198,7 @@
                 "title": "Export"
             },
             "file_meta": "Show file information",
+            "filename_generator": "Pattern for new filenames",
             "formatting_characters_explanation": "Choose the formatting characters that the bold/emphasis commands should use",
             "general": "General",
             "hide_dirs": "Hide directories during global search",
@@ -205,6 +206,7 @@
             "indent_unit": "Indent by the following number of spaces",
             "modtime": "Last modification time",
             "mute_lines": "Mute non-focused lines in distraction-free mode",
+            "new_file_dont_prompt": "Do not prompt for filename when creating new files",
             "nightmode": "Night mode",
             "pandoc": "Path to pandoc executable. Please only change, if Zettlr is unable to locate pandoc.",
             "pandoc_command": "Pandoc command. \u003Cstrong\u003EOnly for advanced users!\u003C/strong\u003E",

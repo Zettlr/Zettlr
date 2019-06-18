@@ -197,6 +197,7 @@
                 "title": "Export"
             },
             "file_meta": "Zus\u00e4tzliche Dateiinformationen",
+            "filename_generator": "Muster f\u00fcr neue Dateinamen",
             "formatting_characters_explanation": "W\u00e4hle die Formatierungszeichen f\u00fcr die Fett/Kursiv-Befehle aus",
             "general": "Allgemein",
             "hide_dirs": "Verstecke Verzeichnisse w\u00e4hrend globaler Suchen",
@@ -204,6 +205,7 @@
             "indent_unit": "R\u00fccke um folgende Anzahl Leerzeichen ein",
             "modtime": "Letzter Bearbeitungszeitpunkt",
             "mute_lines": "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab",
+            "new_file_dont_prompt": "Dateinamen bei Dateierstellung nicht abfragen",
             "nightmode": "Dunkles Thema",
             "pandoc": "Pfad zum Pandoc-Programm. Bitte \u00e4ndere dies nur, wenn Zettlr Pandoc nicht automatisch findet.",
             "pandoc_command": "Pandoc-Befehl. \u003Cstrong\u003ENur f\u00fcr erfahrene Benutzer!\u003C/strong\u003E",

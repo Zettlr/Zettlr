@@ -180,32 +180,12 @@ function sort (arr, type = 'name-up') {
 }
 
 /**
-* This function generates a (per second unique) name
-* @return {String} A name in the format "New File YYYY-MM-DD hh:mm:ss.md"
-*/
-function generateName () {
-  let date = new Date()
-  let yyyy = date.getFullYear()
-  let mm = date.getMonth() + 1
-  if (mm <= 9) mm = '0' + mm
-  let dd = date.getDate()
-  if (dd <= 9) dd = '0' + dd
-  let hh = date.getHours()
-  if (hh <= 9) hh = '0' + hh
-  let m = date.getMinutes()
-  if (m <= 9) m = '0' + m
-  let ss = date.getSeconds()
-  if (ss <= 9) ss = '0' + ss
-  let add = yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + m + ':' + ss
-
-  return 'New file ' + add + '.md'
-}
-
-/**
-* This function generates a (per second unique) ID to be inserted into the editor
-* @return {String} An id in the format "YYYYMMDDHHMMSS"
-*/
-function generateId (pattern = '@ID:%Y%M%D%h%m%s') {
+ * A utility function that can replace a bunch of variables in strings, used
+ * for the pattern generators (ID and filename)
+ * @param       {string} string The input string
+ * @return      {string}        The output string, with all %-variables replaced
+ */
+function _replaceStringVariables (string) {
   let date = new Date()
   let yyyy = date.getFullYear()
   let mm = date.getMonth() + 1
@@ -220,13 +200,33 @@ function generateId (pattern = '@ID:%Y%M%D%h%m%s') {
   if (ss <= 9) ss = '0' + ss
 
   // Now generate the id by replacing all placeholders in the pattern
-  pattern = pattern.replace(/%Y/g, yyyy)
-  pattern = pattern.replace(/%M/g, mm)
-  pattern = pattern.replace(/%D/g, dd)
-  pattern = pattern.replace(/%h/g, hh)
-  pattern = pattern.replace(/%m/g, m)
-  pattern = pattern.replace(/%s/g, ss)
+  string = string.replace(/%Y/g, yyyy)
+  string = string.replace(/%M/g, mm)
+  string = string.replace(/%D/g, dd)
+  string = string.replace(/%h/g, hh)
+  string = string.replace(/%m/g, m)
+  string = string.replace(/%s/g, ss)
+
+  return string
+}
+
+/**
+ * Generates a new filename based on the configured filename pattern.
+ * @return {string} The new filename.
+ */
+function generateFileName () {
+  let pattern = global.config.get('newFileNamePattern')
+  pattern = _replaceStringVariables(pattern)
+  pattern = pattern.replace(/%id/g, generateId(global.config.get('zkn.idGen')))
   return pattern
+}
+
+/**
+* This function generates a (per second unique) ID to be inserted into the editor
+* @return {String} An id in the format "YYYYMMDDHHMMSS"
+*/
+function generateId (pattern = '%Y%M%D%h%m%s') {
+  return _replaceStringVariables(pattern)
 }
 
 /**
@@ -479,7 +479,7 @@ module.exports = {
   hash,
   flattenDirectoryTree,
   sort,
-  generateName,
+  generateFileName,
   generateId,
   formatDate,
   ignoreFile,

@@ -108,6 +108,8 @@ class ConfigProvider extends EventEmitter {
       'muteLines': true, // Should the editor mute lines in distraction free mode?
       'combinerState': 'collapsed', // collapsed = Preview or directories visible --- expanded = both visible
       'enableRMarkdown': false, // Whether or not RMarkdown files should be recognised
+      'newFileNamePattern': '%id.md',
+      'newFileDontPrompt': false, // If true immediately creates files
       // Export options
       'pandoc': 'pandoc',
       'xelatex': 'xelatex',

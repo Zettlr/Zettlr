@@ -25,7 +25,7 @@ const { shell } = require('electron')
 const { trans } = require('../common/lang/i18n.js')
 
 // Include helpers
-const { hash, sort, generateName,
+const { hash, sort, generateFileName,
   ignoreDir, ignoreFile, isFile, isDir, isAttachment
 } = require('../common/zettlr-helpers.js')
 
@@ -248,7 +248,7 @@ class ZettlrDir {
   newfile (name) {
     if (name == null) {
       // Generate a unique new name
-      name = generateName()
+      name = generateFileName()
     }
 
     name = sanitize(name, { replacement: '-' })
