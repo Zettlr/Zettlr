@@ -41,6 +41,7 @@
 - Replaced the citation engine with `Citr` for more accurate results in previewing citations.
 - The `Citeproc` engine is now a service provider.
 - Switched internally to CSS-variables for all colours.
+- Moved all Zettlr CodeMirror modes to their respective files.
 
 # 1.3.0
 

@@ -54,8 +54,10 @@ require('codemirror/addon/hint/show-hint')
 
 // Zettlr specific addons
 require('./zettlr-plugin-markdown-shortcuts.js')
+require('./zettlr-mode-spellchecker.js')
+require('./zettlr-mode-zkn.js')
 require('./zettlr-mode-readability.js')
-require('./zettlr-modes-spellchecker-zkn.js')
+require('./zettlr-mode-multiplex.js')
 require('./zettlr-plugin-footnotes.js')
 require('./zettlr-plugin-render-images.js')
 require('./zettlr-plugin-render-links.js')
