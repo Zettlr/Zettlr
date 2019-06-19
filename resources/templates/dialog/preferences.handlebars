@@ -9,6 +9,7 @@
         <li><a href="#prefs-tabs-zkn">{{i18n "dialog.preferences.zkn.title"}}</a></li>
         <li><a href="#prefs-tabs-display">{{i18n "dialog.preferences.display.title"}}</a></li>
         <li><a href="#prefs-tabs-theme">{{i18n "dialog.preferences.theme.title"}}</a></li>
+        <li><a href="#prefs-tabs-spellchecking">{{i18n "dialog.preferences.spellchecking.title"}}</a></li>
         <li><a href="#prefs-tabs-advanced">{{i18n "dialog.preferences.advanced"}}</a></li>
       </ul>
 
@@ -155,30 +156,6 @@
       <div id="prefs-tabs-editor">
         <div class="clear"></div>
         <div class="box-left">
-          <p>{{i18n "dialog.preferences.spellcheck"}}</p>
-          <p>{{i18n "dialog.preferences.spellcheck_warning"}}</p>
-          <input type="text" class="dicts-list-search" placeholder="{{i18n "dialog.preferences.spellcheck_search_placeholder"}}">
-          <ul class="dicts-list">
-            {{#each availableDicts}}
-            <li class="cb-group dicts-list-item">
-              <label class="cb-toggle">
-                <input type="checkbox" name="selectedDicts" value="{{this}}" id="{{this}}" {{#ifIn this ../selectedDicts}}checked="checked"{{/ifIn}}>
-                <div class="toggle"></div>
-              </label>
-              <label for="{{this}}">{{transDict this}}</label>
-            </li>
-            {{/each}}
-          </ul>
-          <hr>
-          <label for="editor.defaultSaveImagePath">
-            {{i18n "dialog.preferences.default_image_save_path"}}
-          </label>
-          <input type="text" name="editor.defaultSaveImagePath" id="editor.defaultSaveImagePath" value="{{ editor.defaultSaveImagePath }}">
-          <label for="editor.indentUnit">
-            {{i18n "dialog.preferences.indent_unit"}}
-          </label>
-          <input type="number" min="1" max="12" class="inline" name="editor.indentUnit" id="editor.indentUnit" value="{{ editor.indentUnit }}">
-          <hr>
           <p>
             {{i18n "dialog.preferences.formatting_characters_explanation"}}
           </p>
@@ -199,7 +176,6 @@
               <label for="pref-bold-formatting-underscore"><strong>__{{i18n 'gui.formatting.bold'}}__</strong></label>
             </div>
           </div>
-
           <div class="box-right">
             <div class="cb-group">
               <label class="radio-toggle">
@@ -216,7 +192,23 @@
               <label for="pref-em-formatting-underscore"><em>_{{i18n 'gui.formatting.italic'}}_</em></label>
             </div>
           </div>
-
+          <hr>
+          <label for="editor.defaultSaveImagePath">
+            {{i18n "dialog.preferences.default_image_save_path"}}
+          </label>
+          <input type="text" name="editor.defaultSaveImagePath" id="editor.defaultSaveImagePath" value="{{ editor.defaultSaveImagePath }}">
+          <label for="editor.indentUnit">
+            {{i18n "dialog.preferences.indent_unit"}}
+          </label>
+          <input type="number" min="1" max="12" class="inline" name="editor.indentUnit" id="editor.indentUnit" value="{{ editor.indentUnit }}">
+          <hr>
+          {{i18n "dialog.preferences.readability_algorithm"}}
+          <select name="editor.readabilityAlgorithm">
+            <option value="dale-chall" {{#ifCond editor.readabilityAlgorithm '=' 'dale-chall'}}selected="selected"{{/ifCond}}>Dale-Chall</option>
+            <option value="gunning-fog" {{#ifCond editor.readabilityAlgorithm '=' 'gunning-fog'}}selected="selected"{{/ifCond}}>Gunning-Fog</option>
+            <option value="coleman-liau" {{#ifCond editor.readabilityAlgorithm '=' 'coleman-liau'}}selected="selected"{{/ifCond}}>Coleman/Liau</option>
+            <option value="automated-readability" {{#ifCond editor.readabilityAlgorithm '=' 'automated-readability'}}selected="selected"{{/ifCond}}>Automated Readability Index (ARI)</option>
+          </select>
         </div>
         <div class="box-right">
           <div class="cb-group">
@@ -254,17 +246,6 @@
             </label>
             <label for="countChars">{{i18n "dialog.preferences.count_chars"}}</label>
           </div>
-          <hr>
-          <!-- Here come the custom user dictionary words! -->
-          <p>{{i18n "dialog.preferences.user_dictionary"}}</p>
-          <ul class="user-dict">
-            {{#each userDictionary}}
-            <li class="user-dict-item">
-              <input type="hidden" value="{{this}}" name="userDictionary">
-              {{this}}
-            </li>
-            {{/each}}
-          </ul>
         </div>
         <div class="clear"></div>
       </div>
@@ -582,6 +563,41 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+
+
+
+      <!-- Spellchecking options -->
+      <div id="prefs-tabs-spellchecking">
+        <div class="box-left">
+          <p>{{i18n "dialog.preferences.spellcheck"}}</p>
+          <p>{{i18n "dialog.preferences.spellcheck_warning"}}</p>
+          <input type="text" class="dicts-list-search" placeholder="{{i18n "dialog.preferences.spellcheck_search_placeholder"}}">
+          <ul class="dicts-list">
+            {{#each availableDicts}}
+            <li class="cb-group dicts-list-item">
+              <label class="cb-toggle">
+                <input type="checkbox" name="selectedDicts" value="{{this}}" id="{{this}}" {{#ifIn this ../selectedDicts}}checked="checked"{{/ifIn}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="{{this}}">{{transDict this}}</label>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+        <div class="box-right">
+          <!-- Here come the custom user dictionary words! -->
+          <p>{{i18n "dialog.preferences.user_dictionary"}}</p>
+          <ul class="user-dict">
+            {{#each userDictionary}}
+            <li class="user-dict-item">
+              <input type="hidden" value="{{this}}" name="userDictionary">
+              {{this}}
+            </li>
+            {{/each}}
+          </ul>
         </div>
       </div>
 

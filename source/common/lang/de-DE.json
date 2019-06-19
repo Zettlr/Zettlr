@@ -257,6 +257,7 @@
                 "title": "Projekteinstellungen",
                 "title_label": "Name des Projektes"
             },
+            "readability_algorithm": "Algorithmus f\u00fcr den Lesbarkeits-Modus",
             "reset_pandoc_command": "Pandoc-Befehl auf Werkseinstellungen zur\u00fccksetzen",
             "sorting_ascii": "ASCII-Reihenfolge (2 kommt nach 10)",
             "sorting_explanation": "Sortierreihenfolge f\u00fcr Dateien (bei Sortierung nach Dateinamen)",
@@ -265,6 +266,9 @@
             "spellcheck": "W\u00e4hle die Sprachen aus, f\u00fcr welche du die Rechtschreibpr\u00fcfung einschalten m\u00f6chtest.",
             "spellcheck_search_placeholder": "Suche nach W\u00f6rterb\u00fcchern &hellip;",
             "spellcheck_warning": "\u003Cem\u003EVorsicht:\u003C/em\u003E Zu viele gleichzeitig aktivierte Bibliotheken verlangsamen die App sp\u00fcrbar! Versuche, nicht mehr als drei gleichzeitig zu aktivieren!",
+            "spellchecking": {
+                "title": "Rechtschreibung"
+            },
             "theme": {
                 "info": "W\u00e4hle hier das Theme der App aus.",
                 "title": "Design"

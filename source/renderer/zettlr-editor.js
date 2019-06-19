@@ -463,7 +463,10 @@ class ZettlrEditor {
    */
   enterReadability () {
     this._lastMode = this._cm.getOption('mode')
-    this._cm.setOption('mode', 'readability')
+    this._cm.setOption('mode', {
+      name: 'readability',
+      algorithm: global.config.get('editor.readabilityAlgorithm')
+    })
     this._cm.refresh()
   }
 
@@ -479,7 +482,10 @@ class ZettlrEditor {
    * Returns whether or not the editor is currently in readability mode
    * @return {Boolean} Whether or not readability mode is active.
    */
-  isReadabilityModeActive () { return this._cm.getOption('mode') === 'readability' }
+  isReadabilityModeActive () {
+    let mode = this._cm.getOption('mode')
+    return mode.hasOwnProperty('name') && mode.name === 'readability'
+  }
 
   /**
    * Toggles the readability mode on or off, depending on its state.
