@@ -33,6 +33,7 @@
 - The preview image colour is now adapted to the active theme.
 - You can now choose the formatting characters that should be used by the formatting commands.
 - You can now change the pattern used for generating new file names, and omit being asked for filenames in general.
+- Zettlr now tries to escape the input you provide for options that are directly passed into LaTeX documents.
 
 ## Under the Hood
 

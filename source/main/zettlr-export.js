@@ -356,10 +356,10 @@ class ZettlrExport {
       'LINE_SPACING': pdf.lineheight,
       'FONT_SIZE': pdf.fontsize + 'pt',
       // Metadata
-      'PDF_TITLE': this.options.title,
-      'PDF_SUBJECT': this.options.title,
-      'PDF_AUTHOR': this.options.author,
-      'PDF_KEYWORDS': this.options.keywords,
+      'PDF_TITLE': this._sanitiseTexVariable(this.options.title),
+      'PDF_SUBJECT': this._sanitiseTexVariable(this.options.title),
+      'PDF_AUTHOR': this._sanitiseTexVariable(this.options.author),
+      'PDF_KEYWORDS': this._sanitiseTexVariable(this.options.keywords),
       // Project settings
       'TITLEPAGE': (pdf.titlepage) ? '\\maketitle\n\\pagebreak\n' : '',
       'GENERATE_TOC': (pdf.toc) ? `\\setcounter{tocdepth}{${pdf.tocDepth}}\n\\tableofcontents\n\\pagebreak\n` : ''
@@ -370,6 +370,19 @@ class ZettlrExport {
     }
 
     fs.writeFileSync(this.textpl, cnt, 'utf8')
+  }
+
+  /**
+   * Sanitises a string so that it is safe to insert into a document.
+   * @param  {String} val The input.
+   * @return {String}     The sanitised output.
+   */
+  _sanitiseTexVariable (val) {
+    // Escape or remove TeX command characters: # $ % ^ & _ { } ~ \
+    val = val.replace(/(?<=[^\\]|^)([_#%&{}])/g, '\\$1')
+    // Remove those that cannot be rendered
+    val = val.replace(/[$^~\\]/g, '')
+    return val
   }
 
   /**
@@ -425,7 +438,6 @@ class ZettlrExport {
     this.pandocFlags['citeproc'] = this._citeprocOptions
     this.pandocFlags['tpl'] = this.tpl
     this.pandocFlags['outflag'] = `-t ${this.options.format}`
-    // this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${this._citeprocOptions} -t ${this.options.format} ${standalone} -o "${this.targetFile}"`
   }
 
   /**
@@ -438,8 +450,6 @@ class ZettlrExport {
     // we don't need to grab the pre-rendered tex-file prior and chase it
     // through the xelatex engine manually and can let pandoc do the work.
 
-    // let toc = (this.options.pdf.toc) ? '--toc' : ''
-    // let tocdepth = (this.options.pdf.tocDepth) ? '--toc-depth=' + this.options.pdf.tocDepth : ''
     this.pandocFlags['toc'] = (this.options.pdf.toc) ? '--toc' : ''
     this.pandocFlags['tocdepth'] = (this.options.pdf.tocDepth) ? '--toc-depth=' + this.options.pdf.tocDepth : ''
     this.pandocFlags['infile'] = this.tempfile
@@ -449,7 +459,6 @@ class ZettlrExport {
     this.pandocFlags['outfile_basename'] = path.basename(this.targetFile)
     this.pandocFlags['citeproc'] = this._citeprocOptions
     this.pandocFlags['tpl'] = this.tpl
-    // this.command = `pandoc "${this.tempfile}" -f markdown ${this.tpl} ${toc} ${tocdepth} ${this._citeprocOptions} --pdf-engine=xelatex -o "${this.targetFile}"`
   }
 
   /**
@@ -596,8 +605,6 @@ class ZettlrExport {
     for (let key in this.pandocFlags) {
       this.command = this.command.replace(new RegExp('\\$' + key + '\\$', 'g'), this.pandocFlags[key])
     }
-
-    // pandoc "$infile$" -f markdown $tpl$ $citeproc$ -t $outformat$ ${standalone} -o "${this.targetFile}
   }
 }
 
