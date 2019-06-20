@@ -13,6 +13,8 @@
  * END HEADER
  */
 
+const path = require('path')
+
 /**
  * The file view displays a single root file.
  */
@@ -28,6 +30,8 @@ class FileView {
     this._file = paths // Pointer to this file's base object
     this._root = isRoot
     this._target = null
+    this._dir = path.basename(path.dirname(this._file.path))
+    this._hasDuplicateName = false
 
     // Create the elements
     this._elem = $('<div>').addClass('file')
@@ -62,6 +66,7 @@ class FileView {
     this._elem.attr('data-hash', this._file.hash)
     this._elem.attr('title', this._file.path)
     this._elem.text(this._file.name)
+    if (this._hasDuplicateName) this._elem.prepend('<span class="dir">' + this._dir + '/' + '</span>')
 
     return this
   }
@@ -115,6 +120,25 @@ class FileView {
   }
 
   /**
+   * Marks this file as being non-unique, that is: there is at least one
+   * other file with the same name. In that case, prepend the containing dirname.
+   * @return {FileView} Chainability
+   */
+  markDuplicate () {
+    this._hasDuplicateName = true
+    return this
+  }
+
+  /**
+   * Marks the file as unique.
+   * @return {FileView} Chainability
+   */
+  markUnique () {
+    this._hasDuplicateName = false
+    return this
+  }
+
+  /**
     * Sets the DOM target for this file.
     * @param {Integer} i The wanted target.
     */
@@ -155,6 +179,12 @@ class FileView {
     * @return {String} The path.
     */
   getPath () { return this._file.path }
+
+  /**
+   * Returns the basename of this file
+   * @return {string} The basename of the file.
+   */
+  getBasename () { return this._file.name }
 }
 
 module.exports = FileView

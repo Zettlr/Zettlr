@@ -95,6 +95,25 @@ class ZettlrDirectories {
       t.moveToTarget()
     }
 
+    // Notify root files in case their basename is not unique to display
+    // some more context information.
+    let found = Object.create(null) // All found names
+    for (let obj of this._tree) {
+      if (obj.isFile()) {
+        let n = obj.getBasename()
+        if (!found[n]) found[n] = 1
+        else found[n] += 1
+      }
+    }
+
+    for (let obj of this._tree) {
+      if (obj.isFile() && found[obj.getBasename()] && found[obj.getBasename()] > 1) {
+        obj.markDuplicate() // There are other files with the same name
+      } else if (obj.isFile()) {
+        obj.markUnique()
+      }
+    }
+
     // Select everything that may be selected.
     this.select()
 

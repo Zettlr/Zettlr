@@ -19,7 +19,11 @@
         .selected { background-color: var(--c-primary-shade); }
     }
 
-    .file:hover { background-color:var(--grey-5); }
+    .file {
+        &:hover { background-color:var(--grey-5); }
+
+        span.dir { color: var(--grey-4); }
+    }
 
     .project { color: var(--c-project-dark); }
 
