@@ -66,7 +66,7 @@ class FileView {
     this._elem.attr('data-hash', this._file.hash)
     this._elem.attr('title', this._file.path)
     this._elem.text(this._file.name)
-    if (this._hasDuplicateName) this._elem.prepend('<span class="dir">' + this._dir + '/' + '</span>')
+    if (this._hasDuplicateName) this._elem.append('<span class="dir">&nbsp;(' + this._dir + ')</span>')
 
     return this
   }
