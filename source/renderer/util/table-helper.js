@@ -33,6 +33,9 @@ class TableHelper {
     this._cellIndex = 0
     this._rowIndex = 0
     this._options = options
+    this._containerElement = options.container || $('body')
+    if (typeof this._containerElement === 'string') this._containerElement = $(this._containerElement)
+
     this._elem = undefined
     this._ast = [] // The Abstract Syntax Tree representing the table contents
     this._colSizes = [] // The maximum number of chars in each column
@@ -49,25 +52,6 @@ class TableHelper {
 
     // Inject the CSS necessary to style the table and buttons.
     this._injectCSS()
-
-    // Display the edge action buttons when the user hovers over the table
-    // This must be activated here, as we need to rely on it being attached
-    // only once.
-    let moveHelper = (evt) => {
-      // Detach the helper if the element is not rendered
-      if (!this._elem) return $('body').off('mousemove', moveHelper)
-      let minX = this._elem.offset().left - this._edgeButtonSize / 2
-      let minY = this._elem.offset().top - this._edgeButtonSize / 2
-      let maxX = minX + this._elem.outerWidth() + this._edgeButtonSize // Not half to account for the lower minY
-      let maxY = minY + this._elem.outerHeight() + this._edgeButtonSize // Not half to account for the lower minY
-
-      if (evt.clientX >= minX && evt.clientX <= maxX && evt.clientY >= minY && evt.clientY <= maxY) {
-        this._showEdgeButtons()
-      } else {
-        this._hideEdgeButtons()
-      }
-    }
-    $('body').on('mousemove', moveHelper)
   }
 
   /**
@@ -82,6 +66,24 @@ class TableHelper {
       for (let j = 0; j < this._cols; j++) {
         row.append($('<td></td>').attr('contenteditable', 'true'))
       }
+    }
+  }
+
+  // Display the edge action buttons when the user hovers over the table
+  // This must be activated here, as we need to rely on it being attached
+  // only once.
+  _moveHelper (evt) {
+    // Detach the helper if the element is not rendered
+    if (!this._elem) return this._containerElement.off('mousemove', this._moveHelper)
+    let minX = this._elem.offset().left - this._edgeButtonSize / 2
+    let minY = this._elem.offset().top - this._edgeButtonSize / 2
+    let maxX = minX + this._elem.outerWidth() + this._edgeButtonSize // Not half to account for the lower minY
+    let maxY = minY + this._elem.outerHeight() + this._edgeButtonSize // Not half to account for the lower minY
+
+    if (evt.clientX >= minX && evt.clientX <= maxX && evt.clientY >= minY && evt.clientY <= maxY) {
+      this._showEdgeButtons()
+    } else {
+      this._hideEdgeButtons()
     }
   }
 
@@ -296,6 +298,9 @@ class TableHelper {
         if (this._options.hasOwnProperty('onBlur')) this._options.onBlur(this)
       }
     })
+
+    // Finally instantiate the move helper
+    this._containerElement.on('mousemove', $.proxy(this._moveHelper, this))
   }
 
   /**
