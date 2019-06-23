@@ -33,7 +33,7 @@ const CodeMirror = require('codemirror')
 // The timeout after which a "save"-command is triggered to automatically save changes
 const SAVE_TIMOUT = require('../common/data.json').poll_time
 const AUTOCLOSEBRACKETS = {
-  pairs: '()[]{}\'\'""»«„““”‘’__``', // Autoclose markdown specific stuff
+  pairs: '()[]{}\'\'""«»»«„““”‘’__``', // Autoclose markdown specific stuff
   override: true
 }
 
