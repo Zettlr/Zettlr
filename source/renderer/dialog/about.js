@@ -15,6 +15,7 @@
 
 const ZettlrDialog = require('./zettlr-dialog.js')
 const { trans } = require('../../common/lang/i18n')
+const { formatDate } = require('../../common/zettlr-helpers')
 
 class AboutDialog extends ZettlrDialog {
   constructor () {
@@ -34,10 +35,11 @@ class AboutDialog extends ZettlrDialog {
       // List all contributors to translations
       let html = ''
       for (let lang of data) {
+        console.log(lang)
         let failsafe = 'dialog.preferences.app_lang.' + lang.bcp47
         let name = trans(failsafe)
         if (name === failsafe) name = lang.bcp47
-        html += `<p><strong>${name}</strong></p>`
+        html += `<h3>${name} <small>last updated ${formatDate(new Date(lang.updated_at))}</small></h3>`
         html += `<ul>`
         for (let author of lang.authors) html += `<li>${author.replace(/<(.+)>/g, '<small>(<a href="mailto:$1">$1</a>)</small>')}</li>`
         html += `</ul>`

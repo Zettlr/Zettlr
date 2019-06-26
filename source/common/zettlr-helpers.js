@@ -19,6 +19,9 @@ const filetypes = require('./data.json').filetypes
 // Ignored directory patterns
 const ignoreDirs = require('./data.json').ignoreDirs
 
+// For the date formatter
+const moment = require('moment')
+
 // An array of Markdown block elements
 const BLOCK_ELEMENTS = require('../common/data.json').block_elements
 
@@ -230,31 +233,19 @@ function generateId (pattern = '%Y%M%D%h%m%s') {
 }
 
 /**
-* Format a date. TODO: Localize options once they're implemented in the preferences/config.
+* Format a date.
 * @param  {Date} dateObj Object of type date.
-* @return {String}         Returns the localized, human-readable date as a string
+* @return {String}       Returns the localized, human-readable date as a string
 */
 function formatDate (dateObj) {
-  let yyyy = dateObj.getFullYear()
-  let mm = dateObj.getMonth() + 1
-  let dd = dateObj.getDate()
-  let h = dateObj.getHours()
-  let m = dateObj.getMinutes()
+  let date = moment(dateObj)
+  // Set the current locale of the application, with fallback to en-GB.
+  // Why en-GB in this specific case? Because nobody understands the imperial
+  // system, and at least the British have gotten that right.
+  date.locale('en-GB')
+  date.locale(global.config.get('appLang'))
 
-  if (mm < 10) {
-    mm = '0' + mm
-  }
-  if (dd < 10) {
-    dd = '0' + dd
-  }
-  if (h < 10) {
-    h = '0' + h
-  }
-  if (m < 10) {
-    m = '0' + m
-  }
-
-  return `${dd}.${mm}.${yyyy}, ${h}:${m}`
+  return date.format('LLL')
 }
 
 /**

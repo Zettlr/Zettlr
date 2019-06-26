@@ -37,6 +37,8 @@
 - When you have open two or more root files with the same filename, Zettlr will display the containing directory's name as well.
 - French-style guillemets are now supported for auto closing.
 - Image display in HTML exports fixed.
+- The About dialog contributors' tab now displays the date when the translation was last updated at.
+- The dates and times all across the app are now correctly localised.
 
 ## Under the Hood
 

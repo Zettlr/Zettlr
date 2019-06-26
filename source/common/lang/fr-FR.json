@@ -10,7 +10,8 @@
             "Alexis M\u00e9taireau",
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
-        "license": "GNU GPL v3"
+        "license": "GNU GPL v3",
+        "updated_at": "2019-06-25T08:10:26.000000Z"
     },
     "dialog": {
         "about": {
@@ -171,6 +172,8 @@
             "combiner_collapsed": "\u00c9troit &mdash; Remontrer Preview ou Tree View",
             "combiner_expanded": "\u00c9largi &mdash; Remontrer Preview et Tree View",
             "combiner_explanation": "Affichage du panneau lat\u00e9ral",
+            "count_chars": "Compter caract\u00e8res au lieu des mots (p. ex., pour le chinois)",
+            "creationtime": "Temps de cr\u00e9ation du fichier",
             "debug": "Activer le mode debug",
             "default_image_save_path": "Chemin par d\u00e9faut des images (relatif ou absolu)",
             "display": {
@@ -204,6 +207,7 @@
             "general": "G\u00e9n\u00e9ral",
             "hide_dirs": "Cacher les dossiers durant la recherche globale",
             "homeEndBehaviour": "Utilise les actions par d\u00e9faut de CodeMirror pour \u003Ckbd\u003EHome\u003C/kbd\u003E et \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
+            "modtime": "Heure de la derni\u00e8re modification",
             "mute_lines": "Masquer les lignes hors focus dans le mode sans distraction",
             "nightmode": "Mode sombre",
             "pandoc": "Chemin d'acc\u00e8s \u00e0 Pandoc. \u00c0 ne changer que si Zettlr ne parvient pas \u00e0 trouver le programme.",
@@ -574,6 +578,7 @@
         "insert_ul": "Ins\u00e9rer une liste non ordonn\u00e9e",
         "pomodoro": "Minuteur Pomodoro",
         "preferences": "R\u00e9gler les param\u00e8tres",
+        "readability": "Activer mode de lisibilit\u00e9",
         "remove_fn": "Supprimer la note de pied de page sous le curseur",
         "share": "Exporter le fichier courant en HTML, DOCX, ODT ou PDF",
         "show_menu": "Ouvrir le menu d'application",

@@ -238,11 +238,20 @@ function getTranslationMetadata (paths = [ __dirname, path.join(app.getPath('use
   for (let f of files) {
     let lang = path.basename(f, path.extname(f)) // bcp-47 tag
     let data = fs.readFileSync(f, 'utf-8')
+    let stat = fs.lstatSync(f)
     data = JSON.parse(data)
     if (!data.hasOwnProperty('metadata')) {
-      metadata.push({ 'bcp47': lang }) // Only the language tag
+      // Only the language tag and last file modification date
+      metadata.push({
+        'bcp47': lang,
+        'updated_at': stat.mtime.toISOString()
+      })
     } else {
       data.metadata['bcp47'] = lang // Add language tag
+      // Make sure we have a last updated property.
+      if (!data.metadata.hasOwnProperty('updated_at')) {
+        data.metadata.updated_at = stat.mtime.toISOString()
+      }
       metadata.push(data.metadata)
     }
   }
