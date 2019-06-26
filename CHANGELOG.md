@@ -48,6 +48,7 @@
 - Switched internally to CSS-variables for all colours.
 - Moved all Zettlr CodeMirror modes to their respective files.
 - Moved all helper functions to their own files.
+- Translations located in the `lang`-directory in the user data folder now take precedence over the shipped translations.
 
 # 1.3.0
 

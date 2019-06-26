@@ -220,7 +220,7 @@ function findLangCandidates (lang, candidates) {
  * @param  {Array}  [paths=[ __dirname,    path.join(app.getPath('userData'] Paths to be searched for
  * @return {Array}          An array containing the language metadata (keys = bcp-47 tags)
  */
-function getTranslationMetadata (paths = [ __dirname, path.join(app.getPath('userData'), '/lang') ]) {
+function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/lang'), __dirname ]) {
   let metadata = []
 
   // First get all translations available
@@ -255,7 +255,7 @@ function getTranslationMetadata (paths = [ __dirname, path.join(app.getPath('use
  * @param  {Array} [paths=[]] An array of paths to search for. Optional.
  * @return {Array}       An array containing metadata for all found files.
  */
-function enumLangFiles (paths = [ __dirname, path.join(app.getPath('userData'), '/lang') ]) {
+function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), __dirname ]) {
   // Now go through all search paths and enumerate all available files of interest
   let candidates = []
   for (let p of paths) {
