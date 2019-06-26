@@ -35,9 +35,9 @@
         "bcp-47": "^1.0.5",
         "chart.js": "^2.7.2",
         "chokidar": "^3.0.1",
-        "citeproc": "^2.2.9",
+        "citeproc": "^2.2.10",
         "clusterize.js": "^0.18.1",
-        "codemirror": "^5.47.0",
+        "codemirror": "^5.48.0",
         "command-exists": "^1.2.7",
         "got": "^9.6.0",
         "jquery": "^3.4.1",
@@ -55,8 +55,8 @@
     "devDependencies": {
         "chalk": "^2.4.2",
         "csso": "^3.5.1",
-        "electron": "^5.0.4",
-        "electron-builder": "^20.43.0",
+        "electron": "^5.0.5",
+        "electron-builder": "^20.44.4",
         "handlebars": "^4.1.2",
         "less": "^3.9.0",
         "string-extract-class-names": "^5.8.24"
