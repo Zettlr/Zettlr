@@ -17,8 +17,11 @@ const fs = require('fs')
 const path = require('path')
 const sanitize = require('sanitize-filename')
 const { shell } = require('electron')
-const { hash, ignoreFile, makeImgPathsAbsolute, countWords } = require('../common/zettlr-helpers.js')
-const { trans } = require('../common/lang/i18n.js')
+const hash = require('../common/util/hash')
+const ignoreFile = require('../common/util/ignore-file')
+const makeImgPathsAbsolute = require('../common/util/make-img-paths-absolute')
+const countWords = require('../common/util/count-words')
+const { trans } = require('../common/lang/i18n')
 
 /**
  * Error Object

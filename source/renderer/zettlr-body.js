@@ -34,7 +34,8 @@ const CustomCSS = require('./dialog/custom-css.js')
 const ErrorDialog = require('./dialog/error-dialog.js')
 
 const { trans } = require('../common/lang/i18n.js')
-const { localiseNumber, generateFileName } = require('../common/zettlr-helpers.js')
+const localiseNumber = require('../common/util/localise-number')
+const generateFileName = require('../common/util/generate-filename')
 
 /**
  * This class's duty is to handle everything that affects (or can potentially

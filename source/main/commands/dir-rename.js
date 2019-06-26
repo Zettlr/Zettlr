@@ -14,7 +14,7 @@
 
 const ZettlrCommand = require('./zettlr-command')
 const path = require('path')
-const { hash } = require('../../common/zettlr-helpers.js')
+const hash = require('../../common/util/hash')
 
 class DirRename extends ZettlrCommand {
   constructor (app) {

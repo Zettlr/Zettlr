@@ -23,7 +23,7 @@ const { ipcMain } = require('electron')
 const Citr = require('@zettlr/citr') // Parse the citations from the renderer
 const fs = require('fs')
 const path = require('path')
-const { trans } = require('../../common/lang/i18n.js')
+const { trans } = require('../../common/lang/i18n')
 const BibTexParser = require('astrocite-bibtex')
 
 // Statuses the engine can be in

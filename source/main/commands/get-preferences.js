@@ -13,7 +13,7 @@
  */
 
 const ZettlrCommand = require('./zettlr-command')
-const { enumDictFiles, enumLangFiles } = require('../../common/lang/i18n.js')
+const { enumDictFiles, enumLangFiles } = require('../../common/lang/i18n')
 
 class GetPreferences extends ZettlrCommand {
   constructor (app) {

@@ -19,8 +19,8 @@ const electron = require('electron')
 const { dialog, BrowserWindow, app } = electron
 const url = require('url')
 const path = require('path')
-const { trans } = require('../common/lang/i18n.js')
-const { isDir } = require('../common/zettlr-helpers.js')
+const { trans } = require('../common/lang/i18n')
+const isDir = require('../common/util/is-dir')
 const ZettlrMenu = require('./zettlr-menu.js')
 
 /**

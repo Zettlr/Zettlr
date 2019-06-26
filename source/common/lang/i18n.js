@@ -16,17 +16,8 @@ const fs = require('fs')
 const path = require('path')
 const bcp47 = require('bcp-47')
 const { app } = require('electron')
-// Ah, found the circular dependency! If we import isDir and isFile from Zettlr
-// helpers, node instantiates the complete module - including the require trans
-// command at the top of the helpers module. As this is done HERE on THIS line
-// the module exports by THIS module have not yet been delcared, resulting in an
-// empty object back in the helpers-module. As node only instantiates ONE version
-// of a module and does not try to require them multiple times, the helpers
-// module with the broken, because empty trans-reference will remain in memory
-// and won't be overwritten by any LATER call to require!
-// TODO: All ZettlrHelpers definitely need their own files. And, for that matter,
-// so do the translation functions.
-const { isDir, isFile } = require('../zettlr-helpers.js')
+const isDir = require('../util/is-dir')
+const isFile = require('../util/is-file')
 
 /**
  * Status mode that describes a returned language metadata object as an exact

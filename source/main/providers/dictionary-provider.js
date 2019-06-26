@@ -19,7 +19,7 @@ const path = require('path')
 const fs = require('fs')
 
 const { ipcMain, app } = require('electron')
-const { getDictionaryFile } = require('../../common/lang/i18n.js')
+const { getDictionaryFile } = require('../../common/lang/i18n')
 const { promisify } = require('util')
 const readFile = promisify(fs.readFile)
 

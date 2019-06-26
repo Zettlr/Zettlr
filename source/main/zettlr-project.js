@@ -20,7 +20,7 @@ const fs = require('fs')
 const path = require('path')
 const makeExport = require('./zettlr-export.js')
 const sanitize = require('sanitize-filename')
-const { flattenDirectoryTree } = require('../common/zettlr-helpers.js')
+const flattenDirectoryTree = require('../common/util/flatten-directory-tree')
 
 const PROJECT_FILE = '.ztr-project'
 

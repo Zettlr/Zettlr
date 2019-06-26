@@ -25,9 +25,14 @@ const { shell } = require('electron')
 const { trans } = require('../common/lang/i18n.js')
 
 // Include helpers
-const { hash, sort, generateFileName,
-  ignoreDir, ignoreFile, isFile, isDir, isAttachment
-} = require('../common/zettlr-helpers.js')
+const hash = require('../common/util/hash')
+const sort = require('../common/util/sort')
+const generateFileName = require('../common/util/generate-filename')
+const ignoreDir = require('../common/util/ignore-dir')
+const ignoreFile = require('../common/util/ignore-file')
+const isFile = require('../common/util/is-file')
+const isDir = require('../common/util/is-dir')
+const isAttachment = require('../common/util/is-attachment')
 
 const ALLOW_SORTS = ['name-up', 'name-down', 'time-up', 'time-down']
 const FILETYPES = require('../common/data.json').filetypes

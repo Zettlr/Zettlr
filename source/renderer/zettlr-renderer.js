@@ -25,7 +25,7 @@ const ZettlrAttachments = require('./zettlr-attachments.js')
 const { remote } = require('electron')
 const { clipboard } = require('electron')
 
-const { generateId } = require('../common/zettlr-helpers.js')
+const generateId = require('../common/util/generate-id')
 
 const path = require('path')
 

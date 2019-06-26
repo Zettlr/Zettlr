@@ -16,7 +16,7 @@
 
 const path = require('path')
 const { shell } = require('electron')
-const { hash } = require('../common/zettlr-helpers.js')
+const hash = require('../common/util/hash')
 
 /**
  * This class simply manages all non-markdown files in directories. Basically a

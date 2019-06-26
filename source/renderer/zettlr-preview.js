@@ -15,12 +15,10 @@
 
 const Clusterize = require('clusterize.js')
 const tippy = require('tippy.js')
-const {
-  formatDate,
-  flattenDirectoryTree,
-  hash,
-  localiseNumber
-} = require('../common/zettlr-helpers.js')
+const formatDate = require('../common/util/format-date')
+const flattenDirectoryTree = require('../common/util/flatten-directory-tree')
+const hash = require('../common/util/hash')
+const localiseNumber = require('../common/util/localise-number')
 const { trans } = require('../common/lang/i18n.js')
 // Sorting icons (WebHostingHub-Glyphs)
 const SORT_NAME_UP = '&#xf1c2;'

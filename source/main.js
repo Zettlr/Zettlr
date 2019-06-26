@@ -24,7 +24,8 @@ const process = require('process')
 // Include the global Zettlr class
 const Zettlr = require('./main/zettlr.js')
 
-const { isFile, ignoreFile } = require('./common/zettlr-helpers.js')
+const isFile = require('./common/util/is-file')
+const ignoreFile = require('./common/util/ignore-file')
 
 /**
  * The main Zettlr object. As long as this exists in memory, the app will run.

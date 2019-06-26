@@ -20,7 +20,9 @@
 const path = require('path')
 
 // Include helpers
-const { hash, sort, isFile } = require('../common/zettlr-helpers.js')
+const hash = require('../common/util/hash')
+const sort = require('../common/util/sort')
+const isFile = require('../common/util/is-file')
 
 const ALLOW_SORTS = ['name-up', 'name-down', 'time-up', 'time-down']
 

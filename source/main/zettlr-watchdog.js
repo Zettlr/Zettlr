@@ -22,9 +22,11 @@
 // const path = require('path')
 const chokidar = require('chokidar')
 
-const { ignoreDir, ignoreFile,
-  isFile, isDir, isAttachment
-} = require('../common/zettlr-helpers.js')
+const ignoreDir = require('../common/util/ignore-dir')
+const ignoreFile = require('../common/util/ignore-file')
+const isFile = require('../common/util/is-file')
+const isDir = require('../common/util/is-dir')
+const isAttachment = require('../common/util/is-attachment')
 
 /**
  * This class enables some realtime monitoring features of Zettlr. As the Files

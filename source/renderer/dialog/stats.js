@@ -16,7 +16,7 @@
 
 const ZettlrDialog = require('./zettlr-dialog.js')
 const Chart = require('chart.js')
-const { localiseNumber } = require('../../common/zettlr-helpers.js')
+const localiseNumber = require('../../common/util/localise-number')
 const { trans } = require('../../common/lang/i18n.js')
 const moment = require('moment')
 

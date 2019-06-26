@@ -14,7 +14,7 @@
  */
 
 const handlebars = require('./assets/handlebars/handlebars.runtime.js')
-const { trans } = require('./lang/i18n.js')
+const { trans } = require('./lang/i18n')
 
 function makeTemplate (cat, tpl, data = {}) {
   /**

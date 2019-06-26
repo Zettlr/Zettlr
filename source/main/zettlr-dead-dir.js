@@ -18,7 +18,7 @@
 const path = require('path')
 
 // Include helpers
-const { hash } = require('../common/zettlr-helpers.js')
+const hash = require('../common/util/hash')
 
 /**
  * This class models properties and features of a directory on disk.

@@ -15,7 +15,7 @@
 
 const ZettlrDialog = require('./zettlr-dialog.js')
 const { trans } = require('../../common/lang/i18n')
-const { formatDate } = require('../../common/zettlr-helpers')
+const formatDate = require('../../common/util/format-date')
 
 class AboutDialog extends ZettlrDialog {
   constructor () {

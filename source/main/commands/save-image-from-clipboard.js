@@ -18,7 +18,7 @@ const sanitize = require('sanitize-filename')
 const path = require('path')
 const fs = require('fs')
 const { clipboard } = require('electron')
-const { isDir } = require('../../common/zettlr-helpers')
+const isDir = require('../../common/util/is-dir')
 
 class SaveImage extends ZettlrCommand {
   constructor (app) {

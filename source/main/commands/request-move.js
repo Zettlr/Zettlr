@@ -15,7 +15,7 @@
 const ZettlrCommand = require('./zettlr-command')
 const path = require('path')
 const { trans } = require('../../common/lang/i18n')
-const { hash } = require('../../common/zettlr-helpers')
+const hash = require('../../common/util/hash')
 
 class RequestMove extends ZettlrCommand {
   constructor (app) {

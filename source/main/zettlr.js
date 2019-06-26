@@ -27,9 +27,12 @@ const ZettlrDeadDir = require('./zettlr-dead-dir.js')
 const ZettlrWatchdog = require('./zettlr-watchdog.js')
 const ZettlrTargets = require('./zettlr-targets.js')
 const ZettlrStats = require('./zettlr-stats.js')
-const { i18n, trans } = require('../common/lang/i18n.js')
-const { hash, ignoreDir,
-  ignoreFile, isFile, isDir } = require('../common/zettlr-helpers.js')
+const { i18n, trans } = require('../common/lang/i18n')
+const hash = require('../common/util/hash')
+const ignoreDir = require('../common/util/ignore-dir')
+const ignoreFile = require('../common/util/ignore-file')
+const isDir = require('../common/util/is-dir')
+const isFile = require('../common/util/is-file')
 
 const loadCommands = require('./commands/_autoload')
 

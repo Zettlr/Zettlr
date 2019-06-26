@@ -47,6 +47,7 @@
 - The `Citeproc` engine is now a service provider.
 - Switched internally to CSS-variables for all colours.
 - Moved all Zettlr CodeMirror modes to their respective files.
+- Moved all helper functions to their own files.
 
 # 1.3.0
 

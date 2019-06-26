@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const { makeSearchRegEx } = require('../common/zettlr-helpers.js')
+const makeSearchRegEx = require('../common/util/make-search-regex')
 const { trans } = require('../common/lang/i18n.js')
 
 // CodeMirror related includes

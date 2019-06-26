@@ -17,7 +17,8 @@
 const commandExists = require('command-exists').sync
 const path = require('path')
 const { exec } = require('child_process')
-const { isDir, isFile } = require('../common/zettlr-helpers.js')
+const isDir = require('../common/util/is-dir')
+const isFile = require('../common/util/is-file')
 const { trans } = require('../common/lang/i18n.js')
 const { app } = require('electron')
 const fs = require('fs')

@@ -13,8 +13,9 @@
  * END HEADER
  */
 
-const { trans } = require('../common/lang/i18n.js')
-const { formatDate, isFile } = require('../common/zettlr-helpers.js')
+const { trans } = require('../common/lang/i18n')
+const formatDate = require('../common/util/format-date')
+const isFile = require('../common/util/is-file')
 const { exec } = require('child_process')
 const commandExists = require('command-exists').sync // Need to use here because we cannot rely on the config's availability
 const path = require('path')
