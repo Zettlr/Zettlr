@@ -36,6 +36,7 @@
 - Zettlr now tries to escape the input you provide for options that are directly passed into LaTeX documents.
 - When you have open two or more root files with the same filename, Zettlr will display the containing directory's name as well.
 - French-style guillemets are now supported for auto closing.
+- Image display in HTML exports fixed.
 
 ## Under the Hood
 

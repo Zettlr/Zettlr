@@ -405,13 +405,27 @@ function localiseNumber (number) {
 function makeImgPathsAbsolute (basePath, mdstring) {
   let imgRE = /^!\[(.*?)\]\((.+?)\)({.*})?$/gmi
   return mdstring.replace(imgRE, (match, p1, p2, p3, offset, string) => {
-    // Check if the path (p2) contains the absolute path
-    if (p2.indexOf(basePath) === 0 || p2.indexOf('http') === 0 || isFile(p2)) {
+    // Check if the path (p2) contains the absolute path. This is assumed
+    // in three cases:
+    // 1. The BasePath is the beginning of the given URL
+    // 2. The image path begins with either http(s) or file (i.e. protocols)
+    // 3. It's an actual file.
+    if (p2.indexOf(basePath) === 0 || /^(http|file)/.test(p2) || isFile(p2)) {
       // It's already absolute (either local or remote)
+      // But we have to make sure a protocol is assigned for HTML exports to
+      // work properly.
+      try {
+        let tester = new URL(p2)
+        if (!tester.protocol || !/^(http|file)/.test(tester.protocol)) p2 = 'file://' + p2
+      } catch (e) {
+        // new URL() throws a type error if it's not a valid URL (also happens)
+        // in cases of absolute file paths.
+        p2 = 'file://' + p2
+      }
       return `![${p1}](${p2})${(p3 != null) ? p3 : ''}`
     } else {
       // Make it absolute
-      return `![${p1}](${path.join(basePath, p2)})${(p3 != null) ? p3 : ''}`
+      return `![${p1}](file://${path.join(basePath, p2)})${(p3 != null) ? p3 : ''}`
     }
   })
 }
