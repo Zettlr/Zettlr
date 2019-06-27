@@ -70,6 +70,10 @@ class ZettlrPreview {
     this._maxWeight = -1 // Maximum weight found during search
     this._showSearchResults = false // Indicates whether or not _gen() should include negative search results.
 
+    // We need some globals to access the search results TODO move to dedicated class
+    global.search = {
+      hasResult: (hash) => { return this.hasResult(hash) }
+    }
     // Activate event listeners
     this._act()
   }

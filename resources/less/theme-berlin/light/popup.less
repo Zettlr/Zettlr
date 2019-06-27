@@ -96,6 +96,12 @@
         input#searchWhat {
           border-bottom: 1px solid var(--grey-5);
           border-right: 1px solid var(--grey-5);
+          transition: 0.5s background-color,color ease;
+
+          &.not-found {
+            background-color: var(--red-4);
+            color: white;
+          }
         }
 
         input#replaceWhat {

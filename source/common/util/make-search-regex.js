@@ -17,7 +17,7 @@
  * @param {Array} [injectFlags=['i']] Flags to be injected into the expression
  * @return {Object}      A search term object with props term and flags.
  */
-module.exports = function (term, injectFlags = ['i']) {
+module.exports = function (term, injectFlags = []) {
   let re = {}
 
   // For ease of access you can simply pass the injectFlags as a string of characters

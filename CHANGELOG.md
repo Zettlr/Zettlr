@@ -39,6 +39,10 @@
 - Image display in HTML exports fixed.
 - The About dialog contributors' tab now displays the date when the translation was last updated at.
 - The dates and times all across the app are now correctly localised.
+- When initiating a replace command with a regular expression search, you can now use variables in your replacement value so that you can re-use capturing groups from the search regular expression:
+  - `$1` in the replacement value will be replaced with the first capturing group
+  - `$2` with the second capturing group
+  - ... and so forth.
 
 ## Under the Hood
 
@@ -49,6 +53,7 @@
 - Moved all Zettlr CodeMirror modes to their respective files.
 - Moved all helper functions to their own files.
 - Translations located in the `lang`-directory in the user data folder now take precedence over the shipped translations.
+- Moved all local find functionality to a new class `EditorSearch` and did some fixing.
 
 # 1.3.0
 

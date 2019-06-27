@@ -577,7 +577,7 @@ class ZettlrBody {
     // This must be a persistent popup
     this._currentPopup = popup($('.button.find'), cnt, (x) => {
       // Remove search cursor once the popup is closed
-      this._renderer.getEditor().stopSearch()
+      global.editorSearch.stop()
       this._currentPopup = null
     }) // .makePersistent()
 
@@ -592,10 +592,12 @@ class ZettlrBody {
 
     $('#searchWhat').on('keyup', (e) => {
       this._findPopup.searchVal = $('#searchWhat').val()
-      if (regexRE.test($(e.target).val())) {
-        $(e.target).addClass('regexp')
+      if (regexRE.test($('#searchWhat').val())) {
+        $('#searchWhat').addClass('regexp')
+        $('#replaceWhat').addClass('regexp')
       } else {
-        $(e.target).removeClass('regexp')
+        $('#searchWhat').removeClass('regexp')
+        $('#replaceWhat').removeClass('regexp')
       }
 
       if (e.which === 13) { // Enter
@@ -616,17 +618,23 @@ class ZettlrBody {
     })
 
     $('#searchNext').click((e) => {
-      this._renderer.getEditor().searchNext($('#searchWhat').val())
+      let res = global.editorSearch.next($('#searchWhat').val())
+      console.log(res)
+      // Indicate non-successful matches where nothing was found
+      if (!res) $('#searchWhat').addClass('not-found')
+      else $('#searchWhat').removeClass('not-found')
     })
 
     $('#replaceNext').click((e) => {
-      this._renderer.getEditor().replaceNext($('#replaceWhat').val())
-      // Immediately highlight the next search result
-      this._renderer.getEditor().searchNext($('#searchWhat').val())
+      // If the user hasn't searched before, initate a search beforehand.
+      if (!global.editorSearch.hasSearch()) $('#searchNext').click()
+      let res = global.editorSearch.replaceNext($('#replaceWhat').val())
+      if (!res) $('#searchWhat').addClass('not-found')
+      else $('#searchWhat').removeClass('not-found')
     })
 
     $('#replaceAll').click((e) => {
-      this._renderer.getEditor().replaceAll($('#searchWhat').val(), $('#replaceWhat').val())
+      global.editorSearch.replaceAll($('#searchWhat').val(), $('#replaceWhat').val())
     })
   }
 

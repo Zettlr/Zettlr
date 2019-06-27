@@ -19,11 +19,11 @@ const showdown = require('showdown')
 const tippy = require('tippy.js')
 const { clipboard, shell } = require('electron')
 const hash = require('../common/util/hash')
-const makeSearchRegEx = require('../common/util/make-search-regex')
 const countWords = require('../common/util/count-words')
 const flattenDirectoryTree = require('../common/util/flatten-directory-tree')
 const { trans } = require('../common/lang/i18n.js')
 const generateKeymap = require('./assets/codemirror/generate-keymap.js')
+const EditorSearch = require('./util/editor-search')
 
 // The autoloader requires all necessary CodeMirror addons and modes that are
 // used by the main class. It simply folds about 70 lines of code into an extra
@@ -66,10 +66,7 @@ class ZettlrEditor {
     this._fontsize = 100 // Font size (used for zooming)
     this._timeout = null // Stores a current timeout for a save-command
 
-    this._currentLocalSearch = '' // Saves a current local search, to re-start search on text field change
-    this._markedResults = [] // Contains the search results marked in the text
-    this._scrollbarAnnotations = null // Contains an object to mark search results on the scrollbar
-    this._searchCursor = null // A search cursor while searching
+    this._searcher = new EditorSearch(null)
 
     // The starting position for a tag autocomplete.
     this._autoCompleteStart = null
@@ -194,6 +191,8 @@ class ZettlrEditor {
       continuelistModes: [ 'markdown', 'markdown-zkn' ],
       extraKeys: generateKeymap(this)
     })
+
+    this._searcher.setInstance(this._cm)
 
     /**
      * Listen to the beforeChange event to modify pasted image paths into real
@@ -546,61 +545,6 @@ class ZettlrEditor {
     setTimeout(() => { this.updateCitations() }, 1000)
 
     return this
-  }
-
-  /**
-    * Highlights search results if any given.
-    * @param {ZettlrFile} [file=this._renderer.getCurrentFile()] The file to retrieve and mark results for
-    */
-  markResults (file = this._renderer.getCurrentFile()) {
-    if (!file) {
-      return
-    }
-
-    if (this._renderer.getPreview().hasResult(file.hash)) {
-      let res = this._renderer.getPreview().hasResult(file.hash).result
-      this._mark(res)
-    }
-  }
-
-  /**
-    * Why do you have a second _mark-function, when there is markResults?
-    * Because the local search also generates search results that have to be
-    * marked without retrieving anything from the ZettlrPreview.
-    * @param  {Array} res An Array containing all positions to be rendered.
-    */
-  _mark (res) {
-    if (!res) {
-      return
-    }
-
-    this.unmarkResults() // Clear potential previous marks
-    let sbannotate = []
-    for (let result of res) {
-      if (!result.from || !result.to) {
-        // One of these was undefined. And somehow this if-clause has made
-        // searching approximately three times faster. Crazy.
-        continue
-      }
-      sbannotate.push({ 'from': result.from, 'to': result.to })
-      this._markedResults.push(this._cm.markText(result.from, result.to, { className: 'search-result' }))
-    }
-
-    this._scrollbarAnnotations.update(sbannotate)
-  }
-
-  /**
-    * Removes all marked search results
-    */
-  unmarkResults () {
-    // Simply remove all markers
-    for (let mark of this._markedResults) {
-      mark.clear()
-    }
-
-    this._scrollbarAnnotations.update([])
-
-    this._markedResults = []
   }
 
   /**
@@ -1010,69 +954,42 @@ class ZettlrEditor {
   }
 
   /**
+   * Highlights search results if any given.
+   * @param {ZettlrFile} [file=this._renderer.getCurrentFile()] The file to retrieve and mark results for
+   */
+  markResults (file = this._renderer.getCurrentFile()) {
+    this._searcher.markResults(file)
+  }
+
+  /**
+   * Removes all marked search results
+   */
+  unmarkResults () {
+    this._searcher.unmarkResults()
+  }
+
+  /**
     * Find the next occurrence of a given term
     * @param  {String} [term] The term to search for
     */
   searchNext (term) {
-    if (this._searchCursor == null || this._currentLocalSearch !== term) {
-      // (Re)start search in case there was none or the term has changed
-      this.startSearch(term)
-    }
-
-    if (this._searchCursor.findNext()) {
-      this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
-    } else {
-      // Start from beginning
-      this._searchCursor = this._cm.getSearchCursor(makeSearchRegEx(term), { 'line': 0, 'ch': 0 })
-      if (this._searchCursor.findNext()) {
-        this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
-      }
-    }
+    this._searcher.searchNext(term)
   }
 
   /**
     * Starts the search by preparing a search cursor we can use to forward the
     * search.
     * @param  {String} term The string to start a search for
-    * @return {ZettlrEditor}      This for chainability.
     */
   startSearch (term) {
-    // First transform the term based upon what the user has entered
-    this._currentLocalSearch = term
-    // Create a new search cursor
-    this._searchCursor = this._cm.getSearchCursor(makeSearchRegEx(term), this._cm.getCursor())
-
-    // Find all matches
-    // For this single instance we need a global modifier
-    let tRE = makeSearchRegEx(term, 'gi')
-    let res = []
-    let match = null
-    for (let i = 0; i < this._cm.lineCount(); i++) {
-      let l = this._cm.getLine(i)
-      tRE.lastIndex = 0
-      while ((match = tRE.exec(l)) != null) {
-        res.push({
-          'from': { 'line': i, 'ch': match.index },
-          'to': { 'line': i, 'ch': match.index + match[0].length }
-        })
-      }
-    }
-
-    // Mark these in document and on the scroll bar
-    this._mark(res)
-
-    return this
+    this._searcher.startSearch(term)
   }
 
   /**
     * Stops the search by destroying the search cursor
-    * @return {ZettlrEditor}   This for chainability.
     */
   stopSearch () {
-    this._searchCursor = null
-    this.unmarkResults()
-
-    return this
+    this._searcher.stopSearch()
   }
 
   /**
@@ -1081,11 +998,7 @@ class ZettlrEditor {
     * @return {Boolean} Whether or not a string has been replaced.
     */
   replaceNext (replacement) {
-    if (this._searchCursor != null) {
-      this._searchCursor.replace(replacement)
-      return true
-    }
-    return false
+    this._searcher.replaceNext(replacement)
   }
 
   /**
@@ -1094,19 +1007,7 @@ class ZettlrEditor {
     * @param  {String} replaceWhat Replace with this string
     */
   replaceAll (searchWhat, replaceWhat) {
-    searchWhat = makeSearchRegEx(searchWhat)
-    // First select all matches
-    let ranges = []
-    let cur = this._cm.getSearchCursor(searchWhat, { 'line': 0, 'ch': 0 })
-    while (cur.findNext()) { ranges.push({ 'anchor': cur.from(), 'head': cur.to() }) }
-    if (ranges.length) this._cm.setSelections(ranges, 0)
-    // Create a new array with the same size as all selections
-    let repl = new Array(this._cm.getSelections().length)
-    // Fill it with the replace value (to replace every single selection with
-    // the same term)
-    repl = repl.fill(replaceWhat)
-    // Aaaand do it
-    this._cm.replaceSelections(repl)
+    this._searcher.replaceAll(searchWhat, replaceWhat)
   }
 
   /**
