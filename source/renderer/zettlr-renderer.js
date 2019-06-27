@@ -578,7 +578,7 @@ class ZettlrRenderer {
    */
   exitSearch () {
     this._preview.showFiles()
-    this._editor.unmarkResults()
+    global.editorSearch.unmarkResults()
   }
 
   /**
