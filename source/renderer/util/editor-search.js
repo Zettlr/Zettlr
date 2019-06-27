@@ -27,6 +27,7 @@ class EditorSearch {
       'replaceAll': (search, replace) => { this.replaceAll(search, replace) },
       'stop': () => { this.stopSearch() },
       'hasSearch': () => { return this._searchCursor !== null },
+      'markResults': () => { this.markResults() },
       'unmarkResults': () => { this.unmarkResults() }
     }
   }

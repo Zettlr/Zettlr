@@ -798,7 +798,7 @@ class ZettlrPreview {
     this._showSearchResults = true // Indicate that the list should be only displaying search results.
     this.refresh() // Refresh to apply.
     // Also mark the results in the potential open file
-    this._renderer.getEditor().markResults()
+    global.editorSearch.markResults()
   }
 
   /**
