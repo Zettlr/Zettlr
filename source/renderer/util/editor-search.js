@@ -152,6 +152,7 @@ class EditorSearch {
     this._searchCursor = null
     this.unmarkResults()
     this._currentLocalSearch = null
+    this._lastSearchResult = null
 
     return this
   }
@@ -168,9 +169,7 @@ class EditorSearch {
       // matched groups from the last found search result. Do this globally for
       // multiple occurrences.
       for (let i = 1; i < this._lastSearchResult.length; i++) {
-        console.log('Replacing $' + i + ' with ' + this._lastSearchResult[i])
         replacement = replacement.replace(new RegExp('\\$' + i, 'g'), this._lastSearchResult[i])
-        console.log(`Replacement is now: ${replacement}`)
       }
       this._searchCursor.replace(replacement)
       // Highlight the next search result
@@ -186,19 +185,29 @@ class EditorSearch {
     * @param  {String} replaceWhat Replace with this string
     */
   replaceAll (searchWhat, replaceWhat) {
-    searchWhat = makeSearchRegEx(searchWhat)
     // First select all matches
     let ranges = []
-    let cur = this._cm.getSearchCursor(searchWhat, { 'line': 0, 'ch': 0 })
-    while (cur.findNext()) { ranges.push({ 'anchor': cur.from(), 'head': cur.to() }) }
-    if (ranges.length) this._cm.setSelections(ranges, 0)
-    // Create a new array with the same size as all selections
-    let repl = new Array(this._cm.getSelections().length)
-    // Fill it with the replace value (to replace every single selection with
-    // the same term)
-    repl = repl.fill(replaceWhat)
+    let replacements = []
+    let res
+    let cur = this._cm.getSearchCursor(makeSearchRegEx(searchWhat), { 'line': 0, 'ch': 0 })
+    while ((res = cur.findNext()) !== false) {
+      // First push the match to the ranges to be replaced
+      ranges.push({ 'anchor': cur.from(), 'head': cur.to() })
+      // Also make sure to replace variables in the replaceWhat, if applicable
+      if (res.length < 2) {
+        replacements.push(replaceWhat)
+      } else {
+        let repl = replaceWhat
+        for (let i = 1; i < res.length; i++) {
+          repl = repl.replace(new RegExp('\\$' + i, 'g'), res[i])
+        }
+        replacements.push(repl)
+      }
+    }
+
     // Aaaand do it
-    this._cm.replaceSelections(repl)
+    this._cm.setSelections(ranges, 0)
+    this._cm.replaceSelections(replacements)
 
     this.unmarkResults() // Nothing to show afterwards.
   }
