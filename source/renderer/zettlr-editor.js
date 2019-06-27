@@ -539,7 +539,7 @@ class ZettlrEditor {
 
     // Last but not least: If there are any search results currently
     // display, mark the respective positions.
-    this.markResults(file)
+    this._searcher.markResults(file)
 
     // Finally, set a timeout for a first run of citation rendering
     setTimeout(() => { this.updateCitations() }, 1000)
@@ -951,63 +951,6 @@ class ZettlrEditor {
     this._div.css('font-size', this._fontsize + '%')
     this._cm.refresh()
     return this
-  }
-
-  /**
-   * Highlights search results if any given.
-   * @param {ZettlrFile} [file=this._renderer.getCurrentFile()] The file to retrieve and mark results for
-   */
-  markResults (file = this._renderer.getCurrentFile()) {
-    this._searcher.markResults(file)
-  }
-
-  /**
-   * Removes all marked search results
-   */
-  unmarkResults () {
-    this._searcher.unmarkResults()
-  }
-
-  /**
-    * Find the next occurrence of a given term
-    * @param  {String} [term] The term to search for
-    */
-  searchNext (term) {
-    this._searcher.searchNext(term)
-  }
-
-  /**
-    * Starts the search by preparing a search cursor we can use to forward the
-    * search.
-    * @param  {String} term The string to start a search for
-    */
-  startSearch (term) {
-    this._searcher.startSearch(term)
-  }
-
-  /**
-    * Stops the search by destroying the search cursor
-    */
-  stopSearch () {
-    this._searcher.stopSearch()
-  }
-
-  /**
-    * Replace the next occurrence with 'replacement'
-    * @param  {String} replacement The string with which the next occurrence of the search cursor term will be replaced
-    * @return {Boolean} Whether or not a string has been replaced.
-    */
-  replaceNext (replacement) {
-    this._searcher.replaceNext(replacement)
-  }
-
-  /**
-    * Replace all occurrences of a given string with a given replacement
-    * @param  {String} searchWhat  The string to be searched for
-    * @param  {String} replaceWhat Replace with this string
-    */
-  replaceAll (searchWhat, replaceWhat) {
-    this._searcher.replaceAll(searchWhat, replaceWhat)
   }
 
   /**
