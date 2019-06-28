@@ -35,7 +35,7 @@ class DirSort extends ZettlrCommand {
 
     dir.toggleSorting(arg.type)
 
-    this._app.ipc.send('paths-update', this._app.getPathDummies())
+    global.application.dirUpdate(dir.hash, dir.getMetadata())
   }
 }
 

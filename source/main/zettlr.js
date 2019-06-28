@@ -24,7 +24,7 @@ const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
 const ZettlrDir = require('./zettlr-dir.js')
 const ZettlrFile = require('./zettlr-file.js')
 const ZettlrDeadDir = require('./zettlr-dead-dir.js')
-const ZettlrWatchdog = require('./zettlr-watchdog.js')
+// const ZettlrWatchdog = require('./zettlr-watchdog.js')
 const ZettlrTargets = require('./zettlr-targets.js')
 const ZettlrStats = require('./zettlr-stats.js')
 const { i18n, trans } = require('../common/lang/i18n')
@@ -92,7 +92,7 @@ class Zettlr {
     this._refreshTimeout = null
 
     // Initiate the watchdog
-    this.watchdog = new ZettlrWatchdog()
+    // this.watchdog = new ZettlrWatchdog()
 
     // Statistics
     this.stats = new ZettlrStats(this)
@@ -125,6 +125,54 @@ class Zettlr {
       })
     })
 
+    // Listen to certain events from the watchdog
+    global.watchdog.on('unlink', (p) => {
+      if (this.getCurrentFile() && (hash(p) === this.getCurrentFile().hash)) {
+        // We need to close the file
+        this.ipc.send('file-close')
+        this.setCurrentFile(null) // Reset file
+      }
+    })
+
+    global.watchdog.on('change', (p) => {
+      let cur = this.getCurrentFile()
+      if (!cur || cur.isScope(p) !== cur || !cur.hasChanged()) return
+      // Current file has changed -> ask to replace
+      // and do as the user wishes
+      if (global.config.get('alwaysReloadFiles')) {
+        this.ipc.send('file-open', cur.withContent())
+      } else {
+        // The user did not check this option, so ask first
+        this.getWindow().askReplaceFile((ret, alwaysReload) => {
+          // Set the corresponding config option
+          global.config.set('alwaysReloadFiles', alwaysReload)
+          // ret can have three status: cancel = 0, save = 1, omit = 2.
+          // To keep up with semantics, the function "askSaveChanges" would
+          // naturally return "true" if the user wants to save changes and "false"
+          // - so how deal with "omit" changes?
+          // Well I don't want to create some constants so let's just leave it
+          // with these three values.
+          if (ret === 1 || alwaysReload) this.ipc.send('file-open', cur.withContent())
+        })
+      }
+    })
+
+    // Inject some globals
+    global.application = {
+      fileUpdate: (oldHash, fileMetadata) => {
+        this.ipc.send('file-replace', {
+          'hash': oldHash,
+          'file': fileMetadata
+        })
+      },
+      dirUpdate: (oldHash, dirMetadata) => {
+        this.ipc.send('dir-replace', {
+          'hash': oldHash,
+          'dir': dirMetadata
+        })
+      }
+    }
+
     // Initiate regular polling
     setTimeout(() => {
       this.poll()
@@ -140,6 +188,7 @@ class Zettlr {
     this._providers = {
       'config': require('./providers/config-provider.js'),
       'appearance': require('./providers/appearance-provider.js'),
+      'watchdog': require('./providers/watchdog-provider.js'),
       'citeproc': require('./providers/citeproc-provider.js'),
       'dictionary': require('./providers/dictionary-provider.js'),
       'recentDocs': require('./providers/recent-docs-provider.js'),
@@ -164,54 +213,6 @@ class Zettlr {
     * in the future.
     */
   poll () {
-    // Polls the watchdog for changes.
-    if (this.watchdog.countChanges() > 0) {
-      this.watchdog.each((e, p) => {
-      // Available events: add, change, unlink, addDir, unlinkDir
-      // No changeDir because this consists of one unlink and one add
-        for (let root of this.getPaths()) {
-          if (root.isScope(p) !== false) {
-            let changed = root.handleEvent(p, e)
-            let isCurrentFile = (this.getCurrentFile() && (hash(p) === this.getCurrentFile().hash))
-            let isCurrentDir = (this.getCurrentDir() && (hash(p) === this.getCurrentDir().hash))
-            if (isCurrentFile && (e === 'unlink')) {
-              // We need to close the file
-              this.ipc.send('file-close')
-              this.setCurrentFile(null) // Reset file
-            } else if (isCurrentFile && (e === 'change') && changed) {
-              // Current file has changed -> ask to replace and do
-              // as the user wishes
-              if (global.config.get('alwaysReloadFiles')) {
-                this.ipc.send('file-open', this.getCurrentFile().withContent())
-              } else {
-                // The user did not check this option, so ask first
-                this.getWindow().askReplaceFile((ret, alwaysReload) => {
-                  // Set the corresponding config option
-                  global.config.set('alwaysReloadFiles', alwaysReload)
-                  // ret can have three status: cancel = 0, save = 1, omit = 2.
-                  // To keep up with semantics, the function "askSaveChanges" would
-                  // naturally return "true" if the user wants to save changes and "false"
-                  // - so how deal with "omit" changes?
-                  // Well I don't want to create some constants so let's just leave it
-                  // with these three values.
-                  if (ret === 1 || alwaysReload) this.ipc.send('file-open', this.getCurrentFile().withContent())
-                })
-              }
-            } else if (isCurrentDir && (e === 'unlinkDir') && root.isScope(p) === root) {
-              // The root has been removed
-              this.makeDead(this.getCurrentDir())
-              this.setCurrentDir(null) // Remove current directory
-            } // end if current file changed
-          } // end if is scope
-        } // end for
-      })
-
-      // flush all changes so they aren't processed again next cycle
-      this.watchdog.flush()
-      // Send a paths update to the renderer to reflect the changes.
-      this.ipc.send('paths-update', this.getPathDummies())
-    }
-
     setTimeout(() => { this.poll() }, POLL_TIME)
   }
 
@@ -449,6 +450,7 @@ class Zettlr {
    * @return {void}     No return.
    */
   makeDead (dir) {
+    if (dir === this.getCurrentDir()) this.setCurrentDir(null) // Remove current directory
     let p = this.getPaths()
     for (let i = 0; i < p.length; i++) {
       if (p[i] === dir) p[i] = new ZettlrDeadDir(this, dir.path)
@@ -517,6 +519,7 @@ class Zettlr {
     let lastFile = this.findFile({ 'hash': parseInt(global.config.get('lastFile')) })
     this.setCurrentDir(lastDir)
     this.setCurrentFile(lastFile)
+    if (lastFile) this.ipc.send('file-open', lastFile.withContent())
 
     console.log(`Done!`)
 

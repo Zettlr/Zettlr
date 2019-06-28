@@ -30,8 +30,7 @@ class FileNew extends ZettlrCommand {
     // This command closes the current file
     if (!this._app.canClose()) return
 
-    let dir = null
-    let file = null
+    let dir
 
     // There should be also a hash in the argument.
     if (arg.hasOwnProperty('hash')) {
@@ -41,20 +40,18 @@ class FileNew extends ZettlrCommand {
     }
 
     // Create the file
-    try {
-      file = dir.newfile(arg.name)
-    } catch (e) {
-      return this._app.window.prompt({
+    dir.newfile(arg.name).then((file) => {
+      // Send the new paths and open the respective file.
+      global.application.dirUpdate(dir.hash, dir.getMetadata())
+      this._app.ipc.send('file-open', file.withContent())
+      this._app.setCurrentFile(file)
+    }).catch((e) => {
+      this._app.window.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_file'),
         message: e.message
       })
-    }
-
-    // Send the new paths and open the respective file.
-    this._app.ipc.send('paths-update', this._app.getPathDummies())
-    this._app.setCurrentFile(file)
-    this._app.ipc.send('file-open', file.withContent())
+    })
   }
 }
 

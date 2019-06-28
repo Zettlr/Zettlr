@@ -59,7 +59,7 @@ class TreeView {
     this._dir = $('<li>').attr('data-hash', this.getHash())
     if (!this.isRoot()) { this._dir.css('padding-left', this._level + 'em') }
     this._dir.addClass(this._paths.type) // To ensure proper display of virtual directories and filters in different colours
-    this._dir.append('<span>').text(this._paths.name)
+    this._dir.append($('<span>').addClass('dirname').text(this._paths.name))
     if (this.isRoot()) { this._dir.addClass('root') }
 
     // Indicate that there is a project.
@@ -214,6 +214,10 @@ class TreeView {
     } else {
       this._indicator.detach()
     }
+
+    // Change the data of this object, if applicable.
+    this._dir.find('.dirname').text(this._paths.name)
+    this._dir.attr('data-hash', this._paths.hash)
 
     // Indicate that there is a project (if there is one)
     if (this._paths.project != null) {

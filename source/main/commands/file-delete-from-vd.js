@@ -36,7 +36,7 @@ class FileDeleteFromVD extends ZettlrCommand {
 
     if (vd && file) {
       vd.remove(file)
-      this._app.ipc.send('paths-update', this._app.getPathDummies())
+      global.application.dirUpdate(vd.hash, vd.getMetadata())
       return true
     }
     return false

@@ -153,5 +153,5 @@ app.on('activate', function () {
  */
 process.on('unhandledRejection', (err) => {
   // Just log to console.
-  console.error('Received an unhandled rejection: ' + err.message)
+  console.error(err)
 })

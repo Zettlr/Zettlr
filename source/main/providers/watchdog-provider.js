@@ -2,8 +2,8 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ZettlrWatchdog class
- * CVM-Role:        Controller
+ * Contains:        WatchdogProvider class
+ * CVM-Role:        Service Provider
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
@@ -19,14 +19,16 @@
  * END HEADER
  */
 
-// const path = require('path')
 const chokidar = require('chokidar')
+const EventEmitter = require('events')
 
-const ignoreDir = require('../common/util/ignore-dir')
-const ignoreFile = require('../common/util/ignore-file')
-const isFile = require('../common/util/is-file')
-const isDir = require('../common/util/is-dir')
-const isAttachment = require('../common/util/is-attachment')
+const ignoreDir = require('../../common/util/ignore-dir')
+const ignoreFile = require('../../common/util/ignore-file')
+const isFile = require('../../common/util/is-file')
+const isDir = require('../../common/util/is-dir')
+const isAttachment = require('../../common/util/is-attachment')
+
+const IGNORE_DIR_REGEXP = require('../../common/data.json').ignoreDirs
 
 /**
  * This class enables some realtime monitoring features of Zettlr. As the Files
@@ -36,13 +38,14 @@ const isAttachment = require('../common/util/is-attachment')
  * resources, we are only monitoring changes that are (1) not ignored, (2) not
  * in the blacklist of directories and (3) on the file whitelist.
  */
-class ZettlrWatchdog {
+class WatchdogProvider extends EventEmitter {
   /**
    * Create a new watcher instance
    * @param {String} path The path to projectDir
    */
   constructor (paths = []) {
-    this._staged = []
+    super() // Setup the Event Emitter
+    this.setMaxListeners(100000) // Set the maximum listeners to 100.000. More files should produce warnings.
     this._ignored = []
     this._ready = false
     this._booting = false
@@ -54,8 +57,20 @@ class ZettlrWatchdog {
     // Inject global functions for ease of access
     global.watchdog = {
       addPath: (p) => { this.addPath(p) },
-      ignoreNext: (event, path) => { this.ignoreNext(event, path) }
+      ignoreNext: (event, path) => { this.ignoreNext(event, path) },
+      stop: () => { this.stop() },
+      // Event emitter functionality
+      on: (event, callback) => { this.on(event, callback) },
+      off: (event, callback) => { this.off(event, callback) }
     }
+  }
+
+  /**
+   * Shuts down the service provider.
+   * @return {void} No return.
+   */
+  shutdown () {
+    this.stop()
   }
 
   /**
@@ -81,9 +96,8 @@ class ZettlrWatchdog {
     // for all files that are _not_ in the filetypes list (whitelisting)
     // Further reading: https://github.com/micromatch/anymatch
     let ignoreDirs = [/(^|[/\\])\../]
-    let d = require('../common/data.json').ignoreDirs
 
-    for (let x of d) {
+    for (let x of IGNORE_DIR_REGEXP) {
       // Create new regexps from the strings
       ignoreDirs.push(new RegExp(x, 'i'))
     }
@@ -127,7 +141,9 @@ class ZettlrWatchdog {
 
         // Only watch changes in directories and supported files
         if ((dir && !ignoreDir(p)) || (file && (!ignoreFile(p) || isAttachment(p)))) {
-          this._staged.push({ 'type': event, 'path': p })
+          // Emit the event for the respective path.
+          this.emit(event, p)
+          console.log(`WATCHDOG: ${event} on ${p}`)
         }
       }
     })
@@ -141,15 +157,14 @@ class ZettlrWatchdog {
    * @return {ZettlrWatchdog} This for chainability.
    */
   stop () {
+    this._watch = false
+    this._ready = false
     if (this._process != null) {
       this._process.close()
       this._process = null
     }
-    // Also flush all changes and ignores
-    this._staged = []
+    // Also flush all ignores
     this._ignored = []
-    this._watch = false
-    this._ready = false
   }
 
   /**
@@ -183,31 +198,10 @@ class ZettlrWatchdog {
   isReady () { return this._ready }
 
   /**
-   * Return all staged changes
-   * @return {array} Array containing all change objects.
-   */
-  getChanges () { return this._staged }
-
-  /**
    * Is the process currently booting up?
    * @return {Boolean} True, if it's booting and false if it's not.
    */
   isBooting () { return this._booting }
-
-  /**
-   * Returns number of staged changes
-   * @return {Integer} The amount of changes
-   */
-  countChanges () { return this._staged.length }
-
-  /**
-   * Remove all changes from array.
-   * @return {ZettlrWatchdog} This for chainability.
-   */
-  flush () {
-    this._staged = []
-    return this
-  }
 
   /**
    * Sets the paths to be watched
@@ -278,22 +272,6 @@ class ZettlrWatchdog {
   }
 
   /**
-   * Iterate over all staged changes with a callback
-   * @param  {Function} callback A function to be called for each change.
-   * @return {ZettlrWatchdog}            This for chainability.
-   */
-  each (callback) {
-    let t = {}
-    if (callback && t.toString.call(callback) === '[object Function]') {
-      for (let change of this._staged) {
-        callback(change.type, change.path)
-      }
-    }
-
-    return this
-  }
-
-  /**
    * Ignore the next event of type evt for path "path"
    * Useful to ignore save events from the editor
    * @param  {String} evt  Event to be ignored
@@ -306,4 +284,4 @@ class ZettlrWatchdog {
   }
 }
 
-module.exports = ZettlrWatchdog
+module.exports = new WatchdogProvider()

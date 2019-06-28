@@ -77,7 +77,7 @@ class SaveFile extends ZettlrCommand {
     }
 
     // Ignore the next change for this specific file
-    this._app.watchdog.ignoreNext('change', file.path)
+    global.watchdog.ignoreNext('change', file.path)
     file.save(cnt)
     this._app.clearModified()
 
@@ -89,7 +89,7 @@ class SaveFile extends ZettlrCommand {
     } else {
       // Immediately update the paths in renderer so that it is able to find
       // the file to (re)-select it.
-      this._app.ipc.send('file-update', file.getMetadata())
+      global.application.fileUpdate(file.getMetadata())
     }
 
     // Switch to newly created file (only happens before a file is selected)

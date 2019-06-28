@@ -360,6 +360,11 @@ class ZettlrRendererIPC {
         this._app.replaceFile(cnt.hash, cnt.file)
         break
 
+      // Replace a full directory tree (e.g., on rename or modification of the children)
+      case 'dir-replace':
+        this._app.replaceDir(cnt.hash, cnt.dir)
+        break
+
       // Show the popup to set a file's target
       case 'set-target':
         this._app.getBody().setTarget(cnt)
@@ -613,13 +618,6 @@ class ZettlrRendererIPC {
         // An image has been pasted onto the editor. Show the dialog to
         // determine what to do.
         this._app.getBody().displayPasteImage()
-        break
-
-      // DEBUG TODO
-      case 'switch-theme-berlin':
-      case 'switch-theme-bielefeld':
-      case 'switch-theme-frankfurt':
-        this.send(cmd) // Resend the command to the main process to switch theme
         break
 
       default:

@@ -383,6 +383,8 @@ class ZettlrRenderer {
 
     let oldFile = this.findObject(oldHash)
 
+    console.log('Replacing file', oldFile)
+
     if (oldFile && oldFile.type === 'file') {
       // Apply all necessary properties
       oldFile.dir = file.dir
@@ -396,6 +398,41 @@ class ZettlrRenderer {
       oldFile.charCount = file.charCount
       oldFile.ext = file.ext
       oldFile.modtime = file.modtime
+
+      // Then refresh
+      this._preview.refresh()
+      this._directories.refresh()
+    }
+  }
+
+  /**
+    * Replaces a directory after the name has changed (or it has been moved)
+    * @param  {Number} oldHash The old hash
+    * @param  {ZettlrDir} dir    The new dir to replace the old.
+    */
+  replaceDir (oldHash, dir) {
+    if (!dir) {
+      return // No file given; main has screwed up
+    }
+
+    let oldDir = this.findObject(oldHash)
+
+    console.log('Replacing directory', dir, oldDir)
+
+    if (oldDir && ['directory', 'virtual-directory'].includes(oldDir.type)) {
+      // Apply all necessary properties.
+      // NOTE that we do not replace the parent here,
+      // as we only replace one single directory. As
+      // soon as a directory has been moved to a
+      // different directory, a replacement of the
+      // parent directory needs to take place.
+      oldDir.path = dir.path
+      oldDir.name = dir.name
+      oldDir.hash = dir.hash
+      oldDir.project = dir.project
+      oldDir.attachments = dir.attachments
+      oldDir.sorting = dir.sorting
+      oldDir.children = dir.children
 
       // Then refresh
       this._preview.refresh()
@@ -530,6 +567,8 @@ class ZettlrRenderer {
    * Saves the current file
    */
   saveFile () {
+    if (!this.isModified()) return // No need to save
+
     // The user wants to save the currently opened file.
     let file = this.getCurrentFile()
     if (file == null) {

@@ -78,6 +78,13 @@ class ZettlrFile {
       global.watchdog.addPath(this.path)
     }
 
+    this._boundOnUnlink = this.onUnlink.bind(this)
+    this._boundOnChange = this.onChange.bind(this)
+
+    // Listen to certain events from the watchdog
+    global.watchdog.on('unlink', this._boundOnUnlink)
+    global.watchdog.on('change', this._boundOnChange)
+
     // Last but not least check if there's a writing target and listen for
     // change events.
     this.target = global.targets.get(this.hash)
@@ -100,31 +107,24 @@ class ZettlrFile {
     * @return {void} Does not return anything.
     */
   shutdown () {
-    // Such empty
+    // Remove the listeners
+    global.watchdog.off('unlink', this._boundOnUnlink)
+    global.watchdog.off('change', this._boundOnChange)
   }
 
-  /**
-    * Handles an event emitted by the watchdog
-    * @param  {String} p The path to test against
-    * @param  {String} e The event to handle
-    * @return {Boolean} True, if the file has been changed, or false.
-    */
-  handleEvent (p, e) {
-    if (this.isScope(p) === this && this.hasChanged()) {
-      // Only in this case may we handle the event. Possible events:
-      // change, unlink
-      if (e === 'change') {
-        this.update().parent.notifyChange(trans('system.file_changed', this.name))
-        return true
-      } else if (e === 'unlink') {
-        this.parent.notifyChange(trans('system.file_removed', this.name))
-        this.remove()
-        return true
-      }
-    }
+  onUnlink (p) {
+    if (this.isScope(p) !== this) return
+    this.parent.notifyChange(trans('system.file_removed', this.name))
+    this.remove()
+  }
 
-    // Nothing has changed.
-    return false
+  onChange (p) {
+    if (this.isScope(p) !== this) return
+    if (!this.hasChanged()) return
+    // this.update().parent.notifyChange(trans('system.file_changed', this.name))
+    this.update()
+    global.ipc.notify(trans('system.file_changed', this.name))
+    global.application.fileUpdate(this.getMetadata())
   }
 
   /**
@@ -147,14 +147,17 @@ class ZettlrFile {
    * Asynchronously scans the file's contents to not interrupt loading of the app.
    * @return {void} Does not return.
    */
-  scan () {
+  async scan () {
     let stat = fs.lstatSync(this.path)
     this.modtime = stat.mtime.getTime()
     this.creationtime = stat.birthtime.getTime()
 
-    fs.readFile(this.path, { encoding: 'utf8' }, (err, content) => {
-      if (err) console.error(err)
-      this._parseFileContents({}, content)
+    return new Promise((resolve, reject) => {
+      fs.readFile(this.path, { encoding: 'utf8' }, (err, content) => {
+        if (err) reject(err)
+        this._parseFileContents({}, content)
+        resolve()
+      })
     })
   }
 
@@ -359,6 +362,7 @@ class ZettlrFile {
     * @return {Boolean} The return value of the remove operation on parent
     */
   remove (force = false) {
+    this.shutdown()
     if (force) shell.moveItemToTrash(this.path)
     // Notify the virtual directories that this file is now in the trash
     // (also a virtual directory, but not quite the same).
@@ -380,9 +384,7 @@ class ZettlrFile {
     }
 
     // Make sure we got an extension.
-    if (ignoreFile(name)) {
-      name += '.md'
-    }
+    if (ignoreFile(name)) name += '.md'
 
     // Rename
     this.name = name

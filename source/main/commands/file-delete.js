@@ -32,7 +32,7 @@ class FileDelete extends ZettlrCommand {
     let hash
     if (arg.hasOwnProperty('hash')) {
       hash = arg.hash
-    } else if (this._app.getCurrentFile() != null) {
+    } else if (this._app.getCurrentFile()) {
       hash = this._app.getCurrentFile().hash
     }
 
@@ -44,14 +44,15 @@ class FileDelete extends ZettlrCommand {
     if (!this._app.window.confirmRemove(file)) return false
 
     // Now that we are save, let's move the current file to trash.
-    if (this._app.getCurrentFile() && (file.hash === this._app.getCurrentFile().hash)) {
+    if (this._app.getCurrentFile() === file) {
       this._app.ipc.send('file-close', {})
       // Tell main & renderer to close file references
       this._app.setCurrentFile(null)
     }
 
+    let parentDir = file.parent
     file.remove(true) // Also move the file to the trash
-    this._app.ipc.send('paths-update', this._app.getPathDummies())
+    global.application.dirUpdate(parentDir.hash, parentDir.getMetadata())
     return true
   }
 }

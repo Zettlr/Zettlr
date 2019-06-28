@@ -92,6 +92,14 @@ class ZettlrDir {
       // We have to add our dir to the watchdog
       global.watchdog.addPath(this.path)
     }
+
+    this._boundOnUnlinkDir = this.onUnlinkDir.bind(this)
+    this._boundOnAdd = this.onAdd.bind(this)
+
+    // Add the directory to the list of event receivers
+    global.watchdog.on('unlinkDir', this._boundOnUnlinkDir)
+    global.watchdog.on('add', this._boundOnAdd)
+    global.watchdog.on('addDir', this._boundOnAdd)
   }
 
   /**
@@ -106,43 +114,38 @@ class ZettlrDir {
     if (this.project) {
       this.project.save()
     }
+
+    // Also remove the listeners
+    global.watchdog.off('unlinkDir', this._boundOnUnlinkDir)
+    global.watchdog.off('add', this._boundOnAdd)
+    global.watchdog.off('addDir', this._boundOnAdd)
   }
 
   /**
-    * Handles an event sent fron the watchdog
-    * @param  {String} p The path for which the event was thrown
-    * @param  {String} e The event itself
-    * @return {Boolean}   Whether the event actually caused a change.
-    */
-  handleEvent (p, e) {
-    if ((this.isScope(p) === this) && (e === 'unlinkDir') && !this.isRoot()) {
-      // This directory has been removed. Notify host process and remove.
+   * If this directory is removed, handle it.
+   * @param  {string} p The path
+   * @return {void}   No return.
+   */
+  onUnlinkDir (p) {
+    // Only handle this-scopes
+    if (this.isScope(p) !== this) return
+    if (!this.isRoot()) {
       this.parent.notifyChange(trans('system.directory_removed', this.name))
       this.remove()
-      return true
-    } else if ((this.isScope(p) === this) && (e === 'unlinkDir') && this.isRoot()) {
-      // A root directory has been removed, so indicate that fact by replacing
-      // this directory with a dead link.
+    } else {
+      this.shutdown() // Need to remove the listeners
       this.parent.makeDead(this)
-      return true // Something has changed, so return true
-    } else if (this.isScope(p) === true) {
-      if ((path.dirname(p) === this.path) && (e === 'add' || e === 'addDir')) {
-        // A new dir or a new file has been created here. Re-Scan.
-        this.scan()
-        return true
-      }
-      // Some children has to handle it
-      let change = false
-      for (let c of this.children) {
-        if (c.handleEvent(p, e)) {
-          change = true
-        }
-      }
-      return change
     }
+  }
 
-    // If this part is executed, nothing has changed.
-    return false
+  onAdd (p) {
+    if (this.isScope(p) !== true) return
+    // A new dir or a new file has been created here. Re-Scan.
+    if ((path.dirname(p) === this.path)) {
+      this.scan().then(() => {
+        global.application.dirUpdate(this.hash, this.getMetadata())
+      })
+    }
   }
 
   /**
@@ -250,7 +253,7 @@ class ZettlrDir {
     * @param  {String} name The new name, if given
     * @return {ZettlrFile}             The newly created file.
     */
-  newfile (name) {
+  async newfile (name) {
     if (name == null) {
       // Generate a unique new name
       name = generateFileName()
@@ -279,6 +282,7 @@ class ZettlrDir {
     let f = new ZettlrFile(this, path.join(this.path, name))
     this.children.push(f)
     this.children = sort(this.children, this.sorting)
+    await f.scan()
     return f
   }
 
@@ -337,9 +341,8 @@ class ZettlrDir {
     * Move (or rename) this directory. It's a double-use function
     * @param  {String} newpath     The new location of this dir
     * @param  {String} [name=null] A name, given when this should be renamed
-    * @return {ZettlrDir}             This for chainability.
     */
-  move (newpath, name = null) {
+  async move (newpath, name = null) {
     // name will only be not-null if the dir should be renamed
     // If we move a directory, all files will automatically move.
     // So easiest way is to move this directory and then re-fetch
@@ -352,6 +355,12 @@ class ZettlrDir {
 
     // Determine if this is just a rename or a move
     let rename = (newpath === path.dirname(this.path))
+
+    // In *any case* we MUST shut down and remove the children.
+    // They will be re-read.
+    for (let c of this.children) c.shutdown()
+    this.children = []
+    this.attachments = []
 
     let oldPath = this.path
     this.path = path.join(newpath, this.name)
@@ -370,6 +379,10 @@ class ZettlrDir {
       global.config.set('openPaths', openPaths)
     }
 
+    // Ignore both the unlink and the add event on the parent's directory
+    global.watchdog.ignoreNext('unlinkDir', oldPath)
+    global.watchdog.ignoreNext('addDir', this.path)
+
     // Move
     fs.renameSync(oldPath, this.path)
 
@@ -380,10 +393,7 @@ class ZettlrDir {
     this._vdInterface = new ZettlrInterface(path.join(this.path, '.ztr-virtual-directories'))
 
     // Re-read
-    this.scan()
-
-    // Chainability
-    return this
+    await this.scan()
   }
 
   /**

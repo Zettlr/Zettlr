@@ -47,7 +47,7 @@ class DirNew extends ZettlrCommand {
 
     // Re-render the directories, and then as well the file-list of the
     // current folder.
-    this._app.ipc.send('paths-update', this._app.getPathDummies())
+    this._app.dirUpdate(curdir.hash, curdir.getMetadata())
 
     // Switch to newly created directory.
     this._app.setCurrentDir(dir)

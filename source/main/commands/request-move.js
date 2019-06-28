@@ -15,7 +15,6 @@
 const ZettlrCommand = require('./zettlr-command')
 const path = require('path')
 const { trans } = require('../../common/lang/i18n')
-const hash = require('../../common/util/hash')
 
 class RequestMove extends ZettlrCommand {
   constructor (app) {
@@ -38,6 +37,12 @@ class RequestMove extends ZettlrCommand {
 
     let to = this._app.findDir({ 'hash': parseInt(arg.to) })
 
+    if (!to) {
+      // If findDir doesn't return anything then it's a file
+      console.error(`Cannot move anything into a file!`)
+      return
+    }
+
     // Let's check that:
     if (from.contains(to)) {
       return this._app.window.prompt({
@@ -56,63 +61,68 @@ class RequestMove extends ZettlrCommand {
       })
     }
 
+    let oldDirectory = from.parent
+
     // Now check if we've actually gotten a virtual directory
     if (to.isVirtualDirectory() && from.isFile()) {
       // Then simply attach.
       to.attach(from)
       // And, of course, refresh the renderer.
-      this._app.ipc.send('paths-update', this._app.getPathDummies())
-      return
+      // this._app.ipc.send('paths-update', this._app.getPathDummies())
+      global.application.dirUpdate(to.hash, to.getMetadata())
+      return true
     }
 
-    let newPath = null
+    let newPath
 
-    if (from.isFile() && (this._app.getCurrentFile() != null) && (from.hash === this._app.getCurrentFile().hash)) {
+    if (from === this._app.getCurrentFile()) {
       // Current file is to be moved
       // So move the file and immediately retrieve the new path
-      this._app.watchdog.ignoreNext('unlink', from.path)
-      this._app.watchdog.ignoreNext('add', path.join(to.path, from.name))
+      global.watchdog.ignoreNext('add', path.join(to.path, from.name))
       from.move(to.path)
       to.attach(from)
 
-      // Now our current file has been successfully moved and will
-      // save correctly. Problem? The client needs it as well.
-      // We have to set current dir (the to-dir) and current file AND
-      // select it.
-      this._app.setCurrentDir(to) // Current file is still correctly set
-      this._app.ipc.send('paths-update', this._app.getPathDummies())
-      return
-    } else if ((this._app.getCurrentFile() !== null) &&
-    (from.findFile({ 'hash': this._app.getCurrentFile().hash }) !== null)) {
+      // Re-set the current file to send the correct new hash to the renderer
+      global.application.dirUpdate(to.hash, to.getMetadata())
+      this._app.setCurrentFile(from)
+      // this._app.ipc.send('paths-update', this._app.getPathDummies())
+      return true
+    } else if (from.contains(this._app.getCurrentFile())) {
       // The current file is in said dir so we need to trick a little bit
       newPath = this._app.getCurrentFile().path
       let relative = newPath.replace(from.path, '') // Remove old directory to get relative path
       // Re-merge:
       newPath = path.join(to.path, from.name, relative) // New path now
-      // Hash it
-      newPath = hash(newPath)
     }
 
     if (from.isDirectory()) {
       // TODO: Think of something to ignore _all_ events emanating from
       // the directory (every file will also trigger an unlink/add-couple)
-      this._app.watchdog.ignoreNext('unlinkDir', from.path)
-      this._app.watchdog.ignoreNext('addDir', path.join(to.path, from.name))
+      global.watchdog.ignoreNext('unlinkDir', from.path)
+      global.watchdog.ignoreNext('addDir', path.join(to.path, from.name))
     } else if (from.isFile()) {
-      this._app.watchdog.ignoreNext('unlink', from.path)
-      this._app.watchdog.ignoreNext('add', path.join(to.path, from.name))
+      global.watchdog.ignoreNext('unlink', from.path)
+      global.watchdog.ignoreNext('add', path.join(to.path, from.name))
     }
 
-    from.move(to.path)
-    // Add directory or file to target dir
-    to.attach(from)
+    from.move(to.path).then(() => {
+      // Add directory or file to target dir
+      to.attach(from)
 
-    this._app.ipc.send('paths-update', this._app.getPathDummies())
+      // Now replace from and to
+      global.application.dirUpdate(to.hash, to.getMetadata())
+      global.application.dirUpdate(oldDirectory.hash, oldDirectory.getMetadata())
+      // this._app.ipc.send('paths-update', this._app.getPathDummies())
 
-    if (newPath != null) {
-      // Find the current file and reset the pointers to it.
-      this._app.setCurrentFile(from.findFile({ 'hash': newPath }))
-    }
+      if (newPath) {
+        // Find the current file and reset the pointers to it.
+        this._app.setCurrentFile(from.findFile({ 'path': newPath }))
+      }
+
+      if (from === this._app.getCurrentDir()) {
+        this._app.setCurrentDir(from) // Re-Set to re-engage the hashes
+      }
+    })
 
     return true
   }

@@ -29,33 +29,39 @@ class DirRename extends ZettlrCommand {
   run (evt, arg) {
     // { 'hash': hash, 'name': val }
     let dir = this._app.findDir({ 'hash': parseInt(arg.hash) })
+    if (!dir) {
+      console.error(`Could not rename directory ${arg.hash} -- not found!`)
+      return // Something went wrong
+    }
 
-    let oldDir = path.dirname(dir.path)
+    let containingDirectory = path.dirname(dir.path)
 
     // Save for later whether this is the currentDir (have to re-send dir list)
-    let isCurDir = ((this._app.getCurrentDir() != null) && (dir.hash === this._app.getCurrentDir().hash))
-    let oldPath = null
+    let isCurDir = dir === this._app.getCurrentDir()
+    let oldPath
 
-    if ((this._app.getCurrentFile() !== null) && (dir.findFile({ 'hash': this._app.getCurrentFile().hash }) !== null)) {
+    if (dir.contains(this._app.getCurrentFile())) {
       // The current file is in said dir so we need to trick a little bit
       oldPath = this._app.getCurrentFile().path
       let relative = oldPath.replace(dir.path, '') // Remove old directory to get relative path
       // Re-merge:
-      oldPath = path.join(oldDir, arg.name, relative) // New path now
+      oldPath = path.join(containingDirectory, arg.name, relative) // New path now
     }
 
     // Move to same location with different name
-    dir.move(oldDir, arg.name)
+    dir.move(containingDirectory, arg.name).then(() => {
+      global.application.dirUpdate(arg.hash, dir.getMetadata())
 
-    this._app.ipc.send('paths-update', this._app.getPathDummies())
+      // We need to explicitly re-set the dir, as only by this the
+      // newly generated hash will be available throughout the app.
+      if (isCurDir) this._app.setCurrentDir(dir)
 
-    if (isCurDir) this._app.setCurrentDir(dir)
-
-    if (oldPath != null) {
-      // Re-set current file in the client
-      let nfile = dir.findFile({ 'hash': hash(oldPath) })
-      this._app.setCurrentFile(nfile)
-    }
+      if (oldPath) {
+        // Re-set the current file
+        let nfile = dir.findFile({ 'hash': hash(oldPath) })
+        this._app.setCurrentFile(nfile)
+      }
+    })
 
     return true
   }

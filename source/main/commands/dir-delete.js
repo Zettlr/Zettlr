@@ -58,7 +58,7 @@ class DirDelete extends ZettlrCommand {
     }
 
     // Now that we are save, let's move the current directory to trash.
-    this._app.watchdog.ignoreNext('unlinkDir', dir.path)
+    global.watchdog.ignoreNext('unlinkDir', dir.path)
 
     dir.remove(dir, true)
 
