@@ -24,7 +24,6 @@ const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
 const ZettlrDir = require('./zettlr-dir.js')
 const ZettlrFile = require('./zettlr-file.js')
 const ZettlrDeadDir = require('./zettlr-dead-dir.js')
-// const ZettlrWatchdog = require('./zettlr-watchdog.js')
 const ZettlrTargets = require('./zettlr-targets.js')
 const ZettlrStats = require('./zettlr-stats.js')
 const { i18n, trans } = require('../common/lang/i18n')
@@ -35,8 +34,6 @@ const isDir = require('../common/util/is-dir')
 const isFile = require('../common/util/is-file')
 
 const loadCommands = require('./commands/_autoload')
-
-const POLL_TIME = require('../common/data.json').poll_time
 
 /**
  * The Zettlr class handles every core functionality of Zettlr. Nothing works
@@ -83,6 +80,22 @@ class Zettlr {
 
     this.ipc = new ZettlrIPC(this)
 
+    // Inject some globals
+    global.application = {
+      fileUpdate: (oldHash, fileMetadata) => {
+        this.ipc.send('file-replace', {
+          'hash': oldHash,
+          'file': fileMetadata
+        })
+      },
+      dirUpdate: (oldHash, dirMetadata) => {
+        this.ipc.send('dir-replace', {
+          'hash': oldHash,
+          'dir': dirMetadata
+        })
+      }
+    }
+
     /**
      * this is a refresh timeout that is used to only send one update every 100
      * ms. During app boot, this will be used to make sure the path update will
@@ -90,9 +103,6 @@ class Zettlr {
      * @type {Number}
      */
     this._refreshTimeout = null
-
-    // Initiate the watchdog
-    // this.watchdog = new ZettlrWatchdog()
 
     // Statistics
     this.stats = new ZettlrStats(this)
@@ -153,27 +163,6 @@ class Zettlr {
         })
       }
     })
-
-    // Inject some globals
-    global.application = {
-      fileUpdate: (oldHash, fileMetadata) => {
-        this.ipc.send('file-replace', {
-          'hash': oldHash,
-          'file': fileMetadata
-        })
-      },
-      dirUpdate: (oldHash, dirMetadata) => {
-        this.ipc.send('dir-replace', {
-          'hash': oldHash,
-          'dir': dirMetadata
-        })
-      }
-    }
-
-    // Initiate regular polling
-    setTimeout(() => {
-      this.poll()
-    }, POLL_TIME)
   }
 
   /**
@@ -201,16 +190,6 @@ class Zettlr {
     for (let provider in this._providers) {
       this._providers[provider].shutdown()
     }
-  }
-
-  /**
-    * Performs recurring tasks such as polling the watchdog every five secs.
-    * @return {void} Returns nothing.
-    * @deprecated The watchdog polls will be put into an event listening system
-    * in the future.
-    */
-  poll () {
-    setTimeout(() => { this.poll() }, POLL_TIME)
   }
 
   /**

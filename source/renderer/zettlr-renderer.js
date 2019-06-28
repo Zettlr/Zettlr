@@ -383,8 +383,6 @@ class ZettlrRenderer {
 
     let oldFile = this.findObject(oldHash)
 
-    console.log('Replacing file', oldFile)
-
     if (oldFile && oldFile.type === 'file') {
       // Apply all necessary properties
       oldFile.dir = file.dir
@@ -416,8 +414,6 @@ class ZettlrRenderer {
     }
 
     let oldDir = this.findObject(oldHash)
-
-    console.log('Replacing directory', dir, oldDir)
 
     if (oldDir && ['directory', 'virtual-directory'].includes(oldDir.type)) {
       // Apply all necessary properties.
