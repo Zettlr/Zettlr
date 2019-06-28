@@ -110,11 +110,8 @@ class Zettlr {
     process.nextTick(() => {
       // Read all paths into the app
       this.refreshPaths().then(() => {
-        console.log(`Paths loaded!`)
         // If there are any, open argv-files
         this.handleAddRoots(global.filesToOpen).then(() => {
-          console.log(`New roots added!`)
-
           // Verify the integrity of the targets after all paths have been loaded
           this._targets.verify()
         }).catch((err) => {
@@ -485,21 +482,16 @@ class Zettlr {
     * @return {Promise} Resolved after the paths have been re-read
     */
   async refreshPaths () {
-    console.log(`Performing path refresh ...`)
     this._openPaths = []
     // Reload all opened files, garbage collect will get the old ones.
     for (let p of global.config.get('openPaths')) {
       if (isFile(p)) {
-        console.log(`Loading file ${p} ...`)
         let file = new ZettlrFile(this, p)
         await file.scan()
-        console.log(`File loaded!`)
         this._openPaths.push(file)
       } else if (isDir(p)) {
-        console.log(`Loading directory ${p} ...`)
         let dir = new ZettlrDir(this, p)
         await dir.scan()
-        console.log(`Directory loaded!`)
         this._openPaths.push(dir)
       } else if (path.extname(p) === '') {
         // It's not a file (-> no extension) but it could not be found ->
@@ -512,8 +504,6 @@ class Zettlr {
     // in the renderer for the following setting of current dirs and files.
     this.ipc.send('paths-update', this.getPathDummies())
 
-    console.log(`Setting current file/dir ...`)
-
     // Set the pointers either to null or last opened dir/file
     let lastDir = this.findDir({ 'hash': parseInt(global.config.get('lastDir')) })
     let lastFile = this.findFile({ 'hash': parseInt(global.config.get('lastFile')) })
@@ -521,14 +511,11 @@ class Zettlr {
     this.setCurrentFile(lastFile)
     if (lastFile) this.ipc.send('file-open', lastFile.withContent())
 
-    console.log(`Done!`)
-
     // Also add the last file to the list of recent documents.
     if (lastFile !== null) global.recentDocs.add(lastFile.getMetadata())
 
     // Preset the window's title with the current file, if applicable
     this.window.fileUpdate()
-    console.log(`Paths refreshed!`)
   }
 
   /**

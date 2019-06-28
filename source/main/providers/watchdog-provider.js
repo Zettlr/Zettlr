@@ -7,14 +7,9 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     Monitors the projectDir for external changes.
- *                  Some words on the ignoring array: We cannot simply pause()
- *                  and resume() the watchdog during save operations, because
- *                  the write process will trigger a change event after the save
- *                  process has stopped. This means that the actual event will
- *                  be fired by chokidar only AFTER resume() has been called
- *                  already. Therefore we will just be ignoring change events
- *                  for the specific path.
+ * Description:     Monitors root files and directories for changes of any kind,
+ *                  to notify the respective event listeners who can then take
+ *                  appropriate action.
  *
  * END HEADER
  */
@@ -143,7 +138,6 @@ class WatchdogProvider extends EventEmitter {
         if ((dir && !ignoreDir(p)) || (file && (!ignoreFile(p) || isAttachment(p)))) {
           // Emit the event for the respective path.
           this.emit(event, p)
-          console.log(`WATCHDOG: ${event} on ${p}`)
         }
       }
     })

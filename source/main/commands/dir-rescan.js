@@ -37,9 +37,7 @@ class DirRescan extends ZettlrCommand {
       // replace the directory.
       if (p[i].hash === parseInt(arg.hash) && p[i].type === 'dead-directory') {
         try {
-          console.log(`Scanning for ${p[i].path}`)
           fs.lstatSync(p[i].path)
-          console.log(`Found! Replacing ...`)
           p[i] = new ZettlrDirectory(p[i].parent, p[i].path)
           p[i].scan().then(() => {
             // send path update

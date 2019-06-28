@@ -96,8 +96,9 @@ class RequestMove extends ZettlrCommand {
     }
 
     if (from.isDirectory()) {
-      // TODO: Think of something to ignore _all_ events emanating from
-      // the directory (every file will also trigger an unlink/add-couple)
+      // All events that pertain to files within that directory will not
+      // be handled as the directory has already changed by the time they
+      // arrive.
       global.watchdog.ignoreNext('unlinkDir', from.path)
       global.watchdog.ignoreNext('addDir', path.join(to.path, from.name))
     } else if (from.isFile()) {
