@@ -228,6 +228,7 @@ function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/
   // Now loop through them and extract the metadata section
   for (let f of files) {
     let lang = path.basename(f, path.extname(f)) // bcp-47 tag
+    if (metadata.find(elem => elem.bcp47 === lang)) continue // Already included
     let data = fs.readFileSync(f, 'utf-8')
     let stat = fs.lstatSync(f)
     data = JSON.parse(data)

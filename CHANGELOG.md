@@ -43,6 +43,7 @@
   - `$1` in the replacement value will be replaced with the first capturing group
   - `$2` with the second capturing group
   - ... and so forth.
+- Zettlr now automatically downloads updations to the translations, if available.
 
 ## Under the Hood
 

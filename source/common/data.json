@@ -12,6 +12,7 @@
     ],
     "poll_time": 5000,
     "repo_url": "https://api.zettlr.com/v1/releases/latest",
+    "translation_api_url": "https://translate.zettlr.com/api/languages",
     "additional_paths": {
         "win32": [],
         "linux": [
