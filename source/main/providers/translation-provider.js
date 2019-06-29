@@ -31,6 +31,12 @@ class TranslationProvider {
     this._languageDirectory = path.join(app.getPath('userData'), '/lang/')
     // Inject the global provider functions
     global.translations = {
+      /**
+       * Return a copy of the available languages
+       * @return {Array} An array containing online languages available
+       */
+      getAvailableLanguages: () => { return JSON.parse(JSON.stringify(this._availableLanguages)) },
+      requestLanguage: (bcp47) => { this.requestLanguage(bcp47) }
     }
 
     this.init().catch((err) => {
@@ -76,8 +82,12 @@ class TranslationProvider {
     }
 
     // Now we are done and can notify the user of all updated translations!
-    // TODO fully translate.
-    global.ipc.notify('Successfully updated: ' + toUpdate.map(elem => trans('dialog.preferences.app_lang.' + elem.bcp47)).join(', '))
+    global.ipc.notify(
+      trans(
+        'dialog.preferences.translations.updated',
+        toUpdate.map(elem => trans(`dialog.preferences.app_lang.${elem.bcp47}`)).join(', ')
+      )
+    )
   }
 
   /**
@@ -88,6 +98,26 @@ class TranslationProvider {
     let l = await got(language.download_url, { method: 'GET' })
     let file = path.join(this._languageDirectory, language.bcp47 + '.json')
     await writeFileAsync(file, l.body)
+  }
+
+  async requestLanguage (bcp47) {
+    let l = this._availableLanguages.find(elem => elem.bcp47 === bcp47)
+    if (l) {
+      try {
+        await this.downloadLanguage(l)
+        // Notify the renderer of the successful download
+        global.ipc.send('language-download', {
+          'bcp47': l.bcp47,
+          'success': true
+        })
+      } catch (e) {
+        console.error(e)
+        global.ipc.send('language-download', {
+          'bcp47': l.bcp47,
+          'success': false
+        })
+      }
+    }
   }
 
   /**

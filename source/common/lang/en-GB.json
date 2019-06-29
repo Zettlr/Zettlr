@@ -5,7 +5,7 @@
             "ScaredCoward"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-06-19T15:16:55.000000Z"
+        "updated_at": "2019-06-29T11:52:31.000000Z"
     },
     "dialog": {
         "about": {
@@ -276,6 +276,14 @@
                 "title": "Theme"
             },
             "title": "Preferences",
+            "translations": {
+                "download": "Click to download",
+                "downloading": "Downloading %s",
+                "error": "Could not download %s",
+                "not_available": "%s is not available",
+                "success": "Successfully downloaded %s!",
+                "updated": "Updated translations: %s"
+            },
             "user_dictionary": "User dictionary. Remove words by clicking them.",
             "xelatex": "Path to xelatex executable. Please only change, if Zettlr is unable to locate it.",
             "xelatex_default": "Default: xelatex",

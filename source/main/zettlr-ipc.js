@@ -308,6 +308,11 @@ class ZettlrIPC {
         this._app.openQL(cnt)
         return true
 
+      // Request a language to download from the API
+      case 'request-language':
+        global.translations.requestLanguage(cnt)
+        break
+
       case 'switch-theme-berlin':
       case 'switch-theme-bielefeld':
       case 'switch-theme-frankfurt':

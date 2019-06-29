@@ -21,12 +21,20 @@
           <label for="app-lang">{{i18n "dialog.preferences.app_lang.title"}}
           </label>
           <select name="appLang" id="app-lang">
-            {{#each supportedLangs}}
-            <option value="{{this}}" {{#ifCond this '=' ../appLang}}selected="selected"{{/ifCond}}>{{i18n "dialog.preferences.app_lang." this}}</option>
+            {{#each languages}}
+            <option value="{{this.bcp47}}" data-download="{{this.todownload}}" {{#ifCond this.bcp47 '=' ../appLang}}selected="selected"{{/ifCond}}>
+              {{#if this.toDownload}}
+              {{i18n "dialog.preferences.translations.download"}}
+              {{/if}}
+              {{i18n "dialog.preferences.app_lang." this.bcp47}}
+              {{#ifCond this.completion '<' 100}}
+              ({{this.completion}}%)
+              {{/ifCond}}
+            </option>
             {{/each}}
           </select>
-          <p>
-            <a href="#" onclick="require('electron').shell.openExternal('https://translate.zettlr.com/')">Get more languages &hellip;</a>
+          <p id="app-lang-download-indicator">
+            <!--<a href="#" onclick="require('electron').shell.openExternal('https://translate.zettlr.com/')">Get more languages &hellip;</a>-->
           </p>
           <hr>
           <div class="cb-group">

@@ -16,12 +16,21 @@
 
 const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
+const { ipcRenderer } = require('electron')
 const { trans } = require('../../common/lang/i18n')
 
 class PreferencesDialog extends ZettlrDialog {
   constructor () {
     super()
     this._dialog = 'preferences'
+    this._boundCallback = this.afterDownload.bind(this)
+    this._textTimeout = null
+
+    // Build the loading spinner that we need for the downloading indication
+    this._spinner = $('<div>').addClass('sk-three-bounce')
+    for (let i = 1; i < 4; i++) {
+      this._spinner.append($('<div>').addClass('sk-bounce' + i).addClass('sk-child'))
+    }
   }
 
   preInit (data) {
@@ -30,6 +39,26 @@ class PreferencesDialog extends ZettlrDialog {
 
     // Determine the ability of the OS to switch to dark mode
     data.hasOSDarkMode = ['darwin', 'win32'].includes(process.platform)
+
+    // Build the full translation list
+    data.languages = data.supportedLangs.map((elem) => {
+      return {
+        'bcp47': elem,
+        'completion': 100,
+        'toDownload': false
+      }
+    })
+
+    for (let lang of data.availableLanguages) {
+      // If the language is already in the supportedLangs, we can jump over them
+      if (!data.languages.find(elem => elem.bcp47 === lang.bcp47)) {
+        let x = lang
+        x.toDownload = true
+        data.languages.push(x)
+      }
+    }
+    this._languages = data.languages // Save a reference for downloading etc.
+
     return data
   }
 
@@ -39,8 +68,31 @@ class PreferencesDialog extends ZettlrDialog {
     form.on('submit', (e) => {
       e.preventDefault()
       // Give the ZettlrBody object the results
-      // Form: dialog type, values, the originally passed object
       this.proceed(form.serializeArray())
+    })
+
+    // Download not-available languages on select
+    form.find('#app-lang').change((event) => {
+      let l = this._languages.find(elem => elem.bcp47 === $('#app-lang').val())
+      if (l.toDownload) {
+        let langLocalisation = trans('dialog.preferences.translations.downloading', trans(`dialog.preferences.app_lang.${l.bcp47}`))
+        // How does downloding work? Easy:
+        // 1. Block the element itself
+        // 2. Notify the user that a language will be downloaded
+        // 3. Tell the main process to download the language
+        // 4. Wait for the one IPC event announcing the download (or error)
+        // 5. Notify the user of the successful download
+        // 6. Unblock the element
+        $('#app-lang').prop('disabled', true) // Block
+        // Indicate downloading both on the element itself ...
+        $('#app-lang').find('option[value="' + l.bcp47 + '"]').text(langLocalisation)
+        // ... and beneath the select
+        $('#app-lang-download-indicator').text(langLocalisation)
+        $('#app-lang-download-indicator').append(this._spinner)
+        // Notify main
+        global.ipc.send('request-language', l.bcp47)
+        ipcRenderer.on('message', this._boundCallback) // Listen for the back event
+      }
     })
 
     // Functions for the search field of the dictionary list.
@@ -117,6 +169,29 @@ class PreferencesDialog extends ZettlrDialog {
       // Simply send the respective command to main and let the magic happen!
       global.ipc.send(`switch-theme-${elem}`)
     })
+  }
+
+  afterDownload (event, arg) {
+    if (!arg.hasOwnProperty('command') || arg.command !== 'language-download') return
+    // Detach this event listener
+    ipcRenderer.off('message', this._boundCallback)
+    let cnt = arg.content
+    let langLocalisation = trans(`dialog.preferences.app_lang.${cnt.bcp47}`)
+
+    // Tell success or failure and unlock the select
+    if (cnt.success) { // dialog.preferences.translation.downloading
+      $('#app-lang-download-indicator').text(trans('dialog.preferences.translations.success', langLocalisation))
+      $('#app-lang').find('option[value="' + cnt.bcp47 + '"]').text(langLocalisation)
+    } else {
+      $('#app-lang-download-indicator').text(trans('dialog.preferences.translations.error', langLocalisation))
+      $('#app-lang').find('option[value="' + cnt.bcp47 + '"]').text(trans('dialog.preferences.translations.not_available', langLocalisation))
+    }
+    $('#app-lang').prop('disabled', false) // Unblock
+    if (this._textTimeout) clearTimeout(this._textTimeout)
+    this._textTimeout = setTimeout(() => {
+      // Hide the text after three seconds
+      $('#app-lang-download-indicator').text('')
+    }, 3000)
   }
 
   proceed (data) {
