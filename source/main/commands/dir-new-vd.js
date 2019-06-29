@@ -36,7 +36,7 @@ class DirNewVD extends ZettlrCommand {
 
     // Create the vd
     let vd = dir.addVirtualDir(arg.name)
-    this._app.ipc.send('paths-update', this._app.getPathDummies())
+    global.application.dirUpdate(dir.hash, dir.getMetadata())
     this._app.setCurrentDir(vd)
   }
 }
