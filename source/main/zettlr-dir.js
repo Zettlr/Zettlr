@@ -229,7 +229,7 @@ class ZettlrDir {
     * @param  {String} name The name (not path!) for the subdirectory.
     * @return {ZettlrDir}      The newly created directory.
     */
-  newdir (name) {
+  async newdir (name) {
     // Remove unallowed characters.
     name = sanitize(name, { replacement: '-' })
     if ((name === '') || (name === null)) {
@@ -241,6 +241,7 @@ class ZettlrDir {
     global.watchdog.ignoreNext('addDir', newpath)
 
     let dir = new ZettlrDir(this, newpath)
+    await dir.scan()
     this.children.push(dir)
     this.children = sort(this.children, this.sorting)
 

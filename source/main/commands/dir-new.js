@@ -26,7 +26,6 @@ class DirNew extends ZettlrCommand {
     * @param  {Object} arg An object containing hash of containing and name of new dir.
     */
   run (evt, arg) {
-    let dir = null
     let curdir = null
 
     if (arg.hasOwnProperty('hash')) {
@@ -35,22 +34,20 @@ class DirNew extends ZettlrCommand {
       curdir = this._app.getCurrentDir()
     }
 
-    try {
-      dir = curdir.newdir(arg.name)
-    } catch (e) {
-      return this._app.window.prompt({
+    curdir.newdir(arg.name).then((dir) => {
+      // Re-render the directories, and then as well the file-list of the
+      // current folder.
+      global.application.dirUpdate(curdir.hash, curdir.getMetadata())
+
+      // Switch to newly created directory.
+      this._app.setCurrentDir(dir)
+    }).catch((err) => {
+      this._app.window.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_dir'),
-        message: e.message
+        message: err.message
       })
-    }
-
-    // Re-render the directories, and then as well the file-list of the
-    // current folder.
-    this._app.dirUpdate(curdir.hash, curdir.getMetadata())
-
-    // Switch to newly created directory.
-    this._app.setCurrentDir(dir)
+    })
   }
 }
 
