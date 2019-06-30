@@ -86,6 +86,9 @@ class PreferencesDialog extends ZettlrDialog {
         $('#app-lang').prop('disabled', true) // Block
         // Indicate downloading both on the element itself ...
         $('#app-lang').find('option[value="' + l.bcp47 + '"]').text(langLocalisation)
+        // Override the option's value to ensure even if the user saves during
+        // download no non-available language is set.
+        $('#app-lang').find('option[value="' + l.bcp47 + '"]').val(global.config.get('appLang'))
         // ... and beneath the select
         $('#app-lang-download-indicator').text(langLocalisation)
         $('#app-lang-download-indicator').append(this._spinner)
@@ -179,10 +182,14 @@ class PreferencesDialog extends ZettlrDialog {
     let langLocalisation = trans(`dialog.preferences.app_lang.${cnt.bcp47}`)
 
     // Tell success or failure and unlock the select
-    if (cnt.success) { // dialog.preferences.translation.downloading
+    if (cnt.success) {
       $('#app-lang-download-indicator').text(trans('dialog.preferences.translations.success', langLocalisation))
-      $('#app-lang').find('option[value="' + cnt.bcp47 + '"]').text(langLocalisation)
+      $('#app-lang').find('option[value="' + global.config.get('appLang') + '"]').text(langLocalisation)
+      // Again override the value to the correct one.
+      $('#app-lang').find('option[value="' + global.config.get('appLang') + '"]').val(cnt.bcp47)
     } else {
+      // Do not override the language value to make sure the language stays
+      // even if the user doesn't select another language.
       $('#app-lang-download-indicator').text(trans('dialog.preferences.translations.error', langLocalisation))
       $('#app-lang').find('option[value="' + cnt.bcp47 + '"]').text(trans('dialog.preferences.translations.not_available', langLocalisation))
     }
