@@ -118,6 +118,7 @@ class ZettlrEditor {
       foldOptions: {
         'widget': '\u00A0\u2026\u00A0' // nbsp ellipse nbsp
       },
+      placeholder: ' ', // Just an invisible space.
       hintOptions: {
         completeSingle: false, // Don't auto-complete, even if there's only one word available
         hint: (cm, opt) => {

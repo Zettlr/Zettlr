@@ -45,6 +45,7 @@
   - `$2` with the second capturing group
   - ... and so forth.
 - Zettlr now automatically downloads updations to the translations, if available.
+- The editor now has a light background image in case it is empty.
 
 ## Under the Hood
 

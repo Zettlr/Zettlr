@@ -17,6 +17,7 @@ require('./indentlist.js')
 
 // 3. Display addons
 require('codemirror/addon/display/fullscreen')
+require('codemirror/addon/display/placeholder')
 
 // 4. Search addons
 require('codemirror/addon/search/searchcursor')
