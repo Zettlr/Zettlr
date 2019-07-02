@@ -46,6 +46,7 @@
   - ... and so forth.
 - Zettlr now automatically downloads updations to the translations, if available.
 - The editor now has a light background image in case it is empty.
+- Fixed a bug with certain types of keyboards on macOS conflicting with internal CodeMirror commands.
 
 ## Under the Hood
 
