@@ -35,7 +35,6 @@ class AboutDialog extends ZettlrDialog {
       // List all contributors to translations
       let html = ''
       for (let lang of data) {
-        console.log(lang)
         let failsafe = 'dialog.preferences.app_lang.' + lang.bcp47
         let name = trans(failsafe)
         if (name === failsafe) name = lang.bcp47

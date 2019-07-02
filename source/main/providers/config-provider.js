@@ -364,18 +364,6 @@ class ConfigProvider extends EventEmitter {
     * @return {void} Nothing to return.
     */
   checkPaths () {
-    /*
-    for (let i = 0; i < this.config['openPaths'].length; i++) {
-      try {
-        fs.lstatSync(this.config['openPaths'][i])
-      } catch (e) {
-        // Remove the path
-        this.config['openPaths'].splice(i, 1)
-        --i
-      }
-    }
-    */
-
     // Remove duplicates
     this.config['openPaths'] = [...new Set(this.config['openPaths'])]
 
@@ -605,10 +593,10 @@ class ConfigProvider extends EventEmitter {
    */
   _validate (key, value) {
     let rule = this._rules.find(elem => elem.getKey() === key)
-    if (rule) { // There is a rule for this key, so validate
-      return rule.validate(value)
-    }
-    return true // There are some options for which there is no validation.
+    // There is a rule for this key, so validate
+    if (rule) return rule.validate(value)
+    // There are some options for which there is no validation.
+    return true
   }
 }
 

@@ -59,6 +59,7 @@
 - Translations located in the `lang`-directory in the user data folder now take precedence over the shipped translations.
 - Moved all local find functionality to a new class `EditorSearch` and did some fixing.
 - Massive rewrite of the watchdog logic. Now the app is blazingly fast, there's no up-to-five-seconds-delay anymore when you add/remove any files and the app should generally feel smoother to handle.
+- Fixed duplicate dictionary entries and saving of the dictionary preferences function.
 
 # 1.3.0
 

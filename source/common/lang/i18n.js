@@ -46,7 +46,6 @@ const FALLBACK = 'fallback'
  * @return {Object}                The language metadata object.
  */
 function i18n (lang = 'en-US') {
-  // let file = path.join(__dirname, lang + '.json')
   let file = getLanguageFile(lang) // Will return a working path
 
   // Cannot do this asynchronously, because it HAS to be loaded directly
@@ -83,11 +82,9 @@ function trans (string, ...args) {
     }
   }
 
-  if (typeof transString !== 'string') {
-    // There was an additional attribute missing (there is a whole object
-    // in the variable) -> just return the string
-    return string
-  }
+  // There was an additional attribute missing (there is a whole object
+  // in the variable) -> just return the string
+  if (typeof transString !== 'string') return string
 
   for (let a of args) {
     transString = transString.replace('%s', a) // Always replace one %s with an arg
@@ -283,7 +280,7 @@ function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), _
  * @param  {Array} [paths=[]] An array of paths to be searched. Defaults to standard paths.
  * @return {Array}       An array containing metadata for all found dictionaries.
  */
-function enumDictFiles (paths = [ path.join(__dirname, '../../main/assets/dict'), path.join(app.getPath('userData'), '/dict') ]) {
+function enumDictFiles (paths = [ path.join(app.getPath('userData'), '/dict'), path.join(__dirname, '../../main/assets/dict') ]) {
   let candidates = []
   for (let p of paths) {
     let list = fs.readdirSync(p)
@@ -300,8 +297,11 @@ function enumDictFiles (paths = [ path.join(__dirname, '../../main/assets/dict')
           dic = path.join(p, dir, 'index.dic')
           if (!isFile(aff) || !isFile(dic)) continue
         }
-        // TODO harden for cases in which the file may be called index.aff or so
-        candidates.push({ 'tag': dir, 'aff': aff, 'dic': dic })
+        // Only add the found dictionary if it is not already present. Useful
+        // to override the shipped dictionaries.
+        if (!candidates.find(elem => elem.tag === dir)) {
+          candidates.push({ 'tag': dir, 'aff': aff, 'dic': dic })
+        }
       }
     }
   }

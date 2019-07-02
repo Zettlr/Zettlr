@@ -69,7 +69,6 @@ class ZettlrQuicklookWindow {
     })
 
     ipc.on('custom-css', (evt, cnt) => {
-      console.log('received custom css!', cnt)
       let lnk = $('<link>').attr('rel', 'stylesheet')
       lnk.attr('href', 'file://' + cnt + '?' + Date.now())
       lnk.attr('type', 'text/css')

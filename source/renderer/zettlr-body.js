@@ -619,7 +619,6 @@ class ZettlrBody {
 
     $('#searchNext').click((e) => {
       let res = global.editorSearch.next($('#searchWhat').val())
-      console.log(res)
       // Indicate non-successful matches where nothing was found
       if (!res) $('#searchWhat').addClass('not-found')
       else $('#searchWhat').removeClass('not-found')
