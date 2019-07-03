@@ -29,22 +29,12 @@ class FileRename extends ZettlrCommand {
     let oldpath = ''
 
     let file = this._app.findFile({ 'hash': parseInt(arg.hash) })
+    if (!file) return console.error(`Could not find file ${arg.hash}`)
 
-    // Possibilities: Non-opened file or opened file
-    if (file === this._app.getCurrentFile()) {
-      // Current file should be renamed.
-      oldpath = file.path
-      file.rename(arg.name)
-      // Adapt window title (manually trigger a fileUpdate)
-      this._app.window.fileUpdate()
-    } else {
-      // Non-open file should be renamed.
-      file = this._app.findFile({ 'hash': parseInt(arg.hash) })
-      oldpath = file.path
-      file.rename(arg.name) // Done.
-    }
+    oldpath = file.path
+    file.rename(arg.name) // Done.
 
-    // A root has been renamed -> reflect in openPaths
+    // A root has been renamed -> replace the old path with the new one.
     if (file.isRoot()) {
       let oP = global.config.get('openPaths')
       for (let i = 0; i < oP.length; i++) {
@@ -60,9 +50,11 @@ class FileRename extends ZettlrCommand {
     global.application.fileUpdate(arg.hash, file.getMetadata())
 
     if (file === this._app.getCurrentFile()) {
-      // Also "re-set" the current file to trigger some additional actions
-      // necessary to reflect the changes throughout the app.
+      // Also "re-set" the current file to trigger some additional
+      // actions necessary to reflect the changes throughout the app.
       this._app.setCurrentFile(this._app.getCurrentFile())
+      // Adapt window title (manually trigger a fileUpdate)
+      this._app.window.fileUpdate()
     }
   }
 }
