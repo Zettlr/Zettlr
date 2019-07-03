@@ -409,25 +409,27 @@ class ZettlrFile {
   /**
     * Move a file to another directory
     * @param  {String} toPath The new directory's path
-    * @return {ZettlrFile}        this for chainability.
+    * @return {Promise} Resolves after a successful move
     */
-  move (toPath) {
-    // First detach the object.
-    this.detach()
+  async move (toPath) {
+    return new Promise((resolve, reject) => {
+      // First detach the object.
+      this.detach()
 
-    // Find new path:
-    let oldPath = this.path
-    this.path = path.join(toPath, this.name)
-    this.hash = hash(this.path)
+      // Find new path:
+      let oldPath = this.path
+      this.path = path.join(toPath, this.name)
+      this.hash = hash(this.path)
 
-    // Move
-    fs.renameSync(oldPath, this.path)
+      // Move
+      fs.rename(oldPath, this.path, (err) => {
+        if (err) reject(err)
+        // Notify virtualDirectories of the path change.
+        this._notifyVD()
 
-    // Notify virtualDirectories of the path change.
-    this._notifyVD()
-
-    // Chainability
-    return this
+        resolve()
+      })
+    })
   }
 
   /**

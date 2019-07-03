@@ -43,7 +43,7 @@ class RequestMove extends ZettlrCommand {
       return
     }
 
-    // Let's check that:
+    // Let's check if the destination is a children of the source:
     if (from.contains(to)) {
       return this._app.window.prompt({
         type: 'error',
@@ -79,13 +79,12 @@ class RequestMove extends ZettlrCommand {
       // Current file is to be moved
       // So move the file and immediately retrieve the new path
       global.watchdog.ignoreNext('add', path.join(to.path, from.name))
-      from.move(to.path)
-      to.attach(from)
-
-      // Re-set the current file to send the correct new hash to the renderer
-      global.application.dirUpdate(to.hash, to.getMetadata())
-      this._app.setCurrentFile(from)
-      // this._app.ipc.send('paths-update', this._app.getPathDummies())
+      from.move(to.path).then(() => {
+        to.attach(from)
+        // Re-set the current file to send the correct new hash to the renderer
+        global.application.dirUpdate(to.hash, to.getMetadata())
+        this._app.setCurrentFile(from)
+      })
       return true
     } else if (from.contains(this._app.getCurrentFile())) {
       // The current file is in said dir so we need to trick a little bit
