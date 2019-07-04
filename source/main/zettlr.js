@@ -353,15 +353,13 @@ class Zettlr {
 
     // The user may have provided no path at all, which returns in an
     // empty array -> check against and abort if array is empty
-    if (!(ret && ret.length)) {
-      return
-    }
+    if (!(ret && ret.length)) return
 
     // Ret is now an array. As we do not allow multiple selection, just
     // take the first index.
     ret = ret[0]
 
-    if ((isDir(ret) && ignoreDir(ret)) || (isFile(ret) && ignoreFile(ret))) {
+    if ((isDir(ret) && ignoreDir(ret)) || (isFile(ret) && ignoreFile(ret)) || ret === app.getPath('home')) {
       // We cannot add this dir, because it is in the list of ignored directories.
       return this.window.prompt({
         'type': 'error',

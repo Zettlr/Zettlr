@@ -47,6 +47,7 @@
 - Zettlr now automatically downloads updations to the translations, if available.
 - The editor now has a light background image in case it is empty.
 - Fixed a bug with certain types of keyboards on macOS conflicting with internal CodeMirror commands.
+- Prevent opening of a user's home directory.
 
 ## Under the Hood
 
