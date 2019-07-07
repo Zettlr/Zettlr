@@ -15,7 +15,7 @@
   // Should match everything permittible -- first alternative are the huge
   // blocks, second alternative are the simple @ID-things, both recognised by
   // Pandoc citeproc.
-  var citationRE = /(\[[^[\]]*@[^[\]]+\])|(?<=[^\\\S])@([a-z0-9_:.#$%&\-+?<>~/]+)/gi
+  var citationRE = /(\[[^[\]]*@[^[\]]+\])|(?<=[^\\\S])(@[a-z0-9_:.#$%&\-+?<>~/]+)/gi
   var citeMarkers = [] // CiteMarkers
 
   CodeMirror.commands.markdownRenderCitations = function (cm) {

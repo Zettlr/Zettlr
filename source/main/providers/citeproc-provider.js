@@ -334,6 +334,7 @@ class CiteprocProvider {
     try {
       citations = Citr.parseSingle(citation)
     } catch (err) {
+      console.error(err)
       return undefined
     }
 

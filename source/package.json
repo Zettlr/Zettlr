@@ -14,7 +14,7 @@
     "license": "GPL-3.0",
     "main": "main.js",
     "dependencies": {
-        "@zettlr/citr": "^1.0.1",
+        "@zettlr/citr": "^1.0.3",
         "adm-zip": "^0.4.13",
         "astrocite": "^0.14.0",
         "bcp-47": "^1.0.5",
