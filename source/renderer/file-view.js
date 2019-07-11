@@ -126,6 +126,7 @@ class FileView {
    */
   markDuplicate () {
     this._hasDuplicateName = true
+    this.refresh() // Reflect the change
     return this
   }
 
@@ -135,6 +136,7 @@ class FileView {
    */
   markUnique () {
     this._hasDuplicateName = false
+    this.refresh() // Reflect the change
     return this
   }
 
