@@ -99,6 +99,14 @@
           continue
         }
 
+        if (url !== '' && /\)+$/.test(url)) {
+          // We got a Markdown link AND it ends with at least two braces, so
+          // there's a strong indication that we should not include the final
+          // brace inside our actual link.
+          curTo.ch -= 1
+          url = url.substr(0, url.length - 1)
+        }
+
         let a = document.createElement('a')
         a.className = 'cma' // CodeMirrorAnchors
         if (standalone) {
