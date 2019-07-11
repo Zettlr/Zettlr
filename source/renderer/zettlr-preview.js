@@ -117,9 +117,11 @@ class ZettlrPreview {
     console.log(`Generating File List Tags...`)
     // Check whether the data-array is already an array. Else, flatten the
     // object tree to a one-dimensional array.
-    if (!Array.isArray(this._data)) {
-      this._data = flattenDirectoryTree(this._data)
-    }
+    if (!Array.isArray(this._data)) this._data = flattenDirectoryTree(this._data)
+
+    // Receive the current theme's colour hue variable
+    // The fallback hue of 159 corresponds to @green-0
+    let hue = window.getComputedStyle(document.documentElement).getPropertyValue('--search-hue') || '159'
 
     // Reset the tags.
     this._tags = []
@@ -174,7 +176,7 @@ class ZettlrPreview {
           w += r.weight
         }
         w = Math.round(w / this._maxWeight * 100) // Percentage
-        bgcolor = ` style="background-color:hsl(159, ${w}%, 50%);"` // hue of 159 corresponds to @green-0
+        bgcolor = ` style="background-color:hsl(${hue}, ${w}%, 50%);"`
         color = ` style="color: ${(w > 50) ? 'black' : 'white'};"`
       }
 
@@ -797,8 +799,10 @@ class ZettlrPreview {
     this._currentSearch = null
     this._showSearchResults = true // Indicate that the list should be only displaying search results.
     this.refresh() // Refresh to apply.
-    // Also mark the results in the potential open file
-    global.editorSearch.markResults()
+    // Also mark the results in the potential open file. We have to pass the
+    // renderer's currentFile to it, as the editorSearch can't access the
+    // renderer.
+    global.editorSearch.markResults(this._renderer.getCurrentFile())
   }
 
   /**

@@ -50,6 +50,7 @@
 - Prevent opening of a user's home directory.
 - The citation rendering plugin won't render the domain parts of Emails anymore.
 - Markdown links in braces won't include the closing brace anymore.
+- The search's heatmaps now use the theme's colour as a base to indiciate the relevancy instead of always green.
 
 ## Under the Hood
 

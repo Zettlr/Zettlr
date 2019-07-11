@@ -53,7 +53,7 @@ class EditorSearch {
     * Highlights search results if any given.
     * @param {ZettlrFile} [file=this._renderer.getCurrentFile()] The file to retrieve and mark results for
     */
-  markResults (file = this._renderer.getCurrentFile()) {
+  markResults (file) {
     if (!file) return // No file, so no results to be marked.
 
     let res = global.search.hasResult(file.hash)
