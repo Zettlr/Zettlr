@@ -70,15 +70,6 @@
         let curFrom = { 'line': i, 'ch': match.index }
         let curTo = { 'line': i, 'ch': match.index + match[0].length }
 
-        // Do not render if it's inside a comment (in this case the mode will be
-        // markdown, but comments shouldn't be included in rendering)
-        if (
-          cm.getTokenAt(curFrom).type === 'comment' ||
-          cm.getTokenAt(curTo).type === 'comment'
-        ) {
-          continue
-        }
-
         let cur = cm.getCursor('from')
         if (cur.line === curFrom.line && cur.ch >= curFrom.ch && cur.ch <= curTo.ch + 1) {
           // Cursor is in selection: Do not render. Also include the adjacent
@@ -98,6 +89,15 @@
           }
         }
         if (con) continue // Skip this match
+
+        // Do not render if it's inside a comment (in this case the mode will be
+        // markdown, but comments shouldn't be included in rendering)
+        // Final check to avoid it for as long as possible, as getTokenAt takes
+        // considerable time.
+        if (cm.getTokenAt(curFrom).type === 'comment' ||
+            cm.getTokenAt(curTo).type === 'comment') {
+          continue
+        }
 
         let a = document.createElement('a')
         a.className = 'cma' // CodeMirrorAnchors
