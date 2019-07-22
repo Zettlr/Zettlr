@@ -15,7 +15,7 @@
   // GENERAL PLUGIN VARIABLES
 
   // Image detection regex
-  var imageRE = /^!\[(.*?)\]\((.+?)\)(?:{.*})?$/
+  var imageRE = /^\s*!\[(.*?)\]\((.+?)\)(?:{.*})?\s*$/
 
   // Holds the currently rendered images
   var imageMarkers = []
