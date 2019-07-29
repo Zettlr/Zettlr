@@ -53,7 +53,7 @@ To explore the functionality and inner workings of the app, [head over to our de
 `$ yarn less`\
 `$ yarn handlebars`
 
-to compile both the style sheets and the precompiled `handlebars.js` templates.
+to compile both the style sheets and the precompiled `handlebars.js` templates. (If you are using `npm`, the command is `npm run less`, etc.)
 
 ## License
 
