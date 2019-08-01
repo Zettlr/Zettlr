@@ -22,9 +22,12 @@ echo "    8. Check the correctness of the checksums"
 echo ""
 echo ""
 
-# First we need the version number.
-read -p "Which version is in package.json? "  pkgver
-echo "Computing with $pkgver ..."
+# First we need the version number. We will
+# use the get-pkg-version helper, which simply
+# logs the version field from package.json
+# to the console.
+pkgver=$(node ./scripts/get-pkg-version.js)
+echo "Package version is: $pkgver"
 echo ""
 
 # Rebuild Stylesheets

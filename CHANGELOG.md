@@ -68,6 +68,7 @@
 - Fixed duplicate dictionary entries and saving of the dictionary preferences function.
 - Moved the comment detection in the link rendering command further back to speed up performance significantly.
 - Added a clipboard inspection dialog to inspect the contents of the clipboard and make sure copy & paste operations work as expected.
+- Updated the `make.sh` script to automatically infer the version to use from the source's `package.json`.
 
 # 1.3.0
 
