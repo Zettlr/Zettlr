@@ -24,8 +24,6 @@
         "less": "node scripts/less.js",
         "less:extract": "node scripts/extract-css.js",
         "handlebars": "node scripts/handlebars.js",
-        "docs:build": "node scripts/docs.js",
-        "docs": "documentation build ./source/main.js -f html -o resources/docs",
         "lang:refresh": "node scripts/refresh-language.js",
         "reveal:build": "node scripts/update-reveal.js"
     },
