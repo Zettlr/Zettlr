@@ -204,6 +204,10 @@
   "debug": {
     "label": "menu.labels.debug",
     "submenu": [
+      {
+        "label": "menu.inspect_clipboard",
+        "command": "inspect-clipboard"
+      },
     {
       "label": "menu.reload",
       "accelerator": "F5",

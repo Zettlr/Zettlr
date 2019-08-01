@@ -67,6 +67,7 @@
 - Massive rewrite of the watchdog logic. Now the app is blazingly fast, there's no up-to-five-seconds-delay anymore when you add/remove any files and the app should generally feel smoother to handle.
 - Fixed duplicate dictionary entries and saving of the dictionary preferences function.
 - Moved the comment detection in the link rendering command further back to speed up performance significantly.
+- Added a clipboard inspection dialog to inspect the contents of the clipboard and make sure copy & paste operations work as expected.
 
 # 1.3.0
 

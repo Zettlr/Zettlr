@@ -480,6 +480,10 @@ class ZettlrRendererIPC {
         this._app.getBody().displayTagsPreferences(cnt)
         break
 
+      case 'inspect-clipboard':
+        this._app.getBody().displayDevClipboard()
+        break
+
       case 'set-tags':
         this._app.getPreview().setTags(cnt)
         break

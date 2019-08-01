@@ -32,6 +32,7 @@ const TagsPreferences = require('./dialog/tags-preferences.js')
 const ProjectProperties = require('./dialog/project-properties.js')
 const CustomCSS = require('./dialog/custom-css.js')
 const ErrorDialog = require('./dialog/error-dialog.js')
+const DevClipboard = require('./dialog/clipboard.js')
 
 const { trans } = require('../common/lang/i18n.js')
 const localiseNumber = require('../common/util/localise-number')
@@ -780,6 +781,15 @@ class ZettlrBody {
         this.displayTOC()
       }
     })
+  }
+
+  displayDevClipboard () {
+    // DevClipboard
+    if (this._currentDialog !== null) return // Only one dialog at a time
+    if (this._currentPopup) this._currentPopup.close(true) // Close popups
+    this._currentDialog = new DevClipboard()
+    this._currentDialog.init({}).open()
+    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
 
   /**

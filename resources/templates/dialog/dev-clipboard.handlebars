@@ -1,0 +1,31 @@
+<div class="dialog">
+  <h1>Inspect Clipboard</h1>
+  <p>
+    Here you can inspect the current contents of the clipboard.
+    <strong>Note</strong>: This is a developer feature.
+  </p>
+  <h2>HTML Contents</h2>
+  <p>
+    <pre style="white-space: pre-wrap"><code style="display: block">{{ clipboardHTML }}</code></pre>
+  </p>
+  <h2>Text Contents</h2>
+  <p>
+    <pre style="white-space: pre-wrap"><code style="display: block">{{ clipboardText }}</code></pre>
+  </p>
+  <h2>RichText Contents</h2>
+  <p>
+    <pre style="white-space: pre-wrap"><code style="display: block">{{ clipboardRTF }}</code></pre>
+  </p>
+  <h2>Image</h2>
+  <p>
+    {{#if clipboardImage}}
+    <img src="{{ clipboardImage }}">
+    <span class="info">Image dimensions: {{ imgWidth }}&times;{{ imgHeight }}</span>
+    {{else}}
+    <pre style="white-space: pre-wrap"><code style="display: block">The Clipboard does not contain an image.</code></pre>
+    {{/if}}
+  </p>
+  <div>
+    <button id="abort">Close</button>
+  </div>
+</div>
