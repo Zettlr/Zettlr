@@ -70,6 +70,7 @@
 - Added a clipboard inspection dialog to inspect the contents of the clipboard and make sure copy & paste operations work as expected.
 - Updated the `make.sh` script to automatically infer the version to use from the source's `package.json`.
 - Simplified the process of maintaining the revealJS templates, added a few other goodies. The command `reveal:build` will now re-build the full revealJS templates with the installed revealJS version.
+- The Citeproc-provider now logs all errors that prevent a successful boot to the console.
 
 # 1.3.0
 
