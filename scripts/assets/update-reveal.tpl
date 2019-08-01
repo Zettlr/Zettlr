@@ -21,7 +21,7 @@
      * Read more at https://docs.zettlr.com/academic/presentations/.          *
      *                                                                        *
      **************************************************************************/
-    const zettlrRevealOptions = {
+    var zettlrRevealOptions = {
 		  // Display controls in the bottom right corner
 		  controls: true,
 		  // Display a presentation progress bar
