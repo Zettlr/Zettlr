@@ -26,7 +26,8 @@
         "handlebars": "node scripts/handlebars.js",
         "docs:build": "node scripts/docs.js",
         "docs": "documentation build ./source/main.js -f html -o resources/docs",
-        "lang:refresh": "node scripts/refresh-language.js"
+        "lang:refresh": "node scripts/refresh-language.js",
+        "reveal:build": "node scripts/update-reveal.js"
     },
     "dependencies": {
         "@zettlr/citr": "^1.0.3",
@@ -59,6 +60,8 @@
         "electron-builder": "^20.44.4",
         "handlebars": "^4.1.2",
         "less": "^3.9.0",
-        "string-extract-class-names": "^5.8.24"
+        "reveal.js": "^3.8.0",
+        "string-extract-class-names": "^5.8.24",
+        "uglify-js": "^3.6.0"
     }
 }
