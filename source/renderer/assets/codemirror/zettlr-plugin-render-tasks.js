@@ -12,7 +12,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  var taskRE = /^(\s*?)- \[( |x)\] /g // Matches `- [ ]` and `- [x]`
+  var taskRE = /^(\s*)- \[( |x)\] /g // Matches `- [ ]` and `- [x]`
   var taskMarkers = []
 
   CodeMirror.commands.markdownRenderTasks = function (cm) {
@@ -93,7 +93,7 @@
         // First, recalculate where the checkbox actually is.
         let markerLine = textMarker.find().from.line
         let m = taskRE.exec(cm.getLine(markerLine))
-        let leadingSpaces = m[1].length || 0
+        let leadingSpaces = (m && m[1]) ? m[1].length : 0
         let curFrom = { 'line': markerLine, 'ch': 0 + leadingSpaces }
         let curTo = { 'line': markerLine, 'ch': 5 + leadingSpaces }
 

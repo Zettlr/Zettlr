@@ -52,6 +52,7 @@
 - Markdown links in braces won't include the closing brace anymore.
 - The search's heatmaps now use the theme's colour as a base to indiciate the relevancy instead of always green.
 - The image regular expression is now a little bit less restrictive, allowing for some spaces before and after the image.
+- Fixed a small bug during checking and unchecking of task list items that would prevent the updating of the underlying Markdown text.
 
 ## Under the Hood
 
