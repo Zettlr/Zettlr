@@ -77,13 +77,17 @@ input, select, textarea, button { &:focus { outline: 0; } }
 
 @import "modal.less";
 
-@import "directories.less";
+// @import "directories.less";
 
 @import "clusterize.less"; // Clusterize.js styles
 
-@import "preview.less";
+// @import "preview.less";
 
-@import "combiner.less"; // Has to be included after directories and preview.
+@import "file-list.less";
+@import "file-tree.less";
+@import "sidebar.less";
+
+// @import "combiner.less"; // Has to be included after directories and preview.
 
 @import "editor.less";
 
@@ -96,8 +100,6 @@ input, select, textarea, button { &:focus { outline: 0; } }
 @import "toolbar.less";
 
 @import "notify.less";
-
-@import "preview.less";
 
 @import "popup.less";
 

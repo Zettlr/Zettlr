@@ -56,8 +56,8 @@ class EditorSearch {
   markResults (file) {
     if (!file) return // No file, so no results to be marked.
 
-    let res = global.search.hasResult(file.hash)
-    if (res) this._mark(res.result)
+    // let res = global.search.hasResult(file.hash)
+    // if (res) this._mark(res.result)
   }
 
   /**

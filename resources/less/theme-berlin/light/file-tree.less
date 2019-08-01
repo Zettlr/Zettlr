@@ -1,6 +1,6 @@
 // Directory styling
 
-#directories {
+#file-tree {
     background-color: var(--bg-directories);
     transition: @mode-transition all ease;
     color: var(--grey-4);
@@ -14,26 +14,24 @@
     }
 
 
-    ul {
-        .selected {
+    div.list-item {
+        &.selected {
             background-color:var(--c-primary);
             color:white;
 
             &:before { color:white; }
         }
 
-        li {
-            &:hover {
-              color: var(--grey-4);
-              background-color:var(--grey-1);
-            }
+        &:hover {
+          color: var(--grey-4);
+          background-color:var(--grey-1);
+        }
 
-            &.highlight {
-                box-shadow: 0px 0px 1px 2px var(--selection-light);
+        &.highlight {
+            box-shadow: 0px 0px 1px 2px var(--selection-light);
 
-                // Prevent hovering effect on drag'n'drop actions
-                &:hover  { background-color:inherit; }
-            }
+            // Prevent hovering effect on drag'n'drop actions
+            &:hover  { background-color:inherit; }
         }
     }
 
@@ -71,6 +69,6 @@
 
 // When both directories and preview list are visible, we need a visible border
 // between both so that it does not look weird.
-#combiner.expanded #directories {
+#sidebar.expanded #file-tree {
   border-right: 1px solid var(--grey-2);
 }

@@ -1,6 +1,6 @@
 // Geometry for the tree view
 
-#directories {
+#file-tree {
     position:absolute;
     top:0;
     left:0%;
@@ -26,49 +26,29 @@
       }
     }
 
-    #directories-dirs-header:before { content: '\f0f0'; }
-    #directories-files-header:before { content: '\f0d6'; }
+    #directories-dirs-header::before { content: '\f0f0'; }
+    #directories-files-header::before { content: '\f0d6'; }
 
-    ul {
-        list-style-type: none;
-        margin-left:0px;
-        padding-left:0px;
+    .collapse-indicator {
+      margin-right:3px;
 
-        li {
-            line-height: @ribbon-height;
-            padding:@ribbon-padding;
-            white-space: nowrap;
-            padding-left:5px;
-            margin:5px 0px;
-            overflow: hidden;
-        }
+      &::before {
+        content: "\f48b";
+        font-family: @font-icon;
+        font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
+        display:inline-block;
+        vertical-align: middle;
+        width:10px;
+        line-height:@ribbon-height;
+        overflow:hidden;
+      }
 
-        .collapse-indicator {
-            margin-right:3px;
-
-            &::before {
-                content: "\f48b";
-                font-family: @font-icon;
-                font-size: @font-size-small * 0.6; /* Bit smaller, those indicators are damned huge */
-                display:inline-block;
-                vertical-align: middle;
-                width:10px;
-                line-height:@ribbon-height;
-                overflow:hidden;
-            }
-        }
-
-        &.collapsed .collapse-indicator::before {
-            content: "\f488";
-        }
-
-        &.collapsed ul {
-            height:0px;
-            display:none;
-        }
+      &.collapsed::before {
+        content: "\f488";
+      }
     }
 
-    .file {
+    .filename {
         line-height: @ribbon-height;
         padding:@ribbon-padding;
         white-space: nowrap;
@@ -77,7 +57,7 @@
         overflow: hidden;
     }
 
-    .virtual-directory:before {
+    .list-item.virtual-directory > p.filename::before {
         content: '\f4ea';
         font-family: @font-icon;
         font-size: @font-size-small; /* Bit smaller, those indicators are damned huge */
@@ -86,7 +66,7 @@
         position:relative;
     }
 
-    .project:before {
+    .list-item.project > p.filename::before {
         content: '\f6af';
         font-family: @font-icon;
         font-size: @font-size-small; /* Bit smaller, those indicators are damned huge */
@@ -96,7 +76,7 @@
         position:relative;
     }
 
-    .dead-directory:before {
+    .list-item.dead-directory > p.filename::before {
       content: '\f5d7';
       font-family: @font-icon;
       font-size: @font-size-small;
@@ -105,7 +85,7 @@
       position: relative;
     }
 
-    .emptyPaths {
+    .empty-tree {
         position: absolute;
         top: 0;
         bottom: 0;

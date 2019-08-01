@@ -14,13 +14,16 @@
  */
 
 const ZettlrRendererIPC = require('./zettlr-rendereripc.js')
-const ZettlrDirectories = require('./zettlr-directories.js')
-const ZettlrPreview = require('./zettlr-preview.js')
 const ZettlrEditor = require('./zettlr-editor.js')
 const ZettlrBody = require('./zettlr-body.js')
 const ZettlrToolbar = require('./zettlr-toolbar.js')
 const ZettlrPomodoro = require('./zettlr-pomodoro.js')
 const ZettlrAttachments = require('./zettlr-attachments.js')
+
+const ZettlrStore = require('./zettlr-store.js')
+const createSidebar = require('./vue-components/sidebar')
+// const Vue = require('vue')
+const Vuex = require('vuex')
 
 const { remote } = require('electron')
 const { clipboard } = require('electron')
@@ -35,10 +38,7 @@ const POLL_TIME = require('../common/data.json').poll_time
 /**
  * This is the pendant class to the Zettlr class in the main process. It mirrors
  * the functionality of the main process, only that the functionality in here
- * is connected with the rendering, not with the reading of files, etc. This is
- * the only object that is directly referenced from with the index.html file --
- * this is why all the paths in here do not begin in the `renderer` directory,
- * but in the assets directory (which is where the index.htm resides).
+ * is connected with the rendering, not with the reading of files, etc.
  */
 class ZettlrRenderer {
   /**
@@ -48,15 +48,14 @@ class ZettlrRenderer {
     this._currentFile = null
     this._currentDir = null
     this._paths = null
-    this._lang = 'en_US' // Default fallback
+    this._lang = 'en-US' // Default fallback
 
     // Write translation data into renderer process's global var
     // Why do we have to stringify and parse it? Because otherwise the
     // renderer's global.i18n-variable will simply be a huge object calling
     // the main's IPC EVERY TIME it is accessed. Therefore, we take some more
     // time to copy it completely into the renderer's memory. It will take up
-    // some time at the beginning, but as we are using an overlay either way
-    // it's not gonna impact that much.
+    // some time at the beginning, but it's not gonna impact that much.
     global.i18n = JSON.parse(JSON.stringify(remote.getGlobal('i18n')))
 
     // Immediately add the operating system class to the body element to
@@ -65,16 +64,15 @@ class ZettlrRenderer {
 
     // Init the complete list of objects that we need
     this._ipc = new ZettlrRendererIPC(this)
-    this._directories = new ZettlrDirectories(this)
-    this._preview = new ZettlrPreview(this)
     this._editor = new ZettlrEditor(this)
     this._body = new ZettlrBody(this)
     this._toolbar = new ZettlrToolbar(this)
     this._pomodoro = new ZettlrPomodoro(this)
     this._attachments = new ZettlrAttachments(this)
-
-    this._directoriesLocked = false // Is the directory tree view currently locked?
-    this._stateBeforeLocked = '' // Saves the state the combiner was in before lock was initialised, can be preview or directories
+    Vue.use(Vuex) // Must use this before accessing the store.
+    this._store = new ZettlrStore(this)
+    // Create a sidebar with the reference of the store.
+    this._sidebar = createSidebar(this._store.getVuex())
   }
 
   /**
@@ -152,9 +150,10 @@ class ZettlrRenderer {
     // Set dark theme
     this.darkTheme(global.config.get('darkTheme'))
     // Set file meta
-    this.getPreview().fileMeta(global.config.get('fileMeta'))
-    this.getPreview().hideDirs(global.config.get('hideDirs'))
-    this.getPreview().displayTime(global.config.get('fileMetaTime'))
+    global.store.set('fileMeta', global.config.get('fileMeta'))
+    global.store.set('hideDirs', global.config.get('hideDirs')) // TODO: Not yet implemented
+    global.store.set('displayTime', global.config.get('fileMetaTime'))
+    global.store.set('sidebarMode', global.config.get('combinerState'))
     // Receive the application language
     this.setLocale(global.config.get('appLang'))
 
@@ -163,18 +162,6 @@ class ZettlrRenderer {
 
     // Tell the editor that the config has changed
     this.getEditor().configChange()
-
-    // Set the correct combiner state
-    switch (global.config.get('combinerState')) {
-      case 'expanded':
-        $('#editor').addClass('collapsed')
-        $('#combiner').addClass('expanded')
-        break
-      case 'collapsed':
-        $('#editor').removeClass('collapsed')
-        $('#combiner').removeClass('expanded')
-        break
-    }
   }
 
   /**
@@ -343,10 +330,11 @@ class ZettlrRenderer {
       this.setCurrentFile(null)
     }
 
-    // Trigger a refresh in directories and preview and attachment pane
-    this._directories.refresh()
-    this._preview.refresh()
+    // Trigger a refresh in the attachment pane
     this._attachments.refresh()
+
+    // Pass on the new paths object as is to the store.
+    global.store.set('items', nData)
   }
 
   /**
@@ -377,9 +365,8 @@ class ZettlrRenderer {
     * @param  {ZettlrFile} file    The new file to replace the old.
     */
   replaceFile (oldHash, file) {
-    if (!file) {
-      return // No file given; main has screwed up
-    }
+    // No file given; main has screwed up
+    if (!file) return
 
     let oldFile = this.findObject(oldHash)
 
@@ -397,9 +384,8 @@ class ZettlrRenderer {
       oldFile.ext = file.ext
       oldFile.modtime = file.modtime
 
-      // Then refresh
-      this._preview.refresh()
-      this._directories.refresh()
+      // Also tell the store to patch the object
+      global.store.patch(oldHash, file)
     }
   }
 
@@ -409,9 +395,7 @@ class ZettlrRenderer {
     * @param  {ZettlrDir} dir    The new dir to replace the old.
     */
   replaceDir (oldHash, dir) {
-    if (!dir) {
-      return // No file given; main has screwed up
-    }
+    if (!dir) return // No file given; main has screwed up
 
     let oldDir = this.findObject(oldHash)
 
@@ -430,9 +414,8 @@ class ZettlrRenderer {
       oldDir.sorting = dir.sorting
       oldDir.children = dir.children
 
-      // Then refresh
-      this._preview.refresh()
-      this._directories.refresh()
+      // Also tell the store to patch the object
+      global.store.patch(oldHash, dir)
     }
   }
 
@@ -524,22 +507,6 @@ class ZettlrRenderer {
   updateWordCount (words) { this._toolbar.updateWordCount(words) }
 
   /**
-   * Request the selection of the directory in main.
-   * @param  {Integer} hash As usually, a hash identifying a directory.
-   * @return {void}      Nothing to return.
-   */
-  requestDir (hash) {
-    // Only request a new directory if it is about to be changed.
-    if (this.getCurrentDir() == null || this.getCurrentDir().hash !== parseInt(hash)) {
-      this._ipc.send('dir-select', hash)
-    } else {
-      // Otherwise, the user simply has clicked on the dir again to show
-      // the preview list.
-      this.showPreview()
-    }
-  }
-
-  /**
    * Opens a new file
    * @param  {ZettlrFile} f The file to be opened
    */
@@ -547,7 +514,7 @@ class ZettlrRenderer {
     // We have received a new file. So close the old and open the new
     this._editor.close()
     // Select the file either in the preview list or in the directory tree
-    this._preview.select(f.hash)
+    global.store.set('selectedFile', f.hash)
     this._editor.open(f)
   }
 
@@ -621,32 +588,9 @@ class ZettlrRenderer {
    * @param {ZettlrDir} newdir The new dir.
    */
   setCurrentDir (newdir = null) {
-    let oldDir = this._currentDir
     this._currentDir = this.findObject(newdir) // Find the dir (hash) in our own paths object
+    global.store.selectDirectory(newdir)
     this._attachments.refresh()
-
-    if (this._currentDir != null) {
-      // What we can also do here: Select the dir and refresh the file list.
-      // Because that's what _always_ follows this function call.
-      this._directories.select(newdir)
-      if ((oldDir != null) && (oldDir.path !== newdir.path)) {
-        // End (potential) displaying of file results. showFiles() also refreshes.
-        this.exitSearch()
-      } else {
-        // Else don't exit the search
-        this._preview.refresh()
-      }
-
-      if (this.getCurrentFile()) {
-        // Necessary to scroll the file into view
-        this._preview.select(this.getCurrentFile().hash)
-      }
-      if (oldDir == null || this._currentDir.hash !== oldDir.hash) {
-        this.showPreview()
-      } // Else stay where we are
-    } else {
-      this.showDirectories()
-    }
   }
 
   /**
@@ -655,11 +599,7 @@ class ZettlrRenderer {
    */
   setCurrentFile (newHash) {
     this._currentFile = this.findObject(newHash)
-    // Also directly select it
-    if (this._currentFile !== null) {
-      this._preview.select(newHash)
-      this._directories.select(newHash)
-    }
+    global.store.set('selectedFile', newHash)
   }
 
   /**
@@ -691,18 +631,6 @@ class ZettlrRenderer {
    * @return {ZettlrEditor} The editor instance
    */
   getEditor () { return this._editor }
-
-  /**
-   * Returns the preview object
-   * @return {ZettlrPreview} The preview list
-   */
-  getPreview () { return this._preview }
-
-  /**
-   * Returns the directories object
-   * @return {ZettlrDirectories} The directory object
-   */
-  getDirectories () { return this._directories }
 
   /**
    * Returns the body object
@@ -751,47 +679,6 @@ class ZettlrRenderer {
     }
 
     return arr
-  }
-
-  /**
-   * Shows directory pane in combiner
-   */
-  showDirectories () {
-    this._preview.hide()
-    this._directories.show()
-  }
-
-  /**
-   * Shows preview in combiner
-   */
-  showPreview () {
-    if (this._directoriesLocked) {
-      return // Can't show the preview pane
-    }
-    this._preview.show()
-    this._directories.hide()
-  }
-
-  /**
-   * Lock the directories so that preview won't show up
-   */
-  lockDirectories () {
-    this._directoriesLocked = true
-    // Get previous state
-    this._stateBeforeLocked = ($('#preview').hasClass('hidden')) ? 'directories' : 'preview'
-    // Also make sure directories are shown
-    this.showDirectories()
-  }
-
-  /**
-     * Unlocks the directory pane, e.g. preview can be shown again
-     */
-  unlockDirectories () {
-    this._directoriesLocked = false
-    // Restore preview, if it was shown before the directories were locked.
-    if (this._stateBeforeLocked === 'preview') {
-      this.showPreview()
-    }
   }
 
   /**

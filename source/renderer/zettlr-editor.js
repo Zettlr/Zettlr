@@ -443,18 +443,6 @@ class ZettlrEditor {
 
     this._cm.refresh()
 
-    // Enable resizing of the editor
-    this.enableResizable()
-    // Update resize options on window resize
-    window.addEventListener('resize', (e) => {
-      if (this._div.hasClass('fullscreen')) return // Don't handle
-      this._div.resizable('option', 'minWidth', Math.round($(window).width() * 0.4))
-      this._div.resizable('option', 'maxWidth', Math.round($(window).width() * 0.9))
-
-      // Also we have to resize the editor to the correct width again
-      $('#editor').css('width', $(window).innerWidth() - $('#combiner').outerWidth() + 'px')
-    })
-
     // Finally create the annotateScrollbar object to be able to annotate the scrollbar with search results.
     this._scrollbarAnnotations = this._cm.annotateScrollbar('sb-annotation')
     this._scrollbarAnnotations.update([])
@@ -578,11 +566,9 @@ class ZettlrEditor {
     if (!this._cm.getOption('fullScreen')) {
       this._unmuteLines()
       this._div.removeClass('fullscreen')
-      this.enableResizable()
     } else {
       if (this._mute) this._muteLines()
       this._div.addClass('fullscreen')
-      this.disableResizable()
     }
 
     // We have to re-apply the font-size to the editor because this style gets
@@ -981,40 +967,6 @@ class ZettlrEditor {
     if (plain && plain.length > 0) this.insertText(plain)
 
     return this
-  }
-
-  /**
-   * Enables the resizable between editor and sidebar.
-   * @return {void} Does not return.
-   */
-  enableResizable () {
-    // Make preview and editor resizable
-    this._div.resizable({
-      'handles': 'w',
-      'resize': (e, ui) => {
-        // We need to account for the 10 pixels padding in the editor somehow.
-        $('#combiner').css('width', ($(window).width() - ui.size.width - 10) + 'px')
-        this._div.css('width', '')
-      },
-      'stop': (e, ui) => {
-        this.refresh() // Refresh the editor to update lines and cursor positions.
-        $('body').css('cursor', '') // Why does jQueryUI ALWAYS do this to me?
-        this._div.css('width', '')
-      },
-      'minWidth': Math.round($(window).width() * 0.4),
-      'maxWidth': Math.round($(window).width() * 0.9)
-    })
-  }
-
-  /**
-   * Disables the resizing functionality between the sidebar and the editor.
-   * @return {void} This function does not return.
-   */
-  disableResizable () {
-    $('#editor').resizable('destroy')
-    $('#editor').attr('style', '') // Remove the left and width things
-    $('#combiner').attr('style', '')
-    // TODO save these variables!
   }
 
   /**

@@ -17,10 +17,9 @@
   top:@toolbar-height;
   right:0;
   bottom:0;
-  left: 20%;
-  overflow-x:hidden;
+  left: calc(20% + 10px);
+  overflow-x: hidden;
   overflow-y: auto;
-  padding-left: 10px; // Don't include the resize-marker (needed to make the gutters work)
 
   &.fullscreen { left: 0%; padding-left: 0px; }
 

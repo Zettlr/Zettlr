@@ -485,7 +485,7 @@ class ZettlrRendererIPC {
         break
 
       case 'set-tags':
-        this._app.getPreview().setTags(cnt)
+        global.store.set('tags', cnt)
         break
 
       // Update the editor's tag database
