@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        GlobalSearch class
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls the global search functionality.
+ *
+ * END HEADER
+ */
+
 class GlobalSearch {
   constructor (term) {
     let compiledTerms = this._compileSearchTerms(term)

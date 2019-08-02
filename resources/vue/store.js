@@ -10,6 +10,7 @@
  *
  * END HEADER
  */
+
 const Vue = require('vue')
 const objectToArray = require('../../source/common/util/object-to-array')
 const findObject = require('../../source/common/util/find-object')

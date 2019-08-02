@@ -1,3 +1,16 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Sidebar Vue Component
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls the sidebar logic.
+ *
+ * END HEADER
+ */
 <template>
   <div id="sidebar"
     v-on:mousemove="handleMouseOver"

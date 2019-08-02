@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        EditorSearch class
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls the search bound to the CodeMirror instance.
+ *
+ * END HEADER
+ */
+
 const makeSearchRegEx = require('../../common/util/make-search-regex')
 
 class EditorSearch {

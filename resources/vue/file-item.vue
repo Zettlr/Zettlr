@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        FileItem Vue component.
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls a single file list item.
+ *
+ * END HEADER
+ */
+
 <template>
   <div class="container" v-on:mouseenter="hover=true" v-on:mouseleave="hover=false" v-bind:style="getStyle">
     <div

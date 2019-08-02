@@ -4,7 +4,7 @@
 * BEGIN HEADER
 *
 * Contains:        TableHelper class
-* CVM-Role:        <none>
+* CVM-Role:        View
 * Maintainer:      Hendrik Erz
 * License:         GNU GPL v3
 *

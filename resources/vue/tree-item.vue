@@ -1,3 +1,17 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        TreeItem Vue Component
+ * CVM-Role:        View
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Controls a single sub-tree in the sidebar.
+ *
+ * END HEADER
+ */
+
 <template>
   <div class="container"
     v-bind:data-hash="obj.hash"

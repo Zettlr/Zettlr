@@ -6,7 +6,8 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This class acts as an interface between the store and the NodeJS environment
+ * Description:     This class acts as an interface between
+ *                  the store and the NodeJS environment.
  *
  * END HEADER
  */

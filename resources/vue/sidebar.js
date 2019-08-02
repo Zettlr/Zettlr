@@ -1,7 +1,19 @@
-// Here we create a module.export that, when called
-// will create the Vue application for the sidebar,
-// which in turn will mount itself to the #sidebar
-// container.
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * Contains:        Sidebar exporting module.
+ * CVM-Role:        Controller
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     In this module, the sidebar is assembled and the global
+ *                  store is initialised. The only necessary thing is that
+ *                  the exported function needs to be called.
+ *
+ * END HEADER
+ */
+
 const Vue = require('vue')
 const Vuex = require('vuex')
 const App = require('./sidebar.vue').default

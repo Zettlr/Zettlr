@@ -11,7 +11,7 @@ module.exports = {
   devtool: 'none', // Don't use fancy packing which breaks Electron's content policy.
   output: {
     filename: 'vue-[name].js',
-    // The target is commonJS so that we can require() the main.js
+    // The target is commonJS so that we can require() the entry points.
     libraryTarget: 'commonjs2',
     // Place the app in the assets directory
     path: path.resolve(__dirname, 'source/renderer/assets/vue')
