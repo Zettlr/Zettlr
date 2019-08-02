@@ -74,6 +74,7 @@ module.exports = {
       state.sidebarMode = mode
     },
     searchResult: (state, res) => {
+      if (res.result.length === 0) return
       // The search results have the following structure
       // hash: <the file's hash>
       // result: Array<all results>
@@ -81,13 +82,17 @@ module.exports = {
       // So what we need to do is find the corresponding
       // file, add the results to the object and push it
       // into the searchResults-array.
+
+      // Recalculate the maxWeight, if applicable, b/c it's the least
+      // resource intensive and can cause the commit to abort.
+      let w = 0
+      for (let r of res.result) { w += r.weight }
+      if (w === 0) return // Don't commit empty results
+
       let file = findObject(state.items, 'hash', res.hash, 'children')
       // Make sure we have a corresponding file!
       if (!file) return
       let result = {}
-      // Finally recalculate the maxWeight, if applicable
-      let w = 0
-      for (let r of res.result) { w += r.weight }
 
       // Commit
       // We don't need a deep copy, b/c children do not exist on files

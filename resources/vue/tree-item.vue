@@ -50,6 +50,11 @@ module.exports = {
       // Open the tree on selectedFile change, if the
       // selected file is contained in this dir somewhere
       if (findObject(this.obj, 'hash', this.selectedFile, 'children')) this.collapsed = false
+    },
+    selectedDir: function (oldVal, newVal) {
+      // If a directory within this has been selected,
+      // open up, lads!
+      if (findObject(this.obj, 'hash', this.selectedDir, 'children')) this.collapsed = false
     }
   },
   data: () => {
@@ -97,7 +102,6 @@ module.exports = {
       let list = 'list-item ' + this.obj.type
       if (this.$parent.type === 'virtual-dir') list += ' vd-file'
       if ([this.selectedFile, this.selectedDir].includes(this.obj.hash)) list += ' selected'
-      if (this.combined) list += ' combined'
       // Determine if this is a root component
       if (this.isRoot) list += ' root'
       return list

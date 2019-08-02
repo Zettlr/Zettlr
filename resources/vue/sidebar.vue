@@ -55,7 +55,7 @@
               v-bind:key="item.hash"
             >
           </file-item>
-            <div class="empty-directory">Empty directory</div>
+            <div class="empty-directory" v-if="getDirectoryContents[0].type === 'directory'">Empty directory</div>
           </template>
           <template v-else>
             <!-- Same as above: Detect combined sidebar mode -->

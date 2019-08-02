@@ -26,7 +26,12 @@ class ZettlrStore {
       patch: (oldHash, newObject) => {
         console.log('Received a patch command!')
         this._store.dispatch('patch', { 'hash': oldHash, 'object': newObject })
-      }
+      },
+      commitSearchResult: (res) => {
+        this._store.commit('searchResult', res)
+      },
+      commitEndSearch: () => { this._store.commit('endSearch') },
+      getSearchResults: () => { return this._store.state.searchResults }
     }
   }
 

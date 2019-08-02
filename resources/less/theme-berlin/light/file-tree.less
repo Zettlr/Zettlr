@@ -33,33 +33,30 @@
             // Prevent hovering effect on drag'n'drop actions
             &:hover  { background-color:inherit; }
         }
-    }
-
-    .file {
         &.selected {
-            background-color:var(--c-primary);
-            color:white;
+          background-color:var(--c-primary);
+          color:white;
         }
 
         &:hover {
-            background-color:var(--grey-1);
-            color:inherit;
+          background-color:var(--grey-1);
+          color:inherit;
         }
 
         span.dir { color: var(--grey-2); }
+
+        .virtual-directory { color: var(--c-virtual-directory); }
+
+        .dead-directory {
+          color: var(--grey-2);
+          &:hover {
+            color: var(--grey-2);
+            background-color: inherit;
+          }
+        }
+
+        .project { color: var(--c-project); }
     }
-
-    .virtual-directory { color: var(--c-virtual-directory); }
-
-    .dead-directory {
-      color: var(--grey-2);
-      &:hover {
-        color: var(--grey-2);
-        background-color: inherit;
-      }
-    }
-
-    .project { color: var(--c-project); }
 
     .empty-tree {
         background-color:var(--grey-0);

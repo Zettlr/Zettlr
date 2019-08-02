@@ -1,6 +1,6 @@
 // Dark directory colours
 
-#directories {
+#file-tree {
     background-color: var(--grey-7);
     color:white;
 
@@ -11,37 +11,38 @@
 
     .collapse-indicator::before { color:var(--grey-1); }
 
-    ul {
-        li:hover {
-          color: white;
-          background-color:var(--grey-6);
-        }
-        .selected { background-color: var(--c-primary-shade); }
-    }
+    div.list-item {
+      &:hover {
+        color: white;
+        background-color:var(--grey-6);
+      }
 
-    .file {
+      &.selected { background-color: var(--c-primary-shade); }
+
+      &.file {
         &:hover { background-color:var(--grey-5); }
 
         span.dir { color: var(--grey-4); }
-    }
+      }
 
-    .project { color: var(--c-project-dark); }
+      &.project { color: var(--c-project-dark); }
 
-    .dead-directory {
-      color: var(--grey-4);
-      &:hover {
+      &.dead-directory {
         color: var(--grey-4);
-        background-color: inherit;
+        &:hover {
+          color: var(--grey-4);
+          background-color: inherit;
+        }
       }
     }
 
-    .emptyPaths {
+    .empty-tree {
         background-color:var(--grey-5);
         color:var(--grey-1);
     }
 }
 
 // Add a colour to the directories in extended mode
-#combiner.expanded #directories {
+#sidebar.expanded #file-tree {
   border-right-color: var(--grey-5);
 }

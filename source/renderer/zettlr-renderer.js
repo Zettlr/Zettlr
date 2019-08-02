@@ -13,15 +13,16 @@
  * END HEADER
  */
 
-const ZettlrRendererIPC = require('./zettlr-rendereripc.js')
-const ZettlrEditor = require('./zettlr-editor.js')
-const ZettlrBody = require('./zettlr-body.js')
-const ZettlrToolbar = require('./zettlr-toolbar.js')
-const ZettlrPomodoro = require('./zettlr-pomodoro.js')
-const ZettlrAttachments = require('./zettlr-attachments.js')
+const ZettlrRendererIPC = require('./zettlr-rendereripc')
+const ZettlrEditor = require('./zettlr-editor')
+const ZettlrBody = require('./zettlr-body')
+const ZettlrToolbar = require('./zettlr-toolbar')
+const ZettlrPomodoro = require('./zettlr-pomodoro')
+const ZettlrAttachments = require('./zettlr-attachments')
+const GlobalSearch = require('./util/global-search')
 
-const ZettlrStore = require('./zettlr-store.js')
-const createSidebar = require('./assets/sidebar.js')
+const ZettlrStore = require('./zettlr-store')
+const createSidebar = require('./assets/vue/vue-sidebar')
 
 const { remote } = require('electron')
 const { clipboard } = require('electron')
@@ -416,10 +417,42 @@ class ZettlrRenderer {
    * @return {void}      Nothing to return.
    */
   beginSearch (term) {
-    // Show preview before searching the dir
-    this.showPreview()
+    // First end any search in the store, if applicable.
+    global.store.commitEndSearch()
+
+    // Immediately send out a force-open command to see if a file matches
     this._ipc.send('force-open', term)
-    this._preview.beginSearch(term)
+
+    // Now perform the actual search. For this we'll create a new search
+    // object and pass all necessary data to it.
+    let dirContents = this._store.getVuex().getters.directoryContents
+    let search = new GlobalSearch(term)
+    search.with(
+      // Filter by file and then only retain the hashes
+      dirContents.filter(elem => elem.type === 'file').map(elem => elem.hash)
+    ).each((elem, compiledSearchTerms) => {
+      return new Promise((resolve, reject) => {
+        // Send a request to the main process and handle it afterwards.
+        global.ipc.send('file-search', {
+          'hash': elem,
+          'terms': compiledSearchTerms
+        })
+
+        // Now listen for the return
+        global.ipc.once('file-search-result', (data) => {
+          // Once the data comes back from main, resolve the promise
+          resolve(data)
+          // Also commit the search result to the store
+          global.store.commitSearchResult(data)
+        })
+      })
+    }).afterEach((count, total) => {
+      this.searchProgress(count, total)
+    }).then((res) => {
+      // Mark the results in the potential open file
+      global.editorSearch.markResults(this._currentFile)
+      this._toolbar.endSearch() // Mark the search as finished
+    }).start()
   }
 
   /**
@@ -454,12 +487,11 @@ class ZettlrRenderer {
   searchProgress (curIndex, count) { this._toolbar.searchProgress(curIndex, count) }
 
   /**
-   * Pass-through function from ZettlrPreview to Toolbar.
-   * @return {void} Nothing to return.
+   * Exits the search, i.e. resets everything back to what it looked like.
    */
-  endSearch () {
-    this._toolbar.endSearch()
-    this._preview.endSearch()
+  exitSearch () {
+    global.store.commitEndSearch()
+    global.editorSearch.unmarkResults()
   }
 
   // END search functions
@@ -545,14 +577,6 @@ class ZettlrRenderer {
     } else {
       this._body.requestFileName(this.getCurrentDir())
     }
-  }
-
-  /**
-   * Exits the search, i.e. resets everything back to what it looked like.
-   */
-  exitSearch () {
-    this._preview.showFiles()
-    global.editorSearch.unmarkResults()
   }
 
   /**

@@ -58,12 +58,23 @@ class ZettlrRendererIPC {
         }
       }
 
+      // Now check if there are any once-callbacks listed
+      for (let cb of this._onceCallbacks) {
+        if (cb.message === arg.command) {
+          // Call the callback and remove from the array
+          cb.callback(arg.content)
+          this._onceCallbacks.splice(this._onceCallbacks.indexOf(cb), 1)
+          return
+        }
+      }
+
       // Dispatch the message further down the array.
       this.dispatch(arg)
     })
 
     this._bufferedMessage = null
     this._callbackBuffer = {}
+    this._onceCallbacks = []
 
     // This is an object that will hold all previously checked words in the form
     // of word: correct?
@@ -157,6 +168,18 @@ class ZettlrRendererIPC {
         this._callbackBuffer[cypher] = callback
         // Send!
         ipc.send('message', payload)
+      },
+      /**
+       * Registers a callback for a one-time message callback.
+       * @param  {String}   message  The message to which this callback applies
+       * @param  {Function} callback The provided callback
+       * @return {void}            Does not return.
+       */
+      once: (message, callback) => {
+        this._onceCallbacks.push({
+          'message': message,
+          'callback': callback
+        })
       }
     }
   }
@@ -405,10 +428,6 @@ class ZettlrRendererIPC {
         if (cnt.hasOwnProperty('hash') && cnt.hasOwnProperty('virtualdir')) {
           this.send('file-delete-from-vd', cnt)
         }
-        break
-
-      case 'file-search-result':
-        this._app.getPreview().handleSearchResult(cnt)
         break
 
       // Toggle theme or file meta, main will automatically trigger a configuration change.

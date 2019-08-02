@@ -27,7 +27,7 @@ class EditorSearch {
       'replaceAll': (search, replace) => { this.replaceAll(search, replace) },
       'stop': () => { this.stopSearch() },
       'hasSearch': () => { return this._searchCursor !== null },
-      'markResults': () => { this.markResults() },
+      'markResults': (file) => { this.markResults(file) },
       'unmarkResults': () => { this.unmarkResults() }
     }
   }
@@ -50,14 +50,17 @@ class EditorSearch {
   }
 
   /**
-    * Highlights search results if any given.
-    * @param {ZettlrFile} [file=this._renderer.getCurrentFile()] The file to retrieve and mark results for
+    * Highlights the given search results in the file.
+    * @param {ZettlrFile} file The file for which to find results.
     */
   markResults (file) {
-    if (!file) return // No file, so no results to be marked.
-
-    // let res = global.search.hasResult(file.hash)
-    // if (res) this._mark(res.result)
+    let results = global.store.getSearchResults()
+    if (file && results.length > 0) {
+      // Find the results and display them.
+      // The results are merged with the file.
+      let res = results.find(e => e.hash === file.hash)
+      this._mark(res.results)
+    }
   }
 
   /**

@@ -3,16 +3,18 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const path = require('path')
 
 module.exports = {
-  entry: './resources/vue/sidebar.js',
+  entry: {
+    sidebar: './resources/vue/sidebar.js'
+  },
   target: 'electron-renderer',
   mode: process.env.NODE_ENV,
   devtool: 'none', // Don't use fancy packing which breaks Electron's content policy.
   output: {
-    filename: 'sidebar.js',
+    filename: 'vue-[name].js',
     // The target is commonJS so that we can require() the main.js
     libraryTarget: 'commonjs2',
     // Place the app in the assets directory
-    path: path.resolve(__dirname, 'source/renderer/assets/')
+    path: path.resolve(__dirname, 'source/renderer/assets/vue')
   },
   module: {
     rules: [

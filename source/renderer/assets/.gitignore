@@ -1,2 +1,2 @@
-# Ignore the compiled Sidebar Vue application
-sidebar.js
+# Ignore all compiled vue templates
+vue
