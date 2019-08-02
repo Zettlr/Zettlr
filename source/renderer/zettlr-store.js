@@ -11,13 +11,10 @@
  * END HEADER
  */
 
-const StoreConfig = require('./vue-components/store.js')
-const Vuex = require('vuex')
-
 class ZettlrStore {
-  constructor (parent) {
+  constructor (parent, store) {
     this._app = parent
-    this._store = new Vuex.Store(StoreConfig)
+    this._store = store
 
     global.store = {
       set: (key, val) => {
@@ -27,7 +24,8 @@ class ZettlrStore {
         this._store.dispatch('selectDirectory', newDir)
       },
       patch: (oldHash, newObject) => {
-        this._store.commit('patch', { 'hash': oldHash, 'object': newObject })
+        console.log('Received a patch command!')
+        this._store.dispatch('patch', { 'hash': oldHash, 'object': newObject })
       }
     }
   }

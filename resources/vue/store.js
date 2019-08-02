@@ -11,8 +11,8 @@
  * END HEADER
  */
 const Vue = require('vue')
-const objectToArray = require('../../common/util/object-to-array')
-const findObject = require('../../common/util/find-object')
+const objectToArray = require('../../source/common/util/object-to-array')
+const findObject = require('../../source/common/util/find-object')
 
 // Make the Vuex-Store the default export
 module.exports = {
@@ -72,16 +72,6 @@ module.exports = {
     sidebarMode: (state, mode) => {
       if (!['thin', 'combined', 'expanded'].includes(mode)) return
       state.sidebarMode = mode
-    },
-    patch: (state, opt) => {
-      // Patch a full object with new properties. Adding objects works by
-      // replacing the parent object (as in this way the new children list
-      // will be applied to the current object).
-      let obj = findObject(state.items, 'hash', opt.hash, 'children')
-      let isCurrentlySelected = obj.hash === opt.hash
-      obj = opt.object
-      // Make sure to re-select the file, if necessary
-      if (isCurrentlySelected) state.selectedFile = opt.object.hash
     },
     searchResult: (state, res) => {
       // The search results have the following structure
@@ -147,6 +137,21 @@ module.exports = {
 
         // Recompute the file list, if the file has been in the current directory.
         if (isInCurrentDir) context.commit('computeFileList')
+      }
+    },
+    patch: function (context, opt) {
+      // Patch a full object with new properties. Adding objects works by
+      // replacing the parent object (as in this way the new children list
+      // will be applied to the current object).
+      let obj = findObject(context.state.items, 'hash', opt.hash, 'children')
+      let isCurrentlySelected = (obj.type === 'file') ? (context.state.selectedFile === obj.hash) : (context.state.selectedDirectory === obj.hash)
+      obj = opt.object
+      // Make sure to re-select the file or directory, if necessary
+      if (isCurrentlySelected) {
+        if (obj.type === 'file') context.selectedFile = obj.hash
+        else context.selectedDirectory = obj.hash
+        // Make sure the file list is re-computed
+        context.commit('computeFileList')
       }
     }
   }

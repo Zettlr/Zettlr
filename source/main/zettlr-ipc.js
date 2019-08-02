@@ -111,15 +111,7 @@ class ZettlrIPC {
        * @param  {Object} msg        The error object
        * @return {void}            Does not return.
        */
-      notifyError: (msg) => { this.send('notify-error', msg) },
-      /**
-       * Replaces the given file in the renderer. Can be used by any file to
-       * update itself in the renderer without having to issue a full path
-       * update.
-       * @param  {ZettlrFile} file A file which should be updated
-       * @return {void}       Does not return.
-       */
-      updateFile: (file) => { this.send('file-replace', { 'hash': file.hash, 'file': file.getMetadata() }) }
+      notifyError: (msg) => { this.send('notify-error', msg) }
     }
   }
 

@@ -134,10 +134,17 @@ class ZettlrCon {
     let menupath = ''
 
     // First: determine where the click happened (preview pane, directories or editor)
-    if (elem.parents('#preview').length > 0) {
-      // In case of preview, our wanted elements are: the p.filename-tag (containing
-      // the name) inside the <li> and the data-hash attr inside the <li>
-      if (elem.hasClass('filename') || elem.hasClass('file-meta') || elem.hasClass('taglist')) {
+    if (elem.parents('#file-list').length > 0) {
+      // The user has clicked an element in the file list.
+      // Here's what the options are:
+      //
+      // 1. The surrounding .container
+      // 2. The .list-item, which is what we want
+      // 3. The .filename
+      // 4. The .taglist (or a descendant)
+      // 5. The .meta (or a descendant)
+      // So the following works:
+      if (elem.hasClass('filename') || elem.hasClass('meta') || elem.hasClass('taglist')) {
         elem = elem.parent() // Move up 1 level
       } else if (elem.is('span') || elem.hasClass('tagspacer')) {
         elem = elem.parent().parent() // Move up 2 levels
@@ -145,7 +152,7 @@ class ZettlrCon {
         elem = elem.parent().parent().parent() // Move up 3 levels
       }
 
-      if (elem.hasClass('directory')) return
+      if (elem.hasClass('directory')) return // No context menu for directories (yet)
 
       hash = elem.attr('data-hash')
       vdfile = elem.hasClass('vd-file')
@@ -158,15 +165,21 @@ class ZettlrCon {
         attr.push({ 'name': nodes.item(i).nodeName, 'value': nodes.item(i).nodeValue })
       }
       menupath = 'preview_file.json'
-    } else if (elem.parents('#directories').length > 0) {
-      // In case of directories, our wanted elements are: Only the <li>s
-      if (elem.is('li') || elem.is('span')) {
-        if (elem.is('span')) {
-          elem = elem.parent()
-        }
+    } else if (elem.parents('#file-tree').length > 0) {
+      // In case of elements in the file-tree, the following
+      // elements can end up being the evt.targets:
+      //
+      // 1. The surrounding .container
+      // 2. The .list-item (which is what we want)
+      // 3. The .filename (move up 1 parent)
+      // 4. The collapse indicator (move up 2 parents)
+      if (elem.hasClass('container')) elem = elem.children('list-item').first()
+      if (elem.hasClass('filename')) elem = elem.parent()
+      if (elem.hasClass('collapse-indicator')) elem = elem.parent().parent()
+      hash = elem.attr('data-hash')
+      let isDir = elem.hasClass('directory') || elem.hasClass('virtual-directory') || elem.hasClass('dead-directory')
 
-        hash = elem.attr('data-hash')
-
+      if (isDir) {
         // Determine the scopes
         if (elem.hasClass('project')) {
           scopes.push('project')
@@ -180,11 +193,10 @@ class ZettlrCon {
 
         if (elem.hasClass('root')) scopes.push('root')
         menupath = 'directories_directory.json'
-      } else if (elem.is('div') && elem.hasClass('file')) {
-        // Standalone root file selected
-        hash = elem.attr('data-hash')
+      } else if (elem.hasClass('file')) {
         menupath = 'directories_file.json'
       }
+      // END file-tree
     } else if (elem.parents('#editor').length > 0) {
       // If the word is spelled wrong, request suggestions
       if (elem.hasClass('cm-spell-error')) {

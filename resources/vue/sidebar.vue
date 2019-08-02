@@ -1,34 +1,94 @@
-/* global Vue $ */
-/**
- * BEGIN HEADER
- *
- * Contains:        Configuration for the Sidebar
- * CVM-Role:        <none>
- * Maintainer:      Hendrik Erz
- * License:         GNU GPL v3
- *
- * Description:     This file holds the configuration for the sidebar.
- *
- * END HEADER
- */
+<template>
+  <div id="sidebar"
+    v-on:mousemove="handleMouseOver"
+    v-on:dragover="handleDragOver"
+    v-bind:class="sidebarClass"
+  >
+    <!-- Display the arrow button in case we have a non-combined view -->
+    <div
+      v-on:click="toggleFileList"
+      id="arrow-button"
+      ref="arrowButton"
+      class="hidden"
+    >
+    </div>
+    <!-- Render a the file-tree -->
+    <div id="component-container">
+      <div id="file-tree" ref="directories" v-on:click="selectionListener">
+        <template v-if="$store.state.items.length > 0">
+          <div id="directories-files-header" v-show="getFiles.length > 0">Files</div>
+            <tree-item
+              v-for="item in getFiles"
+              v-bind:obj="item"
+              v-bind:key="item.hash"
+              v-bind:depth="0"
+            >
+            </tree-item>
+            <div id="directories-dirs-header" v-show="getDirectories.length > 0">Directories</div>
+            <tree-item
+              v-for="item in getDirectories"
+              v-bind:obj="item"
+              v-bind:key="item.hash"
+              v-bind:depth="0"
+            >
+            </tree-item>
+          </template>
+          <template v-else>
+            <div class="empty-tree" v-on:click="requestOpenRoot">
+              <div class="info">{{ noRootsMessage }}</div>
+            </div>
+          </template>
+        </div>
+        <div id="file-list" class="hidden" ref="fileList">
+          <template v-if="getDirectoryContents.length > 1">
+            <file-item
+              v-for="item in getDirectoryContents"
+              v-bind:obj="item"
+              v-bind:key="item.hash"
+            >
+          </file-item>
+          </template>
+          <template v-else-if="getDirectoryContents.length === 1">
+            <file-item
+              v-for="item in getDirectoryContents"
+              v-bind:obj="item"
+              v-bind:key="item.hash"
+            >
+          </file-item>
+            <div class="empty-directory">Empty directory</div>
+          </template>
+          <template v-else>
+            <!-- Same as above: Detect combined sidebar mode -->
+            <div class="empty-file-list">Please select a directory</div>
+          </template>
+        </div>
+    </div>
+    <div id="sidebar-inner-resizer" v-if="isExpanded" ref="sidebarInnerResizer" v-on:mousedown="sidebarStartInnerResize"></div>
+    <div id="sidebar-resize" ref="sidebarResizer" v-on:mousedown="sidebarStartResize"></div>
+  </div>
+</template>
 
-const tippy = require('tippy.js')
-const findObject = require('../../common/util/find-object')
-const TreeItem = require('./tree-item')
-const FileItem = require('./file-item')
-// const Vue = require('vue')
+<script>
+// Please do not ask me why I have to explicitly use the "default" property
+// of some modules, but not others. The vue-loader is a mess when used with
+// ES6 CommonJS-modules in a exports/require-environment.
+const tippy = require('tippy.js').default
+const findObject = require('../../source/common/util/find-object.js')
+const { trans } = require('../../source/common/lang/i18n.js')
+const TreeItem = require('./tree-item.vue').default
+const FileItem = require('./file-item.vue').default
 
-let sidebarConfig = {
-  el: '#sidebar',
-  store: null, // Propagate the full store into the tree components
-  data: {
+module.exports = {
+  data: () => {
+    return {
     previous: '', // Can be "file-list" or "directories"
     lockedTree: false, // Is the file tree locked in?
     sidebarResizing: false, // Only true during sidebar resizes
     sidebarResizeX: 0, // Save the resize cursor position during resizes
     sidebarInnerResizing: false,
     sidebarInnerResizeX: 0
-  },
+  }
+},
   components: {
     'tree-item': TreeItem,
     'file-item': FileItem
@@ -89,7 +149,7 @@ let sidebarConfig = {
   updated: function () {
     this.$nextTick(function () {
       // Update all tippy instances, where appropriate.
-      tippy('[data-tippy-content]', {
+      tippy('#sidebar [data-tippy-content]', {
         delay: 100,
         arrow: true,
         duration: 100,
@@ -112,14 +172,17 @@ let sidebarConfig = {
     isCombined: function () { return this.$store.state.sidebarMode === 'combined' },
     isExpanded: function () { return this.$store.state.sidebarMode === 'expanded' },
     // We need the sidebarMode separately to watch the property
-    sidebarMode: function () { return this.$store.state.sidebarMode }
+    sidebarMode: function () { return this.$store.state.sidebarMode },
+    noRootsMessage: function () { return trans('gui.empty_directories') }
   },
   methods: {
     /**
      * Determines whether the file list is currently visible
      * @returns {Boolean}  Whether the file list is visible.
      */
-    isFileListVisible: function () { return !this.$refs.fileList.classList.contains('hidden') },
+    isFileListVisible: function () {
+      return !this.$refs.fileList.classList.contains('hidden')
+    },
     /**
      * Toggles the fileList's visibility, if applicable.
      */
@@ -279,7 +342,9 @@ let sidebarConfig = {
       // Now resize everything accordingly
       this.$refs.directories.style.width = (this.$refs.directories.offsetWidth - x) + 'px'
       this.$refs.fileList.style.left = this.$refs.directories.offsetWidth + 'px'
-      this.$refs.sidebarInnerResizer.style.left = this.$refs.fileList.style.left
+      // Reposition the resizer handle exactly on top of the divider, hence
+      // substract the half width
+      this.$refs.sidebarInnerResizer.style.left = (this.$refs.directories.offsetWidth - 5) + 'px'
       this.$refs.fileList.style.width = (this.$el.offsetWidth - this.$refs.directories.offsetWidth) + 'px'
     },
     /**
@@ -291,12 +356,14 @@ let sidebarConfig = {
       this.sidebarInnerResizeX = 0
       this.$el.removeEventListener('mousemove', this.sidebarInnerResize)
       this.$el.removeEventListener('mouseup', this.sidebarStopInnerResize)
-    }
+    },
+    /**
+     * Called whenever the user clicks on the "No open files or folders"
+     * message -- it requests to open a new folder from the main process.
+     * @param  {MouseEvent} evt The click event.
+     * @return {void}     Does not return.
+     */
+    requestOpenRoot: function (evt) { global.ipc.send('dir-open') }
   }
 }
-
-module.exports = function (store) {
-  // Set the store in the configuration, before creating the Vue application.
-  sidebarConfig.store = store
-  return new Vue(sidebarConfig)
-}
+</script>

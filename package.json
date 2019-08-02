@@ -25,7 +25,9 @@
         "less:extract": "node scripts/extract-css.js",
         "handlebars": "node scripts/handlebars.js",
         "lang:refresh": "node scripts/refresh-language.js",
-        "reveal:build": "node scripts/update-reveal.js"
+        "reveal:build": "node scripts/update-reveal.js",
+        "wp:dev": "cross-env NODE_ENV=development webpack",
+        "wp:prod": "cross-env NODE_ENV=production webpack"
     },
     "dependencies": {
         "@zettlr/citr": "^1.0.3",
@@ -55,6 +57,7 @@
     },
     "devDependencies": {
         "chalk": "^2.4.2",
+        "cross-env": "^5.2.0",
         "csso": "^3.5.1",
         "electron": "^5.0.6",
         "electron-builder": "^20.44.4",
@@ -62,6 +65,10 @@
         "less": "^3.9.0",
         "reveal.js": "^3.8.0",
         "string-extract-class-names": "^5.8.24",
-        "uglify-js": "^3.6.0"
+        "uglify-js": "^3.6.0",
+        "vue-loader": "^15.7.1",
+        "vue-template-compiler": "^2.6.10",
+        "webpack": "^4.39.0",
+        "webpack-cli": "^3.3.6"
     }
 }

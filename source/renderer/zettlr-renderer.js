@@ -21,9 +21,7 @@ const ZettlrPomodoro = require('./zettlr-pomodoro.js')
 const ZettlrAttachments = require('./zettlr-attachments.js')
 
 const ZettlrStore = require('./zettlr-store.js')
-const createSidebar = require('./vue-components/sidebar')
-// const Vue = require('vue')
-const Vuex = require('vuex')
+const createSidebar = require('./assets/sidebar.js')
 
 const { remote } = require('electron')
 const { clipboard } = require('electron')
@@ -69,10 +67,11 @@ class ZettlrRenderer {
     this._toolbar = new ZettlrToolbar(this)
     this._pomodoro = new ZettlrPomodoro(this)
     this._attachments = new ZettlrAttachments(this)
-    Vue.use(Vuex) // Must use this before accessing the store.
-    this._store = new ZettlrStore(this)
-    // Create a sidebar with the reference of the store.
-    this._sidebar = createSidebar(this._store.getVuex())
+    // Create and mount the sidebar
+    this._sidebar = createSidebar()
+    // Create the store wrapper which will act as
+    // a unifying interface to commit changes to the store.
+    this._store = new ZettlrStore(this, this._sidebar.$store)
   }
 
   /**
@@ -170,8 +169,8 @@ class ZettlrRenderer {
    * @return {void} Does not return.
    */
   genId () {
-    // First we need to backup the existing clipboard contents so that they are
-    // not lost during the operation.
+    // First we need to backup the existing clipboard contents
+    // so that they are not lost during the operation.
     let text = clipboard.readText()
     let html = clipboard.readHTML()
     let image = clipboard.readImage()
@@ -365,26 +364,13 @@ class ZettlrRenderer {
     * @param  {ZettlrFile} file    The new file to replace the old.
     */
   replaceFile (oldHash, file) {
-    // No file given; main has screwed up
-    if (!file) return
+    if (!file) return // No file given; main has screwed up
 
     let oldFile = this.findObject(oldHash)
 
     if (oldFile && oldFile.type === 'file') {
-      // Apply all necessary properties
-      oldFile.dir = file.dir
-      oldFile.name = file.name
-      oldFile.path = file.path
-      oldFile.hash = file.hash
-      oldFile.id = file.id
-      oldFile.tags = file.tags
-      oldFile.target = file.target
-      oldFile.wordCount = file.wordCount
-      oldFile.charCount = file.charCount
-      oldFile.ext = file.ext
-      oldFile.modtime = file.modtime
-
-      // Also tell the store to patch the object
+      // We'll be patching the store, as this will
+      // be reflected in renderer._paths as well.
       global.store.patch(oldHash, file)
     }
   }
@@ -400,21 +386,8 @@ class ZettlrRenderer {
     let oldDir = this.findObject(oldHash)
 
     if (oldDir && ['directory', 'virtual-directory'].includes(oldDir.type)) {
-      // Apply all necessary properties.
-      // NOTE that we do not replace the parent here,
-      // as we only replace one single directory. As
-      // soon as a directory has been moved to a
-      // different directory, a replacement of the
-      // parent directory needs to take place.
-      oldDir.path = dir.path
-      oldDir.name = dir.name
-      oldDir.hash = dir.hash
-      oldDir.project = dir.project
-      oldDir.attachments = dir.attachments
-      oldDir.sorting = dir.sorting
-      oldDir.children = dir.children
-
-      // Also tell the store to patch the object
+      // We'll be patching the store, as this
+      // will also update the renderer._paths.
       global.store.patch(oldHash, dir)
     }
   }
@@ -552,7 +525,6 @@ class ZettlrRenderer {
   renameFile (f) {
     if (f.hasOwnProperty('hash')) {
       // Make sure preview is visible for this to work correctly
-      this.showPreview()
       // Another file should be renamed
       // Rename a file based on a hash -> find it
       this._body.requestNewFileName(this.findObject(f.hash))

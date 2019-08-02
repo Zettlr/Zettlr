@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- Allow script execution only from the app itself or inline stuff to
          supress the Electron default warning (and also make it safer here) -->
-    <!--<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">-->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
     <title>Zettlr</title>
 
     <!-- Codemirror CSS files -->
@@ -25,8 +25,6 @@
     <script type="text/javascript" src="../../node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="../../common/assets/js/jquery-ui.min.js"></script>
 
-    <script src="../../node_modules/vue/dist/vue.js" charset="utf-8"></script>
-
     <!-- Hack for jQuery (part 2) -->
     <script>if (window.module) module = window.module;</script>
 
@@ -41,71 +39,7 @@
         </div>
 
         <!-- Mount the Sidebar -->
-        <div id="sidebar" v-on:mousemove="handleMouseOver" v-on:dragover="handleDragOver" v-bind:class="sidebarClass">
-          <!-- Display the arrow button in case we have a non-combined view -->
-          <div
-            v-on:click="toggleFileList"
-            id="arrow-button"
-            ref="arrowButton"
-            class="hidden"
-          >
-          </div>
-          <!-- Render a the file-tree -->
-          <div id="component-container">
-            <div id="file-tree" ref="directories" v-on:click="selectionListener">
-              <template v-if="$store.state.items.length > 0">
-                <div id="directories-files-header">Files</div>
-                  <tree-item
-                    v-for="item in getFiles"
-                    v-bind:obj="item"
-                    v-bind:key="item.hash"
-                    v-bind:depth="0"
-                  >
-                  </tree-item>
-                  <div id="directories-dirs-header">Directories</div>
-                  <tree-item
-                    v-for="item in getDirectories"
-                    v-bind:obj="item"
-                    v-bind:key="item.hash"
-                    v-bind:depth="0"
-                  >
-                  </tree-item>
-                </template>
-                <template v-else>
-                  <div class="empty-tree">
-                    <div class="info"></div>
-                    No open directories
-                  </div>
-                </template>
-              </div>
-              <div id="file-list" class="hidden" ref="fileList">
-                <template v-if="getDirectoryContents.length > 1">
-                  <file-item
-                    v-for="item in getDirectoryContents"
-                    v-bind:obj="item"
-                    v-bind:key="item.hash"
-                  >
-                </file-item>
-                </template>
-                <template v-else-if="getDirectoryContents.length === 1">
-                  <file-item
-                    v-for="item in getDirectoryContents"
-                    v-bind:obj="item"
-                    v-bind:key="item.hash"
-                  >
-                </file-item>
-                  <!-- TODO: Detect if the sidebar is in combined mode, b/c then here only search results will appear -->
-                  <div>Empty directory</div>
-                </template>
-                <template v-else>
-                  <!-- Same as above: Detect combined sidebar mode -->
-                  <div class="">No directory selected &hellip;</div>
-                </template>
-              </div>
-          </div>
-          <div id="sidebar-inner-resizer" v-if="isExpanded" ref="sidebarInnerResizer" v-on:mousedown="sidebarStartInnerResize"></div>
-          <div id="sidebar-resize" ref="sidebarResizer" v-on:mousedown="sidebarStartResize"></div>
-        </div>
+        <div id="sidebar"></div>
 
         <!-- Three: The editor itself -->
         <div id="editor">

@@ -92,12 +92,14 @@ class ZettlrFile {
       if (this.hash !== hash) return // Not our business
       // Simply pull in the new target
       this.target = global.targets.get(this.hash)
-      global.ipc.updateFile(this) // Send a fresh version of this file to the renderer.
+      // Send a fresh version of this file to the renderer.
+      global.application.fileUpdate(this.hash, this.getMetadata())
     })
     global.targets.on('remove', (hash) => {
       if (this.hash !== hash) return // Also not our business
       this.target = null // Reset
-      global.ipc.updateFile(this) // Send a fresh version of this file to the renderer.
+      // Send a fresh version of this file to the renderer.
+      global.application.fileUpdate(this.hash, this.getMetadata())
     })
   }
 

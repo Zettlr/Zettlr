@@ -1,5 +1,43 @@
+<template>
+  <div class="container"
+    v-bind:data-hash="obj.hash"
+    v-bind:draggable="!isRoot"
+    v-on:dragstart.stop="beginDragging"
+    v-on:dragenter.stop="enterDragging"
+    v-on:dragleave.stop="leaveDragging"
+  >
+    <div
+      v-bind:class="classList"
+      v-bind:data-hash="obj.hash"
+      v-on:click="requestSelection"
+      v-bind:style="pad"
+      ref="listElement"
+      v-on:drop="handleDrop"
+      v-on:dragover="acceptDrags"
+    >
+      <p class="filename" v-bind:data-hash="obj.hash">
+        <span v-show="hasChildren" v-on:click.stop="toggleCollapse" v-bind:class="indicatorClass"></span>
+        {{ obj.name }}<span v-if="hasDuplicateName" class="dir">&nbsp;({{ dirname }})</span>
+      </p>
+    </div>
+    <div v-if="hasSearchResults" class="display-search-results list-item" v-on:click="this.$root.toggleFileList">
+      Display search results
+    </div>
+    <div v-if="isDirectory" v-show="!collapsed">
+      <tree-item
+        v-for="child in filteredChildren"
+        v-bind:obj="child"
+        v-bind:key="child.hash"
+        v-bind:depth="depth + 1"
+      >
+      </tree-item>
+    </div>
+  </div>
+</template>
+
+<script>
 // Tree View item component
-const findObject = require('../../common/util/find-object')
+const findObject = require('../../source/common/util/find-object.js')
 
 module.exports = {
   name: 'tree-item',
@@ -19,42 +57,6 @@ module.exports = {
       collapsed: true // Initial: collapsed list (if there are children)
     }
   },
-  template: `
-    <div class="container"
-      v-bind:data-hash="obj.hash"
-      v-bind:draggable="!isRoot"
-      v-on:dragstart.stop="beginDragging"
-      v-on:dragenter.stop="enterDragging"
-      v-on:dragleave.stop="leaveDragging"
-    >
-      <div
-        v-bind:class="classList"
-        v-bind:data-hash="obj.hash"
-        v-on:click="requestSelection"
-        v-bind:style="pad"
-        ref="listElement"
-        v-on:drop="handleDrop"
-        v-on:dragover="acceptDrags"
-      >
-        <p class="filename" v-bind:data-hash="obj.hash">
-          <span v-show="hasChildren" v-on:click.stop="toggleCollapse" v-bind:class="indicatorClass"></span>
-          {{ obj.name }}<span v-if="hasDuplicateName" class="dir">&nbsp;({{ dirname }})</span>
-        </p>
-      </div>
-      <div v-if="hasSearchResults" class="display-search-results list-item" v-on:click="this.$root.toggleFileList">
-        Display search results
-      </div>
-      <div v-if="isDirectory" v-show="!collapsed">
-        <tree-item
-          v-for="child in filteredChildren"
-          v-bind:obj="child"
-          v-bind:key="child.hash"
-          v-bind:depth="depth + 1"
-        >
-        </tree-item>
-      </div>
-    </div>
-  `,
   computed: {
     /**
      * Returns true if this component is a root
@@ -221,3 +223,4 @@ module.exports = {
     }
   }
 }
+</script>

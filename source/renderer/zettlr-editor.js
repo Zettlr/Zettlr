@@ -103,7 +103,10 @@ class ZettlrEditor {
     // All individual citations fetched during this session.
     this._citationBuffer = Object.create(null)
 
-    this._mute = true // Should the editor mute lines while in distraction-free mode?
+    // Should the editor mute lines while in distraction-free mode?
+    this._mute = true
+    // Caches the "left" style property during distraction free
+    this._leftBeforeDistractionFree = ''
 
     this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
       mode: {
@@ -566,9 +569,12 @@ class ZettlrEditor {
     if (!this._cm.getOption('fullScreen')) {
       this._unmuteLines()
       this._div.removeClass('fullscreen')
+      this._div.css('left', this._leftBeforeDistractionFree)
     } else {
       if (this._mute) this._muteLines()
       this._div.addClass('fullscreen')
+      this._leftBeforeDistractionFree = this._div.css('left')
+      this._div.css('left', '') // Remove the "left" property
     }
 
     // We have to re-apply the font-size to the editor because this style gets

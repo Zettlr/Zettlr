@@ -89,7 +89,7 @@ class SaveFile extends ZettlrCommand {
     } else {
       // Immediately update the paths in renderer so that it is able to find
       // the file to (re)-select it.
-      global.application.fileUpdate(file.getMetadata())
+      global.application.fileUpdate(file.hash, file.getMetadata())
     }
 
     // Switch to newly created file (only happens before a file is selected)
