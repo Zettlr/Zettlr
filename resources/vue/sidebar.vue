@@ -71,7 +71,7 @@
               v-bind:emit-update="true"
               v-on:update="updateDynamics"
               v-bind:page-mode="true"
-              key-field="hash"
+              key-field="modtime"
               v-slot="{ item }"
             >
               <file-item v-bind:obj="item"></file-item>
@@ -398,7 +398,6 @@ module.exports = {
      * @return {void}     Does not return.
      */
     updateDynamics: function () {
-      console.log('Updating ....')
       // Update all tippy instances, where appropriate.
       tippy('#sidebar [data-tippy-content]', {
         delay: 100,

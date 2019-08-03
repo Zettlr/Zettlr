@@ -31,6 +31,9 @@ class ZettlrStore {
       commitSearchResult: (res) => {
         this._store.commit('searchResult', res)
       },
+      renewItems: (newItems) => {
+        this._store.dispatch('renewItems', newItems)
+      },
       commitEndSearch: () => { this._store.commit('endSearch') },
       getSearchResults: () => { return this._store.state.searchResults }
     }

@@ -48,6 +48,8 @@ class FileRename extends ZettlrCommand {
 
     // Replace all relevant properties of the renamed file in renderer.
     global.application.fileUpdate(arg.hash, file.getMetadata())
+    // Remember to also update the directory to apply the potential new sorting!
+    global.application.dirUpdate(file.parent.hash, file.parent.getMetadata())
 
     if (file === this._app.getCurrentFile()) {
       // Also "re-set" the current file to trigger some additional

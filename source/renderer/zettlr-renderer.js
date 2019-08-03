@@ -334,7 +334,7 @@ class ZettlrRenderer {
     this._attachments.refresh()
 
     // Pass on the new paths object as is to the store.
-    global.store.set('items', nData)
+    global.store.renewItems(nData)
   }
 
   /**

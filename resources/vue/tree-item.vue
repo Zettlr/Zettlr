@@ -225,7 +225,7 @@ module.exports = {
       // app itself.
       let data
       try {
-        data = JSON.parse(event.dataTransfer.getData('text'))
+        data = JSON.parse(event.dataTransfer.getData('text/x-zettlr-file'))
       } catch (e) {
         // Error in JSON stringifying (either b/c malformed or no text)
         return

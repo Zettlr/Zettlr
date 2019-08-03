@@ -87,7 +87,6 @@ module.exports = {
       state.fileList = objectToArray(dir, 'children')
     },
     sidebarMode: (state, mode) => {
-      if (!['thin', 'combined', 'expanded'].includes(mode)) return
       state.sidebarMode = mode
     },
     searchResult: (state, res) => {
@@ -144,7 +143,6 @@ module.exports = {
       // the parent's hash and _again_ search, now for the parent. Then we
       // can splice the object in question from the children array and
       // replace the children-property of our parent object correctly.
-      let isInCurrentDir = context.state.fileList.find(e => e.hash === hash)
       if (obj.parent === null) {
         // We need to splice a root object (note that we require a
         // "parent" property to be set)
@@ -156,10 +154,9 @@ module.exports = {
         let found = parent.children.find(e => e.hash === hash)
         // Now simply splice it, the observers by Vue.js will get notified and update the view.
         parent.children.splice(parent.children.indexOf(found), 1)
-
-        // Recompute the file list, if the file has been in the current directory.
-        if (isInCurrentDir) context.commit('computeFileList')
       }
+      // Always recompute the fileList afterwards
+      context.commit('computeFileList')
     },
     patch: function (context, opt) {
       // Patch a full object with new properties. Adding objects works by
@@ -177,6 +174,11 @@ module.exports = {
         if (obj.type === 'file') context.selectedFile = obj.hash
         else context.selectedDirectory = obj.hash
       }
+    },
+    renewItems: function (context, newItems) {
+      context.state.items = newItems
+      // Commit all actions necessary after a full path update
+      context.commit('computeFileList')
     }
   }
 }

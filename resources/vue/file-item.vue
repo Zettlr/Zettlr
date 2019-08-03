@@ -152,8 +152,8 @@
 
           return `${current} / ${this.obj.target.count} (${progress} %)`
         },
-        sortingNameIcon: function () { return (this.sorting === 'name-up') ? '&#xf1c1;' : '&#xf1c2;' },
-        sortingTimeIcon: function () { return (this.sorting === 'time-up') ? '&#xf1c4;' : '&#xf1c3;' }
+        sortingNameIcon: function () { return (this.obj.sorting === 'name-up') ? '&#xf1c2;' : '&#xf1c1;' },
+        sortingTimeIcon: function () { return (this.obj.sorting === 'time-up') ? '&#xf1c3;' : '&#xf1c4;' }
       },
       methods: {
         requestSelection: function (event) {
@@ -172,7 +172,11 @@
           }
         },
         toggleSorting: function (evt) {
-          let c = evt.target.classList.item(0) // First item is sortName or sortTime
+          // First item is sortName or sortTime
+          let c = evt.target.classList.item(0)
+          // We have a span to render the HTML in there
+          // and the user possibly clicked that one.
+          if (c === null) c = evt.target.parentNode.classList.item(0)
           let newSorting = 'name-up'
           if (c === 'sortName') {
             if (this.obj.sorting === 'name-up') newSorting = 'name-down'
@@ -191,7 +195,7 @@
           // But the parent is fortunately our sidebar component.
           this.$root.lockDirectoryTree()
           event.dataTransfer.effectAllowed = 'move'
-          event.dataTransfer.setData('text', JSON.stringify({
+          event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
             'hash': this.obj.hash,
             'type': this.obj.type // Can be file or directory
           }))
