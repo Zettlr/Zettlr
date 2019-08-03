@@ -50,6 +50,11 @@ module.exports = {
         return []
       }
     },
+    currentDirectoryContent: (state) => {
+      // This definitely returns the current fileList
+      // (Necessary to get the directory contents in combined mode)
+      return state.fileList
+    },
     tags: (state) => (tags) => {
       if (!tags) return []
       if (!Array.isArray(tags)) return []

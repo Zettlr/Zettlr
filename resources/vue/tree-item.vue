@@ -34,7 +34,12 @@
         {{ obj.name }}<span v-if="hasDuplicateName" class="dir">&nbsp;({{ dirname }})</span>
       </p>
     </div>
-    <div v-if="hasSearchResults" class="display-search-results list-item" v-on:click="this.$root.toggleFileList">
+    <div
+      v-if="hasSearchResults"
+      class="display-search-results list-item"
+      v-on:click="this.$root.toggleFileList"
+      v-bind:style="searchResultMessagePadding"
+    >
       <p class="filename">{{ displayResultsMessage }}</p>
     </div>
     <div v-if="isDirectory" v-show="!collapsed">
@@ -52,6 +57,7 @@
 <script>
 // Tree View item component
 const findObject = require('../../source/common/util/find-object.js')
+const { trans } = require('../../source/common/lang/i18n')
 
 module.exports = {
   name: 'tree-item',
@@ -138,6 +144,7 @@ module.exports = {
      * Returns the amount of padding that should be applied, based on the depth
      */
     pad: function () { return `padding-left: ${this.depth}em` },
+    searchResultMessagePadding: function () { return `padding-left: ${this.depth + 1}em` },
     /**
      * Returns true if this is a root file and has the same name as another root file
      */

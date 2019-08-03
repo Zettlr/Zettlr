@@ -62,12 +62,15 @@
               the virtual scroller with the correct size
               of the list items (60px in mode with meta-
               data, 30 in cases without).
+              NOTE: The page-mode MUST be true, because
+              it will speed up performance incredibly!
             -->
             <recycle-scroller
               v-bind:items="getDirectoryContents"
               v-bind:item-size="($store.state.fileMeta) ? 60 : 30"
               v-bind:emit-update="true"
               v-on:update="updateDynamics"
+              v-bind:page-mode="true"
               key-field="hash"
               v-slot="{ item }"
             >
