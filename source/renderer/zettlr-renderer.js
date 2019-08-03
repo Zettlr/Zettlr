@@ -153,7 +153,7 @@ class ZettlrRenderer {
     global.store.set('fileMeta', global.config.get('fileMeta'))
     global.store.set('hideDirs', global.config.get('hideDirs')) // TODO: Not yet implemented
     global.store.set('displayTime', global.config.get('fileMetaTime'))
-    global.store.set('sidebarMode', global.config.get('combinerState'))
+    global.store.set('sidebarMode', global.config.get('sidebarMode'))
     // Receive the application language
     this.setLocale(global.config.get('appLang'))
 

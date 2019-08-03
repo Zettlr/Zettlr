@@ -5,7 +5,7 @@
             "ScaredCoward"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-08-01T11:46:06.000000Z"
+        "updated_at": "2019-08-02T23:35:47.000000Z"
     },
     "dialog": {
         "about": {
@@ -261,6 +261,10 @@
             },
             "readability_algorithm": "Algorithm to use for the readability mode",
             "reset_pandoc_command": "Reset pandoc command",
+            "sidebar_combined": "Combined &mdash; show files and directories in the file tree",
+            "sidebar_expanded": "Expanded &mdash; show both file tree and file list",
+            "sidebar_explanation": "Sidebar mode",
+            "sidebar_thin": "Thin &mdash; show either file tree or file list",
             "sorting_ascii": "ASCII order (2 after 10)",
             "sorting_explanation": "Sorting order for files (used for sorting by name)",
             "sorting_natural": "Natural order (10 after 2)",

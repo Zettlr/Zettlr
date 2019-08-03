@@ -2,6 +2,8 @@
 
 ## GUI and Functionality
 
+**This update will reset your sidebar mode to the initial value of thin.**
+
 - **New Feature**: Table management has just become easier. With the new table helper plugin, Zettlr enables you to circumvent manually having to edit Markdown tables. All you need to do now is keep the table helper active in the settings and just edit your tables as you would do in any other application. The table helper offers the following keyboard navigation shortcuts:
     - **Tab**: Move to the next cell, or the first cell on the next row, if the cursor is in the last column. Adds a new table row, if the cursor is in the last row.
     - **Shift-Tab**: Move to the previous cell, or the last cell on the previous row, if the cursor is in the first column.
@@ -72,6 +74,7 @@
 - Simplified the process of maintaining the revealJS templates, added a few other goodies. The command `reveal:build` will now re-build the full revealJS templates with the installed revealJS version.
 - The Citeproc-provider now logs all errors that prevent a successful boot to the console.
 - Replaced the sidebar with a Vue.js component.
+- The configuration setting for the `sidebarMode` is finally called as such.
 
 # 1.3.0
 

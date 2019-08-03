@@ -108,7 +108,7 @@ class ConfigProvider extends EventEmitter {
       'sorting': 'natural', // Can be natural or based on ASCII values
       'sortingTime': 'modtime', // can be modtime or creationtime
       'muteLines': true, // Should the editor mute lines in distraction free mode?
-      'combinerState': 'collapsed', // collapsed = Preview or directories visible --- expanded = both visible
+      'sidebarMode': 'thin', // thin = Preview or directories visible --- expanded = both visible --- combined = tree view displays also files
       'enableRMarkdown': false, // Whether or not RMarkdown files should be recognised
       'newFileNamePattern': '%id.md',
       'newFileDontPrompt': false, // If true immediately creates files

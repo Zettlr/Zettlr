@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-08-01T11:45:52.000000Z"
+        "updated_at": "2019-08-02T23:37:22.000000Z"
     },
     "dialog": {
         "about": {
@@ -260,6 +260,10 @@
             },
             "readability_algorithm": "Algorithmus f\u00fcr den Lesbarkeits-Modus",
             "reset_pandoc_command": "Pandoc-Befehl auf Werkseinstellungen zur\u00fccksetzen",
+            "sidebar_combined": "Verbunden &mdash; Dateibaum zeigt Dateien",
+            "sidebar_expanded": "Erweitert &mdash; zeige Dateibaum und Liste",
+            "sidebar_explanation": "Sidebar-Modus",
+            "sidebar_thin": "D\u00fcnn &mdash; zeige Dateibaum oder Liste",
             "sorting_ascii": "ASCII-Reihenfolge (2 kommt nach 10)",
             "sorting_explanation": "Sortierreihenfolge f\u00fcr Dateien (bei Sortierung nach Dateinamen)",
             "sorting_natural": "Nat\u00fcrliche Reihenfolge (10 kommt nach 2)",

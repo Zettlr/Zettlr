@@ -35,7 +35,7 @@
       </p>
     </div>
     <div v-if="hasSearchResults" class="display-search-results list-item" v-on:click="this.$root.toggleFileList">
-      Display search results
+      <p class="filename">Display search results</p>
     </div>
     <div v-if="isDirectory" v-show="!collapsed">
       <tree-item

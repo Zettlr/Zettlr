@@ -45,9 +45,9 @@
 
         span.dir { color: var(--grey-2); }
 
-        .virtual-directory { color: var(--c-virtual-directory); }
+        &.virtual-directory { color: var(--c-virtual-directory); }
 
-        .dead-directory {
+        &.dead-directory {
           color: var(--grey-2);
           &:hover {
             color: var(--grey-2);
@@ -55,7 +55,14 @@
           }
         }
 
-        .project { color: var(--c-project); }
+        &.project { color: var(--c-project); }
+
+        &.display-search-results {
+          color: var(--red-1);
+        }
+
+        // In combined mode, there are files, which we'll make bold this way.
+        &.file p.filename { font-weight: bold; }
     }
 
     .empty-tree {

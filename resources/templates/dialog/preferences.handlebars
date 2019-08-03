@@ -103,21 +103,28 @@
         </div>
         <div class="box-right">
           <p>
-            {{i18n "dialog.preferences.combiner_explanation"}}
+            {{i18n "dialog.preferences.sidebar_explanation"}}
           </p>
           <div class="cb-group">
             <label class="radio-toggle">
-              <input type="radio" name="combinerState" value="collapsed" id="pref-comb-state-coll" {{#ifCond combinerState '=' 'collapsed'}}checked="checked"{{/ifCond}}>
+              <input type="radio" name="sidebarMode" value="thin" id="pref-sidebar-state-thin" {{#ifCond sidebarMode '=' 'thin'}}checked="checked"{{/ifCond}}>
               <div class="toggle"></div>
             </label>
-            <label for="pref-comb-state-coll">{{i18n "dialog.preferences.combiner_collapsed"}}</label>
+            <label for="pref-sidebar-state-thin">{{i18n "dialog.preferences.sidebar_thin"}}</label>
           </div>
           <div class="cb-group">
             <label class="radio-toggle">
-              <input type="radio" name="combinerState" value="expanded" id="pref-comb-state-exp" {{#ifCond combinerState '=' 'expanded'}}checked="checked"{{/ifCond}}>
+              <input type="radio" name="sidebarMode" value="expanded" id="pref-sidebar-state-exp" {{#ifCond sidebarMode '=' 'expanded'}}checked="checked"{{/ifCond}}>
               <div class="toggle"></div>
             </label>
-            <label for="pref-comb-state-exp">{{i18n "dialog.preferences.combiner_expanded"}}</label>
+            <label for="pref-sidebar-state-exp">{{i18n "dialog.preferences.sidebar_expanded"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="sidebarMode" value="combined" id="pref-sidebar-state-combined" {{#ifCond sidebarMode '=' 'combined'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-sidebar-state-combined">{{i18n "dialog.preferences.sidebar_combined"}}</label>
           </div>
           <hr>
           <!-- Sorting stuff -->

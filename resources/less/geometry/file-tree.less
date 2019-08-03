@@ -85,6 +85,17 @@
       position: relative;
     }
 
+    // Mimick a list item for the display indicator in combined mode
+    .list-item.display-search-results {
+      p.filename::before {
+        content: '\f0c5';
+        font-family: @font-icon;
+        font-size: @font-size-small * 0.8;
+        display: inline-block;
+        width: 18px;
+      }
+    }
+
     .empty-tree {
         position: absolute;
         top: 0;

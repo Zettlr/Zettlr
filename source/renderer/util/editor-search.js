@@ -73,7 +73,7 @@ class EditorSearch {
       // Find the results and display them.
       // The results are merged with the file.
       let res = results.find(e => e.hash === file.hash)
-      this._mark(res.results)
+      if (res) this._mark(res.results)
     }
   }
 
