@@ -38,16 +38,6 @@ const ALLOW_SORTS = ['name-up', 'name-down', 'time-up', 'time-down']
 const FILETYPES = require('../common/data.json').filetypes
 
 /**
- * Error object constructor
- * @param       {string} msg The error message
- * @constructor
- */
-function DirectoryError (msg) {
-  this.name = 'Directory error'
-  this.message = msg
-}
-
-/**
  * This class models properties and features of a directory on disk.
  */
 class ZettlrDir {
@@ -58,7 +48,7 @@ class ZettlrDir {
     */
   constructor (parent, dir) {
     if (dir === null || dir === '') {
-      throw new DirectoryError('Error on ZettlrDir instantiation: dir cannot be empty!')
+      throw new Error('Error on ZettlrDir instantiation: dir cannot be empty!')
     }
 
     // Prepopulate
@@ -169,7 +159,7 @@ class ZettlrDir {
     } else if (obj.hasOwnProperty('hash') && obj.hash != null) {
       prop = 'hash'
     } else {
-      throw new DirectoryError('Cannot search directory. Neither path nor hash given.')
+      throw new Error('Cannot search directory. Neither path nor hash given.')
     }
 
     if (this[prop] === obj[prop]) {
@@ -233,7 +223,7 @@ class ZettlrDir {
     // Remove unallowed characters.
     name = sanitize(name, { replacement: '-' })
     if ((name === '') || (name === null)) {
-      throw new DirectoryError(trans('system.error.no_allowed_chars'))
+      throw new Error(trans('system.error.no_allowed_chars'))
     }
     let newpath = path.join(this.path, name)
 
@@ -263,7 +253,7 @@ class ZettlrDir {
     name = sanitize(name, { replacement: '-' })
     // This gets executed once the user has not entered any allowed characters
     if ((name === '') || (name == null)) {
-      throw new DirectoryError(trans('system.error.no_allowed_chars'))
+      throw new Error(trans('system.error.no_allowed_chars'))
     }
 
     // Do we have a valid extension?
@@ -273,7 +263,7 @@ class ZettlrDir {
 
     // Already exists
     if (this.exists(path.join(this.path, name))) {
-      throw new DirectoryError(trans('system.error.file_exists'))
+      throw new Error(trans('system.error.file_exists'))
     }
 
     // Ignore the creation event
@@ -331,7 +321,7 @@ class ZettlrDir {
       } else {
         // Logically, this should never be executed. But who am I to tell
         // you about logic and software ...
-        throw new DirectoryError('Could not find child inside array to remove!')
+        throw new Error('Could not find child inside array to remove!')
       }
     }
 
@@ -751,18 +741,30 @@ class ZettlrDir {
   }
 
   async _loadSettings () {
+    let configPath = path.join(this.path, '.ztr-directory')
     try {
-      fs.lstatSync(path.join(this.path, '.ztr-directory'))
+      fs.lstatSync(configPath)
     } catch (err) {
-      // Create the file first
-      await this._saveSettings()
+      // No config file -> all options at default ->
+      // return a promise which immediately resolves.
+      return new Promise((resolve, reject) => { resolve() })
     }
 
     return new Promise((resolve, reject) => {
-      fs.readFile(path.join(this.path, '.ztr-directory'), 'utf8', (err, data) => {
+      fs.readFile(configPath, 'utf8', (err, data) => {
         if (err) reject(err)
 
         data = JSON.parse(data)
+        // DEBUG: Remove this after the next release, after
+        // all unnecessary .ztr-directories have been removed.
+        if (data.settings.sorting === this.sorting) {
+          try {
+            fs.unlinkSync(configPath)
+          } catch (e) {
+            // Apparently the file disappeared again
+          }
+          return resolve()
+        }
         this.sorting = data.settings.sorting
         resolve()
       })
@@ -771,6 +773,7 @@ class ZettlrDir {
 
   async _saveSettings () {
     return new Promise((resolve, reject) => {
+      let configPath = path.join(this.path, '.ztr-directory')
       // Prepare settings
       let data = {
         'settings': {
@@ -778,7 +781,18 @@ class ZettlrDir {
         }
       }
 
-      fs.writeFile(path.join(this.path, '.ztr-directory'), JSON.stringify(data), 'utf8', (err) => {
+      if (this.sorting === 'name-up') {
+        // The settings are the default, so no need to write them to file
+        try {
+          fs.lstatSync(configPath)
+          fs.unlinkSync(configPath)
+        } catch (e) {
+          // Nothing to do
+        }
+        return
+      }
+
+      fs.writeFile(configPath, JSON.stringify(data), 'utf8', (err) => {
         if (err) reject(err)
         resolve()
       })
