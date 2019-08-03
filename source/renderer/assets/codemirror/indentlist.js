@@ -5,7 +5,7 @@
  * THIS ADDON HAS BEEN DRAWN FROM THE CODEMIRROR-MARKDOWN-LIST-AUTOINDENT PLUGIN
  * TO PREVENT FURTHER ANNOYING ERRORS IN BUILT PACKAGES B/C THE POSTINSTALL
  * SCRIPT MORE OFTEN THAN NOT DOESN'T RUN CORRECTLY.
- * 
+ *
  * See original repository at https://github.com/joel-porquet/CodeMirror-markdown-list-autoindent
  */
 
@@ -68,7 +68,7 @@
 
       if (!ranges[i].empty() || !matchListToken(pos, cm)) {
         /* If no match, call regular Shift-Tab handler */
-        cm.execCommand("indentAuto");
+        cm.execCommand("indentLess");
         return;
       }
 
