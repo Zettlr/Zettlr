@@ -29,7 +29,7 @@
     <div id="component-container">
       <div id="file-tree" ref="directories" v-on:click="selectionListener">
         <template v-if="$store.state.items.length > 0">
-          <div id="directories-files-header" v-show="getFiles.length > 0">Files</div>
+          <div id="directories-files-header" v-show="getFiles.length > 0">{{ fileSectionHeading }}</div>
             <tree-item
               v-for="item in getFiles"
               v-bind:obj="item"
@@ -37,7 +37,7 @@
               v-bind:depth="0"
             >
             </tree-item>
-            <div id="directories-dirs-header" v-show="getDirectories.length > 0">Directories</div>
+            <div id="directories-dirs-header" v-show="getDirectories.length > 0">{{ dirSectionHeading }}</div>
             <tree-item
               v-for="item in getDirectories"
               v-bind:obj="item"
@@ -72,7 +72,7 @@
           </template>
           <template v-else>
             <!-- Same as above: Detect combined sidebar mode -->
-            <div class="empty-file-list">Please select a directory</div>
+            <div class="empty-file-list">{{ emptyFileListMessage }}</div>
           </template>
         </div>
     </div>
@@ -186,7 +186,10 @@ module.exports = {
     isExpanded: function () { return this.$store.state.sidebarMode === 'expanded' },
     // We need the sidebarMode separately to watch the property
     sidebarMode: function () { return this.$store.state.sidebarMode },
-    noRootsMessage: function () { return trans('gui.empty_directories') }
+    noRootsMessage: function () { return trans('gui.empty_directories') },
+    fileSectionHeading: function () { return trans('gui.dirs') },
+    dirSectionHeading: function () { return trans('gui.files') },
+    emptyFileListMessage: function () { return trans('gui.no_dir_selected') }
   },
   methods: {
     /**

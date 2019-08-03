@@ -35,7 +35,7 @@
       </p>
     </div>
     <div v-if="hasSearchResults" class="display-search-results list-item" v-on:click="this.$root.toggleFileList">
-      <p class="filename">Display search results</p>
+      <p class="filename">{{ displayResultsMessage }}</p>
     </div>
     <div v-if="isDirectory" v-show="!collapsed">
       <tree-item
@@ -158,7 +158,8 @@ module.exports = {
       if (this.$store.state.searchResults.length < 1) return false
       if (this.obj.hash !== this.selectedDir) return false
       return true
-    }
+    },
+    displayResultsMessage: function () { return trans('gui.display_search_results') }
   },
   /**
    * Callable methods

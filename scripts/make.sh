@@ -19,12 +19,13 @@ echo ""
 echo "    1. Re-compile the LESS files to the final CSS"
 echo "    2. Re-compile the Handlebars templates"
 echo "    3. Re-compile the revealJS templates"
-echo "    4. Download the built-in language files"
-echo "    5. Compile Zettlr for Windows"
-echo "    6. Compile Zettlr for macOS"
-echo "    7. Compile Zettlr for Debian and Fedora"
-echo "    8. Generate SHA 256 checksums"
-echo "    9. Check the correctness of the checksums"
+echo "    4. Re-compile the Vue.js components"
+echo "    5. Download the built-in language files"
+echo "    6. Compile Zettlr for Windows"
+echo "    7. Compile Zettlr for macOS"
+echo "    8. Compile Zettlr for Debian and Fedora"
+echo "    9. Generate SHA 256 checksums"
+echo "   10. Check the correctness of the checksums"
 echo ""
 echo ""
 
@@ -48,6 +49,9 @@ yarn handlebars
 
 # Rebuild revealJS
 yarn reveal:build
+
+# Rebuild a production-ready version of the Vue.js components
+yarn wp:prod
 
 # fetch the most recent translations
 yarn lang:refresh
