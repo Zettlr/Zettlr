@@ -37,7 +37,18 @@ module.exports = {
       return state.items.filter(elem => elem.type !== 'file')
     },
     directoryContents: (state) => {
-      return (state.searchResults.length > 0) ? state.searchResults : state.fileList
+      if (state.searchResults.length > 0) {
+        // Return the search results, if there are any
+        return state.searchResults
+      } else if (state.sidebarMode !== 'combined') {
+        // Return the file list if not in combined mode
+        return state.fileList
+      } else {
+        // In combined mode w/o search results, return an empty array for
+        // performance purposes (we don't need to render the file list if
+        // it's never visible.)
+        return []
+      }
     },
     tags: (state) => (tags) => {
       if (!tags) return []

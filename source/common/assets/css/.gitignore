@@ -1,8 +1,5 @@
 # Ignore all compiled CSS files
 /*
 
-# KaTeX CSS isn't re-generated everytime
-!katex.css
-
 # Also add the .gitignore to the repository
 !.gitignore

@@ -12,28 +12,6 @@
       overflow-x: hidden;
       width: 100%;
       height: 100%;
-
-      #file-tree, #file-list {
-        div.meta {
-          margin-top: 5px;
-          white-space: nowrap;
-
-          // Small info blocks inside the file meta
-          .date, .id, .tags, .tex-indicator,
-          .directories, .files, .virtual-directories {
-            font-size:75%;
-            border-radius:4px;
-            padding:2px 4px;
-          }
-
-          // Optional target progress meter, if a target has been set
-          .target-progress-indicator {
-            vertical-align: bottom;
-            margin: 0 4px;
-            transform: rotateZ(-90deg); // Beginning must be at the top
-          }
-        }
-      }
     } // End component container
 
     &.expanded {

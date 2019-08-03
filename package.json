@@ -58,16 +58,19 @@
     "devDependencies": {
         "chalk": "^2.4.2",
         "cross-env": "^5.2.0",
+        "css-loader": "^3.1.0",
         "csso": "^3.5.1",
         "electron": "^5.0.6",
         "electron-builder": "^21.2.0",
         "handlebars": "^4.1.2",
         "less": "^3.9.0",
+        "mini-css-extract-plugin": "^0.8.0",
         "reveal.js": "^3.8.0",
         "string-extract-class-names": "^5.8.35",
         "uglify-js": "^3.6.0",
         "vue-loader": "^15.7.1",
         "vue-template-compiler": "^2.6.10",
+        "vue-virtual-scroller": "^1.0.0-rc.2",
         "webpack": "^4.39.1",
         "webpack-cli": "^3.3.6"
     }

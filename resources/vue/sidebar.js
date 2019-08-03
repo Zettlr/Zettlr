@@ -19,6 +19,8 @@ const Vuex = require('vuex')
 const App = require('./sidebar.vue').default
 const store = require('./store.js')
 
+require('vue-virtual-scroller/dist/vue-virtual-scroller.css')
+
 // Indicate that we would like to use a vuex store
 Vue.use(Vuex)
 

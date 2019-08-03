@@ -52,14 +52,27 @@
             </div>
           </template>
         </div>
+        <!-- Now render the file list -->
         <div id="file-list" class="hidden" ref="fileList">
           <template v-if="getDirectoryContents.length > 1">
-            <file-item
-              v-for="item in getDirectoryContents"
-              v-bind:obj="item"
-              v-bind:key="item.hash"
+            <!--
+              For the "real" sidelist, we need the virtual
+              scroller to maintain performance, because it
+              may contain thousands of elements. Provide
+              the virtual scroller with the correct size
+              of the list items (60px in mode with meta-
+              data, 30 in cases without).
+            -->
+            <recycle-scroller
+              v-bind:items="getDirectoryContents"
+              v-bind:item-size="($store.state.fileMeta) ? 60 : 30"
+              v-bind:emit-update="true"
+              v-on:update="updateDynamics"
+              key-field="hash"
+              v-slot="{ item }"
             >
-          </file-item>
+              <file-item v-bind:obj="item"></file-item>
+            </recycle-scroller>
           </template>
           <template v-else-if="getDirectoryContents.length === 1">
             <file-item
@@ -90,6 +103,7 @@ const findObject = require('../../source/common/util/find-object.js')
 const { trans } = require('../../source/common/lang/i18n.js')
 const TreeItem = require('./tree-item.vue').default
 const FileItem = require('./file-item.vue').default
+const { RecycleScroller } = require('vue-virtual-scroller')
 
 module.exports = {
   data: () => {
@@ -104,7 +118,8 @@ module.exports = {
 },
   components: {
     'tree-item': TreeItem,
-    'file-item': FileItem
+    'file-item': FileItem,
+    'recycle-scroller': RecycleScroller
   },
   /**
    * Watches some properties to perform actions, if necessary.
@@ -161,14 +176,7 @@ module.exports = {
    */
   updated: function () {
     this.$nextTick(function () {
-      // Update all tippy instances, where appropriate.
-      tippy('#sidebar [data-tippy-content]', {
-        delay: 100,
-        arrow: true,
-        duration: 100,
-        flip: true,
-        theme: 'light' // TODO: can be used to change to light in light mode (or better: vice versa)
-      })
+      this.updateDynamics()
     })
   },
   computed: {
@@ -187,8 +195,8 @@ module.exports = {
     // We need the sidebarMode separately to watch the property
     sidebarMode: function () { return this.$store.state.sidebarMode },
     noRootsMessage: function () { return trans('gui.empty_directories') },
-    fileSectionHeading: function () { return trans('gui.dirs') },
-    dirSectionHeading: function () { return trans('gui.files') },
+    fileSectionHeading: function () { return trans('gui.files') },
+    dirSectionHeading: function () { return trans('gui.dirs') },
     emptyFileListMessage: function () { return trans('gui.no_dir_selected') }
   },
   methods: {
@@ -379,7 +387,22 @@ module.exports = {
      * @param  {MouseEvent} evt The click event.
      * @return {void}     Does not return.
      */
-    requestOpenRoot: function (evt) { global.ipc.send('dir-open') }
+    requestOpenRoot: function (evt) { global.ipc.send('dir-open') },
+    /**
+     * Called everytime when there is an update to the DOM, so that we can
+     * dynamically enable all newly rendered tippy instances.
+     * @return {void}     Does not return.
+     */
+    updateDynamics: function () {
+      // Update all tippy instances, where appropriate.
+      tippy('#sidebar [data-tippy-content]', {
+        delay: 100,
+        arrow: true,
+        duration: 100,
+        flip: true,
+        theme: 'light' // TODO: can be used to change to light in light mode (or better: vice versa)
+      })
+    }
   }
 }
 </script>

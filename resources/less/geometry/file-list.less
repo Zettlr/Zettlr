@@ -14,17 +14,31 @@
     &.hidden { left:100%; }
 
     div.list-item {
-      margin-top:-1px;
-      overflow:hidden;
-      line-height:@tile-height-min;
-      padding-left:6px;
-      position:relative;
+      overflow: hidden;
+      line-height: @tile-height-min;
+      padding-left: 6px;
+      position: relative;
 
-      // Bigger size when file meta is shown.
-      &.file-meta {
-        height:@tile-height-full - (2*@pane-padding); // Remove top/bottom padding
-        padding:@pane-padding;
-        line-height:inherit;
+      // The meta information div in the extended file list
+      div.meta {
+        white-space: nowrap;
+        height: @tile-height-min;
+        line-height: inherit;
+
+        // Small info blocks inside the file meta
+        .date, .id, .tags, .tex-indicator,
+        .directories, .files, .virtual-directories {
+          font-size:75%;
+          border-radius:4px;
+          padding:2px 4px;
+        }
+
+        // Optional target progress meter, if a target has been set
+        .target-progress-indicator {
+          vertical-align: bottom;
+          margin: 0 4px;
+          transform: rotateZ(-90deg); // Beginning must be at the top
+        }
       }
 
       p.filename {
@@ -32,6 +46,7 @@
         // before and after
         white-space: nowrap;
         display: block;
+        line-height: @tile-height-min;
         width: 100%;
         overflow: hidden;
       }

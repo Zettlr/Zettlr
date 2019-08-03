@@ -61,8 +61,12 @@
           color: var(--red-1);
         }
 
-        // In combined mode, there are files, which we'll make bold this way.
-        &.file p.filename { font-weight: bold; }
+        // Make the files stick out
+        &.file:not(.root) p.filename::before {
+          content: '\f0d6';
+          font-family: @font-icon;
+          font-size: @font-size-small * 0.8; // Even smaller
+        }
     }
 
     .empty-tree {

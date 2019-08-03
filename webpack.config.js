@@ -1,5 +1,8 @@
 // webpack.config.js
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+// MiniCssExtractPlugin generates the necessary CSS files for
+// our components.
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 
 module.exports = {
@@ -14,7 +17,9 @@ module.exports = {
     // The target is commonJS so that we can require() the entry points.
     libraryTarget: 'commonjs2',
     // Place the app in the assets directory
-    path: path.resolve(__dirname, 'source/renderer/assets/vue')
+    path: path.resolve(__dirname, 'source/renderer/assets/vue'),
+    // The common/assets folder is the default publicPath
+    publicPath: path.resolve(__dirname, 'source/common/assets')
   },
   module: {
     rules: [
@@ -26,6 +31,18 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader'
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: false // Disable hot module reloading
+            }
+          },
+          'css-loader'
+        ]
       }
     ]
   },
@@ -36,5 +53,13 @@ module.exports = {
       'vue$': 'vue/dist/vue.common.js'
     }
   },
-  plugins: [ new VueLoaderPlugin() ]
+  plugins: [
+    new VueLoaderPlugin(),
+    new MiniCssExtractPlugin({
+      // The files will be placed next to the respective components
+      // i.e.: vue-sidebar.js will be in the same directory as sidebar.css
+      filename: '[name].css',
+      ignoreOrder: false // Maybe we need this if the plugin spits out warnings
+    })
+  ]
 }
