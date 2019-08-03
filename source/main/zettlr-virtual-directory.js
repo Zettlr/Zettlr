@@ -368,7 +368,7 @@ class ZettlrVirtualDirectory {
     // For VDs we don't need the circular prevention b/c none of the children
     // have this as their parent.
     return {
-      'parent': null, // this.parent.getMetadata(false),
+      'parent': null,
       'path': this.path,
       'name': this.name,
       'hash': this.hash,

@@ -678,7 +678,6 @@ class ZettlrDir {
     * @return {ZettlrDir} This for chainability.
     */
   sort () {
-    console.log('Sorting myself!')
     this.children = sort(this.children, this.sorting)
     return this
   }
