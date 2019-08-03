@@ -167,13 +167,15 @@ module.exports = {
       // will be applied to the current object).
       let obj = findObject(context.state.items, 'hash', opt.hash, 'children')
       let isCurrentlySelected = (obj.type === 'file') ? (context.state.selectedFile === obj.hash) : (context.state.selectedDirectory === obj.hash)
-      obj = opt.object
+      // Explicitly set the properties of the object to make the
+      // reactive parts of Vue ... well, react.
+      for (let prop in opt.object) { Vue.set(obj, prop, opt.object[prop]) }
+      // Make sure the file list is re-computed
+      context.commit('computeFileList')
       // Make sure to re-select the file or directory, if necessary
       if (isCurrentlySelected) {
         if (obj.type === 'file') context.selectedFile = obj.hash
         else context.selectedDirectory = obj.hash
-        // Make sure the file list is re-computed
-        context.commit('computeFileList')
       }
     }
   }

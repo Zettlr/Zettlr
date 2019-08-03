@@ -98,6 +98,7 @@
 </template>
 
 <script>
+/* global $ */
 // Please do not ask me why I have to explicitly use the "default" property
 // of some modules, but not others. The vue-loader is a mess when used with
 // ES6 CommonJS-modules in a exports/require-environment.
@@ -111,14 +112,14 @@ const { RecycleScroller } = require('vue-virtual-scroller')
 module.exports = {
   data: () => {
     return {
-    previous: '', // Can be "file-list" or "directories"
-    lockedTree: false, // Is the file tree locked in?
-    sidebarResizing: false, // Only true during sidebar resizes
-    sidebarResizeX: 0, // Save the resize cursor position during resizes
-    sidebarInnerResizing: false,
-    sidebarInnerResizeX: 0
-  }
-},
+      previous: '', // Can be "file-list" or "directories"
+      lockedTree: false, // Is the file tree locked in?
+      sidebarResizing: false, // Only true during sidebar resizes
+      sidebarResizeX: 0, // Save the resize cursor position during resizes
+      sidebarInnerResizing: false,
+      sidebarInnerResizeX: 0
+    }
+  },
   components: {
     'tree-item': TreeItem,
     'file-item': FileItem,
@@ -188,7 +189,7 @@ module.exports = {
      */
     getFiles: function () { return this.$store.getters.rootFiles },
     getDirectories: function () { return this.$store.getters.rootDirectories },
-    getDirectoryContents: function () { return this.$store.getters.directoryContents },
+    getDirectoryContents: function () { console.log('Directory Contents have changed!'); return this.$store.getters.directoryContents },
     selectedFile: function () { return this.$store.state.selectedFile },
     selectedDirectory: function () { return this.$store.state.selectedDirectory },
     sidebarClass: function () { return (this.isExpanded) ? 'expanded' : '' },
@@ -397,6 +398,7 @@ module.exports = {
      * @return {void}     Does not return.
      */
     updateDynamics: function () {
+      console.log('Updating ....')
       // Update all tippy instances, where appropriate.
       tippy('#sidebar [data-tippy-content]', {
         delay: 100,

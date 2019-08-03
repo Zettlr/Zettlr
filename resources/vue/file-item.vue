@@ -16,7 +16,7 @@
   <div class="container" v-on:mouseenter="hover=true" v-on:mouseleave="hover=false" v-bind:style="getStyle">
     <div
     v-bind:class="classList"
-    v-bind:data-hash="obj.hash"
+    v-bind:data-hash="getHash"
     v-on:click="requestSelection"
     v-bind:draggable="isDraggable"
     v-on:dragstart.stop="beginDragging"
@@ -27,7 +27,7 @@
       <span class="sortName" v-on:click.stop="toggleSorting"><span v-html="sortingNameIcon"></span></span>
       <span class="sortTime" v-on:click.stop="toggleSorting"><span v-html="sortingTimeIcon"></span></span>
     </div>
-    <tag-list v-bind:tags="this.obj.tags" v-if="!isDirectory"></tag-list>
+    <tag-list v-bind:tags="getTags" v-if="!isDirectory"></tag-list>
     <template v-if="fileMeta">
       <div class="meta">
         <template v-if="isDirectory">
@@ -38,8 +38,8 @@
         <template v-else>
           <span class="tex-indicator" v-if="isTex">TeX</span>
           <span class="date">{{ getDate }}</span>
-          <span class="id" v-if="obj.id">{{ obj.id }}</span>
-          <span class="tags" v-if="obj.tags && obj.tags.length > 0">#{{ obj.tags.length }}</span>
+          <span class="id" v-if="getId">{{ getId }}</span>
+          <span class="tags" v-if="hasTags">#{{ countTags }}</span>
           <svg v-if="hasWritingTarget" class="target-progress-indicator" width="16" height="16" viewBox="-1 -1 2 2" v-bind:data-tippy-content="writingTargetInfo">
             <circle class="indicator-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle>
             <path v-bind:d="writingTargetPath" fill="" class="indicator-value" shape-rendering="geometricPrecision"></path>
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+  /* eslint indent: 0 */
   const TagList = require('./tag-list.vue').default
   const formatDate = require('../../source/common/util/format-date.js')
 
@@ -66,7 +67,13 @@
     },
     components: { 'tag-list': TagList },
     computed: {
+      // We have to explicitly transform ALL properties to computed ones for
+      // the reactivity in conjunction with the recycle-scroller.
       basename: function () { return this.obj.name.replace(this.obj.ext, '') },
+      getHash: function () { return this.obj.hash },
+      getId: function () { return this.obj.id },
+      getTags: function () { return this.obj.tags },
+      hasTags: function () { return this.obj.tags && this.obj.tags.length > 0 },
       isDirectory: function () { return this.obj.type !== 'file' },
       isDraggable: function () { return !this.isDirectory && !this.obj.hasOwnProperty('results') },
       fileMeta: function () { return this.$store.state.fileMeta },
@@ -114,6 +121,7 @@
         if (!this.obj.hasOwnProperty('children')) return 0
         return this.obj.children.filter(e => e.type === 'virtual-directory').length + ' Virtual Directories' || 0
       },
+      countTags: function () { return this.obj.tags.length },
       hasWritingTarget: function () {
         if (!this.obj.hasOwnProperty('target') || !this.obj.target) return false
         if (!this.obj.target.mode ||
@@ -181,7 +189,7 @@
         },
         beginDragging: function (event) {
           // But the parent is fortunately our sidebar component.
-          this.$parent.lockDirectoryTree()
+          this.$root.lockDirectoryTree()
           event.dataTransfer.effectAllowed = 'move'
           event.dataTransfer.setData('text', JSON.stringify({
             'hash': this.obj.hash,
@@ -190,7 +198,7 @@
         },
         stopDragging: function (evt) {
           // Unlock the directory tree
-          this.$parent.unlockDirectoryTree()
+          this.$root.unlockDirectoryTree()
         }
       }
     }
