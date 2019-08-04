@@ -61,6 +61,7 @@ class ZettlrDir {
     this.attachments = []
     this.type = 'directory'
     this.sorting = 'name-up'
+    this.modtime = 0
 
     // Create an interface for virtual directories
     this._vdInterface = new ZettlrInterface(path.join(this.path, '.ztr-virtual-directories'))
@@ -422,7 +423,8 @@ class ZettlrDir {
 
     return new Promise((resolve, reject) => {
       try {
-        fs.lstatSync(this.path)
+        let stat = fs.lstatSync(this.path)
+        this.modtime = stat.mtime.getTime()
       } catch (e) {
         // Do not create directories here, only read.
         resolve()
@@ -736,7 +738,8 @@ class ZettlrDir {
       'children': (children) ? this.children.map(elem => elem.getMetadata()) : [],
       'attachments': this.attachments.map(elem => elem.getMetadata()),
       'type': this.type,
-      'sorting': this.sorting
+      'sorting': this.sorting,
+      'modtime': this.modtime
     }
   }
 

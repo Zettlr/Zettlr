@@ -24,16 +24,6 @@ const countWords = require('../common/util/count-words')
 const { trans } = require('../common/lang/i18n')
 
 /**
- * Error Object
- * @param       {String} msg The error message
- * @constructor
- */
-function FileError (msg) {
-  this.name = 'File error'
-  this.msg = msg
-}
-
-/**
  * Model for accessing files on the filesystem. This class is also capable of
  * keeping autosave files and reverting to certain states.
  */
@@ -316,7 +306,7 @@ class ZettlrFile {
     } else if (obj.hasOwnProperty('hash') && obj.hash != null) {
       prop = 'hash'
     } else {
-      throw new FileError('Cannot findFile!')
+      throw new Error('Cannot findFile!')
     }
 
     if (this[prop] === obj[prop]) {
@@ -382,7 +372,7 @@ class ZettlrFile {
 
     // Rename this file.
     if ((name == null) || (name === '')) {
-      throw new FileError('The new name did not contain any allowed characters.')
+      throw new Error('The new name did not contain any allowed characters.')
     }
 
     // Make sure we got an extension.

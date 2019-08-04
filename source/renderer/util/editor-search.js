@@ -123,6 +123,7 @@ class EditorSearch {
     if (!term) return // There must be something so search for.
     if (this._searchCursor == null || this._currentLocalSearch !== term) {
       // (Re)start search in case there was none or the term has changed
+      this.stopSearch()
       this.startSearch(term)
     }
 

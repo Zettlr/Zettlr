@@ -66,6 +66,9 @@
         hover: false // True as long as the user hovers over the element
       }
     },
+    watch: {
+      obj: (oldval, newval) => { console.log('Item changed: ', oldval.hash, newval.hash) }
+    },
     components: { 'tag-list': TagList },
     computed: {
       // We have to explicitly transform ALL properties to computed ones for

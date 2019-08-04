@@ -71,10 +71,10 @@
               v-bind:emit-update="true"
               v-on:update="updateDynamics"
               v-bind:page-mode="true"
-              key-field="modtime"
-              v-slot="{ item }"
+              key-field="hash"
+              v-slot="view"
             >
-              <file-item v-bind:obj="item"></file-item>
+              <file-item v-bind:obj="view.item" v-if="view.active"></file-item>
             </recycle-scroller>
           </template>
           <template v-else-if="getDirectoryContents.length === 1">

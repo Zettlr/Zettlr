@@ -586,6 +586,7 @@ class ZettlrBody {
     // the respective class.
     if (regexRE.test($('#searchWhat').val())) {
       $('#searchWhat').addClass('regexp')
+      $('#replaceWhat').addClass('regexp')
     }
 
     // Select the search input for convenience
