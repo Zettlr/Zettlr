@@ -73,6 +73,15 @@ class ZettlrRenderer {
     // Create the store wrapper which will act as
     // a unifying interface to commit changes to the store.
     this._store = new ZettlrStore(this, this._sidebar.$store)
+
+    // Add a few convenience functions
+    global.application = {
+      globalSearch: (term) => {
+        // Initiate a global search
+        this._toolbar.setSearch(term)
+        this.beginSearch(term)
+      }
+    }
   }
 
   /**
@@ -395,19 +404,6 @@ class ZettlrRenderer {
 
   // SEARCH FUNCTIONS
   // This class only acts as a pass-through
-
-  /**
-   * This function can be used to programmatically start a global search. It
-   * takes care that the toolbar shows the correct search term and that the
-   * search is initiated.
-   * @param  {String} term A term in string form
-   * @return {ZettlrRenderer} This for chainability.
-   */
-  triggerGlobalSearch (term) {
-    this._toolbar.setSearch(term)
-    this.beginSearch(term)
-    return this
-  }
 
   /**
    * This function is called by ZettlrToolbar. The term gets passed on to

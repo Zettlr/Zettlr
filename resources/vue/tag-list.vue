@@ -36,7 +36,7 @@ module.exports = {
       return 'background-color: ' + col
     },
     tagSearch: function (evt) {
-      console.log('Starting search for tag ' + evt.target.dataset.name + '!')
+      global.application.globalSearch('#' + evt.target.dataset.name)
     }
   }
 }
