@@ -17,6 +17,7 @@
     <div
     v-bind:class="classList"
     v-bind:data-hash="getHash"
+    v-bind:data-id="getId"
     v-on:click="requestSelection"
     v-bind:draggable="isDraggable"
     v-on:dragstart.stop="beginDragging"
