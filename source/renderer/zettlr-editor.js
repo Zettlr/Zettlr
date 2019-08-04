@@ -574,6 +574,7 @@ class ZettlrEditor {
       if (this._mute) this._muteLines()
       this._div.addClass('fullscreen')
       this._leftBeforeDistractionFree = this._div.css('left')
+      if (this._leftBeforeDistractionFree === '0px') this._leftBeforeDistractionFree = ''
       this._div.css('left', '') // Remove the "left" property
     }
 
