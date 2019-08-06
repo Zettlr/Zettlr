@@ -14,16 +14,14 @@
  * END HEADER
  */
 
-// First require the complete electron environment and put it into var
-const electron = require('electron')
-
-// Module to control application life.
-const app = electron.app
+// We need the app and process modules.
+const { app } = require('electron')
 const process = require('process')
 
 // Include the global Zettlr class
 const Zettlr = require('./main/zettlr.js')
 
+// Helpers to determine what files from argv we can open
 const isFile = require('./common/util/is-file')
 const ignoreFile = require('./common/util/ignore-file')
 
@@ -50,9 +48,7 @@ let isFirstInstance = app.requestSingleInstanceLock()
  * Exit immediately if this is a second instance of Zettlr.
  * @param  {Boolean} isFirstInstance Whether or not this is a second instance.
  */
-if (!isFirstInstance) {
-  app.exit(0)
-}
+if (!isFirstInstance) app.exit(0)
 
 /**
  * This event will be called if another instance of Zettlr has been opened with
@@ -90,7 +86,7 @@ app.on('second-instance', (event, argv, cwd) => {
     // The Zettlr object has not yet been instantiated (e.g. the user double
     // clicked a file with Zettlr not being open or something like that.)
     // Workaround: Use the global array filesToOpen.
-    global.filesToOpen = files
+    global.filesToOpen = global.filesToOpen.concat(files)
   }
 })
 
@@ -103,7 +99,7 @@ app.on('open-file', (e, p) => {
     zettlr.handleAddRoots([p])
   } else {
     // The Zettlr object has yet to be created -> use the global.
-    global.filesToOpen = [p]
+    global.filesToOpen.push(p)
   }
 })
 
@@ -113,7 +109,7 @@ app.on('open-file', (e, p) => {
  * may not work correctly.
  */
 app.on('ready', function () {
-  zettlr = new Zettlr(this)
+  zettlr = new Zettlr()
 })
 
 /**

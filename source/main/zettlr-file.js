@@ -106,14 +106,13 @@ class ZettlrFile {
 
   onUnlink (p) {
     if (this.isScope(p) !== this) return
-    this.parent.notifyChange(trans('system.file_removed', this.name))
+    global.application.notifyChange(trans('system.file_removed', this.name))
     this.remove()
   }
 
   onChange (p) {
     if (this.isScope(p) !== this) return
     if (!this.hasChanged()) return
-    // this.update().parent.notifyChange(trans('system.file_changed', this.name))
     this.update()
     global.ipc.notify(trans('system.file_changed', this.name))
     global.application.fileUpdate(this.getMetadata())
@@ -202,22 +201,20 @@ class ZettlrFile {
 
     // Remove the current tags from the database. The new tags will be reported
     // later on.
-    if (global.tags && global.tags.hasOwnProperty('remove') && this.tags.length > 0) global.tags.remove(this.tags)
+    if (this.tags.length > 0) global.tags.remove(this.tags)
 
     // Now read all tags
     this.tags = []
     while ((match = tagRE.exec(cnt)) != null) {
       let tag = match[1]
       tag = tag.replace(/#/g, '') // Prevent headings levels 2-6 from showing up in the tag list
-      if (tag.length > 0) {
-        this.tags.push(match[1].toLowerCase())
-      }
+      if (tag.length > 0) this.tags.push(match[1].toLowerCase())
     }
     // Remove duplicates
     this.tags = [...new Set(this.tags)]
 
     // Report the tags to the global database
-    if (global.tags && global.tags.hasOwnProperty('report') && this.tags.length > 0) global.tags.report(this.tags)
+    if (this.tags.length > 0) global.tags.report(this.tags)
 
     // Search for an ID
     this.id = ''

@@ -48,12 +48,12 @@ class Zettlr {
     * Create a new application object
     * @param {electron.app} parentApp The app object.
     */
-  constructor (parentApp) {
+  constructor () {
     // INTERNAL VARIABLES
     this.currentFile = null // Currently opened file (object)
     this.currentDir = null // Current working directory (object)
     this.editFlag = false // Is the current opened file edited?
-    this._openPaths = []
+    this._openPaths = [] // Holds all currently opened paths.
     this._providers = {} // Holds all app providers (as properties of this object)
 
     this._commands = [] // This array holds all commands that can be performed
@@ -65,9 +65,6 @@ class Zettlr {
       console.error(e)
     })
 
-    // INTERNAL OBJECTS
-    this.app = parentApp // Internal pointer to app object
-
     // First thing that has to be done is to load the service providers
     this._bootServiceProviders()
 
@@ -78,6 +75,7 @@ class Zettlr {
     // must update the config to reflect this.
     if (metadata.tag !== global.config.get('appLang')) global.config.set('appLang', metadata.tag)
 
+    // Boot up the IPC.
     this.ipc = new ZettlrIPC(this)
 
     // Inject some globals
@@ -93,16 +91,12 @@ class Zettlr {
           'hash': oldHash,
           'dir': dirMetadata
         })
+      },
+      notifyChange: (msg) => {
+        global.ipc.send('paths-update', this.getPathDummies())
+        global.ipc.notify(msg)
       }
     }
-
-    /**
-     * this is a refresh timeout that is used to only send one update every 100
-     * ms. During app boot, this will be used to make sure the path update will
-     * only be sent once everything has been loaded.
-     * @type {Number}
-     */
-    this._refreshTimeout = null
 
     // Statistics
     this.stats = new ZettlrStats(this)
@@ -122,6 +116,8 @@ class Zettlr {
       this.refreshPaths().then(() => {
         // If there are any, open argv-files
         this.handleAddRoots(global.filesToOpen).then(() => {
+          // Reset the global so that no old paths are re-added
+          global.filesToOpen = []
           // Verify the integrity of the targets after all paths have been loaded
           this._targets.verify()
         }).catch((err) => {
@@ -191,15 +187,6 @@ class Zettlr {
     for (let provider in this._providers) {
       this._providers[provider].shutdown()
     }
-  }
-
-  /**
-    * Sends a notification together with a change event.
-    * @param  {String} msg The message to be sent
-    */
-  notifyChange (msg) {
-    this.ipc.send('paths-update', this.getPathDummies())
-    global.ipc.notify(msg)
   }
 
   /**
@@ -284,16 +271,6 @@ class Zettlr {
       throw new Error('Unknown command!')
     }
   }
-
-  /****************************************************************************
-   **                                                                        **
-   **                                                                        **
-   **                                                                        **
-   **                          BEGIN EVENT HANDLE EVENTS                     **
-   **                                                                        **
-   **                                                                        **
-   **                                                                        **
-   ***************************************************************************/
 
   /**
     * Send a file with its contents to the renderer process.
@@ -431,16 +408,6 @@ class Zettlr {
       if (p[i] === dir) p[i] = new ZettlrDeadDir(this, dir.path)
     }
   }
-
-  /****************************************************************************
-   **                                                                        **
-   **                                                                        **
-   **                                                                        **
-   **                           END EVENT HANDLE EVENTS                      **
-   **                                                                        **
-   **                                                                        **
-   **                                                                        **
-   ***************************************************************************/
 
   /**
     * Called by roots to remove themselves from the open paths.

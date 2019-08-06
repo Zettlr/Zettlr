@@ -3,7 +3,8 @@
         ".txt",
         ".md",
         ".markdown",
-        ".tex"
+        ".tex",
+        ".rmd"
     ],
     "ignoreDirs": [
         "^\\.",

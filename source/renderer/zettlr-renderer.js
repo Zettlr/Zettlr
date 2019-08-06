@@ -445,6 +445,9 @@ class ZettlrRenderer {
     }).afterEach((count, total) => {
       this.searchProgress(count, total)
     }).then((res) => {
+      // TODO in case there are no search results, indicate this, because
+      // the new sidebar will fall back to the regular file list if the
+      // search Results are empty!
       // Mark the results in the potential open file
       global.editorSearch.markResults(this._currentFile)
       this._toolbar.endSearch() // Mark the search as finished
@@ -463,8 +466,6 @@ class ZettlrRenderer {
       this._toolbar.setSearch(term)
       this.beginSearch(term)
     } else {
-      // Show preview before searching the dir
-      this.showPreview()
       // Don't search, simply tell main to open the file
       this._ipc.send('force-open', term)
       // Also initiate a search to be run accordingly for any files that

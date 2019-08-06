@@ -74,11 +74,6 @@ class ZettlrDir {
       fs.mkdirSync(this.path)
     }
 
-    // Load default files and folders
-    // this.scan()
-    // Load virtual directories initially (if existent)
-    // this.loadVirtualDirectories()
-
     if (this.isRoot()) {
       // We have to add our dir to the watchdog
       global.watchdog.addPath(this.path)
@@ -102,9 +97,7 @@ class ZettlrDir {
       c.shutdown()
     }
 
-    if (this.project) {
-      this.project.save()
-    }
+    if (this.project) this.project.save()
 
     // Also remove the listeners
     global.watchdog.off('unlinkDir', this._boundOnUnlinkDir)
@@ -137,14 +130,6 @@ class ZettlrDir {
         global.application.dirUpdate(this.hash, this.getMetadata())
       })
     }
-  }
-
-  /**
-    * Notifies the parent (a dir or Zettlr) to send a notification + paths-update.
-    * @param  {String} msg The message to be sent.
-    */
-  notifyChange (msg) {
-    this.parent.notifyChange(msg)
   }
 
   /**
@@ -246,10 +231,8 @@ class ZettlrDir {
     * @return {ZettlrFile}             The newly created file.
     */
   async newfile (name) {
-    if (name == null) {
-      // Generate a unique new name
-      name = generateFileName()
-    }
+    // Generate a unique new name
+    if (name == null) name = generateFileName()
 
     name = sanitize(name, { replacement: '-' })
     // This gets executed once the user has not entered any allowed characters
@@ -258,9 +241,7 @@ class ZettlrDir {
     }
 
     // Do we have a valid extension?
-    if (!FILETYPES.includes(path.extname(name))) {
-      name = name + '.md' // Assume Markdown by default
-    }
+    if (!FILETYPES.includes(path.extname(name))) name = name + '.md'
 
     // Already exists
     if (this.exists(path.join(this.path, name))) {
@@ -519,19 +500,14 @@ class ZettlrDir {
     })
 
     // Last but not least check if we are a project
-    if (ZettlrProject.isProject(this)) {
-      // We can reuse the function here.
-      this.makeProject()
-    }
+    if (ZettlrProject.isProject(this)) this.makeProject()
   }
 
   /**
     * Creates a project for this directory.
     */
   makeProject () {
-    if (!this.project) {
-      this.project = new ZettlrProject(this)
-    }
+    if (!this.project) this.project = new ZettlrProject(this)
   }
 
   /**
@@ -549,9 +525,7 @@ class ZettlrDir {
     * Returns the project.
     * @return {ZettlrProject} The Zettlr Project instance, or null, if there is none.
     */
-  getProject () {
-    return this.project
-  }
+  getProject () { return this.project }
 
   /**
     * Toggles the sorting. Default is name-up
@@ -591,21 +565,12 @@ class ZettlrDir {
     */
   exists (p) {
     // return true if path exists
-    if (this.path === p) {
-      return true
-    }
+    if (this.path === p) return true
 
     let e = false
     for (let c of this.children) {
-      if (c.path === p) {
-        e = true
-      }
-
-      if (c.type === 'directory') {
-        if (c.exists(p)) {
-          e = true
-        }
-      }
+      if (c.path === p) e = true
+      if (c.type === 'directory' && c.exists(p)) e = true
     }
 
     return e
@@ -617,10 +582,8 @@ class ZettlrDir {
     * @return {Boolean}     True (if this directory contains <hash>) or false
     */
   contains (obj) {
-    if (!obj) {
-      // In rare occasions, it can happen that there is no object given
-      return false
-    }
+    // In rare occasions, it can happen that there is no object given
+    if (!obj) return false
 
     if (typeof obj === 'number') {
       // Same problem as in the find-methods. Only here I don't care anymore.
@@ -650,10 +613,10 @@ class ZettlrDir {
     let prop = ''
     if (typeof obj === 'string') {
       // assume path
-      obj.path = obj
+      obj = { path: obj }
     } else if (typeof obj === 'number') {
       // assume hash
-      obj.hash = obj
+      obj = { hash: obj }
     } else if (obj.hasOwnProperty('path')) {
       prop = 'path'
     } else if (obj.hasOwnProperty('name')) {
@@ -662,14 +625,10 @@ class ZettlrDir {
       prop = 'hash'
     }
 
-    if (prop === '') {
-      return false
-    }
+    if (prop === '') return false
 
     for (let c of this.children) {
-      if (c[prop] === obj[prop]) {
-        return true
-      }
+      if (c[prop] === obj[prop]) return true
     }
 
     return false
@@ -689,10 +648,8 @@ class ZettlrDir {
     */
   loadVirtualDirectories () {
     let data = this._vdInterface.getData()
-    if (!data) {
-      // No data in file
-      return
-    }
+    // No data in file
+    if (!data) return
     let arr = []
     for (let vd of data) {
       arr.push(new ZettlrVirtualDirectory(this, vd, this._vdInterface))
@@ -717,7 +674,7 @@ class ZettlrDir {
       this.sort()
     } else {
       // Already exists!
-      this.notifyChange(trans('system.error.virtual_dir_exists', n))
+      global.application.notifyChange(trans('system.error.virtual_dir_exists', n))
     }
   }
 

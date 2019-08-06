@@ -15,8 +15,7 @@
  * END HEADER
  */
 
-const electron = require('electron')
-const { dialog, BrowserWindow, app } = electron
+const { dialog, BrowserWindow, app } = require('electron')
 const url = require('url')
 const path = require('path')
 const { trans } = require('../common/lang/i18n')
@@ -55,7 +54,9 @@ class ZettlrWindow {
     let winMax = global.config.get('window.max')
 
     // Sanity checks
-    let screensize = electron.screen.getPrimaryDisplay().workAreaSize
+    // NOTE: We cannot require the screen module on module load b/c when this
+    // file will be read, the ready-event has not yet been fired!
+    let screensize = require('electron').screen.getPrimaryDisplay().workAreaSize
     if (typeof winWidth !== 'number' || winWidth > screensize.width) winWidth = screensize.width
     if (typeof winHeight !== 'number' || winHeight > screensize.height) winHeight = screensize.height
     if (typeof winX !== 'number' || winX > screensize.width) winX = 0
@@ -150,19 +151,15 @@ class ZettlrWindow {
       global.config.set('window.width', newBounds.width)
       global.config.set('window.height', newBounds.height)
       // On macOS there's no "unmaximize", therefore we have to check manually.
-      let s = electron.screen.getPrimaryDisplay().workArea
+      let s = require('electron').screen.getPrimaryDisplay().workArea
       if (newBounds.width < s.width || newBounds.height < s.height || newBounds.x > s.x || newBounds.y > s.y) {
         global.config.set('window.max', false)
       } else {
         global.config.set('window.max', true)
       }
     }
-    this._win.on('maximize', (event) => {
-      global.config.set('window.max', true)
-    })
-    this._win.on('unmaximize', (event) => {
-      global.config.set('window.max', false)
-    })
+    this._win.on('maximize', (event) => { global.config.set('window.max', true) })
+    this._win.on('unmaximize', (event) => { global.config.set('window.max', false) })
     this._win.on('resize', sizingCallback)
     this._win.on('move', sizingCallback)
 
@@ -200,10 +197,7 @@ class ZettlrWindow {
     * @deprecated Will be removed in a further version in exchange for fileUpdate()
     */
   setTitle (newTitle = '') {
-    if (newTitle === '') {
-      newTitle = 'Zettlr'
-    }
-
+    if (newTitle === '') newTitle = 'Zettlr'
     this._win.setTitle(newTitle)
   }
 
@@ -225,9 +219,7 @@ class ZettlrWindow {
     * Returns the current window title
     * @return {String} The window's current title.
     */
-  getTitle () {
-    return this._win.getTitle()
-  }
+  getTitle () { return this._win.getTitle() }
 
   /**
    * Toggle the maximisation of the window (either maximise or unmaximise)
@@ -249,9 +241,7 @@ class ZettlrWindow {
    * @param  {number} y The y-position of the menu
    * @return {void}   Does not return
    */
-  popupMenu (x, y) {
-    this._menu.popup(x, y)
-  }
+  popupMenu (x, y) { this._menu.popup(x, y) }
 
   /**
     * Indicates that there are unsaved changes with a star in title and, on
@@ -285,9 +275,7 @@ class ZettlrWindow {
     * Returns the current window instance (or null, if window is null)
     * @return {Mixed} Either a BrowserWindow instance or null
     */
-  getWindow () {
-    return this._win
-  }
+  getWindow () { return this._win }
 
   // FUNCTIONS CALLED FROM WITHIN EVENT LISTENERS
 
@@ -295,18 +283,13 @@ class ZettlrWindow {
     * Dereference a window if it has been destroyed (called by BrowserWindow)
     * @return {void} Does not return anything.
     */
-  close () {
-    // Dereference the window.
-    this._win = null
-  }
+  close () { this._win = null }
 
   /**
     * Can we close the window?
     * @return {Boolean} Returns either true or false depending on modification flag on parent.
     */
-  canClose () {
-    return this._app.canClose()
-  }
+  canClose () { return this._app.canClose() }
 
   /**
     * Prompt the user to save or omit changes, or cancel the process completely.
@@ -464,12 +447,6 @@ class ZettlrWindow {
 
     return (ret === 0)
   }
-
-  /**
-    * Returns the Zettlr main object
-    * @return {Zettlr} The parent app object
-    */
-  getApp () { return this._app }
 }
 
 module.exports = ZettlrWindow
