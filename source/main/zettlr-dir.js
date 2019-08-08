@@ -37,6 +37,11 @@ const isAttachment = require('../common/util/is-attachment')
 const ALLOW_SORTS = ['name-up', 'name-down', 'time-up', 'time-down']
 const FILETYPES = require('../common/data.json').filetypes
 
+const SETTINGS_TEMPLATE = {
+  sorting: 'name-up',
+  virtualDirectories: [] // Empty array
+}
+
 /**
  * This class models properties and features of a directory on disk.
  */
@@ -62,6 +67,9 @@ class ZettlrDir {
     this.type = 'directory'
     this.sorting = 'name-up'
     this.modtime = 0
+
+    // Generate the settings
+    this._settings = Object.assign({}, SETTINGS_TEMPLATE)
 
     // Create an interface for virtual directories
     this._vdInterface = new ZettlrInterface(path.join(this.path, '.ztr-virtual-directories'))
@@ -154,10 +162,7 @@ class ZettlrDir {
       // Traverse the children
       for (let c of this.children) {
         let dir = c.findDir(obj)
-        if (dir != null) {
-          // Found it
-          return dir
-        }
+        if (dir != null) return dir
       }
     }
 
@@ -174,10 +179,7 @@ class ZettlrDir {
     // Traverse the children
     for (let c of this.children) {
       let file = c.findFile(obj)
-      if (file != null) {
-        // Found it
-        return file
-      }
+      if (file != null) return file
     }
 
     // Not found
@@ -192,9 +194,7 @@ class ZettlrDir {
   findExact (term) {
     for (let c of this.children) {
       let file = c.findExact(term)
-      if (file != null) {
-        return file
-      }
+      if (file != null) return file
     }
 
     return null
@@ -219,7 +219,7 @@ class ZettlrDir {
     let dir = new ZettlrDir(this, newpath)
     await dir.scan()
     this.children.push(dir)
-    this.children = sort(this.children, this.sorting)
+    this.sort()
 
     // Return dir for chainability
     return dir
@@ -254,7 +254,7 @@ class ZettlrDir {
     // Create a new file.
     let f = new ZettlrFile(this, path.join(this.path, name))
     this.children.push(f)
-    this.children = sort(this.children, this.sorting)
+    this.sort()
     await f.scan()
     return f
   }
@@ -378,7 +378,7 @@ class ZettlrDir {
     this.children.push(newchild)
     // Set the correct new parent
     newchild.parent = this
-    this.children = sort(this.children, this.sorting)
+    this.sort()
 
     return this
   }
@@ -487,7 +487,7 @@ class ZettlrDir {
     this.attachments = nAttachments
 
     // Final step: Sort
-    this.children = sort(this.children, this.sorting)
+    this.sort()
     this.attachments.sort((a, b) => {
       // Negative return: a is smaller b (case insensitive)
       if (a.name.toLowerCase() < b.name.toLowerCase()) {
@@ -534,27 +534,27 @@ class ZettlrDir {
     */
   toggleSorting (type = 'name-up') {
     if (ALLOW_SORTS.includes(type)) {
-      this.sorting = type
+      this._settings.sorting = type
     } else if (type.indexOf('name') > -1) {
-      if (this.sorting === 'name-up') {
-        this.sorting = 'name-down'
+      if (this._settings.sorting === 'name-up') {
+        this._settings.sorting = 'name-down'
       } else {
-        this.sorting = 'name-up'
+        this._settings.sorting = 'name-up'
       }
     } else if (type.indexOf('time') > -1) {
-      if (this.sorting === 'time-up') {
-        this.sorting = 'time-down'
+      if (this._settings.sorting === 'time-up') {
+        this._settings.sorting = 'time-down'
       } else {
-        this.sorting = 'time-up'
+        this._settings.sorting = 'time-up'
       }
     } else {
-      this.sorting = 'name-up'
+      this._settings.sorting = 'name-up'
     }
 
     // Persist sorting
     this._saveSettings()
 
-    this.children = sort(this.children, this.sorting)
+    this.sort()
     return this
   }
 
@@ -639,7 +639,7 @@ class ZettlrDir {
     * @return {ZettlrDir} This for chainability.
     */
   sort () {
-    this.children = sort(this.children, this.sorting)
+    this.children = sort(this.children, this._settings.sorting)
     return this
   }
 
@@ -695,7 +695,7 @@ class ZettlrDir {
       'children': (children) ? this.children.map(elem => elem.getMetadata()) : [],
       'attachments': this.attachments.map(elem => elem.getMetadata()),
       'type': this.type,
-      'sorting': this.sorting,
+      'sorting': this._settings.sorting,
       'modtime': this.modtime
     }
   }
@@ -717,7 +717,7 @@ class ZettlrDir {
         data = JSON.parse(data)
         // DEBUG: Remove this after the next release, after
         // all unnecessary .ztr-directories have been removed.
-        if (data.settings.sorting === this.sorting) {
+        if (data.sorting === this._settings.sorting) {
           try {
             fs.unlinkSync(configPath)
           } catch (e) {
@@ -725,7 +725,8 @@ class ZettlrDir {
           }
           return resolve()
         }
-        this.sorting = data.settings.sorting
+        // this.sorting = data.settings.sorting
+        Object.assign(this._settings, data)
         resolve()
       })
     })
@@ -734,29 +735,35 @@ class ZettlrDir {
   async _saveSettings () {
     return new Promise((resolve, reject) => {
       let configPath = path.join(this.path, '.ztr-directory')
-      // Prepare settings
-      let data = {
-        'settings': {
-          'sorting': this.sorting
-        }
-      }
 
-      if (this.sorting === 'name-up') {
+      if (this._settingsAreDefault()) {
         // The settings are the default, so no need to write them to file
         try {
           fs.lstatSync(configPath)
-          fs.unlinkSync(configPath)
+          fs.unlinkSync(configPath) // Unlink if exists
         } catch (e) {
           // Nothing to do
         }
         return
       }
 
-      fs.writeFile(configPath, JSON.stringify(data), 'utf8', (err) => {
+      fs.writeFile(configPath, JSON.stringify(this._settings), 'utf8', (err) => {
         if (err) reject(err)
         resolve()
       })
     })
+  }
+
+  /**
+   * Returns true, if the settings match the template, or false.
+   * @return {Boolean} Whether or not the settings are at default.
+   */
+  settingsAreDefault () {
+    for (let key in this._settings) {
+      if (SETTINGS_TEMPLATE[key] !== this._settings[key]) return false
+    }
+
+    return true
   }
 
   /**

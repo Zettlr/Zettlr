@@ -14,6 +14,7 @@
 <template>
   <div id="sidebar"
     v-on:mousemove="handleMouseOver"
+    v-on:mouseleave="handleMouseOver"
     v-on:dragover="handleDragOver"
     v-bind:class="sidebarClass"
   >
@@ -235,6 +236,7 @@ module.exports = {
      * @param {MouseEvent} evt The associated event.
      */
     handleMouseOver: function (evt) {
+      // TODO: Handle the case where the mouse is outside this element.
       // The fileList is not visible after all
       if (this.$refs.fileList.classList.contains('hidden')) return
       if (this.isExpanded) return
@@ -243,8 +245,11 @@ module.exports = {
       // fileList is displayed and the user moves
       // up to an area about 100px at the top
       if (this.combined && this.$store.state.searchResults.length < 1) return
-      if (evt.clientY > 100) this.$refs.arrowButton.classList.add('hidden')
-      else this.$refs.arrowButton.classList.remove('hidden')
+      if (evt.clientY > 100 || evt.clientY < this.$el.offsetTop || evt.clientX < 0 || evt.clientX > this.$el.offsetWidth) {
+        this.$refs.arrowButton.classList.add('hidden')
+      } else {
+        this.$refs.arrowButton.classList.remove('hidden')
+      }
     },
     /**
      * Scrolls the directory tree if necessary to enable dropping of
