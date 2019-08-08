@@ -46,6 +46,7 @@
         "md5": "^2.2.1",
         "moment": "^2.24.0",
         "nspell": "^2.1.1",
+        "on-change": "^1.6.2",
         "rimraf": "^2.6.3",
         "sanitize-filename": "^1.6.2",
         "semver": "^6.3.0",

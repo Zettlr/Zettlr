@@ -8,7 +8,7 @@
     "command": "file-delete"
   },
   {
-    "scope": "virtual-directory",
+    "scope": "alias",
     "label": "menu.delete_from_vd",
     "command": "file-delete-from-vd"
   },

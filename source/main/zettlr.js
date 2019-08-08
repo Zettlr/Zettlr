@@ -95,6 +95,30 @@ class Zettlr {
       notifyChange: (msg) => {
         global.ipc.send('paths-update', this.getPathDummies())
         global.ipc.notify(msg)
+      },
+      findFile: (prop) => {
+        let obj = {}
+        if (typeof prop === 'number') {
+          obj.hash = prop
+        } else if (typeof prop === 'string') {
+          obj.path = prop
+        } else {
+          obj = prop
+        }
+
+        return this.findFile(obj)
+      },
+      findDir: (prop) => {
+        let obj = {}
+        if (typeof prop === 'number') {
+          obj.hash = prop
+        } else if (typeof prop === 'string') {
+          obj.path = prop
+        } else {
+          obj = prop
+        }
+
+        return this.findDir(obj)
       }
     }
 
@@ -278,9 +302,7 @@ class Zettlr {
     * @return {void}     This function does not return anything.
     */
   sendFile (arg) {
-    if (!this.canClose()) {
-      return
-    }
+    if (!this.canClose()) return
 
     // arg contains the hash of a file.
     // findFile now returns the file object
@@ -310,7 +332,7 @@ class Zettlr {
     let obj = this.findDir({ 'hash': parseInt(arg) })
 
     // Now send it back (the GUI should by itself filter out the files)
-    if (obj != null && obj.isDirectory() && obj.type !== 'dead-directory') {
+    if (obj && obj.isDirectory() && obj.type !== 'dead-directory') {
       this.setCurrentDir(obj)
     } else {
       this.window.prompt({
@@ -450,6 +472,7 @@ class Zettlr {
     this.ipc.send('paths-update', this.getPathDummies())
 
     // Set the pointers either to null or last opened dir/file
+    console.log('Last file is: ', global.config.get('lastFile'))
     let lastDir = this.findDir({ 'hash': parseInt(global.config.get('lastDir')) })
     let lastFile = this.findFile({ 'hash': parseInt(global.config.get('lastFile')) })
     this.setCurrentDir(lastDir)

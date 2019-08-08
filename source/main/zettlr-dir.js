@@ -20,9 +20,9 @@ const ZettlrFile = require('./zettlr-file.js')
 const ZettlrAttachment = require('./zettlr-attachment.js')
 const ZettlrProject = require('./zettlr-project.js')
 const ZettlrVirtualDirectory = require('./zettlr-virtual-directory.js')
-const ZettlrInterface = require('./zettlr-interface.js')
 const { shell } = require('electron')
 const { trans } = require('../common/lang/i18n.js')
+const onChange = require('on-change')
 
 // Include helpers
 const hash = require('../common/util/hash')
@@ -65,14 +65,12 @@ class ZettlrDir {
     this.children = []
     this.attachments = []
     this.type = 'directory'
-    this.sorting = 'name-up'
     this.modtime = 0
 
-    // Generate the settings
-    this._settings = Object.assign({}, SETTINGS_TEMPLATE)
-
-    // Create an interface for virtual directories
-    this._vdInterface = new ZettlrInterface(path.join(this.path, '.ztr-virtual-directories'))
+    // Generate the settings, NOTE that we have to deep-copy the object.
+    // We'll watch the settings object for changes so that we can automatically
+    // save it once anything has been modified.
+    this._settings = onChange(JSON.parse(JSON.stringify(SETTINGS_TEMPLATE)), this._onSettingsChangeHandler.bind(this))
 
     // The directory might've been just been created.
     try {
@@ -94,6 +92,43 @@ class ZettlrDir {
     global.watchdog.on('unlinkDir', this._boundOnUnlinkDir)
     global.watchdog.on('add', this._boundOnAdd)
     global.watchdog.on('addDir', this._boundOnAdd)
+  }
+
+  _onSettingsChangeHandler (objPath, current, prev) {
+    console.log('Settings object have changed at position ' + objPath + '!')
+    this._saveSettings() // We don't need to check the Promise
+  }
+
+  /**
+   * DEBUG: Migrates the virtual directories from their old file into the main config file.
+   * @return {void} Does not return.
+   */
+  _migrateSettings () {
+    let vdPath = path.join(this.path, '.ztr-virtual-directories')
+    if (!isFile(vdPath)) return
+
+    let vds = JSON.parse(fs.readFileSync(vdPath, { encoding: 'utf8' }))
+    if (vds.length === 0) return console.log('Not parsing the virtual Directories: Empty.')
+
+    let newSettings = JSON.parse(JSON.stringify(SETTINGS_TEMPLATE))
+    for (let virtualDir of vds) {
+      console.log('    Parsing VD ' + virtualDir.name)
+      let aliases = {}
+      for (let file of virtualDir.files) {
+        console.log('        Adding alias ' + file + '...')
+        // Convert the paths to relatives (as this will be the standard in later use cases)
+        aliases[path.basename(file, path.extname(file))] = path.relative(this.path, path.join(this.path, file))
+      }
+      newSettings.virtualDirectories.push({
+        'name': virtualDir.name,
+        'aliases': aliases
+      })
+    }
+
+    console.log('Saving retained virtual directories to disk ...')
+    fs.writeFileSync(path.join(this.path, '.ztr-directory'), JSON.stringify(newSettings))
+    // Also remove the now-obsolete file
+    fs.unlinkSync(vdPath)
   }
 
   /**
@@ -362,9 +397,6 @@ class ZettlrDir {
     // Detach from parent if not only renamed, because it's no longer in there
     if (!rename) this.detach()
 
-    // Reset the interface
-    this._vdInterface = new ZettlrInterface(path.join(this.path, '.ztr-virtual-directories'))
-
     // Re-read
     await this.scan()
   }
@@ -399,6 +431,8 @@ class ZettlrDir {
     * @return {Promise} Resolve on successful loading
     */
   async scan () {
+    // DEBUG for migrating virtual directories
+    await this._migrateSettings()
     // (Re-)Reads this directory.
     await this._loadSettings() // Loads persisted settings on disk
 
@@ -512,7 +546,7 @@ class ZettlrDir {
 
   /**
     * Removes the project from this dir.
-    * @return {[type]} [description]
+    * @return {void} No return.
     */
   removeProject () {
     if (this.project) {
@@ -551,9 +585,8 @@ class ZettlrDir {
       this._settings.sorting = 'name-up'
     }
 
-    // Persist sorting
-    this._saveSettings()
-
+    // We do not need to persist the sorting, as the change-handler will
+    // notice this and do it on his own.
     this.sort()
     return this
   }
@@ -644,20 +677,29 @@ class ZettlrDir {
   }
 
   /**
-    * Loads virtual directories from disk
+    * Loads virtual directories from the settings object
     */
   loadVirtualDirectories () {
-    let data = this._vdInterface.getData()
-    // No data in file
-    if (!data) return
-    let arr = []
-    for (let vd of data) {
-      arr.push(new ZettlrVirtualDirectory(this, vd, this._vdInterface))
+    let vds = []
+    for (let virtualDir of this._settings.virtualDirectories) {
+      console.log(`Adding ${virtualDir.name} to children list ...`)
+      vds.push(new ZettlrVirtualDirectory(this, virtualDir))
     }
 
-    // Initial load of virtual directories
-    this.children = arr.concat(this.children)
+    // Add to the children and sort
+    this.children = vds.concat(this.children)
     this.sort()
+    // let data = this._vdInterface.getData()
+    // // No data in file
+    // if (!data) return
+    // let arr = []
+    // for (let vd of data) {
+    //   arr.push(new ZettlrVirtualDirectory(this, vd, this._vdInterface))
+    // }
+    //
+    // // Initial load of virtual directories
+    // this.children = arr.concat(this.children)
+    // this.sort()
   }
 
   /**
@@ -700,33 +742,28 @@ class ZettlrDir {
     }
   }
 
+  /**
+   * Loads the settings from disk.
+   * @return {Promise} Resolves once the settings have been loaded and parsed.
+   */
   async _loadSettings () {
     let configPath = path.join(this.path, '.ztr-directory')
-    try {
-      fs.lstatSync(configPath)
-    } catch (err) {
-      // No config file -> all options at default ->
-      // return a promise which immediately resolves.
-      return new Promise((resolve, reject) => { resolve() })
-    }
+    // No config file -> all options at default ->
+    // return a promise which immediately resolves.
+    if (!isFile(configPath)) return new Promise((resolve, reject) => { resolve() })
 
     return new Promise((resolve, reject) => {
       fs.readFile(configPath, 'utf8', (err, data) => {
         if (err) reject(err)
 
         data = JSON.parse(data)
-        // DEBUG: Remove this after the next release, after
+        Object.assign(this._settings, data)
+        // DEBUG: Remove this in Zettlr 1.5, after
         // all unnecessary .ztr-directories have been removed.
-        if (data.sorting === this._settings.sorting) {
-          try {
-            fs.unlinkSync(configPath)
-          } catch (e) {
-            // Apparently the file disappeared again
-          }
+        if (this._settingsAreDefault()) {
+          if (isFile(configPath)) fs.unlinkSync(configPath)
           return resolve()
         }
-        // this.sorting = data.settings.sorting
-        Object.assign(this._settings, data)
         resolve()
       })
     })
@@ -738,13 +775,8 @@ class ZettlrDir {
 
       if (this._settingsAreDefault()) {
         // The settings are the default, so no need to write them to file
-        try {
-          fs.lstatSync(configPath)
-          fs.unlinkSync(configPath) // Unlink if exists
-        } catch (e) {
-          // Nothing to do
-        }
-        return
+        if (isFile(configPath)) fs.unlinkSync(configPath)
+        return resolve()
       }
 
       fs.writeFile(configPath, JSON.stringify(this._settings), 'utf8', (err) => {
@@ -758,12 +790,15 @@ class ZettlrDir {
    * Returns true, if the settings match the template, or false.
    * @return {Boolean} Whether or not the settings are at default.
    */
-  settingsAreDefault () {
-    for (let key in this._settings) {
-      if (SETTINGS_TEMPLATE[key] !== this._settings[key]) return false
+  _settingsAreDefault () {
+    if (JSON.stringify(this._settings) === JSON.stringify(SETTINGS_TEMPLATE)) {
+      console.log('Settings are default in dir ' + this.name)
+      console.log(JSON.stringify(this._settings) + JSON.stringify(SETTINGS_TEMPLATE))
     }
-
-    return true
+    // ATTENTION: This relies upon the fact that adds or deletions
+    // to the _settings-array DOES NOT happen. Shouldn't happen after
+    // all.
+    return JSON.stringify(this._settings) === JSON.stringify(SETTINGS_TEMPLATE)
   }
 
   /**

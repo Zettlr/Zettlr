@@ -449,6 +449,7 @@ class ZettlrRenderer {
       // the new sidebar will fall back to the regular file list if the
       // search Results are empty!
       // Mark the results in the potential open file
+      if (res.length === 0) global.notify('No search results.') // TODO translate
       global.editorSearch.markResults(this._currentFile)
       this._toolbar.endSearch() // Mark the search as finished
     }).start()

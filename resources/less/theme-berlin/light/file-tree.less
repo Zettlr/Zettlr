@@ -55,6 +55,10 @@
           }
         }
 
+        // File is displayed as part of a virtual directory -> actually
+        // some kind of a "ghost" file
+        &.alias { color: var(--c-alias-light); }
+
         &.project { color: var(--c-project); }
 
         &.display-search-results {

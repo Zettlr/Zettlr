@@ -155,10 +155,8 @@ class ZettlrCon {
       if (elem.hasClass('directory')) return // No context menu for directories (yet)
 
       hash = elem.attr('data-hash')
-      vdfile = elem.hasClass('vd-file')
-      if (vdfile) vdhash = elem.attr('data-vd-hash')
       // Now determine the scope
-      if (vdfile) scopes.push('virtual-directory')
+      if (elem.hasClass('alias')) scopes.push('alias')
       // Push all attributes into the attributes array
       for (let i = 0, nodes = elem[0].attributes; i < elem[0].attributes.length; i++) {
         // The attributes are a NamedNodeMap, so we have to use weird function calling to retrieve them

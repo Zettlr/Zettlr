@@ -53,7 +53,6 @@ class ZettlrFile {
     // the renderer. It will be empty all other times, because otherwise the
     // RAM will fill up pretty fast.
     this.content = ''
-    this._vd = [] // This array holds all virtual directories in which the file is also present. Necessary to inform them of renames etc.
 
     // The file might've been just created. Test that
     try {
@@ -63,10 +62,8 @@ class ZettlrFile {
       fs.writeFileSync(this.path, '', { encoding: 'utf8' })
     }
 
-    if (this.isRoot()) {
-      // We have to add our file to the watchdog
-      global.watchdog.addPath(this.path)
-    }
+    // We have to add our file to the watchdog
+    if (this.isRoot()) global.watchdog.addPath(this.path)
 
     this._boundOnUnlink = this.onUnlink.bind(this)
     this._boundOnChange = this.onChange.bind(this)
@@ -261,9 +258,7 @@ class ZettlrFile {
     * @return {Mixed}      Either the file's contents or null
     */
   get (hash) {
-    if (this.hash === parseInt(hash)) {
-      return this.read()
-    }
+    if (this.hash === parseInt(hash)) return this.read()
     return null
   }
 
@@ -302,13 +297,11 @@ class ZettlrFile {
       prop = 'path'
     } else if (obj.hasOwnProperty('hash') && obj.hash != null) {
       prop = 'hash'
-    } else {
-      throw new Error('Cannot findFile!')
     }
 
-    if (this[prop] === obj[prop]) {
-      return this
-    }
+    if (!prop) return null
+
+    if (this[prop] === obj[prop]) return this
 
     // This is not the file you are looking for.
     return null
@@ -333,9 +326,8 @@ class ZettlrFile {
     */
   save (cnt) {
     // Replace CodeMirror \n linefeeds with detected one
-    if (this.linefeed !== '\n') {
-      cnt = cnt.split('\n').join(this.linefeed)
-    }
+    if (this.linefeed !== '\n') cnt = cnt.split('\n').join(this.linefeed)
+
     fs.writeFileSync(this.path, cnt, { encoding: 'utf8' })
 
     // Last but not least: Retrieve all changed information by re-reading
@@ -353,9 +345,6 @@ class ZettlrFile {
   remove (force = false) {
     this.shutdown()
     if (force) shell.moveItemToTrash(this.path)
-    // Notify the virtual directories that this file is now in the trash
-    // (also a virtual directory, but not quite the same).
-    this.removeFromVD()
     return this.parent.remove(this)
   }
 
@@ -388,9 +377,6 @@ class ZettlrFile {
     // Let the parent sort itself again to reflect possible changes in order.
     this.parent.sort()
 
-    // Notify virtualDirectories of the path change.
-    this._notifyVD()
-
     // Chainability
     return this
   }
@@ -413,9 +399,6 @@ class ZettlrFile {
       // Move
       fs.rename(oldPath, this.path, (err) => {
         if (err) reject(err)
-        // Notify virtualDirectories of the path change.
-        this._notifyVD()
-
         resolve()
       })
     })
@@ -429,46 +412,6 @@ class ZettlrFile {
     this.parent.remove(this)
     this.parent = null
     return this
-  }
-
-  /**
-    * Add a virtual directory to the list of virtual directories
-    * @param {ZettlrVirtualDirectory} vd The directory to be added
-    */
-  addVD (vd) {
-    // Prevent duplicates
-    if (!this._vd.includes(vd)) {
-      this._vd.push(vd)
-    }
-  }
-
-  /**
-    * This function notifies all virtual directories, of which this file is a
-    * member, that something has changed and they should update themselves.
-    */
-  _notifyVD () {
-    for (let vd of this._vd) {
-      vd.update() // Call update method
-    }
-  }
-
-  /**
-    * Remove a virtual directory to the list of virtual directories
-    * @param {ZettlrVirtualDirectory} vd The directory to be removed
-    */
-  removeVD (vd) {
-    if (this._vd.includes(vd)) {
-      this._vd.splice(this._vd.indexOf(vd), 1)
-    }
-  }
-
-  /**
-    * Notifies all virtual directories that they can now remove this file.
-    */
-  removeFromVD () {
-    for (let vd of this._vd) {
-      vd.remove(this)
-    }
   }
 
   /**

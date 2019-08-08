@@ -120,7 +120,7 @@ module.exports = {
      */
     classList: function () {
       let list = 'list-item ' + this.obj.type
-      if (this.$parent.type === 'virtual-dir') list += ' vd-file'
+      if (this.obj.hasOwnProperty('isAlias') && this.obj.isAlias) list += ' alias'
       if ([this.selectedFile, this.selectedDir].includes(this.obj.hash)) list += ' selected'
       // Determine if this is a root component
       if (this.isRoot) list += ' root'

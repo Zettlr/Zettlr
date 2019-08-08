@@ -22,7 +22,8 @@ const path = require('path')
 // Include helpers
 const hash = require('../common/util/hash')
 const sort = require('../common/util/sort')
-const isFile = require('../common/util/is-file')
+
+const ZettlrAlias = require('./zettlr-alias')
 
 const ALLOW_SORTS = ['name-up', 'name-down', 'time-up', 'time-down']
 
@@ -40,32 +41,26 @@ class ZettlrVirtualDirectory {
    * @param {Array} vd    An array of files inside this directory.
    * @param {ZettlrInterface} model The ZettlrInterface
    */
-  constructor (dir, vd, model) {
+  constructor (dir, vd) {
+    this._vd = vd
     this.parent = dir
-    this.path = ''
-    this.name = vd.name
-    this.hash = hash(this.path + this.name) // Path can be the same for multiple virtual dirs, therefore include name!
+    this.name = this._vd.name
+    this.path = path.join(this.parent.path, this.name)
+    this.hash = hash(this.path)
     this.children = []
-    this.attachments = []
     this.type = 'virtual-directory'
     this.sorting = 'name-up'
-    this._model = model // Handles persistancy of all these directories on disk (e.g. .ztr-virtual-directories- files)
     // Read in children from file
-    this.init(vd.files)
+    this.init()
   }
 
   /**
    * Initially read all files present in the vd object
-   * @param  {Array} fileArray An array of relative paths.
    */
-  init (fileArray) {
-    for (let file of fileArray) {
-      let f = this.parent.findFile({ 'path': this._makeAbsolute(file) })
-      // Don't remove files from array if they aren't found.
-      if (f != null) {
-        this.children.push(f)
-        f.addVD(this)
-      }
+  init () {
+    for (let file in this._vd.aliases) {
+      // Signature: this, name, path
+      this.children.push(new ZettlrAlias(this, file, this._vd.aliases[file]))
     }
   }
 
@@ -73,20 +68,7 @@ class ZettlrVirtualDirectory {
    * Shuts down the virtual directory, saves the last changes and quits.
    */
   shutdown () {
-    // The ZettlrFiles will shutdown when their real parent shuts down.
-    // The model we may check, whether or not there were changes.
-    let arr = this._model.get(this.name)
-    if (arr) {
-      arr = arr.files
-      for (let f of arr) {
-        if (!this.children.find((elem) => { return elem.path === this._makeAbsolute(f) })) {
-          // At least one file has changed -> Update everything, flush to disk and exit loop
-          this._updateModel()
-          this._model.flush()
-          break
-        }
-      }
-    }
+    // Nothing to do
   }
 
   /**
@@ -108,11 +90,8 @@ class ZettlrVirtualDirectory {
    * @return {Mixed}     Either this or null.
    */
   findDir (obj) {
-    // Return this, if hashes match
-    if (obj.hasOwnProperty('hash') && obj.hash === this.hash) {
-      return this
-    }
-
+    if (obj.hasOwnProperty('hash') && obj.hash === this.hash) return this
+    if (obj.hasOwnProperty('path') && obj.path === this.path) return this
     return null
   }
 
@@ -125,23 +104,7 @@ class ZettlrVirtualDirectory {
     // Traverse the children
     for (let c of this.children) {
       let file = c.findFile(obj)
-      if (file != null) {
-        // Found it
-        // Now check if it still exists, because it may be that the whole
-        // directory has been moved. As the files are then simply dropped
-        // and the directory re-reads itself at the new location, there
-        // may be dead links in the files.
-        if (!isFile(file.path)) {
-          // File doesn't exist there anymore -> splice it from the
-          // array and notify the renderer that the file has been moved.
-          this.remove(file)
-          // TODO: Enable locating stuff. And besides, the files aren't
-          // removed anymore if they are moved outside.
-          this.parent.notifyChange('The file ' + file.name + ' doesn\'t exist anymore')
-        } else {
-          return file
-        }
-      }
+      if (file) return file
     }
 
     // Not found
@@ -156,9 +119,7 @@ class ZettlrVirtualDirectory {
   findExact (term) {
     for (let c of this.children) {
       let file = c.findExact(term)
-      if (file != null) {
-        return file
-      }
+      if (file != null) return file
     }
 
     return null
@@ -172,10 +133,7 @@ class ZettlrVirtualDirectory {
   get (hash) {
     for (let c of this.children) {
       let cnt = c.get(hash)
-      if (cnt != null) {
-        // Got it -> return.
-        return cnt
-      }
+      if (cnt != null) return cnt
     }
 
     return null
@@ -194,12 +152,11 @@ class ZettlrVirtualDirectory {
       // Remove a file
       let index = this.children.indexOf(obj)
 
-      // Should (normally) always be true. Attention: Is never called by
-      // the children, who have another parent!
+      // Should (normally) always be true.
       if (index > -1) {
         this.children.splice(index, 1)
-        this._updateModel()
-        obj.removeVD(this)
+        // Also remove from the parent's settings
+        delete this._vd.aliases[obj.name]
       } else {
         // Fail gracefully
         return false
@@ -240,20 +197,33 @@ class ZettlrVirtualDirectory {
    * @return {ZettlrVirtualDirectory}          This for chainability.
    */
   attach (newchild) {
-    // Only add files, prevent duplicates and make sure the file is inside the parent directory.
-    if (!newchild.isFile() || this.contains(newchild) || !this.parent.contains(newchild)) {
-      if (!this.parent.contains(newchild)) {
-        this.parent.notifyChange(`Cannot add file to virtual directory ${this.name}, it resides outside the containing directory.`)
-      }
-      return this
+    // First check that there's no symbolic link pointing to that file already.
+    let found = this.findFile({ 'hash': newchild.hash })
+    // Property checker to determine that this alias is not already taken
+    let basename = path.basename(newchild.name, path.extname(newchild.name))
+    let prop = this._vd.aliases.hasOwnProperty(basename)
+    let relPath = path.relative(this.getRootPath(), newchild.path)
+    if (!found && !prop) {
+      // Add a new alias to the file
+      this._vd.aliases[basename] = relPath
+      // Signature: this, name, path
+      this.children.push(new ZettlrAlias(this, basename, relPath))
+      console.log('Added new child! Relative path is: ' + relPath)
     }
-
-    this.children.push(newchild)
-    this.children = sort(this.children, this.sorting)
-
-    this._updateModel()
-    newchild.addVD(this)
-
+    // Only add files, prevent duplicates and make sure the file is inside the parent directory.
+    // if (!newchild.isFile() || this.contains(newchild) || !this.parent.contains(newchild)) {
+    //   if (!this.parent.contains(newchild)) {
+    //     this.parent.notifyChange(`Cannot add file to virtual directory ${this.name}, it resides outside the containing directory.`)
+    //   }
+    //   return this
+    // }
+    //
+    // this.children.push(newchild)
+    // this.children = sort(this.children, this.sorting)
+    //
+    // this._updateModel()
+    // newchild.addVD(this)
+    //
     return this
   }
 
@@ -317,10 +287,7 @@ class ZettlrVirtualDirectory {
    * @return {Boolean}     True, if a file is present here, or false.
    */
   contains (obj) {
-    if (!obj) {
-      // In rare occasions, it can happen that there is no object given
-      return false
-    }
+    if (!obj) return false
 
     if (typeof obj === 'number') {
       // Same problem as in the find-methods. Only here I don't care anymore.
@@ -346,10 +313,7 @@ class ZettlrVirtualDirectory {
    * @param  {Object}  obj An object, which will be omitted.
    * @return {null}     Always returns null.
    */
-  hasChild (obj) {
-    // VirtualDirectories don't really contain children.
-    return null
-  }
+  hasChild (obj) { return null }
 
   /**
    * Re-sorts this virtual directory.
@@ -373,7 +337,7 @@ class ZettlrVirtualDirectory {
       'name': this.name,
       'hash': this.hash,
       'children': this.children.map(elem => elem.getMetadata(false)),
-      'attachments': this.attachments,
+      'attachments': [],
       'type': this.type,
       'sorting': this.sorting
     }
@@ -383,26 +347,19 @@ class ZettlrVirtualDirectory {
    * Returns the hash of this VD.
    * @return {Number} The hash.
    */
-  getHash () {
-    return this.hash
-  }
+  getHash () { return this.hash }
 
   /**
    * Returns the path of this directory.
    * @return {String} The path (always an empty string).
    */
-  getPath () {
-    // VirtualDirectories don't have a specific path
-    return ''
-  }
+  getPath () { return '' }
 
   /**
    * Returns the name of this virtual directory.
    * @return {String} The name.
    */
-  getName () {
-    return this.name
-  }
+  getName () { return this.name }
 
   /**
    * Returns whether or not this is a directory.
@@ -423,18 +380,13 @@ class ZettlrVirtualDirectory {
    * Returns whether or not this is a file.
    * @return {Boolean} Always false, for this is not a file.
    */
-  isFile () {
-    return false
-  }
+  isFile () { return false }
 
   /**
    * Returns whether or not this is a root.
    * @return {Boolean} Always false, because VDs can't be roots.
    */
-  isRoot () {
-    // VirtualDirectories are never root
-    return false
-  }
+  isRoot () { return false }
 
   /**
    * Returns whether or not the given path is inside this object's scope.
@@ -480,9 +432,9 @@ class ZettlrVirtualDirectory {
       }
     }
 
-    let nData = { 'name': this.name, 'files': arr }
+    // let nData = { 'name': this.name, 'files': arr }
 
-    this._model.set(rowname, nData)
+    // this._model.set(rowname, nData)
   }
 
   /**
@@ -492,7 +444,7 @@ class ZettlrVirtualDirectory {
    */
   _makeRelative (p) {
     if (this._isAbsolute(p)) {
-      return p.replace(this._getRootPath(), '')
+      return p.replace(this.getRootPath(), '')
     }
 
     return p
@@ -505,7 +457,7 @@ class ZettlrVirtualDirectory {
    */
   _makeAbsolute (p) {
     if (!this._isAbsolute(p)) {
-      return path.join(this._getRootPath(), p)
+      return path.join(this.getRootPath(), p)
     }
 
     return p
@@ -517,7 +469,7 @@ class ZettlrVirtualDirectory {
    * @return {Boolean}   True, if the path contains the root directory's path
    */
   _isAbsolute (p) {
-    if (p.indexOf(this._getRootPath()) === 0) {
+    if (p.indexOf(this.getRootPath()) === 0) {
       return true
     }
 
@@ -528,7 +480,7 @@ class ZettlrVirtualDirectory {
    * Returns the containing ZettlrDir's path
    * @return {String} The containing directory's path
    */
-  _getRootPath () {
+  getRootPath () {
     return this.parent.path
   }
 }

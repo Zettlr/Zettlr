@@ -68,7 +68,6 @@ class RequestMove extends ZettlrCommand {
       // Then simply attach.
       to.attach(from)
       // And, of course, refresh the renderer.
-      // this._app.ipc.send('paths-update', this._app.getPathDummies())
       global.application.dirUpdate(to.hash, to.getMetadata())
       return true
     }

@@ -90,8 +90,7 @@
       },
       classList: function () {
         let list = 'list-item ' + this.obj.type
-        // TODO: The parent of virtual-directory-files is still the regular directory.
-        if (this.$parent.type === 'virtual-directory') list += ' vd-file'
+        if (this.obj.hasOwnProperty('isAlias') && this.obj.isAlias) list += ' alias'
         if (this.$store.state.selectedFile === this.obj.hash) list += ' selected'
         return list
       },
