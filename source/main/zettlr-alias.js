@@ -180,6 +180,19 @@ class ZettlrAlias {
   }
 
   /**
+   * Saves the content to the original file.
+   * @param  {String} cnt The new content
+   * @return {ZettlrAlias}     This.
+   */
+  save (cnt) {
+    let file = global.application.findFile(this._alias)
+    if (!file) return null
+    file.save(cnt)
+
+    return this
+  }
+
+  /**
    * Aliases are never root, so it always returns false.
    * @return {Boolean} Always false.
    */

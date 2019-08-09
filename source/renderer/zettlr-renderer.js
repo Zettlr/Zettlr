@@ -419,6 +419,9 @@ class ZettlrRenderer {
     // Immediately send out a force-open command to see if a file matches
     this._ipc.send('force-open', term)
 
+    // Make sure the file list is visible
+    if (!this._sidebar.isFileListVisible()) this._sidebar.toggleFileList()
+
     // Now perform the actual search. For this we'll create a new search
     // object and pass all necessary data to it.
     let dirContents = this._store.getVuex().getters.currentDirectoryContent

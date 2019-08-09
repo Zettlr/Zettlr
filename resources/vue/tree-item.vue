@@ -23,6 +23,7 @@
     <div
       v-bind:class="classList"
       v-bind:data-hash="obj.hash"
+      v-bind:data-id="obj.id || ''"
       v-on:click="requestSelection"
       v-bind:style="pad"
       ref="listElement"

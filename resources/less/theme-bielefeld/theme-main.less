@@ -79,13 +79,15 @@ body {
     font-family: @font-liberation;
   }
 
-  #directories { background-color: var(--beige-1); }
-  #preview {
+  #file-tree { background-color: var(--beige-1); }
+  #file-list {
     background-color: var(--beige-1);
-    ul li.directory, li.virtual-directory {
+    div.directory, div.virtual-directory {
       color: var(--orange-1);
     }
   }
+
+  #sidebar #sidebar-resize { background-color: var(--beige-0); }
 }
 
 // Exchange the colour of the preview image in the display settings to accomodate

@@ -48,9 +48,7 @@ class ZettlrCon {
    * @return {Array}               An array containing the generated items.
    */
   _buildFromSource (menutpl, hash = null, vdhash = null, scopes = [], attributes = []) {
-    if (!menutpl) {
-      throw new Error('No menutpl detected!')
-    }
+    if (!menutpl) throw new Error('No menutpl detected!')
 
     let menu = []
 
@@ -111,9 +109,11 @@ class ZettlrCon {
     // No context menu for sorters
     if (elem.hasClass('sorter') || elem.parents('sorter').length > 0) return
     let hash = null
-    let vdfile = false // Is this file part of a virtual directory?
     let vdhash = null
     let typoPrefix = []
+    let scopes = [] // Used to hold the scopes
+    let attr = [] // Used to hold the attributes
+    let menupath = '' // Path to the template file to use.
 
     // If the user has right-clicked a link, select the link contents to make it
     // look better and give visual feedback that the user is indeed about to copy
@@ -126,75 +126,49 @@ class ZettlrCon {
       selection.addRange(range)
     }
 
-    // Used to hold the scopes
-    let scopes = []
-    // Used to hold the attributes
-    let attr = []
-    // Path to the template file to use.
-    let menupath = ''
-
-    // First: determine where the click happened (preview pane, directories or editor)
-    if (elem.parents('#file-list').length > 0) {
-      // The user has clicked an element in the file list.
-      // Here's what the options are:
+    // First: determine where the click happened (Sidebar or editor)
+    if (elem.parents('#sidebar').length > 0) {
+      // Here's what the options of elements the user might click are:
       //
       // 1. The surrounding .container
       // 2. The .list-item, which is what we want
       // 3. The .filename
       // 4. The .taglist (or a descendant)
       // 5. The .meta (or a descendant)
+      //
       // So the following works:
+      if (elem.hasClass('container')) elem = elem.children('list-item').first()
       if (elem.hasClass('filename') || elem.hasClass('meta') || elem.hasClass('taglist')) {
         elem = elem.parent() // Move up 1 level
-      } else if (elem.is('span') || elem.hasClass('tagspacer')) {
+      } else if (elem.is('span') || elem.hasClass('tagspacer') || elem.hasClass('collapse-indicator')) {
         elem = elem.parent().parent() // Move up 2 levels
       } else if (elem.hasClass('tag')) {
         elem = elem.parent().parent().parent() // Move up 3 levels
       }
 
-      if (elem.hasClass('directory')) return // No context menu for directories (yet)
+      // Determine whether this is a dir or a file
+      if (elem.hasClass('file') || elem.hasClass('alias')) menupath = 'file.json'
+      if (elem.hasClass('directory') || elem.hasClass('virtual-directory')) menupath = 'directory.json'
+
+      // Determine the scopes
+      if (elem.hasClass('project')) {
+        scopes.push('project')
+      } else if (elem.hasClass('directory')) {
+        scopes.push('no-project')
+      }
+      if (elem.hasClass('directory')) scopes.push('directory')
+      if (elem.hasClass('virtual-directory')) scopes.push('virtual-directory')
+      if (elem.hasClass('dead-directory')) scopes.push('dead-directory')
+      if (elem.hasClass('alias')) scopes.push('alias')
+      if (elem.hasClass('root')) scopes.push('root')
 
       hash = elem.attr('data-hash')
-      // Now determine the scope
-      if (elem.hasClass('alias')) scopes.push('alias')
       // Push all attributes into the attributes array
       for (let i = 0, nodes = elem[0].attributes; i < elem[0].attributes.length; i++) {
+        if (!nodes.item(i).nodeValue) continue // Don't include empty attributes
         // The attributes are a NamedNodeMap, so we have to use weird function calling to retrieve them
         attr.push({ 'name': nodes.item(i).nodeName, 'value': nodes.item(i).nodeValue })
       }
-      menupath = 'preview_file.json'
-    } else if (elem.parents('#file-tree').length > 0) {
-      // In case of elements in the file-tree, the following
-      // elements can end up being the evt.targets:
-      //
-      // 1. The surrounding .container
-      // 2. The .list-item (which is what we want)
-      // 3. The .filename (move up 1 parent)
-      // 4. The collapse indicator (move up 2 parents)
-      if (elem.hasClass('container')) elem = elem.children('list-item').first()
-      if (elem.hasClass('filename')) elem = elem.parent()
-      if (elem.hasClass('collapse-indicator')) elem = elem.parent().parent()
-      hash = elem.attr('data-hash')
-      let isDir = elem.hasClass('directory') || elem.hasClass('virtual-directory') || elem.hasClass('dead-directory')
-
-      if (isDir) {
-        // Determine the scopes
-        if (elem.hasClass('project')) {
-          scopes.push('project')
-        } else if (elem.hasClass('directory')) {
-          scopes.push('no-project')
-        }
-
-        if (elem.hasClass('directory')) scopes.push('directory')
-        if (elem.hasClass('virtual-directory')) scopes.push('virtual-directory')
-        if (elem.hasClass('dead-directory')) scopes.push('dead-directory')
-
-        if (elem.hasClass('root')) scopes.push('root')
-        menupath = 'directories_directory.json'
-      } else if (elem.hasClass('file')) {
-        menupath = 'directories_file.json'
-      }
-      // END file-tree
     } else if (elem.parents('#editor').length > 0) {
       // If the word is spelled wrong, request suggestions
       if (elem.hasClass('cm-spell-error')) {
@@ -226,7 +200,6 @@ class ZettlrCon {
               'type': 'add',
               'term': elem.text()
             })
-            // IPC send: add to dict TODO
           }
         })
         // Final separator
