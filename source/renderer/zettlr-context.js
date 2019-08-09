@@ -148,7 +148,7 @@ class ZettlrCon {
 
       // Determine whether this is a dir or a file
       if (elem.hasClass('file') || elem.hasClass('alias')) menupath = 'file.json'
-      if (elem.hasClass('directory') || elem.hasClass('virtual-directory')) menupath = 'directory.json'
+      if (elem.hasClass('directory') || elem.hasClass('virtual-directory') || elem.hasClass('dead-directory')) menupath = 'directory.json'
 
       // Determine the scopes
       if (elem.hasClass('project')) {

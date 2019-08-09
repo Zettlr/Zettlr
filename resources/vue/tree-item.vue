@@ -176,7 +176,10 @@ module.exports = {
     /**
      * On click, this will call the selection function.
      */
-    requestSelection: function () {
+    requestSelection: function (evt) {
+      // Dead directories can't be opened, so stop the propagation to
+      // the sidebar and don't do a thing.
+      if (this.obj.type === 'dead-directory') return evt.stopPropagation()
       if (this.obj.type === 'file') {
         global.ipc.send('file-get', this.obj.hash)
       } else {
