@@ -35,6 +35,15 @@ class TagCloud extends ZettlrDialog {
       window.renderer.autoSearch(elem.attr('data-tag'))
       this.close()
     })
+
+    $('#filter-tags').keyup((evt) => {
+      let res = $('#filter-tags').val()
+      $('.dialog .tag').each(function (index) {
+        res = res.toLowerCase()
+        if ($(this).text().toLowerCase().indexOf(res) < 0) $(this).hide()
+        else $(this).show()
+      })
+    })
   }
 }
 

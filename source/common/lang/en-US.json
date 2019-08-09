@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-08-09T08:50:08.000000Z"
+        "updated_at": "2019-08-09T12:03:58.000000Z"
     },
     "dialog": {
         "about": {
@@ -65,6 +65,7 @@
         "file_rename": {
             "placeholder": "Filename"
         },
+        "filter_tags": "Filter tags\u2026",
         "find": {
             "find_label": "Find",
             "find_placeholder": "Find\u2026",
