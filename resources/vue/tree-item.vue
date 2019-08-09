@@ -123,6 +123,7 @@ module.exports = {
       let list = 'list-item ' + this.obj.type
       if (this.obj.hasOwnProperty('isAlias') && this.obj.isAlias) list += ' alias'
       if ([this.selectedFile, this.selectedDir].includes(this.obj.hash)) list += ' selected'
+      if (this.obj.project) list += ' project'
       // Determine if this is a root component
       if (this.isRoot) list += ' root'
       return list

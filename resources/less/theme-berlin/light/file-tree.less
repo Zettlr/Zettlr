@@ -59,7 +59,10 @@
         // some kind of a "ghost" file
         &.alias { color: var(--c-alias-light); }
 
-        &.project { color: var(--c-project); }
+        &.project {
+          color: var(--c-project);
+          &.selected { color: white; }
+        }
 
         &.display-search-results {
           color: var(--red-1);

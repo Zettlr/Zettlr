@@ -25,7 +25,10 @@
         span.dir { color: var(--grey-4); }
       }
 
-      &.project { color: var(--c-project-dark); }
+      &.project {
+        color: var(--c-project-dark);
+        &.selected { color: white; }
+      }
 
       &.dead-directory {
         color: var(--grey-4);
