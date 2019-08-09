@@ -21,6 +21,7 @@ class ZettlrAlias {
     this.parent = parent
     // The alias is always references relative to the parent VD's directory path.
     this._alias = hash(path.resolve(this.parent.getRootPath(), relativePath))
+    this.type = 'file' // Mock a file in this respect.
     this.name = name
     this.path = path.join(this.parent.path, this.name)
     this.hash = hash(this.path)
@@ -63,6 +64,20 @@ class ZettlrAlias {
    * @return {Boolean}                The success or failure of the removal.
    */
   remove (force = false) { return this.parent.remove(this) }
+
+  /**
+   * Renames the alias.
+   * @param  {String} name The new name.
+   * @return {ZettlrAlias}      this.
+   */
+  rename (name) {
+    let oldname = this.name
+    this.name = name
+    this.parent.renameFile(oldname, this.name)
+    return this
+  }
+
+  getAlias () { return this._alias }
 
   /**
    * FUNCTIONS THAT SHOULD RETURN REFERENCES TO THE ALIASED FILE
@@ -163,6 +178,12 @@ class ZettlrAlias {
 
     return metadata
   }
+
+  /**
+   * Aliases are never root, so it always returns false.
+   * @return {Boolean} Always false.
+   */
+  isRoot () { return false }
 }
 
 module.exports = ZettlrAlias

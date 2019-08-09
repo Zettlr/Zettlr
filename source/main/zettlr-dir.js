@@ -96,6 +96,7 @@ class ZettlrDir {
 
   _onSettingsChangeHandler (objPath, current, prev) {
     console.log('Settings object have changed at position ' + objPath + '!')
+    console.log(this._settings)
     this._saveSettings() // We don't need to check the Promise
   }
 
@@ -121,6 +122,7 @@ class ZettlrDir {
       }
       newSettings.virtualDirectories.push({
         'name': virtualDir.name,
+        'sorting': 'name-up',
         'aliases': aliases
       })
     }
@@ -329,8 +331,14 @@ class ZettlrDir {
       if (force) shell.moveItemToTrash(this.path)
       this.parent.remove(this)
     } else {
-      // Remove a file (function was called by a children)
+      // Remove a file/virtual dir/dir (function was called by a children)
       let index = this.children.indexOf(obj)
+
+      if (obj.isVirtualDirectory()) {
+        // In this case we need to pluck it from the list of virtual directories
+        let vd = this._settings.virtualDirectories.find(e => e.name === obj.name)
+        if (vd) this._settings.virtualDirectories.splice(this._settings.virtualDirectories.indexOf(vd), 1)
+      }
 
       // Should (normally) always be true
       if (index > -1) {
@@ -682,24 +690,12 @@ class ZettlrDir {
   loadVirtualDirectories () {
     let vds = []
     for (let virtualDir of this._settings.virtualDirectories) {
-      console.log(`Adding ${virtualDir.name} to children list ...`)
       vds.push(new ZettlrVirtualDirectory(this, virtualDir))
     }
 
     // Add to the children and sort
     this.children = vds.concat(this.children)
     this.sort()
-    // let data = this._vdInterface.getData()
-    // // No data in file
-    // if (!data) return
-    // let arr = []
-    // for (let vd of data) {
-    //   arr.push(new ZettlrVirtualDirectory(this, vd, this._vdInterface))
-    // }
-    //
-    // // Initial load of virtual directories
-    // this.children = arr.concat(this.children)
-    // this.sort()
   }
 
   /**
@@ -707,16 +703,15 @@ class ZettlrDir {
     * @param {String} n The directory's name
     */
   addVirtualDir (n) {
-    n = sanitize(n, { replacement: '-' }) // Same rules as "normal" directories. Why? To keep it JSON-safe.
-    if (!this._vdInterface.has(n)) {
-      let vd = { 'name': n, 'files': [] }
-      this._vdInterface.set(vd.name, vd)
-      vd = new ZettlrVirtualDirectory(this, vd, this._vdInterface)
-      this.children.push(vd)
-      this.sort()
-    } else {
-      // Already exists!
+    n = sanitize(n, { replacement: '-' })
+    if (this._settings.virtualDirectories.find(e => e.name === n)) {
+      // We already got the virtual directory.
       global.application.notifyChange(trans('system.error.virtual_dir_exists', n))
+    } else {
+      let vd = { 'name': n, 'aliases': {}, 'sorting': 'name-up' }
+      this._settings.virtualDirectories.push(vd)
+      let dir = new ZettlrVirtualDirectory(this, vd, this._vdInterface)
+      this.children.push(dir)
     }
   }
 

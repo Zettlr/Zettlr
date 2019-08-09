@@ -22,6 +22,7 @@ module.exports = {
     tags: [],
     fileList: [], // Computed property based on selectedDirectory
     searchResults: [], // Can contain search results, but mustn't
+    searchNoResults: false, // Will be true during resultless searches.
     maxWeight: 0, // Maximum weight of the search results
     fileMeta: true,
     displayTime: 'modtime',
@@ -120,9 +121,13 @@ module.exports = {
       state.searchResults.push(result)
       if (w > state.maxWeight) state.maxWeight = w
     },
+    emptySearchResults: (state) => {
+      state.searchNoResults = true
+    },
     endSearch: (state) => {
       state.searchResults = []
       state.maxWeight = 0
+      state.searchNoResults = false
     },
     tags: (state, tags) => {
       state.tags = tags

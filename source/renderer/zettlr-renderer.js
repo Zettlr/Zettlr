@@ -445,11 +445,9 @@ class ZettlrRenderer {
     }).afterEach((count, total) => {
       this.searchProgress(count, total)
     }).then((res) => {
-      // TODO in case there are no search results, indicate this, because
-      // the new sidebar will fall back to the regular file list if the
-      // search Results are empty!
+      // Indicate no results, if applicable.
+      if (res.length === 0) global.store.emptySearchResult()
       // Mark the results in the potential open file
-      if (res.length === 0) global.notify('No search results.') // TODO translate
       global.editorSearch.markResults(this._currentFile)
       this._toolbar.endSearch() // Mark the search as finished
     }).start()

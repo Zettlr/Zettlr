@@ -472,7 +472,6 @@ class Zettlr {
     this.ipc.send('paths-update', this.getPathDummies())
 
     // Set the pointers either to null or last opened dir/file
-    console.log('Last file is: ', global.config.get('lastFile'))
     let lastDir = this.findDir({ 'hash': parseInt(global.config.get('lastDir')) })
     let lastFile = this.findFile({ 'hash': parseInt(global.config.get('lastFile')) })
     this.setCurrentDir(lastDir)

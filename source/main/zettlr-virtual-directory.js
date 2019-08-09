@@ -140,6 +140,19 @@ class ZettlrVirtualDirectory {
   }
 
   /**
+   * Renames an alias.
+   * @param  {String} oldname The old alias name
+   * @param  {String} newname The new name.
+   * @return {ZettlrVirtualDirectory} This.
+   */
+  renameFile (oldname, newname) {
+    let temp = this._vd.aliases[oldname]
+    delete this._vd.aliases[oldname]
+    this._vd.aliases[newname] = temp
+    return this
+  }
+
+  /**
    * Removes either a file from this VD or this VD from the containing dir.
    * @param  {Object} [obj=this] Either this or a specific file that has called this function.
    * @return {Boolean}            Whether or not the remove operation was successful.
@@ -198,7 +211,7 @@ class ZettlrVirtualDirectory {
    */
   attach (newchild) {
     // First check that there's no symbolic link pointing to that file already.
-    let found = this.findFile({ 'hash': newchild.hash })
+    let found = this.children.find(e => e.getAlias() === newchild.hash)
     // Property checker to determine that this alias is not already taken
     let basename = path.basename(newchild.name, path.extname(newchild.name))
     let prop = this._vd.aliases.hasOwnProperty(basename)
@@ -208,22 +221,14 @@ class ZettlrVirtualDirectory {
       this._vd.aliases[basename] = relPath
       // Signature: this, name, path
       this.children.push(new ZettlrAlias(this, basename, relPath))
-      console.log('Added new child! Relative path is: ' + relPath)
+      console.log('Added alias to', relPath)
+    } else {
+      console.log('Couldnt do it')
+      console.log('Basename', basename)
+      console.log('prop exists?', prop)
+      console.log('relpath', relPath)
+      console.log('found?', found != null)
     }
-    // Only add files, prevent duplicates and make sure the file is inside the parent directory.
-    // if (!newchild.isFile() || this.contains(newchild) || !this.parent.contains(newchild)) {
-    //   if (!this.parent.contains(newchild)) {
-    //     this.parent.notifyChange(`Cannot add file to virtual directory ${this.name}, it resides outside the containing directory.`)
-    //   }
-    //   return this
-    // }
-    //
-    // this.children.push(newchild)
-    // this.children = sort(this.children, this.sorting)
-    //
-    // this._updateModel()
-    // newchild.addVD(this)
-    //
     return this
   }
 
@@ -233,19 +238,13 @@ class ZettlrVirtualDirectory {
    */
   detach () {
     this.parent.remove(this)
-    this.parent = null
-    // Also remove from model by passing null as value argument
-    this._model.set(this.name, null)
-    for (let c of this.children) {
-      c.removeVD(this)
-    }
     return this
   }
 
   /**
    * Changes the sorting mechanism and re-sorts the directory.
    * @param  {String} [type='name-up'] The new sorting mechanism.
-   * @return {ZettlrVirtualDirectory}                  This for chainability.
+   * @return {ZettlrVirtualDirectory}  This for chainability.
    */
   toggleSorting (type = 'name-up') {
     if (ALLOW_SORTS.includes(type)) {
@@ -266,7 +265,7 @@ class ZettlrVirtualDirectory {
       this.sorting = 'name-up'
     }
 
-    this.children = sort(this.children, this.sorting)
+    this.sort()
     return this
   }
 
@@ -276,10 +275,7 @@ class ZettlrVirtualDirectory {
    * @param  {String} p The path to be checked.
    * @return {null}   Always null, as VDs don't contain files.
    */
-  exists (p) {
-    // VirtualDirectories must never act as if they were really containing something
-    return null
-  }
+  exists (p) { return null }
 
   /**
    * Checks whether or not a given object is present in this virtual directory.

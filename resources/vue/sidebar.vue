@@ -55,7 +55,11 @@
         </div>
         <!-- Now render the file list -->
         <div id="file-list" class="hidden" ref="fileList">
-          <template v-if="getDirectoryContents.length > 1">
+          <template v-if="emptySearchResults">
+            <!-- Did we have no search results? -->
+            <div class="empty-file-list">{{ noResultsMessage }}</div>
+          </template>
+          <template v-else-if="getDirectoryContents.length > 1">
             <!--
               For the "real" sidelist, we need the virtual
               scroller to maintain performance, because it
@@ -200,9 +204,11 @@ module.exports = {
     // We need the sidebarMode separately to watch the property
     sidebarMode: function () { return this.$store.state.sidebarMode },
     noRootsMessage: function () { return trans('gui.empty_directories') },
+    noResultsMessage: function () { return trans('gui.no_search_results') },
     fileSectionHeading: function () { return trans('gui.files') },
     dirSectionHeading: function () { return trans('gui.dirs') },
-    emptyFileListMessage: function () { return trans('gui.no_dir_selected') }
+    emptyFileListMessage: function () { return trans('gui.no_dir_selected') },
+    emptySearchResults: function () { return this.$store.state.searchNoResults }
   },
   methods: {
     /**
