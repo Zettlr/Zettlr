@@ -57,6 +57,7 @@
 - Fixed a small bug during checking and unchecking of task list items that would prevent the updating of the underlying Markdown text.
 - When you enter an ID and choose the ID from the popup list, the filename belonging to that ID will also be inserted after the ID.
 - You can now filter the tags in the tag cloud.
+- You can now duplicate files within a given directory.
 
 ## Under the Hood
 

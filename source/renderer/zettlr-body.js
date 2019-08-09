@@ -170,6 +170,41 @@ class ZettlrBody {
   }
 
   /**
+    * Display a small popup to ask for a new file name
+    * @param  {Object} file A file hash.
+    * @return {void}     Nothing to return.
+    */
+  requestDuplicate (file) {
+    // No file given.
+    if (!file) return
+
+    // Retrieve the file
+    file = this._renderer.findObject(file.hash)
+
+    // Don't open multiple popups
+    if (this._currentPopup) this._currentPopup.close(true)
+
+    // Cannot duplicate aliases
+    if (file.hasOwnProperty('isAlias') && file.isAlias) return
+
+    let cnt = makeTemplate('popup', 'textfield', {
+      'val': 'Copy of ' + file.name,
+      'placeholder': trans('dialog.file_new.placeholder')
+    })
+
+    this._currentPopup = popup($('#sidebar div[data-hash="' + file.hash + '"]'), cnt, (form) => {
+      if (form) {
+        global.ipc.send('file-duplicate', {
+          'dir': file.parent.hash,
+          'file': file.hash,
+          'name': form[0].value
+        })
+      }
+      this._currentPopup = null // Reset current popup
+    })
+  }
+
+  /**
     * Display a small popup for a new directory.
     * @param  {ZettlrDir} dir The parent directory object.
     * @return {void}     Nothing to return.

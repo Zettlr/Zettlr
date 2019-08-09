@@ -8,9 +8,8 @@
     "command": "file-delete"
   },
   {
-    "scope": "alias",
-    "label": "menu.delete_from_vd",
-    "command": "file-delete-from-vd"
+    "label": "menu.duplicate_file",
+    "command": "file-duplicate"
   },
   {
     "type": "separator"

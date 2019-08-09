@@ -414,6 +414,10 @@ class ZettlrRendererIPC {
         this._app.getBody().displayFind()
         break
 
+      case 'file-duplicate':
+        this._app.getBody().requestDuplicate(cnt)
+        break
+
       case 'file-delete':
         // The user has requested to delete the current file
         // Request from main process
@@ -421,12 +425,6 @@ class ZettlrRendererIPC {
           this.send('file-delete', { 'hash': cnt.hash })
         } else {
           this.send('file-delete', {})
-        }
-        break
-
-      case 'file-delete-from-vd':
-        if (cnt.hasOwnProperty('hash') && cnt.hasOwnProperty('virtualdir')) {
-          this.send('file-delete-from-vd', cnt)
         }
         break
 

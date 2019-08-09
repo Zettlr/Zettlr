@@ -295,6 +295,46 @@ class ZettlrDir {
   }
 
   /**
+    * Duplicate a file from this directory.
+    * @param  {Number} file The file's hash.
+    * @param {String} name The new file's name.
+    * @return {ZettlrFile} The newly created file.
+    */
+  async duplicate (file, name) {
+    // Generate a unique new name
+    if (name == null) name = generateFileName()
+
+    name = sanitize(name, { replacement: '-' })
+    // This gets executed once the user has not entered any allowed characters
+    if ((name === '') || (name == null)) {
+      throw new Error(trans('system.error.no_allowed_chars'))
+    }
+
+    file = this.findFile({ 'hash': file })
+    if (!file) throw new Error(trans('system.error.fnf_message'))
+
+    // Do we have a valid extension?
+    if (!FILETYPES.includes(path.extname(name))) name = name + '.md'
+
+    // Already exists
+    if (this.exists(path.join(this.path, name))) {
+      throw new Error(trans('system.error.file_exists'))
+    }
+
+    // Ignore the creation event
+    global.watchdog.ignoreNext('add', path.join(this.path, name))
+
+    // Create a new file.
+    let f = new ZettlrFile(this, path.join(this.path, name))
+    this.children.push(f)
+    // Also immediately "save" the contents of the original file.
+    f.save(file.read())
+    this.sort()
+    await f.scan()
+    return f
+  }
+
+  /**
     * Returns the contents of a file identified by its hash
     * @param  {Integer} hash The file's hash
     * @return {Mixed}      Either a string containing the file's content or null.
