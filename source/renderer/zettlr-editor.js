@@ -139,7 +139,12 @@ class ZettlrEditor {
             'to': cm.getCursor()
           }
           // Set the autocomplete to false as soon as the user has actively selected something.
-          CodeMirror.on(completionObject, 'pick', () => {
+          CodeMirror.on(completionObject, 'pick', (completion) => {
+            // We need to add completion.displayText after the completed thing.
+            let cur = JSON.parse(JSON.stringify(cm.getCursor()))
+            cur.ch += 2
+            cm.setCursor(cur)
+            cm.replaceSelection(' ' + completion.displayText)
             this._autoCompleteStart = null
           })
           return completionObject

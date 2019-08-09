@@ -31,6 +31,15 @@ class Export extends ZettlrCommand {
     */
   run (evt, arg) {
     let file = this._app.findFile({ 'hash': parseInt(arg.hash) })
+
+    // In case an alias has been selected, we need to sneakily switch the alias
+    // with its target.
+    if (file.isAlias()) file = this._app.findFile({ 'hash': file.getAlias() })
+
+    // As we have introduced aliases into the app, it may be that the target
+    // returns null. In this case abort export and notify the user.
+    if (!file) return global.ipc.notify(trans('system.error.fnf_message'))
+
     let dest
     if (global.config.get('export.dir') === 'temp') {
       // The user wants the file saved to the temporary directory.

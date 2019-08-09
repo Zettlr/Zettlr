@@ -95,8 +95,6 @@ class ZettlrDir {
   }
 
   _onSettingsChangeHandler (objPath, current, prev) {
-    console.log('Settings object have changed at position ' + objPath + '!')
-    console.log(this._settings)
     this._saveSettings() // We don't need to check the Promise
   }
 

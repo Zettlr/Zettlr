@@ -40,7 +40,7 @@
           <span class="tex-indicator" v-if="isTex">TeX</span>
           <span class="date">{{ getDate }}</span>
           <span class="id" v-if="getId">{{ getId }}</span>
-          <span class="tags" v-if="hasTags">#{{ countTags }}</span>
+          <span class="tags" v-if="hasTags" v-bind:data-tippy-content="getTagList">#{{ countTags }}</span>
           <svg v-if="hasWritingTarget" class="target-progress-indicator" width="16" height="16" viewBox="-1 -1 2 2" v-bind:data-tippy-content="writingTargetInfo">
             <circle class="indicator-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle>
             <path v-bind:d="writingTargetPath" fill="" class="indicator-value" shape-rendering="geometricPrecision"></path>
@@ -66,9 +66,6 @@
         hover: false // True as long as the user hovers over the element
       }
     },
-    watch: {
-      obj: (oldval, newval) => { console.log('Item changed: ', oldval.hash, newval.hash) }
-    },
     components: { 'tag-list': TagList },
     computed: {
       // We have to explicitly transform ALL properties to computed ones for
@@ -77,6 +74,7 @@
       getHash: function () { return this.obj.hash },
       getId: function () { return this.obj.id },
       getTags: function () { return this.obj.tags },
+      getTagList: function () { return this.obj.tags.join(', ') },
       hasTags: function () { return this.obj.tags && this.obj.tags.length > 0 },
       isDirectory: function () { return this.obj.type !== 'file' },
       isDraggable: function () { return !this.isDirectory && !this.obj.hasOwnProperty('results') && !this.obj.hasOwnProperty('isAlias') },

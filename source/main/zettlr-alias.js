@@ -180,6 +180,18 @@ class ZettlrAlias {
   }
 
   /**
+   * Reads in the target file.
+   * @param  {Object} opt Optional options.
+   * @return {String}     The file's contents.
+   */
+  read (opt) {
+    let file = global.application.findFile(this._alias)
+    if (!file) return null
+
+    return file.read(opt)
+  }
+
+  /**
    * Saves the content to the original file.
    * @param  {String} cnt The new content
    * @return {ZettlrAlias}     This.
@@ -197,6 +209,12 @@ class ZettlrAlias {
    * @return {Boolean} Always false.
    */
   isRoot () { return false }
+
+  /**
+   * Yup, this file is an alias.
+   * @return {Boolean} True, as this is an alias.
+   */
+  isAlias () { return true }
 }
 
 module.exports = ZettlrAlias

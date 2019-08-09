@@ -186,19 +186,19 @@ class ZettlrBody {
     let elem
 
     // Selection method stolen from requestNewDirName
-    if (!$('#combiner').hasClass('expanded') && $('#directories').hasClass('hidden')) {
-      // The combiner is in thin mode and directories is hidden, so the file list
+    if (!$('#sidebar').hasClass('expanded') && $('#file-tree').hasClass('hidden')) {
+      // The sidebar is in thin mode and tree-view is hidden, so the file list
       // is visible -> find the div in there. (Should be the top containing dir)
-      elem = $('#preview').find('li[data-hash="' + dir.hash + '"]').first()
+      elem = $('#file-list').find('div[data-hash="' + dir.hash + '"]').first()
     } else {
       // The combiner is in extended mode and/or the tree view is visible.
-      elem = $('#directories').find('li[data-hash="' + dir.hash + '"]').first()
+      elem = $('#file-tree').find('div[data-hash="' + dir.hash + '"]').first()
     }
 
     // In case the combiner was not in an extended mode and the preview list did
-    // not contain the directory fall back to the combiner element itself. But
+    // not contain the directory fall back to the sidebar element itself. But
     // this should normally never happen.
-    if (elem.length === 0) elem = $('#combiner')
+    if (elem.length === 0) elem = $('#sidebar')
 
     let cnt = makeTemplate('popup', 'textfield', {
       'val': trans('dialog.dir_new.value'),
@@ -244,7 +244,7 @@ class ZettlrBody {
     */
   requestNewDirName (dir) {
     if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
-    let elem = $('#directories').find('li[data-hash="' + dir.hash + '"]').first()
+    let elem = $('#file-tree').find('div[data-hash="' + dir.hash + '"]').first()
     let cnt = makeTemplate('popup', 'textfield', {
       'val': dir.name,
       'placeholder': trans('dialog.dir_rename.placeholder')
@@ -269,10 +269,10 @@ class ZettlrBody {
     if (this._renderer.getCurrentFile() != null && this._renderer.getCurrentFile().hash === file.hash) {
       elem = $('.button.file-rename')
     } else {
-      elem = $('#preview').find('li[data-hash="' + file.hash + '"]').first()
+      elem = $('#file-list').find('div[data-hash="' + file.hash + '"]').first()
       if (elem.length === 0) {
         // Obviously the file is standalone
-        elem = $('#directories').find('div[data-hash="' + file.hash + '"]').first()
+        elem = $('#file-tree').find('div[data-hash="' + file.hash + '"]').first()
       }
     }
 

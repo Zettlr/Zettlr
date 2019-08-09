@@ -626,6 +626,12 @@ class ZettlrFile {
   isRoot () { return !this.parent.isDirectory() }
 
   /**
+   * Nope, this file is a real file.
+   * @return {Boolean} False, as this is a file.
+   */
+  isAlias () { return false }
+
+  /**
     * Checks whether or not the given path p is in the scope of this object
     * @param  {String}  p The path to test
     * @return {Mixed}   "this" if p equals path, false otherwise.
