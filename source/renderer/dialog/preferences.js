@@ -18,6 +18,7 @@ const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
 const { ipcRenderer } = require('electron')
 const { trans } = require('../../common/lang/i18n')
+const generateId = require('../../common/util/generate-id')
 
 class PreferencesDialog extends ZettlrDialog {
   constructor () {
@@ -151,7 +152,7 @@ class PreferencesDialog extends ZettlrDialog {
     })
 
     $('#generate-id').on('click', (e) => {
-      let id = require('../../common/zettlr-helpers.js').generateId($('#pref-zkn-id-gen').val())
+      let id = generateId($('#pref-zkn-id-gen').val())
       let re = new RegExp('^' + $('#pref-zkn-free-id').val() + '$')
       $('#generator-tester').text(id)
       if (re.test(id)) {
