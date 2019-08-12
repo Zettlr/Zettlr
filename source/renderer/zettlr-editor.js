@@ -140,12 +140,20 @@ class ZettlrEditor {
           }
           // Set the autocomplete to false as soon as the user has actively selected something.
           CodeMirror.on(completionObject, 'pick', (completion) => {
-            // We need to add completion.displayText after the completed thing.
-            let cur = JSON.parse(JSON.stringify(cm.getCursor()))
-            cur.ch += 2
-            cm.setCursor(cur)
-            cm.replaceSelection(' ' + completion.displayText)
+            // When a user inserts an ID, neither the citeproc IDs nor the
+            // tagDB will be loaded, but a generated library containing the
+            // displayText-property.
+            if (this._currentDatabase !== this._tagDB &&
+              this._currentDatabase !== this._citeprocIDs &&
+              completion.displayText) {
+              // We need to add completion.displayText after the completed thing.
+              let cur = JSON.parse(JSON.stringify(cm.getCursor()))
+              cur.ch += 2
+              cm.setCursor(cur)
+              cm.replaceSelection(' ' + completion.displayText)
+            }
             this._autoCompleteStart = null
+            this._currentDatabase = null // Reset the database used for the hints.
           })
           return completionObject
         }
@@ -257,10 +265,15 @@ class ZettlrEditor {
     this._cm.on('change', (cm, changeObj) => {
       // Show tag autocompletion window, if applicable (or close it)
       if (changeObj.text[0] === '#') {
-        // Tag autocompletion
-        this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
-        this._currentDatabase = this._tagDB
-        this._cm.showHint()
+        let cur = cm.getCursor()
+        // Make sure the # is either at the beginning
+        // of the line or is preceded by a space.
+        if (cur.ch === 1 || cm.getLine(cur.line).charAt(cur.ch - 2) === ' ') {
+          // Tag autocompletion
+          this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
+          this._currentDatabase = this._tagDB
+          this._cm.showHint()
+        }
       } else if (changeObj.text[0] === '@') {
         // citeproc-ID autocompletion
         this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))

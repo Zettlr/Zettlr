@@ -58,6 +58,7 @@
 - When you enter an ID and choose the ID from the popup list, the filename belonging to that ID will also be inserted after the ID.
 - You can now filter the tags in the tag cloud.
 - You can now duplicate files within a given directory.
+- The tag selection dropdown will not appear anymore, if you type a `#` somewhere within a word or a link. It must either be at the beginning of a line, or preceded by a space for the tag dropdown to appear.
 
 ## Under the Hood
 
