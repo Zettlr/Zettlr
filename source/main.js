@@ -130,10 +130,7 @@ app.on('window-all-closed', function () {
  * properly.
  */
 app.on('will-quit', function (event) {
-  if (zettlr) {
-    zettlr.shutdown()
-    app.quit()
-  }
+  if (zettlr) zettlr.shutdown()
 })
 
 /**
