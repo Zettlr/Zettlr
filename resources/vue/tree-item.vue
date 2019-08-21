@@ -113,7 +113,8 @@ module.exports = {
      * Returns the directory name. TODO: Migrate to NodeJS Path
      */
     dirname: function () {
-      let name = this.obj.path.substr(0, this.obj.path.lastIndexOf('/'))
+      let name = this.obj.path.replace(/\\/g, '/')
+      name = name.substr(0, name.lastIndexOf('/'))
       return name.substr(name.lastIndexOf('/') + 1)
     },
     /**
