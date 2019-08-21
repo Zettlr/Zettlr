@@ -356,8 +356,9 @@ class ZettlrRendererIPC {
         this.send(cmd, cnt)
         break
 
+      // Closes a root file or directory
       case 'root-close':
-        this.send('close-root', cnt.hash)
+        this.send('root-close', cnt.hash)
         break
 
         // FILES

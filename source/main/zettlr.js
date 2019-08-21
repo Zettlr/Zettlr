@@ -561,29 +561,6 @@ class Zettlr {
   }
 
   /**
-    * Closes an open file/dir if the hashes match
-    * @param  {Number} hash The hash to be closed
-    */
-  close (hash) {
-    for (let p of this.getPaths()) {
-      if (p.getHash() === parseInt(hash)) {
-        // If it's the current file, close it
-        if (p === this.getCurrentFile()) {
-          this.ipc.send('file-close')
-          this.getWindow().setTitle()
-        }
-        if (p === this.getCurrentDir()) {
-          this.setCurrentDir(null)
-        }
-        global.config.removePath(p.getPath())
-        this.getPaths().splice(this.getPaths().indexOf(p), 1)
-        this.ipc.send('paths-update', this.getPathDummies())
-        break
-      }
-    }
-  }
-
-  /**
     * Called when a root file is renamed. This is an alias for _sortPaths.
     */
   sort () {

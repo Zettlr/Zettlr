@@ -191,17 +191,6 @@ class ZettlrWindow {
   // END this.open
 
   /**
-    * Sets the title and always appends Zettlr to it.
-    * @param {String} [newTitle=''] The new title to set.
-    * @return {ZettlrWindow} This for chainability.
-    * @deprecated Will be removed in a further version in exchange for fileUpdate()
-    */
-  setTitle (newTitle = '') {
-    if (newTitle === '') newTitle = 'Zettlr'
-    this._win.setTitle(newTitle)
-  }
-
-  /**
     * This function should be triggered if the currently opened file changes to
     * reflect the file in the window title.
     * @return {ZettlrWindow} This for chainability.
@@ -209,9 +198,9 @@ class ZettlrWindow {
   fileUpdate () {
     let curFile = this._app.getCurrentFile()
     if (curFile == null) {
-      this.setTitle()
+      this._win.setTitle('Zettlr')
     } else {
-      this.setTitle(curFile.name)
+      this._win.setTitle(curFile.name)
     }
   }
 

@@ -31,5 +31,14 @@
     "attribute": "data-hash",
     "label": "menu.set_target",
     "command": "set-target"
+  },
+  {
+    "scope": "root",
+    "type": "separator"
+  },
+  {
+    "scope": "root",
+    "label": "menu.close_file",
+    "command": "root-close"
   }
 ]

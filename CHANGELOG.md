@@ -46,7 +46,7 @@
   - `$1` in the replacement value will be replaced with the first capturing group
   - `$2` with the second capturing group
   - ... and so forth.
-- Zettlr now automatically downloads updations to the translations, if available.
+- Zettlr now automatically downloads updates to the translations, if available.
 - The editor now has a light background image in case it is empty.
 - Fixed a bug with certain types of keyboards on macOS conflicting with internal CodeMirror commands.
 - Prevent opening of a user's home directory.
@@ -79,6 +79,7 @@
 - The Citeproc-provider now logs all errors that prevent a successful boot to the console.
 - Replaced the sidebar with a Vue.js component.
 - The configuration setting for the `sidebarMode` is finally called as such.
+- Removed `ZettlrWindow::setTitle()`.
 
 # 1.3.0
 

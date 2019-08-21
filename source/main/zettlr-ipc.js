@@ -229,10 +229,6 @@ class ZettlrIPC {
         this._app.open()
         break
 
-      case 'close-root':
-        this._app.close(cnt)
-        break
-
       // Force-open is basically a search and immediate return.
       case 'force-open':
         let open = this._app.findExact(cnt) // Find an exact match
