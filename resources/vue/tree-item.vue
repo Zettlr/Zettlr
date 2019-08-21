@@ -152,7 +152,7 @@ module.exports = {
      * Returns true if this is a root file and has the same name as another root file
      */
     hasDuplicateName: function () {
-      if (this.isRoot && !this.isDirectory) {
+      if (this.isRoot) {
         let elem = this.$store.state.items.filter(elem => elem.name === this.obj.name)
         if (elem.length > 1) return true
       }
