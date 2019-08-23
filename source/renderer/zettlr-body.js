@@ -754,26 +754,26 @@ class ZettlrBody {
         case 2:
           h2++
           h3 = h4 = h5 = h6 = 0
-          level = [h1, h2].join('.')
+          level = [ h1, h2 ].join('.')
           break
         case 3:
           h3++
           h4 = h5 = h6 = 0
-          level = [h1, h2, h3].join('.')
+          level = [ h1, h2, h3 ].join('.')
           break
         case 4:
           h4++
           h5 = h6 = 0
-          level = [h1, h2, h3, h4].join('.')
+          level = [ h1, h2, h3, h4 ].join('.')
           break
         case 5:
           h5++
           h6 = 0
-          level = [h1, h2, h3, h4, h5].join('.')
+          level = [ h1, h2, h3, h4, h5 ].join('.')
           break
         case 6:
           h6++
-          level = [h1, h2, h3, h4, h5, h6].join('.')
+          level = [ h1, h2, h3, h4, h5, h6 ].join('.')
       }
 
       cnt.append(

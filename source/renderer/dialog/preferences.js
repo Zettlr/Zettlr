@@ -39,7 +39,7 @@ class PreferencesDialog extends ZettlrDialog {
     data.attachmentExtensions = data.attachmentExtensions.join(', ')
 
     // Determine the ability of the OS to switch to dark mode
-    data.hasOSDarkMode = ['darwin', 'win32'].includes(process.platform)
+    data.hasOSDarkMode = [ 'darwin', 'win32' ].includes(process.platform)
 
     // Build the full translation list
     data.languages = data.supportedLangs.map((elem) => {
@@ -204,7 +204,7 @@ class PreferencesDialog extends ZettlrDialog {
 
   proceed (data) {
     // First remove potential error-classes
-    this.getModal().find(`input`).removeClass('has-error')
+    this.getModal().find('input').removeClass('has-error')
 
     let cfg = {}
 

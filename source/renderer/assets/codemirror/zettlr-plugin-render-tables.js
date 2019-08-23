@@ -95,7 +95,7 @@ const Table = require('../../util/table-helper.js');
       // First grab the full table
       let markdownTable = ''
       for (let i = firstLine; i <= lastLine; i++) {
-        markdownTable += cm.getLine(i) + `\n`
+        markdownTable += cm.getLine(i) + '\n'
       }
 
       // Now attempt to create a table from it.

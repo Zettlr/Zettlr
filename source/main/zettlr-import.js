@@ -57,7 +57,7 @@ function checkImportIntegrity (fileList) {
   // It may be that the user did indeed not provide a directory, but also not
   // an array. In this case, abort.
   if (!Array.isArray(fileList)) {
-    throw Error(`The file list was not an array.`)
+    throw Error('The file list was not an array.')
   }
 
   // Now do the integrity check.

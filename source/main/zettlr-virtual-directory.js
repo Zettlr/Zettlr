@@ -25,7 +25,7 @@ const sort = require('../common/util/sort')
 
 const ZettlrAlias = require('./zettlr-alias')
 
-const ALLOW_SORTS = ['name-up', 'name-down', 'time-up', 'time-down']
+const ALLOW_SORTS = [ 'name-up', 'name-down', 'time-up', 'time-down' ]
 
 /**
  * Manages one single virtual directory containing manually added files. This

@@ -39,7 +39,7 @@ class RequestMove extends ZettlrCommand {
 
     if (!to) {
       // If findDir doesn't return anything then it's a file
-      console.error(`Cannot move anything into a file!`)
+      console.error('Cannot move anything into a file!')
       return
     }
 

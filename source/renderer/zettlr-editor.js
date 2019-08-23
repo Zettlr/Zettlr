@@ -809,7 +809,7 @@ class ZettlrEditor {
       }
     })
 
-    let cnt = `<div class="footnote-edit">`
+    let cnt = '<div class="footnote-edit">'
     cnt += `<textarea id="footnote-edit-textarea">${line.text.substr(5 + ref.length)}</textarea>`
     cnt += '</div>'
 
@@ -845,7 +845,7 @@ class ZettlrEditor {
         toc.push({
           'line': i,
           'text': line.replace(/^#{1,6} /, ''),
-          'level': (line.match(/^(#+)/) || [[], []])[1].length
+          'level': (line.match(/^(#+)/) || [ [], [] ])[1].length
         })
       }
     }
@@ -933,7 +933,7 @@ class ZettlrEditor {
       // we create an array containing the first and second argument [toline, 0],
       // and afterwards add the whole section array. They will be inserted in the
       // right order and the function will be called accordingly.
-      Array.prototype.splice.apply(lines, [toLine, 0].concat(section))
+      Array.prototype.splice.apply(lines, [ toLine, 0 ].concat(section))
       // Splice will be called on "lines" with the argument chain.
       // Equivalent: lines.splice(toLine, 0, section)
     }

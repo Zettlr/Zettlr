@@ -413,7 +413,7 @@ class ZettlrExport {
         // In this case we need to give Pandoc a better template than its own.
         // Therefore, copy the template out of the ASAR and into the temporary
         // directory.
-        let tmpPath = path.join(app.getPath('temp'), 'zettlr-export.htm')
+        var tmpPath = path.join(app.getPath('temp'), 'zettlr-export.htm')
         fs.copyFileSync(path.join(__dirname, './assets/export.tpl'), tmpPath)
         this.tpl = `--template="${tmpPath}"`
         // fall through

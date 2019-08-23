@@ -44,7 +44,7 @@ class RecentDocsProvider extends EventEmitter {
         // Push the file into the global array (to the beginning)
         this._recentDocs.unshift(doc)
         // Push the file into the doc-menu if we're on macOS or Windows
-        if (['darwin', 'win32'].includes(process.platform)) {
+        if ([ 'darwin', 'win32' ].includes(process.platform)) {
           app.addRecentDocument(doc.path)
         }
 
@@ -65,7 +65,7 @@ class RecentDocsProvider extends EventEmitter {
       clear: () => {
         this._recentDocs = []
         // Clear the application's recent docs menu as well on macOS or Windows
-        if (['darwin', 'win32'].includes(process.platform)) {
+        if ([ 'darwin', 'win32' ].includes(process.platform)) {
           app.clearRecentDocuments()
         }
         global.refreshMenu()

@@ -231,10 +231,8 @@ class ZettlrIPC {
 
       // Force-open is basically a search and immediate return.
       case 'force-open':
-        let open = this._app.findExact(cnt) // Find an exact match
-        if (open != null) {
-          this._app.sendFile(open.hash)
-        }
+        var open = this._app.findExact(cnt) // Find an exact match
+        if (open != null) this._app.sendFile(open.hash)
         break
 
       // Change theme in config

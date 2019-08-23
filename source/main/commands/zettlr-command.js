@@ -21,7 +21,7 @@ class ZettlrCommand {
     this._app = app
 
     // The bind event is the event that is sent from the renderer
-    if (!bindEvent) throw new Error(`The binding event name must be given!`)
+    if (!bindEvent) throw new Error('The binding event name must be given!')
     if (!Array.isArray(bindEvent)) bindEvent = [bindEvent]
     this._bind = bindEvent
 

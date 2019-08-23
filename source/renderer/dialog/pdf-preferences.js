@@ -29,8 +29,8 @@ class PDFPreferences extends ZettlrDialog {
     data.pdf.lineheight = data.pdf.lineheight * 100
     data.supportedPapertypes = SUPPORTED_PAPERTYPES
     data.papertypeNames = PAPERNAMES
-    data.availableMarginUnits = ['cm', 'mm', 'pt']
-    data.availablePageNumberingSystems = ['arabic', 'alph', 'alph_upper', 'roman', 'roman_upper', 'gobble']
+    data.availableMarginUnits = [ 'cm', 'mm', 'pt' ]
+    data.availablePageNumberingSystems = [ 'arabic', 'alph', 'alph_upper', 'roman', 'roman_upper', 'gobble' ]
     return data
   }
 

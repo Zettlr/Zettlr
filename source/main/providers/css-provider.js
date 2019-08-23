@@ -26,7 +26,7 @@ class CSSProvider {
       fs.lstatSync(this._filePath)
     } catch (e) {
       // Create an empty file with a nice initial comment in it.
-      fs.writeFileSync(this._filePath, `/* Enter your custom CSS here */\n\n`)
+      fs.writeFileSync(this._filePath, '/* Enter your custom CSS here */\n\n')
     }
 
     // Inject the global provider functions

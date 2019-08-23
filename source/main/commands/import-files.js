@@ -37,7 +37,7 @@ class ImportFiles extends ZettlrCommand {
     // Prepare the list of file filters
     let formats = require('../../common/data.json').import_files
     // The "All Files" filter should be at the top
-    let fltr = [{ 'name': trans('system.all_files'), 'extensions': [ '*' ] }]
+    let fltr = [{ 'name': trans('system.all_files'), 'extensions': ['*'] }]
     for (let f of formats) {
       // The import_files array has the structure "pandoc format" "readable format" "extensions"...
       // Here we set index 1 as readable name and all following elements (without leading dots)

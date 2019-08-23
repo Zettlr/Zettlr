@@ -34,7 +34,7 @@ const isFile = require('../common/util/is-file')
 const isDir = require('../common/util/is-dir')
 const isAttachment = require('../common/util/is-attachment')
 
-const ALLOW_SORTS = ['name-up', 'name-down', 'time-up', 'time-down']
+const ALLOW_SORTS = [ 'name-up', 'name-down', 'time-up', 'time-down' ]
 const FILETYPES = require('../common/data.json').filetypes
 
 const SETTINGS_TEMPLATE = {

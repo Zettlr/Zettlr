@@ -39,9 +39,9 @@ class AboutDialog extends ZettlrDialog {
         let name = trans(failsafe)
         if (name === failsafe) name = lang.bcp47
         html += `<h3>${name} <small>last updated ${formatDate(new Date(lang.updated_at))}</small></h3>`
-        html += `<ul>`
+        html += '<ul>'
         for (let author of lang.authors) html += `<li>${author.replace(/<(.+)>/g, '<small>(<a href="mailto:$1">$1</a>)</small>')}</li>`
-        html += `</ul>`
+        html += '</ul>'
       }
       document.getElementById('contrib').innerHTML = html
     })

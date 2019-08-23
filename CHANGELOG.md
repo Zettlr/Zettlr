@@ -81,6 +81,7 @@
 - Replaced the sidebar with a Vue.js component.
 - The configuration setting for the `sidebarMode` is finally called as such.
 - Removed `ZettlrWindow::setTitle()`.
+- ESLint is now added to the `devDependencies` so that everyone can use the same code style.
 
 # 1.3.0
 

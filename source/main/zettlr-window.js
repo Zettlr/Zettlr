@@ -408,7 +408,7 @@ class ZettlrWindow {
 
     dialog.showMessageBox(this._win, {
       type: options.type || 'info',
-      buttons: [ 'Ok' ],
+      buttons: ['Ok'],
       defaultId: 0,
       title: options.title || 'Zettlr',
       message: options.message

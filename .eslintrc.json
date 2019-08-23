@@ -1,0 +1,30 @@
+{
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "standard"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018
+    },
+    "rules": {
+        // The following rule-changes to JSStandard Coding Style are tradition,
+        // as they were included with the default configuration of Atom's ESLint
+        // plugin, so we'll keep them here for the time being.
+        "prefer-const": "off",
+        "quote-props": "off",
+        "no-prototype-builtins": "off",
+        "dot-notation": "off",
+        "array-bracket-spacing": [ 2, "always", {
+            "objectsInArrays": false,
+            "singleValue": false
+        } ]
+    }
+}

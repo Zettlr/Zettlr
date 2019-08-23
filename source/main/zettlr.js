@@ -148,7 +148,7 @@ class Zettlr {
           console.error('Could not add additional roots!', err)
         })
       }).catch((err) => {
-        console.error(`Could not load paths!`, err)
+        console.error('Could not load paths!', err)
       })
     })
 

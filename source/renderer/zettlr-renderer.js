@@ -395,7 +395,7 @@ class ZettlrRenderer {
 
     let oldDir = this.findObject(oldHash)
 
-    if (oldDir && ['directory', 'virtual-directory'].includes(oldDir.type)) {
+    if (oldDir && [ 'directory', 'virtual-directory' ].includes(oldDir.type)) {
       // We'll be patching the store, as this
       // will also update the renderer._paths.
       global.store.patch(oldHash, dir)

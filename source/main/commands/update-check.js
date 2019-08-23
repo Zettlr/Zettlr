@@ -51,9 +51,9 @@ class UpdateCheck extends ZettlrCommand {
       this._response = await got(REPO_URL, {
         method: 'GET',
         query: new URLSearchParams([
-          ['uuid', global.config.get('uuid')],
-          ['accept-beta', global.config.get('checkForBeta')],
-          ['platform', process.platform]
+          [ 'uuid', global.config.get('uuid') ],
+          [ 'accept-beta', global.config.get('checkForBeta') ],
+          [ 'platform', process.platform ]
         ]).toString()
       })
       // Alright, we only need the body

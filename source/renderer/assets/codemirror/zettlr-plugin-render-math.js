@@ -111,7 +111,7 @@
         if (isRendered) continue
 
         // Use jQuery for simple creation of the DOM element
-        let elem = $(`<span class="preview-math"></span>`)[0]
+        let elem = $('<span class="preview-math"></span>')[0]
 
         let textMarker = cm.markText(
           myMarker.curFrom, myMarker.curTo,

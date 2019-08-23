@@ -173,7 +173,7 @@
 
       // Remove the footnote and its reference in one step (to only account
       // for one single CodeMirror history event)
-      cm.doc.replaceSelections(['', ''])
+      cm.doc.replaceSelections([ '', '' ])
 
       // Reset the cursor to the initial beginning
       cm.doc.setCursor(curFrom)

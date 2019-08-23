@@ -239,7 +239,7 @@ class TableHelper {
       // Also recalculate the button positions as the table's size may have changed.
       this._recalculateEdgeButtonPositions()
 
-      if ([37, 38, 39, 40].includes(evt.which)) {
+      if ([ 37, 38, 39, 40 ].includes(evt.which)) {
         let cursorPosition = this._getCursorPositionInElement(evt.target)
         let isAtEnd = cursorPosition === evt.target.textContent.length
         let isAtBegin = cursorPosition === 0
@@ -800,7 +800,7 @@ class TableHelper {
   * @param {number} col The column index to change
   */
   changeColAlignment (alignment, col = this._cellIndex) {
-    if (!['left', 'center', 'right'].includes(alignment)) throw new Error('Wrong column alignment provided! ' + alignment)
+    if (![ 'left', 'center', 'right' ].includes(alignment)) throw new Error('Wrong column alignment provided! ' + alignment)
     if (col > this._cellIndex || col < 0) throw new Error('Could not align column - Index out of bounds: ' + col)
     this._colAlignment[col] = alignment
 

@@ -122,11 +122,11 @@
           url = 'mailto:' + email
         } else {
           // Markdown URL
-          caption = caption.replace(/\*\*([^*]+?)\*\*/g, `<strong>$1</strong>`)
-          caption = caption.replace(/__([^_]+?)__/g, `<strong>$1</strong>`)
-          caption = caption.replace(/\*([^*]+?)\*/g, `<em>$1</em>`)
-          caption = caption.replace(/_([^_]+?)_/g, `<em>$1</em>`)
-          caption = caption.replace(/~~([^~]+?)~~/g, `<del>$1</del>`)
+          caption = caption.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>')
+          caption = caption.replace(/__([^_]+?)__/g, '<strong>$1</strong>')
+          caption = caption.replace(/\*([^*]+?)\*/g, '<em>$1</em>')
+          caption = caption.replace(/_([^_]+?)_/g, '<em>$1</em>')
+          caption = caption.replace(/~~([^~]+?)~~/g, '<del>$1</del>')
           if (/^!\[.+\]\(.+\)$/.test(caption)) {
             caption = caption.replace(/^!\[(.+)\]\((.+)\)$/, '<img src="$2" title="$1">')
           }

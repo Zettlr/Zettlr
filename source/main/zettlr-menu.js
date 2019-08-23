@@ -149,7 +149,7 @@ class ZettlrMenu {
             // Disable if there are no recent docs
             if (!global.recentDocs.hasDocs()) builtItem.submenu[0].enabled = false
             // Get the most recent 10 documents
-            let i = 0
+            var i = 0
             for (let recent of global.recentDocs.get().slice(0, 10)) {
               i++
               builtItem.submenu.push({
