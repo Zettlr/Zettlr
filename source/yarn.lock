@@ -19,10 +19,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.7.tgz#4f2563bad652b2acb1722d7e7aae2b0ff62d192c"
   integrity sha512-1YKeT4JitGgE4SOzyB9eMwO0nGVNkNEsm9qlIt1Lqm/tG2QEiSMTD4kS3aO6L+w5SClLVxALmIBESK6Mk5wX0A==
 
-"@zettlr/citr@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@zettlr/citr/-/citr-1.0.3.tgz#51886b014e314018c966cbfa5f620a5ec03dbfd1"
-  integrity sha512-hEoW8QdFb5LgB6dO1y0yUYmZPcS12vy3SpsRMMRcajcylz7wc4bWGYLkwrO8W6Y1iNk4p4R7S/C4MPYPuMzz6w==
+"@zettlr/citr@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@zettlr/citr/-/citr-1.0.4.tgz#f94b79ffa75f99dae684f0a2116f9138c7c142b8"
+  integrity sha512-QWJa03T5vZQTUxv6rfoBF0IZefsTcMq9khPc5I6FfkLZFI2hUnAhLDYzPgaJDT2OvQS627v8YifVvViAoUpIVQ==
   dependencies:
     "@types/node" "^12.0.7"
 
@@ -214,20 +214,15 @@ clone-response@^1.0.2:
   dependencies:
     mimic-response "^1.0.0"
 
-clusterize.js@^0.18.1:
-  version "0.18.1"
-  resolved "https://registry.yarnpkg.com/clusterize.js/-/clusterize.js-0.18.1.tgz#a286a9749bd1fa9c2fe21b7fabd8780a590dd836"
-  integrity sha512-UsLhW2lG3TaTnE8LI7ninvovua3FLrlsbksb9uzx0fVzzV2WFScO5FU/4yFwdM8RW8iuYVWFraBpDjsosReFlg==
-
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-codemirror@^5.48.2:
-  version "5.48.2"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.48.2.tgz#a9dd3d426dea4cd59efd59cd98e20a9152a30922"
-  integrity sha512-i9VsmC8AfA5ji6EDIZ+aoSe4vt9FcwPLdHB1k1ItFbVyuOFRrcfvnoKqwZlC7EVA2UmTRiNEypE4Uo7YvzVY8Q==
+codemirror@^5.48.4:
+  version "5.48.4"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.48.4.tgz#4210fbe92be79a88f0eea348fab3ae78da85ce47"
+  integrity sha512-pUhZXDQ6qXSpWdwlgAwHEkd4imA0kf83hINmUEzJpmG80T/XLtDDEzZo8f6PQLuRCcUQhmzqqIo3ZPTRaWByRA==
 
 color-convert@^0.5.3:
   version "0.5.3"
@@ -499,10 +494,10 @@ json-buffer@3.0.0:
   resolved "https://registry.yarnpkg.com/json-buffer/-/json-buffer-3.0.0.tgz#5b1f397afc75d677bde8bcfc0e47e1f9a3d9a898"
   integrity sha1-Wx85evx11ne96Lz8Dkfh+aPZqJg=
 
-katex@^0.10.2:
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/katex/-/katex-0.10.2.tgz#39973edbb65eda5b6f9e7f41648781e557dd4932"
-  integrity sha512-cQOmyIRoMloCoSIOZ1+gEwsksdJZ1EW4SWm3QzxSza/QsnZr6D4U1V9S4q+B/OLm2OQ8TCBecQ8MaIfnScI7cw==
+katex@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/katex/-/katex-0.11.0.tgz#9a870f37dd9a5c90446277754bfc98f905c04bbc"
+  integrity sha512-RQsU3HSMjLW9AdPpi2zaBwM123goCbUcUbBJfmjcAdA982RgtEUNMmrf+3y8anGjgJLantcNLa/VSK73xztQBg==
   dependencies:
     commander "^2.19.0"
 
@@ -725,10 +720,10 @@ responselike@^1.0.2:
   dependencies:
     lowercase-keys "^1.0.0"
 
-rimraf@^2.6.3:
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.3.tgz#b2d104fe0d8fb27cf9e0a1cda8262dd3833c6cab"
-  integrity sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA==
+rimraf@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-3.0.0.tgz#614176d4b3010b75e5c390eb0ee96f6dc0cebb9b"
+  integrity sha512-NDGVxTsjqfunkds7CqsOiEnxln4Bo7Nddl3XhS4pXg5OzwkLqJ971ZVAAnB+DDLnF76N+VnDEiBHaVV8I06SUg==
   dependencies:
     glob "^7.1.3"
 
@@ -847,10 +842,10 @@ utf8-byte-length@^1.0.1:
   resolved "https://registry.yarnpkg.com/utf8-byte-length/-/utf8-byte-length-1.0.4.tgz#f45f150c4c66eee968186505ab93fcbb8ad6bf61"
   integrity sha1-9F8VDExm7uloGGUFq5P8u4rWv2E=
 
-uuid@^3.3.2:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
-  integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
+uuid@^3.3.3:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
+  integrity sha512-pW0No1RGHgzlpHJO1nsVrHKpOEIxkGg1xB+v0ZmdNH5OAeAwzAVrCnI2/6Mtx+Uys6iaylxa+D3g4j63IKKjSQ==
 
 vue@^2.6.10:
   version "2.6.10"
