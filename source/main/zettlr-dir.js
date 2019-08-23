@@ -789,13 +789,19 @@ class ZettlrDir {
       fs.readFile(configPath, 'utf8', (err, data) => {
         if (err) reject(err)
 
-        data = JSON.parse(data)
-        Object.assign(this._settings, data)
-        // DEBUG: Remove this in Zettlr 1.5, after
-        // all unnecessary .ztr-directories have been removed.
-        if (this._settingsAreDefault()) {
-          if (isFile(configPath)) fs.unlinkSync(configPath)
-          return resolve()
+        try {
+          data = JSON.parse(data)
+          Object.assign(this._settings, data)
+          // DEBUG: Remove this in Zettlr 1.5, after
+          // all unnecessary .ztr-directories have been removed.
+          if (this._settingsAreDefault()) {
+            if (isFile(configPath)) fs.unlinkSync(configPath)
+            return resolve()
+          }
+        } catch (err) {
+          // Remove the file because it seems to be corrupted, it will be overridden
+          // with the defaults on exit.
+          fs.unlinkSync(configPath)
         }
         resolve()
       })
