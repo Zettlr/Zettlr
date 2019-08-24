@@ -43,7 +43,7 @@ async function run () {
   file = await fs.open(path.join(revealBasePath, 'css/reveal.css'))
   let tmp = await file.readFile({ encoding: 'utf8' })
   await file.close()
-  revealCSS += `\n` + tmp
+  revealCSS += '\n' + tmp
   // Display debugging information
   log.info(`[INPUT] revealJS:  ${revealJS.length} characters, ${revealJS.split('\n').length} lines`)
   log.info(`[INPUT] revealCSS: ${revealCSS.length} characters, ${revealCSS.split('\n').length} lines`)

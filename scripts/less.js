@@ -7,7 +7,7 @@ const path = require('path')
 const log = require('./console-colour.js')
 const csso = require('csso')
 
-log.info(`Starting LESS compiler ...`)
+log.info('Starting LESS compiler ...')
 
 log.info(`Current working directory: ${__dirname}`)
 
@@ -42,7 +42,7 @@ let themes = [
   }
 ]
 
-log.info(`Reading input files ...`)
+log.info('Reading input files ...')
 
 // First read both the theme and the geometry file into memory.
 

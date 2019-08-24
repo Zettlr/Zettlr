@@ -38,7 +38,7 @@ tplPaths.push(
  *                              BEGIN PROCESSING                              *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 
-log.info(`Starting Handlebars distribution ...`)
+log.info('Starting Handlebars distribution ...')
 log.info(`CWD: ${__dirname}\n`)
 
 // First copy over the runtime libraries
@@ -46,7 +46,7 @@ log.info(`CWD: ${__dirname}\n`)
 try {
   fs.lstatSync(runtimeInput)
 } catch (e) {
-  log.error(`The runtime libraries haven't been found! Did you run "npm install"?`)
+  log.error('The runtime libraries haven\'t been found! Did you run "yarn install"?')
   process.exit(-1)
 }
 
@@ -59,9 +59,9 @@ try {
   log.warn(`Path ${runtimeOutput} does not exist. Creating ...`)
   try {
     fs.mkdirSync(runtimeOutput)
-    log.success(`Directory created!`)
+    log.success('Directory created!')
   } catch (e) {
-    log.error(`Could not create the output path for the runtime! Exiting ...`)
+    log.error('Could not create the output path for the runtime! Exiting ...')
     process.exit(-1)
   }
 }
@@ -75,10 +75,10 @@ for (let file of fileList) {
   copyRecursive(path.join(runtimeInput, file), runtimeOutput)
 }
 
-log.success(`Done copying!`)
+log.success('Done copying!')
 
 // Now precompile all templates.
-log.info(`Compiling templates ...`)
+log.info('Compiling templates ...')
 
 for (let tupel of tplPaths) {
   let input = tupel.input

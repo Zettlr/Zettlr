@@ -30,7 +30,7 @@ if (flags.length > 2) {
 }
 
 // Extract the build targets
-buildTargets = flags.filter(elem => ['--mac', '--win', '--linux'].includes(elem))
+buildTargets = flags.filter(elem => [ '--mac', '--win', '--linux' ].includes(elem))
 
 if (buildTargets.length === 0) {
   // We need at least one build target, so let's assume the current platform
@@ -48,11 +48,11 @@ if (buildTargets.length === 0) {
 }
 
 if (buildTargets.length === 0) {
-  log.info(`No targets given! Aborting build process ...`)
+  log.info('No targets given! Aborting build process ...')
   process.exit(0)
 }
 
-log.info(`Starting build process`)
+log.info('Starting build process')
 log.info(`Building for: ${buildTargets.map(elem => elem.substr(2)).join(', ')}`)
 
 const config = {
@@ -125,9 +125,9 @@ const config = {
 }
 
 runBuilder().then(() => {
-  log.success(`Build run complete!`)
+  log.success('Build run complete!')
 }).catch((err) => {
-  log.error(`Build failed!`)
+  log.error('Build failed!')
   log.error(err)
 })
 
