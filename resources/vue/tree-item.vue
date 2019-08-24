@@ -29,11 +29,14 @@
       ref="listElement"
       v-on:drop="handleDrop"
       v-on:dragover="acceptDrags"
+      v-on:mouseenter="hover=true"
+      v-on:mouseleave="hover=false"
     >
       <p class="filename" v-bind:data-hash="obj.hash">
         <span v-show="hasChildren" v-on:click.stop="toggleCollapse" v-bind:class="indicatorClass"></span>
         {{ obj.name }}<span v-if="hasDuplicateName" class="dir">&nbsp;({{ dirname }})</span>
       </p>
+      <Sorter v-if="isDirectory && combined" v-show="hover" v-bind:sorting="obj.sorting"></Sorter>
     </div>
     <div
       v-if="hasSearchResults"
@@ -59,6 +62,7 @@
 // Tree View item component
 const findObject = require('../../source/common/util/find-object.js')
 const { trans } = require('../../source/common/lang/i18n')
+const Sorter = require('./sorter.vue').default
 
 module.exports = {
   name: 'tree-item',
@@ -66,6 +70,9 @@ module.exports = {
     'obj', // The actual object
     'depth' // How deep is this item nested?
   ],
+  components: {
+    'Sorter': Sorter
+  },
   watch: {
     selectedFile: function (oldVal, newVal) {
       // Open the tree on selectedFile change, if the
@@ -80,7 +87,8 @@ module.exports = {
   },
   data: () => {
     return {
-      collapsed: true // Initial: collapsed list (if there are children)
+      collapsed: true, // Initial: collapsed list (if there are children)
+      hover: false // True as long as the user hovers over the element
     }
   },
   computed: {
@@ -193,6 +201,24 @@ module.exports = {
      * On a click on the indicator, this'll toggle the collapsed state
      */
     toggleCollapse: function (event) { this.collapsed = !this.collapsed },
+    /**
+     * Toggles the sorting of the item, if it's a directory
+     */
+    toggleSorting: function (type) {
+      let newSorting = 'name-up'
+      if (type === 'name' && this.obj.sorting === 'name-up') {
+        newSorting = 'name-down'
+      } else if (type === 'time') {
+        if (this.obj.sorting === 'time-up') {
+          newSorting = 'time-down'
+        } else {
+          newSorting = 'time-up'
+        }
+      }
+
+      // Request to re-sort this directory
+      global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': newSorting })
+    },
     /**
      * Initiates a drag movement and inserts the correct data
      * @param {DragEvent} event The drag event

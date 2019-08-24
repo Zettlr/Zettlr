@@ -24,10 +24,7 @@
     v-on:dragend.stop="stopDragging"
     >
     <p class="filename">{{ basename }}</p>
-    <div class="sorter" v-if="isDirectory" v-show="hover">
-      <span class="sortName" v-on:click.stop="toggleSorting"><span v-html="sortingNameIcon"></span></span>
-      <span class="sortTime" v-on:click.stop="toggleSorting"><span v-html="sortingTimeIcon"></span></span>
-    </div>
+    <Sorter v-if="isDirectory" v-show="hover" v-bind:sorting="obj.sorting"></Sorter>
     <tag-list v-bind:tags="getTags" v-if="!isDirectory"></tag-list>
     <template v-if="fileMeta">
       <div class="meta">
@@ -55,6 +52,7 @@
 <script>
   /* eslint indent: 0 */
   const TagList = require('./tag-list.vue').default
+  const Sorter = require('./sorter.vue').default
   const formatDate = require('../../source/common/util/format-date.js')
 
   module.exports = {
@@ -66,7 +64,10 @@
         hover: false // True as long as the user hovers over the element
       }
     },
-    components: { 'tag-list': TagList },
+    components: {
+      'tag-list': TagList,
+      'Sorter': Sorter
+      },
     computed: {
       // We have to explicitly transform ALL properties to computed ones for
       // the reactivity in conjunction with the recycle-scroller.
@@ -152,9 +153,7 @@
           if (progress > 100) progress = 100 // Never exceed 100 %
 
           return `${current} / ${this.obj.target.count} (${progress} %)`
-        },
-        sortingNameIcon: function () { return (this.obj.sorting === 'name-up') ? '&#xf1c2;' : '&#xf1c1;' },
-        sortingTimeIcon: function () { return (this.obj.sorting === 'time-up') ? '&#xf1c3;' : '&#xf1c4;' }
+        }
       },
       methods: {
         requestSelection: function (event) {
@@ -172,16 +171,11 @@
             global.ipc.send('dir-select', this.obj.hash)
           }
         },
-        toggleSorting: function (evt) {
-          // First item is sortName or sortTime
-          let c = evt.target.classList.item(0)
-          // We have a span to render the HTML in there
-          // and the user possibly clicked that one.
-          if (c === null) c = evt.target.parentNode.classList.item(0)
+        toggleSorting: function (type) {
           let newSorting = 'name-up'
-          if (c === 'sortName') {
+          if (type === 'name') {
             if (this.obj.sorting === 'name-up') newSorting = 'name-down'
-          } else if (c === 'sortTime') {
+          } else if (type === 'time') {
             if (this.obj.sorting === 'time-up') {
               newSorting = 'time-down'
             } else {

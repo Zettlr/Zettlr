@@ -58,6 +58,30 @@
         overflow: hidden;
     }
 
+    .list-item {
+      position: relative;
+
+      &.directory .sorter, &.virtual-directory .sorter {
+        display: block;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        height: @ribbon-height;
+        font-family: @font-icon;
+        font-size: @font-size-small * 0.8;
+        line-height: 100%;
+        text-align: right;
+        margin:0;
+
+        .sortTime, .sortName {
+          padding: 5px;
+          line-height: @ribbon-height;
+          display: inline-block;
+          margin-top: 0px; // Overwrite margin of the spans
+        }
+      }
+    }
+
     .list-item.virtual-directory > p.filename::before {
         content: '\f4ea';
         font-family: @font-icon;
