@@ -959,10 +959,10 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-citeproc@^2.2.21:
-  version "2.2.21"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.21.tgz#7421904f98cf04a863db586ecc1ff126c797cc4e"
-  integrity sha512-ifrNz2ilrYYms66fY7MXghMFB47Yq11U1cq39It9XN0m8UYiq5crkuR5RbwBOO9i7cbHBxChdJe0aIFWxqTi0w==
+citeproc@^2.2.22:
+  version "2.2.22"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.22.tgz#0ecd121f3a715cec02c33fd030ba800921b568a7"
+  integrity sha512-IiflK3N964weUcPWZgfJm+tGXDRCam5tLCUsZCqKlQccF0M81jtFSvqvmmPiMWafiSfoK4vQzZMCg+mWFGFDHQ==
 
 class-utils@^0.3.5:
   version "0.3.6"
