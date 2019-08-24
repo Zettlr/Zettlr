@@ -138,7 +138,7 @@
         writingTargetPath: function () {
           let current = this.obj.charCount
           if (this.obj.target.mode === 'words') current = this.obj.wordCount
-          let progress = Math.round(current / this.obj.target.count * 100)
+          let progress = current / this.obj.target.count
           let large = (progress > 0.5) ? 1 : 0
           if (progress > 1) progress = 1 // Never exceed 100 %
           let x = Math.cos(2 * Math.PI * progress)
