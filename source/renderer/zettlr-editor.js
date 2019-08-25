@@ -180,17 +180,17 @@ class ZettlrEditor {
           }
         } else {
           // First try to open the URL itself
-          shell.openExternal(url).catch((e) => {
+          shell.openExternal(url, { activate: true }).catch((e) => {
             if (e) {
               // Okay, didn't work. Let's try a local file (trying to open https
               // will always work, but the browser may complain that
               // https://my-file.pdf won't exist). Always join with the file's
               // base path, as an absolute URL would've been opened.
-              shell.openExternal('file://' + path.join(this._cm.getOption('markdownImageBasePath'), url)).catch((e) => {
+              shell.openExternal('file://' + path.join(this._cm.getOption('markdownImageBasePath'), url), { activate: true }).catch((e) => {
                 if (e) {
                   // Chrome, do your job!
                   if (!/:\/\//.test(url)) url = 'https://' + url
-                  shell.openExternal(url).catch((e) => {
+                  shell.openExternal(url, { activate: true }).catch((e) => {
                     // Notify the user that we couldn't open the URL
                     if (e) global.notify(trans('system.error.open_url_error', url))
                   })

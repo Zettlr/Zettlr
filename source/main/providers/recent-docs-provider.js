@@ -12,8 +12,6 @@
  * END HEADER
  */
 
-// const fs = require('fs')
-// const path = require('path')
 const EventEmitter = require('events')
 const { app } = require('electron')
 
@@ -27,7 +25,6 @@ class RecentDocsProvider extends EventEmitter {
    */
   constructor () {
     super()
-    // this._file = path.join(require('electron').app.getPath('userData'), 'tags.json')
 
     this._recentDocs = [] // This array holds all recent documents
 
