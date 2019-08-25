@@ -99,8 +99,16 @@
   }
 
   // Share buttons
-  .row {
-    display:flex;
+  .row { display:flex; } // Also used by the table generator
+  .table-generator { padding: 5px; }
+  .table-generator .row .cell {
+    flex-grow: 1;
+    width: 10px;
+    height: 10px;
+    margin: 1px;
+    border: 1px solid black;
+
+    &.active { background-color: var(--c-primary); }
   }
   .btn-share {
     flex-grow:1;

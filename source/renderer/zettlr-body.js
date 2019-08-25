@@ -37,6 +37,7 @@ const DevClipboard = require('./dialog/clipboard.js')
 const { trans } = require('../common/lang/i18n.js')
 const localiseNumber = require('../common/util/localise-number')
 const generateFileName = require('../common/util/generate-filename')
+const generateTable = require('../common/util/generate-markdown-table')
 
 /**
  * This class's duty is to handle everything that affects (or can potentially
@@ -713,8 +714,41 @@ class ZettlrBody {
     })
 
     $('.formatting a').click((e) => {
+      if (e.target.className === 'markdownInsertTable') {
+        e.stopPropagation()
+        e.preventDefault()
+        // Display the generator popup
+        return this.displayTableGenerator()
+      }
       $('.formatting span').removeClass('active')
       this._renderer.handleEvent('cm-command', e.target.className)
+      this._currentPopup.close()
+      this._currentPopup = null
+    })
+  }
+
+  displayTableGenerator () {
+    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
+    let cnt = makeTemplate('popup', 'table')
+    this._currentPopup = popup($('.button.formatting'), cnt)
+
+    $('.table-generator').mouseleave(e => { $('.table-generator .cell').removeClass('active') })
+
+    // For the nice little colouring effect
+    $('.table-generator .cell').hover(e => {
+      let rows = e.target.dataset.rows
+      let cols = e.target.dataset.cols
+      $('.table-generator .cell').removeClass('active')
+      for (let i = 1; i <= rows; i++) {
+        for (let k = 1; k <= cols; k++) {
+          $(`.table-generator .cell[data-rows="${i}"][data-cols="${k}"]`).addClass('active')
+        }
+      }
+    })
+
+    $('.table-generator .cell').click(e => {
+      let table = generateTable(e.target.dataset.rows, e.target.dataset.cols)
+      this._renderer.getEditor().insertText(table)
       this._currentPopup.close()
       this._currentPopup = null
     })

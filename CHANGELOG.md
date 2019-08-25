@@ -66,6 +66,7 @@
   - Arrow up: Select previous file
   - Shift key: Move up or down by ten files
   - Command or Control: Move to the bottom or the top.
+- Added a table generator.
 
 ## Under the Hood
 
