@@ -43,6 +43,10 @@ class ZettlrToolbar {
     this._autocomplete = []
     this._oldval = ''
 
+    // Stores the mode of the word counter
+    this._fileInfoMode = 'words' // can be "words" or "cursor"
+    this._lastFileInfo = null // Holds the last received fileInfo object
+
     this._act()
   }
 
@@ -99,6 +103,15 @@ class ZettlrToolbar {
       this._renderer.getBody().showFileInfo()
     })
 
+    this._fileInfo.contextmenu((e) => {
+      e.stopPropagation()
+      e.preventDefault()
+      // Switch to line:ch-display
+      if (this._fileInfoMode === 'words') this._fileInfoMode = 'cursor'
+      else this._fileInfoMode = 'words'
+      this.updateFileInfo()
+    })
+
     // Activate buttons
     // -- so beautifully DRY <3
     this._div.find('.button').on('click', (e) => {
@@ -131,8 +144,8 @@ class ZettlrToolbar {
       global.ipc.send('win-maximise')
     })
 
-    // Tippify all buttons
-    tippy('#toolbar .button', {
+    // Tippify all elements with the respective attribute.
+    tippy('#toolbar [data-tippy-content]', {
       delay: 100,
       arrow: true,
       duration: 100,
@@ -158,30 +171,32 @@ class ZettlrToolbar {
         child.addClass(elem.class)
         child.attr('data-command', elem.command)
         child.attr('data-content', elem.content)
-        child.attr('data-tippy-content', trans(elem.title))
       } else if (elem.role === 'searchbar') {
         child.html('<input type="text"><div class="end-search">&times;</div>')
       } else if (elem.role === 'pomodoro') {
         child.addClass('button')
         child.attr('data-command', 'pomodoro')
-        child.attr('data-tippy-content', trans(elem.title))
         child.html('<svg width="20" height="20" viewBox="-1 -1 2 2"><circle class="pomodoro-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle><path d="" fill="" class="pomodoro-value" shape-rendering="geometricPrecision"></path></svg>')
       }
+      if (elem.title) child.attr('data-tippy-content', trans(elem.title))
       this._div.append(child)
     }
   }
 
   /**
     * Updates the word count in the info area
-    * @param  {Integer} words Wordcount
+    * @param  {Object} fileInfo fileInfo object.
     * @return {void}       Nothing to return
     */
-  updateWordCount (words) {
-    if (words === 0) {
-      return this.hideWordCount()
-    }
+  updateFileInfo (fileInfo = this._lastFileInfo) {
+    this._lastFileInfo = fileInfo
+    if (this._lastFileInfo.words === 0) return this.hideWordCount()
 
-    this._fileInfo.text(trans('gui.words', localiseNumber(words)))
+    if (this._fileInfoMode === 'words') {
+      this._fileInfo.text(trans('gui.words', localiseNumber(this._lastFileInfo.words)))
+    } else if (this._fileInfoMode === 'cursor') {
+      this._fileInfo.text(`${this._lastFileInfo.cursor.line}:${this._lastFileInfo.cursor.ch}`)
+    }
   }
 
   /**

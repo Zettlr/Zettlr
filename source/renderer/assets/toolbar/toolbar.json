@@ -99,7 +99,8 @@
           "title": "toolbar.readability"
         },
         {
-            "role": "file-info"
+            "role": "file-info",
+            "title": "toolbar.file_info"
         },
         {
             "role": "pomodoro",

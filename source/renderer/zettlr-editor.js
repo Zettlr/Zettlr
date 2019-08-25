@@ -302,9 +302,6 @@ class ZettlrEditor {
         }
       }
 
-      // Update wordcount
-      this._renderer.updateWordCount(countWords(this._cm.getValue(), this._countChars))
-
       if (changeObj.origin === 'paste' && changeObj.text.join(' ').split(' ').length > 10) {
         // In case the user pasted more than ten words don't let these count towards
         // the word counter. Simply update the word count before the save function
@@ -361,6 +358,9 @@ class ZettlrEditor {
       // Additionally, render all citations that may have been newly added to
       // the DOM by CodeMirror.
       this.renderCitations()
+
+      // Update fileInfo
+      this._renderer.updateFileInfo(this.getFileInfo())
     })
 
     // We need to update citations also on updates, as this is the moment when
@@ -703,13 +703,14 @@ class ZettlrEditor {
 
   /**
     * Returns an object containing info about the opened file.
-    * @return {Objet} An object containing words, chars, chars_wo_spaces, if selection: words_sel and chars_sel
+    * @return {Object} An object containing words, chars, chars_wo_spaces, if selection: words_sel and chars_sel
     */
   getFileInfo () {
     let ret = {
       'words': countWords(this._cm.getValue(), this._countChars),
       'chars': this._cm.getValue().length,
-      'chars_wo_spaces': this._cm.getValue().replace(/[\s ]+/g, '').length
+      'chars_wo_spaces': this._cm.getValue().replace(/[\s ]+/g, '').length,
+      'cursor': JSON.parse(JSON.stringify(this._cm.getCursor()))
     }
 
     if (this._cm.somethingSelected()) {

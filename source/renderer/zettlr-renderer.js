@@ -505,10 +505,10 @@ class ZettlrRenderer {
 
   /**
    * Pass-through function from ZettlrEditor to ZettlrToolbar.
-   * @param  {Integer} words Number of words in editor.
+   * @param  {Object} fileInfo fileInfo object.
    * @return {void}       Nothing to return.
    */
-  updateWordCount (words) { this._toolbar.updateWordCount(words) }
+  updateFileInfo (fileInfo) { this._toolbar.updateFileInfo(fileInfo) }
 
   /**
    * Opens a new file

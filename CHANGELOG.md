@@ -60,6 +60,7 @@
 - You can now duplicate files within a given directory.
 - The tag selection dropdown will not appear anymore, if you type a `#` somewhere within a word or a link. It must either be at the beginning of a line, or preceded by a space for the tag dropdown to appear.
 - If there are two or more root directories open with the same name, Zettlr will now display the containing directory just like with root files.
+- Added a line:column indicator mode to the word counter (switch modes with right-click).
 
 ## Under the Hood
 
