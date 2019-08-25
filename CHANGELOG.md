@@ -61,6 +61,11 @@
 - The tag selection dropdown will not appear anymore, if you type a `#` somewhere within a word or a link. It must either be at the beginning of a line, or preceded by a space for the tag dropdown to appear.
 - If there are two or more root directories open with the same name, Zettlr will now display the containing directory just like with root files.
 - Added a line:column indicator mode to the word counter (switch modes with right-click).
+- You can now move through the file-list with the arrow buttons in steps:
+  - Arrow down: Select next file
+  - Arrow up: Select previous file
+  - Shift key: Move up or down by ten files
+  - Command or Control: Move to the bottom or the top.
 
 ## Under the Hood
 

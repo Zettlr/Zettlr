@@ -54,7 +54,7 @@
           </template>
         </div>
         <!-- Now render the file list -->
-        <div id="file-list" class="hidden" ref="fileList">
+        <div id="file-list" class="hidden" ref="fileList" tabindex="1" v-on:keydown="navigate">
           <template v-if="emptySearchResults">
             <!-- Did we have no search results? -->
             <div class="empty-file-list">{{ noResultsMessage }}</div>
@@ -145,6 +145,7 @@ module.exports = {
       // will return if the mode is combined or expanded)
       else if (!this.isFileListVisible()) this.toggleFileList()
     },
+    selectedFile: function () { this.scrollIntoView() },
     /**
      * Whenever the directoryContents change, determine if we should
      * display the file list.
@@ -417,6 +418,55 @@ module.exports = {
         flip: true,
         theme: 'light' // TODO: can be used to change to light in light mode (or better: vice versa)
       })
+    },
+    /**
+     * Navigates the filelist to the next/prev file.
+     * Hold Shift for moving by 10 files, Command or Control to
+     * jump to the very end.
+     */
+    navigate: function (evt) {
+      evt.stopPropagation()
+      evt.preventDefault()
+
+      let list = this.getDirectoryContents
+      list = list.filter(e => [ 'file', 'alias' ].includes(e.type))
+      let index = list.indexOf(list.find(e => e.hash === this.selectedFile))
+
+      switch (evt.key) {
+        case 'ArrowDown':
+          index++
+          if (evt.shiftKey) index += 9 // Fast-scrolling
+          if (index > list.length - 1) index = list.length - 1
+          if (evt.ctrlKey || evt.metaKey) {
+            // Select the last file
+            return global.ipc.send('file-get', list[list.length - 1].hash)
+            }
+          if (index < list.length) global.ipc.send('file-get', list[index].hash)
+          break
+        case 'ArrowUp':
+          index--
+          if (evt.shiftKey) index -= 9 // Fast-scrolling
+          if (index < 0) index = 0
+          if (evt.ctrlKey || evt.metaKey) {
+            // Select the first file
+            return global.ipc.send('file-get', list[0].hash)
+            }
+          if (index >= 0) global.ipc.send('file-get', list[index].hash)
+          break
+      }
+    },
+    scrollIntoView: function () {
+      // In case the file changed, make sure it's in view.
+      let scrollTop = this.$refs.fileList.scrollTop
+      let index = this.getDirectoryContents.find(e => e.hash === this.selectedFile)
+      if (!index) return
+      index = this.getDirectoryContents.indexOf(index)
+      let modifier = (this.$store.state.fileMeta) ? 60 : 30
+      let position = index * modifier
+      if (position < scrollTop) this.$refs.fileList.scrollTop = position
+      else if (position > scrollTop + this.$refs.fileList.offsetHeight - modifier) {
+        this.$refs.fileList.scrollTop = position - this.$refs.fileList.offsetHeight + modifier
+      }
     }
   }
 }
