@@ -124,6 +124,17 @@
         .pomodoro-long  { color: var(--pomodoro-long); }
     }
 
+    // The table generator
+    .table-generator {
+      .row .cell {
+        border: 1px solid black;
+        &.active {
+          background-color: var(--c-primary);
+          border-color: var(--c-primary);
+        }
+      }
+    }
+
     // Footnote edit popup
     .footnote-edit textarea {
         background-color:transparent;
