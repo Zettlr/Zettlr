@@ -223,8 +223,6 @@ class Zettlr {
     // Save the config and stats
     global.config.save()
     this.stats.save()
-    // Stop the watchdog
-    if (this.watchdog) this.watchdog.stop()
     // Perform closing activity in the path.
     for (let p of this._openPaths) {
       p.shutdown()
