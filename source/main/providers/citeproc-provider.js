@@ -114,6 +114,14 @@ class CiteprocProvider {
   }
 
   /**
+   * Shuts down the service provider
+   */
+  shutdown () {
+    this.unload()
+    return true
+  }
+
+  /**
    * Initiates the watching of the main library and changes it if applicable.
    * @return {void} Doesn't return
    */
