@@ -289,6 +289,7 @@ class TableHelper {
       // As soon as any cell is focused, recalculate
       // the current cell and table dimensions.
       this._recalculateCurrentCell($(evt.target))
+      if (this._edgeButtonsVisible) this._recalculateEdgeButtonPositions()
     })
 
     $('table#' + this._tableID).off('blur', 'td').on('blur', 'td', (evt) => {
@@ -356,19 +357,24 @@ class TableHelper {
   * Recalculates the correct positions of all edge buttons.
   */
   _recalculateEdgeButtonPositions () {
+    // First we need the current cell
+    let currentCell = this._elem.find('tr:eq(' + this._rowIndex + ') td:eq(' + this._cellIndex + ')')
+    let cellTop = currentCell.offset().top
+    let cellLeft = currentCell.offset().left
+    let cellWidth = currentCell.outerWidth()
+    let cellHeight = currentCell.outerHeight()
+    let cellRight = cellLeft + cellWidth
+    let cellBottom = cellTop + cellHeight
+
     // Calculate positions position
-    this._addTopButton.css('top', (this._elem.offset().top - this._edgeButtonSize / 2) + 'px').css('left', (this._elem.offset().left + this._elem.outerWidth() / 2 - this._edgeButtonSize / 2) + 'px')
-    this._addBottomButton.css('top', (this._elem.offset().top + this._elem.outerHeight() - this._edgeButtonSize / 2) + 'px').css('left', (this._elem.offset().left + this._elem.outerWidth() / 2 - this._edgeButtonSize / 2) + 'px')
-    this._addLeftButton.css('top', (this._elem.offset().top + this._elem.outerHeight() / 2 - this._edgeButtonSize / 2) + 'px').css('left', (this._elem.offset().left - this._edgeButtonSize / 2) + 'px')
-    this._addRightButton.css('top', (this._elem.offset().top + this._elem.outerHeight() / 2 - this._edgeButtonSize / 2) + 'px').css('left', (this._elem.offset().left + this._elem.outerWidth() - this._edgeButtonSize / 2) + 'px')
+    this._addTopButton.css('top', (cellTop - this._edgeButtonSize / 2) + 'px').css('left', (cellLeft + cellWidth / 2 - this._edgeButtonSize / 2) + 'px')
+    this._addBottomButton.css('top', (cellBottom - this._edgeButtonSize / 2) + 'px').css('left', (cellLeft + cellWidth / 2 - this._edgeButtonSize / 2) + 'px')
+    this._addLeftButton.css('top', (cellTop + cellHeight / 2 - this._edgeButtonSize / 2) + 'px').css('left', (cellLeft - this._edgeButtonSize / 2) + 'px')
+    this._addRightButton.css('top', (cellTop + cellHeight / 2 - this._edgeButtonSize / 2) + 'px').css('left', (cellRight - this._edgeButtonSize / 2) + 'px')
     this._alignButtons.css('top', (this._elem.offset().top - this._edgeButtonSize / 2) + 'px').css('left', (this._elem.offset().left + this._edgeButtonSize / 2) + 'px')
     this._removeButtons.css('top', (this._elem.offset().top - this._edgeButtonSize / 2) + 'px').css('left', (this._elem.offset().left + this._elem.outerWidth() - this._edgeButtonSize * 2.5) + 'px')
 
     // Make sure all buttons stay visible on screen
-    if (this._addTopButton.offset().top < 0) this._addTopButton.css('top', this._edgeButtonSize + 'px')
-    if (this._addBottomButton.offset().top < 0) this._addBottomButton.css('top', this._edgeButtonSize + 'px')
-    if (this._addLeftButton.offset().top < 0) this._addLeftButton.css('top', this._edgeButtonSize + 'px')
-    if (this._addRightButton.offset().top < 0) this._addRightButton.css('top', this._edgeButtonSize + 'px')
     if (this._alignButtons.offset().top < 0) this._alignButtons.css('top', this._edgeButtonSize + 'px')
     if (this._removeButtons.offset().top < 0) this._removeButtons.css('top', this._edgeButtonSize + 'px')
 
@@ -630,45 +636,47 @@ class TableHelper {
   }
 
   /**
-   * Prepends a column to the left side of the table.
+   * Prepends a column to the left of the currently active cell of the table.
    * @return {void} Does not return.
    */
   prependCol () {
-    // Add a column to the left of the table -> add a TD child to all TRs
+    console.log('Prepend col')
+    // Add a column to the left of the active cell -> add a TD child to all TRs
     let newcol = $('<td></td>').attr('contenteditable', 'true')
     newcol.css('text-align', this._colAlignment[this._cellIndex])
-    this._elem.find('tr').prepend(newcol.clone())
+    this._elem.find('tr').find('td:eq(' + this._cellIndex + ')').before(newcol.clone())
 
-    // Move into the first cell of the current row
-    this._cellIndex = 0
+    // (Re-)select the now correct new cell
     this.selectCell()
     this._recalculateEdgeButtonPositions()
     this._signalContentChange() // Notify the caller
   }
 
   /**
-   * Appends a column at the right side of the table.
+   * Appends a column at the right side of the currently active cell of the table.
    * @return {void} Does not return.
    */
   appendCol () {
+    console.log('Append col')
     // Add a column to the right of the table -> add a TD child to all TRs
     let newcol = $('<td></td>').attr('contenteditable', 'true')
     newcol.css('text-align', this._colAlignment[this._cellIndex])
-    this._elem.find('tr').append(newcol.clone())
+    this._elem.find('tr').find('td:eq(' + this._cellIndex + ')').after(newcol.clone())
 
-    // Move into the last cell of the current row
-    this._cellIndex = this._rows // Rows is one-based number, so it's the correct index
+    // Move into the next cell of the current row
+    this._cellIndex++
     this.selectCell()
     this._recalculateEdgeButtonPositions()
     this._signalContentChange() // Notify the caller
   }
 
   /**
-   * Prepends a row to the beginning of the table.
+   * Prepends a row to the top of the currently active cell of the table.
    * @return {void} Does not return.
    */
   prependRow () {
-    // Prepend a whole row to the table
+    console.log('Prepend Row')
+    // Prepend a whole row to the currently active cell
     let row = $('<tr></tr>')
     for (let i = 0; i < this._cols; i++) {
       let col = $('<td></td>').attr('contenteditable', 'true')
@@ -676,9 +684,8 @@ class TableHelper {
       row.append(col)
     }
 
-    this._elem.prepend(row)
-    this._rowIndex = 0
-    this.selectCell()
+    this._elem.find('tr:eq(' + this._rowIndex + ')').before(row)
+    this.selectCell() // Select the now again correct rowIndex
     this._recalculateEdgeButtonPositions()
     this._signalContentChange() // Notify the caller
   }
@@ -696,9 +703,9 @@ class TableHelper {
       row.append(col)
     }
 
-    this._elem.append(row)
+    this._elem.find('tr:eq(' + this._rowIndex + ')').after(row)
 
-    this._rowIndex = this._rows // One-Based number, so correct index
+    this._rowIndex++ // One-Based number, so correct index
     this.selectCell()
     this._recalculateEdgeButtonPositions()
     this._signalContentChange() // Notify the caller

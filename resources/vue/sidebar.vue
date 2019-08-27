@@ -195,7 +195,7 @@ module.exports = {
      */
     getFiles: function () { return this.$store.getters.rootFiles },
     getDirectories: function () { return this.$store.getters.rootDirectories },
-    getDirectoryContents: function () { console.log('Directory Contents have changed!'); return this.$store.getters.directoryContents },
+    getDirectoryContents: function () { return this.$store.getters.directoryContents },
     selectedFile: function () { return this.$store.state.selectedFile },
     selectedDirectory: function () { return this.$store.state.selectedDirectory },
     sidebarClass: function () { return (this.isExpanded) ? 'expanded' : '' },

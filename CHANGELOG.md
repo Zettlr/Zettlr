@@ -15,7 +15,7 @@
     - **Buttons**:
         - **Alignment-Buttons** (top-left): Aligns the currently active column left, center, or right.
         - **Removal-Buttons** (top-right): Removes either the current row or the current column. Does not remove the last row or column.
-        - **Add-Buttons**: Adds rows or columns to the top, left, bottom or right hand side of the table, depending on the button.
+        - **Add-Buttons**: Adds rows or columns to the top, left, bottom or right hand side of the currently active cell, depending on the button.
 - **New Feature**: 1.4 introduces a **readability mode** that you can turn on. It will try to highlight your sentences based on four possible algorithms, where green means that it's readable and red means that the sentence is difficult to read. You can turn on the mode in the toolbar. Thanks to @wooorm at this point for providing the incentive of implementing the algorithm!
 - **New Feature**: The Translatr-API is now integrated into the app. This means: All translations will automatically be kept updated. Additionally, you can comfortably download all available languages (completed at least 50 percent) from the preferences dialog.
 - The app will boot much faster now.
