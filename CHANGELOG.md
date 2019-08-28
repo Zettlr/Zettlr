@@ -4,6 +4,8 @@
 
 **This update will reset your sidebar mode to the initial value of thin.**
 
+**From this update on, you will need to hold either the `Alt`-key or the `Ctrl`-key on your keyboard, if you plan to move a file out of the app.**
+
 - **New Feature**: Table management has just become easier. With the new table helper plugin, Zettlr enables you to circumvent manually having to edit Markdown tables. All you need to do now is keep the table helper active in the settings and just edit your tables as you would do in any other application. The table helper offers the following keyboard navigation shortcuts:
     - **Tab**: Move to the next cell, or the first cell on the next row, if the cursor is in the last column. Adds a new table row, if the cursor is in the last row.
     - **Shift-Tab**: Move to the previous cell, or the last cell on the previous row, if the cursor is in the first column.

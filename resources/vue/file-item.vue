@@ -21,6 +21,7 @@
     v-on:click="requestSelection"
     v-bind:draggable="isDraggable"
     v-on:dragstart.stop="beginDragging"
+    v-on:drag="handleDrag"
     v-on:dragend.stop="stopDragging"
     >
     <p class="filename">{{ basename }}</p>
@@ -187,7 +188,14 @@
           global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': newSorting })
         },
         beginDragging: function (event) {
-          // But the parent is fortunately our sidebar component.
+          if (event.ctrlKey || event.altKey) {
+            // If the alt key was pressed when the drag begins, initiate
+            // an out-of-window drag
+            global.ipc.send('file-drag-start', { 'hash': this.obj.hash })
+            event.preventDefault()
+            return false
+          }
+          // Tell the sidebar component to lock the directory tree (only necessary for thin mode)
           this.$root.lockDirectoryTree()
           event.dataTransfer.effectAllowed = 'move'
           event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
