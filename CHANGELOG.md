@@ -22,7 +22,6 @@
 - **New Feature**: The Translatr-API is now integrated into the app. This means: All translations will automatically be kept updated. Additionally, you can comfortably download all available languages (completed at least 50 percent) from the preferences dialog.
 - The app will boot much faster now.
 - Root directories that have not been found on app start, or are removed during runtime, are indicated as "dead" in your directory tree. If they reside on a removable medium, you can now simply plug the medium into the computer and rescan the directory. You don't have to manually open it anymore.
-- Decreased the sensitivity for when a drag event should start, so that accidental drags are prevented.
 - Citations in your text are now always updated, you don't have to type anything for this to work.
 - Inserting tasklists is now possible via context menu and formatting toolbar.
 - New Theme: **Karl-Marx-Stadt**.
