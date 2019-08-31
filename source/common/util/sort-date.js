@@ -19,9 +19,12 @@
  */
 module.exports = function (a, b) {
   let prop = (global.config.get('sortingTime') === 'modtime') ? 'modtime' : 'creationtime'
+  console.log(`Sorting ${prop}`)
   if (a[prop] < b[prop]) {
+    console.log(`${a.name} (${a[prop]}) before ${b.name} (${b[prop]})`)
     return -1
   } else if (a[prop] > b[prop]) {
+    console.log(`${a.name} (${a[prop]}) after ${b.name} (${b[prop]})`)
     return 1
   } else {
     return 0

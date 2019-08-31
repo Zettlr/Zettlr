@@ -68,6 +68,7 @@
   - Shift key: Move up or down by ten files
   - Command or Control: Move to the bottom or the top.
 - Added a table generator.
+- Fixed a small bug that would not correctly sort newly created files.
 
 ## Under the Hood
 

@@ -288,9 +288,12 @@ class ZettlrDir {
 
     // Create a new file.
     let f = new ZettlrFile(this, path.join(this.path, name))
+    // We have to scan/read the file BEFORE sorting,
+    // otherwise, time-based sorting doesn't work as
+    // expected (modtime is still 0)
+    await f.scan()
     this.children.push(f)
     this.sort()
-    await f.scan()
     return f
   }
 
