@@ -25,17 +25,17 @@
     <date-part name="day" form="numeric-leading-zeros" prefix="/"/>
   </date>
   <terms>
-    <term name="accessed">见於</term>
+    <term name="accessed">见于</term>
     <term name="and">和</term>
     <term name="and others">及其他</term>
     <term name="anonymous">作者不详</term>
     <term name="anonymous" form="short">无名氏</term>
-    <term name="at">於</term>
-    <term name="available at">载於</term>
+    <term name="at">于</term>
+    <term name="available at">载于</term>
     <term name="by">著</term>
     <term name="circa">介于</term>
     <term name="circa" form="short">约</term>
-    <term name="cited">见引於</term>
+    <term name="cited">见引于</term>
     <term name="edition">版本</term>
     <term name="edition" form="short">本</term>
     <term name="et-al">等</term>
@@ -50,7 +50,7 @@
     <term name="no date">日期不详</term>
     <term name="no date" form="short">不详</term>
     <term name="online">在线</term>
-    <term name="presented at">发表於</term>
+    <term name="presented at">发表于</term>
     <term name="reference">参考</term>
     <term name="reference" form="short">参</term>
     <term name="retrieved">取读于</term>

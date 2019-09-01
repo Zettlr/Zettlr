@@ -69,38 +69,32 @@
     <term name="page-range-delimiter">–</term>
 
     <!-- ORDINALS -->
-    <term name="ordinal">th</term>
-    <term name="ordinal-01">st</term>
-    <term name="ordinal-02">nd</term>
-    <term name="ordinal-03">rd</term>
-    <term name="ordinal-11">th</term>
-    <term name="ordinal-12">th</term>
-    <term name="ordinal-13">th</term>
+    <term name="ordinal">-p</term>
 
     <!-- LONG ORDINALS -->
-    <term name="long-ordinal-01">first</term>
-    <term name="long-ordinal-02">second</term>
-    <term name="long-ordinal-03">third</term>
-    <term name="long-ordinal-04">fourth</term>
-    <term name="long-ordinal-05">fifth</term>
-    <term name="long-ordinal-06">sixth</term>
-    <term name="long-ordinal-07">seventh</term>
-    <term name="long-ordinal-08">eighth</term>
-    <term name="long-ordinal-09">ninth</term>
-    <term name="long-ordinal-10">tenth</term>
+    <term name="long-ordinal-01">нэгдүгээр</term>
+    <term name="long-ordinal-02">хоёрдугаар</term>
+    <term name="long-ordinal-03">гуравдугаар</term>
+    <term name="long-ordinal-04">дөрөвдүгээр</term>
+    <term name="long-ordinal-05">тавдугаар</term>
+    <term name="long-ordinal-06">зургаадугаар</term>
+    <term name="long-ordinal-07">долоодугаар</term>
+    <term name="long-ordinal-08">наймдугаар</term>
+    <term name="long-ordinal-09">есдүгээр</term>
+    <term name="long-ordinal-10">аравдугаар</term>
 
     <!-- LONG LOCATOR FORMS -->
     <term name="book">
-      <single>book</single>
-      <multiple>books</multiple>
+      <single>ном</single>
+      <multiple>номнууд</multiple>
     </term>
     <term name="chapter">
       <single>chapter</single>
       <multiple>chapters</multiple>
     </term>
     <term name="column">
-      <single>column</single>
-      <multiple>columns</multiple>
+      <single>багана</single>
+      <multiple>баганууд</multiple>
     </term>
     <term name="figure">
       <single>figure</single>
@@ -111,12 +105,12 @@
       <multiple>folios</multiple>
     </term>
     <term name="issue">
-      <single>number</single>
-      <multiple>numbers</multiple>
+      <single>тоо</single>
+      <multiple>тоонууд</multiple>
     </term>
     <term name="line">
-      <single>line</single>
-      <multiple>lines</multiple>
+      <single>шугам</single>
+      <multiple>шугамнууд</multiple>
     </term>
     <term name="note">
       <single>note</single>
@@ -127,12 +121,12 @@
       <multiple>opera</multiple>
     </term>
     <term name="page">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>хуудас</single>
+      <multiple>хуудаснууд</multiple>
     </term>
     <term name="number-of-pages">
-      <single>page</single>
-      <multiple>pages</multiple>
+      <single>хуудас</single>
+      <multiple>хуудаснууд</multiple>
     </term>
     <term name="paragraph">
       <single>paragraph</single>
@@ -209,24 +203,24 @@
       <multiple>directors</multiple>
     </term>
     <term name="editor">
-      <single>editor</single>
-      <multiple>editors</multiple>
+      <single>редактор</single>
+      <multiple>редакторууд</multiple>
     </term>
     <term name="editorial-director">
-      <single>editor</single>
-      <multiple>editors</multiple>
+      <single>редактор</single>
+      <multiple>редакторууд</multiple>
     </term>
     <term name="illustrator">
       <single>illustrator</single>
       <multiple>illustrators</multiple>
     </term>
     <term name="translator">
-      <single>translator</single>
-      <multiple>translators</multiple>
+      <single>орчуулагч</single>
+      <multiple>орчуулагчид</multiple>
     </term>
     <term name="editortranslator">
-      <single>editor &amp; translator</single>
-      <multiple>editors &amp; translators</multiple>
+      <single>редактор ба орчуулагч</single>
+      <multiple>редакторууд ба орчуулагчид</multiple>
     </term>
 
     <!-- SHORT ROLE FORMS -->
@@ -235,24 +229,24 @@
       <multiple>dirs.</multiple>
     </term>
     <term name="editor" form="short">
-      <single>ed</single>
-      <multiple>eds</multiple>
+      <single>ред.</single>
+      <multiple>ред.</multiple>
     </term>
     <term name="editorial-director" form="short">
-      <single>ed.</single>
-      <multiple>eds.</multiple>
+      <single>ред.</single>
+      <multiple>ред.</multiple>
     </term>
     <term name="illustrator" form="short">
       <single>ill.</single>
       <multiple>ills.</multiple>
     </term>
     <term name="translator" form="short">
-      <single>tran</single>
-      <multiple>trans</multiple>
+      <single>орч</single>
+      <multiple>орч</multiple>
     </term>
     <term name="editortranslator" form="short">
-      <single>ed. &amp; tran.</single>
-      <multiple>eds. &amp; trans.</multiple>
+      <single>ред. ба орч.</single>
+      <multiple>ред. ба орч.</multiple>
     </term>
 
     <!-- VERB ROLE FORMS -->
@@ -276,37 +270,37 @@
     <term name="editortranslator" form="verb-short">ed. &amp; trans. by</term>
 
     <!-- LONG MONTH FORMS -->
-    <term name="month-01">January</term>
-    <term name="month-02">February</term>
-    <term name="month-03">March</term>
-    <term name="month-04">April</term>
-    <term name="month-05">May</term>
-    <term name="month-06">June</term>
-    <term name="month-07">July</term>
-    <term name="month-08">August</term>
-    <term name="month-09">September</term>
-    <term name="month-10">October</term>
-    <term name="month-11">November</term>
-    <term name="month-12">December</term>
+    <term name="month-01">Нэгдүгээр сар</term>
+    <term name="month-02">Хоёрдугаар сар</term>
+    <term name="month-03">Гуравдугаар сар</term>
+    <term name="month-04">Дөрөвдүгээр сар</term>
+    <term name="month-05">Тавдугаар сар</term>
+    <term name="month-06">Зургаадугаар сар</term>
+    <term name="month-07">Долдугаар сар</term>
+    <term name="month-08">Наймдугаар сар</term>
+    <term name="month-09">Есдүгээр сар</term>
+    <term name="month-10">Аравдугаар сар</term>
+    <term name="month-11">Арван нэгдүгээр сар</term>
+    <term name="month-12">Арван хоёрдугаар сар</term>
 
     <!-- SHORT MONTH FORMS -->
-    <term name="month-01" form="short">Jan</term>
-    <term name="month-02" form="short">Feb</term>
-    <term name="month-03" form="short">Mar</term>
-    <term name="month-04" form="short">Apr</term>
-    <term name="month-05" form="short">May</term>
-    <term name="month-06" form="short">Jun</term>
-    <term name="month-07" form="short">Jul</term>
-    <term name="month-08" form="short">Aug</term>
-    <term name="month-09" form="short">Sep</term>
-    <term name="month-10" form="short">Oct</term>
-    <term name="month-11" form="short">Nov</term>
-    <term name="month-12" form="short">Dec</term>
+    <term name="month-01" form="short">1-р сар</term>
+    <term name="month-02" form="short">2-р сар</term>
+    <term name="month-03" form="short">3-р сар</term>
+    <term name="month-04" form="short">4-р сар</term>
+    <term name="month-05" form="short">5-р сар</term>
+    <term name="month-06" form="short">6-р сар</term>
+    <term name="month-07" form="short">7-р сар</term>
+    <term name="month-08" form="short">8-р сар</term>
+    <term name="month-09" form="short">9-р сар</term>
+    <term name="month-10" form="short">10-р сар</term>
+    <term name="month-11" form="short">11-р сар</term>
+    <term name="month-12" form="short">12-р сар</term>
 
     <!-- SEASONS -->
-    <term name="season-01">Spring</term>
-    <term name="season-02">Summer</term>
-    <term name="season-03">Autumn</term>
-    <term name="season-04">Winter</term>
+    <term name="season-01">Хавар</term>
+    <term name="season-02">Зун</term>
+    <term name="season-03">Намар</term>
+    <term name="season-04">Өвөл</term>
   </terms>
 </locale>
