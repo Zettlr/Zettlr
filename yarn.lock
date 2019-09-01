@@ -461,54 +461,54 @@ astral-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
   integrity sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
 
-astrocite-bibtex@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/astrocite-bibtex/-/astrocite-bibtex-0.14.0.tgz#c05d31addd269dbaf8e423e7fea34f49029820ce"
-  integrity sha512-QRrhrED8ikWtPvtNtgkN8YIX8xJNPCFIUYttyJ/h98q0Y1X3NqWxQn978vIkPWvDxhy3xsjUq9u1Uvs2c2UkCw==
+astrocite-bibtex@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/astrocite-bibtex/-/astrocite-bibtex-0.15.0.tgz#680edd1992ab4319d8913ac3b37c4efc8cfe31b2"
+  integrity sha512-XyACfnf2VbKKOEhyGxYaRWTtW55t6tnqfipNL2A1buic2SNuiO+b5+eVJ2eHkXUzfBJqbof7AccHrkBFOoQXIA==
   dependencies:
-    astrocite-core "^0.14.0"
+    astrocite-core "^0.15.0"
     csl-json "^0.1.0"
 
-astrocite-core@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/astrocite-core/-/astrocite-core-0.14.0.tgz#c04a0686e53791420af2e9c31183ffed43e06c0a"
-  integrity sha512-S/IuwzgFUYRjjPA/KpL0jRpNz+mrW0ML9Aj1yaFTgMc4hswwbX9O/+nPu327PWdzjmr9PsDkZ3eSsOJrQ8TowQ==
+astrocite-core@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/astrocite-core/-/astrocite-core-0.15.0.tgz#191c5d2e39caa1a1ae8b5460a684630f34e50fa3"
+  integrity sha512-XReFjy0j442cCnHt8R5c2gQD+NrE6ZwiljmCG2tPXuRBXrRVhSYKe8taPNEW8l3S5LjYjGucwZBI1vzqGoRCIg==
   dependencies:
     csl-json "^0.1.0"
 
-astrocite-eutils@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/astrocite-eutils/-/astrocite-eutils-0.14.0.tgz#d05bf14623c7877d54ec0feaf3914b1d66fb34d9"
-  integrity sha512-TChWXfgQ+1YM2J3Kpfk3/sb90Pcfw0yM0gC3BlLjIISO0kgF2e4MXGfjlfB1bpaMxAcKMSIch+IgjhJkexDjOg==
+astrocite-eutils@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/astrocite-eutils/-/astrocite-eutils-0.15.0.tgz#7979568eb3773bcf68e0bbd47cbdc1d56c7ad668"
+  integrity sha512-Jj5SNtJAK2c4689M9ypmYMx3ajisvjRHuVO7XMJ6P6UAmLqz1YVpz5DazkLeWgRH0VD4IgHatISSocBdVwi6Cw==
   dependencies:
-    astrocite-core "^0.14.0"
+    astrocite-core "^0.15.0"
     csl-json "^0.1.0"
 
-astrocite-googlebooks@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/astrocite-googlebooks/-/astrocite-googlebooks-0.14.0.tgz#dc66fcf2053b9ae0f4d0197d5f55615d7b3f686f"
-  integrity sha512-vdDDFKV/RoAQxhbtPigRtyT79LRyY/wBYv+hdCsyc6NyR1u99Eh564A4MbkfPQ6oQVWQFietRC03ETxYfuBEJA==
+astrocite-googlebooks@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/astrocite-googlebooks/-/astrocite-googlebooks-0.15.0.tgz#f120a95ec3d95da0f357036ac40b727c81be4bcd"
+  integrity sha512-rxv8o3OfE0cwmLyc9ZUYghg+G/bBbzto355EgS/g9IbrWlctIUqkGPlYlDH/zZX22Izj0dCXLAbEk3gHZ9Wz9Q==
   dependencies:
-    astrocite-core "^0.14.0"
+    astrocite-core "^0.15.0"
     csl-json "^0.1.0"
 
-astrocite-ris@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/astrocite-ris/-/astrocite-ris-0.14.0.tgz#263566b911453b74581cb3d428ce322ea6740c26"
-  integrity sha512-sfdr9Y4YE0/D9a43zfDSyJ+gj9q01fh6IyzwmI3mWSGfzXWrePubjwUWAU7zKryArlhwk1laiivKzmibWPT3Vg==
+astrocite-ris@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/astrocite-ris/-/astrocite-ris-0.15.0.tgz#74a7a891f77a61c19b376141bad73f8f241d7cc8"
+  integrity sha512-CrhqcwWF89HOlJNwHz5VnFOfkoOUywE9/CHx5bszbe1X9jfujKWIh4piziK/lFVZMk3o9m6hUkG63tGtHpAlkg==
   dependencies:
-    astrocite-core "^0.14.0"
+    astrocite-core "^0.15.0"
     csl-json "^0.1.0"
 
-astrocite@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/astrocite/-/astrocite-0.14.0.tgz#38cf4a31915bfbf986ccc48a2fad6f2632019b48"
-  integrity sha512-XcfedQGjizpxiyLhV00TZTn4hPdxO4bxuyhUrqhrv2htyoDCfTahEW6D4rQSo0ldiIMFIhT7Qub/47v93fdyRQ==
+astrocite@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/astrocite/-/astrocite-0.15.0.tgz#0d805a489eb3ef7da3aead4f1bfe18a21f655a3c"
+  integrity sha512-d6VIWLTjhp4UYWei/IaysAHAASK3JLGbb0ym3lXGrPw8Gr5LyFnLYxLpfUNUrzuVjN++rZ5PjRc66ntpAk4z5g==
   dependencies:
-    astrocite-bibtex "^0.14.0"
-    astrocite-eutils "^0.14.0"
-    astrocite-googlebooks "^0.14.0"
-    astrocite-ris "^0.14.0"
+    astrocite-bibtex "^0.15.0"
+    astrocite-eutils "^0.15.0"
+    astrocite-googlebooks "^0.15.0"
+    astrocite-ris "^0.15.0"
 
 async-each@^1.0.1:
   version "1.0.3"
@@ -959,10 +959,10 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-citeproc@^2.2.22:
-  version "2.2.22"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.22.tgz#0ecd121f3a715cec02c33fd030ba800921b568a7"
-  integrity sha512-IiflK3N964weUcPWZgfJm+tGXDRCam5tLCUsZCqKlQccF0M81jtFSvqvmmPiMWafiSfoK4vQzZMCg+mWFGFDHQ==
+citeproc@^2.2.23:
+  version "2.2.23"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.23.tgz#3f1b46d9529a0f582752dca35e490f2118625f1d"
+  integrity sha512-tCZdyxwcjiVcb3PwBnHF3gtFc77T5LMMhkhdFIst2Utfk3/WMcgg/0n8x5XzKOPHGvySM5wPh3u1jq/cVJp0AQ==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -1197,13 +1197,12 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-cross-env@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-5.2.0.tgz#6ecd4c015d5773e614039ee529076669b9d126f2"
-  integrity sha512-jtdNFfFW1hB7sMhr/H6rW1Z45LFqyI431m3qU6bFXcQ3Eh7LtBuG3h74o7ohHZ3crrRkkqHlo4jYHFPcjroANg==
+cross-env@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-5.2.1.tgz#b2c76c1ca7add66dc874d11798466094f551b34d"
+  integrity sha512-1yHhtcfAd1r4nwQgknowuUNfIT9E8dOMMspC36g45dN+iD1blloi7xp8X/xAIDnjHWyt1uQ8PHk2fkNaym7soQ==
   dependencies:
     cross-spawn "^6.0.5"
-    is-windows "^1.0.0"
 
 cross-spawn@6.0.5, cross-spawn@^6.0.0, cross-spawn@^6.0.5:
   version "6.0.5"
@@ -1573,10 +1572,10 @@ electron-publish@21.2.0:
     lazy-val "^1.0.4"
     mime "^2.4.4"
 
-electron@^5.0.10:
-  version "5.0.10"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-5.0.10.tgz#a3819c3ff8d05ee57315bfabe2d61d3529f5659c"
-  integrity sha512-OSyxTlJ+7Yf0B+6pTdHdxY9RvI4U+mVKAbn+CkAOWxlCPMg3K+jt5UHKSPRRLnXQhQ0Tulg4vupbC0k27aukVw==
+electron@^6.0.7:
+  version "6.0.7"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-6.0.7.tgz#cf3f02502aa58d1517f3befd9c2da2a95cd2eb46"
+  integrity sha512-W0TFnJrBdYBUhzRnEqZt/CfYFmG9RwSnhhXBbOumn/qLQYr9e7kXb6z4y0XQQLhXKkDhuXp+dNqfzhtId5ZiQw==
   dependencies:
     "@types/node" "^10.12.18"
     electron-download "^4.1.0"
@@ -1666,10 +1665,10 @@ escape-string-regexp@^1.0.5:
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
   integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
 
-eslint-config-standard@^14.0.1:
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/eslint-config-standard/-/eslint-config-standard-14.0.1.tgz#375c3636fb4bd453cb95321d873de12e4eef790b"
-  integrity sha512-1RWsAKTDTZgA8bIM6PSC9aTGDAUlKqNkYNJlTZ5xYD/HYkIM6GlcefFvgcJ8xi0SWG5203rttKYX28zW+rKNOg==
+eslint-config-standard@^14.1.0:
+  version "14.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-standard/-/eslint-config-standard-14.1.0.tgz#b23da2b76fe5a2eba668374f246454e7058f15d4"
+  integrity sha512-EF6XkrrGVbvv8hL/kYa/m6vnvmUT+K82pJJc4JJVMM6+Qgqh0pnwprSxdduDLB9p/7bIxD+YV5O0wfb8lmcPbA==
 
 eslint-import-resolver-node@^0.3.2:
   version "0.3.2"
@@ -1687,12 +1686,12 @@ eslint-module-utils@^2.4.0:
     debug "^2.6.8"
     pkg-dir "^2.0.0"
 
-eslint-plugin-es@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-es/-/eslint-plugin-es-1.4.0.tgz#475f65bb20c993fc10e8c8fe77d1d60068072da6"
-  integrity sha512-XfFmgFdIUDgvaRAlaXUkxrRg5JSADoRC8IkKLc/cISeR3yHVMefFHQZpcyXXEUUPHfy5DwviBcrfqlyqEwlQVw==
+eslint-plugin-es@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-es/-/eslint-plugin-es-1.4.1.tgz#12acae0f4953e76ba444bfd1b2271081ac620998"
+  integrity sha512-5fa/gR2yR3NxQf+UXkeLeP8FBBl6tSgdrAz1+cF84v1FMM4twGwQoqTnn+QxFLcPOrF4pdKEJKDB/q9GoyJrCA==
   dependencies:
-    eslint-utils "^1.3.0"
+    eslint-utils "^1.4.2"
     regexpp "^2.0.1"
 
 eslint-plugin-import@^2.18.2:
@@ -1712,13 +1711,13 @@ eslint-plugin-import@^2.18.2:
     read-pkg-up "^2.0.0"
     resolve "^1.11.0"
 
-eslint-plugin-node@^9.1.0:
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-node/-/eslint-plugin-node-9.1.0.tgz#f2fd88509a31ec69db6e9606d76dabc5adc1b91a"
-  integrity sha512-ZwQYGm6EoV2cfLpE1wxJWsfnKUIXfM/KM09/TlorkukgCAwmkgajEJnPCmyzoFPQQkmvo5DrW/nyKutNIw36Mw==
+eslint-plugin-node@^9.2.0:
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-node/-/eslint-plugin-node-9.2.0.tgz#b1911f111002d366c5954a6d96d3cd5bf2a3036a"
+  integrity sha512-2abNmzAH/JpxI4gEOwd6K8wZIodK3BmHbTxz4s79OIYwwIt2gkpEXlAouJXu4H1c9ySTnRso0tsuthSOZbUMlA==
   dependencies:
-    eslint-plugin-es "^1.4.0"
-    eslint-utils "^1.3.1"
+    eslint-plugin-es "^1.4.1"
+    eslint-utils "^1.4.2"
     ignore "^5.1.1"
     minimatch "^3.0.4"
     resolve "^1.10.1"
@@ -1750,7 +1749,7 @@ eslint-scope@^5.0.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-utils@^1.3.0, eslint-utils@^1.3.1, eslint-utils@^1.4.2:
+eslint-utils@^1.4.2:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/eslint-utils/-/eslint-utils-1.4.2.tgz#166a5180ef6ab7eb462f162fd0e6f2463d7309ab"
   integrity sha512-eAZS2sEUMlIeCjBeubdj45dmBHQwPHWyBcT1VSYB7o9x9WRRqKxyUoiXlRjyAwzN7YEzHJlYg0NmzDRWx6GP4Q==
@@ -1762,10 +1761,10 @@ eslint-visitor-keys@^1.0.0, eslint-visitor-keys@^1.1.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-1.1.0.tgz#e2a82cea84ff246ad6fb57f9bde5b46621459ec2"
   integrity sha512-8y9YjtM1JBJU/A9Kc+SbaOV4y29sSWckBwMHa+FGtVj5gN/sbnKDf6xJUl+8g7FAij9LVaP8C24DUiH/f/2Z9A==
 
-eslint@^6.2.1:
-  version "6.2.2"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-6.2.2.tgz#03298280e7750d81fcd31431f3d333e43d93f24f"
-  integrity sha512-mf0elOkxHbdyGX1IJEUsNBzCDdyoUgljF3rRlgfyYh0pwGnreLc0jjD6ZuleOibjmnUWZLY2eXwSooeOgGJ2jw==
+eslint@^6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-6.3.0.tgz#1f1a902f67bfd4c354e7288b81e40654d927eb6a"
+  integrity sha512-ZvZTKaqDue+N8Y9g0kp6UPZtS4FSY3qARxBs7p4f0H0iof381XHduqVerFWtK8DPtKmemqbqCFENWSQgPR/Gow==
   dependencies:
     "@babel/code-frame" "^7.0.0"
     ajv "^6.10.0"
@@ -2894,7 +2893,7 @@ is-utf8@^0.2.0:
   resolved "https://registry.yarnpkg.com/is-utf8/-/is-utf8-0.2.1.tgz#4b0da1442104d1b336340e80797e865cf39f7d72"
   integrity sha1-Sw2hRCEE0bM2NA6AeX6GXPOffXI=
 
-is-windows@^1.0.0, is-windows@^1.0.1, is-windows@^1.0.2:
+is-windows@^1.0.1, is-windows@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/is-windows/-/is-windows-1.0.2.tgz#d1850eb9791ecd18e6182ce12a30f396634bb19d"
   integrity sha512-eXK1UInq2bPmjyX6e3VHIzMLobc4J94i4AWn+Hpq3OU5KkrRC96OAcR3PRJ/pGu6m8TRnBHP9dkXQVsT/COVIA==
@@ -4643,6 +4642,13 @@ sanitize-filename@^1.6.2:
   dependencies:
     truncate-utf8-bytes "^1.0.0"
 
+sanitize-filename@^1.6.3:
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/sanitize-filename/-/sanitize-filename-1.6.3.tgz#755ebd752045931977e30b2025d340d7c9090378"
+  integrity sha512-y/52Mcy7aw3gRm7IrcGDFx/bCk4AhRh2eI9luHOQM86nZsqwiRkkq2GekHXBBD+SmPidc8i2PqtYZl+pWJ8Oeg==
+  dependencies:
+    truncate-utf8-bytes "^1.0.0"
+
 sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
@@ -4951,10 +4957,10 @@ strict-uri-encode@^1.0.0:
   resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
   integrity sha1-J5siXfHVgrH1TmWt3UNS4Y+qBxM=
 
-string-extract-class-names@^5.8.38:
-  version "5.8.38"
-  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.8.38.tgz#baaf2d355c23dd06525e3f7463333c492790e5d2"
-  integrity sha512-hSryZgYIK1GXXa2BHZYqUDrcCFejU1fhBD+bhwfozIqNekj1VeaCHh6i0O7y/69eKYDi1zNtMhW9l8V6RNyaFw==
+string-extract-class-names@^5.8.40:
+  version "5.8.40"
+  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.8.40.tgz#b4c9c8ea427c1914d4ddbb1674bd1724ffc21ffd"
+  integrity sha512-YeoghvFM5p6AQZa/PPpJHxHUxi24gXWogqcs92EGTe4auWPrSArXMvv79so5rGiE07/qV707sZVLqlh++FxqmA==
 
 string-width@^1.0.1:
   version "1.0.2"
@@ -5575,10 +5581,10 @@ webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack@^4.39.2:
-  version "4.39.2"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.39.2.tgz#c9aa5c1776d7c309d1b3911764f0288c8c2816aa"
-  integrity sha512-AKgTfz3xPSsEibH00JfZ9sHXGUwIQ6eZ9tLN8+VLzachk1Cw2LVmy+4R7ZiwTa9cZZ15tzySjeMui/UnSCAZhA==
+webpack@^4.39.3:
+  version "4.39.3"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.39.3.tgz#a02179d1032156b713b6ec2da7e0df9d037def50"
+  integrity sha512-BXSI9M211JyCVc3JxHWDpze85CvjC842EvpRsVTc/d15YJGlox7GIDd38kJgWrb3ZluyvIjgenbLDMBQPDcxYQ==
   dependencies:
     "@webassemblyjs/ast" "1.8.5"
     "@webassemblyjs/helper-module-context" "1.8.5"

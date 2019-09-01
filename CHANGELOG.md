@@ -92,6 +92,7 @@
 - Removed `ZettlrWindow::setTitle()`.
 - ESLint is now added to the `devDependencies` so that everyone can use the same code style.
 - Add activation for opening external links on macOS.
+- Switched to `Electron 6`.
 
 # 1.3.0
 

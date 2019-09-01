@@ -49,54 +49,54 @@ anymatch@^3.0.1:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
-astrocite-bibtex@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/astrocite-bibtex/-/astrocite-bibtex-0.14.0.tgz#c05d31addd269dbaf8e423e7fea34f49029820ce"
-  integrity sha512-QRrhrED8ikWtPvtNtgkN8YIX8xJNPCFIUYttyJ/h98q0Y1X3NqWxQn978vIkPWvDxhy3xsjUq9u1Uvs2c2UkCw==
+astrocite-bibtex@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/astrocite-bibtex/-/astrocite-bibtex-0.15.0.tgz#680edd1992ab4319d8913ac3b37c4efc8cfe31b2"
+  integrity sha512-XyACfnf2VbKKOEhyGxYaRWTtW55t6tnqfipNL2A1buic2SNuiO+b5+eVJ2eHkXUzfBJqbof7AccHrkBFOoQXIA==
   dependencies:
-    astrocite-core "^0.14.0"
+    astrocite-core "^0.15.0"
     csl-json "^0.1.0"
 
-astrocite-core@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/astrocite-core/-/astrocite-core-0.14.0.tgz#c04a0686e53791420af2e9c31183ffed43e06c0a"
-  integrity sha512-S/IuwzgFUYRjjPA/KpL0jRpNz+mrW0ML9Aj1yaFTgMc4hswwbX9O/+nPu327PWdzjmr9PsDkZ3eSsOJrQ8TowQ==
+astrocite-core@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/astrocite-core/-/astrocite-core-0.15.0.tgz#191c5d2e39caa1a1ae8b5460a684630f34e50fa3"
+  integrity sha512-XReFjy0j442cCnHt8R5c2gQD+NrE6ZwiljmCG2tPXuRBXrRVhSYKe8taPNEW8l3S5LjYjGucwZBI1vzqGoRCIg==
   dependencies:
     csl-json "^0.1.0"
 
-astrocite-eutils@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/astrocite-eutils/-/astrocite-eutils-0.14.0.tgz#d05bf14623c7877d54ec0feaf3914b1d66fb34d9"
-  integrity sha512-TChWXfgQ+1YM2J3Kpfk3/sb90Pcfw0yM0gC3BlLjIISO0kgF2e4MXGfjlfB1bpaMxAcKMSIch+IgjhJkexDjOg==
+astrocite-eutils@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/astrocite-eutils/-/astrocite-eutils-0.15.0.tgz#7979568eb3773bcf68e0bbd47cbdc1d56c7ad668"
+  integrity sha512-Jj5SNtJAK2c4689M9ypmYMx3ajisvjRHuVO7XMJ6P6UAmLqz1YVpz5DazkLeWgRH0VD4IgHatISSocBdVwi6Cw==
   dependencies:
-    astrocite-core "^0.14.0"
+    astrocite-core "^0.15.0"
     csl-json "^0.1.0"
 
-astrocite-googlebooks@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/astrocite-googlebooks/-/astrocite-googlebooks-0.14.0.tgz#dc66fcf2053b9ae0f4d0197d5f55615d7b3f686f"
-  integrity sha512-vdDDFKV/RoAQxhbtPigRtyT79LRyY/wBYv+hdCsyc6NyR1u99Eh564A4MbkfPQ6oQVWQFietRC03ETxYfuBEJA==
+astrocite-googlebooks@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/astrocite-googlebooks/-/astrocite-googlebooks-0.15.0.tgz#f120a95ec3d95da0f357036ac40b727c81be4bcd"
+  integrity sha512-rxv8o3OfE0cwmLyc9ZUYghg+G/bBbzto355EgS/g9IbrWlctIUqkGPlYlDH/zZX22Izj0dCXLAbEk3gHZ9Wz9Q==
   dependencies:
-    astrocite-core "^0.14.0"
+    astrocite-core "^0.15.0"
     csl-json "^0.1.0"
 
-astrocite-ris@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/astrocite-ris/-/astrocite-ris-0.14.0.tgz#263566b911453b74581cb3d428ce322ea6740c26"
-  integrity sha512-sfdr9Y4YE0/D9a43zfDSyJ+gj9q01fh6IyzwmI3mWSGfzXWrePubjwUWAU7zKryArlhwk1laiivKzmibWPT3Vg==
+astrocite-ris@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/astrocite-ris/-/astrocite-ris-0.15.0.tgz#74a7a891f77a61c19b376141bad73f8f241d7cc8"
+  integrity sha512-CrhqcwWF89HOlJNwHz5VnFOfkoOUywE9/CHx5bszbe1X9jfujKWIh4piziK/lFVZMk3o9m6hUkG63tGtHpAlkg==
   dependencies:
-    astrocite-core "^0.14.0"
+    astrocite-core "^0.15.0"
     csl-json "^0.1.0"
 
-astrocite@^0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/astrocite/-/astrocite-0.14.0.tgz#38cf4a31915bfbf986ccc48a2fad6f2632019b48"
-  integrity sha512-XcfedQGjizpxiyLhV00TZTn4hPdxO4bxuyhUrqhrv2htyoDCfTahEW6D4rQSo0ldiIMFIhT7Qub/47v93fdyRQ==
+astrocite@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/astrocite/-/astrocite-0.15.0.tgz#0d805a489eb3ef7da3aead4f1bfe18a21f655a3c"
+  integrity sha512-d6VIWLTjhp4UYWei/IaysAHAASK3JLGbb0ym3lXGrPw8Gr5LyFnLYxLpfUNUrzuVjN++rZ5PjRc66ntpAk4z5g==
   dependencies:
-    astrocite-bibtex "^0.14.0"
-    astrocite-eutils "^0.14.0"
-    astrocite-googlebooks "^0.14.0"
-    astrocite-ris "^0.14.0"
+    astrocite-bibtex "^0.15.0"
+    astrocite-eutils "^0.15.0"
+    astrocite-googlebooks "^0.15.0"
+    astrocite-ris "^0.15.0"
 
 balanced-match@^1.0.0:
   version "1.0.0"
@@ -193,10 +193,10 @@ chokidar@^3.0.2:
   optionalDependencies:
     fsevents "^2.0.6"
 
-citeproc@^2.2.22:
-  version "2.2.22"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.22.tgz#0ecd121f3a715cec02c33fd030ba800921b568a7"
-  integrity sha512-IiflK3N964weUcPWZgfJm+tGXDRCam5tLCUsZCqKlQccF0M81jtFSvqvmmPiMWafiSfoK4vQzZMCg+mWFGFDHQ==
+citeproc@^2.2.23:
+  version "2.2.23"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.23.tgz#3f1b46d9529a0f582752dca35e490f2118625f1d"
+  integrity sha512-tCZdyxwcjiVcb3PwBnHF3gtFc77T5LMMhkhdFIst2Utfk3/WMcgg/0n8x5XzKOPHGvySM5wPh3u1jq/cVJp0AQ==
 
 cliui@^4.0.0:
   version "4.1.0"
@@ -727,10 +727,10 @@ rimraf@^3.0.0:
   dependencies:
     glob "^7.1.3"
 
-sanitize-filename@^1.6.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/sanitize-filename/-/sanitize-filename-1.6.2.tgz#01b4fc8809f14e9d22761fe70380fe7f3f902185"
-  integrity sha512-cmTzND7RMxUB+f7gI+4+KAVHWEg0lfXvQJdko+FXDP5bNbGIdx4KMP5pX6lv5jfT9jSf6OBbjyxjFtZQwYA/ig==
+sanitize-filename@^1.6.3:
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/sanitize-filename/-/sanitize-filename-1.6.3.tgz#755ebd752045931977e30b2025d340d7c9090378"
+  integrity sha512-y/52Mcy7aw3gRm7IrcGDFx/bCk4AhRh2eI9luHOQM86nZsqwiRkkq2GekHXBBD+SmPidc8i2PqtYZl+pWJ8Oeg==
   dependencies:
     truncate-utf8-bytes "^1.0.0"
 
