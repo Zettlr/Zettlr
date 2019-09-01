@@ -72,7 +72,7 @@
             -->
             <recycle-scroller
               v-bind:items="getDirectoryContents"
-              v-bind:item-size="($store.state.fileMeta) ? 60 : 30"
+              v-bind:item-size="($store.state.fileMeta) ? 61 : 31"
               v-bind:emit-update="true"
               v-on:update="updateDynamics"
               v-bind:page-mode="true"

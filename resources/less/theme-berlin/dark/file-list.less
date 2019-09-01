@@ -3,13 +3,13 @@
 #file-list {
   background-color: var(--grey-7);
   color:white;
+  box-shadow: inset -14px 2px 54px -23px rgba(0,0,0,0.75);
 
   div.container {
-    .selected { background-color: var(--c-primary-shade); }
-
     div.list-item {
       border-top-color: var(--grey-4);
-      border-bottom-color: var(--grey-4);
+
+    &.selected { background-color: var(--grey-6); }
 
       p.filename { color: white; }
       div.meta {

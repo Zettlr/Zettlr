@@ -21,7 +21,6 @@
     v-on:click="requestSelection"
     v-bind:draggable="isDraggable"
     v-on:dragstart.stop="beginDragging"
-    v-on:drag="handleDrag"
     v-on:dragend.stop="stopDragging"
     >
     <p class="filename">{{ basename }}</p>
