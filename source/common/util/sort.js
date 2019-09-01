@@ -68,15 +68,12 @@ module.exports = function (arr, type = 'name-up') {
       f.sort(sortingFunc).reverse()
       break
     case 'time-up':
-      console.log('Sorting time-up')
       f.sort(dateSorting)
       break
     case 'time-down':
-      console.log('Sorting time-down')
       f.sort(dateSorting).reverse()
       break
   }
-  console.log(f.map(e => e.name).join(',\n'))
 
   // Return sorted array files -> virtual directories -> directories
   return f.concat(vd).concat(d)
