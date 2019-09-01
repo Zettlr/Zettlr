@@ -25,7 +25,6 @@ class ZettlrStore {
         this._store.dispatch('selectDirectory', newDir)
       },
       patch: (oldHash, newObject) => {
-        console.log('Received a patch command!')
         this._store.dispatch('patch', { 'hash': oldHash, 'object': newObject })
       },
       commitSearchResult: (res) => {
