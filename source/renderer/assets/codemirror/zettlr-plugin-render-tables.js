@@ -102,7 +102,9 @@ const Table = require('../../util/table-helper.js');
       let tbl
       let textMarker
       tbl = new Table(0, 0, {
-        'container': '#editor .CodeMirror', // Detect mouse movement on the editor only
+        // Detect mouse movement on the scroll element (so that
+        // scroll detection in the helper works as expected)
+        'container': '#editor .CodeMirror .CodeMirror-scroll',
         'onBlur': (t) => {
           // Don't replace some arbitrary text somewhere in the document!
           if (!textMarker || !textMarker.find()) return

@@ -82,9 +82,20 @@ class TableHelper {
 
     if (evt.clientX >= minX && evt.clientX <= maxX && evt.clientY >= minY && evt.clientY <= maxY) {
       this._showEdgeButtons()
+      // Always recalculate the positions to make sure
+      // their position is always updated asap.
+      this._recalculateEdgeButtonPositions()
     } else {
       this._hideEdgeButtons()
     }
+  }
+
+  /**
+   * In case the edge buttons are visible, recalculate their positions.
+   * @param {ScrollEvent} evt The scroll event
+   */
+  _scrollHelper (evt) {
+    if (this._edgeButtonsVisible) this._recalculateEdgeButtonPositions()
   }
 
   /**
@@ -302,6 +313,7 @@ class TableHelper {
 
     // Finally instantiate the move helper
     this._containerElement.on('mousemove', $.proxy(this._moveHelper, this))
+    this._containerElement.on('scroll', $.proxy(this._scrollHelper, this))
   }
 
   /**
