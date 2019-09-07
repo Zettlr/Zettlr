@@ -13,6 +13,8 @@
  */
 
 const ZettlrCommand = require('./zettlr-command')
+const ignoreFile = require('../../common/util/ignore-file')
+const sanitize = require('sanitize-filename')
 
 class FileRename extends ZettlrCommand {
   constructor (app) {
@@ -24,14 +26,29 @@ class FileRename extends ZettlrCommand {
    * @param {String} evt The event name
    * @param  {Object} arg An object containing hash of containing and name of new dir.
    */
-  run (evt, arg) {
+  async run (evt, arg) {
     // { 'hash': hash, 'name': val }
     let oldpath = ''
+
+    // We need to prepare the name to be correct for
+    // accurate checking whether or not the file
+    // already exists
+    arg.name = sanitize(arg.name, { replacement: '-' })
+    // Make sure we got an extension.
+    if (ignoreFile(arg.name)) arg.name += '.md'
 
     let file = this._app.findFile({ 'hash': parseInt(arg.hash) })
     if (!file) return console.error(`Could not find file ${arg.hash}`)
 
     oldpath = file.path
+    console.log('Renaming file ...')
+    if (file.parent.hasChild({ 'name': arg.name })) {
+      // hasChild will look for the property "name". But as it
+      // will look for "hash" first, we need to extract it
+      let res = await this._app.getWindow().askOverwriteFile(arg.name)
+      if (res.response === 0) return console.log('Not overwriting.')// Don't overwrite; abort
+    }
+
     file.rename(arg.name) // Done.
 
     // A root has been renamed -> replace the old path with the new one.

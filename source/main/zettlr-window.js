@@ -284,7 +284,7 @@ class ZettlrWindow {
     * Prompt the user to save or omit changes, or cancel the process completely.
     * @return {Integer} Either 0 (cancel), 1 (save changes) or 2 (omit changes)
     */
-  askSaveChanges () {
+  async askSaveChanges () {
     let options = {
       type: 'question',
       title: trans('system.save_changes_title'),
@@ -298,7 +298,8 @@ class ZettlrWindow {
       defaultId: 1
     }
 
-    let ret = dialog.showMessageBox(this._win, options)
+    let ret = await dialog.showMessageBox(this._win, options)
+    // Signature: { response: <id>, checkboxChecked: <bool> }
 
     // ret can have three status: cancel = 0, save = 1, omit = 2.
     // To keep up with semantics, the function "askSaveChanges" would
@@ -306,7 +307,7 @@ class ZettlrWindow {
     // - so how deal with "omit" changes?
     // Well I don't want to create some constants so let's just leave it
     // with these three values.
-    return ret
+    return ret.response
   }
 
   /**
@@ -329,31 +330,54 @@ class ZettlrWindow {
     }
 
     // Asynchronous message box to not block the main process
-    dialog.showMessageBox(this._win, options, callback)
+    dialog.showMessageBox(this._win, options).then((data) => {
+      callback(data.response, data.checkboxChecked)
+    })
+  }
+
+  /**
+    * Ask whether or not the user wants to replace a certain file.
+    * @return {Promise} Resolves after the message box got clicked.
+    */
+  askOverwriteFile (filename) {
+    let options = {
+      type: 'question',
+      title: trans('system.overwrite_file_title'),
+      message: trans('system.overwrite_file_message', filename),
+      buttons: [
+        trans('system.cancel'),
+        trans('system.ok')
+      ],
+      cancelId: 0,
+      defaultId: 1
+    }
+
+    // showMessageBox returns a Promise
+    return dialog.showMessageBox(this._win, options)
   }
 
   /**
     * Show the dialog for choosing a directory
     * @return {Array}          An array containing all selected paths.
     */
-  askDir () {
+  async askDir () {
     let startDir = app.getPath('home')
     if (isDir(global.config.get('dialogPaths.askDirDialog'))) {
       startDir = global.config.get('dialogPaths.askDirDialog')
     }
 
-    let ret = dialog.showOpenDialog(this._win, {
+    let ret = await dialog.showOpenDialog(this._win, {
       title: trans('system.open_folder'),
       defaultPath: startDir,
       properties: [
         'openDirectory',
         'createDirectory' // macOS only
       ]
-    }) || [] // In case the dialog spits out an undefined we need a default array
+    })
 
     // Save the path of the dir into the config
-    if (ret.length > 0 && isDir(path.dirname(ret[0]))) {
-      global.config.set('dialogPaths.askDirDialog', ret[0])
+    if (!ret.canceled && ret.filePaths.length > 0 && isDir(path.dirname(ret.filePaths[0]))) {
+      global.config.set('dialogPaths.askDirDialog', ret.filePaths[0])
     }
 
     return ret
@@ -366,7 +390,7 @@ class ZettlrWindow {
    * @param {String} [startDir]       The starting directory
    * @return {Array}                   An array containing all selected files.
    */
-  askFile (filters = null, multiSel = false, startDir = global.config.get('dialogPaths.askFileDialog')) {
+  async askFile (filters = null, multiSel = false, startDir = global.config.get('dialogPaths.askFileDialog')) {
     // Sanity check for default start directory.
     if (!isDir(startDir)) startDir = app.getPath('documents')
 
@@ -386,14 +410,14 @@ class ZettlrWindow {
     // Should multiple selections be allowed?
     if (multiSel) opt.properties.push('multiSelections')
 
-    let ret = dialog.showOpenDialog(this._win, opt) || [] // In case the dialog spits out an undefined we need a default array
+    let ret = await dialog.showOpenDialog(this._win, opt) || [] // In case the dialog spits out an undefined we need a default array
 
     // Save the path of the containing dir of the first file into the config
-    if (ret.length > 0 && isDir(path.dirname(ret[0]))) {
-      global.config.set('dialogPaths.askFileDialog', ret[0])
+    if (ret.filePaths.length > 0 && isDir(path.dirname(ret.filePaths[0]))) {
+      global.config.set('dialogPaths.askFileDialog', ret.filePaths[0])
     }
 
-    return ret
+    return ret.filePaths
   }
 
   /**
@@ -406,6 +430,8 @@ class ZettlrWindow {
       options = { 'message': options }
     }
 
+    // The showmessageBox-function returns a promise,
+    // nevertheless, we don't need a return.
     dialog.showMessageBox(this._win, {
       type: options.type || 'info',
       buttons: ['Ok'],
@@ -422,8 +448,8 @@ class ZettlrWindow {
     * @param  {Mixed} obj Either ZettlrFile or ZettlrDirectory
     * @return {Boolean}     True if user wishes to remove it, or false.
     */
-  confirmRemove (obj) {
-    let ret = dialog.showMessageBox(this._win, {
+  async confirmRemove (obj) {
+    let ret = await dialog.showMessageBox(this._win, {
       type: 'warning',
       buttons: [ 'Ok', trans('system.error.cancel_remove') ],
       defaultId: 0,
@@ -434,7 +460,7 @@ class ZettlrWindow {
 
     // 0 = Ok, 1 = Cancel
 
-    return (ret === 0)
+    return (ret.response === 0)
   }
 }
 

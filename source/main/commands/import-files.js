@@ -28,7 +28,7 @@ class ImportFiles extends ZettlrCommand {
     * @param {Object} arg The command arguments.
     * @return {void} Does not return.
     */
-  run (evt, arg) {
+  async run (evt, arg) {
     if (!this._app.getCurrentDir()) {
       global.ipc.notify(trans('system.import_no_directory'))
       return false
@@ -46,7 +46,7 @@ class ImportFiles extends ZettlrCommand {
     }
 
     // First ask the user for a fileList
-    let fileList = this._app.window.askFile(fltr, true)
+    let fileList = await this._app.window.askFile(fltr, true)
     if (!fileList || fileList.length === 0) {
       // The user seems to have decided not to import anything. Gracefully
       // fail. Not like the German SPD.

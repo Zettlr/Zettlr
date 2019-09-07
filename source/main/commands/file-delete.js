@@ -25,7 +25,7 @@ class FileDelete extends ZettlrCommand {
     * @param  {Object} arg the parameters of the file to be deleted
     * @return {Boolean} Whether the file was successfully deleted.
     */
-  run (evt, arg) {
+  async run (evt, arg) {
     // First determine if this is modified.
     if (!this._app.canClose()) return false
 
@@ -41,7 +41,7 @@ class FileDelete extends ZettlrCommand {
 
     let file = this._app.findFile({ 'hash': parseInt(hash) })
 
-    if (!this._app.window.confirmRemove(file)) return false
+    if (!await this._app.window.confirmRemove(file)) return false
 
     // Now that we are save, let's move the current file to trash.
     if (this._app.getCurrentFile() === file) {

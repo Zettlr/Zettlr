@@ -24,7 +24,7 @@ class DirDelete extends ZettlrCommand {
     * @param {String} evt The event name
     * @param  {Object} arg An object containing hash of containing and name of new dir.
     */
-  run (evt, arg) {
+  async run (evt, arg) {
     let hash = arg.hasOwnProperty('hash') ? arg.hash : this._app.getCurrentFile().hash
     let filedir = null
     let dir = null
@@ -42,7 +42,7 @@ class DirDelete extends ZettlrCommand {
       return false
     }
 
-    if (!this._app.window.confirmRemove(dir)) {
+    if (!await this._app.window.confirmRemove(dir)) {
       return false
     }
 
