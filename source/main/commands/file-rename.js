@@ -41,12 +41,11 @@ class FileRename extends ZettlrCommand {
     if (!file) return console.error(`Could not find file ${arg.hash}`)
 
     oldpath = file.path
-    console.log('Renaming file ...')
     if (file.parent.hasChild({ 'name': arg.name })) {
       // hasChild will look for the property "name". But as it
       // will look for "hash" first, we need to extract it
       let res = await this._app.getWindow().askOverwriteFile(arg.name)
-      if (res.response === 0) return console.log('Not overwriting.')// Don't overwrite; abort
+      if (res.response === 0) return // Don't overwrite; abort
     }
 
     file.rename(arg.name) // Done.
@@ -62,6 +61,9 @@ class FileRename extends ZettlrCommand {
         }
       }
     }
+
+    // Make sure the directory knows what has been changed
+    await file.parent.scan()
 
     // Replace all relevant properties of the renamed file in renderer.
     global.application.fileUpdate(arg.hash, file.getMetadata())
