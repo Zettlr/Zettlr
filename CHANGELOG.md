@@ -1,3 +1,15 @@
+# 1.4.1
+
+## GUI and Functionality
+
+- Added a security check when you are about to overwrite an already existing file.
+- Overwriting files in a directory now doesn't leave an empty space in the file list.
+
+## Under the Hood
+
+- Fixed Electron's dialog signature handling.
+- Small fixes to the core.
+
 # 1.4.0
 
 ## GUI and Functionality

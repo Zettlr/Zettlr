@@ -236,15 +236,13 @@ class Zettlr {
     * Returns false if the file should not close, and true if it's safe.
     * @return {Boolean} Either true, if the window can close, or false.
     */
-  canClose () {
+  async canClose () {
     if (this.isModified()) {
       // The file is currently modified. Ask for saving.
-      let ret = this.window.askSaveChanges()
+      let ret = await this.window.askSaveChanges()
 
       // Cancel: abort opening a new file
-      if (ret === 0) {
-        return false
-      }
+      if (ret === 0) return false
 
       if (ret === 1) { // User wants to save the file first.
         this.ipc.send('file-save', {})
@@ -253,9 +251,7 @@ class Zettlr {
       }
 
       // Mark as if nothing has been changed
-      if (ret === 2) {
-        this.clearModified()
-      }
+      if (ret === 2) this.clearModified()
     }
     return true
   }
@@ -264,8 +260,8 @@ class Zettlr {
     * This function is mainly called by the browser window to close the app.
     * @return {void} Does not return anything.
     */
-  saveAndClose () {
-    if (this.canClose()) {
+  async saveAndClose () {
+    if (await this.canClose()) {
       // Remember to clear the editFlag because otherwise the window
       // will refuse to close itself
       this.clearModified()
@@ -299,8 +295,8 @@ class Zettlr {
     * @param  {Integer} arg An integer containing the file's hash.
     * @return {void}     This function does not return anything.
     */
-  sendFile (arg) {
-    if (!this.canClose()) return
+  async sendFile (arg) {
+    if (!await this.canClose()) return
 
     // arg contains the hash of a file.
     // findFile now returns the file object
@@ -344,17 +340,12 @@ class Zettlr {
   /**
     * Open a new root.
     */
-  open () {
+  async open () {
     // The user wants to open another file or directory.
-    let ret = this.window.askDir()
-
-    // The user may have provided no path at all, which returns in an
-    // empty array -> check against and abort if array is empty
-    if (!(ret && ret.length)) return
-
-    // Ret is now an array. As we do not allow multiple selection, just
-    // take the first index.
-    ret = ret[0]
+    let ret = await this.window.askDir()
+    // Let's see if the user has canceled or not provided a path
+    if (ret.canceled || ret.filePaths.length === 0) return
+    ret = ret.filePaths[0] // We only need the filePaths property, first element
 
     if ((isDir(ret) && ignoreDir(ret)) || (isFile(ret) && ignoreFile(ret)) || ret === app.getPath('home')) {
       // We cannot add this dir, because it is in the list of ignored directories.
@@ -365,7 +356,7 @@ class Zettlr {
       })
     }
 
-    this.handleAddRoots([ret])
+    await this.handleAddRoots([ret])
   }
 
   /**

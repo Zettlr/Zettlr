@@ -140,7 +140,7 @@ class ZettlrDialog extends EventEmitter {
     // Abort integration if an abort button is given
     this._modal.find('#abort').on('click', (e) => { this.close() })
 
-    // Integration of default action: If there isa data-default-action button
+    // Integration of default action: If there is a data-default-action button
     // in the dialog, focus it so that the user by pressing return can immediately
     // issue the command.
     this._modal.find('button[data-default-action="data-default-action"]').focus()

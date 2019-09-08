@@ -30,10 +30,10 @@ class ImportLangFile extends ZettlrCommand {
     * @param {String} evt The event name
     * @param {Object} arg The arguments
     */
-  run (evt, arg) {
+  async run (evt, arg) {
     let files
     try {
-      files = this.askLangFile()
+      files = await this.askLangFile()
     } catch (err) {
       return false // The main window is not open
     }
@@ -67,9 +67,9 @@ class ImportLangFile extends ZettlrCommand {
 
   /**
     * Asks for a language file to be imported to the app.
-    * @return {[type]} [description]
+    * @return {Promise} A promise that resolves to an array of files.
     */
-  askLangFile () {
+  async askLangFile () {
     if (!global.mainWindow) throw new Error('Main Window not open!')
 
     let startDir = app.getPath('desktop')
@@ -77,7 +77,7 @@ class ImportLangFile extends ZettlrCommand {
       startDir = global.config.get('dialogPaths.askLangFileDialog')
     }
 
-    let ret = dialog.showOpenDialog(global.mainWindow, {
+    let ret = await dialog.showOpenDialog(global.mainWindow, {
       'title': trans('system.import_lang_file'),
       'defaultPath': startDir,
       'filters': [
@@ -86,14 +86,14 @@ class ImportLangFile extends ZettlrCommand {
       'properties': [
         'openFile'
       ]
-    }) || [] // In case the dialog spits out an undefined we need a default array
+    })
 
     // Save the path of the containing dir of the first file into the config
-    if (ret.length > 0 && isDir(path.dirname(ret[0]))) {
-      global.config.set('dialogPaths.askLangFileDialog', ret[0])
+    if (ret.filePaths.length > 0 && isDir(path.dirname(ret.filePaths[0]))) {
+      global.config.set('dialogPaths.askLangFileDialog', ret.filePaths[0])
     }
 
-    return ret
+    return ret.filePaths
   }
 }
 
