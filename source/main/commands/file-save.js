@@ -27,7 +27,7 @@ class SaveFile extends ZettlrCommand {
     * @param  {Object} file An object containing some properties of the file.
     * @return {void}      This function does not return.
     */
-  run (evt, file) {
+  async run (evt, file) {
     if ((file == null) || !file.hasOwnProperty('content')) {
       // No file given -> abort saving process
       return false
@@ -48,7 +48,8 @@ class SaveFile extends ZettlrCommand {
     if (!file.hasOwnProperty('hash') || file.hash == null) {
       // For ease create a new file in current directory.
       if (this._app.getCurrentDir() == null) {
-        switch (this._app.window.askSaveChanges()) {
+        let ret = await this._app.window.askSaveChanges()
+        switch (ret) {
           case 2: // Omit changes
             // Mark clean and force-close
             this._app.ipc.send('file-close', {})

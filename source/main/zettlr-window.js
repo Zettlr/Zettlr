@@ -164,8 +164,8 @@ class ZettlrWindow {
     this._win.on('move', sizingCallback)
 
     // Prevent closing if unable to comply
-    this._win.beforeunload = (e) => {
-      if (!this.canClose()) {
+    this._win.beforeunload = async (e) => {
+      if (!await this.canClose()) {
         // Prevent closing for now.
         e.returnValue = false
         // And ask the user to save changes. The parent will then re-
@@ -276,7 +276,7 @@ class ZettlrWindow {
 
   /**
     * Can we close the window?
-    * @return {Boolean} Returns either true or false depending on modification flag on parent.
+    * @return {Promise} Resolves to true or false, depending on the state.
     */
   canClose () { return this._app.canClose() }
 

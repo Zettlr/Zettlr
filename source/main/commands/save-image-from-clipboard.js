@@ -32,7 +32,7 @@ class SaveImage extends ZettlrCommand {
    * @param  {Object} target Options on the image
    * @return {void}        Does not return.
    */
-  run (evt, target) {
+  async run (evt, target) {
     // First check the name for sanity
     target.name = sanitize(target.name, '-')
     if (target.name === '') {
@@ -60,7 +60,8 @@ class SaveImage extends ZettlrCommand {
 
     // Did the user want to choose the directory for this one? Then let's ask him!
     if (target.mode === 'save-other') {
-      defaultPath = this._app.getWindow().askDir()[0] // We only take one directory
+      let dirs = await this._app.getWindow().askDir()
+      defaultPath = dirs.filePaths[0] // We only take one directory
     }
 
     if (!path.isAbsolute(defaultPath)) {

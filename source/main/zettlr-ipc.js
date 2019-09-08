@@ -65,8 +65,10 @@ class ZettlrIPC {
         // only to confuse myself in some months when I will stumble back upon
         // this piece of code and wonder why I have to send/return the thing
         // twice.)
-        arg.returnValue = this.runCall(arg.command, arg.content)
-        event.sender.send('message', arg)
+        this.runCall(arg.command, arg.content).then((retVal) => {
+          arg.returnValue = retVal
+          event.sender.send('message', arg)
+        })
         return // Also, don't dispatch further
       }
 
@@ -317,9 +319,9 @@ class ZettlrIPC {
    * Literally the same as dispatch(), only with returns
    * @param  {string} cmd The Command
    * @param  {Object} arg The payload
-   * @return {Mixed}     Whatever is registered in runCall to return for a given cmd.
+   * @return {Promise}    Returns a promise that resolves to the return value
    */
-  runCall (cmd, arg) {
+  async runCall (cmd, arg) {
     // We received a new event and need to handle it.
 
     switch (cmd) {
