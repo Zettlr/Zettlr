@@ -11,7 +11,7 @@
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-06-29T11:48:33.000000Z"
+        "updated_at": "2019-09-08T12:07:49.000000Z"
     },
     "dialog": {
         "about": {
@@ -20,7 +20,6 @@
             "chokidar": "D\u00e9tecte les changements apport\u00e9s aux fichiers par des programmes ext\u00e9rieurs",
             "citationstyle": "Zettlr a recours \u00e0 Citeproc pour afficher les citations et les r\u00e9f\u00e9rences bibliographiques directement dans l'\u00e9diteur. \u00c0 cet effet, Zettlr utilise des fichiers de directive au format CSL (Citation Style Language). Ces fichiers sont fournis tels quels, avec les coordonn\u00e9es des auteurs. Pour plus d'informations:",
             "citeproc": "Formate proprement les citations pour tout type de travaux",
-            "clusterizejs": "Affiche m\u00eame les listes les plus longues",
             "contributors": "Contributeurs",
             "jquery": "Facilite le rendu de toute l'interface utilisateur",
             "katex": "Rendu des formules LaTeX dans l\u2019\u00e9diteur",
@@ -66,12 +65,12 @@
             "no_xelatex": "Xelatex non trouv\u00e9. Pandoc l'utilise pour exporter en PDF. Veuillez installer une distribution de LaTeX pour activer l'export PDF."
         },
         "file_new": {
-            "placeholder": "Nom du fichier",
-            "value": "Sans nom"
+            "placeholder": "Nom du fichier"
         },
         "file_rename": {
             "placeholder": "Nom du fichier"
         },
+        "filter_tags": "Filtrer les \u00e9tiquettes",
         "find": {
             "find_label": "Trouver",
             "find_placeholder": "Trouver\u2026",
@@ -114,6 +113,7 @@
                 "es-ES": "Espagnol (Espagne)",
                 "et-ET": "Estonien",
                 "eu-EU": "Basquaise",
+                "fi-FI": "Finnois",
                 "fo-FO": "F\u00e9ro\u00efen",
                 "fr-FR": "Fran\u00e7ais (France)",
                 "ga-GA": "Irlandais",
@@ -169,9 +169,6 @@
             "checkForBeta": "Me pr\u00e9venir \u00e0 propos des versions b\u00eata",
             "choose_file": "Choisir un fichier\u2026",
             "citation_database": "Fichier de r\u00e9f\u00e9rences bibliographiques (au format CSL JSON ou BibTex)",
-            "combiner_collapsed": "\u00c9troit &mdash; Remontrer Preview ou Tree View",
-            "combiner_expanded": "\u00c9largi &mdash; Remontrer Preview et Tree View",
-            "combiner_explanation": "Affichage du panneau lat\u00e9ral",
             "count_chars": "Compter caract\u00e8res au lieu des mots (p. ex., pour le chinois)",
             "creationtime": "Temps de cr\u00e9ation du fichier",
             "debug": "Activer le mode debug",
@@ -188,6 +185,7 @@
                 "render_tasks": "Afficher les t\u00e2ches",
                 "title": "Afficher"
             },
+            "display_time_explanation": "Affichage chronologique des fichiers",
             "editor": "\u00c9diteur",
             "enable_rmarkdown": "Charger les fichiers RMarkdown",
             "enable_table_helper": "Activer l'\u00e9diteur de tableau",
@@ -204,11 +202,15 @@
                 "title": "Exporter"
             },
             "file_meta": "Propri\u00e9t\u00e9s du fichier",
+            "filename_generator": "Mod\u00e8le pour les nouveaux noms de fichiers",
+            "formatting_characters_explanation": "Choisissez les caract\u00e8res de formatage que les commandes en gras / d'emphase doivent utiliser",
             "general": "G\u00e9n\u00e9ral",
             "hide_dirs": "Cacher les dossiers durant la recherche globale",
             "homeEndBehaviour": "Utilise les actions par d\u00e9faut de CodeMirror pour \u003Ckbd\u003EHome\u003C/kbd\u003E et \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
+            "indent_unit": "Largeur d\u2019indentation en nombre d\u2019espaces",
             "modtime": "Heure de la derni\u00e8re modification",
             "mute_lines": "Masquer les lignes hors focus dans le mode sans distraction",
+            "new_file_dont_prompt": "Ne pas demander de nom lors de la cr\u00e9ation de nouveaux fichiers",
             "nightmode": "Mode sombre",
             "pandoc": "Chemin d'acc\u00e8s \u00e0 Pandoc. \u00c0 ne changer que si Zettlr ne parvient pas \u00e0 trouver le programme.",
             "pandoc_command": "Commande Pandoc. \u003Cstrong\u003EUtilisateurs avanc\u00e9s seulement !\u003C/strong\u003E",
@@ -260,20 +262,34 @@
                 "title": "Param\u00e8tres du projet",
                 "title_label": "Titre du projet"
             },
+            "readability_algorithm": "Algorithme \u00e0 utiliser pour le mode de lisibilit\u00e9",
             "reset_pandoc_command": "R\u00e9initialiser la commande Pandoc",
+            "sidebar_combined": "&mdash; combin\u00e9e affiche les fichiers et les r\u00e9pertoires dans l'arborescence",
+            "sidebar_expanded": "&mdash; large affiche l'arborescence et la liste de fichiers",
+            "sidebar_explanation": "Mode d\u2019affichage de la barre lat\u00e9rale",
+            "sidebar_thin": "&mdash; \u00e9troite affiche soit l'arborescence, soit la liste des fichiers",
             "sorting_ascii": "Ordre ASCII (2 apr\u00e8s 10)",
             "sorting_explanation": "Ordre de tri des fichiers (utilis\u00e9 pour le tri par nom)",
             "sorting_natural": "Ordre naturel (10 apr\u00e8s 2)",
+            "sorting_time_explanation": "Lorsque vous triez par heure, triez par",
             "spellcheck": "Choisir les langues pour lesquelles vous voulez activer le correcteur orthographique.",
             "spellcheck_search_placeholder": "Chercher les dictionnaires\u2026",
             "spellcheck_warning": "\u003Cem\u003EAttention :\u003C/em\u003Esi trop de dictionnaires sont activ\u00e9s en m\u00eame temps, Zettlr peut \u00eatre tr\u00e8s ralenti\u2009! Essayez de ne pas activer plus de 3 dictionnaires.",
+            "spellchecking": {
+                "title": "V\u00e9rification orthographique"
+            },
             "theme": {
                 "info": "Choisir le th\u00e8me de l'application.",
                 "title": "Th\u00e8me"
             },
             "title": "Param\u00e8tres",
             "translations": {
-                "downloading": "T\u00e9l\u00e9chargement de la traduction %s"
+                "download": "Cliquez pour t\u00e9l\u00e9charger",
+                "downloading": "T\u00e9l\u00e9chargement de la traduction %s",
+                "error": "Impossible de t\u00e9l\u00e9charger %s.",
+                "not_available": "%s n'est pas disponible",
+                "success": "%s t\u00e9l\u00e9charg\u00e9 avec succ\u00e8s!",
+                "updated": "Traductions mises \u00e0 jour : %s"
             },
             "user_dictionary": "Dictionnaire personnalis\u00e9. Enlever des mots avec un clic.",
             "xelatex": "Chemin d'acc\u00e8s \u00e0 xelatex. \u00c0 ne changer que si Zettlr ne parvient pas \u00e0 trouver le programme.",
@@ -362,6 +378,7 @@
             "reloading": "Le fichier du bibliographie \u00e0 chang\u00e9. Red\u00e9marrer \u2026"
         },
         "dirs": "Dossiers",
+        "display_search_results": "Afficher les r\u00e9sultats de la recherche",
         "empty_directories": "Aucun fichier ou dossier",
         "file_chars": "caract\u00e8res",
         "file_chars_sel": "caract\u00e8res (s\u00e9lection)",
@@ -386,6 +403,8 @@
             "ul": "Liste non ordonn\u00e9e"
         },
         "no_attachments": "Aucun annexe",
+        "no_dir_selected": "Aucun r\u00e9pertoire s\u00e9lectionn\u00e9",
+        "no_search_results": "Aucun r\u00e9sultat",
         "today_words": "mots aujourd'hui",
         "virtual_dirs": "Dossiers virtuels",
         "words": "%s mots",
@@ -412,9 +431,9 @@
         "cut": "Couper",
         "delete_dir": "Supprimer le dossier",
         "delete_file": "Supprimer le fichier",
-        "delete_from_vd": "Supprimer du dossier virtuel",
         "docs": "Ouvrir le manuel",
         "donate": "Soutenir Zettlr",
+        "duplicate_file": "Dupliquer le fichier",
         "export": "Exporter\u2026",
         "find_dir": "Trouver dans le dossier",
         "find_file": "Trouver dans le fichier",
@@ -428,6 +447,7 @@
         "insert_ol": "Ins\u00e9rer une liste ordonn\u00e9e",
         "insert_tasklist": "Ins\u00e9rer une liste de t\u00e2ches",
         "insert_ul": "Ins\u00e9rer une liste non ordonn\u00e9e",
+        "inspect_clipboard": "Inspecter le presse-papier",
         "italic": "Italique",
         "labels": {
             "debug": "D\u00e9velopper",
@@ -470,7 +490,7 @@
         "set_target": "D\u00e9finir la cible d'\u00e9criture\u2026",
         "speech": "Parole",
         "start_speaking": "Commencer la parole",
-        "stop_speaking": "Arr\u00eater la parole",
+        "stop_speaking": "Arr\u00eater de parler",
         "tags": "Ajuster les mot-cl\u00e9s",
         "toggle_attachments": "Voir les annexes",
         "toggle_devtools": "Outils du d\u00e9veloppeur",
@@ -553,6 +573,8 @@
         "no_command": "R\u00e9ception d'un message sans commande : % s",
         "ok": "Ok",
         "open_folder": "Ouvrir le dossier racine.",
+        "overwrite_file_message": "Le fichier %s existe d\u00e9j\u00e0 dans ce r\u00e9pertoire. \u00c9craser?",
+        "overwrite_file_title": "\u00c9craser le fichier existant",
         "replace_file_message": "Le fichier actuel a \u00e9t\u00e9 modifi\u00e9 par un programme externe. Faut-il le remplacer ?",
         "replace_file_title": "Remplacer le fichier actuel ?",
         "save_changes_cancel": "Annuler",
@@ -567,6 +589,7 @@
         "dir_new": "Cr\u00e9er un dossier",
         "dir_open": "Ouvrir un dossier",
         "file_delete": "Supprimer le fichier",
+        "file_info": "Afficher les informations du fichier (clic droit pour ligne : colonne)",
         "file_new": "Cr\u00e9er un fichier",
         "file_rename": "Renommer le fichier en cours",
         "file_save": "Enregistrer le fichier en cours",

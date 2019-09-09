@@ -5,7 +5,7 @@
             "ScaredCoward"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-08-25T13:20:04.000000Z"
+        "updated_at": "2019-09-08T10:54:12.000000Z"
     },
     "dialog": {
         "about": {
@@ -14,7 +14,6 @@
             "chokidar": "Detects any changes you make to your files outside the app",
             "citationstyle": "Zettlr makes use of citeproc to display citations directly in the editor. To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:",
             "citeproc": "Renders correct citations for all works",
-            "clusterizejs": "Displays even the longest file lists reliably",
             "contributors": "Contributors",
             "jquery": "Makes it easy to render the whole user interface",
             "katex": "Renders LaTeX-formulae in the editor",
@@ -60,8 +59,7 @@
             "no_xelatex": "Could not find the xelatex executable on your system. Please make sure to install LaTeX to be able to export to PDF."
         },
         "file_new": {
-            "placeholder": "Filename",
-            "value": "Untitled"
+            "placeholder": "Filename"
         },
         "file_rename": {
             "placeholder": "Filename"
@@ -109,6 +107,7 @@
                 "es-ES": "Spanish (Spain)",
                 "et-ET": "Estonian",
                 "eu-EU": "Basque",
+                "fi-FI": "Finnish",
                 "fo-FO": "Faroese",
                 "fr-FR": "French (France)",
                 "ga-GA": "Irish",
@@ -164,9 +163,6 @@
             "checkForBeta": "Notify me about beta releases",
             "choose_file": "Choose file \u2026",
             "citation_database": "Citation Database (CSL JSON or BibTex)",
-            "combiner_collapsed": "Thin &mdash; Show either preview or tree view",
-            "combiner_expanded": "Extended &mdash; Show both preview and tree view",
-            "combiner_explanation": "Sidebar mode",
             "count_chars": "Count characters instead of words (e.g., for Chinese)",
             "creationtime": "File creation time",
             "debug": "Enable debug mode",
@@ -429,7 +425,6 @@
         "cut": "Cut",
         "delete_dir": "Delete directory",
         "delete_file": "Delete file",
-        "delete_from_vd": "Delete from virtual directory",
         "docs": "Open user manual",
         "donate": "Support Zettlr",
         "duplicate_file": "Duplicate file",
@@ -572,6 +567,8 @@
         "no_command": "Received a message with no command: %s",
         "ok": "Ok",
         "open_folder": "Open project folder",
+        "overwrite_file_message": "The file %s already exists in this directory. Overwrite?",
+        "overwrite_file_title": "Overwrite existing file",
         "replace_file_message": "The current file has been modified remotely. Replace in editor?",
         "replace_file_title": "Replace current file?",
         "save_changes_cancel": "Cancel",

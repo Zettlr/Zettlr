@@ -1,3 +1,13 @@
+# (no version assigned)
+
+## GUI and Functionality
+
+- Removed the last remnants of Clusterize.js
+
+## Under the Hood
+
+(nothing here)
+
 # 1.4.1
 
 ## GUI and Functionality
