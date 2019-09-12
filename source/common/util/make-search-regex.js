@@ -35,7 +35,7 @@ module.exports = function (term, injectFlags = []) {
     // User wants to do a simple search. Careful: Escape all raw regex chars!
     // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
     re.term = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    re.flags = injectFlags
+    re.flags = injectFlags.concat(['i']) // Always make a case-insensitive search
   }
 
   // The flags need to be unique
