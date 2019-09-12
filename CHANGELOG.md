@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Removed the last remnants of Clusterize.js
+- Fixed a bug that would cause the app to crash when you search for `//`.
 
 ## Under the Hood
 

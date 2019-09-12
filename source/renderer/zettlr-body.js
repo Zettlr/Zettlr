@@ -603,7 +603,7 @@ class ZettlrBody {
   displayFind () {
     if (this._currentPopup) this._currentPopup.close(true)
     if (this._renderer.getCurrentFile() === null) return
-    let regexRE = /^\/.*\/[gimy]{0,4}$/ // It's meta, dude!
+    let regexRE = /^\/.+\/[gimy]{0,4}$/ // It's meta, dude!
 
     // Create the popup template. Make sure we pre-set the value, if given.
     let cnt = makeTemplate('popup', 'find', {
