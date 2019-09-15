@@ -5,6 +5,7 @@
 - Removed the last remnants of Clusterize.js
 - Fixed a bug that would cause the app to crash when you search for `//`.
 - The default editor search is now case-insensitive.
+- Added highlighting, which can be applied either with `==highlight==` or `::highlight::`.
 
 ## Under the Hood
 

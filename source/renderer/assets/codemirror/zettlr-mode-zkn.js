@@ -13,6 +13,7 @@
   'use strict'
 
   var zknTagRE = /##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?/i
+  var highlightRE = /::.+?::|==.+?==/
   var tableRE = /^\|.+\|$/i
 
   /**
@@ -32,6 +33,11 @@
         if (stream.peek() === '\\') {
           stream.next()
           return 'escape-char'
+        }
+
+        // Implement highlighting
+        if (stream.match(highlightRE)) {
+          return 'highlight'
         }
 
         // Now dig deeper for more tokens
@@ -94,6 +100,7 @@
                 !stream.match(zknTagRE, false) &&
                 !stream.match(zknIDRE, false) &&
                 !stream.match(zknLinkRE, false) &&
+                !stream.match(highlightRE, false) &&
                 !stream.match(/\\/, false)) { }
 
         return null
