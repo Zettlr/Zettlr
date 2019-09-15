@@ -41,14 +41,19 @@ class PreferencesDialog extends ZettlrDialog {
     // Determine the ability of the OS to switch to dark mode
     data.hasOSDarkMode = [ 'darwin', 'win32' ].includes(process.platform)
 
-    // Build the full translation list
-    data.languages = data.supportedLangs.map((elem) => {
-      return {
-        'bcp47': elem,
-        'completion': 100,
-        'toDownload': false
+    data.languages = [] // Initialise
+    // Make sure the languages are unique and
+    // the duplicates (internal + external files)
+    // are removed from the array.
+    for (let l of data.supportedLangs) {
+      if (!data.languages.find(e => e.bcp47 === l)) {
+        data.languages.push({
+          'bcp47': l,
+          'completion': 100,
+          'toDownload': false
+        })
       }
-    })
+    }
 
     for (let lang of data.availableLanguages) {
       // If the language is already in the supportedLangs, we can jump over them
@@ -58,6 +63,9 @@ class PreferencesDialog extends ZettlrDialog {
         data.languages.push(x)
       }
     }
+    console.log('Supported:', data.supportedLangs)
+    console.log('Available:', data.availableLanguages)
+    console.log('All langs', data.languages)
     this._languages = data.languages // Save a reference for downloading etc.
 
     return data

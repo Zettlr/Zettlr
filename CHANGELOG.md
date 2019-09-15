@@ -8,7 +8,7 @@
 
 ## Under the Hood
 
-(nothing here)
+- Made sure the default languages do not appear twice in the preferences.
 
 # 1.4.1
 
