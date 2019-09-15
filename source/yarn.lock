@@ -49,10 +49,10 @@ anymatch@^3.0.1:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
-astrocite-bibtex@^0.15.0:
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/astrocite-bibtex/-/astrocite-bibtex-0.15.0.tgz#680edd1992ab4319d8913ac3b37c4efc8cfe31b2"
-  integrity sha512-XyACfnf2VbKKOEhyGxYaRWTtW55t6tnqfipNL2A1buic2SNuiO+b5+eVJ2eHkXUzfBJqbof7AccHrkBFOoQXIA==
+astrocite-bibtex@^0.15.1:
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/astrocite-bibtex/-/astrocite-bibtex-0.15.1.tgz#700a7e9c3aa5d0a08e98d076a3454b6fbbde50aa"
+  integrity sha512-Q5gUzakqH00H1WaNVT3uWX2ByfP4b0QLqLi9Tpu92hwkQXHLL/zwZ2xHOCTzoryHqL1n2Jx95CT4bMuzMCdaSg==
   dependencies:
     astrocite-core "^0.15.0"
     csl-json "^0.1.0"
@@ -88,12 +88,12 @@ astrocite-ris@^0.15.0:
     astrocite-core "^0.15.0"
     csl-json "^0.1.0"
 
-astrocite@^0.15.0:
-  version "0.15.0"
-  resolved "https://registry.yarnpkg.com/astrocite/-/astrocite-0.15.0.tgz#0d805a489eb3ef7da3aead4f1bfe18a21f655a3c"
-  integrity sha512-d6VIWLTjhp4UYWei/IaysAHAASK3JLGbb0ym3lXGrPw8Gr5LyFnLYxLpfUNUrzuVjN++rZ5PjRc66ntpAk4z5g==
+astrocite@^0.15.1:
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/astrocite/-/astrocite-0.15.1.tgz#54a9ca6ac58662eaefdffb4041a8941049d7f6cc"
+  integrity sha512-WfdwxetEbs1s2PrIe0UIjqn3tXBg5gklczJy/5HyxRUJYN6S0pezR4gjMCRlWsmf3sZeeGsT332O/Lx75gff+w==
   dependencies:
-    astrocite-bibtex "^0.15.0"
+    astrocite-bibtex "^0.15.1"
     astrocite-eutils "^0.15.0"
     astrocite-googlebooks "^0.15.0"
     astrocite-ris "^0.15.0"
@@ -193,10 +193,10 @@ chokidar@^3.0.2:
   optionalDependencies:
     fsevents "^2.0.6"
 
-citeproc@^2.2.23:
-  version "2.2.23"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.23.tgz#3f1b46d9529a0f582752dca35e490f2118625f1d"
-  integrity sha512-tCZdyxwcjiVcb3PwBnHF3gtFc77T5LMMhkhdFIst2Utfk3/WMcgg/0n8x5XzKOPHGvySM5wPh3u1jq/cVJp0AQ==
+citeproc@^2.2.25:
+  version "2.2.25"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.25.tgz#2fe4f62eaf4bfcafd5f5c91f0fbd362e3962f1d4"
+  integrity sha512-I7MP5kLBgxQqmrDizGltj+DOia5qzHAMi+vWthfMfzPSV04QNtCqWSrmedMjJtOym1wPV8FQ72Xglm+jO4aEgA==
 
 cliui@^4.0.0:
   version "4.1.0"
