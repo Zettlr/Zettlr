@@ -63,9 +63,6 @@ class PreferencesDialog extends ZettlrDialog {
         data.languages.push(x)
       }
     }
-    console.log('Supported:', data.supportedLangs)
-    console.log('Available:', data.availableLanguages)
-    console.log('All langs', data.languages)
     this._languages = data.languages // Save a reference for downloading etc.
 
     return data
