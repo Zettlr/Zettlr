@@ -22,7 +22,7 @@ const filetypes = require('../data.json').filetypes
 * @return {Boolean}   True or false, depending on whether the file should be ignored.
 */
 module.exports = function (p) {
-  let ext = path.extname(p)
+  let ext = path.extname(p).toLowerCase()
   // Check for RMarkdown files
   if (ext === '.rmd' && global.config.get('enableRMarkdown')) return false
   return (!filetypes.includes(ext))
