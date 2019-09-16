@@ -39,12 +39,13 @@ module.exports = function (basePath, mdstring) {
       } catch (e) {
         // new URL() throws a type error if it's not a valid URL (also happens)
         // in cases of absolute file paths.
-        p2 = 'file://' + p2
+        // p2 = 'file://' + p2
       }
       return `![${p1}](${p2})${(p3 != null) ? p3 : ''}`
     } else {
       // Make it absolute
-      return `![${p1}](file://${path.join(basePath, p2)})${(p3 != null) ? p3 : ''}`
+      // return `![${p1}](file://${path.join(basePath, p2)})${(p3 != null) ? p3 : ''}`
+      return `![${p1}](${path.join(basePath, p2)})${(p3 != null) ? p3 : ''}`
     }
   })
 }
