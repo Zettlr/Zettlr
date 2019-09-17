@@ -30,10 +30,31 @@
 
 // First generic variables
 .cm-comment, .cm-fenced-code { color: var(--grey-3); }
-.cm-comment:not(.cm-formatting):not(.cm-fenced-code) {
+.cm-comment:not(.cm-formatting):not(.cm-fenced-code)  {
   background-color: var(--grey-0);
-  border-radius: @border-radius;
-  padding: 0 5px;
+  &:first-child {
+    border-top-left-radius: @border-radius;
+    border-bottom-left-radius: @border-radius;
+    padding-left: 5px;
+  }
+  &:last-child {
+    border-top-right-radius: @border-radius;
+    border-bottom-right-radius: @border-radius;
+    padding-right: 5px;
+  }
+}
+
+// We need to make sure inline elements (directly after & before formatting
+// elements) also have this nice padding and border.
+.cm-formatting + .cm-comment:not(.cm-formatting):not(.cm-fenced-code) {
+  border-top-left-radius: @border-radius;
+  border-bottom-left-radius: @border-radius;
+  padding-left: 5px;
+}
+.cm-formatting  ~ .cm-comment:not(.cm-formatting):not(.cm-fenced-code){
+  border-top-right-radius: @border-radius;
+  border-bottom-right-radius: @border-radius;
+  padding-right: 5px;
 }
 
 .cm-highlight { background-color: yellow; color: #333; }
