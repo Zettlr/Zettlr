@@ -35,7 +35,7 @@
         "astrocite": "^0.15.1",
         "bcp-47": "^1.0.5",
         "chart.js": "^2.7.2",
-        "chokidar": "^3.0.2",
+        "chokidar": "^3.1.0",
         "citeproc": "^2.2.25",
         "codemirror": "^5.48.4",
         "command-exists": "^1.2.7",
@@ -72,12 +72,12 @@
         "less": "^3.10.3",
         "mini-css-extract-plugin": "^0.8.0",
         "reveal.js": "^3.8.0",
-        "string-extract-class-names": "^5.9.1",
+        "string-extract-class-names": "^5.9.2",
         "uglify-js": "^3.6.0",
         "vue-loader": "^15.7.1",
         "vue-template-compiler": "^2.6.10",
         "vue-virtual-scroller": "^1.0.0-rc.2",
         "webpack": "^4.40.2",
-        "webpack-cli": "^3.3.8"
+        "webpack-cli": "^3.3.9"
     }
 }

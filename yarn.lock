@@ -323,10 +323,10 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-anymatch@^3.0.1:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/anymatch/-/anymatch-3.0.3.tgz#2fb624fe0e84bccab00afee3d0006ed310f22f09"
-  integrity sha512-c6IvoeBECQlMVuYUjSwimnhmztImpErfxJzWZhIQinIvQWoGOnB0dLIgifbPHQt5heS6mNlaZG16f06H3C8t1g==
+anymatch@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/anymatch/-/anymatch-3.1.0.tgz#e609350e50a9313b472789b2f14ef35808ee14d6"
+  integrity sha512-Ozz7l4ixzI7Oxj2+cw+p0tVUt27BpaJ+1+q1TCeANWxHpvyn2+Un+YamBdfKu0uh8xLodGhoa1v7595NhKDAuA==
   dependencies:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
@@ -914,12 +914,12 @@ chokidar@^2.0.2:
   optionalDependencies:
     fsevents "^1.2.7"
 
-chokidar@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.0.2.tgz#0d1cd6d04eb2df0327446188cd13736a3367d681"
-  integrity sha512-c4PR2egjNjI1um6bamCQ6bUNPDiyofNQruHvKgHQ4gDUP/ITSVSzNsiI5OWtHOsX323i5ha/kk4YmOZ1Ktg7KA==
+chokidar@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.1.0.tgz#ff23d077682a90eadd209bfa76eb10ed6d359668"
+  integrity sha512-6vZfo+7W0EOlbSo0nhVKMz4yyssrwiPbBZ8wj1lq8/+l4ZhGZ2U4Md7PspvmijXp1a26D3B7AHEBmIB7aVtaOQ==
   dependencies:
-    anymatch "^3.0.1"
+    anymatch "^3.1.0"
     braces "^3.0.2"
     glob-parent "^5.0.0"
     is-binary-path "^2.1.0"
@@ -4972,17 +4972,17 @@ strict-uri-encode@^1.0.0:
   resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
   integrity sha1-J5siXfHVgrH1TmWt3UNS4Y+qBxM=
 
-string-extract-class-names@^5.9.1:
-  version "5.9.1"
-  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.9.1.tgz#7bbd9619ecbc8ccde905c712ebbd6eba3399dbc1"
-  integrity sha512-MwChBhHJH/XCOvqEgXLjcmLPkLWYOOHiNfLAHwKFzg3LxXGVkNQuYBYsO1REL/QGR9GeXD+/qqjxo0oJCA7SCg==
+string-extract-class-names@^5.9.2:
+  version "5.9.2"
+  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.9.2.tgz#6632c573570ba1c0fe8eeed5abb1b00154af60dc"
+  integrity sha512-ZC9xW2OSmVx81Ws4ZSMMv/oRORmmOKJnkPRfmHHJJ12N/lL66EayxeMVD08LWD1Ckkd/MD3dyNRyH+w+6DJ50w==
   dependencies:
-    string-left-right "^2.3.1"
+    string-left-right "^2.3.2"
 
-string-left-right@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/string-left-right/-/string-left-right-2.3.1.tgz#5c9ccad4141b81f1313fc02eaabec20a14edc9ce"
-  integrity sha512-yW/eyfeu+os4f84YKITvON4Va+1ZiMvjVYiHmDLVfb5Uuv82dd9J0ygQc7wuvftyjKSdWWmIKtC3J1nqZc6oOQ==
+string-left-right@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/string-left-right/-/string-left-right-2.3.2.tgz#9c1950d35ac2fccdfcc85c0b81832d28a8468a88"
+  integrity sha512-p17ibSIXqNj9vgoLYrXjCUDC5VUnGenjIKRmf9PcNL19C2yETjzxZzHN0XJf6UNTVqFx6wLUZpeTuGopKOrMvw==
   dependencies:
     lodash.clonedeep "^4.5.0"
     lodash.isplainobject "^4.0.6"
@@ -5581,10 +5581,10 @@ watchpack@^1.6.0:
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
 
-webpack-cli@^3.3.8:
-  version "3.3.8"
-  resolved "https://registry.yarnpkg.com/webpack-cli/-/webpack-cli-3.3.8.tgz#caeaebcc26f685db1736e5decd3f01aac30123ec"
-  integrity sha512-RANYSXwikSWINjHMd/mtesblNSpjpDLoYTBtP99n1RhXqVI/wxN40Auqy42I7y4xrbmRBoA5Zy5E0JSBD5XRhw==
+webpack-cli@^3.3.9:
+  version "3.3.9"
+  resolved "https://registry.yarnpkg.com/webpack-cli/-/webpack-cli-3.3.9.tgz#79c27e71f94b7fe324d594ab64a8e396b9daa91a"
+  integrity sha512-xwnSxWl8nZtBl/AFJCOn9pG7s5CYUYdZxmmukv+fAHLcBIHM36dImfpQg3WfShZXeArkWlf6QRw24Klcsv8a5A==
   dependencies:
     chalk "2.4.2"
     cross-spawn "6.0.5"

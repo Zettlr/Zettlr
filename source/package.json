@@ -19,7 +19,7 @@
         "astrocite": "^0.15.1",
         "bcp-47": "^1.0.5",
         "chart.js": "^2.7.2",
-        "chokidar": "^3.0.2",
+        "chokidar": "^3.1.0",
         "citeproc": "^2.2.25",
         "codemirror": "^5.48.4",
         "command-exists": "^1.2.7",
