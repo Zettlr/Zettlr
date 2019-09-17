@@ -7,6 +7,7 @@
 - The default editor search is now case-insensitive.
 - Added highlighting, which can be applied either with `==highlight==` or `::highlight::`.
 - The EdgeButtons of the table editors won't cover the toolbar anymore. Additionally, their movement is now smoother.
+- If there are untranslated strings in your language, Zettlr will now try to show you the meaningful English ones first, before falling back to the translation identifiers, making the user experience better.
 
 ## Under the Hood
 

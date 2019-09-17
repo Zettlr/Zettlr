@@ -56,6 +56,7 @@ class ZettlrRenderer {
     // time to copy it completely into the renderer's memory. It will take up
     // some time at the beginning, but it's not gonna impact that much.
     global.i18n = JSON.parse(JSON.stringify(remote.getGlobal('i18n')))
+    global.i18nFallback = JSON.parse(JSON.stringify(remote.getGlobal('i18nFallback')))
 
     // Immediately add the operating system class to the body element to
     // enable the correct font-family.
