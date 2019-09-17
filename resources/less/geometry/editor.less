@@ -72,6 +72,13 @@
       @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
       @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
       overflow-x:hidden !important; // Necessary to hide the horizontal scrollbar
+
+      // We need to override a negative margin
+      // and a bottom padding from the standard
+      // CSS for some calculations to be correct
+      // such as the table editor
+      margin-bottom: 0px;
+      padding-bottom: 0px;
     }
   }
 
