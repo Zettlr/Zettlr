@@ -57,7 +57,7 @@ $ yarn wp:dev # Or npm run wp:dev, this recompiles the Vue components
 $ yarn reveal:build # Or npm run reveal:build, needs to be run once
 ```
 
-To dive deeper into the development process, have a look at our [full development documentation](https://docs.zettlr.com/get-involved).
+To dive deeper into the development process, have a look at our [full development documentation](https://docs.zettlr.com/en/get-involved).
 
 ## License
 
