@@ -55,7 +55,7 @@ class SaveFile extends ZettlrCommand {
             this._app.ipc.send('file-close', {})
             this._app.clearModified()
             break
-          case 1: // Save changes
+          case 1: // Save changes TODO: This is not the way the "save" button should work!!!
           case 0: // cancel
             // Abort saving process to let the user choose a dir
             global.ipc.notify(trans('system.save_changes_select_dir'))
