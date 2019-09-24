@@ -63,7 +63,7 @@ class SaveFile extends ZettlrCommand {
         }
         return false
       }
-      file = this._app.getCurrentDir().newfile(null)
+      file = await this._app.getCurrentDir().newfile(null)
       pathsUpdateNecessary = true
     } else {
       let f = this._app.getCurrentFile()
