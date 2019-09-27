@@ -15,6 +15,7 @@
 - Made sure the default languages do not appear twice in the preferences.
 - Zettlr will now detect files it can open case-insensitively (so: `.md` === `.MD`).
 - Images in export should work again.
+- Remedy a small error on some Linux launchers.
 
 # 1.4.1
 

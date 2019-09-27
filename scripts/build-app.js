@@ -90,10 +90,12 @@ const config = {
   linux: {
     target: (onlyDir) ? 'dir' : [ 'deb', 'rpm' ],
     artifactName: 'Zettlr-linux-x64-${version}.${ext}', // eslint-disable-line
-    executableName: 'zettlr', // Override productName for compatibility, see #341
     synopsis: 'Markdown editor',
     category: 'Office',
-    icon: 'resources/icons/png'
+    icon: 'resources/icons/png',
+    desktop: {
+      'StartupWMClass': 'zettlr' // Needed for compatibility with some docks, see #341
+    }
   },
   dmg: {
     background: 'resources/icons/dmg/dmg_back.tiff',
