@@ -653,6 +653,12 @@ class ZettlrRenderer {
   getStatsView () { return this._stats }
 
   /**
+   * Returns the sidebar component
+   * @return {VueComponent} The sidebar
+   */
+  getSidebar () { return this._sidebar }
+
+  /**
    * Returns a one-dimensional array of all files in the current directory and
    * its subdirectories. The extensions are omitted!
    * @param  {Object} [obj=this.getCurrentDir()] The object to be searched in.
