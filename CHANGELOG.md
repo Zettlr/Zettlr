@@ -1,4 +1,4 @@
-# (no version assigned)
+# 1.4.2
 
 ## GUI and Functionality
 
@@ -10,6 +10,7 @@
 - If there are untranslated strings in your language, Zettlr will now try to show you the meaningful English ones first, before falling back to the translation identifiers, making the user experience better.
 - Minor design improvements.
 - Fixed the sidebar toggle.
+- Added a context menu item to show a file in Finder/Explorer/your file browser.
 
 ## Under the Hood
 

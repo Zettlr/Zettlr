@@ -599,6 +599,10 @@ class ZettlrRendererIPC {
         this.send('import-files')
         break
 
+      case 'show-in-finder':
+        this._app.showInFinder(cnt)
+        break
+
       // Copy a selection as HTML
       case 'copy-as-html':
         this._app.getEditor().copyAsHTML()
