@@ -193,10 +193,10 @@ chokidar@^3.1.0:
   optionalDependencies:
     fsevents "^2.0.6"
 
-citeproc@^2.2.25:
-  version "2.2.25"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.25.tgz#2fe4f62eaf4bfcafd5f5c91f0fbd362e3962f1d4"
-  integrity sha512-I7MP5kLBgxQqmrDizGltj+DOia5qzHAMi+vWthfMfzPSV04QNtCqWSrmedMjJtOym1wPV8FQ72Xglm+jO4aEgA==
+citeproc@^2.2.27:
+  version "2.2.27"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.27.tgz#f284d64762c4de84b8d33c571e612a6b5106cf8b"
+  integrity sha512-AQIxcXD6ZZch5V9BPaMpwRTjiRgyOvw80OS9bLWEIHwm7E9b5CXoLj9s7LS+cjkD1iuWGYf1qRK1pd40ymzNmQ==
 
 cliui@^4.0.0:
   version "4.1.0"

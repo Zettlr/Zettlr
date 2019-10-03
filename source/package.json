@@ -20,7 +20,7 @@
         "bcp-47": "^1.0.5",
         "chart.js": "^2.7.2",
         "chokidar": "^3.1.0",
-        "citeproc": "^2.2.25",
+        "citeproc": "^2.2.27",
         "codemirror": "^5.48.4",
         "command-exists": "^1.2.7",
         "got": "^9.6.0",

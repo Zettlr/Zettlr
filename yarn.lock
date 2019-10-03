@@ -959,10 +959,10 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-citeproc@^2.2.25:
-  version "2.2.25"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.25.tgz#2fe4f62eaf4bfcafd5f5c91f0fbd362e3962f1d4"
-  integrity sha512-I7MP5kLBgxQqmrDizGltj+DOia5qzHAMi+vWthfMfzPSV04QNtCqWSrmedMjJtOym1wPV8FQ72Xglm+jO4aEgA==
+citeproc@^2.2.27:
+  version "2.2.27"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.2.27.tgz#f284d64762c4de84b8d33c571e612a6b5106cf8b"
+  integrity sha512-AQIxcXD6ZZch5V9BPaMpwRTjiRgyOvw80OS9bLWEIHwm7E9b5CXoLj9s7LS+cjkD1iuWGYf1qRK1pd40ymzNmQ==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -1572,10 +1572,10 @@ electron-publish@21.2.0:
     lazy-val "^1.0.4"
     mime "^2.4.4"
 
-electron@^6.0.9:
-  version "6.0.9"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-6.0.9.tgz#fea15e9fec329248db500b33ba6544a26fe025a3"
-  integrity sha512-lFpSmDNyjpvJFwEnK897Soone3DV7D3ASFUb315H2VTVZSbKib9Kbrsovxf4c+e1q5hTdaONsGIm3Lb4CXIW1g==
+electron@^6.0.11:
+  version "6.0.11"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-6.0.11.tgz#64effa71397045779a1ddbf51312a41ccf26f491"
+  integrity sha512-mi1oHmeFIQrg+CDQ6lbugZAloOxuWPm/ecEKYe1230PGlDoWND7SYStiWQ2eI4YXAEOL/NvuY88ogemu1qhdBg==
   dependencies:
     "@types/node" "^10.12.18"
     electron-download "^4.1.0"
@@ -4972,17 +4972,17 @@ strict-uri-encode@^1.0.0:
   resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
   integrity sha1-J5siXfHVgrH1TmWt3UNS4Y+qBxM=
 
-string-extract-class-names@^5.9.2:
-  version "5.9.2"
-  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.9.2.tgz#6632c573570ba1c0fe8eeed5abb1b00154af60dc"
-  integrity sha512-ZC9xW2OSmVx81Ws4ZSMMv/oRORmmOKJnkPRfmHHJJ12N/lL66EayxeMVD08LWD1Ckkd/MD3dyNRyH+w+6DJ50w==
+string-extract-class-names@^5.9.4:
+  version "5.9.4"
+  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.9.4.tgz#ab44fd8ff995ab51b988e48d7378fb31398d30a7"
+  integrity sha512-18mHuVnxsNnMLjeEq8XmBpbDdmvOhhI1K29EReJgJg3k1BqryZOucPVylNxLVKP/kpXJPrkV88g5LoQCg4Uc6g==
   dependencies:
-    string-left-right "^2.3.2"
+    string-left-right "^2.3.4"
 
-string-left-right@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/string-left-right/-/string-left-right-2.3.2.tgz#9c1950d35ac2fccdfcc85c0b81832d28a8468a88"
-  integrity sha512-p17ibSIXqNj9vgoLYrXjCUDC5VUnGenjIKRmf9PcNL19C2yETjzxZzHN0XJf6UNTVqFx6wLUZpeTuGopKOrMvw==
+string-left-right@^2.3.4:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/string-left-right/-/string-left-right-2.3.4.tgz#f09d4a992870a284275be4a2bbec488bae3aeed7"
+  integrity sha512-MpdpVzireXFHUGkCxYHIG7vB7Eutajzspr6CgNudlVayZNTgNwhQjsspONjgIE+qV2ULJsBoLVC6EtNGKJ0fAg==
   dependencies:
     lodash.clonedeep "^4.5.0"
     lodash.isplainobject "^4.0.6"
