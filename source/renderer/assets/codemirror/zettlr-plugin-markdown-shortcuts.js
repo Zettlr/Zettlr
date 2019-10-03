@@ -26,7 +26,7 @@ const { clipboard } = require('electron');
   // First capturing group: preceding whitespace. Second cap.: line contents
   // Non-capturing group in the middle: all block elements.
   // Non-capturing group afterwards: catches all whitespace
-  var blockRE = /^(\s*?)(?:#{1,6}|>|\*|\+|-|\d{1,5}\.)(?:\s*)(.*)$/
+  var blockRE = /^(\s*?)(?:#{1,6}|>|\*|\+|-|\d{1,5}\.)(?:\s+)(.*)$/
 
   /**
    * This function undoes a block formatting and then re-applies another one.
