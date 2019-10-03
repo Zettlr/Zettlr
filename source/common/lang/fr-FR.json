@@ -8,10 +8,11 @@
             "metal3d",
             "ScaredCoward",
             "Alexis M\u00e9taireau",
+            "concretx",
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-09-08T12:07:49.000000Z"
+        "updated_at": "2019-09-30T09:46:50.000000Z"
     },
     "dialog": {
         "about": {
@@ -488,10 +489,11 @@
         "select_all": "S\u00e9lectionner tout",
         "services": "Services",
         "set_target": "D\u00e9finir la cible d'\u00e9criture\u2026",
+        "show_file": "Monter le fichier",
         "speech": "Parole",
-        "start_speaking": "Commencer la parole",
+        "start_speaking": "Commencer \u00e0 parler",
         "stop_speaking": "Arr\u00eater de parler",
-        "tags": "Ajuster les mot-cl\u00e9s",
+        "tags": "G\u00e9rer les mots-cl\u00e9s",
         "toggle_attachments": "Voir les annexes",
         "toggle_devtools": "Outils du d\u00e9veloppeur",
         "toggle_distraction_free": "Mode sans distraction",

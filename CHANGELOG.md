@@ -11,6 +11,8 @@
 - Minor design improvements.
 - Fixed the sidebar toggle.
 - Added a context menu item to show a file in Finder/Explorer/your file browser.
+- Added a notification when opening a new root directory to announce that the process of opening a directory may take some time. Zettlr will notify you once the new root directory has been fully loaded.
+- When you close a root directory which also happened to be the currently selected one, Zettlr will try to select the previous or next root directory before actually closing the directory so that you will always have one directory selected.
 
 ## Under the Hood
 
