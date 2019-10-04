@@ -1,3 +1,27 @@
+# 1.4.2
+
+## GUI and Functionality
+
+- Removed the last remnants of Clusterize.js
+- Fixed a bug that would cause the app to crash when you search for `//`.
+- The default editor search is now case-insensitive.
+- Added highlighting, which can be applied either with `==highlight==` or `::highlight::`.
+- The EdgeButtons of the table editors won't cover the toolbar anymore. Additionally, their movement is now smoother.
+- If there are untranslated strings in your language, Zettlr will now try to show you the meaningful English ones first, before falling back to the translation identifiers, making the user experience better.
+- Minor design improvements.
+- Fixed the sidebar toggle.
+- Added a context menu item to show a file in Finder/Explorer/your file browser.
+- Added a notification when opening a new root directory to announce that the process of opening a directory may take some time. Zettlr will notify you once the new root directory has been fully loaded.
+- When you close a root directory which also happened to be the currently selected one, Zettlr will try to select the previous or next root directory before actually closing the directory so that you will always have one directory selected.
+- Fixed a small error that would count italics at the beginning of a line as a list item when applying a block-formatting style.
+
+## Under the Hood
+
+- Made sure the default languages do not appear twice in the preferences.
+- Zettlr will now detect files it can open case-insensitively (so: `.md` === `.MD`).
+- Images in export should work again.
+- Remedy a small error on some Linux launchers.
+
 # 1.4.1
 
 ## GUI and Functionality

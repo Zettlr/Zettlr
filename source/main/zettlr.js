@@ -355,8 +355,9 @@ class Zettlr {
         'message': trans('system.error.ignored_dir_message', path.basename(ret))
       })
     }
-
+    global.ipc.notify(trans('system.open_root_directory', path.basename(ret)))
     await this.handleAddRoots([ret])
+    global.ipc.notify(trans('system.open_root_directory_success', path.basename(ret)))
   }
 
   /**

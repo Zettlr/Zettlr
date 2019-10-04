@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-09-08T10:54:04.000000Z"
+        "updated_at": "2019-10-03T10:30:26.000000Z"
     },
     "dialog": {
         "about": {
@@ -13,7 +13,6 @@
             "chokidar": "Erkennt alle \u00c4nderung an den Dateien von au\u00dferhalb und stellt sie dar",
             "citationstyle": "Zettlr verwendet citeproc, um Zitationen direkt im Editor anzuzeigen. Hierzu verwendet Zettlr die CitationStyleLanguage (CSL) Sprachdateien sowie Stile. Die Dateien wurden unver\u00e4ndert mit Autorenangaben ausgeliefert. Weitere Informationen:",
             "citeproc": "Liefert die korrekten Zitationen f\u00fcr alle Werke",
-            "clusterizejs": "Stellt selbst die l\u00e4ngsten Dateilisten zuverl\u00e4ssig dar",
             "contributors": "Mitwirkende",
             "jquery": "Unersetzlich f\u00fcr die Darstellung des Nutzer-Interfaces",
             "katex": "Stellt LaTeX-Formeln im Editor dar",
@@ -59,8 +58,7 @@
             "no_xelatex": "Es wurde keine XeLaTeX-Datei auf diesem System gefunden. Pandoc nutzt sie, um Dateien nach PDF exportieren zu k\u00f6nnen. Bitte installiere eine Version von LaTeX, die f\u00fcr dein System gemacht ist."
         },
         "file_new": {
-            "placeholder": "Dateiname",
-            "value": "Unbenannt"
+            "placeholder": "Dateiname"
         },
         "file_rename": {
             "placeholder": "Dateiname"
@@ -164,9 +162,6 @@
             "checkForBeta": "Informiere mich \u00fcber Beta-Releases",
             "choose_file": "Datei w\u00e4hlen \u2026",
             "citation_database": "Zitationsdatenbank (CSL JSON oder BibTex)",
-            "combiner_collapsed": "Schmal &mdash; zeige entweder Preview oder Verzeichnisse",
-            "combiner_expanded": "Erweitert &mdash; zeige sowohl Preview als auch Verzeichnisse",
-            "combiner_explanation": "Modus der Seitenleiste",
             "count_chars": "Zeichen statt W\u00f6rter z\u00e4hlen (z.B. f\u00fcr Chinesisch)",
             "creationtime": "Dateierstellungszeitpunkt",
             "debug": "Entwicklermodus aktivieren",
@@ -429,7 +424,6 @@
         "cut": "Ausschneiden",
         "delete_dir": "Verzeichnis l\u00f6schen",
         "delete_file": "Datei l\u00f6schen",
-        "delete_from_vd": "Aus virtuellem Verzeichnis l\u00f6schen",
         "docs": "Handbuch \u00f6ffnen",
         "donate": "Unterst\u00fctzen",
         "duplicate_file": "Datei duplizieren",
@@ -487,6 +481,7 @@
         "select_all": "Alles ausw\u00e4hlen",
         "services": "Dienste",
         "set_target": "Schreibziel setzen\u2026",
+        "show_file": "Datei anzeigen",
         "speech": "Sprache",
         "start_speaking": "Sprechen beginnen",
         "stop_speaking": "Sprechen anhalten",
@@ -572,6 +567,8 @@
         "no_command": "Nachricht ohne Befehl erhalten: %s",
         "ok": "Ok",
         "open_folder": "Projektverzeichnis \u00f6ffnen",
+        "open_root_directory": "\u00d6ffne Verzeichnis %s \u2026",
+        "open_root_directory_success": "Verzeichnis %s wurde geladen.",
         "overwrite_file_message": "Die Date %s existiert bereits in diesem Verzeichnis. \u00dcberschreiben?",
         "overwrite_file_title": "Datei \u00fcberschreiben",
         "replace_file_message": "Die aktuelle Datei wurde von au\u00dferhalb ver\u00e4ndert. \u00c4nderungen \u00fcbernehmen?",

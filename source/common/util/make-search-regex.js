@@ -26,7 +26,7 @@ module.exports = function (term, injectFlags = []) {
   if (!Array.isArray(injectFlags)) injectFlags = [injectFlags]
 
   // Test if we have a regular expression
-  if (/^\/.*\/[gimy]{0,4}$/.test(term)) {
+  if (/^\/.+\/[gimy]{0,4}$/.test(term)) {
     // The user wants to do a regex search -> transform
     let r = term.split('/') // 0 is empty, 1 contains the expression, 2 the flags
     re.term = r[1]
@@ -35,7 +35,7 @@ module.exports = function (term, injectFlags = []) {
     // User wants to do a simple search. Careful: Escape all raw regex chars!
     // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
     re.term = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    re.flags = injectFlags
+    re.flags = injectFlags.concat(['i']) // Always make a case-insensitive search
   }
 
   // The flags need to be unique

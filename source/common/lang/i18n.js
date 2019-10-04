@@ -52,6 +52,11 @@ function i18n (lang = 'en-US') {
   // after the config and written into the global object
   global.i18n = JSON.parse(fs.readFileSync(file.path, 'utf8'))
 
+  // Also load the en-US fallback as we can be sure this WILL both stay
+  // up to date and will be understood by most people.
+  let fallback = getLanguageFile('en-US') // Will return either the shipped or updated file
+  global.i18nFallback = JSON.parse(fs.readFileSync(fallback.path, 'utf8'))
+
   return file
 };
 
@@ -70,7 +75,15 @@ function trans (string, ...args) {
 
   // Split the string by dots
   let str = string.split('.')
+  // The function will be called from line 88 as a fallback
+  // if a given string couldn't be found.
   let transString = global.i18n
+  let skipFallback = false
+  if (args[0] === true) {
+    transString = global.i18nFallback
+    skipFallback = true // Prevent an endless loop if the string is also missing from fallback
+    args.splice(0, 1) // Remove the first argument as it's only the injected "true"
+  }
 
   for (let obj of str) {
     if (transString.hasOwnProperty(obj)) {
@@ -78,7 +91,7 @@ function trans (string, ...args) {
     } else {
       // Something went wrong and the requested translation string was
       // not found -> fall back and just return the original string
-      return string
+      return (global.config.get('debug') || skipFallback) ? string : trans(string, ...[true].concat(args))
     }
   }
 

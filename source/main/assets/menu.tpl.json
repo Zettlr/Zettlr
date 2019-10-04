@@ -138,7 +138,7 @@
     {
       "label": "menu.toggle_sidebar",
       "accelerator": "CmdOrCtrl+!",
-      "command": "toggle-directories"
+      "command": "toggle-sidebar"
     }, {
       "label": "menu.toggle_attachments",
       "accelerator": "CmdOrCtrl+?",

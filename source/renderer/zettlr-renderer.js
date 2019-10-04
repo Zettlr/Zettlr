@@ -24,8 +24,7 @@ const GlobalSearch = require('./util/global-search')
 const ZettlrStore = require('./zettlr-store')
 const createSidebar = require('./assets/vue/vue-sidebar')
 
-const { remote } = require('electron')
-const { clipboard } = require('electron')
+const { remote, shell, clipboard } = require('electron')
 
 const generateId = require('../common/util/generate-id')
 
@@ -56,6 +55,7 @@ class ZettlrRenderer {
     // time to copy it completely into the renderer's memory. It will take up
     // some time at the beginning, but it's not gonna impact that much.
     global.i18n = JSON.parse(JSON.stringify(remote.getGlobal('i18n')))
+    global.i18nFallback = JSON.parse(JSON.stringify(remote.getGlobal('i18nFallback')))
 
     // Immediately add the operating system class to the body element to
     // enable the correct font-family.
@@ -341,7 +341,7 @@ class ZettlrRenderer {
 
     // Trigger a refresh in the attachment pane
     this._attachments.refresh()
-
+    console.log(nData)
     // Pass on the new paths object as is to the store.
     global.store.renewItems(nData)
   }
@@ -579,6 +579,19 @@ class ZettlrRenderer {
   }
 
   /**
+   * Shows a given file in finder/explorer/file browser.
+   * @param {Number} hash The file's hash
+   */
+  showInFinder (hash) {
+    if (!hash) return
+    let file = this.findObject(hash)
+
+    if (!file || file.type !== 'file') return
+
+    shell.showItemInFolder(file.path)
+  }
+
+  /**
    * Sets the current dir pointer to the new.
    * @param {ZettlrDir} newdir The new dir.
    */
@@ -650,6 +663,12 @@ class ZettlrRenderer {
    * @return {ZettlrStatsView} The view instance
    */
   getStatsView () { return this._stats }
+
+  /**
+   * Returns the sidebar component
+   * @return {VueComponent} The sidebar
+   */
+  getSidebar () { return this._sidebar }
 
   /**
    * Returns a one-dimensional array of all files in the current directory and

@@ -8,10 +8,11 @@
             "metal3d",
             "ScaredCoward",
             "Alexis M\u00e9taireau",
+            "concretx",
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-09-08T10:54:41.000000Z"
+        "updated_at": "2019-09-30T09:46:50.000000Z"
     },
     "dialog": {
         "about": {
@@ -20,7 +21,6 @@
             "chokidar": "D\u00e9tecte les changements apport\u00e9s aux fichiers par des programmes ext\u00e9rieurs",
             "citationstyle": "Zettlr a recours \u00e0 Citeproc pour afficher les citations et les r\u00e9f\u00e9rences bibliographiques directement dans l'\u00e9diteur. \u00c0 cet effet, Zettlr utilise des fichiers de directive au format CSL (Citation Style Language). Ces fichiers sont fournis tels quels, avec les coordonn\u00e9es des auteurs. Pour plus d'informations:",
             "citeproc": "Formate proprement les citations pour tout type de travaux",
-            "clusterizejs": "Affiche m\u00eame les listes les plus longues",
             "contributors": "Contributeurs",
             "jquery": "Facilite le rendu de toute l'interface utilisateur",
             "katex": "Rendu des formules LaTeX dans l\u2019\u00e9diteur",
@@ -66,8 +66,7 @@
             "no_xelatex": "Xelatex non trouv\u00e9. Pandoc l'utilise pour exporter en PDF. Veuillez installer une distribution de LaTeX pour activer l'export PDF."
         },
         "file_new": {
-            "placeholder": "Nom du fichier",
-            "value": "Sans nom"
+            "placeholder": "Nom du fichier"
         },
         "file_rename": {
             "placeholder": "Nom du fichier"
@@ -171,9 +170,6 @@
             "checkForBeta": "Me pr\u00e9venir \u00e0 propos des versions b\u00eata",
             "choose_file": "Choisir un fichier\u2026",
             "citation_database": "Fichier de r\u00e9f\u00e9rences bibliographiques (au format CSL JSON ou BibTex)",
-            "combiner_collapsed": "\u00c9troit &mdash; Remontrer Preview ou Tree View",
-            "combiner_expanded": "\u00c9largi &mdash; Remontrer Preview et Tree View",
-            "combiner_explanation": "Affichage du panneau lat\u00e9ral",
             "count_chars": "Compter caract\u00e8res au lieu des mots (p. ex., pour le chinois)",
             "creationtime": "Temps de cr\u00e9ation du fichier",
             "debug": "Activer le mode debug",
@@ -436,7 +432,6 @@
         "cut": "Couper",
         "delete_dir": "Supprimer le dossier",
         "delete_file": "Supprimer le fichier",
-        "delete_from_vd": "Supprimer du dossier virtuel",
         "docs": "Ouvrir le manuel",
         "donate": "Soutenir Zettlr",
         "duplicate_file": "Dupliquer le fichier",
@@ -494,10 +489,11 @@
         "select_all": "S\u00e9lectionner tout",
         "services": "Services",
         "set_target": "D\u00e9finir la cible d'\u00e9criture\u2026",
+        "show_file": "Monter le fichier",
         "speech": "Parole",
-        "start_speaking": "Commencer la parole",
-        "stop_speaking": "Arr\u00eater la parole",
-        "tags": "Ajuster les mot-cl\u00e9s",
+        "start_speaking": "Commencer \u00e0 parler",
+        "stop_speaking": "Arr\u00eater de parler",
+        "tags": "G\u00e9rer les mots-cl\u00e9s",
         "toggle_attachments": "Voir les annexes",
         "toggle_devtools": "Outils du d\u00e9veloppeur",
         "toggle_distraction_free": "Mode sans distraction",
@@ -579,6 +575,8 @@
         "no_command": "R\u00e9ception d'un message sans commande : % s",
         "ok": "Ok",
         "open_folder": "Ouvrir le dossier racine.",
+        "overwrite_file_message": "Le fichier %s existe d\u00e9j\u00e0 dans ce r\u00e9pertoire. \u00c9craser?",
+        "overwrite_file_title": "\u00c9craser le fichier existant",
         "replace_file_message": "Le fichier actuel a \u00e9t\u00e9 modifi\u00e9 par un programme externe. Faut-il le remplacer ?",
         "replace_file_title": "Remplacer le fichier actuel ?",
         "save_changes_cancel": "Annuler",

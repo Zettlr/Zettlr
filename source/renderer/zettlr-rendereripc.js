@@ -443,20 +443,8 @@ class ZettlrRendererIPC {
         this._app.getToolbar().toggleDistractionFree()
         break
 
-      case 'toggle-directories':
-        if (this._app.getDirectories().isHidden()) {
-          this._app.showDirectories()
-        } else {
-          this._app.showPreview()
-        }
-        break
-
-      case 'toggle-preview':
-        if (this._app.getPreview().isHidden()) {
-          this._app.showPreview()
-        } else {
-          this._app.showDirectories()
-        }
+      case 'toggle-sidebar':
+        this._app.getSidebar().toggleFileList()
         break
 
       case 'export':
@@ -609,6 +597,10 @@ class ZettlrRendererIPC {
       // Import files and folders
       case 'import-files':
         this.send('import-files')
+        break
+
+      case 'show-in-finder':
+        this._app.showInFinder(cnt)
         break
 
       // Copy a selection as HTML

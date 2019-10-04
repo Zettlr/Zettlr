@@ -29,6 +29,11 @@
   },
   {
     "attribute": "data-hash",
+    "label": "menu.show_file",
+    "command": "show-in-finder"
+  },
+  {
+    "attribute": "data-hash",
     "label": "menu.set_target",
     "command": "set-target"
   },

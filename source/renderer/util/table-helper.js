@@ -369,7 +369,7 @@ class TableHelper {
   * Recalculates the correct positions of all edge buttons.
   */
   _recalculateEdgeButtonPositions () {
-    // First we need the current cell
+    // First we need the measurements of both the current cell and the container element.
     let currentCell = this._elem.find('tr:eq(' + this._rowIndex + ') td:eq(' + this._cellIndex + ')')
     let cellTop = currentCell.offset().top
     let cellLeft = currentCell.offset().left
@@ -377,25 +377,51 @@ class TableHelper {
     let cellHeight = currentCell.outerHeight()
     let cellRight = cellLeft + cellWidth
     let cellBottom = cellTop + cellHeight
+    let containerTop = (this._containerElement) ? this._containerElement.offset().top : 0
+    let containerHeight = (this._containerElement) ? this._containerElement.outerHeight() : $(window).height()
+    let containerBottom = containerTop + containerHeight
 
-    // Calculate positions position
-    this._addTopButton.css('top', (cellTop - this._edgeButtonSize / 2) + 'px').css('left', (cellLeft + cellWidth / 2 - this._edgeButtonSize / 2) + 'px')
-    this._addBottomButton.css('top', (cellBottom - this._edgeButtonSize / 2) + 'px').css('left', (cellLeft + cellWidth / 2 - this._edgeButtonSize / 2) + 'px')
-    this._addLeftButton.css('top', (cellTop + cellHeight / 2 - this._edgeButtonSize / 2) + 'px').css('left', (cellLeft - this._edgeButtonSize / 2) + 'px')
-    this._addRightButton.css('top', (cellTop + cellHeight / 2 - this._edgeButtonSize / 2) + 'px').css('left', (cellRight - this._edgeButtonSize / 2) + 'px')
+    // Determine whether or not the active cell is visible on screen
+    let cellIsOnScreen = cellTop > containerTop && cellBottom < containerBottom
+    // Then calculate the button positions. First for the align- and remove-buttons
+    // as these will always be visible and then for the add-buttons depending on
+    // cell visibility.
     this._alignButtons.css('top', (this._elem.offset().top - this._edgeButtonSize / 2) + 'px').css('left', (this._elem.offset().left + this._edgeButtonSize / 2) + 'px')
     this._removeButtons.css('top', (this._elem.offset().top - this._edgeButtonSize / 2) + 'px').css('left', (this._elem.offset().left + this._elem.outerWidth() - this._edgeButtonSize * 2.5) + 'px')
 
-    // Make sure all buttons stay visible on screen
-    if (this._alignButtons.offset().top < 0) this._alignButtons.css('top', this._edgeButtonSize + 'px')
-    if (this._removeButtons.offset().top < 0) this._removeButtons.css('top', this._edgeButtonSize + 'px')
+    // Also make sure the button groups stay visible
+    // if the user scrolls to one of the edges of the
+    // container element
+    if (this._alignButtons.offset().top < containerTop) this._alignButtons.css('top', containerTop + 'px')
+    if (this._alignButtons.offset().top + this._edgeButtonSize > containerBottom) this._alignButtons.css('top', (containerBottom - this._edgeButtonSize) + 'px')
+    if (this._removeButtons.offset().top < containerTop) this._removeButtons.css('top', containerTop + 'px')
+    if (this._removeButtons.offset().top + this._edgeButtonSize > containerBottom) this._removeButtons.css('top', (containerBottom - this._edgeButtonSize) + 'px')
 
-    if (this._addTopButton.offset().top > $(window).height()) this._addTopButton.css('top', ($(window).height() - this._edgeButtonSize * 2) + 'px')
-    if (this._addBottomButton.offset().top > $(window).height()) this._addBottomButton.css('top', ($(window).height() - this._edgeButtonSize * 2) + 'px')
-    if (this._addLeftButton.offset().top > $(window).height()) this._addLeftButton.css('top', ($(window).height() - this._edgeButtonSize * 2) + 'px')
-    if (this._addRightButton.offset().top > $(window).height()) this._addRightButton.css('top', ($(window).height() - this._edgeButtonSize * 2) + 'px')
-    if (this._alignButtons.offset().top > $(window).height()) this._alignButtons.css('top', ($(window).height() - this._edgeButtonSize * 2) + 'px')
-    if (this._removeButtons.offset().top > $(window).height()) this._removeButtons.css('top', ($(window).height() - this._edgeButtonSize * 2) + 'px')
+    // Move the buttons if the cell is visible.
+    if (cellIsOnScreen) {
+      this._addTopButton.css('top', (cellTop - this._edgeButtonSize / 2) + 'px').css('left', (cellLeft + cellWidth / 2 - this._edgeButtonSize / 2) + 'px')
+      this._addBottomButton.css('top', (cellBottom - this._edgeButtonSize / 2) + 'px').css('left', (cellLeft + cellWidth / 2 - this._edgeButtonSize / 2) + 'px')
+      this._addLeftButton.css('top', (cellTop + cellHeight / 2 - this._edgeButtonSize / 2) + 'px').css('left', (cellLeft - this._edgeButtonSize / 2) + 'px')
+      this._addRightButton.css('top', (cellTop + cellHeight / 2 - this._edgeButtonSize / 2) + 'px').css('left', (cellRight - this._edgeButtonSize / 2) + 'px')
+
+      // Then make sure the buttons are actually fully visible when nearing the top edge ...
+      if (this._addTopButton.offset().top < containerTop) this._addTopButton.css('top', containerTop + 'px')
+      if (this._addBottomButton.offset().top < containerTop) this._addBottomButton.css('top', containerTop + 'px')
+      if (this._addLeftButton.offset().top < containerTop) this._addLeftButton.css('top', containerTop + 'px')
+      if (this._addRightButton.offset().top < containerTop) this._addRightButton.css('top', containerTop + 'px')
+
+      // ... and when nearing the bottom edge.
+      if (this._addTopButton.offset().top + this._edgeButtonSize > containerBottom) this._addTopButton.css('top', (containerBottom - this._edgeButtonSize) + 'px')
+      if (this._addBottomButton.offset().top + this._edgeButtonSize > containerBottom) this._addBottomButton.css('top', (containerBottom - this._edgeButtonSize) + 'px')
+      if (this._addLeftButton.offset().top + this._edgeButtonSize > containerBottom) this._addLeftButton.css('top', (containerBottom - this._edgeButtonSize) + 'px')
+      if (this._addRightButton.offset().top + this._edgeButtonSIze > containerBottom) this._addRightButton.css('top', (containerBottom - this._edgeButtonSize) + 'px')
+    } else {
+      // Hide the buttons as the cell is not visible.
+      this._addTopButton.css('top', '-1000px')
+      this._addBottomButton.css('top', '-1000px')
+      this._addLeftButton.css('top', '-1000px')
+      this._addRightButton.css('top', '-1000px')
+    }
   }
 
   /**

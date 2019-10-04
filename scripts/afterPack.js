@@ -10,10 +10,9 @@ const log = require('./console-colour')
 const execAsync = promisify(exec)
 
 exports.default = async function (context) {
-  return // DEBUG try without this hook
   if (context.electronPlatformName !== 'linux') return
 
-  log.info(`Applying CHMOD patch to Linux packaging ...`)
+  log.info('Applying CHMOD patch to Linux packaging ...')
 
   // Get the full path to the linux unpacked chrome-sandbox
   let chromeSandboxBinary = path.resolve('./release/linux-unpacked/chrome-sandbox')
