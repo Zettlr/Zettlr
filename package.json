@@ -27,7 +27,8 @@
         "lang:refresh": "node scripts/refresh-language.js",
         "reveal:build": "node scripts/update-reveal.js",
         "wp:dev": "cross-env NODE_ENV=development webpack",
-        "wp:prod": "cross-env NODE_ENV=production webpack"
+        "wp:prod": "cross-env NODE_ENV=production webpack",
+        "test": "mocha"
     },
     "dependencies": {
         "@zettlr/citr": "^1.0.4",
@@ -71,6 +72,7 @@
         "handlebars": "^4.2.0",
         "less": "^3.10.3",
         "mini-css-extract-plugin": "^0.8.0",
+        "mocha": "^6.2.1",
         "reveal.js": "^3.8.0",
         "string-extract-class-names": "^5.9.4",
         "uglify-js": "^3.6.0",

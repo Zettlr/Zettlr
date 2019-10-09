@@ -23,7 +23,9 @@ const BLOCK_ELEMENTS = require('../data.json').block_elements
 module.exports = function (words, countChars = false) {
   if (!words || typeof words !== 'string') return 0
 
-  words = words.split(/[\s ]+/)
+  // Split by whitespace and additionally make sure that empty lines
+  // are also removed so that \n\n counts as 0 words, not as two.
+  words = words.split(/[\s ]+/).filter(word => word !== '')
 
   let i = 0
 

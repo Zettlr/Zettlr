@@ -28,9 +28,10 @@ module.exports = function (term, injectFlags = []) {
   // Test if we have a regular expression
   if (/^\/.+\/[gimy]{0,4}$/.test(term)) {
     // The user wants to do a regex search -> transform
-    let r = term.split('/') // 0 is empty, 1 contains the expression, 2 the flags
-    re.term = r[1]
-    re.flags = r[2].split('').concat(injectFlags)
+    let r = term.split('/') // 0 is empty, last index contains flags, everthing else is expression
+    r.shift() // Remove empty index 0
+    re.flags = r.pop().split('').concat(injectFlags) // Retrieve the flags, convert to char array and concat
+    re.term = r.join('/') // Reassemble the expression if it contained forward-slashes.
   } else {
     // User wants to do a simple search. Careful: Escape all raw regex chars!
     // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
@@ -38,7 +39,7 @@ module.exports = function (term, injectFlags = []) {
     re.flags = injectFlags.concat(['i']) // Always make a case-insensitive search
   }
 
-  // The flags need to be unique
-  re.flags = [...new Set(re.flags)]
+  // The flags need to be unique and valid, so filter out any non-valid flags.
+  re.flags = [...new Set(re.flags)].filter(flag => /[gimy]/.test(flag))
   return new RegExp(re.term, re.flags.join(''))
 }

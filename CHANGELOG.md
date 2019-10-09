@@ -1,3 +1,14 @@
+# (no version assigned)
+
+## GUI and Functionality
+
+- The word counter does not count files with newlines as having words anymore.
+- The regular expression search functionality treats expressions containing forward slashes correctly.
+
+## Under the Hood
+
+- Began work on unit tests.
+
 # 1.4.2
 
 ## GUI and Functionality
