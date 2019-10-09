@@ -49,6 +49,7 @@ class Zettlr {
     * @param {electron.app} parentApp The app object.
     */
   constructor () {
+    this.isBooting = true // Only is true until the main process has fully loaded
     // INTERNAL VARIABLES
     this.currentFile = null // Currently opened file (object)
     this.currentDir = null // Current working directory (object)
@@ -80,6 +81,8 @@ class Zettlr {
 
     // Inject some globals
     global.application = {
+      // Flag indicating whether or not the application is booting
+      isBooting: () => { return this.isBooting },
       fileUpdate: (oldHash, fileMetadata) => {
         this.ipc.send('file-replace', {
           'hash': oldHash,
@@ -144,11 +147,14 @@ class Zettlr {
           global.filesToOpen = []
           // Verify the integrity of the targets after all paths have been loaded
           this._targets.verify()
+          this.isBooting = false // Now we're done booting
         }).catch((err) => {
           console.error('Could not add additional roots!', err)
+          this.isBooting = false // Now we're done booting
         })
       }).catch((err) => {
         console.error('Could not load paths!', err)
+        this.isBooting = false // Now we're done booting
       })
     })
 

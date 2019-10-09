@@ -5,6 +5,7 @@
 - The word counter does not count files with newlines as having words anymore.
 - The regular expression search functionality treats expressions containing forward slashes correctly.
 - When the file list is focused, it only captures arrow key presses and does not prevent other shortcuts from working.
+- Tags are now added and removed to and from the tag dropdown selector during runtime.
 
 ## Under the Hood
 

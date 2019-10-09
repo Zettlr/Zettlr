@@ -51,6 +51,9 @@ class TagProvider {
             this._globalTagDatabase[tag].count += 1
           }
         }
+
+        // If we're not booting anymore, update the tag database
+        if (!global.application.isBooting()) global.ipc.send('tags-database', JSON.parse(JSON.stringify(this._globalTagDatabase)))
       },
       /**
        * Removes the given tagArray from the database, i.e. decreases the
@@ -60,15 +63,13 @@ class TagProvider {
        */
       remove: (tagArray) => {
         for (let tag of tagArray) {
-          if (this._globalTagDatabase[tag]) {
-            if (this._globalTagDatabase[tag].count > 0) {
-              this._globalTagDatabase[tag].count--
-            } else {
-              // Remove the tag altogether if its count is zero.
-              this._globalTagDatabase[tag] = undefined
-            }
-          }
+          if (this._globalTagDatabase[tag]) this._globalTagDatabase[tag].count--
+          // Remove the tag altogether if its count is zero.
+          if (this._globalTagDatabase[tag].count <= 0) this._globalTagDatabase[tag] = undefined
         }
+
+        // If we're not booting anymore, update the tag database
+        if (!global.application.isBooting()) global.ipc.send('tags-database', JSON.parse(JSON.stringify(this._globalTagDatabase)))
       },
       /**
        * Returns the global tag database
