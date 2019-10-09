@@ -425,6 +425,8 @@ module.exports = {
      * jump to the very end.
      */
     navigate: function (evt) {
+      // Only capture arrow movements
+      if (![ 'ArrowDown', 'ArrowUp' ].includes(evt.key)) return
       evt.stopPropagation()
       evt.preventDefault()
 
