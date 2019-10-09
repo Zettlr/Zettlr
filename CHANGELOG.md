@@ -10,6 +10,7 @@
 ## Under the Hood
 
 - Began work on unit tests.
+- The `localiseNumber()` helper is now capable of localising negative and floating numbers as well.
 
 # 1.4.2
 

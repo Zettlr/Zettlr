@@ -19,13 +19,29 @@ const { trans } = require('../lang/i18n')
  * @return {String}        The number with delimiters.
  */
 module.exports = function (number) {
-  if (typeof number !== 'number' || number < 1000) {
-    return number
+  if (typeof number !== 'number' || (number < 1000 && number >= 0)) {
+    return number.toString()
   }
 
   let delim = trans('localise.thousand_delimiter')
+  let decimal = trans('localise.decimal_delimiter')
   // No delimiter available -> fallback
-  if (delim.length > 1) delim = '.'
+  if (delim === 'localise.thousand_delimiter') delim = '.'
+  if (decimal === 'localise.decimal_delimiter') decimal = ','
+
+  // Account for negative values
+  let isNegative = false
+  let suffix = ''
+  if (number < 0) {
+    isNegative = true
+    number = Math.abs(number)
+  }
+
+  // If we have a float, we have a suffix
+  if (number % 1 !== 0) {
+    suffix = number.toString().split('.')[1]
+    number = Math.floor(number)
+  }
 
   let ret = ''
   ret = number.toString()
@@ -38,5 +54,9 @@ module.exports = function (number) {
     }
   }
 
-  return ret
+  // Re-append the suffix, if applicable
+  ret = (suffix.length > 0) ? ret + decimal + suffix : ret
+
+  // Re-prepend the minus sign
+  return ((isNegative) ? '-' + ret : ret)
 }
