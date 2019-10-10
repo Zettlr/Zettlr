@@ -15,7 +15,7 @@
 
 const localiseNumber = require('../common/util/localise-number')
 const { trans } = require('../common/lang/i18n')
-const tippy = require('tippy.js')
+const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
 
 /**
  * This class is responsible for rendering the Toolbar. It builds the toolbar

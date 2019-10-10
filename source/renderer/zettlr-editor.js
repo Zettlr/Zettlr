@@ -16,7 +16,7 @@
 const path = require('path')
 const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
-const tippy = require('tippy.js')
+const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
 const { clipboard, shell } = require('electron')
 const hash = require('../common/util/hash')
 const countWords = require('../common/util/count-words')

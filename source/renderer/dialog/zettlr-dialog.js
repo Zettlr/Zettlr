@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-const tippy = require('tippy.js')
+const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
 const EventEmitter = require('events')
 const makeTemplate = require('../../common/zettlr-template.js')
 const { clipboard } = require('electron')
