@@ -3,20 +3,6 @@
 .quicklook-standalone, .print-window {
     position:fixed;
 
-    #init-print {
-      padding: @title-bar-height * 0.4;
-      cursor: pointer;
-      width: 20px;
-      height: @title-bar-height;
-      &::before {
-        font-family: @font-icon;
-        font-size: @title-bar-height * 0.6;
-        line-height: 0px; // Necessary to center the Icon on the title bar
-        content: '\f125';
-        -webkit-app-region: no-drag;
-      }
-    }
-
     .title {
         // Title bar options
         cursor:-webkit-grab;
@@ -63,6 +49,21 @@
             line-height: @title-bar-height;
           }
         }
+    }
+
+    // Initialise print-button.
+    #init-print {
+      padding: @title-bar-height * 0.4;
+      cursor: pointer;
+      -webkit-app-region: no-drag;
+      width: 20px;
+      height: @title-bar-height;
+      &::before {
+        font-family: @font-icon;
+        font-size: @title-bar-height * 0.6;
+        line-height: 0px; // Necessary to center the Icon on the title bar
+        content: '\f125';
+      }
     }
 
     .body .CodeMirror {
