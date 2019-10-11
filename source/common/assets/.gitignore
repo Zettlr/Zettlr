@@ -1,0 +1,2 @@
+# Don't commit the handlebars runtime to VCS
+handlebars

@@ -350,11 +350,6 @@ class ConfigProvider extends EventEmitter {
       this.config.uuid = uuid()
     }
 
-    // Small bugfix b/c of me completely misunderstanding the UUID package
-    if (this.config.uuid === 'ebc1e1d7-0e27-59dd-b348-32a6ba99c952') {
-      this.config.uuid = uuid()
-    }
-
     return this
   }
 

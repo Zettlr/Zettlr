@@ -11,6 +11,8 @@
 
 - Began work on unit tests.
 - The `localiseNumber()` helper is now capable of localising negative and floating numbers as well.
+- Rewrote the exporting engine to be more modular.
+- Removed the Handlebars runtime from VCS.
 
 # 1.4.2
 
