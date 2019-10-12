@@ -12,14 +12,18 @@
  * END HEADER
  */
 
+// Pre-Pandoc modules
 const prepareFile = require('./includes/prepare-file')
 const prepareDefault = require('./includes/prepare-default-export')
 const preparePDF = require('./includes/prepare-pdf-export')
-const prepareReveal = require('./includes/prepare-reveal-export')
-const bundle = require('./includes/bundler-export')
+
+// Post-Pandoc modules
+const makeRevealBundle = require('./includes/make-reveal-bundle')
+const makeTextbundle = require('./includes/make-textbundle')
 const showdown = require('./includes/showdown-export')
 const runPandoc = require('./includes/run-pandoc')
 
+// General includes
 const commandExists = require('command-exists')
 const path = require('path')
 const { shell } = require('electron')
@@ -87,7 +91,7 @@ async function makeExport (options) {
   switch (options.format) {
     case 'textbundle':
     case 'textpack':
-      await bundle(options)
+      await makeTextbundle(options)
       break
     case 'html':
       if (hasPandoc) {
@@ -95,9 +99,6 @@ async function makeExport (options) {
       } else {
         await showdown(options)
       }
-      break
-    case 'revealjs':
-      await prepareReveal(options)
       break
     case 'pdf':
       await preparePDF(options)
@@ -112,6 +113,10 @@ async function makeExport (options) {
       (options.format === 'html' && hasPandoc)) {
     await runPandoc(options)
   }
+
+  // revealJS needs no *pre*paration, but postparation, if that is even
+  // a word. This is because Pandoc can't handle inline JavaScript.
+  if (options.format === 'revealjs') await makeRevealBundle(options)
 
   // The user may pass an optional autoOpen property. If not present or set to
   // true, the file will be opened automatically. If present and set to false,

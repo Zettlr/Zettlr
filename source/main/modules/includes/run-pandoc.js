@@ -67,7 +67,7 @@ module.exports = async function (options) {
     'outfile': options.targetFile,
     'outflag': '-t ' + ((options.format === 'pdf') ? 'latex' : options.format),
     'format': options.format,
-    'standalone': '',
+    'standalone': (options.standalone) ? '-s' : '',
     'indir': path.dirname(options.sourceFile),
     'infile_basename': path.basename(options.sourceFile),
     'outfile_basename': path.basename(options.targetFile)

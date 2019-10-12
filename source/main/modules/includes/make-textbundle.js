@@ -12,13 +12,14 @@
  * END HEADER
  */
 
-const fs = require('fs')
+const fs = require('fs').promises
+const writeStream = require('fs').createWriteStream
 const path = require('path')
-const ZIP = require('adm-zip')
+const archiver = require('archiver')
 const rimraf = require('rimraf')
 const isFile = require('../../../common/util/is-file')
 
-module.exports = function (options) {
+module.exports = async function (options) {
   /*
    * We have to do the following (in order):
    * 1. Find all images in the Markdown file.
@@ -32,13 +33,13 @@ module.exports = function (options) {
    */
 
   // First of all we must make sure that the generated file is actually a
-  // textbundle, and not a textpack.
+  // textbundle, and not a textpack. This way we can simply zip the bundle.
   if (options.format === 'textpack') {
     options.targetFile = options.targetFile.replace('.textpack', '.textbundle')
   }
 
   // Load in the tempfile
-  let cnt = fs.readFileSync(options.sourceFile, 'utf8')
+  let cnt = await fs.readFile(options.sourceFile, 'utf8')
   let imgRE = /!\[.*?\]\(([^)]+)\)/g
   let match
   let images = []
@@ -60,49 +61,53 @@ module.exports = function (options) {
 
   // Create the textbundle folder
   try {
-    fs.lstatSync(options.targetFile)
+    await fs.lstat(options.targetFile)
   } catch (e) {
-    fs.mkdirSync(options.targetFile)
+    await fs.mkdir(options.targetFile)
   }
 
   // Write the markdown file
-  fs.writeFileSync(path.join(options.targetFile, 'text.md'), cnt, 'utf8')
+  await fs.writeFile(path.join(options.targetFile, 'text.md'), cnt, { encoding: 'utf8' })
 
   // Create the assets folder
   try {
-    fs.lstatSync(path.join(options.targetFile, 'assets'))
+    await fs.lstat(path.join(options.targetFile, 'assets'))
   } catch (e) {
-    fs.mkdirSync(path.join(options.targetFile, 'assets'))
+    await fs.mkdir(path.join(options.targetFile, 'assets'))
   }
 
   // Copy over all images
   for (let image of images) {
-    fs.copyFileSync(image.old, path.join(options.targetFile, image.new))
+    await fs.copyFile(image.old, path.join(options.targetFile, image.new))
   }
 
   // Finally, create the info.json
-  fs.writeFileSync(path.join(options.targetFile, 'info.json'), JSON.stringify({
+  await fs.writeFile(path.join(options.targetFile, 'info.json'), JSON.stringify({
     'version': 2,
     'type': 'net.daringfireball.markdown',
     'creatorIdentifier': 'com.zettlr.app',
     'sourceURL': path.basename(options.file.path)
-  }), 'utf8')
+  }), { encoding: 'utf8' })
 
   // As a last step, check whether or not we should actually create a textpack
   if (options.format === 'textpack') {
-    // Zip dat shit!
-    let archive = new ZIP()
-    let zipName = options.targetFile.replace('.textbundle', '.textpack')
-    // From the docs: If you want to create a directory the entryName must end
-    // in / and a null buffer should be provided.
-    let root = path.basename(options.targetFile)
-    if (root.charAt(root.length - 1) !== '/') root += '/'
-    archive.addFile(root, Buffer.alloc(0))
-    archive.addLocalFolder(options.targetFile, path.basename(options.targetFile))
-    archive.writeZip(zipName)
+    await new Promise((resolve, reject) => {
+      let packFile = options.targetFile.replace('.textbundle', '.textpack')
+      let stream = writeStream(packFile)
+      // Create a Zip file with compression 9
+      let archive = archiver('zip', { zlib: { level: 9 } })
+      // Throw the error for the engine to capture
+      archive.on('error', (err) => { reject(err) })
+      // Resolve the promise as soon as the archive has finished writing
+      stream.on('finish', () => { resolve() })
+      archive.pipe(stream) // Pipe the data through to our file
+      archive.directory(options.targetFile, path.basename(options.targetFile))
+      archive.finalize() // Done.
+      // Now we need to overwrite the targetFile with the pack name
+      options.targetFile = packFile
+    })
+
     // Afterwards remove the source file
-    rimraf(options.targetFile, () => { /* Nothing to do */ })
-    // Now we need to overwrite the targetFile with the zipName
-    options.targetFile = zipName
+    rimraf(options.targetFile.replace('.textpack', '.textbundle'), () => { /* Nothing to do */ })
   }
 }

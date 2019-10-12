@@ -97,9 +97,15 @@ function importTextbundle (bundle, target) {
     // We need to unzip it before importing.
     let file = new ZIP(bundle.path)
     file.extractAllTo(app.getPath('temp'), true) // Extract everything
-
     // Now modify the bundle so that the importer can do something with it
-    bundle.path = path.join(app.getPath('temp'), file.getEntries()[0].entryName)
+    let parent = file.getEntries()[0].entryName
+    // It may be that there is no extra entry for the containing textbundle
+    // directory. In that case, traverse up one level
+    if (path.extname(parent) !== '.textbundle') parent = path.dirname(parent)
+    // Second time check, in case the generating ZIP library has put an image
+    // in the assets folder at entry position 0.
+    if (path.extname(parent) !== '.textbundle') parent = path.dirname(parent)
+    bundle.path = path.join(app.getPath('temp'), parent)
     bundle.knownFormat = 'textbundle'
   }
 

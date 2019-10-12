@@ -18,7 +18,7 @@
 
 const fs = require('fs')
 const path = require('path')
-const makeExport = require('./zettlr-export.js')
+const makeExport = require('./modules/export')
 const sanitize = require('sanitize-filename')
 const flattenDirectoryTree = require('../common/util/flatten-directory-tree')
 

@@ -15,7 +15,6 @@
 const ZettlrCommand = require('./zettlr-command')
 const { app } = require('electron')
 const path = require('path')
-// const makeExport = require('../zettlr-export')
 const makeExport = require('../modules/export')
 const { trans } = require('../../common/lang/i18n')
 
@@ -72,6 +71,7 @@ class Export extends ZettlrCommand {
     makeExport(opt)
       .then((exporter) => { global.ipc.notify(trans('system.export_success', opt.format.toUpperCase())) })
       .catch((err) => {
+        console.error(err)
         // Error may be thrown. If there's additional info, spit out an extended
         // dialog.
         if (err.additionalInfo) {

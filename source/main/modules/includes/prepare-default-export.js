@@ -7,16 +7,26 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     Prepares a default export with no magic from Zettlr.
+ * Description:     Prepares a default file export. This can include,
+ *                  but is not limited to providing a custom template,
+ *                  some other file modifications and syntactic sugar.
  *
  * END HEADER
  */
 
+const fs = require('fs').promises
+const path = require('path')
+
 module.exports = async function (options) {
-  // Here we currently don't apply anything, because
-  // everything is already set for a default file
-  // export. However, what we could be doing was,
-  // for instance, provide custom templates for all
-  // files that support this. Or do other magic stuff
-  // before Pandoc takes over.
+  // We have a custom HTML template which we'd like to use
+  if (options.format === 'html') {
+    let tpl = await fs.readFile(path.join(__dirname, '../../assets/export.tpl'), { encoding: 'utf8' })
+    options.template = path.join(options.dest, 'template.tpl')
+    options.discardTemplate = true
+    await fs.writeFile(options.template, tpl, { encoding: 'utf8' })
+  }
+
+  // Make sure the file endings are correct
+  if (options.format === 'plain') options.targetFile = options.targetFile.replace('.plain', '.txt')
+  if (options.format === 'latex') options.targetFile = options.targetFile.replace('.latex', '.tex')
 }

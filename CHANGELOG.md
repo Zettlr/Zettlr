@@ -14,6 +14,7 @@
 - The `localiseNumber()` helper is now capable of localising negative and floating numbers as well.
 - Rewrote the exporting engine to be more modular.
 - Removed the Handlebars runtime from VCS.
+- Switched from `adm-zip` to `archiver` for zipping Textpack-files.
 
 # 1.4.2
 

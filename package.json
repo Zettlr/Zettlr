@@ -33,6 +33,7 @@
     "dependencies": {
         "@zettlr/citr": "^1.0.4",
         "adm-zip": "^0.4.13",
+        "archiver": "^3.1.1",
         "astrocite": "^0.15.3",
         "bcp-47": "^1.0.5",
         "chart.js": "^2.7.2",
