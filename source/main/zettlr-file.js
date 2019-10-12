@@ -313,6 +313,9 @@ class ZettlrFile {
     * @return {ZettlrFile}      This or null.
     */
   findExact (term) {
+    // Make sure the term indeed is a string
+    if (!term || typeof term !== 'string') return null
+
     let name = this.name.substr(0, this.name.length - this.ext.length)
     let titleFound = (name.toLowerCase() === term.toLowerCase())
 

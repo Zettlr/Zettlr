@@ -6,6 +6,7 @@
 - The regular expression search functionality treats expressions containing forward slashes correctly.
 - When the file list is focused, it only captures arrow key presses and does not prevent other shortcuts from working.
 - Tags are now added and removed to and from the tag dropdown selector during runtime.
+- Fixed a rare error that could occur during tag cloud searches.
 
 ## Under the Hood
 
