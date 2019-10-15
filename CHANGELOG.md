@@ -7,6 +7,7 @@
 - When the file list is focused, it only captures arrow key presses and does not prevent other shortcuts from working.
 - Tags are now added and removed to and from the tag dropdown selector during runtime.
 - Fixed a rare error that could occur during tag cloud searches.
+- Fixed the scheduling mode for the automatic dark mode switching. It now also works with overnight schedules where the start time is bigger than the end time (such as 21:00-06:00).
 
 ## Under the Hood
 

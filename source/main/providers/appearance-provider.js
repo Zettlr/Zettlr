@@ -37,7 +37,6 @@ class AppearanceProvider extends EventEmitter {
 
     // Initiate everything
     this._mode = global.config.get('autoDarkMode')
-    this._scheduleWasDark = this._isItDark() // Preset where we currently are
     this._isDarkMode = global.config.get('darkTheme')
     this._recalculateSchedule() // Parse the start and end times
 
@@ -87,15 +86,9 @@ class AppearanceProvider extends EventEmitter {
 
   tick () {
     if (this._mode === 'schedule') {
-      // By tracking the status of the time, we avoid annoying people by forcing
-      // the dark or light theme even if they decide to change it later on. This
-      // time Zettlr will only trigger a theme change if we traversed from
-      // daytime to nighttime, and leave out the question of whether or not dark
-      // mode has been active or not.
-      if (this._scheduleWasDark !== this._isItDark()) {
+      if (this._isDarkMode !== this._isItDark()) {
         // The schedule just changed -> change the theme
         global.config.set('darkTheme', this._isItDark())
-        this._scheduleWasDark = this._isItDark()
       }
     }
     // Have a tick (tac)
@@ -109,11 +102,15 @@ class AppearanceProvider extends EventEmitter {
   _recalculateSchedule () {
     let start = global.config.get('autoDarkModeStart').split(':')
     let end = global.config.get('autoDarkModeEnd').split(':')
+    console.log(start, end)
 
     this._startHour = parseInt(start[0], 10)
     this._startMin = parseInt(start[1], 10)
     this._endHour = parseInt(end[0], 10)
     this._endMin = parseInt(end[1], 10)
+
+    // Make sure the times differ.
+    if (this._startHour === this._endHour && this._startMin === this._endMin) this._endMin++
   }
 
   /**
@@ -126,8 +123,19 @@ class AppearanceProvider extends EventEmitter {
     let nowMin = now.getMinutes()
     let nowHours = now.getHours()
 
-    return (nowHours >= this._startHour && nowMin >= this._startMin &&
-        nowHours <= this._endHour && nowMin <= this._endMin)
+    // Overnight is when the startHour is bigger than the endHour
+    // (or the startMinutes bigger than the endMinutes, even only by one)
+    let isOvernight = this._startHour > this._endHour || (this._startHour === this._endHour && this._startMin > this._endMin)
+    let nowLaterThanStart = nowHours > this._startHour || (nowHours === this._startHour && nowMin >= this._startMin)
+    let nowEarlierThanEnd = nowHours < this._endHour || (nowHours === this._endHour && nowMin < this._endMin)
+
+    if (isOvernight) {
+      // In this case, now needs to be bigger than start or less than end
+      return nowLaterThanStart || nowEarlierThanEnd
+    } else {
+      // Here, the current time needs to be between start and end
+      return nowLaterThanStart && nowEarlierThanEnd
+    }
   }
 
   /**
