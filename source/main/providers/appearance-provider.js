@@ -37,6 +37,7 @@ class AppearanceProvider extends EventEmitter {
 
     // Initiate everything
     this._mode = global.config.get('autoDarkMode')
+    this._scheduleWasDark = this._isItDark() // Preset where we currently are
     this._isDarkMode = global.config.get('darkTheme')
     this._recalculateSchedule() // Parse the start and end times
 
@@ -71,6 +72,14 @@ class AppearanceProvider extends EventEmitter {
       }
     }
 
+    // It may be that it was already dark when the user started the app, but the
+    // theme was light. This makes sure the theme gets set once after application
+    // start --- But if the user decides to change it back, it'll not be altered.
+    if (this._mode === 'schedule' && global.config.get('darkTheme') !== this._isItDark()) {
+      global.config.set('darkTheme', this._isItDark())
+      this._scheduleWasDark = this._isItDark()
+    }
+
     // Subscribe to configuration updates
     global.config.on('update', (option) => {
       // Set internal vars accordingly
@@ -86,9 +95,15 @@ class AppearanceProvider extends EventEmitter {
 
   tick () {
     if (this._mode === 'schedule') {
-      if (this._isDarkMode !== this._isItDark()) {
+      // By tracking the status of the time, we avoid annoying people by forcing
+      // the dark or light theme even if they decide to change it later on. This
+      // time Zettlr will only trigger a theme change if we traversed from
+      // daytime to nighttime, and leave out the question of whether or not dark
+      // mode has been active or not.
+      if (this._scheduleWasDark !== this._isItDark()) {
         // The schedule just changed -> change the theme
         global.config.set('darkTheme', this._isItDark())
+        this._scheduleWasDark = this._isItDark()
       }
     }
     // Have a tick (tac)
@@ -102,7 +117,6 @@ class AppearanceProvider extends EventEmitter {
   _recalculateSchedule () {
     let start = global.config.get('autoDarkModeStart').split(':')
     let end = global.config.get('autoDarkModeEnd').split(':')
-    console.log(start, end)
 
     this._startHour = parseInt(start[0], 10)
     this._startMin = parseInt(start[1], 10)
