@@ -31,7 +31,7 @@
         "test": "mocha"
     },
     "dependencies": {
-        "@zettlr/citr": "^1.0.4",
+        "@zettlr/citr": "^1.1.0",
         "adm-zip": "^0.4.13",
         "archiver": "^3.1.1",
         "astrocite": "^0.15.3",
