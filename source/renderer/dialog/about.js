@@ -45,6 +45,22 @@ class AboutDialog extends ZettlrDialog {
       }
       document.getElementById('contrib').innerHTML = html
     })
+
+    global.ipc.send('get-sponsors')
+    // Don't want the above-hack again. Let's simply listen for a different command.
+    global.ipc.once('sponsors-list', (data) => {
+      // List all sponsors, optionally with link
+      let html = '<ul>'
+      for (let sponsor of data) {
+        html += `<li>${sponsor.name}`
+        if (sponsor.link) {
+          html += `(<a onclick="require('electron').shell.openExternal('${sponsor.link}')">${sponsor.link}</a>)`
+        }
+        html += '</li>'
+      }
+      html += '</ul>'
+      document.getElementById('sponsorList').innerHTML = html
+    })
   }
 }
 
