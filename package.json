@@ -62,7 +62,7 @@
         "cross-env": "^6.0.3",
         "css-loader": "^3.2.0",
         "csso": "^3.5.1",
-        "electron": "^6.0.12",
+        "electron": "^6.1.2",
         "electron-builder": "^21.2.0",
         "eslint": "^6.5.1",
         "eslint-config-standard": "^14.1.0",

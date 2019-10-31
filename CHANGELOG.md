@@ -17,6 +17,7 @@
 - Rewrote the exporting engine to be more modular.
 - Removed the Handlebars runtime from VCS.
 - Switched from `adm-zip` to `archiver` for zipping Textpack-files.
+- Updated Electron to `6.1.2`.
 
 # 1.4.2
 
