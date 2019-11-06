@@ -1,3 +1,13 @@
+# 1.5.0
+
+## GUI and Functionality
+
+- Fixed a bug that would ignore the page size set in your PDF preferences when using the default template.
+
+## Under the Hood
+
+(nothing here)
+
 # 1.4.3
 
 ## GUI and Functionality
