@@ -10,7 +10,6 @@ require('codemirror/addon/mode/overlay')
 require('codemirror/addon/mode/multiplex') // Multiplex needed for syntax highlighting
 
 // 2. Editing addons
-// require('codemirror/addon/edit/continuelist')
 require('codemirror/addon/edit/closebrackets')
 require('./continuelist.js')
 require('./indentlist.js')
@@ -59,6 +58,7 @@ require('./zettlr-mode-spellchecker.js')
 require('./zettlr-mode-zkn.js')
 require('./zettlr-mode-readability.js')
 require('./zettlr-mode-multiplex.js')
+require('./zettlr-plugin-autocorrect')
 require('./zettlr-plugin-footnotes.js')
 require('./zettlr-plugin-render-images.js')
 require('./zettlr-plugin-render-links.js')

@@ -114,6 +114,48 @@ class ZettlrEditor {
       },
       theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
       autofocus: false,
+      autoCorrect: {
+        // TODO: DYNAMIC OPTIONS
+        'style': 'LibreOffice',
+        'quotes': {
+          'single': { 'start': '›', 'end': '‹' },
+          'double': { 'start': '»', 'end': '«' }
+        },
+        'keys': {
+          // Arrows
+          '-->': '→',
+          '<--': '←',
+          '<->': '↔',
+          '<-->': '↔',
+          '==>': '⇒',
+          '<==': '⇐',
+          '<=>': '⇔',
+          '<==>': '⇔',
+          // Mathematical symbols
+          '!=': '≠',
+          '<>': '≠',
+          '+-': '∓',
+          '<=': '≤',
+          '>=': '≥',
+          '1/2': '½',
+          '1/3': '⅓',
+          '1/4': '¼',
+          '1/8': '⅛',
+          '2/3': '⅔',
+          '3/4': '¾',
+          '3/8': '⅜',
+          '5/8': '⅝',
+          '7/8': '⅞',
+          // Special symbols
+          '(c)': '©',
+          '(tm)': '™',
+          '(r)': '®',
+          // Interpunctation
+          '...': '…',
+          '--': '–',
+          '---': '—'
+        }
+      },
       foldGutter: true,
       cursorScrollMargin: 60, // Keep the cursor 60px below/above editor edges
       cursorBlinkRate: 0, // Disable cursor blinking (we'll do this with a @keyframes animation)

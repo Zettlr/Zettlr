@@ -2,6 +2,8 @@
 
 ## GUI and Functionality
 
+- **New Feature**: AutoCorrect! Zettlr can now automatically replace certain characters with special symbols. For instance, by default it will replace `-->` with `→`, `!=` with `≠` or perform certain default replacements, such as transforming hyphens and fullstops with their typographically correct symbols (`...` -> `…` and `--` -> `–`). You can edit the replacement table in the preferences and adapt them to your own needs. _Please note_ that this feature will only be active when you are outside of codeblocks. This is meant to prevent unintended replacements, especially with certain languages such as R, where ASCII arrows are part of assignment operations.
+- **New Feature**: Magic Quotes! Together with AutoCorrect, we've implemented the ability of Zettlr to use magic quotes. That means, whenever you type `"` (double quote) or `'` (single quote), it will instead insert the typographically correct characters of your choice, for instance `„…“` for German, or `« … »` for French. Even `「…」` for Japanese are supported! _Please note_ that this feature will only be active when you are outside of codeblocks. This is meant to prevent unintended replacements, as most languages require the ASCII quotes. Note also that having this feature active will deactivate the automatic bracket matching for quotes.
 - Fixed a bug that would ignore the page size set in your PDF preferences when using the default template.
 
 ## Under the Hood
