@@ -225,8 +225,7 @@ module.exports = {
      */
     beginDragging: function (event) {
       event.dataTransfer.effectAllowed = 'move'
-      event.dataTransfer.dropEffect = 'move'
-      event.dataTransfer.setData('text', JSON.stringify({
+      event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
         'hash': this.obj.hash,
         'type': this.obj.type // Can be file or directory
       }))
