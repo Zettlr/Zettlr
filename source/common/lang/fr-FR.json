@@ -12,7 +12,7 @@
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-09-30T09:46:50.000000Z"
+        "updated_at": "2019-11-07T19:39:36.000000Z"
     },
     "dialog": {
         "about": {
@@ -32,6 +32,7 @@
             "other_projects": "Zettlr utilise \u00e9galement ces logiciels tiers",
             "projects": "Logiciels tiers",
             "showdownjs": "Afficher le Changelog pour visualiser les changements apport\u00e9s par une mise \u00e0 jour",
+            "sponsors": "Soutiens",
             "tippyjs": "C'est d'ici que viennent les jolies infobulles",
             "title": "\u00c0 propos de Zettlr",
             "trademark": "Tous les logos et les noms de marque sont soumis \u00e0 leurs propri\u00e9taires l\u00e9gitimes. En plus d'utiliser leur code, Zettlr n'est aucunement affili\u00e9 \u00e0 aucun de ces projets. Node.js est une marque de commerce de Joyent, Inc."
@@ -167,6 +168,10 @@
             "auto_dark_mode_schedule": "Horaires",
             "auto_dark_mode_schedule_format": "HH:MM (format 24h)",
             "auto_dark_mode_system": "Suivre le syst\u00e8me d'exploitation",
+            "autocorrect": {
+                "active_label": "Activer AutoCorrect",
+                "title": "AutoCorrect"
+            },
             "checkForBeta": "Me pr\u00e9venir \u00e0 propos des versions b\u00eata",
             "choose_file": "Choisir un fichier\u2026",
             "citation_database": "Fichier de r\u00e9f\u00e9rences bibliographiques (au format CSL JSON ou BibTex)",
@@ -575,6 +580,7 @@
         "no_command": "R\u00e9ception d'un message sans commande : % s",
         "ok": "Ok",
         "open_folder": "Ouvrir le dossier racine.",
+        "open_root_directory": "Ouvrir le dossier %s \u2026",
         "overwrite_file_message": "Le fichier %s existe d\u00e9j\u00e0 dans ce r\u00e9pertoire. \u00c9craser?",
         "overwrite_file_title": "\u00c9craser le fichier existant",
         "replace_file_message": "Le fichier actuel a \u00e9t\u00e9 modifi\u00e9 par un programme externe. Faut-il le remplacer ?",

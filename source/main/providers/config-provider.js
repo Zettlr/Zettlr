@@ -159,7 +159,46 @@ class ConfigProvider extends EventEmitter {
         'countChars': false, // Set to true to enable counting characters instead of words
         'boldFormatting': '**', // Can be ** or __
         'italicFormatting': '_', // Can be * or _
-        'readabilityAlgorithm': 'dale-chall' // The algorithm to use with readability mode.
+        'readabilityAlgorithm': 'dale-chall', // The algorithm to use with readability mode.
+        'autoCorrect': {
+          'active': true, // AutoCorrect is on by default
+          'style': 'LibreOffice', // Default to LibreOffice style
+          'quotes': false,
+          'replacements': {
+            // Arrows
+            '-->': '→',
+            '<--': '←',
+            '<->': '↔',
+            '<-->': '↔',
+            '==>': '⇒',
+            '<==': '⇐',
+            '<=>': '⇔',
+            '<==>': '⇔',
+            // Mathematical symbols
+            '!=': '≠',
+            '<>': '≠',
+            '+-': '∓',
+            '<=': '≤',
+            '>=': '≥',
+            '1/2': '½',
+            '1/3': '⅓',
+            '1/4': '¼',
+            '1/8': '⅛',
+            '2/3': '⅔',
+            '3/4': '¾',
+            '3/8': '⅜',
+            '5/8': '⅝',
+            '7/8': '⅞',
+            // Special symbols
+            '(c)': '©',
+            '(tm)': '™',
+            '(r)': '®',
+            // Interpunctation
+            '...': '…',
+            '--': '–',
+            '---': '—'
+          }
+        } // END autoCorrect options
       },
       'display': {
         'theme': 'berlin', // The theme used by the app, can be berlin, frankfurt, bielefeld

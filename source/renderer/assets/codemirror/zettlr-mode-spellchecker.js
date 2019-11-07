@@ -14,7 +14,7 @@
 
   var codeRE = /`.*?`/i
   var zknTagRE = /##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?/i
-  var delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚'
+  var delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»‹›„“”「」『』–—…÷‘’‚'
 
   /**
     * Define the spellchecker mode that will simply check all found words against

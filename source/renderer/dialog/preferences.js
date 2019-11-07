@@ -65,6 +65,15 @@ class PreferencesDialog extends ZettlrDialog {
     }
     this._languages = data.languages // Save a reference for downloading etc.
 
+    // Now prepopulate some stuff for autoCorrect
+    data.autoCorrectReplacements = []
+    for (let key in data.editor.autoCorrect.replacements) {
+      data.autoCorrectReplacements.push({
+        'key': key,
+        'value': data.editor.autoCorrect.replacements[key]
+      })
+    }
+
     return data
   }
 
@@ -242,6 +251,28 @@ class PreferencesDialog extends ZettlrDialog {
     // Extract selected dictionaries
     cfg['selectedDicts'] = data.filter(elem => elem.name === 'selectedDicts').map(elem => elem.value)
 
+    // Now for the AutoCorrect preferences - first the replacement table
+    let keys = data.filter((e) => e.name === 'autoCorrectKeys[]')
+    let vals = data.filter((e) => e.name === 'autoCorrectValues[]')
+    cfg['editor.autoCorrect.replacements'] = {}
+    for (let i = 0; i < keys.length; i++) {
+      cfg['editor.autoCorrect.replacements'][keys[i].value] = vals[i].value
+    }
+
+    // And then second the quotes. We split them at the hyphen character
+    // (so we only) need to maintain one instance of these things.
+    let prim = data.find(elem => elem.name === 'autoCorrectQuotesDouble').value.split('…')
+    let sec = data.find(elem => elem.name === 'autoCorrectQuotesSingle').value.split('…')
+    if (prim[0] === '"' && prim[1] === '"' && sec[0] === "'" && sec[1] === "'") {
+      // If defaults are selected, disable Magic Quotes
+      cfg['editor.autoCorrect.quotes'] = false
+    } else {
+      cfg['editor.autoCorrect.quotes'] = {
+        'double': { 'start': prim[0], 'end': prim[1] },
+        'single': { 'start': sec[0], 'end': sec[1] }
+      }
+    }
+
     // Copy over all other field values from the result set.
     for (let r of data) {
       // Only non-missing to not overwrite the checkboxes that ARE checked with a "yes"
@@ -286,7 +317,7 @@ class PreferencesDialog extends ZettlrDialog {
     }
 
     // We're done. But before sending retrieve all remaining user dictionary words ...
-    let userDictionary = data.filter(elem => elem.name === 'userDictionary').map(elem => elem.value)
+    let userDictionary = data.filter(elem => elem.name === 'userDictionary' && elem.value.length > 0).map(elem => elem.value)
     // ... and send them to main separately
     global.ipc.send('update-user-dictionary', userDictionary)
 

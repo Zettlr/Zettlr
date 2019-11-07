@@ -32,7 +32,7 @@
  *
  * The autoCorrect option can have three keys:
  *
- * autoCorrect.keys | Object ({ key: "value" }) | Default: {}
+ * autoCorrect.replacements | Object ({ key: "value" }) | Default: {}
  *     Defines the replacement table. If not present, you can still
  *     use Magic Quotes.
  *
@@ -109,13 +109,13 @@
    * @param {Mixed} option The new configuration of the AutoCorrect plugin.
    */
   function setup (option) {
-    if (option.hasOwnProperty('keys') && typeof option.keys === 'object') {
-      // In case we have a property "keys" which is also an object
+    if (option.hasOwnProperty('replacements') && typeof option.replacements === 'object') {
+      // In case we have a property "replacements" which is also an object
       // this indicates we should use this. If it's not an object,
-      // it indicates that the user might want to replace "keys"
+      // it indicates that the user might want to replace "replacements"
       // with something.
-      replacementCandidates = option.keys
-    } else if (option.hasOwnProperty('keys') && option.keys === false) {
+      replacementCandidates = option.replacements
+    } else if (option.hasOwnProperty('replacements') && option.keys === false) {
       // Deactivate replacements
       replacementCandidates = {}
     } else {
@@ -287,13 +287,12 @@
 
     canPerformReverseReplacement = false // Reset the handleBackspace flag
     var cursorBefore = { 'line': cursor.line, 'ch': cursor.ch - 1 }
-    var cursorAfter = { 'line': cursor.line, 'ch': cursor.ch + 1 }
     // We have to check for two possibilities:
     // There's a space in front of the quote or not.
-    if (cm.getRange(cursorBefore, cursor) === ' ') {
-      cm.replaceRange(quotes[type].start, cursor, cursorAfter)
+    if (cursor.ch === 0 || cm.getRange(cursorBefore, cursor) === ' ') {
+      cm.replaceRange(quotes[type].start, cursor)
     } else {
-      cm.replaceRange(quotes[type].end, cursor, cursorAfter)
+      cm.replaceRange(quotes[type].end, cursor)
     }
   }
 

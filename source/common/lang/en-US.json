@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-10-31T17:16:47.000000Z"
+        "updated_at": "2019-11-07T19:34:41.000000Z"
     },
     "dialog": {
         "about": {
@@ -160,6 +160,15 @@
             "auto_dark_mode_schedule": "Schedule",
             "auto_dark_mode_schedule_format": "HH:MM (24h format)",
             "auto_dark_mode_system": "Follow Operating System",
+            "autocorrect": {
+                "active_label": "Turn on AutoCorrect",
+                "quotes_double_label": "Primary Magic Quotes",
+                "quotes_single_label": "Secondary Magic Quotes",
+                "replacement_info": "Here you can define certain strings that will be replaced when AutoCorrect is on. The characters on the left side will be replaced with whatever comes on the right.",
+                "style_libre_office_label": "LibreOffice style",
+                "style_word_label": "Word style",
+                "title": "AutoCorrect"
+            },
             "checkForBeta": "Notify me about beta releases",
             "choose_file": "Choose file \u2026",
             "citation_database": "Citation Database (CSL JSON or BibTex)",

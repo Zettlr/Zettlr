@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-10-31T17:17:14.000000Z"
+        "updated_at": "2019-11-07T19:36:42.000000Z"
     },
     "dialog": {
         "about": {
@@ -160,6 +160,15 @@
             "auto_dark_mode_schedule": "Zeit",
             "auto_dark_mode_schedule_format": "HH:MM",
             "auto_dark_mode_system": "Folge Betriebssystem",
+            "autocorrect": {
+                "active_label": "AutoCorrect einschalten",
+                "quotes_double_label": "Prim\u00e4re Anf\u00fchrungszeichen",
+                "quotes_single_label": "Sekund\u00e4re Anf\u00fchrungszeichen",
+                "replacement_info": "Hier kannst du Zeichenketten definieren, die ersetzt werden, sobald AutoCorrect eingeschaltet ist. Die Zeichen links werden mit den Zeichen rechts ersetzt.",
+                "style_libre_office_label": "LibreOffice-Stil",
+                "style_word_label": "Word-Stil",
+                "title": "AutoCorrect"
+            },
             "checkForBeta": "Informiere mich \u00fcber Beta-Releases",
             "choose_file": "Datei w\u00e4hlen \u2026",
             "citation_database": "Zitationsdatenbank (CSL JSON oder BibTex)",
