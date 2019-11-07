@@ -122,7 +122,6 @@
 
     input[type="checkbox"], input[type="radio"] {
       margin:0.5em;
-      width:auto;
       display:inline;
     }
 
@@ -196,6 +195,12 @@
     div.box-left, div.box-right {
       width: 100%;
       padding:2%;
+    }
+
+    // Helper class for containers that should not exceed a certain height
+    .modal-container-constrain-size {
+      max-height: 50vh;
+      overflow-y: auto;
     }
 
     // On larger screens, box-left and box-right are displayed next to each other.

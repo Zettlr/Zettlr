@@ -67,12 +67,15 @@ class PreferencesDialog extends ZettlrDialog {
 
     // Now prepopulate some stuff for autoCorrect
     data.autoCorrectReplacements = []
-    for (let key in data.editor.autoCorrect.replacements) {
-      data.autoCorrectReplacements.push({
-        'key': key,
-        'value': data.editor.autoCorrect.replacements[key]
-      })
+    for (let replacement of data.editor.autoCorrect.replacements) {
+      data.autoCorrectReplacements.push({ 'key': replacement.key, 'value': replacement.val })
     }
+
+    // For ease of access in Handlebars, we also need to provide it with the current
+    // quotes
+    let q = data.editor.autoCorrect.quotes
+    data.primaryQuotes = q.double.start + '…' + q.double.end
+    data.secondaryQuotes = q.single.start + '…' + q.single.end
 
     return data
   }
@@ -187,6 +190,21 @@ class PreferencesDialog extends ZettlrDialog {
       // Simply send the respective command to main and let the magic happen!
       global.ipc.send(`switch-theme-${elem}`)
     })
+
+    // BEGIN functionality for the AutoCorrect options
+    $('#add-autocorrect-key').click(function (e) {
+      e.stopPropagation()
+      e.preventDefault()
+      let keyCol = $('<td>').html('<div class="form-inline-buttons"><input type="text" name="autoCorrectKeys[]"></div>')
+      let valCol = $('<td>').html('<div class="form-inline-buttons"><input type="text" name="autoCorrectValues[]"> <button class="autocorrect-remove-row">&times;</button></div>')
+      let row = $('<tr>').append(keyCol, valCol)
+      $('#autocorrect-key-container').append(row)
+    })
+
+    $('#autocorrect-key-container').on('click', '.autocorrect-remove-row', function (e) {
+      e.preventDefault()
+      $(e.target).parent().parent().parent().detach() // Button -> div -> td -> tr
+    })
   }
 
   afterDownload (event, arg) {
@@ -254,9 +272,9 @@ class PreferencesDialog extends ZettlrDialog {
     // Now for the AutoCorrect preferences - first the replacement table
     let keys = data.filter((e) => e.name === 'autoCorrectKeys[]')
     let vals = data.filter((e) => e.name === 'autoCorrectValues[]')
-    cfg['editor.autoCorrect.replacements'] = {}
+    cfg['editor.autoCorrect.replacements'] = []
     for (let i = 0; i < keys.length; i++) {
-      cfg['editor.autoCorrect.replacements'][keys[i].value] = vals[i].value
+      cfg['editor.autoCorrect.replacements'].push({ key: keys[i].value, val: vals[i].value })
     }
 
     // And then second the quotes. We split them at the hyphen character

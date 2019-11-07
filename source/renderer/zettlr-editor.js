@@ -659,10 +659,15 @@ class ZettlrEditor {
     if (!conf.active) {
       this._cm.setOption('autoCorrect', false)
     } else {
+      // Convert the replacements into the correct format for the plugin
+      let keys = {}
+      for (let repl of conf.replacements) {
+        keys[repl.key] = repl.val
+      }
       this._cm.setOption('autoCorrect', {
         style: conf.style,
         quotes: conf.quotes,
-        replacements: conf.replacements
+        replacements: keys
       })
     }
 

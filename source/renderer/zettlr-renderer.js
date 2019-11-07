@@ -341,7 +341,7 @@ class ZettlrRenderer {
 
     // Trigger a refresh in the attachment pane
     this._attachments.refresh()
-    console.log(nData)
+
     // Pass on the new paths object as is to the store.
     global.store.renewItems(nData)
   }

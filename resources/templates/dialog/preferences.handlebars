@@ -653,20 +653,20 @@
             <select name="autoCorrectQuotesDouble" id="autoCorrectQuotesDouble">
               {{!-- Taken from: https://de.wikipedia.org/wiki/Anf%C3%BChrungszeichen --}}
               {{!-- ATTENTION when adding new pairs: They will be SPLIT using the hyphen character! --}}
-              <option value='"…"'>"…"</option>
-              <option value="“…”">“…”</option>
-              <option value="”…”">”…”</option>
-              <option value="„…“">„…“</option>
-              <option value="„…”">„…”</option>
-              <option value="“…„">“…„</option>
-              <option value="“ … ”">“ … ”</option>
-              <option value="»…«">»…«</option>
-              <option value="«…»">«…»</option>
-              <option value="»…»">»…»</option>
-              <option value="‘…’">‘…’</option>
-              <option value="« … »">« … »</option>
-              <option value="「…」">「…」</option>
-              <option value="『…』">『…』</option>
+              <option value='"…"'{{#ifCond primaryQuotes '=' '"…"'}}selected="selected"{{/ifCond}}>"…"</option>
+              <option value="“…”"{{#ifCond primaryQuotes '=' '“…”'}}selected="selected"{{/ifCond}}>“…”</option>
+              <option value="”…”"{{#ifCond primaryQuotes '=' '”…”'}}selected="selected"{{/ifCond}}>”…”</option>
+              <option value="„…“"{{#ifCond primaryQuotes '=' '„…“'}}selected="selected"{{/ifCond}}>„…“</option>
+              <option value="„…”"{{#ifCond primaryQuotes '=' '„…”'}}selected="selected"{{/ifCond}}>„…”</option>
+              <option value="“…„"{{#ifCond primaryQuotes '=' '“…„'}}selected="selected"{{/ifCond}}>“…„</option>
+              <option value="“ … ”"{{#ifCond primaryQuotes '=' '“ … ”'}}selected="selected"{{/ifCond}}>“ … ”</option>
+              <option value="»…«"{{#ifCond primaryQuotes '=' '»…«'}}selected="selected"{{/ifCond}}>»…«</option>
+              <option value="«…»"{{#ifCond primaryQuotes '=' '«…»'}}selected="selected"{{/ifCond}}>«…»</option>
+              <option value="»…»"{{#ifCond primaryQuotes '=' '»…»'}}selected="selected"{{/ifCond}}>»…»</option>
+              <option value="‘…’"{{#ifCond primaryQuotes '=' '‘…’'}}selected="selected"{{/ifCond}}>‘…’</option>
+              <option value="« … »"{{#ifCond primaryQuotes '=' '« … »'}}selected="selected"{{/ifCond}}>« … »</option>
+              <option value="「…」"{{#ifCond primaryQuotes '=' '「…」'}}selected="selected"{{/ifCond}}>「…」</option>
+              <option value="『…』"{{#ifCond primaryQuotes '=' '『…』'}}selected="selected"{{/ifCond}}>『…』</option>
             </select>
           </div>
           <div class="box-right">
@@ -674,59 +674,50 @@
             <select name="autoCorrectQuotesSingle" id="autoCorrectQuotesSingle">
               {{!-- Taken from: https://de.wikipedia.org/wiki/Anf%C3%BChrungszeichen --}}
               {{!-- ATTENTION when adding new pairs: They will be SPLIT using the hyphen character! --}}
-              <option value="'…'">'…'</option>
-              <option value="‘…’">‘…’</option>
-              <option value="’…’">’…’</option>
-              <option value="‚…‘">‚…‘</option>
-              <option value="‚…’">‚…’</option>
-              <option value="‘…‚">‘…‚</option>
-              <option value="‘ … ’">‘ … ’</option>
-              <option value="‹…›">‹…›</option>
-              <option value="›…›">›…›</option>
-              <option value="‹ … ›">‹ … ›</option>
-              <option value="«…»">«…»</option>
-              <option value="„…“">„…“</option>
-              <option value="„…”">„…”</option>
-              <option value="「…」">「…」</option>
-              <option value="『…』">『…』</option>
+              <option value="'…'"{{#ifCond secondaryQuotes '=' "'…'"}}selected="selected"{{/ifCond}}>'…'</option>
+              <option value="‘…’"{{#ifCond secondaryQuotes '=' '‘…’'}}selected="selected"{{/ifCond}}>‘…’</option>
+              <option value="’…’"{{#ifCond secondaryQuotes '=' '’…’'}}selected="selected"{{/ifCond}}>’…’</option>
+              <option value="‚…‘"{{#ifCond secondaryQuotes '=' '‚…‘'}}selected="selected"{{/ifCond}}>‚…‘</option>
+              <option value="‚…’"{{#ifCond secondaryQuotes '=' '‚…’'}}selected="selected"{{/ifCond}}>‚…’</option>
+              <option value="‘…‚"{{#ifCond secondaryQuotes '=' '‘…‚'}}selected="selected"{{/ifCond}}>‘…‚</option>
+              <option value="‘ … ’"{{#ifCond secondaryQuotes '=' '‘ … ’'}}selected="selected"{{/ifCond}}>‘ … ’</option>
+              <option value="‹…›"{{#ifCond secondaryQuotes '=' '‹…›'}}selected="selected"{{/ifCond}}>‹…›</option>
+              <option value="›…›"{{#ifCond secondaryQuotes '=' '›…›'}}selected="selected"{{/ifCond}}>›…›</option>
+              <option value="‹ … ›"{{#ifCond secondaryQuotes '=' '‹ … ›'}}selected="selected"{{/ifCond}}>‹ … ›</option>
+              <option value="«…»"{{#ifCond secondaryQuotes '=' '«…»'}}selected="selected"{{/ifCond}}>«…»</option>
+              <option value="„…“"{{#ifCond secondaryQuotes '=' '„…“'}}selected="selected"{{/ifCond}}>„…“</option>
+              <option value="„…”"{{#ifCond secondaryQuotes '=' '„…”'}}selected="selected"{{/ifCond}}>„…”</option>
+              <option value="「…」"{{#ifCond secondaryQuotes '=' '「…」'}}selected="selected"{{/ifCond}}>「…」</option>
+              <option value="『…』"{{#ifCond secondaryQuotes '=' '『…』'}}selected="selected"{{/ifCond}}>『…』</option>
             </select>
           </div>
         </div>
         <div class="box-right">
           {{!-- Replacement Table --}}
           <p>{{i18n "dialog.preferences.autocorrect.replacement_info"}}</p>
-          <table>
-            <thead>
-              <tr>
-                <th>Characters</th>
-                <th>Replacements</th>
-                <th>&nbsp;</th>
-              </tr>
-            </thead>
-            <tbody>
-              {{#each autoCorrectReplacements }}
-              <tr>
-                <td>
-                  <div class="form-inline-buttons">
-                    <input type="text" name="autoCorrectKeys[]" value="{{ key }}">
-                  </div>
-                </td>
-                <td>
-                  <div class="form-inline-buttons">
-                    <input type="text" name="autoCorrectValues[]" value="{{ value }}">
-                    <button>&times;</button>
-                  </div>
-                </td>
-              </tr>
-              {{/each}}
-              <tr>
-                <td colspan="2">
-                  <button>Add</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+          <div class="modal-container-constrain-size">
+            <table>
+              <tbody id="autocorrect-key-container">
+                {{#each autoCorrectReplacements }}
+                <tr>
+                  <td>
+                    <div class="form-inline-buttons">
+                      <input type="text" name="autoCorrectKeys[]" value="{{ key }}">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-inline-buttons">
+                      <input type="text" name="autoCorrectValues[]" value="{{ value }}">
+                      <button class="autocorrect-remove-row">&times;</button>
+                    </div>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+          <button id="add-autocorrect-key">+</button>
+          </div>
       </div>
 
 

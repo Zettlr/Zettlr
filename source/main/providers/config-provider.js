@@ -164,40 +164,40 @@ class ConfigProvider extends EventEmitter {
           'active': true, // AutoCorrect is on by default
           'style': 'LibreOffice', // Default to LibreOffice style
           'quotes': false,
-          'replacements': {
+          'replacements': [
             // Arrows
-            '-->': '→',
-            '<--': '←',
-            '<->': '↔',
-            '<-->': '↔',
-            '==>': '⇒',
-            '<==': '⇐',
-            '<=>': '⇔',
-            '<==>': '⇔',
+            { key: '-->', val: '→' },
+            { key: '<--', val: '←' },
+            { key: '<->', val: '↔' },
+            { key: '<-->', val: '↔' },
+            { key: '==>', val: '⇒' },
+            { key: '<==', val: '⇐' },
+            { key: '<=>', val: '⇔' },
+            { key: '<==>', val: '⇔' },
             // Mathematical symbols
-            '!=': '≠',
-            '<>': '≠',
-            '+-': '∓',
-            '<=': '≤',
-            '>=': '≥',
-            '1/2': '½',
-            '1/3': '⅓',
-            '1/4': '¼',
-            '1/8': '⅛',
-            '2/3': '⅔',
-            '3/4': '¾',
-            '3/8': '⅜',
-            '5/8': '⅝',
-            '7/8': '⅞',
+            { key: '!=', val: '≠' },
+            { key: '<>', val: '≠' },
+            { key: '+-', val: '∓' },
+            { key: '<=', val: '≤' },
+            { key: '>=', val: '≥' },
+            { key: '1/2', val: '½' },
+            { key: '1/3', val: '⅓' },
+            { key: '1/4', val: '¼' },
+            { key: '1/8', val: '⅛' },
+            { key: '2/3', val: '⅔' },
+            { key: '3/4', val: '¾' },
+            { key: '3/8', val: '⅜' },
+            { key: '5/8', val: '⅝' },
+            { key: '7/8', val: '⅞' },
             // Special symbols
-            '(c)': '©',
-            '(tm)': '™',
-            '(r)': '®',
+            { key: '(c)', val: '©' },
+            { key: '(tm)', val: '™' },
+            { key: '(r)', val: '®' },
             // Interpunctation
-            '...': '…',
-            '--': '–',
-            '---': '—'
-          }
+            { key: '...', val: '…' },
+            { key: '--', val: '–' },
+            { key: '---', val: '—' }
+          ]
         } // END autoCorrect options
       },
       'display': {
