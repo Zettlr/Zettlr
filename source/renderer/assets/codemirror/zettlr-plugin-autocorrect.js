@@ -17,43 +17,32 @@
   */
 
 /**
- * HOW TO USE THIS PLUGIN
+ * HOW TO USE THIS PLUGIN // OPTIONS
  *
- * 1. Include this file in the HTML document you would like to use CodeMirror on.
- * 2. This plugin defines a new option, "autoCorrect", which you can use.
+ * All options are held within the autoCorrect-key in the CodeMirror options,
+ * so you can change it at runtime by executing cm.setOption("autoCorrect", newValue)
  *
- * The autoCorrect option can have three forms, Boolean, a simple object, or the
- * full configuration.
+ * autoCorrect = false
+ *     If autoCorrect is set to a falsy value, AutoCorrect will be deactivated.
  *
- * autoCorrect = false (Boolean)
+ * autoCorrect = { key: "value" }
+ *     If the option is a simple key-value-object, the plugin assumes this to be
+ *     the replacement table and sets the "style" and "quotes"-keys to their
+ *     default values.
  *
- *     This means that the plugin is deactivated.
+ * The autoCorrect option can have three keys:
  *
- * autoCorrect = key-value-pairs object
+ * autoCorrect.keys | Object ({ key: "value" }) | Default: {}
+ *     Defines the replacement table. If not present, you can still
+ *     use Magic Quotes.
  *
- *     If the option only contains an object with key-value pairs, it will
- *     assume this to be the replacement table. It will assume default quotes
- *     (that is, ASCII double- and single quotes: " and ') and also fall back
- *     to the WORD style AutoCorrect.
+ * autoCorrect.style | string ('LibreOffice' or 'Word') | Default: 'Word'
+ *     Sets the mode to either Word or LibreOffice (see below for an explanation)
  *
- * The full configuration looks like this:
- *
- * autoCorrect: {
- *   // Style: Any other value than "LibreOffice" means: Word style.
- *   style: 'LibreOffice',
- *   quotes: {
- *     // Should be self-explanatory. If ANY value is not correct,
- *     // the plugin falls back to default.
- *     double: { start: '"', end: '"' }
- *     single: { start: ''', end: ''' }
- *   },
- *   keys: {
- *     // This is the replacement table, some possible values:
- *     '-->': '→', // The "key" will be replaced with "value"
- *     '<--': '←',
- *     '<->': '↔',
- *   }
- * }
+ * autoCorrect.quotes | Object | Default: false
+ *     This key should hold an object with two keys, "single" and "double", each
+ *     with the keys 'start' and 'end'. If any of these keys is missing, quotes
+ *     will fall back to default.
  */
 
 (function (mod) {
@@ -67,83 +56,109 @@
 })(function (CodeMirror) {
   'use strict'
 
-  // This variable will hold the computed keyMap (we need to store it externally so that
-  // it can be removed in case the user deactivates the AutoCorrect plugin at runtime)
+  // This variable holds the generated keymap
+  // that triggers the plugin's functionality
   var builtKeyMap
 
-  // This variable holds the replacement characters for quotes
-  var quotes
+  // This variable holds the magic quotes
+  var quotes = false
 
-  // This variable holds the final table for key-value pairs to be replaced.
-  var replacementCandidates = {}
+  // This variable holds the replacement table
+  var replacementCandidates
 
   // Do we use Word-style AutoCorrect, or LibreOffice?
+  // Difference: Word triggers on the last character of
+  // a replacement candidate, while LibreOffice requires
+  // the use of space/enter.
   var wordStyleAutoCorrect = true
 
-  // This variable will be set to true after a normal key replacement has taken place.
-  // As long as the variable is true, handleBackspace will reverse a replacement by
-  // looking up the replacements backwards. As soon as a special character (Space or Enter)
-  // is used, the variable will be set to false again.
+  // This variable will be set to true after a replacement
+  // has taken place. As long as it's true, handleBackspace
+  // will reverse a replacement by looking up the table
+  // backwards. As soon as a special character (Space or
+  // Enter) is used, the variable will be set to false again.
   var canPerformReverseReplacement = false
 
-  // This is the next variable we need. In case we have just performed a reverse-replacement
-  // we need to prevent the special characters from re-doing that replacement once again, so
-  // for one instance we need to stop these handlers from calling.
+  // This variable will be true once a reverse replacement has
+  // taken place to prevent special characters (space/enter)
+  // from simply re-replacing the characters again, which would
+  // lead to an infinite loop.
   var hasJustPerformedReverseReplacement = false
 
-  CodeMirror.defineOption('autoCorrect', false /* Inactive by default */, function (cm, value, oldValue) {
-    // Define the autocorrect option
-
-    // Remove the keymap before re-assigning it, if it has been present
-    // before
-    if (oldValue && oldValue !== CodeMirror.Init) cm.removeKeyMap(builtKeyMap)
-
-    // Do we have a new value? (if value = false this means the option is deactivated)
-    if (value) {
-      console.log('Activating AutoCorrect ...')
-      builtKeyMap = makeKeyMap(value) // Create the correct keyMap from the object passed
-      cm.addKeyMap(builtKeyMap)
-
-      // Now we need to extract the quotes (if present)
-      try {
-        // If any of these properties is not present, it will trigger an error,
-        // hence the default mapping will be used.
-        quotes = {
-          'single': {
-            'start': value.quotes.single.start,
-            'end': value.quotes.single.end
-          },
-          'double': {
-            'start': value.quotes.double.start,
-            'end': value.quotes.double.end
-          }
-        }
-      } catch (err) {
-        quotes = {
-          'single': { 'start': "'", 'end': "'" },
-          'double': { 'start': '"', 'end': '"' }
-        }
-      }
-    } else {
-      console.log('AutoCorrect is deactivated.')
-    }
-  })
+  // Define the autocorrect option
+  CodeMirror.defineOption('autoCorrect', false, onOptionChange)
 
   /**
-   * This function creates a keyMap to be passed to CodeMirror to handle.
-   * @param {Object} keys An object containing all the keys and their replacements
+   * Triggers on option change and (re-)sets up the AutoCorrect.
+   * @param {CodeMirror} cm The calling CodeMirror instance
+   * @param {Mixed} value The new autoCorrect value
+   * @param {Mixed} oldValue The previous autoCorrect value
    */
-  function makeKeyMap (value) {
-    replacementCandidates = value // Assume key-value-pair object.
-    if (value['keys'] && typeof value['keys'] === 'object') {
+  function onOptionChange (cm, value, oldValue) {
+    if (oldValue && oldValue !== CodeMirror.Init) cm.removeKeyMap(builtKeyMap)
+
+    if (value) {
+      setup(value)
+      makeKeyMap()
+      cm.addKeyMap(builtKeyMap)
+    }
+  }
+
+  /**
+   * Sets up the configuration for AutoCorrect.
+   * @param {Mixed} option The new configuration of the AutoCorrect plugin.
+   */
+  function setup (option) {
+    if (option.hasOwnProperty('keys') && typeof option.keys === 'object') {
       // In case we have a property "keys" which is also an object
       // this indicates we should use this. If it's not an object,
       // it indicates that the user might want to replace "keys"
       // with something.
-      replacementCandidates = value['keys']
+      replacementCandidates = option.keys
+    } else if (option.hasOwnProperty('keys') && option.keys === false) {
+      // Deactivate replacements
+      replacementCandidates = {}
+    } else {
+      // Assume key-value-pair object.
+      replacementCandidates = option
     }
 
-    var keyMap = {
+    // This variable indicates whether or not the user likes to
+    // have word-style auto-correct or LibreOffice style
+    // autocorrect. The former is a bit more aggressive in that
+    // it also triggers when you type the last character of a
+    // oreplacement-value. LibreOffice only replaces on Space
+    // or Enter.
+    wordStyleAutoCorrect = (!option.hasOwnProperty('style') || option.style !== 'LibreOffice')
+
+    try {
+      // If any of these properties is not present,
+      // it will trigger an error, hence the
+      // default mapping will be used.
+      quotes = {
+        'single': {
+          'start': option.quotes.single.start,
+          'end': option.quotes.single.end
+        },
+        'double': {
+          'start': option.quotes.double.start,
+          'end': option.quotes.double.end
+        }
+      }
+    } catch (err) {
+      // If no quotes are present, don't handle them.
+      // This helps use the AutoCorrect functionality
+      // without the Magic Quotes (e.g. to not block
+      // the matchBrackets algorithm etc.)
+      quotes = false
+    }
+  }
+
+  /**
+   * This function creates a keyMap to be passed to CodeMirror to handle.
+   */
+  function makeKeyMap () {
+    builtKeyMap = {
       // Define the default handlers
       'Space': handleSpecial,
       'Enter': handleSpecial,
@@ -153,59 +168,34 @@
       // Afterwards, we can add characters as we deem fit (only Word-style AutoCorrect)
     }
 
-    // This variable indicates whether or not the user likes to
-    // have word-style auto-correct or LibreOffice style
-    // autocorrect. The former is a bit more aggressive in that
-    // it also triggers when you type the last character of a
-    // oreplacement-value. LibreOffice only replaces on Space
-    // or Enter.
-    wordStyleAutoCorrect = (value['style'] !== 'LibreOffice') // false means: LibreOffice style, fallback is Word style.
+    // In case of LibreOffice style AutoCorrect only
+    // space and enter will trigger replacements.
+    if (!wordStyleAutoCorrect) return
 
-    // Do we have LibreOffice-style AutoCorrect? In this case, immediately
-    // return the default keymap, as our work here is done (only the default
-    // keymap's keys will trigger AutoCorrect).
-    if (!wordStyleAutoCorrect) return keyMap
-
-    // If we're here we should be using Word-style replacement, that is: the
-    // last character of a replacement should be triggering a replacement, so
-    // let's do it!
+    // If we're here we should be using Word-style replacement, that is:
+    // We need to retrieve the triggering characters
     var triggerCharacters = {}
     for (var key in replacementCandidates) {
-      var character = key[key.length - 1] // Retrieve the last character
+      var character = key[key.length - 1]
       if (!triggerCharacters[character]) triggerCharacters[character] = {}
       triggerCharacters[character][key] = replacementCandidates[key]
     }
 
-    // Now we have an object in the form of
-    // {
-    //   '>': {
-    //     '-->': '→',
-    //     '==>', '→'
-    //   },
-    //   '=': {
-    //     '!=': '≠'
-    //   }
-    // }
-
-    // What we need to do finally is to extend the default keymap with the
-    // trigger characters.
+    // Finally, fill the keymap with the trigger characters
     for (var char in triggerCharacters) {
       // Create the handler and provide it with all potential
       // candidates for that very character. NOTE that we have
       // to surround these characters with LITERAL single quotes.
       // It does NOT suffice for them simply to be strings.
-      keyMap["'" + char + "'"] = makeHandler(triggerCharacters[char], char)
+      builtKeyMap["'" + char + "'"] = makeHandler(triggerCharacters[char], char)
     }
-
-    // Finally return that thing!
-    return keyMap
   }
 
   /**
    * This function returns a handler function that will be called each
    * time the key is pressed, thereby ensuring it will replace the
    * corresponding value with its predefined replacement.
-   * @param {Object} candidates All the candidate key-value-pairs for which the key is responsible.
+   * @param {Object} candidates A subset of the replacement table for the key
    * @param {string} key The key to be handled.
    */
   function makeHandler (candidates, key = '') {
@@ -217,8 +207,8 @@
   /**
    * This function checks whether or not there is a string to be replaced.
    * @param {CodeMirror} cm The CodeMirror instance
-   * @param {Object} candidates All the candidate key-value-pairs for which the key is responsible.
-   * @param {string} key The key to be handled. Necessary, because it won't be in the document at this point.
+   * @param {Object} candidates A subset of the replacement table for the key
+   * @param {string} key The key that is currently being handled.
    */
   function handleKey (cm, candidates, key) {
     if (cm.getOption('disableInput')) return CodeMirror.Pass
@@ -227,15 +217,13 @@
     // we only apply this if we're in markdown.
     if (cm.getModeAt(cursor).name !== 'markdown') return CodeMirror.Pass
 
-    var cursorEnd = cursor // Starting position
-    var cursorBegin = { 'line': cursorEnd.line, 'ch': cursorEnd.ch }
+    var { cursorBegin, cursorEnd } = cursors(cursor, candidates)
+    if (cursorBegin.ch === cursorEnd.ch) return CodeMirror.Pass // Empty range, no need to check
     var replacementOccurred = false
-    while (cursorBegin.ch >= 0) {
-      cursorBegin.ch--
+    for (; cursorBegin.ch < cursorEnd.ch; cursorBegin.ch++) {
       for (var candidate in candidates) {
         if (candidate === cm.getRange(cursorBegin, cursorEnd) + key) {
-          // Replace! Use the +input origin so that the user can remove it with Cmd/Ctrl+Z
-          cm.replaceRange(candidates[candidate], cursorBegin, cursorEnd, '+input')
+          cm.replaceRange(candidates[candidate], cursorBegin, cursorEnd)
           replacementOccurred = true
           if (wordStyleAutoCorrect) canPerformReverseReplacement = true // Activate reverse replacement
           break // No need to go through all of the candidates anymore
@@ -243,12 +231,12 @@
       }
     }
 
-    // Return CodeMirror.Pass either if nothing has been replaced OR if the alwaysPass flag has been set.
+    // Return CodeMirror.Pass if no replacement happened.
     if (!replacementOccurred) return CodeMirror.Pass
   }
 
   /**
-   * Handles a special character (special insofar as the trigger needs to be passed along).
+   * Handles a special character.
    * @param {CodeMirror} cm The CodeMirror instance.
    */
   function handleSpecial (cm) {
@@ -267,15 +255,14 @@
       return CodeMirror.Pass
     }
 
-    // The cursor will now still be at the position BEFORE the space has been inserted
-    var cursorEnd = cursor // Starting position
-    var cursorBegin = { 'line': cursorEnd.line, 'ch': cursorEnd.ch }
-    while (cursorBegin.ch >= 0) {
-      cursorBegin.ch--
+    // The cursor will now be at the position BEFORE the space has been inserted
+    var { cursorBegin, cursorEnd } = cursors(cursor, replacementCandidates)
+    if (cursorBegin.ch === cursorEnd.ch) return CodeMirror.Pass // Empty range, no need to check
+    for (; cursorBegin.ch < cursorEnd.ch; cursorBegin.ch++) {
       for (var candidate in replacementCandidates) {
         if (candidate === cm.getRange(cursorBegin, cursorEnd)) {
           // Replace! Use the +input origin so that the user can remove it with Cmd/Ctrl+Z
-          cm.replaceRange(replacementCandidates[candidate], cursorBegin, cursorEnd, '+input')
+          cm.replaceRange(replacementCandidates[candidate], cursorBegin, cursorEnd)
           if (wordStyleAutoCorrect) canPerformReverseReplacement = true // Activate reverse replacement
           break // No need to go through all of the candidates anymore
         }
@@ -287,39 +274,34 @@
   }
 
   /**
-   * Handles the insertion of a quote, thereby distinguishing between opening and closing quotes.
+   * Handles the insertion of a quote, either single or double.
    * @param {CodeMirror} cm The CodeMirror instance.
    * @param {string} type The type of quote to be handled (single or double).
    */
   function handleQuote (cm, type) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (quotes === false || cm.getOption('disableInput')) return CodeMirror.Pass
     var cursor = cm.getCursor()
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
     if (cm.getModeAt(cursor).name !== 'markdown') return CodeMirror.Pass
 
     canPerformReverseReplacement = false // Reset the handleBackspace flag
-
-    // We have to check for two possibilities: There's a space
-    // in front of the double quote or not.
     var cursorBefore = { 'line': cursor.line, 'ch': cursor.ch - 1 }
-    var preceededBySpace = cm.getRange(cursorBefore, cursor) === ' '
-
-    // Make sure nothing is selected, before replacing the "selection"
-    cm.setSelection(cursor)
-    if (preceededBySpace) {
-      cm.replaceSelection(quotes[type].start)
+    var cursorAfter = { 'line': cursor.line, 'ch': cursor.ch + 1 }
+    // We have to check for two possibilities:
+    // There's a space in front of the quote or not.
+    if (cm.getRange(cursorBefore, cursor) === ' ') {
+      cm.replaceRange(quotes[type].start, cursor, cursorAfter)
     } else {
-      cm.replaceSelection(quotes[type].end)
+      cm.replaceRange(quotes[type].end, cursor, cursorAfter)
     }
   }
 
   /**
-   * Handles a backspace keypress, but only if we're in Word-style replacement. It undoes the last replacement.
+   * Handles a backspace keypress if using Word style. It undoes the last replacement.
    * @param {CodeMirror} cm The CodeMirror instance.
    */
   function handleBackspace (cm) {
-    // handleBackspace will only be valid in Word-style mode, if input is allowed AND if reverseReplacement can be performed.
     if (!wordStyleAutoCorrect || cm.getOption('disableInput') || !canPerformReverseReplacement) return CodeMirror.Pass
 
     // What do we do here? Easy: Check if the characters preceeding the cursor equal a replacement table value. If they do,
@@ -334,6 +316,36 @@
       if (wordStyleAutoCorrect) hasJustPerformedReverseReplacement = true
     } else {
       return CodeMirror.Pass // Let the backspace be handled correctly.
+    }
+  }
+
+  /**
+   * Determines the maximum length of replacement candidates within a given field.
+   * @param {Object} candidates The replacement table (or a subset thereof)
+   */
+  function getMaxCandidateLength (candidates) {
+    var len = 0
+    for (let key of Object.keys(candidates)) {
+      if (key.length > len) len = key.length
+    }
+    return len
+  }
+
+  /**
+   * Computes the beginning and the ending cursors
+   * to perform an AutoCorrect operation on.
+   * @param {Cursor} cursor The CodeMirror cursor from which to begin.
+   * @param {Object} candidates An object of replacement candidates.
+   */
+  function cursors (cursor, candidates) {
+    var cursorBegin = {
+      'line': cursor.line,
+      'ch': cursor.ch - getMaxCandidateLength(candidates)
+    }
+    if (cursorBegin.ch < 0) cursorBegin.ch = 0
+    return {
+      'cursorBegin': cursorBegin,
+      'cursorEnd': cursor
     }
   }
 })
