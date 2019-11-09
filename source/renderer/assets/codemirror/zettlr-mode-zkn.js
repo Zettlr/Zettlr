@@ -26,8 +26,35 @@
     * @return {OverlayMode}              The loaded overlay mode.
     */
   CodeMirror.defineMode('markdown-zkn', function (config, parserConfig) {
+    var yamlMode = CodeMirror.getMode(config, 'yaml')
+
     var markdownZkn = {
+      startState: function () {
+        return {
+          startOfFile: true,
+          inFrontmatter: false
+        }
+      },
       token: function (stream, state) {
+        if (state.startOfFile && stream.sol() && stream.match(/---/)) {
+          // Assume a frontmatter
+          state.startOfFile = false
+          state.inFrontmatter = true
+          return 'hr yaml-frontmatter-start' // TODO
+        } else if (!state.startOfFile && state.inFrontmatter) {
+          // Still in frontMatter?
+          if (stream.sol() && stream.match(/---|\.\.\./)) {
+            state.inFrontmatter = false
+            return 'hr' // TODO
+          }
+
+          // Continue to parse in YAML mode
+          return yamlMode.token(stream, state) + ' fenced-code'
+        } else if (state.startOfFile) {
+          // If no frontmatter was found, set the state to a desirable state
+          state.startOfFile = false
+        }
+
         // Immediately check for escape characters
         // Escape characters need to be greyed out, but not the characters themselves.
         if (stream.peek() === '\\') {
@@ -104,6 +131,16 @@
                 !stream.match(/\\/, false)) { }
 
         return null
+      },
+      innerMode: function (state) {
+        // We need to return the correct mode so that
+        // other plugins such as AutoCorrect don't
+        // trigger in YAML mode as these inspect the
+        // mode object.
+        return {
+          'mode': (state.isFrontmatter) ? yamlMode : markdownZkn,
+          'state': state // (state.isFrontmatter) ? '' : ''
+        }
       }
     }
 

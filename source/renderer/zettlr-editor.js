@@ -42,6 +42,9 @@ const AUTOCLOSEBRACKETS = {
 
 const IMAGE_REGEX = /(jpg|jpeg|png|gif|svg|tiff|tif)$/i
 
+const MD_MODE = { name: 'multiplex' }
+const TEX_MODE = { name: 'stex' }
+
 /**
 * This class propably has the most `require`s in it, because it loads all
 * functionality concerning the CodeMirror editor. It loads them, initializes
@@ -86,7 +89,7 @@ class ZettlrEditor {
     this._renderTables = false
 
     // Remembers the last mode when entering readability
-    this._lastMode = 'multiplex' // Default mode
+    this._lastMode = MD_MODE // Default mode
 
     this._countChars = false // Whether or not Zettlr should count characters as words (e.g., for Chinese)
 
@@ -109,9 +112,7 @@ class ZettlrEditor {
     this._leftBeforeDistractionFree = ''
 
     this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
-      mode: {
-        name: 'multiplex' // This will automatically pull in all other overlays
-      },
+      mode: MD_MODE,
       theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
       autofocus: false,
       autoCorrect: false, // Default to false to keep this thing clean
@@ -522,10 +523,10 @@ class ZettlrEditor {
 
     // Switch modes based on the file type
     if (file.ext === '.tex') {
-      this._cm.setOption('mode', 'stex')
+      this._cm.setOption('mode', TEX_MODE)
       $('.CodeMirror').addClass('cm-stex-mode')
     } else if (this._cm.getOption('mode') === 'stex') {
-      this._cm.setOption('mode', 'multiplex')
+      this._cm.setOption('mode', MD_MODE)
       $('.CodeMirror').removeClass('cm-stex-mode')
     }
 
