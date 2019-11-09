@@ -176,6 +176,10 @@ class ZettlrFile {
     this.wordCount = countWords(cnt)
     this.charCount = cnt.length
 
+    // Create a copy of the code without any code blocks and inline
+    // code for the tag and ID extraction methods.
+    let mdWithoutCode = cnt.replace(/`{1,3}[^`]+`{1,3}/g, '')
+
     // Determine linefeed to preserve on saving so that version control
     // systems don't complain.
     if (/\r\n/.test(cnt)) {
@@ -202,7 +206,7 @@ class ZettlrFile {
 
     // Now read all tags
     this.tags = []
-    while ((match = tagRE.exec(cnt)) != null) {
+    while ((match = tagRE.exec(mdWithoutCode)) != null) {
       let tag = match[1]
       tag = tag.replace(/#/g, '') // Prevent headings levels 2-6 from showing up in the tag list
       if (tag.length > 0) this.tags.push(match[1].toLowerCase())
@@ -221,7 +225,7 @@ class ZettlrFile {
     if ((match = idRE.exec(this.name)) != null) {
       this.id = match[1] || ''
       return cnt
-    } else if ((match = idRE.exec(cnt)) == null) {
+    } else if ((match = idRE.exec(mdWithoutCode)) == null) {
       // No ID found in the content either
       return cnt
     }
