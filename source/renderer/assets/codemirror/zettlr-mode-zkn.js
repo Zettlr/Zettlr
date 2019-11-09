@@ -32,7 +32,16 @@
       startState: function () {
         return {
           startOfFile: true,
-          inFrontmatter: false
+          inFrontmatter: false,
+          yamlState: CodeMirror.startState(yamlMode)
+        }
+      },
+      copyState: function (state) {
+        return {
+          startOfFile: state.startOfFile,
+          inFrontmatter: state.inFrontmatter,
+          // Make sure to correctly copy the YAML state
+          yamlState: CodeMirror.copyState(yamlMode, state.yamlState)
         }
       },
       token: function (stream, state) {
@@ -40,12 +49,12 @@
           // Assume a frontmatter
           state.startOfFile = false
           state.inFrontmatter = true
-          return 'hr yaml-frontmatter-start' // TODO
+          return 'hr yaml-frontmatter-start'
         } else if (!state.startOfFile && state.inFrontmatter) {
           // Still in frontMatter?
           if (stream.sol() && stream.match(/---|\.\.\./)) {
             state.inFrontmatter = false
-            return 'hr' // TODO
+            return 'hr yaml-frontmatter-end'
           }
 
           // Continue to parse in YAML mode
@@ -138,8 +147,8 @@
         // trigger in YAML mode as these inspect the
         // mode object.
         return {
-          'mode': (state.isFrontmatter) ? yamlMode : markdownZkn,
-          'state': state // (state.isFrontmatter) ? '' : ''
+          'mode': (state.inFrontmatter) ? yamlMode : markdownZkn,
+          'state': (state.inFrontmatter) ? state.yamlState : state
         }
       }
     }
