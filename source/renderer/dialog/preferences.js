@@ -74,8 +74,13 @@ class PreferencesDialog extends ZettlrDialog {
     // For ease of access in Handlebars, we also need to provide it with the current
     // quotes
     let q = data.editor.autoCorrect.quotes
-    data.primaryQuotes = q.double.start + '…' + q.double.end
-    data.secondaryQuotes = q.single.start + '…' + q.single.end
+    if (!q) {
+      data.primaryQuotes = '"…"'
+      data.secondaryQuotes = "'…'"
+    } else {
+      data.primaryQuotes = q.double.start + '…' + q.double.end
+      data.secondaryQuotes = q.single.start + '…' + q.single.end
+    }
 
     return data
   }
