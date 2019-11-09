@@ -8,6 +8,7 @@
 - Codeblocks are now excluded from both tag extraction and ID search algorithms, so for example `#include` (used in C++ code) will no longer be recognised as a tag.
 - Fixed a bug that would ignore the page size set in your PDF preferences when using the default template.
 - Fixed a bug that prevented you from moving files and folders in combined sidebar mode.
+- Fixed the broken footnote in-place preview and editing support when using named references.
 
 ## Under the Hood
 

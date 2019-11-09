@@ -14,6 +14,7 @@
 
   var codeRE = /`.*?`/i
   var zknTagRE = /##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?/i
+  var footnoteRefRE = /\[\^[^\]]+\]/
   var delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»‹›„“”「」『』–—…÷‘’‚'
 
   /**
@@ -54,6 +55,11 @@
 
         // Don't spellcheck inline code
         if (stream.match(codeRE)) return null
+
+        // Don't spellcheck footnote references
+        // to enable users to use named references
+        // without breaking the preview.
+        if (stream.match(footnoteRefRE)) return null
 
         if (delim.includes(ch)) {
           stream.next()
