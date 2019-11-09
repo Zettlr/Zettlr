@@ -167,6 +167,7 @@ class ConfigProvider extends EventEmitter {
           'replacements': [
             // Arrows
             { key: '-->', val: '→' },
+            { key: '–>', val: '→' }, // For Word mode arrows
             { key: '<--', val: '←' },
             { key: '<->', val: '↔' },
             { key: '<-->', val: '↔' },
@@ -177,7 +178,9 @@ class ConfigProvider extends EventEmitter {
             // Mathematical symbols
             { key: '!=', val: '≠' },
             { key: '<>', val: '≠' },
-            { key: '+-', val: '∓' },
+            { key: '+-', val: '±' },
+            { key: ':times:', val: '×' },
+            { key: ':division:', val: '÷' },
             { key: '<=', val: '≤' },
             { key: '>=', val: '≥' },
             { key: '1/2', val: '½' },
@@ -189,6 +192,24 @@ class ConfigProvider extends EventEmitter {
             { key: '3/8', val: '⅜' },
             { key: '5/8', val: '⅝' },
             { key: '7/8', val: '⅞' },
+            // Units
+            { key: 'mm2', val: 'mm²' },
+            { key: 'cm2', val: 'cm²' },
+            { key: 'm2', val: 'm²' },
+            { key: 'km2', val: 'km²' },
+            { key: 'mm3', val: 'mm³' },
+            { key: 'cm3', val: 'cm³' },
+            { key: 'm3', val: 'm³' },
+            { key: 'km3', val: 'km³' },
+            { key: ':sup2:', val: '²' },
+            { key: ':sup3:', val: '³' },
+            { key: ':deg:', val: '°' },
+            // Currencies
+            { key: ':eur:', val: '€' },
+            { key: ':gbp:', val: '£' },
+            { key: ':yen:', val: '¥' },
+            { key: ':cent:', val: '¢' },
+            { key: ':inr:', val: '₹' },
             // Special symbols
             { key: '(c)', val: '©' },
             { key: '(tm)', val: '™' },
