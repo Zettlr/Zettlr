@@ -56,6 +56,8 @@
 })(function (CodeMirror) {
   'use strict'
 
+  var startChars = ' ([{-–—'
+
   // This variable holds the generated keymap
   // that triggers the plugin's functionality
   var builtKeyMap
@@ -288,8 +290,8 @@
     canPerformReverseReplacement = false // Reset the handleBackspace flag
     var cursorBefore = { 'line': cursor.line, 'ch': cursor.ch - 1 }
     // We have to check for two possibilities:
-    // There's a space in front of the quote or not.
-    if (cursor.ch === 0 || cm.getRange(cursorBefore, cursor) === ' ') {
+    // There's a "startChar" in front of the quote or not.
+    if (cursor.ch === 0 || startChars.includes(cm.getRange(cursorBefore, cursor))) {
       cm.replaceRange(quotes[type].start, cursor)
     } else {
       cm.replaceRange(quotes[type].end, cursor)
