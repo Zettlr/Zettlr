@@ -9,6 +9,7 @@
 - Fixed a bug that would ignore the page size set in your PDF preferences when using the default template.
 - Fixed a bug that prevented you from moving files and folders in combined sidebar mode.
 - Fixed the broken footnote in-place preview and editing support when using named references.
+- Improved the design of wrongly spelled words -- now the dotted line is closer to the actual words.
 
 ## Under the Hood
 
