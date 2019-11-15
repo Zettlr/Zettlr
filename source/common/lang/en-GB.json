@@ -169,18 +169,18 @@
             "debug": "Enable debug mode",
             "default_image_save_path": "Default image path (relative or absolute)",
             "display": {
-                "image_size_info": "With these controls you can constrain the image previews.",
+                "image_size_info": "With these controls you can control the dimensions of the image previews.",
                 "preview_info": "These options determine which elements are rendered in documents.",
                 "render_citations": "Render Citations",
                 "render_htags": "Hide heading characters",
-                "render_iframes": "Render Iframes",
+                "render_iframes": "Render iFrames",
                 "render_images": "Render Images",
                 "render_links": "Render Links",
                 "render_math": "Render Formulae",
                 "render_tasks": "Render Tasks",
                 "title": "Display"
             },
-            "display_time_explanation": "In the file metadata display",
+            "display_time_explanation": "In the file metadata display:",
             "editor": "Editor",
             "enable_rmarkdown": "Enable RMarkdown file support",
             "enable_table_helper": "Enable Table Editor",
@@ -269,7 +269,7 @@
             "sorting_time_explanation": "When sorting by time, sort by",
             "spellcheck": "Select the languages for which you want to enable automatic spell checking.",
             "spellcheck_search_placeholder": "Search for dictionaries &hellip;",
-            "spellcheck_warning": "\u003Cem\u003EAttention:\u003C/em\u003E Too many active spell check libraries may slow the app down significanty! Try to stick with three at maximum.",
+            "spellcheck_warning": "\u003Cem\u003EAttention:\u003C/em\u003E Too many active spell check libraries may slow the app down significantly! Try to stick with three at maximum.",
             "spellchecking": {
                 "title": "Spellchecking"
             },
