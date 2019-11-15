@@ -190,9 +190,15 @@ module.exports = {
       // Dead directories can't be opened, so stop the propagation to
       // the sidebar and don't do a thing.
       if (this.obj.type === 'dead-directory') return evt.stopPropagation()
-      if (this.obj.type === 'file') {
+
+      if (this.obj.type === 'file' && event.altKey) {
+        // QuickLook the file
+        global.ipc.send('open-quicklook', this.obj.hash)
+      } else if (this.obj.type === 'file') {
+        // Request the clicked file
         global.ipc.send('file-get', this.obj.hash)
       } else {
+        // Select this directory
         global.ipc.send('dir-select', this.obj.hash)
         this.collapsed = false // Also open the directory
       }

@@ -10,6 +10,7 @@
 - Fixed a bug that prevented you from moving files and folders in combined sidebar mode.
 - Fixed the broken footnote in-place preview and editing support when using named references.
 - Improved the design of wrongly spelled words -- now the dotted line is closer to the actual words.
+- Fixed `Alt`-clicking files in the combined sidebar mode. Now this will also open QuickLooks.
 
 ## Under the Hood
 
