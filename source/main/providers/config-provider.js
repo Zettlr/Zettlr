@@ -199,6 +199,7 @@ class ConfigProvider extends EventEmitter {
             { key: 'km2', val: 'km²' },
             { key: 'mm3', val: 'mm³' },
             { key: 'cm3', val: 'cm³' },
+            { key: 'ccm', val: 'cm³' },
             { key: 'm3', val: 'm³' },
             { key: 'km3', val: 'km³' },
             { key: ':sup2:', val: '²' },

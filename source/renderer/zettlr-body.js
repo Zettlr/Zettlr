@@ -101,6 +101,21 @@ class ZettlrBody {
       }
     })
 
+    // React to global GUI shortcuts
+    $(document).on('keydown', (event) => {
+      let isDarwin = $('body').hasClass('darwin')
+      let cmdOrCtrl = (isDarwin && event.metaKey) || (!isDarwin && event.ctrlKey)
+      let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && event.key === 'e')
+      let focusSidebarShortcut = (cmdOrCtrl && event.shiftKey && event.key === 't')
+      if (focusEditorShortcut) { // Cmd/Ctrl+Shift+E
+        // Obviously, focus the editor
+        this._renderer.getEditor().getEditor().focus()
+      } else if (focusSidebarShortcut) { // Cmd/Ctrl+Shift+T
+        // You know what to do
+        $('#file-list').focus()
+      }
+    })
+
     // Inject a global notify and notifyError function
     global.notify = (msg) => { this.notify(msg) }
     global.notifyError = (msg) => { this.notifyError(msg) }
