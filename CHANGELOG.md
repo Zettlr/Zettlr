@@ -12,6 +12,7 @@
 - Improved the design of wrongly spelled words -- now the dotted line is closer to the actual words.
 - Fixed `Alt`-clicking files in the combined sidebar mode. Now this will also open QuickLooks.
 - Added the shortcuts `Cmd/Ctrl+Shift+E` to focus the editor and `Cmd/Ctrl+Shift+T` to focus the file list.
+- On macOS, you can now also `Cmd-Click` links and tags to open/follow them.
 
 ## Under the Hood
 
