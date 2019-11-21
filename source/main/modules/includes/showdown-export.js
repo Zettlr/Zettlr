@@ -25,6 +25,9 @@ module.exports = async function (options) {
     'requireSpaceBeforeHeadingText': true // Needed to not render tags at line beginning
   })
   sd.setFlavor('github')
+  sd.setOption('strikethrough', true)
+  sd.setOption('omitExtraWLInCodeBlocks', true)
+  sd.setOption('tasklists', true)
 
   // Simply write the target file ourselves. Therefore first convert
   // to HTML and insert into the template, then replace the variables.

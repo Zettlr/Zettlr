@@ -99,6 +99,9 @@ class ZettlrEditor {
     this._showdown.setFlavor('github')
     this._showdown.setOption('strikethrough', true)
     this._showdown.setOption('tables', true)
+    this._showdown.setOption('omitExtraWLInCodeBlocks', true)
+    this._showdown.setOption('tasklists', true)
+    this._showdown.setOption('requireSpaceBeforeHeadingText', true)
 
     // The last array of IDs as fetched from the document
     this._lastKnownCitationCluster = []
@@ -238,7 +241,7 @@ class ZettlrEditor {
         // converter will result in unwanted behaviour (including Electron).
         let html = clipboard.readHTML()
         let plain = clipboard.readText()
-        if (html && html.length > 0 && plain && html !== plain) {
+        if (html && html.length > 0 && (!plain || html !== plain)) {
           // We've got HTML, so let's fire up Showdown.js
           plain = this._showdown.makeMarkdown(html)
           // Let's update the (very likely plain) HTML text with some Markdown
@@ -993,7 +996,9 @@ class ZettlrEditor {
     if (this._cm.somethingSelected()) {
       let md = this._cm.getSelections().join(' ')
       let html = this._showdown.makeHtml(md)
-      clipboard.writeHTML(html)
+      // Write both the HTML and the Markdown
+      // (as fallback plain text) to the clipboard
+      clipboard.write({ 'text': md, 'html': html })
     }
     return this
   }

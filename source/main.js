@@ -25,6 +25,9 @@ const Zettlr = require('./main/zettlr.js')
 const isFile = require('./common/util/is-file')
 const ignoreFile = require('./common/util/ignore-file')
 
+// Introduce v8 code caching
+require('v8-compile-cache')
+
 /**
  * The main Zettlr object. As long as this exists in memory, the app will run.
  * @type {Zettlr}

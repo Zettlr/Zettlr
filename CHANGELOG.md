@@ -14,6 +14,8 @@
 - Added the shortcuts `Cmd/Ctrl+Shift+E` to focus the editor and `Cmd/Ctrl+Shift+T` to focus the file list.
 - On macOS, you can now also `Cmd-Click` links and tags to open/follow them.
 - Added the variable `%uuid4` to use Universally Unique Identifiers version 4 (random UUID) within certain strings in the app.
+- Improve "Copy as HTML" to also provide fallback Markdown.
+- Fixed paste detection (if there's only HTML in the clipboard)
 
 ## Under the Hood
 
