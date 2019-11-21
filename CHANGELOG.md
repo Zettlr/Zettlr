@@ -13,6 +13,7 @@
 - Fixed `Alt`-clicking files in the combined sidebar mode. Now this will also open QuickLooks.
 - Added the shortcuts `Cmd/Ctrl+Shift+E` to focus the editor and `Cmd/Ctrl+Shift+T` to focus the file list.
 - On macOS, you can now also `Cmd-Click` links and tags to open/follow them.
+- Added the variable `%uuid4` to use Universally Unique Identifiers version 4 (random UUID) within certain strings in the app.
 
 ## Under the Hood
 

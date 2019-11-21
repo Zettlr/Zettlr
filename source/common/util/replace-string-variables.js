@@ -11,6 +11,8 @@
  * END HEADER
  */
 
+const uuid4 = require('uuid/v4')
+
 /**
  * A utility function that can replace a bunch of variables in strings, used
  * for the pattern generators (ID and filename)
@@ -38,6 +40,7 @@ module.exports = function (string) {
   string = string.replace(/%h/g, hh)
   string = string.replace(/%m/g, m)
   string = string.replace(/%s/g, ss)
+  string = string.replace(/%uuid4/g, uuid4())
 
   return string
 }
