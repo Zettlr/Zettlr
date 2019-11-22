@@ -20,7 +20,8 @@
 
 ## Under the Hood
 
-(nothing here)
+- Switched to Electron 7.
+- Added v8 code caching for better startup performance.
 
 # 1.4.3
 
