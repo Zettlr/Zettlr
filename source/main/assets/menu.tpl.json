@@ -183,7 +183,7 @@
     { "label": "menu.about", "command": "display-about" },
     {
       "label": "menu.donate",
-      "target": "https://paypal.me/hendrikerz"
+      "target": "https://patreon.com/zettlr"
     },
     {
       "label": "menu.learn_more",

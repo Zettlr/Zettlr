@@ -16,6 +16,7 @@
 - Added the variable `%uuid4` to use Universally Unique Identifiers version 4 (random UUID) within certain strings in the app.
 - Improve "Copy as HTML" to also provide fallback Markdown.
 - Fixed paste detection (if there's only HTML in the clipboard)
+- Changed the Support-link to link to Patreon.
 
 ## Under the Hood
 

@@ -12,7 +12,7 @@
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-11-07T19:39:36.000000Z"
+        "updated_at": "2019-11-07T23:02:10.000000Z"
     },
     "dialog": {
         "about": {
@@ -170,6 +170,11 @@
             "auto_dark_mode_system": "Suivre le syst\u00e8me d'exploitation",
             "autocorrect": {
                 "active_label": "Activer AutoCorrect",
+                "quotes_double_label": "Guillemets fran\u00e7ais",
+                "quotes_single_label": "Guillemets anglais",
+                "replacement_info": "Ici, vous pouvez d\u00e9finir les cha\u00eenes de caract\u00e8res qui seront remplac\u00e9es lorsque la correction automatique est activ\u00e9e. Les caract\u00e8res du c\u00f4t\u00e9 gauche seront remplac\u00e9s par ceux de droite droite.",
+                "style_libre_office_label": "\u00c0 la mani\u00e8re de LibreOffice",
+                "style_word_label": "\u00c0 la mani\u00e8re de Word",
                 "title": "AutoCorrect"
             },
             "checkForBeta": "Me pr\u00e9venir \u00e0 propos des versions b\u00eata",
@@ -581,6 +586,7 @@
         "ok": "Ok",
         "open_folder": "Ouvrir le dossier racine.",
         "open_root_directory": "Ouvrir le dossier %s \u2026",
+        "open_root_directory_success": "% s a \u00e9t\u00e9 charg\u00e9.",
         "overwrite_file_message": "Le fichier %s existe d\u00e9j\u00e0 dans ce r\u00e9pertoire. \u00c9craser?",
         "overwrite_file_title": "\u00c9craser le fichier existant",
         "replace_file_message": "Le fichier actuel a \u00e9t\u00e9 modifi\u00e9 par un programme externe. Faut-il le remplacer ?",
