@@ -17,6 +17,7 @@
 - Improve "Copy as HTML" to also provide fallback Markdown.
 - Fixed paste detection (if there's only HTML in the clipboard)
 - Changed the Support-link to link to Patreon.
+- Added a new error message informing you of malformed citation keys.
 
 ## Under the Hood
 
