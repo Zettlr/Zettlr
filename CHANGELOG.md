@@ -18,6 +18,7 @@
 - Fixed paste detection (if there's only HTML in the clipboard)
 - Changed the Support-link to link to Patreon.
 - Added a new error message informing you of malformed citation keys.
+- Fixed the print preview.
 
 ## Under the Hood
 

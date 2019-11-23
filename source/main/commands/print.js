@@ -49,10 +49,9 @@ class Print extends ZettlrCommand {
 
     // Call the exporter.
     makeExport(opt)
-      .then((exporter) => {
-        let file = exporter.getFile()
+      .then((target) => {
         // Now we'll need to open the print window.
-        this._printWindow.openPrint(file)
+        this._printWindow.openPrint(target)
       })
       .catch((err) => { global.ipc.notify(err.name + ': ' + err.message) }) // Error may be thrown
   }

@@ -129,6 +129,8 @@ async function makeExport (options) {
       shell.openItem(options.targetFile)
     }
   }
+
+  return options.targetFile // Return the target file for the caller
 }
 
 module.exports = makeExport
