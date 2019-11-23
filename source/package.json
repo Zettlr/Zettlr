@@ -19,9 +19,9 @@
         "archiver": "^3.1.1",
         "astrocite": "^0.16.1",
         "bcp-47": "^1.0.5",
-        "chart.js": "^2.9.2",
+        "chart.js": "2.9.3",
         "chokidar": "^3.3.0",
-        "citeproc": "^2.2.27",
+        "citeproc": "^2.2.28",
         "codemirror": "^5.49.2",
         "command-exists": "^1.2.7",
         "got": "^9.6.0",
@@ -39,7 +39,7 @@
         "uuid": "^3.3.3",
         "v8-compile-cache": "^2.1.0",
         "vue": "^2.6.10",
-        "vuex": "^3.1.1"
+        "vuex": "^3.1.2"
     },
     "devDependencies": {}
 }
