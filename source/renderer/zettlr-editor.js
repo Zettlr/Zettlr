@@ -528,7 +528,7 @@ class ZettlrEditor {
     if (file.ext === '.tex') {
       this._cm.setOption('mode', TEX_MODE)
       $('.CodeMirror').addClass('cm-stex-mode')
-    } else if (this._cm.getOption('mode') === 'stex') {
+    } else if (this._cm.getOption('mode') === TEX_MODE) {
       this._cm.setOption('mode', MD_MODE)
       $('.CodeMirror').removeClass('cm-stex-mode')
     }
