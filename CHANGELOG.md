@@ -19,6 +19,7 @@
 - Changed the Support-link to link to Patreon.
 - Added a new error message informing you of malformed citation keys.
 - Fixed the print preview.
+- Removed the quotes from the matchbrackets-configuration.
 
 ## Under the Hood
 
