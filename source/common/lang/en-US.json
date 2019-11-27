@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-11-07T19:34:41.000000Z"
+        "updated_at": "2019-11-27T07:13:31.000000Z"
     },
     "dialog": {
         "about": {
@@ -154,7 +154,8 @@
                 "zh-CN": "Chinese (China)"
             },
             "attachments_info": "Enter all file extensions that you want to see in your attachment sidebar. Separate them with a comma. Changes are recognized after a restart.",
-            "autoCloseBrackets": "Automatically close the following character pairs: ()[]{}'\"\"\u00bb\u00ab\u201e\u201c\u201c\u201d\u2018\u2019__``",
+            "autoCloseBrackets": "Automatically close matching character pairs",
+            "auto_close_brackets": "Automatically close matching character pairs",
             "auto_dark_mode_explanation": "Automatically switch to dark mode",
             "auto_dark_mode_off": "Off",
             "auto_dark_mode_schedule": "Schedule",

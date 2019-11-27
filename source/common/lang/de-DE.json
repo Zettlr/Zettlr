@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-11-07T19:36:42.000000Z"
+        "updated_at": "2019-11-27T07:13:44.000000Z"
     },
     "dialog": {
         "about": {
@@ -154,7 +154,8 @@
                 "zh-CN": "Chinesisch (China)"
             },
             "attachments_info": "Trage hier alle Dateitypen ein, die du in der Attachment-Sidebar sehen m\u00f6chtest. Trenne jeden Dateityp mit einem Komma. \u00c4nderungen werden nach einem Neustart wirksam.",
-            "autoCloseBrackets": "Schlie\u00dfe automatisch die folgenden Zeichenpaare: ()[]{}'\"\"\u00bb\u00ab\u201e\u201c\u201c\u201d\u2018\u2019__``",
+            "autoCloseBrackets": "Schlie\u00dfe Zeichenpaare automatisch",
+            "auto_close_brackets": "Schlie\u00dfe Zeichenpaare automatisch",
             "auto_dark_mode_explanation": "Automatisch ins dunkle Thema wechseln",
             "auto_dark_mode_off": "Aus",
             "auto_dark_mode_schedule": "Zeit",
