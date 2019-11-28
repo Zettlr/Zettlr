@@ -51,7 +51,6 @@ div#app {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-bottom: none;
-  display: inline-block;
   margin-left: 5px;
   float: right;
 }
@@ -66,11 +65,11 @@ div#app {
 .verbose:hover { background-color: white; }
 
 .warning {
-  background-color: rgb(255, 255, 98);
+  background-color: rgb(221, 221, 81);
   color: rgb(109, 109, 8);
 }
 
-.warning-hover { background-color: rgb(253, 253, 176); }
+.warning:hover { background-color: rgb(253, 253, 176); }
 
 .info {
   background-color: rgb(144, 190, 251);
