@@ -25,6 +25,7 @@ class RecentDocsProvider extends EventEmitter {
    */
   constructor () {
     super()
+    global.log.verbose('Recent documents provider booting up ...')
 
     this._recentDocs = [] // This array holds all recent documents
 
@@ -89,7 +90,10 @@ class RecentDocsProvider extends EventEmitter {
    * Shuts down the provider
    * @return {Boolean} Always returns true
    */
-  shutdown () { return true }
+  shutdown () {
+    global.log.verbose('Recent documents provider shutting down ...')
+    return true
+  }
 }
 
 module.exports = new RecentDocsProvider()

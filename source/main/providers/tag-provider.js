@@ -24,6 +24,7 @@ class TagProvider {
    * Create the instance on program start and initially load the tags.
    */
   constructor () {
+    global.log.verbose('Tag provider booting up ...')
     this._file = path.join(require('electron').app.getPath('userData'), 'tags.json')
     this._tags = []
     // The global tag database; it contains all tags that are used in any of the
@@ -98,6 +99,7 @@ class TagProvider {
    * @return {Boolean} Returns true after successful shutdown
    */
   shutdown () {
+    global.log.verbose('Tag provider shutting down ...')
     this._save()
     return true
   }

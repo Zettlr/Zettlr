@@ -18,6 +18,7 @@ const { app } = require('electron')
 
 class CSSProvider {
   constructor () {
+    global.log.verbose('CSS provider booting up ...')
     this._filePath = path.join(app.getPath('userData'), 'custom.css')
 
     // Check for the existence of the custom CSS file. If it is not existent,
@@ -41,7 +42,10 @@ class CSSProvider {
    * Shuts down the provider
    * @return {Boolean} Whether or not the shutdown was successful
    */
-  shutdown () { return true }
+  shutdown () {
+    global.log.verbose('CSS provider shutting down ...')
+    return true
+  }
 
   /**
    * Retrieves the content of the custom CSS file

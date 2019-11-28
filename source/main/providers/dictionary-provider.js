@@ -31,6 +31,7 @@ const readFile = promisify(fs.readFile)
 class DictionaryProvider extends EventEmitter {
   constructor () {
     super()
+    global.log.verbose('Dictionary provider booting up ...')
     // Array containing all loaded NSpell dictionaries
     this._typos = []
     // Array containing the language codes for which checking currently works
@@ -93,6 +94,7 @@ class DictionaryProvider extends EventEmitter {
    * @return {Boolean} Whether or not the shutdown was successful
    */
   shutdown () {
+    global.log.verbose('Dictionary provider shutting down ...')
     fs.writeFileSync(this._userDictionaryPath, this._userDictionary.join('\n'), 'utf8')
     return true
   }

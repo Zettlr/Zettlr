@@ -47,6 +47,7 @@ class ConfigProvider extends EventEmitter {
     */
   constructor () {
     super() // Initiate the emitter
+    global.log.verbose('Config provider booting up ...')
     this.configPath = app.getPath('userData')
     this.configFile = path.join(this.configPath, 'config.json')
 
@@ -308,6 +309,7 @@ class ConfigProvider extends EventEmitter {
    * @return {Boolean} Returns true after successful shutdown.
    */
   shutdown () {
+    global.log.verbose('Config provider shutting down ...')
     this.save()
     return true
   }

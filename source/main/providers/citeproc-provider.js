@@ -38,6 +38,7 @@ const READY = 4
  */
 class CiteprocProvider {
   constructor () {
+    global.log.verbose('Citeproc provider booting up ...')
     this._mainLibrary = ''
     // The Zettlr internal preview of these citations will always use Chicago,
     // because (a) it's just a preview, and (b) Chicago is the default of Pandoc.
@@ -117,6 +118,7 @@ class CiteprocProvider {
    * Shuts down the service provider
    */
   shutdown () {
+    global.log.verbose('Citeproc provider shutting down ...')
     this.unload()
     return true
   }

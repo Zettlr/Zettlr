@@ -27,6 +27,7 @@ const TRANSLATION_API_URL = require('../../common/data.json').translation_api_ur
 
 class TranslationProvider {
   constructor () {
+    global.log.verbose('Translation provider booting up ...')
     this._availableLanguages = [] // Holds all translations able to download
     this._languageDirectory = path.join(app.getPath('userData'), '/lang/')
     // Inject the global provider functions
@@ -124,7 +125,10 @@ class TranslationProvider {
    * Shuts down the provider
    * @return {Boolean} Whether or not the shutdown was successful
    */
-  shutdown () { return true }
+  shutdown () {
+    global.log.verbose('Translation provider shutting down ...')
+    return true
+  }
 }
 
 module.exports = new TranslationProvider()

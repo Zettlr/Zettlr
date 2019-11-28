@@ -28,7 +28,7 @@ class LogProvider {
     // Initialise log with pre-boot messages and an initialisation message
     this._log = []
     this._migratePreBootLog()
-    this.log(LOG_LEVEL_INFO, 'Log provider booting up ...', null)
+    this.log(LOG_LEVEL_VERBOSE, 'Log provider booting up ...', null)
 
     // Inject the global provider functions
     global.log = {
@@ -45,6 +45,7 @@ class LogProvider {
    * @return {Boolean} Whether or not the shutdown was successful
    */
   shutdown () {
+    this.log(LOG_LEVEL_VERBOSE, 'Log provider shutting down ...', null)
     for (let entry of this._log) {
       console.log(this._toString(entry))
     }

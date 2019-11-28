@@ -40,6 +40,7 @@ class WatchdogProvider extends EventEmitter {
    */
   constructor (paths = []) {
     super() // Setup the Event Emitter
+    global.log.verbose('Watchdog provider booting up ...')
     this.setMaxListeners(100000) // Set the maximum listeners to 100.000. More files should produce warnings.
     this._ignored = []
     this._ready = false
@@ -65,6 +66,7 @@ class WatchdogProvider extends EventEmitter {
    * @return {void} No return.
    */
   shutdown () {
+    global.log.verbose('Watchdog provider shutting down ...')
     this.stop()
   }
 

@@ -28,7 +28,7 @@ class AppearanceProvider extends EventEmitter {
    */
   constructor () {
     super()
-
+    global.log.verbose('Appearance provider booting up ...')
     // Possible modes:
     // - off: Do nothing in here
     // - schedule: Ask the clock when to switch
@@ -156,7 +156,10 @@ class AppearanceProvider extends EventEmitter {
    * Shuts down the provider
    * @return {Boolean} Always returns true
    */
-  shutdown () { return true }
+  shutdown () {
+    global.log.verbose('Appearance provider shutting down ...')
+    return true
+  }
 }
 
 module.exports = new AppearanceProvider()

@@ -46,9 +46,11 @@ class ZettlrIPC {
     ipc.on('message', (event, arg) => {
       // We always need a command
       if (!arg.hasOwnProperty('command')) {
-        console.error(trans('system.no_command'), arg)
+        global.log.error(trans('system.no_command'), arg)
         return
       }
+
+      global.log.verbose('>>> IPC IN: ' + arg.command, arg.content)
 
       if (arg.command === 'file-drag-start') {
         event.sender.startDrag({
@@ -139,6 +141,7 @@ class ZettlrIPC {
     if (!this._app.window.getWindow()) {
       return this // Fail gracefully
     }
+    global.log.verbose('<<< IPC OUT: ' + command, content)
     let sender = this._app.window.getWindow().webContents
     sender.send('message', {
       'command': command,
