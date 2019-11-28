@@ -14,6 +14,12 @@
  * END HEADER
  */
 
+global.preBootLog = [{
+  'level': 2, // Info
+  // eslint-disable-next-line no-irregular-whitespace
+  'message': `こうんいちわ！　Booting Zettlr at ${(new Date()).toString()}.`
+}]
+
 // We need the app and process modules.
 const { app } = require('electron')
 const process = require('process')
@@ -112,6 +118,10 @@ app.on('open-file', (e, p) => {
  * may not work correctly.
  */
 app.on('ready', function () {
+  global.preBootLog.push({
+    'level': 2, // Info
+    'message': 'Electron reports ready state. Instantiating main process...'
+  })
   zettlr = new Zettlr()
 })
 

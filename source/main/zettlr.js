@@ -198,15 +198,16 @@ class Zettlr {
   _bootServiceProviders () {
     // The order is important, we'll just save them to this object
     this._providers = {
-      'config': require('./providers/config-provider.js'),
-      'appearance': require('./providers/appearance-provider.js'),
-      'watchdog': require('./providers/watchdog-provider.js'),
-      'citeproc': require('./providers/citeproc-provider.js'),
-      'dictionary': require('./providers/dictionary-provider.js'),
-      'recentDocs': require('./providers/recent-docs-provider.js'),
-      'tags': require('./providers/tag-provider.js'),
-      'css': require('./providers/css-provider.js'),
-      'translations': require('./providers/translation-provider.js')
+      'log': require('./providers/log-provider'),
+      'config': require('./providers/config-provider'),
+      'appearance': require('./providers/appearance-provider'),
+      'watchdog': require('./providers/watchdog-provider'),
+      'citeproc': require('./providers/citeproc-provider'),
+      'dictionary': require('./providers/dictionary-provider'),
+      'recentDocs': require('./providers/recent-docs-provider'),
+      'tags': require('./providers/tag-provider'),
+      'css': require('./providers/css-provider'),
+      'translations': require('./providers/translation-provider')
     }
   }
 

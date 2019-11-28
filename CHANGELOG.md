@@ -25,6 +25,7 @@
 
 - Switched to Electron 7.
 - Added v8 code caching for better startup performance.
+- Added a global logging interface for better error and bug handling.
 
 # 1.4.3
 

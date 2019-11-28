@@ -135,6 +135,11 @@ class ZettlrMenu {
               if (focusedWindow) focusedWindow.webContents.toggleDevTools()
             }
             break
+          case 'openLogViewer':
+            builtItem.click = function (menuitem, focusedWindow) {
+              global.log.showLogViewer()
+            }
+            break
           case 'openDictData':
             builtItem.click = function (menuitem, focusedWindow) {
               require('electron').shell.openItem(require('path').join(require('electron').app.getPath('userData'), '/dict'))

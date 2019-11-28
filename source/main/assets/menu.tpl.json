@@ -208,15 +208,19 @@
         "label": "menu.inspect_clipboard",
         "command": "inspect-clipboard"
       },
-    {
-      "label": "menu.reload",
-      "accelerator": "F5",
-      "id": "reloadWindow"
-    }, {
-      "label": "menu.toggle_devtools",
-      "accelerator": { "darwin": "Alt+Command+I", "other": "Ctrl+Shift+I" },
-      "id": "toggleDevTools"
-    }
+      {
+        "label": "menu.reload",
+        "accelerator": "F5",
+        "id": "reloadWindow"
+      }, {
+        "label": "menu.toggle_devtools",
+        "accelerator": { "darwin": "Alt+Command+I", "other": "Ctrl+Shift+I" },
+        "id": "toggleDevTools"
+      }, {
+        "label": "Open Logs",
+        "accelerator": "CmdOrCtrl+Alt+Shift+L",
+        "id": "openLogViewer"
+      }
   ]},
   "mixin_preferences": {
     "submenu": [
