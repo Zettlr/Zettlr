@@ -30,7 +30,7 @@ class DirRename extends ZettlrCommand {
     // { 'hash': hash, 'name': val }
     let dir = this._app.findDir({ 'hash': parseInt(arg.hash) })
     if (!dir) {
-      console.error(`Could not rename directory ${arg.hash} -- not found!`)
+      global.log.error(`Could not rename directory ${arg.hash} -- not found!`)
       return // Something went wrong
     }
 

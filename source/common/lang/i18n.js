@@ -69,7 +69,7 @@ function i18n (lang = 'en-US') {
 function trans (string, ...args) {
   if (string.indexOf('.') === -1) {
     // Wtf? But alright, return the string and log an error
-    console.error('The translation string was malformed: ' + string + '!')
+    global.log.warning('The translation string was malformed: ' + string + '!')
     return string
   }
 

@@ -90,7 +90,7 @@ function makeTemplate (cat, tpl, data = {}) {
     let precompiled = require(`./assets/tpl/${cat}/${tpl}.handlebars.js`)
     return handlebars.template(precompiled)(data)
   } catch (e) {
-    console.error(e)
+    global.log.error(e.message, e)
     return false
   }
 }

@@ -321,7 +321,8 @@ class ConfigProvider extends EventEmitter {
     let pathToCheck = [
       this.configPath, // Main config directory
       path.join(this.configPath, 'dict'), // Custom dictionary path
-      path.join(this.configPath, 'lang') // Custom translation path
+      path.join(this.configPath, 'lang'), // Custom translation path
+      path.join(this.configPath, 'logs') // Log path
     ]
 
     // Make sure each path exists

@@ -50,6 +50,8 @@ class AppearanceProvider extends EventEmitter {
       systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', (event, userInfo) => {
         // Only react to these notifications if the schedule is set to 'system'
         if (this._mode !== 'system') return
+        let isItDark = systemPreferences.isDarkMode() ? 'dark' : 'light'
+        global.log.verbose('Switching appearance to ' + isItDark)
         // Set the var accordingly
         global.config.set('darkTheme', systemPreferences.isDarkMode())
       })
@@ -58,6 +60,8 @@ class AppearanceProvider extends EventEmitter {
       // scheme changes.
       systemPreferences.on('inverted-color-scheme-changed', (event, invertedColorScheme) => {
         if (this._mode !== 'system') return
+        let isItDark = invertedColorScheme ? 'dark' : 'light'
+        global.log.verbose('Switching appearance to ' + isItDark)
         // Also set the var accordingly
         global.config.set('darkTheme', invertedColorScheme)
       })
@@ -102,6 +106,7 @@ class AppearanceProvider extends EventEmitter {
       // mode has been active or not.
       if (this._scheduleWasDark !== this._isItDark()) {
         // The schedule just changed -> change the theme
+        global.log.verbose('Switching appearance to ' + (this._isItDark() ? 'dark' : 'light'))
         global.config.set('darkTheme', this._isItDark())
         this._scheduleWasDark = this._isItDark()
       }

@@ -137,6 +137,7 @@ class CiteprocProvider {
         // Reload the whole thing. But do it after a timeout to let Zotero time
         // to complete writing the file.
         setTimeout(() => { this.load() }, 2000)
+        global.log.verbose('Reloading citation database ...')
         global.ipc.notify(trans('gui.citeproc.reloading'))
       })
     } else {
@@ -192,7 +193,7 @@ class CiteprocProvider {
         // Didn't work, so let's try to parse it as BibTex data.
         this._cslData = BibTexParser.parse(cslData)
       } catch (e) {
-        console.error(e)
+        global.log.error(err.message, err)
         // Nopey.
         global.ipc.notify(trans('gui.citeproc.error_db'))
         this._status = ERROR
@@ -243,7 +244,7 @@ class CiteprocProvider {
       this._status = READY
       this._loadIdHint()
     } catch (e) {
-      console.error(e)
+      global.log.error(e.message, e)
       this._status = ERROR
     }
   }
@@ -362,7 +363,7 @@ class CiteprocProvider {
     try {
       citations = Citr.parseSingle(citation)
     } catch (err) {
-      console.error(err)
+      global.log.error(err.message, err)
       return undefined
     }
 
@@ -371,7 +372,7 @@ class CiteprocProvider {
     try {
       return this._engine.makeCitationCluster(citations)
     } catch (e) {
-      console.error(e)
+      global.log.error(e.message, e)
       return undefined
     }
   }
@@ -394,7 +395,7 @@ class CiteprocProvider {
       this._engine.updateItems(this._sanitiseItemList(passed))
       return true
     } catch (e) {
-      console.log(e)
+      global.log.error(e.message, e)
       return false
     }
   }
@@ -409,6 +410,7 @@ class CiteprocProvider {
     try {
       return this._engine.makeBibliography()
     } catch (e) {
+      global.log.warning(e.message, e)
       return false // Something went wrong (e.g. falsy items in the registry)
     }
   }

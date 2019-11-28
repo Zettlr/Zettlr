@@ -41,7 +41,7 @@ class TranslationProvider {
     }
 
     this.init().catch((err) => {
-      console.error(err)
+      global.log(err.message, err)
     })
   }
 
@@ -112,7 +112,7 @@ class TranslationProvider {
           'success': true
         })
       } catch (e) {
-        console.error(e)
+        global.log.error(e.message, e)
         global.ipc.send('language-download', {
           'bcp47': l.bcp47,
           'success': false

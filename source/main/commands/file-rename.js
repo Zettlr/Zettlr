@@ -38,7 +38,7 @@ class FileRename extends ZettlrCommand {
     if (ignoreFile(arg.name)) arg.name += '.md'
 
     let file = this._app.findFile({ 'hash': parseInt(arg.hash) })
-    if (!file) return console.error(`Could not find file ${arg.hash}`)
+    if (!file) return global.log.error(`Could not find file ${arg.hash}`)
 
     oldpath = file.path
     if (file.parent.hasChild({ 'name': arg.name })) {

@@ -63,7 +63,7 @@ class Zettlr {
     }).catch((e) => {
       // TODO: In case the commands can't be loaded we should definitely shut
       // down the app
-      console.error(e)
+      global.log.error(e.message, e)
     })
 
     // First thing that has to be done is to load the service providers
@@ -149,11 +149,11 @@ class Zettlr {
           this._targets.verify()
           this.isBooting = false // Now we're done booting
         }).catch((err) => {
-          console.error('Could not add additional roots!', err)
+          global.log.error('Could not add additional roots!', err)
           this.isBooting = false // Now we're done booting
         })
       }).catch((err) => {
-        console.error('Could not load paths!', err)
+        global.log.error('Could not load paths!', err)
         this.isBooting = false // Now we're done booting
       })
     })
