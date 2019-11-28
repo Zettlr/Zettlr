@@ -128,12 +128,12 @@ app.on('ready', function () {
 /**
  * Quit as soon as all windows are closed and we are not on macOS.
  */
-app.on('window-all-closed', function () {
+app.on('window-all-closed', async function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
     // Shutdown the app before quitting
-    zettlr.shutdown()
+    await zettlr.shutdown()
     app.quit()
   }
 })
@@ -142,8 +142,8 @@ app.on('window-all-closed', function () {
  * Hook into the will-quit event to make sure we are able to shut down our app
  * properly.
  */
-app.on('will-quit', function (event) {
-  if (zettlr) zettlr.shutdown()
+app.on('will-quit', async function (event) {
+  if (zettlr) await zettlr.shutdown()
 })
 
 /**

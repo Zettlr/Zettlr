@@ -13,7 +13,7 @@
  */
 
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs').promises
 const { app, BrowserWindow } = require('electron')
 const hasProp = Object.prototype.hasOwnProperty
 
@@ -27,6 +27,8 @@ class LogProvider {
     this._logPath = path.join(app.getPath('userData'), 'logs')
     // Initialise log with pre-boot messages and an initialisation message
     this._log = []
+    this._entryPointer = 0 // Set the log entry file pointer to zero
+    this._fileLock = false // True while data is being appended to the log
     this._migratePreBootLog()
     this.log(LOG_LEVEL_VERBOSE, 'Log provider booting up ...', null)
 
@@ -44,11 +46,9 @@ class LogProvider {
    * Shuts down the provider
    * @return {Boolean} Whether or not the shutdown was successful
    */
-  shutdown () {
+  async shutdown () {
     this.log(LOG_LEVEL_VERBOSE, 'Log provider shutting down ...', null)
-    for (let entry of this._log) {
-      console.log(this._toString(entry))
-    }
+    await this._append() // One final append to flush the log
     return true
   }
 
@@ -85,6 +85,31 @@ class LogProvider {
   }
 
   /**
+   * Logs one entry to the internal log.
+   * @param {Number} logLevel The log level (defined atop of this file)
+   * @param {String} message A short, human-readable error message
+   * @param {Object} details Optional details (completely customisable)
+   */
+  log (logLevel, message, details) {
+    if (!details) details = {} // No details -> empty object
+
+    // Simply append to log
+    let msg = {
+      'level': logLevel,
+      'message': message,
+      'details': details,
+      'time': this._getTimestamp()
+    }
+
+    this._log.push(msg)
+
+    // Immediately append the log
+    if (this._win) this._win.webContents.send('log-view-add', msg)
+    this._append() // Returns a promise, but the function manages
+    // it's own lock-flag
+  }
+
+  /**
    * Migrates potential pre-boot messages to the internal log
    */
   _migratePreBootLog () {
@@ -110,27 +135,32 @@ class LogProvider {
     }
   }
 
-  /**
-   * Logs one entry to the internal log.
-   * @param {Number} logLevel The log level (defined atop of this file)
-   * @param {String} message A short, human-readable error message
-   * @param {Object} details Optional details (completely customisable)
-   */
-  log (logLevel, message, details) {
-    if (!details) details = {} // No details -> empty object
+  async _append () {
+    if (this._fileLock) return // Cannot write until the previous write has finished
+    if (this._entryPointer >= this._log.length - 1) return // Nothing to write
 
-    // Simply append to log
-    let msg = {
-      'level': logLevel,
-      'message': message,
-      'details': details,
-      'time': this._getTimestamp()
-    }
+    // First slice the part of the log that is not yet written to file
+    let logsToWrite = this._log.slice(this._entryPointer)
+    // Push forward the pointer to the end of the log.
+    // Attention: At the current state, it references a
+    // non-existing index, but this is checked in line 1
+    // of this function.
+    this._entryPointer = this._log.length
 
-    this._log.push(msg)
+    // Now, filter out all verbose entries
+    logsToWrite = logsToWrite.filter((entry) => entry.level > LOG_LEVEL_VERBOSE)
 
-    // Immediately append the log
-    if (this._win) this._win.webContents.send('log-view-add', msg)
+    // Then map the entries to strings and join them with newlines
+    logsToWrite = logsToWrite.map((elem) => this._toString(elem))
+    if (logsToWrite.length === 0) return // Apparently, only verbose messages
+    logsToWrite = logsToWrite.join('\n') + '\n' // Trailing newline
+
+    // Finally, append these guys to the current logfile
+    let logfile = path.join(this._logPath, this._getLogfileName())
+
+    this._fileLock = true
+    await fs.writeFile(logfile, logsToWrite, { flag: 'a' })
+    this._fileLock = false
   }
 
   /**

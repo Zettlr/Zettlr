@@ -214,9 +214,9 @@ class Zettlr {
   /**
    * Shuts down all service providers.
    */
-  _shutdownServiceProviders () {
+  async _shutdownServiceProviders () {
     for (let provider in this._providers) {
-      this._providers[provider].shutdown()
+      await this._providers[provider].shutdown()
     }
   }
 
@@ -224,7 +224,7 @@ class Zettlr {
     * Shutdown the app. This function is called on quit.
     * @return {void} Does not return anything.
     */
-  shutdown () {
+  async shutdown () {
     // Close all Quicklook Windows
     this._ql.closeAll()
     // Save the config and stats
@@ -236,7 +236,7 @@ class Zettlr {
     }
 
     // Finally, shut down the service providers
-    this._shutdownServiceProviders()
+    await this._shutdownServiceProviders()
   }
 
   /**
@@ -286,7 +286,7 @@ class Zettlr {
       try {
         return cmd.run(evt, arg)
       } catch (e) {
-        console.log(e)
+        global.log.error(e.message, e)
         // Re-throw for the IPC to handle a fall-through
         throw e
       }
