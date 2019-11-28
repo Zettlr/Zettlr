@@ -205,31 +205,25 @@ class CiteprocProvider {
       let item = this._cslData[i]
       // if (!item.issued) continue
       let id = item.id
+      // Check the validity of the citation
+      try {
+        Citr.parseSingle(`@${id}`)
+      } catch (err) {
+        global.log.warning(err.message)
+        if (global.application.isBooting()) {
+          // In case the application is still booting, cache the message and delay sending
+          // TODO: This is goddamned ugly.
+          setTimeout(() => { global.ipc.notify(err.message) }, 5000)
+        } else {
+          // Otherwise immediately dispatch
+          global.ipc.notify(err.message)
+        }
+        continue // Don't include the citation
+      }
       this._items[id] = item
       this._ids[id] = true // Create a fast accessible object (instead of slow array)
     }
 
-    // Before finally initialising the processor, we need to make sure all citation
-    // keys are valid. If the following function throws an error, we know
-    // there's an error.
-    try {
-      // Any error thrown by Citr will be caught here and
-      // reported to the user.
-      this._checkCitationIds()
-    } catch (err) {
-      let message = trans('gui.citeproc.error_db') + ' &mdash; ' + err.message
-      if (global.application.isBooting()) {
-        // In case the application is still booting, cache the message and delay sending
-        // TODO: This is goddamned ugly.
-        setTimeout(() => { global.ipc.notify(message) }, 5000)
-        console.error(message) // Failsafe, in case the user has a REALLY slow app.
-      } else {
-        // Otherwise immediately dispatch
-        global.ipc.notify(message)
-      }
-      this._status = ERROR
-      return
-    }
     // Now we are ready. Initiate the processor.
     this._initProcessor()
   }
@@ -324,24 +318,6 @@ class CiteprocProvider {
       return list
     } else {
       return [] // No other possibilities
-    }
-  }
-
-  /**
-   * Checks all citation keys by parsing them
-   * one by one, not catching potential errors
-   * which then are detected during the library
-   * load.
-   */
-  _checkCitationIds () {
-    for (let key of Object.keys(this._ids)) {
-      // Pretty easy process: Simply attempt to
-      // parse all citations. The first that
-      // does not work will prompt Citr to throw
-      // an error which will be passed to the
-      // calling function, as it's not cought
-      // here.
-      Citr.parseSingle(`[@${key}]`)
     }
   }
 

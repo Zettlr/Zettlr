@@ -26,6 +26,7 @@
 - Switched to Electron 7.
 - Added v8 code caching for better startup performance.
 - Added a global logging interface for better error and bug handling.
+- Relaxed the policy on wrong citation keys: One wrong key won't stop the loading of the rest of the database anymore, only the wrong key won't be included.
 
 # 1.4.3
 
