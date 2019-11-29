@@ -293,6 +293,7 @@ class Zettlr {
     } else {
       // We need to throw, because the return value of a successful command run
       // may very well also evaluate to null, undefined, false or anything else.
+      global.log.error('Unknown command!')
       throw new Error('Unknown command!')
     }
   }
@@ -315,6 +316,7 @@ class Zettlr {
       // Add the file's metadata object to the recent docs
       global.recentDocs.add(file.getMetadata())
     } else {
+      global.log.error('Could not find file', arg)
       this.window.prompt({
         type: 'error',
         title: trans('system.error.fnf_title'),
@@ -336,6 +338,7 @@ class Zettlr {
     if (obj && obj.isDirectory() && obj.type !== 'dead-directory') {
       this.setCurrentDir(obj)
     } else {
+      global.log.error('Could not find directory', arg)
       this.window.prompt({
         type: 'error',
         title: trans('system.error.dnf_title'),
@@ -356,6 +359,7 @@ class Zettlr {
 
     if ((isDir(ret) && ignoreDir(ret)) || (isFile(ret) && ignoreFile(ret)) || ret === app.getPath('home')) {
       // We cannot add this dir, because it is in the list of ignored directories.
+      global.log.error('The chosen directory is on the ignore list.', ret)
       return this.window.prompt({
         'type': 'error',
         'title': trans('system.error.ignored_dir_title'),
