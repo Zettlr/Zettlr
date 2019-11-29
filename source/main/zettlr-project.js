@@ -141,8 +141,11 @@ class ZettlrProject {
 
     // Aaaand export.
     makeExport(opt)
-      .then((exporter) => { /* Nothing to do */ })
-      .catch((err) => { global.ipc.notifyError(err) })
+      .then((targetFile) => { /* Nothing to do */ })
+      .catch((err) => {
+        global.log.error(err.message, err)
+        global.ipc.notifyError(err)
+      })
   }
 
   /**
