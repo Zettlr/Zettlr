@@ -20,6 +20,7 @@
 - Added a new error message informing you of malformed citation keys.
 - Fixed the print preview.
 - Removed the quotes from the matchbrackets-configuration.
+- Fixed link rendering and the opening of links.
 
 ## Under the Hood
 
@@ -27,6 +28,7 @@
 - Added v8 code caching for better startup performance.
 - Added a global logging interface for better error and bug handling.
 - Relaxed the policy on wrong citation keys: One wrong key won't stop the loading of the rest of the database anymore, only the wrong key won't be included.
+- Moved out the markdownOpenLink-function from the editor class to the utilities.
 
 # 1.4.3
 

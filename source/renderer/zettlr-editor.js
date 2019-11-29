@@ -17,13 +17,14 @@ const path = require('path')
 const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
-const { clipboard, shell } = require('electron')
+const { clipboard } = require('electron')
 const hash = require('../common/util/hash')
 const countWords = require('../common/util/count-words')
 const flattenDirectoryTree = require('../common/util/flatten-directory-tree')
 const { trans } = require('../common/lang/i18n.js')
 const generateKeymap = require('./assets/codemirror/generate-keymap.js')
 const EditorSearch = require('./util/editor-search')
+const openMarkdownLink = require('./util/open-markdown-link')
 
 // The autoloader requires all necessary CodeMirror addons and modes that are
 // used by the main class. It simply folds about 70 lines of code into an extra
@@ -170,41 +171,7 @@ class ZettlrEditor {
       markdownImageBasePath: '', // The base path used to render the image in case of relative URLs
       markdownBoldFormatting: '**', // The characters used for bold
       markdownItalicFormatting: '_', // The characters used for italic
-      markdownOnLinkOpen: (url) => {
-        if (url[0] === '#') {
-          // We should open an internal link
-          let re = new RegExp('#\\s[^\\r\\n]*?' +
-          url.replace(/-/g, '[^\\r\\n]+?').replace(/^#/, ''), 'i')
-          // The new regex should now match the corresponding heading in the document
-          for (let i = 0; i < this._cm.lineCount(); i++) {
-            let line = this._cm.getLine(i)
-            if (re.test(line)) {
-              this.jtl(i)
-              break
-            }
-          }
-        } else {
-          // First try to open the URL itself
-          shell.openExternal(url, { activate: true }).catch((e) => {
-            if (e) {
-              // Okay, didn't work. Let's try a local file (trying to open https
-              // will always work, but the browser may complain that
-              // https://my-file.pdf won't exist). Always join with the file's
-              // base path, as an absolute URL would've been opened.
-              shell.openExternal('file://' + path.join(this._cm.getOption('markdownImageBasePath'), url), { activate: true }).catch((e) => {
-                if (e) {
-                  // Chrome, do your job!
-                  if (!/:\/\//.test(url)) url = 'https://' + url
-                  shell.openExternal(url, { activate: true }).catch((e) => {
-                    // Notify the user that we couldn't open the URL
-                    if (e) global.notify(trans('system.error.open_url_error', url))
-                  })
-                }
-              })
-            }
-          }) // P.S.: Did someone notice the sudden callback hell?
-        } // End else
-      }, // Action for ALT-Clicks
+      markdownOnLinkOpen: (url) => { return openMarkdownLink(url, this) }, // Action for ALT-Clicks
       zkn: {
         idRE: '(\\d{14})', // What do the IDs look like?
         linkStart: '\\[\\[', // Start of links?
