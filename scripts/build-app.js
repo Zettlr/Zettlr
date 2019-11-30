@@ -62,10 +62,18 @@ const config = {
   copyright: 'Zettlr is licensed under GNU GPL v3.',
   fileAssociations: [
     {
-      ext: [ 'md', 'markdown' ],
+      ext: 'md',
       name: 'Markdown',
-      mimeType: 'text/markdown',
       description: 'Markdown document',
+      mimeType: 'text/markdown',
+      role: 'Editor',
+      isPackage: false
+    },
+    {
+      ext: 'markdown',
+      name: 'Markdown',
+      description: 'Markdown document',
+      mimeType: 'text/markdown',
       role: 'Editor',
       isPackage: false
     }
@@ -88,8 +96,18 @@ const config = {
     icon: 'resources/icons/ico/icon.ico'
   },
   linux: {
-    target: (onlyDir) ? 'dir' : [ 'deb', 'rpm' ],
-    artifactName: 'Zettlr-linux-x64-${version}.${ext}', // eslint-disable-line
+    target: (onlyDir) ? 'dir' : [
+      'deb',
+      'rpm',
+      {
+        target: 'AppImage',
+        arch: [
+          'x64',
+          'ia32'
+        ]
+      }
+    ],
+    artifactName: 'Zettlr-linux-${version}-${arch}.${ext}', // eslint-disable-line
     synopsis: 'Markdown editor',
     category: 'Office',
     icon: 'resources/icons/png',
