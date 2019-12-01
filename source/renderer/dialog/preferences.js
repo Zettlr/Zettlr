@@ -210,6 +210,16 @@ class PreferencesDialog extends ZettlrDialog {
       e.preventDefault()
       $(e.target).parent().parent().parent().detach() // Button -> div -> td -> tr
     })
+
+    $('.mq-select').click(function (e) {
+      e.preventDefault()
+      let primary = e.target.dataset.primary
+      let secondary = e.target.dataset.secondary
+      console.log(`Selecting indexes ${primary} and ${secondary}!`)
+
+      $('#autoCorrectQuotesDouble')[0].options.selectedIndex = primary
+      $('#autoCorrectQuotesSingle')[0].options.selectedIndex = secondary
+    })
   }
 
   afterDownload (event, arg) {

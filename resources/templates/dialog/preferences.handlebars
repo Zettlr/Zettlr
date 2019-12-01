@@ -647,6 +647,7 @@
             </label>
             <label for="autoCorrectStyleLibreOffice">{{i18n "dialog.preferences.autocorrect.style_libre_office_label"}}</label>
           </div>
+          <hr>
 
           {{!-- Magic Quotes Section --}}
           <div class="box-left">
@@ -692,6 +693,13 @@
               <option value="『…』"{{#ifCond secondaryQuotes '=' '『…』'}}selected="selected"{{/ifCond}}>『…』</option>
             </select>
           </div>
+          {{!-- Add the quick-selectors --}}
+          <p>{{ i18n "dialog.preferences.autocorrect.quick_select_label" }}</p>
+          <button class="mq-select" data-primary="0" data-secondary="0">{{ i18n "dialog.preferences.autocorrect.quick_select_none_label" }}</button>
+          <button class="mq-select" data-primary="1" data-secondary="1">en</button>
+          <button class="mq-select" data-primary="3" data-secondary="3">de</button>
+          <button class="mq-select" data-primary="11" data-secondary="9">fr</button>
+          <button class="mq-select" data-primary="13" data-secondary="13">jp</button>
         </div>
         <div class="box-right">
           {{!-- Replacement Table --}}

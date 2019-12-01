@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-11-27T07:13:31.000000Z"
+        "updated_at": "2019-12-01T16:09:05.000000Z"
     },
     "dialog": {
         "about": {
@@ -163,6 +163,8 @@
             "auto_dark_mode_system": "Follow Operating System",
             "autocorrect": {
                 "active_label": "Turn on AutoCorrect",
+                "quick_select_label": "Quick select",
+                "quick_select_none_label": "None",
                 "quotes_double_label": "Primary Magic Quotes",
                 "quotes_single_label": "Secondary Magic Quotes",
                 "replacement_info": "Here you can define certain strings that will be replaced when AutoCorrect is on. The characters on the left side will be replaced with whatever comes on the right.",
