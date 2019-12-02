@@ -22,6 +22,8 @@ const uuid4 = require('uuid/v4')
 module.exports = function (string) {
   let date = new Date()
   let yyyy = date.getFullYear()
+  let yy = date.getFullYear().toString().substr(-2)
+  if (yy <= 9) yy = '0' + yy
   let mm = date.getMonth() + 1
   if (mm <= 9) mm = '0' + mm
   let dd = date.getDate()
@@ -35,6 +37,7 @@ module.exports = function (string) {
 
   // Now generate the id by replacing all placeholders in the pattern
   string = string.replace(/%Y/g, yyyy)
+  string = string.replace(/%y/g, yy)
   string = string.replace(/%M/g, mm)
   string = string.replace(/%D/g, dd)
   string = string.replace(/%h/g, hh)
