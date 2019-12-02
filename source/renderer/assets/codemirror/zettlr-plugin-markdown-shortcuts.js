@@ -596,4 +596,6 @@ const { clipboard } = require('electron');
   CodeMirror.keyMap['default']['Shift-Ctrl-I'] = 'markdownImage'
   CodeMirror.keyMap['default']['Shift-Cmd-C'] = 'markdownComment'
   CodeMirror.keyMap['default']['Shift-Ctrl-C'] = 'markdownComment'
+  CodeMirror.keyMap['default']['Cmd-T'] = 'markdownMakeTaskList'
+  CodeMirror.keyMap['default']['Ctrl-T'] = 'markdownMakeTaskList'
 })
