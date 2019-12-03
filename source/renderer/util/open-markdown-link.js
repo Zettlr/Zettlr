@@ -1,5 +1,5 @@
 const { shell } = require('electron')
-const path = require('path')
+const makeValidUri = require('../../common/util/make-valid-uri')
 const { trans } = require('../../common/lang/i18n.js')
 
 module.exports = function (url, editorInstance) {
@@ -17,28 +17,18 @@ module.exports = function (url, editorInstance) {
     }
   } else {
     // It is valid Markdown to surround the URL with < and >
-    url = url.replace(/^<(.+)>$/, '$1')
-    // First try to open the URL itself
-    shell.openExternal(url, { activate: true }).catch((e) => {
-      if (e) {
-        console.warn(`Could not open URL ${url}, trying as file ...`)
-        // Okay, didn't work. Let's try a local file (trying to open https
-        // will always work, but the browser may complain that
-        // https://my-file.pdf won't exist). Always join with the file's
-        // base path, as an absolute URL would've been opened.
-        let absPath = path.join(editorInstance._cm.getOption('markdownImageBasePath'), url)
-        shell.openExternal('file://' + absPath, { activate: true }).catch((e) => {
-          if (e) {
-            // Chrome, do your job!
-            if (!/:\/\//.test(url)) url = 'https://' + url
-            shell.openExternal(url, { activate: true }).catch((e) => {
-              console.warn(`Could not open URL ${url}`)
-              // Notify the user that we couldn't open the URL
-              if (e) global.notify(trans('system.error.open_url_error', url))
-            })
-          }
-        })
+    url = url.replace(/^<(.+)>$/, '$1') // Looks like an Emoji!
+    // We'll be making use of a helper function here, because
+    // we cannot rely on the errors thrown by new URL(), as,
+    // e.g., file://./relative.md will not throw an error albeit
+    // we need to convert it to absolute.
+    let base = editorInstance._cm.getOption('markdownImageBasePath')
+    let validURI = makeValidUri(url, base)
+    shell.openExternal(validURI).catch((err) => {
+      // Notify the user that we couldn't open the URL
+      if (err) {
+        global.notify(trans('system.error.open_url_error', validURI) + ': ' + err.message)
       }
-    }) // P.S.: Did someone notice the sudden callback hell?
-  } // End else
+    })
+  }
 }
