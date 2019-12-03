@@ -59,7 +59,7 @@ module.exports = async function (options) {
 
   // Pandoc flags to be passed to the compiler
   let pandocFlags = {
-    'tpl': (options.template) ? `--template=${options.template}` : '',
+    'tpl': (options.template) ? `--template="${options.template}"` : '',
     'infile': options.sourceFile,
     'toc': (options.pdf.toc && options.format === 'pdf') ? '--toc' : '',
     'tocdepth': (options.pdf.tocDepth) ? '--toc-depth=' + options.pdf.tocDepth : '',

@@ -32,6 +32,7 @@
 - Relaxed the policy on wrong citation keys: One wrong key won't stop the loading of the rest of the database anymore, only the wrong key won't be included.
 - Moved out the markdownOpenLink-function from the editor class to the utilities.
 - Added much better heuristics to resolve paths linked to in markdown documents. Except a few edge cases, the algorithm should be able to open most varieties of links.
+- The exporter now escapes the templates to account for potential spaces in the template path.
 
 # 1.4.3
 
