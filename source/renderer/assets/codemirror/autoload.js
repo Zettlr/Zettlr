@@ -5,6 +5,8 @@
  * in the main class.
  */
 
+const highlightingModes = require('../../../common/data').highlightingModes
+
 // 1. Mode addons
 require('codemirror/addon/mode/overlay')
 require('codemirror/addon/mode/multiplex') // Multiplex needed for syntax highlighting
@@ -28,18 +30,9 @@ require('codemirror/mode/gfm/gfm')
 require('codemirror/mode/stex/stex')
 
 // 6. Code highlighting modes
-require('codemirror/mode/javascript/javascript')
-require('codemirror/mode/clike/clike')
-require('codemirror/mode/css/css')
-require('codemirror/mode/php/php')
-require('codemirror/mode/python/python')
-require('codemirror/mode/r/r')
-require('codemirror/mode/ruby/ruby')
-require('codemirror/mode/sql/sql')
-require('codemirror/mode/swift/swift')
-require('codemirror/mode/shell/shell')
-require('codemirror/mode/yaml/yaml')
-require('codemirror/mode/go/go')
+for (let mode of new Set(Object.values(highlightingModes).map(hlmode => hlmode.mode))) {
+  require(`codemirror/mode/${mode}/${mode}`)
+}
 
 // 7. The folding addon
 require('codemirror/addon/fold/foldcode')
