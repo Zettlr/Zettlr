@@ -1,104 +1,118 @@
+/* global define CodeMirror */
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: https://codemirror.net/LICENSE
 //
-// This is the Zettlr fork of addon/edit/continuelist for extra stuff. Let's
-// hope we can switch back to the default plugin soon.
+// This is the Zettlr fork of addon/edit/continuelist.
+// Changes:
+//
+// + Enable the option continueListModes to add the markdown-zkn mode
+// + Adapt paths for use within Zettlr
+// + Remove the blockquote character (>) from the list regex.
 
-// Additional fix: Different paths to CodeMirror
- (function(mod) {
-  if (typeof exports == "object" && typeof module == "object") // CommonJS
-    mod(require("../../../node_modules/codemirror/lib/codemirror"));
-  else if (typeof define == "function" && define.amd) // AMD
-    define(["../../../node_modules/codemirror/lib/codemirror"], mod);
-  else // Plain browser env
-    mod(CodeMirror);
- })(function(CodeMirror) {
-  "use strict";
+(function (mod) {
+  if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
+    mod(require('../../../node_modules/codemirror/lib/codemirror'))
+  } else if (typeof define === 'function' && define.amd) { // AMD
+    define(['../../../node_modules/codemirror/lib/codemirror'], mod)
+  } else { // Plain browser env
+    mod(CodeMirror)
+  }
+})(function (CodeMirror) {
+  'use strict'
 
-  var listRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/,
-      emptyListRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/,
-      unorderedListRE = /[*+-]\s/;
+  var listRE = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/
+  let emptyListRE = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/
+  let unorderedListRE = /[*+-]\s/
 
-  CodeMirror.commands.newlineAndIndentContinueMarkdownList = function(cm) {
-    if (cm.getOption("disableInput")) return CodeMirror.Pass;
-    var ranges = cm.listSelections(), replacements = [];
-    for (var i = 0; i < ranges.length; i++) {
-      var pos = ranges[i].head;
-
+  CodeMirror.commands.newlineAndIndentContinueMarkdownList = function (cm) {
+    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    let ranges = cm.listSelections()
+    let replacements = []
+    for (let i = 0; i < ranges.length; i++) {
+      let pos = ranges[i].head
       // If we're not in Markdown mode, fall back to normal newlineAndIndent
-      var eolState = cm.getStateAfter(pos.line);
-      var inner = cm.getMode().innerMode(eolState);
-      var allowedModes = cm.getOption("continuelistModes") || ["markdown"];
+      var eolState = cm.getStateAfter(pos.line)
+      var inner = cm.getMode().innerMode(eolState)
+      var allowedModes = cm.getOption('continuelistModes') || ['markdown']
       if (!allowedModes.includes(inner.mode.name)) {
-        cm.execCommand("newlineAndIndent");
-        return;
+        cm.execCommand('newlineAndIndent')
+        return
       } else {
-        eolState = inner.state;
+        eolState = inner.state
       }
 
-      var inList = eolState.list !== false;
-      var inQuote = eolState.quote !== 0;
+      var inList = eolState.list !== false
+      var inQuote = eolState.quote !== 0
 
-      var line = cm.getLine(pos.line), match = listRE.exec(line);
-      var cursorBeforeBullet = /^\s*$/.test(line.slice(0, pos.ch));
+      let line = cm.getLine(pos.line)
+      let match = listRE.exec(line)
+      var cursorBeforeBullet = /^\s*$/.test(line.slice(0, pos.ch))
       if (!ranges[i].empty() || (!inList && !inQuote) || !match || cursorBeforeBullet) {
-        cm.execCommand("newlineAndIndent");
-        return;
+        cm.execCommand('newlineAndIndent')
+        return
       }
       if (emptyListRE.test(line)) {
-        if (!/>\s*$/.test(line)) cm.replaceRange("", {
-          line: pos.line, ch: 0
-        }, {
-          line: pos.line, ch: pos.ch + 1
-        });
-        replacements[i] = "\n";
+        if (!/>\s*$/.test(line)) {
+          cm.replaceRange('', {
+            line: pos.line, ch: 0
+          }, {
+            line: pos.line, ch: pos.ch + 1
+          })
+          replacements[i] = '\n'
+        }
       } else {
-        var indent = match[1], after = match[5];
-        var numbered = !(unorderedListRE.test(match[2]) || match[2].indexOf(">") >= 0);
-        var bullet = numbered ? (parseInt(match[3], 10) + 1) + match[4] : match[2].replace("x", " ");
-        replacements[i] = "\n" + indent + bullet + after;
+        let indent = match[1]
+        let after = match[5]
+        let numbered = !(unorderedListRE.test(match[2]) || match[2].indexOf('>') >= 0)
+        let bullet = numbered ? (parseInt(match[3], 10) + 1) + match[4] : match[2].replace('x', ' ')
+        replacements[i] = '\n' + indent + bullet + after
 
-        if (numbered) incrementRemainingMarkdownListNumbers(cm, pos);
+        if (numbered) incrementRemainingMarkdownListNumbers(cm, pos)
       }
     }
 
-    cm.replaceSelections(replacements);
-  };
+    cm.replaceSelections(replacements)
+  }
 
   // Auto-updating Markdown list numbers when a new item is added to the
   // middle of a list
-  function incrementRemainingMarkdownListNumbers(cm, pos) {
-    var startLine = pos.line, lookAhead = 0, skipCount = 0;
-    var startItem = listRE.exec(cm.getLine(startLine)), startIndent = startItem[1];
+  function incrementRemainingMarkdownListNumbers (cm, pos) {
+    let startLine = pos.line
+    let lookAhead = 0
+    let skipCount = 0
+    let startItem = listRE.exec(cm.getLine(startLine))
+    let startIndent = startItem[1]
 
     do {
-      lookAhead += 1;
-      var nextLineNumber = startLine + lookAhead;
-      var nextLine = cm.getLine(nextLineNumber), nextItem = listRE.exec(nextLine);
+      lookAhead += 1
+      let nextLineNumber = startLine + lookAhead
+      let nextLine = cm.getLine(nextLineNumber)
+      var nextItem = listRE.exec(nextLine)
 
       if (nextItem) {
-        var nextIndent = nextItem[1];
-        var newNumber = (parseInt(startItem[3], 10) + lookAhead - skipCount);
-        var nextNumber = (parseInt(nextItem[3], 10)), itemNumber = nextNumber;
+        let nextIndent = nextItem[1]
+        let newNumber = (parseInt(startItem[3], 10) + lookAhead - skipCount)
+        let nextNumber = (parseInt(nextItem[3], 10))
+        let itemNumber = nextNumber
 
         if (startIndent === nextIndent && !isNaN(nextNumber)) {
-          if (newNumber === nextNumber) itemNumber = nextNumber + 1;
-          if (newNumber > nextNumber) itemNumber = newNumber + 1;
+          if (newNumber === nextNumber) itemNumber = nextNumber + 1
+          if (newNumber > nextNumber) itemNumber = newNumber + 1
           cm.replaceRange(
             nextLine.replace(listRE, nextIndent + itemNumber + nextItem[4] + nextItem[5]),
-          {
-            line: nextLineNumber, ch: 0
-          }, {
-            line: nextLineNumber, ch: nextLine.length
-          });
+            {
+              line: nextLineNumber, ch: 0
+            }, {
+              line: nextLineNumber, ch: nextLine.length
+            })
         } else {
-          if (startIndent.length > nextIndent.length) return;
+          if (startIndent.length > nextIndent.length) return
           // This doesn't run if the next line immediatley indents, as it is
           // not clear of the users intention (new indented item or same level)
-          if ((startIndent.length < nextIndent.length) && (lookAhead === 1)) return;
-          skipCount += 1;
+          if ((startIndent.length < nextIndent.length) && (lookAhead === 1)) return
+          skipCount += 1
         }
       }
-    } while (nextItem);
+    } while (nextItem)
   }
-});
+})
