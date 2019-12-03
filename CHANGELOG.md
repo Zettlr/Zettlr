@@ -21,6 +21,7 @@
 - Fixed the print preview.
 - Removed the quotes from the matchbrackets-configuration.
 - Fixed link rendering and the opening of links.
+- Added the shortcut `Cmd/Ctrl+T` to create a task list. Thanks to @jeffgeorge for implementing!
 - The blockquote character `>` is not treated as a list-item anymore, meaning you don't have to `Shift-Enter` into the next line anymore to prevent the blockquote from expanding unnecessarily.
 
 ## Under the Hood
