@@ -13,6 +13,7 @@ const path = require('path')
 * --mac: Build for macOS
 * --win: Build for Windows
 * --linux: Build for Linux
+* --app-image: Build for AppImage
 */
 
 let flags = process.argv // Contains the CLI flags
