@@ -73,6 +73,14 @@
     animation: soft-blink @cursor-blink-rate infinite; // Use the "soft-blink" animation
   }
 
+  /* Implement a "fat" cursor for Windows' overwrite mode (Ins key) */
+  .CodeMirror-overwrite .CodeMirror-cursor {
+    width: auto;
+    border-top: 2px solid #333;
+    border-bottom: 2px solid #333;
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+
   /* Make the formatting characters and escape sequences nearly invisible */
   .cm-formatting-code,
   .cm-formatting-code-block,
