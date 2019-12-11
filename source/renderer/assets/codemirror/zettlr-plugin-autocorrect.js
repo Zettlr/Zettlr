@@ -218,6 +218,8 @@
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
     if (cm.getModeAt(cursor).name !== 'markdown') return CodeMirror.Pass
+    // Additionally, we only should replace if we're not within comment-style tokens
+    if (cm.getTokenTypeAt(cursor).split(' ').includes('comment')) return CodeMirror.Pass
 
     var { cursorBegin, cursorEnd } = cursors(cursor, candidates)
     if (cursorBegin.ch === cursorEnd.ch) return CodeMirror.Pass // Empty range, no need to check
@@ -247,6 +249,8 @@
     // we only apply this if we're in markdown.
     var cursor = cm.getCursor()
     if (cm.getModeAt(cursor).name !== 'markdown') return CodeMirror.Pass
+    // Additionally, we only should replace if we're not within comment-style tokens
+    if (cm.getTokenTypeAt(cursor).split(' ').includes('comment')) return CodeMirror.Pass
 
     canPerformReverseReplacement = false // Reset the handleBackspace flag
 
