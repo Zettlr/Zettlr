@@ -161,6 +161,7 @@ class ZettlrIPC {
   handleEvent (cmd, cnt) {
     // We received a new event and need to handle it.
     try {
+      global.log.verbose('Trying to run command through Application: ' + cmd)
       let res = this._app.runCommand(cmd, cnt)
       return res // In case the command has run there's no need to handle it.
     } catch (e) {
@@ -313,7 +314,7 @@ class ZettlrIPC {
         break
 
       default:
-        console.log(trans('system.unknown_command', cmd))
+        global.log.error(trans('system.unknown_command', cmd))
         break
     }
   }
@@ -380,7 +381,7 @@ class ZettlrIPC {
         return global.css.set(arg)
 
       default:
-        console.log(trans('system.unknown_command', cmd))
+        global.log.error(trans('system.unknown_command', cmd))
         return null
     }
   }

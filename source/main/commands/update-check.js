@@ -50,7 +50,7 @@ class UpdateCheck extends ZettlrCommand {
     try {
       this._response = await got(REPO_URL, {
         method: 'GET',
-        query: new URLSearchParams([
+        searchParams: new URLSearchParams([
           [ 'uuid', global.config.get('uuid') ],
           [ 'accept-beta', global.config.get('checkForBeta') ],
           [ 'platform', process.platform ]
@@ -60,12 +60,12 @@ class UpdateCheck extends ZettlrCommand {
       this._response = this._response.body
     } catch (error) {
       // Give a more detailed error message
-      if (error.statusCode >= 500) {
-        throw new Error(trans('dialog.update.server_error', error.statusCode))
-      } else if (error.statusCode >= 400) {
-        throw new Error(trans('dialog.update.client_error', error.statusCode))
-      } else if (error.statusCode >= 300) {
-        throw new Error(trans('dialog.update.redirect_error', error.statusCode))
+      if (error.response.statusCode >= 500) {
+        throw new Error(trans('dialog.update.server_error', error.response.statusCode))
+      } else if (error.response.statusCode >= 400) {
+        throw new Error(trans('dialog.update.client_error', error.response.statusCode))
+      } else if (error.response.statusCode >= 300) {
+        throw new Error(trans('dialog.update.redirect_error', error.response.statusCode))
       } else if (error.code === 'ENOTFOUND') {
         // getaddrinfo has reported that the host has not been found.
         // This normally only happens if the networking interface is
