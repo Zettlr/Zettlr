@@ -13,11 +13,13 @@ const path = require('path')
 * --mac: Build for macOS
 * --win: Build for Windows
 * --linux: Build for Linux
+* --app-image: Build for AppImage
 */
 
 let flags = process.argv // Contains the CLI flags
 let buildTargets // Contains all build targets
 let onlyDir = false // Is set to true, if --dir flag is given on command line
+const arifactFilenameFormat = 'Zettlr-${version}-${platform}-${arch}.${ext}'
 
 // Set the current working directory to the app's root.
 process.chdir(path.resolve(__dirname, '../'))
@@ -30,7 +32,7 @@ if (flags.length > 2) {
 }
 
 // Extract the build targets
-buildTargets = flags.filter(elem => [ '--mac', '--win', '--linux' ].includes(elem))
+buildTargets = flags.filter(elem => [ '--mac', '--win', '--linux', '--app-image' ].includes(elem))
 
 if (buildTargets.length === 0) {
   // We need at least one build target, so let's assume the current platform
@@ -55,6 +57,14 @@ if (buildTargets.length === 0) {
 log.info('Starting build process')
 log.info(`Building for: ${buildTargets.map(elem => elem.substr(2)).join(', ')}`)
 
+const appImageTarget = [{
+  target: 'AppImage',
+  arch: [
+    'x64',
+    'ia32'
+  ]
+}]
+
 const config = {
   appId: 'com.zettlr.app',
   productName: 'Zettlr',
@@ -62,10 +72,18 @@ const config = {
   copyright: 'Zettlr is licensed under GNU GPL v3.',
   fileAssociations: [
     {
-      ext: [ 'md', 'markdown' ],
+      ext: 'md',
       name: 'Markdown',
-      mimeType: 'text/markdown',
       description: 'Markdown document',
+      mimeType: 'text/markdown',
+      role: 'Editor',
+      isPackage: false
+    },
+    {
+      ext: 'markdown',
+      name: 'Markdown',
+      description: 'Markdown document',
+      mimeType: 'text/markdown',
       role: 'Editor',
       isPackage: false
     }
@@ -78,18 +96,18 @@ const config = {
   mac: {
     category: 'public.app-category.productivity',
     target: (onlyDir) ? 'dir' : 'dmg',
-    artifactName: 'Zettlr-macos-x64-${version}.${ext}', // eslint-disable-line
+    artifactName: arifactFilenameFormat, // eslint-disable-line
     icon: 'resources/icons/icns/icon.icns',
     darkModeSupport: true
   },
   win: {
     target: (onlyDir) ? 'dir' : 'nsis',
-    artifactName: 'Zettlr-win32-x64-${version}.${ext}', // eslint-disable-line
+    artifactName: arifactFilenameFormat, // eslint-disable-line
     icon: 'resources/icons/ico/icon.ico'
   },
   linux: {
-    target: (onlyDir) ? 'dir' : [ 'deb', 'rpm' ],
-    artifactName: 'Zettlr-linux-x64-${version}.${ext}', // eslint-disable-line
+    target: (onlyDir) ? 'dir' : buildTargets.includes('--app-image') ? appImageTarget : [ 'deb', 'rpm' ],
+    artifactName: arifactFilenameFormat, // eslint-disable-line
     synopsis: 'Markdown editor',
     category: 'Office',
     icon: 'resources/icons/png',
@@ -140,6 +158,7 @@ async function runBuilder () {
     if (flag === '--mac') target = Platform.MAC.createTarget()
     if (flag === '--win') target = Platform.WINDOWS.createTarget()
     if (flag === '--linux') target = Platform.LINUX.createTarget()
+    if (flag === '--app-image') target = Platform.LINUX.createTarget()
     await builder.build({ 'targets': target, 'config': config })
     log.success(`Build for ${flag.substr(2)} complete!`)
   }

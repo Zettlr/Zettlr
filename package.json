@@ -21,6 +21,7 @@
         "release:mac": "node scripts/build-app.js --mac",
         "release:win": "node scripts/build-app.js --win",
         "release:linux": "node scripts/build-app.js --linux",
+        "release:app-image": "node scripts/build-app.js --app-image",
         "less": "node scripts/less.js",
         "less:extract": "node scripts/extract-css.js",
         "handlebars": "node scripts/handlebars.js",
