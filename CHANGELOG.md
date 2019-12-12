@@ -36,6 +36,7 @@
 - Added much better heuristics to resolve paths linked to in markdown documents. Except a few edge cases, the algorithm should be able to open most varieties of links.
 - The exporter now escapes the templates to account for potential spaces in the template path.
 - Increased efficiency and cleanliness for loading the fenced code highlighting modes. Thanks to @BAKFR for implementing!
+- Added support for building AppImage releases using the command `yarn release:app-image` (or `npm run release:app-image`). Thanks to @yashha for implementing!
 
 # 1.4.3
 

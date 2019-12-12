@@ -19,7 +19,7 @@ const path = require('path')
 let flags = process.argv // Contains the CLI flags
 let buildTargets // Contains all build targets
 let onlyDir = false // Is set to true, if --dir flag is given on command line
-const arifactFilenameFormat = 'Zettlr-${version}-${platform}-${arch}.${ext}'
+const arifactFilenameFormat = 'Zettlr-${version}-${platform}-${arch}.${ext}' // eslint-disable-line
 
 // Set the current working directory to the app's root.
 process.chdir(path.resolve(__dirname, '../'))
@@ -96,18 +96,18 @@ const config = {
   mac: {
     category: 'public.app-category.productivity',
     target: (onlyDir) ? 'dir' : 'dmg',
-    artifactName: arifactFilenameFormat, // eslint-disable-line
+    artifactName: arifactFilenameFormat,
     icon: 'resources/icons/icns/icon.icns',
     darkModeSupport: true
   },
   win: {
     target: (onlyDir) ? 'dir' : 'nsis',
-    artifactName: arifactFilenameFormat, // eslint-disable-line
+    artifactName: arifactFilenameFormat,
     icon: 'resources/icons/ico/icon.ico'
   },
   linux: {
     target: (onlyDir) ? 'dir' : buildTargets.includes('--app-image') ? appImageTarget : [ 'deb', 'rpm' ],
-    artifactName: arifactFilenameFormat, // eslint-disable-line
+    artifactName: arifactFilenameFormat,
     synopsis: 'Markdown editor',
     category: 'Office',
     icon: 'resources/icons/png',
