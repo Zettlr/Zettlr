@@ -34,6 +34,7 @@
 - Moved out the markdownOpenLink-function from the editor class to the utilities.
 - Added much better heuristics to resolve paths linked to in markdown documents. Except a few edge cases, the algorithm should be able to open most varieties of links.
 - The exporter now escapes the templates to account for potential spaces in the template path.
+- Increased efficiency and cleanliness for loading the fenced code highlighting modes. Thanks to @BAKFR for implementing!
 
 # 1.4.3
 
