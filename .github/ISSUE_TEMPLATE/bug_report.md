@@ -18,10 +18,9 @@ about: Create a report to help us improve
 
 <!-- Please provide information on your operating system -->
 ## Platform
- - OS: [e.g. iOS]
- - OS Version [e.g. 11]
- - Zettlr Version [e.g. 0.15]
- - Screen Resolution [only necessary if the bug is relating to the GUI]
+ - OS and version:
+ - Zettlr Version:
+ - Screen Resolution:
 
 <!-- If there is anything else that might be of interest, please provide it here -->
 ## Additional information
