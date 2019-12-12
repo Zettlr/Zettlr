@@ -24,6 +24,7 @@
 - Added the shortcut `Cmd/Ctrl+T` to create a task list. Thanks to @jeffgeorge for implementing!
 - The blockquote character `>` is not treated as a list-item anymore, meaning you don't have to `Shift-Enter` into the next line anymore to prevent the blockquote from expanding unnecessarily.
 - Implemented a "fat" cursor for the insert mode of Windows, so that when you press the `Ins`-key to toggle between inserting and replacing, Zettlr will graphically announce that you'll now be replacing characters rather than inserting. _Please note that this will only look good for monospaced fonts -- the other themes will have characters that are bigger than the cursor._
+- Improve the tabs display for long titles (e.g. in the preferences dialog).
 
 ## Under the Hood
 
