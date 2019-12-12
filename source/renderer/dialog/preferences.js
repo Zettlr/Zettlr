@@ -215,7 +215,6 @@ class PreferencesDialog extends ZettlrDialog {
       e.preventDefault()
       let primary = e.target.dataset.primary
       let secondary = e.target.dataset.secondary
-      console.log(`Selecting indexes ${primary} and ${secondary}!`)
 
       $('#autoCorrectQuotesDouble')[0].options.selectedIndex = primary
       $('#autoCorrectQuotesSingle')[0].options.selectedIndex = secondary
