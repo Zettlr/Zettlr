@@ -24,8 +24,9 @@ echo "    5. Download the built-in language files"
 echo "    6. Compile Zettlr for Windows"
 echo "    7. Compile Zettlr for macOS"
 echo "    8. Compile Zettlr for Debian and Fedora"
-echo "    9. Generate SHA 256 checksums"
-echo "   10. Check the correctness of the checksums"
+echo "    9. Compile Zettlr for AppImage (Debian and Fedora-based distros)"
+echo "   10. Generate SHA 256 checksums"
+echo "   11. Check the correctness of the checksums"
 echo ""
 echo ""
 
@@ -53,7 +54,7 @@ yarn reveal:build
 # Rebuild a production-ready version of the Vue.js components
 yarn wp:prod
 
-# fetch the most recent translations
+# Fetch the most recent translations
 yarn lang:refresh
 
 # Build NSIS EXE installer
@@ -65,15 +66,19 @@ yarn release:mac
 # Build .deb + .rpm
 yarn release:linux
 
+# Build an AppImage
+yarn release:app-image
+
 # Switch working directory to the release folder.
 cd ./release
 
 # Generate the checksums
 echo "Generating SHA 256 checksums for all installers ..."
-shasum -a 256 "Zettlr-win32-x64-$pkgver.exe" > "SHA256SUMS.txt"
-shasum -a 256 "Zettlr-macos-x64-$pkgver.dmg" >> "SHA256SUMS.txt"
-shasum -a 256 "Zettlr-linux-x64-$pkgver.deb" >> "SHA256SUMS.txt"
-shasum -a 256 "Zettlr-linux-x64-$pkgver.rpm" >> "SHA256SUMS.txt"
+shasum -a 256 "Zettlr-$pkgver.exe" > "SHA256SUMS.txt"
+shasum -a 256 "Zettlr-$pkgver.dmg" >> "SHA256SUMS.txt"
+shasum -a 256 "Zettlr-$pkgver-amd64.deb" >> "SHA256SUMS.txt"
+shasum -a 256 "Zettlr-$pkgver-x86_64.rpm" >> "SHA256SUMS.txt"
+shasum -a 256 "Zettlr-$pkgver-i386.AppImage" >> "SHA256SUMS.txt"
 
 echo ""
 
