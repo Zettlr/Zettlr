@@ -53,7 +53,8 @@ class UpdateCheck extends ZettlrCommand {
         searchParams: new URLSearchParams([
           [ 'uuid', global.config.get('uuid') ],
           [ 'accept-beta', global.config.get('checkForBeta') ],
-          [ 'platform', process.platform ]
+          [ 'platform', process.platform ],
+          [ 'version', CUR_VER ]
         ]).toString()
       })
       // Alright, we only need the body

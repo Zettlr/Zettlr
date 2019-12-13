@@ -25,6 +25,7 @@ const LOG_LEVEL_ERROR = 4
 class LogProvider {
   constructor () {
     this._logPath = path.join(app.getPath('userData'), 'logs')
+    this._cleanLogs() // Remove all older logs
     // Initialise log with pre-boot messages and an initialisation message
     this._log = []
     this._entryPointer = 0 // Set the log entry file pointer to zero
@@ -107,6 +108,26 @@ class LogProvider {
     if (this._win) this._win.webContents.send('log-view-add', msg)
     this._append() // Returns a promise, but the function manages
     // it's own lock-flag
+  }
+
+  /**
+   * Removes old logfiles so that at max there are 30 files present.
+   */
+  async _cleanLogs () {
+    // Get all logs
+    let logfiles = await fs.readdir(this._logPath, 'utf8')
+
+    // Make sure we only have log files, sorted ascending
+    logfiles = logfiles.filter((elem) => /\.log$/.test(elem))
+    logfiles = logfiles.sort()
+
+    // Now use this loop to remove files until there are max 30
+    // files left. Prevents disk space running full.
+    while (logfiles.length > 30) {
+      // Remove the first file from the array
+      let toRemove = path.join(this._logPath, logfiles.shift())
+      await fs.unlink(toRemove)
+    }
   }
 
   /**
