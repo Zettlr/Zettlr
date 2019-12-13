@@ -22,6 +22,18 @@ const ignoreFile = require('../common/util/ignore-file')
 const makeImgPathsAbsolute = require('../common/util/make-img-paths-absolute')
 const countWords = require('../common/util/count-words')
 const { trans } = require('../common/lang/i18n')
+const extractYamlFrontmatter = require('../common/util/extract-yaml-frontmatter')
+
+// This is a list of all possible Pandoc Frontmatter
+// variables that Zettlr may make use of
+const FRONTMATTER_VARS = [
+  'title',
+  'subtitle',
+  'author',
+  'date',
+  'keywords',
+  'lang'
+]
 
 /**
  * Model for accessing files on the filesystem. This class is also capable of
@@ -49,6 +61,7 @@ class ZettlrFile {
     this.modtime = 0 // Modification time
     this.creationtime = 0 // Creation time
     this.linefeed = '\n'
+    this.frontmatter = {} // May contain frontmatter variables
     // This variable is only used to transfer the file contents to and from
     // the renderer. It will be empty all other times, because otherwise the
     // RAM will fill up pretty fast.
@@ -176,6 +189,19 @@ class ZettlrFile {
     this.wordCount = countWords(cnt)
     this.charCount = cnt.length
 
+    // Extract a potential YAML frontmatter
+    let frontmatter = extractYamlFrontmatter(cnt)
+    this.frontmatter = {} // Reset
+    if (frontmatter) {
+      // Here are all supported variables for Pandoc:
+      // https://pandoc.org/MANUAL.html#variables
+      for (let [ key, value ] of Object.entries(frontmatter)) {
+        if (FRONTMATTER_VARS.includes(key)) {
+          this.frontmatter[key] = value
+        }
+      }
+    }
+
     // Create a copy of the code without any code blocks and inline
     // code for the tag and ID extraction methods.
     let mdWithoutCode = cnt.replace(/`{1,3}[^`]+`{1,3}/g, '')
@@ -211,6 +237,12 @@ class ZettlrFile {
       tag = tag.replace(/#/g, '') // Prevent headings levels 2-6 from showing up in the tag list
       if (tag.length > 0) this.tags.push(match[1].toLowerCase())
     }
+
+    // Merge possible keywords from the frontmatter
+    if (this.frontmatter.hasOwnProperty('keywords')) {
+      this.tags = this.tags.concat(this.frontmatter.keywords)
+    }
+
     // Remove duplicates
     this.tags = [...new Set(this.tags)]
 
@@ -285,6 +317,7 @@ class ZettlrFile {
       'ext': this.ext,
       'modtime': this.modtime,
       'creationtime': this.creationtime,
+      'frontmatter': this.frontmatter,
       'content': this.read() // Will only be not empty when the file is modified.
     }
   }
@@ -570,6 +603,7 @@ class ZettlrFile {
       'target': this.target,
       'modtime': this.modtime,
       'creationtime': this.creationtime,
+      'frontmatter': this.frontmatter,
       'linefeed': this.linefeed
     }
   }

@@ -57,7 +57,8 @@
         "uuid": "^3.3.3",
         "v8-compile-cache": "^2.1.0",
         "vue": "^2.6.10",
-        "vuex": "^3.1.2"
+        "vuex": "^3.1.2",
+        "yaml": "^1.7.2"
     },
     "devDependencies": {
         "chalk": "^3.0.0",

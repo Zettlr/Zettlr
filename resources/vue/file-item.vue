@@ -71,7 +71,13 @@
     computed: {
       // We have to explicitly transform ALL properties to computed ones for
       // the reactivity in conjunction with the recycle-scroller.
-      basename: function () { return this.obj.name.replace(this.obj.ext, '') },
+      basename: function () {
+        if (this.obj.frontmatter && this.obj.frontmatter.hasOwnProperty('title')) {
+          return this.obj.frontmatter.title
+        } else {
+          return this.obj.name.replace(this.obj.ext, '')
+        }
+      },
       getHash: function () { return this.obj.hash },
       getId: function () { return this.obj.id },
       getTags: function () { return this.obj.tags },
