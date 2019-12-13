@@ -79,6 +79,7 @@ shasum -a 256 "Zettlr-$pkgver.dmg" >> "SHA256SUMS.txt"
 shasum -a 256 "Zettlr-$pkgver-amd64.deb" >> "SHA256SUMS.txt"
 shasum -a 256 "Zettlr-$pkgver-x86_64.rpm" >> "SHA256SUMS.txt"
 shasum -a 256 "Zettlr-$pkgver-i386.AppImage" >> "SHA256SUMS.txt"
+shasum -a 256 "Zettlr-$pkgver-x86_64.AppImage" >> "SHA256SUMS.txt"
 
 echo ""
 
