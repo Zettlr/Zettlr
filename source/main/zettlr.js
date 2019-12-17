@@ -293,7 +293,7 @@ class Zettlr {
     } else {
       // We need to throw, because the return value of a successful command run
       // may very well also evaluate to null, undefined, false or anything else.
-      global.log.info('No command registered with the application for command ' + evt)
+      global.log.verbose('No command registered with the application for command ' + evt)
       throw new Error('No command registered with the application for command ' + evt)
     }
   }
