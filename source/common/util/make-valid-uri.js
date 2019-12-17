@@ -17,6 +17,7 @@ const path = require('path')
 
 const protocolRE = /^([a-z]{1,10}):\/\//i
 const linkRE = /^[a-z0-9]+\.[a-z0-9]+/i
+const mdFileRE = /[a-z0-9]+\.(?:md|markdown|txt)$/i
 
 module.exports = function (uri, base = '') {
   // Why do we need a helper function for this?
@@ -68,11 +69,14 @@ module.exports = function (uri, base = '') {
       // In this case, it's not a file, but we don't care which
       // protocol it uses.
       isFile = false
-    } else if (linkRE.test(uri)) {
+    } else if (linkRE.test(uri) && !mdFileRE.test(uri)) {
       // NOTE: The regular expression will also test true for
       // relative paths without ./ at the beginning and a folder
       // containing a full stop. But remedification by adding ./
       // is easy in this case for the user.
+      // NOTE: Using mdFileRE we prevent this behaviour for markdown-files
+      // BUT beware: This will treat moldovian TLD domains as Markdown
+      // files. Here, a trailing slash will remedify this.
       isFile = false
     } else {
       isFile = true

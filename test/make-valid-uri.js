@@ -34,8 +34,10 @@ const makeUriTesters = [
   // Relative paths both with and without the leading full stop indicator should be converted absolute
   { 'input': './more/relative.md', 'expected': 'file:///home/foo/documents/more/relative.md' },
   { 'input': 'another/relative.md', 'expected': 'file:///home/foo/documents/another/relative.md' },
-  // This one is expected, as this is a limit for the heuristic.
-  { 'input': 'folder.bundle/file.md', 'expected': 'https://folder.bundle/file.md' },
+  // As this is a .md-file, the heuristic should treat it as a file
+  { 'input': 'folder.bundle/file.md', 'expected': 'file:///home/foo/documents/folder.bundle/file.md' },
+  // This is a moldovan TLD URI. The trailing slash indicates this is not a markdown file.
+  { 'input': 'gov.md/', 'expected': 'https://gov.md/' },
   // Alleviation: Simply make it explicitly relative, either by adding the protocol or with a full stop
   { 'input': 'file://folder.bundle/file.md', 'expected': 'file:///home/foo/documents/folder.bundle/file.md' },
   { 'input': './folder.bundle/file.md', 'expected': 'file:///home/foo/documents/folder.bundle/file.md' }
