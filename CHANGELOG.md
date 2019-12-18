@@ -27,6 +27,7 @@
 - Implemented a "fat" cursor for the insert mode of Windows, so that when you press the `Ins`-key to toggle between inserting and replacing, Zettlr will graphically announce that you'll now be replacing characters rather than inserting. _Please note that this will only look good for monospaced fonts -- the other themes will have characters that are bigger than the cursor._
 - Improve the tabs display for long titles (e.g. in the preferences dialog).
 - The link detection algorithm is now less aggressive.
+- On HTML exports (both revealJS presentations and regular HTML files), image paths will _not_ be absolute anymore, but relative.
 
 ## Under the Hood
 

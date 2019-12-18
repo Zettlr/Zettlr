@@ -18,8 +18,9 @@ const path = require('path')
 module.exports = async function (options) {
   // Prepare the sourceFile path
   options.sourceFile = path.join(options.dest, 'export.tmp')
-  // Then load the file.
-  let cnt = options.file.read({ 'absoluteImagePaths': true })
+  // Then load the file. For revealJS and HTML we do not want absolute paths.
+  let absolutePaths = (![ 'revealjs', 'html' ].includes(options.format.toLowerCase()))
+  let cnt = options.file.read({ 'absoluteImagePaths': absolutePaths })
 
   // Second strip tags if necessary
   if (options.stripTags) cnt = cnt.replace(/(?<= |\n|^)#(#?[A-Z0-9-_]+#?)/gi, '')

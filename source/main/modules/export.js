@@ -51,9 +51,9 @@ const ALLOWED_FORMATS = [
  * @param  {Object} options An options object compatible to ZettlrExport.
  * @return {Promise}         A promise
  */
-async function makeExport (options) {
+module.exports = async function (options) {
   // Check if the format is not invalid
-  if (!ALLOWED_FORMATS.includes(options.format)) {
+  if (!ALLOWED_FORMATS.includes(options.format.toLowerCase())) {
     throw new Error('Unknown format: ' + options.format)
   }
 
@@ -73,7 +73,6 @@ async function makeExport (options) {
   }
 
   // Make sure the PDF key is set, even if we don't use it
-  // Necessary evaluations
   if (!options.hasOwnProperty('pdf')) options.pdf = {}
   if (!options.pdf.hasOwnProperty('toc')) options.pdf.toc = false
   if (!options.pdf.hasOwnProperty('tocDepth')) options.pdf.tocDepth = 0
@@ -132,5 +131,3 @@ async function makeExport (options) {
 
   return options.targetFile // Return the target file for the caller
 }
-
-module.exports = makeExport
