@@ -44,7 +44,8 @@ class Print extends ZettlrCommand {
       'stripLinks': global.config.get('export.stripLinks'),
       'title': file.name.substr(0, file.name.lastIndexOf('.')),
       'author': global.config.get('pdf').author,
-      'autoOpen': false // Do not automatically open the file after export
+      'autoOpen': false, // Do not automatically open the file after export
+      'absoluteImagePaths': true // Explicitly request absolute image paths
     }
 
     // Call the exporter.

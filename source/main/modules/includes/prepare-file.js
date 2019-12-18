@@ -20,6 +20,9 @@ module.exports = async function (options) {
   options.sourceFile = path.join(options.dest, 'export.tmp')
   // Then load the file. For revealJS and HTML we do not want absolute paths.
   let absolutePaths = (![ 'revealjs', 'html' ].includes(options.format.toLowerCase()))
+
+  // Allow overriding via explicitly set property on the options.
+  if (options.hasOwnProperty('absoluteImagePaths')) absolutePaths = options.absoluteImagePaths
   let cnt = options.file.read({ 'absoluteImagePaths': absolutePaths })
 
   // Second strip tags if necessary
