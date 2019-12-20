@@ -148,15 +148,15 @@ class ZettlrEditor {
           CodeMirror.on(completionObject, 'pick', (completion) => {
             // When a user inserts an ID, neither the citeproc IDs nor the
             // tagDB will be loaded, but a generated library containing the
-            // displayText-property.
+            // expandedText-property.
             if (this._currentDatabase !== this._tagDB &&
               this._currentDatabase !== this._citeprocIDs &&
-              completion.displayText) {
-              // We need to add completion.displayText after the completed thing.
+              completion.expandedText) {
+              // We need to add completion.expandedText after the completed thing.
               let cur = JSON.parse(JSON.stringify(cm.getCursor()))
               cur.ch += 2
               cm.setCursor(cur)
-              cm.replaceSelection(' ' + completion.displayText)
+              cm.replaceSelection(' ' + completion.expandedText)
             }
             this._autoCompleteStart = null
             this._currentDatabase = null // Reset the database used for the hints.
@@ -264,9 +264,14 @@ class ZettlrEditor {
           for (let file of flattenDirectoryTree(this._renderer.getCurrentDir())) {
             if (file.type !== 'file') continue
             let fname = path.basename(file.name, path.extname(file.name))
+            let expandedText
+            if(file.id && fname.includes(file.id + ' ')) {
+              expandedText = fname.replace(file.id + ' ', '')
+            }
             db[fname] = {
               'text': file.id || fname, // Use the ID, if given, or the filename
-              'displayText': fname // Always display the filename
+              'displayText': fname, // Always display the filename
+              'expandedText': expandedText || fname // Remove ID from expansion, or use filename
             }
           }
           this._currentDatabase = db
