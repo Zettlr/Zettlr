@@ -50,15 +50,17 @@ function i18n (lang = 'en-US') {
 
   // Cannot do this asynchronously, because it HAS to be loaded directly
   // after the config and written into the global object
-  global.i18n = JSON.parse(fs.readFileSync(file.path, 'utf8'))
+  global.i18nRawData = fs.readFileSync(file.path, 'utf8')
+  global.i18n = JSON.parse(global.i18nRawData)
 
   // Also load the en-US fallback as we can be sure this WILL both stay
   // up to date and will be understood by most people.
   let fallback = getLanguageFile('en-US') // Will return either the shipped or updated file
-  global.i18nFallback = JSON.parse(fs.readFileSync(fallback.path, 'utf8'))
+  global.i18nFallbackRawData = fs.readFileSync(fallback.path, 'utf8')
+  global.i18nFallback = JSON.parse(global.i18nFallbackRawData)
 
   return file
-};
+}
 
 /**
  * This translates a given identifier string into the loaded language
