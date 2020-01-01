@@ -1,3 +1,13 @@
+# (no version assigned)
+
+## GUI and Functionality
+
+(nothing here)
+
+## Under the Hood
+
+- Fixed a small bug that would display a non-intuitive message when checking for updates and the update server is not available.
+
 # 1.5.0
 
 ## GUI and Functionality

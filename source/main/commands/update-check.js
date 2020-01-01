@@ -60,21 +60,28 @@ class UpdateCheck extends ZettlrCommand {
       // Alright, we only need the body
       this._response = this._response.body
     } catch (error) {
+      // Determine the error
+      let serverError = error.response && error.response.statusCode >= 500
+      let clientError = error.response && error.response.statusCode >= 500
+      let redirectError = error.response && error.response.statusCode >= 500
+      let notFoundError = !error.response && error.code === 'ENOTFOUND'
+
       // Give a more detailed error message
-      if (error.response.statusCode >= 500) {
+      if (serverError) {
         throw new Error(trans('dialog.update.server_error', error.response.statusCode))
-      } else if (error.response.statusCode >= 400) {
+      } else if (clientError) {
         throw new Error(trans('dialog.update.client_error', error.response.statusCode))
-      } else if (error.response.statusCode >= 300) {
+      } else if (redirectError) {
         throw new Error(trans('dialog.update.redirect_error', error.response.statusCode))
-      } else if (error.code === 'ENOTFOUND') {
+      } else if (notFoundError) {
         // getaddrinfo has reported that the host has not been found.
         // This normally only happens if the networking interface is
         // offline.
         throw new Error(trans('dialog.update.connection_error'))
       } else {
         // Something else has occurred. TODO: Translate!
-        throw new Error(`Could not check for updates. ${error.code}: ${error.message}`)
+        // GotError objects have a name property.
+        throw new Error(`Could not check for updates. ${error.name}: ${error.message}`)
       }
     }
 
