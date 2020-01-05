@@ -7,6 +7,7 @@
 ## Under the Hood
 
 - Fixed a small bug that would display a non-intuitive message when checking for updates and the update server is not available.
+- Fixed wrong error logging in the Citeproc provider.
 
 # 1.5.0
 

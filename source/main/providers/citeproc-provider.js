@@ -193,7 +193,7 @@ class CiteprocProvider {
         // Didn't work, so let's try to parse it as BibTex data.
         this._cslData = BibTexParser.parse(cslData)
       } catch (e) {
-        global.log.error(err.message, err)
+        global.log.error(e.message, e)
         // Nopey.
         global.ipc.notify(trans('gui.citeproc.error_db'))
         this._status = ERROR
