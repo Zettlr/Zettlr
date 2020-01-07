@@ -166,6 +166,8 @@ pdfborder={0 0 0}
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
+% The following commands are used by Pandoc if a CSL bibliography is present
+% to create proper indentation, especially for styles with hanging indentation.
 $if(csl-refs)$
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
