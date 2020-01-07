@@ -8,6 +8,7 @@
 
 - Fixed a small bug that would display a non-intuitive message when checking for updates and the update server is not available.
 - Fixed wrong error logging in the Citeproc provider.
+- Added the necessary `cslenvironment` to Zettlr's default TeX template so that Pandoc >2.8 does not throw errors. Thanks to @frederik-elwert for implementing!
 
 # 1.5.0
 
