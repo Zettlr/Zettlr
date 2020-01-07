@@ -166,6 +166,15 @@ pdfborder={0 0 0}
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
+$if(csl-refs)$
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newenvironment{cslreferences}%
+{$if(csl-hanging-indent)$\setlength{\parindent}{0pt}%
+\everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces$endif$}%
+{\par}
+$endif$
+
 \title{$PDF_TITLE$}
 \author{$PDF_AUTHOR$}
 
