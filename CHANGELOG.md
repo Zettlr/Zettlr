@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Improved the Math equation detection again. Now it's simpler, faster and will work more reliable. Escaping dollar signs should most of the time not be necessary anymore.
 
 ## Under the Hood
 

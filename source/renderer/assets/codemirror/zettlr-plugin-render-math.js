@@ -12,13 +12,13 @@
 })(function (CodeMirror) {
   'use strict'
 
-  // Matches all inlines and displays with non-escaped (double-)dollar-signs.
-  // Alternatives:
-  // 1. Inline Math Equation, beginning at char 0
-  // 2. Inline Math Equation within a paragraph (preceeded by other chars)
-  // 3. Display Math Equation, beginning at char 0
-  // 4. Display Math Equation within a paragraph (preceeded by other chars)
-  var mathRE = /^\$\$(.*?[^\\$]+?)\$\$|(?<=[^\\$])\$\$(.*?[^\\$]+?)\$\$|^\$(.*?[^\\$]+?)\$|(?<=[^\\])\$(.*?[^\\$]+?)\$/g
+  // Matches all inlines according to the Pandoc documentation
+  // on its tex_math_dollars-extension.
+  // More information: https://pandoc.org/MANUAL.html#math
+  // First alternative is only for single-character-equations
+  // such as $x$. All others are captured by the second alternative.
+  var inlineMathRE = /(?<!\\)\$([^\s\\])\$(?!\d)|(?<!\\)\$([^\s].*?[^\s\\])\$(?!\d)/g
+  var multilineMathRE = /^\s*\$\$\s*$/
   var mathMarkers = []
 
   CodeMirror.commands.markdownRenderMath = function (cm) {
@@ -48,7 +48,7 @@
     for (let i = 0; i < cm.lineCount(); i++) {
       if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
       // Reset the index of the expression everytime we enter a new line.
-      mathRE.lastIndex = 0
+      inlineMathRE.lastIndex = 0
 
       // This array holds all markers to be inserted (either one in case of the
       // final line of a multiline-equation or multiple in case of several
@@ -56,15 +56,15 @@
       let newMarkers = []
 
       let line = cm.getLine(i)
-      if (!isMultiline && line === '$$') {
+      if (!isMultiline && multilineMathRE.test(line)) {
         isMultiline = true
         fromLine = i
         eq = ''
-      } else if (isMultiline && line !== '$$') {
+      } else if (isMultiline && !multilineMathRE.test(line)) {
         // Simply add the line to the equation and continue
         eq += line + '\n'
         continue
-      } else if (isMultiline && line === '$$') {
+      } else if (isMultiline && multilineMathRE.test(line)) {
         // We have left the multiline equation and can render it now.
         isMultiline = false
         newMarkers.push({
@@ -75,12 +75,14 @@
         eq = '' // Reset the equation
       } else {
         // Else: No multiline. Search for inlines.
-        while ((match = mathRE.exec(line)) != null) {
+        while ((match = inlineMathRE.exec(line)) != null) {
           newMarkers.push({
             'curFrom': { 'ch': match.index, 'line': i },
             'curTo': { 'ch': match.index + match[0].length, 'line': i },
-            // An equation may be found in any of the four capturing groups
-            'eq': match[1] || match[2] || match[3] || match[4] || ''
+            // An equation is stored in the first capturing group or
+            // second, depending on whether there only was
+            // one char, or multiple ones within the equation.
+            'eq': match[1] || match[2] || ''
           })
         }
       }
