@@ -15,6 +15,8 @@
   var zknTagRE = /##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?/i
   var highlightRE = /::.+?::|==.+?==/
   var tableRE = /^\|.+\|$/i
+  var inlineMathRE = /^(?:\$[^\s\\]\$(?!\d)|\$[^\s].*?[^\s\\]\$(?!\d))/
+  var blockMathRE = /^\s*\$\$\s*$/
 
   /**
     * This defines the Markdown Zettelkasten system mode, which highlights IDs
@@ -33,6 +35,7 @@
         return {
           startOfFile: true,
           inFrontmatter: false,
+          inEquation: false,
           yamlState: CodeMirror.startState(yamlMode)
         }
       },
@@ -40,6 +43,7 @@
         return {
           startOfFile: state.startOfFile,
           inFrontmatter: state.inFrontmatter,
+          inEquation: state.inEquation,
           // Make sure to correctly copy the YAML state
           yamlState: CodeMirror.copyState(yamlMode, state.yamlState)
         }
@@ -58,10 +62,39 @@
           }
 
           // Continue to parse in YAML mode
-          return yamlMode.token(stream, state) + ' fenced-code'
+          return yamlMode.token(stream, state.yamlState) + ' fenced-code'
         } else if (state.startOfFile) {
           // If no frontmatter was found, set the state to a desirable state
           state.startOfFile = false
+        }
+
+        // End possible block equations immediately
+        // ATTENTION: We have to check for inEquation first, because
+        // otherwise, stream.match() will ALWAYS be executed, hence
+        // falsifying the otherwise correct else-if!!
+        if (stream.sol() && !state.inEquation && stream.match(blockMathRE)) {
+          // We have a multiline equation
+          state.inEquation = true
+          return 'fenced-code'
+        } else if (stream.sol() && state.inEquation && stream.match(blockMathRE)) {
+          // We're leaving the multiline equation
+          state.inEquation = false
+          return 'fenced-code'
+        }
+
+        // // While we're in an equation, simply return fenced-codes
+        if (state.inEquation) {
+          stream.skipToEnd()
+          return 'fenced-code'
+        }
+
+        // Now let's check for inline equations
+        if (stream.match(inlineMathRE, false)) {
+          // Test for possible backspaces
+          if (!stream.sol() && stream.backUp(1) === undefined && stream.next() !== '\\') {
+            stream.match(inlineMathRE)
+            return 'fenced-code'
+          }
         }
 
         // Immediately check for escape characters
@@ -72,9 +105,7 @@
         }
 
         // Implement highlighting
-        if (stream.match(highlightRE)) {
-          return 'highlight'
-        }
+        if (stream.match(highlightRE)) return 'highlight'
 
         // Now dig deeper for more tokens
         let zknIDRE = ''
@@ -137,6 +168,7 @@
                 !stream.match(zknIDRE, false) &&
                 !stream.match(zknLinkRE, false) &&
                 !stream.match(highlightRE, false) &&
+                !stream.match(inlineMathRE, false) &&
                 !stream.match(/\\/, false)) { }
 
         return null

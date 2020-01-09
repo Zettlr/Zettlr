@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Improved the Math equation detection again. Now it's simpler, faster and will work more reliable. Escaping dollar signs should most of the time not be necessary anymore.
+- Added syntax highlighting to inline and block Math equations. Now they're displayed in monospace to make it easier for you to write them.
 
 ## Under the Hood
 
