@@ -17,6 +17,7 @@
   // Pandoc citeproc.
   var citationRE = /(\[[^[\]]*@[^[\]]+\])|(?<=[^\\\S])(@[a-z0-9_:.#$%&\-+?<>~/]+)/gi
   var citeMarkers = [] // CiteMarkers
+  var Citr = require('@zettlr/citr')
 
   CodeMirror.commands.markdownRenderCitations = function (cm) {
     let match
@@ -74,6 +75,13 @@
         let span = document.createElement('span')
         span.className = 'citeproc-citation' // citations
         // The text content will be updated automatically based upon the ID
+        try {
+          // Try to extract the citekeys for the context menu to list them
+          let key = Citr.parseSingle(citation).map(elem => elem.id).join(',')
+          span.dataset.citekeys = key // data-citekeys="key1,key2"
+        } catch (err) {
+          // Do nothing
+        }
         span.textContent = citation
         // Apply TextMarker
         try {

@@ -51,6 +51,7 @@ class ZettlrCon {
     if (!menutpl) throw new Error('No menutpl detected!')
 
     let menu = []
+    let attributeKeys = attributes.map(elem => elem.name) // Ease of access
 
     // Traverse the submenu and apply
     for (let item of menutpl) {
@@ -93,6 +94,18 @@ class ZettlrCon {
         click: () => {
           require('electron').remote.getCurrentWindow().inspectElement(this._pos.x, this._pos.y)
         }
+      })
+    }
+
+    if (scopes.includes('editor') && attributeKeys.includes('data-citekeys')) {
+      let keys = attributes[attributeKeys.indexOf('data-citekeys')].value.split(',')
+      // Add menu items for all cite keys to open the corresponding PDFs
+      menu.push({ 'type': 'separator' })
+      menu.push({
+        label: trans('menu.open_attachment'),
+        // The following line is an hommage to Python developers, a language
+        // whose sole purpose is to stuff as much code into one single line as possible.
+        submenu: keys.map(elem => { return { label: elem, click: () => { global.ipc.send('open-attachment', { 'citekey': elem }) } } })
       })
     }
 
@@ -170,6 +183,7 @@ class ZettlrCon {
         attr.push({ 'name': nodes.item(i).nodeName, 'value': nodes.item(i).nodeValue })
       }
     } else if (elem.parents('#editor').length > 0) {
+      scopes.push('editor')
       // If the word is spelled wrong, request suggestions
       if (elem.hasClass('cm-spell-error')) {
         let suggestions = global.typo.suggest(elem.text())
@@ -204,6 +218,12 @@ class ZettlrCon {
         })
         // Final separator
         typoPrefix.push({ type: 'separator' })
+      }
+      // Push all attributes into the attributes array
+      for (let i = 0, nodes = elem[0].attributes; i < elem[0].attributes.length; i++) {
+        if (!nodes.item(i).nodeValue) continue // Don't include empty attributes
+        // The attributes are a NamedNodeMap, so we have to use weird function calling to retrieve them
+        attr.push({ 'name': nodes.item(i).nodeName, 'value': nodes.item(i).nodeValue })
       }
       menupath = 'editor.json'
     } else if (elem.is('input[type="text"]') || elem.is('textarea')) {

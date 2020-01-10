@@ -24,6 +24,7 @@ const Citr = require('@zettlr/citr') // Parse the citations from the renderer
 const fs = require('fs')
 const path = require('path')
 const { trans } = require('../../common/lang/i18n')
+const extractBibTexAttachments = require('../../common/util/extract-bibtex-attachments')
 const BibTexParser = require('astrocite-bibtex')
 
 // Statuses the engine can be in
@@ -47,6 +48,7 @@ class CiteprocProvider {
     this._mainStyle = fs.readFileSync(path.join(__dirname, `../assets/csl-styles/${this._styleID}.csl`), 'utf8')
     this._engine = null // Holds the CSL engine
     this._cslData = null // Holds the parsed CSL data (JSON)
+    this._bibtexAttachments = null // Holds the bibtex-attachments, if applicable
     this._items = {} // ID-accessible CSL data array.
     this._ids = Object.create(null) // Database index array
     this._idHint = Object.create(null) // The IDs that can be used for autocompletion
@@ -81,7 +83,11 @@ class CiteprocProvider {
         }
       },
       updateItems: (idList) => { return this.updateItems(idList) },
-      makeBibliography: () => { return this.makeBibliography() }
+      makeBibliography: () => { return this.makeBibliography() },
+      hasBibTexAttachments: () => {
+        return this._bibtexAttachments !== null && Object.keys(this._bibtexAttachments).length > 0
+      },
+      getBibTexAttachments: (id) => { return this._bibtexAttachments[id] }
     }
 
     // Be notified of potential updates
@@ -192,6 +198,11 @@ class CiteprocProvider {
       try {
         // Didn't work, so let's try to parse it as BibTex data.
         this._cslData = BibTexParser.parse(cslData)
+        // If we're here, we had a BibTex library --> extract the attachments
+        try {
+          let attachments = extractBibTexAttachments(cslData, path.dirname(this._mainLibrary))
+          this._bibtexAttachments = attachments
+        } catch (err) { /* Do nothing */ }
       } catch (e) {
         global.log.error(e.message, e)
         // Nopey.
@@ -334,6 +345,7 @@ class CiteprocProvider {
     this._status = NOT_LOADED
     this._engine = null
     this._ids = Object.create(null)
+    this._bibtexAttachments = null
     if (this._watcher != null) {
       this._watcher.close()
       this._watcher = null
