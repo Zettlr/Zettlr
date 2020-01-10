@@ -5,7 +5,7 @@
             "ScaredCoward"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-12-01T16:09:30.000000Z"
+        "updated_at": "2020-01-10T12:09:43.000000Z"
     },
     "dialog": {
         "about": {
@@ -472,6 +472,7 @@
         "new_vd": "New virtual directory\u2026",
         "no_suggestions": "No suggestions",
         "open": "Open\u2026",
+        "open_attachment": "Open Attachment",
         "open_link": "Open Link",
         "pandoc": "Get Pandoc",
         "paste": "Paste",
@@ -557,6 +558,7 @@
             "no_pandoc_title": "Pandoc not found",
             "no_xelatex_message": "Zettlr couldn't detect a LaTeX-distribution on this system. Please install LaTeX prior to exporting to PDF.",
             "no_xelatex_title": "LaTeX not found",
+            "open_attachment_error": "Could not open attachment. Is Zotero running?",
             "open_root_error": "Could not open %s",
             "open_url_error": "Could not open %s",
             "pandoc_error_message": "Pandoc reported an error: %s",

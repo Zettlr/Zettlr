@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2019-12-01T16:09:21.000000Z"
+        "updated_at": "2020-01-10T12:10:03.000000Z"
     },
     "dialog": {
         "about": {
@@ -471,6 +471,7 @@
         "new_vd": "Neues virtuelles Verzeichnis\u2026",
         "no_suggestions": "Keine Vorschl\u00e4ge",
         "open": "\u00d6ffnen\u2026",
+        "open_attachment": "Dateianhang \u00f6ffnen",
         "open_link": "Link \u00f6ffnen",
         "pandoc": "Pandoc installieren",
         "paste": "Einf\u00fcgen",
@@ -556,6 +557,7 @@
             "no_pandoc_title": "Pandoc nicht gefunden",
             "no_xelatex_message": "Es wurde keine LaTeX-Installation gefunden. Bitte installiere zun\u00e4chst LaTeX, um nach PDF zu exportieren.",
             "no_xelatex_title": "LaTeX nicht gefunden",
+            "open_attachment_error": "Konnte Anhang nicht \u00f6ffnen. L\u00e4uft Zotero?",
             "open_root_error": "Konnte Datei %s nicht \u00f6ffnen",
             "open_url_error": "Konnte %s nicht \u00f6ffnen",
             "pandoc_error_message": "Pandoc hat beim Export folgenden Fehler ausgegeben: %s",
