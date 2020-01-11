@@ -15,6 +15,7 @@ require('codemirror/addon/mode/multiplex') // Multiplex needed for syntax highli
 require('codemirror/addon/edit/closebrackets')
 require('./continuelist.js')
 require('./indentlist.js')
+require('codemirror/keymap/sublime') // This will load the extra commands from SublimeText
 
 // 3. Display addons
 require('codemirror/addon/display/fullscreen')

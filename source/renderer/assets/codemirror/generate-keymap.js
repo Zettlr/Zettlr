@@ -17,12 +17,15 @@ module.exports = function (editor) {
     CodeMirror.commands['newlineAndIndent'](cm)
   }
   keymap['Shift-Ctrl-Enter'] = (cm) => {
-    console.log('Inserting line above')
     // Implement middle-of-line insert line above behaviour (see #101)
     CodeMirror.commands['goLineUp'](cm)
     CodeMirror.commands['goLineEnd'](cm)
     CodeMirror.commands['newlineAndIndent'](cm)
   }
+
+  // Swap lines in the editor (mostly useful for lists)
+  keymap['Alt-Up'] = 'swapLineUp'
+  keymap['Alt-Down'] = 'swapLineDown'
 
   // macOS only shortcuts
   if (process.platform === 'darwin') {
