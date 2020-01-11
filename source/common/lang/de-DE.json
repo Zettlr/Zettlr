@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-01-11T16:08:28.000000Z"
+        "updated_at": "2020-01-11T18:08:10.000000Z"
     },
     "dialog": {
         "about": {
@@ -305,6 +305,10 @@
                 "id_generator_label": "Muster f\u00fcr neue IDs",
                 "id_label": "ID Regul\u00e4rer Ausdruck (RegEx)",
                 "intro": "Hier kannst du Zettlr so einstellen, dass es mit deinem bisherigen Ablauf funktioniert. Die ID basiert auf regul\u00e4ren Ausdr\u00fccken (RegEx), also achte darauf, Sonderzeichen zu escapen. Du kannst die Erstellung und Erkennung von IDs mit dem Button testen. Im Handbuch stehen alle verf\u00fcgbaren Variablen f\u00fcr das ID-Muster.",
+                "link_behaviour_always": "immer an",
+                "link_behaviour_description": "Beim Verlinken von Dateien, f\u00fcge den Dateinamen \u2026",
+                "link_behaviour_id": "nur an, wenn mit ID verlinkt wird",
+                "link_behaviour_never": "niemals an",
                 "linkend_label": "Link-Ende",
                 "linkstart_label": "Link-Anfang",
                 "pass_check_no": "Der regul\u00e4re Ausdruck hat die ID nicht erkannt.",

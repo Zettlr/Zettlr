@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-01-11T16:07:44.000000Z"
+        "updated_at": "2020-01-11T18:06:50.000000Z"
     },
     "dialog": {
         "about": {
@@ -305,6 +305,10 @@
                 "id_generator_label": "Pattern used to generate new IDs",
                 "id_label": "ID regular expression",
                 "intro": "On this page you can adjust Zettlr to work with your existing Zettelkasten workflow. The ID is based upon regular expressions, so please make sure to escape RegEx-characters that literally occur in your IDs. Test the generation (and detection) of IDs by clicking the button below. Check the manual to see all possible variables for the ID generator.",
+                "link_behaviour_always": "always",
+                "link_behaviour_description": "When linking files, add the filename \u2026",
+                "link_behaviour_id": "only when linking using the ID",
+                "link_behaviour_never": "never",
                 "linkend_label": "Link ending",
                 "linkstart_label": "Link start",
                 "pass_check_no": "Your regular expression did not match the generated ID.",

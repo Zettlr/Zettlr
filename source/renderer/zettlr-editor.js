@@ -146,17 +146,32 @@ class ZettlrEditor {
           }
           // Set the autocomplete to false as soon as the user has actively selected something.
           CodeMirror.on(completionObject, 'pick', (completion) => {
-            // When a user inserts an ID, neither the citeproc IDs nor the
-            // tagDB will be loaded, but a generated library containing the
-            // displayText-property.
+            // In case the user wants to link a file, intercept during
+            // the process and add the file link according to the user's
+            // preference settings.
             if (this._currentDatabase !== this._tagDB &&
               this._currentDatabase !== this._citeprocIDs &&
               completion.displayText) {
-              // We need to add completion.displayText after the completed thing.
+              // Get the correct setting
+              let linkPref = global.config.get('zkn.linkWithFilename')
+              // We need to know how far we should advance the cursor
+              let linkEndingLength = this._cm.getOption('zkn').linkEnd.length
+              // Prepare the text to insert, removing the ID if found in the filename
+              let text = completion.displayText
+              if (completion.id && text.indexOf(completion.id) >= 0) {
+                text = text.replace(completion.id, '').trim()
+              }
+              // In case the whole filename consists of the ID, well.
+              // Then, have your ID duplicated.
+              if (text.length === 0) text = completion.displayText
+              // Advance the cursor so that it is outside of the link again
               let cur = JSON.parse(JSON.stringify(cm.getCursor()))
-              cur.ch += 2
+              cur.ch += linkEndingLength
               cm.setCursor(cur)
-              cm.replaceSelection(' ' + completion.displayText)
+              if (linkPref === 'always' || (linkPref === 'withID' && completion.id)) {
+                // We need to add the text after the link.
+                cm.replaceSelection(' ' + text)
+              }
             }
             this._autoCompleteStart = null
             this._currentDatabase = null // Reset the database used for the hints.
@@ -266,7 +281,8 @@ class ZettlrEditor {
             let fname = path.basename(file.name, path.extname(file.name))
             db[fname] = {
               'text': file.id || fname, // Use the ID, if given, or the filename
-              'displayText': fname // Always display the filename
+              'displayText': fname, // Always display the filename
+              'id': file.id || false
             }
           }
           this._currentDatabase = db

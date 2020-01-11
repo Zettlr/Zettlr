@@ -388,6 +388,30 @@
               <li><strong>%uuid4</strong>: Universally Unique Identifier (UUID) v4</li>
             </ul>
           </p>
+          {{!-- Add the preferences to determine file linking --}}
+          <hr>
+          {{i18n "dialog.preferences.zkn.link_behaviour_description"}}
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="zkn.linkWithFilename" value="always" id="pref-link-always" {{#ifCond zkn.linkWithFilename '=' 'always'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-link-always">{{i18n "dialog.preferences.zkn.link_behaviour_always"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="zkn.linkWithFilename" value="withID" id="pref-link-with-id" {{#ifCond zkn.linkWithFilename '=' 'withID'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-link-with-id">{{i18n "dialog.preferences.zkn.link_behaviour_id"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="zkn.linkWithFilename" value="never" id="pref-link-never" {{#ifCond zkn.linkWithFilename '=' 'never'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-link-never">{{i18n "dialog.preferences.zkn.link_behaviour_never"}}</label>
+          </div>
         </div>
       </div>
 
