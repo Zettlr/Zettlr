@@ -292,6 +292,6 @@
     cm.doc.setCursor(oldCursor)
   }
 
-  CodeMirror.keyMap['default']['Ctrl-Alt-F'] = 'insertFootnote'
-  CodeMirror.keyMap['default']['Cmd-Alt-R'] = 'insertFootnote'
+  if (process.platform !== 'darwin') CodeMirror.keyMap['default']['Ctrl-Alt-F'] = 'insertFootnote'
+  if (process.platform === 'darwin') CodeMirror.keyMap['default']['Cmd-Alt-R'] = 'insertFootnote'
 })

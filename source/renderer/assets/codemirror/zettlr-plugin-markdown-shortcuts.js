@@ -586,16 +586,19 @@ const { clipboard } = require('electron');
   }
 
   // Add all commands to the default keymap
-  CodeMirror.keyMap['default']['Cmd-B'] = 'markdownBold'
-  CodeMirror.keyMap['default']['Ctrl-B'] = 'markdownBold'
-  CodeMirror.keyMap['default']['Cmd-I'] = 'markdownItalic'
-  CodeMirror.keyMap['default']['Ctrl-I'] = 'markdownItalic'
-  CodeMirror.keyMap['default']['Cmd-K'] = 'markdownLink'
-  CodeMirror.keyMap['default']['Ctrl-K'] = 'markdownLink'
-  CodeMirror.keyMap['default']['Shift-Cmd-I'] = 'markdownImage'
-  CodeMirror.keyMap['default']['Shift-Ctrl-I'] = 'markdownImage'
-  CodeMirror.keyMap['default']['Shift-Cmd-C'] = 'markdownComment'
-  CodeMirror.keyMap['default']['Shift-Ctrl-C'] = 'markdownComment'
-  CodeMirror.keyMap['default']['Cmd-T'] = 'markdownMakeTaskList'
-  CodeMirror.keyMap['default']['Ctrl-T'] = 'markdownMakeTaskList'
+  if (process.platform === 'darwin') {
+    CodeMirror.keyMap['default']['Cmd-T'] = 'markdownMakeTaskList'
+    CodeMirror.keyMap['default']['Shift-Cmd-C'] = 'markdownComment'
+    CodeMirror.keyMap['default']['Shift-Cmd-I'] = 'markdownImage'
+    CodeMirror.keyMap['default']['Cmd-K'] = 'markdownLink'
+    CodeMirror.keyMap['default']['Cmd-I'] = 'markdownItalic'
+    CodeMirror.keyMap['default']['Cmd-B'] = 'markdownBold'
+  } else {
+    CodeMirror.keyMap['default']['Ctrl-T'] = 'markdownMakeTaskList'
+    CodeMirror.keyMap['default']['Shift-Ctrl-C'] = 'markdownComment'
+    CodeMirror.keyMap['default']['Shift-Ctrl-I'] = 'markdownImage'
+    CodeMirror.keyMap['default']['Ctrl-K'] = 'markdownLink'
+    CodeMirror.keyMap['default']['Ctrl-I'] = 'markdownItalic'
+    CodeMirror.keyMap['default']['Ctrl-B'] = 'markdownBold'
+  }
 })

@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - **New Feature**: Zettlr is now able to open file attachments for citations in your files. Simply right-click a citation, go to "Open Attachment" and select the cite-key for which you want to open the file attachment. Got multiple? Here's how Zettlr chooses which one to open: All attachments are listed and then the PDF files are sorted on top of the list. Then, Zettlr will open whatever attachment is the first in the list.
+- Cleaned up the shortcuts. Until now, `Ctrl+B` would also make text bold on macOS. Now, only `Cmd+B` will work, while `Ctrl+B` will only work on non-Apple systems.
 - Improved the Math equation detection again. Now it's simpler, faster and will work more reliable. Escaping dollar signs should most of the time not be necessary anymore.
 - Added syntax highlighting to inline and block Math equations. Now they're displayed in monospace to make it easier for you to write them.
 
