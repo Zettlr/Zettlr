@@ -20,8 +20,7 @@ const ZettlrCommand = require('./zettlr-command')
 const { trans } = require('../../common/lang/i18n')
 const got = require('got')
 const { shell } = require('electron')
-
-const pdfRE = /\.pdf$/i
+const pdfSorter = require('../../common/util/sort-by-pdf')
 
 class OpenAttachment extends ZettlrCommand {
   constructor (app) {
@@ -58,14 +57,7 @@ class OpenAttachment extends ZettlrCommand {
       // Now map the result set. It will contain ALL attachments.
       let allAttachments = res.result.map(elem => elem.path)
       // Sort them with PDFs on top
-      allAttachments = allAttachments.sort((a, b) => {
-        let isAPDF = pdfRE.test(a)
-        let isBPDF = pdfRE.test(b)
-
-        if (isAPDF && isBPDF) return 0
-        if (isAPDF) return -1
-        if (isBPDF) return 1
-      })
+      allAttachments = allAttachments.sort(pdfSorter)
       return shell.openItem(allAttachments[0])
     } catch (err) {
       global.log.error('Could not open attachment.', err.message)

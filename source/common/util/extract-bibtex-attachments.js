@@ -14,21 +14,7 @@
 
 const path = require('path')
 const AstrociteAST = require('astrocite').bibtex.AST
-const pdfRE = /\.pdf$/i
-
-/**
- * Sorting function that sorts PDF files to be at the top
- * @param {String} a The first comparator
- * @param {String} b The second comparator
- */
-function pdfSorter (a, b) {
-  let isAPDF = pdfRE.test(a)
-  let isBPDF = pdfRE.test(b)
-
-  if (isAPDF && isBPDF) return 0
-  if (isAPDF) return -1
-  if (isBPDF) return 1
-}
+const pdfSorter = require('./sort-by-pdf')
 
 /**
  * Returns a dictionary in the form citeKey: Array(files)
