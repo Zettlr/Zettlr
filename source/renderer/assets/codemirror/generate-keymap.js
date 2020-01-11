@@ -5,38 +5,56 @@ const CodeMirror = require('codemirror')
 
 module.exports = function (editor) {
   let homeEndBehaviour = global.config.get('editor.homeEndBehaviour')
+  let keymap = {}
 
-  // Returns a CodeMirror keymap for the main editor, aware of potential settings.
-  return CodeMirror.normalizeKeyMap({
-    'Cmd-F': false, // Disable the internal search on macOS
-    'Ctrl-F': false, // Disable the internal search on Windows + Linux
-    'Alt-B': false, // Disable word-backwarding on macOS (handled by Alt+ArrowLeft)
-    'Alt-F': false, // Disable word-forwarding on macOS (handled by Alt+ArrowRight)
-    'Enter': 'newlineAndIndentContinueMarkdownList',
-    'Tab': 'autoIndentMarkdownList',
-    'Shift-Tab': 'autoUnindentMarkdownList',
+  // Crossplatform shortcuts
+  keymap['Enter'] = 'newlineAndIndentContinueMarkdownList'
+  keymap['Tab'] = 'autoIndentMarkdownList'
+  keymap['Shift-Tab'] = 'autoUnindentMarkdownList'
+  keymap['Ctrl-Enter'] = (cm) => {
+    // Implement middle-of-line insert line below behaviour (see #101)
+    CodeMirror.commands['goLineEnd'](cm)
+    CodeMirror.commands['newlineAndIndent'](cm)
+  }
+  keymap['Shift-Ctrl-Enter'] = (cm) => {
+    console.log('Inserting line above')
+    // Implement middle-of-line insert line above behaviour (see #101)
+    CodeMirror.commands['goLineUp'](cm)
+    CodeMirror.commands['goLineEnd'](cm)
+    CodeMirror.commands['newlineAndIndent'](cm)
+  }
+
+  // macOS only shortcuts
+  if (process.platform === 'darwin') {
+    keymap['Cmd-F'] = false // Disable the internal search
+    keymap['Ctrl-F'] = false // Disable the internal search
+    keymap['Alt-B'] = false // Disable word-backwarding on macOS (handled by Alt+ArrowLeft)
+    keymap['Alt-F'] = false // Disable word-forwarding on macOS (handled by Alt+ArrowRight)
+    keymap['Cmd-Shift-V'] = (cm) => { editor.pasteAsPlain() }
+    keymap['Cmd-Alt-R'] = 'insertFootnote'
+    keymap['Cmd-T'] = 'markdownMakeTaskList'
+    keymap['Shift-Cmd-C'] = 'markdownComment'
+    keymap['Shift-Cmd-I'] = 'markdownImage'
+    keymap['Cmd-K'] = 'markdownLink'
+    keymap['Cmd-I'] = 'markdownItalic'
+    keymap['Cmd-B'] = 'markdownBold'
+  } else {
+    // Windows/Linux/other shortcuts
+    keymap['Ctrl-F'] = false // Disable the internal search
     // If homeEndBehaviour is true, use defaults (paragraph start/end), if it's
     // false, use visible lines.
-    'Home': (homeEndBehaviour) ? 'goLineStart' : 'goLineLeftSmart',
-    'End': (homeEndBehaviour) ? 'golineEnd' : 'goLineRight',
-    'Ctrl-Enter': (cm) => {
-      // Implement middle-of-line insert line below behaviour (see #101)
-      CodeMirror.commands['goLineEnd'](cm)
-      CodeMirror.commands['newlineAndIndent'](cm)
-    },
-    'Shift-Ctrl-Enter': (cm) => {
-      // Implement middle-of-line insert line above behaviour (see #101)
-      CodeMirror.commands['goLineUp'](cm)
-      CodeMirror.commands['goLineEnd'](cm)
-      CodeMirror.commands['newlineAndIndent'](cm)
-    },
-    // We need to override the default behaviour
-    'Ctrl-Shift-V': (cm) => {
-      if (process.platform === 'darwin') return
-      editor.pasteAsPlain()
-    },
-    'Cmd-Shift-V': (cm) => {
-      editor.pasteAsPlain()
-    }
-  })
+    keymap['Home'] = (homeEndBehaviour) ? 'goLineStart' : 'goLineLeftSmart'
+    keymap['End'] = (homeEndBehaviour) ? 'golineEnd' : 'goLineRight'
+    keymap['Ctrl-Shift-V'] = (cm) => { editor.pasteAsPlain() }
+    keymap['Ctrl-Alt-F'] = 'insertFootnote'
+    keymap['Ctrl-T'] = 'markdownMakeTaskList'
+    keymap['Shift-Ctrl-C'] = 'markdownComment'
+    keymap['Shift-Ctrl-I'] = 'markdownImage'
+    keymap['Ctrl-K'] = 'markdownLink'
+    keymap['Ctrl-I'] = 'markdownItalic'
+    keymap['Ctrl-B'] = 'markdownBold'
+  }
+
+  // Returns a CodeMirror keymap for the main editor, aware of potential settings.
+  return CodeMirror.normalizeKeyMap(keymap)
 }
