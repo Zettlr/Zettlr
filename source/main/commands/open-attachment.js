@@ -35,13 +35,20 @@ class OpenAttachment extends ZettlrCommand {
   async run (evt, arg) {
     if (!arg.citekey || typeof arg.citekey !== 'string') return false
 
+    let appearsToHaveNoAttachments = false
+
     // First let's see if we've got BibTex attachments, so we can
     // circumvent the Zotero thing directly
     if (global.citeproc.hasBibTexAttachments()) {
       let attachments = global.citeproc.getBibTexAttachments(arg.citekey)
-      if (attachments) {
+      if (attachments && attachments.length === 0) {
+        appearsToHaveNoAttachments = true
+      } else if (attachments) {
         return shell.openItem(attachments[0])
-      } // Else: Try Zotero
+      } else {
+        // Try Zotero, but indicate that there might not be attachments
+        appearsToHaveNoAttachments = true
+      }
     }
 
     // Thanks to @retorquere, we can query the better bibtex JSON RPC
@@ -54,14 +61,22 @@ class OpenAttachment extends ZettlrCommand {
           'params': [arg.citekey]
         }
       }).json()
+      if (res.result.length === 0) appearsToHaveNoAttachments = true
       // Now map the result set. It will contain ALL attachments.
       let allAttachments = res.result.map(elem => elem.path)
       // Sort them with PDFs on top
       allAttachments = allAttachments.sort(pdfSorter)
       return shell.openItem(allAttachments[0])
     } catch (err) {
-      global.log.error('Could not open attachment.', err.message)
-      global.ipc.notify(trans('system.error.open_attachment_error'))
+      if (appearsToHaveNoAttachments) {
+        // Better error message
+        let msg = trans('system.error.citation_no_attachments', arg.citekey)
+        global.log.info(msg)
+        global.ipc.notify(msg)
+      } else {
+        global.log.error('Could not open attachment.', err.message)
+        global.ipc.notify(trans('system.error.open_attachment_error'))
+      }
       return false
     }
   }

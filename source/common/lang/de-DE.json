@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-01-10T12:10:03.000000Z"
+        "updated_at": "2020-01-11T16:08:28.000000Z"
     },
     "dialog": {
         "about": {
@@ -534,6 +534,7 @@
             "already_exists_message": "Die Datei bzw. das Verzeichnis %s existiert am Zielort bereits.",
             "already_exists_title": "Kann Datei oder Verzeichnis nicht verschieben",
             "cancel_remove": "Abbrechen",
+            "citation_no_attachments": "Die Referenz mit dem Schl\u00fcssel %s scheint keine Anh\u00e4nge zu haben.",
             "could_not_create_dir": "Konnte Verzeichnis nicht erstellen",
             "could_not_create_file": "Konnte Datei nicht erstellen",
             "could_not_save_image": "Konnte Bild nicht speichern",
