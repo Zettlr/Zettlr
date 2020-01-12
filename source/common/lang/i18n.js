@@ -42,10 +42,11 @@ const FALLBACK = 'fallback'
 
 /**
  * This function loads a language JSON file specified by lang into the global i18n-object
+ * It must be used only in the main process; renderer processes must call loadI18nRenderer() instead.
  * @param  {String} [lang='en-US'] The language to be loaded
  * @return {Object}                The language metadata object.
  */
-function i18n (lang = 'en-US') {
+function loadI18nMain (lang = 'en-US') {
   let file = getLanguageFile(lang) // Will return a working path
 
   // Cannot do this asynchronously, because it HAS to be loaded directly
@@ -324,7 +325,7 @@ function enumDictFiles (paths = [ path.join(app.getPath('userData'), '/dict'), p
 }
 
 module.exports = {
-  i18n,
+  loadI18nMain,
   trans,
   getDictionaryFile,
   getLanguageFile,

@@ -26,7 +26,7 @@ const ZettlrFile = require('./zettlr-file.js')
 const ZettlrDeadDir = require('./zettlr-dead-dir.js')
 const ZettlrTargets = require('./zettlr-targets.js')
 const ZettlrStats = require('./zettlr-stats.js')
-const { i18n, trans } = require('../common/lang/i18n')
+const { loadI18nMain, trans } = require('../common/lang/i18n')
 const hash = require('../common/util/hash')
 const ignoreDir = require('../common/util/ignore-dir')
 const ignoreFile = require('../common/util/ignore-file')
@@ -70,7 +70,7 @@ class Zettlr {
     this._bootServiceProviders()
 
     // Init translations
-    let metadata = i18n(global.config.get('appLang'))
+    let metadata = loadI18nMain(global.config.get('appLang'))
 
     // It may be that only a fallback has been provided or else. In this case we
     // must update the config to reflect this.
