@@ -13,6 +13,7 @@
  * END HEADER
  */
 
+const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
 const ipc = require('electron').ipcRenderer
 const path = require('path')
 
@@ -35,7 +36,7 @@ class ZettlrPrintWindow {
 
     // as this class basically acts as the renderer class, we also have to take
     // care of specifics such as getting the translation strings, etc.
-    global.i18n = JSON.parse(JSON.stringify(require('electron').remote.getGlobal('i18n')))
+    loadI18nRenderer()
 
     // Directly inject the correct body class
     $('body').addClass(process.platform)

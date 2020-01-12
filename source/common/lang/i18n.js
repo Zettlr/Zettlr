@@ -42,23 +42,26 @@ const FALLBACK = 'fallback'
 
 /**
  * This function loads a language JSON file specified by lang into the global i18n-object
+ * It must be used only in the main process; renderer processes must call loadI18nRenderer() instead.
  * @param  {String} [lang='en-US'] The language to be loaded
  * @return {Object}                The language metadata object.
  */
-function i18n (lang = 'en-US') {
+function loadI18nMain (lang = 'en-US') {
   let file = getLanguageFile(lang) // Will return a working path
 
   // Cannot do this asynchronously, because it HAS to be loaded directly
   // after the config and written into the global object
-  global.i18n = JSON.parse(fs.readFileSync(file.path, 'utf8'))
+  global.i18nRawData = fs.readFileSync(file.path, 'utf8')
+  global.i18n = JSON.parse(global.i18nRawData)
 
   // Also load the en-US fallback as we can be sure this WILL both stay
   // up to date and will be understood by most people.
   let fallback = getLanguageFile('en-US') // Will return either the shipped or updated file
-  global.i18nFallback = JSON.parse(fs.readFileSync(fallback.path, 'utf8'))
+  global.i18nFallbackRawData = fs.readFileSync(fallback.path, 'utf8')
+  global.i18nFallback = JSON.parse(global.i18nFallbackRawData)
 
   return file
-};
+}
 
 /**
  * This translates a given identifier string into the loaded language
@@ -322,7 +325,7 @@ function enumDictFiles (paths = [ path.join(app.getPath('userData'), '/dict'), p
 }
 
 module.exports = {
-  i18n,
+  loadI18nMain,
   trans,
   getDictionaryFile,
   getLanguageFile,
