@@ -15,6 +15,7 @@
 - Fixed wrong error logging in the Citeproc provider.
 - Added the necessary `cslenvironment` to Zettlr's default TeX template so that Pandoc >2.8 does not throw errors. Thanks to @frederik-elwert for implementing!
 - Cleaned up the keymap for CodeMirror. It's now centralised within `generate-keymap.js` and not scattered in all the plugins anymore.
+- Rewrote the i18n loading logic, resulting in huge performance gains on startup. Thanks to @BAKFR for implementing!
 
 # 1.5.0
 
