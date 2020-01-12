@@ -462,23 +462,53 @@ class ZettlrFile {
   search (terms) {
     let matches = 0
 
-    // First match the title and tags (faster results)
-    for (let t of terms) {
+    // Initialise the content variables (needed to check for NOT operators)
+    let cnt = this.read()
+    let cntLower = cnt.toLowerCase()
+
+    // Immediately search for not operators
+    let notOperators = terms.filter(elem => elem.operator === 'NOT')
+    if (notOperators.length > 0) {
+      for (let not of notOperators) {
+        // NOT is a strict stop indicator, meaning that if
+        // one NOT is found in the file, the whole file is
+        // disqualified as a candidate.
+        if (
+          cntLower.indexOf(not.word.toLowerCase()) > -1 ||
+          this.name.toLowerCase().indexOf(not.word.toLowerCase()) > -1
+        ) {
+          return []
+        }
+      }
+    }
+
+    // If we've reached this point, there was no stop. However,
+    // it might be, that there are no other terms left, that is:
+    // the user wanted to simply *exclude* files. What do we do?
+    // Easy, look above: We'll be returning an object to indicate
+    // *as if* this file had a filename match.
+    if (notOperators.length === terms.length) { return [{ line: -1, restext: this.name, 'weight': 2 }] }
+
+    // Now, pluck the not operators from the terms
+    let termsToSearch = terms.filter(elem => elem.operator !== 'NOT')
+
+    // First try to match the title and tags
+    for (let t of termsToSearch) {
       if (t.operator === 'AND') {
-        if (this.name.indexOf(t.word) > -1 || this.tags.includes(t.word)) {
+        if (this.name.toLowerCase().indexOf(t.word.toLowerCase()) > -1 || this.tags.includes(t.word.toLowerCase())) {
           matches++
         } else if (t.word[0] === '#' && this.tags.includes(t.word.substr(1))) {
           // Account for a potential # in front of the tag
           matches++
         }
-      } else {
+      } else if (t.operator === 'OR') {
         // OR operator
         for (let wd of t.word) {
-          if (this.name.indexOf(wd) > -1 || this.tags.includes(wd)) {
+          if (this.name.toLowerCase().indexOf(wd.toLowerCase()) > -1 || this.tags.includes(wd.toLowerCase())) {
             matches++
             // Break because only one match necessary
             break
-          } else if (wd[0] === '#' && this.tags.includes(wd.substr(1))) {
+          } else if (wd[0] === '#' && this.tags.includes(wd.toLowerCase().substr(1))) {
             // Account for a potential # in front of the tag
             matches++
             break
@@ -488,18 +518,17 @@ class ZettlrFile {
     }
 
     // Return immediately with an object of line -1 (indicating filename or tag matches) and a huge weight
-    if (matches === terms.length) { return [{ line: -1, restext: this.name, 'weight': 2 }] }
+    if (matches === termsToSearch.length) { return [{ line: -1, restext: this.name, 'weight': 2 }] }
 
-    // Do a full text search.
-    let cnt = this.read()
-    let cntLower = cnt.toLowerCase()
+    // Reset the matches, now to hold an array
+    matches = []
 
+    // Initialise the rest of the necessary variables
     let lines = cnt.split('\n')
     let linesLower = cntLower.split('\n')
-    matches = []
     let termsMatched = 0
 
-    for (let t of terms) {
+    for (let t of termsToSearch) {
       let hasTermMatched = false
       if (t.operator === 'AND') {
         for (let index in lines) {
@@ -535,7 +564,7 @@ class ZettlrFile {
           }
         }
         // End AND operator
-      } else {
+      } else if (t.operator === 'OR') {
         // OR operator.
         for (let wd of t.word) {
           let br = false
@@ -579,7 +608,7 @@ class ZettlrFile {
       if (hasTermMatched) termsMatched++
     }
 
-    if (termsMatched === terms.length) return matches
+    if (termsMatched === termsToSearch.length) return matches
     return [] // Empty array indicating that not all required terms have matched
   }
 

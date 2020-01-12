@@ -12,9 +12,11 @@
  * END HEADER
  */
 
+const compileSearchTerms = require('../../common/util/compile-search-terms')
+
 class GlobalSearch {
   constructor (term) {
-    let compiledTerms = this._compileSearchTerms(term)
+    let compiledTerms = compileSearchTerms(term)
 
     // Now we are all set and can begin the journey. First we need to prepare
     // some things. First: Write the current terms into this object
@@ -149,88 +151,6 @@ class GlobalSearch {
     this._currentSearch = null
 
     if (this._afterCallback) this._afterCallback(this._results)
-  }
-
-  _compileSearchTerms (term) {
-    // First sanitize the terms
-    let myTerms = []
-    let curWord = ''
-    let hasExact = false
-    let operator = 'AND'
-
-    for (let i = 0; i < term.length; i++) {
-      let c = term.charAt(i)
-      if ((c === ' ') && !hasExact) {
-        // Eat word and next
-        if (curWord.trim() !== '') {
-          myTerms.push({ 'word': curWord.trim(), 'operator': operator })
-          curWord = ''
-          if (operator === 'OR') {
-            operator = 'AND'
-          }
-        }
-        continue
-      } else if (c === '|') {
-        // We got an OR operator
-        // So change the last word's operator and set current operator to OR
-        operator = 'OR'
-        // Take a look forward and if the next char is also a space, eat it right now
-        if (term.charAt(i + 1) === ' ') {
-          ++i
-        }
-        // Also the previous operator should also be set to or
-        myTerms[myTerms.length - 1].operator = 'OR'
-        continue
-      } else if (c === '"') {
-        if (!hasExact) {
-          hasExact = true
-          continue
-        } else {
-          hasExact = false
-          myTerms.push({ 'word': curWord.trim(), 'operator': operator })
-          curWord = ''
-          if (operator === 'OR') {
-            operator = 'AND'
-          }
-          continue
-        }
-        // Don't eat the quote;
-      }
-
-      curWord += term.charAt(i)
-    }
-
-    // Afterwards eat the last word if its not empty
-    if (curWord.trim() !== '') {
-      myTerms.push({ 'word': curWord.trim(), 'operator': operator })
-    }
-
-    // Now pack together all consecutive ORs
-    // to make it easier for the search in the main process
-    let currentOr = {}
-    currentOr.operator = 'OR'
-    currentOr.word = []
-    let newTerms = []
-
-    for (let i = 0; i < myTerms.length; i++) {
-      if (myTerms[i].operator === 'AND') {
-        if (currentOr.word.length > 0) {
-          // Duplicate object so that the words are retained
-          newTerms.push(JSON.parse(JSON.stringify(currentOr)))
-          currentOr.word = []
-        }
-        newTerms.push(myTerms[i])
-      } else if (myTerms[i].operator === 'OR') {
-        currentOr.word.push(myTerms[i].word)
-      }
-    }
-
-    // Now push the currentOr if not empty
-    if (currentOr.word.length > 0) {
-      newTerms.push(JSON.parse(JSON.stringify(currentOr)))
-    }
-
-    return newTerms
   }
 }
 

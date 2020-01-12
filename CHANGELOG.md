@@ -4,10 +4,12 @@
 
 - **New Feature**: Zettlr is now able to open file attachments for citations in your files. Simply right-click a citation, go to "Open Attachment" and select the cite-key for which you want to open the file attachment. Got multiple? Here's how Zettlr chooses which one to open: All attachments are listed and then the PDF files are sorted on top of the list. Then, Zettlr will open whatever attachment is the first in the list.
 - **New Feature**: You now have an additional setting that allows you to determine if, and when, the filename will be automatically added to your link. "Never" means that the file name will never be added, "Only with ID" means that the file name will only be added, if the link is constructed using the ID, and "always" (the default) means that the file name will always be added, possibly duplicating it.
+- **New Feature**: NOT search operator. Now you can use an exclamation mark (!) before the term in your global search to exclude certain search terms. If any NOT-condition is satisfied, the file will no longer be considered a candidate. You can combine the NOT-operator with both exact matches (`!"an exact phrase"`) and single terms (`!word`).
 - Pressing `Alt-Up` and `Alt-Down` will now swap lines in the editor window up or down.
 - Cleaned up the shortcuts. Until now, `Ctrl+B` would also make text bold on macOS. Now, only `Cmd+B` will work, while `Ctrl+B` will only work on non-Apple systems.
 - Improved the Math equation detection again. Now it's simpler, faster and will work more reliable. Escaping dollar signs should most of the time not be necessary anymore.
 - Added syntax highlighting to inline and block Math equations. Now they're displayed in monospace to make it easier for you to write them.
+- Title and tag matching of search terms during global search is now performed case insensitive.
 
 ## Under the Hood
 
