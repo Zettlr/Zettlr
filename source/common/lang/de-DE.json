@@ -154,7 +154,6 @@
                 "zh-CN": "Chinesisch (China)"
             },
             "attachments_info": "Trage hier alle Dateitypen ein, die du in der Attachment-Sidebar sehen m\u00f6chtest. Trenne jeden Dateityp mit einem Komma. \u00c4nderungen werden nach einem Neustart wirksam.",
-            "autoCloseBrackets": "Schlie\u00dfe Zeichenpaare automatisch",
             "auto_close_brackets": "Schlie\u00dfe Zeichenpaare automatisch",
             "auto_dark_mode_explanation": "Automatisch ins dunkle Thema wechseln",
             "auto_dark_mode_off": "Aus",

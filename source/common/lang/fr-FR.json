@@ -162,7 +162,6 @@
                 "zh-CN": "Chinois (Chine)"
             },
             "attachments_info": "Entrez toutes les extensions de fichiers que vous voulez voir dans la liste d\u2019annexes. S\u00e9parez-les par des virgules. Les modifications prendront effet au prochain red\u00e9marrage.",
-            "autoCloseBrackets": "Fermez automatiquement les paires de caract\u00e8res suivantes: () [] {} '\"\" \u00bb\" \"\" \"\" \u2018\u2019 __ `",
             "auto_close_brackets": "Fermer automatiquement les paires de caract\u00e8res correspondantes",
             "auto_dark_mode_explanation": "Basculer automatiquement en mode sombre",
             "auto_dark_mode_off": "Arr\u00eat",

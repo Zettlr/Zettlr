@@ -155,7 +155,6 @@
                 "zh-CN": "Chinese (China)"
             },
             "attachments_info": "Enter all file extensions that you want to see in your attachment sidebar. Separate them with a comma. Changes are recognised after a restart.",
-            "autoCloseBrackets": "Automatically close matching character pairs",
             "auto_close_brackets": "Automatically close matching character pairs",
             "auto_dark_mode_explanation": "Automatically switch to dark mode",
             "auto_dark_mode_off": "Off",
