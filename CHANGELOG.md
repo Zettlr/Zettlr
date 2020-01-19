@@ -10,6 +10,7 @@
 - Improved the Math equation detection again. Now it's simpler, faster and will work more reliable. Escaping dollar signs should most of the time not be necessary anymore.
 - Added syntax highlighting to inline and block Math equations. Now they're displayed in monospace to make it easier for you to write them.
 - Title and tag matching of search terms during global search is now performed case insensitive.
+- Added an option to copy the filename of files to the clipboard via the context menu.
 
 ## Under the Hood
 

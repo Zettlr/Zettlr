@@ -18,6 +18,7 @@
     v-bind:class="classList"
     v-bind:data-hash="getHash"
     v-bind:data-id="getId"
+    v-bind:data-filename="getFilename"
     v-on:click="requestSelection"
     v-bind:draggable="isDraggable"
     v-on:dragstart.stop="beginDragging"
@@ -80,6 +81,7 @@
       },
       getHash: function () { return this.obj.hash },
       getId: function () { return this.obj.id },
+      getFilename: function () { return this.obj.name },
       getTags: function () { return this.obj.tags },
       getTagList: function () { return this.obj.tags.join(', ') },
       hasTags: function () { return this.obj.tags && this.obj.tags.length > 0 },
