@@ -11,6 +11,7 @@
 - Added syntax highlighting to inline and block Math equations. Now they're displayed in monospace to make it easier for you to write them.
 - Title and tag matching of search terms during global search is now performed case insensitive.
 - Added an option to copy the filename of files to the clipboard via the context menu.
+- Exact search terms in the global search are no longer trimmed (trailing and leading whitespace is not removed) to maintain the meaning of "exact".
 
 ## Under the Hood
 

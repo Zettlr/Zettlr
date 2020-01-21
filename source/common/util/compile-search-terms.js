@@ -48,7 +48,9 @@ module.exports = function (term) {
         continue
       } else {
         hasExact = false
-        myTerms.push({ 'word': curWord.trim(), 'operator': operator })
+        // Do not trim the word to account for trailing and
+        // ending whitespace within an exact capturing group
+        myTerms.push({ 'word': curWord, 'operator': operator })
         curWord = ''
         operator = 'AND' // Reset the operator
         continue
