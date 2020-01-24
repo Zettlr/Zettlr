@@ -17,10 +17,10 @@ jobs:
     - name: Run the unit tests
       run: npm test
     - name: Test template compilation # Can we successfully compile the templates?
-      run: npm handlebars
+      run: npm run handlebars
     - name: Test stylesheet compilation # Does the LESS compile without errors?
-      run: npm less
+      run: npm run less
     - name: Test webpack build
-      run: npm wp:prod # We're testing against the production build as this is what effectively matters during automated builds.
+      run: npm run wp:prod # We're testing against the production build as this is what effectively matters during automated builds.
     - name: Test reveal.JS template pre-building
-      run: npm reveal:build
+      run: npm run reveal:build
