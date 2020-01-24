@@ -8,13 +8,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup the current NodeJS LTS
+    - name: Setup NodeJS 12.x
       uses: actions/setup-node@v1
       with:
-        # We're using the current LTS version. This should
-        # work out of the box most of the times, as we're
-        # using the most recent in most cases.
-        node-version: lts
+        node-version: '12.x'
     - name: Install packages in main and source directories
       run: npm install && cd ./source && npm install && cd ..
     - name: Test with mocha
