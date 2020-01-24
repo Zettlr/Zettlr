@@ -1,0 +1,21 @@
+name: Run the application's tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup the current NodeJS LTS
+      uses: actions/setup-node@v1
+      with:
+        # We're using the current LTS version. This should
+        # work out of the box most of the times, as we're
+        # using the most recent in most cases.
+        node-version: lts
+    - name: Install packages in main and source directories
+      run: npm install && cd ./source && npm install && cd ..
+    - name: Test with mocha
+      run: npm test
