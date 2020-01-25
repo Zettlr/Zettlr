@@ -44,7 +44,7 @@ jobs:
     # Linux --> build DEB, RPM, and AppImage
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     # Define the operating system
     runs-on: ${{ matrix.os }}
@@ -68,6 +68,9 @@ jobs:
           npm run handlebars
           npm run reveal:build
           npm run wp:prod
+      - name: Manually create the handlebars-directory.
+        if: matrix.os == 'windows-latest'
+        run: New-Item -Path "./source/common/assets" -Name "handlebars" -ItemType "directory" # Hello, PowerShell ._.
       # Save the current package.json's version value
       # as the output from this step so that we can
       # reference it later on.
