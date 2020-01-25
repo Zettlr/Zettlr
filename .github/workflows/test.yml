@@ -1,0 +1,26 @@
+name: Unit and compiler tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup NodeJS 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: Install packages in main and source directories
+      run: npm install && cd ./source && npm install && cd .. # Simply use one single command for all that stuff and chain using &&
+    - name: Run the unit tests
+      run: npm test
+    - name: Test template compilation # Can we successfully compile the templates?
+      run: npm run handlebars
+    - name: Test stylesheet compilation # Does the LESS compile without errors?
+      run: npm run less
+    - name: Test webpack build
+      run: npm run wp:prod # We're testing against the production build as this is what effectively matters during automated builds.
+    - name: Test reveal.JS template pre-building
+      run: npm run reveal:build
