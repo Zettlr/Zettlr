@@ -58,7 +58,7 @@ jobs:
         with:
           node-version: '12.x'
 
-      - name: Manually create the handlebars-directory, because Node somehow fails on Windows VMs doing exactly that.
+      - name: Manually create the handlebars-directory (Windows only)
         if: matrix.os == 'windows-latest'
         run: New-Item -Path "./source/common/assets" -Name "handlebars" -ItemType "directory" # Hello, PowerShell ._.
 
@@ -203,6 +203,8 @@ jobs:
       - name: Create a new release draft
         id: create_release
         uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }} # tag_name is required, but can be overridden during edit
           release_name: Release ${{ github.ref }} # release_name is required
