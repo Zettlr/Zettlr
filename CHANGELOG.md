@@ -12,6 +12,7 @@
 - Title and tag matching of search terms during global search is now performed case insensitive.
 - Added an option to copy the filename of files to the clipboard via the context menu.
 - Exact search terms in the global search are no longer trimmed (trailing and leading whitespace is not removed) to maintain the meaning of "exact".
+- The AutoCorrect option can now be activated and deactivated as intended.
 
 ## Under the Hood
 
