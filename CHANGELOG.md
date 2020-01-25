@@ -1,4 +1,4 @@
-# (no version assigned)
+# 1.6.0
 
 ## GUI and Functionality
 

@@ -12,7 +12,7 @@
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-01-02T09:44:02.000000Z"
+        "updated_at": "2020-01-21T14:20:21.000000Z"
     },
     "dialog": {
         "about": {
@@ -312,6 +312,10 @@
                 "id_generator_label": "Mod\u00e8le de cr\u00e9ation des identifiants",
                 "id_label": "Expression r\u00e9guli\u00e8re pour l\u2019identifiant",
                 "intro": "Vous pouvez param\u00e9trer ici Zettlr pour travailler avec votre flux de travail Zettelkasten. L'identifiant est bas\u00e9 sur des expressions r\u00e9guli\u00e8res, assurez-vous donc d\u2019\u00e9chapper des caract\u00e8res RegEx qui apparaissent litt\u00e9ralement dans vos identifiants. Testez la g\u00e9n\u00e9ration (et la d\u00e9tection) des identifiants ci-dessous. Consultez le manuel pour toutes les variables possibles pour le g\u00e9n\u00e9rateur d'identifiant.",
+                "link_behaviour_always": "toujours",
+                "link_behaviour_description": "Lorsque vous liez des fichiers, ajoutez le nom du fichier\u2026",
+                "link_behaviour_id": "uniquement lors de la liaison \u00e0 l'aide de l'ID",
+                "link_behaviour_never": "jamais",
                 "linkend_label": "Fin du lien",
                 "linkstart_label": "D\u00e9but du lien",
                 "pass_check_no": "Votre expression r\u00e9guli\u00e8re ne correspond pas \u00e0 l\u2019identifiant g\u00e9n\u00e9r\u00e9.",
@@ -436,6 +440,7 @@
         "close_dir": "Fermer le dossier",
         "close_file": "Fermer le fichier",
         "copy": "Copier",
+        "copy_filename": "Copier le nom de fichier",
         "copy_html": "Copier en HTML",
         "copy_id": "Copier l\u2019identifiant",
         "copy_link": "Copier le lien",
@@ -478,6 +483,7 @@
         "new_vd": "Nouveau dossier virtuel\u2026",
         "no_suggestions": "Pas de suggestions",
         "open": "Ouvrir",
+        "open_attachment": "Ouvrir annexe",
         "open_link": "Ouvrir le lien",
         "pandoc": "T\u00e9l\u00e9charger Pandoc",
         "paste": "Coller",
@@ -509,9 +515,9 @@
         "toggle_attachments": "Voir les annexes",
         "toggle_devtools": "Outils du d\u00e9veloppeur",
         "toggle_distraction_free": "Mode sans distraction",
-        "toggle_file_meta": "M\u00e9ta de fichier",
+        "toggle_file_meta": "Propri\u00e9t\u00e9s du fichier",
         "toggle_fullscreen": "Plein \u00e9cran",
-        "toggle_sidebar": "Commuter la barre lat\u00e9rale",
+        "toggle_sidebar": "Afficher la barre lat\u00e9rale",
         "toggle_theme": "Mode sombre",
         "undo": "Annuler",
         "unhide": "Remontrer",
@@ -540,6 +546,7 @@
             "already_exists_message": "Le fichier ou le dossier %s existe d\u00e9j\u00e0.",
             "already_exists_title": "Impossible de d\u00e9placer le dossier ou le fichier",
             "cancel_remove": "Annuler",
+            "citation_no_attachments": "La r\u00e9f\u00e9rence avec la cl\u00e9 %s ne semble pas avoir de pi\u00e8ces jointes.",
             "could_not_create_dir": "Erreur lors de la cr\u00e9ation du dossier",
             "could_not_create_file": "Erreur lors de la cr\u00e9ation du fichier",
             "could_not_save_image": "Erreur lors de la cr\u00e9ation de l'image",
@@ -563,6 +570,7 @@
             "no_pandoc_title": "Le programme pandoc n'a pas pu \u00eatre trouv\u00e9",
             "no_xelatex_message": "LaTeX n\u2019a pas \u00e9t\u00e9 trouv\u00e9 dans votre ordinateur. Veuillez t\u00e9l\u00e9charger LaTeX pour exporter en PDF.",
             "no_xelatex_title": "Impossible de trouver LaTeX",
+            "open_attachment_error": "Impossible d'ouvrir la pi\u00e8ce jointe. Est-ce que Zotero est lanc\u00e9?",
             "open_root_error": "Impossible d'ouvrir %s",
             "open_url_error": "Impossible d'ouvrir %s",
             "pandoc_error_message": "Pandoc a rapport\u00e9 une erreur : %s",
