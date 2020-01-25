@@ -8,6 +8,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.ref }} # Always fetch the branch that triggered the event (develop or master)
     - name: Setup NodeJS 12.x
       uses: actions/setup-node@v1
       with:
