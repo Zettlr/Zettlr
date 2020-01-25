@@ -58,7 +58,7 @@ jobs:
         with:
           node-version: '12.x'
 
-      - name: Manually create the handlebars-directory.
+      - name: Manually create the handlebars-directory, because Node somehow fails on Windows VMs doing exactly that.
         if: matrix.os == 'windows-latest'
         run: New-Item -Path "./source/common/assets" -Name "handlebars" -ItemType "directory" # Hello, PowerShell ._.
 
@@ -81,6 +81,7 @@ jobs:
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
+        shell: bash # I'm sorry PowerShell, but I'm not rewriting code for you.
       # Now we're set to finally release the beast!
       # WINDOWS ==============================================================
       - name: Build Windows NSIS installer
@@ -147,6 +148,7 @@ jobs:
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
+        shell: bash # I'm sorry PowerShell, but I'm not rewriting code for you.
       # Now, download all resulting assets from the previous steps.
       - name: Download the Windows asset
         uses: actions/download-artifact@v1
