@@ -205,6 +205,7 @@ jobs:
         uses: actions/create-release@v1
         with:
           tag_name: ${{ github.ref }} # tag_name is required, but can be overridden during edit
+          release_name: Release ${{ github.ref }} # release_name is required
           body: If you can read this, we have forgotten to fill in the changelog. Sorry!
           draft: true # Always create as draft, so that we can populate the remaining values easily
 
