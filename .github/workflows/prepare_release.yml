@@ -143,6 +143,13 @@ jobs:
     needs: [build] # Make sure (and wait until) the build has succeeded
     runs-on: [ubuntu-latest]
     steps:
+      # Clone the repository to get the ./scripts/get-pkg-version.js and the ./package.json
+      - uses: actions/checkout@v2
+      # Setup node to run the retrieval script
+      - name: Setup NodeJS 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
       - name: Retrieve the current package version
         id: pkg
         run: |
