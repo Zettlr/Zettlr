@@ -1,4 +1,4 @@
-name: Unit and compiler tests
+name: Test
 
 on: [push, pull_request]
 

@@ -1,4 +1,4 @@
-name: Builds the app for all targets and prepares a release draft
+name: Build
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # RATIONALE BEHIND THIS HUGE WORKFLOW
