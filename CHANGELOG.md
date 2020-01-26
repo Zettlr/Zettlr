@@ -14,6 +14,7 @@
 - Exact search terms in the global search are no longer trimmed (trailing and leading whitespace is not removed) to maintain the meaning of "exact".
 - The AutoCorrect option can now be activated and deactivated as intended.
 - Added German secondary guillemets to the MagicQuotes settings.
+- Better citation detection: Now, standalone-citations at the beginning of line will also be rendered.
 
 ## Under the Hood
 
