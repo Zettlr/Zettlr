@@ -1,10 +1,10 @@
 # Zettlr [_ˈset·lər_]
 
-The Markdown editor for the 21st century.
+**The Markdown editor for the 21st century.**
 
 ***
 
-<a href="https://doi.org/10.5281/zenodo.2580173"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.2580173.svg" alt="DOI"></a> <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GNU GPL v3"></a> <img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/Zettlr/Zettlr/total.svg"> <a href="https://www.zettlr.com/download"><img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/tag-date/Zettlr/Zettlr.svg?label=latest"></a> ![Unit and compiler tests](https://github.com/Zettlr/Zettlr/workflows/Unit%20and%20compiler%20tests/badge.svg?branch=master)
+<a href="https://doi.org/10.5281/zenodo.2580173"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.2580173.svg" alt="DOI"></a> <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GNU GPL v3"></a> <img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/Zettlr/Zettlr/total.svg"> <a href="https://www.zettlr.com/download"><img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/tag-date/Zettlr/Zettlr.svg?label=latest"></a> ![Test](https://github.com/Zettlr/Zettlr/workflows/Test/badge.svg?branch=master) ![Build](https://github.com/Zettlr/Zettlr/workflows/Build/badge.svg)
 
 ![The central window of Zettlr](/resources/screenshots/zettlr_view.png)
 
