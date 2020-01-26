@@ -58,6 +58,9 @@ jobs:
         with:
           node-version: '12.x'
 
+      # On Windows server, we have to create the handlebars-directory
+      # manually, because the node-process always crashes when it
+      # attempts literally the same thing.
       - name: Manually create the handlebars-directory (Windows only)
         if: matrix.os == 'windows-latest'
         run: New-Item -Path "./source/common/assets" -Name "handlebars" -ItemType "directory" # Hello, PowerShell ._.
@@ -85,50 +88,50 @@ jobs:
       # Now we're set to finally release the beast!
       # WINDOWS ==============================================================
       - name: Build Windows NSIS installer
-        if: matrix.os == 'windows-latest' # Only if the matrix runs on Windows
+        if: matrix.os == 'windows-latest' # Only if the job runs on Windows
         run: npm run release:win
       - name: Cache Windows release
-        if: matrix.os == 'windows-latest' # Only if the matrix runs on Windows
+        if: matrix.os == 'windows-latest' # Only if the job runs on Windows
         uses: actions/upload-artifact@v1
         with:
           name: Zettlr-${{ steps.pkg.outputs.version }}.exe
           path: ./release/Zettlr-${{ steps.pkg.outputs.version }}.exe
       # MACOS ================================================================
       - name: Build macOS DMG file
-        if: matrix.os == 'macos-latest' # Only if the matrix runs on macOS
+        if: matrix.os == 'macos-latest' # Only if the job runs on macOS
         run: npm run release:mac
       - name: Cache macOS release
-        if: matrix.os == 'macos-latest' # Only if the matrix runs on macOS
+        if: matrix.os == 'macos-latest' # Only if the job runs on macOS
         uses: actions/upload-artifact@v1
         with:
           name: Zettlr-${{ steps.pkg.outputs.version }}.dmg
           path: ./release/Zettlr-${{ steps.pkg.outputs.version }}.dmg
       # LINUX ================================================================
       - name: Build Linux targets
-        if: matrix.os == 'ubuntu-latest' # Only if the matrix runs on Linux
+        if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
         run: |
           npm run release:linux
           npm run release:app-image
       - name: Cache Linux Debian release
-        if: matrix.os == 'ubuntu-latest' # Only if the matrix runs on Linux
+        if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
         uses: actions/upload-artifact@v1
         with:
           name: Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb
           path: ./release/Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb
       - name: Cache Linux Fedora release
-        if: matrix.os == 'ubuntu-latest' # Only if the matrix runs on Linux
+        if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
         uses: actions/upload-artifact@v1
         with:
           name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
           path: ./release/Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
       - name: Cache Linux AppImage (x32) release
-        if: matrix.os == 'ubuntu-latest' # Only if the matrix runs on Linux
+        if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
         uses: actions/upload-artifact@v1
         with:
           name: Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
           path: ./release/Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
       - name: Cache Linux AppImage (x64) release
-        if: matrix.os == 'ubuntu-latest' # Only if the matrix runs on Linux
+        if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
         uses: actions/upload-artifact@v1
         with:
           name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
@@ -141,7 +144,7 @@ jobs:
   # whole mess to the draft release.
   prepare_release:
     needs: [build] # Make sure (and wait until) the build has succeeded
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
     steps:
       # Clone the repository to get the ./scripts/get-pkg-version.js and the ./package.json
       - uses: actions/checkout@v2
@@ -155,7 +158,6 @@ jobs:
         run: |
           pkgver=$(node ./scripts/get-pkg-version.js)
           echo ::set-output name=version::$pkgver
-        shell: bash # I'm sorry PowerShell, but I'm not rewriting code for you.
       # Now, download all resulting assets from the previous steps.
       - name: Download the Windows asset
         uses: actions/download-artifact@v1
@@ -206,8 +208,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }} # tag_name is required, but can be overridden during edit
-          release_name: Release ${{ github.ref }} # release_name is required
+          tag_name: v${{ steps.pkg.outputs.version }} # tag_name is required, but can be overridden during edit
+          release_name: Release v${{ steps.pkg.outputs.version }} # release_name is required
           body: If you can read this, we have forgotten to fill in the changelog. Sorry!
           draft: true # Always create as draft, so that we can populate the remaining values easily
 
