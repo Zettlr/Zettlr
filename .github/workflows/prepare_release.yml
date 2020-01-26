@@ -24,8 +24,6 @@ name: Builds the app for all targets and prepares a release draft
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # Only when we push to master, as this indicates a build
-# TODO: Once this workflow runs, remember to replace with
-# the tag!
 on:
   push:
     branches:
