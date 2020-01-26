@@ -14,7 +14,7 @@
  */
 
 const EventEmitter = require('events')
-const { systemPreferences } = require('electron')
+const { systemPreferences, nativeTheme } = require('electron')
 
 /**
  * This class manages automatic changes in the appearance of the app. It won't
@@ -50,10 +50,9 @@ class AppearanceProvider extends EventEmitter {
       systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', (event, userInfo) => {
         // Only react to these notifications if the schedule is set to 'system'
         if (this._mode !== 'system') return
-        let isItDark = systemPreferences.isDarkMode() ? 'dark' : 'light'
-        global.log.verbose('Switching appearance to ' + isItDark)
+        global.log.verbose('Switching to ' + (nativeTheme.shouldUseDarkColors ? 'dark' : 'light') + ' mode')
         // Set the var accordingly
-        global.config.set('darkTheme', systemPreferences.isDarkMode())
+        global.config.set('darkTheme', nativeTheme.shouldUseDarkColors)
       })
     } else if (process.platform === 'win32') {
       // On Windows, we achieve the same effect by listening for inverted colour
@@ -72,7 +71,7 @@ class AppearanceProvider extends EventEmitter {
       if (process.platform === 'win32') {
         global.config.set('darkTheme', systemPreferences.isInvertedColorScheme())
       } else if (process.platform === 'darwin') {
-        global.config.set('darkTheme', systemPreferences.isDarkMode())
+        global.config.set('darkTheme', nativeTheme.shouldUseDarkColors)
       }
     }
 
