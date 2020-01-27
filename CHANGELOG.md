@@ -24,6 +24,7 @@
 - Cleaned up the keymap for CodeMirror. It's now centralised within `generate-keymap.js` and not scattered in all the plugins anymore.
 - Rewrote the i18n loading logic, resulting in huge performance gains on startup. Thanks to @BAKFR for implementing!
 - Exchanged deprecated API calls in the `AppearanceProvider` class.
+- The default DMG height for macOS installers now again shows the disclaimer at the bottom of the archive window.
 
 # 1.5.0
 

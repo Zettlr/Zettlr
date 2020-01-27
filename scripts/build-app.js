@@ -129,7 +129,11 @@ const config = {
         type: 'link',
         path: '/Applications'
       }
-    ]
+    ],
+    window: {
+      width: 540,
+      height: 400 // Default 380px is insufficient as it doesn't include 20px of title bar
+    }
   },
   nsis: {
     oneClick: false,
