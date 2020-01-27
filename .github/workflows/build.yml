@@ -107,9 +107,7 @@ jobs:
       # LINUX ================================================================
       - name: Build Linux targets
         if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
-        run: |
-          npm run release:linux
-          npm run release:app-image
+        run: npm run release:linux
       - name: Cache Linux Debian release
         if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
         uses: actions/upload-artifact@v1
