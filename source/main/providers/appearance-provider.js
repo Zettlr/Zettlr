@@ -47,7 +47,7 @@ class AppearanceProvider extends EventEmitter {
      * if the config setting is set to "system", i.e.: follow system appearance.
      */
     if (process.platform === 'darwin') {
-      systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', (event, userInfo) => {
+      nativeTheme.on('updated', () => {
         // Only react to these notifications if the schedule is set to 'system'
         if (this._mode !== 'system') return
         global.log.verbose('Switching to ' + (nativeTheme.shouldUseDarkColors ? 'dark' : 'light') + ' mode')
