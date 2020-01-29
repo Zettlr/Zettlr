@@ -118,6 +118,9 @@ class ZettlrCon {
     * @return {void}       Nothing to return.
     */
   _build (event) {
+    // Will be returned, if true, selects word under cursor
+    let shouldSelectWordUnderCursor = true
+
     let elem = $(event.target)
     // No context menu for sorters
     if (elem.hasClass('sorter') || elem.parents('sorter').length > 0) return
@@ -132,11 +135,20 @@ class ZettlrCon {
     // look better and give visual feedback that the user is indeed about to copy
     // the whole link into the clipboard, not a part of it.
     if (elem.hasClass('cma')) {
+      shouldSelectWordUnderCursor = false // Don't select the word under cursor
       let selection = window.getSelection()
       let range = document.createRange()
       range.selectNodeContents(elem[0])
       selection.removeAllRanges()
       selection.addRange(range)
+    }
+
+    // Don't select the word under cursor if we've right-clicked a citation
+    if (elem.hasClass('citeproc-citation')) {
+      shouldSelectWordUnderCursor = false
+      // Also, remove the selected part of the citation
+      let selection = window.getSelection()
+      selection.removeAllRanges()
     }
 
     // First: determine where the click happened (Sidebar or editor)
@@ -255,6 +267,7 @@ class ZettlrCon {
       })
     }
     this._menu = Menu.buildFromTemplate(this._menu)
+    return shouldSelectWordUnderCursor
   }
 
   /**
@@ -265,8 +278,12 @@ class ZettlrCon {
   popup (event) {
     try {
       this._pos = { 'x': event.clientX, 'y': event.clientY }
-      this._build(event)
+      let shouldSelectWordUnderCursor = this._build(event)
       if (this._menu.items.length > 0) {
+        if (shouldSelectWordUnderCursor) {
+          // Select the word under cursor prior to displaying the menu
+          this._body._renderer._editor.runCommand('selectWordUnderCursor')
+        }
         // Open at click coords even the user may have moved the mouse
         this._menu.popup(this._pos)
       }

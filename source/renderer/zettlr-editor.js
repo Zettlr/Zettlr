@@ -447,7 +447,7 @@ class ZettlrEditor {
     this._cm.getWrapperElement().addEventListener('contextmenu', (e) => {
       // We cannot run the command using the runCommand() function as that would
       // reset the selection
-      CodeMirror.commands['selectWordUnderCursor'](this._cm)
+      // CodeMirror.commands['selectWordUnderCursor'](this._cm)
     })
 
     this._cm.refresh()
@@ -1136,13 +1136,18 @@ class ZettlrEditor {
     * @return {void}     Nothing to return.
     */
   runCommand (cmd) {
+    // Shortcut for the only command that
+    // actively should change the selection.
+    if (cmd === 'selectWordUnderCursor') {
+      this._cm.execCommand(cmd)
+      return
+    }
+
     let sel = this._cm.doc.listSelections()
     let oldCur = JSON.parse(JSON.stringify(this._cm.getCursor()))
     this._cm.execCommand(cmd)
 
-    if (sel.length > 0) {
-      this._cm.doc.setSelections(sel)
-    }
+    if (sel.length > 0) this._cm.doc.setSelections(sel)
 
     if (cmd === 'insertFootnote') {
       // In case the user inserted a footnote, we have to re-set the cursor
