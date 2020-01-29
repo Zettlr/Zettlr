@@ -26,6 +26,7 @@
 - Rewrote the i18n loading logic, resulting in huge performance gains on startup. Thanks to @BAKFR for implementing!
 - Exchanged deprecated API calls in the `AppearanceProvider` class.
 - The default DMG height for macOS installers now again shows the disclaimer at the bottom of the archive window.
+- Fixed a logical bug with zoom levels bigger than 40x.
 
 # 1.5.0
 

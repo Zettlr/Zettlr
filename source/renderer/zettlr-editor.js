@@ -963,7 +963,7 @@ class ZettlrEditor {
       let newSize = this._fontsize + 10 * direction
       // Constrain the size so it doesn't run into errors
       if (newSize < 30) newSize = 30 // Less than thirty and CodeMirror doesn't display the text anymore.
-      if (newSize > 600) newSize = 400 // More than 400 and you'll run into problems concerning headings 1
+      if (newSize > 400) newSize = 400 // More than 400 and you'll run into problems concerning headings 1
       this._fontsize = newSize
     }
     this._div.css('font-size', this._fontsize + '%')
