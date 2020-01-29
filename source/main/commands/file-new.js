@@ -43,7 +43,10 @@ class FileNew extends ZettlrCommand {
     dir.newfile(arg.name).then((file) => {
       // Send the new paths and open the respective file.
       global.application.dirUpdate(dir.hash, dir.getMetadata())
-      this._app.ipc.send('file-open', file.withContent())
+      this._app.ipc.send('file-open', {
+        file: file.withContent(),
+        flag: 'new-file' // Indicate this is a new file
+      })
       this._app.setCurrentFile(file)
     }).catch((e) => {
       this._app.window.prompt({

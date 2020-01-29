@@ -510,11 +510,17 @@ class ZettlrRenderer {
    * @param  {ZettlrFile} f The file to be opened
    */
   openFile (f) {
+    let flag = null
+    if (f.hasOwnProperty('flag')) {
+      // We have a flag, so we need to extract the file
+      flag = f.flag
+      f = f.file
+    }
     // We have received a new file. So close the old and open the new
     this._editor.close()
     // Select the file either in the preview list or in the directory tree
     global.store.set('selectedFile', f.hash)
-    this._editor.open(f)
+    this._editor.open(f, flag)
   }
 
   /**

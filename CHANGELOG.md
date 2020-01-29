@@ -16,6 +16,7 @@
 - Added German secondary guillemets to the MagicQuotes settings.
 - Better citation detection: Now, standalone-citations at the beginning of line will also be rendered.
 - Improved the contextmenu behaviour.
+- When creating a new file, the editor is re-focused again so that you can immediately begin writing.
 
 ## Under the Hood
 

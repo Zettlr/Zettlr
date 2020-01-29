@@ -492,10 +492,11 @@ class ZettlrEditor {
 
   /**
     * Opens a file, i.e. replaced the editor's content
-    * @param  {ZettlrFile} file The file to be renderer
-    * @return {ZettlrEditor}      Chainability.
+    * @param  {ZettlrFile}   file The file to be renderer
+    * @param  {Mixed}        flag An optional flag
+    * @return {ZettlrEditor}       Chainability.
     */
-  open (file) {
+  open (file, flag = null) {
     this._cm.setValue(file.content)
     this._cm.setOption('markdownImageBasePath', path.dirname(file.path)) // Set the base path for image rendering
 
@@ -530,6 +531,9 @@ class ZettlrEditor {
     // Last but not least: If there are any search results currently
     // display, mark the respective positions.
     this._searcher.markResults(file)
+
+    // If we've got a new file, we need to re-focus the editor
+    if (flag === 'new-file') this._cm.focus()
 
     // Finally, set a timeout for a first run of citation rendering
     setTimeout(() => { this.updateCitations() }, 1000)
