@@ -442,14 +442,6 @@ class ZettlrEditor {
       }
     })
 
-    // When the user demands a context menu, pre-emptively select the word
-    // under the cursor.
-    this._cm.getWrapperElement().addEventListener('contextmenu', (e) => {
-      // We cannot run the command using the runCommand() function as that would
-      // reset the selection
-      // CodeMirror.commands['selectWordUnderCursor'](this._cm)
-    })
-
     this._cm.refresh()
 
     // Finally create the annotateScrollbar object to be able to annotate the scrollbar with search results.
