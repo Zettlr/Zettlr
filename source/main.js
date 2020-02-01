@@ -17,7 +17,7 @@
 global.preBootLog = [{
   'level': 2, // Info
   // eslint-disable-next-line no-irregular-whitespace
-  'message': `こうんいちわ！　Booting Zettlr at ${(new Date()).toString()}.`
+  'message': `こんにちは！　Booting Zettlr at ${(new Date()).toString()}.`
 }]
 
 // We need the app and process modules.

@@ -465,6 +465,10 @@ class Zettlr {
         // It's not a file (-> no extension) but it could not be found ->
         // mark it as "dead"
         this._openPaths.push(new ZettlrDeadDir(this, p))
+      } else {
+        // Remove the path, because it obviously does not exist anymore
+        global.log.info(`Removing path ${p}, as it does no longer exist.`)
+        global.config.removePath(p)
       }
     }
 

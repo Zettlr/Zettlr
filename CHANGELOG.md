@@ -28,6 +28,8 @@
 - Exchanged deprecated API calls in the `AppearanceProvider` class.
 - The default DMG height for macOS installers now again shows the disclaimer at the bottom of the archive window.
 - Fixed a logical bug with zoom levels bigger than 40x.
+- Fixed the welcome log message, because whatever it was, it did not read こんにちは (Hello).
+- Now during startup all files that do not exist anymore in the `openPaths`-property will be removed (because only directories can be "dead").
 
 # 1.5.0
 
