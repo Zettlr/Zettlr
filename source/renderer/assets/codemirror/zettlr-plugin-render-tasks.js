@@ -12,7 +12,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  var taskRE = /^(\s*)- \[( |x)\] /g // Matches `- [ ]` and `- [x]`
+  var taskRE = /^(\s*)([-+*]) \[( |x)\] /g // Matches `- [ ]` and `- [x]`
   var taskMarkers = []
 
   CodeMirror.commands.markdownRenderTasks = function (cm) {
@@ -69,7 +69,8 @@
       if (isRendered) continue
 
       // Now we can render it finally.
-      let checked = (match[2] === 'x')
+      let checked = (match[3] === 'x')
+      let listSign = match[2] // Save the sign +, -, or * for later
 
       let cbox = document.createElement('input')
       cbox.type = 'checkbox'
@@ -101,7 +102,7 @@
         // Check the checkbox, alter the underlying text and replace the
         // text marker in the list of checkboxes.
         let check = (cbox.checked) ? 'x' : ' '
-        cm.replaceRange(`- [${check}]`, curFrom, curTo)
+        cm.replaceRange(`${listSign} [${check}]`, curFrom, curTo)
         taskMarkers.splice(taskMarkers.indexOf(textMarker), 1)
         textMarker = cm.markText(
           curFrom, curTo,

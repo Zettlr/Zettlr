@@ -17,6 +17,8 @@
 - Better citation detection: Now, standalone-citations at the beginning of line will also be rendered.
 - Improved the contextmenu behaviour.
 - When creating a new file, the editor is re-focused again so that you can immediately begin writing.
+- Task items are now rendered irrespective of the list-type-character they use, i.e. the following examples will all be rendered correctly: `- [ ]`, `+ [ ]`, and `* [ ]`.
+
 
 ## Under the Hood
 
