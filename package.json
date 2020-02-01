@@ -26,6 +26,7 @@
         "less:extract": "node scripts/extract-css.js",
         "handlebars": "node scripts/handlebars.js",
         "lang:refresh": "node scripts/refresh-language.js",
+        "csl:refresh": "node scripts/update-csl.js",
         "reveal:build": "node scripts/update-reveal.js",
         "wp:dev": "cross-env NODE_ENV=development webpack",
         "wp:prod": "cross-env NODE_ENV=production webpack",

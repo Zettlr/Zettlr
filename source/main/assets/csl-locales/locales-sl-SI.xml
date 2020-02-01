@@ -14,7 +14,7 @@
   <date form="text">
     <date-part name="day" form="numeric" suffix=". "/>
     <date-part name="month" suffix=" "/>
-    <date-part name="year" suffix="."/>
+    <date-part name="year"/>
   </date>
   <date form="numeric">
     <date-part name="day" form="numeric" suffix=". "/>
