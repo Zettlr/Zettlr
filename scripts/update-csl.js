@@ -18,7 +18,7 @@ const log = require('./console-colour.js') // Colourful output
 
 // The locales-URL returns an array with all files in that directory, incl. their download URL.
 const REPO_LOCALES_URL = 'https://api.github.com/repos/citation-style-language/locales/contents'
-
+const STYLE_URL = 'https://raw.githubusercontent.com/citation-style-language/styles/master/chicago-author-date.csl'
 // First, let's download the list of contents from
 // the GitHub API.
 async function getCSLLocales () {
@@ -45,6 +45,15 @@ async function getCSLLocales () {
     await fs.writeFile(targetPath, filecontents, 'utf8')
     log.success(`Successfully updated ${basename}!`)
   }
+
+  // Finally, update the CSL style
+  log.info('Updating CSL style ...')
+  response = await got(STYLE_URL, { method: 'GET' })
+  response = response.body
+  let basename = path.basename(STYLE_URL)
+  let targetPath = path.join(__dirname, '../source/main/assets/csl-styles', basename)
+  await fs.writeFile(targetPath, response, 'utf8')
+  log.success('Updated CSL style!')
 }
 
 // Execute the functions
