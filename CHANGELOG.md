@@ -2,6 +2,7 @@
 
 ## GUI and Functionality
 
+- **New Feature**: [Mermaid](https://mermaid-js.github.io/mermaid/#/) chart support! Now you can add code blocks with the keyword "mermaid" (i.e. "```mermaid")to your document and use the Mermaid chart language to create charts!
 - **New Feature**: Zettlr is now able to open file attachments for citations in your files. Simply right-click a citation, go to "Open Attachment" and select the cite-key for which you want to open the file attachment. Got multiple? Here's how Zettlr chooses which one to open: All attachments are listed and then the PDF files are sorted on top of the list. Then, Zettlr will open whatever attachment is the first in the list.
 - **New Feature**: You now have an additional setting that allows you to determine if, and when, the filename will be automatically added to your link. "Never" means that the file name will never be added, "Only with ID" means that the file name will only be added, if the link is constructed using the ID, and "always" (the default) means that the file name will always be added, possibly duplicating it.
 - **New Feature**: NOT search operator. Now you can use an exclamation mark (!) before the term in your global search to exclude certain search terms. If any NOT-condition is satisfied, the file will no longer be considered a candidate. You can combine the NOT-operator with both exact matches (`!"an exact phrase"`) and single terms (`!word`).
@@ -18,7 +19,6 @@
 - Improved the contextmenu behaviour.
 - When creating a new file, the editor is re-focused again so that you can immediately begin writing.
 - Task items are now rendered irrespective of the list-type-character they use, i.e. the following examples will all be rendered correctly: `- [ ]`, `+ [ ]`, and `* [ ]`.
-
 
 ## Under the Hood
 

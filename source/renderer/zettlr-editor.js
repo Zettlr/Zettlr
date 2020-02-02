@@ -330,6 +330,7 @@ class ZettlrEditor {
       // This event fires on either editor changes (because, obviously the
       // cursor changes its position as well then) or when the cursor moves.
       if (this._renderImages) this._cm.execCommand('markdownRenderImages') // Render images
+      this._cm.execCommand('markdownRenderMermaid') // Render mermaid codeblocks
       if (this._renderIframes) this._cm.execCommand('markdownRenderIframes') // Render iFrames
       if (this._renderMath) this._cm.execCommand('markdownRenderMath') // Render equations
       if (this._renderLinks) this._cm.execCommand('markdownRenderLinks') // Render links
