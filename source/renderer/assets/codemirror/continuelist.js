@@ -33,8 +33,10 @@
       // If we're not in Markdown mode, fall back to normal newlineAndIndent
       var eolState = cm.getStateAfter(pos.line)
       var inner = cm.getMode().innerMode(eolState)
-      var allowedModes = cm.getOption('continuelistModes') || ['markdown']
-      if (!allowedModes.includes(inner.mode.name)) {
+      // innerMode gets the first inner mode, i.e.:
+      // multiplex -> spellchecker (not visible the
+      // underyling md mode)
+      if (inner.mode.name !== 'spellchecker') {
         cm.execCommand('newlineAndIndent')
         return
       } else {

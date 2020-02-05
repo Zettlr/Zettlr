@@ -46,7 +46,7 @@
     let fromLine = i
 
     for (let i = 0; i < cm.lineCount(); i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
       // Reset the index of the expression everytime we enter a new line.
       inlineMathRE.lastIndex = 0
 

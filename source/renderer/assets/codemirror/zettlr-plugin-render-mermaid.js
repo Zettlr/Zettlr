@@ -46,7 +46,7 @@ const mermaid = require('mermaid')
 
     // Now render all potential new images
     for (let i = 0; i < cm.lineCount(); i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
 
       // Cursor is in here, so also don't render (for now)
       if (currentCursorPosition === i) continue

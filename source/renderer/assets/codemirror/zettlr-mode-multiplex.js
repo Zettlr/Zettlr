@@ -37,7 +37,7 @@ const highlightingModes = require('../../../common/data').highlightingModes;
     }
 
     return CodeMirror.multiplexingMode(
-      CodeMirror.getMode(config, 'markdown-zkn'), // Default mode
+      CodeMirror.getMode(config, 'spellchecker'), // Default mode
       ...codeModes,
       {
         open: '```',

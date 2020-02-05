@@ -101,8 +101,8 @@
     }
 
     let mode = CodeMirror.getMode(config, {
-      name: 'gfm',
-      highlightFormatting: true
+      name: 'markdown-zkn',
+      // highlightFormatting: true
     })
     return CodeMirror.overlayMode(mode, spellchecker, true)
   })

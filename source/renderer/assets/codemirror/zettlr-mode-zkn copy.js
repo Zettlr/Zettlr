@@ -29,7 +29,6 @@
     */
   CodeMirror.defineMode('markdown-zkn', function (config, parserConfig) {
     var yamlMode = CodeMirror.getMode(config, 'yaml')
-    var mdMode = CodeMirror.getMode(config, { name: 'gfm', highlightFormatting: true })
 
     var markdownZkn = {
       startState: function () {
@@ -37,8 +36,7 @@
           startOfFile: true,
           inFrontmatter: false,
           inEquation: false,
-          yamlState: CodeMirror.startState(yamlMode),
-          mdState: CodeMirror.startState(mdMode)
+          yamlState: CodeMirror.startState(yamlMode)
         }
       },
       copyState: function (state) {
@@ -47,8 +45,7 @@
           inFrontmatter: state.inFrontmatter,
           inEquation: state.inEquation,
           // Make sure to correctly copy the YAML state
-          yamlState: CodeMirror.copyState(yamlMode, state.yamlState),
-          mdState: CodeMirror.copyState(mdMode, state.mdState)
+          yamlState: CodeMirror.copyState(yamlMode, state.yamlState)
         }
       },
       token: function (stream, state) {
@@ -165,8 +162,6 @@
           return 'zkn-id'
         }
 
-        return mdMode.token(stream, state.mdState)
-
         // Progress until another match.
         while (stream.next() != null &&
                 !stream.match(zknTagRE, false) &&
@@ -190,8 +185,6 @@
       }
     }
 
-    return markdownZkn // CodeMirror.overlayMode(CodeMirror.getMode(config, 'spellchecker'), markdownZkn, true)
+    return CodeMirror.overlayMode(CodeMirror.getMode(config, 'spellchecker'), markdownZkn, true)
   })
-
-  CodeMirror.defineMIME('text/x-zkn', 'markdown-zkn')
 })

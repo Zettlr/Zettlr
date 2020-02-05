@@ -33,6 +33,7 @@
 - Fixed the welcome log message, because whatever it was, it did not read こんにちは (Hello).
 - Now during startup all files that do not exist anymore in the `openPaths`-property will be removed (because only directories can be "dead").
 - Wrote script to automatically update the CSL styles and locales that are shipped with the app. Also, updated the CSL styles and locales.
+- The YAML mode within frontmatters is now correctly detected by all plugins, so that e.g. AutoCorrect does not apply within YAML-frontmatters and quotes are the "correct" ones (no need to disable MagicQuotes temporarily to write frontmatters).
 
 # 1.5.0
 

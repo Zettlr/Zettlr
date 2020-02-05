@@ -44,7 +44,7 @@ const Table = require('../../util/table-helper.js');
 
     // Now render all potential new links
     for (let i = 0; i < cm.lineCount(); i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
 
       // First get the line and test if the contents resemble a table
       let line = cm.getLine(i)
