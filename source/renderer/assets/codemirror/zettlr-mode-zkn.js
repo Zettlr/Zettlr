@@ -166,17 +166,6 @@
         }
 
         return mdMode.token(stream, state.mdState)
-
-        // Progress until another match.
-        while (stream.next() != null &&
-                !stream.match(zknTagRE, false) &&
-                !stream.match(zknIDRE, false) &&
-                !stream.match(zknLinkRE, false) &&
-                !stream.match(highlightRE, false) &&
-                !stream.match(inlineMathRE, false) &&
-                !stream.match(/\\/, false)) { }
-
-        return null
       },
       innerMode: function (state) {
         // We need to return the correct mode so that
@@ -187,6 +176,11 @@
           'mode': (state.inFrontmatter) ? yamlMode : markdownZkn,
           'state': (state.inFrontmatter) ? state.yamlState : state
         }
+      },
+      blankLine: function (state) {
+        // The underlying mode needs
+        // to be aware of blank lines
+        return mdMode.blankLine(state.mdState)
       }
     }
 

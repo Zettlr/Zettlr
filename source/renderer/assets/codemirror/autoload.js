@@ -42,6 +42,7 @@ require('codemirror/addon/fold/brace-fold')
 require('codemirror/addon/fold/indent-fold')
 require('codemirror/addon/fold/markdown-fold')
 require('codemirror/addon/fold/comment-fold')
+require('./zettlr-plugin-foldcode-helper')
 
 // 8. Hinting (tag autocompletion, e.g.)
 require('codemirror/addon/hint/show-hint')
