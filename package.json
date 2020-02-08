@@ -69,6 +69,7 @@
         "csso": "^4.0.2",
         "electron": "^7.1.10",
         "electron-builder": "^22.3.2",
+        "electron-notarize": "^0.2.1",
         "eslint": "^6.8.0",
         "eslint-config-standard": "^14.1.0",
         "eslint-plugin-import": "^2.20.1",

@@ -89,13 +89,21 @@ const config = {
     output: 'release',
     app: 'source'
   },
+  // Scripts to run after certain hooks
   afterPack: './scripts/afterPack.js',
+  afterSign: './scripts/afterSign.js',
   mac: {
     category: 'public.app-category.productivity',
     target: (onlyDir) ? 'dir' : 'dmg',
     artifactName: artifactFilenameFormat,
     icon: 'resources/icons/icns/icon.icns',
-    darkModeSupport: true
+    darkModeSupport: true,
+    hardenedRuntime: true,
+    // This is not really necessary, but funfact: It's a bug, so we have to set it to false
+    // Further info: https://github.com/electron-userland/electron-builder/issues/3828
+    gatekeeperAssess: false,
+    entitlements: path.join(__dirname, './assets/entitlements.plist'),
+    entitlementsInherit: path.join(__dirname, './assets/entitlements.plist')
   },
   win: {
     target: (onlyDir) ? 'dir' : 'nsis',

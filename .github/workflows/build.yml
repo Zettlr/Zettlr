@@ -97,7 +97,7 @@ jobs:
       # MACOS ================================================================
       - name: Build macOS DMG file
         if: matrix.os == 'macos-latest' # Only if the job runs on macOS
-        run: CSC_LINK=${{ secrets.MACOS_CERT }} CSC_KEY_PASSWORD=${{ secrets.MACOS_CERT_PASS }} npm run release:mac
+        run: APPLE_ID=${{ secrets.APPLE_ID }} APPLE_ID_PASS=${{ secrets.APPLE_ID_PASS }} CSC_LINK=${{ secrets.MACOS_CERT }}  CSC_KEY_PASSWORD=${{ secrets.MACOS_CERT_PASS }} npm run release:mac
       - name: Cache macOS release
         if: matrix.os == 'macos-latest' # Only if the job runs on macOS
         uses: actions/upload-artifact@v1
