@@ -89,7 +89,7 @@
               v-bind:key="item.hash"
             >
           </file-item>
-            <div class="empty-directory" v-if="getDirectoryContents[0].type === 'directory'">Empty directory</div>
+            <div class="empty-directory" v-if="getDirectoryContents[0].type === 'directory'">{{ emptyDirectoryMessage }}</div>
           </template>
           <template v-else>
             <!-- Same as above: Detect combined sidebar mode -->
@@ -209,6 +209,7 @@ module.exports = {
     fileSectionHeading: function () { return trans('gui.files') },
     dirSectionHeading: function () { return trans('gui.dirs') },
     emptyFileListMessage: function () { return trans('gui.no_dir_selected') },
+    emptyDirectoryMessage: function () { return trans('gui.empty_dir') },
     emptySearchResults: function () { return this.$store.state.searchNoResults }
   },
   methods: {

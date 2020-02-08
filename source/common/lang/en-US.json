@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-01-19T21:17:16.000000Z"
+        "updated_at": "2020-02-08T17:01:42.000000Z"
     },
     "dialog": {
         "about": {
@@ -388,6 +388,7 @@
         },
         "dirs": "Directories",
         "display_search_results": "Display search results",
+        "empty_dir": "Empty directory",
         "empty_directories": "No open files or folders",
         "file_chars": "characters",
         "file_chars_sel": "characters (selection)",

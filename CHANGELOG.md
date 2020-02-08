@@ -19,6 +19,7 @@
 - Improved the contextmenu behaviour.
 - When creating a new file, the editor is re-focused again so that you can immediately begin writing.
 - Task items are now rendered irrespective of the list-type-character they use, i.e. the following examples will all be rendered correctly: `- [ ]`, `+ [ ]`, and `* [ ]`.
+- The "Empty directory"-message is now translatable and available in several languages.
 
 ## Under the Hood
 
