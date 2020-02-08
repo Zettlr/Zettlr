@@ -842,7 +842,7 @@ class ZettlrEditor {
     let toc = []
     for (let i = 0; i < this._cm.lineCount(); i++) {
       // Don't include comments from code examples in the TOC
-      if (this._cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      if (this._cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
       let line = this._cm.getLine(i)
       if (/^#{1,6} /.test(line)) {
         toc.push({
