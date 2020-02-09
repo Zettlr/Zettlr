@@ -13,6 +13,7 @@
   'use strict'
 
   var zknTagRE = /##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?/i
+  var headingRE = /(#+)\s+/
   var highlightRE = /::.+?::|==.+?==/
   var tableRE = /^\|.+\|$/i
   var inlineMathRE = /^(?:\$[^\s\\]\$(?!\d)|\$[^\s].*?[^\s\\]\$(?!\d))/
@@ -146,11 +147,21 @@
               stream.match(zknTagRE)
               return null
             }
+          } else if (!stream.match(headingRE, false)) {
+            // We're at SOL, but the headingRE did not
+            // match, so it's definitely a tag, and not
+            // a heading.
+            // At this point we can be sure that this is a tag and not escaped.
+            stream.match(zknTagRE)
+            return 'zkn-tag'
+          } else {
+            // If we're here, the headingRE has been triggered, e.g. it's a heading
+            // Due to some unexplainable behaviour, the mdMode only colours
+            // the first character, not the rest, so let's just do it manually. *sigh*
+            let match = stream.match(headingRE)
+            let lvl = match[1].length
+            return `formatting formatting-header formatting-header-${lvl} header header-${lvl}`
           }
-
-          // At this point we can be sure that this is a tag and not escaped.
-          stream.match(zknTagRE)
-          return 'zkn-tag'
         }
 
         // Second: zkn links. This is MUCH easier than I thought :o
