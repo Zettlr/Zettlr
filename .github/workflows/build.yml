@@ -61,7 +61,7 @@ jobs:
       # attempts literally the same thing.
       - name: Manually create the handlebars-directory (Windows only)
         if: matrix.os == 'windows-latest'
-        run: New-Item -Path "./source/common/assets" -Name "handlebars" -ItemType "directory" # Hello, PowerShell ._.
+        run: New-Item -Path "./source/common/assets/handlebars" -ItemType Directory # Hello, PowerShell ._.
 
       # Perform all necessary pre-build steps (LESS, handlebars, and so forth)
       - name: Set up build environment and compile the assets
