@@ -107,12 +107,18 @@
 // citations
 .citeproc-citation {
   background-color: var(--grey-0);
-  &.error { color: var(--fg-error); }
+  &.error { color: var(--red-2); }
 }
 
 // Mermaid charts
 .mermaid-chart {
   // THEMING
+  // For now, a simple background
+  // for easy recognition
+  svg {
+    background-color: var(--grey-4);
+    border-radius: 5px;
+  }
   // .edgePaths {
   //   stroke: #333;
   // }

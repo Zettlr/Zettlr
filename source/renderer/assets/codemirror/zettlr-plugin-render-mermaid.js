@@ -16,7 +16,7 @@ const mermaid = require('mermaid')
 
   // Initialise the mermaid API
   // TODO: Theming!
-  mermaid.mermaidAPI.initialize({ startOnLoad: false/*, theme: null */ })
+  mermaid.mermaidAPI.initialize({ startOnLoad: false, theme: 'dark'/*, theme: null */ })
 
   // Holds the currently rendered diagrams
   var mermaidMarkers = []
