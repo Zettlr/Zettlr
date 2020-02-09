@@ -181,8 +181,11 @@ class ZettlrRenderer {
     let image = clipboard.readImage()
     let rtf = clipboard.readRTF()
 
+    // If the file has an id, paste it instead of generating a new one
+    let f = this.getCurrentFile()
+    let id = (f && f.id) ? f.id : generateId(global.config.get('zkn.idGen'))
     // Write an ID to the clipboard
-    clipboard.writeText(generateId(global.config.get('zkn.idGen')))
+    clipboard.writeText(id)
     // Paste the ID
     remote.getCurrentWebContents().paste()
 
