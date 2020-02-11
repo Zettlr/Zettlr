@@ -2,6 +2,10 @@
 
 **The macOS-build of Zettlr is now code-signed and notarized, which means you will be able to open it without having to explicitly add an exception in your security preferences.**
 
+## Breaking Changes
+
+- If you want to enable the newly added MathJax CDN support for equation rendering, make sure to add the `--mathjax`-flag to your Pandoc command. If you did not modify the Pandoc command, you can "restore" the (new) default value, which will add the MathJax support for you.
+
 ## GUI and Functionality
 
 - **New Feature**: [Mermaid](https://mermaid-js.github.io/mermaid/#/) chart support! Now you can add code blocks with the keyword "mermaid" (i.e. "```mermaid")to your document and use the Mermaid chart language to create charts!
