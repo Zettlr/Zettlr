@@ -30,7 +30,6 @@ module.exports = function (editor) {
   // macOS only shortcuts
   if (process.platform === 'darwin') {
     keymap['Cmd-F'] = false // Disable the internal search
-    keymap['Ctrl-F'] = false // Disable the internal search
     keymap['Alt-B'] = false // Disable word-backwarding on macOS (handled by Alt+ArrowLeft)
     keymap['Alt-F'] = false // Disable word-forwarding on macOS (handled by Alt+ArrowRight)
     keymap['Cmd-Shift-V'] = (cm) => { editor.pasteAsPlain() }

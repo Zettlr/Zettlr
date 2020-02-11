@@ -23,6 +23,7 @@
 - Task items are now rendered irrespective of the list-type-character they use, i.e. the following examples will all be rendered correctly: `- [ ]`, `+ [ ]`, and `* [ ]`.
 - The "Empty directory"-message is now translatable and available in several languages.
 - Headings will no longer be considered tags
+- Fix `Ctrl+F`-shortcut on macOS.
 
 ## Under the Hood
 
