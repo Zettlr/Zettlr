@@ -134,6 +134,11 @@
 
         // First: Tags, in the format of Twitter
         if (stream.match(zknTagRE, false)) {
+          if (stream.sol()) {
+            stream.match(zknTagRE)
+            return 'zkn-tag'
+          }
+
           // As lookbehinds and other nice inventions of regular expressions
           // won't work here because it is a stream of characters rather than
           // one long string, we have to manually check that the tag can be
@@ -143,10 +148,9 @@
           // no spaces, they'll also match our if-condition below.
           if (!stream.sol()) {
             stream.backUp(1)
-            if (stream.next() !== ' ') {
-              stream.match(zknTagRE)
-              return null
-            }
+            let isValidTag = stream.next() === ' '
+            stream.match(zknTagRE)
+            return (isValidTag) ? 'zkn-tag' : null
           } else if (!stream.match(headingRE, false)) {
             // We're at SOL, but the headingRE did not
             // match, so it's definitely a tag, and not
