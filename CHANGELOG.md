@@ -25,6 +25,7 @@
 - Headings will no longer be considered tags
 - Fix `Ctrl+F`-shortcut on macOS.
 - When linking a file using the Zettelkasten links, the prompt will now include *all files from the whole root*, not just the files from within the current directory.
+- Made the dialogs more resilient. Now you can select text somewhere on dialogs, and regardless of whether you accidentally moved too far (out of the dialog), it will not close anymore, when you release the mouse.
 
 ## Under the Hood
 

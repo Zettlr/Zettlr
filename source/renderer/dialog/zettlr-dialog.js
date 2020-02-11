@@ -147,10 +147,13 @@ class ZettlrDialog extends EventEmitter {
 
     // Don't bubble so that the user may click on the dialog without
     // closing the whole modal.
-    this._modal.find('.dialog').on('click', (e) => { e.stopPropagation() })
+    this._modal.find('.dialog').on('click mousedown', (e) => { e.stopPropagation() })
 
-    // Abort on click
-    this._modal.on('click', (e) => { this.close() })
+    // Abort on mousedown (why mousedown? b/c click only triggers
+    // after down AND up. So if the user mouseDOWNED on the dialog
+    // e.g. to select some text, and then pulls up the mouse on
+    // the modal, it'll close regardless of intent).
+    this._modal.on('mousedown', (e) => { this.close() })
 
     // Enable tabs if there are any.
     if (this._modal.find('#prefs-tabs').length > 0) {
