@@ -21,7 +21,8 @@ const countWordsTesters = [
   { 'input': 'Lorem\n\n# Ipsum Dolor', 'expected': 3 },
   { 'input': '\n\n', 'expected': 0 },
   { 'input': '* one\n* two\n* three', 'expected': 3 },
-  { 'input': '#', 'expected': 0 }
+  { 'input': '#', 'expected': 0 },
+  { 'input': '---\ntitle: "Some title"\nkeywords:\n  - one\n  - two\n  - three\n...\n\n# Heading\n\nLorem Ipsum dolor, sit amet', 'expected': 6 }
 ]
 
 describe('Utility#countWords()', function () {

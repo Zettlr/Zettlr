@@ -23,6 +23,23 @@ const BLOCK_ELEMENTS = require('../data.json').block_elements
 module.exports = function (words, countChars = false) {
   if (!words || typeof words !== 'string') return 0
 
+  let tmp = words.split('\n')
+  if (tmp[0] === '---') {
+    // We probably got a frontmatter.
+    // Either way, splice the first elem
+    tmp.shift()
+    let end = 0
+    for (let i = 0; i < tmp.length; i++) {
+      if ([ '...', '---' ].includes(tmp[i])) {
+        end = i
+        break
+      }
+    }
+
+    // Reconstitute the words array, but without the frontmatter
+    if (end > 0) words = tmp.slice(end + 1).join('\n')
+  }
+
   // Split by whitespace and additionally make sure that empty lines
   // are also removed so that \n\n counts as 0 words, not as two.
   words = words.split(/[\s ]+/).filter(word => word !== '')
