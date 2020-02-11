@@ -263,12 +263,12 @@ class ZettlrFile {
     }
 
     do {
-      if (cnt.substr(match.index - linkStart.length, linkStart.length) !== linkStart) {
+      if (mdWithoutCode.substr(match.index - linkStart.length, linkStart.length) !== linkStart) {
         // Found the first ID. Precedence should go to the first found.
         // Minor BUG: Takes IDs that are inside links but not literally make up for a link.
         break
       }
-    } while ((match = idRE.exec(cnt)) != null)
+    } while ((match = idRE.exec(mdWithoutCode)) != null)
 
     if ((match != null) && (match[1].substr(-(linkEnd.length)) !== linkEnd)) {
       this.id = match[1] || ''
