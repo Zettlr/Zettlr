@@ -87,6 +87,27 @@
     border-bottom:1px solid #333;
   }
   </style>
+
+<!-- Pandoc variables -->
+$for(author-meta)$
+<meta name="author" content="$author-meta$" />
+$endfor$
+$if(date-meta)$
+<meta name="dcterms.date" content="$date-meta$" />
+$endif$
+$if(keywords)$
+<meta name="keywords" content="$for(keywords)$$keywords$$sep$, $endfor$" />
+$endif$
+
+<!-- Additional CSS in case the user has passed it -->
+$for(css)$
+  <link rel="stylesheet" href="$css$" />
+$endfor$
+
+<!-- Include MathJax CDN, if applicable -->
+$if(math)$
+  $math$
+$endif$
 </head>
 <body>
   <!-- Render in article for reader view enabling -->

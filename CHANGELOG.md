@@ -28,6 +28,7 @@
 - Made the dialogs more resilient. Now you can select text somewhere on dialogs, and regardless of whether you accidentally moved too far (out of the dialog), it will not close anymore, when you release the mouse.
 - The front matter is now disregarded when counting words or chars.
 - In case of renaming a directory, the containing directory is now re-sorted everytime so that changes are reflected immediately.
+- The HTML template now includes a switch to include MathJax (CDN) in order to display equations in HTML exports and the print preview (only works with Pandoc installed).
 
 ## Under the Hood
 

@@ -170,7 +170,7 @@ class PreferencesDialog extends ZettlrDialog {
 
     // Reset the pandoc command
     $('#reset-pandoc-command').on('click', (e) => {
-      $('#pandocCommand').val('pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex -o "$outfile$"')
+      $('#pandocCommand').val('pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"')
     })
 
     $('#generate-id').on('click', (e) => {
