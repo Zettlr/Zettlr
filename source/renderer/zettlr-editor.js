@@ -276,8 +276,44 @@ class ZettlrEditor {
           this._autoCompleteStart = JSON.parse(JSON.stringify(cur))
           // Build the database in the correct format
           let db = {}
-          for (let file of flattenDirectoryTree(this._renderer.getCurrentDir())) {
-            if (file.type !== 'file') continue
+          let dir = this._renderer.getCurrentDir()
+
+          // Navigate to the root to include as many files as possible
+          while (dir.parent) dir = dir.parent
+
+          // Okay, cool, now we have to replace dir with
+          // a dir coming from findObject(). Why? Because
+          // out of unknown reasons, traversing the directory
+          // UP using the parent-property, removes the children
+          // property of said parent. But when traversing DOWN
+          // from the root level of the directories, the
+          // children array is maintained. Just in case you're
+          // wondering, comment out the following section and
+          // run it (by bringing up the corresponding file link
+          // hint). All three roots will be the same, but the
+          // first one will have zero children, while the others
+          // will have the correct amount. Therefore, only the
+          // third operating statement will return true.
+
+          // let foundRoot = dir
+          // let pathsRoot = renderer._paths[11]
+          // let hashRoot = renderer.findObject(foundRoot.hash)
+          // console.log('Root via traversal: ', foundRoot.name, foundRoot.hash)
+          // console.log('Root via _paths:', pathsRoot.name, pathsRoot.hash)
+          // console.log('Root via findObject(): ', hashRoot.name, hashRoot.hash)
+          // console.log('Num children (traversal)', foundRoot.children.length)
+          // console.log('Num children (_paths)', pathsRoot.children.length)
+          // console.log('Num children (findObject)', hashRoot.children.length)
+          // console.log('Dir same as paths root?', foundRoot === pathsRoot)
+          // console.log('Root same as found object?', foundRoot === hashRoot)
+          // console.log('Paths same as found?', pathsRoot === hashRoot)
+
+          // JavaScript never stops to amaze me.
+          dir = this._renderer.findObject(dir.hash)
+
+          let tree = flattenDirectoryTree(dir).filter(elem => elem.type === 'file')
+
+          for (let file of tree) {
             let fname = path.basename(file.name, path.extname(file.name))
             db[fname] = {
               'text': file.id || fname, // Use the ID, if given, or the filename

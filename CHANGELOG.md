@@ -24,6 +24,7 @@
 - The "Empty directory"-message is now translatable and available in several languages.
 - Headings will no longer be considered tags
 - Fix `Ctrl+F`-shortcut on macOS.
+- When linking a file using the Zettelkasten links, the prompt will now include *all files from the whole root*, not just the files from within the current directory.
 
 ## Under the Hood
 
