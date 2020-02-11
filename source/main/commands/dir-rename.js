@@ -50,7 +50,13 @@ class DirRename extends ZettlrCommand {
 
     // Move to same location with different name
     dir.move(containingDirectory, arg.name).then(() => {
-      global.application.dirUpdate(arg.hash, dir.getMetadata())
+      if (!dir.isRoot()) {
+        // Update the parent, because the file sorting might have changed
+        global.application.dirUpdate(dir.parent.hash, dir.parent.getMetadata())
+      } else {
+        // We got a root, so there's no parent to update
+        global.application.dirUpdate(arg.hash, dir.getMetadata())
+      }
 
       // We need to explicitly re-set the dir, as only by this the
       // newly generated hash will be available throughout the app.

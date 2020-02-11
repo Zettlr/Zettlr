@@ -407,7 +407,7 @@ class ZettlrDir {
     if (name != null) {
       this.name = name // No need to detach on rename
       // But what we want to do is have the parent re-sort its children
-      this.parent.sort()
+      if (!this.isRoot()) this.parent.sort()
     }
 
     // Determine if this is just a rename or a move
