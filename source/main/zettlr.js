@@ -139,6 +139,7 @@ class Zettlr {
     this.openWindow()
 
     process.nextTick(() => {
+      let start = Date.now()
       // Read all paths into the app
       this.refreshPaths().then(() => {
         // If there are any, open argv-files
@@ -148,6 +149,9 @@ class Zettlr {
           // Verify the integrity of the targets after all paths have been loaded
           this._targets.verify()
           this.isBooting = false // Now we're done booting
+          let duration = Date.now() - start
+          duration /= 1000 // Convert to seconds
+          global.log.info(`Loaded all roots in ${duration} seconds`)
         }).catch((err) => {
           global.log.error('Could not add additional roots!', err)
           this.isBooting = false // Now we're done booting
