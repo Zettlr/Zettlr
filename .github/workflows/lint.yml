@@ -1,0 +1,25 @@
+name: Lint
+
+on: pull_request
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.ref }} # Always fetch the branch that triggered the event (develop or master)
+    - name: Setup NodeJS 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: Install packages in main and source directories
+      run: npm install && cd ./source && npm install && cd .. # Simply use one single command for all that stuff and chain using &&
+    - name: Run ESLint
+      run: npm run lint
+    - name: Provide ESLint Report
+      if: failed() # Only upload if ESLint had something to say
+      uses: actions/upload-artifact@v1
+      with:
+        name: eslint-report.htm
+        path: ./eslint_report.htm

@@ -30,7 +30,8 @@
         "reveal:build": "node scripts/update-reveal.js",
         "wp:dev": "cross-env NODE_ENV=development webpack",
         "wp:prod": "cross-env NODE_ENV=production webpack",
-        "test": "mocha"
+        "test": "mocha",
+        "lint": "eslint \"./source/**/*.js\" -f html -o eslint_report.htm"
     },
     "dependencies": {
         "@zettlr/citr": "^1.1.0",

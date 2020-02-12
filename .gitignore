@@ -10,3 +10,6 @@ release
 # Don't commit these pesky yarn logs
 yarn-error.log
 yarn.log
+
+# Don't commit ESLint error reports
+eslint_report.htm
