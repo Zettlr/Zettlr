@@ -70,6 +70,7 @@ jobs:
           cd ./source
           npm install
           cd ..
+          npm run lang:refresh
           npm run less
           npm run handlebars
           npm run reveal:build
