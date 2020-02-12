@@ -4,6 +4,16 @@
 .CodeMirror-vscrollbar { cursor:default; }
 
 .CodeMirror {
+  // The textarea element needs to have the same
+  // font-size as the editor, even though it is
+  // hidden. This way, pop-ups for non-western
+  // fonts such as Hiragana/Katakana are correctly
+  // aligned. Should also help accessibility-plugins.
+  &.CodeMirror-wrap > div > textarea {
+    font-size: 26px;
+    line-height: inherit;
+  }
+
   line-height:1.4375;
   user-select:text;
   background-color: inherit; // Override the codemirror.css default

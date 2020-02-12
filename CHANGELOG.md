@@ -33,6 +33,7 @@
 - The front matter is now disregarded when counting words or chars.
 - In case of renaming a directory, the containing directory is now re-sorted everytime so that changes are reflected immediately.
 - The HTML template now includes a switch to include MathJax (CDN) in order to display equations in HTML exports and the print preview (only works with Pandoc installed).
+- Improved placement of Input Method Editors (IME) for non-western input sources (e.g., Japanese or Korean typeset).
 
 ## Under the Hood
 
