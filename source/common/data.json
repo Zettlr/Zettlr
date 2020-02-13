@@ -159,6 +159,10 @@
         "mode": "javascript",
         "selectors": [ "json" ]
       },
+      "text/typescript": {
+        "mode": "javascript",
+        "selectors": [ "typescript", "ts" ]
+      },
       "text/x-csrc": {
         "mode": "clike",
         "selectors": [ "c" ]
