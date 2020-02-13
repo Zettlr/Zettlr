@@ -38,6 +38,7 @@
           startOfFile: true,
           inFrontmatter: false,
           inEquation: false,
+          inZknLink: false, // Whether or not we're currently within a zkn Link
           yamlState: CodeMirror.startState(yamlMode),
           mdState: CodeMirror.startState(mdMode)
         }
@@ -47,12 +48,27 @@
           startOfFile: state.startOfFile,
           inFrontmatter: state.inFrontmatter,
           inEquation: state.inEquation,
+          inZknLink: state.inZknLink,
           // Make sure to correctly copy the YAML state
           yamlState: CodeMirror.copyState(yamlMode, state.yamlState),
           mdState: CodeMirror.copyState(mdMode, state.mdState)
         }
       },
       token: function (stream, state) {
+        let le = config.zkn.linkEnd || ''
+        if (le !== '' && state.inZknLink) {
+          // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
+          le = config.zkn.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+          le = new RegExp(le)
+          if (stream.match(le)) {
+            state.inZknLink = false
+            return 'zkn-link-formatting'
+          } else {
+            stream.next()
+            return 'zkn-link'
+          }
+        }
+
         if (state.startOfFile && stream.sol() && stream.match(/---/)) {
           // Assume a frontmatter
           state.startOfFile = false
@@ -116,14 +132,6 @@
         if (config.hasOwnProperty('zkn') && config.zkn.hasOwnProperty('idRE')) {
           zknIDRE = new RegExp(config.zkn.idRE)
         }
-        let ls = ''
-        let le = ''
-        if (config.hasOwnProperty('zkn') && config.zkn.hasOwnProperty('linkStart') && config.zkn.hasOwnProperty('linkEnd')) {
-          // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
-          ls = config.zkn.linkStart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
-          le = config.zkn.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
-        }
-        let zknLinkRE = new RegExp(ls + '.+?' + le)
 
         // This mode should also handle tables, b/c they are rather simple to detect.
         if (stream.sol() && stream.match(tableRE, false)) {
@@ -168,9 +176,16 @@
           }
         }
 
-        // Second: zkn links. This is MUCH easier than I thought :o
-        if ((le !== '') && stream.match(zknLinkRE)) {
-          return 'zkn-link'
+        let ls = config.zkn.linkStart || ''
+        if (ls !== '') {
+          ls = config.zkn.linkStart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+          ls = new RegExp(ls)
+        }
+
+        // Now check for a zknLink
+        if ((ls !== '') && stream.match(ls)) {
+          state.inZknLink = true
+          return 'zkn-link-formatting'
         }
 
         // Third: IDs (The upside of this is that IDs _inside_ links will
@@ -193,6 +208,7 @@
         }
       },
       blankLine: function (state) {
+        state.inZknLink = false
         // The underlying mode needs
         // to be aware of blank lines
         return mdMode.blankLine(state.mdState)
