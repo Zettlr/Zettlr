@@ -154,8 +154,6 @@ class ZettlrEditor {
               completion.displayText) {
               // Get the correct setting
               let linkPref = global.config.get('zkn.linkWithFilename')
-              // We need to know how far we should advance the cursor
-              let linkEndingLength = this._cm.getOption('zkn').linkEnd.length
               // Prepare the text to insert, removing the ID if found in the filename
               let text = completion.displayText
               if (completion.id && text.indexOf(completion.id) >= 0) {
@@ -164,13 +162,23 @@ class ZettlrEditor {
               // In case the whole filename consists of the ID, well.
               // Then, have your ID duplicated.
               if (text.length === 0) text = completion.displayText
-              // Advance the cursor so that it is outside of the link again
               let cur = JSON.parse(JSON.stringify(cm.getCursor()))
-              cur.ch += linkEndingLength
-              cm.setCursor(cur)
+              // Check if the linkEnd has been already inserted
+              let line = cm.getLine(cur.line)
+              let end = this._cm.getOption('zkn').linkEnd || ''
+              let prefix = ' '
+              if (end !== '' && line.substr(cur.ch, end.length) !== end) {
+                // Add the linkend
+                prefix = end + prefix
+              } else {
+                // Advance the cursor so that it is outside of the link again
+                cur.ch += end.length
+                cm.setCursor(cur)
+              }
               if (linkPref === 'always' || (linkPref === 'withID' && completion.id)) {
                 // We need to add the text after the link.
-                cm.replaceSelection(' ' + text)
+                console.log('Replacing with ' + prefix + text)
+                cm.replaceSelection(prefix + text)
               }
             }
             this._autoCompleteStart = null

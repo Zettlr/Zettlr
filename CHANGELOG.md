@@ -36,6 +36,8 @@
 - Improved placement of Input Method Editors (IME) for non-western input sources (e.g., Japanese or Korean typeset).
 - The file linking autocomplete will now respect your choice of Zettelkasten link starting characters, if they differ from `[[`.
 - The formatting of Zettelkasten-links is now according to other formattings (such as emphasis or bold text), slightly transparent.
+- On autocompleting Zettelkasten-links, the closing characters for the links are now added in case they are not already present (due to autoclosing, or else).
+- The automplete-dropdown for Zettelkasten-links does not appear anymore if editing a footnote.
 
 ## Under the Hood
 
