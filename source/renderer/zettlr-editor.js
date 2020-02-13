@@ -456,7 +456,7 @@ class ZettlrEditor {
         // The user clicked a zkn link -> create a search
         this._renderer.autoSearch(elem.text())
       } else if (elem.hasClass('cm-zkn-link')) {
-        this._renderer.autoSearch(elem.text().replace(/[[\]]/g, ''), true)
+        this._renderer.autoSearch(elem.text(), true)
       } else if (elem.hasClass('cm-link') && elem.text().indexOf('^') === 0) {
         // We've got a footnote
         this._editFootnote(elem)
