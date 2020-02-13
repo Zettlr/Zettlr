@@ -189,8 +189,8 @@ class ZettlrEditor {
       markdownOnLinkOpen: (url) => { return openMarkdownLink(url, this) }, // Action for ALT-Clicks
       zkn: {
         idRE: '(\\d{14})', // What do the IDs look like?
-        linkStart: '\\[\\[', // Start of links?
-        linkEnd: '\\]\\]' // End of links?
+        linkStart: '[[', // Start of links?
+        linkEnd: ']]' // End of links?
       },
       continuelistModes: [ 'markdown', 'markdown-zkn' ],
       extraKeys: generateKeymap(this)
@@ -250,8 +250,12 @@ class ZettlrEditor {
     })
 
     this._cm.on('change', (cm, changeObj) => {
+      let cur = cm.getCursor()
+      let newText = changeObj.text
+      let linkStart = cm.getOption('zkn').linkStart
+      let textUntilCursor = cm.getLine(cur.line).substr(cur.ch - linkStart.length, linkStart.length)
       // Show tag autocompletion window, if applicable (or close it)
-      if (changeObj.text[0] === '#') {
+      if (newText[0] === '#') {
         let cur = cm.getCursor()
         // Make sure the # is either at the beginning
         // of the line or is preceded by a space.
@@ -261,72 +265,66 @@ class ZettlrEditor {
           this._currentDatabase = this._tagDB
           this._cm.showHint()
         }
-      } else if (changeObj.text[0] === '@') {
+      } else if (newText[0] === '@') {
         // citeproc-ID autocompletion
         this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
         this._currentDatabase = this._citeprocIDs
         this._cm.showHint()
-      } else if (changeObj.text[0].charAt(0) === '[' && cm.getCursor().ch > 1) {
-        let cur = cm.getCursor()
+      } else if (textUntilCursor === linkStart && this._renderer.getCurrentDir() != null) {
         // File name autocompletion
-        // Only match the first character to account for both autocomplete
-        // brackets and if the setting is off
-        if (cm.getLine(cur.line).charAt(cur.ch - 2) === '[' && this._renderer.getCurrentDir() != null) {
-          // Only trigger, if the char before is existent and also a square brace
-          this._autoCompleteStart = JSON.parse(JSON.stringify(cur))
-          // Build the database in the correct format
-          let db = {}
-          let dir = this._renderer.getCurrentDir()
+        this._autoCompleteStart = JSON.parse(JSON.stringify(cur))
+        // Build the database in the correct format
+        let db = {}
+        let dir = this._renderer.getCurrentDir()
 
-          // Navigate to the root to include as many files as possible
-          while (dir.parent) dir = dir.parent
+        // Navigate to the root to include as many files as possible
+        while (dir.parent) dir = dir.parent
 
-          // Okay, cool, now we have to replace dir with
-          // a dir coming from findObject(). Why? Because
-          // out of unknown reasons, traversing the directory
-          // UP using the parent-property, removes the children
-          // property of said parent. But when traversing DOWN
-          // from the root level of the directories, the
-          // children array is maintained. Just in case you're
-          // wondering, comment out the following section and
-          // run it (by bringing up the corresponding file link
-          // hint). All three roots will be the same, but the
-          // first one will have zero children, while the others
-          // will have the correct amount. Therefore, only the
-          // third operating statement will return true.
+        // Okay, cool, now we have to replace dir with
+        // a dir coming from findObject(). Why? Because
+        // out of unknown reasons, traversing the directory
+        // UP using the parent-property, removes the children
+        // property of said parent. But when traversing DOWN
+        // from the root level of the directories, the
+        // children array is maintained. Just in case you're
+        // wondering, comment out the following section and
+        // run it (by bringing up the corresponding file link
+        // hint). All three roots will be the same, but the
+        // first one will have zero children, while the others
+        // will have the correct amount. Therefore, only the
+        // third operating statement will return true.
 
-          // let foundRoot = dir
-          // let pathsRoot = renderer._paths[11]
-          // let hashRoot = renderer.findObject(foundRoot.hash)
-          // console.log('Root via traversal: ', foundRoot.name, foundRoot.hash)
-          // console.log('Root via _paths:', pathsRoot.name, pathsRoot.hash)
-          // console.log('Root via findObject(): ', hashRoot.name, hashRoot.hash)
-          // console.log('Num children (traversal)', foundRoot.children.length)
-          // console.log('Num children (_paths)', pathsRoot.children.length)
-          // console.log('Num children (findObject)', hashRoot.children.length)
-          // console.log('Dir same as paths root?', foundRoot === pathsRoot)
-          // console.log('Root same as found object?', foundRoot === hashRoot)
-          // console.log('Paths same as found?', pathsRoot === hashRoot)
+        // let foundRoot = dir
+        // let pathsRoot = renderer._paths[11]
+        // let hashRoot = renderer.findObject(foundRoot.hash)
+        // console.log('Root via traversal: ', foundRoot.name, foundRoot.hash)
+        // console.log('Root via _paths:', pathsRoot.name, pathsRoot.hash)
+        // console.log('Root via findObject(): ', hashRoot.name, hashRoot.hash)
+        // console.log('Num children (traversal)', foundRoot.children.length)
+        // console.log('Num children (_paths)', pathsRoot.children.length)
+        // console.log('Num children (findObject)', hashRoot.children.length)
+        // console.log('Dir same as paths root?', foundRoot === pathsRoot)
+        // console.log('Root same as found object?', foundRoot === hashRoot)
+        // console.log('Paths same as found?', pathsRoot === hashRoot)
 
-          // JavaScript never stops to amaze me.
-          dir = this._renderer.findObject(dir.hash)
+        // JavaScript never stops to amaze me.
+        dir = this._renderer.findObject(dir.hash)
 
-          let tree = flattenDirectoryTree(dir).filter(elem => elem.type === 'file')
+        let tree = flattenDirectoryTree(dir).filter(elem => elem.type === 'file')
 
-          for (let file of tree) {
-            let fname = path.basename(file.name, path.extname(file.name))
-            db[fname] = {
-              'text': file.id || fname, // Use the ID, if given, or the filename
-              'displayText': fname, // Always display the filename
-              'id': file.id || false
-            }
+        for (let file of tree) {
+          let fname = path.basename(file.name, path.extname(file.name))
+          db[fname] = {
+            'text': file.id || fname, // Use the ID, if given, or the filename
+            'displayText': fname, // Always display the filename
+            'id': file.id || false
           }
-          this._currentDatabase = db
-          this._cm.showHint()
         }
+        this._currentDatabase = db
+        this._cm.showHint()
       }
 
-      if (changeObj.origin === 'paste' && changeObj.text.join(' ').split(' ').length > 10) {
+      if (changeObj.origin === 'paste' && newText.join(' ').split(' ').length > 10) {
         // In case the user pasted more than ten words don't let these count towards
         // the word counter. Simply update the word count before the save function
         // is triggered. This way none of the just pasted words will count.
