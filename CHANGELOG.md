@@ -40,6 +40,7 @@
 - On autocompleting Zettelkasten-links, the closing characters for the links are now added in case they are not already present (due to autoclosing, or else).
 - The automplete-dropdown for Zettelkasten-links does not appear anymore if editing a footnote.
 - Added overall days statistics to the stats dialog.
+- Image-Paths correction for Windows systems.
 
 ## Under the Hood
 

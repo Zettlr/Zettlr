@@ -252,11 +252,9 @@ class ZettlrEditor {
         let newtext = []
         for (let i in changeObj.text) {
           if (changeObj.text[i].indexOf('file://') === 0 && IMAGE_REGEX.test(changeObj.text[i])) {
-            console.log(changeObj.text[i])
             // Omit the file:// and decode any URI components to enable Pandoc
             // and xetex to find the image.
-            let uri = decodeURIComponent(changeObj.text[i].substr(7))
-            console.log(uri)
+            let uri = decodeURIComponent(changeObj.text[i].substr((process.platform === 'win32') ? 8 : 7))
             newtext[i] = `![${path.basename(changeObj.text[i])}](${uri})`
           } else {
             newtext[i] = changeObj.text[i]
