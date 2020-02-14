@@ -8,13 +8,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: ${{ github.ref }} # Always fetch the branch that triggered the event (develop or master)
+        # Always fetch the branch that triggered the event (develop or master)
+        ref: ${{ github.ref }}
     - name: Setup NodeJS 12.x
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
     - name: Install packages in main and source directories
-      run: npm install && cd ./source && npm install && cd .. # Simply use one single command for all that stuff and chain using &&
+      # Simply use one single command for all that stuff and chain using &&
+      run: npm install && cd ./source && npm install && cd ..
     - name: Run ESLint
       run: npm run lint
     - name: Provide ESLint Report
