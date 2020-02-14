@@ -230,7 +230,15 @@ class ZettlrEditor {
         // converter will result in unwanted behaviour (including Electron).
         let html = clipboard.readHTML()
         let plain = clipboard.readText()
-        if (html && html.length > 0 && (!plain || html !== plain)) {
+        // We have the problem that CodeMirror treats moving
+        // text around and dropping links exactly the same
+        // as explicitly hitting Cmd/Ctrl+V. The only way we
+        // can be sure is to make sure the changeObject is the
+        // same as the plain text from the clipboard. ONLY in
+        // this instance is it a regular, explicit paste. Else
+        // the text in the changeObject takes precedence.
+        let explicitPaste = plain === changeObj.text.join('\n')
+        if (html && html.length > 0 && (!plain || html !== plain) && explicitPaste) {
           // We've got HTML, so let's fire up Showdown.js
           plain = this._showdown.makeMarkdown(html)
           // Let's update the (very likely plain) HTML text with some Markdown
