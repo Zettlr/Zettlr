@@ -84,6 +84,9 @@ module.exports = {
         return
       }
 
+      // state.fileList = objectToArray(dir, 'children')
+      // return
+
       state.fileList = []
       setTimeout(() => {
         // Now we need to flatten the object into an array.
