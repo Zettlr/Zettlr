@@ -177,7 +177,6 @@ class ZettlrEditor {
               }
               if (linkPref === 'always' || (linkPref === 'withID' && completion.id)) {
                 // We need to add the text after the link.
-                console.log('Replacing with ' + prefix + text)
                 cm.replaceSelection(prefix + text)
               }
             }
@@ -303,7 +302,7 @@ class ZettlrEditor {
         // third operating statement will return true.
 
         // let foundRoot = dir
-        // let pathsRoot = renderer._paths[11]
+        // let pathsRoot = renderer._paths[11] (correct index for you, obvsly)
         // let hashRoot = renderer.findObject(foundRoot.hash)
         // console.log('Root via traversal: ', foundRoot.name, foundRoot.hash)
         // console.log('Root via _paths:', pathsRoot.name, pathsRoot.hash)

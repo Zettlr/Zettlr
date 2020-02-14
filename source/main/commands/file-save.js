@@ -29,6 +29,7 @@ class SaveFile extends ZettlrCommand {
     */
   async run (evt, file) {
     if ((file == null) || !file.hasOwnProperty('content')) {
+      global.log.error('Could not save file, it\'s either null or has no content', file)
       // No file given -> abort saving process
       return false
     }
@@ -68,6 +69,7 @@ class SaveFile extends ZettlrCommand {
     } else {
       let f = this._app.getCurrentFile()
       if (f == null) {
+        global.log.error('getCurrentFile() did not return a file!')
         return this._app.window.prompt({
           type: 'error',
           title: trans('system.error.fnf_title'),
@@ -79,8 +81,13 @@ class SaveFile extends ZettlrCommand {
 
     // Ignore the next change for this specific file
     global.watchdog.ignoreNext('change', file.path)
-    file.save(cnt)
-    this._app.clearModified()
+    try {
+      file.save(cnt)
+      this._app.clearModified()
+    } catch (err) {
+      global.log.error('An error occurred during file saving!', err)
+      return false
+    }
 
     // Now it can be that a paths update is necessary. We have to send the
     // update instead of the file-update to make sure the correct file is in
