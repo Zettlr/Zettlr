@@ -153,6 +153,7 @@ class ZettlrCon {
 
     // First: determine where the click happened (Sidebar or editor)
     if (elem.parents('#sidebar').length > 0) {
+      shouldSelectWordUnderCursor = false // Don't select when right-clicking the sidebar
       // Here's what the options of elements the user might click are:
       //
       // 1. The surrounding .container
@@ -239,6 +240,7 @@ class ZettlrCon {
       }
       menupath = 'editor.json'
     } else if (elem.is('input[type="text"]') || elem.is('textarea')) {
+      shouldSelectWordUnderCursor = false // Don't select when right-clicking a text field
       menupath = 'text.json'
     }
 
