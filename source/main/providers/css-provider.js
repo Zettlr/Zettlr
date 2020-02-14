@@ -56,7 +56,7 @@ class CSSProvider extends EventEmitter {
    * @return {String} The custom CSS
    */
   get () {
-    let file = fs.readFileSync(this._filePath)
+    let file = fs.readFileSync(this._filePath, 'utf8')
     return file
   }
 
@@ -74,7 +74,7 @@ class CSSProvider extends EventEmitter {
   set (newContent) {
     try {
       fs.writeFileSync(this._filePath, newContent)
-      this.emit('update', this.getPath())
+      this.emit('update', this._filePath)
       return true
     } catch (e) {
       return false
