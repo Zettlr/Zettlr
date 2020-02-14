@@ -17,6 +17,7 @@
 const ZettlrDialog = require('./zettlr-dialog.js')
 const Chart = require('chart.js')
 const localiseNumber = require('../../common/util/localise-number')
+const formatDate = require('../../common/util/format-date')
 const { trans } = require('../../common/lang/i18n.js')
 const moment = require('moment')
 
@@ -43,9 +44,14 @@ class StatsDialog extends ZettlrDialog {
   preInit (data = null) {
     if (!data) throw new Error('No statistical data provided')
 
-    this._rawData = data // Save the raw word counts into this object
+    this._rawData = JSON.parse(JSON.stringify(data)) // Save the raw word counts into this object
     this._sanitiseData() // Fill in holes in the data.
     this._prepareData() // By default start with weeks
+    data.days = Object.keys(this._rawData).length
+    let date = Object.keys(this._rawData)[0].split('-').map(e => parseInt(e))
+    date = new Date(date[0], date[1] - 1, date[2]) // Remember months need to be 0-based
+    date = formatDate(date)
+    data.firstDay = date
 
     return data
   }
@@ -273,8 +279,8 @@ class StatsDialog extends ZettlrDialog {
         max = max.isoWeekday(7).format('YYYY-MM-DD')
       }
 
-      this._chart.options.scales.xAxes[0].time.min = min
-      this._chart.options.scales.xAxes[0].time.max = max
+      this._chart.options.scales.xAxes[0].ticks.min = min
+      this._chart.options.scales.xAxes[0].ticks.max = max
     }
 
     // Pre-set the progress bar

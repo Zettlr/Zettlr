@@ -39,6 +39,7 @@
 - The formatting of Zettelkasten-links is now according to other formattings (such as emphasis or bold text), slightly transparent.
 - On autocompleting Zettelkasten-links, the closing characters for the links are now added in case they are not already present (due to autoclosing, or else).
 - The automplete-dropdown for Zettelkasten-links does not appear anymore if editing a footnote.
+- Added overall days statistics to the stats dialog.
 
 ## Under the Hood
 
