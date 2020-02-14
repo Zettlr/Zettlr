@@ -27,21 +27,15 @@ class ZettlrQLStandalone {
 
     // Enable listening to config changes
     global.config.on('update', (e) => {
-      let darkMode = global.config.get('darkTheme')
-      let theme = global.config.get('display.theme')
-
-      if (darkMode !== this._darkMode) {
-        this._darkMode = darkMode
-        for (let ql of this._ql) {
-          if (ql) ql.webContents.send('toggle-theme')
-        }
+      // Finally, send the full config object
+      for (let ql of this._ql) {
+        if (ql) ql.webContents.send('config-update', global.config.get())
       }
+    })
 
-      if (theme !== this._currentTheme) {
-        this._currentTheme = theme
-        for (let ql of this._ql) {
-          if (ql) ql.webContents.send('switch-theme', theme)
-        }
+    global.css.on('update', (cssPath) => {
+      for (let ql of this._ql) {
+        if (ql) ql.webContents.send('custom-css', cssPath)
       }
     })
   }

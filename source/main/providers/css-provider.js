@@ -15,9 +15,11 @@
 const path = require('path')
 const fs = require('fs')
 const { app } = require('electron')
+const EventEmitter = require('events')
 
-class CSSProvider {
+class CSSProvider extends EventEmitter {
   constructor () {
+    super()
     global.log.verbose('CSS provider booting up ...')
     this._filePath = path.join(app.getPath('userData'), 'custom.css')
 
@@ -32,6 +34,8 @@ class CSSProvider {
 
     // Inject the global provider functions
     global.css = {
+      on: (event, callback) => { this.on(event, callback) },
+      off: (event, callback) => { this.on(event, callback) },
       get: () => { return this.get() },
       getPath: () => { return this._filePath },
       set: (newContent) => { return this.set(newContent) }
@@ -70,6 +74,7 @@ class CSSProvider {
   set (newContent) {
     try {
       fs.writeFileSync(this._filePath, newContent)
+      this.emit('update', this.getPath())
       return true
     } catch (e) {
       return false

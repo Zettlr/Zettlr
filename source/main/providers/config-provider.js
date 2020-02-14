@@ -595,6 +595,7 @@ class ConfigProvider extends EventEmitter {
     // Notify renderer afterwards
     this._bulkSetInProgress = false
     if (global.hasOwnProperty('ipc')) global.ipc.send('config-update')
+    this.emit('update', this.getConfig()) // Notify everyone else
 
     return ret
   }

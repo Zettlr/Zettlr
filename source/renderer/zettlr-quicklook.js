@@ -92,6 +92,11 @@ class ZettlrQuicklook {
         'Cmd-F': 'focusFind',
         'Ctrl-F': 'focusFind'
       },
+      zkn: {
+        idRE: '(\\d{14})', // What do the IDs look like?
+        linkStart: '[[', // Start of links?
+        linkEnd: ']]' // End of links?
+      },
       theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
       cursorBlinkRate: -1 // Hide the cursor
     })
@@ -107,6 +112,13 @@ class ZettlrQuicklook {
       e.stopPropagation()
       this.close()
     })
+  }
+
+  onConfigUpdate (config) {
+    this._cm.setOption('zkn', config.zkn)
+    // Quote Marijn: "Resetting the mode option with setOption will trigger a full re-parse."
+    // Source: https://github.com/codemirror/CodeMirror/issues/3318#issuecomment-111067281
+    this._cm.setOption('mode', this._cm.getOption('mode'))
   }
 
   /**

@@ -56,6 +56,7 @@
 - The YAML mode within frontmatters is now correctly detected by all plugins, so that e.g. AutoCorrect does not apply within YAML-frontmatters and quotes are the "correct" ones (no need to disable MagicQuotes temporarily to write frontmatters).
 - Added an additional check to make sure to differ between explicit and implicit paste events in the CodeMirror instance.
 - Finally fixed the weird glitches of the file list. Now it will correctly scroll files into view, not break, and be not empty for a fraction of a second.
+- Overhauled the QuickLook windows. Now they react to much more finetuned configuration changes, are more responsive, and in general react faster to changes.
 
 # 1.5.0
 

@@ -31,8 +31,10 @@ class ZettlrQuicklookWindow {
     * @param {ZettlrFile} file     The file whose content should be displayed
     */
   constructor () {
+    let url = new URL(window.location.href)
     this._file = null
     this._ql = null
+    this._theme = url.searchParams.get('theme')
 
     // as this class basically acts as the renderer class, we also have to take
     // care of specifics such as getting the translation strings, etc.
@@ -42,7 +44,6 @@ class ZettlrQuicklookWindow {
     $('body').addClass(process.platform)
 
     // Find out which file we should request
-    let url = new URL(window.location.href)
     let hash = url.searchParams.get('file')
     // First sending must go out of the first tick of the application
     setTimeout(() => {
@@ -55,26 +56,37 @@ class ZettlrQuicklookWindow {
 
     // Also we need to know whether or not we should initiate in darkMode, and
     // which theme to use initially.
-    let dm = url.searchParams.get('darkMode')
-    let theme = url.searchParams.get('theme')
-    if (dm === 'true') $('body').addClass('dark')
-    $('link#theme-css').attr('href', $('link#theme-css').attr('href').replace(/bielefeld|berlin|frankfurt|karl-marx-stadt/, theme))
-
-    // Toggle the theme (or mode) if there's an appropriate event
-    ipc.on('toggle-theme', (e) => { $('body').toggleClass('dark') })
-    ipc.on('switch-theme', (e, theme) => {
-      $('link#theme-css').attr(
-        'href',
-        $('link#theme-css').attr('href').replace(/bielefeld|berlin|frankfurt|karl-marx-stadt/, theme)
-      )
-    })
+    if (url.searchParams.get('darkMode') === 'true') $('body').addClass('dark')
+    $('link#theme-css').attr('href', $('link#theme-css').attr('href').replace(/bielefeld|berlin|frankfurt|karl-marx-stadt/, this._theme))
 
     ipc.on('custom-css', (evt, cnt) => {
+      $('#custom-css-link').detach() // Remove any prior link
       let lnk = $('<link>').attr('rel', 'stylesheet')
       lnk.attr('href', 'file://' + cnt + '?' + Date.now())
       lnk.attr('type', 'text/css')
       lnk.attr('id', 'custom-css-link')
       $('head').first().append(lnk)
+    })
+
+    ipc.on('config-update', (evt, config) => {
+      console.log(config)
+      // First update externalities
+      if (config.darkTheme) {
+        $('body').addClass('dark')
+      } else {
+        $('body').removeClass('dark')
+      }
+
+      if (config.display.theme !== this._theme) {
+        this._theme = config.display.theme
+        $('link#theme-css').attr(
+          'href',
+          $('link#theme-css').attr('href').replace(/bielefeld|berlin|frankfurt|karl-marx-stadt/, this._theme)
+        )
+      }
+
+      // ... and then the CodeMirror instance
+      this._ql.onConfigUpdate(config)
     })
 
     // activate event listeners for the window
