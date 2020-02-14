@@ -55,6 +55,7 @@
 - Wrote script to automatically update the CSL styles and locales that are shipped with the app. Also, updated the CSL styles and locales.
 - The YAML mode within frontmatters is now correctly detected by all plugins, so that e.g. AutoCorrect does not apply within YAML-frontmatters and quotes are the "correct" ones (no need to disable MagicQuotes temporarily to write frontmatters).
 - Added an additional check to make sure to differ between explicit and implicit paste events in the CodeMirror instance.
+- Finally fixed the weird glitches of the file list. Now it will correctly scroll files into view, not break, and be not empty for a fraction of a second.
 
 # 1.5.0
 

@@ -76,10 +76,9 @@
               v-bind:emit-update="true"
               v-on:update="updateDynamics"
               v-bind:page-mode="true"
-              key-field="hash"
-              v-slot="view"
+              v-slot="{ item }"
             >
-              <file-item v-bind:obj="view.item" v-if="view.active"></file-item>
+              <file-item v-bind:obj="item.props"></file-item>
             </recycle-scroller>
           </template>
           <template v-else-if="getDirectoryContents.length === 1">
@@ -160,6 +159,9 @@ module.exports = {
         this.$refs.fileList.classList.add('hidden')
         this.$refs.directories.classList.remove('hidden')
       }
+
+      // As soon as the directory contents have changed, scroll to the right file
+      this.$nextTick(function () { this.scrollIntoView() })
     },
     /**
      * Listens to changes of the sidebarMode to reset
@@ -195,7 +197,16 @@ module.exports = {
      */
     getFiles: function () { return this.$store.getters.rootFiles },
     getDirectories: function () { return this.$store.getters.rootDirectories },
-    getDirectoryContents: function () { return this.$store.getters.directoryContents },
+    getDirectoryContents: function () {
+      let ret = []
+      for (let i = 0; i < this.$store.getters.directoryContents.length; i++) {
+        ret.push({
+          id: i, // This helps the virtual scroller to adequately position the items
+          props: this.$store.getters.directoryContents[i] // The actual item
+        })
+      }
+      return ret
+    },
     selectedFile: function () { return this.$store.state.selectedFile },
     selectedDirectory: function () { return this.$store.state.selectedDirectory },
     sidebarClass: function () { return (this.isExpanded) ? 'expanded' : '' },
@@ -461,10 +472,10 @@ module.exports = {
     scrollIntoView: function () {
       // In case the file changed, make sure it's in view.
       let scrollTop = this.$refs.fileList.scrollTop
-      let index = this.getDirectoryContents.find(e => e.hash === this.selectedFile)
+      let index = this.getDirectoryContents.find(e => e.props.hash === this.selectedFile)
       if (!index) return
       index = this.getDirectoryContents.indexOf(index)
-      let modifier = (this.$store.state.fileMeta) ? 60 : 30
+      let modifier = (this.$store.state.fileMeta) ? 61 : 31
       let position = index * modifier
       if (position < scrollTop) this.$refs.fileList.scrollTop = position
       else if (position > scrollTop + this.$refs.fileList.offsetHeight - modifier) {

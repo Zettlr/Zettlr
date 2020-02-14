@@ -84,15 +84,7 @@ module.exports = {
         return
       }
 
-      // state.fileList = objectToArray(dir, 'children')
-      // return
-
-      state.fileList = []
-      setTimeout(() => {
-        // Now we need to flatten the object into an array.
-        // Signature: First the object, then the attribute where the nested objects are
-        state.fileList = objectToArray(dir, 'children')
-      }, 1) // Compute after next tick BUG DEBUG: This is a problem in virtual-scroller
+      state.fileList = objectToArray(dir, 'children')
     },
     sidebarMode: (state, mode) => {
       state.sidebarMode = mode
