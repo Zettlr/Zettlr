@@ -20,7 +20,7 @@ jobs:
     - name: Run ESLint
       run: npm run lint
     - name: Provide ESLint Report
-      if: failed() # Only upload if ESLint had something to say
+      if: failure() # Only upload if ESLint had something to say
       uses: actions/upload-artifact@v1
       with:
         name: eslint-report.htm
