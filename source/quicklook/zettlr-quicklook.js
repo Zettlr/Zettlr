@@ -14,13 +14,13 @@
  */
 
 const makeSearchRegEx = require('../common/util/make-search-regex')
-const { trans } = require('../common/lang/i18n.js')
+const { trans } = require('../common/lang/i18n')
 
 // CodeMirror related includes
 // The autoloader requires all necessary CodeMirror addons and modes that are
 // used by the main class. It simply folds about 70 lines of code into an extra
 // file.
-require('./assets/codemirror/autoload.js')
+require('../renderer/assets/codemirror/autoload')
 
 // Finally CodeMirror itself
 const CodeMirror = require('codemirror')

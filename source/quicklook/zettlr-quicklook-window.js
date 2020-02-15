@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const ZettlrQuicklook = require('../renderer/zettlr-quicklook.js')
+const ZettlrQuicklook = require('./zettlr-quicklook')
 const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
 const ipc = require('electron').ipcRenderer
 
