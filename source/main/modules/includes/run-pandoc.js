@@ -89,9 +89,11 @@ module.exports = async function (options) {
         reject(new Error(trans('system.error.export_temp_file', options.sourceFile)))
       }
       if (error) {
-        let err = new Error()
+        // We can't instantiate an error object, because any
+        // additional properties will simply be dropped on IPC send.
+        let err = {}
         err.title = trans('system.error.export_error_title')
-        err.message = trans('system.error.export_error_message', error.message)
+        err.message = trans('system.error.export_error_message', error.cmd)
         err.additionalInfo = stderr // Pandoc sometimes produces helpful stuff
         return reject(err)
       }

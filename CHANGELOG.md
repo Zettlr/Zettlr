@@ -61,6 +61,7 @@
 - Finally fixed the weird glitches of the file list. Now it will correctly scroll files into view, not break, and be not empty for a fraction of a second.
 - Overhauled the QuickLook windows. Now they react to much more finetuned configuration changes, are more responsive, and in general react faster to changes.
 - Switch to Electron 8.
+- Fix Pandoc error logging
 
 # 1.5.0
 
