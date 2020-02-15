@@ -1,12 +1,38 @@
-# Zettlr [_ˈset·lər_]
+<h1 align="center">
+  <a href="https://github.com/Zettlr/Zettlr">
+    <img src="resources/icons/png/256x256px" alt="Zettlr"/>
+  </a>
+  <br/>
+  Zettlr [_ˈset·lər_]
+</h1>
 
-**The Markdown editor for the 21st century.**
+<p align="center"><strong>A Markdown Editor for the 21<sup>st</sup> century</strong>.</p>
 
-***
+<p align="center">
+  <a href="https://doi.org/10.5281/zenodo.2580173">
+    <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.2580173.svg" alt="DOI">
+  </a>
+  <a href="https://www.gnu.org/licenses/gpl-3.0">
+    <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GNU GPL v3">
+  </a>
+  <a href="https://www.zettlr.com/download">
+    <img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/tag-date/Zettlr/Zettlr.svg?label=latest">
+  </a>
+  <img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/Zettlr/Zettlr/total.svg">
+  <img alt="Test" src="https://github.com/Zettlr/Zettlr/workflows/Test/badge.svg?branch=master">
+  <img alt="Build" src="https://github.com/Zettlr/Zettlr/workflows/Build/badge.svg">
+</p>
 
-<a href="https://doi.org/10.5281/zenodo.2580173"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.2580173.svg" alt="DOI"></a> <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GNU GPL v3"></a> <img alt="GitHub All Releases" src="https://img.shields.io/github/downloads/Zettlr/Zettlr/total.svg"> <a href="https://www.zettlr.com/download"><img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/tag-date/Zettlr/Zettlr.svg?label=latest"></a> ![Test](https://github.com/Zettlr/Zettlr/workflows/Test/badge.svg?branch=master) ![Build](https://github.com/Zettlr/Zettlr/workflows/Build/badge.svg)
+<p align="center">
+  <a href="https://www.zettlr.com/" target="_blank">Homepage</a> |
+  <a href="https://www.zettlr.com/download">Download</a> |
+  <a href="https://docs.zettlr.com/" target="_blank">Documentation</a> |
+  <a href="https://forum.zettlr.com/" target="_blank">Discussion Forum</a> |
+  <a href="#contributing">Contributing</a> |
+  <a href="https://www.patreon.com/zettlr" target="_blank">Support Us</a>
+</p>
 
-![The central window of Zettlr](/resources/screenshots/zettlr_view.png)
+![screenshot](/resources/screenshots/zettlr_view.png)
 
 With Zettlr, writing professional texts is easy and motivating: Whether you are a college student, a researcher, a journalist, or an author — Zettlr has the right tools for you. [Watch the video](https://www.youtube.com/watch?v=BJ27r6YGpAs) or continue reading to see what they are!
 
@@ -14,22 +40,26 @@ With Zettlr, writing professional texts is easy and motivating: Whether you are 
 
 ## Features
 
+- Available in over a dozen languages
+- Tight and ever-growing **integration with your favourite reference manager** (Zotero, JabRef)
+- **Cite with Zettlr** using `citeproc` and your existing literature database
+- Four **themes and dark mode support**
 - File-agnostic writing: Enjoy **full control over your own files**
 - Keep all your notes and texts **in one place** — searchable and accessible
-- **Night Mode** support
-- **Cite with Zettlr** using `citeproc` and your existing literature database
-- **Code highlighting** for most contemporary programming languages
+- **Code highlighting** for many languages
 - Simple and beautiful **exports** with [Pandoc](https://pandoc.org/), [LaTeX](https://www.latex-project.org/), and [Textbundle](http://textbundle.org/)
 - Support for state of the art knowledge management techniques (**Zettelkasten**)
 - A revolutionary **search algorithm** with integrated heatmap
 
-… and the best is: **Zettlr is [Open Source](https://en.wikipedia.org/wiki/Free_and_open-source_software)!**
+… and the best is: **Zettlr is [Open Source (FOSS)](https://en.wikipedia.org/wiki/Free_and_open-source_software)!**
 
 ## Get Zettlr
 
-To install Zettlr, just [download the latest release](https://www.zettlr.com/download/) for your operating system! Currently supported are macOS, Windows, and Debian- and Fedora-based Linux systems. (And every other system _electron_ runs on, if you build the app yourself).
+To install Zettlr, just [download the latest release](https://www.zettlr.com/download/) for your operating system! Currently supported are macOS, Windows, and most Linux distributions (via Debian- and Fedora-packages as well as AppImages).
 
-**Please also consider a [donation](https://paypal.me/hendrikerz)!**
+Every other system _electron_ runs on is supported as well, if you build the app yourself.
+
+**Please also consider [becoming a patron](https://www.patreon.com/zettlr") or giving a [one-time donation](https://paypal.me/hendrikerz)!**
 
 ## What next?
 
@@ -37,7 +67,7 @@ If you have downloaded Zettlr, [head over to our website](https://zettlr.com/doc
 
 ![The central window of Zettlr using the Night Theme](/resources/screenshots/zettlr_view_dark.png)
 
-## Developing
+## Contributing
 
 Zettlr is an electron-based app, so to start developing, you'll need to have a [NodeJS](https://nodejs.org/)-stack on your computer installed. Make sure node and preferably [Yarn](https://yarnpkg.com/en/) are installed, which is the recommended package manager.
 
