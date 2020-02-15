@@ -158,7 +158,7 @@
             stream.backUp(1)
             let isValidTag = stream.next() === ' '
             stream.match(zknTagRE)
-            return (isValidTag) ? 'zkn-tag' : null
+            return (isValidTag) ? 'zkn-tag' : mdMode.token(stream, state.mdState)
           } else if (!stream.match(headingRE, false)) {
             // We're at SOL, but the headingRE did not
             // match, so it's definitely a tag, and not
