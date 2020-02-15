@@ -17,6 +17,15 @@ const path = require('path')
 const isFile = require('../../../common/util/is-file')
 const sanitiseTexValue = require('../../../common/util/sanitise-tex-value')
 
+const TITLEPAGE_REPLACEMENT = `\\maketitle
+$if(abstract)$
+\\begin{abstract}
+$abstract$
+\\end{abstract}
+$endif$
+\\pagebreak
+`
+
 module.exports = async function (options) {
   // Set the template on the options so the pandoc runner knows to use it
   options.template = path.join(options.dest, 'template.latex')
@@ -57,7 +66,7 @@ module.exports = async function (options) {
     'PDF_AUTHOR': sanitiseTexValue(options.author),
     'PDF_KEYWORDS': sanitiseTexValue(options.keywords),
     // Project settings
-    'TITLEPAGE': (pdf.titlepage) ? '\\maketitle\n\\pagebreak\n' : '',
+    'TITLEPAGE': (pdf.titlepage) ? TITLEPAGE_REPLACEMENT : '',
     'GENERATE_TOC': (pdf.toc) ? `\\setcounter{tocdepth}{${pdf.tocDepth}}\n\\tableofcontents\n\\pagebreak\n` : ''
   }
 

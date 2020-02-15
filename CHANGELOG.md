@@ -42,6 +42,7 @@
 - Added overall days statistics to the stats dialog.
 - Image-Paths correction for Windows systems.
 - Setext headers are now rendered in the correct size, in line with the ATX headers.
+- Abstracts in the YAML frontmatter are now considered on PDF exports.
 
 ## Under the Hood
 
@@ -61,7 +62,7 @@
 - Finally fixed the weird glitches of the file list. Now it will correctly scroll files into view, not break, and be not empty for a fraction of a second.
 - Overhauled the QuickLook windows. Now they react to much more finetuned configuration changes, are more responsive, and in general react faster to changes.
 - Switch to Electron 8.
-- Fix Pandoc error logging
+- Fix Pandoc error logging.
 
 # 1.5.0
 
