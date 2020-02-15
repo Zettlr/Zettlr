@@ -9,9 +9,18 @@
   // hidden. This way, pop-ups for non-western
   // fonts such as Hiragana/Katakana are correctly
   // aligned. Should also help accessibility-plugins.
-  &.CodeMirror-wrap > div > textarea {
-    font-size: 1.6em;
-    line-height: inherit;
+  &.CodeMirror-wrap > div:first-child {
+    height: 1.4375em !important;
+    width: 0 !important;
+    textarea {
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      height: 1.4375em !important;
+      top: 0 !important;
+      bottom: 0 !important;
+      margin: auto;
+    }
   }
 
   line-height:1.4375;
