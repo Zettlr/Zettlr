@@ -47,9 +47,41 @@
       let match = /^(#{1,6}) /.exec(cm.getLine(i))
       if (match) {
         cm.addLineClass(i, 'wrap', `size-header-${match[1].length}`)
-        // If the new header class is different than the old one, indicate a
-        // refresh.
+        // If the new header class is different
+        // than the old one, indicate a refresh.
         if (oldClass !== `size-header-${match[1].length}`) needsRefresh = true
+      }
+
+      if (i === 0) continue // No need to check for Setext header
+
+      // Check for Setext headers. According to the CommonMark
+      // spec: At most 3 preceeding spaces, no internal spaces
+      match = /^[ ]{0,3}[=]+[ ]*$|^[ ]{0,3}[-]+[ ]*$/.exec(cm.getLine(i))
+      if (match) {
+        // We got a match, so first determine its level
+        let level = (match[0].indexOf('=') > -1) ? 1 : 2
+        // Now determine the span of the heading, because
+        // the heading can span an arbitrary number (but
+        // not contain a blank line, obviously)
+        let begin = i - 1
+        for (; begin >= 0; begin--) {
+          // First empty line stops the heading
+          if (/^\s*$/.test(cm.getLine(begin))) {
+            begin++
+            break
+          }
+        }
+
+        if (begin === i) continue // False alarm
+
+        // Add the correct line classes to both lines
+        for (let line = begin; line <= i; line++) {
+          cm.addLineClass(line, 'wrap', `size-header-${level}`)
+        }
+
+        // If the new header class is different
+        // than the old one, indicate a refresh.
+        if (oldClass !== `size-header-${level}`) needsRefresh = true
       }
     }
 

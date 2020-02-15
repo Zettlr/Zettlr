@@ -41,6 +41,7 @@
 - The automplete-dropdown for Zettelkasten-links does not appear anymore if editing a footnote.
 - Added overall days statistics to the stats dialog.
 - Image-Paths correction for Windows systems.
+- Setext headers are now rendered in the correct size, in line with the ATX headers.
 
 ## Under the Hood
 
