@@ -34,7 +34,7 @@
 - The front matter is now disregarded when counting words or chars.
 - In case of renaming a directory, the containing directory is now re-sorted everytime so that changes are reflected immediately.
 - The HTML template now includes a switch to include MathJax (CDN) in order to display equations in HTML exports and the print preview (only works with Pandoc installed).
-- Improved placement of Input Method Editors (IME) for non-western input sources (e.g., Japanese or Korean typeset).
+- Improved placement of Input Method Editors (IME) for non-western input sources (e.g., Japanese or Korean typeset). Thanks to @ryota-abe for implementing!
 - The file linking autocomplete will now respect your choice of Zettelkasten link starting characters, if they differ from `[[`.
 - The formatting of Zettelkasten-links is now according to other formattings (such as emphasis or bold text), slightly transparent.
 - On autocompleting Zettelkasten-links, the closing characters for the links are now added in case they are not already present (due to autoclosing, or else).
@@ -43,6 +43,7 @@
 - Image-Paths correction for Windows systems.
 - Setext headers are now rendered in the correct size, in line with the ATX headers.
 - Abstracts in the YAML frontmatter are now considered on PDF exports.
+- Fixed a rare bug, which would cause the edit flag on the main process to remain even though the renderer reports the editor is clean (that is, no changes to the document).
 
 ## Under the Hood
 

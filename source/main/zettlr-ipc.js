@@ -225,6 +225,12 @@ class ZettlrIPC {
         this._app.setModified()
         break
 
+      // The renderer requested that the editor
+      // is marked clean again
+      case 'mark-clean':
+        this._app.clearModified()
+        break
+
       // Set or update a target
       case 'set-target':
         global.targets.set(cnt)

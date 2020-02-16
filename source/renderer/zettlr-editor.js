@@ -349,21 +349,24 @@ class ZettlrEditor {
       if (changeObj.origin !== 'setValue') {
         // If origin is setValue this means that the contents have been
         // programatically changed -> no need to flag any modification!
-        this._renderer.setModified()
-
-        // Automatically save the file each time there have been changes
-        if (this._timeout) {
-          clearTimeout(this._timeout)
-        }
+        // Clear the timeouts in any case
+        if (this._timeout) clearTimeout(this._timeout)
         if (this._citationTimeout) clearTimeout(this._citationTimeout)
 
-        // This timeout can be used for everything that takes some time and
-        // makes the writing feel laggy (such as generating a bunch of
-        // bibliography entries.)
-        this._timeout = setTimeout((e) => {
-          this._renderer.saveFile()
-          this.updateCitations()
-        }, SAVE_TIMOUT)
+        // Check if the change actually modified the
+        // doc or not
+        if (this.isClean()) {
+          console.log('Doc is clean!')
+          this._renderer.clearModified()
+        } else {
+          console.log('DIRTY -- modified flag set')
+          this._renderer.setModified()
+          // Set the autosave timeout
+          this._timeout = setTimeout((e) => {
+            this._renderer.saveFile()
+            this.updateCitations()
+          }, SAVE_TIMOUT)
+        }
 
         // Always run an update-citations command each time there have been changes
         this._citationTimeout = setTimeout((e) => {

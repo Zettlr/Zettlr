@@ -715,6 +715,11 @@ class ZettlrRenderer {
   setModified () { this._ipc.send('file-modified', {}) }
 
   /**
+   * Instructs main to remove the edit flag.
+   */
+  clearModified () { this._ipc.send('mark-clean') }
+
+  /**
    * Can tell whether or not the editor is modified.
    * @return {Boolean} True if the editor's contents are modified.
    */
