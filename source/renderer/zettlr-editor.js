@@ -211,11 +211,12 @@ class ZettlrEditor {
      * @type {function}
      */
     this._cm.on('beforeChange', (cm, changeObj) => {
+      // Tap into pasting
       if (changeObj.origin === 'paste') {
         // First check if there's an image in the clipboard. In this case we
         // need to cancel the paste event and handle the image ourselves.
         let image = clipboard.readImage()
-        if (!image.isEmpty()) {
+        if (!image.isEmpty() && !changeObj.text) {
           // We've got an image. So we need to handle it.
           this._renderer.handleEvent('paste-image')
           return changeObj.cancel() // Cancel handling of the event
@@ -228,15 +229,14 @@ class ZettlrEditor {
         // version, as some apps may write the same plain text stuff into the
         // HTML part of the clipboard, in which case dragging it through the
         // converter will result in unwanted behaviour (including Electron).
+        // We have the problem that CodeMirror treats moving text around and
+        // dropping links exactly the same as explicitly hitting Cmd/Ctrl+V.
+        // The only way we can be sure is to make sure the changeObject is the
+        // same as the plain text from the clipboard. ONLY in this instance
+        // is it a regular, explicit paste. Else the text in the changeObject
+        // takes precedence.
         let html = clipboard.readHTML()
         let plain = clipboard.readText()
-        // We have the problem that CodeMirror treats moving
-        // text around and dropping links exactly the same
-        // as explicitly hitting Cmd/Ctrl+V. The only way we
-        // can be sure is to make sure the changeObject is the
-        // same as the plain text from the clipboard. ONLY in
-        // this instance is it a regular, explicit paste. Else
-        // the text in the changeObject takes precedence.
         let explicitPaste = plain === changeObj.text.join('\n')
         if (html && html.length > 0 && (!plain || html !== plain) && explicitPaste) {
           // We've got HTML, so let's fire up Showdown.js
@@ -246,21 +246,21 @@ class ZettlrEditor {
           // resulting string as the update method expects an Array of lines,
           // not a complete string with line breaks.
           return changeObj.update(changeObj.from, changeObj.to, plain.split('\n'))
-        }
-
-        // Continue with checking for potential images.
-        let newtext = []
-        for (let i in changeObj.text) {
-          if (changeObj.text[i].indexOf('file://') === 0 && IMAGE_REGEX.test(changeObj.text[i])) {
-            // Omit the file:// and decode any URI components to enable Pandoc
-            // and xetex to find the image.
-            let uri = decodeURIComponent(changeObj.text[i].substr((process.platform === 'win32') ? 8 : 7))
-            newtext[i] = `![${path.basename(changeObj.text[i])}](${uri})`
-          } else {
-            newtext[i] = changeObj.text[i]
+        } else if (explicitPaste) {
+          // Continue with checking for potential images.
+          let newtext = []
+          for (let i in changeObj.text) {
+            if (changeObj.text[i].indexOf('file://') === 0 && IMAGE_REGEX.test(changeObj.text[i])) {
+              // Omit the file:// and decode any URI components to enable Pandoc
+              // and xetex to find the image.
+              let uri = decodeURIComponent(changeObj.text[i].substr((process.platform === 'win32') ? 8 : 7))
+              newtext[i] = `![${path.basename(changeObj.text[i])}](${uri})`
+            } else {
+              newtext[i] = changeObj.text[i]
+            }
           }
+          return changeObj.update(changeObj.from, changeObj.to, newtext)
         }
-        changeObj.update(changeObj.from, changeObj.to, newtext)
       }
     })
 
