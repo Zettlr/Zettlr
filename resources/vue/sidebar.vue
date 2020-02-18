@@ -422,7 +422,17 @@ module.exports = {
      * @return {void}     Does not return.
      */
     updateDynamics: function () {
-      // Update all tippy instances, where appropriate.
+      // Tippy.js cannot observe changes within attributes, so because
+      // the instances are all created in advance, we have to update
+      // the content so that it reflects the current content of
+      // the data-tippy-content-property.
+      let elements = document.querySelectorAll('#sidebar [data-tippy-content]')
+      for (let elem of elements) {
+        if (elem._tippy) elem._tippy.setContent(elem.dataset.tippyContent)
+      }
+
+      // Create instances for all elements without already existing
+      // tippy-instances.
       tippy('#sidebar [data-tippy-content]', {
         delay: 100,
         arrow: true,
