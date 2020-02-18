@@ -45,6 +45,7 @@
 - Abstracts in the YAML frontmatter are now considered on PDF exports.
 - Fixed a rare bug, which would cause the edit flag on the main process to remain even though the renderer reports the editor is clean (that is, no changes to the document).
 - Fixed an error where a completely empty custom CSS (e.g. when the user simply selects and deletes all content in the dialog or in the file) would cause the dialog generation to crash until a restart of the app.
+- Fixed a rare error where an error would be thrown during export of extremely small projects.
 
 ## Under the Hood
 
