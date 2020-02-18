@@ -106,7 +106,14 @@ class ZettlrDialog extends EventEmitter {
     * @return {ZettlrDialog}           Chainability.
     */
   init (data = {}) {
-    if (!data) {
+    // It might be that data is simply an empty string
+    // e.g. with CustomCSS, when the user has removed
+    // it all. To prevent this case from erroing out,
+    // we need to explicitly check for the only two
+    // types where we really say it's not correct. If
+    // no data should be passed to the dialog, leaving
+    // out the argument will work perfectly.
+    if (data === null || data === undefined) {
       throw new Error(trans('dialog.error.no_data', data))
     }
 

@@ -44,6 +44,7 @@
 - Setext headers are now rendered in the correct size, in line with the ATX headers.
 - Abstracts in the YAML frontmatter are now considered on PDF exports.
 - Fixed a rare bug, which would cause the edit flag on the main process to remain even though the renderer reports the editor is clean (that is, no changes to the document).
+- Fixed an error where a completely empty custom CSS (e.g. when the user simply selects and deletes all content in the dialog or in the file) would cause the dialog generation to crash until a restart of the app.
 
 ## Under the Hood
 
