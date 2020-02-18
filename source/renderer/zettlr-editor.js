@@ -356,10 +356,8 @@ class ZettlrEditor {
         // Check if the change actually modified the
         // doc or not
         if (this.isClean()) {
-          console.log('Doc is clean!')
           this._renderer.clearModified()
         } else {
-          console.log('DIRTY -- modified flag set')
           this._renderer.setModified()
           // Set the autosave timeout
           this._timeout = setTimeout((e) => {
