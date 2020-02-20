@@ -62,6 +62,8 @@ const linuxTargets = [
   'rpm'
 ]
 
+const win32Targets = [{ target: 'nsis', arch: [ 'x64', 'ia32' ] }]
+
 const config = {
   appId: 'com.zettlr.app',
   productName: 'Zettlr',
@@ -106,7 +108,7 @@ const config = {
     entitlementsInherit: path.join(__dirname, './assets/entitlements.plist')
   },
   win: {
-    target: (onlyDir) ? 'dir' : 'nsis',
+    target: (onlyDir) ? 'dir' : win32Targets,
     artifactName: artifactFilenameFormat,
     icon: 'resources/icons/ico/icon.ico'
   },
@@ -159,6 +161,9 @@ runBuilder().then(() => {
 }).catch((err) => {
   log.error('Build failed!')
   log.error(err)
+  // We have to exit the process with an error signal
+  // for correct behaviour on CI
+  process.exit(1)
 })
 
 async function runBuilder () {

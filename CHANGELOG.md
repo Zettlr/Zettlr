@@ -13,6 +13,7 @@
 - **New Feature**: You now have an additional setting that allows you to determine if, and when, the filename will be automatically added to your link. "Never" means that the file name will never be added, "Only with ID" means that the file name will only be added, if the link is constructed using the ID, and "always" (the default) means that the file name will always be added, possibly duplicating it.
 - **New Feature**: NOT search operator. Now you can use an exclamation mark (!) before the term in your global search to exclude certain search terms. If any NOT-condition is satisfied, the file will no longer be considered a candidate. You can combine the NOT-operator with both exact matches (`!"an exact phrase"`) and single terms (`!word`).
 - Added TypeScript syntax highlighting. Keywords: `typescript`, `ts`.
+- Added `Windows 32bit` build.
 - Pressing `Alt-Up` and `Alt-Down` will now swap lines in the editor window up or down.
 - Cleaned up the shortcuts. Until now, `Ctrl+B` would also make text bold on macOS. Now, only `Cmd+B` will work, while `Ctrl+B` will only work on non-Apple systems.
 - Improved the Math equation detection again. Now it's simpler, faster and will work more reliable. Escaping dollar signs should most of the time not be necessary anymore.
