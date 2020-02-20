@@ -7,6 +7,10 @@ const Platform = builder.Platform
 const log = require('./console-colour.js')
 const path = require('path')
 
+// Define the target list for Linux and Windows builds
+const linuxTargets = [{ target: 'AppImage', arch: [ 'x64', 'ia32' ] }, 'deb', 'rpm' ]
+const win32Targets = [{ target: 'nsis', arch: [ 'x64', 'ia32' ] }]
+
 /**
 * POSSIBLE ARGUMENTS
 * --dir: Don't package the app, only export to directory
@@ -55,14 +59,6 @@ if (buildTargets.length === 0) {
 
 log.info('Starting build process')
 log.info(`Building for: ${buildTargets.map(elem => elem.substr(2)).join(', ')}`)
-
-const linuxTargets = [
-  { target: 'AppImage', arch: [ 'x64', 'ia32' ] },
-  'deb',
-  'rpm'
-]
-
-const win32Targets = [{ target: 'nsis', arch: [ 'x64', 'ia32' ] }]
 
 const config = {
   appId: 'com.zettlr.app',
@@ -161,8 +157,8 @@ runBuilder().then(() => {
 }).catch((err) => {
   log.error('Build failed!')
   log.error(err)
-  // We have to exit the process with an error signal
-  // for correct behaviour on CI
+  // We have to exit the process with an
+  // error signal for correct behaviour on CI
   process.exit(1)
 })
 
