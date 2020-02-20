@@ -161,6 +161,9 @@ runBuilder().then(() => {
 }).catch((err) => {
   log.error('Build failed!')
   log.error(err)
+  // We have to exit the process with an error signal
+  // for correct behaviour on CI
+  process.exit(1)
 })
 
 async function runBuilder () {
