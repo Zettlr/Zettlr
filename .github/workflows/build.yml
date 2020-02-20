@@ -89,6 +89,11 @@ jobs:
       - name: Build Windows NSIS installer
         if: matrix.os == 'windows-latest' # Only if the job runs on Windows
         run: npm run release:win
+      # DEBUG COMMAND
+      - name: "DEBUG: List windows assets in release for file name checking"
+        if: matrix.os == 'windows-latest'
+        run: Get-ChildItem -Path ./release
+      # END DEBUG COMMAND
       - name: Cache Windows release
         if: matrix.os == 'windows-latest' # Only if the job runs on Windows
         uses: actions/upload-artifact@v1
