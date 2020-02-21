@@ -167,9 +167,11 @@ class ZettlrEditor {
               let line = cm.getLine(cur.line)
               let end = this._cm.getOption('zkn').linkEnd || ''
               let prefix = ' '
+              let linkEndMissing = false
               if (end !== '' && line.substr(cur.ch, end.length) !== end) {
                 // Add the linkend
                 prefix = end + prefix
+                linkEndMissing = true
               } else {
                 // Advance the cursor so that it is outside of the link again
                 cur.ch += end.length
@@ -178,6 +180,8 @@ class ZettlrEditor {
               if (linkPref === 'always' || (linkPref === 'withID' && completion.id)) {
                 // We need to add the text after the link.
                 cm.replaceSelection(prefix + text)
+              } else if (linkEndMissing) {
+                cm.replaceSelection(end) // Add the link ending
               }
             }
             this._autoCompleteStart = null
