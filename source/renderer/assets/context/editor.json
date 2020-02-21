@@ -80,6 +80,6 @@
   {
     "label": "menu.select_all",
     "accelerator": "CmdOrCtrl+A",
-    "role": "select_all"
+    "role": "selectAll"
   }
 ]
