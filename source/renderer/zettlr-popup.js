@@ -51,30 +51,11 @@ class ZettlrPopup {
     this._x = 0
     this._y = 0
 
-    $(document).on('click contextmenu', (event) => {
-      // The popup is initiated before the menu has bubbled up. This means
-      // the first click we will detect will be the click that created the
-      // popup in the first place; that is the click on the element itself.
-      if (event.target === this._elem[0]) return
-      let x = event.clientX
-      let y = event.clientY
-
-      // Now determine where the popup is
-      let minX = this._popup.offset().left
-      let maxX = minX + this._popup.outerWidth()
-      let minY = this._popup.offset().top
-      let maxY = minY + this._popup.outerHeight()
-
-      if (x < minX || maxX < x || y < minY || maxY < y) {
-        // Clicked outside the popup -> close it
-        this.close(true)
-      }
-    })
-
-    // Keep the popup relative to parent element even on resize
-    $(window).on('resize', (e) => {
-      this._place()
-    })
+    // Set up the event listeners
+    this._boundClickHandler = this._onClickHandler.bind(this)
+    this._boundResizeHandler = this._onResizeHandler.bind(this)
+    $(document).on('click contextmenu', this._boundClickHandler)
+    $(window).on('resize', this._boundResizeHandler)
 
     this._popup = $('<div>').addClass('popup').css('opacity', '0')
     this._arrow = $('<div>').addClass('popup-arrow')
@@ -104,6 +85,39 @@ class ZettlrPopup {
     // Afterwards blend it in
     this._popup.animate({ 'opacity': '1' }, 200, 'swing')
   }
+
+  /**
+   * Determines if the popup should be closed on click.
+   * @param {Event} event The event fired
+   */
+  _onClickHandler (event) {
+    // Clicks on the popup itself are cool
+    if (event.target === this._elem[0]) return
+    // And so are any clicks on elements within this.
+    // Background for the following line:
+    // https://github.com/Zettlr/Zettlr/issues/554
+    if (this._elem[0].contains(event.target)) return
+
+    let x = event.clientX
+    let y = event.clientY
+
+    // Now determine where the popup is
+    let minX = this._popup.offset().left
+    let maxX = minX + this._popup.outerWidth()
+    let minY = this._popup.offset().top
+    let maxY = minY + this._popup.outerHeight()
+
+    if (x < minX || maxX < x || y < minY || maxY < y) {
+      // Clicked outside the popup -> close it
+      this.close(true)
+    }
+  }
+
+  /**
+   * Resizes and moves a popup on resizing.
+   * @param {Event} event The event object
+   */
+  _onResizeHandler (event) { this._place() }
 
   /**
     * Places the popup relative to the target element.
@@ -215,6 +229,9 @@ class ZettlrPopup {
     this._arrow.detach()
     this._popup.animate({ 'opacity': '0' }, 200, 'swing', () => {
       this._popup.detach()
+      // Remove the event handlers
+      $(document).off('click contextmenu', this._boundClickHandler)
+      $(window).off('resize', this._boundResizeHandler)
     })
   }
 

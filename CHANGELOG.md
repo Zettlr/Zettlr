@@ -47,6 +47,7 @@
 - Fixed a rare bug, which would cause the edit flag on the main process to remain even though the renderer reports the editor is clean (that is, no changes to the document).
 - Fixed an error where a completely empty custom CSS (e.g. when the user simply selects and deletes all content in the dialog or in the file) would cause the dialog generation to crash until a restart of the app.
 - Fixed a rare error where an error would be thrown during export of extremely small projects.
+- Fixed an error where the writing target popup would close itself via click on an option on Windows systems.
 
 ## Under the Hood
 
@@ -67,6 +68,7 @@
 - Overhauled the QuickLook windows. Now they react to much more finetuned configuration changes, are more responsive, and in general react faster to changes.
 - Switch to Electron 8.
 - Fix Pandoc error logging.
+- Detach Popup event listeners on close.
 
 # 1.5.0
 
