@@ -140,39 +140,26 @@
           return 'table'
         }
 
-        // First: Tags, in the format of Twitter
-        if (stream.match(zknTagRE, false)) {
+        // Next on are tags in the form of #hashtag. We have to check for
+        // headings first, as the tagRE will also match these, but they are not
+        // real tags, so we need to hand them over to the mdMode.
+        if (stream.match(headingRE, false)) {
+          return mdMode.token(stream, state.mdState)
+        } else if (stream.match(zknTagRE, false)) {
+          // Two possibilities: sol, which will definitely be a tag, because
+          // the headingRE did not match. Otherwise, not SOL, in which case we
+          // need to check that the tag is preceeded by a space.
           if (stream.sol()) {
             stream.match(zknTagRE)
             return 'zkn-tag'
-          }
-
-          // As lookbehinds and other nice inventions of regular expressions
-          // won't work here because it is a stream of characters rather than
-          // one long string, we have to manually check that the tag can be
-          // rendered as such. The only way where this should happen is, if the
-          // tag is either on a newline or preceeded by a space. This is why we
-          // don't have to manually check for escape characters - as these are
-          // no spaces, they'll also match our if-condition below.
-          if (!stream.sol()) {
-            stream.backUp(1)
-            let isValidTag = stream.next() === ' '
-            stream.match(zknTagRE)
-            return (isValidTag) ? 'zkn-tag' : mdMode.token(stream, state.mdState)
-          } else if (!stream.match(headingRE, false)) {
-            // We're at SOL, but the headingRE did not
-            // match, so it's definitely a tag, and not
-            // a heading.
-            // At this point we can be sure that this is a tag and not escaped.
-            stream.match(zknTagRE)
-            return 'zkn-tag'
           } else {
-            // If we're here, the headingRE has been triggered, e.g. it's a heading
-            // Due to some unexplainable behaviour, the mdMode only colours
-            // the first character, not the rest, so let's just do it manually. *sigh*
-            let match = stream.match(headingRE)
-            let lvl = match[1].length
-            return `formatting formatting-header formatting-header-${lvl} header header-${lvl}`
+            stream.backUp(1)
+            if (stream.next() === ' ') {
+              stream.match(zknTagRE)
+              return 'zkn-tag'
+            } else {
+              return mdMode.token(stream, state.mdState)
+            }
           }
         }
 
