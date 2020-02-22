@@ -84,7 +84,7 @@
           <template v-else-if="getDirectoryContents.length === 1">
             <file-item
               v-for="item in getDirectoryContents"
-              v-bind:obj="item"
+              v-bind:obj="item.props"
               v-bind:key="item.hash"
             >
           </file-item>
