@@ -30,7 +30,7 @@
     */
   CodeMirror.defineMode('markdown-zkn', function (config, parserConfig) {
     var yamlMode = CodeMirror.getMode(config, 'yaml')
-    var mdMode = CodeMirror.getMode(config, { name: 'gfm', highlightFormatting: true })
+    var mdMode = CodeMirror.getMode(config, { name: 'gfm', highlightFormatting: true, gitHubSpice: false })
 
     var markdownZkn = {
       startState: function () {
