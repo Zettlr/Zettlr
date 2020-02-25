@@ -59,7 +59,7 @@ To install Zettlr, just [download the latest release](https://www.zettlr.com/dow
 
 Every other system _electron_ runs on is supported as well, if you build the app yourself.
 
-**Please also consider [becoming a patron](https://www.patreon.com/zettlr") or giving a [one-time donation](https://paypal.me/hendrikerz)!**
+**Please also consider [becoming a patron](https://www.patreon.com/zettlr) or making a [one-time donation](https://paypal.me/hendrikerz)!**
 
 ## What next?
 
