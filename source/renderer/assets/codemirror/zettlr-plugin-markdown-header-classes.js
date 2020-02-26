@@ -65,8 +65,11 @@
         // not contain a blank line, obviously)
         let begin = i - 1
         for (; begin >= 0; begin--) {
-          // First empty line stops the heading
-          if (/^\s*$/.test(cm.getLine(begin))) {
+          // First empty line stops the heading. Also, check for
+          // lists, because strictly speaking, this might also
+          // return truthy for a Setext heading.
+          let beginningLine = cm.getLine(begin)
+          if (/^\s*$/.test(beginningLine) || /^\s*-\s+/.test(beginningLine)) {
             begin++
             break
           }
