@@ -49,7 +49,7 @@ const Table = require('../../util/table-helper.js');
       // First get the line and test if the contents resemble a table
       let line = cm.getLine(i)
       if (tableRE.test(line)) {
-        if (!firstLine) {
+        if (firstLine === undefined) {
           firstLine = lastLine = i
           continue // Next line
         }
@@ -59,7 +59,7 @@ const Table = require('../../util/table-helper.js');
       } else {
         // First non-table line, let's check if we already have one. If there's
         // none, jump over this line
-        if (!firstLine && !lastLine) continue
+        if (firstLine === undefined && lastLine === undefined) continue
       }
 
       // We've got ourselves a table! firstLine and lastLine now demarcate the
