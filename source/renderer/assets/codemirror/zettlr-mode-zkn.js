@@ -39,6 +39,7 @@
           inFrontmatter: false,
           inEquation: false,
           inZknLink: false, // Whether or not we're currently within a zkn Link
+          hasJustEscaped: false, // Whether the previous iteration had an escape char
           yamlState: CodeMirror.startState(yamlMode),
           mdState: CodeMirror.startState(mdMode)
         }
@@ -49,12 +50,19 @@
           inFrontmatter: state.inFrontmatter,
           inEquation: state.inEquation,
           inZknLink: state.inZknLink,
+          hasJustEscaped: state.hasJustEscaped,
           // Make sure to correctly copy the YAML state
           yamlState: CodeMirror.copyState(yamlMode, state.yamlState),
           mdState: CodeMirror.copyState(mdMode, state.mdState)
         }
       },
       token: function (stream, state) {
+        // At the beginning check for escaping immediately
+        if (state.hasJustEscaped) {
+          state.hasJustEscaped = false // Needs to be reset always
+          if (!stream.eol()) stream.next()
+          return null // No highlighting for escaped characters
+        }
         let le = config.zkn.linkEnd || ''
         if (le !== '' && state.inZknLink) {
           // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
@@ -117,10 +125,13 @@
           }
         }
 
-        // Immediately check for escape characters
-        // Escape characters need to be greyed out, but not the characters themselves.
-        if (stream.peek() === '\\') {
-          stream.next()
+        // Escape characters are greyed out.
+        // hasJustEscaped is necessary, because
+        // we need to make sure not to style the
+        // following character, no matter what it
+        // is.
+        if (stream.match('\\')) {
+          state.hasJustEscaped = true
           return 'escape-char'
         }
 
@@ -196,13 +207,14 @@
       },
       blankLine: function (state) {
         state.inZknLink = false
+        state.hasJustEscaped = false
         // The underlying mode needs
         // to be aware of blank lines
         return mdMode.blankLine(state.mdState)
       }
     }
 
-    return markdownZkn // CodeMirror.overlayMode(CodeMirror.getMode(config, 'spellchecker'), markdownZkn, true)
+    return markdownZkn
   })
 
   CodeMirror.defineMIME('text/x-zkn', 'markdown-zkn')
