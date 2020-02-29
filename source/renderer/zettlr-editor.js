@@ -16,7 +16,7 @@
 const path = require('path')
 const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
-const turndown = require('joplin-turndown')
+const Turndown = require('joplin-turndown')
 const turndownGfm = require('joplin-turndown-plugin-gfm')
 const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
 const { clipboard } = require('electron')
@@ -107,7 +107,7 @@ class ZettlrEditor {
     this._showdown.setOption('requireSpaceBeforeHeadingText', true)
 
     // HTML to Markdown conversion is better done with Turndown.
-    this._turndown = new turndown({
+    this._turndown = new Turndown({
       headingStyle: 'atx',
       hr: '---'
     })
