@@ -186,7 +186,7 @@ class TableHelper {
       // don't have a valid header.
       let isHeader = true
       for (let col of row) {
-        if (!/^[-:]+$/.test(col)) {
+        if (!/^[ -:]+$/.test(col)) {
           isHeader = false
           break
         }

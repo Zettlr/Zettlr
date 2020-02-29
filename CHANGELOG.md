@@ -49,6 +49,7 @@
 - Fixed a rare error where an error would be thrown during export of extremely small projects.
 - Fixed an error where the writing target popup would close itself via click on an option on Windows systems.
 - Fixed "Select All" context menu item for text selection.
+- Allow spaces in header delimiting rows.
 
 ## Under the Hood
 
