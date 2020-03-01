@@ -14,6 +14,7 @@
 - **New Feature**: NOT search operator. Now you can use an exclamation mark (!) before the term in your global search to exclude certain search terms. If any NOT-condition is satisfied, the file will no longer be considered a candidate. You can combine the NOT-operator with both exact matches (`!"an exact phrase"`) and single terms (`!word`).
 - Added TypeScript syntax highlighting. Keywords: `typescript`, `ts`.
 - Added `Windows 32bit` build.
+- Switched from `showdown` to `turndown` for converting HTML to Markdown on pasting contents. This makes pasting HTML formatted text much better than prior. Thanks to @Zverik for implementing!
 - Pressing `Alt-Up` and `Alt-Down` will now swap lines in the editor window up or down.
 - Cleaned up the shortcuts. Until now, `Ctrl+B` would also make text bold on macOS. Now, only `Cmd+B` will work, while `Ctrl+B` will only work on non-Apple systems.
 - Improved the Math equation detection again. Now it's simpler, faster and will work more reliable. Escaping dollar signs should most of the time not be necessary anymore.
