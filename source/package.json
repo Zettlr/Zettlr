@@ -25,6 +25,8 @@
         "codemirror": "^5.51.0",
         "command-exists": "^1.2.7",
         "got": "^10.5.5",
+        "joplin-turndown": "^4.0.22",
+        "joplin-turndown-plugin-gfm": "^1.0.12",
         "jquery": "^3.4.1",
         "katex": "^0.11.1",
         "md5": "^2.2.1",

@@ -16,6 +16,8 @@
 const path = require('path')
 const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
+const Turndown = require('joplin-turndown')
+const turndownGfm = require('joplin-turndown-plugin-gfm')
 const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
 const { clipboard } = require('electron')
 const hash = require('../common/util/hash')
@@ -103,6 +105,13 @@ class ZettlrEditor {
     this._showdown.setOption('omitExtraWLInCodeBlocks', true)
     this._showdown.setOption('tasklists', true)
     this._showdown.setOption('requireSpaceBeforeHeadingText', true)
+
+    // HTML to Markdown conversion is better done with Turndown.
+    this._turndown = new Turndown({
+      headingStyle: 'atx',
+      hr: '---'
+    })
+    this._turndown.use(turndownGfm.gfm)
 
     // The last array of IDs as fetched from the document
     this._lastKnownCitationCluster = []
@@ -244,7 +253,7 @@ class ZettlrEditor {
         let explicitPaste = plain === changeObj.text.join('\n')
         if (html && html.length > 0 && (!plain || html !== plain) && explicitPaste) {
           // We've got HTML, so let's fire up Showdown.js
-          plain = this._showdown.makeMarkdown(html)
+          plain = this._turndown.turndown(html)
           // Let's update the (very likely plain) HTML text with some Markdown
           // that retains the formatting. PLEASE NOTE that we have to split the
           // resulting string as the update method expects an Array of lines,
