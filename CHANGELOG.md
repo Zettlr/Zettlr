@@ -52,6 +52,7 @@
 - Fixed "Select All" context menu item for text selection.
 - Allow spaces in header delimiting rows.
 - revealJS-presentations now have a basic syntax highlighting (Solarized theme).
+- HTML exports now have a basic syntax highlighting (Solarized theme).
 
 ## Under the Hood
 

@@ -33,7 +33,7 @@ module.exports = async function (options) {
   // to HTML and insert into the template, then replace the variables.
   let file = await fs.readFile(options.sourceFile, 'utf8')
   file = sd.makeHtml(file)
-  let tpl = await fs.readFile(path.join(__dirname, '../../assets/export.tpl'), 'utf8')
+  let tpl = await fs.readFile(path.join(__dirname, '../../assets/export.tpl.htm'), 'utf8')
   tpl = tpl.replace('$body$', file)
   tpl = tpl.replace('$title$', options.file.name)
   tpl = tpl.replace('$date$', formatDate(new Date()))

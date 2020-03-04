@@ -20,7 +20,7 @@ const path = require('path')
 module.exports = async function (options) {
   // We have a custom HTML template which we'd like to use
   if (options.format === 'html') {
-    let tpl = await fs.readFile(path.join(__dirname, '../../assets/export.tpl'), { encoding: 'utf8' })
+    let tpl = await fs.readFile(path.join(__dirname, '../../assets/export.tpl.htm'), { encoding: 'utf8' })
     options.template = path.join(options.dest, 'template.tpl')
     options.discardTemplate = true
     await fs.writeFile(options.template, tpl, { encoding: 'utf8' })
