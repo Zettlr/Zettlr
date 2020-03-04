@@ -64,7 +64,7 @@ async function run () {
 
   // Now we can build the template file.
   // First read it in.
-  file = await fs.open(path.join(__dirname, 'assets/update-reveal.tpl'))
+  file = await fs.open(path.join(__dirname, 'assets/reveal-template.htm'))
   let template = await file.readFile({ encoding: 'utf8' })
   await file.close()
   template = template.replace('$REVEAL_CSS$', revealCSS)

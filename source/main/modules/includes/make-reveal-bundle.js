@@ -17,6 +17,12 @@
 const fs = require('fs').promises
 const path = require('path')
 
+// Helper function to retrieve the correct syntax highlighting theme
+function getSkylightingTheme (revealStyle) {
+  let isDarkStyle = [ 'black', 'moon', 'league', 'sky' ].includes(revealStyle)
+  return (isDarkStyle) ? 'skylighting-dark.css' : 'skylighting-light.css'
+}
+
 module.exports = async function (options) {
   // When this module is called, Pandoc had a run over the file already,
   // so all we need to do is read the file Pandoc has produced (it's
@@ -35,10 +41,14 @@ module.exports = async function (options) {
   let revealStyle = path.join(__dirname, `../../assets/revealjs-styles/${options.revealJSStyle}.css`)
   let style = await fs.readFile(revealStyle, { encoding: 'utf8' })
 
+  let skylightingStyle = path.join(__dirname, `../../assets/revealjs-styles/${getSkylightingTheme(options.revealJSStyle)}`)
+  let skylight = await fs.readFile(skylightingStyle, { encoding: 'utf8' })
+
   // Now do the magic
   tpl = tpl.replace('$style$', style)
   tpl = tpl.replace('$body$', file)
   tpl = tpl.replace('$title$', options.file.name)
+  tpl = tpl.replace('$SKYLIGHTING_THEME$', skylight)
 
   await fs.writeFile(options.targetFile, tpl, 'utf8')
 }

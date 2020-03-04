@@ -51,6 +51,7 @@
 - Fixed an error where the writing target popup would close itself via click on an option on Windows systems.
 - Fixed "Select All" context menu item for text selection.
 - Allow spaces in header delimiting rows.
+- revealJS-presentations now have a basic syntax highlighting (Solarized theme).
 
 ## Under the Hood
 
