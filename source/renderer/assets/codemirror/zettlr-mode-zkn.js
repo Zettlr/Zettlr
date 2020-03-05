@@ -57,26 +57,8 @@
         }
       },
       token: function (stream, state) {
-        // At the beginning check for escaping immediately
-        if (state.hasJustEscaped) {
-          state.hasJustEscaped = false // Needs to be reset always
-          if (!stream.eol()) stream.next()
-          return null // No highlighting for escaped characters
-        }
-        let le = config.zkn.linkEnd || ''
-        if (le !== '' && state.inZknLink) {
-          // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
-          le = config.zkn.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
-          le = new RegExp(le)
-          if (stream.match(le)) {
-            state.inZknLink = false
-            return 'zkn-link-formatting'
-          } else {
-            stream.next()
-            return 'zkn-link'
-          }
-        }
-
+        // First: YAML highlighting. This block will only execute
+        // at the beginning of a file.
         if (state.startOfFile && stream.sol() && stream.match(/---/)) {
           // Assume a frontmatter
           state.startOfFile = false
@@ -96,7 +78,20 @@
           state.startOfFile = false
         }
 
-        // End possible block equations immediately
+        // Second: If we don't have a frontmatter, escaping is possible.
+        if (state.hasJustEscaped) {
+          state.hasJustEscaped = false // Needs to be reset always
+          if (!stream.eol()) stream.next()
+          return null // No highlighting for escaped characters
+        }
+
+        // Third: Directly afterwards check for inline code so
+        // that stuff such as zkn-links are not highlighted:
+        if (state.mdState.overlay.code || state.mdState.overlay.codeBlock) {
+          return mdMode.token(stream, state.mdState)
+        }
+
+        // Fourth: Handle block equations.
         // ATTENTION: We have to check for inEquation first, because
         // otherwise, stream.match() will ALWAYS be executed, hence
         // falsifying the otherwise correct else-if!!
@@ -108,41 +103,46 @@
           // We're leaving the multiline equation
           state.inEquation = false
           return 'fenced-code'
-        }
-
-        // // While we're in an equation, simply return fenced-codes
-        if (state.inEquation) {
+        } else if (state.inEquation) {
+          // While we're in an equation, simply return fenced-codes.
           stream.skipToEnd()
           return 'fenced-code'
         }
 
-        // Now let's check for inline equations
-        if (stream.match(inlineMathRE, false)) {
-          // Test for possible backspaces
-          if (!stream.sol() && stream.backUp(1) === undefined && stream.next() !== '\\') {
-            stream.match(inlineMathRE)
-            return 'fenced-code'
-          }
-        }
-
-        // Escape characters are greyed out.
-        // hasJustEscaped is necessary, because
-        // we need to make sure not to style the
-        // following character, no matter what it
-        // is.
+        // In everything that follows, escpaing things is allowed and possible.
+        // By immediately returning and checking right at the beginning of the
+        // method, we can prevent other modes from triggering.
         if (stream.match('\\')) {
           state.hasJustEscaped = true
           return 'escape-char'
+        } // This is here because escaping link-endings is a thing. Maybe. For some.
+
+        // Fifth: Are we in a link?
+        let le = config.zkn.linkEnd || ''
+        if (le !== '' && state.inZknLink) {
+          // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
+          le = config.zkn.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+          le = new RegExp(le)
+          if (stream.match(le)) {
+            state.inZknLink = false
+            return 'zkn-link-formatting'
+          } else {
+            stream.next()
+            return 'zkn-link'
+          }
         }
+
+        // From here on there are only not-so-special things. Using the
+        // hasJustEscaped-state, we can keep most things very simple.
+        // None of the following has to explicitly check for backspaces.
+
+        // Now let's check for inline equations
+        if (stream.match(inlineMathRE)) return 'fenced-code'
 
         // Implement highlighting
         if (stream.match(highlightRE)) return 'highlight'
 
         // Now dig deeper for more tokens
-        let zknIDRE = ''
-        if (config.hasOwnProperty('zkn') && config.zkn.hasOwnProperty('idRE')) {
-          zknIDRE = new RegExp(config.zkn.idRE)
-        }
 
         // This mode should also handle tables, b/c they are rather simple to detect.
         if (stream.sol() && stream.match(tableRE, false)) {
@@ -186,13 +186,16 @@
           return 'zkn-link-formatting'
         }
 
-        // Third: IDs (The upside of this is that IDs _inside_ links will
+        // IDs (The upside of this is that IDs _inside_ links will
         // be treated as _links_ and not as "THE" ID of the file as long
-        // as the definition of zlkn-links is above this matcher.)
-        if ((zknIDRE !== '') && stream.match(zknIDRE)) {
-          return 'zkn-id'
-        }
+        // as the definition of zkn-links is above this matcher.)
 
+        let zknIDRE = config.zkn.idRE || null
+        if (zknIDRE) zknIDRE = new RegExp(config.zkn.idRE)
+        if (zknIDRE && stream.match(zknIDRE)) return 'zkn-id'
+
+        // If nothing has triggered until here, let the markdown
+        // mode take over as it is responsible for everything else.
         return mdMode.token(stream, state.mdState)
       },
       innerMode: function (state) {
