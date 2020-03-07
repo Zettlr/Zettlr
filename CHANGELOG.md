@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- If available, a title from a YAML frontmatter will be appended to the displayed file entry when linking files.
 
 ## Under the Hood
 
