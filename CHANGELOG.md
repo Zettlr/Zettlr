@@ -1,3 +1,13 @@
+# (no version assigned)
+
+## GUI and Functionality
+
+(nothing here)
+
+## Under the Hood
+
+- Improvements to image dragging and dropping from the attachment sidebar.
+
 # 1.6.0
 
 **The macOS-build of Zettlr is now code-signed and notarized, which means you will be able to open it without having to explicitly add an exception in your security preferences.**

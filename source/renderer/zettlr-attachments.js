@@ -17,6 +17,16 @@ const { shell } = require('electron')
 
 const { trans } = require('../common/lang/i18n.js')
 
+const FILETYPES_IMG = [
+  '.jpg',
+  '.jpeg',
+  '.svg',
+  '.gif',
+  '.png',
+  '.tiff',
+  '.tif'
+]
+
 /**
   * Handles both display of files in the attachment sidebar and the list of
   * references, if applicable.
@@ -79,6 +89,26 @@ class ZettlrAttachments {
           .attr('data-hash', a.hash)
           .attr('title', a.path) // Make sure the user can always see the full title
           .attr('href', a.path) // Necessary for native drag&drop functionality
+
+        // When dragging files from here onto the editor instance, users want
+        // to have the appropriate link placed automatically, that is: images
+        // should be wrapped in appropriate image tags, whereas documents
+        // should be linked to enable click & open. We have to do this on
+        // this end, because when trying to override data during drop it
+        // won't work.
+        let dragData = a.path
+        if (FILETYPES_IMG.includes(a.ext.toLowerCase())) {
+          // Override the drag data with a link to the image
+          let uri = decodeURIComponent(a.path)
+          dragData = `![${a.name}](${uri})`
+        } else {
+          // Standard file link
+          let uri = decodeURIComponent(a.path)
+          dragData = `[${a.name}](${uri})`
+        }
+
+        // Circumvent the jQuery event wrapping and use native events.
+        link[0].ondragstart = (event) => { this.setDragData(dragData, event) }
         this._fileContainer.append(link)
       }
     }
@@ -92,6 +122,15 @@ class ZettlrAttachments {
   refreshBibliography (bib) {
     if (typeof bib === 'string') this._bibliographyContainer.html(`<p>${bib}</p>`)
     else this._bibliographyContainer.html(bib[0].bibstart + bib[1].join('\n') + bib[0].bibend)
+  }
+
+  /**
+   * Overwrites the text buffer of a DragEvent to modify what is being dragged.
+   * @param {String} data The data to be written into the buffer
+   * @param {DragEvent} event The drag event, whose buffer should be overwritten
+   */
+  setDragData (data, event) {
+    event.dataTransfer.setData('text', data)
   }
 
   /**

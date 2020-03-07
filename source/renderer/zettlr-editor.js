@@ -252,7 +252,7 @@ class ZettlrEditor {
         let plain = clipboard.readText()
         let explicitPaste = plain === changeObj.text.join('\n')
         if (html && html.length > 0 && (!plain || html !== plain) && explicitPaste) {
-          // We've got HTML, so let's fire up Showdown.js
+          // We've got HTML, so let's fire up Turndown.
           plain = this._turndown.turndown(html)
           // Let's update the (very likely plain) HTML text with some Markdown
           // that retains the formatting. PLEASE NOTE that we have to split the
