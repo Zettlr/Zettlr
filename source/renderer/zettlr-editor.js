@@ -229,7 +229,11 @@ class ZettlrEditor {
         // First check if there's an image in the clipboard. In this case we
         // need to cancel the paste event and handle the image ourselves.
         let image = clipboard.readImage()
-        if (!image.isEmpty() && !changeObj.text) {
+        let html = clipboard.readHTML()
+        let plain = clipboard.readText()
+        let explicitPaste = plain === changeObj.text.join('\n')
+
+        if (!image.isEmpty() && (explicitPaste || !changeObj.text)) {
           // We've got an image. So we need to handle it.
           this._renderer.handleEvent('paste-image')
           return changeObj.cancel() // Cancel handling of the event
@@ -248,9 +252,6 @@ class ZettlrEditor {
         // same as the plain text from the clipboard. ONLY in this instance
         // is it a regular, explicit paste. Else the text in the changeObject
         // takes precedence.
-        let html = clipboard.readHTML()
-        let plain = clipboard.readText()
-        let explicitPaste = plain === changeObj.text.join('\n')
         if (html && html.length > 0 && (!plain || html !== plain) && explicitPaste) {
           // We've got HTML, so let's fire up Turndown.
           plain = this._turndown.turndown(html)
