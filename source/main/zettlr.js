@@ -26,6 +26,7 @@ const ZettlrFile = require('./zettlr-file.js')
 const ZettlrDeadDir = require('./zettlr-dead-dir.js')
 const ZettlrTargets = require('./zettlr-targets.js')
 const ZettlrStats = require('./zettlr-stats.js')
+const FSAL = require('./modules/fsal')
 const { loadI18nMain, trans } = require('../common/lang/i18n')
 const hash = require('../common/util/hash')
 const ignoreDir = require('../common/util/ignore-dir')
@@ -125,6 +126,9 @@ class Zettlr {
       }
     }
 
+    // File System Abstraction Layer
+    this._fsal = new FSAL(path.join(app.getPath('userData'), 'fsal_cache'))
+
     // Statistics
     this.stats = new ZettlrStats(this)
 
@@ -152,6 +156,7 @@ class Zettlr {
           let duration = Date.now() - start
           duration /= 1000 // Convert to seconds
           global.log.info(`Loaded all roots in ${duration} seconds`)
+          // app.quit() // DEBUG
         }).catch((err) => {
           global.log.error('Could not add additional roots!', err)
           this.isBooting = false // Now we're done booting
@@ -238,6 +243,9 @@ class Zettlr {
     for (let p of this._openPaths) {
       p.shutdown()
     }
+
+    // Finally shut down the file system
+    this._fsal.shutdown()
 
     // Finally, shut down the service providers
     await this._shutdownServiceProviders()
@@ -394,6 +402,10 @@ class Zettlr {
       } else if ((newDir = this.findDir({ 'path': f })) != null) {
         // Do nothing
       } else if (global.config.addPath(f)) {
+        // FSAL CODE
+        this._fsal.loadPath(f)
+
+        // LEGACY CODE
         if (isFile(f)) {
           newFile = new ZettlrFile(this, f)
           await newFile.scan() // Asynchronously scan file contents
@@ -457,6 +469,16 @@ class Zettlr {
     this._openPaths = []
     // Reload all opened files, garbage collect will get the old ones.
     for (let p of global.config.get('openPaths')) {
+      // New FSAL code
+      try {
+        await this._fsal.loadPath(p)
+      } catch (e) {
+        console.log(e)
+        // global.log.info(`FSAL Removing path ${p}, as it does no longer exist.`)
+        // global.config.removePath(p)
+      }
+
+      // Legacy code
       if (isFile(p)) {
         let file = new ZettlrFile(this, p)
         await file.scan()
