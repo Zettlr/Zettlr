@@ -259,20 +259,6 @@ class ZettlrEditor {
           // resulting string as the update method expects an Array of lines,
           // not a complete string with line breaks.
           return changeObj.update(changeObj.from, changeObj.to, plain.split('\n'))
-        } else if (explicitPaste) {
-          // Continue with checking for potential images.
-          let newtext = []
-          for (let i in changeObj.text) {
-            if (changeObj.text[i].indexOf('file://') === 0 && IMAGE_REGEX.test(changeObj.text[i])) {
-              // Omit the file:// and decode any URI components to enable Pandoc
-              // and xetex to find the image.
-              let uri = decodeURIComponent(changeObj.text[i].substr((process.platform === 'win32') ? 8 : 7))
-              newtext[i] = `![${path.basename(changeObj.text[i])}](${uri})`
-            } else {
-              newtext[i] = changeObj.text[i]
-            }
-          }
-          return changeObj.update(changeObj.from, changeObj.to, newtext)
         }
       }
     })
