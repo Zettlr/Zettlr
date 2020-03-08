@@ -27,10 +27,15 @@ module.exports = class FSALCache {
   constructor (datadir) {
     this._datadir = datadir
     this._data = {}
+    // Hash table for all keys that were requested before persist is called
+    // Everything not in this table will be cleaned out to keep the disk
+    // space as small as possible.
+    this._accessed = {}
 
     try {
       fs.lstatSync(this._datadir)
     } catch (e) {
+      console.log('Cache data dir does not yet exist.', this._datadir)
       // Make sure the path exists
       fs.mkdirSync(this._datadir, { 'recursive': true })
     }
@@ -39,9 +44,15 @@ module.exports = class FSALCache {
   /**
    * Returns the value associated for a key without removing it.
    * @param {String} key The key to get
+   * @returns {Mixed} The key's value or undefined
    */
   get (key) {
     if (!this._hasShard(key)) this._loadShard(key)
+    if (this.has(key)) {
+      this._accessed[key] = true
+    } else {
+      return undefined
+    }
     return this._data[this._determineShard(key)][key]
   }
 
@@ -52,6 +63,7 @@ module.exports = class FSALCache {
    */
   set (key, value) {
     if (!this._hasShard(key)) this._loadShard(key)
+    this._accessed[key] = true // Obviously, a set key has been accessed
     this._data[this._determineShard(key)][key] = value
   }
 
@@ -86,14 +98,28 @@ module.exports = class FSALCache {
    * Persist all cache data on disk.
    */
   persist () {
+    let deleted = 0
     // Saves all currently loaded shards to disk
     for (let shard of Object.keys(this._data)) {
+      // Clean up the remnant keys
+      for (let key of Object.keys(this._data[shard])) {
+        if (!this._accessed.hasOwnProperty(key)) {
+          delete this._data[shard][key]
+          deleted++
+        }
+      }
+
       try {
         fs.writeFileSync(path.join(this._datadir, shard), JSON.stringify(this._data[shard]))
       } catch (e) {
         global.log.error(`Could not save shard ${shard} on disk!`, e)
       }
     }
+
+    if (deleted > 0) global.log.info(`Cleaned up FSAL cache: Removed ${deleted} remnants.`)
+
+    // Reset the access table
+    this._accessed = {}
   }
 
   /**
@@ -131,6 +157,9 @@ module.exports = class FSALCache {
     // whoooooooooooooo. Well, but the keys will only
     // be hashes, so whatever lol. Nothing fancy as
     // Instagram does (cf. https://instagram-engineering.com/sharding-ids-at-instagram-1cf5a71e5a5c)
+
+    // One more note: This caching algorithm will ensure
+    // there'll be at most 99 files (10 to 99 and -1 to -9).
 
     let shard = key
     if (typeof shard !== 'string') shard = key.toString()

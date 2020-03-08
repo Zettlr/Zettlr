@@ -21,8 +21,6 @@ const path = require('path')
 const ZettlrIPC = require('./zettlr-ipc.js')
 const ZettlrWindow = require('./zettlr-window.js')
 const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
-const ZettlrDir = require('./zettlr-dir.js')
-const ZettlrFile = require('./zettlr-file.js')
 const ZettlrDeadDir = require('./zettlr-dead-dir.js')
 const ZettlrTargets = require('./zettlr-targets.js')
 const ZettlrStats = require('./zettlr-stats.js')
@@ -97,37 +95,16 @@ class Zettlr {
         })
       },
       notifyChange: (msg) => {
-        global.ipc.send('paths-update', this.getPathDummies())
+        global.ipc.send('paths-update', this._fsal.getTreeMeta())
         global.ipc.notify(msg)
       },
-      findFile: (prop) => {
-        let obj = {}
-        if (typeof prop === 'number') {
-          obj.hash = prop
-        } else if (typeof prop === 'string') {
-          obj.path = prop
-        } else {
-          obj = prop
-        }
-
-        return this.findFile(obj)
-      },
-      findDir: (prop) => {
-        let obj = {}
-        if (typeof prop === 'number') {
-          obj.hash = prop
-        } else if (typeof prop === 'string') {
-          obj.path = prop
-        } else {
-          obj = prop
-        }
-
-        return this.findDir(obj)
-      }
+      findFile: (prop) => { return this._fsal.findFile(prop) },
+      findDir: (prop) => { return this._fsal.findDir(prop) }
     }
 
-    // File System Abstraction Layer
-    this._fsal = new FSAL(path.join(app.getPath('userData'), 'fsal_cache'))
+    // File System Abstraction Layer, pass the folder
+    // where it can store its internal files.
+    this._fsal = new FSAL(app.getPath('userData'))
 
     // Statistics
     this.stats = new ZettlrStats(this)
@@ -320,13 +297,13 @@ class Zettlr {
 
     // arg contains the hash of a file.
     // findFile now returns the file object
-    let file = this.findFile({ 'hash': parseInt(arg) })
+    let file = this._fsal.findFile(arg)
 
-    if (file != null) {
+    if (file) {
       this.setCurrentFile(file)
-      this.ipc.send('file-open', file.withContent())
+      this.ipc.send('file-open', await this._fsal.getFile(file))
       // Add the file's metadata object to the recent docs
-      global.recentDocs.add(file.getMetadata())
+      global.recentDocs.add(file)
     } else {
       global.log.error('Could not find file', arg)
       this.window.prompt({
@@ -344,10 +321,10 @@ class Zettlr {
     */
   selectDir (arg) {
     // arg contains a hash for a directory.
-    let obj = this.findDir({ 'hash': parseInt(arg) })
+    let obj = this._fsal.findDir(arg)
 
     // Now send it back (the GUI should by itself filter out the files)
-    if (obj && obj.isDirectory() && obj.type !== 'dead-directory') {
+    if (obj && obj.type === 'directory') {
       this.setCurrentDir(obj)
     } else {
       global.log.error('Could not find directory', arg)
@@ -395,33 +372,21 @@ class Zettlr {
       // First check if this thing is already added. If so, simply write
       // the existing file/dir into the newFile/newDir vars. They will be
       // opened accordingly.
-      if ((newFile = this.findFile({ 'path': f })) != null) {
+      if ((newFile = this._fsal.findFile(f)) != null) {
         // Also set the newDir variable so that Zettlr will automatically
         // navigate to the directory.
         newDir = newFile.parent
-      } else if ((newDir = this.findDir({ 'path': f })) != null) {
+      } else if ((newDir = this._fsal.findDir(f)) != null) {
         // Do nothing
       } else if (global.config.addPath(f)) {
-        // FSAL CODE
         this._fsal.loadPath(f)
-
-        // LEGACY CODE
-        if (isFile(f)) {
-          newFile = new ZettlrFile(this, f)
-          await newFile.scan() // Asynchronously scan file contents
-          this._openPaths.push(newFile)
-        } else {
-          newDir = new ZettlrDir(this, f)
-          await newDir.scan() // Asynchronously pull in the directory tree
-          this._openPaths.push(newDir)
-        }
       } else {
         global.ipc.notify(trans('system.error.open_root_error', path.basename(f)))
       }
     }
 
     this._sortPaths()
-    this.ipc.send('paths-update', this.getPathDummies())
+    this.ipc.send('paths-update', this._fsal.getTreeMeta())
     // Open the newly added path(s) directly.
     if (newDir) { this.setCurrentDir(newDir) }
     if (newFile) { this.sendFile(newFile.hash) }
@@ -432,7 +397,7 @@ class Zettlr {
    * @param  {number} hash The hash of the file to be displayed in the window
    * @return {void}      No return.
    */
-  openQL (hash) { this._ql.openQuicklook(this.findFile({ 'hash': hash })) }
+  openQL (hash) { this._ql.openQuicklook(this._fsal.findFile(hash)) }
 
   /**
    * In case a root directory gets removed, indicate that fact by marking it
@@ -444,6 +409,7 @@ class Zettlr {
     if (dir === this.getCurrentDir()) this.setCurrentDir(null) // Remove current directory
     let p = this.getPaths()
     for (let i = 0; i < p.length; i++) {
+      // TODO: LEGACY CODE
       if (p[i] === dir) p[i] = new ZettlrDeadDir(this, dir.path)
     }
   }
@@ -454,11 +420,14 @@ class Zettlr {
     * @return {void}      Does not return.
     */
   remove (obj) {
-    // This function is always called if root files are removed externally
-    // and therefore want to remove themselves. This means we simply have
-    // to splice the object from our paths array.
-    this.getPaths().splice(this.getPaths().indexOf(obj), 1)
-    this.ipc.send('paths-update', this.getPathDummies())
+    // This function is always called if root files are removed
+    // externally and therefore want to remove themselves.
+    try {
+      this._fsal.unloadPath(obj)
+    } catch (e) {
+      global.log.error(`Could not close root ${obj.name}`, e)
+    }
+    this.ipc.send('paths-update', this._fsal.getTreeMeta())
   }
 
   /**
@@ -466,130 +435,52 @@ class Zettlr {
     * @return {Promise} Resolved after the paths have been re-read
     */
   async refreshPaths () {
-    this._openPaths = []
     // Reload all opened files, garbage collect will get the old ones.
+    this._fsal.unloadAll()
+    let start = Date.now()
     for (let p of global.config.get('openPaths')) {
       // New FSAL code
       try {
         await this._fsal.loadPath(p)
       } catch (e) {
         console.log(e)
-        // global.log.info(`FSAL Removing path ${p}, as it does no longer exist.`)
-        // global.config.removePath(p)
-      }
-
-      // Legacy code
-      if (isFile(p)) {
-        let file = new ZettlrFile(this, p)
-        await file.scan()
-        this._openPaths.push(file)
-      } else if (isDir(p)) {
-        let dir = new ZettlrDir(this, p)
-        await dir.scan()
-        this._openPaths.push(dir)
-      } else if (path.extname(p) === '') {
-        // It's not a file (-> no extension) but it could not be found ->
-        // mark it as "dead"
-        this._openPaths.push(new ZettlrDeadDir(this, p))
-      } else {
-        // Remove the path, because it obviously does not exist anymore
-        global.log.info(`Removing path ${p}, as it does no longer exist.`)
-        global.config.removePath(p)
+        global.log.info(`FSAL Removing path ${p}, as it does no longer exist.`)
+        // global.config.removePath(p) TODO
       }
     }
 
+    console.log(`Read all paths in ${Date.now() - start} ms!`)
+
     // Now send an update containing all paths, because these need to be present
     // in the renderer for the following setting of current dirs and files.
-    this.ipc.send('paths-update', this.getPathDummies())
+    this.ipc.send('paths-update', this._fsal.getTreeMeta())
 
     // Set the pointers either to null or last opened dir/file
-    let lastDir = this.findDir({ 'hash': parseInt(global.config.get('lastDir')) })
-    let lastFile = this.findFile({ 'hash': parseInt(global.config.get('lastFile')) })
+    let lastDir = null
+    let lastFile = null
+    try {
+      lastDir = this._fsal.findDir(global.config.get('lastDir'))
+      lastFile = this._fsal.findFile(global.config.get('lastFile'))
+    } catch (e) {
+      console.log('Error on finding last dir or file', e)
+    }
     this.setCurrentDir(lastDir)
     this.setCurrentFile(lastFile)
-    if (lastFile) this.ipc.send('file-open', lastFile.withContent())
-
-    // Also add the last file to the list of recent documents.
-    if (lastFile !== null) global.recentDocs.add(lastFile.getMetadata())
+    if (lastFile) {
+      this.ipc.send('file-open', await this._fsal.getFile(lastFile))
+      global.recentDocs.add(lastFile)
+    }
 
     // Preset the window's title with the current file, if applicable
     this.window.fileUpdate()
   }
 
   /**
-    * Wrapper to find files within all open paths
-    * @param  {Object} obj An object that conforms with ZettlrDir/ZettlrFile::findFile()
-    * @return {Mixed}     ZettlrFile or null
-    */
-  findFile (obj) {
-    if (obj.hasOwnProperty('hash') && obj.hash == null) {
-      return null
-    } else if (obj.hasOwnProperty('path') && obj.path == null) {
-      return null
-    }
-
-    // We may have to cast the hash into a number, because stupid IPC doesn't care
-    // about whether we transmit a number or a string.
-    if (obj.hasOwnProperty('hash') && typeof obj.hash !== 'number') {
-      obj.hash = parseInt(obj.hash)
-    }
-
-    let found = null
-    for (let p of this.getPaths()) {
-      found = p.findFile(obj)
-      if (found != null) {
-        return found
-      }
-    }
-
-    return null
-  }
-
-  /**
-    * Wrapper around findDir
-    * @param  {Object} obj An object that conforms with ZettlrDir/ZettlrFile::findDir()
-    * @return {Mixed}     ZettlrDir or null
-    */
-  findDir (obj) {
-    if (obj.hasOwnProperty('hash') && obj.hash == null) {
-      return null
-    } else if (obj.hasOwnProperty('path') && obj.path == null) {
-      return null
-    }
-
-    // We may have to cast the hash into a number, because stupid IPC doesn't care
-    // about whether we transmit a number or a string.
-    if (obj.hasOwnProperty('hash') && typeof obj.hash !== 'number') {
-      obj.hash = parseInt(obj.hash)
-    }
-
-    let found = null
-    for (let p of this.getPaths()) {
-      found = p.findDir(obj)
-      if (found != null) {
-        return found
-      }
-    }
-
-    return null
-  }
-
-  /**
     * Either returns one file that matches its ID with the given term or null
     * @param  {String} term The ID to be searched for
-    * @return {ZettlrFile}      The exact match, or null.
+    * @return {OBject}      The exact match, or null.
     */
-  findExact (term) {
-    let found = null
-    for (let p of this.getPaths()) {
-      found = p.findExact(term)
-      if (found != null) {
-        return found
-      }
-    }
-
-    return null
-  }
+  findExact (term) { return this._fsal.findExact(term) }
 
   /**
     * Called when a root file is renamed. This is an alias for _sortPaths.
@@ -642,8 +533,8 @@ class Zettlr {
     */
   setCurrentFile (f) {
     this.currentFile = f
-    this.ipc.send('file-set-current', (f && f.hasOwnProperty('hash')) ? f.hash : null)
-    global.config.set('lastFile', (f && f.hasOwnProperty('hash')) ? f.hash : null)
+    this.ipc.send('file-set-current', (f) ? f.hash : null)
+    global.config.set('lastFile', (f) ? f.hash : null)
 
     // Always adapt the window title
     if (this.window) this.window.fileUpdate()
@@ -663,8 +554,8 @@ class Zettlr {
     // will definitely exist in the renderer's memory, b/c we re-send the
     // paths each time we change them. So renderer should always be on the
     // newest update.
-    this.ipc.send('dir-set-current', (d && d.hasOwnProperty('hash')) ? d.hash : null)
-    global.config.set('lastDir', (d && d.hasOwnProperty('hash')) ? d.hash : null)
+    this.ipc.send('dir-set-current', (d) ? d.hash : null)
+    global.config.set('lastDir', (d) ? d.hash : null)
   }
 
   /**
@@ -708,16 +599,6 @@ class Zettlr {
     * @return {ZettlrIPC}  The IPC object
     */
   getIPC () { return this.ipc }
-
-  /**
-    * Returns the directory tree. Thid does _not_, however, leave the paths
-    * unchanged. It re-maps them and removes from the roots the pointer to this
-    * object to prevent strange crashes of the app.
-    * @return {ZettlrDir} The root directory pointer.
-    */
-  getPaths () { return this._openPaths }
-
-  getPathDummies () { return this._openPaths.map(elem => elem.getMetadata()) }
 
   /**
     * Returns the updater

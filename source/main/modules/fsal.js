@@ -13,20 +13,24 @@
  * END HEADER
  */
 
+const fs = require('fs').promises
 const path = require('path')
 const EventEmitter = require('events')
 const isFile = require('../../common/util/is-file')
 const isDir = require('../../common/util/is-dir')
-const parseFile = require('./includes/fsal-parseFile')
-const parseDirectory = require('./includes/fsal-parseDirectory')
+const findObject = require('../../common/util/find-object')
+const FSALFile = require('./includes/fsal-file')
+const FSALDir = require('./includes/fsal-directory')
 const Cache = require('./includes/fsal-cache')
+const hash = require('../../common/util/hash')
+const FILETYPES = require('../../common/data.json').filetypes
 
 module.exports = class FSAL extends EventEmitter {
   constructor (cachedir) {
     super()
     global.log.verbose('FSAL booting up ...')
     this._roots = [] // The file system tree(s)
-    this._cache = new Cache(cachedir)
+    this._cache = new Cache(path.join(cachedir, 'fsal/cache'))
   }
 
   /**
@@ -46,7 +50,7 @@ module.exports = class FSAL extends EventEmitter {
   async _loadFile (filePath) {
     // Loads a standalone file
     let start = Date.now()
-    this._roots.push(await parseFile(filePath, this._cache))
+    this._roots.push(await FSALFile.parse(filePath, this._cache))
     console.log(`${Date.now() - start} ms: Loaded file ${filePath}`) // DEBUG
   }
 
@@ -57,7 +61,7 @@ module.exports = class FSAL extends EventEmitter {
   async _loadDir (dirPath) {
     // Loads a directory
     let start = Date.now()
-    this._roots.push(await parseDirectory(dirPath, this._cache))
+    this._roots.push(await FSALDir.parse(dirPath, this._cache))
     console.log(`${Date.now() - start} ms: Loaded directory ${dirPath}`) // DEBUG
   }
 
@@ -88,6 +92,109 @@ module.exports = class FSAL extends EventEmitter {
       // If we've reached here the path poses a problem -> notify caller
       throw new Error(`FSAL: Could not load path ${p}!`)
     }
+  }
+
+  /**
+   * Unloads the complete FSAL, can be used
+   * for preparation of a full reload.
+   */
+  unloadAll () {
+    this._roots = [] // Throw 'em out!
+  }
+
+  /**
+   * Unloads a Root from the FSAL.
+   * @param {Object} root The root to be removed.
+   */
+  unloadPath (root) {
+    if (!this._roots.includes(root)) throw new Error(`Cannot remove root ${root.name} - not open!`)
+    this._roots.splice(this._roots.indexOf(root), 1)
+    return true
+  }
+
+  async getFile (searchParam) {
+    let val = searchParam
+    if (typeof val === 'object') val = val.hash
+    let file = this.findFile(val)
+
+    file.content = await FSALFile.load(file)
+    return file
+  }
+
+  async createFile (directory, filename) {
+    if (typeof directory === 'string') directory = this.findDir(directory)
+    return FSALDir.createFile(directory, filename)
+  }
+
+  /**
+   * Returns a lean directory tree, ready to be stringyfied for IPC calls.
+   */
+  getTreeMeta () {
+    let ret = []
+    for (let root of this._roots) {
+      if (root.type === 'directory') {
+        ret.push(FSALDir.metadata(root))
+      } else if (root.type === 'file') {
+        ret.push(FSALFile.metadata(root))
+      } else {
+        // Dead directory or so
+      }
+    }
+
+    return ret
+  }
+
+  /**
+   * Attempts to find a directory in the FSAL. Returns null if not found.
+   * @param {Mixed} val Either an absolute path or a hash
+   * @return {Mixed} Either null or the wanted directory
+   */
+  findDir (val) {
+    // We'll only search for hashes, so if the user searches for a path,
+    // convert it to the hash prior to searching the tree.
+    if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
+    if (typeof val !== 'number') val = parseInt(val, 10)
+
+    let found = findObject(this._roots, 'hash', val, 'children')
+    if (!found || found.type !== 'directory') return null
+    return found
+  }
+
+  /**
+   * Attempts to find a file in the FSAL. Returns null if not found.
+   * @param {Mixed} val Either an absolute path or a hash
+   * @return {Mixed} Either null or the wanted file
+   */
+  findFile (val) {
+    // We'll only search for hashes, so if the user searches for a path,
+    // convert it to the hash prior to searching the tree.
+    if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
+    if (typeof val !== 'number') val = parseInt(val, 10)
+
+    let found = findObject(this._roots, 'hash', val, 'children')
+    if (!found || found.type !== 'file') return null
+    return found
+  }
+
+  /**
+   * Searches for a file with the exact name as given,
+   * accounting for missing endings.
+   * @param {String} name The file name to be searched for
+   */
+  findExact (query) {
+    let ext = path.extname(query)
+    if (ext.length > 1) {
+      // file ending given
+      return findObject(this._roots, 'name', query, 'children')
+    } else {
+      // No file ending given, so let's test all allowed
+      for (let type of FILETYPES) {
+        let found = findObject(this._roots, 'name', query + type, 'children')
+        if (found) return found
+      }
+    }
+
+    return null
   }
 
   /**

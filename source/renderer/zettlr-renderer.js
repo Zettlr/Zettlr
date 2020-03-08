@@ -29,6 +29,8 @@ const { remote, shell, clipboard } = require('electron')
 const generateId = require('../common/util/generate-id')
 const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
 
+const reconstruct = require('./util/reconstruct-tree')
+
 const path = require('path')
 
 // Pull the poll-time from the data
@@ -322,6 +324,12 @@ class ZettlrRenderer {
     * @return {void}       Nothing to return.
     */
   refresh (nData) {
+    // First we have to "reconstruct" the circular structure
+    // of the directory tree. This function replaces each
+    // parent-prop (only a hash) with the corresponding tree
+    // object, so that we have in principle the same structure
+    // than in main.
+    reconstruct(nData)
     this._paths = nData
     if (this.getCurrentDir() != null) {
       this.setCurrentDir(this.getCurrentDir().hash)

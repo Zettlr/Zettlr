@@ -29,6 +29,11 @@ const FRONTMATTER_VARS = [
   'lang'
 ]
 
+/**
+ * Applies a cached file, saving time where the file is not being parsed.
+ * @param {Object} origFile The file object
+ * @param {Object} cachedFile The cache object to apply
+ */
 function applyCache (origFile, cachedFile) {
   for (let prop of Object.keys(origFile)) {
     if (cachedFile.hasOwnProperty(prop)) {
@@ -37,8 +42,56 @@ function applyCache (origFile, cachedFile) {
   }
 }
 
-module.exports = async function (filePath, cache) {
+/**
+ * Caches a file, but removes circular structures beforehand.
+ * @param {Object} origFile The file to cache
+ */
+function cacheFile (origFile, cacheAdapter) {
+  let cache = {}
+  for (let prop of Object.keys(origFile)) {
+    // Save everything to the cache object except the parent to
+    // prevent circular structures throwing errors on persisting.
+    if (prop === 'parent') continue
+    cache[prop] = origFile[prop]
+  }
+
+  cacheAdapter.set(cache.hash, cache)
+}
+
+module.exports = {
+  'metadata': function (fileObject) {
+    return {
+      // By only passing the hash, the object becomes
+      // both lean AND it can be reconstructed into a
+      // circular structure with NO overheads in the
+      // renderer.
+      'parent': (fileObject.parent) ? fileObject.parent.hash : null,
+      'dir': fileObject.dir,
+      'path': fileObject.path,
+      'name': fileObject.name,
+      'hash': fileObject.hash,
+      'ext': fileObject.ext,
+      'id': fileObject.id,
+      'tags': fileObject.tags,
+      'type': fileObject.type,
+      'wordCount': fileObject.wordCount,
+      'charCount': fileObject.charCount,
+      'target': fileObject.target,
+      'modtime': fileObject.modtime,
+      'creationtime': fileObject.creationtime,
+      'frontmatter': fileObject.frontmatter,
+      'linefeed': fileObject.linefeed
+    }
+  },
+  'load': async function (fileObject) {
+    // Loads the content of a file from disk
+    return fs.readFile(fileObject.path, { encoding: 'utf8' })
+  }
+}
+
+module.exports.parse = async function (filePath, cache, parent = null) {
   let file = {
+    'parent': parent,
     'dir': path.dirname(filePath), // Containing dir
     'path': filePath,
     'name': path.basename(filePath),
@@ -169,7 +222,7 @@ module.exports = async function (filePath, cache) {
   }
 
   // Make sure to cache that thing
-  cache.set(file.hash, file)
+  cacheFile(file, cache)
 
   return file
 }
