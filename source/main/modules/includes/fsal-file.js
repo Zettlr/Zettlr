@@ -86,6 +86,9 @@ module.exports = {
   'load': async function (fileObject) {
     // Loads the content of a file from disk
     return fs.readFile(fileObject.path, { encoding: 'utf8' })
+  },
+  'save': async function (fileObject, content) {
+    return fs.writeFile(fileObject.path, content)
   }
 }
 

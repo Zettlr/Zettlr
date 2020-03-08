@@ -301,9 +301,13 @@ class Zettlr {
 
     if (file) {
       this.setCurrentFile(file)
-      this.ipc.send('file-open', await this._fsal.getFile(file))
-      // Add the file's metadata object to the recent docs
-      global.recentDocs.add(file)
+      try {
+        this.ipc.send('file-open', await this._fsal.getFile(file))
+        // Add the file's metadata object to the recent docs
+        global.recentDocs.add(this._fsal.getMetadataFor(file))
+      } catch (e) {
+        global.log.error(`Error sending file! ${file.name}`, e)
+      }
     } else {
       global.log.error('Could not find file', arg)
       this.window.prompt({
@@ -467,8 +471,12 @@ class Zettlr {
     this.setCurrentDir(lastDir)
     this.setCurrentFile(lastFile)
     if (lastFile) {
-      this.ipc.send('file-open', await this._fsal.getFile(lastFile))
-      global.recentDocs.add(lastFile)
+      try {
+        this.ipc.send('file-open', await this._fsal.getFile(lastFile))
+        global.recentDocs.add(this._fsal.getMetadataFor(lastFile))
+      } catch (e) {
+        console.log('Could not send initial file', e)
+      }
     }
 
     // Preset the window's title with the current file, if applicable
@@ -585,6 +593,11 @@ class Zettlr {
     this.editFlag = false
     this.ipc.send('mark-clean')
   }
+
+  /**
+   * Convenience function to send a full file object to the renderer
+   */
+  updatePaths () { global.ipc.send('paths-update', this._fsal.getTreeMeta()) }
 
   // Getters
 

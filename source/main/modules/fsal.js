@@ -13,7 +13,6 @@
  * END HEADER
  */
 
-const fs = require('fs').promises
 const path = require('path')
 const EventEmitter = require('events')
 const isFile = require('../../common/util/is-file')
@@ -21,6 +20,7 @@ const isDir = require('../../common/util/is-dir')
 const findObject = require('../../common/util/find-object')
 const FSALFile = require('./includes/fsal-file')
 const FSALDir = require('./includes/fsal-directory')
+const FSALAttachment = require('./includes/fsal-attachment')
 const Cache = require('./includes/fsal-cache')
 const hash = require('../../common/util/hash')
 const FILETYPES = require('../../common/data.json').filetypes
@@ -112,18 +112,46 @@ module.exports = class FSAL extends EventEmitter {
     return true
   }
 
-  async getFile (searchParam) {
-    let val = searchParam
+  /**
+   * Returns a file's metadata including the contents.
+   * @param {Mixed} val The search parameter
+   */
+  async getFile (val) {
     if (typeof val === 'object') val = val.hash
     let file = this.findFile(val)
+    if (!file) throw new Error('Could not find file!')
 
+    // Prepare the file for sending
+    file = FSALFile.metadata(file)
     file.content = await FSALFile.load(file)
     return file
   }
 
+  /**
+   * Creates a new file in the given directory with the filename.
+   * @param {Object} directory The directory in which to create the file
+   * @param {String} filename The name of the file to be created
+   */
   async createFile (directory, filename) {
     if (typeof directory === 'string') directory = this.findDir(directory)
     return FSALDir.createFile(directory, filename)
+  }
+
+  /**
+   * Saves a file to disk and re-reads it.
+   * @param {Object} file The file metadata
+   * @param {String} content The new content
+   */
+  async saveFile (file, content) {
+    await FSALFile.save(file, content)
+    // Re-parse the file
+    let newFile = await FSALFile.parse(file.path, this._cache, file.parent)
+
+    // Update the correct file object in memory
+    for (let prop of Object.keys(file)) {
+      if (newFile.hasOwnProperty(prop)) file[prop] = newFile[prop]
+    }
+    return true
   }
 
   /**
@@ -142,6 +170,17 @@ module.exports = class FSAL extends EventEmitter {
     }
 
     return ret
+  }
+
+  /**
+   * Retrieves the metadata for a single object.
+   * @param {Object} obj The metadata object
+   */
+  getMetadataFor (obj) {
+    if (obj.type === 'directory') return FSALDir.metadata(obj)
+    if (obj.type === 'file') return FSALFile.metadata(obj)
+    if (obj.type === 'attachment') return FSALAttachment.metadata(obj)
+    return obj
   }
 
   /**

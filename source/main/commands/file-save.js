@@ -46,10 +46,11 @@ class SaveFile extends ZettlrCommand {
       realFile = this._app._fsal.createFile(this._app.getCurrentDir(), generateFilename())
     }
 
-    console.log('saving as ' + realFile.name)
     try {
-      this._app._fsal.saveFile(realFile, file.content)
+      await this._app._fsal.saveFile(realFile, file.content)
       this._app.clearModified()
+      // Re-send the file
+      this._app.updatePaths() // TODO: Only send the file, if possible.
     } catch (e) {
       global.log.error(`Error writing file ${realFile.name}!`, e)
     }

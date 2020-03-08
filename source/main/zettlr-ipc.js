@@ -207,7 +207,11 @@ class ZettlrIPC {
         // Also set the current file and dir correctly immediately
         this.send('file-set-current', (this._app.getCurrentFile()) ? this._app.getCurrentFile().hash : null)
         this.send('dir-set-current', (this._app.getCurrentDir()) ? this._app.getCurrentDir().hash : null)
-        if (this._app.getCurrentFile()) this.send('file-open', this._app._fsal.getFile(this._app.getCurrentFile()))
+        if (this._app.getCurrentFile()) {
+          this._app._fsal.getFile(this._app.getCurrentFile()).then((file) => {
+            this.send('file-open', file)
+          })
+        }
         break
 
       case 'file-get':
