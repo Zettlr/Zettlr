@@ -23,7 +23,7 @@ class TagCloud extends ZettlrDialog {
 
   preInit (data) {
     data.tags = Object.keys(data).map(key => data[key])
-    data.tag_list = Object.keys(data).join('\n')
+    data.tag_list = Object.keys(data).map(e => '#' + e).join('\n')
     return data
   }
 
@@ -38,11 +38,18 @@ class TagCloud extends ZettlrDialog {
 
     $('#filter-tags').keyup((evt) => {
       let res = $('#filter-tags').val()
+      let remainingTags = []
       $('.dialog .tag').each(function (index) {
         res = res.toLowerCase()
-        if ($(this).text().toLowerCase().indexOf(res) < 0) $(this).hide()
-        else $(this).show()
+        if ($(this).text().toLowerCase().indexOf(res) < 0) {
+          $(this).hide()
+        } else {
+          $(this).show()
+          remainingTags.push(this.dataset.tag)
+        }
       })
+
+      $('.dialog #copy-to-clipboard').attr('data-copy-clipboard', remainingTags.join('\n'))
     })
   }
 }
