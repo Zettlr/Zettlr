@@ -90,7 +90,6 @@ class ZettlrToolbar {
     })
 
     this._searchbar.on('focus', (e) => {
-      this._searchbar.select()
       this._autocomplete = this._renderer.getFilesInDirectory()
     })
 
