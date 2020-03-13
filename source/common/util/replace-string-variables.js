@@ -12,6 +12,7 @@
  */
 
 const uuid4 = require('uuid/v4')
+const moment = require('moment')
 
 /**
  * A utility function that can replace a bunch of variables in strings, used
@@ -20,29 +21,17 @@ const uuid4 = require('uuid/v4')
  * @return      {string}        The output string, with all %-variables replaced
  */
 module.exports = function (string) {
-  let date = new Date()
-  let yyyy = date.getFullYear()
-  let mm = date.getMonth() + 1
-  if (mm <= 9) mm = '0' + mm
-  let dd = date.getDate()
-  if (dd <= 9) dd = '0' + dd
-  let hh = date.getHours()
-  if (hh <= 9) hh = '0' + hh
-  let m = date.getMinutes()
-  if (m <= 9) m = '0' + m
-  let ss = date.getSeconds()
-  if (ss <= 9) ss = '0' + ss
-  let wn = date.getWeek()
-  if (wn <= 9) wn = '0' + wn
+  // Get the current date
+  let d = moment()
 
   // Now generate the id by replacing all placeholders in the pattern
-  string = string.replace(/%Y/g, yyyy)
-  string = string.replace(/%M/g, mm)
-  string = string.replace(/%D/g, dd)
-  string = string.replace(/%W/g, wn)
-  string = string.replace(/%h/g, hh)
-  string = string.replace(/%m/g, m)
-  string = string.replace(/%s/g, ss)
+  string = string.replace(/%Y/g, d.format('YYYY'))
+  string = string.replace(/%M/g, d.format('MM'))
+  string = string.replace(/%D/g, d.format('DD'))
+  string = string.replace(/%W/g, d.format('WW'))
+  string = string.replace(/%h/g, d.format('HH'))
+  string = string.replace(/%m/g, d.format('mm'))
+  string = string.replace(/%s/g, d.format('ss'))
   string = string.replace(/%uuid4/g, uuid4())
 
   return string

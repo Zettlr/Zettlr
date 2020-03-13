@@ -15,6 +15,7 @@
 ## Under the Hood
 
 - Improvements to image dragging and dropping from the attachment sidebar.
+- Switched the string variable replacer from vanilla JavaScript to moment.js, which simplified the function considerably.
 
 # 1.6.0
 
