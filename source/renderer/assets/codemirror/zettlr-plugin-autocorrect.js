@@ -291,7 +291,6 @@
     var cursor = cm.getCursor()
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
-    console.log(cm.getModeAt(cursor))
     if (cm.getModeAt(cursor).name !== 'markdown-zkn') return CodeMirror.Pass
 
     canPerformReverseReplacement = false // Reset the handleBackspace flag
