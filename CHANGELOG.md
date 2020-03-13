@@ -9,6 +9,7 @@
 - Added the week-number as a variable for filenames and the Zettelkasten IDs (use `%W`).
 - Changes to the Pomodoro timer: Now the sound will play each time you release the mouse button on the volume slider to check how loud it is. Furthermore, the mute button has been removed in favor of a volume indication, with 0% equalling the former mute setting.
 - When the tag cloud is filtered, "Copy Tags" will only copy the filtered tags, and no longer all tags. To copy all tags, reset the filter. Furthermore tags will now be copied to clipboard including the leading hashtag.
+- Re-enabled double-dollar inline equations for rendering and syntax highlighting.
 
 ## Under the Hood
 
