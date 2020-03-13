@@ -11,7 +11,7 @@
  * END HEADER
  */
 
-const uuid4 = require('uuid/v4')
+const uuid4 = require('uuid').v4
 const moment = require('moment')
 
 /**

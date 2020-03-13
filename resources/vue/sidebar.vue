@@ -437,7 +437,6 @@ module.exports = {
         delay: 100,
         arrow: true,
         duration: 100,
-        flip: true,
         theme: 'light' // TODO: can be used to change to light in light mode (or better: vice versa)
       })
     },

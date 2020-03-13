@@ -18,7 +18,7 @@
 
 const fs = require('fs')
 const path = require('path')
-const uuid = require('uuid/v4')
+const uuid4 = require('uuid').v4
 const EventEmitter = require('events')
 const bcp47 = require('bcp-47')
 const ZettlrValidation = require('../../common/zettlr-validation')
@@ -412,7 +412,7 @@ class ConfigProvider extends EventEmitter {
 
     // Finally, check whether or not a UUID exists, and, if not, generate one.
     if (!this.config.uuid) {
-      this.config.uuid = uuid()
+      this.config.uuid = uuid4()
     }
 
     return this
