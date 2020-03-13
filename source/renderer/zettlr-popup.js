@@ -54,7 +54,9 @@ class ZettlrPopup {
     // Set up the event listeners
     this._boundClickHandler = this._onClickHandler.bind(this)
     this._boundResizeHandler = this._onResizeHandler.bind(this)
-    $(document).on('click contextmenu', this._boundClickHandler)
+    // Only bind mousedowns so that the user may release the mouse
+    // outside of the popup without closing it.
+    $(document).on('mousedown contextmenu', this._boundClickHandler)
     $(window).on('resize', this._boundResizeHandler)
 
     this._popup = $('<div>').addClass('popup').css('opacity', '0')
