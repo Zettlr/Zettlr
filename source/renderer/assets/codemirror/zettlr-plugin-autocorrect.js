@@ -295,12 +295,19 @@
 
     canPerformReverseReplacement = false // Reset the handleBackspace flag
     var cursorBefore = { 'line': cursor.line, 'ch': cursor.ch - 1 }
+    var cursorAfter = { 'line': cursor.line, 'ch': cursor.ch + 1 }
+
+    // Now add the "regular" quote first. This way, the user can
+    // "undo" the magic quote.
+    cm.doc.replaceRange((type === 'double') ? '"' : "'", cursor, cursor, '+input')
     // We have to check for two possibilities:
     // There's a "startChar" in front of the quote or not.
     if (cursor.ch === 0 || startChars.includes(cm.getRange(cursorBefore, cursor))) {
-      cm.replaceRange(quotes[type].start, cursor)
+      // The change origin 'autocorrect' should create a new event, but it doesn't.
+      // TODO: Have to investigate.
+      cm.doc.replaceRange(quotes[type].start, cursor, cursorAfter, 'autocorrect')
     } else {
-      cm.replaceRange(quotes[type].end, cursor)
+      cm.doc.replaceRange(quotes[type].end, cursor, cursorAfter, 'autocorrect')
     }
   }
 
