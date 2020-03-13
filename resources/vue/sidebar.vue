@@ -106,7 +106,7 @@
 // Please do not ask me why I have to explicitly use the "default" property
 // of some modules, but not others. The vue-loader is a mess when used with
 // ES6 CommonJS-modules in a exports/require-environment.
-const tippy = require('tippy.js').default
+// const tippy = require('tippy.js').default
 const findObject = require('../../source/common/util/find-object.js')
 const { trans } = require('../../source/common/lang/i18n.js')
 const TreeItem = require('./tree-item.vue').default
