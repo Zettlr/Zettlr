@@ -7,6 +7,7 @@
 - The popups are now more resilient against accidental closing, just like the dialogs.
 - When focus-selecting the global search bar (pressing the mouse button in the input and using it to select some text immediately) works as in other inputs now.
 - Added the week-number as a variable for filenames and the Zettelkasten IDs (use `%W`).
+- Changes to the Pomodoro timer: Now the sound will play each time you release the mouse button on the volume slider to check how loud it is. Furthermore, the mute button has been removed in favor of a volume indication, with 0% equalling the former mute setting.
 
 ## Under the Hood
 

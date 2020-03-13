@@ -232,7 +232,7 @@ class ZettlrPopup {
     this._popup.animate({ 'opacity': '0' }, 200, 'swing', () => {
       this._popup.detach()
       // Remove the event handlers
-      $(document).off('click contextmenu', this._boundClickHandler)
+      $(document).off('mousedown contextmenu', this._boundClickHandler)
       $(window).off('resize', this._boundResizeHandler)
     })
   }

@@ -364,8 +364,10 @@
     }
   }
 
-  .pomodoro p {
-    font-size: 2em;
+  .pomodoro p { font-size: 2em; }
+  .pomodoro .pomodoro-sound-indicator::before {
+    content: '\f181'; // icon-music
+    font-family: @font-icon;
   }
 
   // Footnote edit popup

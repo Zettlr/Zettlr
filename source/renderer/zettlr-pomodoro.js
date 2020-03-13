@@ -55,7 +55,6 @@ class ZettlrPomodoro {
     }
 
     this._running = false // Is timer currently running?
-    this._playSound = false // Play a sound each time a phase ends?
 
     this._svg = $('#toolbar .button.pomodoro svg').first()
     this._progressMeter = $('.pomodoro-value')
@@ -119,7 +118,7 @@ class ZettlrPomodoro {
         this._phase.type = 'task'
         this._phase.max = this._duration.task
       }
-      if (!this.isMuted()) {
+      if (!this._sound.volume > 0) {
         // Play a "finish" audio sound
         this._sound.currentTime = 0
         this._sound.play()
@@ -181,33 +180,41 @@ class ZettlrPomodoro {
           'duration_task': this._duration.task / 60,
           'duration_short': this._duration.short / 60,
           'duration_long': this._duration.long / 60,
-          'volume': this._sound.volume * 100,
-          'mute': !this._playSound
+          'volume': this._sound.volume * 100
         }
         this._pref = popup($('.button.pomodoro'), makeTemplate('popup', 'pomodoro-settings', data), (form) => {
           // Callback
           this._pref = null
-          if (!form) {
-            // User has aborted
-            return
-          }
+          // User has aborted
+          if (!form) return
+
           // 0 = task
           // 1 = short
           // 2 = long
-          // 3 = mute OR volume
-          // 4 = volume if mute
+          // 3 = volume
           this._duration.task = form[0].value * 60
           this._duration.short = form[1].value * 60
           this._duration.long = form[2].value * 60
-          if (form[3].name === 'mute') {
-            this.unmute()
-            this._sound.volume = form[4].value / 100
-          } else {
-            this.mute()
-            this._sound.volume = form[3].value / 100
-          }
+          this._sound.volume = form[3].value / 100
           // Now start
           this._start()
+          if (this._sound.volume === 0) console.log('Starting muted!')
+        }) // END callback
+
+        // Play the sound immediately as a check for the user
+        $('#pomodoro-volume-range').on('change', (evt) => {
+          let level = $('#pomodoro-volume-range').val() / 100
+          this._sound.volume = level
+          this._sound.currentTime = 0
+          this._sound.play()
+        })
+
+        // Indicate the correct volume immediately.
+        // "onChange" triggers when the mouse is released,
+        // "onInput" as soon as the bar moves.
+        $('#pomodoro-volume-range').on('input', (evt) => {
+          let level = $('#pomodoro-volume-range').val()
+          $('#pomodoro-volume-level').text(level + '%')
         })
       } else {
         // Display information and a stop button
@@ -220,9 +227,9 @@ class ZettlrPomodoro {
           'type': trans('pomodoro.phase.' + this._phase.type)
         }
         this._pref = popup($('.button.pomodoro'), makeTemplate('popup', 'pomodoro-status', data), (form) => {
-          // Callback
           this._pref = null
         })
+
         $('#pomodoro-stop-button').on('click', (e) => {
           this._pref.close()
           this._pref = null
@@ -243,29 +250,6 @@ class ZettlrPomodoro {
    */
   isRunning () { return this._running }
 
-  /**
-   * Is the timer currently muted, i.e. won't play the notification sound?
-   * @return {Boolean} True, if the timer is silent.
-   */
-  isMuted () { return !this._playSound }
-
-  /**
-   * Mutes the timer.
-   * @return {ZettlrPomodoro} Chainability.
-   */
-  mute () {
-    this._playSound = false
-    return this
-  }
-
-  /**
-   * Unmutes the timer.
-   * @return {ZettlrPomodoro} Chainability.
-   */
-  unmute () {
-    this._playSound = true
-    return this
-  }
 }
 
 module.exports = ZettlrPomodoro
