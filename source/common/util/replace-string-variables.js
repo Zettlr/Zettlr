@@ -32,11 +32,14 @@ module.exports = function (string) {
   if (m <= 9) m = '0' + m
   let ss = date.getSeconds()
   if (ss <= 9) ss = '0' + ss
+  let wn = date.getWeek()
+  if (wn <= 9) wn = '0' + wn
 
   // Now generate the id by replacing all placeholders in the pattern
   string = string.replace(/%Y/g, yyyy)
   string = string.replace(/%M/g, mm)
   string = string.replace(/%D/g, dd)
+  string = string.replace(/%W/g, wn)
   string = string.replace(/%h/g, hh)
   string = string.replace(/%m/g, m)
   string = string.replace(/%s/g, ss)

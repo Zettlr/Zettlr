@@ -6,6 +6,7 @@
 - Copying images from the Explorer/Finder/file browser now offers to insert them into the document, copying them over to the assets directory.
 - The popups are now more resilient against accidental closing, just like the dialogs.
 - When focus-selecting the global search bar (pressing the mouse button in the input and using it to select some text immediately) works as in other inputs now.
+- Added the week-number as a variable for filenames and the Zettelkasten IDs (use `%W`).
 
 ## Under the Hood
 
