@@ -249,7 +249,6 @@ class ZettlrPomodoro {
    * @return {Boolean} True, if the timer is currently running.
    */
   isRunning () { return this._running }
-
 }
 
 module.exports = ZettlrPomodoro
