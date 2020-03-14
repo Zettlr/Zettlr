@@ -99,7 +99,9 @@ class Zettlr {
         global.ipc.notify(msg)
       },
       findFile: (prop) => { return this._fsal.findFile(prop) },
-      findDir: (prop) => { return this._fsal.findDir(prop) }
+      findDir: (prop) => { return this._fsal.findDir(prop) },
+      // Same as findFile, only with content
+      getFile: (prop) => { return this._fsal.getFile(prop) }
     }
 
     // File System Abstraction Layer, pass the folder

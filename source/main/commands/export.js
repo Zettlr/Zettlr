@@ -29,12 +29,12 @@ class Export extends ZettlrCommand {
     * @param  {Object} arg An object containing hash and wanted extension.
     * @return {Boolean}     Whether or not the call succeeded.
     */
-  run (evt, arg) {
-    let file = this._app.findFile({ 'hash': parseInt(arg.hash) })
+  async run (evt, arg) {
+    let file = await global.application.getFile(arg.hash)
 
     // In case an alias has been selected, we need to sneakily switch the alias
     // with its target.
-    if (file.isAlias()) file = this._app.findFile({ 'hash': file.getAlias() })
+    // if (file.isAlias()) file = this._app.findFile({ 'hash': file.getAlias() })
 
     // As we have introduced aliases into the app, it may be that the target
     // returns null. In this case abort export and notify the user.

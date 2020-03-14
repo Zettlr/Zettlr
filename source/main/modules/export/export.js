@@ -13,15 +13,15 @@
  */
 
 // Pre-Pandoc modules
-const prepareFile = require('./includes/prepare-file')
-const prepareDefault = require('./includes/prepare-default-export')
-const preparePDF = require('./includes/prepare-pdf-export')
+const prepareFile = require('./prepare-file')
+const prepareDefault = require('./prepare-default-export')
+const preparePDF = require('./prepare-pdf-export')
 
 // Post-Pandoc modules
-const makeRevealBundle = require('./includes/make-reveal-bundle')
-const makeTextbundle = require('./includes/make-textbundle')
-const showdown = require('./includes/showdown-export')
-const runPandoc = require('./includes/run-pandoc')
+const makeRevealBundle = require('./make-reveal-bundle')
+const makeTextbundle = require('./make-textbundle')
+const showdown = require('./showdown-export')
+const runPandoc = require('./run-pandoc')
 
 // General includes
 const commandExists = require('command-exists')
