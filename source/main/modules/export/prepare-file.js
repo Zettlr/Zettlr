@@ -24,7 +24,6 @@ module.exports = async function (options) {
   // Allow overriding via explicitly set property on the options.
   // if (options.hasOwnProperty('absoluteImagePaths')) absolutePaths = options.absoluteImagePaths
   // let cnt = options.file.read({ 'absoluteImagePaths': absolutePaths })
-  console.log(options.file)
   let cnt = options.file.content
 
   // Second strip tags if necessary

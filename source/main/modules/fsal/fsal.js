@@ -15,15 +15,15 @@
 
 const path = require('path')
 const EventEmitter = require('events')
-const isFile = require('../../common/util/is-file')
-const isDir = require('../../common/util/is-dir')
-const findObject = require('../../common/util/find-object')
-const FSALFile = require('./includes/fsal-file')
-const FSALDir = require('./includes/fsal-directory')
-const FSALAttachment = require('./includes/fsal-attachment')
-const Cache = require('./includes/fsal-cache')
-const hash = require('../../common/util/hash')
-const FILETYPES = require('../../common/data.json').filetypes
+const isFile = require('../../../common/util/is-file')
+const isDir = require('../../../common/util/is-dir')
+const findObject = require('../../../common/util/find-object')
+const FSALFile = require('./fsal-file')
+const FSALDir = require('./fsal-directory')
+const FSALAttachment = require('./fsal-attachment')
+const Cache = require('./fsal-cache')
+const hash = require('../../../common/util/hash')
+const FILETYPES = require('../../../common/data.json').filetypes
 
 module.exports = class FSAL extends EventEmitter {
   constructor (cachedir) {
