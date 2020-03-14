@@ -32,9 +32,20 @@ module.exports = class FSAL extends EventEmitter {
     this._roots = [] // The file system tree(s)
     this._cache = new Cache(path.join(cachedir, 'fsal/cache'))
 
+    // The following actions can be run on the file tree
     this._actions = {
-      'sort': async (src, target, options) => {
-        return FSALDir.sort(src, options)
+      'sort': async (src, target, options) => { return FSALDir.sort(src, options) },
+      'create-file': async (src, target, options) => { return FSALDir.createFile(src, options) },
+      'save-file': async (src, target, options) => {
+        await FSALFile.save(src, options)
+        // Re-parse the file
+        let newFile = await FSALFile.parse(src.path, this._cache, src.parent)
+
+        // Update the correct file object in memory
+        for (let prop of Object.keys(src)) {
+          if (newFile.hasOwnProperty(prop)) src[prop] = newFile[prop]
+        }
+        return true
       }
     }
   }
@@ -269,32 +280,5 @@ module.exports = class FSAL extends EventEmitter {
       options.target || options.source, // Some actions only have a source
       options.info
     )
-  }
-
-  /**
-   * Creates a new file in the given directory with the filename.
-   * @param {Object} directory The directory in which to create the file
-   * @param {String} filename The name of the file to be created
-   */
-  async createFile (directory, filename) {
-    if (typeof directory === 'string') directory = this.findDir(directory)
-    return FSALDir.createFile(directory, filename)
-  }
-
-  /**
-   * Saves a file to disk and re-reads it.
-   * @param {Object} file The file metadata
-   * @param {String} content The new content
-   */
-  async saveFile (file, content) {
-    await FSALFile.save(file, content)
-    // Re-parse the file
-    let newFile = await FSALFile.parse(file.path, this._cache, file.parent)
-
-    // Update the correct file object in memory
-    for (let prop of Object.keys(file)) {
-      if (newFile.hasOwnProperty(prop)) file[prop] = newFile[prop]
-    }
-    return true
   }
 }

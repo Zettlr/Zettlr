@@ -40,14 +40,20 @@ class SaveFile extends ZettlrCommand {
     // Update word count
     this._app.stats.updateWordCount(file.wordcount || 0)
 
-    let realFile = this._app._fsal.findFile(file.hash || null)
+    let realFile = global.application.findFile(file.hash || null)
     if (!realFile) {
       console.log('No file found - creating')
-      realFile = this._app._fsal.createFile(this._app.getCurrentDir(), generateFilename())
+      realFile = await this._app.getFileSystem().runAction('create-file', {
+        'source': this._app.getCurrentDir(),
+        'info': generateFilename()
+      })
     }
 
     try {
-      await this._app._fsal.saveFile(realFile, file.content)
+      await this._app.getFileSystem().runAction('save-file', {
+        'source': realFile,
+        'info': file.content
+      })
       this._app.clearModified()
       // Re-send the file
       this._app.updatePaths() // TODO: Only send the file, if possible.
