@@ -31,6 +31,12 @@ module.exports = class FSAL extends EventEmitter {
     global.log.verbose('FSAL booting up ...')
     this._roots = [] // The file system tree(s)
     this._cache = new Cache(path.join(cachedir, 'fsal/cache'))
+
+    this._actions = {
+      'sort': async (src, target, options) => {
+        return FSALDir.sort(src, options)
+      }
+    }
   }
 
   /**
@@ -128,33 +134,6 @@ module.exports = class FSAL extends EventEmitter {
   }
 
   /**
-   * Creates a new file in the given directory with the filename.
-   * @param {Object} directory The directory in which to create the file
-   * @param {String} filename The name of the file to be created
-   */
-  async createFile (directory, filename) {
-    if (typeof directory === 'string') directory = this.findDir(directory)
-    return FSALDir.createFile(directory, filename)
-  }
-
-  /**
-   * Saves a file to disk and re-reads it.
-   * @param {Object} file The file metadata
-   * @param {String} content The new content
-   */
-  async saveFile (file, content) {
-    await FSALFile.save(file, content)
-    // Re-parse the file
-    let newFile = await FSALFile.parse(file.path, this._cache, file.parent)
-
-    // Update the correct file object in memory
-    for (let prop of Object.keys(file)) {
-      if (newFile.hasOwnProperty(prop)) file[prop] = newFile[prop]
-    }
-    return true
-  }
-
-  /**
    * Returns a lean directory tree, ready to be stringyfied for IPC calls.
    */
   getTreeMeta () {
@@ -180,7 +159,7 @@ module.exports = class FSAL extends EventEmitter {
     if (obj.type === 'directory') return FSALDir.metadata(obj)
     if (obj.type === 'file') return FSALFile.metadata(obj)
     if (obj.type === 'attachment') return FSALAttachment.metadata(obj)
-    return obj
+    return undefined
   }
 
   /**
@@ -275,5 +254,47 @@ module.exports = class FSAL extends EventEmitter {
     }
 
     count.attachments += dir.attachments.length
+  }
+
+  /**
+   * Runs an action on the file tree
+   */
+  async runAction (actionName, options) {
+    if (!Object.keys(this._actions).includes(actionName)) {
+      throw new Error(`Unknown action ${actionName}`)
+    }
+
+    return this._actions[actionName](
+      options.source,
+      options.target || options.source, // Some actions only have a source
+      options.info
+    )
+  }
+
+  /**
+   * Creates a new file in the given directory with the filename.
+   * @param {Object} directory The directory in which to create the file
+   * @param {String} filename The name of the file to be created
+   */
+  async createFile (directory, filename) {
+    if (typeof directory === 'string') directory = this.findDir(directory)
+    return FSALDir.createFile(directory, filename)
+  }
+
+  /**
+   * Saves a file to disk and re-reads it.
+   * @param {Object} file The file metadata
+   * @param {String} content The new content
+   */
+  async saveFile (file, content) {
+    await FSALFile.save(file, content)
+    // Re-parse the file
+    let newFile = await FSALFile.parse(file.path, this._cache, file.parent)
+
+    // Update the correct file object in memory
+    for (let prop of Object.keys(file)) {
+      if (newFile.hasOwnProperty(prop)) file[prop] = newFile[prop]
+    }
+    return true
   }
 }

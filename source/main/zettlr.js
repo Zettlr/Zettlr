@@ -88,10 +88,11 @@ class Zettlr {
           'file': fileMetadata
         })
       },
-      dirUpdate: (oldHash, dirMetadata) => {
+      dirUpdate: (oldHash, newHash) => {
+        let dir = this._fsal.findDir(newHash)
         this.ipc.send('dir-replace', {
           'hash': oldHash,
-          'dir': dirMetadata
+          'dir': this._fsal.getMetadataFor(dir)
         })
       },
       notifyChange: (msg) => {
@@ -644,6 +645,11 @@ class Zettlr {
     * @return {Mixed} ZettlrFile or null.
     */
   getCurrentFile () { return this.currentFile }
+
+  /**
+   * Returns the File System Abstraction Layer
+   */
+  getFileSystem () { return this._fsal }
 
   /**
     * Called by the root directory to determine if it is root.

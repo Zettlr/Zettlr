@@ -24,18 +24,17 @@ class DirSort extends ZettlrCommand {
     * @param {String} evt The event name
     * @param  {Object} arg An object containing both a hash and a sorting type
     */
-  run (evt, arg) {
+  async run (evt, arg) {
     if (!arg.hasOwnProperty('hash') || !arg.hasOwnProperty('type')) {
       return false
     }
 
-    let dir = this._app.findDir({ 'hash': parseInt(arg.hash) })
-
-    if (dir === null) return false
-
-    dir.toggleSorting(arg.type)
-
-    global.application.dirUpdate(dir.hash, dir.getMetadata())
+    let dir = global.application.findDir(arg.hash)
+    await this._app.getFileSystem().runAction('sort', {
+      'source': dir,
+      'info': arg.type
+    })
+    global.application.dirUpdate(dir.hash, dir.hash) // Hash has not changed
   }
 }
 
