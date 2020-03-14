@@ -75,7 +75,7 @@ async function readTree (currentPath, cache, parent) {
   // Retrieve the metadata
   try {
     let stats = await fs.lstat(currentPath)
-    dir.modtime = stats.mtime.getTime()
+    dir.modtime = stats.ctimeMs
   } catch (e) {
     global.log.error(`Error reading metadata for directory ${dir.path}!`, e)
     // Re-throw so that the caller knows something's afoul

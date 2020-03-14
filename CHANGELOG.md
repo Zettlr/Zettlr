@@ -17,6 +17,7 @@
 - Improvements to image dragging and dropping from the attachment sidebar.
 - Switched the string variable replacer from vanilla JavaScript to moment.js, which simplified the function considerably.
 - The `export` module is now really a module.
+- Switched to cTime internally as the representation for modification time, because it'll capture more changes than mTime.
 
 # 1.6.0
 

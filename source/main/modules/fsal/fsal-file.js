@@ -119,8 +119,8 @@ module.exports.parse = async function (filePath, cache, parent = null) {
   try {
     // Get lstat
     let stat = await fs.lstat(filePath)
-    file.modtime = stat.mtime.getTime()
-    file.creationtime = stat.birthtime.getTime()
+    file.modtime = stat.ctimeMs
+    file.creationtime = stat.birthtimeMs
   } catch (e) {
     global.log.error('Error reading file ' + filePath, e)
     throw e // Rethrow
