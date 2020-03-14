@@ -15,7 +15,7 @@
 
 const localiseNumber = require('../common/util/localise-number')
 const { trans } = require('../common/lang/i18n')
-const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
+// const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
 
 /**
  * This class is responsible for rendering the Toolbar. It builds the toolbar
@@ -90,7 +90,6 @@ class ZettlrToolbar {
     })
 
     this._searchbar.on('focus', (e) => {
-      this._searchbar.select()
       this._autocomplete = this._renderer.getFilesInDirectory()
     })
 
@@ -145,11 +144,10 @@ class ZettlrToolbar {
     })
 
     // Tippify all elements with the respective attribute.
-    tippy('#toolbar [data-tippy-content]', {
+    global.tippy('#toolbar [data-tippy-content]', {
       delay: 100,
       arrow: true,
-      duration: 100,
-      flip: true
+      duration: 100
     })
   }
 

@@ -54,7 +54,9 @@ class ZettlrPopup {
     // Set up the event listeners
     this._boundClickHandler = this._onClickHandler.bind(this)
     this._boundResizeHandler = this._onResizeHandler.bind(this)
-    $(document).on('click contextmenu', this._boundClickHandler)
+    // Only bind mousedowns so that the user may release the mouse
+    // outside of the popup without closing it.
+    $(document).on('mousedown contextmenu', this._boundClickHandler)
     $(window).on('resize', this._boundResizeHandler)
 
     this._popup = $('<div>').addClass('popup').css('opacity', '0')
@@ -230,7 +232,7 @@ class ZettlrPopup {
     this._popup.animate({ 'opacity': '0' }, 200, 'swing', () => {
       this._popup.detach()
       // Remove the event handlers
-      $(document).off('click contextmenu', this._boundClickHandler)
+      $(document).off('mousedown contextmenu', this._boundClickHandler)
       $(window).off('resize', this._boundResizeHandler)
     })
   }

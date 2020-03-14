@@ -18,7 +18,7 @@ const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const Turndown = require('joplin-turndown')
 const turndownGfm = require('joplin-turndown-plugin-gfm')
-const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
+// const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
 const { clipboard } = require('electron')
 const hash = require('../common/util/hash')
 const countWords = require('../common/util/count-words')
@@ -809,12 +809,11 @@ class ZettlrEditor {
 
     // Now we either got a match or an empty fnref. So create a tippy
     // instance
-    tippy(element[0], {
+    global.tippy(element[0], {
       'content': fnref,
       onHidden (instance) {
         instance.destroy() // Destroy the tippy instance.
       },
-      flip: true,
       arrow: true
     }).show() // Immediately show the tooltip
   }

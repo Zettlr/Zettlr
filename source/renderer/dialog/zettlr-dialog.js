@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
+// const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
 const EventEmitter = require('events')
 const makeTemplate = require('../../common/zettlr-template.js')
 const { clipboard } = require('electron')
@@ -205,11 +205,10 @@ class ZettlrDialog extends EventEmitter {
     })
 
     // Tippify all elements with the respective attribute
-    tippy('[data-tippy-content]', {
+    global.tippy('[data-tippy-content]', {
       delay: 100,
       arrow: true,
-      duration: 100,
-      flip: true
+      duration: 100
     })
 
     // After everything is set, give the extension dialogs a chance to apply

@@ -17,7 +17,7 @@
   // More information: https://pandoc.org/MANUAL.html#math
   // First alternative is only for single-character-equations
   // such as $x$. All others are captured by the second alternative.
-  var inlineMathRE = /(?<!\\)\$([^\s\\])\$(?!\d)|(?<!\\)\$([^\s].*?[^\s\\])\$(?!\d)/g
+  var inlineMathRE = /(?<!\\)\${1,2}([^\s\\])\${1,2}(?!\d)|(?<!\\)\${1,2}([^\s].*?[^\s\\])\${1,2}(?!\d)/g
   var multilineMathRE = /^\s*\$\$\s*$/
   var mathMarkers = []
 

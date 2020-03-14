@@ -4,10 +4,18 @@
 
 - If available, a title from a YAML frontmatter will be appended to the displayed file entry when linking files.
 - Copying images from the Explorer/Finder/file browser now offers to insert them into the document, copying them over to the assets directory.
+- The popups are now more resilient against accidental closing, just like the dialogs.
+- When focus-selecting the global search bar (pressing the mouse button in the input and using it to select some text immediately) works as in other inputs now.
+- Added the week-number as a variable for filenames and the Zettelkasten IDs (use `%W`).
+- Changes to the Pomodoro timer: Now the sound will play each time you release the mouse button on the volume slider to check how loud it is. Furthermore, the mute button has been removed in favor of a volume indication, with 0% equalling the former mute setting.
+- When the tag cloud is filtered, "Copy Tags" will only copy the filtered tags, and no longer all tags. To copy all tags, reset the filter. Furthermore tags will now be copied to clipboard including the leading hashtag.
+- Re-enabled double-dollar inline equations for rendering and syntax highlighting.
+- HTML-style comments (`<!-- Lorem Ipsum -->`) are now also exempt from the word counting.
 
 ## Under the Hood
 
 - Improvements to image dragging and dropping from the attachment sidebar.
+- Switched the string variable replacer from vanilla JavaScript to moment.js, which simplified the function considerably.
 
 # 1.6.0
 

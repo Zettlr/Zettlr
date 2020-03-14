@@ -16,7 +16,7 @@
   var headingRE = /(#+)\s+/
   var highlightRE = /::.+?::|==.+?==/
   var tableRE = /^\|.+\|$/i
-  var inlineMathRE = /^(?:\$[^\s\\]\$(?!\d)|\$[^\s].*?[^\s\\]\$(?!\d))/
+  var inlineMathRE = /^(?:\${1,2}[^\s\\]\${1,2}(?!\d)|\${1,2}[^\s].*?[^\s\\]\${1,2}(?!\d))/
   var blockMathRE = /^\s*\$\$\s*$/
 
   /**

@@ -40,6 +40,10 @@ module.exports = function (words, countChars = false) {
     if (end > 0) words = tmp.slice(end + 1).join('\n')
   }
 
+  // Now we need to remove comments, as these
+  // should also not be in the word count.
+  words = words.replace(/<!--.*?-->/gms, '')
+
   // Split by whitespace and additionally make sure that empty lines
   // are also removed so that \n\n counts as 0 words, not as two.
   words = words.split(/[\s ]+/).filter(word => word !== '')
