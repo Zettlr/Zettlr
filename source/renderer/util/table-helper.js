@@ -17,6 +17,7 @@
 */
 
 const pipeParser = require('./table-parser-pipe')
+const simpleParser = require('./table-parser-simple')
 
 class TableHelper {
   /**
@@ -153,13 +154,22 @@ class TableHelper {
    * Rebuilds the full AST and the DOM element from the given Markdown table.
    * Throws errors if it encounters any errors while parsing.
    * @param  {string|array} markdownTable The Markdown table, either as string or line array.
+   * @param {string} potentialType Indicates which type of Pandoc Markdown table this might be.
    * @return {void}               Does not return.
    */
-  fromMarkdown (markdownTable) {
-    // First determine the type of table and parse it
-    let { ast, colAlignments } = pipeParser(markdownTable)
-    // Now we need to rebuild everything from the AST
-    this._rebuildFromAST(ast, colAlignments)
+  fromMarkdown (markdownTable, potentialType = 'pipe') {
+    let parsed
+    switch (potentialType) {
+      case 'simple':
+        parsed = simpleParser(markdownTable)
+        break
+      default:
+        parsed = pipeParser(markdownTable)
+        break
+    }
+
+    // Now parse the whole thing into the table element.
+    this._rebuildFromAST(parsed.ast, parsed.colAlignments)
   }
 
   /**

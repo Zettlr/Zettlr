@@ -65,7 +65,7 @@ module.exports = function (markdownTable) {
     // first column to break this rule means we don't have a valid header.
     let isHeader = true
     for (let col of row) {
-      if (!/^[ -:]+$/.test(col) || col.trim() === '') {
+      if (!/^[-: ]+$/.test(col) || col.trim() === '') {
         // Note we have to check for completely blank lines
         isHeader = false
         break
