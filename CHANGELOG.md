@@ -11,6 +11,7 @@
 - When the tag cloud is filtered, "Copy Tags" will only copy the filtered tags, and no longer all tags. To copy all tags, reset the filter. Furthermore tags will now be copied to clipboard including the leading hashtag.
 - Re-enabled double-dollar inline equations for rendering and syntax highlighting.
 - HTML-style comments (`<!-- Lorem Ipsum -->`) are now also exempt from the word counting.
+- Fixed an error in the Table Editor that would assume empty rows to be header rows, leading to false behavior when trying to display a completely empty table.
 
 ## Under the Hood
 

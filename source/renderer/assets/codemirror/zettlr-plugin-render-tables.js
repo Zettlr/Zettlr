@@ -30,9 +30,6 @@ const Table = require('../../util/table-helper.js');
 
     // First remove tables that don't exist anymore.
     do {
-      if (!tableMarkers[i]) {
-        continue
-      }
       if (tableMarkers[i] && tableMarkers[i].find() === undefined) {
         // Marker is no longer present, so splice it
         tableMarkers.splice(i, 1)
@@ -132,7 +129,7 @@ const Table = require('../../util/table-helper.js');
         // Will raise an error if the table is malformed
         tbl.fromMarkdown(markdownTable)
       } catch (err) {
-        console.log(`Could not instantiate table between ${firstLine} and ${lastLine}: ${err.message}`)
+        console.error(`Could not instantiate table between ${firstLine} and ${lastLine}: ${err.message}`)
         // Error, so abort rendering.
         firstLine = lastLine = undefined
         continue
