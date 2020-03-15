@@ -14,6 +14,7 @@
 - Fixed an error in the Table Editor that would assume empty rows to be header rows, leading to false behavior when trying to display a completely empty table.
 - The Table Editor can now also parse and display simple tables and a wider range of pipe tables, as described in the Pandoc manual.
 - Fixed a small mistake where literal blocks would be wrongly offset as the editor treated them as list items.
+- Fixed artefacts with spellchecking errors. Thanks to @ryota-abe for proposing the correct selector!
 
 ## Under the Hood
 

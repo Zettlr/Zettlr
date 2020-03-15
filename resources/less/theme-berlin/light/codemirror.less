@@ -99,6 +99,8 @@
   text-decoration: underline;
   text-decoration-color: var(--orange-2);
   text-decoration-style: dotted;
+  // Prevent skipping of low-baseline chars to prevent strange artefacts
+  text-decoration-skip-ink: none;
 }
 .cm-zkn-tag, .cm-zkn-id, .cm-zkn-link, .cm-zkn-link-formatting { color:var(--c-primary); }
 // cma = code-mirror-anchor
