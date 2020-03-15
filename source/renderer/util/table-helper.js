@@ -185,8 +185,6 @@ class TableHelper {
       row.pop() // Out goes the last ...
       row.shift() // ... and the first
 
-      console.log('Parsing row ...', row)
-
       // First row determines the amount of columns expected
       if (!numColumns) numColumns = row.length
       if (numColumns !== row.length) {
@@ -222,7 +220,6 @@ class TableHelper {
 
       // We have a normal table row, so parse all columns
       let cols = []
-      console.log('Parsing ' + row.length + ' cols')
       for (let j = 0; j < row.length; j++) {
         cols.push(row[j].trim()) // Trim whitespaces
       }
