@@ -16,7 +16,7 @@ const Table = require('../../util/table-helper.js');
 
   var tableMarkers = []
   var tables = []
-  var tableHeadingRE = /(^[- ]+$)|(^[- |:+]+$)/
+  var tableHeadingRE = /(^[- ]+$)|(^[- +:]+$)|(^[- |:+]+$)/
 
   CodeMirror.commands.markdownInsertTable = function (cm) {
     // A small command that inserts a 2x2 table at the current cursor position.

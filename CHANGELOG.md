@@ -15,6 +15,7 @@
 - The Table Editor can now also parse and display simple and grid tables, and a wider range of pipe tables, as described in the Pandoc manual.
 - Fixed a small mistake where literal blocks would be wrongly offset as the editor treated them as list items.
 - Fixed artefacts with spellchecking errors. Thanks to @ryota-abe for proposing the correct selector!
+- The Table Editor now remembers what the source table looked like and tries to recreate that when it applies the changes to the DOM.
 
 ## Under the Hood
 

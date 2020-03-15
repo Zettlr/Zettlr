@@ -20,6 +20,10 @@ const pipeParser = require('./table-parser-pipe')
 const simpleParser = require('./table-parser-simple')
 const gridParser = require('./table-parser-grid')
 
+const buildPipeTable = require('./table-build-pipe')
+const buildSimpleTable = require('./table-build-simple')
+const buildGridTable = require('./table-build-grid')
+
 class TableHelper {
   /**
    * Creates a new TableHelper. You can pass rows and cols, if you wish. If you
@@ -37,6 +41,7 @@ class TableHelper {
     this._cellIndex = 0
     this._rowIndex = 0
     this._options = options
+    this._mdTableType = 'pipe' // Default to pipes
     this._containerElement = options.container || $('body')
     if (typeof this._containerElement === 'string') this._containerElement = $(this._containerElement)
 
@@ -159,6 +164,7 @@ class TableHelper {
    * @return {void}               Does not return.
    */
   fromMarkdown (markdownTable, potentialType = 'pipe') {
+    this._mdTableType = potentialType
     let parsed
     switch (potentialType) {
       case 'simple':
@@ -491,47 +497,15 @@ class TableHelper {
   * @returns {string} The markdown table
   */
   getMarkdownTable () {
-    let markdownTable = ''
-    // Now build from AST
-    for (let i = 0; i < this._ast.length; i++) {
-      for (let j = 0; j < this._ast[i].length; j++) {
-        if (j === 0) markdownTable += '|'
-        // Pad the text contents to fill up to the maximum chars
-        switch (this._colAlignment[j]) {
-          case 'left':
-          case 'center':
-            markdownTable += ` ${this._ast[i][j].padEnd(this._colSizes[j], ' ')} |`
-            break
-          case 'right':
-            markdownTable += ` ${this._ast[i][j].padStart(this._colSizes[j], ' ')} |`
-            break
-        }
-      }
-
-      markdownTable += '\n'
-
-      // First row is the header, so add a secondary row.
-      if (i === 0) {
-        markdownTable += '|'
-        for (let k = 0; k < this._colSizes.length; k++) {
-          // Respect the spaces left and right and account for alignment
-          switch (this._colAlignment[k]) {
-            case 'left':
-              markdownTable += '-'.repeat(this._colSizes[k] + 2) + '|'
-              break
-            case 'center':
-              markdownTable += ':' + '-'.repeat(this._colSizes[k]) + ':|'
-              break
-            case 'right':
-              markdownTable += '-'.repeat(this._colSizes[k] + 1) + ':|'
-              break
-          }
-        }
-        markdownTable += '\n'
-      }
+    // Determine which table to output, based on the _mdTableType
+    switch (this._mdTableType) {
+      case 'simple':
+        return buildSimpleTable(this._ast, this._colAlignment, this._colSizes)
+      case 'grid':
+        return buildGridTable(this._ast, this._colAlignment, this._colSizes)
+      default:
+        return buildPipeTable(this._ast, this._colAlignment, this._colSizes)
     }
-
-    return markdownTable
   }
 
   /**
