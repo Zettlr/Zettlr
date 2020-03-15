@@ -82,7 +82,23 @@ const Table = require('../../util/table-helper.js');
 
         potentialTableType = 'simple'
       } else if (match[2]) {
-        // Group 2 triggered, so we might have a pipe table. A pipe table must
+        // Group 2 triggered, so we maybe got a grid table. Grid tables may be
+        // headerless or have a header. But the very first line will always
+        // match the group, so we only have to look downward! As for pipe
+        // tables, the first empty line marks the end of the table.
+        // N.B.: We have this order of capturing groups because group 3 will
+        // also match grid tables!
+        firstLine = i
+        for (let j = i + 1; j < cm.lineCount(); j++) {
+          if (cm.getLine(j).trim() === '') {
+            lastLine = j - 1
+            break
+          }
+        }
+
+        potentialTableType = 'grid'
+      } else if (match[3]) {
+        // Group 3 triggered, so we might have a pipe table. A pipe table must
         // have a header, which means we'll have an easy time determining the
         // table boundaries.
         if (i === 0 || cm.getLine(i - 1).trim() === '') continue // Nope

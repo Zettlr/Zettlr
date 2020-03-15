@@ -18,6 +18,7 @@
 
 const pipeParser = require('./table-parser-pipe')
 const simpleParser = require('./table-parser-simple')
+const gridParser = require('./table-parser-grid')
 
 class TableHelper {
   /**
@@ -162,6 +163,9 @@ class TableHelper {
     switch (potentialType) {
       case 'simple':
         parsed = simpleParser(markdownTable)
+        break
+      case 'grid':
+        parsed = gridParser(markdownTable)
         break
       default:
         parsed = pipeParser(markdownTable)
