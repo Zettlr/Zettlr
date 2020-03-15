@@ -16,7 +16,7 @@ const Table = require('../../util/table-helper.js');
 
   var tableMarkers = []
   var tables = []
-  var tableHeadingRE = /(^[- ]+$)|(^[- +:]+$)|(^[- |:+]+$)/
+  var tableRE = /^\|.+\|$/
 
   CodeMirror.commands.markdownInsertTable = function (cm) {
     // A small command that inserts a 2x2 table at the current cursor position.
@@ -24,8 +24,11 @@ const Table = require('../../util/table-helper.js');
   }
 
   CodeMirror.commands.markdownRenderTables = function (cm) {
-    // First remove tables that don't exist anymore.
     let i = 0
+    let firstLine // First line of a given table
+    let lastLine // Last line of a given table
+
+    // First remove tables that don't exist anymore.
     do {
       if (tableMarkers[i] && tableMarkers[i].find() === undefined) {
         // Marker is no longer present, so splice it
@@ -36,96 +39,37 @@ const Table = require('../../util/table-helper.js');
       }
     } while (i < tableMarkers.length)
 
-    // Now render all potential new links. We only check one line less
-    // because such a table header WILL NEVER be on the last line, plus
-    // this way we can check for Setext headers without having to worry.
-    for (let i = 0; i < cm.lineCount() - 1; i++) {
+    // Now render all potential new links
+    for (let i = 0; i < cm.lineCount(); i++) {
       if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
 
-      // First get the line and test if the contents resemble a table. We only
-      // search for the heading rows here, because these are the only ones that
-      // indicate a table. (Which is why none other than the really explicit
-      // tables have syntax highlighting -- CodeMirror modes cannot do that).
-      let firstLine // First line of a given table
-      let lastLine // Last line of a given table
-      let potentialTableType // Stores the potential type, can be "pipe", "simple"
+      // First get the line and test if the contents resemble a table
       let line = cm.getLine(i)
-      let match = tableHeadingRE.exec(line)
-      if (match == null) continue // No table heading
-
-      if (match[1]) {
-        // Group 1 triggered, so we might have a simple table.
-        if (cm.getLine(i + 1).trim() === '') continue // It's a Setext heading
-        if (i === 0 || cm.getLine(i - 1).trim() === '') {
-          // We have a headless table, so let's search the end.
-          firstLine = i // First line in this case is i
-          for (let j = i + 1; j < cm.lineCount(); j++) {
-            let l = cm.getLine(j)
-            if (l.trim() === '') break // Leave without setting lastLine
-            let m = tableHeadingRE.exec(l)
-            if (m != null && m[1]) {
-              lastLine = j
-              break
-            }
-          }
-        } else {
-          // We do not have a headless table
-          firstLine = i - 1
-          for (let j = i; j < cm.lineCount(); j++) {
-            if (cm.getLine(j).trim() === '') {
-              // First empty line marks the end of the table.
-              lastLine = j - 1
-              break
-            }
-          }
+      if (tableRE.test(line)) {
+        if (firstLine === undefined) {
+          firstLine = lastLine = i
+          continue // Next line
         }
 
-        potentialTableType = 'simple'
-      } else if (match[2]) {
-        // Group 2 triggered, so we maybe got a grid table. Grid tables may be
-        // headerless or have a header. But the very first line will always
-        // match the group, so we only have to look downward! As for pipe
-        // tables, the first empty line marks the end of the table.
-        // N.B.: We have this order of capturing groups because group 3 will
-        // also match grid tables!
-        firstLine = i
-        for (let j = i + 1; j < cm.lineCount(); j++) {
-          if (cm.getLine(j).trim() === '') {
-            lastLine = j - 1
-            break
-          }
-        }
-
-        potentialTableType = 'grid'
-      } else if (match[3]) {
-        // Group 3 triggered, so we might have a pipe table. A pipe table must
-        // have a header, which means we'll have an easy time determining the
-        // table boundaries.
-        if (i === 0 || cm.getLine(i - 1).trim() === '') continue // Nope
-        firstLine = i - 1
-        for (let j = i; j < cm.lineCount(); j++) {
-          if (cm.getLine(j).trim() === '') {
-            lastLine = j - 1
-            break
-          }
-        }
-
-        potentialTableType = 'pipe'
+        lastLine = i
+        continue
+      } else {
+        // First non-table line, let's check if we already have one. If there's
+        // none, jump over this line
+        if (firstLine === undefined && lastLine === undefined) continue
       }
 
-      // Something went wrong
-      if (lastLine === undefined || firstLine === undefined) continue
-      if (firstLine === lastLine) continue
-
       // We've got ourselves a table! firstLine and lastLine now demarcate the
-      // lines from and to which it goes. But before we continue with the table,
-      // we need to set i to lastLine, because otherwise the renderer will
-      // produce sometimes even overlapping tables, especially with simple ones.
-      i = lastLine
-
+      // lines from and to which they go
       // First check if the user is not inside that table
       let cur = cm.getCursor('from')
-      if (cur.line >= firstLine && cur.line <= lastLine) continue
+      if (cur.line >= firstLine && cur.line <= lastLine) {
+        // Cursor is in selection: Do not render. Additionally,
+        // we must reset firstLine and lastLine to not mess up
+        // with the renderer.
+        firstLine = lastLine = undefined
+        continue
+      }
 
       let curFrom = { 'line': firstLine, 'ch': 0 }
       let curTo = { 'line': lastLine, 'ch': cm.getLine(lastLine).length }
@@ -140,7 +84,10 @@ const Table = require('../../util/table-helper.js');
           break
         }
       }
-      if (con) continue // Skip
+      if (con) {
+        firstLine = lastLine = undefined
+        continue // Skip this match
+      }
 
       // First grab the full table
       let markdownTable = ''
@@ -180,10 +127,11 @@ const Table = require('../../util/table-helper.js');
       }) // END constructor
       try {
         // Will raise an error if the table is malformed
-        tbl.fromMarkdown(markdownTable, potentialTableType)
+        tbl.fromMarkdown(markdownTable)
       } catch (err) {
         console.error(`Could not instantiate table between ${firstLine} and ${lastLine}: ${err.message}`)
         // Error, so abort rendering.
+        firstLine = lastLine = undefined
         continue
       }
 
@@ -203,6 +151,7 @@ const Table = require('../../util/table-helper.js');
 
       tableMarkers.push(textMarker)
       tables.push(tbl)
+      firstLine = lastLine = undefined // Reset first and last line
     }
   }
 

@@ -16,6 +16,14 @@
 * END HEADER
 */
 
+const pipeParser = require('./table-parser-pipe')
+const simpleParser = require('./table-parser-simple')
+const gridParser = require('./table-parser-grid')
+
+const buildPipeTable = require('./table-build-pipe')
+const buildSimpleTable = require('./table-build-simple')
+const buildGridTable = require('./table-build-grid')
+
 class TableHelper {
   /**
    * Creates a new TableHelper. You can pass rows and cols, if you wish. If you
@@ -33,6 +41,7 @@ class TableHelper {
     this._cellIndex = 0
     this._rowIndex = 0
     this._options = options
+    this._mdTableType = 'pipe' // Default to pipes
     this._containerElement = options.container || $('body')
     if (typeof this._containerElement === 'string') this._containerElement = $(this._containerElement)
 
@@ -151,81 +160,26 @@ class TableHelper {
    * Rebuilds the full AST and the DOM element from the given Markdown table.
    * Throws errors if it encounters any errors while parsing.
    * @param  {string|array} markdownTable The Markdown table, either as string or line array.
+   * @param {string} potentialType Indicates which type of Pandoc Markdown table this might be.
    * @return {void}               Does not return.
    */
-  fromMarkdown (markdownTable) {
-    // This function re-builds the full table from a given Markdown table.
-    if (!Array.isArray(markdownTable)) markdownTable = markdownTable.split('\n')
-
-    if (markdownTable.length === 0) throw new Error('MarkdownTable was empty!')
-    if (markdownTable.length === 1 && markdownTable[0].trim() === '') throw new Error('MarkdownTable was empty!')
-
-    let ast = [] // Two-dimensional array
-    let colAlignments = [] // One-dimensional column alignments
-    let numColumns // If there is an uneven number of columns, throw an error.
-    // Now iterate over all table rows
-    for (let i = 0; i < markdownTable.length; i++) {
-      // Ignore empty lines
-      if (markdownTable[i].trim() === '') continue
-      let row = markdownTable[i]
-
-      // Remove surrounding pipes
-      if (row[0] === '|') row = row.substr(1)
-      if (row[row.length - 1] === '|') row = row.substr(0, row.length - 1)
-
-      // Split to columns
-      row = row.split('|')
-
-      // First row determines the amount of columns expected
-      if (!numColumns) numColumns = row.length
-      if (numColumns !== row.length) throw new Error('Malformed Markdown Table!')
-
-      // First test if we've got a header row.
-      // A header row is defined of consisting of columns only containing
-      // dashes and colons. The first column to break this rule means we
-      // don't have a valid header.
-      let isHeader = true
-      for (let col of row) {
-        if (!/^[ -:]+$/.test(col)) {
-          isHeader = false
-          break
-        }
-      }
-
-      if (isHeader) {
-        for (let j = 0; j < row.length; j++) {
-          let col = row[j].trim()
-          if (col[0] === ':' && col[col.length - 1] === ':') {
-            colAlignments[j] = 'center'
-          } else if (col[col.length - 1] === ':') {
-            colAlignments[j] = 'right'
-          } else {
-            colAlignments[j] = 'left'
-          }
-        }
-        continue // We're done here -- don't add it to the AST
-      }
-
-      // Now parse all columns
-      let cols = []
-      for (let j = 0; j < row.length; j++) {
-        cols.push(row[j].trim()) // Trim whitespaces
-      }
-
-      // Add the whole row to the AST
-      ast.push(cols)
+  fromMarkdown (markdownTable, potentialType = 'pipe') {
+    this._mdTableType = potentialType
+    let parsed
+    switch (potentialType) {
+      case 'simple':
+        parsed = simpleParser(markdownTable)
+        break
+      case 'grid':
+        parsed = gridParser(markdownTable)
+        break
+      default:
+        parsed = pipeParser(markdownTable)
+        break
     }
 
-    // If we have reached this stage, but no header row was found,
-    // preset all column alignments with left
-    if (colAlignments.length === 0) {
-      for (let i = 0; i < numColumns; i++) {
-        colAlignments.push('left')
-      }
-    }
-
-    // Now we need to rebuild everything from the AST
-    this._rebuildFromAST(ast, colAlignments)
+    // Now parse the whole thing into the table element.
+    this._rebuildFromAST(parsed.ast, parsed.colAlignments)
   }
 
   /**
@@ -543,47 +497,15 @@ class TableHelper {
   * @returns {string} The markdown table
   */
   getMarkdownTable () {
-    let markdownTable = ''
-    // Now build from AST
-    for (let i = 0; i < this._ast.length; i++) {
-      for (let j = 0; j < this._ast[i].length; j++) {
-        if (j === 0) markdownTable += '|'
-        // Pad the text contents to fill up to the maximum chars
-        switch (this._colAlignment[j]) {
-          case 'left':
-          case 'center':
-            markdownTable += ` ${this._ast[i][j].padEnd(this._colSizes[j], ' ')} |`
-            break
-          case 'right':
-            markdownTable += ` ${this._ast[i][j].padStart(this._colSizes[j], ' ')} |`
-            break
-        }
-      }
-
-      markdownTable += '\n'
-
-      // First row is the header, so add a secondary row.
-      if (i === 0) {
-        markdownTable += '|'
-        for (let k = 0; k < this._colSizes.length; k++) {
-          // Respect the spaces left and right and account for alignment
-          switch (this._colAlignment[k]) {
-            case 'left':
-              markdownTable += '-'.repeat(this._colSizes[k] + 2) + '|'
-              break
-            case 'center':
-              markdownTable += ':' + '-'.repeat(this._colSizes[k]) + ':|'
-              break
-            case 'right':
-              markdownTable += '-'.repeat(this._colSizes[k] + 1) + ':|'
-              break
-          }
-        }
-        markdownTable += '\n'
-      }
+    // Determine which table to output, based on the _mdTableType
+    switch (this._mdTableType) {
+      case 'simple':
+        return buildSimpleTable(this._ast, this._colAlignment, this._colSizes)
+      case 'grid':
+        return buildGridTable(this._ast, this._colAlignment, this._colSizes)
+      default:
+        return buildPipeTable(this._ast, this._colAlignment, this._colSizes)
     }
-
-    return markdownTable
   }
 
   /**

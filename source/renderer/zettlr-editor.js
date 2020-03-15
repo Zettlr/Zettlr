@@ -416,7 +416,7 @@ class ZettlrEditor {
       // Show continued list/qoute lines aligned to start of text rather
       // than first non-space char.  MINOR BUG: also does this inside
       // literal blocks.
-      let leadingSpaceListBulletsQuotes = /^\s*([*+-]\s+|\d+\.\s+|>\s*)*/
+      let leadingSpaceListBulletsQuotes = /^\s*([*+-]\s+|\d+\.\s+|>\s*)+/ // NOTE: Replaced the last * with +
       let leading = (leadingSpaceListBulletsQuotes.exec(line.text) || [''])[0]
       let off = CodeMirror.countColumn(leading, leading.length, cm.getOption('tabSize')) * charWidth
 
