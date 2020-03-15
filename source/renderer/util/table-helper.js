@@ -16,6 +16,8 @@
 * END HEADER
 */
 
+const pipeParser = require('./table-parser-pipe')
+
 class TableHelper {
   /**
    * Creates a new TableHelper. You can pass rows and cols, if you wish. If you
@@ -154,93 +156,8 @@ class TableHelper {
    * @return {void}               Does not return.
    */
   fromMarkdown (markdownTable) {
-    // First remove whitespace from both sides of the table, e.g. in case
-    // a trailing newline is present
-    markdownTable = markdownTable.trim()
-    if (!Array.isArray(markdownTable)) markdownTable = markdownTable.split('\n')
-
-    if (markdownTable.length === 0) throw new Error('MarkdownTable was empty!')
-    if (markdownTable.length === 1 && markdownTable[0].trim() === '') throw new Error('MarkdownTable was empty!')
-
-    let ast = [] // Two-dimensional array
-    let colAlignments = [] // One-dimensional column alignments
-    let numColumns // If there is an uneven number of columns, throw an error.
-
-    // Now iterate over all table rows
-    for (let i = 0; i < markdownTable.length; i++) {
-      // There should not be empty lines in the table.
-      // If so, this indicates an error in the render tables plugin!
-      if (markdownTable[i].trim() === '') throw new Error(`Line ${i} in the table was empty!`)
-      let row = markdownTable[i].trim() // Clean up whitespace
-
-      // Split to columns
-      row = row.split('|')
-
-      // Now, expect that the first and last "column" are empty
-      // and remove them.
-      if (row[0].trim() !== '' || row[row.length - 1].trim() !== '') {
-        throw new Error(`Malformed Markdown table! Row ${i} was not surrounded by whitespace!`)
-      }
-
-      row.pop() // Out goes the last ...
-      row.shift() // ... and the first
-
-      // First row determines the amount of columns expected
-      if (!numColumns) numColumns = row.length
-      if (numColumns !== row.length) {
-        throw new Error(`Malformed Markdown Table! Found ${row.length} columns rows on line ${i} (should be ${numColumns}).`)
-      }
-
-      // First test if we've got a header row. A header row is defined of
-      // consisting of columns only containing dashes, colons and spaces. The
-      // first column to break this rule means we don't have a valid header.
-      let isHeader = true
-      for (let col of row) {
-        if (!/^[ -:]+$/.test(col) || col.trim() === '') {
-          // Note we have to check for completely blank lines
-          isHeader = false
-          break
-        }
-      }
-
-      // Parse the header
-      if (isHeader) {
-        for (let j = 0; j < row.length; j++) {
-          let col = row[j].trim()
-          if (col[0] === ':' && col[col.length - 1] === ':') {
-            colAlignments[j] = 'center'
-          } else if (col[col.length - 1] === ':') {
-            colAlignments[j] = 'right'
-          } else {
-            colAlignments[j] = 'left'
-          }
-        }
-        continue // We're done here -- don't add it to the AST
-      }
-
-      // We have a normal table row, so parse all columns
-      let cols = []
-      for (let j = 0; j < row.length; j++) {
-        cols.push(row[j].trim()) // Trim whitespaces
-      }
-
-      // Add the whole row to the AST
-      ast.push(cols)
-    }
-
-    // If we have reached this stage, but no header row was found,
-    // preset all column alignments with left
-    if (colAlignments.length === 0) {
-      for (let i = 0; i < numColumns; i++) {
-        colAlignments.push('left')
-      }
-    }
-
-    if (ast.length === 0 || ast[0].length === 0) {
-      // This AST does not look as it's supposed to -> abort
-      throw new Error('Malformed Markdown Table! The parsed AST was empty.')
-    }
-
+    // First determine the type of table and parse it
+    let { ast, colAlignments } = pipeParser(markdownTable)
     // Now we need to rebuild everything from the AST
     this._rebuildFromAST(ast, colAlignments)
   }
