@@ -39,23 +39,25 @@ module.exports = function (markdownTable) {
     // If so, this indicates an error in the render tables plugin!
     if (markdownTable[i].trim() === '') throw new Error(`Line ${i} in the table was empty!`)
     let row = markdownTable[i].trim() // Clean up whitespace
+    if (/^[- :+|]+$/.test(row)) {
+      // We have an alternative pipetable, separated with + instead of |,
+      // so we have to replace all instances of + with |
+      row = row.replace(/\+/g, '|')
+    }
 
     // Split to columns
     row = row.split('|')
 
-    // Now, expect that the first and last "column" are empty
-    // and remove them.
-    if (row[0].trim() !== '' || row[row.length - 1].trim() !== '') {
-      throw new Error(`Malformed Markdown table! Row ${i} was not surrounded by whitespace!`)
-    }
-
-    row.pop() // Out goes the last ...
-    row.shift() // ... and the first
+    // Now, expect that the first and last "column" are empty and remove them.
+    // If they are not empty, we probably have a pipe table without surrounding
+    // pipes.
+    if (row[0].trim() === '') row.shift()
+    if (row[row.length - 1].trim() === '') row.pop()
 
     // First row determines the amount of columns expected
     if (!numColumns) numColumns = row.length
     if (numColumns !== row.length) {
-      throw new Error(`Malformed Markdown Table! Found ${row.length} columns rows on line ${i} (should be ${numColumns}).`)
+      throw new Error(`Malformed Markdown Table! Found ${row.length} columns on line ${i} (should be ${numColumns}).`)
     }
 
     // First test if we've got a header row. A header row is defined of

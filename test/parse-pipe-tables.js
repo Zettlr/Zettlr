@@ -16,19 +16,61 @@
 const pipeParser = require('../source/renderer/util/table-parser-pipe')
 const assert = require('assert')
 
-const TABLE_NORMAL = `| Heading | Second th |Something with no spacing| Last   |
+const table = []
+const tableResults = []
+
+/** * * * * * * * * * * * * * * * * * *
+ * TABLE ONE
+ */
+table.push(`| Heading | Second th |Something with no spacing| Last   |
 | :- | --- | --- |:-:|
 |Content | over |Content | with irregular spacing |
-| Second | Row | With | Normal Spacing |`
+| Second | Row | With | Normal Spacing |`)
 
-const TABLE_NORMAL_RESULT = {
+tableResults.push({
   'ast': [
     [ 'Heading', 'Second th', 'Something with no spacing', 'Last' ],
     [ 'Content', 'over', 'Content', 'with irregular spacing' ],
     [ 'Second', 'Row', 'With', 'Normal Spacing' ]
   ],
   'colAlignments': [ 'left', 'left', 'left', 'center' ]
-}
+})
+
+/** * * * * * * * * * * * * * * * * * *
+ * TABLE TWO
+ */
+table.push(`fruit| price
+-----|-----:
+apple|2.05
+pear|1.37
+orange|3.09`)
+
+tableResults.push({
+  'ast': [
+    [ 'fruit', 'price' ],
+    [ 'apple', '2.05' ],
+    [ 'pear', '1.37' ],
+    [ 'orange', '3.09' ]
+  ],
+  'colAlignments': [ 'left', 'right' ]
+})
+
+/** * * * * * * * * * * * * * * * * * *
+ * TABLE THREE
+ */
+table.push(`| One | Two   |
+|-----+-------|
+| my  | table |
+| is  | nice  |`)
+
+tableResults.push({
+  'ast': [
+    [ 'One', 'Two' ],
+    [ 'my', 'table' ],
+    [ 'is', 'nice' ]
+  ],
+  'colAlignments': [ 'left', 'left' ]
+})
 
 const TABLE_ERROR_1 = `| Unequal | cols | table | here |
 | - | - | - | - |
@@ -36,9 +78,11 @@ const TABLE_ERROR_1 = `| Unequal | cols | table | here |
 | error | because | wrong | col number |`
 
 describe('TableEditor#pipeParser()', function () {
-  it('Should parse a normal pipe table with irregular spacings correctly', function () {
-    assert.deepStrictEqual(pipeParser(TABLE_NORMAL), TABLE_NORMAL_RESULT)
-  })
+  for (let i = 0; i < table.length; i++) {
+    it(`Should parse the test table ${i + 1} correctly`, function () {
+      assert.deepStrictEqual(pipeParser(table[i]), tableResults[i])
+    })
+  }
 
   it('Should throw an error when attempting to parse mismatched columns', function () {
     assert.throws(function () { pipeParser(TABLE_ERROR_1) })
