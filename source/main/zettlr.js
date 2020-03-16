@@ -130,7 +130,6 @@ class Zettlr {
 
     // And the window.
     this.window = new ZettlrWindow(this)
-    this.openWindow()
 
     process.nextTick(() => {
       let start = Date.now()
@@ -146,12 +145,17 @@ class Zettlr {
           let duration = Date.now() - start
           duration /= 1000 // Convert to seconds
           global.log.info(`Loaded all roots in ${duration} seconds`)
-          // app.quit() // DEBUG
+
+          // Now after all paths have been loaded, we are ready to load the
+          // main window to get this party started!
+          this.openWindow()
         }).catch((err) => {
+          console.error(err)
           global.log.error('Could not add additional roots!', err.message)
           this.isBooting = false // Now we're done booting
         })
       }).catch((err) => {
+        console.error(err)
         global.log.error('Could not load paths!', err.message)
         this.isBooting = false // Now we're done booting
       })
@@ -269,38 +273,6 @@ class Zettlr {
   }
 
   /**
-    * Send a file with its contents to the renderer process.
-    * @param  {Integer} arg An integer containing the file's hash.
-    * @return {void}     This function does not return anything.
-    */
-  async sendFile (arg) {
-    if (!await this.canClose()) return
-
-    // arg contains the hash of a file.
-    // findFile now returns the file object
-    let file = this._fsal.findFile(arg)
-
-    if (file) {
-      this.setCurrentFile(file)
-      try {
-        file = await this._fsal.getFile(file)
-        this.ipc.send('file-open', file)
-        // Add the file's metadata object to the recent docs
-        global.recentDocs.add(this._fsal.getMetadataFor(file))
-      } catch (e) {
-        global.log.error(`Error sending file! ${file.name}`, e)
-      }
-    } else {
-      global.log.error('Could not find file', arg)
-      this.window.prompt({
-        type: 'error',
-        title: trans('system.error.fnf_title'),
-        message: trans('system.error.fnf_message')
-      })
-    }
-  }
-
-  /**
     * Send a new directory list to the client.
     * @param  {Integer} arg A hash identifying the directory.
     * @return {void}     This function does not return anything.
@@ -371,7 +343,6 @@ class Zettlr {
       }
     }
 
-    this.ipc.send('paths-update', this._fsal.getTreeMeta())
     // Open the newly added path(s) directly.
     if (newDir) { this.setCurrentDir(newDir) }
     if (newFile) { this.sendFile(newFile.hash) }
@@ -396,22 +367,6 @@ class Zettlr {
   }
 
   /**
-    * Called by roots to remove themselves from the open paths.
-    * @param  {Mixed} obj The root file or dir requesting removal.
-    * @return {void}      Does not return.
-    */
-  remove (obj) {
-    // This function is always called if root files are removed
-    // externally and therefore want to remove themselves.
-    try {
-      this._fsal.unloadPath(obj)
-    } catch (e) {
-      global.log.error(`Could not close root ${obj.name}`, e)
-    }
-    this.ipc.send('paths-update', this._fsal.getTreeMeta())
-  }
-
-  /**
     * Reloads the complete directory tree.
     * @return {Promise} Resolved after the paths have been re-read
     */
@@ -419,19 +374,13 @@ class Zettlr {
     // Reload all opened files, garbage collect will get the old ones.
     this._fsal.unloadAll()
     for (let p of global.config.get('openPaths')) {
-      // New FSAL code
       try {
         await this._fsal.loadPath(p)
       } catch (e) {
-        console.log(e)
         global.log.info(`FSAL Removing path ${p}, as it does no longer exist.`)
-        // global.config.removePath(p) TODO
+        global.config.removePath(p)
       }
     }
-
-    // Now send an update containing all paths, because these need to be present
-    // in the renderer for the following setting of current dirs and files.
-    this.ipc.send('paths-update', this._fsal.getTreeMeta())
 
     // Set the pointers either to null or last opened dir/file
     let lastDir = null
@@ -444,17 +393,7 @@ class Zettlr {
     }
     this.setCurrentDir(lastDir)
     this.setCurrentFile(lastFile)
-    if (lastFile) {
-      try {
-        this.ipc.send('file-open', await this._fsal.getFile(lastFile))
-        global.recentDocs.add(this._fsal.getMetadataFor(lastFile))
-      } catch (e) {
-        console.log('Could not send initial file', e)
-      }
-    }
-
-    // Preset the window's title with the current file, if applicable
-    this.window.fileUpdate()
+    if (lastFile) global.recentDocs.add(this._fsal.getMetadataFor(lastFile))
   }
 
   findFile (arg) { return this._fsal.findFile(arg) }
@@ -487,23 +426,64 @@ class Zettlr {
   setCurrentDir (d) {
     // Set the dir
     this.currentDir = d
-    // HOLY SHIT. Sending only the hash instead of the whole object (which
-    // has to be crunched to be send through the pipe) is SO MUCH FASTER.
-    // Especially with virtual directories, because they got a LOT of
-    // recursive stuff going on. And we can be sure, that this directory
-    // will definitely exist in the renderer's memory, b/c we re-send the
-    // paths each time we change them. So renderer should always be on the
-    // newest update.
     this.ipc.send('dir-set-current', (d) ? d.hash : null)
     global.config.set('lastDir', (d) ? d.hash : null)
   }
 
   /**
+   * Opens the file by moving it into the openFiles array on the FSAL.
+   * @param {Number} arg The hash of a file to open
+   */
+  async openFile (arg) {
+    console.log('Opening file ... ' + arg)
+    // arg contains the hash of a file.
+    // findFile now returns the file object
+    let file = this.findFile(arg)
+
+    if (file != null) {
+      // Add the file's metadata object to the recent docs
+      // We only need to call the underlying function, it'll trigger a state
+      // change event and will set in motion all other necessary processes.
+      this._fsal.openFile(file)
+      global.recentDocs.add(this._fsal.getMetadataFor(file))
+      await this.sendFile(file.hash)
+    } else {
+      global.log.error('Could not find file', arg)
+      this.window.prompt({
+        type: 'error',
+        title: trans('system.error.fnf_title'),
+        message: trans('system.error.fnf_message')
+      })
+    }
+  }
+
+  /**
     * Closes the current file and takes care of all steps necessary to accomodate.
+    * @param {Object} file The file descriptor
     */
-  closeFile () {
-    this.setCurrentFile(null)
-    this.ipc.send('file-close', {})
+  closeFile (file) {
+    // Same as with openFile
+    this._fsal.closeFile(file)
+  }
+
+  /**
+    * Send a file with its contents to the renderer process.
+    * @param  {Integer} arg An integer containing the file's hash.
+    * @return {void}     This function does not return anything.
+    */
+  async sendFile (arg) {
+    // arg contains the hash of a file.
+    // findFile now returns the file object
+    let file = this._fsal.findFile(arg)
+
+    if (file) {
+      try {
+        file = await this._fsal.getFileContents(file)
+        this.ipc.send('file-open', file)
+      } catch (e) {
+        global.log.error(`Error sending file! ${file.name}`, e)
+      }
+    }
   }
 
   /**
@@ -529,7 +509,18 @@ class Zettlr {
   /**
    * Convenience function to send a full file object to the renderer
    */
-  updatePaths () { global.ipc.send('paths-update', this._fsal.getTreeMeta()) }
+  sendPaths () { global.ipc.send('paths-update', this._fsal.getTreeMeta()) }
+
+  /**
+   * Sends all currently opened files to the renderer
+   */
+  async sendOpenFiles () {
+    let files = this._fsal.getOpenFiles()
+
+    for (let hash of files) {
+      await this.sendFile(hash)
+    }
+  }
 
   // Getters
 

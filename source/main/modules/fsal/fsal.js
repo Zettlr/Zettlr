@@ -86,7 +86,6 @@ module.exports = class FSAL extends EventEmitter {
     // Loads a standalone file
     let start = Date.now()
     let file = await FSALFile.parse(filePath, this._cache)
-    // this._roots.push(file)
     this._state.filetree.push(file)
     console.log(`${Date.now() - start} ms: Loaded file ${filePath}`) // DEBUG
   }
@@ -99,7 +98,6 @@ module.exports = class FSAL extends EventEmitter {
     // Loads a directory
     let start = Date.now()
     let dir = await FSALDir.parse(dirPath, this._cache)
-    // this._roots.push(dir)
     this._state.filetree.push(dir)
     console.log(`${Date.now() - start} ms: Loaded directory ${dirPath}`) // DEBUG
   }
@@ -129,8 +127,9 @@ module.exports = class FSAL extends EventEmitter {
       await this._loadPlaceholder(p)
     } else {
       // If we've reached here the path poses a problem -> notify caller
-      throw new Error(`FSAL: Could not load path ${p}!`)
+      return false
     }
+    return true
   }
 
   /**
@@ -138,7 +137,6 @@ module.exports = class FSAL extends EventEmitter {
    * for preparation of a full reload.
    */
   unloadAll () {
-    // this._roots = [] // Throw 'em out!
     this._state.filetree = []
   }
 
@@ -148,30 +146,56 @@ module.exports = class FSAL extends EventEmitter {
    */
   unloadPath (root) {
     if (!this._state.filetree.includes(root)) {
-      throw new Error(`Cannot remove root ${root.name} - not open!`)
+      return false
     }
 
-    // Unset the directory pointer
     if (this._state.openDirectory === root) {
+      // Unset the directory pointer
       this._state.openDirectory = null
     } else if (this._state.openFiles.includes(root)) {
+      // Close the file
       this._state.openFiles.splice(this._roots.indexOf(root), 1)
     }
-    // this._roots.splice(this._roots.indexOf(root), 1)
+
     this._state.filetree.splice(this._state.filetree.indexOf(root), 1)
     return true
   }
 
   /**
    * Returns a file's metadata including the contents.
-   * @param {Mixed} val The search parameter
+   * @param {Object} file The file descriptor
    */
-  async getFile (val) {
-    if (typeof val === 'object') val = val.hash
-    let file = this.findFile(val)
-    if (!file) throw new Error('Could not find file!')
+  openFile (file) {
+    if (this._state.openFiles.includes(file)) return false
+    this._state.openFiles.push(file) // Will trigger a state update
+    return true
+  }
 
-    // Prepare the file for sending
+  /**
+   * Closes a given file.
+   * @param {Object} file The file descriptor
+   */
+  closeFile (file) {
+    if (this._state.openFiles.includes(file)) {
+      this._state.openFiles.splice(this._state.openFiles.indexOf(file), 1)
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /**
+   * Returns a list of hashes for all open files
+   */
+  getOpenFiles () {
+    return this._state.openFiles.map(elem => elem.hash)
+  }
+
+  /**
+   * Returns a file metadata object including the file contents.
+   * @param {Object} file The file descriptor
+   */
+  async getFileContents (file) {
     file = FSALFile.metadata(file)
     file.content = await FSALFile.load(file)
     return file

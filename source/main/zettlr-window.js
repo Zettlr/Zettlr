@@ -36,6 +36,14 @@ class ZettlrWindow {
     this._app = parent
     this._win = null
     this._menu = null
+
+    // Enable classes from within the app to update the menu
+    global.refreshMenu = () => {
+      if (!this._win || !this._menu) {
+        return global.log.verbose('Not updating menu. Window not open.')
+      }
+      this._menu.set()
+    }
   }
 
   /**
@@ -182,10 +190,6 @@ class ZettlrWindow {
     // Push the window into the globals that the menu for instance can access it
     // to send commands.
     global.mainWindow = this._win
-
-    // Enable classes from within the app to update the menu
-    global.refreshMenu = () => { this._menu.set() }
-
     return this
   }
   // END this.open
@@ -196,6 +200,9 @@ class ZettlrWindow {
     * @return {ZettlrWindow} This for chainability.
     */
   fileUpdate () {
+    if (!this._win) {
+      return global.log.verbose('Not updating window title. Window not open.')
+    }
     let curFile = this._app.getCurrentFile()
     if (curFile == null) {
       this._win.setTitle('Zettlr')

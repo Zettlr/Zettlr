@@ -80,7 +80,10 @@ class ConfigProvider extends EventEmitter {
     // Config Template providing all necessary arguments
     this.cfgtpl = {
       // Root directories
-      'openPaths': [],
+      'openPaths': [], // Array to include all opened root paths
+      'openFiles': [], // Array to include all currently opened files
+      'lastFile': null, // Save last opened file hash here
+      'lastDir': null, // Save last opened dir hash here
       'dialogPaths': {
         'askFileDialog': '',
         'askDirDialog': '',
@@ -93,8 +96,6 @@ class ConfigProvider extends EventEmitter {
         'height': require('electron').screen.getPrimaryDisplay().workAreaSize.width,
         'max': true
       },
-      'lastFile': null, // Save last opened file hash here
-      'lastDir': null, // Save last opened dir hash here
       // Visible attachment filetypes
       'attachmentExtensions': COMMON_DATA.attachmentExtensions,
       // UI related options
