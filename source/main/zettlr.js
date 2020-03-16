@@ -21,12 +21,10 @@ const path = require('path')
 const ZettlrIPC = require('./zettlr-ipc.js')
 const ZettlrWindow = require('./zettlr-window.js')
 const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
-const ZettlrDeadDir = require('./zettlr-dead-dir.js')
 const ZettlrTargets = require('./zettlr-targets.js')
 const ZettlrStats = require('./zettlr-stats.js')
 const FSAL = require('./modules/fsal')
 const { loadI18nMain, trans } = require('../common/lang/i18n')
-const hash = require('../common/util/hash')
 const ignoreDir = require('../common/util/ignore-dir')
 const ignoreFile = require('../common/util/ignore-file')
 const isDir = require('../common/util/is-dir')
@@ -109,6 +107,18 @@ class Zettlr {
     // where it can store its internal files.
     this._fsal = new FSAL(app.getPath('userData'))
 
+    // Listen to changes in the file system
+    this._fsal.on('fsal-state-changed', (objPath) => {
+      console.log(`FSAL state changed: ${objPath}`)
+      // Emitted when anything in the state changes
+      switch (objPath) {
+        // The root filetree has changed (added or removed root)
+        case 'filetree':
+          if (!this.isBooting) global.application.notifyChange('Roots have changed!')
+          break
+      }
+    })
+
     // Statistics
     this.stats = new ZettlrStats(this)
 
@@ -138,45 +148,13 @@ class Zettlr {
           global.log.info(`Loaded all roots in ${duration} seconds`)
           // app.quit() // DEBUG
         }).catch((err) => {
-          global.log.error('Could not add additional roots!', err)
+          global.log.error('Could not add additional roots!', err.message)
           this.isBooting = false // Now we're done booting
         })
       }).catch((err) => {
-        global.log.error('Could not load paths!', err)
+        global.log.error('Could not load paths!', err.message)
         this.isBooting = false // Now we're done booting
       })
-    })
-
-    // Listen to certain events from the watchdog
-    global.watchdog.on('unlink', (p) => {
-      if (this.getCurrentFile() && (hash(p) === this.getCurrentFile().hash)) {
-        // We need to close the file
-        this.ipc.send('file-close')
-        this.setCurrentFile(null) // Reset file
-      }
-    })
-
-    global.watchdog.on('change', (p) => {
-      let cur = this.getCurrentFile()
-      if (!cur || cur.isScope(p) !== cur || !cur.hasChanged()) return
-      // Current file has changed -> ask to replace
-      // and do as the user wishes
-      if (global.config.get('alwaysReloadFiles')) {
-        this.ipc.send('file-open', cur.withContent())
-      } else {
-        // The user did not check this option, so ask first
-        this.getWindow().askReplaceFile((ret, alwaysReload) => {
-          // Set the corresponding config option
-          global.config.set('alwaysReloadFiles', alwaysReload)
-          // ret can have three status: cancel = 0, save = 1, omit = 2.
-          // To keep up with semantics, the function "askSaveChanges" would
-          // naturally return "true" if the user wants to save changes and "false"
-          // - so how deal with "omit" changes?
-          // Well I don't want to create some constants so let's just leave it
-          // with these three values.
-          if (ret === 1 || alwaysReload) this.ipc.send('file-open', cur.withContent())
-        })
-      }
     })
   }
 
@@ -305,7 +283,8 @@ class Zettlr {
     if (file) {
       this.setCurrentFile(file)
       try {
-        this.ipc.send('file-open', await this._fsal.getFile(file))
+        file = await this._fsal.getFile(file)
+        this.ipc.send('file-open', file)
         // Add the file's metadata object to the recent docs
         global.recentDocs.add(this._fsal.getMetadataFor(file))
       } catch (e) {
@@ -392,7 +371,6 @@ class Zettlr {
       }
     }
 
-    this._sortPaths()
     this.ipc.send('paths-update', this._fsal.getTreeMeta())
     // Open the newly added path(s) directly.
     if (newDir) { this.setCurrentDir(newDir) }
@@ -414,11 +392,7 @@ class Zettlr {
    */
   makeDead (dir) {
     if (dir === this.getCurrentDir()) this.setCurrentDir(null) // Remove current directory
-    let p = this.getPaths()
-    for (let i = 0; i < p.length; i++) {
-      // TODO: LEGACY CODE
-      if (p[i] === dir) p[i] = new ZettlrDeadDir(this, dir.path)
-    }
+    return console.log(`Marking directory ${dir.name} as dead!`)
   }
 
   /**
@@ -444,7 +418,6 @@ class Zettlr {
   async refreshPaths () {
     // Reload all opened files, garbage collect will get the old ones.
     this._fsal.unloadAll()
-    let start = Date.now()
     for (let p of global.config.get('openPaths')) {
       // New FSAL code
       try {
@@ -455,8 +428,6 @@ class Zettlr {
         // global.config.removePath(p) TODO
       }
     }
-
-    console.log(`Read all paths in ${Date.now() - start} ms!`)
 
     // Now send an update containing all paths, because these need to be present
     // in the renderer for the following setting of current dirs and files.
@@ -486,57 +457,15 @@ class Zettlr {
     this.window.fileUpdate()
   }
 
+  findFile (arg) { return this._fsal.findFile(arg) }
+  findDir (arg) { return this._fsal.findDir(arg) }
+
   /**
     * Either returns one file that matches its ID with the given term or null
     * @param  {String} term The ID to be searched for
     * @return {OBject}      The exact match, or null.
     */
   findExact (term) { return this._fsal.findExact(term) }
-
-  /**
-    * Called when a root file is renamed. This is an alias for _sortPaths.
-    */
-  sort () {
-    this._sortPaths()
-  }
-
-  /**
-    * Sorts currently opened root paths
-    */
-  _sortPaths () {
-    let f = []
-    let d = []
-
-    for (let p of this.getPaths()) {
-      if (p.isFile()) {
-        f.push(p)
-      } else {
-        d.push(p)
-      }
-    }
-
-    f = f.sort((a, b) => {
-      if (a.getName() < b.getName()) {
-        return -1
-      } else if (a.getName() > b.getName()) {
-        return 1
-      } else {
-        return 0
-      }
-    })
-
-    d = d.sort((a, b) => {
-      if (a.getName() < b.getName()) {
-        return -1
-      } else if (a.getName() > b.getName()) {
-        return 1
-      } else {
-        return 0
-      }
-    })
-
-    this._openPaths = f.concat(d)
-  }
 
   /**
     * Sets the current file to the given file.

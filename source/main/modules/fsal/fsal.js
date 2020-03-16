@@ -23,14 +23,32 @@ const FSALDir = require('./fsal-directory')
 const FSALAttachment = require('./fsal-attachment')
 const Cache = require('./fsal-cache')
 const hash = require('../../../common/util/hash')
+const onChange = require('on-change')
 const FILETYPES = require('../../../common/data.json').filetypes
 
 module.exports = class FSAL extends EventEmitter {
   constructor (cachedir) {
     super()
     global.log.verbose('FSAL booting up ...')
-    this._roots = [] // The file system tree(s)
     this._cache = new Cache(path.join(cachedir, 'fsal/cache'))
+
+    let stateObj = {
+      // The app supports one open directory and (in theory) unlimited open files
+      openDirectory: null,
+      openFiles: [],
+      filetree: [] // Contains the full filetree
+    }
+
+    // Listen to changes in the state, so that we can emit events
+    this._state = onChange(stateObj, (objPath, current, prev) => {
+      console.log('State changed!', objPath)
+      this.emit('fsal-state-changed', objPath)
+    }, {
+      // Only watch the top-level properties, because otherwise sad Electron
+      // doesn't like me anymore, because apparently it's too much to ask that
+      // it simply stringifies watched properties, even if they are primitives.
+      'isShallow': true
+    })
 
     // The following actions can be run on the file tree
     this._actions = {
@@ -67,7 +85,9 @@ module.exports = class FSAL extends EventEmitter {
   async _loadFile (filePath) {
     // Loads a standalone file
     let start = Date.now()
-    this._roots.push(await FSALFile.parse(filePath, this._cache))
+    let file = await FSALFile.parse(filePath, this._cache)
+    // this._roots.push(file)
+    this._state.filetree.push(file)
     console.log(`${Date.now() - start} ms: Loaded file ${filePath}`) // DEBUG
   }
 
@@ -78,7 +98,9 @@ module.exports = class FSAL extends EventEmitter {
   async _loadDir (dirPath) {
     // Loads a directory
     let start = Date.now()
-    this._roots.push(await FSALDir.parse(dirPath, this._cache))
+    let dir = await FSALDir.parse(dirPath, this._cache)
+    // this._roots.push(dir)
+    this._state.filetree.push(dir)
     console.log(`${Date.now() - start} ms: Loaded directory ${dirPath}`) // DEBUG
   }
 
@@ -116,7 +138,8 @@ module.exports = class FSAL extends EventEmitter {
    * for preparation of a full reload.
    */
   unloadAll () {
-    this._roots = [] // Throw 'em out!
+    // this._roots = [] // Throw 'em out!
+    this._state.filetree = []
   }
 
   /**
@@ -124,8 +147,18 @@ module.exports = class FSAL extends EventEmitter {
    * @param {Object} root The root to be removed.
    */
   unloadPath (root) {
-    if (!this._roots.includes(root)) throw new Error(`Cannot remove root ${root.name} - not open!`)
-    this._roots.splice(this._roots.indexOf(root), 1)
+    if (!this._state.filetree.includes(root)) {
+      throw new Error(`Cannot remove root ${root.name} - not open!`)
+    }
+
+    // Unset the directory pointer
+    if (this._state.openDirectory === root) {
+      this._state.openDirectory = null
+    } else if (this._state.openFiles.includes(root)) {
+      this._state.openFiles.splice(this._roots.indexOf(root), 1)
+    }
+    // this._roots.splice(this._roots.indexOf(root), 1)
+    this._state.filetree.splice(this._state.filetree.indexOf(root), 1)
     return true
   }
 
@@ -149,7 +182,8 @@ module.exports = class FSAL extends EventEmitter {
    */
   getTreeMeta () {
     let ret = []
-    for (let root of this._roots) {
+    // for (let root of this._roots) {
+    for (let root of this._state.filetree) {
       if (root.type === 'directory') {
         ret.push(FSALDir.metadata(root))
       } else if (root.type === 'file') {
@@ -184,7 +218,8 @@ module.exports = class FSAL extends EventEmitter {
     if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
     if (typeof val !== 'number') val = parseInt(val, 10)
 
-    let found = findObject(this._roots, 'hash', val, 'children')
+    // let found = findObject(this._roots, 'hash', val, 'children')
+    let found = findObject(this._state.filetree, 'hash', val, 'children')
     if (!found || found.type !== 'directory') return null
     return found
   }
@@ -200,7 +235,8 @@ module.exports = class FSAL extends EventEmitter {
     if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
     if (typeof val !== 'number') val = parseInt(val, 10)
 
-    let found = findObject(this._roots, 'hash', val, 'children')
+    // let found = findObject(this._roots, 'hash', val, 'children')
+    let found = findObject(this._state.filetree, 'hash', val, 'children')
     if (!found || found.type !== 'file') return null
     return found
   }
@@ -214,16 +250,28 @@ module.exports = class FSAL extends EventEmitter {
     let ext = path.extname(query)
     if (ext.length > 1) {
       // file ending given
-      return findObject(this._roots, 'name', query, 'children')
+      // return findObject(this._roots, 'name', query, 'children')
+      return findObject(this._state.filetree, 'name', query, 'children')
     } else {
       // No file ending given, so let's test all allowed
       for (let type of FILETYPES) {
-        let found = findObject(this._roots, 'name', query + type, 'children')
+        // let found = findObject(this._roots, 'name', query + type, 'children')
+        let found = findObject(this._state.filetree, 'name', query + type, 'children')
         if (found) return found
       }
     }
 
     return null
+  }
+
+  /**
+   * Convenience wrapper for findFile && findDir
+   * @param {Mixed} val The value to search for (hash or path)
+   */
+  find (val) {
+    let res = this.findFile(val)
+    if (!res) return this.findDir(val)
+    return res
   }
 
   /**
@@ -240,7 +288,8 @@ module.exports = class FSAL extends EventEmitter {
       'dirs': 0
     }
 
-    for (let root of this._roots) {
+    // for (let root of this._roots) {
+    for (let root of this._state.filetree) {
       if (root.type === 'file') {
         count.files++
       } else if (root.type === 'attachment') {
