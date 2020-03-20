@@ -1,0 +1,17 @@
+// Document tabs styling
+
+#document-tabs {
+  border-bottom: 1px solid #666;
+  color: var(--grey-1);
+
+  .document {
+    transition: 0.5s background-color ease;
+
+    &:hover { background-color: var(--grey-6); }
+
+    .close {
+      transition: 0.5s transform ease;
+      &:hover { transform: rotate(90deg); }
+    }
+  }
+}

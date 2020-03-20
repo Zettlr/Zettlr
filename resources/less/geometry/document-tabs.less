@@ -1,0 +1,40 @@
+// Document Tab bar (over the editor)
+
+#document-tabs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: @tabbar-height;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  overflow-x: auto;
+
+  // In case of an overflow, hide the scrollbar so that scrolling left/right
+  // remains possible, but no thicc scrollbar in the way!
+  &::-webkit-scrollbar { display: none; }
+
+  .document {
+    flex-grow: 1;
+    position: relative;
+    min-width: 100px;
+    line-height: @tabbar-height;
+
+    .filename {
+      min-width: 80px;
+      overflow: hidden;
+    }
+
+    .close {
+      position: absolute;
+      right: 0px;
+      margin: 5px;
+      width: 10px;
+      line-height: @tabbar-height - 10px;
+      display: inline-block;
+    }
+  }
+}

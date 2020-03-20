@@ -1,0 +1,18 @@
+// Editor tabs styling
+// Document Tab bar (over the editor)
+
+#document-tabs {
+  border-bottom: 1px solid #ddd;
+
+  .document {
+    transition: 0.5s background-color ease;
+    padding-left: 4px;
+
+    &:hover { background-color: rgb(200, 200, 210); }
+
+    .close {
+      transition: 0.5s transform ease;
+      &:hover { transform: rotate(90deg); }
+    }
+  }
+}
