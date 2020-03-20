@@ -519,6 +519,53 @@ class ZettlrEditor {
     * @return {ZettlrEditor}       Chainability.
     */
   open (file, flag = null) {
+    if (!this._openFiles.find(elem => elem.hash === file.hash)) {
+      console.log('File not opened. Adding to open files ...')
+      // We need to create a new doc for the file and then swap
+      // the currently active doc. TODO
+      this._openFiles.push(file)
+    }
+
+    this._switchFile(this._openFiles.find(elem => elem.hash === file.hash))
+
+    // If we've got a new file, we need to re-focus the editor
+    if (flag === 'new-file') this._cm.focus()
+
+    // Finally, set a timeout for a first run of citation rendering
+    setTimeout(() => { this.updateCitations() }, 1000)
+
+    return this
+  }
+
+  /**
+    * Closes the current file.
+    * @return {ZettlrEditor} Chainability.
+    */
+  close () {
+    if (this.isReadabilityModeActive()) this.exitReadability()
+    // Save current positions in case the file is being opened again later.
+    if (this._currentHash != null) {
+      this._positions[this._currentHash] = {
+        'scroll': JSON.parse(JSON.stringify(this._cm.getScrollInfo())),
+        'cursor': JSON.parse(JSON.stringify(this._cm.getCursor()))
+      }
+    }
+
+    //
+
+    this._cm.setValue('')
+    this._cm.markClean()
+    this._cm.clearHistory()
+    this._words = 0
+    this._cm.setOption('markdownImageBasePath', '') // Reset base path
+    return this
+  }
+
+  /**
+   * Switched to the given file.
+   * @param {Object} file The file to switch to
+   */
+  _switchFile (file) {
     this._cm.setValue(file.content)
     this._cm.setOption('markdownImageBasePath', path.dirname(file.path)) // Set the base path for image rendering
 
@@ -553,36 +600,6 @@ class ZettlrEditor {
     // Last but not least: If there are any search results currently
     // display, mark the respective positions.
     this._searcher.markResults(file)
-
-    // If we've got a new file, we need to re-focus the editor
-    if (flag === 'new-file') this._cm.focus()
-
-    // Finally, set a timeout for a first run of citation rendering
-    setTimeout(() => { this.updateCitations() }, 1000)
-
-    return this
-  }
-
-  /**
-    * Closes the current file.
-    * @return {ZettlrEditor} Chainability.
-    */
-  close () {
-    if (this.isReadabilityModeActive()) this.exitReadability()
-    // Save current positions in case the file is being opened again later.
-    if (this._currentHash != null) {
-      this._positions[this._currentHash] = {
-        'scroll': JSON.parse(JSON.stringify(this._cm.getScrollInfo())),
-        'cursor': JSON.parse(JSON.stringify(this._cm.getCursor()))
-      }
-    }
-
-    this._cm.setValue('')
-    this._cm.markClean()
-    this._cm.clearHistory()
-    this._words = 0
-    this._cm.setOption('markdownImageBasePath', '') // Reset base path
-    return this
   }
 
   /**
