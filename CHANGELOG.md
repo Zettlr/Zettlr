@@ -16,11 +16,13 @@
 - Fixed a small mistake where literal blocks would be wrongly offset as the editor treated them as list items.
 - Fixed artefacts with spellchecking errors. Thanks to @ryota-abe for proposing the correct selector!
 - The Table Editor now remembers what the source table looked like and tries to recreate that when it applies the changes to the DOM.
+- Added verbose error reporting and improved the error handling during citeproc boot. Now, Zettlr will (a) remove error-throwing CiteKeys so that the rest of the library loads just fine and (b) display the exact errors as reported by citeproc-js so that users can immediately identify the bad keys and know where to look.
 
 ## Under the Hood
 
 - Improvements to image dragging and dropping from the attachment sidebar.
 - Switched the string variable replacer from vanilla JavaScript to moment.js, which simplified the function considerably.
+- Updated insecure dependencies.
 
 # 1.6.0
 
