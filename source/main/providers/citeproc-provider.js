@@ -261,7 +261,7 @@ class CiteprocProvider {
 
     // We all know that people can close dialog windows if they appear. If that
     // happens, let's make sure the errors are at least in the log file!
-    global.log.error(`Encountered ${errors.length} errors trying to verify the database integrity!`, errors)
+    if (errors.length > 0) global.log.error(`${errors.length} errors during database integrity check!`, errors)
 
     return errors
   }
