@@ -124,6 +124,9 @@ class ZettlrEditor {
     // Caches the "left" style property during distraction free
     this._leftBeforeDistractionFree = ''
 
+    this._spaceWidth = 0
+    this._monospaceWidth = 0
+
     this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
       mode: MD_MODE,
       theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
@@ -139,7 +142,7 @@ class ZettlrEditor {
       placeholder: ' ', // Just an invisible space.
       hintOptions: {
         completeSingle: false, // Don't auto-complete, even if there's only one word available
-        hint: (cm, opt) => {
+        hint: (cm) => {
           let term = cm.getRange(this._autoCompleteStart, cm.getCursor()).toLowerCase()
           let completionObject = {
             'list': Object.keys(this._currentDatabase).filter((key) => {
@@ -362,14 +365,14 @@ class ZettlrEditor {
         } else {
           this._renderer.setModified()
           // Set the autosave timeout
-          this._timeout = setTimeout((e) => {
+          this._timeout = setTimeout(() => {
             this._renderer.saveFile()
             this.updateCitations()
           }, SAVE_TIMOUT)
         }
 
         // Always run an update-citations command each time there have been changes
-        this._citationTimeout = setTimeout((e) => {
+        this._citationTimeout = setTimeout(() => {
           this.updateCitations()
         }, 500)
       }
@@ -378,7 +381,7 @@ class ZettlrEditor {
     // On cursor activity (not the mouse one but the text one), render all
     // things we should replace in the sense of render directly in the text
     // such as images, links, other stuff.
-    this._cm.on('cursorActivity', (cm) => {
+    this._cm.on('cursorActivity', () => {
       // This event fires on either editor changes (because, obviously the
       // cursor changes its position as well then) or when the cursor moves.
       if (this._renderImages) this._cm.execCommand('markdownRenderImages') // Render images
@@ -406,7 +409,7 @@ class ZettlrEditor {
 
     // We need to update citations also on updates, as this is the moment when
     // new spans get added to the DOM which we might have to render.
-    this._cm.on('update', (cm) => {
+    this._cm.on('update', () => {
       this.renderCitations()
       // Must be called to ensure all tables have active event listeners.
       if (this._renderTables) this._cm.execCommand('markdownInitiateTables')
@@ -442,17 +445,32 @@ class ZettlrEditor {
 
     // Thanks for this to https://discuss.codemirror.net/t/hanging-indent/243/2
     this._cm.on('renderLine', (cm, line, elt) => {
-      let charWidth = cm.defaultCharWidth() - 2
-      let basePadding = 4
-      // Show continued list/qoute lines aligned to start of text rather
-      // than first non-space char.  MINOR BUG: also does this inside
-      // literal blocks.
+      let monospaceWidth = this.computeMonospaceWidth()
+      let spaceWidth = this.computeSpaceWidth()
+      let basePadding = 2.5 * monospaceWidth
+
+      // Show continued list/quote lines aligned to start of text rather than first non-space char (hanging indent)
+      // MINOR BUG: also does this inside literal blocks.
       let leadingSpaceListBulletsQuotes = /^\s*([*+-]\s+|\d+\.\s+|>\s*)+/ // NOTE: Replaced the last * with +
       let leading = (leadingSpaceListBulletsQuotes.exec(line.text) || [''])[0]
-      let off = CodeMirror.countColumn(leading, leading.length, cm.getOption('tabSize')) * charWidth
+      let offset = CodeMirror.countColumn(leading, leading.length, cm.getOption('tabSize'))
 
-      elt.style.textIndent = '-' + off + 'px'
-      elt.style.paddingLeft = (basePadding + off) + 'px'
+      if (offset > 0) {
+        // The following code is a bit complicated as the as the HTML structure is the following:
+        //  - some spaces or tabs in normal font (count = offset - 2)
+        //  - the sequence "- " in monospaced font
+        //  - text in normal font
+        // Setting "textIndent" and "paddingLeft" to "- 2 * monospaceWidth" would give the correct result if "   - " wouldn't be part of the text
+
+        // Tabs are another story. They are inserted as spans with class "cm-tab" and consequently change the layout again
+        // The following tries to align tab-indented list with space-indented lists (works quite ok at least on the first level)
+        let tabWidth = 6
+        let numberOfTabs = offset - 2 - leading.length
+        if (numberOfTabs < 0) numberOfTabs = 0
+
+        elt.style.textIndent = '-' + ((2) * monospaceWidth + (offset - 2) * spaceWidth) + 'px'
+        elt.style.paddingLeft = (basePadding + numberOfTabs * tabWidth + (offset - 2) * spaceWidth) + 'px'
+      }
     })
 
     // Display a footnote if the target is a link (and begins with ^)
@@ -481,7 +499,7 @@ class ZettlrEditor {
       }
     })
 
-    this._cm.getWrapperElement().addEventListener('paste', (e) => {
+    this._cm.getWrapperElement().addEventListener('paste', () => {
       let image = clipboard.readImage()
       // Trigger the insertion process from here only if there is no text in the
       // clipboard (because then CodeMirror will not do anything). If there is
@@ -502,6 +520,38 @@ class ZettlrEditor {
     this._scrollbarAnnotations.update([])
   }
   // END constructor
+
+  /**
+  * Computes and returns the width of a character in the monospace font in pixels.
+  * @see https://stackoverflow.com/a/118251/873661
+  */
+  computeMonospaceWidth () {
+    if (this._monospaceWidth > 0) return this._monospaceWidth
+
+    // We use 50 characters in order to get an approximately correct width (clientWidth is an integer)
+    var container = document.createElement('div')
+    container.id = 'measureMonoWidth'
+    container.innerHTML = '<span>--------------------------------------------------</span>'
+    this._cm.getWrapperElement().appendChild(container)
+    this._monospaceWidth = (container.clientWidth + 1) / 50
+    return this._monospaceWidth
+  }
+
+  /**
+  * Computes and returns the width of a character in the monospace font in pixels.
+  * @see https://stackoverflow.com/a/118251/873661
+  */
+  computeSpaceWidth () {
+    if (this._spaceWidth > 0) return this._spaceWidth
+
+    // We use 50 characters in order to get an approximately correct width (clientWidth is an integer)
+    var container = document.createElement('div')
+    container.id = 'measureWidth'
+    container.innerHTML = '<span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>'
+    this._cm.getWrapperElement().appendChild(container)
+    this._spaceWidth = (container.clientWidth + 1) / 50
+    return this._spaceWidth
+  }
 
   /**
    * Enters the readability mode

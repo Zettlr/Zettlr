@@ -106,9 +106,31 @@
   .cm-zkn-link-formatting,
   .cm-escape-char { opacity:.3; }
 
+  .cm-formatting-quote,
   .cm-formatting-list-ul,
   .cm-formatting-list-ol {
     font-family: @font-code;
+  }
+
+  #measureWidth {
+    position: absolute;
+    visibility: hidden;
+    height: auto;
+    width: auto;
+    white-space: nowrap;
+  }
+
+  #measureMonoWidth {
+    font-family: @font-code;
+    position: absolute;
+    visibility: hidden;
+    height: auto;
+    width: auto;
+    white-space: nowrap;
+  }
+
+  .cm-tab {
+    display: inline;
   }
 
   .cm-url, .cm-link { text-decoration: none; }
