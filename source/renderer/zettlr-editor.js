@@ -542,9 +542,9 @@ class ZettlrEditor {
     // We use 50 characters in order to get an approximately correct width (clientWidth is an integer)
     var container = document.createElement('div')
     container.id = 'measureMonoWidth'
-    container.innerHTML = '<span>--------------------------------------------------</span>'
+    container.innerHTML = '<span>' + '-'.repeat(100) + '</span>'
     this._cm.getWrapperElement().appendChild(container)
-    this._monospaceWidth = (container.clientWidth + 1) / 50
+    this._monospaceWidth = (container.clientWidth + 1) / 100
     return this._monospaceWidth
   }
 
@@ -558,9 +558,9 @@ class ZettlrEditor {
     // We use 50 characters in order to get an approximately correct width (clientWidth is an integer)
     var container = document.createElement('div')
     container.id = 'measureWidth'
-    container.innerHTML = '<span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>'
+    container.innerHTML = '<span>' + '&nbsp'.repeat(100) + '</span>'
     this._cm.getWrapperElement().appendChild(container)
-    this._spaceWidth = (container.clientWidth + 1) / 50
+    this._spaceWidth = (container.clientWidth + 1) / 100
     return this._spaceWidth
   }
 
