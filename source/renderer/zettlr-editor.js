@@ -27,6 +27,7 @@ const { trans } = require('../common/lang/i18n.js')
 const generateKeymap = require('./assets/codemirror/generate-keymap.js')
 const EditorSearch = require('./util/editor-search')
 const openMarkdownLink = require('./util/open-markdown-link')
+const ipc = require('electron').ipcRenderer
 
 // The autoloader requires all necessary CodeMirror addons and modes that are
 // used by the main class. It simply folds about 70 lines of code into an extra
