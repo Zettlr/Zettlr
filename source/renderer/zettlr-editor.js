@@ -447,30 +447,35 @@ class ZettlrEditor {
     this._cm.on('renderLine', (cm, line, elt) => {
       let monospaceWidth = this.computeMonospaceWidth()
       let spaceWidth = this.computeSpaceWidth()
+      let tabWidth = spaceWidth * 5
       let basePadding = 2.5 * monospaceWidth
 
       // Show continued list/quote lines aligned to start of text rather than first non-space char (hanging indent)
       // MINOR BUG: also does this inside literal blocks.
-      let leadingSpaceListBulletsQuotes = /^\s*([*+-]\s+|\d+\.\s+|>\s*)+/ // NOTE: Replaced the last * with +
-      let leading = (leadingSpaceListBulletsQuotes.exec(line.text) || [''])[0]
+      let leadingSpaceListBulletsQuotes = /^(?<spaces>\s*)(?<ordinal>[*+-]\s+|\d+\.\s+|>\s*)+/ // NOTE: Replaced the last * with +
+      let match = leadingSpaceListBulletsQuotes.exec(line.text)
+
+      if (!match) return
+
+      let [ leading, padding, ordinal ] = match
       let offset = CodeMirror.countColumn(leading, leading.length, cm.getOption('tabSize'))
 
-      if (offset > 0) {
-        // The following code is a bit complicated as the as the HTML structure is the following:
-        //  - some spaces or tabs in normal font (count = offset - 2)
-        //  - the sequence "- " in monospaced font
-        //  - text in normal font
-        // Setting "textIndent" and "paddingLeft" to "- 2 * monospaceWidth" would give the correct result if "   - " wouldn't be part of the text
+      if (offset <= 0) return
 
-        // Tabs are another story. They are inserted as spans with class "cm-tab" and consequently change the layout again
-        // The following tries to align tab-indented list with space-indented lists (works quite ok at least on the first level)
-        let tabWidth = 6
-        let numberOfTabs = offset - 2 - leading.length
-        if (numberOfTabs < 0) numberOfTabs = 0
+      // The following code is a bit complicated as the as the HTML structure is the following:
+      //  - some spaces or tabs in normal font (length = numberOfSpaces)
+      //  - the sequence "- " or "1. " in monospaced font (length = numberOfOrdinal)
+      //  - text in normal font
+      // Setting "textIndent" and "paddingLeft" to "- 2 * monospaceWidth" would give the correct result if "   - " wouldn't be part of the text
 
-        elt.style.textIndent = '-' + ((2) * monospaceWidth + (offset - 2) * spaceWidth) + 'px'
-        elt.style.paddingLeft = (basePadding + numberOfTabs * tabWidth + (offset - 2) * spaceWidth) + 'px'
-      }
+      // Tabs are another story. They are inserted as spans with class "cm-tab" and consequently change the layout again
+      // The following tries to align tab-indented list with space-indented lists (works quite ok at least on the first level)
+      let numberOfTabs = (padding.match(/\t/g) || []).length
+      let numberOfSpaces = padding.length - numberOfTabs
+      let numberOfOrdinal = ordinal.length
+
+      elt.style.textIndent = '-' + (numberOfOrdinal * monospaceWidth + (offset - numberOfOrdinal) * spaceWidth) + 'px'
+      elt.style.paddingLeft = (basePadding + tabWidth * numberOfTabs + numberOfSpaces * spaceWidth) + 'px'
     })
 
     // Display a footnote if the target is a link (and begins with ^)
