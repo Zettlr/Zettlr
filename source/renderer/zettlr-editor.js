@@ -126,6 +126,11 @@ class ZettlrEditor {
 
     this._spaceWidth = 0
     this._monospaceWidth = 0
+    ipc.on('toggle-theme', (e) => this.resetSpaceCalculation())
+    ipc.on('switch-theme-berlin', (e) => this.resetSpaceCalculation())
+    ipc.on('switch-theme-bielefeld', (e) => this.resetSpaceCalculation())
+    ipc.on('switch-theme-frankfurt', (e) => this.resetSpaceCalculation())
+    ipc.on('switch-theme-karl-marx-stadt', (e) => this.resetSpaceCalculation())
 
     this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
       mode: MD_MODE,
@@ -556,6 +561,11 @@ class ZettlrEditor {
     this._cm.getWrapperElement().appendChild(container)
     this._spaceWidth = (container.clientWidth + 1) / 50
     return this._spaceWidth
+  }
+
+  resetSpaceCalculation () {
+    this._spaceWidth = 0
+    this.monospaceWidth = 0
   }
 
   /**
