@@ -545,6 +545,7 @@ class ZettlrEditor {
     container.innerHTML = '<span>' + '-'.repeat(100) + '</span>'
     this._cm.getWrapperElement().appendChild(container)
     this._monospaceWidth = (container.clientWidth + 1) / 100
+    this._cm.getWrapperElement().removeChild(container)
     return this._monospaceWidth
   }
 
@@ -561,6 +562,7 @@ class ZettlrEditor {
     container.innerHTML = '<span>' + '&nbsp'.repeat(100) + '</span>'
     this._cm.getWrapperElement().appendChild(container)
     this._spaceWidth = (container.clientWidth + 1) / 100
+    this._cm.getWrapperElement().removeChild(container)
     return this._spaceWidth
   }
 
