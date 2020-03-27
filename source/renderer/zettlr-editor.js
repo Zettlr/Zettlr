@@ -842,6 +842,7 @@ class ZettlrEditor {
     // instance
     global.tippy(element[0], {
       'content': fnref,
+      allowHTML: true,
       onHidden (instance) {
         instance.destroy() // Destroy the tippy instance.
       },
