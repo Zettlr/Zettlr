@@ -85,7 +85,7 @@ module.exports = async function (options) {
   await fs.writeFile(path.join(options.targetFile, 'info.json'), JSON.stringify({
     'version': 2,
     'type': 'net.daringfireball.markdown',
-    'creatorIdentifier': 'com.zettlr.app',
+    'creatorIdentifier': 'com.gettlr.app',
     'sourceURL': path.basename(options.file.path)
   }), { encoding: 'utf8' })
 

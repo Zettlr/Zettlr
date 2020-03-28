@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 
-class UpdateProjectProperties extends ZettlrCommand {
+class UpdateProjectProperties extends GettlrCommand {
   constructor (app) {
     super(app, 'update-project-properties')
   }

@@ -3,7 +3,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:    ZettlrCiteproc
+ * Contains:    GettlrCiteproc
  * CVM-Role:    Model
  * Maintainer:  Hendrik Erz
  * License:     GNU GPL v3
@@ -20,7 +20,7 @@
 const citeproc = require('citeproc')
 const chokidar = require('chokidar') // We'll just use the one-liner to watch the library file.
 const { ipcMain } = require('electron')
-const Citr = require('@zettlr/citr') // Parse the citations from the renderer
+const Citr = require('@Gettlr/citr') // Parse the citations from the renderer
 const fs = require('fs')
 const path = require('path')
 const { trans } = require('../../common/lang/i18n')
@@ -41,7 +41,7 @@ class CiteprocProvider {
   constructor () {
     global.log.verbose('Citeproc provider booting up ...')
     this._mainLibrary = ''
-    // The Zettlr internal preview of these citations will always use Chicago,
+    // The Gettlr internal preview of these citations will always use Chicago,
     // because (a) it's just a preview, and (b) Chicago is the default of Pandoc.
     this._styleID = 'chicago-author-date'
     this._lang = global.config.get('appLang')
@@ -386,7 +386,7 @@ class CiteprocProvider {
 
   /**
    * Unloads the complete engine
-   * @return {ZettlrCiteproc} Chainability
+   * @return {GettlrCiteproc} Chainability
    */
   unload () {
     this._status = NOT_LOADED
@@ -402,7 +402,7 @@ class CiteprocProvider {
 
   /**
    * (Re-)loads the complete engine
-   * @return {ZettlrCiteproc} Chainability
+   * @return {GettlrCiteproc} Chainability
    */
   load () {
     // First unload the engine if not already

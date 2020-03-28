@@ -21,7 +21,7 @@ const path = require('path')
 class FileView {
   /**
     * Create a new file view.
-    * @param {ZettlrDirectories}  parent         The directories object
+    * @param {GettlrDirectories}  parent         The directories object
     * @param {Object}  paths          The paths object
     * @param {Boolean} [isRoot=false] Whether or not this is a root.
     */

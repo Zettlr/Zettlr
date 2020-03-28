@@ -12,11 +12,11 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 const path = require('path')
 const hash = require('../../common/util/hash')
 
-class DirRename extends ZettlrCommand {
+class DirRename extends GettlrCommand {
   constructor (app) {
     super(app, 'dir-rename')
   }

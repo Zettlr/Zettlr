@@ -2,12 +2,12 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ZettlrExport
+ * Contains:        GettlrExport
  * CVM-Role:        Controller
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     The exporter module for Zettlr.
+ * Description:     The exporter module for Gettlr.
  *
  * END HEADER
  */
@@ -39,7 +39,7 @@ const ALLOWED_FORMATS = [
   'mediawiki', 'ms', 'muse', 'native', 'odt', 'opml', 'opendocument', 'org',
   'plain', 'pptx', 'rst', 'rtf', 'texinfo', 'textile', 'slideous', 'slidy',
   'dzslides', 's5', 'tei', 'xwiki', 'zimwiki',
-  // Zettlr-specific export options that need special care
+  // Gettlr-specific export options that need special care
   'html', 'textbundle', 'textpack', 'pdf',
   // revealJS with theme options
   'revealjs-black', 'revealjs-moon', 'revealjs-league', 'revealjs-sky',
@@ -48,7 +48,7 @@ const ALLOWED_FORMATS = [
 
 /**
  * Returns a Promise that resolves or rejects depending on the outcome of the export.
- * @param  {Object} options An options object compatible to ZettlrExport.
+ * @param  {Object} options An options object compatible to GettlrExport.
  * @return {Promise}         A promise
  */
 module.exports = async function (options) {

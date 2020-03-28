@@ -3,7 +3,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ZettlrDialog class
+ * Contains:        GettlrDialog class
  * CVM-Role:        View
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -14,12 +14,12 @@
  * END HEADER
  */
 
-const ZettlrDialog = require('./zettlr-dialog.js')
+const GettlrDialog = require('./gettlr-dialog.js')
 const validate = require('../../common/validate.js')
 const SUPPORTED_PAPERTYPES = require('../../common/data.json').papertypes
 const PAPERNAMES = require('../../common/data.json').papernames
 
-class ProjectDialog extends ZettlrDialog {
+class ProjectDialog extends GettlrDialog {
   constructor () {
     super()
     this._dialog = 'project-properties'
@@ -44,7 +44,7 @@ class ProjectDialog extends ZettlrDialog {
     let form = this._modal.find('form#dialog')
     form.on('submit', (e) => {
       e.preventDefault()
-      // Give the ZettlrBody object the results
+      // Give the GettlrBody object the results
       // Form: dialog type, values, the originally passed object
       this.proceed(form.serializeArray())
     })

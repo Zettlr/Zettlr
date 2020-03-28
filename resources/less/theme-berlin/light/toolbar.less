@@ -12,20 +12,7 @@
 
     .button {
         transition:@fast-transition all ease;
-
-        &:not(.pomodoro):hover {
-            background-color: var(--grey-1);
-            transition:@fast-transition all ease;
-        }
-
-        // Pomodoro meter
-        &.pomodoro svg {
-            // Colours for the pomodoro counter
-            .pomodoro-meter       { fill: var(--grey-2); }
-            .pomodoro-value.task  { fill: var(--pomodoro-task); }
-            .pomodoro-value.short { fill: var(--pomodoro-short); }
-            .pomodoro-value.long  { fill: var(--pomodoro-long); }
-        }
+        
     }
 
     .file-info { font-size: @font-size-small * 0.8; }

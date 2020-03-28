@@ -14,12 +14,12 @@
  * END HEADER
  */
 
-const ZettlrDialog = require('./zettlr-dialog.js')
+const GettlrDialog = require('./gettlr-dialog.js')
 const validate = require('../../common/validate.js')
 const SUPPORTED_PAPERTYPES = require('../../common/data.json').papertypes
 const PAPERNAMES = require('../../common/data.json').papernames
 
-class PDFPreferences extends ZettlrDialog {
+class PDFPreferences extends GettlrDialog {
   constructor () {
     super()
     this._dialog = 'pdf-preferences'
@@ -39,7 +39,7 @@ class PDFPreferences extends ZettlrDialog {
     let form = this._modal.find('form#dialog')
     form.on('submit', (e) => {
       e.preventDefault()
-      // Give the ZettlrBody object the results
+      // Give the GettlrBody object the results
       // Form: dialog type, values, the originally passed object
       this.proceed(form.serializeArray())
     })

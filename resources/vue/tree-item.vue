@@ -231,7 +231,7 @@ module.exports = {
      */
     beginDragging: function (event) {
       event.dataTransfer.effectAllowed = 'move'
-      event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
+      event.dataTransfer.setData('text/x-Gettlr-file', JSON.stringify({
         'hash': this.obj.hash,
         'type': this.obj.type // Can be file or directory
       }))
@@ -262,7 +262,7 @@ module.exports = {
       // app itself.
       let data
       try {
-        data = JSON.parse(event.dataTransfer.getData('text/x-zettlr-file'))
+        data = JSON.parse(event.dataTransfer.getData('text/x-Gettlr-file'))
       } catch (e) {
         // Error in JSON stringifying (either b/c malformed or no text)
         return

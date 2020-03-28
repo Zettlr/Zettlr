@@ -12,11 +12,11 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 const ignoreFile = require('../../common/util/ignore-file')
 const sanitize = require('sanitize-filename')
 
-class FileRename extends ZettlrCommand {
+class FileRename extends GettlrCommand {
   constructor (app) {
     super(app, 'file-rename')
   }

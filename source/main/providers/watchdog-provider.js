@@ -26,7 +26,7 @@ const isAttachment = require('../../common/util/is-attachment')
 const IGNORE_DIR_REGEXP = require('../../common/data.json').ignoreDirs
 
 /**
- * This class enables some realtime monitoring features of Zettlr. As the Files
+ * This class enables some realtime monitoring features of Gettlr. As the Files
  * are unable to monitor changes by themselves, and a regular "pulse" would be
  * too resource-heavy, we've got chokidar, a file watcher that stages all changes
  * that have occurred on the disk and need to be handled with. To save even more
@@ -72,7 +72,7 @@ class WatchdogProvider extends EventEmitter {
 
   /**
    * Initiate watching process and stage all changes in the staged-array
-   * @return {ZettlrWatchdog} This for chainability.
+   * @return {GettlrWatchdog} This for chainability.
    */
   start () {
     if (this._paths.length < 1 || this.isBooting()) {
@@ -150,7 +150,7 @@ class WatchdogProvider extends EventEmitter {
   /**
    * Stop the watchdog completely (saves energy on pause because the process
    * is terminated)
-   * @return {ZettlrWatchdog} This for chainability.
+   * @return {GettlrWatchdog} This for chainability.
    */
   stop () {
     this._watch = false
@@ -165,7 +165,7 @@ class WatchdogProvider extends EventEmitter {
 
   /**
    * Temporarily pause the watchdog (don't stage changes)
-   * @return {ZettlrWatchdog} This for chainability.
+   * @return {GettlrWatchdog} This for chainability.
    */
   pause () {
     this._watch = false
@@ -174,7 +174,7 @@ class WatchdogProvider extends EventEmitter {
 
   /**
    * Resumes watching (e.g. putting changes into the array)
-   * @return {ZettlrWatchdog} This for chainability.
+   * @return {GettlrWatchdog} This for chainability.
    */
   resume () {
     this._watch = true
@@ -202,7 +202,7 @@ class WatchdogProvider extends EventEmitter {
   /**
    * Sets the paths to be watched
    * @param {String} paths Sets paths to be watched.
-   * @return {ZettlrWatchdog} This for chainability.
+   * @return {GettlrWatchdog} This for chainability.
    */
   setPath (paths) {
     this._paths = paths
@@ -212,7 +212,7 @@ class WatchdogProvider extends EventEmitter {
   /**
    * Adds a path to the currently watched paths
    * @param {String} p A new directory or file to be watched
-   * @return {ZettlrWatchdog} This for chainability.
+   * @return {GettlrWatchdog} This for chainability.
    */
   addPath (p) {
     if (this._paths.includes(p)) {
@@ -239,7 +239,7 @@ class WatchdogProvider extends EventEmitter {
   /**
    * Removes a path from the watchdog process
    * @param  {String} p The path to be unwatched
-   * @return {ZettlrWatchdog}   This for chainability
+   * @return {GettlrWatchdog}   This for chainability
    */
   removePath (p) {
     if (!this._paths.includes(p)) {
@@ -255,7 +255,7 @@ class WatchdogProvider extends EventEmitter {
 
   /**
    * Restart the watchdog service
-   * @return {ZettlrWatchdog} This for chainability.
+   * @return {GettlrWatchdog} This for chainability.
    */
   restart () {
     if (this._process != null) {
@@ -272,7 +272,7 @@ class WatchdogProvider extends EventEmitter {
    * Useful to ignore save events from the editor
    * @param  {String} evt  Event to be ignored
    * @param  {String} path Absolute path
-   * @return {ZettlrWatchdog}      This for ... dude, you know why we return this.
+   * @return {GettlrWatchdog}      This for ... dude, you know why we return this.
    */
   ignoreNext (evt, path) {
     this._ignored.push({ 'type': evt, 'path': path })

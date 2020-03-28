@@ -22,7 +22,7 @@ const win32Targets = [{ target: 'nsis', arch: [ 'x64', 'ia32' ] }]
 let flags = process.argv // Contains the CLI flags
 let buildTargets // Contains all build targets
 let onlyDir = false // Is set to true, if --dir flag is given on command line
-const artifactFilenameFormat = 'Zettlr-${version}-${arch}.${ext}' // eslint-disable-line
+const artifactFilenameFormat = 'Gettlr-${version}-${arch}.${ext}' // eslint-disable-line
 
 // Set the current working directory to the app's root.
 process.chdir(path.resolve(__dirname, '../'))
@@ -61,10 +61,10 @@ log.info('Starting build process')
 log.info(`Building for: ${buildTargets.map(elem => elem.substr(2)).join(', ')}`)
 
 const config = {
-  appId: 'com.zettlr.app',
-  productName: 'Zettlr',
+  appId: 'com.Gettlr.app',
+  productName: 'Gettlr',
   npmRebuild: false,
-  copyright: 'Zettlr is licensed under GNU GPL v3.',
+  copyright: 'Gettlr is licensed under GNU GPL v3.',
   fileAssociations: [
     {
       ext: 'md',
@@ -115,7 +115,7 @@ const config = {
     category: 'Office',
     icon: 'resources/icons/png',
     desktop: {
-      'StartupWMClass': 'zettlr' // Needed for compatibility with some docks, see #341
+      'StartupWMClass': 'Gettlr' // Needed for compatibility with some docks, see #341
     }
   },
   dmg: {

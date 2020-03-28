@@ -30,7 +30,7 @@ module.exports = async function (app) {
 
   for (let file of dirs) {
     // Don't include the builtins
-    if (file === '_autoload.js' || file === 'zettlr-command.js') continue
+    if (file === '_autoload.js' || file === 'gettlr-command.js') continue
 
     let Command = require(path.join(__dirname, file))
 

@@ -12,10 +12,10 @@
  * END HEADER
  */
 
-const ZettlrDialog = require('./zettlr-dialog.js')
+const GettlrDialog = require('./gettlr-dialog.js')
 const { clipboard } = require('electron')
 
-class DevClipboard extends ZettlrDialog {
+class DevClipboard extends GettlrDialog {
   constructor () {
     super()
     this._dialog = 'dev-clipboard'

@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 const path = require('path')
 const fs = require('fs')
 const bcp47 = require('bcp-47')
@@ -20,7 +20,7 @@ const { trans } = require('../../common/lang/i18n')
 const isDir = require('../../common/util/is-dir')
 const { app, dialog } = require('electron')
 
-class ImportLangFile extends ZettlrCommand {
+class ImportLangFile extends GettlrCommand {
   constructor (app) {
     super(app, 'import-lang-file')
   }

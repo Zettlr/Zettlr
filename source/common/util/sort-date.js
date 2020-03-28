@@ -13,8 +13,8 @@
 
 /**
  * Helper function to sort files by modification or creation time
- * @param  {ZettlrFile} a A ZettlrFile exposing a modtime property
- * @param  {ZettlrFile} b A ZettlrFile exposing a modtime property
+ * @param  {GettlrFile} a A GettlrFile exposing a modtime property
+ * @param  {GettlrFile} b A GettlrFile exposing a modtime property
  * @return {number}   0, 1, or -1, depending upon what the comparision yields.
  */
 module.exports = function (a, b) {

@@ -103,10 +103,6 @@
             "title": "toolbar.file_info"
         },
         {
-            "role": "pomodoro",
-            "title": "toolbar.pomodoro"
-        },
-        {
             "role": "button",
             "class": "toggle-attachments",
             "command": "toggle-attachments",

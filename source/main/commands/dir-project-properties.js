@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 
-class DirProjectProperties extends ZettlrCommand {
+class DirProjectProperties extends GettlrCommand {
   constructor (app) {
     super(app, 'dir-project-properties')
   }

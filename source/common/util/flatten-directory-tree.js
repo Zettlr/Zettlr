@@ -13,7 +13,7 @@
 
 /**
  * This function flattens an object tree (file tree) to an array.
- * @param  {Object} tree        A ZettlrDir tree
+ * @param  {Object} tree        A GettlrDir tree
  * @param  {Array}  [newarr=[]] Needed for recursion. Do not use.
  * @return {Mixed}             An array or nothing.
  */

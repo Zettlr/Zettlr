@@ -7,7 +7,7 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     Enables Zettlr to adapt its display mode according to user
+ * Description:     Enables Gettlr to adapt its display mode according to user
  *                  settings.
  *
  * END HEADER
@@ -100,7 +100,7 @@ class AppearanceProvider extends EventEmitter {
     if (this._mode === 'schedule') {
       // By tracking the status of the time, we avoid annoying people by forcing
       // the dark or light theme even if they decide to change it later on. This
-      // time Zettlr will only trigger a theme change if we traversed from
+      // time Gettlr will only trigger a theme change if we traversed from
       // daytime to nighttime, and leave out the question of whether or not dark
       // mode has been active or not.
       if (this._scheduleWasDark !== this._isItDark()) {
@@ -132,7 +132,7 @@ class AppearanceProvider extends EventEmitter {
   }
 
   /**
-   * Returns true if, according to the schedule, Zettlr should now be in dark
+   * Returns true if, according to the schedule, Gettlr should now be in dark
    * mode.
    * @return {Boolean} Whether or not time indicates it should be dark now.
    */

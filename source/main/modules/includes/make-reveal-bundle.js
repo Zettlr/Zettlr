@@ -8,7 +8,7 @@
  * License:         GNU GPL v3
  *
  * Description:     Takes a revealJS-file and bundles it to a complete
- *                  presentation using the revealJS-template by Zettlr
+ *                  presentation using the revealJS-template by gettlr
  *                  and a corresponding style.
  *
  * END HEADER

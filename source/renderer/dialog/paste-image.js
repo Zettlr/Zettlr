@@ -14,12 +14,12 @@
 * END HEADER
 */
 
-const ZettlrDialog = require('./zettlr-dialog.js')
+const GettlrDialog = require('./gettlr-dialog.js')
 const { clipboard } = require('electron')
 const path = require('path')
 const md5 = require('md5')
 
-class PasteImage extends ZettlrDialog {
+class PasteImage extends GettlrDialog {
   constructor () {
     super()
     this._dialog = 'paste-image'

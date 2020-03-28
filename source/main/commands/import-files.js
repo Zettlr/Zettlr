@@ -12,12 +12,12 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 const { trans } = require('../../common/lang/i18n')
-const ZettlrImport = require('../zettlr-import')
+const GettlrImport = require('../Gettlr-import')
 const path = require('path')
 
-class ImportFiles extends ZettlrCommand {
+class ImportFiles extends GettlrCommand {
   constructor (app) {
     super(app, 'import-files')
   }
@@ -56,7 +56,7 @@ class ImportFiles extends ZettlrCommand {
     // Now import.
     global.ipc.notify(trans('system.import_status'))
     try {
-      let ret = ZettlrImport(fileList, this._app.getCurrentDir(), (file, error) => {
+      let ret = GettlrImport(fileList, this._app.getCurrentDir(), (file, error) => {
         // This callback gets called whenever there is an error while running pandoc.
         global.ipc.notify(trans('system.import_error', path.basename(file)))
       }, (file) => {

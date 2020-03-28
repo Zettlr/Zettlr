@@ -1,6 +1,6 @@
 // This file will be run by electron-builder after packaging the app so that we
 // can run the chmod-fix for the sanboxed chromium binary as suggested in
-// https://github.com/Zettlr/Zettlr/issues/134.
+// https://github.com/Gettlr/Gettlr/issues/134.
 
 const path = require('path')
 const { exec } = require('child_process')

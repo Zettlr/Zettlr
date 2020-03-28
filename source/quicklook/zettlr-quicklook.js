@@ -3,7 +3,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ZettlrQuicklook class
+ * Contains:        GettlrQuicklook class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -32,11 +32,11 @@ const CodeMirror = require('codemirror')
  * can be resized, dragged around, minimized by a double-click on the title bar
  * and make use of the necessary CodeMirror functionality, such as Searching.
  */
-class ZettlrQuicklook {
+class GettlrQuicklook {
   /**
     * Create a window
-    * @param {ZettlrBody} parent   Calling object
-    * @param {ZettlrFile} file     The file whose content should be displayed
+    * @param {GettlrBody} parent   Calling object
+    * @param {GettlrFile} file     The file whose content should be displayed
     */
   constructor (parent, file) {
     this._parent = parent
@@ -97,7 +97,7 @@ class ZettlrQuicklook {
         linkStart: '[[', // Start of links?
         linkEnd: ']]' // End of links?
       },
-      theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
+      theme: 'Gettlr', // We don't actually use the cm-s-Gettlr class, but this way we prevent the default theme from overriding.
       cursorBlinkRate: -1 // Hide the cursor
     })
 
@@ -123,7 +123,7 @@ class ZettlrQuicklook {
 
   /**
     * Shows the quicklook window on screen.
-    * @return {ZettlrQuicklook} Chainability.
+    * @return {GettlrQuicklook} Chainability.
     */
   show () {
     // Standalone windows are pretty easy.
@@ -142,7 +142,7 @@ class ZettlrQuicklook {
     this._window = null
   }
 
-  // SEARCH FUNCTIONS STOLEN FROM THE ZETTLREDITOR CLASS
+  // SEARCH FUNCTIONS STOLEN FROM THE GettlrEDITOR CLASS
   searchNext (term) {
     if (term === '') {
       // Stop search if the field is empty
@@ -170,7 +170,7 @@ class ZettlrQuicklook {
     * Starts the search by preparing a search cursor we can use to forward the
     * search.
     * @param  {String} term The string to start a search for
-    * @return {ZettlrEditor}      This for chainability.
+    * @return {GettlrEditor}      This for chainability.
     */
   startSearch (term) {
     // Create a new search cursor
@@ -200,7 +200,7 @@ class ZettlrQuicklook {
 
   /**
     * Stops the search by destroying the search cursor
-    * @return {ZettlrEditor}   This for chainability.
+    * @return {GettlrEditor}   This for chainability.
     */
   stopSearch () {
     this._searchCursor = null
@@ -209,11 +209,11 @@ class ZettlrQuicklook {
     return this
   }
 
-  // MARK FUNCTIONS ALSO STOLEN FROM ZETTLREDITOR
+  // MARK FUNCTIONS ALSO STOLEN FROM GettlrEDITOR
 
   /**
     * Highlights search results if any given.
-    * @param {ZettlrFile} [file=this._renderer.getCurrentFile()] The file to retrieve and mark results for
+    * @param {GettlrFile} [file=this._renderer.getCurrentFile()] The file to retrieve and mark results for
     */
   markResults (file = this._renderer.getCurrentFile()) {
     if (!file) {
@@ -229,7 +229,7 @@ class ZettlrQuicklook {
   /**
     * Why do you have a second _mark-function, when there is markResults?
     * Because the local search also generates search results that have to be
-    * marked without retrieving anything from the ZettlrPreview.
+    * marked without retrieving anything from the GettlrPreview.
     * @param  {Array} res An Array containing all positions to be rendered.
     */
   _mark (res) {
@@ -267,4 +267,4 @@ class ZettlrQuicklook {
   }
 }
 
-module.exports = ZettlrQuicklook
+module.exports = GettlrQuicklook

@@ -1,4 +1,4 @@
-// This script generates both main.css and zettlr-theme.css.
+// This script generates both main.css and Gettlr-theme.css.
 // Run with `npm run less`
 
 const less = require('less')

@@ -13,11 +13,11 @@
  * END HEADER
  */
 
-const ZettlrDialog = require('./zettlr-dialog.js')
+const GettlrDialog = require('./gettlr-dialog.js')
 const validate = require('../../common/validate.js')
 const { trans } = require('../../common/lang/i18n')
 
-class TagsPreferences extends ZettlrDialog {
+class TagsPreferences extends GettlrDialog {
   constructor () {
     super()
     this._dialog = 'tags-preferences'
@@ -28,7 +28,7 @@ class TagsPreferences extends ZettlrDialog {
     let form = this._modal.find('form#dialog')
     form.on('submit', (e) => {
       e.preventDefault()
-      // Give the ZettlrBody object the results
+      // Give the GettlrBody object the results
       // Form: dialog type, values, the originally passed object
       this.proceed(form.serializeArray())
     })

@@ -93,8 +93,8 @@ jobs:
         if: matrix.os == 'windows-latest' # Only if the job runs on Windows
         uses: actions/upload-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}.exe
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}.exe
+          name: Gettlr-${{ steps.pkg.outputs.version }}.exe
+          path: ./release/Gettlr-${{ steps.pkg.outputs.version }}.exe
       # MACOS ================================================================
       - name: Build macOS DMG file
         if: matrix.os == 'macos-latest' # Only if the job runs on macOS
@@ -103,8 +103,8 @@ jobs:
         if: matrix.os == 'macos-latest' # Only if the job runs on macOS
         uses: actions/upload-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}.dmg
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}.dmg
+          name: Gettlr-${{ steps.pkg.outputs.version }}.dmg
+          path: ./release/Gettlr-${{ steps.pkg.outputs.version }}.dmg
       # LINUX ================================================================
       - name: Build Linux targets
         if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
@@ -113,26 +113,26 @@ jobs:
         if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
         uses: actions/upload-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb
+          name: Gettlr-${{ steps.pkg.outputs.version }}-amd64.deb
+          path: ./release/Gettlr-${{ steps.pkg.outputs.version }}-amd64.deb
       - name: Cache Linux Fedora release
         if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
         uses: actions/upload-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
+          name: Gettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
+          path: ./release/Gettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
       - name: Cache Linux AppImage (x32) release
         if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
         uses: actions/upload-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
+          name: Gettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
+          path: ./release/Gettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
       - name: Cache Linux AppImage (x64) release
         if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
         uses: actions/upload-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
+          name: Gettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
+          path: ./release/Gettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
 
 
   # As soon as the build matrix has completed correctly, this job will
@@ -159,43 +159,43 @@ jobs:
       - name: Download the Windows asset
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}.exe
+          name: Gettlr-${{ steps.pkg.outputs.version }}.exe
           path: .
       - name: Download the macOS asset
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}.dmg
+          name: Gettlr-${{ steps.pkg.outputs.version }}.dmg
           path: .
       - name: Download the Debian asset
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb
+          name: Gettlr-${{ steps.pkg.outputs.version }}-amd64.deb
           path: .
       - name: Download the Fedora asset
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
+          name: Gettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
           path: .
       - name: Download the AppImage (x32) asset
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
+          name: Gettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
           path: .
       - name: Download the AppImage (x64) asset
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
+          name: Gettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
           path: .
       # Now we are set, we have all five release assets on the VM. It's time to create the
       # SHA-checksums file and then upload everything!
       - name: Generate SHA256 checksums
         run: |
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}.exe" > "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}.dmg" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage" >> "SHA256SUMS.txt"
+          sha256sum "Gettlr-${{ steps.pkg.outputs.version }}.exe" > "SHA256SUMS.txt"
+          sha256sum "Gettlr-${{ steps.pkg.outputs.version }}.dmg" >> "SHA256SUMS.txt"
+          sha256sum "Gettlr-${{ steps.pkg.outputs.version }}-amd64.deb" >> "SHA256SUMS.txt"
+          sha256sum "Gettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm" >> "SHA256SUMS.txt"
+          sha256sum "Gettlr-${{ steps.pkg.outputs.version }}-i386.AppImage" >> "SHA256SUMS.txt"
+          sha256sum "Gettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage" >> "SHA256SUMS.txt"
       - name: Verify checksums
         run: sha256sum -c SHA256SUMS.txt
       # Create a new release draft
@@ -218,8 +218,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}.exe
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}.exe
+          asset_path: ./Gettlr-${{ steps.pkg.outputs.version }}.exe
+          asset_name: Gettlr-${{ steps.pkg.outputs.version }}.exe
           asset_content_type: application/x-msdownload
 
 
@@ -229,8 +229,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}.dmg
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}.dmg
+          asset_path: ./Gettlr-${{ steps.pkg.outputs.version }}.dmg
+          asset_name: Gettlr-${{ steps.pkg.outputs.version }}.dmg
           asset_content_type: application/octet-stream
 
 
@@ -240,8 +240,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb
+          asset_path: ./Gettlr-${{ steps.pkg.outputs.version }}-amd64.deb
+          asset_name: Gettlr-${{ steps.pkg.outputs.version }}-amd64.deb
           asset_content_type: application/octet-stream
 
 
@@ -251,8 +251,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
+          asset_path: ./Gettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
+          asset_name: Gettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
           asset_content_type: application/octet-stream
 
 
@@ -262,8 +262,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
+          asset_path: ./Gettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
+          asset_name: Gettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
           asset_content_type: application/octet-stream
 
 
@@ -273,8 +273,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
+          asset_path: ./Gettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
+          asset_name: Gettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
           asset_content_type: application/octet-stream
 
       - name: Upload the checksums

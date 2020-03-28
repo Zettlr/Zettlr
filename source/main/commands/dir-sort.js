@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 
-class DirSort extends ZettlrCommand {
+class DirSort extends GettlrCommand {
   constructor (app) {
     super(app, 'dir-sort')
   }

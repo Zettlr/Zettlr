@@ -16,12 +16,12 @@
  */
 
 // __dirname is set to the index.htm, not to the renderer directory!
-const ZettlrRenderer = require('../zettlr-renderer.js')
+const GettlrRenderer = require('../gettlr-renderer.js')
 // We need a global for our renderer element
 var renderer
 
 $(document).ready(function () {
   // Create the renderer
-  renderer = new ZettlrRenderer()
+  renderer = new GettlrRenderer()
   renderer.init()
 })

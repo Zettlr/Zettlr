@@ -1,15 +1,15 @@
 {
-    "name": "zettlr",
-    "homepage": "https://www.zettlr.com",
+    "name": "gettlr",
+    "homepage": "https://www.regyxxer.xyz",
     "author": {
-        "name": "Hendrik Erz",
-        "email": "zettlr@mailbox.org"
+        "name": "Thomas Koppelaar",
+        "email": "thomaskoppelaar@protonmail.com"
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/Zettlr/Zettlr.git"
+        "url": "git://github.com/thomaskoppelaar/Gettlr.git"
     },
-    "version": "1.6.0",
+    "version": "0.0.1",
     "license": "GPL-3.0",
     "description": "A powerful Markdown editor for researchers.",
     "main": "./source/main.js",
@@ -31,10 +31,12 @@
         "wp:dev": "cross-env NODE_ENV=development webpack",
         "wp:prod": "cross-env NODE_ENV=production webpack",
         "test": "mocha",
-        "lint": "eslint \"./source/**/*.js\" -f html -o eslint_report.htm"
+        "lint": "eslint \"./source/**/*.js\" -f html -o eslint_report.htm",
+		"tk-reload": "npm run less && npm run less:extract && npm run handlebars && npm run wp:prod && npm run reveal:build",
+		"tk-start": "npm run tk-reload && npm run build:quick && npm run start"
     },
     "dependencies": {
-        "@zettlr/citr": "^1.1.0",
+        "@Gettlr/citr": "^1.1.0",
         "adm-zip": "^0.4.14",
         "archiver": "^3.1.1",
         "astrocite": "^0.16.3",

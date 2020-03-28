@@ -3,7 +3,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ZettlrPrintWindow class
+ * Contains:        GettlrPrintWindow class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -24,11 +24,11 @@ const path = require('path')
  * can be resized, dragged around, minimized by a double-click on the title bar
  * and make use of the necessary CodeMirror functionality, such as Searching.
  */
-class ZettlrPrintWindow {
+class GettlrPrintWindow {
   /**
     * Create a window
-    * @param {ZettlrBody} parent   Calling object
-    * @param {ZettlrFile} file     The file whose content should be displayed
+    * @param {GettlrBody} parent   Calling object
+    * @param {GettlrFile} file     The file whose content should be displayed
     */
   constructor () {
     this._file = null
@@ -103,4 +103,4 @@ class ZettlrPrintWindow {
   }
 }
 
-module.exports = ZettlrPrintWindow
+module.exports = GettlrPrintWindow

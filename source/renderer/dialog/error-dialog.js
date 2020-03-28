@@ -8,14 +8,14 @@
  * License:         GNU GPL v3
  *
  * Description:     This dialog shows the about window, displaying all packages
- *                  used by Zettlr, the license and additional info.
+ *                  used by Gettlr, the license and additional info.
  *
  * END HEADER
  */
 
-const ZettlrDialog = require('./zettlr-dialog.js')
+const GettlrDialog = require('./gettlr-dialog.js')
 
-class ErrorDialog extends ZettlrDialog {
+class ErrorDialog extends GettlrDialog {
   constructor () {
     super()
     this._dialog = 'error'

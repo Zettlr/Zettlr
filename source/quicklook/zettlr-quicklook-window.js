@@ -3,7 +3,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ZettlrQuicklook class
+ * Contains:        GettlrQuicklook class
  * CVM-Role:        Model
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const ZettlrQuicklook = require('./zettlr-quicklook')
+const GettlrQuicklook = require('./Gettlr-quicklook')
 const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
 const ipc = require('electron').ipcRenderer
 
@@ -24,11 +24,11 @@ const ipc = require('electron').ipcRenderer
  * can be resized, dragged around, minimized by a double-click on the title bar
  * and make use of the necessary CodeMirror functionality, such as Searching.
  */
-class ZettlrQuicklookWindow {
+class GettlrQuicklookWindow {
   /**
     * Create a window
-    * @param {ZettlrBody} parent   Calling object
-    * @param {ZettlrFile} file     The file whose content should be displayed
+    * @param {GettlrBody} parent   Calling object
+    * @param {GettlrFile} file     The file whose content should be displayed
     */
   constructor () {
     let url = new URL(window.location.href)
@@ -99,7 +99,7 @@ class ZettlrQuicklookWindow {
     document.title = file.name // Update the window's title
     // Quicklook windows open themselves automatically. We only have to indicate
     // that this thing is a standalone.
-    this._ql = new ZettlrQuicklook(this, this._file)
+    this._ql = new GettlrQuicklook(this, this._file)
   }
 
   _act () {
@@ -114,4 +114,4 @@ class ZettlrQuicklookWindow {
   }
 }
 
-module.exports = ZettlrQuicklookWindow
+module.exports = GettlrQuicklookWindow

@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 const got = require('got')
 const semver = require('semver')
 const showdown = require('showdown')
@@ -22,7 +22,7 @@ const { trans } = require('../../common/lang/i18n.js')
 const REPO_URL = require('../../common/data.json').repo_url
 const CUR_VER = require('../../package.json').version
 
-class UpdateCheck extends ZettlrCommand {
+class UpdateCheck extends GettlrCommand {
   constructor (app) {
     super(app, 'update-check')
     this._response = ''

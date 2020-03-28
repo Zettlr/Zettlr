@@ -1,7 +1,7 @@
 {
     "metadata": {
         "authors": [
-            "Hendrik Erz \u003Cinfo@zettlr.com\u003E",
+            "Hendrik Erz \u003Cinfo@Gettlr.com\u003E",
             "ScaredCoward"
         ],
         "license": "GNU GPL v3",
@@ -9,26 +9,26 @@
     },
     "dialog": {
         "about": {
-            "astrocite": "Enables Zettlr to display citations from BibTex libraries",
+            "astrocite": "Enables Gettlr to display citations from BibTex libraries",
             "chartjs": "Displays your writing statistics in a nice chart",
             "chokidar": "Detects any changes you make to your files outside the app",
-            "citationstyle": "Zettlr makes use of citeproc to display citations directly in the editor. To this end, Zettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:",
+            "citationstyle": "Gettlr makes use of citeproc to display citations directly in the editor. To this end, Gettlr uses the CitationStyleLanguage (CSL) language and style files. The files have been shipped unaltered with author metadata. More information:",
             "citeproc": "Renders correct citations for all works",
             "contributors": "Contributors",
             "jquery": "Makes it easy to render the whole user interface",
             "katex": "Renders LaTeX-formulae in the editor",
-            "lead": "Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. It is Open Source, free of charge and based upon the Electron framework. Zettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Zettlr would not be possible. Below you can find all projects that Zettlr uses.",
-            "lessjs": "Helps a lot in writing the styles for Zettlr",
+            "lead": "Gettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. It is Open Source, free of charge and based upon the Electron framework. Gettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Gettlr would not be possible. Below you can find all projects that Gettlr uses.",
+            "lessjs": "Helps a lot in writing the styles for Gettlr",
             "license": "License",
             "main": "Main Projects",
-            "nspell": "Provides Zettlr with spellchecking abilities",
-            "other_projects": "Zettlr also makes use of these projects:",
+            "nspell": "Provides Gettlr with spellchecking abilities",
+            "other_projects": "Gettlr also makes use of these projects:",
             "projects": "Other projects",
             "showdownjs": "Renders the Changelog so that you can see what's changed in an update",
             "sponsors": "Sponsors",
             "tippyjs": "That's where the nice tooltips come from",
-            "title": "About Zettlr",
-            "trademark": "All logos and brand names are subject to their rightful owners. Besides using their code, Zettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc."
+            "title": "About Gettlr",
+            "trademark": "All logos and brand names are subject to their rightful owners. Besides using their code, Gettlr is in no way affiliated with any of these projects. Node.js is a trademark of Joyent, Inc."
         },
         "button": {
             "cancel": "Cancel",
@@ -37,7 +37,7 @@
             "save": "Save"
         },
         "custom_css": {
-            "info": "Here you can override the styles of Zettlr to customise it even further. \u003Cstrong\u003EAttention: This file overrides all CSS directives! Never alter the geometry of elements, otherwise the app may expose unwanted behaviour!\u003C/strong\u003E",
+            "info": "Here you can override the styles of Gettlr to customise it even further. \u003Cstrong\u003EAttention: This file overrides all CSS directives! Never alter the geometry of elements, otherwise the app may expose unwanted behaviour!\u003C/strong\u003E",
             "title": "Custom CSS"
         },
         "dir_new": {
@@ -156,11 +156,11 @@
             },
             "attachments_info": "Enter all file extensions that you want to see in your attachment sidebar. Separate them with a comma. Changes are recognised after a restart.",
             "auto_close_brackets": "Automatically close matching character pairs",
-            "auto_dark_mode_explanation": "Automatically switch to dark mode",
+            "auto_dark_mode_explanation": "jknsdjknsdjkfn",
             "auto_dark_mode_off": "Off",
             "auto_dark_mode_schedule": "Schedule",
             "auto_dark_mode_schedule_format": "HH:MM (24h format)",
-            "auto_dark_mode_system": "Follow Operating System",
+            "auto_dark_mode_system": "Fuck",
             "autocorrect": {
                 "active_label": "Turn on AutoCorrect",
                 "quick_select_label": "Quick select",
@@ -218,7 +218,7 @@
             "mute_lines": "Mute non-focused lines in distraction-free mode",
             "new_file_dont_prompt": "Do not prompt for filename when creating new files",
             "nightmode": "Night mode",
-            "pandoc": "Path to pandoc executable. Please only change, if Zettlr is unable to locate pandoc.",
+            "pandoc": "Path to pandoc executable. Please only change, if Gettlr is unable to locate pandoc.",
             "pandoc_command": "Pandoc command. \u003Cstrong\u003EOnly for advanced users!\u003C/strong\u003E",
             "pandoc_default": "Default: pandoc",
             "pdf": {
@@ -298,13 +298,13 @@
                 "updated": "Updated translations: %s"
             },
             "user_dictionary": "User dictionary. Remove words by clicking them.",
-            "xelatex": "Path to xelatex executable. Please only change, if Zettlr is unable to locate it.",
+            "xelatex": "Path to xelatex executable. Please only change, if Gettlr is unable to locate it.",
             "xelatex_default": "Default: xelatex",
             "zkn": {
                 "generated_id": "Generated ID",
                 "id_generator_label": "Pattern used to generate new IDs",
                 "id_label": "ID regular expression",
-                "intro": "On this page you can adjust Zettlr to work with your existing Zettelkasten workflow. The ID is based upon regular expressions, so please make sure to escape RegEx-characters that literally occur in your IDs. Test the generation (and detection) of IDs by clicking the button below. Check the manual to see all possible variables for the ID generator.",
+                "intro": "On this page you can adjust Gettlr to work with your existing Zettelkasten workflow. The ID is based upon regular expressions, so please make sure to escape RegEx-characters that literally occur in your IDs. Test the generation (and detection) of IDs by clicking the button below. Check the manual to see all possible variables for the ID generator.",
                 "link_behaviour_always": "always",
                 "link_behaviour_description": "When linking files, add the filename \u2026",
                 "link_behaviour_id": "only when linking using the ID",
@@ -362,8 +362,8 @@
             "connection_error": "Could not check for updates: Could not establish connection",
             "current_version": "Your version",
             "no_data": "Could not check for updates: Server hasn't sent any data",
-            "no_update": "You got the newest version of Zettlr",
-            "notification": "There is a new version of Zettlr available to download. Please read the changelog below.",
+            "no_update": "You got the newest version of Gettlr",
+            "notification": "There is a new version of Gettlr available to download. Please read the changelog below.",
             "redirect_error": "Could not check for updates: The server tried to redirect (Status code: %s)",
             "release_url": "Open download page",
             "server_error": "Could not check for updates: Server Error (Status code: %s)",
@@ -426,7 +426,7 @@
         "thousand_delimiter": ","
     },
     "menu": {
-        "about": "About Zettlr",
+        "about": "About Gettlr",
         "add_to_dictionary": "Add to dictionary",
         "all_front": "Bring All to Front",
         "bold": "Bold",
@@ -444,7 +444,7 @@
         "delete_dir": "Delete directory",
         "delete_file": "Delete file",
         "docs": "Open user manual",
-        "donate": "Support Zettlr",
+        "donate": "Support Gettlr",
         "duplicate_file": "Duplicate file",
         "export": "Export\u2026",
         "find_dir": "Find in directory",
@@ -554,7 +554,7 @@
             "file_exists": "The file already exists.",
             "fnf_message": "The requested file was not found.",
             "fnf_title": "File not found",
-            "ignored_dir_message": "Directory &quot;%s&quot; cannot be opened by Zettlr.",
+            "ignored_dir_message": "Directory &quot;%s&quot; cannot be opened by Gettlr.",
             "ignored_dir_title": "Cannot open directory",
             "malformed_textbundle": "Malformed Textbundle: %s",
             "move_into_child_message": "You cannot move a directory into one of its subdirectories.",
@@ -562,7 +562,7 @@
             "no_allowed_chars": "The provided name did not contain any allowed letters.",
             "no_pandoc_message": "Pandoc has not been found on this system. Please install Pandoc prior to exporting or importing files.",
             "no_pandoc_title": "Pandoc not found",
-            "no_xelatex_message": "Zettlr couldn't detect a LaTeX-distribution on this system. Please install LaTeX prior to exporting to PDF.",
+            "no_xelatex_message": "Gettlr couldn't detect a LaTeX-distribution on this system. Please install LaTeX prior to exporting to PDF.",
             "no_xelatex_title": "LaTeX not found",
             "open_attachment_error": "Could not open attachment. Is Zotero running?",
             "open_root_error": "Could not open %s",

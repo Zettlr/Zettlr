@@ -12,10 +12,10 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 const { trans } = require('../../common/lang/i18n')
 
-class FileNew extends ZettlrCommand {
+class FileNew extends GettlrCommand {
   constructor (app) {
     super(app, 'file-new')
   }

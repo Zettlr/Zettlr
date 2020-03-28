@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 
-class FileDelete extends ZettlrCommand {
+class FileDelete extends GettlrCommand {
   constructor (app) {
     super(app, 'file-delete')
   }

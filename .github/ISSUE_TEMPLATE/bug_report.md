@@ -10,7 +10,7 @@ about: Create a report to help us improve
 <!-- Below describe the steps necessary to reproduce the malicious behaviour -->
 ## Reproducing
 
-<!-- Below, please describe what Zettlr should do instead -->
+<!-- Below, please describe what Gettlr should do instead -->
 ## Expected behaviour
 
 <!-- If helpful, add Screenshots to further narrow down the issue -->
@@ -19,7 +19,7 @@ about: Create a report to help us improve
 <!-- Please provide information on your operating system -->
 ## Platform
  - OS and version:
- - Zettlr Version:
+ - Gettlr Version:
  - Screen Resolution:
 
 <!-- If there is anything else that might be of interest, please provide it here -->

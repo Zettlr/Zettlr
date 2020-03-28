@@ -70,9 +70,9 @@
   dependencies:
     "@types/node" "*"
 
-"@zettlr/citr@^1.1.0":
+"@Gettlr/citr@^1.1.0":
   version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@zettlr/citr/-/citr-1.1.0.tgz#2849a8565a67cf14c73e86438bbab50dc48746d3"
+  resolved "https://registry.yarnpkg.com/@Gettlr/citr/-/citr-1.1.0.tgz#2849a8565a67cf14c73e86438bbab50dc48746d3"
   integrity sha512-ylHgUR17j2yV8b9OuaK3NQ03PsqLXJ/Yqi71eFyiHF9PBOen8x5qAGCUfJyZdJtQm7V+feLkACLX2LsfcukXXg==
   dependencies:
     "@types/node" "^12.0.7"

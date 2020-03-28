@@ -13,10 +13,10 @@
  * END HEADER
  */
 
-const ZettlrDialog = require('./zettlr-dialog.js')
+const GettlrDialog = require('./gettlr-dialog.js')
 const CodeMirror = require('codemirror')
 
-class CustomCSS extends ZettlrDialog {
+class CustomCSS extends GettlrDialog {
   constructor () {
     super()
     this._dialog = 'custom-css'

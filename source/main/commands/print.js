@@ -12,17 +12,17 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
-const ZettlrPrint = require('../zettlr-print.js')
+const GettlrCommand = require('./Gettlr-command')
+const GettlrPrint = require('../gettlr-print.js')
 const { app } = require('electron')
 const makeExport = require('../modules/export')
 
-class Print extends ZettlrCommand {
+class Print extends GettlrCommand {
   constructor (app) {
     super(app, 'print')
 
     // Load the print window handler class
-    this._printWindow = new ZettlrPrint()
+    this._printWindow = new GettlrPrint()
   }
 
   /**

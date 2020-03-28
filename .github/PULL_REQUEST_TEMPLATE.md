@@ -31,7 +31,7 @@ following points:
 <!-- Please provide any testing system -->
 ## Tested On
  - OS and version:
- - Zettlr version:
+ - Gettlr version:
 
 <!-- If there is anything else that might be of interest, please provide it here -->
 ## Additional information

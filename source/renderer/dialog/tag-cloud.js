@@ -13,9 +13,9 @@
  * END HEADER
  */
 
-const ZettlrDialog = require('./zettlr-dialog.js')
+const GettlrDialog = require('./gettlr-dialog.js')
 
-class TagCloud extends ZettlrDialog {
+class TagCloud extends GettlrDialog {
   constructor () {
     super()
     this._dialog = 'tag-cloud'

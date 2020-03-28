@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 
-class UpdateUserDictionary extends ZettlrCommand {
+class UpdateUserDictionary extends GettlrCommand {
   constructor (app) {
     super(app, 'update-user-dictionary')
   }

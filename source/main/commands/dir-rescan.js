@@ -13,11 +13,11 @@
  */
 
 const fs = require('fs')
-const ZettlrCommand = require('./zettlr-command')
-const ZettlrDirectory = require('../zettlr-dir')
+const GettlrCommand = require('./Gettlr-command')
+const GettlrDirectory = require('../Gettlr-dir')
 const { trans } = require('../../common/lang/i18n')
 
-class DirRescan extends ZettlrCommand {
+class DirRescan extends GettlrCommand {
   constructor (app) {
     super(app, 'dir-rescan')
   }
@@ -38,7 +38,7 @@ class DirRescan extends ZettlrCommand {
       if (p[i].hash === parseInt(arg.hash) && p[i].type === 'dead-directory') {
         try {
           fs.lstatSync(p[i].path)
-          p[i] = new ZettlrDirectory(p[i].parent, p[i].path)
+          p[i] = new GettlrDirectory(p[i].parent, p[i].path)
           p[i].scan().then(() => {
             // send path update
             global.ipc.send('paths-update', this._app.getPathDummies())

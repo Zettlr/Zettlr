@@ -106,11 +106,11 @@ class TagProvider {
 
   /**
    * This function only (re-)reads the tags on disk.
-   * @return {ZettlrTags} This for chainability.
+   * @return {GettlrTags} This for chainability.
    */
   _load () {
     // We are not checking if the user directory exists, b/c this file will
-    // be loaded after the ZettlrConfig, which makes sure the dir exists.
+    // be loaded after the GettlrConfig, which makes sure the dir exists.
 
     // Does the file already exist?
     try {
@@ -128,7 +128,7 @@ class TagProvider {
 
   /**
    * Simply writes the tag data to disk.
-   * @return {ZettlrTags} This for chainability.
+   * @return {GettlrTags} This for chainability.
    */
   _save () {
     // (Over-)write the tags

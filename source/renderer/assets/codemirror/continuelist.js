@@ -2,11 +2,11 @@
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: https://codemirror.net/LICENSE
 //
-// This is the Zettlr fork of addon/edit/continuelist.
+// This is the gettlr fork of addon/edit/continuelist.
 // Changes:
 //
 // + Enable the option continueListModes to add the markdown-zkn mode
-// + Adapt paths for use within Zettlr
+// + Adapt paths for use within gettlr
 // + Remove the blockquote character (>) from the list regex.
 
 (function (mod) {

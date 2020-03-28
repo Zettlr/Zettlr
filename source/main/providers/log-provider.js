@@ -200,7 +200,7 @@ class LogProvider {
 
   /**
    * Returns the current log file name (dynamically
-   * generated when Zettlr runs overnight).
+   * generated when Gettlr runs overnight).
    */
   _getLogfileName () {
     let date = new Date()

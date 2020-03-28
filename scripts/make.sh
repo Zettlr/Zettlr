@@ -8,11 +8,11 @@ fi
 # First switch to the correct working directory, regardless
 # of where this script was called from.
 cd "$(dirname "$0")" # Now we're in /scripts
-cd ".." # Now we're in /Zettlr
+cd ".." # Now we're in /Gettlr
 
 # Next, simply run everything in order
 
-echo "Making a full Zettlr release."
+echo "Making a full Gettlr release."
 echo ""
 echo "This script will run the following commands in order:"
 echo ""
@@ -21,10 +21,10 @@ echo "    2. Re-compile the Handlebars templates"
 echo "    3. Re-compile the revealJS templates"
 echo "    4. Re-compile the Vue.js components"
 echo "    5. Download the built-in language files"
-echo "    6. Compile Zettlr for Windows"
-echo "    7. Compile Zettlr for macOS"
-echo "    8. Compile Zettlr for Debian and Fedora"
-echo "    9. Compile Zettlr for AppImage (Debian and Fedora-based distros)"
+echo "    6. Compile Gettlr for Windows"
+echo "    7. Compile Gettlr for macOS"
+echo "    8. Compile Gettlr for Debian and Fedora"
+echo "    9. Compile Gettlr for AppImage (Debian and Fedora-based distros)"
 echo "   10. Generate SHA 256 checksums"
 echo "   11. Check the correctness of the checksums"
 echo ""
@@ -74,12 +74,12 @@ cd ./release
 
 # Generate the checksums
 echo "Generating SHA 256 checksums for all installers ..."
-shasum -a 256 "Zettlr-$pkgver.exe" > "SHA256SUMS.txt"
-shasum -a 256 "Zettlr-$pkgver.dmg" >> "SHA256SUMS.txt"
-shasum -a 256 "Zettlr-$pkgver-amd64.deb" >> "SHA256SUMS.txt"
-shasum -a 256 "Zettlr-$pkgver-x86_64.rpm" >> "SHA256SUMS.txt"
-shasum -a 256 "Zettlr-$pkgver-i386.AppImage" >> "SHA256SUMS.txt"
-shasum -a 256 "Zettlr-$pkgver-x86_64.AppImage" >> "SHA256SUMS.txt"
+shasum -a 256 "Gettlr-$pkgver.exe" > "SHA256SUMS.txt"
+shasum -a 256 "Gettlr-$pkgver.dmg" >> "SHA256SUMS.txt"
+shasum -a 256 "Gettlr-$pkgver-amd64.deb" >> "SHA256SUMS.txt"
+shasum -a 256 "Gettlr-$pkgver-x86_64.rpm" >> "SHA256SUMS.txt"
+shasum -a 256 "Gettlr-$pkgver-i386.AppImage" >> "SHA256SUMS.txt"
+shasum -a 256 "Gettlr-$pkgver-x86_64.AppImage" >> "SHA256SUMS.txt"
 
 echo ""
 

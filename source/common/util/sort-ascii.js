@@ -13,8 +13,8 @@
 
 /**
  * Helper function to sort files by ascii characters
- * @param  {ZettlrFile} a A ZettlrFile exposing a name property
- * @param  {ZettlrFile} b A ZettlrFile exposing a name property
+ * @param  {GettlrFile} a A GettlrFile exposing a name property
+ * @param  {GettlrFile} b A GettlrFile exposing a name property
  * @return {number}   0, 1, or -1, depending upon what the comparision yields.
  */
 module.exports = function (a, b) {

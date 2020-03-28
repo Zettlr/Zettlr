@@ -12,10 +12,10 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 const { enumDictFiles, enumLangFiles } = require('../../common/lang/i18n')
 
-class GetPreferences extends ZettlrCommand {
+class GetPreferences extends GettlrCommand {
   constructor (app) {
     super(app, 'get-preferences')
   }

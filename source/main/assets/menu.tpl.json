@@ -1,6 +1,6 @@
 {
   "app": {
-    "label": "Zettlr",
+    "label": "CUck",
     "submenu": [
       { "label": "menu.about", "role": "about" },
       { "mixin": "darwin_prefs" },
@@ -183,11 +183,11 @@
     { "label": "menu.about", "command": "display-about" },
     {
       "label": "menu.donate",
-      "target": "https://patreon.com/zettlr"
+      "target": "https://patreon.com/Gettlr"
     },
     {
       "label": "menu.learn_more",
-      "target": "https://www.zettlr.com/"
+      "target": "https://www.Gettlr.com/"
     }, {
       "label": "menu.pandoc",
       "target": "https://github.com/jgm/pandoc/releases/latest"
@@ -197,7 +197,7 @@
     }, {
       "label": "menu.docs",
       "accelerator": "F1",
-      "target": "https://docs.zettlr.com/"
+      "target": "https://docs.Gettlr.com/"
     },
     { "label": "menu.update", "command": "update-check" }
   ]},

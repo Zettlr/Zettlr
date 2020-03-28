@@ -1,4 +1,4 @@
-// This file holds all geometry for the Zettlr toolbar
+// This file holds all geometry for the Gettlr toolbar
 
 #toolbar {
     position: absolute;
@@ -50,19 +50,7 @@
         &.show-toc::before           { content: "\f68c"; }
         &.toggle-attachments::before { content: "\f285"; } // Alternative: '\f284' and '\f286'
 
-        // Pomodoro meter
-        &.pomodoro {
-            padding:2px;
-            // Don't display as button
-            background-image:none;
-            border:none;
 
-            svg {
-                transform: rotate(-90deg);
-                display: inherit;
-                margin: 0 auto;
-            }
-        }
     }
 
     .spacer { flex-grow:5; }

@@ -8,19 +8,19 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This class ensures all the preferences of Zettlr can be
+ * Description:     This class ensures all the preferences of Gettlr can be
  *                  customised to your likings.
  *
  * END HEADER
  */
 
-const ZettlrDialog = require('./zettlr-dialog.js')
+const GettlrDialog = require('./gettlr-dialog.js')
 const validate = require('../../common/validate.js')
 const { ipcRenderer } = require('electron')
 const { trans } = require('../../common/lang/i18n')
 const generateId = require('../../common/util/generate-id')
 
-class PreferencesDialog extends ZettlrDialog {
+class PreferencesDialog extends GettlrDialog {
   constructor () {
     super()
     this._dialog = 'preferences'
@@ -90,7 +90,7 @@ class PreferencesDialog extends ZettlrDialog {
     let form = this._modal.find('form#dialog')
     form.on('submit', (e) => {
       e.preventDefault()
-      // Give the ZettlrBody object the results
+      // Give the GettlrBody object the results
       this.proceed(form.serializeArray())
     })
 

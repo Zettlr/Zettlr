@@ -9,10 +9,10 @@ about: Something missing? Come along!
   first read this short paragraph. If you can check all the boxes below, go for
   it and propose the feature!
 
-  - [ ] Zettlr does not possess something similar (in which case it
+  - [ ] Gettlr does not possess something similar (in which case it
         would be an enhancement, NOT a feature!)
   - [ ] I have searched the documentation to make sure I did not overlook it.
-  - [ ] Zettlr's current features cannot be used to approximate this behaviour.
+  - [ ] Gettlr's current features cannot be used to approximate this behaviour.
   - [ ] I have searched all issues (open and closed) to see if someone else
         wants something similar to which I could propose modifications (two
         features in one are easier and faster for us to implement).

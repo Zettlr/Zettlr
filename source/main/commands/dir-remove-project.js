@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 
-class DirRemoveProject extends ZettlrCommand {
+class DirRemoveProject extends GettlrCommand {
   constructor (app) {
     super(app, 'dir-remove-project')
   }

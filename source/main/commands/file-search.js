@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 
-class FileSearch extends ZettlrCommand {
+class FileSearch extends GettlrCommand {
   constructor (app) {
     super(app, 'file-search')
   }

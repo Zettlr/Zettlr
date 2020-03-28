@@ -1,5 +1,5 @@
 /*
- * This file is only used to keep the main ZettlrEditor class a little bit
+ * This file is only used to keep the main gettlrEditor class a little bit
  * cleaner. It requires all plugins necessary for CodeMirror to run, but
  * this layers this task out. After all, we've won about 70 lines of less code
  * in the main class.
@@ -42,28 +42,28 @@ require('codemirror/addon/fold/brace-fold')
 require('codemirror/addon/fold/indent-fold')
 require('codemirror/addon/fold/markdown-fold')
 require('codemirror/addon/fold/comment-fold')
-require('./zettlr-plugin-foldcode-helper')
+require('./gettlr-plugin-foldcode-helper')
 
 // 8. Hinting (tag autocompletion, e.g.)
 require('codemirror/addon/hint/show-hint')
 
-// Zettlr specific addons
-require('./zettlr-plugin-markdown-shortcuts.js')
-require('./zettlr-mode-spellchecker.js')
-require('./zettlr-mode-zkn.js')
-require('./zettlr-mode-readability.js')
-require('./zettlr-mode-multiplex.js')
-require('./zettlr-plugin-autocorrect')
-require('./zettlr-plugin-footnotes.js')
-require('./zettlr-plugin-render-images.js')
-require('./zettlr-plugin-render-links.js')
-require('./zettlr-plugin-render-citations.js')
-require('./zettlr-plugin-render-tables.js')
-require('./zettlr-plugin-render-tasks.js')
-require('./zettlr-plugin-render-h-tags.js')
-require('./zettlr-plugin-render-iframes.js')
-require('./zettlr-plugin-render-math.js')
-require('./zettlr-plugin-render-mermaid')
-require('./zettlr-plugin-markdown-header-classes.js')
-require('./zettlr-plugin-select-word.js')
-require('./zettlr-plugin-wysiwyg.js')
+// gettlr specific addons
+require('./gettlr-plugin-markdown-shortcuts.js')
+require('./gettlr-mode-spellchecker.js')
+require('./gettlr-mode-zkn.js')
+require('./gettlr-mode-readability.js')
+require('./gettlr-mode-multiplex.js')
+require('./gettlr-plugin-autocorrect')
+require('./gettlr-plugin-footnotes.js')
+require('./gettlr-plugin-render-images.js')
+require('./gettlr-plugin-render-links.js')
+require('./gettlr-plugin-render-citations.js')
+require('./gettlr-plugin-render-tables.js')
+require('./gettlr-plugin-render-tasks.js')
+require('./gettlr-plugin-render-h-tags.js')
+require('./gettlr-plugin-render-iframes.js')
+require('./gettlr-plugin-render-math.js')
+require('./gettlr-plugin-render-mermaid')
+require('./gettlr-plugin-markdown-header-classes.js')
+require('./gettlr-plugin-select-word.js')
+require('./gettlr-plugin-wysiwyg.js')

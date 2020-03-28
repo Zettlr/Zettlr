@@ -9,7 +9,7 @@
  *
  * Description:     This file is the procedural file for the main process. It is
  *                  the main entry point for the application. What it does:
- *                  Listen to app-Events and initialize the Zettlr object.
+ *                  Listen to app-Events and initialize the Gettlr object.
  *
  * END HEADER
  */
@@ -17,15 +17,15 @@
 global.preBootLog = [{
   'level': 2, // Info
   // eslint-disable-next-line no-irregular-whitespace
-  'message': `こんにちは！　Booting Zettlr at ${(new Date()).toString()}.`
+  'message': `こんにちは！　Booting Gettlr at ${(new Date()).toString()}.`
 }]
 
 // We need the app and process modules.
 const { app } = require('electron')
 const process = require('process')
 
-// Include the global Zettlr class
-const Zettlr = require('./main/zettlr.js')
+// Include the global Gettlr class
+const gettlr = require('./main/Gettlr.js')
 
 // Helpers to determine what files from argv we can open
 const isFile = require('./common/util/is-file')
@@ -35,10 +35,10 @@ const ignoreFile = require('./common/util/ignore-file')
 require('v8-compile-cache')
 
 /**
- * The main Zettlr object. As long as this exists in memory, the app will run.
- * @type {Zettlr}
+ * The main Gettlr object. As long as this exists in memory, the app will run.
+ * @type {Gettlr}
  */
-let zettlr
+let Gettlr
 
 /**
  * Global array containing files collected from argv before process start
@@ -54,13 +54,13 @@ global.filesToOpen = []
 let isFirstInstance = app.requestSingleInstanceLock()
 
 /**
- * Exit immediately if this is a second instance of Zettlr.
+ * Exit immediately if this is a second instance of Gettlr.
  * @param  {Boolean} isFirstInstance Whether or not this is a second instance.
  */
 if (!isFirstInstance) app.exit(0)
 
 /**
- * This event will be called if another instance of Zettlr has been opened with
+ * This event will be called if another instance of Gettlr has been opened with
  * the argv of that instance.
  * @param {Object} event The instance event
  * @param {Array} argv The arguments the second instance had received
@@ -76,24 +76,24 @@ app.on('second-instance', (event, argv, cwd) => {
   })
 
   // Someone tried to run a second instance, so focus the main window if existing
-  if (zettlr) {
-    // We need to call the open() method of ZettlrWindow to make sure there's a
-    // window, because on Windows, where this code is always executed, Zettlr
+  if (Gettlr) {
+    // We need to call the open() method of GettlrWindow to make sure there's a
+    // window, because on Windows, where this code is always executed, Gettlr
     // instances can enter a zombie mode in which the instances still run although
     // the Window has been closed (due to the close event not being fired in rare
     // instances). This way we make sure there's a window open in any case before
     // it's accessed.
-    zettlr.getWindow().open() // Will simply return if the window is already open
-    let win = zettlr.getWindow().getWindow()
+    Gettlr.getWindow().open() // Will simply return if the window is already open
+    let win = Gettlr.getWindow().getWindow()
     // Restore the window in case it's minimised
     if (win.isMinimized()) win.restore()
     win.focus()
 
     // In case the user wants to open a file/folder with this running instance
-    zettlr.handleAddRoots(files)
+    Gettlr.handleAddRoots(files)
   } else {
-    // The Zettlr object has not yet been instantiated (e.g. the user double
-    // clicked a file with Zettlr not being open or something like that.)
+    // The Gettlr object has not yet been instantiated (e.g. the user double
+    // clicked a file with Gettlr not being open or something like that.)
     // Workaround: Use the global array filesToOpen.
     global.filesToOpen = global.filesToOpen.concat(files)
   }
@@ -104,10 +104,10 @@ app.on('second-instance', (event, argv, cwd) => {
  */
 app.on('open-file', (e, p) => {
   // The user wants to open a file -> simply handle it.
-  if (zettlr) {
-    zettlr.handleAddRoots([p])
+  if (Gettlr) {
+    Gettlr.handleAddRoots([p])
   } else {
-    // The Zettlr object has yet to be created -> use the global.
+    // The Gettlr object has yet to be created -> use the global.
     global.filesToOpen.push(p)
   }
 })
@@ -122,7 +122,7 @@ app.on('ready', function () {
     'level': 2, // Info
     'message': 'Electron reports ready state. Instantiating main process...'
   })
-  zettlr = new Zettlr()
+  Gettlr = new gettlr()
 })
 
 /**
@@ -133,7 +133,7 @@ app.on('window-all-closed', async function () {
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
     // Shutdown the app before quitting
-    await zettlr.shutdown()
+    await Gettlr.shutdown()
     app.quit()
   }
 })
@@ -143,14 +143,14 @@ app.on('window-all-closed', async function () {
  * properly.
  */
 app.on('will-quit', async function (event) {
-  if (zettlr) await zettlr.shutdown()
+  if (Gettlr) await Gettlr.shutdown()
 })
 
 /**
  * On macOS, open a new window as soon as the user re-activates the app.
  */
 app.on('activate', function () {
-  zettlr.openWindow()
+  Gettlr.openWindow()
 })
 
 /**

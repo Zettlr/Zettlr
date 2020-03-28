@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 const { trans } = require('../../common/lang/i18n')
 const sanitize = require('sanitize-filename')
 const path = require('path')
@@ -20,7 +20,7 @@ const fs = require('fs')
 const { clipboard } = require('electron')
 const isDir = require('../../common/util/is-dir')
 
-class SaveImage extends ZettlrCommand {
+class SaveImage extends GettlrCommand {
   constructor (app) {
     super(app, 'save-image-from-clipboard')
   }

@@ -22,7 +22,7 @@ const isFile = require('./is-file')
 module.exports = function (p) {
   let ext = global.config.get('attachmentExtensions')
   if (!ext) {
-    // Something went wrong on init. Hey ZettlrConfig, are you even there?
+    // Something went wrong on init. Hey GettlrConfig, are you even there?
     return false
   }
 

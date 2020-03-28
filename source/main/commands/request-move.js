@@ -12,11 +12,11 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 const path = require('path')
 const { trans } = require('../../common/lang/i18n')
 
-class RequestMove extends ZettlrCommand {
+class RequestMove extends GettlrCommand {
   constructor (app) {
     super(app, 'request-move')
   }

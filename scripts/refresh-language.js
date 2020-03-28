@@ -1,4 +1,4 @@
-// This simple script downloads the default languages from Zettlr Translate
+// This simple script downloads the default languages from Gettlr Translate
 const got = require('got')
 const fs = require('fs')
 const path = require('path')
@@ -16,7 +16,7 @@ const bcp47 = [
 log.info(`Refreshing language files for ${bcp47.join(', ')} ...`)
 
 for (let lang of bcp47) {
-  got(`https://translate.zettlr.com/download/${lang}.json`).then((data) => {
+  got(`https://translate.Gettlr.com/download/${lang}.json`).then((data) => {
     log.success(`${lang} successfully downloaded!`)
     // Write to file
     fs.writeFile(path.join(targetDir, lang + '.json'), data.body, 'utf8', (err) => {

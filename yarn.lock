@@ -331,9 +331,9 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@zettlr/citr@^1.1.0":
+"@Gettlr/citr@^1.1.0":
   version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@zettlr/citr/-/citr-1.1.0.tgz#2849a8565a67cf14c73e86438bbab50dc48746d3"
+  resolved "https://registry.yarnpkg.com/@Gettlr/citr/-/citr-1.1.0.tgz#2849a8565a67cf14c73e86438bbab50dc48746d3"
   integrity sha512-ylHgUR17j2yV8b9OuaK3NQ03PsqLXJ/Yqi71eFyiHF9PBOen8x5qAGCUfJyZdJtQm7V+feLkACLX2LsfcukXXg==
   dependencies:
     "@types/node" "^12.0.7"

@@ -8,7 +8,7 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This file tests a component of Zettlr.
+ * Description:     This file tests a component of Gettlr.
  *
  * END HEADER
  */

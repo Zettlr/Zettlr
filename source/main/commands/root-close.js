@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 
-class RootClose extends ZettlrCommand {
+class RootClose extends GettlrCommand {
   constructor (app) {
     super(app, 'root-close')
   }

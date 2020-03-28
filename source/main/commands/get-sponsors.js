@@ -12,11 +12,11 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 const got = require('got')
 const REPO_URL = require('../../common/data.json').sponsors_url
 
-class GetSponsors extends ZettlrCommand {
+class GetSponsors extends GettlrCommand {
   constructor (app) {
     super(app, 'get-sponsors')
   }

@@ -65,7 +65,7 @@ class EditorSearch {
 
   /**
     * Highlights the given search results in the file.
-    * @param {ZettlrFile} file The file for which to find results.
+    * @param {GettlrFile} file The file for which to find results.
     */
   markResults (file) {
     let results = global.store.getSearchResults()
@@ -80,7 +80,7 @@ class EditorSearch {
   /**
     * Why do you have a second _mark-function, when there is markResults?
     * Because the local search also generates search results that have to be
-    * marked without retrieving anything from the ZettlrPreview.
+    * marked without retrieving anything from the GettlrPreview.
     * @param  {Array} res An Array containing all positions to be rendered.
     */
   _mark (res) {
@@ -150,7 +150,7 @@ class EditorSearch {
     * Starts the search by preparing a search cursor we can use to forward the
     * search.
     * @param  {String} term The string to start a search for
-    * @return {ZettlrEditor}      This for chainability.
+    * @return {GettlrEditor}      This for chainability.
     */
   startSearch (term) {
     // First transform the term based upon what the user has entered
@@ -166,7 +166,7 @@ class EditorSearch {
 
   /**
     * Stops the search by destroying the search cursor
-    * @return {ZettlrEditor}   This for chainability.
+    * @return {GettlrEditor}   This for chainability.
     */
   stopSearch () {
     this._searchCursor = null

@@ -15,8 +15,8 @@ const asciiSorting = require('./sort-ascii')
 const dateSorting = require('./sort-date')
 
 /**
-* This function can sort an array of ZettlrFile and ZettlrDir objects
-* @param  {Array} arr An array containing only ZettlrFile, ZettlrVirtualDirectory and ZettlrDir objects
+* This function can sort an array of GettlrFile and GettlrDir objects
+* @param  {Array} arr An array containing only GettlrFile, GettlrVirtualDirectory and GettlrDir objects
 * @param {String} [type='name-up'] The type of sorting - can be time-up, time-down, name-up or name-down
 * @return {Array}     The sorted array
 */

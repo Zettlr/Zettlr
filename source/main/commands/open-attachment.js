@@ -16,13 +16,13 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 const { trans } = require('../../common/lang/i18n')
 const got = require('got')
 const { shell } = require('electron')
 const pdfSorter = require('../../common/util/sort-by-pdf')
 
-class OpenAttachment extends ZettlrCommand {
+class OpenAttachment extends GettlrCommand {
   constructor (app) {
     super(app, 'open-attachment')
   }

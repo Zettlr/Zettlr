@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 
-class DirProjectExport extends ZettlrCommand {
+class DirProjectExport extends GettlrCommand {
   constructor (app) {
     super(app, 'dir-project-export')
   }

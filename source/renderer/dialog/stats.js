@@ -14,14 +14,14 @@
  * END HEADER
  */
 
-const ZettlrDialog = require('./zettlr-dialog.js')
+const GettlrDialog = require('./gettlr-dialog.js')
 const Chart = require('chart.js')
 const localiseNumber = require('../../common/util/localise-number')
 const formatDate = require('../../common/util/format-date')
 const { trans } = require('../../common/lang/i18n.js')
 const moment = require('moment')
 
-class StatsDialog extends ZettlrDialog {
+class StatsDialog extends GettlrDialog {
   /**
    * This class is used to display the writing statistics in a dialog. It is
    * able to do a lot of data variation using chart.js
@@ -169,7 +169,7 @@ class StatsDialog extends ZettlrDialog {
 
   /**
    * Sanitises the data in that it fills up holes in the wordCount object where
-   * Zettlr hasn't been running and where there are no information. We'll preset
+   * Gettlr hasn't been running and where there are no information. We'll preset
    * these days with 0.
    * @return {void} Modifies internal objects and does not return.
    */

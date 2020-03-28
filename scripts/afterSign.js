@@ -18,7 +18,7 @@ exports.default = async function (context) {
   const appName = context.packager.appInfo.productFilename
 
   return notarize({
-    appBundleId: 'com.zettlr.app',
+    appBundleId: 'com.Gettlr.app',
     appPath: `${context.appOutDir}/${appName}.app`,
     appleId: process.env.APPLE_ID,
     appleIdPassword: process.env.APPLE_ID_PASS

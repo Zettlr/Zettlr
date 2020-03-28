@@ -161,8 +161,8 @@ class DictionaryProvider extends EventEmitter {
     try {
       fs.lstatSync(this._userDictionaryPath)
     } catch (e) {
-      // Create a new file (and add Zettlr as a correct word :3)
-      fs.writeFileSync(this._userDictionaryPath, 'Zettlr', 'utf8')
+      // Create a new file (and add Gettlr as a correct word :3)
+      fs.writeFileSync(this._userDictionaryPath, 'Gettlr', 'utf8')
     }
     this._userDictionary = await readFile(this._userDictionaryPath, 'utf8')
     this._userDictionary = this._userDictionary.split(/\n/)
@@ -252,7 +252,7 @@ class DictionaryProvider extends EventEmitter {
   getDicts () { return this._loadedDicts }
 
   /**
-   * Does ZettlrDictionary check for the given language, i.e. did it load?
+   * Does GettlrDictionary check for the given language, i.e. did it load?
    * @param  {string} lang The language code, e.g. en_GB
    * @return {Boolean}      True, if the dictionary has been loaded, or false.
    */

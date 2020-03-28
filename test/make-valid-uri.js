@@ -8,7 +8,7 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This file tests a component of Zettlr.
+ * Description:     This file tests a component of Gettlr.
  *
  * END HEADER
  */
@@ -28,7 +28,7 @@ const makeUriTesters = [
   { 'input': 'file://./relative/file.md', 'expected': 'file:///home/foo/documents/relative/file.md' },
   // Links without protocol should receive the HTTPS protocol
   { 'input': 'github.com', 'expected': 'https://github.com' },
-  { 'input': 'www.zettlr.com', 'expected': 'https://www.zettlr.com' },
+  { 'input': 'www.Gettlr.com', 'expected': 'https://www.Gettlr.com' },
   // Absolute file paths should be returned with the file protocol
   { 'input': '/home/bar/documents/absolute.md', 'expected': 'file:///home/bar/documents/absolute.md' },
   // Relative paths both with and without the leading full stop indicator should be converted absolute

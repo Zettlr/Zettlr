@@ -1,33 +1,33 @@
 {
     "metadata": {
         "authors": [
-            "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
+            "Hendrik Erz \u003Cinfo@Gettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
         "updated_at": "2020-02-08T17:02:11.000000Z"
     },
     "dialog": {
         "about": {
-            "astrocite": "Erm\u00f6glicht Zettlr die Darstellung von Zitationen aus BibTex-Dateien",
+            "astrocite": "Erm\u00f6glicht Gettlr die Darstellung von Zitationen aus BibTex-Dateien",
             "chartjs": "Bereitet deine Schreibstatistiken grafisch auf",
             "chokidar": "Erkennt alle \u00c4nderung an den Dateien von au\u00dferhalb und stellt sie dar",
-            "citationstyle": "Zettlr verwendet citeproc, um Zitationen direkt im Editor anzuzeigen. Hierzu verwendet Zettlr die CitationStyleLanguage (CSL) Sprachdateien sowie Stile. Die Dateien wurden unver\u00e4ndert mit Autorenangaben ausgeliefert. Weitere Informationen:",
+            "citationstyle": "Gettlr verwendet citeproc, um Zitationen direkt im Editor anzuzeigen. Hierzu verwendet Gettlr die CitationStyleLanguage (CSL) Sprachdateien sowie Stile. Die Dateien wurden unver\u00e4ndert mit Autorenangaben ausgeliefert. Weitere Informationen:",
             "citeproc": "Liefert die korrekten Zitationen f\u00fcr alle Werke",
             "contributors": "Mitwirkende",
             "jquery": "Unersetzlich f\u00fcr die Darstellung des Nutzer-Interfaces",
             "katex": "Stellt LaTeX-Formeln im Editor dar",
-            "lead": "Zettlr ist ein Projekt von Hendrik Erz, lizensiert unter der GNU GPL v3-Lizenz. Es ist Open Source, komplett kostenlos und basiert auf dem Electron-Framework. Zettlr dankt an dieser Stelle den Entwicklern von Electron, Node.js und dem CodeMirror-Editor f\u00fcr ihre Arbeit. Ohne sie w\u00e4re die Entwicklung von Zettlr nicht m\u00f6glich. Hier sind alle Projekte aufgelistet, die Zettlr erm\u00f6glichen.",
+            "lead": "Gettlr ist ein Projekt von Hendrik Erz, lizensiert unter der GNU GPL v3-Lizenz. Es ist Open Source, komplett kostenlos und basiert auf dem Electron-Framework. Gettlr dankt an dieser Stelle den Entwicklern von Electron, Node.js und dem CodeMirror-Editor f\u00fcr ihre Arbeit. Ohne sie w\u00e4re die Entwicklung von Gettlr nicht m\u00f6glich. Hier sind alle Projekte aufgelistet, die Gettlr erm\u00f6glichen.",
             "lessjs": "Kompiliert die Design-Richtlinien f\u00fcr die App",
             "license": "Lizenz",
             "main": "Hauptprojekte",
             "nspell": "Erm\u00f6glicht die eingebaute Rechtschreibpr\u00fcfung",
-            "other_projects": "Zettlr nutzt auch die folgenden Projekte:",
+            "other_projects": "Gettlr nutzt auch die folgenden Projekte:",
             "projects": "Andere Projekte",
             "showdownjs": "\u00dcbersetzt das in Markdown geschriebene Changelog im Update-Dialog",
             "sponsors": "Sponsoren",
             "tippyjs": "Ist f\u00fcr die schicken Tooltips verantwortlich",
-            "title": "\u00dcber Zettlr",
-            "trademark": "Alle Logos und Markennamen geh\u00f6ren ihren rechtm\u00e4\u00dfigen Besitzern. Au\u00dfer durch die Nutzung ihres Codes ist Zettlr auf keine Weise mit diesen Projekten verbunden. Node.js ist ein eingetragenes Warenzeichen von Joyent, Inc."
+            "title": "\u00dcber Gettlr",
+            "trademark": "Alle Logos und Markennamen geh\u00f6ren ihren rechtm\u00e4\u00dfigen Besitzern. Au\u00dfer durch die Nutzung ihres Codes ist Gettlr auf keine Weise mit diesen Projekten verbunden. Node.js ist ein eingetragenes Warenzeichen von Joyent, Inc."
         },
         "button": {
             "cancel": "Abbrechen",
@@ -36,7 +36,7 @@
             "save": "Speichern"
         },
         "custom_css": {
-            "info": "Hier kannst du verschiedene Stile von Zettlr \u00fcberschreiben und damit die App noch weiter anpassen. \u003Cstrong\u003EAchtung: Diese Datei \u00fcberschreibt s\u00e4mtliche CSS-Direktiven! \u00c4ndere daher niemals die Geometrie von Elementen, anderenfalls k\u00f6nnte Zettlr unerwartetes Verhalten zeigen!\u003C/strong\u003E",
+            "info": "Hier kannst du verschiedene Stile von Gettlr \u00fcberschreiben und damit die App noch weiter anpassen. \u003Cstrong\u003EAchtung: Diese Datei \u00fcberschreibt s\u00e4mtliche CSS-Direktiven! \u00c4ndere daher niemals die Geometrie von Elementen, anderenfalls k\u00f6nnte Gettlr unerwartetes Verhalten zeigen!\u003C/strong\u003E",
             "title": "Benutzerdefiniertes CSS"
         },
         "dir_new": {
@@ -180,7 +180,7 @@
             "default_image_save_path": "Standard-Bildspeicherort (relativ oder absolut)",
             "display": {
                 "image_size_info": "Hiermit bestimmst du die maximale Gr\u00f6\u00dfe der Bildvorschauen",
-                "preview_info": "Hiermit bestimmst du, welche Elemente Zettlr darstellt",
+                "preview_info": "Hiermit bestimmst du, welche Elemente Gettlr darstellt",
                 "render_citations": "Zitationen darstellen",
                 "render_htags": "\u00dcberschrift-Zeichen verstecken",
                 "render_iframes": "iframe-Elemente darstellen",
@@ -217,7 +217,7 @@
             "mute_lines": "Blende nicht fokussierte Zeilen im ablenkungsfreien Modus ab",
             "new_file_dont_prompt": "Dateinamen bei Dateierstellung nicht abfragen",
             "nightmode": "Dunkles Thema",
-            "pandoc": "Pfad zum Pandoc-Programm. Bitte \u00e4ndere dies nur, wenn Zettlr Pandoc nicht automatisch findet.",
+            "pandoc": "Pfad zum Pandoc-Programm. Bitte \u00e4ndere dies nur, wenn Gettlr Pandoc nicht automatisch findet.",
             "pandoc_command": "Pandoc-Befehl. \u003Cstrong\u003ENur f\u00fcr erfahrene Benutzer!\u003C/strong\u003E",
             "pandoc_default": "Standard: pandoc",
             "pdf": {
@@ -303,7 +303,7 @@
                 "generated_id": "Erstellte ID",
                 "id_generator_label": "Muster f\u00fcr neue IDs",
                 "id_label": "ID Regul\u00e4rer Ausdruck (RegEx)",
-                "intro": "Hier kannst du Zettlr so einstellen, dass es mit deinem bisherigen Ablauf funktioniert. Die ID basiert auf regul\u00e4ren Ausdr\u00fccken (RegEx), also achte darauf, Sonderzeichen zu escapen. Du kannst die Erstellung und Erkennung von IDs mit dem Button testen. Im Handbuch stehen alle verf\u00fcgbaren Variablen f\u00fcr das ID-Muster.",
+                "intro": "Hier kannst du Gettlr so einstellen, dass es mit deinem bisherigen Ablauf funktioniert. Die ID basiert auf regul\u00e4ren Ausdr\u00fccken (RegEx), also achte darauf, Sonderzeichen zu escapen. Du kannst die Erstellung und Erkennung von IDs mit dem Button testen. Im Handbuch stehen alle verf\u00fcgbaren Variablen f\u00fcr das ID-Muster.",
                 "link_behaviour_always": "immer an",
                 "link_behaviour_description": "Beim Verlinken von Dateien, f\u00fcge den Dateinamen \u2026",
                 "link_behaviour_id": "nur an, wenn mit ID verlinkt wird",
@@ -361,8 +361,8 @@
             "connection_error": "Konnte nicht nach Updates suchen: Verbindung konnte nicht hergestellt werden",
             "current_version": "Deine Version",
             "no_data": "Konnte nicht nach Updates suchen: Server hat keine Daten gesendet",
-            "no_update": "Du nutzt die aktuelle Version von Zettlr",
-            "notification": "Eine neue Version von Zettlr steht zum Download bereit. Bitte lies die \u00c4nderungsdatei unten.",
+            "no_update": "Du nutzt die aktuelle Version von Gettlr",
+            "notification": "Eine neue Version von Gettlr steht zum Download bereit. Bitte lies die \u00c4nderungsdatei unten.",
             "redirect_error": "Konnte nicht nach Updates suchen: Der Server hat eine Weiterleitung gesendet (Statuscode: %s)",
             "release_url": "Zum Download",
             "server_error": "Konnte nicht nach Updates suchen: Server Error (Statuscode: %s)",
@@ -425,7 +425,7 @@
         "thousand_delimiter": "."
     },
     "menu": {
-        "about": "\u00dcber Zettlr",
+        "about": "\u00dcber Gettlr",
         "add_to_dictionary": "Zum W\u00f6rterbuch hinzuf\u00fcgen",
         "all_front": "Alle in den Vordergrund",
         "bold": "Fett",
@@ -469,7 +469,7 @@
             "window": "Fenster"
         },
         "latex": "LaTeX installieren",
-        "learn_more": "Zettlr im Web",
+        "learn_more": "Gettlr im Web",
         "new_dir": "Neues Verzeichnis\u2026",
         "new_file": "Neue Datei\u2026",
         "new_project": "Projekt erstellen",
@@ -553,7 +553,7 @@
             "file_exists": "Die Datei existiert bereits.",
             "fnf_message": "Die angeforderte Datei wurde nicht gefunden.",
             "fnf_title": "Datei nicht gefunden",
-            "ignored_dir_message": "Das Verzeichnis &quot;%s&quot; kann von Zettlr nicht ge\u00f6ffnet werden.",
+            "ignored_dir_message": "Das Verzeichnis &quot;%s&quot; kann von Gettlr nicht ge\u00f6ffnet werden.",
             "ignored_dir_title": "Kann Verzeichnis nicht \u00f6ffnen",
             "malformed_textbundle": "Fehlerhaftes Textbundle: %s",
             "move_into_child_message": "Du kannst kein Verzeichnis in eines seiner Unterverzeichnisse verschieben.",

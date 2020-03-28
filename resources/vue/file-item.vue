@@ -205,7 +205,7 @@
           // Tell the sidebar component to lock the directory tree (only necessary for thin mode)
           this.$root.lockDirectoryTree()
           event.dataTransfer.effectAllowed = 'move'
-          event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
+          event.dataTransfer.setData('text/x-Gettlr-file', JSON.stringify({
             'hash': this.obj.hash,
             'type': this.obj.type // Can be file or directory
           }))

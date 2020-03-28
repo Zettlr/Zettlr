@@ -12,9 +12,9 @@
  * END HEADER
  */
 
-const ZettlrCommand = require('./zettlr-command')
+const GettlrCommand = require('./Gettlr-command')
 
-class DirNewVD extends ZettlrCommand {
+class DirNewVD extends GettlrCommand {
   constructor (app) {
     super(app, 'dir-new-vd')
   }
