@@ -26,6 +26,7 @@ const flattenDirectoryTree = require('../common/util/flatten-directory-tree')
 const { trans } = require('../common/lang/i18n.js')
 const generateKeymap = require('./assets/codemirror/generate-keymap.js')
 const EditorSearch = require('./util/editor-search')
+const EditorTabs = require('./util/editor-tabs')
 const openMarkdownLink = require('./util/open-markdown-link')
 
 // The autoloader requires all necessary CodeMirror addons and modes that are
@@ -65,7 +66,7 @@ class ZettlrEditor {
   constructor (parent) {
     this._renderer = parent
     this._div = $('#editor')
-    this._positions = [] // Saves the positions of the editor
+    this._openFiles = [] // Holds all open files in the editor
     this._currentHash = null // Needed for positions
 
     this._words = 0 // Currently written words
@@ -73,6 +74,16 @@ class ZettlrEditor {
     this._timeout = null // Stores a current timeout for a save-command
 
     this._searcher = new EditorSearch(null)
+    this._tabs = new EditorTabs()
+    // The user can select or close documents on the tab bar
+    this._tabs.setIntentCallback((hash, intent) => {
+      hash = parseInt(hash, 10) // Make sure === works as intended
+      if (intent === 'close') {
+        this.close(hash)
+      } else if (intent === 'select') {
+        this._swapFile(hash)
+      }
+    })
 
     // The starting position for a tag autocomplete.
     this._autoCompleteStart = null
@@ -350,27 +361,7 @@ class ZettlrEditor {
     this._cm.on('cursorActivity', (cm) => {
       // This event fires on either editor changes (because, obviously the
       // cursor changes its position as well then) or when the cursor moves.
-      if (this._renderImages) this._cm.execCommand('markdownRenderImages') // Render images
-      this._cm.execCommand('markdownRenderMermaid') // Render mermaid codeblocks
-      if (this._renderIframes) this._cm.execCommand('markdownRenderIframes') // Render iFrames
-      if (this._renderMath) this._cm.execCommand('markdownRenderMath') // Render equations
-      if (this._renderLinks) this._cm.execCommand('markdownRenderLinks') // Render links
-      if (this._renderCitations) this._cm.execCommand('markdownRenderCitations') // Render citations
-      if (this._renderTables) this._cm.execCommand('markdownRenderTables') // Render tables
-      if (this._renderTasks) this._cm.execCommand('markdownRenderTasks') // Render tasks
-      if (this._renderHTags) this._cm.execCommand('markdownRenderHTags') // Render heading levels
-      if (this._wysiwyg) this._cm.execCommand('markdownWYSIWYG') // Render all other elements
-      this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
-      if (this._cm.getOption('fullScreen') && this._mute) {
-        this._muteLines()
-      }
-
-      // Additionally, render all citations that may have been newly added to
-      // the DOM by CodeMirror.
-      this.renderCitations()
-
-      // Update fileInfo
-      this._renderer.updateFileInfo(this.getFileInfo())
+      this._fireRenderers()
     })
 
     // We need to update citations also on updates, as this is the moment when
@@ -473,6 +464,31 @@ class ZettlrEditor {
   // END constructor
 
   /**
+   * Apply all renderers and other fancy stuff on the editor.
+   */
+  _fireRenderers () {
+    if (this._renderImages) this._cm.execCommand('markdownRenderImages') // Render images
+    this._cm.execCommand('markdownRenderMermaid') // Render mermaid codeblocks
+    if (this._renderIframes) this._cm.execCommand('markdownRenderIframes') // Render iFrames
+    if (this._renderMath) this._cm.execCommand('markdownRenderMath') // Render equations
+    if (this._renderLinks) this._cm.execCommand('markdownRenderLinks') // Render links
+    if (this._renderCitations) this._cm.execCommand('markdownRenderCitations') // Render citations
+    if (this._renderTables) this._cm.execCommand('markdownRenderTables') // Render tables
+    if (this._renderTasks) this._cm.execCommand('markdownRenderTasks') // Render tasks
+    if (this._renderHTags) this._cm.execCommand('markdownRenderHTags') // Render heading levels
+    if (this._wysiwyg) this._cm.execCommand('markdownWYSIWYG') // Render all other elements
+    this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
+    if (this._cm.getOption('fullScreen') && this._mute) this._muteLines()
+
+    // Additionally, render all citations that may have been newly added to
+    // the DOM by CodeMirror.
+    this.renderCitations()
+
+    // Update fileInfo
+    this._renderer.updateFileInfo(this.getFileInfo())
+  }
+
+  /**
    * Enters the readability mode
    */
   enterReadability () {
@@ -498,6 +514,7 @@ class ZettlrEditor {
    */
   isReadabilityModeActive () {
     let mode = this._cm.getOption('mode')
+    if (!mode) return false // Before a doc has been loaded, mode can be undefined
     return mode.hasOwnProperty('name') && mode.name === 'readability'
   }
 
@@ -519,14 +536,23 @@ class ZettlrEditor {
     * @return {ZettlrEditor}       Chainability.
     */
   open (file, flag = null) {
-    if (!this._openFiles.find(elem => elem.hash === file.hash)) {
+    if (!this._openFiles.find(elem => elem.fileObject.hash === file.hash)) {
       console.log('File not opened. Adding to open files ...')
       // We need to create a new doc for the file and then swap
-      // the currently active doc. TODO
-      this._openFiles.push(file)
+      // the currently active doc.
+      // Switch modes based on the file type
+      let mode = MD_MODE
+      if (file.ext === '.tex') {
+        mode = TEX_MODE
+        // Potentially helpful: $('.CodeMirror').addClass('cm-stex-mode')
+      }
+      this._openFiles.push({
+        'fileObject': file,
+        'cmDoc': CodeMirror.Doc(file.content, mode)
+      })
     }
 
-    this._switchFile(this._openFiles.find(elem => elem.hash === file.hash))
+    this._swapFile(file.hash)
 
     // If we've got a new file, we need to re-focus the editor
     if (flag === 'new-file') this._cm.focus()
@@ -538,68 +564,81 @@ class ZettlrEditor {
   }
 
   /**
-    * Closes the current file.
-    * @return {ZettlrEditor} Chainability.
-    */
-  close () {
-    if (this.isReadabilityModeActive()) this.exitReadability()
-    // Save current positions in case the file is being opened again later.
-    if (this._currentHash != null) {
-      this._positions[this._currentHash] = {
-        'scroll': JSON.parse(JSON.stringify(this._cm.getScrollInfo())),
-        'cursor': JSON.parse(JSON.stringify(this._cm.getCursor()))
-      }
-    }
-
-    //
-
-    this._cm.setValue('')
-    this._cm.markClean()
-    this._cm.clearHistory()
-    this._words = 0
-    this._cm.setOption('markdownImageBasePath', '') // Reset base path
-    return this
-  }
-
-  /**
-   * Switched to the given file.
-   * @param {Object} file The file to switch to
+   * Exchanges the current document displayed.
+   * @param {Number} hash The hash of the file to be swapped
    */
-  _switchFile (file) {
-    this._cm.setValue(file.content)
-    this._cm.setOption('markdownImageBasePath', path.dirname(file.path)) // Set the base path for image rendering
-
-    // Switch modes based on the file type
-    if (file.ext === '.tex') {
-      this._cm.setOption('mode', TEX_MODE)
-      $('.CodeMirror').addClass('cm-stex-mode')
-    } else if (this._cm.getOption('mode') === TEX_MODE) {
-      this._cm.setOption('mode', MD_MODE)
-      $('.CodeMirror').removeClass('cm-stex-mode')
+  _swapFile (hash) {
+    if (this.isReadabilityModeActive()) this.exitReadability()
+    // Exchanges the CodeMirror document object
+    let file = this._openFiles.find(elem => elem.fileObject.hash === hash)
+    if (!file) {
+      console.log('No file found to swap.')
+      return
     }
+    // swapDoc returns the old doc, but we retain a reference in the
+    // _openFiles array so we don't need to catch it.
+    this._cm.swapDoc(file.cmDoc)
+    this._currentHash = hash
 
-    this._cm.refresh()
-    // Scroll the scrollbar to top, to make sure it's at the top of the new
-    // file (in case there are positions saved, they will be scrolled to
-    // later in this function)
-    $('.CodeMirror-vscrollbar').scrollTop(0)
-    this._currentHash = 'hash' + file.hash
-    this._words = countWords(this._cm.getValue(), this._countChars)
+    // Synchronise the file changes to the document tabs
+    this._tabs.syncFiles(this._openFiles, this._currentHash)
 
-    // Mark clean, because now we got a new (and therefore unmodified) file
-    this._cm.markClean()
-    this._cm.clearHistory() // Clear history so that no "old" files can be
-    // recreated using Cmd/Ctrl+Z.
-
-    if (this._positions[this._currentHash] !== undefined) {
-      // Restore scroll positions
-      this._cm.scrollIntoView(this._positions[this._currentHash].scroll)
-      this._cm.setSelection(this._positions[this._currentHash].cursor)
-    }
+    // Make sure all headings are rendered etc. pp
+    this._fireRenderers()
 
     // Last but not least: If there are any search results currently
     // display, mark the respective positions.
     this._searcher.markResults(file)
+  }
+
+  /**
+    * Closes the current file.
+    * @param {Number} hash An optional hash
+    * @return {ZettlrEditor} Chainability.
+    */
+  close (hash = null) {
+    // In case a hash was provided, and the hash is not the open document,
+    // close it without further ado
+    if (hash !== null && hash !== this._currentHash) {
+      let currentFile = this._openFiles.find(elem => elem.fileObject.hash === hash)
+      let currentIndex = this._openFiles.indexOf(currentFile)
+      this._openFiles.splice(currentIndex, 1)
+
+      // Synchronise the file changes to the document tabs
+      this._tabs.syncFiles(this._openFiles, this._currentHash)
+      return // Done!
+    }
+
+    let mdBasePath = ''
+
+    // Here we now need to pluck the file from the openFiles
+    // array, and, optionally, select another openDoc.
+    let currentFile = this._openFiles.find(elem => elem.fileObject.hash === this._currentHash)
+    let currentIndex = this._openFiles.indexOf(currentFile)
+    this._openFiles.splice(currentIndex, 1)
+
+    // Do we have another openFile?
+    if (this._openFiles.length > 0) {
+      if (currentIndex > 0) {
+        this._swapFile(this._openFiles[currentIndex - 1].fileObject.hash)
+        mdBasePath = this._openFiles[currentIndex - 1].fileObject.path
+      } else {
+        this._swapFile(this._openFiles[0].fileObject.hash)
+        mdBasePath = this._openFiles[0].fileObject.path
+      }
+      mdBasePath = path.dirname(mdBasePath) // We need the dir, not the file
+    } else {
+      // Replace with an empty new doc
+      this._cm.swapDoc(CodeMirror.Doc('', MD_MODE))
+      this._words = 0
+      this._currentHash = null
+
+      // Synchronise the file changes to the document tabs
+      this._tabs.syncFiles(this._openFiles, this._currentHash)
+    }
+
+    this._cm.setOption('markdownImageBasePath', mdBasePath) // Reset base path
+    return this
   }
 
   /**

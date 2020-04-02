@@ -146,6 +146,9 @@ class Zettlr {
           duration /= 1000 // Convert to seconds
           global.log.info(`Loaded all roots in ${duration} seconds`)
 
+          // Also, we need to (re)open all files in tabs
+          this._fsal.setOpenFiles(global.config.get('openFiles'))
+
           // Now after all paths have been loaded, we are ready to load the
           // main window to get this party started!
           this.openWindow()
@@ -446,6 +449,8 @@ class Zettlr {
       // change event and will set in motion all other necessary processes.
       this._fsal.openFile(file)
       global.recentDocs.add(this._fsal.getMetadataFor(file))
+      // Also, add to last opened files to persist during reboots
+      global.config.addFile(file.path)
       await this.sendFile(file.hash)
     } else {
       global.log.error('Could not find file', arg)
@@ -464,6 +469,7 @@ class Zettlr {
   closeFile (file) {
     // Same as with openFile
     this._fsal.closeFile(file)
+    global.config.removeFile(file.path)
   }
 
   /**

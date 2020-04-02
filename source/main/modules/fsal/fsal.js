@@ -161,6 +161,11 @@ module.exports = class FSAL extends EventEmitter {
     return true
   }
 
+  setOpenFiles (fileArray) {
+    // Such failchecks
+    this._state.openFiles = fileArray.map(f => this.findFile(f))
+  }
+
   /**
    * Returns a file's metadata including the contents.
    * @param {Object} file The file descriptor

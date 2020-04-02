@@ -302,7 +302,9 @@ class ConfigProvider extends EventEmitter {
        * @param  {String} p The path to remove
        * @return {Boolean}   Whether or not the call succeeded
        */
-      removePath: (p) => { return this.removePath(p) }
+      removePath: (p) => { return this.removePath(p) },
+      addFile: (f) => { return this.addFile(f) },
+      removeFile: (f) => { return this.removeFile(f) }
     }
   }
 
@@ -465,6 +467,33 @@ class ConfigProvider extends EventEmitter {
   removePath (p) {
     if (this.config['openPaths'].includes(p)) {
       this.config['openPaths'].splice(this.config['openPaths'].indexOf(p), 1)
+      return true
+    }
+    return false
+  }
+
+  /**
+   * Adds a file to the array of open files.
+   * @param {String} f The path of the file to add
+   */
+  addFile (f) {
+    // Only add valid and unique files
+    if ((!ignoreFile(f) || isDir(f)) && !this.config['openFiles'].includes(f)) {
+      this.config['openFiles'].push(f)
+      return true
+    }
+
+    return false
+  }
+
+  /**
+    * Removes a file from the open files
+    * @param  {String} p The file to be removed
+    * @return {Boolean} Whether or not the call succeeded.
+    */
+  removeFile (f) {
+    if (this.config['openFiles'].includes(f)) {
+      this.config['openFiles'].splice(this.config['openFiles'].indexOf(f), 1)
       return true
     }
     return false

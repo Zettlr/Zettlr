@@ -22,18 +22,29 @@
     position: relative;
     min-width: 100px;
     line-height: @tabbar-height;
+    overflow: hidden;
+    padding-right: @tabbar-height; // Push the filename back
 
     .filename {
-      min-width: 80px;
-      overflow: hidden;
+      white-space: nowrap;
+      overflow-x: hidden;
+      display: inline-block;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      right: @tabbar-height; // Don't overlay the close button
+      padding-left: 2px;
     }
 
     .close {
       position: absolute;
       right: 0px;
-      margin: 5px;
-      width: 10px;
-      line-height: @tabbar-height - 10px;
+      top: 0px;
+      width: @tabbar-height;
+      height: @tabbar-height;
+      line-height: @tabbar-height;
+      text-align: center;
+      border-radius: @tabbar-height;
       display: inline-block;
     }
   }
