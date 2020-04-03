@@ -23,7 +23,7 @@ jobs:
     - name: Test template compilation # Can we successfully compile the templates?
       run: npm run handlebars
     - name: Test stylesheet compilation # Does the LESS compile without errors?
-      run: gulp less
+      run: npm run less
     - name: Test webpack build
       # We're testing against the production build as this is what effectively matters during automated builds.
       run: npm run wp:prod

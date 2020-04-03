@@ -22,7 +22,7 @@
         "release:win": "node scripts/build-app.js --win",
         "release:linux": "node scripts/build-app.js --linux",
         "release:app-image": "node scripts/build-app.js --app-image",
-        "less": "node scripts/less.js",
+        "less": "gulp less",
         "less:extract": "node scripts/extract-css.js",
         "handlebars": "node scripts/handlebars.js",
         "lang:refresh": "node scripts/refresh-language.js",
@@ -30,6 +30,7 @@
         "reveal:build": "node scripts/update-reveal.js",
         "wp:dev": "cross-env NODE_ENV=development webpack",
         "wp:prod": "cross-env NODE_ENV=production webpack",
+        "watch": "gulp watch",
         "test": "mocha",
         "lint": "eslint \"./source/**/*.js\" -f html -o eslint_report.htm"
     },

@@ -12,6 +12,20 @@
         },
         "args" : ["."],
         "outputCapture": "std"
+      },
+      {
+        "name": "Debug Renderer Process",
+        "type": "chrome",
+        "request": "launch",
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+        "windows": {
+          "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+        },
+        "runtimeArgs": [
+          "${workspaceRoot}/source/main.js",
+          "--remote-debugging-port=9222"
+        ],
+        "webRoot": "${workspaceRoot}"
       }
     ]
   }
