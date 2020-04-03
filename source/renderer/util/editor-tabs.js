@@ -30,7 +30,10 @@ module.exports = class EditorTabs {
     this._div.innerHTML = '' // Reset
     files = files.map(elem => elem.fileObject) // Make it easier accessible
     for (let file of files) {
-      this._div.appendChild(this.makeElement(file.name, file.hash, file.hash === openFile))
+      // Use the frontmatter title var, if applicable
+      let name = file.name
+      if (file.frontmatter && file.frontmatter.title) name = file.frontmatter.title
+      this._div.appendChild(this.makeElement(name, file.hash, file.hash === openFile))
     }
   }
 

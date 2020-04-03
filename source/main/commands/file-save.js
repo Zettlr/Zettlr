@@ -13,7 +13,6 @@
  */
 
 const ZettlrCommand = require('./zettlr-command')
-const { trans } = require('../../common/lang/i18n')
 const generateFilename = require('../../common/util/generate-filename')
 
 class SaveFile extends ZettlrCommand {
@@ -34,8 +33,6 @@ class SaveFile extends ZettlrCommand {
       // No file given -> abort saving process
       return false
     }
-
-    console.log('Saving file')
 
     // Update word count
     this._app.stats.updateWordCount(file.wordcount || 0)

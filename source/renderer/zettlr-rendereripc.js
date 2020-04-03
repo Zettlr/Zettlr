@@ -448,8 +448,8 @@ class ZettlrRendererIPC {
         break
 
       case 'export':
-        if (this._app.getCurrentFile() != null) {
-          this._app.getBody().displayExport(this._app.getCurrentFile())
+        if (this._app.getActiveFile() != null) {
+          this._app.getBody().displayExport(this._app.getActiveFile())
         }
         break
 

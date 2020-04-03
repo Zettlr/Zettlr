@@ -336,8 +336,8 @@ class ZettlrRenderer {
     } else {
       this.setCurrentDir(null) // Reset
     }
-    if (this.getCurrentFile() != null) {
-      this.setCurrentFile(this.getCurrentFile().hash)
+    if (this.getActiveFile() != null) {
+      this.setCurrentFile(this.getActiveFile().hash)
     } else {
       this.setCurrentFile(null)
     }
@@ -354,12 +354,12 @@ class ZettlrRenderer {
     * @param  {ZettlrFile} file The new file object.
     */
   refreshCurrentFile (file) {
-    if (this.getCurrentFile()) {
+    if (this.getActiveFile()) {
       // The only things that could've changed and that are immediately
       // visible to the user (which is why we need to update them) are:
       // modtime, file meta, tags, id. The rest can wait until the next big
       // update.
-      let f = this.getCurrentFile()
+      let f = this.getActiveFile()
       f.modtime = file.modtime
       f.tags = file.tags
       f.wordCount = file.wordCount
@@ -546,7 +546,7 @@ class ZettlrRenderer {
     if (!this.isModified()) return // No need to save
 
     // The user wants to save the currently opened file.
-    let file = this.getCurrentFile()
+    let file = this.getActiveFile()
     if (file == null) {
       // User wants to save an untitled file
       // Important: The main Zettlr-class expects hash to be null
@@ -568,8 +568,8 @@ class ZettlrRenderer {
       // Another file should be renamed
       // Rename a file based on a hash -> find it
       this._body.requestNewFileName(this.findObject(f.hash))
-    } else if (this.getCurrentFile() != null) {
-      this._body.requestNewFileName(this.getCurrentFile())
+    } else if (this.getActiveFile() != null) {
+      this._body.requestNewFileName(this.getActiveFile())
     }
   }
 
@@ -620,10 +620,10 @@ class ZettlrRenderer {
   }
 
   /**
-   * Returns the current file's pointer.
+   * Get the active file from the editor
    * @return {ZettlrFile} The file object.
    */
-  getCurrentFile () { return this._currentFile }
+  getActiveFile () { return this._editor.getActiveFile() }
 
   /**
    * Returns the current directory's pointer.

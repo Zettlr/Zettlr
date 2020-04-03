@@ -318,7 +318,8 @@ class ZettlrBody {
   requestNewFileName (file) {
     if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
     let elem = ''
-    if (this._renderer.getCurrentFile() != null && this._renderer.getCurrentFile().hash === file.hash) {
+    if (this._renderer.getActiveFile() != null && this._renderer.getActiveFile().hash === file.hash) {
+      // TODO: Need to make this appropriate for all open files (open popup under their respective tabs)
       elem = $('.button.file-rename')
     } else {
       elem = $('#file-list').find('div[data-hash="' + file.hash + '"]').first()
@@ -618,7 +619,7 @@ class ZettlrBody {
     */
   displayFind () {
     if (this._currentPopup) this._currentPopup.close(true)
-    if (this._renderer.getCurrentFile() === null) return
+    if (this._renderer.getActiveFileFile() == null) return
     let regexRE = /^\/.+\/[gimy]{0,4}$/ // It's meta, dude!
 
     // Create the popup template. Make sure we pre-set the value, if given.
@@ -776,7 +777,7 @@ class ZettlrBody {
     */
   displayTOC () {
     if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
-    if (this._renderer.getCurrentFile() === null) return
+    if (this._renderer.getActiveFile() == null) return
 
     let toc = this._renderer.getEditor().buildTOC()
 

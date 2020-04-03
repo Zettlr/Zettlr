@@ -642,6 +642,14 @@ class ZettlrEditor {
   }
 
   /**
+   * Returns the file that is active (i.e. visible), but only the object, NOT the doc
+   */
+  getActiveFile () {
+    let activeFile = this._openFiles.find(elem => elem.fileObject.hash === this._currentHash)
+    return (activeFile) ? activeFile.fileObject : undefined
+  }
+
+  /**
     * Toggles the distraction free mode
     */
   toggleDistractionFree () {
