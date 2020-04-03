@@ -16,7 +16,7 @@ var rename = require('gulp-rename')
 
 function lessGeometry () {
   return gulp.src('resources/less/geometry/geometry-main.less')
-    .pipe(plumber())
+    .pipe(plumber()) // Improve error handling
     .pipe(sourcemaps.init())
     .pipe(concat('geometry.css')) // Rename file
     .pipe(less()) // Run less
@@ -26,7 +26,7 @@ function lessGeometry () {
 
 function lessThemes () {
   return gulp.src('resources/less/*/theme-main.less')
-    .pipe(plumber())
+    .pipe(plumber()) // Improve error handling
     .pipe(sourcemaps.init())
     .pipe(less()) // Run less
     .pipe(rename(function (path) { // Rename files
