@@ -76,9 +76,23 @@ class ZettlrEditor {
 
     // The starting position for a tag autocomplete.
     this._autoCompleteStart = null
-    this._tagDB = [] // Holds all available tags for autocomplete
-    this._citeprocIDs = [] // Holds all available IDs for autocomplete
+    this._tagDB = [] // Holds all available tags for autocompletion
+    this._citeprocIDs = [] // Holds all available IDs for autocompletion
+    this._latexCommands = [] // Holds all available LaTeX commands for autocompletion
     this._currentDatabase = null // Points either to the tagDB or the ID database
+
+    const fs = require('fs')
+    var latexCommandsFile = 'C:\\Users\\Tobi\\AppData\\Roaming\\Sublime Text 3\\Packages\\User\\cwl\\latex.cwl'
+    this._latexCommands = fs.readFileSync(latexCommandsFile, { encoding: 'utf8' })
+      .split(/\r?\n/)
+      .filter(text => text.startsWith('\\'))
+      .map(command => {
+        var commandText = command.substring(1)
+        return {
+          'text': commandText,
+          'displayText': command
+        }
+      })
 
     // What elements should be rendered?
     this._renderCitations = false
@@ -160,6 +174,7 @@ class ZettlrEditor {
             // preference settings.
             if (this._currentDatabase !== this._tagDB &&
               this._currentDatabase !== this._citeprocIDs &&
+              this._currentDatabase !== this._latexCommands &&
               completion.displayText) {
               // Get the correct setting
               let linkPref = global.config.get('zkn.linkWithFilename')
@@ -284,6 +299,11 @@ class ZettlrEditor {
         // citeproc-ID autocompletion
         this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
         this._currentDatabase = this._citeprocIDs
+        this._cm.showHint()
+      } else if (newText[0] === '\\') {
+        // LaTeX commands autocompletion
+        this._autoCompleteStart = JSON.parse(JSON.stringify(cm.getCursor()))
+        this._currentDatabase = this._latexCommands
         this._cm.showHint()
       } else if (textUntilCursor === linkStart && this._renderer.getCurrentDir() != null) {
         // File name autocompletion
@@ -714,7 +734,7 @@ class ZettlrEditor {
   }
 
   /**
-   * This sets the tag database necessary for the tag autocomplete.
+   * Sets the tag database necessary for the tag autocomplete.
    * @param {Object} tagDB An object (here with prototype due to JSON) containing tags
    */
   setTagDatabase (tagDB) { this._tagDB = tagDB }
@@ -732,6 +752,12 @@ class ZettlrEditor {
       this._citeprocIDs = idList
     }
   }
+
+  /**
+   * Sets the command database necessary for the LaTeX autocomplete.
+   * @param {Object} commandDB An object (here with prototype due to JSON) containing LaTeX commands
+   */
+  setLaTeXCommandsDatabase (commandDB) { this._latexCommands = commandDB }
 
   /**
     * Removes the mute-class from all lines

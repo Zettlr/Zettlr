@@ -128,7 +128,396 @@
         // Enable on-click closing of rendered Math elements.
         elem.onclick = (e) => { textMarker.clear() }
 
-        require('katex').render(myMarker.eq, elem, { throwOnError: false })
+        // TODO: Read from file
+        // const fs = require('fs')
+        // var customMacrosFile = 'D:\\Research\\A_Central\\Latex\\tex\\generic\\myMathHeader.json'
+        // let customMacros = new Map(JSON.parse(fs.readFileSync(customMacrosFile, { encoding: 'utf8' })))
+        require('katex').render(myMarker.eq, elem, {
+          throwOnError: false,
+          macros: {
+            // # Math commands
+            /*
+            \begin{thm}
+            \end{thm}
+            \begin{prop}
+            \end{prop}
+            \begin{lemma}
+            \end{lemma}
+            \begin{coro}
+            \end{coro}
+            \begin{defn}
+            \end{defn}
+            \begin{fact}
+            \end{fact}
+            \begin{remark}
+            \end{remark}
+            \begin{remarks}
+            \end{remarks}
+            \begin{example}
+            \end{example}
+            \begin{counterexample}
+            \end{counterexample}
+            \begin{proof}
+            \end{proof}
+
+            \begin{thmenumerate}
+            \end{thmenumerate}
+            */
+
+            '\\abs': '',
+            '\\norm': '',
+            '\\nnorm': '',
+            '\\normDot': '',
+            '\\equivClass': '',
+            '\\bracket': '',
+            '\\scalarProd': '',
+            '\\scalarProdDot': '',
+            '\\scalarProdR': '',
+            '\\poisson{left}{right}': '',
+            '\\poissonDot': '',
+            '\\commutator': '',
+            '\\commutatorDot': '',
+            '\\antiCommutator': '',
+            '\\LieBracket': '',
+            '\\LieBracketDot': '',
+            '\\dualPair{left}{right}': '',
+            '\\dualPairDot': '',
+            '\\dualPairR{left}{right}': '',
+            '\\dualPairRDot': '',
+            '\\LTwoDualPair{left}{right}': '',
+            '\\LTwoDualPairDot': '',
+            '\\LTwoNorm{}': '',
+            '\\wedgeLie': '',
+            '\\wedgeLieDot': '',
+            '\\wedgeDual': '',
+            '\\wedgeDualDot': '',
+            '\\wedgeldot': '',
+
+            '\\sslash': '',
+
+            '\\field': '',
+            '\\R': '',
+            '\\C': '',
+            '\\N': '',
+            '\\Z': '',
+            '\\Q': '',
+            '\\K': '',
+
+            '\\Hom': '',
+            '\\Aut': '',
+            '\\End': '',
+            '\\Tor': '',
+            '\\TorAb': '',
+            '\\Ext': '',
+            '\\ExtAb': '',
+
+            '\\sgn': '',
+            '\\pr': '',
+            '\\inc': '',
+            '\\tr': '',
+            '\\Sym': '',
+            '\\jet': '',
+            '\\divergence': '',
+            '\\ind': '',
+            '\\const': '',
+            '\\principalSymbol': '',
+
+            '\\ker': '',
+            '\\coker ': '',
+            '\\img ': '',
+            '\\coimg ': '',
+            '\\supp   ': '',
+            '\\vspan   ': '',
+            '\\id': '',
+            '\\one': '',
+            '\\ev': '',
+            '\\Ev': '',
+            '\\pb': '',
+            '\\pf': '',
+            '\\vol': '',
+
+            '\\inv': '',
+            '\\mult': '',
+            '\\comp': '',
+
+            '\\flux': '',
+
+            '\\fixPointSet': '',
+
+            '\\secondFundForm': '',
+
+            '\\fourierTransform': '',
+
+            '\\LieA': '',
+            '\\LieAEx': '',
+            '\\aCentralizer': '',
+            '\\aCenter': '',
+
+            '\\LeftTrans': '',
+            '\\RightTrans': '',
+            '\\centralizer': '',
+            '\\AdAction': '',
+            '\\CoAdAction': '',
+            '\\CoAdMAction': '',
+            '\\CoAdOrbit': '',
+            '\\adAction': '',
+            '\\CoadAction': '',
+            '\\CoadMAction': '',
+            '\\conjAction': '',
+
+            '\\contr': '',
+            '\\hatProduct': '',
+            '\\flow': '',
+            '\\tensorProd': '',
+            '\\externalTensor': '',
+
+            '\\SequenceSpace': '',
+
+            '\\TBundle': '',
+            '\\CotBundle': '',
+            '\\CotBundleProj': '',
+            '\\ExtBundle': '',
+            '\\SymBundle': '',
+            '\\DensityBundle': '',
+            '\\halfDensityBundle': '',
+            '\\VBundle': '',
+            '\\VDensityBundle': '',
+            '\\HBundle': '',
+            '\\NBundle': '',
+            '\\AdBundle': '',
+            '\\FrameBundle': '',
+            '\\SpinBundle': '',
+            '\\SpinorBundle': '',
+            '\\CoSpinorBundle': '',
+            '\\SpBundle': '',
+            '\\CoAdBundle': '',
+            '\\ConjBundle': '',
+            '\\AtBundle': '',
+            '\\JetBundle': '',
+            '\\JetSpace': '',
+            '\\pJetBundle': '',
+            '\\HomBundle': '',
+            '\\ConnBundle': '',
+            '\\UniEBundle': '',
+            '\\UniBBundle': '',
+            '\\KBundle': '',
+            '\\OrientationBundle': '',
+            '\\LinMapBundle': '',
+
+            '\\toInject': '',
+            '\\toSurject': '',
+
+            '\\LinMapSpace': '',
+            '\\GLinMapSpace': '',
+            '\\FlagSpace': '',
+            '\\LagSpace': '',
+            '\\FunctionSpace': '',
+            '\\sFunctionSpace': '',
+            '\\cFunctionSpace': '',
+            '\\ccFunctionSpace': '',
+            '\\scFunctionSpace': '',
+            '\\LFunctionSpace': '',
+            '\\LTwoFunctionSpace': '',
+            '\\HFunctionSpace': '',
+            '\\SectionSpace': '',
+            '\\sSectionSpace': '',
+            '\\scSectionSpace': '',
+            '\\cSectionSpace': '',
+            '\\psSectionSpace': '',
+            '\\FibreBundleModel': '',
+            '\\SectionSpaceAbb': '',
+            '\\SectionMapAbb': '',
+            '\\DiffOpSpace': '',
+            '\\PseudoDiffOpSpace': '',
+            '\\TestFunctionSpace': '',
+            '\\DistributionSpace': '',
+            '\\cDistributionSpace': '',
+            '\\CoNormalDistributionSpace': '',
+            '\\SchwartzSectionSpace': '',
+            '\\halfSchwartzSectionSpace': '',
+            '\\temperedDistributionSpace': '',
+            '\\locIntSectionSpace': '',
+            '\\BesovSectionSpace': '',
+            '\\locBesovSectionSpace': '',
+            '\\SymbolSpace': '',
+            '\\DiffFormSpace': '',
+            '\\clDiffFormSpace': '',
+            '\\clZDiffFormSpace': '',
+            '\\VectorFieldSpace': '',
+            '\\TensorFieldSpace': '',
+            '\\SymTensorFieldSpace': '',
+            '\\DensitySpace': '',
+            '\\cDensitySpace': '',
+            '\\MetricSpace': '',
+            '\\VolSpace': '',
+            '\\EmbeddingSpace': '',
+            '\\ImmersionSpace': '',
+            '\\DiffGroup': '',
+            '\\AutGroup': '',
+            '\\AutAlgebra': '',
+            '\\GauGroup': '',
+            '\\GauAlgebra': '',
+            '\\CoGauAlgebra': '',
+            '\\HamDiffGroup': '',
+            '\\HamVectorFields': '',
+            '\\ConnSpace': '',
+            '\\cenConnSpace': '',
+            '\\cenYMConnSpace': '',
+            '\\PathSpace': '',
+            '\\sPathSpace': '',
+            '\\psPathSpace': '',
+            '\\cPathSpace': '',
+            '\\LoopSpace': '',
+            '\\sLoopSpace': '',
+            '\\psLoopSpace': '',
+            '\\cLoopSpace': '',
+            '\\RepSpace': '',
+            '\\posSSymSpace': '',
+            '\\MatrixSpace': '',
+            '\\SiegelSpace': '',
+            '\\H': '',
+
+            '\\hor': '',
+            '\\Hol': '',
+
+            '\\UGroup': '',
+            '\\UAlgebra': '',
+            '\\SUGroup': '',
+            '\\SUAlgebra': '',
+            '\\PUGroup': '',
+            '\\OGroup': '',
+            '\\OAlgebra': '',
+            '\\SOGroup': '',
+            '\\SpinGroup': '',
+            '\\SpinRep': '',
+            '\\SLGroup': '',
+            '\\GLGroup': '',
+            '\\GLAlgebra': '',
+            '\\SLAlgebra': '',
+            '\\SpGroup': '',
+            '\\SpAlgebra': '',
+            '\\USpGroup': '',
+            '\\UTGroup': '',
+
+            '\\HolGroup': '',
+            '\\HolAlgebra': '',
+            '\\pJetGroup': '',
+            '\\pJetAlgebra': '',
+
+            '\\chernClass': '',
+            '\\stiefelWhitneyClass': '',
+            '\\pontryaginClass': '',
+            '\\JacTorus': '',
+
+            '\\fundamentalGroup': '',
+            '\\sChain': '',
+            '\\sCycles': '',
+            '\\sBoundaries': '',
+            '\\sHomology': '',
+            '\\sCochain': '',
+            '\\sCocycles': '',
+            '\\sCoboundaries': '',
+            '\\sCohomology': '',
+            '\\csCohomology': '',
+            '\\deRCohomology': '',
+            '\\cechCohomology': '',
+            '\\simplex': '',
+            '\\boundary': '',
+            '\\coboundary': '',
+
+            '\\per': '',
+
+            '\\intFibre': '',
+
+            '\\slashed': '',
+
+            '\\laplace': '',
+            '\\dAlambert': '',
+            '\\dif': '',
+            '\\Dif': '',
+            '\\difp': '',
+            '\\difpBar': '',
+            '\\diF': '',
+            '\\difDirac': '',
+            '\\difLog': '',
+            '\\difLie': '',
+
+            '\\difFrac': '',
+            '\\DifFrac': '',
+            '\\difpFrac': '',
+            '\\diFFrac': '',
+            '\\difFracAt': '',
+            '\\difpFracAt': '',
+
+            '\\defeq': '',
+
+            '\\set': '',
+            '\\setc': '',
+
+            '\\restr{function}{subset}': '',
+
+            '\\transversal': '',
+
+            '\\closureSet': '',
+            '\\interior': '',
+            '\\stratification': '',
+
+            '\\isomorph': '',
+            '\\T': '',
+
+            '\\tangent': '',
+            '\\cotangent': '',
+            '\\vtangent': '',
+            '\\tangentLeft': '',
+            '\\pJetProlongation': '',
+            '\\Hessian': '',
+
+            '\\hodgeStar': '',
+
+            '\\symplMatrix': '',
+
+            '\\lSemiProduct': '',
+            '\\rSemiProduct': '',
+
+            '\\intersect': '',
+            '\\bigIntersection': '',
+            '\\union': '',
+            '\\disjUnion': '',
+            '\\bigUnion': '',
+            '\\bigDisjUnion': '',
+            '\\normalSubgroupEq': '',
+
+            '\\normalizer': '',
+            '\\type': '',
+
+            '\\RP': '',
+            '\\CP': '',
+
+            '\\OpenBall': '',
+            '\\ClosedBall': '',
+
+            '\\I': '',
+            '\\imaginary': '',
+            '\\E': '',
+            '\\LeviCivita': '',
+            '\\Kronecker': '',
+
+            '\\curv': '',
+            '\\Ric': '',
+            '\\RicScalar': '',
+
+            '\\Matrix': '',
+            '\\smallMatrix': '',
+            '\\Vector': '',
+
+            '\\grad': '',
+
+            '\\singularPart': '',
+            '\\ext': '',
+
+            '\\ldot': ''
+          }
+        })
 
         // Now the marker has obviously changed
         textMarker.changed()
