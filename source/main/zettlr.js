@@ -395,7 +395,7 @@ class Zettlr {
       console.log('Error on finding last dir or file', e)
     }
     this.setCurrentDir(lastDir)
-    this.setCurrentFile(lastFile)
+    // this.setCurrentFile(lastFile)
     if (lastFile) global.recentDocs.add(this._fsal.getMetadataFor(lastFile))
   }
 

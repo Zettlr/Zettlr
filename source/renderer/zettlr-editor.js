@@ -79,7 +79,9 @@ class ZettlrEditor {
     this._tabs.setIntentCallback((hash, intent) => {
       hash = parseInt(hash, 10) // Make sure === works as intended
       if (intent === 'close') {
-        this.close(hash)
+        // Send the close request to main
+        global.ipc.send('file-close', { 'hash': hash })
+        // this.close(hash)
       } else if (intent === 'select') {
         this._swapFile(hash)
       }
@@ -589,6 +591,32 @@ class ZettlrEditor {
     // Last but not least: If there are any search results currently
     // display, mark the respective positions.
     this._searcher.markResults(file)
+
+    // The sidebar needs to be informed that the active file has changed!
+    global.store.set('selectedFile', this._currentHash)
+  }
+
+  /**
+   * Pulls the correct file descriptors from the renderer.
+   */
+  syncFiles () {
+    console.log('File synching initiated!')
+    let syncNecessary = false
+    for (let fileDescriptor of this._openFiles) {
+      // We do we copy over the attributes? Because this way the
+      // file descriptor of the editor remains the same. We keep
+      // the file tree apart from the file descriptors of the
+      // editor. TODO: This might be unnecessary, but not try to
+      // be too brave here for now.
+      let newerFile = this._renderer.findObject(fileDescriptor.fileObject.hash)
+      for (let prop of Object.keys(fileDescriptor.fileObject)) {
+        fileDescriptor.fileObject[prop] = newerFile[prop]
+        syncNecessary = true
+      }
+    }
+
+    // Finally, propagate the changes to the tabs.
+    if (syncNecessary) this._tabs.syncFiles(this._openFiles, this._currentHash)
   }
 
   /**

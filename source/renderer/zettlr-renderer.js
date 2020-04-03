@@ -336,17 +336,15 @@ class ZettlrRenderer {
     } else {
       this.setCurrentDir(null) // Reset
     }
-    if (this.getActiveFile() != null) {
-      this.setCurrentFile(this.getActiveFile().hash)
-    } else {
-      this.setCurrentFile(null)
-    }
 
     // Trigger a refresh in the attachment pane
     this._attachments.refresh()
 
     // Pass on the new paths object as is to the store.
     global.store.renewItems(nData)
+
+    // Finally, synchronize the file descriptors in the editor
+    this._editor.syncFiles()
   }
 
   /**
@@ -368,6 +366,9 @@ class ZettlrRenderer {
       f.id = file.id
       // Trigger a redraw of this specific file in the preview list.
       this._preview.refresh()
+
+      // Finally, synchronize the file descriptors in the editor
+      this._editor.syncFiles()
     }
   }
 
@@ -385,6 +386,9 @@ class ZettlrRenderer {
       // We'll be patching the store, as this will
       // be reflected in renderer._paths as well.
       global.store.patch(oldHash, file)
+
+      // Finally, synchronize the file descriptors in the editor
+      this._editor.syncFiles()
     }
   }
 
@@ -533,10 +537,11 @@ class ZettlrRenderer {
 
   /**
    * Closes the current file
+   * @param {number} hash The hash of the file to be closed.
    */
-  closeFile () {
+  closeFile (hash = null) {
     // We have received a close-file command.
-    this._editor.close()
+    this._editor.close(hash)
   }
 
   /**
@@ -608,15 +613,6 @@ class ZettlrRenderer {
     this._currentDir = this.findObject(newdir) // Find the dir (hash) in our own paths object
     global.store.selectDirectory(newdir)
     this._attachments.refresh()
-  }
-
-  /**
-   * Simply sets the current file pointer to the new.
-   * @param {Number} newHash The new file's hash.
-   */
-  setCurrentFile (newHash) {
-    this._currentFile = this.findObject(newHash)
-    global.store.set('selectedFile', newHash)
   }
 
   /**

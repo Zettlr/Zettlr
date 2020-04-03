@@ -363,16 +363,12 @@ class ZettlrRendererIPC {
 
         // FILES
 
-      case 'file-set-current':
-        this._app.setCurrentFile(cnt)
-        break
-
       case 'file-open':
         this._app.openFile(cnt)
         break
 
       case 'file-close':
-        this._app.closeFile()
+        this._app.closeFile(cnt.hash)
         break
 
       case 'file-save':
