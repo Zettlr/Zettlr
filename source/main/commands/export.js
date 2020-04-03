@@ -30,7 +30,7 @@ class Export extends ZettlrCommand {
     * @return {Boolean}     Whether or not the call succeeded.
     */
   async run (evt, arg) {
-    let file = await global.application.getFile(arg.hash)
+    let file = await global.application.getFile(global.application.findFile(arg.hash))
 
     // In case an alias has been selected, we need to sneakily switch the alias
     // with its target.

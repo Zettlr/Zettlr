@@ -159,11 +159,11 @@ class ZettlrIPC {
     * @param  {Object} cnt   Contains the message body.
     * @return {void}       Does not return anything.
     */
-  handleEvent (cmd, cnt) {
+  async handleEvent (cmd, cnt) {
     // We received a new event and need to handle it.
     try {
       global.log.verbose('Trying to run command through Application: ' + cmd)
-      let res = this._app.runCommand(cmd, cnt)
+      let res = await this._app.runCommand(cmd, cnt)
       return res // In case the command has run there's no need to handle it.
     } catch (e) {
       // Simple fall through

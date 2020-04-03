@@ -201,8 +201,11 @@ module.exports = class FSAL extends EventEmitter {
    * @param {Object} file The file descriptor
    */
   async getFileContents (file) {
+    console.log('Getting file contents ...')
     file = FSALFile.metadata(file)
+    console.log('Got file:', file)
     file.content = await FSALFile.load(file)
+    console.log('File done', file)
     return file
   }
 

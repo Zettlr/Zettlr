@@ -100,7 +100,7 @@ class Zettlr {
       findFile: (prop) => { return this._fsal.findFile(prop) },
       findDir: (prop) => { return this._fsal.findDir(prop) },
       // Same as findFile, only with content
-      getFile: (prop) => { return this._fsal.getFile(prop) }
+      getFile: (prop) => { return this._fsal.getFileContents(prop) }
     }
 
     // File System Abstraction Layer, pass the folder
@@ -253,7 +253,7 @@ class Zettlr {
     }
   }
 
-  runCommand (evt, arg) {
+  async runCommand (evt, arg) {
     // This function will be called from IPC with a command and an arg.
     // First find the command
     let cmd = this._commands.find(elem => elem.respondsTo(evt))

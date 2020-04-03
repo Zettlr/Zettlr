@@ -623,7 +623,13 @@ class ZettlrRenderer {
    * Get the active file from the editor
    * @return {ZettlrFile} The file object.
    */
-  getActiveFile () { return this._editor.getActiveFile() }
+  getActiveFile () {
+    let activeFile = this._editor.getActiveFile()
+    if (!activeFile) return undefined
+    // Don't return the editor's object (with all
+    // content etc) but our own's without content!
+    return this.findObject(activeFile.hash)
+  }
 
   /**
    * Returns the current directory's pointer.

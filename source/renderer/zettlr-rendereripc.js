@@ -278,7 +278,7 @@ class ZettlrRendererIPC {
 
       // Print the current file
       case 'print':
-        this.send('print')
+        this.send('print', { 'hash': this._app.getActiveFile().hash })
         break
 
       // The context menu triggers this action, so send it to the main process.
