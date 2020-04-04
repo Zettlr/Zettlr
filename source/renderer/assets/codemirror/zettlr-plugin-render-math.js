@@ -70,7 +70,8 @@
         newMarkers.push({
           'curFrom': { 'ch': 0, 'line': fromLine },
           'curTo': { 'ch': 2, 'line': i },
-          'eq': eq
+          'eq': eq,
+          'displayMode': true
         })
         eq = '' // Reset the equation
       } else {
@@ -82,7 +83,8 @@
             // An equation is stored in the first capturing group or
             // second, depending on whether there only was
             // one char, or multiple ones within the equation.
-            'eq': match[1] || match[2] || ''
+            'eq': match[1] || match[2] || '',
+            'displayMode': false
           })
         }
       }
@@ -128,7 +130,7 @@
         // Enable on-click closing of rendered Math elements.
         elem.onclick = (e) => { textMarker.clear() }
 
-        require('katex').render(myMarker.eq, elem, { throwOnError: false })
+        require('katex').render(myMarker.eq, elem, { throwOnError: false, displayMode: myMarker.displayMode })
 
         // Now the marker has obviously changed
         textMarker.changed()
