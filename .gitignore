@@ -14,7 +14,7 @@ yarn.log
 # Don't commit ESLint error reports
 eslint_report.htm
 
-# Created by https://www.gitignore.io/api/visualstudiocode
+# Taken from https://www.gitignore.io/api/visualstudiocode
 
 ### VisualStudioCode ###
 .vscode/*
