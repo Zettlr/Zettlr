@@ -95,6 +95,31 @@ async function persistSettings (dir) {
 }
 
 /**
+ * Parses a settings file for the given directory.
+ * @param {Object} dir The directory descriptor.
+ */
+async function parseSettings (dir) {
+  let configPath = path.join(dir.path, '.ztr-directory')
+  try {
+    let settings = await fs.readFile(configPath, { encoding: 'utf8' })
+    settings = JSON.parse(settings)
+    Object.assign(dir._settings, settings)
+    if (JSON.stringify(dir._settings) === JSON.stringify(SETTINGS_TEMPLATE)) {
+      // The settings are the default, so no need to write them to file
+      await fs.unlink(configPath)
+    }
+  } catch (e) {
+    // No (specific) settings
+    // As the file exists, but something was wrong, let's remove this remnant.
+    await fs.unlink(configPath)
+  }
+}
+
+async function parseProject (dir) {
+  //
+}
+
+/**
  * Reads in a file tree recursively, returning the directory descriptor object.
  * @param {String} currentPath The current path of the directory
  * @param {FSALCache} cache A cache object so that the files can cache themselves
@@ -133,22 +158,15 @@ async function readTree (currentPath, cache, parent) {
   for (let child of children) {
     if (isFile(path.join(dir.path, child)) && child === '.ztr-directory') {
       // We got a settings file, so let's try to read it in
-      let configPath = path.join(dir.path, '.ztr-directory')
-      try {
-        let settings = await fs.readFile(configPath, { encoding: 'utf8' })
-        settings = JSON.parse(settings)
-        Object.assign(dir._settings, settings)
-        if (JSON.stringify(dir._settings) === JSON.stringify(SETTINGS_TEMPLATE)) {
-          // The settings are the default, so no need to write them to file
-          await fs.unlink(configPath)
-        }
-      } catch (e) {
-        // No (specific) settings
-        // As the file exists, but something was wrong, let's remove this remnant.
-        await fs.unlink(configPath)
-      }
-      continue // Nothing further to do
-    } // END: Settings file
+      await parseSettings(dir)
+      continue // Done!
+    }
+
+    if (isFile(path.join(dir.path, child)) && child === '.ztr-project') {
+      // We got a settings file, so let's try to read it in
+      await parseProject(dir)
+      continue // Done!
+    }
 
     // Helper vars
     let absolutePath = path.join(dir.path, child)
