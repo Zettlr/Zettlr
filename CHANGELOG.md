@@ -100,6 +100,7 @@
 - Switch to Electron 8.
 - Fix Pandoc error logging.
 - Detach Popup event listeners on close.
+- Add configuration files for Visual Studio Code to simplify coding. Thanks to @tobiasdiez for implementing.
 
 # 1.5.0
 
