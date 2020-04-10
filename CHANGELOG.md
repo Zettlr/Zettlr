@@ -23,6 +23,7 @@
 - Improvements to image dragging and dropping from the attachment sidebar.
 - Switched the string variable replacer from vanilla JavaScript to moment.js, which simplified the function considerably.
 - Updated insecure dependencies.
+- `.git`-directories are now ignored.
 
 # 1.6.0
 
