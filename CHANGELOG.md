@@ -25,6 +25,7 @@
 - The `export` module is now really a module.
 - Switched to cTime internally as the representation for modification time, because it'll capture more changes than mTime.
 - Updated insecure dependencies.
+- `.git`-directories are now ignored.
 
 # 1.6.0
 
