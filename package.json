@@ -33,6 +33,9 @@
         "test": "mocha",
         "lint": "eslint \"./source/**/*.js\" -f html -o eslint_report.htm"
     },
+    "resolutions": {
+      "eslint/espree/acorn": "^7.1.1"
+    },
     "dependencies": {
         "@zettlr/citr": "^1.1.0",
         "adm-zip": "^0.4.14",
