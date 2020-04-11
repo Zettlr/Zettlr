@@ -26,6 +26,7 @@
 - Switched to cTime internally as the representation for modification time, because it'll capture more changes than mTime.
 - Updated insecure dependencies.
 - `.git`-directories are now ignored.
+- Applying the CSS line classes for Markdown headings should now be less computationally intensive.
 
 # 1.6.0
 
