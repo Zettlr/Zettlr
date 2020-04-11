@@ -4088,11 +4088,6 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lodash.clonedeep@^4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
-  integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
-
 lodash.defaults@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.defaults/-/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
@@ -6170,21 +6165,6 @@ strict-uri-encode@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
   integrity sha1-J5siXfHVgrH1TmWt3UNS4Y+qBxM=
-
-string-extract-class-names@^5.9.17:
-  version "5.9.17"
-  resolved "https://registry.yarnpkg.com/string-extract-class-names/-/string-extract-class-names-5.9.17.tgz#60de9ec7c18eaa51fd5385ab195df196d4082789"
-  integrity sha512-yksoqfbjvrbRpcUEpzNThJLSFCOgZbrQjbjt6pixRTSO9KnLswMa0xqf3fw86xFJVn5XzNUF7TmhjA+tJ2VdhQ==
-  dependencies:
-    string-left-right "^2.3.17"
-
-string-left-right@^2.3.17:
-  version "2.3.17"
-  resolved "https://registry.yarnpkg.com/string-left-right/-/string-left-right-2.3.17.tgz#03051316733d96a5d5ec1b4b80fd31746d9dad83"
-  integrity sha512-AUaObh//7q94iXjWQGcKC2qhnoGSS90McAc0f2Om0AVb+cH02eKVTMkmESigTl9ObROXV7a0EvaFfN8qocctXA==
-  dependencies:
-    lodash.clonedeep "^4.5.0"
-    lodash.isplainobject "^4.0.6"
 
 string-width@^1.0.1:
   version "1.0.2"
