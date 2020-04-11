@@ -33,6 +33,9 @@
         "test": "mocha",
         "lint": "eslint \"./source/**/*.js\" -f html -o eslint_report.htm"
     },
+    "resolutions": {
+        "eslint/espree/acorn": "^7.1.1"
+    },
     "dependencies": {
         "@zettlr/citr": "^1.1.0",
         "adm-zip": "^0.4.14",
@@ -45,9 +48,9 @@
         "codemirror": "^5.52.2",
         "command-exists": "^1.2.7",
         "got": "^10.7.0",
-        "joplin-turndown": "^4.0.25",
+        "joplin-turndown": "^4.0.27",
         "joplin-turndown-plugin-gfm": "^1.0.12",
-        "jquery": "^3.4.1",
+        "jquery": "^3.5.0",
         "katex": "^0.11.1",
         "md5": "^2.2.1",
         "mermaid": "^8.4.8",
@@ -56,7 +59,7 @@
         "on-change": "^2.0.1",
         "rimraf": "^3.0.2",
         "sanitize-filename": "^1.6.3",
-        "semver": "^7.1.3",
+        "semver": "^7.2.2",
         "showdown": "^1.9.1",
         "tippy.js": "^6.1.1",
         "uuid": "^7.0.3",
@@ -68,9 +71,9 @@
     "devDependencies": {
         "chalk": "^4.0.0",
         "cross-env": "^7.0.2",
-        "css-loader": "^3.4.2",
+        "css-loader": "^3.5.2",
         "csso": "^4.0.3",
-        "electron": "^8.2.0",
+        "electron": "^8.2.1",
         "electron-builder": "^22.4.1",
         "electron-notarize": "^0.3.0",
         "eslint": "^6.8.0",
@@ -84,7 +87,7 @@
         "mini-css-extract-plugin": "^0.9.0",
         "mocha": "^7.1.1",
         "reveal.js": "^3.9.2",
-        "string-extract-class-names": "^5.9.17",
+        "string-extract-class-names": "^5.9.16",
         "uglify-js": "^3.8.1",
         "vue-loader": "^15.9.1",
         "vue-template-compiler": "^2.6.11",
