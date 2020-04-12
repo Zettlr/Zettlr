@@ -25,10 +25,16 @@ class DirNewProject extends ZettlrCommand {
     * @param  {Object} arg The hash of a directory.
     */
   run (evt, arg) {
-    let dir = this._app.findDir(arg)
+    let dir = this._app.findDir(arg.hash)
     if (dir) {
-      dir.makeProject()
-      this._app.ipc.send('paths-update', this._app.getPathDummies())
+      this._app.getFileSystem().runAction('create-project', {
+        'source': dir,
+        // Preset the project settings with some preliminary info
+        'info': {
+          'title': dir.name
+        }
+      })
+      global.application.dirUpdate(dir.hash, dir.hash)
     }
   }
 }

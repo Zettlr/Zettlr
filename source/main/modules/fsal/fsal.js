@@ -64,6 +64,17 @@ module.exports = class FSAL extends EventEmitter {
           if (newFile.hasOwnProperty(prop)) src[prop] = newFile[prop]
         }
         return true
+      },
+      // Creates a project in a dir
+      'create-project': async (src, target, options) => {
+        await FSALDir.makeProject(src, options)
+      },
+      'update-project': async (src, target, options) => {
+        // Updates the project properties on a directory.
+        await FSALDir.updateProjectProperties(src, options)
+      },
+      'remove-project': async (src, target, options) => {
+        await FSALDir.removeProject(src)
       }
     }
   }
@@ -201,9 +212,9 @@ module.exports = class FSAL extends EventEmitter {
    * @param {Object} file The file descriptor
    */
   async getFileContents (file) {
-    file = FSALFile.metadata(file)
-    file.content = await FSALFile.load(file)
-    return file
+    let returnFile = FSALFile.metadata(file)
+    returnFile.content = await FSALFile.load(file)
+    return returnFile
   }
 
   /**

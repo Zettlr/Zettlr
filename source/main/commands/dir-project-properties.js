@@ -25,10 +25,13 @@ class DirProjectProperties extends ZettlrCommand {
     * @param  {Object} arg The hash of a directory.
     */
   run (evt, arg) {
-    let dir = this._app.findDir(arg)
+    let dir = this._app.findDir(arg.hash)
     if (dir) {
-      arg.properties = dir.getProject().getProperties()
-      this._app.ipc.send('project-properties', arg) // Now cnt not only contains hash, but also the properties
+      arg.properties = dir._settings.project
+      // Send the properties back to the renderer
+      global.ipc.send('project-properties', arg)
+    } else {
+      global.log.warning(`Cannot open project properties for hash ${arg.hash}: No directory found.`)
     }
   }
 }
