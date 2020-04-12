@@ -24,6 +24,7 @@ const bcp47 = require('bcp-47')
 const ZettlrValidation = require('../../common/zettlr-validation')
 const { app } = require('electron')
 const ignoreFile = require('../../common/util/ignore-file')
+const safeAssign = require('../../common/util/safe-assign')
 const isDir = require('../../common/util/is-dir')
 const isDictAvailable = require('../../common/util/is-dict-available')
 const { getLanguageFile } = require('../../common/lang/i18n')
@@ -53,6 +54,7 @@ class ConfigProvider extends EventEmitter {
 
     this.config = null
     this._rules = [] // This array holds all validation rules
+    this._firstStart = false // Only true if a config file has been created
 
     this._bulkSetInProgress = false // As long as this is true, a bulk set happens
 
@@ -262,30 +264,20 @@ class ConfigProvider extends EventEmitter {
 
     // Put a global setter and getter for config keys into the globals.
     global.config = {
-      get: (key) => {
-        // Clone the properties to prevent intrusion
-        return JSON.parse(JSON.stringify(this.get(key)))
-      },
+      // Clone the properties to prevent intrusion
+      get: (key) => { return JSON.parse(JSON.stringify(this.get(key))) },
       // The setter is a simply pass-through
-      set: (key, val) => {
-        return this.set(key, val)
-      },
+      set: (key, val) => { return this.set(key, val) },
       /**
        * Set multiple config keys at once.
        * @param  {Object} obj An object containing key/value-pairs to set.
        * @return {Boolean}     Whether or not the call succeeded.
        */
-      bulkSet: (obj) => {
-        return this.bulkSet(obj)
-      },
+      bulkSet: (obj) => { return this.bulkSet(obj) },
       // Enable global event listening to updates of the config
-      on: (evt, callback) => {
-        this.on(evt, callback)
-      },
+      on: (evt, callback) => { this.on(evt, callback) },
       // Also do the same for the removal of listeners
-      off: (evt, callback) => {
-        this.off(evt, callback)
-      },
+      off: (evt, callback) => { this.off(evt, callback) },
       /**
        * Persists the current configuration to disk
        * @return {void} Does not return
@@ -353,6 +345,7 @@ class ConfigProvider extends EventEmitter {
       readConfig = JSON.parse(fs.readFileSync(this.configFile, { encoding: 'utf8' }))
     } catch (e) {
       fs.writeFileSync(this.configFile, JSON.stringify(this.cfgtpl), { encoding: 'utf8' })
+      this._firstStart = true // Assume first start
       return this // No need to iterate over objects anymore
     }
 
@@ -488,7 +481,7 @@ class ConfigProvider extends EventEmitter {
 
   /**
     * Removes a file from the open files
-    * @param  {String} p The file to be removed
+    * @param  {String} f The file to be removed
     * @return {Boolean} Whether or not the call succeeded.
     */
   removeFile (f) {
@@ -633,25 +626,13 @@ class ConfigProvider extends EventEmitter {
   /**
     * Update the complete configuration object with new values
     * @param  {Object} newcfg               The new object containing new props
-    * @param  {Object} [oldcfg=this.config] Necessary for recursion
     * @return {void}                      Does not return anything.
     */
-  update (newcfg, oldcfg = this.config) {
-    // Overwrite all given attributes (and leave the not given in place)
-    // This will ensure sane defaults.
-    for (var prop in oldcfg) {
-      if (newcfg.hasOwnProperty(prop)) {
-        // We have some variable-length arrays that only contain
-        // strings, e.g. we cannot update them using update()
-        if ((typeof oldcfg[prop] === 'object') && !Array.isArray(oldcfg[prop]) && oldcfg[prop] !== null) {
-          // Update sub-object
-          this.update(newcfg[prop], oldcfg[prop])
-        } else {
-          oldcfg[prop] = newcfg[prop]
-        }
-      }
-    }
-
+  update (newcfg) {
+    // Use safeAssign to make sure only properties from the config
+    // are retained, and no rogue values (which can also simply be
+    // old deprecated values).
+    this.config = safeAssign(newcfg, this.config)
     this.emit('update') // Emit an event to all listeners
   }
 
