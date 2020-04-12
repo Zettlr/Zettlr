@@ -27,6 +27,7 @@
 - Updated insecure dependencies.
 - `.git`-directories are now ignored.
 - Applying the CSS line classes for Markdown headings should now be less computationally intensive.
+- Switched to Gulp for LESS compilation (thanks to @tobiasdiez for implementing).
 
 # 1.6.0
 
