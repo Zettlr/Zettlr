@@ -25,11 +25,8 @@ class DirSort extends ZettlrCommand {
     * @param  {Object} arg An object containing both a hash and a sorting type
     */
   async run (evt, arg) {
-    if (!arg.hasOwnProperty('hash') || !arg.hasOwnProperty('type')) {
-      return false
-    }
-
-    let dir = global.application.findDir(arg.hash)
+    let dir = this._app.findDir(arg.hash)
+    if (!dir) return false
     await this._app.getFileSystem().runAction('sort', {
       'source': dir,
       'info': arg.type

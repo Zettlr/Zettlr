@@ -75,6 +75,16 @@ module.exports = class FSAL extends EventEmitter {
       },
       'remove-project': async (src, target, options) => {
         await FSALDir.removeProject(src)
+      },
+      'create-directory': async (src, target, options) => {
+        await FSALDir.createDir(src, options)
+      },
+      'rename-directory': async (src, target, options) => {
+        // This thing needs the cache
+        await FSALDir.renameDir(src, options, this._cache)
+      },
+      'remove-directory': async (src, target, options) => {
+        await FSALDir.removeDir(src)
       }
     }
   }
@@ -355,6 +365,12 @@ module.exports = class FSAL extends EventEmitter {
 
     count.attachments += dir.attachments.length
   }
+
+  setOpenDirectory (dirObject) {
+    this._state.openDirectory = dirObject
+  }
+
+  getOpenDirectory () { return this._state.openDirectory }
 
   /**
    * Runs an action on the file tree

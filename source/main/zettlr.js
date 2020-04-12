@@ -49,7 +49,7 @@ class Zettlr {
     this.isBooting = true // Only is true until the main process has fully loaded
     // INTERNAL VARIABLES
     this.currentFile = null // Currently opened file (object)
-    this.currentDir = null // Current working directory (object)
+    // this.currentDir = null // Current working directory (object)
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = [] // Holds all currently opened paths.
     this._providers = {} // Holds all app providers (as properties of this object)
@@ -115,6 +115,10 @@ class Zettlr {
         // The root filetree has changed (added or removed root)
         case 'filetree':
           if (!this.isBooting) global.application.notifyChange('Roots have changed!')
+          break
+        case 'openDirectory':
+          this.ipc.send('dir-set-current', this.getCurrentDir().hash || null)
+          global.config.set('lastDir', this.getCurrentDir().hash || null)
           break
       }
     })
@@ -319,6 +323,7 @@ class Zettlr {
     global.ipc.notify(trans('system.open_root_directory', path.basename(ret)))
     await this.handleAddRoots([ret])
     global.ipc.notify(trans('system.open_root_directory_success', path.basename(ret)))
+    global.ipc.send('paths-update', this._fsal.getTreeMeta())
   }
 
   /**
@@ -428,9 +433,7 @@ class Zettlr {
     */
   setCurrentDir (d) {
     // Set the dir
-    this.currentDir = d
-    this.ipc.send('dir-set-current', (d) ? d.hash : null)
-    global.config.set('lastDir', (d) ? d.hash : null)
+    this._fsal.setOpenDirectory(d)
   }
 
   /**
@@ -564,7 +567,7 @@ class Zettlr {
     * Get the current directory.
     * @return {ZettlrDir} Current directory.
     */
-  getCurrentDir () { return this.currentDir }
+  getCurrentDir () { return this._fsal.getOpenDirectory() }
 
   /**
     * Return the current file.

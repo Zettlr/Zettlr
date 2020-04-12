@@ -23,6 +23,8 @@ const ignoreFile = require('../../../common/util/ignore-file')
 const safeAssign = require('../../../common/util/safe-assign')
 const isAttachment = require('../../../common/util/is-attachment')
 
+const { shell } = require('electron')
+
 const FSALFile = require('./fsal-file')
 const FSALAttachment = require('./fsal-attachment')
 
@@ -247,7 +249,6 @@ module.exports = {
     // Persist the settings to disk
     await persistSettings(dirObject)
     sortChildren(dirObject)
-    return dirObject
   },
   /**
    * Assigns new project properties to a directory.
@@ -268,5 +269,50 @@ module.exports = {
   'removeProject': async function (dirObject) {
     dirObject._settings.project = null
     await persistSettings(dirObject)
+  },
+  'createDir': async function (dirObject, options) {
+    if (!options.name || options.name.trim() === '') throw new Error('Invalid directory name provided!')
+    let existingDir = dirObject.children.find(elem => elem.name === options.name)
+    if (existingDir) throw new Error(`Directory ${options.name} already exists!`)
+    let newPath = path.join(dirObject.path, options.name)
+    await fs.mkdir(newPath)
+    // Add the new directory to the source dir
+    dirObject.children.push({
+      'parent': dirObject,
+      'path': newPath,
+      'name': path.basename(newPath),
+      'hash': hash(newPath),
+      'children': [],
+      'attachments': [],
+      'type': 'directory',
+      'modtime': 0, // You know when something has gone wrong: 01.01.1970
+      '_settings': JSON.parse(JSON.stringify(SETTINGS_TEMPLATE))
+    })
+    sortChildren(dirObject)
+  },
+  'renameDir': async function (dirObject, info, cache) {
+    // Check some things beforehand
+    if (!info.name || info.name.trim() === '') throw new Error('Invalid directory name provided!')
+    let existingDir = dirObject.parent.children.find(elem => elem.name === info.name)
+    if (existingDir) throw new Error(`Directory ${info.name} already exists!`)
+
+    let newPath = path.join(dirObject.parent.path, info.name)
+    await fs.rename(dirObject.path, newPath)
+    // Rescan the new dir to get all new file information
+    let newDir = await readTree(newPath, cache, dirObject.parent)
+    // Exchange the directory in the parent
+    let index = dirObject.parent.children.indexOf(dirObject)
+    dirObject.parent.children.splice(index, 1, newDir)
+    // Now sort the parent
+    sortChildren(dirObject.parent)
+  },
+  'removeDir': async function (dirObject) {
+    // First, get the parent, if there is any
+    let parentDir = dirObject.parent
+    // Now, remove the directory
+    if (shell.moveItemToTrash(dirObject.path) && parentDir) {
+      // Splice it from the parent directory
+      parentDir.children.splice(parentDir.children.indexOf(dirObject), 1)
+    }
   }
 }
