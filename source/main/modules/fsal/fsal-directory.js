@@ -314,5 +314,31 @@ module.exports = {
       // Splice it from the parent directory
       parentDir.children.splice(parentDir.children.indexOf(dirObject), 1)
     }
+  },
+  'move': async function (sourceObject, targetDir, cache) {
+    // Moves anything into the target. We'll use fs.rename for that.
+    // Luckily, it doesn't care if it's a directory or a file, so just
+    // stuff the path into that.
+    let sourcePath = sourceObject.path
+    let targetPath = path.join(targetDir.path, sourceObject.name)
+    await fs.rename(sourcePath, targetPath)
+
+    // Now remove the source from its parent (which in any case is a directory)
+    let oldChildren = sourceObject.parent.children
+    oldChildren.splice(oldChildren.indexOf(sourceObject), 1)
+
+    // Re-read the source
+    let newSource
+    if (sourceObject.type === 'directory') {
+      newSource = await readTree(targetPath, cache, targetDir)
+    } else {
+      newSource = await FSALFile.parse(targetPath, cache, targetDir)
+    }
+
+    // Add it to the new target
+    targetDir.children.push(newSource)
+
+    // Finally resort the target. Now the state should be good to go.
+    sortChildren(targetDir)
   }
 }

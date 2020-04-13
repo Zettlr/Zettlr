@@ -206,7 +206,6 @@ class ZettlrIPC {
         // The child process requested the current paths and files
         this._app.sendPaths()
         // Also set the current file and dir correctly immediately
-        this.send('file-set-current', (this._app.getCurrentFile()) ? this._app.getCurrentFile().hash : null)
         this.send('dir-set-current', (this._app.getCurrentDir()) ? this._app.getCurrentDir().hash : null)
         // TODO: Send a list of all open files!
         this._app.sendOpenFiles()
@@ -215,6 +214,14 @@ class ZettlrIPC {
       case 'file-get':
         // The client requested a different file.
         this._app.openFile(cnt)
+        break
+
+      case 'file-request-sync':
+        // The editor has received a synchronisation command and now needs to
+        // pull some additional files from the main process in order to have
+        // their contents available.
+        this._app.getFileSystem().getFileContents(this._app.getFileSystem().findFile(cnt.hash))
+          .then(file => { this.send('file-request-sync', file) })
         break
 
       case 'dir-select':

@@ -529,7 +529,6 @@ class ZettlrRenderer {
       f = f.file
     }
     // We have received a new file. So close the old and open the new
-    // this._editor.close()
     // Select the file either in the preview list or in the directory tree
     global.store.set('selectedFile', f.hash)
     this._editor.open(f, flag)
@@ -587,6 +586,10 @@ class ZettlrRenderer {
     if ((d != null) && d.hasOwnProperty('hash')) {
       // User has probably right clicked
       this._body.requestFileName(this.findObject(d.hash))
+    } else if (d === 'new-file-button') {
+      // The user has requested a new file from the new file button
+      // on the tab bar - so let's display it there
+      this._body.requestFileName(this.getCurrentDir(), 'new-file-button')
     } else {
       this._body.requestFileName(this.getCurrentDir())
     }

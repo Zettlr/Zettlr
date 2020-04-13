@@ -156,7 +156,7 @@ class ZettlrBody {
     * @param  {ZettlrDir} dir A directory object
     * @return {void}     Nothing to return.
     */
-  requestFileName (dir) {
+  requestFileName (dir, newFileButton = false) {
     // No directory selected.
     if (!dir) return
 
@@ -178,7 +178,10 @@ class ZettlrBody {
       'placeholder': trans('dialog.file_new.placeholder')
     })
 
-    this._currentPopup = popup($('.button.file-new'), cnt, (form) => {
+    // If the newFileButton has been clicked, center the popup there, not someplace else
+    let targetElement = (newFileButton) ? $('#document-tabs .add-new-file') : $('.button.file-new')
+
+    this._currentPopup = popup(targetElement, cnt, (form) => {
       if (form) {
         global.ipc.send('file-new', { 'name': form[0].value, 'hash': dir.hash })
       }

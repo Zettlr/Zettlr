@@ -65,6 +65,12 @@ module.exports = class FSAL extends EventEmitter {
         }
         return true
       },
+      'remove-file': async (src, target, options) => {
+        // First remove the file
+        await FSALFile.remove(src)
+        // Will trigger a change that syncs the files
+        this.closeFile(src)
+      },
       // Creates a project in a dir
       'create-project': async (src, target, options) => {
         await FSALDir.makeProject(src, options)
@@ -85,6 +91,64 @@ module.exports = class FSAL extends EventEmitter {
       },
       'remove-directory': async (src, target, options) => {
         await FSALDir.removeDir(src)
+      },
+      'move': async (src, target, options) => {
+        let openFilesUpdateNeeded = false
+        let openDirUpdateNeeded = false
+        let newOpenDirHash
+        let newFileHashes = []
+        if (src.type === 'directory') {
+          // A directory is being moved, so check the open files if something
+          // needs to change concerning them.
+          for (let file of this._state.openFiles) {
+            let found = this.findFile(file.hash, src)
+            if (found) {
+              // The file is in there, so we need to update the open files
+              openFilesUpdateNeeded = true
+              // Exchange the old directory path for the new one and compute
+              // its new hash
+              let newHash = hash(file.path.replace(src.parent.path, target.path))
+              newFileHashes.push(newHash)
+            } else {
+              // Nothing really to do
+              newFileHashes.push(file.hash)
+            }
+          }
+        } else if (src.type === 'file') {
+          if (this._state.openFiles.includes(src)) {
+            // The source is an open file, we need to account for that.
+            openFilesUpdateNeeded = true
+            let newHash = hash(src.path.replace(src.parent.path, target.path))
+            newFileHashes.push(newHash)
+            newFileHashes = this._state.openFiles.map(e => e.hash)
+            newFileHashes.splice(newFileHashes.indexOf(src.hash), 1, newHash)
+          }
+        }
+
+        if (
+          src.type === 'directory' &&
+          (src === this._state.openDirectory ||
+          this.findDir(this._state.openDirectory.hash, src))
+        ) {
+          // Compute the new hash and indicate an update is necessary
+          openDirUpdateNeeded = true
+          newOpenDirHash = hash(this._state.openDirectory.path.replace(src.parent.path, target.path))
+        }
+
+        // Now perform the actual move. What the action will do is re-read the
+        // new source again, and insert it into the target, so the filetree is
+        // good to go afterwards.
+        await FSALDir.move(src, target, this._cache)
+
+        // Emit an event notifying the app that the file tree has changed. This
+        // will cause a full new tree to be sent to the renderer. This way we
+        // can be sure it'll be accurate.
+        this.emit('fsal-state-changed', 'filetree')
+
+        // Afterwards, let's see if we have to change something. These
+        // functions will notify the application respectively.
+        if (openFilesUpdateNeeded) this.setOpenFiles(newFileHashes)
+        if (openDirUpdateNeeded) this.setOpenDirectory(this.findDir(newOpenDirHash))
       }
     }
   }
@@ -182,9 +246,17 @@ module.exports = class FSAL extends EventEmitter {
     return true
   }
 
+  /**
+   * Called by the main object once to set the open files for the editor to pull.
+   * @param {Array} fileArray An array with hashes to open
+   */
   setOpenFiles (fileArray) {
-    // Such failchecks
-    this._state.openFiles = fileArray.map(f => this.findFile(f))
+    let files = fileArray.map(f => this.findFile(f))
+    files = files.filter(elem => elem != null)
+    this._state.openFiles = files
+
+    // Make sure the config is consistent and we remove non-existent files
+    global.config.set('openFiles', this._state.openFiles.map(e => e.hash))
   }
 
   /**
@@ -204,6 +276,9 @@ module.exports = class FSAL extends EventEmitter {
   closeFile (file) {
     if (this._state.openFiles.includes(file)) {
       this._state.openFiles.splice(this._state.openFiles.indexOf(file), 1)
+      // Splicing does not trigger a change,
+      // so we need to manually trigger that.
+      this.emit('fsal-state-changed', 'openFiles')
       return true
     } else {
       return false
@@ -232,15 +307,8 @@ module.exports = class FSAL extends EventEmitter {
    */
   getTreeMeta () {
     let ret = []
-    // for (let root of this._roots) {
     for (let root of this._state.filetree) {
-      if (root.type === 'directory') {
-        ret.push(FSALDir.metadata(root))
-      } else if (root.type === 'file') {
-        ret.push(FSALFile.metadata(root))
-      } else {
-        // Dead directory or so
-      }
+      ret.push(this.getMetadataFor(root))
     }
 
     return ret
@@ -262,14 +330,14 @@ module.exports = class FSAL extends EventEmitter {
    * @param {Mixed} val Either an absolute path or a hash
    * @return {Mixed} Either null or the wanted directory
    */
-  findDir (val) {
+  findDir (val, baseTree = this._state.filetree) {
     // We'll only search for hashes, so if the user searches for a path,
     // convert it to the hash prior to searching the tree.
     if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
     if (typeof val !== 'number') val = parseInt(val, 10)
 
     // let found = findObject(this._roots, 'hash', val, 'children')
-    let found = findObject(this._state.filetree, 'hash', val, 'children')
+    let found = findObject(baseTree, 'hash', val, 'children')
     if (!found || found.type !== 'directory') return null
     return found
   }
@@ -279,14 +347,14 @@ module.exports = class FSAL extends EventEmitter {
    * @param {Mixed} val Either an absolute path or a hash
    * @return {Mixed} Either null or the wanted file
    */
-  findFile (val) {
+  findFile (val, baseTree = this._state.filetree) {
     // We'll only search for hashes, so if the user searches for a path,
     // convert it to the hash prior to searching the tree.
     if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
     if (typeof val !== 'number') val = parseInt(val, 10)
 
     // let found = findObject(this._roots, 'hash', val, 'children')
-    let found = findObject(this._state.filetree, 'hash', val, 'children')
+    let found = findObject(baseTree, 'hash', val, 'children')
     if (!found || found.type !== 'file') return null
     return found
   }
@@ -364,6 +432,23 @@ module.exports = class FSAL extends EventEmitter {
     }
 
     count.attachments += dir.attachments.length
+  }
+
+  /**
+   * Returns true, if the haystack contains a descriptor with the same name as needle.
+   * @param {Object} haystack A file/dir descriptor
+   * @param {Object} needle A file or directory descriptor
+   */
+  hasChild (haystack, needle) {
+    // Hello, PHP
+    if (haystack.type === 'file') return false
+
+    // If a name checks out, return true
+    for (let child of haystack.children) {
+      if (child.name === needle.name) return true
+    }
+
+    return false
   }
 
   setOpenDirectory (dirObject) {

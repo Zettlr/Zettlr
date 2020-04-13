@@ -18,7 +18,6 @@ const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const Turndown = require('joplin-turndown')
 const turndownGfm = require('joplin-turndown-plugin-gfm')
-// const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
 const { clipboard } = require('electron')
 const hash = require('../common/util/hash')
 const countWords = require('../common/util/count-words')
@@ -84,6 +83,9 @@ class ZettlrEditor {
         // this.close(hash)
       } else if (intent === 'select') {
         this._swapFile(hash)
+      } else if (intent === 'new-file') {
+        // Tell the renderer someone wants a new file
+        this._renderer.newFile('new-file-button')
       }
     })
 
@@ -544,16 +546,24 @@ class ZettlrEditor {
       // the currently active doc.
       // Switch modes based on the file type
       let mode = MD_MODE
-      if (file.ext === '.tex') {
-        mode = TEX_MODE
-        // Potentially helpful: $('.CodeMirror').addClass('cm-stex-mode')
-      }
+      // Potentially helpful: $('.CodeMirror').addClass('cm-stex-mode')
+      if (file.ext === '.tex') mode = TEX_MODE
+
+      // Bind the "correct" filetree object to the doc, because
+      // we won't be accessing the content property at all, hence
+      // it's easier to have the file object bound here that all
+      // of the renderer is working with.
+      let fileTreeObject = this._renderer.findObject(file.hash)
       this._openFiles.push({
-        'fileObject': file,
+        'fileObject': fileTreeObject,
         'cmDoc': CodeMirror.Doc(file.content, mode)
       })
     }
 
+    // I know that I will make this mistake in the future, so here's why we
+    // don't swap the file.content property during this: Because there's a
+    // different function to do so. Use it! Don't monkey path _swapFiles. NO
+    // content replacement here!
     this._swapFile(file.hash)
 
     // If we've got a new file, we need to re-focus the editor
@@ -570,6 +580,7 @@ class ZettlrEditor {
    * @param {Number} hash The hash of the file to be swapped
    */
   _swapFile (hash) {
+    console.log('_swapFile called')
     if (this.isReadabilityModeActive()) this.exitReadability()
     // Exchanges the CodeMirror document object
     let file = this._openFiles.find(elem => elem.fileObject.hash === hash)
@@ -597,56 +608,100 @@ class ZettlrEditor {
   }
 
   /**
-   * Pulls the correct file descriptors from the renderer.
+   * Synchronises a list of hashes with the open documents in the editor.
+   * @param {Array} newHashes A potential new list of hashes to open/sync.
    */
-  syncFiles () {
-    console.log('File synching initiated!')
-    let syncNecessary = false
+  syncFiles (newHashes = this._openFiles.map(elem => elem.fileObject.hash)) {
+    let oldHashes = this._openFiles.map(elem => elem.fileObject.hash)
+    console.log('File syncing initiated!', newHashes, oldHashes)
+    let lastHashIndex = oldHashes.indexOf(this._currentHash)
+    if (lastHashIndex > newHashes.length) lastHashIndex = newHashes.length - 1
+
+    // First, close all files no longer present.
     for (let fileDescriptor of this._openFiles) {
-      // We do we copy over the attributes? Because this way the
-      // file descriptor of the editor remains the same. We keep
-      // the file tree apart from the file descriptors of the
-      // editor. TODO: This might be unnecessary, but not try to
-      // be too brave here for now.
-      let newerFile = this._renderer.findObject(fileDescriptor.fileObject.hash)
-      for (let prop of Object.keys(fileDescriptor.fileObject)) {
-        fileDescriptor.fileObject[prop] = newerFile[prop]
-        syncNecessary = true
+      if (!newHashes.includes(fileDescriptor.fileObject.hash)) {
+        console.log(`Closing file ${fileDescriptor.fileObject.name}`)
+        this.close(fileDescriptor.fileObject.hash)
       }
     }
 
+    // Then, determine all files we have yet to open anew.
+    let toOpen = newHashes.filter(fileHash => !oldHashes.includes(fileHash))
+    if (toOpen.length > 0) {
+      console.warn(`There are ${toOpen.length} files we need to pull from main!`)
+      for (let fileHash of toOpen) {
+        console.log('Retrieving file ...')
+        global.ipc.send('file-request-sync', { 'hash': fileHash })
+      }
+    }
+
+    // Last but not least, exchange the current hash, if not present anymore.
+    // We'll use the same index for that, because, purely from a visual
+    // perspective, it makes absolutely sense that the new active file is at
+    // roughly the same position than the former one.
+    if (!newHashes.includes(this._currentHash)) {
+      // In this case, we also need to swap files
+      this._swapFile(newHashes[lastHashIndex])
+    }
+
     // Finally, propagate the changes to the tabs.
-    if (syncNecessary) this._tabs.syncFiles(this._openFiles, this._currentHash)
+    // this._tabs.syncFiles(this._openFiles, this._currentHash)
+  }
+
+  /**
+   * Silently adds a file to the array of open files.
+   * @param {Object} fileObject A file descriptor with content
+   */
+  addFileToOpen (fileObject) {
+    console.log('addFileToOpen called')
+    // Check if the file is already open; prevent duplicates.
+    if (this._openFiles.find(elem => elem.fileObject.hash === fileObject.hash)) return
+    // This function is called by the IPC when there's a new file
+    // synchronisation request answered by main. Let's simply push it to the
+    // array of open files without touching any other logic.
+    let fileTreeObject = this._renderer.findObject(fileObject.hash)
+    let mode = MD_MODE
+    if (fileObject.ext === '.tex') mode = TEX_MODE
+    this._openFiles.push({
+      'fileObject': fileTreeObject,
+      'cmDoc': CodeMirror.Doc(fileObject.content, mode)
+    })
+
+    // If there's no file open, open this one.
+    if (!this._currentHash) this._swapFile(fileObject.hash)
+
+    // Propagate changes
+    this._tabs.syncFiles(this._openFiles, this._currentHash)
   }
 
   /**
     * Closes the current file.
-    * @param {Number} hash An optional hash
+    * @param {Number} hash A hash to close
     * @return {ZettlrEditor} Chainability.
     */
-  close (hash = null) {
-    // In case a hash was provided, and the hash is not the open document,
-    // close it without further ado
-    if (hash !== null && hash !== this._currentHash) {
-      let currentFile = this._openFiles.find(elem => elem.fileObject.hash === hash)
-      let currentIndex = this._openFiles.indexOf(currentFile)
-      this._openFiles.splice(currentIndex, 1)
+  close (hash) {
+    console.log('Editor.close called', hash)
+    if (!hash) return console.error('Could not close file: No hash provided!')
 
-      // Synchronise the file changes to the document tabs
-      this._tabs.syncFiles(this._openFiles, this._currentHash)
-      return // Done!
-    }
+    let fileToClose = this._openFiles.find(elem => elem.fileObject.hash === hash)
+    if (!fileToClose) return console.error('Could not close file: Not open.')
+    let currentIndex = this._openFiles.indexOf(fileToClose)
 
-    let mdBasePath = ''
-
-    // Here we now need to pluck the file from the openFiles
-    // array, and, optionally, select another openDoc.
-    let currentFile = this._openFiles.find(elem => elem.fileObject.hash === this._currentHash)
-    let currentIndex = this._openFiles.indexOf(currentFile)
+    // Splice it
     this._openFiles.splice(currentIndex, 1)
 
-    // Do we have another openFile?
-    if (this._openFiles.length > 0) {
+    if (this._openFiles.length === 0) {
+      console.log('After closing, openFiles is empty')
+      // Replace with an empty new doc
+      this._cm.swapDoc(CodeMirror.Doc('', MD_MODE))
+      this._words = 0
+      this._currentHash = null
+      this._cm.setOption('markdownImageBasePath', '') // Reset base path
+    }
+
+    if (this._currentHash === fileToClose.fileObject.hash && this._openFiles.length > 0) {
+      // The current file has been closed: Select another one
+      let mdBasePath = ''
       if (currentIndex > 0) {
         this._swapFile(this._openFiles[currentIndex - 1].fileObject.hash)
         mdBasePath = this._openFiles[currentIndex - 1].fileObject.path
@@ -655,17 +710,12 @@ class ZettlrEditor {
         mdBasePath = this._openFiles[0].fileObject.path
       }
       mdBasePath = path.dirname(mdBasePath) // We need the dir, not the file
-    } else {
-      // Replace with an empty new doc
-      this._cm.swapDoc(CodeMirror.Doc('', MD_MODE))
-      this._words = 0
-      this._currentHash = null
-
-      // Synchronise the file changes to the document tabs
-      this._tabs.syncFiles(this._openFiles, this._currentHash)
+      this._cm.setOption('markdownImageBasePath', mdBasePath) // Reset base path
     }
 
-    this._cm.setOption('markdownImageBasePath', mdBasePath) // Reset base path
+    // Synchronise the file changes to the document tabs
+    this._tabs.syncFiles(this._openFiles, this._currentHash)
+
     return this
   }
 

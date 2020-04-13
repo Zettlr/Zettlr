@@ -62,6 +62,8 @@ class DirDelete extends ZettlrCommand {
     // proceed to remove the directory.
     let parentDir = dirToDelete.parent
 
+    if (!await this._app.window.confirmRemove(dirToDelete)) return false
+
     // First, remove the directory
     try {
       await this._app.getFileSystem().runAction('remove-directory', {

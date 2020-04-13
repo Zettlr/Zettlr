@@ -20,6 +20,9 @@ module.exports = class EditorTabs {
 
     // Listen to the important events
     this._div.onclick = (event) => { this._onClick(event) }
+
+    // Initial sync with no files
+    this.syncFiles([], null)
   }
 
   setIntentCallback (callback) {
@@ -28,6 +31,20 @@ module.exports = class EditorTabs {
 
   syncFiles (files, openFile) {
     this._div.innerHTML = '' // Reset
+
+    if (files.length === 0) {
+      // No files, so indicate!
+      let noFiles = document.createElement('div')
+      noFiles.classList.add('no-files')
+      noFiles.innerText = 'No open files.'
+      let addNew = document.createElement('button')
+      addNew.classList.add('add-new-file')
+      addNew.innerText = '+ Create new'
+      noFiles.appendChild(addNew)
+      this._div.append(noFiles)
+      return
+    }
+
     files = files.map(elem => elem.fileObject) // Make it easier accessible
     for (let file of files) {
       // Use the frontmatter title var, if applicable
@@ -38,6 +55,12 @@ module.exports = class EditorTabs {
   }
 
   _onClick (event) {
+    if (event.target.classList.contains('add-new-file')) {
+      // The user has clicked the "add new file" thingy
+      if (this._intentCallback) this._intentCallback(null, 'new-file')
+      return
+    }
+
     if (event.target.getAttribute('id') === 'document-tabs') return // No file selected
     let closeIntent = event.target.classList.contains('close')
     let hash = event.target

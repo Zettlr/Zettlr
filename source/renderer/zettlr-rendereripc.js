@@ -380,6 +380,16 @@ class ZettlrRendererIPC {
         this._app.replaceFile(cnt.hash, cnt.file)
         break
 
+      case 'sync-files':
+        this._app.getEditor().syncFiles(cnt)
+        break
+
+      case 'file-request-sync':
+        // This is the answer from main with a file and its contents which
+        // we simply need to add to the open files
+        this._app.getEditor().addFileToOpen(cnt)
+        break
+
       // Replace a full directory tree (e.g., on rename or modification of the children)
       case 'dir-replace':
         this._app.replaceDir(cnt.hash, cnt.dir)

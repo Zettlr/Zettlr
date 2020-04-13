@@ -114,11 +114,24 @@ class Zettlr {
       switch (objPath) {
         // The root filetree has changed (added or removed root)
         case 'filetree':
-          if (!this.isBooting) global.application.notifyChange('Roots have changed!')
+          // TODO: Do this only when the roots have actually changed, not when
+          // simply the state has changed. Move to the respective function.
+          // if (!this.isBooting) global.application.notifyChange('Roots have changed!')
+          if (!this.isBooting) {
+            console.log('+++++ SENDING NEW FILE TREE TO RENDERER +++++')
+            global.ipc.send('paths-update', this._fsal.getTreeMeta())
+          }
           break
         case 'openDirectory':
-          this.ipc.send('dir-set-current', this.getCurrentDir().hash || null)
-          global.config.set('lastDir', this.getCurrentDir().hash || null)
+          console.log('+++++ SENDING NEW DIRECTORY TO RENDERER +++++')
+          this.ipc.send('dir-set-current', (this.getCurrentDir()) ? this.getCurrentDir().hash : null)
+          global.config.set('lastDir', (this.getCurrentDir()) ? this.getCurrentDir().hash : null)
+          break
+        case 'openFiles':
+          console.log('+++++ SYNCING OPEN FILES WITH RENDERER +++++')
+          console.log(this._fsal.getOpenFiles())
+          this.ipc.send('sync-files', this._fsal.getOpenFiles())
+          global.config.set('openFiles', this._fsal.getOpenFiles())
           break
       }
     })

@@ -27,16 +27,26 @@ class FileNew extends ZettlrCommand {
    */
   run (evt, arg) {
     // Close the file
-    if (!arg || !arg.hash) throw new Error('Could not close file! No hash provided!')
+    console.log('Closing file ...')
+    try {
+      if (!arg || !arg.hash) throw new Error('Could not close file! No hash provided!')
+      console.log('Hash checks out')
+      let file = this._app.getFileSystem().findFile(arg.hash)
+      console.log('File found')
+      if (!file) throw new Error(`Could not close file! No file with hash ${arg.hash} found!`)
 
-    let file = this._app.getFileSystem().findFile(arg.hash)
-    if (!file) throw new Error(`Could not close file! No file with hash ${arg.hash} found!`)
-
-    if (this._app.getFileSystem().closeFile(file)) {
-      // Tell the renderer to close the file!
-      global.ipc.send('file-close', { 'hash': file.hash })
-    } else {
-      throw new Error('Could not close file! Not open.')
+      if (this._app.getFileSystem().closeFile(file)) {
+        console.log('File closed successfully')
+        global.config.removeFile(file.path)
+        // We do not need to explicitly close the file now, because the file
+        // system will notify the application that the openFiles array has
+        // changed, which will trigger a synchronisation command.
+      } else {
+        console.log('File not closed.')
+        throw new Error('Could not close file! Not open.')
+      }
+    } catch (e) {
+      console.log(e)
     }
   }
 }

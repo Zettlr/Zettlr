@@ -17,6 +17,7 @@ const path = require('path')
 const hash = require('../../../common/util/hash')
 const countWords = require('../../../common/util/count-words')
 const extractYamlFrontmatter = require('../../../common/util/extract-yaml-frontmatter')
+const { shell } = require('electron')
 
 // This is a list of all possible Pandoc Frontmatter
 // variables that Zettlr may make use of
@@ -89,6 +90,13 @@ module.exports = {
   },
   'save': async function (fileObject, content) {
     return fs.writeFile(fileObject.path, content)
+  },
+  'remove': async function (fileObject) {
+    // await fs.unlink(fileObject.path)
+    if (shell.moveItemToTrash(fileObject.path) && fileObject.parent) {
+      // Splice it from the parent directory
+      fileObject.parent.children.splice(fileObject.parent.children.indexOf(fileObject), 1)
+    }
   }
 }
 
