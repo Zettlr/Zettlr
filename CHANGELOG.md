@@ -28,6 +28,7 @@
 - `.git`-directories are now ignored.
 - Applying the CSS line classes for Markdown headings should now be less computationally intensive.
 - Switched to Gulp for LESS compilation (thanks to @tobiasdiez for implementing).
+- The command autoloader now logs potential errors during command loading.
 
 # 1.6.0
 
