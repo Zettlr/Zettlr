@@ -29,6 +29,7 @@
 - Applying the CSS line classes for Markdown headings should now be less computationally intensive.
 - Switched to Gulp for LESS compilation (thanks to @tobiasdiez for implementing).
 - The command autoloader now logs potential errors during command loading.
+- You can now pass a temporary configuration file to Zettlr, e.g. for testing purposes. Simply start Zettlr from the command line and pass `--config /your/config/file.json`. It can also only be a stub (e.g. only containing certain selected configuration parameters), as Zettlr will set all missing properties to their respective defaults. If the path is relative, Zettlr will attempt to find the file either at the repository root, if `app.isPackaged` is `false`, or at the current executable's directory.
 
 # 1.6.0
 
