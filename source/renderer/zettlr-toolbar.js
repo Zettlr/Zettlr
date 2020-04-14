@@ -56,7 +56,12 @@ class ZettlrToolbar {
      */
   _act () {
     // Activate search function.
+
+    let isComposing = false
+    this._searchbar[0].onkeyup = (e) => { isComposing = e.isComposing } // For checking composition state of IME, this event value is not available in jQuery keyEvents
+
     this._searchbar.on('keyup', (e) => {
+      if (isComposing) return // check CJk IME composing state
       if (e.which === 27) { // ESC
         this._searchbar.blur()
         this._searchbar.val('')
