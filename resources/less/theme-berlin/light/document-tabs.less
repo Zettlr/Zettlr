@@ -5,16 +5,21 @@
   border-bottom: 1px solid #ddd;
 
   .document {
-    transition: 0.5s background-color ease;
-    padding-left: 4px;
+    transition: 0.2s background-color ease;
+
+    .filename { padding-left: 8px; }
 
     &:hover { background-color: rgb(200, 200, 210); }
 
-    &.active { font-weight: bold; }
+    &.active { background-color: rgb(200, 200, 210); }
 
     .close {
-      transition: 0.5s transform ease;
-      &:hover { transform: rotate(90deg); }
+      transition: 0.5s all ease;
+      font-weight: bold;
+      &:hover {
+        transform: rotate(90deg);
+        color: var(--red-0);
+      }
     }
   }
 }

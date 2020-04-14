@@ -12,6 +12,9 @@
  * END HEADER
  */
 
+const { trans } = require('../../common/lang/i18n')
+const path = require('path')
+
 module.exports = class EditorTabs {
   constructor () {
     this._div = document.getElementById('document-tabs')
@@ -47,11 +50,15 @@ module.exports = class EditorTabs {
 
     files = files.map(elem => elem.fileObject) // Make it easier accessible
     for (let file of files) {
-      // Use the frontmatter title var, if applicable
-      let name = file.name
-      if (file.frontmatter && file.frontmatter.title) name = file.frontmatter.title
-      this._div.appendChild(this.makeElement(name, file.hash, file.hash === openFile))
+      this._div.appendChild(this.makeElement(file, file.hash === openFile))
     }
+
+    // After synchronising, enable the tippy
+    global.tippy('#document-tabs .document', {
+      delay: [ 1000, null ], // Show after 1s, hide normally
+      allowHTML: true, // There is HTML in the contents
+      placement: 'bottom' // Prefer to display it on the bottom
+    })
   }
 
   _onClick (event) {
@@ -74,23 +81,53 @@ module.exports = class EditorTabs {
     }
   }
 
-  makeElement (filename, hash, active = false) {
+  makeElement (file, active = false) {
+    // First determine the display title (either filename or frontmatter title)
+    let displayTitle = file.name
+    if (file.frontmatter && file.frontmatter.title) displayTitle = file.frontmatter.title
+
+    // Then create the document div
     let doc = document.createElement('div')
     doc.classList.add('document')
-    doc.setAttribute('title', filename)
-    doc.dataset['hash'] = hash
+    doc.dataset['hash'] = file.hash
+    // Show some additional information on hover
+    doc.dataset['tippyContent'] = `<strong>${file.name}</strong><br>`
+    doc.dataset['tippyContent'] += `<small>(${path.basename(path.dirname(file.path))})</small><br>`
+    doc.dataset['tippyContent'] += file.wordCount + ' ' + trans('dialog.target.words')
+    doc.dataset['tippyContent'] += ', ' + file.charCount + ' ' + trans('dialog.target.chars')
+    // From here on, possible information begins, so we have to add <br>s before
+    if (file.id !== '') doc.dataset['tippyContent'] += '<br>ID: ' + file.id
+
+    // Mark it as active, if applicable
     if (active) doc.classList.add('active')
 
+    // Next create the name span containing the display title
     let nameSpan = document.createElement('span')
     nameSpan.classList.add('filename')
-    nameSpan.innerText = filename
+    nameSpan.innerText = displayTitle
 
+    // Also enable closing of the document
     let closeSpan = document.createElement('span')
     closeSpan.classList.add('close')
     closeSpan.innerHTML = '&times;'
 
     doc.appendChild(nameSpan)
     doc.appendChild(closeSpan)
+
+    // In case there's a writing target, append that as well
+    if (file.target) {
+      let current = file.charCount
+      if (file.target.mode === 'words') current = file.wordCount
+      let targetValue = trans('dialog.target.chars')
+      if (file.target.mode === 'words') targetValue = trans('dialog.target.words')
+
+      let progress = Math.round(current / file.target.count * 100)
+      if (progress > 100) progress = 100 // Never exceed 100 %
+
+      // We now need to append this to the tippyContent
+      doc.dataset['tippyContent'] += `<br>${current}/${file.target.count} ${targetValue} (${progress} %)`
+    }
+
     return doc
   }
 }

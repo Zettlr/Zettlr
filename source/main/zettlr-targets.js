@@ -157,6 +157,7 @@ class ZettlrTargets extends EventEmitter {
    * @param {number} count The word count to reach.
    */
   set (hash, mode, count) {
+    console.log('***** SETTING TARGET!', hash, mode, count)
     // Sanity checks
     if (![ 'words', 'chars' ].includes(mode)) mode = 'words'
 

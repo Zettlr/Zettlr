@@ -238,10 +238,14 @@ module.exports = {
   'metadata': function (dirObject) {
     return metadata(dirObject)
   },
-  'createFile': async function (dirObject, filename) {
-    fs.writeFile(path.join(dirObject.path, filename), '')
-    // TODO
-    // dirObject.children.push(await FSALFile.parse(path.join(dirObject.path, filename)))
+  'createFile': async function (dirObject, options, cache) {
+    let filename = options.name
+    let content = options.content || ''
+    let fullPath = path.join(dirObject.path, filename)
+    await fs.writeFile(fullPath, content)
+    let file = await FSALFile.parse(fullPath, cache, dirObject)
+    dirObject.children.push(file)
+    sortChildren(dirObject)
   },
   'sort': async function (dirObject, method) {
     if (!SORTINGS.includes(method)) throw new Error('Unknown sorting: ' + method)
@@ -270,24 +274,15 @@ module.exports = {
     dirObject._settings.project = null
     await persistSettings(dirObject)
   },
-  'createDir': async function (dirObject, options) {
+  'createDir': async function (dirObject, options, cache) {
     if (!options.name || options.name.trim() === '') throw new Error('Invalid directory name provided!')
     let existingDir = dirObject.children.find(elem => elem.name === options.name)
     if (existingDir) throw new Error(`Directory ${options.name} already exists!`)
     let newPath = path.join(dirObject.path, options.name)
     await fs.mkdir(newPath)
+    let newDir = readTree(newPath, cache, dirObject)
     // Add the new directory to the source dir
-    dirObject.children.push({
-      'parent': dirObject,
-      'path': newPath,
-      'name': path.basename(newPath),
-      'hash': hash(newPath),
-      'children': [],
-      'attachments': [],
-      'type': 'directory',
-      'modtime': 0, // You know when something has gone wrong: 01.01.1970
-      '_settings': JSON.parse(JSON.stringify(SETTINGS_TEMPLATE))
-    })
+    dirObject.children.push(newDir)
     sortChildren(dirObject)
   },
   'renameDir': async function (dirObject, info, cache) {

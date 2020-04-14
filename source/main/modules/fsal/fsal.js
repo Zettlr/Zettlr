@@ -53,7 +53,10 @@ module.exports = class FSAL extends EventEmitter {
     // The following actions can be run on the file tree
     this._actions = {
       'sort': async (src, target, options) => { return FSALDir.sort(src, options) },
-      'create-file': async (src, target, options) => { return FSALDir.createFile(src, options) },
+      'create-file': async (src, target, options) => {
+        // This action needs the cache because it'll parse a file
+        return FSALDir.createFile(src, options, this._cache)
+      },
       'save-file': async (src, target, options) => {
         await FSALFile.save(src, options)
         // Re-parse the file
@@ -83,7 +86,8 @@ module.exports = class FSAL extends EventEmitter {
         await FSALDir.removeProject(src)
       },
       'create-directory': async (src, target, options) => {
-        await FSALDir.createDir(src, options)
+        // Parses a directory and henceforth needs the cache
+        await FSALDir.createDir(src, options, this._cache)
       },
       'rename-directory': async (src, target, options) => {
         // This thing needs the cache
@@ -149,8 +153,27 @@ module.exports = class FSAL extends EventEmitter {
         // functions will notify the application respectively.
         if (openFilesUpdateNeeded) this.setOpenFiles(newFileHashes)
         if (openDirUpdateNeeded) this.setOpenDirectory(this.findDir(newOpenDirHash))
-      }
+      } // END: move-action
     }
+
+    // Finally, set up listeners for global targets
+    global.targets.on('update', (hash) => {
+      let file = this.findFile(hash)
+      if (!file) return // Not our business
+      // Simply pull in the new target
+      FSALFile.setTarget(file, global.targets.get(hash))
+      // Send a fresh version of this file to the renderer.
+      // TODO: Do this via emits!
+      global.application.fileUpdate(hash, FSALFile.metadata(file))
+    })
+    global.targets.on('remove', (hash) => {
+      let file = this.findFile(hash)
+      if (!file) return // Also not our business
+      FSALFile.setTarget(file, null) // Reset
+      // Send a fresh version of this file to the renderer.
+      // TODO: Do this via emits!
+      global.application.fileUpdate(hash, FSALFile.metadata(file))
+    })
   }
 
   /**

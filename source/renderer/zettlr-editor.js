@@ -645,7 +645,7 @@ class ZettlrEditor {
     }
 
     // Finally, propagate the changes to the tabs.
-    // this._tabs.syncFiles(this._openFiles, this._currentHash)
+    this._tabs.syncFiles(this._openFiles, this._currentHash)
   }
 
   /**

@@ -63,19 +63,6 @@ class Zettlr {
       global.log.error(e.message, e)
     })
 
-    // First thing that has to be done is to load the service providers
-    this._bootServiceProviders()
-
-    // Init translations
-    let metadata = loadI18nMain(global.config.get('appLang'))
-
-    // It may be that only a fallback has been provided or else. In this case we
-    // must update the config to reflect this.
-    if (metadata.tag !== global.config.get('appLang')) global.config.set('appLang', metadata.tag)
-
-    // Boot up the IPC.
-    this.ipc = new ZettlrIPC(this)
-
     // Inject some globals
     global.application = {
       // Flag indicating whether or not the application is booting
@@ -102,6 +89,31 @@ class Zettlr {
       // Same as findFile, only with content
       getFile: (prop) => { return this._fsal.getFileContents(prop) }
     }
+
+    // First thing that has to be done is to load the service providers
+    this._bootServiceProviders()
+
+    // Init translations
+    let metadata = loadI18nMain(global.config.get('appLang'))
+
+    // It may be that only a fallback has been provided or else. In this case we
+    // must update the config to reflect this.
+    if (metadata.tag !== global.config.get('appLang')) global.config.set('appLang', metadata.tag)
+
+    // Boot up the IPC.
+    this.ipc = new ZettlrIPC(this)
+
+    // Statistics
+    this.stats = new ZettlrStats(this)
+
+    // Instantiate the writing targets
+    this._targets = new ZettlrTargets(this)
+
+    // Load in the Quicklook window handler class
+    this._ql = new ZettlrQLStandalone()
+
+    // And the window.
+    this.window = new ZettlrWindow(this)
 
     // File System Abstraction Layer, pass the folder
     // where it can store its internal files.
@@ -135,18 +147,6 @@ class Zettlr {
           break
       }
     })
-
-    // Statistics
-    this.stats = new ZettlrStats(this)
-
-    // Instantiate the writing targets
-    this._targets = new ZettlrTargets(this)
-
-    // Load in the Quicklook window handler class
-    this._ql = new ZettlrQLStandalone()
-
-    // And the window.
-    this.window = new ZettlrWindow(this)
 
     process.nextTick(() => {
       let start = Date.now()

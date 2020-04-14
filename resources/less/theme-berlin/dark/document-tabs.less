@@ -5,13 +5,15 @@
   color: var(--grey-1);
 
   .document {
-    transition: 0.5s background-color ease;
-
     &:hover { background-color: var(--grey-6); }
 
+    &.active { background-color: var(--grey-6); }
+
     .close {
-      transition: 0.5s transform ease;
-      &:hover { transform: rotate(90deg); }
+      &:hover {
+        transform: rotate(90deg);
+        color: var(--red-0);
+      }
     }
   }
 }
