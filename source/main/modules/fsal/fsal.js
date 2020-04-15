@@ -68,6 +68,10 @@ module.exports = class FSAL extends EventEmitter {
         }
         return true
       },
+      'search-file': async (src, target, options) => {
+        // Searches a file and returns the result
+        return FSALFile.search(src, options)
+      },
       'remove-file': async (src, target, options) => {
         // First remove the file
         await FSALFile.remove(src)

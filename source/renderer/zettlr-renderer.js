@@ -458,7 +458,7 @@ class ZettlrRenderer {
       // Indicate no results, if applicable.
       if (res.length === 0) global.store.emptySearchResult()
       // Mark the results in the potential open file
-      global.editorSearch.markResults(this._currentFile)
+      global.editorSearch.markResults(this.getActiveFile())
       this._toolbar.endSearch() // Mark the search as finished
     }).start()
   }

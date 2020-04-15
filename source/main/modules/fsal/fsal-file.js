@@ -15,6 +15,7 @@
 const fs = require('fs').promises
 const path = require('path')
 const hash = require('../../../common/util/hash')
+const search = require('./search-file')
 const countWords = require('../../../common/util/count-words')
 const extractYamlFrontmatter = require('../../../common/util/extract-yaml-frontmatter')
 const { shell } = require('electron')
@@ -223,6 +224,12 @@ function parseFileContents (file, content) {
   }
 }
 
+async function searchFile (fileObject, terms) {
+  // Initialise the content variables (needed to check for NOT operators)
+  let cnt = await fs.readFile(fileObject.path, { encoding: 'utf8' })
+  return search(fileObject, terms, cnt)
+}
+
 module.exports = {
   'metadata': function (fileObject) {
     return metadata(fileObject)
@@ -254,5 +261,8 @@ module.exports = {
   },
   'setTarget': function (fileObject, target) {
     fileObject.target = target
+  },
+  'search': async function (fileObject, terms) {
+    return searchFile(fileObject, terms)
   }
 }

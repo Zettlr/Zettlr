@@ -608,7 +608,7 @@ class ZettlrEditor {
 
     // Last but not least: If there are any search results currently
     // display, mark the respective positions.
-    this._searcher.markResults(file)
+    this._searcher.markResults(file.fileObject)
 
     // The sidebar needs to be informed that the active file has changed!
     global.store.set('selectedFile', this._currentHash)
