@@ -283,6 +283,29 @@ module.exports = class FSAL extends EventEmitter {
   }
 
   /**
+   * Sorts the openFiles according to hashArray, and returns the new sorting.
+   * @param {Array} hashArray An array with hashes to sort with
+   * @return {Array} The new sorting
+   */
+  sortOpenFiles (hashArray) {
+    if (!Array.isArray(hashArray)) return this._state.openFiles
+    // Expand the hash array
+    let notFound = this._state.openFiles.filter(e => !hashArray.includes(e.hash))
+    let newSorting = hashArray.map(e => this._state.openFiles.find(file => file.hash === e))
+    // Then filter out undefines from the find function
+    newSorting = newSorting.filter(e => e !== undefined)
+
+    // Finally make sure that not found elements are still added again.
+    if (notFound.length > 0) {
+      global.log.warning(`${notFound.length} elements were not found in the new sorting! Adding anyway ...`)
+      newSorting.concat(notFound)
+    }
+
+    this._state.openFiles = newSorting
+    return newSorting
+  }
+
+  /**
    * Returns a file's metadata including the contents.
    * @param {Object} file The file descriptor
    */

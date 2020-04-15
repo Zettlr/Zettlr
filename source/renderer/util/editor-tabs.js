@@ -21,9 +21,48 @@ module.exports = class EditorTabs {
 
     this._intentCallback = null
 
+    this._currentlyDragging = undefined
+    this._tabbarLeft = this._div.getBoundingClientRect().left
+    this._cursorOffset = 0
+
     // Listen to the important events
     this._div.onclick = (event) => { this._onClick(event) }
+    this._div.ondragstart = (evt) => {
+      // The user has initated a drag operation, so we need some variables
+      // we'll be accessing throughout the drag operation: The currently
+      // dragged element, the cursor offset (i.e. the amount of pixels the
+      // cursor is within the element), and the current offset of the tabbar
+      // itself.
+      this._currentlyDragging = evt.target
+      this._cursorOffset = evt.clientX - this._currentlyDragging.getBoundingClientRect().left
+      this._tabbarLeft = this._div.getBoundingClientRect().left
 
+      this._currentlyDragging.ondrag = (evt) => {
+        // Immediately sort everything correctly.
+        let currentElementPosition = evt.clientX - this._cursorOffset - this._tabbarLeft
+        for (let elem of this._currentlyDragging.parentElement.childNodes) {
+          if (elem === this._currentlyDragging) continue // No inception, please
+          if (elem.offsetLeft > currentElementPosition) {
+            elem.parentElement.insertBefore(this._currentlyDragging, elem)
+            break
+          }
+        }
+      }
+    }
+    this._div.ondragend = (evt) => {
+      // Reset everything again TODO implement sorting command to main
+      let newHashes = []
+      // Now get the correct list of hashes
+      for (let elem of this._currentlyDragging.parentElement.childNodes) {
+        newHashes.push(parseInt(elem.dataset['hash'], 10))
+      }
+
+      if (this._intentCallback) this._intentCallback(newHashes, 'sorting')
+
+      this._currentlyDragging.ondrag = null
+      this._currentlyDragging = undefined
+      this._cursorOffset = 0
+    }
     // Initial sync with no files
     this.syncFiles([], null)
   }
@@ -51,6 +90,16 @@ module.exports = class EditorTabs {
     files = files.map(elem => elem.fileObject) // Make it easier accessible
     for (let file of files) {
       this._div.appendChild(this.makeElement(file, file.hash === openFile))
+    }
+
+    // Now make sure that the active tab is visible and scroll if necessary.
+    let tabbarWidth = this._div.offsetWidth
+    let activeElem = this._div.getElementsByClassName('active')[0]
+    if (activeElem.offsetLeft + activeElem.offsetWidth > tabbarWidth) {
+      this._div.scrollLeft += activeElem.offsetLeft + activeElem.offsetWidth - tabbarWidth
+    } else if (activeElem.offsetLeft + activeElem.offsetWidth < 0) {
+      console.log('Scrolling! Active element is out of view (to the LEFT)')
+      // TODO: How do we do this?
     }
 
     // After synchronising, enable the tippy
@@ -81,6 +130,12 @@ module.exports = class EditorTabs {
     }
   }
 
+  /**
+   * Creates a new document DOM element to be added to the tab bar based on the
+   * information available in the file descriptor.
+   * @param {Object} file A file descriptor
+   * @param {Boolean} active Whether the file is currently active
+   */
   makeElement (file, active = false) {
     // First determine the display title (either filename or frontmatter title)
     let displayTitle = file.name
@@ -89,6 +144,7 @@ module.exports = class EditorTabs {
     // Then create the document div
     let doc = document.createElement('div')
     doc.classList.add('document')
+    doc.setAttribute('draggable', 'true') // Users can drag that thing around
     doc.dataset['hash'] = file.hash
     // Show some additional information on hover
     doc.dataset['tippyContent'] = `<strong>${file.name}</strong><br>`

@@ -76,7 +76,8 @@ class ZettlrEditor {
     this._tabs = new EditorTabs()
     // The user can select or close documents on the tab bar
     this._tabs.setIntentCallback((hash, intent) => {
-      hash = parseInt(hash, 10) // Make sure === works as intended
+      // Make sure === works as intended
+      if (!Array.isArray(hash)) hash = parseInt(hash, 10)
       if (intent === 'close') {
         // Send the close request to main
         global.ipc.send('file-close', { 'hash': hash })
@@ -86,6 +87,12 @@ class ZettlrEditor {
       } else if (intent === 'new-file') {
         // Tell the renderer someone wants a new file
         this._renderer.newFile('new-file-button')
+      } else if (intent === 'sorting') {
+        // hash is actually an array, with all hashes in their desired new sorting,
+        // so let's forward that to main. But also make sure we sort it here
+        // because otherwise the new sorting won't be persisted in the tabbar.
+        this._openFiles = hash.map(e => this._openFiles.find(file => file.fileObject.hash === e))
+        global.ipc.send('sort-open-files', hash)
       }
     })
 
