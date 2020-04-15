@@ -600,6 +600,9 @@ class ZettlrEditor {
     this._cm.swapDoc(file.cmDoc)
     this._currentHash = hash
 
+    // Reset the word count to match the now active file
+    this._words = countWords(this._cm.getValue(), this._countChars)
+
     // Synchronise the file changes to the document tabs
     this._tabs.syncFiles(this._openFiles, this._currentHash)
 
