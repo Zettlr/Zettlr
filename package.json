@@ -10,7 +10,7 @@
         "url": "git://github.com/Zettlr/Zettlr.git"
     },
     "version": "1.6.0",
-    "license": "GPL-3.0",
+    "license": "GPL-3.0-only",
     "description": "A powerful Markdown editor for researchers.",
     "main": "./source/main.js",
     "scripts": {

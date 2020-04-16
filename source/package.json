@@ -11,7 +11,7 @@
     },
     "version": "1.6.0",
     "description": "A powerful Markdown Editor with integrated tree view",
-    "license": "GPL-3.0",
+    "license": "GPL-3.0-only",
     "main": "main.js",
     "dependencies": {
         "@zettlr/citr": "^1.1.0",
