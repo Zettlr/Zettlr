@@ -20,18 +20,17 @@ const path = require('path')
  * This class manages the writing targets of directories and files. It reads the
  * targets on each start of the app and writes them after they have been changed.
  */
-class ZettlrTargets extends EventEmitter {
+class TargetProvider extends EventEmitter {
   /**
    * Create the instance on program start and initially load the targets.
-   * @param {Zettlr} parent The main app object.
    */
-  constructor (parent) {
+  constructor () {
     super()
+    global.log.verbose('Target provider booting up')
     // Set the maximum amount of listeners to infinity, because in this specific
     // case we don't want only 10 listeners, but as many as needed.
     this.setMaxListeners(Infinity)
 
-    this._app = parent
     this._file = path.join(require('electron').app.getPath('userData'), 'targets.json')
     this._targets = []
 
@@ -74,8 +73,14 @@ class ZettlrTargets extends EventEmitter {
        * @param  {Function} callback The callback
        * @return {void}              Nothing to return.
        */
-      off: (event, callback) => { this.off(event, callback) }
+      off: (event, callback) => { this.off(event, callback) },
+      verify: () => { return this.verify() }
     }
+  } // End constructor
+
+  async shutdown () {
+    global.log.verbose('Target provider shutting down ...')
+    this._save() // Persist to disk
   }
 
   /**
@@ -123,10 +128,8 @@ class ZettlrTargets extends EventEmitter {
       if (typeof target.count !== 'number') continue
       // Mode must be either words or chars
       if (![ 'words', 'chars' ].includes(target.mode)) continue
-      // Now check if the file/folder still exists.
-      if (!this._app.findFile({ 'hash': target.hash })) {
-        if (!this._app.findDir({ 'hash': target.hash })) continue
-      }
+      // Now check if the file still exists.
+      if (!global.application.findFile(target.hash)) continue
 
       // If a target made it until here, push it (to the limit)
       validTargets.push(target)
@@ -206,4 +209,4 @@ class ZettlrTargets extends EventEmitter {
   }
 }
 
-module.exports = ZettlrTargets
+module.exports = new TargetProvider()

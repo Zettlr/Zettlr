@@ -21,7 +21,6 @@ const path = require('path')
 const ZettlrIPC = require('./zettlr-ipc.js')
 const ZettlrWindow = require('./zettlr-window.js')
 const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
-const ZettlrTargets = require('./zettlr-targets.js')
 const ZettlrStats = require('./zettlr-stats.js')
 const FSAL = require('./modules/fsal')
 const { loadI18nMain, trans } = require('../common/lang/i18n')
@@ -106,9 +105,6 @@ class Zettlr {
     // Statistics
     this.stats = new ZettlrStats(this)
 
-    // Instantiate the writing targets
-    this._targets = new ZettlrTargets(this)
-
     // Load in the Quicklook window handler class
     this._ql = new ZettlrQLStandalone()
 
@@ -157,7 +153,7 @@ class Zettlr {
           // Reset the global so that no old paths are re-added
           global.filesToOpen = []
           // Verify the integrity of the targets after all paths have been loaded
-          this._targets.verify()
+          global.targets.verify()
           this.isBooting = false // Now we're done booting
           let duration = Date.now() - start
           duration /= 1000 // Convert to seconds
@@ -197,6 +193,7 @@ class Zettlr {
       'dictionary': require('./providers/dictionary-provider'),
       'recentDocs': require('./providers/recent-docs-provider'),
       'tags': require('./providers/tag-provider'),
+      'targets': require('./providers/target-provider'),
       'css': require('./providers/css-provider'),
       'translations': require('./providers/translation-provider')
     }
