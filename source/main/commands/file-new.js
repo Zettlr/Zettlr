@@ -62,7 +62,7 @@ class FileNew extends ZettlrCommand {
       global.application.dirUpdate(dir.hash, dir.hash)
 
       // And directly thereafter, open the file
-      let fileHash = hash(path.join(dir.path, arg.name))
+      let fileHash = hash(path.join(dir.path, filename))
       await this._app.openFile(fileHash)
     } catch (e) {
       global.log.error(trans('system.error.could_not_create_file') + ': ' + e.message)
