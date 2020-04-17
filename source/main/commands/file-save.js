@@ -53,6 +53,7 @@ class SaveFile extends ZettlrCommand {
       })
       this._app.clearModified()
       // Re-send the file
+      console.log(realFile)
       global.application.fileUpdate(realFile.hash, global.application.findFile(realFile.hash))
     } catch (e) {
       global.log.error(`Error writing file ${realFile.name}!`, e)

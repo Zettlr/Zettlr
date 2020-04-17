@@ -104,7 +104,7 @@ async function parseFile (filePath, cache, parent = null) {
     'modtime': 0, // Modification time
     'creationtime': 0, // Creation time
     'linefeed': '\n',
-    'frontmatter': {}, // May contain frontmatter variables
+    'frontmatter': undefined, // May contain frontmatter variables
     // This variable is only used to transfer the file contents to and from
     // the renderer. It will be empty all other times, because otherwise the
     // RAM will fill up pretty fast.
@@ -163,11 +163,13 @@ function parseFileContents (file, content) {
   let match
   // Get the word and character count
   file.wordCount = countWords(content)
-  file.charCount = content.length
+  file.charCount = countWords(content, true)
 
   // Extract a potential YAML frontmatter
+  file.frontmatter = undefined // Reset first
   let frontmatter = extractYamlFrontmatter(content)
   if (frontmatter) {
+    if (!file.frontmatter) file.frontmatter = {}
     for (let [ key, value ] of Object.entries(frontmatter)) {
       if (FRONTMATTER_VARS.includes(key)) {
         file.frontmatter[key] = value
@@ -181,6 +183,7 @@ function parseFileContents (file, content) {
 
   // Determine linefeed to preserve on saving so that version control
   // systems don't complain.
+  file.linefeed = '\n'
   if (/\r\n/.test(content)) file.linefeed = '\r\n'
   if (/\n\r/.test(content)) file.linefeed = '\n\r'
 
@@ -220,7 +223,9 @@ function parseFileContents (file, content) {
   }
 
   if ((match != null) && (match[1].substr(-(linkEnd.length)) !== linkEnd)) {
-    file.id = match[1] || ''
+    file.id = match[1]
+  } else {
+    file.id = '' // Remove the file id again
   }
 }
 

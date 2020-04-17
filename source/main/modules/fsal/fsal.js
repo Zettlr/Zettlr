@@ -77,13 +77,6 @@ module.exports = class FSAL extends EventEmitter {
       },
       'save-file': async (src, target, options) => {
         await FSALFile.save(src, options)
-        // Re-parse the file
-        let newFile = await FSALFile.parse(src.path, this._cache, src.parent)
-
-        // Update the correct file object in memory
-        for (let prop of Object.keys(src)) {
-          if (newFile.hasOwnProperty(prop)) src[prop] = newFile[prop]
-        }
         return true
       },
       'search-file': async (src, target, options) => {
