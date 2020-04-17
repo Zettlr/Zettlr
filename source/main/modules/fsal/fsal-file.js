@@ -245,6 +245,15 @@ module.exports = {
     parseFileContents(fileObject, content)
     global.tags.report(fileObject.tags)
   },
+  'rename': async function (fileObject, options) {
+    let oldPath = fileObject.path
+    let newPath = path.join(path.dirname(fileObject.path), options.name)
+    await fs.rename(oldPath, newPath)
+    // Now update the object
+    fileObject.path = newPath
+    fileObject.hash = hash(newPath)
+    fileObject.name = options.name
+  },
   'remove': async function (fileObject) {
     // await fs.unlink(fileObject.path)
     if (shell.moveItemToTrash(fileObject.path) && fileObject.parent) {

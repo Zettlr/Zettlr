@@ -248,6 +248,8 @@ module.exports = {
     sortChildren(dirObject)
   },
   'sort': async function (dirObject, method) {
+    // If the caller omits the method, it should remain unchanged
+    if (!method) method = dirObject._settings.sorting
     if (!SORTINGS.includes(method)) throw new Error('Unknown sorting: ' + method)
     dirObject._settings.sorting = method
     // Persist the settings to disk
@@ -274,7 +276,7 @@ module.exports = {
     dirObject._settings.project = null
     await persistSettings(dirObject)
   },
-  'createDir': async function (dirObject, options, cache) {
+  'create': async function (dirObject, options, cache) {
     if (!options.name || options.name.trim() === '') throw new Error('Invalid directory name provided!')
     let existingDir = dirObject.children.find(elem => elem.name === options.name)
     if (existingDir) throw new Error(`Directory ${options.name} already exists!`)
@@ -285,7 +287,7 @@ module.exports = {
     dirObject.children.push(newDir)
     sortChildren(dirObject)
   },
-  'renameDir': async function (dirObject, info, cache) {
+  'rename': async function (dirObject, info, cache) {
     // Check some things beforehand
     if (!info.name || info.name.trim() === '') throw new Error('Invalid directory name provided!')
     let existingDir = dirObject.parent.children.find(elem => elem.name === info.name)
@@ -301,7 +303,7 @@ module.exports = {
     // Now sort the parent
     sortChildren(dirObject.parent)
   },
-  'removeDir': async function (dirObject) {
+  'remove': async function (dirObject) {
     // First, get the parent, if there is any
     let parentDir = dirObject.parent
     // Now, remove the directory

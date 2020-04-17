@@ -57,6 +57,24 @@ module.exports = class FSAL extends EventEmitter {
         // This action needs the cache because it'll parse a file
         return FSALDir.createFile(src, options, this._cache)
       },
+      'rename-file': async (src, target, options) => {
+        let oldHash = src.hash
+        let isOpenFile = this._state.openFiles.find(e => e.hash === oldHash) !== undefined
+        await FSALFile.rename(src, options)
+        // Now we need to re-sort the parent directory
+        await FSALDir.sort(src.parent) // Omit sorting
+        // Notify of a state change
+        this.emit('fsal-state-changed', 'filetree')
+        // If applicable, trigger a file synchronisation
+        if (isOpenFile) this.emit('fsal-state-changed', 'openFiles')
+        return true
+      },
+      'remove-file': async (src, target, options) => {
+        // First remove the file
+        await FSALFile.remove(src)
+        // Will trigger a change that syncs the files
+        this.closeFile(src)
+      },
       'save-file': async (src, target, options) => {
         await FSALFile.save(src, options)
         // Re-parse the file
@@ -72,12 +90,6 @@ module.exports = class FSAL extends EventEmitter {
         // Searches a file and returns the result
         return FSALFile.search(src, options)
       },
-      'remove-file': async (src, target, options) => {
-        // First remove the file
-        await FSALFile.remove(src)
-        // Will trigger a change that syncs the files
-        this.closeFile(src)
-      },
       // Creates a project in a dir
       'create-project': async (src, target, options) => {
         await FSALDir.makeProject(src, options)
@@ -91,14 +103,14 @@ module.exports = class FSAL extends EventEmitter {
       },
       'create-directory': async (src, target, options) => {
         // Parses a directory and henceforth needs the cache
-        await FSALDir.createDir(src, options, this._cache)
+        await FSALDir.create(src, options, this._cache)
       },
       'rename-directory': async (src, target, options) => {
         // This thing needs the cache
-        await FSALDir.renameDir(src, options, this._cache)
+        await FSALDir.rename(src, options, this._cache)
       },
       'remove-directory': async (src, target, options) => {
-        await FSALDir.removeDir(src)
+        await FSALDir.remove(src)
       },
       'move': async (src, target, options) => {
         let openFilesUpdateNeeded = false

@@ -413,7 +413,7 @@ class Zettlr {
       console.log('Error on finding last dir or file', e)
     }
     this.setCurrentDir(lastDir)
-    // this.setCurrentFile(lastFile)
+    this.setCurrentFile(lastFile)
     if (lastFile) global.recentDocs.add(this._fsal.getMetadataFor(lastFile))
   }
 
@@ -429,15 +429,11 @@ class Zettlr {
 
   /**
     * Sets the current file to the given file.
-    * @param {ZettlrFile} f A ZettlrFile object.
+    * @param {number} f A file hash
     */
   setCurrentFile (f) {
     this.currentFile = f
-    this.ipc.send('file-set-current', (f) ? f.hash : null)
-    global.config.set('lastFile', (f) ? f.hash : null)
-
-    // Always adapt the window title
-    if (this.window) this.window.fileUpdate()
+    global.config.set('lastFile', (f && f.hasOwnProperty('hash')) ? f.hash : f)
   }
 
   /**
