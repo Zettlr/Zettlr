@@ -195,7 +195,7 @@ class ZettlrCon {
         // The attributes are a NamedNodeMap, so we have to use weird function calling to retrieve them
         attr.push({ 'name': nodes.item(i).nodeName, 'value': nodes.item(i).nodeValue })
       }
-    } else if (elem.parents('#editor').length > 0) {
+    } else if (elem.parents('.CodeMirror').length > 0) {
       scopes.push('editor')
       // If the word is spelled wrong, request suggestions
       if (elem.hasClass('cm-spell-error')) {
