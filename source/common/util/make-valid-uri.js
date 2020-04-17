@@ -17,7 +17,7 @@ const path = require('path')
 
 const protocolRE = /^([a-z]{1,10}):\/\//i
 const linkRE = /^[a-z0-9]+\.[a-z0-9]+/i
-const mdFileRE = /[a-z0-9]+\.(?:md|markdown|txt)$/i
+const mdFileRE = /.+\.(?:md|markdown|txt|tex)$/iu
 
 module.exports = function (uri, base = '') {
   // Why do we need a helper function for this?

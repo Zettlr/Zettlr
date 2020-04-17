@@ -24,11 +24,21 @@ module.exports = function (url, editorInstance) {
     // we need to convert it to absolute.
     let base = editorInstance._cm.getOption('markdownImageBasePath')
     let validURI = makeValidUri(url, base)
-    shell.openExternal(validURI).catch((err) => {
-      // Notify the user that we couldn't open the URL
-      if (err) {
-        global.notify(trans('system.error.open_url_error', validURI) + ': ' + err.message)
+    if (validURI.indexOf('file://') === 0) {
+      // Check if we are opening a file
+      if (!shell.openItem(validURI)) {
+        // If it failed to open, then show an error message
+        // Unlike openExternal, it returns a boolean value, so there is additional no error message
+        // If we wanted to append one, it will require us to write translation for all other locales...
+        global.notify(trans('system.error.open_url_error', validURI))
       }
-    })
+    } else {
+      shell.openExternal(validURI).catch((err) => {
+      // Notify the user that we couldn't open the URL
+        if (err) {
+          global.notify(trans('system.error.open_url_error', validURI) + ': ' + err.message)
+        }
+      })
+    }
   }
 }
