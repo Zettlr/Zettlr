@@ -106,8 +106,8 @@ class ZettlrBody {
     $(document).on('keydown', (event) => {
       let isDarwin = $('body').hasClass('darwin')
       let cmdOrCtrl = (isDarwin && event.metaKey) || (!isDarwin && event.ctrlKey)
-      let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && event.key === 'e')
-      let focusSidebarShortcut = (cmdOrCtrl && event.shiftKey && event.key === 't')
+      let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && event.which === 69)
+      let focusSidebarShortcut = (cmdOrCtrl && event.shiftKey && event.which === 84)
       if (focusEditorShortcut) { // Cmd/Ctrl+Shift+E
         // Obviously, focus the editor
         this._renderer.getEditor().getEditor().focus()
