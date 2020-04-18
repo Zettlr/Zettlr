@@ -3,7 +3,7 @@
         {
           "role": "button",
           "class": "menu-popup",
-          "context": [ "win32", "linux" ],
+          "context": [ "win32" ],
           "command": "win-menu",
           "content": "{ 'x': 15, 'y': 15 }",
           "title": "toolbar.show_menu"

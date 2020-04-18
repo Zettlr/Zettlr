@@ -19,6 +19,7 @@
 - Added verbose error reporting and improved the error handling during citeproc boot. Now, Zettlr will (a) remove error-throwing CiteKeys so that the rest of the library loads just fine and (b) display the exact errors as reported by citeproc-js so that users can immediately identify the bad keys and know where to look.
 - The global search bar's autocomplete will now also work for non-western scripts such as Japanese, Korean, Chinese, or any other.
 - Virtual directories have been discontinued. Parts of their functionality will be re-implemented in different ways.
+- On Linux, we've restored the default window decorations -- that is, the burger menu button is gone, and the menu will be displayed wherever the window manager decides.
 
 ## Under the Hood
 
