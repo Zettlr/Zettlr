@@ -122,13 +122,13 @@ class ZettlrBody {
     global.notifyError = (msg) => { this.notifyError(msg) }
 
     // Afterwards, activate the event listeners of the window controls
-    $('.windows-window-controls .minimise, .linux-window-controls .minimise').click((e) => {
+    $('.windows-window-controls .minimise').click((e) => {
       global.ipc.send('win-minimise')
     })
-    $('.windows-window-controls .resize, .linux-window-controls .maximise').click((e) => {
+    $('.windows-window-controls .resize').click((e) => {
       global.ipc.send('win-maximise')
     })
-    $('.windows-window-controls .close, .linux-window-controls .close').click((e) => {
+    $('.windows-window-controls .close').click((e) => {
       global.ipc.send('win-close')
     })
   }
