@@ -325,10 +325,6 @@ class ZettlrRendererIPC {
         this._app.deleteDir(cnt)
         break
 
-      case 'dir-new-vd':
-        this._app.newVirtualDir(cnt)
-        break
-
       // Make a project from a directory
       case 'dir-new-project':
         this.send('dir-new-project', cnt)

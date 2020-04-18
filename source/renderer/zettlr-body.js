@@ -170,9 +170,6 @@ class ZettlrBody {
       return global.ipc.send('file-new', { 'name': generateFileName(), 'hash': dir.hash })
     }
 
-    // It was a virtual directory, not an actual directory.
-    if (dir.type !== 'directory') return
-
     let cnt = makeTemplate('popup', 'textfield', {
       'val': generateFileName(),
       'placeholder': trans('dialog.file_new.placeholder')
@@ -235,9 +232,6 @@ class ZettlrBody {
     // Prevent multiple popups
     if (this._currentPopup) this._currentPopup.close(true)
 
-    // It was a virtual directory, not an actual directory.
-    if (dir.type !== 'directory') return
-
     let elem
 
     // Selection method stolen from requestNewDirName
@@ -265,30 +259,6 @@ class ZettlrBody {
         global.ipc.send('dir-new', { 'name': form[0].value, 'hash': dir.hash })
       }
       this._currentPopup = null // Reset current popup
-    })
-  }
-
-  /**
-    * Requests a directory name for a new virtual directory
-    * @param  {ZettlrDir} dir The parent directory object.
-    * @return {void}     Nothing to return.
-    */
-  requestVirtualDirName (dir) {
-    if (!dir) return // No directory selected.
-
-    // Prevent multiple popups
-    if (this._currentPopup) this._currentPopup.close(true)
-
-    let cnt = makeTemplate('popup', 'textfield', {
-      'val': trans('dialog.dir_new.value'),
-      'placeholder': trans('dialog.dir_new.placeholder')
-    })
-
-    this._currentPopup = popup($(`[data-hash=${dir.hash}]`), cnt, (form) => {
-      if (form) {
-        global.ipc.send('dir-new-vd', { 'name': form[0].value, 'hash': dir.hash })
-      }
-      this._currentPopup = null
     })
   }
 

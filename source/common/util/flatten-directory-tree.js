@@ -25,7 +25,7 @@ function flattenDirectoryTree (tree, newarr = []) {
 
   if (tree.type === 'file') {
     return newarr.push(tree)
-  } else if (tree.type === 'directory' || tree.type === 'virtual-directory') {
+  } else if (tree.type === 'directory') {
     // Append directory (for easier overview)
     newarr.push(tree)
     if (tree.children != null) {

@@ -230,18 +230,6 @@ class ZettlrRenderer {
   }
 
   /**
-    * Tells the ZettlrBody to request a new virtualdir name
-    * @param  {Object} arg Contains the parent dir's hash
-    */
-  newVirtualDir (arg) {
-    if (arg.hasOwnProperty('hash')) {
-      this._body.requestVirtualDirName(this.findObject(arg.hash))
-    } else if (this.getCurrentDir().type === 'directory') { // Only add vds to normal directories
-      this._body.requestVirtualDirName(this.getCurrentDir())
-    }
-  }
-
-  /**
     * The user wants to delete a directory
     * @param  {Object} arg Contains the hash (or none)
     * @return {void}     No return.
@@ -402,7 +390,7 @@ class ZettlrRenderer {
 
     let oldDir = this.findObject(oldHash)
 
-    if (oldDir && [ 'directory', 'virtual-directory' ].includes(oldDir.type)) {
+    if (oldDir && oldDir.type === 'directory') {
       // We'll be patching the store, as this
       // will also update the renderer._paths.
       global.store.patch(oldHash, dir)

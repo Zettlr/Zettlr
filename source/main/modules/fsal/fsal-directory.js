@@ -33,7 +33,6 @@ const FSALAttachment = require('./fsal-attachment')
  */
 const SETTINGS_TEMPLATE = {
   'sorting': 'name-up',
-  'virtualDirectories': [], // Empty array
   'project': null // Default: no project
 }
 

@@ -15,10 +15,6 @@
       border-left: 5px solid var(--c-primary);
     }
 
-    // File is displayed as part of a virtual directory -> actually
-    // some kind of a "ghost" file
-    &.alias { background-color: var(--bg-virtual-directory); }
-
     &.file:hover {
       // important is needed to not mess with the heatmap styles
       background-color:var(--grey-0) !important;
@@ -28,7 +24,7 @@
     /* Taglist stuff */
     .taglist:hover .tag { border:2px solid white; }
 
-    &.directory, &.virtual-directory {
+    &.directory {
       background-color:var(--grey-1);
       transition: @mode-transition background-color ease;
       color:var(--c-primary);
@@ -39,10 +35,8 @@
       }
     }
 
-    &.virtual-directory { color:var(--c-virtual-directory); }
-
     div.meta {
-      .id, .tags, .directories, .files, .virtual-directories {
+      .id, .tags, .directories, .files {
         background-color:var(--grey-1);
         color: var(--grey-3);
       }

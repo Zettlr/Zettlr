@@ -32,7 +32,6 @@
         <template v-if="isDirectory">
           <span class="directories">{{ countDirs }}</span>
           <span class="files">{{ countFiles }}</span>
-          <span class="virtual-directories">{{ countVirtualDirs }}</span>
         </template>
         <template v-else>
           <span class="tex-indicator" v-if="isTex">TeX</span>
@@ -86,7 +85,7 @@
       getTagList: function () { return this.obj.tags.join(', ') },
       hasTags: function () { return this.obj.tags && this.obj.tags.length > 0 },
       isDirectory: function () { return this.obj.type !== 'file' },
-      isDraggable: function () { return !this.isDirectory && !this.obj.hasOwnProperty('results') && !this.obj.hasOwnProperty('isAlias') },
+      isDraggable: function () { return !this.isDirectory && !this.obj.hasOwnProperty('results') },
       fileMeta: function () { return this.$store.state.fileMeta },
       displayTime: function () { return this.$store.state.displayTime },
       hasChildren: function () {
@@ -97,7 +96,6 @@
       },
       classList: function () {
         let list = 'list-item ' + this.obj.type
-        if (this.obj.hasOwnProperty('isAlias') && this.obj.isAlias) list += ' alias'
         if (this.$store.state.selectedFile === this.obj.hash) list += ' selected'
         return list
       },
@@ -126,10 +124,6 @@
       countFiles: function () {
         if (!this.obj.hasOwnProperty('children')) return 0
         return this.obj.children.filter(e => e.type === 'file').length + ' Files' || 0
-      },
-      countVirtualDirs: function () {
-        if (!this.obj.hasOwnProperty('children')) return 0
-        return this.obj.children.filter(e => e.type === 'virtual-directory').length + ' Virtual Directories' || 0
       },
       countTags: function () { return this.obj.tags.length },
       hasWritingTarget: function () {

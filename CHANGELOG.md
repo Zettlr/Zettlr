@@ -18,6 +18,7 @@
 - The Table Editor now remembers what the source table looked like and tries to recreate that when it applies the changes to the DOM.
 - Added verbose error reporting and improved the error handling during citeproc boot. Now, Zettlr will (a) remove error-throwing CiteKeys so that the rest of the library loads just fine and (b) display the exact errors as reported by citeproc-js so that users can immediately identify the bad keys and know where to look.
 - The global search bar's autocomplete will now also work for non-western scripts such as Japanese, Korean, Chinese, or any other.
+- Virtual directories have been discontinued. Parts of their functionality will be re-implemented in different ways.
 
 ## Under the Hood
 

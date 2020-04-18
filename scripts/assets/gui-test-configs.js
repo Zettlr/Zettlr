@@ -198,7 +198,6 @@ module.exports = {
   },
   'directory': {
     'sorting': 'name-up',
-    'virtualDirectories': [], // Empty array
     'project': null // Default: no project
   },
   'sortings': [
