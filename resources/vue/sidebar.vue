@@ -61,14 +61,12 @@
           </template>
           <template v-else-if="getDirectoryContents.length > 1">
             <!--
-              For the "real" sidelist, we need the virtual
-              scroller to maintain performance, because it
-              may contain thousands of elements. Provide
-              the virtual scroller with the correct size
-              of the list items (60px in mode with meta-
-              data, 30 in cases without).
-              NOTE: The page-mode MUST be true, because
-              it will speed up performance incredibly!
+              For the "real" sidelist, we need the virtual scroller to maintain
+              performance, because it may contain thousands of elements.
+              Provide the virtual scroller with the correct size of the list
+              items (60px in mode with meta-data, 30 in cases without).
+              NOTE: The page-mode MUST be true, because it will speed up
+              performance incredibly!
             -->
             <recycle-scroller
               v-bind:items="getDirectoryContents"
