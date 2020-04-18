@@ -57,6 +57,12 @@ module.exports = class FSAL extends EventEmitter {
         // This action needs the cache because it'll parse a file
         return FSALDir.createFile(src, options, this._cache)
       },
+      'duplicate-file': async (src, target, options) => {
+        // Duplicating a file is basically the same as creating, only with
+        // passing the content of an existing file to the createFile
+        // function (as a content-property for the options)
+        return FSALDir.createFile(src, options, this._cache)
+      },
       'rename-file': async (src, target, options) => {
         let oldHash = src.hash
         let isOpenFile = this._state.openFiles.find(e => e.hash === oldHash) !== undefined
