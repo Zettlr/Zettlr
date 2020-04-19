@@ -16,6 +16,8 @@ require('codemirror/addon/edit/closebrackets')
 require('./continuelist.js')
 require('./indentlist.js')
 require('codemirror/keymap/sublime') // This will load the extra commands from SublimeText
+require('codemirror/keymap/vim') // This will load the extra commands from Vim
+require('codemirror/keymap/emacs') // This will load the extra commands from Emacs
 
 // 3. Display addons
 require('codemirror/addon/display/fullscreen')
