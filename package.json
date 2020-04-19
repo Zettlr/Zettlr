@@ -14,7 +14,7 @@
     "description": "A powerful Markdown editor for researchers.",
     "main": "./source/main.js",
     "scripts": {
-        "postinstall": "electron-builder install-app-deps",
+        "postinstall": "electron-builder install-app-deps && yarn less && yarn handlebars && yarn csl:refresh && yarn reveal:build && yarn wp:prod",
         "start": "electron .",
         "build:quick": "node scripts/build-app.js --dir",
         "release:this": "node scripts/build-app.js",
@@ -23,7 +23,6 @@
         "release:linux": "node scripts/build-app.js --linux",
         "release:app-image": "node scripts/build-app.js --app-image",
         "less": "gulp less",
-        "less:extract": "node scripts/extract-css.js",
         "handlebars": "node scripts/handlebars.js",
         "lang:refresh": "node scripts/refresh-language.js",
         "csl:refresh": "node scripts/update-csl.js",

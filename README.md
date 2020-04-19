@@ -3,7 +3,7 @@
     <img src="https://raw.githubusercontent.com/Zettlr/Zettlr/master/resources/icons/png/256x256.png" alt="Zettlr"/>
   </a>
   <br/>
-  Zettlr [_ˈset·lər_]
+  Zettlr [<em>ˈset·lər</em>]
 </h1>
 
 <p align="center"><strong>A Markdown Editor for the 21<sup>st</sup> century</strong>.</p>

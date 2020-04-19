@@ -53,6 +53,7 @@ class Export extends ZettlrCommand {
       // file.
       dest = path.dirname(file.path)
     }
+
     let opt = {
       'format': arg.ext, // Which format: "html", "docx", "odt", "pdf"
       'file': file, // The file to be exported

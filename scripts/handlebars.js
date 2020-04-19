@@ -25,10 +25,6 @@ tplPaths.push(
     'output': path.join(__dirname, '..', 'source/common/assets/tpl/dialog')
   },
   {
-    'input': path.join(__dirname, '..', 'resources/templates/other'),
-    'output': path.join(__dirname, '..', 'source/common/assets/tpl/other')
-  },
-  {
     'input': path.join(__dirname, '..', 'resources/templates/popup'),
     'output': path.join(__dirname, '..', 'source/common/assets/tpl/popup')
   }
