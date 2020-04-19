@@ -21,7 +21,8 @@ const findObject = require('../../../common/util/find-object')
 const FSALFile = require('./fsal-file')
 const FSALDir = require('./fsal-directory')
 const FSALAttachment = require('./fsal-attachment')
-const Cache = require('./fsal-cache')
+const FSALWatchdog = require('./fsal-watchdog')
+const FSALCache = require('./fsal-cache')
 const hash = require('../../../common/util/hash')
 const onChange = require('on-change')
 const FILETYPES = require('../../../common/data.json').filetypes
@@ -30,7 +31,8 @@ module.exports = class FSAL extends EventEmitter {
   constructor (cachedir) {
     super()
     global.log.verbose('FSAL booting up ...')
-    this._cache = new Cache(path.join(cachedir, 'fsal/cache'))
+    this._cache = new FSALCache(path.join(cachedir, 'fsal/cache'))
+    this._watchdog = new FSALWatchdog()
 
     let stateObj = {
       // The app supports one open directory and (in theory) unlimited open files
@@ -41,7 +43,6 @@ module.exports = class FSAL extends EventEmitter {
 
     // Listen to changes in the state, so that we can emit events
     this._state = onChange(stateObj, (objPath, current, prev) => {
-      console.log('State changed!', objPath)
       this.emit('fsal-state-changed', objPath)
     }, {
       // Only watch the top-level properties, because otherwise sad Electron
@@ -191,6 +192,34 @@ module.exports = class FSAL extends EventEmitter {
         'newHash': file.hash
       })
     })
+    this._watchdog.on('change', async (changedPath) => {
+      console.log(`Path ${changedPath} changed!`)
+      let descriptorHash = hash(changedPath)
+      let descriptor = this.find(descriptorHash)
+      if (descriptor) {
+        if (descriptor.type === 'file') {
+          let newfile = await FSALFile.parse(changedPath, this._cache)
+          let children = descriptor.parent.children
+          children.splice(children.indexOf(descriptor), 1)
+          children.push(newfile)
+          FSALDir.sort(descriptor.parent)
+          this.emit('fsal-state-changed', 'directory', {
+            'oldHash': descriptor.parent.hash,
+            'newHash': descriptor.parent.hash
+          })
+        } else if (descriptor.type === 'directory') {
+          let newfile = await FSALDir.parse(changedPath, this._cache)
+          let children = descriptor.parent.children
+          children.splice(children.indexOf(descriptor), 1)
+          children.push(newfile)
+          FSALDir.sort(descriptor.parent)
+          this.emit('fsal-state-changed', 'directory', {
+            'oldHash': descriptor.parent.hash,
+            'newHash': descriptor.parent.hash
+          })
+        }
+      }
+    })
   }
 
   /**
@@ -244,8 +273,10 @@ module.exports = class FSAL extends EventEmitter {
     // Load a path
     if (isFile(p)) {
       await this._loadFile(p)
+      this._watchdog.watch(p)
     } else if (isDir(p)) {
       await this._loadDir(p)
+      this._watchdog.watch(p)
     } else if (path.extname(p) === '') {
       // It's not a file (-> no extension) but it
       // could not be found -> mark it as "dead"
@@ -262,6 +293,10 @@ module.exports = class FSAL extends EventEmitter {
    * for preparation of a full reload.
    */
   unloadAll () {
+    for (let p of Object.keys(this._state.filetree)) {
+      this._watchdog.unwatch(p)
+    }
+
     this._state.filetree = []
   }
 
@@ -283,6 +318,7 @@ module.exports = class FSAL extends EventEmitter {
     }
 
     this._state.filetree.splice(this._state.filetree.indexOf(root), 1)
+    this._watchdog.unwatch(root.path)
     return true
   }
 

@@ -71,11 +71,10 @@ class Zettlr {
         if (typeof fileMetadata === 'number') {
           // NOTE: This will become permanent later on
           fileMetadata = this._fsal.findFile(fileMetadata)
-          fileMetadata = this._fsal.getMetadataFor(fileMetadata)
         }
         this.ipc.send('file-replace', {
           'hash': oldHash,
-          'file': fileMetadata
+          'file': this._fsal.getMetadataFor(fileMetadata)
         })
       },
       dirUpdate: (oldHash, newHash) => {
