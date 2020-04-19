@@ -177,17 +177,19 @@ module.exports = class FSAL extends EventEmitter {
       if (!file) return // Not our business
       // Simply pull in the new target
       FSALFile.setTarget(file, global.targets.get(hash))
-      // Send a fresh version of this file to the renderer.
-      // TODO: Do this via emits!
-      global.application.fileUpdate(hash, FSALFile.metadata(file))
+      this.emit('fsal-state-changed', 'file', {
+        'oldHash': file.hash,
+        'newHash': file.hash
+      })
     })
     global.targets.on('remove', (hash) => {
       let file = this.findFile(hash)
       if (!file) return // Also not our business
       FSALFile.setTarget(file, null) // Reset
-      // Send a fresh version of this file to the renderer.
-      // TODO: Do this via emits!
-      global.application.fileUpdate(hash, FSALFile.metadata(file))
+      this.emit('fsal-state-changed', 'file', {
+        'oldHash': file.hash,
+        'newHash': file.hash
+      })
     })
   }
 
