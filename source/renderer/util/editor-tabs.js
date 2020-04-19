@@ -39,7 +39,11 @@ module.exports = class EditorTabs {
 
       this._currentlyDragging.ondrag = (evt) => {
         // Immediately sort everything correctly.
-        let currentElementPosition = evt.clientX - this._cursorOffset - this._tabbarLeft
+        // Take the absolute X coord, and then make it relative:
+        // 1. Substract the left offset (the sidebar)
+        // 2. Move the position to the beginning of the element
+        // 3. Take the current scrollLeft value into account
+        let currentElementPosition = evt.clientX - this._cursorOffset - this._tabbarLeft + this._div.scrollLeft
         for (let elem of this._currentlyDragging.parentElement.childNodes) {
           if (elem === this._currentlyDragging) continue // No inception, please
           if (elem.offsetLeft > currentElementPosition) {
@@ -50,7 +54,6 @@ module.exports = class EditorTabs {
       }
     }
     this._div.ondragend = (evt) => {
-      // Reset everything again TODO implement sorting command to main
       let newHashes = []
       // Now get the correct list of hashes
       for (let elem of this._currentlyDragging.parentElement.childNodes) {
