@@ -25,7 +25,6 @@ const FSALWatchdog = require('./fsal-watchdog')
 const FSALCache = require('./fsal-cache')
 const hash = require('../../../common/util/hash')
 const onChange = require('on-change')
-const FILETYPES = require('../../../common/data.json').filetypes
 
 module.exports = class FSAL extends EventEmitter {
   constructor (cachedir) {
@@ -33,6 +32,7 @@ module.exports = class FSAL extends EventEmitter {
     global.log.verbose('FSAL booting up ...')
     this._cache = new FSALCache(path.join(cachedir, 'fsal/cache'))
     this._watchdog = new FSALWatchdog()
+    this._ignoreRemoteChanges = false // Set to true during actions
 
     let stateObj = {
       // The app supports one open directory and (in theory) unlimited open files
@@ -193,33 +193,59 @@ module.exports = class FSAL extends EventEmitter {
       })
     })
     this._watchdog.on('change', async (changedPath) => {
-      console.log(`Path ${changedPath} changed!`)
-      let descriptorHash = hash(changedPath)
-      let descriptor = this.find(descriptorHash)
-      if (descriptor) {
-        if (descriptor.type === 'file') {
-          let newfile = await FSALFile.parse(changedPath, this._cache)
-          let children = descriptor.parent.children
-          children.splice(children.indexOf(descriptor), 1)
-          children.push(newfile)
-          FSALDir.sort(descriptor.parent)
-          this.emit('fsal-state-changed', 'directory', {
-            'oldHash': descriptor.parent.hash,
-            'newHash': descriptor.parent.hash
-          })
-        } else if (descriptor.type === 'directory') {
-          let newfile = await FSALDir.parse(changedPath, this._cache)
-          let children = descriptor.parent.children
-          children.splice(children.indexOf(descriptor), 1)
-          children.push(newfile)
-          FSALDir.sort(descriptor.parent)
-          this.emit('fsal-state-changed', 'directory', {
-            'oldHash': descriptor.parent.hash,
-            'newHash': descriptor.parent.hash
-          })
-        }
-      }
+      await this._onRemoteChange(changedPath)
     })
+  } // END constructor
+
+  async _onRemoteChange (changedPath) {
+    if (this._ignoreRemoteChanges) return
+
+    console.log(`Path ${changedPath} changed!`)
+
+    // The following possibilities do we have:
+    // 1. It can be a root file --> Replace file, update config
+    // 2. It can be a root directory --> Replace dir, update config
+    // 3. It can be (a directory/file within) the openDirectory --> Replace dir
+    // 4. It can be an openFile --> Replace file and synchronise (replace hash!)
+    // 5. It can be a directory or a file that's buried somewhere but not visible --> replace file/dir
+
+    // So, let's see what we got. First, find the file descriptor
+    let descriptorHash = hash(changedPath)
+    let descriptor = this.find(descriptorHash)
+
+    // Then let's see what we got!
+    let isRoot = this._state.filetree.includes(descriptor)
+    // let isDir = descriptor.type === 'directory'
+    // let isOpenDir = descriptor === this._state.openDirectory
+    // let isOpenFile = this._state.openFiles.includes(descriptor)
+
+    if (isRoot) {
+      //
+    }
+
+    if (descriptor) {
+      if (descriptor.type === 'file') {
+        let newfile = await FSALFile.parse(changedPath, this._cache)
+        let children = descriptor.parent.children
+        children.splice(children.indexOf(descriptor), 1)
+        children.push(newfile)
+        FSALDir.sort(descriptor.parent)
+        this.emit('fsal-state-changed', 'directory', {
+          'oldHash': descriptor.parent.hash,
+          'newHash': descriptor.parent.hash
+        })
+      } else if (descriptor.type === 'directory') {
+        let newfile = await FSALDir.parse(changedPath, this._cache)
+        let children = descriptor.parent.children
+        children.splice(children.indexOf(descriptor), 1)
+        children.push(newfile)
+        FSALDir.sort(descriptor.parent)
+        this.emit('fsal-state-changed', 'directory', {
+          'oldHash': descriptor.parent.hash,
+          'newHash': descriptor.parent.hash
+        })
+      }
+    }
   }
 
   /**
@@ -463,22 +489,8 @@ module.exports = class FSAL extends EventEmitter {
    * accounting for missing endings.
    * @param {String} name The file name to be searched for
    */
-  findExact (query) {
-    let ext = path.extname(query)
-    if (ext.length > 1) {
-      // file ending given
-      // return findObject(this._roots, 'name', query, 'children')
-      return findObject(this._state.filetree, 'name', query, 'children')
-    } else {
-      // No file ending given, so let's test all allowed
-      for (let type of FILETYPES) {
-        // let found = findObject(this._roots, 'name', query + type, 'children')
-        let found = findObject(this._state.filetree, 'name', query + type, 'children')
-        if (found) return found
-      }
-    }
-
-    return null
+  findExact (query, property = 'name') {
+    return findObject(this._state.filetree, property, query, 'children')
   }
 
   /**
@@ -564,10 +576,13 @@ module.exports = class FSAL extends EventEmitter {
       throw new Error(`Unknown action ${actionName}`)
     }
 
-    return this._actions[actionName](
+    this._ignoreRemoteChanges = true
+    let ret = await this._actions[actionName](
       options.source,
       options.target || options.source, // Some actions only have a source
       options.info
     )
+    this._ignoreRemoteChanges = false
+    return ret
   }
 }

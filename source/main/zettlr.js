@@ -28,7 +28,7 @@ const ignoreDir = require('../common/util/ignore-dir')
 const ignoreFile = require('../common/util/ignore-file')
 const isDir = require('../common/util/is-dir')
 const isFile = require('../common/util/is-file')
-
+const FILETYPES = require('../common/data.json').filetypes
 const loadCommands = require('./commands/_autoload')
 
 /**
@@ -431,9 +431,30 @@ class Zettlr {
   /**
     * Either returns one file that matches its ID with the given term or null
     * @param  {String} term The ID to be searched for
-    * @return {OBject}      The exact match, or null.
+    * @return {Object}      The exact match, or null.
     */
-  findExact (term) { return this._fsal.findExact(term) }
+  findExact (term) {
+    // First try the ID
+    let file = this._fsal.findExact(term, 'id')
+    // No luck? Then try the name property
+    if (!file) {
+      file = this._fsal.findExact(term, 'name')
+      let ext = path.extname(term)
+      if (ext.length > 1) {
+        // file ending given
+        file = this._fsal.findExact(term, 'name')
+      } else {
+        // No file ending given, so let's test all allowed
+        for (let type of FILETYPES) {
+          file = this._fsal.findExact(term + type, 'name')
+          if (file) break
+        }
+      }
+    }
+
+    // If any of this has worked,
+    if (file != null) this.openFile(file.hash)
+  }
 
   /**
     * Sets the current file to the given file.
