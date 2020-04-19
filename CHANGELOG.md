@@ -20,6 +20,7 @@
 - The global search bar's autocomplete will now also work for non-western scripts such as Japanese, Korean, Chinese, or any other.
 - Virtual directories have been discontinued. Parts of their functionality will be re-implemented in different ways.
 - On Linux, we've restored the default window decorations -- that is, the burger menu button is gone, and the menu will be displayed wherever the window manager decides.
+- Fixed a small bug that could lead to errors during autocomplete selection if no frontmatter is present in the file.
 
 ## Under the Hood
 

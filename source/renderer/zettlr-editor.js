@@ -321,7 +321,7 @@ class ZettlrEditor {
         for (let file of tree) {
           let fname = path.basename(file.name, path.extname(file.name))
           let displayText = fname // Always display the filename
-          if (file.frontmatter.title) displayText += ' ' + file.frontmatter.title
+          if (file.frontmatter && file.frontmatter.title) displayText += ' ' + file.frontmatter.title
           db[fname] = {
             'text': file.id || fname, // Use the ID, if given, or the filename
             'displayText': displayText,
