@@ -29,3 +29,5 @@ jobs:
       run: npm run wp:prod
     - name: Test reveal.JS template pre-building
       run: npm run reveal:build
+    - name: Test CSL refreshing
+      run: npm run csl:refresh

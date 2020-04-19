@@ -75,6 +75,7 @@ jobs:
           npm run handlebars
           npm run reveal:build
           npm run wp:prod
+          npm run csl:refresh
       # Save the current package.json's version value
       # as the output from this step so that we can
       # reference it later on.
