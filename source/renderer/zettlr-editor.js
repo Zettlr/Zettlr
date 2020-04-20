@@ -175,22 +175,29 @@ class ZettlrEditor {
               // Check if the linkEnd has been already inserted
               let line = cm.getLine(cur.line)
               let end = this._cm.getOption('zkn').linkEnd || ''
-              let prefix = ' '
-              let linkEndMissing = false
-              if (end !== '' && line.substr(cur.ch, end.length) !== end) {
-                // Add the linkend
-                prefix = end + prefix
-                linkEndMissing = true
+              let linkEndMissing = end !== '' && line.substr(cur.ch, end.length) !== end
+              // Check if we need to add the filename
+              let addfilename = (linkPref === 'always' ||
+                (linkPref === 'withID' && completion.id))
+              // Check if the filename needs to be added within the link
+              let inlink = this._cm.getOption('zkn').linkEnd === ']]' &&
+                this._cm.getOption('zkn').linkStart === '[['
+              if (addfilename && inlink && text !== completion.text) {
+                // We need to add the text in the link.
+                cm.replaceSelection('|' + text)
+                cur.ch += 1 + text.length
+              }
+              if (linkEndMissing) {
+                // We need to add the missing link end
+                cm.replaceSelection(end)
               } else {
                 // Advance the cursor so that it is outside of the link again
                 cur.ch += end.length
                 cm.setCursor(cur)
               }
-              if (linkPref === 'always' || (linkPref === 'withID' && completion.id)) {
-                // We need to add the text after the link.
-                cm.replaceSelection(prefix + text)
-              } else if (linkEndMissing) {
-                cm.replaceSelection(end) // Add the link ending
+              if (addfilename && !inlink) {
+              // We need to add the text behind the link.
+                cm.replaceSelection(' ' + text)
               }
             }
             this._autoCompleteStart = null
@@ -474,7 +481,13 @@ class ZettlrEditor {
         // The user clicked a zkn link -> create a search
         this._renderer.autoSearch(elem.text())
       } else if (elem.hasClass('cm-zkn-link')) {
-        this._renderer.autoSearch(elem.text(), true)
+        let txt = elem.text()
+        // Extract filename/tag
+        let match = /(.+?)\|.+/.exec(txt)
+        if (match) {
+          txt = match[1]
+        }
+        this._renderer.autoSearch(txt, true)
       } else if (elem.hasClass('cm-link') && elem.text().indexOf('^') === 0) {
         // We've got a footnote
         this._editFootnote(elem)
