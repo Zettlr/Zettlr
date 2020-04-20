@@ -89,7 +89,6 @@ module.exports = class FSALWatchdog extends EventEmitter {
     })
 
     this._process.on('all', (event, p) => {
-      console.log(event, p)
       // Determine that these are real and valid files/dirs
       let dir = (event === 'unlinkDir') ? true : isDir(p)
       let file = (event === 'unlink') ? true : isFile(p)
@@ -97,7 +96,7 @@ module.exports = class FSALWatchdog extends EventEmitter {
       // Only watch changes in directories and supported files
       if ((dir && !ignoreDir(p)) || (file && (!ignoreFile(p) || isAttachment(p)))) {
         // Emit the event for the respective path.
-        this.emit('change', p)
+        this.emit('change', event, p)
       }
     })
 

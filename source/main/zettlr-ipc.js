@@ -141,7 +141,6 @@ class ZettlrIPC {
     if (!this._app.window.getWindow()) {
       return this // Fail gracefully
     }
-    console.log('IPC', command)
     global.log.verbose('<<< IPC OUT: ' + command, content)
     let sender = this._app.window.getWindow().webContents
     sender.send('message', {

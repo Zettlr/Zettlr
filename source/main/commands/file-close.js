@@ -14,7 +14,7 @@
 
 const ZettlrCommand = require('./zettlr-command')
 
-class FileNew extends ZettlrCommand {
+class FileClose extends ZettlrCommand {
   constructor (app) {
     super(app, 'file-close')
   }
@@ -51,4 +51,4 @@ class FileNew extends ZettlrCommand {
   }
 }
 
-module.exports = FileNew
+module.exports = FileClose
