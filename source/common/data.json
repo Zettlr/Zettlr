@@ -184,6 +184,10 @@
         "mode": "clike",
         "selectors": [ "kotlin", "kt" ]
       },
+      "text/x-haskell": {
+        "mode": "haskell",
+        "selectors": [ "haskell", "hs" ]
+      },
       "text/x-objectivec": {
         "mode": "clike",
         "selectors": [ "objective-c", "objectivec", "objc" ]
