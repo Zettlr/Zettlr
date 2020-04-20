@@ -11,7 +11,12 @@
 
     &:hover { background-color: rgb(200, 200, 210); }
 
-    &.active { background-color: rgb(200, 200, 210); }
+    &.active {
+      background-color: var(--c-primary);
+      // Let's use LESS to output a contrast color (white or black depending on
+      // the theme's primary colour)
+      color: contrast(@c-primary);
+    }
 
     .close {
       transition: 0.5s all ease;
