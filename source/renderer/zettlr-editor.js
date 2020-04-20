@@ -165,8 +165,8 @@ class ZettlrEditor {
               let linkPref = global.config.get('zkn.linkWithFilename')
               // Prepare the text to insert, removing the ID if found in the filename
               let text = completion.displayText
-              if (completion.id && text.indexOf(completion.id) >= 0) {
-                text = text.replace(completion.id, '').trim()
+              if (text.startsWith(completion.text)) {
+                text = text.slice(completion.text.length).trim()
               }
               // In case the whole filename consists of the ID, well.
               // Then, have your ID duplicated.
