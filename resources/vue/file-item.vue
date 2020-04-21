@@ -111,9 +111,10 @@
           let hue = window.getComputedStyle(document.documentElement).getPropertyValue('--search-hue') || '159'
           for (let r of this.obj.results) w += r.weight
           w = Math.round(w / this.$store.state.maxWeight * 100) // Percentage
-          let bgcolor = `background-color:hsl(${hue}, ${w}%, 50%);`
-          // TODO: let color = ` style="color: ${(w > 50) ? 'black' : 'white'};"`
-          return bgcolor
+          let style = `background-color:hsl(${hue}, ${w}%, 50%);`
+          style += ` color: ${(w > 50) ? 'black' : 'white'};`
+          console.log(`w is ${w}, so we're going for ${(w > 50) ? 'black' : 'white'}`)
+          return style
         }
         return ''
       },
