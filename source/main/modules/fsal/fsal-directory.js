@@ -127,6 +127,8 @@ function sortChildren (dir) {
  * @param {Object} dir The directory descriptor
  */
 async function persistSettings (dir) {
+  // Only persist the settings if they are not default
+  if (JSON.stringify(dir._settings) === JSON.stringify(SETTINGS_TEMPLATE)) return
   await fs.writeFile(path.join(dir.path, '.ztr-directory'), JSON.stringify(dir._settings))
 }
 

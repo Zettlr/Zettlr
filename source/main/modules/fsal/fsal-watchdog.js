@@ -92,11 +92,21 @@ module.exports = class FSALWatchdog extends EventEmitter {
       // Determine that these are real and valid files/dirs
       let dir = (event === 'unlinkDir') ? true : isDir(p)
       let file = (event === 'unlink') ? true : isFile(p)
+      let attachment = isAttachment(p, event === 'unlink')
+
+      console.log(`UNFILTERED: ${event}: ${p}`)
 
       // Only watch changes in directories and supported files
-      if ((dir && !ignoreDir(p)) || (file && (!ignoreFile(p) || isAttachment(p)))) {
+      if ((dir && !ignoreDir(p)) || (file && (!ignoreFile(p) || attachment))) {
         // Emit the event for the respective path.
+        console.log(`  FILTERED: ${event}: ${p}`)
         this.emit('change', event, p)
+      } else {
+        console.log('dir:', dir)
+        console.log('ignoreDir:', ignoreDir(p))
+        console.log('file:', file)
+        console.log('ignoreFile:', ignoreFile(p))
+        console.log('isAttachment:', isAttachment(p))
       }
     })
 

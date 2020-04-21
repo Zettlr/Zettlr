@@ -17,6 +17,7 @@ const path = require('path')
 const EventEmitter = require('events')
 const isFile = require('../../../common/util/is-file')
 const isDir = require('../../../common/util/is-dir')
+const isAttachment = require('../../../common/util/is-attachment')
 const findObject = require('../../../common/util/find-object')
 const FSALFile = require('./fsal-file')
 const FSALDir = require('./fsal-directory')
@@ -216,6 +217,9 @@ module.exports = class FSAL extends EventEmitter {
     let descriptor
     if ([ 'change', 'unlink', 'unlinkDir' ].includes(event)) {
       descriptorHash = hash(changedPath)
+      // It may be that an attachment was unlinked/changed. In this case make
+      // sure to pull in its parent directory.
+      if (isAttachment(changedPath, true)) descriptorHash = hash(path.dirname(changedPath))
       descriptor = this.find(descriptorHash)
     } else {
       // Both in case of add and addDir there'll be a parent directory
@@ -260,7 +264,24 @@ module.exports = class FSAL extends EventEmitter {
     let fileToUpdate = null
 
     // Now let's distinguish the different scenarios we need to handle
-    if (isRoot && event === 'unlinkDir') {
+    if (isAttachment(changedPath, true)) {
+      console.log(`Attachment update detected: ${event} for ${changedPath}`)
+      // The descriptor contains the parent directory of the attachment, and
+      // it suffices to have it rescan its children, which we'll achieve by
+      // simply reparsing the directory.
+      let newdir = await FSALDir.parse(descriptor.path, this._cache, descriptor.parent || null)
+      FSALDir.sort(newdir)
+      // We can't use isRoot, as it'll be false if it's an add-event
+      if (this._state.filetree.includes(descriptor)) {
+        let index = this._state.filetree.indexOf(descriptor)
+        this._state.filetree.splice(index, 1, newdir)
+      } else {
+        let index = descriptor.parent.children.indexOf(descriptor)
+        descriptor.parent.children.splice(index, 1, newdir)
+      }
+      isDirectoryUpdateNeeded = true
+      directoryToUpdate = descriptor
+    } else if (isRoot && event === 'unlinkDir') {
       console.log('Removing root directory')
       // It's a directory and it has been removed -> remove it from the state
       this._state.filetree.splice(this._state.filetree.indexOf(descriptor), 1)

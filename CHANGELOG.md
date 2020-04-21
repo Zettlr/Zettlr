@@ -23,6 +23,7 @@
 - Fixed a small bug that could lead to errors during autocomplete selection if no frontmatter is present in the file.
 - Added Haskell syntax highlighting (keywords: `hs` or `haskell`).
 - Fix the colours of the heatmap search list.
+- Fixed a logical error in the detection of remote changes of attachment files.
 
 ## Under the Hood
 

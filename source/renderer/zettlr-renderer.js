@@ -397,6 +397,7 @@ class ZettlrRenderer {
       // We'll be patching the store, as this
       // will also update the renderer._paths.
       global.store.patch(oldHash, dir)
+      this._attachments.refresh()
     }
   }
 
