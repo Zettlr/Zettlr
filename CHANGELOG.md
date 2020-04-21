@@ -1,7 +1,12 @@
-# (no version assigned)
+# 1.7.0
 
 ## GUI and Functionality
 
+- **New Feature**: Zettlr now supports (theoretically) unlimited open documents and orders them in tabs at the top of the editor instance.
+    - The tabs display the frontmatter title, if applicable, or the filename.
+    - On hover, you can get additional info about the documents.
+    - Drag and drop the tabs to re-sort their order.
+    - Get going where you left of the day before: Open files are persisted during restarts of the application.
 - If available, a title from a YAML frontmatter will be appended to the displayed file entry when linking files.
 - Copying images from the Explorer/Finder/file browser now offers to insert them into the document, copying them over to the assets directory.
 - The popups are now more resilient against accidental closing, just like the dialogs.
@@ -27,6 +32,12 @@
 
 ## Under the Hood
 
+- **FSAL Refactor**: This release includes a huge refactor of the file system core of the application. In general terms, the rewritten core enables Zettlr to handle the file system more efficiently, uses up less RAM and has some other goodies that make the whole File System Abstraction Layer (FSAL) much more scalable for future feature implementations. More precisely:
+    - **From OOP to Functional**: While previously files and directories were heavily object-oriented with one full object being instantiated for each and every file including a whole prototype chain, the new core switches to a functional approach, removing the memory-intensive prototype chains. Instead, files and directories are now represented by a **descriptor** which includes the all meta-information packages, but no function bodies. Instead, the new FSAL calls functions to which it passes one or more descriptors in order to enable the function to modify the descriptor itself. This also makes state management easier, as the whole FSAL only works with object pointers and does not re-instantiate most descriptors every time a function modifies them.
+    - **Improved state management**: Now the state is not littered across the main process code base, but instead is centrally managed by the FSAL core class, which emits events every time anything in the state changes. This keeps the functional logic of the application much simpler. As opposed to before, the Zettlr main application class only accesses the FSAL state, and furthermore makes use of three events -- directory replacement, file replacement, and full file tree update -- to propagate any changes to the renderer process.
+    - **File Caching for faster boot**: The FSAL additionally includes a [sharded](https://searchoracle.techtarget.com/definition/sharding) file cache which approximately doubles the boot time. Furthermore, this enables the app to be much more resource-friendly for your storage, as the number of file accesses is reduced heavily -- at most, one hundred files will be opened during boot, instead of up to 10,000 or more, depending on the amount of open files you had.
+    - **Improved remote change detection**: As a result of the descriptor-system and improved central state management, detecting and managing state changes induced remotely much easier. The whole logic of the watchdog has been cut down to its essential parts to make its business logic more manageable.
+    - **Improved debugging**: Also as a result of implementing the new FSAL core as a self-contained EventEmitter module, it's much easier to locate logical errors, as due to improved state management missing state updates in the graphical user interface most likely emanate from exactly there, and not the FSAL. This has already helped identify several very small and almost unnoticeable bugs that did not update the renderer's state as wanted.
 - Improvements to image dragging and dropping from the attachment sidebar.
 - Switched the string variable replacer from vanilla JavaScript to moment.js, which simplified the function considerably.
 - The `export` module is now really a module.
