@@ -26,7 +26,11 @@
 - Virtual directories have been discontinued. Parts of their functionality will be re-implemented in different ways.
 - On Linux, we've restored the default window decorations -- that is, the burger menu button is gone, and the menu will be displayed wherever the window manager decides.
 - Fixed a small bug that could lead to errors during autocomplete selection if no frontmatter is present in the file.
-- Added Haskell syntax highlighting (keywords: `hs` or `haskell`).
+- Added syntax highlighting modes (with keywords):
+    - **Elm**: `elm`
+    - **F#**: `f#`/`fsharp`
+    - **Haskell**: `hs`/`haskell`
+    - **VB.net**: `vb.net`/`vb`/`visualbasic`
 - Fix the colours of the heatmap search list.
 - Fixed a logical error in the detection of remote changes of attachment files.
 
