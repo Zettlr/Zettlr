@@ -322,6 +322,7 @@ class ZettlrIPC {
       case 'switch-theme-bielefeld':
       case 'switch-theme-frankfurt':
       case 'switch-theme-karl-marx-stadt':
+      case 'switch-theme-bordeaux':
         // Set the theme accordingly
         global.config.set('display.theme', cmd.substr(13))
         break
