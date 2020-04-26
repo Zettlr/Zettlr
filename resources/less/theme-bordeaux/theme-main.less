@@ -85,7 +85,11 @@ body {
 
   &.dark {
     // DARK THEME
-    #editor { background-color: #002b36; }
+    #editor {
+      background-color: #002b36;
+      // Style the code block line wrapper classes
+      .CodeMirror .code-block-line { background-color: #111111; }
+    }
 
     #sidebar #sidebar-resize,
     #sidebar #sidebar-inner-resizer {
