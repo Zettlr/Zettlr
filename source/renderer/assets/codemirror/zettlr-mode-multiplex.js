@@ -26,10 +26,10 @@ const highlightingModes = require('../../../common/data').highlightingModes;
     let codeModes = []
 
     for (let [ mimeType, highlightingMode ] of Object.entries(highlightingModes)) {
-      let openRegex = new RegExp('```\\s*(' + highlightingMode.selectors.join('|') + ')\\b.*$')
+      let openRegex = new RegExp('(?:`{3}|~{3})\\s*(' + highlightingMode.selectors.join('|') + ')\\b.*$')
       codeModes.push({
         open: openRegex,
-        close: '```',
+        close: /`{3}|~{3}/,
         mode: CodeMirror.getMode(config, mimeType),
         delimStyle: 'formatting-code-block',
         innerStyle: 'fenced-code'
@@ -40,8 +40,8 @@ const highlightingModes = require('../../../common/data').highlightingModes;
       CodeMirror.getMode(config, 'spellchecker'), // Default mode
       ...codeModes,
       {
-        open: '```',
-        close: '```',
+        open: /`{3}|~{3}/,
+        close: /`{3}|~{3}/,
         mode: CodeMirror.getMode(config, 'text/plain'),
         delimStyle: 'formatting-code-block',
         innerStyle: 'fenced-code'

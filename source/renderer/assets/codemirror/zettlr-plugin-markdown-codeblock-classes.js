@@ -29,22 +29,20 @@
     for (let i = 0; i < cm.lineCount(); i++) {
       // Each code block line toggles the isCodeBlock variable (but the
       // codeblocks themselves should not be styled)
-      if (/^`{3}.*/.test(cm.getLine(i))) {
+      if (/^(?:`{3}|~{3}).*/.test(cm.getLine(i))) {
         isCodeBlock = !isCodeBlock
         continue
       }
 
-      let hasWrapClass = cm.lineInfo(i).wrapClass !== undefined
-      let isCurrentlyCode = (hasWrapClass) ? cm.lineInfo(i).wrapClass.includes(codeblockClass) : false
+      let wrapClass = cm.lineInfo(i).wrapClass
+      let isCurrentlyCode = (wrapClass) ? wrapClass.includes(codeblockClass) : false
 
       if (isCodeBlock && !isCurrentlyCode) {
         // We should render as code
-        console.log('Line ' + i + ': adding wrapper class')
         cm.addLineClass(i, 'wrap', codeblockClass)
         needsRefresh = true
       } else if (!isCodeBlock && isCurrentlyCode) {
         // We should not render as code
-        console.log('Line ' + i + ': removing wrapper class')
         cm.removeLineClass(i, 'wrap', codeblockClass)
         needsRefresh = true
       }
