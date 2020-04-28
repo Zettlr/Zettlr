@@ -34,6 +34,7 @@
 - Fix the colours of the heatmap search list.
 - Fixed a logical error in the detection of remote changes of attachment files.
 - Fenced code blocks, delimited by three backticks have a customizable box background. The colour (and different styles) can be customized by targeting the `code-block-line`-CSS class.
+- The font size of mathematics was decreased a bit to align it better with the size of normal text. Thanks to @tobiasdiez.
 
 ## Under the Hood
 

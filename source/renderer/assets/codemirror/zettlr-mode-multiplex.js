@@ -26,7 +26,7 @@ const highlightingModes = require('../../../common/data').highlightingModes;
     let codeModes = []
 
     for (let [ mimeType, highlightingMode ] of Object.entries(highlightingModes)) {
-      let openRegex = new RegExp('```(' + highlightingMode.selectors.join('|') + ')$')
+      let openRegex = new RegExp('```\\s*(' + highlightingMode.selectors.join('|') + ')\\b.*$')
       codeModes.push({
         open: openRegex,
         close: '```',
