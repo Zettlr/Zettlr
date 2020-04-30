@@ -25,7 +25,6 @@ const FSALAttachment = require('./fsal-attachment')
 const FSALWatchdog = require('./fsal-watchdog')
 const FSALCache = require('./fsal-cache')
 const hash = require('../../../common/util/hash')
-const onChange = require('on-change')
 
 module.exports = class FSAL extends EventEmitter {
   constructor (cachedir) {
@@ -38,22 +37,12 @@ module.exports = class FSAL extends EventEmitter {
     this._ignoreRemoteChanges = false // Set to true during actions
     this._remoteChangeTimeout = null // Holds the timeout to ignore remote changes
 
-    let stateObj = {
+    this._state = {
       // The app supports one open directory and (in theory) unlimited open files
       openDirectory: null,
       openFiles: [],
       filetree: [] // Contains the full filetree
     }
-
-    // Listen to changes in the state, so that we can emit events
-    this._state = onChange(stateObj, (objPath, current, prev) => {
-      this.emit('fsal-state-changed', objPath)
-    }, {
-      // Only watch the top-level properties, because otherwise sad Electron
-      // doesn't like me anymore, because apparently it's too much to ask that
-      // it simply stringifies watched properties, even if they are primitives.
-      'isShallow': true
-    })
 
     // The following actions can be run on the file tree
     this._actions = {
@@ -425,6 +414,7 @@ module.exports = class FSAL extends EventEmitter {
     let start = Date.now()
     let file = await FSALFile.parse(filePath, this._cache)
     this._state.filetree.push(file)
+    this.emit('fsal-state-changed', 'filetree')
     console.log(`${Date.now() - start} ms: Loaded file ${filePath}`) // DEBUG
   }
 
@@ -437,6 +427,7 @@ module.exports = class FSAL extends EventEmitter {
     let start = Date.now()
     let dir = await FSALDir.parse(dirPath, this._cache)
     this._state.filetree.push(dir)
+    this.emit('fsal-state-changed', 'filetree')
     console.log(`${Date.now() - start} ms: Loaded directory ${dirPath}`) // DEBUG
   }
 
@@ -482,6 +473,7 @@ module.exports = class FSAL extends EventEmitter {
     }
 
     this._state.filetree = []
+    this.emit('fsal-state-changed', 'filetree')
   }
 
   /**
@@ -496,13 +488,16 @@ module.exports = class FSAL extends EventEmitter {
     if (this._state.openDirectory === root) {
       // Unset the directory pointer
       this._state.openDirectory = null
+      this.emit('fsal-state-changed', 'openDirectory')
     } else if (this._state.openFiles.includes(root)) {
       // Close the file
       this._state.openFiles.splice(this._roots.indexOf(root), 1)
+      this.emit('fsal-state-changed', 'openFiles')
     }
 
     this._state.filetree.splice(this._state.filetree.indexOf(root), 1)
     this._watchdog.unwatch(root.path)
+    this.emit('fsal-state-changed', 'filetree')
     return true
   }
 
@@ -514,8 +509,10 @@ module.exports = class FSAL extends EventEmitter {
     let files = fileArray.map(f => this.findFile(f))
     files = files.filter(elem => elem != null)
     this._state.openFiles = files
+    this.emit('fsal-state-changed', 'openFiles')
 
     // Make sure the config is consistent and we remove non-existent files
+    // TODO: Move to application
     global.config.set('openFiles', this._state.openFiles.map(e => e.hash))
   }
 
@@ -539,6 +536,7 @@ module.exports = class FSAL extends EventEmitter {
     }
 
     this._state.openFiles = newSorting
+    this.emit('fsal-state-changed', 'openFiles')
     return newSorting
   }
 
@@ -548,7 +546,8 @@ module.exports = class FSAL extends EventEmitter {
    */
   openFile (file) {
     if (this._state.openFiles.includes(file)) return false
-    this._state.openFiles.push(file) // Will trigger a state update
+    this._state.openFiles.push(file)
+    this.emit('fsal-state-changed', 'openFiles')
     return true
   }
 
@@ -559,8 +558,6 @@ module.exports = class FSAL extends EventEmitter {
   closeFile (file) {
     if (this._state.openFiles.includes(file)) {
       this._state.openFiles.splice(this._state.openFiles.indexOf(file), 1)
-      // Splicing does not trigger a change,
-      // so we need to manually trigger that.
       this.emit('fsal-state-changed', 'openFiles')
       return true
     } else {
@@ -675,7 +672,6 @@ module.exports = class FSAL extends EventEmitter {
       'dirs': 0
     }
 
-    // for (let root of this._roots) {
     for (let root of this._state.filetree) {
       if (root.type === 'file') {
         count.files++
@@ -722,6 +718,7 @@ module.exports = class FSAL extends EventEmitter {
 
   setOpenDirectory (dirObject) {
     this._state.openDirectory = dirObject
+    this.emit('fsal-state-changed', 'openDirectory')
   }
 
   getOpenDirectory () { return this._state.openDirectory }

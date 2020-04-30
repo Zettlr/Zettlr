@@ -36,17 +36,18 @@ class SaveFile extends ZettlrCommand {
 
     // Update word count
     this._app.stats.updateWordCount(file.wordcount || 0)
-
-    let realFile = global.application.findFile(file.hash || null)
-    if (!realFile) {
-      console.log('No file found - creating')
-      realFile = await this._app.getFileSystem().runAction('create-file', {
-        'source': this._app.getCurrentDir(),
-        'info': generateFilename()
-      })
-    }
+    let realFile
 
     try {
+      realFile = global.application.findFile(file.hash || null)
+      if (!realFile) {
+        console.log('No file found - creating')
+        realFile = await this._app.getFileSystem().runAction('create-file', {
+          'source': this._app.getCurrentDir(),
+          'info': generateFilename()
+        })
+      }
+
       await this._app.getFileSystem().runAction('save-file', {
         'source': realFile,
         'info': file.content
@@ -55,7 +56,7 @@ class SaveFile extends ZettlrCommand {
       // Re-send the file
       global.application.fileUpdate(realFile.hash, global.application.findFile(realFile.hash))
     } catch (e) {
-      global.log.error(`Error writing file ${realFile.name}!`, e)
+      global.log.error(`Error saving file: ${e.message}!`, e)
     }
 
     return true
