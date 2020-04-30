@@ -26,7 +26,7 @@ module.exports = function () {
   pattern = replaceStringVariables(pattern)
   pattern = pattern.replace(/%id/g, generateId(global.config.get('zkn.idGen')))
   // In case a funny guy has removed the pattern from config.
-  if (pattern.length === '') pattern = uuid()
+  if (pattern.trim().length === 0) pattern = uuid()
   // Make sure there's an ending
   if (path.extname(pattern).length < 2) pattern += '.md'
   return pattern
