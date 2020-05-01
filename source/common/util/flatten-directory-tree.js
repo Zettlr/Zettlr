@@ -13,28 +13,26 @@
 
 /**
  * This function flattens an object tree (file tree) to an array.
- * @param  {Object} tree        A ZettlrDir tree
- * @param  {Array}  [newarr=[]] Needed for recursion. Do not use.
- * @return {Mixed}             An array or nothing.
+ * @param  {Object} tree        A descriptor, can be a tree or a single object.
+ * @return {Mixed}              An array.
  */
-function flattenDirectoryTree (tree, newarr = []) {
+module.exports = function flattenDirectoryTree (tree) {
+  let newarr = []
   // In case of completely empty stuff, simply return an empty array
-  if (tree == null || tree.length === 0) {
+  if (tree == null || (Array.isArray(tree) && tree.length === 0)) {
     return []
   }
 
   if (tree.type === 'file') {
-    return newarr.push(tree)
+    return [tree] // well ...
   } else if (tree.type === 'directory') {
     // Append directory (for easier overview)
     newarr.push(tree)
-    if (tree.children != null) {
+    if (tree.hasOwnProperty('children') && tree.children != null) {
       for (let c of tree.children) {
-        newarr.concat(flattenDirectoryTree(c, newarr))
+        newarr.concat(flattenDirectoryTree(c))
       }
     }
     return newarr
   }
 }
-
-module.exports = flattenDirectoryTree
