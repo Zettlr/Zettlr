@@ -18,6 +18,7 @@ const EventEmitter = require('events')
 const isFile = require('../../../common/util/is-file')
 const isDir = require('../../../common/util/is-dir')
 const isAttachment = require('../../../common/util/is-attachment')
+const flattenDirectoryTree = require('../../../common/util/flatten-directory-tree')
 const findObject = require('../../../common/util/find-object')
 const FSALFile = require('./fsal-file')
 const FSALDir = require('./fsal-directory')
@@ -34,7 +35,6 @@ module.exports = class FSAL extends EventEmitter {
     this._watchdog = new FSALWatchdog()
     this._isCurrentlyHandlingRemoteChange = false
     this._remoteChangeBuffer = [] // Holds events for later processing
-    this._ignoreRemoteChanges = false // Set to true during actions
     this._remoteChangeTimeout = null // Holds the timeout to ignore remote changes
 
     this._state = {
@@ -46,20 +46,44 @@ module.exports = class FSAL extends EventEmitter {
 
     // The following actions can be run on the file tree
     this._actions = {
-      'sort': async (src, target, options) => { return FSALDir.sort(src, options) },
+      'sort': async (src, target, options) => {
+        // NOTE: Does not generate watchdog events
+        return FSALDir.sort(src, options)
+      },
       'create-file': async (src, target, options) => {
         // This action needs the cache because it'll parse a file
+        // NOTE: Generates an add-event
+        this._watchdog.ignoreEvents({
+          'event': 'add',
+          'path': path.join(src.path, options.name)
+        })
         return FSALDir.createFile(src, options, this._cache)
       },
       'duplicate-file': async (src, target, options) => {
         // Duplicating a file is basically the same as creating, only with
         // passing the content of an existing file to the createFile
         // function (as a content-property for the options)
+        // NOTE: Generates an add-event
+        this._watchdog.ignoreEvents({
+          'event': 'add',
+          'path': path.join(src.path, options.name)
+        })
         return FSALDir.createFile(src, options, this._cache)
       },
       'rename-file': async (src, target, options) => {
+        // NOTE: Generates 1x unlink, 1x add
         let oldHash = src.hash
         let isOpenFile = this._state.openFiles.find(e => e.hash === oldHash) !== undefined
+
+        this._watchdog.ignoreEvents({
+          'event': 'unlink',
+          'path': src.path
+        })
+        this._watchdog.ignoreEvents({
+          'event': 'add',
+          'path': path.join(path.dirname(src.path), options.name)
+        })
+
         await FSALFile.rename(src, options)
         // Now we need to re-sort the parent directory
         await FSALDir.sort(src.parent) // Omit sorting
@@ -70,42 +94,93 @@ module.exports = class FSAL extends EventEmitter {
         return true
       },
       'remove-file': async (src, target, options) => {
+        // NOTE: Generates 1x unlink
         // First remove the file
+        this._watchdog.ignoreEvents({
+          'event': 'unlink',
+          'path': src.path
+        })
         await FSALFile.remove(src)
         // Will trigger a change that syncs the files
         this.closeFile(src)
       },
       'save-file': async (src, target, options) => {
+        // NOTE: Generates 1x chance
+        this._watchdog.ignoreEvents({
+          'event': 'change',
+          'path': src.path
+        })
         await FSALFile.save(src, options)
         return true
       },
       'search-file': async (src, target, options) => {
+        // NOTE: Generates no events
         // Searches a file and returns the result
         return FSALFile.search(src, options)
       },
       // Creates a project in a dir
       'create-project': async (src, target, options) => {
+        // NOTE: Generates no events as dotfiles are not watched
         await FSALDir.makeProject(src, options)
       },
       'update-project': async (src, target, options) => {
+        // NOTE: Generates no events as dotfiles are not watched
         // Updates the project properties on a directory.
         await FSALDir.updateProjectProperties(src, options)
       },
       'remove-project': async (src, target, options) => {
+        // NOTE: Generates no events as dotfiles are not watched
         await FSALDir.removeProject(src)
       },
       'create-directory': async (src, target, options) => {
         // Parses a directory and henceforth needs the cache
+        // NOTE: Generates 1x add
+        this._watchdog.ignoreEvents({
+          'event': 'addDir',
+          'path': path.join(src.path, options.name)
+        })
         await FSALDir.create(src, options, this._cache)
       },
       'rename-directory': async (src, target, options) => {
         // This thing needs the cache
+        // NOTE: Generates 1x unlink, 1x add for each child + src!
+        let oldPrefix = path.join(path.dirname(src.path), src.name)
+        let newPrefix = path.join(path.dirname(src.path), options.name)
+
+        let arr = flattenDirectoryTree(src)
+        let adds = []
+        let removes = []
+        for (let obj of arr) {
+          adds.push({
+            'event': obj.type === 'file' ? 'add' : 'addDir',
+            // Converts /old/path/oldname/file.md --> /old/path/newname/file.md
+            'path': obj.path.replace(oldPrefix, newPrefix)
+          })
+          removes.push({
+            'event': obj.type === 'file' ? 'unlink' : 'unlinkDir',
+            'path': obj.path
+          })
+        }
+
+        // Now concat the removes in reverse direction and ignore them
+        this._watchdog.ignoreEvents(adds.concat(removes))
+
         await FSALDir.rename(src, options, this._cache)
       },
       'remove-directory': async (src, target, options) => {
+        // NOTE: Generates 1x unlink for each child + src!
+        let arr = flattenDirectoryTree(src).map(e => {
+          return {
+            'event': e.type === 'file' ? 'unlink' : 'unlinkDir',
+            'path': e.path
+          }
+        })
+
+        this._watchdog.ignoreEvents(arr)
         await FSALDir.remove(src)
       },
       'move': async (src, target, options) => {
+        // NOTE: Generates 1x unlink, 1x add for each child, src and on the target!
         let openFilesUpdateNeeded = false
         let openDirUpdateNeeded = false
         let newOpenDirHash
@@ -148,6 +223,25 @@ module.exports = class FSAL extends EventEmitter {
           newOpenDirHash = hash(this._state.openDirectory.path.replace(src.parent.path, target.path))
         }
 
+        // Now we need to generate the ignore events that are to be expected.
+        let sourcePath = src.path
+        let targetPath = path.join(target.path, src.name)
+        let arr = flattenDirectoryTree(src)
+        let adds = []
+        let removes = []
+        for (let obj of arr) {
+          adds.push({
+            'event': obj.type === 'file' ? 'add' : 'addDir',
+            // Converts /path/source/file.md --> /path/target/file.md
+            'path': obj.path.replace(sourcePath, targetPath)
+          })
+          removes.push({
+            'event': obj.type === 'file' ? 'unlink' : 'unlinkDir',
+            'path': obj.path
+          })
+        }
+        this._watchdog.ignoreEvents(adds.concat(removes))
+
         // Now perform the actual move. What the action will do is re-read the
         // new source again, and insert it into the target, so the filetree is
         // good to go afterwards.
@@ -156,6 +250,7 @@ module.exports = class FSAL extends EventEmitter {
         // Emit an event notifying the app that the file tree has changed. This
         // will cause a full new tree to be sent to the renderer. This way we
         // can be sure it'll be accurate.
+        // TODO are you insane? You can just send a directory update
         this.emit('fsal-state-changed', 'filetree')
 
         // Afterwards, let's see if we have to change something. These
@@ -185,8 +280,9 @@ module.exports = class FSAL extends EventEmitter {
         'newHash': file.hash
       })
     })
+
     this._watchdog.on('change', async (event, changedPath) => {
-      if (this._ignoreRemoteChanges) return // Ignore that one
+      // TODO: Check for ignored events
       // Buffer the event for later
       this._remoteChangeBuffer.push({ 'event': event, 'changedPath': changedPath })
 
@@ -731,15 +827,11 @@ module.exports = class FSAL extends EventEmitter {
       throw new Error(`Unknown action ${actionName}`)
     }
 
-    if (this._remoteChangeTimeout) clearTimeout(this._remoteChangeTimeout)
-    this._ignoreRemoteChanges = true
     let ret = await this._actions[actionName](
       options.source,
       options.target || options.source, // Some actions only have a source
       options.info
     )
-    // The file changes will come in with a slight delay, so account for that
-    this._remoteChangeTimeout = setTimeout(() => { this._ignoreRemoteChanges = false }, 500)
     return ret
   }
 }

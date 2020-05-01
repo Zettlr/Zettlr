@@ -35,6 +35,7 @@ module.exports = class FSALWatchdog extends EventEmitter {
     this._booting = false
     this._process = null
     this._paths = []
+    this._ignoredEvents = []
   }
 
   /**
@@ -89,6 +90,19 @@ module.exports = class FSALWatchdog extends EventEmitter {
     })
 
     this._process.on('all', (event, p) => {
+      // Should we ignore that event?
+      let shouldIgnore = this._ignoredEvents.findIndex(e => {
+        return e.event === event && e.path === p
+      })
+
+      if (shouldIgnore > -1) {
+        // Yup
+        let i = this._ignoredEvents[shouldIgnore]
+        console.log(`+++ WATCHDOG IGNORE +++ ${i.event}:${i.path}`)
+        this._ignoredEvents.splice(shouldIgnore, 1)
+        return
+      }
+
       // Determine that these are real and valid files/dirs
       let dir = (event === 'unlinkDir') ? true : isDir(p)
       let file = (event === 'unlink') ? true : isFile(p)
@@ -146,5 +160,18 @@ module.exports = class FSALWatchdog extends EventEmitter {
     this._process.unwatch(p)
 
     return this
+  }
+
+  /**
+   * Adds events in the form { path: '', event: '' } to the ignore list.
+   * @param {Array} events An array of path/event-objects to ignore
+   */
+  ignoreEvents (events) {
+    if (!events) return false
+    if (!Array.isArray(events)) events = [events]
+
+    this._ignoredEvents = this._ignoredEvents.concat(events)
+
+    return true
   }
 }
