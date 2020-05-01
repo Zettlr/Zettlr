@@ -16,7 +16,7 @@ const path = require('path')
 const sanitize = require('sanitize-filename')
 const ZettlrCommand = require('./zettlr-command')
 const makeExport = require('../modules/export')
-const flattenDirectoryTree = require('../../common/util/flatten-directory-tree')
+const objectToArray = require('../../common/util/object-to-array')
 const makeImgPathsAbsolute = require('../../common/util/make-img-paths-absolute')
 
 // Extracts footnotes
@@ -44,7 +44,7 @@ class DirProjectExport extends ZettlrCommand {
     let config = dir._settings.project
 
     // Receive a two dimensional array of all directory contents
-    let files = flattenDirectoryTree(dir)
+    let files = objectToArray(dir, 'children')
 
     // Reduce to files-only
     files = files.filter((elem) => { return elem.type === 'file' })

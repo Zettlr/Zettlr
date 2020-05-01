@@ -18,7 +18,7 @@ const EventEmitter = require('events')
 const isFile = require('../../../common/util/is-file')
 const isDir = require('../../../common/util/is-dir')
 const isAttachment = require('../../../common/util/is-attachment')
-const flattenDirectoryTree = require('../../../common/util/flatten-directory-tree')
+const objectToArray = require('../../../common/util/object-to-array')
 const findObject = require('../../../common/util/find-object')
 const FSALFile = require('./fsal-file')
 const FSALDir = require('./fsal-directory')
@@ -86,6 +86,7 @@ module.exports = class FSAL extends EventEmitter {
 
         await FSALFile.rename(src, options)
         // Now we need to re-sort the parent directory
+        // TODO: Only do if it's not a root! And if it's a root, we have to do our open paths as well etc etc
         await FSALDir.sort(src.parent) // Omit sorting
         // Notify of a state change
         this.emit('fsal-state-changed', 'filetree')
@@ -147,7 +148,7 @@ module.exports = class FSAL extends EventEmitter {
         let oldPrefix = path.join(path.dirname(src.path), src.name)
         let newPrefix = path.join(path.dirname(src.path), options.name)
 
-        let arr = flattenDirectoryTree(src)
+        let arr = objectToArray(src, 'children')
         let adds = []
         let removes = []
         for (let obj of arr) {
@@ -169,7 +170,7 @@ module.exports = class FSAL extends EventEmitter {
       },
       'remove-directory': async (src, target, options) => {
         // NOTE: Generates 1x unlink for each child + src!
-        let arr = flattenDirectoryTree(src).map(e => {
+        let arr = objectToArray(src, 'children').map(e => {
           return {
             'event': e.type === 'file' ? 'unlink' : 'unlinkDir',
             'path': e.path
@@ -226,7 +227,7 @@ module.exports = class FSAL extends EventEmitter {
         // Now we need to generate the ignore events that are to be expected.
         let sourcePath = src.path
         let targetPath = path.join(target.path, src.name)
-        let arr = flattenDirectoryTree(src)
+        let arr = objectToArray(src, 'children')
         let adds = []
         let removes = []
         for (let obj of arr) {

@@ -21,7 +21,7 @@ const turndownGfm = require('joplin-turndown-plugin-gfm')
 const { clipboard } = require('electron')
 const hash = require('../common/util/hash')
 const countWords = require('../common/util/count-words')
-const flattenDirectoryTree = require('../common/util/flatten-directory-tree')
+const objectToArray = require('../common/util/object-to-array')
 const { trans } = require('../common/lang/i18n.js')
 const generateKeymap = require('./assets/codemirror/generate-keymap.js')
 const EditorSearch = require('./util/editor-search')
@@ -316,7 +316,7 @@ class ZettlrEditor {
 
         // Navigate to the root to include as many files as possible
         while (dir.parent) dir = dir.parent
-        let tree = flattenDirectoryTree(dir).filter(elem => elem.type === 'file')
+        let tree = objectToArray(dir, 'children').filter(elem => elem.type === 'file')
 
         for (let file of tree) {
           let fname = path.basename(file.name, path.extname(file.name))
