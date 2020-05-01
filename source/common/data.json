@@ -8,6 +8,7 @@
     ],
     "ignoreDirs": [
         "^\\.",
+        "^\\.git",
         ".+?\\.app",
         ".+?\\.textbundle"
     ],
