@@ -686,6 +686,22 @@ class ZettlrEditor {
   }
 
   /**
+   * Hot-swaps the contents of one of the currently opened files.
+   *
+   * @param {number} hash The file's hash
+   * @param {string} contents The new file contents
+   * @memberof ZettlrEditor
+   */
+  replaceFileContents (hash, contents) {
+    let openedFile = this._openFiles.find((e) => e.fileObject.hash === hash)
+    if (openedFile) {
+      openedFile.cmDoc.setValue(contents)
+    } else {
+      console.warn('Cannot replace the file contents of file ' + hash + ': No open file found!')
+    }
+  }
+
+  /**
     * Closes the current file.
     * @param {Number} hash A hash to close
     * @return {ZettlrEditor} Chainability.

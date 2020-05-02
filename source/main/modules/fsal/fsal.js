@@ -353,6 +353,12 @@ module.exports = class FSAL extends EventEmitter {
     })
   } // END constructor
 
+  /**
+   * Triggers on remote changes, detected by the FSAL watchdog.
+   *
+   * @param {string} event       The triggered event (equals chokidar event).
+   * @param {string} changedPath The path on which this event was triggered.
+   */
   async _onRemoteChange (event, changedPath) {
     // Lock the function during processing
     this._isCurrentlyHandlingRemoteChange = true
@@ -475,7 +481,13 @@ module.exports = class FSAL extends EventEmitter {
       isFileUpdateNeeded = true
       fileToUpdate = newfile
       // In case the file was open, also replace it in the openFiles array
-      if (isOpenFile) this._state.openFiles.splice(this._state.openFiles.indexOf(descriptor), 1, newfile)
+      if (isOpenFile) {
+        // Tell the editor to both update the open files and
+        // the file contents of the new file
+        this._state.openFiles.splice(this._state.openFiles.indexOf(descriptor), 1, newfile)
+        this.emit('fsal-state-changed', 'fileContents', { 'hash': hash(changedPath) })
+        this.emit('fsal-state-changed', 'openFiles')
+      }
     } else if ([ 'unlink', 'unlinkDir' ].includes(event)) {
       console.log('Removing file or directory')
       // A file or directory was removed
@@ -554,8 +566,9 @@ module.exports = class FSAL extends EventEmitter {
   }
 
   /**
-   * Shuts down the provider
-   * @return {Boolean} Whether or not the shutdown was successful
+   * Shuts down the service provider.
+   *
+   * @returns {boolean} Whether or not the shutdown was successful
    */
   shutdown () {
     global.log.verbose('FSAL shutting down ...')

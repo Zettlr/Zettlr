@@ -142,6 +142,9 @@ class Zettlr {
           console.log('Sending small file update')
           global.application.fileUpdate(info.oldHash, info.newHash)
           break
+        case 'fileContents':
+          this._onFileContentsChanged(info)
+          break
         case 'openDirectory':
           console.log('+++++ SENDING NEW DIRECTORY TO RENDERER +++++')
           this.ipc.send('dir-set-current', (this.getCurrentDir()) ? this.getCurrentDir().hash : null)
@@ -207,6 +210,41 @@ class Zettlr {
       'targets': require('./providers/target-provider'),
       'css': require('./providers/css-provider'),
       'translations': require('./providers/translation-provider')
+    }
+  }
+
+  /**
+   * Callback to perform necessary functions in order to replace file contents.
+   *
+   * @param {object} info The info object originally passed to the event.
+   * @memberof Zettlr
+   */
+  _onFileContentsChanged (info) {
+    let changedFile = this.findFile(info.hash)
+    // The contents of one of the open files have changed.
+    // What follows looks a bit ugly, welcome to callback hell.
+    if (global.config.get('alwaysReloadFiles')) {
+      this._fsal.getFileContents(changedFile).then((file) => {
+        this.ipc.send('replace-file-contents', {
+          'hash': info.hash,
+          'contents': file.content
+        })
+      })
+    } else {
+      // The user did not check this option, so ask first
+      this.getWindow().askReplaceFile(changedFile.name, (ret, alwaysReload) => {
+        // Set the corresponding config option
+        global.config.set('alwaysReloadFiles', alwaysReload)
+        // ret can have three status: cancel = 0, save = 1, omit = 2.
+        if (ret !== 1) return
+
+        this._fsal.getFileContents(changedFile).then((file) => {
+          this.ipc.send('replace-file-contents', {
+            'hash': info.hash,
+            'contents': file.content
+          })
+        })
+      }) // END ask replace file
     }
   }
 

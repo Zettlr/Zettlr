@@ -318,14 +318,18 @@ class ZettlrWindow {
   }
 
   /**
-    * The currently opened file's contents have changed on disk -- reload?
-    * @return {Integer} 0 (Do not replace the file) or 1 (Replace the file)
-    */
-  askReplaceFile (callback) {
+   * Asks the user for confirmation whether to replace an opened file with a
+   * newer version.
+   *
+   * @param {string}   filename The filename to be displayed.
+   * @param {function} callback A callback which will be called afterwards.
+   * @memberof ZettlrWindow
+   */
+  askReplaceFile (filename, callback) {
     let options = {
       type: 'question',
       title: trans('system.replace_file_title'),
-      message: trans('system.replace_file_message'),
+      message: trans('system.replace_file_message', filename),
       checkboxLabel: trans('dialog.preferences.always_reload_files'),
       checkboxChecked: global.config.get('alwaysReloadFiles'),
       buttons: [

@@ -376,6 +376,11 @@ class ZettlrRendererIPC {
         this._app.replaceFile(cnt.hash, cnt.file)
         break
 
+      // Is used to hot-swap the contents of a currently opened file
+      case 'replace-file-contents':
+        this._app.getEditor().replaceFileContents(cnt.hash, cnt.contents)
+        break
+
       case 'sync-files':
         this._app.getEditor().syncFiles(cnt)
         break
