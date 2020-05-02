@@ -143,7 +143,51 @@ module.exports = class FSAL extends EventEmitter {
         await FSALDir.create(src, options, this._cache)
       },
       'rename-directory': async (src, target, options) => {
-        // This thing needs the cache
+        // We are probably going to need that code from the move action
+        let openFilesUpdateNeeded = false
+        let openDirUpdateNeeded = false
+        let newOpenDirHash
+        let newFileHashes = []
+        if (src.type === 'directory') {
+          // A directory is being moved, so check the open files if something
+          // needs to change concerning them.
+          for (let file of this._state.openFiles) {
+            let found = this.findFile(file.hash, src)
+            if (found) {
+              // The file is in there, so we need to update the open files
+              openFilesUpdateNeeded = true
+              // Exchange the old directory path for the new one and compute
+              // its new hash
+              let newHash = hash(file.path.replace(src.parent.path, target.path))
+              newFileHashes.push(newHash)
+            } else {
+              // Nothing really to do
+              newFileHashes.push(file.hash)
+            }
+          }
+        } else if (src.type === 'file') {
+          if (this._state.openFiles.includes(src)) {
+            // The source is an open file, we need to account for that.
+            openFilesUpdateNeeded = true
+            let newHash = hash(src.path.replace(src.parent.path, target.path))
+            newFileHashes.push(newHash)
+            newFileHashes = this._state.openFiles.map(e => e.hash)
+            newFileHashes.splice(newFileHashes.indexOf(src.hash), 1, newHash)
+          }
+        }
+
+        if (
+          src.type === 'directory' &&
+          (src === this._state.openDirectory ||
+          this.findDir(this._state.openDirectory.hash, src))
+        ) {
+          // Compute the new hash and indicate an update is necessary
+          openDirUpdateNeeded = true
+          newOpenDirHash = hash(this._state.openDirectory.path.replace(src.parent.path, target.path))
+        }
+
+        // Now that we have prepared potential updates,
+        // let us perform the rename.
         // NOTE: Generates 1x unlink, 1x add for each child + src!
         let oldPrefix = path.join(path.dirname(src.path), src.name)
         let newPrefix = path.join(path.dirname(src.path), options.name)
@@ -167,6 +211,17 @@ module.exports = class FSAL extends EventEmitter {
         this._watchdog.ignoreEvents(adds.concat(removes))
 
         await FSALDir.rename(src, options, this._cache)
+
+        // Update the parent
+        this.emit('fsal-state-changed', 'directory', {
+          'oldHash': src.parent.hash,
+          'newHash': src.parent.hash
+        })
+
+        // Afterwards, let's see if we have to change something. These
+        // functions will notify the application respectively.
+        if (openFilesUpdateNeeded) this.setOpenFiles(newFileHashes)
+        if (openDirUpdateNeeded) this.setOpenDirectory(this.findDir(newOpenDirHash))
       },
       'remove-directory': async (src, target, options) => {
         // NOTE: Generates 1x unlink for each child + src!
@@ -248,11 +303,17 @@ module.exports = class FSAL extends EventEmitter {
         // good to go afterwards.
         await FSALDir.move(src, target, this._cache)
 
-        // Emit an event notifying the app that the file tree has changed. This
-        // will cause a full new tree to be sent to the renderer. This way we
-        // can be sure it'll be accurate.
-        // TODO are you insane? You can just send a directory update
-        this.emit('fsal-state-changed', 'filetree')
+        // Now update both the source's parent and the target
+        this.emit('fsal-state-changed', 'directory', {
+          // We cannot move roots, so the source WILL have a parent
+          'oldHash': src.parent.hash,
+          'newHash': src.parent.hash
+        })
+        this.emit('fsal-state-changed', 'directory', {
+          // We cannot move into files, so target WILL be a directory
+          'oldHash': target.hash,
+          'newHash': target.hash
+        })
 
         // Afterwards, let's see if we have to change something. These
         // functions will notify the application respectively.
