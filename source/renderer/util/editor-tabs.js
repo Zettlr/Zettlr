@@ -92,7 +92,7 @@ module.exports = class EditorTabs {
 
     files = files.map(elem => elem.fileObject) // Make it easier accessible
     for (let file of files) {
-      this._div.appendChild(this.makeElement(file, file.hash === openFile))
+      this._div.appendChild(this._makeElement(file, file.hash === openFile))
     }
 
     // Now make sure that the active tab is visible and scroll if necessary.
@@ -111,6 +111,22 @@ module.exports = class EditorTabs {
       allowHTML: true, // There is HTML in the contents
       placement: 'bottom' // Prefer to display it on the bottom
     })
+  }
+
+  markDirty (hash) {
+    for (let elem of this._div.children) {
+      if (parseInt(elem.dataset['hash'], 10) === hash) {
+        elem.classList.add('modified')
+      }
+    }
+  }
+
+  markClean (hash) {
+    for (let elem of this._div.children) {
+      if (parseInt(elem.dataset['hash'], 10) === hash) {
+        elem.classList.remove('modified')
+      }
+    }
   }
 
   _onClick (event) {
@@ -139,7 +155,7 @@ module.exports = class EditorTabs {
    * @param {Object} file A file descriptor
    * @param {Boolean} active Whether the file is currently active
    */
-  makeElement (file, active = false) {
+  _makeElement (file, active = false) {
     // First determine the display title (either filename or frontmatter title)
     let displayTitle = file.name
     if (file.frontmatter && file.frontmatter.title) displayTitle = file.frontmatter.title

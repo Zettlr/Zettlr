@@ -350,8 +350,10 @@ class ZettlrEditor {
         // doc or not
         if (this.isClean()) {
           this._renderer.clearModified()
+          this._tabs.markClean(this._currentHash)
         } else {
           this._renderer.setModified()
+          this._tabs.markDirty(this._currentHash)
           // Set the autosave timeout
           this._timeout = setTimeout((e) => {
             this._renderer.saveFile()
