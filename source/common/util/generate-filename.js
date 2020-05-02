@@ -14,7 +14,7 @@
 
 const replaceStringVariables = require('./replace-string-variables.js')
 const generateId = require('./generate-id')
-const uuid = require('uuid/v4')
+const uuid = require('uuid').v4
 const path = require('path')
 
 /**
