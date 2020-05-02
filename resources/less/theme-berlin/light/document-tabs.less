@@ -1,0 +1,30 @@
+// Editor tabs styling
+// Document Tab bar (over the editor)
+
+#document-tabs {
+  border-bottom: 1px solid #ddd;
+
+  .document {
+    transition: 0.2s background-color ease;
+
+    .filename { padding-left: 8px; }
+
+    &:hover { background-color: rgb(200, 200, 210); }
+
+    &.active {
+      background-color: var(--c-primary);
+      // Let's use LESS to output a contrast color (white or black depending on
+      // the theme's primary colour)
+      color: contrast(@c-primary);
+    }
+
+    .close {
+      transition: 0.5s all ease;
+      font-weight: bold;
+      &:hover {
+        transform: rotate(90deg);
+        color: var(--red-0);
+      }
+    }
+  }
+}

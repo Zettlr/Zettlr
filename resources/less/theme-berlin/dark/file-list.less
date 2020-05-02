@@ -11,9 +11,8 @@
 
     &.selected { background-color: var(--grey-6); }
 
-      p.filename { color: white; }
       div.meta {
-        .id, .tags, .directories, .files, .virtual-directories, .tex-indicator {
+        .id, .tags, .directories, .files, .tex-indicator {
           background-color:var(--grey-4);
           color: var(--grey-0);
         }
@@ -35,11 +34,7 @@
         p.filename { color: white !important; }
       }
 
-      // File is displayed as part of a virtual directory -> actually
-      // some kind of a "ghost" file
-      &.alias { background-color:var(--purple-selection-dark); }
-
-      &.directory, &.virtual-directory {
+      &.directory {
         background-color:var(--grey-8);
         color: var(--c-primary-shade);
 
@@ -48,8 +43,6 @@
           &:hover { color: var(--grey-2); }
         }
       }
-
-      &.virtual-directory { color:var(--purple-selection); }
     }
   }
 

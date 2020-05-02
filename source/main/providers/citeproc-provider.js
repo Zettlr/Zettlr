@@ -220,6 +220,8 @@ class CiteprocProvider {
       // Check the validity of the citation
       try {
         Citr.parseSingle(`@${id}`)
+        this._items[id] = item
+        this._ids[id] = true
       } catch (err) {
         global.log.warning(err.message)
         if (global.application.isBooting()) {
@@ -230,10 +232,7 @@ class CiteprocProvider {
           // Otherwise immediately dispatch
           global.ipc.notify(err.message)
         }
-        continue // Don't include the citation
       }
-      this._items[id] = item
-      this._ids[id] = true // Create a fast accessible object (instead of slow array)
     }
 
     // Now we are ready. Initiate the processor.
@@ -252,6 +251,7 @@ class CiteprocProvider {
         // Try to make a citation "cluster" out of each single CiteKey
         this._engine.makeCitationCluster([this._sys.retrieveItem(key)])
       } catch (e) {
+        console.error(key, this._sys.retrieveItem(key))
         // In this case, to ensure correct loading of the rest of the
         // database, remove the problematic cite key.
         delete this._ids[key]

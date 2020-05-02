@@ -57,6 +57,14 @@ class ZettlrToolbar {
   _act () {
     // Activate search function.
     this._searchbar.on('keyup', (e) => {
+      // In case the user is using an IME (for non-latin script) autocomplete
+      // will not work correctly due to the way IMEs compose the letters. Which
+      // is the keyword here, because if the isComposing flag is set, simply
+      // don't handle that event and wait for the compositionend-event to fire
+      // on the textfield for the magic to happen!
+      if (e.originalEvent.isComposing) return
+      if (e.which === 8 || e.which === 46) return // DEL or backspace has been pressed
+
       if (e.which === 27) { // ESC
         this._searchbar.blur()
         this._searchbar.val('')
@@ -65,20 +73,15 @@ class ZettlrToolbar {
         this._renderer.beginSearch(this._searchbar.val())
         this._searchbar.select() // Select everything in the area.
       } else {
-        if (e.which === 8 || e.which === 46) return // DEL or backspace has been pressed
-        if ((this._searchbar.val() === '') || (this._searchbar.val() === this._oldval)) return // Content has not changed
-        // Any other key has been pressed
-        this._oldval = this._searchbar.val()
-        for (let name of this._autocomplete) {
-          if (name.substr(0, this._oldval.length).toLowerCase() === this._oldval.toLowerCase()) {
-            this._searchbar.val(this._oldval + name.substr(this._oldval.length)).select().focus()
-            let e = this._searchbar[0] // Retrieve actual DOM element
-            if (e.setSelectionRange) { e.setSelectionRange(this._oldval.length, this._searchbar.val().length) }
-            break
-          }
-        }
-        this._oldval = this._searchbar.val() // Now this is the old value
+        // In any other case, apply autocomplete
+        this._applyAutocomplete()
       }
+    })
+
+    // Listen for the event fired if an IME is done composing something
+    this._searchbar.on('compositionend', (e) => {
+      // Composition has ended, so we can apply autocomplete!
+      this._applyAutocomplete()
     })
 
     this._searchbar.on('dblclick', (e) => { e.stopPropagation() })
@@ -149,6 +152,33 @@ class ZettlrToolbar {
       arrow: true,
       duration: 100
     })
+  }
+
+  /**
+   * Applies autocorrect to the global search area. This code has been
+   * outsources from the keyup event listener, because it also needs to be
+   * executed after the endcomposing-event fires.
+   */
+  _applyAutocomplete () {
+    if ((this._searchbar.val() === '') || (this._searchbar.val() === this._oldval)) return // Content has not changed
+
+    // First, get the current value of the searchbar
+    this._oldval = this._searchbar.val()
+
+    // Then test if the current value equals the (lowercased) beginning of any
+    // autocorrect name we have in memory. If it does, replace it and select
+    // everything afterwards.
+    for (let name of this._autocomplete) {
+      if (name.substr(0, this._oldval.length).toLowerCase() === this._oldval.toLowerCase()) {
+        this._searchbar.val(this._oldval + name.substr(this._oldval.length)).select().focus()
+        let e = this._searchbar[0] // Retrieve actual DOM element
+        if (e.setSelectionRange) {
+          e.setSelectionRange(this._oldval.length, this._searchbar.val().length)
+        }
+        break
+      }
+    }
+    this._oldval = this._searchbar.val() // Now this is the "old value"
   }
 
   /**

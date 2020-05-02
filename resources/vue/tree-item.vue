@@ -99,7 +99,7 @@ module.exports = {
     /**
      * Returns true if this is a directory
      */
-    isDirectory: function () { return ['directory', 'virtual-directory'].includes(this.obj.type) },
+    isDirectory: function () { return 'directory' === this.obj.type },
     /**
      * Shortcut methods to access the store
      */
@@ -130,7 +130,6 @@ module.exports = {
      */
     classList: function () {
       let list = 'list-item ' + this.obj.type
-      if (this.obj.hasOwnProperty('isAlias') && this.obj.isAlias) list += ' alias'
       if ([this.selectedFile, this.selectedDir].includes(this.obj.hash)) list += ' selected'
       if (this.obj.project) list += ' project'
       // Determine if this is a root component

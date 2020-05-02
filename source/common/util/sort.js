@@ -16,7 +16,7 @@ const dateSorting = require('./sort-date')
 
 /**
 * This function can sort an array of ZettlrFile and ZettlrDir objects
-* @param  {Array} arr An array containing only ZettlrFile, ZettlrVirtualDirectory and ZettlrDir objects
+* @param  {Array} arr An array containing file and directory descriptors
 * @param {String} [type='name-up'] The type of sorting - can be time-up, time-down, name-up or name-down
 * @return {Array}     The sorted array
 */
@@ -24,7 +24,6 @@ module.exports = function (arr, type = 'name-up') {
   // First split the array based on type
   let f = []
   let d = []
-  let vd = []
 
   // Should we use natural sorting or ascii?
   let useNatural = (global.config && global.config.get('sorting') === 'natural')
@@ -47,17 +46,11 @@ module.exports = function (arr, type = 'name-up') {
       case 'directory':
         d.push(c)
         break
-      case 'virtual-directory':
-        vd.push(c)
-        break
     }
   }
 
   // Sort the directories (always based on name)
   d.sort(sortingFunc)
-
-  // Then virtual directories (also by name)
-  vd.sort(sortingFunc)
 
   // Now sort the files according to the type of sorting
   switch (type) {
@@ -75,6 +68,6 @@ module.exports = function (arr, type = 'name-up') {
       break
   }
 
-  // Return sorted array files -> virtual directories -> directories
-  return f.concat(vd).concat(d)
+  // Return sorted array files -> directories
+  return f.concat(d)
 }

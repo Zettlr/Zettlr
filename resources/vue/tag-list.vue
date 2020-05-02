@@ -14,7 +14,7 @@
 
 <template>
   <div class="taglist">
-    <div v-for="tag in getTags" class="tagspacer">
+    <div v-for="(tag, index) in getTags" class="tagspacer" v-bind:key="index">
       <div class="tag" v-on:click.stop="tagSearch" v-bind:data-name="tag.name" v-bind:data-tippy-content="tag.desc" v-bind:style="col(tag.color)"></div>
     </div>
   </div>

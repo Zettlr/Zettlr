@@ -15,6 +15,7 @@
 const ZettlrCommand = require('./zettlr-command')
 const path = require('path')
 const hash = require('../../common/util/hash')
+const sanitize = require('sanitize-filename')
 
 class DirRename extends ZettlrCommand {
   constructor (app) {
@@ -26,49 +27,36 @@ class DirRename extends ZettlrCommand {
    * @param {String} evt The event name
    * @param  {Object} arg An object containing hash of containing and name of new dir.
    */
-  run (evt, arg) {
-    // { 'hash': hash, 'name': val }
-    let dir = this._app.findDir({ 'hash': parseInt(arg.hash) })
-    if (!dir) {
-      global.log.error(`Could not rename directory ${arg.hash} -- not found!`)
-      return // Something went wrong
+  async run (evt, arg) {
+    let sourceDir = this._app.findDir(arg.hash)
+    if (!sourceDir) {
+      global.log.error('Could not rename directory: Not found.')
+      return false
     }
 
-    let containingDirectory = path.dirname(dir.path)
+    let wasCurrentDir = this._app.getCurrentDir() === sourceDir
 
-    // Save for later whether this is the currentDir (have to re-send dir list)
-    let isCurDir = dir === this._app.getCurrentDir()
-    let oldPath
+    arg.name = sanitize(arg.name, { replacement: '-' })
 
-    if (dir.contains(this._app.getCurrentFile())) {
-      // The current file is in said dir so we need to trick a little bit
-      oldPath = this._app.getCurrentFile().path
-      let relative = oldPath.replace(dir.path, '') // Remove old directory to get relative path
-      // Re-merge:
-      oldPath = path.join(containingDirectory, arg.name, relative) // New path now
+    try {
+      await this._app.getFileSystem().runAction('rename-directory', {
+        'source': sourceDir,
+        'info': { 'name': arg.name }
+      })
+    } catch (e) {
+      this._app.window.prompt({
+        type: 'error',
+        title: e.name,
+        message: e.message
+      })
+      return false
     }
 
-    // Move to same location with different name
-    dir.move(containingDirectory, arg.name).then(() => {
-      if (!dir.isRoot()) {
-        // Update the parent, because the file sorting might have changed
-        global.application.dirUpdate(dir.parent.hash, dir.parent.getMetadata())
-      } else {
-        // We got a root, so there's no parent to update
-        global.application.dirUpdate(arg.hash, dir.getMetadata())
-      }
-
-      // We need to explicitly re-set the dir, as only by this the
-      // newly generated hash will be available throughout the app.
-      if (isCurDir) this._app.setCurrentDir(dir)
-
-      if (oldPath) {
-        // Re-set the current file
-        let nfile = dir.findFile({ 'hash': hash(oldPath) })
-        this._app.setCurrentFile(nfile)
-      }
-    })
-
+    // Now the dir should be created -> Send an update to the renderer
+    // and set the new dir as current.
+    global.application.dirUpdate(sourceDir.parent.hash, sourceDir.parent.hash)
+    let newDirHash = hash(path.join(sourceDir.parent.path, arg.name))
+    if (wasCurrentDir) this._app.setCurrentDir(this._app.findDir(newDirHash))
     return true
   }
 }

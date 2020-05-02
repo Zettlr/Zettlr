@@ -176,6 +176,14 @@
         "mode": "clike",
         "selectors": [ "c\\#", "csharp", "cs" ]
       },
+      "text/x-elm": {
+        "mode": "elm",
+        "selectors": [ "elm" ]
+      },
+      "text/x-fsharp": {
+        "mode": "mllike",
+        "selectors": [ "f\\#", "fsharp" ]
+      },
       "text/x-java": {
         "mode": "clike",
         "selectors": [ "java" ]
@@ -183,6 +191,10 @@
       "text/x-kotlin": {
         "mode": "clike",
         "selectors": [ "kotlin", "kt" ]
+      },
+      "text/x-haskell": {
+        "mode": "haskell",
+        "selectors": [ "haskell", "hs" ]
       },
       "text/x-objectivec": {
         "mode": "clike",
@@ -231,6 +243,10 @@
       "text/x-sh": {
         "mode": "shell",
         "selectors": [ "shell", "sh", "bash" ]
+      },
+      "text/x-vb": {
+        "mode": "vb",
+        "selectors": [ "vb\\.net", "vb", "visualbasic" ]
       },
       "text/x-yaml": {
         "mode": "yaml",

@@ -1,0 +1,54 @@
+// Document Tab bar (over the editor)
+
+#document-tabs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: @tabbar-height;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  overflow-x: auto;
+
+  // In case of an overflow, hide the scrollbar so that scrolling left/right
+  // remains possible, but no thicc scrollbar in the way!
+  &::-webkit-scrollbar { display: none; }
+
+  .document {
+    flex-grow: 1;
+    position: relative;
+    min-width: 200px;
+    line-height: @tabbar-height;
+    overflow: hidden;
+    padding-right: @tabbar-height; // Push the filename back
+
+    .filename {
+      white-space: nowrap;
+      overflow-x: hidden;
+      display: inline-block;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      right: @tabbar-height; // Don't overlay the close button
+      padding-left: 2px;
+    }
+
+    // Mark modification status classically
+    &.modified .filename::before { content: '* ' }
+
+    .close {
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      width: @tabbar-height;
+      height: @tabbar-height;
+      line-height: @tabbar-height;
+      text-align: center;
+      border-radius: @tabbar-height;
+      display: inline-block;
+    }
+  }
+}

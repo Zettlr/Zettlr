@@ -36,6 +36,14 @@ class ZettlrWindow {
     this._app = parent
     this._win = null
     this._menu = null
+
+    // Enable classes from within the app to update the menu
+    global.refreshMenu = () => {
+      if (!this._win || !this._menu) {
+        return global.log.verbose('Not updating menu. Window not open.')
+      }
+      this._menu.set()
+    }
   }
 
   /**
@@ -88,10 +96,10 @@ class ZettlrWindow {
       winConf.titleBarStyle = 'hiddenInset'
     }
 
-    // Remove the frame on Linux and Windows
-    if (process.platform === 'linux' || process.platform === 'win32') {
-      winConf.frame = false
-    }
+    // Remove the frame on Windows
+    if (process.platform === 'win32') winConf.frame = false
+
+    // On Linux we'll fall back to how the windows should look
 
     // First create a new browserWindow
     this._win = new BrowserWindow(winConf)
@@ -182,10 +190,6 @@ class ZettlrWindow {
     // Push the window into the globals that the menu for instance can access it
     // to send commands.
     global.mainWindow = this._win
-
-    // Enable classes from within the app to update the menu
-    global.refreshMenu = () => { this._menu.set() }
-
     return this
   }
   // END this.open
@@ -196,6 +200,9 @@ class ZettlrWindow {
     * @return {ZettlrWindow} This for chainability.
     */
   fileUpdate () {
+    if (!this._win) {
+      return global.log.verbose('Not updating window title. Window not open.')
+    }
     let curFile = this._app.getCurrentFile()
     if (curFile == null) {
       this._win.setTitle('Zettlr')
@@ -311,14 +318,18 @@ class ZettlrWindow {
   }
 
   /**
-    * The currently opened file's contents have changed on disk -- reload?
-    * @return {Integer} 0 (Do not replace the file) or 1 (Replace the file)
-    */
-  askReplaceFile (callback) {
+   * Asks the user for confirmation whether to replace an opened file with a
+   * newer version.
+   *
+   * @param {string}   filename The filename to be displayed.
+   * @param {function} callback A callback which will be called afterwards.
+   * @memberof ZettlrWindow
+   */
+  askReplaceFile (filename, callback) {
     let options = {
       type: 'question',
       title: trans('system.replace_file_title'),
-      message: trans('system.replace_file_message'),
+      message: trans('system.replace_file_message', filename),
       checkboxLabel: trans('dialog.preferences.always_reload_files'),
       checkboxChecked: global.config.get('alwaysReloadFiles'),
       buttons: [

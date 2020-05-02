@@ -49,10 +49,13 @@
     }
 
     .CodeMirror {
-      height:100%;
-      cursor:text;
-      font-family: inherit;
+      // The CodeMirror editor needs to respect the new tabbar; it cannot take
+      // up 100 % all for itself anymore.
+      height: calc(100% - @tabbar-height);
+      margin-top: @tabbar-height;
       margin-left: 0.5em;
+      cursor: text;
+      font-family: inherit;
 
       @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
       @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }

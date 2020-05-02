@@ -106,8 +106,8 @@ class ZettlrBody {
     $(document).on('keydown', (event) => {
       let isDarwin = $('body').hasClass('darwin')
       let cmdOrCtrl = (isDarwin && event.metaKey) || (!isDarwin && event.ctrlKey)
-      let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && event.key === 'e')
-      let focusSidebarShortcut = (cmdOrCtrl && event.shiftKey && event.key === 't')
+      let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && event.which === 69)
+      let focusSidebarShortcut = (cmdOrCtrl && event.shiftKey && event.which === 84)
       if (focusEditorShortcut) { // Cmd/Ctrl+Shift+E
         // Obviously, focus the editor
         this._renderer.getEditor().getEditor().focus()
@@ -122,13 +122,13 @@ class ZettlrBody {
     global.notifyError = (msg) => { this.notifyError(msg) }
 
     // Afterwards, activate the event listeners of the window controls
-    $('.windows-window-controls .minimise, .linux-window-controls .minimise').click((e) => {
+    $('.windows-window-controls .minimise').click((e) => {
       global.ipc.send('win-minimise')
     })
-    $('.windows-window-controls .resize, .linux-window-controls .maximise').click((e) => {
+    $('.windows-window-controls .resize').click((e) => {
       global.ipc.send('win-maximise')
     })
-    $('.windows-window-controls .close, .linux-window-controls .close').click((e) => {
+    $('.windows-window-controls .close').click((e) => {
       global.ipc.send('win-close')
     })
   }
@@ -145,7 +145,7 @@ class ZettlrBody {
 
     // On config change, change the theme according to the settings
     let href = $('link#theme-css').attr('href')
-    href = href.replace(/bielefeld|berlin|frankfurt|karl-marx-stadt/, newTheme)
+    href = href.replace(/bielefeld|berlin|frankfurt|karl-marx-stadt|bordeaux/, newTheme)
     $('link#theme-css').attr('href', href)
     this._renderer.getEditor().refresh()
     this._currentTheme = newTheme
@@ -156,7 +156,7 @@ class ZettlrBody {
     * @param  {ZettlrDir} dir A directory object
     * @return {void}     Nothing to return.
     */
-  requestFileName (dir) {
+  requestFileName (dir, newFileButton = false) {
     // No directory selected.
     if (!dir) return
 
@@ -170,15 +170,15 @@ class ZettlrBody {
       return global.ipc.send('file-new', { 'name': generateFileName(), 'hash': dir.hash })
     }
 
-    // It was a virtual directory, not an actual directory.
-    if (dir.type !== 'directory') return
-
     let cnt = makeTemplate('popup', 'textfield', {
       'val': generateFileName(),
       'placeholder': trans('dialog.file_new.placeholder')
     })
 
-    this._currentPopup = popup($('.button.file-new'), cnt, (form) => {
+    // If the newFileButton has been clicked, center the popup there, not someplace else
+    let targetElement = (newFileButton) ? $('#document-tabs .add-new-file') : $('.button.file-new')
+
+    this._currentPopup = popup(targetElement, cnt, (form) => {
       if (form) {
         global.ipc.send('file-new', { 'name': form[0].value, 'hash': dir.hash })
       }
@@ -232,9 +232,6 @@ class ZettlrBody {
     // Prevent multiple popups
     if (this._currentPopup) this._currentPopup.close(true)
 
-    // It was a virtual directory, not an actual directory.
-    if (dir.type !== 'directory') return
-
     let elem
 
     // Selection method stolen from requestNewDirName
@@ -262,30 +259,6 @@ class ZettlrBody {
         global.ipc.send('dir-new', { 'name': form[0].value, 'hash': dir.hash })
       }
       this._currentPopup = null // Reset current popup
-    })
-  }
-
-  /**
-    * Requests a directory name for a new virtual directory
-    * @param  {ZettlrDir} dir The parent directory object.
-    * @return {void}     Nothing to return.
-    */
-  requestVirtualDirName (dir) {
-    if (!dir) return // No directory selected.
-
-    // Prevent multiple popups
-    if (this._currentPopup) this._currentPopup.close(true)
-
-    let cnt = makeTemplate('popup', 'textfield', {
-      'val': trans('dialog.dir_new.value'),
-      'placeholder': trans('dialog.dir_new.placeholder')
-    })
-
-    this._currentPopup = popup($(`[data-hash=${dir.hash}]`), cnt, (form) => {
-      if (form) {
-        global.ipc.send('dir-new-vd', { 'name': form[0].value, 'hash': dir.hash })
-      }
-      this._currentPopup = null
     })
   }
 
@@ -318,7 +291,8 @@ class ZettlrBody {
   requestNewFileName (file) {
     if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
     let elem = ''
-    if (this._renderer.getCurrentFile() != null && this._renderer.getCurrentFile().hash === file.hash) {
+    if (this._renderer.getActiveFile() != null && this._renderer.getActiveFile().hash === file.hash) {
+      // TODO: Need to make this appropriate for all open files (open popup under their respective tabs)
       elem = $('.button.file-rename')
     } else {
       elem = $('#file-list').find('div[data-hash="' + file.hash + '"]').first()
@@ -618,7 +592,7 @@ class ZettlrBody {
     */
   displayFind () {
     if (this._currentPopup) this._currentPopup.close(true)
-    if (this._renderer.getCurrentFile() === null) return
+    if (this._renderer.getActiveFile() == null) return
     let regexRE = /^\/.+\/[gimy]{0,4}$/ // It's meta, dude!
 
     // Create the popup template. Make sure we pre-set the value, if given.
@@ -776,7 +750,7 @@ class ZettlrBody {
     */
   displayTOC () {
     if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
-    if (this._renderer.getCurrentFile() === null) return
+    if (this._renderer.getActiveFile() == null) return
 
     let toc = this._renderer.getEditor().buildTOC()
 

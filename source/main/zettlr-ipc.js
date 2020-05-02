@@ -158,11 +158,11 @@ class ZettlrIPC {
     * @param  {Object} cnt   Contains the message body.
     * @return {void}       Does not return anything.
     */
-  handleEvent (cmd, cnt) {
+  async handleEvent (cmd, cnt) {
     // We received a new event and need to handle it.
     try {
       global.log.verbose('Trying to run command through Application: ' + cmd)
-      let res = this._app.runCommand(cmd, cnt)
+      let res = await this._app.runCommand(cmd, cnt)
       return res // In case the command has run there's no need to handle it.
     } catch (e) {
       // Simple fall through
@@ -203,16 +203,24 @@ class ZettlrIPC {
 
       case 'get-paths':
         // The child process requested the current paths and files
-        this.send('paths-update', this._app.getPathDummies())
+        this._app.sendPaths()
         // Also set the current file and dir correctly immediately
-        this.send('file-set-current', (this._app.getCurrentFile()) ? this._app.getCurrentFile().hash : null)
         this.send('dir-set-current', (this._app.getCurrentDir()) ? this._app.getCurrentDir().hash : null)
-        if (this._app.getCurrentFile()) this.send('file-open', this._app.getCurrentFile().withContent())
+        // TODO: Send a list of all open files!
+        this._app.sendOpenFiles()
         break
 
       case 'file-get':
         // The client requested a different file.
-        this._app.sendFile(cnt)
+        this._app.openFile(cnt)
+        break
+
+      case 'file-request-sync':
+        // The editor has received a synchronisation command and now needs to
+        // pull some additional files from the main process in order to have
+        // their contents available.
+        this._app.getFileSystem().getFileContents(this._app.getFileSystem().findFile(cnt.hash))
+          .then(file => { this.send('file-request-sync', file) })
         break
 
       case 'dir-select':
@@ -243,8 +251,7 @@ class ZettlrIPC {
 
       // Force-open is basically a search and immediate return.
       case 'force-open':
-        var open = this._app.findExact(cnt) // Find an exact match
-        if (open != null) this._app.sendFile(open.hash)
+        this._app.findExact(cnt) // Find an exact match
         break
 
       // Change theme in config
@@ -315,6 +322,7 @@ class ZettlrIPC {
       case 'switch-theme-bielefeld':
       case 'switch-theme-frankfurt':
       case 'switch-theme-karl-marx-stadt':
+      case 'switch-theme-bordeaux':
         // Set the theme accordingly
         global.config.set('display.theme', cmd.substr(13))
         break

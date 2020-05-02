@@ -22,6 +22,10 @@
   CodeMirror.commands.markdownHeaderClasses = function (cm) {
     let wrapperClass = ''
     let needsRefresh = false // Will be set to true if at least one line has been altered
+
+    // Buffer changes
+    cm.startOperation()
+
     for (let i = 0; i < cm.lineCount(); i++) {
       let oldClass = ''
 
@@ -87,6 +91,9 @@
         if (oldClass !== `size-header-${level}`) needsRefresh = true
       }
     }
+
+    // End operation (apply the buffer to the layouting and force a repaint)
+    cm.endOperation()
 
     // If at least one header class has been altered, refresh the codemirror
     // instance as the sizes won't match up in that case.

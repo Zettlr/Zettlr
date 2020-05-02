@@ -60,7 +60,7 @@ body {
 
     // Fixes the non-readable blue colour of the links and prevents them from
     // breaking out of the container.
-    .tippy-popper {
+    .tippy-box .tippy-content {
       a {
         color: white;
         word-wrap: break-word;
@@ -101,18 +101,7 @@ body {
         font-family: @font-main;
     }
 
-    // The loading spinner colours
-    .sk-three-bounce .sk-child { background-color: var(--c-primary); }
-
 }
 
-// DARK STYLES
-body.dark {
-    @import "dark/main.less";
-
-    .table-helper-align-button-container,
-    .table-helper-remove-button-container,
-    .table-helper-add-button {
-      background-color: white;
-    }
-}
+// now import the dark styles
+@import "dark/main.less";

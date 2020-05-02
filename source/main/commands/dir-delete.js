@@ -20,49 +20,76 @@ class DirDelete extends ZettlrCommand {
   }
 
   /**
-    * Create a new directory.
+    * Remove a directory.
     * @param {String} evt The event name
     * @param  {Object} arg An object containing hash of containing and name of new dir.
     */
   async run (evt, arg) {
-    let hash = arg.hasOwnProperty('hash') ? arg.hash : this._app.getCurrentFile().hash
-    let filedir = null
-    let dir = null
+    let dirToDelete = this._app.findDir(arg.hash)
+    if (!dirToDelete) {
+      global.log.error('Could not remove directory: Not found.')
+      return false
+    }
 
-    // First determine if this is modified.
-    if (this._app.getCurrentFile() == null) {
-      filedir = ''
+    let isCurrentDir = dirToDelete === this._app.getCurrentDir()
+
+    // Now we need to figure out if any currently opened
+    // files are within the directory to delete. If so,
+    // we need to close them before removing the directory
+    // to not create fissures in the time-space-continuum.
+    let filesToClose = []
+    for (let fileHash of this._app.getFileSystem().getOpenFiles()) {
+      // For each file, simply traverse up the parent property
+      // and add it to the close array if any of them is the dirToDelete
+      let file = this._app.findFile(fileHash)
+      let parent = file.parent
+      while (parent != null) {
+        if (parent === dirToDelete) {
+          filesToClose.push(file)
+          break
+        }
+        parent = parent.parent
+      }
+    }
+
+    // Sooo, we now know which files to close, so do it. We can hijack
+    // the corresponding command for that.
+    for (let file of filesToClose) {
+      await this._app.runCommand('file-close', { 'hash': file.hash })
+    }
+
+    // Now that all files are corresponding files are closed, we can
+    // proceed to remove the directory.
+    let parentDir = dirToDelete.parent
+
+    if (!await this._app.window.confirmRemove(dirToDelete)) return false
+
+    // First, remove the directory
+    try {
+      await this._app.getFileSystem().runAction('remove-directory', {
+        'source': dirToDelete,
+        'info': null
+      })
+    } catch (e) {
+      console.error(e)
+      return false
+    }
+
+    // Now determine if we need to splice it from the openPaths as well
+    if (!parentDir) {
+      // This is taken from the root-close command
+      this._app.getFileSystem().unloadPath(dirToDelete)
+      global.config.removePath(dirToDelete.path)
+    }
+
+    // Notify the renderer
+    if (parentDir) {
+      global.application.dirUpdate(parentDir.hash, parentDir.hash)
+      // Set a correct new dir
+      if (isCurrentDir) this._app.setCurrentDir(parentDir)
     } else {
-      filedir = this._app.getCurrentFile().parent // Oh I knew this would be clever :>
+      global.application.notifyChange('Successfully removed root ' + dirToDelete.name)
     }
-
-    dir = this._app.findDir({ 'hash': parseInt(hash) })
-
-    if (filedir === dir && !this._app.canClose()) {
-      return false
-    }
-
-    if (!await this._app.window.confirmRemove(dir)) {
-      return false
-    }
-
-    // Close the current file, if there is one open
-    if ((this._app.getCurrentFile() != null) && dir.contains(this._app.getCurrentFile())) {
-      this._app.closeFile()
-    }
-
-    if (dir === this._app.getCurrentDir() && !this._app.getCurrentDir().isRoot()) {
-      this._app.setCurrentDir(dir.parent) // Move up one level
-    } else if (dir === this._app.getCurrentDir() && this._app.getCurrentDir().isRoot()) {
-      this._app.setCurrentDir(null) // Simply reset the current dir pointer
-    }
-
-    // Now that we are save, let's move the current directory to trash.
-    global.watchdog.ignoreNext('unlinkDir', dir.path)
-
-    dir.remove(dir, true)
-
-    this._app.ipc.send('paths-update', this._app.getPathDummies())
     return true
   }
 }
