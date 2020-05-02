@@ -12,13 +12,12 @@
 })(function (CodeMirror) {
   'use strict'
 
-  // Matches all inlines according to the Pandoc documentation
+  // Matches all equations contained in one line according to the Pandoc documentation
   // on its tex_math_dollars-extension.
   // More information: https://pandoc.org/MANUAL.html#math
-  // First alternative is only for single-character-equations
-  // such as $x$. All others are captured by the second alternative.
-  var inlineMathRE = /(?<!\\)\${1,2}([^\s\\])\${1,2}(?!\d)|(?<!\\)\${1,2}([^\s].*?[^\s\\])\${1,2}(?!\d)/g
-  var multilineMathRE = /^\s*\$\$\s*$/
+  // First alternative is only for single-character-equations such as $x$. All others are captured by the second alternative.
+  var inlineMathRE = /(?<!\\)(?<bracket>\${1,2})(?<eq>[^\s\\])\k<bracket>(?!\d)|(?<!\\)(?<bracketTwo>\${1,2})(?<eqTwo>[^\s].*?[^\s\\])\k<bracketTwo>(?!\d)/g
+  var multilineMathRE = /^(\s*)\$\$\s*$/
   var mathMarkers = []
 
   CodeMirror.commands.markdownRenderMath = function (cm) {
@@ -56,35 +55,37 @@
       let newMarkers = []
 
       let line = cm.getLine(i)
-      if (!isMultiline && multilineMathRE.test(line)) {
+      let multilineMathMatch = multilineMathRE.exec(line)
+      let isMultilineStartOrEnd = multilineMathMatch !== null
+      if (!isMultiline && isMultilineStartOrEnd) {
         isMultiline = true
         fromLine = i
         eq = ''
-      } else if (isMultiline && !multilineMathRE.test(line)) {
+      } else if (isMultiline && !isMultilineStartOrEnd) {
         // Simply add the line to the equation and continue
         eq += line + '\n'
         continue
-      } else if (isMultiline && multilineMathRE.test(line)) {
+      } else if (isMultiline && isMultilineStartOrEnd) {
         // We have left the multiline equation and can render it now.
         isMultiline = false
         newMarkers.push({
           'curFrom': { 'ch': 0, 'line': fromLine },
-          'curTo': { 'ch': 2, 'line': i },
+          'curTo': { 'ch': multilineMathMatch[1].length, 'line': i },
           'eq': eq,
           'displayMode': true
         })
         eq = '' // Reset the equation
       } else {
-        // Else: No multiline. Search for inlines.
-        while ((match = inlineMathRE.exec(line)) != null) {
+        // Else: No multiline. Search for inline equations.
+        while ((match = inlineMathRE.exec(line)) !== null) {
           newMarkers.push({
             'curFrom': { 'ch': match.index, 'line': i },
             'curTo': { 'ch': match.index + match[0].length, 'line': i },
-            // An equation is stored in the first capturing group or
-            // second, depending on whether there only was
-            // one char, or multiple ones within the equation.
-            'eq': match[1] || match[2] || '',
-            'displayMode': false
+            // An equation is stored in the "eq" or "eqTwo" group,
+            // depending on whether there only was one char, or multiple ones within the equation.
+            'eq': match.groups.eq || match.groups.eqTwo || '',
+            // Equations surrounded by two dollars should be displayed as centered equation
+            'displayMode': (match.groups.bracket || match.groups.bracketTwo || '').length === 2
           })
         }
       }
