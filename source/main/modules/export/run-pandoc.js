@@ -80,6 +80,7 @@ module.exports = async function (options) {
 
   // Finally, run the command.
   return new Promise((resolve, reject) => {
+    global.log.info(`Running Pandoc with command: ${command}`)
     exec(command, { 'cwd': options.dest }, async (error, stdout, stderr) => {
       // Remove both the temporary source file and the template (if applicable)
       try {
