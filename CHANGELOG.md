@@ -58,6 +58,7 @@
 - Added a test command for GUI testing. It creates a small directory structure so that you can test the GUI without having to sacrifice your files or your mental health for that issue. Run `yarn test-gui` to run Zettlr in that test environment, and do to the files whatever you want!
 - The targets class is now a service provider.
 - Fixed the `flattenDirectoryTree` utility function. I have no idea why it worked for eleven months, but when it started throwing errors on the `FSAL` I realized it did a lot of things but it should've never worked. JavaScript is magic. Update: Found a newer and more optimized utility function, `objectToArray`, so I'm trashing it for good.
+- The Pandoc-command is now logged in its resolved state immediately before actually being run.
 
 # 1.6.0
 
