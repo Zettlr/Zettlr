@@ -274,15 +274,12 @@ class ZettlrRenderer {
     * @return {Object}      Either a file or a directory object
     */
   findObject (hash) {
-    let o = null
     for (let p of this._paths) {
-      o = this._find(hash, p)
-      if (o != null) {
-        break
-      }
+      let o = this._find(hash, p)
+      if (o != null) return o
     }
 
-    return o
+    return null
   }
 
   /**
@@ -297,9 +294,7 @@ class ZettlrRenderer {
     } else if (obj.hasOwnProperty('children')) {
       for (let c of obj.children) {
         let ret = this._find(hash, c)
-        if (ret != null) {
-          return ret
-        }
+        if (ret != null) return ret
       }
     }
     return null
