@@ -12,17 +12,11 @@
 })(function (CodeMirror) {
   'use strict'
 
-  // Matches all equations contained in one line according to the Pandoc documentation
-  // on its tex_math_dollars-extension.
-  // More information: https://pandoc.org/MANUAL.html#math
-  // First alternative is only for single-character-equations such as $x$. All others are captured by the second alternative.
-  var inlineMathRE = /(?<!\\)(?<bracket>\${1,2})(?<eq>[^\s\\])\k<bracket>(?!\d)|(?<!\\)(?<bracketTwo>\${1,2})(?<eqTwo>[^\s].*?[^\s\\])\k<bracketTwo>(?!\d)/g
-  var multilineMathRE = /^(\s*)\$\$\s*$/
+  var multilineMathRE = /^(\s*\$\$)\s*$/
   var mathMarkers = []
 
   CodeMirror.commands.markdownRenderMath = function (cm) {
     let i = 0
-    let match
 
     // First remove iFrames that don't exist anymore. As soon as someone
     // moves the cursor into the link, it will be automatically removed,
@@ -46,8 +40,6 @@
 
     for (let i = 0; i < cm.lineCount(); i++) {
       if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
-      // Reset the index of the expression everytime we enter a new line.
-      inlineMathRE.lastIndex = 0
 
       // This array holds all markers to be inserted (either one in case of the
       // final line of a multiline-equation or multiple in case of several
@@ -77,17 +69,7 @@
         eq = '' // Reset the equation
       } else {
         // Else: No multiline. Search for inline equations.
-        while ((match = inlineMathRE.exec(line)) !== null) {
-          newMarkers.push({
-            'curFrom': { 'ch': match.index, 'line': i },
-            'curTo': { 'ch': match.index + match[0].length, 'line': i },
-            // An equation is stored in the "eq" or "eqTwo" group,
-            // depending on whether there only was one char, or multiple ones within the equation.
-            'eq': match.groups.eq || match.groups.eqTwo || '',
-            // Equations surrounded by two dollars should be displayed as centered equation
-            'displayMode': (match.groups.bracket || match.groups.bracketTwo || '').length === 2
-          })
-        }
+        newMarkers.push.apply(newMarkers, EquationFinder.findInlineEquations(line, i))
       }
 
       // Now cycle through all new markers and insert them, if they weren't
@@ -138,7 +120,34 @@
 
         // Finally push the marker
         mathMarkers.push(textMarker)
-      } // End for all markers
-    } // End for lines
-  } // End command
+      }
+    }
+  }
 })
+
+EquationFinder = {
+  /**
+   * Finds all equations contained in a given string according to the Pandoc documentation
+   * on its tex_math_dollars-extension.
+   * More information: https://pandoc.org/MANUAL.html#math
+   * @param {string} text the input string
+   * @param {int} line the line number of the input
+   * @returns {Array} list of equations in the input
+   */
+  findInlineEquations: function (text, line) {
+    var inlineMathRE = /(?<![\\$])(?<dollar>\${1,2})(?![\s$])(?<eq>.+?)(?<![\s\\])\k<dollar>(?!\d)/g
+    let newMarkers = []
+
+    let match
+    while ((match = inlineMathRE.exec(text)) !== null) {
+      newMarkers.push({
+        'curFrom': { 'ch': match.index, 'line': line },
+        'curTo': { 'ch': match.index + match[0].length, 'line': line },
+        'eq': match.groups.eq || '',
+        // Equations surrounded by two dollars should be displayed as centered equation
+        'displayMode': (match.groups.dollar || '').length === 2
+      })
+    }
+    return newMarkers
+  }
+}

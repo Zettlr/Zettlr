@@ -26,6 +26,16 @@
         "--remote-debugging-port=9222"
       ],
       "webRoot": "${workspaceRoot}"
-    }
+    },
+    {
+      "name": "Run Tests For Current File",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "args": [
+         "${file}"
+       ],
+       "cwd": "${workspaceRoot}"
+   }
   ]
 }
