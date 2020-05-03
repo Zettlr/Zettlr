@@ -89,7 +89,10 @@ jobs:
       # WINDOWS ==============================================================
       - name: Build Windows NSIS installer
         if: matrix.os == 'windows-latest' # Only if the job runs on Windows
-        run: npm run release:win
+        # NOTE: We are signing the Windows installer using the Apple certificate.
+        # This will not mark it safe for Windows SmartScreen, but it will give
+        # more credibility to the installer with regard to virus scanners.
+        run: CSC_LINK=${{ secrets.MACOS_CERT }}  CSC_KEY_PASSWORD=${{ secrets.MACOS_CERT_PASS }} npm run release:win
       - name: Cache Windows release
         if: matrix.os == 'windows-latest' # Only if the job runs on Windows
         uses: actions/upload-artifact@v1
