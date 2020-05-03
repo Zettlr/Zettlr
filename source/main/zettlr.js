@@ -588,7 +588,6 @@ class Zettlr {
   clearModified () {
     this.window.clearModified()
     this.editFlag = false
-    this.ipc.send('mark-clean')
   }
 
   /**

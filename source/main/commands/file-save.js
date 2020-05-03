@@ -52,7 +52,8 @@ class SaveFile extends ZettlrCommand {
         'source': realFile,
         'info': file.content
       })
-      this._app.clearModified()
+      // Mark this file as clean
+      global.ipc.send('mark-clean', { 'hash': realFile.hash })
       // Re-send the file
       global.application.fileUpdate(realFile.hash, global.application.findFile(realFile.hash))
     } catch (e) {

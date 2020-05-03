@@ -402,7 +402,7 @@ class ZettlrRendererIPC {
         break
 
       case 'mark-clean':
-        this._app.getEditor().markClean()
+        this._app.getEditor().markClean(cnt.hash)
         // If we have a buffered message, send that and afterwards clean up
         if (this._bufferedMessage != null) {
           this.send(this._bufferedMessage.command, this._bufferedMessage.content)

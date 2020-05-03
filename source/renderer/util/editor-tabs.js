@@ -90,9 +90,13 @@ module.exports = class EditorTabs {
       return
     }
 
-    files = files.map(elem => elem.fileObject) // Make it easier accessible
-    for (let file of files) {
-      this._div.appendChild(this._makeElement(file, file.hash === openFile))
+    // files = files.map(elem => elem.fileObject) // Make it easier accessible
+    for (let document of files) {
+      let file = document.fileObject
+      let isDocumentClean = document.cmDoc.isClean()
+      let isActiveFile = file.hash === openFile
+      let elem = this._makeElement(file, isActiveFile, isDocumentClean)
+      this._div.appendChild(elem)
     }
 
     // Now make sure that the active tab is visible and scroll if necessary.
@@ -153,9 +157,10 @@ module.exports = class EditorTabs {
    * Creates a new document DOM element to be added to the tab bar based on the
    * information available in the file descriptor.
    * @param {Object} file A file descriptor
-   * @param {Boolean} active Whether the file is currently active
+   * @param {boolean} active Whether the file is currently active
+   * @param {boolean} clean Whether the document is clean or contains changes
    */
-  _makeElement (file, active = false) {
+  _makeElement (file, active = false, clean = true) {
     // First determine the display title (either filename or frontmatter title)
     let displayTitle = file.name
     if (file.frontmatter && file.frontmatter.title) displayTitle = file.frontmatter.title
@@ -173,8 +178,9 @@ module.exports = class EditorTabs {
     // From here on, possible information begins, so we have to add <br>s before
     if (file.id !== '') doc.dataset['tippyContent'] += '<br>ID: ' + file.id
 
-    // Mark it as active, if applicable
+    // Mark it as active and/or modified, if applicable
     if (active) doc.classList.add('active')
+    if (!clean) doc.classList.add('modified')
 
     // Next create the name span containing the display title
     let nameSpan = document.createElement('span')

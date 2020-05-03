@@ -75,26 +75,7 @@ class ZettlrEditor {
     this._searcher = new EditorSearch(null)
     this._tabs = new EditorTabs()
     // The user can select or close documents on the tab bar
-    this._tabs.setIntentCallback((hash, intent) => {
-      // Make sure === works as intended
-      if (!Array.isArray(hash)) hash = parseInt(hash, 10)
-      if (intent === 'close') {
-        // Send the close request to main
-        global.ipc.send('file-close', { 'hash': hash })
-        // this.close(hash)
-      } else if (intent === 'select') {
-        this._swapFile(hash)
-      } else if (intent === 'new-file') {
-        // Tell the renderer someone wants a new file
-        this._renderer.newFile('new-file-button')
-      } else if (intent === 'sorting') {
-        // hash is actually an array, with all hashes in their desired new sorting,
-        // so let's forward that to main. But also make sure we sort it here
-        // because otherwise the new sorting won't be persisted in the tabbar.
-        this._openFiles = hash.map(e => this._openFiles.find(file => file.fileObject.hash === e))
-        global.ipc.send('sort-open-files', hash)
-      }
-    })
+    this._tabs.setIntentCallback(this._onTabAction.bind(this))
 
     // The starting position for a tag autocomplete.
     this._autoCompleteStart = null
@@ -348,14 +329,16 @@ class ZettlrEditor {
 
         // Check if the change actually modified the
         // doc or not
-        if (this.isClean()) {
+        if (this._cm.doc.isClean()) {
           this._renderer.clearModified()
-          this._tabs.markClean(this._currentHash)
+          this.markClean(this._currentHash)
         } else {
           this._renderer.setModified()
           this._tabs.markDirty(this._currentHash)
           // Set the autosave timeout
           this._timeout = setTimeout((e) => {
+            // NOTE that the renderer will pull the currently active file from
+            // the editor in any case, so the state is maintained.
             this._renderer.saveFile()
             this.updateCitations()
           }, SAVE_TIMOUT)
@@ -662,6 +645,35 @@ class ZettlrEditor {
   }
 
   /**
+   * Handles the callback intent whenever the user performs an action
+   * on the tabs.
+   *
+   * @param {( string|number )} hash The hash upon which the intent was triggered.
+   * @param {string} intent The actual intent.
+   * @memberof ZettlrEditor
+   */
+  _onTabAction (hash, intent) {
+    // Make sure === works as intended
+    if (!Array.isArray(hash)) hash = parseInt(hash, 10)
+    if (intent === 'close') {
+      // Send the close request to main
+      global.ipc.send('file-close', { 'hash': hash })
+      // this.close(hash)
+    } else if (intent === 'select') {
+      this._swapFile(hash)
+    } else if (intent === 'new-file') {
+      // Tell the renderer someone wants a new file
+      this._renderer.newFile('new-file-button')
+    } else if (intent === 'sorting') {
+      // hash is actually an array, with all hashes in their desired new sorting,
+      // so let's forward that to main. But also make sure we sort it here
+      // because otherwise the new sorting won't be persisted in the tabbar.
+      this._openFiles = hash.map(e => this._openFiles.find(file => file.fileObject.hash === e))
+      global.ipc.send('sort-open-files', hash)
+    }
+  }
+
+  /**
    * Silently adds a file to the array of open files.
    * @param {Object} fileObject A file descriptor with content
    */
@@ -698,6 +710,9 @@ class ZettlrEditor {
     let openedFile = this._openFiles.find((e) => e.fileObject.hash === hash)
     if (openedFile) {
       openedFile.cmDoc.setValue(contents)
+      // Now mark clean this one document using the function, which also takes
+      // care to instruct main to remove the edit flag if applicable.
+      this.markClean(openedFile.fileObject.hash)
     } else {
       console.warn('Cannot replace the file contents of file ' + hash + ': No open file found!')
     }
@@ -900,10 +915,11 @@ class ZettlrEditor {
     * @return {Object} An object containing words, chars, chars_wo_spaces, if selection: words_sel and chars_sel
     */
   getFileInfo () {
+    let currentValue = this._cm.getValue()
     let ret = {
-      'words': countWords(this._cm.getValue(), this._countChars),
-      'chars': this._cm.getValue().length,
-      'chars_wo_spaces': this._cm.getValue().replace(/[\s ]+/g, '').length,
+      'words': countWords(currentValue, this._countChars),
+      'chars': currentValue.length,
+      'chars_wo_spaces': currentValue.replace(/[\s ]+/g, '').length,
       'cursor': JSON.parse(JSON.stringify(this._cm.getCursor()))
     }
 
@@ -1308,16 +1324,34 @@ class ZettlrEditor {
   insertText (text) { this._cm.replaceSelection(text) }
 
   /**
-    * Mark clean the CodeMirror instance
-    * @return {void} Nothing to return.
-    */
-  markClean () { this._cm.markClean() }
+   * Marks the specified document clean
+   *
+   * @param {number} hash The hash of the document to mark clean
+   * @memberof ZettlrEditor
+   */
+  markClean (hash) {
+    let file = this._openFiles.find(e => e.fileObject.hash === hash)
+    if (file) {
+      file.cmDoc.markClean()
+      this._tabs.markClean(file.fileObject.hash)
+      // In case this was the last file to be cleared, we can instruct main to
+      // remove the edit flag itself
+      if (this.isClean()) this._renderer.clearModified()
+    } else {
+      console.warn(`Could not mark clean the document ${hash}. Not found.`)
+    }
+  }
 
   /**
-    * Query if the editor is currently modified
-    * @return {Boolean} True, if there are no changes, false, if there are.
+    * Query if any of the documents are modified.
+    * @return {boolean} True, if there are no changes, false, if there are.
     */
-  isClean () { return this._cm.doc.isClean() }
+  isClean () {
+    for (let doc of this._openFiles) {
+      if (!doc.cmDoc.isClean()) return false
+    }
+    return true
+  }
 
   /**
     * Run a CodeMirror command.
