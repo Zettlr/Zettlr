@@ -283,7 +283,7 @@ module.exports = {
     if (existingDir) throw new Error(`Directory ${options.name} already exists!`)
     let newPath = path.join(dirObject.path, options.name)
     await fs.mkdir(newPath)
-    let newDir = readTree(newPath, cache, dirObject)
+    let newDir = await readTree(newPath, cache, dirObject)
     // Add the new directory to the source dir
     dirObject.children.push(newDir)
     sortChildren(dirObject)
