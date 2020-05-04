@@ -78,6 +78,38 @@ class AboutDialog extends ZettlrDialog {
     return data
   }
 
+  /**
+   * A polling function that updates the system load info in real time.
+   */
+  _realtimeUpdatePoll () {
+    let memoryInfo = process.memoryUsage()
+    let heapInfo = process.getHeapStatistics()
+    let realtimeCPU = roundDec(process.getCPUUsage().percentCPUUsage, 2)
+    let realtimeRSS = roundDec(memoryInfo.rss / 1000000, 2)
+    let realtimeExternal = roundDec(memoryInfo.external / 1000000, 2)
+    let realtimeHeapUsed = roundDec(heapInfo.usedHeapSize / 1000, 2)
+    let realtimeHeapTotal = roundDec(heapInfo.totalHeapSize / 1000, 2)
+
+    let rtCPUElem = document.getElementById('realtime-cpu-load')
+    let rtRSSElem = document.getElementById('realtime-rss')
+    let rtExtElem = document.getElementById('realtime-external')
+    let rtHpUElem = document.getElementById('realtime-heap-used')
+    let rtHpTElem = document.getElementById('realtime-heap-total')
+
+    // If any of these elements is missing, this indicates that the dialog has
+    // been closed, so neither do we need to update, nor start a timeout.
+    if (!rtCPUElem || !rtRSSElem || !rtExtElem || !rtHpUElem || !rtHpTElem) return
+
+    rtCPUElem.innerText = realtimeCPU
+    rtRSSElem.innerText = realtimeRSS
+    rtExtElem.innerText = realtimeExternal
+    rtHpUElem.innerText = realtimeHeapUsed
+    rtHpTElem.innerText = realtimeHeapTotal
+
+    // This timeout will only be fired when the dialog is still open
+    setTimeout(this._realtimeUpdatePoll.bind(this), 1000)
+  }
+
   postAct () {
     // Retrieve additional data from main
     global.ipc.send('get-translation-metadata', {}, (data) => {
@@ -110,6 +142,9 @@ class AboutDialog extends ZettlrDialog {
       html += '</ul>'
       document.getElementById('sponsorList').innerHTML = html
     })
+
+    // Enable real time statistics for the debug panel
+    this._realtimeUpdatePoll()
   }
 }
 

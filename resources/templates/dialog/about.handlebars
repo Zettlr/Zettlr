@@ -936,10 +936,12 @@
         </p>
         <h2>Current System Load</h2>
         <ul>
-          <li>CPU Load: {{ cpu }} %</li>
-          <li>Resident Set Size: {{ memory.rss }} MB</li>
-          <li>C++ memory for JS Objects: {{ memory.external }} MB</li>
-          <li>Heap: {{ heap.used }} from {{ heap.total }} MB (Limit: {{ heap.limit }} MB)</li>
+          <li>CPU Load: <strong><span id="realtime-cpu-load">{{ cpu }}</span> %</strong></li>
+          <li>Resident Set Size: <strong><span id="realtime-rss">{{ memory.rss }}</span></strong> MB</li>
+          <li>C++ memory for JS Objects: <strong><span id="realtime-external">{{ memory.external }}</span></strong> MB</li>
+          <li>Heap:
+            <strong>
+              <span id="realtime-heap-used">{{ heap.used }}</span></strong> from <strong><span id="realtime-heap-total">{{ heap.total }}</span></strong> MB (Limit: <strong>{{ heap.limit }}</strong> MB)</li>
         </ul>
         <h2>Renderer flags</h2>
         <ul>
