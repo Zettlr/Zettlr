@@ -40,7 +40,17 @@ class DirNew extends ZettlrCommand {
       return false
     }
 
-    arg.name = sanitize(arg.name, { replacement: '-' })
+    arg.name = sanitize(arg.name, { replacement: '-' }).trim()
+
+    if (arg.name.length === 0) {
+      global.log.error('New directory name was empty after sanitization.')
+      this._app.window.prompt({
+        type: 'error',
+        title: trans('system.error.could_not_create_dir'),
+        message: trans('system.error.could_not_create_dir')
+      })
+      return false
+    }
 
     try {
       await this._app.getFileSystem().runAction('create-directory', {
