@@ -43,6 +43,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Fenced code blocks, delimited by three backticks have a customizable box background. The colour (and different styles) can be customized by targeting the `code-block-line`-CSS class.
 - The font size of mathematics was decreased a bit to align it better with the size of normal text. Thanks to @tobiasdiez.
 - Support fenced code blocks surrounded by tildes (`~`) instead of backticks.
+- The About dialog of the application now also holds a tab with debug information about both the binary, the system, and the current environment.
 
 ## Under the Hood
 

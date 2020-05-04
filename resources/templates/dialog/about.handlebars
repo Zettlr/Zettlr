@@ -9,6 +9,7 @@
       <li><a href="#about-tabs-sponsors">{{i18n "dialog.about.sponsors"}}</a></li>
       <li><a href="#about-tabs-contributors">{{i18n "dialog.about.contributors"}}</a></li>
       <li><a href="#about-tabs-license">{{i18n "dialog.about.license"}}</a></li>
+      <li><a href="#about-tabs-debug">Debug Information</a></li>
     </ul>
 
     {{!-- Main tab --}}
@@ -910,6 +911,51 @@
         </p>
       </div>
     </div>
+
+
+    {{!-- Debug information --}}
+    <div id="about-tabs-debug">
+      <p>
+        This page contains internal debug information for this installation of Zettlr.
+      </p>
+      <div class="changelog">
+        <h2>General Information</h2>
+        <p>Zettlr Version: <strong>v{{ version }}</strong></p>
+        <p>System: <strong>{{ platform }} {{ platformVersion }}</strong> (architecture: {{ architecture }})</p>
+        <h2>Build Dependencies</h2>
+        <p>
+          This build was compiled using
+          <ul>
+            <li>Node.js <strong>v{{ versions.node }}</strong></li>
+            <li>Electron <strong>v{{ versions.electron }}</strong></li>
+            <li>Chrome <strong>v{{ versions.chrome }}</strong></li>
+            <li>v8 engine <strong>v{{ versions.v8 }}</strong></li>
+            <li>Zlib <strong>v{{ versions.zlib }}</strong></li>
+            <li>OpenSSL <strong>v{{ versions.openssl }}</strong></li>
+          </ul>
+        </p>
+        <h2>Current System Load</h2>
+        <ul>
+          <li>CPU Load: {{ cpu }} %</li>
+          <li>Resident Set Size: {{ memory.rss }} MB</li>
+          <li>C++ memory for JS Objects: {{ memory.external }} MB</li>
+          <li>Heap: {{ heap.used }} from {{ heap.total }} MB (Limit: {{ heap.limit }} MB)</li>
+        </ul>
+        <h2>Renderer flags</h2>
+        <ul>
+        {{#each argv }}
+          <li>{{ this }}</li>
+        {{/each}}
+        </ul>
+        <h2>Environment Variables</h2>
+        <ul>
+        {{#each env }}
+          <li><strong>{{ key }}</strong>: {{ value }}</li>
+        {{/each}}
+        </ul>
+      </div>
+    </div>
+
   </div> <!-- End pref tabs -->
   <button id="abort">{{i18n "dialog.button.close"}}</button>
 </div>

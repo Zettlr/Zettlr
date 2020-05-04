@@ -17,6 +17,18 @@ const ZettlrDialog = require('./zettlr-dialog.js')
 const { trans } = require('../../common/lang/i18n')
 const formatDate = require('../../common/util/format-date')
 
+/**
+ * Rounds an integer to the specified amount of floating points.
+ *
+ * @param {number} num The number to be rounded.
+ * @param {number} amount The number of floating point digits to retain.
+ * @returns {number}
+ */
+function roundDec (num, amount) {
+  let exp = Math.pow(10, amount)
+  return Math.round(num * exp) / exp
+}
+
 class AboutDialog extends ZettlrDialog {
   constructor () {
     super()
@@ -24,8 +36,45 @@ class AboutDialog extends ZettlrDialog {
   }
 
   preInit (data) {
+    process.getCPUUsage() // First call returns null, so we have to call it twice
     data.version = require('../../package.json').version
     data.uuid = global.config.get('uuid')
+
+    // Debug info: Versions, argv, env, and overall process uptime
+    data.versions = JSON.parse(JSON.stringify(process.versions))
+    data.argv = JSON.parse(JSON.stringify(process.argv))
+    data.env = []
+    for (let key of Object.keys(process.env)) {
+      data.env.push({
+        'key': key,
+        'value': process.env[key]
+      })
+    }
+    data.uptime = Math.floor(process.uptime()) // In seconds
+
+    // System info: arch, platform, and version
+    data.architecture = process.arch
+    data.platform = process.platform
+    data.platformVersion = process.getSystemVersion()
+
+    // Realtime stats
+    let mem = process.memoryUsage() // rss, heapTotal, heapUsed, external, all in bytes
+    data.memory = {
+      // Here we are converting all from bytes to megabytes
+      'rss': roundDec(mem.rss / 1000000, 2), // Resident Set Size
+      'external': roundDec(mem.external / 1000000, 2) // C++ objects bound to their JavaScript pendants
+    }
+
+    data.cpu = roundDec(process.getCPUUsage().percentCPUUsage, 2)
+
+    let heap = process.getHeapStatistics()
+    data.heap = {
+      // Convert all from KB to MB
+      'total': roundDec(heap.totalHeapSize / 1000, 2),
+      'used': roundDec(heap.usedHeapSize / 1000, 2),
+      'limit': roundDec(heap.heapSizeLimit / 1000, 2)
+    }
+
     return data
   }
 
