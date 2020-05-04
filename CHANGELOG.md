@@ -1,5 +1,12 @@
 # 1.7.0
 
+## Breaking Changes
+
+This release contains several breaking changes to 1.6 due to heavy internal refactoring.
+
+* Your virtual directories will be gone after installing.
+* Projects will be incorporated into the `.ztr-directory`-files, which means that you need to extract these files (or backup them) if you plan to roll back to 1.6 or earlier, lest you will lose the project settings.
+
 ## GUI and Functionality
 
 - **New Feature**: Zettlr now supports (theoretically) unlimited open documents and orders them in tabs at the top of the editor instance.
