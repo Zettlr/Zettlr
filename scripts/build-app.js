@@ -65,6 +65,7 @@ const config = {
   productName: 'Zettlr',
   npmRebuild: false,
   copyright: 'Zettlr is licensed under GNU GPL v3.',
+  publish: 'never',
   fileAssociations: [
     {
       ext: 'md',
