@@ -16,12 +16,11 @@
     "scripts": {
         "postinstall": "electron-builder install-app-deps && yarn less && yarn handlebars && yarn csl:refresh && yarn reveal:build && yarn wp:prod",
         "start": "electron .",
-        "build:quick": "node scripts/build-app.js --dir",
-        "release:this": "node scripts/build-app.js",
-        "release:mac": "node scripts/build-app.js --mac",
-        "release:win": "node scripts/build-app.js --win",
-        "release:linux": "node scripts/build-app.js --linux",
-        "release:app-image": "node scripts/build-app.js --app-image",
+        "build:quick": "electron-builder --dir",
+        "release:this": "electron-builder",
+        "release:mac": "electron-builder --mac --publish \"never\"",
+        "release:win": "electron-builder --win --publish \"never\"",
+        "release:linux": "electron-builder --linux --publish \"never\"",
         "less": "gulp less",
         "handlebars": "node scripts/handlebars.js",
         "lang:refresh": "node scripts/refresh-language.js",
@@ -33,6 +32,106 @@
         "test": "mocha",
         "test-gui": "node scripts/test-gui.js",
         "lint": "eslint \"./source/**/*.js\" -f html -o eslint_report.htm"
+    },
+    "build": {
+      "appId": "com.zettlr.app",
+      "productName": "Zettlr",
+      "npmRebuild": false,
+      "copyright": "Zettlr is licensed under GNU GPL v3.",
+      "fileAssociations": [
+        {
+          "ext": "md",
+          "name": "Markdown",
+          "description": "Markdown document",
+          "mimeType": "text/markdown",
+          "role": "Editor",
+          "isPackage": false
+        },
+        {
+          "ext": "markdown",
+          "name": "Markdown",
+          "description": "Markdown document",
+          "mimeType": "text/markdown",
+          "role": "Editor",
+          "isPackage": false
+        }
+      ],
+      "directories": {
+        "output": "release",
+        "app": "source"
+      },
+      "afterPack": "./scripts/afterPack.js",
+      "afterSign": "./scripts/afterSign.js",
+      "mac": {
+        "category": "public.app-category.productivity",
+        "target": "dmg",
+        "artifactName": "Zettlr-${version}-${arch}.${ext}",
+        "icon": "resources/icons/icns/icon.icns",
+        "darkModeSupport": true,
+        "hardenedRuntime": true,
+        "gatekeeperAssess": false,
+        "entitlements": "./scripts/assets/entitlements.plist",
+        "entitlementsInherit": "./scripts/assets/entitlements.plist"
+      },
+      "win": {
+        "target": [
+          {
+            "target": "nsis",
+            "arch": [ "x64", "ia32" ]
+          }
+        ],
+        "artifactName": "Zettlr-${version}-${arch}.${ext}",
+        "icon": "resources/icons/ico/icon.ico"
+      },
+      "linux": {
+        "target": [
+          {
+            "target": "AppImage",
+            "arch": [ "x64", "ia32" ]
+          },
+          "deb",
+          "rpm"
+        ],
+        "artifactName": "Zettlr-${version}-${arch}.${ext}",
+        "synopsis": "Markdown editor",
+        "category": "Office",
+        "icon": "resources/icons/png",
+        "desktop": {
+          "StartupWMClass": "zettlr"
+        }
+      },
+      "dmg": {
+        "background": "resources/icons/dmg/dmg_back.tiff",
+        "icon": "resources/icons/icns/icon.icns",
+        "contents": [
+          {
+            "x": 130,
+            "y": 220
+          },
+          {
+            "x": 410,
+            "y": 220,
+            "type": "link",
+            "path": "/Applications"
+          }
+        ],
+        "window": {
+          "width": 540,
+          "height": 400
+        }
+      },
+      "nsis": {
+        "oneClick": false,
+        "perMachine": false,
+        "allowElevation": true,
+        "allowToChangeInstallationDirectory": true,
+        "uninstallDisplayName": "${productName}"
+      },
+      "deb": {
+        "priority": "optional",
+        "compression": "xz"
+      },
+      "rpm": { "compression": "xz" }
     },
     "resolutions": {
         "eslint/espree/acorn": "^7.1.1"
