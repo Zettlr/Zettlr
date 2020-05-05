@@ -68,6 +68,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Fixed the `flattenDirectoryTree` utility function. I have no idea why it worked for eleven months, but when it started throwing errors on the `FSAL` I realized it did a lot of things but it should've never worked. JavaScript is magic. Update: Found a newer and more optimized utility function, `objectToArray`, so I'm trashing it for good.
 - The Pandoc-command is now logged in its resolved state immediately before actually being run.
 - Sign Windows installers using the Apple certificate.
+- Switched back to the `package.json` configuration for electron-builder, because, well, Electron.
 
 # 1.6.0
 
