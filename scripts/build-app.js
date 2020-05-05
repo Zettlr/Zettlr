@@ -65,7 +65,6 @@ const config = {
   productName: 'Zettlr',
   npmRebuild: false,
   copyright: 'Zettlr is licensed under GNU GPL v3.',
-  publish: 'never',
   fileAssociations: [
     {
       ext: 'md',
@@ -92,6 +91,7 @@ const config = {
   afterPack: './scripts/afterPack.js',
   afterSign: './scripts/afterSign.js',
   mac: {
+    publish: 'never',
     category: 'public.app-category.productivity',
     target: (onlyDir) ? 'dir' : 'dmg',
     artifactName: artifactFilenameFormat,
@@ -105,11 +105,13 @@ const config = {
     entitlementsInherit: path.join(__dirname, './assets/entitlements.plist')
   },
   win: {
+    publish: 'never',
     target: (onlyDir) ? 'dir' : win32Targets,
     artifactName: artifactFilenameFormat,
     icon: 'resources/icons/ico/icon.ico'
   },
   linux: {
+    publish: 'never',
     target: (onlyDir) ? 'dir' : linuxTargets,
     artifactName: artifactFilenameFormat,
     synopsis: 'Markdown editor',
