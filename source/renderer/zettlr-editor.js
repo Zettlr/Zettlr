@@ -28,7 +28,6 @@ const EditorSearch = require('./util/editor-search')
 const EditorTabs = require('./util/editor-tabs')
 const moveSection = require('./util/editor-move-section')
 const openMarkdownLink = require('./util/open-markdown-link')
-const ipc = require('electron').ipcRenderer
 
 // The autoloader requires all necessary CodeMirror addons and modes that are
 // used by the main class. It simply folds about 70 lines of code into an extra
@@ -129,13 +128,14 @@ class ZettlrEditor {
     // Caches the "left" style property during distraction free
     this._leftBeforeDistractionFree = ''
 
+    // Caches the width of a space (in normal font and in monospace font)
     this._spaceWidth = 0
     this._monospaceWidth = 0
-    ipc.on('toggle-theme', (e) => this.resetSpaceCalculation())
-    ipc.on('switch-theme-berlin', (e) => this.resetSpaceCalculation())
-    ipc.on('switch-theme-bielefeld', (e) => this.resetSpaceCalculation())
-    ipc.on('switch-theme-frankfurt', (e) => this.resetSpaceCalculation())
-    ipc.on('switch-theme-karl-marx-stadt', (e) => this.resetSpaceCalculation())
+    // Reset cached widths upon config update 
+    global.config.on('update', () => {
+      this._spaceWidth = 0
+      this.monospaceWidth = 0
+    })
 
     this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
       mode: MD_MODE,
@@ -152,7 +152,7 @@ class ZettlrEditor {
       placeholder: ' ', // Just an invisible space.
       hintOptions: {
         completeSingle: false, // Don't auto-complete, even if there's only one word available
-        hint: (cm) => {
+        hint: (cm, opt) => {
           let term = cm.getRange(this._autoCompleteStart, cm.getCursor()).toLowerCase()
           let completionObject = {
             'list': Object.keys(this._currentDatabase).filter((key) => {
@@ -355,7 +355,7 @@ class ZettlrEditor {
         }
 
         // Always run an update-citations command each time there have been changes
-        this._citationTimeout = setTimeout(() => {
+        this._citationTimeout = setTimeout((e) => {
           this.updateCitations()
         }, 500)
       }
@@ -364,7 +364,7 @@ class ZettlrEditor {
     // On cursor activity (not the mouse one but the text one), render all
     // things we should replace in the sense of render directly in the text
     // such as images, links, other stuff.
-    this._cm.on('cursorActivity', () => {
+    this._cm.on('cursorActivity', (cm) => {
       // This event fires on either editor changes (because, obviously the
       // cursor changes its position as well then) or when the cursor moves.
       this._fireRenderers()
@@ -372,7 +372,7 @@ class ZettlrEditor {
 
     // We need to update citations also on updates, as this is the moment when
     // new spans get added to the DOM which we might have to render.
-    this._cm.on('update', () => {
+    this._cm.on('update', (cm) => {
       this.renderCitations()
       // Must be called to ensure all tables have active event listeners.
       if (this._renderTables) this._cm.execCommand('markdownInitiateTables')
@@ -406,16 +406,16 @@ class ZettlrEditor {
       }
     })
 
-    // Thanks for this to https://discuss.codemirror.net/t/hanging-indent/243/2
     this._cm.on('renderLine', (cm, line, elt) => {
+      // Need to calculate indent and padding in order to provide a proper hanging indent
+      // Originally based on https://discuss.codemirror.net/t/hanging-indent/243/2
       let monospaceWidth = this.computeMonospaceWidth()
       let spaceWidth = this.computeSpaceWidth()
       let tabWidth = spaceWidth * 5
       let basePadding = 2.5 * monospaceWidth
 
       // Show continued list/quote lines aligned to start of text rather than first non-space char (hanging indent)
-      // MINOR BUG: also does this inside literal blocks.
-      let leadingSpaceListBulletsQuotes = /^(?<spaces>\s*)(?<ordinal>[*+-]\s+|\d+\.\s+|>\s*)+/ // NOTE: Replaced the last * with +
+      let leadingSpaceListBulletsQuotes = /^(?<spaces>\s*)(?<ordinal>[*+-]\s+|\d+\.\s+|>\s*)+/
       let match = leadingSpaceListBulletsQuotes.exec(line.text)
 
       if (!match) return
@@ -467,7 +467,7 @@ class ZettlrEditor {
       }
     })
 
-    this._cm.getWrapperElement().addEventListener('paste', () => {
+    this._cm.getWrapperElement().addEventListener('paste', (e) => {
       let image = clipboard.readImage()
       // Trigger the insertion process from here only if there is no text in the
       // clipboard (because then CodeMirror will not do anything). If there is
@@ -491,41 +491,39 @@ class ZettlrEditor {
 
   /**
   * Computes and returns the width of a character in the monospace font in pixels.
-  * @see https://stackoverflow.com/a/118251/873661
   */
   computeMonospaceWidth () {
-    if (this._monospaceWidth > 0) return this._monospaceWidth
-
-    // We use 50 characters in order to get an approximately correct width (clientWidth is an integer)
-    var container = document.createElement('div')
-    container.id = 'measureMonoWidth'
-    container.innerHTML = '<span>' + '-'.repeat(100) + '</span>'
-    this._cm.getWrapperElement().appendChild(container)
-    this._monospaceWidth = (container.clientWidth + 1) / 100
-    this._cm.getWrapperElement().removeChild(container)
+    if (this._monospaceWidth === 0) { 
+      this._monospaceWidth = measureCharWidth('measureMonoWidth')
+    }
     return this._monospaceWidth
   }
 
   /**
   * Computes and returns the width of a character in the monospace font in pixels.
-  * @see https://stackoverflow.com/a/118251/873661
   */
   computeSpaceWidth () {
-    if (this._spaceWidth > 0) return this._spaceWidth
-
-    // We use 50 characters in order to get an approximately correct width (clientWidth is an integer)
-    var container = document.createElement('div')
-    container.id = 'measureWidth'
-    container.innerHTML = '<span>' + '&nbsp'.repeat(100) + '</span>'
-    this._cm.getWrapperElement().appendChild(container)
-    this._spaceWidth = (container.clientWidth + 1) / 100
-    this._cm.getWrapperElement().removeChild(container)
+    if (this._spaceWidth === 0) { 
+      this._spaceWidth = measureCharWidth('measureWidth')
+    }
     return this._spaceWidth
   }
 
-  resetSpaceCalculation () {
-    this._spaceWidth = 0
-    this.monospaceWidth = 0
+  /**
+   * Computes and returns the width of a character for a character that is placed in a (new) node with the given id
+   * @param {String} id
+   * @see https://stackoverflow.com/a/118251/873661
+   */
+  measureCharWidth (id) {
+    // Idea: Create a span containing a space and measure its size 
+    // Infact, We use 100 characters in order to get an approximately correct width (clientWidth is an integer)
+    var container = document.createElement('div')
+    container.id = id
+    container.innerHTML = '<span>' + '&nbsp'.repeat(100) + '</span>'
+    this._cm.getWrapperElement().appendChild(container)
+    var width = (container.clientWidth + 1) / 100
+    this._cm.getWrapperElement().removeChild(container)
+    return width
   }
 
   /**
