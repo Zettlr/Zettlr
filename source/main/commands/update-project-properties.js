@@ -25,8 +25,42 @@ class UpdateProjectProperties extends ZettlrCommand {
     * @param  {Object} arg The hash of a directory.
     */
   run (evt, arg) {
-    let dir = this._app.findDir(arg) // Contains a hash property
-    if (dir) dir.getProject().bulkSet(arg.properties)
+    // First, we need to create the new settings object
+    let newProperties = {}
+    for (let prop of Object.keys(arg.properties)) {
+      if (prop.indexOf('.') > 0) {
+        // Resolve the nested
+        let nested = prop.split('.')
+        // Last property must be set manually
+        let lastProp = nested.pop()
+
+        // Now make sure the newProperties-object has all properties.
+        // We'll also advance a property pointer, which we can easily
+        // use to actually set the property then.
+        let propertyPointer = newProperties
+        for (let nestedProp of nested) {
+          if (!propertyPointer.hasOwnProperty(nestedProp)) propertyPointer[nestedProp] = {}
+          propertyPointer = propertyPointer[nestedProp]
+        }
+
+        // Set the nested property
+        propertyPointer[lastProp] = arg.properties[prop]
+      } else {
+        // Simply apply the prop
+        newProperties[prop] = arg.properties[prop]
+      }
+    }
+
+    // Now find the directory, and apply the new properties to it
+    let dir = this._app.findDir(arg.hash)
+    if (dir) {
+      this._app.getFileSystem().runAction('update-project', {
+        'source': dir,
+        'info': newProperties
+      })
+    } else {
+      global.log.warning(`Could not update project properties for ${arg.hash}: No directory found!`)
+    }
   }
 }
 

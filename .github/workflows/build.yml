@@ -75,6 +75,7 @@ jobs:
           npm run handlebars
           npm run reveal:build
           npm run wp:prod
+          npm run csl:refresh
       # Save the current package.json's version value
       # as the output from this step so that we can
       # reference it later on.
@@ -88,7 +89,9 @@ jobs:
       # WINDOWS ==============================================================
       - name: Build Windows NSIS installer
         if: matrix.os == 'windows-latest' # Only if the job runs on Windows
-        run: npm run release:win
+        # Make sure to sign the windows installer using the corresponding SSL EV.
+        run: CSC_LINK=${{ secrets.WIN_CERT }}  CSC_KEY_PASSWORD=${{ secrets.WIN_CERT_PASS }} npm run release:win
+        shell: bash # I'm sorry PowerShell, but I'm not rewriting code for you.
       - name: Cache Windows release
         if: matrix.os == 'windows-latest' # Only if the job runs on Windows
         uses: actions/upload-artifact@v1

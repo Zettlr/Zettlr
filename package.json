@@ -14,82 +14,190 @@
     "description": "A powerful Markdown editor for researchers.",
     "main": "./source/main.js",
     "scripts": {
-        "postinstall": "electron-builder install-app-deps",
+        "postinstall": "electron-builder install-app-deps && yarn less && yarn handlebars && yarn csl:refresh && yarn reveal:build && yarn wp:prod",
         "start": "electron .",
-        "build:quick": "node scripts/build-app.js --dir",
-        "release:this": "node scripts/build-app.js",
-        "release:mac": "node scripts/build-app.js --mac",
-        "release:win": "node scripts/build-app.js --win",
-        "release:linux": "node scripts/build-app.js --linux",
-        "release:app-image": "node scripts/build-app.js --app-image",
-        "less": "node scripts/less.js",
-        "less:extract": "node scripts/extract-css.js",
+        "build:quick": "electron-builder --dir",
+        "release:this": "electron-builder",
+        "release:mac": "electron-builder --mac --publish \"never\"",
+        "release:win": "electron-builder --win --publish \"never\"",
+        "release:linux": "electron-builder --linux --publish \"never\"",
+        "less": "gulp less",
         "handlebars": "node scripts/handlebars.js",
         "lang:refresh": "node scripts/refresh-language.js",
         "csl:refresh": "node scripts/update-csl.js",
         "reveal:build": "node scripts/update-reveal.js",
         "wp:dev": "cross-env NODE_ENV=development webpack",
         "wp:prod": "cross-env NODE_ENV=production webpack",
+        "watch": "gulp watch",
         "test": "mocha",
+        "test-gui": "node scripts/test-gui.js",
         "lint": "eslint \"./source/**/*.js\" -f html -o eslint_report.htm"
+    },
+    "build": {
+      "appId": "com.zettlr.app",
+      "productName": "Zettlr",
+      "npmRebuild": false,
+      "copyright": "Zettlr is licensed under GNU GPL v3.",
+      "fileAssociations": [
+        {
+          "ext": "md",
+          "name": "Markdown",
+          "description": "Markdown document",
+          "mimeType": "text/markdown",
+          "role": "Editor",
+          "isPackage": false
+        },
+        {
+          "ext": "markdown",
+          "name": "Markdown",
+          "description": "Markdown document",
+          "mimeType": "text/markdown",
+          "role": "Editor",
+          "isPackage": false
+        }
+      ],
+      "directories": {
+        "output": "release",
+        "app": "source"
+      },
+      "afterPack": "./scripts/afterPack.js",
+      "afterSign": "./scripts/afterSign.js",
+      "mac": {
+        "category": "public.app-category.productivity",
+        "target": "dmg",
+        "artifactName": "Zettlr-${version}-${arch}.${ext}",
+        "icon": "resources/icons/icns/icon.icns",
+        "darkModeSupport": true,
+        "hardenedRuntime": true,
+        "gatekeeperAssess": false,
+        "entitlements": "./scripts/assets/entitlements.plist",
+        "entitlementsInherit": "./scripts/assets/entitlements.plist"
+      },
+      "win": {
+        "target": [
+          {
+            "target": "nsis",
+            "arch": [ "x64", "ia32" ]
+          }
+        ],
+        "artifactName": "Zettlr-${version}-${arch}.${ext}",
+        "icon": "resources/icons/ico/icon.ico"
+      },
+      "linux": {
+        "target": [
+          {
+            "target": "AppImage",
+            "arch": [ "x64", "ia32" ]
+          },
+          "deb",
+          "rpm"
+        ],
+        "artifactName": "Zettlr-${version}-${arch}.${ext}",
+        "synopsis": "Markdown editor",
+        "category": "Office",
+        "icon": "resources/icons/png",
+        "desktop": {
+          "StartupWMClass": "zettlr"
+        }
+      },
+      "dmg": {
+        "background": "resources/icons/dmg/dmg_back.tiff",
+        "icon": "resources/icons/icns/icon.icns",
+        "contents": [
+          {
+            "x": 130,
+            "y": 220
+          },
+          {
+            "x": 410,
+            "y": 220,
+            "type": "link",
+            "path": "/Applications"
+          }
+        ],
+        "window": {
+          "width": 540,
+          "height": 400
+        }
+      },
+      "nsis": {
+        "oneClick": false,
+        "perMachine": false,
+        "allowElevation": true,
+        "allowToChangeInstallationDirectory": true,
+        "uninstallDisplayName": "${productName}"
+      },
+      "deb": {
+        "priority": "optional",
+        "compression": "xz"
+      },
+      "rpm": { "compression": "xz" }
+    },
+    "resolutions": {
+        "eslint/espree/acorn": "^7.1.1"
     },
     "dependencies": {
         "@zettlr/citr": "^1.1.0",
         "adm-zip": "^0.4.14",
-        "archiver": "^3.1.1",
+        "archiver": "^4.0.1",
         "astrocite": "^0.16.3",
         "bcp-47": "^1.0.7",
         "chart.js": "^2.9.3",
-        "chokidar": "^3.3.1",
-        "citeproc": "^2.2.33",
-        "codemirror": "^5.52.0",
-        "command-exists": "^1.2.7",
-        "got": "^10.6.0",
-        "joplin-turndown": "^4.0.24",
+        "chokidar": "^3.4.0",
+        "citeproc": "^2.3.7",
+        "codemirror": "^5.53.2",
+        "command-exists": "^1.2.9",
+        "got": "^11.0.3",
+        "joplin-turndown": "^4.0.27",
         "joplin-turndown-plugin-gfm": "^1.0.12",
-        "jquery": "^3.4.1",
+        "jquery": "^3.5.0",
         "katex": "^0.11.1",
         "md5": "^2.2.1",
-        "mermaid": "^8.4.8",
-        "moment": "^2.24.0",
+        "mermaid": "^8.5.0",
+        "moment": "^2.25.1",
         "nspell": "^2.1.1",
-        "on-change": "^1.8.1",
+        "on-change": "^2.0.1",
         "rimraf": "^3.0.2",
         "sanitize-filename": "^1.6.3",
-        "semver": "^7.1.3",
+        "semver": "^7.3.2",
         "showdown": "^1.9.1",
-        "tippy.js": "^6.0.3",
-        "uuid": "^7.0.2",
+        "tippy.js": "^6.2.3",
+        "uuid": "^8.0.0",
         "v8-compile-cache": "^2.1.0",
         "vue": "^2.6.11",
-        "vuex": "^3.1.3",
-        "yaml": "^1.8.2"
+        "vuex": "^3.3.0",
+        "yaml": "^1.9.2"
     },
     "devDependencies": {
-        "chalk": "^3.0.0",
+        "chalk": "^4.0.0",
         "cross-env": "^7.0.2",
-        "css-loader": "^3.4.2",
-        "csso": "^4.0.2",
-        "electron": "^8.1.1",
-        "electron-builder": "^22.4.1",
-        "electron-notarize": "^0.2.1",
+        "css-loader": "^3.5.3",
+        "csso": "^4.0.3",
+        "electron": "^8.2.5",
+        "electron-builder": "^22.6.0",
+        "electron-notarize": "^0.3.0",
         "eslint": "^6.8.0",
-        "eslint-config-standard": "^14.1.0",
-        "eslint-plugin-import": "^2.20.1",
-        "eslint-plugin-node": "^11.0.0",
+        "eslint-config-standard": "^14.1.1",
+        "eslint-plugin-import": "^2.20.2",
+        "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-promise": "^4.2.1",
         "eslint-plugin-standard": "^4.0.1",
-        "handlebars": "^4.7.3",
-        "less": "^3.11.1",
+        "gulp": "^4.0.2",
+        "gulp-concat": "^2.6.1",
+        "gulp-less": "^4.0.1",
+        "gulp-plumber": "^1.2.1",
+        "gulp-rename": "^2.0.0",
+        "gulp-sourcemaps": "^2.6.5",
+        "handlebars": "^4.7.6",
+        "lorem-ipsum": "^2.0.3",
         "mini-css-extract-plugin": "^0.9.0",
-        "mocha": "^7.1.0",
+        "mocha": "^7.1.2",
         "reveal.js": "^3.9.2",
-        "string-extract-class-names": "^5.9.16",
-        "uglify-js": "^3.8.0",
-        "vue-loader": "^15.9.0",
+        "uglify-js": "^3.9.1",
+        "vue-loader": "^15.9.2",
         "vue-template-compiler": "^2.6.11",
-        "vue-virtual-scroller": "^1.0.0-rc.2",
-        "webpack": "^4.42.0",
+        "vue-virtual-scroller": "^1.0.10",
+        "webpack": "^4.43.0",
         "webpack-cli": "^3.3.11"
     }
 }

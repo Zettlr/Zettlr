@@ -29,11 +29,6 @@
   --bg-primary: white;
 
   // Colours for the directory list
-  --c-virtual-directory: var(--purple-selection);
-  --bg-virtual-directory: lighten(@purple-selection, 10%);
-  --c-virtual-directory-dark: var(--purple-selection-dark);
-  --bg-virtual-directory-dark: lighten(@purple-selection-dark, 10%);
-
   --c-project: var(--orange-2);
 
   // Scrollbar annotations
@@ -69,16 +64,18 @@
 @c-primary: @blue-0;
 @c-primary-shade: @blue-1;
 
-/**
- * Change editor font only.
- */
-#editor .CodeMirror {
-  font-family: @font-crimson;
-  font-size: 1.5em;
-}
+body {
+  /**
+   * Change editor font only.
+   */
+  #editor {
+    font-family: @font-crimson;
+    font-size: 1.5em;
+  }
 
-// Exchange the colour of the preview image in the display settings to accomodate
-// for the primary colour of this theme.
-.modal .dialog div.image-size .image {
-  filter: hue-rotate(64deg) saturate(84%) contrast(149%) brightness(90%);
+  // Exchange the colour of the preview image in the display settings to accomodate
+  // for the primary colour of this theme.
+  .modal .dialog div.image-size .image {
+    filter: hue-rotate(64deg) saturate(84%) contrast(149%) brightness(90%);
+  }
 }

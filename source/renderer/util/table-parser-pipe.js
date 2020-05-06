@@ -57,7 +57,6 @@ module.exports = function (markdownTable) {
     // First row determines the amount of columns expected
     if (!numColumns) numColumns = row.length
     if (numColumns !== row.length) {
-      console.log(markdownTable)
       throw new Error(`Malformed Markdown Table! Found ${row.length} columns on line ${i} (should be ${numColumns}).`)
     }
 

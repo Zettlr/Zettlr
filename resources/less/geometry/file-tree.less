@@ -61,7 +61,7 @@
     .list-item {
       position: relative;
 
-      &.directory .sorter, &.virtual-directory .sorter {
+      &.directory .sorter {
         display: block;
         position: absolute;
         top: 0px;
@@ -80,16 +80,6 @@
           margin-top: 0px; // Overwrite margin of the spans
         }
       }
-    }
-
-    .list-item.virtual-directory > p.filename::before {
-        content: '\f4ea';
-        font-family: @font-icon;
-        font-size: @font-size-small; /* Bit smaller, those indicators are damned huge */
-        margin-right:5px;
-        display:inline-block;
-        position:relative;
-        text-align: text-bottom;
     }
 
     .list-item.project > p.filename::before {

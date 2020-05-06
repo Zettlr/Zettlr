@@ -278,7 +278,7 @@ class ZettlrRendererIPC {
 
       // Print the current file
       case 'print':
-        this.send('print')
+        this.send('print', { 'hash': this._app.getActiveFile().hash })
         break
 
       // The context menu triggers this action, so send it to the main process.
@@ -325,10 +325,6 @@ class ZettlrRendererIPC {
         this._app.deleteDir(cnt)
         break
 
-      case 'dir-new-vd':
-        this._app.newVirtualDir(cnt)
-        break
-
       // Make a project from a directory
       case 'dir-new-project':
         this.send('dir-new-project', cnt)
@@ -363,16 +359,12 @@ class ZettlrRendererIPC {
 
         // FILES
 
-      case 'file-set-current':
-        this._app.setCurrentFile(cnt)
-        break
-
       case 'file-open':
         this._app.openFile(cnt)
         break
 
       case 'file-close':
-        this._app.closeFile()
+        this._app.closeFile(cnt.hash)
         break
 
       case 'file-save':
@@ -382,6 +374,21 @@ class ZettlrRendererIPC {
       // Replace all properties of a file (e.g. on rename)
       case 'file-replace':
         this._app.replaceFile(cnt.hash, cnt.file)
+        break
+
+      // Is used to hot-swap the contents of a currently opened file
+      case 'replace-file-contents':
+        this._app.getEditor().replaceFileContents(cnt.hash, cnt.contents)
+        break
+
+      case 'sync-files':
+        this._app.getEditor().syncFiles(cnt)
+        break
+
+      case 'file-request-sync':
+        // This is the answer from main with a file and its contents which
+        // we simply need to add to the open files
+        this._app.getEditor().addFileToOpen(cnt)
         break
 
       // Replace a full directory tree (e.g., on rename or modification of the children)
@@ -395,7 +402,7 @@ class ZettlrRendererIPC {
         break
 
       case 'mark-clean':
-        this._app.getEditor().markClean()
+        this._app.getEditor().markClean(cnt.hash)
         // If we have a buffered message, send that and afterwards clean up
         if (this._bufferedMessage != null) {
           this.send(this._bufferedMessage.command, this._bufferedMessage.content)
@@ -448,8 +455,8 @@ class ZettlrRendererIPC {
         break
 
       case 'export':
-        if (this._app.getCurrentFile() != null) {
-          this._app.getBody().displayExport(this._app.getCurrentFile())
+        if (this._app.getActiveFile() != null) {
+          this._app.getBody().displayExport(this._app.getActiveFile())
         }
         break
 

@@ -49,10 +49,13 @@
     }
 
     .CodeMirror {
-      height:100%;
-      cursor:text;
-      font-family: inherit;
+      // The CodeMirror editor needs to respect the new tabbar; it cannot take
+      // up 100 % all for itself anymore.
+      height: calc(100% - @tabbar-height);
+      margin-top: @tabbar-height;
       margin-left: 0.5em;
+      cursor: text;
+      font-family: inherit;
 
       @media(min-width: 1025px) { margin-left: @editor-margin-normal-lg; }
       @media(max-width: 1024px) { margin-left: @editor-margin-normal-md; }
@@ -80,30 +83,33 @@
       margin-bottom: 0px;
       padding-bottom: 0px;
     }
+
+    // Reduce font size of math a bit
+    .katex { font-size: 1.1em; }
   }
 
 
-  // CodeMirror fullscreen
-  .CodeMirror-fullscreen {
-    position: fixed !important; // Have to override another relative
-    top: @toolbar-height; left: 0; right: 0; bottom: 0;
-    height: auto;
-    z-index: 500;
+// CodeMirror fullscreen
+.CodeMirror-fullscreen {
+  position: fixed !important; // Have to override another relative
+  top: @toolbar-height; left: 0; right: 0; bottom: 0;
+  height: auto;
+  z-index: 500;
 
-    @media(min-width: 1301px) { margin-left: @editor-margin-fullscreen-xxl !important; }
-    @media(max-width: 1300px) { margin-left: @editor-margin-fullscreen-xl  !important; }
-    @media(max-width: 1100px) { margin-left: @editor-margin-fullscreen-lg  !important; }
-    @media(max-width: 1000px) { margin-left: @editor-margin-fullscreen-md  !important; }
-    @media(max-width:  800px) { margin-left: @editor-margin-fullscreen-sm  !important; }
+  @media(min-width: 1301px) { margin-left: @editor-margin-fullscreen-xxl !important; }
+  @media(max-width: 1300px) { margin-left: @editor-margin-fullscreen-xl  !important; }
+  @media(max-width: 1100px) { margin-left: @editor-margin-fullscreen-lg  !important; }
+  @media(max-width: 1000px) { margin-left: @editor-margin-fullscreen-md  !important; }
+  @media(max-width:  800px) { margin-left: @editor-margin-fullscreen-sm  !important; }
 
-    .CodeMirror-scroll {
-      @media(min-width: 1301px) { padding-right: @editor-margin-fullscreen-xxl !important; }
-      @media(max-width: 1300px) { padding-right: @editor-margin-fullscreen-xl  !important; }
-      @media(max-width: 1100px) { padding-right: @editor-margin-fullscreen-lg  !important; }
-      @media(max-width: 1000px) { padding-right: @editor-margin-fullscreen-md  !important; }
-      @media(max-width:  800px) { padding-right: @editor-margin-fullscreen-sm  !important; }
-    }
+  .CodeMirror-scroll {
+    @media(min-width: 1301px) { padding-right: @editor-margin-fullscreen-xxl !important; }
+    @media(max-width: 1300px) { padding-right: @editor-margin-fullscreen-xl  !important; }
+    @media(max-width: 1100px) { padding-right: @editor-margin-fullscreen-lg  !important; }
+    @media(max-width: 1000px) { padding-right: @editor-margin-fullscreen-md  !important; }
+    @media(max-width:  800px) { padding-right: @editor-margin-fullscreen-sm  !important; }
   }
+}
 
 // Define the readability classes
 .cm-readability-0   { background-color: hsv(100, 70%, 95%); color: #444444 !important; }

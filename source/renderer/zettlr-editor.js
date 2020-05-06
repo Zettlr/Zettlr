@@ -18,14 +18,15 @@ const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const Turndown = require('joplin-turndown')
 const turndownGfm = require('joplin-turndown-plugin-gfm')
-// const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
 const { clipboard } = require('electron')
 const hash = require('../common/util/hash')
 const countWords = require('../common/util/count-words')
-const flattenDirectoryTree = require('../common/util/flatten-directory-tree')
+const objectToArray = require('../common/util/object-to-array')
 const { trans } = require('../common/lang/i18n.js')
 const generateKeymap = require('./assets/codemirror/generate-keymap.js')
 const EditorSearch = require('./util/editor-search')
+const EditorTabs = require('./util/editor-tabs')
+const moveSection = require('./util/editor-move-section')
 const openMarkdownLink = require('./util/open-markdown-link')
 const ipc = require('electron').ipcRenderer
 
@@ -66,7 +67,7 @@ class ZettlrEditor {
   constructor (parent) {
     this._renderer = parent
     this._div = $('#editor')
-    this._positions = [] // Saves the positions of the editor
+    this._openFiles = [] // Holds all open files in the editor
     this._currentHash = null // Needed for positions
 
     this._words = 0 // Currently written words
@@ -74,6 +75,9 @@ class ZettlrEditor {
     this._timeout = null // Stores a current timeout for a save-command
 
     this._searcher = new EditorSearch(null)
+    this._tabs = new EditorTabs()
+    // The user can select or close documents on the tab bar
+    this._tabs.setIntentCallback(this._onTabAction.bind(this))
 
     // The starting position for a tag autocomplete.
     this._autoCompleteStart = null
@@ -303,43 +307,12 @@ class ZettlrEditor {
 
         // Navigate to the root to include as many files as possible
         while (dir.parent) dir = dir.parent
-
-        // Okay, cool, now we have to replace dir with
-        // a dir coming from findObject(). Why? Because
-        // out of unknown reasons, traversing the directory
-        // UP using the parent-property, removes the children
-        // property of said parent. But when traversing DOWN
-        // from the root level of the directories, the
-        // children array is maintained. Just in case you're
-        // wondering, comment out the following section and
-        // run it (by bringing up the corresponding file link
-        // hint). All three roots will be the same, but the
-        // first one will have zero children, while the others
-        // will have the correct amount. Therefore, only the
-        // third operating statement will return true.
-
-        // let foundRoot = dir
-        // let pathsRoot = renderer._paths[11] (correct index for you, obvsly)
-        // let hashRoot = renderer.findObject(foundRoot.hash)
-        // console.log('Root via traversal: ', foundRoot.name, foundRoot.hash)
-        // console.log('Root via _paths:', pathsRoot.name, pathsRoot.hash)
-        // console.log('Root via findObject(): ', hashRoot.name, hashRoot.hash)
-        // console.log('Num children (traversal)', foundRoot.children.length)
-        // console.log('Num children (_paths)', pathsRoot.children.length)
-        // console.log('Num children (findObject)', hashRoot.children.length)
-        // console.log('Dir same as paths root?', foundRoot === pathsRoot)
-        // console.log('Root same as found object?', foundRoot === hashRoot)
-        // console.log('Paths same as found?', pathsRoot === hashRoot)
-
-        // JavaScript never stops to amaze me.
-        dir = this._renderer.findObject(dir.hash)
-
-        let tree = flattenDirectoryTree(dir).filter(elem => elem.type === 'file')
+        let tree = objectToArray(dir, 'children').filter(elem => elem.type === 'file')
 
         for (let file of tree) {
           let fname = path.basename(file.name, path.extname(file.name))
           let displayText = fname // Always display the filename
-          if (file.frontmatter.title) displayText += ' ' + file.frontmatter.title
+          if (file.frontmatter && file.frontmatter.title) displayText += ' ' + file.frontmatter.title
           db[fname] = {
             'text': file.id || fname, // Use the ID, if given, or the filename
             'displayText': displayText,
@@ -366,12 +339,16 @@ class ZettlrEditor {
 
         // Check if the change actually modified the
         // doc or not
-        if (this.isClean()) {
+        if (this._cm.doc.isClean()) {
           this._renderer.clearModified()
+          this.markClean(this._currentHash)
         } else {
           this._renderer.setModified()
+          this._tabs.markDirty(this._currentHash)
           // Set the autosave timeout
-          this._timeout = setTimeout(() => {
+          this._timeout = setTimeout((e) => {
+            // NOTE that the renderer will pull the currently active file from
+            // the editor in any case, so the state is maintained.
             this._renderer.saveFile()
             this.updateCitations()
           }, SAVE_TIMOUT)
@@ -390,27 +367,7 @@ class ZettlrEditor {
     this._cm.on('cursorActivity', () => {
       // This event fires on either editor changes (because, obviously the
       // cursor changes its position as well then) or when the cursor moves.
-      if (this._renderImages) this._cm.execCommand('markdownRenderImages') // Render images
-      this._cm.execCommand('markdownRenderMermaid') // Render mermaid codeblocks
-      if (this._renderIframes) this._cm.execCommand('markdownRenderIframes') // Render iFrames
-      if (this._renderMath) this._cm.execCommand('markdownRenderMath') // Render equations
-      if (this._renderLinks) this._cm.execCommand('markdownRenderLinks') // Render links
-      if (this._renderCitations) this._cm.execCommand('markdownRenderCitations') // Render citations
-      if (this._renderTables) this._cm.execCommand('markdownRenderTables') // Render tables
-      if (this._renderTasks) this._cm.execCommand('markdownRenderTasks') // Render tasks
-      if (this._renderHTags) this._cm.execCommand('markdownRenderHTags') // Render heading levels
-      if (this._wysiwyg) this._cm.execCommand('markdownWYSIWYG') // Render all other elements
-      this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
-      if (this._cm.getOption('fullScreen') && this._mute) {
-        this._muteLines()
-      }
-
-      // Additionally, render all citations that may have been newly added to
-      // the DOM by CodeMirror.
-      this.renderCitations()
-
-      // Update fileInfo
-      this._renderer.updateFileInfo(this.getFileInfo())
+      this._fireRenderers()
     })
 
     // We need to update citations also on updates, as this is the moment when
@@ -572,6 +529,32 @@ class ZettlrEditor {
   }
 
   /**
+   * Apply all renderers and other fancy stuff on the editor.
+   */
+  _fireRenderers () {
+    if (this._renderImages) this._cm.execCommand('markdownRenderImages') // Render images
+    this._cm.execCommand('markdownRenderMermaid') // Render mermaid codeblocks
+    if (this._renderIframes) this._cm.execCommand('markdownRenderIframes') // Render iFrames
+    if (this._renderMath) this._cm.execCommand('markdownRenderMath') // Render equations
+    if (this._renderLinks) this._cm.execCommand('markdownRenderLinks') // Render links
+    if (this._renderCitations) this._cm.execCommand('markdownRenderCitations') // Render citations
+    if (this._renderTables) this._cm.execCommand('markdownRenderTables') // Render tables
+    if (this._renderTasks) this._cm.execCommand('markdownRenderTasks') // Render tasks
+    if (this._renderHTags) this._cm.execCommand('markdownRenderHTags') // Render heading levels
+    if (this._wysiwyg) this._cm.execCommand('markdownWYSIWYG') // Render all other elements
+    this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
+    this._cm.execCommand('markdownCodeblockClasses') // Apply code block classes
+    if (this._cm.getOption('fullScreen') && this._mute) this._muteLines()
+
+    // Additionally, render all citations that may have been newly added to
+    // the DOM by CodeMirror.
+    this.renderCitations()
+
+    // Update fileInfo
+    this._renderer.updateFileInfo(this.getFileInfo())
+  }
+
+  /**
    * Enters the readability mode
    */
   enterReadability () {
@@ -597,6 +580,7 @@ class ZettlrEditor {
    */
   isReadabilityModeActive () {
     let mode = this._cm.getOption('mode')
+    if (!mode) return false // Before a doc has been loaded, mode can be undefined
     return mode.hasOwnProperty('name') && mode.name === 'readability'
   }
 
@@ -618,40 +602,31 @@ class ZettlrEditor {
     * @return {ZettlrEditor}       Chainability.
     */
   open (file, flag = null) {
-    this._cm.setValue(file.content)
-    this._cm.setOption('markdownImageBasePath', path.dirname(file.path)) // Set the base path for image rendering
+    if (!this._openFiles.find(elem => elem.fileObject.hash === file.hash)) {
+      console.log('File not opened. Adding to open files ...')
+      // We need to create a new doc for the file and then swap
+      // the currently active doc.
+      // Switch modes based on the file type
+      let mode = MD_MODE
+      // Potentially helpful: $('.CodeMirror').addClass('cm-stex-mode')
+      if (file.ext === '.tex') mode = TEX_MODE
 
-    // Switch modes based on the file type
-    if (file.ext === '.tex') {
-      this._cm.setOption('mode', TEX_MODE)
-      $('.CodeMirror').addClass('cm-stex-mode')
-    } else if (this._cm.getOption('mode') === TEX_MODE) {
-      this._cm.setOption('mode', MD_MODE)
-      $('.CodeMirror').removeClass('cm-stex-mode')
+      // Bind the "correct" filetree object to the doc, because
+      // we won't be accessing the content property at all, hence
+      // it's easier to have the file object bound here that all
+      // of the renderer is working with.
+      let fileTreeObject = this._renderer.findObject(file.hash)
+      this._openFiles.push({
+        'fileObject': fileTreeObject,
+        'cmDoc': CodeMirror.Doc(file.content, mode)
+      })
     }
 
-    this._cm.refresh()
-    // Scroll the scrollbar to top, to make sure it's at the top of the new
-    // file (in case there are positions saved, they will be scrolled to
-    // later in this function)
-    $('.CodeMirror-vscrollbar').scrollTop(0)
-    this._currentHash = 'hash' + file.hash
-    this._words = countWords(this._cm.getValue(), this._countChars)
-
-    // Mark clean, because now we got a new (and therefore unmodified) file
-    this._cm.markClean()
-    this._cm.clearHistory() // Clear history so that no "old" files can be
-    // recreated using Cmd/Ctrl+Z.
-
-    if (this._positions[this._currentHash] !== undefined) {
-      // Restore scroll positions
-      this._cm.scrollIntoView(this._positions[this._currentHash].scroll)
-      this._cm.setSelection(this._positions[this._currentHash].cursor)
-    }
-
-    // Last but not least: If there are any search results currently
-    // display, mark the respective positions.
-    this._searcher.markResults(file)
+    // I know that I will make this mistake in the future, so here's why we
+    // don't swap the file.content property during this: Because there's a
+    // different function to do so. Use it! Don't monkey path _swapFiles. NO
+    // content replacement here!
+    this._swapFile(file.hash)
 
     // If we've got a new file, we need to re-focus the editor
     if (flag === 'new-file') this._cm.focus()
@@ -663,25 +638,206 @@ class ZettlrEditor {
   }
 
   /**
-    * Closes the current file.
-    * @return {ZettlrEditor} Chainability.
-    */
-  close () {
+   * Exchanges the current document displayed.
+   * @param {Number} hash The hash of the file to be swapped
+   */
+  _swapFile (hash) {
+    console.log('_swapFile called')
     if (this.isReadabilityModeActive()) this.exitReadability()
-    // Save current positions in case the file is being opened again later.
-    if (this._currentHash != null) {
-      this._positions[this._currentHash] = {
-        'scroll': JSON.parse(JSON.stringify(this._cm.getScrollInfo())),
-        'cursor': JSON.parse(JSON.stringify(this._cm.getCursor()))
+    // Exchanges the CodeMirror document object
+    let file = this._openFiles.find(elem => elem.fileObject.hash === hash)
+    if (!file) {
+      console.log('No file found to swap.')
+      return
+    }
+    // swapDoc returns the old doc, but we retain a reference in the
+    // _openFiles array so we don't need to catch it.
+    this._cm.swapDoc(file.cmDoc)
+    this._currentHash = hash
+
+    // Reset the word count to match the now active file
+    this._words = countWords(this._cm.getValue(), this._countChars)
+
+    // Synchronise the file changes to the document tabs
+    this._tabs.syncFiles(this._openFiles, this._currentHash)
+
+    // Make sure all headings are rendered etc. pp
+    this._fireRenderers()
+
+    // Last but not least: If there are any search results currently
+    // display, mark the respective positions.
+    this._searcher.markResults(file.fileObject)
+
+    // The sidebar needs to be informed that the active file has changed!
+    global.store.set('selectedFile', this._currentHash)
+  }
+
+  /**
+   * Synchronises a list of hashes with the open documents in the editor.
+   * @param {Array} newHashes A potential new list of hashes to open/sync.
+   */
+  syncFiles (newHashes = this._openFiles.map(elem => elem.fileObject.hash)) {
+    let oldHashes = this._openFiles.map(elem => elem.fileObject.hash)
+    console.log('File syncing initiated!', newHashes, oldHashes)
+    let lastHashIndex = oldHashes.indexOf(this._currentHash)
+    if (lastHashIndex > newHashes.length) lastHashIndex = newHashes.length - 1
+
+    // First, close all files no longer present.
+    for (let fileDescriptor of this._openFiles) {
+      if (!newHashes.includes(fileDescriptor.fileObject.hash)) {
+        console.log(`Closing file ${fileDescriptor.fileObject.name}`)
+        this.close(fileDescriptor.fileObject.hash)
       }
     }
 
-    this._cm.setValue('')
-    this._cm.markClean()
-    this._cm.clearHistory()
-    this._words = 0
-    this._cm.setOption('markdownImageBasePath', '') // Reset base path
+    // Then, determine all files we have yet to open anew.
+    let toOpen = newHashes.filter(fileHash => !oldHashes.includes(fileHash))
+    if (toOpen.length > 0) {
+      console.warn(`There are ${toOpen.length} files we need to pull from main!`)
+      for (let fileHash of toOpen) {
+        console.log('Retrieving file ...')
+        global.ipc.send('file-request-sync', { 'hash': fileHash })
+      }
+    }
+
+    // Last but not least, exchange the current hash, if not present anymore.
+    // We'll use the same index for that, because, purely from a visual
+    // perspective, it makes absolutely sense that the new active file is at
+    // roughly the same position than the former one.
+    if (!newHashes.includes(this._currentHash)) {
+      // In this case, we also need to swap files
+      this._swapFile(newHashes[lastHashIndex])
+    }
+
+    // Finally, propagate the changes to the tabs.
+    this._tabs.syncFiles(this._openFiles, this._currentHash)
+  }
+
+  /**
+   * Handles the callback intent whenever the user performs an action
+   * on the tabs.
+   *
+   * @param {( string|number )} hash The hash upon which the intent was triggered.
+   * @param {string} intent The actual intent.
+   * @memberof ZettlrEditor
+   */
+  _onTabAction (hash, intent) {
+    // Make sure === works as intended
+    if (!Array.isArray(hash)) hash = parseInt(hash, 10)
+    if (intent === 'close') {
+      // Send the close request to main
+      global.ipc.send('file-close', { 'hash': hash })
+      // this.close(hash)
+    } else if (intent === 'select') {
+      this._swapFile(hash)
+    } else if (intent === 'new-file') {
+      // Tell the renderer someone wants a new file
+      this._renderer.newFile('new-file-button')
+    } else if (intent === 'sorting') {
+      // hash is actually an array, with all hashes in their desired new sorting,
+      // so let's forward that to main. But also make sure we sort it here
+      // because otherwise the new sorting won't be persisted in the tabbar.
+      this._openFiles = hash.map(e => this._openFiles.find(file => file.fileObject.hash === e))
+      global.ipc.send('sort-open-files', hash)
+    }
+  }
+
+  /**
+   * Silently adds a file to the array of open files.
+   * @param {Object} fileObject A file descriptor with content
+   */
+  addFileToOpen (fileObject) {
+    console.log('addFileToOpen called')
+    // Check if the file is already open; prevent duplicates.
+    if (this._openFiles.find(elem => elem.fileObject.hash === fileObject.hash)) return
+    // This function is called by the IPC when there's a new file
+    // synchronisation request answered by main. Let's simply push it to the
+    // array of open files without touching any other logic.
+    let fileTreeObject = this._renderer.findObject(fileObject.hash)
+    let mode = MD_MODE
+    if (fileObject.ext === '.tex') mode = TEX_MODE
+    this._openFiles.push({
+      'fileObject': fileTreeObject,
+      'cmDoc': CodeMirror.Doc(fileObject.content, mode)
+    })
+
+    // If there's no file open, open this one.
+    if (!this._currentHash) this._swapFile(fileObject.hash)
+
+    // Propagate changes
+    this._tabs.syncFiles(this._openFiles, this._currentHash)
+  }
+
+  /**
+   * Hot-swaps the contents of one of the currently opened files.
+   *
+   * @param {number} hash The file's hash
+   * @param {string} contents The new file contents
+   * @memberof ZettlrEditor
+   */
+  replaceFileContents (hash, contents) {
+    let openedFile = this._openFiles.find((e) => e.fileObject.hash === hash)
+    if (openedFile) {
+      openedFile.cmDoc.setValue(contents)
+      // Now mark clean this one document using the function, which also takes
+      // care to instruct main to remove the edit flag if applicable.
+      this.markClean(openedFile.fileObject.hash)
+    } else {
+      console.warn('Cannot replace the file contents of file ' + hash + ': No open file found!')
+    }
+  }
+
+  /**
+    * Closes the current file.
+    * @param {Number} hash A hash to close
+    * @return {ZettlrEditor} Chainability.
+    */
+  close (hash) {
+    console.log('Editor.close called', hash)
+    if (!hash) return console.error('Could not close file: No hash provided!')
+
+    let fileToClose = this._openFiles.find(elem => elem.fileObject.hash === hash)
+    if (!fileToClose) return console.error('Could not close file: Not open.')
+    let currentIndex = this._openFiles.indexOf(fileToClose)
+
+    // Splice it
+    this._openFiles.splice(currentIndex, 1)
+
+    if (this._openFiles.length === 0) {
+      console.log('After closing, openFiles is empty')
+      // Replace with an empty new doc
+      this._cm.swapDoc(CodeMirror.Doc('', MD_MODE))
+      this._words = 0
+      this._currentHash = null
+      this._cm.setOption('markdownImageBasePath', '') // Reset base path
+    }
+
+    if (this._currentHash === fileToClose.fileObject.hash && this._openFiles.length > 0) {
+      // The current file has been closed: Select another one
+      let mdBasePath = ''
+      if (currentIndex > 0) {
+        this._swapFile(this._openFiles[currentIndex - 1].fileObject.hash)
+        mdBasePath = this._openFiles[currentIndex - 1].fileObject.path
+      } else {
+        this._swapFile(this._openFiles[0].fileObject.hash)
+        mdBasePath = this._openFiles[0].fileObject.path
+      }
+      mdBasePath = path.dirname(mdBasePath) // We need the dir, not the file
+      this._cm.setOption('markdownImageBasePath', mdBasePath) // Reset base path
+    }
+
+    // Synchronise the file changes to the document tabs
+    this._tabs.syncFiles(this._openFiles, this._currentHash)
+
     return this
+  }
+
+  /**
+   * Returns the file that is active (i.e. visible), but only the object, NOT the doc
+   */
+  getActiveFile () {
+    let activeFile = this._openFiles.find(elem => elem.fileObject.hash === this._currentHash)
+    return (activeFile) ? activeFile.fileObject : undefined
   }
 
   /**
@@ -828,10 +984,11 @@ class ZettlrEditor {
     * @return {Object} An object containing words, chars, chars_wo_spaces, if selection: words_sel and chars_sel
     */
   getFileInfo () {
+    let currentValue = this._cm.getValue()
     let ret = {
-      'words': countWords(this._cm.getValue(), this._countChars),
-      'chars': this._cm.getValue().length,
-      'chars_wo_spaces': this._cm.getValue().replace(/[\s ]+/g, '').length,
+      'words': countWords(currentValue, this._countChars),
+      'chars': currentValue.length,
+      'chars_wo_spaces': currentValue.replace(/[\s ]+/g, '').length,
       'cursor': JSON.parse(JSON.stringify(this._cm.getCursor()))
     }
 
@@ -910,6 +1067,7 @@ class ZettlrEditor {
     // instance
     global.tippy(element[0], {
       'content': fnref,
+      allowHTML: true,
       onHidden (instance) {
         instance.destroy() // Destroy the tippy instance.
       },
@@ -993,77 +1151,7 @@ class ZettlrEditor {
    * @return {ZettlrEditor}    This for chainability.
    */
   moveSection (fromLine, toLine) {
-    let sectionStart = fromLine
-    let sectionEnd = fromLine
-    let headingLevel = -1
-
-    // First match of the following regex contains the heading characters, ergo
-    // the length is the heading level
-    headingLevel = /^(#{1,6}) (.*)$/.exec(this._cm.getLine(fromLine))[1].length
-
-    // Build a regex to be used now. We'll only stop at either a higher or
-    // same level heading. We're doing this, because this way we'll include
-    // lesser headings in this section.
-    let searchRegex = new RegExp(`^#{1,${headingLevel}} .+$`)
-    for (let i = sectionStart + 1; i < this._cm.lineCount(); i++) {
-      if (searchRegex.test(this._cm.getLine(i))) {
-        // We've found a heading of at least this level.
-        sectionEnd = i - 1 // Don't include the current line, obviously
-        break
-      }
-    }
-
-    // Sanity check: If sectionEnd has not been set, this means that the user
-    // wanted to move the final section -- the RegExp will naturally not yield
-    // any result, so we take everything until the very end to be included in
-    // the section.
-    if (sectionEnd === fromLine) sectionEnd = this._cm.lineCount() - 1
-
-    let lines = this._cm.getValue().split('\n')
-    let section = lines.slice(sectionStart, sectionEnd + 1)
-
-    if (toLine < 0) {
-      // We should move the section to the end, so cut and append it.
-      // Remove the old section.
-      lines.splice(sectionStart, section.length)
-      // Sneak a new line into the section
-      section.unshift('')
-      // Concat the section
-      lines = lines.concat(section)
-    } else if (sectionEnd < toLine) {
-      // The section should be moved to the back, so to not confuse line numbers,
-      // we first need to insert the section (i.e. copy and paste), and only
-      // afterwards remove the section.
-      // First get the stuff before the old section position
-      let beforeSection = lines.slice(0, sectionStart)
-      // Then append the part behind the section up until the target line
-      beforeSection = beforeSection.concat(lines.slice(sectionEnd + 1, toLine))
-
-      // Get everything after the target line
-      let afterSection = lines.slice(toLine)
-
-      // Now glue it back together (afterSection -> section, then section -> beforeSection)
-      lines = beforeSection.concat(section.concat(afterSection))
-    } else if (sectionStart > toLine) {
-      // The section should be moved to the front, so we can safely cut it directly.
-      // Remove the old section.
-      lines.splice(sectionStart, section.length)
-
-      // Then insert it above the target line. We will make use of Function.apply
-      // to pass the array completely to the function. What do I mean? Splice
-      // basically needs 2 arguments plus a list of unknown length. This means
-      // we create an array containing the first and second argument [toline, 0],
-      // and afterwards add the whole section array. They will be inserted in the
-      // right order and the function will be called accordingly.
-      Array.prototype.splice.apply(lines, [ toLine, 0 ].concat(section))
-      // Splice will be called on "lines" with the argument chain.
-      // Equivalent: lines.splice(toLine, 0, section)
-    }
-
-    // Now we have the correct lines. So let's simply replace the whole content
-    // with it. Tadaa!
-    this._cm.setValue(lines.join('\n'))
-
+    this._cm.setValue(moveSection(this._cm.getValue(), fromLine, toLine))
     return this
   }
 
@@ -1235,16 +1323,34 @@ class ZettlrEditor {
   insertText (text) { this._cm.replaceSelection(text) }
 
   /**
-    * Mark clean the CodeMirror instance
-    * @return {void} Nothing to return.
-    */
-  markClean () { this._cm.markClean() }
+   * Marks the specified document clean
+   *
+   * @param {number} hash The hash of the document to mark clean
+   * @memberof ZettlrEditor
+   */
+  markClean (hash) {
+    let file = this._openFiles.find(e => e.fileObject.hash === hash)
+    if (file) {
+      file.cmDoc.markClean()
+      this._tabs.markClean(file.fileObject.hash)
+      // In case this was the last file to be cleared, we can instruct main to
+      // remove the edit flag itself
+      if (this.isClean()) this._renderer.clearModified()
+    } else {
+      console.warn(`Could not mark clean the document ${hash}. Not found.`)
+    }
+  }
 
   /**
-    * Query if the editor is currently modified
-    * @return {Boolean} True, if there are no changes, false, if there are.
+    * Query if any of the documents are modified.
+    * @return {boolean} True, if there are no changes, false, if there are.
     */
-  isClean () { return this._cm.doc.isClean() }
+  isClean () {
+    for (let doc of this._openFiles) {
+      if (!doc.cmDoc.isClean()) return false
+    }
+    return true
+  }
 
   /**
     * Run a CodeMirror command.

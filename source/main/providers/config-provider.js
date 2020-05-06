@@ -24,6 +24,7 @@ const bcp47 = require('bcp-47')
 const ZettlrValidation = require('../../common/zettlr-validation')
 const { app } = require('electron')
 const ignoreFile = require('../../common/util/ignore-file')
+const safeAssign = require('../../common/util/safe-assign')
 const isDir = require('../../common/util/is-dir')
 const isDictAvailable = require('../../common/util/is-dict-available')
 const { getLanguageFile } = require('../../common/lang/i18n')
@@ -51,8 +52,28 @@ class ConfigProvider extends EventEmitter {
     this.configPath = app.getPath('userData')
     this.configFile = path.join(this.configPath, 'config.json')
 
+    // The user may provide a temporary config to the process, which
+    // leaves the "original" one untouched. This is very handy for
+    // testing.
+    if (process.argv.includes('--config')) {
+      // A different configuration was, provided, so let's use that one instead!
+      let temporaryConfig = process.argv[process.argv.indexOf('--config') + 1]
+      if (!path.isAbsolute(temporaryConfig)) {
+        if (app.isPackaged) {
+          // Attempt to use the executable file's path
+          temporaryConfig = path.join(path.dirname(app.getPath('exe')), temporaryConfig)
+        } else {
+          // Attempt to use the repository's root directory
+          temporaryConfig = path.join(__dirname, '../../../', temporaryConfig)
+        }
+      }
+      global.log.info('Using temporary configuration file at ' + temporaryConfig)
+      this.configFile = temporaryConfig
+    }
+
     this.config = null
     this._rules = [] // This array holds all validation rules
+    this._firstStart = false // Only true if a config file has been created
 
     this._bulkSetInProgress = false // As long as this is true, a bulk set happens
 
@@ -80,7 +101,10 @@ class ConfigProvider extends EventEmitter {
     // Config Template providing all necessary arguments
     this.cfgtpl = {
       // Root directories
-      'openPaths': [],
+      'openPaths': [], // Array to include all opened root paths
+      'openFiles': [], // Array to include all currently opened files
+      'lastFile': null, // Save last opened file hash here
+      'lastDir': null, // Save last opened dir hash here
       'dialogPaths': {
         'askFileDialog': '',
         'askDirDialog': '',
@@ -93,8 +117,6 @@ class ConfigProvider extends EventEmitter {
         'height': require('electron').screen.getPrimaryDisplay().workAreaSize.width,
         'max': true
       },
-      'lastFile': null, // Save last opened file hash here
-      'lastDir': null, // Save last opened dir hash here
       // Visible attachment filetypes
       'attachmentExtensions': COMMON_DATA.attachmentExtensions,
       // UI related options
@@ -261,30 +283,20 @@ class ConfigProvider extends EventEmitter {
 
     // Put a global setter and getter for config keys into the globals.
     global.config = {
-      get: (key) => {
-        // Clone the properties to prevent intrusion
-        return JSON.parse(JSON.stringify(this.get(key)))
-      },
+      // Clone the properties to prevent intrusion
+      get: (key) => { return JSON.parse(JSON.stringify(this.get(key))) },
       // The setter is a simply pass-through
-      set: (key, val) => {
-        return this.set(key, val)
-      },
+      set: (key, val) => { return this.set(key, val) },
       /**
        * Set multiple config keys at once.
        * @param  {Object} obj An object containing key/value-pairs to set.
        * @return {Boolean}     Whether or not the call succeeded.
        */
-      bulkSet: (obj) => {
-        return this.bulkSet(obj)
-      },
+      bulkSet: (obj) => { return this.bulkSet(obj) },
       // Enable global event listening to updates of the config
-      on: (evt, callback) => {
-        this.on(evt, callback)
-      },
+      on: (evt, callback) => { this.on(evt, callback) },
       // Also do the same for the removal of listeners
-      off: (evt, callback) => {
-        this.off(evt, callback)
-      },
+      off: (evt, callback) => { this.off(evt, callback) },
       /**
        * Persists the current configuration to disk
        * @return {void} Does not return
@@ -301,7 +313,9 @@ class ConfigProvider extends EventEmitter {
        * @param  {String} p The path to remove
        * @return {Boolean}   Whether or not the call succeeded
        */
-      removePath: (p) => { return this.removePath(p) }
+      removePath: (p) => { return this.removePath(p) },
+      addFile: (f) => { return this.addFile(f) },
+      removeFile: (f) => { return this.removeFile(f) }
     }
   }
 
@@ -350,6 +364,7 @@ class ConfigProvider extends EventEmitter {
       readConfig = JSON.parse(fs.readFileSync(this.configFile, { encoding: 'utf8' }))
     } catch (e) {
       fs.writeFileSync(this.configFile, JSON.stringify(this.cfgtpl), { encoding: 'utf8' })
+      this._firstStart = true // Assume first start
       return this // No need to iterate over objects anymore
     }
 
@@ -464,6 +479,33 @@ class ConfigProvider extends EventEmitter {
   removePath (p) {
     if (this.config['openPaths'].includes(p)) {
       this.config['openPaths'].splice(this.config['openPaths'].indexOf(p), 1)
+      return true
+    }
+    return false
+  }
+
+  /**
+   * Adds a file to the array of open files.
+   * @param {String} f The path of the file to add
+   */
+  addFile (f) {
+    // Only add valid and unique files
+    if ((!ignoreFile(f) || isDir(f)) && !this.config['openFiles'].includes(f)) {
+      this.config['openFiles'].push(f)
+      return true
+    }
+
+    return false
+  }
+
+  /**
+    * Removes a file from the open files
+    * @param  {String} f The file to be removed
+    * @return {Boolean} Whether or not the call succeeded.
+    */
+  removeFile (f) {
+    if (this.config['openFiles'].includes(f)) {
+      this.config['openFiles'].splice(this.config['openFiles'].indexOf(f), 1)
       return true
     }
     return false
@@ -603,25 +645,13 @@ class ConfigProvider extends EventEmitter {
   /**
     * Update the complete configuration object with new values
     * @param  {Object} newcfg               The new object containing new props
-    * @param  {Object} [oldcfg=this.config] Necessary for recursion
     * @return {void}                      Does not return anything.
     */
-  update (newcfg, oldcfg = this.config) {
-    // Overwrite all given attributes (and leave the not given in place)
-    // This will ensure sane defaults.
-    for (var prop in oldcfg) {
-      if (newcfg.hasOwnProperty(prop)) {
-        // We have some variable-length arrays that only contain
-        // strings, e.g. we cannot update them using update()
-        if ((typeof oldcfg[prop] === 'object') && !Array.isArray(oldcfg[prop]) && oldcfg[prop] !== null) {
-          // Update sub-object
-          this.update(newcfg[prop], oldcfg[prop])
-        } else {
-          oldcfg[prop] = newcfg[prop]
-        }
-      }
-    }
-
+  update (newcfg) {
+    // Use safeAssign to make sure only properties from the config
+    // are retained, and no rogue values (which can also simply be
+    // old deprecated values).
+    this.config = safeAssign(newcfg, this.config)
     this.emit('update') // Emit an event to all listeners
   }
 

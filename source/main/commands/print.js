@@ -31,10 +31,16 @@ class Print extends ZettlrCommand {
    * @param {Object} arg The argument
    * @return {Boolean} Whether the command ran successful
    */
-  run (evt, arg) {
+  async run (evt, arg) {
+    if (!arg || !arg.hash) {
+      global.log.error('Could not produce print preview: No file hash given.')
+      return
+    }
+
     // First we need to export the current file as HTML.
-    let file = this._app.getCurrentFile()
+    let file = await global.application.getFile(global.application.findFile(arg.hash))
     if (!file) return // No file open.
+
     let opt = {
       'format': 'html',
       'file': file, // The file to be exported

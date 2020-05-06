@@ -94,7 +94,6 @@
         // Obviously, the real URL has not been found. Let's do
         // a check if a relative path works, by using the path of the
         // CodeMirror option markdownImageBasePath
-        // let rel = path.dirname(this._renderer.getCurrentFile().path);
         let rel = img404
         if (cm.getOption('markdownImageBasePath')) {
           // This actually works even better than path.join

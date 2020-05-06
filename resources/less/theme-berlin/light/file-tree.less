@@ -45,8 +45,6 @@
 
         span.dir { color: var(--grey-2); }
 
-        &.virtual-directory { color: var(--c-virtual-directory); }
-
         &.dead-directory {
           color: var(--grey-2);
           &:hover {
@@ -54,10 +52,6 @@
             background-color: inherit;
           }
         }
-
-        // File is displayed as part of a virtual directory -> actually
-        // some kind of a "ghost" file
-        &.alias { color: var(--c-alias-light); }
 
         &.project {
           color: var(--c-project);

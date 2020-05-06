@@ -2,50 +2,75 @@
  * MAIN CSS FOR DARK THEMING
  */
 
-// CodeMirror scrollbar annotations
-.sb-annotation { background-color: var(--bg-annotation-dark); }
+// DARK STYLES
+body.dark {
+  background-color: var(--grey-7);
 
-::-webkit-scrollbar-thumb { background-color:var(--c-primary-shade); }
-::-webkit-scrollbar-thumb:window-inactive { background-color: darken(@c-primary-shade, 20%); }
+  // CodeMirror scrollbar annotations
+  .sb-annotation {
+    background-color: var(--bg-annotation-dark);
+  }
 
-.dragger {
-    color:white;
-    background-color:var(--grey-6);
-}
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--c-primary-shade);
+  }
 
-background-color: var(--grey-7); // To make opacity to toolbar better looking
+  ::-webkit-scrollbar-thumb:window-inactive {
+    background-color: darken(@c-primary-shade, 20%);
+  }
 
-// To make it appear as if the editor is larger than thought,
-// by colouring the sidebar resizer's background according to
-// the editor's, and not according to the file-list.
-#sidebar {
-  #sidebar-resize, #sidebar-inner-resizer {
-    background-color: var(--grey-8);
+  .dragger {
+    color: white;
+    background-color: var(--grey-6);
+  }
 
-    &:hover::after {
-      background-color: rgba(255, 255, 255, 0.4);
+  // To make opacity to toolbar better looking
+
+  // To make it appear as if the editor is larger than thought,
+  // by colouring the sidebar resizer's background according to
+  // the editor's, and not according to the file-list.
+  #sidebar {
+
+    #sidebar-resize,
+    #sidebar-inner-resizer {
+      background-color: var(--grey-8);
+
+      &:hover::after {
+        background-color: rgba(255, 255, 255, 0.4);
+      }
+    }
+
+    #sidebar-inner-resizer {
+      background-color: transparent;
     }
   }
 
-  #sidebar-inner-resizer { background-color: transparent; }
+  // Now all other, bigger stylings.
+
+  @import "file-tree.less";
+
+  @import "file-list.less";
+
+  @import "toolbar.less";
+
+  @import "editor.less";
+
+  @import "document-tabs.less";
+
+  @import "codemirror.less";
+
+  @import "popup.less";
+
+  @import "attachments.less";
+
+  @import "quicklook.less";
+
+  @import "window-controls.less";
+
+
+  .table-helper-align-button-container,
+  .table-helper-remove-button-container,
+  .table-helper-add-button {
+    background-color: white;
+  }
 }
-
-// Now all other, bigger stylings.
-
-@import "file-tree.less";
-
-@import "file-list.less";
-
-@import "toolbar.less";
-
-@import "editor.less";
-
-@import "codemirror.less";
-
-@import "popup.less";
-
-@import "attachments.less";
-
-@import "quicklook.less";
-
-@import "window-controls.less";

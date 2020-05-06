@@ -29,6 +29,8 @@ const { remote, shell, clipboard } = require('electron')
 const generateId = require('../common/util/generate-id')
 const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
 
+const reconstruct = require('./util/reconstruct-tree')
+
 const path = require('path')
 
 // Pull the poll-time from the data
@@ -228,18 +230,6 @@ class ZettlrRenderer {
   }
 
   /**
-    * Tells the ZettlrBody to request a new virtualdir name
-    * @param  {Object} arg Contains the parent dir's hash
-    */
-  newVirtualDir (arg) {
-    if (arg.hasOwnProperty('hash')) {
-      this._body.requestVirtualDirName(this.findObject(arg.hash))
-    } else if (this.getCurrentDir().type === 'directory') { // Only add vds to normal directories
-      this._body.requestVirtualDirName(this.getCurrentDir())
-    }
-  }
-
-  /**
     * The user wants to delete a directory
     * @param  {Object} arg Contains the hash (or none)
     * @return {void}     No return.
@@ -284,15 +274,12 @@ class ZettlrRenderer {
     * @return {Object}      Either a file or a directory object
     */
   findObject (hash) {
-    let o = null
     for (let p of this._paths) {
-      o = this._find(hash, p)
-      if (o != null) {
-        break
-      }
+      let o = this._find(hash, p)
+      if (o != null) return o
     }
 
-    return o
+    return null
   }
 
   /**
@@ -307,9 +294,7 @@ class ZettlrRenderer {
     } else if (obj.hasOwnProperty('children')) {
       for (let c of obj.children) {
         let ret = this._find(hash, c)
-        if (ret != null) {
-          return ret
-        }
+        if (ret != null) return ret
       }
     }
     return null
@@ -322,16 +307,17 @@ class ZettlrRenderer {
     * @return {void}       Nothing to return.
     */
   refresh (nData) {
+    // First we have to "reconstruct" the circular structure
+    // of the directory tree. This function replaces each
+    // parent-prop (only a hash) with the corresponding tree
+    // object, so that we have in principle the same structure
+    // than in main.
+    reconstruct(nData)
     this._paths = nData
     if (this.getCurrentDir() != null) {
       this.setCurrentDir(this.getCurrentDir().hash)
     } else {
       this.setCurrentDir(null) // Reset
-    }
-    if (this.getCurrentFile() != null) {
-      this.setCurrentFile(this.getCurrentFile().hash)
-    } else {
-      this.setCurrentFile(null)
     }
 
     // Trigger a refresh in the attachment pane
@@ -339,6 +325,9 @@ class ZettlrRenderer {
 
     // Pass on the new paths object as is to the store.
     global.store.renewItems(nData)
+
+    // Finally, synchronize the file descriptors in the editor
+    this._editor.syncFiles()
   }
 
   /**
@@ -346,12 +335,12 @@ class ZettlrRenderer {
     * @param  {ZettlrFile} file The new file object.
     */
   refreshCurrentFile (file) {
-    if (this.getCurrentFile()) {
+    if (this.getActiveFile()) {
       // The only things that could've changed and that are immediately
       // visible to the user (which is why we need to update them) are:
       // modtime, file meta, tags, id. The rest can wait until the next big
       // update.
-      let f = this.getCurrentFile()
+      let f = this.getActiveFile()
       f.modtime = file.modtime
       f.tags = file.tags
       f.wordCount = file.wordCount
@@ -360,6 +349,9 @@ class ZettlrRenderer {
       f.id = file.id
       // Trigger a redraw of this specific file in the preview list.
       this._preview.refresh()
+
+      // Finally, synchronize the file descriptors in the editor
+      this._editor.syncFiles()
     }
   }
 
@@ -369,14 +361,20 @@ class ZettlrRenderer {
     * @param  {ZettlrFile} file    The new file to replace the old.
     */
   replaceFile (oldHash, file) {
+    console.log('replacing file', file)
     if (!file) return // No file given; main has screwed up
 
     let oldFile = this.findObject(oldHash)
 
     if (oldFile && oldFile.type === 'file') {
+      console.log('Huhu')
       // We'll be patching the store, as this will
       // be reflected in renderer._paths as well.
       global.store.patch(oldHash, file)
+      console.warn('replacing file', file)
+
+      // Finally, synchronize the file descriptors in the editor
+      this._editor.syncFiles()
     }
   }
 
@@ -390,10 +388,11 @@ class ZettlrRenderer {
 
     let oldDir = this.findObject(oldHash)
 
-    if (oldDir && [ 'directory', 'virtual-directory' ].includes(oldDir.type)) {
+    if (oldDir && oldDir.type === 'directory') {
       // We'll be patching the store, as this
       // will also update the renderer._paths.
       global.store.patch(oldHash, dir)
+      this._attachments.refresh()
     }
   }
 
@@ -446,7 +445,7 @@ class ZettlrRenderer {
       // Indicate no results, if applicable.
       if (res.length === 0) global.store.emptySearchResult()
       // Mark the results in the potential open file
-      global.editorSearch.markResults(this._currentFile)
+      global.editorSearch.markResults(this.getActiveFile())
       this._toolbar.endSearch() // Mark the search as finished
     }).start()
   }
@@ -517,7 +516,6 @@ class ZettlrRenderer {
       f = f.file
     }
     // We have received a new file. So close the old and open the new
-    this._editor.close()
     // Select the file either in the preview list or in the directory tree
     global.store.set('selectedFile', f.hash)
     this._editor.open(f, flag)
@@ -525,10 +523,11 @@ class ZettlrRenderer {
 
   /**
    * Closes the current file
+   * @param {number} hash The hash of the file to be closed.
    */
-  closeFile () {
+  closeFile (hash = null) {
     // We have received a close-file command.
-    this._editor.close()
+    this._editor.close(hash)
   }
 
   /**
@@ -538,7 +537,7 @@ class ZettlrRenderer {
     if (!this.isModified()) return // No need to save
 
     // The user wants to save the currently opened file.
-    let file = this.getCurrentFile()
+    let file = this.getActiveFile()
     if (file == null) {
       // User wants to save an untitled file
       // Important: The main Zettlr-class expects hash to be null
@@ -560,8 +559,8 @@ class ZettlrRenderer {
       // Another file should be renamed
       // Rename a file based on a hash -> find it
       this._body.requestNewFileName(this.findObject(f.hash))
-    } else if (this.getCurrentFile() != null) {
-      this._body.requestNewFileName(this.getCurrentFile())
+    } else if (this.getActiveFile() != null) {
+      this._body.requestNewFileName(this.getActiveFile())
     }
   }
 
@@ -574,6 +573,10 @@ class ZettlrRenderer {
     if ((d != null) && d.hasOwnProperty('hash')) {
       // User has probably right clicked
       this._body.requestFileName(this.findObject(d.hash))
+    } else if (d === 'new-file-button') {
+      // The user has requested a new file from the new file button
+      // on the tab bar - so let's display it there
+      this._body.requestFileName(this.getCurrentDir(), 'new-file-button')
     } else {
       this._body.requestFileName(this.getCurrentDir())
     }
@@ -603,19 +606,16 @@ class ZettlrRenderer {
   }
 
   /**
-   * Simply sets the current file pointer to the new.
-   * @param {Number} newHash The new file's hash.
-   */
-  setCurrentFile (newHash) {
-    this._currentFile = this.findObject(newHash)
-    global.store.set('selectedFile', newHash)
-  }
-
-  /**
-   * Returns the current file's pointer.
+   * Get the active file from the editor
    * @return {ZettlrFile} The file object.
    */
-  getCurrentFile () { return this._currentFile }
+  getActiveFile () {
+    let activeFile = this._editor.getActiveFile()
+    if (!activeFile) return undefined
+    // Don't return the editor's object (with all
+    // content etc) but our own's without content!
+    return this.findObject(activeFile.hash)
+  }
 
   /**
    * Returns the current directory's pointer.

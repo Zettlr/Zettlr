@@ -47,7 +47,7 @@ class ZettlrCon {
    * @param  {Array}  [attributes=[]]   An array of all attributes of the emanating element
    * @return {Array}               An array containing the generated items.
    */
-  _buildFromSource (menutpl, hash = null, vdhash = null, scopes = [], attributes = []) {
+  _buildFromSource (menutpl, hash = null, scopes = [], attributes = []) {
     if (!menutpl) throw new Error('No menutpl detected!')
 
     let menu = []
@@ -75,7 +75,6 @@ class ZettlrCon {
       if (item.hasOwnProperty('command')) {
         builtItem.click = function (menuitem, focusedWindow) {
           let content = (item.hasOwnProperty('content')) ? item.content : { 'hash': hash }
-          if (vdhash) content.virtualdir = vdhash
           // Set the content to the attribute's value, if given
           if (item.hasOwnProperty('attribute')) content = attributes.find(elem => elem.name === item.attribute).value
           that._body.getRenderer().handleEvent(item.command, content)
@@ -125,7 +124,6 @@ class ZettlrCon {
     // No context menu for sorters
     if (elem.hasClass('sorter') || elem.parents('sorter').length > 0) return
     let hash = null
-    let vdhash = null
     let typoPrefix = []
     let scopes = [] // Used to hold the scopes
     let attr = [] // Used to hold the attributes
@@ -174,7 +172,7 @@ class ZettlrCon {
 
       // Determine whether this is a dir or a file
       if (elem.hasClass('file') || elem.hasClass('alias')) menupath = 'file.json'
-      if (elem.hasClass('directory') || elem.hasClass('virtual-directory') || elem.hasClass('dead-directory')) menupath = 'directory.json'
+      if (elem.hasClass('directory') || elem.hasClass('dead-directory')) menupath = 'directory.json'
 
       // Determine the scopes
       if (elem.hasClass('project')) {
@@ -183,7 +181,6 @@ class ZettlrCon {
         scopes.push('no-project')
       }
       if (elem.hasClass('directory')) scopes.push('directory')
-      if (elem.hasClass('virtual-directory')) scopes.push('virtual-directory')
       if (elem.hasClass('dead-directory')) scopes.push('dead-directory')
       if (elem.hasClass('alias')) scopes.push('alias')
       if (elem.hasClass('root')) scopes.push('root')
@@ -195,7 +192,7 @@ class ZettlrCon {
         // The attributes are a NamedNodeMap, so we have to use weird function calling to retrieve them
         attr.push({ 'name': nodes.item(i).nodeName, 'value': nodes.item(i).nodeValue })
       }
-    } else if (elem.parents('#editor').length > 0) {
+    } else if (elem.parents('.CodeMirror').length > 0) {
       scopes.push('editor')
       // If the word is spelled wrong, request suggestions
       if (elem.hasClass('cm-spell-error')) {
@@ -246,7 +243,7 @@ class ZettlrCon {
 
     // Now build with all information we have gathered.
     this._menu = new Menu()
-    this._menu = this._buildFromSource(require('./assets/context/' + menupath), hash, vdhash, scopes, attr)
+    this._menu = this._buildFromSource(require('./assets/context/' + menupath), hash, scopes, attr)
     if (elem.hasClass('cm-spell-error')) this._menu = typoPrefix.concat(this._menu)
 
     // If the element is a link, add an "open link" context menu entry

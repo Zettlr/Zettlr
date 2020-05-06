@@ -20,6 +20,24 @@ global.preBootLog = [{
   'message': `こんにちは！　Booting Zettlr at ${(new Date()).toString()}.`
 }]
 
+/**
+ * This will be overwritten by the log provider, once it has booted
+ */
+global.log = {
+  'verbose': (message) => {
+    global.preBootLog.push({ 'level': 1, 'message': message })
+  },
+  'info': (message) => {
+    global.preBootLog.push({ 'level': 2, 'message': message })
+  },
+  'warning': (message) => {
+    global.preBootLog.push({ 'level': 3, 'message': message })
+  },
+  'error': (message) => {
+    global.preBootLog.push({ 'level': 4, 'message': message })
+  }
+}
+
 // We need the app and process modules.
 const { app } = require('electron')
 const process = require('process')
@@ -118,10 +136,7 @@ app.on('open-file', (e, p) => {
  * may not work correctly.
  */
 app.on('ready', function () {
-  global.preBootLog.push({
-    'level': 2, // Info
-    'message': 'Electron reports ready state. Instantiating main process...'
-  })
+  global.log.info('Electron reports ready state. Instantiating main process...')
   zettlr = new Zettlr()
 })
 

@@ -25,14 +25,20 @@ class FileSearch extends ZettlrCommand {
    * @param  {Object} arg An object containing a hash of a file to be searched
    * @return {Boolean}     Whether the call succeeded.
    */
-  run (evt, arg) {
+  async run (evt, arg) {
     // arg.content contains a hash of the file to be searched
     // and the prepared terms.
-    let file = this._app.findFile({ 'hash': arg.hash })
+    let file = this._app.findFile(arg.hash)
     if (!file) return false // File not found
+
+    let result = await this._app.getFileSystem().runAction('search-file', {
+      'source': file,
+      'info': arg.terms
+    })
+
     this._app.ipc.send('file-search-result', {
       'hash': arg.hash,
-      'result': file.search(arg.terms)
+      'result': result
     })
     return true
   }

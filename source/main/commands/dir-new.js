@@ -14,6 +14,9 @@
 
 const ZettlrCommand = require('./zettlr-command')
 const { trans } = require('../../common/lang/i18n')
+const hash = require('../../common/util/hash')
+const path = require('path')
+const sanitize = require('sanitize-filename')
 
 class DirNew extends ZettlrCommand {
   constructor (app) {
@@ -25,29 +28,49 @@ class DirNew extends ZettlrCommand {
     * @param {String} evt The event name
     * @param  {Object} arg An object containing hash of containing and name of new dir.
     */
-  run (evt, arg) {
-    let curdir = null
-
-    if (arg.hasOwnProperty('hash')) {
-      curdir = this._app.findDir({ 'hash': parseInt(arg.hash) })
-    } else {
-      curdir = this._app.getCurrentDir()
-    }
-
-    curdir.newdir(arg.name).then((dir) => {
-      // Re-render the directories, and then as well the file-list of the
-      // current folder.
-      global.application.dirUpdate(curdir.hash, curdir.getMetadata())
-
-      // Switch to newly created directory.
-      this._app.setCurrentDir(dir)
-    }).catch((err) => {
+  async run (evt, arg) {
+    let sourceDir = this._app.findDir(arg.hash)
+    if (!sourceDir) {
+      global.log.error('Could not create directory: No source given.')
       this._app.window.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_dir'),
-        message: err.message
+        message: trans('system.error.could_not_create_dir')
       })
-    })
+      return false
+    }
+
+    arg.name = sanitize(arg.name, { replacement: '-' }).trim()
+
+    if (arg.name.length === 0) {
+      global.log.error('New directory name was empty after sanitization.')
+      this._app.window.prompt({
+        type: 'error',
+        title: trans('system.error.could_not_create_dir'),
+        message: trans('system.error.could_not_create_dir')
+      })
+      return false
+    }
+
+    try {
+      await this._app.getFileSystem().runAction('create-directory', {
+        'source': sourceDir,
+        'info': { 'name': arg.name }
+      })
+    } catch (e) {
+      this._app.window.prompt({
+        type: 'error',
+        title: trans('system.error.could_not_create_dir'),
+        message: e.message
+      })
+      return false
+    }
+
+    // Now the dir should be created -> Send an update to the renderer
+    // and set the new dir as current.
+    global.application.dirUpdate(sourceDir.hash, sourceDir.hash)
+    let newDirHash = hash(path.join(sourceDir.path, arg.name))
+    this._app.setCurrentDir(this._app.findDir(newDirHash))
   }
 }
 

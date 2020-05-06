@@ -26,34 +26,27 @@ class FileDelete extends ZettlrCommand {
     * @return {Boolean} Whether the file was successfully deleted.
     */
   async run (evt, arg) {
-    // First determine if this is modified.
-    if (!this._app.canClose()) return false
-
-    let hash
-    if (arg.hasOwnProperty('hash')) {
-      hash = arg.hash
-    } else if (this._app.getCurrentFile()) {
-      hash = this._app.getCurrentFile().hash
+    let file = this._app.findFile(arg.hash)
+    if (!file) {
+      global.log.error('Cannot delete file: Not found.')
+      return false
     }
-
-    // No file to remove
-    if (!hash) return false
-
-    let file = this._app.findFile({ 'hash': parseInt(hash) })
 
     if (!await this._app.window.confirmRemove(file)) return false
 
-    // Now that we are save, let's move the current file to trash.
-    if (this._app.getCurrentFile() === file) {
-      this._app.ipc.send('file-close', {})
-      // Tell main & renderer to close file references
-      this._app.setCurrentFile(null)
+    // Now, remove the file
+    try {
+      await this._app.getFileSystem().runAction('remove-file', {
+        'source': file,
+        'info': null
+      })
+    } catch (e) {
+      console.error(e)
+      return false
     }
 
-    let parentDir = file.parent
-    file.remove(true) // Also move the file to the trash
-    global.application.dirUpdate(parentDir.hash, parentDir.getMetadata())
-    return true
+    // Now we obviously need to update the directory
+    global.application.dirUpdate(file.parent.hash, file.parent.hash)
   }
 }
 

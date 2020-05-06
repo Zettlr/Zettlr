@@ -1,7 +1,19 @@
-# (no version assigned)
+# 1.7.0
+
+## Breaking Changes
+
+This release contains several breaking changes to 1.6 due to heavy internal refactoring.
+
+* Your virtual directories will be gone after installing.
+* Projects will be incorporated into the `.ztr-directory`-files, which means that you need to extract these files (or backup them) if you plan to roll back to 1.6 or earlier, lest you will lose the project settings.
 
 ## GUI and Functionality
 
+- **New Feature**: Zettlr now supports (theoretically) unlimited open documents and orders them in tabs at the top of the editor instance.
+    - The tabs display the frontmatter title, if applicable, or the filename.
+    - On hover, you can get additional info about the documents.
+    - Drag and drop the tabs to re-sort their order.
+    - Get going where you left of the day before: Open files are persisted during restarts of the application.
 - If available, a title from a YAML frontmatter will be appended to the displayed file entry when linking files.
 - Copying images from the Explorer/Finder/file browser now offers to insert them into the document, copying them over to the assets directory.
 - The popups are now more resilient against accidental closing, just like the dialogs.
@@ -17,12 +29,46 @@
 - Fixed artefacts with spellchecking errors. Thanks to @ryota-abe for proposing the correct selector!
 - The Table Editor now remembers what the source table looked like and tries to recreate that when it applies the changes to the DOM.
 - Added verbose error reporting and improved the error handling during citeproc boot. Now, Zettlr will (a) remove error-throwing CiteKeys so that the rest of the library loads just fine and (b) display the exact errors as reported by citeproc-js so that users can immediately identify the bad keys and know where to look.
+- The global search bar's autocomplete will now also work for non-western scripts such as Japanese, Korean, Chinese, or any other.
+- Virtual directories have been discontinued. Parts of their functionality will be re-implemented in different ways.
+- On Linux, we've restored the default window decorations -- that is, the burger menu button is gone, and the menu will be displayed wherever the window manager decides.
+- Fixed a small bug that could lead to errors during autocomplete selection if no frontmatter is present in the file.
+- Added syntax highlighting modes (with keywords):
+    - **Elm**: `elm`
+    - **F#**: `f#`/`fsharp`
+    - **Haskell**: `hs`/`haskell`
+    - **VB.net**: `vb.net`/`vb`/`visualbasic`
+- Fix the colours of the heatmap search list.
+- Fixed a logical error in the detection of remote changes of attachment files.
+- Fenced code blocks, delimited by three backticks have a customizable box background. The colour (and different styles) can be customized by targeting the `code-block-line`-CSS class.
+- The font size of mathematics was decreased a bit to align it better with the size of normal text. Thanks to @tobiasdiez.
+- Support fenced code blocks surrounded by tildes (`~`) instead of backticks.
+- The About dialog of the application now also holds a tab with debug information about both the binary, the system, and the current environment.
 
 ## Under the Hood
 
+- **FSAL Refactor**: This release includes a huge refactor of the file system core of the application. In general terms, the rewritten core enables Zettlr to handle the file system more efficiently, uses up less RAM and has some other goodies that make the whole File System Abstraction Layer (FSAL) much more scalable for future feature implementations. More precisely:
+    - **From OOP to Functional**: While previously files and directories were heavily object-oriented with one full object being instantiated for each and every file including a whole prototype chain, the new core switches to a functional approach, removing the memory-intensive prototype chains. Instead, files and directories are now represented by a **descriptor** which includes the all meta-information packages, but no function bodies. Instead, the new FSAL calls functions to which it passes one or more descriptors in order to enable the function to modify the descriptor itself. This also makes state management easier, as the whole FSAL only works with object pointers and does not re-instantiate most descriptors every time a function modifies them.
+    - **Improved state management**: Now the state is not littered across the main process code base, but instead is centrally managed by the FSAL core class, which emits events every time anything in the state changes. This keeps the functional logic of the application much simpler. As opposed to before, the Zettlr main application class only accesses the FSAL state, and furthermore makes use of three events -- directory replacement, file replacement, and full file tree update -- to propagate any changes to the renderer process.
+    - **File Caching for faster boot**: The FSAL additionally includes a [sharded](https://searchoracle.techtarget.com/definition/sharding) file cache which approximately doubles the boot time. Furthermore, this enables the app to be much more resource-friendly for your storage, as the number of file accesses is reduced heavily -- at most, one hundred files will be opened during boot, instead of up to 10,000 or more, depending on the amount of open files you had.
+    - **Improved remote change detection**: As a result of the descriptor-system and improved central state management, detecting and managing state changes induced remotely much easier. The whole logic of the watchdog has been cut down to its essential parts to make its business logic more manageable.
+    - **Improved debugging**: Also as a result of implementing the new FSAL core as a self-contained EventEmitter module, it's much easier to locate logical errors, as due to improved state management missing state updates in the graphical user interface most likely emanate from exactly there, and not the FSAL. This has already helped identify several very small and almost unnoticeable bugs that did not update the renderer's state as wanted.
 - Improvements to image dragging and dropping from the attachment sidebar.
 - Switched the string variable replacer from vanilla JavaScript to moment.js, which simplified the function considerably.
+- The `export` module is now really a module.
+- Switched to cTime internally as the representation for modification time, because it'll capture more changes than mTime.
 - Updated insecure dependencies.
+- `.git`-directories are now ignored.
+- Applying the CSS line classes for Markdown headings should now be less computationally intensive.
+- Switched to Gulp for LESS compilation (thanks to @tobiasdiez for implementing).
+- The command autoloader now logs potential errors during command loading.
+- You can now pass a temporary configuration file to Zettlr, e.g. for testing purposes. Simply start Zettlr from the command line and pass `--config /your/config/file.json`. It can also only be a stub (e.g. only containing certain selected configuration parameters), as Zettlr will set all missing properties to their respective defaults. If the path is relative, Zettlr will attempt to find the file either at the repository root, if `app.isPackaged` is `false`, or at the current executable's directory.
+- Added a test command for GUI testing. It creates a small directory structure so that you can test the GUI without having to sacrifice your files or your mental health for that issue. Run `yarn test-gui` to run Zettlr in that test environment, and do to the files whatever you want!
+- The targets class is now a service provider.
+- Fixed the `flattenDirectoryTree` utility function. I have no idea why it worked for eleven months, but when it started throwing errors on the `FSAL` I realized it did a lot of things but it should've never worked. JavaScript is magic. Update: Found a newer and more optimized utility function, `objectToArray`, so I'm trashing it for good.
+- The Pandoc-command is now logged in its resolved state immediately before actually being run.
+- Sign Windows installers using the Apple certificate.
+- Switched back to the `package.json` configuration for electron-builder, because, well, Electron.
 
 # 1.6.0
 
@@ -100,6 +146,7 @@
 - Switch to Electron 8.
 - Fix Pandoc error logging.
 - Detach Popup event listeners on close.
+- Add configuration files for Visual Studio Code to simplify coding. Thanks to @tobiasdiez for implementing.
 
 # 1.5.0
 
