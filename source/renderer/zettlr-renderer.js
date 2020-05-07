@@ -367,7 +367,6 @@ class ZettlrRenderer {
     let oldFile = this.findObject(oldHash)
 
     if (oldFile && oldFile.type === 'file') {
-      console.log('Huhu')
       // We'll be patching the store, as this will
       // be reflected in renderer._paths as well.
       global.store.patch(oldHash, file)
