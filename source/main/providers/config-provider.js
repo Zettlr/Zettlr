@@ -184,6 +184,8 @@ class ConfigProvider extends EventEmitter {
         'boldFormatting': '**', // Can be ** or __
         'italicFormatting': '_', // Can be * or _
         'readabilityAlgorithm': 'dale-chall', // The algorithm to use with readability mode.
+        'direction': 'ltr', // Can be set to rtl for right-to-left scripts such as Persian
+        'rtlMoveVisually': true, // Whether the cursor should move visually with arrows in RTL mode
         'autoCorrect': {
           'active': true, // AutoCorrect is on by default
           'style': 'LibreOffice', // Default to LibreOffice style

@@ -1,10 +1,10 @@
 {
     "metadata": {
         "authors": [
-            "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
+            "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-02-08T17:02:11.000000Z"
+        "updated_at": "2020-05-07T19:07:51.000000Z"
     },
     "dialog": {
         "about": {
@@ -191,7 +191,11 @@
                 "title": "Anzeige"
             },
             "display_time_explanation": "Zeige folgende Zeit in den Dateiinformationen an",
-            "editor": "Editor",
+            "editor": "Dokumentenschreibrichtung von rechts nach links (RTL)",
+            "editor_setting": {
+                "direction_ltr": "Dokumentenschreibrichtung von links nach rechts (LTR)",
+                "rtl_move_visually": "Navigiere visuell mit den Pfeiltasten im RTL-Modus"
+            },
             "enable_rmarkdown": "RMarkdown-Dateisupport aktivieren",
             "enable_table_helper": "Tabelleneditor aktivieren",
             "export": {
@@ -323,6 +327,7 @@
                 "var_minute": "Minuten (f\u00fchrende Null)",
                 "var_month": "Monat (f\u00fchrende Null)",
                 "var_second": "Sekunden (f\u00fchrende Null)",
+                "var_week_number": "Nummer der Woche (f\u00fchrende Null)",
                 "var_year": "Jahr (vierstellig)"
             }
         },
@@ -379,6 +384,8 @@
         "avg_words": "durchschnittlich",
         "citeproc": {
             "error_db": "Die Zitationsdatenbank konnte nicht geladen werden",
+            "error_report_message": "%s Zitationen konnten aufgrund von Fehlern nicht geladen werden. Bitte \u00fcberpr\u00fcfe die unten stehenden CiteKeys anhand des mit ausgegebenen Fehlertextes.",
+            "error_report_title": "Fehler beim Laden der Zitations-Datenbank",
             "no_db": "Keine Bibliotheks-Datei geladen.",
             "references_booting": "Die Citeproc-Engine ist noch nicht geladen \u2026",
             "references_error": "Beim Erstellen der Bibliographie ist ein Fehler aufgetreten!",
@@ -592,8 +599,8 @@
         "open_root_directory_success": "Verzeichnis %s wurde geladen.",
         "overwrite_file_message": "Die Date %s existiert bereits in diesem Verzeichnis. \u00dcberschreiben?",
         "overwrite_file_title": "Datei \u00fcberschreiben",
-        "replace_file_message": "Die aktuelle Datei wurde von au\u00dferhalb ver\u00e4ndert. \u00c4nderungen \u00fcbernehmen?",
-        "replace_file_title": "Aktuelle Datei ersetzen?",
+        "replace_file_message": "Datei %s wurde au\u00dferhalb von Zettlr ver\u00e4ndert. Soll die geladene Datei mit der neueren Version ersetzt werden?",
+        "replace_file_title": "Datei ersetzen",
         "save_changes_cancel": "Abbrechen",
         "save_changes_message": "Die Datei enth\u00e4lt ungespeicherte \u00c4nderungen. Verwerfen oder speichern?",
         "save_changes_omit": "\u00c4nderungen verwerfen",
