@@ -81,11 +81,7 @@ module.exports = class EditorTabs {
       // No files, so indicate!
       let noFiles = document.createElement('div')
       noFiles.classList.add('no-files')
-      noFiles.innerText = 'No open files.'
-      let addNew = document.createElement('button')
-      addNew.classList.add('add-new-file')
-      addNew.innerText = '+ Create new'
-      noFiles.appendChild(addNew)
+      noFiles.innerText = 'No open files.' // TODO translate
       this._div.append(noFiles)
       return
     }
