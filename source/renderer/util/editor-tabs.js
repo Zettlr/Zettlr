@@ -188,12 +188,12 @@ module.exports = class EditorTabs {
     nameSpan.innerText = displayTitle
 
     // Also enable closing of the document
-    let closeSpan = document.createElement('span')
-    closeSpan.classList.add('close')
-    closeSpan.innerHTML = '&times;'
+    let closeIcon = document.createElement('clr-icon')
+    closeIcon.classList.add('close')
+    closeIcon.setAttribute('shape', 'window-close')
 
     doc.appendChild(nameSpan)
-    doc.appendChild(closeSpan)
+    doc.appendChild(closeIcon)
 
     // In case there's a writing target, append that as well
     if (file.target) {
