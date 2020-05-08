@@ -36,7 +36,7 @@ class ZettlrAttachments {
   constructor (parent) {
     this._renderer = parent
     this._container = $('<div>').prop('id', 'attachments').css('display', 'none')
-    this._container.html(`<h1>${trans('gui.attachments')} <small id="open-dir-external" title="${trans('gui.attachments_open_dir')}">&#xf332;</small></h1>`)
+    this._container.html(`<h1>${trans('gui.attachments')} <clr-icon shape="folder" class="is-solid" id="open-dir-external" title="${trans('gui.attachments_open_dir')}"></clr-icon></h1>`)
     this._fileContainer = $('<div>').prop('id', 'files')
     this._bibliographyContainer = $('<div>').prop('id', 'bibliography')
     this._container.append(this._fileContainer)
