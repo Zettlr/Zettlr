@@ -31,6 +31,8 @@ const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
 
 const reconstruct = require('./util/reconstruct-tree')
 
+const icons = require('./util/icons')
+
 const path = require('path')
 
 // Pull the poll-time from the data
@@ -79,6 +81,7 @@ class ZettlrRenderer {
         this.beginSearch(term)
       }
     }
+    setTimeout(() => icons.loadCustomIcons(), 0)
   }
 
   /**
