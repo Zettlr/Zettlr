@@ -25,5 +25,8 @@ for (let lang of bcp47) {
     })
   }).catch((err) => {
     if (err) log.error(err)
+    // We have to exit the process with an
+    // error signal for correct behaviour on CI
+    process.exit(1)
   })
 }

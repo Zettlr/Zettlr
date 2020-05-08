@@ -118,11 +118,12 @@ class ZettlrPomodoro {
         this._phase.type = 'task'
         this._phase.max = this._duration.task
       }
-      if (!this._sound.volume > 0) {
+      if (this._sound.volume > 0) {
         // Play a "finish" audio sound
         this._sound.currentTime = 0
-        this._sound.play()
+        this._sound.play().then(() => { console.log('Audio played!') }).catch((e) => { console.log('Audio did not play.', e) })
       }
+
       // Set the class of the value accordingly
       this._progressValue.addClass(this._phase.type)
       $('#pomodoro-phase-type').text(trans('pomodoro.phase.' + this._phase.type))
@@ -138,9 +139,8 @@ class ZettlrPomodoro {
     this._progressValue.attr('d', `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`)
 
     let sec = ((this._phase.max - this._phase.cur) % 60)
-    if (sec < 10) {
-      sec = '0' + sec
-    }
+    if (sec < 10) sec = '0' + sec
+
     $('#pomodoro-time-remaining').text(Math.floor((this._phase.max - this._phase.cur) / 60) + ':' + sec)
 
     // Prepare next cycle
@@ -158,6 +158,7 @@ class ZettlrPomodoro {
     this._running = false
     // Reset timer to none
     this._progressValue.attr('d', '')
+    this._progressValue.removeClass('long short task')
 
     // Now reset counters
     this._counter = {
@@ -192,10 +193,10 @@ class ZettlrPomodoro {
           // 1 = short
           // 2 = long
           // 3 = volume
-          this._duration.task = form[0].value * 60
-          this._duration.short = form[1].value * 60
-          this._duration.long = form[2].value * 60
-          this._sound.volume = form[3].value / 100
+          this._duration.task = parseInt(form[0].value, 10) * 60
+          this._duration.short = parseInt(form[1].value) * 60
+          this._duration.long = parseInt(form[2].value, 10) * 60
+          this._sound.volume = parseInt(form[3].value, 10) / 100
           // Now start
           this._start()
           if (this._sound.volume === 0) console.log('Starting muted!')
@@ -203,8 +204,8 @@ class ZettlrPomodoro {
 
         // Play the sound immediately as a check for the user
         $('#pomodoro-volume-range').on('change', (evt) => {
-          let level = $('#pomodoro-volume-range').val() / 100
-          this._sound.volume = level
+          let level = $('#pomodoro-volume-range').val()
+          this._sound.volume = parseInt(level, 10) / 100
           this._sound.currentTime = 0
           this._sound.play()
         })
@@ -214,7 +215,7 @@ class ZettlrPomodoro {
         // "onInput" as soon as the bar moves.
         $('#pomodoro-volume-range').on('input', (evt) => {
           let level = $('#pomodoro-volume-range').val()
-          $('#pomodoro-volume-level').text(level + '%')
+          $('#pomodoro-volume-level').text(level + ' %')
         })
       } else {
         // Display information and a stop button

@@ -3,16 +3,19 @@
         "authors": [
             "Nicolas Girard \u003Cgirard.nicolas@gmail.com\u003E",
             "Le Monolecte \u003Cmonolecte@gmail.com\u003E",
-            "Hendrik Erz \u003Cinfo@zettlr.com\u003E",
+            "Hendrik Erz \u003Chendrik@zettlr.com\u003E",
             "free1fox",
             "metal3d",
             "ScaredCoward",
             "Alexis M\u00e9taireau",
+            "Lexane",
+            "Taylan TATLI",
             "concretx",
+            "Joris",
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-01-21T14:20:21.000000Z"
+        "updated_at": "2020-05-07T17:35:58.000000Z"
     },
     "dialog": {
         "about": {
@@ -331,6 +334,7 @@
                 "var_minute": "Minutes (sur 2 chiffres)",
                 "var_month": "Mois (sur 2 chiffres)",
                 "var_second": "Secondes (sur 2 chiffres)",
+                "var_week_number": "Semaine de l\u2019ann\u00e9e (avec z\u00e9ro au d\u00e9but si n\u00e9cessaire)",
                 "var_year": "Ann\u00e9e (sur 4 chiffres)"
             }
         },
@@ -387,6 +391,8 @@
         "avg_words": "Moyenne quotidienne",
         "citeproc": {
             "error_db": "Le fichier de bibliographie n'a pas \u00e9t\u00e9 charg\u00e9",
+            "error_report_message": "%s d\u2019\u00e9l\u00e9ments de votre biblioth\u00e8que qui n\u2019ont pas pu \u00eatre charg\u00e9s en raison d\u2019erreurs. Merci de lire les messages d\u2019erreur ci-dessous pour voir quelles CiteKeys ont \u00e9t\u00e9 mal form\u00e9es et quelle \u00e9tait l\u2019erreur.",
+            "error_report_title": "Erreurs en chargeant la base de donn\u00e9es des citations",
             "no_db": "Aucun fichier de bibliographie charg\u00e9.",
             "references_booting": "Le moteur citeproc est en cours de d\u00e9marrage\u2026",
             "references_error": "Impossible de mettre \u00e0 jour la bibliographie.",
@@ -396,6 +402,7 @@
         },
         "dirs": "Dossiers",
         "display_search_results": "Afficher les r\u00e9sultats de la recherche",
+        "empty_dir": "R\u00e9pertoire vide",
         "empty_directories": "Aucun fichier ou dossier",
         "file_chars": "caract\u00e8res",
         "file_chars_sel": "caract\u00e8res (s\u00e9lection)",
@@ -599,8 +606,8 @@
         "open_root_directory_success": "%s a \u00e9t\u00e9 charg\u00e9.",
         "overwrite_file_message": "Le fichier %s existe d\u00e9j\u00e0 dans ce r\u00e9pertoire. \u00c9craser?",
         "overwrite_file_title": "\u00c9craser le fichier existant",
-        "replace_file_message": "Le fichier actuel a \u00e9t\u00e9 modifi\u00e9 par un programme externe. Faut-il le remplacer ?",
-        "replace_file_title": "Remplacer le fichier actuel ?",
+        "replace_file_message": "Le fichier %s a \u00e9t\u00e9 modifi\u00e9 \u00e0 distance. Remplacer la version charg\u00e9e par la plus r\u00e9cente du disque?",
+        "replace_file_title": "Remplacer le fichier",
         "save_changes_cancel": "Annuler",
         "save_changes_message": "Le fichier contient des modifications non enregistr\u00e9es. Voulez-vous les annuler ou les enregistrer ?",
         "save_changes_omit": "Continuer sans sauvegarder les modifications",
@@ -632,7 +639,7 @@
         "remove_fn": "Supprimer la note de pied de page sous le curseur",
         "share": "Exporter le fichier courant en HTML, DOCX, ODT ou PDF",
         "show_menu": "Ouvrir le menu d'application",
-        "show_toc": "Affiche la table des mati\u00e8res",
+        "show_toc": "Afficher la table des mati\u00e8res",
         "stats": "Voir les statistiques",
         "tag_cloud": "Mots-cl\u00e9s",
         "toggle_attachments": "Voir les annexes"

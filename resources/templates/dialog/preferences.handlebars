@@ -262,6 +262,30 @@
             </label>
             <label for="countChars">{{i18n "dialog.preferences.count_chars"}}</label>
           </div>
+
+          {{!-- RTL support options --}}
+          <hr>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="editor.rtlMoveVisually" value="yes" id="rtlMoveVisually" {{#if editor.rtlMoveVisually}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="rtlMoveVisually">{{i18n "dialog.preferences.editor_setting.rtl_move_visually"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="editor.direction" value="ltr" id="pref-editor-direction-ltr" {{#ifCond editor.direction '=' 'ltr'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-editor-direction-ltr">{{i18n "dialog.preferences.editor_setting.direction_ltr"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="radio-toggle">
+              <input type="radio" name="editor.direction" value="rtl" id="pref-editor-direction-rtl" {{#ifCond editor.direction '=' 'rtl'}}checked="checked"{{/ifCond}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="pref-editor-direction-rtl">{{i18n "dialog.preferences.editor_setting.direction_rtl"}}</label>
+          </div>
         </div>
         <div class="clear"></div>
       </div>

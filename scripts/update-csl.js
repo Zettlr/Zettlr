@@ -58,4 +58,9 @@ async function getCSLLocales () {
 
 // Execute the functions
 getCSLLocales().then(() => { console.log('Successfully updated the locales.') })
-  .catch((err) => { console.error('An unexpected error occurred!'); console.error(err) })
+  .catch((err) => {
+    console.error('An unexpected error occurred!', err)
+    // We have to exit the process with an
+    // error signal for correct behaviour on CI
+    process.exit(1)
+  })

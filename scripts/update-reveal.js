@@ -91,6 +91,9 @@ async function run () {
 run().then(() => {
   log.success('reveal.JS has been updated successfully!')
 }).catch((err) => {
-  console.error(err)
   log.error('Could not update reveal.JS')
+  console.error(err)
+  // We have to exit the process with an
+  // error signal for correct behaviour on CI
+  process.exit(1)
 })

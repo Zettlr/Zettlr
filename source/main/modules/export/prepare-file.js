@@ -27,7 +27,7 @@ module.exports = async function (options) {
   let cnt = options.file.content
 
   // Second strip tags if necessary
-  if (options.stripTags) cnt = cnt.replace(/(?<= |\n|^)#(#?[A-Z0-9-_]+#?)/gi, '')
+  if (options.stripTags) cnt = cnt.replace(/(?<= |\n|^)##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?/gi, '')
 
   // Remove or unlink links.
   let ls = global.config.get('zkn.linkStart').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
