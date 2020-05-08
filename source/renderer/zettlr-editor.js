@@ -929,6 +929,10 @@ class ZettlrEditor {
       })
     }
 
+    // Check for RTL-support
+    this._cm.setOption('direction', global.config.get('editor.direction'))
+    this._cm.setOption('rtlMoveVisually', global.config.get('editor.rtlMoveVisually'))
+
     // Last but not least set the Zettelkasten options
     this._cm.setOption('zkn', global.config.get('zkn'))
 

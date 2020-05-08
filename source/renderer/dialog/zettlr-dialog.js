@@ -205,7 +205,7 @@ class ZettlrDialog extends EventEmitter {
     })
 
     // Tippify all elements with the respective attribute
-    global.tippy('[data-tippy-content]', {
+    global.tippy(this._modal[0].querySelectorAll('[data-tippy-content]'), {
       delay: 100,
       arrow: true,
       duration: 100

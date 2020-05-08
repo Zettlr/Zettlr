@@ -1,10 +1,12 @@
 {
     "metadata": {
         "authors": [
-            "Hendrik Erz \u003Cinfo@zettlr.com\u003E"
+            "Hendrik Erz \u003Chendrik@zettlr.com\u003E",
+            "ScaredCoward",
+            "Celso Lira"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-02-08T17:01:42.000000Z"
+        "updated_at": "2020-05-07T19:06:49.000000Z"
     },
     "dialog": {
         "about": {
@@ -111,7 +113,7 @@
                 "fo-FO": "Faroese",
                 "fr-FR": "French (France)",
                 "ga-GA": "Irish",
-                "gd-GD": "Scottich (Gaelic)",
+                "gd-GD": "Scottish (Gaelic)",
                 "gl-ES": "Galician (Spain)",
                 "he-HE": "Hebrew",
                 "hi-IN": "Hindi",
@@ -137,8 +139,8 @@
                 "nl-NL": "Dutch (Netherlands)",
                 "nn-NO": "Norwegian (Nyorsk)",
                 "pl-PL": "Polish",
-                "pt-BR": "Portugese (Brazil)",
-                "pt-PT": "Portugese (Portugal)",
+                "pt-BR": "Portuguese (Brazil)",
+                "pt-PT": "Portuguese (Portugal)",
                 "ro-RO": "Romanian",
                 "ru-RU": "Russian",
                 "rw-RW": "Rwandan (Kinyarwanda)",
@@ -191,7 +193,11 @@
                 "title": "Display"
             },
             "display_time_explanation": "In the file metadata display",
-            "editor": "Editor",
+            "editor": "Use right-to-left (RTL) writing direction",
+            "editor_setting": {
+                "direction_ltr": "Use left-to-right (LTR) writing direction",
+                "rtl_move_visually": "Use visual order for arrow key movement while in RTL-mode"
+            },
             "enable_rmarkdown": "Enable RMarkdown file support",
             "enable_table_helper": "Enable Table Editor",
             "export": {
@@ -323,6 +329,7 @@
                 "var_minute": "Minutes (leading zeroes)",
                 "var_month": "Month (leading zeroes)",
                 "var_second": "Seconds (leading zeroes)",
+                "var_week_number": "Week of the year (leading zeroes)",
                 "var_year": "Year (four digit)"
             }
         },
@@ -379,6 +386,8 @@
         "avg_words": "daily average",
         "citeproc": {
             "error_db": "The citation database could not be loaded",
+            "error_report_message": "%s items in your library could not be loaded due to errors. Please check the error messages below to see which CiteKeys are malformed and what the error was.",
+            "error_report_title": "Errors while loading citation database",
             "no_db": "No library file loaded.",
             "references_booting": "The citeproc engine is still booting up \u2026",
             "references_error": "Could not update bibliography!",
@@ -592,8 +601,8 @@
         "open_root_directory_success": "%s has been loaded.",
         "overwrite_file_message": "The file %s already exists in this directory. Overwrite?",
         "overwrite_file_title": "Overwrite existing file",
-        "replace_file_message": "The current file has been modified remotely. Replace in editor?",
-        "replace_file_title": "Replace current file?",
+        "replace_file_message": "File %s has been modified remotely. Replace the loaded version with the newer one from disk?",
+        "replace_file_title": "Replace file",
         "save_changes_cancel": "Cancel",
         "save_changes_message": "There are unsaved changes to the current file. Do you want to omit them or save?",
         "save_changes_omit": "Proceed without saving",
