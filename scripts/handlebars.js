@@ -106,6 +106,9 @@ for (let tupel of tplPaths) {
       log.success(`Compiled ${tpl}!`)
     } catch (e) {
       log.error(`Error compiling ${tpl}: ${e.message}`)
+      // We have to exit the process with an
+      // error signal for correct behaviour on CI
+      process.exit(1)
     }
   }
 }
