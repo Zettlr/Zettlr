@@ -44,6 +44,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - The font size of mathematics was decreased a bit to align it better with the size of normal text. Thanks to @tobiasdiez.
 - Support fenced code blocks surrounded by tildes (`~`) instead of backticks.
 - The About dialog of the application now also holds a tab with debug information about both the binary, the system, and the current environment.
+- Switched to using the [Clarity Design](https://clarity.design/icons) icon set where possible.
 
 ## Under the Hood
 
