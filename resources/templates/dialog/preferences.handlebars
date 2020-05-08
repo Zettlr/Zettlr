@@ -358,16 +358,16 @@
         <div class="box-left form-inline-buttons">
           <label for="pref-zkn-free-id">{{i18n "dialog.preferences.zkn.id_label"}}</label>
           <input type="text" id="pref-zkn-free-id" value="{{zkn.idRE}}" name="zkn.idRE">
-          <button type="button" id="reset-id-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_id"}}">&#9003;</button>
+          <button type="button" id="reset-id-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_id"}}"><clr-icon shape="refresh"></clr></button>
           <label for="pref-zkn-free-linkstart">{{i18n "dialog.preferences.zkn.linkstart_label"}}</label>
           <input type="text" id="pref-zkn-free-linkstart" value="{{zkn.linkStart}}" name="zkn.linkStart">
-          <button type="button" id="reset-linkstart-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_linkstart"}}">&#9003;</button>
+          <button type="button" id="reset-linkstart-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_linkstart"}}"><clr-icon shape="refresh"></clr></button>
           <label for="pref-zkn-free-linkend">{{i18n "dialog.preferences.zkn.linkend_label"}}</label>
           <input type="text" id="pref-zkn-free-linkend" value="{{zkn.linkEnd}}" name="zkn.linkEnd">
-          <button type="button" id="reset-linkend-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_linkend"}}">&#9003;</button>
+          <button type="button" id="reset-linkend-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_linkend"}}"><clr-icon shape="refresh"></clr></button>
           <label for="pref-zkn-id-gen">{{i18n "dialog.preferences.zkn.id_generator_label"}}</label>
           <input type="text" id="pref-zkn-id-gen" value="{{zkn.idGen}}" name="zkn.idGen">
-          <button type="button" id="reset-id-generator" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_generator"}}">&#9003;</button>
+          <button type="button" id="reset-id-generator" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_generator"}}"><clr-icon shape="refresh"></clr></button>
           <hr>
           <p>
             <button type="button" id="generate-id">{{i18n "dialog.preferences.zkn.test_id_generator"}}</button>
@@ -841,7 +841,7 @@
           </label>
           <div class="form-inline-buttons">
             <input type="text" id="pandocCommand" name="pandocCommand" placeholder="pandoc &quot;$infile$&quot; -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex --mathjax -o &quot;$outfile$&quot;" value="{{ pandocCommand }}">
-            <button type="button" id="reset-pandoc-command" data-tippy-content="{{i18n "dialog.preferences.reset_pandoc_command"}}">&#9003;</button>
+            <button type="button" id="reset-pandoc-command" data-tippy-content="{{i18n "dialog.preferences.reset_pandoc_command"}}"><clr-icon shape="refresh"></clr></button>
           </div>
           <span class="info">Variables: $citeproc$, $format$, $infile$, $indir$, $outfile$, $outflag$, $standalone$, $toc$, $tocdepth$, $tpl$</span>
         </div>
