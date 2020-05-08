@@ -278,9 +278,18 @@
       &::before {
         font-family: @font-icon;
         font-size:@font-size-small * 0.8;
-        padding-right:5px;
-        width:30px;
+        margin-right:13px;
+        margin-left:5px;
+        width: 20px;
         display:inline-block;
+      }
+
+      & clr-icon {
+          height: 20px;
+          width: 20px;
+          margin-top: -4px;
+          margin-right: 18px;
+          margin-bottom: -4px;
       }
     }
 
@@ -291,27 +300,7 @@
     #header-formatting.markdownHeading5::before { content: "H5"; }
     #header-formatting.markdownHeading6::before { content: "H6"; }
 
-    .markdownBlockquote::before         { content: '\f328'; }
-    .markdownLink::before               { content: "\f022"; }
-    .markdownImage::before              { content: "\22b7"; }
-    .markdownCode::before               { content: "\f743"; }
-    .markdownComment::before            { content: "\f068"; }
-    .markdownMakeOrderedList::before    { content: "\f4c3"; }
-    .markdownMakeUnorderedList::before  { content: "\f4c2"; }
-    .markdownMakeTaskList::before       { content: "\f310"; }
-    .markdownInsertTable::before        { content: "\f4e3"; }
-    .markdownDivider::before            { content: "\f1cc"; }
     .insertFootnote::before             { content: "\f1eb"; }
-
-    .markdownBold {
-      font-weight:bold;
-      &::before { content: "\f1f4"; }
-    }
-
-    .markdownItalic {
-      font-style:italic;
-      &::before { content: "\f1f5"; }
-    }
 
     .removeFootnote::before {
       content: "\f1eb";
