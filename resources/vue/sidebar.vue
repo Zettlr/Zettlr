@@ -431,6 +431,7 @@ module.exports = {
 
       // Create instances for all elements without already existing
       // tippy-instances.
+      // eslint-disable-next-line no-undef
       tippy('#sidebar [data-tippy-content]', {
         delay: 100,
         arrow: true,
@@ -461,7 +462,7 @@ module.exports = {
           if (evt.ctrlKey || evt.metaKey) {
             // Select the last file
             return global.ipc.send('file-get', list[list.length - 1].hash)
-            }
+          }
           if (index < list.length) global.ipc.send('file-get', list[index].hash)
           break
         case 'ArrowUp':
@@ -471,7 +472,7 @@ module.exports = {
           if (evt.ctrlKey || evt.metaKey) {
             // Select the first file
             return global.ipc.send('file-get', list[0].hash)
-            }
+          }
           if (index >= 0) global.ipc.send('file-get', list[index].hash)
           break
       }

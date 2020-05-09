@@ -5,7 +5,9 @@
         "node": true
     },
     "extends": [
-        "standard"
+        "standard",
+        "eslint:recommended",
+        "plugin:vue/vue3-recommended"
     ],
     "globals": {
         "Atomics": "readonly",
