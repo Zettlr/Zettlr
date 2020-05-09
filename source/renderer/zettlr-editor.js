@@ -131,11 +131,6 @@ class ZettlrEditor {
     // Caches the width of a space (in normal font and in monospace font)
     this._spaceWidth = 0
     this._monospaceWidth = 0
-    // Reset cached widths upon config update 
-    global.config.on('update', () => {
-      this._spaceWidth = 0
-      this.monospaceWidth = 0
-    })
 
     this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
       mode: MD_MODE,
@@ -493,8 +488,8 @@ class ZettlrEditor {
   * Computes and returns the width of a character in the monospace font in pixels.
   */
   computeMonospaceWidth () {
-    if (this._monospaceWidth === 0) { 
-      this._monospaceWidth = measureCharWidth('measureMonoWidth')
+    if (this._monospaceWidth === 0) {
+      this._monospaceWidth = this.measureCharWidth('measureMonoWidth')
     }
     return this._monospaceWidth
   }
@@ -503,8 +498,8 @@ class ZettlrEditor {
   * Computes and returns the width of a character in the monospace font in pixels.
   */
   computeSpaceWidth () {
-    if (this._spaceWidth === 0) { 
-      this._spaceWidth = measureCharWidth('measureWidth')
+    if (this._spaceWidth === 0) {
+      this._spaceWidth = this.measureCharWidth('measureWidth')
     }
     return this._spaceWidth
   }
@@ -515,7 +510,7 @@ class ZettlrEditor {
    * @see https://stackoverflow.com/a/118251/873661
    */
   measureCharWidth (id) {
-    // Idea: Create a span containing a space and measure its size 
+    // Idea: Create a span containing a space and measure its size
     // Infact, We use 100 characters in order to get an approximately correct width (clientWidth is an integer)
     var container = document.createElement('div')
     container.id = id
@@ -932,6 +927,10 @@ class ZettlrEditor {
     // Check for RTL-support
     this._cm.setOption('direction', global.config.get('editor.direction'))
     this._cm.setOption('rtlMoveVisually', global.config.get('editor.rtlMoveVisually'))
+
+    // Reset cached widths
+    this._spaceWidth = 0
+    this.monospaceWidth = 0
 
     // Last but not least set the Zettelkasten options
     this._cm.setOption('zkn', global.config.get('zkn'))
