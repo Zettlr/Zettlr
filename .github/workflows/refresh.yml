@@ -33,6 +33,13 @@ jobs:
         run: |
           yarn lang:refresh
           git commit -m "Update language files" -a
+      - name: Test build # to make sure we don't break anything
+        run: |
+          npm install
+          cd ./source
+          npm install
+          cd ..
+          npm test
       - name: Push changes
         uses: ad-m/github-push-action@v0.5.0
         with:
