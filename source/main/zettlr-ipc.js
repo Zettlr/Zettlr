@@ -78,7 +78,10 @@ class ZettlrIPC {
       // we mustn't obliterate the "event" because this way we don't need to
       // search for the window.
       if (arg.command === 'ql-get-file') {
-        event.sender.send('file', this._app.findFile({ 'hash': arg.content }).withContent())
+        let QLFile = this._app.findFile(arg.content)
+        global.application.getFile(QLFile).then(file => {
+          event.sender.send('file', file)
+        })
         return
       }
 
@@ -206,7 +209,6 @@ class ZettlrIPC {
         this._app.sendPaths()
         // Also set the current file and dir correctly immediately
         this.send('dir-set-current', (this._app.getCurrentDir()) ? this._app.getCurrentDir().hash : null)
-        // TODO: Send a list of all open files!
         this._app.sendOpenFiles()
         break
 
@@ -229,14 +231,19 @@ class ZettlrIPC {
         break
 
       case 'file-modified':
-        // Just set the modification flags.
-        this._app.setModified()
+        // Set the modification flag and notify the FSAL of a dirty doc.
+        this._app.setModified(cnt.hash)
+        break
+
+      // Sent by the renderer to indicate the active file has changed
+      case 'set-active-file':
+        this._app.getFileSystem().setActiveFile(cnt.hash)
         break
 
       // The renderer requested that the editor
       // is marked clean again
       case 'mark-clean':
-        this._app.clearModified()
+        this._app.clearModified(cnt.hash)
         break
 
       // Set or update a target

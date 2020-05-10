@@ -25,28 +25,28 @@ class FileClose extends ZettlrCommand {
    * @param  {Object} arg An object containing a hash of the file to close.
    * @return {void}     This function does not return anything.
    */
-  run (evt, arg) {
+  async run (evt, arg) {
     // Close the file
     console.log('Closing file ...')
     try {
       if (!arg || !arg.hash) throw new Error('Could not close file! No hash provided!')
-      console.log('Hash checks out')
       let file = this._app.getFileSystem().findFile(arg.hash)
-      console.log('File found')
       if (!file) throw new Error(`Could not close file! No file with hash ${arg.hash} found!`)
 
-      if (this._app.getFileSystem().closeFile(file)) {
-        console.log('File closed successfully')
-        global.config.removeFile(file.path)
-        // We do not need to explicitly close the file now, because the file
-        // system will notify the application that the openFiles array has
-        // changed, which will trigger a synchronisation command.
-      } else {
-        console.log('File not closed.')
-        throw new Error('Could not close file! Not open.')
+      // Now check if we can safely close the file
+      if (file.modified) {
+        // Ask the user if they REALLY want to close the file
+        let ret = await this._app.getWindow().askSaveChanges(file.name)
+        // The user does not want to close the file -> give them time to save
+        if (ret === 0) return false
+      }
+
+      // If we're here the user really wants to close the file.
+      if (!this._app.getFileSystem().closeFile(file)) {
+        throw new Error('Could not close file!')
       }
     } catch (e) {
-      console.log(e)
+      global.log.error(e.message, e)
     }
   }
 }

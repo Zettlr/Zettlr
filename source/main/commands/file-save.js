@@ -39,7 +39,7 @@ class SaveFile extends ZettlrCommand {
     let realFile
 
     try {
-      realFile = global.application.findFile(file.hash || null)
+      realFile = this._app.getFileSystem().findFile(file.hash || null)
       if (!realFile) {
         console.log('No file found - creating')
         realFile = await this._app.getFileSystem().runAction('create-file', {

@@ -9,7 +9,7 @@
         "type": "git",
         "url": "git://github.com/Zettlr/Zettlr.git"
     },
-    "version": "1.7.0-beta.1",
+    "version": "1.7.0-beta.2",
     "description": "A powerful Markdown Editor with integrated tree view",
     "license": "GPL-3.0",
     "main": "main.js",
@@ -32,7 +32,7 @@
         "katex": "^0.11.1",
         "md5": "^2.2.1",
         "mermaid": "^8.5.0",
-        "moment": "^2.25.1",
+        "moment": "=2.24.0",
         "nspell": "^2.1.1",
         "on-change": "^2.0.1",
         "rimraf": "^3.0.2",
