@@ -22,7 +22,7 @@
     "release:win": "electron-builder --win --publish \"never\"",
     "release:linux": "electron-builder --linux --publish \"never\"",
     "less": "gulp less",
-    "handlebars": "node scripts/handlebars.js",
+    "handlebars": "gulp handlebars",
     "lang:refresh": "node scripts/refresh-language.js",
     "csl:refresh": "node scripts/update-csl.js",
     "reveal:build": "node scripts/update-reveal.js",
@@ -38,7 +38,8 @@
     "productName": "Zettlr",
     "npmRebuild": false,
     "copyright": "Zettlr is licensed under GNU GPL v3.",
-    "fileAssociations": [{
+    "fileAssociations": [
+      {
         "ext": "md",
         "name": "Markdown",
         "description": "Markdown document",
@@ -73,18 +74,21 @@
       "entitlementsInherit": "./scripts/assets/entitlements.plist"
     },
     "win": {
-      "target": [{
-        "target": "nsis",
-        "arch": [
-          "x64",
-          "ia32"
-        ]
-      }],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
       "artifactName": "Zettlr-${version}-${arch}.${ext}",
       "icon": "resources/icons/ico/icon.ico"
     },
     "linux": {
-      "target": [{
+      "target": [
+        {
           "target": "AppImage",
           "arch": [
             "x64",
@@ -105,7 +109,8 @@
     "dmg": {
       "background": "resources/icons/dmg/dmg_back.tiff",
       "icon": "resources/icons/icns/icon.icns",
-      "contents": [{
+      "contents": [
+        {
           "x": 130,
           "y": 220
         },
@@ -187,10 +192,12 @@
     "eslint-plugin-standard": "^4.0.1",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
+    "gulp-handlebars": "^5.0.2",
     "gulp-less": "^4.0.1",
     "gulp-plumber": "^1.2.1",
     "gulp-rename": "^2.0.0",
     "gulp-sourcemaps": "^2.6.5",
+    "gulp-wrap": "^0.15.0",
     "handlebars": "^4.7.6",
     "lorem-ipsum": "^2.0.3",
     "mini-css-extract-plugin": "^0.9.0",
