@@ -328,13 +328,16 @@ class ZettlrEditor {
         if (this._timeout) clearTimeout(this._timeout)
         if (this._citationTimeout) clearTimeout(this._citationTimeout)
 
-        // Check if the change actually modified the
-        // doc or not
+        // Check if the change actually modified the doc or not.
         if (this._cm.doc.isClean()) {
-          this._renderer.clearModified()
+          this._renderer.clearModified(this._currentHash)
+          // NOTE in case you notice we're either calling this.markClean or
+          // this._tabs.markDirty, this is because on markClean we also have to
+          // mark the document as clean (in another case it's called
+          // programmatically), but if we mark the tabs dirty, the doc IS dirty.
           this.markClean(this._currentHash)
         } else {
-          this._renderer.setModified()
+          this._renderer.setModified(this._currentHash)
           this._tabs.markDirty(this._currentHash)
           // Set the autosave timeout
           this._timeout = setTimeout((e) => {
@@ -1269,11 +1272,8 @@ class ZettlrEditor {
     if (file) {
       file.cmDoc.markClean()
       this._tabs.markClean(file.fileObject.hash)
-      // In case this was the last file to be cleared, we can instruct main to
-      // remove the edit flag itself
-      if (this.isClean()) this._renderer.clearModified()
     } else {
-      console.warn(`Could not mark clean the document ${hash}. Not found.`)
+      console.error(`Could not mark clean the document ${hash}. Not found.`)
     }
   }
 

@@ -134,7 +134,7 @@ class ZettlrWindow {
         // renderer, triggering a save command prior to actually closing the
         // window.
         event.preventDefault()
-        global.ipc.send('win-close')
+        this._app.saveAndClose()
       } else {
         // We can close - so clear down the cache in any case
         let ses = this._win.webContents.session
@@ -172,8 +172,8 @@ class ZettlrWindow {
     this._win.on('move', sizingCallback)
 
     // Prevent closing if unable to comply
-    this._win.beforeunload = async (e) => {
-      if (!await this.canClose()) {
+    this._win.beforeunload = (e) => {
+      if (this._app.isModified()) {
         // Prevent closing for now.
         e.returnValue = false
         // And ask the user to save changes. The parent will then re-
@@ -247,9 +247,7 @@ class ZettlrWindow {
   setModified () {
     // Set the modified flag on the window if the file is edited (macOS only)
     // Function does nothing if not on macOS
-    if (this._win != null) {
-      this._win.setDocumentEdited(true)
-    }
+    if (this._win != null) this._win.setDocumentEdited(true)
 
     return this
   }
@@ -260,9 +258,7 @@ class ZettlrWindow {
     */
   clearModified () {
     // Clear the modified flag on the window if the file is edited (macOS only)
-    if (this._win != null) {
-      this._win.setDocumentEdited(false)
-    }
+    if (this._win != null) this._win.setDocumentEdited(false)
 
     return this
   }
@@ -282,27 +278,33 @@ class ZettlrWindow {
   close () { this._win = null }
 
   /**
-    * Can we close the window?
-    * @return {Promise} Resolves to true or false, depending on the state.
-    */
-  canClose () { return this._app.canClose() }
-
-  /**
     * Prompt the user to save or omit changes, or cancel the process completely.
+    * @param {(string|string[])} changedFiles Can contain one or multiple filenames
     * @return {Integer} Either 0 (cancel), 1 (save changes) or 2 (omit changes)
     */
-  async askSaveChanges () {
+  async askSaveChanges (changedFiles = []) {
+    let msg
+
+    if (!Array.isArray(changedFiles)) {
+      msg = trans('system.save_changes_message')
+    } else {
+      msg = 'There are unsaved changes. The following files have been modified:\n\n'
+      msg += changedFiles.map(e => '- ' + e).join('\n')
+      msg += '\n\nDo you want to omit these changes?'
+    }
+
     let options = {
       type: 'question',
       title: trans('system.save_changes_title'),
-      message: trans('system.save_changes_message'),
+      // message: trans('system.save_changes_message'),
+      message: msg,
       buttons: [
         trans('system.save_changes_cancel'),
-        trans('system.save_changes_save'),
+        // trans('system.save_changes_save'),
         trans('system.save_changes_omit')
       ],
       cancelId: 0,
-      defaultId: 1
+      defaultId: 0
     }
 
     let ret = await dialog.showMessageBox(this._win, options)
@@ -470,7 +472,6 @@ class ZettlrWindow {
     })
 
     // 0 = Ok, 1 = Cancel
-
     return (ret.response === 0)
   }
 }

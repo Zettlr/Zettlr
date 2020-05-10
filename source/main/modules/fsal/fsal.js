@@ -112,6 +112,9 @@ module.exports = class FSAL extends EventEmitter {
           'path': src.path
         })
         await FSALFile.save(src, options)
+        // Notify that a file has saved, which strictly speaking does not
+        // modify the openFiles array, but does change the modification flag.
+        this.emit('fsal-state-changed', 'fileSaved')
         return true
       },
       'search-file': async (src, target, options) => {
@@ -344,7 +347,6 @@ module.exports = class FSAL extends EventEmitter {
     })
 
     this._watchdog.on('change', async (event, changedPath) => {
-      // TODO: Check for ignored events
       // Buffer the event for later
       this._remoteChangeBuffer.push({ 'event': event, 'changedPath': changedPath })
 
@@ -751,6 +753,40 @@ module.exports = class FSAL extends EventEmitter {
     let returnFile = FSALFile.metadata(file)
     returnFile.content = await FSALFile.load(file)
     return returnFile
+  }
+
+  /**
+   * Sets the modification flag on an open file
+   */
+  markDirty (file) {
+    if (!this._state.openFiles.includes(file)) {
+      console.error('Cannot mark dirty a non-open file!')
+      return false
+    }
+
+    return FSALFile.markDirty(file)
+  }
+
+  /**
+   * Removes the modification flag on an open file
+   */
+  markClean (file) {
+    if (!this._state.openFiles.includes(file)) {
+      console.error('Cannot mark clean a non-open file!')
+      return false
+    }
+
+    return FSALFile.markClean(file)
+  }
+
+  /**
+   * Returns true if none of the open files have their modified flag set.
+   */
+  isClean () {
+    for (let openFile of this._state.openFiles) {
+      if (openFile.modified) return false
+    }
+    return true
   }
 
   /**

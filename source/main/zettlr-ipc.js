@@ -229,14 +229,14 @@ class ZettlrIPC {
         break
 
       case 'file-modified':
-        // Just set the modification flags.
-        this._app.setModified()
+        // Set the modification flag and notify the FSAL of a dirty doc.
+        this._app.setModified(cnt.hash)
         break
 
       // The renderer requested that the editor
       // is marked clean again
       case 'mark-clean':
-        this._app.clearModified()
+        this._app.clearModified(cnt.hash)
         break
 
       // Set or update a target

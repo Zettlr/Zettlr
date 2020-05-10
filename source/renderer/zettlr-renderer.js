@@ -544,7 +544,7 @@ class ZettlrRenderer {
       file = {}
     }
     file.content = this._editor.getValue()
-    file.wordcount = this._editor.getWrittenWords() // For statistical purposes only =D
+    file.wordcount = this._editor.getWrittenWords()
     this._ipc.send('file-save', file)
   }
 
@@ -711,12 +711,12 @@ class ZettlrRenderer {
   /**
    * Simply indicates to main to set the modified flag.
    */
-  setModified () { this._ipc.send('file-modified', {}) }
+  setModified (hash) { this._ipc.send('file-modified', { 'hash': hash }) }
 
   /**
    * Instructs main to remove the edit flag.
    */
-  clearModified () { this._ipc.send('mark-clean') }
+  clearModified (hash) { this._ipc.send('mark-clean', { 'hash': hash }) }
 
   /**
    * Can tell whether or not the editor is modified.

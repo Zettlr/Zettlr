@@ -82,7 +82,8 @@ function metadata (fileObject) {
     'modtime': fileObject.modtime,
     'creationtime': fileObject.creationtime,
     'frontmatter': fileObject.frontmatter,
-    'linefeed': fileObject.linefeed
+    'linefeed': fileObject.linefeed,
+    'modified': fileObject.modified
   }
 }
 
@@ -108,7 +109,8 @@ async function parseFile (filePath, cache, parent = null) {
     // This variable is only used to transfer the file contents to and from
     // the renderer. It will be empty all other times, because otherwise the
     // RAM will fill up pretty fast.
-    'content': ''
+    'content': '',
+    'modified': false // If true, it has been modified in the renderer
   }
 
   // In any case, we need the most recent times.
@@ -249,6 +251,7 @@ module.exports = {
     global.tags.remove(fileObject.tags)
     parseFileContents(fileObject, content)
     global.tags.report(fileObject.tags)
+    fileObject.modified = false // Always reset the modification flag.
   },
   'rename': async function (fileObject, options) {
     let oldPath = fileObject.path
@@ -278,5 +281,11 @@ module.exports = {
   },
   'search': async function (fileObject, terms) {
     return searchFile(fileObject, terms)
+  },
+  'markDirty': function (fileObject) {
+    fileObject.modified = true
+  },
+  'markClean': function (fileObject) {
+    fileObject.modified = false
   }
 }
