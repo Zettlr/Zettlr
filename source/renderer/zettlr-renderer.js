@@ -51,6 +51,9 @@ class ZettlrRenderer {
     this._paths = null
     this._lang = 'en-US' // Default fallback
 
+    // Stores the current global search in order to access it.
+    this._currentSearch = null
+
     // Write translation data into renderer process's global var
     loadI18nRenderer()
 
@@ -406,6 +409,9 @@ class ZettlrRenderer {
    * @return {void}      Nothing to return.
    */
   beginSearch (term) {
+    // If there is a search running, set the interrupt flag
+    if (this._currentSearch) this._currentSearch.setInterrupt()
+
     // First end any search in the store, if applicable.
     global.store.commitEndSearch()
 
@@ -418,8 +424,8 @@ class ZettlrRenderer {
     // Now perform the actual search. For this we'll create a new search
     // object and pass all necessary data to it.
     let dirContents = this._store.getVuex().getters.currentDirectoryContent
-    let search = new GlobalSearch(term)
-    search.with(
+    this._currentSearch = new GlobalSearch(term)
+    this._currentSearch.with(
       // Filter by file and then only retain the hashes
       dirContents.filter(elem => elem.type === 'file').map(elem => elem.hash)
     ).each((elem, compiledSearchTerms) => {
