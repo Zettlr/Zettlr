@@ -31,7 +31,7 @@ const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
 
 const reconstruct = require('./util/reconstruct-tree')
 
-const icons = require('./util/icons')
+const loadicons = require('./util/load-icons')
 
 const path = require('path')
 
@@ -81,7 +81,6 @@ class ZettlrRenderer {
         this.beginSearch(term)
       }
     }
-    setTimeout(() => icons.loadCustomIcons(), 0)
   }
 
   /**
@@ -127,6 +126,9 @@ class ZettlrRenderer {
 
     // Here we can init actions and stuff to be done after the startup has finished
     setTimeout(() => { this.poll() }, POLL_TIME) // Poll every POLL_TIME seconds
+
+    // Load the clarity icon modules and add custom icons
+    setTimeout(() => loadicons(), 0)
   }
 
   /**
