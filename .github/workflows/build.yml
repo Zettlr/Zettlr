@@ -66,8 +66,11 @@ jobs:
       # Perform all necessary pre-build steps (LESS, handlebars, and so forth)
       - name: Set up build environment and compile the assets
       # N.B.: The "postinstall" field in package.json will make sure everything's compiled
+      # except cls and language files which we update separately
         run: |
           npm install
+          npm run csl:refresh
+          npm run lang:refresh
           cd ./source
           npm install
           cd ..
