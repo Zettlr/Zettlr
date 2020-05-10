@@ -222,6 +222,31 @@ class ZettlrEditor {
 
     this._searcher.setInstance(this._cm)
 
+    this._cm.on('keyup', (cm, event) => {
+      if(event.altKey
+        && event.code === 'Enter'
+        && !event.ctrlKey
+        && !event.shiftKey
+        && !event.metaKey) {
+          let cur = cm.getCursor()
+          let linkStart = cm.getOption('zkn').linkStart
+          let linkEnd = cm.getOption('zkn').linkEnd
+          let line = cm.getLine(cur.line)
+          
+          let linkStartPos = line.indexOf(linkStart)
+          let linkEndPos = line.indexOf(linkEnd)
+
+          if(linkStartPos != -1
+            && linkEndPos != -1
+            && linkStartPos < linkEndPos
+            && (linkStartPos-1) <= cur.ch //allow cursur to be just before
+            && (linkEndPos+linkEnd.length) >= cur.ch) { //allow cursor to be just after
+              let linkName = line.substr(linkStartPos+linkStart.length, linkEndPos-linkStartPos-linkStart.length)
+              this._renderer.openOrCreate(linkName)
+            }
+        }
+    })
+
     /**
      * Listen to the beforeChange event to modify pasted image paths into real
      * markdown images.
