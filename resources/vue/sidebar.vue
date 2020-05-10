@@ -30,7 +30,9 @@
     <div id="component-container">
       <div id="file-tree" ref="directories" v-on:click="selectionListener">
         <template v-if="$store.state.items.length > 0">
-          <div id="directories-files-header" v-show="getFiles.length > 0">{{ fileSectionHeading }}</div>
+          <div id="directories-files-header" v-show="getFiles.length > 0">
+            <clr-icon shape="file"></clr-icon>{{ fileSectionHeading }}
+          </div>
             <tree-item
               v-for="item in getFiles"
               v-bind:obj="item"
@@ -38,7 +40,9 @@
               v-bind:depth="0"
             >
             </tree-item>
-            <div id="directories-dirs-header" v-show="getDirectories.length > 0">{{ dirSectionHeading }}</div>
+            <div id="directories-dirs-header" v-show="getDirectories.length > 0">
+              <clr-icon shape="tree-view"></clr-icon>{{ dirSectionHeading }}
+            </div>
             <tree-item
               v-for="item in getDirectories"
               v-bind:obj="item"

@@ -17,17 +17,14 @@
       vertical-align: bottom;
       margin-top: @ribbon-height/2;
 
-      &:before {
-          font-family: @font-icon;
-          font-size: @font-size-small * 0.8;
-          margin:0px 5px;
-          display:inline-block;
-          line-height:@ribbon-height;
+      clr-icon {
+        width: 12px;
+        height: 12px;
+        margin-left: 3px;
+        margin-right: 3px;
+        vertical-align: bottom;
       }
     }
-
-    #directories-dirs-header::before { content: '\f0f0'; }
-    #directories-files-header::before { content: '\f0d6'; }
 
     .filename {
         line-height: @ribbon-height;
