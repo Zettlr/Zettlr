@@ -6,7 +6,7 @@
             "Celso Lira"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-05-07T19:06:49.000000Z"
+        "updated_at": "2020-05-09T08:28:38.000000Z"
     },
     "dialog": {
         "about": {
@@ -193,9 +193,10 @@
                 "title": "Display"
             },
             "display_time_explanation": "In the file metadata display",
-            "editor": "Use right-to-left (RTL) writing direction",
+            "editor": "Editor",
             "editor_setting": {
                 "direction_ltr": "Use left-to-right (LTR) writing direction",
+                "direction_rtl": "Use right-to-left (RTL) writing direction",
                 "rtl_move_visually": "Use visual order for arrow key movement while in RTL-mode"
             },
             "enable_rmarkdown": "Enable RMarkdown file support",
