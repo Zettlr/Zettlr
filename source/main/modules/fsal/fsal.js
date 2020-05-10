@@ -74,6 +74,7 @@ module.exports = class FSAL extends EventEmitter {
         // NOTE: Generates 1x unlink, 1x add
         let oldHash = src.hash
         let isOpenFile = this._state.openFiles.find(e => e.hash === oldHash) !== undefined
+        let isRoot = src.parent == null
 
         this._watchdog.ignoreEvents({
           'event': 'unlink',
@@ -87,7 +88,8 @@ module.exports = class FSAL extends EventEmitter {
         await FSALFile.rename(src, options)
         // Now we need to re-sort the parent directory
         // TODO: Only do if it's not a root! And if it's a root, we have to do our open paths as well etc etc
-        await FSALDir.sort(src.parent) // Omit sorting
+        if (!isRoot) await FSALDir.sort(src.parent) // Omit sorting
+
         // Notify of a state change
         this.emit('fsal-state-changed', 'filetree')
         // If applicable, trigger a file synchronisation
@@ -103,7 +105,7 @@ module.exports = class FSAL extends EventEmitter {
         })
         await FSALFile.remove(src)
         // Will trigger a change that syncs the files
-        this.closeFile(src)
+        this.closeFile(src) // Does nothing if the file is not open
       },
       'save-file': async (src, target, options) => {
         // NOTE: Generates 1x chance
