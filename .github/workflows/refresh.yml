@@ -16,7 +16,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
         with:
-          ref: debug
+          ref: develop
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
@@ -44,4 +44,4 @@ jobs:
         uses: ad-m/github-push-action@v0.5.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: debug
+          branch: develop
