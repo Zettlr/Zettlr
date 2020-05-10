@@ -589,6 +589,7 @@ class ZettlrEditor {
     // _openFiles array so we don't need to catch it.
     this._cm.swapDoc(file.cmDoc)
     this._currentHash = hash
+    this._cm.setOption('markdownImageBasePath', path.dirname(file.fileObject.path))
 
     // Reset the word count to match the now active file
     this._words = countWords(this._cm.getValue(), this._countChars)
@@ -605,6 +606,8 @@ class ZettlrEditor {
 
     // The sidebar needs to be informed that the active file has changed!
     global.store.set('selectedFile', this._currentHash)
+    // Same for the main process
+    global.ipc.send('set-active-file', { 'hash': hash })
   }
 
   /**
@@ -749,16 +752,11 @@ class ZettlrEditor {
 
     if (this._currentHash === fileToClose.fileObject.hash && this._openFiles.length > 0) {
       // The current file has been closed: Select another one
-      let mdBasePath = ''
       if (currentIndex > 0) {
         this._swapFile(this._openFiles[currentIndex - 1].fileObject.hash)
-        mdBasePath = this._openFiles[currentIndex - 1].fileObject.path
       } else {
         this._swapFile(this._openFiles[0].fileObject.hash)
-        mdBasePath = this._openFiles[0].fileObject.path
       }
-      mdBasePath = path.dirname(mdBasePath) // We need the dir, not the file
-      this._cm.setOption('markdownImageBasePath', mdBasePath) // Reset base path
     }
 
     // Synchronise the file changes to the document tabs

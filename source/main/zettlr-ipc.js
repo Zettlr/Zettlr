@@ -235,6 +235,11 @@ class ZettlrIPC {
         this._app.setModified(cnt.hash)
         break
 
+      // Sent by the renderer to indicate the active file has changed
+      case 'set-active-file':
+        this._app.getFileSystem().setActiveFile(cnt.hash)
+        break
+
       // The renderer requested that the editor
       // is marked clean again
       case 'mark-clean':

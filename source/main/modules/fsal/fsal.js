@@ -41,6 +41,7 @@ module.exports = class FSAL extends EventEmitter {
       // The app supports one open directory and (in theory) unlimited open files
       openDirectory: null,
       openFiles: [],
+      activeFile: null, // Can contain an active file (active in the editor)
       filetree: [] // Contains the full filetree
     }
 
@@ -738,6 +739,28 @@ module.exports = class FSAL extends EventEmitter {
     } else {
       return false
     }
+  }
+
+  /**
+   * Sets the active file pointer to the file identified by the hash.
+   * @param {number} hash The hash of the file to set as active
+   */
+  setActiveFile (hash) {
+    let file = this.findFile(hash)
+    if (file && this._state.openFiles.includes(file)) {
+      this._state.activeFile = file
+      this.emit('fsal-state-changed', 'activeFile')
+    } else {
+      console.log('Could not set active file: Either not found or not open.')
+    }
+  }
+
+  /**
+   * Returns the hash of the currently active file.
+   * @returns {number} The hash of the active file.
+   */
+  getActiveFile () {
+    return (this._state.activeFile) ? this._state.activeFile.hash : null
   }
 
   /**
