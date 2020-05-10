@@ -21,6 +21,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
+      - name: Install packages in main and source directories
+        # the scripts require some modules that we need to install.
+        run: npm install && cd ./source && npm install && cd ..
       - name: Config git
         run: |
           git config --local user.email "action@github.com"
