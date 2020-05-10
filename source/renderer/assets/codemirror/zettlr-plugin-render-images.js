@@ -123,6 +123,7 @@
       img.style.maxWidth = width
       img.style.maxHeight = height
       img.style.cursor = 'default' // Nicer cursor
+      console.log('First using URL ' + url)
       img.src = url + `?${new Date().getTime()}` // Add a "cachebreaker", thanks to https://stackoverflow.com/a/1077051
       img.onclick = (e) => { textMarker.clear() }
 

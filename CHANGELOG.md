@@ -46,6 +46,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Support fenced code blocks surrounded by tildes (`~`) instead of backticks.
 - The About dialog of the application now also holds a tab with debug information about both the binary, the system, and the current environment.
 - Tags with diacritics are now also removed on export (with the respective setting turned on), so that the removed tags match the tags which are highlighted in the editor.
+- Fixed searches behaving irrationally if you search again while the previous search has not yet ended.
 
 ## Under the Hood
 

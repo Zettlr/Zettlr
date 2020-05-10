@@ -449,15 +449,17 @@ module.exports = {
       evt.stopPropagation()
       evt.preventDefault()
 
-      let list = this.getDirectoryContents
-      list = list.filter(e => [ 'file', 'alias' ].includes(e.type))
+      // getDirectoryContents accomodates the virtual scroller
+      // by packing the actual items in a props property.
+      let list = this.getDirectoryContents.map(e => e.props)
+      list = list.filter(e => e.type === 'file')
       let index = list.indexOf(list.find(e => e.hash === this.selectedFile))
 
       switch (evt.key) {
         case 'ArrowDown':
           index++
           if (evt.shiftKey) index += 9 // Fast-scrolling
-          if (index > list.length - 1) index = list.length - 1
+          if (index >= list.length) index = list.length - 1
           if (evt.ctrlKey || evt.metaKey) {
             // Select the last file
             return global.ipc.send('file-get', list[list.length - 1].hash)

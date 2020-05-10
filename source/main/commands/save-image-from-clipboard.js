@@ -39,8 +39,8 @@ class SaveImage extends ZettlrCommand {
       return global.ipc.notify(trans('system.error.no_allowed_chars'))
     }
 
-    // A file must be opened
-    if (!this._app.getCurrentFile()) return global.ipc.notify(trans('system.error.fnf_message'))
+    // A file must be opened and active
+    if (!this._app.getFileSystem().getActiveFile()) return global.ipc.notify(trans('system.error.fnf_message'))
 
     // Now check the extension of the name (some users may
     // prefer to choose to provide it already)
@@ -48,7 +48,10 @@ class SaveImage extends ZettlrCommand {
 
     // Do we store the image to a relative path?
     let isCwd = (target.mode === 'save-cwd')
-    let currentFilePath = path.dirname(this._app.getCurrentFile().path)
+    let activeFile = this._app.getFileSystem().findFile(this._app.getFileSystem().getActiveFile())
+    let currentFilePath = path.dirname(activeFile.path)
+
+    console.log('Preparing to save: ' + activeFile.name + '; filepath: ' + currentFilePath)
 
     // Preset the default CWD path
     let defaultPath = global.config.get('editor.defaultSaveImagePath') || ''
@@ -81,6 +84,8 @@ class SaveImage extends ZettlrCommand {
 
     // Build the correct path
     let imagePath = path.join(defaultPath, target.name)
+
+    console.log('Saving image as: ' + imagePath)
 
     // And now save the image
     let image = clipboard.readImage()

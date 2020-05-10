@@ -91,7 +91,7 @@ class Zettlr {
       findFile: (prop) => { return this._fsal.findFile(prop) },
       findDir: (prop) => { return this._fsal.findDir(prop) },
       // Same as findFile, only with content
-      getFile: (prop) => { return this._fsal.getFileContents(prop) }
+      getFile: (fileDescriptor) => { return this._fsal.getFileContents(fileDescriptor) }
     }
 
     // First thing that has to be done is to load the service providers
@@ -142,6 +142,9 @@ class Zettlr {
           console.log('Sending small file update')
           global.application.fileUpdate(info.oldHash, info.newHash)
           break
+        case 'fileSaved':
+          if (!this.isModified()) this.getWindow().clearModified()
+          break
         case 'fileContents':
           this._onFileContentsChanged(info)
           break
@@ -154,6 +157,7 @@ class Zettlr {
           console.log('+++++ SYNCING OPEN FILES WITH RENDERER +++++')
           this.ipc.send('sync-files', this._fsal.getOpenFiles())
           global.config.set('openFiles', this._fsal.getOpenFiles())
+          if (!this.isModified()) this.getWindow().clearModified()
           break
       }
     })
@@ -285,20 +289,15 @@ class Zettlr {
     */
   async canClose () {
     if (this.isModified()) {
-      // The file is currently modified. Ask for saving.
-      let ret = await this.window.askSaveChanges()
+      // There is at least one file currently modified
+      let modifiedFiles = this._fsal.getOpenFiles()
+        .map(e => this._fsal.findFile(e))
+        .filter(e => e.modified)
+        .map(e => e.name) // Hello piping my old friend, I've come to use you once again ...
+      let ret = await this.window.askSaveChanges(modifiedFiles)
 
-      // Cancel: abort opening a new file
+      // Cancel: abort closing
       if (ret === 0) return false
-
-      if (ret === 1) { // User wants to save the file first.
-        this.ipc.send('file-save', {})
-        return false
-        // TODO: Implement into the event arguments a "intent" of closing
-      }
-
-      // Mark as if nothing has been changed
-      if (ret === 2) this.clearModified()
     }
     return true
   }
@@ -309,9 +308,15 @@ class Zettlr {
     */
   async saveAndClose () {
     if (await this.canClose()) {
-      // Remember to clear the editFlag because otherwise the window
-      // will refuse to close itself
-      this.clearModified()
+      // "Hard reset" any edit flags that might prevent closing down of the app
+      this.getWindow().clearModified()
+      let modifiedFiles = this._fsal.getOpenFiles().map(e => this._fsal.findFile(e)).filter(e => e.modified)
+
+      // This is the programmatical middle finger to good state management
+      for (let file of modifiedFiles) {
+        file.modified = false
+      }
+
       app.quit()
     }
   }
@@ -542,16 +547,6 @@ class Zettlr {
   }
 
   /**
-    * Closes the current file and takes care of all steps necessary to accomodate.
-    * @param {Object} file The file descriptor
-    */
-  closeFile (file) {
-    // Same as with openFile
-    this._fsal.closeFile(file)
-    global.config.removeFile(file.path)
-  }
-
-  /**
     * Send a file with its contents to the renderer process.
     * @param  {Integer} arg An integer containing the file's hash.
     * @return {void}     This function does not return anything.
@@ -575,19 +570,31 @@ class Zettlr {
     * Indicate modifications.
     * @return {void} Nothing to return here.
     */
-  setModified () {
-    this.window.setModified()
-    this.editFlag = true
+  setModified (hash) {
+    // Set the modify-indicator on the window
+    // and tell the FSAL that a file has been
+    // modified.
+    let file = this._fsal.findFile(hash)
+    if (file) {
+      this._fsal.markDirty(file)
+      this.window.setModified()
+    } else {
+      global.log.warning('The renderer reported a modified file, but the FSAL did not find that file.')
+    }
   }
 
   /**
-    * Remove the modification flag. Also notify the renderer process so that
-    * the editor can mark itself clear as well.
+    * Remove the modification flag.
     * @return {void} Nothing to return.
     */
-  clearModified () {
-    this.window.clearModified()
-    this.editFlag = false
+  clearModified (hash) {
+    let file = this._fsal.findFile(hash)
+    if (file) {
+      this._fsal.markClean(file)
+      if (this._fsal.isClean()) this.window.clearModified()
+    } else {
+      global.log.warning('The renderer reported a saved file, but the FSAL did not find that file.')
+    }
   }
 
   /**
@@ -662,10 +669,10 @@ class Zettlr {
   isDirectory () { return false }
 
   /**
-    * Is the current file modified?
+    * Are there unsaved changes currently in the file system?
     * @return {Boolean} Return true, if there are unsaved changes, or false.
     */
-  isModified () { return this.editFlag }
+  isModified () { return !this._fsal.isClean() }
 
   /**
     * Open a new window.
