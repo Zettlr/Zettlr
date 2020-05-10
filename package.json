@@ -14,7 +14,7 @@
   "description": "A powerful Markdown editor for researchers.",
   "main": "./source/main.js",
   "scripts": {
-    "postinstall": "electron-builder install-app-deps && npm run less && npm run handlebars && npm run csl:refresh && npm run reveal:build && npm run wp:prod && npm run lang:refresh",
+    "postinstall": "electron-builder install-app-deps && npm run less && npm run handlebars && npm run reveal:build && npm run wp:prod",
     "start": "electron .",
     "build:quick": "electron-builder --dir",
     "release:this": "electron-builder",

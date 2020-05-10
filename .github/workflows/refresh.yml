@@ -1,0 +1,47 @@
+name: Refresh Citation Style and Language Files
+
+on:
+  push:
+    paths:
+      - '.github/workflows/refresh.yml'
+  schedule:
+    # Run on 1st and 15th of each month
+    - cron: '1 2 1,15 * *'
+
+jobs:
+  refresh:
+    name: Refresh Citation Style and Language Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          ref: debug
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Config git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+      - name: Update csl
+        run: |
+          yarn csl:refresh
+          git commit -m "Update csl" -a
+      - name: Update language files
+        run: |
+          yarn lang:refresh
+          git commit -m "Update language files" -a
+      - name: Test build # to make sure we don't break anything
+        run: |
+          npm install
+          cd ./source
+          npm install
+          cd ..
+          npm test
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.5.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: debug
