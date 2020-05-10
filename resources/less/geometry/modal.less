@@ -380,10 +380,17 @@
       overflow-y: auto;
 
       li.user-dict-item {
-        display: block;
+        display: flex;
+        align-items: center;
         cursor: pointer;
         margin: 0;
         padding: 5px;
+        span {
+          flex: 1 0 auto;
+        }
+        clr-icon {
+          flex: 0 1 auto;
+        }
       }
     }
 

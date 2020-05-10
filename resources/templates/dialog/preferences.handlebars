@@ -692,7 +692,8 @@
             {{#each userDictionary}}
             <li class="user-dict-item">
               <input type="hidden" value="{{this}}" name="userDictionary">
-              {{this}}
+              <span>{{this}}</span>
+              <clr-icon shape="times"></clr-icon>
             </li>
             {{/each}}
           </ul>
