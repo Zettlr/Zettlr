@@ -88,7 +88,6 @@ module.exports = class FSAL extends EventEmitter {
 
         await FSALFile.rename(src, options)
         // Now we need to re-sort the parent directory
-        // TODO: Only do if it's not a root! And if it's a root, we have to do our open paths as well etc etc
         if (!isRoot) await FSALDir.sort(src.parent) // Omit sorting
 
         // Notify of a state change
@@ -437,6 +436,8 @@ module.exports = class FSAL extends EventEmitter {
         let index = descriptor.parent.children.indexOf(descriptor)
         descriptor.parent.children.splice(index, 1, newdir)
       }
+      // Make sure to pull potential new openFiles from the filetree
+      this._refetchOpenFiles()
       isDirectoryUpdateNeeded = true
       directoryToUpdate = descriptor
     } else if (isRoot && event === 'unlinkDir') {
@@ -528,12 +529,6 @@ module.exports = class FSAL extends EventEmitter {
       }
     } // END isOpenDir
 
-    console.log('isDirectoryUpdateNeeded:', isDirectoryUpdateNeeded)
-    console.log('isFileUpdateNeeded:', isFileUpdateNeeded)
-    console.log('isTreeUpdateNeeded:', isTreeUpdateNeeded)
-    console.log('isOpenFile:', isOpenFile)
-    console.log('isOpenDir:', isOpenDir)
-
     // Finally, trigger all necessary events
     if (isDirectoryUpdateNeeded) {
       // console.log('Triggering directory update!')
@@ -568,6 +563,16 @@ module.exports = class FSAL extends EventEmitter {
       let event = this._remoteChangeBuffer.shift()
       this._onRemoteChange(event.event, event.changedPath).catch(e => console.error(e))
     }
+  }
+
+  /**
+   * Re-fetches all open files from the current file tree. This is necessary if
+   * a directory was re-read as the directory's children could (have) been open
+   * and in that case one or more of the openFiles are not present in the
+   * filetree anymore. This fixes that.
+   */
+  _refetchOpenFiles () {
+    this._state.openFiles = this._state.openFiles.map(e => this.findFile(e.hash))
   }
 
   /**
@@ -722,6 +727,7 @@ module.exports = class FSAL extends EventEmitter {
    */
   openFile (file) {
     if (this._state.openFiles.includes(file)) return false
+    console.log('FIle ' + file.name + ' is now open')
     this._state.openFiles.push(file)
     this.emit('fsal-state-changed', 'openFiles')
     return true
@@ -735,6 +741,7 @@ module.exports = class FSAL extends EventEmitter {
     if (this._state.openFiles.includes(file)) {
       this._state.openFiles.splice(this._state.openFiles.indexOf(file), 1)
       this.emit('fsal-state-changed', 'openFiles')
+      console.log('FIle ' + file.name + ' is now closed')
       return true
     } else {
       return false
@@ -809,6 +816,7 @@ module.exports = class FSAL extends EventEmitter {
    */
   isClean () {
     for (let openFile of this._state.openFiles) {
+      if (openFile.modified) console.log('NOT CLEAN: ' + openFile.name)
       if (openFile.modified) return false
     }
     return true

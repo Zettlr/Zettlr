@@ -294,6 +294,7 @@ class Zettlr {
         .map(e => this._fsal.findFile(e))
         .filter(e => e.modified)
         .map(e => e.name) // Hello piping my old friend, I've come to use you once again ...
+
       let ret = await this.window.askSaveChanges(modifiedFiles)
 
       // Cancel: abort closing
@@ -310,11 +311,11 @@ class Zettlr {
     if (await this.canClose()) {
       // "Hard reset" any edit flags that might prevent closing down of the app
       this.getWindow().clearModified()
-      let modifiedFiles = this._fsal.getOpenFiles().map(e => this._fsal.findFile(e)).filter(e => e.modified)
+      let modifiedFiles = this._fsal.getOpenFiles().map(e => this._fsal.findFile(e))
 
       // This is the programmatical middle finger to good state management
       for (let file of modifiedFiles) {
-        file.modified = false
+        this._fsal.markClean(file)
       }
 
       app.quit()
