@@ -91,7 +91,7 @@ class Zettlr {
       findFile: (prop) => { return this._fsal.findFile(prop) },
       findDir: (prop) => { return this._fsal.findDir(prop) },
       // Same as findFile, only with content
-      getFile: (prop) => { return this._fsal.getFileContents(prop) }
+      getFile: (fileDescriptor) => { return this._fsal.getFileContents(fileDescriptor) }
     }
 
     // First thing that has to be done is to load the service providers

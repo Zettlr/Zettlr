@@ -78,7 +78,10 @@ class ZettlrIPC {
       // we mustn't obliterate the "event" because this way we don't need to
       // search for the window.
       if (arg.command === 'ql-get-file') {
-        event.sender.send('file', this._app.findFile({ 'hash': arg.content }).withContent())
+        let QLFile = this._app.findFile(arg.content)
+        global.application.getFile(QLFile).then(file => {
+          event.sender.send('file', file)
+        })
         return
       }
 
@@ -206,7 +209,6 @@ class ZettlrIPC {
         this._app.sendPaths()
         // Also set the current file and dir correctly immediately
         this.send('dir-set-current', (this._app.getCurrentDir()) ? this._app.getCurrentDir().hash : null)
-        // TODO: Send a list of all open files!
         this._app.sendOpenFiles()
         break
 
