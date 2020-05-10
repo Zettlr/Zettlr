@@ -16,6 +16,9 @@
 const { shell } = require('electron')
 
 const { trans } = require('../common/lang/i18n.js')
+const clarityIcons = require('@clr/icons').ClarityIcons
+
+const path = require('path')
 
 const FILETYPES_IMG = [
   '.jpg',
@@ -45,8 +48,6 @@ class ZettlrAttachments {
     $('body').append(this._container)
     this._open = false
     this._attachments = []
-
-    this.refresh()
 
     this._act() // Activate both the directory toggle and the link
   }
@@ -84,7 +85,9 @@ class ZettlrAttachments {
     } else {
       this._attachments = this._renderer.getCurrentDir().attachments
       for (let a of this._attachments) {
-        let link = $('<a>').text(a.name)
+        let svg = clarityIcons.get('file-ext')
+          .replace('EXT', path.extname(a.path).slice(1, 4))
+        let link = $('<a>').html(svg + a.name)
           .attr('data-link', a.path)
           .attr('data-hash', a.hash)
           .attr('title', a.path) // Make sure the user can always see the full title

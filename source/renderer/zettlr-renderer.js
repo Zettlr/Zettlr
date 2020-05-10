@@ -127,8 +127,9 @@ class ZettlrRenderer {
     // Here we can init actions and stuff to be done after the startup has finished
     setTimeout(() => { this.poll() }, POLL_TIME) // Poll every POLL_TIME seconds
 
-    // Load the clarity icon modules and add custom icons
-    setTimeout(() => loadicons(), 0)
+    // Load the clarity icon modules, add custom icons and then refresh
+    // attachments (because it requires custom icons to be loaded).
+    setTimeout(() => loadicons().then(() => this._attachments.refresh()), 0)
   }
 
   /**
