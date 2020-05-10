@@ -355,7 +355,7 @@
           </div>
           <hr>
           <label for="cslLibrary">{{i18n "dialog.preferences.citation_database"}}</label>
-          <div class="file-select-group">
+          <div class="input-button-group">
             <input type="text" name="export.cslLibrary" id="cslLibrary" value="{{export.cslLibrary}}">
             <button type="button" class="request-file"
             data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
@@ -364,7 +364,7 @@
             data-request-target="#cslLibrary"><clr-icon shape="file"></clr-icon></button>
           </div>
           <label for="cslStyle">{{i18n "dialog.preferences.project.csl_style"}}</label>
-          <div class="file-select-group">
+          <div class="input-button-group">
             <input type="text" name="export.cslStyle" id="cslStyle" value="{{export.cslStyle}}">
             <button type="button" class="request-file"
             data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
@@ -379,19 +379,27 @@
 
       <!-- Zettelkasten options -->
       <div id="prefs-tabs-zkn">
-        <div class="box-left form-inline-buttons">
+        <div class="box-left">
           <label for="pref-zkn-free-id">{{i18n "dialog.preferences.zkn.id_label"}}</label>
-          <input type="text" id="pref-zkn-free-id" value="{{zkn.idRE}}" name="zkn.idRE">
-          <button type="button" id="reset-id-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_id"}}"><clr-icon shape="refresh"></clr></button>
+          <div class="input-button-group">
+            <input type="text" id="pref-zkn-free-id" value="{{zkn.idRE}}" name="zkn.idRE">
+            <button type="button" id="reset-id-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_id"}}"><clr-icon shape="refresh"></clr></button>
+          </div>
           <label for="pref-zkn-free-linkstart">{{i18n "dialog.preferences.zkn.linkstart_label"}}</label>
-          <input type="text" id="pref-zkn-free-linkstart" value="{{zkn.linkStart}}" name="zkn.linkStart">
-          <button type="button" id="reset-linkstart-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_linkstart"}}"><clr-icon shape="refresh"></clr></button>
+          <div class="input-button-group">
+            <input type="text" id="pref-zkn-free-linkstart" value="{{zkn.linkStart}}" name="zkn.linkStart">
+            <button type="button" id="reset-linkstart-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_linkstart"}}"><clr-icon shape="refresh"></clr></button>
+          </div>
           <label for="pref-zkn-free-linkend">{{i18n "dialog.preferences.zkn.linkend_label"}}</label>
-          <input type="text" id="pref-zkn-free-linkend" value="{{zkn.linkEnd}}" name="zkn.linkEnd">
-          <button type="button" id="reset-linkend-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_linkend"}}"><clr-icon shape="refresh"></clr></button>
+          <div class="input-button-group">
+            <input type="text" id="pref-zkn-free-linkend" value="{{zkn.linkEnd}}" name="zkn.linkEnd">
+            <button type="button" id="reset-linkend-regex" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_linkend"}}"><clr-icon shape="refresh"></clr></button>
+          </div>
           <label for="pref-zkn-id-gen">{{i18n "dialog.preferences.zkn.id_generator_label"}}</label>
-          <input type="text" id="pref-zkn-id-gen" value="{{zkn.idGen}}" name="zkn.idGen">
-          <button type="button" id="reset-id-generator" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_generator"}}"><clr-icon shape="refresh"></clr></button>
+          <div class="input-button-group">
+            <input type="text" id="pref-zkn-id-gen" value="{{zkn.idGen}}" name="zkn.idGen">
+            <button type="button" id="reset-id-generator" data-tippy-content="{{i18n "dialog.preferences.zkn.reset_default_generator"}}"><clr-icon shape="refresh"></clr></button>
+          </div>
           <hr>
           <p>
             <button type="button" id="generate-id">{{i18n "dialog.preferences.zkn.test_id_generator"}}</button>
@@ -784,12 +792,12 @@
                 {{#each autoCorrectReplacements }}
                 <tr>
                   <td>
-                    <div class="form-inline-buttons">
+                    <div class="input-button-group">
                       <input type="text" name="autoCorrectKeys[]" value="{{ key }}">
                     </div>
                   </td>
                   <td>
-                    <div class="form-inline-buttons">
+                    <div class="input-button-group">
                       <input type="text" name="autoCorrectValues[]" value="{{ value }}">
                       <button class="autocorrect-remove-row"><clr-icon shape="times"></clr-icon></button>
                     </div>
@@ -863,7 +871,7 @@
           <label for="pandocCommand">
             {{i18n "dialog.preferences.pandoc_command"}}
           </label>
-          <div class="form-inline-buttons">
+          <div class="input-button-group">
             <input type="text" id="pandocCommand" name="pandocCommand" placeholder="pandoc &quot;$infile$&quot; -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex --mathjax -o &quot;$outfile$&quot;" value="{{ pandocCommand }}">
             <button type="button" id="reset-pandoc-command" data-tippy-content="{{i18n "dialog.preferences.reset_pandoc_command"}}"><clr-icon shape="refresh"></clr></button>
           </div>

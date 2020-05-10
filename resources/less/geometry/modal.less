@@ -141,19 +141,13 @@
       text-decoration:none;
     }
 
-    // Special treatment for the open-file-buttons
-    button.request-file {
-      margin: 0;
-    }
 
-    // The inputs need to be smaller in size to let the request-file buttons
-    // fit on the same line
-    div.file-select-group {
+    div.input-button-group {
       display: flex;
       margin-bottom: 1em;
       input {
         flex: 0 5 auto;
-        margin-bottom: 0; // Remove the standard margin and apply it to the box
+        margin: 0;
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
       }
@@ -161,6 +155,8 @@
         flex: 0 1 auto;
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
+        margin: 0;
+        display: inline-flex;
       }
     }
 

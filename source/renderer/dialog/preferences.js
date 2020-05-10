@@ -200,8 +200,8 @@ class PreferencesDialog extends ZettlrDialog {
     $('#add-autocorrect-key').click(function (e) {
       e.stopPropagation()
       e.preventDefault()
-      let keyCol = $('<td>').html('<div class="form-inline-buttons"><input type="text" name="autoCorrectKeys[]"></div>')
-      let valCol = $('<td>').html('<div class="form-inline-buttons"><input type="text" name="autoCorrectValues[]"> <button class="autocorrect-remove-row"><clr-icon shape="times"></clr-icon></button></div>')
+      let keyCol = $('<td>').html('<div class="input-button-group"><input type="text" name="autoCorrectKeys[]"></div>')
+      let valCol = $('<td>').html('<div class="input-button-group"><input type="text" name="autoCorrectValues[]"> <button class="autocorrect-remove-row"><clr-icon shape="times"></clr-icon></button></div>')
       let row = $('<tr>').append(keyCol, valCol)
       $('#autocorrect-key-container').append(row)
     })
