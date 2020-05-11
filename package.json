@@ -38,8 +38,7 @@
     "productName": "Zettlr",
     "npmRebuild": false,
     "copyright": "Zettlr is licensed under GNU GPL v3.",
-    "fileAssociations": [
-      {
+    "fileAssociations": [{
         "ext": "md",
         "name": "Markdown",
         "description": "Markdown document",
@@ -74,8 +73,7 @@
       "entitlementsInherit": "./scripts/assets/entitlements.plist"
     },
     "win": {
-      "target": [
-        {
+      "target": [{
           "target": "nsis",
           "arch": [
             "x64",
@@ -87,8 +85,7 @@
       "icon": "resources/icons/ico/icon.ico"
     },
     "linux": {
-      "target": [
-        {
+      "target": [{
           "target": "AppImage",
           "arch": [
             "x64",
@@ -109,8 +106,7 @@
     "dmg": {
       "background": "resources/icons/dmg/dmg_back.tiff",
       "icon": "resources/icons/icns/icon.icns",
-      "contents": [
-        {
+      "contents": [{
           "x": 130,
           "y": 220
         },

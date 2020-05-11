@@ -16,11 +16,11 @@ var rename = require('gulp-rename')
 var handlebars = require('gulp-handlebars')
 var wrap = require('gulp-wrap')
 
-const resourcesLessDir = 'resources/less/'
-const resourcesTemplatesDir = 'resources/templates/'
+const lessDirectory = 'resources/less/'
+const tplDirectory = 'resources/templates/'
 
 function lessGeometry () {
-  return gulp.src(resourcesLessDir + 'geometry/geometry-main.less')
+  return gulp.src(lessDirectory + 'geometry/geometry-main.less')
     .pipe(plumber()) // Improve error handling
     .pipe(sourcemaps.init())
     .pipe(concat('geometry.css')) // Rename file
@@ -30,7 +30,7 @@ function lessGeometry () {
 }
 
 function lessThemes () {
-  return gulp.src(resourcesLessDir + '*/theme-main.less')
+  return gulp.src(lessDirectory + '*/theme-main.less')
     .pipe(plumber()) // Improve error handling
     .pipe(sourcemaps.init())
     .pipe(less()) // Run less
@@ -46,7 +46,7 @@ function lessThemes () {
  * Precompile handlebar templates
  */
 function handlebarTemplates () {
-  return gulp.src(resourcesTemplatesDir + '**/*.handlebars')
+  return gulp.src(tplDirectory + '**/*.handlebars')
     .pipe(plumber()) // Improve error handling
     .pipe(handlebars({
       // Use same version of handlebars as specified in package.json
@@ -73,6 +73,6 @@ function handlebarRuntime () {
 exports.less = gulp.parallel(lessGeometry, lessThemes)
 exports.handlebars = gulp.parallel(handlebarRuntime, handlebarTemplates)
 exports.watch = function () {
-  gulp.watch(resourcesLessDir + '**/*', { ignoreInitial: false }, exports.less)
-  gulp.watch(resourcesTemplatesDir + '**/*', { ignoreInitial: false }, handlebarTemplates)
+  gulp.watch(lessDirectory + '**/*', { ignoreInitial: false }, exports.less)
+  gulp.watch(tplDirectory + '**/*', { ignoreInitial: false }, handlebarTemplates)
 }
