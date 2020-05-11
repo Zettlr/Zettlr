@@ -23,7 +23,7 @@ jobs:
           node-version: '12.x'
       - name: Install packages in main and source directories
         # the scripts require some modules that we need to install.
-        run: npm install && cd ./source && npm install && cd ..
+        run: yarn install --frozen-lockfile && cd ./source && yarn install --frozen-lockfile && cd ..
       - name: Config git
         run: |
           git config --local user.email "action@github.com"
@@ -31,18 +31,20 @@ jobs:
       - name: Update csl
         run: |
           yarn csl:refresh
-          git commit -m "Update csl" -a
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Update csl"
       - name: Update language files
         run: |
           yarn lang:refresh
-          git commit -m "Update language files" -a
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Update language files"
       - name: Test build # to make sure we don't break anything
         run: |
-          npm install
+          yarn install --frozen-lockfile
           cd ./source
-          npm install
+          yarn install --frozen-lockfile
           cd ..
-          npm test
+          yarn test
       - name: Push changes
         uses: ad-m/github-push-action@v0.5.0
         with:
