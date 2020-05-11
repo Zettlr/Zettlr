@@ -223,37 +223,36 @@ class ZettlrEditor {
     this._searcher.setInstance(this._cm)
 
     this._cm.on('keyup', (cm, event) => {
-      if(event.altKey
-        && event.code === 'Enter'
-        && !event.ctrlKey
-        && !event.metaKey) {
-          let cur = cm.getCursor()
-          let linkStart = cm.getOption('zkn').linkStart
-          let linkEnd = cm.getOption('zkn').linkEnd
-          let line = cm.getLine(cur.line)
-          
-          let linkStartPos = line.indexOf(linkStart)
-          let linkEndPos = line.indexOf(linkEnd)
+      if (event.altKey &&
+        event.code === 'Enter' &&
+        !event.ctrlKey &&
+        !event.metaKey) {
+        let cur = cm.getCursor()
+        let linkStart = cm.getOption('zkn').linkStart
+        let linkEnd = cm.getOption('zkn').linkEnd
+        let line = cm.getLine(cur.line)
 
-          if(linkStartPos != -1
-            && linkEndPos != -1
-            && linkStartPos < linkEndPos
-            && (linkStartPos-1) <= cur.ch //allow cursur to be just before
-            && (linkEndPos+linkEnd.length) >= cur.ch) { //allow cursor to be just after
-              let linkName = line.substr(linkStartPos+linkStart.length, linkEndPos-linkStartPos-linkStart.length)
-              if(event.shiftKey) {
-                //Performa a save to avoid a problem where a file
-                //is saved while trying to create or open a link.
-                //That action cancels the file open/create
-                this._renderer.saveFile()
-                this.markClean(this._currentHash)
-                this._renderer.openOrCreate(linkName)
-              }
-              else {
-                this._renderer.autoSearch(linkName, true)
-              }
-            }
+        let linkStartPos = line.indexOf(linkStart)
+        let linkEndPos = line.indexOf(linkEnd)
+
+        if (linkStartPos !== -1 &&
+          linkEndPos !== -1 &&
+          linkStartPos < linkEndPos &&
+          (linkStartPos - 1) <= cur.ch &&
+          (linkEndPos + linkEnd.length) >= cur.ch) {
+          let linkName = line.substr(linkStartPos + linkStart.length, linkEndPos - linkStartPos - linkStart.length)
+          if (event.shiftKey) {
+            // Performa a save to avoid a problem where a file
+            // is saved while trying to create or open a link.
+            // That action cancels the file open/create
+            this._renderer.saveFile()
+            this.markClean(this._currentHash)
+            this._renderer.openOrCreate(linkName)
+          } else {
+            this._renderer.autoSearch(linkName, true)
+          }
         }
+      }
     })
 
     /**
@@ -468,15 +467,14 @@ class ZettlrEditor {
         // The user clicked a zkn link -> create a search
         this._renderer.autoSearch(elem.text())
       } else if (elem.hasClass('cm-zkn-link')) {
-        if(e.shiftKey) {
-          //Performa a save to avoid a problem where a file
-          //is saved while trying to create or open a link.
-          //That action cancels the file open/create
+        if (e.shiftKey) {
+          // Performa a save to avoid a problem where a file
+          // is saved while trying to create or open a link.
+          // That action cancels the file open/create
           this._renderer.saveFile()
           this.markClean(this._currentHash)
           this._renderer.openOrCreate(elem.text())
-        }
-        else {
+        } else {
           this._renderer.autoSearch(elem.text(), true)
         }
       } else if (elem.hasClass('cm-link') && elem.text().indexOf('^') === 0) {
