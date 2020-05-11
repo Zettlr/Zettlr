@@ -226,7 +226,6 @@ class ZettlrEditor {
       if(event.altKey
         && event.code === 'Enter'
         && !event.ctrlKey
-        && !event.shiftKey
         && !event.metaKey) {
           let cur = cm.getCursor()
           let linkStart = cm.getOption('zkn').linkStart
@@ -242,7 +241,17 @@ class ZettlrEditor {
             && (linkStartPos-1) <= cur.ch //allow cursur to be just before
             && (linkEndPos+linkEnd.length) >= cur.ch) { //allow cursor to be just after
               let linkName = line.substr(linkStartPos+linkStart.length, linkEndPos-linkStartPos-linkStart.length)
-              this._renderer.openOrCreate(linkName)
+              if(event.shiftKey) {
+                //Performa a save to avoid a problem where a file
+                //is saved while trying to create or open a link.
+                //That action cancels the file open/create
+                this._renderer.saveFile()
+                this.markClean(this._currentHash)
+                this._renderer.openOrCreate(linkName)
+              }
+              else {
+                this._renderer.autoSearch(linkName, true)
+              }
             }
         }
     })
@@ -459,7 +468,17 @@ class ZettlrEditor {
         // The user clicked a zkn link -> create a search
         this._renderer.autoSearch(elem.text())
       } else if (elem.hasClass('cm-zkn-link')) {
-        this._renderer.autoSearch(elem.text(), true)
+        if(e.shiftKey) {
+          //Performa a save to avoid a problem where a file
+          //is saved while trying to create or open a link.
+          //That action cancels the file open/create
+          this._renderer.saveFile()
+          this.markClean(this._currentHash)
+          this._renderer.openOrCreate(elem.text())
+        }
+        else {
+          this._renderer.autoSearch(elem.text(), true)
+        }
       } else if (elem.hasClass('cm-link') && elem.text().indexOf('^') === 0) {
         // We've got a footnote
         this._editFootnote(elem)
