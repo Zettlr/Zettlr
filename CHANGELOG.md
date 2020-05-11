@@ -47,6 +47,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - The About dialog of the application now also holds a tab with debug information about both the binary, the system, and the current environment.
 - Tags with diacritics are now also removed on export (with the respective setting turned on), so that the removed tags match the tags which are highlighted in the editor.
 - Fixed searches behaving irrationally if you search again while the previous search has not yet ended.
+- Added ability to open or create new files from a ZKN link [[]] by either _Shift + Alt/Opt + Click_ or _Shift + Alt/Opt + Enter_
 
 ## Under the Hood
 
