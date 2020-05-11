@@ -207,6 +207,9 @@ class ZettlrToolbar {
         child.html('<svg width="20" height="20" viewBox="-1 -1 2 2"><circle class="pomodoro-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle><path d="" fill="" class="pomodoro-value" shape-rendering="geometricPrecision"></path></svg>')
       }
       if (elem.title) child.attr('data-tippy-content', trans(elem.title))
+      if (elem.icon && typeof elem.icon === 'string') {
+        child.html(`<clr-icon shape="${elem.icon}"></clr-icon>`)
+      }
       this._div.append(child)
     }
   }

@@ -21,13 +21,13 @@
           <input type="text" name="pdf.keywords" if="pdf.keywords" value="{{pdf.keywords}}" placeholder="{{i18n "dialog.preferences.pdf.keywords"}}">
           <hr>
           <label for="textpl">{{i18n "dialog.preferences.pdf.textpl"}}</label>
-          <div class="file-select-group">
+          <div class="input-button-group">
             <input type="text" name="pdf.textpl" id="textpl" value="{{pdf.textpl}}">
             <button type="button" class="request-file"
             data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
             data-request-name="TeX Template File"
             data-request-ext="tex"
-            data-request-target="#textpl"></button>
+            data-request-target="#textpl"><clr-icon shape="file"></clr-icon></button>
           </div>
         </div>
         <div class="box-right">
@@ -56,13 +56,13 @@
           </select>
           <hr>
           <label for="cslStyle">{{i18n "dialog.preferences.project.csl_style"}}</label>
-          <div class="file-select-group">
+          <div class="input-button-group">
             <input type="text" name="cslStyle" id="cslStyle" value="{{cslStyle}}">
             <button type="button" class="request-file"
               data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
               data-request-name="Citation Style Language File"
               data-request-ext="csl"
-              data-request-target="#cslStyle"></button>
+              data-request-target="#cslStyle"><clr-icon shape="file"></clr-icon></button>
           </div>
           <div class="clearfix"></div>
         </div>

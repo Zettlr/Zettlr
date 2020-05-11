@@ -10,8 +10,16 @@
     overflow-x:hidden;
 
     #open-dir-external {
-        font-family: @font-icon;
-        cursor:default;
+        padding: @button-margin;
+        border-radius: @border-radius;
+        display: inline-block;
+        width: @button-size;
+        height: @button-size;
+
+        clr-icon {
+            width: @button-icon-size;
+            height: @button-icon-size;
+        }
     }
 
     h1 {
@@ -28,12 +36,12 @@
         text-decoration:none;
         color:inherit;
         white-space:nowrap;
-
-        &::before {
-            font-family: @font-icon;
-            content: "\f285";
-            margin-right:5px;
-            display:inline-block;
+        svg {
+          width: 24px;
+          height: 24px;
+          margin-right: 4px;
+          vertical-align: bottom;
+          margin-bottom: -1px;
         }
     }
 
