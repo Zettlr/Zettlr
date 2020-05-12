@@ -251,6 +251,24 @@ class ZettlrEditor {
           } else {
             this._renderer.autoSearch(linkName, true)
           }
+        } else {
+          let selection = cm.getSelection().trim()
+          // Make sure the selection does not wrap a line
+          // TODO: More is needed here. Make sure no invalid file chars.
+          let crStr = /\r/
+          let lfStr = /\n/
+          if (selection.length > 0 && selection.search(crStr) === -1 && selection.search(lfStr) === -1) {
+            if (event.shiftKey) {
+              // Performa a save to avoid a problem where a file
+              // is saved while trying to create or open a link.
+              // That action cancels the file open/create
+              this._renderer.saveFile()
+              this.markClean(this._currentHash)
+              this._renderer.openOrCreate(selection)
+            } else {
+              this._renderer.autoSearch(selection, true)
+            }
+          }
         }
       }
     })
