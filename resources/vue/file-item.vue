@@ -25,7 +25,12 @@
     v-on:dragend.stop="stopDragging"
     >
     <p class="filename">{{ basename }}</p>
-    <Sorter v-if="isDirectory" v-show="hover" v-bind:sorting="obj.sorting"></Sorter>
+    <Sorter
+      v-if="isDirectory"
+      v-show="hover"
+      v-bind:sorting="obj.sorting"
+      v-on:sort-change="sort">
+    </Sorter>
     <tag-list v-bind:tags="getTags" v-if="!isDirectory"></tag-list>
     <template v-if="fileMeta">
       <div class="meta">
@@ -174,20 +179,11 @@
             global.ipc.send('dir-select', this.obj.hash)
           }
         },
-        toggleSorting: function (type) {
-          let newSorting = 'name-up'
-          if (type === 'name') {
-            if (this.obj.sorting === 'name-up') newSorting = 'name-down'
-          } else if (type === 'time') {
-            if (this.obj.sorting === 'time-up') {
-              newSorting = 'time-down'
-            } else {
-              newSorting = 'time-up'
-            }
-          }
-
-          // Request to re-sort this directory
-          global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': newSorting })
+        /**
+         * Request to re-sort this directory
+         */
+        sort: function (sorting) {
+          global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': sorting })
         },
         beginDragging: function (event) {
           if (event.ctrlKey || event.altKey) {

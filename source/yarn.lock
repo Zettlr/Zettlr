@@ -14,6 +14,11 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-3.1.0.tgz#8ff71d51053cd5ee4981e5a501d80a536244f7fd"
   integrity sha512-GcIY79elgB+azP74j8vqkiXz8xLFfIzbQJdlwOPisgbKT00tviJQuEghOXSMVxJ00HoYJbGswr4kcllUc4xCcg==
 
+"@clr/icons@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-3.1.2.tgz#72fe44ba4656d48183dc8bf4659b2ece77035a5e"
+  integrity sha512-vd5gFEmS42961wBtnYLvtm2mzSfxJ/V9Mt0aeHJlN9DDQSkq1k5dntYnwYxsjoZeqyMTA6lCDXajEBROBwvr4g==
+
 "@popperjs/core@^2.3.2":
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.4.0.tgz#0e1bdf8d021e7ea58affade33d9d607e11365915"

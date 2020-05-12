@@ -4,7 +4,7 @@
     <p><input type="text" id="filter-tags" placeholder="{{i18n "dialog.filter_tags"}}"></p>
     <p>
         {{#each tags}}
-        <span class="tag" data-tag="#{{ text }}">{{ text }} <small>{{ count }}&times;</small></span>
+        <span class="tag" data-tag="#{{ text }}">{{ text }} <small>{{ count }}<clr-icon shape="times"></clr-icon></small></span>
         {{/each}}
     </p>
     <button id="abort">{{i18n "dialog.button.close"}}</button>

@@ -14,7 +14,7 @@
   "description": "A powerful Markdown editor for researchers.",
   "main": "./source/main.js",
   "scripts": {
-    "postinstall": "electron-builder install-app-deps && npm run less && npm run handlebars && npm run reveal:build && npm run wp:prod",
+    "postinstall": "electron-builder install-app-deps && yarn less && yarn handlebars && yarn reveal:build && yarn wp:prod",
     "start": "electron .",
     "build:quick": "electron-builder --dir",
     "release:this": "electron-builder",
@@ -22,7 +22,7 @@
     "release:win": "electron-builder --win --publish \"never\"",
     "release:linux": "electron-builder --linux --publish \"never\"",
     "less": "gulp less",
-    "handlebars": "node scripts/handlebars.js",
+    "handlebars": "gulp handlebars",
     "lang:refresh": "node scripts/refresh-language.js",
     "csl:refresh": "node scripts/update-csl.js",
     "reveal:build": "node scripts/update-reveal.js",
@@ -74,12 +74,13 @@
     },
     "win": {
       "target": [{
-        "target": "nsis",
-        "arch": [
-          "x64",
-          "ia32"
-        ]
-      }],
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
       "artifactName": "Zettlr-${version}-${arch}.${ext}",
       "icon": "resources/icons/ico/icon.ico"
     },
@@ -187,10 +188,12 @@
     "eslint-plugin-standard": "^4.0.1",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
+    "gulp-handlebars": "^5.0.2",
     "gulp-less": "^4.0.1",
     "gulp-plumber": "^1.2.1",
     "gulp-rename": "^2.0.0",
     "gulp-sourcemaps": "^2.6.5",
+    "gulp-wrap": "^0.15.0",
     "handlebars": "^4.7.6",
     "lorem-ipsum": "^2.0.3",
     "mini-css-extract-plugin": "^0.9.0",

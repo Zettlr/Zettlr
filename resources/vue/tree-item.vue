@@ -33,10 +33,16 @@
       v-on:mouseleave="hover=false"
     >
       <p class="filename" v-bind:data-hash="obj.hash">
-        <span v-show="hasChildren" v-on:click.stop="toggleCollapse" v-bind:class="indicatorClass"></span>
+        <clr-icon v-show="obj.project" shape="blocks-group" class="is-solid"></clr-icon>
+        <clr-icon v-show="hasChildren" v-on:click.stop="toggleCollapse" v-bind:shape="indicatorShape"></clr-icon>
         {{ obj.name }}<span v-if="hasDuplicateName" class="dir">&nbsp;({{ dirname }})</span>
       </p>
-      <Sorter v-if="isDirectory && combined" v-show="hover" v-bind:sorting="obj.sorting"></Sorter>
+      <Sorter
+        v-if="isDirectory && combined"
+        v-show="hover"
+        v-bind:sorting="obj.sorting"
+        v-on:sort-change="sort">
+      </Sorter>
     </div>
     <div
       v-if="hasSearchResults"
@@ -147,9 +153,9 @@ module.exports = {
       return this.combined ? this.obj.children : this.obj.children.filter(e => e.type !== 'file')
     },
     /**
-     * Returns the correct indicator class (necessary for the indicator CSS content property)
+     * Returns the correct indicator shape
      */
-    indicatorClass: function () { return this.collapsed ? 'collapse-indicator collapsed' : 'collapse-indicator' },
+    indicatorShape: function () { return this.collapsed ? 'caret right' : 'caret down' },
     /**
      * Returns the amount of padding that should be applied, based on the depth
      */
@@ -207,22 +213,10 @@ module.exports = {
      */
     toggleCollapse: function (event) { this.collapsed = !this.collapsed },
     /**
-     * Toggles the sorting of the item, if it's a directory
+     * Request to re-sort this directory
      */
-    toggleSorting: function (type) {
-      let newSorting = 'name-up'
-      if (type === 'name' && this.obj.sorting === 'name-up') {
-        newSorting = 'name-down'
-      } else if (type === 'time') {
-        if (this.obj.sorting === 'time-up') {
-          newSorting = 'time-down'
-        } else {
-          newSorting = 'time-up'
-        }
-      }
-
-      // Request to re-sort this directory
-      global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': newSorting })
+    sort: function (sorting) {
+      global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': sorting })
     },
     /**
      * Initiates a drag movement and inserts the correct data
