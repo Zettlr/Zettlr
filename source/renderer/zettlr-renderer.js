@@ -581,13 +581,13 @@ class ZettlrRenderer {
    */
   openOrCreate (fileName) {
     let dirContents = this._store.getVuex().getters.currentDirectoryContent
-    if(dirContents.length > 0) {
-      let currentDir = dirContents[0];
-      let dirFile = dirContents.find(elem => elem.type==='file' && elem.name.replace(elem.ext, '') === fileName)
-      if(!dirFile) {
-        this._ipc.send('file-new', {name: fileName, hash: currentDir.hash})
+    if (dirContents.length > 0) {
+      let currentDir = dirContents[0]
+      let dirFile = dirContents.find(elem => elem.type === 'file' && elem.name.replace(elem.ext, '') === fileName)
+      if (!dirFile) {
+        this._ipc.send('file-new', { name: fileName, hash: currentDir.hash })
       }
-      
+
       this._ipc.send('force-open', fileName)
     }
   }
