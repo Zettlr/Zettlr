@@ -87,7 +87,7 @@ class ZettlrAttachments {
       for (let a of this._attachments) {
         let svg = clarityIcons.get('file-ext')
           .replace('EXT', path.extname(a.path).slice(1, 4))
-        let link = $('<a>').html(svg + a.name)
+        let link = $('<a>').html(svg + ' ' + a.name)
           .attr('data-link', a.path)
           .attr('data-hash', a.hash)
           .attr('title', a.path) // Make sure the user can always see the full title
