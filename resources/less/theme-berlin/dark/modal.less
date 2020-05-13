@@ -1,0 +1,204 @@
+// Dark modal styles
+
+// Modal styles
+
+.modal {
+  .dialog {
+      background-color:var(--grey-6);
+      color: white;
+
+      hr {
+          border-bottom:1px solid var(--grey-0);
+          width: 80%;
+      }
+
+      // Why the .code-class? Because sometimes we have a small code area,
+      // sometimes it's the only content of the dialog (in which case we
+      // need to constrain its size in the geometry part)
+      code, .code {
+          background-color: var(--grey-6);
+          color: white;
+      }
+
+      // Forms
+
+      label { color: var(--grey-1); }
+
+      input {
+        line-height: 150%;
+        font-size: inherit;
+
+        &.has-error { background-color: var(--bg-error) !important; }
+      }
+
+      input[type="text"], input[type="number"], button, a.button, textarea, select {
+        line-height: 150%;
+        border: none;
+        border-radius: @border-radius;
+        padding: 2px 10px;
+        background-color: var(--grey-7);
+        color: var(--grey-1);
+        border-radius: @border-radius;
+      }
+
+      button, a.button {
+        background-color: var(--grey-7);
+        color: var(--grey-1);
+        transition: 0.2s all ease;
+        outline:0;
+        &:hover, &:focus { background-color: var(--c-primary); color: var(--bg-primary); }
+      }
+
+      // The wrapper for the preferences submit & cancel buttons
+      .prefs-submit-group { clear: both; }
+
+      .changelog {
+          border:1px solid var(--grey-4);
+          border-radius:2px;
+      }
+
+      // Positioning of the paper margin text elements
+      div.paper {
+          position:relative;
+          &.a4paper { border: 1px solid black; }
+
+          .error {
+              background-color: var(--bg-error);
+              color: var(--fg-error);
+              border: 1px solid var(--fg-error);
+              border-radius: 5px;
+          }
+      }
+
+      // Tabs styles
+      .ui-tabs-nav {
+          border-bottom:1px solid var(--grey-1);
+
+          .ui-tabs-tab {
+              line-height:200%;
+              border-top-left-radius: @border-radius;
+              border-top-right-radius: @border-radius;
+
+              &.ui-tabs-active {
+                background-color: var(--c-primary);
+                a { color: white; }
+              }
+
+              a, &.ui-tabs-active:hover a {
+                  color: white;
+                  text-decoration: none;
+                  text-align: center;
+              }
+
+              &:hover { background-color: var(--grey-7); }
+          }
+      }
+
+      // Dictionary list styles
+      ul.dicts-list {
+          margin: 0px;
+          border: 1px solid var(--grey-2);
+          padding: 0;
+          border-radius: 5px;
+          border-top-left-radius: 0px;
+          border-top-right-radius: 0px;
+
+          li.dicts-list-item {
+              padding: 10px;
+              font-weight: bold;
+              margin: 0;
+              background-color: var(--grey-7);
+              border-bottom: 1px solid var(--grey-2);
+
+              &:hover { background-color: var(--grey-5); }
+              &:last-child { border-bottom: none; }
+          }
+      }
+
+      ul.user-dict {
+        margin: 0px;
+        border: 1px solid var(--grey-2);
+        padding: 0;
+        border-radius: 5px;
+
+        li.user-dict-item {
+          position: relative;
+          border-bottom: 1px solid var(--grey-2);
+
+          clr-icon {
+            color: var(--red-5);
+          }
+
+          &:hover { background-color: var(--red-0); color: white; }
+        }
+      }
+
+      input.dicts-list-search {
+          border:1px solid var(--grey-2);
+          background-color: var(--grey-7);
+          border-bottom: none;
+          font-size: inherit;
+          display: block;
+          margin: 0;
+          padding: 10px;
+          border-radius: 5px;
+          border-bottom-left-radius: 0px;
+          border-bottom-right-radius: 0px;
+      }
+
+      .selected-dict {
+          color: white;
+          cursor: pointer;
+          background-color: var(--c-primary);
+          border-radius: 5px;
+          padding: 5px 10px;
+          margin: 5px;
+          border: 1px solid var(--c-primary-shade);
+
+          &:after {
+              content: "\00d7"; // &times;
+              font-size: 150%;
+              padding: 0px 5px;
+              color: var(--c-primary-shade);
+              line-height: 50%;
+              vertical-align: baseline;
+          }
+
+          &:hover {
+              background-color: darken(@c-primary, 10%);
+              border-color: darken(@c-primary-shade, 10%);
+
+              &:after {
+                  color: darken(@c-primary-shade, 10%);
+              }
+          }
+      }
+
+      // Tag cloud related stuff
+      .tag {
+        display: inline-block;
+        background-color: lighten(@c-primary, 10%);
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: @border-radius;
+        border-bottom: 3px solid var(--c-primary);
+        border-right: 3px solid var(--c-primary);
+        color: var(grey-8);
+        padding: 5px;
+        margin: 5px;
+        transition: 0.1s all ease;
+
+        &:hover {
+          background-color: var(--c-primary);
+          border-color: darken(@c-primary, 10%);
+        }
+
+        small {
+          // <small>s are the tag count
+          color: darken(@c-primary, 20%);
+          margin-left: 5px;
+        }
+      }
+
+  } // END .dialog
+} // END .modal
