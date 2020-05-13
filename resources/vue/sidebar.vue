@@ -435,8 +435,7 @@ module.exports = {
 
       // Create instances for all elements without already existing
       // tippy-instances.
-      // eslint-disable-next-line no-undef
-      tippy('#sidebar [data-tippy-content]', {
+      window.tippy('#sidebar [data-tippy-content]', {
         delay: 100,
         arrow: true,
         duration: 100,

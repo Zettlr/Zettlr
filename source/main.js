@@ -138,8 +138,14 @@ app.on('open-file', (e, p) => {
  * else. It is necessary to wait for the ready event, because prior, some APIs
  * may not work correctly.
  */
-app.on('ready', function () {
+app.whenReady().then(() => {
   global.log.info('Electron reports ready state. Instantiating main process...')
+
+  // Load Vue developer extension
+  installExtension(VUEJS_DEVTOOLS)
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.log('An error occurred: ', err))
+
   zettlr = new Zettlr()
 })
 
@@ -169,15 +175,6 @@ app.on('will-quit', async function (event) {
  */
 app.on('activate', function () {
   zettlr.openWindow()
-})
-
-/**
- * Load Vue developer extension
- */
-app.whenReady().then(() => {
-  installExtension(VUEJS_DEVTOOLS)
-    .then((name) => console.log(`Added Extension:  ${name}`))
-    .catch((err) => console.log('An error occurred: ', err))
 })
 
 /**
