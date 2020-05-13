@@ -871,6 +871,9 @@ class ZettlrEditor {
     // Last but not least set the Zettelkasten options
     this._cm.setOption('zkn', global.config.get('zkn'))
 
+    // Fire the renderers in order to apply potential changed styles and settings
+    this._fireRenderers()
+
     return this
   }
 

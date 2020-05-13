@@ -49,6 +49,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Fixed searches behaving irrationally if you search again while the previous search has not yet ended.
 - Switched to using the [Clarity Design](https://clarity.design/icons) icon set where possible.
 - Sort buttons now show how the directory is currently sorted. One shows and toggles what is being sorted by (name or time). The other shows and toggles what direction is being sorted ine (ascending or descending).
+- Modified display settings are now applied on configuration changes (not just after clicking somewhere in the document).
 
 ## Under the Hood
 

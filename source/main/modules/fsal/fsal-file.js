@@ -117,7 +117,7 @@ async function parseFile (filePath, cache, parent = null) {
   try {
     // Get lstat
     let stat = await fs.lstat(filePath)
-    file.modtime = stat.ctimeMs
+    file.modtime = stat.mtimeMs // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
     file.creationtime = stat.birthtimeMs
   } catch (e) {
     global.log.error('Error reading file ' + filePath, e)
@@ -240,6 +240,10 @@ async function searchFile (fileObject, terms) {
 module.exports = {
   'metadata': function (fileObject) {
     return metadata(fileObject)
+  },
+  'hasChangedOnDisk': async function (fileObject) {
+    let stat = await fs.lstat(fileObject.path)
+    return stat.mtimeMs !== fileObject.mtimeMs
   },
   'load': async function (fileObject) {
     // Loads the content of a file from disk

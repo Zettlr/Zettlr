@@ -478,21 +478,28 @@ module.exports = class FSAL extends EventEmitter {
         directoryToUpdate = descriptor
       }
     } else if (event === 'change') {
-      console.log('Changing file')
-      // A file has been changed (its contents) --> replace it
-      let newfile = await FSALFile.parse(changedPath, this._cache, descriptor.parent)
-      let parent = descriptor.parent
-      parent.children.splice(parent.children.indexOf(descriptor), 1, newfile)
-      FSALDir.sort(parent)
-      isFileUpdateNeeded = true
-      fileToUpdate = newfile
-      // In case the file was open, also replace it in the openFiles array
-      if (isOpenFile) {
-        // Tell the editor to both update the open files and
-        // the file contents of the new file
-        this._state.openFiles.splice(this._state.openFiles.indexOf(descriptor), 1, newfile)
-        this.emit('fsal-state-changed', 'fileContents', { 'hash': hash(changedPath) })
-        this.emit('fsal-state-changed', 'openFiles')
+      // We have to make sure the "change" event was appropriate
+      // This is DEBUG as of now (See issue #773 for more information)
+      let hasChangedOnDisk = await FSALFile.hasChangedOnDisk(descriptor)
+      if (!hasChangedOnDisk) {
+        global.log.info(`The change ${descriptor.name} has not changed, but a change event was fired by chokidar.`)
+      } else {
+        console.log('Changing file')
+        // A file has been changed (its contents) --> replace it
+        let newfile = await FSALFile.parse(changedPath, this._cache, descriptor.parent)
+        let parent = descriptor.parent
+        parent.children.splice(parent.children.indexOf(descriptor), 1, newfile)
+        FSALDir.sort(parent)
+        isFileUpdateNeeded = true
+        fileToUpdate = newfile
+        // In case the file was open, also replace it in the openFiles array
+        if (isOpenFile) {
+          // Tell the editor to both update the open files and
+          // the file contents of the new file
+          this._state.openFiles.splice(this._state.openFiles.indexOf(descriptor), 1, newfile)
+          this.emit('fsal-state-changed', 'fileContents', { 'hash': hash(changedPath) })
+          this.emit('fsal-state-changed', 'openFiles')
+        }
       }
     } else if ([ 'unlink', 'unlinkDir' ].includes(event)) {
       console.log('Removing file or directory')
