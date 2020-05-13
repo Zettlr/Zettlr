@@ -1,11 +1,15 @@
 <template>
   <div class="sorter">
-    <span class="sortName" v-on:click.stop="toggleSorting('name')">
-      <span v-html="sortingNameIcon"></span>
+    <clr-icon
+      class="sortType"
+      v-on:click.stop="toggleType()"
+      v-bind:shape="type">
       <!-- Same line to remove the nbsp added by Chrome -->
-    </span><span class="sortTime" v-on:click.stop="toggleSorting('time')">
-      <span v-html="sortingTimeIcon"></span>
-    </span>
+    </clr-icon><clr-icon
+      class="sortDirection"
+      v-on:click.stop="toggleDirection()"
+      shape="sort-by"
+      v-bind:flip="flip"></clr-icon>
   </div>
 </template>
 
@@ -16,13 +20,24 @@ module.exports = {
   ],
   name: 'sorter',
   computed: {
-    sortingNameIcon: function () { return (this.sorting === 'name-up') ? '&#xf1c2;' : '&#xf1c1;' },
-    sortingTimeIcon: function () { return (this.sorting === 'time-up') ? '&#xf1c3;' : '&#xf1c4;' }
+    type: function () { return this.sorting.startsWith('time') ? 'clock' : 'text' },
+    flip: function () { return this.sorting.endsWith('up') ? 'vertical' : '' }
   },
   methods: {
-    toggleSorting: function (type) {
-      this.$parent.toggleSorting(type)
-    }
+    toggleType: function () {
+      if (this.sorting.startsWith('time')) {
+        this.$emit('sort-change', this.sorting.replace('time', 'name'))
+      } else {
+        this.$emit('sort-change', this.sorting.replace('name', 'time'))
+      }
+    },
+    toggleDirection: function () {
+      if (this.sorting.endsWith('up')) {
+        this.$emit('sort-change', this.sorting.replace('up', 'down'))
+      } else {
+        this.$emit('sort-change', this.sorting.replace('down', 'up'))
+      }
+    },
   }
 }
 </script>

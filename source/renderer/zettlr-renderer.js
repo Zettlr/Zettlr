@@ -31,6 +31,8 @@ const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
 
 const reconstruct = require('./util/reconstruct-tree')
 
+const loadicons = require('./util/load-icons')
+
 const path = require('path')
 
 // Pull the poll-time from the data
@@ -50,6 +52,9 @@ class ZettlrRenderer {
     this._currentDir = null
     this._paths = null
     this._lang = 'en-US' // Default fallback
+
+    // Stores the current global search in order to access it.
+    this._currentSearch = null
 
     // Write translation data into renderer process's global var
     loadI18nRenderer()
@@ -124,6 +129,10 @@ class ZettlrRenderer {
 
     // Here we can init actions and stuff to be done after the startup has finished
     setTimeout(() => { this.poll() }, POLL_TIME) // Poll every POLL_TIME seconds
+
+    // Load the clarity icon modules, add custom icons and then refresh
+    // attachments (because it requires custom icons to be loaded).
+    setTimeout(() => loadicons().then(() => this._attachments.refresh()), 0)
   }
 
   /**
@@ -406,6 +415,9 @@ class ZettlrRenderer {
    * @return {void}      Nothing to return.
    */
   beginSearch (term) {
+    // If there is a search running, set the interrupt flag
+    if (this._currentSearch) this._currentSearch.setInterrupt()
+
     // First end any search in the store, if applicable.
     global.store.commitEndSearch()
 
@@ -418,8 +430,8 @@ class ZettlrRenderer {
     // Now perform the actual search. For this we'll create a new search
     // object and pass all necessary data to it.
     let dirContents = this._store.getVuex().getters.currentDirectoryContent
-    let search = new GlobalSearch(term)
-    search.with(
+    this._currentSearch = new GlobalSearch(term)
+    this._currentSearch.with(
       // Filter by file and then only retain the hashes
       dirContents.filter(elem => elem.type === 'file').map(elem => elem.hash)
     ).each((elem, compiledSearchTerms) => {
@@ -544,7 +556,7 @@ class ZettlrRenderer {
       file = {}
     }
     file.content = this._editor.getValue()
-    file.wordcount = this._editor.getWrittenWords() // For statistical purposes only =D
+    file.wordcount = this._editor.getWrittenWords()
     this._ipc.send('file-save', file)
   }
 
@@ -711,12 +723,12 @@ class ZettlrRenderer {
   /**
    * Simply indicates to main to set the modified flag.
    */
-  setModified () { this._ipc.send('file-modified', {}) }
+  setModified (hash) { this._ipc.send('file-modified', { 'hash': hash }) }
 
   /**
    * Instructs main to remove the edit flag.
    */
-  clearModified () { this._ipc.send('mark-clean') }
+  clearModified (hash) { this._ipc.send('mark-clean', { 'hash': hash }) }
 
   /**
    * Can tell whether or not the editor is modified.

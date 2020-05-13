@@ -1,6 +1,9 @@
 # Node modules
 node_modules
 
+# Package Lock
+package-lock.json
+
 # Compiled releases
 release
 

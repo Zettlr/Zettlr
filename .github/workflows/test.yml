@@ -17,17 +17,17 @@ jobs:
         node-version: '12.x'
     - name: Install packages in main and source directories
       # Simply use one single command for all that stuff and chain using &&
-      run: npm install && cd ./source && npm install && cd ..
+      run: yarn install --frozen-lockfile && cd ./source && yarn install --frozen-lockfile && cd ..
     - name: Run the unit tests
-      run: npm test
+      run: yarn test
     - name: Test template compilation # Can we successfully compile the templates?
-      run: npm run handlebars
+      run: yarn handlebars
     - name: Test stylesheet compilation # Does the LESS compile without errors?
-      run: npm run less
+      run: yarn less
     - name: Test webpack build
       # We're testing against the production build as this is what effectively matters during automated builds.
-      run: npm run wp:prod
+      run: yarn wp:prod
     - name: Test reveal.JS template pre-building
-      run: npm run reveal:build
+      run: yarn reveal:build
     - name: Test CSL refreshing
-      run: npm run csl:refresh
+      run: yarn csl:refresh

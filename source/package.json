@@ -9,11 +9,12 @@
         "type": "git",
         "url": "git://github.com/Zettlr/Zettlr.git"
     },
-    "version": "1.7.0-beta.1",
+    "version": "1.7.0-beta.2",
     "description": "A powerful Markdown Editor with integrated tree view",
     "license": "GPL-3.0",
     "main": "main.js",
     "dependencies": {
+        "@clr/icons": "^3.1.2",
         "@zettlr/citr": "^1.1.0",
         "adm-zip": "^0.4.14",
         "archiver": "^4.0.1",

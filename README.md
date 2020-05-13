@@ -117,13 +117,9 @@ This simply runs [ESLint](https://eslint.org/) with the configuration and output
 
 This command is basically `build:quick`, but additionally packages it for your platform. That means, it will spit out a `.deb`, `.rpm`, `.dmg` or `.exe`-installer, depending on your operating system.
 
-#### `release:app-image`
-
-Explicitly creates [AppImage](https://appimage.org/) installer. This command compiles both 32bit and 64bit versions.
-
 #### `release:linux`
 
-Explicitly creates installer packages for Linux, that is: One `.deb`-package and one `.rpm`-package.
+Explicitly creates installer packages for Linux, that is: One `.deb`-package, one `.rpm`-package as well as [AppImage](https://appimage.org/) installers (both 32bit and 64bit).
 
 #### `release:mac`
 

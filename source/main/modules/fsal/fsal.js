@@ -41,6 +41,7 @@ module.exports = class FSAL extends EventEmitter {
       // The app supports one open directory and (in theory) unlimited open files
       openDirectory: null,
       openFiles: [],
+      activeFile: null, // Can contain an active file (active in the editor)
       filetree: [] // Contains the full filetree
     }
 
@@ -74,6 +75,7 @@ module.exports = class FSAL extends EventEmitter {
         // NOTE: Generates 1x unlink, 1x add
         let oldHash = src.hash
         let isOpenFile = this._state.openFiles.find(e => e.hash === oldHash) !== undefined
+        let isRoot = src.parent == null
 
         this._watchdog.ignoreEvents({
           'event': 'unlink',
@@ -86,8 +88,8 @@ module.exports = class FSAL extends EventEmitter {
 
         await FSALFile.rename(src, options)
         // Now we need to re-sort the parent directory
-        // TODO: Only do if it's not a root! And if it's a root, we have to do our open paths as well etc etc
-        await FSALDir.sort(src.parent) // Omit sorting
+        if (!isRoot) await FSALDir.sort(src.parent) // Omit sorting
+
         // Notify of a state change
         this.emit('fsal-state-changed', 'filetree')
         // If applicable, trigger a file synchronisation
@@ -103,7 +105,7 @@ module.exports = class FSAL extends EventEmitter {
         })
         await FSALFile.remove(src)
         // Will trigger a change that syncs the files
-        this.closeFile(src)
+        this.closeFile(src) // Does nothing if the file is not open
       },
       'save-file': async (src, target, options) => {
         // NOTE: Generates 1x chance
@@ -112,6 +114,9 @@ module.exports = class FSAL extends EventEmitter {
           'path': src.path
         })
         await FSALFile.save(src, options)
+        // Notify that a file has saved, which strictly speaking does not
+        // modify the openFiles array, but does change the modification flag.
+        this.emit('fsal-state-changed', 'fileSaved')
         return true
       },
       'search-file': async (src, target, options) => {
@@ -344,7 +349,6 @@ module.exports = class FSAL extends EventEmitter {
     })
 
     this._watchdog.on('change', async (event, changedPath) => {
-      // TODO: Check for ignored events
       // Buffer the event for later
       this._remoteChangeBuffer.push({ 'event': event, 'changedPath': changedPath })
 
@@ -432,6 +436,8 @@ module.exports = class FSAL extends EventEmitter {
         let index = descriptor.parent.children.indexOf(descriptor)
         descriptor.parent.children.splice(index, 1, newdir)
       }
+      // Make sure to pull potential new openFiles from the filetree
+      this._refetchOpenFiles()
       isDirectoryUpdateNeeded = true
       directoryToUpdate = descriptor
     } else if (isRoot && event === 'unlinkDir') {
@@ -523,12 +529,6 @@ module.exports = class FSAL extends EventEmitter {
       }
     } // END isOpenDir
 
-    console.log('isDirectoryUpdateNeeded:', isDirectoryUpdateNeeded)
-    console.log('isFileUpdateNeeded:', isFileUpdateNeeded)
-    console.log('isTreeUpdateNeeded:', isTreeUpdateNeeded)
-    console.log('isOpenFile:', isOpenFile)
-    console.log('isOpenDir:', isOpenDir)
-
     // Finally, trigger all necessary events
     if (isDirectoryUpdateNeeded) {
       // console.log('Triggering directory update!')
@@ -563,6 +563,16 @@ module.exports = class FSAL extends EventEmitter {
       let event = this._remoteChangeBuffer.shift()
       this._onRemoteChange(event.event, event.changedPath).catch(e => console.error(e))
     }
+  }
+
+  /**
+   * Re-fetches all open files from the current file tree. This is necessary if
+   * a directory was re-read as the directory's children could (have) been open
+   * and in that case one or more of the openFiles are not present in the
+   * filetree anymore. This fixes that.
+   */
+  _refetchOpenFiles () {
+    this._state.openFiles = this._state.openFiles.map(e => this.findFile(e.hash))
   }
 
   /**
@@ -717,6 +727,7 @@ module.exports = class FSAL extends EventEmitter {
    */
   openFile (file) {
     if (this._state.openFiles.includes(file)) return false
+    console.log('FIle ' + file.name + ' is now open')
     this._state.openFiles.push(file)
     this.emit('fsal-state-changed', 'openFiles')
     return true
@@ -730,10 +741,33 @@ module.exports = class FSAL extends EventEmitter {
     if (this._state.openFiles.includes(file)) {
       this._state.openFiles.splice(this._state.openFiles.indexOf(file), 1)
       this.emit('fsal-state-changed', 'openFiles')
+      console.log('FIle ' + file.name + ' is now closed')
       return true
     } else {
       return false
     }
+  }
+
+  /**
+   * Sets the active file pointer to the file identified by the hash.
+   * @param {number} hash The hash of the file to set as active
+   */
+  setActiveFile (hash) {
+    let file = this.findFile(hash)
+    if (file && this._state.openFiles.includes(file)) {
+      this._state.activeFile = file
+      this.emit('fsal-state-changed', 'activeFile')
+    } else {
+      console.log('Could not set active file: Either not found or not open.')
+    }
+  }
+
+  /**
+   * Returns the hash of the currently active file.
+   * @returns {number} The hash of the active file.
+   */
+  getActiveFile () {
+    return (this._state.activeFile) ? this._state.activeFile.hash : null
   }
 
   /**
@@ -751,6 +785,41 @@ module.exports = class FSAL extends EventEmitter {
     let returnFile = FSALFile.metadata(file)
     returnFile.content = await FSALFile.load(file)
     return returnFile
+  }
+
+  /**
+   * Sets the modification flag on an open file
+   */
+  markDirty (file) {
+    if (!this._state.openFiles.includes(file)) {
+      console.error('Cannot mark dirty a non-open file!')
+      return false
+    }
+
+    return FSALFile.markDirty(file)
+  }
+
+  /**
+   * Removes the modification flag on an open file
+   */
+  markClean (file) {
+    if (!this._state.openFiles.includes(file)) {
+      console.error('Cannot mark clean a non-open file!')
+      return false
+    }
+
+    return FSALFile.markClean(file)
+  }
+
+  /**
+   * Returns true if none of the open files have their modified flag set.
+   */
+  isClean () {
+    for (let openFile of this._state.openFiles) {
+      if (openFile.modified) console.log('NOT CLEAN: ' + openFile.name)
+      if (openFile.modified) return false
+    }
+    return true
   }
 
   /**

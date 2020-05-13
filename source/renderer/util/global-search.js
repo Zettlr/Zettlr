@@ -28,6 +28,8 @@ class GlobalSearch {
     this._beforeSearchCallback = null
     this._afterSearchCallback = null
 
+    this._interrupt = false // If this flag is set, the doSearch function will break
+
     // The search index will be increased BEFORE accessing the first file!
     this._currentSearchIndex = -1
 
@@ -105,6 +107,8 @@ class GlobalSearch {
       return
     }
 
+    if (this._interrupt) return // An interrupt will prematurely break searching
+
     this._currentSearchIndex++
 
     // Now call the provided callback and handle the search result once it
@@ -123,6 +127,8 @@ class GlobalSearch {
     * @return {void}     Nothing to return.
     */
   handleSearchResult (res) {
+    if (this._interrupt) return // An interrupt will prematurely break searching
+
     if (res.result.length > 0) {
       this._results.push(res) // For later reference
       let w = 0
@@ -151,6 +157,13 @@ class GlobalSearch {
     this._currentSearch = null
 
     if (this._afterCallback) this._afterCallback(this._results)
+  }
+
+  /**
+   * Sets the interrupt flag if called in order to break a running search.
+   */
+  setInterrupt () {
+    this._interrupt = true
   }
 }
 
