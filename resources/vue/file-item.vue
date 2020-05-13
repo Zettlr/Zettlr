@@ -63,7 +63,7 @@
   module.exports = {
     name: 'file-item',
     // Bind the actual object to the container
-    props: [ 'obj' ],
+    props: ['obj'],
     data: () => {
       return {
         hover: false // True as long as the user hovers over the element
@@ -186,7 +186,7 @@
           global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': sorting })
         },
         beginDragging: function (event) {
-          if (event.ctrlKey || event.altKey) {
+          if (event.ctrlKey || event.altKey) {
             // If the alt key was pressed when the drag begins, initiate
             // an out-of-window drag
             global.ipc.send('file-drag-start', { 'hash': this.obj.hash })

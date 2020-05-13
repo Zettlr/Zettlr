@@ -22,7 +22,7 @@
 
 <script>
 module.exports = {
-  props: [ 'tags' ],
+  props: ['tags'],
   data: () => {
     return {
       // Nothing in here

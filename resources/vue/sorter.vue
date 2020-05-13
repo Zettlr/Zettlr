@@ -37,7 +37,7 @@ module.exports = {
       } else {
         this.$emit('sort-change', this.sorting.replace('down', 'up'))
       }
-    },
+    }
   }
 }
 </script>

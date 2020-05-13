@@ -105,7 +105,7 @@ module.exports = {
     /**
      * Returns true if this is a directory
      */
-    isDirectory: function () { return 'directory' === this.obj.type },
+    isDirectory: function () { return this.obj.type === 'directory' },
     /**
      * Shortcut methods to access the store
      */
@@ -136,7 +136,7 @@ module.exports = {
      */
     classList: function () {
       let list = 'list-item ' + this.obj.type
-      if ([this.selectedFile, this.selectedDir].includes(this.obj.hash)) list += ' selected'
+      if ([ this.selectedFile, this.selectedDir ].includes(this.obj.hash)) list += ' selected'
       if (this.obj.project) list += ' project'
       // Determine if this is a root component
       if (this.isRoot) list += ' root'
