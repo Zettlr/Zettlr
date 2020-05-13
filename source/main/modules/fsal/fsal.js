@@ -482,7 +482,7 @@ module.exports = class FSAL extends EventEmitter {
       // This is DEBUG as of now (See issue #773 for more information)
       let hasChangedOnDisk = await FSALFile.hasChangedOnDisk(descriptor)
       if (!hasChangedOnDisk) {
-        global.log.info(`The change ${descriptor.name} has not changed, but a change event was fired by chokidar.`)
+        global.log.info(`The file ${descriptor.name} has not changed, but a change event was fired by chokidar.`)
       } else {
         console.log('Changing file')
         // A file has been changed (its contents) --> replace it
