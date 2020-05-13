@@ -29,11 +29,6 @@
   },
   {
     "scope": "directory",
-    "label": "menu.new_vd",
-    "command": "dir-new-vd"
-  },
-  {
-    "scope": "directory",
     "type": "separator"
   },
   {
