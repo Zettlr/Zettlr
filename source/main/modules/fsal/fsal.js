@@ -579,7 +579,14 @@ module.exports = class FSAL extends EventEmitter {
    * filetree anymore. This fixes that.
    */
   _refetchOpenFiles () {
-    this._state.openFiles = this._state.openFiles.map(e => this.findFile(e.hash))
+    let oldHashes = this._state.openFiles.map(e => e.hash)
+    this._state.openFiles = this._state.openFiles.map(e => this.findFile(e.hash)).filter(e => e != null)
+
+    // In case the hashes don't match again (e.g. files have been removed or
+    // added, notify the main process.)
+    if (this._state.openFiles.map(e => e.hash) !== oldHashes) {
+      this.emit('fsal-state-changed', 'openFiles')
+    }
   }
 
   /**
@@ -661,7 +668,15 @@ module.exports = class FSAL extends EventEmitter {
     }
 
     this._state.filetree = []
+    this._state.openFiles = []
+    this._state.openDirectory = null
+    this._state.activeFile = null
+
+    // Emit as if there was no morning after!
     this.emit('fsal-state-changed', 'filetree')
+    this.emit('fsal-state-changed', 'openFiles')
+    this.emit('fsal-state-changed', 'openDirectory')
+    this.emit('fsal-state-changed', 'activeFile')
   }
 
   /**
@@ -686,6 +701,9 @@ module.exports = class FSAL extends EventEmitter {
     this._state.filetree.splice(this._state.filetree.indexOf(root), 1)
     this._watchdog.unwatch(root.path)
     this.emit('fsal-state-changed', 'filetree')
+
+    // Make sure to keep the openFiles array updated.
+    this._refetchOpenFiles()
     return true
   }
 
