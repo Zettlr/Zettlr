@@ -49,9 +49,6 @@ const Zettlr = require('./main/zettlr.js')
 const isFile = require('./common/util/is-file')
 const ignoreFile = require('./common/util/ignore-file')
 
-// Developer tools
-const { default: installExtension, VUEJS_DEVTOOLS } = require('electron-devtools-installer')
-
 // Introduce v8 code caching
 require('v8-compile-cache')
 
@@ -141,10 +138,16 @@ app.on('open-file', (e, p) => {
 app.whenReady().then(() => {
   global.log.info('Electron reports ready state. Instantiating main process...')
 
-  // Load Vue developer extension
-  installExtension(VUEJS_DEVTOOLS)
-    .then((name) => console.log(`Added Extension:  ${name}`))
-    .catch((err) => console.log('An error occurred: ', err))
+  try {
+    // Developer tools
+    const { default: installExtension, VUEJS_DEVTOOLS } = require('electron-devtools-installer')
+    // Load Vue developer extension
+    installExtension(VUEJS_DEVTOOLS)
+      .then((name) => global.log.info(`Added DevTools extension:  ${name}`))
+      .catch((err) => console.log('An error occurred: ', err))
+  } catch (e) {
+    global.log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
+  }
 
   zettlr = new Zettlr()
 })
