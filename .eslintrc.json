@@ -26,6 +26,24 @@
         "array-bracket-spacing": [ 2, "always", {
             "objectsInArrays": false,
             "singleValue": false
-        } ]
+        } ],
+        // Here follow vue-styles. While the short form is recommended
+        // I tend to value verbose code. At least for now, discussion is
+        // well received.
+        "vue/v-bind-style": [ "error", "longform" ],
+        "vue/v-on-style": [ "error", "longform" ],
+        "vue/component-tags-order": [ "error", {
+          "order": [ "template", "script", "style" ]
+        } ],
+        // Let the implementation decide if self-closing is wanted or not.
+        "vue/html-self-closing": [ "warn", {
+          "html": {
+            "void": "any",
+            "normal": "any",
+            "component": "any"
+          },
+          "svg": "any",
+          "math": "any"
+        }]
     }
 }
