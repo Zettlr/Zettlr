@@ -63,7 +63,7 @@ All other [platforms that Electron supports](https://www.electronjs.org/docs/tut
 
 ## Getting Started
 
-If you have downloaded Zettlr, [head over to our website](https://zettlr.com/docs) to get to know Zettlr. Refer to the [Quick Start Guide](https://zettlr.com/docs/quick-start), if you prefer to use software heads-on.
+If you have downloaded Zettlr, [head over to our website](https://docs.zettlr.com/) to get to know Zettlr. Refer to the [Quick Start Guide](https://docs.zettlr.com/en/5-minutes/), if you prefer to use software heads-on.
 
 ![The central window of Zettlr using the Night Theme](/resources/screenshots/zettlr_view_dark.png)
 
@@ -95,7 +95,7 @@ This command builds the app locally without packing it. This means that within t
 
 #### `csl:refresh`
 
-This downloads the [Citation Style Language](https://citationstyles.org/) (CSL) files with which the application is shipped, and places them in the `source/main/assets/csl-locales`- and `source/main/assets/csl-styles`-directories respectively. You can occasionally run this command to pull potential updates from the repositories.
+This downloads the [Citation Style Language](https://citationstyles.org/) (CSL) files with which the application is shipped, and places them in the `source/main/assets/csl-locales`- and `source/main/assets/csl-styles`-directories respectively. You can occasionally run this command to pull potential updates from the repositories. _Please note, that an automated workflow will run from time to time on the repository to do this, so in almost all cases it should suffice to pull from the develop branch from time to time._
 
 #### `handlebars`
 
@@ -103,7 +103,7 @@ This re-compiles the [Handlebars.js](https://handlebarsjs.com/) template files a
 
 #### `lang:refresh`
 
-This downloads the four default translations of the application from [Zettlr Translate](https://translate.zettlr.com/), with which it is shipped by default. It places the files in the `source/common/lang`-directory. Currently, the default languages are: German (Germany), English (USA), English (UK), and French (France).
+This downloads the four default translations of the application from [Zettlr Translate](https://translate.zettlr.com/), with which it is shipped by default. It places the files in the `source/common/lang`-directory. Currently, the default languages are: German (Germany), English (USA), English (UK), and French (France). _Please note, that an automated workflow will run from time to time on the repository to do this, so in almost all cases it should suffice to pull from the develop branch from time to time._
 
 #### `less`
 
