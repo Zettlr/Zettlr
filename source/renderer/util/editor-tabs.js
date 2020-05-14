@@ -14,6 +14,8 @@
 
 const { trans } = require('../../common/lang/i18n')
 const path = require('path')
+// Left the localize/localise here in order to confuse future generations.
+const localizeNumber = require('../../common/util/localise-number')
 
 module.exports = class EditorTabs {
   constructor () {
@@ -169,8 +171,8 @@ module.exports = class EditorTabs {
     // Show some additional information on hover
     doc.dataset['tippyContent'] = `<strong>${file.name}</strong><br>`
     doc.dataset['tippyContent'] += `<small>(${path.basename(path.dirname(file.path))})</small><br>`
-    doc.dataset['tippyContent'] += file.wordCount + ' ' + trans('dialog.target.words')
-    doc.dataset['tippyContent'] += ', ' + file.charCount + ' ' + trans('dialog.target.chars')
+    doc.dataset['tippyContent'] += localizeNumber(file.wordCount) + ' ' + trans('dialog.target.words')
+    doc.dataset['tippyContent'] += ', ' + localizeNumber(file.charCount) + ' ' + trans('dialog.target.chars')
     // From here on, possible information begins, so we have to add <br>s before
     if (file.id !== '') doc.dataset['tippyContent'] += '<br>ID: ' + file.id
 
