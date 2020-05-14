@@ -560,7 +560,7 @@ class ZettlrRenderer {
       file = {}
     }
     file.content = this._editor.getValue()
-    file.wordcount = this._editor.getWrittenWords()
+    file.wordCountOnSave = this._editor.getWrittenWords()
     this._ipc.send('file-save', file)
   }
 
