@@ -51,6 +51,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Sort buttons now show how the directory is currently sorted. One shows and toggles what is being sorted by (name or time). The other shows and toggles what direction is being sorted ine (ascending or descending).
 - Modified display settings are now applied on configuration changes (not just after clicking somewhere in the document).
 - Modals now also apply a dark theming if in dark mode.
+- Fixed image exports.
 
 ## Under the Hood
 

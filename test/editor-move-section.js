@@ -138,7 +138,6 @@ Text Section 4`
 describe('EditorUtility#moveSection()', function () {
   for (let i = 0; i < INPUT.length; i++) {
     it('should correctly move the defined section', function () {
-      console.log(editorMoveSection(INPUT[i], MOVE[i].from, MOVE[i].to))
       assert.strictEqual(editorMoveSection(INPUT[i], MOVE[i].from, MOVE[i].to), OUTPUT[i])
     })
   }

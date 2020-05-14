@@ -11,7 +11,6 @@
  * END HEADER
  */
 
-const isFile = require('./is-file')
 const path = require('path')
 
 /**
@@ -24,28 +23,22 @@ const path = require('path')
 module.exports = function (basePath, mdstring) {
   let imgRE = /^!\[(.*?)\]\((.+?)\)({.*})?$/gmi
   return mdstring.replace(imgRE, (match, p1, p2, p3, offset, string) => {
-    // Check if the path (p2) contains the absolute path. This is assumed
-    // in three cases:
-    // 1. The BasePath is the beginning of the given URL
-    // 2. The image path begins with either http(s) or file (i.e. protocols)
-    // 3. It's an actual file.
-    if (p2.indexOf(basePath) === 0 || /^(http|file)/.test(p2) || isFile(p2)) {
-      // It's already absolute (either local or remote)
-      // But we have to make sure a protocol is assigned for HTML exports to
-      // work properly.
-      try {
-        let tester = new URL(p2)
-        if (!tester.protocol || !/^(http|file)/.test(tester.protocol)) p2 = 'file://' + p2
-      } catch (e) {
-        // new URL() throws a type error if it's not a valid URL (also happens)
-        // in cases of absolute file paths.
-        // p2 = 'file://' + p2
-      }
-      return `![${p1}](${p2})${(p3 != null) ? p3 : ''}`
-    } else {
-      // Make it absolute
-      // return `![${p1}](file://${path.join(basePath, p2)})${(p3 != null) ? p3 : ''}`
-      return `![${p1}](${path.join(basePath, p2)})${(p3 != null) ? p3 : ''}`
+    // We'll make use of path for file system URIs, and the URL() constructor
+    // for web links. We know that new URL() will throw a TypeError if the URL
+    // is not valid, so we can distinct two cases: If URL does not throw, it's
+    // a valid URL and we can simply pass that one. But if it throws, use some
+    // path-magic to convert it into an absolute path.
+    try {
+      // Short explainer for "throwawayVariable": If we instantiate URL
+      // without "new" it'll throw an error always. But if we simply use "new"
+      // there may be side effects. So we'll stuff it into an unused variable
+      // and disable that line ...
+      let throwawayVariable = new URL(p2) // eslint-disable-line
+    } catch (e) {
+      // It's not a valid URL, so pathify it! Luckily, path.resolve does all
+      // the work for us.
+      p2 = path.resolve(basePath, p2)
     }
+    return `![${p1}](${p2})${(p3 != null) ? p3 : ''}`
   })
 }
