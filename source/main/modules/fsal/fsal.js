@@ -436,8 +436,6 @@ module.exports = class FSAL extends EventEmitter {
         let index = descriptor.parent.children.indexOf(descriptor)
         descriptor.parent.children.splice(index, 1, newdir)
       }
-      // Make sure to pull potential new openFiles from the filetree
-      this._refetchOpenFiles()
       isDirectoryUpdateNeeded = true
       directoryToUpdate = descriptor
     } else if (isRoot && event === 'unlinkDir') {
@@ -535,6 +533,11 @@ module.exports = class FSAL extends EventEmitter {
         }
       }
     } // END isOpenDir
+
+    // Make sure to pull potential new openFiles from the filetree. There is a
+    // variety of events that might change that list. We'll do this check here
+    // after everything that might have changed has changed for good.
+    this._refetchOpenFiles()
 
     // Finally, trigger all necessary events
     if (isDirectoryUpdateNeeded) {
