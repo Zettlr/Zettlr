@@ -23,10 +23,11 @@ module.exports = async function (options) {
   // and relative ones if we're exporting to the current (w/ absolute override possible).
   let willExportToSameDir = path.relative(options.dest, path.dirname(options.file.path)) === ''
   let absolutePathsOverride = options.hasOwnProperty('absoluteImagePaths') && options.absoluteImagePaths === true
+  let isTextBundle = [ 'textbundle', 'textpack' ].includes(options.format)
 
   // Allow overriding via explicitly set property on the options.
   let cnt = options.file.content
-  if (!willExportToSameDir || absolutePathsOverride) {
+  if (!willExportToSameDir || isTextBundle || absolutePathsOverride) {
     cnt = makeImgPathsAbsolute(path.dirname(options.file.path), cnt)
   }
 
