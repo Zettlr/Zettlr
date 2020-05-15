@@ -17,9 +17,17 @@
 @import "../theme-karl-marx-stadt/theme-main.less";
 
 // Primary colours
+@c-primary: #657b83;
+@c-primary-shade: #839496;
+@c-secondary: #002b36;
+@c-secondary-shade: #073642;
+
+// Also make them accessible to the root
 :root {
-  --c-primary: #657b83;
-  --c-primary-shade: #839496;
+  --c-primary: @c-primary;
+  --c-primary-shade: @c-primary-shade;
+  --c-secondary: @c-secondary;
+  --c-secondary-shade: @c-secondary-shade;
 }
 
 body {
@@ -45,15 +53,11 @@ body {
     .CodeMirror .cm-formatting-list-ol,
     .CodeMirror .cm-formatting-list-ul,
     .popup .search input.regexp {
-      font-family: 'Inconsolata', monospace;
+      font-family: @font-inconsolata;
     }
 
     .CodeMirror {
       // EDITOR SPECIFIC
-      .size-header-1 { font-size: 1.5em }
-      .size-header-2 { font-size: 1.2em }
-      .size-header-3 { font-size: 1em }
-
       // Formattings
       .cm-hr, .cm-em, .cm-strong,
       .cm-formatting-list-ul, .cm-formatting-list-ol { color: inherit; }
@@ -82,7 +86,7 @@ body {
       .cm-link, .cma { color: inherit; }
 
       .cm-table {
-        font-family: 'Inconsolata', monospace;
+        font-family: @font-inconsolata;
         font-weight: 400;
       }
     }
