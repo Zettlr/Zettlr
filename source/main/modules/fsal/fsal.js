@@ -153,42 +153,28 @@ module.exports = class FSAL extends EventEmitter {
         let openDirUpdateNeeded = false
         let newOpenDirHash
         let newFileHashes = []
-        if (src.type === 'directory') {
-          // A directory is being moved, so check the open files if something
-          // needs to change concerning them.
-          for (let file of this._state.openFiles) {
-            let found = this.findFile(file.hash, src)
-            if (found) {
-              // The file is in there, so we need to update the open files
-              openFilesUpdateNeeded = true
-              // Exchange the old directory path for the new one and compute
-              // its new hash
-              let newHash = hash(file.path.replace(src.parent.path, target.path))
-              newFileHashes.push(newHash)
-            } else {
-              // Nothing really to do
-              newFileHashes.push(file.hash)
-            }
-          }
-        } else if (src.type === 'file') {
-          if (this._state.openFiles.includes(src)) {
-            // The source is an open file, we need to account for that.
+        // A directory is being moved, so check the open files if something
+        // needs to change concerning them.
+        for (let file of this._state.openFiles) {
+          let found = this.findFile(file.hash, src)
+          if (found) {
+            // The file is in there, so we need to update the open files
             openFilesUpdateNeeded = true
-            let newHash = hash(src.path.replace(src.parent.path, target.path))
+            // Exchange the old directory path for the new one and compute
+            // its new hash
+            let newHash = hash(file.path.replace(path.dirname(src.path), target.path))
             newFileHashes.push(newHash)
-            newFileHashes = this._state.openFiles.map(e => e.hash)
-            newFileHashes.splice(newFileHashes.indexOf(src.hash), 1, newHash)
+          } else {
+            // Nothing really to do
+            newFileHashes.push(file.hash)
           }
         }
 
-        if (
-          src.type === 'directory' &&
-          (src === this._state.openDirectory ||
-          this.findDir(this._state.openDirectory.hash, src))
-        ) {
+        if (src === this._state.openDirectory ||
+          this.findDir(this._state.openDirectory.hash, src)) {
           // Compute the new hash and indicate an update is necessary
           openDirUpdateNeeded = true
-          newOpenDirHash = hash(this._state.openDirectory.path.replace(src.parent.path, target.path))
+          newOpenDirHash = hash(this._state.openDirectory.path.replace(path.dirname(src.path), target.path))
         }
 
         // Now that we have prepared potential updates,
@@ -217,11 +203,18 @@ module.exports = class FSAL extends EventEmitter {
 
         await FSALDir.rename(src, options, this._cache)
 
-        // Update the parent
-        this.emit('fsal-state-changed', 'directory', {
-          'oldHash': src.parent.hash,
-          'newHash': src.parent.hash
-        })
+        if (!src.parent) {
+          this.emit('fsal-state-changed', 'filetree')
+        } else {
+          // Update the parent
+          this.emit('fsal-state-changed', 'directory', {
+            'oldHash': src.parent.hash,
+            'newHash': src.parent.hash
+          })
+        }
+
+        // Make sure we have a correct set of open files
+        this._refetchOpenFiles()
 
         // Afterwards, let's see if we have to change something. These
         // functions will notify the application respectively.
