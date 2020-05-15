@@ -14,10 +14,19 @@
 
   var taskRE = /^(\s*)([-+*]) \[( |x)\] /g // Matches `- [ ]` and `- [x]`
   var taskMarkers = []
+  var currentDocID = null
 
   CodeMirror.commands.markdownRenderTasks = function (cm) {
     let i = 0
     let match
+
+    if (currentDocID !== cm.doc.id) {
+      currentDocID = cm.doc.id
+      for (let marker of taskMarkers) {
+        if (marker.find()) marker.clear()
+      }
+      taskMarkers = [] // Flush it away!
+    }
 
     // First remove links that don't exist anymore. As soon as someone
     // moves the cursor into the link, it will be automatically removed,

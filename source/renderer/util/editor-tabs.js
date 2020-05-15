@@ -132,18 +132,17 @@ module.exports = class EditorTabs {
   }
 
   _onClick (event) {
-    if (event.target.classList.contains('add-new-file')) {
-      // The user has clicked the "add new file" thingy
-      if (this._intentCallback) this._intentCallback(null, 'new-file')
-      return
-    }
+    let elem = event.target
+    // Make sure that the element is not somewhere inside the close span
+    if (elem.tagName === 'PATH') elem = elem.parentElement
+    if (elem.tagName === 'SVG') elem = elem.parentElement
+    // After these IFs we should have the clr-icon if the user clicked the X
 
-    if (event.target.getAttribute('id') === 'document-tabs') return // No file selected
-    let closeIntent = event.target.classList.contains('close')
-    let hash = event.target
-    if (!hash.classList.contains('document')) hash = hash.parentNode
-    hash = hash.dataset['hash']
-    console.log((closeIntent) ? 'Should close!' : 'Should select', hash)
+    if (elem.getAttribute('id') === 'document-tabs') return // No file selected
+
+    let closeIntent = elem.classList.contains('close')
+    if (!elem.classList.contains('document')) elem = elem.parentNode
+    let hash = elem.dataset['hash']
 
     // If given, call the callback
     if (this._intentCallback) {

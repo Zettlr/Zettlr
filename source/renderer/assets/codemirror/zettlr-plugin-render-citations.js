@@ -17,10 +17,19 @@
   // Pandoc citeproc.
   var citationRE = /(\[[^[\]]*@[^[\]]+\])|(?<=\s|^)(@[a-z0-9_:.#$%&\-+?<>~/]+)/gi
   var citeMarkers = [] // CiteMarkers
+  var currentDocID = null
   var Citr = require('@zettlr/citr')
 
   CodeMirror.commands.markdownRenderCitations = function (cm) {
     let match
+
+    if (currentDocID !== cm.doc.id) {
+      currentDocID = cm.doc.id
+      for (let marker of citeMarkers) {
+        if (marker.find()) marker.clear()
+      }
+      citeMarkers = [] // Flush it away!
+    }
 
     // First remove links that don't exist anymore. As soon as someone
     // moves the cursor into the link, it will be automatically removed,

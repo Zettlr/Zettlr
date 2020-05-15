@@ -17,6 +17,7 @@ const Table = require('../../util/table-helper.js');
   var tableMarkers = []
   var tables = []
   var tableHeadingRE = /(^[- ]+$)|(^[- +:]+$)|(^[- |:+]+$)/
+  var currentDocID = null
 
   CodeMirror.commands.markdownInsertTable = function (cm) {
     // A small command that inserts a 2x2 table at the current cursor position.
@@ -24,6 +25,15 @@ const Table = require('../../util/table-helper.js');
   }
 
   CodeMirror.commands.markdownRenderTables = function (cm) {
+    if (currentDocID !== cm.doc.id) {
+      currentDocID = cm.doc.id
+      for (let marker of tableMarkers) {
+        if (marker.find()) marker.clear()
+      }
+      tableMarkers = [] // Flush it away!
+      tables = []
+    }
+
     // First remove tables that don't exist anymore.
     let i = 0
     do {
