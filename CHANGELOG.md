@@ -52,6 +52,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Modified display settings are now applied on configuration changes (not just after clicking somewhere in the document).
 - Modals now also apply a dark theming if in dark mode.
 - Fixed image exports.
+- Fixed correct exporting of images when exporting to Textbundle and Textpack.
 
 ## Under the Hood
 
