@@ -103,6 +103,14 @@ class ZettlrToolbar {
 
     this._searchbar.on('focus', (e) => {
       this._autocomplete = this._renderer.getFilesInDirectory()
+      if (this._searchbar[0].value === '') {
+        // Let's prefill this with the selection from the editor if possible.
+        let selections = this._renderer.getEditor().getSelections()
+        if (selections.length > 0) {
+          this._searchbar[0].value = selections[0]
+          this._searchbar[0].select() // Ease of access
+        }
+      }
     })
 
     this._searchbar.on('blur', (e) => {
