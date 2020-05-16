@@ -50,15 +50,9 @@ function applyCache (origFile, cachedFile) {
  * @param {Object} origFile The file to cache
  */
 function cacheFile (origFile, cacheAdapter) {
-  let cache = {}
-  for (let prop of Object.keys(origFile)) {
-    // Save everything to the cache object except the parent to
-    // prevent circular structures throwing errors on persisting.
-    if (prop === 'parent') continue
-    cache[prop] = origFile[prop]
-  }
-
-  cacheAdapter.set(cache.hash, cache)
+  let copy = Object.assign({}, origFile)
+  delete copy.parent // Make sure not to store circular properties
+  cacheAdapter.set(origFile.hash, copy)
 }
 
 function metadata (fileObject) {
