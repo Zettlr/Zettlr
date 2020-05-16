@@ -781,6 +781,12 @@ class ZettlrEditor {
   }
 
   /**
+   * Tab switcher functions
+   */
+  selectNextTab () { this._tabs.selectNext() }
+  selectPrevTab () { this._tabs.selectPrevious() }
+
+  /**
    * Returns the file that is active (i.e. visible), but only the object, NOT the doc
    */
   getActiveFile () {

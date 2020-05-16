@@ -88,7 +88,6 @@ module.exports = class EditorTabs {
       return
     }
 
-    // files = files.map(elem => elem.fileObject) // Make it easier accessible
     for (let document of files) {
       let file = document.fileObject
       let isDocumentClean = document.cmDoc.isClean()
@@ -102,9 +101,8 @@ module.exports = class EditorTabs {
     let activeElem = this._div.getElementsByClassName('active')[0]
     if (activeElem.offsetLeft + activeElem.offsetWidth > tabbarWidth) {
       this._div.scrollLeft += activeElem.offsetLeft + activeElem.offsetWidth - tabbarWidth
-    } else if (activeElem.offsetLeft + activeElem.offsetWidth < 0) {
-      console.log('Scrolling! Active element is out of view (to the LEFT)')
-      // TODO: How do we do this?
+    } else if (activeElem.offsetLeft < this._div.scrollLeft) {
+      this._div.scrollLeft = activeElem.offsetLeft
     }
 
     // After synchronising, enable the tippy
@@ -129,6 +127,30 @@ module.exports = class EditorTabs {
         elem.classList.remove('modified')
       }
     }
+  }
+
+  /**
+   * Attempts to select the next tab, or start from the beginning if the
+   * active tab is already the last one.
+   */
+  selectNext () {
+    let active = this._div.querySelectorAll('.document.active')[0]
+    let next = active.nextElementSibling
+    if (!next) next = this._div.firstElementChild // Re-start from beginning
+    if (next) {
+      this._intentCallback(next.dataset['hash'], 'select')
+    }
+  }
+
+  /**
+   * Attempts to select the previous tab, or start from the end if the active
+   * tab is already the first one.
+   */
+  selectPrevious () {
+    let active = this._div.querySelectorAll('.document.active')[0]
+    let prev = active.previousElementSibling
+    if (!prev) prev = this._div.lastElementChild // Re-start from end
+    if (prev) this._intentCallback(prev.dataset['hash'], 'select')
   }
 
   _onClick (event) {

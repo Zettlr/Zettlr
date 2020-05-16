@@ -269,11 +269,6 @@
         "role": "minimize"
       },
       {
-        "label": "menu.tab_close",
-        "accelerator": "CmdOrCtrl+W",
-        "command": "attempt-close-tab"
-      },
-      {
         "label": "menu.win_close",
         "accelerator": "CmdOrCtrl+Shift+W",
         "role": "close"
@@ -281,6 +276,24 @@
       {
         "label": "menu.all_front",
         "role": "front"
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "label": "menu.tab_close",
+        "accelerator": "CmdOrCtrl+W",
+        "command": "attempt-close-tab"
+      },
+      {
+        "label": "menu.tab_previous",
+        "accelerator": "Ctrl+Shift+Tab",
+        "command": "select-previous-tab"
+      },
+      {
+        "label": "menu.tab_next",
+        "accelerator": "Ctrl+Tab",
+        "command": "select-next-tab"
       }
     ]
   },
