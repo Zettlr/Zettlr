@@ -50,11 +50,11 @@ class RecentDocsProvider extends EventEmitter {
         this._recentDocs = this._recentDocs.slice(0, 100)
 
         // Afterwards, refresh the menu
-        global.refreshMenu()
+        // global.refreshMenu()
 
         // Finally, announce the fact that the list of recent documents has
         // changed to whomever it may concern
-        this.emit('recent-docs-updated')
+        this.emit('update')
       },
       /**
        * Clears out the list of recent files
@@ -66,9 +66,9 @@ class RecentDocsProvider extends EventEmitter {
         if ([ 'darwin', 'win32' ].includes(process.platform)) {
           app.clearRecentDocuments()
         }
-        global.refreshMenu()
+        // global.refreshMenu()
         // Announce that the list of recent docs has changed
-        this.emit('recent-docs-updated')
+        this.emit('update')
         return true
       },
       /**
@@ -82,7 +82,15 @@ class RecentDocsProvider extends EventEmitter {
        * Queries the list of recent documents
        * @return {Boolean} Returns true if there is at least one recent document.
        */
-      hasDocs: () => { return this._recentDocs.length > 0 }
+      hasDocs: () => { return this._recentDocs.length > 0 },
+      /**
+       * Registers a callback for the given event
+       */
+      on: (event, callback) => { return this.on(event, callback) },
+      /**
+       * Deregisters a callback for the given event
+       */
+      off: (event, callback) => { return this.off(event, callback) }
     }
   }
 

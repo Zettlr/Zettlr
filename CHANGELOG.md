@@ -6,6 +6,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 
 * Your virtual directories will be gone after installing.
 * Projects will be incorporated into the `.ztr-directory`-files, which means that you need to extract these files (or backup them) if you plan to roll back to 1.6 or earlier, lest you will lose the project settings.
+* `Cmd/Ctrl+W` will now attempt to close open tabs first before closing the window. To close the main window directly, use `Cmd/Ctrl+Shift+W`.
 
 ## GUI and Functionality
 
@@ -80,6 +81,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - The Pandoc-command is now logged in its resolved state immediately before actually being run.
 - Windows installers are finally signed.
 - Switched back to the `package.json` configuration for electron-builder, because, well, Electron.
+- Fix a lot of unused and weirdly coded code.
 
 # 1.6.0
 

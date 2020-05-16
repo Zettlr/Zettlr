@@ -665,7 +665,6 @@ class ZettlrEditor {
     if (intent === 'close') {
       // Send the close request to main
       global.ipc.send('file-close', { 'hash': hash })
-      // this.close(hash)
     } else if (intent === 'select') {
       this._swapFile(hash)
     } else if (intent === 'new-file') {
@@ -763,6 +762,22 @@ class ZettlrEditor {
     this._tabs.syncFiles(this._openFiles, this._currentHash)
 
     return this
+  }
+
+  /**
+   * Attempts to close an open tab, and returns true if it did.
+   * @returns {boolean} True, if a tab has been closed, otherwise false.
+   */
+  attemptCloseTab () {
+    if (this._openFiles.length === 0) return false
+
+    if (!this._currentHash) return false
+
+    // Send the close request to main
+    global.ipc.send('file-close', { 'hash': this._currentHash })
+
+    // Indicate that we have indeed been able to close a tab
+    return true
   }
 
   /**
