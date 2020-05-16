@@ -49,12 +49,9 @@
         continue
       }
       if (imageMarkers[i] && imageMarkers[i].find() === undefined) {
-        console.log('removing image ...')
         // Marker is no longer present, so splice it
         imageMarkers.splice(i, 1)
       } else {
-        console.log('Pertaining image!')
-        console.log(imageMarkers[i])
         // Push the marker's actual _line_ (not the index) into the
         // rendered array.
         rendered.push(imageMarkers[i].find().from.line)

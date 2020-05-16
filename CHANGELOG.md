@@ -54,6 +54,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Fixed image exports.
 - Fixed correct exporting of images when exporting to Textbundle and Textpack.
 - Fixed revealJS presentations which now display Math.
+- Fixed the autocomplete behaviour, especially with cursor movement.
 
 ## Under the Hood
 
