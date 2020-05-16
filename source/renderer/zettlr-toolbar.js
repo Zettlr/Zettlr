@@ -66,7 +66,6 @@ class ZettlrToolbar {
   _act () {
     // Activate search function.
     this._searchbar.on('keyup', (e) => {
-      console.log(e.key)
       // In case the user is using an IME (for non-latin script) autocomplete
       // will not work correctly due to the way IMEs compose the letters. Which
       // is the keyword here, because if the isComposing flag is set, simply

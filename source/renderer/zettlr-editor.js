@@ -1270,12 +1270,6 @@ class ZettlrEditor {
   }
 
   /**
-   * Returns the current value of the editor.
-   * @return {String} The current editor contents.
-   */
-  getValue () { return this._cm.getValue() }
-
-  /**
    * This method can be used to insert some text at the current cursor position.
    * ATTENTION: It WILL overwrite any given selection!
    * @param  {String} text The text to insert
@@ -1346,6 +1340,17 @@ class ZettlrEditor {
     * Refresh the CodeMirror instance
     */
   refresh () { this._cm.refresh() }
+
+  /**
+   * Returns the current value of the editor.
+   * @return {String} The current editor contents.
+   */
+  getValue () { return this._cm.getValue() }
+
+  /**
+   * Returns all selections in the current document.
+   */
+  getSelections () { return this._cm.doc.getSelections() }
 
   /**
    * Get the CodeMirror instance

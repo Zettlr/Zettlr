@@ -56,6 +56,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Fixed correct exporting of images when exporting to Textbundle and Textpack.
 - Fixed revealJS presentations which now display Math.
 - Fixed the autocomplete behaviour, especially with cursor movement.
+- If there is a selection in the document, its contents are used to fill in the search field now. Furthermore, the occurrences of the search term are now already highlighted without you having to search first.
 
 ## Under the Hood
 
