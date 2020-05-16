@@ -53,6 +53,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Modals now also apply a dark theming if in dark mode.
 - Fixed image exports.
 - Fixed correct exporting of images when exporting to Textbundle and Textpack.
+- Fixed revealJS presentations which now display Math.
 
 ## Under the Hood
 
