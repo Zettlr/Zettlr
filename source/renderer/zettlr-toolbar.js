@@ -15,7 +15,16 @@
 
 const localiseNumber = require('../common/util/localise-number')
 const { trans } = require('../common/lang/i18n')
-// const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
+
+/**
+ * The following keys do not trigger the autocomplete on the searchbar
+ */
+const NON_TRIGGERING_KEYS = [
+  'Alt', 'AltGraph', 'CapsLock', 'Control', 'Fn', 'FnLock', 'Hyper', 'Meta',
+  'NumLock', 'ScrollLock', 'Shift', 'Super', 'ArrowDown', 'ArrowLeft',
+  'ArrowRight', 'ArrowUp', 'End', 'Home', 'PageDown', 'PageUp', 'Backspace',
+  'Delete', 'Insert', 'Undo', 'Redo', 'Copy', 'Paste', 'Cut'
+]
 
 /**
  * This class is responsible for rendering the Toolbar. It builds the toolbar
@@ -63,17 +72,17 @@ class ZettlrToolbar {
       // don't handle that event and wait for the compositionend-event to fire
       // on the textfield for the magic to happen!
       if (e.originalEvent.isComposing) return
-      if (e.which === 8 || e.which === 46) return // DEL or backspace has been pressed
+      // Check for non triggering keys
+      if (NON_TRIGGERING_KEYS.includes(e.key)) return
 
-      if (e.which === 27) { // ESC
+      if (e.key === 'Escape') {
         this._searchbar.blur()
         this._searchbar.val('')
         this._renderer.exitSearch()
-      } else if (e.which === 13) { // RETURN
+      } else if (e.key === 'Enter') {
         this._renderer.beginSearch(this._searchbar.val())
         this._searchbar.select() // Select everything in the area.
       } else {
-        // In any other case, apply autocomplete
         this._applyAutocomplete()
       }
     })
@@ -94,6 +103,14 @@ class ZettlrToolbar {
 
     this._searchbar.on('focus', (e) => {
       this._autocomplete = this._renderer.getFilesInDirectory()
+      if (this._searchbar[0].value === '') {
+        // Let's prefill this with the selection from the editor if possible.
+        let selections = this._renderer.getEditor().getSelections()
+        if (selections.length > 0) {
+          this._searchbar[0].value = selections[0]
+          this._searchbar[0].select() // Ease of access
+        }
+      }
     })
 
     this._searchbar.on('blur', (e) => {
@@ -160,25 +177,25 @@ class ZettlrToolbar {
    * executed after the endcomposing-event fires.
    */
   _applyAutocomplete () {
-    if ((this._searchbar.val() === '') || (this._searchbar.val() === this._oldval)) return // Content has not changed
+    let elem = this._searchbar[0]
+    if ((elem.value === '') || (elem.value === this._oldval)) return // Content has not changed
 
     // First, get the current value of the searchbar
-    this._oldval = this._searchbar.val()
+    this._oldval = elem.value
 
     // Then test if the current value equals the (lowercased) beginning of any
     // autocorrect name we have in memory. If it does, replace it and select
     // everything afterwards.
     for (let name of this._autocomplete) {
       if (name.substr(0, this._oldval.length).toLowerCase() === this._oldval.toLowerCase()) {
-        this._searchbar.val(this._oldval + name.substr(this._oldval.length)).select().focus()
-        let e = this._searchbar[0] // Retrieve actual DOM element
-        if (e.setSelectionRange) {
-          e.setSelectionRange(this._oldval.length, this._searchbar.val().length)
+        elem.value = this._oldval + name.substr(this._oldval.length)
+        if (elem.setSelectionRange) {
+          elem.setSelectionRange(this._oldval.length, elem.value.length)
         }
         break
       }
     }
-    this._oldval = this._searchbar.val() // Now this is the "old value"
+    this._oldval = elem.value // Now this is the "old value"
   }
 
   /**

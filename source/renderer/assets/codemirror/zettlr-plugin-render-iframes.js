@@ -14,10 +14,19 @@
 
   var iframeRE = /^<iframe.*?>.*?<\/iframe>$/i // Matches all iframes
   var iframeMarkers = []
+  var currentDocID = null
 
   CodeMirror.commands.markdownRenderIframes = function (cm) {
     let i = 0
     let match
+
+    if (currentDocID !== cm.doc.id) {
+      currentDocID = cm.doc.id
+      for (let marker of iframeMarkers) {
+        if (marker.find()) marker.clear()
+      }
+      iframeMarkers = [] // Flush it away!
+    }
 
     // First remove iFrames that don't exist anymore. As soon as someone
     // moves the cursor into the link, it will be automatically removed,

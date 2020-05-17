@@ -13,45 +13,89 @@
  */
 
 <template>
-  <div class="container" v-on:mouseenter="hover=true" v-on:mouseleave="hover=false" v-bind:style="getStyle">
+  <div
+    class="container"
+    v-bind:style="getStyle"
+    v-on:mouseenter="hover=true"
+    v-on:mouseleave="hover=false"
+  >
     <div
-    v-bind:class="classList"
-    v-bind:data-hash="getHash"
-    v-bind:data-id="getId"
-    v-bind:data-filename="getFilename"
-    v-on:click="requestSelection"
-    v-bind:draggable="isDraggable"
-    v-on:dragstart.stop="beginDragging"
-    v-on:dragend.stop="stopDragging"
+      v-bind:class="classList"
+      v-bind:data-hash="getHash"
+      v-bind:data-id="getId"
+      v-bind:data-filename="getFilename"
+      v-bind:draggable="isDraggable"
+      v-on:click="requestSelection"
+      v-on:dragstart.stop="beginDragging"
+      v-on:dragend.stop="stopDragging"
     >
-    <p class="filename">{{ basename }}</p>
-    <Sorter
-      v-if="isDirectory"
-      v-show="hover"
-      v-bind:sorting="obj.sorting"
-      v-on:sort-change="sort">
-    </Sorter>
-    <tag-list v-bind:tags="getTags" v-if="!isDirectory"></tag-list>
-    <template v-if="fileMeta">
-      <div class="meta">
-        <template v-if="isDirectory">
-          <span class="directories">{{ countDirs }}</span>
-          <span class="files">{{ countFiles }}</span>
-        </template>
-        <template v-else>
-          <span class="tex-indicator" v-if="isTex">TeX</span>
-          <span class="date">{{ getDate }}</span>
-          <span class="id" v-if="getId">{{ getId }}</span>
-          <span class="tags" v-if="hasTags" v-bind:data-tippy-content="getTagList">#{{ countTags }}</span>
-          <svg v-if="hasWritingTarget" class="target-progress-indicator" width="16" height="16" viewBox="-1 -1 2 2" v-bind:data-tippy-content="writingTargetInfo">
-            <circle class="indicator-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle>
-            <path v-bind:d="writingTargetPath" fill="" class="indicator-value" shape-rendering="geometricPrecision"></path>
-          </svg>
-        </template>
-      </div>
-    </template>
+      <p class="filename">
+        {{ basename }}
+      </p>
+      <Sorter
+        v-if="isDirectory"
+        v-show="hover"
+        v-bind:sorting="obj.sorting"
+        v-on:sort-change="sort"
+      ></Sorter>
+      <tag-list
+        v-if="!isDirectory"
+        v-bind:tags="getTags"
+      ></tag-list>
+      <template v-if="fileMeta">
+        <div class="meta">
+          <template v-if="isDirectory">
+            <span class="directories">{{ countDirs }}</span>
+            <span class="files">{{ countFiles }}</span>
+          </template>
+          <template v-else>
+            <span
+              v-if="isTex"
+              class="tex-indicator"
+            >
+              TeX
+            </span>
+            <span class="date">{{ getDate }}</span>
+            <span
+              v-if="getId"
+              class="id"
+            >
+              {{ getId }}
+            </span>
+            <span
+              v-if="hasTags"
+              class="tags"
+              v-bind:data-tippy-content="getTagList"
+            >
+              #{{ countTags }}
+            </span>
+            <svg
+              v-if="hasWritingTarget"
+              class="target-progress-indicator"
+              width="16"
+              height="16"
+              viewBox="-1 -1 2 2"
+              v-bind:data-tippy-content="writingTargetInfo"
+            >
+              <circle
+                class="indicator-meter"
+                cx="0"
+                cy="0"
+                r="1"
+                shape-rendering="geometricPrecision"
+              ></circle>
+              <path
+                v-bind:d="writingTargetPath"
+                fill=""
+                class="indicator-value"
+                shape-rendering="geometricPrecision"
+              ></path>
+            </svg>
+          </template>
+        </div>
+      </template>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -63,7 +107,7 @@
   module.exports = {
     name: 'file-item',
     // Bind the actual object to the container
-    props: [ 'obj' ],
+    props: ['obj'],
     data: () => {
       return {
         hover: false // True as long as the user hovers over the element
@@ -186,7 +230,7 @@
           global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': sorting })
         },
         beginDragging: function (event) {
-          if (event.ctrlKey || event.altKey) {
+          if (event.ctrlKey || event.altKey) {
             // If the alt key was pressed when the drag begins, initiate
             // an out-of-window drag
             global.ipc.send('file-drag-start', { 'hash': this.obj.hash })

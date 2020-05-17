@@ -14,15 +14,25 @@
 
 <template>
   <div class="taglist">
-    <div v-for="(tag, index) in getTags" class="tagspacer" v-bind:key="index">
-      <div class="tag" v-on:click.stop="tagSearch" v-bind:data-name="tag.name" v-bind:data-tippy-content="tag.desc" v-bind:style="col(tag.color)"></div>
+    <div
+      v-for="(tag, index) in getTags"
+      v-bind:key="index"
+      class="tagspacer"
+    >
+      <div
+        class="tag"
+        v-bind:data-name="tag.name"
+        v-bind:data-tippy-content="tag.desc"
+        v-bind:style="col(tag.color)"
+        v-on:click.stop="tagSearch"
+      ></div>
     </div>
   </div>
 </template>
 
 <script>
 module.exports = {
-  props: [ 'tags' ],
+  props: ['tags'],
   data: () => {
     return {
       // Nothing in here

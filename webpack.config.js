@@ -1,17 +1,15 @@
 // webpack.config.js
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-// MiniCssExtractPlugin generates the necessary CSS files for
-// our components.
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
+const webpack = require('webpack')
 
-module.exports = {
+var configuration = {
   entry: {
     sidebar: './resources/vue/sidebar.js'
   },
   target: 'electron-renderer',
   mode: process.env.NODE_ENV,
-  devtool: 'none', // Don't use fancy packing which breaks Electron's content policy.
+  devtool: 'cheap-module-source-map',
   output: {
     filename: 'vue-[name].js',
     // The target is commonJS so that we can require() the entry points.
@@ -23,26 +21,32 @@ module.exports = {
   },
   module: {
     rules: [
-      // AFTER this rule we can add any other rules we may have,
+      {
+        test: /\.(js|vue)$/,
+        enforce: 'pre',
+        exclude: /node_modules/,
+        loader: 'eslint-loader'
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'vue-style-loader',
+          'css-loader'
+        ]
+      },
+      // BEFORE this rule we can add any other rules we may have,
       // b/c vue-loader will split up vue files in three chunks.
       // --> CSS, JS, and the render function (so, basically JS)
       // (Nota bene: Webpack parses bottom-up, so new rules need
       // to be placed ABOVE this one.)
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
-      },
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: false // Disable hot module reloading
-            }
-          },
-          'css-loader'
-        ]
+        use: {
+          loader: 'vue-loader',
+          options: {
+            extractCSS: process.env.NODE_ENV === 'production'
+          }
+        }
       }
     ]
   },
@@ -55,11 +59,23 @@ module.exports = {
   },
   plugins: [
     new VueLoaderPlugin(),
-    new MiniCssExtractPlugin({
-      // The files will be placed next to the respective components
-      // i.e.: vue-sidebar.js will be in the same directory as sidebar.css
-      filename: '[name].css',
-      ignoreOrder: false // Maybe we need this if the plugin spits out warnings
-    })
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
   ]
 }
+
+if (process.env.NODE_ENV === 'production') {
+  // Don't emit sourcemaps
+  configuration.devtool = ''
+
+  configuration.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"production"'
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    })
+  )
+}
+
+module.exports = configuration

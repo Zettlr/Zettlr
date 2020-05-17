@@ -35,7 +35,7 @@ class SaveFile extends ZettlrCommand {
     }
 
     // Update word count
-    this._app.stats.updateWordCount(file.wordcount || 0)
+    this._app.stats.updateWordCount(file.wordCountOnSave || 0)
     let realFile
 
     try {

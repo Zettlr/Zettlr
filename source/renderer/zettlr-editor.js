@@ -725,7 +725,6 @@ class ZettlrEditor {
     if (intent === 'close') {
       // Send the close request to main
       global.ipc.send('file-close', { 'hash': hash })
-      // this.close(hash)
     } else if (intent === 'select') {
       this._swapFile(hash)
     } else if (intent === 'new-file') {
@@ -824,6 +823,28 @@ class ZettlrEditor {
 
     return this
   }
+
+  /**
+   * Attempts to close an open tab, and returns true if it did.
+   * @returns {boolean} True, if a tab has been closed, otherwise false.
+   */
+  attemptCloseTab () {
+    if (this._openFiles.length === 0) return false
+
+    if (!this._currentHash) return false
+
+    // Send the close request to main
+    global.ipc.send('file-close', { 'hash': this._currentHash })
+
+    // Indicate that we have indeed been able to close a tab
+    return true
+  }
+
+  /**
+   * Tab switcher functions
+   */
+  selectNextTab () { this._tabs.selectNext() }
+  selectPrevTab () { this._tabs.selectPrevious() }
 
   /**
    * Returns the file that is active (i.e. visible), but only the object, NOT the doc
@@ -930,6 +951,9 @@ class ZettlrEditor {
 
     // Last but not least set the Zettelkasten options
     this._cm.setOption('zkn', global.config.get('zkn'))
+
+    // Fire the renderers in order to apply potential changed styles and settings
+    this._fireRenderers()
 
     return this
   }
@@ -1306,12 +1330,6 @@ class ZettlrEditor {
   }
 
   /**
-   * Returns the current value of the editor.
-   * @return {String} The current editor contents.
-   */
-  getValue () { return this._cm.getValue() }
-
-  /**
    * This method can be used to insert some text at the current cursor position.
    * ATTENTION: It WILL overwrite any given selection!
    * @param  {String} text The text to insert
@@ -1382,6 +1400,17 @@ class ZettlrEditor {
     * Refresh the CodeMirror instance
     */
   refresh () { this._cm.refresh() }
+
+  /**
+   * Returns the current value of the editor.
+   * @return {String} The current editor contents.
+   */
+  getValue () { return this._cm.getValue() }
+
+  /**
+   * Returns all selections in the current document.
+   */
+  getSelections () { return this._cm.doc.getSelections() }
 
   /**
    * Get the CodeMirror instance

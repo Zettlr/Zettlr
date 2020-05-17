@@ -14,17 +14,22 @@
 
 const fs = require('fs').promises
 const path = require('path')
+const makeImgPathsAbsolute = require('../../../common/util/make-img-paths-absolute')
 
 module.exports = async function (options) {
   // Prepare the sourceFile path
   options.sourceFile = path.join(options.dest, 'export.tmp')
-  // Then load the file. For revealJS and HTML we do not want absolute paths.
-  // let absolutePaths = (![ 'revealjs', 'html' ].includes(options.format.toLowerCase()))
+  // We want absolute paths if we're exporting to a different than the current directory,
+  // and relative ones if we're exporting to the current (w/ absolute override possible).
+  let willExportToSameDir = path.relative(options.dest, path.dirname(options.file.path)) === ''
+  let absolutePathsOverride = options.hasOwnProperty('absoluteImagePaths') && options.absoluteImagePaths === true
+  let isTextBundle = [ 'textbundle', 'textpack' ].includes(options.format)
 
   // Allow overriding via explicitly set property on the options.
-  // if (options.hasOwnProperty('absoluteImagePaths')) absolutePaths = options.absoluteImagePaths
-  // let cnt = options.file.read({ 'absoluteImagePaths': absolutePaths })
   let cnt = options.file.content
+  if (!willExportToSameDir || isTextBundle || absolutePathsOverride) {
+    cnt = makeImgPathsAbsolute(path.dirname(options.file.path), cnt)
+  }
 
   // Second strip tags if necessary
   if (options.stripTags) cnt = cnt.replace(/(?<= |\n|^)##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?/gi, '')

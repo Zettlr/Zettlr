@@ -30,6 +30,7 @@ const showdown = require('showdown');
    * 8. Inline code
    */
   var wysiwygMarkers = [] // Elements that have been rendered
+  var currentDocID = null
 
   // This Markdown to HTML converter is used in various parts of the
   // class to perform converting operations.
@@ -40,6 +41,14 @@ const showdown = require('showdown');
 
   CodeMirror.commands.markdownWYSIWYG = function (cm) {
     let match
+
+    if (currentDocID !== cm.doc.id) {
+      currentDocID = cm.doc.id
+      for (let marker of wysiwygMarkers) {
+        if (marker.find()) marker.clear()
+      }
+      wysiwygMarkers = [] // Flush it away!
+    }
 
     // First remove elements that don't exist anymore.
     for (let i in wysiwygMarkers) {

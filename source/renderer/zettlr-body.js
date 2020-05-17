@@ -595,6 +595,11 @@ class ZettlrBody {
     if (this._renderer.getActiveFile() == null) return
     let regexRE = /^\/.+\/[gimy]{0,4}$/ // It's meta, dude!
 
+    // Now we need to find out if there are selections in the editor that we
+    // should respect (i.e. automatically search for this).
+    let selections = this._renderer.getEditor().getSelections()
+    if (selections.length > 0) this._findPopup.searchVal = selections[0]
+
     // Create the popup template. Make sure we pre-set the value, if given.
     let cnt = makeTemplate('popup', 'find', {
       'search': this._findPopup.searchVal || '',
@@ -617,6 +622,12 @@ class ZettlrBody {
 
     // Select the search input for convenience
     $('#searchWhat').select()
+
+    // Another convenience: Already highlight all occurrences within the
+    // document, if there is content in the find field.
+    if ($('#searchWhat').val() !== '') {
+      global.editorSearch.highlightOccurrences($('#searchWhat').val())
+    }
 
     $('#searchWhat').on('keyup', (e) => {
       this._findPopup.searchVal = $('#searchWhat').val()

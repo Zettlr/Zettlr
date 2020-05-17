@@ -34,7 +34,8 @@ class ZettlrMenu {
 
     // Begin listening to configuration update events that announce a change in
     // the recent docs list so that we can make sure the menu is always updated.
-    global.config.on('recent-docs-updated', () => { this.set() })
+    global.recentDocs.on('update', () => { this.set() })
+    global.config.on('update', () => { this.set() })
   }
 
   /**

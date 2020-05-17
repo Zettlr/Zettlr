@@ -42,7 +42,13 @@ class EditorSearch {
       'stop': () => { this.stopSearch() },
       'hasSearch': () => { return this._searchCursor !== null },
       'markResults': (file) => { this.markResults(file) },
-      'unmarkResults': () => { this.unmarkResults() }
+      'unmarkResults': () => { this.unmarkResults() },
+      /**
+       * Utility function that lets you highlight a certain search term without
+       * triggering a full search (helpful for marking certain occurrences within
+       * the document).
+       */
+      'highlightOccurrences': (term) => { this._highlightSearchResults(term) }
     }
   }
 
@@ -237,12 +243,12 @@ class EditorSearch {
    * in the text. This is necessary, because replacing something removes
    * some of the text markers, so we have to restore them.
    */
-  _highlightSearchResults () {
+  _highlightSearchResults (highlightWhat = this._currentLocalSearch) {
     this.unmarkResults()
-    if (!this._currentLocalSearch) return // Nothing to highlight
+    if (!highlightWhat) return // Nothing to highlight
     // Find all matches
     // For this single instance we need a global modifier
-    let tRE = makeSearchRegEx(this._currentLocalSearch, 'g')
+    let tRE = makeSearchRegEx(highlightWhat, 'g')
     let res = []
     let match = null
     for (let i = 0; i < this._cm.lineCount(); i++) {

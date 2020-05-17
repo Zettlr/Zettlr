@@ -162,6 +162,13 @@ class ZettlrRenderer {
    * and apply them.
    */
   configChange () {
+    // Tell the body that the config has changed. We need to do this first of
+    // all because the body will automatically switch the theme based on the
+    // config, and if we do it after the language is being received, there'll
+    // be an ugly display glitch, as the language is basically 2MB written to
+    // the IPC pipe, which'll block other files from loading.
+    this.getBody().configChange()
+
     // Set dark theme
     this.darkTheme(global.config.get('darkTheme'))
     // Set file meta
@@ -171,9 +178,6 @@ class ZettlrRenderer {
     global.store.set('sidebarMode', global.config.get('sidebarMode'))
     // Receive the application language
     this.setLocale(global.config.get('appLang'))
-
-    // Tell the body that the config has changed
-    this.getBody().configChange()
 
     // Tell the editor that the config has changed
     this.getEditor().configChange()
@@ -556,7 +560,7 @@ class ZettlrRenderer {
       file = {}
     }
     file.content = this._editor.getValue()
-    file.wordcount = this._editor.getWrittenWords()
+    file.wordCountOnSave = this._editor.getWrittenWords()
     this._ipc.send('file-save', file)
   }
 

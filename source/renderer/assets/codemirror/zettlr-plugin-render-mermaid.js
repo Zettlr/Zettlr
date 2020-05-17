@@ -20,6 +20,7 @@ const mermaid = require('mermaid')
 
   // Holds the currently rendered diagrams
   var mermaidMarkers = []
+  var currentDocID = null
 
   /**
    * Defines the CodeMirror command to render all found markdown images.
@@ -30,6 +31,14 @@ const mermaid = require('mermaid')
     let i = 0
     let codeblock = [] // Holds a mermaid code block
     let currentCursorPosition = cm.getCursor('from').line
+
+    if (currentDocID !== cm.doc.id) {
+      currentDocID = cm.doc.id
+      for (let marker of mermaidMarkers) {
+        if (marker.find()) marker.clear()
+      }
+      mermaidMarkers = [] // Flush it away!
+    }
 
     // First remove images that may not exist anymore. As soon as someone
     // clicks into the image, it will be automatically removed, as well as

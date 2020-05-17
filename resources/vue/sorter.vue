@@ -2,14 +2,16 @@
   <div class="sorter">
     <clr-icon
       class="sortType"
+      v-bind:shape="type"
       v-on:click.stop="toggleType()"
-      v-bind:shape="type">
+    >
       <!-- Same line to remove the nbsp added by Chrome -->
     </clr-icon><clr-icon
       class="sortDirection"
-      v-on:click.stop="toggleDirection()"
       shape="sort-by"
-      v-bind:flip="flip"></clr-icon>
+      v-bind:flip="flip"
+      v-on:click.stop="toggleDirection()"
+    ></clr-icon>
   </div>
 </template>
 
@@ -37,7 +39,7 @@ module.exports = {
       } else {
         this.$emit('sort-change', this.sorting.replace('down', 'up'))
       }
-    },
+    }
   }
 }
 </script>

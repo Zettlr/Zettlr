@@ -29,7 +29,6 @@ class ProjectDialog extends ZettlrDialog {
     let hash = data.hash
     data = data.properties
     data.hash = hash
-    data.availableTocLevels = [ '1', '2', '3', '4', '5', '6' ]
     data.availableExportFormats = [ 'pdf', 'docx', 'odt', 'html' ]
     data.pdf.lineheight = data.pdf.lineheight * 100
     data.supportedPapertypes = SUPPORTED_PAPERTYPES
@@ -102,6 +101,8 @@ class ProjectDialog extends ZettlrDialog {
       }
       return // Don't try to update falsy settings.
     }
+
+    console.log('Will send properties:', cfg)
 
     // Send and close
     global.ipc.send('update-project-properties', { 'properties': cfg, 'hash': hash })

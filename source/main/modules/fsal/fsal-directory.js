@@ -289,20 +289,23 @@ module.exports = {
     sortChildren(dirObject)
   },
   'rename': async function (dirObject, info, cache) {
+    let isRoot = dirObject.parent == null
     // Check some things beforehand
     if (!info.name || info.name.trim() === '') throw new Error('Invalid directory name provided!')
-    let existingDir = dirObject.parent.children.find(elem => elem.name === info.name)
-    if (existingDir) throw new Error(`Directory ${info.name} already exists!`)
+    let parentNames = await fs.readdir(path.dirname(dirObject.path))
+    if (parentNames.includes(info.name)) throw new Error(`Directory ${info.name} already exists!`)
 
-    let newPath = path.join(dirObject.parent.path, info.name)
+    let newPath = path.join(path.dirname(dirObject.path), info.name)
     await fs.rename(dirObject.path, newPath)
     // Rescan the new dir to get all new file information
     let newDir = await readTree(newPath, cache, dirObject.parent)
-    // Exchange the directory in the parent
-    let index = dirObject.parent.children.indexOf(dirObject)
-    dirObject.parent.children.splice(index, 1, newDir)
-    // Now sort the parent
-    sortChildren(dirObject.parent)
+    if (!isRoot) {
+      // Exchange the directory in the parent
+      let index = dirObject.parent.children.indexOf(dirObject)
+      dirObject.parent.children.splice(index, 1, newDir)
+      // Now sort the parent
+      sortChildren(dirObject.parent)
+    }
   },
   'remove': async function (dirObject) {
     // First, get the parent, if there is any

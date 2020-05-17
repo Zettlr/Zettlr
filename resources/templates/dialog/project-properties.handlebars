@@ -43,9 +43,12 @@
           </label>
           <label for="pdf.toc">{{i18n "dialog.preferences.pdf.toc_label"}}</label>
           <select name="pdf.tocDepth">
-            {{#each availableTocLevels}}
-            <option value="{{this}}" {{#ifCond this '=' ../pdf.tocDepth}}selected="selected"{{/ifCond}}>{{this}}</option>
-            {{/each}}
+            <option value="1" {{#ifCond pdf.tocDepth '=' 1}}selected="selected"{{/ifCond}}>1</option>
+            <option value="2" {{#ifCond pdf.tocDepth '=' 2}}selected="selected"{{/ifCond}}>2</option>
+            <option value="3" {{#ifCond pdf.tocDepth '=' 3}}selected="selected"{{/ifCond}}>3</option>
+            <option value="4" {{#ifCond pdf.tocDepth '=' 4}}selected="selected"{{/ifCond}}>4</option>
+            <option value="5" {{#ifCond pdf.tocDepth '=' 5}}selected="selected"{{/ifCond}}>5</option>
+            <option value="6" {{#ifCond pdf.tocDepth '=' 6}}selected="selected"{{/ifCond}}>6</option>
           </select>
           <hr>
           <label for="format">{{i18n "dialog.preferences.project.format"}}</label>

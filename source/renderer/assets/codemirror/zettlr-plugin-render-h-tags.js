@@ -14,10 +14,19 @@
 
   var headRE = /^(#{1,6}) (.*)/g
   var headMarkers = []
+  var currentDocID = null
 
   CodeMirror.commands.markdownRenderHTags = function (cm) {
     let i = 0
     let match
+
+    if (currentDocID !== cm.doc.id) {
+      currentDocID = cm.doc.id
+      for (let marker of headMarkers) {
+        if (marker.find()) marker.clear()
+      }
+      headMarkers = [] // Flush it away!
+    }
 
     // First remove links that don't exist anymore. As soon as someone
     // moves the cursor into the link, it will be automatically removed,

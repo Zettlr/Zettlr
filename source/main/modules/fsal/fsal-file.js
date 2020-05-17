@@ -50,15 +50,9 @@ function applyCache (origFile, cachedFile) {
  * @param {Object} origFile The file to cache
  */
 function cacheFile (origFile, cacheAdapter) {
-  let cache = {}
-  for (let prop of Object.keys(origFile)) {
-    // Save everything to the cache object except the parent to
-    // prevent circular structures throwing errors on persisting.
-    if (prop === 'parent') continue
-    cache[prop] = origFile[prop]
-  }
-
-  cacheAdapter.set(cache.hash, cache)
+  let copy = Object.assign({}, origFile)
+  delete copy.parent // Make sure not to store circular properties
+  cacheAdapter.set(origFile.hash, copy)
 }
 
 function metadata (fileObject) {
@@ -117,7 +111,7 @@ async function parseFile (filePath, cache, parent = null) {
   try {
     // Get lstat
     let stat = await fs.lstat(filePath)
-    file.modtime = stat.ctimeMs
+    file.modtime = stat.mtimeMs // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
     file.creationtime = stat.birthtimeMs
   } catch (e) {
     global.log.error('Error reading file ' + filePath, e)
@@ -240,6 +234,10 @@ async function searchFile (fileObject, terms) {
 module.exports = {
   'metadata': function (fileObject) {
     return metadata(fileObject)
+  },
+  'hasChangedOnDisk': async function (fileObject) {
+    let stat = await fs.lstat(fileObject.path)
+    return stat.mtimeMs !== fileObject.mtimeMs
   },
   'load': async function (fileObject) {
     // Loads the content of a file from disk

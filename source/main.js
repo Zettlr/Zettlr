@@ -135,8 +135,20 @@ app.on('open-file', (e, p) => {
  * else. It is necessary to wait for the ready event, because prior, some APIs
  * may not work correctly.
  */
-app.on('ready', function () {
+app.whenReady().then(() => {
   global.log.info('Electron reports ready state. Instantiating main process...')
+
+  try {
+    // Developer tools
+    const { default: installExtension, VUEJS_DEVTOOLS } = require('electron-devtools-installer')
+    // Load Vue developer extension
+    installExtension(VUEJS_DEVTOOLS)
+      .then((name) => global.log.info(`Added DevTools extension:  ${name}`))
+      .catch((err) => console.log('An error occurred: ', err))
+  } catch (e) {
+    global.log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
+  }
+
   zettlr = new Zettlr()
 })
 

@@ -14,6 +14,8 @@
 
 const { trans } = require('../../common/lang/i18n')
 const path = require('path')
+// Left the localize/localise here in order to confuse future generations.
+const localizeNumber = require('../../common/util/localise-number')
 
 module.exports = class EditorTabs {
   constructor () {
@@ -86,7 +88,6 @@ module.exports = class EditorTabs {
       return
     }
 
-    // files = files.map(elem => elem.fileObject) // Make it easier accessible
     for (let document of files) {
       let file = document.fileObject
       let isDocumentClean = document.cmDoc.isClean()
@@ -100,9 +101,8 @@ module.exports = class EditorTabs {
     let activeElem = this._div.getElementsByClassName('active')[0]
     if (activeElem.offsetLeft + activeElem.offsetWidth > tabbarWidth) {
       this._div.scrollLeft += activeElem.offsetLeft + activeElem.offsetWidth - tabbarWidth
-    } else if (activeElem.offsetLeft + activeElem.offsetWidth < 0) {
-      console.log('Scrolling! Active element is out of view (to the LEFT)')
-      // TODO: How do we do this?
+    } else if (activeElem.offsetLeft < this._div.scrollLeft) {
+      this._div.scrollLeft = activeElem.offsetLeft
     }
 
     // After synchronising, enable the tippy
@@ -129,19 +129,42 @@ module.exports = class EditorTabs {
     }
   }
 
-  _onClick (event) {
-    if (event.target.classList.contains('add-new-file')) {
-      // The user has clicked the "add new file" thingy
-      if (this._intentCallback) this._intentCallback(null, 'new-file')
-      return
+  /**
+   * Attempts to select the next tab, or start from the beginning if the
+   * active tab is already the last one.
+   */
+  selectNext () {
+    let active = this._div.querySelectorAll('.document.active')[0]
+    let next = active.nextElementSibling
+    if (!next) next = this._div.firstElementChild // Re-start from beginning
+    if (next) {
+      this._intentCallback(next.dataset['hash'], 'select')
     }
+  }
 
-    if (event.target.getAttribute('id') === 'document-tabs') return // No file selected
-    let closeIntent = event.target.classList.contains('close')
-    let hash = event.target
-    if (!hash.classList.contains('document')) hash = hash.parentNode
-    hash = hash.dataset['hash']
-    console.log((closeIntent) ? 'Should close!' : 'Should select', hash)
+  /**
+   * Attempts to select the previous tab, or start from the end if the active
+   * tab is already the first one.
+   */
+  selectPrevious () {
+    let active = this._div.querySelectorAll('.document.active')[0]
+    let prev = active.previousElementSibling
+    if (!prev) prev = this._div.lastElementChild // Re-start from end
+    if (prev) this._intentCallback(prev.dataset['hash'], 'select')
+  }
+
+  _onClick (event) {
+    let elem = event.target
+    // Make sure that the element is not somewhere inside the close span
+    if (elem.tagName === 'PATH') elem = elem.parentElement
+    if (elem.tagName === 'SVG') elem = elem.parentElement
+    // After these IFs we should have the clr-icon if the user clicked the X
+
+    if (elem.getAttribute('id') === 'document-tabs') return // No file selected
+
+    let closeIntent = elem.classList.contains('close')
+    if (!elem.classList.contains('document')) elem = elem.parentNode
+    let hash = elem.dataset['hash']
 
     // If given, call the callback
     if (this._intentCallback) {
@@ -169,8 +192,8 @@ module.exports = class EditorTabs {
     // Show some additional information on hover
     doc.dataset['tippyContent'] = `<strong>${file.name}</strong><br>`
     doc.dataset['tippyContent'] += `<small>(${path.basename(path.dirname(file.path))})</small><br>`
-    doc.dataset['tippyContent'] += file.wordCount + ' ' + trans('dialog.target.words')
-    doc.dataset['tippyContent'] += ', ' + file.charCount + ' ' + trans('dialog.target.chars')
+    doc.dataset['tippyContent'] += localizeNumber(file.wordCount) + ' ' + trans('dialog.target.words')
+    doc.dataset['tippyContent'] += ', ' + localizeNumber(file.charCount) + ' ' + trans('dialog.target.chars')
     // From here on, possible information begins, so we have to add <br>s before
     if (file.id !== '') doc.dataset['tippyContent'] += '<br>ID: ' + file.id
 

@@ -13,7 +13,8 @@
  */
 
 <template>
-  <div class="container"
+  <div
+    class="container"
     v-bind:data-hash="obj.hash"
     v-bind:draggable="!isRoot"
     v-on:dragstart.stop="beginDragging"
@@ -21,45 +22,66 @@
     v-on:dragleave.stop="leaveDragging"
   >
     <div
+      ref="listElement"
       v-bind:class="classList"
       v-bind:data-hash="obj.hash"
       v-bind:data-id="obj.id || ''"
-      v-on:click="requestSelection"
       v-bind:style="pad"
-      ref="listElement"
+      v-on:click="requestSelection"
       v-on:drop="handleDrop"
       v-on:dragover="acceptDrags"
       v-on:mouseenter="hover=true"
       v-on:mouseleave="hover=false"
     >
-      <p class="filename" v-bind:data-hash="obj.hash">
-        <clr-icon v-show="obj.project" shape="blocks-group" class="is-solid"></clr-icon>
-        <clr-icon v-show="hasChildren" v-on:click.stop="toggleCollapse" v-bind:shape="indicatorShape"></clr-icon>
-        {{ obj.name }}<span v-if="hasDuplicateName" class="dir">&nbsp;({{ dirname }})</span>
+      <p
+        class="filename"
+        v-bind:data-hash="obj.hash"
+      >
+        <clr-icon
+          v-show="obj.project"
+          shape="blocks-group"
+          class="is-solid"
+        />
+        <clr-icon
+          v-show="hasChildren"
+          v-bind:shape="indicatorShape"
+          v-on:click.stop="toggleCollapse"
+        />
+        {{ obj.name }}
+        <span
+          v-if="hasDuplicateName"
+          class="dir"
+        >
+          &nbsp;({{ dirname }})
+        </span>
       </p>
       <Sorter
         v-if="isDirectory && combined"
         v-show="hover"
         v-bind:sorting="obj.sorting"
-        v-on:sort-change="sort">
-      </Sorter>
+        v-on:sort-change="sort"
+      />
     </div>
     <div
       v-if="hasSearchResults"
       class="display-search-results list-item"
-      v-on:click="this.$root.toggleFileList"
       v-bind:style="searchResultMessagePadding"
+      v-on:click="this.$root.toggleFileList"
     >
-      <p class="filename">{{ displayResultsMessage }}</p>
+      <p class="filename">
+        {{ displayResultsMessage }}
+      </p>
     </div>
-    <div v-if="isDirectory" v-show="!collapsed">
+    <div
+      v-if="isDirectory"
+      v-show="!collapsed"
+    >
       <tree-item
         v-for="child in filteredChildren"
-        v-bind:obj="child"
         v-bind:key="child.hash"
+        v-bind:obj="child"
         v-bind:depth="depth + 1"
-      >
-      </tree-item>
+      />
     </div>
   </div>
 </template>
@@ -105,7 +127,7 @@ module.exports = {
     /**
      * Returns true if this is a directory
      */
-    isDirectory: function () { return 'directory' === this.obj.type },
+    isDirectory: function () { return this.obj.type === 'directory' },
     /**
      * Shortcut methods to access the store
      */
@@ -136,7 +158,7 @@ module.exports = {
      */
     classList: function () {
       let list = 'list-item ' + this.obj.type
-      if ([this.selectedFile, this.selectedDir].includes(this.obj.hash)) list += ' selected'
+      if ([ this.selectedFile, this.selectedDir ].includes(this.obj.hash)) list += ' selected'
       if (this.obj.project) list += ' project'
       // Determine if this is a root component
       if (this.isRoot) list += ' root'

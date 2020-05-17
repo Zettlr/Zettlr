@@ -12,94 +12,134 @@
  * END HEADER
  */
 <template>
-  <div id="sidebar"
+  <div
+    id="sidebar"
+    v-bind:class="sidebarClass"
     v-on:mousemove="handleMouseOver"
     v-on:mouseleave="handleMouseOver"
     v-on:dragover="handleDragOver"
-    v-bind:class="sidebarClass"
   >
     <!-- Display the arrow button in case we have a non-combined view -->
     <div
-      v-on:click="toggleFileList"
       id="arrow-button"
       ref="arrowButton"
       class="hidden"
+      v-on:click="toggleFileList"
     >
     </div>
     <!-- Render a the file-tree -->
     <div id="component-container">
-      <div id="file-tree" ref="directories" v-on:click="selectionListener">
+      <div
+        id="file-tree"
+        ref="directories"
+        v-on:click="selectionListener"
+      >
         <template v-if="$store.state.items.length > 0">
-          <div id="directories-files-header" v-show="getFiles.length > 0">
+          <div
+            v-show="getFiles.length > 0"
+            id="directories-files-header"
+          >
             <clr-icon shape="file"></clr-icon>{{ fileSectionHeading }}
           </div>
-            <tree-item
-              v-for="item in getFiles"
-              v-bind:obj="item"
-              v-bind:key="item.hash"
-              v-bind:depth="0"
-            >
-            </tree-item>
-            <div id="directories-dirs-header" v-show="getDirectories.length > 0">
-              <clr-icon shape="tree-view"></clr-icon>{{ dirSectionHeading }}
+          <tree-item
+            v-for="item in getFiles"
+            v-bind:key="item.hash"
+            v-bind:obj="item"
+            v-bind:depth="0"
+          >
+          </tree-item>
+          <div
+            v-show="getDirectories.length > 0"
+            id="directories-dirs-header"
+          >
+            <clr-icon shape="tree-view"></clr-icon>{{ dirSectionHeading }}
+          </div>
+          <tree-item
+            v-for="item in getDirectories"
+            v-bind:key="item.hash"
+            v-bind:obj="item"
+            v-bind:depth="0"
+          >
+          </tree-item>
+        </template>
+        <template v-else>
+          <div
+            class="empty-tree"
+            v-on:click="requestOpenRoot"
+          >
+            <div class="info">
+              {{ noRootsMessage }}
             </div>
-            <tree-item
-              v-for="item in getDirectories"
-              v-bind:obj="item"
-              v-bind:key="item.hash"
-              v-bind:depth="0"
-            >
-            </tree-item>
-          </template>
-          <template v-else>
-            <div class="empty-tree" v-on:click="requestOpenRoot">
-              <div class="info">{{ noRootsMessage }}</div>
-            </div>
-          </template>
-        </div>
-        <!-- Now render the file list -->
-        <div id="file-list" class="hidden" ref="fileList" tabindex="1" v-on:keydown="navigate">
-          <template v-if="emptySearchResults">
-            <!-- Did we have no search results? -->
-            <div class="empty-file-list">{{ noResultsMessage }}</div>
-          </template>
-          <template v-else-if="getDirectoryContents.length > 1">
-            <!--
-              For the "real" sidelist, we need the virtual scroller to maintain
-              performance, because it may contain thousands of elements.
-              Provide the virtual scroller with the correct size of the list
-              items (60px in mode with meta-data, 30 in cases without).
-              NOTE: The page-mode MUST be true, because it will speed up
-              performance incredibly!
-            -->
-            <recycle-scroller
-              v-bind:items="getDirectoryContents"
-              v-bind:item-size="($store.state.fileMeta) ? 61 : 31"
-              v-bind:emit-update="true"
-              v-on:update="updateDynamics"
-              v-bind:page-mode="true"
-              v-slot="{ item }"
-            >
-              <file-item v-bind:obj="item.props"></file-item>
-            </recycle-scroller>
-          </template>
-          <template v-else-if="getDirectoryContents.length === 1">
-            <file-item
-              v-for="item in getDirectoryContents"
-              v-bind:obj="item.props"
-              v-bind:key="item.hash"
-            >
+          </div>
+        </template>
+      </div>
+      <!-- Now render the file list -->
+      <div
+        id="file-list"
+        ref="fileList"
+        class="hidden"
+        tabindex="1"
+        v-on:keydown="navigate"
+      >
+        <template v-if="emptySearchResults">
+          <!-- Did we have no search results? -->
+          <div class="empty-file-list">
+            {{ noResultsMessage }}
+          </div>
+        </template>
+        <template v-else-if="getDirectoryContents.length > 1">
+          <!--
+            For the "real" sidelist, we need the virtual scroller to maintain
+            performance, because it may contain thousands of elements.
+            Provide the virtual scroller with the correct size of the list
+            items (60px in mode with meta-data, 30 in cases without).
+            NOTE: The page-mode MUST be true, because it will speed up
+            performance incredibly!
+          -->
+          <recycle-scroller
+            v-slot="{ item }"
+            v-bind:items="getDirectoryContents"
+            v-bind:item-size="($store.state.fileMeta) ? 61 : 31"
+            v-bind:emit-update="true"
+            v-bind:page-mode="true"
+            v-on:update="updateDynamics"
+          >
+            <file-item v-bind:obj="item.props"></file-item>
+          </recycle-scroller>
+        </template>
+        <template v-else-if="getDirectoryContents.length === 1">
+          <file-item
+            v-for="item in getDirectoryContents"
+            v-bind:key="item.hash"
+            v-bind:obj="item.props"
+          >
           </file-item>
-            <div class="empty-directory" v-if="getDirectoryContents[0].type === 'directory'">{{ emptyDirectoryMessage }}</div>
-          </template>
-          <template v-else>
-            <!-- Same as above: Detect combined sidebar mode -->
-            <div class="empty-file-list">{{ emptyFileListMessage }}</div>
-          </template>
-        </div>
+          <div
+            v-if="getDirectoryContents[0].type === 'directory'"
+            class="empty-directory"
+          >
+            {{ emptyDirectoryMessage }}
+          </div>
+        </template>
+        <template v-else>
+          <!-- Same as above: Detect combined sidebar mode -->
+          <div class="empty-file-list">
+            {{ emptyFileListMessage }}
+          </div>
+        </template>
+      </div>
     </div>
-    <div id="sidebar-inner-resizer" v-if="isExpanded" ref="sidebarInnerResizer" v-on:mousedown="sidebarStartInnerResize"></div>
-    <div id="sidebar-resize" ref="sidebarResizer" v-on:mousedown="sidebarStartResize"></div>
+    <div
+      v-if="isExpanded"
+      id="sidebar-inner-resizer"
+      ref="sidebarInnerResizer"
+      v-on:mousedown="sidebarStartInnerResize"
+    ></div>
+    <div
+      id="sidebar-resize"
+      ref="sidebarResizer"
+      v-on:mousedown="sidebarStartResize"
+    ></div>
   </div>
 </template>
 
@@ -435,7 +475,7 @@ module.exports = {
 
       // Create instances for all elements without already existing
       // tippy-instances.
-      tippy('#sidebar [data-tippy-content]', {
+      window.tippy('#sidebar [data-tippy-content]', {
         delay: 100,
         arrow: true,
         duration: 100,
@@ -467,7 +507,7 @@ module.exports = {
           if (evt.ctrlKey || evt.metaKey) {
             // Select the last file
             return global.ipc.send('file-get', list[list.length - 1].hash)
-            }
+          }
           if (index < list.length) global.ipc.send('file-get', list[index].hash)
           break
         case 'ArrowUp':
@@ -477,7 +517,7 @@ module.exports = {
           if (evt.ctrlKey || evt.metaKey) {
             // Select the first file
             return global.ipc.send('file-get', list[0].hash)
-            }
+          }
           if (index >= 0) global.ipc.send('file-get', list[index].hash)
           break
       }
