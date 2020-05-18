@@ -985,6 +985,11 @@ module.exports = class FSAL extends EventEmitter {
   getOpenDirectory () { return this._state.openDirectory }
 
   /**
+   * Clears the cache
+   */
+  clearCache () { return this._cache.clearCache() }
+
+  /**
    * Runs an action on the file tree
    */
   async runAction (actionName, options) {

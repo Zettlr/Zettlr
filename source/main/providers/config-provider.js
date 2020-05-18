@@ -29,6 +29,7 @@ const isDir = require('../../common/util/is-dir')
 const isDictAvailable = require('../../common/util/is-dict-available')
 const { getLanguageFile } = require('../../common/lang/i18n')
 const COMMON_DATA = require('../../common/data.json')
+const ZETTLR_VERSION = require('../../package.json').version
 
 // Suppress notifications on modification of the following settings
 const SUPPRESS_NOTIFICATION = [
@@ -74,6 +75,7 @@ class ConfigProvider extends EventEmitter {
     this.config = null
     this._rules = [] // This array holds all validation rules
     this._firstStart = false // Only true if a config file has been created
+    this._newVersion = false // True if the last read config had a different version
 
     this._bulkSetInProgress = false // As long as this is true, a bulk set happens
 
@@ -100,7 +102,7 @@ class ConfigProvider extends EventEmitter {
 
     // Config Template providing all necessary arguments
     this.cfgtpl = {
-      // Root directories
+      'version': ZETTLR_VERSION, // Useful for migrating
       'openPaths': [], // Array to include all opened root paths
       'openFiles': [], // Array to include all currently opened files
       'lastFile': null, // Save last opened file hash here
@@ -317,7 +319,15 @@ class ConfigProvider extends EventEmitter {
        */
       removePath: (p) => { return this.removePath(p) },
       addFile: (f) => { return this.addFile(f) },
-      removeFile: (f) => { return this.removeFile(f) }
+      removeFile: (f) => { return this.removeFile(f) },
+      /**
+       * If true, Zettlr assumes this is the first start of the app
+       */
+      isFirstStart: () => { return this._firstStart },
+      /**
+       * If true, Zettlr has detected a change in version in the config
+       */
+      newVersionDetected: () => { return this._newVersion }
     }
   }
 
@@ -367,10 +377,21 @@ class ConfigProvider extends EventEmitter {
     } catch (e) {
       fs.writeFileSync(this.configFile, JSON.stringify(this.cfgtpl), { encoding: 'utf8' })
       this._firstStart = true // Assume first start
+      this._newVersion = true // Obviously
       return this // No need to iterate over objects anymore
     }
 
+    // Determine if this is a different version
+    let oldVersion = readConfig.version || undefined
+    this._newVersion = oldVersion !== this.config.version
+    if (this._newVersion) {
+      global.log.info(`Migrating from ${oldVersion} to ${this.config.version}!`)
+    }
+
     this.update(readConfig)
+
+    // Don't forget to update the version
+    if (this._newVersion) this.set('version', ZETTLR_VERSION)
 
     return this
   }

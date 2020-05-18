@@ -123,6 +123,40 @@ module.exports = class FSALCache {
   }
 
   /**
+   * Clears the cache during runtime
+   */
+  clearCache () {
+    // Two things need to be done:
+    // First, flush everything from memory
+    // Second: Remove all cache files
+    this._data = {}
+    this._accessed = {}
+
+    // We'll collect the cache clearing actions to resolve them all
+    let promises = []
+    let directoryContents = fs.readdirSync(this._datadir)
+    for (let file of directoryContents) {
+      let realPath = path.join(this._datadir, file)
+      promises.push(new Promise((resolve, reject) => {
+        fs.unlink(realPath, (err) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve()
+          }
+        })
+      }))
+    }
+
+    // Watch how the promises do
+    Promise.all(promises).then(() => {
+      global.log.info('Cache cleared!')
+    }).catch((e) => {
+      global.log.error('Error while clearing the cache!', e)
+    })
+  }
+
+  /**
    * Lazily loads the shard for the given key.
    * @param {String} key The key for which the shard should be loaded
    */
