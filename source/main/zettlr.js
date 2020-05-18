@@ -121,7 +121,8 @@ class Zettlr {
     this._fsal = new FSAL(app.getPath('userData'))
 
     // Immediately determine if the cache needs to be cleared
-    if (global.config.newVersionDetected()) {
+    let shouldClearCache = process.argv.includes('--clear-cache')
+    if (global.config.newVersionDetected() || shouldClearCache) {
       global.log.info('Clearing the FSAL cache ...')
       this._fsal.clearCache()
     }
