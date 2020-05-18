@@ -24,16 +24,16 @@ const GlobalSearch = require('./util/global-search')
 const ZettlrStore = require('./zettlr-store')
 const createSidebar = require('./assets/vue/vue-sidebar')
 
+const path = require('path')
+
 const { remote, shell, clipboard } = require('electron')
 
 const generateId = require('../common/util/generate-id')
 const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
+const matchFilesByTags = require('../common/util/match-files-by-tags')
 
 const reconstruct = require('./util/reconstruct-tree')
-
 const loadicons = require('./util/load-icons')
-
-const path = require('path')
 
 // Pull the poll-time from the data
 const POLL_TIME = require('../common/data.json').poll_time
@@ -84,6 +84,20 @@ class ZettlrRenderer {
         this.beginSearch(term)
       }
     }
+  }
+
+  /**
+   * Matches the given file with potential candidates based on the used tags.
+   * @returns {Array} An array with potential candidates
+   */
+  matchFile (hash) {
+    let fileDescriptor = this.findObject(hash)
+    return matchFilesByTags(fileDescriptor, this._paths).map(e => {
+      return {
+        'fileDescriptor': this.findObject(e.hash),
+        'matches': e.matches
+      }
+    })
   }
 
   /**
