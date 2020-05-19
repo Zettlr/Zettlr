@@ -562,7 +562,7 @@ class ZettlrRenderer {
   /**
    * Saves the current file
    */
-  saveFile () {
+  saveFile (sync=false) {
     if (!this.isModified()) return // No need to save
 
     // The user wants to save the currently opened file.
@@ -575,7 +575,11 @@ class ZettlrRenderer {
     }
     file.content = this._editor.getValue()
     file.wordCountOnSave = this._editor.getWrittenWords()
-    this._ipc.send('file-save', file)
+    if (sync === true) {
+      this._ipc.sendSync('file-save', file)
+    } else {
+      this._ipc.send('file-save', file)
+    }
   }
 
   /**

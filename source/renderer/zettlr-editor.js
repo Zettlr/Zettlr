@@ -256,7 +256,7 @@ class ZettlrEditor {
             // Performa a save to avoid a problem where a file
             // is saved while trying to create or open a link.
             // That action cancels the file open/create
-            this._renderer.saveFile()
+            this._renderer.saveFile(true)
             this.markClean(this._currentHash)
             this._renderer.openOrCreate(linkName)
           } else {
@@ -273,7 +273,7 @@ class ZettlrEditor {
               // Performa a save to avoid a problem where a file
               // is saved while trying to create or open a link.
               // That action cancels the file open/create
-              this._renderer.saveFile()
+              this._renderer.saveFile(true)
               this.markClean(this._currentHash)
               this._renderer.openOrCreate(selection)
             } else {
@@ -525,7 +525,7 @@ class ZettlrEditor {
           // Performa a save to avoid a problem where a file
           // is saved while trying to create or open a link.
           // That action cancels the file open/create
-          this._renderer.saveFile()
+          this._renderer.saveFile(true)
           this.markClean(this._currentHash)
           this._renderer.openOrCreate(elem.text())
         } else {
