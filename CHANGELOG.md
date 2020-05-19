@@ -60,6 +60,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - If there is a selection in the document, its contents are used to fill in the search field now. Furthermore, the occurrences of the search term are now already highlighted without you having to search first.
 - If there is a selection in the document, its contents fill up the global search field on focus, if the global search field does not have any contents.
 - Fixed wrong display of project property table of content evaluation level.
+- When linking files, Zettlr will now present you those files that match with at least one tag with the currently active file, making cross-linking of notes as easy as typing the link-start and hitting the arrow down-key. Bonus: It'll present you these options even if the files reside in a completely different root directory.
 
 ## Under the Hood
 
@@ -86,6 +87,8 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Windows installers are finally signed.
 - Switched back to the `package.json` configuration for electron-builder, because, well, Electron.
 - Fix a lot of unused and weirdly coded code.
+- Added a flag to determine if the Zettlr version has changed, indicating an update (or downgrade). Based on this, the FSAL will clear its cache on boot.
+- Added command-line flag `--clear-cache` to programmatically clear the FSAL cache on startup.
 
 # 1.6.0
 

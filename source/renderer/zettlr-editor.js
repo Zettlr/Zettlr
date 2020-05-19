@@ -153,6 +153,17 @@ class ZettlrEditor {
               if (this._currentDatabase[key].hasOwnProperty('displayText') && this._currentDatabase[key].displayText.toLowerCase().indexOf(term) >= 0) return true
               return false
             })
+              .sort((a, b) => {
+                // This sorter makes sure "special" things are always sorted top
+                let aClass = this._currentDatabase[a].className !== undefined
+                let bClass = this._currentDatabase[b].className !== undefined
+                let aMatch = this._currentDatabase[a].matches || 0
+                let bMatch = this._currentDatabase[b].matches || 0
+                if (aClass && !bClass) return -1
+                if (!aClass && bClass) return 1
+                if (aClass && bClass) return aMatch - bMatch
+                return 0
+              })
               .map(key => this._currentDatabase[key]),
             'from': this._autoCompleteStart,
             'to': cm.getCursor()
@@ -361,6 +372,31 @@ class ZettlrEditor {
             'id': file.id || false
           }
         }
+
+        let fileMatches = this._renderer.matchFile(this._currentHash)
+
+        // Modify all files that are potential matches
+        for (let candidate of fileMatches) {
+          let entry = db[candidate.fileDescriptor.name]
+          if (entry) {
+            // Modify
+            entry.className = 'cm-hint-colour'
+            entry.matches = candidate.matches
+          } else {
+            let file = candidate.fileDescriptor
+            let fname = path.basename(file.name, path.extname(file.name))
+            let displayText = fname // Always display the filename
+            if (file.frontmatter && file.frontmatter.title) displayText += ' ' + file.frontmatter.title
+            db[candidate.fileDescriptor.name] = {
+              'text': file.id || fname, // Use the ID, if given, or the filename
+              'displayText': displayText,
+              'id': file.id || false,
+              'className': 'cm-hint-colour',
+              'matches': candidate.matches
+            }
+          }
+        }
+
         this._currentDatabase = db
         this._cm.showHint()
       }

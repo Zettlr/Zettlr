@@ -120,6 +120,13 @@ class Zettlr {
     // where it can store its internal files.
     this._fsal = new FSAL(app.getPath('userData'))
 
+    // Immediately determine if the cache needs to be cleared
+    let shouldClearCache = process.argv.includes('--clear-cache')
+    if (global.config.newVersionDetected() || shouldClearCache) {
+      global.log.info('Clearing the FSAL cache ...')
+      this._fsal.clearCache()
+    }
+
     // Listen to changes in the file system
     this._fsal.on('fsal-state-changed', (objPath, info) => {
       // Emitted when anything in the state changes
