@@ -486,18 +486,11 @@ class ZettlrRenderer {
    * @param {Boolean} [forceOpen=false] If true, Zettlr will directly open the file
    */
   autoSearch (term, forceOpen = false) {
-    if (!forceOpen) {
-      // Insert the term into the search field and commence search.
-      this._toolbar.setSearch(term)
-      this.beginSearch(term)
-    } else {
-      // Don't search, simply tell main to open the file
-      this._ipc.send('force-open', term)
-      // Also initiate a search to be run accordingly for any files that
-      // might reference the file.
-      this._toolbar.setSearch(term)
-      this.beginSearch(term)
-    }
+    // Also initiate a search to be run accordingly for any files that
+    // might reference the file.
+    this._toolbar.setSearch(term)
+    this.beginSearch(term)
+    if (forceOpen) this._ipc.send('force-open', term)
   }
 
   /**

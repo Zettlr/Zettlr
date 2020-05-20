@@ -88,6 +88,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Fix a lot of unused and weirdly coded code.
 - Added a flag to determine if the Zettlr version has changed, indicating an update (or downgrade). Based on this, the FSAL will clear its cache on boot.
 - Added command-line flag `--clear-cache` to programmatically clear the FSAL cache on startup.
+- Moved the `forceOpen`-functionality to a command.
 
 # 1.6.0
 

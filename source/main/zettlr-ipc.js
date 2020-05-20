@@ -256,11 +256,6 @@ class ZettlrIPC {
         this._app.open()
         break
 
-      // Force-open is basically a search and immediate return.
-      case 'force-open':
-        this._app.findExact(cnt) // Find an exact match
-        break
-
       // Change theme in config
       case 'toggle-theme':
         global.config.set('darkTheme', !global.config.get('darkTheme'))
