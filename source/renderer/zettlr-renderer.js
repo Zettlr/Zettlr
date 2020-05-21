@@ -562,7 +562,7 @@ class ZettlrRenderer {
   /**
    * Saves the current file
    */
-  saveFile (sync=false) {
+  saveFile (sync = false) {
     if (!this.isModified()) return // No need to save
 
     // The user wants to save the currently opened file.
