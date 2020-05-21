@@ -335,7 +335,8 @@
                 "var_month": "Mois (sur 2 chiffres)",
                 "var_second": "Secondes (sur 2 chiffres)",
                 "var_week_number": "Semaine de l\u2019ann\u00e9e (avec z\u00e9ro au d\u00e9but si n\u00e9cessaire)",
-                "var_year": "Ann\u00e9e (sur 4 chiffres)"
+                "var_year": "Ann\u00e9e (sur 4 chiffres)",
+                "create_if_not_exists": "Lorsque vous cliquez sur un lien ZKN, créez et/ou ouvrez un fichier avec le nom du lien au lieu de rechercher"
             }
         },
         "statistics": {

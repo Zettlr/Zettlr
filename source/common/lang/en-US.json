@@ -332,7 +332,7 @@
                 "var_second": "Seconds (leading zeroes)",
                 "var_week_number": "Week of the year (leading zeroes)",
                 "var_year": "Year (four digit)",
-                "create_if_not_exists": "When selecting ZKN link, open or create file with that name instead of search"
+                "create_if_not_exists": "When clicking on a ZKN link, create and/or open file with link name instead of search"
             }
         },
         "statistics": {

@@ -329,7 +329,8 @@
                 "var_month": "Monat (f\u00fchrende Null)",
                 "var_second": "Sekunden (f\u00fchrende Null)",
                 "var_week_number": "Nummer der Woche (f\u00fchrende Null)",
-                "var_year": "Jahr (vierstellig)"
+                "var_year": "Jahr (vierstellig)",
+                "create_if_not_exists": "Wenn Sie auf einen ZKN-Link klicken, erstellen und/oder öffnen Sie eine Datei mit dem Linknamen anstelle der Suche"
             }
         },
         "statistics": {
