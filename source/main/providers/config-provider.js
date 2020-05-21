@@ -173,7 +173,8 @@ class ConfigProvider extends EventEmitter {
         'idGen': '%Y%M%D%h%m%s',
         'linkStart': '[[',
         'linkEnd': ']]',
-        'linkWithFilename': 'always' // can be always|never|withID
+        'linkWithFilename': 'always', // can be always|never|withID
+        'createIfNotExists': false
       },
       // Editor related stuff
       'editor': {

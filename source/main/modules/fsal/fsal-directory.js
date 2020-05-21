@@ -247,6 +247,7 @@ module.exports = {
     let file = await FSALFile.parse(fullPath, cache, dirObject)
     dirObject.children.push(file)
     sortChildren(dirObject)
+    return file
   },
   'sort': async function (dirObject, method) {
     // If the caller omits the method, it should remain unchanged

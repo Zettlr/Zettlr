@@ -445,6 +445,14 @@
             </label>
             <label for="pref-link-never">{{i18n "dialog.preferences.zkn.link_behaviour_never"}}</label>
           </div>
+          <hr>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="zkn.createIfNotExists" value="yes" id="znCreateIfNotExists" {{#if zkn.createIfNotExists}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="znCreateIfNotExists">{{i18n "dialog.preferences.zkn.create_if_not_exists"}}</label>
+          </div>
         </div>
       </div>
 

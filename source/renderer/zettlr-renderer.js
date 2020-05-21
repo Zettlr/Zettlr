@@ -488,9 +488,15 @@ class ZettlrRenderer {
   autoSearch (term, forceOpen = false) {
     // Also initiate a search to be run accordingly for any files that
     // might reference the file.
-    this._toolbar.setSearch(term)
-    this.beginSearch(term)
-    if (forceOpen) this._ipc.send('force-open', term)
+    let create = global.config.get('zkn.createIfNotExists')
+    if (!create) {
+      this._toolbar.setSearch(term)
+      this.beginSearch(term)
+    }
+
+    if (forceOpen || create) {
+      this._ipc.send('force-open', { 'filename': term, 'create': create })
+    }
   }
 
   /**

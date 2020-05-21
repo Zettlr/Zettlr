@@ -15,6 +15,7 @@
 
 const path = require('path')
 const ZettlrCommand = require('./zettlr-command')
+const FileNew = require('./file-new')
 const FILETYPES = require('../../common/data.json').filetypes
 
 class ForceOpen extends ZettlrCommand {
@@ -29,7 +30,8 @@ class ForceOpen extends ZettlrCommand {
     * @return {Boolean} Whether the file was successfully deleted.
     */
   async run (evt, arg) {
-    let filename = arg
+    let filename = arg.filename
+    let create = arg.create
     // First try the ID
     let file = this._app.getFileSystem().findExact(filename, 'id')
     // No luck? Then try the name property
@@ -46,6 +48,11 @@ class ForceOpen extends ZettlrCommand {
           if (file) break
         }
       }
+    }
+
+    if (!file && create) {
+      let dir = this._app.getCurrentDir()
+      new FileNew(this._app).run('', { 'name': filename, 'hash': dir.hash })
     }
 
     // If any of this has worked,

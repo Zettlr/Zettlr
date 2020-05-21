@@ -266,6 +266,7 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['checkForBeta'] = (data.find(elem => elem.name === 'checkForBeta') !== undefined)
     cfg['enableRMarkdown'] = (data.find(elem => elem.name === 'enableRMarkdown') !== undefined)
     cfg['newFileDontPrompt'] = (data.find(elem => elem.name === 'newFileDontPrompt') !== undefined)
+    cfg['zkn.createIfNotExists'] = (data.find(elem => elem.name === 'zkn.createIfNotExists') !== undefined)
 
     // Display checkboxes
     cfg['display.renderCitations'] = (data.find(elem => elem.name === 'display.renderCitations') !== undefined)
