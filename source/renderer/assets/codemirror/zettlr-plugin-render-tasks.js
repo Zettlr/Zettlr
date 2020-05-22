@@ -83,9 +83,7 @@
 
       let cbox = document.createElement('input')
       cbox.type = 'checkbox'
-      if (checked) {
-        cbox.checked = true
-      }
+      if (checked) cbox.checked = true
 
       let textMarker = cm.markText(
         curFrom, curTo,
@@ -102,6 +100,7 @@
 
         // First, recalculate where the checkbox actually is.
         let markerLine = textMarker.find().from.line
+        taskRE.lastIndex = 0
         let m = taskRE.exec(cm.getLine(markerLine))
         let leadingSpaces = (m && m[1]) ? m[1].length : 0
         let curFrom = { 'line': markerLine, 'ch': 0 + leadingSpaces }
