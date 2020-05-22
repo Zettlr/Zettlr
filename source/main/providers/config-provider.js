@@ -173,7 +173,9 @@ class ConfigProvider extends EventEmitter {
         'idGen': '%Y%M%D%h%m%s',
         'linkStart': '[[',
         'linkEnd': ']]',
-        'linkWithFilename': 'always' // can be always|never|withID
+        'linkWithFilename': 'always', // can be always|never|withID
+        // If true, create files that are not found, if forceOpen is called
+        'autoCreateLinkedFiles': false
       },
       // Editor related stuff
       'editor': {

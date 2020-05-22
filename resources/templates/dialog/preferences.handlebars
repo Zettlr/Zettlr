@@ -445,6 +445,15 @@
             </label>
             <label for="pref-link-never">{{i18n "dialog.preferences.zkn.link_behaviour_never"}}</label>
           </div>
+
+          {{!-- Should Zettlr automatically create files that it did not find when following a ZKN link? --}}
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="zkn.autoCreateLinkedFiles" value="yes" id="zkn.autoCreateLinkedFiles" {{#if zkn.autoCreateLinkedFiles}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="zkn.autoCreateLinkedFiles">{{i18n "dialog.preferences.zkn.auto_create_file" }}</label>
+          </div>
         </div>
       </div>
 

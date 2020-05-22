@@ -439,8 +439,8 @@ class ZettlrRenderer {
     // First end any search in the store, if applicable.
     global.store.commitEndSearch()
 
-    // Immediately send out a force-open command to see if a file matches
-    this._ipc.send('force-open', term)
+    // Also send a "soft" force-open command in order to open
+    this._ipc.send('force-open-if-exists', term)
 
     // Make sure the file list is visible
     if (!this._sidebar.isFileListVisible()) this._sidebar.toggleFileList()
