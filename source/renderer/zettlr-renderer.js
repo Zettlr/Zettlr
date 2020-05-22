@@ -88,10 +88,13 @@ class ZettlrRenderer {
 
   /**
    * Matches the given file with potential candidates based on the used tags.
+   * @param {number} hash The hash of the file to match candidates to.
    * @returns {Array} An array with potential candidates
    */
   matchFile (hash) {
+    if (!hash) return []
     let fileDescriptor = this.findObject(hash)
+    if (!fileDescriptor) return []
     return matchFilesByTags(fileDescriptor, this._paths).map(e => {
       return {
         'fileDescriptor': this.findObject(e.hash),
@@ -347,8 +350,9 @@ class ZettlrRenderer {
       this.setCurrentDir(null) // Reset
     }
 
-    // Trigger a refresh in the attachment pane
+    // Trigger a refresh for all affected places
     this._attachments.refresh()
+    this._editor.signalUpdateFileAutocomplete()
 
     // Pass on the new paths object as is to the store.
     global.store.renewItems(nData)
@@ -625,6 +629,7 @@ class ZettlrRenderer {
     this._currentDir = this.findObject(newdir) // Find the dir (hash) in our own paths object
     global.store.selectDirectory(newdir)
     this._attachments.refresh()
+    this._editor.signalUpdateFileAutocomplete() // On every directory change
   }
 
   /**
