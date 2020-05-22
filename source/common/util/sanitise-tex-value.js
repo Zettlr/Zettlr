@@ -12,14 +12,14 @@
  */
 
 /**
-* Sanitises a string so that it is safe to insert into a document.
+* Escape or remove TeX command characters: # $ % ^ & _ { } ~ \
 * @param  {String} val The input.
 * @return {String}     The sanitised output.
 */
 module.exports = function (val) {
-  // Escape or remove TeX command characters: # $ % ^ & _ { } ~ \
-  val = val.replace(/(?<=[^\\]|^)([_#%&{}])/g, '\\$1')
-  // Remove those that cannot be rendered
+  // First remove those that cannot be rendered
   val = val.replace(/[$^~\\]/g, '')
+  // Then escape the rest
+  val = val.replace(/(?<!\\)([_#%&{}])/g, '\\$1')
   return val
 }

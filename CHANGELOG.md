@@ -62,6 +62,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Fixed wrong display of project property table of content evaluation level.
 - When linking files, Zettlr will now present you those files that match with at least one tag with the currently active file, making cross-linking of notes as easy as typing the link-start and hitting the arrow down-key. Bonus: It'll present you these options even if the files reside in a completely different root directory.
 - Fixed behaviour of nested checkboxes.
+- Fixed escaping of special TeX characters in input value fields (e.g. project properties).
 
 ## Under the Hood
 

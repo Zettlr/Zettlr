@@ -13,6 +13,7 @@
  */
 
 const ZettlrCommand = require('./zettlr-command')
+const expandOptionObject = require('../../common/util/expand-option-object')
 
 class UpdateProjectProperties extends ZettlrCommand {
   constructor (app) {
@@ -25,12 +26,15 @@ class UpdateProjectProperties extends ZettlrCommand {
     * @param  {Object} arg The hash of a directory.
     */
   run (evt, arg) {
+    // The properties come from the renderer with dot notation, but the action
+    // expects them already in their expanded state.
+    let expanded = expandOptionObject(arg.properties)
     // Find the directory, and apply the properties to it!
     let dir = this._app.findDir(arg.hash)
     if (dir) {
       this._app.getFileSystem().runAction('update-project', {
         'source': dir,
-        'info': arg.properties
+        'info': expanded
       })
     } else {
       global.log.warning(`Could not update project properties for ${arg.hash}: No directory found!`)
