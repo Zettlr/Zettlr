@@ -2,8 +2,8 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        autocomplete function
- * CVM-Role:        Utility function
+ * Contains:        EditorAutocomplete class
+ * CVM-Role:        Utility class
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
@@ -26,7 +26,10 @@ module.exports = class EditorAutocomplete {
     this._currentDatabase = null // Points to the correct database
   }
 
-  // We need the actual CodeMirror instance to set everything up
+  /**
+   * Sets up the event listener on the CodeMirror instance
+   * @param {CodeMirror} cmInstance The instance
+   */
   init (cmInstance) {
     /**
      * Sets up an event listener to look whether or not we should display an
@@ -43,6 +46,12 @@ module.exports = class EditorAutocomplete {
     })
   }
 
+  /**
+   * Will be called by the CodeMirror instance whenever showHint() is being called.
+   * @param {CodeMirror} cm The CodeMirror instance
+   * @param {object} opt Options for the hint plugin
+   * @returns {object} The completion object upon which the widget is based.
+   */
   hint (cm, opt) {
     let term = cm.getRange(this._autoCompleteStart, cm.getCursor()).toLowerCase()
     let completionObject = {
@@ -116,6 +125,13 @@ module.exports = class EditorAutocomplete {
     return completionObject
   }
 
+  /**
+   * Determines if the change currently observed on the editor instance
+   * justifies an autocomplete hint, and also provides the correct database.
+   * @param {CodeMirror} cm The CodeMirror instance
+   * @param {object} changeObj The object containing the precise changes.
+   * @returns {string} The database to be loaded (or undefined)
+   */
   _shouldBeginAutocomplete (cm, changeObj) {
     // The easiest are citekeys
     if (changeObj.text[0] === '@') return 'citekeys'
@@ -143,10 +159,18 @@ module.exports = class EditorAutocomplete {
     return undefined // Nothing to do for us here
   }
 
+  /**
+   * Sets the tag index.
+   * @param {Array} tagArray The tags to autocomplete with.
+   */
   setTagCompletion (tagArray) {
     this._databases['tags'] = tagArray
   }
 
+  /**
+   * Sets the citekey index for the autocompletion.
+   * @param {Array} citeKeyArray The array with citation keys
+   */
   setCiteKeyCompletion (citeKeyArray) {
     if (typeof citeKeyArray !== 'object' || citeKeyArray === null) {
       console.warn('No citekeys to update!')
@@ -158,6 +182,11 @@ module.exports = class EditorAutocomplete {
     }
   }
 
+  /**
+   * Generates the index for the file autocompletion hint.
+   * @param {object} dir The directory descriptor from which to pull the files.
+   * @param {Array} fileMatches A list of potential candidates to match with.
+   */
   setFileCompletion (dir, fileMatches) {
     if (!dir) {
       this._databases['files'] = []
