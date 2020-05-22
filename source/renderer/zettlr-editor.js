@@ -14,20 +14,19 @@
 */
 
 const path = require('path')
+const hash = require('../common/util/hash')
 const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const Turndown = require('joplin-turndown')
-const turndownGfm = require('joplin-turndown-plugin-gfm')
-const { clipboard } = require('electron')
-const hash = require('../common/util/hash')
 const countWords = require('../common/util/count-words')
-const { trans } = require('../common/lang/i18n.js')
-const generateKeymap = require('./assets/codemirror/generate-keymap.js')
-const EditorSearch = require('./util/editor-search')
 const EditorTabs = require('./util/editor-tabs')
-const EditorAutocomplete = require('./util/editor-autocomplete')
+const turndownGfm = require('joplin-turndown-plugin-gfm')
 const moveSection = require('./util/editor-move-section')
+const EditorSearch = require('./util/editor-search')
+const { clipboard } = require('electron')
+const generateKeymap = require('./assets/codemirror/generate-keymap.js')
 const openMarkdownLink = require('./util/open-markdown-link')
+const EditorAutocomplete = require('./util/editor-autocomplete')
 
 // The autoloader requires all necessary CodeMirror addons and modes that are
 // used by the main class. It simply folds about 70 lines of code into an extra
@@ -80,13 +79,6 @@ class ZettlrEditor {
 
     this._autocomplete = new EditorAutocomplete()
 
-    // The starting position for a tag autocomplete.
-    // TODO
-    this._autoCompleteStart = null
-    this._tagDB = [] // Holds all available tags for autocomplete
-    this._citeprocIDs = [] // Holds all available IDs for autocomplete
-    this._currentDatabase = null // Points either to the tagDB or the ID database
-
     // What elements should be rendered?
     this._renderCitations = false
     this._renderIframes = false
@@ -119,9 +111,6 @@ class ZettlrEditor {
       hr: '---'
     })
     this._turndown.use(turndownGfm.gfm)
-
-    // The last array of IDs as fetched from the document
-    this._lastKnownCitationCluster = []
 
     // All individual citations fetched during this session.
     this._citationBuffer = Object.create(null)
@@ -248,14 +237,8 @@ class ZettlrEditor {
             // NOTE that the renderer will pull the currently active file from
             // the editor in any case, so the state is maintained.
             this._renderer.saveFile()
-            this.updateCitations()
           }, SAVE_TIMOUT)
         }
-
-        // Always run an update-citations command each time there have been changes
-        this._citationTimeout = setTimeout((e) => {
-          this.updateCitations()
-        }, 500)
       }
     })
 
@@ -471,9 +454,6 @@ class ZettlrEditor {
     // If we've got a new file, we need to re-focus the editor
     if (flag === 'new-file') this._cm.focus()
 
-    // Finally, set a timeout for a first run of citation rendering
-    setTimeout(() => { this.updateCitations() }, 1000)
-
     return this
   }
 
@@ -482,7 +462,6 @@ class ZettlrEditor {
    * @param {Number} hash The hash of the file to be swapped
    */
   _swapFile (hash) {
-    console.log('_swapFile called')
     if (this.isReadabilityModeActive()) this.exitReadability()
     // Exchanges the CodeMirror document object
     let file = this._openFiles.find(elem => elem.fileObject.hash === hash)
@@ -507,6 +486,8 @@ class ZettlrEditor {
 
     // We also need to tell the autocompletion to rebuild the index
     this.signalUpdateFileAutocomplete()
+
+    this._renderer.signalActiveFileChanged()
 
     // Last but not least: If there are any search results currently
     // display, mark the respective positions.
@@ -1113,69 +1094,6 @@ class ZettlrEditor {
     // We need to refresh the editor, because the updating process has certainly
     // altered the widths of the spans.
     if (needRefresh) this._cm.refresh()
-  }
-
-  /**
-   * This method updates both the in-text citations as well as the bibliography.
-   * @return {void} Does not return.
-   */
-  updateCitations () {
-    // This function searches for all elements with class .citeproc-citation and
-    // updates the contents of these elements based upon the ID.
-
-    // NEVER use jQuery to always query all citeproc-citations, because CodeMirror
-    // does NOT always print them! We have to manually go through the value of
-    // the code ...
-    let cnt = this._cm.getValue()
-    let totalIDs = Object.create(null)
-    let match
-    let citeprocIDRE = /@([a-z0-9_:.#$%&\-+?<>~/]+)/gi
-    let somethingUpdated = false // This flag indicates if anything has changed and justifies a new bibliography.
-    while ((match = citeprocIDRE.exec(cnt)) != null) {
-      let id = match[1]
-      totalIDs[id] = this._lastKnownCitationCluster[id] // Could be undefined.
-    }
-
-    // Now we have the correct amount of IDs in our cluster. Now fetch all
-    // citations of new ones.
-    for (let id in totalIDs) {
-      if (totalIDs[id] === undefined) {
-        totalIDs[id] = true
-        somethingUpdated = true // We have to fetch a new citation
-      }
-    }
-
-    // Check if there are some citations _missing_ from the new array
-    for (let id in this._lastKnownCitationCluster) {
-      if (totalIDs[id] === undefined) {
-        somethingUpdated = true // We only need one entry to justify an update
-        break
-      }
-    }
-
-    // Swap
-    this._lastKnownCitationCluster = totalIDs
-
-    if (Object.keys(this._lastKnownCitationCluster).length === 0) {
-      return this._renderer.setBibliography(trans('gui.citeproc.references_none'))
-    }
-
-    if (somethingUpdated) {
-      // Need to update
-      // We need to update the items first!
-      let bib = global.citeproc.updateItems(Object.keys(this._lastKnownCitationCluster))
-      if (bib === true) {
-        global.citeproc.makeBibliography() // Trigger a new bibliography build
-      } else if (bib === 1) { // 1 means booting
-        this._renderer.setBibliography(trans('gui.citeproc.references_booting'))
-        // Unset so that the update process is triggered again next time
-        this._lastKnownCitationCluster = Object.create(null)
-      } else if (bib === 3) { // There was an error
-        this._renderer.setBibliography(trans('gui.citeproc.references_error'))
-      } else if (bib === 2) { // No database loaded
-        this._renderer.setBibliography(trans('gui.citeproc.no_db'))
-      }
-    }
   }
 
   /**

@@ -366,12 +366,12 @@ class ZettlrRenderer {
     * @param  {ZettlrFile} file The new file object.
     */
   refreshCurrentFile (file) {
-    if (this.getActiveFile()) {
+    let f = this.getActiveFile()
+    if (f) {
       // The only things that could've changed and that are immediately
       // visible to the user (which is why we need to update them) are:
       // modtime, file meta, tags, id. The rest can wait until the next big
       // update.
-      let f = this.getActiveFile()
       f.modtime = file.modtime
       f.tags = file.tags
       f.wordCount = file.wordCount
@@ -380,6 +380,9 @@ class ZettlrRenderer {
       f.id = file.id
       // Trigger a redraw of this specific file in the preview list.
       this._preview.refresh()
+
+      // Also, the bibliography has likely changed
+      this._attachments.refreshBibliography(this._editor.getValue())
 
       // Finally, synchronize the file descriptors in the editor
       this._editor.syncFiles()
@@ -545,6 +548,14 @@ class ZettlrRenderer {
     // Select the file either in the preview list or in the directory tree
     global.store.set('selectedFile', f.hash)
     this._editor.open(f, flag)
+  }
+
+  /**
+   * Called by the editor instance to indicate that the current activeFile has changed.
+   */
+  signalActiveFileChanged () {
+    // Also, the bibliography has likely changed
+    this._attachments.refreshBibliography(this._editor.getValue())
   }
 
   /**
@@ -734,7 +745,7 @@ class ZettlrRenderer {
    * update it here.
    * @param {Object} bib A new citeproc bibliography object.
    */
-  setBibliography (bib) { this._attachments.refreshBibliography(bib) }
+  setBibliography (bib) { this._attachments.setBibliographyContents(bib) }
 
   /**
    * Simply indicates to main to set the modified flag.

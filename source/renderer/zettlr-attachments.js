@@ -17,6 +17,7 @@ const { shell } = require('electron')
 
 const { trans } = require('../common/lang/i18n.js')
 const clarityIcons = require('@clr/icons').ClarityIcons
+const Citr = require('@zettlr/citr')
 
 const path = require('path')
 
@@ -120,10 +121,48 @@ class ZettlrAttachments {
 
   /**
    * This function refreshes the bibliography settings.
-   * @param  {Mixed} bib Either an array as returned from citeproc, or a string.
-   * @return {void}     This does not return.
+   * @param  {string} doc The contents of a file
    */
-  refreshBibliography (bib) {
+  refreshBibliography (doc) {
+    console.log('Refreshing bibliography ...')
+    // Remove code which does not contain any citeKeys
+    doc = doc.replace(/`{1,3}[^`]+`{1,3}/g, '')
+
+    // Now, use Citr to extract all citations and then extract them to valid
+    // CSL JSON to be passed to the main process in order to retrieve the
+    // correct bibliography.
+    let keys = Citr.util.extractCitations(doc).map(e => Citr.parseSingle(e))
+
+    // Unfortunately, parseSingle always returns an array, as one citation may
+    // have multiple keys in it, so we have to "flatten" it out.
+    let sanitizedKeys = []
+    for (let key of keys) sanitizedKeys = sanitizedKeys.concat(key)
+    keys = sanitizedKeys
+
+    // Now we can set the bibliography container to whatever we need
+    if (keys.length === 0) {
+      this.setBibliographyContents(trans('gui.citeproc.references_none'))
+      return
+    }
+
+    console.log(keys)
+    let updateResult = global.citeproc.updateItems(keys.map(e => e.id))
+
+    if (updateResult === true) {
+      global.citeproc.makeBibliography() // Trigger a new bibliography build
+    } else if (updateResult === 1) { // 1 means booting
+      this.setBibliographyContents(trans('gui.citeproc.references_booting'))
+    } else if (updateResult === 3) { // There was an error
+      this.setBibliographyContents(trans('gui.citeproc.references_error'))
+    } else if (updateResult === 2) { // No database loaded
+      this.setBibliographyContents(trans('gui.citeproc.no_db'))
+    }
+  }
+
+  /**
+   * Sets the actual HTML contents of the bibliography container.
+   */
+  setBibliographyContents (bib) {
     if (typeof bib === 'string') this._bibliographyContainer.html(`<p>${bib}</p>`)
     else this._bibliographyContainer.html(bib[0].bibstart + bib[1].join('\n') + bib[0].bibend)
   }
