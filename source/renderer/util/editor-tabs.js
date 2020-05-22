@@ -26,6 +26,7 @@ module.exports = class EditorTabs {
     this._currentlyDragging = undefined
     this._tabbarLeft = this._div.getBoundingClientRect().left
     this._cursorOffset = 0
+    this._tippyInstances = []
 
     // Listen to the important events
     this._div.onclick = (event) => { this._onClick(event) }
@@ -77,7 +78,13 @@ module.exports = class EditorTabs {
   }
 
   syncFiles (files, openFile) {
-    this._div.innerHTML = '' // Reset
+    // First reset the whole tab bar
+    for (let instance of this._tippyInstances) {
+      instance.destroy()
+    }
+    this._tippyInstances = []
+
+    this._div.innerHTML = ''
 
     if (files.length === 0) {
       // No files, so indicate!
@@ -106,7 +113,7 @@ module.exports = class EditorTabs {
     }
 
     // After synchronising, enable the tippy
-    global.tippy('#document-tabs .document', {
+    this._tippyInstances = global.tippy('#document-tabs .document', {
       delay: [ 1000, null ], // Show after 1s, hide normally
       allowHTML: true, // There is HTML in the contents
       placement: 'bottom' // Prefer to display it on the bottom
