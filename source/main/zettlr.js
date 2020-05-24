@@ -207,7 +207,7 @@ class Zettlr {
    * @return {void} Doesn't return
    */
   _bootServiceProviders () {
-    // The order is important, we'll just save them to this object
+    // NOTE: The order these providers are loaded is important.
     this._providers = {
       'log': require('./providers/log-provider'),
       'config': require('./providers/config-provider'),

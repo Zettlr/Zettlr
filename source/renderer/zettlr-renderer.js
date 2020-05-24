@@ -422,6 +422,10 @@ class ZettlrRenderer {
     let oldDir = this.findObject(oldHash)
 
     if (oldDir && oldDir.type === 'directory') {
+      let tempParent = dir.parent
+      reconstruct(dir) // Reconstruct may overwrite the parent with null
+      dir.parent = tempParent
+
       // We'll be patching the store, as this
       // will also update the renderer._paths.
       global.store.patch(oldHash, dir)

@@ -66,9 +66,9 @@ class DirNew extends ZettlrCommand {
       return false
     }
 
-    // Now the dir should be created -> Send an update to the renderer
-    // and set the new dir as current.
-    global.application.dirUpdate(sourceDir.hash, sourceDir.hash)
+    // Now the dir should be created, the FSAL will automatically notify the
+    // application of the changes, so all we have to do is set the directory
+    // as the new current directory.
     let newDirHash = hash(path.join(sourceDir.path, arg.name))
     this._app.setCurrentDir(this._app.findDir(newDirHash))
   }

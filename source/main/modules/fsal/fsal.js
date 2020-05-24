@@ -47,10 +47,12 @@ module.exports = class FSAL extends EventEmitter {
 
     // The following actions can be run on the file tree
     this._actions = {
+      // TODO: Doesn't emit currently
       'sort': async (src, target, options) => {
         // NOTE: Does not generate watchdog events
         return FSALDir.sort(src, options)
       },
+      // TODO: Doesn't emit currently
       'create-file': async (src, target, options) => {
         // This action needs the cache because it'll parse a file
         // NOTE: Generates an add-event
@@ -60,6 +62,7 @@ module.exports = class FSAL extends EventEmitter {
         })
         return FSALDir.createFile(src, options, this._cache)
       },
+      // TODO: Doesn't emit currently
       'duplicate-file': async (src, target, options) => {
         // Duplicating a file is basically the same as creating, only with
         // passing the content of an existing file to the createFile
@@ -96,6 +99,7 @@ module.exports = class FSAL extends EventEmitter {
         if (isOpenFile) this.emit('fsal-state-changed', 'openFiles')
         return true
       },
+      // TODO: Doesn't emit currently
       'remove-file': async (src, target, options) => {
         // NOTE: Generates 1x unlink
         // First remove the file
@@ -108,7 +112,7 @@ module.exports = class FSAL extends EventEmitter {
         this.closeFile(src) // Does nothing if the file is not open
       },
       'save-file': async (src, target, options) => {
-        // NOTE: Generates 1x chance
+        // NOTE: Generates 1x change
         this._watchdog.ignoreEvents({
           'event': 'change',
           'path': src.path
@@ -125,15 +129,18 @@ module.exports = class FSAL extends EventEmitter {
         return FSALFile.search(src, options)
       },
       // Creates a project in a dir
+      // TODO: Doesn't emit currently
       'create-project': async (src, target, options) => {
         // NOTE: Generates no events as dotfiles are not watched
         await FSALDir.makeProject(src, options)
       },
+      // TODO: Doesn't emit currently
       'update-project': async (src, target, options) => {
         // NOTE: Generates no events as dotfiles are not watched
         // Updates the project properties on a directory.
         await FSALDir.updateProjectProperties(src, options)
       },
+      // TODO: Doesn't emit currently
       'remove-project': async (src, target, options) => {
         // NOTE: Generates no events as dotfiles are not watched
         await FSALDir.removeProject(src)
@@ -146,6 +153,12 @@ module.exports = class FSAL extends EventEmitter {
           'path': path.join(src.path, options.name)
         })
         await FSALDir.create(src, options, this._cache)
+
+        // Notify the event listeners
+        this.emit('fsal-state-changed', 'directory', {
+          'oldHash': src.hash,
+          'newHash': src.hash
+        })
       },
       'rename-directory': async (src, target, options) => {
         // We are probably going to need that code from the move action
@@ -221,6 +234,7 @@ module.exports = class FSAL extends EventEmitter {
         if (openFilesUpdateNeeded) this.setOpenFiles(newFileHashes)
         if (openDirUpdateNeeded) this.setOpenDirectory(this.findDir(newOpenDirHash))
       },
+      // TODO: Doesn't emit currently
       'remove-directory': async (src, target, options) => {
         // NOTE: Generates 1x unlink for each child + src!
         let arr = objectToArray(src, 'children').map(e => {
@@ -233,6 +247,7 @@ module.exports = class FSAL extends EventEmitter {
         this._watchdog.ignoreEvents(arr)
         await FSALDir.remove(src)
       },
+      // TODO: Doesn't emit currently (at least not consistently)
       'move': async (src, target, options) => {
         // NOTE: Generates 1x unlink, 1x add for each child, src and on the target!
         let openFilesUpdateNeeded = false
@@ -304,7 +319,7 @@ module.exports = class FSAL extends EventEmitter {
         // Now update both the source's parent and the target
         this.emit('fsal-state-changed', 'directory', {
           // We cannot move roots, so the source WILL have a parent
-          'oldHash': src.parent.hash,
+          'oldHash': src.parent.hash, // NOTE that src still points to the old location
           'newHash': src.parent.hash
         })
         this.emit('fsal-state-changed', 'directory', {

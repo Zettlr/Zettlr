@@ -170,7 +170,18 @@ module.exports = {
       let isCurrentlySelected = (obj.type === 'file') ? (context.state.selectedFile === obj.hash) : (context.state.selectedDirectory === obj.hash)
       // Explicitly set the properties of the object to make the
       // reactive parts of Vue ... well, react.
-      for (let prop in opt.object) { Vue.set(obj, prop, opt.object[prop]) }
+      for (let prop in opt.object) {
+        if (prop === 'parent' && typeof opt.object[prop] === 'number') {
+          // If we reach this point we have to duplicate the methods of
+          // "recreating" the directory tree, that is, interlink the objects
+          // again. In most circumstances this won't change the current parent
+          // of obj, but the new hash might be used to attach obj to a
+          // different parent, so we'll explicitly do this here.
+          let p = findObject(context.state.items, 'hash', opt.object[prop], 'children')
+          Vue.set(obj, prop, p)
+        }
+        Vue.set(obj, prop, opt.object[prop])
+      }
       // Make sure the file list is re-computed
       context.commit('computeFileList')
       // Make sure to re-select the file or directory, if necessary
