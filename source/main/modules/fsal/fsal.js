@@ -89,7 +89,7 @@ module.exports = class FSAL extends EventEmitter {
           'path': path.join(path.dirname(src.path), options.name)
         })
 
-        await FSALFile.rename(src, options)
+        await FSALFile.rename(src, this._cache, options)
         // Now we need to re-sort the parent directory
         if (!isRoot) await FSALDir.sort(src.parent) // Omit sorting
 
@@ -113,11 +113,8 @@ module.exports = class FSAL extends EventEmitter {
       },
       'save-file': async (src, target, options) => {
         // NOTE: Generates 1x change
-        this._watchdog.ignoreEvents({
-          'event': 'change',
-          'path': src.path
-        })
-        await FSALFile.save(src, options)
+        this._watchdog.ignoreEvents({ 'event': 'change', 'path': src.path })
+        await FSALFile.save(src, this._cache, options)
         // Notify that a file has saved, which strictly speaking does not
         // modify the openFiles array, but does change the modification flag.
         this.emit('fsal-state-changed', 'fileSaved')

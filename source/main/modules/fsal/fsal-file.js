@@ -243,15 +243,16 @@ module.exports = {
     // Loads the content of a file from disk
     return fs.readFile(fileObject.path, { encoding: 'utf8' })
   },
-  'save': async function (fileObject, content) {
+  'save': async function (fileObject, cache, content) {
     await fs.writeFile(fileObject.path, content)
     // Make sure to keep the file object itself as well as the tags updated
     global.tags.remove(fileObject.tags)
     parseFileContents(fileObject, content)
     global.tags.report(fileObject.tags)
     fileObject.modified = false // Always reset the modification flag.
+    cacheFile(fileObject, cache)
   },
-  'rename': async function (fileObject, options) {
+  'rename': async function (fileObject, cache, options) {
     let oldPath = fileObject.path
     let newPath = path.join(path.dirname(fileObject.path), options.name)
     await fs.rename(oldPath, newPath)
@@ -259,6 +260,7 @@ module.exports = {
     fileObject.path = newPath
     fileObject.hash = hash(newPath)
     fileObject.name = options.name
+    cacheFile(fileObject, cache)
   },
   'remove': async function (fileObject) {
     // await fs.unlink(fileObject.path)
@@ -269,10 +271,6 @@ module.exports = {
   },
   'parse': async function (filePath, cache, parent = null) {
     return parseFile(filePath, cache, parent)
-  },
-  'updateFile': function (fileObject, newContents) {
-    // Updates a file object with new contents
-    return parseFileContents(fileObject, newContents)
   },
   'setTarget': function (fileObject, target) {
     fileObject.target = target
