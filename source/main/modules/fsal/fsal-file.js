@@ -81,6 +81,21 @@ function metadata (fileObject) {
   }
 }
 
+/**
+ * Updates the file metadata (such as modification time) from lstat.
+ *
+ * @param   {Object}  fileObject  The object to be updated
+ * @return  {void}              Does not return
+ */
+async function updateFileMetadata (fileObject) {
+  try {
+    let stat = await fs.lstat(fileObject)
+    fileObject.modtime = stat.mtimeMs
+  } catch (e) {
+    // Do nothing ...
+  }
+}
+
 async function parseFile (filePath, cache, parent = null) {
   // First of all, prepare the file descriptor
   let file = {
@@ -120,11 +135,17 @@ async function parseFile (filePath, cache, parent = null) {
 
   // Before reading in the full file and parsing it,
   // let's check if the file has been changed
+  let hasCache = false
   if (cache.has(file.hash)) {
     let cachedFile = cache.get(file.hash)
     // If the modtime is still the same, we can apply the cache
-    if (cachedFile.modtime === file.modtime) applyCache(file, cachedFile)
-  } else {
+    if (cachedFile.modtime === file.modtime) {
+      applyCache(file, cachedFile)
+      hasCache = true
+    }
+  }
+
+  if (!hasCache) {
     // Read in the file, parse the contents and make sure to cache the file
     let content = await fs.readFile(filePath, { encoding: 'utf8' })
     parseFileContents(file, content)
@@ -245,6 +266,8 @@ module.exports = {
   },
   'save': async function (fileObject, cache, content) {
     await fs.writeFile(fileObject.path, content)
+    // Afterwards, retrieve the now current modtime
+    await updateFileMetadata(fileObject)
     // Make sure to keep the file object itself as well as the tags updated
     global.tags.remove(fileObject.tags)
     parseFileContents(fileObject, content)
@@ -260,6 +283,8 @@ module.exports = {
     fileObject.path = newPath
     fileObject.hash = hash(newPath)
     fileObject.name = options.name
+    // Afterwards, retrieve the now current modtime
+    await updateFileMetadata(fileObject)
     cacheFile(fileObject, cache)
   },
   'remove': async function (fileObject) {
