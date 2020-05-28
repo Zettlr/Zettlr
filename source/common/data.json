@@ -216,6 +216,14 @@
         "mode": "css",
         "selectors": [ "less" ]
       },
+      "text/html": {
+        "mode": "xml",
+        "selectors": [ "html" ]
+      },
+      "application/xml": {
+        "mode": "xml",
+        "selectors": [ "xml" ]
+      },
       "text/x-php": {
         "mode": "php",
         "selectors": [ "php" ]
