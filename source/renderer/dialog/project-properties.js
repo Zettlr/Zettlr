@@ -102,8 +102,6 @@ class ProjectDialog extends ZettlrDialog {
       return // Don't try to update falsy settings.
     }
 
-    console.log('Will send properties:', cfg)
-
     // Send and close
     global.ipc.send('update-project-properties', { 'properties': cfg, 'hash': hash })
     this.close()

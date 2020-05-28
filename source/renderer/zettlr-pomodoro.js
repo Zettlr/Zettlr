@@ -121,7 +121,7 @@ class ZettlrPomodoro {
       if (this._sound.volume > 0) {
         // Play a "finish" audio sound
         this._sound.currentTime = 0
-        this._sound.play().then(() => { console.log('Audio played!') }).catch((e) => { console.log('Audio did not play.', e) })
+        this._sound.play()
       }
 
       // Set the class of the value accordingly

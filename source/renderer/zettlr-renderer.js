@@ -395,7 +395,6 @@ class ZettlrRenderer {
     * @param  {ZettlrFile} file    The new file to replace the old.
     */
   replaceFile (oldHash, file) {
-    console.log('replacing file', file)
     if (!file) return // No file given; main has screwed up
 
     let oldFile = this.findObject(oldHash)
@@ -404,7 +403,6 @@ class ZettlrRenderer {
       // We'll be patching the store, as this will
       // be reflected in renderer._paths as well.
       global.store.patch(oldHash, file)
-      console.warn('replacing file', file)
 
       // Finally, synchronize the file descriptors in the editor
       this._editor.syncFiles()

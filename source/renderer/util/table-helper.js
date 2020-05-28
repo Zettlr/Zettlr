@@ -600,7 +600,6 @@ class TableHelper {
    * @return {void} Does not return.
    */
   prependCol () {
-    console.log('Prepend col')
     // Add a column to the left of the active cell -> add a TD child to all TRs
     let newcol = $('<td></td>').attr('contenteditable', 'true')
     newcol.css('text-align', this._colAlignment[this._cellIndex])
@@ -617,7 +616,6 @@ class TableHelper {
    * @return {void} Does not return.
    */
   appendCol () {
-    console.log('Append col')
     // Add a column to the right of the table -> add a TD child to all TRs
     let newcol = $('<td></td>').attr('contenteditable', 'true')
     newcol.css('text-align', this._colAlignment[this._cellIndex])
@@ -635,7 +633,6 @@ class TableHelper {
    * @return {void} Does not return.
    */
   prependRow () {
-    console.log('Prepend Row')
     // Prepend a whole row to the currently active cell
     let row = $('<tr></tr>')
     for (let i = 0; i < this._cols; i++) {

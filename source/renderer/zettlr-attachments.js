@@ -124,7 +124,6 @@ class ZettlrAttachments {
    * @param  {string} doc The contents of a file
    */
   refreshBibliography (doc) {
-    console.log('Refreshing bibliography ...')
     // Remove code which does not contain any citeKeys
     doc = doc.replace(/`{1,3}[^`]+`{1,3}/g, '')
 
@@ -145,7 +144,6 @@ class ZettlrAttachments {
       return
     }
 
-    console.log(keys)
     let updateResult = global.citeproc.updateItems(keys.map(e => e.id))
 
     if (updateResult === true) {

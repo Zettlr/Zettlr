@@ -426,7 +426,6 @@ class ZettlrEditor {
     */
   open (file, flag = null) {
     if (!this._openFiles.find(elem => elem.fileObject.hash === file.hash)) {
-      console.log('File not opened. Adding to open files ...')
       // We need to create a new doc for the file and then swap
       // the currently active doc.
       // Switch modes based on the file type
@@ -465,10 +464,7 @@ class ZettlrEditor {
     if (this.isReadabilityModeActive()) this.exitReadability()
     // Exchanges the CodeMirror document object
     let file = this._openFiles.find(elem => elem.fileObject.hash === hash)
-    if (!file) {
-      console.log('No file found to swap.')
-      return
-    }
+    if (!file) return
     // swapDoc returns the old doc, but we retain a reference in the
     // _openFiles array so we don't need to catch it.
     this._cm.swapDoc(file.cmDoc)
@@ -573,7 +569,6 @@ class ZettlrEditor {
    * @param {Object} fileObject A file descriptor with content
    */
   addFileToOpen (fileObject) {
-    console.log('addFileToOpen called')
     // Check if the file is already open; prevent duplicates.
     if (this._openFiles.find(elem => elem.fileObject.hash === fileObject.hash)) return
     // This function is called by the IPC when there's a new file
