@@ -12,6 +12,7 @@
  * END HEADER
  */
 
+const CodeMirror = require('codemirror')
 const path = require('path')
 const objectToArray = require('../../common/util/object-to-array')
 
@@ -79,13 +80,11 @@ module.exports = class EditorAutocomplete {
     }
 
     // Set the autocomplete to false as soon as the user has actively selected something.
-    cm.on(completionObject, 'pick', (completion) => {
+    CodeMirror.on(completionObject, 'pick', (completion) => {
       // In case the user wants to link a file, intercept during
       // the process and add the file link according to the user's
       // preference settings.
-      if (this._currentDatabase !== this._tagDB &&
-        this._currentDatabase !== this._citeprocIDs &&
-        completion.displayText) {
+      if (this._currentDatabase === this._databases['files']) {
         // Get the correct setting
         let linkPref = global.config.get('zkn.linkWithFilename')
         // Prepare the text to insert, removing the ID if found in the filename
@@ -99,7 +98,7 @@ module.exports = class EditorAutocomplete {
         let cur = JSON.parse(JSON.stringify(cm.getCursor()))
         // Check if the linkEnd has been already inserted
         let line = cm.getLine(cur.line)
-        let end = this._cm.getOption('zkn').linkEnd || ''
+        let end = cm.getOption('zkn').linkEnd || ''
         let prefix = ' '
         let linkEndMissing = false
         if (end !== '' && line.substr(cur.ch, end.length) !== end) {
