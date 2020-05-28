@@ -220,6 +220,10 @@
         "mode": "xml",
         "selectors": [ "html" ]
       },
+      "text/x-markdown": {
+        "mode": "gfm",
+        "selectors": [ "markdown", "md" ]
+      },
       "application/xml": {
         "mode": "xml",
         "selectors": [ "xml" ]
