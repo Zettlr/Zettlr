@@ -189,7 +189,6 @@ module.exports = class EditorAutocomplete {
    */
   setFileCompletion (dir, fileMatches) {
     if (!dir) {
-      console.log('[AUTOCOMPLETE] Resetting file database ...')
       this._databases['files'] = []
       return
     }
@@ -235,6 +234,5 @@ module.exports = class EditorAutocomplete {
 
     // Finally set the database
     this._databases['files'] = fileDatabase
-    console.log('[AUTOCOMPLETE] Filled fileDatabase', Object.keys(fileDatabase).length)
   }
 }

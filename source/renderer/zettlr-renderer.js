@@ -422,7 +422,7 @@ class ZettlrRenderer {
     if (oldDir && oldDir.type === 'directory') {
       let tempParent = dir.parent
       reconstruct(dir) // Reconstruct may overwrite the parent with null
-      dir.parent = tempParent
+      dir.parent = this.findObject(tempParent)
 
       // We'll be patching the store, as this
       // will also update the renderer._paths.
