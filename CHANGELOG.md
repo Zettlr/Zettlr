@@ -44,6 +44,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
     - **HTML**: `html`
     - **XML**: `xml`
     - **Markdown**: `markdown`/`md`
+    - **Julia**: `julia`/`jl`
 - Fix the colours of the heatmap search list.
 - Fixed a logical error in the detection of remote changes of attachment files.
 - Fenced code blocks, delimited by three backticks have a customizable box background. The colour (and different styles) can be customized by targeting the `code-block-line`-CSS class.

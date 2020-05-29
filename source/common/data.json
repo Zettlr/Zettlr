@@ -271,6 +271,10 @@
       "text/x-rustsrc": {
         "mode": "rust",
         "selectors": [ "rust", "rs" ]
+      },
+      "text/x-julia": {
+        "mode": "julia",
+        "selectors": [ "julia", "jl" ]
       }
     }
 }
