@@ -24,11 +24,20 @@ class RootClose extends ZettlrCommand {
    * @param {String} evt The event name
    * @param  {Object} arg The hash of a root directory or file.
    */
-  run (evt, arg) {
+  async run (evt, arg) {
     let root = this._app.getFileSystem().find(arg)
     if (!root) {
       console.log(`No root for arg ${arg} found. Cannot close.`)
       return false
+    }
+
+    // Run the close file command in case we're going to close an open root file
+    if (this._app.getFileSystem().getOpenFiles().includes(root.hash)) {
+      let res = await this._app.runCommand('file-close', { 'hash': root.hash })
+      if (!res) {
+        global.log.info(`Could not unload root file ${root.name}: Could not close it.`)
+        return false
+      }
     }
 
     // We got a root, so now we need to unload it and remove it from config

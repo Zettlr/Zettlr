@@ -376,6 +376,7 @@ class Zettlr {
     * Open a new root.
     */
   async open () {
+    // TODO: Move this to a command
     // The user wants to open another file or directory.
     let ret = await this.window.askDir()
     // Let's see if the user has canceled or not provided a path

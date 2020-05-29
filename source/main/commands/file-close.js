@@ -23,11 +23,10 @@ class FileClose extends ZettlrCommand {
    * Close an open file
    * @param {String} evt The event name
    * @param  {Object} arg An object containing a hash of the file to close.
-   * @return {void}     This function does not return anything.
+   * @return {boolean}     True, if the file was successfully closed
    */
   async run (evt, arg) {
     // Close the file
-    console.log('Closing file ...')
     try {
       if (!arg || !arg.hash) throw new Error('Could not close file! No hash provided!')
       let file = this._app.getFileSystem().findFile(arg.hash)
@@ -45,8 +44,11 @@ class FileClose extends ZettlrCommand {
       if (!this._app.getFileSystem().closeFile(file)) {
         throw new Error('Could not close file!')
       }
+
+      return true
     } catch (e) {
       global.log.error(e.message, e)
+      return false
     }
   }
 }

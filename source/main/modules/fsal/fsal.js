@@ -701,22 +701,18 @@ module.exports = class FSAL extends EventEmitter {
       return false
     }
 
-    if (this._state.openDirectory === root) {
-      // Unset the directory pointer
-      this._state.openDirectory = null
-      this.emit('fsal-state-changed', 'openDirectory')
-    } else if (this._state.openFiles.includes(root)) {
-      // Close the file
-      this._state.openFiles.splice(this._roots.indexOf(root), 1)
-      this.emit('fsal-state-changed', 'openFiles')
-    }
+    // Unset the directory pointer
+    if (this._state.openDirectory === root) this.setOpenDirectory(null)
+    // Close the open file
+    if (this._state.openFiles.includes(root)) this.closeFile(root)
 
     this._state.filetree.splice(this._state.filetree.indexOf(root), 1)
     this._watchdog.unwatch(root.path)
-    this.emit('fsal-state-changed', 'filetree')
 
     // Make sure to keep the openFiles array updated.
     this._refetchOpenFiles()
+
+    this.emit('fsal-state-changed', 'filetree')
     return true
   }
 
@@ -854,7 +850,6 @@ module.exports = class FSAL extends EventEmitter {
    */
   isClean () {
     for (let openFile of this._state.openFiles) {
-      if (openFile.modified) console.log('NOT CLEAN: ' + openFile.name)
       if (openFile.modified) return false
     }
     return true
