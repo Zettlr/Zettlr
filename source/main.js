@@ -80,6 +80,7 @@ if (!isFirstInstance) app.exit(0)
 /**
  * This event will be called if another instance of Zettlr has been opened with
  * the argv of that instance.
+ * NOTE from the electron docs: This event is guaranteed to be emitted after the ready event of app gets emitted.
  * @param {Object} event The instance event
  * @param {Array} argv The arguments the second instance had received
  * @param {String} cwd The current working directory
@@ -93,34 +94,28 @@ app.on('second-instance', (event, argv, cwd) => {
     return element.substring(0, 2) !== '--' && isFile(element) && !ignoreFile(element)
   })
 
-  // Someone tried to run a second instance, so focus the main window if existing
-  if (zettlr) {
-    // We need to call the open() method of ZettlrWindow to make sure there's a
-    // window, because on Windows, where this code is always executed, Zettlr
-    // instances can enter a zombie mode in which the instances still run although
-    // the Window has been closed (due to the close event not being fired in rare
-    // instances). This way we make sure there's a window open in any case before
-    // it's accessed.
-    zettlr.getWindow().open() // Will simply return if the window is already open
-    let win = zettlr.getWindow().getWindow()
+  if (files.length === 0) return // Nothing to do
+
+  global.log.info(`Opening ${files.length} files from a second instance.`, files)
+
+  let win = zettlr.getWindow().getWindow()
+  if (!win) {
+    zettlr.getWindow().open()
+  } else {
     // Restore the window in case it's minimised
     if (win.isMinimized()) win.restore()
     win.focus()
-
-    // In case the user wants to open a file/folder with this running instance
-    zettlr.handleAddRoots(files)
-  } else {
-    // The Zettlr object has not yet been instantiated (e.g. the user double
-    // clicked a file with Zettlr not being open or something like that.)
-    // Workaround: Use the global array filesToOpen.
-    global.filesToOpen = global.filesToOpen.concat(files)
   }
+
+  // In case the user wants to open a file/folder with this running instance
+  zettlr.handleAddRoots(files)
 })
 
 /**
  * This gets executed when the user wants to open a file on macOS.
  */
 app.on('open-file', (e, p) => {
+  e.preventDefault() // Need to explicitly set this b/c we're handling this
   // The user wants to open a file -> simply handle it.
   if (zettlr) {
     zettlr.handleAddRoots([p])
@@ -159,8 +154,17 @@ app.on('window-all-closed', async function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
-    // Shutdown the app before quitting
-    await zettlr.shutdown()
+    try {
+      // Shutdown the app before quitting
+      await zettlr.shutdown()
+    } catch (e) {
+      // Using a try/catch we prevent potential zombie processes. The console
+      // is here to inform the devs in case there's weird behaviour, so we can
+      // double-check if there's an error, e.g., in the provider shutdowns.
+      // This makes sure the app quits correctly on user systems, whereas we
+      // can have a look at the console for that.
+      console.error(e)
+    }
     app.quit()
   }
 })

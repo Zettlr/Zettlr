@@ -51,6 +51,7 @@ class ZettlrWindow {
     * @return {ZettlrWindow} Again this for chainability.
     */
   open () {
+    // TODO clean this mess up and make this thing asynchronous
     // There is still a window active, so don't do anything (one-window app)
     if (this._win != null) return this
 
