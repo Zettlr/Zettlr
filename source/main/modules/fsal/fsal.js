@@ -26,6 +26,7 @@ const FSALAttachment = require('./fsal-attachment')
 const FSALWatchdog = require('./fsal-watchdog')
 const FSALCache = require('./fsal-cache')
 const hash = require('../../../common/util/hash')
+const sort = require('../../../common/util/sort')
 
 module.exports = class FSAL extends EventEmitter {
   constructor (cachedir) {
@@ -619,7 +620,6 @@ module.exports = class FSAL extends EventEmitter {
     let start = Date.now()
     let file = await FSALFile.parse(filePath, this._cache)
     this._state.filetree.push(file)
-    this.emit('fsal-state-changed', 'filetree')
     console.log(`${Date.now() - start} ms: Loaded file ${filePath}`) // DEBUG
   }
 
@@ -632,7 +632,6 @@ module.exports = class FSAL extends EventEmitter {
     let start = Date.now()
     let dir = await FSALDir.parse(dirPath, this._cache)
     this._state.filetree.push(dir)
-    this.emit('fsal-state-changed', 'filetree')
     console.log(`${Date.now() - start} ms: Loaded directory ${dirPath}`) // DEBUG
   }
 
@@ -665,6 +664,10 @@ module.exports = class FSAL extends EventEmitter {
       // If we've reached here the path poses a problem -> notify caller
       return false
     }
+
+    this._state.filetree = sort(this._state.filetree)
+    this.emit('fsal-state-changed', 'filetree')
+
     return true
   }
 
