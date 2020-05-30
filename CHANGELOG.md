@@ -98,6 +98,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Moved the `forceOpen`-functionality to a command.
 - Refactored the autocompletion logic and moved it out into its own designated class to reduce the size of the `ZettlrEditor` class.
 - Refactored the logic for building the bibliography in an attempt to further reduce the size of the `ZettlrEditor` class.
+- Include the `codemirror.css` into the geometry styles so we have one less dependency to include on startup.
 
 # 1.6.0
 

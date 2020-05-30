@@ -768,6 +768,7 @@ class ZettlrEditor {
     }
 
     // Check for RTL-support
+    console.log('Setting writing direction', global.config.get('editor.direction'))
     this._cm.setOption('direction', global.config.get('editor.direction'))
     this._cm.setOption('rtlMoveVisually', global.config.get('editor.rtlMoveVisually'))
 
