@@ -81,7 +81,6 @@ class ZettlrWindow {
       minWidth: 176,
       minHeight: 144,
       show: false,
-      icon: 'icons/png/64x64.png',
       webPreferences: {
         // Zettlr needs all the node features, so in preparation for Electron
         // 5.0 we'll need to explicitly request it.

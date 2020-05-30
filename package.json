@@ -40,7 +40,8 @@
     "productName": "Zettlr",
     "npmRebuild": false,
     "copyright": "Zettlr is licensed under GNU GPL v3.",
-    "fileAssociations": [{
+    "fileAssociations": [
+      {
         "ext": "md",
         "name": "Markdown",
         "description": "Markdown document",
@@ -75,7 +76,8 @@
       "entitlementsInherit": "./scripts/assets/entitlements.plist"
     },
     "win": {
-      "target": [{
+      "target": [
+        {
           "target": "nsis",
           "arch": [
             "x64",
@@ -87,7 +89,8 @@
       "icon": "resources/icons/ico/icon.ico"
     },
     "linux": {
-      "target": [{
+      "target": [
+        {
           "target": "AppImage",
           "arch": [
             "x64",
@@ -108,7 +111,8 @@
     "dmg": {
       "background": "resources/icons/dmg/dmg_back.tiff",
       "icon": "resources/icons/icns/icon.icns",
-      "contents": [{
+      "contents": [
+        {
           "x": 130,
           "y": 220
         },
@@ -140,7 +144,7 @@
     }
   },
   "resolutions": {
-    "eslint/espree/acorn": "^7.1.1"
+    "eslint/espree/acorn": "^7.2.0"
   },
   "dependencies": {
     "@zettlr/citr": "^1.1.0",
@@ -150,17 +154,17 @@
     "bcp-47": "^1.0.7",
     "chart.js": "^2.9.3",
     "chokidar": "^3.4.0",
-    "citeproc": "^2.3.7",
-    "codemirror": "^5.53.2",
+    "citeproc": "^2.3.22",
+    "codemirror": "^5.54.0",
     "command-exists": "^1.2.9",
-    "got": "^11.0.3",
+    "got": "^11.1.4",
     "joplin-turndown": "^4.0.27",
     "joplin-turndown-plugin-gfm": "^1.0.12",
-    "jquery": "^3.5.0",
+    "jquery": "^3.5.1",
     "katex": "^0.11.1",
     "md5": "^2.2.1",
-    "mermaid": "^8.5.0",
-    "moment": "=2.24.0",
+    "mermaid": "8.0.0",
+    "moment": "^2.26.0",
     "nspell": "^2.1.1",
     "on-change": "^2.0.1",
     "rimraf": "^3.0.2",
@@ -168,22 +172,22 @@
     "semver": "^7.3.2",
     "showdown": "^1.9.1",
     "tippy.js": "^6.2.3",
-    "uuid": "^8.0.0",
+    "uuid": "^8.1.0",
     "v8-compile-cache": "^2.1.0",
     "vue": "^2.6.11",
-    "vuex": "^3.3.0",
-    "yaml": "^1.9.2"
+    "vuex": "^3.4.0",
+    "yaml": "^1.10.0"
   },
   "devDependencies": {
     "chalk": "^4.0.0",
     "cross-env": "^7.0.2",
     "css-loader": "^3.5.3",
     "csso": "^4.0.3",
-    "electron": "^8.2.5",
-    "electron-builder": "^22.6.0",
+    "electron": "^9.0.0",
+    "electron-builder": "^22.7.0",
     "electron-devtools-installer": "^3.0.0",
     "electron-notarize": "^0.3.0",
-    "eslint": "^7.0.0",
+    "eslint": "^7.1.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.20.2",
@@ -201,10 +205,10 @@
     "gulp-wrap": "^0.15.0",
     "handlebars": "^4.7.6",
     "lorem-ipsum": "^2.0.3",
-    "mocha": "^7.1.2",
+    "mocha": "^7.2.0",
     "npm-run-all": "^4.1.5",
     "reveal.js": "^3.9.2",
-    "uglify-js": "^3.9.1",
+    "uglify-js": "^3.9.4",
     "vue-loader": "^15.9.2",
     "vue-template-compiler": "^2.6.11",
     "vue-virtual-scroller": "^1.0.10",

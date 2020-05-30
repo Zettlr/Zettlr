@@ -180,14 +180,26 @@ class ZettlrAttachments {
   _act () {
     $('#attachments').on('click', 'a', (e) => {
       let elem = $(e.target)
-      if (elem.attr('data-link')) shell.openItem(elem.attr('data-link'))
+      if (elem.attr('data-link')) {
+        shell.openPath(elem.attr('data-link'))
+          .then(potentialError => {
+            if (potentialError !== '') {
+              console.error('Could not open attachment:' + potentialError)
+            }
+          })
+      }
       e.preventDefault() // Don't follow the link
       e.stopPropagation()
     })
 
     $('#attachments #open-dir-external').click((e) => {
       if (this._renderer.getCurrentDir()) {
-        shell.openItem(this._renderer.getCurrentDir().path)
+        shell.openPath(this._renderer.getCurrentDir().path)
+          .then(potentialError => {
+            if (potentialError !== '') {
+              console.error('Could not open attachment:' + potentialError)
+            }
+          })
       }
     })
   }
