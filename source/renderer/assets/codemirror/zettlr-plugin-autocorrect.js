@@ -217,7 +217,7 @@
     var cursor = cm.getCursor()
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
-    if (cm.getModeAt(cursor).name !== 'markdown-zkn') return CodeMirror.Pass
+    if (cm.getModeAt(cursor).name !== 'markdown') return CodeMirror.Pass
     // Additionally, we only should replace if we're not within comment-style tokens
     let tokens = cm.getTokenTypeAt(cursor)
     if (tokens && tokens.split(' ').includes('comment')) return CodeMirror.Pass

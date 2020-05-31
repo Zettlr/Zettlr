@@ -50,7 +50,7 @@ const Table = require('../../util/table-helper.js');
     // because such a table header WILL NEVER be on the last line, plus
     // this way we can check for Setext headers without having to worry.
     for (let i = 1; i < cm.lineCount() - 1; i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
 
       // First get the line and test if the contents resemble a table. We only
       // search for the heading rows here, because these are the only ones that

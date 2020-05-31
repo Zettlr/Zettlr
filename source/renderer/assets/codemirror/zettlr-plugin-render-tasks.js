@@ -45,7 +45,7 @@
 
     // Now render all potential new tasks
     for (let i = 0; i < cm.lineCount(); i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
       // Always reset lastIndex property, because test()-ing on regular
       // expressions advances it.
       taskRE.lastIndex = 0

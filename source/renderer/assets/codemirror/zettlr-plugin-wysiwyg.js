@@ -60,7 +60,7 @@ const showdown = require('showdown');
 
     // Now render all potential new links
     for (let i = 0; i < cm.lineCount(); i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
       // Always reset lastIndex property, because test()-ing on regular
       // expressions advance it.
       wysiwygRE.lastIndex = 0

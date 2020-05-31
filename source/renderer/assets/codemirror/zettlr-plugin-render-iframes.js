@@ -45,7 +45,7 @@
 
     // Now render all potential new iFrames
     for (let i = 0; i < cm.lineCount(); i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
       // First get the line and test if the contents contain a link
       let line = cm.getLine(i)
       if ((match = iframeRE.exec(line)) == null) {

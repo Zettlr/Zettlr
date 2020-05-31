@@ -52,7 +52,7 @@
 
     // Now render all potential new links
     for (let i = 0; i < cm.lineCount(); i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
+      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
       // Always reset lastIndex property, because test()-ing on regular
       // expressions advance it.
       linkRE.lastIndex = 0
@@ -78,6 +78,36 @@
         // Now get the precise beginning of the match and its end
         let curFrom = { 'line': i, 'ch': match.index }
         let curTo = { 'line': i, 'ch': match.index + match[0].length }
+
+        // Now the age-old problem of parenthesis-detection. The regular expression
+        // will not match all parenthesis, if a link contains these, so what we need
+        // is we have to go through the URL, and, if it contains opening parentheses
+        // we need a matching pair of these, so we'll have to go through it one by one.
+        let openingParentheses = 0
+        let closingParentheses = 0
+        if (url !== '') {
+          for (let i = 0; i < url.length; i++) {
+            if (url.charAt(i) === '(') openingParentheses++
+            if (url.charAt(i) === ')') closingParentheses++
+          }
+
+          if (openingParentheses > closingParentheses) {
+            // If we're here we most certainly have a non-closed parenthesis in a link
+            // The assumption is that a link always contains matching pairs. So a link
+            // like www.domain.tld/link(likethis will not work.
+            let leftOvers = openingParentheses - closingParentheses
+            while (curTo.ch < line.length) {
+              let currentChar = line.charAt(curTo.ch)
+              url += currentChar
+              curTo.ch++
+              if (currentChar === ')') leftOvers--
+              if (leftOvers === 0) break
+            }
+
+            // If we were unable to fully resolve all parentheses, abort rendering.
+            if (leftOvers > 0) continue
+          }
+        }
 
         let cur = cm.getCursor('from')
         if (cur.line === curFrom.line && cur.ch >= curFrom.ch && cur.ch <= curTo.ch + 1) {
@@ -106,14 +136,6 @@
         if (cm.getTokenAt(curFrom).type === 'comment' ||
             cm.getTokenAt(curTo).type === 'comment') {
           continue
-        }
-
-        if (url !== '' && /\)+$/.test(url)) {
-          // We got a Markdown link AND it ends with at least two braces, so
-          // there's a strong indication that we should not include the final
-          // brace inside our actual link.
-          curTo.ch -= 1
-          url = url.substr(0, url.length - 1)
         }
 
         let a = document.createElement('a')

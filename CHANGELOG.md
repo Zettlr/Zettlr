@@ -67,6 +67,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - When linking files, Zettlr will now present you those files that match with at least one tag with the currently active file, making cross-linking of notes as easy as typing the link-start and hitting the arrow down-key. Bonus: It'll present you these options even if the files reside in a completely different root directory.
 - Fixed behaviour of nested checkboxes.
 - Fixed escaping of special TeX characters in input value fields (e.g. project properties).
+- Finally fixed the parenthesis-link-problem. This means: For each Markdown link, the algorithm will parse the full detected URL and see if all opening parentheses have closing ones. If there are more opening parentheses than closing ones, the algorithm will push the link further in an attempt to fully resolve all parentheses. If this is not possible (because the link itself contains more opening than closing parentheses to begin with), you need to encode one opening parenthesis using `%28` for the algorithm to successfully render the link.
 
 ## Under the Hood
 
