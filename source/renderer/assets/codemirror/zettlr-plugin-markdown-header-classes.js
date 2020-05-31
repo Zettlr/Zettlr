@@ -41,7 +41,7 @@
       for (let x = 1; x < 7; x++) cm.removeLineClass(i, 'wrap', `size-header-${x}`)
 
       // Only re-apply a header class if allowed.
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') {
+      if (![ 'markdown-zkn', 'markdown', 'gfm' ].includes(cm.getModeAt({ 'line': i, 'ch': 0 }).name)) {
         // Indicate a refresh if necessary
         if (oldClass !== '') needsRefresh = true
         continue

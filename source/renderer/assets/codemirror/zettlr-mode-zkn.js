@@ -204,8 +204,10 @@
         // trigger in YAML mode as these inspect the
         // mode object.
         return {
-          'mode': (state.inFrontmatter) ? yamlMode : markdownZkn,
-          'state': (state.inFrontmatter) ? state.yamlState : state
+          // 'mode': (state.inFrontmatter) ? yamlMode : markdownZkn,
+          // 'state': (state.inFrontmatter) ? state.yamlState : state
+          'mode': (state.inFrontmatter) ? yamlMode : mdMode,
+          'state': (state.inFrontmatter) ? state.yamlState : state.mdState
         }
       },
       blankLine: function (state) {
