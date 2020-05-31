@@ -229,7 +229,7 @@ class StatsDialog extends ZettlrDialog {
     // decides upon the amount of available labels.
     if (this._compare) {
       if (this._currentSheet > 0 &&
-        Object.keys(this._backgroundData[this._currentSheet - 1].length > Object.keys(this._backgroundData[this._currentSheet]).length)) {
+        Object.keys(this._backgroundData[this._currentSheet - 1]).length > Object.keys(this._backgroundData[this._currentSheet]).length) {
         // I have an issue with too long variable names ...
         this._chart.data.labels = Object.keys(this._backgroundData[this._currentSheet - 1])
       } else {
