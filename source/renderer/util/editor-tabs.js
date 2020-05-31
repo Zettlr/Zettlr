@@ -196,6 +196,7 @@ module.exports = class EditorTabs {
     doc.classList.add('document')
     doc.setAttribute('draggable', 'true') // Users can drag that thing around
     doc.dataset['hash'] = file.hash
+    doc.dataset['id'] = file.id
     // Show some additional information on hover
     doc.dataset['tippyContent'] = `<strong>${file.name}</strong><br>`
     doc.dataset['tippyContent'] += `<small>(${path.basename(path.dirname(file.path))})</small><br>`

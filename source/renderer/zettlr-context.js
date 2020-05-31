@@ -239,6 +239,16 @@ class ZettlrCon {
     } else if (elem.is('input[type="text"]') || elem.is('textarea')) {
       shouldSelectWordUnderCursor = false // Don't select when right-clicking a text field
       menupath = 'text.json'
+    } else if (elem.parents('#document-tabs').length > 0) {
+      // We can have:
+      // 1. A close-icon
+      // 2. The file name
+      // 3. The document itself
+      if (elem.hasClass('filename') || elem.hasClass('close')) elem = elem.parent()
+      menupath = 'file.json'
+      shouldSelectWordUnderCursor = false
+      hash = elem.attr('data-hash')
+      if (elem.attr('data-id')) attr.push({ 'data-id': elem.attr('data-id') })
     }
 
     // Now build with all information we have gathered.
