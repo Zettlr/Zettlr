@@ -134,7 +134,7 @@
       getTagList: function () { return this.obj.tags.join(', ') },
       hasTags: function () { return this.obj.tags && this.obj.tags.length > 0 },
       isDirectory: function () { return this.obj.type !== 'file' },
-      isDraggable: function () { return !this.isDirectory && !this.obj.hasOwnProperty('results') },
+      isDraggable: function () { return !this.isDirectory },
       fileMeta: function () { return this.$store.state.fileMeta },
       displayTime: function () { return this.$store.state.displayTime },
       hasChildren: function () {
@@ -162,7 +162,6 @@
           w = Math.round(w / this.$store.state.maxWeight * 100) // Percentage
           let style = `background-color:hsl(${hue}, ${w}%, 50%);`
           style += ` color: ${(w > 50) ? 'black' : 'white'};`
-          console.log(`w is ${w}, so we're going for ${(w > 50) ? 'black' : 'white'}`)
           return style
         }
         return ''
