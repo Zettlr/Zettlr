@@ -106,11 +106,12 @@ class ZettlrMenu {
       // Commands need to be simply sent to the renderer
       if (item.hasOwnProperty('command')) {
         builtItem.click = function (menuitem, focusedWindow) {
-          if (global.mainWindow) {
-            global.mainWindow.webContents.send('message', { 'command': item.command })
-          } else if (focusedWindow) {
-            focusedWindow.webContents.send('message', { 'command': item.command })
-          }
+          global.ipc.send(item.command)
+          // if (global.mainWindow) {
+          //   global.mainWindow.webContents.send('message', { 'command': item.command })
+          // } else if (focusedWindow) {
+          //   focusedWindow.webContents.send('message', { 'command': item.command })
+          // }
         }
       }
 

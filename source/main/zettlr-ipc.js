@@ -141,12 +141,17 @@ class ZettlrIPC {
     * @return {ZettlrIPC}              This for chainability.
     */
   send (command, content = {}) {
-    if (!this._app.window.getWindow()) {
-      return this // Fail gracefully
+    let mainWinFocused = this._app.window.getWindow() === BrowserWindow.getFocusedWindow()
+    if (command === 'attempt-close-tab' && !mainWinFocused) {
+      // DEBUG attention, monkey-patch
+      BrowserWindow.getFocusedWindow().close()
+      return this
     }
+
+    if (!this._app.window.getWindow()) return this
     global.log.verbose('<<< IPC OUT: ' + command, content)
     let sender = this._app.window.getWindow().webContents
-    sender.send('message', {
+    sender.webContents.send('message', {
       'command': command,
       'content': content
     })
