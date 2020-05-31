@@ -31,6 +31,14 @@ module.exports = {
     selectedDirectory: null
   },
   getters: {
+    /**
+     * Returns true whenever there is any search result in the state.
+     */
+    activeSearch: (state) => {
+      console.log('SearchResults', state.searchResults.length)
+      console.log('hasNoResults?', state.searchNoResults)
+      return state.searchResults.length > 0 || state.searchNoResults
+    },
     rootFiles: (state) => {
       return state.items.filter(elem => elem.type === 'file')
     },

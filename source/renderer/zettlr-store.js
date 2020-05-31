@@ -35,7 +35,8 @@ class ZettlrStore {
       },
       commitEndSearch: () => { this._store.commit('endSearch') },
       emptySearchResult: () => { this._store.commit('emptySearchResults') },
-      getSearchResults: () => { return this._store.state.searchResults }
+      getSearchResults: () => { return this._store.state.searchResults },
+      hasActiveSearch: () => { return this._store.getters.activeSearch }
     }
   }
 

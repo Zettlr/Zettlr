@@ -283,6 +283,10 @@ class ZettlrToolbar {
     this._searchbar.val(term)
   }
 
+  getSearchTerm () {
+    return this._searchbar.val()
+  }
+
   /**
     * Progresses the search indicator
     * @param  {Integer} item    Current items that have been searched
