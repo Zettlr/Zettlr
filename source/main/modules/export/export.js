@@ -125,7 +125,10 @@ module.exports = async function (options) {
     if ([ 'textbundle', 'textpack' ].includes(options.format)) {
       shell.showItemInFolder(options.targetFile)
     } else {
-      shell.openItem(options.targetFile)
+      let potentialError = await shell.openPath(options.targetFile)
+      if (potentialError !== '') {
+        throw new Error('Could not open exported file: ' + potentialError)
+      }
     }
   }
 

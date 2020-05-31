@@ -63,10 +63,8 @@ class ZettlrPrint {
       winConf.titleBarStyle = 'hiddenInset'
     }
 
-    // Remove the frame on Linux and Windows
-    if (process.platform === 'linux' || process.platform === 'win32') {
-      winConf.frame = false
-    }
+    // Remove the frame on Windows
+    if (process.platform === 'win32') winConf.frame = false
 
     // First create a new browserWindow
     let win = new BrowserWindow(winConf)

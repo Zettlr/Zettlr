@@ -12,7 +12,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  var zknTagRE = /##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?/i
+  var zknTagRE = /##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?/i
   var headingRE = /(#+)\s+/
   var highlightRE = /::.+?::|==.+?==/
   var tableRE = /^\|.+\|$/i

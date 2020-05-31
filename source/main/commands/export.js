@@ -70,7 +70,10 @@ class Export extends ZettlrCommand {
 
     // Call the exporter. Don't throw the "big" error as this is single-file export
     makeExport(opt)
-      .then((exporter) => { global.ipc.notify(trans('system.export_success', opt.format.toUpperCase())) })
+      .then((targetFile) => {
+        global.log.info('Successfully exported file to ' + targetFile)
+        global.ipc.notify(trans('system.export_success', opt.format.toUpperCase()))
+      })
       .catch((err) => {
         global.log.error(err.message, err)
         // Error may be thrown. If there's additional info, spit out an extended
