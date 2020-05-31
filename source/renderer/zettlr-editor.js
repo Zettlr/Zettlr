@@ -132,6 +132,8 @@ class ZettlrEditor {
       foldOptions: {
         'widget': '\u00A0\u2026\u00A0' // nbsp ellipse nbsp
       },
+      direction: 'ltr',
+      rtlMoveVisually: true,
       placeholder: ' ', // Just an invisible space.
       hintOptions: {
         completeSingle: false, // Don't auto-complete, even if there's only one word available
@@ -768,7 +770,6 @@ class ZettlrEditor {
     }
 
     // Check for RTL-support
-    console.log('Setting writing direction', global.config.get('editor.direction'))
     this._cm.setOption('direction', global.config.get('editor.direction'))
     this._cm.setOption('rtlMoveVisually', global.config.get('editor.rtlMoveVisually'))
 
