@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-05-07T19:14:13.000000Z"
+        "updated_at": "2020-05-22T13:32:42.000000Z"
     },
     "dialog": {
         "about": {
@@ -305,6 +305,7 @@
             "xelatex": "Pfad zum XeLaTeX-Programm. Bitte \u00e4ndere dies nur, wenn Pandoc einen Fehler ausgibt, dass er die Bibliothek nicht finden kann.",
             "xelatex_default": "Standard: xelatex",
             "zkn": {
+                "auto_create_file": "Erstelle nicht existierende Dateien automatisch beim Klick auf interne Links",
                 "generated_id": "Erstellte ID",
                 "id_generator_label": "Muster f\u00fcr neue IDs",
                 "id_label": "ID Regul\u00e4rer Ausdruck (RegEx)",
@@ -512,6 +513,9 @@
         "speech": "Sprache",
         "start_speaking": "Sprechen beginnen",
         "stop_speaking": "Sprechen anhalten",
+        "tab_close": "Tab schlie\u00dfen",
+        "tab_next": "N\u00e4chster Tab",
+        "tab_previous": "Voriger Tab",
         "tags": "Schlagw\u00f6rter\u2026",
         "toggle_attachments": "Anh\u00e4nge anzeigen",
         "toggle_devtools": "Entwicklerwerkzeuge",

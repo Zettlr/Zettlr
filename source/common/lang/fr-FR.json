@@ -15,7 +15,7 @@
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-05-07T17:35:58.000000Z"
+        "updated_at": "2020-05-29T16:52:56.000000Z"
     },
     "dialog": {
         "about": {
@@ -203,6 +203,11 @@
             },
             "display_time_explanation": "Affichage chronologique des fichiers",
             "editor": "\u00c9diteur",
+            "editor_setting": {
+                "direction_ltr": "Utiliser la direction d'\u00e9criture de gauche \u00e0 droite (G\u00e0D)",
+                "direction_rtl": "Utiliser la direction d'\u00e9criture de droite \u00e0 gauche (D\u00e0G)",
+                "rtl_move_visually": "Utiliser l'ordre visuel pour le mouvement des touches fl\u00e9ch\u00e9es en mode D\u00e0G"
+            },
             "enable_rmarkdown": "Charger les fichiers RMarkdown",
             "enable_table_helper": "Activer l'\u00e9diteur de tableau",
             "export": {
@@ -311,6 +316,7 @@
             "xelatex": "Chemin d'acc\u00e8s \u00e0 xelatex. \u00c0 ne changer que si Zettlr ne parvient pas \u00e0 trouver le programme.",
             "xelatex_default": "Par d\u00e9faut : xelatex",
             "zkn": {
+                "auto_create_file": "Cr\u00e9ation automatique des fichiers inexistants en suivant des liens internes",
                 "generated_id": "Votre identifiant",
                 "id_generator_label": "Mod\u00e8le de cr\u00e9ation des identifiants",
                 "id_label": "Expression r\u00e9guli\u00e8re pour l\u2019identifiant",
@@ -518,6 +524,9 @@
         "speech": "Parole",
         "start_speaking": "Commencer \u00e0 parler",
         "stop_speaking": "Arr\u00eater de parler",
+        "tab_close": "Fermer l\u2019onglet",
+        "tab_next": "Onglet suivant",
+        "tab_previous": "Onglet pr\u00e9c\u00e9dent",
         "tags": "G\u00e9rer les mots-cl\u00e9s",
         "toggle_attachments": "Voir les annexes",
         "toggle_devtools": "Outils du d\u00e9veloppeur",
