@@ -91,7 +91,8 @@
   }
 
   /* Implement a "fat" cursor for Windows' overwrite mode (Ins key) */
-  .CodeMirror-overwrite .CodeMirror-cursor {
+  // Also valid for vim and everything that needs a block cursor.
+  .CodeMirror-overwrite .CodeMirror-cursor, &.cm-fat-cursor .CodeMirror-cursor {
     width: auto;
     border-top: 2px solid #333;
     border-bottom: 2px solid #333;
