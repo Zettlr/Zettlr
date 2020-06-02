@@ -579,6 +579,10 @@ module.exports = class FSAL extends EventEmitter {
     // Let's see if we still have events to handle
     if (this._remoteChangeBuffer.length > 0) {
       let event = this._remoteChangeBuffer.shift()
+      if (!isDir(event.changedPath) && !isFile(event.changedPath)) {
+        global.log.info(`Could not process event ${event.event} for ${event.changedPath}: The corresponding node does not exist anymore!`)
+        return this._afterRemoteChange() // Try the next event
+      }
       this._onRemoteChange(event.event, event.changedPath).catch(e => console.error(e))
     }
   }
