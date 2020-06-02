@@ -286,6 +286,16 @@
             </label>
             <label for="pref-editor-direction-rtl">{{i18n "dialog.preferences.editor_setting.direction_rtl"}}</label>
           </div>
+          
+          <hr>
+          <div class="cb-group">
+            {{i18n "dialog.preferences.input_mode"}}
+            <select name="editor.inputMode">
+              <option value="default" {{#ifCond editor.inputMode '=' 'default'}}selected="selected"{{/ifCond}}>Normal</option>
+              <option value="vim" {{#ifCond editor.inputMode '=' 'vim'}}selected="selected"{{/ifCond}}>Vim</option>
+              <option value="emacs" {{#ifCond editor.inputMode '=' 'emacs'}}selected="selected"{{/ifCond}}>Emacs</option>
+            </select>
+          </div>
         </div>
         <div class="clear"></div>
       </div>

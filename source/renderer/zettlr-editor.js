@@ -773,6 +773,9 @@ class ZettlrEditor {
     this._cm.setOption('direction', global.config.get('editor.direction'))
     this._cm.setOption('rtlMoveVisually', global.config.get('editor.rtlMoveVisually'))
 
+    // Set input mode (vim, emacs, default (sublime))
+    this._cm.setOption('keyMap', global.config.get('editor.inputMode'))
+
     // Last but not least set the Zettelkasten options
     this._cm.setOption('zkn', global.config.get('zkn'))
 

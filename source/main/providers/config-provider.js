@@ -185,6 +185,7 @@ class ConfigProvider extends EventEmitter {
         'enableTableHelper': true, // Enable the table helper plugin
         'indentUnit': 4, // The number of spaces to be added
         'countChars': false, // Set to true to enable counting characters instead of words
+        'inputMode': 'default', // Can be default, vim, emacs
         'boldFormatting': '**', // Can be ** or __
         'italicFormatting': '_', // Can be * or _
         'readabilityAlgorithm': 'dale-chall', // The algorithm to use with readability mode.
