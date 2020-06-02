@@ -87,6 +87,11 @@
   // lead to an infinite loop.
   var hasJustPerformedReverseReplacement = false
 
+  // This variable will be true if the user just typed in a quote (' or ") and
+  // MagicQuotes has inserted a special one. If set, the user can press
+  // backspace immediately to insert a "normal" quote instead.
+  var hasJustAddedQuote = false
+
   // Define the autocorrect option
   CodeMirror.defineOption('autoCorrect', false, onOptionChange)
 
@@ -249,12 +254,13 @@
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
     var cursor = cm.getCursor()
-    if (cm.getModeAt(cursor).name !== 'markdown-zkn') return CodeMirror.Pass
+    if (cm.getModeAt(cursor).name !== 'markdown') return CodeMirror.Pass
     // Additionally, we only should replace if we're not within comment-style tokens
     let tokens = cm.getTokenTypeAt(cursor)
     if (tokens && tokens.split(' ').includes('comment')) return CodeMirror.Pass
 
     canPerformReverseReplacement = false // Reset the handleBackspace flag
+    hasJustAddedQuote = false // Reset the ability to reset the quote
 
     if (hasJustPerformedReverseReplacement) {
       // We should not re-replace something that
@@ -291,24 +297,22 @@
     var cursor = cm.getCursor()
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
-    if (cm.getModeAt(cursor).name !== 'markdown-zkn') return CodeMirror.Pass
+    if (cm.getModeAt(cursor).name !== 'markdown') return CodeMirror.Pass
 
     canPerformReverseReplacement = false // Reset the handleBackspace flag
     var cursorBefore = { 'line': cursor.line, 'ch': cursor.ch - 1 }
     var cursorAfter = { 'line': cursor.line, 'ch': cursor.ch + 1 }
 
-    // Now add the "regular" quote first. This way, the user can
-    // "undo" the magic quote.
-    cm.doc.replaceRange((type === 'double') ? '"' : "'", cursor, cursor, '+input')
     // We have to check for two possibilities:
     // There's a "startChar" in front of the quote or not.
     if (cursor.ch === 0 || startChars.includes(cm.getRange(cursorBefore, cursor))) {
-      // The change origin 'autocorrect' should create a new event, but it doesn't.
-      // TODO: Have to investigate.
-      cm.doc.replaceRange(quotes[type].start, cursor, cursorAfter, 'autocorrect')
+      cm.doc.replaceRange(quotes[type].start, cursor, cursorAfter)
     } else {
-      cm.doc.replaceRange(quotes[type].end, cursor, cursorAfter, 'autocorrect')
+      cm.doc.replaceRange(quotes[type].end, cursor, cursorAfter)
     }
+
+    console.log('Setting hasJustAddedQuote ...')
+    hasJustAddedQuote = true
   }
 
   /**
@@ -316,7 +320,45 @@
    * @param {CodeMirror} cm The CodeMirror instance.
    */
   function handleBackspace (cm) {
-    if (!wordStyleAutoCorrect || cm.getOption('disableInput') || !canPerformReverseReplacement) return CodeMirror.Pass
+    if (cm.getOption('disableInput')) return CodeMirror.Pass
+
+    if (hasJustAddedQuote) {
+      hasJustAddedQuote = false // We can already reset this here
+      // Re-set the last added quote
+      let cursor = cm.getCursor()
+      let rangeStart = cursor.ch - 1
+      let line = cm.getLine(cursor.line)
+      let allQuotes = [
+        quotes.single.start,
+        quotes.single.end,
+        quotes.double.start,
+        quotes.double.end
+      ]
+
+      while (rangeStart > -1 && !allQuotes.includes(line.substr(rangeStart, 1))) {
+        rangeStart--
+      }
+
+      // Double-check that we are not out of bounds
+      if (!allQuotes.includes(line.substr(rangeStart, 1))) return CodeMirror.Pass
+
+      // Now find out which quote it was
+      let currentQuote = line.substr(rangeStart, 1)
+
+      let replacement = '"'
+      if ([
+        quotes.single.start, quotes.single.end
+      ].includes(currentQuote)) replacement = "'"
+
+      cm.doc.replaceRange(
+        replacement,
+        { 'line': cursor.line, 'ch': rangeStart },
+        { 'line': cursor.line, 'ch': rangeStart + 1 }
+      )
+      return // We are done here
+    }
+
+    if (!wordStyleAutoCorrect || !canPerformReverseReplacement) return CodeMirror.Pass
 
     // What do we do here? Easy: Check if the characters preceeding the cursor equal a replacement table value. If they do,
     // replace that with the original replacement *key*.

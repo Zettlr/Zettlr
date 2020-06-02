@@ -70,6 +70,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Finally fixed the parenthesis-link-problem. This means: For each Markdown link, the algorithm will parse the full detected URL and see if all opening parentheses have closing ones. If there are more opening parentheses than closing ones, the algorithm will push the link further in an attempt to fully resolve all parentheses. If this is not possible (because the link itself contains more opening than closing parentheses to begin with), you need to encode one opening parenthesis using `%28` for the algorithm to successfully render the link.
 - Dragging search results like normal files is now possible.
 - When switching directories while a search result list is displayed, this search is now performed at the other directory immediately after switching.
+- Reversing a MagicQuote can now be performed by pressing backspace after a replacement has taken place, in order to restore the default double (") or single (') quote.
 
 ## Under the Hood
 
