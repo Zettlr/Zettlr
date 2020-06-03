@@ -126,6 +126,10 @@ module.exports = class FSAL extends EventEmitter {
         // Searches a file and returns the result
         return FSALFile.search(src, options)
       },
+      'set-directory-setting': async (src, target, options) => {
+        // Sets a setting on the directory
+        await FSALDir.setSetting(src, options)
+      },
       // Creates a project in a dir
       // TODO: Doesn't emit currently
       'create-project': async (src, target, options) => {

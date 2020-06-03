@@ -316,6 +316,37 @@ class ZettlrBody {
   }
 
   /**
+    * Display a small popup to ask for a new icon for that directory.
+    * @param  {number} directoryHash The directory's hash
+    * @return {void}     Nothing to return.
+    */
+  displayIconSelect (arg) {
+    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
+    let dir = this._renderer.findObject(arg.hash)
+    if (!dir) return // No directory found
+
+    let elem = $('#file-tree').find('div[data-hash="' + arg.hash + '"]').first()
+    let cnt = makeTemplate('popup', 'icon-selector', {})
+
+    this._currentPopup = popup(elem, cnt, (form) => {
+      this._currentPopup = null
+    })
+
+    $('#icon-selector-popup').on('click', '.icon-block', (event) => {
+      let div = event.currentTarget
+      let icon = div.dataset['shape']
+      global.ipc.send('dir-set-icon', {
+        'hash': dir.hash,
+        'icon': (icon === '__reset') ? null : icon
+      })
+
+      // Close & dereference
+      this._currentPopup.close()
+      this._currentPopup = null
+    })
+  }
+
+  /**
    * Shows the popup to set or update a target on a file.
    * @param {number} hash The hash for which the popup should be shown.
    */

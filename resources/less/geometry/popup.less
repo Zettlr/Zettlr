@@ -1,5 +1,20 @@
 // Popup related css classes
 
+// MIXINS FOR THE POPUPS
+
+// Makes a div flex, can be used to generate a grid style button set
+.flex-button-mixin {
+  flex-grow:1;
+  width:46px;
+  height:46px;
+  line-height:46px;
+  text-align:center;
+  transition:0.2s all ease;
+  cursor:default;
+}
+
+// END MIXINS FOR THE POPUPS
+
 .popup-arrow {
   width:0;
   height:0;
@@ -107,14 +122,9 @@
     height: 10px;
     margin: 1px;
   }
+
   .btn-share {
-    flex-grow:1;
-    width:46px;
-    height:46px;
-    line-height:46px;
-    text-align:center;
-    transition:0.2s all ease;
-    cursor:default;
+    .flex-button-mixin();
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -234,6 +244,11 @@
       color: lighten(#0b0080, 20%);
       &:hover { background-color: #0b0080; color: white; }
     }
+  }
+
+  // For the icon selector
+  .icon-block {
+    .flex-button-mixin();
   }
 
   // The revealjs theme selector's visibility

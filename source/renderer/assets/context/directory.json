@@ -29,6 +29,11 @@
   },
   {
     "scope": "directory",
+    "label": "menu.set_icon",
+    "command": "select-icon"
+  },
+  {
+    "scope": "directory",
     "type": "separator"
   },
   {

@@ -573,6 +573,10 @@ class ZettlrRendererIPC {
         this._app.getBody().displayAbout()
         break
 
+      case 'select-icon':
+        this._app.getBody().displayIconSelect(cnt)
+        break
+
       case 'toggle-attachments':
         this._app.toggleAttachments()
         break

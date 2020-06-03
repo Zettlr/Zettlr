@@ -37,11 +37,19 @@
         class="filename"
         v-bind:data-hash="obj.hash"
       >
-        <clr-icon
-          v-show="obj.project"
-          shape="blocks-group"
-          class="is-solid"
-        />
+        <template v-if="obj.project">
+          <clr-icon
+            shape="blocks-group"
+            class="is-solid"
+          />
+        </template>
+        <template v-else>
+          <clr-icon
+            v-show="obj.icon"
+            v-bind:shape="obj.icon"
+            class="is-solid"
+          />
+        </template>
         <clr-icon
           v-show="hasChildren"
           v-bind:shape="indicatorShape"

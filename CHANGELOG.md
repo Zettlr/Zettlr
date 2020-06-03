@@ -18,6 +18,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - **New Feature**: RTL support! Now whether you are writing in Hebrew, Persian, Urdu or any other right-to-left writing system, you can do so now. We've added support for the respective options of CodeMirror in the "Preferences -> Editor" tab.
 - **New Feature**: You can now direct Zettlr to automatically create new files if you click on an internal link that does not match a file. Thanks to @halcyonquest for their contribution!
 - **New Feature**: Vim and Emacs insertion modes are now supported! You can switch persistently between these two and the "normal" insertion mode using the preferences. Thanks to @JorySchossau for implementing this feature!
+- **New Feature**: Directory icons. From now on you can select an arbitrary icon to further visually distinguish certain directories from the others. This has no other than a purely visual effect and may help identify specific directories within a longer list reliably.
 - If available, a title from a YAML frontmatter will be appended to the displayed file entry when linking files.
 - Copying images from the Explorer/Finder/file browser now offers to insert them into the document, copying them over to the assets directory.
 - The popups are now more resilient against accidental closing, just like the dialogs.

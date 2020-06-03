@@ -33,7 +33,8 @@ const FSALAttachment = require('./fsal-attachment')
  */
 const SETTINGS_TEMPLATE = {
   'sorting': 'name-up',
-  'project': null // Default: no project
+  'project': null, // Default: no project
+  'icon': null // Default: no icon
 }
 
 /**
@@ -110,6 +111,7 @@ function metadata (dirObject) {
     'attachments': dirObject.attachments.map(elem => FSALAttachment.metadata(elem)),
     'type': dirObject.type,
     'sorting': dirObject._settings.sorting,
+    'icon': dirObject._settings.icon,
     'modtime': dirObject.modtime
   }
 }
@@ -238,6 +240,17 @@ module.exports = {
   },
   'metadata': function (dirObject) {
     return metadata(dirObject)
+  },
+  // Sets an arbitrary setting on the directory object.
+  'setSetting': async function (dirObject, settings) {
+    for (let key of Object.keys(settings)) {
+      if (dirObject._settings.hasOwnProperty(key)) {
+        console.log('Setting key ' + key + ' to ' + settings[key] + ' ...')
+        dirObject._settings[key] = settings[key]
+      }
+    }
+
+    await persistSettings(dirObject)
   },
   'createFile': async function (dirObject, options, cache) {
     let filename = options.name
