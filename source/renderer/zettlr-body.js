@@ -94,8 +94,11 @@ class ZettlrBody {
     // pressed.
     $(document).on('keydown keyup', (event) => {
       let metaElements = $('#editor .CodeMirror .cm-zkn-tag, #editor .CodeMirror .cm-zkn-link, #editor .CodeMirror .cma')
-      let isDarwin = $('body').hasClass('darwin')
-      if (event.ctrlKey || event.altKey || (event.metaKey && isDarwin)) {
+
+      let darwinMeta = process.platform === 'darwin' && event.metaKey
+      let otherCtrl = process.platform !== 'darwin' && event.ctrlKey
+
+      if (darwinMeta || otherCtrl) {
         metaElements.addClass('meta-key')
       } else {
         metaElements.removeClass('meta-key')

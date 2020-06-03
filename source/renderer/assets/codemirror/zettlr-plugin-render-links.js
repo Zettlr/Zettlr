@@ -185,8 +185,11 @@
         )
 
         a.onclick = (e) => {
-          // Only open while either Alt or Ctrl is pressed.
-          if (e.altKey || e.ctrlKey) {
+          // Only open while either Ctrl or Cmd is pressed.
+          let darwinCmd = process.platform === 'darwin' && e.metaKey
+          let otherCtrl = process.platform !== 'darwin' && e.ctrlKey
+
+          if (darwinCmd || otherCtrl) {
             e.preventDefault()
             // On ALT-Clicks, use the callback to have the user decide
             // what should happen when they click on links, defined

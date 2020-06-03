@@ -313,8 +313,9 @@ class ZettlrEditor {
     })
 
     this._cm.getWrapperElement().addEventListener('click', (e) => {
-      // Open links on both Alt and Ctrl clicks - otherwise stop handling event
-      if (!(e.altKey || e.ctrlKey)) return true
+      // Open links on both Cmd and Ctrl clicks - otherwise stop handling event
+      if (process.platform === 'darwin' && !e.metaKey) return true
+      if (process.platform !== 'darwin' && !e.ctrlKey) return true
 
       e.preventDefault()
 
