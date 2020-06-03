@@ -74,6 +74,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Dragging search results like normal files is now possible.
 - When switching directories while a search result list is displayed, this search is now performed at the other directory immediately after switching.
 - Reversing a MagicQuote can now be performed by pressing backspace after a replacement has taken place, in order to restore the default double (") or single (') quote.
+- Math doesn't render in comments anymore.
 
 ## Under the Hood
 

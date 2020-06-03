@@ -121,6 +121,15 @@
         // Also in this case simply skip.
         if (isRendered) continue
 
+        // Do not render if it's inside a comment (in this case the mode will be
+        // markdown, but comments shouldn't be included in rendering)
+        // Final check to avoid it for as long as possible, as getTokenAt takes
+        // considerable time.
+        if (cm.getTokenAt(myMarker.curFrom).type === 'comment' ||
+            cm.getTokenAt(myMarker.curTo).type === 'comment') {
+          continue
+        }
+
         // Use jQuery for simple creation of the DOM element
         let elem = $('<span class="preview-math"></span>')[0]
 
