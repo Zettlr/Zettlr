@@ -47,7 +47,6 @@
           <clr-icon
             v-show="obj.icon"
             v-bind:shape="obj.icon"
-            class="is-solid"
           />
         </template>
         <clr-icon

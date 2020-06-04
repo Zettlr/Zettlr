@@ -1,19 +1,43 @@
 // Popup related css classes
 
-// MIXINS FOR THE POPUPS
+/* * * * * * * * * * * * * *
+ *                         *
+ *   BEGIN VARIABLES AREA  *
+ *                         *
+ * * * * * * * * * * * * * */
+
+@size-share-buttons: 46px;
+@size-icon-buttons:  25px;
+
+/* * * * * * * * * * * * * *
+ *                         *
+ *    END VARIABLES AREA   *
+ *                         *
+ * * * * * * * * * * * * * */
+
+/* * * * * * * * * * * * * *
+ *                         *
+ *     BEGIN MIXIN AREA    *
+ *                         *
+ * * * * * * * * * * * * * */
 
 // Makes a div flex, can be used to generate a grid style button set
-.flex-button-mixin {
-  flex-grow:1;
-  width:46px;
-  height:46px;
-  line-height:46px;
-  text-align:center;
-  transition:0.2s all ease;
-  cursor:default;
+.flex-button-mixin(@size) {
+  flex-grow: 1;
+  width: @size;
+  height: @size;
+  line-height: @size;
+  text-align: center;
+  transition: 0.2s all ease;
+  cursor: default;
 }
 
-// END MIXINS FOR THE POPUPS
+/* * * * * * * * * * * * * *
+ *                         *
+ *      END MIXIN AREA     *
+ *                         *
+ * * * * * * * * * * * * * */
+
 
 .popup-arrow {
   width:0;
@@ -124,7 +148,7 @@
   }
 
   .btn-share {
-    .flex-button-mixin();
+    .flex-button-mixin(@size-share-buttons);
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -248,13 +272,14 @@
 
   // For the icon selector
   .icon-block {
-    .flex-button-mixin();
+    .flex-button-mixin(@size-icon-buttons);
+    font-size: 10px; // The clarity icons are way too big
   }
 
   // The revealjs theme selector's visibility
   #reveal-themes {
     transition:0.2s height ease;
-    height:46px * 2; // Share button height times 2
+    height: @size-share-buttons * 2;
     overflow:hidden;
     &.hidden {
       height:0px;
