@@ -73,6 +73,24 @@ module.exports = class EditorTabs {
     // For those non-macOS users (boo!)
     this._div.onwheel = (evt) => { this._div.scrollLeft += evt.deltaY }
 
+    // Listen to Cmd/Ctrl+[0-9] events on the window
+    window.addEventListener('keydown', (e) => {
+      let darwinCmd = process.platform === 'darwin' && e.metaKey
+      let otherCtrl = process.platform !== 'darwin' && e.ctrlKey
+
+      if (!darwinCmd && !otherCtrl) return
+
+      if ([ '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' ].includes(e.key)) {
+        e.stopPropagation()
+        e.preventDefault()
+        let key = parseInt(e.key, 10)
+        key--
+        if (key === -1) key = 9
+        if (this._div.children.length <= key) return // Out of range
+        this._div.children[key].click()
+      }
+    })
+
     // Initial sync with no files
     this.syncFiles([], null)
   }

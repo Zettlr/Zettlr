@@ -8,6 +8,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 * Projects will be incorporated into the `.ztr-directory`-files, which means that you need to extract these files (or backup them) if you plan to roll back to 1.6 or earlier, lest you will lose the project settings.
 * `Cmd/Ctrl+W` will now attempt to close open tabs first before closing the window. To close the main window directly, use `Cmd/Ctrl+Shift+W`.
 * Now you will need to either `Cmd+Click` (macOS) or `Ctrl+Click` (other platforms) on internal and external links as well as on tags in order to follow the link/start a search.
+* `Cmd/Ctrl+[0-9]` now **do no longer toggle recent documents** -- rather they select the corresponding tab (0 = tab number 10)!
 
 ## GUI and Functionality
 
