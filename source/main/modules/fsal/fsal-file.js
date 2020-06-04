@@ -258,7 +258,9 @@ module.exports = {
   },
   'hasChangedOnDisk': async function (fileObject) {
     let stat = await fs.lstat(fileObject.path)
-    return stat.mtimeMs !== fileObject.mtimeMs
+    // DEBUG
+    console.log(`Has the file ${fileObject.name} changed on disk? Stat: ${stat.mtimeMs}; Modtime: ${fileObject.modtime}`)
+    return stat.mtimeMs !== fileObject.modtime
   },
   'load': async function (fileObject) {
     // Loads the content of a file from disk
