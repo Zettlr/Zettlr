@@ -352,6 +352,15 @@ class ZettlrRendererIPC {
         this.send(cmd, cnt)
         break
 
+      // Copy the current file's ID to the clipboard
+      case 'copy-current-id':
+        try {
+          require('electron').clipboard.writeText(this._app.getActiveFile().id)
+        } catch (e) {
+          // Obviously no ID ...
+        }
+        break
+
       // Closes a root file or directory
       case 'root-close':
         this.send('root-close', cnt.hash)

@@ -191,6 +191,11 @@
         "command": "insert-id"
       },
       {
+        "label": "menu.copy_id",
+        "accelerator": "CmdOrCtrl+Shift+L",
+        "command": "copy-current-id"
+      },
+      {
         "mixin": "darwin_speech"
       }
     ]
