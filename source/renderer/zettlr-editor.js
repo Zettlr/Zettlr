@@ -95,6 +95,10 @@ class ZettlrEditor {
 
     this._countChars = false // Whether or not Zettlr should count characters as words (e.g., for Chinese)
 
+    // Pinch gestures are a pain, but here we go: STATE!
+    this._pointerEvents = []
+    this._pointerDiff = -1
+
     // This Markdown to HTML converter is used in various parts of the
     // class to perform converting operations.
     this._showdown = new showdown.Converter()
@@ -345,10 +349,16 @@ class ZettlrEditor {
       }
     })
 
+    // Enable zooming by Cmd/Ctrl-scrolling
     this._cm.getWrapperElement().addEventListener('wheel', (e) => {
-      // Divide by itself as absolute to either get -1 or +1
-      if (process.platform !== 'darwin' && e.ctrlKey) {
+      if (
+        (process.platform !== 'darwin' && e.ctrlKey) ||
+        (process.platform === 'darwin' && e.metaKey)
+      ) {
+        // NOTE: Did you know that pinching events get reported as "wheel" events as well?
+        // Me neither.
         e.preventDefault()
+        // Divide by itself as absolute to either get -1 or +1
         let direction = e.deltaY / Math.abs(e.deltaY)
         this.zoom(isNaN(direction) ? 0 : direction)
       }
