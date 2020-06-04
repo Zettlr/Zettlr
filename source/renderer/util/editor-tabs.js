@@ -69,6 +69,10 @@ module.exports = class EditorTabs {
       this._currentlyDragging = undefined
       this._cursorOffset = 0
     }
+
+    // For those non-macOS users (boo!)
+    this._div.onwheel = (evt) => { this._div.scrollLeft += evt.deltaY }
+
     // Initial sync with no files
     this.syncFiles([], null)
   }
