@@ -44,10 +44,8 @@ const process = require('process')
 
 // Include the global Zettlr class
 const Zettlr = require('./main/zettlr.js')
-
-// Helpers to determine what files from argv we can open
-const isFile = require('./common/util/is-file')
-const ignoreFile = require('./common/util/ignore-file')
+// Helper function to extract files to open from process.argv
+const extractFilesFromArgv = require('./common/util/extract-files-from-argv')
 
 // Introduce v8 code caching
 require('v8-compile-cache')
@@ -62,7 +60,7 @@ let zettlr
  * Global array containing files collected from argv before process start
  * @type {Array}
  */
-global.filesToOpen = []
+global.filesToOpen = extractFilesFromArgv() // Will automatically filter these out
 
 /**
  * This variable is true, if this process is the only one, or false if there is
@@ -80,19 +78,14 @@ if (!isFirstInstance) app.exit(0)
 /**
  * This event will be called if another instance of Zettlr has been opened with
  * the argv of that instance.
- * NOTE from the electron docs: This event is guaranteed to be emitted after the ready event of app gets emitted.
+ * NOTE from the electron docs: This event is guaranteed to be emitted after
+ * the ready event of app gets emitted.
  * @param {Object} event The instance event
  * @param {Array} argv The arguments the second instance had received
  * @param {String} cwd The current working directory
  */
 app.on('second-instance', (event, argv, cwd) => {
-  // Retrieve all potential files from the list of arguments. Thanks to
-  // Abricotine for this logic!
-  // Taken from: https://github.com/brrd/Abricotine/blob/develop/app/abr-application.js
-  argv = argv && argv.length > 0 ? argv : process.argv
-  let files = argv.filter(function (element) {
-    return element.substring(0, 2) !== '--' && isFile(element) && !ignoreFile(element)
-  })
+  let files = extractFilesFromArgv(argv) // Override process.argv with the correct one
 
   if (files.length === 0) return // Nothing to do
 
