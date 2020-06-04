@@ -34,56 +34,52 @@ class SaveImage extends ZettlrCommand {
    */
   async run (evt, target) {
     // First check the name for sanity
-    target.name = sanitize(target.name, '-')
-    if (target.name === '') {
-      return global.ipc.notify(trans('system.error.no_allowed_chars'))
-    }
+    let targetFile = sanitize(target.name, '-')
+    let activeFile = this._app.getFileSystem().findFile(this._app.getFileSystem().getActiveFile())
 
-    // A file must be opened and active
-    if (!this._app.getFileSystem().getActiveFile()) return global.ipc.notify(trans('system.error.fnf_message'))
+    // A file must be opened and active, and the name valid
+    if (targetFile === '') return global.ipc.notify(trans('system.error.no_allowed_chars'))
+    if (!activeFile) return global.ipc.notify(trans('system.error.fnf_message'))
 
     // Now check the extension of the name (some users may
     // prefer to choose to provide it already)
-    if (path.extname(target.name) !== '.png') target.name += '.png'
+    if (path.extname(targetFile) !== '.png') targetFile += '.png'
 
-    // Do we store the image to a relative path?
-    let isCwd = (target.mode === 'save-cwd')
-    let activeFile = this._app.getFileSystem().findFile(this._app.getFileSystem().getActiveFile())
-    let currentFilePath = path.dirname(activeFile.path)
+    // Now resolve the path correctly, taking into account a potential relative
+    // path the user has chosen.
+    let targetPath = path.resolve(
+      path.dirname(activeFile.path),
+      global.config.get('editor.defaultSaveImagePath') || ''
+    )
 
-    console.log('Preparing to save: ' + activeFile.name + '; filepath: ' + currentFilePath)
+    console.log('Preparing to save: ' + activeFile.name + '; filepath: ' + targetPath)
 
-    // Preset the default CWD path
-    let defaultPath = global.config.get('editor.defaultSaveImagePath') || ''
-
-    // Set default path to current file's dir, if the config path is empty.
-    if (isCwd && defaultPath.trim() === '') {
-      defaultPath = currentFilePath
-    }
-
-    // Did the user want to choose the directory for this one? Then let's ask him!
+    // Did the user want to choose the directory for this one? In this case,
+    // that choice overrides the resolved path from earlier.
     if (target.mode === 'save-other') {
       let dirs = await this._app.getWindow().askDir()
-      defaultPath = dirs.filePaths[0] // We only take one directory
+      targetPath = dirs.filePaths[0] // We only take one directory
     }
 
-    if (!path.isAbsolute(defaultPath)) {
-      // Resolve the path to an absolute one
-      defaultPath = path.resolve(currentFilePath, defaultPath)
+    // Failsafe. Shouldn't be necessary, but you never know. (In that case log
+    // an error, just to be safe)
+    if (!path.isAbsolute(targetPath)) {
+      global.log.error(`Error while saving image to ${targetPath}: Not absolute. This should not have happened.`)
+      targetPath = path.resolve(path.dirname(activeFile.path), targetPath)
     }
 
     // Now we need to make sure the directory exists.
     try {
-      fs.lstatSync(defaultPath)
+      fs.lstatSync(targetPath)
     } catch (e) {
-      fs.mkdirSync(defaultPath, { recursive: true })
+      fs.mkdirSync(targetPath, { recursive: true })
     }
 
     // If something went wrong or the user did not provide a directory, abort
-    if (!isDir(defaultPath)) return global.ipc.notify(trans('system.error.dnf_message'))
+    if (!isDir(targetPath)) return global.ipc.notify(trans('system.error.dnf_message'))
 
     // Build the correct path
-    let imagePath = path.join(defaultPath, target.name)
+    let imagePath = path.join(targetPath, targetFile)
 
     console.log('Saving image as: ' + imagePath)
 
@@ -104,13 +100,15 @@ class SaveImage extends ZettlrCommand {
       })
     }
 
+    global.log.info(`Saving image ${targetFile} at ${imagePath} ...`)
+
     fs.writeFile(imagePath, image.toPNG(), (err) => {
       if (err) return global.ipc.notify(trans('system.error.could_not_save_image'))
       // Insert a relative path instead of an absolute one
-      let pathToInsert = path.relative(currentFilePath, imagePath)
+      let pathToInsert = path.relative(path.dirname(activeFile.path), imagePath)
 
       // Everything worked out - now tell the editor to insert some text
-      this._app.ipc.send('insert-text', `![${target.name}](${pathToInsert})\n`)
+      this._app.ipc.send('insert-text', `![${targetFile}](${pathToInsert})\n`)
       // Tada!
     })
 
