@@ -85,9 +85,9 @@
           return null // No highlighting for escaped characters
         }
 
-        // Third: Directly afterwards check for inline code so
+        // Third: Directly afterwards check for inline code or comments, so
         // that stuff such as zkn-links are not highlighted:
-        if (state.mdState.overlay.code || state.mdState.overlay.codeBlock) {
+        if (state.mdState.overlay.code || state.mdState.overlay.codeBlock || state.mdState.baseCur === 'comment') {
           return mdMode.token(stream, state.mdState)
         }
 
