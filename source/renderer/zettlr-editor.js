@@ -771,8 +771,12 @@ class ZettlrEditor {
     }
 
     // Check for RTL-support
-    this._cm.setOption('direction', global.config.get('editor.direction'))
-    this._cm.setOption('rtlMoveVisually', global.config.get('editor.rtlMoveVisually'))
+    setTimeout(() => {
+      // Why wrap it in a timeout? Because this specific setting requires the
+      // instance to be rendered before we can actually set that thing.
+      this._cm.setOption('direction', global.config.get('editor.direction'))
+      this._cm.setOption('rtlMoveVisually', global.config.get('editor.rtlMoveVisually'))
+    }, 100)
 
     // Set input mode (vim, emacs, default (sublime))
     this._cm.setOption('keyMap', global.config.get('editor.inputMode'))
