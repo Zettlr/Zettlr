@@ -79,6 +79,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Opening files with Zettlr when the app is not running will now correctly open them.
 - Zooming on Windows and Linux can now be facilitated by scrolling while holding down the control-key.
 - Use `Cmd/Ctrl+Shift+L` to copy the active file's ID to the clipboard.
+- You can now also use `F2` to trigger a file rename for the current file.
 
 ## Under the Hood
 
