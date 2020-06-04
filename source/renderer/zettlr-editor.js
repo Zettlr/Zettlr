@@ -345,6 +345,15 @@ class ZettlrEditor {
       }
     })
 
+    this._cm.getWrapperElement().addEventListener('wheel', (e) => {
+      // Divide by itself as absolute to either get -1 or +1
+      if (process.platform !== 'darwin' && e.ctrlKey) {
+        e.preventDefault()
+        let direction = e.deltaY / Math.abs(e.deltaY)
+        this.zoom(isNaN(direction) ? 0 : direction)
+      }
+    })
+
     this._cm.refresh()
 
     // Finally create the annotateScrollbar object to be able to annotate the
@@ -698,7 +707,7 @@ class ZettlrEditor {
 
     // We have to re-apply the font-size to the editor because this style gets
     // overwritten by one of the above operations.
-    if (this._fontsize !== 100) this._div.css('font-size', this._fontsize + '%')
+    if (this._fontsize !== 100) this._cm.getWrapperElement().style.fontSize = this._fontsize + '%'
 
     // Refresh to reflect the size changes
     this._cm.refresh()
@@ -1026,7 +1035,7 @@ class ZettlrEditor {
       if (newSize > 400) newSize = 400 // More than 400 and you'll run into problems concerning headings 1
       this._fontsize = newSize
     }
-    this._div.css('font-size', this._fontsize + '%')
+    this._cm.getWrapperElement().style.fontSize = this._fontsize + '%'
     this._cm.refresh()
     return this
   }

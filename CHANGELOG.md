@@ -76,6 +76,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Reversing a MagicQuote can now be performed by pressing backspace after a replacement has taken place, in order to restore the default double (") or single (') quote.
 - Math doesn't render in comments anymore.
 - Opening files with Zettlr when the app is not running will now correctly open them.
+- Zooming on Windows and Linux can now be facilitated by scrolling while holding down the control-key.
 
 ## Under the Hood
 
