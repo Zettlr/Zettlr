@@ -71,9 +71,10 @@
         for (; begin >= 0; begin--) {
           // First empty line stops the heading. Also, check for
           // lists, because strictly speaking, this might also
-          // return truthy for a Setext heading.
+          // return truthy for a Setext heading. Also, we need to
+          // check for code block endings (backticks)
           let beginningLine = cm.getLine(begin)
-          if (/^\s*$/.test(beginningLine) || /^\s*-\s+/.test(beginningLine)) {
+          if (/^\s*$/.test(beginningLine) || /^\s*-\s+|^\s{0,3}`{3,}/.test(beginningLine)) {
             begin++
             break
           }
