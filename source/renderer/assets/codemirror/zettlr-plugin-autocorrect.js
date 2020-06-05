@@ -301,17 +301,15 @@
 
     canPerformReverseReplacement = false // Reset the handleBackspace flag
     var cursorBefore = { 'line': cursor.line, 'ch': cursor.ch - 1 }
-    var cursorAfter = { 'line': cursor.line, 'ch': cursor.ch + 1 }
 
     // We have to check for two possibilities:
     // There's a "startChar" in front of the quote or not.
     if (cursor.ch === 0 || startChars.includes(cm.getRange(cursorBefore, cursor))) {
-      cm.doc.replaceRange(quotes[type].start, cursor, cursorAfter)
+      cm.doc.replaceRange(quotes[type].start, cursor)
     } else {
-      cm.doc.replaceRange(quotes[type].end, cursor, cursorAfter)
+      cm.doc.replaceRange(quotes[type].end, cursor)
     }
 
-    console.log('Setting hasJustAddedQuote ...')
     hasJustAddedQuote = true
   }
 
@@ -324,6 +322,12 @@
 
     if (hasJustAddedQuote) {
       hasJustAddedQuote = false // We can already reset this here
+
+      // If there are selections, simply don't do it, because a selection means
+      // the user wants to remove several things, and not want to undo any
+      // Magic Quote.
+      if (cm.doc.somethingSelected()) return CodeMirror.Pass
+
       // Re-set the last added quote
       let cursor = cm.getCursor()
       let rangeStart = cursor.ch - 1
