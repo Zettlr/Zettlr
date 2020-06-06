@@ -25,6 +25,12 @@
     &.cm-number     { color: var(--blue-3); }
 }
 
+// Make the block cursor visible in dark mode as well
+.CodeMirror .CodeMirror-overwrite .CodeMirror-cursor,
+.CodeMirror.cm-fat-cursor .CodeMirror-cursor {
+  background-color: var(--c-primary-shade);
+}
+
 // HTML tags
 .cm-tag       { color: var(--orange-2); }
 .cm-attribute { color: var(--blue-3); }
