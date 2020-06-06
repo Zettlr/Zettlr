@@ -114,6 +114,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Refactored the logic for building the bibliography in an attempt to further reduce the size of the `ZettlrEditor` class.
 - Include the `codemirror.css` into the geometry styles so we have one less dependency to include on startup.
 - Switched to Electron 9.0.0.
+- Set the `standalone` flag for Pandoc on all non-special exports.
 
 # 1.6.0
 

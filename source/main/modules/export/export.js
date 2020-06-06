@@ -103,6 +103,9 @@ module.exports = async function (options) {
       await preparePDF(options)
       break
     default:
+      // In all cases, we want a standalone file
+      // (docx and odt imply that, but RTF doesn't)
+      options.standalone = true
       await prepareDefault(options)
       break
   }
