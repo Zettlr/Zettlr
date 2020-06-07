@@ -266,6 +266,24 @@ class ZettlrEditor {
     })
 
     this._cm.on('drop', (cm, event) => {
+      // If the user has dropped a file onto the editor, this strongly suggest
+      // they want to link it.
+      try {
+        let data = JSON.parse(event.dataTransfer.getData('text/x-zettlr-file'))
+        let textToInsert = cm.getOption('zkn').linkStart
+        textToInsert += data.id ? data.id : path.basename(data.path, path.extname(data.path))
+        textToInsert += cm.getOption('zkn').linkEnd
+        let linkPref = global.config.get('zkn.linkWithFilename')
+        if (linkPref === 'always' || (linkPref === 'withID' && data.id)) {
+          // We need to add the text after the link.
+          textToInsert += ' ' + path.basename(data.path)
+        }
+        this.insertText(textToInsert)
+      } catch (e) {
+        // Error in JSON stringifying (either b/c malformed or no text)
+        // --> proceed performing normally
+      }
+
       if (event.dataTransfer.files.length > 0) {
         // In case of files being dropped, do *not* let CodeMirror handle them.
         event.codemirrorIgnore = true

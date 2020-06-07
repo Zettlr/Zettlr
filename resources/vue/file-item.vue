@@ -241,7 +241,9 @@
           event.dataTransfer.effectAllowed = 'move'
           event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
             'hash': this.obj.hash,
-            'type': this.obj.type // Can be file or directory
+            'type': this.obj.type, // Can be file or directory
+            'path': this.obj.path,
+            'id': this.obj.id // Convenience
           }))
         },
         stopDragging: function (evt) {

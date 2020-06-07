@@ -81,6 +81,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Use `Cmd/Ctrl+Shift+L` to copy the active file's ID to the clipboard.
 - You can now also use `F2` to trigger a file rename for the current file.
 - Improve the detection and rendering of Setext-headings.
+- Dropping files from the file list onto the editor now inserts a valid Zettelkasten-link to that file into the editor.
 
 ## Under the Hood
 
