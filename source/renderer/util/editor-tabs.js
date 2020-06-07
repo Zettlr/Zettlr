@@ -80,12 +80,11 @@ module.exports = class EditorTabs {
 
       if (!darwinCmd && !otherCtrl) return
 
-      if ([ '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' ].includes(e.key)) {
+      if ([ '1', '2', '3', '4', '5', '6', '7', '8', '9' ].includes(e.key)) {
         e.stopPropagation()
         e.preventDefault()
         let key = parseInt(e.key, 10)
         key--
-        if (key === -1) key = 9
         if (this._div.children.length <= key) return // Out of range
         this._div.children[key].click()
       }

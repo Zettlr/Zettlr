@@ -109,7 +109,7 @@ class ZettlrBody {
     $(document).on('keydown', (event) => {
       let isDarwin = $('body').hasClass('darwin')
       let cmdOrCtrl = (isDarwin && event.metaKey) || (!isDarwin && event.ctrlKey)
-      console.log(event.key)
+
       let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && event.key === 'e')
       let focusSidebarShortcut = (cmdOrCtrl && event.shiftKey && event.key === 't')
       if (focusEditorShortcut) { // Cmd/Ctrl+Shift+E
