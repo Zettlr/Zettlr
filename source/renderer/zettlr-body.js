@@ -803,7 +803,6 @@ class ZettlrBody {
 
     let toc = this._renderer.getEditor().buildTOC()
 
-    console.log(toc)
     if (toc.length === 0) return
 
     let idUniquifier = Date.now()
