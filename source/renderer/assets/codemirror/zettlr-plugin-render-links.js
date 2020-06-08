@@ -39,9 +39,8 @@
     // moves the cursor into the link, it will be automatically removed,
     // as well as if someone simply deletes the whole line.
     do {
-      if (!linkMarkers[i]) {
-        continue
-      }
+      if (!linkMarkers[i]) continue
+
       if (linkMarkers[i] && linkMarkers[i].find() === undefined) {
         // Marker is no longer present, so splice it
         linkMarkers.splice(i, 1)
