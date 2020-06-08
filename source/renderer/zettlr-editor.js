@@ -395,15 +395,15 @@ class ZettlrEditor {
    * Apply all renderers and other fancy stuff on the editor.
    */
   _fireRenderers () {
-    if (this._renderImages) this._cm.execCommand('markdownRenderImages') // Render images
     this._cm.execCommand('markdownRenderMermaid') // Render mermaid codeblocks
-    if (this._renderIframes) this._cm.execCommand('markdownRenderIframes') // Render iFrames
-    if (this._renderMath) this._cm.execCommand('markdownRenderMath') // Render equations
-    if (this._renderLinks) this._cm.execCommand('markdownRenderLinks') // Render links
-    if (this._renderCitations) this._cm.execCommand('markdownRenderCitations') // Render citations
     if (this._renderTables) this._cm.execCommand('markdownRenderTables') // Render tables
+    if (this._renderLinks) this._cm.execCommand('markdownRenderLinks') // Render links
+    if (this._renderImages) this._cm.execCommand('markdownRenderImages') // Render images
+    if (this._renderMath) this._cm.execCommand('markdownRenderMath') // Render equations
+    if (this._renderCitations) this._cm.execCommand('markdownRenderCitations') // Render citations
     if (this._renderTasks) this._cm.execCommand('markdownRenderTasks') // Render tasks
     if (this._renderHTags) this._cm.execCommand('markdownRenderHTags') // Render heading levels
+    if (this._renderIframes) this._cm.execCommand('markdownRenderIframes') // Render iFrames
     if (this._wysiwyg) this._cm.execCommand('markdownWYSIWYG') // Render all other elements
     this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
     this._cm.execCommand('markdownCodeblockClasses') // Apply code block classes
