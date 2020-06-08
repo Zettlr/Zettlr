@@ -184,7 +184,7 @@ class ZettlrMenu {
     mainMenu.push(this._buildFromSource(this._blueprint.file))
     mainMenu.push(this._buildFromSource(this._blueprint.edit))
     mainMenu.push(this._buildFromSource(this._blueprint.view))
-    if (process.platform === 'darwin') mainMenu.push(this._buildFromSource(this._blueprint.window))
+    mainMenu.push(this._buildFromSource(this._blueprint.window))
     if (global.config.get('debug')) mainMenu.push(this._buildFromSource(this._blueprint.debug))
     mainMenu.push(this._buildFromSource(this._blueprint.help))
 

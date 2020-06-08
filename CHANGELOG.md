@@ -83,6 +83,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Improve the detection and rendering of Setext-headings.
 - Dropping files from the file list onto the editor now inserts a valid Zettelkasten-link to that file into the editor.
 - Images will now also render in-line.
+- The "Window" submenu is now not confined to macOS applications anymore, but available to all platforms.
 
 ## Under the Hood
 
