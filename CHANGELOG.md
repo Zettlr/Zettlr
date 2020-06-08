@@ -82,6 +82,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - You can now also use `F2` to trigger a file rename for the current file.
 - Improve the detection and rendering of Setext-headings.
 - Dropping files from the file list onto the editor now inserts a valid Zettelkasten-link to that file into the editor.
+- Images will now also render in-line.
 
 ## Under the Hood
 

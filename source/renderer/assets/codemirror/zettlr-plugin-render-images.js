@@ -15,7 +15,7 @@
   // GENERAL PLUGIN VARIABLES
 
   // Image detection regex
-  var imageRE = /^\s*!\[(.*?)\]\((.+?)\)(?:{.*})?\s*$/
+  var imageRE = /(?<=\s|^)!\[(.*?)\]\((.+?)\)(?:{.*})?/gm
   var protocolRE = /^([a-z]{1,10}):\/\//i
 
   // Holds the currently rendered images
@@ -58,7 +58,6 @@
    */
   CodeMirror.commands.markdownRenderImages = function (cm) {
     let i = 0
-    let rendered = []
 
     if (currentDocID !== cm.doc.id) {
       currentDocID = cm.doc.id
@@ -78,9 +77,6 @@
         // Marker is no longer present, so splice it
         imageMarkers.splice(i, 1)
       } else {
-        // Push the marker's actual _line_ (not the index) into the
-        // rendered array.
-        rendered.push(imageMarkers[i].find().from.line)
         // Array is same size, so increase i
         i++
       }
@@ -89,56 +85,89 @@
     // Now render all potential new images
     for (let i = 0; i < cm.lineCount(); i++) {
       if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
-      // Already rendered, so move on
-      if (rendered.includes(i)) continue
 
-      // Cursor is in here, so also don't render (for now)
-      if (cm.getCursor('from').line === i) continue
+      // Always reset lastIndex property, because test()-ing on regular
+      // expressions advance it.
+      imageRE.lastIndex = 0
 
       // First get the line and test if the contents contain an image
       let line = cm.getLine(i)
       if (!imageRE.test(line)) continue
 
-      // Extract information from the line
-      let match = imageRE.exec(line)
-      let caption = match[1]
-      let url = match[2]
+      imageRE.lastIndex = 0 // Necessary because of global flag in RegExp
 
-      // Retrieve lineInfo for line number
-      let lineInfo = cm.lineInfo(i)
-      let img = new Image()
-      // Now add a line widget to this line.
-      let textMarker = cm.markText(
-        { 'line': lineInfo.line, 'ch': 0 },
-        { 'line': lineInfo.line, 'ch': line.length },
-        {
-          'clearOnEnter': true,
-          'replacedWith': img,
-          'handleMouseEvents': true
+      let match
+
+      // Run through all links on this line
+      while ((match = imageRE.exec(line)) != null) {
+        let caption = match[1] || ''
+        let url = match[2] || ''
+
+        // Now get the precise beginning of the match and its end
+        let curFrom = { 'line': i, 'ch': match.index }
+        let curTo = { 'line': i, 'ch': match.index + match[0].length }
+
+        let cur = cm.getCursor('from')
+        if (cur.line === curFrom.line && cur.ch >= curFrom.ch && cur.ch <= curTo.ch + 1) {
+          // Cursor is in selection: Do not render.
+          continue
         }
-      )
 
-      // Retrieve the size constraints
-      let width = (cm.getOption('imagePreviewWidth')) ? cm.getOption('imagePreviewWidth') + '%' : '100%'
-      let height = (cm.getOption('imagePreviewHeight') && cm.getOption('imagePreviewHeight') < 100) ? cm.getOption('imagePreviewHeight') + 'vh' : ''
-      img.style.maxWidth = width
-      img.style.maxHeight = height
-      img.style.cursor = 'default' // Nicer cursor
-      // Display a replacement image in case the correct one is not found
-      img.onerror = (e) => { img.src = img404 }
-      img.onclick = (e) => { textMarker.clear() }
+        // Has this thing already been rendered?
+        let con = false
+        let marks = cm.findMarks(curFrom, curTo)
+        for (let marx of marks) {
+          if (imageMarkers.includes(marx)) {
+            // We've got communism. (Sorry for the REALLY bad pun.)
+            con = true
+            break
+          }
+        }
+        if (con) continue // Skip this match
 
-      // Update the image caption on load to retrieve the real image size.
-      img.onload = () => {
-        img.title = `${caption} (${img.naturalWidth}x${img.naturalHeight}px)`
-        textMarker.changed()
+        // Do not render if it's inside a comment (in this case the mode will be
+        // markdown, but comments shouldn't be included in rendering)
+        // Final check to avoid it for as long as possible, as getTokenAt takes
+        // considerable time.
+        if (cm.getTokenAt(curFrom).type === 'comment' ||
+            cm.getTokenAt(curTo).type === 'comment') {
+          continue
+        }
+
+        let img = new Image()
+        // Now add a line widget to this line.
+        let textMarker = cm.markText(
+          curFrom,
+          curTo,
+          {
+            'clearOnEnter': true,
+            'replacedWith': img,
+            'handleMouseEvents': true
+          }
+        )
+
+        // Retrieve the size constraints
+        let width = (cm.getOption('imagePreviewWidth')) ? cm.getOption('imagePreviewWidth') + '%' : '100%'
+        let height = (cm.getOption('imagePreviewHeight') && cm.getOption('imagePreviewHeight') < 100) ? cm.getOption('imagePreviewHeight') + 'vh' : ''
+        img.style.maxWidth = width
+        img.style.maxHeight = height
+        img.style.cursor = 'default' // Nicer cursor
+        // Display a replacement image in case the correct one is not found
+        img.onerror = (e) => { img.src = img404 }
+        img.onclick = (e) => { textMarker.clear() }
+
+        // Update the image caption on load to retrieve the real image size.
+        img.onload = () => {
+          img.title = `${caption} (${img.naturalWidth}x${img.naturalHeight}px)`
+          textMarker.changed()
+        }
+
+        // Finally set the src to begin the loading process of the image
+        img.src = makeAbsoluteCachefreeURL(cm.getOption('markdownImageBasePath'), url)
+
+        // Push the textMarker into the array
+        imageMarkers.push(textMarker)
       }
-
-      // Finally set the src to begin the loading process of the image
-      img.src = makeAbsoluteCachefreeURL(cm.getOption('markdownImageBasePath'), url)
-
-      // Finally: Push the textMarker into the array
-      imageMarkers.push(textMarker)
     }
   }
 })
