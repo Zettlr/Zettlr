@@ -1010,14 +1010,15 @@ class ZettlrEditor {
     */
   buildTOC () {
     let toc = []
-    for (let i = 0; i < this._cm.lineCount(); i++) {
+    for (let i = 0; i < this._cm.doc.lineCount(); i++) {
       // Don't include comments from code examples in the TOC
-      if (this._cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown-zkn') continue
-      let line = this._cm.getLine(i)
+      if (this._cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      let line = this._cm.doc.getLine(i)
       if (/^#{1,6} /.test(line)) {
         toc.push({
           'line': i,
-          'text': line.replace(/^#{1,6} /, ''),
+          // From the line remove both the heading indicators and optional ending classes
+          'text': line.replace(/^#{1,6} /, '').replace(/\{.*\}$/, ''),
           'level': (line.match(/^(#+)/) || [ [], [] ])[1].length
         })
       }
