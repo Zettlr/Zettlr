@@ -124,6 +124,10 @@ class ZettlrEditor {
     // Caches the "left" style property during distraction free
     this._leftBeforeDistractionFree = ''
 
+    // Caches the width of a space (in normal font and in monospace font)
+    this._spaceWidth = 0
+    this._monospaceWidth = 0
+
     this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
       mode: MD_MODE,
       theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
@@ -311,19 +315,39 @@ class ZettlrEditor {
       }
     })
 
-    // Thanks for this to https://discuss.codemirror.net/t/hanging-indent/243/2
     this._cm.on('renderLine', (cm, line, elt) => {
-      let charWidth = cm.defaultCharWidth() - 2
-      let basePadding = 4
-      // Show continued list/qoute lines aligned to start of text rather
-      // than first non-space char.  MINOR BUG: also does this inside
-      // literal blocks.
-      let leadingSpaceListBulletsQuotes = /^\s*([*+-]\s+|\d+\.\s+|>\s*)+/ // NOTE: Replaced the last * with +
-      let leading = (leadingSpaceListBulletsQuotes.exec(line.text) || [''])[0]
-      let off = CodeMirror.countColumn(leading, leading.length, cm.getOption('tabSize')) * charWidth
+      // Need to calculate indent and padding in order to provide a proper hanging indent
+      // Originally based on https://discuss.codemirror.net/t/hanging-indent/243/2
+      let monospaceWidth = this.computeMonospaceWidth()
+      let spaceWidth = this.computeSpaceWidth()
+      let tabWidth = spaceWidth * 5
+      let basePadding = 2.5 * monospaceWidth
 
-      elt.style.textIndent = '-' + off + 'px'
-      elt.style.paddingLeft = (basePadding + off) + 'px'
+      // Show continued list/quote lines aligned to start of text rather than first non-space char (hanging indent)
+      let leadingSpaceListBulletsQuotes = /^(?<spaces>\s*)(?<ordinal>[*+-]\s+|\d+\.\s+|>\s*)+/
+      let match = leadingSpaceListBulletsQuotes.exec(line.text)
+
+      if (!match) return
+
+      let [ leading, padding, ordinal ] = match
+      let offset = CodeMirror.countColumn(leading, leading.length, cm.getOption('tabSize'))
+
+      if (offset <= 0) return
+
+      // The following code is a bit complicated as the as the HTML structure is the following:
+      //  - some spaces or tabs in normal font (length = numberOfSpaces)
+      //  - the sequence "- " or "1. " in monospaced font (length = numberOfOrdinal)
+      //  - text in normal font
+      // Setting "textIndent" and "paddingLeft" to "- 2 * monospaceWidth" would give the correct result if "   - " wouldn't be part of the text
+
+      // Tabs are another story. They are inserted as spans with class "cm-tab" and consequently change the layout again
+      // The following tries to align tab-indented list with space-indented lists (works quite ok at least on the first level)
+      let numberOfTabs = (padding.match(/\t/g) || []).length
+      let numberOfSpaces = padding.length - numberOfTabs
+      let numberOfOrdinal = ordinal.length
+
+      elt.style.textIndent = '-' + (numberOfOrdinal * monospaceWidth + (offset - numberOfOrdinal) * spaceWidth) + 'px'
+      elt.style.paddingLeft = (basePadding + tabWidth * numberOfTabs + numberOfSpaces * spaceWidth) + 'px'
     })
 
     // Display a footnote if the target is a link (and begins with ^)
@@ -390,6 +414,43 @@ class ZettlrEditor {
     this._scrollbarAnnotations.update([])
   }
   // END constructor
+
+  /**
+  * Computes and returns the width of a character in the monospace font in pixels.
+  */
+  computeMonospaceWidth () {
+    if (this._monospaceWidth === 0) {
+      this._monospaceWidth = this.measureCharWidth('measureMonoWidth')
+    }
+    return this._monospaceWidth
+  }
+
+  /**
+  * Computes and returns the width of a character in the monospace font in pixels.
+  */
+  computeSpaceWidth () {
+    if (this._spaceWidth === 0) {
+      this._spaceWidth = this.measureCharWidth('measureWidth')
+    }
+    return this._spaceWidth
+  }
+
+  /**
+   * Computes and returns the width of a character for a character that is placed in a (new) node with the given id
+   * @param {String} id
+   * @see https://stackoverflow.com/a/118251/873661
+   */
+  measureCharWidth (id) {
+    // Idea: Create a span containing a space and measure its size
+    // Infact, We use 100 characters in order to get an approximately correct width (clientWidth is an integer)
+    var container = document.createElement('div')
+    container.id = id
+    container.innerHTML = '<span>' + '&nbsp'.repeat(100) + '</span>'
+    this._cm.getWrapperElement().appendChild(container)
+    var width = (container.clientWidth + 1) / 100
+    this._cm.getWrapperElement().removeChild(container)
+    return width
+  }
 
   /**
    * Apply all renderers and other fancy stuff on the editor.
@@ -817,6 +878,10 @@ class ZettlrEditor {
 
     // Set input mode (vim, emacs, default (sublime))
     this._cm.setOption('keyMap', global.config.get('editor.inputMode'))
+
+    // Reset cached widths
+    this._spaceWidth = 0
+    this.monospaceWidth = 0
 
     // Last but not least set the Zettelkasten options
     this._cm.setOption('zkn', global.config.get('zkn'))
