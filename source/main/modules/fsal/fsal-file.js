@@ -68,6 +68,7 @@ function metadata (fileObject) {
     'hash': fileObject.hash,
     'ext': fileObject.ext,
     'id': fileObject.id,
+    'subIDs': fileObject.subIDs,
     'tags': fileObject.tags,
     'type': fileObject.type,
     'wordCount': fileObject.wordCount,
@@ -106,6 +107,7 @@ async function parseFile (filePath, cache, parent = null) {
     'hash': hash(filePath),
     'ext': path.extname(filePath),
     'id': '', // The ID, if there is one inside the file.
+    'subIDs' : [], // All IDs found inside the file's contents, excluding the first ID
     'tags': [], // All tags that are to be found inside the file's contents.
     'type': 'file',
     'wordCount': 0,
@@ -244,6 +246,20 @@ function parseFileContents (file, content) {
   } else {
     file.id = '' // Remove the file id again
   }
+
+  // Read subIDs
+  file.subIDs = [] // Reset subIDs
+  while ((match = idRE.exec(mdWithoutCode)) != null) {
+    if (mdWithoutCode.substr(match.index - linkStart.length, linkStart.length) !== linkStart) {
+      if ((match[1] !== file.id) && (match[1].substr(-(linkEnd.length)) !== linkEnd)) {
+        // Store found ID (if different from first ID) in subIDs
+        file.subIDs.push(match[1])
+      } 
+    }
+  }
+
+  // Remove duplicates
+  file.subIDs = [...new Set(file.subIDs)]
 }
 
 async function searchFile (fileObject, terms) {

@@ -23,7 +23,15 @@ module.exports = function findObject (tree, prop, val, traverse) {
   // Is the tree even defined?
   if (!tree) return undefined
   // First let's see if we can shortcut
-  if (!Array.isArray(tree) && tree.hasOwnProperty(prop) && tree[prop] === val) return tree
+  if (!Array.isArray(tree) && tree.hasOwnProperty(prop)) {
+    if(!Array.isArray(tree[prop]) && tree[prop] === val) {
+      return tree
+    }
+    if(Array.isArray(tree[prop]) && tree[prop].includes(val)) {
+      // The property is of type Array (e.g. subIDs)
+      return tree
+    }
+  }
 
   // Now search the tree
   let ret
