@@ -76,6 +76,10 @@ class ZettlrMenu {
         }
         continue // No need to process further; mixins only have the mixin attribute
       }
+
+      // Some menu items are only available on certain platforms
+      if (item.platform && !item.platform.includes(process.platform)) continue
+
       let builtItem = {}
       // Enable submenu recursion
       if (item.hasOwnProperty('submenu')) builtItem = this._buildFromSource(item)
@@ -184,8 +188,8 @@ class ZettlrMenu {
     mainMenu.push(this._buildFromSource(this._blueprint.file))
     mainMenu.push(this._buildFromSource(this._blueprint.edit))
     mainMenu.push(this._buildFromSource(this._blueprint.view))
-    mainMenu.push(this._buildFromSource(this._blueprint.window))
     if (global.config.get('debug')) mainMenu.push(this._buildFromSource(this._blueprint.debug))
+    mainMenu.push(this._buildFromSource(this._blueprint.window))
     mainMenu.push(this._buildFromSource(this._blueprint.help))
 
     // Last but not least add the Quit item (either app menu or file, always the first submenu)

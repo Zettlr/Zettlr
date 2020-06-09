@@ -280,6 +280,7 @@
       },
       {
         "label": "menu.all_front",
+        "platform": ["darwin"],
         "role": "front"
       },
       {
