@@ -275,6 +275,14 @@
       "text/x-julia": {
         "mode": "julia",
         "selectors": [ "julia", "jl" ]
+      },
+      "text/turtle": {
+        "mode": "turtle",
+        "selectors": ["turtle", "ttl"]
+      },
+      "application/sparql-query": {
+        "mode": "sparql",
+        "selectors": ["sparql"]
       }
     }
 }
