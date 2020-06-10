@@ -54,7 +54,7 @@ class ForceOpen extends ZettlrCommand {
       }
     }
     // Still no luck? Try the subIDs property
-    if(!file) {
+    if (!file) {
       file = this._app.getFileSystem().findExact(filename, 'subIDs')
     }
 

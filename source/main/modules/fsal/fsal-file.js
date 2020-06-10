@@ -107,7 +107,7 @@ async function parseFile (filePath, cache, parent = null) {
     'hash': hash(filePath),
     'ext': path.extname(filePath),
     'id': '', // The ID, if there is one inside the file.
-    'subIDs' : [], // All IDs found inside the file's contents, excluding the first ID
+    'subIDs': [], // All IDs found inside the file's contents, excluding the first ID
     'tags': [], // All tags that are to be found inside the file's contents.
     'type': 'file',
     'wordCount': 0,
@@ -254,7 +254,7 @@ function parseFileContents (file, content) {
       if ((match[1] !== file.id) && (match[1].substr(-(linkEnd.length)) !== linkEnd)) {
         // Store found ID (if different from first ID) in subIDs
         file.subIDs.push(match[1])
-      } 
+      }
     }
   }
 
