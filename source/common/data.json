@@ -283,6 +283,22 @@
       "application/sparql-query": {
         "mode": "sparql",
         "selectors": ["sparql"]
+      },
+      "text/x-verilog": {
+        "mode": "verilog",
+        "selectors": [ "verilog", "v" ]
+      },
+      "text/x-systemverilog": {
+        "mode": "verilog",
+        "selectors": [ "systemverilog", "sv" ]
+      },
+      "text/x-vhdl": {
+        "mode": "vhdl",
+        "selectors": [ "vhdl", "vhd" ]
+      },
+      "text/x-tcl": {
+        "mode": "tcl",
+        "selectors": [ "tcl" ]
       }
     }
 }
