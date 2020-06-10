@@ -441,7 +441,7 @@ class ZettlrRendererIPC {
         if (cnt.hasOwnProperty('hash')) {
           this.send('file-delete', { 'hash': cnt.hash })
         } else {
-          this.send('file-delete', {})
+          this.send('file-delete', { 'hash': this._app.getActiveFile().hash })
         }
         break
 

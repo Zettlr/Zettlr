@@ -108,9 +108,11 @@ module.exports = class FSAL extends EventEmitter {
           'event': 'unlink',
           'path': src.path
         })
-        await FSALFile.remove(src)
         // Will trigger a change that syncs the files
         this.closeFile(src) // Does nothing if the file is not open
+
+        // Now we're save to remove the file actually.
+        await FSALFile.remove(src)
       },
       'save-file': async (src, target, options) => {
         // NOTE: Generates 1x change
@@ -783,7 +785,6 @@ module.exports = class FSAL extends EventEmitter {
     if (this._state.openFiles.includes(file)) {
       this._state.openFiles.splice(this._state.openFiles.indexOf(file), 1)
       this.emit('fsal-state-changed', 'openFiles')
-      console.log('FIle ' + file.name + ' is now closed')
       return true
     } else {
       return false
