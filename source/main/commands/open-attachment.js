@@ -28,7 +28,7 @@ class OpenAttachment extends ZettlrCommand {
   }
 
   /**
-   * Create a new directory.
+   * Attempt to open a PDF (or other) attachment for a given citekey.
    * @param {String} evt The event name
    * @param  {Object} arg An object containing the citekey to open.
    */
@@ -44,7 +44,12 @@ class OpenAttachment extends ZettlrCommand {
       if (attachments && attachments.length === 0) {
         appearsToHaveNoAttachments = true
       } else if (attachments) {
-        return shell.openItem(attachments[0])
+        let potentialError = await shell.openPath(attachments[0])
+        if (potentialError !== '') {
+          global.log.warning('Error during opening of BibTex attachment', potentialError)
+          return false
+        }
+        return true
       } else {
         // Try Zotero, but indicate that there might not be attachments
         appearsToHaveNoAttachments = true
@@ -66,7 +71,9 @@ class OpenAttachment extends ZettlrCommand {
       let allAttachments = res.result.map(elem => elem.path)
       // Sort them with PDFs on top
       allAttachments = allAttachments.sort(pdfSorter)
-      return shell.openItem(allAttachments[0])
+      let potentialError = await shell.openPath(allAttachments[0])
+      if (potentialError !== '') throw new Error(potentialError)
+      return true
     } catch (err) {
       if (appearsToHaveNoAttachments) {
         // Better error message
