@@ -301,6 +301,11 @@ class ZettlrIPC {
         this.send('tags-database', global.tags.getTagDatabase())
         break
 
+      // Send the global link database to the renderer process.
+      case 'get-links-database':
+        this.send('links-database', global.links.getLinkDatabase())
+        break
+
       // Handle dropped files/folders
       case 'handle-drop':
         this._app.handleAddRoots(cnt)
@@ -388,6 +393,10 @@ class ZettlrIPC {
       // Send the global tag database to the renderer process.
       case 'get-tags-database':
         return global.tags.getTagDatabase()
+
+      // Send the global tag database to the renderer process.
+      case 'get-links-database':
+        return global.links.getLinkDatabase()
 
       // Returns the custom CSS's file contents
       case 'get-custom-css':

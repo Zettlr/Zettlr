@@ -157,6 +157,7 @@
     "citeproc": "^2.3.22",
     "codemirror": "^5.54.0",
     "command-exists": "^1.2.9",
+    "d3": "^5.16.0",
     "got": "^11.1.4",
     "joplin-turndown": "^4.0.27",
     "joplin-turndown-plugin-gfm": "^1.0.12",

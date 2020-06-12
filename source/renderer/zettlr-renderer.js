@@ -133,6 +133,7 @@ class ZettlrRenderer {
       this._ipc.send('get-tags')
       // Additionally, request the full database of already existing tags inside files.
       this._ipc.send('get-tags-database')
+      this._ipc.send('get-links-database')
 
       // Request a first batch of files
       this._ipc.send('get-paths')

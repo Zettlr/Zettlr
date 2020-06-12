@@ -339,20 +339,15 @@
         quotes.double.end
       ]
 
-      while (rangeStart > -1 && !allQuotes.includes(line.substr(rangeStart, 1))) {
-        rangeStart--
-      }
-
-      // Double-check that we are not out of bounds
-      if (!allQuotes.includes(line.substr(rangeStart, 1))) return CodeMirror.Pass
-
       // Now find out which quote it was
       let currentQuote = line.substr(rangeStart, 1)
 
+      // We don't want the algorithm to replace quotes down the line,
+      // so we'll only check the previous char
+      if (!allQuotes.includes(currentQuote)) return CodeMirror.Pass
+
       let replacement = '"'
-      if ([
-        quotes.single.start, quotes.single.end
-      ].includes(currentQuote)) replacement = "'"
+      if (allQuotes.slice(0, 2).includes(currentQuote)) replacement = "'"
 
       cm.doc.replaceRange(
         replacement,

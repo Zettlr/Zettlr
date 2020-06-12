@@ -69,6 +69,7 @@ function metadata (fileObject) {
     'ext': fileObject.ext,
     'id': fileObject.id,
     'tags': fileObject.tags,
+    'links': fileObject.links,
     'type': fileObject.type,
     'wordCount': fileObject.wordCount,
     'charCount': fileObject.charCount,
@@ -107,6 +108,7 @@ async function parseFile (filePath, cache, parent = null) {
     'ext': path.extname(filePath),
     'id': '', // The ID, if there is one inside the file.
     'tags': [], // All tags that are to be found inside the file's contents.
+    'links': [],
     'type': 'file',
     'wordCount': 0,
     'charCount': 0,
@@ -157,6 +159,7 @@ async function parseFile (filePath, cache, parent = null) {
 
   // Finally, report the tags
   global.tags.report(file.tags)
+  global.links.report(file.links)
 
   return file
 }
@@ -169,6 +172,7 @@ function parseFileContents (file, content) {
   if (!(/\(.+?\)/.test(idStr))) idStr = `(${idStr})`
 
   let idRE = new RegExp(idStr, 'g')
+  let linkRE = new RegExp(idStr, 'g')
   let linkStart = global.config.get('zkn.linkStart')
   let linkEnd = global.config.get('zkn.linkEnd')
   // To detect tags in accordance with what the engine will render as tags,
@@ -244,6 +248,16 @@ function parseFileContents (file, content) {
   } else {
     file.id = '' // Remove the file id again
   }
+
+  // Parse links in the file
+  while ((match = linkRE.exec(mdWithoutCode)) != null) {
+    file.links.push({ 'name': file.name.replace(file.ext, ''), 'source': file.id, 'target': match[1] })
+  }
+
+  // Always have atleast one link for identity
+  if (file.links.length === 0) {
+    file.links.push({ 'name': file.name.replace(file.ext, ''), 'source': file.id, 'target': null })
+  }
 }
 
 async function searchFile (fileObject, terms) {
@@ -272,8 +286,10 @@ module.exports = {
     await updateFileMetadata(fileObject)
     // Make sure to keep the file object itself as well as the tags updated
     global.tags.remove(fileObject.tags)
+    global.links.remove(fileObject.links)
     parseFileContents(fileObject, content)
     global.tags.report(fileObject.tags)
+    global.links.report(fileObject.links)
     fileObject.modified = false // Always reset the modification flag.
     cacheFile(fileObject, cache)
   },

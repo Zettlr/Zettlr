@@ -217,6 +217,7 @@ class Zettlr {
       'dictionary': require('./providers/dictionary-provider'),
       'recentDocs': require('./providers/recent-docs-provider'),
       'tags': require('./providers/tag-provider'),
+      'links': require('./providers/link-provider'),
       'targets': require('./providers/target-provider'),
       'css': require('./providers/css-provider'),
       'translations': require('./providers/translation-provider')

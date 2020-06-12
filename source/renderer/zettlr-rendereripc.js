@@ -520,6 +520,11 @@ class ZettlrRendererIPC {
         this._app.getBody().displayTagCloud()
         break
 
+      // Display the informative tag cloud
+      case 'show-note-network':
+        this._app.getBody().displayNoteNetwork()
+        break
+
       // Execute a command with CodeMirror (Bold, Italic, Link, etc)
       case 'cm-command':
         this._app.getEditor().runCommand(cnt)
