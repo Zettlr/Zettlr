@@ -65,7 +65,6 @@ class LinkProvider {
                 'inbound': []
               }
             }
-
             // Add only the inbound reference in the target node
             this._globalLinkDatabase[link.target].inbound.push(link.source)
           }
