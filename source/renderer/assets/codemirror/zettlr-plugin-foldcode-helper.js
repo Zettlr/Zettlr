@@ -19,7 +19,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  CodeMirror.registerHelper('fold', 'markdown-zkn', function (cm, start) {
+  CodeMirror.registerHelper('fold', 'markdown', function (cm, start) {
     var maxDepth = 100
 
     function isHeader (lineNo) {
