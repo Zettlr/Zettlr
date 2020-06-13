@@ -368,6 +368,7 @@ class ZettlrRendererIPC {
 
         // FILES
 
+      case 'file-request-sync':
       case 'file-open':
         this._app.openFile(cnt)
         break
@@ -394,11 +395,12 @@ class ZettlrRendererIPC {
         this._app.getEditor().syncFiles(cnt)
         break
 
-      case 'file-request-sync':
-        // This is the answer from main with a file and its contents which
-        // we simply need to add to the open files
-        this._app.getEditor().addFileToOpen(cnt)
-        break
+        // case 'file-request-sync':
+        //   // NOTE: We're now perfoming the same action as file-open
+        //   // This is the answer from main with a file and its contents which
+        //   // we simply need to add to the open files
+        //   this._app.getEditor().addFileToOpen(cnt)
+        //   break
 
       // Replace a full directory tree (e.g., on rename or modification of the children)
       case 'dir-replace':

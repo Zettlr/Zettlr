@@ -506,9 +506,13 @@ module.exports = {
           if (index >= list.length) index = list.length - 1
           if (evt.ctrlKey || evt.metaKey) {
             // Select the last file
+            global.editor.announceTransientFile(list[list.length - 1].hash)
             return global.ipc.send('file-get', list[list.length - 1].hash)
           }
-          if (index < list.length) global.ipc.send('file-get', list[index].hash)
+          if (index < list.length) {
+            global.editor.announceTransientFile(list[index].hash)
+            global.ipc.send('file-get', list[index].hash)
+          }
           break
         case 'ArrowUp':
           index--
@@ -516,9 +520,13 @@ module.exports = {
           if (index < 0) index = 0
           if (evt.ctrlKey || evt.metaKey) {
             // Select the first file
+            global.editor.announceTransientFile(list[0].hash)
             return global.ipc.send('file-get', list[0].hash)
           }
-          if (index >= 0) global.ipc.send('file-get', list[index].hash)
+          if (index >= 0) {
+            global.editor.announceTransientFile(list[index].hash)
+            global.ipc.send('file-get', list[index].hash)
+          }
           break
       }
     },

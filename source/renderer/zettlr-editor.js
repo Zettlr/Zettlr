@@ -67,6 +67,7 @@ class ZettlrEditor {
     this._div = $('#editor')
     this._openFiles = [] // Holds all open files in the editor
     this._currentHash = null // Needed for positions
+    this._transientHashes = [] // An array of hashes that when opened should be opened transient
 
     this._words = 0 // Currently written words
     this._fontsize = 100 // Font size (used for zooming)
@@ -94,10 +95,6 @@ class ZettlrEditor {
     this._lastMode = MD_MODE // Default mode
 
     this._countChars = false // Whether or not Zettlr should count characters as words (e.g., for Chinese)
-
-    // Pinch gestures are a pain, but here we go: STATE!
-    this._pointerEvents = []
-    this._pointerDiff = -1
 
     // This Markdown to HTML converter is used in various parts of the
     // class to perform converting operations.
@@ -127,6 +124,11 @@ class ZettlrEditor {
     // Caches the width of a space (in normal font and in monospace font)
     this._spaceWidth = 0
     this._monospaceWidth = 0
+
+    global.editor.announceTransientFile = (hash) => {
+      if (this._openFiles.find(e => e.fileObject.hash === hash)) return
+      this._transientHashes.push(hash)
+    }
 
     this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
       mode: MD_MODE,
@@ -230,6 +232,15 @@ class ZettlrEditor {
         // Clear the timeouts in any case
         if (this._timeout) clearTimeout(this._timeout)
         if (this._citationTimeout) clearTimeout(this._citationTimeout)
+
+        // At this moment, the document also is no longer considered transient
+        let file = this._openFiles.find(e => e.fileObject.hash === this._currentHash)
+
+        if (file.transient) {
+          file.transient = false
+          // Synchronise the file changes to the document tabs
+          this._tabs.syncFiles(this._openFiles, this._currentHash)
+        }
 
         // Check if the change actually modified the doc or not.
         if (this._cm.doc.isClean()) {
@@ -539,10 +550,33 @@ class ZettlrEditor {
       // it's easier to have the file object bound here that all
       // of the renderer is working with.
       let fileTreeObject = this._renderer.findObject(file.hash)
-      this._openFiles.push({
-        'fileObject': fileTreeObject,
-        'cmDoc': CodeMirror.Doc(file.content, mode)
-      })
+
+      let shouldBeTransient = false
+      if (this._transientHashes.includes(file.hash)) {
+        let idx = this._transientHashes.indexOf(file.hash)
+        this._transientHashes.splice(idx, 1)
+        shouldBeTransient = true
+      }
+
+      // Lastly, we need to determine if the current document is considered
+      // transient. If it is, this means we need to "close" it.
+      // At this moment, the document also is no longer considered transient
+      let activeFile = this._openFiles.find(e => e.fileObject.hash === this._currentHash)
+      if (activeFile && activeFile.transient) {
+        // We'll attempt to close the tab, as this function fulfills the functionality we need
+        this.attemptCloseTab()
+        // Swap out all properties of the current tab
+        activeFile.fileObject = fileTreeObject
+        activeFile.cmDoc = CodeMirror.Doc(file.content, mode)
+        activeFile.transient = shouldBeTransient
+      } else {
+        // Simply append to the end of the array
+        this._openFiles.push({
+          'fileObject': fileTreeObject,
+          'cmDoc': CodeMirror.Doc(file.content, mode),
+          'transient': shouldBeTransient
+        })
+      }
     }
 
     // I know that I will make this mistake in the future, so here's why we
@@ -620,8 +654,8 @@ class ZettlrEditor {
       }
     }
 
-    // New tags mean we might have potential new file matches --> signal this
-    // to the autocompletion.
+    // New tags mean we might have potential new file matches
+    // --> signal this to the autocompletion.
     this.signalUpdateFileAutocomplete()
 
     // Last but not least, exchange the current hash, if not present anymore.
@@ -669,26 +703,27 @@ class ZettlrEditor {
    * Silently adds a file to the array of open files.
    * @param {Object} fileObject A file descriptor with content
    */
-  addFileToOpen (fileObject) {
-    // Check if the file is already open; prevent duplicates.
-    if (this._openFiles.find(elem => elem.fileObject.hash === fileObject.hash)) return
-    // This function is called by the IPC when there's a new file
-    // synchronisation request answered by main. Let's simply push it to the
-    // array of open files without touching any other logic.
-    let fileTreeObject = this._renderer.findObject(fileObject.hash)
-    let mode = MD_MODE
-    if (fileObject.ext === '.tex') mode = TEX_MODE
-    this._openFiles.push({
-      'fileObject': fileTreeObject,
-      'cmDoc': CodeMirror.Doc(fileObject.content, mode)
-    })
+  // addFileToOpen (fileObject) {
+  //   // Check if the file is already open; prevent duplicates.
+  //   if (this._openFiles.find(elem => elem.fileObject.hash === fileObject.hash)) return
+  //   // This function is called by the IPC when there's a new file
+  //   // synchronisation request answered by main. Let's simply push it to the
+  //   // array of open files without touching any other logic.
+  //   let fileTreeObject = this._renderer.findObject(fileObject.hash)
+  //   let mode = MD_MODE
+  //   if (fileObject.ext === '.tex') mode = TEX_MODE
+  //   this._openFiles.push({
+  //     'fileObject': fileTreeObject,
+  //     'cmDoc': CodeMirror.Doc(fileObject.content, mode),
+  //     'transient': false
+  //   })
 
-    // If there's no file open, open this one.
-    if (!this._currentHash) this._swapFile(fileObject.hash)
+  //   // If there's no file open, open this one.
+  //   if (!this._currentHash) this._swapFile(fileObject.hash)
 
-    // Propagate changes
-    this._tabs.syncFiles(this._openFiles, this._currentHash)
-  }
+  //   // Propagate changes
+  //   this._tabs.syncFiles(this._openFiles, this._currentHash)
+  // }
 
   /**
    * Hot-swaps the contents of one of the currently opened files.

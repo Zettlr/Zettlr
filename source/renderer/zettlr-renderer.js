@@ -35,9 +35,6 @@ const matchFilesByTags = require('../common/util/match-files-by-tags')
 const reconstruct = require('./util/reconstruct-tree')
 const loadicons = require('./util/load-icons')
 
-// Pull the poll-time from the data
-const POLL_TIME = require('../common/data.json').poll_time
-
 /**
  * This is the pendant class to the Zettlr class in the main process. It mirrors
  * the functionality of the main process, only that the functionality in here
@@ -144,22 +141,9 @@ class ZettlrRenderer {
       this._ipc.send('update-check')
     }, 100)
 
-    // Here we can init actions and stuff to be done after the startup has finished
-    setTimeout(() => { this.poll() }, POLL_TIME) // Poll every POLL_TIME seconds
-
     // Load the clarity icon modules, add custom icons and then refresh
     // attachments (because it requires custom icons to be loaded).
     setTimeout(() => loadicons().then(() => this._attachments.refresh()), 0)
-  }
-
-  /**
-    * This function is called every POLL_TIME seconds to execute recurring tasks.
-    */
-  poll () {
-    // Nothing to do currently
-
-    // Set next timeout
-    setTimeout(() => { this.poll() }, POLL_TIME)
   }
 
   /**
@@ -358,7 +342,7 @@ class ZettlrRenderer {
     global.store.renewItems(nData)
 
     // Finally, synchronize the file descriptors in the editor
-    this._editor.syncFiles()
+    this._editor.syncFiles() // DEBUG
   }
 
   /**

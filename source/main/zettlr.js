@@ -585,13 +585,7 @@ class Zettlr {
   /**
    * Sends all currently opened files to the renderer
    */
-  async sendOpenFiles () {
-    let files = this._fsal.getOpenFiles()
-
-    for (let hash of files) {
-      await this.sendFile(hash)
-    }
-  }
+  sendOpenFiles () { global.ipc.send('sync-files', this._fsal.getOpenFiles()) }
 
   // Getters
 

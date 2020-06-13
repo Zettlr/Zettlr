@@ -99,6 +99,7 @@ module.exports = class EditorTabs {
   }
 
   syncFiles (files, openFile) {
+    console.log(`[TABS] Synching ${files.length} files`)
     // First reset the whole tab bar
     for (let instance of this._tippyInstances) {
       instance.destroy()
@@ -120,7 +121,7 @@ module.exports = class EditorTabs {
       let file = document.fileObject
       let isDocumentClean = document.cmDoc.isClean()
       let isActiveFile = file.hash === openFile
-      let elem = this._makeElement(file, isActiveFile, isDocumentClean)
+      let elem = this._makeElement(file, isActiveFile, isDocumentClean, document.transient || false)
       this._div.appendChild(elem)
     }
 
@@ -207,7 +208,7 @@ module.exports = class EditorTabs {
    * @param {boolean} active Whether the file is currently active
    * @param {boolean} clean Whether the document is clean or contains changes
    */
-  _makeElement (file, active = false, clean = true) {
+  _makeElement (file, active = false, clean = true, transient = false) {
     // First determine the display title (either filename or frontmatter title)
     let displayTitle = file.name
     if (file.frontmatter && file.frontmatter.title) displayTitle = file.frontmatter.title
@@ -233,7 +234,15 @@ module.exports = class EditorTabs {
     // Next create the name span containing the display title
     let nameSpan = document.createElement('span')
     nameSpan.classList.add('filename')
-    nameSpan.innerText = displayTitle
+
+    // Apply the transient style if applicable
+    if (transient) {
+      let em = document.createElement('em')
+      em.innerText = displayTitle
+      nameSpan.appendChild(em)
+    } else {
+      nameSpan.innerText = displayTitle
+    }
 
     // Also enable closing of the document
     let closeIcon = document.createElement('clr-icon')
