@@ -8,6 +8,7 @@
             "metal3d",
             "ScaredCoward",
             "Alexis M\u00e9taireau",
+            "YannB",
             "Lexane",
             "Taylan TATLI",
             "concretx",
@@ -15,7 +16,7 @@
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-05-29T16:52:56.000000Z"
+        "updated_at": "2020-06-05T15:48:00.000000Z"
     },
     "dialog": {
         "about": {
@@ -170,7 +171,7 @@
             "auto_dark_mode_off": "Arr\u00eat",
             "auto_dark_mode_schedule": "Horaires",
             "auto_dark_mode_schedule_format": "HH:MM (format 24h)",
-            "auto_dark_mode_system": "Suivre le syst\u00e8me d'exploitation",
+            "auto_dark_mode_system": "Utiliser l'horloge syst\u00e8me",
             "autocorrect": {
                 "active_label": "Activer AutoCorrect",
                 "quick_select_label": "S\u00e9lection rapide",
@@ -229,6 +230,7 @@
             "hide_dirs": "Cacher les dossiers durant la recherche globale",
             "homeEndBehaviour": "Utilise les actions par d\u00e9faut de CodeMirror pour \u003Ckbd\u003EHome\u003C/kbd\u003E et \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Largeur d\u2019indentation en nombre d\u2019espaces",
+            "input_mode": "Mode de saisie de l'\u00e9diteur",
             "modtime": "Heure de la derni\u00e8re modification",
             "mute_lines": "Masquer les lignes hors focus dans le mode sans distraction",
             "new_file_dont_prompt": "Ne pas demander de nom lors de la cr\u00e9ation de nouveaux fichiers",
@@ -328,7 +330,7 @@
                 "linkend_label": "Fin du lien",
                 "linkstart_label": "D\u00e9but du lien",
                 "pass_check_no": "Votre expression r\u00e9guli\u00e8re ne correspond pas \u00e0 l\u2019identifiant g\u00e9n\u00e9r\u00e9.",
-                "pass_check_yes": "L'expression s'appliquer \u00e0 \u00e7a ID!",
+                "pass_check_yes": "L\u2019identifiant  g\u00e9n\u00e9r\u00e9 a \u00e9t\u00e9 reconnu par l'expression r\u00e9guli\u00e8re !",
                 "reset_default_generator": "R\u00e9initialiser le mod\u00e8le",
                 "reset_default_id": "R\u00e9initialiser l\u2019expression r\u00e9guli\u00e8re d\u2019identifiant",
                 "reset_default_linkend": "R\u00e9initialiser la fin du lien",
@@ -378,7 +380,7 @@
             "client_error": "Impossible de v\u00e9rifier les mises \u00e0 jour : Erreur Client (Code d'\u00e9tat : %s)",
             "connection_error": "Impossible de v\u00e9rifier les mises \u00e0 jour : pas de connexion",
             "current_version": "Votre version",
-            "no_data": "Impossible de rechercher la mise \u00e0 jour: Pas de data",
+            "no_data": "Impossible de v\u00e9rifier les mises \u00e0 jour : le serveur n\u2019a pas envoy\u00e9 de donn\u00e9es",
             "no_update": "Vous avez la version la plus r\u00e9cente de Zettlr",
             "notification": "Une nouvelle version de Zettlr est disponible. La liste des changements est ci-dessous.",
             "redirect_error": "Impossible de v\u00e9rifier les mises \u00e0 jour : le serveur a essay\u00e9 de rediriger (Code d'\u00e9tat : %s)",
@@ -495,7 +497,7 @@
         "new_project": "Nouveau Projet",
         "new_vd": "Nouveau dossier virtuel\u2026",
         "no_suggestions": "Pas de suggestions",
-        "open": "Ouvrir",
+        "open": "Ouvrir...",
         "open_attachment": "Ouvrir annexe",
         "open_link": "Ouvrir le lien",
         "pandoc": "T\u00e9l\u00e9charger Pandoc",
@@ -519,6 +521,7 @@
         "save": "Enregistrer",
         "select_all": "S\u00e9lectionner tout",
         "services": "Services",
+        "set_icon": "Assigner un ic\u00f4ne...",
         "set_target": "D\u00e9finir la cible d'\u00e9criture\u2026",
         "show_file": "Monter le fichier",
         "speech": "Parole",

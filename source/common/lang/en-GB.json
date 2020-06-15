@@ -6,7 +6,7 @@
             "Celso Lira"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-05-22T13:31:27.000000Z"
+        "updated_at": "2020-06-03T13:46:28.000000Z"
     },
     "dialog": {
         "about": {
@@ -220,6 +220,7 @@
             "hide_dirs": "Hide directories during global search",
             "homeEndBehaviour": "Use the CodeMirror default actions for \u003Ckbd\u003EHome\u003C/kbd\u003E and \u003Ckbd\u003EEnd\u003C/kbd\u003E.",
             "indent_unit": "Indent by the following number of spaces",
+            "input_mode": "Editor input mode",
             "modtime": "Last modification time",
             "mute_lines": "Mute non-focused lines in distraction-free mode",
             "new_file_dont_prompt": "Do not prompt for filename when creating new files",
@@ -510,6 +511,7 @@
         "save": "Save",
         "select_all": "Select all",
         "services": "Services",
+        "set_icon": "Set icon \u2026",
         "set_target": "Set writing target\u2026",
         "show_file": "Show file",
         "speech": "Speech",
