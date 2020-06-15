@@ -490,7 +490,9 @@ module.exports = class FSAL extends EventEmitter {
     } else if (event === 'change') {
       // We have to make sure the "change" event was appropriate
       // This is DEBUG as of now (See issue #773 for more information)
-      if (!await FSALFile.hasChangedOnDisk(descriptor)) {
+      let hasChanged = await FSALFile.hasChangedOnDisk(descriptor)
+      global.log.info('Change event detected. FSALFile::hasChangedOnDisk reports: ' + hasChanged + ' with modtime ' + descriptor.modtime, FSALFile.metadata(descriptor))
+      if (!hasChanged) {
         global.log.info(`The file ${descriptor.name} has not changed, but a change event was fired by chokidar.`, {
           'mTime': descriptor.modtime,
           'birthTime': descriptor.creationtime
