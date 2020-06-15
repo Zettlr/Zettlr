@@ -90,7 +90,7 @@ function metadata (fileObject) {
 async function updateFileMetadata (fileObject) {
   try {
     let stat = await fs.lstat(fileObject)
-    fileObject.modtime = stat.mtimeMs
+    fileObject.modtime = stat.mtime.getTime()
   } catch (e) {
     // Do nothing ...
   }
@@ -126,8 +126,8 @@ async function parseFile (filePath, cache, parent = null) {
   try {
     // Get lstat
     let stat = await fs.lstat(filePath)
-    file.modtime = stat.mtimeMs // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
-    file.creationtime = stat.birthtimeMs
+    file.modtime = stat.mtime.getTime() // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
+    file.creationtime = stat.birthtime.getTime()
   } catch (e) {
     global.log.error('Error reading file ' + filePath, e)
     throw e // Rethrow
@@ -258,9 +258,7 @@ module.exports = {
   },
   'hasChangedOnDisk': async function (fileObject) {
     let stat = await fs.lstat(fileObject.path)
-    // DEBUG
-    console.log(`Has the file ${fileObject.name} changed on disk? Stat: ${stat.mtimeMs}; Modtime: ${fileObject.modtime}`)
-    return stat.mtimeMs !== fileObject.modtime
+    return stat.mtime.getTime() !== fileObject.modtime
   },
   'load': async function (fileObject) {
     // Loads the content of a file from disk
