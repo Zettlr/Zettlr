@@ -26,6 +26,9 @@ eslint_report.htm
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# webstorm files
+.idea
+
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
