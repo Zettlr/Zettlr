@@ -50,6 +50,14 @@
             "icon": "cog"
         },
         {
+            "role": "button",
+            "class": "keymaps",
+            "command": "open-keymaps",
+            "content": "{}",
+            "title": "toolbar.keymaps",
+            "icon": "cog"
+        },
+        {
             "role": "searchbar"
         },
         {

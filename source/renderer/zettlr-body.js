@@ -33,6 +33,7 @@ const ProjectProperties = require('./dialog/project-properties.js')
 const CustomCSS = require('./dialog/custom-css.js')
 const ErrorDialog = require('./dialog/error-dialog.js')
 const DevClipboard = require('./dialog/clipboard.js')
+const KeymapsDialog = require('./dialog/keymaps')
 
 const { trans } = require('../common/lang/i18n.js')
 const localiseNumber = require('../common/util/localise-number')
@@ -521,6 +522,13 @@ class ZettlrBody {
     this._currentDialog = new TagsPreferences()
     this._currentDialog.init(prefs).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
+  }
+
+  displayKeymaps (keymaps) {
+    if (this._currentDialog !== null) return
+    this._currentDialog = new KeymapsDialog()
+    this._currentDialog.init(keymaps).open()
+    this._currentDialog.on('afterClose', (e) => {this._currentDialog = null})
   }
 
   /**

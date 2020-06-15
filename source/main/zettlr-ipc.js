@@ -42,8 +42,13 @@ class ZettlrIPC {
       event.returnValue = global.config.get(key)
     })
 
+    ipc.on('keymaps', (event, key) => {
+      event.returnValue = global.keymaps.get(key)
+    })
+
     // Beginn listening to messages
     ipc.on('message', (event, arg) => {
+
       // We always need a command
       if (!arg.hasOwnProperty('command')) {
         global.log.error(trans('system.no_command'), arg)
@@ -332,6 +337,13 @@ class ZettlrIPC {
       case 'switch-theme-bordeaux':
         // Set the theme accordingly
         global.config.set('display.theme', cmd.substr(13))
+        break
+
+      case 'get-keymaps':
+        return global.keymaps.get()
+
+      case 'update-keymaps':
+        global.keymaps.bulkSet(cnt)
         break
 
       default:

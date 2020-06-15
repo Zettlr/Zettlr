@@ -1,0 +1,32 @@
+<div class="dialog">
+
+    <form action="" method="GET" id="dialog">
+        <div class="box">
+            <p>Modify your keymaps here</p>
+            <div class="modal-container-constrain-size">
+                <table>
+                    <tbody id="keymaps-key-container">
+                        {{#each keymaps}}
+                            <tr>
+                                <td>
+                                    <div class="input-button-group">
+                                        <input type="text" name="keymapsFunction[]" value="{{ function }}">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-button-group">
+                                        <input type="text" name="keymapsValue[]" value="{{ keys }}">
+                                    </div>
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="keymaps-submit-group">
+            <button type="submit" id="keymaps-save">{{i18n "dialog.button.save"}}</button>
+            <button id="abort">{{i18n "dialog.button.cancel"}}</button>
+        </div>
+    </form>
+</div>

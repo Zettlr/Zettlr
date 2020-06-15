@@ -102,6 +102,12 @@ class ZettlrRendererIPC {
       }
     }
 
+    global.keymaps = {
+      get: () => {
+        return ipc.sendSync('keymaps')
+      },
+    }
+
     // Inject typo spellcheck and suggest functions into the globals
     global.typo = {
       check: (term) => {
@@ -478,6 +484,18 @@ class ZettlrRendererIPC {
 
       case 'open-preferences':
         this.send('get-preferences')
+        break
+
+      case 'keymaps':
+        this._app.getBody().displayKeymaps(cnt)
+        break
+
+      case 'open-keymaps':
+        this.send('get-keymaps')
+        break
+
+      case 'keymaps-update':
+        this._app.keymapsChange()
         break
 
       case 'open-pdf-preferences':

@@ -24,7 +24,6 @@ const turndownGfm = require('joplin-turndown-plugin-gfm')
 const moveSection = require('./util/editor-move-section')
 const EditorSearch = require('./util/editor-search')
 const { clipboard } = require('electron')
-const generateKeymap = require('./assets/codemirror/generate-keymap.js')
 const openMarkdownLink = require('./util/open-markdown-link')
 const EditorAutocomplete = require('./util/editor-autocomplete')
 
@@ -163,7 +162,6 @@ class ZettlrEditor {
         linkEnd: ']]' // End of links?
       },
       continuelistModes: [ 'markdown', 'markdown-zkn' ],
-      extraKeys: generateKeymap(this)
     })
 
     // Set up the helper classes with the CM instance
@@ -846,7 +844,6 @@ class ZettlrEditor {
     // The configuration has changed, so reload everything
 
     // Re-generate the keymap
-    this._cm.setOption('extraKeys', generateKeymap(this))
 
     // Should lines be muted in distraction free?
     this._mute = global.config.get('muteLines')
@@ -925,6 +922,38 @@ class ZettlrEditor {
     this._fireRenderers()
 
     return this
+  }
+
+  mapFunctionToCodeMirror(name) {
+    switch (name) {
+      case 'CodeMirrorInsertMiddleLineBelow':
+        return (cm) => {
+          CodeMirror.commands['goLineEnd'](cm)
+          CodeMirror.commands['newlineAndIndent'](cm)
+        }
+      case 'CodeMirrorInsertMiddleLineAbove':
+        return (cm) => {
+          CodeMirror.commands['goLineUp'](cm)
+          CodeMirror.commands['goLineEnd'](cm)
+          CodeMirror.commands['newLineAndIndent'](cm)
+        }
+      case 'editorPastAsPlain':
+        return (cm) => { this.pasteAsPlain()}
+      default:
+        return name
+    }
+  }
+
+  keymapsChanged () {
+    let keymaps = global.keymaps.get()
+    let inverseKeymaps = {}
+    // The keymaps are stored as a dict (key, value) with the function as keys and the associated keystroke as value.
+    // We need to inverse that
+    for (let fun in keymaps) {
+      inverseKeymaps[keymaps[fun]] = this.mapFunctionToCodeMirror(fun)
+    }
+    let normalizedKeymaps = CodeMirror.normalizeKeyMap(inverseKeymaps)
+    this._cm.setOption('extraKeys', normalizedKeymaps)
   }
 
   /**
@@ -1327,6 +1356,7 @@ class ZettlrEditor {
    * @return {CodeMirror} The editor instance
    */
   getEditor () { return this._cm }
+
 }
 
 module.exports = ZettlrEditor

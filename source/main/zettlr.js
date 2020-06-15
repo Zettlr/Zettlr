@@ -211,6 +211,7 @@ class Zettlr {
     this._providers = {
       'log': require('./providers/log-provider'),
       'config': require('./providers/config-provider'),
+      'keymaps': require('./providers/keymaps-provider'),
       'appearance': require('./providers/appearance-provider'),
       'watchdog': require('./providers/watchdog-provider'),
       'citeproc': require('./providers/citeproc-provider'),

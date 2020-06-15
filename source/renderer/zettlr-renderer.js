@@ -116,6 +116,7 @@ class ZettlrRenderer {
       // 10ms should suffice - the number is irrelevant. The important part is
       // that it's out of the first tick of the app.
       this.configChange()
+      this.keymapsChange()
 
       // Apply the custom CSS stylesheet to the head element
       global.ipc.send('get-custom-css-path', {}, (ret) => {
@@ -182,6 +183,10 @@ class ZettlrRenderer {
 
     // Tell the editor that the config has changed
     this.getEditor().configChange()
+  }
+
+  keymapsChange () {
+    this.getEditor().keymapsChanged()
   }
 
   /**
