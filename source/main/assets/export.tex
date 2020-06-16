@@ -47,23 +47,15 @@ $endif$
 % _italics_ will become underlines, which is not desirable.
 \usepackage[normalem]{ulem}
 
-% Pandoc uses includegraphics. But as some images may be too big, we have to
-% replace the command with another one that ensures proper scaling of images.
-% Therefore first save the old includegraphics command somewhere else.
-\let\oldincg\includegraphics
-
-% Create the imgwidth variable
-\newlength{\imgwidth}
-
-% Now renew the original includegraphics command to include some logic that
-% first determines the width of the image and then either scales it down or
-% retains it at original size (using the minof command). The centering is done
-% automatically by Pandoc.
-\renewcommand\includegraphics[1]{%
-    \settowidth{\imgwidth}{\oldincg{#1}}%
-    \setlength{\imgwidth}{\minof{\imgwidth}{\textwidth}}%
-    \oldincg[width=\imgwidth]{#1}%
-}
+% Image scaling code from pandoc default.latex template
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 
 % Now we also have to make sure that the figures Pandoc inserts are positioned
 % approximately where they are at. Therefore we have to overwrite the
