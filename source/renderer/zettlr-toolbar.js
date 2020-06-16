@@ -1,4 +1,4 @@
-/* global $ */
+const $ = require('jquery')
 /**
  * @ignore
  * BEGIN HEADER
@@ -15,6 +15,7 @@
 
 const localiseNumber = require('../common/util/localise-number')
 const { trans } = require('../common/lang/i18n')
+const tippy = require('tippy.js').default
 
 /**
  * The following keys do not trigger the autocomplete on the searchbar
@@ -153,7 +154,7 @@ class ZettlrToolbar {
     })
 
     // Tippify all elements with the respective attribute.
-    global.tippy('#toolbar [data-tippy-content]', {
+    tippy('#toolbar [data-tippy-content]', {
       delay: 100,
       arrow: true,
       duration: 100

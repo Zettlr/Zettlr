@@ -1,4 +1,5 @@
-/* global $ */
+const $ = require('jquery')
+require('jquery-ui/ui/widgets/sortable')
 /**
  * @ignore
  * BEGIN HEADER

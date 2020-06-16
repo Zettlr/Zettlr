@@ -43,12 +43,16 @@ const { app } = require('electron')
 const process = require('process')
 
 // Include the global Zettlr class
-const Zettlr = require('./main/zettlr.js')
+const Zettlr = require('./zettlr.js')
 // Helper function to extract files to open from process.argv
-const extractFilesFromArgv = require('./common/util/extract-files-from-argv')
+const extractFilesFromArgv = require('../common/util/extract-files-from-argv')
 
 // Introduce v8 code caching
 require('v8-compile-cache')
+
+if (module.hot) {
+  module.hot.accept()
+}
 
 /**
  * The main Zettlr object. As long as this exists in memory, the app will run.
@@ -125,18 +129,6 @@ app.on('open-file', (e, p) => {
  */
 app.whenReady().then(() => {
   global.log.info('Electron reports ready state. Instantiating main process...')
-
-  try {
-    // Developer tools
-    const { default: installExtension, VUEJS_DEVTOOLS } = require('electron-devtools-installer')
-    // Load Vue developer extension
-    installExtension(VUEJS_DEVTOOLS)
-      .then((name) => global.log.info(`Added DevTools extension:  ${name}`))
-      .catch((err) => console.log('An error occurred: ', err))
-  } catch (e) {
-    global.log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
-  }
-
   zettlr = new Zettlr()
 })
 

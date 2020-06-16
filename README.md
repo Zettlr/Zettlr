@@ -89,25 +89,21 @@ The `install`-scripts will automatically precompile all assets for the first tim
 
 This section lists all available commands that you can use during application development. These are defined within the `package.json` and can be run from the command line by prefixing them either with `npm run` or `yarn`, depending on which package manager you use. Run them from within the base directory of the repository.
 
-#### `build:quick`
+#### `dev`
 
 This command builds the app locally without packing it. This means that within the `release`-directory you will find a pre-built binary, depending on your operating system.
+
+#### `compile`
+
+This commands builds the assets with webpack.
 
 #### `csl:refresh`
 
 This downloads the [Citation Style Language](https://citationstyles.org/) (CSL) files with which the application is shipped, and places them in the `source/main/assets/csl-locales`- and `source/main/assets/csl-styles`-directories respectively. You can occasionally run this command to pull potential updates from the repositories. _Please note, that an automated workflow will run from time to time on the repository to do this, so in almost all cases it should suffice to pull from the develop branch from time to time._
 
-#### `handlebars`
-
-This re-compiles the [Handlebars.js](https://handlebarsjs.com/) template files and places the pre-compiled templates in the `source/common/assets/handlebars`-directory.
-
 #### `lang:refresh`
 
 This downloads the four default translations of the application from [Zettlr Translate](https://translate.zettlr.com/), with which it is shipped by default. It places the files in the `source/common/lang`-directory. Currently, the default languages are: German (Germany), English (USA), English (UK), and French (France). _Please note, that an automated workflow will run from time to time on the repository to do this, so in almost all cases it should suffice to pull from the develop branch from time to time._
-
-#### `less`
-
-This re-generates the CSS files from the [LESS](http://lesscss.org/)-source and places the final stylesheets in the `source/common/assets/css`-directory. You need to run this command every time you modify the LESS-source in order to see the changes reflected in the app's appearance. _Note: During heavy development, it might be easier to watch the LESS files and automatically recompile them. You can do so by running the command `watch`._
 
 #### `lint`
 
@@ -133,10 +129,6 @@ Explicitly creates an installer for Windows. The installer package is significan
 
 This re-compiles the source-files needed by the exporter for building [reveal.js](https://revealjs.com/)-presentations. Due to the nature of how [Pandoc](https://pandoc.org/) creates such presentations, Zettlr needs to modify the output by Pandoc, which is why these files need to be pre-compiled.
 
-#### `start`
-
-This command spins up Electron and runs the app. You will use this quite frequently during development.
-
 #### `test`
 
 This runs the unit tests in the directory `./test`. Make sure to run this command prior to submitting a Pull Request, as this will be run every time you commit to the PR, and this way you can make sure that your changes don't break any tests, making the whole PR-process easier.
@@ -144,18 +136,6 @@ This runs the unit tests in the directory `./test`. Make sure to run this comman
 #### `test-gui`
 
 This prepares a test-directory (placed into your `./resources`-directory) and tells Zettlr to run with a modified simple configuration. This way you can test some things that might destroy files without actually touching your own files.
-
-#### `watch`
-
-This spins up a process that watches the LESS-source for changes. As long as this process runs, every change to a LESS-file will trigger a build so that you can immediately see your changes in a running Electron-application by pressing `F5` to refresh the GUI.
-
-#### `wp:dev`
-
-Compiles the [Vue.js](https://vuejs.org/)-assets from the resources-directory. This tells [Webpack](https://webpack.js.org/) to compile in development mode, which increases logging and makes debugging easier. Please make sure to run `wp:prod` if you want to create a release.
-
-#### `wp:prod`
-
-Compiles the Vue-assets from the resources-directory. This tells Webpack to compile in production mode, which decreases logging and makes the generated scripts run faster. It is recommended to run `wp:dev` in case you need to debug the Vue-files.
 
 To dive deeper into the development process, have a look at our [full development documentation](https://docs.zettlr.com/en/get-involved).
 

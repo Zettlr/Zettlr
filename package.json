@@ -12,28 +12,33 @@
   "version": "1.7.0-beta.13",
   "license": "GPL-3.0",
   "description": "A powerful Markdown editor for researchers.",
-  "main": "./source/main.js",
   "scripts": {
-    "postinstall": "electron-builder install-app-deps && yarn less && yarn handlebars && yarn reveal:build && yarn wp:prod",
-    "start": "electron .",
-    "build:quick": "electron-builder --dir",
+    "dev": "electron-webpack dev",
+    "compile": "electron-webpack",
+    "dist": "yarn compile && electron-builder",
+    "dist:dir": "yarn dist -- --dir -c.compression=store -c.mac.identity=null",
     "release:this": "electron-builder",
     "release:mac": "electron-builder --mac --publish \"never\"",
     "release:win": "electron-builder --win --publish \"never\"",
     "release:linux": "electron-builder --linux --publish \"never\"",
-    "less": "gulp less",
-    "handlebars": "gulp handlebars",
     "lang:refresh": "node scripts/refresh-language.js",
     "csl:refresh": "node scripts/update-csl.js",
     "reveal:build": "node scripts/update-reveal.js",
-    "wp:dev": "cross-env NODE_ENV=development webpack --progress --colors",
-    "wp:prod": "cross-env NODE_ENV=production webpack --progress --colors",
-    "watch:gulp": "gulp watch",
-    "watch:wp": "cross-env NODE_ENV=development webpack --progress --colors --watch",
-    "watch": "npm-run-all --parallel watch:*",
     "test": "mocha",
     "test-gui": "node scripts/test-gui.js",
     "lint": "eslint --ext js,vue -f html -o eslint_report.htm source resources"
+  },
+  "electronWebpack": {
+    "main": {
+      "sourceDirectory": "source/main"
+    },
+    "renderer": {
+      "sourceDirectory": "source/renderer",
+      "template": "source/renderer/assets/index.htm"
+    },
+    "whiteListedModules": [
+      "mermaid"
+    ]
   },
   "build": {
     "appId": "com.zettlr.app",
@@ -59,9 +64,11 @@
       }
     ],
     "directories": {
-      "output": "release",
-      "app": "source"
+      "output": "release"
     },
+    "files": [
+      "!**/node_modules/mermaid${/*}"
+    ],
     "afterPack": "./scripts/afterPack.js",
     "afterSign": "./scripts/afterSign.js",
     "mac": {
@@ -147,6 +154,7 @@
     "eslint/espree/acorn": "^7.2.0"
   },
   "dependencies": {
+    "@clr/icons": "^3.1.3",
     "@zettlr/citr": "^1.1.0",
     "adm-zip": "^0.4.14",
     "archiver": "^4.0.1",
@@ -161,6 +169,7 @@
     "joplin-turndown": "^4.0.27",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "jquery": "^3.5.1",
+    "jquery-ui": "^1.12.1",
     "katex": "^0.11.1",
     "md5": "^2.2.1",
     "mermaid": "8.0.0",
@@ -171,6 +180,7 @@
     "sanitize-filename": "^1.6.3",
     "semver": "^7.3.2",
     "showdown": "^1.9.1",
+    "source-map-support": "^0.5.19",
     "tippy.js": "^6.2.3",
     "uuid": "^8.1.0",
     "v8-compile-cache": "^2.1.0",
@@ -183,13 +193,16 @@
     "cross-env": "^7.0.2",
     "css-loader": "^3.5.3",
     "csso": "^4.0.3",
-    "electron": "^9.0.0",
+    "electron": "^9.0.4",
     "electron-builder": "^22.7.0",
     "electron-devtools-installer": "^3.0.0",
     "electron-notarize": "^0.3.0",
+    "electron-webpack": "^2.8.2",
+    "electron-webpack-vue": "^2.4.0",
     "eslint": "^7.1.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-loader": "^4.0.2",
+    "eslint-plugin-html": "^6.0.2",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
@@ -204,6 +217,8 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-wrap": "^0.15.0",
     "handlebars": "^4.7.6",
+    "less": "^3.11.3",
+    "less-loader": "^6.1.1",
     "lorem-ipsum": "^2.0.3",
     "mocha": "^7.2.0",
     "npm-run-all": "^4.1.5",

@@ -13,8 +13,7 @@
 */
 
 const { Menu } = require('electron')
-const electron = require('electron')
-const app = electron.app
+const { app, shell } = require('electron')
 const { trans } = require('../common/lang/i18n.js')
 
 /**
@@ -103,7 +102,7 @@ class ZettlrMenu {
       // Weblinks are "target"s
       if (item.hasOwnProperty('target')) {
         builtItem.click = function (menuitem, focusedWindow) {
-          require('electron').shell.openExternal(item.target)
+          shell.openExternal(item.target)
         }
       }
 
@@ -143,7 +142,7 @@ class ZettlrMenu {
             break
           case 'openDictData':
             builtItem.click = function (menuitem, focusedWindow) {
-              require('electron').shell.openItem(require('path').join(require('electron').app.getPath('userData'), '/dict'))
+              shell.openItem(require('path').join(app.getPath('userData'), '/dict'))
             }
             break
           // Enumerate the recent docs

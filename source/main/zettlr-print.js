@@ -14,7 +14,7 @@
 
 const path = require('path')
 const url = require('url')
-const { BrowserWindow } = require('electron')
+const { app, BrowserWindow } = require('electron')
 
 class ZettlrPrint {
   /**
@@ -50,7 +50,8 @@ class ZettlrPrint {
       webPreferences: {
         // Zettlr needs all the node features, so in preparation for Electron
         // 5.0 we'll need to explicitly request it.
-        nodeIntegration: true
+        nodeIntegration: true,
+        webSecurity: false
       },
       backgroundColor: '#fff',
       frame: false, // No frame for quicklook windows. Mainly prevents the menu bar to be shown on win+linux
@@ -68,15 +69,22 @@ class ZettlrPrint {
 
     // First create a new browserWindow
     let win = new BrowserWindow(winConf)
+    win.windowType = 'print'
 
     // Then activate listeners.
     // and load the index.html of the app.
-    win.loadURL(url.format({
-      pathname: path.join(__dirname, '../print/index.htm'),
-      protocol: 'file:',
-      slashes: true,
-      search: `file=${file}&darkMode=${global.config.get('darkTheme')}`
-    }))
+    if (app.isPackaged) {
+      console.log('loading index.html')
+      win.loadURL(url.format({
+        pathname: path.join(__dirname, 'index.html'),
+        protocol: 'file',
+        search: `file=${file}&darkMode=${global.config.get('darkTheme')}`,
+        slashes: true
+      }))
+    } else {
+      console.log('opening print window')
+      win.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/?file=${file}&darkMode=${global.config.get('darkTheme')}`)
+    }
     // Only show window once it is completely initialized
     win.once('ready-to-show', () => { win.show() })
     // As soon as the window is closed, reset it to null.

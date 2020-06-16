@@ -145,7 +145,7 @@
 </template>
 
 <script>
-/* global $ */
+const $ = require('jquery')
 // Please do not ask me why I have to explicitly use the "default" property
 // of some modules, but not others. The vue-loader is a mess when used with
 // ES6 CommonJS-modules in a exports/require-environment.
@@ -155,6 +155,7 @@ const { trans } = require('../../source/common/lang/i18n.js')
 const TreeItem = require('./tree-item.vue').default
 const FileItem = require('./file-item.vue').default
 const { RecycleScroller } = require('vue-virtual-scroller')
+const tippy = require('tippy.js').default
 
 module.exports = {
   data: () => {
@@ -476,7 +477,7 @@ module.exports = {
 
       // Create instances for all elements without already existing
       // tippy-instances.
-      window.tippy('#sidebar [data-tippy-content]', {
+      tippy('#sidebar [data-tippy-content]', {
         delay: 100,
         arrow: true,
         duration: 100,

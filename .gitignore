@@ -6,6 +6,7 @@ package-lock.json
 
 # Compiled releases
 release
+dist
 
 # Hidden files and stuff
 /**/.DS_Store

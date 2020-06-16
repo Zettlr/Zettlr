@@ -1,4 +1,4 @@
-/* global $ */
+const $ = require('jquery')
 /**
  * @ignore
  * BEGIN HEADER
@@ -62,7 +62,7 @@ class ZettlrPrintWindow {
     this._file = name
     document.title = path.basename(name)
     $('.title h1').text(path.basename(name))
-    $('.content').html(`<iframe src="${name}"></iframe>`)
+    $('.content').html(`<iframe src="file://${name}"></iframe>`)
     this._reposition() // Initial reposition
   }
 
@@ -98,7 +98,6 @@ class ZettlrPrintWindow {
    */
   _reposition () {
     let titleHeight = $('.title').first().outerHeight()
-    $('iframe').first().css('height', $('body').outerHeight() - titleHeight + 'px')
     $('iframe').first().css('top', titleHeight + 'px')
   }
 }

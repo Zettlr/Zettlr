@@ -20,7 +20,7 @@ const showdown = require('showdown')
 const { trans } = require('../../common/lang/i18n.js')
 
 const REPO_URL = require('../../common/data.json').repo_url
-const CUR_VER = require('../../package.json').version
+const CUR_VER = require('../../../package.json').version
 
 class UpdateCheck extends ZettlrCommand {
   constructor (app) {

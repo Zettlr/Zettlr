@@ -18,9 +18,12 @@
 const { dialog, BrowserWindow, app } = require('electron')
 const url = require('url')
 const path = require('path')
+const process = require('process')
 const { trans } = require('../common/lang/i18n')
 const isDir = require('../common/util/is-dir')
 const ZettlrMenu = require('./zettlr-menu.js')
+
+const isDevelopment = !app.isPackaged
 
 /**
  * This class is a wrapper for electron's BrowserWindow class with some functions
@@ -84,7 +87,8 @@ class ZettlrWindow {
       webPreferences: {
         // Zettlr needs all the node features, so in preparation for Electron
         // 5.0 we'll need to explicitly request it.
-        nodeIntegration: true
+        nodeIntegration: true,
+        enableRemoteModule: true
       },
       backgroundColor: '#fff',
       scrollBounce: true, // The nice scrolling effect for macOS
@@ -102,15 +106,21 @@ class ZettlrWindow {
     // On Linux we'll fall back to how the windows should look
 
     // First create a new browserWindow
+    console.log('opening the application window')
     this._win = new BrowserWindow(winConf)
-
-    // Then activate listeners.
-    // and load the index.html of the app.
-    this._win.loadURL(url.format({
-      pathname: path.join(__dirname, '../renderer/assets/index.htm'),
-      protocol: 'file:',
-      slashes: true
-    }))
+    this._win.windowType = 'main'
+    if (isDevelopment) {
+      console.log('opening development application')
+      this._win.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
+      this._win.webContents.openDevTools()
+    } else {
+      console.log('loading index.html')
+      this._win.loadURL(url.format({
+        pathname: path.join(__dirname, 'index.html'),
+        protocol: 'file',
+        slashes: true
+      }))
+    }
 
     // EVENT LISTENERS
 

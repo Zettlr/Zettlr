@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-const Vue = require('vue')
+const Vue = require('vue').default
 const Vuex = require('vuex')
 const App = require('./sidebar.vue').default
 const store = require('./store.js')

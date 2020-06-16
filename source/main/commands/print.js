@@ -55,12 +55,14 @@ class Print extends ZettlrCommand {
     }
 
     // Call the exporter.
-    makeExport(opt)
-      .then((target) => {
-        // Now we'll need to open the print window.
-        this._printWindow.openPrint(target)
-      })
-      .catch((err) => { global.ipc.notify(err.name + ': ' + err.message) }) // Error may be thrown
+    const target = await makeExport(opt)
+      .catch((err) => {
+        console.error('Converting failed', err)
+        global.ipc.notify(err.name + ': ' + err.message)
+      }) // Error may be thrown
+
+    // Now we'll need to open the print window.
+    this._printWindow.openPrint(target)
   }
 }
 

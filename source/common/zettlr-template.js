@@ -13,8 +13,10 @@
  * END HEADER
  */
 
-const handlebars = require('./assets/handlebars/handlebars.runtime.js')
+const handlebars = require('handlebars')
 const { trans } = require('./lang/i18n')
+const fs = require('fs')
+const path = require('path')
 
 function makeTemplate (cat, tpl, data = {}) {
   /**
@@ -87,8 +89,11 @@ function makeTemplate (cat, tpl, data = {}) {
 
   // Now require, process and return
   try {
-    let precompiled = require(`./assets/tpl/${cat}/${tpl}.handlebars.js`)
-    return handlebars.template(precompiled)(data)
+    // eslint-disable-next-line no-undef
+    const templatePath = path.join(__static, `/templates/${cat}/${tpl}.handlebars`)
+    const template = fs.readFileSync(templatePath, 'utf-8')
+    const compiled = handlebars.compile(template)
+    return compiled(data)
   } catch (e) {
     console.error(e.message, e)
     return false

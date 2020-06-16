@@ -1,4 +1,4 @@
-/* global $ */
+const $ = require('jquery')
 /**
  * @ignore
  * BEGIN HEADER
@@ -22,7 +22,7 @@ const ZettlrAttachments = require('./zettlr-attachments')
 const GlobalSearch = require('./util/global-search')
 
 const ZettlrStore = require('./zettlr-store')
-const createSidebar = require('./assets/vue/vue-sidebar')
+const createSidebar = require('../../resources/vue/sidebar')
 
 const path = require('path')
 

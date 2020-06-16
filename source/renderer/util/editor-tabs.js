@@ -14,6 +14,7 @@
 
 const { trans } = require('../../common/lang/i18n')
 const path = require('path')
+const tippy = require('tippy.js').default
 // Left the localize/localise here in order to confuse future generations.
 const localizeNumber = require('../../common/util/localise-number')
 
@@ -135,7 +136,7 @@ module.exports = class EditorTabs {
     }
 
     // After synchronising, enable the tippy
-    this._tippyInstances = global.tippy('#document-tabs .document', {
+    this._tippyInstances = tippy('#document-tabs .document', {
       delay: [ 1000, null ], // Show after 1s, hide normally
       allowHTML: true, // There is HTML in the contents
       placement: 'bottom' // Prefer to display it on the bottom

@@ -1,4 +1,4 @@
-/* global $ */
+const $ = require('jquery')
 /**
 * @ignore
 * BEGIN HEADER
@@ -24,17 +24,16 @@ const turndownGfm = require('joplin-turndown-plugin-gfm')
 const moveSection = require('./util/editor-move-section')
 const EditorSearch = require('./util/editor-search')
 const { clipboard } = require('electron')
-const generateKeymap = require('./assets/codemirror/generate-keymap.js')
+const CodeMirror = require('codemirror/lib/codemirror')
+const generateKeymap = require('./assets/codemirror/generate-keymap')
 const openMarkdownLink = require('./util/open-markdown-link')
 const EditorAutocomplete = require('./util/editor-autocomplete')
+const tippy = require('tippy.js').default
 
 // The autoloader requires all necessary CodeMirror addons and modes that are
 // used by the main class. It simply folds about 70 lines of code into an extra
 // file.
 require('./assets/codemirror/autoload.js')
-
-// Finally load CodeMirror itself
-const CodeMirror = require('codemirror')
 
 // The timeout after which a "save"-command is triggered to automatically save changes
 const SAVE_TIMOUT = require('../common/data.json').poll_time
@@ -1067,7 +1066,7 @@ class ZettlrEditor {
 
     // Now we either got a match or an empty fnref. So create a tippy
     // instance
-    global.tippy(element[0], {
+    tippy(element[0], {
       'content': fnref,
       allowHTML: true,
       onHidden (instance) {

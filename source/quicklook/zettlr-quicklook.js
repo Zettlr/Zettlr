@@ -1,4 +1,4 @@
-/* global $ */
+const $ = require('jquery')
 /**
  * @ignore
  * BEGIN HEADER

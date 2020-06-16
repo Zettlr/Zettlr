@@ -34,6 +34,11 @@ const NO_DB = 2
 const ERROR = 3
 const READY = 4
 
+function getStatic (input) {
+  // eslint-disable-next-line no-undef
+  return path.join(__static, input)
+}
+
 /**
  * This class enables to export citations from a CSL JSON file to HTML.
  */
@@ -45,7 +50,7 @@ class CiteprocProvider {
     // because (a) it's just a preview, and (b) Chicago is the default of Pandoc.
     this._styleID = 'chicago-author-date'
     this._lang = global.config.get('appLang')
-    this._mainStyle = fs.readFileSync(path.join(__dirname, `../assets/csl-styles/${this._styleID}.csl`), 'utf8')
+    this._mainStyle = fs.readFileSync(getStatic(`/assets/csl-styles/${this._styleID}.csl`), 'utf8')
     this._engine = null // Holds the CSL engine
     this._cslData = null // Holds the parsed CSL data (JSON)
     this._bibtexAttachments = null // Holds the bibtex-attachments, if applicable
@@ -344,7 +349,7 @@ class CiteprocProvider {
   _getLocale (lang) {
     // Takes a lang in the format xx-XX and has to return the corresponding XML
     // file. Let's do just that!
-    let p = path.join(__dirname, `../assets/csl-locales/locales-${lang}.xml`)
+    let p = getStatic(`/assets/csl-locales/locales-${lang}.xml`)
     try {
       fs.lstatSync(p)
       return fs.readFileSync(p, 'utf8')
