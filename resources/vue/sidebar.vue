@@ -79,6 +79,7 @@
         ref="fileList"
         class="hidden"
         tabindex="1"
+        v-bind:data-hash="selectedDirectoryHash"
         v-on:keydown="navigate"
       >
         <template v-if="emptySearchResults">
@@ -178,10 +179,10 @@ module.exports = {
     /**
      * Switches to the fileList, if applicable.
      */
-    selectedDirectory: function () {
+    selectedDirectoryHash: function () {
       // If the directory just got de-selected and the fileList
       // is visible, switch to the directories.
-      if (!this.selectedDirectory && this.isFileListVisible()) this.toggleFileList()
+      if (!this.selectedDirectoryHash && this.isFileListVisible()) this.toggleFileList()
       // Otherwise make sure the fileList is visible (toggleFileList
       // will return if the mode is combined or expanded)
       else if (!this.isFileListVisible()) this.toggleFileList()
@@ -250,7 +251,7 @@ module.exports = {
       return ret
     },
     selectedFile: function () { return this.$store.state.selectedFile },
-    selectedDirectory: function () { return this.$store.state.selectedDirectory },
+    selectedDirectoryHash: function () { return this.$store.state.selectedDirectory },
     sidebarClass: function () { return (this.isExpanded) ? 'expanded' : '' },
     isThin: function () { return this.$store.state.sidebarMode === 'thin' },
     isCombined: function () { return this.$store.state.sidebarMode === 'combined' },

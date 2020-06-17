@@ -121,8 +121,9 @@ class ZettlrCon {
     let shouldSelectWordUnderCursor = true
 
     let elem = $(event.target)
-    // No context menu for sorters
-    if (elem.hasClass('sorter') || elem.parents('sorter').length > 0) return
+    // No context menu for sorters (we cannot check for class "sorter" as the sorter
+    // overlays the full directory)
+    if (elem.hasClass('sortType') || elem.hasClass('sortType').length > 0) return
     let hash = null
     let typoPrefix = []
     let scopes = [] // Used to hold the scopes
@@ -162,7 +163,7 @@ class ZettlrCon {
       //
       // So the following works:
       if (elem.hasClass('container')) elem = elem.children('list-item').first()
-      if (elem.hasClass('filename') || elem.hasClass('meta') || elem.hasClass('taglist')) {
+      if (elem.hasClass('filename') || elem.hasClass('meta') || elem.hasClass('taglist') || elem.hasClass('sorter')) {
         elem = elem.parent() // Move up 1 level
       } else if (elem.is('span') || elem.hasClass('tagspacer') || elem.hasClass('collapse-indicator')) {
         elem = elem.parent().parent() // Move up 2 levels
@@ -172,7 +173,7 @@ class ZettlrCon {
 
       // Determine whether this is a dir or a file
       if (elem.hasClass('file') || elem.hasClass('alias')) menupath = 'file.json'
-      if (elem.hasClass('directory') || elem.hasClass('dead-directory')) menupath = 'directory.json'
+      if (elem.hasClass('directory') || elem.hasClass('dead-directory') || elem.attr('id') === 'file-list') menupath = 'directory.json'
 
       // Determine the scopes
       if (elem.hasClass('project')) {
@@ -180,7 +181,9 @@ class ZettlrCon {
       } else if (elem.hasClass('directory')) {
         scopes.push('no-project')
       }
-      if (elem.hasClass('directory')) scopes.push('directory')
+
+      // Directory-scope can also be reached by right-clicking empty space in the file list or a directory
+      if (elem.hasClass('directory') || elem.attr('id') === 'file-list') scopes.push('directory')
       if (elem.hasClass('dead-directory')) scopes.push('dead-directory')
       if (elem.hasClass('alias')) scopes.push('alias')
       if (elem.hasClass('root')) scopes.push('root')
@@ -296,7 +299,7 @@ class ZettlrCon {
         // Open at click coords even the user may have moved the mouse
         this._menu.popup(this._pos)
       }
-    } catch (e) { /* Fail silently */ }
+    } catch (e) { console.error(e) }
   }
 }
 
