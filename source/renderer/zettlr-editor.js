@@ -701,10 +701,13 @@ class ZettlrEditor {
   replaceFileContents (hash, contents) {
     let openedFile = this._openFiles.find((e) => e.fileObject.hash === hash)
     if (openedFile) {
+      let cursor = JSON.parse(JSON.stringify(openedFile.cmDoc.getCursor()))
       openedFile.cmDoc.setValue(contents)
+      openedFile.cmDoc.setCursor(cursor)
       // Now mark clean this one document using the function, which also takes
       // care to instruct main to remove the edit flag if applicable.
       this.markClean(openedFile.fileObject.hash)
+      openedFile.lastWordCount = countWords(contents, this._countChars)
     } else {
       console.warn('Cannot replace the file contents of file ' + hash + ': No open file found!')
     }

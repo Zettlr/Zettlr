@@ -501,7 +501,6 @@ class Zettlr {
    * @param {Number} arg The hash of a file to open
    */
   async openFile (arg) {
-    console.log('Opening file ... ' + arg)
     // arg contains the hash of a file.
     // findFile now returns the file object
     let file = this.findFile(arg)

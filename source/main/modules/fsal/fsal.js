@@ -455,13 +455,6 @@ module.exports = class FSAL extends EventEmitter {
       // It's a directory and it has been removed -> remove it from the state
       this._state.filetree.splice(this._state.filetree.indexOf(descriptor), 1)
       isTreeUpdateNeeded = true
-    } else if (isRoot && event === 'change') {
-      console.log('Changing root file')
-      // A root file has changed
-      let newfile = await FSALFile.parse(changedPath, this._cache)
-      this._state.filetree.splice(this._state.filetree.indexOf(descriptor), 1, newfile)
-      isFileUpdateNeeded = true
-      fileToUpdate = newfile
     } else if (event === 'add') {
       console.log('Adding file')
       // It may be that the file is already present due to a directory
@@ -499,11 +492,20 @@ module.exports = class FSAL extends EventEmitter {
         })
       } else {
         global.log.info(`Chokidar has detected a change event for file ${descriptor.name}. Attempting to re-parse ...`)
-        // A file has been changed (its contents) --> replace it
-        let newfile = await FSALFile.parse(changedPath, this._cache, descriptor.parent)
-        let parent = descriptor.parent
-        parent.children.splice(parent.children.indexOf(descriptor), 1, newfile)
-        FSALDir.sort(parent)
+
+        let newfile
+        if (isRoot) {
+          // A root file has changed
+          newfile = await FSALFile.parse(changedPath, this._cache)
+          this._state.filetree.splice(this._state.filetree.indexOf(descriptor), 1, newfile)
+        } else {
+          // A non-root file has been changed (its contents) --> replace it
+          let parent = descriptor.parent
+          newfile = await FSALFile.parse(changedPath, this._cache, parent)
+          parent.children.splice(parent.children.indexOf(descriptor), 1, newfile)
+          FSALDir.sort(parent)
+        }
+
         isFileUpdateNeeded = true
         fileToUpdate = newfile
         // In case the file was open, also replace it in the openFiles array
