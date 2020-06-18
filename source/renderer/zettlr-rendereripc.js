@@ -216,7 +216,7 @@ class ZettlrRendererIPC {
         'content': arg
       }
 
-      this._app.saveFile()
+      this._app.getEditor().saveFiles() // Save all files just in case
       return
     }
 
@@ -378,7 +378,7 @@ class ZettlrRendererIPC {
         break
 
       case 'file-save':
-        this._app.saveFile()
+        this._app.getEditor().saveFiles(true) // true means only save active file
         break
 
       // Replace all properties of a file (e.g. on rename)

@@ -554,26 +554,6 @@ class ZettlrRenderer {
   }
 
   /**
-   * Saves the current file
-   */
-  saveFile () {
-    if (!this.isModified()) return // No need to save
-
-    // The user wants to save the currently opened file.
-    let file = this.getActiveFile()
-    if (file == null) {
-      // User wants to save an untitled file
-      // Important: The main Zettlr-class expects hash to be null
-      // for new files
-      file = {}
-    }
-    file.content = this._editor.getValue()
-    file.wordCountOnSave = this._editor.getWrittenWords()
-    this._ipc.send('file-save', file)
-    this.signalActiveFileChanged() // Update the bibliography
-  }
-
-  /**
    * Request the renaming of a file
    * @param  {ZettlrFile} f The file, whose name should be changed
    */
