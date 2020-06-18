@@ -773,7 +773,7 @@ module.exports = class FSAL extends EventEmitter {
    */
   openFile (file) {
     if (this._state.openFiles.includes(file)) return false
-    console.log('FIle ' + file.name + ' is now open')
+    if (file.type !== 'file') return false
     this._state.openFiles.push(file)
     this.emit('fsal-state-changed', 'openFiles')
     return true

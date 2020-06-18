@@ -106,10 +106,11 @@ class Zettlr {
     // Boot up the IPC.
     this.ipc = new ZettlrIPC(this)
 
-    // Statistics
+    // Statistics TODO: Convert to provider
     this.stats = new ZettlrStats(this)
 
     // Load in the Quicklook window handler class
+    // TODO: Convert to provider (or?)
     this._ql = new ZettlrQLStandalone()
 
     // And the window.
@@ -129,23 +130,19 @@ class Zettlr {
     // Listen to changes in the file system
     this._fsal.on('fsal-state-changed', (objPath, info) => {
       // Emitted when anything in the state changes
-      console.log(`FSAL state changed: ${objPath}`)
       if (this.isBooting) return // Only propagate these results when not booting
       switch (objPath) {
         // The root filetree has changed (added or removed root)
         case 'filetree':
           // Nothing specific, so send the full payload
-          console.log('Sending full directory tree')
           global.ipc.send('paths-update', this._fsal.getTreeMeta())
           break
         case 'directory':
           // Only a directory has changed
-          console.log('Sending small directory update')
           global.application.dirUpdate(info.oldHash, info.newHash)
           break
         case 'file':
           // Only a file has changed
-          console.log('Sending small file update')
           global.application.fileUpdate(info.oldHash, info.newHash)
           break
         case 'fileSaved':
@@ -155,12 +152,10 @@ class Zettlr {
           this._onFileContentsChanged(info)
           break
         case 'openDirectory':
-          console.log('+++++ SENDING NEW DIRECTORY TO RENDERER +++++')
           this.ipc.send('dir-set-current', (this.getCurrentDir()) ? this.getCurrentDir().hash : null)
           global.config.set('lastDir', (this.getCurrentDir()) ? this.getCurrentDir().hash : null)
           break
         case 'openFiles':
-          console.log('+++++ SYNCING OPEN FILES WITH RENDERER +++++')
           this.ipc.send('sync-files', this._fsal.getOpenFiles())
           global.config.set('openFiles', this._fsal.getOpenFiles())
           if (!this.isModified()) this.getWindow().clearModified()
@@ -417,9 +412,13 @@ class Zettlr {
       } else if ((newDir = this._fsal.findDir(f)) != null) {
         // Do nothing
       } else if (global.config.addPath(f)) {
-        this._fsal.loadPath(f)
+        let loaded = await this._fsal.loadPath(f)
+        if (!loaded) continue
+        let file = this._fsal.findFile(f)
+        if (file) this.openFile(file.hash)
       } else {
         global.ipc.notify(trans('system.error.open_root_error', path.basename(f)))
+        global.log.error(`Could not open new root file ${f}!`)
       }
     }
 
