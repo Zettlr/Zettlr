@@ -98,7 +98,7 @@ module.exports = class FSALWatchdog extends EventEmitter {
       if (shouldIgnore > -1) {
         // Yup
         let i = this._ignoredEvents[shouldIgnore]
-        console.log(`+++ WATCHDOG IGNORE +++ ${i.event}:${i.path}`)
+        global.log.info(`[WATCHDOG] Ignore event: ${i.event}:${i.path}`)
         this._ignoredEvents.splice(shouldIgnore, 1)
         return
       }
@@ -110,6 +110,13 @@ module.exports = class FSALWatchdog extends EventEmitter {
 
       // Only watch changes in directories and supported files
       if ((dir && !ignoreDir(p)) || (file && (!ignoreFile(p) || attachment))) {
+        global.log.info(`[WATCHDOG] Emitting event: ${event}:${p}`, {
+          'isDir': dir,
+          'ignoreDir': ignoreDir(p),
+          'isFile': file,
+          'ignoreFile': ignoreFile(p),
+          'isAttachment': attachment
+        })
         // Emit the event for the respective path.
         this.emit('change', event, p)
       }
