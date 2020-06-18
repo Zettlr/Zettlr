@@ -189,6 +189,10 @@ module.exports = class EditorTabs {
     if (elem.tagName === 'SVG') elem = elem.parentElement
     // After these IFs we should have the clr-icon if the user clicked the X
 
+    // Transient tabs further embed their filenames in an <em>-tag, which we
+    // account for here.
+    if (elem.tagName === 'EM') elem = elem.parentElement
+
     if (elem.getAttribute('id') === 'document-tabs') return // No file selected
 
     let closeIntent = elem.classList.contains('close')
@@ -226,6 +230,7 @@ module.exports = class EditorTabs {
     doc.dataset['tippyContent'] += ', ' + localizeNumber(file.charCount) + ' ' + trans('dialog.target.chars')
     // From here on, possible information begins, so we have to add <br>s before
     if (file.id !== '') doc.dataset['tippyContent'] += '<br>ID: ' + file.id
+    if (file.tags.length > 0) doc.dataset['tippyContent'] += '<br>' + file.tags.map(tag => '<span class="tag">#' + tag + '</span>').join(' ')
 
     // Mark it as active and/or modified, if applicable
     if (active) doc.classList.add('active')

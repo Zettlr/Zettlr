@@ -17,6 +17,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
     - On hover, you can get additional info about the documents.
     - Drag and drop the tabs to re-sort their order.
     - Get going where you left of the day before: Open files are persisted during restarts of the application.
+    - **Transiency**: Tabs are opened transient, which means if you do not modify their contents, they will be replaced with another file that you open. This way you can quickly stroll through search results without having to close hundreds of tabs afterwards!
 - **New Feature**: RTL support! Now whether you are writing in Hebrew, Persian, Urdu or any other right-to-left writing system, you can do so now. We've added support for the respective options of CodeMirror in the "Preferences -> Editor" tab.
 - **New Feature**: You can now direct Zettlr to automatically create new files if you click on an internal link that does not match a file. Thanks to @halcyonquest for their contribution!
 - **New Feature**: Vim and Emacs insertion modes are now supported! You can switch persistently between these two and the "normal" insertion mode using the preferences. Thanks to @JorySchossau for implementing this feature!
