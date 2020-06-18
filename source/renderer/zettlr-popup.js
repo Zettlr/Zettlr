@@ -75,10 +75,7 @@ class ZettlrPopup {
     // If there is a form, autoselect the content of its first input
     this._popup.find('input').first().select().focus()
     this._popup.find('input').on('keyup', (e) => {
-      if (e.which === 27) {
-        // ESC
-        this.close(true)
-      }
+      if (e.key === 'Escape') this.close(true)
     })
 
     // Place
