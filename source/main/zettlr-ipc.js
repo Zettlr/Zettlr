@@ -141,10 +141,11 @@ class ZettlrIPC {
     * @return {ZettlrIPC}              This for chainability.
     */
   send (command, content = {}) {
-    let mainWinFocused = this._app.window.getWindow() === BrowserWindow.getFocusedWindow()
-    if (command === 'attempt-close-tab' && !mainWinFocused) {
+    let focusedWindow = BrowserWindow.getFocusedWindow()
+    let mainWinFocused = this._app.window.getWindow() === focusedWindow
+    if (command === 'attempt-close-tab' && !mainWinFocused && focusedWindow) {
       // DEBUG attention, monkey-patch
-      BrowserWindow.getFocusedWindow().close()
+      focusedWindow.close()
       return this
     }
 
