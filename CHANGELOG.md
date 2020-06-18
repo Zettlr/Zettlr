@@ -131,6 +131,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Include the `codemirror.css` into the geometry styles so we have one less dependency to include on startup.
 - Switched to Electron 9.0.0.
 - Set the `standalone` flag for Pandoc on all non-special exports.
+- Image rendering now also supports base64-encoded inline images.
 
 # 1.6.0
 

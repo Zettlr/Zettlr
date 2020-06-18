@@ -163,7 +163,11 @@
         }
 
         // Finally set the src to begin the loading process of the image
-        img.src = makeAbsoluteCachefreeURL(cm.getOption('markdownImageBasePath'), url)
+        if (/data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(url)) {
+          img.src = url
+        } else {
+          img.src = makeAbsoluteCachefreeURL(cm.getOption('markdownImageBasePath'), url)
+        }
 
         // Push the textMarker into the array
         imageMarkers.push(textMarker)
