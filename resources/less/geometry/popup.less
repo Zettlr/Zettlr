@@ -139,7 +139,7 @@
   }
 
   // Share buttons
-  .row { display:flex; } // Also used by the table generator
+  .row { display: flex; } // Also used by the table generator
   .table-generator { padding: 5px; }
   .table-generator .row .cell {
     flex-grow: 1;
@@ -356,6 +356,8 @@
 
   // SEARCH POPUP
   .search {
+    width: 350px; // Make use of the bigger width
+
     .row { display: flex; }
     input {
       /** flex layout of the search popup:
@@ -385,8 +387,8 @@
       outline: 0;
 
       &#searchNext { flex: 4 4 auto; } // 40 percent width
-      &#replaceNext { flex: 3 3 auto; } // 30 percent width
-      &#replaceAll { flex: 1 1 auto; } // 10 percent width
+      &#replaceNext { flex: 2 2 auto; } // 20 percent width
+      &#replaceAll { flex: 2 2 auto; } // 20 percent width
     }
   }
 
