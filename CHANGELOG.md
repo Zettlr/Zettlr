@@ -95,6 +95,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - The "Window" submenu is now not confined to macOS applications anymore, but available to all platforms.
 - URLs in Markdown links will not be rendered anymore.
 - Enabled the context menu now also for both directories in the file list and the empty space in the file list (if there is some).
+- You can now open directories externally (read: in Finder/Explorer/your Linux file browser) in the context menu now.
 
 ## Under the Hood
 

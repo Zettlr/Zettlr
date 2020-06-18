@@ -15,6 +15,11 @@
     "command": "dir-rescan"
   },
   {
+    "scope": "directory",
+    "label": "gui.attachments_open_dir",
+    "command": "dir-open-externally"
+  },
+  {
     "type": "separator"
   },
   {

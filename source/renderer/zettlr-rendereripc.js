@@ -303,6 +303,7 @@ class ZettlrRendererIPC {
         this._app.setCurrentDir(cnt)
         break
 
+      // TODO: What the heck is that a kind of "name"?
       case 'dir-find':
       // User wants to search in current directory.
         this._app.getToolbar().focusSearch()
@@ -311,6 +312,16 @@ class ZettlrRendererIPC {
       case 'dir-open':
       // User has requested to open another folder. Notify host process.
         this.send('dir-open')
+        break
+
+      // The user wants to open a dir externally (= in finder etc)
+      case 'dir-open-externally':
+        require('electron').shell.openPath(this._app.findObject(parseInt(cnt.hash, 10)).path)
+          .then(potentialError => {
+            if (potentialError !== '') {
+              console.error('Could not open attachment:' + potentialError)
+            }
+          })
         break
 
       case 'dir-rename':
