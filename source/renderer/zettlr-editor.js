@@ -583,9 +583,6 @@ class ZettlrEditor {
     // content replacement here!
     this._swapFile(file.hash)
 
-    // If we've got a new file, we need to re-focus the editor
-    if (flag === 'new-file') this._cm.focus()
-
     return this
   }
 
@@ -622,6 +619,8 @@ class ZettlrEditor {
     global.store.set('selectedFile', this._currentHash)
     // Same for the main process
     global.ipc.send('set-active-file', { 'hash': this._currentHash })
+
+    this._cm.focus() // DEBUG Check for side effects
   }
 
   /**
