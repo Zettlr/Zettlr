@@ -537,7 +537,7 @@ class ZettlrRenderer {
   }
 
   /**
-   * Called by the editor instance to indicate that the current activeFile has changed.
+   * Called by the editor or this to indicate that the activeFile has changed.
    */
   signalActiveFileChanged () {
     // Also, the bibliography has likely changed
@@ -570,6 +570,7 @@ class ZettlrRenderer {
     file.content = this._editor.getValue()
     file.wordCountOnSave = this._editor.getWrittenWords()
     this._ipc.send('file-save', file)
+    this.signalActiveFileChanged() // Update the bibliography
   }
 
   /**
