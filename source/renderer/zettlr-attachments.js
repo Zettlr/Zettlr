@@ -87,7 +87,8 @@ class ZettlrAttachments {
       this._attachments = this._renderer.getCurrentDir().attachments
       let fileExtIcon = clarityIcons.get('file-ext')
       for (let a of this._attachments) {
-        let svg = fileExtIcon.replace('EXT', path.extname(a.path).slice(1, 4))
+        let svg = ''
+        if (fileExtIcon) svg = fileExtIcon.replace('EXT', path.extname(a.path).slice(1, 4))
 
         let link = $('<a>').html(svg + ' ' + a.name)
           .attr('data-link', a.path)
