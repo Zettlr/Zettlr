@@ -384,6 +384,10 @@ class ZettlrRendererIPC {
         this._app.openFile(cnt)
         break
 
+      case 'announce-transient-file':
+        global.editor.announceTransientFile(cnt.hash)
+        break
+
       case 'file-close':
         this._app.closeFile(cnt.hash)
         break

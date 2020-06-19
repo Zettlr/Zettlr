@@ -230,6 +230,7 @@ module.exports = {
         global.ipc.send('open-quicklook', this.obj.hash)
       } else if (this.obj.type === 'file') {
         // Request the clicked file
+        global.editor.announceTransientFile(this.obj.hash)
         global.ipc.send('file-get', this.obj.hash)
       } else {
         // Select this directory
