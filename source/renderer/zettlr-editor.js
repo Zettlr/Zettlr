@@ -365,6 +365,21 @@ class ZettlrEditor {
       }
     })
 
+    this._cm.on('mousedown', (cm, event) => {
+      // Ignore click events if they attempt to perform a special action
+      let target = event.target
+      let specialClasses = [ 'cma', 'cm-zkn-tag', 'cm-zkn-link' ]
+      let macMeta = process.platform === 'darwin' && event.metaKey
+      let otherCtrl = process.platform !== 'darwin' && event.ctrlKey
+      let isSpecial = false
+      for (let c of specialClasses) {
+        if (target.classList.contains(c)) isSpecial = true
+      }
+      let isFootnote = target.classList.contains('cm-link') && target.innerText.indexOf('^') === 0
+
+      if ((isSpecial || isFootnote) && (macMeta || otherCtrl)) event.codemirrorIgnore = true
+    })
+
     this._cm.getWrapperElement().addEventListener('click', (e) => {
       // Open links on both Cmd and Ctrl clicks - otherwise stop handling event
       if (process.platform === 'darwin' && !e.metaKey) return true
