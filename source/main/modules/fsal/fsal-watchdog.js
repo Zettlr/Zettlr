@@ -67,14 +67,31 @@ module.exports = class FSALWatchdog extends EventEmitter {
     // Create new regexps from the strings
     for (let x of IGNORE_DIR_REGEXP) ignoreDirs.push(new RegExp(x, 'i'))
 
-    // Begin watching the pushed paths
-    this._process = chokidar.watch(this._paths, {
+    let options = {
       'ignored': ignoreDirs,
       'persistent': true,
       'ignoreInitial': true, // Do not track the initial watch as changes
       'followSymlinks': true, // Follow symlinks TODO need to implement that in the FSAL as well
       'ignorePermissionErrors': true // In the worst case one has to reboot the software, but so it looks nicer.
-    })
+    }
+
+    if (global.config.get('watchdog.activatePolling')) {
+      let threshold = global.config.get('watchdog.stabilityThreshold')
+      if (typeof threshold !== 'number') threshold = 1000
+      if (threshold < 0) threshold = 1000
+
+      // From chokidar docs: "[...] in some cases some change events will be
+      // emitted while the file is being written." --> hence activate this.
+      options.awaitWriteFinish = {
+        'stabilityThreshold': threshold,
+        'pollInterval': 100
+      }
+
+      global.log.info(`[FSAL Watchdog] Activating file polling with a threshold of ${threshold}ms.`)
+    }
+
+    // Begin watching the pushed paths
+    this._process = chokidar.watch(this._paths, options)
 
     this._process.on('ready', () => {
       // Add all paths that may have been added to the array while the process

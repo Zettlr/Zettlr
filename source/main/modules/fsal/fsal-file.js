@@ -258,6 +258,7 @@ module.exports = {
   },
   'hasChangedOnDisk': async function (fileObject) {
     let stat = await fs.lstat(fileObject.path)
+    global.log.info(`[FSALFile::hasChangedOnDisk] File ${fileObject.name} has modification time ${fileObject.modtime}, and fs.lstat reports ${stat.mtime.getTime()}`)
     return stat.mtime.getTime() !== fileObject.modtime
   },
   'load': async function (fileObject) {

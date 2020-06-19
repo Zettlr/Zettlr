@@ -896,7 +896,25 @@
             <button type="button" id="reset-pandoc-command" data-tippy-content="{{i18n "dialog.preferences.reset_pandoc_command"}}"><clr-icon shape="refresh"></clr></button>
           </div>
           <span class="info">Variables: $citeproc$, $format$, $infile$, $indir$, $outfile$, $outflag$, $standalone$, $toc$, $tocdepth$, $tpl$</span>
-        </div>
+
+          <hr>
+
+          {{!-- Watchdog polling compatibility options --}}
+          <p>
+            On certain systems, Zettlr may report too many remote file changes. If this happens, try activating this setting.
+          </p>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="watchdog.activatePolling" value="yes" id="activateWatchdogPolling" {{#if watchdog.activatePolling}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="activateWatchdogPolling">Activate Watchdog polling</label>
+          </div>
+
+          <input class="inline time" type="number" min="0" max="10000" step="1" name="watchdog.stabilityThreshold" id="watchdogPollingStability" value="{{watchdog.stabilityThreshold}}" placeholder="1000">
+          <label class="" for="watchdogPollingStability">Threshold before write is considered done (in ms)</label>
+
+        </div> <!-- End box right -->
       </div>
     </div>
     <div class="prefs-submit-group">

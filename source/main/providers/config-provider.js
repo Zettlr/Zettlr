@@ -269,6 +269,10 @@ class ConfigProvider extends EventEmitter {
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.
       'appLang': this.getLocale(),
       'debug': false,
+      'watchdog': {
+        'activatePolling': false, // Set to true to enable polling in chokidar
+        'stabilityThreshold': 1000 // Positive int in milliseconds
+      },
       'checkForBeta': false, // Should the user be notified of beta releases?
       'uuid': null // The app's unique anonymous identifier
     }

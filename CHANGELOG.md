@@ -97,6 +97,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Enabled the context menu now also for both directories in the file list and the empty space in the file list (if there is some).
 - You can now open directories externally (read: in Finder/Explorer/your Linux file browser) in the context menu now.
 - Zettlr now attempts to set the cursor back to the place where it has been after programmatically updating the document content, e.g. after a remote change.
+- Added a setting to control the sensitivity of Zettlr checking for remote file notifications on certain systems.
 
 ## Under the Hood
 

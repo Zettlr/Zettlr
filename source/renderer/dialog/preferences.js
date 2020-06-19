@@ -284,6 +284,8 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['editor.rtlMoveVisually'] = (data.find(elem => elem.name === 'editor.rtlMoveVisually') !== undefined)
     cfg['zkn.autoCreateLinkedFiles'] = (data.find(elem => elem.name === 'zkn.autoCreateLinkedFiles') !== undefined)
 
+    cfg['watchdog.activatePolling'] = (data.find(elem => elem.name === 'watchdog.activatePolling') !== undefined)
+
     // Extract selected dictionaries
     cfg['selectedDicts'] = data.filter(elem => elem.name === 'selectedDicts').map(elem => elem.value)
 
@@ -314,7 +316,7 @@ class PreferencesDialog extends ZettlrDialog {
       // Only non-missing to not overwrite the checkboxes that ARE checked with a "yes"
       if (!cfg.hasOwnProperty(r.name)) {
         // Convert numbers to prevent validation errors.
-        if (!isNaN(r.value) && r.value !== '') r.value = Number(r.value)
+        if (!isNaN(r.value) && r.value.trim() !== '') r.value = Number(r.value)
         cfg[r.name] = r.value
       }
     }
