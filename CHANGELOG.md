@@ -135,6 +135,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Switched to Electron 9.0.0.
 - Set the `standalone` flag for Pandoc on all non-special exports.
 - Image rendering now also supports base64-encoded inline images.
+- Improvements to the detection of tags, internal links and footnotes. The algorithm is now more efficient and stable in various situations.
 
 # 1.6.0
 

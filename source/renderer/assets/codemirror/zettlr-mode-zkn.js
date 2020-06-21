@@ -118,18 +118,16 @@
         } // This is here because escaping link-endings is a thing. Maybe. For some.
 
         // Fifth: Are we in a link?
-        let le = config.zkn.linkEnd || ''
-        if (le !== '' && state.inZknLink) {
-          // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
-          le = config.zkn.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
-          le = new RegExp(le)
-          if (stream.match(le)) {
+        if (config.zkn.linkEnd !== '' && state.inZknLink) {
+          if (stream.match(config.zkn.linkEnd)) {
             state.inZknLink = false
             return 'zkn-link-formatting'
-          } else {
-            stream.next()
-            return 'zkn-link'
           }
+
+          while (!stream.match(config.zkn.linkEnd, false)) {
+            stream.next()
+          }
+          return 'zkn-link'
         }
 
         // From here on there are only not-so-special things. Using the
@@ -174,14 +172,8 @@
           }
         }
 
-        let ls = config.zkn.linkStart || ''
-        if (ls !== '') {
-          ls = config.zkn.linkStart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
-          ls = new RegExp(ls)
-        }
-
         // Now check for a zknLink
-        if ((ls !== '') && stream.match(ls)) {
+        if (config.zkn.linkStart !== '' && stream.match(config.zkn.linkStart)) {
           state.inZknLink = true
           return 'zkn-link-formatting'
         }

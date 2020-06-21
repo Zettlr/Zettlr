@@ -387,15 +387,22 @@ class ZettlrEditor {
 
       e.preventDefault()
 
-      let elem = $(e.target)
-      if (elem.hasClass('cm-zkn-tag')) {
-        // The user clicked a zkn link -> create a search
-        this._renderer.autoSearch(elem.text())
-      } else if (elem.hasClass('cm-zkn-link')) {
-        this._renderer.autoSearch(elem.text(), true)
-      } else if (elem.hasClass('cm-link') && elem.text().indexOf('^') === 0) {
-        // We've got a footnote
-        this._editFootnote(elem)
+      let cursor = this._cm.coordsChar({ left: e.clientX, top: e.clientY })
+      let tokenInfo = this._cm.getTokenAt(cursor)
+
+      switch (tokenInfo.type) {
+        case 'zkn-link':
+          this._renderer.autoSearch(tokenInfo.string, true)
+          break
+        case 'zkn-tag':
+          this._renderer.autoSearch(tokenInfo.string)
+          break
+        case 'link':
+          if (tokenInfo.string.indexOf('^') === 0) this._editFootnote($(e.target))
+          break
+        default:
+          console.log('No success', tokenInfo)
+          break
       }
     })
 
