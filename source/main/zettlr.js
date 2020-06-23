@@ -16,6 +16,7 @@
 
 const { app } = require('electron')
 const path = require('path')
+const fs = require('fs')
 
 // Internal classes
 const ZettlrIPC = require('./zettlr-ipc.js')
@@ -23,12 +24,13 @@ const ZettlrWindow = require('./zettlr-window.js')
 const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
 const ZettlrStats = require('./zettlr-stats.js')
 const FSAL = require('./modules/fsal')
-const { loadI18nMain, trans } = require('../common/lang/i18n')
+const { loadI18nMain, trans, findLangCandidates } = require('../common/lang/i18n')
 const ignoreDir = require('../common/util/ignore-dir')
 const ignoreFile = require('../common/util/ignore-file')
 const isDir = require('../common/util/is-dir')
 const isFile = require('../common/util/is-file')
 const loadCommands = require('./commands/_autoload')
+const hash = require('../common/util/hash')
 
 /**
  * The Zettlr class handles every core functionality of Zettlr. Nothing works
@@ -102,6 +104,13 @@ class Zettlr {
     // It may be that only a fallback has been provided or else. In this case we
     // must update the config to reflect this.
     if (metadata.tag !== global.config.get('appLang')) global.config.set('appLang', metadata.tag)
+
+    // Now that the config provider is definitely set up, let's see if we
+    // should copy the interactive tutorial to the documents directory.
+    if (global.config.isFirstStart()) {
+      global.log.info(`[First Start] Copying over the interactive tutorial to ${app.getPath('documents')}!`)
+      this._prepareFirstStart()
+    }
 
     // Boot up the IPC.
     this.ipc = new ZettlrIPC(this)
@@ -576,6 +585,49 @@ class Zettlr {
   }
 
   /**
+   * This function prepares the app on first start, which includes copying over the tutorial.
+   */
+  _prepareFirstStart () {
+    let tutPath = path.join(__dirname, './assets/tutorial')
+    let targetPath = path.join(app.getPath('documents'), 'Zettlr Tutorial')
+    let candidates = fs.readdirSync(tutPath, { 'encoding': 'utf8' })
+
+    candidates = candidates
+      .map(e => { return { 'tag': e, 'path': path.join(tutPath, e) } })
+      .filter(e => isDir(e.path))
+
+    let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates)
+
+    let tutorial = path.join(__dirname, './assets/tutorial/en')
+    if (exact) tutorial = exact.path
+    if (!exact && close) tutorial = close.path
+
+    // Now we have both a target and a language candidate, let's copy over the files!
+    try {
+      fs.lstatSync(targetPath)
+      // Already exists! Abort!
+      global.log.error(`The directory ${targetPath} already exists - won't overwrite!`)
+      return
+    } catch (e) {
+      fs.mkdirSync(targetPath)
+
+      // Now copy over every file from the directory
+      let contents = fs.readdirSync(tutorial, { 'encoding': 'utf8' })
+      for (let file of contents) {
+        fs.copyFileSync(path.join(tutorial, file), path.join(targetPath, file))
+      }
+      global.log.info('Successfully copied the tutorial files', contents)
+
+      // Now the last thing to do is set it as open
+      global.config.addPath(targetPath)
+      // Also set the welcome.md as open
+      global.config.addFile(path.join(targetPath, 'welcome.md'))
+      // ALSO the directory needs to be opened
+      global.config.set('lastDir', hash(targetPath))
+    }
+  }
+
+  /**
    * Convenience function to send a full file object to the renderer
    */
   sendPaths () { global.ipc.send('paths-update', this._fsal.getTreeMeta()) }
@@ -600,18 +652,6 @@ class Zettlr {
   getIPC () { return this.ipc }
 
   /**
-    * Returns the updater
-    * @return {ZettlrUpdater} The updater.
-    */
-  getUpdater () { return this._updater }
-
-  /**
-    * Returns the watchdog
-    * @return {ZettlrWatchdog} The watchdog instance.
-    */
-  getWatchdog () { return this.watchdog }
-
-  /**
     * Returns the stats
     * @return {ZettlrStats} The stats object.
     */
@@ -633,12 +673,6 @@ class Zettlr {
    * Returns the File System Abstraction Layer
    */
   getFileSystem () { return this._fsal }
-
-  /**
-    * Called by the root directory to determine if it is root.
-    * @return {Boolean} Always returns false.
-    */
-  isDirectory () { return false }
 
   /**
     * Are there unsaved changes currently in the file system?

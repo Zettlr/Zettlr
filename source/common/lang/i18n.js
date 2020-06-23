@@ -331,5 +331,6 @@ module.exports = {
   getLanguageFile,
   enumLangFiles,
   enumDictFiles,
-  getTranslationMetadata
+  getTranslationMetadata,
+  findLangCandidates
 }
