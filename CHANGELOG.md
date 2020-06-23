@@ -100,6 +100,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Added a setting to control the sensitivity of Zettlr checking for remote file notifications on certain systems.
 - Prevent multiple cursors when performing a special action (following a link, clicking a tag, etc.)
 - Now both the current cursor position and the word count are displayed side by side. No need to right-click again to toggle!
+- Citations in comments are now no longer rendered.
 
 ## Under the Hood
 

@@ -81,6 +81,16 @@
           }
         }
         if (con) continue // Skip this match
+
+        // Do not render if it's inside a comment (in this case the mode will be
+        // markdown, but comments shouldn't be included in rendering)
+        // Final check to avoid it for as long as possible, as getTokenAt takes
+        // considerable time.
+        if (cm.getTokenAt(curFrom).type === 'comment' ||
+            cm.getTokenAt(curTo).type === 'comment') {
+          continue
+        }
+
         let span = document.createElement('span')
         span.className = 'citeproc-citation' // citations
         // The text content will be updated automatically based upon the ID
