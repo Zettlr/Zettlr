@@ -8,13 +8,13 @@ keywords:
   - Reference Management
 ...
 
-# Citing with Zettlr
+# Citing with Zettlr 💬
 
 In this final guide, we will dive into how you can automatically cite using Zettlr! If you have been using the Zotero plugin for Word before (or even the Citavi plugin), rest assured: It works almost the same, you only have much more freedom to adapt the citations to your needs!
 
 To begin citing with Zettlr, you’ll need to set up a references database, [which we describe in our documentation](https://docs.zettlr.com/en/academic/citations/). For the purposes of this tutorial, we have already prepared a small database which’ll cover everything you need to know! Let’s load it! In the tutorial directory, there is a small file called “references.json”. It contains some references that Zettlr can cite. To load it, first head over into the preferences and into the tab “Export.” Once there, navigate to the file using the file browser of the references database-field, and save the preferences.
 
-## Your First Citation
+## Your First Citation 🎓
 
 Zettlr will immediately load the file and you’re able to cite. Let’s have a look at the following blockquote, which certainly needs a citation:
 
@@ -24,13 +24,13 @@ This is the famous “between equal rights, force decides”-quote from Karl Mar
 
 Getting back to our citation, which still needs its reference, can you manage to add a citation behind the blockquote that renders as `(Marx 1962, 23: 249)`?
 
-## The References List
+## The References List 💻
 
 As soon as you write longer papers and even books, you may lose oversight over what you’ve already quoted, and which things still need to find their way into your paper. Zettlr is capable of displaying the full list of your references in the sidebar. Open it now by clicking the paper clip icon again, and have a look at the “References”-section. You will notice that the book is visible there — and as you continue to include references, this list will grow!
 
 In order to export these files, make sure to also have `pandoc-citeproc` installed, which is a small extra-program for Pandoc that can parse such citations during export.
 
-## Final Thoughts
+## Final Thoughts 🔥
 
 This concludes our short introduction to Zettlr. You’re good to go!
 
