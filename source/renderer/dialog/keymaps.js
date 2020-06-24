@@ -7,8 +7,16 @@ class KeymapsDialog extends ZettlrDialog {
     }
 
     preInit (data) {
-        data.keymaps = Object.keys(data).map(function(fun) {
-            return {"function": fun, "keys": data[fun]}
+        data.global = Object.keys(data["global"]).map(function(fun) {
+            return {"function": fun, "keys": data["global"][fun]}
+        })
+
+        data.menu = Object.keys(data["menu"]).map(function(fun) {
+            return {"function": fun, "keys": data["menu"][fun]}
+        })
+
+        data.editor = Object.keys(data["editor"]).map(function(fun) {
+            return {"function": fun, "keys": data["editor"][fun]}
         })
         return data
     }
@@ -21,14 +29,54 @@ class KeymapsDialog extends ZettlrDialog {
         })
     }
 
+    _isGlobalKeymapName(name) {
+        return name.split('-')[0] === "globalKeymapsValue"
+    }
+
+    _isMenuKeymapName(name) {
+        return name.split('-')[0] === 'menuKeymapsValue'
+    }
+
+    _isEditorKeymapName(name) {
+        return name.split('-')[0] === 'editorKeymapsValue'
+    }
+
+    _getFunction(name) {
+        return name.split('-')[1]
+    }
+
     proceed (data) {
-        let keymaps = {}
-        let functions = data.filter((e) => e.name === 'keymapsFunction[]')
-        let keys = data.filter((e) => e.name === 'keymapsValue[]')
-        for (let i = 0; i < keys.length; i++) {
-            keymaps[functions[i].value] = keys[i].value
+
+        let globalKeymaps = {}
+        let globalKeymapsKeys = data.filter((e) => this._isGlobalKeymapName(e.name))
+        for (let i = 0; i < globalKeymapsKeys.length; i++) {
+            let binding = globalKeymapsKeys[i].value
+            let fun = this._getFunction(globalKeymapsKeys[i].name)
+            globalKeymaps[fun] = binding
         }
-        // TODO: Check the keymaps ?
+
+        let menuKeymaps = {}
+        let menuKeymapsKeys = data.filter((e) => this._isMenuKeymapName(e.name))
+        for (let i = 0; i < menuKeymapsKeys.length; i++) {
+            let binding = menuKeymapsKeys[i].value
+            let fun = this._getFunction(menuKeymapsKeys[i].name)
+            menuKeymaps[fun] = binding
+        }
+
+        let editorKeymaps = {}
+        let editorKeymapsKeys = data.filter((e) => this._isEditorKeymapName(e.name))
+        for (let i = 0; i < editorKeymaps.length; i++) {
+            let binding = editorKeymapsKeys[i].value
+            let fun = this._getFunction(editorKeymapsKeys[i].name)
+            editorKeymaps[fun] = binding
+        }
+
+        let keymaps = {
+            "menu": menuKeymaps,
+            "editor": editorKeymaps,
+            "global": globalKeymaps
+        }
+
         global.ipc.send('update-keymaps', keymaps)
         this.close()
     }

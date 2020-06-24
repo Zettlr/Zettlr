@@ -1,32 +1,76 @@
 <div class="dialog">
-
     <form action="" method="GET" id="dialog">
-        <div class="box">
-            <p>Modify your keymaps here</p>
-            <div class="modal-container-constrain-size">
+        <div id="prefs-tabs">
+            <ul>
+                <li><a href="#keymaps-tab-global">Global</a></li>
+                <li><a href="#keymaps-tab-menus">Menu</a></li>
+                <li><a href="#keymaps-tab-editor">Editor</a></li>
+            </ul>
+
+        <div id="keymaps-tab-global">
+            <div class="box">
+                <p>Global keymaps</p>
                 <table>
-                    <tbody id="keymaps-key-container">
-                        {{#each keymaps}}
-                            <tr>
-                                <td>
-                                    <div class="input-button-group">
-                                        <input type="text" name="keymapsFunction[]" value="{{ function }}">
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="input-button-group">
-                                        <input type="text" name="keymapsValue[]" value="{{ keys }}">
-                                    </div>
-                                </td>
-                            </tr>
+                    <tbody id="global">
+                        {{# each global}}
+                                <tr>
+                                    <td>
+                                        <label for="{{function}}"> {{ function }}</label>
+                                    </td>
+                                    <td>
+                                        <input id="{{function}}" type="text" name="globalKeymapsValue-{{function}}" value="{{ keys }}" class="Test"/>
+                                    </td>
+                                </tr>
                         {{/each}}
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <div id="keymaps-tab-menus">
+            <div class="box">
+                <p>Menus keymaps</p>
+                <table>
+                    <tbody id="menus-keymaps-container">
+                    {{# each menu}}
+                        <tr>
+                            <td>
+                                <label for="{{function}}"> {{ function }}</label>
+                            </td>
+                            <td>
+                                <input id="{{function}}" type="text" name="menuKeymapsValue-{{function}}" value="{{ keys }}"/>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="keymaps-tab-editor">
+            <div class="box">
+                <p>Editor keymaps</p>
+                <table>
+                    <tbody id="editor-keymaps-container">
+                    {{# each editor}}
+                        <tr>
+                            <td>
+                                <label for="{{function}}"> {{ function }}</label>
+                            </td>
+                            <td>
+                                <input id="{{function}}" type="text" name="editorKeymapsValue-{{function}}" value="{{ keys }}"/>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="keymaps-submit-group">
             <button type="submit" id="keymaps-save">{{i18n "dialog.button.save"}}</button>
             <button id="abort">{{i18n "dialog.button.cancel"}}</button>
+        </div>
         </div>
     </form>
 </div>

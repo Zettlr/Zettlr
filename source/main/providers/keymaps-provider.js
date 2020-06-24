@@ -5,62 +5,96 @@ const fs = require('fs')
 
 class KeymapsProvider extends EventEmitter {
 
+    _create_cmd_keymaps(...keys) {
+        let leaderKey = process.platform === "darwin" ? "Cmd" : "Ctrl"
+        return leaderKey + "-" + keys.join('-')
+    }
+
+    generateKeymapsTemplate () {
+        this.keymapsTpl = {
+            "menu": {
+                "new_file": this._create_cmd_keymaps("N"),
+                "new_dir": this._create_cmd_keymaps("Shift", "N"),
+                "open": this._create_cmd_keymaps("O"),
+                "save": this._create_cmd_keymaps("S"),
+                "export": this._create_cmd_keymaps("E"),
+                "print": this._create_cmd_keymaps("P"),
+                "rename_file": this._create_cmd_keymaps("R"),
+                "rename_dir": this._create_cmd_keymaps("Shift", "R"),
+                "delete_file": this._create_cmd_keymaps("BackSpace"),
+                "delete_dir": this._create_cmd_keymaps("Shift", "Backspace"),
+                "copy_html": this._create_cmd_keymaps("Alt", "C"),
+                "paste_plain": this._create_cmd_keymaps("Shift" , "V"),
+                "find_file": this._create_cmd_keymaps("F"),
+                "find_dir": this._create_cmd_keymaps("Shift", "F"),
+                "generate_id": this._create_cmd_keymaps("L"),
+                "copy_id": this._create_cmd_keymaps("Shift", "L"),
+                "toggle_them": this._create_cmd_keymaps("Alt", "L"),
+                "toggle_file_meta": this._create_cmd_keymaps("Alt", "S"),
+                "toggle_distraction_free": this._create_cmd_keymaps("J"),
+                "toggle_sidebar": this._create_cmd_keymaps("!"),
+                "toggle_attachments": this._create_cmd_keymaps("?"),
+                "reset_zoom": this._create_cmd_keymaps("O"),
+                "zoom_in": this._create_cmd_keymaps("Plus"),
+                "zoom_out": this._create_cmd_keymaps("-"),
+                "win_minimize": this._create_cmd_keymaps("M"),
+                "win_close": this._create_cmd_keymaps("Shift", "W"),
+                "tab_close": this._create_cmd_keymaps("W"),
+                "tab_previous": this._create_cmd_keymaps("Shift", "Tab"),
+                "tab_next": this._create_cmd_keymaps("Tab"),
+                "docs": "F1",
+                "preferences": this._create_cmd_keymaps(","),
+                "pdf_preferences": this._create_cmd_keymaps("Alt", ",")
+            },
+            "editor": {
+                "new_line": "Enter",
+                "auto_indent": "Tab",
+                "auto_unindent": "Shift-Tab",
+                "insert_below": this._create_cmd_keymaps("Enter"),
+                "insert_above": "Shift-" + this._create_cmd_keymaps("Enter"),
+                "swap_line_up": "Alt-Up",
+                "swap_line_down": "Alt-Down",
+                'past_as_plain': this._create_cmd_keymaps('Shift', 'V'),
+                'insertFootnote': this._create_cmd_keymaps('Alt', 'R'),
+                'markdownMakeTaskList': this._create_cmd_keymaps('T'),
+                // Todo: Is Shift-Ctrl-I == Ctrl-Shift-I ?
+                'markdownComment': 'Shift-' + this._create_cmd_keymaps('C'),
+                'markdownImage': 'Shift-' + this._create_cmd_keymaps('I'),
+                'markdownItalic': this._create_cmd_keymaps('I'),
+                'markdownBold': this._create_cmd_keymaps('B'),
+                // For these last two, the last keys must be Click and Scroll. But it might be Ctrl-Shift-Click
+                // instead of Ctrl-Click.
+                'open_link': this._create_cmd_keymaps('Click'),
+                'create_link': this._create_cmd_keymaps('K'),
+                'zoom': this._create_cmd_keymaps('Scroll')
+            },
+            "global": {
+                "focus_editor": this._create_cmd_keymaps('Shift', 'e'),
+                "focus_sidebar": this._create_cmd_keymaps('Shift', 't'),
+                "exit": this._create_cmd_keymaps('Q'),
+
+            }
+        }
+
+        if (process.platform !== 'darwin') {
+            if (global.config.get('editor.homeEndBehaviour')) {
+                this.keymapsTpl['editor']['goLineStart'] = 'Home'
+                this.keymapsTpl['editor']['goLineEnd'] = 'End'
+            } else {
+                this.keymapsTpl['editor']['goLineLeftSmart'] = 'Home'
+                this.keymapsTpl['editor']['goLineRight'] = 'End'
+            }
+        }
+    }
+
+
     constructor() {
         super()
+        this.generateKeymapsTemplate()
         this.keymapsPath = app.getPath('userData')
         this.keymapsFile = path.join(this.keymapsPath, 'keymaps.json')
 
-        let homeEndBehaviour = global.config.get('editor.homeEndBehaviour')
-        // This map needs to be function -> Keymap because we can not know in advance the keys the user wants to use
-        // but we can define a set of function that can be mapped
-        this.keymapsTpl = {}
-        // Crossplatform shortcuts
-        this.keymapsTpl['newlineAndIndentContinueMarkdownList'] = 'Enter'
-        this.keymapsTpl['autoIndentMarkdownList'] = 'Tab'
-        this.keymapsTpl['autoUnindentMarkdownList'] = 'Shift-Tab'
-        this.keymapsTpl['CodeMirrorInsertMiddleLineBelow'] = 'Ctrl-Enter'
-        this.keymapsTpl['CodeMirrorInsertMiddleLineAbove'] = 'Shift-Ctrl-Enter'
-        this.keymapsTpl['sapLineUp'] = 'Alt-Up'
-        this.keymapsTpl['swapLineDown'] = 'Alt-Down'
-
-        if (process.platform === 'darwin') {
-            /* TODO: Have a list of functionnalities to disable
-            this.keymapsTpl['Cmd-F'] = 'False' // Disable the internal search
-            this.keymapsTpl['Alt-B'] = 'False'// Disable word-backwarding on macOS (handled by Alt+ArrowLeft)
-            this.keymapsTpl['Alt-F'] = 'False' // Disable word-forwarding on macOS (handled by Alt+ArrowRight)
-             */
-            this.keymapsTpl['editorPastAsPlain'] = 'Cmd-Shift-V'
-            this.keymapsTpl['insertFootnote'] = 'Cmd-Alt-R'
-            this.keymapsTpl['markdownMakeTaskList'] = 'Cmd-T'
-            this.keymapsTpl['markdownComment'] = 'Shift-Cmd-C'
-            this.keymapsTpl['markdownImage'] = 'Shift-Cmd-I'
-            this.keymapsTpl['markDownLink'] = 'Cmd-K'
-            this.keymapsTpl['markdownItalic'] = 'Cmd-I'
-            this.keymapsTpl['markdownBold'] = 'Cmd-B'
-        } else {
-            // TODO: see above
-            //this.keymapsTpl['Ctrl-F'] = 'False' // Disable the internal search
-            // In this case we must also disable the other? Or is it by default?
-            if (homeEndBehaviour) {
-                this.keymapsTpl['goLineStart'] = 'Home'
-                this.keymapsTpl['goLineEnd'] = 'End'
-            } else {
-                this.keymapsTpl['goLineLeftSmart'] = 'Home'
-                this.keymapsTpl['goLineRight'] = 'End'
-            }
-            this.keymapsTpl['editorPastAsPlain'] = 'Ctrl-Shift-V'
-            this.keymapsTpl['insertFootnote'] = 'Ctrl-Alt-F'
-            this.keymapsTpl['markdownMakeTaskList'] = 'Ctrl-T'
-            this.keymapsTpl['markdownComment'] = 'Shift-Ctrl-C'
-            this.keymapsTpl['markdownImage'] = 'Shift-Ctrl-I'
-            this.keymapsTpl['markDownLink'] = 'Ctrl-K'
-            this.keymapsTpl['markdownItalic'] = 'Ctrl-I'
-            this.keymapsTpl['markdownBold'] = 'Ctrl-B'
-        }
-
         this.load()
-
-        // TODO: check the keymaps. Defining a file with all the possible function/keymaps?
 
         global.keymaps = {
             get: (fun) => {
