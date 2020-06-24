@@ -10,38 +10,40 @@ keywords:
 
  ![zettlr.png](./zettlr.png)
 
-Hello there, and thank you for choosing Zettlr! We’ve compiled this little interactive tutorial to Zettlr so that you can dive right into using the app without having to skim through all of the docs. However, Zettlr is capable of much more than outlined in this short introduction, so we strongly recommend you also have a look at [the extensive documentation](https://docs.zettlr.com/) (hold down `Cmd` or `Ctrl` to open the link), which is available in many different languages, in order to help you navigate through the extensive feature set. You can always open the online documentation by pressing `F1` or selecting the corresponding menu item in the Help-menu.
+Hello there, and thank you for choosing Zettlr! 🎉 We’ve compiled this little interactive tutorial to Zettlr so that you can dive right into using the app without having to skim through all of the docs. However, Zettlr is capable of much more than outlined in this short introduction, so we strongly recommend you also have a look at [🔗 the extensive documentation](https://docs.zettlr.com/) (hold down `Cmd` or `Ctrl` to open the link), which is available in many different languages, in order to help you navigate through the extensive feature set. You can always open the online documentation by pressing `F1` or selecting the corresponding menu item in the Help-menu.
 
 But, now: Let’s go!
 
 > In this tutorial, you will see weblinks that you can follow. By default, clicking on a link is interpreted as “I want to edit this link.” If you want to open it, hold down either your `Cmd`-key, if you use macOS, or the `Ctrl`-key otherwise while clicking on the link! Whenever you stumble upon `Cmd/Ctrl`, read this as “Use `Cmd` if you are on macOS, or `Ctrl` otherwise.”
 
-## About this tutorial
+## About this tutorial 🎬
 
-First, you may wonder what this tutorial is. Several Markdown applications make use of such an interactive quick start guide for a hands-on guide to using the application. In the case of Zettlr, we have created a small directory in your documents folder, named “Zettlr Tutorial” and loaded it for you. If you move your cursor into the top area of Zettlr’s left sidebar (called the “file list”), a round arrow will appear. Click that now.
+First, you may wonder what this tutorial is. Several Markdown applications make use of such an interactive tutorial for a hands-on guide to using the application. In the case of Zettlr, we have created a small directory in your documents folder, named “Zettlr Tutorial” and loaded it for you. Right now, you see the contents of that directory in the left sidebar (called the “file list”), so let us first have a look at the file tree! If you move your cursor into the top area of Zettlr’s left sidebar , a round arrow will appear. Click that now.
 
-What you will see is that there is one directory – the tutorial – loaded. You can right-click the directory, and either “close” or “delete” it. When you close a root-level directory or file in Zettlr, this means that you unload it from the application, but it will remain on your computer. If you delete it, this means that Zettlr will move it into the trash bin. But don’t do that right now, as there are still new things to learn!
+What you will see is that there is one directory – the tutorial – loaded. You can right-click the directory, and either “close” or “delete” it. When you _close_ a root-level directory or file in Zettlr, this means that you unload it from the application, but it will remain on your computer. If you _delete_ it, this means that Zettlr will move it into the trash bin. But don’t do that right now, as there are still new things to learn! ✍🏼
 
 > Note: On some Linux distributions, this may not work out of the box, as Zettlr depends upon a common package for moving files into the trash. If you experience problems removing files and folders, please [check our FAQ section](https://docs.zettlr.com/en/faq/#im-using-linux-and-deleting-files-doesnt-move-them-to-the-trash), which got you covered!
 
-Zettlr is an application that is intended to work with having at least one root directory always loaded into the app where your Markdown files are stored. Imagine these root directories as “work spaces.” They are always displayed in the directory tree that’s visible right now. Click on any directory there to switch to its file list.
+Zettlr is an application that is intended to work with having at least one root directory always loaded into the app where your Markdown files are stored. Imagine these root directories as “work spaces.” They are always displayed in the directory tree that’s visible right now. To view the file list of a directory, simply click the directory.
+
+> Note that there are three modes available for the file list which you can choose in the preferences; one displays either the file list _or_ the file tree (the default), another one displays both at the same time and the third mode displays both files and folders interleaved.
 
 Click on “Zettlr Tutorial” now to switch back to its file list.
 
-## How to use Markdown
+## How to use Markdown 📝
 
-Zettlr is a Markdown editor, which means that it mostly works like apps you already know, such as Microsoft Word, LibreOffice, or OpenOffice. But instead of having to click through an armada of toolbar buttons, you can apply structure to your elements using only characters, which means you never have to leave your keyboard! How cool is that?!
+Zettlr is a Markdown editor, which means that it mostly works like apps you already know, such as Microsoft Word, LibreOffice, or OpenOffice. But instead of having to click through an armada of toolbar buttons, you can apply structure to your elements using only characters, which means you never have to leave your keyboard! How cool is that?! ✨
 
 Let’s quickly go over the most important elements:
 
-1. You can make text **bold** and _italic_ by surrounding it with either underscores or asterisks. Which one you choose is completely up to you. One character makes text italic, two makes it bold and — you guessed it — three make it both __*bold and italic*__!
+1. You can make text **bold** and _italic_ by surrounding it with either underscores or asterisks. Which one you choose is completely up to you. One single character makes text italic, two makes it bold and — you guessed it — three make it both __*bold and italic*__!
 2. Headings are created almost like hashtags — simply write a `#`-character followed by a space. You can use up to six `######`-characters to create headings from level one through six.
 3. Lists are created literally — simply write `*`, `-`, or `+` on a new line. Numbered lists consist of a number followed by a dot.
 4. Finally, blockquotes are written exactly as quoted text is displayed in e-mails: Simply demarcate them using `>`!
 
 Of course, there are a lot of other elements. Footnotes for instance — hover over this one with your cursor.[^1] During this tutorial, you will also learn about some special elements that Zettlr uses to enable truly academic work, as well as knowledge management using a Zettelkasten!
 
-## Links
+## Links ⛓
 
 While they are not used very often in academic texts, links are a powerful tool of Markdown, which Zettlr takes to the next level. Zettlr acts really cleverly when it comes to links. Let’s quickly create one! Select the following link to our Twitter account, and copy it to the clipboard: https://www.twitter.com/Zettlr
 
@@ -49,13 +51,13 @@ Now, select the words “link to our Twitter account” and hit `Cmd/Ctrl+K`! Ze
 
 But Zettlr doesn’t only support common weblinks. If you link to a file that is somewhere on your computer, Zettlr can even open any file if you click on such a link! In general, just remember that Zettlr aims to make your writing experience as frictionless as possible, not just when it comes to links!
 
-## The Sidebar
+## The Sidebar 📎
 
 Now that we got you covered with the Markdown basics, it’s time to show you some more of the stuff Zettlr can do! Click now on the paper clip icon in the top right corner of the toolbar. This will open the sidebar, which contains a section “Attachments.” In there Zettlr shows you all non-Markdown files that you store in the currently selected directory. You can also drag and drop files from there onto the editor to include them in your files.
 
 You can also see the file “Pandoc and LaTeX Guide.pdf”. Wondering what it is? Let’s have a look: Click on it to open the file with your default PDF viewer now!
 
-## Interactive Elements
+## Interactive Elements ⏯
 
 By now, you’ve already learned a lot about Zettlr. Can you check all the checkboxes?
 
@@ -73,7 +75,7 @@ Some elements in the editor are interactive, just like the checkboxes. Tables ar
 
 You can align columns as well as add and remove both rows and columns in the table. The table editor will always work on the column or row that is currently active. So, to remove a certain row, make sure that one cell within that row is selected. Feel free to play around a little bit with the table to get used to how it works!
 
-## Further Resources
+## Further Resources 📚
 
 You made it! The first part of the introduction is over. We did not cover a lot here, but you can learn about anything on our [documentation](https://docs.zettlr.com/)! What you might be interested in, is [the powerful tag manager](https://docs.zettlr.com/en/reference/settings/#manage-tags), or the [versatile search options](https://docs.zettlr.com/en/core/search/).
 
