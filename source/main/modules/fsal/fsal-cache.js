@@ -70,9 +70,15 @@ module.exports = class FSALCache {
   /**
    * Removes the given key from the cache.
    * @param {String} key The key to remove
+   * @returns {Boolean} Whether the adapter has removed the key
    */
   del (key) {
-    if (this.has(key)) delete this._data[this._determineShard(key)][key]
+    if (this.has(key)) {
+      delete this._data[this._determineShard(key)][key]
+      if (this._accessed.hasOwnProperty(key)) delete this._accessed[key]
+      return true
+    }
+    return false
   }
 
   /**

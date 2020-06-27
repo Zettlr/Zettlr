@@ -492,6 +492,8 @@ module.exports = class FSAL extends EventEmitter {
         })
       } else {
         global.log.info(`Chokidar has detected a change event for file ${descriptor.name}. Attempting to re-parse ...`)
+        // Remove the cached value
+        this._cache.del(descriptor.hash)
 
         let newfile
         if (isRoot) {
