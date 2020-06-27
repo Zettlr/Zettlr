@@ -31,16 +31,21 @@ class FileSearch extends ZettlrCommand {
     let file = this._app.findFile(arg.hash)
     if (!file) return false // File not found
 
-    let result = await this._app.getFileSystem().runAction('search-file', {
-      'source': file,
-      'info': arg.terms
-    })
+    try {
+      let result = await this._app.getFileSystem().runAction('search-file', {
+        'source': file,
+        'info': arg.terms
+      })
 
-    this._app.ipc.send('file-search-result', {
-      'hash': arg.hash,
-      'result': result
-    })
-    return true
+      this._app.ipc.send('file-search-result', {
+        'hash': arg.hash,
+        'result': result
+      })
+      return true
+    } catch (e) {
+      global.log.error(`Could not search file ${file.name}: ${e.message}`, e)
+      return false
+    }
   }
 }
 
