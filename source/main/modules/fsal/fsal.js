@@ -495,6 +495,10 @@ module.exports = class FSAL extends EventEmitter {
         // Remove the cached value
         this._cache.del(descriptor.hash)
 
+        // As we will be replacing the descriptor, remember to first remove all
+        // tags from the provider as to prevent duplicates and wrong numbers.
+        global.tags.remove(descriptor.tags)
+
         let newfile
         if (isRoot) {
           // A root file has changed
@@ -521,6 +525,9 @@ module.exports = class FSAL extends EventEmitter {
       }
     } else if ([ 'unlink', 'unlinkDir' ].includes(event)) {
       console.log('Removing file or directory')
+
+      if (event === 'unlink') global.tags.remove(descriptor.tags)
+
       // A file or directory was removed
       descriptor.parent.children.splice(descriptor.parent.children.indexOf(descriptor), 1)
       isDirectoryUpdateNeeded = true
