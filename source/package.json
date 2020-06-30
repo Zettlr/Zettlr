@@ -23,7 +23,7 @@
         "chart.js": "2.9.3",
         "chokidar": "^3.4.0",
         "citeproc": "^2.3.22",
-        "codemirror": "^5.54.0",
+        "codemirror": "^5.55.0",
         "command-exists": "^1.2.9",
         "got": "^11.1.4",
         "joplin-turndown": "^4.0.27",
