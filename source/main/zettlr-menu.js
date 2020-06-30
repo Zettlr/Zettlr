@@ -143,7 +143,12 @@ class ZettlrMenu {
             break
           case 'openDictData':
             builtItem.click = function (menuitem, focusedWindow) {
-              require('electron').shell.openItem(require('path').join(require('electron').app.getPath('userData'), '/dict'))
+              require('electron').shell.openPath(require('path').join(require('electron').app.getPath('userData'), '/dict'))
+                .then(potentialError => {
+                  if (potentialError !== '') {
+                    global.log.error('Could not open dictionary directory:' + potentialError)
+                  }
+                })
             }
             break
           // Enumerate the recent docs
