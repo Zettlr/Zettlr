@@ -36,6 +36,7 @@ class ZettlrMenu {
     // the recent docs list so that we can make sure the menu is always updated.
     global.recentDocs.on('update', () => { this.set() })
     global.config.on('update', () => { this.set() })
+    global.keymaps.on('update', () => {this.set() })
   }
 
   /**
@@ -56,6 +57,8 @@ class ZettlrMenu {
 
     // Top level menus can also have a role (window or help)
     if (menutpl.hasOwnProperty('role')) menu.role = menutpl.role
+
+    let menuKeymaps = global.keymaps.get()['menu']
 
     // Traverse the submenu and apply
     for (let item of menutpl.submenu) {
@@ -91,13 +94,8 @@ class ZettlrMenu {
 
       // Higher-order attributes
 
-      // Accelerators may be system specific for macOS
-      if (item.hasOwnProperty('accelerator')) {
-        if (typeof item.accelerator !== 'string') {
-          builtItem.accelerator = (process.platform === 'darwin') ? item.accelerator.darwin : item.accelerator.other
-        } else {
-          builtItem.accelerator = item.accelerator
-        }
+      if (menuKeymaps.hasOwnProperty(item.command)) {
+        builtItem.accelerator = menuKeymaps[item.command]
       }
 
       // Weblinks are "target"s
@@ -196,7 +194,7 @@ class ZettlrMenu {
     mainMenu[0].submenu.push({ type: 'separator' },
       {
         label: trans('menu.quit'),
-        accelerator: 'CmdOrCtrl+Q',
+        accelerator: global.keymaps.get('global')['exit'],
         click (item, focusedWindow) {
           if (global.mainWindow) {
             global.mainWindow.send('message', { 'command': 'app-quit' })
@@ -220,6 +218,10 @@ class ZettlrMenu {
     if (!this._prebuilt) this._build()
     Menu.setApplicationMenu(this._prebuilt)
     this._prebuilt = null
+  }
+
+  _updateKeymaps () {
+
   }
 
   /**

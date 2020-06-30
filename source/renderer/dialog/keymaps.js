@@ -42,7 +42,7 @@ class KeymapsDialog extends ZettlrDialog {
     }
 
     _getFunction(name) {
-        return name.split('-')[1]
+        return name.split('-').slice(1).join('-')
     }
 
     proceed (data) {

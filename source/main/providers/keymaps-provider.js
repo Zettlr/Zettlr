@@ -7,44 +7,44 @@ class KeymapsProvider extends EventEmitter {
 
     _create_cmd_keymaps(...keys) {
         let leaderKey = process.platform === "darwin" ? "Cmd" : "Ctrl"
-        return leaderKey + "-" + keys.join('-')
+        return leaderKey + "+" + keys.join('+')
     }
 
     generateKeymapsTemplate () {
         this.keymapsTpl = {
             "menu": {
-                "new_file": this._create_cmd_keymaps("N"),
-                "new_dir": this._create_cmd_keymaps("Shift", "N"),
-                "open": this._create_cmd_keymaps("O"),
-                "save": this._create_cmd_keymaps("S"),
+                "file-new": this._create_cmd_keymaps("N"),
+                "dir-new": this._create_cmd_keymaps("Shift", "N"),
+                "dir-open": this._create_cmd_keymaps("O"),
+                "file-save": this._create_cmd_keymaps("S"),
                 "export": this._create_cmd_keymaps("E"),
                 "print": this._create_cmd_keymaps("P"),
-                "rename_file": this._create_cmd_keymaps("R"),
-                "rename_dir": this._create_cmd_keymaps("Shift", "R"),
-                "delete_file": process.platform === 'darwin' ? this._create_cmd_keymaps("BackSpace") : "Delete",
-                "delete_dir": process.platform === 'darwin' ? this._create_cmd_keymaps("Shift", "Backspace") : "Ctrl+Delete",
-                "copy_html": this._create_cmd_keymaps("Alt", "C"),
-                "paste_plain": this._create_cmd_keymaps("Shift" , "V"),
-                "find_file": this._create_cmd_keymaps("F"),
-                "find_dir": this._create_cmd_keymaps("Shift", "F"),
-                "generate_id": this._create_cmd_keymaps("L"),
-                "copy_id": this._create_cmd_keymaps("Shift", "L"),
-                "toggle_them": this._create_cmd_keymaps("Alt", "L"),
-                "toggle_file_meta": this._create_cmd_keymaps("Alt", "S"),
-                "toggle_distraction_free": this._create_cmd_keymaps("J"),
-                "toggle_sidebar": this._create_cmd_keymaps("!"),
-                "toggle_attachments": this._create_cmd_keymaps("?"),
-                "reset_zoom": this._create_cmd_keymaps("O"),
-                "zoom_in": this._create_cmd_keymaps("Plus"),
-                "zoom_out": this._create_cmd_keymaps("-"),
+                "file-rename": this._create_cmd_keymaps("R"),
+                "dir-rename": this._create_cmd_keymaps("Shift", "R"),
+                "file-delete": process.platform === 'darwin' ? this._create_cmd_keymaps("BackSpace") : "Delete",
+                "dir-delete": process.platform === 'darwin' ? this._create_cmd_keymaps("Shift", "Backspace") : "Ctrl+Delete",
+                "copy-as-html": this._create_cmd_keymaps("Alt", "C"),
+                "paste-as-plain": this._create_cmd_keymaps("Shift" , "V"),
+                "file-find": this._create_cmd_keymaps("F"),
+                "dir-find": this._create_cmd_keymaps("Shift", "F"),
+                "insert-id": this._create_cmd_keymaps("L"),
+                "copy-current-id": this._create_cmd_keymaps("Shift", "L"),
+                "toggle-theme": this._create_cmd_keymaps("Alt", "L"),
+                "toggle-file-meta": this._create_cmd_keymaps("Alt", "S"),
+                "toggle-distraction-free": this._create_cmd_keymaps("J"),
+                "toggle-sidebar": this._create_cmd_keymaps("!"),
+                "toggle-attachments": this._create_cmd_keymaps("?"),
+                "zoom-reset": this._create_cmd_keymaps("O"),
+                "zoom-in": this._create_cmd_keymaps("Plus"),
+                "zoom-out": this._create_cmd_keymaps("-"),
                 "win_minimize": this._create_cmd_keymaps("M"),
                 "win_close": this._create_cmd_keymaps("Shift", "W"),
-                "tab_close": this._create_cmd_keymaps("W"),
-                "tab_previous": this._create_cmd_keymaps("Shift", "Tab"),
-                "tab_next": this._create_cmd_keymaps("Tab"),
+                "attempt-close-tab": this._create_cmd_keymaps("W"),
+                "select-previous-tab": this._create_cmd_keymaps("Shift", "Tab"),
+                "select-next-tab": this._create_cmd_keymaps("Tab"),
                 "docs": "F1",
-                "preferences": this._create_cmd_keymaps(","),
-                "pdf_preferences": this._create_cmd_keymaps("Alt", ",")
+                "open-preferences": this._create_cmd_keymaps(","),
+                "open-pdf-preferences": this._create_cmd_keymaps("Alt", ",")
             },
             "editor": {
                 "new_line": "Enter",
@@ -105,7 +105,8 @@ class KeymapsProvider extends EventEmitter {
                     this.set(k, ks[k])
                 }
                 this.save()
-            }
+            },
+            on: (evt, callback) => { this.on(evt, callback)}
         }
     }
 
@@ -113,6 +114,7 @@ class KeymapsProvider extends EventEmitter {
         // TODO: Maybe change this to allow custom keymaps on day?
         if (this.keymaps.hasOwnProperty(fun)) {
             this.keymaps[fun] = key
+            this.update()
             return true
         }
         console.log("Failed to set key " + key + " for function " + fun)
@@ -144,11 +146,16 @@ class KeymapsProvider extends EventEmitter {
         }
     }
 
+    update() {
+        this.emit('update')
+    }
+
     save () {
         fs.writeFileSync(this.keymapsFile, JSON.stringify(this.keymaps, {encoding: 'utf8'}))
         if (global.hasOwnProperty('ipc')) {
             global.ipc.send('keymaps-update', {})
         }
+        this.update()
     }
 }
 
