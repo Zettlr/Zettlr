@@ -54,7 +54,7 @@ class ZettlrIPC {
 
       if (arg.command === 'file-drag-start') {
         event.sender.startDrag({
-          'file': this._app.findFile({ hash: parseInt(arg.content.hash) }).path,
+          'file': this._app.findFile(arg.content.hash).path,
           'icon': require('path').join(__dirname, '/assets/dragicon.png')
         })
         return // Don't dispatch further
