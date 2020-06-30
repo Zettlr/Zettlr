@@ -161,7 +161,7 @@ class ZettlrEditor {
         linkStart: '[[', // Start of links?
         linkEnd: ']]' // End of links?
       },
-      continuelistModes: [ 'markdown', 'markdown-zkn' ],
+      continuelistModes: [ 'markdown', 'markdown-zkn' ]
     })
 
     // Set up the helper classes with the CM instance
@@ -924,7 +924,7 @@ class ZettlrEditor {
     return this
   }
 
-  mapFunctionToCodeMirror(name) {
+  mapFunctionToCodeMirror (name) {
     switch (name) {
       case 'CodeMirrorInsertMiddleLineBelow':
         return (cm) => {
@@ -938,7 +938,7 @@ class ZettlrEditor {
           CodeMirror.commands['newLineAndIndent'](cm)
         }
       case 'editorPastAsPlain':
-        return (cm) => { this.pasteAsPlain()}
+        return (cm) => { this.pasteAsPlain() }
       default:
         return name
     }
@@ -1356,7 +1356,6 @@ class ZettlrEditor {
    * @return {CodeMirror} The editor instance
    */
   getEditor () { return this._cm }
-
 }
 
 module.exports = ZettlrEditor

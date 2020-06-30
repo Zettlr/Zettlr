@@ -528,7 +528,7 @@ class ZettlrBody {
     if (this._currentDialog !== null) return
     this._currentDialog = new KeymapsDialog()
     this._currentDialog.init(keymaps).open()
-    this._currentDialog.on('afterClose', (e) => {this._currentDialog = null})
+    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
 
   /**

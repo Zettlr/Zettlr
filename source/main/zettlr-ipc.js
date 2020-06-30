@@ -46,9 +46,8 @@ class ZettlrIPC {
       event.returnValue = global.keymaps.get(key)
     })
 
-    // Beginn listening to messages
+    // Begin listening to messages
     ipc.on('message', (event, arg) => {
-
       // We always need a command
       if (!arg.hasOwnProperty('command')) {
         global.log.error(trans('system.no_command'), arg)

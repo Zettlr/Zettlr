@@ -105,7 +105,7 @@ class ZettlrRendererIPC {
     global.keymaps = {
       get: () => {
         return ipc.sendSync('keymaps')
-      },
+      }
     }
 
     // Inject typo spellcheck and suggest functions into the globals

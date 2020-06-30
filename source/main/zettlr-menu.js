@@ -36,7 +36,7 @@ class ZettlrMenu {
     // the recent docs list so that we can make sure the menu is always updated.
     global.recentDocs.on('update', () => { this.set() })
     global.config.on('update', () => { this.set() })
-    global.keymaps.on('update', () => {this.set() })
+    global.keymaps.on('update', () => { this.set() })
   }
 
   /**
