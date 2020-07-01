@@ -323,6 +323,8 @@ class ZettlrEditor {
     })
 
     this._cm.on('renderLine', (cm, line, elt) => {
+      // Disable on non-Markdown text
+      if (cm.getModeAt({ 'line': cm.doc.getLineNumber(line), 'ch': 0 }).name !== 'markdown') return
       // Need to calculate indent and padding in order to provide a proper hanging indent
       // Originally based on https://discuss.codemirror.net/t/hanging-indent/243/2
       let monospaceWidth = this.computeMonospaceWidth()
