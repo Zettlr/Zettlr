@@ -307,6 +307,10 @@
       "text/x-common-lisp": {
         "mode": "commonlisp",
         "selectors": [ "clisp", "commonlisp" ]
+      },
+      "application/x-powershell": {
+        "mode": "powershell",
+        "selectors": [ "powershell" ]
       }
     }
 }
