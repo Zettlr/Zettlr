@@ -16,7 +16,7 @@
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-06-05T15:48:00.000000Z"
+        "updated_at": "2020-06-23T17:21:07.000000Z"
     },
     "dialog": {
         "about": {
@@ -315,6 +315,9 @@
                 "updated": "Traductions mises \u00e0 jour : %s"
             },
             "user_dictionary": "Dictionnaire personnalis\u00e9. Enlever des mots avec un clic.",
+            "watchdog_checkbox_label": "Activer le d\u00e9compte du chien de garde",
+            "watchdog_explainer": "Sur certains ordinateurs, Zettlr peut signaler trop de modifications de fichiers \u00e0 distance. Si cela se produit, essayez d'activer ce param\u00e8tre.",
+            "watchdog_threshold_label": "Temps d'attente avant de consid\u00e9rer l\u2019\u00e9criture d\u2019un fichier comme termin\u00e9e (en ms)",
             "xelatex": "Chemin d'acc\u00e8s \u00e0 xelatex. \u00c0 ne changer que si Zettlr ne parvient pas \u00e0 trouver le programme.",
             "xelatex_default": "Par d\u00e9faut : xelatex",
             "zkn": {
@@ -500,6 +503,7 @@
         "open": "Ouvrir...",
         "open_attachment": "Ouvrir annexe",
         "open_link": "Ouvrir le lien",
+        "open_logs": "Ouvrir les journaux",
         "pandoc": "T\u00e9l\u00e9charger Pandoc",
         "paste": "Coller",
         "paste_plain": "Coller sans format",

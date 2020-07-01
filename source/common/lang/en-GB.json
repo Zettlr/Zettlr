@@ -6,7 +6,7 @@
             "Celso Lira"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-06-03T13:46:28.000000Z"
+        "updated_at": "2020-06-23T17:04:29.000000Z"
     },
     "dialog": {
         "about": {
@@ -305,6 +305,9 @@
                 "updated": "Updated translations: %s"
             },
             "user_dictionary": "User dictionary. Remove words by clicking them.",
+            "watchdog_checkbox_label": "Activate Watchdog polling",
+            "watchdog_explainer": "On some computers, Zettlr may report too many remote file changes. If this happens, try activating this setting.",
+            "watchdog_threshold_label": "Time to wait before writing a file is considered done (in ms)",
             "xelatex": "Path to xelatex executable. Please only change, if Zettlr is unable to locate it.",
             "xelatex_default": "Default: xelatex",
             "zkn": {
@@ -490,6 +493,7 @@
         "open": "Open\u2026",
         "open_attachment": "Open Attachment",
         "open_link": "Open Link",
+        "open_logs": "Open Logs",
         "pandoc": "Get Pandoc",
         "paste": "Paste",
         "paste_plain": "Paste without style",
