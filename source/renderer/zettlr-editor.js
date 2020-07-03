@@ -391,20 +391,17 @@ class ZettlrEditor {
 
       let cursor = this._cm.coordsChar({ left: e.clientX, top: e.clientY })
       let tokenInfo = this._cm.getTokenAt(cursor)
+      let tokenList = tokenInfo.type.split(' ')
+      let startsWithCirc = tokenInfo.string.indexOf('^') === 0
 
-      switch (tokenInfo.type) {
-        case 'zkn-link':
-          this._renderer.autoSearch(tokenInfo.string, true)
-          break
-        case 'zkn-tag':
-          this._renderer.autoSearch(tokenInfo.string)
-          break
-        case 'link':
-          if (tokenInfo.string.indexOf('^') === 0) this._editFootnote($(e.target))
-          break
-        default:
-          console.log('No success', tokenInfo)
-          break
+      if (tokenList.includes('zkn-link')) {
+        this._renderer.autoSearch(tokenInfo.string, true)
+      } else if (tokenList.includes('zkn-tag')) {
+        this._renderer.autoSearch(tokenInfo.string)
+      } else if (tokenList.includes('link') && startsWithCirc) {
+        this._editFootnote($(e.target))
+      } else {
+        console.log('No success', tokenInfo)
       }
     })
 
