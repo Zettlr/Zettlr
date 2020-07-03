@@ -43,7 +43,9 @@ class KeymapsProvider extends EventEmitter {
         'select-next-tab': this._createCmdKeymaps('Tab'),
         'docs': 'F1',
         'open-preferences': this._createCmdKeymaps(','),
-        'open-pdf-preferences': this._createCmdKeymaps('Alt', ',')
+        'open-pdf-preferences': this._createCmdKeymaps('Alt', ','),
+        'minimize': this._createCmdKeymaps('M'),
+        'close': this._createCmdKeymaps('Shift', 'W')
       },
       'editor': {
         'new_line': 'Enter',

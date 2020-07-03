@@ -98,6 +98,12 @@ class ZettlrMenu {
         builtItem.accelerator = menuKeymaps[item.command]
       }
 
+      // TODO: Only use for two bindings -> window.minimize & window.close
+      // See if can not be handled in another way? Not very elegant
+      if (menuKeymaps.hasOwnProperty(item.role)) {
+        builtItem.accelerator = menuKeymaps[item.role]
+      }
+
       // Weblinks are "target"s
       if (item.hasOwnProperty('target')) {
         builtItem.click = function (menuitem, focusedWindow) {
