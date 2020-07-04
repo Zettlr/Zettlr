@@ -4,10 +4,11 @@
 
 - Fixed a race condition that would cause the renderer to become completely unresponsive when creating uncomplete Zettelkasten links (e.g. `[[contents]` or `[contents]]`).
 - The interactive tutorial is now also available in French (thanks to @framatophe for their translation!).
+- The sidebar now shows single-citekeys (without square brackets) in the references list again.
 
 ## Under the Hood
 
-(Nothing here)
+- Update Citr to 1.2.0.
 
 # 1.7.0
 

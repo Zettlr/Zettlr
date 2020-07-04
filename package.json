@@ -147,7 +147,7 @@
     "eslint/espree/acorn": "^7.2.0"
   },
   "dependencies": {
-    "@zettlr/citr": "^1.1.0",
+    "@zettlr/citr": "^1.2.0",
     "adm-zip": "^0.4.14",
     "archiver": "^4.0.1",
     "astrocite": "^0.16.3",
