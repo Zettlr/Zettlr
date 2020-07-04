@@ -124,7 +124,7 @@
             return 'zkn-link-formatting'
           }
 
-          while (!stream.match(config.zkn.linkEnd, false)) {
+          while (!stream.eol() && !stream.match(config.zkn.linkEnd, false)) {
             stream.next()
           }
           return 'zkn-link'
@@ -205,6 +205,7 @@
       blankLine: function (state) {
         state.inZknLink = false
         state.hasJustEscaped = false
+        state.inZknLink = false
         // The underlying mode needs
         // to be aware of blank lines
         return mdMode.blankLine(state.mdState)

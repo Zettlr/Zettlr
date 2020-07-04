@@ -1,3 +1,14 @@
+# 1.7.1
+
+## GUI and Functionality
+
+- Fixed a race condition that would cause the renderer to become completely unresponsive when creating uncomplete Zettelkasten links (e.g. `[[contents]` or `[contents]]`).
+- The interactive tutorial is now also available in French (thanks to @framatophe for their translation!).
+
+## Under the Hood
+
+(Nothing here)
+
 # 1.7.0
 
 ## Breaking Changes
