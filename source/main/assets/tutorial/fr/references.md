@@ -1,5 +1,5 @@
 ---
-title: "Citing with Zettlr"
+title: "Les références avec Zettlr"
 author:
   - The Zettlr Team
   - Framatophe (trad.)

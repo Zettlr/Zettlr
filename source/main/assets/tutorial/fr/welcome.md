@@ -1,5 +1,5 @@
 ---
-title: "Welcome to Zettlr!"
+title: "Bienvenue sur Zettlr !"
 author:
   - The Zettlr Team
   - Framatophe (trad.)
@@ -14,7 +14,6 @@ keywords:
 # Bienvenue sur Zettlr !
 
  ![zettlr.png](./zettlr.png)
-
 
 Bonjour, et merci d'avoir choisi Zettlr ! 🎉 Nous avons préparé ce petit tutoriel interactif sur Zettlr afin que vous puissiez vous plonger dans l'utilisation de l'application sans avoir à éplucher toute la documentation. Néanmoins, Zettlr est capable de bien davantage que ce qui est décrit dans cette courte introduction, c'est pourquoi nous vous recommandons vivement de consulter [🔗 la documentation complète](https://docs.zettlr.com/) (maintenez la touche `Cmd` ou `Ctrl` enfoncée pour ouvrir le lien), qui est disponible dans de nombreuses langues, afin de vous aider à naviguer dans le vaste ensemble de fonctionnalités. Vous pouvez toujours ouvrir la documentation en ligne en appuyant sur la touche `F1` ou en sélectionnant l'élément de menu correspondant dans le menu Aide.
 
@@ -60,8 +59,6 @@ Maintenant, sélectionnez les mots « lien vers notre compte Twitter » et cli
 
 Mais Zettlr ne prend pas seulement en charge les liens internet courants. Si vous vous liez un fichier qui se trouve quelque part sur votre ordinateur, Zettlr peut même ouvrir n'importe quel fichier si vous cliquez sur un tel lien ! En résumé, rappelez-vous que Zettlr vise à rendre votre expérience d'écriture aussi fluide que possible, et pas seulement en ce qui concerne les liens !
 
-
-
 ## La barre latérale 📎
 
 Maintenant que nous vous avons présenté les bases du Markdown, il est temps de vous montrer d'autres trucs que Zettlr peut faire ! Cliquez maintenant sur l'icône du trombone dans le coin supérieur droit de la barre d'outils. Cela ouvrira la barre latérale, qui contient une section « Annexes ». Zettlr vous y montre tous les fichiers non Markdown que vous stockez dans le répertoire sélectionné. Vous pouvez aussi glisser et déposer des fichiers à partir de là vers l'éditeur pour les inclure dans vos documents.
@@ -84,7 +81,7 @@ Certains éléments de l'éditeur sont interactifs, tout comme les cases à coch
 |----------------------------------|-------------------------------------------------------------------------------|-----------------|
 | Bienvenue sur Zettlr !           | Donne un aperçu rapide des capacités de Zettlr                                | welcome.md      |
 | Travailler avec les Zettelkästen | Introduction aux différentes caractéristiques des Zettelkästen dans Zettlr    | zettelkasten.md |
-| Les références avec Zettlr       | Souligne les potentialités du travail avec des bases de données de références | citing.md       |
+| Les références avec Zettlr       | Souligne les potentialités du travail avec des bases de données de références | references.md   |
 
 You can align columns as well as add and remove both rows and columns in the table. The table editor will always work on the column or row that is currently active. So, to remove a certain row, make sure that one cell within that row is selected. Feel free to play around a little bit with the table to get used to how it works!
 
@@ -96,5 +93,5 @@ Vous y êtes arrivé ! La première partie de l'introduction est terminée. Nous
 
 Mais maintenant que les bases sont suffisantes, nous sommes prêts à faire le grand saut ! Passons maintenant au tutoriel des Zettelkästen ! Pour y aller, il suffit de cliquer sur le lien wiki suivant : [[zettelkasten]]
 
-[^1] : Ce texte se trouve en bas de ce fichier. Mais, en fait, vous pouvez les mettre où vous voulez. Vous connaissez le meilleur ? Si vous cliquez sur cette note de bas de page tout en maintenant la touche `Cmd/Ctrl` enfoncée, vous pouvez changer le texte de place ! Essayez maintenant et enregistrez vos modifications en appuyant sur `Maj+Entrée`. Si vous voulez annuler vos modifications, cliquez simplement en dehors de la fenêtre popup !
+[^1]: Ce texte se trouve en bas de ce fichier. Mais, en fait, vous pouvez les mettre où vous voulez. Vous connaissez le meilleur ? Si vous cliquez sur cette note de bas de page tout en maintenant la touche `Cmd/Ctrl` enfoncée, vous pouvez changer le texte de place ! Essayez maintenant et enregistrez vos modifications en appuyant sur `Maj+Entrée`. Si vous voulez annuler vos modifications, cliquez simplement en dehors de la fenêtre popup !
 
