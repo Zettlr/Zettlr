@@ -79,22 +79,25 @@
       // Also in this case simply skip.
       if (isRendered) continue
 
+      let hTagWrapper = document.createElement('div')
+      hTagWrapper.className = 'heading-tag'
+
       let hTag = document.createElement('span')
-      hTag.className = 'heading-tag'
       hTag.textContent = 'h' + headingLevel
+      hTagWrapper.appendChild(hTag)
 
       let textMarker = cm.markText(
         curFrom, curTo,
         {
           'clearOnEnter': true,
-          'replacedWith': hTag,
+          'replacedWith': hTagWrapper,
           'inclusiveLeft': false,
           'inclusiveRight': false
         }
       )
 
       // Clear on click
-      hTag.onclick = (e) => { textMarker.clear() }
+      hTagWrapper.onclick = (e) => { textMarker.clear() }
 
       headMarkers.push(textMarker)
     }
