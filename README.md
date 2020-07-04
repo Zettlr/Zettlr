@@ -69,19 +69,19 @@ If you have downloaded Zettlr, [head over to our website](https://docs.zettlr.co
 
 ## Contributing
 
-Zettlr is an [Electron](https://www.electronjs.org/)-based app, so to start developing, you'll need to have a [NodeJS](https://nodejs.org/)-stack on your computer installed. Make sure Node and preferably [Yarn](https://yarnpkg.com/en/) are installed, which is the recommended package manager.
+Zettlr is an [Electron](https://www.electronjs.org/)-based app, so to start developing, you'll need to have a [NodeJS](https://nodejs.org/)-stack on your computer installed. Make sure Node 12+ (`lts/erbium`) and [Yarn](https://yarnpkg.com/en/) are installed, which is the recommended package manager for the project.
 
 Then, simply clone the repository and install the dependencies on your local computer:
 
 ```bash
 $ git clone https://github.com/Zettlr/Zettlr.git
 $ cd Zettlr
-$ yarn install # or npm install
+$ yarn install
 $ cd source
-$ yarn install # or npm install
+$ yarn install
 ```
 
-_(Please note the second `yarn install`/`npm install` in the source directory. This is necessary to build the app locally.)_
+_(Please note the second `yarn install` in the source directory. This is necessary to build the app locally.)_
 
 The `install`-scripts will automatically precompile all assets for the first time, so that you can immediately run `yarn start` after cloning the repository. However, whenever you change something of the resources, you should run these commands again. The next section will teach you everything you need to know about the commands at your disposal for developing the app.
 
