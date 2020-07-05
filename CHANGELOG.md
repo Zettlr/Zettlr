@@ -3,6 +3,8 @@
 ## GUI and Functionality
 
 - The NSIS installer (Windows) now contains customized, branded images for the sidebar and header of the various pages visible during the setup process.
+- Added syntax highlighting modes (with keywords):
+    - **Clojure**: `clojure`
 
 ## Under the Hood
 

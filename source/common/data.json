@@ -176,6 +176,10 @@
         "mode": "clike",
         "selectors": [ "c\\#", "csharp", "cs" ]
       },
+      "text/x-clojure": {
+        "mode": "clojure",
+        "selectors": [ "clojure" ]
+      },
       "text/x-elm": {
         "mode": "elm",
         "selectors": [ "elm" ]
