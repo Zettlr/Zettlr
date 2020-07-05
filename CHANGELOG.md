@@ -1,3 +1,13 @@
+# (no version assigned)
+
+## GUI and Functionality
+
+- The NSIS installer (Windows) now contains customized, branded images for the sidebar and header of the various pages visible during the setup process.
+
+## Under the Hood
+
+(nothing here)
+
 # 1.7.1
 
 ## GUI and Functionality
