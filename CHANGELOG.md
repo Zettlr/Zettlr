@@ -13,7 +13,7 @@
 - Updated dependencies:
   - @zettlr/citr `1.2.0`
   - @clr/icons `3.1.4`
-  - `joplin-turndown` 4.0.28
+  - joplin-turndown `4.0.28`
   - citeproc `2.4.6`
   - electron `9.0.5`
   - electron-notarize `1.0.0`
