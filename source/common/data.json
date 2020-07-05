@@ -311,6 +311,10 @@
       "application/x-powershell": {
         "mode": "powershell",
         "selectors": [ "powershell" ]
+      },
+       "text/x-stsrc": {
+        "mode": "smalltalk",
+        "selectors": ["smalltalk", "st"]
       }
     }
 }
