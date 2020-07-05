@@ -10,7 +10,29 @@
 
 ## Under the Hood
 
-- Update Citr to 1.2.0.
+- Updated dependencies:
+  - @zettlr/citr `1.2.0`
+  - @clr/icons `3.1.4`
+  - `joplin-turndown` 4.0.28
+  - citeproc `2.4.6`
+  - electron `9.0.5`
+  - electron-notarize `1.0.0`
+  - mocha `8.0.1`
+  - chalk `4.1.0`
+  - got `11.4.0`
+  - tippy.js `6.2.4`
+  - moment `2.27.0`
+  - uuid `8.2.0`
+  - v8-compile-cache `2.1.1`
+  - eslint `7.4.0`
+  - eslint-plugin-import `2.22.0`
+  - eslint-plugin-vue `7.0.0-alpha.9`
+  - electron-devtools-installer `3.1.0`
+  - webpack-cli `3.3.12`
+  - uglify-js `3.10.0`
+  - vue-loader `15.9.3`
+  - css-loader `3.6.0`
+  - mermaid `8.5.0`
 
 # 1.7.0
 
