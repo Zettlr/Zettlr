@@ -6,7 +6,7 @@
 
 ## Under the Hood
 
-(nothing here)
+- Added the logo source files to source control. Please make sure to read the accompanying README file in the `icons`-directory before using!!
 
 # 1.7.1
 
