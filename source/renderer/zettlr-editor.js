@@ -494,7 +494,7 @@ class ZettlrEditor {
     if (this._renderHTags) this._cm.execCommand('markdownRenderHTags') // Render heading levels
     if (this._renderIframes) this._cm.execCommand('markdownRenderIframes') // Render iFrames
     if (this._wysiwyg) this._cm.execCommand('markdownWYSIWYG') // Render all other elements
-    this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
+    if (this._cm.getOption('mode').name !== 'readability') this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
     this._cm.execCommand('markdownCodeblockClasses') // Apply code block classes
     if (this._cm.getOption('fullScreen') && this._mute) this._muteLines()
 
