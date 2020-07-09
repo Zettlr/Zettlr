@@ -96,17 +96,18 @@
         // otherwise, stream.match() will ALWAYS be executed, hence
         // falsifying the otherwise correct else-if!!
         if (stream.sol() && !state.inEquation && stream.match(blockMathRE)) {
+          console.log('Multiline equation')
           // We have a multiline equation
           state.inEquation = true
-          return 'fenced-code'
+          return 'comment'
         } else if (stream.sol() && state.inEquation && stream.match(blockMathRE)) {
           // We're leaving the multiline equation
           state.inEquation = false
-          return 'fenced-code'
+          return 'comment'
         } else if (state.inEquation) {
           // While we're in an equation, simply return fenced-codes.
           stream.skipToEnd()
-          return 'fenced-code'
+          return 'comment'
         }
 
         // In everything that follows, escpaing things is allowed and possible.
@@ -135,7 +136,7 @@
         // None of the following has to explicitly check for backspaces.
 
         // Now let's check for inline equations
-        if (stream.match(inlineMathRE)) return 'fenced-code'
+        if (stream.match(inlineMathRE)) return 'inline-math'
 
         // Implement highlighting
         if (stream.match(highlightRE)) return 'highlight'

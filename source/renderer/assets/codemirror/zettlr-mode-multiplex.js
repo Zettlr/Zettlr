@@ -45,6 +45,13 @@ const highlightingModes = require('../../../common/data').highlightingModes;
         mode: CodeMirror.getMode(config, 'text/plain'),
         delimStyle: 'formatting-code-block',
         innerStyle: 'fenced-code'
+      },
+      {
+        open: /\$\$\s*$/,
+        close: /\$\$\s*$/,
+        mode: CodeMirror.getMode(config, { name: 'stex', inMathMode: true }),
+        delimStyle: 'formatting-code-block',
+        innerStyle: 'fenced-code multiline-equation'
       }
     )
   })
