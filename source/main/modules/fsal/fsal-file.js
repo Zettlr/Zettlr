@@ -75,6 +75,7 @@ function metadata (fileObject) {
     'target': fileObject.target,
     'modtime': fileObject.modtime,
     'creationtime': fileObject.creationtime,
+    'firstHeading': fileObject.firstHeading,
     'frontmatter': fileObject.frontmatter,
     'linefeed': fileObject.linefeed,
     'modified': fileObject.modified
@@ -114,6 +115,7 @@ async function parseFile (filePath, cache, parent = null) {
     'modtime': 0, // Modification time
     'creationtime': 0, // Creation time
     'linefeed': '\n',
+    'firstHeading': undefined, // May contain the first heading level 1
     'frontmatter': undefined, // May contain frontmatter variables
     // This variable is only used to transfer the file contents to and from
     // the renderer. It will be empty all other times, because otherwise the
@@ -181,6 +183,9 @@ function parseFileContents (file, content) {
   // Get the word and character count
   file.wordCount = countWords(content)
   file.charCount = countWords(content, true)
+
+  let h1Match = /^#{1}\s(.+)$/m.exec(content)
+  if (h1Match !== null) file.firstHeading = h1Match[1]
 
   // Extract a potential YAML frontmatter
   file.frontmatter = undefined // Reset first

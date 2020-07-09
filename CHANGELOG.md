@@ -10,6 +10,7 @@
 - Added feedback if there was no directory selected, but one is needed to do a certain task.
 - Multiline math equations now feature syntax highlighting.
 - Fixed a bug that would sometimes render parts of multiline equations as headings.
+- Added an option to tell Zettlr to use the first heading level 1 of a file to display instead of the filename (however, a frontmatter title will override this).
 
 ## Under the Hood
 

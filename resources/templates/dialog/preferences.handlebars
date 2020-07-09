@@ -497,6 +497,14 @@
             </label>
             <label for="pref-display-creationtime">{{i18n "dialog.preferences.creationtime"}}</label>
           </div>
+          <hr>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="display.useFirstHeadings" value="yes" id="display.useFirstHeadings" {{#if display.useFirstHeadings}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="display.useFirstHeadings">{{i18n "dialog.preferences.display.use_first_headings"}}</label>
+          </div>
         </div>
         <div class="box-right">
           <p>{{i18n "dialog.preferences.display.preview_info"}}</p>
