@@ -6,6 +6,7 @@
 - Added syntax highlighting modes (with keywords):
     - **Clojure**: `clojure`
 - Fixed a bug where the trailing `---` of a YAML frontmatter would mistakenly be identified by the renderer as ATX-headings in readability mode, resulting in weird display of the last YAML frontmatter line.
+- Added feedback if there was no directory selected, but one is needed to do a certain task.
 
 ## Under the Hood
 

@@ -165,7 +165,7 @@ class ZettlrBody {
     */
   requestFileName (dir, newFileButton = false) {
     // No directory selected.
-    if (!dir) return
+    if (!dir) return this.notify(trans('system.please_select_directory'))
 
     // Don't open multiple popups
     if (this._currentPopup) this._currentPopup.close(true)
@@ -235,7 +235,7 @@ class ZettlrBody {
     */
   requestDirName (dir) {
     // No directory selected.
-    if (!dir) return
+    if (!dir) return this.notify(trans('system.please_select_directory'))
     // Prevent multiple popups
     if (this._currentPopup) this._currentPopup.close(true)
 
