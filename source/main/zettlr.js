@@ -16,6 +16,7 @@
 
 const { app } = require('electron')
 const path = require('path')
+const fs = require('fs')
 
 // Internal classes
 const ZettlrIPC = require('./zettlr-ipc.js')
@@ -23,12 +24,13 @@ const ZettlrWindow = require('./zettlr-window.js')
 const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
 const ZettlrStats = require('./zettlr-stats.js')
 const FSAL = require('./modules/fsal')
-const { loadI18nMain, trans } = require('../common/lang/i18n')
+const { loadI18nMain, trans, findLangCandidates } = require('../common/lang/i18n')
 const ignoreDir = require('../common/util/ignore-dir')
 const ignoreFile = require('../common/util/ignore-file')
 const isDir = require('../common/util/is-dir')
 const isFile = require('../common/util/is-file')
 const loadCommands = require('./commands/_autoload')
+const hash = require('../common/util/hash')
 
 /**
  * The Zettlr class handles every core functionality of Zettlr. Nothing works
@@ -103,13 +105,21 @@ class Zettlr {
     // must update the config to reflect this.
     if (metadata.tag !== global.config.get('appLang')) global.config.set('appLang', metadata.tag)
 
+    // Now that the config provider is definitely set up, let's see if we
+    // should copy the interactive tutorial to the documents directory.
+    if (global.config.isFirstStart()) {
+      global.log.info(`[First Start] Copying over the interactive tutorial to ${app.getPath('documents')}!`)
+      this._prepareFirstStart()
+    }
+
     // Boot up the IPC.
     this.ipc = new ZettlrIPC(this)
 
-    // Statistics
+    // Statistics TODO: Convert to provider
     this.stats = new ZettlrStats(this)
 
     // Load in the Quicklook window handler class
+    // TODO: Convert to provider (or?)
     this._ql = new ZettlrQLStandalone()
 
     // And the window.
@@ -129,23 +139,19 @@ class Zettlr {
     // Listen to changes in the file system
     this._fsal.on('fsal-state-changed', (objPath, info) => {
       // Emitted when anything in the state changes
-      console.log(`FSAL state changed: ${objPath}`)
       if (this.isBooting) return // Only propagate these results when not booting
       switch (objPath) {
         // The root filetree has changed (added or removed root)
         case 'filetree':
           // Nothing specific, so send the full payload
-          console.log('Sending full directory tree')
           global.ipc.send('paths-update', this._fsal.getTreeMeta())
           break
         case 'directory':
           // Only a directory has changed
-          console.log('Sending small directory update')
           global.application.dirUpdate(info.oldHash, info.newHash)
           break
         case 'file':
           // Only a file has changed
-          console.log('Sending small file update')
           global.application.fileUpdate(info.oldHash, info.newHash)
           break
         case 'fileSaved':
@@ -155,12 +161,10 @@ class Zettlr {
           this._onFileContentsChanged(info)
           break
         case 'openDirectory':
-          console.log('+++++ SENDING NEW DIRECTORY TO RENDERER +++++')
           this.ipc.send('dir-set-current', (this.getCurrentDir()) ? this.getCurrentDir().hash : null)
           global.config.set('lastDir', (this.getCurrentDir()) ? this.getCurrentDir().hash : null)
           break
         case 'openFiles':
-          console.log('+++++ SYNCING OPEN FILES WITH RENDERER +++++')
           this.ipc.send('sync-files', this._fsal.getOpenFiles())
           global.config.set('openFiles', this._fsal.getOpenFiles())
           if (!this.isModified()) this.getWindow().clearModified()
@@ -418,9 +422,13 @@ class Zettlr {
       } else if ((newDir = this._fsal.findDir(f)) != null) {
         // Do nothing
       } else if (global.config.addPath(f)) {
-        this._fsal.loadPath(f)
+        let loaded = await this._fsal.loadPath(f)
+        if (!loaded) continue
+        let file = this._fsal.findFile(f)
+        if (file) this.openFile(file.hash)
       } else {
         global.ipc.notify(trans('system.error.open_root_error', path.basename(f)))
+        global.log.error(`Could not open new root file ${f}!`)
       }
     }
 
@@ -503,7 +511,6 @@ class Zettlr {
    * @param {Number} arg The hash of a file to open
    */
   async openFile (arg) {
-    console.log('Opening file ... ' + arg)
     // arg contains the hash of a file.
     // findFile now returns the file object
     let file = this.findFile(arg)
@@ -579,6 +586,49 @@ class Zettlr {
   }
 
   /**
+   * This function prepares the app on first start, which includes copying over the tutorial.
+   */
+  _prepareFirstStart () {
+    let tutPath = path.join(__dirname, './assets/tutorial')
+    let targetPath = path.join(app.getPath('documents'), 'Zettlr Tutorial')
+    let candidates = fs.readdirSync(tutPath, { 'encoding': 'utf8' })
+
+    candidates = candidates
+      .map(e => { return { 'tag': e, 'path': path.join(tutPath, e) } })
+      .filter(e => isDir(e.path))
+
+    let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates)
+
+    let tutorial = path.join(__dirname, './assets/tutorial/en')
+    if (exact) tutorial = exact.path
+    if (!exact && close) tutorial = close.path
+
+    // Now we have both a target and a language candidate, let's copy over the files!
+    try {
+      fs.lstatSync(targetPath)
+      // Already exists! Abort!
+      global.log.error(`The directory ${targetPath} already exists - won't overwrite!`)
+      return
+    } catch (e) {
+      fs.mkdirSync(targetPath)
+
+      // Now copy over every file from the directory
+      let contents = fs.readdirSync(tutorial, { 'encoding': 'utf8' })
+      for (let file of contents) {
+        fs.copyFileSync(path.join(tutorial, file), path.join(targetPath, file))
+      }
+      global.log.info('Successfully copied the tutorial files', contents)
+
+      // Now the last thing to do is set it as open
+      global.config.addPath(targetPath)
+      // Also set the welcome.md as open
+      global.config.addFile(path.join(targetPath, 'welcome.md'))
+      // ALSO the directory needs to be opened
+      global.config.set('lastDir', hash(targetPath))
+    }
+  }
+
+  /**
    * Convenience function to send a full file object to the renderer
    */
   sendPaths () { global.ipc.send('paths-update', this._fsal.getTreeMeta()) }
@@ -586,13 +636,7 @@ class Zettlr {
   /**
    * Sends all currently opened files to the renderer
    */
-  async sendOpenFiles () {
-    let files = this._fsal.getOpenFiles()
-
-    for (let hash of files) {
-      await this.sendFile(hash)
-    }
-  }
+  sendOpenFiles () { global.ipc.send('sync-files', this._fsal.getOpenFiles()) }
 
   // Getters
 
@@ -607,18 +651,6 @@ class Zettlr {
     * @return {ZettlrIPC}  The IPC object
     */
   getIPC () { return this.ipc }
-
-  /**
-    * Returns the updater
-    * @return {ZettlrUpdater} The updater.
-    */
-  getUpdater () { return this._updater }
-
-  /**
-    * Returns the watchdog
-    * @return {ZettlrWatchdog} The watchdog instance.
-    */
-  getWatchdog () { return this.watchdog }
 
   /**
     * Returns the stats
@@ -642,12 +674,6 @@ class Zettlr {
    * Returns the File System Abstraction Layer
    */
   getFileSystem () { return this._fsal }
-
-  /**
-    * Called by the root directory to determine if it is root.
-    * @return {Boolean} Always returns false.
-    */
-  isDirectory () { return false }
 
   /**
     * Are there unsaved changes currently in the file system?

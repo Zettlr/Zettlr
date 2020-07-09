@@ -99,6 +99,7 @@ module.exports = class EditorTabs {
   }
 
   syncFiles (files, openFile) {
+    console.log(`[TABS] Synching ${files.length} files`)
     // First reset the whole tab bar
     for (let instance of this._tippyInstances) {
       instance.destroy()
@@ -120,7 +121,7 @@ module.exports = class EditorTabs {
       let file = document.fileObject
       let isDocumentClean = document.cmDoc.isClean()
       let isActiveFile = file.hash === openFile
-      let elem = this._makeElement(file, isActiveFile, isDocumentClean)
+      let elem = this._makeElement(file, isActiveFile, isDocumentClean, document.transient || false)
       this._div.appendChild(elem)
     }
 
@@ -188,6 +189,10 @@ module.exports = class EditorTabs {
     if (elem.tagName === 'SVG') elem = elem.parentElement
     // After these IFs we should have the clr-icon if the user clicked the X
 
+    // Transient tabs further embed their filenames in an <em>-tag, which we
+    // account for here.
+    if (elem.tagName === 'EM') elem = elem.parentElement
+
     if (elem.getAttribute('id') === 'document-tabs') return // No file selected
 
     let closeIntent = elem.classList.contains('close')
@@ -207,7 +212,7 @@ module.exports = class EditorTabs {
    * @param {boolean} active Whether the file is currently active
    * @param {boolean} clean Whether the document is clean or contains changes
    */
-  _makeElement (file, active = false, clean = true) {
+  _makeElement (file, active = false, clean = true, transient = false) {
     // First determine the display title (either filename or frontmatter title)
     let displayTitle = file.name
     if (file.frontmatter && file.frontmatter.title) displayTitle = file.frontmatter.title
@@ -225,6 +230,7 @@ module.exports = class EditorTabs {
     doc.dataset['tippyContent'] += ', ' + localizeNumber(file.charCount) + ' ' + trans('dialog.target.chars')
     // From here on, possible information begins, so we have to add <br>s before
     if (file.id !== '') doc.dataset['tippyContent'] += '<br>ID: ' + file.id
+    if (file.tags.length > 0) doc.dataset['tippyContent'] += '<br>' + file.tags.map(tag => '<span class="tag">#' + tag + '</span>').join(' ')
 
     // Mark it as active and/or modified, if applicable
     if (active) doc.classList.add('active')
@@ -233,7 +239,15 @@ module.exports = class EditorTabs {
     // Next create the name span containing the display title
     let nameSpan = document.createElement('span')
     nameSpan.classList.add('filename')
-    nameSpan.innerText = displayTitle
+
+    // Apply the transient style if applicable
+    if (transient) {
+      let em = document.createElement('em')
+      em.innerText = displayTitle
+      nameSpan.appendChild(em)
+    } else {
+      nameSpan.innerText = displayTitle
+    }
 
     // Also enable closing of the document
     let closeIcon = document.createElement('clr-icon')

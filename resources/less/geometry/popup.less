@@ -71,74 +71,75 @@
 }
 
 .popup {
-  position:fixed;
-  max-width:250px; // Maximum width.
-  max-height:600px; // Maximum height. If its too much simply scroll.
+  position: fixed;
+  max-width: 350px; // Maximum width.
+  max-height: 600px; // Maximum height. If its too much simply scroll.
   overflow-y: auto;
   overflow-x: hidden;
 
   // TOC links
   a.toc-link {
-    text-decoration:none;
-    display:block;
-    line-height:150%;
-    padding:4px;
+    text-decoration: none;
+    display: block;
+    line-height: 150%;
+    padding: 4px;
     overflow-x: hidden;
-    white-space:nowrap;
+    white-space: nowrap;
   }
 
   p {
-    margin:10px;
-    text-align:center;
+    margin: 10px;
+    text-align: center;
   }
 
   table {
-    vertical-align:middle;
+    vertical-align: middle;
 
-    td { padding:4px; }
+    td { padding: 4px; }
   }
 
   button {
-    border:none;
-    font-size:200%;
-    width:100%;
-    padding:10px;
-    display:block;
-    text-align:center;
+    border: none;
+    font-size: 200%;
+    width: 100%;
+    padding: 10px;
+    display: block;
+    text-align: center;
   }
 
   // Elements inside popups
   form {
     input {
-      padding:5px;
-      font-size:200%;
-      display:block;
-      border:none;
-      width:100%;
-      text-align:center;
+      padding: 5px;
+      font-size: 200%;
+      display: block;
+      border: none;
+      width: 100%;
+      text-align: center;
 
-      &:focus { outline:0; }
+      &:focus { outline: 0; }
 
       &.small {
-        font-size:140%;
-        text-align:left;
+        font-size: 140%;
+        text-align: left;
+        width: 350px; // Single-input areas can be somewhat wider
       }
     }
 
     input[type="checkbox"] {
-      display:inline-block;
-      margin:5px;
-      width:auto;
+      display: inline-block;
+      margin: 5px;
+      width: auto;
     }
 
     label {
       display: inline-block;
-      margin:5px;
+      margin: 5px;
     }
   }
 
   // Share buttons
-  .row { display:flex; } // Also used by the table generator
+  .row { display: flex; } // Also used by the table generator
   .table-generator { padding: 5px; }
   .table-generator .row .cell {
     flex-grow: 1;
@@ -157,7 +158,7 @@
       background-image: url('../img/html5.svg');
       &:hover {
         /* W3C color code */
-        background-color:rgb(78, 175, 87);
+        background-color: rgb(78, 175, 87);
       }
     }
 
@@ -165,7 +166,7 @@
       background-image: url('../img/pdf.svg');
       &:hover {
         /* Adobe reader PDF color code */
-        background-color:lighten(rgb(253, 48, 26), 10%);
+        background-color: lighten(rgb(253, 48, 26), 10%);
       }
     }
 
@@ -173,7 +174,7 @@
       background-image: url('../img/docx.svg');
       &:hover {
         /* MS Word color code */
-        background-color:lighten(rgb(45, 88, 151), 10%);
+        background-color: lighten(rgb(45, 88, 151), 10%);
       }
     }
 
@@ -182,8 +183,8 @@
     }
 
     &.odt, &.tex, &.plain {
-      color:rgba(20, 20, 20, 1);
-      &:hover { background-color:rgba(220, 220, 220, 1); color:black; }
+      color: rgba(20, 20, 20, 1);
+      &:hover { background-color: rgba(220, 220, 220, 1); color:black; }
     }
 
     &.revealjs,
@@ -278,27 +279,25 @@
 
   // The revealjs theme selector's visibility
   #reveal-themes {
-    transition:0.2s height ease;
+    transition: 0.2s height ease;
     height: @size-share-buttons * 2;
-    overflow:hidden;
-    &.hidden {
-      height:0px;
-    }
+    overflow: hidden;
+    &.hidden { height: 0px; }
   }
 
   // Formatting
   .formatting {
     a {
-      text-decoration:none;
-      display:block;
-      padding:5px 10px;
+      text-decoration: none;
+      display: block;
+      padding: 5px 10px;
 
       &#header-formatting {
         display:flex;
         &::before {
           font-family: inherit;
           font-weight: bold;
-          padding:10px 0px;
+          padding: 10px 0px;
         }
       }
 
@@ -308,20 +307,20 @@
       span.markdownHeading4,
       span.markdownHeading5,
       span.markdownHeading6 {
-        display:inline-block;
-        padding:5px 0px;
+        display: inline-block;
+        padding: 5px 0px;
         flex: 1;
-        text-align:center;
-        font-weight:bold;
+        text-align: center;
+        font-weight: bold;
       }
 
       &::before {
         font-family: @font-icon;
-        font-size:@font-size-small * 0.8;
-        margin-right:13px;
-        margin-left:5px;
+        font-size: @font-size-small * 0.8;
+        margin-right: 13px;
+        margin-left: 5px;
         width: 20px;
-        display:inline-block;
+        display: inline-block;
       }
 
       & clr-icon {
@@ -348,48 +347,48 @@
     }
 
     hr {
-      margin:14px 20px;
-      border:none;
-      border-bottom-width:1px;
+      margin: 14px 20px;
+      border: none;
+      border-bottom-width: 1px;
       border-bottom-style: solid;
     }
   }
 
   // SEARCH POPUP
   .search {
+    width: 350px; // Make use of the bigger width
+
     .row { display: flex; }
     input {
       /** flex layout of the search popup:
       * 6 4
       * 6 3 1
       */
-      font-size:100%;
+      font-size: 100%;
       flex: 0 6 auto; // 60 percent width -- set first param to 0 for alignment
-      text-align:left;
-      width:60%;
+      text-align: left;
+      width: 60%;
       background-color: transparent;
-      color:inherit;
-      padding:5px;
-      border:none;
-      &:focus {
-        outline:0;
-      }
+      color: inherit;
+      padding: 5px;
+      border: none;
+      &:focus { outline: 0; }
 
       // Use monospaced font for regular expressions.
       &.regexp { font-family: @font-code; }
     }
 
     button {
-      width:auto;
-      padding:5px 2px;
-      margin:0px;
-      border-radius:2px;
-      overflow:hidden;
+      width: auto;
+      padding: 5px 2px;
+      margin: 0px;
+      border-radius: 2px;
+      overflow: hidden;
       outline: 0;
 
       &#searchNext { flex: 4 4 auto; } // 40 percent width
-      &#replaceNext { flex: 3 3 auto; } // 30 percent width
-      &#replaceAll { flex: 1 1 auto; } // 10 percent width
+      &#replaceNext { flex: 2 2 auto; } // 20 percent width
+      &#replaceAll { flex: 2 2 auto; } // 20 percent width
     }
   }
 
@@ -398,12 +397,12 @@
   // Footnote edit popup
   .footnote-edit {
     textarea {
-      font-size:@font-size-base;
-      min-height:150px;
-      border:none;
-      width:250px; // Maximum width
+      font-size: @font-size-base;
+      min-height: 150px;
+      border: none;
+      width: 250px; // Maximum width
 
-      &:focus { outline:0; }
+      &:focus { outline: 0; }
     }
   }
 

@@ -286,7 +286,7 @@
             </label>
             <label for="pref-editor-direction-rtl">{{i18n "dialog.preferences.editor_setting.direction_rtl"}}</label>
           </div>
-          
+
           <hr>
           <div class="cb-group">
             {{i18n "dialog.preferences.input_mode"}}
@@ -896,7 +896,25 @@
             <button type="button" id="reset-pandoc-command" data-tippy-content="{{i18n "dialog.preferences.reset_pandoc_command"}}"><clr-icon shape="refresh"></clr></button>
           </div>
           <span class="info">Variables: $citeproc$, $format$, $infile$, $indir$, $outfile$, $outflag$, $standalone$, $toc$, $tocdepth$, $tpl$</span>
-        </div>
+
+          <hr>
+
+          {{!-- Watchdog polling compatibility options --}}
+          <p>
+            {{i18n "dialog.preferences.watchdog_explainer"}}
+          </p>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="watchdog.activatePolling" value="yes" id="activateWatchdogPolling" {{#if watchdog.activatePolling}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="activateWatchdogPolling">{{i18n "dialog.preferences.watchdog_checkbox_label"}}</label>
+          </div>
+
+          <input class="inline time" type="number" min="0" max="10000" step="1" name="watchdog.stabilityThreshold" id="watchdogPollingStability" value="{{watchdog.stabilityThreshold}}" placeholder="1000">
+          <label class="" for="watchdogPollingStability">{{i18n "dialog.preferences.watchdog_threshold_label"}}</label>
+
+        </div> <!-- End box right -->
       </div>
     </div>
     <div class="prefs-submit-group">

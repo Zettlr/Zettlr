@@ -181,11 +181,20 @@ class ZettlrDialog extends EventEmitter {
     // clicking them.
     this._modal.find('.request-file').on('click', (event) => {
       let elem = $(event.target)
+      if (event.target.tagName.toLowerCase() === 'clr-icon') elem = $(event.target.parentElement)
+
       let payload = {}
+      let extensions = elem.attr('data-request-ext')
+      if (extensions.indexOf(',') > 0) {
+        extensions = extensions.split(',')
+      } else {
+        extensions = [extensions]
+      }
+
       // Only one filter possible for brevity reasons
       payload.filters = [{
         'name': elem.attr('data-request-name'),
-        'extensions': elem.attr('data-request-ext').split(',')
+        'extensions': extensions
       }]
       payload.multiSel = false
 

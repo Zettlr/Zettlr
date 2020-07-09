@@ -67,8 +67,8 @@ class ZettlrEditor {
     this._div = $('#editor')
     this._openFiles = [] // Holds all open files in the editor
     this._currentHash = null // Needed for positions
+    this._transientHashes = [] // An array of hashes that when opened should be opened transient
 
-    this._words = 0 // Currently written words
     this._fontsize = 100 // Font size (used for zooming)
     this._timeout = null // Stores a current timeout for a save-command
 
@@ -94,10 +94,6 @@ class ZettlrEditor {
     this._lastMode = MD_MODE // Default mode
 
     this._countChars = false // Whether or not Zettlr should count characters as words (e.g., for Chinese)
-
-    // Pinch gestures are a pain, but here we go: STATE!
-    this._pointerEvents = []
-    this._pointerDiff = -1
 
     // This Markdown to HTML converter is used in various parts of the
     // class to perform converting operations.
@@ -127,6 +123,11 @@ class ZettlrEditor {
     // Caches the width of a space (in normal font and in monospace font)
     this._spaceWidth = 0
     this._monospaceWidth = 0
+
+    global.editor.announceTransientFile = (hash) => {
+      if (this._openFiles.find(e => e.fileObject.hash === hash)) return
+      this._transientHashes.push(hash)
+    }
 
     this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
       mode: MD_MODE,
@@ -216,12 +217,13 @@ class ZettlrEditor {
 
     this._cm.on('change', (cm, changeObj) => {
       let newText = changeObj.text
+      let file = this._getActiveFile()
 
       if (changeObj.origin === 'paste' && newText.join(' ').split(' ').length > 10) {
         // In case the user pasted more than ten words don't let these count towards
         // the word counter. Simply update the word count before the save function
         // is triggered. This way none of the just pasted words will count.
-        this.getWrittenWords()
+        file.lastWordCount = countWords(file.cmDoc.getValue(), this._countChar)
       }
 
       if (changeObj.origin !== 'setValue') {
@@ -230,6 +232,13 @@ class ZettlrEditor {
         // Clear the timeouts in any case
         if (this._timeout) clearTimeout(this._timeout)
         if (this._citationTimeout) clearTimeout(this._citationTimeout)
+
+        // At this moment, the document also is no longer considered transient
+        if (file.transient) {
+          file.transient = false
+          // Synchronise the file changes to the document tabs
+          this._tabs.syncFiles(this._openFiles, this._currentHash)
+        }
 
         // Check if the change actually modified the doc or not.
         if (this._cm.doc.isClean()) {
@@ -244,9 +253,7 @@ class ZettlrEditor {
           this._tabs.markDirty(this._currentHash)
           // Set the autosave timeout
           this._timeout = setTimeout((e) => {
-            // NOTE that the renderer will pull the currently active file from
-            // the editor in any case, so the state is maintained.
-            this._renderer.saveFile()
+            this.saveFiles()
           }, SAVE_TIMOUT)
         }
       }
@@ -316,6 +323,8 @@ class ZettlrEditor {
     })
 
     this._cm.on('renderLine', (cm, line, elt) => {
+      // Disable on non-Markdown text
+      if (cm.getModeAt({ 'line': cm.doc.getLineNumber(line), 'ch': 0 }).name !== 'markdown') return
       // Need to calculate indent and padding in order to provide a proper hanging indent
       // Originally based on https://discuss.codemirror.net/t/hanging-indent/243/2
       let monospaceWidth = this.computeMonospaceWidth()
@@ -358,6 +367,21 @@ class ZettlrEditor {
       }
     })
 
+    this._cm.on('mousedown', (cm, event) => {
+      // Ignore click events if they attempt to perform a special action
+      let target = event.target
+      let specialClasses = [ 'cma', 'cm-zkn-tag', 'cm-zkn-link' ]
+      let macMeta = process.platform === 'darwin' && event.metaKey
+      let otherCtrl = process.platform !== 'darwin' && event.ctrlKey
+      let isSpecial = false
+      for (let c of specialClasses) {
+        if (target.classList.contains(c)) isSpecial = true
+      }
+      let isFootnote = target.classList.contains('cm-link') && target.innerText.indexOf('^') === 0
+
+      if ((isSpecial || isFootnote) && (macMeta || otherCtrl)) event.codemirrorIgnore = true
+    })
+
     this._cm.getWrapperElement().addEventListener('click', (e) => {
       // Open links on both Cmd and Ctrl clicks - otherwise stop handling event
       if (process.platform === 'darwin' && !e.metaKey) return true
@@ -365,15 +389,19 @@ class ZettlrEditor {
 
       e.preventDefault()
 
-      let elem = $(e.target)
-      if (elem.hasClass('cm-zkn-tag')) {
-        // The user clicked a zkn link -> create a search
-        this._renderer.autoSearch(elem.text())
-      } else if (elem.hasClass('cm-zkn-link')) {
-        this._renderer.autoSearch(elem.text(), true)
-      } else if (elem.hasClass('cm-link') && elem.text().indexOf('^') === 0) {
-        // We've got a footnote
-        this._editFootnote(elem)
+      let cursor = this._cm.coordsChar({ left: e.clientX, top: e.clientY })
+      let tokenInfo = this._cm.getTokenAt(cursor)
+      let tokenList = tokenInfo.type.split(' ')
+      let startsWithCirc = tokenInfo.string.indexOf('^') === 0
+
+      if (tokenList.includes('zkn-link')) {
+        this._renderer.autoSearch(tokenInfo.string, true)
+      } else if (tokenList.includes('zkn-tag')) {
+        this._renderer.autoSearch(tokenInfo.string)
+      } else if (tokenList.includes('link') && startsWithCirc) {
+        this._editFootnote($(e.target))
+      } else {
+        console.log('No success', tokenInfo)
       }
     })
 
@@ -466,7 +494,7 @@ class ZettlrEditor {
     if (this._renderHTags) this._cm.execCommand('markdownRenderHTags') // Render heading levels
     if (this._renderIframes) this._cm.execCommand('markdownRenderIframes') // Render iFrames
     if (this._wysiwyg) this._cm.execCommand('markdownWYSIWYG') // Render all other elements
-    this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
+    if (this._cm.getOption('mode').name !== 'readability') this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
     this._cm.execCommand('markdownCodeblockClasses') // Apply code block classes
     if (this._cm.getOption('fullScreen') && this._mute) this._muteLines()
 
@@ -539,10 +567,35 @@ class ZettlrEditor {
       // it's easier to have the file object bound here that all
       // of the renderer is working with.
       let fileTreeObject = this._renderer.findObject(file.hash)
-      this._openFiles.push({
-        'fileObject': fileTreeObject,
-        'cmDoc': CodeMirror.Doc(file.content, mode)
-      })
+
+      let shouldBeTransient = false
+      if (this._transientHashes.includes(file.hash)) {
+        let idx = this._transientHashes.indexOf(file.hash)
+        this._transientHashes.splice(idx, 1)
+        shouldBeTransient = true
+      }
+
+      // Lastly, we need to determine if the current document is considered
+      // transient. If it is, this means we need to "close" it.
+      // At this moment, the document also is no longer considered transient
+      let activeFile = this._getActiveFile()
+      if (activeFile && activeFile.transient) {
+        // We'll attempt to close the tab, as this function fulfills the functionality we need
+        this.attemptCloseTab()
+        // Swap out all properties of the current tab
+        activeFile.fileObject = fileTreeObject
+        activeFile.cmDoc = CodeMirror.Doc(file.content, mode)
+        activeFile.transient = shouldBeTransient
+        activeFile.lastWordCount = countWords(file.content, this._countChars)
+      } else {
+        // Simply append to the end of the array
+        this._openFiles.push({
+          'fileObject': fileTreeObject,
+          'cmDoc': CodeMirror.Doc(file.content, mode),
+          'transient': shouldBeTransient,
+          'lastWordCount': countWords(file.content, this._countChars)
+        })
+      }
     }
 
     // I know that I will make this mistake in the future, so here's why we
@@ -550,9 +603,6 @@ class ZettlrEditor {
     // different function to do so. Use it! Don't monkey path _swapFiles. NO
     // content replacement here!
     this._swapFile(file.hash)
-
-    // If we've got a new file, we need to re-focus the editor
-    if (flag === 'new-file') this._cm.focus()
 
     return this
   }
@@ -572,9 +622,6 @@ class ZettlrEditor {
     this._currentHash = hash
     this._cm.setOption('markdownImageBasePath', path.dirname(file.fileObject.path))
 
-    // Reset the word count to match the now active file
-    this._words = countWords(this._cm.getValue(), this._countChars)
-
     // Synchronise the file changes to the document tabs
     this._tabs.syncFiles(this._openFiles, this._currentHash)
 
@@ -583,7 +630,6 @@ class ZettlrEditor {
 
     // We also need to tell the autocompletion to rebuild the index
     this.signalUpdateFileAutocomplete()
-
     this._renderer.signalActiveFileChanged()
 
     // Last but not least: If there are any search results currently
@@ -594,6 +640,8 @@ class ZettlrEditor {
     global.store.set('selectedFile', this._currentHash)
     // Same for the main process
     global.ipc.send('set-active-file', { 'hash': this._currentHash })
+
+    this._cm.focus() // DEBUG Check for side effects
   }
 
   /**
@@ -620,8 +668,8 @@ class ZettlrEditor {
       }
     }
 
-    // New tags mean we might have potential new file matches --> signal this
-    // to the autocompletion.
+    // New tags mean we might have potential new file matches
+    // --> signal this to the autocompletion.
     this.signalUpdateFileAutocomplete()
 
     // Last but not least, exchange the current hash, if not present anymore.
@@ -666,31 +714,6 @@ class ZettlrEditor {
   }
 
   /**
-   * Silently adds a file to the array of open files.
-   * @param {Object} fileObject A file descriptor with content
-   */
-  addFileToOpen (fileObject) {
-    // Check if the file is already open; prevent duplicates.
-    if (this._openFiles.find(elem => elem.fileObject.hash === fileObject.hash)) return
-    // This function is called by the IPC when there's a new file
-    // synchronisation request answered by main. Let's simply push it to the
-    // array of open files without touching any other logic.
-    let fileTreeObject = this._renderer.findObject(fileObject.hash)
-    let mode = MD_MODE
-    if (fileObject.ext === '.tex') mode = TEX_MODE
-    this._openFiles.push({
-      'fileObject': fileTreeObject,
-      'cmDoc': CodeMirror.Doc(fileObject.content, mode)
-    })
-
-    // If there's no file open, open this one.
-    if (!this._currentHash) this._swapFile(fileObject.hash)
-
-    // Propagate changes
-    this._tabs.syncFiles(this._openFiles, this._currentHash)
-  }
-
-  /**
    * Hot-swaps the contents of one of the currently opened files.
    * @param {number} hash The file's hash
    * @param {string} contents The new file contents
@@ -699,10 +722,13 @@ class ZettlrEditor {
   replaceFileContents (hash, contents) {
     let openedFile = this._openFiles.find((e) => e.fileObject.hash === hash)
     if (openedFile) {
+      let cursor = JSON.parse(JSON.stringify(openedFile.cmDoc.getCursor()))
       openedFile.cmDoc.setValue(contents)
+      openedFile.cmDoc.setCursor(cursor)
       // Now mark clean this one document using the function, which also takes
       // care to instruct main to remove the edit flag if applicable.
       this.markClean(openedFile.fileObject.hash)
+      openedFile.lastWordCount = countWords(contents, this._countChars)
     } else {
       console.warn('Cannot replace the file contents of file ' + hash + ': No open file found!')
     }
@@ -726,7 +752,6 @@ class ZettlrEditor {
     if (this._openFiles.length === 0) {
       // Replace with an empty new doc
       this._cm.swapDoc(CodeMirror.Doc('', MD_MODE))
-      this._words = 0
       this._currentHash = null
       this._cm.setOption('markdownImageBasePath', '') // Reset base path
       this.signalUpdateFileAutocomplete() // Autocomplete with no file match
@@ -764,6 +789,29 @@ class ZettlrEditor {
   }
 
   /**
+   * Saves the currently open and modified files. Optionally supports only saving the active file.
+   * @param {Boolean} [onlyActiveFile=false] If true, only attempts to save the active file.
+   */
+  saveFiles (onlyActiveFile = false) {
+    let filesToSave = this._openFiles
+    if (onlyActiveFile) filesToSave = [this._getActiveFile()]
+    // Go through all open files, and, if they are modified, save them
+    for (let file of filesToSave) {
+      if (file.cmDoc.isClean()) continue // No need to save
+      let descriptor = {}
+      descriptor.hash = file.fileObject.hash
+      descriptor.content = file.cmDoc.getValue()
+      let wordcount = countWords(descriptor.content, this._countChars)
+      descriptor.offsetWordcount = wordcount - file.lastWordCount
+      file.lastWordCount = wordcount
+      // Also update the file's wordcount
+      global.ipc.send('file-save', descriptor)
+      // If applicable, notify the renderer
+      if (file.fileObject.hash === this._currentHash) this._renderer.signalActiveFileChanged()
+    }
+  }
+
+  /**
    * Tab switcher functions
    */
   selectNextTab () { this._tabs.selectNext() }
@@ -776,6 +824,12 @@ class ZettlrEditor {
     let activeFile = this._openFiles.find(elem => elem.fileObject.hash === this._currentHash)
     return (activeFile) ? activeFile.fileObject : undefined
   }
+
+  /**
+   * Returns the current active file content. NOTE: This is the internal version
+   * that returns the full object, not just the fileObject.
+   */
+  _getActiveFile () { return this._openFiles.find(e => e.fileObject.hash === this._currentHash) }
 
   /**
     * Toggles the distraction free mode
@@ -951,23 +1005,12 @@ class ZettlrEditor {
     }
 
     if (this._cm.somethingSelected()) {
-      ret.words_sel = countWords(this._cm.getSelections().join(' '), this._countChars)
-      ret.chars_sel = this._cm.getSelections().join('').length
+      let selections = this._cm.getSelections()
+      ret.words_sel = countWords(selections.join(' '), this._countChars)
+      ret.chars_sel = selections.join('').length
     }
 
     return ret
-  }
-
-  /**
-    * Returns the (newly) written words since the last time this function was
-    * called.
-    * @return {Integer} The delta of the word count.
-    */
-  getWrittenWords () {
-    // Return the additional written words
-    let nbr = countWords(this._cm.getValue(), this._countChars) - this._words
-    this._words = countWords(this._cm.getValue(), this._countChars)
-    return nbr
   }
 
   /**
@@ -1057,6 +1100,7 @@ class ZettlrEditor {
     $('#footnote-edit-textarea').focus()
 
     $('.popup .footnote-edit').on('keydown', (e) => {
+      // TODO switch from which to key
       if (e.which === 13 && e.shiftKey) {
         // Done editing.
         e.preventDefault()

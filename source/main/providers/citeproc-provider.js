@@ -204,7 +204,7 @@ class CiteprocProvider {
           this._bibtexAttachments = attachments
         } catch (err) { /* Do nothing */ }
       } catch (e) {
-        global.log.error('[citeproc] ' + e.message, e)
+        global.log.error('[citeproc] Could not parse library file. ' + e.message, e)
         // Nopey.
         global.ipc.notify(trans('gui.citeproc.error_db'))
         this._status = ERROR
@@ -223,7 +223,7 @@ class CiteprocProvider {
         this._items[id] = item
         this._ids[id] = true
       } catch (err) {
-        global.log.warning('[citeproc] ' + err.message)
+        global.log.warning(`[citeproc] Malformed CiteKey @${id}` + err.message)
         if (global.application.isBooting()) {
           // In case the application is still booting, cache the message and delay sending
           // TODO: This is goddamned ugly.
@@ -302,7 +302,7 @@ class CiteprocProvider {
 
       this._loadIdHint()
     } catch (e) {
-      global.log.error('[citeproc] ' + e.message, e)
+      global.log.error('[citeproc] Could not initialize the citation processor. ' + e.message, e)
       this._status = ERROR
     }
   }
@@ -422,7 +422,7 @@ class CiteprocProvider {
     try {
       citations = Citr.parseSingle(citation)
     } catch (err) {
-      global.log.error('[citeproc] ' + err.message, err)
+      global.log.error(`[citeproc] Citr.parseSingle: Could not parse citation ${citation}. ` + err.message, err)
       return undefined
     }
 
@@ -431,7 +431,7 @@ class CiteprocProvider {
     try {
       return this._engine.makeCitationCluster(citations)
     } catch (e) {
-      global.log.error('[citeproc] ' + e.message, e)
+      global.log.error(`[citeproc] makeCitationCluster: Could not create citation cluster ${citations}. ` + e.message, e)
       return undefined
     }
   }
@@ -454,7 +454,7 @@ class CiteprocProvider {
       this._engine.updateItems(this._sanitiseItemList(passed))
       return true
     } catch (e) {
-      global.log.error('[citeproc] ' + e.message, e)
+      global.log.error('[citeproc] Could not update citation cluster. ' + e.message, citations)
       return false
     }
   }

@@ -31,6 +31,7 @@
       // codeblocks themselves should not be styled)
       if (/^(?:`{3}|~{3}).*/.test(cm.getLine(i))) {
         isCodeBlock = !isCodeBlock
+        cm.removeLineClass(i, 'wrap', codeblockClass)
         continue
       }
 

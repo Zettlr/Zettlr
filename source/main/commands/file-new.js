@@ -52,6 +52,15 @@ class FileNew extends ZettlrCommand {
       // If no valid filename is provided, assume .md
       if (!ALLOWED_FILETYPES.includes(path.extname(filename))) filename += '.md'
 
+      // Check if there's already a file with this name in the directory
+      // NOTE: There are case-sensitive file systems, but we'll disallow this
+      let found = dir.children.find(e => e.name.toLowerCase() === filename.toLowerCase())
+      if (found !== undefined) {
+        // Ask before overwriting
+        let result = await this._app.getWindow().askOverwriteFile(filename)
+        if (result.response !== 1) return false // cancelId = 0; OkayID = 1
+      }
+
       // First create the file
       await this._app.getFileSystem().runAction('create-file', {
         'source': dir,

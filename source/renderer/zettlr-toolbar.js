@@ -52,8 +52,6 @@ class ZettlrToolbar {
     this._autocomplete = []
     this._oldval = ''
 
-    // Stores the mode of the word counter
-    this._fileInfoMode = 'words' // can be "words" or "cursor"
     this._lastFileInfo = null // Holds the last received fileInfo object
 
     this._act()
@@ -120,15 +118,6 @@ class ZettlrToolbar {
 
     this._fileInfo.click((e) => {
       this._renderer.getBody().showFileInfo()
-    })
-
-    this._fileInfo.contextmenu((e) => {
-      e.stopPropagation()
-      e.preventDefault()
-      // Switch to line:ch-display
-      if (this._fileInfoMode === 'words') this._fileInfoMode = 'cursor'
-      else this._fileInfoMode = 'words'
-      this.updateFileInfo()
     })
 
     // Activate buttons
@@ -238,13 +227,12 @@ class ZettlrToolbar {
     */
   updateFileInfo (fileInfo = this._lastFileInfo) {
     this._lastFileInfo = fileInfo
-    if (this._lastFileInfo.words === 0) return this.hideWordCount()
 
-    if (this._fileInfoMode === 'words') {
-      this._fileInfo.text(trans('gui.words', localiseNumber(this._lastFileInfo.words)))
-    } else if (this._fileInfoMode === 'cursor') {
-      this._fileInfo.text(`${this._lastFileInfo.cursor.line}:${this._lastFileInfo.cursor.ch}`)
-    }
+    let cnt = trans('gui.words', localiseNumber(this._lastFileInfo.words))
+    cnt += '<br>'
+    cnt += (this._lastFileInfo.cursor.line + 1) + ':' + (this._lastFileInfo.cursor.ch + 1)
+
+    this._fileInfo.html(cnt)
   }
 
   /**

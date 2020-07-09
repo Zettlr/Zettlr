@@ -13,40 +13,48 @@
 @editor-margin-normal-lg: 100px;
 
 #editor {
-  position:fixed;
-  top:@toolbar-height;
-  right:0;
-  bottom:0;
+  position: fixed;
+  top: @toolbar-height;
+  right: 0;
+  bottom: 0;
   left: calc(20% + 10px);
   overflow-x: hidden;
   overflow-y: auto;
 
-  &.fullscreen { left: 0%; padding-left: 0px; }
+  &.fullscreen {
+    left: 0%; padding-left: 0px;
+
+    // Hide the tabs in distraction-free
+    #document-tabs { display: none; }
+  }
 
   // JQUERY UI - THEME (necessary for resizable to work)
   .ui-resizable-handle {
     position: absolute;
     font-size: 0.1px;
-    display: block; }
-    .ui-resizable-disabled .ui-resizable-handle,
-    .ui-resizable-autohide .ui-resizable-handle {
-      display: none;
-    }
-    .ui-resizable-w {
-      cursor: ew-resize;
-      width: 10px;
-      left: 0px;
-      top: 0;
-      height: 100%;
-      padding: 2px;
+    display: block;
+  }
 
-      &::after {
-        content: "";
-        position: absolute;
-        width: 6px;
-        height: calc(100% - 4px);
-      }
+  .ui-resizable-disabled .ui-resizable-handle,
+  .ui-resizable-autohide .ui-resizable-handle {
+    display: none;
+  }
+
+  .ui-resizable-w {
+    cursor: ew-resize;
+    width: 10px;
+    left: 0px;
+    top: 0;
+    height: 100%;
+    padding: 2px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: calc(100% - 4px);
     }
+  }
 
     .CodeMirror {
       // The CodeMirror editor needs to respect the new tabbar; it cannot take
@@ -63,7 +71,7 @@
     }
 
     .CodeMirror-code {
-      margin:5em 0em;
+      margin: 5em 0em;
       @media(max-width: 1024px) { margin: @editor-margin-fullscreen-md 0em; }
 
       .mute { opacity:0.2; }
@@ -92,7 +100,11 @@
 // CodeMirror fullscreen
 .CodeMirror-fullscreen {
   position: fixed !important; // Have to override another relative
-  top: @toolbar-height; left: 0; right: 0; bottom: 0;
+  margin-top: 0px !important; // Normally 25px for tab bar, but not in distraction free
+  top: @toolbar-height;
+  left: 0;
+  right: 0;
+  bottom: 0;
   height: auto;
   z-index: 500;
 

@@ -144,6 +144,13 @@
           a.innerHTML = standalone
           a.title = standalone
           url = standalone
+
+          // Make sure the link is not preceeded by ]( and not followed by )
+          if (curFrom.ch > 3) {
+            let prefix = line.substr(curFrom.ch - 2, 2)
+            let suffix = line.substr(curTo.ch, 1)
+            if (prefix === '](' && suffix === ')') continue // Part of a full markdown link
+          }
         } else if (email) {
           // In case of an email, the same except the URL (which gets
           // an added mailto protocol handler).

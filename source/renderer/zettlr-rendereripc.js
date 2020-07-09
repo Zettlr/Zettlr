@@ -216,7 +216,7 @@ class ZettlrRendererIPC {
         'content': arg
       }
 
-      this._app.saveFile()
+      this._app.getEditor().saveFiles() // Save all files just in case
       return
     }
 
@@ -303,6 +303,7 @@ class ZettlrRendererIPC {
         this._app.setCurrentDir(cnt)
         break
 
+      // TODO: What the heck is that a kind of "name"?
       case 'dir-find':
       // User wants to search in current directory.
         this._app.getToolbar().focusSearch()
@@ -311,6 +312,16 @@ class ZettlrRendererIPC {
       case 'dir-open':
       // User has requested to open another folder. Notify host process.
         this.send('dir-open')
+        break
+
+      // The user wants to open a dir externally (= in finder etc)
+      case 'dir-open-externally':
+        require('electron').shell.openPath(this._app.findObject(parseInt(cnt.hash, 10)).path)
+          .then(potentialError => {
+            if (potentialError !== '') {
+              console.error('Could not open attachment:' + potentialError)
+            }
+          })
         break
 
       case 'dir-rename':
@@ -368,8 +379,13 @@ class ZettlrRendererIPC {
 
         // FILES
 
+      case 'file-request-sync':
       case 'file-open':
         this._app.openFile(cnt)
+        break
+
+      case 'announce-transient-file':
+        global.editor.announceTransientFile(cnt.hash)
         break
 
       case 'file-close':
@@ -377,7 +393,7 @@ class ZettlrRendererIPC {
         break
 
       case 'file-save':
-        this._app.saveFile()
+        this._app.getEditor().saveFiles(true) // true means only save active file
         break
 
       // Replace all properties of a file (e.g. on rename)
@@ -394,11 +410,12 @@ class ZettlrRendererIPC {
         this._app.getEditor().syncFiles(cnt)
         break
 
-      case 'file-request-sync':
-        // This is the answer from main with a file and its contents which
-        // we simply need to add to the open files
-        this._app.getEditor().addFileToOpen(cnt)
-        break
+        // case 'file-request-sync':
+        //   // NOTE: We're now perfoming the same action as file-open
+        //   // This is the answer from main with a file and its contents which
+        //   // we simply need to add to the open files
+        //   this._app.getEditor().addFileToOpen(cnt)
+        //   break
 
       // Replace a full directory tree (e.g., on rename or modification of the children)
       case 'dir-replace':

@@ -54,8 +54,9 @@ class ForceOpen extends ZettlrCommand {
       }
     }
 
-    // If any of this has worked,
     if (file != null) {
+      // Normally files from main are opened intransient. But not this one.
+      global.ipc.send('announce-transient-file', { 'hash': file.hash })
       this._app.openFile(file.hash)
     } else if (autoCreate) {
       // Call the file-new command on the application, which'll do all

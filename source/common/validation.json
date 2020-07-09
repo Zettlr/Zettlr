@@ -44,5 +44,6 @@
    "pdf.lineheight": "required|number|default:1.5",
    "cslLibrary": "optional|string|default:",
    "display.imageWidth": "required|number|min:1|max:100|default:100",
-   "display.imageHeight": "required|number|min:1|max:100|default:100"
+   "display.imageHeight": "required|number|min:1|max:100|default:100",
+   "watchdog.stabilityThreshold": "optional|number|min:1|max:100000|default:1000"
 }

@@ -79,6 +79,7 @@
         ref="fileList"
         class="hidden"
         tabindex="1"
+        v-bind:data-hash="selectedDirectoryHash"
         v-on:keydown="navigate"
       >
         <template v-if="emptySearchResults">
@@ -178,10 +179,10 @@ module.exports = {
     /**
      * Switches to the fileList, if applicable.
      */
-    selectedDirectory: function () {
+    selectedDirectoryHash: function () {
       // If the directory just got de-selected and the fileList
       // is visible, switch to the directories.
-      if (!this.selectedDirectory && this.isFileListVisible()) this.toggleFileList()
+      if (!this.selectedDirectoryHash && this.isFileListVisible()) this.toggleFileList()
       // Otherwise make sure the fileList is visible (toggleFileList
       // will return if the mode is combined or expanded)
       else if (!this.isFileListVisible()) this.toggleFileList()
@@ -250,7 +251,7 @@ module.exports = {
       return ret
     },
     selectedFile: function () { return this.$store.state.selectedFile },
-    selectedDirectory: function () { return this.$store.state.selectedDirectory },
+    selectedDirectoryHash: function () { return this.$store.state.selectedDirectory },
     sidebarClass: function () { return (this.isExpanded) ? 'expanded' : '' },
     isThin: function () { return this.$store.state.sidebarMode === 'thin' },
     isCombined: function () { return this.$store.state.sidebarMode === 'combined' },
@@ -506,9 +507,13 @@ module.exports = {
           if (index >= list.length) index = list.length - 1
           if (evt.ctrlKey || evt.metaKey) {
             // Select the last file
+            global.editor.announceTransientFile(list[list.length - 1].hash)
             return global.ipc.send('file-get', list[list.length - 1].hash)
           }
-          if (index < list.length) global.ipc.send('file-get', list[index].hash)
+          if (index < list.length) {
+            global.editor.announceTransientFile(list[index].hash)
+            global.ipc.send('file-get', list[index].hash)
+          }
           break
         case 'ArrowUp':
           index--
@@ -516,9 +521,13 @@ module.exports = {
           if (index < 0) index = 0
           if (evt.ctrlKey || evt.metaKey) {
             // Select the first file
+            global.editor.announceTransientFile(list[0].hash)
             return global.ipc.send('file-get', list[0].hash)
           }
-          if (index >= 0) global.ipc.send('file-get', list[index].hash)
+          if (index >= 0) {
+            global.editor.announceTransientFile(list[index].hash)
+            global.ipc.send('file-get', list[index].hash)
+          }
           break
       }
     },

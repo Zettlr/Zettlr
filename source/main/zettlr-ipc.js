@@ -54,7 +54,7 @@ class ZettlrIPC {
 
       if (arg.command === 'file-drag-start') {
         event.sender.startDrag({
-          'file': this._app.findFile({ hash: parseInt(arg.content.hash) }).path,
+          'file': this._app.findFile(arg.content.hash).path,
           'icon': require('path').join(__dirname, '/assets/dragicon.png')
         })
         return // Don't dispatch further
@@ -141,10 +141,11 @@ class ZettlrIPC {
     * @return {ZettlrIPC}              This for chainability.
     */
   send (command, content = {}) {
-    let mainWinFocused = this._app.window.getWindow() === BrowserWindow.getFocusedWindow()
-    if (command === 'attempt-close-tab' && !mainWinFocused) {
+    let focusedWindow = BrowserWindow.getFocusedWindow()
+    let mainWinFocused = this._app.window.getWindow() === focusedWindow
+    if (command === 'attempt-close-tab' && !mainWinFocused && focusedWindow) {
       // DEBUG attention, monkey-patch
-      BrowserWindow.getFocusedWindow().close()
+      focusedWindow.close()
       return this
     }
 

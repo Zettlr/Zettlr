@@ -1,3 +1,52 @@
+# (no version assigned)
+
+## GUI and Functionality
+
+- The NSIS installer (Windows) now contains customized, branded images for the sidebar and header of the various pages visible during the setup process.
+- Added syntax highlighting modes (with keywords):
+    - **Clojure**: `clojure`
+- Fixed a bug where the trailing `---` of a YAML frontmatter would mistakenly be identified by the renderer as ATX-headings in readability mode, resulting in weird display of the last YAML frontmatter line.
+
+## Under the Hood
+
+- Added the logo source files to source control. Please make sure to read the accompanying README file in the `icons`-directory before using!!
+
+# 1.7.1
+
+## GUI and Functionality
+
+- Fixed a race condition that would cause the renderer to become completely unresponsive when creating uncomplete Zettelkasten links (e.g. `[[contents]` or `[contents]]`).
+- The interactive tutorial is now also available in French (thanks to @framatophe for their translation!).
+- The sidebar now shows single-citekeys (without square brackets) in the references list again.
+- Added syntax highlighting modes (with keywords):
+    - **Smalltalk**: `smalltalk`/`st`
+
+## Under the Hood
+
+- Updated dependencies:
+  - @zettlr/citr `1.2.0`
+  - @clr/icons `3.1.4`
+  - joplin-turndown `4.0.28`
+  - citeproc `2.4.6`
+  - electron `9.0.5`
+  - electron-notarize `1.0.0`
+  - mocha `8.0.1`
+  - chalk `4.1.0`
+  - got `11.4.0`
+  - tippy.js `6.2.4`
+  - moment `2.27.0`
+  - uuid `8.2.0`
+  - v8-compile-cache `2.1.1`
+  - eslint `7.4.0`
+  - eslint-plugin-import `2.22.0`
+  - eslint-plugin-vue `7.0.0-alpha.9`
+  - electron-devtools-installer `3.1.0`
+  - webpack-cli `3.3.12`
+  - uglify-js `3.10.0`
+  - vue-loader `15.9.3`
+  - css-loader `3.6.0`
+  - mermaid `8.5.0`
+
 # 1.7.0
 
 ## Breaking Changes
@@ -17,10 +66,12 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
     - On hover, you can get additional info about the documents.
     - Drag and drop the tabs to re-sort their order.
     - Get going where you left of the day before: Open files are persisted during restarts of the application.
+    - **Transiency**: Tabs are opened transient, which means if you do not modify their contents, they will be replaced with another file that you open. This way you can quickly stroll through search results without having to close hundreds of tabs afterwards!
 - **New Feature**: RTL support! Now whether you are writing in Hebrew, Persian, Urdu or any other right-to-left writing system, you can do so now. We've added support for the respective options of CodeMirror in the "Preferences -> Editor" tab.
 - **New Feature**: You can now direct Zettlr to automatically create new files if you click on an internal link that does not match a file. Thanks to @halcyonquest for their contribution!
 - **New Feature**: Vim and Emacs insertion modes are now supported! You can switch persistently between these two and the "normal" insertion mode using the preferences. Thanks to @JorySchossau for implementing this feature!
 - **New Feature**: Directory icons. From now on you can select an arbitrary icon to further visually distinguish certain directories from the others. This has no other than a purely visual effect and may help identify specific directories within a longer list reliably.
+- **New Feature**: Many apps feature it already, Zettlr joins them now. An interactive tutorial will be opened on the first start of the app.
 - If available, a title from a YAML frontmatter will be appended to the displayed file entry when linking files.
 - Copying images from the Explorer/Finder/file browser now offers to insert them into the document, copying them over to the assets directory.
 - The popups are now more resilient against accidental closing, just like the dialogs.
@@ -49,6 +100,15 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
     - **XML**: `xml`
     - **Markdown**: `markdown`/`md`
     - **Julia**: `julia`/`jl`
+    - **Turtle**: `turtle`/`ttl`
+    - **SPARQL**: `sparql`
+    - **Verilog**: `verilog`/`v`
+    - **SystemVerilog**: `systemverilog`/`sv`
+    - **VHDL**: `vhdl`/`vhd`
+    - **Tcl**: `tcl`
+    - **CommonLisp**: `clisp`/`commonlisp`
+    - **Scheme**: `scheme`
+    - **PowerShell**: `powershell`
 - Fix the colours of the heatmap search list.
 - Fixed a logical error in the detection of remote changes of attachment files.
 - Fenced code blocks, delimited by three backticks have a customizable box background. The colour (and different styles) can be customized by targeting the `code-block-line`-CSS class.
@@ -84,6 +144,14 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Dropping files from the file list onto the editor now inserts a valid Zettelkasten-link to that file into the editor.
 - Images will now also render in-line.
 - The "Window" submenu is now not confined to macOS applications anymore, but available to all platforms.
+- URLs in Markdown links will not be rendered anymore.
+- Enabled the context menu now also for both directories in the file list and the empty space in the file list (if there is some).
+- You can now open directories externally (read: in Finder/Explorer/your Linux file browser) in the context menu now.
+- Zettlr now attempts to set the cursor back to the place where it has been after programmatically updating the document content, e.g. after a remote change.
+- Added a setting to control the sensitivity of Zettlr checking for remote file notifications on certain systems.
+- Prevent multiple cursors when performing a special action (following a link, clicking a tag, etc.)
+- Now both the current cursor position and the word count are displayed side by side. No need to right-click again to toggle!
+- Citations in comments are now no longer rendered.
 
 ## Under the Hood
 
@@ -118,6 +186,8 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - Include the `codemirror.css` into the geometry styles so we have one less dependency to include on startup.
 - Switched to Electron 9.0.0.
 - Set the `standalone` flag for Pandoc on all non-special exports.
+- Image rendering now also supports base64-encoded inline images.
+- Improvements to the detection of tags, internal links and footnotes. The algorithm is now more efficient and stable in various situations.
 
 # 1.6.0
 

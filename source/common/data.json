@@ -176,6 +176,10 @@
         "mode": "clike",
         "selectors": [ "c\\#", "csharp", "cs" ]
       },
+      "text/x-clojure": {
+        "mode": "clojure",
+        "selectors": [ "clojure" ]
+      },
       "text/x-elm": {
         "mode": "elm",
         "selectors": [ "elm" ]
@@ -299,6 +303,22 @@
       "text/x-tcl": {
         "mode": "tcl",
         "selectors": [ "tcl" ]
+      },
+      "text/x-scheme": {
+        "mode": "scheme",
+        "selectors": [ "scheme" ]
+      },
+      "text/x-common-lisp": {
+        "mode": "commonlisp",
+        "selectors": [ "clisp", "commonlisp" ]
+      },
+      "application/x-powershell": {
+        "mode": "powershell",
+        "selectors": [ "powershell" ]
+      },
+       "text/x-stsrc": {
+        "mode": "smalltalk",
+        "selectors": ["smalltalk", "st"]
       }
     }
 }
