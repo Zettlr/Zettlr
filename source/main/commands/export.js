@@ -54,6 +54,49 @@ class Export extends ZettlrCommand {
       dest = path.dirname(file.path)
     }
 
+    // Title precedence is: Filename, but if there is a frontmatter title, use
+    // that one instead. And if there is a H1 and the corresponding option is
+    // set, use that one as a fallback
+    let title = file.name.substr(0, file.name.lastIndexOf('.'))
+    if (file.frontmatter && file.frontmatter.hasOwnProperty('title')) {
+      title = file.frontmatter.title
+    } else if (file.firstHeading && global.config.get('display.useFirstHeadings')) {
+      title = file.firstHeading
+    }
+
+    // The PDF author can also be overridden by a frontmatter
+    let author = global.config.get('pdf').author
+    if (file.frontmatter && file.frontmatter.hasOwnProperty('author')) {
+      let a = file.frontmatter.author
+      if (typeof a === 'string') {
+        author = a
+      } else if (Array.isArray(a)) {
+        author = a.map(e => {
+          if (typeof e === 'string') return e
+          if (e.hasOwnProperty('name')) return e.name
+          return String(e) // No idea what the value was but now we can work with it
+        })
+
+        author = author.join(', ')
+      }
+    }
+
+    let keywords = global.config.get('pdf').keywords
+    // The same applies to keywords (only they get merged)
+    if (file.tags && file.tags.length > 0) {
+      if (keywords.length > 0) {
+        keywords = keywords.split(/[,;]/gi).map(e => e.trim())
+        keywords = keywords.concat(file.tags).join(', ')
+      } else {
+        keywords = file.tags.join(', ')
+      }
+    }
+
+    let date = '\\today'
+    if (file.frontmatter && file.frontmatter.hasOwnProperty('date')) {
+      date = file.frontmatter.date
+    }
+
     let opt = {
       'format': arg.ext, // Which format: "html", "docx", "odt", "pdf"
       'file': file, // The file to be exported
@@ -62,9 +105,10 @@ class Export extends ZettlrCommand {
       'stripTags': global.config.get('export.stripTags'),
       'stripLinks': global.config.get('export.stripLinks'),
       'pdf': global.config.get('pdf'),
-      'title': file.name.substr(0, file.name.lastIndexOf('.')),
-      'author': global.config.get('pdf').author,
-      'keywords': global.config.get('pdf').keywords,
+      'title': title,
+      'date': date,
+      'author': author,
+      'keywords': keywords,
       'cslStyle': global.config.get('export.cslStyle')
     }
 

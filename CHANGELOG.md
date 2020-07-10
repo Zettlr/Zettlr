@@ -12,6 +12,7 @@
 - Fixed a bug that would sometimes render parts of multiline equations as headings.
 - Added an option to tell Zettlr to use the first heading level 1 of a file to display instead of the filename (however, a frontmatter title will override this).
 - YAML frontmatter ending characters should not trigger AutoCorrect anymore.
+- The exporter now respects values from a YAML frontmatter, if (and where) applicable.
 
 ## Under the Hood
 

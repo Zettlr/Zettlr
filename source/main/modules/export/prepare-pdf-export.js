@@ -65,6 +65,7 @@ module.exports = async function (options) {
     'PDF_SUBJECT': sanitiseTexValue(options.title),
     'PDF_AUTHOR': sanitiseTexValue(options.author),
     'PDF_KEYWORDS': sanitiseTexValue(options.keywords),
+    'PDF_DATE': (options.date === '\\today') ? options.date : sanitiseTexValue(options.date),
     // Project settings
     'TITLEPAGE': (pdf.titlepage) ? TITLEPAGE_REPLACEMENT : '',
     'GENERATE_TOC': (pdf.toc) ? `\\setcounter{tocdepth}{${pdf.tocDepth}}\n\\tableofcontents\n\\pagebreak\n` : ''
