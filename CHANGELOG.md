@@ -11,10 +11,12 @@
 - Multiline math equations now feature syntax highlighting.
 - Fixed a bug that would sometimes render parts of multiline equations as headings.
 - Added an option to tell Zettlr to use the first heading level 1 of a file to display instead of the filename (however, a frontmatter title will override this).
+- YAML frontmatter ending characters should not trigger AutoCorrect anymore.
 
 ## Under the Hood
 
 - Added the logo source files to source control. Please make sure to read the accompanying README file in the `icons`-directory before using!!
+- The AutoCorrect replacement now checks for the actual mode at both range endings before actually performing a replacement.
 
 # 1.7.1
 
