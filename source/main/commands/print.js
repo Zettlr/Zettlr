@@ -15,7 +15,7 @@
 const ZettlrCommand = require('./zettlr-command')
 const ZettlrPrint = require('../zettlr-print.js')
 const { app } = require('electron')
-const makeExport = require('../modules/export')
+const makeExport = require('../modules/export/export')
 
 class Print extends ZettlrCommand {
   constructor (app) {

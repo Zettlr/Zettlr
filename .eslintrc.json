@@ -5,7 +5,7 @@
         "node": true
     },
     "extends": [
-        "standard",
+        "standard-with-typescript",
         "plugin:vue/vue3-recommended"
     ],
     "globals": {
@@ -13,8 +13,13 @@
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
-        "ecmaVersion": 2018
+        "ecmaVersion": 2018,
+        "project": "./tsconfig.json"
     },
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
     "rules": {
         // The following rule-changes to JSStandard Coding Style are tradition,
         // as they were included with the default configuration of Atom's ESLint

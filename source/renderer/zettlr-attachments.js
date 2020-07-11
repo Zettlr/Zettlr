@@ -16,7 +16,7 @@
 const { shell } = require('electron')
 
 const { trans } = require('../common/lang/i18n.js')
-const clarityIcons = require('@clr/icons').ClarityIcons
+const clarityIcons = require('../vendor/clr-icons.min.js').ClarityIcons
 const Citr = require('@zettlr/citr')
 
 const path = require('path')

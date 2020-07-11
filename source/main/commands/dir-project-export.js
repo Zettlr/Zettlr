@@ -15,7 +15,7 @@
 const path = require('path')
 const sanitize = require('sanitize-filename')
 const ZettlrCommand = require('./zettlr-command')
-const makeExport = require('../modules/export')
+const makeExport = require('../modules/export/export')
 const objectToArray = require('../../common/util/object-to-array')
 const makeImgPathsAbsolute = require('../../common/util/make-img-paths-absolute')
 

@@ -12,8 +12,8 @@
  * END HEADER
  */
 
-const clarityIcons = require('@clr/icons').ClarityIcons
-require('@clr/icons/shapes/all-shapes')
+const clarityIcons = require('../../vendor/clr-icons.min.js').ClarityIcons
+require('../../vendor/all-shapes.js')
 const fs = require('fs').promises
 const path = require('path')
 

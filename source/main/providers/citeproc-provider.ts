@@ -17,7 +17,11 @@
  * END HEADER
  */
 
-const citeproc = require('citeproc')
+import { IpcCiteService } from '../../IpcCiteService'
+import { IpcModule } from '../../IpcModule'
+
+import { citeproc, CSLBibTex } from 'citeproc'
+
 const chokidar = require('chokidar') // We'll just use the one-liner to watch the library file.
 const { ipcMain } = require('electron')
 const Citr = require('@zettlr/citr') // Parse the citations from the renderer
@@ -37,7 +41,21 @@ const READY = 4
 /**
  * This class enables to export citations from a CSL JSON file to HTML.
  */
-class CiteprocProvider {
+class CiteprocProvider implements IpcCiteService {
+  _mainLibrary: string
+  _styleID: string
+  _lang: string
+  _mainStyle
+  _engine
+  _cslData
+  _bibtexAttachments
+  _items
+  _ids
+  _idHint
+  _watcher
+  _status: number
+  _sys
+
   constructor () {
     global.log.verbose('Citeproc provider booting up ...')
     this._mainLibrary = ''
@@ -67,53 +85,9 @@ class CiteprocProvider {
       retrieveItem: (id) => { return this._items[id] }
     }
 
-    // Create a global object so that we can easily pass rendered citations
-    global.citeproc = {
-      getIDs: () => {
-        // Always include the status in the return.
-        return {
-          'ids': JSON.parse(JSON.stringify(this._idHint)),
-          'status': this._status
-        }
-      },
-      getCitation: (idList) => {
-        return {
-          'citation': this.getCitation(idList),
-          'status': this._status
-        }
-      },
-      updateItems: (idList) => { return this.updateItems(idList) },
-      makeBibliography: () => { return this.makeBibliography() },
-      hasBibTexAttachments: () => {
-        return this._bibtexAttachments !== null && Object.keys(this._bibtexAttachments).length > 0
-      },
-      getBibTexAttachments: (id) => { return this._bibtexAttachments[id] }
-    }
-
     // Be notified of potential updates
     global.config.on('update', () => {
       this._onConfigUpdate()
-    })
-
-    // Listen for synchronous citation messages from the renderer
-    // Citeproc calls (either single citation or a whole cluster)
-    ipcMain.on('cite', (event, message) => {
-      if (message.type === 'get-citation') {
-        // Return a single citation
-        event.returnValue = {
-          'citation': this.getCitation(message.content),
-          'status': this._status
-        }
-      } else if (message.type === 'update-items') {
-        // Update the items of the registry
-        event.returnValue = this.updateItems(message.content)
-      } else if (message.type === 'make-bibliography') {
-        // Make and send out a bibliography based on the state of the registry
-        event.sender.send('message', {
-          'command': 'citeproc-bibliography',
-          'content': this.makeBibliography()
-        })
-      }
     })
 
     // Read in the main library
@@ -245,7 +219,7 @@ class CiteprocProvider {
    * them to ensure that all other keys can be loaded, in the meantime.
    */
   _verifyIntegrity () {
-    let errors = []
+    let errors: {key: string, error: any}[] = []
     for (let key of Object.keys(this._ids)) {
       try {
         // Try to make a citation "cluster" out of each single CiteKey
@@ -411,41 +385,34 @@ class CiteprocProvider {
     this._read()
   }
 
-  /**
-   * Takes IDs as set in Zotero and returns Author-Date citations for them.
-   * @param  {String} citation Array containing the IDs to be returned
-   * @return {String}     The rendered string
-   */
-  getCitation (citation) {
-    if (this._status !== READY) return undefined // Don't try to access the engine before loaded
+  getStatus(): number {
+    return this._status
+  }
+
+  getCitation (citation: Array<any>|string): string {
+    if (this._status !== READY) return "" // Don't try to access the engine before loaded
     let citations
     try {
       citations = Citr.parseSingle(citation)
     } catch (err) {
       global.log.error('[citeproc] ' + err.message, err)
-      return undefined
+      return ""
     }
 
     citations = this._sanitiseItemList(citations)
-    if (citations.length === 0) return undefined // Nothing to render
+    if (citations.length === 0) return "" // Nothing to render
     try {
       return this._engine.makeCitationCluster(citations)
     } catch (e) {
       global.log.error('[citeproc] ' + e.message, e)
-      return undefined
+      return ""
     }
   }
 
-  /**
-   * Updates the items that the engine uses for bibliographies. Must be called
-   * prior to makeBibliography()
-   * @param  {Array} citations A list of IDs
-   * @return {Boolean}    An indicator whether or not the call succeeded and the registry has been updated.
-   */
-  updateItems (citations) {
-    if (this._status !== READY) return this._status // Don't try to access the engine before loaded
+  updateItems (citations: Array<string>): boolean {
+    if (this._status !== READY) return false // Don't try to access the engine before loaded
     try {
-      let passed = []
+      let passed: string[] = []
       for (let i = 0; i < citations.length; i++) {
         if (Citr.util.validateCitationID(citations[i])) {
           passed.push(citations[i])
@@ -459,12 +426,7 @@ class CiteprocProvider {
     }
   }
 
-  /**
-   * Directs the engine to create a bibliography from the items currently in the
-   * registry (this can be updated by calling updateItems with an array of IDs.)
-   * @return {CSLBibTex} A CSL object containing the bibliography.
-   */
-  makeBibliography () {
+  makeBibliography (): CSLBibTex {
     if (this._status !== READY) return this._status // Don't try to access the engine before loaded
     try {
       return this._engine.makeBibliography()
@@ -494,3 +456,9 @@ class CiteprocProvider {
 }
 
 module.exports = new CiteprocProvider()
+
+global.citeproc = module.exports
+
+// Listen for synchronous citation messages from the renderer
+// Citeproc calls (either single citation or a whole cluster)
+IpcModule.registerMain<IpcCiteService>(module.exports)

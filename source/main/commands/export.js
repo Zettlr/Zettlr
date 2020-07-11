@@ -15,7 +15,7 @@
 const ZettlrCommand = require('./zettlr-command')
 const { app } = require('electron')
 const path = require('path')
-const makeExport = require('../modules/export')
+const makeExport = require('../modules/export/export')
 const { trans } = require('../../common/lang/i18n')
 
 class Export extends ZettlrCommand {

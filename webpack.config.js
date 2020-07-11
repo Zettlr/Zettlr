@@ -15,7 +15,7 @@ var configuration = {
     // The target is commonJS so that we can require() the entry points.
     libraryTarget: 'commonjs2',
     // Place the app in the assets directory
-    path: path.resolve(__dirname, 'source/renderer/assets/vue'),
+    path: path.resolve(__dirname, 'dist/renderer/assets/vue'),
     // The common/assets folder is the default publicPath
     publicPath: path.resolve(__dirname, 'source/common/assets')
   },

@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "allowJs": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "outDir": "dist",
+        "baseUrl": ".",
+        "sourceMap": true,
+        "noImplicitAny": false,
+        "resolveJsonModule": true,
+        "downlevelIteration": true,
+        "types": [
+            "jquery"
+        ]
+    },
+    "include": [
+        "source/**/*"
+    ],
+    "files": [
+        "global.d.ts"
+    ]
+}

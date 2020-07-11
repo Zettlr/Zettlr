@@ -13,6 +13,9 @@
 * END HEADER
 */
 
+import { IpcModule } from "../IpcModule"
+import { IpcCiteService } from "../IpcCiteService"
+
 const path = require('path')
 const hash = require('../common/util/hash')
 const popup = require('./zettlr-popup.js')
@@ -34,7 +37,7 @@ const EditorAutocomplete = require('./util/editor-autocomplete')
 require('./assets/codemirror/autoload.js')
 
 // Finally load CodeMirror itself
-const CodeMirror = require('codemirror')
+import CodeMirror from 'codemirror'
 
 // The timeout after which a "save"-command is triggered to automatically save changes
 const SAVE_TIMOUT = require('../common/data.json').poll_time
@@ -58,6 +61,40 @@ const TEX_MODE = { name: 'stex' }
 * functions.
 */
 class ZettlrEditor {
+  _renderer: any
+  _div: any
+  _openFiles: any
+  _currentHash: any
+  _words: any
+  _fontsize: any
+  _timeout: any
+  _citationTimeout
+  _searcher: any
+  _tabs: any
+  _autocomplete: any
+  _renderCitations: any
+  _renderIframes: any
+  _renderImages: any
+  _renderLinks: any
+  _renderMath: any
+  _renderTasks: any
+  _renderHTags: any
+  _wysiwyg: any
+  _renderTables: any
+  _lastMode
+  _countChars
+  _pointerEvents
+  _pointerDiff
+  _showdown
+  _turndown
+  _citationBuffer
+  _mute
+  _leftBeforeDistractionFree
+  _spaceWidth
+  _monospaceWidth
+  _cm: any
+  _scrollbarAnnotations
+
   /**
     * Instantiate the editor
     * @param {ZettlrRenderer} parent The parent renderer element.
@@ -128,7 +165,7 @@ class ZettlrEditor {
     this._spaceWidth = 0
     this._monospaceWidth = 0
 
-    this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
+    this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text') as HTMLTextAreaElement, {
       mode: MD_MODE,
       theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
       autofocus: false,
@@ -162,7 +199,7 @@ class ZettlrEditor {
       },
       continuelistModes: [ 'markdown', 'markdown-zkn' ],
       extraKeys: generateKeymap(this)
-    })
+    } as CodeMirror.EditorConfiguration)
 
     // Set up the helper classes with the CM instance
     this._searcher.setInstance(this._cm)
@@ -232,7 +269,7 @@ class ZettlrEditor {
         if (this._citationTimeout) clearTimeout(this._citationTimeout)
 
         // Check if the change actually modified the doc or not.
-        if (this._cm.doc.isClean()) {
+        if (this._cm.getDoc().isClean()) {
           this._renderer.clearModified(this._currentHash)
           // NOTE in case you notice we're either calling this.markClean or
           // this._tabs.markDirty, this is because on markClean we also have to
@@ -291,7 +328,7 @@ class ZettlrEditor {
       if (event.dataTransfer.files.length > 0) {
         // In case of files being dropped, do *not* let CodeMirror handle them.
         event.codemirrorIgnore = true
-        let imagesToInsert = []
+        let imagesToInsert: any[] = []
         for (let x of event.dataTransfer.files) {
           if (IMAGE_REGEX.test(x.path)) {
             imagesToInsert.push(x.path)
@@ -881,7 +918,7 @@ class ZettlrEditor {
 
     // Reset cached widths
     this._spaceWidth = 0
-    this.monospaceWidth = 0
+    this._monospaceWidth = 0
 
     // Last but not least set the Zettelkasten options
     this._cm.setOption('zkn', global.config.get('zkn'))
@@ -920,7 +957,7 @@ class ZettlrEditor {
     */
   _unmuteLines () {
     for (let i = 0; i < this._cm.lineCount(); i++) {
-      this._cm.doc.removeLineClass(i, 'text', 'mute')
+      this._cm.getDoc().removeLineClass(i, 'text', 'mute')
     }
   }
 
@@ -932,7 +969,7 @@ class ZettlrEditor {
     let highlightLine = this._cm.getCursor().line
     for (let i = 0; i < this._cm.lineCount(); i++) {
       if (highlightLine !== i) {
-        this._cm.doc.addLineClass(i, 'text', 'mute')
+        this._cm.getDoc().addLineClass(i, 'text', 'mute')
       }
     }
   }
@@ -943,7 +980,7 @@ class ZettlrEditor {
     */
   getFileInfo () {
     let currentValue = this._cm.getValue()
-    let ret = {
+    let ret: {words, chars, chars_wo_spaces, cursor, words_sel?, chars_sel?} = {
       'words': countWords(currentValue, this._countChars),
       'chars': currentValue.length,
       'chars_wo_spaces': currentValue.replace(/[\s ]+/g, '').length,
@@ -1005,10 +1042,10 @@ class ZettlrEditor {
     // our RegEx from the footnotes plugin.
     let fnrefRE = /^\[\^([\da-zA-Z_-]+)\]: (.+)/gm
 
-    for (let lineNo = this._cm.doc.lastLine(); lineNo > -1; lineNo--) {
+    for (let lineNo = this._cm.getDoc().lastLine(); lineNo > -1; lineNo--) {
       fnrefRE.lastIndex = 0
-      let line = this._cm.doc.getLine(lineNo)
-      let match = null
+      let line = this._cm.getDoc().getLine(lineNo)
+      let match
       if (((match = fnrefRE.exec(line)) != null) && (match[1] === fn)) {
         fnref = match[2]
         break
@@ -1039,13 +1076,15 @@ class ZettlrEditor {
     */
   _editFootnote (elem) {
     let ref = elem.text().substr(1)
-    let line = null
+    let line
     this._cm.eachLine((handle) => {
       if (handle.text.indexOf(`[^${ref}]:`) === 0) {
         // Got the line
         line = handle
       }
     })
+    if (line === null)
+      return
 
     let cnt = '<div class="footnote-edit">'
     cnt += `<textarea id="footnote-edit-textarea">${line.text.substr(5 + ref.length)}</textarea>`
@@ -1056,7 +1095,7 @@ class ZettlrEditor {
     // Focus the textarea immediately.
     $('#footnote-edit-textarea').focus()
 
-    $('.popup .footnote-edit').on('keydown', (e) => {
+    $('.popup .footnote-edit').on('keydown', (e:any) => {
       if (e.which === 13 && e.shiftKey) {
         // Done editing.
         e.preventDefault()
@@ -1074,11 +1113,11 @@ class ZettlrEditor {
     * @return {Array} An array containing objects with all headings
     */
   buildTOC () {
-    let toc = []
-    for (let i = 0; i < this._cm.doc.lineCount(); i++) {
+    let toc: {line: number, text: any, level: any}[] = []
+    for (let i = 0; i < this._cm.getDoc().lineCount(); i++) {
       // Don't include comments from code examples in the TOC
       if (this._cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
-      let line = this._cm.doc.getLine(i)
+      let line = this._cm.getDoc().getLine(i)
       if (/^#{1,6} /.test(line)) {
         toc.push({
           'line': i,
@@ -1099,7 +1138,7 @@ class ZettlrEditor {
     */
   jtl (line) {
     // Wow. Such magic.
-    this._cm.doc.setCursor({ 'line': line, 'ch': 0 })
+    this._cm.getDoc().setCursor({ 'line': line, 'ch': 0 })
     this._cm.refresh()
   }
 
@@ -1167,37 +1206,38 @@ class ZettlrEditor {
 
   /**
    * Renders all citations that haven't been rendered yet.
-   * @return {void} Does not return.
    */
-  renderCitations () {
+  public async renderCitations (): Promise<void> {
     let needRefresh = false
     let elements = $('.CodeMirror .citeproc-citation')
-    elements.each((index, elem) => {
-      elem = $(elem)
-      if (elem.attr('data-rendered') !== 'yes') {
-        let item = elem.text()
+    let citeService = IpcModule.forRenderer<IpcCiteService>()
+    for (const elem of elements) {
+      let jqueryElem = $(elem)
+      if (jqueryElem.attr('data-rendered') !== 'yes') {
+        let item = jqueryElem.text()
         let id = hash(item)
         if (this._citationBuffer[id] !== undefined) {
-          elem.html(this._citationBuffer[id]).removeClass('error').attr('data-rendered', 'yes')
+          jqueryElem.html(this._citationBuffer[id]).removeClass('error').attr('data-rendered', 'yes')
           needRefresh = true
         } else {
-          let newCite = global.citeproc.getCitation(item)
-          switch (newCite.status) {
-            case 4: // Engine was ready, newCite.citation contains the citation
-              elem.html(newCite.citation).removeClass('error').attr('data-rendered', 'yes')
-              this._citationBuffer[id] = newCite.citation
+          let status = await citeService.getStatus()
+          switch (status) {
+            case 4: // Engine is ready
+              let citation = await citeService.getCitation(item)
+              jqueryElem.html(citation).removeClass('error').attr('data-rendered', 'yes')
+              this._citationBuffer[id] = citation
               needRefresh = true
               break
             case 3: // There was an error loading the database
-              elem.addClass('error')
+              jqueryElem.addClass('error')
               break
             case 2: // There was no database, so don't do anything.
-              elem.attr('data-rendered', 'yes')
+              jqueryElem.attr('data-rendered', 'yes')
               break
           }
         }
       }
-    })
+    }
 
     // We need to refresh the editor, because the updating process has certainly
     // altered the widths of the spans.
@@ -1252,11 +1292,11 @@ class ZettlrEditor {
       return
     }
 
-    let sel = this._cm.doc.listSelections()
+    let sel = this._cm.getDoc().listSelections()
     let oldCur = JSON.parse(JSON.stringify(this._cm.getCursor()))
     this._cm.execCommand(cmd)
 
-    if (sel.length > 0) this._cm.doc.setSelections(sel)
+    if (sel.length > 0) this._cm.getDoc().setSelections(sel)
 
     if (cmd === 'insertFootnote') {
       // In case the user inserted a footnote, we have to re-set the cursor
@@ -1285,7 +1325,7 @@ class ZettlrEditor {
   /**
    * Returns all selections in the current document.
    */
-  getSelections () { return this._cm.doc.getSelections() }
+  getSelections () { return this._cm.getDoc().getSelections() }
 
   /**
    * Get the CodeMirror instance

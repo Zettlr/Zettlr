@@ -40,7 +40,7 @@ global.log = {
 
 // We need the app and process modules.
 const { app } = require('electron')
-const process = require('process')
+const processInfo = require('process')
 
 // Include the global Zettlr class
 const Zettlr = require('./main/zettlr.js')
@@ -49,6 +49,10 @@ const extractFilesFromArgv = require('./common/util/extract-files-from-argv')
 
 // Introduce v8 code caching
 require('v8-compile-cache')
+
+// Copy json files (workaround as tcs only copies imported json files: https://stackoverflow.com/a/59419449/873661)
+import * as validationJson from './common/validation.json'
+import * as dataJson from './common/data.json'
 
 /**
  * The main Zettlr object. As long as this exists in memory, the app will run.
@@ -146,7 +150,7 @@ app.whenReady().then(() => {
 app.on('window-all-closed', async function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
+  if (processInfo.platform !== 'darwin') {
     try {
       // Shutdown the app before quitting
       await zettlr.shutdown()
@@ -181,7 +185,7 @@ app.on('activate', function () {
  * Hook into the unhandledRejection-event to prevent nasty error messages when
  * a Promise is rejected somewhere.
  */
-process.on('unhandledRejection', (err) => {
+processInfo.on('unhandledRejection', (err) => {
   // Just log to console.
   global.log.error(err.message)
 })

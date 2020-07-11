@@ -644,7 +644,7 @@ class ZettlrRenderer {
     let hasActiveSearch = global.store.hasActiveSearch()
     this._currentDir = this.findObject(newdir) // Find the dir (hash) in our own paths object
     global.store.selectDirectory(newdir)
-    this._attachments.refresh()
+    //this._attachments.refresh()
     this._editor.signalUpdateFileAutocomplete() // On every directory change
     // "Re-do" the search
     if (hasActiveSearch) this.beginSearch(this._toolbar.getSearchTerm())

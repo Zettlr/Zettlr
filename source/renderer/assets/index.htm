@@ -8,9 +8,9 @@
     <title>Zettlr</title>
 
     <!-- KaTeX CSS file -->
-    <link rel="stylesheet" href="../../node_modules/katex/dist/katex.min.css">
+    <link rel="stylesheet" href="../../vendor/katex.min.css">
     <!-- Clarity CSS files -->
-    <link rel="stylesheet" href="../../node_modules/@clr/icons/clr-icons.min.css">
+    <link rel="stylesheet" href="../../vendor/clr-icons.min.css">
     <!-- Generated CSS output for the vue components -->
     <link rel="stylesheet" href="./vue/sidebar.css">
 
@@ -24,16 +24,16 @@
     <!-- Hack for recognizing jquery (thanks to https://stackoverflow.com/a/37480521/8651046)-->
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
 
-    <script type="text/javascript" src="../../node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="../../vendor/jquery.js"></script>
     <script type="text/javascript" src="../../common/assets/js/jquery-ui.min.js"></script>
 
     <!-- Hack for jQuery (part 2) -->
     <script>if (window.module) module = window.module;</script>
 
     <!-- Load tippy.js -->
-    <link rel="stylesheet" href="../../node_modules/tippy.js/dist/tippy.css">
-    <script src="../../node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
-    <script type="text/javascript" src="../../node_modules/tippy.js/dist/tippy.umd.js"></script>
+    <link rel="stylesheet" href="../../vendor/tippy.css">
+    <script src="../../vendor/popper.min.js"></script>
+    <script type="text/javascript" src="../../vendor/tippy.umd.js"></script>
 
     <!-- Finally load the app. It will load automatically. -->
     <script type="text/javascript" src="../main.js"></script>
