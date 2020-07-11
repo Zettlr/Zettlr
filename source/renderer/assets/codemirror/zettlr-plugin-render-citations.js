@@ -15,7 +15,8 @@
   // Should match everything permittible -- first alternative are the huge
   // blocks, second alternative are the simple @ID-things, both recognised by
   // Pandoc citeproc.
-  var citationRE = /(\[[^[\]]*@[^[\]]+\])|(?<=\s|^)(@[a-z0-9_:.#$%&\-+?<>~/]+)/gi
+  // citationRE is taken from the Citr library (the extraction regex)
+  var citationRE = /(\[([^[\]]*@[^[\]]+)\])|(?<=\s|^)(@[\p{L}\d_][\p{L}\d_:.#$%&\-+?<>~/]*)/gu
   var citeMarkers = [] // CiteMarkers
   var currentDocID = null
   var Citr = require('@zettlr/citr')
@@ -50,9 +51,7 @@
 
       // First get the line and test if the contents contain a link
       let line = cm.getLine(i)
-      if (!citationRE.test(line)) {
-        continue
-      }
+      if (!citationRE.test(line)) continue
 
       citationRE.lastIndex = 0 // Necessary because of global flag in RegExp
 
@@ -90,6 +89,15 @@
             cm.getTokenAt(curTo).type === 'comment') {
           continue
         }
+
+        // A final check, as there is an edge case where if people use [[]] as
+        // their internal links, and decide to use @-characters somewhere in
+        // there, this plugin will attempt to render this as a citation as well
+        // Hence: The citation shall not be encapsulated in square brackets.
+        // See https://github.com/Zettlr/Zettlr/issues/1046
+        let prefix = line.substr(curFrom.ch - 1, 2)
+        let suffix = line.substr(curTo.ch - 1, 2)
+        if (prefix === '[[' && suffix === ']]') continue
 
         let span = document.createElement('span')
         span.className = 'citeproc-citation' // citations

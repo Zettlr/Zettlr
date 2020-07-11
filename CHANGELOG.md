@@ -14,6 +14,7 @@
 - YAML frontmatter ending characters should not trigger AutoCorrect anymore.
 - The exporter now respects values from a YAML frontmatter, if (and where) applicable.
 - You should now be able to fold Markdown sections from anywhere within their section text.
+- Fixed a rare bug where Zettlr would attempt to render an internal link as a citation.
 
 ## Under the Hood
 
