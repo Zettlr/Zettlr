@@ -14,6 +14,9 @@
  *
  * END HEADER
  */
+require('jquery-ui/ui/widget')
+require('jquery-ui/ui/widgets/mouse')
+require('jquery-ui/ui/widgets/sortable')
 
 const ZettlrCon = require('./zettlr-context.js')
 const ZettlrNotification = require('./zettlr-notification.js')
