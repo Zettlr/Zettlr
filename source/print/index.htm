@@ -42,12 +42,11 @@
     </style>
 
 <script>
-/* global $ */
 const PrintWindow = require('./zettlr-print-window.js')
 // We need a global for our renderer element
 var pw
 
-$(document).ready(function () {
+window.addEventListener('load', (event) => {
   // Create the renderer
   pw = new PrintWindow()
 })

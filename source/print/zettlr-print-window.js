@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -33,13 +32,15 @@ class ZettlrPrintWindow {
   constructor () {
     this._file = null
     this._ql = null
+    this._iframe = null
+    this._titleElem = null
 
     // as this class basically acts as the renderer class, we also have to take
     // care of specifics such as getting the translation strings, etc.
     loadI18nRenderer()
 
     // Directly inject the correct body class
-    $('body').addClass(process.platform)
+    document.body.classList.add(process.platform)
 
     // Find out which file we should request
     let url = new URL(window.location.href)
@@ -49,10 +50,10 @@ class ZettlrPrintWindow {
 
     // Also we need to know whether or not we should initiate in darkMode.
     let dm = url.searchParams.get('darkMode')
-    if (dm === 'true') $('body').addClass('dark')
+    if (dm === 'true') document.body.classList.add('dark')
 
     // Toggle the theme if there's an appropriate event
-    ipc.on('toggle-theme', (e) => { $('body').toggleClass('dark') })
+    ipc.on('toggle-theme', (e) => { document.body.classList.toggle('dark') })
 
     // activate event listeners for the window
     this._act()
@@ -60,21 +61,53 @@ class ZettlrPrintWindow {
 
   init (name) {
     this._file = name
-    document.title = path.basename(name)
-    $('.title h1').text(path.basename(name))
-    $('.content').html(`<iframe src="${name}"></iframe>`)
+    let basename = path.basename(name)
+    document.title = basename
+
+    // Store some necessary values for later use
+    this._titleElem = document.querySelectorAll('.title')[0]
+
+    let title = document.querySelectorAll('.title h1')[0]
+    title.textContent = basename
+
+    this._iframe = document.createElement('iframe')
+    document.querySelectorAll('.content')[0].appendChild(this._iframe)
+    this._iframe.setAttribute('src', name)
     this._reposition() // Initial reposition
   }
 
   _act () {
     // Activate the window controls.
-    $('.windows-window-controls .close').click((e) => { ipc.send('message', { 'command': 'win-close', content: {} }) })
-    $('.windows-window-controls .resize').click((e) => { ipc.send('message', { 'command': 'win-maximise', content: {} }) })
-    $('.windows-window-controls .minimise').click((e) => { ipc.send('message', { 'command': 'win-minimise', content: {} }) })
+    let winClose = document.querySelectorAll('.windows-window-controls .close')[0]
+    let winResize = document.querySelectorAll('.windows-window-controls .resize')[0]
+    let winMin = document.querySelectorAll('.windows-window-controls .minimise')[0]
+    let linuxClose = document.querySelectorAll('.linux-window-controls .close')[0]
+    let linuxResize = document.querySelectorAll('.linux-window-controls .maximise')[0]
+    let linuxMin = document.querySelectorAll('.linux-window-controls .minimise')[0]
 
-    $('.linux-window-controls .close').click((e) => { ipc.send('message', { 'command': 'win-close', content: {} }) })
-    $('.linux-window-controls .maximise').click((e) => { ipc.send('message', { 'command': 'win-maximise', content: {} }) })
-    $('.linux-window-controls .minimise').click((e) => { ipc.send('message', { 'command': 'win-minimise', content: {} }) })
+    winClose.addEventListener('click', (e) => {
+      ipc.send('message', { 'command': 'win-close', content: {} })
+    })
+
+    winResize.addEventListener('click', (e) => {
+      ipc.send('message', { 'command': 'win-maximise', content: {} })
+    })
+
+    winMin.addEventListener('click', (e) => {
+      ipc.send('message', { 'command': 'win-minimise', content: {} })
+    })
+
+    linuxClose.addEventListener('click', (e) => {
+      ipc.send('message', { 'command': 'win-close', content: {} })
+    })
+
+    linuxResize.addEventListener('click', (e) => {
+      ipc.send('message', { 'command': 'win-maximise', content: {} })
+    })
+
+    linuxMin.addEventListener('click', (e) => {
+      ipc.send('message', { 'command': 'win-minimise', content: {} })
+    })
 
     window.addEventListener('resize', (e) => {
       this._reposition()
@@ -82,13 +115,13 @@ class ZettlrPrintWindow {
 
     // Toggle the maximisation of the window by double clicking. (Windows will
     // take care of this already, but not Linux and macOS.)
-    $('.title').on('dblclick', (e) => {
+    this._titleElem.addEventListener('dblclick', (e) => {
       ipc.send('message', { 'command': 'win-maximise', 'content': '{}' })
     })
 
     // Issue a print command for the frame.
-    $('#init-print').click((e) => {
-      window.frames[0].print()
+    document.getElementById('init-print').addEventListener('click', (event) => {
+      this._iframe.contentWindow.print()
     })
   }
 
@@ -97,9 +130,10 @@ class ZettlrPrintWindow {
    * @return {void} Does not return.
    */
   _reposition () {
-    let titleHeight = $('.title').first().outerHeight()
-    $('iframe').first().css('height', $('body').outerHeight() - titleHeight + 'px')
-    $('iframe').first().css('top', titleHeight + 'px')
+    let titleHeight = this._titleElem.offsetHeight
+    let windowHeight = window.innerHeight
+    this._iframe.style.height = windowHeight - titleHeight + 'px'
+    this._iframe.style.top = titleHeight + 'px'
   }
 }
 
