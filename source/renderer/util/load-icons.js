@@ -34,4 +34,5 @@ async function loadCustomIcons (dir) {
   }
 }
 
-module.exports = () => loadCustomIcons(path.join(__dirname, '../assets/icons'))
+// TOOD: Reactivate
+//module.exports = () => loadCustomIcons(path.join(__dirname, '../assets/icons'))

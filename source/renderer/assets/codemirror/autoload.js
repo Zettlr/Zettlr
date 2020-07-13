@@ -5,7 +5,7 @@
  * in the main class.
  */
 
-const highlightingModes = require('../../../common/data').highlightingModes
+const highlightingModes = require('../../../common/data.json').highlightingModes
 
 // 1. Mode addons
 require('codemirror/addon/mode/overlay')

@@ -15,16 +15,13 @@
  * END HEADER
  */
 
-
-// __dirname is set to the index.htm, not to the renderer directory!
 import ZettlrRenderer from './zettlr-renderer'
 // We need a global for our renderer element
 var renderer
 // This doesn't work so far
-/*
+
 $(document).ready(function () {
   // Create the renderer
   renderer = new ZettlrRenderer()
   renderer.init()
 })
-*/
