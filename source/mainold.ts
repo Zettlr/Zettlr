@@ -39,13 +39,20 @@ global.log = {
 }
 
 // We need the app and process modules.
-const { app } = require('electron')
+const { app, BrowserWindow } = require('electron')
+declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
+
 const process = require('process')
 
 // Include the global Zettlr class
 const Zettlr = require('./main/zettlr.js')
 // Helper function to extract files to open from process.argv
 const extractFilesFromArgv = require('./common/util/extract-files-from-argv')
+
+// Handle creating/removing shortcuts on Windows when installing/uninstalling.
+if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
+  app.quit();
+}
 
 // Introduce v8 code caching
 require('v8-compile-cache')
@@ -138,6 +145,18 @@ app.whenReady().then(() => {
   }
 
   zettlr = new Zettlr()
+
+  // Create the browser window.
+  const mainWindow = new BrowserWindow({
+    height: 600,
+    width: 800,
+  });
+
+  // and load the index.html of the app.
+  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+
+  // Open the DevTools.
+  mainWindow.webContents.openDevTools();
 })
 
 /**

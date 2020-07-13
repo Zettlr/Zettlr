@@ -16,7 +16,6 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make",
     "release:this": "electron-forge publish",
     "release:mac": "electron-builder --mac --publish \"never\"",
     "release:win": "electron-builder --win --publish \"never\"",
@@ -59,24 +58,6 @@
           "name": "@electron-forge/maker-rpm",
           "config": {}
         }
-      ],
-      "plugins": [
-        [
-          "@electron-forge/plugin-webpack",
-          {
-            "mainConfig": "./webpack.main.config.js",
-            "renderer": {
-              "config": "./webpack.renderer.config.js",
-              "entryPoints": [
-                {
-                  "html": "./source/renderer/assets/index.htm",
-                  "js": "./source/renderer/renderer.ts",
-                  "name": "main_window"
-                }
-              ]
-            }
-          }
-        ]
       ]
     }
   },
@@ -232,10 +213,6 @@
     "@electron-forge/maker-rpm": "6.0.0-beta.52",
     "@electron-forge/maker-squirrel": "6.0.0-beta.52",
     "@electron-forge/maker-zip": "6.0.0-beta.52",
-    "@electron-forge/plugin-webpack": "6.0.0-beta.52",
-    "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
-    "@typescript-eslint/eslint-plugin": "^2.18.0",
-    "@typescript-eslint/parser": "^2.18.0",
     "chalk": "^4.1.0",
     "cross-env": "^7.0.2",
     "css-loader": "^3.6.0",
@@ -251,7 +228,6 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-vue": "^7.0.0-alpha.9",
-    "fork-ts-checker-webpack-plugin": "^3.1.1",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-handlebars": "^5.0.2",
@@ -263,12 +239,8 @@
     "handlebars": "^4.7.6",
     "lorem-ipsum": "^2.0.3",
     "mocha": "^8.0.1",
-    "node-loader": "^0.6.0",
     "npm-run-all": "^4.1.5",
     "reveal.js": "^3.9.2",
-    "style-loader": "^0.23.1",
-    "ts-loader": "^6.2.1",
-    "typescript": "^3.7.0",
     "uglify-js": "^3.10.0",
     "vue-loader": "^15.9.3",
     "vue-template-compiler": "^2.6.11",
