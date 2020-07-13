@@ -91,6 +91,7 @@ class ZettlrAttachments {
         if (fileExtIcon) svg = fileExtIcon.replace('EXT', path.extname(a.path).slice(1, 4))
 
         let link = $('<a>').html(svg + ' ' + a.name)
+          .attr('class', 'attachment')
           .attr('data-link', a.path)
           .attr('data-hash', a.hash)
           .attr('title', a.path) // Make sure the user can always see the full title
@@ -188,6 +189,8 @@ class ZettlrAttachments {
               console.error('Could not open attachment:' + potentialError)
             }
           })
+      } else {
+        shell.openExternal(elem.attr('href'))
       }
       e.preventDefault() // Don't follow the link
       e.stopPropagation()
