@@ -1222,12 +1222,14 @@ class ZettlrEditor {
         } else {
           let status = await citeService.getStatus()
           switch (status) {
-            case 4: // Engine is ready
+            case 4: {
+              // Engine is ready
               let citation = await citeService.getCitation(item)
               jqueryElem.html(citation).removeClass('error').attr('data-rendered', 'yes')
               this._citationBuffer[id] = citation
               needRefresh = true
               break
+            }
             case 3: // There was an error loading the database
               jqueryElem.addClass('error')
               break
