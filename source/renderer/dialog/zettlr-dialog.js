@@ -19,6 +19,8 @@ const EventEmitter = require('events')
 const makeTemplate = require('../../common/zettlr-template.js')
 const { clipboard } = require('electron')
 const { trans } = require('../../common/lang/i18n.js')
+require('jquery-ui/ui/unique-id')
+require('jquery-ui/ui/widgets/tabs')
 
 /**
  * This class definitely needs a revamp, because it is not self-sustaining but
