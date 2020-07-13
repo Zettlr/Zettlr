@@ -37,8 +37,7 @@ global.log = {
   }
 }
 
-import { app, BrowserWindow } from 'electron';
-declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
+import { app } from 'electron';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -143,6 +142,7 @@ app.whenReady().then(() => {
 
   zettlr = new Zettlr()
 })
+
 /**
  * Quit as soon as all windows are closed and we are not on macOS.
  */
