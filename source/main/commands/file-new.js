@@ -50,7 +50,8 @@ class FileNew extends ZettlrCommand {
       let filename = sanitize(arg.name, { 'replacement': '-' })
       if (filename.trim() === '') throw new Error('Could not create file: Filename was not valid')
       // If no valid filename is provided, assume .md
-      if (!ALLOWED_FILETYPES.includes(path.extname(filename))) filename += '.md'
+      let ext = path.extname(filename).toLowerCase()
+      if (!ALLOWED_FILETYPES.includes(ext)) filename += '.md'
 
       // Check if there's already a file with this name in the directory
       // NOTE: There are case-sensitive file systems, but we'll disallow this

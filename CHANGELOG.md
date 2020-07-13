@@ -15,6 +15,7 @@
 - The exporter now respects values from a YAML frontmatter, if (and where) applicable.
 - You should now be able to fold Markdown sections from anywhere within their section text.
 - Fixed a rare bug where Zettlr would attempt to render an internal link as a citation.
+- Creating files using a case-sensitive extension name should now work.
 
 ## Under the Hood
 
