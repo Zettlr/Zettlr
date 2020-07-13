@@ -106,11 +106,7 @@ class ZettlrWindow {
 
     // Then activate listeners.
     // and load the index.html of the app.
-    this._win.loadURL(url.format({
-      pathname: path.join(__dirname, '../renderer/assets/index.htm'),
-      protocol: 'file:',
-      slashes: true
-    }))
+    this._win.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
     // EVENT LISTENERS
 
