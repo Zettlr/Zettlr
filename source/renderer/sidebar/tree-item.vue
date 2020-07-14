@@ -95,8 +95,8 @@
 
 <script>
 // Tree View item component
-const findObject = require('../../source/common/util/find-object.js')
-const { trans } = require('../../source/common/lang/i18n')
+const findObject = require('../../common/util/find-object.js')
+const { trans } = require('../../common/lang/i18n')
 const Sorter = require('./sorter.vue').default
 
 module.exports = {

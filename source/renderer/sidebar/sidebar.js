@@ -14,12 +14,14 @@
  * END HEADER
  */
 
-const Vue = require('vue')
-const Vuex = require('vuex')
-const App = require('./sidebar.vue').default
-const store = require('./store.js')
+import Vue from 'vue'
+import App from './sidebar.vue'
+import store from './store'
 
-require('vue-virtual-scroller/dist/vue-virtual-scroller.css')
+const Vuex = require('vuex')
+
+// TODO: Renable
+//require('vue-virtual-scroller/dist/vue-virtual-scroller.css')
 
 // Indicate that we would like to use a vuex store
 Vue.use(Vuex)
@@ -29,7 +31,7 @@ Vue.use(Vuex)
 // we'll be using it throughout the renderer.
 var applicationStore = new Vuex.Store(store)
 
-module.exports = function () {
+export default function () {
   return new Vue({
     // Destructure the App config object, and enrich with store and hook
     ...App,

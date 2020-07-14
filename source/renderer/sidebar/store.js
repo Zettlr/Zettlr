@@ -12,8 +12,8 @@
  */
 
 const Vue = require('vue')
-const objectToArray = require('../../source/common/util/object-to-array')
-const findObject = require('../../source/common/util/find-object')
+const objectToArray = require('../../common/util/object-to-array')
+const findObject = require('../../common/util/find-object')
 
 // Make the Vuex-Store the default export
 module.exports = {

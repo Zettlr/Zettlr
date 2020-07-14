@@ -22,10 +22,8 @@ const ZettlrAttachments = require('./zettlr-attachments')
 const GlobalSearch = require('./util/global-search')
 
 const ZettlrStore = require('./zettlr-store')
-/*
-TOOD: Reactivate
-const createSidebar = require('./assets/vue/vue-sidebar')
-*/
+
+const createSidebar = require('./sidebar/sidebar').default
 
 const path = require('path')
 
