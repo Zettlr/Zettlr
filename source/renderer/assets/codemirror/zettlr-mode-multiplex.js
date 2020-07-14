@@ -1,7 +1,7 @@
 /* global CodeMirror define */
 // ZETTLR SPELLCHECKER PLUGIN
 
-const highlightingModes = require('../../../common/data').highlightingModes;
+const highlightingModes = require('../../../common/data.json').highlightingModes;
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
