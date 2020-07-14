@@ -66,6 +66,11 @@ class ZettlrPrint {
     // Remove the frame on Windows
     if (process.platform === 'win32') winConf.frame = false
 
+    // Application icon for Linux. Cannot be not embedded in the executable.
+    if (process.platform === 'linux') {
+      winConf.icon = path.join(__dirname, 'assets/icons/128x128.png')
+    }
+
     // First create a new browserWindow
     let win = new BrowserWindow(winConf)
 
