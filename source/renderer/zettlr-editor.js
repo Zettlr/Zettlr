@@ -139,7 +139,8 @@ class ZettlrEditor {
       cursorBlinkRate: 0, // Disable cursor blinking (we'll do this with a @keyframes animation)
       gutters: ['CodeMirror-foldgutter'],
       foldOptions: {
-        'widget': '\u00A0\u2026\u00A0' // nbsp ellipse nbsp
+        'widget': '\u00A0\u2026\u00A0', // nbsp ellipse nbsp
+        'scanUp': true // If nothing on current line can be folded, attempt the Markdown heading
       },
       direction: 'ltr',
       rtlMoveVisually: true,

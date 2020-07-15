@@ -55,7 +55,18 @@
     let fromLine = i
 
     for (let i = 0; i < cm.lineCount(); i++) {
-      if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
+      let modeName = cm.getModeAt({ 'line': i, 'ch': 0 }).name
+      if (![ 'markdown', 'stex' ].includes(modeName)) continue
+      if (modeName === 'stex') {
+        // Make sure the token list includes "multiline-equation"
+        // because otherwise we shouldn't render this as it's within
+        // a default LaTeX code block, not an equation.
+        let tokenType = cm.getTokenTypeAt({ 'line': i, 'ch': 0 })
+        let isMultilineBeginning = multilineMathRE.test(cm.getLine(i))
+        let isMultilineEquation = tokenType && tokenType.indexOf('multiline-equation') >= 0
+        if (!isMultilineBeginning && !isMultilineEquation) continue
+      }
+
       // Reset the index of the expression everytime we enter a new line.
       inlineMathRE.lastIndex = 0
 

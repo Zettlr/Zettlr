@@ -275,6 +275,13 @@
     for (; cursorBegin.ch < cursorEnd.ch; cursorBegin.ch++) {
       for (var candidate in replacementCandidates) {
         if (candidate === cm.getRange(cursorBegin, cursorEnd)) {
+          // We have found a suitable candidate and can replace. However, we
+          // need to check that both range endings are actually in the Markdown
+          // mode (common case: the end delimiter of a YAML frontmatter)
+          let beginInMd = cm.getModeAt(cursorBegin).name === 'markdown'
+          let endInMd = cm.getModeAt(cursorEnd).name === 'markdown'
+          if (!beginInMd || !endInMd) return CodeMirror.Pass
+
           // Replace! Use the +input origin so that the user can remove it with Cmd/Ctrl+Z
           cm.replaceRange(replacementCandidates[candidate], cursorBegin, cursorEnd)
           if (wordStyleAutoCorrect) canPerformReverseReplacement = true // Activate reverse replacement

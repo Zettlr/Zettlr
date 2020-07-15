@@ -25,6 +25,7 @@ module.exports = {
     searchNoResults: false, // Will be true during resultless searches.
     maxWeight: 0, // Maximum weight of the search results
     fileMeta: true,
+    useFirstHeadings: false, // If the file list should attempt to use firstHeadings
     displayTime: 'modtime',
     sidebarMode: 'thin', // Can be "thin", "expanded", or "combined"
     selectedFile: null,

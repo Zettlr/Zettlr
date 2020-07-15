@@ -275,6 +275,7 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['display.renderMath'] = (data.find(elem => elem.name === 'display.renderMath') !== undefined)
     cfg['display.renderTasks'] = (data.find(elem => elem.name === 'display.renderTasks') !== undefined)
     cfg['display.renderHTags'] = (data.find(elem => elem.name === 'display.renderHTags') !== undefined)
+    cfg['display.useFirstHeadings'] = (data.find(elem => elem.name === 'display.useFirstHeadings') !== undefined)
 
     cfg['editor.autoCloseBrackets'] = (data.find(elem => elem.name === 'editor.autoCloseBrackets') !== undefined)
     cfg['editor.homeEndBehaviour'] = (data.find(elem => elem.name === 'editor.homeEndBehaviour') !== undefined)

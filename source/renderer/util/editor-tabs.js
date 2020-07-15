@@ -99,7 +99,6 @@ module.exports = class EditorTabs {
   }
 
   syncFiles (files, openFile) {
-    console.log(`[TABS] Synching ${files.length} files`)
     // First reset the whole tab bar
     for (let instance of this._tippyInstances) {
       instance.destroy()
@@ -215,6 +214,7 @@ module.exports = class EditorTabs {
   _makeElement (file, active = false, clean = true, transient = false) {
     // First determine the display title (either filename or frontmatter title)
     let displayTitle = file.name
+    if (file.firstHeading && global.config.get('display.useFirstHeadings')) displayTitle = file.firstHeading
     if (file.frontmatter && file.frontmatter.title) displayTitle = file.frontmatter.title
 
     // Then create the document div

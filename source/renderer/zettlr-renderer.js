@@ -178,6 +178,7 @@ class ZettlrRenderer {
     global.store.set('hideDirs', global.config.get('hideDirs')) // TODO: Not yet implemented
     global.store.set('displayTime', global.config.get('fileMetaTime'))
     global.store.set('sidebarMode', global.config.get('sidebarMode'))
+    global.store.set('useFirstHeadings', global.config.get('display.useFirstHeadings'))
     // Receive the application language
     this.setLocale(global.config.get('appLang'))
 

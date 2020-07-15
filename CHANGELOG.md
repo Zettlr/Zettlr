@@ -5,11 +5,23 @@
 - The NSIS installer (Windows) now contains customized, branded images for the sidebar and header of the various pages visible during the setup process.
 - Added syntax highlighting modes (with keywords):
     - **Clojure**: `clojure`
+    - **LaTeX**: `latex`/`tex`
 - Fixed a bug where the trailing `---` of a YAML frontmatter would mistakenly be identified by the renderer as ATX-headings in readability mode, resulting in weird display of the last YAML frontmatter line.
+- Added feedback if there was no directory selected, but one is needed to do a certain task.
+- Multiline math equations now feature syntax highlighting.
+- Fixed a bug that would sometimes render parts of multiline equations as headings.
+- Added an option to tell Zettlr to use the first heading level 1 of a file to display instead of the filename (however, a frontmatter title will override this).
+- YAML frontmatter ending characters should not trigger AutoCorrect anymore.
+- The exporter now respects values from a YAML frontmatter, if (and where) applicable.
+- You should now be able to fold Markdown sections from anywhere within their section text.
+- Fixed a rare bug where Zettlr would attempt to render an internal link as a citation.
+- Creating files using a case-sensitive extension name should now work.
+- Set desktop Linux desktop icon in BrowserWindow config
 
 ## Under the Hood
 
 - Added the logo source files to source control. Please make sure to read the accompanying README file in the `icons`-directory before using!!
+- The AutoCorrect replacement now checks for the actual mode at both range endings before actually performing a replacement.
 
 # 1.7.1
 

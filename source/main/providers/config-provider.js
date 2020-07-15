@@ -263,7 +263,8 @@ class ConfigProvider extends EventEmitter {
         'renderLinks': true,
         'renderMath': true,
         'renderTasks': true,
-        'renderHTags': false
+        'renderHTags': false,
+        'useFirstHeadings': false // Should first headings be displayed instead of filenames?
       },
       // Language
       'selectedDicts': [ ], // By default no spell checking is active to speed up first start.

@@ -232,6 +232,10 @@
         "mode": "xml",
         "selectors": [ "xml" ]
       },
+      "text/x-stex": {
+        "mode": "stex",
+        "selectors": [ "latex", "tex" ]
+      },
       "text/x-php": {
         "mode": "php",
         "selectors": [ "php" ]
