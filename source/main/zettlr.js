@@ -140,6 +140,10 @@ class Zettlr {
     this._fsal.on('fsal-state-changed', (objPath, info) => {
       // Emitted when anything in the state changes
       if (this.isBooting) return // Only propagate these results when not booting
+
+      // Sync links when the FSAL ius updated
+      global.links.sync(this._cache)
+
       switch (objPath) {
         // The root filetree has changed (added or removed root)
         case 'filetree':

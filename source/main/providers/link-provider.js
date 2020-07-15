@@ -12,9 +12,6 @@
  * END HEADER
  */
 
-const fs = require('fs')
-const path = require('path')
-
 /**
  * This class manages note's relations on the app. It reads the links on each
  * start of the app and writes them after they have been changed.
@@ -22,16 +19,15 @@ const path = require('path')
 class LinkProvider {
   /**
    * Create the instance on program start and initially load the links.
+   * @param {FSALCache} cache a cache to store links
    */
   constructor () {
     global.log.verbose('Link provider booting up ...')
-    this._file = path.join(require('electron').app.getPath('userData'), 'links.json')
+
     this._links = []
     // The global link database; it contains all links that are used in any of the
     // files.
     this._globalLinkDatabase = Object.create(null)
-
-    this._load()
 
     // Register a global helper for the link database
     global.links = {
@@ -119,7 +115,19 @@ class LinkProvider {
        * @param  {Array} newlinks An array containing the links to be set.
        * @return {Boolean} True if all succeeded, false if at least one failed.
        */
-      update: (newTags) => { return this.update(newTags) }
+      update: (newTags) => { return this.update(newTags) },
+      /**
+       * Sync link data from cache. This is called when FSAL is updated
+       * @param {FSALCache} cache The cache object
+       */
+      sync: (cache) => {
+        if (!this._initialized) {
+          this._cache = cache
+          this._initialized = true
+        }
+
+        this._load()
+      }
     }
   }
 
@@ -141,16 +149,17 @@ class LinkProvider {
     // We are not checking if the user directory exists, b/c this file will
     // be loaded after the ZettlrConfig, which makes sure the dir exists.
 
-    // Does the file already exist?
-    try {
-      fs.lstatSync(this._file)
-      this._links = JSON.parse(fs.readFileSync(this._file, { encoding: 'utf8' }))
-    } catch (e) {
-      fs.writeFileSync(this._file, JSON.stringify([]), { encoding: 'utf8' })
-      return this // No need to iterate over objects anymore
-    }
+    if (this._cache) {
+      // Does the file already exist?
+      if (this._cache.has('links')) {
+        this._links = JSON.parse(this._cache.get('links'))
+      } else {
+        this._cache.set('links', JSON.stringify([]))
+        return this // No need to iterate over objects anymore
+      }
 
-    this._checkIntegrity()
+      this._checkIntegrity()
+    }
 
     return this
   }
@@ -160,8 +169,10 @@ class LinkProvider {
    * @return {LinkProvider} This for chainability.
    */
   _save () {
-    // (Over-)write the links
-    fs.writeFileSync(this._file, JSON.stringify(this._links), { encoding: 'utf8' })
+    if (this._cache) {
+      // (Over-)write the links
+      this._cache.set('links', JSON.stringify(this._links))
+    }
 
     return this
   }
