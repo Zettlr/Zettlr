@@ -57,7 +57,7 @@
 
       // Run through all links on this line
       while ((match = citationRE.exec(line)) != null) {
-        let citation = match[1] || match[2]
+        let citation = match[1] || match[3]
 
         // Now get the precise beginning of the match and its end
         let curFrom = { 'line': i, 'ch': match.index }
