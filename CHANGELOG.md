@@ -520,6 +520,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - The full path to an attachment will now be shown on mouse over.
 - You can now turn off the dialog asking you to load remote changes into the editor by checking the corresponding checkbox in the preferences or in the dialog.
 - The file list now shows the full filename after a 1 second delay if you keep your mouse over the name of a file.
+- You can middle mouse click on editor-tabs to close them.
 
 ### Fixes
 
