@@ -29,7 +29,10 @@ module.exports = class EditorTabs {
     this._tippyInstances = []
 
     // Listen to the important events
-    this._div.onclick = (event) => { this._onClick(event) }
+    this._div.onclick = (event) => this._onClick(event)
+    // Listen for non-primary clicks
+    this._div.onauxclick = (event) => this._onClick(event)
+
     this._div.ondragstart = (evt) => {
       // The user has initated a drag operation, so we need some variables
       // we'll be accessing throughout the drag operation: The currently
@@ -99,6 +102,7 @@ module.exports = class EditorTabs {
   }
 
   syncFiles (files, openFile) {
+    console.log(`[TABS] Synching ${files.length} files`)
     // First reset the whole tab bar
     for (let instance of this._tippyInstances) {
       instance.destroy()
@@ -200,7 +204,12 @@ module.exports = class EditorTabs {
 
     // If given, call the callback
     if (this._intentCallback) {
-      this._intentCallback(hash, (closeIntent) ? 'close' : 'select')
+      // middle mouse click closes tab
+      if (event.type === 'auxclick' && event.button === 1) {
+        this._intentCallback(hash, 'close')
+      } else {
+        this._intentCallback(hash, (closeIntent) ? 'close' : 'select')
+      }
     }
   }
 
@@ -214,7 +223,6 @@ module.exports = class EditorTabs {
   _makeElement (file, active = false, clean = true, transient = false) {
     // First determine the display title (either filename or frontmatter title)
     let displayTitle = file.name
-    if (file.firstHeading && global.config.get('display.useFirstHeadings')) displayTitle = file.firstHeading
     if (file.frontmatter && file.frontmatter.title) displayTitle = file.frontmatter.title
 
     // Then create the document div
