@@ -102,7 +102,6 @@ module.exports = class EditorTabs {
   }
 
   syncFiles (files, openFile) {
-    console.log(`[TABS] Synching ${files.length} files`)
     // First reset the whole tab bar
     for (let instance of this._tippyInstances) {
       instance.destroy()
