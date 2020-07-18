@@ -16,11 +16,16 @@
 - You should now be able to fold Markdown sections from anywhere within their section text.
 - Fixed a rare bug where Zettlr would attempt to render an internal link as a citation.
 - Creating files using a case-sensitive extension name should now work.
+- Set desktop Linux desktop icon in BrowserWindow config.
+- `reveal.js`-presentations now do not have standalone-flags during export.
+- The "Import"-option now also lets you select Markdown- and text-files. However, instead of running them through Pandoc, they are directly copied into the target directory.
 
 ## Under the Hood
 
 - Added the logo source files to source control. Please make sure to read the accompanying README file in the `icons`-directory before using!!
 - The AutoCorrect replacement now checks for the actual mode at both range endings before actually performing a replacement.
+- The importer is now a module.
+- Fixed a logical error in the FSAL change detection, which would lead to the FSAL not being able to process additions of assets.
 
 # 1.7.1
 
