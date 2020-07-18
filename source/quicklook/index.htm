@@ -18,23 +18,12 @@
 
     <!-- Include the main theme -->
     <link rel="stylesheet" id="theme-css" href="../common/assets/css/theme-berlin.css">
-
-    <!-- And now the JS -->
-    <!-- Hack for recognizing jquery (thanks to https://stackoverflow.com/a/37480521/8651046)-->
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-
-    <script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
-
-    <!-- Hack for jQuery (part 2) -->
-    <script>if (window.module) module = window.module;</script>
-
 <script>
-/* global $ */
 const QuicklookWindow = require('./zettlr-quicklook-window.js')
 // We need a global for our renderer element
 var ql
 
-$(document).ready(function () {
+window.addEventListener('load', (event) => {
   // Create the renderer
   ql = new QuicklookWindow()
 })

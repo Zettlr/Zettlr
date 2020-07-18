@@ -26,11 +26,13 @@ class ZettlrPrint {
 
     // Enable listening to config changes
     global.config.on('update', (e) => {
-      if (!this._win) return // There's no window to alter
-      if (global.config.get('darkTheme') !== this._darkMode) {
-        this._darkMode = global.config.get('darkTheme')
-        this._win.webContents.send('toggle-theme')
-      }
+      this._darkMode = global.config.get('darkTheme')
+
+      if (this._win) this._win.webContents.send('config-update', global.config.get())
+    })
+
+    global.css.on('update', (cssPath) => {
+      if (this._win) this._win.webContents.send('custom-css', cssPath)
     })
   }
 
@@ -80,7 +82,7 @@ class ZettlrPrint {
       pathname: path.join(__dirname, '../print/index.htm'),
       protocol: 'file:',
       slashes: true,
-      search: `file=${file}&darkMode=${global.config.get('darkTheme')}`
+      search: `file=${file}&darkMode=${global.config.get('darkTheme')}&theme=${global.config.get('display.theme')}`
     }))
     // Only show window once it is completely initialized
     win.once('ready-to-show', () => { win.show() })

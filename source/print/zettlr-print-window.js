@@ -30,10 +30,14 @@ class ZettlrPrintWindow {
     * @param {ZettlrFile} file     The file whose content should be displayed
     */
   constructor () {
+    let url = new URL(window.location.href)
+
     this._file = null
     this._ql = null
     this._iframe = null
     this._titleElem = null
+    this._theme = null
+    this.setTheme(url.searchParams.get('theme'))
 
     // as this class basically acts as the renderer class, we also have to take
     // care of specifics such as getting the translation strings, etc.
@@ -43,7 +47,6 @@ class ZettlrPrintWindow {
     document.body.classList.add(process.platform)
 
     // Find out which file we should request
-    let url = new URL(window.location.href)
     let name = url.searchParams.get('file')
     // Load the file into an iFrame.
     this.init(name)
@@ -52,8 +55,28 @@ class ZettlrPrintWindow {
     let dm = url.searchParams.get('darkMode')
     if (dm === 'true') document.body.classList.add('dark')
 
-    // Toggle the theme if there's an appropriate event
-    ipc.on('toggle-theme', (e) => { document.body.classList.toggle('dark') })
+    ipc.on('custom-css', (evt, cnt) => {
+      let customCss = document.getElementById('custom-css-link')
+      if (customCss) customCss.remove() // Remove any prior link
+
+      let lnk = document.createElement('link')
+      lnk.setAttribute('href', 'file://' + cnt + '?' + Date.now())
+      lnk.setAttribute('type', 'text/css')
+      lnk.setAttribute('id', 'custom-css-link')
+
+      document.head.appendChild(lnk)
+    })
+
+    ipc.on('config-update', (evt, config) => {
+      // First update externalities
+      if (config.darkTheme) {
+        document.body.classList.add('dark')
+      } else {
+        document.body.classList.remove('dark')
+      }
+
+      if (config.display.theme !== this._theme) this.setTheme(config.display.theme)
+    })
 
     // activate event listeners for the window
     this._act()
@@ -71,9 +94,18 @@ class ZettlrPrintWindow {
     title.textContent = basename
 
     this._iframe = document.createElement('iframe')
-    document.querySelectorAll('.content')[0].appendChild(this._iframe)
+    document.querySelector('.content').appendChild(this._iframe)
     this._iframe.setAttribute('src', name)
     this._reposition() // Initial reposition
+  }
+
+  /**
+   * Sets the theme according to the new parameter
+   */
+  setTheme (theme = this._theme) {
+    this._theme = theme
+    let css = document.getElementById('theme-css').getAttribute('href')
+    document.getElementById('theme-css').setAttribute('href', css.replace(/bielefeld|berlin|frankfurt|karl-marx-stadt|bordeaux/, this._theme))
   }
 
   _act () {
