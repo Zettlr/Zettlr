@@ -393,6 +393,7 @@ module.exports = class FSAL extends EventEmitter {
     } else {
       // Both in case of add and addDir there'll be a parent directory
       // we have to find
+      // TODO: What is this? I'm pretty sure it does not do what it says.
       let dir
       do {
         let oldDir = dir

@@ -184,6 +184,16 @@ function ZettlrImport (fileOrFolder, dirToImport, errorCallback = null, successC
       let newName = path.join(dirToImport.path, path.basename(file.path, path.extname(file.path))) + '.md'
       let cmd = `pandoc -f ${file.knownFormat} -t markdown -o "${newName}" --wrap=none --atx-headers "${file.path}"`
 
+      if ([ 'markdown', 'txt' ].includes(file.knownFormat)) {
+        // In this case we should just copy it over
+        try {
+          fs.copyFileSync(file.path, newName)
+          successCallback(file.path)
+        } catch (err) {
+          errorCallback(file.path, err.message)
+        }
+      }
+
       exec(cmd, { 'cwd': dirToImport.path }, (error, stdout, stderr) => {
         if (error && errorCallback) {
           // Call the error callback function to let the initiator
