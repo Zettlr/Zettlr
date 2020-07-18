@@ -29,7 +29,7 @@ const isDir = require('../../common/util/is-dir')
 const isDictAvailable = require('../../common/util/is-dict-available')
 const { getLanguageFile } = require('../../common/lang/i18n')
 const COMMON_DATA = require('../../common/data.json')
-const ZETTLR_VERSION = require('../../package.json').version
+const ZETTLR_VERSION = app.getVersion()
 
 // Suppress notifications on modification of the following settings
 const SUPPRESS_NOTIFICATION = [
