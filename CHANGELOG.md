@@ -25,6 +25,7 @@
 - Added the logo source files to source control. Please make sure to read the accompanying README file in the `icons`-directory before using!!
 - The AutoCorrect replacement now checks for the actual mode at both range endings before actually performing a replacement.
 - The importer is now a module.
+- Fixed a logical error in the FSAL change detection, which would lead to the FSAL not being able to process additions of assets.
 
 # 1.7.1
 
