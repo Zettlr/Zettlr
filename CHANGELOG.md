@@ -16,7 +16,8 @@
 - You should now be able to fold Markdown sections from anywhere within their section text.
 - Fixed a rare bug where Zettlr would attempt to render an internal link as a citation.
 - Creating files using a case-sensitive extension name should now work.
-- Set desktop Linux desktop icon in BrowserWindow config
+- Set desktop Linux desktop icon in BrowserWindow config.
+- `reveal.js`-presentations now do not have standalone-flags during export.
 
 ## Under the Hood
 
