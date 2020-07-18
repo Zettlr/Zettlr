@@ -19,6 +19,7 @@
 - Set desktop Linux desktop icon in BrowserWindow config.
 - `reveal.js`-presentations now do not have standalone-flags during export.
 - The "Import"-option now also lets you select Markdown- and text-files. However, instead of running them through Pandoc, they are directly copied into the target directory.
+- Fixed a bug that would cause the global search to stop working in certain situations, e.g. after renaming a file.
 
 ## Under the Hood
 
