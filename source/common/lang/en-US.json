@@ -288,7 +288,7 @@
             "sorting_time_explanation": "When sorting by time, sort by",
             "spellcheck": "Select the languages for which you want to enable automatic spell checking.",
             "spellcheck_search_placeholder": "Search for dictionaries &hellip;",
-            "spellcheck_warning": "\u003Cem\u003EAttention:\u003C/em\u003E Too many active spell check libraries may slow the app down significanty! Try to stick with three at maximum.",
+            "spellcheck_warning": "\u003Cem\u003EAttention:\u003C/em\u003E Too many active spell check libraries may slow the app down significantly! Try to stick with three at maximum.",
             "spellchecking": {
                 "title": "Spellchecking"
             },
