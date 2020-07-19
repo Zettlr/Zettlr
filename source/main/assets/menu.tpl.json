@@ -39,12 +39,10 @@
     "submenu": [
       {
         "label": "menu.new_file",
-        "accelerator": "CmdOrCtrl+N",
         "command": "file-new"
       },
       {
         "label": "menu.new_dir",
-        "accelerator": "CmdOrCtrl+Shift+N",
         "command": "dir-new"
       },
       {
@@ -52,12 +50,10 @@
       },
       {
         "label": "menu.open",
-        "accelerator": "CmdOrCtrl+O",
         "command": "dir-open"
       },
       {
         "label": "menu.save",
-        "accelerator": "CmdOrCtrl+S",
         "command": "file-save"
       },
       {
@@ -73,12 +69,10 @@
       },
       {
         "label": "menu.export",
-        "accelerator": "CmdOrCtrl+E",
         "command": "export"
       },
       {
         "label": "menu.print",
-        "accelerator": "CmdOrCtrl+P",
         "command": "print"
       },
       {
@@ -97,12 +91,10 @@
       },
       {
         "label": "menu.rename_file",
-        "accelerator": "CmdOrCtrl+R",
         "command": "file-rename"
       },
       {
         "label": "menu.rename_dir",
-        "accelerator": "CmdOrCtrl+Shift+R",
         "command": "dir-rename"
       },
       {
@@ -110,18 +102,10 @@
       },
       {
         "label": "menu.delete_file",
-        "accelerator": {
-          "darwin": "Cmd+Backspace",
-          "other": "Delete"
-        },
         "command": "file-delete"
       },
       {
         "label": "menu.delete_dir",
-        "accelerator": {
-          "darwin": "Cmd+Shift+Backspace",
-          "other": "Ctrl+Delete"
-        },
         "command": "dir-delete"
       },
       {
@@ -153,7 +137,6 @@
       },
       {
         "label": "menu.copy_html",
-        "accelerator": "CmdOrCtrl+Alt+C",
         "command": "copy-as-html"
       },
       {
@@ -162,7 +145,6 @@
       },
       {
         "label": "menu.paste_plain",
-        "accelerator": "CmdOrCtrl+Shift+V",
         "command": "paste-as-plain"
       },
       {
@@ -174,12 +156,10 @@
       },
       {
         "label": "menu.find_file",
-        "accelerator": "CmdOrCtrl+F",
         "command": "file-find"
       },
       {
         "label": "menu.find_dir",
-        "accelerator": "CmdOrCtrl+Shift+F",
         "command": "dir-find"
       },
       {
@@ -187,12 +167,10 @@
       },
       {
         "label": "menu.generate_id",
-        "accelerator": "CmdOrCtrl+L",
         "command": "insert-id"
       },
       {
         "label": "menu.copy_id",
-        "accelerator": "CmdOrCtrl+Shift+L",
         "command": "copy-current-id"
       },
       {
@@ -205,21 +183,18 @@
     "submenu": [
       {
         "label": "menu.toggle_theme",
-        "accelerator": "CmdOrCtrl+Alt+L",
         "type": "checkbox",
         "checked": "darkTheme",
         "command": "toggle-theme"
       },
       {
         "label": "menu.toggle_file_meta",
-        "accelerator": "CmdOrCtrl+Alt+S",
         "type": "checkbox",
         "checked": "fileMeta",
         "command": "toggle-file-meta"
       },
       {
         "label": "menu.toggle_distraction_free",
-        "accelerator": "CmdOrCtrl+J",
         "type": "checkbox",
         "checked": "null",
         "command": "toggle-distraction-free"
@@ -229,12 +204,10 @@
       },
       {
         "label": "menu.toggle_sidebar",
-        "accelerator": "CmdOrCtrl+!",
         "command": "toggle-sidebar"
       },
       {
         "label": "menu.toggle_attachments",
-        "accelerator": "CmdOrCtrl+?",
         "command": "toggle-attachments"
       },
       {
@@ -242,17 +215,14 @@
       },
       {
         "label": "menu.reset_zoom",
-        "accelerator": "CmdOrCtrl+0",
         "command": "zoom-reset"
       },
       {
         "label": "menu.zoom_in",
-        "accelerator": "CmdOrCtrl+Plus",
         "command": "zoom-in"
       },
       {
         "label": "menu.zoom_out",
-        "accelerator": "CmdOrCtrl+-",
         "command": "zoom-out"
       },
       {
@@ -270,12 +240,10 @@
     "submenu": [
       {
         "label": "menu.win_minimize",
-        "accelerator": "CmdOrCtrl+M",
         "role": "minimize"
       },
       {
         "label": "menu.win_close",
-        "accelerator": "CmdOrCtrl+Shift+W",
         "role": "close"
       },
       {
@@ -288,17 +256,14 @@
       },
       {
         "label": "menu.tab_close",
-        "accelerator": "CmdOrCtrl+W",
         "command": "attempt-close-tab"
       },
       {
         "label": "menu.tab_previous",
-        "accelerator": "Ctrl+Shift+Tab",
         "command": "select-previous-tab"
       },
       {
         "label": "menu.tab_next",
-        "accelerator": "Ctrl+Tab",
         "command": "select-next-tab"
       }
     ]
@@ -329,7 +294,6 @@
       },
       {
         "label": "menu.docs",
-        "accelerator": "F1",
         "target": "https://docs.zettlr.com/"
       },
       {
@@ -369,12 +333,10 @@
     "submenu": [
       {
         "label": "menu.preferences",
-        "accelerator": "CmdOrCtrl+,",
         "command": "open-preferences"
       },
       {
         "label": "menu.pdf_preferences",
-        "accelerator": "CmdOrCtrl+Alt+,",
         "command": "open-pdf-preferences"
       },
       {
