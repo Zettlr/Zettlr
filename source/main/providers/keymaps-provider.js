@@ -125,18 +125,19 @@ class KeymapsProvider extends EventEmitter {
   }
 
   get (fun) {
+    let kmps = this.getKeymaps()
     if (!fun) {
-      return this.getKeymaps()
+      return kmps
     }
     // Since the dictionnary of keymaps is define in a two-level dict we need to find the value
     // of the function in the sub-dictionnary.
     // If more than one level -> recursive search? What about the perf?
-    let kmps = this.keymaps
-    Object.keys(kmps).forEach(function (e) {
-      if (kmps[e].hasOwnProperty(fun)) {
-        return kmps[e][fun]
+    for (const key of Object.keys(kmps)) {
+      const dict = kmps[key]
+      if (fun in dict) {
+        return dict[fun]
       }
-    })
+    }
     return null
   }
 
@@ -152,10 +153,7 @@ class KeymapsProvider extends EventEmitter {
     } catch (e) {
       fs.writeFileSync(this.keymapsFile, JSON.stringify(this.keymapsTpl), { encoding: 'utf8' })
     }
-  }
-
-  update () {
-    this.emit('update')
+    this.update()
   }
 
   save () {
@@ -164,6 +162,10 @@ class KeymapsProvider extends EventEmitter {
       global.ipc.send('keymaps-update', {})
     }
     this.update()
+  }
+
+  update () {
+    this.emit('update')
   }
 }
 
