@@ -93,7 +93,7 @@ class ZettlrMenu {
       if (item.hasOwnProperty('role')) {
         let binding = keymaps.get(item.role)
         if (binding) {
-          buildItem.accelerator = binding
+          builtItem.accelerator = binding
         }
         builtItem.role = item.role
       }

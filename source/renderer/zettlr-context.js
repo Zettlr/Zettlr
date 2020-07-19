@@ -67,7 +67,7 @@ class ZettlrCon {
       if (item.hasOwnProperty('role')) {
         let binding = keymaps.get(item.role)
         if (binding) {
-          buildItem.accelerator = binding
+          builtItem.accelerator = binding
         }
         builtItem.role = item.role
       }
@@ -82,15 +82,15 @@ class ZettlrCon {
           builtItem.accelerator = binding
         }
         builtItem.click = function (menuitem, focusedWindow) {
-          let content = ""
+          let content = ''
           if (item.hasOwnProperty('content')) {
             let binding = keymaps.get(item.content)
             if (binding) {
-              buildItem.accelerator = binding
+              builtItem.accelerator = binding
             }
             content = item.content
           } else {
-            content = {'hash': hash}
+            content = { 'hash': hash }
           }
           // Set the content to the attribute's value, if given
           if (item.hasOwnProperty('attribute')) content = attributes.find(elem => elem.name === item.attribute).value
