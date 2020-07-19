@@ -58,7 +58,7 @@ class ZettlrMenu {
     // Top level menus can also have a role (window or help)
     if (menutpl.hasOwnProperty('role')) menu.role = menutpl.role
 
-    let menuKeymaps = global.keymaps.get()['menu']
+    let keymaps = global.keymaps
 
     // Traverse the submenu and apply
     for (let item of menutpl.submenu) {
@@ -90,19 +90,15 @@ class ZettlrMenu {
       // Simple copying of trivial attributes
       if (item.hasOwnProperty('label')) builtItem.label = trans(item.label)
       if (item.hasOwnProperty('type')) builtItem.type = item.type
-      if (item.hasOwnProperty('role')) builtItem.role = item.role
+      if (item.hasOwnProperty('role')) {
+        let binding = keymaps.get(item.role)
+        if (binding) {
+          buildItem.accelerator = binding
+        }
+        builtItem.role = item.role
+      }
 
       // Higher-order attributes
-
-      if (menuKeymaps.hasOwnProperty(item.command)) {
-        builtItem.accelerator = menuKeymaps[item.command]
-      }
-
-      // TODO: Only use for two bindings -> window.minimize & window.close
-      // See if can not be handled in another way? Not very elegant
-      if (menuKeymaps.hasOwnProperty(item.role)) {
-        builtItem.accelerator = menuKeymaps[item.role]
-      }
 
       // Weblinks are "target"s
       if (item.hasOwnProperty('target')) {
@@ -113,6 +109,10 @@ class ZettlrMenu {
 
       // Commands need to be simply sent to the renderer
       if (item.hasOwnProperty('command')) {
+        let binding = keymaps.get(item.command)
+        if (binding) {
+          builtItem.accelerator = binding
+        }
         builtItem.click = function (menuitem, focusedWindow) {
           global.ipc.send(item.command)
         }
@@ -200,7 +200,7 @@ class ZettlrMenu {
     mainMenu[0].submenu.push({ type: 'separator' },
       {
         label: trans('menu.quit'),
-        accelerator: global.keymaps.get('global')['exit'],
+        accelerator: global.keymaps.get('exit'),
         click (item, focusedWindow) {
           if (global.mainWindow) {
             global.mainWindow.send('message', { 'command': 'app-quit' })

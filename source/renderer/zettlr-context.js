@@ -52,6 +52,7 @@ class ZettlrCon {
 
     let menu = []
     let attributeKeys = attributes.map(elem => elem.name) // Ease of access
+    let keymaps = global.keymaps
 
     // Traverse the submenu and apply
     for (let item of menutpl) {
@@ -63,18 +64,34 @@ class ZettlrCon {
       // Simple copying of trivial attributes
       if (item.hasOwnProperty('label')) builtItem.label = trans(item.label)
       if (item.hasOwnProperty('type')) builtItem.type = item.type
-      if (item.hasOwnProperty('role')) builtItem.role = item.role
+      if (item.hasOwnProperty('role')) {
+        let binding = keymaps.get(item.role)
+        if (binding) {
+          buildItem.accelerator = binding
+        }
+        builtItem.role = item.role
+      }
 
       // Higher-order attributes
-
-      // Accelerators may be system specific for macOS
-      if (item.hasOwnProperty('accelerator')) builtItem.accelerator = item.accelerator
 
       // Commands need to be simply sent to the renderer
       let that = this
       if (item.hasOwnProperty('command')) {
+        let binding = keymaps.get(item.command)
+        if (binding) {
+          builtItem.accelerator = binding
+        }
         builtItem.click = function (menuitem, focusedWindow) {
-          let content = (item.hasOwnProperty('content')) ? item.content : { 'hash': hash }
+          let content = ""
+          if (item.hasOwnProperty('content')) {
+            let binding = keymaps.get(item.content)
+            if (binding) {
+              buildItem.accelerator = binding
+            }
+            content = item.content
+          } else {
+            content = {'hash': hash}
+          }
           // Set the content to the attribute's value, if given
           if (item.hasOwnProperty('attribute')) content = attributes.find(elem => elem.name === item.attribute).value
           that._body.getRenderer().handleEvent(item.command, content)

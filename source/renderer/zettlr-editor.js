@@ -926,26 +926,38 @@ class ZettlrEditor {
 
   mapFunctionToCodeMirror (name) {
     switch (name) {
-      case 'CodeMirrorInsertMiddleLineBelow':
+      case 'new_line':
+        return 'newLineAndIndentContinuousMarkdownList'
+      case 'auto_indent':
+        return 'autoIndentMarkdownList'
+      case 'auto_unindent':
+        return 'autoUnindentMarkdownList'
+      case 'insert_below':
         return (cm) => {
           CodeMirror.commands['goLineEnd'](cm)
           CodeMirror.commands['newlineAndIndent'](cm)
         }
-      case 'CodeMirrorInsertMiddleLineAbove':
+      case 'insert_above':
         return (cm) => {
           CodeMirror.commands['goLineUp'](cm)
           CodeMirror.commands['goLineEnd'](cm)
           CodeMirror.commands['newLineAndIndent'](cm)
         }
-      case 'editorPastAsPlain':
+      case 'swap_line_up':
+        return 'swapLineUp'
+      case 'swap_line_down':
+        return 'swapLineDown'
+      case 'past_as_plain':
         return (cm) => { this.pasteAsPlain() }
+      case 'create_link':
+        return 'markDownLink'
       default:
         return name
     }
   }
 
   keymapsChanged () {
-    let keymaps = global.keymaps.get()
+    let keymaps = global.keymaps.get()['editor']
     let inverseKeymaps = {}
     // The keymaps are stored as a dict (key, value) with the function as keys and the associated keystroke as value.
     // We need to inverse that

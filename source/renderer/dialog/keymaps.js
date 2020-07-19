@@ -41,8 +41,8 @@ class KeymapsDialog extends ZettlrDialog {
     return name.split('-')[0] === 'editorKeymapsValue'
   }
 
-  _getFunction (name) {
-    return name.split('-').slice(1).join('-')
+  _getFunction (name, delimiter) {
+    return name.split('-').slice(1).join(delimiter)
   }
 
   proceed (data) {
@@ -50,7 +50,7 @@ class KeymapsDialog extends ZettlrDialog {
     let globalKeymapsKeys = data.filter((e) => this._isGlobalKeymapName(e.name))
     for (let i = 0; i < globalKeymapsKeys.length; i++) {
       let binding = globalKeymapsKeys[i].value
-      let fun = this._getFunction(globalKeymapsKeys[i].name)
+      let fun = this._getFunction(globalKeymapsKeys[i].name, '+')
       globalKeymaps[fun] = binding
     }
 
@@ -58,15 +58,15 @@ class KeymapsDialog extends ZettlrDialog {
     let menuKeymapsKeys = data.filter((e) => this._isMenuKeymapName(e.name))
     for (let i = 0; i < menuKeymapsKeys.length; i++) {
       let binding = menuKeymapsKeys[i].value
-      let fun = this._getFunction(menuKeymapsKeys[i].name)
+      let fun = this._getFunction(menuKeymapsKeys[i].name, '+')
       menuKeymaps[fun] = binding
     }
 
     let editorKeymaps = {}
     let editorKeymapsKeys = data.filter((e) => this._isEditorKeymapName(e.name))
-    for (let i = 0; i < editorKeymaps.length; i++) {
+    for (let i = 0; i < editorKeymapsKeys.length; i++) {
       let binding = editorKeymapsKeys[i].value
-      let fun = this._getFunction(editorKeymapsKeys[i].name)
+      let fun = this._getFunction(editorKeymapsKeys[i].name, '-')
       editorKeymaps[fun] = binding
     }
 
