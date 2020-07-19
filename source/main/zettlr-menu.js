@@ -90,6 +90,7 @@ class ZettlrMenu {
       // Simple copying of trivial attributes
       if (item.hasOwnProperty('label')) builtItem.label = trans(item.label)
       if (item.hasOwnProperty('type')) builtItem.type = item.type
+
       if (item.hasOwnProperty('role')) {
         let binding = keymaps.get(item.role)
         if (binding) {
@@ -224,10 +225,6 @@ class ZettlrMenu {
     if (!this._prebuilt) this._build()
     Menu.setApplicationMenu(this._prebuilt)
     this._prebuilt = null
-  }
-
-  _updateKeymaps () {
-
   }
 
   /**
