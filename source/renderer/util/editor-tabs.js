@@ -29,9 +29,9 @@ module.exports = class EditorTabs {
     this._tippyInstances = []
 
     // Listen to the important events
-    this._div.onclick = (event) => this._onClick(event)
+    this._div.onclick = (event) => { this._onClick(event) }
     // Listen for non-primary clicks
-    this._div.onauxclick = (event) => this._onClick(event)
+    this._div.onauxclick = (event) => { this._onClick(event) }
 
     this._div.ondragstart = (evt) => {
       // The user has initated a drag operation, so we need some variables
@@ -203,12 +203,9 @@ module.exports = class EditorTabs {
 
     // If given, call the callback
     if (this._intentCallback) {
-      // middle mouse click closes tab
-      if (event.type === 'auxclick' && event.button === 1) {
-        this._intentCallback(hash, 'close')
-      } else {
-        this._intentCallback(hash, (closeIntent) ? 'close' : 'select')
-      }
+      // determine if a middle (wheel) click
+      let middleClick = (event.type === 'auxclick' && event.button === 1)
+      this._intentCallback(hash, (middleClick || closeIntent) ? 'close' : 'select')
     }
   }
 
