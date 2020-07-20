@@ -103,6 +103,7 @@
   const TagList = require('./tag-list.vue').default
   const Sorter = require('./sorter.vue').default
   const formatDate = require('../../source/common/util/format-date.js')
+  const { trans } = require('../../source/common/lang/i18n.js')
 
   module.exports = {
     name: 'file-item',
@@ -170,11 +171,11 @@
       },
       countDirs: function () {
         if (!this.obj.hasOwnProperty('children')) return 0
-        return this.obj.children.filter(e => e.type === 'directory').length + ' Directories' || 0
+        return this.obj.children.filter(e => e.type === 'directory').length + ' ' + trans('system.directories') || 0
       },
       countFiles: function () {
         if (!this.obj.hasOwnProperty('children')) return 0
-        return this.obj.children.filter(e => e.type === 'file').length + ' Files' || 0
+        return this.obj.children.filter(e => e.type === 'file').length + ' ' + trans('system.files') || 0
       },
       countTags: function () { return this.obj.tags.length },
       hasWritingTarget: function () {
