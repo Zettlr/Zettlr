@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -33,15 +32,38 @@ class TagsPreferences extends ZettlrDialog {
       this.proceed(form.serializeArray())
     })
 
-    $('#addTagLine').click((e) => {
-      $('#prefs-taglist').append(
-        `<div>
-            <input type="text" name="prefs-tags-name" placeholder="${trans('dialog.tags.name_desc')}">
-            <input type="color" name="prefs-tags-color" placeholder="${trans('dialog.tags.color_desc')}">
-            <input type="text" name="prefs-tags-desc" placeholder="${trans('dialog.tags.desc_desc')}">
-            <button type="button" onclick="$(this).parent().detach()">-</button>
-            </div>`
-      )
+    document.getElementById('addTagLine').addEventListener('click', (e) => {
+      let taglist = document.getElementById('prefs-taglist')
+      let container = document.createElement('div')
+
+      let tagName = document.createElement('input')
+      tagName.setAttribute('type', 'text')
+      tagName.setAttribute('name', 'prefs-tags-name')
+      tagName.setAttribute('placeholder', trans('dialog.tags.name_desc'))
+
+      let tagColor = document.createElement('input')
+      tagColor.setAttribute('type', 'color')
+      tagColor.setAttribute('name', 'prefs-tags-color')
+      tagColor.setAttribute('placeholder', trans('dialog.tags.color_desc'))
+
+      let tagDesc = document.createElement('input')
+      tagDesc.setAttribute('type', 'text')
+      tagDesc.setAttribute('name', 'prefs-tags-desc')
+      tagDesc.setAttribute('placeholder', trans('dialog.tags.desc_desc'))
+
+      let removeButton = document.createElement('button')
+      removeButton.setAttribute('onclick', 'this.parentNode.parentNode.removeChild(this.parentNode)')
+
+      let icon = document.createElement('clr-icon')
+      icon.setAttribute('shape', 'minus')
+      removeButton.appendChild(icon)
+
+      container.appendChild(tagName)
+      container.appendChild(tagColor)
+      container.appendChild(tagDesc)
+      container.appendChild(removeButton)
+
+      taglist.appendChild(container)
     })
   }
 
