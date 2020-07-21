@@ -21,6 +21,7 @@
 - The "Import"-option now also lets you select Markdown and text files. However, instead of running them through Pandoc, they are directly copied into the target directory.
 - Fixed a bug that would cause the global search to stop working in certain situations, e.g. after renaming a file.
 - The middle mouse button now closes tabs (thanks to @Kaan0200 for implementing).
+- All images paths created when pasting or dropping an image are now relative and POSIX (using forward slashes). This unifies images paths across platforms (in particular Windows) and insertion method.
 
 ## Under the Hood
 

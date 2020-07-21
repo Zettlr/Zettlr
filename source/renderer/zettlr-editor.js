@@ -317,10 +317,10 @@ class ZettlrEditor {
           this._cm.setCursor(where)
           let activeFile = this._getActiveFile()
           let str = '\n'
-          for (let p of imagesToInsert) {    
+          for (let p of imagesToInsert) {
             // Insert a relative path instead of an absolute one
             let pathToInsert = path.relative(path.dirname(activeFile.fileObject.path), p)
-              
+
             // Transforms Win32 paths (backslashes) into Posix paths (fwd slashes)
             pathToInsert = path.posix.join(...pathToInsert.split(path.win32.sep))
             str += `![${path.basename(p)}](${pathToInsert})\n`

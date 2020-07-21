@@ -106,10 +106,10 @@ class SaveImage extends ZettlrCommand {
       if (err) return global.ipc.notify(trans('system.error.could_not_save_image'))
       // Insert a relative path instead of an absolute one
       let pathToInsert = path.relative(path.dirname(activeFile.path), imagePath)
-      
+
       // Transforms Win32 paths (backslashes) into Posix paths (fwd slashes)
       pathToInsert = path.posix.join(...pathToInsert.split(path.win32.sep))
-        
+
       // Everything worked out - now tell the editor to insert some text
       this._app.ipc.send('insert-text', `![${targetFile}](${pathToInsert})\n`)
       // Tada!
