@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -20,7 +19,7 @@ const ZettlrRenderer = require('../zettlr-renderer.js')
 // We need a global for our renderer element
 var renderer
 
-$(document).ready(function () {
+window.addEventListener('load', (event) => {
   // Create the renderer
   renderer = new ZettlrRenderer()
   renderer.init()

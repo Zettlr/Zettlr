@@ -3,11 +3,17 @@
 #attachments {
     position: absolute;
     top: @toolbar-height;
-    right: -20%;
+    right: 0%;
     bottom: 0;
     width: 20%;
     overflow-y:auto;
     overflow-x:hidden;
+    transition: right 0.5s ease;
+
+    &.hidden {
+      right: -20%;
+      transition: right 0.5s ease;
+    }
 
     #open-dir-external {
         padding: @button-margin;

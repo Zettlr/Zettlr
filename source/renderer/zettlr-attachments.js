@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -39,15 +38,27 @@ const FILETYPES_IMG = [
 class ZettlrAttachments {
   constructor (parent) {
     this._renderer = parent
-    this._container = $('<div>').prop('id', 'attachments').css('display', 'none')
-    this._container.html(`<h1>${trans('gui.attachments')} <clr-icon shape="folder" class="is-solid" id="open-dir-external" title="${trans('gui.attachments_open_dir')}"></clr-icon></h1>`)
-    this._fileContainer = $('<div>').prop('id', 'files')
-    this._bibliographyContainer = $('<div>').prop('id', 'bibliography')
-    this._container.append(this._fileContainer)
-    this._container.append($('<h1>').text(trans('gui.citeproc.references_heading')))
-    this._container.append(this._bibliographyContainer)
-    $('body').append(this._container)
-    this._open = false
+
+    this._container = document.createElement('div')
+    this._container.setAttribute('id', 'attachments')
+    this._container.classList.add('hidden')
+    this._container.innerHTML = `<h1>${trans('gui.attachments')} <clr-icon shape="folder" class="is-solid" id="open-dir-external" title="${trans('gui.attachments_open_dir')}"></clr-icon></h1>`
+
+    this._fileContainer = document.createElement('div')
+    this._fileContainer.setAttribute('id', 'files')
+
+    this._bibliographyContainer = document.createElement('div')
+    this._bibliographyContainer.setAttribute('id', 'bibliography')
+
+    let referencesHeading = document.createElement('h1')
+    referencesHeading.textContent = trans('gui.citeproc.references_heading')
+
+    this._container.appendChild(this._fileContainer)
+    this._container.appendChild(referencesHeading)
+    this._container.appendChild(this._bibliographyContainer)
+
+    document.body.appendChild(this._container)
+
     this._attachments = []
 
     this._act() // Activate both the directory toggle and the link
@@ -58,31 +69,27 @@ class ZettlrAttachments {
     */
   toggle () {
     // Toggles the display of the attachment pane
-    if (!this._open) {
-      this._container.css('display', '')
-      this._container.animate({ 'right': '0%' })
-    } else {
-      this._container.animate({ 'right': '-20%' }, () => {
-        this._container.css('display', 'none')
-      })
-    }
-
-    this._open = !this._open
+    this._container.classList.toggle('hidden')
   }
 
   /**
     * Refreshes the list with new attachments on dir change.
     */
   refresh () {
-    this._fileContainer.text('')
+    this._fileContainer.textContent = ''
+
     // Grab the newest attachments and refresh
     if (!this._renderer.getCurrentDir()) {
-      this._fileContainer.append($('<p>').text(trans('gui.no_attachments')))
+      let p = document.createElement('p')
+      p.textContent = trans('gui.no_attachments')
+      this._fileContainer.appendChild(p)
       return // Don't activate in this instance
     }
 
     if (this._renderer.getCurrentDir().attachments.length === 0) {
-      this._fileContainer.append($('<p>').text(trans('gui.no_attachments')))
+      let p = document.createElement('p')
+      p.textContent = trans('gui.no_attachments')
+      this._fileContainer.appendChild(p)
     } else {
       this._attachments = this._renderer.getCurrentDir().attachments
       let fileExtIcon = clarityIcons.get('file-ext')
@@ -90,11 +97,12 @@ class ZettlrAttachments {
         let svg = ''
         if (fileExtIcon) svg = fileExtIcon.replace('EXT', path.extname(a.path).slice(1, 4))
 
-        let link = $('<a>').html(svg + ' ' + a.name)
-          .attr('data-link', a.path)
-          .attr('data-hash', a.hash)
-          .attr('title', a.path) // Make sure the user can always see the full title
-          .attr('href', a.path) // Necessary for native drag&drop functionality
+        let link = document.createElement('a')
+        link.innerHTML = `${svg} ${a.name}`
+        link.setAttribute('data-link', a.path)
+        link.setAttribute('data-hash', a.hash)
+        link.setAttribute('title', a.path) // Make sure the user can always see the full title
+        link.setAttribute('href', a.path) // Necessary for native drag&drop functionality
 
         // When dragging files from here onto the editor instance, users want
         // to have the appropriate link placed automatically, that is: images
@@ -114,8 +122,8 @@ class ZettlrAttachments {
         }
 
         // Circumvent the jQuery event wrapping and use native events.
-        link[0].ondragstart = (event) => { this.setDragData(dragData, event) }
-        this._fileContainer.append(link)
+        link.ondragstart = (event) => { this.setDragData(dragData, event) }
+        this._fileContainer.appendChild(link)
       }
     }
   }
@@ -162,8 +170,11 @@ class ZettlrAttachments {
    * Sets the actual HTML contents of the bibliography container.
    */
   setBibliographyContents (bib) {
-    if (typeof bib === 'string') this._bibliographyContainer.html(`<p>${bib}</p>`)
-    else this._bibliographyContainer.html(bib[0].bibstart + bib[1].join('\n') + bib[0].bibend)
+    if (typeof bib === 'string') {
+      this._bibliographyContainer.innerHTML = `<p>${bib}</p>`
+    } else {
+      this._bibliographyContainer.innerHTML = bib[0].bibstart + bib[1].join('\n') + bib[0].bibend
+    }
   }
 
   /**
@@ -179,21 +190,24 @@ class ZettlrAttachments {
     * Activates the event listeners on the attachment pane.
     */
   _act () {
-    $('#attachments').on('click', 'a', (e) => {
-      let elem = $(e.target)
-      if (elem.attr('data-link')) {
-        shell.openPath(elem.attr('data-link'))
+    this._container.addEventListener('click', (e) => {
+      let a = e.target
+      if (a.tagName !== 'A') return // Not an anchor
+
+      if (a.hasAttribute('data-link')) {
+        shell.openPath(a.getAttribute('data-link'))
           .then(potentialError => {
             if (potentialError !== '') {
               console.error('Could not open attachment:' + potentialError)
             }
           })
       }
+
       e.preventDefault() // Don't follow the link
       e.stopPropagation()
     })
 
-    $('#attachments #open-dir-external').click((e) => {
+    document.getElementById('open-dir-external').addEventListener('click', (e) => {
       if (this._renderer.getCurrentDir()) {
         shell.openPath(this._renderer.getCurrentDir().path)
           .then(potentialError => {
