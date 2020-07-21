@@ -16,11 +16,19 @@
 - You should now be able to fold Markdown sections from anywhere within their section text.
 - Fixed a rare bug where Zettlr would attempt to render an internal link as a citation.
 - Creating files using a case-sensitive extension name should now work.
+- Set desktop Linux desktop icon in BrowserWindow config.
+- `reveal.js`-presentations now do not have standalone-flags during export.
+- The "Import"-option now also lets you select Markdown- and text-files. However, instead of running them through Pandoc, they are directly copied into the target directory.
+- Fixed a bug that would cause the global search to stop working in certain situations, e.g. after renaming a file.
+- The middle mouse button now closes tabs (thanks to @Kaan0200 for implementing).
 
 ## Under the Hood
 
 - Added the logo source files to source control. Please make sure to read the accompanying README file in the `icons`-directory before using!!
 - The AutoCorrect replacement now checks for the actual mode at both range endings before actually performing a replacement.
+- The importer is now a module.
+- Fixed a logical error in the FSAL change detection, which would lead to the FSAL not being able to process additions of assets.
+- The application now uses `app.getVersion()` instead of requiring the `package.json`-file (thanks to @Aigeruth for implementing).
 
 # 1.7.1
 
@@ -519,6 +527,7 @@ This release contains several breaking changes to 1.6 due to heavy internal refa
 - The full path to an attachment will now be shown on mouse over.
 - You can now turn off the dialog asking you to load remote changes into the editor by checking the corresponding checkbox in the preferences or in the dialog.
 - The file list now shows the full filename after a 1 second delay if you keep your mouse over the name of a file.
+- You can middle mouse click on editor-tabs to close them.
 
 ### Fixes
 

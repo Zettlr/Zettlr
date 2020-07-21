@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-06-23T17:07:59.000000Z"
+        "updated_at": "2020-07-09T14:44:43.000000Z"
     },
     "dialog": {
         "about": {
@@ -188,7 +188,8 @@
                 "render_links": "Links darstellen",
                 "render_math": "Formeln darstellen",
                 "render_tasks": "Tasks darstellen",
-                "title": "Anzeige"
+                "title": "Anzeige",
+                "use_first_headings": "Falls vorhanden, zeige die erste \u00dcberschrift Ebene 1 statt des Dateinamens"
             },
             "display_time_explanation": "Zeige folgende Zeit in den Dateiinformationen an",
             "editor": "Editor",
@@ -610,6 +611,7 @@
         "open_root_directory_success": "Verzeichnis %s wurde geladen.",
         "overwrite_file_message": "Die Date %s existiert bereits in diesem Verzeichnis. \u00dcberschreiben?",
         "overwrite_file_title": "Datei \u00fcberschreiben",
+        "please_select_directory": "Bitte w\u00e4hle zuerst ein Verzeichnis aus",
         "replace_file_message": "Datei %s wurde au\u00dferhalb von Zettlr ver\u00e4ndert. Soll die geladene Datei mit der neueren Version ersetzt werden?",
         "replace_file_title": "Datei ersetzen",
         "save_changes_cancel": "Abbrechen",

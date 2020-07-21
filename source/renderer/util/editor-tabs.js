@@ -14,6 +14,7 @@
 
 const { trans } = require('../../common/lang/i18n')
 const path = require('path')
+const tippy = require('tippy.js').default
 // Left the localize/localise here in order to confuse future generations.
 const localizeNumber = require('../../common/util/localise-number')
 
@@ -30,6 +31,9 @@ module.exports = class EditorTabs {
 
     // Listen to the important events
     this._div.onclick = (event) => { this._onClick(event) }
+    // Listen for non-primary clicks
+    this._div.onauxclick = (event) => { this._onClick(event) }
+
     this._div.ondragstart = (evt) => {
       // The user has initated a drag operation, so we need some variables
       // we'll be accessing throughout the drag operation: The currently
@@ -134,7 +138,7 @@ module.exports = class EditorTabs {
     }
 
     // After synchronising, enable the tippy
-    this._tippyInstances = global.tippy('#document-tabs .document', {
+    this._tippyInstances = tippy('#document-tabs .document', {
       delay: [ 1000, null ], // Show after 1s, hide normally
       allowHTML: true, // There is HTML in the contents
       placement: 'bottom' // Prefer to display it on the bottom
@@ -200,7 +204,9 @@ module.exports = class EditorTabs {
 
     // If given, call the callback
     if (this._intentCallback) {
-      this._intentCallback(hash, (closeIntent) ? 'close' : 'select')
+      // determine if a middle (wheel) click
+      let middleClick = (event.type === 'auxclick' && event.button === 1)
+      this._intentCallback(hash, (middleClick || closeIntent) ? 'close' : 'select')
     }
   }
 

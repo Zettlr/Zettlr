@@ -50,6 +50,8 @@
       ".tiff"
     ],
     "import_files": [
+        [ "markdown",   "Markdown",                          ".md", ".markdown" ],
+        [ "txt",        "Text",                              ".txt" ],
         [ "docbook",    "DocBook",                           ".docbook" ],
         [ "docx",       "Microsoft Word",                    ".docx", ".doc" ],
         [ "epub",       "EPUB",                              ".epub" ],

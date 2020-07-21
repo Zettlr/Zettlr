@@ -101,6 +101,11 @@ class ZettlrWindow {
 
     // On Linux we'll fall back to how the windows should look
 
+    // Application icon for Linux. Cannot be not embedded in the executable.
+    if (process.platform === 'linux') {
+      winConf.icon = path.join(__dirname, 'assets/icons/128x128.png')
+    }
+
     // First create a new browserWindow
     this._win = new BrowserWindow(winConf)
 

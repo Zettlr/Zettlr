@@ -209,6 +209,7 @@
     "joplin-turndown": "^4.0.28",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "jquery": "^3.5.1",
+    "jquery-ui": "^1.12.1",
     "katex": "^0.11.1",
     "md5": "^2.2.1",
     "mermaid": "8.5.0",

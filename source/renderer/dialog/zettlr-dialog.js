@@ -14,11 +14,13 @@
  * END HEADER
  */
 
-// const tippy = require('tippy.js/dist/tippy-bundle.cjs.js').default
+const tippy = require('tippy.js').default
 const EventEmitter = require('events')
 const makeTemplate = require('../../common/zettlr-template.js')
 const { clipboard } = require('electron')
 const { trans } = require('../../common/lang/i18n.js')
+require('jquery-ui/ui/unique-id')
+require('jquery-ui/ui/widgets/tabs')
 
 /**
  * This class definitely needs a revamp, because it is not self-sustaining but
@@ -214,7 +216,7 @@ class ZettlrDialog extends EventEmitter {
     })
 
     // Tippify all elements with the respective attribute
-    global.tippy(this._modal[0].querySelectorAll('[data-tippy-content]'), {
+    tippy(this._modal[0].querySelectorAll('[data-tippy-content]'), {
       delay: 100,
       arrow: true,
       duration: 100

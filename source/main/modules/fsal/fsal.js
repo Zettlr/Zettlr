@@ -391,12 +391,12 @@ module.exports = class FSAL extends EventEmitter {
       if (isAttachment(changedPath, true)) descriptorHash = hash(path.dirname(changedPath))
       descriptor = this.find(descriptorHash)
     } else {
-      // Both in case of add and addDir there'll be a parent directory
-      // we have to find
-      let dir
+      // Both in case of add and addDir there'll
+      // be a parent directory we have to find
+      let dir = changedPath
       do {
         let oldDir = dir
-        dir = path.dirname(changedPath)
+        dir = path.dirname(dir)
         if (dir === oldDir) break // We've reached the top of the file system
         descriptorHash = hash(dir)
       } while (!(descriptor = this.find(descriptorHash)))

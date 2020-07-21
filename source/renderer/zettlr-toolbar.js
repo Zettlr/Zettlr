@@ -13,6 +13,7 @@
  * END HEADER
  */
 
+const tippy = require('tippy.js').default
 const localiseNumber = require('../common/util/localise-number')
 const { trans } = require('../common/lang/i18n')
 
@@ -153,7 +154,7 @@ class ZettlrToolbar {
     })
 
     // Tippify all elements with the respective attribute.
-    global.tippy('#toolbar [data-tippy-content]', {
+    tippy('#toolbar [data-tippy-content]', {
       delay: 100,
       arrow: true,
       duration: 100
