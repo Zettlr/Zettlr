@@ -1,4 +1,4 @@
-/* global CodeMirror $ define */
+/* global CodeMirror define */
 // This plugin renders MathJax parts in CodeMirror instances
 
 (function (mod) {
@@ -142,7 +142,8 @@
         }
 
         // Use jQuery for simple creation of the DOM element
-        let elem = $('<span class="preview-math"></span>')[0]
+        let elem = document.createElement('span')
+        elem.classList.add('preview-math')
 
         let textMarker = cm.markText(
           myMarker.curFrom, myMarker.curTo,

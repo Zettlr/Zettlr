@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -24,11 +23,13 @@ class UpdateDialog extends ZettlrDialog {
   preInit (data) {
     let matomoData = '?pk_campaign=RecurringUsers&pk_source=app&pk_medium=ZettlrUpdater'
     data.downloadLink = 'https://www.zettlr.com/download/' + matomoData
-    if ($('body').hasClass('darwin')) {
+
+    let bodyClasses = document.body.classList
+    if (bodyClasses.contains('darwin')) {
       data.downloadLink = 'https://www.zettlr.com/download/macos' + matomoData
-    } else if ($('body').hasClass('win32')) {
+    } else if (bodyClasses.contains('win32')) {
       data.downloadLink = 'https://www.zettlr.com/download/win32' + matomoData
-    } else if ($('body').hasClass('linux')) {
+    } else if (bodyClasses.contains('linux')) {
       data.downloadLink = 'https://www.zettlr.com/download/linux' + matomoData
     }
 
