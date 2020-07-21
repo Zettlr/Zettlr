@@ -18,6 +18,7 @@ const hash = require('../common/util/hash')
 const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const Turndown = require('joplin-turndown')
+const tippy = require('tippy.js').default
 const countWords = require('../common/util/count-words')
 const EditorTabs = require('./util/editor-tabs')
 const turndownGfm = require('joplin-turndown-plugin-gfm')
@@ -1067,7 +1068,7 @@ class ZettlrEditor {
 
     // Now we either got a match or an empty fnref. So create a tippy
     // instance
-    global.tippy(element[0], {
+    tippy(element[0], {
       'content': fnref,
       allowHTML: true,
       onHidden (instance) {
