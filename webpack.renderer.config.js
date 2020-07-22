@@ -1,5 +1,6 @@
 const rules = require('./webpack.rules')
 const plugins = require('./webpack.plugins')
+const path = require('path')
 
 rules.push({
   test: /\.css$/,
@@ -15,6 +16,16 @@ rules.push({
     loader: 'less-loader' // Compile Less to CSS
   }]
 })
+rules.push({
+  test: /\.handlebars$/,
+  use: [{
+    loader: 'handlebars-loader',
+    options: {
+      // Use custom Handlebars runtime with extra helpers registered
+      runtime: path.join(__dirname, 'source/common/zettlr-template.js')
+    }
+  }]
+})
 
 module.exports = {
   module: {
@@ -22,6 +33,6 @@ module.exports = {
   },
   plugins: plugins,
   resolve: {
-    extensions: [ '.js', '.ts', '.jsx', '.tsx', '.css', '.less' ]
+    extensions: [ '.js', '.ts', '.jsx', '.tsx', '.css', '.less', '.handlebars' ]
   }
 }

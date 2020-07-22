@@ -24,7 +24,6 @@ require('jquery-ui/ui/widgets/sortable')
 const ZettlrCon = require('./zettlr-context.js')
 const ZettlrNotification = require('./zettlr-notification.js')
 const popup = require('./zettlr-popup.js')
-const makeTemplate = require('../common/zettlr-template.js')
 
 // Dialogs
 const StatsDialog = require('./dialog/stats.js')
@@ -183,7 +182,8 @@ class ZettlrBody {
       return global.ipc.send('file-new', { 'name': generateFileName(), 'hash': dir.hash })
     }
 
-    let cnt = makeTemplate('popup', 'textfield', {
+    const textfieldTemplate = require('./../../resources/templates/popup/textfield.handlebars')
+    let cnt = textfieldTemplate({
       'val': generateFileName(),
       'placeholder': trans('dialog.file_new.placeholder')
     })
@@ -774,7 +774,7 @@ class ZettlrBody {
 
   displayTableGenerator () {
     if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
-    let cnt = makeTemplate('popup', 'table')
+    let cnt = require('./../../resources/templates/popup/table.handlebars')
     this._currentPopup = popup($('.button.formatting'), cnt)
 
     $('.table-generator').mouseleave(e => { $('.table-generator .cell').removeClass('active') })
