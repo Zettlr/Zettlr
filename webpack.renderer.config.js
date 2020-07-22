@@ -5,6 +5,16 @@ rules.push({
   test: /\.css$/,
   use: [{ loader: 'style-loader' }, { loader: 'css-loader' }, { loader: 'vue-loader' }]
 })
+rules.push({
+  test: /\.less$/,
+  use: [{
+    loader: 'style-loader' // Create style nodes from JS strings
+  }, {
+    loader: 'css-loader' // Translate CSS into JS string
+  }, {
+    loader: 'less-loader' // Compile Less to CSS
+  }]
+})
 
 module.exports = {
   module: {
@@ -12,6 +22,6 @@ module.exports = {
   },
   plugins: plugins,
   resolve: {
-    extensions: [ '.js', '.ts', '.jsx', '.tsx', '.css' ]
+    extensions: [ '.js', '.ts', '.jsx', '.tsx', '.css', '.less' ]
   }
 }

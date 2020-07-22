@@ -26,7 +26,21 @@ module.exports = [
     ]
   },
   {
-    test: /\.tsx?$/,
+    // Handle picture files: just copy them
+    test: /\.(png|svg|jpg|gif)$/,
+    use: [
+      'file-loader'
+    ]
+  },
+  {
+    // Handle font files: just copy them
+    test: /\.(woff|woff2|eot|ttf|otf)$/,
+    use: [
+      'file-loader'
+    ]
+  },
+  {
+    test: /(.ts|.tsx)$/,
     exclude: /(node_modules|\.webpack)/,
     use: {
       loader: 'ts-loader',
