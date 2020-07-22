@@ -6,5 +6,9 @@ module.exports = {
   },
   resolve: {
     extensions: [ '.js', '.ts', '.jsx', '.tsx', '.css', '.json' ]
+  },
+  externals: {
+    // Do not embed fsevents (otherwise this leads to problems on Linux and Windows, see https://github.com/paulmillr/chokidar/issues/618#issuecomment-392618390)
+    'fsevents': "require('fsevents')"
   }
 }

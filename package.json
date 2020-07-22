@@ -227,6 +227,9 @@
     "vuex": "^3.5.1",
     "yaml": "^1.10.0"
   },
+  "optionalDependencies": {
+    "fsevents": "^1.2.4"
+  },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.52",
     "@electron-forge/maker-deb": "6.0.0-beta.52",
