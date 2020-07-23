@@ -81,7 +81,8 @@
           "target": "nsis",
           "arch": [
             "x64",
-            "ia32"
+            "ia32",
+            "arm64"
           ]
         }
       ],
@@ -135,7 +136,7 @@
       "allowToChangeInstallationDirectory": true,
       "uninstallDisplayName": "Uninstall ${productName}",
       "installerHeader": "resources/NSIS/NSISinstallerHeader.bmp",
-      "installerSidebar": "resources/NSISinstallerSidebar.bmp"
+      "installerSidebar": "resources/NSIS/NSISinstallerSidebar.bmp"
     },
     "deb": {
       "priority": "optional",
