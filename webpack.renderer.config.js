@@ -1,6 +1,7 @@
 const rules = require('./webpack.rules')
 const plugins = require('./webpack.plugins')
 const path = require('path')
+const webpack = require('webpack')
 
 rules.push({
   test: /\.css$/,
@@ -26,6 +27,13 @@ rules.push({
     }
   }]
 })
+
+// Load jQuery
+plugins.push(new webpack.ProvidePlugin({
+  '$': 'jquery',
+  'jQuery': 'jquery',
+  'window.jQuery': 'jquery'
+}))
 
 module.exports = {
   module: {
