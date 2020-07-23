@@ -194,6 +194,7 @@
     "joplin-turndown/jsdom/acorn-globals/acorn": "^6.4.1"
   },
   "dependencies": {
+    "@clr/icons": "^3.1.4",
     "@zettlr/citr": "^1.2.0",
     "adm-zip": "^0.4.16",
     "archiver": "^4.0.1",

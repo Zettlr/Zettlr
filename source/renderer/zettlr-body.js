@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -14,6 +13,7 @@
  *
  * END HEADER
  */
+const $ = require('jquery')
 require('jquery-ui/ui/data')
 require('jquery-ui/ui/scroll-parent')
 require('jquery-ui/ui/version')

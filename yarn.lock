@@ -23,6 +23,11 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-3.1.0.tgz#8ff71d51053cd5ee4981e5a501d80a536244f7fd"
   integrity sha512-GcIY79elgB+azP74j8vqkiXz8xLFfIzbQJdlwOPisgbKT00tviJQuEghOXSMVxJ00HoYJbGswr4kcllUc4xCcg==
 
+"@clr/icons@^3.1.4":
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-3.1.4.tgz#6a33c225801cb3c6e9b3f199c5adb71f5b2b187f"
+  integrity sha512-vsqYf/9wSB0W2YpqvfhJQ89dvYnDbblpJj/Vi624X+Ih83jabh0IVepMbqSSfboHyUuBlCRkndLp9yQIhNcjDQ==
+
 "@electron-forge/async-ora@6.0.0-beta.52":
   version "6.0.0-beta.52"
   resolved "https://registry.yarnpkg.com/@electron-forge/async-ora/-/async-ora-6.0.0-beta.52.tgz#33f6543263abaf7bde65e226c5ad6c9632019f4e"
