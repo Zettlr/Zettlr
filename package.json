@@ -41,7 +41,6 @@
     "productName": "Zettlr",
     "npmRebuild": false,
     "copyright": "Zettlr is licensed under GNU GPL v3.",
-    "compression": "maximum",
     "fileAssociations": [
       {
         "ext": "md",
@@ -99,7 +98,8 @@
         "deb",
         "rpm"
       ],
-      "artifactName": "Zettlr-${version}-${arch}.${ext}", "synopsis": "Markdown editor",
+      "artifactName": "Zettlr-${version}-${arch}.${ext}",
+      "synopsis": "Markdown editor",
       "category": "Office",
       "icon": "resources/icons/png",
       "desktop": {
