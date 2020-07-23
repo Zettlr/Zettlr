@@ -180,7 +180,7 @@
       "allowToChangeInstallationDirectory": true,
       "uninstallDisplayName": "Uninstall ${productName}",
       "installerHeader": "resources/NSIS/NSISinstallerHeader.bmp",
-      "installerSidebar": "resources/NSISinstallerSidebar.bmp"
+      "installerSidebar": "resources/NSIS/NSISinstallerSidebar.bmp"
     },
     "deb": {
       "priority": "optional",
