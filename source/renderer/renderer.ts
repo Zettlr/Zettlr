@@ -15,7 +15,7 @@
  */
 
 // Include the geometry style of the app (will be included in the html by webpack magic)
-import './../common/assets/less/geometry/geometry-main.less'
+import './../common/assets/less/main.less'
 
 import ZettlrRenderer from './zettlr-renderer'
 // We need a global for our renderer element
