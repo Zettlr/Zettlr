@@ -202,7 +202,7 @@ jobs:
       - name: Generate SHA256 checksums
         run: |
           sha256sum "Zettlr-${{ steps.pkg.outputs.version }}.exe" > "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe" > "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{ steps.pkg.outputs.version }}.dmg" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm" >> "SHA256SUMS.txt"
