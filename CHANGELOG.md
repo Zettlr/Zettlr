@@ -1,4 +1,4 @@
-# (no version assigned)	# 1.7.2
+# (no version assigned)
 - All images paths created when pasting or dropping an image are now relative and POSIX (using forward slashes). This unifies images paths across platforms (in particular Windows) and insertion method.
 - Parenthesis in images paths created when pasting or dropping are now escaped with percent-encoding (%28 %29)
 
