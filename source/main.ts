@@ -23,16 +23,16 @@ global.preBootLog = [{
  * This will be overwritten by the log provider, once it has booted
  */
 global.log = {
-  'verbose': (message) => {
+  'verbose': (message: string) => {
     global.preBootLog.push({ 'level': 1, 'message': message })
   },
-  'info': (message) => {
+  'info': (message: string) => {
     global.preBootLog.push({ 'level': 2, 'message': message })
   },
-  'warning': (message) => {
+  'warning': (message: string) => {
     global.preBootLog.push({ 'level': 3, 'message': message })
   },
-  'error': (message) => {
+  'error': (message: string) => {
     global.preBootLog.push({ 'level': 4, 'message': message })
   }
 }
@@ -134,8 +134,8 @@ app.whenReady().then(() => {
     const { default: installExtension, VUEJS_DEVTOOLS } = require('electron-devtools-installer')
     // Load Vue developer extension
     installExtension(VUEJS_DEVTOOLS)
-      .then((name) => global.log.info(`Added DevTools extension:  ${name}`))
-      .catch((err) => console.log('An error occurred: ', err))
+      .then((name: string) => global.log.info(`Added DevTools extension:  ${name}`))
+      .catch((err: any) => console.log('An error occurred: ', err))
   } catch (e) {
     global.log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
   }
@@ -184,7 +184,7 @@ app.on('activate', function () {
  * Hook into the unhandledRejection-event to prevent nasty error messages when
  * a Promise is rejected somewhere.
  */
-process.on('unhandledRejection', (err) => {
+process.on('unhandledRejection', (err: any) => {
   // Just log to console.
   global.log.error(err.message)
 })
