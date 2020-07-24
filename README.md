@@ -43,7 +43,7 @@ With Zettlr, writing professional texts is easy and motivating: Whether you are 
 - Available in over a dozen languages
 - Tight and ever-growing **integration with your favourite reference manager** (such as Zotero or JabRef)
 - **Cite with Zettlr** using `citeproc` and your existing literature database
-- Four **themes and dark mode support**
+- Five **themes and dark mode support**
 - File-agnostic writing: Enjoy **full control over your own files**
 - Keep all your notes and texts **in one place** — searchable and accessible
 - **Code highlighting** for many languages
