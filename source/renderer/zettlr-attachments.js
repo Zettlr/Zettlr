@@ -106,6 +106,13 @@ class ZettlrAttachments {
         if (FILETYPES_IMG.includes(a.ext.toLowerCase())) {
           // Override the drag data with a link to the image
           let uri = decodeURIComponent(a.path)
+
+          // Make the link relative instead of absolute
+          uri = path.basename(uri)
+
+          // If the filename contains parenthesis, we percent-encode them
+          uri = uri.replace(/[()]/g, escape)
+
           dragData = `![${a.name}](${uri})`
         } else {
           // Standard file link
