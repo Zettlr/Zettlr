@@ -14,13 +14,14 @@
   "description": "A powerful Markdown editor for researchers.",
   "main": ".webpack/main",
   "scripts": {
+    "postinstall": "electron-builder install-app-deps",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "release:this": "electron-forge publish",
-    "release:mac": "electron-builder --mac --publish \"never\"",
-    "release:win": "electron-builder --win --publish \"never\"",
-    "release:linux": "electron-builder --linux --publish \"never\"",
+    "release:this": "yarn package && electron-builder",
+    "release:mac": "yarn package && electron-builder --mac --publish \"never\"",
+    "release:win": "yarn package && electron-builder --win --publish \"never\" --prepackaged out/zettlr-win32-x64",
+    "release:linux": "yarn package && electron-builder --linux --publish \"never\"",
     "less": "gulp less",
     "handlebars": "gulp handlebars",
     "lang:refresh": "node scripts/refresh-language.js",
@@ -37,7 +38,9 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "asar": true
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
@@ -104,8 +107,7 @@
       }
     ],
     "directories": {
-      "output": "release",
-      "app": "source"
+      "output": "release"
     },
     "afterPack": "./scripts/afterPack.js",
     "afterSign": "./scripts/afterSign.js",
@@ -246,6 +248,7 @@
     "css-loader": "^3.6.0",
     "csso": "^4.0.3",
     "electron": "^9.0.5",
+    "electron-builder": "^22.7.0",
     "electron-devtools-installer": "^3.1.0",
     "electron-notarize": "^1.0.0",
     "eslint": "^7.4.0",
