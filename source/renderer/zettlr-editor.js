@@ -321,8 +321,15 @@ class ZettlrEditor {
             // Insert a relative path instead of an absolute one
             let pathToInsert = path.relative(path.dirname(activeFile.fileObject.path), p)
 
+            // If the path contains parenthesis, we percent-encode them
+            // (tested on Windows, needs testing in macOS/Linux!)
+            pathToInsert = pathToInsert.replace(/[()]/g, escape)
+
             // Transforms Win32 paths (backslashes) into Posix paths (fwd slashes)
-            pathToInsert = path.posix.join(...pathToInsert.split(path.win32.sep))
+            if (process.platform === 'win32') {
+              pathToInsert = path.posix.join(...pathToInsert.split(path.win32.sep))
+            }
+
             str += `![${path.basename(p)}](${pathToInsert})\n`
           }
           this._cm.replaceSelection(str)

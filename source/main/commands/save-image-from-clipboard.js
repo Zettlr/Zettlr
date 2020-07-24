@@ -108,7 +108,9 @@ class SaveImage extends ZettlrCommand {
       let pathToInsert = path.relative(path.dirname(activeFile.path), imagePath)
 
       // Transforms Win32 paths (backslashes) into Posix paths (fwd slashes)
-      pathToInsert = path.posix.join(...pathToInsert.split(path.win32.sep))
+      if (process.platform === 'win32') {
+        pathToInsert = path.posix.join(...pathToInsert.split(path.win32.sep))
+      }
 
       // Everything worked out - now tell the editor to insert some text
       this._app.ipc.send('insert-text', `![${targetFile}](${pathToInsert})\n`)
