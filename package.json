@@ -275,6 +275,7 @@
     "npm-run-all": "^4.1.5",
     "reveal.js": "^3.9.2",
     "style-loader": "^0.23.1",
+    "svg-inline-loader": "^0.8.2",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.0",
     "uglify-js": "^3.10.0",
