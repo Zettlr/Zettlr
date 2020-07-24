@@ -16,7 +16,6 @@
 
 const tippy = require('tippy.js').default
 const EventEmitter = require('events')
-const makeTemplate = require('../../common/zettlr-template.js')
 const { clipboard } = require('electron')
 const { trans } = require('../../common/lang/i18n.js')
 require('jquery-ui/ui/unique-id')
@@ -123,7 +122,7 @@ class ZettlrDialog extends EventEmitter {
     // template rendering.
     if (this.preInit) data = this.preInit(data)
 
-    let tpl = makeTemplate('dialog', this._dialog, data)
+    let tpl = require('./../../../resources/templates/dialog/' + this._dialog + '.handlebars')(data)
 
     // It may be that something goes wrong requiring the template. In this case
     // fail silently.
