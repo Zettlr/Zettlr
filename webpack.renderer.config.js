@@ -4,10 +4,6 @@ const path = require('path')
 const webpack = require('webpack')
 
 rules.push({
-  test: /\.css$/,
-  use: [{ loader: 'style-loader' }, { loader: 'css-loader' }, { loader: 'vue-loader' }]
-})
-rules.push({
   test: /\.less$/,
   use: [{
     loader: 'style-loader' // Create style nodes from JS strings

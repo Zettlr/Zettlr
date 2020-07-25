@@ -20,8 +20,7 @@ import store from './store'
 
 const Vuex = require('vuex')
 
-// TODO: Renable
-//require('vue-virtual-scroller/dist/vue-virtual-scroller.css')
+require('vue-virtual-scroller/dist/vue-virtual-scroller.css')
 
 // Indicate that we would like to use a vuex store
 Vue.use(Vuex)
