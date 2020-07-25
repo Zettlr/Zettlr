@@ -588,9 +588,7 @@ class Zettlr {
    * This function prepares the app on first start, which includes copying over the tutorial.
    */
   _prepareFirstStart () {
-    // TODO: Reactivate this (forge fails if this is uncommented)
-    /*
-    let tutPath = path.join(__dirname, './assets/tutorial')
+    let tutPath = path.join(__dirname, 'tutorial')
     let targetPath = path.join(app.getPath('documents'), 'Zettlr Tutorial')
     let candidates = fs.readdirSync(tutPath, { 'encoding': 'utf8' })
 
@@ -600,7 +598,7 @@ class Zettlr {
 
     let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates)
 
-    let tutorial = path.join(__dirname, './assets/tutorial/en')
+    let tutorial = path.join(tutPath, 'en')
     if (exact) tutorial = exact.path
     if (!exact && close) tutorial = close.path
 
@@ -627,7 +625,6 @@ class Zettlr {
       // ALSO the directory needs to be opened
       global.config.set('lastDir', hash(targetPath))
     }
-    */
   }
 
   /**
