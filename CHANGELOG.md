@@ -1,4 +1,4 @@
-# (no version assigned)
+# 1.7.2
 
 ## GUI and Functionality
 
@@ -18,10 +18,9 @@
 - Creating files using a case-sensitive extension name should now work.
 - Set desktop Linux desktop icon in BrowserWindow config.
 - `reveal.js`-presentations now do not have standalone-flags during export.
-- The "Import"-option now also lets you select Markdown- and text-files. However, instead of running them through Pandoc, they are directly copied into the target directory.
+- The "Import"-option now also lets you select Markdown and text files. However, instead of running them through Pandoc, they are directly copied into the target directory.
 - Fixed a bug that would cause the global search to stop working in certain situations, e.g. after renaming a file.
 - The middle mouse button now closes tabs (thanks to @Kaan0200 for implementing).
-- The Windows installer package now features customized brand images.
 
 ## Under the Hood
 
