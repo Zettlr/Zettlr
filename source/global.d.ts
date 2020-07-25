@@ -18,4 +18,4 @@ declare global {
             tippy: any
         }
     }
-} 
+}
