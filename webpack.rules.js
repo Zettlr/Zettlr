@@ -40,6 +40,13 @@ module.exports = [
     ]
   },
   {
+    // Handle csl files: just copy them
+    test: /\.(xml|csl)$/,
+    use: [
+      'file-loader'
+    ]
+  },
+  {
     test: /(.ts|.tsx)$/,
     exclude: /(node_modules|\.webpack)/,
     use: {
