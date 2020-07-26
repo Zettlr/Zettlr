@@ -116,8 +116,8 @@ class ZettlrBody {
       let isDarwin = $('body').hasClass('darwin')
       let cmdOrCtrl = (isDarwin && event.metaKey) || (!isDarwin && event.ctrlKey)
 
-      let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && event.key === 'e')
-      let focusSidebarShortcut = (cmdOrCtrl && event.shiftKey && event.key === 't')
+      let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && (event.key === 'e' || event.key === 'E'))
+      let focusSidebarShortcut = (cmdOrCtrl && event.shiftKey && (event.key === 't' || event.key === 'T'))
       if (focusEditorShortcut) { // Cmd/Ctrl+Shift+E
         // Obviously, focus the editor
         this._renderer.getEditor().getEditor().focus()
@@ -491,6 +491,17 @@ class ZettlrBody {
       this._currentPopup.close()
       this._currentPopup = null
     })
+  }
+
+  /**
+    * Open a new dialog for displaying the global search.
+    * @return {void}       Nothing to return.
+    */
+  displayGlobalSearch () {
+    if (this._currentDialog !== null) return // Only one dialog at a time
+    this._currentDialog = new GlobalSearchDialog()
+    this._currentDialog.init().open()
+    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
 
   /**

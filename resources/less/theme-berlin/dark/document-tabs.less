@@ -1,17 +1,22 @@
 // Document tabs styling
 
 #document-tabs {
-  border-bottom: 1px solid #666;
-  color: var(--grey-1);
+  background-color: var(--grey-7);
+  color:white;
+  box-shadow: inset 14px 2px 54px -23px rgba(0,0,0,0.75);
 
   .document {
-    &:hover { background-color: var(--grey-6); }
+    border-top-color: var(--grey-4);
+
+    &:hover { 
+      background-color: var(--grey-6) !important; 
+      p.filename { color: white !important; }
+    }
 
     &.active { background-color: var(--grey-6); }
 
     .close {
       &:hover {
-        transform: rotate(90deg);
         fill: var(--red-0);
       }
     }

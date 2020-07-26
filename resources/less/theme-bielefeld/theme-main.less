@@ -72,6 +72,9 @@ body {
   #editor {
     background-color: var(--beige-0);
     // We only need to change the editor's font
+  }
+
+  #editor > :not(#document-tabs) {
     font-family: @font-liberation;
   }
 
@@ -84,6 +87,11 @@ body {
   }
 
   #sidebar #sidebar-resize { background-color: var(--beige-0); }
+
+  #document-tabs {
+    background-color: var(--beige-1);
+  }
+
 }
 
 // Exchange the colour of the preview image in the display settings to accomodate

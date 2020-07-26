@@ -166,6 +166,7 @@ class ZettlrEditor {
       continuelistModes: [ 'markdown', 'markdown-zkn' ],
       extraKeys: generateKeymap(this)
     })
+    global.cm = this._cm
 
     // Set up the helper classes with the CM instance
     this._searcher.setInstance(this._cm)
@@ -600,6 +601,8 @@ class ZettlrEditor {
       }
     }
 
+    // if (flag === 'new-file') this._cm.focus()
+
     // I know that I will make this mistake in the future, so here's why we
     // don't swap the file.content property during this: Because there's a
     // different function to do so. Use it! Don't monkey path _swapFiles. NO
@@ -643,7 +646,7 @@ class ZettlrEditor {
     // Same for the main process
     global.ipc.send('set-active-file', { 'hash': this._currentHash })
 
-    this._cm.focus() // DEBUG Check for side effects
+    // this._cm.focus() // DEBUG Check for side effects
   }
 
   /**
@@ -941,6 +944,18 @@ class ZettlrEditor {
 
     // Last but not least set the Zettelkasten options
     this._cm.setOption('zkn', global.config.get('zkn'))
+
+    if(global.config.get('editor.verticalTabs')) {
+      $('#document-tabs').addClass('vertical')
+      $('#document-tabs').removeClass('horizontal')
+      document.getElementById('document-tabs').style.removeProperty('width')
+      this._cm.getWrapperElement().style.marginRight = '25%'
+    } else {
+      $('#document-tabs').addClass('horizontal')
+      $('#document-tabs').removeClass('vertical')
+      document.getElementById('document-tabs').style.removeProperty('width')
+      this._cm.getWrapperElement().style.marginRight = '0'
+    }
 
     // Fire the renderers in order to apply potential changed styles and settings
     this._fireRenderers()

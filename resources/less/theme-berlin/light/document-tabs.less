@@ -2,28 +2,43 @@
 // Document Tab bar (over the editor)
 
 #document-tabs {
-  border-bottom: 1px solid #ddd;
+  background-color: var(--bg-preview);
+  transition: @mode-transition background-color ease;
+  font-size: @font-size-small;
+  box-shadow: inset 14px 2px 54px -23px rgba(0,0,0,0.25);
 
   .document {
-    transition: 0.2s background-color ease;
+    border-bottom:1px solid var(--grey-2);
+    border-left: 5px solid transparent;
 
     .filename { padding-left: 8px; }
 
-    &:hover { background-color: rgb(200, 200, 210); }
-
-    &.active {
-      background-color: var(--c-primary);
-      // Let's use LESS to output a contrast color (white or black depending on
-      // the theme's primary colour)
-      color: contrast(@c-primary);
+    &:hover { 
+      background-color:var(--grey-0) !important;
+      p.filename { color: var(--grey-7) !important; }
     }
 
-    .close {
-      transition: 0.1s all ease;
-      &:hover {
-        transform: rotate(90deg);
-        path { fill: var(--red-0); }
-      }
+    &.active {
+      background-color: var(--grey-2);
+      border-left: 5px solid var(--c-primary);
+    }
+  }
+
+  &.horizontal .document .close {
+    transition: 0.1s all ease;
+    &:hover {
+      transform: rotate(90deg);
+      path { fill: var(--red-0); }
+    }
+  }
+
+  &.vertical .document .close {
+    opacity: 0;
+    transition: 0.1s all ease;
+    &:hover {
+      opacity: 1;
+      background-color: var(--grey-2);
+      path { fill: var(--red-0); }
     }
   }
 }

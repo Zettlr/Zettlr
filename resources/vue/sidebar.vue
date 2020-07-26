@@ -490,7 +490,7 @@ module.exports = {
      */
     navigate: function (evt) {
       // Only capture arrow movements
-      if (![ 'ArrowDown', 'ArrowUp' ].includes(evt.key)) return
+      if (![ 'ArrowDown', 'ArrowUp', 'Enter' ].includes(evt.key)) return
       evt.stopPropagation()
       evt.preventDefault()
 
@@ -528,6 +528,9 @@ module.exports = {
             global.editor.announceTransientFile(list[index].hash)
             global.ipc.send('file-get', list[index].hash)
           }
+          break
+        case 'Enter':
+          global.cm.focus()
           break
       }
     },

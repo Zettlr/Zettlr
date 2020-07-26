@@ -1,17 +1,43 @@
 // Document Tab bar (over the editor)
 
 #document-tabs {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: @tabbar-height;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  flex-shrink: 0;
-  overflow-x: auto;
+
+  &.horizontal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: @tabbar-height;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    flex-shrink: 0;
+    overflow-x: auto;
+
+    .document {
+      min-width: 200px;
+      .filename {
+        overflow-x: hidden;
+      }
+    }
+  }
+
+  &.vertical {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 25%;
+    height: auto;
+    display: block;
+    .document {
+      min-height: 30px;
+      .filename {
+        overflow-x: initial;
+      }
+    }
+  }
 
   // In case of an overflow, hide the scrollbar so that scrolling left/right
   // remains possible, but no thicc scrollbar in the way!
@@ -27,20 +53,20 @@
   .document {
     flex-grow: 1;
     position: relative;
-    min-width: 200px;
     line-height: @tabbar-height;
     overflow: hidden;
     padding-right: @tabbar-height; // Push the filename back
 
     .filename {
       white-space: nowrap;
-      overflow-x: hidden;
       display: inline-block;
+      line-height: @tile-height-min;
       position: absolute;
       left: 0px;
       top: 0px;
       right: @tabbar-height; // Don't overlay the close button
       padding-left: 2px;
+      padding-right: 2px;
     }
 
     // Mark modification status classically
@@ -49,13 +75,43 @@
     .close {
       position: absolute;
       right: 0px;
-      top: 0px;
+      top: 2px;
       width: @tabbar-height;
       height: @tabbar-height;
       line-height: @tabbar-height;
       text-align: center;
       border-radius: @tabbar-height;
       display: inline-block;
+    }
+  }
+
+  // The directory's resizable handler
+  &.vertical #tabs-resize {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0px;
+    width: 10px;
+    cursor: ew-resize;
+    z-index: 10;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: calc(100% - 4px);
+    }
+
+    &::after {
+      border-radius:10px;
+      transition: 0.4s all ease;
+    }
+
+    &:hover {
+      &::after {
+        background-color: rgba(0, 0, 0, .4);
+        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .25);
+      }
     }
   }
 }

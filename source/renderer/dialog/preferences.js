@@ -285,6 +285,8 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['editor.rtlMoveVisually'] = (data.find(elem => elem.name === 'editor.rtlMoveVisually') !== undefined)
     cfg['zkn.autoCreateLinkedFiles'] = (data.find(elem => elem.name === 'zkn.autoCreateLinkedFiles') !== undefined)
 
+    cfg['editor.verticalTabs'] = (data.find(elem => elem.name === 'editor.verticalTabs') !== undefined)
+
     cfg['watchdog.activatePolling'] = (data.find(elem => elem.name === 'watchdog.activatePolling') !== undefined)
 
     // Extract selected dictionaries

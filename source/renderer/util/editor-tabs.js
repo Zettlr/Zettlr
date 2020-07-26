@@ -21,6 +21,8 @@ const localizeNumber = require('../../common/util/localise-number')
 module.exports = class EditorTabs {
   constructor () {
     this._div = document.getElementById('document-tabs')
+    this._resizer = document.getElementById('tabs-resize')
+    this.width = document.getElementById('container').offsetWidth
 
     this._intentCallback = null
 
@@ -41,8 +43,10 @@ module.exports = class EditorTabs {
       // cursor is within the element), and the current offset of the tabbar
       // itself.
       this._currentlyDragging = evt.target
-      this._cursorOffset = evt.clientX - this._currentlyDragging.getBoundingClientRect().left
+      this._cursorOffsetX = evt.clientX - this._currentlyDragging.getBoundingClientRect().left
+      this._cursorOffsetY = evt.clientY - this._currentlyDragging.getBoundingClientRect().top
       this._tabbarLeft = this._div.getBoundingClientRect().left
+      this._tabbarTop = this._div.getBoundingClientRect().top
 
       this._currentlyDragging.ondrag = (evt) => {
         // Immediately sort everything correctly.
@@ -50,10 +54,17 @@ module.exports = class EditorTabs {
         // 1. Substract the left offset (the sidebar)
         // 2. Move the position to the beginning of the element
         // 3. Take the current scrollLeft value into account
-        let currentElementPosition = evt.clientX - this._cursorOffset - this._tabbarLeft + this._div.scrollLeft
+        let currentElementPositionX = evt.clientX - this._cursorOffsetX - this._tabbarLeft + this._div.scrollLeft
+        let currentElementPositionY = evt.clientY - this._cursorOffsetY - this._tabbarTop + this._div.scrollTop
         for (let elem of this._currentlyDragging.parentElement.childNodes) {
           if (elem === this._currentlyDragging) continue // No inception, please
-          if (elem.offsetLeft > currentElementPosition) {
+          if (!global.config.get('editor.verticalTabs') 
+              && elem.offsetLeft > currentElementPositionX) {
+            elem.parentElement.insertBefore(this._currentlyDragging, elem)
+            break
+          }
+          if (global.config.get('editor.verticalTabs') 
+              && elem.offsetTop > currentElementPositionY) {
             elem.parentElement.insertBefore(this._currentlyDragging, elem)
             break
           }
@@ -64,7 +75,9 @@ module.exports = class EditorTabs {
       let newHashes = []
       // Now get the correct list of hashes
       for (let elem of this._currentlyDragging.parentElement.childNodes) {
-        newHashes.push(parseInt(elem.dataset['hash'], 10))
+        if(elem.id !== 'tabs-resize') {
+          newHashes.push(parseInt(elem.dataset['hash'], 10))
+        }
       }
 
       if (this._intentCallback) this._intentCallback(newHashes, 'sorting')
@@ -77,12 +90,28 @@ module.exports = class EditorTabs {
     // For those non-macOS users (boo!)
     this._div.onwheel = (evt) => { this._div.scrollLeft += evt.deltaY }
 
-    // Listen to Cmd/Ctrl+[0-9] events on the window
-    window.addEventListener('keydown', (e) => {
-      let darwinCmd = process.platform === 'darwin' && e.metaKey
-      let otherCtrl = process.platform !== 'darwin' && e.ctrlKey
+    this.tabsResize = (evt) => {
+      const width = (this.width - evt.clientX) + 'px'
+      this._div.style.width = width
+      document.getElementsByClassName('CodeMirror')[0].style.marginRight = width
+    }
 
-      if (!darwinCmd && !otherCtrl) return
+    this.tabsStopResize = (evt) => {
+      document.removeEventListener('mousemove', this.tabsResize)
+      document.removeEventListener('mouseup', this.tabsStopResize)
+    }
+
+    this._resizer.onmousedown = (evt) => {
+      document.addEventListener('mousemove', this.tabsResize)
+      document.addEventListener('mouseup', this.tabsStopResize)
+    }
+
+  // Listen to Cmd/Ctrl+[0-9] events on the window
+  window.addEventListener('keydown', (e) => {
+    let darwinCmd = process.platform === 'darwin' && e.metaKey
+    let otherCtrl = process.platform !== 'darwin' && e.ctrlKey
+
+    if (!darwinCmd && !otherCtrl) return
 
       if ([ '1', '2', '3', '4', '5', '6', '7', '8', '9' ].includes(e.key)) {
         e.stopPropagation()
@@ -109,7 +138,13 @@ module.exports = class EditorTabs {
     }
     this._tippyInstances = []
 
-    this._div.innerHTML = ''
+    this._div.innerHTML = '<div id="tabs-resize"></div>'
+    // Need to reattach handlers after clearing innerHTML
+    this._resizer = document.getElementById('tabs-resize')
+    this._resizer.onmousedown = (evt) => {
+      document.addEventListener('mousemove', this.tabsResize)
+      document.addEventListener('mouseup', this.tabsStopResize)
+    }
 
     if (files.length === 0) {
       // No files, so indicate!
@@ -168,7 +203,8 @@ module.exports = class EditorTabs {
   selectNext () {
     let active = this._div.querySelectorAll('.document.active')[0]
     let next = active.nextElementSibling
-    if (!next) next = this._div.firstElementChild // Re-start from beginning
+    // #tabs-resize is a sibling of the .document elements
+    if (!next) next = this._div.firstElementChild.nextElementSibling // Re-start from beginning
     if (next) {
       this._intentCallback(next.dataset['hash'], 'select')
     }
@@ -181,7 +217,8 @@ module.exports = class EditorTabs {
   selectPrevious () {
     let active = this._div.querySelectorAll('.document.active')[0]
     let prev = active.previousElementSibling
-    if (!prev) prev = this._div.lastElementChild // Re-start from end
+    // #tabs-resize is a sibling of the .document elements
+    if (!prev.previousElementSibling) prev = this._div.lastElementChild // Re-start from end
     if (prev) this._intentCallback(prev.dataset['hash'], 'select')
   }
 

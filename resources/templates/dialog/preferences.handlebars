@@ -262,6 +262,14 @@
             </label>
             <label for="countChars">{{i18n "dialog.preferences.count_chars"}}</label>
           </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="editor.verticalTabs" value="yes" id="verticalTabs" {{#if editor.verticalTabs}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="verticalTabs">Vertical Tabs</label>
+            {{!-- <label for="tabsOrientation">{{i18n "dialog.preferences.tabsOrientation"}}</label> --}}
+          </div>
 
           {{!-- RTL support options --}}
           <hr>
