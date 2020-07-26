@@ -58,13 +58,13 @@ module.exports = class EditorTabs {
         let currentElementPositionY = evt.clientY - this._cursorOffsetY - this._tabbarTop + this._div.scrollTop
         for (let elem of this._currentlyDragging.parentElement.childNodes) {
           if (elem === this._currentlyDragging) continue // No inception, please
-          if (!global.config.get('editor.verticalTabs') 
-              && elem.offsetLeft > currentElementPositionX) {
+          if (!global.config.get('editor.verticalTabs') &&
+              elem.offsetLeft > currentElementPositionX) {
             elem.parentElement.insertBefore(this._currentlyDragging, elem)
             break
           }
-          if (global.config.get('editor.verticalTabs') 
-              && elem.offsetTop > currentElementPositionY) {
+          if (global.config.get('editor.verticalTabs') &&
+              elem.offsetTop > currentElementPositionY) {
             elem.parentElement.insertBefore(this._currentlyDragging, elem)
             break
           }
@@ -76,7 +76,7 @@ module.exports = class EditorTabs {
       // Now get the correct list of hashes
       for (let elem of this._currentlyDragging.parentElement.childNodes) {
         // #tabs-resize is a sibling of the .document elements
-        if(elem.id !== 'tabs-resize') {
+        if (elem.id !== 'tabs-resize') {
           newHashes.push(parseInt(elem.dataset['hash'], 10))
         }
       }
@@ -106,12 +106,12 @@ module.exports = class EditorTabs {
       document.addEventListener('mouseup', this.tabsStopResize)
     }
 
-  // Listen to Cmd/Ctrl+[0-9] events on the window
-  window.addEventListener('keydown', (e) => {
-    let darwinCmd = process.platform === 'darwin' && e.metaKey
-    let otherCtrl = process.platform !== 'darwin' && e.ctrlKey
+    // Listen to Cmd/Ctrl+[0-9] events on the window
+    window.addEventListener('keydown', (e) => {
+      let darwinCmd = process.platform === 'darwin' && e.metaKey
+      let otherCtrl = process.platform !== 'darwin' && e.ctrlKey
 
-    if (!darwinCmd && !otherCtrl) return
+      if (!darwinCmd && !otherCtrl) return
 
       if ([ '1', '2', '3', '4', '5', '6', '7', '8', '9' ].includes(e.key)) {
         e.stopPropagation()

@@ -948,7 +948,7 @@ class ZettlrEditor {
     this._cm.setOption('zkn', global.config.get('zkn'))
 
     // Set the tab orientation
-    if(global.config.get('editor.verticalTabs')) {
+    if (global.config.get('editor.verticalTabs')) {
       $('#document-tabs').addClass('vertical')
       $('#document-tabs').removeClass('horizontal')
       document.getElementById('document-tabs').style.removeProperty('width')
