@@ -22,16 +22,9 @@
     "release:mac": "yarn package && electron-builder --mac --publish \"never\"",
     "release:win": "yarn package && electron-builder --win --publish \"never\" --prepackaged out/zettlr-win32-x64",
     "release:linux": "yarn package && electron-builder --linux --publish \"never\"",
-    "less": "gulp less",
-    "handlebars": "gulp handlebars",
     "lang:refresh": "node scripts/refresh-language.js",
     "csl:refresh": "node scripts/update-csl.js",
     "reveal:build": "node scripts/update-reveal.js",
-    "wp:dev": "cross-env NODE_ENV=development webpack --progress --colors",
-    "wp:prod": "cross-env NODE_ENV=production webpack --progress --colors",
-    "watch:gulp": "gulp watch",
-    "watch:wp": "cross-env NODE_ENV=development webpack --progress --colors --watch",
-    "watch": "npm-run-all --parallel watch:*",
     "test": "mocha",
     "test-gui": "node scripts/test-gui.js",
     "lint": "eslint --ext js,vue,ts -f html -o eslint_report.htm source resources"
@@ -41,28 +34,6 @@
       "packagerConfig": {
         "asar": true
       },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "zettlr"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ],
       "plugins": [
         [
           "@electron-forge/plugin-webpack",
@@ -207,7 +178,6 @@
     "citeproc": "^2.4.6",
     "codemirror": "^5.55.0",
     "command-exists": "^1.2.9",
-    "electron-squirrel-startup": "^1.0.0",
     "got": "^11.4.0",
     "joplin-turndown": "^4.0.28",
     "joplin-turndown-plugin-gfm": "^1.0.12",
@@ -235,10 +205,6 @@
   },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.52",
-    "@electron-forge/maker-deb": "6.0.0-beta.52",
-    "@electron-forge/maker-rpm": "6.0.0-beta.52",
-    "@electron-forge/maker-squirrel": "6.0.0-beta.52",
-    "@electron-forge/maker-zip": "6.0.0-beta.52",
     "@electron-forge/plugin-webpack": "6.0.0-beta.52",
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
@@ -262,21 +228,12 @@
     "eslint-plugin-vue": "^7.0.0-alpha.9",
     "file-loader": "^6.0.0",
     "fork-ts-checker-webpack-plugin": "^3.1.1",
-    "gulp": "^4.0.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-handlebars": "^5.0.2",
-    "gulp-less": "^4.0.1",
-    "gulp-plumber": "^1.2.1",
-    "gulp-rename": "^2.0.0",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-wrap": "^0.15.0",
     "handlebars": "^4.7.6",
     "handlebars-loader": "^1.7.1",
     "less-loader": "^6.2.0",
     "lorem-ipsum": "^2.0.3",
     "mocha": "^8.0.1",
     "node-loader": "^0.6.0",
-    "npm-run-all": "^4.1.5",
     "reveal.js": "^3.9.2",
     "style-loader": "^0.23.1",
     "svg-inline-loader": "^0.8.2",
@@ -285,8 +242,6 @@
     "uglify-js": "^3.10.0",
     "vue-loader": "^15.9.3",
     "vue-template-compiler": "^2.6.11",
-    "vue-virtual-scroller": "^1.0.10",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12"
+    "vue-virtual-scroller": "^1.0.10"
   }
 }
