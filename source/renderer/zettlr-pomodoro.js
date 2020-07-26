@@ -61,8 +61,7 @@ class ZettlrPomodoro {
     // For playing optional sound effects
     this._sound = new window.Audio()
     this._sound.volume = 1
-    // TODO: Reactivate
-    //this._sound.src = `file://${__dirname}/assets/glass.ogg`
+    this._sound.src = require('./assets/glass.ogg')
   }
 
   /**

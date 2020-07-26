@@ -40,8 +40,15 @@ module.exports = [
     ]
   },
   {
-    // Handle csl files: just copy them
+    // Handle files for citeproc: copy them, and import them as string
     test: /\.(xml|csl)$/,
+    use: [
+      'raw-loader'
+    ]
+  },
+  {
+    // Handle audio files: just copy them
+    test: /\.(ogg)$/,
     use: [
       'file-loader'
     ]

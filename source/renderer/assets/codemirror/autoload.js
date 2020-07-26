@@ -34,8 +34,7 @@ require('codemirror/mode/stex/stex')
 
 // 6. Code highlighting modes
 for (let mode of new Set(Object.values(highlightingModes).map(hlmode => hlmode.mode))) {
-  // TODO: reactivte this
-  //require(`codemirror/mode/${mode}/${mode}.js`)
+  require.context('codemirror/mode', true)(`codemirror/mode/${mode}/${mode}.js`)
 }
 
 // 7. The folding addon
