@@ -1,5 +1,9 @@
 # 1.7.2
 
+- Vertical tabs option in Editor Preferences
+- Changed tab style to mirror the file tree style
+- Hitting Enter in the global search focuses the file tree, hitting Enter in the file tree focuses the editor.
+
 ## GUI and Functionality
 
 - The NSIS installer (Windows) now contains customized, branded images for the sidebar and header of the various pages visible during the setup process.

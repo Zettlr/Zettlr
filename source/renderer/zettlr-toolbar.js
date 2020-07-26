@@ -80,8 +80,8 @@ class ZettlrToolbar {
         this._renderer.exitSearch()
       } else if (e.key === 'Enter') {
         this._renderer.beginSearch(this._searchbar.val())
-        // this._searchbar.select() // Select everything in the area.
-        $('#file-list').focus()
+        //Focus the file-list for immediate arrow navigation
+        $('#file-list').focus() 
       } else {
         this._applyAutocomplete()
       }

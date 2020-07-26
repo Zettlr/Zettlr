@@ -494,17 +494,6 @@ class ZettlrBody {
   }
 
   /**
-    * Open a new dialog for displaying the global search.
-    * @return {void}       Nothing to return.
-    */
-  displayGlobalSearch () {
-    if (this._currentDialog !== null) return // Only one dialog at a time
-    this._currentDialog = new GlobalSearchDialog()
-    this._currentDialog.init().open()
-    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
-  }
-
-  /**
     * Open a new dialog for displaying the preferences.
     * @param  {Object} prefs An object containing all current config variables
     * @return {void}       Nothing to return.

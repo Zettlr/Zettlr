@@ -601,6 +601,7 @@ class ZettlrEditor {
       }
     }
 
+    // Always focusing CodeMirror breaks file-list arrow navigation
     // if (flag === 'new-file') this._cm.focus()
 
     // I know that I will make this mistake in the future, so here's why we
@@ -646,6 +647,7 @@ class ZettlrEditor {
     // Same for the main process
     global.ipc.send('set-active-file', { 'hash': this._currentHash })
 
+    // Always focusing CodeMirror breaks file-list arrow navigation
     // this._cm.focus() // DEBUG Check for side effects
   }
 
@@ -945,6 +947,7 @@ class ZettlrEditor {
     // Last but not least set the Zettelkasten options
     this._cm.setOption('zkn', global.config.get('zkn'))
 
+    // Set the tab orientation
     if(global.config.get('editor.verticalTabs')) {
       $('#document-tabs').addClass('vertical')
       $('#document-tabs').removeClass('horizontal')

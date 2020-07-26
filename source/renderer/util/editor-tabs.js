@@ -50,10 +50,10 @@ module.exports = class EditorTabs {
 
       this._currentlyDragging.ondrag = (evt) => {
         // Immediately sort everything correctly.
-        // Take the absolute X coord, and then make it relative:
-        // 1. Substract the left offset (the sidebar)
+        // Take the absolute X/Y coord, and then make it relative:
+        // 1. Substract the X/Y offset (the sidebar)
         // 2. Move the position to the beginning of the element
-        // 3. Take the current scrollLeft value into account
+        // 3. Take the current scrollLeft/Top value into account
         let currentElementPositionX = evt.clientX - this._cursorOffsetX - this._tabbarLeft + this._div.scrollLeft
         let currentElementPositionY = evt.clientY - this._cursorOffsetY - this._tabbarTop + this._div.scrollTop
         for (let elem of this._currentlyDragging.parentElement.childNodes) {
@@ -75,6 +75,7 @@ module.exports = class EditorTabs {
       let newHashes = []
       // Now get the correct list of hashes
       for (let elem of this._currentlyDragging.parentElement.childNodes) {
+        // #tabs-resize is a sibling of the .document elements
         if(elem.id !== 'tabs-resize') {
           newHashes.push(parseInt(elem.dataset['hash'], 10))
         }
@@ -90,17 +91,16 @@ module.exports = class EditorTabs {
     // For those non-macOS users (boo!)
     this._div.onwheel = (evt) => { this._div.scrollLeft += evt.deltaY }
 
+    // Resize vertical tabs
     this.tabsResize = (evt) => {
       const width = (this.width - evt.clientX) + 'px'
       this._div.style.width = width
       document.getElementsByClassName('CodeMirror')[0].style.marginRight = width
     }
-
     this.tabsStopResize = (evt) => {
       document.removeEventListener('mousemove', this.tabsResize)
       document.removeEventListener('mouseup', this.tabsStopResize)
     }
-
     this._resizer.onmousedown = (evt) => {
       document.addEventListener('mousemove', this.tabsResize)
       document.addEventListener('mouseup', this.tabsStopResize)
@@ -139,7 +139,7 @@ module.exports = class EditorTabs {
     this._tippyInstances = []
 
     this._div.innerHTML = '<div id="tabs-resize"></div>'
-    // Need to reattach handlers after clearing innerHTML
+    // Need to reattach resize handlers after clearing innerHTML
     this._resizer = document.getElementById('tabs-resize')
     this._resizer.onmousedown = (evt) => {
       document.addEventListener('mousemove', this.tabsResize)
