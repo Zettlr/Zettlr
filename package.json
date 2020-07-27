@@ -32,29 +32,7 @@
     "lint": "eslint --ext js,vue,ts -f html -o eslint_report.htm source resources"
   },
   "config": {
-    "forge": {
-      "packagerConfig": {
-        "asar": true
-      },
-      "plugins": [
-        [
-          "@electron-forge/plugin-webpack",
-          {
-            "mainConfig": "./webpack.main.config.js",
-            "renderer": {
-              "config": "./webpack.renderer.config.js",
-              "entryPoints": [
-                {
-                  "html": "./source/renderer/assets/index.htm",
-                  "js": "./source/renderer/renderer.ts",
-                  "name": "main_window"
-                }
-              ]
-            }
-          }
-        ]
-      ]
-    }
+    "forge": "./forge.config.js"
   },
   "build": {
     "appId": "com.zettlr.app",
@@ -88,7 +66,7 @@
       "category": "public.app-category.productivity",
       "target": "dmg",
       "artifactName": "Zettlr-${version}-${arch}.${ext}",
-      "icon": "resources/icons/icns/icon.icns",
+      "icon": "resources/icons/icon.icns",
       "darkModeSupport": true,
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
@@ -130,7 +108,7 @@
     },
     "dmg": {
       "background": "resources/icons/dmg/dmg_back.tiff",
-      "icon": "resources/icons/icns/icon.icns",
+      "icon": "resources/icons/icon.icns",
       "contents": [
         {
           "x": 130,

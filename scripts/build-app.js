@@ -94,7 +94,7 @@ const config = {
     category: 'public.app-category.productivity',
     target: (onlyDir) ? 'dir' : 'dmg',
     artifactName: artifactFilenameFormat,
-    icon: 'resources/icons/icns/icon.icns',
+    icon: 'resources/icons/icon.icns',
     darkModeSupport: true,
     hardenedRuntime: true,
     // This is not really necessary, but funfact: It's a bug, so we have to set it to false
@@ -106,7 +106,7 @@ const config = {
   win: {
     target: (onlyDir) ? 'dir' : win32Targets,
     artifactName: artifactFilenameFormat,
-    icon: 'resources/icons/ico/icon.ico'
+    icon: 'resources/icons/icon.ico'
   },
   linux: {
     target: (onlyDir) ? 'dir' : linuxTargets,
@@ -120,7 +120,7 @@ const config = {
   },
   dmg: {
     background: 'resources/icons/dmg/dmg_back.tiff',
-    icon: 'resources/icons/icns/icon.icns',
+    icon: 'resources/icons/icon.icns',
     contents: [
       {
         x: 130,

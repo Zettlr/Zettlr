@@ -5,8 +5,8 @@ In this folder, you may find various versions of the official Logo of Zettlr:
 - `./icon.xcf` The original source file of the logo.
 - `./1024x1024.png` An unscaled PNG-export of the logo.
 - `./png/` Contains PNG-exports of various sizes from 16px up to 512px.
-- `./ico/icon.ico` A Windows-compatible ICO-export.
-- `./icns/icon.icns` A macOS-compatible ICNS-export.
+- `./icon.ico` A Windows-compatible ICO-export.
+- `./icon.icns` A macOS-compatible ICNS-export.
 - `./dmg/dmg_back.xcf` The original source file for the macOS DMG-background.
 - `./dmg/dmg_back.tiff` The compiled TIFF-background for macOS DMG-packages.
 - `dmg_back@1x.png`, `dmg_back@2x.png`, and `dmg_back@3x.png` Differently sized raw images that will be compiled into the final `dmg_back.tiff`.
