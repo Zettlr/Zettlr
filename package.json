@@ -19,7 +19,8 @@
     "build:quick": "electron-builder --dir",
     "release:this": "electron-builder",
     "release:mac": "electron-builder --mac --publish \"never\"",
-    "release:win": "electron-builder --win --publish \"never\"",
+    "release:win": "electron-builder --win --x64 --ia32 --publish \"never\"",
+    "release:win-arm": "electron-builder --win --ia32 --arm64 --publish \"never\"",
     "release:linux": "electron-builder --linux --publish \"never\"",
     "less": "gulp less",
     "handlebars": "gulp handlebars",
@@ -79,10 +80,7 @@
       "target": [
         {
           "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
+          "arch": []
         }
       ],
       "artifactName": "Zettlr-${version}-${arch}.${ext}",
