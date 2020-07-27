@@ -35,6 +35,7 @@
 - Fixed a logical error in the FSAL change detection, which would lead to the FSAL not being able to process additions of assets.
 - The application now uses `app.getVersion()` instead of requiring the `package.json`-file (thanks to @Aigeruth for implementing).
 - CodeMirror is now required directly within the plugins and is independent of the location of `node_modules`.
+- Zettlr is now also available for ARM64 Windows (thanks to @smitec for implementing).
 
 # 1.7.1
 
