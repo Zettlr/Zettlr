@@ -5328,10 +5328,10 @@ joplin-turndown-plugin-gfm@^1.0.12:
   resolved "https://registry.yarnpkg.com/joplin-turndown-plugin-gfm/-/joplin-turndown-plugin-gfm-1.0.12.tgz#f0774183177895c6fedeec951053cab6046dede8"
   integrity sha512-qL4+1iycQjZ1fs8zk3jSRk7cg3ROBUHk7GKtiLAQLFzLPKErnILUvz5DLszSQvz3s1sTjPbywLDISVUtBY6HaA==
 
-joplin-turndown@^4.0.28:
-  version "4.0.28"
-  resolved "https://registry.yarnpkg.com/joplin-turndown/-/joplin-turndown-4.0.28.tgz#310b5750bd0bc35119ea9d4c80f8165c28a1c0e5"
-  integrity sha512-wQP9OUBAkWq/VPPCJcY1EI6tSXWlGs/BJ7Ce8BZYRF/1vEk/TRHOdKmCObQrXz/0nRoLiP5xeqNvHE1nK4XbRQ==
+joplin-turndown@^4.0.29:
+  version "4.0.29"
+  resolved "https://registry.yarnpkg.com/joplin-turndown/-/joplin-turndown-4.0.29.tgz#2b26bb6e77563144173f11c7929bbd079f9d2756"
+  integrity sha512-rVGu8u4TpSRETo59/jiVW9iaXnpdxxpBHjb7nyCflkDfWhg1Kska4uagBQGw7cD2yxw7mB2YUIB/fAgtlIzcDQ==
   dependencies:
     css "^2.2.4"
     html-entities "^1.2.1"

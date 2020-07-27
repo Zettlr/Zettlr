@@ -19,10 +19,12 @@
     "package": "electron-forge package",
     "package:mac": "electron-forge package --platform=darwin",
     "package:win": "electron-forge package --platform=win32 --arch=ia32,x64",
+    "package:win-arm": "electron-forge package --platform=win32 --arch=arm64",
     "package:linux": "electron-forge package --platform=linux",
     "release": "yarn package && electron-builder",
     "release:mac": "yarn package:mac && electron-builder --mac --publish \"never\" --prepackaged out/TODO",
-    "release:win": "yarn package:win && electron-builder --win --publish \"never\" --prepackaged out/zettlr-win32-x64",
+    "release:win": "yarn package:win && electron-builder --win --x64 --ia32 --publish \"never\" --prepackaged out/zettlr-win32-x64",
+    "release:win-arm": "yarn package:win-arm && electron-builder --win --ia32 --arm64 --publish \"never\" --prepackaged out/TODO",
     "release:linux": "yarn package:linux && electron-builder --linux --publish \"never\" --prepackaged out/TODO",
     "lang:refresh": "node scripts/refresh-language.js",
     "csl:refresh": "node scripts/update-csl.js",
@@ -77,10 +79,7 @@
       "target": [
         {
           "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
+          "arch": []
         }
       ],
       "artifactName": "Zettlr-${version}-${arch}.${ext}",
@@ -159,7 +158,7 @@
     "codemirror": "^5.55.0",
     "command-exists": "^1.2.9",
     "got": "^11.4.0",
-    "joplin-turndown": "^4.0.28",
+    "joplin-turndown": "^4.0.29",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "jquery": "^3.5.1",
     "jquery-ui": "^1.12.1",
