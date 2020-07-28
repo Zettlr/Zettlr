@@ -40,7 +40,7 @@ The documentation always changes with every new feature we ship, so keeping it u
 
 ### Development
 
-If you have some experiences with developing, we would glady welcome your help in fixing issues and adding features. Even if you just start: There are tons of smaller things and chores to do, so by cleaning up code here and there you can improve your skills and also help the project. Even if it's a minor fix, it is still a fix!
+If you have some experiences with developing, we would gladly welcome your help in fixing issues and adding features. Even if you just start: There are tons of smaller things and chores to do, so by cleaning up code here and there you can improve your skills and also help the project. Even if it's a minor fix, it is still a fix!
 
 #### Our Stack (with linked documentation)
 
@@ -51,7 +51,7 @@ If you have some experiences with developing, we would glady welcome your help i
 
 There are – broadly speaking – three categories of issues on the Zettlr GitHub issue tracker, which you can distinguish with their associated labels.
 
-1. **Bugs** come in two flavors: non-critical and critical. Non-critical bugs are those that sometimes can mean a nuisance but that do not seriously affect working with the app. Critical bugs, however, make Zettlr barely or un-usable, and fixes need to be addressed urgently. Normally, the latter is taken on by the core-team.
+1. **Bugs** come in two flavours: non-critical and critical. Non-critical bugs are those that sometimes can mean a nuisance but that do not seriously affect working with the app. Critical bugs, however, make Zettlr barely or un-usable, and fixes need to be addressed urgently. Normally, the latter is taken on by the core-team.
 2. **Enhancements** are some small additions that require adding some more functionality to a feature, but that should not evolve into an own distinct feature. Even if the issue description reads like a full feature to you, the "enhancement" label means there is already said functionality, which just needs to be amended. Please ask if you are unsure.
 3. **Features** are bigger additions to the application that require a completely new feature. These can take some time, but could also prove to be a nice winter project.
 
