@@ -31,6 +31,7 @@
 - The application now uses `app.getVersion()` instead of requiring the `package.json`-file (thanks to @Aigeruth for implementing).
 - CodeMirror is now required directly within the plugins and is independent of the location of `node_modules`.
 - Zettlr is now also available for ARM64 Windows (thanks to @smitec for implementing).
+- Insert Image from Clipboard saves as JPEG when the 'jpg' file extension is specified.
 
 # 1.7.1
 

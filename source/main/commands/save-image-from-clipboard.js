@@ -41,9 +41,15 @@ class SaveImage extends ZettlrCommand {
     if (targetFile === '') return global.ipc.notify(trans('system.error.no_allowed_chars'))
     if (!activeFile) return global.ipc.notify(trans('system.error.fnf_message'))
 
-    // Now check the extension of the name (some users may
-    // prefer to choose to provide it already)
-    if (path.extname(targetFile) !== '.png') targetFile += '.png'
+    // PNG is the default file format.
+    let fileFormat = 'png'
+    // Now check the file extension. Set the file format to JPEG if the
+    // extension is 'jpg', or add 'png' missing.
+    if (path.extname(targetFile).toLowerCase() === '.jpg') {
+      fileFormat = 'jpg'
+    } else if (path.extname(targetFile).toLowerCase() !== '.png') {
+      targetFile += '.png'
+    }
 
     // Now resolve the path correctly, taking into account a potential relative
     // path the user has chosen.
@@ -102,7 +108,9 @@ class SaveImage extends ZettlrCommand {
 
     global.log.info(`Saving image ${targetFile} at ${imagePath} ...`)
 
-    fs.writeFile(imagePath, image.toPNG(), (err) => {
+    let imageData = (fileFormat === 'jpg') ? image.toJPEG(85) : image.toPNG()
+
+    fs.writeFile(imagePath, imageData, (err) => {
       if (err) return global.ipc.notify(trans('system.error.could_not_save_image'))
       // Insert a relative path instead of an absolute one
       let pathToInsert = path.relative(path.dirname(activeFile.path), imagePath)
