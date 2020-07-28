@@ -19,7 +19,8 @@
     "build:quick": "electron-builder --dir",
     "release:this": "electron-builder",
     "release:mac": "electron-builder --mac --publish \"never\"",
-    "release:win": "electron-builder --win --publish \"never\"",
+    "release:win": "electron-builder --win --x64 --ia32 --publish \"never\"",
+    "release:win-arm": "electron-builder --win --ia32 --arm64 --publish \"never\"",
     "release:linux": "electron-builder --linux --publish \"never\"",
     "less": "gulp less",
     "handlebars": "gulp handlebars",
@@ -79,10 +80,7 @@
       "target": [
         {
           "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
+          "arch": []
         }
       ],
       "artifactName": "Zettlr-${version}-${arch}.${ext}",
@@ -160,7 +158,7 @@
     "codemirror": "^5.55.0",
     "command-exists": "^1.2.9",
     "got": "^11.4.0",
-    "joplin-turndown": "^4.0.28",
+    "joplin-turndown": "^4.0.29",
     "joplin-turndown-plugin-gfm": "^1.0.12",
     "jquery": "^3.5.1",
     "jquery-ui": "^1.12.1",
