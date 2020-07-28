@@ -90,17 +90,6 @@ jobs:
         with:
           name: Zettlr-${{ steps.pkg.outputs.version }}.exe
           path: ./release/Zettlr-${{ steps.pkg.outputs.version }}.exe
-      - name: Build Windows NSIS installer arm64
-        if: matrix.os == 'windows-latest' # Only if the job runs on Windows
-        # Make sure to sign the windows installer using the corresponding SSL EV.
-        run: CSC_LINK=${{ secrets.WIN_CERT }}  CSC_KEY_PASSWORD=${{ secrets.WIN_CERT_PASS }} npm run release:win-arm
-        shell: bash # I'm sorry PowerShell, but I'm not rewriting code for you.
-      - name: Cache Windows release arm64
-        if: matrix.os == 'windows-latest' # Only if the job runs on Windows
-        uses: actions/upload-artifact@v1
-        with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}.exe
       # MACOS ================================================================
       - name: Build macOS DMG file
         if: matrix.os == 'macos-latest' # Only if the job runs on macOS
@@ -167,11 +156,6 @@ jobs:
         with:
           name: Zettlr-${{ steps.pkg.outputs.version }}.exe
           path: .
-      - name: Download the Windows arm64 asset
-        uses: actions/download-artifact@v1
-        with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe
-          path: .
       - name: Download the macOS asset
         uses: actions/download-artifact@v1
         with:
@@ -202,7 +186,6 @@ jobs:
       - name: Generate SHA256 checksums
         run: |
           sha256sum "Zettlr-${{ steps.pkg.outputs.version }}.exe" > "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{ steps.pkg.outputs.version }}.dmg" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm" >> "SHA256SUMS.txt"
@@ -232,17 +215,6 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}.exe
           asset_name: Zettlr-${{ steps.pkg.outputs.version }}.exe
-          asset_content_type: application/x-msdownload
-
-
-      - name: Upload Windows arm64 asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe
           asset_content_type: application/x-msdownload
 
 
