@@ -18,10 +18,8 @@ jobs:
       # Simply use one single command for all that stuff and chain using &&
       run: npm install && cd ./source && npm install && cd ..
     - name: Run ESLint
-      run: npm run lint
-    - name: Provide ESLint Report
-      if: failure() # Only upload if ESLint had something to say
-      uses: actions/upload-artifact@v1
+    - uses: hallee/eslint-action@1.0.3
+      if: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }} 
       with:
-        name: eslint-report.htm
-        path: ./eslint_report.htm
+        repo-token: ${{secrets.GITHUB_TOKEN}}
+        source-root: source
