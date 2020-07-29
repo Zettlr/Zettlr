@@ -1,3 +1,9 @@
+# (no version assigned)
+
+## GUI and Functionality
+
+- Fixed a bug causing Export Project to fail.
+
 # 1.7.2
 
 ## GUI and Functionality
