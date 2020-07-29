@@ -18,7 +18,7 @@ jobs:
       # Simply use one single command for all that stuff and chain using &&
       run: npm install && cd ./source && npm install && cd ..
     - name: Run ESLint
-    - uses: hallee/eslint-action@1.0.3
+      uses: hallee/eslint-action@1.0.3
       if: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository }} 
       with:
         repo-token: ${{secrets.GITHUB_TOKEN}}
