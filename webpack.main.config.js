@@ -9,7 +9,8 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'source/main/assets/tutorial', to: 'tutorial' }
+        { from: 'source/main/assets/tutorial', to: 'tutorial' },
+        { from: 'source/main/assets/dict', to: 'dict' }
       ]
     })
   ],
