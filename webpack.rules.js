@@ -28,16 +28,24 @@ module.exports = [
   {
     // Handle picture files: just copy them
     test: /\.(png|svg|jpg|gif)$/,
-    use: [
-      'file-loader'
-    ]
+    use: {
+      loader: 'file-loader',
+      options: {
+        // Do not wrap in js module (important for handlebars)
+        esModule: false
+      }
+    }
   },
   {
     // Handle font files: just copy them
     test: /\.(woff|woff2|eot|ttf|otf)$/,
-    use: [
-      'file-loader'
-    ]
+    use: {
+      loader: 'file-loader',
+      options: {
+        // Do not wrap in js module
+        esModule: false
+      }
+    }
   },
   {
     // Handle files for citeproc: copy them, and import them as string
@@ -49,9 +57,13 @@ module.exports = [
   {
     // Handle audio files: just copy them
     test: /\.(ogg)$/,
-    use: [
-      'file-loader'
-    ]
+    use: {
+      loader: 'file-loader',
+      options: {
+        // Do not wrap in js module
+        esModule: false
+      }
+    }
   },
   {
     test: /(.ts|.tsx)$/,
