@@ -24,9 +24,6 @@ module.exports = function (filePath, basePath, isImg = false) {
   let text = ''
   let pathToInsert = path.relative(basePath, filePath)
 
-  // If the path contains parenthesis, we percent-encode them
-  pathToInsert = pathToInsert.replace(/[()]/g, escape)
-
   // Transforms Win32 paths (backslashes) into Posix paths (fwd slashes)
   if (process.platform === 'win32') {
     pathToInsert = path.posix.join(...pathToInsert.split(path.win32.sep))
