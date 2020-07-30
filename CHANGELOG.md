@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Fixed a bug causing Export Project to fail.
+- Fixed parentheses detection in links and images paths.
 
 # 1.7.2
 
