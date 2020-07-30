@@ -110,9 +110,6 @@ class ZettlrAttachments {
           // Make the link relative instead of absolute
           uri = path.basename(uri)
 
-          // If the filename contains parenthesis, we percent-encode them
-          uri = uri.replace(/[()]/g, escape)
-
           dragData = `![${a.name}](${uri})`
         } else {
           // Standard file link
