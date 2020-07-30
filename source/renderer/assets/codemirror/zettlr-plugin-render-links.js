@@ -12,6 +12,8 @@
 })(function (CodeMirror) {
   'use strict'
 
+  const parenthesisDetection = require('../../util/parenthesis-detection')
+
   // This regular expression matches three different kinds of URLs:
   // 1. Markdown URLs in the format [Caption](www.link-target.tld)
   // 2. Standalone links, either beginning with http(s):// or www.
@@ -78,35 +80,11 @@
         let curFrom = { 'line': i, 'ch': match.index }
         let curTo = { 'line': i, 'ch': match.index + match[0].length }
 
-        // Now the age-old problem of parenthesis-detection. The regular expression
-        // will not match all parenthesis, if a link contains these, so what we need
-        // is we have to go through the URL, and, if it contains opening parentheses
-        // we need a matching pair of these, so we'll have to go through it one by one.
-        let openingParentheses = 0
-        let closingParentheses = 0
-        if (url !== '') {
-          for (let i = 0; i < url.length; i++) {
-            if (url.charAt(i) === '(') openingParentheses++
-            if (url.charAt(i) === ')') closingParentheses++
-          }
+        // The regex will need a little help if an image path contains closing parentheses
+        url = parenthesisDetection(url, line, curTo)
 
-          if (openingParentheses > closingParentheses) {
-            // If we're here we most certainly have a non-closed parenthesis in a link
-            // The assumption is that a link always contains matching pairs. So a link
-            // like www.domain.tld/link(likethis will not work.
-            let leftOvers = openingParentheses - closingParentheses
-            while (curTo.ch < line.length) {
-              let currentChar = line.charAt(curTo.ch)
-              url += currentChar
-              curTo.ch++
-              if (currentChar === ')') leftOvers--
-              if (leftOvers === 0) break
-            }
-
-            // If we were unable to fully resolve all parentheses, abort rendering.
-            if (leftOvers > 0) continue
-          }
-        }
+        // If something went wrong, parenthesisDetection returns ''. Do not render.
+        if (url === '') continue
 
         let cur = cm.getCursor('from')
         if (cur.line === curFrom.line && cur.ch >= curFrom.ch && cur.ch <= curTo.ch + 1) {
