@@ -1,6 +1,9 @@
 # (no version assigned)
+
+## GUI and Functionality
+
+- Fixed a bug causing Export Project to fail.
 - All images paths created when pasting or dropping an image are now relative and POSIX (using forward slashes). This unifies images paths across platforms (in particular Windows) and insertion method.
-- Parenthesis in images paths created when pasting or dropping are now escaped with percent-encoding (%28 %29)
 
 # 1.7.2
 
