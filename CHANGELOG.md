@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Fixed a bug causing project exports to fail.
+- The `Cmd/Ctrl+K`-shortcut now works with most domains and protocols (i.e. no matter which URL is in the clipboard, it should insert it now).
 
 ## Under the Hood
 
