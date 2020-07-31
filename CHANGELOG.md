@@ -1,8 +1,13 @@
-# (no version assigned)
+# 1.7.3
 
 ## GUI and Functionality
 
-- Fixed a bug causing Export Project to fail.
+- Fixed a bug causing project exports to fail.
+
+## Under the Hood
+
+- Upgraded `joplin-turndown` which should result in better HTML-to-Markdown conversion on pasting.
+- In case Pandoc produces any output (such as warnings or other useful info) but runs successfully, this output will be logged so that you can troubleshoot even non-fatal warnings.
 
 # 1.7.2
 
