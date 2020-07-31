@@ -92,6 +92,7 @@ async function updateFileMetadata (fileObject) {
   try {
     let stat = await fs.lstat(fileObject)
     fileObject.modtime = stat.mtime.getTime()
+    global.log.info(`Updated modtime for fileDescriptor ${fileObject.name} to ${fileObject.modtime}`)
   } catch (e) {
     // Do nothing ...
   }

@@ -48,10 +48,13 @@ class SaveFile extends ZettlrCommand {
         })
       }
 
+      global.log.info(`Saving file ${realFile.name} (modtime ${realFile.modtime})...`)
       await this._app.getFileSystem().runAction('save-file', {
         'source': realFile,
         'info': file.content
       })
+      global.log.info(`File ${realFile.name} saved! New modtime: ${realFile.modtime}.`)
+
       // Mark this file as clean
       global.ipc.send('mark-clean', { 'hash': realFile.hash })
       // Re-send the file
