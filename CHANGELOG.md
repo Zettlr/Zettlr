@@ -2,8 +2,19 @@
 
 ## GUI and Functionality
 
-- Fixed a bug causing Export Project to fail.
 - All images paths created when pasting or dropping an image are now relative and POSIX (using forward slashes). This unifies images paths across platforms (in particular Windows) and insertion method.
+
+# 1.7.3
+
+## GUI and Functionality
+
+- Fixed a bug causing project exports to fail.
+- The `Cmd/Ctrl+K`-shortcut now works with most domains and protocols (i.e. no matter which URL is in the clipboard, it should insert it now).
+
+## Under the Hood
+
+- Upgraded `joplin-turndown` which should result in better HTML-to-Markdown conversion on pasting.
+- In case Pandoc produces any output (such as warnings or other useful info) but runs successfully, this output will be logged so that you can troubleshoot even non-fatal warnings.
 
 # 1.7.2
 

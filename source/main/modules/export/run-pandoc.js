@@ -99,6 +99,16 @@ module.exports = async function (options) {
         return reject(err)
       }
 
+      // Log the stdout and stderr, in case warnings were produced
+      if (stderr.length > 0 || stdout.length > 0) {
+        global.log.warning(
+          'Pandoc ran successfully. However, there were warnings and/or additional output.',
+          { 'stdout': stdout, 'stderr': stderr }
+        )
+      } else {
+        global.log.info('Pandoc ran successfully and did not produce any output.')
+      }
+
       resolve()
     })
   })

@@ -165,7 +165,7 @@
           caption = caption.replace(/_([^_]+?)_/g, '<em>$1</em>')
           caption = caption.replace(/~~([^~]+?)~~/g, '<del>$1</del>')
           if (/^!\[.+\]\(.+\)$/.test(caption)) {
-            caption = caption.replace(/^!\[(.+)\]\((.+)\)$/, '<img src="$2" title="$1">')
+            caption = caption.replace(/^!\[(.*)\]\((.+)\)$/, '<img src="$2" title="$1">')
           }
           a.innerHTML = caption
           a.title = url // Set the url as title to let users see where they're going
