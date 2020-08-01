@@ -4,6 +4,7 @@
 
 - Fixed a bug causing project exports to fail.
 - The `Cmd/Ctrl+K`-shortcut now works with most domains and protocols (i.e. no matter which URL is in the clipboard, it should insert it now).
+- Fixed a serious bug that would lead to file descriptors never updating their metadata and cause thousands of remote notifications where they shouldn't be, because the file metadata would never be updated after each safe, resulting in Zettlr thinking that the file hasn't been updated.
 
 ## Under the Hood
 

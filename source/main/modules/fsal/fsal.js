@@ -366,7 +366,7 @@ module.exports = class FSAL extends EventEmitter {
       this._remoteChangeBuffer.push({ 'event': event, 'changedPath': changedPath })
 
       // Handle the buffer if we're not currently handling a change.
-      if (!this._isCurrentlyHandlingRemoteChange) this._afterRemoteChange()
+      if (!this._isCurrentlyHandlingRemoteChange && !this._fsalIsBusy) this._afterRemoteChange()
     })
   } // END constructor
 
@@ -604,7 +604,7 @@ module.exports = class FSAL extends EventEmitter {
         global.log.info(`Could not process event ${event.event} for ${event.changedPath}: The corresponding node does not exist anymore.`)
         return this._afterRemoteChange() // Try the next event
       }
-      this._onRemoteChange(event.event, event.changedPath).catch(e => console.error(e))
+      this._onRemoteChange(event.event, event.changedPath).catch(e => global.log.error(e.message, e))
     }
   }
 

@@ -71,8 +71,6 @@ module.exports = async function (options) {
     'GENERATE_TOC': (pdf.toc) ? `\\setcounter{tocdepth}{${pdf.tocDepth}}\n\\tableofcontents\n\\pagebreak\n` : ''
   }
 
-  console.log(variables)
-
   for (let key in variables) {
     cnt = cnt.replace(new RegExp('\\$' + key + '\\$', 'g'), variables[key])
   }
