@@ -37,7 +37,7 @@ global.log = {
   }
 }
 
-import { app } from 'electron';
+import { app, protocol } from 'electron';
 
 // Include the global Zettlr class
 import Zettlr from './main/zettlr'
@@ -134,6 +134,20 @@ app.whenReady().then(() => {
   } catch (e) {
     global.log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
   }
+
+  // Make it possible to safely load external files
+  // In order to load files, the 'safe-file' protocol has to be used instead of 'file'
+  // https://stackoverflow.com/a/61623585/873661
+  const protocolName = 'safe-file'
+  protocol.registerFileProtocol(protocolName, (request, callback) => {
+    const url = request.url.replace(`${protocolName}://`, '')
+    try {
+      return callback(decodeURIComponent(url))
+    }
+    catch (error) {
+      global.log.error('Error loading external file', error)
+    }
+  })
 
   zettlr = new Zettlr()
 })

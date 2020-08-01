@@ -31,9 +31,9 @@
    * Creates a definite absolute URL if the information suffices.
    * @param {string} base The base path to be used
    * @param {string} fragment The URL to be converted, either relative or absolute
-   * @returns {string} The converted absolute URL with a cachefree-parameter.
+   * @returns {string} The converted absolute URL.
    */
-  function makeAbsoluteCachefreeURL (base, fragment) {
+  function makeAbsoluteURL (base, fragment) {
     let urlObject
     try {
       // If it's already a correct URL, we are almost done
@@ -42,12 +42,10 @@
       // Obviously not a correct URL. In the context of this limited
       // application, we can be sure base is always a path to a Markdown file.
       let resolvedPath = path.resolve(base, fragment)
-      if (!protocolRE.test(resolvedPath)) resolvedPath = 'file://' + resolvedPath
+      if (!protocolRE.test(resolvedPath)) resolvedPath = 'safe-file://' + resolvedPath
       urlObject = new URL(resolvedPath)
     }
 
-    // Now make the thing cachefree
-    urlObject.searchParams.append('c', new Date().getTime())
     return urlObject.toString()
   }
 
@@ -166,7 +164,7 @@
         if (/data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(url)) {
           img.src = url
         } else {
-          img.src = makeAbsoluteCachefreeURL(cm.getOption('markdownImageBasePath'), url)
+          img.src = makeAbsoluteURL(cm.getOption('markdownImageBasePath'), url)
         }
 
         // Push the textMarker into the array
