@@ -487,11 +487,7 @@ module.exports = class FSAL extends EventEmitter {
       let hasChanged = await FSALFile.hasChangedOnDisk(descriptor)
       global.log.info('Change event detected. FSALFile::hasChangedOnDisk reports: ' + hasChanged + ' with modtime ' + descriptor.modtime, FSALFile.metadata(descriptor))
       if (!hasChanged) {
-        global.log.info(`The file ${descriptor.name} has not changed, but a change event was fired by chokidar.`, {
-          'mTime': descriptor.modtime,
-          'birthTime': descriptor.creationtime
-        })
-        global.ipc.notify('Change event detected but not handled.')
+        global.log.info(`The file ${descriptor.name} has not changed, but a change event was fired by chokidar.`)
       } else {
         global.log.info(`Chokidar has detected a change event for file ${descriptor.name}. Attempting to re-parse ...`)
         // Remove the cached value

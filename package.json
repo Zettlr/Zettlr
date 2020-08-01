@@ -179,7 +179,7 @@
   "devDependencies": {
     "chalk": "^4.1.0",
     "cross-env": "^7.0.2",
-    "css-loader": "^4.2.0",
+    "css-loader": "3.6.0",
     "csso": "^4.0.3",
     "electron": "^9.1.2",
     "electron-builder": "^22.8.0",
