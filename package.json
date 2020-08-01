@@ -203,6 +203,7 @@
     "gulp-wrap": "^0.15.0",
     "handlebars": "^4.7.6",
     "lorem-ipsum": "^2.0.3",
+    "mini-css-extract-plugin": "^0.9.0",
     "mocha": "^8.1.0",
     "npm-run-all": "^4.1.5",
     "reveal.js": "^3.9.2",

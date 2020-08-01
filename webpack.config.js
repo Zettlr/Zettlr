@@ -2,6 +2,7 @@
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const path = require('path')
 const webpack = require('webpack')
+const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 
 var configuration = {
   entry: {
@@ -30,7 +31,8 @@ var configuration = {
       {
         test: /\.css$/,
         use: [
-          'vue-style-loader',
+          // The MiniCSSExtractPlugin is required if we want the CSS files to be emitted.
+          (process.env.NODE_ENV !== 'production') ? 'vue-style-loader' : MiniCSSExtractPlugin.loader,
           'css-loader'
         ]
       },
@@ -41,12 +43,7 @@ var configuration = {
       // to be placed ABOVE this one.)
       {
         test: /\.vue$/,
-        use: {
-          loader: 'vue-loader',
-          options: {
-            extractCSS: process.env.NODE_ENV === 'production'
-          }
-        }
+        loader: 'vue-loader'
       }
     ]
   },
@@ -60,7 +57,8 @@ var configuration = {
   plugins: [
     new VueLoaderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
+    new MiniCSSExtractPlugin()
   ]
 }
 
