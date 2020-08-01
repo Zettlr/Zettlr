@@ -6,7 +6,7 @@
 
 ## Under the Hood
 
-- Fixed missing CSS styles.
+- Fixed missing CSS styles (#1141).
 
 # 1.7.3
 
