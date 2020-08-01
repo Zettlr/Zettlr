@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git://github.com/Zettlr/Zettlr.git"
   },
-  "version": "1.7.3",
+  "version": "1.7.4",
   "license": "GPL-3.0",
   "description": "A powerful Markdown editor for researchers.",
   "main": "./source/main.js",
@@ -179,7 +179,7 @@
   "devDependencies": {
     "chalk": "^4.1.0",
     "cross-env": "^7.0.2",
-    "css-loader": "^4.2.0",
+    "css-loader": "3.6.0",
     "csso": "^4.0.3",
     "electron": "^9.1.2",
     "electron-builder": "^22.8.0",
@@ -203,6 +203,7 @@
     "gulp-wrap": "^0.15.0",
     "handlebars": "^4.7.6",
     "lorem-ipsum": "^2.0.3",
+    "mini-css-extract-plugin": "^0.9.0",
     "mocha": "^8.1.0",
     "npm-run-all": "^4.1.5",
     "reveal.js": "^3.9.2",

@@ -1,3 +1,13 @@
+# 1.7.4
+
+## GUI and Functionality
+
+- Removed a verbose debug notification which was added in order to test for persistence of bug #746.
+
+## Under the Hood
+
+- Fixed missing CSS styles (#1141).
+
 # 1.7.3
 
 ## GUI and Functionality
