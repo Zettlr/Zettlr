@@ -9,21 +9,24 @@
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron-forge-vscode-nix",
       "windows": {
         "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron-forge-vscode-win.cmd"
-      }
-    },
-    {
-      "name": "Debug Renderer Process",
-      "type": "chrome",
-      "request": "launch",
-      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
-      "windows": {
-        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
       },
       "runtimeArgs": [
-        "${workspaceRoot}/source/main.js",
-        "--remote-debugging-port=9222"
-      ],
+        ".",
+        "--remote-debugging-port=9223"
+      ]
+    },
+    {
+      "name": "Attach to Renderer Process",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9223,
       "webRoot": "${workspaceRoot}"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug All",
+      "configurations": ["Debug Main Process", "Attach to Renderer Process"]
     }
   ]
 }
