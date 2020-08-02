@@ -56,18 +56,11 @@ jobs:
         with:
           node-version: '12.x'
 
-      # On Windows server, we have to create the handlebars-directory
-      # manually, because the node-process always crashes when it
-      # attempts literally the same thing.
-      - name: Manually create the handlebars-directory (Windows only)
-        if: matrix.os == 'windows-latest'
-        run: New-Item -Path "./source/common/assets" -Name "handlebars" -ItemType "directory" # Hello, PowerShell ._.
-
-      # Perform all necessary pre-build steps (LESS, handlebars, and so forth)
+      # Perform all necessary pre-build steps
       - name: Set up build environment and compile the assets
       # N.B.: The "postinstall" field in package.json will make sure everything's compiled
       # except cls and language files which we update separately
-        run: yarn install --frozen-lockfile && cd ./source && yarn install --frozen-lockfile && cd ..
+        run: yarn install --frozen-lockfile
       # Save the current package.json's version value
       # as the output from this step so that we can
       # reference it later on.
