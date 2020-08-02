@@ -11,6 +11,18 @@ rules.push({
     loader: 'css-loader' // Translate CSS into JS string
   }, {
     loader: 'less-loader' // Compile Less to CSS
+  }],
+  exclude: /theme-main\.less$/
+})
+rules.push({
+  test: /theme-main\.less$/,
+  use: [{
+    loader: 'style-loader', // Create style nodes from JS strings
+    options: { injectType: 'lazyStyleTag' } // Lazy-load themes so that we can switch between them
+  }, {
+    loader: 'css-loader' // Translate CSS into JS string
+  }, {
+    loader: 'less-loader' // Compile Less to CSS
   }]
 })
 rules.push({

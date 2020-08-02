@@ -63,7 +63,6 @@ class ZettlrBody {
     this._currentDialog = null
     // Holds the current popup. Prevents multiple popups from appearing.
     this._currentPopup = null
-    this._currentTheme = 'berlin' // Default theme is Berlin
 
     // This object caches the values of search and replace value, so they stay
     // persistent on a per-session basis.
@@ -150,17 +149,40 @@ class ZettlrBody {
    * necessary adjustments.
    */
   configChange () {
-    let newTheme = global.config.get('display.theme')
-    // Check if we really need to replace the style to prevent ugly flickering
-    // when replacing the same theme with the same.
-    if (this._currentTheme === newTheme) return
-
     // On config change, change the theme according to the settings
-    let href = $('link#theme-css').attr('href')
-    href = href.replace(/bielefeld|berlin|frankfurt|karl-marx-stadt|bordeaux/, newTheme)
-    $('link#theme-css').attr('href', href)
-    this._renderer.getEditor().refresh()
-    this._currentTheme = newTheme
+    let newTheme = global.config.get('display.theme')
+
+    let berlin = require('./../common/assets/less/theme-berlin/theme-main.less')
+    let bielefeld = require('./../common/assets/less/theme-bielefeld/theme-main.less')
+    let frankfurt = require('./../common/assets/less/theme-frankfurt/theme-main.less')
+    let karlMarxStadt = require('./../common/assets/less/theme-karl-marx-stadt/theme-main.less')
+    let bordeaux = require('./../common/assets/less/theme-bordeaux/theme-main.less')
+
+    let themeToUse
+    switch (newTheme) {
+      case 'berlin':
+        themeToUse = berlin
+        break
+      case 'bielefeld':
+        themeToUse = bielefeld
+        break
+      case 'frankfurt':
+        themeToUse = frankfurt
+        break
+      case 'karl-marx-stadt':
+        themeToUse = karlMarxStadt
+        break
+      case 'bordeaux':
+        themeToUse = bordeaux
+        break
+    }
+
+    // Unload all themes except the new one
+    [ berlin, bielefeld, frankfurt, karlMarxStadt, bordeaux ]
+      .filter(theme => theme !== themeToUse)
+      .forEach(theme => theme.unuse())
+    // Load the new theme
+    themeToUse.use()
   }
 
   /**
