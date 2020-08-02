@@ -1,3 +1,27 @@
+# 1.7.4
+
+## GUI and Functionality
+
+- Removed a verbose debug notification which was added in order to test for persistence of bug #746.
+
+## Under the Hood
+
+- Fixed missing CSS styles (#1141).
+
+# 1.7.3
+
+## GUI and Functionality
+
+- Fixed a bug causing project exports to fail.
+- The `Cmd/Ctrl+K`-shortcut now works with most domains and protocols (i.e. no matter which URL is in the clipboard, it should insert it now).
+- Fixed a serious bug that would lead to file descriptors never updating their metadata and cause thousands of remote notifications where they shouldn't be. Due to this, Zettlr was thinking that the file hasn't been updated by a save.
+- The application is now also available as an Windows ARM 64bit release.
+
+## Under the Hood
+
+- Upgraded `joplin-turndown` which should result in better HTML-to-Markdown conversion on pasting.
+- In case Pandoc produces any output (such as warnings or other useful info) but runs successfully, this output will be logged so that you can troubleshoot even non-fatal warnings.
+
 # 1.7.2
 
 ## GUI and Functionality

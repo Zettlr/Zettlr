@@ -12,11 +12,12 @@
             "Lexane",
             "Taylan TATLI",
             "concretx",
+            "\u00c9ric Guirbal",
             "Joris",
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-06-23T17:21:07.000000Z"
+        "updated_at": "2020-07-29T09:02:17.000000Z"
     },
     "dialog": {
         "about": {
@@ -200,7 +201,8 @@
                 "render_links": "Afficher les liens",
                 "render_math": "Afficher les formules",
                 "render_tasks": "Afficher les t\u00e2ches",
-                "title": "Afficher"
+                "title": "Afficher",
+                "use_first_headings": "S'il existe, utiliser le premier titre de niveau 1 comme nom de fichier"
             },
             "display_time_explanation": "Affichage chronologique des fichiers",
             "editor": "\u00c9diteur",
@@ -440,6 +442,7 @@
         "no_attachments": "Aucun annexe",
         "no_dir_selected": "Aucun r\u00e9pertoire s\u00e9lectionn\u00e9",
         "no_search_results": "Aucun r\u00e9sultat",
+        "statistics_more": "Plus de statistiques\u2026",
         "today_words": "mots aujourd'hui",
         "virtual_dirs": "Dossiers virtuels",
         "words": "%s mots",
@@ -564,6 +567,7 @@
     "system": {
         "all_files": "Tous les fichiers",
         "cancel": "Annuler",
+        "directories": "Dossiers",
         "directory_removed": "Le dossier %s a \u00e9t\u00e9 supprim\u00e9.",
         "error": {
             "already_exists_message": "Le fichier ou le dossier %s existe d\u00e9j\u00e0.",
@@ -607,6 +611,7 @@
         "export_success": "Exportation vers %s",
         "file_changed": "Le fichier %s a \u00e9t\u00e9 modifi\u00e9 par un programme ext\u00e9rieur.",
         "file_removed": "Le fichier %s a \u00e9t\u00e9 supprim\u00e9.",
+        "files": "Fichiers",
         "import_error": "Impossible d'importer %s.",
         "import_fail": "Les fichiers %s ne peuvent pas \u00eatre import\u00e9s, car leur type de fichier est inconnu : %s",
         "import_lang_file": "Importer un fichier de traduction",
@@ -622,6 +627,7 @@
         "open_root_directory_success": "%s a \u00e9t\u00e9 charg\u00e9.",
         "overwrite_file_message": "Le fichier %s existe d\u00e9j\u00e0 dans ce r\u00e9pertoire. \u00c9craser?",
         "overwrite_file_title": "\u00c9craser le fichier existant",
+        "please_select_directory": "Veuillez commencer par choisir un dossier",
         "replace_file_message": "Le fichier %s a \u00e9t\u00e9 modifi\u00e9 \u00e0 distance. Remplacer la version charg\u00e9e par la plus r\u00e9cente du disque?",
         "replace_file_title": "Remplacer le fichier",
         "save_changes_cancel": "Annuler",
@@ -636,7 +642,7 @@
         "dir_new": "Cr\u00e9er un dossier",
         "dir_open": "Ouvrir un dossier",
         "file_delete": "Supprimer le fichier",
-        "file_info": "Afficher les informations du fichier (clic droit pour ligne : colonne)",
+        "file_info": "Afficher les informations du fichier",
         "file_new": "Cr\u00e9er un fichier",
         "file_rename": "Renommer le fichier en cours",
         "file_save": "Enregistrer le fichier en cours",
@@ -651,7 +657,7 @@
         "insert_ul": "Ins\u00e9rer une liste non ordonn\u00e9e",
         "pomodoro": "Minuteur Pomodoro",
         "preferences": "R\u00e9gler les param\u00e8tres",
-        "readability": "Activer mode de lisibilit\u00e9",
+        "readability": "Activer le mode de lisibilit\u00e9",
         "remove_fn": "Supprimer la note de pied de page sous le curseur",
         "share": "Exporter le fichier courant en HTML, DOCX, ODT ou PDF",
         "show_menu": "Ouvrir le menu d'application",

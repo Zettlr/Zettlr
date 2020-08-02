@@ -6,7 +6,7 @@
             "Celso Lira"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-07-09T14:44:15.000000Z"
+        "updated_at": "2020-07-20T20:00:40.000000Z"
     },
     "dialog": {
         "about": {
@@ -431,6 +431,7 @@
         "no_attachments": "No attachments",
         "no_dir_selected": "No directory selected",
         "no_search_results": "No results",
+        "statistics_more": "More statistics \u2026",
         "today_words": "words today",
         "virtual_dirs": "Virtual Directories",
         "words": "%s words",
@@ -555,6 +556,7 @@
     "system": {
         "all_files": "All Files",
         "cancel": "Cancel",
+        "directories": "Directories",
         "directory_removed": "Directory %s has been removed.",
         "error": {
             "already_exists_message": "The file/directory %s already exists in target.",
@@ -598,6 +600,7 @@
         "export_success": "Exporting to %s",
         "file_changed": "File %s has changed remotely.",
         "file_removed": "File %s has been removed.",
+        "files": "Files",
         "import_error": "Couldn't import %s.",
         "import_fail": "The following %s files could not be imported, because their filetype is unknown: %s",
         "import_lang_file": "Import new translation",
@@ -628,7 +631,7 @@
         "dir_new": "Create a new directory",
         "dir_open": "Open existing directory",
         "file_delete": "Remove the current file",
-        "file_info": "Display file information (right-click for line:column)",
+        "file_info": "Display file information",
         "file_new": "Create a new file",
         "file_rename": "Rename the current file",
         "file_save": "Save the current file",

@@ -34,12 +34,8 @@ class SaveFile extends ZettlrCommand {
       return false
     }
 
-    // Update word count
-    this._app.stats.updateWordCount(file.offsetWordcount || 0)
-    let realFile
-
     try {
-      realFile = this._app.getFileSystem().findFile(file.hash || null)
+      let realFile = this._app.getFileSystem().findFile(file.hash)
       if (!realFile) {
         console.log('No file found - creating')
         realFile = await this._app.getFileSystem().runAction('create-file', {
@@ -48,10 +44,17 @@ class SaveFile extends ZettlrCommand {
         })
       }
 
+      global.log.info(`Saving file ${realFile.name} (modtime ${realFile.modtime})...`)
       await this._app.getFileSystem().runAction('save-file', {
         'source': realFile,
         'info': file.content
       })
+
+      // Update word count
+      this._app.stats.updateWordCount(file.offsetWordcount || 0)
+
+      global.log.info(`File ${realFile.name} saved! New modtime: ${realFile.modtime}.`)
+
       // Mark this file as clean
       global.ipc.send('mark-clean', { 'hash': realFile.hash })
       // Re-send the file

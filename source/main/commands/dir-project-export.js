@@ -83,6 +83,7 @@ class DirProjectExport extends ZettlrCommand {
       'stripLinks': 'full',
       'pdf': config.pdf,
       'title': config.title,
+      'date': '\\today',
       'author': config.pdf.author,
       'keywords': config.pdf.keywords,
       'cslStyle': config.cslStyle

@@ -366,7 +366,7 @@ module.exports = class FSAL extends EventEmitter {
       this._remoteChangeBuffer.push({ 'event': event, 'changedPath': changedPath })
 
       // Handle the buffer if we're not currently handling a change.
-      if (!this._isCurrentlyHandlingRemoteChange) this._afterRemoteChange()
+      if (!this._isCurrentlyHandlingRemoteChange && !this._fsalIsBusy) this._afterRemoteChange()
     })
   } // END constructor
 
@@ -487,11 +487,7 @@ module.exports = class FSAL extends EventEmitter {
       let hasChanged = await FSALFile.hasChangedOnDisk(descriptor)
       global.log.info('Change event detected. FSALFile::hasChangedOnDisk reports: ' + hasChanged + ' with modtime ' + descriptor.modtime, FSALFile.metadata(descriptor))
       if (!hasChanged) {
-        global.log.info(`The file ${descriptor.name} has not changed, but a change event was fired by chokidar.`, {
-          'mTime': descriptor.modtime,
-          'birthTime': descriptor.creationtime
-        })
-        global.ipc.notify('Change event detected but not handled.')
+        global.log.info(`The file ${descriptor.name} has not changed, but a change event was fired by chokidar.`)
       } else {
         global.log.info(`Chokidar has detected a change event for file ${descriptor.name}. Attempting to re-parse ...`)
         // Remove the cached value
@@ -604,7 +600,7 @@ module.exports = class FSAL extends EventEmitter {
         global.log.info(`Could not process event ${event.event} for ${event.changedPath}: The corresponding node does not exist anymore.`)
         return this._afterRemoteChange() // Try the next event
       }
-      this._onRemoteChange(event.event, event.changedPath).catch(e => console.error(e))
+      this._onRemoteChange(event.event, event.changedPath).catch(e => global.log.error(e.message, e))
     }
   }
 

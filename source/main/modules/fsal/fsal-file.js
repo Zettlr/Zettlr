@@ -90,10 +90,11 @@ function metadata (fileObject) {
  */
 async function updateFileMetadata (fileObject) {
   try {
-    let stat = await fs.lstat(fileObject)
+    let stat = await fs.lstat(fileObject.path)
     fileObject.modtime = stat.mtime.getTime()
+    global.log.info(`Updated modtime for fileDescriptor ${fileObject.name} to ${fileObject.modtime}`)
   } catch (e) {
-    // Do nothing ...
+    global.log.error(`Could not update the metadata for file ${fileObject.name}: ${e.message}`, e)
   }
 }
 

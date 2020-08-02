@@ -93,14 +93,15 @@ jobs:
       - name: Build Windows NSIS installer arm64
         if: matrix.os == 'windows-latest' # Only if the job runs on Windows
         # Make sure to sign the windows installer using the corresponding SSL EV.
-        run: CSC_LINK=${{ secrets.WIN_CERT }}  CSC_KEY_PASSWORD=${{ secrets.WIN_CERT_PASS }} npm run release:win-arm
+        run: CSC_LINK=${{ secrets.WIN_CERT }}  CSC_KEY_PASSWORD=${{ secrets.WIN_CERT_PASS }} npm run release:win-arm && mv ./release/Zettlr-${{ steps.pkg.outputs.version }}.exe ./release/Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe
         shell: bash # I'm sorry PowerShell, but I'm not rewriting code for you.
       - name: Cache Windows release arm64
         if: matrix.os == 'windows-latest' # Only if the job runs on Windows
         uses: actions/upload-artifact@v1
         with:
+          # It is important to remember that "name" does NOT refer to the uploaded file's name, but it's rather an ID, so the file needs to be renamed prior to uploading.
           name: Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}.exe
+          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe
       # MACOS ================================================================
       - name: Build macOS DMG file
         if: matrix.os == 'macos-latest' # Only if the job runs on macOS

@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-07-09T14:44:43.000000Z"
+        "updated_at": "2020-07-20T20:00:56.000000Z"
     },
     "dialog": {
         "about": {
@@ -429,6 +429,7 @@
         "no_attachments": "Keine Anh\u00e4nge",
         "no_dir_selected": "Kein Verzeichnis ausgew\u00e4hlt",
         "no_search_results": "Keine Ergebnisse",
+        "statistics_more": "Mehr Statistiken \u2026",
         "today_words": "W\u00f6rter heute",
         "virtual_dirs": "Virtuelle Ordner",
         "words": "%s W\u00f6rter",
@@ -553,6 +554,7 @@
     "system": {
         "all_files": "Alle Dateien",
         "cancel": "Abbrechen",
+        "directories": "Verzeichnisse",
         "directory_removed": "Das Verzeichnis %s wurde entfernt.",
         "error": {
             "already_exists_message": "Die Datei bzw. das Verzeichnis %s existiert am Zielort bereits.",
@@ -596,6 +598,7 @@
         "export_success": "Exportiere nach %s",
         "file_changed": "Datei %s wurde au\u00dferhalb bearbeitet.",
         "file_removed": "Datei %s wurde entfernt.",
+        "files": "Dateien",
         "import_error": "Konnte %s nicht importieren.",
         "import_fail": "Die folgenden %s Dateien konnten nicht importiert werden, da ihre Dateiendung unbekannt ist: %s",
         "import_lang_file": "Sprachdatei importieren",
@@ -626,7 +629,7 @@
         "dir_new": "Neues Verzeichnis erstellen",
         "dir_open": "Bestehendes Verzeichnis \u00f6ffnen",
         "file_delete": "Datei in den Papierkorb verschieben",
-        "file_info": "Zeige Dateiinfo (Rechtsklick f\u00fcr Zeile:Spalte)",
+        "file_info": "Dateiinformationen anzeigen",
         "file_new": "Neue Datei erstellen",
         "file_rename": "Datei umbenennen",
         "file_save": "\u00c4nderungen an der Datei speichern",

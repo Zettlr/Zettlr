@@ -99,7 +99,6 @@ module.exports = class FSALWatchdog extends EventEmitter {
       let alreadyWatched = Object.keys(this._process.getWatched())
       for (let p of this._paths) {
         if (!alreadyWatched.includes(p)) {
-          console.log('Adding late path ' + p)
           this._process.add(p)
         }
       }
@@ -127,13 +126,7 @@ module.exports = class FSALWatchdog extends EventEmitter {
 
       // Only watch changes in directories and supported files
       if ((dir && !ignoreDir(p)) || (file && (!ignoreFile(p) || attachment))) {
-        global.log.info(`[WATCHDOG] Emitting event: ${event}:${p}`, {
-          'isDir': dir,
-          'ignoreDir': ignoreDir(p),
-          'isFile': file,
-          'ignoreFile': ignoreFile(p),
-          'isAttachment': attachment
-        })
+        global.log.info(`[WATCHDOG] Emitting event: ${event}:${p}`)
         // Emit the event for the respective path.
         this.emit('change', event, p)
       }
