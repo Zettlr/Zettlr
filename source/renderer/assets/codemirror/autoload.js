@@ -5,8 +5,6 @@
  * in the main class.
  */
 
-const highlightingModes = require('../../../common/data.json').highlightingModes
-
 // 1. Mode addons
 require('codemirror/addon/mode/overlay')
 require('codemirror/addon/mode/multiplex') // Multiplex needed for syntax highlighting

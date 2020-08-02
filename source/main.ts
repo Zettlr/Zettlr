@@ -13,6 +13,17 @@
  * END HEADER
  */
 
+import { app, protocol } from 'electron'
+
+// Include the global Zettlr class
+import Zettlr from './main/zettlr'
+
+// Helper function to extract files to open from process.argv
+import extractFilesFromArgv from './common/util/extract-files-from-argv'
+
+// Developer tools
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+
 global.preBootLog = [{
   'level': 2, // Info
   // eslint-disable-next-line no-irregular-whitespace
@@ -36,17 +47,6 @@ global.log = {
     global.preBootLog.push({ 'level': 4, 'message': message })
   }
 }
-
-import { app, protocol } from 'electron';
-
-// Include the global Zettlr class
-import Zettlr from './main/zettlr'
-
-// Helper function to extract files to open from process.argv
-const extractFilesFromArgv = require('./common/util/extract-files-from-argv')
-
-// Introduce v8 code caching
-require('v8-compile-cache')
 
 /**
  * The main Zettlr object. As long as this exists in memory, the app will run.
@@ -125,8 +125,6 @@ app.whenReady().then(() => {
   global.log.info('Electron reports ready state. Instantiating main process...')
 
   try {
-    // Developer tools
-    const { default: installExtension, VUEJS_DEVTOOLS } = require('electron-devtools-installer')
     // Load Vue developer extension
     installExtension(VUEJS_DEVTOOLS)
       .then((name: string) => global.log.info(`Added DevTools extension:  ${name}`))
@@ -143,8 +141,7 @@ app.whenReady().then(() => {
     const url = request.url.replace(`${protocolName}://`, '')
     try {
       return callback(decodeURIComponent(url))
-    }
-    catch (error) {
+    } catch (error) {
       global.log.error('Error loading external file', error)
     }
   })

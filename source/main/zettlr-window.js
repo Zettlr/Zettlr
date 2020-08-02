@@ -16,7 +16,6 @@
  */
 
 const { dialog, BrowserWindow, app } = require('electron')
-const url = require('url')
 const path = require('path')
 const { trans } = require('../common/lang/i18n')
 const isDir = require('../common/util/is-dir')
@@ -111,6 +110,7 @@ class ZettlrWindow {
 
     // Then activate listeners.
     // and load the index.html of the app.
+    // eslint-disable-next-line no-undef
     this._win.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
     // EVENT LISTENERS

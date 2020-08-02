@@ -5,15 +5,19 @@
         "node": true
     },
     "extends": [
-        "standard",
+        "standard-with-typescript",
         "plugin:vue/vue3-recommended"
     ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
+    "parser": "vue-eslint-parser",
     "parserOptions": {
-        "ecmaVersion": 2018
+        "parser": "@typescript-eslint/parser",
+        "ecmaVersion": 2018,
+        "project": "./tsconfig.json",
+        "extraFileExtensions": [".vue"]
     },
     "rules": {
         // The following rule-changes to JSStandard Coding Style are tradition,
@@ -44,6 +48,13 @@
           },
           "svg": "any",
           "math": "any"
-        }]
-    }
+        }],
+        // Disable a few typescript rules as we are not yet there to easily implement them
+        "@typescript-eslint/no-floating-promises": [ "warn" ],
+        "@typescript-eslint/no-misused-promises": [ "warn" ],
+        "@typescript-eslint/strict-boolean-expressions": [ "warn" ]
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ]
 }
