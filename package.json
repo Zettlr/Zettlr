@@ -173,6 +173,7 @@
     "uuid": "^8.3.0",
     "v8-compile-cache": "^2.1.1",
     "vue": "^2.6.11",
+    "vue-virtual-scroller": "^1.0.10",
     "vuex": "^3.5.1",
     "yaml": "^1.10.0"
   },
@@ -208,9 +209,6 @@
     "handlebars-loader": "^1.7.1",
     "less-loader": "^6.2.0",
     "lorem-ipsum": "^2.0.3",
-    "mocha": "^8.0.1",
-    "node-loader": "^0.6.0",
-    "raw-loader": "^4.0.1",
     "mocha": "^8.1.0",
     "node-loader": "^0.6.0",
     "raw-loader": "^4.0.1",
