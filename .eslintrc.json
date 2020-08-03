@@ -4,6 +4,9 @@
         "es6": true,
         "node": true
     },
+    "plugins": [
+        "jquery"
+    ],
     "extends": [
         "standard",
         "plugin:vue/vue3-recommended"
@@ -44,6 +47,19 @@
           },
           "svg": "any",
           "math": "any"
-        }]
+        }],
+        "jquery/no-ajax": 2,
+        "jquery/no-ajax-events": 2,
+        "jquery/no-animate": 2,
+        "jquery/no-bind": 2,
+        "jquery/no-fade": 2,
+        "jquery/no-load": 2,
+        "jquery/no-param": 2,
+        "jquery/no-serialize": 2,
+        "jquery/no-sizzle": 2,
+        "jquery/no-slide": 2,
+        "jquery/no-toggle": 2,
+        "jquery/no-when": 2,
+        "jquery/no-wrap": 2
     }
 }
