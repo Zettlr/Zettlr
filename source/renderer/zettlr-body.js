@@ -150,39 +150,23 @@ class ZettlrBody {
    */
   configChange () {
     // On config change, change the theme according to the settings
-    let newTheme = global.config.get('display.theme')
+    let newThemeName = global.config.get('display.theme')
 
-    let berlin = require('./../common/assets/less/theme-berlin/theme-main.less')
-    let bielefeld = require('./../common/assets/less/theme-bielefeld/theme-main.less')
-    let frankfurt = require('./../common/assets/less/theme-frankfurt/theme-main.less')
-    let karlMarxStadt = require('./../common/assets/less/theme-karl-marx-stadt/theme-main.less')
-    let bordeaux = require('./../common/assets/less/theme-bordeaux/theme-main.less')
-
-    let themeToUse
-    switch (newTheme) {
-      case 'berlin':
-        themeToUse = berlin
-        break
-      case 'bielefeld':
-        themeToUse = bielefeld
-        break
-      case 'frankfurt':
-        themeToUse = frankfurt
-        break
-      case 'karl-marx-stadt':
-        themeToUse = karlMarxStadt
-        break
-      case 'bordeaux':
-        themeToUse = bordeaux
-        break
+    const themes = {
+      'berlin': require('./../common/assets/less/theme-berlin/theme-main.less'),
+      'bielefeld': require('./../common/assets/less/theme-bielefeld/theme-main.less'),
+      'frankfurt': require('./../common/assets/less/theme-frankfurt/theme-main.less'),
+      'karl-marx-stadt': require('./../common/assets/less/theme-karl-marx-stadt/theme-main.less'),
+      'bordeaux': require('./../common/assets/less/theme-bordeaux/theme-main.less')
     }
 
     // Unload all themes except the new one
-    [ berlin, bielefeld, frankfurt, karlMarxStadt, bordeaux ]
-      .filter(theme => theme !== themeToUse)
-      .forEach(theme => theme.unuse())
+    // According to https://github.com/webpack-contrib/style-loader#lazystyletag there might be problems if we call unuse without a prior call to use, but so far everything seems to work
+    Object.entries(themes)
+      .filter(([ name, theme ]) => name !== newThemeName)
+      .forEach(([ name, theme ]) => theme.unuse())
     // Load the new theme
-    themeToUse.use()
+    themes[newThemeName].use()
   }
 
   /**
