@@ -54,7 +54,7 @@ module.exports = function searchFile (fileObject, terms, cnt) {
     if (t.operator === 'AND') {
       if (fileObject.name.toLowerCase().indexOf(t.word.toLowerCase()) > -1 || fileObject.tags.includes(t.word.toLowerCase())) {
         matches++
-      } else if (t.word[0] === '#' && fileObject.tags.includes(t.word.substr(1))) {
+      } else if (t.word[0] === '#' && fileObject.tags.includes(t.word.substr(1).toLocaleLowerCase())) {
         // Account for a potential # in front of the tag
         matches++
       }
@@ -65,7 +65,7 @@ module.exports = function searchFile (fileObject, terms, cnt) {
           matches++
           // Break because only one match necessary
           break
-        } else if (wd[0] === '#' && fileObject.tags.includes(wd.toLowerCase().substr(1))) {
+        } else if (wd[0] === '#' && fileObject.tags.includes(wd.toLowerCase().substr(1).toLocaleLowerCase())) {
           // Account for a potential # in front of the tag
           matches++
           break
