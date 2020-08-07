@@ -1,3 +1,9 @@
+# 1.7.5
+
+## Export
+
+- HTML Export now centres figure captions underneath figures.
+
 # 1.7.4
 
 ## GUI and Functionality
