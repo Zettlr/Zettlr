@@ -17,10 +17,9 @@
 import Vue from 'vue'
 import App from './sidebar.vue'
 import store from './store'
+import Vuex from 'vuex'
 
-const Vuex = require('vuex')
-
-require('vue-virtual-scroller/dist/vue-virtual-scroller.css')
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 // Indicate that we would like to use a vuex store
 Vue.use(Vuex)
@@ -30,7 +29,7 @@ Vue.use(Vuex)
 // we'll be using it throughout the renderer.
 var applicationStore = new Vuex.Store(store)
 
-export default function () {
+export default (): Vue => {
   return new Vue({
     // Destructure the App config object, and enrich with store and hook
     ...App,

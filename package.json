@@ -184,6 +184,7 @@
     "@electron-forge/cli": "6.0.0-beta.52",
     "@electron-forge/plugin-webpack": "6.0.0-beta.52",
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
+    "@teamsupercell/typings-for-css-modules-loader": "^2.2.1",
     "@types/electron-devtools-installer": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^3.6.0",
     "@typescript-eslint/parser": "^3.6.0",
@@ -220,6 +221,7 @@
     "svg-inline-loader": "^0.8.2",
     "ts-loader": "^6.2.1",
     "typescript": "^3.9.6",
+    "typings-for-css-modules-loader": "^1.7.0",
     "uglify-js": "^3.10.0",
     "vue-loader": "^15.9.3",
     "vue-template-compiler": "^2.6.11"

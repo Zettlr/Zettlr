@@ -8,7 +8,9 @@ rules.push({
   use: [{
     loader: 'style-loader' // Create style nodes from JS strings
   }, {
-    loader: 'css-loader' // Translate CSS into JS string
+    loader: "@teamsupercell/typings-for-css-modules-loader" // Enrich css by typing information
+  }, {
+    loader: "css-loader" // Translate CSS into JS string
   }, {
     loader: 'less-loader' // Compile Less to CSS
   }],
@@ -20,11 +22,16 @@ rules.push({
     loader: 'style-loader', // Create style nodes from JS strings
     options: { injectType: 'lazyStyleTag' } // Lazy-load themes so that we can switch between them
   }, {
-    loader: 'css-loader' // Translate CSS into JS string
+    loader: "@teamsupercell/typings-for-css-modules-loader" // Enrich css by typing information
+  }, {
+    loader: "css-loader" // Translate CSS into JS string
   }, {
     loader: 'less-loader' // Compile Less to CSS
   }]
 })
+
+// Handle handlebars files: Precompile them
+// The precompiled templates can be imported using "require(path to the handlebars fie)"
 rules.push({
   test: /\.handlebars$/,
   use: [{

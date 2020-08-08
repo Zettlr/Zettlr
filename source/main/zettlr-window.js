@@ -108,8 +108,8 @@ class ZettlrWindow {
     // First create a new browserWindow
     this._win = new BrowserWindow(winConf)
 
-    // Then activate listeners.
-    // and load the index.html of the app.
+    // Load the index.html of the app.
+    // The variable MAIN_WINDOW_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
     // eslint-disable-next-line no-undef
     this._win.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 

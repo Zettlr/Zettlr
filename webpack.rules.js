@@ -22,6 +22,7 @@ module.exports = [
     test: /\.css$/,
     use: [
       'vue-style-loader',
+      '@teamsupercell/typings-for-css-modules-loader',
       'css-loader'
     ]
   },
@@ -48,10 +49,10 @@ module.exports = [
     }
   },
   {
-    // Handle files for citeproc: copy them, and import them as string
-    test: /\.(xml|csl)$/,
+    // Handle audio files: just copy them
+    test: /\.(ogg)$/,
     use: {
-      loader: 'raw-loader',
+      loader: 'file-loader',
       options: {
         // Do not wrap in js module
         esModule: false
@@ -59,10 +60,10 @@ module.exports = [
     }
   },
   {
-    // Handle audio files: just copy them
-    test: /\.(ogg)$/,
+    // Handle files for citeproc: copy them, and import them as string
+    test: /\.(xml|csl)$/,
     use: {
-      loader: 'file-loader',
+      loader: 'raw-loader',
       options: {
         // Do not wrap in js module
         esModule: false

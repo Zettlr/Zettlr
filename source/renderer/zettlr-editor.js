@@ -29,10 +29,8 @@ const generateKeymap = require('./assets/codemirror/generate-keymap.js')
 const openMarkdownLink = require('./util/open-markdown-link')
 const EditorAutocomplete = require('./util/editor-autocomplete')
 
-// The autoloader requires all necessary CodeMirror addons and modes that are
-// used by the main class. It simply folds about 70 lines of code into an extra
-// file.
-require('./assets/codemirror/autoload.js')
+// Load CodeMirror addons and modes
+require('./assets/codemirror/plugins.js')
 
 // Finally load CodeMirror itself
 const CodeMirror = require('codemirror')
