@@ -33,7 +33,7 @@ rules.push({
       // Automatically load referenced images
       inlineRequires: '/img/',
       // Use custom Handlebars runtime with extra helpers registered
-      runtime: path.join(__dirname, 'source/common/zettlr-template.js')
+      runtime: path.join(__dirname, 'source/common/zettlr-handlebars-runtime.js')
     }
   }]
 })
