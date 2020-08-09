@@ -6,6 +6,7 @@
 - Fixed a bug where the app would not process inline images during export, leading to missing images.
 - HTML Export now centres figure captions underneath figures (thanks to @Kangie for implementing).
 - Zettlr finally allows alternative/title texts in images to be specified, making it possible to preview images with a title, and have them properly export even with relative filenames.
+- Fix wrong design of the sorters in combined sidebar file trees.
 
 ## Under the Hood
 
