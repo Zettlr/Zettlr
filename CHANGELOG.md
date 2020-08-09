@@ -7,7 +7,7 @@
 
 ## Under the Hood
 
-(nothing here)
+- Added an additional check for directory exports to check that they indeed have an attached project.
 
 # 1.7.4
 
