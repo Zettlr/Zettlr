@@ -78,7 +78,9 @@
     }
 
     .searchbar {
+        position: relative;
         flex-grow:5;
+
         input {
             height:@button-size;
             width:90%; // Fill out the whole space
@@ -90,14 +92,19 @@
         }
 
         div.end-search {
-            position: relative;
-            right: 26px;
-            width: 0px; // 0px will ensure it stays on the input in all sizes
-            height: 12px;
-            display: inline-block;
-            line-height: 11px;
+            position: absolute;
+            top: @button-margin;
+            right: @button-margin + @button-size;
+            height: @button-size;
+            width: @button-size;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 80%;
-            text-align: center;
+
+            &:hover {
+                color: var(--c-primary);
+            }
         }
     }
 }

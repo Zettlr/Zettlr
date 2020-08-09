@@ -153,10 +153,15 @@
     border: none;
     left: 0 !important;
   }
-  .CodeMirror-foldgutter { width: .7em; }
+  .CodeMirror-foldgutter { width: 2em; }
   .CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
+    text-align: right;
     cursor: pointer;
     font-size: 18px;
+
+    &:hover {
+      color: var(--c-primary);
+    }
   }
   .CodeMirror-foldgutter-open:after { content: "\25BE"; }
   .CodeMirror-foldgutter-folded:after { content: "\25B8"; }
@@ -173,11 +178,15 @@
 }
 
 .heading-tag {
-  font-size: 20px;
-  font-weight: normal;
+  display: inline-block;
   cursor: pointer;
   border-radius: @border-radius;
-  padding: 4px;
+  padding: 0 4px;
+
+  span {
+    font-size: 20px;
+    font-weight: normal;
+  }
 }
 
 // Hints (tag autocompletion, etc.)
