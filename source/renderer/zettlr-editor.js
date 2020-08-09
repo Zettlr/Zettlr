@@ -331,25 +331,24 @@ class ZettlrEditor {
       // Originally based on https://discuss.codemirror.net/t/hanging-indent/243/2
       let monospaceWidth = this.computeMonospaceWidth()
       let spaceWidth = this.computeSpaceWidth()
-      let tabWidth = spaceWidth * 5
-      let basePadding = 2.5 * monospaceWidth
 
-      // Show continued list/quote lines aligned to start of text rather than first non-space char (hanging indent)
-      let leadingSpaceListBulletsQuotes = /^(?<spaces>\s*)(?<ordinal>[*+-]\s+|\d+\.\s+|>\s*)+/
-      let match = leadingSpaceListBulletsQuotes.exec(line.text)
+      // Determine everything before the meaningful text begins. This will match the following:
+      //     Text indentended by 4 (or any number of) spaces
+      //     - List indented by 4 (or any number of) spaces
+      // - List non-indented
+      //   - - - - - Some text here (will only match first hyphen)
+      let match = /^(?<spaces>\s*)(?<ordinal>[*+-]\s+|\d+[.)]\s+|>\s*)?/.exec(line.text)
 
-      if (!match) return
+      if (!match) return // No need to indent
 
-      let [ leading, padding, ordinal ] = match
-      let offset = CodeMirror.countColumn(leading, leading.length, cm.getOption('tabSize'))
-
-      if (offset <= 0) return
+      // Extract full match, leading spaces and an optional ordinal
+      let padding = match[1]
+      let ordinal = match[2] || ''
 
       // The following code is a bit complicated as the as the HTML structure is the following:
       //  - some spaces or tabs in normal font (length = numberOfSpaces)
       //  - the sequence "- " or "1. " in monospaced font (length = numberOfOrdinal)
       //  - text in normal font
-      // Setting "textIndent" and "paddingLeft" to "- 2 * monospaceWidth" would give the correct result if "   - " wouldn't be part of the text
 
       // Tabs are another story. They are inserted as spans with class "cm-tab" and consequently change the layout again
       // The following tries to align tab-indented list with space-indented lists (works quite ok at least on the first level)
@@ -357,8 +356,8 @@ class ZettlrEditor {
       let numberOfSpaces = padding.length - numberOfTabs
       let numberOfOrdinal = ordinal.length
 
-      elt.style.textIndent = '-' + (numberOfOrdinal * monospaceWidth + (offset - numberOfOrdinal) * spaceWidth) + 'px'
-      elt.style.paddingLeft = (basePadding + tabWidth * numberOfTabs + numberOfSpaces * spaceWidth) + 'px'
+      elt.style.textIndent = '-' + (numberOfSpaces * spaceWidth + numberOfOrdinal * monospaceWidth) + 'px'
+      elt.style.paddingLeft = (numberOfSpaces * spaceWidth + numberOfOrdinal * monospaceWidth) + 'px'
     })
 
     // Display a footnote if the target is a link (and begins with ^)

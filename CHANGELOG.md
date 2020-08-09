@@ -7,6 +7,7 @@
 - HTML Export now centres figure captions underneath figures (thanks to @Kangie for implementing).
 - Zettlr finally allows alternative/title texts in images to be specified, making it possible to preview images with a title, and have them properly export even with relative filenames.
 - Fix wrong design of the sorters in combined sidebar file trees.
+- Fixed a bug where adding more and more list-characters in front of a list item would make the left gutter "swallow" these due to an extreme amount of negative indent. Now the line indentation for soft-wrapped lists (or anything indented) should work as expected.
 
 ## Under the Hood
 
