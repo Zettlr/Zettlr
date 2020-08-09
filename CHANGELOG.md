@@ -8,6 +8,7 @@
 - Zettlr finally allows alternative/title texts in images to be specified, making it possible to preview images with a title, and have them properly export even with relative filenames.
 - Fix wrong design of the sorters in combined sidebar file trees.
 - Fixed a bug where adding more and more list-characters in front of a list item would make the left gutter "swallow" these due to an extreme amount of negative indent. Now the line indentation for soft-wrapped lists (or anything indented) should work as expected.
+- Fixed a behaviour that would sometimes lead to the editor inserting `tab`-characters instead of spaces.
 
 ## Under the Hood
 
