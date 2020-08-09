@@ -1,3 +1,13 @@
+# (no version)
+
+## GUI and Functionality
+
+- Fixed a bug where opening RMarkdown files with Zettlr not open would throw an error.
+
+## Under the Hood
+
+(nothing here)
+
 # 1.7.4
 
 ## GUI and Functionality
