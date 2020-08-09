@@ -13,9 +13,10 @@
   'use strict'
 
   // GENERAL PLUGIN VARIABLES
+  const { getImageRE } = require('../../../common/regular-expressions')
 
   // Image detection regex
-  var imageRE = /(?<=\s|^)!\[(.*?)\]\((.+?)\)(?:{.*})?/gm
+  var imageRE = getImageRE()
   var protocolRE = /^([a-z]{1,10}):\/\//i
 
   // Holds the currently rendered images

@@ -12,6 +12,7 @@
  */
 
 const path = require('path')
+const { getImageRE } = require('../regular-expressions')
 
 /**
  * This function takes a Markdown string and replaces all occurrences of images
@@ -21,7 +22,7 @@ const path = require('path')
  * @return {String}          The altered mdstring value.
  */
 module.exports = function (basePath, mdstring) {
-  let imgRE = /^!\[(.*?)\]\((.+?)\)({.*})?$/gmi
+  let imgRE = getImageRE(true) // We need the multiline version
   return mdstring.replace(imgRE, (match, p1, p2, p3, offset, string) => {
     // We'll make use of path for file system URIs, and the URL() constructor
     // for web links. We know that new URL() will throw a TypeError if the URL

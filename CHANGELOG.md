@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Fixed a bug where opening RMarkdown files with Zettlr not open would throw an error.
+- Fixed a bug where the app would not process inline images during export, leading to missing images.
 
 ## Under the Hood
 
