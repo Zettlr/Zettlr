@@ -101,7 +101,8 @@
 
       // Run through all links on this line
       while ((match = imageRE.exec(line)) != null) {
-        let caption = match[1] || ''
+        let altText = match[1] || ''
+        let title = match[3] || altText
         let url = match[2] || ''
 
         // Now get the precise beginning of the match and its end
@@ -153,15 +154,19 @@
         img.style.maxWidth = width
         img.style.maxHeight = height
         img.style.cursor = 'default' // Nicer cursor
+        img.alt = altText
         // Display a replacement image in case the correct one is not found
         img.onerror = (e) => { img.src = img404 }
         img.onclick = (e) => { textMarker.clear() }
 
-        // Update the image caption on load to retrieve the real image size.
+        // Update the image title on load to retrieve the real image size.
         img.onload = () => {
-          img.title = `${caption} (${img.naturalWidth}x${img.naturalHeight}px)`
+          img.title = `${title} (${img.naturalWidth}x${img.naturalHeight}px)`
           textMarker.changed()
         }
+
+        // Check if there is a title to replace
+        if (match[3]) url = url.replace(`"${match[3]}"`, '').trim()
 
         // Finally set the src to begin the loading process of the image
         if (/data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(url)) {

@@ -17,7 +17,7 @@ module.exports = {
   'getImageRE': function (multiline = false) {
     let flag = (multiline) ? 'm' : ''
     return RegExp(
-      /(?<=\s|^)!\[(.*?)\]\((.+?)\)(?:{.*})?/.source,
+      /(?<=\s|^)!\[(.*?)\]\((.+?(?:(?<= )"(.+)")?)\)({.*})?/.source,
       // Necessary flags + optional multiline flag
       'g' + flag)
   }
