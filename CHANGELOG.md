@@ -4,6 +4,7 @@
 
 - Fixed a bug where opening RMarkdown files with Zettlr not open would throw an error.
 - Fixed a bug where the app would not process inline images during export, leading to missing images.
+- HTML Export now centres figure captions underneath figures (thanks to @Kangie for implementing).
 
 ## Under the Hood
 
