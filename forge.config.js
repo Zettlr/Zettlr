@@ -1,7 +1,8 @@
 module.exports = {
   'packagerConfig': {
     'asar': true,
-    'icon': './resources/icons/icon' // Automatically adds file extension based on OS
+    'icon': './resources/icons/icon', // Automatically adds file extension based on OS
+    'name': 'Zettlr'
   },
   'plugins': [
     [
