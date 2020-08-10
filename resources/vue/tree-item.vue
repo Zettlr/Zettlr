@@ -37,18 +37,32 @@
         class="filename"
         v-bind:data-hash="obj.hash"
       >
+        <!-- Is this a project? -->
         <template v-if="obj.project">
           <clr-icon
             shape="blocks-group"
             class="is-solid"
           />
         </template>
-        <template v-else>
+        <!-- Indicate if this is a dead directory -->
+        <template v-else-if="obj.type === 'dead-directory'">
+          <clr-icon
+            shape="disconnect"
+            class="is-solid"
+          />
+        </template>
+        <!-- Display a custom icon, if applicable -->
+        <template v-else-if="obj.type === 'directory'">
           <clr-icon
             v-show="obj.icon"
             v-bind:shape="obj.icon"
           />
         </template>
+        <!-- Display a file icon -->
+        <template v-else-if="obj.type === 'file'">
+          <clr-icon shape="file"></clr-icon>
+        </template>
+        <!-- Display a toggle to collapse/expand the file list -->
         <clr-icon
           v-show="hasChildren"
           v-bind:shape="indicatorShape"
@@ -76,7 +90,7 @@
       v-on:click="this.$root.toggleFileList"
     >
       <p class="filename">
-        {{ displayResultsMessage }}
+        <clr-icon shape="search"></clr-icon> {{ displayResultsMessage }}
       </p>
     </div>
     <div

@@ -2,13 +2,17 @@
   <h1>{{i18n "dialog.statistics.title"}}</h1>
   <p>{{i18n "dialog.statistics.intro"}}</p>
   <div style="text-align: center;">
-      <span id="prev-sheet"></span>
+    <span id="prev-sheet">
+      <clr-icon shape="caret left"></clr-icon>
+    </span>
     <select id="data-mode">
       <option value="week">{{i18n "dialog.statistics.week"}}</option>
       <option value="month">{{i18n "dialog.statistics.month"}}</option>
       <option value="year">{{i18n "dialog.statistics.year"}}</option>
     </select>
-    <span id="next-sheet"></span>
+    <span id="next-sheet">
+      <clr-icon shape="caret right"></clr-icon>
+    </span>
     <br>
     <progress id="current-sheet-info" value="0" max="0"></progress>
   </div>
