@@ -15,6 +15,7 @@
 ## Under the Hood
 
 - Added an additional check for directory exports to check that they indeed have an attached project.
+- Removed all legacy WebHostingHub-Glyph references and switch fully to Clarity.
 
 # 1.7.4
 

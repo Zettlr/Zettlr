@@ -107,10 +107,6 @@ class ZettlrQuicklookWindow {
     $('.windows-window-controls .close').click((e) => { ipc.send('message', { 'command': 'win-close', content: {} }) })
     $('.windows-window-controls .resize').click((e) => { ipc.send('message', { 'command': 'win-maximise', content: {} }) })
     $('.windows-window-controls .minimise').click((e) => { ipc.send('message', { 'command': 'win-minimise', content: {} }) })
-
-    $('.linux-window-controls .close').click((e) => { ipc.send('message', { 'command': 'win-close', content: {} }) })
-    $('.linux-window-controls .maximise').click((e) => { ipc.send('message', { 'command': 'win-maximise', content: {} }) })
-    $('.linux-window-controls .minimise').click((e) => { ipc.send('message', { 'command': 'win-minimise', content: {} }) })
   }
 }
 
