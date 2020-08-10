@@ -187,17 +187,7 @@
       &:hover { background-color: rgba(220, 220, 220, 1); color:black; }
     }
 
-    &.revealjs,
-    &.revealjs-beige, &.revealjs-black, &.revealjs-league, &.revealjs-moon,
-    &.revealjs-serif, &.revealjs-sky, &.revealjs-solarized, &.revealjs-white {
-      &:before {
-        font-family: @font-icon;
-        content: "\f0c4";
-      }
-    }
-
     &.revealjs {
-      &:before { content: '\f50b'; } // Lens icon, looks better and fits into "reveal"
       color: rgba(120, 120, 120, 1);
       &:hover { background-color: rgba( 40,  40,  40, 1); color: white; }
     }
@@ -314,21 +304,22 @@
         font-weight: bold;
       }
 
-      &::before {
-        font-family: @font-icon;
-        font-size: @font-size-small * 0.8;
-        margin-right: 13px;
-        margin-left: 5px;
-        width: 20px;
-        display: inline-block;
-      }
-
-      & clr-icon {
+      clr-icon {
           height: 20px;
           width: 20px;
           margin-top: -4px;
           margin-right: 18px;
           margin-bottom: -4px;
+      }
+
+      span.fn-icon {
+        display: inline-block;
+        width: 20px;
+        // Margin left + right should be the same as the right margin of clr-icon
+        margin-right: 14px;
+        margin-left: 4px;
+
+        sup { font-size: 50%; }
       }
     }
 
@@ -338,13 +329,6 @@
     #header-formatting.markdownHeading4::before { content: "H4"; }
     #header-formatting.markdownHeading5::before { content: "H5"; }
     #header-formatting.markdownHeading6::before { content: "H6"; }
-
-    .insertFootnote::before             { content: "\f1eb"; }
-
-    .removeFootnote::before {
-      content: "\f1eb";
-      text-decoration:line-through;
-    }
 
     hr {
       margin: 14px 20px;

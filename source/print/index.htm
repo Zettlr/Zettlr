@@ -57,7 +57,10 @@ $(document).ready(function () {
   <div class="print-window">
   <div class="title">
     <h1></h1>
-    <span id="init-print"></span>
+    <span id="init-print">
+      <!-- TODO: Not yet working -->
+      <clr-icon shape="printer"></clr-icon>
+    </span>
 
     <!--
       Windows window controls, taken from
@@ -85,13 +88,6 @@ $(document).ready(function () {
           <polygon fill="#000000" points="10,1 9,0 5,4 1,0 0,1 4,5 0,9 1,10 5,6 9,10 10,9 6,5"></polygon>
         </svg>
       </div>
-    </div>
-
-    <!-- Linux Window controls. Totally my own doing. -->
-    <div class="linux-window-controls">
-      <div class="minimise"></div>
-      <div class="maximise"></div>
-      <div class="close"></div>
     </div>
   </div>
   <div class="content">

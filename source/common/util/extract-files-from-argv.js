@@ -14,7 +14,6 @@
 
 // Helpers to determine what files from argv we can open
 const isFile = require('./is-file')
-const ignoreFile = require('./ignore-file')
 
 /**
  * Extracts files from the argv.
@@ -25,6 +24,8 @@ module.exports = function (argv = process.argv) {
   if (!argv || !Array.isArray(argv)) return []
 
   return argv.filter(function (element) {
-    return element.substring(0, 2) !== '--' && isFile(element) && !ignoreFile(element)
+    // Only filter out based on file-status, as we cannot check for higher
+    // order requirements, as at this point the providers have not yet loaded.
+    return element.substring(0, 2) !== '--' && isFile(element)
   })
 }

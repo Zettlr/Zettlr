@@ -26,6 +26,7 @@
       class="hidden"
       v-on:click="toggleFileList"
     >
+      <clr-icon shape="caret left" class="is-solid" size="20"></clr-icon>
     </div>
     <!-- Render a the file-tree -->
     <div id="component-container">

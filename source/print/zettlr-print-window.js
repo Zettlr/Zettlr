@@ -16,6 +16,8 @@
 const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
 const ipc = require('electron').ipcRenderer
 const path = require('path')
+// TODO: Move to common directory!
+const loadicons = require('../renderer/util/load-icons')
 
 /**
  * Quicklook windows are small overlay windows based on pure CSS (so that they
@@ -63,6 +65,11 @@ class ZettlrPrintWindow {
     document.title = path.basename(name)
     $('.title h1').text(path.basename(name))
     $('.content').html(`<iframe src="${name}"></iframe>`)
+
+    // Load the clarity icon modules, add custom icons and then refresh
+    // attachments (because it requires custom icons to be loaded).
+    setTimeout(() => loadicons(), 0)
+
     this._reposition() // Initial reposition
   }
 
@@ -71,10 +78,6 @@ class ZettlrPrintWindow {
     $('.windows-window-controls .close').click((e) => { ipc.send('message', { 'command': 'win-close', content: {} }) })
     $('.windows-window-controls .resize').click((e) => { ipc.send('message', { 'command': 'win-maximise', content: {} }) })
     $('.windows-window-controls .minimise').click((e) => { ipc.send('message', { 'command': 'win-minimise', content: {} }) })
-
-    $('.linux-window-controls .close').click((e) => { ipc.send('message', { 'command': 'win-close', content: {} }) })
-    $('.linux-window-controls .maximise').click((e) => { ipc.send('message', { 'command': 'win-maximise', content: {} }) })
-    $('.linux-window-controls .minimise').click((e) => { ipc.send('message', { 'command': 'win-minimise', content: {} }) })
 
     window.addEventListener('resize', (e) => {
       this._reposition()

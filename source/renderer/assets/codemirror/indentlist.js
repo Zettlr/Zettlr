@@ -51,7 +51,7 @@
 
       if (!ranges[i].empty() || !matchListToken(pos, cm)) {
         /* If no match, call regular Tab handler */
-        cm.execCommand("defaultTab");
+        cm.execCommand("indentMore");
         return;
       }
 

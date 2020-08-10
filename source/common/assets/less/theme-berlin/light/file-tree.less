@@ -62,17 +62,13 @@
           color: var(--red-1);
         }
 
-        // Make the files stick out
-        &.file:not(.root) p.filename::before {
-          content: '\f0d6';
-          font-family: @font-icon;
-          font-size: @font-size-small * 0.8; // Even smaller
-        }
-
-        .sorter .sortDirection, .sorter .sortType {
+        &.directory .sorter {
           color: var(--grey-4);
-          background-color:var(--grey-1);
-          &:hover { color: var(--grey-8); }
+          background-color: var(--grey-1);
+
+          .sortDirection:hover, .sortType.hover {
+            color: var(--grey-8);
+          }
         }
     }
 

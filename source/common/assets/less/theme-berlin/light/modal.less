@@ -1,10 +1,10 @@
 // Modal styles
 
 .modal {
-    background-color:rgba(0,0,0,.5);
+    background-color: rgba(0,0,0,.5);
 
     .dialog {
-        background-color:white;
+        background-color: white;
         border-radius: @border-radius;
         box-shadow: 20px 20px 40px 0px rgba(0, 0, 0, 0.45);
 
@@ -36,7 +36,7 @@
         }
 
         hr {
-            border-bottom:1px solid var(--grey-4);
+            border-bottom: 1px solid var(--grey-4);
             width: 80%;
         }
 
@@ -44,7 +44,7 @@
         // sometimes it's the only content of the dialog (in which case we
         // need to constrain its size in the geometry part)
         code, .code {
-            border-radius:2px;
+            border-radius: 2px;
             font-weight: bold;
             padding: 2px 5px;
         }
@@ -52,8 +52,8 @@
         // Forms
 
         label {
-          margin-bottom:0.2em;
-          padding-bottom:0;
+          margin-bottom: 0.2em;
+          padding-bottom: 0;
           vertical-align: middle;
         }
 
@@ -69,7 +69,6 @@
           line-height: 150%;
           border: none;
           border-radius: @border-radius;
-          padding: 2px 10px;
           border-radius: @border-radius;
         }
 
@@ -77,21 +76,23 @@
           background-color: var(--grey-1);
           color: var(--grey-7);
           transition: 0.2s all ease;
-          outline:0;
-          &:hover, &:focus { background-color: var(--c-primary); color: var(--bg-primary); }
+          outline: 0;
+          &:hover, &:focus {
+            background-color: var(--c-primary);
+            color: var(--bg-primary);
+          }
         }
 
         // The wrapper for the preferences submit & cancel buttons
         .prefs-submit-group { clear: both; }
 
         .changelog {
-            border:1px solid var(--grey-4);
-            border-radius:2px;
+            border: 1px solid var(--grey-4);
+            border-radius: 2px;
         }
 
         // Positioning of the paper margin text elements
         div.paper {
-            position:relative;
             &.a4paper { border: 1px solid black; }
 
             .error {
@@ -104,10 +105,10 @@
 
         // Tabs styles
         .ui-tabs-nav {
-            border-bottom:1px solid var(--grey-1);
+            border-bottom: 1px solid var(--grey-1);
 
             .ui-tabs-tab {
-                line-height:200%;
+                line-height: 200%;
                 border-top-left-radius: @border-radius;
                 border-top-right-radius: @border-radius;
 
@@ -158,7 +159,6 @@
           border-radius: 5px;
 
           li.user-dict-item {
-            position: relative;
             border-bottom: 1px solid var(--grey-2);
 
             clr-icon {
@@ -170,7 +170,7 @@
         }
 
         input.dicts-list-search {
-            border:1px solid var(--grey-2);
+            border: 1px solid var(--grey-2);
             background-color: white;
             border-bottom: none;
             font-size: inherit;

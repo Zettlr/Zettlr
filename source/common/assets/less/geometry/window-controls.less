@@ -47,23 +47,3 @@
      }
    }
 }
-
-body.linux {
-  .linux-window-controls {
-    display: block;
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: @toolbar-height;
-
-    .minimise, .maximise, .close {
-      display: inline-block;
-      padding: @toolbar-margin * 2;
-      &:before { font-family: @font-icon; }
-    }
-
-    .minimise:before { content: '\2212'; }
-    .maximise:before { content: '\f30f'; }
-    .close:before { content: "\00d7"; }
-  }
-}

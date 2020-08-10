@@ -3,18 +3,18 @@
 @dialog-breakpoint: 800px;
 
 .modal {
-  position:fixed;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  z-index:1000;
-  overflow-x:hidden; /* For longer settings(?) and stuff dialogs */
-  overflow-y:auto;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  overflow-x: hidden; /* For longer settings(?) and stuff dialogs */
+  overflow-y: auto;
 
   .dialog {
-    margin:0 15%;
-    padding:20px;
+    margin: 0 15%;
+    padding: 20px;
 
     // General typography
     h1 {
@@ -25,7 +25,7 @@
     }
 
     span.uuid {
-      display:block;
+      display: block;
       margin-top: -3em; // Place directly underneath the heading
       margin-bottom: 1em;
       font-size: 75%;
@@ -34,26 +34,26 @@
     }
 
     h2, h3, h4, h5, h6 {
-      margin-bottom:1em;
+      margin-bottom: 1em;
 
       small { font-size: 75%; }
     }
 
-    p, li { line-height:150%; }
+    p, li { line-height: 150%; }
 
-    ul, ol, p, li { margin-bottom:0.5em; }
+    ul, ol, p, li { margin-bottom: 0.5em; }
 
     hr {
-      border:none;
+      border: none;
       border-bottom-style: solid;
       border-bottom-width: 1px;
-      width:80%;
-      margin:1em 10%;
+      width: 80%;
+      margin: 1em 10%;
     }
 
     img {
-      max-width:100%;
-      max-height:100%;
+      max-width: 100%;
+      max-height: 100%;
 
       // The following class is used in the paste-image dialog.
       &.image-preview {
@@ -75,18 +75,19 @@
     }
 
     label {
-      margin:1em 0.5em 0.5em 0em;
-      display:block;
-      cursor:pointer;
-      display:inline;
+      margin: 1em 0.5em 0.5em 0em;
+      display: block;
+      cursor: pointer;
+      display: inline;
     }
 
     input {
       width: 100%;
       line-height: 150%;
       font-size: inherit;
-      outline:none;
-      margin-bottom:1em;
+      outline: none;
+      padding: 2px 10px;
+      margin-bottom: 1em;
 
       &.inline {
         width: auto;
@@ -116,29 +117,29 @@
     select {
       line-height: 200%;
       font-size: inherit;
-      padding:0.5em;
-      margin:0.5em;
+      padding: 0.5em;
+      margin: 0.5em;
     }
 
     input[type="checkbox"], input[type="radio"] {
-      margin:0.5em;
-      display:inline;
+      margin: 0.5em;
+      display: inline;
     }
 
     textarea {
-      font-size:inherit;
-      width:100%;
-      padding:1em;
+      font-size: inherit;
+      width: 100%;
+      padding: 1em;
       border-radius: @border-radius;
     }
 
     button, a.button {
-      display:inline-block;
-      font-size:1em;
-      margin:1em;
-      padding:0.5em 1em;
-      cursor:pointer;
-      text-decoration:none;
+      display: inline-block;
+      font-size: 1em;
+      margin: 1em;
+      padding: 0.5em 1em;
+      cursor: pointer;
+      text-decoration:  none;
     }
 
 
@@ -171,11 +172,11 @@
     // sometimes it's the only content of the dialog (in which case we
     // need to constrain its size in the geometry part)
     .changelog, .code {
-      max-height:300px;
-      overflow-y:auto;
-      border-radius:2px;
-      padding:10px;
-      margin:10px 0px;
+      max-height: 300px;
+      overflow-y: auto;
+      border-radius: 2px;
+      padding: 10px;
+      margin: 10px 0px;
       user-select: text; // The code contents may be copied
     }
 
@@ -186,14 +187,14 @@
       user-select: text; // The code contents may be copied
     }
 
-    div.clear { clear:both; }
+    div.clear { clear: both; }
 
     // box-left and box-right are used on normal fullscreen to display content
     // side-by-side, while on smaller screens (i.e. less than 800px) for the
     // sake of readability it will be displayed full width on the modals.
     div.box-left, div.box-right {
       width: 100%;
-      padding:2%;
+      padding: 2%;
     }
 
     // Helper class for containers that should not exceed a certain height
@@ -205,14 +206,14 @@
     // On larger screens, box-left and box-right are displayed next to each other.
     @media(min-width: @dialog-breakpoint) {
       div.box-left,
-      div.box-right { width:50%; }
-      div.box-left  { float:left; }
-      div.box-right { float:right; }
+      div.box-right { width: 50%; }
+      div.box-left  { float: left; }
+      div.box-right { float: right; }
     }
 
     // Positioning of the paper margin text elements
     div.paper {
-      position:relative;
+      position: relative;
 
       &.a4paper {
         width: 5em; // Approx. aspect ratio is 5em/7em
@@ -222,8 +223,8 @@
       }
 
       input[type="number"] {
-        text-align:center;
-        width:4em;
+        text-align: center;
+        width: 4em;
 
         &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
           -webkit-appearance: none;
@@ -231,7 +232,7 @@
         }
       }
 
-      .tmargin, .rmargin, .bmargin, .lmargin { position:absolute; }
+      .tmargin, .rmargin, .bmargin, .lmargin { position: absolute; }
       .tmargin { top: -2em;     margin: 0 0.5em; }
       .rmargin { right: -4.1em; top: 2.5em;      }
       .bmargin { bottom: -2em;  margin: 0 0.5em; }
@@ -280,24 +281,24 @@
 
     // This is the paragraph needed for previewing of changes to PDF preferences.
     .pdf-preview {
-      max-height:100%;
-      overflow-y:auto;
+      max-height: 100%;
+      overflow-y: auto;
     }
 
     .error {
-      border-radius:5px;
-      margin:0.5em;
-      padding:1em;
+      border-radius: 5px;
+      margin: 0.5em;
+      padding: 1em;
     }
 
     div#prefs-taglist {
       div {
-        display:flex;
+        display: flex;
 
         input, button {
-          flex:5;
-          display:inline;
-          margin:0.5em;
+          flex: 5;
+          display: inline;
+          margin: 0.5em;
         }
 
         input[type="color"] { flex: 1; }
@@ -314,23 +315,10 @@
         padding:1em;
 
         img {
-          width:100%;
-          max-height:100%;
+          width: 100%;
+          max-height: 100%;
         }
       }
-    }
-
-    span#prev-sheet, span#next-sheet {
-      font-family: @font-icon;
-      font-size:@font-size-small * 0.8;
-    }
-
-    span#prev-sheet::before {
-      content: '\f489';
-    }
-
-    span#next-sheet::before {
-      content: '\f488';
     }
 
     // Tabs styles
@@ -342,8 +330,8 @@
 
       .ui-tabs-tab {
         flex: 1;
-        display:inline-block;
-        line-height:200%;
+        display: inline-block;
+        line-height: 200%;
         list-style-type: none;
         margin-bottom: 0;
         padding: 0 6px;
@@ -363,13 +351,13 @@
     // Dictionary list geometry
     ul.dicts-list {
       list-style-type: none;
-      max-height:300px;
-      overflow-y:auto;
+      max-height: 300px;
+      overflow-y: auto;
 
       li.dicts-list-item {
         display: block;
         cursor: pointer;
-        line-height:1.5em;
+        line-height: 1.5em;
         margin: 0;
         padding: 5px;
       }
@@ -381,6 +369,7 @@
       overflow-y: auto;
 
       li.user-dict-item {
+        // position: relative;
         display: flex;
         align-items: center;
         cursor: pointer;

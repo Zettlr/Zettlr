@@ -1,3 +1,22 @@
+# (no version)
+
+## GUI and Functionality
+
+- Fixed a bug where opening RMarkdown files with Zettlr not open would throw an error.
+- Fixed a bug where the app would not process inline images during export, leading to missing images.
+- HTML Export now centres figure captions underneath figures (thanks to @Kangie for implementing).
+- Zettlr finally allows alternative/title texts in images to be specified, making it possible to preview images with a title, and have them properly export even with relative filenames.
+- Fix wrong design of the sorters in combined sidebar file trees.
+- Fixed a bug where adding more and more list-characters in front of a list item would make the left gutter "swallow" these due to an extreme amount of negative indent. Now the line indentation for soft-wrapped lists (or anything indented) should work as expected.
+- Fixed a behaviour that would sometimes lead to the editor inserting `tab`-characters instead of spaces.
+- Added UX improvements to the fold gutter and the global search bar (thanks to @doup for implementing).
+- Fixed non-centered button icons and made some UI elements a little bit bigger.
+
+## Under the Hood
+
+- Added an additional check for directory exports to check that they indeed have an attached project.
+- Removed all legacy WebHostingHub-Glyph references and switch fully to Clarity.
+
 # 1.7.4
 
 ## GUI and Functionality
