@@ -10,6 +10,7 @@
 - Fixed a bug where adding more and more list-characters in front of a list item would make the left gutter "swallow" these due to an extreme amount of negative indent. Now the line indentation for soft-wrapped lists (or anything indented) should work as expected.
 - Fixed a behaviour that would sometimes lead to the editor inserting `tab`-characters instead of spaces.
 - Added UX improvements to the fold gutter and the global search bar (thanks to @doup for implementing).
+- Fixed non-centered button icons and made some UI elements a little bit bigger.
 
 ## Under the Hood
 
