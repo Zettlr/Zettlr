@@ -63,6 +63,8 @@ class ZettlrBody {
     this._currentDialog = null
     // Holds the current popup. Prevents multiple popups from appearing.
     this._currentPopup = null
+    // Holds the current theme. Needed for switching between themes
+    this._currentTheme = null
 
     // This object caches the values of search and replace value, so they stay
     // persistent on a per-session basis.
@@ -150,8 +152,6 @@ class ZettlrBody {
    */
   configChange () {
     // On config change, change the theme according to the settings
-    let newThemeName = global.config.get('display.theme')
-
     const themes = {
       'berlin': require('./../common/assets/less/theme-berlin/theme-main.less'),
       'bielefeld': require('./../common/assets/less/theme-bielefeld/theme-main.less'),
@@ -160,13 +160,17 @@ class ZettlrBody {
       'bordeaux': require('./../common/assets/less/theme-bordeaux/theme-main.less')
     }
 
-    // Unload all themes except the new one
-    // According to https://github.com/webpack-contrib/style-loader#lazystyletag there might be problems if we call unuse without a prior call to use, but so far everything seems to work
-    Object.entries(themes)
-      .filter(([ name, theme ]) => name !== newThemeName)
-      .forEach(([ name, theme ]) => theme.unuse())
-    // Load the new theme
-    themes[newThemeName].use()
+    let newThemeName = global.config.get('display.theme')
+    let newTheme = themes[newThemeName]
+    if (newTheme !== this._currentTheme) {
+      if (this._currentTheme != null) {
+        // Unload old theme
+        this._currentTheme.unuse()
+      }
+      // Load the new theme
+      newTheme.use()
+      this._currentTheme = newTheme
+    }
   }
 
   /**
