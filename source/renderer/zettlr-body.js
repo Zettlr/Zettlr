@@ -657,39 +657,39 @@ class ZettlrBody {
       this._currentPopup = null
     }) // .makePersistent()
 
+    const searchForElement = document.getElementById('searchWhat')
+    const searchFor = () => searchForElement.value || ''
+    const replaceWithElement = document.getElementById('replaceWhat')
+    const replaceWith = () => replaceWithElement.value
     // If a regular expression was restored to the find popup, make sure to set
     // the respective class.
-    if (regexRE.test($('#searchWhat').val())) {
-      $('#searchWhat').addClass('regexp')
-      $('#replaceWhat').addClass('regexp')
+    if (regexRE.test(searchFor())) {
+      searchForElement.classList.add('regexp')
+      replaceWithElement.classList.add('regexp')
     }
 
     // Select the search input for convenience
-    $('#searchWhat').select()
+    searchForElement.select()
 
     // Another convenience: Already highlight all occurrences within the
     // document, if there is content in the find field.
-    if ($('#searchWhat').val() !== '') {
-      global.editorSearch.highlightOccurrences($('#searchWhat').val())
+    if (searchFor()) {
+      global.editorSearch.highlightOccurrences(searchFor())
     }
 
-    $('#searchWhat').on('keyup', (e) => {
-      this._findPopup.searchVal = $('#searchWhat').val()
-      if (regexRE.test($('#searchWhat').val())) {
-        $('#searchWhat').addClass('regexp')
-        $('#replaceWhat').addClass('regexp')
-      } else {
-        $('#searchWhat').removeClass('regexp')
-        $('#replaceWhat').removeClass('regexp')
-      }
+    searchForElement.addEventListener('keyup', (e) => {
+      this._findPopup.searchVal = searchFor()
+      const isRegExp = regexRE.test(searchFor())
+      searchForElement.classList.toggle('regexp', isRegExp)
+      replaceWithElement.classList.toggle('regexp', isRegExp)
 
       if (e.which === 13) { // Enter
         $('#searchNext').click()
       }
     })
 
-    $('#replaceWhat').on('keyup', (e) => {
-      this._findPopup.replaceVal = $('#replaceWhat').val()
+    replaceWithElement.addEventListener('keyup', (e) => {
+      this._findPopup.replaceVal = replaceWith()
       if (e.which === 13) { // Return
         e.preventDefault()
         if (e.altKey) {
@@ -701,22 +701,20 @@ class ZettlrBody {
     })
 
     $('#searchNext').click((e) => {
-      let res = global.editorSearch.next($('#searchWhat').val())
+      let res = global.editorSearch.next(searchFor())
       // Indicate non-successful matches where nothing was found
-      if (!res) $('#searchWhat').addClass('not-found')
-      else $('#searchWhat').removeClass('not-found')
+      searchForElement.classList.toggle('not-found', !res)
     })
 
     $('#replaceNext').click((e) => {
       // If the user hasn't searched before, initate a search beforehand.
       if (!global.editorSearch.hasSearch()) $('#searchNext').click()
-      let res = global.editorSearch.replaceNext($('#replaceWhat').val())
-      if (!res) $('#searchWhat').addClass('not-found')
-      else $('#searchWhat').removeClass('not-found')
+      let res = global.editorSearch.replaceNext(replaceWith())
+      searchForElement.classList.toggle('not-found', !res)
     })
 
     $('#replaceAll').click((e) => {
-      global.editorSearch.replaceAll($('#searchWhat').val(), $('#replaceWhat').val())
+      global.editorSearch.replaceAll(searchFor(), replaceWith())
     })
   }
 

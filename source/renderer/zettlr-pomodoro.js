@@ -202,10 +202,12 @@ class ZettlrPomodoro {
           if (this._sound.volume === 0) console.log('Starting muted!')
         }) // END callback
 
+        const volumeDisplay = document.getElementById('pomodoro-volume-level')
+        const volumeSlider = document.getElementById('pomodoro-volume-range')
+        const volumeLevel = () => volumeSlider.value
         // Play the sound immediately as a check for the user
-        $('#pomodoro-volume-range').on('change', (evt) => {
-          let level = $('#pomodoro-volume-range').val()
-          this._sound.volume = parseInt(level, 10) / 100
+        volumeSlider.addEventListener('change', (evt) => {
+          this._sound.volume = parseInt(volumeLevel(), 10) / 100
           this._sound.currentTime = 0
           this._sound.play()
         })
@@ -213,9 +215,8 @@ class ZettlrPomodoro {
         // Indicate the correct volume immediately.
         // "onChange" triggers when the mouse is released,
         // "onInput" as soon as the bar moves.
-        $('#pomodoro-volume-range').on('input', (evt) => {
-          let level = $('#pomodoro-volume-range').val()
-          $('#pomodoro-volume-level').text(level + ' %')
+        volumeSlider.addEventListener('input', (evt) => {
+          volumeDisplay.textContent = `${volumeLevel()} %`
         })
       } else {
         // Display information and a stop button

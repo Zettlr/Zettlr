@@ -55,17 +55,18 @@ class ZettlrQuicklook {
     CodeMirror.commands.focusFind = (cm) => { this._window.find('#searchWhat').first().focus() }
 
     this._window.find('#searchWhat').first().on('keydown', (e) => {
+      const textToFind = this._window.getElementById('searchWhat').value
       if (e.which === 13) {
         e.preventDefault()
         e.stopPropagation()
         // Search next immediately because the term is the same and the user
         // wants to cycle through the results.
-        this.searchNext($('#searchWhat').val())
+        this.searchNext(textToFind)
       } else {
         // Set a timeout with a short delay to not make the app feel laggy
         clearTimeout(this._findTimeout)
         this._findTimeout = setTimeout(() => {
-          this.searchNext($('#searchWhat').val())
+          this.searchNext(textToFind)
         }, 300) // 300ms delay
       }
     })

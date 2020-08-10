@@ -45,6 +45,6 @@ module.exports = function (basePath, mdstring) {
       p2 = path.resolve(basePath, p2)
     }
 
-    return `![${p1}](${p2}${(p3 !== undefined) ? ' "' + p3 + '"' : ''})${(p4 != undefined) ? p4 : ''}`
+    return `![${p1}](${p2}${(p3 !== undefined) ? ' "' + p3 + '"' : ''})${(p4 !== undefined) ? p4 : ''}`
   })
 }

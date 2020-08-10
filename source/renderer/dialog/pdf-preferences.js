@@ -46,24 +46,24 @@ class PDFPreferences extends ZettlrDialog {
 
     // These scripts only are used to update the preview paragraph
     $('#lineheight').change((e) => {
-      $('p.pdf-preview').css('line-height', $(e.target).val() + '%')
+      $('p.pdf-preview').css('line-height', e.target.value + '%')
     })
     $('#fontsize').change((e) => {
       // 1pt is approx. 1.333333 px
-      $('p.pdf-preview').css('font-size', ($(e.target).val() * 1.3) + 'px')
+      $('p.pdf-preview').css('font-size', (e.target.value * 1.3) + 'px')
     })
     $('#mainfont').change((e) => {
-      $('p.pdf-preview').css('font-family', $(e.target).val())
+      $('p.pdf-preview').css('font-family', e.target.value)
     })
     $('#sansfont').change((e) => {
-      $('h1.pdf-preview').css('font-family', $(e.target).val())
+      $('h1.pdf-preview').css('font-family', e.target.value)
     })
 
     // Initial changing of CSS
-    $('p.pdf-preview').css('line-height', $('#lineheight').val() + '%')
-    $('p.pdf-preview').css('font-size', ($('#fontsize').val() * 1.3) + 'px')
-    $('p.pdf-preview').css('font-family', $('#mainfont').val())
-    $('h1.pdf-preview').css('font-family', $('#sansfont').val())
+    $('p.pdf-preview').css('line-height', document.getElementById('lineheight').value + '%')
+    $('p.pdf-preview').css('font-size', (document.getElementById('fontsize').value * 1.3) + 'px')
+    $('p.pdf-preview').css('font-family', document.getElementById('mainfont').value)
+    $('h1.pdf-preview').css('font-family', document.getElementById('sansfont').value)
   }
 
   proceed (data) {
