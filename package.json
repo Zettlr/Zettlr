@@ -18,7 +18,7 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "package:mac": "electron-forge package --platform=darwin",
-    "package:win": "electron-forge package --platform=win32 --arch=ia32,x64",
+    "package:win": "electron-forge package --platform=win32 --arch=x64",
     "package:win-arm": "electron-forge package --platform=win32 --arch=arm64",
     "package:linux": "electron-forge package --platform=linux",
     "release": "yarn package && electron-builder",
