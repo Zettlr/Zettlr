@@ -1,7 +1,9 @@
 const rules = require('./webpack.rules')
-const plugins = require('./webpack.plugins')
 const path = require('path')
 const webpack = require('webpack')
+
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 rules.push({
   test: /\.less$/,
@@ -45,18 +47,24 @@ rules.push({
   }]
 })
 
-// Load jQuery
-plugins.push(new webpack.ProvidePlugin({
-  '$': 'jquery',
-  'jQuery': 'jquery',
-  'window.jQuery': 'jquery'
-}))
-
 module.exports = {
   module: {
     rules
   },
-  plugins: plugins,
+  plugins: [
+    // Load jQuery
+    new webpack.ProvidePlugin({
+      '$': 'jquery',
+      'jQuery': 'jquery',
+      'window.jQuery': 'jquery'
+    }),
+
+    // Enhanced typescript support (e.g. moves typescript type checking to separate process)
+    new ForkTsCheckerWebpackPlugin(),
+
+    // Apply webpack rules to the corresponding language blocks in .vue files
+    new VueLoaderPlugin()
+  ],
   resolve: {
     extensions: [ '.js', '.ts', '.jsx', '.tsx', '.css', '.less', '.handlebars' ]
   }
