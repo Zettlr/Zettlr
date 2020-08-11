@@ -24,6 +24,7 @@ require('jquery-ui/ui/widgets/sortable')
 const ZettlrCon = require('./zettlr-context.js')
 const ZettlrNotification = require('./zettlr-notification.js')
 const popup = require('./zettlr-popup.js')
+const ThemeHandler = require('./../common/theme-handler').default
 
 // Dialogs
 const StatsDialog = require('./dialog/stats.js')
@@ -63,8 +64,8 @@ class ZettlrBody {
     this._currentDialog = null
     // Holds the current popup. Prevents multiple popups from appearing.
     this._currentPopup = null
-    // Holds the current theme. Needed for switching between themes
-    this._currentTheme = null
+    // Handles switching between themes
+    this._themeHandler = new ThemeHandler()
 
     // This object caches the values of search and replace value, so they stay
     // persistent on a per-session basis.
@@ -152,25 +153,9 @@ class ZettlrBody {
    */
   configChange () {
     // On config change, change the theme according to the settings
-    const themes = {
-      'berlin': require('./../common/assets/less/theme-berlin/theme-main.less'),
-      'bielefeld': require('./../common/assets/less/theme-bielefeld/theme-main.less'),
-      'frankfurt': require('./../common/assets/less/theme-frankfurt/theme-main.less'),
-      'karl-marx-stadt': require('./../common/assets/less/theme-karl-marx-stadt/theme-main.less'),
-      'bordeaux': require('./../common/assets/less/theme-bordeaux/theme-main.less')
-    }
-
+    // This is also invoked on initial load
     let newThemeName = global.config.get('display.theme')
-    let newTheme = themes[newThemeName]
-    if (newTheme !== this._currentTheme) {
-      if (this._currentTheme != null) {
-        // Unload old theme
-        this._currentTheme.unuse()
-      }
-      // Load the new theme
-      newTheme.use()
-      this._currentTheme = newTheme
-    }
+    this._themeHandler.switchTo(newThemeName)
   }
 
   /**

@@ -50,7 +50,8 @@ class ZettlrPrint {
       webPreferences: {
         // Zettlr needs all the node features, so in preparation for Electron
         // 5.0 we'll need to explicitly request it.
-        nodeIntegration: true
+        nodeIntegration: true,
+        additionalArguments: [ file.toString(), global.config.get('darkTheme').toString() ]
       },
       backgroundColor: '#fff',
       frame: false, // No frame for quicklook windows. Mainly prevents the menu bar to be shown on win+linux
@@ -76,12 +77,8 @@ class ZettlrPrint {
 
     // Then activate listeners.
     // and load the index.html of the app.
-    win.loadURL(url.format({
-      pathname: path.join(__dirname, '../print/index.htm'),
-      protocol: 'file:',
-      slashes: true,
-      search: `file=${file}&darkMode=${global.config.get('darkTheme')}`
-    }))
+    win.loadURL(PRINT_WEBPACK_ENTRY)
+
     // Only show window once it is completely initialized
     win.once('ready-to-show', () => { win.show() })
     // As soon as the window is closed, reset it to null.

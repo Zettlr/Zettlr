@@ -81,8 +81,7 @@ class LogProvider {
     this._win.on('closed', () => { this._win = null })
 
     // Load the renderer index
-    let indexfile = path.resolve(__dirname, '../../log-viewer/index.htm')
-    this._win.loadURL(`file://${indexfile}`)
+    this._win.loadURL(LOG_VIEWER_WEBPACK_ENTRY)
   }
 
   /**
