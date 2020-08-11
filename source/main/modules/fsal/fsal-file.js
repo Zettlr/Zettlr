@@ -227,9 +227,8 @@ function parseFileContents (file, content) {
 
   // Merge possible keywords from the frontmatter
   if (file.frontmatter && file.frontmatter.hasOwnProperty('keywords')) {
-    // Lower-case (as with regex-extracted tags) and replace spaces with dashes
+    // Lower-case (as with regex-extracted tags)
     file.frontmatter.keywords = file.frontmatter.keywords.map(k => k.toLocaleLowerCase(global.config.get('appLang')))
-
     file.tags = file.tags.concat(file.frontmatter.keywords)
   }
 
