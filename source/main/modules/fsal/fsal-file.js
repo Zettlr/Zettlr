@@ -222,13 +222,13 @@ function parseFileContents (file, content) {
   while ((match = tagRE.exec(mdWithoutCode)) != null) {
     let tag = match[1]
     tag = tag.replace(/#/g, '') // Prevent headings levels 2-6 from showing up in the tag list
-    if (tag.length > 0) file.tags.push(match[1].toLocaleLowerCase())
+    if (tag.length > 0) file.tags.push(match[1].toLocaleLowerCase(global.config.get('appLang')))
   }
 
   // Merge possible keywords from the frontmatter
   if (file.frontmatter && file.frontmatter.hasOwnProperty('keywords')) {
     // Lower-case (as with regex-extracted tags) and replace spaces with dashes
-    file.frontmatter.keywords = file.frontmatter.keywords.map(k => k.toLocaleLowerCase().split(' ').join('-'))
+    file.frontmatter.keywords = file.frontmatter.keywords.map(k => k.toLocaleLowerCase(global.config.get('appLang')))
 
     file.tags = file.tags.concat(file.frontmatter.keywords)
   }
