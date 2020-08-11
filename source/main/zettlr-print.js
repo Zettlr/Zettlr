@@ -13,7 +13,6 @@
   */
 
 const path = require('path')
-const url = require('url')
 const { BrowserWindow } = require('electron')
 
 class ZettlrPrint {
@@ -77,6 +76,7 @@ class ZettlrPrint {
 
     // Then activate listeners.
     // and load the index.html of the app.
+    // eslint-disable-next-line no-undef
     win.loadURL(PRINT_WEBPACK_ENTRY)
 
     // Only show window once it is completely initialized

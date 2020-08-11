@@ -81,6 +81,7 @@ class LogProvider {
     this._win.on('closed', () => { this._win = null })
 
     // Load the renderer index
+    // eslint-disable-next-line no-undef
     this._win.loadURL(LOG_VIEWER_WEBPACK_ENTRY)
   }
 

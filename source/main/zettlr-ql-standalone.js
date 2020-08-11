@@ -82,6 +82,7 @@ class ZettlrQLStandalone {
 
     // Then activate listeners.
     // and load the index.html of the app.
+    // eslint-disable-next-line no-undef
     win.loadURL(QUICKLOOK_WEBPACK_ENTRY)
     // Only show window once it is completely initialized
     win.once('ready-to-show', () => { win.show() })
