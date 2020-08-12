@@ -47,15 +47,55 @@ class PasteImage extends ZettlrDialog {
     return data
   }
 
+  get imageNameElement () {
+    return document.getElementById('img-name')
+  }
+
+  get imageName () {
+    return this.imageNameElement.value
+  }
+
+  get imageWidthElement () {
+    return document.getElementById('img-width')
+  }
+
+  get imageWidth () {
+    return parseInt(this.imageWidthElement.value || 0)
+  }
+
+  set imageWidth (width) {
+    this.imageWidthElement.value = width
+  }
+
+  get imageHeightElement () {
+    return document.getElementById('img-height')
+  }
+
+  get imageHeight () {
+    return parseInt(this.imageHeightElement.value || 0)
+  }
+
+  set imageHeight (height) {
+    this.imageHeightElement.value = height
+  }
+
+  get aspectRatioElement () {
+    return document.getElementById('aspect-ratio')
+  }
+
+  get aspectRatio () {
+    return this.aspectRatioElement.value
+  }
+
   postAct () {
     // Activate the sending buttons
     $('#save-cwd, #save-other').on('click', (e) => {
       // The content is either save-cwd or save-other
       global.ipc.send('save-image-from-clipboard', {
         'mode': $(e.target).attr('id'),
-        'name': $('#img-name').val(),
-        'width': parseInt($('#img-width').val() || 0), // Resize to width, 0 indicates no change
-        'height': parseInt($('#img-height').val() || 0) // Resize to height, 0 indicates no change
+        'name': this.imageName,
+        'width': this.imageWidth, // Resize to width, 0 indicates no change
+        'height': this.imageHeight // Resize to height, 0 indicates no change
       })
 
       // Now close the dialog
@@ -67,19 +107,21 @@ class PasteImage extends ZettlrDialog {
     setTimeout(() => { this._place() }, 10)
 
     // Enable the custom javascript actions
-    $('#img-width').on('change', (e) => {
-      let aspect = $('#aspect-ratio').val()
-      if ($('#aspect').prop('checked')) {
-        $('#img-height').val(Math.round($('#img-width').val() / aspect))
+    this.imageWidthElement.addEventListener('change', (e) => {
+      if (this.shouldRetainAspectRatio()) {
+        this.imageHeight = Math.round(this.imageWidth / this.aspectRatio)
       }
     })
 
-    $('#img-height').on('change', (e) => {
-      let aspect = $('#aspect-ratio').val()
-      if ($('#aspect').prop('checked')) {
-        $('#img-width').val(Math.round($('#img-height').val() * aspect))
+    this.imageHeightElement.addEventListener('change', (e) => {
+      if (this.shouldRetainAspectRatio()) {
+        this.imageWidth = Math.round(this.imageHeight * this.aspectRatio)
       }
     })
+  }
+
+  shouldRetainAspectRatio () {
+    return $('#aspect').prop('checked')
   }
 }
 

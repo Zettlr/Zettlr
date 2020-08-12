@@ -182,23 +182,21 @@ class ZettlrDialog extends EventEmitter {
     // Are there any open-file-buttons? If so enable the request for a file by
     // clicking them.
     this._modal.find('.request-file').on('click', (event) => {
-      let elem = $(event.target)
-      if (event.target.tagName.toLowerCase() === 'clr-icon') elem = $(event.target.parentElement)
+      const targetButton = event.target.tagName.toLowerCase() === 'clr-icon'
+        ? event.target.parentElement
+        : event.target
+      const { requestExt, requestName, requestTarget } = targetButton.dataset
 
-      let payload = {}
-      let extensions = elem.attr('data-request-ext')
-      if (extensions.indexOf(',') > 0) {
-        extensions = extensions.split(',')
-      } else {
-        extensions = [extensions]
+      const payload = {
+        // Only one filter possible for brevity reasons
+        filters: [{
+          'name': requestName,
+          'extensions': requestExt.includes(',')
+            ? requestExt.split(',')
+            : [requestExt]
+        }],
+        multiSel: false
       }
-
-      // Only one filter possible for brevity reasons
-      payload.filters = [{
-        'name': elem.attr('data-request-name'),
-        'extensions': extensions
-      }]
-      payload.multiSel = false
 
       // After all is done send an async callback message
       global.ipc.send('request-files', payload, (ret) => {
@@ -206,7 +204,7 @@ class ZettlrDialog extends EventEmitter {
         if (!ret || ret.length === 0 || ret[0] === '') return
         // Write the return value into the data-request-target of the clicked
         // button, because each button has a designated text field.
-        $(elem.attr('data-request-target')).val(ret[0])
+        document.querySelector(requestTarget).value = ret[0]
       })
     })
 

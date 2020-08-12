@@ -85,6 +85,18 @@ class PreferencesDialog extends ZettlrDialog {
     return data
   }
 
+  get appLangElement () {
+    return document.getElementById('app-lang')
+  }
+
+  get appLang () {
+    return this.appLangElement.value
+  }
+
+  getLanguageOptionElement (language) {
+    return this.appLangElement.querySelector(`option[value="${language}"]`)
+  }
+
   postAct () {
     // Activate the form to be submitted
     let form = this._modal.find('form#dialog')
@@ -95,8 +107,8 @@ class PreferencesDialog extends ZettlrDialog {
     })
 
     // Download not-available languages on select
-    form.find('#app-lang').change((event) => {
-      let l = this._languages.find(elem => elem.bcp47 === $('#app-lang').val())
+    this.appLangElement.addEventListener('change', (event) => {
+      let l = this._languages.find(elem => elem.bcp47 === this.appLang)
       if (l.toDownload) {
         let langLocalisation = trans('dialog.preferences.translations.downloading', trans(`dialog.preferences.app_lang.${l.bcp47}`))
         // How does downloding work? Easy:
@@ -106,12 +118,13 @@ class PreferencesDialog extends ZettlrDialog {
         // 4. Wait for the one IPC event announcing the download (or error)
         // 5. Notify the user of the successful download
         // 6. Unblock the element
-        $('#app-lang').prop('disabled', true) // Block
+        this.appLangElement.disabled = true
         // Indicate downloading both on the element itself ...
-        $('#app-lang').find('option[value="' + l.bcp47 + '"]').text(langLocalisation)
+        const language = this.getLanguageOptionElement(l.bcp47)
+        language.textContent = langLocalisation
         // Override the option's value to ensure even if the user saves during
         // download no non-available language is set.
-        $('#app-lang').find('option[value="' + l.bcp47 + '"]').val(global.config.get('appLang'))
+        language.value = global.config.get('appLang')
         // ... and beneath the select
         $('#app-lang-download-indicator').text(langLocalisation)
         $('#app-lang-download-indicator').append(this._spinner)
@@ -121,11 +134,12 @@ class PreferencesDialog extends ZettlrDialog {
       }
     })
 
+    const dictionariesSearchField = document.querySelector('.dicts-list-search')
     // Functions for the search field of the dictionary list.
-    $('.dicts-list-search').on('keyup', (e) => {
-      let val = $('.dicts-list-search').val().toLowerCase()
+    dictionariesSearchField.addEventListener('keyup', (e) => {
+      const searchFor = dictionariesSearchField.value.toLowerCase()
       $('.dicts-list').find('li').each(function (i) {
-        if ($(this).text().toLowerCase().indexOf(val) === -1) {
+        if ($(this).text().toLowerCase().indexOf(searchFor) === -1) {
           $(this).hide()
         } else {
           $(this).show()
@@ -155,27 +169,31 @@ class PreferencesDialog extends ZettlrDialog {
     })
 
     // Begin: functions for the zkn regular expression fields
+    const zknFreeIdElement = document.getElementById('pref-zkn-free-id')
     $('#reset-id-regex').on('click', (e) => {
-      $('#pref-zkn-free-id').val('(\\d{14})')
+      zknFreeIdElement.value = '(\\d{14})'
     })
     $('#reset-linkstart-regex').on('click', (e) => {
-      $('#pref-zkn-free-linkstart').val('[[')
+      document.getElementById('pref-zkn-free-linkstart').value = '[['
     })
     $('#reset-linkend-regex').on('click', (e) => {
-      $('#pref-zkn-free-linkend').val(']]')
+      document.getElementById('pref-zkn-free-linkend').value = ']]'
     })
+    const zknIdGenElement = document.getElementById('pref-zkn-id-gen')
     $('#reset-id-generator').on('click', (e) => {
-      $('#pref-zkn-id-gen').val('%Y%M%D%h%m%s')
+      zknIdGenElement.value = '%Y%M%D%h%m%s'
     })
 
     // Reset the pandoc command
     $('#reset-pandoc-command').on('click', (e) => {
-      $('#pandocCommand').val('pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"')
+      document.getElementById('pandocCommand').value = 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"'
     })
 
     $('#generate-id').on('click', (e) => {
-      let id = generateId($('#pref-zkn-id-gen').val())
-      let re = new RegExp('^' + $('#pref-zkn-free-id').val() + '$')
+      const idPattern = zknIdGenElement.value
+      const idMatcher = zknFreeIdElement.value
+      const id = generateId(idPattern)
+      const re = new RegExp(`^${idMatcher}$`)
       $('#generator-tester').text(id)
       if (re.test(id)) {
         $('#pass-check').text(trans('dialog.preferences.zkn.pass_check_yes'))
@@ -186,7 +204,9 @@ class PreferencesDialog extends ZettlrDialog {
 
     // BEGIN functionality for the image constraining options
     $('#imageWidth, #imageHeight').on('input', (e) => {
-      $('#preview-image-sizes').html($('#imageWidth').val() + '% &times; ' + $('#imageHeight').val() + '%')
+      const width = document.getElementById('imageWidth').value
+      const height = document.getElementById('imageHeight').value
+      $('#preview-image-sizes').html(`${width}% &times; ${height}%`)
     })
 
     // BEGIN functionality for theme switching
@@ -231,16 +251,16 @@ class PreferencesDialog extends ZettlrDialog {
     // Tell success or failure and unlock the select
     if (cnt.success) {
       $('#app-lang-download-indicator').text(trans('dialog.preferences.translations.success', langLocalisation))
-      $('#app-lang').find('option[value="' + global.config.get('appLang') + '"]').text(langLocalisation)
+      this.getLanguageOptionElement(global.config.get('appLang')).textContent = langLocalisation
       // Again override the value to the correct one.
-      $('#app-lang').find('option[value="' + global.config.get('appLang') + '"]').val(cnt.bcp47)
+      this.getLanguageOptionElement(global.config.get('appLang')).value = cnt.bcp47
     } else {
       // Do not override the language value to make sure the language stays
       // even if the user doesn't select another language.
       $('#app-lang-download-indicator').text(trans('dialog.preferences.translations.error', langLocalisation))
-      $('#app-lang').find('option[value="' + cnt.bcp47 + '"]').text(trans('dialog.preferences.translations.not_available', langLocalisation))
+      this.getLanguageOptionElement(cnt.bcp47).textContent = trans('dialog.preferences.translations.not_available', langLocalisation)
     }
-    $('#app-lang').prop('disabled', false) // Unblock
+    this.appLangElement.disabled = false // Unblock
     if (this._textTimeout) clearTimeout(this._textTimeout)
     this._textTimeout = setTimeout(() => {
       // Hide the text after three seconds

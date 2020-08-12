@@ -154,8 +154,9 @@ class StatsDialog extends ZettlrDialog {
     })
 
     // If the user wants to change the precision of the graph.
-    $('#data-mode').change((e) => {
-      this._mode = $(e.target).val()
+    const period = document.getElementById('data-mode')
+    period.addEventListener('change', () => {
+      this._mode = period.value
       this._prepareData()
       this._updateChart()
     })

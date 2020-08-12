@@ -80,6 +80,7 @@
         "jquery/no-sizzle": 2,
         "jquery/no-slide": 2,
         "jquery/no-toggle": 2,
+        "jquery/no-val": 2,
         "jquery/no-when": 2,
         "jquery/no-wrap": 2
     }
