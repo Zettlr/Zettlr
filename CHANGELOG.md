@@ -13,6 +13,7 @@
 - Fixed non-centered button icons and made some UI elements a little bit bigger.
 - You can now abort searching in Quicklook windows by pressing escape while the search field is highlighted.
 - Fixed a rare error where codeblocks would not be indented correctly in HTML outputs.
+- Zettlr now renders linked images.
 
 ## Under the Hood
 
