@@ -14,6 +14,7 @@
 - You can now abort searching in Quicklook windows by pressing escape while the search field is highlighted.
 - Fixed a rare error where codeblocks would not be indented correctly in HTML outputs.
 - Zettlr now renders linked images.
+- Restored the security question when you are about to overwrite an already existing file.
 
 ## Under the Hood
 

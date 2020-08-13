@@ -12,9 +12,11 @@
  * END HEADER
  */
 
+const path = require('path')
 const ZettlrCommand = require('./zettlr-command')
 const ignoreFile = require('../../common/util/ignore-file')
 const sanitize = require('sanitize-filename')
+const hash = require('../../common/util/hash')
 
 class FileRename extends ZettlrCommand {
   constructor (app) {
@@ -38,6 +40,15 @@ class FileRename extends ZettlrCommand {
 
     let file = this._app.findFile(arg.hash)
     if (!file) return global.log.error(`Could not find file ${arg.hash}`)
+
+    // Test if we are about to override a file
+    if (this._app.findFile(hash(path.join(file.dir, arg.name)))) {
+      // Ask for override
+      let result = await this._app.getWindow().askOverwriteFile(arg.name)
+      if (result.response === 0) return // No override wanted
+    }
+
+    // askOverwriteFile
     await this._app.getFileSystem().runAction('rename-file', {
       'source': file,
       'info': { 'name': arg.name }

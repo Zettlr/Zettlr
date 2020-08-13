@@ -370,7 +370,8 @@ class ZettlrWindow {
       defaultId: 1
     }
 
-    // showMessageBox returns a Promise
+    // showMessageBox returns a Promise, resolves to:
+    // { response: <button-id>, checkboxChecked: <boolean> }
     return dialog.showMessageBox(this._win, options)
   }
 
