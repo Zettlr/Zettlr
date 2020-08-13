@@ -136,8 +136,10 @@
         // markdown, but comments shouldn't be included in rendering)
         // Final check to avoid it for as long as possible, as getTokenAt takes
         // considerable time.
-        if (cm.getTokenAt(myMarker.curFrom).type === 'comment' ||
-            cm.getTokenAt(myMarker.curTo).type === 'comment') {
+        let tokenTypeBegin = cm.getTokenTypeAt(myMarker.curFrom)
+        let tokenTypeEnd = cm.getTokenTypeAt(myMarker.curTo)
+        if ((tokenTypeBegin && tokenTypeBegin.includes('comment')) ||
+        (tokenTypeEnd && tokenTypeEnd.includes('comment'))) {
           continue
         }
 

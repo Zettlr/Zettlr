@@ -19,6 +19,7 @@
 - Added an additional check for directory exports to check that they indeed have an attached project.
 - Removed all legacy WebHostingHub-Glyph references and switch fully to Clarity.
 - Removed unused legacy code from the Quicklook windows.
+- Replaced `getTokenAt` with `getTokenTypeAt`, hopefully achieving performance gains on documents littered with renderable elements.
 
 # 1.7.4
 
