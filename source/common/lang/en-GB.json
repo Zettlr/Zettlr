@@ -6,7 +6,7 @@
             "Celso Lira"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-07-20T20:00:40.000000Z"
+        "updated_at": "2020-08-13T20:38:27.000000Z"
     },
     "dialog": {
         "about": {
@@ -109,6 +109,7 @@
                 "es-ES": "Spanish (Spain)",
                 "et-ET": "Estonian",
                 "eu-EU": "Basque",
+                "fa-IR": "Persian (Farsi)",
                 "fi-FI": "Finnish",
                 "fo-FO": "Faroese",
                 "fr-FR": "French (France)",
@@ -617,8 +618,8 @@
         "overwrite_file_message": "The file %s already exists in this directory. Overwrite?",
         "overwrite_file_title": "Overwrite existing file",
         "please_select_directory": "Please select a directory first",
-        "replace_file_message": "Replace file",
-        "replace_file_title": "File %s has been modified remotely. Replace the loaded version with the newer one from disk?",
+        "replace_file_message": "File %s has been modified remotely. Replace the loaded version with the newer one from disk?",
+        "replace_file_title": "Replace file",
         "save_changes_cancel": "Cancel",
         "save_changes_message": "There are unsaved changes to the current file. Do you want to omit them or save?",
         "save_changes_omit": "Proceed without saving",

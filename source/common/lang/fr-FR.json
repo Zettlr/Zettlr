@@ -17,7 +17,7 @@
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-07-29T09:02:17.000000Z"
+        "updated_at": "2020-08-05T16:05:31.000000Z"
     },
     "dialog": {
         "about": {
@@ -120,6 +120,7 @@
                 "es-ES": "Espagnol (Espagne)",
                 "et-ET": "Estonien",
                 "eu-EU": "Basquaise",
+                "fa-IR": "Persan (Farsi)",
                 "fi-FI": "Finnois",
                 "fo-FO": "F\u00e9ro\u00efen",
                 "fr-FR": "Fran\u00e7ais (France)",
@@ -347,7 +348,7 @@
                 "var_minute": "Minutes (sur 2 chiffres)",
                 "var_month": "Mois (sur 2 chiffres)",
                 "var_second": "Secondes (sur 2 chiffres)",
-                "var_week_number": "Semaine de l\u2019ann\u00e9e (avec z\u00e9ro au d\u00e9but si n\u00e9cessaire)",
+                "var_week_number": "Semaine (sur 2 chiffres)",
                 "var_year": "Ann\u00e9e (sur 4 chiffres)"
             }
         },
@@ -597,7 +598,7 @@
             "no_pandoc_title": "Le programme pandoc n'a pas pu \u00eatre trouv\u00e9",
             "no_xelatex_message": "LaTeX n\u2019a pas \u00e9t\u00e9 trouv\u00e9 dans votre ordinateur. Veuillez t\u00e9l\u00e9charger LaTeX pour exporter en PDF.",
             "no_xelatex_title": "Impossible de trouver LaTeX",
-            "open_attachment_error": "Impossible d'ouvrir la pi\u00e8ce jointe. Est-ce que Zotero est lanc\u00e9?",
+            "open_attachment_error": "Impossible d'ouvrir la pi\u00e8ce jointe. Zotero fonctionne-t-il\u202f?",
             "open_root_error": "Impossible d'ouvrir %s",
             "open_url_error": "Impossible d'ouvrir %s",
             "pandoc_error_message": "Pandoc a rapport\u00e9 une erreur : %s",
@@ -620,12 +621,12 @@
         "import_success": "%s import\u00e9 avec succ\u00e8s.",
         "lang_import_error": "Ne pas importer la traduction %s !",
         "lang_import_success": "Le fichier de langue %s a \u00e9t\u00e9 import\u00e9 !",
-        "no_command": "R\u00e9ception d'un message sans commande : % s",
+        "no_command": "R\u00e9ception d'un message sans commande : %s",
         "ok": "Ok",
         "open_folder": "Ouvrir le dossier racine.",
         "open_root_directory": "Ouvrir le dossier %s \u2026",
         "open_root_directory_success": "%s a \u00e9t\u00e9 charg\u00e9.",
-        "overwrite_file_message": "Le fichier %s existe d\u00e9j\u00e0 dans ce r\u00e9pertoire. \u00c9craser?",
+        "overwrite_file_message": "Le fichier %s existe d\u00e9j\u00e0 dans ce r\u00e9pertoire. \u00c9craser\u202f?",
         "overwrite_file_title": "\u00c9craser le fichier existant",
         "please_select_directory": "Veuillez commencer par choisir un dossier",
         "replace_file_message": "Le fichier %s a \u00e9t\u00e9 modifi\u00e9 \u00e0 distance. Remplacer la version charg\u00e9e par la plus r\u00e9cente du disque?",
@@ -634,7 +635,7 @@
         "save_changes_message": "Le fichier contient des modifications non enregistr\u00e9es. Voulez-vous les annuler ou les enregistrer ?",
         "save_changes_omit": "Continuer sans sauvegarder les modifications",
         "save_changes_save": "Enregistrer",
-        "save_changes_select_dir": "Merci de s\u00e9lectionner un dossier pour enregistrer le nouveau fichier.",
+        "save_changes_select_dir": "Veuillez s\u00e9lectionner un dossier pour enregistrer le nouveau fichier.",
         "save_changes_title": "Annuler les modifications ?",
         "unknown_command": "Commande inconnue re\u00e7ue : %s"
     },

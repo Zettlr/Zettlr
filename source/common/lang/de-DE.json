@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-07-20T20:00:56.000000Z"
+        "updated_at": "2020-08-03T08:52:45.000000Z"
     },
     "dialog": {
         "about": {
@@ -107,6 +107,7 @@
                 "es-ES": "Spanisch (Spanien)",
                 "et-ET": "Estnisch",
                 "eu-EU": "Baskisch",
+                "fa-IR": "Persisch (Farsi)",
                 "fi-FI": "Finnisch",
                 "fo-FO": "Far\u00f6isch",
                 "fr-FR": "Franz\u00f6sisch (Frankreich)",
