@@ -1,4 +1,4 @@
-/* global $ */
+/* global */
 /**
  * @ignore
  * BEGIN HEADER
@@ -42,7 +42,6 @@ class ZettlrQuicklook {
     this._parent = parent
     this._file = file
     this._cm = null
-    this._window = null
     this._findTimeout = null // Timeout to begin search after
     this._bodyHeight = 0 // Contains the height of the element, in case it was minimized
     this._searchcursor = null // The search cursor used for searching
@@ -52,16 +51,19 @@ class ZettlrQuicklook {
     this._load()
 
     // Focus the search bar
-    CodeMirror.commands.focusFind = (cm) => { this._window.find('#searchWhat').first().focus() }
+    CodeMirror.commands.focusFind = (cm) => { document.getElementById('searchWhat').focus() }
 
-    this._window.find('#searchWhat').first().on('keydown', (e) => {
-      const textToFind = this._window.getElementById('searchWhat').value
-      if (e.which === 13) {
+    document.getElementById('searchWhat').addEventListener('keydown', (e) => {
+      const textToFind = document.getElementById('searchWhat').value
+      if (e.key === 'Enter') {
         e.preventDefault()
         e.stopPropagation()
         // Search next immediately because the term is the same and the user
         // wants to cycle through the results.
         this.searchNext(textToFind)
+      } else if (e.key === 'Escape') {
+        document.getElementById('searchWhat').value = ''
+        this.stopSearch()
       } else {
         // Set a timeout with a short delay to not make the app feel laggy
         clearTimeout(this._findTimeout)
@@ -74,18 +76,13 @@ class ZettlrQuicklook {
     // Finally create the annotateScrollbar object to be able to annotate the scrollbar with search results.
     this._scrollbarAnnotations = this._cm.annotateScrollbar('sb-annotation')
     this._scrollbarAnnotations.update([])
-
-    // Now show the QL Window
-    this.show()
   }
 
   /**
     * Load the Quicklook template and prepare everything
     */
   _load () {
-    this._window = $('body')
-
-    this._cm = CodeMirror.fromTextArea(this._window.find('textarea')[0], {
+    this._cm = CodeMirror.fromTextArea(document.querySelector('textarea'), {
       readOnly: true,
       mode: 'multiplex',
       lineWrapping: true,
@@ -102,17 +99,12 @@ class ZettlrQuicklook {
       cursorBlinkRate: -1 // Hide the cursor
     })
 
-    this._window.find('h1').first().text(this._file.name)
+    document.querySelector('h1').textContent = this._file.name
     this._cm.setValue(this._file.content)
     // Apply heading line classes immediately
     this._cm.execCommand('markdownHeaderClasses')
 
-    this._window.find('#searchWhat').attr('placeholder', trans('dialog.find.find_placeholder'))
-
-    this._window.find('.close').first().on('click', (e) => {
-      e.stopPropagation()
-      this.close()
-    })
+    document.getElementById('searchWhat').setAttribute('placeholder', trans('dialog.find.find_placeholder'))
   }
 
   onConfigUpdate (config) {
@@ -120,27 +112,6 @@ class ZettlrQuicklook {
     // Quote Marijn: "Resetting the mode option with setOption will trigger a full re-parse."
     // Source: https://github.com/codemirror/CodeMirror/issues/3318#issuecomment-111067281
     this._cm.setOption('mode', this._cm.getOption('mode'))
-  }
-
-  /**
-    * Shows the quicklook window on screen.
-    * @return {ZettlrQuicklook} Chainability.
-    */
-  show () {
-    // Standalone windows are pretty easy.
-    $('body').append(this._window)
-    this._cm.refresh()
-    return this
-  }
-
-  /**
-    * Closes the window and destroys it.
-    * @return {void} Nothing to return.
-    */
-  close () {
-    this._window.detach()
-    this._cm = null
-    this._window = null
   }
 
   // SEARCH FUNCTIONS STOLEN FROM THE ZETTLREDITOR CLASS

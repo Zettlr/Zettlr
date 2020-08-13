@@ -11,11 +11,13 @@
 - Fixed a behaviour that would sometimes lead to the editor inserting `tab`-characters instead of spaces.
 - Added UX improvements to the fold gutter and the global search bar (thanks to @doup for implementing).
 - Fixed non-centered button icons and made some UI elements a little bit bigger.
+- You can now abort searching in Quicklook windows by pressing escape while the search field is highlighted.
 
 ## Under the Hood
 
 - Added an additional check for directory exports to check that they indeed have an attached project.
 - Removed all legacy WebHostingHub-Glyph references and switch fully to Clarity.
+- Removed unused legacy code from the Quicklook windows.
 
 # 1.7.4
 
