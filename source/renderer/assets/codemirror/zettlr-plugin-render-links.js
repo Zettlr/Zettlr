@@ -12,14 +12,17 @@
 })(function (CodeMirror) {
   'use strict'
 
+  const makeAbsoluteCachefreeURL = require('../../../common/util/make-absolute-cachefree-url')
+
   // This regular expression matches three different kinds of URLs:
-  // 1. Markdown URLs in the format [Caption](www.link-target.tld)
-  // 2. Standalone links, either beginning with http(s):// or www.
-  // 3. Email addresses.
+  // 1. Linked images in the format [![Alt text](image/path.png)](www.link-target.tld)
+  // 2. Markdown URLs in the format [Caption](www.link-target.tld)
+  // 3. Standalone links, either beginning with http(s):// or www.
+  // 4. Email addresses.
   // var linkRE = /\[([^\]]+?)\]\(([^)]+?)\)|(https?:\/\/\S+|www\.\S+)|([a-z0-9.\-_+]+?@[a-z0-9.\-_+]+\.[a-z]{2,7})/gi
   // ATTENTION: The middle part is taken from the gfm mode so that the rendered
   // links are the same as those that the gfm mode detects.
-  var linkRE = /\[([^\]]+)\]\((.+?)\)|(((?:(?:aaas?|about|acap|adiumxtra|af[ps]|aim|apt|attachment|aw|beshare|bitcoin|bolo|callto|cap|chrome(?:-extension)?|cid|coap|com-eventbrite-attendee|content|crid|cvs|data|dav|dict|dlna-(?:playcontainer|playsingle)|dns|doi|dtn|dvb|ed2k|facetime|feed|file|finger|fish|ftp|geo|gg|git|gizmoproject|go|gopher|gtalk|h323|hcp|https?|iax|icap|icon|im|imap|info|ipn|ipp|irc[6s]?|iris(?:\.beep|\.lwz|\.xpc|\.xpcs)?|itms|jar|javascript|jms|keyparc|lastfm|ldaps?|magnet|mailto|maps|market|message|mid|mms|ms-help|msnim|msrps?|mtqp|mumble|mupdate|mvn|news|nfs|nih?|nntp|notes|oid|opaquelocktoken|palm|paparazzi|platform|pop|pres|proxy|psyc|query|res(?:ource)?|rmi|rsync|rtmp|rtsp|secondlife|service|session|sftp|sgn|shttp|sieve|sips?|skype|sm[bs]|snmp|soap\.beeps?|soldat|spotify|ssh|steam|svn|tag|teamspeak|tel(?:net)?|tftp|things|thismessage|tip|tn3270|tv|udp|unreal|urn|ut2004|vemmi|ventrilo|view-source|webcal|wss?|wtai|wyciwyg|xcon(?:-userid)?|xfire|xmlrpc\.beeps?|xmpp|xri|ymsgr|z39\.50[rs]?):(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]|\([^\s()<>]*\))+(?:\([^\s()<>]*\)|[^\s`*!()[\]{};:'".,<>?«»“”‘’])))|([a-z0-9.\-_+]+?@[a-z0-9.\-_+]+\.[a-z]{2,7})/gi
+  var linkRE = /\[!\[([^[]*)\]\((.+)\)\]\((.+)\)|\[([^\]]+)\]\((.+?)\)|(((?:(?:aaas?|about|acap|adiumxtra|af[ps]|aim|apt|attachment|aw|beshare|bitcoin|bolo|callto|cap|chrome(?:-extension)?|cid|coap|com-eventbrite-attendee|content|crid|cvs|data|dav|dict|dlna-(?:playcontainer|playsingle)|dns|doi|dtn|dvb|ed2k|facetime|feed|file|finger|fish|ftp|geo|gg|git|gizmoproject|go|gopher|gtalk|h323|hcp|https?|iax|icap|icon|im|imap|info|ipn|ipp|irc[6s]?|iris(?:\.beep|\.lwz|\.xpc|\.xpcs)?|itms|jar|javascript|jms|keyparc|lastfm|ldaps?|magnet|mailto|maps|market|message|mid|mms|ms-help|msnim|msrps?|mtqp|mumble|mupdate|mvn|news|nfs|nih?|nntp|notes|oid|opaquelocktoken|palm|paparazzi|platform|pop|pres|proxy|psyc|query|res(?:ource)?|rmi|rsync|rtmp|rtsp|secondlife|service|session|sftp|sgn|shttp|sieve|sips?|skype|sm[bs]|snmp|soap\.beeps?|soldat|spotify|ssh|steam|svn|tag|teamspeak|tel(?:net)?|tftp|things|thismessage|tip|tn3270|tv|udp|unreal|urn|ut2004|vemmi|ventrilo|view-source|webcal|wss?|wtai|wyciwyg|xcon(?:-userid)?|xfire|xmlrpc\.beeps?|xmpp|xri|ymsgr|z39\.50[rs]?):(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]|\([^\s()<>]*\))+(?:\([^\s()<>]*\)|[^\s`*!()[\]{};:'".,<>?«»“”‘’])))|([a-z0-9.\-_+]+?@[a-z0-9.\-_+]+\.[a-z]{2,7})/gi
   var linkMarkers = []
   var currentDocID = null
 
@@ -69,10 +72,26 @@
         if ((match.index > 0) && (line[match.index - 1] === '!')) {
           continue
         }
-        let caption = match[1] || ''
-        let url = match[2] || ''
-        let standalone = match[3] || ''
-        let email = match[5] || ''
+        // What groups can we expect here?
+        // Group 1: Image caption of a linked image
+        // Group 2: Image link of a linked image
+        // Group 3: Link target of a linked image
+        // Group 4: Caption of a regular link
+        // Group 5: Link target of a regular link
+        // Group 6 & 7: Link target of a standalone link
+        // Group 8: Email address
+        let linkImageCaption = match[1] || ''
+        let linkImagePath = match[2] || ''
+        let linkImageTarget = match[3] || ''
+        let regularLinkCaption = match[4] || ''
+        let regularLinkTarget = match[5] || ''
+        let standaloneLinkTarget = match[6] || ''
+        let email = match[8] || ''
+
+        let isLinkedImage = linkImagePath !== '' && linkImageTarget !== ''
+        let isMdLink = regularLinkTarget !== ''
+        let isStandaloneLink = standaloneLinkTarget !== ''
+        let isEmail = email !== ''
 
         // Now get the precise beginning of the match and its end
         let curFrom = { 'line': i, 'ch': match.index }
@@ -84,10 +103,10 @@
         // we need a matching pair of these, so we'll have to go through it one by one.
         let openingParentheses = 0
         let closingParentheses = 0
-        if (url !== '') {
-          for (let i = 0; i < url.length; i++) {
-            if (url.charAt(i) === '(') openingParentheses++
-            if (url.charAt(i) === ')') closingParentheses++
+        if (isMdLink) { // We are *not* repeating this madness for linked images.
+          for (let i = 0; i < regularLinkTarget.length; i++) {
+            if (regularLinkTarget.charAt(i) === '(') openingParentheses++
+            if (regularLinkTarget.charAt(i) === ')') closingParentheses++
           }
 
           if (openingParentheses > closingParentheses) {
@@ -97,7 +116,7 @@
             let leftOvers = openingParentheses - closingParentheses
             while (curTo.ch < line.length) {
               let currentChar = line.charAt(curTo.ch)
-              url += currentChar
+              regularLinkTarget += currentChar
               curTo.ch++
               if (currentChar === ')') leftOvers--
               if (leftOvers === 0) break
@@ -140,12 +159,25 @@
         }
 
         let a = document.createElement('a')
+        let renderedLinkTarget = regularLinkTarget
         a.className = 'cma' // CodeMirrorAnchors
-        if (standalone) {
+        if (isLinkedImage) {
+          let img = document.createElement('img')
+          img.title = `${linkImageCaption} (${linkImageTarget})`
+          img.src = makeAbsoluteCachefreeURL(cm.getOption('markdownImageBasePath'), linkImagePath)
+          img.style.cursor = 'pointer' // Nicer cursor
+          // Copied over from the other plugin
+          let width = (cm.getOption('imagePreviewWidth')) ? cm.getOption('imagePreviewWidth') + '%' : '100%'
+          let height = (cm.getOption('imagePreviewHeight') && cm.getOption('imagePreviewHeight') < 100) ? cm.getOption('imagePreviewHeight') + 'vh' : ''
+          img.style.maxWidth = width
+          img.style.maxHeight = height
+          a.appendChild(img)
+          renderedLinkTarget = linkImageTarget
+        } else if (isStandaloneLink) {
           // In case of a standalone link, all is the same
-          a.innerHTML = standalone
-          a.title = standalone
-          url = standalone
+          a.innerHTML = standaloneLinkTarget
+          a.title = standaloneLinkTarget
+          renderedLinkTarget = standaloneLinkTarget
 
           // Make sure the link is not preceeded by ]( and not followed by )
           if (curFrom.ch > 3) {
@@ -153,24 +185,24 @@
             let suffix = line.substr(curTo.ch, 1)
             if (prefix === '](' && suffix === ')') continue // Part of a full markdown link
           }
-        } else if (email) {
+        } else if (isEmail) {
           // In case of an email, the same except the URL (which gets
           // an added mailto protocol handler).
           a.innerHTML = email
           a.title = 'mailto:' + email
-          url = 'mailto:' + email
+          renderedLinkTarget = 'mailto:' + email
         } else {
           // Markdown URL
-          caption = caption.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>')
-          caption = caption.replace(/__([^_]+?)__/g, '<strong>$1</strong>')
-          caption = caption.replace(/\*([^*]+?)\*/g, '<em>$1</em>')
-          caption = caption.replace(/_([^_]+?)_/g, '<em>$1</em>')
-          caption = caption.replace(/~~([^~]+?)~~/g, '<del>$1</del>')
-          if (/^!\[.+\]\(.+\)$/.test(caption)) {
-            caption = caption.replace(/^!\[(.*)\]\((.+)\)$/, '<img src="$2" title="$1">')
+          regularLinkCaption = regularLinkCaption.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>')
+          regularLinkCaption = regularLinkCaption.replace(/__([^_]+?)__/g, '<strong>$1</strong>')
+          regularLinkCaption = regularLinkCaption.replace(/\*([^*]+?)\*/g, '<em>$1</em>')
+          regularLinkCaption = regularLinkCaption.replace(/_([^_]+?)_/g, '<em>$1</em>')
+          regularLinkCaption = regularLinkCaption.replace(/~~([^~]+?)~~/g, '<del>$1</del>')
+          if (/^!\[.+\]\(.+\)$/.test(regularLinkCaption)) {
+            regularLinkCaption = regularLinkCaption.replace(/^!\[(.*)\]\((.+)\)$/, '<img src="$2" title="$1">')
           }
-          a.innerHTML = caption
-          a.title = url // Set the url as title to let users see where they're going
+          a.innerHTML = regularLinkCaption
+          a.title = renderedLinkTarget // Set the url as title to let users see where they're going
         }
 
         // Retain the outer formatting, if applicable
@@ -204,7 +236,7 @@
             // in the markdownOnLinkOpen option.
             let callback = cm.getOption('markdownOnLinkOpen')
             if (callback && {}.toString.call(callback) === '[object Function]') {
-              callback(url)
+              callback(renderedLinkTarget)
             }
           } else {
             // Clear the textmarker and set the cursor to where the
