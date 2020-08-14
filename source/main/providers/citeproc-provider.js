@@ -278,6 +278,9 @@ class CiteprocProvider {
       // is only for preview purposes, it should follow the language like the
       // rest of the interface.
       this._engine = new citeproc.Engine(this._sys, this._mainStyle, this._lang)
+      // ATTENTION: This is a development extension we're using to auto-wrap
+      // links and DOIs in a-tags so that the user can click them in the
+      // bibliography. Remove if it becomes unstable and implement manually.
       this._engine.opt.development_extensions.wrap_url_and_doi = true
       this._status = READY
       // This function will make sure malformed keys will not remain in the

@@ -15,6 +15,7 @@
 - Fixed a rare error where codeblocks would not be indented correctly in HTML outputs.
 - Zettlr now renders linked images.
 - Restored the security question when you are about to overwrite an already existing file.
+- Made URLs in references into clickable links that open in the system's browser (thanks to @maxedmands for implementing).
 
 ## Under the Hood
 
@@ -51,7 +52,6 @@
 
 ## GUI and Functionality
 
-- Made URLs in references into clickable links that open in the system's browser.
 - The NSIS installer (Windows) now contains customized, branded images for the sidebar and header of the various pages visible during the setup process.
 - Added syntax highlighting modes (with keywords):
     - **Clojure**: `clojure`

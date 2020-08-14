@@ -164,7 +164,22 @@ class ZettlrAttachments {
    */
   setBibliographyContents (bib) {
     if (typeof bib === 'string') this._bibliographyContainer.html(`<p>${bib}</p>`)
-    else this._bibliographyContainer.html(bib[0].bibstart + bib[1].join('\n') + bib[0].bibend)
+    else {
+      // Convert links, so that they remain but do not open in the same
+      // window. Security fallback: target="_blank" (then at least they "only"
+      // open a new window)
+      let aRE = /<a(.+?)>(.*?)<\/a>/g
+      let output = []
+      for (let entry of bib[1]) {
+        aRE.lastIndex = 0
+        output.push(
+          entry.replace(aRE, function (match, p1, p2, offset, string) {
+            return `<a${p1} onclick="(e)=>{e.preventDefault(); require('electron').shell.openExternal(this.getAttribute('href')); return false;}" target="_blank">${p2}</a>`
+          })
+        )
+      }
+      this._bibliographyContainer.html(bib[0].bibstart + output.join('\n') + bib[0].bibend)
+    }
   }
 
   /**
