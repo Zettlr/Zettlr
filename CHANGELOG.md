@@ -17,6 +17,7 @@
 - Restored the security question when you are about to overwrite an already existing file.
 - Made URLs in references into clickable links that open in the system's browser (thanks to @maxedmands for implementing).
 - The context menu on directories within the file list now correctly shows you project options, if the directory is one.
+- The file tree has been cleaned up. Now, the children toggle (if a directory has any) as well as any additional icon will be displayed aligned with each other.
 
 ## Under the Hood
 
