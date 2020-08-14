@@ -278,6 +278,7 @@ class CiteprocProvider {
       // is only for preview purposes, it should follow the language like the
       // rest of the interface.
       this._engine = new citeproc.Engine(this._sys, this._mainStyle, this._lang)
+      this._engine.opt.development_extensions.wrap_url_and_doi = true
       this._status = READY
       // This function will make sure malformed keys will not remain in the
       // database and can be reported to the user.
