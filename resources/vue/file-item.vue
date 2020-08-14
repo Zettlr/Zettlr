@@ -30,6 +30,7 @@
       v-on:dragend.stop="stopDragging"
     >
       <p class="filename">
+        <clr-icon shape="blocks-group" class="is-solid" v-if="isProject"></clr-icon>
         {{ basename }}
       </p>
       <Sorter
@@ -137,6 +138,7 @@
       getTagList: function () { return this.obj.tags.join(', ') },
       hasTags: function () { return this.obj.tags && this.obj.tags.length > 0 },
       isDirectory: function () { return this.obj.type !== 'file' },
+      isProject: function () { return this.isDirectory && this.obj.project !== null },
       isDraggable: function () { return !this.isDirectory },
       fileMeta: function () { return this.$store.state.fileMeta },
       displayTime: function () { return this.$store.state.displayTime },
@@ -149,6 +151,7 @@
       classList: function () {
         let list = 'list-item ' + this.obj.type
         if (this.$store.state.selectedFile === this.obj.hash) list += ' selected'
+        if (this.obj.type === 'directory' && this.obj.project !== null) list += ' project'
         return list
       },
       isTex: function () { return this.obj.ext === '.tex' },
