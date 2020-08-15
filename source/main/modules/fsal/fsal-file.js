@@ -185,6 +185,7 @@ function parseFileContents (file, content) {
   file.wordCount = countWords(content)
   file.charCount = countWords(content, true)
 
+  file.firstHeading = undefined
   let h1Match = /^#{1}\s(.+)$/m.exec(content)
   if (h1Match !== null) file.firstHeading = h1Match[1]
 
