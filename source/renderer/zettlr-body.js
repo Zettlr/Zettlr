@@ -44,6 +44,7 @@ const { trans } = require('../common/lang/i18n.js')
 const localiseNumber = require('../common/util/localise-number')
 const generateFileName = require('../common/util/generate-filename')
 const generateTable = require('../common/util/generate-markdown-table')
+const { renderTemplate } = require('./util/template.js')
 
 /**
  * This class's duty is to handle everything that affects (or can potentially
@@ -726,11 +727,12 @@ class ZettlrBody {
     let cnt = makeTemplate('popup', 'format')
     this._currentPopup = popup($('.button.formatting'), cnt)
 
-    $('.formatting #header-formatting').on('mousemove', (e) => {
+    const headerFormattingElement = document.getElementById('header-formatting')
+    headerFormattingElement.addEventListener('mousemove', (e) => {
       let elem = $(e.target)
       $('.formatting span').removeClass('active')
       if (!elem.is('span')) {
-        $('.formatting #header-formatting').prop('class', 'markdownHeading1')
+        headerFormattingElement.classList.add('markdownHeading1')
         return
       }
       // Nice little effect
@@ -753,7 +755,7 @@ class ZettlrBody {
         case 'markdownHeading1':
           $('.formatting .markdownHeading1').addClass('active')
       }
-      $('.formatting #header-formatting').prop('class', e.target.className)
+      headerFormattingElement.classList.add(e.target.className)
     })
 
     $('.formatting a').click((e) => {
@@ -852,10 +854,7 @@ class ZettlrBody {
       }
 
       cnt.append(
-        $('<a>').text(level + '. ' + entry.text)
-          .attr('data-line', entry.line)
-          .attr('href', '#')
-          .addClass('toc-link')
+        renderTemplate(`<a href="#" class="toc-link" data-line="${entry.line}">${level}. ${entry.text}</a>`)
       )
     }
 
