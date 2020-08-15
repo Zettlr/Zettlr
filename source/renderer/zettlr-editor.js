@@ -313,13 +313,20 @@ class ZettlrEditor {
           event.stopPropagation()
           event.preventDefault()
 
-          // Add all images.
           this._cm.setCursor(where)
-          let str = '\n'
-          for (let p of imagesToInsert) {
-            str += `![${p.substr(p.lastIndexOf('/') + 1)}](${p})\n`
+
+          let isSingleInline = imagesToInsert.length === 1 && this._cm.getLine(where.line).trim() !== ''
+          if (isSingleInline) {
+            // Only add a single inline image
+            this._cm.replaceSelection(`![${path.basename(imagesToInsert[0])}](${imagesToInsert[0]})`)
+          } else {
+            // Add all images.
+            let str = '\n'
+            for (let p of imagesToInsert) {
+              str += `![${path.basename(p)}](${p})\n`
+            }
+            this._cm.replaceSelection(str)
           }
-          this._cm.replaceSelection(str)
         }
       }
     })

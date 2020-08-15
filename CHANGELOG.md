@@ -19,6 +19,7 @@
 - The context menu on directories within the file list now correctly shows you project options, if the directory is one.
 - The file tree has been cleaned up. Now, the children toggle (if a directory has any) as well as any additional icon will be displayed aligned with each other.
 - Fixed a bug that would not display the filename but a heading level 1 that has been removed from the file.
+- Single inline image inserts are now handled without adding newline characters.
 
 ## Under the Hood
 
