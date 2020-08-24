@@ -1,3 +1,13 @@
+# (no version assigned)
+
+## GUI and Functionality
+
+- Fixed the fold-gutter being too close to the text.
+
+## Under the Hood
+
+(nothingh here)
+
 # 1.7.5
 
 ## GUI and Functionality
