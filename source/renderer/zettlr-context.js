@@ -19,6 +19,14 @@ const { Menu } = remote
 const ipc = require('electron').ipcRenderer
 const { trans } = require('../common/lang/i18n.js')
 
+// Require the templates for the context menu
+const TEMPLATES = {
+  'directory': require('./assets/context/directory.json'),
+  'editor': require('./assets/context/editor.json'),
+  'file': require('./assets/context/file.json'),
+  'text': require('./assets/context/text.json')
+}
+
 /**
  * This class is a wrapper for the remote Menu class. What it does is basically
  * being called by ZettlrBody object, and then determine from the event itself,
@@ -123,12 +131,12 @@ class ZettlrCon {
     let elem = $(event.target)
     // No context menu for sorters (we cannot check for class "sorter" as the sorter
     // overlays the full directory)
-    if (elem.hasClass('sortType') || elem.hasClass('sortType').length > 0) return
+    if (elem.hasClass('sortType') || elem.hasClass('sortType').length > 0) return false
     let hash = null
     let typoPrefix = []
     let scopes = [] // Used to hold the scopes
     let attr = [] // Used to hold the attributes
-    let menupath = '' // Path to the template file to use.
+    let template // Path to the template file to use.
 
     // If the user has right-clicked a link, select the link contents to make it
     // look better and give visual feedback that the user is indeed about to copy
@@ -172,8 +180,8 @@ class ZettlrCon {
       }
 
       // Determine whether this is a dir or a file
-      if (elem.hasClass('file') || elem.hasClass('alias')) menupath = 'file.json'
-      if (elem.hasClass('directory') || elem.hasClass('dead-directory') || elem.attr('id') === 'file-list') menupath = 'directory.json'
+      if (elem.hasClass('file') || elem.hasClass('alias')) template = TEMPLATES.file
+      if (elem.hasClass('directory') || elem.hasClass('dead-directory') || elem.attr('id') === 'file-list') template = TEMPLATES.directory
 
       // Determine the scopes
       if (elem.hasClass('project')) {
@@ -238,17 +246,17 @@ class ZettlrCon {
         // The attributes are a NamedNodeMap, so we have to use weird function calling to retrieve them
         attr.push({ 'name': nodes.item(i).nodeName, 'value': nodes.item(i).nodeValue })
       }
-      menupath = 'editor.json'
+      template = TEMPLATES.editor
     } else if (elem.is('input[type="text"]') || elem.is('textarea')) {
       shouldSelectWordUnderCursor = false // Don't select when right-clicking a text field
-      menupath = 'text.json'
+      template = TEMPLATES.text
     } else if (elem.parents('#document-tabs').length > 0) {
       // We can have:
       // 1. A close-icon
       // 2. The file name
       // 3. The document itself
       if (elem.hasClass('filename') || elem.hasClass('close')) elem = elem.parent()
-      menupath = 'file.json'
+      template = TEMPLATES.file
       shouldSelectWordUnderCursor = false
       hash = elem.attr('data-hash')
       if (elem.attr('data-id')) attr.push({ 'data-id': elem.attr('data-id') })
@@ -256,7 +264,8 @@ class ZettlrCon {
 
     // Now build with all information we have gathered.
     this._menu = new Menu()
-    this._menu = this._buildFromSource(require('./assets/context/' + menupath), hash, scopes, attr)
+
+    this._menu = this._buildFromSource(template, hash, scopes, attr)
     if (elem.hasClass('cm-spell-error')) this._menu = typoPrefix.concat(this._menu)
 
     // If the element is a link, add an "open link" context menu entry
