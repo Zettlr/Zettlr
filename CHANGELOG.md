@@ -1,4 +1,4 @@
-# (no version assigned)
+# 1.8.0
 
 ## GUI and Functionality
 
@@ -7,7 +7,7 @@
 
 ## Under the Hood
 
-(nothingh here)
+- Switched to Electron forge (thanks to @tobiasdiez for implementing).
 
 # 1.7.5
 
