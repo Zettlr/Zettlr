@@ -200,8 +200,16 @@ module.exports = class EditorAutocomplete {
 
     for (let file of tree) {
       let fname = path.basename(file.name, path.extname(file.name))
-      let displayText = fname // Always display the filename
-      if (file.frontmatter && file.frontmatter.title) displayText += ' ' + file.frontmatter.title
+      let displayText = fname // Fallback: Only filename
+      if (global.config.get('display.useFirstHeadings') && file.firstHeading) {
+        // The user wants to use first headings as titles,
+        // so use them for autocomplete as well
+        displayText = fname + ': ' + file.firstHeading
+      } else if (file.frontmatter && file.frontmatter.title) {
+        // (Else) if there is a frontmatter, use that title
+        displayText = fname + ': ' + file.frontmatter.title
+      }
+
       fileDatabase[fname] = {
         'text': file.id || fname, // Use the ID, if given, or the filename
         'displayText': displayText,

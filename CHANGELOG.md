@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Fixed the fold-gutter being too close to the text.
+- The editor link autocompletion now respects the setting to use headings level 1 instead of YAML frontmatter titles where possible.
 
 ## Under the Hood
 
