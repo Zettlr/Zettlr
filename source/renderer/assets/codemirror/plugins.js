@@ -5,8 +5,6 @@
  * in the main class.
  */
 
-const highlightingModes = require('../../../common/data').highlightingModes
-
 // 1. Mode addons
 require('codemirror/addon/mode/overlay')
 require('codemirror/addon/mode/multiplex') // Multiplex needed for syntax highlighting
@@ -33,9 +31,37 @@ require('codemirror/mode/gfm/gfm')
 require('codemirror/mode/stex/stex')
 
 // 6. Code highlighting modes
-for (let mode of new Set(Object.values(highlightingModes).map(hlmode => hlmode.mode))) {
-  require(`codemirror/mode/${mode}/${mode}`)
-}
+require('codemirror/mode/clike/clike.js')
+require('codemirror/mode/clojure/clojure.js')
+require('codemirror/mode/css/css.js')
+require('codemirror/mode/elm/elm.js')
+require('codemirror/mode/gfm/gfm.js')
+require('codemirror/mode/haskell/haskell.js')
+require('codemirror/mode/javascript/javascript.js')
+require('codemirror/mode/mllike/mllike.js')
+require('codemirror/mode/xml/xml.js')
+require('codemirror/mode/stex/stex.js')
+require('codemirror/mode/php/php.js')
+require('codemirror/mode/python/python.js')
+require('codemirror/mode/r/r.js')
+require('codemirror/mode/ruby/ruby.js')
+require('codemirror/mode/sql/sql.js')
+require('codemirror/mode/swift/swift.js')
+require('codemirror/mode/shell/shell.js')
+require('codemirror/mode/vb/vb.js')
+require('codemirror/mode/yaml/yaml.js')
+require('codemirror/mode/go/go.js')
+require('codemirror/mode/rust/rust.js')
+require('codemirror/mode/julia/julia.js')
+require('codemirror/mode/turtle/turtle.js')
+require('codemirror/mode/sparql/sparql.js')
+require('codemirror/mode/verilog/verilog.js')
+require('codemirror/mode/vhdl/vhdl.js')
+require('codemirror/mode/tcl/tcl.js')
+require('codemirror/mode/scheme/scheme.js')
+require('codemirror/mode/commonlisp/commonlisp.js')
+require('codemirror/mode/powershell/powershell.js')
+require('codemirror/mode/smalltalk/smalltalk.js')
 
 // 7. The folding addon
 require('codemirror/addon/fold/foldcode')

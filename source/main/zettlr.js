@@ -29,7 +29,7 @@ const ignoreDir = require('../common/util/ignore-dir')
 const ignoreFile = require('../common/util/ignore-file')
 const isDir = require('../common/util/is-dir')
 const isFile = require('../common/util/is-file')
-const loadCommands = require('./commands/_autoload')
+const { commands } = require('./commands')
 const hash = require('../common/util/hash')
 
 /**
@@ -53,15 +53,6 @@ class Zettlr {
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = [] // Holds all currently opened paths.
     this._providers = {} // Holds all app providers (as properties of this object)
-
-    this._commands = [] // This array holds all commands that can be performed
-    loadCommands(this).then((cmd) => {
-      this._commands = cmd
-    }).catch((e) => {
-      // TODO: In case the commands can't be loaded we should definitely shut
-      // down the app
-      global.log.error(e.message, e)
-    })
 
     // Inject some globals
     global.application = {
@@ -97,6 +88,9 @@ class Zettlr {
 
     // First thing that has to be done is to load the service providers
     this._bootServiceProviders()
+
+    // Load available commands
+    this._commands = commands.map(Command => new Command(this))
 
     // Init translations
     let metadata = loadI18nMain(global.config.get('appLang'))
@@ -588,17 +582,17 @@ class Zettlr {
    * This function prepares the app on first start, which includes copying over the tutorial.
    */
   _prepareFirstStart () {
-    let tutPath = path.join(__dirname, './assets/tutorial')
+    let tutorialPath = path.join(__dirname, 'tutorial')
     let targetPath = path.join(app.getPath('documents'), 'Zettlr Tutorial')
-    let candidates = fs.readdirSync(tutPath, { 'encoding': 'utf8' })
+    let candidates = fs.readdirSync(tutorialPath, { 'encoding': 'utf8' })
 
     candidates = candidates
-      .map(e => { return { 'tag': e, 'path': path.join(tutPath, e) } })
+      .map(e => { return { 'tag': e, 'path': path.join(tutorialPath, e) } })
       .filter(e => isDir(e.path))
 
     let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates)
 
-    let tutorial = path.join(__dirname, './assets/tutorial/en')
+    let tutorial = path.join(tutorialPath, 'en')
     if (exact) tutorial = exact.path
     if (!exact && close) tutorial = close.path
 

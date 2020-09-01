@@ -103,8 +103,8 @@
   /* eslint indent: 0 */
   const TagList = require('./tag-list.vue').default
   const Sorter = require('./sorter.vue').default
-  const formatDate = require('../../source/common/util/format-date.js')
-  const { trans } = require('../../source/common/lang/i18n.js')
+  const formatDate = require('../../common/util/format-date.js')
+  const { trans } = require('../../common/lang/i18n.js')
 
   module.exports = {
     name: 'file-item',

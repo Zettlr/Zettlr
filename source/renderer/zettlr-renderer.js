@@ -22,7 +22,8 @@ const ZettlrAttachments = require('./zettlr-attachments')
 const GlobalSearch = require('./util/global-search')
 
 const ZettlrStore = require('./zettlr-store')
-const createSidebar = require('./assets/vue/vue-sidebar')
+
+const createSidebar = require('./sidebar/sidebar').default
 
 const path = require('path')
 
@@ -120,7 +121,7 @@ class ZettlrRenderer {
       // Apply the custom CSS stylesheet to the head element
       global.ipc.send('get-custom-css-path', {}, (ret) => {
         let lnk = $('<link>').attr('rel', 'stylesheet')
-        lnk.attr('href', 'file://' + ret + '?' + Date.now())
+        lnk.attr('href', 'safe-file://' + ret)
         lnk.attr('type', 'text/css')
         lnk.attr('id', 'custom-css-link')
         $('head').first().append(lnk)

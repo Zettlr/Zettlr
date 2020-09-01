@@ -43,9 +43,8 @@ class CiteprocProvider {
     this._mainLibrary = ''
     // The Zettlr internal preview of these citations will always use Chicago,
     // because (a) it's just a preview, and (b) Chicago is the default of Pandoc.
-    this._styleID = 'chicago-author-date'
     this._lang = global.config.get('appLang')
-    this._mainStyle = fs.readFileSync(path.join(__dirname, `../assets/csl-styles/${this._styleID}.csl`), 'utf8')
+    this._mainStyle = require('./../assets/csl-styles/chicago-author-date.csl')
     this._engine = null // Holds the CSL engine
     this._cslData = null // Holds the parsed CSL data (JSON)
     this._bibtexAttachments = null // Holds the bibtex-attachments, if applicable
@@ -348,10 +347,8 @@ class CiteprocProvider {
   _getLocale (lang) {
     // Takes a lang in the format xx-XX and has to return the corresponding XML
     // file. Let's do just that!
-    let p = path.join(__dirname, `../assets/csl-locales/locales-${lang}.xml`)
     try {
-      fs.lstatSync(p)
-      return fs.readFileSync(p, 'utf8')
+      return require('./../assets/csl-locales/locales-en-US.xml')
     } catch (e) {
       // File not found -> Let the engine fall back to a default.
       return false

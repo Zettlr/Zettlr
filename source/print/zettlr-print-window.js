@@ -13,6 +13,9 @@
  * END HEADER
  */
 
+// Include the geometry style of the app (will be included in the html by webpack magic)
+require('./../common/assets/less/main.less')
+
 const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
 const ipc = require('electron').ipcRenderer
 const path = require('path')
@@ -43,15 +46,15 @@ class ZettlrPrintWindow {
     // Directly inject the correct body class
     $('body').addClass(process.platform)
 
-    // Find out which file we should request
-    let url = new URL(window.location.href)
-    let name = url.searchParams.get('file')
-    // Load the file into an iFrame.
+    // Get additional data passed to the window
+    let name, darkMode
+    [ name, darkMode ] = window.process.argv.slice(-2)
+
+    // Load the file into an iFrame
     this.init(name)
 
-    // Also we need to know whether or not we should initiate in darkMode.
-    let dm = url.searchParams.get('darkMode')
-    if (dm === 'true') $('body').addClass('dark')
+    // Switch to darkMode if necessary
+    if (darkMode === 'true') $('body').addClass('dark')
 
     // Toggle the theme if there's an appropriate event
     ipc.on('toggle-theme', (e) => { $('body').toggleClass('dark') })
@@ -106,4 +109,4 @@ class ZettlrPrintWindow {
   }
 }
 
-module.exports = ZettlrPrintWindow
+module.exports = new ZettlrPrintWindow()

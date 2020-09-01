@@ -35,9 +35,9 @@ class CSSProvider extends EventEmitter {
     // Inject the global provider functions
     global.css = {
       on: (event, callback) => { this.on(event, callback) },
-      off: (event, callback) => { this.on(event, callback) },
+      off: (event, callback) => { this.off(event, callback) },
       get: () => { return this.get() },
-      getPath: () => { return this._filePath },
+      getPath: () => { return this.getPath() },
       set: (newContent) => { return this.set(newContent) }
     }
   }

@@ -13,7 +13,11 @@
  * END HEADER
  */
 
+// Include the geometry style of the app (will be included in the html by webpack magic)
+require('./../common/assets/less/main.less')
+
 const ZettlrQuicklook = require('./zettlr-quicklook')
+const ThemeHandler = require('./../common/theme-handler').default
 const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
 const ipc = require('electron').ipcRenderer
 
@@ -31,10 +35,11 @@ class ZettlrQuicklookWindow {
     * @param {ZettlrFile} file     The file whose content should be displayed
     */
   constructor () {
-    let url = new URL(window.location.href)
-    this._file = null
-    this._ql = null
-    this._theme = url.searchParams.get('theme')
+    // Get additional data passed to the window
+    let hash, darkMode, theme
+    [ hash, darkMode, theme ] = window.process.argv.slice(-3)
+
+    let themeHandler = new ThemeHandler()
 
     // as this class basically acts as the renderer class, we also have to take
     // care of specifics such as getting the translation strings, etc.
@@ -43,8 +48,6 @@ class ZettlrQuicklookWindow {
     // Directly inject the correct body class
     $('body').addClass(process.platform)
 
-    // Find out which file we should request
-    let hash = url.searchParams.get('file')
     // First sending must go out of the first tick of the application
     setTimeout(() => {
       ipc.send('message', { 'command': 'ql-get-file', 'content': hash })
@@ -56,8 +59,8 @@ class ZettlrQuicklookWindow {
 
     // Also we need to know whether or not we should initiate in darkMode, and
     // which theme to use initially.
-    if (url.searchParams.get('darkMode') === 'true') $('body').addClass('dark')
-    $('link#theme-css').attr('href', $('link#theme-css').attr('href').replace(/bielefeld|berlin|frankfurt|karl-marx-stadt/, this._theme))
+    if (darkMode === 'true') $('body').addClass('dark')
+    themeHandler.switchTo(theme)
 
     ipc.on('custom-css', (evt, cnt) => {
       $('#custom-css-link').detach() // Remove any prior link
@@ -77,13 +80,7 @@ class ZettlrQuicklookWindow {
         $('body').removeClass('dark')
       }
 
-      if (config.display.theme !== this._theme) {
-        this._theme = config.display.theme
-        $('link#theme-css').attr(
-          'href',
-          $('link#theme-css').attr('href').replace(/bielefeld|berlin|frankfurt|karl-marx-stadt/, this._theme)
-        )
-      }
+      themeHandler.switchTo(config.display.theme)
 
       // ... and then the CodeMirror instance
       this._ql.onConfigUpdate(config)
@@ -110,4 +107,4 @@ class ZettlrQuicklookWindow {
   }
 }
 
-module.exports = ZettlrQuicklookWindow
+module.exports = new ZettlrQuicklookWindow()

@@ -14,8 +14,6 @@
  */
 
 const popup = require('./zettlr-popup.js')
-const makeTemplate = require('../common/zettlr-template.js')
-
 const { trans } = require('../common/lang/i18n.js')
 
 /**
@@ -63,7 +61,7 @@ class ZettlrPomodoro {
     // For playing optional sound effects
     this._sound = new window.Audio()
     this._sound.volume = 1
-    this._sound.src = `file://${__dirname}/assets/glass.ogg`
+    this._sound.src = require('./assets/glass.ogg')
   }
 
   /**
@@ -183,7 +181,8 @@ class ZettlrPomodoro {
           'duration_long': this._duration.long / 60,
           'volume': this._sound.volume * 100
         }
-        this._pref = popup($('.button.pomodoro'), makeTemplate('popup', 'pomodoro-settings', data), (form) => {
+        const pomodoroTemplate = require('./../../resources/templates/popup/pomodoro-settings.handlebars')
+        this._pref = popup($('.button.pomodoro'), pomodoroTemplate(data), (form) => {
           // Callback
           this._pref = null
           // User has aborted
@@ -228,7 +227,8 @@ class ZettlrPomodoro {
           'time': Math.floor((this._phase.max - this._phase.cur) / 60) + ':' + sec,
           'type': trans('pomodoro.phase.' + this._phase.type)
         }
-        this._pref = popup($('.button.pomodoro'), makeTemplate('popup', 'pomodoro-status', data), (form) => {
+        const pomodoroTemplate = require('./../../resources/templates/popup/pomodoro-status.handlebars')
+        this._pref = popup($('.button.pomodoro'), pomodoroTemplate(data), (form) => {
           this._pref = null
         })
 

@@ -2,7 +2,6 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        main.js
  * CVM-Role:        <none>
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -14,6 +13,17 @@
  * END HEADER
  */
 
+import { app, protocol } from 'electron'
+
+// Include the global Zettlr class
+import Zettlr from './main/zettlr'
+
+// Helper function to extract files to open from process.argv
+import extractFilesFromArgv from './common/util/extract-files-from-argv'
+
+// Developer tools
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+
 global.preBootLog = [{
   'level': 2, // Info
   // eslint-disable-next-line no-irregular-whitespace
@@ -24,37 +34,25 @@ global.preBootLog = [{
  * This will be overwritten by the log provider, once it has booted
  */
 global.log = {
-  'verbose': (message) => {
+  'verbose': (message: string) => {
     global.preBootLog.push({ 'level': 1, 'message': message })
   },
-  'info': (message) => {
+  'info': (message: string) => {
     global.preBootLog.push({ 'level': 2, 'message': message })
   },
-  'warning': (message) => {
+  'warning': (message: string) => {
     global.preBootLog.push({ 'level': 3, 'message': message })
   },
-  'error': (message) => {
+  'error': (message: string) => {
     global.preBootLog.push({ 'level': 4, 'message': message })
   }
 }
-
-// We need the app and process modules.
-const { app } = require('electron')
-const process = require('process')
-
-// Include the global Zettlr class
-const Zettlr = require('./main/zettlr.js')
-// Helper function to extract files to open from process.argv
-const extractFilesFromArgv = require('./common/util/extract-files-from-argv')
-
-// Introduce v8 code caching
-require('v8-compile-cache')
 
 /**
  * The main Zettlr object. As long as this exists in memory, the app will run.
  * @type {Zettlr}
  */
-let zettlr
+let zettlr: Zettlr
 
 /**
  * Global array containing files collected from argv before process start
@@ -127,15 +125,31 @@ app.whenReady().then(() => {
   global.log.info('Electron reports ready state. Instantiating main process...')
 
   try {
-    // Developer tools
-    const { default: installExtension, VUEJS_DEVTOOLS } = require('electron-devtools-installer')
     // Load Vue developer extension
     installExtension(VUEJS_DEVTOOLS)
-      .then((name) => global.log.info(`Added DevTools extension:  ${name}`))
-      .catch((err) => console.log('An error occurred: ', err))
+      .then((name: string) => global.log.info(`Added DevTools extension:  ${name}`))
+      .catch((err: any) => console.log('An error occurred: ', err))
   } catch (e) {
     global.log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
   }
+
+  // Make it possible to safely load external files
+  // In order to load files, the 'safe-file' protocol has to be used instead of 'file'
+  // https://stackoverflow.com/a/61623585/873661
+  const protocolName = 'safe-file'
+  protocol.registerFileProtocol(protocolName, (request, callback) => {
+    const url = request.url.replace(`${protocolName}://`, '')
+    try {
+      // eslint-disable-next-line standard/no-callback-literal
+      return callback({
+        path: decodeURIComponent(url),
+        // Prevent that local files are cached
+        headers: { 'Cache-control': 'no-store', 'pragma': 'no-cache' }
+      })
+    } catch (error) {
+      global.log.error('Error loading external file', error)
+    }
+  })
 
   zettlr = new Zettlr()
 })
@@ -181,7 +195,7 @@ app.on('activate', function () {
  * Hook into the unhandledRejection-event to prevent nasty error messages when
  * a Promise is rejected somewhere.
  */
-process.on('unhandledRejection', (err) => {
+process.on('unhandledRejection', (err: any) => {
   // Just log to console.
   global.log.error(err.message)
 })

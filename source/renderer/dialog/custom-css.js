@@ -56,7 +56,7 @@ class CustomCSS extends ZettlrDialog {
             // We have to create the element
             global.ipc.send('get-custom-css-path', {}, (ret) => {
               let lnk = $('<link>').attr('rel', 'stylesheet')
-              lnk.attr('href', 'file://' + ret + '?' + Date.now())
+              lnk.attr('href', 'safe-file://' + ret)
               lnk.attr('type', 'text/css')
               lnk.attr('id', 'custom-css-link')
               $('head').first().append(lnk)

@@ -151,8 +151,8 @@
 // of some modules, but not others. The vue-loader is a mess when used with
 // ES6 CommonJS-modules in a exports/require-environment.
 const tippy = require('tippy.js').default
-const findObject = require('../../source/common/util/find-object.js')
-const { trans } = require('../../source/common/lang/i18n.js')
+const findObject = require('../../common/util/find-object.js')
+const { trans } = require('../../common/lang/i18n.js')
 const TreeItem = require('./tree-item.vue').default
 const FileItem = require('./file-item.vue').default
 const { RecycleScroller } = require('vue-virtual-scroller')

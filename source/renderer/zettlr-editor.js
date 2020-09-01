@@ -17,7 +17,7 @@ const path = require('path')
 const hash = require('../common/util/hash')
 const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
-const Turndown = require('joplin-turndown')
+const Turndown = require('joplin-turndown').default
 const tippy = require('tippy.js').default
 const countWords = require('../common/util/count-words')
 const EditorTabs = require('./util/editor-tabs')
@@ -29,10 +29,8 @@ const generateKeymap = require('./assets/codemirror/generate-keymap.js')
 const openMarkdownLink = require('./util/open-markdown-link')
 const EditorAutocomplete = require('./util/editor-autocomplete')
 
-// The autoloader requires all necessary CodeMirror addons and modes that are
-// used by the main class. It simply folds about 70 lines of code into an extra
-// file.
-require('./assets/codemirror/autoload.js')
+// Load CodeMirror addons and modes
+require('./assets/codemirror/plugins.js')
 
 // Finally load CodeMirror itself
 const CodeMirror = require('codemirror')

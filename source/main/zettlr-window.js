@@ -16,7 +16,6 @@
  */
 
 const { dialog, BrowserWindow, app } = require('electron')
-const url = require('url')
 const path = require('path')
 const { trans } = require('../common/lang/i18n')
 const isDir = require('../common/util/is-dir')
@@ -109,13 +108,10 @@ class ZettlrWindow {
     // First create a new browserWindow
     this._win = new BrowserWindow(winConf)
 
-    // Then activate listeners.
-    // and load the index.html of the app.
-    this._win.loadURL(url.format({
-      pathname: path.join(__dirname, '../renderer/assets/index.htm'),
-      protocol: 'file:',
-      slashes: true
-    }))
+    // Load the index.html of the app.
+    // The variable MAIN_WINDOW_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
+    // eslint-disable-next-line no-undef
+    this._win.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
 
     // EVENT LISTENERS
 

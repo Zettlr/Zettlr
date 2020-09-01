@@ -53,7 +53,7 @@ async function prepareEnvironment () {
 // Finally, run the function
 prepareEnvironment().then(() => {
   console.log('Successfully prepared environment! Starting Zettlr ...')
-  let proc = spawn('electron', [ '.', '--config', CONFIG_FILE ], {
+  let proc = spawn('electron-forge', [ 'start', '--', '--config', CONFIG_FILE ], {
     'cwd': path.join(__dirname, '..')
   })
   proc.stdout.on('data', (data) => { console.log(data.toString('utf8')) })

@@ -6,34 +6,6 @@
          supress the Electron default warning (and also make it safer here) -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
     <title>Zettlr</title>
-
-    <!-- KaTeX CSS file -->
-    <link rel="stylesheet" href="../../node_modules/katex/dist/katex.min.css">
-    <!-- Clarity CSS files -->
-    <link rel="stylesheet" href="../../node_modules/@clr/icons/clr-icons.min.css">
-    <!-- Generated CSS output for the vue components -->
-    <link rel="stylesheet" href="./vue/sidebar.css">
-
-    <!-- Include the geometry of the app -->
-    <link rel="stylesheet" href="../../common/assets/css/geometry.css">
-
-    <!-- Include the main theme -->
-    <link rel="stylesheet" id="theme-css" href="../../common/assets/css/theme-berlin.css">
-
-    <!-- And now the JS -->
-    <!-- Hack for recognizing jquery (thanks to https://stackoverflow.com/a/37480521/8651046)-->
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
-
-    <script type="text/javascript" src="../../node_modules/jquery/dist/jquery.js"></script>
-
-    <!-- Hack for jQuery (part 2) -->
-    <script>if (window.module) module = window.module;</script>
-
-    <!-- Load tippy.js -->
-    <link rel="stylesheet" href="../../node_modules/tippy.js/dist/tippy.css">
-
-    <!-- Finally load the app. It will load automatically. -->
-    <script type="text/javascript" src="../main.js"></script>
 </head>
 <body>
     <div id="container">

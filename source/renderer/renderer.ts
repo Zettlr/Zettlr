@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -15,13 +14,10 @@
  * END HEADER
  */
 
-// __dirname is set to the index.htm, not to the renderer directory!
-const ZettlrRenderer = require('../zettlr-renderer.js')
-// We need a global for our renderer element
-var renderer
+// Include the geometry style of the app (will be included in the html by webpack magic)
+import './../common/assets/less/main.less'
 
-$(document).ready(function () {
-  // Create the renderer
-  renderer = new ZettlrRenderer()
-  renderer.init()
-})
+import ZettlrRenderer from './zettlr-renderer'
+// We need a global for our renderer element
+var renderer = new ZettlrRenderer()
+renderer.init()

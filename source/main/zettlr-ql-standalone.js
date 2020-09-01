@@ -14,7 +14,6 @@
   */
 
 const path = require('path')
-const url = require('url')
 const { BrowserWindow } = require('electron')
 
 class ZettlrQLStandalone {
@@ -54,7 +53,8 @@ class ZettlrQLStandalone {
       webPreferences: {
         // Zettlr needs all the node features, so in preparation for Electron
         // 5.0 we'll need to explicitly request it.
-        nodeIntegration: true
+        nodeIntegration: true,
+        additionalArguments: [ file.hash.toString(), global.config.get('darkTheme').toString(), global.config.get('display.theme') ]
       },
       backgroundColor: '#fff',
       frame: false, // No frame for quicklook windows. Mainly prevents the menu bar to be shown on win+linux
@@ -82,12 +82,8 @@ class ZettlrQLStandalone {
 
     // Then activate listeners.
     // and load the index.html of the app.
-    win.loadURL(url.format({
-      pathname: path.join(__dirname, '../quicklook/index.htm'),
-      protocol: 'file:',
-      slashes: true,
-      search: `file=${file.hash}&darkMode=${global.config.get('darkTheme')}&theme=${global.config.get('display.theme')}`
-    }))
+    // eslint-disable-next-line no-undef
+    win.loadURL(QUICKLOOK_WEBPACK_ENTRY)
     // Only show window once it is completely initialized
     win.once('ready-to-show', () => { win.show() })
     // As soon as the window is closed, remove it from our array.

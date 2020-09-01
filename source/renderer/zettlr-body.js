@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -14,6 +13,7 @@
  *
  * END HEADER
  */
+const $ = require('jquery')
 require('jquery-ui/ui/data')
 require('jquery-ui/ui/scroll-parent')
 require('jquery-ui/ui/version')
@@ -24,7 +24,7 @@ require('jquery-ui/ui/widgets/sortable')
 const ZettlrCon = require('./zettlr-context.js')
 const ZettlrNotification = require('./zettlr-notification.js')
 const popup = require('./zettlr-popup.js')
-const makeTemplate = require('../common/zettlr-template.js')
+const ThemeHandler = require('./../common/theme-handler').default
 
 // Dialogs
 const StatsDialog = require('./dialog/stats.js')
@@ -64,7 +64,8 @@ class ZettlrBody {
     this._currentDialog = null
     // Holds the current popup. Prevents multiple popups from appearing.
     this._currentPopup = null
-    this._currentTheme = 'berlin' // Default theme is Berlin
+    // Handles switching between themes
+    this._themeHandler = new ThemeHandler()
 
     // This object caches the values of search and replace value, so they stay
     // persistent on a per-session basis.
@@ -151,17 +152,10 @@ class ZettlrBody {
    * necessary adjustments.
    */
   configChange () {
-    let newTheme = global.config.get('display.theme')
-    // Check if we really need to replace the style to prevent ugly flickering
-    // when replacing the same theme with the same.
-    if (this._currentTheme === newTheme) return
-
     // On config change, change the theme according to the settings
-    let href = $('link#theme-css').attr('href')
-    href = href.replace(/bielefeld|berlin|frankfurt|karl-marx-stadt|bordeaux/, newTheme)
-    $('link#theme-css').attr('href', href)
-    this._renderer.getEditor().refresh()
-    this._currentTheme = newTheme
+    // This is also invoked on initial load
+    let newThemeName = global.config.get('display.theme')
+    this._themeHandler.switchTo(newThemeName)
   }
 
   /**
@@ -183,7 +177,8 @@ class ZettlrBody {
       return global.ipc.send('file-new', { 'name': generateFileName(), 'hash': dir.hash })
     }
 
-    let cnt = makeTemplate('popup', 'textfield', {
+    const textfieldTemplate = require('./../../resources/templates/popup/textfield.handlebars')
+    let cnt = textfieldTemplate({
       'val': generateFileName(),
       'placeholder': trans('dialog.file_new.placeholder')
     })
@@ -217,7 +212,8 @@ class ZettlrBody {
     // Cannot duplicate aliases
     if (file.hasOwnProperty('isAlias') && file.isAlias) return
 
-    let cnt = makeTemplate('popup', 'textfield', {
+    const textfieldTemplate = require('./../../resources/templates/popup/textfield.handlebars')
+    let cnt = textfieldTemplate({
       'val': 'Copy of ' + file.name,
       'placeholder': trans('dialog.file_new.placeholder')
     })
@@ -262,7 +258,8 @@ class ZettlrBody {
     // this should normally never happen.
     if (elem.length === 0) elem = $('#sidebar')
 
-    let cnt = makeTemplate('popup', 'textfield', {
+    const textfieldTemplate = require('./../../resources/templates/popup/textfield.handlebars')
+    let cnt = textfieldTemplate({
       'val': trans('dialog.dir_new.value'),
       'placeholder': trans('dialog.dir_new.placeholder')
     })
@@ -283,7 +280,8 @@ class ZettlrBody {
   requestNewDirName (dir) {
     if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
     let elem = $('#file-tree').find('div[data-hash="' + dir.hash + '"]').first()
-    let cnt = makeTemplate('popup', 'textfield', {
+    const textfieldTemplate = require('./../../resources/templates/popup/textfield.handlebars')
+    let cnt = textfieldTemplate({
       'val': dir.name,
       'placeholder': trans('dialog.dir_rename.placeholder')
     })
@@ -315,7 +313,8 @@ class ZettlrBody {
       }
     }
 
-    let cnt = makeTemplate('popup', 'textfield', {
+    const textfieldTemplate = require('./../../resources/templates/popup/textfield.handlebars')
+    let cnt = textfieldTemplate({
       'val': file.name,
       'placeholder': trans('dialog.file_rename.placeholder')
     })
@@ -339,7 +338,7 @@ class ZettlrBody {
     if (!dir) return // No directory found
 
     let elem = $('#file-tree').find('div[data-hash="' + arg.hash + '"]').first()
-    let cnt = makeTemplate('popup', 'icon-selector', {})
+    let cnt = require('./../../resources/templates/popup/icon-selector.handlebars')
 
     this._currentPopup = popup(elem, cnt, (form) => {
       this._currentPopup = null
@@ -377,7 +376,8 @@ class ZettlrBody {
       targetCount = file.target.count || 0
     }
 
-    let cnt = makeTemplate('popup', 'target', {
+    const targetTemplate = require('./../../resources/templates/popup/target.handlebars')
+    let cnt = targetTemplate({
       'mode': targetMode,
       'count': targetCount
     })
@@ -412,7 +412,8 @@ class ZettlrBody {
       'chars_sel': (info.chars_sel) ? localiseNumber(info.chars_sel) : null
     }
 
-    let cnt = makeTemplate('popup', 'file-info', data)
+    const fileInfoTemplate = require('./../../resources/templates/popup/file-info.handlebars')
+    let cnt = fileInfoTemplate(data)
     this._currentPopup = popup($('#toolbar .file-info'), cnt, () => {
       this._currentPopup = null
     })
@@ -472,7 +473,8 @@ class ZettlrBody {
     if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
     // Create a popup
 
-    let cnt = makeTemplate('popup', 'export', { 'hash': file.hash })
+    const exportTemplate = require('./../../resources/templates/popup/export.handlebars')
+    let cnt = exportTemplate({ 'hash': file.hash })
     if (!cnt) return this
 
     this._currentPopup = popup($('.button.share'), cnt)
@@ -616,7 +618,8 @@ class ZettlrBody {
       'cmpAvg': data.avgMonth,
       'cmpAvgHalf': data.avgMonth / 2
     }
-    let cnt = makeTemplate('popup', 'stats', context)
+    const statsTemplate = require('./../../resources/templates/popup/stats.handlebars')
+    let cnt = statsTemplate(context)
     this._currentPopup = popup($('#toolbar .stats'), cnt)
     $('#more-stats').on('click', (e) => {
       // Theres no form but the user has clicked the more button
@@ -645,7 +648,8 @@ class ZettlrBody {
     if (selections.length > 0) this._findPopup.searchVal = selections[0]
 
     // Create the popup template. Make sure we pre-set the value, if given.
-    let cnt = makeTemplate('popup', 'find', {
+    const findTemplate = require('./../../resources/templates/popup/find.handlebars')
+    let cnt = findTemplate({
       'search': this._findPopup.searchVal || '',
       'replace': this._findPopup.replaceVal || ''
     })
@@ -723,7 +727,7 @@ class ZettlrBody {
     */
   displayFormatting () {
     if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
-    let cnt = makeTemplate('popup', 'format')
+    let cnt = require('./../../resources/templates/popup/format.handlebars')
     this._currentPopup = popup($('.button.formatting'), cnt)
 
     $('.formatting #header-formatting').on('mousemove', (e) => {
@@ -772,7 +776,7 @@ class ZettlrBody {
 
   displayTableGenerator () {
     if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
-    let cnt = makeTemplate('popup', 'table')
+    let cnt = require('./../../resources/templates/popup/table.handlebars')
     this._currentPopup = popup($('.button.formatting'), cnt)
 
     $('.table-generator').mouseleave(e => { $('.table-generator .cell').removeClass('active') })
