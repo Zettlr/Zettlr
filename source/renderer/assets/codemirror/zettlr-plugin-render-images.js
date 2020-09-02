@@ -170,7 +170,8 @@
         if (/data:[a-zA-Z0-9/;=]+(?:;base64){0,1},.+/.test(url)) {
           img.src = url
         } else {
-          img.src = makeAbsoluteURL(cm.getOption('markdownImageBasePath'), url)
+          // img.src = makeAbsoluteURL(cm.getOption('markdownImageBasePath'), url)
+          img.src = makeAbsoluteCachefreeURL(cm.getOption('markdownImageBasePath'), url)
         }
 
         // Push the textMarker into the array
