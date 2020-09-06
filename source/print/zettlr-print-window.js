@@ -66,7 +66,7 @@ class ZettlrPrintWindow {
   init (name) {
     this._file = name
     document.title = path.basename(name)
-    $('.title h1').text(path.basename(name))
+    document.querySelector('.title h1').textContent = path.basename(name)
     $('.content').html(`<iframe src="${name}"></iframe>`)
 
     // Load the clarity icon modules, add custom icons and then refresh

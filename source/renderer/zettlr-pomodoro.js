@@ -124,7 +124,7 @@ class ZettlrPomodoro {
 
       // Set the class of the value accordingly
       this._progressValue.addClass(this._phase.type)
-      $('#pomodoro-phase-type').text(trans('pomodoro.phase.' + this._phase.type))
+      document.getElementById('pomodoro-phase-type').textContent = trans('pomodoro.phase.' + this._phase.type)
       if (this._pref) this._pref.change() // Indicate a possible change in the popup's size.
       global.notify('Pomodoro: <strong>' + trans('pomodoro.phase.' + this._phase.type) + '</strong>')
     }
@@ -139,7 +139,10 @@ class ZettlrPomodoro {
     let sec = ((this._phase.max - this._phase.cur) % 60)
     if (sec < 10) sec = '0' + sec
 
-    $('#pomodoro-time-remaining').text(Math.floor((this._phase.max - this._phase.cur) / 60) + ':' + sec)
+    const timeRemainingElement = document.getElementById('pomodoro-time-remaining')
+    if (timeRemainingElement) {
+      timeRemainingElement.textContent = Math.floor((this._phase.max - this._phase.cur) / 60) + ':' + sec
+    }
 
     // Prepare next cycle
     this._phase.cur++

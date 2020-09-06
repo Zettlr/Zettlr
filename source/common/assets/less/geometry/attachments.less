@@ -8,6 +8,13 @@
     width: 20%;
     overflow-y: auto;
     overflow-x: hidden;
+    transition: all 1s ease 0s;
+    visibility: hidden;
+
+    &.open {
+      right: 0%;
+      visibility: visible;
+    }
 
     #open-dir-external {
         padding: @button-margin;
