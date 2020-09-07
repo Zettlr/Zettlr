@@ -7,7 +7,7 @@ const path = require('path')
 * @param {string} fragment The URL to be converted, either relative or absolute
 * @returns {string} The converted absolute URL with a cachefree-parameter.
 */
-module.exports = function makeAbsoluteCachefreeURL (base, fragment) {
+module.exports = function makeAbsoluteURL (base, fragment) {
   let urlObject
   try {
     // If it's already a correct URL, we are almost done
@@ -16,11 +16,13 @@ module.exports = function makeAbsoluteCachefreeURL (base, fragment) {
     // Obviously not a correct URL. In the context of this limited
     // application, we can be sure base is always a path to a Markdown file.
     let resolvedPath = path.resolve(base, fragment)
-    if (!protocolRE.test(resolvedPath)) resolvedPath = 'file://' + resolvedPath
+    if (!protocolRE.test(resolvedPath)) resolvedPath = 'safe-file://' + resolvedPath
     urlObject = new URL(resolvedPath)
   }
-
-  // Now make the thing cachefree
-  urlObject.searchParams.append('c', new Date().getTime())
+  if (urlObject.protocol === 'file:') {
+    // Windows C:/ etc. file paths are valid URLs,
+    // but use the file:// protocol that we don't handle.
+    return 'safe-' + urlObject.toString()
+  }
   return urlObject.toString()
 }

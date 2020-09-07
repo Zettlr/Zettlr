@@ -12,7 +12,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  const makeAbsoluteCachefreeURL = require('../../../common/util/make-absolute-cachefree-url')
+  const makeAbsoluteURL = require('../../../common/util/make-absolute-url')
 
   // This regular expression matches three different kinds of URLs:
   // 1. Linked images in the format [![Alt text](image/path.png)](www.link-target.tld)
@@ -164,7 +164,7 @@
         if (isLinkedImage) {
           let img = document.createElement('img')
           img.title = `${linkImageCaption} (${linkImageTarget})`
-          img.src = makeAbsoluteCachefreeURL(cm.getOption('markdownImageBasePath'), linkImagePath)
+          img.src = makeAbsoluteURL(cm.getOption('markdownImageBasePath'), linkImagePath)
           img.style.cursor = 'pointer' // Nicer cursor
           // Copied over from the other plugin
           let width = (cm.getOption('imagePreviewWidth')) ? cm.getOption('imagePreviewWidth') + '%' : '100%'
