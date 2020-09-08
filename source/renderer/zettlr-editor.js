@@ -779,6 +779,15 @@ class ZettlrEditor {
   }
 
   /**
+   * Closes all open files
+   */
+  closeAll () {
+    for (let file of this._openFiles) {
+      global.ipc.send('file-close', { 'hash': file.fileObject.hash })
+    }
+  }
+
+  /**
    * Attempts to close an open tab, and returns true if it did.
    * @returns {boolean} True, if a tab has been closed, otherwise false.
    */

@@ -560,6 +560,13 @@ class ZettlrRenderer {
   }
 
   /**
+   * Closes all open files
+   */
+  closeAllFiles () {
+    this._editor.closeAll()
+  }
+
+  /**
    * Request the renaming of a file
    * @param  {ZettlrFile} f The file, whose name should be changed
    */
