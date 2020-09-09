@@ -204,8 +204,10 @@ module.exports = class EditorTabs {
 
     // If given, call the callback
     if (this._intentCallback) {
+      event.stopPropagation() // We are handling the event, so don't bubble it.
       // determine if a middle (wheel) click
       let middleClick = (event.type === 'auxclick' && event.button === 1)
+      if (middleClick) event.preventDefault() // If we don't do this, on Windows we get middle-click-scrolling
       this._intentCallback(hash, (middleClick || closeIntent) ? 'close' : 'select')
     }
   }
