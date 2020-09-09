@@ -27,6 +27,7 @@ const CLOSING_COMMANDS = [
   'file-get',
   'file-new',
   'file-delete',
+  'file-rename', // No visible closing, but files are being swapped under the hood
   'close-root',
   'force-open',
   'win-close',

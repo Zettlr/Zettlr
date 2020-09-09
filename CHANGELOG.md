@@ -5,6 +5,7 @@
 - Fixed the fold-gutter being too close to the text.
 - The editor link autocompletion now respects the setting to use headings level 1 instead of YAML frontmatter titles where possible.
 - The paste image dialog now also provides the original image size as a default value, so that you simply can use the arrow buttons on the field to adjust the image size.
+- Fixed a rare bug where changes would be discarded if you renamed the modified file quickly enough.
 
 ## Under the Hood
 
