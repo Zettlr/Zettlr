@@ -12,6 +12,7 @@
  */
 
 const asciiSorting = require('./sort-ascii')
+const naturalSorting = require('./sort-natural')
 const dateSorting = require('./sort-date')
 
 /**
@@ -27,12 +28,6 @@ module.exports = function (arr, type = 'name-up') {
 
   // Should we use natural sorting or ascii?
   let useNatural = (global.config && global.config.get('sorting') === 'natural')
-
-  // Create a collator for long lists, using the app-lang in BCP-47, and en as fallback
-  let coll = new Intl.Collator([ global.config.get('appLang'), 'en' ], { 'numeric': true })
-
-  // We need a buffer function because compare() expects strings, not objects
-  let naturalSorting = (a, b) => { return coll.compare(a.name, b.name) }
 
   // Write in the sortingFunc whatever we should be using
   let sortingFunc = (useNatural) ? naturalSorting : asciiSorting

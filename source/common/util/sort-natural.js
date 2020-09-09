@@ -6,13 +6,14 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     This file contains a utility function to sort Files by name.
+ * Description:     This file contains a utility function to sort Files by name
+ *                  (with language support).
  *
  * END HEADER
  */
 
 /**
- * Helper function to sort files by ascii characters
+ * Helper function to sort files using a collator
  * @param  {ZettlrFile} a A ZettlrFile exposing a name property
  * @param  {ZettlrFile} b A ZettlrFile exposing a name property
  * @return {number}   0, 1, or -1, depending upon what the comparision yields.
@@ -31,12 +32,7 @@ module.exports = function (a, b) {
   if (a.frontmatter !== undefined && a.frontmatter.hasOwnProperty('title')) aSort = a.frontmatter.title.toLowerCase()
   if (b.frontmatter !== undefined && b.frontmatter.hasOwnProperty('title')) bSort = b.frontmatter.title.toLowerCase()
 
-  // Negative return: a is smaller b (case insensitive)
-  if (aSort < bSort) {
-    return -1
-  } else if (aSort > bSort) {
-    return 1
-  }
+  let coll = new Intl.Collator([ global.config.get('appLang'), 'en' ], { 'numeric': true })
 
-  return 0
+  return coll.compare(aSort, bSort)
 }
