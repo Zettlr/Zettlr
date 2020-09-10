@@ -24,6 +24,9 @@ import extractFilesFromArgv from './common/util/extract-files-from-argv'
 // Developer tools
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 
+// Disable the disk cache for http requests.
+app.commandLine.appendSwitch('disable-http-cache')
+
 global.preBootLog = [{
   'level': 2, // Info
   // eslint-disable-next-line no-irregular-whitespace
