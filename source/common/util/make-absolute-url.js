@@ -1,4 +1,18 @@
-var protocolRE = /^([a-z]{1,10}):\/\//i
+/**
+ * BEGIN HEADER
+ *
+ * Contains:        Utility function
+ * CVM-Role:        <none>
+ * Maintainer:      Kangie
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains a utility function to absolutize URLs to
+ *                  render images within the GUI.
+ *
+ * END HEADER
+ */
+
+const protocolRE = require('../regular-expressions').getProtocolRE()
 const path = require('path')
 
 /**
