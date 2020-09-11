@@ -13,6 +13,34 @@
 ## Under the Hood
 
 - Switched to Electron forge (thanks to @tobiasdiez for implementing).
+- Bumped dependencies:
+  - @clr/icons `4.0.1`
+  - @electron-forge/cli `6.0.0-beta.53`
+  - @electron-forge/plugin-webpack `6.0.0-beta.53`
+  - @teamsupercell/typings-for-css-modules-loader `2.3.0`
+  - @typescript-eslint/eslint-plugin `4.1.0`
+  - @typescript-eslint/parser `4.1.0`
+  - archiver `5.0.1`
+  - chokidar `3.4.2`
+  - codemirror `5.57.0`
+  - copy-webpack-plugin `6.1.0`
+  - electron `9.3.0`
+  - eslint `7.8.1`
+  - eslint-config-standard-with-typescript `19.0.1`
+  - eslint-plugin-vue `7.0.0-beta.3`
+  - file-loader `6.1.0`
+  - fork-ts-checker-webpack-plugin `5.1.0`
+  - fsevents `2.1.3`
+  - got `11.6.2`
+  - md5 `2.3.0`
+  - mocha `8.1.3`
+  - node-loader `1.0.1`
+  - on-change `2.1.2`
+  - ts-loader `8.0.3`
+  - typescript `4.0.2`
+  - uglify-js `3.10.4`
+  - vue `2.6.12`
+  - vue-template-compiler `2.6.12`
 
 # 1.7.5
 
