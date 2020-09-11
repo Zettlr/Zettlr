@@ -8,6 +8,7 @@
 - Fixed a rare bug where changes would be discarded if you renamed the modified file quickly enough.
 - HTML export should now centre both figures and figure captions.
 - Sorting files by name now takes into account possible settings such as using headings of level 1 or YAML frontmatter titles so that sorted files now correspond to their display again.
+- You can now select rendered references from the right sidebar.
 
 ## Under the Hood
 
