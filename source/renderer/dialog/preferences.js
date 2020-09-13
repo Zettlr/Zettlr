@@ -19,6 +19,7 @@ const validate = require('../../common/validate.js')
 const { ipcRenderer } = require('electron')
 const { trans } = require('../../common/lang/i18n')
 const generateId = require('../../common/util/generate-id')
+const { renderTemplate } = require('../util/render-template')
 
 class PreferencesDialog extends ZettlrDialog {
   constructor () {
@@ -26,12 +27,16 @@ class PreferencesDialog extends ZettlrDialog {
     this._dialog = 'preferences'
     this._boundCallback = this.afterDownload.bind(this)
     this._textTimeout = null
+  }
 
-    // Build the loading spinner that we need for the downloading indication
-    this._spinner = $('<div>').addClass('sk-three-bounce')
-    for (let i = 1; i < 4; i++) {
-      this._spinner.append($('<div>').addClass('sk-bounce' + i).addClass('sk-child'))
-    }
+  get spinner () {
+    return renderTemplate(
+      `<div class="sk-three-bounce">
+        <div class="sk-child sk-bounce1"></div>
+        <div class="sk-child sk-bounce2"></div>
+        <div class="sk-child sk-bounce3"></div>
+      </div>`
+    )
   }
 
   preInit (data) {
@@ -97,6 +102,10 @@ class PreferencesDialog extends ZettlrDialog {
     return this.appLangElement.querySelector(`option[value="${language}"]`)
   }
 
+  get downloadIndicatorElement () {
+    return document.getElementById('app-lang-download-indicator')
+  }
+
   postAct () {
     // Activate the form to be submitted
     let form = this._modal.find('form#dialog')
@@ -126,8 +135,8 @@ class PreferencesDialog extends ZettlrDialog {
         // download no non-available language is set.
         language.value = global.config.get('appLang')
         // ... and beneath the select
-        $('#app-lang-download-indicator').text(langLocalisation)
-        $('#app-lang-download-indicator').append(this._spinner)
+        this.downloadIndicatorElement.textContent = langLocalisation
+        this.downloadIndicatorElement.append(this.spinner)
         // Notify main
         global.ipc.send('request-language', l.bcp47)
         ipcRenderer.on('message', this._boundCallback) // Listen for the back event
@@ -138,12 +147,10 @@ class PreferencesDialog extends ZettlrDialog {
     // Functions for the search field of the dictionary list.
     dictionariesSearchField.addEventListener('keyup', (e) => {
       const searchFor = dictionariesSearchField.value.toLowerCase()
-      $('.dicts-list').find('li').each(function (i) {
-        if ($(this).text().toLowerCase().indexOf(searchFor) === -1) {
-          $(this).hide()
-        } else {
-          $(this).show()
-        }
+      document.querySelectorAll('.dicts-list li').forEach((element) => {
+        element.innerText.toLowerCase().includes(searchFor)
+          ? $(element).show()
+          : $(element).hide()
       })
     })
 
@@ -189,16 +196,20 @@ class PreferencesDialog extends ZettlrDialog {
       document.getElementById('pandocCommand').value = 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"'
     })
 
+    const reportTestResult = (resultTranslationKey) => {
+      document.getElementById('pass-check').textContent = trans(resultTranslationKey)
+    }
     $('#generate-id').on('click', (e) => {
       const idPattern = zknIdGenElement.value
       const idMatcher = zknFreeIdElement.value
       const id = generateId(idPattern)
       const re = new RegExp(`^${idMatcher}$`)
-      $('#generator-tester').text(id)
+      document.getElementById('generator-tester').textContent = id
+
       if (re.test(id)) {
-        $('#pass-check').text(trans('dialog.preferences.zkn.pass_check_yes'))
+        reportTestResult('dialog.preferences.zkn.pass_check_yes')
       } else {
-        $('#pass-check').text(trans('dialog.preferences.zkn.pass_check_no'))
+        reportTestResult('dialog.preferences.zkn.pass_check_no')
       }
     })
 
@@ -250,21 +261,21 @@ class PreferencesDialog extends ZettlrDialog {
 
     // Tell success or failure and unlock the select
     if (cnt.success) {
-      $('#app-lang-download-indicator').text(trans('dialog.preferences.translations.success', langLocalisation))
+      this.downloadIndicatorElement.textContent = trans('dialog.preferences.translations.success', langLocalisation)
       this.getLanguageOptionElement(global.config.get('appLang')).textContent = langLocalisation
       // Again override the value to the correct one.
       this.getLanguageOptionElement(global.config.get('appLang')).value = cnt.bcp47
     } else {
       // Do not override the language value to make sure the language stays
       // even if the user doesn't select another language.
-      $('#app-lang-download-indicator').text(trans('dialog.preferences.translations.error', langLocalisation))
+      this.downloadIndicatorElement.textContent = trans('dialog.preferences.translations.error', langLocalisation)
       this.getLanguageOptionElement(cnt.bcp47).textContent = trans('dialog.preferences.translations.not_available', langLocalisation)
     }
     this.appLangElement.disabled = false // Unblock
     if (this._textTimeout) clearTimeout(this._textTimeout)
     this._textTimeout = setTimeout(() => {
       // Hide the text after three seconds
-      $('#app-lang-download-indicator').text('')
+      this.downloadIndicatorElement.textContent = ''
     }, 3000)
   }
 

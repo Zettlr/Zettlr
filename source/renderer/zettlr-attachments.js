@@ -12,6 +12,7 @@
  *
  * END HEADER
  */
+const { renderTemplate } = require('./util/render-template')
 
 const { shell } = require('electron')
 
@@ -39,18 +40,36 @@ const FILETYPES_IMG = [
 class ZettlrAttachments {
   constructor (parent) {
     this._renderer = parent
-    this._container = $('<div>').prop('id', 'attachments').css('display', 'none')
-    this._container.html(`<h1>${trans('gui.attachments')} <clr-icon shape="folder" class="is-solid" id="open-dir-external" title="${trans('gui.attachments_open_dir')}"></clr-icon></h1>`)
-    this._fileContainer = $('<div>').prop('id', 'files')
-    this._bibliographyContainer = $('<div>').prop('id', 'bibliography')
-    this._container.append(this._fileContainer)
-    this._container.append($('<h1>').text(trans('gui.citeproc.references_heading')))
-    this._container.append(this._bibliographyContainer)
-    $('body').append(this._container)
     this._open = false
     this._attachments = []
 
     this._act() // Activate both the directory toggle and the link
+  }
+
+  get container () {
+    if (!this._container) {
+      this._container = renderTemplate(`<div id="attachments">
+  <h1>${trans('gui.attachments')} <clr-icon shape="folder" class="is-solid" id="open-dir-external" title="${trans('gui.attachments_open_dir')}"></clr-icon></h1>
+  <div id="files">
+    <p>${trans('gui.no_attachments')}</p>
+  </div>
+  <h1>${trans('gui.citeproc.references_heading')}</h1>
+  <div id="bibliography">
+    <p>${trans('gui.citeproc.references_none')}</p>
+  </div>
+</div>`)
+      document.querySelector('body').append(this._container)
+    }
+
+    return document.getElementById('attachments')
+  }
+
+  get fileContainer () {
+    return document.getElementById('files')
+  }
+
+  get bibliographyContainer () {
+    return document.getElementById('bibliography')
   }
 
   /**
@@ -58,65 +77,70 @@ class ZettlrAttachments {
     */
   toggle () {
     // Toggles the display of the attachment pane
-    if (!this._open) {
-      this._container.css('display', '')
-      this._container.animate({ 'right': '0%' })
-    } else {
-      this._container.animate({ 'right': '-20%' }, () => {
-        this._container.css('display', 'none')
-      })
-    }
-
     this._open = !this._open
+    this.container.classList.toggle('open', this._open)
+  }
+
+  createAttachmentElement (attachment, icon) {
+    return renderTemplate(
+      `<a
+        class="attachment"
+        data-link="${attachment.path}"
+        data-hash="${attachment.hash}"
+        title="${attachment.path}"
+        href="${attachment.path}"
+      >
+        ${icon} ${attachment.name}
+      </a>`
+    )
+  }
+
+  isImage (extension) {
+    return FILETYPES_IMG.includes(extension)
   }
 
   /**
     * Refreshes the list with new attachments on dir change.
     */
   refresh () {
-    this._fileContainer.text('')
+    if (!this.fileContainer) {
+      // DOM is not ready
+      return
+    }
+    this.fileContainer.textContent = ''
     // Grab the newest attachments and refresh
     if (!this._renderer.getCurrentDir()) {
-      this._fileContainer.append($('<p>').text(trans('gui.no_attachments')))
+      this.fileContainer.append(renderTemplate(`<p>${trans('gui.no_attachments')}</p>`))
       return // Don't activate in this instance
     }
 
     if (this._renderer.getCurrentDir().attachments.length === 0) {
-      this._fileContainer.append($('<p>').text(trans('gui.no_attachments')))
+      this.fileContainer.append(renderTemplate(`<p>${trans('gui.no_attachments')}</p>`))
     } else {
       this._attachments = this._renderer.getCurrentDir().attachments
       let fileExtIcon = clarityIcons.get('file-ext')
       for (let a of this._attachments) {
-        let svg = ''
-        if (fileExtIcon) svg = fileExtIcon.replace('EXT', path.extname(a.path).slice(1, 4))
-
-        let link = $('<a>').html(svg + ' ' + a.name)
-          .attr('class', 'attachment')
-          .attr('data-link', a.path)
-          .attr('data-hash', a.hash)
-          .attr('title', a.path) // Make sure the user can always see the full title
-          .attr('href', a.path) // Necessary for native drag&drop functionality
-
-        // When dragging files from here onto the editor instance, users want
-        // to have the appropriate link placed automatically, that is: images
-        // should be wrapped in appropriate image tags, whereas documents
-        // should be linked to enable click & open. We have to do this on
-        // this end, because when trying to override data during drop it
-        // won't work.
-        let dragData = a.path
-        if (FILETYPES_IMG.includes(a.ext.toLowerCase())) {
-          // Override the drag data with a link to the image
-          let uri = decodeURIComponent(a.path)
-          dragData = `![${a.name}](${uri})`
-        } else {
-          // Standard file link
-          let uri = decodeURIComponent(a.path)
-          dragData = `[${a.name}](${uri})`
+        const link = this.createAttachmentElement(
+          a,
+          fileExtIcon
+            ? fileExtIcon.replace('EXT', path.extname(a.path).slice(1, 4))
+            : ''
+        )
+        link.firstChild.ondragstart = (event) => {
+          // When dragging files from here onto the editor instance, users want
+          // to have the appropriate link placed automatically, that is: images
+          // should be wrapped in appropriate image tags, whereas documents
+          // should be linked to enable click & open. We have to do this on
+          // this end, because when trying to override data during drop it
+          // won't work.
+          const uri = decodeURIComponent(a.path)
+          this.setDragData(
+            this.isImage(a.ext.toLowerCase())
+              ? `![${a.name}](${uri})`
+              : `[${a.name}](${uri})`,
+            event)
         }
-
-        // Circumvent the jQuery event wrapping and use native events.
-        link[0].ondragstart = (event) => { this.setDragData(dragData, event) }
-        this._fileContainer.append(link)
+        this.fileContainer.append(link)
       }
     }
   }
@@ -163,23 +187,28 @@ class ZettlrAttachments {
    * Sets the actual HTML contents of the bibliography container.
    */
   setBibliographyContents (bib) {
-    if (typeof bib === 'string') this._bibliographyContainer.html(`<p>${bib}</p>`)
-    else {
-      // Convert links, so that they remain but do not open in the same
-      // window. Security fallback: target="_blank" (then at least they "only"
-      // open a new window)
-      let aRE = /<a(.+?)>(.*?)<\/a>/g
-      let output = []
-      for (let entry of bib[1]) {
-        aRE.lastIndex = 0
-        output.push(
-          entry.replace(aRE, function (match, p1, p2, offset, string) {
-            return `<a${p1} onclick="(e)=>{e.preventDefault(); require('electron').shell.openExternal(this.getAttribute('href')); return false;}" target="_blank">${p2}</a>`
-          })
-        )
-      }
-      this._bibliographyContainer.html(bib[0].bibstart + output.join('\n') + bib[0].bibend)
+    if (!this.bibliographyContainer) {
+      // DOM is not ready; Clarity custom elements are not loaded.
+      return
     }
+    if (typeof bib === 'string') {
+      this.bibliographyContainer.innerHTML = `<p>${bib}</p>`
+      return
+    }
+    // Convert links, so that they remain but do not open in the same
+    // window. Security fallback: target="_blank" (then at least they "only"
+    // open a new window)
+    let aRE = /<a(.+?)>(.*?)<\/a>/g
+    let output = []
+    for (let entry of bib[1]) {
+      aRE.lastIndex = 0
+      output.push(
+        entry.replace(aRE, function (match, p1, p2, offset, string) {
+          return `<a${p1} onclick="(e)=>{e.preventDefault(); require('electron').shell.openExternal(this.getAttribute('href')); return false;}" target="_blank">${p2}</a>`
+        })
+      )
+    }
+    this.bibliographyContainer.innerHTML = bib[0].bibstart + output.join('\n') + bib[0].bibend
   }
 
   /**

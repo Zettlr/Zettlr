@@ -23,6 +23,7 @@ const gridParser = require('./table-parser-grid')
 const buildPipeTable = require('./table-build-pipe')
 const buildSimpleTable = require('./table-build-simple')
 const buildGridTable = require('./table-build-grid')
+const { renderTemplate } = require('./render-template')
 
 class TableHelper {
   /**
@@ -119,12 +120,16 @@ class TableHelper {
     for (let i = 0; i < ast.length; i++) {
       let row = $('<tr></tr>').css('width', '100%')
       this._elem.append(row)
-      for (let j = 0; j < ast[i].length; j++) {
-        // Preset the colSizes
-        if (!this._colSizes[j]) this._colSizes[j] = ast[i][j].length
-        if (ast[i][j].length > this._colSizes[j]) this._colSizes[j] = ast[i][j].length
-        row.append($('<td></td>').text(ast[i][j]).css('text-align', colAlignments[j]).attr('contenteditable', 'true'))
-      }
+      ast[i].forEach((cell, index) => {
+        this._colSizes[index] = Math.max( // Finding the widest cell
+          cell.length,
+          this._colSizes[index] || 0 // default to 0
+        )
+
+        row.append(
+          renderTemplate(`<td text-align="${colAlignments[index]}" contenteditable="true">${cell}</td>`)
+        )
+      })
     }
 
     // Save the colAlignment settings

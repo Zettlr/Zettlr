@@ -132,8 +132,8 @@
         img.style.cursor = 'default' // Nicer cursor
         img.alt = altText
         // Display a replacement image in case the correct one is not found
-        img.onerror = (e) => { img.src = img404 }
-        img.onclick = (e) => { textMarker.clear() }
+        img.onerror = () => { img.src = img404 }
+        img.onclick = () => { textMarker.clear() }
 
         // Update the image title on load to retrieve the real image size.
         img.onload = () => {
