@@ -15,7 +15,7 @@
    "zkn.idRE": "required|string|default:",
    "zkn.linkStart": "required|string|default:",
    "zkn.linkEnd": "required|string|default:",
-   "zkn.idGen": "required|string|min:3|default:",
+   "zkn.idGen": "required|string|min:2|default:",
    "zkn.autoCreateLinkedFiles": "required|boolean|default:false",
    "attachmentExtensions": "optional|array",
    "pandoc": "optional|string|min:6|default:",
