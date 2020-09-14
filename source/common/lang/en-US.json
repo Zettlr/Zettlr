@@ -377,7 +377,7 @@
             "connection_error": "Could not check for updates: Could not establish connection",
             "current_version": "Your version",
             "no_data": "Could not check for updates: Server hasn't sent any data",
-            "no_update": "You got the newest version of Zettlr",
+            "no_update": "You have the newest version of Zettlr",
             "notification": "There is a new version of Zettlr available to download. Please read the changelog below.",
             "redirect_error": "Could not check for updates: The server tried to redirect (Status code: %s)",
             "release_url": "Open download page",
