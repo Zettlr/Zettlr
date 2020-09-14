@@ -422,12 +422,14 @@
             {{i18n "dialog.preferences.zkn.intro"}}
             <ul>
               <li><strong>%Y</strong>: {{i18n "dialog.preferences.zkn.var_year"}}</li>
+              <li><strong>%y</strong>: {{i18n "dialog.preferences.zkn.var_year_two"}}</li>
               <li><strong>%M</strong>: {{i18n "dialog.preferences.zkn.var_month"}}</li>
               <li><strong>%D</strong>: {{i18n "dialog.preferences.zkn.var_day"}}</li>
               <li><strong>%W</strong>: {{i18n "dialog.preferences.zkn.var_week_number"}}</li>
               <li><strong>%h</strong>: {{i18n "dialog.preferences.zkn.var_hour"}}</li>
               <li><strong>%m</strong>: {{i18n "dialog.preferences.zkn.var_minute"}}</li>
               <li><strong>%s</strong>: {{i18n "dialog.preferences.zkn.var_second"}}</li>
+              <li><strong>%X</strong>: {{i18n "dialog.preferences.zkn.var_unix_epoch"}}</li>
               <li><strong>%uuid4</strong>: Universally Unique Identifier (UUID) v4</li>
             </ul>
           </p>
@@ -848,7 +850,7 @@
             {{i18n "dialog.preferences.filename_generator"}}
           </label>
           <input type="text" id="filename-generator" name="newFileNamePattern" placeholder="%id.md" value="{{newFileNamePattern}}">
-          <span class="info">Variables: %id, %Y, %M, %D, %W, %h, %m, %s, %uuid4</span>
+          <span class="info">Variables: %id, %Y, %y, %M, %D, %W, %h, %m, %s, %X, %uuid4</span>
 
           <div class="cb-group">
             <label class="cb-toggle">
