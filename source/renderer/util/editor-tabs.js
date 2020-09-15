@@ -131,10 +131,12 @@ module.exports = class EditorTabs {
     // Now make sure that the active tab is visible and scroll if necessary.
     let tabbarWidth = this._div.offsetWidth
     let activeElem = this._div.getElementsByClassName('active')[0]
-    if (activeElem.offsetLeft + activeElem.offsetWidth > tabbarWidth) {
-      this._div.scrollLeft += activeElem.offsetLeft + activeElem.offsetWidth - tabbarWidth
-    } else if (activeElem.offsetLeft < this._div.scrollLeft) {
-      this._div.scrollLeft = activeElem.offsetLeft
+    if (typeof activeElem !== 'undefined') {
+      if (activeElem.offsetLeft + activeElem.offsetWidth > tabbarWidth) {
+        this._div.scrollLeft += activeElem.offsetLeft + activeElem.offsetWidth - tabbarWidth
+      } else if (activeElem.offsetLeft < this._div.scrollLeft) {
+        this._div.scrollLeft = activeElem.offsetLeft
+      }
     }
 
     // After synchronising, enable the tippy

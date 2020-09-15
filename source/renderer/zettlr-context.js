@@ -24,7 +24,8 @@ const TEMPLATES = {
   'directory': require('./assets/context/directory.json'),
   'editor': require('./assets/context/editor.json'),
   'file': require('./assets/context/file.json'),
-  'text': require('./assets/context/text.json')
+  'text': require('./assets/context/text.json'),
+  'tabs': require('./assets/context/tabs.json')
 }
 
 /**
@@ -256,7 +257,7 @@ class ZettlrCon {
       // 2. The file name
       // 3. The document itself
       if (elem.hasClass('filename') || elem.hasClass('close')) elem = elem.parent()
-      template = TEMPLATES.file
+      template = TEMPLATES.tabs
       shouldSelectWordUnderCursor = false
       hash = elem.attr('data-hash')
       if (elem.attr('data-id')) attr.push({ 'data-id': elem.attr('data-id') })

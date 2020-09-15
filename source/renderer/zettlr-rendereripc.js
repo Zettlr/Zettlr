@@ -393,6 +393,10 @@ class ZettlrRendererIPC {
         this._app.closeFile(cnt.hash)
         break
 
+      case 'file-close-all':
+        this._app.closeAllFiles()
+        break
+
       case 'file-save':
         this._app.getEditor().saveFiles(true) // true means only save active file
         break
