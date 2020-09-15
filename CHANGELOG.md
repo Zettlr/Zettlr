@@ -9,6 +9,7 @@
 - HTML export should now centre both figures and figure captions.
 - Sorting files by name now takes into account possible settings such as using headings of level 1 or YAML frontmatter titles so that sorted files now correspond to their display again.
 - You can now select rendered references from the right sidebar.
+- The file tabs now have their own, dedicated menu, containing a new "Close all tabs" command to close all open file tabs (thanks to @anoopengineer for implementing).
 
 ## Under the Hood
 
