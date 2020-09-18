@@ -31,7 +31,7 @@
     "reveal:build": "node scripts/update-reveal.js",
     "test": "mocha",
     "test-gui": "node scripts/test-gui.js",
-    "lint": "eslint --ext js,vue,ts source"
+    "lint": "eslint 'source/**/*.{js,ts,vue}'"
   },
   "config": {
     "forge": "./forge.config.js"
@@ -211,8 +211,10 @@
     "fork-ts-checker-webpack-plugin": "^5.1.0",
     "handlebars": "^4.7.6",
     "handlebars-loader": "^1.7.1",
+    "husky": ">=4",
     "jsdom": "^16.4.0",
     "less-loader": "6.2.0",
+    "lint-staged": ">=10",
     "lorem-ipsum": "^2.0.3",
     "mocha": "^8.1.3",
     "node-loader": "^1.0.1",
@@ -226,5 +228,13 @@
     "uglify-js": "^3.10.4",
     "vue-loader": "^15.9.3",
     "vue-template-compiler": "^2.6.12"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,vue,ts}": "eslint --cache --fix"
   }
 }

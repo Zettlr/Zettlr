@@ -16,6 +16,7 @@ yarn.log
 
 # Don't commit ESLint error reports
 eslint_report.htm
+.eslintcache
 
 # Ignore electron-forge build output
 out/
