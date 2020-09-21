@@ -409,8 +409,19 @@ class ZettlrBody {
       'words': localiseNumber(info.words),
       'chars': localiseNumber(info.chars),
       'chars_wo_spaces': localiseNumber(info.chars_wo_spaces),
-      'words_sel': (info.words_sel) ? localiseNumber(info.words_sel) : null,
-      'chars_sel': (info.chars_sel) ? localiseNumber(info.chars_sel) : null
+      'selections': info.selections.map(sel => {
+        return {
+          'selectionLength': localiseNumber(sel.selectionLength),
+          'start': {
+            'line': sel.start.line + 1,
+            'ch': sel.start.ch + 1
+          },
+          'end': {
+            'line': sel.end.line + 1,
+            'ch': sel.end.ch + 1
+          }
+        }
+      })
     }
 
     const fileInfoTemplate = require('./../../resources/templates/popup/file-info.handlebars')

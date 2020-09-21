@@ -1016,13 +1016,30 @@ class ZettlrEditor {
       'words': countWords(currentValue, this._countChars),
       'chars': currentValue.length,
       'chars_wo_spaces': currentValue.replace(/[\s ]+/g, '').length,
-      'cursor': JSON.parse(JSON.stringify(this._cm.getCursor()))
+      'cursor': JSON.parse(JSON.stringify(this._cm.getCursor())),
+      'selections': []
     }
 
     if (this._cm.somethingSelected()) {
-      let selections = this._cm.getSelections()
-      ret.words_sel = countWords(selections.join(' '), this._countChars)
-      ret.chars_sel = selections.join('').length
+      // Only get the primary selection w/ its bounds
+      // let primarySelection = this._cm.getSelections()[0]
+      // let selectionBounds = this._cm.listSelections()[0]
+      // ret.words_sel = countWords(primarySelection, this._countChars)
+      // ret.chars_sel = primarySelection.length
+      // ret.selection = {
+      //   'start': Object.assign({}, selectionBounds.anchor),
+      //   'end': Object.assign({}, selectionBounds.head)
+      // }
+      // Write all selections into the file info object
+      let selectionText = this._cm.getSelections()
+      let selectionBounds = this._cm.listSelections()
+      for (let i = 0; i < selectionText.length; i++) {
+        ret.selections.push({
+          'selectionLength': countWords(selectionText[i], this._countChars),
+          'start': Object.assign({}, selectionBounds[i].anchor),
+          'end': Object.assign({}, selectionBounds[i].head)
+        })
+      }
     }
 
     return ret

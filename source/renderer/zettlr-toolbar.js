@@ -163,7 +163,7 @@ class ZettlrToolbar {
 
   /**
    * Applies autocorrect to the global search area. This code has been
-   * outsources from the keyup event listener, because it also needs to be
+   * outsourced from the keyup event listener, because it also needs to be
    * executed after the endcomposing-event fires.
    */
   _applyAutocomplete () {
@@ -228,10 +228,32 @@ class ZettlrToolbar {
     */
   updateFileInfo (fileInfo = this._lastFileInfo) {
     this._lastFileInfo = fileInfo
+    let cnt = ''
 
-    let cnt = trans('gui.words', localiseNumber(this._lastFileInfo.words))
-    cnt += '<br>'
-    cnt += (this._lastFileInfo.cursor.line + 1) + ':' + (this._lastFileInfo.cursor.ch + 1)
+    if (fileInfo.selections.length > 0) {
+      // We have selections to display.
+      let length = 0
+      fileInfo.selections.forEach(sel => {
+        length += sel.selectionLength
+      })
+
+      cnt = trans('gui.words_selected', localiseNumber(length))
+      cnt += '<br>'
+      if (fileInfo.selections.length === 1) {
+        cnt += (this._lastFileInfo.selections[0].start.line + 1) + ':'
+        cnt += (this._lastFileInfo.selections[0].start.ch + 1) + ' &ndash; '
+        cnt += (this._lastFileInfo.selections[0].end.line + 1) + ':'
+        cnt += (this._lastFileInfo.selections[0].end.ch + 1)
+      } else {
+        // Multiple selections --> indicate
+        cnt += trans('gui.number_selections', this._lastFileInfo.selections.length)
+      }
+    } else {
+      // No selection. NOTE: words always contains the count of chars OR words.
+      cnt = trans('gui.words', localiseNumber(this._lastFileInfo.words))
+      cnt += '<br>'
+      cnt += (this._lastFileInfo.cursor.line + 1) + ':' + (this._lastFileInfo.cursor.ch + 1)
+    }
 
     this._fileInfo.html(cnt)
   }

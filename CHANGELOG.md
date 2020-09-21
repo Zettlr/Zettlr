@@ -10,6 +10,7 @@
 - Sorting files by name now takes into account possible settings such as using headings of level 1 or YAML frontmatter titles so that sorted files now correspond to their display again.
 - You can now select rendered references from the right sidebar.
 - The file tabs now have their own, dedicated menu, containing a new "Close all tabs" command to close all open file tabs (thanks to @anoopengineer for implementing).
+- The file info now displays the selection information, if there is any. The popup that opens when you click the counter then lists all selections within your document.
 
 ## Under the Hood
 
@@ -42,6 +43,7 @@
   - uglify-js `3.10.4`
   - vue `2.6.12`
   - vue-template-compiler `2.6.12`
+- Added a new Handlebars templating helper function, `i18n_value` that allows you to translate something passing a value to the translation helper (e.g. `{{i18n_value 'trans.identifier' someValue}}`).
 
 # 1.7.5
 

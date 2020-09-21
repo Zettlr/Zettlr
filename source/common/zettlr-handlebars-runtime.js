@@ -31,6 +31,18 @@ Handlebars.registerHelper('i18n', function (str, str2 = undefined) {
 })
 
 /**
+ * Translates strings passing a value to the helper
+ *
+ * @param   {String}  str         The identifier
+ * @param   {Mixed}  value        The value to be passed
+ *
+ * @return  {Object}              SafeString containing the translated text
+ */
+Handlebars.registerHelper('i18n_value', function (str, value) {
+  return new Handlebars.SafeString(trans(str, value))
+})
+
+/**
  * Checks if an element is contained in the given array.
  * @param  {Mixed} elem    The element to be searched for.
  * @param  {Array} arr     The array in which the element should be found.
