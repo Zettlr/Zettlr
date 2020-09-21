@@ -18,6 +18,17 @@
 import './../common/assets/less/main.less'
 
 import ZettlrRenderer from './zettlr-renderer'
+
+declare global {
+  interface Window {
+    // DEBUG: The tag cloud dialog explicitly needs to reference this. TODO
+    renderer: any
+  }
+}
+
 // We need a global for our renderer element
 var renderer = new ZettlrRenderer()
 renderer.init()
+
+// TODO: Remove asap
+window.renderer = renderer

@@ -32,7 +32,7 @@ class TagCloud extends ZettlrDialog {
     $('span.tag').click((evt) => {
       let elem = $(evt.target)
       // TODO: Don't access the renderer element via window
-      window.renderer.autoSearch(elem.attr('data-tag'))
+      window.renderer.autoSearch(`"${elem.attr('data-tag')}"`)
       this.close()
     })
 
