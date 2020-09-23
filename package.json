@@ -20,12 +20,15 @@
     "package:mac": "electron-forge package --platform=darwin",
     "package:win": "electron-forge package --platform=win32 --arch=x64",
     "package:win-arm": "electron-forge package --platform=win32 --arch=arm64",
-    "package:linux": "electron-forge package --platform=linux",
+    "package:linux-x64": "electron-forge package --platform=linux --arch=x64",
+    "package:linux-x32": "electron-forge package --platform=linux --arch=ia32",
     "release": "yarn package && electron-builder",
     "release:mac": "yarn package:mac && electron-builder --mac --publish \"never\" --prepackaged out/Zettlr-darwin-x64/Zettlr.app",
     "release:win": "yarn package:win && electron-builder --win --x64 --publish \"never\" --prepackaged out/Zettlr-win32-x64",
     "release:win-arm": "yarn package:win-arm && electron-builder --win --ia32 --arm64 --publish \"never\" --prepackaged out/Zettlr-win32-arm64",
-    "release:linux": "yarn package:linux && electron-builder --linux --publish \"never\" --prepackaged out/Zettlr-linux-x64",
+    "release:linux-x32": "yarn package:linux-x32 && electron-builder --linux AppImage --ia32 --publish \"never\" --prepackaged out/Zettlr-linux-ia32",
+    "release:linux-x64": "yarn package:linux-x64 && electron-builder --linux AppImage deb rpm --x64 --publish \"never\" --prepackaged out/Zettlr-linux-x64",
+    "release:linux": "yarn release:linux-x32 && yarn release:linux-x64",
     "lang:refresh": "node scripts/refresh-language.js",
     "csl:refresh": "node scripts/update-csl.js",
     "reveal:build": "node scripts/update-reveal.js",
@@ -87,13 +90,7 @@
     },
     "linux": {
       "target": [
-        {
-          "target": "AppImage",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        },
+        "AppImage",
         "deb",
         "rpm"
       ],
