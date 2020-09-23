@@ -71,8 +71,8 @@ If you have downloaded Zettlr, [head over to our website](https://docs.zettlr.co
 
 Zettlr is an [Electron](https://www.electronjs.org/)-based app, so to start developing, you'll need to have:
 
-1. A [NodeJS](https://nodejs.org/)-stack on your computer installed. Make sure it is Node 12+ (`lts/erbium`). To test what version you have, try `node -v`.
-2. [Yarn](https://yarnpkg.com/en/) installed, the _required_ package manager for the project. You can install this globally using `npm install -g yarn`.
+1. A [NodeJS](https://nodejs.org/)-stack installed on your computer. Make sure it's Node 12+ (`lts/erbium`). To test what version you have, run `node -v`.
+2. [Yarn](https://yarnpkg.com/en/) installed. Yarn is the required package manager for the project, as we do not commit `package-lock.json`-files and many commands require yarn. You can install this globally using `npm install -g yarn` or Homebrew, if you are on macOS.
 
 Then, simply clone the repository and install the dependencies on your local computer:
 
