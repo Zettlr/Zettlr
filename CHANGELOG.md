@@ -15,6 +15,7 @@
 - The image paste dialog now shows you the resolved path of the directory into which the image you are about to paste will be saved to.
 - Fixed a missing translatable string from the paste image dialog.
 - Fixed the width of the word counter in order to make the toolbar more "stiff."
+- Enabled Dart syntax highlighting (thanks to @Kangie for implementing).
 
 ## Under the Hood
 
