@@ -70,11 +70,16 @@
     }
 
     .file-info {
-        flex-grow:5;
-        text-align:center;
-        line-height:@toolbar-height;
+        flex-grow: 5;
+        text-align: center;
+        line-height: @toolbar-height;
         white-space: nowrap;
         line-height: 1em;
+        p {
+            // The word count should not expand/contract
+            width: 150px;
+            margin: 0 auto;
+        }
     }
 
     .searchbar {

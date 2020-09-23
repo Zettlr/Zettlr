@@ -255,7 +255,7 @@ class ZettlrToolbar {
       cnt += (this._lastFileInfo.cursor.line + 1) + ':' + (this._lastFileInfo.cursor.ch + 1)
     }
 
-    this._fileInfo.html(cnt)
+    this._fileInfo.html(`<p>${cnt}</p>`)
   }
 
   /**

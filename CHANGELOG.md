@@ -14,6 +14,7 @@
 - When you initiate a keyword search from the tag cloud by clicking on a tag, it'll be automatically enclosed in quotes, enabling searches for keywords with spaces in them.
 - The image paste dialog now shows you the resolved path of the directory into which the image you are about to paste will be saved to.
 - Fixed a missing translatable string from the paste image dialog.
+- Fixed the width of the word counter in order to make the toolbar more "stiff."
 
 ## Under the Hood
 
