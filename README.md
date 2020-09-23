@@ -70,8 +70,9 @@ If you have downloaded Zettlr, [head over to our website](https://docs.zettlr.co
 ## Contributing
 
 Zettlr is an [Electron](https://www.electronjs.org/)-based app, so to start developing, you'll need to have:
+
 1. A [NodeJS](https://nodejs.org/)-stack on your computer installed. Make sure it is Node 12+ (`lts/erbium`). To test what version you have, try `node -v`.
-2. [Yarn](https://yarnpkg.com/en/) installed, which is the recommended package manager for the project. You can install this globally using `npm install -g yarn`.
+2. [Yarn](https://yarnpkg.com/en/) installed, the _required_ package manager for the project. You can install this globally using `npm install -g yarn`.
 
 Then, simply clone the repository and install the dependencies on your local computer:
 
@@ -89,7 +90,7 @@ The `install`-scripts will automatically precompile all assets for the first tim
 
 ### Development Commands
 
-This section lists all available commands that you can use during application development. These are defined within the `package.json` and can be run from the command line by prefixing them either with `npm run` or `yarn`, depending on which package manager you use. Run them from within the base directory of the repository.
+This section lists all available commands that you can use during application development. These are defined within the `package.json` and can be run from the command line by prefixing them with `yarn`. Run them from within the base directory of the repository.
 
 #### `build:quick`
 
