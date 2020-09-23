@@ -173,6 +173,10 @@ const highlightingModes = {
   'text/x-stsrc': {
     'mode': 'smalltalk',
     'selectors': [ 'smalltalk', 'st' ]
+  },
+  'application/dart': {
+    'mode': 'dart',
+    'selectors': [ 'dart', 'dt' ]
   }
 };
 
