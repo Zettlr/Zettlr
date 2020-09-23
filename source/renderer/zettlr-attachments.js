@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -38,16 +37,19 @@ const FILETYPES_IMG = [
 class ZettlrAttachments {
   constructor (parent) {
     this._renderer = parent
-    this._open = false
-    this._attachments = []
-
-    this._act() // Activate both the directory toggle and the link
   }
 
+  /**
+   * Returns the rendered attachment container.
+   *
+   * @return  {Element}  The container element.
+   */
   get container () {
     if (!this._container) {
       this._container = renderTemplate(`<div id="attachments">
-  <h1>${trans('gui.attachments')} <div id="open-dir-external"><clr-icon shape="folder" class="is-solid" title="${trans('gui.attachments_open_dir')}"></clr-icon></div></h1>
+  <h1>${trans('gui.attachments')}
+    <clr-icon shape="folder" class="is-solid" id="open-dir-external" title="${trans('gui.attachments_open_dir')}"></clr-icon>
+  </h1>
   <div id="files">
     <p>${trans('gui.no_attachments')}</p>
   </div>
@@ -57,15 +59,41 @@ class ZettlrAttachments {
   </div>
 </div>`)
       document.querySelector('body').append(this._container)
+
+      // Enable opening of the directory in Finder/Explorer/linux file browser
+      this.openDirButton.addEventListener('click', (e) => {
+        if (this._renderer.getCurrentDir() !== null) {
+          global.ipc.send('open-external', { href: this._renderer.getCurrentDir().path })
+        }
+      })
     }
 
     return document.getElementById('attachments')
   }
 
+  /**
+   * Returns the directory opening button
+   *
+   * @return  {Element} The document element.
+   */
+  get openDirButton () {
+    return document.getElementById('open-dir-external')
+  }
+
+  /**
+   * Returns the file container element
+   *
+   * @return  {Element}  The file container element.
+   */
   get fileContainer () {
     return document.getElementById('files')
   }
 
+  /**
+   * Returns the bibliography container element
+   *
+   * @return  {Element} The DOM element.
+   */
   get bibliographyContainer () {
     return document.getElementById('bibliography')
   }
@@ -75,10 +103,17 @@ class ZettlrAttachments {
     */
   toggle () {
     // Toggles the display of the attachment pane
-    this._open = !this._open
-    this.container.classList.toggle('open', this._open)
+    this.container.classList.toggle('open')
   }
 
+  /**
+   * Creates a renderable DOM element for the given attachment
+   *
+   * @param   {Object}  attachment  The attachment to be rendered
+   * @param   {String}  icon        The SVG icon string
+   *
+   * @return  {DOMElement}          The rendered DOM element
+   */
   createAttachmentElement (attachment, icon) {
     return renderTemplate(
       `<a
@@ -93,6 +128,13 @@ class ZettlrAttachments {
     )
   }
 
+  /**
+   * Returns true if the provided path extension is a valid image file type
+   *
+   * @param   {String}  extension  The extension to be tested
+   *
+   * @return  {Boolean}            The result of the check.
+   */
   isImage (extension) {
     return FILETYPES_IMG.includes(extension)
   }
@@ -105,41 +147,39 @@ class ZettlrAttachments {
       // DOM is not ready
       return
     }
+
     this.fileContainer.textContent = ''
+
+    let currentDir = this._renderer.getCurrentDir()
     // Grab the newest attachments and refresh
-    if (!this._renderer.getCurrentDir()) {
+    if (currentDir === null || currentDir.attachments.length === 0) {
       this.fileContainer.append(renderTemplate(`<p>${trans('gui.no_attachments')}</p>`))
       return // Don't activate in this instance
     }
 
-    if (this._renderer.getCurrentDir().attachments.length === 0) {
-      this.fileContainer.append(renderTemplate(`<p>${trans('gui.no_attachments')}</p>`))
-    } else {
-      this._attachments = this._renderer.getCurrentDir().attachments
-      let fileExtIcon = clarityIcons.get('file-ext')
-      for (let a of this._attachments) {
-        const link = this.createAttachmentElement(
-          a,
-          fileExtIcon
-            ? fileExtIcon.replace('EXT', path.extname(a.path).slice(1, 4))
-            : ''
-        )
-        link.firstChild.ondragstart = (event) => {
-          // When dragging files from here onto the editor instance, users want
-          // to have the appropriate link placed automatically, that is: images
-          // should be wrapped in appropriate image tags, whereas documents
-          // should be linked to enable click & open. We have to do this on
-          // this end, because when trying to override data during drop it
-          // won't work.
-          const uri = decodeURIComponent(a.path)
-          this.setDragData(
-            this.isImage(a.ext.toLowerCase())
-              ? `![${a.name}](${uri})`
-              : `[${a.name}](${uri})`,
-            event)
-        }
-        this.fileContainer.append(link)
+    let fileExtIcon = clarityIcons.get('file-ext')
+    for (let a of currentDir.attachments) {
+      const link = this.createAttachmentElement(
+        a,
+        fileExtIcon
+          ? fileExtIcon.replace('EXT', path.extname(a.path).slice(1, 4))
+          : ''
+      )
+      link.firstChild.ondragstart = (event) => {
+        // When dragging files from here onto the editor instance, users want
+        // to have the appropriate link placed automatically, that is: images
+        // should be wrapped in appropriate image tags, whereas documents
+        // should be linked to enable click & open. We have to do this on
+        // this end, because when trying to override data during drop it
+        // won't work.
+        const uri = decodeURIComponent(a.path)
+        this.setDragData(
+          this.isImage(a.ext.toLowerCase())
+            ? `![${a.name}](${uri})`
+            : `[${a.name}](${uri})`,
+          event)
       }
+      this.fileContainer.append(link)
     }
   }
 
@@ -185,7 +225,7 @@ class ZettlrAttachments {
    * Sets the actual HTML contents of the bibliography container.
    */
   setBibliographyContents (bib) {
-    if (!this.bibliographyContainer) {
+    if (this.bibliographyContainer === null) {
       // DOM is not ready; Clarity custom elements are not loaded.
       return
     }
@@ -221,18 +261,6 @@ class ZettlrAttachments {
    */
   setDragData (data, event) {
     event.dataTransfer.setData('text', data)
-  }
-
-  /**
-    * Activates the event listeners on the attachment pane.
-    */
-  _act () {
-    $('#attachments #open-dir-external').click((e) => {
-      console.log('Clicked!')
-      if (this._renderer.getCurrentDir()) {
-        global.ipc.send('open-external', { href: this._renderer.getCurrentDir().path })
-      }
-    })
   }
 }
 
