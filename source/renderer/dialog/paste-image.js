@@ -29,6 +29,12 @@ class PasteImage extends ZettlrDialog {
     data.size = clipboard.readImage().getSize() // First get the original size
     data.aspect = clipboard.readImage().getAspectRatio() // Then the aspect
 
+    // Taken from the path resolving logic in save-image-from-clipboard.js
+    data.savePath = path.resolve(
+      path.dirname(data.activeFile.path),
+      global.config.get('editor.defaultSaveImagePath') || ''
+    )
+
     // Now reduce the image size and write the image into a data url to speed
     // up image preview rendering.
     data.img = clipboard.readImage().resize({ 'height': 600 }).toDataURL()
@@ -37,12 +43,12 @@ class PasteImage extends ZettlrDialog {
       // If you copy an image from the web, the browser sometimes inserts
       // the original URL to it as text into the clipboard. In this case
       // we've already got a good image name!
-      data.imageName = path.basename(clipboard.readText(), path.extname(clipboard.readText()))
+      data.imageName = path.basename(clipboard.readText(), path.extname(clipboard.readText())) + '.png'
     } else {
       // In case there is no potential basename we could extract, simply
       // hash the dataURL. This way we can magically also prevent the same
       // image to be saved twice in the same directory. Such efficiency!
-      data.imageName = md5('img' + data.img)
+      data.imageName = md5('img' + data.img) + '.png'
     }
     return data
   }

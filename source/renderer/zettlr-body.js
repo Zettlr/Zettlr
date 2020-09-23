@@ -598,7 +598,7 @@ class ZettlrBody {
   displayPasteImage () {
     if (this._currentDialog !== null) return // Only one dialog at a time
     this._currentDialog = new PasteImage()
-    this._currentDialog.init().open()
+    this._currentDialog.init({ 'activeFile': this._renderer.getActiveFile() }).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
 

@@ -22,6 +22,7 @@ import * as ImportFiles from './import'
 import * as ImportLangFile from './import-lang-file'
 import * as IncreasePomodoro from './increase-pomodoro'
 import * as OpenAttachment from './open-attachment'
+import * as OpenExternally from './open-externally'
 import * as Print from './print'
 import * as RequestMove from './request-move'
 import * as RootClose from './root-close'
@@ -56,6 +57,7 @@ export const commands = [
   ImportLangFile,
   IncreasePomodoro,
   OpenAttachment,
+  OpenExternally,
   Print,
   RequestMove,
   RootClose,

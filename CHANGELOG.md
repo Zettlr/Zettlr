@@ -12,7 +12,10 @@
 - The file tabs now have their own, dedicated menu, containing a new "Close all tabs" command to close all open file tabs (thanks to @anoopengineer for implementing).
 - The file info now displays the selection information, if there is any. The popup that opens when you click the counter then lists all selections within your document.
 - When you initiate a keyword search from the tag cloud by clicking on a tag, it'll be automatically enclosed in quotes, enabling searches for keywords with spaces in them.
-- Enabled Dart syntax highlighting.
+- The image paste dialog now shows you the resolved path of the directory into which the image you are about to paste will be saved to.
+- Fixed a missing translatable string from the paste image dialog.
+- Fixed the width of the word counter in order to make the toolbar more "stiff."
+- Enabled Dart syntax highlighting (thanks to @Kangie for implementing).
 
 ## Under the Hood
 

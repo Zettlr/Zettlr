@@ -19,9 +19,9 @@ async function loadCustomIcons () {
   // We use the svg-inline-loader, because clarity expects a plain svg string and not a javascript module
   /* eslint-disable import/no-webpack-loader-syntax */
   clarityIcons.add({
-    'code-alt.svg': require('!!svg-inline-loader!./../assets/icons/clarity-custom/code-alt.svg'),
-    'file-ext.svg': require('!!svg-inline-loader!./../assets/icons/clarity-custom/file-ext.svg'),
-    'indented-view-list.svg': require('!!svg-inline-loader!./../assets/icons/clarity-custom/indented-view-list.svg')
+    'code-alt': require('!!svg-inline-loader!./../assets/icons/clarity-custom/code-alt.svg'),
+    'file-ext': require('!!svg-inline-loader!./../assets/icons/clarity-custom/file-ext.svg'),
+    'indented-view-list': require('!!svg-inline-loader!./../assets/icons/clarity-custom/indented-view-list.svg')
   })
 }
 
