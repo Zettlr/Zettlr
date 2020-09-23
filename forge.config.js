@@ -2,7 +2,21 @@ module.exports = {
   'packagerConfig': {
     'asar': true,
     'icon': './resources/icons/icon', // Automatically adds file extension based on OS
-    'name': 'Zettlr'
+    'name': 'Zettlr',
+    // The certificate is written to the default keychain during CI build.
+    // TODO
+    'osxSign': {
+      'identity': 'Developer ID Application: Hendrik Erz (QS52BN8W68)',
+      'hardened-runtime': true,
+      'gatekeeper-assess': false,
+      'entitlements': 'scripts/assets/entitlements.plist',
+      'entitlements-inherit': 'scripts/assets/entitlements.plist',
+      'signature-flags': 'library'
+    },
+    'osxNotarize': {
+      'appleId': process.env['APPLE_ID'],
+      'appleIdPassword': process.env['APPLE_ID_PASS'],
+    }
   },
   'plugins': [
     [
