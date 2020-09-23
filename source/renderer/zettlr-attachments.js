@@ -143,7 +143,7 @@ class ZettlrAttachments {
     * Refreshes the list with new attachments on dir change.
     */
   refresh () {
-    if (!this.fileContainer) {
+    if (this.fileContainer === null) {
       // DOM is not ready
       return
     }
