@@ -138,7 +138,7 @@ class StatsDialog extends ZettlrDialog {
     this._updateChart()
 
     // Now we need to activate the previous/next buttons
-    $('#prev-sheet').click((e) => {
+    $('#prev-sheet').on('click', (e) => {
       if (this._currentSheet > 0) {
         this._currentSheet--
         this._updateChart()
@@ -146,7 +146,7 @@ class StatsDialog extends ZettlrDialog {
     })
 
     // Next button
-    $('#next-sheet').click((e) => {
+    $('#next-sheet').on('click', (e) => {
       if (this._currentSheet < this._backgroundData.length - 1) {
         this._currentSheet++
         this._updateChart()
@@ -162,7 +162,7 @@ class StatsDialog extends ZettlrDialog {
     })
 
     // If the user wants to compare with the previous time frame.
-    $('#data-compare').change((e) => {
+    $('#data-compare').on('change', (e) => {
       this._compare = !this._compare
       this._updateChart()
     })

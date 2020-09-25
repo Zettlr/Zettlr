@@ -132,13 +132,13 @@ class ZettlrBody {
     global.notifyError = (msg) => { this.notifyError(msg) }
 
     // Afterwards, activate the event listeners of the window controls
-    $('.windows-window-controls .minimise').click((e) => {
+    $('.windows-window-controls .minimise').on('click', (e) => {
       global.ipc.send('win-minimise')
     })
-    $('.windows-window-controls .resize').click((e) => {
+    $('.windows-window-controls .resize').on('click', (e) => {
       global.ipc.send('win-maximise')
     })
-    $('.windows-window-controls .close').click((e) => {
+    $('.windows-window-controls .close').on('click', (e) => {
       global.ipc.send('win-close')
     })
   }
@@ -459,7 +459,7 @@ class ZettlrBody {
     // Show the appropriate popup
     global.popupProvider.show('export', document.querySelector('.button.share'))
 
-    $('.btn-share').click((e) => {
+    $('.btn-share').on('click', (e) => {
       // The revealjs-button doesn't trigger an export, but the visibility
       // of the themes selection
       if ($(e.target).hasClass('revealjs')) {
@@ -637,7 +637,7 @@ class ZettlrBody {
       replaceWithElement.classList.toggle('regexp', isRegExp)
 
       if (e.which === 13) { // Enter
-        $('#searchNext').click()
+        $('#searchNext').trigger('click')
       }
     })
 
@@ -646,27 +646,27 @@ class ZettlrBody {
       if (e.which === 13) { // Return
         e.preventDefault()
         if (e.altKey) {
-          $('#replaceAll').click()
+          $('#replaceAll').trigger('click')
         } else {
-          $('#replaceNext').click()
+          $('#replaceNext').trigger('click')
         }
       }
     })
 
-    $('#searchNext').click((e) => {
+    $('#searchNext').on('click', (e) => {
       let res = global.editorSearch.next(searchFor())
       // Indicate non-successful matches where nothing was found
       searchForElement.classList.toggle('not-found', !res)
     })
 
-    $('#replaceNext').click((e) => {
+    $('#replaceNext').on('click', (e) => {
       // If the user hasn't searched before, initate a search beforehand.
-      if (!global.editorSearch.hasSearch()) $('#searchNext').click()
+      if (!global.editorSearch.hasSearch()) $('#searchNext').trigger('click')
       let res = global.editorSearch.replaceNext(replaceWith())
       searchForElement.classList.toggle('not-found', !res)
     })
 
-    $('#replaceAll').click((e) => {
+    $('#replaceAll').on('click', (e) => {
       global.editorSearch.replaceAll(searchFor(), replaceWith())
     })
   }
@@ -709,7 +709,7 @@ class ZettlrBody {
       headerFormattingElement.className = e.target.className
     })
 
-    $('.formatting a').click((e) => {
+    $('.formatting a').on('click', (e) => {
       if (e.target.className === 'markdownInsertTable') {
         e.stopPropagation()
         e.preventDefault()
@@ -726,10 +726,10 @@ class ZettlrBody {
     // Show the popup
     global.popupProvider.show('table', document.querySelector('.button.formatting'))
 
-    $('.table-generator').mouseleave(e => { $('.table-generator .cell').removeClass('active') })
+    $('.table-generator').on('mouseleave', e => { $('.table-generator .cell').removeClass('active') })
 
     // For the nice little colouring effect
-    $('.table-generator .cell').hover(e => {
+    $('.table-generator .cell').on('hover', e => {
       let rows = e.target.dataset.rows
       let cols = e.target.dataset.cols
       $('.table-generator .cell').removeClass('active')
@@ -740,7 +740,7 @@ class ZettlrBody {
       }
     })
 
-    $('.table-generator .cell').click(e => {
+    $('.table-generator .cell').on('click', e => {
       let table = generateTable(e.target.dataset.rows, e.target.dataset.cols)
       this._renderer.getEditor().insertText(table)
       global.popupProvider.close()
@@ -762,7 +762,7 @@ class ZettlrBody {
     global.popupProvider.show('table-of-contents', document.querySelector('.button.show-toc'), { 'entries': toc })
 
     // On click jump to line
-    $('.toc-link').click((event) => {
+    $('.toc-link').on('click', (event) => {
       let elem = $(event.target)
       this._renderer.getEditor().jtl(elem.attr('data-line'))
     })

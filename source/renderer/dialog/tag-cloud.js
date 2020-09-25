@@ -29,7 +29,7 @@ class TagCloud extends ZettlrDialog {
 
   postAct () {
     // Activate searches on click on the spans
-    $('span.tag').click((evt) => {
+    $('span.tag').on('click', (evt) => {
       let elem = $(evt.target)
       // TODO: Don't access the renderer element via window
       window.renderer.autoSearch(`"${elem.attr('data-tag')}"`)

@@ -33,7 +33,7 @@ class TagsPreferences extends ZettlrDialog {
       this.proceed(form.serializeArray())
     })
 
-    $('#addTagLine').click((e) => {
+    $('#addTagLine').on('click', (e) => {
       $('#prefs-taglist').append(
         `<div>
             <input type="text" name="prefs-tags-name" placeholder="${trans('dialog.tags.name_desc')}">

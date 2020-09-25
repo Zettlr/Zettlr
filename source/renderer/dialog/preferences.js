@@ -229,7 +229,7 @@ class PreferencesDialog extends ZettlrDialog {
     })
 
     // BEGIN functionality for the AutoCorrect options
-    $('#add-autocorrect-key').click(function (e) {
+    $('#add-autocorrect-key').on('click', function (e) {
       e.stopPropagation()
       e.preventDefault()
       let keyCol = $('<td>').html('<div class="input-button-group"><input type="text" name="autoCorrectKeys[]"></div>')
@@ -243,7 +243,7 @@ class PreferencesDialog extends ZettlrDialog {
       $(e.target).parent().parent().parent().detach() // Button -> div -> td -> tr
     })
 
-    $('.mq-select').click(function (e) {
+    $('.mq-select').on('click', function (e) {
       e.preventDefault()
       let primary = e.target.dataset.primary
       let secondary = e.target.dataset.secondary

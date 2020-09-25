@@ -10,7 +10,8 @@
     ],
     "extends": [
         "standard-with-typescript",
-        "plugin:vue/vue3-recommended"
+        "plugin:vue/vue3-recommended",
+        "plugin:no-jquery/deprecated-3.5"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -79,19 +80,14 @@
         "no-jquery/no-ajax": 2,
         "no-jquery/no-ajax-events": 2,
         "no-jquery/no-animate": 2,
-        "no-jquery/no-bind": 2,
         "no-jquery/no-fade": 2,
         "no-jquery/no-load": 2,
         "no-jquery/no-param": 2,
         "no-jquery/no-serialize": 2,
-        "no-jquery/no-size": 2,
-        "no-jquery/no-sizzle": 2,
         "no-jquery/no-slide": 2,
         "no-jquery/no-submit": 2,
         "no-jquery/no-text": 2,
         "no-jquery/no-toggle": 2,
-        "no-jquery/no-trigger": 2,
-        "no-jquery/no-trim": 2,
         "no-jquery/no-val": 2,
         "no-jquery/no-when": 2,
         "no-jquery/no-wrap": 2,

@@ -46,17 +46,17 @@ class PDFPreferences extends ZettlrDialog {
     })
 
     // These scripts only are used to update the preview paragraph
-    $('#lineheight').change((e) => {
+    $('#lineheight').on('change', (e) => {
       $('p.pdf-preview').css('line-height', e.target.value + '%')
     })
-    $('#fontsize').change((e) => {
+    $('#fontsize').on('change', (e) => {
       // 1pt is approx. 1.333333 px
       $('p.pdf-preview').css('font-size', (e.target.value * 1.3) + 'px')
     })
-    $('#mainfont').change((e) => {
+    $('#mainfont').on('change', (e) => {
       $('p.pdf-preview').css('font-family', e.target.value)
     })
-    $('#sansfont').change((e) => {
+    $('#sansfont').on('change', (e) => {
       $('h1.pdf-preview').css('font-family', e.target.value)
     })
 

@@ -47,7 +47,7 @@ class CustomCSS extends ZettlrDialog {
     this._cm.refresh()
 
     // Activate the sender
-    $('div.dialog #save').click((e) => {
+    $('div.dialog #save').on('click', (e) => {
       global.ipc.send('set-custom-css', this._cm.getValue(), (ret) => {
         // TODO error handling
         if (ret) {
