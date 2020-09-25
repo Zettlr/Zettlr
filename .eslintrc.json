@@ -5,7 +5,7 @@
         "node": true
     },
     "plugins": [
-        "jquery",
+        "no-jquery",
         "@typescript-eslint"
     ],
     "extends": [
@@ -76,25 +76,25 @@
         }],
         
         // Disallow jquery
-        "jquery/no-ajax": 2,
-        "jquery/no-ajax-events": 2,
-        "jquery/no-animate": 2,
-        "jquery/no-bind": 2,
-        "jquery/no-fade": 2,
-        "jquery/no-load": 2,
-        "jquery/no-param": 2,
-        "jquery/no-serialize": 2,
-        "jquery/no-size": 2,
-        "jquery/no-sizzle": 2,
-        "jquery/no-slide": 2,
-        "jquery/no-submit": 2,
-        "jquery/no-text": 2,
-        "jquery/no-toggle": 2,
-        "jquery/no-trigger": 2,
-        "jquery/no-trim": 2,
-        "jquery/no-val": 2,
-        "jquery/no-when": 2,
-        "jquery/no-wrap": 2,
+        "no-jquery/no-ajax": 2,
+        "no-jquery/no-ajax-events": 2,
+        "no-jquery/no-animate": 2,
+        "no-jquery/no-bind": 2,
+        "no-jquery/no-fade": 2,
+        "no-jquery/no-load": 2,
+        "no-jquery/no-param": 2,
+        "no-jquery/no-serialize": 2,
+        "no-jquery/no-size": 2,
+        "no-jquery/no-sizzle": 2,
+        "no-jquery/no-slide": 2,
+        "no-jquery/no-submit": 2,
+        "no-jquery/no-text": 2,
+        "no-jquery/no-toggle": 2,
+        "no-jquery/no-trigger": 2,
+        "no-jquery/no-trim": 2,
+        "no-jquery/no-val": 2,
+        "no-jquery/no-when": 2,
+        "no-jquery/no-wrap": 2,
 
         // Disable a few typescript rules as we are not yet there to easily implement them
         "@typescript-eslint/no-floating-promises": [ "warn" ],
