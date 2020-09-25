@@ -1,26 +1,23 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-
 ---
 
-<!-- Below, please describe what the Bug does in one or two short sentences. -->
 ## Description
+<!-- Below, please describe what the Bug does in one or two short sentences. -->
 
-<!-- Below describe the steps necessary to reproduce the malicious behaviour -->
 ## Reproducing
+<!-- Below, describe the steps necessary to reproduce the unwanted behaviour -->
 
-<!-- Below, please describe what Zettlr should do instead -->
 ## Expected behaviour
+<!-- Below, please describe what Zettlr should do instead -->
 
 <!-- If helpful, add Screenshots to further narrow down the issue -->
-**Screenshots**
 
 <!-- Please provide information on your operating system -->
 ## Platform
  - OS and version:
  - Zettlr Version:
- - Screen Resolution:
 
-<!-- If there is anything else that might be of interest, please provide it here -->
 ## Additional information
+<!-- If there is anything else that might be of interest, please provide it here -->
