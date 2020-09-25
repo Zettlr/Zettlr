@@ -49,6 +49,7 @@
   - vue `2.6.12`
   - vue-template-compiler `2.6.12`
 - Added a new Handlebars templating helper function, `i18n_value` that allows you to translate something passing a value to the translation helper (e.g. `{{i18n_value 'trans.identifier' someValue}}`).
+- Switched the version format from `x.y.z` to `vx.y.z` (i.e., added a `v` in front of the version field).
 
 # 1.7.5
 
