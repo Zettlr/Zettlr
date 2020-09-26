@@ -24,7 +24,7 @@ on:
       - master
     tags:
       # Build on every tag in the form v1.2.3-something.4
-      - "v[0-9]+.[0-9]+.[0-9]+*"
+      - 'v*'
 
 # Defaults for every job and step in this workflow
 defaults:
@@ -46,8 +46,11 @@ jobs:
     steps:
       - name: Retrieve tag version
         id: ref # For access as ${{steps.ref.outputs.version}}
-        # Makes refs/tags/v1.2.3 --> v1.2.3
-        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+        # We're always building the latest available tag (which MUST correspond
+        # to the same value in package.json).
+        # What this does is first get the latest tagged commit hash, and then
+        # describes (=outputs) the corresponding tag name for that commit.
+        run: echo ::set-output name=version::$(git describe --tags $(git rev-list --tags --max-count=1))
       - name: Clone repository
         uses: actions/checkout@v2
       - name: Setup NodeJS 12.x
@@ -97,8 +100,11 @@ jobs:
     steps:
       - name: Retrieve tag version
         id: ref # For access as ${{steps.ref.outputs.version}}
-        # Makes refs/tags/v1.2.3 --> v1.2.3
-        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+        # We're always building the latest available tag (which MUST correspond
+        # to the same value in package.json).
+        # What this does is first get the latest tagged commit hash, and then
+        # describes (=outputs) the corresponding tag name for that commit.
+        run: echo ::set-output name=version::$(git describe --tags $(git rev-list --tags --max-count=1))
       - name: Clone repository
         uses: actions/checkout@v2
       - name: Setup NodeJS 12.x
@@ -138,8 +144,11 @@ jobs:
     steps:
       - name: Retrieve tag version
         id: ref # For access as ${{steps.ref.outputs.version}}
-        # Makes refs/tags/v1.2.3 --> v1.2.3
-        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+        # We're always building the latest available tag (which MUST correspond
+        # to the same value in package.json).
+        # What this does is first get the latest tagged commit hash, and then
+        # describes (=outputs) the corresponding tag name for that commit.
+        run: echo ::set-output name=version::$(git describe --tags $(git rev-list --tags --max-count=1))
       - name: Clone repository
         uses: actions/checkout@v2
       - name: Setup NodeJS 12.x
@@ -182,8 +191,11 @@ jobs:
     steps:
       - name: Retrieve tag version
         id: ref # For access as ${{steps.ref.outputs.version}}
-        # Makes refs/tags/v1.2.3 --> v1.2.3
-        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+        # We're always building the latest available tag (which MUST correspond
+        # to the same value in package.json).
+        # What this does is first get the latest tagged commit hash, and then
+        # describes (=outputs) the corresponding tag name for that commit.
+        run: echo ::set-output name=version::$(git describe --tags $(git rev-list --tags --max-count=1))
       # First, download all resulting assets from the previous steps.
       - name: Download NSIS installer
         uses: actions/download-artifact@v1
