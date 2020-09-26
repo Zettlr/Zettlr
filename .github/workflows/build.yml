@@ -1,207 +1,236 @@
 name: Build
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# RATIONALE BEHIND THIS HUGE WORKFLOW
-#
-# GitHub Actions runs everything in a sandboxed VM, and we need to build
-# each asset on its "home" operating system, both because macOS code
-# signing, e.g., doesn't work on other platforms. Additionally, this way
-# we don't need WINE and, if necessary at some point, can build any
-# native dependencies.
-#
-# This workflow tries to use as few hacks and monkey patches as possible
-# to perform the same workflow as the ./scripts/make.sh-file. Therefore
-# we ONLY build the corresponding release on the build-VMs, and then
-# upload the resulting artifact to the Workflow.
-#
-# After all artifacts from the three VMs have been successfully uploaded
-# to the workflow run, we then download all of them on a fourth VM, where
-# we generate the checksums, verify the integrity and finally create a
-# new release draft where we upload everything in one step.
-#
-# Benefits: Native environments without the need to upload useless
-# stuff to foreign places (data scarcity, DRY).
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# ZETTLR GITHUB ACTIONS WORKFLOW FILE                                         #
+#                                                                             #
+# This file contains the logic necessary to build a full release from source. #
+#                                                                             #
+# Whenever someone creates a new git tag on the master branch, this workflow  #
+# will be triggered, building the corresponding release for all platforms.    #
+# This entails running three workers, one on Ubuntu, one on macos, and one on #
+# Windows, in order to build the application. Each build worker clones the    #
+# repository, installs the dependencies, then runs the actual build, before   #
+# uploading the resulting artifact(s) to the worker's temporary space. After  #
+# all three builds have been successfully completed, the last job worker will #
+# start, download all created assets, generate the SHA256 checksums for them, #
+# verify the sums, create a new release draft with the corresponding tag, and #
+# finally upload all generated assets to the release draft.                   #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# Only when we push to master, as this indicates a build
+# Whenever a tag is being created on the master branch, trigger this build.
 on:
   push:
     branches:
       - master
+    tags:
+      # Build on every tag in the form v1.2.3-something.4
+      - "v[0-9]+.[0-9]+.[0-9]+*"
 
-# We need two jobs: First a build-job, running on a matrix
-# to build all necessary releases, which also uploads all
-# resulting assets to the workflow. And then, we download
-# them onto a separate VM running the release-job to verify
-# the checksums and create a draft release.
+# Defaults for every job and step in this workflow
+defaults:
+  run:
+    shell: bash # Run everything using bash
+
+# This workflow file contains four jobs, three to build the corresponding
+# releases on all three supported platforms, and a last one, which will
+# create the release draft.
 jobs:
-  build:
-    # The build job needs to be built on Win, Linux, and macOS
-    # Win32 --> build NSIS
-    # macOS --> build DMG
-    # Linux --> build DEB, RPM, and AppImage
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-
-    # Define the operating system
-    runs-on: ${{ matrix.os }}
-
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+  #                                                                           #
+  #                              WINDOWS BUILDS                               #
+  #                                                                           #
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+  build_win:
+    name: Windows build
+    runs-on: windows-latest
     steps:
-      # Clone the repository
-      - uses: actions/checkout@v2
-      # Setup node
+      - name: Retrieve tag version
+        id: ref # For access as ${{steps.ref.outputs.version}}
+        # Makes refs/tags/v1.2.3 --> v1.2.3
+        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+      - name: Clone repository
+        uses: actions/checkout@v2
       - name: Setup NodeJS 12.x
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-
-      # Perform all necessary pre-build steps
-      - name: Set up build environment and compile the assets
-      # N.B.: The "postinstall" field in package.json will make sure everything's compiled
-      # except cls and language files which we update separately
+      - name: Set up build environment
         run: yarn install --frozen-lockfile
-      # Save the current package.json's version value
-      # as the output from this step so that we can
-      # reference it later on.
-      - name: Emit pkgver
-        id: pkg
-        run: |
-          pkgver=$(node ./scripts/get-pkg-version.js)
-          echo ::set-output name=version::$pkgver
-        shell: bash # I'm sorry PowerShell, but I'm not rewriting code for you.
-      # Now we're set to finally release the beast!
-      # WINDOWS ==============================================================
-      - name: Build Windows NSIS installer
-        if: matrix.os == 'windows-latest' # Only if the job runs on Windows
+      - name: Build Windows NSIS installer (x32 and x64)
         # Make sure to sign the windows installer using the corresponding SSL EV.
-        run: CSC_LINK=${{ secrets.WIN_CERT }}  CSC_KEY_PASSWORD=${{ secrets.WIN_CERT_PASS }} npm run release:win
-        shell: bash # I'm sorry PowerShell, but I'm not rewriting code for you.
-      - name: Cache Windows release
-        if: matrix.os == 'windows-latest' # Only if the job runs on Windows
+        run: yarn release:win
+        env:
+          CSC_LINK: ${{ secrets.WIN_CERT }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS }}
+      - name: Cache artifact (x32 and x64)
         uses: actions/upload-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}.exe
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}.exe
-      - name: Build Windows NSIS installer arm64
-        if: matrix.os == 'windows-latest' # Only if the job runs on Windows
+          name: Zettlr-${{steps.ref.outputs.version}}.exe
+          path: ./release/Zettlr-${{steps.ref.outputs.version}}.exe
+      - name: Build Windows NSIS installer (arm64)
         # Make sure to sign the windows installer using the corresponding SSL EV.
-        run: CSC_LINK=${{ secrets.WIN_CERT }}  CSC_KEY_PASSWORD=${{ secrets.WIN_CERT_PASS }} npm run release:win-arm && mv ./release/Zettlr-${{ steps.pkg.outputs.version }}.exe ./release/Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe
-        shell: bash # I'm sorry PowerShell, but I'm not rewriting code for you.
-      - name: Cache Windows release arm64
-        if: matrix.os == 'windows-latest' # Only if the job runs on Windows
+        run: yarn release:win-arm
+        env:
+          CSC_LINK: ${{ secrets.WIN_CERT }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS }}
+      - name: Rename arm64 artifact
+        # We need to rename the artifact prior to uploading so that it does not
+        # overwrite the first release artifact for 32 and 64 bit desktop architectures
+        run: mv ./release/Zettlr-${{steps.ref.outputs.version}}.exe ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.exe
+      - name: Cache artifact (arm64)
         uses: actions/upload-artifact@v1
         with:
-          # It is important to remember that "name" does NOT refer to the uploaded file's name, but it's rather an ID, so the file needs to be renamed prior to uploading.
-          name: Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe
-      # MACOS ================================================================
+          # It is important to understand that "name" does NOT refer to the
+          # uploaded file's name, but it's rather an ID, so the file needs to
+          # be renamed prior to uploading (see step above).
+          name: Zettlr-${{steps.ref.outputs.version}}-arm64.exe
+          path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.exe
+
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+  #                                                                           #
+  #                               MACOS BUILDS                                #
+  #                                                                           #
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+  build_macos:
+    name: macOS build
+    runs-on: macos-latest
+    steps:
+      - name: Retrieve tag version
+        id: ref # For access as ${{steps.ref.outputs.version}}
+        # Makes refs/tags/v1.2.3 --> v1.2.3
+        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Setup NodeJS 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Set up build environment
+        run: yarn install --frozen-lockfile
+      # Save the macOS certificate on this runner for forge to access it in the
+      # next step below.
+      - name: Retrieve code signing certificate
+        run: ./scripts/add-osx-cert.sh
+        env:
+          MACOS_CERT: ${{ secrets.MACOS_CERT }}
+          MACOS_CERT_PASS: ${{ secrets.MACOS_CERT_PASS }}
+      # This step also signs and notarizes the app. NOTE that forge does this,
+      # as we shall not notarize and/or sign the resulting DMG file as well!
       - name: Build macOS DMG file
-        if: matrix.os == 'macos-latest' # Only if the job runs on macOS
-        run: APPLE_ID=${{ secrets.APPLE_ID }} APPLE_ID_PASS=${{ secrets.APPLE_ID_PASS }} CSC_LINK=${{ secrets.MACOS_CERT }}  CSC_KEY_PASSWORD=${{ secrets.MACOS_CERT_PASS }} npm run release:mac
+        run: yarn release:mac
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
       - name: Cache macOS release
-        if: matrix.os == 'macos-latest' # Only if the job runs on macOS
         uses: actions/upload-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}.dmg
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}.dmg
-      # LINUX ================================================================
-      - name: Build Linux targets
-        if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
-        run: npm run release:linux
-      - name: Cache Linux Debian release
-        if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
-        uses: actions/upload-artifact@v1
-        with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb
-      - name: Cache Linux Fedora release
-        if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
-        uses: actions/upload-artifact@v1
-        with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
-      - name: Cache Linux AppImage (x32) release
-        if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
-        uses: actions/upload-artifact@v1
-        with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
-      - name: Cache Linux AppImage (x64) release
-        if: matrix.os == 'ubuntu-latest' # Only if the job runs on Linux
-        uses: actions/upload-artifact@v1
-        with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
-          path: ./release/Zettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
+          name: Zettlr-${{steps.ref.outputs.version}}.dmg
+          path: ./release/Zettlr-${{steps.ref.outputs.version}}.dmg
 
-
-  # As soon as the build matrix has completed correctly, this job will
-  # commence, creating a new draft release, downloading all assets from
-  # the previous job, verifying the checksum integrity, and uploading that
-  # whole mess to the draft release.
-  prepare_release:
-    needs: [build] # Make sure (and wait until) the build has succeeded
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+  #                                                                           #
+  #                               LINUX BUILDS                                #
+  #                                                                           #
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+  build_linux:
+    name: Linux build
     runs-on: ubuntu-latest
     steps:
-      # Clone the repository to get the ./scripts/get-pkg-version.js and the ./package.json
-      - uses: actions/checkout@v2
-      # Setup node to run the retrieval script
+      - name: Retrieve tag version
+        id: ref # For access as ${{steps.ref.outputs.version}}
+        # Makes refs/tags/v1.2.3 --> v1.2.3
+        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+      - name: Clone repository
+        uses: actions/checkout@v2
       - name: Setup NodeJS 12.x
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-      - name: Retrieve the current package version
-        id: pkg
-        run: |
-          pkgver=$(node ./scripts/get-pkg-version.js)
-          echo ::set-output name=version::$pkgver
-      # Now, download all resulting assets from the previous steps.
-      - name: Download the Windows asset
+      - name: Set up build environment
+        run: yarn install --frozen-lockfile
+      - name: Build Linux targets
+        run: yarn release:linux
+      - name: Cache .deb release
+        uses: actions/upload-artifact@v1
+        with:
+          name: Zettlr-${{steps.ref.outputs.version}}-amd64.deb
+          path: ./release/Zettlr-${{steps.ref.outputs.version}}-amd64.deb
+      - name: Cache .rpm release
+        uses: actions/upload-artifact@v1
+        with:
+          name: Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
+          path: ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
+      - name: Cache AppImage (x32) release
+        uses: actions/upload-artifact@v1
+        with:
+          name: Zettlr-${{steps.ref.outputs.version}}-i386.AppImage
+          path: ./release/Zettlr-${{steps.ref.outputs.version}}-i386.AppImage
+      - name: Cache AppImage (x64) release
+        uses: actions/upload-artifact@v1
+        with:
+          name: Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
+          path: ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
+
+  # after the three builds, this job downloads all assets, creates and verifies
+  # SHA256 checksums, and finally creates a release draft and uploads all
+  # assets to it.
+  prepare_release:
+    name: Prepare release draft
+    # Make sure (and wait until) the builds have succeeded
+    needs: [build_win, build_macos, build_linux]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Retrieve tag version
+        id: ref # For access as ${{steps.ref.outputs.version}}
+        # Makes refs/tags/v1.2.3 --> v1.2.3
+        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+      # First, download all resulting assets from the previous steps.
+      - name: Download NSIS installer
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}.exe
+          name: Zettlr-${{steps.ref.outputs.version}}.exe
           path: .
-      - name: Download the Windows arm64 asset
+      - name: Download NSIS-installer (arm64)
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe
+          name: Zettlr-${{steps.ref.outputs.version}}-arm64.exe
           path: .
-      - name: Download the macOS asset
+      - name: Download macOS image
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}.dmg
+          name: Zettlr-${{steps.ref.outputs.version}}.dmg
           path: .
-      - name: Download the Debian asset
+      - name: Download .deb-installer
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb
+          name: Zettlr-${{steps.ref.outputs.version}}-amd64.deb
           path: .
-      - name: Download the Fedora asset
+      - name: Download .rpm-installer
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
+          name: Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
           path: .
-      - name: Download the AppImage (x32) asset
+      - name: Download AppImage binary (x32)
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
+          name: Zettlr-${{steps.ref.outputs.version}}-i386.AppImage
           path: .
-      - name: Download the AppImage (x64) asset
+      - name: Download AppImage binary (x64)
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
+          name: Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
           path: .
       # Now we are set, we have all five release assets on the VM. It's time to create the
       # SHA-checksums file and then upload everything!
       - name: Generate SHA256 checksums
         run: |
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}.exe" > "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}.dmg" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{steps.ref.outputs.version}}.exe" > "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.exe" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{steps.ref.outputs.version}}.dmg" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{steps.ref.outputs.version}}-amd64.deb" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{steps.ref.outputs.version}}-i386.AppImage" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage" >> "SHA256SUMS.txt"
       - name: Verify checksums
         run: sha256sum -c SHA256SUMS.txt
       # Create a new release draft
@@ -211,89 +240,75 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.pkg.outputs.version }} # tag_name is required, but can be overridden during edit
-          release_name: Release v${{ steps.pkg.outputs.version }} # release_name is required
+          tag_name: ${{steps.ref.outputs.version}} # tag_name is required, but can be overridden during edit
+          release_name: Release ${{steps.ref.outputs.version}} # release_name is required
           body: If you can read this, we have forgotten to fill in the changelog. Sorry!
           draft: true # Always create as draft, so that we can populate the remaining values easily
 
-
       # And finally, upload that shit
-      - name: Upload Windows asset
+      - name: Upload NSIS installer
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}.exe
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}.exe
+          asset_path: ./Zettlr-${{steps.ref.outputs.version}}.exe
+          asset_name: Zettlr-${{steps.ref.outputs.version}}.exe
           asset_content_type: application/x-msdownload
-
-
-      - name: Upload Windows arm64 asset
+      - name: Upload NSIS installer (arm64)
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}-arm64.exe
+          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-arm64.exe
+          asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.exe
           asset_content_type: application/x-msdownload
-
-
-      - name: Upload macOS asset
+      - name: Upload macOS image
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}.dmg
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}.dmg
+          asset_path: ./Zettlr-${{steps.ref.outputs.version}}.dmg
+          asset_name: Zettlr-${{steps.ref.outputs.version}}.dmg
           asset_content_type: application/octet-stream
-
-
-      - name: Upload Debian asset
+      - name: Upload .deb installer
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}-amd64.deb
+          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-amd64.deb
+          asset_name: Zettlr-${{steps.ref.outputs.version}}-amd64.deb
           asset_content_type: application/octet-stream
-
-
-      - name: Upload Fedora asset
+      - name: Upload .rpm installer
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.rpm
+          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
+          asset_name: Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
           asset_content_type: application/octet-stream
-
-
-      - name: Upload AppImage (x32) asset
+      - name: Upload AppImage binary (x32)
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}-i386.AppImage
+          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-i386.AppImage
+          asset_name: Zettlr-${{steps.ref.outputs.version}}-i386.AppImage
           asset_content_type: application/octet-stream
-
-
-      - name: Upload AppImage (x64) asset
+      - name: Upload AppImage binary (x64)
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
-          asset_name: Zettlr-${{ steps.pkg.outputs.version }}-x86_64.AppImage
+          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
+          asset_name: Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage
           asset_content_type: application/octet-stream
-
       - name: Upload the checksums
         uses: actions/upload-release-asset@v1.0.1
         env:
