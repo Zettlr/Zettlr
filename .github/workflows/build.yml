@@ -44,6 +44,12 @@ jobs:
     name: Windows build
     runs-on: windows-latest
     steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Setup NodeJS 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
       - name: Retrieve tag version
         id: ref # For access as ${{steps.ref.outputs.version}}
         # We're always building the latest available tag (which MUST correspond
@@ -51,12 +57,6 @@ jobs:
         # What this does is first get the latest tagged commit hash, and then
         # describes (=outputs) the corresponding tag name for that commit.
         run: echo ::set-output name=version::$(git describe --tags $(git rev-list --tags --max-count=1))
-      - name: Clone repository
-        uses: actions/checkout@v2
-      - name: Setup NodeJS 12.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
       - name: Set up build environment
         run: yarn install --frozen-lockfile
       - name: Build Windows NSIS installer (x32 and x64)
@@ -98,6 +98,12 @@ jobs:
     name: macOS build
     runs-on: macos-latest
     steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Setup NodeJS 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
       - name: Retrieve tag version
         id: ref # For access as ${{steps.ref.outputs.version}}
         # We're always building the latest available tag (which MUST correspond
@@ -105,12 +111,6 @@ jobs:
         # What this does is first get the latest tagged commit hash, and then
         # describes (=outputs) the corresponding tag name for that commit.
         run: echo ::set-output name=version::$(git describe --tags $(git rev-list --tags --max-count=1))
-      - name: Clone repository
-        uses: actions/checkout@v2
-      - name: Setup NodeJS 12.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
       - name: Set up build environment
         run: yarn install --frozen-lockfile
       # Save the macOS certificate on this runner for forge to access it in the
@@ -142,6 +142,12 @@ jobs:
     name: Linux build
     runs-on: ubuntu-latest
     steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Setup NodeJS 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
       - name: Retrieve tag version
         id: ref # For access as ${{steps.ref.outputs.version}}
         # We're always building the latest available tag (which MUST correspond
@@ -149,12 +155,6 @@ jobs:
         # What this does is first get the latest tagged commit hash, and then
         # describes (=outputs) the corresponding tag name for that commit.
         run: echo ::set-output name=version::$(git describe --tags $(git rev-list --tags --max-count=1))
-      - name: Clone repository
-        uses: actions/checkout@v2
-      - name: Setup NodeJS 12.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
       - name: Set up build environment
         run: yarn install --frozen-lockfile
       - name: Build Linux targets
