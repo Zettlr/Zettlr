@@ -2,9 +2,18 @@ module.exports = {
   'packagerConfig': {
     'asar': true,
     'darwinDarkModeSupport': 'true',
-    'icon': './resources/icons/icon', // Automatically adds file extension based on OS
+    // Electron-forge automatically adds the file extension based on OS
+    'icon': './resources/icons/icon',
+    // The binary name should always be uppercase Zettlr. As we cannot specify
+    // this on a per-maker basis, we need to output everything this way. With
+    // this property, macOS builds are named Zettlr.app, Windows builds
+    // Zettlr.exe and the linux binaries are called Zettlr (albeit on Linux,
+    // lowercase is preferred). Due to the last issue (Linux binaries being
+    // with capital Z) we have to explicitly set executableName on the Linux
+    // target.
     'name': 'Zettlr',
     // The certificate is written to the default keychain during CI build.
+    // See ./scripts/add-osx-cert.sh
     'osxSign': {
       'identity': 'Developer ID Application: Hendrik Erz (QS52BN8W68)',
       'hardened-runtime': true,

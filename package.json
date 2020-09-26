@@ -1,6 +1,5 @@
 {
   "name": "zettlr",
-  "productName": "Zettlr",
   "homepage": "https://www.zettlr.com",
   "author": {
     "name": "Hendrik Erz",
@@ -91,6 +90,7 @@
         "rpm"
       ],
       "artifactName": "Zettlr-${version}-${arch}.${ext}",
+      "executableName": "Zettlr",
       "synopsis": "Markdown editor",
       "category": "Office",
       "icon": "resources/icons/png",
