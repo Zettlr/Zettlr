@@ -58,7 +58,10 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build Windows NSIS installer (x32 and x64)
         # Make sure to sign the windows installer using the corresponding SSL EV.
-        run: CSC_LINK=${{ secrets.WIN_CERT }}  CSC_KEY_PASSWORD=${{ secrets.WIN_CERT_PASS }} yarn release:win
+        run: yarn release:win
+        env:
+          CSC_LINK: ${{ secrets.WIN_CERT }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS }}
       - name: Cache artifact (x32 and x64)
         uses: actions/upload-artifact@v1
         with:
@@ -66,7 +69,10 @@ jobs:
           path: ./release/Zettlr-${{steps.ref.outputs.version}}.exe
       - name: Build Windows NSIS installer (arm64)
         # Make sure to sign the windows installer using the corresponding SSL EV.
-        run: CSC_LINK=${{ secrets.WIN_CERT }}  CSC_KEY_PASSWORD=${{ secrets.WIN_CERT_PASS }} yarn release:win-arm
+        run: yarn release:win-arm
+        env:
+          CSC_LINK: ${{ secrets.WIN_CERT }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CERT_PASS }}
       - name: Rename arm64 artifact
         # We need to rename the artifact prior to uploading so that it does not
         # overwrite the first release artifact for 32 and 64 bit desktop architectures
@@ -101,9 +107,20 @@ jobs:
           node-version: '12.x'
       - name: Set up build environment
         run: yarn install --frozen-lockfile
-      # This step also signs and notarizes the app and <<dmg file.
+      # Save the macOS certificate on this runner for forge to access it in the
+      # next step below.
+      - name: Retrieve code signing certificate
+        run: ./scripts/add-osx-cert.sh
+        env:
+          MACOS_CERT: ${{ secrets.MACOS_CERT }}
+          MACOS_CERT_PASS: ${{ secrets.MACOS_CERT_PASS }}
+      # This step also signs and notarizes the app. NOTE that forge does this,
+      # as we shall not notarize and/or sign the resulting DMG file as well!
       - name: Build macOS DMG file
-        run: APPLE_ID=${{ secrets.APPLE_ID }} APPLE_ID_PASS=${{ secrets.APPLE_ID_PASS }} CSC_LINK=${{ secrets.MACOS_CERT }}  CSC_KEY_PASSWORD=${{ secrets.MACOS_CERT_PASS }} yarn release:mac
+        run: yarn release:mac
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
       - name: Cache macOS release
         uses: actions/upload-artifact@v1
         with:

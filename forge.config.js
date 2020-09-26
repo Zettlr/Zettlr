@@ -1,10 +1,10 @@
 module.exports = {
   'packagerConfig': {
     'asar': true,
+    'darwinDarkModeSupport': 'true',
     'icon': './resources/icons/icon', // Automatically adds file extension based on OS
     'name': 'Zettlr',
     // The certificate is written to the default keychain during CI build.
-    // TODO
     'osxSign': {
       'identity': 'Developer ID Application: Hendrik Erz (QS52BN8W68)',
       'hardened-runtime': true,
