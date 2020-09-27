@@ -76,8 +76,8 @@ class ZettlrDialog extends EventEmitter {
       let margin = (winH - diaH) / 2
       dialog.css('margin-top', margin + 'px')
     } else {
-      dialog.css('margin-top', '15%') // Otherwise enable scrolling
-      dialog.css('margin-bottom', '15%')
+      dialog.css('margin-top', '2%') // Otherwise enable scrolling
+      dialog.css('margin-bottom', '2%')
     }
   }
 
