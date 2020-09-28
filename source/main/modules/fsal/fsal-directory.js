@@ -100,13 +100,13 @@ function metadata (dirObject) {
     // both lean AND it can be reconstructed into a
     // circular structure with NO overheads in the
     // renderer.
-    'parent': (dirObject.parent) ? dirObject.parent.hash : null,
+    'parent': (dirObject.parent !== null) ? dirObject.parent.hash : null,
     'path': dirObject.path,
     'name': dirObject.name,
     'hash': dirObject.hash,
     // The project itself is not needed, renderer only checks if it equals
     // null, or not (then it means there is a project)
-    'project': (dirObject._settings.project) ? true : null,
+    'project': (dirObject._settings.project !== null) ? true : null,
     'children': children,
     'attachments': dirObject.attachments.map(elem => FSALAttachment.metadata(elem)),
     'type': dirObject.type,
@@ -144,7 +144,7 @@ async function parseSettings (dir) {
     let settings = await fs.readFile(configPath, { encoding: 'utf8' })
     settings = JSON.parse(settings)
     dir._settings = safeAssign(settings, SETTINGS_TEMPLATE)
-    if (settings.project) {
+    if (settings.project !== null) {
       // We have a project, so we need to sanitize the values (in case
       // that there have been changes to the config). We'll just use
       // the code from the config provider.
@@ -155,9 +155,8 @@ async function parseSettings (dir) {
       await fs.unlink(configPath)
     }
   } catch (e) {
-    // No (specific) settings
-    // As the file exists, but something was wrong, let's remove this remnant.
-    await fs.unlink(configPath)
+    // Something went wrong
+    global.log.error(`Could not parse settings file for ${dir.name}`, e)
   }
 }
 
@@ -194,21 +193,10 @@ async function readTree (currentPath, cache, parent) {
   // Now parse the directory contents recursively
   let children = await fs.readdir(dir.path)
   for (let child of children) {
-    if (isFile(path.join(dir.path, child)) && child === '.ztr-directory') {
+    if (child === '.ztr-directory') {
       // We got a settings file, so let's try to read it in
       await parseSettings(dir)
       continue // Done!
-    }
-
-    if (isFile(path.join(dir.path, child)) && child === '.ztr-project') {
-      global.log.info(`Found .ztr-project file in directory ${dir.name} - migrating!`)
-      let projectFile = await fs.readFile(path.join(dir.path, child), { encoding: 'utf8' })
-      projectFile = JSON.parse(projectFile)
-      dir._settings.project = safeAssign(projectFile, PROJECT_TEMPLATE)
-      // Make sure to persist the new settings to disk!
-      await persistSettings(dir)
-      // Finally unlink the "old" file
-      await fs.unlink(path.join(dir.path, child))
     }
 
     // Helper vars

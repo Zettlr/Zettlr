@@ -17,6 +17,7 @@
 - Fixed the width of the word counter in order to make the toolbar more "stiff."
 - Enabled Dart syntax highlighting (thanks to @Kangie for implementing).
 - Reduced the added margins for overflowing dialog windows from 15 % to 2 %, making the visible gap on smaller screens smaller.
+- Remove the intermediary `.ztr-project`-migration code, which means you should update to Zettlr 1.7.x before updating to 1.8.x, if you still use an older version of Zettlr.
 
 ## Under the Hood
 
