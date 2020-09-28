@@ -23,7 +23,7 @@ const gridParser = require('./table-parser-grid')
 const buildPipeTable = require('./table-build-pipe')
 const buildSimpleTable = require('./table-build-simple')
 const buildGridTable = require('./table-build-grid')
-const { renderTemplate } = require('./render-template')
+const renderTemplate = require('./render-template')
 
 class TableHelper {
   /**

@@ -2,7 +2,7 @@ const assert = require('assert').strict
 
 const { JSDOM } = require('jsdom');
 
-const { renderTemplate } = require('../source/renderer/util/render-template')
+const renderTemplate = require('../source/renderer/util/render-template')
 
 describe('renderTemplate()', () => {
   it('can render a paragraph', () => {

@@ -11,7 +11,7 @@
  *
  * END HEADER
  */
-const { renderTemplate } = require('./util/render-template')
+const renderTemplate = require('./util/render-template')
 
 const { trans } = require('../common/lang/i18n.js')
 const clarityIcons = require('@clr/icons').ClarityIcons

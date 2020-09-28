@@ -44,7 +44,7 @@ const { trans } = require('../common/lang/i18n.js')
 const localiseNumber = require('../common/util/localise-number')
 const generateFileName = require('../common/util/generate-filename')
 const generateTable = require('../common/util/generate-markdown-table')
-const { renderTemplate } = require('./util/render-template')
+const renderTemplate = require('./util/render-template')
 
 /**
  * This class's duty is to handle everything that affects (or can potentially

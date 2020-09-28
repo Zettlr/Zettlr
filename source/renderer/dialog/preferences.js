@@ -19,7 +19,7 @@ const validate = require('../../common/validate.js')
 const { ipcRenderer } = require('electron')
 const { trans } = require('../../common/lang/i18n')
 const generateId = require('../../common/util/generate-id')
-const { renderTemplate } = require('../util/render-template')
+const renderTemplate = require('../util/render-template')
 
 class PreferencesDialog extends ZettlrDialog {
   constructor () {
