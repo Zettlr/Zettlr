@@ -245,7 +245,6 @@ module.exports = {
   'setSetting': async function (dirObject, settings) {
     for (let key of Object.keys(settings)) {
       if (dirObject._settings.hasOwnProperty(key)) {
-        console.log('Setting key ' + key + ' to ' + settings[key] + ' ...')
         dirObject._settings[key] = settings[key]
       }
     }
