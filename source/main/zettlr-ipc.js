@@ -50,8 +50,6 @@ class ZettlrIPC {
         return
       }
 
-      global.log.verbose('>>> IPC IN: ' + arg.command, arg.content)
-
       if (arg.command === 'file-drag-start') {
         event.sender.startDrag({
           'file': this._app.findFile(arg.content.hash).path,
@@ -150,7 +148,6 @@ class ZettlrIPC {
     }
 
     if (!this._app.window.getWindow()) return this
-    global.log.verbose('<<< IPC OUT: ' + command, content)
     let sender = this._app.window.getWindow().webContents
     sender.webContents.send('message', {
       'command': command,

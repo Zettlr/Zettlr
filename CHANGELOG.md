@@ -54,6 +54,7 @@
 - Switched the version format from `x.y.z` to `vx.y.z` (i.e., added a `v` in front of the version field).
 - Refactored the main build Workflow file. Now it doesn't run on a matrix, but due to the many dissimilar steps involved, there are three distinct jobs. Other than that, we switched to the GitHub tag name instead of utilizing a node script to retrieve the `package.json` version, switched to `yarn` everywhere and cleaned up the code.
 - Removed the now unused scripts `get-pkg-version.js` and `afterSign.js`.
+- Finally removed the verbose IPC calls from the logs.
 
 # 1.7.5
 
