@@ -56,6 +56,7 @@
 - Removed the now unused scripts `get-pkg-version.js` and `afterSign.js`.
 - Finally removed the verbose IPC calls from the logs.
 - Migrated the toolbar logic from jQuery to vanilla JS.
+- Migrated the main renderer from jQuery to vanilla JS.
 
 # 1.7.5
 

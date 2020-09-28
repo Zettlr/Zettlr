@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -59,7 +58,7 @@ class ZettlrRenderer {
 
     // Immediately add the operating system class to the body element to
     // enable the correct font-family.
-    $('body').addClass(process.platform)
+    document.body.classList.add(process.platform)
 
     // Init the complete list of objects that we need
     this._ipc = new ZettlrRendererIPC(this)
@@ -120,11 +119,12 @@ class ZettlrRenderer {
 
       // Apply the custom CSS stylesheet to the head element
       global.ipc.send('get-custom-css-path', {}, (ret) => {
-        let lnk = $('<link>').attr('rel', 'stylesheet')
-        lnk.attr('href', 'safe-file://' + ret)
-        lnk.attr('type', 'text/css')
-        lnk.attr('id', 'custom-css-link')
-        $('head').first().append(lnk)
+        let link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.setAttribute('href', 'safe-file://' + ret)
+        link.setAttribute('type', 'text/css')
+        link.setAttribute('id', 'custom-css-link')
+        document.head.appendChild(link)
       })
 
       // Receive an initial list of tags to display in the preview list
@@ -266,15 +266,6 @@ class ZettlrRenderer {
    */
   darkTheme (val) {
     this._body.darkTheme(val)
-  }
-
-  /**
-    * Toggle the display of the directory pane.
-    * @return {void} No return.
-    */
-  toggleCombiner () {
-    $('#combiner').hide() // bruh
-    this._editor.toggleCombiner() // Need a better name for this thing. Definitely.
   }
 
   /**
