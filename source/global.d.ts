@@ -16,6 +16,7 @@ declare global {
       filesToOpen: any
       preBootLog: any
       tippy: any
+      updates: any
     }
   }
 }

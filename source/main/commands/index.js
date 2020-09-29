@@ -28,7 +28,6 @@ import * as RequestMove from './request-move'
 import * as RootClose from './root-close'
 import * as SaveImageFromClipboard from './save-image-from-clipboard'
 import * as SortOpenFiles from './sort-open-files'
-import * as UpdateCheck from './update-check'
 import * as UpdateProjectProperties from './update-project-properties'
 import * as UpdateUserDictionary from './update-user-dictionary'
 
@@ -63,7 +62,6 @@ export const commands = [
   RootClose,
   SaveImageFromClipboard,
   SortOpenFiles,
-  UpdateCheck,
   UpdateProjectProperties,
   UpdateUserDictionary
 ]

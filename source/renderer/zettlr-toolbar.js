@@ -17,6 +17,8 @@ const localiseNumber = require('../common/util/localise-number')
 const renderTemplate = require('./util/render-template')
 const { trans } = require('../common/lang/i18n')
 
+const { ipcRenderer } = require('electron')
+
 /**
  * The following keys do not trigger the autocomplete on the searchbar
  */
@@ -46,9 +48,62 @@ class ZettlrToolbar {
     this._autocomplete = []
     this._oldval = ''
 
-    this._lastFileInfo = null // Holds the last received fileInfo object
+    /**
+     * Contains the update data, if any
+     *
+     * @var {Object}
+     */
+    this._updateData = null
+
+    // Holds the last received fileInfo object
+    this._lastFileInfo = null
+
+    // If an update is in progress, this contains the progress
+    this._downloadProgress = undefined
 
     this._act()
+
+    setTimeout(() => {
+      // Send an initial check for an update
+      ipcRenderer.send('update-provider', {
+        'command': 'update-check',
+        'content': {}
+      })
+    }, 10000)
+
+    ipcRenderer.on('update-provider', (event, data) => {
+      let { command, content } = data
+
+      if (command === 'update-data') {
+        // New data from the provider
+        this._updateData = content
+        this._onUpdateData() // Update the toolbar accordingly
+      } else if (command === 'download-progress') {
+        this._downloadProgress = content
+        let progress = document.getElementById('app-update-progress')
+        let progressPercent = document.getElementById('app-update-progress-percent')
+        let progressEta = document.getElementById('app-update-progress-eta')
+        if (progress && progressPercent) {
+          progress.setAttribute('max', this._downloadProgress.size_total)
+          progress.setAttribute('value', this._downloadProgress.size_downloaded)
+          progressPercent.textContent = this._downloadProgress.download_percent + ' %'
+          let seconds = this._downloadProgress.eta_seconds
+          if (seconds > 60) {
+            progressEta.textContent = '(' + Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's)'
+          } else {
+            progressEta.textContent = '(' + seconds + 's)'
+          }
+        }
+        if (this._downloadProgress.finished === false) {
+          setTimeout(() => {
+            ipcRenderer.send('update-provider', {
+              'command': 'download-progress',
+              'content': null
+            })
+          }, 1000)
+        } // end if
+      }
+    })
   }
 
   /**
@@ -94,6 +149,15 @@ class ZettlrToolbar {
    */
   get searchProgressIndicator () {
     return document.getElementById('search-progress-indicator')
+  }
+
+  /**
+   * Returns the miscellaneous container
+   *
+   * @return  {Element}  The container element
+   */
+  get miscellaneousContainer () {
+    return document.getElementById('toolbar-misc-buttons')
   }
 
   /**
@@ -202,6 +266,89 @@ class ZettlrToolbar {
   }
 
   /**
+   * Called whenever there's new update data from the update provider
+   */
+  _onUpdateData () {
+    // Update the toolbar according to the status of the update data
+    if (this._updateData !== null && this._updateData.isNewer === true) {
+      let button = document.createElement('div')
+      button.classList.add('button')
+      button.setAttribute('id', 'update-info-button')
+      button.innerHTML = '<clr-icon shape="download-cloud" class="is-success"></clr-icon>'
+      this.miscellaneousContainer.appendChild(button)
+
+      let instance = tippy(button, {
+        content: `Update to version ${this._updateData.newVer} available`,
+        delay: 100,
+        arrow: true,
+        duration: 100
+      })
+
+      // Show the tippy for 3 seconds to get the user's attention
+      instance.show()
+      setTimeout(() => {
+        instance.hide()
+        instance.setContent('Update available')
+      }, 3000)
+
+      button.addEventListener('click', (e) => {
+        e.stopPropagation()
+
+        if (this._downloadProgress !== undefined) {
+          // We have a download progress to show
+          global.popupProvider.show('update-progress', button, this._downloadProgress)
+
+          document.getElementById('begin-update-progress-button').addEventListener('click', (e) => {
+            ipcRenderer.send('update-provider', {
+              'command': 'begin-update',
+              'content': null
+            })
+          })
+        } else {
+          // No download progress, so display the normal popup
+          global.popupProvider.show('update', button, this._updateData)
+
+          // Enable listening for update requests
+          let requestButtons = document.querySelectorAll('.request-app-update')
+
+          requestButtons.forEach((button, key, parent) => {
+            button.addEventListener('click', (e) => {
+              let url = button.dataset['url']
+              ipcRenderer.send('update-provider', {
+                'command': 'request-app-update',
+                'content': url
+              })
+              global.popupProvider.close()
+
+              // Now, send a request for the download progress data, and poll on
+              // each update until it is finished
+              ipcRenderer.send('update-provider', {
+                'command': 'download-progress',
+                'content': null
+              })
+            })
+          })
+        }
+
+        // Display the changelog, if requested. Available in all popups
+        document.getElementById('view-changelog-button').addEventListener('click', (e) => {
+          this._renderer.getBody().displayUpdate({
+            'newVer': this._updateData.newVer,
+            'curVer': this._updateData.curVer,
+            'isBeta': this._updateData.isBeta,
+            'changelog': this._updateData.changelog
+          })
+          global.popupProvider.close()
+        })
+      })
+    } else {
+      // No update available, remove button if applicable
+      let button = document.getElementById('update-info-button')
+      if (button) button.parentElement.removeChild(button)
+    }
+  }
+
+  /**
    * Applies autocorrect to the global search area. This code has been
    * outsourced from the keyup event listener, because it also needs to be
    * executed after the endcomposing-event fires.
@@ -265,6 +412,12 @@ class ZettlrToolbar {
     // Create the progress indicator circle and insert it hidden
     let searchProgressIndicator = renderTemplate('<svg id="search-progress-indicator" class="hidden" width="20" height="20" viewBox="-1 -1 2 2"><circle class="indicator-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle><path d="" fill="" class="indicator-value" shape-rendering="geometricPrecision"></path></svg>')
     this.container.querySelector('.searchbar').after(searchProgressIndicator)
+
+    // Insert a div container for additional buttons that may or may not be
+    // part of the toolbar (e.g. dynamics)
+    let miscellaneousContainer = document.createElement('div')
+    miscellaneousContainer.setAttribute('id', 'toolbar-misc-buttons')
+    this.container.appendChild(miscellaneousContainer)
   }
 
   /**

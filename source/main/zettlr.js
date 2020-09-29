@@ -32,6 +32,9 @@ const isFile = require('../common/util/is-file')
 const { commands } = require('./commands')
 const hash = require('../common/util/hash')
 
+// Service providers
+const UpdateProvider = require('./providers/update-provider')
+
 /**
  * The Zettlr class handles every core functionality of Zettlr. Nothing works
  * without this. One object of Zettlr is created on initialization of the app
@@ -187,6 +190,9 @@ class Zettlr {
           // Now after all paths have been loaded, we are ready to load the
           // main window to get this party started!
           this.openWindow()
+
+          // Finally, initiate a first check for updates
+          global.updates.check()
         }).catch((err) => {
           console.error(err)
           global.log.error('Could not add additional roots!', err.message)
@@ -217,7 +223,8 @@ class Zettlr {
       'tags': require('./providers/tag-provider'),
       'targets': require('./providers/target-provider'),
       'css': require('./providers/css-provider'),
-      'translations': require('./providers/translation-provider')
+      'translations': require('./providers/translation-provider'),
+      'updates': new UpdateProvider()
     }
   }
 

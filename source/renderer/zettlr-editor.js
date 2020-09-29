@@ -15,7 +15,6 @@
 
 const path = require('path')
 const hash = require('../common/util/hash')
-const popup = require('./zettlr-popup.js')
 const showdown = require('showdown')
 const Turndown = require('joplin-turndown').default
 const tippy = require('tippy.js').default
@@ -1122,11 +1121,8 @@ class ZettlrEditor {
       }
     })
 
-    let cnt = '<div class="footnote-edit">'
-    cnt += `<textarea id="footnote-edit-textarea">${line.text.substr(5 + ref.length)}</textarea>`
-    cnt += '</div>'
-
-    let p = popup(elem, cnt)
+    const data = { 'content': line.text.substr(5 + ref.length) }
+    global.popupProvider.show('footnote-edit', elem, data)
 
     // Focus the textarea immediately.
     $('#footnote-edit-textarea').focus()
@@ -1140,7 +1136,7 @@ class ZettlrEditor {
         let sc = this._cm.getSearchCursor(line.text, { 'line': 0, 'ch': 0 })
         sc.findNext()
         sc.replace(newtext)
-        p.close()
+        global.popupProvider.close()
       }
     })
   }

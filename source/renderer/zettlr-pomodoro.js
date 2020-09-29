@@ -13,7 +13,6 @@
  * END HEADER
  */
 
-const popup = require('./zettlr-popup.js')
 const { trans } = require('../common/lang/i18n.js')
 
 /**
@@ -175,75 +174,67 @@ class ZettlrPomodoro {
    */
   popup () {
     // Display the small settings popup
-    if (this._pref == null) {
-      if (!this.isRunning()) {
-        // Preferences popup
-        let data = {
-          'duration_task': this._duration.task / 60,
-          'duration_short': this._duration.short / 60,
-          'duration_long': this._duration.long / 60,
-          'volume': this._sound.volume * 100
-        }
-        const pomodoroTemplate = require('./../../resources/templates/popup/pomodoro-settings.handlebars')
-        this._pref = popup($('.button.pomodoro'), pomodoroTemplate(data), (form) => {
-          // Callback
-          this._pref = null
-          // User has aborted
-          if (!form) return
-
-          // 0 = task
-          // 1 = short
-          // 2 = long
-          // 3 = volume
-          this._duration.task = parseInt(form[0].value, 10) * 60
-          this._duration.short = parseInt(form[1].value) * 60
-          this._duration.long = parseInt(form[2].value, 10) * 60
-          this._sound.volume = parseInt(form[3].value, 10) / 100
-          // Now start
-          this._start()
-          if (this._sound.volume === 0) console.log('Starting muted!')
-        }) // END callback
-
-        const volumeDisplay = document.getElementById('pomodoro-volume-level')
-        const volumeSlider = document.getElementById('pomodoro-volume-range')
-        const volumeLevel = () => volumeSlider.value
-        // Play the sound immediately as a check for the user
-        volumeSlider.addEventListener('change', (evt) => {
-          this._sound.volume = parseInt(volumeLevel(), 10) / 100
-          this._sound.currentTime = 0
-          this._sound.play()
-        })
-
-        // Indicate the correct volume immediately.
-        // "onChange" triggers when the mouse is released,
-        // "onInput" as soon as the bar moves.
-        volumeSlider.addEventListener('input', (evt) => {
-          volumeDisplay.textContent = `${volumeLevel()} %`
-        })
-      } else {
-        // Display information and a stop button
-        let sec = ((this._phase.max - this._phase.cur) % 60)
-        if (sec < 10) {
-          sec = '0' + sec
-        }
-        let data = {
-          'time': Math.floor((this._phase.max - this._phase.cur) / 60) + ':' + sec,
-          'type': trans('pomodoro.phase.' + this._phase.type)
-        }
-        const pomodoroTemplate = require('./../../resources/templates/popup/pomodoro-status.handlebars')
-        this._pref = popup($('.button.pomodoro'), pomodoroTemplate(data), (form) => {
-          this._pref = null
-        })
-
-        $('#pomodoro-stop-button').on('click', (e) => {
-          this._pref.close()
-          this._pref = null
-          this._stop()
-        })
+    if (!this.isRunning()) {
+      // Preferences popup
+      let data = {
+        'duration_task': this._duration.task / 60,
+        'duration_short': this._duration.short / 60,
+        'duration_long': this._duration.long / 60,
+        'volume': this._sound.volume * 100
       }
+
+      this._pref = global.popupProvider.show('pomodoro-settings', document.querySelector('.button.pomodoro'), data, (form) => {
+        this._pref = null
+        // User has aborted
+        if (form === null) return
+
+        // 0 = task
+        // 1 = short
+        // 2 = long
+        // 3 = volume
+        this._duration.task = parseInt(form[0].value, 10) * 60
+        this._duration.short = parseInt(form[1].value) * 60
+        this._duration.long = parseInt(form[2].value, 10) * 60
+        this._sound.volume = parseInt(form[3].value, 10) / 100
+        // Now start
+        this._start()
+        if (this._sound.volume === 0) console.log('Starting muted!')
+      })
+
+      const volumeDisplay = document.getElementById('pomodoro-volume-level')
+      const volumeSlider = document.getElementById('pomodoro-volume-range')
+      const volumeLevel = () => volumeSlider.value
+      // Play the sound immediately as a check for the user
+      volumeSlider.addEventListener('change', (evt) => {
+        this._sound.volume = parseInt(volumeLevel(), 10) / 100
+        this._sound.currentTime = 0
+        this._sound.play()
+      })
+
+      // Indicate the correct volume immediately.
+      // "onChange" triggers when the mouse is released,
+      // "onInput" as soon as the bar moves.
+      volumeSlider.addEventListener('input', (evt) => {
+        volumeDisplay.textContent = `${volumeLevel()} %`
+      })
     } else {
-      this._pref.close()
-      this._pref = null
+      // Display information and a stop button
+      let sec = ((this._phase.max - this._phase.cur) % 60)
+      if (sec < 10) {
+        sec = '0' + sec
+      }
+      let data = {
+        'time': Math.floor((this._phase.max - this._phase.cur) / 60) + ':' + sec,
+        'type': trans('pomodoro.phase.' + this._phase.type)
+      }
+
+      this._pref = global.popupProvider.show('pomodoro-status', document.querySelector('.button.pomodoro'), data)
+
+      $('#pomodoro-stop-button').on('click', (e) => {
+        global.popupProvider.close()
+        this._pref = null
+        this._stop()
+      })
     }
   }
 

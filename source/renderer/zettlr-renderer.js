@@ -35,6 +35,9 @@ const matchFilesByTags = require('../common/util/match-files-by-tags')
 const reconstruct = require('./util/reconstruct-tree')
 const loadicons = require('./util/load-icons')
 
+// Service providers
+const PopupProvider = require('./providers/popup-provider')
+
 /**
  * This is the pendant class to the Zettlr class in the main process. It mirrors
  * the functionality of the main process, only that the functionality in here
@@ -80,6 +83,11 @@ class ZettlrRenderer {
         this._toolbar.setSearch(term)
         this.beginSearch(term)
       }
+    }
+
+    // Boot the service providers
+    this._providers = {
+      'popup': new PopupProvider()
     }
   }
 
@@ -137,9 +145,6 @@ class ZettlrRenderer {
 
       // Send an initial request to the reference database.
       this._ipc.send('citeproc-get-ids')
-
-      // Send an initial check for an update
-      this._ipc.send('update-check')
     }, 100)
 
     // Load the clarity icon modules, add custom icons and then refresh
