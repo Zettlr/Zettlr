@@ -52,21 +52,14 @@ class ZettlrPopup {
     document.addEventListener('mousedown', this._boundClickHandler)
     document.addEventListener('contextmenu', this._boundClickHandler)
     window.addEventListener('resize', this._boundResizeHandler)
-    // $(document).on('mousedown contextmenu', this._boundClickHandler)
-    // $(window).on('resize', this._boundResizeHandler)
 
-    // this._popup = // $('<div>').addClass('popup').css('opacity', '0')
     this._popup = document.createElement('div')
     this._popup.classList.add('popup')
     this._arrow = document.createElement('div')
     this._arrow.classList.add('popup-arrow')
-    // this._arrow = $('<div>').addClass('popup-arrow')
-    // this._popup.html(this._cnt)
     this._popup.innerHTML = this._cnt
     document.body.appendChild(this._popup)
     document.body.appendChild(this._arrow)
-    // $('body').append(this._popup)
-    // $('body').append(this._arrow)
 
     // Activate forms
     this._popup.querySelectorAll('form').forEach((form) => {
@@ -90,9 +83,6 @@ class ZettlrPopup {
 
     // Place
     this._place()
-
-    // Afterwards blend it in
-    // this._popup.animate({ 'opacity': '1' }, 200, 'swing')
   }
 
   /**
@@ -142,20 +132,22 @@ class ZettlrPopup {
     this._arrow.style.top = ''
     this._arrow.classList.remove('up', 'down', 'left', 'right')
 
-    this._x = this._elem.offsetLeft + this._elem.offsetWidth / 2
-    this._y = this._elem.offsetTop + this._elem.offsetHeight
+    let elemRect = this._elem.getBoundingClientRect()
+
+    this._x = elemRect.left + elemRect.width / 2
+    this._y = elemRect.top + elemRect.height
 
     let height = this._popup.offsetHeight
     let width = this._popup.offsetWidth
 
     // First find on which side there is the most space.
-    let top = this._elem.offsetTop
-    let left = this._elem.offsetLeft
-    let right = window.innerWidth - left - this._elem.offsetWidth
-    let bottom = window.innerHeight - top - this._elem.offsetHeight
+    let top = elemRect.top
+    let left = elemRect.left
+    let right = window.innerWidth - left - elemRect.width
+    let bottom = window.innerHeight - top - elemRect.height
 
     // 10px: arrow plus the safety-margin
-    if (bottom > height + 10 || this._elem.offsetTop < 50) {
+    if (bottom > height + 10 || elemRect.top < 50) {
       // Below element
       this._arrow.classList.add('up')
       this._popup.style.top = (this._y + 5) + 'px' // 5px margin for arrow
@@ -167,8 +159,8 @@ class ZettlrPopup {
         this._popup.style.left = (this._x - width / 2) + 'px' // Place centered under element
       }
 
-      this._arrow.style.top = (top + this._elem.offsetHeight) + 'px'
-      this._arrow.style.left = (left + this._elem.offsetWidth / 2 - this._arrow.offsetWidth / 2) + 'px'
+      this._arrow.style.top = (top + elemRect.height) + 'px'
+      this._arrow.style.left = (left + elemRect.width / 2 - this._arrow.offsetWidth / 2) + 'px'
 
       // Ensure the popup is completely visible (move inside the document if it's at an edge)
       if (this._popup.offsetLeft + this._popup.offsetWidth > window.innerWidth - 10) {
@@ -186,8 +178,8 @@ class ZettlrPopup {
     } else if (right > width + 10 && height <= window.innerHeight - 20 - this._y) {
       // We can place it right of the element
       // Therefore re-compute x and y
-      this._x = this._elem.offsetLeft + this._elem.offsetWidth
-      this._y = this._elem.offsetTop + this._elem.offsetHeight / 2
+      this._x = elemRect.left + elemRect.width
+      this._y = elemRect.top + elemRect.height / 2
       this._arrow.classList.add('left')
       this._popup.style.left = (this._x + 5) + 'px'
       if (this._y + height / 2 > window.innerHeight - 5) {
@@ -195,8 +187,8 @@ class ZettlrPopup {
       } else {
         this._popup.style.top = (this._y - height / 2) + 'px'
       }
-      this._arrow.style.left = (left + this._elem.offsetWidth) + 'px'
-      this._arrow.style.top = (top + this._elem.offsetHeight / 2 - this._arrow.offsetHeight / 2) + 'px'
+      this._arrow.style.left = (left + elemRect.width) + 'px'
+      this._arrow.style.top = (top + elemRect.height / 2 - this._arrow.offsetHeight / 2) + 'px'
 
       // Ensure the popup is completely visible (move inside the document if it's at an edge)
       if (this._popup.offsetTop + this._popup.offsetHeight > window.innerHeight - 10) {
@@ -207,8 +199,8 @@ class ZettlrPopup {
     } else {
       // Above
       // Therefore re-compute x and y
-      this._x = this._elem.offsetLeft + this._elem.offsetWidth / 2
-      this._y = this._elem.offsetTop
+      this._x = elemRect.left + elemRect.width / 2
+      this._y = elemRect.top
       this._arrow.classList.add('down')
       this._popup.style.top = (this._y - height - 5) + 'px'
       if (this._x + width / 2 > window.innerWidth - 5) {
@@ -217,7 +209,7 @@ class ZettlrPopup {
         this._popup.style.left = (this._x - width / 2) + 'px'
       }
       this._arrow.style.top = top - 5 + 'px'
-      this._arrow.style.left = (left + this._elem.offsetWidth / 2 - this._arrow.offsetWidth / 2) + 'px'
+      this._arrow.style.left = (left + elemRect.width / 2 - this._arrow.offsetWidth / 2) + 'px'
 
       // Ensure the popup is completely visible (move inside the document if it's at an edge)
       if (this._popup.offsetLeft + this._popup.offsetWidth > window.innerWidth - 10) {

@@ -1122,7 +1122,8 @@ class ZettlrEditor {
     })
 
     const data = { 'content': line.text.substr(5 + ref.length) }
-    global.popupProvider.show('footnote-edit', elem, data)
+    console.log(elem[0])
+    global.popupProvider.show('footnote-edit', elem[0], data)
 
     // Focus the textarea immediately.
     $('#footnote-edit-textarea').focus()
