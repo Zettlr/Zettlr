@@ -331,6 +331,7 @@ class ZettlrEditor {
     this._cm.on('renderLine', (cm, line, elt) => {
       // Disable on non-Markdown text
       if (cm.getModeAt({ 'line': cm.doc.getLineNumber(line), 'ch': 0 }).name !== 'markdown') return
+
       // Need to calculate indent and padding in order to provide a proper hanging indent
       // Originally based on https://discuss.codemirror.net/t/hanging-indent/243/2
       let monospaceWidth = this.computeMonospaceWidth()
@@ -349,19 +350,30 @@ class ZettlrEditor {
       let padding = match[1]
       let ordinal = match[2] || ''
 
-      // The following code is a bit complicated as the as the HTML structure is the following:
+      // The following code is a bit complicated as the as the HTML structure
+      // is the following:
       //  - some spaces or tabs in normal font (length = numberOfSpaces)
       //  - the sequence "- " or "1. " in monospaced font (length = numberOfOrdinal)
       //  - text in normal font
 
-      // Tabs are another story. They are inserted as spans with class "cm-tab" and consequently change the layout again
-      // The following tries to align tab-indented list with space-indented lists (works quite ok at least on the first level)
+      // Tabs are another story. They are inserted as spans with class "cm-tab"
+      // and consequently change the layout again. The following tries to align
+      // tab-indented list with space-indented lists (works quite ok at least
+      // on the first level)
       let numberOfTabs = (padding.match(/\t/g) || []).length
       let numberOfSpaces = padding.length - numberOfTabs
       let numberOfOrdinal = ordinal.length
 
+      // The following is a funny bug: If we don't add that amount back to the
+      // paddingLeft of the line element, any selection on that element will be
+      // left-padded by exactly 4 pixels. This fix of simply adding 4 pixels
+      // surprisingly works on any font (monospace, serif, sans-serif) as well
+      // as on all zoom levels. I have no idea why this happens. If someone
+      // finds the cause, please shoot me a few lines!
+      let selectionLeftPadFix = 4
+
       elt.style.textIndent = '-' + (numberOfSpaces * spaceWidth + numberOfOrdinal * monospaceWidth) + 'px'
-      elt.style.paddingLeft = (numberOfSpaces * spaceWidth + numberOfOrdinal * monospaceWidth) + 'px'
+      elt.style.paddingLeft = (numberOfSpaces * spaceWidth + numberOfOrdinal * monospaceWidth + selectionLeftPadFix) + 'px'
     })
 
     // Display a footnote if the target is a link (and begins with ^)
