@@ -1,7 +1,7 @@
 /* global define CodeMirror */
 // This plugin renders markdown tables for easy editability
 
-const Table = require('../../util/table-helper.js');
+const Table = require('../../modules/table-editor');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

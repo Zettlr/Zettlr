@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const pipeParser = require('../source/renderer/util/table-parser-pipe')
+const parsePipeTable = require('../source/renderer/modules/table-editor/parse-pipe')
 const assert = require('assert')
 
 const table = []
@@ -80,11 +80,11 @@ const TABLE_ERROR_1 = `| Unequal | cols | table | here |
 describe('TableEditor#pipeParser()', function () {
   for (let i = 0; i < table.length; i++) {
     it(`Should parse the test table ${i + 1} correctly`, function () {
-      assert.deepStrictEqual(pipeParser(table[i]), tableResults[i])
+      assert.deepStrictEqual(parsePipeTable(table[i]), tableResults[i])
     })
   }
 
   it('Should throw an error when attempting to parse mismatched columns', function () {
-    assert.throws(function () { pipeParser(TABLE_ERROR_1) })
+    assert.throws(function () { parsePipeTable(TABLE_ERROR_1) })
   })
 })

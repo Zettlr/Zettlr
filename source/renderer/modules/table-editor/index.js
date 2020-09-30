@@ -16,14 +16,14 @@
 * END HEADER
 */
 
-const pipeParser = require('./table-parser-pipe')
-const simpleParser = require('./table-parser-simple')
-const gridParser = require('./table-parser-grid')
+const parsePipeTable = require('./parse-pipe')
+const parseSimpleTable = require('./parse-simple')
+const parseGridTable = require('./parse-grid')
 
-const buildPipeTable = require('./table-build-pipe')
-const buildSimpleTable = require('./table-build-simple')
-const buildGridTable = require('./table-build-grid')
-const renderTemplate = require('./render-template')
+const buildPipeTable = require('./build-pipe')
+const buildSimpleTable = require('./build-simple')
+const buildGridTable = require('./build-grid')
+const renderTemplate = require('../../util/render-template')
 
 class TableHelper {
   /**
@@ -173,13 +173,13 @@ class TableHelper {
     let parsed
     switch (potentialType) {
       case 'simple':
-        parsed = simpleParser(markdownTable)
+        parsed = parseSimpleTable(markdownTable)
         break
       case 'grid':
-        parsed = gridParser(markdownTable)
+        parsed = parseGridTable(markdownTable)
         break
       default:
-        parsed = pipeParser(markdownTable)
+        parsed = parsePipeTable(markdownTable)
         break
     }
 
