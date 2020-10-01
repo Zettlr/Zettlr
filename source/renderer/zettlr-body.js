@@ -30,7 +30,6 @@ const StatsDialog = require('./dialog/stats.js')
 const TagCloud = require('./dialog/tag-cloud.js')
 const UpdateDialog = require('./dialog/update.js')
 const AboutDialog = require('./dialog/about.js')
-const PasteImage = require('./dialog/paste-image.js')
 const PreferencesDialog = require('./dialog/preferences.js')
 const PDFPreferences = require('./dialog/pdf-preferences.js')
 const TagsPreferences = require('./dialog/tags-preferences.js')
@@ -59,8 +58,6 @@ class ZettlrBody {
     this._renderer = parent
     this._spellcheckLangs = null // This holds all available languages
     this._n = [] // Holds all notifications currently displaying
-    // Holds the currently displayed dialog. Prevents multiple dialogs from appearing.
-    this._currentDialog = null
     // Holds the current popup. Prevents multiple popups from appearing.
     this._currentPopup = null
     // Handles switching between themes
@@ -480,7 +477,6 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayPreferences (prefs) {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     this._currentDialog = new PreferencesDialog()
     this._currentDialog.init(prefs).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
@@ -492,7 +488,6 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayPDFPreferences (prefs) {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     this._currentDialog = new PDFPreferences()
     this._currentDialog.init(prefs).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
@@ -504,7 +499,6 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayTagsPreferences (prefs) {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     this._currentDialog = new TagsPreferences()
     this._currentDialog.init(prefs).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
@@ -516,7 +510,6 @@ class ZettlrBody {
    * @return {void}      Nothing to return.
    */
   displayTagCloud () {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     global.ipc.send('get-tags-database', {}, (ret) => {
       this._currentDialog = new TagCloud()
       this._currentDialog.init(ret).open()
@@ -530,7 +523,6 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayProjectProperties (prefs) {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     this._currentDialog = new ProjectProperties()
     // We need the project directory's name as a default value
     prefs.projectDirectory = this.getRenderer().findObject(prefs.hash).name
@@ -543,7 +535,6 @@ class ZettlrBody {
     * @param  {Object} cnt An object containing information on the update.
     */
   displayUpdate (cnt) {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     this._currentDialog = new UpdateDialog()
     this._currentDialog.init(cnt).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
@@ -553,19 +544,8 @@ class ZettlrBody {
     * Displays the about dialog
     */
   displayAbout () {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     this._currentDialog = new AboutDialog()
     this._currentDialog.init().open()
-    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
-  }
-
-  /**
-   * This dialog is shown when the user has pasted an image from the clipboard.
-   */
-  displayPasteImage () {
-    if (this._currentDialog !== null) return // Only one dialog at a time
-    this._currentDialog = new PasteImage()
-    this._currentDialog.init({ 'activeFile': this._renderer.getActiveFile() }).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
 
@@ -573,7 +553,6 @@ class ZettlrBody {
    * This dialog lets the user edit his/her custom CSS
    */
   displayCustomCss () {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     global.ipc.send('get-custom-css', {}, (ret) => {
       this._currentDialog = new CustomCSS()
       this._currentDialog.init(ret).open()
@@ -861,7 +840,6 @@ class ZettlrBody {
 
   displayDevClipboard () {
     // DevClipboard
-    if (this._currentDialog !== null) return // Only one dialog at a time
     global.popupProvider.close()
     this._currentDialog = new DevClipboard()
     this._currentDialog.init({}).open()

@@ -58,6 +58,7 @@
 - Migrated the toolbar logic from jQuery to vanilla JS.
 - Migrated the main renderer from jQuery to vanilla JS.
 - Migrated the popup class from jQuery to vanilla JS.
+- (Mostly) migrated the dialog classes from jQuery to vanilla JS (tabs are still done using jQueryUI).
 - Added a popup provider for easy creation of popups across the main renderer process.
 - Added an update provider for easy access to specific updating functionality (such as downloading an update, and automatically running it).
 - Migrated any popups that were defined inline into their respective handlebars template files.

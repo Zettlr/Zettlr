@@ -37,10 +37,15 @@ class ZettlrDialog extends EventEmitter {
     */
   constructor () {
     super()
+    if (document.getElementById('zettlr-modal') !== null) {
+      throw new Error('Could not create dialog: There is already a dialog open!')
+    }
+
     // Used to retrieve some configuration options
-    this._body = $('body')
-    this._container = $('#container')
-    this._modal = $('<div>').addClass('modal')
+    this._container = document.getElementById('container')
+    this._modal = document.createElement('div')
+    this._modal.classList.add('modal')
+    this._modal.setAttribute('id', 'zettlr-modal')
     this._dialog = null // Must be overwritten by extension dialogs.
     this._statsData = []
     this._statsLabels = []
@@ -56,8 +61,8 @@ class ZettlrDialog extends EventEmitter {
     }
 
     // Blur the background
-    this._container.addClass('blur')
-    this._body.append(this._modal)
+    this._container.classList.add('blur')
+    document.body.appendChild(this._modal)
 
     // Activate event listeners
     return this._act()
@@ -68,16 +73,17 @@ class ZettlrDialog extends EventEmitter {
     */
   _place () {
     // Adjust the margins
-    let dialog = this._modal.find('.dialog').first()
-    let diaH = dialog.outerHeight()
-    let winH = $(window).innerHeight()
+    let dialog = this._modal.querySelector('.dialog')
+    let diaH = dialog.offsetHeight
+    let winH = window.innerHeight
 
     if (diaH < winH) {
       let margin = (winH - diaH) / 2
-      dialog.css('margin-top', margin + 'px')
+      dialog.style.marginTop = margin + 'px'
     } else {
-      dialog.css('margin-top', '2%') // Otherwise enable scrolling
-      dialog.css('margin-bottom', '2%')
+      // Otherwise enable scrolling
+      dialog.style.marginTop = '2%'
+      dialog.style.marginBottom = '2%'
     }
   }
 
@@ -87,9 +93,9 @@ class ZettlrDialog extends EventEmitter {
     */
   close () {
     this.emit('beforeClose') // Notify listeners that the dialog will be closed.
-    this._modal.detach()
-    this._container.removeClass('blur')
-    this._modal.html('')
+    document.body.removeChild(this._modal)
+    this._container.classList.remove('blur')
+    this._modal.innerHTML = ''
     this.emit('afterClose') // Notify listeners that the dialog is now closed.
     return this
   }
@@ -98,7 +104,7 @@ class ZettlrDialog extends EventEmitter {
     * Has the dialog been initialized?
     * @return {Boolean} True, if the initialization has occurred previously.
     */
-  isInitialized () { return (this._modal.html() !== '') }
+  isInitialized () { return (this._modal.innerHTML !== '') }
 
   /**
     * Initializes the dialog. Pass the dialog and some data to load the template.
@@ -131,7 +137,7 @@ class ZettlrDialog extends EventEmitter {
       return this.close()
     }
 
-    this._modal.html(tpl)
+    this._modal.innerHTML = tpl
 
     return this
   }
@@ -142,45 +148,52 @@ class ZettlrDialog extends EventEmitter {
     */
   _act () {
     // Focus the first input, if there is a form.
-    let form = this._modal.find('form#dialog')
-    form.find('input').first().select()
+    let form = this._modal.querySelector('form#dialog')
+    if (form !== null) {
+      form.querySelector('input').select()
+    }
 
     // Abort integration if an abort button is given
-    this._modal.find('#abort').on('click', (e) => { this.close() })
+    this._modal.querySelector('#abort').addEventListener('click', (e) => { this.close() })
 
     // Integration of default action: If there is a data-default-action button
     // in the dialog, focus it so that the user by pressing return can immediately
     // issue the command.
-    this._modal.find('button[data-default-action="data-default-action"]').focus()
+    let defaultAction = this._modal.querySelector('button[data-default-action="data-default-action"]')
+    if (defaultAction !== null) {
+      defaultAction.focus()
+    }
 
     // Don't bubble so that the user may click on the dialog without
     // closing the whole modal.
-    this._modal.find('.dialog').on('click mousedown', (e) => { e.stopPropagation() })
+    this._modal.querySelector('.dialog').addEventListener('click', (e) => { e.stopPropagation() })
+    this._modal.querySelector('.dialog').addEventListener('mousedown', (e) => { e.stopPropagation() })
 
     // Abort on mousedown (why mousedown? b/c click only triggers
     // after down AND up. So if the user mouseDOWNED on the dialog
     // e.g. to select some text, and then pulls up the mouse on
     // the modal, it'll close regardless of intent).
-    this._modal.on('mousedown', (e) => { this.close() })
+    this._modal.addEventListener('mousedown', (e) => { this.close() })
 
     // Enable tabs if there are any.
-    if (this._modal.find('#prefs-tabs').length > 0) {
-      this._modal.find('.dialog').tabs({
+    if (this._modal.querySelector('#prefs-tabs') !== null) {
+      // TODO
+      $(this._modal.querySelector('.dialog')).tabs({
         // Always re-place the modal and adjust the margins.
         activate: (event, ui) => { this._place() }
       })
     }
 
     // Always keep the dialog centered and nice
-    $(window).on('resize', (e) => { this._place() })
+    window.addEventListener('resize', (e) => { this._place() })
 
     // If there are any images in the tab, re-compute the size of the dialog
     // margins after the images load.
-    this._modal.on('load', 'img', (e) => { this._place() })
+    // TODO: this._modal.addEventListener('load', 'img', (e) => { this._place() })
 
     // Are there any open-file-buttons? If so enable the request for a file by
     // clicking them.
-    this._modal.find('.request-file').on('click', (event) => {
+    let onRequestFile = (event) => {
       const targetButton = event.target.tagName.toLowerCase() === 'clr-icon'
         ? event.target.parentElement
         : event.target
@@ -205,15 +218,23 @@ class ZettlrDialog extends EventEmitter {
         // button, because each button has a designated text field.
         document.querySelector(requestTarget).value = ret[0]
       })
+    }
+
+    let requestFileButtons = this._modal.querySelectorAll('.request-file')
+    requestFileButtons.forEach((elem) => {
+      elem.addEventListener('click', onRequestFile)
     })
 
     // If there is a "copy to clipboard" button, copy the data to the clipboard.
-    this._modal.find('.copy-clipboard').on('click', (event) => {
-      clipboard.writeText($(event.target).attr('data-copy-clipboard'))
-    })
+    let copyClipboardButton = this._modal.querySelector('.copy-clipboard')
+    if (copyClipboardButton !== null) {
+      copyClipboardButton.addEventListener('click', (event) => {
+        clipboard.writeText(event.target.dataset.copyClipboard)
+      })
+    }
 
     // Tippify all elements with the respective attribute
-    tippy(this._modal[0].querySelectorAll('[data-tippy-content]'), {
+    tippy(this._modal.querySelectorAll('[data-tippy-content]'), {
       delay: 100,
       arrow: true,
       duration: 100
@@ -233,7 +254,7 @@ class ZettlrDialog extends EventEmitter {
   /**
    * This function grants access to the modal object to e.g. assign classes to
    * certain elements.
-   * @return {jQuery} The modal DOM object.
+   * @return {Element} The modal DOM object.
    */
   getModal () { return this._modal }
 }

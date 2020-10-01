@@ -108,10 +108,11 @@ class PreferencesDialog extends ZettlrDialog {
 
   postAct () {
     // Activate the form to be submitted
-    let form = this._modal.find('form#dialog')
-    form.on('submit', (e) => {
+    let form = this._modal.querySelector('form#dialog')
+    form.addEventListener('submit', (e) => {
       e.preventDefault()
       // Give the ZettlrBody object the results
+      // TODO
       this.proceed(form.serializeArray())
     })
 
