@@ -14,7 +14,7 @@
 /**
 * Basic hashing function (thanks to https://stackoverflow.com/a/7616484)
 * @param  {String} string The string that should be hashed
-* @return {Integer}        The hash of the given string
+* @return {Number}        The hash of the given string
 */
 module.exports = function (string) {
   let hash = 0
@@ -25,7 +25,7 @@ module.exports = function (string) {
   for (i = 0; i < string.length; i++) {
     chr = string.charCodeAt(i)
     hash = ((hash << 5) - hash) + chr
-    hash |= 0 // Convert to 32bit integer
+    hash |= 0 // Convert to 64bit integer
   }
   return hash
 }
