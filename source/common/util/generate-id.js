@@ -14,9 +14,13 @@
 const replaceStringVariables = require('./replace-string-variables.js')
 
 /**
-* This function generates a (per second unique) ID to be inserted into the editor
-* @return {String} An id in the format "YYYYMMDDHHMMSS"
-*/
+ * This function generates an ID using the given pattern (default: YYYYMMDDhhmmss)
+ * by replacing any variables within said pattern.
+ *
+ * @param   {String}  [pattern='%Y%M%D%h%m%s']  The pattern to apply
+ *
+ * @return  {String}                            The final string after replacements.
+ */
 module.exports = function (pattern = '%Y%M%D%h%m%s') {
   return replaceStringVariables(pattern)
 }
