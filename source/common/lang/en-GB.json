@@ -7,7 +7,7 @@
             "lukecarrier \u003Cluke@carrier.im\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-09-14T12:02:54.000000Z"
+        "updated_at": "2020-09-23T11:34:18.000000Z"
     },
     "dialog": {
         "about": {
@@ -76,10 +76,12 @@
             "replace_placeholder": "Replace with"
         },
         "paste_image": {
+            "current_directory": "Current directory",
             "dimensions": "Image size",
             "info": "Here is a preview of the image that is currently in your clipboard. Hit return to save it to the current directory, or choose a custom directory.",
             "name_label": "Filename",
             "name_placeholder": "A unique filename",
+            "resize_to": "Resize image to",
             "retain_aspect_label": "Retain aspect ratio",
             "save_cwd": "Save to current directory",
             "title": "Insert Image from Clipboard"
@@ -433,11 +435,13 @@
         "no_attachments": "No attachments",
         "no_dir_selected": "No directory selected",
         "no_search_results": "No results",
+        "number_selections": "%s selections",
         "statistics_more": "More statistics \u2026",
         "today_words": "words today",
         "virtual_dirs": "Virtual Directories",
         "words": "%s words",
-        "words_last_month": "words last month"
+        "words_last_month": "words last month",
+        "words_selected": "%s selected"
     },
     "localise": {
         "decimal_delimiter": ".",
@@ -449,6 +453,7 @@
         "all_front": "Bring All to Front",
         "bold": "Bold",
         "clear_recent_docs": "Empty",
+        "close_all_tabs": "Close all tabs",
         "close_dir": "Close directory",
         "close_file": "Close file",
         "copy": "Copy",

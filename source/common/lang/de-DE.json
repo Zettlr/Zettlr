@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-08-03T08:52:45.000000Z"
+        "updated_at": "2020-09-23T11:35:13.000000Z"
     },
     "dialog": {
         "about": {
@@ -73,10 +73,12 @@
             "replace_placeholder": "Ersetzen mit"
         },
         "paste_image": {
+            "current_directory": "Aktuelles Verzeichnis",
             "dimensions": "Bildma\u00dfe",
             "info": "Hier siehst du eine Vorschau des Bildes, welches in die Datei eingef\u00fcgt werden wird. Dr\u00fccke Eingabe, um das Bild im aktuell ausgew\u00e4hlten Verzeichnis zu speichern, oder w\u00e4hle ein benutzerdefiniertes Verzeichnis aus.",
             "name_label": "Dateiname",
             "name_placeholder": "Ein eindeutiger Dateiname",
+            "resize_to": "Verkleinere Bild auf",
             "retain_aspect_label": "Seitenverh\u00e4ltnis beibehalten",
             "save_cwd": "Im aktuellen Verzeichnis speichern",
             "title": "Bild einf\u00fcgen"
@@ -430,11 +432,13 @@
         "no_attachments": "Keine Anh\u00e4nge",
         "no_dir_selected": "Kein Verzeichnis ausgew\u00e4hlt",
         "no_search_results": "Keine Ergebnisse",
+        "number_selections": "%s Selektionen",
         "statistics_more": "Mehr Statistiken \u2026",
         "today_words": "W\u00f6rter heute",
         "virtual_dirs": "Virtuelle Ordner",
         "words": "%s W\u00f6rter",
-        "words_last_month": "W\u00f6rter (Monat)"
+        "words_last_month": "W\u00f6rter (Monat)",
+        "words_selected": "%s ausgew\u00e4hlt"
     },
     "localise": {
         "decimal_delimiter": ",",
@@ -446,6 +450,7 @@
         "all_front": "Alle in den Vordergrund",
         "bold": "Fett",
         "clear_recent_docs": "Liste leeren",
+        "close_all_tabs": "Alle Tabs schlie\u00dfen",
         "close_dir": "Verzeichnis schlie\u00dfen",
         "close_file": "Datei schlie\u00dfen",
         "copy": "Kopieren",
