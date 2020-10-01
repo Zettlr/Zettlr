@@ -62,6 +62,7 @@
 - Added an update provider for easy access to specific updating functionality (such as downloading an update, and automatically running it).
 - Migrated any popups that were defined inline into their respective handlebars template files.
 - The TableEditor is now finally a module.
+- Outsourced the CSS computations from the main module of the TableEditor.
 
 # 1.7.5
 

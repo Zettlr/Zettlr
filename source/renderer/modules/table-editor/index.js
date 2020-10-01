@@ -23,7 +23,10 @@ const parseGridTable = require('./parse-grid')
 const buildPipeTable = require('./build-pipe')
 const buildSimpleTable = require('./build-simple')
 const buildGridTable = require('./build-grid')
+
 const renderTemplate = require('../../util/render-template')
+
+const computeCSS = require('./compute-css')
 
 class TableHelper {
   /**
@@ -794,156 +797,8 @@ class TableHelper {
     if (document.getElementById('tableHelperCSS')) return // CSS already present
 
     // Create the styles
-    let link = $('<style>').attr('id', 'tableHelperCSS')
-    link.text(`
-      table.table-helper {
-        width: 100%;
-        display: inline-table; /* Prevent any issues */
-        border: 1px solid #666;
-        padding: 0px;
-        border-collapse: collapse;
-      }
-
-      table.table-helper tr:first-child {
-        font-weight: bold;
-      }
-
-      table.table-helper td {
-        padding: 2px;
-        border: 1px solid #666;
-        border-collapse: collapse;
-        min-width: 10px;
-      }
-
-      .table-helper-align-button-container {
-        opacity: 0.25;
-        transition: 0.2s opacity ease;
-        width: ${this._edgeButtonSize * 3}px;
-        height: ${this._edgeButtonSize}px;
-        border-radius: ${this._edgeButtonSize * 0.25}px;
-        overflow: hidden;
-        background-color: #fff;
-        color: #4d5d75;
-        position: absolute;
-        box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, .25);
-      }
-
-      .table-helper-align-button-container:hover { opacity: 1; }
-
-      .table-helper-align-button, .table-helper-remove-button {
-        width: ${this._edgeButtonSize}px;
-        height: ${this._edgeButtonSize}px;
-        padding-top: ${this._edgeButtonSize * 0.1}px;
-        display: inline-block;
-        vertical-align: top;
-        text-align: center;
-        cursor: pointer;
-        transition: 0.2s background-color ease;
-      }
-
-      .table-helper-align-button:hover, .table-helper-remove-button:hover {
-        background-color: #cde;
-      }
-
-      .table-helper-align-button-line {
-        width: ${this._edgeButtonSize * 0.74}px;
-        height: ${this._edgeButtonSize * 0.1}px;
-        margin-top: ${this._edgeButtonSize * 0.13}px;
-        margin-left: ${this._edgeButtonSize * 0.13}px;
-        margin-right: ${this._edgeButtonSize * 0.13}px;
-        background-color: #4d5d75;
-      }
-
-      .table-helper-align-button.align-left div:last-child {
-        width: ${this._edgeButtonSize * 0.4}px;
-      }
-
-      .table-helper-align-button.align-right div:last-child {
-        width: ${this._edgeButtonSize * 0.4}px;
-        margin-left: ${this._edgeButtonSize * 0.47}px;
-      }
-
-      .table-helper-align-button.align-center div:nth-child(2) {
-        width: ${this._edgeButtonSize * 0.4}px;
-        margin-left: ${this._edgeButtonSize * 0.27}px;
-      }
-
-      .table-helper-remove-button-container {
-        opacity: 0.25;
-        transition: 0.2s opacity ease;
-        width: ${this._edgeButtonSize * 2}px;
-        height: ${this._edgeButtonSize}px;
-        border-radius: ${this._edgeButtonSize * 0.25}px;
-        overflow: hidden;
-        background-color: #fff;
-        color: #4d5d75;
-        position: absolute;
-        box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, .25);
-      }
-
-      .table-helper-remove-button-container:hover { opacity: 1; }
-
-      .table-helper-remove-button-line {
-        background-color: #4d5d75;
-        width: ${this._edgeButtonSize * 0.74}px;
-        height: ${this._edgeButtonSize * 0.1}px;
-      }
-
-      .table-helper-remove-button {
-        /*transform-origin: center center;*/
-      }
-
-      .table-helper-remove-button.row .table-helper-remove-button-line {
-        position: absolute;
-        top: ${this._edgeButtonSize / 2}px;
-        left: ${this._edgeButtonSize * 0.13}px; /* The margin */
-      }
-
-      .table-helper-remove-button.col .table-helper-remove-button-line {
-        position: absolute;
-        top: ${this._edgeButtonSize / 2}px;
-        left: ${this._edgeButtonSize + this._edgeButtonSize * 0.13}px; /* The margin */
-      }
-
-      .table-helper-remove-button-line:nth-child(1) {
-        transform: rotate(-45deg);
-        background-color: #f56868;
-      }
-      .table-helper-remove-button-line:nth-child(2) {
-        transform: rotate(45deg);
-        background-color: #f56868;
-      }
-
-      /* row */
-      .table-helper-remove-button.row .table-helper-remove-button-line:nth-child(3) {
-        transform: rotate(0deg)
-        width:
-      }
-
-      /* col */
-      .table-helper-remove-button.col .table-helper-remove-button-line:nth-child(3) {
-        transform: rotate(90deg)
-      }
-
-      .table-helper-add-button {
-        opacity: 0.25;
-        transition: 0.2s opacity ease;
-        width: ${this._edgeButtonSize}px;
-        height: ${this._edgeButtonSize}px;
-        border-radius: ${this._edgeButtonSize}px;
-        background-color: #fff;
-        color: #4d5d75;
-        text-align: center;
-        box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, .25);
-        line-height: ${this._edgeButtonSize}px;
-        cursor: pointer;
-        position: absolute;
-        font-weight: bold;
-      }
-      .table-helper-add-button:hover { opacity: 1; }
-      `)
-
-    $('head').prepend(link)
+    const styleElement = computeCSS(this._edgeButtonSize)
+    document.head.prepend(styleElement)
   }
 
   /**
