@@ -2,6 +2,7 @@
 
 ## GUI and Functionality
 
+- **New Feature**: Typewriter mode. By pressing `Cmd/Ctrl+Alt+T`, you can activate the typewriter mode, which will keep the current line in the editor always centered so that you have to move your eyes less while editing a text. This also works in combination with the distraction free mode so that you can fully focus on what you're editing right at the moment.
 - Fixed the fold-gutter being too close to the text.
 - The editor link autocompletion now respects the setting to use headings level 1 instead of YAML frontmatter titles where possible.
 - The paste image dialog now also provides the original image size as a default value, so that you simply can use the arrow buttons on the field to adjust the image size.
@@ -19,6 +20,10 @@
 - Reduced the added margins for overflowing dialog windows from 15 % to 2 %, making the visible gap on smaller screens smaller.
 - Remove the intermediary `.ztr-project`-migration code, which means you should update to Zettlr 1.7.x before updating to 1.8.x, if you still use an older version of Zettlr.
 - Fixed (= monkeypatched) a weird bug that would cause selections on specially indented lines (e.g. wrapped blockquotes, list items, etc.) to be padded by precisely four pixels, making the selection not look like a box.
+- Double clicks on file tabs now make files intransient (if they were transient before).
+- The editor is now in a non-editable mode if no file is open. If the editor is read-only, the Zettlr logo will display in the background to indicate that fact. Empty files, on the other hand, will not yield the feather logo anymore. This should now meet up with users' expectations about file editing better.
+- The last opened file will now reliably open whenever you start the application again.
+- File loading (especially on boot) is now much faster, because the opened tabs won't be switched through during load anymore. Only the relevant, last file will be opened and displayed.
 
 ## Under the Hood
 
@@ -64,6 +69,17 @@
 - Migrated any popups that were defined inline into their respective handlebars template files.
 - The TableEditor is now finally a module.
 - Outsourced the CSS computations from the main module of the TableEditor.
+- Migrated the CodeMirror editor instantiation into its own module (MarkdownEditor).
+- Transformed all event listeners on the CodeMirror instance to "hooks" to reflect the fact that they are plugins, except they are not run like parameterless commands but hook into certain events of the application.
+- Moved the CodeMirror assets from the old folder into the MarkdownEditor module.
+- Moved some general utility functions to the `common/util`-folder.
+- The rendering plugins have been optimized. They now take less time to run and also don't keep an additional array of all the textmarkers in memory, decreasing the computational load especially for big documents.
+- The app now saves the last opened file again.
+- Moved the Turndown and Showdown converters to two utility functions, md2html and html2md.
+- Moved the regular expression for detecting image files by extension into the global RegExp module.
+- Moved the `moveSection` helper function to the `common/util`-folder.
+- Documentation fix for `safeAssign`.
+- Fixes in the tests.
 
 # 1.7.5
 
