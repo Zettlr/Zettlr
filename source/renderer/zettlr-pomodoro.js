@@ -123,7 +123,11 @@ class ZettlrPomodoro {
 
       // Set the class of the value accordingly
       this._progressValue.addClass(this._phase.type)
-      document.getElementById('pomodoro-phase-type').textContent = trans('pomodoro.phase.' + this._phase.type)
+      const pomodoroTimerPhaseElement = document.getElementById('pomodoro-phase-type')
+      if (pomodoroTimerPhaseElement) {
+        pomodoroTimerPhaseElement.textContent = trans('pomodoro.phase.' + this._phase.type)
+      }
+
       if (this._pref) this._pref.change() // Indicate a possible change in the popup's size.
       global.notify('Pomodoro: <strong>' + trans('pomodoro.phase.' + this._phase.type) + '</strong>')
     }
