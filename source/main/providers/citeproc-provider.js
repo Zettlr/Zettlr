@@ -115,6 +115,23 @@ class CiteprocProvider {
       }
     })
 
+    /**
+     * Listen for events coming from the citation renderer of the MarkdownEditor
+     */
+    ipcMain.on('citation-renderer', (event, content) => {
+      const { command, payload } = content
+
+      if (command === 'get-citation') {
+        event.sender.webContents.send('citeproc', {
+          'command': 'get-citation',
+          'payload': {
+            'originalCitation': payload.citation,
+            'renderedCitation': this.getCitation(payload.citation)
+          }
+        })
+      }
+    })
+
     // Read in the main library
     this.load()
   }

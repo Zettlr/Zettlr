@@ -141,14 +141,6 @@ class ZettlrEditor {
     this._searcher.setInstance(this._editor.codeMirror)
     this._autocomplete.init(this._editor.codeMirror)
 
-    // We need to update citations also on updates, as this is the moment when
-    // new spans get added to the DOM which we might have to render.
-    // TODO this._cm.on('update', (cm) => {
-    //   this.renderCitations()
-    //   // Must be called to ensure all tables have active event listeners.
-    //   if (this._renderTables) this._cm.execCommand('markdownInitiateTables')
-    // })
-
     // TODO this._cm.on('mousedown', (cm, event) => {
     //   // Ignore click events if they attempt to perform a special action
     //   let target = event.target
@@ -714,45 +706,6 @@ class ZettlrEditor {
    */
   moveSection (fromLine, toLine) {
     this._editor.moveSection(fromLine, toLine)
-  }
-
-  /**
-   * Renders all citations that haven't been rendered yet.
-   * @return {void} Does not return.
-   */
-  renderCitations () {
-    let needRefresh = false
-    let elements = $('.CodeMirror .citeproc-citation')
-    elements.each((index, elem) => {
-      elem = $(elem)
-      if (elem.attr('data-rendered') !== 'yes') {
-        let item = elem.text()
-        let id = hash(item)
-        if (this._citationBuffer[id] !== undefined) {
-          elem.html(this._citationBuffer[id]).removeClass('error').attr('data-rendered', 'yes')
-          needRefresh = true
-        } else {
-          let newCite = global.citeproc.getCitation(item)
-          switch (newCite.status) {
-            case 4: // Engine was ready, newCite.citation contains the citation
-              elem.html(newCite.citation).removeClass('error').attr('data-rendered', 'yes')
-              this._citationBuffer[id] = newCite.citation
-              needRefresh = true
-              break
-            case 3: // There was an error loading the database
-              elem.addClass('error')
-              break
-            case 2: // There was no database, so don't do anything.
-              elem.attr('data-rendered', 'yes')
-              break
-          }
-        }
-      }
-    })
-
-    // We need to refresh the editor, because the updating process has certainly
-    // altered the widths of the spans.
-    if (needRefresh) this._cm.refresh()
   }
 
   /**

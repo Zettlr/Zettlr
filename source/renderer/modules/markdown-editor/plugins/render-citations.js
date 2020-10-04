@@ -12,12 +12,38 @@
 })(function (CodeMirror) {
   'use strict'
 
+  const { ipcRenderer } = require('electron')
+
+  // Listen to IPC events to update the citations
+  ipcRenderer.on('citation-renderer', (event, message) => {
+    const { command, payload } = message
+
+    if (command === 'get-citation') {
+      // Find the correct citation and replace the span's text content
+      // with the correct, rendered citation
+      let spanToRender = toRender.find(elem => elem.citation === payload.originalCitation)
+      if (spanToRender !== undefined) {
+        // Replace HTML content and remove item from array
+        // We need to set the HTML as citeproc may spit out <i>-tags etc.
+        spanToRender.element.innerHTML = payload.renderedCitation
+        toRender.splice(toRender.indexOf(spanToRender), 1)
+      }
+    }
+  })
+
   // Should match everything permittible -- first alternative are the huge
   // blocks, second alternative are the simple @ID-things, both recognised by
   // Pandoc citeproc.
   // citationRE is taken from the Citr library (the extraction regex)
   var citationRE = /(\[(?:[^[\]]*@[^[\]]+)\])|(?<=\s|^)(@[\p{L}\d_][\p{L}\d_:.#$%&\-+?<>~/]*)/gu
   var Citr = require('@zettlr/citr')
+
+  /**
+   * This Array contains citations that should be rendered somewhere in the DOM
+   *
+   * @var {Object[]}
+   */
+  let toRender = []
 
   CodeMirror.commands.markdownRenderCitations = function (cm) {
     let match
@@ -100,6 +126,18 @@
             cm.setCursor(cm.coordsChar({ 'left': e.clientX, 'top': e.clientY }))
             cm.focus()
           }
+
+          // Now that everything is done, request the citation and replace the
+          // text contents accordingly
+          toRender.push({
+            'citation': citation,
+            'element': span
+          })
+
+          ipcRenderer.send('citation-renderer', {
+            command: 'get-citation',
+            payload: { citation: citation }
+          })
         } catch (e) {
           // CodeMirror throws errors if one tries to paper over an existing
           // mark with a new marker. In this case, don't mark the text and simply
