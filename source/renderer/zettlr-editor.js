@@ -845,7 +845,7 @@ class ZettlrEditor {
    * Returns all selections in the current document.
    */
   getSelections () {
-    return this._cm.doc.getSelections()
+    return this._getActiveFile().cmDoc.getSelections()
   }
 
   /**
