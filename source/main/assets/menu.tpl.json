@@ -225,6 +225,13 @@
         "command": "toggle-distraction-free"
       },
       {
+        "label": "menu.toggle_typewriter_mode",
+        "accelerator": "CmdOrCtrl+Alt+T",
+        "type": "checkbox",
+        "checked": "null",
+        "command": "toggle-typewriter-mode"
+      },
+      {
         "type": "separator"
       },
       {

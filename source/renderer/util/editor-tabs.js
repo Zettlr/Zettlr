@@ -29,10 +29,16 @@ module.exports = class EditorTabs {
     this._cursorOffset = 0
     this._tippyInstances = []
 
-    // Listen to the important events
+    // Holds information when the last click event occurred. Necessary to
+    // register double clicks in the event handler.
+    this._lastClickEvent = Date.now()
+
+    // Listen to click events
     this._div.onclick = (event) => { this._onClick(event) }
-    // Listen for non-primary clicks
+    // Listen for non-primary clicks (= closing)
     this._div.onauxclick = (event) => { this._onClick(event) }
+    // Listen for double clicks (= make intransient)
+    // this._div.ondblclick = (event) => { this._onClick(event) }
 
     this._div.ondragstart = (evt) => {
       // The user has initated a drag operation, so we need some variables
@@ -204,13 +210,31 @@ module.exports = class EditorTabs {
     if (!elem.classList.contains('document')) elem = elem.parentNode
     let hash = elem.dataset['hash']
 
+    // Determine if we have a middle (wheel) click
+    const middleClick = (event.type === 'auxclick' && event.button === 1)
+
+    // Check if we had a double click event in order to make the given
+    // file intransient (currently assuming two clicks within 750ms)
+    let isDblClick = false
+    if (!middleClick && Date.now() - this._lastClickEvent < 750) {
+      isDblClick = true
+    }
+
+    // Set the correct date for the last click event
+    if (!middleClick) this._lastClickEvent = Date.now()
+
     // If given, call the callback
     if (this._intentCallback) {
-      event.stopPropagation() // We are handling the event, so don't bubble it.
-      // determine if a middle (wheel) click
-      let middleClick = (event.type === 'auxclick' && event.button === 1)
-      if (middleClick) event.preventDefault() // If we don't do this, on Windows we get middle-click-scrolling
-      this._intentCallback(hash, (middleClick || closeIntent) ? 'close' : 'select')
+      // We are handling the event, so don't bubble it.
+      event.stopPropagation()
+      // Prevent default behaviour on Windows/Linux (permanent scrolling on middle click)
+      if (middleClick) event.preventDefault()
+
+      if (isDblClick) {
+        this._intentCallback(hash, 'make-intransient')
+      } else {
+        this._intentCallback(hash, (middleClick || closeIntent) ? 'close' : 'select')
+      }
     }
   }
 

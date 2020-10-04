@@ -13,35 +13,9 @@
   'use strict'
 
   var taskRE = /^(\s*)([-+*]) \[( |x)\] /g // Matches `- [ ]` and `- [x]`
-  var taskMarkers = []
-  var currentDocID = null
 
   CodeMirror.commands.markdownRenderTasks = function (cm) {
-    let i = 0
     let match
-
-    if (currentDocID !== cm.doc.id) {
-      currentDocID = cm.doc.id
-      for (let marker of taskMarkers) {
-        if (marker.find()) marker.clear()
-      }
-      taskMarkers = [] // Flush it away!
-    }
-
-    // First remove links that don't exist anymore. As soon as someone
-    // moves the cursor into the link, it will be automatically removed,
-    // as well as if someone simply deletes the whole line.
-    do {
-      if (!taskMarkers[i]) {
-        continue
-      }
-      if (taskMarkers[i] && taskMarkers[i].find() === undefined) {
-        // Marker is no longer present, so splice it
-        taskMarkers.splice(i, 1)
-      } else {
-        i++
-      }
-    } while (i < taskMarkers.length)
 
     // Now render all potential new tasks
     for (let i = 0; i < cm.lineCount(); i++) {
@@ -65,17 +39,8 @@
       let curFrom = { 'line': i, 'ch': 0 + leadingSpaces }
       let curTo = { 'line': i, 'ch': 5 + leadingSpaces }
 
-      let isRendered = false
-      let marks = cm.findMarks(curFrom, curTo)
-      for (let marx of marks) {
-        if (taskMarkers.includes(marx)) {
-          isRendered = true
-          break
-        }
-      }
-
-      // Also in this case simply skip.
-      if (isRendered) continue
+      // We can only have one marker at any given position at any given time
+      if (cm.findMarks(curFrom, curTo).length > 0) continue
 
       // Now we can render it finally.
       let checked = (match[3] === 'x')
@@ -111,7 +76,7 @@
         // text marker in the list of checkboxes.
         let check = (cbox.checked) ? 'x' : ' '
         cm.replaceRange(`${listSign} [${check}]`, curFrom, curTo)
-        taskMarkers.splice(taskMarkers.indexOf(textMarker), 1)
+        // ReplaceRange removes the marker, so we have to re-initiate it
         textMarker = cm.markText(
           curFrom, curTo,
           {
@@ -121,10 +86,7 @@
             'inclusiveRight': false
           }
         )
-        taskMarkers.push(textMarker)
       }
-
-      taskMarkers.push(textMarker)
     }
   }
 })

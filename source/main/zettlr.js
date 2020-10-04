@@ -138,6 +138,11 @@ class Zettlr {
       // Emitted when anything in the state changes
       if (this.isBooting) return // Only propagate these results when not booting
       switch (objPath) {
+        case 'activeFile':
+          // The active file has changed; set it in the config to
+          // have it open again on the next start of the app.
+          global.config.set('lastFile', this._fsal.getActiveFile())
+          break
         // The root filetree has changed (added or removed root)
         case 'filetree':
           // Nothing specific, so send the full payload

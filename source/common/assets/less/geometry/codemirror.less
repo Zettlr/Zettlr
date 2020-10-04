@@ -31,8 +31,6 @@
   .CodeMirror-sizer { height: 100%; }
 
   &.CodeMirror-empty {
-    // If the editor is empty, display a nice background image
-    background-image: url('../../img/feather.svg');
     background-position: center center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -40,6 +38,16 @@
     // which it not present in an empty editor. Therefore, we need to apply
     // it to the whole content in case of an empty editor.
     padding-top: 5em;
+  }
+
+  &.CodeMirror-empty:not(.CodeMirror-readonly) {
+    // If the editor is empty, display a nice background image
+    // background-image: url('../../img/feather.svg');
+  }
+
+  &.CodeMirror-empty.CodeMirror-readonly {
+    // If the editor is empty, display a nice background image
+    background-image: url('../../img/logo.svg');
   }
 
   pre { padding:0; }

@@ -17,30 +17,10 @@
   // Pandoc citeproc.
   // citationRE is taken from the Citr library (the extraction regex)
   var citationRE = /(\[(?:[^[\]]*@[^[\]]+)\])|(?<=\s|^)(@[\p{L}\d_][\p{L}\d_:.#$%&\-+?<>~/]*)/gu
-  var citeMarkers = [] // CiteMarkers
-  var currentDocID = null
   var Citr = require('@zettlr/citr')
 
   CodeMirror.commands.markdownRenderCitations = function (cm) {
     let match
-
-    if (currentDocID !== cm.doc.id) {
-      currentDocID = cm.doc.id
-      for (let marker of citeMarkers) {
-        if (marker.find()) marker.clear()
-      }
-      citeMarkers = [] // Flush it away!
-    }
-
-    // First remove links that don't exist anymore. As soon as someone
-    // moves the cursor into the link, it will be automatically removed,
-    // as well as if someone simply deletes the whole line.
-    for (let i in citeMarkers) {
-      if (citeMarkers[i] && citeMarkers[i].find() === undefined) {
-        // Marker is no longer present, so splice it
-        citeMarkers.splice(i, 1)
-      }
-    }
 
     // Now render all potential new links
     for (let i = 0; i < cm.lineCount(); i++) {
@@ -69,17 +49,8 @@
           continue
         }
 
-        // Has this thing already been rendered?
-        let con = false
-        let marks = cm.findMarks(curFrom, curTo)
-        for (let marx of marks) {
-          if (citeMarkers.includes(marx)) {
-            // We've got communism. (Sorry for the REALLY bad pun.)
-            con = true
-            break
-          }
-        }
-        if (con) continue // Skip this match
+        // We can only have one marker at any given position at any given time
+        if (cm.findMarks(curFrom, curTo).length > 0) continue
 
         // Do not render if it's inside a comment (in this case the mode will be
         // markdown, but comments shouldn't be included in rendering)
@@ -109,6 +80,7 @@
           span.dataset.citekeys = key // data-citekeys="key1,key2"
         } catch (err) {
           // Do nothing
+          console.log('Error attempting to parse citation ' + citation, err)
         }
         span.textContent = citation
         // Apply TextMarker
@@ -128,13 +100,11 @@
             cm.setCursor(cm.coordsChar({ 'left': e.clientX, 'top': e.clientY }))
             cm.focus()
           }
-
-          // Finally push the marker into the array
-          citeMarkers.push(textMarker)
         } catch (e) {
           // CodeMirror throws errors if one tries to paper over an existing
           // mark with a new marker. In this case, don't mark the text and simply
           // do nothing.
+          console.error('Could not render marker: Text was already marked!')
         }
       }
     }

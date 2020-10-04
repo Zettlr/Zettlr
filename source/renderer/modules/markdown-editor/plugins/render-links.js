@@ -12,7 +12,8 @@
 })(function (CodeMirror) {
   'use strict'
 
-  const makeAbsoluteURL = require('../../../common/util/make-absolute-url')
+  const makeAbsoluteURL = require('../../../../common/util/make-absolute-url')
+  const openMarkdownLink = require('../../../util/open-markdown-link')
 
   // This regular expression matches three different kinds of URLs:
   // 1. Linked images in the format [![Alt text](image/path.png)](www.link-target.tld)
@@ -23,34 +24,9 @@
   // ATTENTION: The middle part is taken from the gfm mode so that the rendered
   // links are the same as those that the gfm mode detects.
   var linkRE = /\[!\[([^[]*)\]\((.+)\)\]\((.+)\)|\[([^\]]+)\]\((.+?)\)|(((?:(?:aaas?|about|acap|adiumxtra|af[ps]|aim|apt|attachment|aw|beshare|bitcoin|bolo|callto|cap|chrome(?:-extension)?|cid|coap|com-eventbrite-attendee|content|crid|cvs|data|dav|dict|dlna-(?:playcontainer|playsingle)|dns|doi|dtn|dvb|ed2k|facetime|feed|file|finger|fish|ftp|geo|gg|git|gizmoproject|go|gopher|gtalk|h323|hcp|https?|iax|icap|icon|im|imap|info|ipn|ipp|irc[6s]?|iris(?:\.beep|\.lwz|\.xpc|\.xpcs)?|itms|jar|javascript|jms|keyparc|lastfm|ldaps?|magnet|mailto|maps|market|message|mid|mms|ms-help|msnim|msrps?|mtqp|mumble|mupdate|mvn|news|nfs|nih?|nntp|notes|oid|opaquelocktoken|palm|paparazzi|platform|pop|pres|proxy|psyc|query|res(?:ource)?|rmi|rsync|rtmp|rtsp|secondlife|service|session|sftp|sgn|shttp|sieve|sips?|skype|sm[bs]|snmp|soap\.beeps?|soldat|spotify|ssh|steam|svn|tag|teamspeak|tel(?:net)?|tftp|things|thismessage|tip|tn3270|tv|udp|unreal|urn|ut2004|vemmi|ventrilo|view-source|webcal|wss?|wtai|wyciwyg|xcon(?:-userid)?|xfire|xmlrpc\.beeps?|xmpp|xri|ymsgr|z39\.50[rs]?):(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.-]+[.][a-z]{2,4}\/)(?:[^\s()<>]|\([^\s()<>]*\))+(?:\([^\s()<>]*\)|[^\s`*!()[\]{};:'".,<>?«»“”‘’])))|([a-z0-9.\-_+]+?@[a-z0-9.\-_+]+\.[a-z]{2,7})/gi
-  var linkMarkers = []
-  var currentDocID = null
 
   CodeMirror.commands.markdownRenderLinks = function (cm) {
-    let i = 0
     let match
-
-    if (currentDocID !== cm.doc.id) {
-      currentDocID = cm.doc.id
-      for (let marker of linkMarkers) {
-        if (marker.find()) marker.clear()
-      }
-      linkMarkers = [] // Flush it away!
-    }
-
-    // First remove links that don't exist anymore. As soon as someone
-    // moves the cursor into the link, it will be automatically removed,
-    // as well as if someone simply deletes the whole line.
-    do {
-      if (!linkMarkers[i]) continue
-
-      if (linkMarkers[i] && linkMarkers[i].find() === undefined) {
-        // Marker is no longer present, so splice it
-        linkMarkers.splice(i, 1)
-      } else {
-        i++
-      }
-    } while (i < linkMarkers.length)
 
     // Now render all potential new links
     for (let i = 0; i < cm.lineCount(); i++) {
@@ -135,17 +111,8 @@
           continue
         }
 
-        // Has this thing already been rendered?
-        let con = false
-        let marks = cm.findMarks(curFrom, curTo)
-        for (let marx of marks) {
-          if (linkMarkers.includes(marx)) {
-            // We've got communism. (Sorry for the REALLY bad pun.)
-            con = true
-            break
-          }
-        }
-        if (con) continue // Skip this match
+        // We can only have one marker at any given position at any given time
+        if (cm.findMarks(curFrom, curTo).length > 0) continue
 
         // Do not render if it's inside a comment (in this case the mode will be
         // markdown, but comments shouldn't be included in rendering)
@@ -164,7 +131,7 @@
         if (isLinkedImage) {
           let img = document.createElement('img')
           img.title = `${linkImageCaption} (${linkImageTarget})`
-          img.src = makeAbsoluteURL(cm.getOption('markdownImageBasePath'), linkImagePath)
+          img.src = makeAbsoluteURL(cm.getOption('zettlr').markdownImageBasePath, linkImagePath)
           img.style.cursor = 'pointer' // Nicer cursor
           // Copied over from the other plugin
           let width = (cm.getOption('imagePreviewWidth')) ? cm.getOption('imagePreviewWidth') + '%' : '100%'
@@ -234,10 +201,8 @@
             // On ALT-Clicks, use the callback to have the user decide
             // what should happen when they click on links, defined
             // in the markdownOnLinkOpen option.
-            let callback = cm.getOption('markdownOnLinkOpen')
-            if (callback && {}.toString.call(callback) === '[object Function]') {
-              callback(renderedLinkTarget)
-            }
+            console.log(renderedLinkTarget, cm)
+            openMarkdownLink(renderedLinkTarget, cm)
           } else {
             // Clear the textmarker and set the cursor to where the
             // user has clicked the link.
@@ -246,8 +211,6 @@
             cm.focus()
           }
         }
-
-        linkMarkers.push(textMarker)
       }
     }
   }

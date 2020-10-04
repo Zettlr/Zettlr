@@ -381,6 +381,9 @@ class ZettlrRendererIPC {
         // FILES
 
       case 'file-request-sync':
+        // Indicate with "true" that it should open the file in background
+        this._app.openFile(cnt, true)
+        break
       case 'file-open':
         this._app.openFile(cnt)
         break
@@ -479,6 +482,10 @@ class ZettlrRendererIPC {
       case 'toggle-distraction-free':
         this._app.getEditor().toggleDistractionFree()
         this._app.getToolbar().toggleDistractionFree()
+        break
+
+      case 'toggle-typewriter-mode':
+        this._app.getEditor().toggleTypewriterMode()
         break
 
       case 'toggle-sidebar':

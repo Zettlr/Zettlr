@@ -96,7 +96,6 @@
         // otherwise, stream.match() will ALWAYS be executed, hence
         // falsifying the otherwise correct else-if!!
         if (stream.sol() && !state.inEquation && stream.match(blockMathRE)) {
-          console.log('Multiline equation')
           // We have a multiline equation
           state.inEquation = true
           return 'comment'
@@ -119,13 +118,13 @@
         } // This is here because escaping link-endings is a thing. Maybe. For some.
 
         // Fifth: Are we in a link?
-        if (config.zkn.linkEnd !== '' && state.inZknLink) {
-          if (stream.match(config.zkn.linkEnd)) {
+        if (state.inZknLink) {
+          if (stream.match(config.zettlr.zettelkasten.linkEnd)) {
             state.inZknLink = false
             return 'zkn-link-formatting'
           }
 
-          while (!stream.eol() && !stream.match(config.zkn.linkEnd, false)) {
+          while (!stream.eol() && !stream.match(config.zettlr.zettelkasten.linkEnd, false)) {
             stream.next()
           }
           return 'zkn-link'
@@ -174,7 +173,7 @@
         }
 
         // Now check for a zknLink
-        if (config.zkn.linkStart !== '' && stream.match(config.zkn.linkStart)) {
+        if (stream.match(config.zettlr.zettelkasten.linkStart)) {
           state.inZknLink = true
           return 'zkn-link-formatting'
         }
@@ -183,9 +182,8 @@
         // be treated as _links_ and not as "THE" ID of the file as long
         // as the definition of zkn-links is above this matcher.)
 
-        let zknIDRE = config.zkn.idRE || null
-        if (zknIDRE) zknIDRE = new RegExp(config.zkn.idRE)
-        if (zknIDRE && stream.match(zknIDRE)) return 'zkn-id'
+        let zknIDRE = new RegExp(config.zettlr.zettelkasten.idRE)
+        if (stream.match(zknIDRE)) return 'zkn-id'
 
         // If nothing has triggered until here, let the markdown
         // mode take over as it is responsible for everything else.

@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const editorMoveSection = require('../source/renderer/util/editor-move-section')
+const moveSection = require('../source/common/util/move-section')
 const assert = require('assert')
 
 const INPUT = [
@@ -138,7 +138,7 @@ Text Section 4`
 describe('EditorUtility#moveSection()', function () {
   for (let i = 0; i < INPUT.length; i++) {
     it('should correctly move the defined section', function () {
-      assert.strictEqual(editorMoveSection(INPUT[i], MOVE[i].from, MOVE[i].to), OUTPUT[i])
+      assert.strictEqual(moveSection(INPUT[i], MOVE[i].from, MOVE[i].to), OUTPUT[i])
     })
   }
 })

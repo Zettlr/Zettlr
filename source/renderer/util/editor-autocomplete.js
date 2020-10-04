@@ -144,7 +144,7 @@ module.exports = class EditorAutocomplete {
       (cursor.ch === 1 || line.charAt(cursor.ch - 2) === ' ')) return 'tags'
 
     // Can we begin file autocompletion?
-    let linkStart = cm.getOption('zkn').linkStart
+    let linkStart = cm.getOption('zettlr').zettelkasten.linkStart
     let linkStartRange = cm.getRange({
       'line': cursor.line,
       'ch': cursor.ch - linkStart.length

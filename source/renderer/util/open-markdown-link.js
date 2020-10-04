@@ -2,16 +2,17 @@ const { shell } = require('electron')
 const makeValidUri = require('../../common/util/make-valid-uri')
 const { trans } = require('../../common/lang/i18n.js')
 
-module.exports = function (url, editorInstance) {
+module.exports = function (url, cm) {
   if (url[0] === '#') {
     // We should open an internal link
     let re = new RegExp('#\\s[^\\r\\n]*?' +
     url.replace(/-/g, '[^\\r\\n]+?').replace(/^#/, ''), 'i')
     // The new regex should now match the corresponding heading in the document
-    for (let i = 0; i < editorInstance._cm.lineCount(); i++) {
-      let line = editorInstance._cm.getLine(i)
+    for (let i = 0; i < cm.lineCount(); i++) {
+      let line = cm.getLine(i)
       if (re.test(line)) {
-        editorInstance.jtl(i)
+        cm.setCursor({ 'line': i, 'ch': 0 })
+        cm.refresh()
         break
       }
     }
@@ -22,7 +23,7 @@ module.exports = function (url, editorInstance) {
     // we cannot rely on the errors thrown by new URL(), as,
     // e.g., file://./relative.md will not throw an error albeit
     // we need to convert it to absolute.
-    let base = editorInstance._cm.getOption('markdownImageBasePath')
+    let base = cm.getOption('markdownImageBasePath')
     let validURI = makeValidUri(url, base)
     shell.openExternal(validURI).catch((err) => {
       // Notify the user that we couldn't open the URL

@@ -29,6 +29,21 @@ module.exports = {
       'g' + flag)
   },
   /**
+   * Returns a regular expression that matches image file names
+   *
+   * @param   {Boolean}  multiline  Whether the expression should match multilines
+   *
+   * @return  {RegExp}             The compiled expression
+   */
+  'getImageFileRE': function (multiline = false) {
+    let flag = (multiline) ? 'm' : ''
+    return RegExp(
+      /(\.jpg|\.jpeg|\.png|\.gif|\.svg|\.tiff|\.tif)$/.source,
+      // Necessary flags + optional multiline flag
+      'i' + flag
+    )
+  },
+  /**
    * Returns a regular expression that matches URL protocols (e.g. http://)
    *
    * @param   {Boolean}  multiline  Whether or not the expression should be multiline

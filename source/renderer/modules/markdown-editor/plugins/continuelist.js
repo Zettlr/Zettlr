@@ -5,7 +5,6 @@
 // This is the Zettlr fork of addon/edit/continuelist.
 // Changes:
 //
-// + Enable the option continueListModes to add the markdown-zkn mode
 // + Adapt paths for use within Zettlr
 // + Remove the blockquote character (>) from the list regex.
 

@@ -32,13 +32,9 @@
       token: function (stream) {
         var ch = stream.peek()
         var word = ''
-        let ls = ''
-        let le = ''
-        if (config.hasOwnProperty('zkn') && config.zkn.hasOwnProperty('linkStart') && config.zkn.hasOwnProperty('linkEnd')) {
-          // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
-          ls = config.zkn.linkStart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
-          le = config.zkn.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
-        }
+        // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
+        let ls = config.zettlr.zettelkasten.linkStart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
+        let le = config.zettlr.zettelkasten.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
 
         let zknLinkRE = new RegExp(ls + '.+?' + le)
 

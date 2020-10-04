@@ -19,40 +19,14 @@
   // such as $x$. All others are captured by the second alternative.
   var inlineMathRE = /(?<!\\)\${1,2}([^\s\\])\${1,2}(?!\d)|(?<!\\)\${1,2}([^\s].*?[^\s\\])\${1,2}(?!\d)/g
   var multilineMathRE = /^\s*\$\$\s*$/
-  var mathMarkers = []
-  var currentDocID = null
 
   CodeMirror.commands.markdownRenderMath = function (cm) {
-    let i = 0
     let match
-
-    if (currentDocID !== cm.doc.id) {
-      currentDocID = cm.doc.id
-      for (let marker of mathMarkers) {
-        if (marker.find()) marker.clear()
-      }
-      mathMarkers = [] // Flush it away!
-    }
-
-    // First remove iFrames that don't exist anymore. As soon as someone
-    // moves the cursor into the link, it will be automatically removed,
-    // as well as if someone simply deletes the whole line.
-    do {
-      if (!mathMarkers[i]) {
-        continue
-      }
-      if (mathMarkers[i] && mathMarkers[i].find() === undefined) {
-        // Marker is no longer present, so splice it
-        mathMarkers.splice(i, 1)
-      } else {
-        i++
-      }
-    } while (i < mathMarkers.length)
 
     // Now render all potential new Math elements
     let isMultiline = false // Are we inside a multiline?
     let eq = ''
-    let fromLine = i
+    let fromLine = 0
 
     for (let i = 0; i < cm.lineCount(); i++) {
       let modeName = cm.getModeAt({ 'line': i, 'ch': 0 }).name
@@ -120,17 +94,8 @@
           continue
         }
 
-        let isRendered = false
-        let marks = cm.findMarks(myMarker.curFrom, myMarker.curTo)
-        for (let marx of marks) {
-          if (mathMarkers.includes(marx)) {
-            isRendered = true
-            break
-          }
-        }
-
-        // Also in this case simply skip.
-        if (isRendered) continue
+        // We can only have one marker at any given position at any given time
+        if (cm.findMarks(myMarker.curFrom, myMarker.curTo).length > 0) continue
 
         // Do not render if it's inside a comment (in this case the mode will be
         // markdown, but comments shouldn't be included in rendering)
@@ -163,9 +128,6 @@
 
         // Now the marker has obviously changed
         textMarker.changed()
-
-        // Finally push the marker
-        mathMarkers.push(textMarker)
       } // End for all markers
     } // End for lines
   } // End command

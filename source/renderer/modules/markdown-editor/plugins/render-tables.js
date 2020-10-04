@@ -1,7 +1,7 @@
 /* global define CodeMirror */
 // This plugin renders markdown tables for easy editability
 
-const Table = require('../../modules/table-editor');
+const Table = require('../../table-editor');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -14,10 +14,8 @@ const Table = require('../../modules/table-editor');
 })(function (CodeMirror) {
   'use strict'
 
-  var tableMarkers = []
   var tables = []
   var tableHeadingRE = /(^[- ]+$)|(^[- +:]+$)|(^[- |:+]+$)/
-  var currentDocID = null
 
   CodeMirror.commands.markdownInsertTable = function (cm) {
     // A small command that inserts a 2x2 table at the current cursor position.
@@ -25,27 +23,6 @@ const Table = require('../../modules/table-editor');
   }
 
   CodeMirror.commands.markdownRenderTables = function (cm) {
-    if (currentDocID !== cm.doc.id) {
-      currentDocID = cm.doc.id
-      for (let marker of tableMarkers) {
-        if (marker.find()) marker.clear()
-      }
-      tableMarkers = [] // Flush it away!
-      tables = []
-    }
-
-    // First remove tables that don't exist anymore.
-    let i = 0
-    do {
-      if (tableMarkers[i] && tableMarkers[i].find() === undefined) {
-        // Marker is no longer present, so splice it
-        tableMarkers.splice(i, 1)
-        tables.splice(i, 1) // Remove the corresponding table
-      } else {
-        i++
-      }
-    } while (i < tableMarkers.length)
-
     // Now render all potential new links. We only check one line less
     // because such a table header WILL NEVER be on the last line, plus
     // this way we can check for Setext headers without having to worry.
@@ -140,17 +117,8 @@ const Table = require('../../modules/table-editor');
       let curFrom = { 'line': firstLine, 'ch': 0 }
       let curTo = { 'line': lastLine, 'ch': cm.getLine(lastLine).length }
 
-      // Has this thing already been rendered?
-      let con = false
-      let marks = cm.findMarks(curFrom, curTo)
-      for (let marx of marks) {
-        if (tableMarkers.includes(marx)) {
-          // We've got communism. (Sorry for the REALLY bad pun.)
-          con = true
-          break
-        }
-      }
-      if (con) continue // Skip
+      // We can only have one marker at any given position at any given time
+      if (cm.findMarks(curFrom, curTo).length > 0) continue
 
       // First grab the full table
       let markdownTable = ''
@@ -169,7 +137,7 @@ const Table = require('../../modules/table-editor');
           // Don't replace some arbitrary text somewhere in the document!
           if (!textMarker || !textMarker.find()) return
 
-          let found = tables.find(elem => elem === t)
+          let found = tables.indexOf(t)
           let md = t.getMarkdownTable()
           // The markdown table has a trailing newline, which we need to
           // remove at all costs.
@@ -184,8 +152,6 @@ const Table = require('../../modules/table-editor');
           if (textMarker) textMarker.clear()
           // Splice the table and corresponding marker from the arrays
           if (found) tables.splice(found, 1)
-          // Also splice it to retain synchronous arrays
-          if (found) tableMarkers.splice(found, 1)
         }
       }) // END constructor
       try {
@@ -211,7 +177,6 @@ const Table = require('../../modules/table-editor');
         }
       )
 
-      tableMarkers.push(textMarker)
       tables.push(tbl)
     }
   }

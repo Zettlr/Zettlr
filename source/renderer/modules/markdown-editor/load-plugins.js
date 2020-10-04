@@ -5,32 +5,36 @@
  * in the main class.
  */
 
-// 1. Mode addons
+// 1. CodeMirror modes
 require('codemirror/addon/mode/overlay')
-require('codemirror/addon/mode/multiplex') // Multiplex needed for syntax highlighting
+require('codemirror/addon/mode/multiplex')
+require('codemirror/mode/markdown/markdown')
+require('codemirror/mode/gfm/gfm')
+require('codemirror/mode/stex/stex')
+require('./modes/markdown-zkn.js')
+require('./modes/readability.js')
+require('./modes/multiplex.js')
+require('./modes/spellchecker.js')
 
 // 2. Editing addons
 require('codemirror/addon/edit/closebrackets')
-require('./continuelist.js')
-require('./indentlist.js')
+require('./plugins/continuelist.js')
+require('./plugins/indentlist.js')
+
+// 3. Keymaps
 require('codemirror/keymap/sublime') // This will load the extra commands from SublimeText
 require('codemirror/keymap/vim') // This will load the extra commands from Vim
 require('codemirror/keymap/emacs') // This will load the extra commands from Emacs
 
-// 3. Display addons
+// 4. Display addons
 require('codemirror/addon/display/fullscreen')
 require('codemirror/addon/display/placeholder')
 
-// 4. Search addons
+// 5. Search addons
 require('codemirror/addon/search/searchcursor')
 require('codemirror/addon/scroll/annotatescrollbar')
 
-// 5. Central modes
-require('codemirror/mode/markdown/markdown')
-require('codemirror/mode/gfm/gfm')
-require('codemirror/mode/stex/stex')
-
-// 6. Code highlighting modes
+// 6. Code highlighting-only modes
 require('codemirror/mode/clike/clike.js')
 require('codemirror/mode/clojure/clojure.js')
 require('codemirror/mode/css/css.js')
@@ -71,29 +75,23 @@ require('codemirror/addon/fold/brace-fold')
 require('codemirror/addon/fold/indent-fold')
 require('codemirror/addon/fold/markdown-fold')
 require('codemirror/addon/fold/comment-fold')
-require('./zettlr-plugin-foldcode-helper')
+require('./plugins/foldcode-helper')
 
 // 8. Hinting (tag autocompletion, e.g.)
 require('codemirror/addon/hint/show-hint')
 
-// Zettlr specific addons
-require('./zettlr-plugin-markdown-shortcuts.js')
-require('./zettlr-mode-spellchecker.js')
-require('./zettlr-mode-zkn.js')
-require('./zettlr-mode-readability.js')
-require('./zettlr-mode-multiplex.js')
-require('./zettlr-plugin-autocorrect')
-require('./zettlr-plugin-footnotes.js')
-require('./zettlr-plugin-render-images.js')
-require('./zettlr-plugin-render-links.js')
-require('./zettlr-plugin-render-citations.js')
-require('./zettlr-plugin-render-tables.js')
-require('./zettlr-plugin-render-tasks.js')
-require('./zettlr-plugin-render-h-tags.js')
-require('./zettlr-plugin-render-iframes.js')
-require('./zettlr-plugin-render-math.js')
-require('./zettlr-plugin-render-mermaid')
-require('./zettlr-plugin-markdown-header-classes.js')
-require('./zettlr-plugin-markdown-codeblock-classes.js')
-require('./zettlr-plugin-select-word.js')
-require('./zettlr-plugin-wysiwyg.js')
+// 9. Zettlr specific addons
+require('./plugins/markdown-shortcuts.js')
+require('./plugins/autocorrect')
+require('./plugins/footnotes.js')
+require('./plugins/render-images.js')
+require('./plugins/render-links.js')
+require('./plugins/render-citations.js')
+require('./plugins/render-tables.js')
+require('./plugins/render-tasks.js')
+require('./plugins/render-h-tags.js')
+require('./plugins/render-iframes.js')
+require('./plugins/render-math.js')
+require('./plugins/render-mermaid')
+require('./plugins/select-word.js')
+require('./plugins/wysiwyg.js')

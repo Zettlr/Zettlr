@@ -13,35 +13,9 @@
   'use strict'
 
   var headRE = /^(#{1,6}) (.*)/g
-  var headMarkers = []
-  var currentDocID = null
 
   CodeMirror.commands.markdownRenderHTags = function (cm) {
-    let i = 0
     let match
-
-    if (currentDocID !== cm.doc.id) {
-      currentDocID = cm.doc.id
-      for (let marker of headMarkers) {
-        if (marker.find()) marker.clear()
-      }
-      headMarkers = [] // Flush it away!
-    }
-
-    // First remove links that don't exist anymore. As soon as someone
-    // moves the cursor into the link, it will be automatically removed,
-    // as well as if someone simply deletes the whole line.
-    do {
-      if (!headMarkers[i]) {
-        continue
-      }
-      if (headMarkers[i] && headMarkers[i].find() === undefined) {
-        // Marker is no longer present, so splice it
-        headMarkers.splice(i, 1)
-      } else {
-        i++
-      }
-    } while (i < headMarkers.length)
 
     // Now render all potential new tasks
     for (let i = 0; i < cm.lineCount(); i++) {
@@ -67,17 +41,8 @@
 
       curFrom = { 'line': i, 'ch': 0 }
 
-      let isRendered = false
-      let marks = cm.findMarks(curFrom, curTo)
-      for (let marx of marks) {
-        if (headMarkers.includes(marx)) {
-          isRendered = true
-          break
-        }
-      }
-
-      // Also in this case simply skip.
-      if (isRendered) continue
+      // We can only have one marker at any given position at any given time
+      if (cm.findMarks(curFrom, curTo).length > 0) continue
 
       let hTagWrapper = document.createElement('div')
       hTagWrapper.className = 'heading-tag'
@@ -98,8 +63,6 @@
 
       // Clear on click
       hTagWrapper.onclick = (e) => { textMarker.clear() }
-
-      headMarkers.push(textMarker)
     }
   }
 })

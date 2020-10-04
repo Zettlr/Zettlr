@@ -245,7 +245,9 @@
         if (words[0] === '') words.shift()
         if (words[words.length - 1] === '') words.pop()
 
-        let score = readabilityAlgorithms[parserConfig.algorithm || 'dale-chall'](words)
+        let algorithm = config.zettlr.readabilityAlgorithm || 'dale-chall'
+
+        let score = readabilityAlgorithms[algorithm](words)
 
         // Now return a token corresponding to the score.
         return 'readability-' + score

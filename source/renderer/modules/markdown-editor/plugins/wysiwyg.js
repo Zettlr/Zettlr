@@ -1,8 +1,6 @@
 /* global define CodeMirror */
 // This plugin gives the editor a real WYSIWYG feeling
 
-const showdown = require('showdown');
-
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
     mod(require('codemirror/lib/codemirror'))
@@ -29,34 +27,13 @@ const showdown = require('showdown');
    * 7. Blockquotes
    * 8. Inline code
    */
-  var wysiwygMarkers = [] // Elements that have been rendered
-  var currentDocID = null
 
-  // This Markdown to HTML converter is used in various parts of the
-  // class to perform converting operations.
-  var _showdown = new showdown.Converter()
-  _showdown.setFlavor('github')
-  _showdown.setOption('strikethrough', true)
-  _showdown.setOption('tables', true)
+  // WYSIWYG means you need HTML elements rendered instead of
+  // the underlying Markdown code
+  const md2html = require('../../../../common/util/md-to-html')
 
   CodeMirror.commands.markdownWYSIWYG = function (cm) {
     let match
-
-    if (currentDocID !== cm.doc.id) {
-      currentDocID = cm.doc.id
-      for (let marker of wysiwygMarkers) {
-        if (marker.find()) marker.clear()
-      }
-      wysiwygMarkers = [] // Flush it away!
-    }
-
-    // First remove elements that don't exist anymore.
-    for (let i in wysiwygMarkers) {
-      if (wysiwygMarkers[i] && wysiwygMarkers[i].find() === undefined) {
-        // Marker is no longer present, so splice it
-        wysiwygMarkers.splice(i, 1)
-      }
-    }
 
     // Now render all potential new links
     for (let i = 0; i < cm.lineCount(); i++) {
@@ -85,17 +62,8 @@ const showdown = require('showdown');
           continue
         }
 
-        // Has this thing already been rendered?
-        let con = false
-        let marks = cm.findMarks(curFrom, curTo)
-        for (let marx of marks) {
-          if (wysiwygMarkers.includes(marx)) {
-            // We've got communism. (Sorry for the REALLY bad pun.)
-            con = true
-            break
-          }
-        }
-        if (con) continue // Skip this match
+        // We can only have one marker at any given position at any given time
+        if (cm.findMarks(curFrom, curTo).length > 0) continue
 
         // Let's find out what kind of element we should create
         let elemName = ''
@@ -120,7 +88,7 @@ const showdown = require('showdown');
         // The inner HTML contains the contents inside the element. We'll also
         // render any Markdown inside the element so that it looks nice.
         // We need to remove the containing paragraphs!
-        elem.innerHTML = _showdown.makeHtml(contents).replace(/<p>(.*?)<\/p>/g, '$1')
+        elem.innerHTML = md2html(contents).replace(/<p>(.*?)<\/p>/g, '$1')
         elem.style = styles.join('; ') // Add the styles
         elem.className = 'cm-' + className // Apply the corresponding class
         // Apply TextMarker
@@ -140,13 +108,11 @@ const showdown = require('showdown');
             cm.setCursor(cm.coordsChar({ 'left': e.clientX, 'top': e.clientY }))
             cm.focus()
           }
-
-          // Finally push the marker into the array
-          wysiwygMarkers.push(textMarker)
         } catch (e) {
           // CodeMirror throws errors if one tries to paper over an existing
           // mark with a new marker. In this case, don't mark the text and simply
           // do nothing.
+          console.error(e)
         }
       }
     }

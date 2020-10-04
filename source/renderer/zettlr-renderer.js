@@ -523,19 +523,19 @@ class ZettlrRenderer {
 
   /**
    * Opens a new file
-   * @param  {ZettlrFile} f The file to be opened
+   * @param  {ZettlrFile} f       The file to be opened
+   * @param {Boolean}     isSync  If this is a synchronization request
    */
-  openFile (f) {
-    let flag = null
+  openFile (f, isSync = false) {
     if (f.hasOwnProperty('flag')) {
       // We have a flag, so we need to extract the file
-      flag = f.flag
+      // flag = f.flag
       f = f.file
     }
     // We have received a new file. So close the old and open the new
     // Select the file either in the preview list or in the directory tree
     global.store.set('selectedFile', f.hash)
-    this._editor.open(f, flag)
+    this._editor.open(f, isSync)
   }
 
   /**

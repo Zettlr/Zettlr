@@ -13,35 +13,9 @@
   'use strict'
 
   var iframeRE = /^<iframe.*?>.*?<\/iframe>$/i // Matches all iframes
-  var iframeMarkers = []
-  var currentDocID = null
 
   CodeMirror.commands.markdownRenderIframes = function (cm) {
-    let i = 0
     let match
-
-    if (currentDocID !== cm.doc.id) {
-      currentDocID = cm.doc.id
-      for (let marker of iframeMarkers) {
-        if (marker.find()) marker.clear()
-      }
-      iframeMarkers = [] // Flush it away!
-    }
-
-    // First remove iFrames that don't exist anymore. As soon as someone
-    // moves the cursor into the link, it will be automatically removed,
-    // as well as if someone simply deletes the whole line.
-    do {
-      if (!iframeMarkers[i]) {
-        continue
-      }
-      if (iframeMarkers[i] && iframeMarkers[i].find() === undefined) {
-        // Marker is no longer present, so splice it
-        iframeMarkers.splice(i, 1)
-      } else {
-        i++
-      }
-    } while (i < iframeMarkers.length)
 
     // Now render all potential new iFrames
     for (let i = 0; i < cm.lineCount(); i++) {
@@ -60,23 +34,14 @@
       let curFrom = { 'line': i, 'ch': 0 }
       let curTo = { 'line': i, 'ch': match[0].length }
 
-      let isRendered = false
-      let marks = cm.findMarks(curFrom, curTo)
-      for (let marx of marks) {
-        if (iframeMarkers.includes(marx)) {
-          isRendered = true
-          break
-        }
-      }
-
-      // Also in this case simply skip.
-      if (isRendered) continue
+      // We can only have one marker at any given position at any given time
+      if (cm.findMarks(curFrom, curTo).length > 0) continue
 
       // Now we can render it finally.
 
       let iframe = $(match[0])[0] // Use jQuery for simple creation of the DOM element
 
-      let textMarker = cm.markText(
+      cm.markText(
         curFrom, curTo,
         {
           'clearOnEnter': true,
@@ -85,8 +50,6 @@
           'inclusiveRight': false
         }
       )
-
-      iframeMarkers.push(textMarker)
     }
   }
 })

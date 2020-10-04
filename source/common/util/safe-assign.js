@@ -22,6 +22,8 @@
  * present on referenceObject.
  * @param {Object} obj The new object to be safe assigned
  * @param {Object} referenceObject The reference to use the props from
+ *
+ * @return {Object} The cloned reference object with new values applied
  */
 function safeAssign (obj, referenceObject) {
   // Overwrite all given attributes (and leave the not given in place)
