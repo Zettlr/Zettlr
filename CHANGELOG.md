@@ -24,6 +24,7 @@
 - The editor is now in a non-editable mode if no file is open. If the editor is read-only, the Zettlr logo will display in the background to indicate that fact. Empty files, on the other hand, will not yield the feather logo anymore. This should now meet up with users' expectations about file editing better.
 - The last opened file will now reliably open whenever you start the application again.
 - File loading (especially on boot) is now much faster, because the opened tabs won't be switched through during load anymore. Only the relevant, last file will be opened and displayed.
+- Fixed a bug that would prevent you from exporting standalone files.
 
 ## Under the Hood
 

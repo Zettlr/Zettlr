@@ -44,7 +44,7 @@ class Export extends ZettlrCommand {
     if (global.config.get('export.dir') === 'temp') {
       // The user wants the file saved to the temporary directory.
       dest = app.getPath('temp')
-    } else if (file.parent.path) {
+    } else if (file.parent !== null) {
       // The user wants the file saved in the file's directory, and it is not a
       // root file.
       dest = file.parent.path
