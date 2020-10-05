@@ -144,6 +144,11 @@ module.exports = class MarkdownEditor extends EventEmitter {
       this.emit('change', changeOrigin, newTextCharCount, newTextWordCount)
     })
 
+    // Propagate the cursorActivity event to the calling process
+    this._instance.on('cursorActivity', (cm) => {
+      this.emit('cursorActivity')
+    })
+
     this._instance.getWrapperElement().addEventListener('click', (event) => {
       // Open links on both Cmd and Ctrl clicks - otherwise stop handling event
       if (process.platform === 'darwin' && !event.metaKey) return true
@@ -341,7 +346,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
     let ret = {
       'words': this.wordCount,
       'chars': this.charCount,
-      'chars_wo_spaces': this.charCount.replace(/[\s ]+/g, '').length,
+      'chars_wo_spaces': this.charCountWithoutSpaces,
       'cursor': Object.assign({}, this._instance.getCursor()),
       'selections': []
     }
@@ -457,6 +462,15 @@ module.exports = class MarkdownEditor extends EventEmitter {
    */
   get charCount () {
     return countWords(this.value, true)
+  }
+
+  /**
+   * Return the amount of characters without spaces
+   *
+   * @return  {Number}  The number of chars without spaces
+   */
+  get charCountWithoutSpaces () {
+    return countWords(this.value.replace(/[\s ]+/g, ''), true)
   }
 
   /**

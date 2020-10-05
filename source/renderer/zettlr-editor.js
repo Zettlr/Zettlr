@@ -125,7 +125,16 @@ class ZettlrEditor {
           }, SAVE_TIMEOUT)
         }
       }
+
+      // Finally, update the file info in the toolbar
+      this._renderer.updateFileInfo(this._editor.documentInfo)
     }) // END MarkdownEditor::onChange
+
+    // We also need to update the document info on cursor activity
+    // to capture changes in the selections.
+    this._editor.on('cursorActivity', (e) => {
+      this._renderer.updateFileInfo(this._editor.documentInfo)
+    })
 
     // Listen to special click events on the MarkdownEditor
     this._editor.on('zettelkasten-link', (linkContents) => {
@@ -310,6 +319,7 @@ class ZettlrEditor {
     // We also need to tell the autocompletion to rebuild the index
     this.signalUpdateFileAutocomplete()
     this._renderer.signalActiveFileChanged()
+    this._renderer.updateFileInfo(this._editor.documentInfo)
 
     // Last but not least: If there are any search results currently
     // display, mark the respective positions.
