@@ -122,7 +122,7 @@ class CiteprocProvider {
       const { command, payload } = content
 
       if (command === 'get-citation') {
-        event.sender.webContents.send('citeproc', {
+        event.sender.webContents.send('citation-renderer', {
           'command': 'get-citation',
           'payload': {
             'originalCitation': payload.citation,
