@@ -17,7 +17,7 @@ const makeSearchRegEx = require('../common/util/make-search-regex')
 const { trans } = require('../common/lang/i18n')
 
 // Load CodeMirror addons and modes
-require('../renderer/assets/codemirror/plugins')
+// require('../renderer/assets/codemirror/plugins')
 
 // Finally CodeMirror itself
 const CodeMirror = require('codemirror')

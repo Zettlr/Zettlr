@@ -171,7 +171,7 @@ module.exports = class ZettlrSidebar {
    * @return  {Element}  The DOM element.
    */
   get tocContainer () {
-    return document.getElementById('sidebar-toc')
+    return document.getElementById('sidebar-toc-contents')
   }
 
   /**
