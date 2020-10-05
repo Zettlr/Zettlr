@@ -14,7 +14,6 @@
 */
 
 const path = require('path')
-const hash = require('../common/util/hash')
 const countWords = require('../common/util/count-words')
 const EditorTabs = require('./util/editor-tabs')
 const EditorSearch = require('./util/editor-search')
@@ -569,6 +568,15 @@ class ZettlrEditor {
   }
 
   /**
+    * Run a CodeMirror command.
+    * @param  {String} cmd The command to be passed to cm.
+    * @return {void}     Nothing to return.
+    */
+  runCommand (cmd) {
+    this._editor.runCommand(cmd)
+  }
+
+  /**
    * Gets called by the Renderer everytime the configuration changes so that the
    * editor can reload all defaults
    * @return {ZettlrEditor} Chainability
@@ -746,37 +754,10 @@ class ZettlrEditor {
   }
 
   /**
-    * Run a CodeMirror command.
-    * @param  {String} cmd The command to be passed to cm.
-    * @return {void}     Nothing to return.
-    */
-  runCommand (cmd) {
-    // Shortcut for the only command that
-    // actively should change the selection.
-    if (cmd === 'selectWordUnderCursor') {
-      this._cm.execCommand(cmd)
-      return
-    }
-
-    let sel = this._cm.doc.listSelections()
-    let oldCur = JSON.parse(JSON.stringify(this._cm.getCursor()))
-    this._cm.execCommand(cmd)
-
-    if (sel.length > 0) this._cm.doc.setSelections(sel)
-
-    if (cmd === 'insertFootnote') {
-      // In case the user inserted a footnote, we have to re-set the cursor
-      // for ease of access.
-      oldCur.ch += 2 // This sets the cursor inside, so the user has a visual on where to ALT-Click
-      this._cm.setCursor(oldCur)
-    }
-  }
-
-  /**
     * Focus the CodeMirror instance
     */
   focus () {
-    this._cm.focus()
+    this._editor.focus()
   }
 
   /**

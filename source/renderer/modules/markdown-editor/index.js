@@ -289,6 +289,26 @@ module.exports = class MarkdownEditor extends EventEmitter {
   }
 
   /**
+   * Runs a command on the underlying CodeMirror instance
+   *
+   * @param   {String}  cmd  The command to run
+   */
+  runCommand (cmd) {
+    this._instance.execCommand(cmd)
+  }
+
+  /**
+   * Issues a focus command to the underlying instance
+   */
+  focus () {
+    this._instance.focus()
+  }
+
+  /* * * * * * * * * * * *
+   * GETTERS AND SETTERS *
+   * * * * * * * * * * * */
+
+  /**
    * This function builds a table of contents based on the editor contents
    *
    * @return {Array} An array containing objects with all headings
