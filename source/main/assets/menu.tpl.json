@@ -235,9 +235,9 @@
         "type": "separator"
       },
       {
-        "label": "menu.toggle_sidebar",
+        "label": "menu.toggle_filemanager",
         "accelerator": "CmdOrCtrl+!",
-        "command": "toggle-sidebar"
+        "command": "toggle-file-manager"
       },
       {
         "label": "menu.toggle_attachments",

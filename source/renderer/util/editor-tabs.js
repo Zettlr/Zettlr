@@ -37,8 +37,6 @@ module.exports = class EditorTabs {
     this._div.onclick = (event) => { this._onClick(event) }
     // Listen for non-primary clicks (= closing)
     this._div.onauxclick = (event) => { this._onClick(event) }
-    // Listen for double clicks (= make intransient)
-    // this._div.ondblclick = (event) => { this._onClick(event) }
 
     this._div.ondragstart = (evt) => {
       // The user has initated a drag operation, so we need some variables
@@ -53,7 +51,7 @@ module.exports = class EditorTabs {
       this._currentlyDragging.ondrag = (evt) => {
         // Immediately sort everything correctly.
         // Take the absolute X coord, and then make it relative:
-        // 1. Substract the left offset (the sidebar)
+        // 1. Substract the left offset (the file manager)
         // 2. Move the position to the beginning of the element
         // 3. Take the current scrollLeft value into account
         let currentElementPosition = evt.clientX - this._cursorOffset - this._tabbarLeft + this._div.scrollLeft
