@@ -16,7 +16,7 @@
  * END HEADER
  */
 
-const isFunction = require('../../common/util/is-function')
+const isFunction = require('../../../common/util/is-function')
 
 class ZettlrPopup {
   /**
@@ -254,10 +254,6 @@ class ZettlrPopup {
     document.removeEventListener('mousedown', this._boundClickHandler)
     document.removeEventListener('contextmenu', this._boundClickHandler)
     window.removeEventListener('resize', this._boundResizeHandler)
-    // this._popup.animate({ 'opacity': '0' }, 200, 'swing', () => {
-    //   this._popup.detach()
-    //   // Remove the event handlers
-    // })
   }
 
   /**
@@ -272,7 +268,9 @@ class ZettlrPopup {
    * have changed.
    * @return {void} Does not return.
    */
-  change () { this._place() }
+  change () {
+    this._place()
+  }
 }
 
 /**

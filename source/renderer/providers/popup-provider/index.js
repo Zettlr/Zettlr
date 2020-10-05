@@ -14,25 +14,25 @@
  * END HEADER
  */
 
-const popup = require('../util/popup')
-const isFunction = require('../../common/util/is-function')
+const popup = require('./popup')
+const isFunction = require('../../../common/util/is-function')
 
 const POPUP_MODULES = {
-  'export': require('../../../resources/templates/popup/export.handlebars'),
-  'file-info': require('../../../resources/templates/popup/file-info.handlebars'),
-  'find': require('../../../resources/templates/popup/find.handlebars'),
-  'footnote-edit': require('../../../resources/templates/popup/footnote-edit.handlebars'),
-  'format': require('../../../resources/templates/popup/format.handlebars'),
-  'icon-selector': require('../../../resources/templates/popup/icon-selector.handlebars'),
-  'pomodoro-settings': require('../../../resources/templates/popup/pomodoro-settings.handlebars'),
-  'pomodoro-status': require('../../../resources/templates/popup/pomodoro-status.handlebars'),
-  'stats': require('../../../resources/templates/popup/stats.handlebars'),
-  'table-of-contents': require('../../../resources/templates/popup/table-of-contents.handlebars'),
-  'table': require('../../../resources/templates/popup/table.handlebars'),
-  'target': require('../../../resources/templates/popup/target.handlebars'),
-  'textfield': require('../../../resources/templates/popup/textfield.handlebars'),
-  'update-progress': require('../../../resources/templates/popup/update-progress.handlebars'),
-  'update': require('../../../resources/templates/popup/update.handlebars')
+  'export': require('../../../../resources/templates/popup/export.handlebars'),
+  'file-info': require('../../../../resources/templates/popup/file-info.handlebars'),
+  'find': require('../../../../resources/templates/popup/find.handlebars'),
+  'footnote-edit': require('../../../../resources/templates/popup/footnote-edit.handlebars'),
+  'format': require('../../../../resources/templates/popup/format.handlebars'),
+  'icon-selector': require('../../../../resources/templates/popup/icon-selector.handlebars'),
+  'pomodoro-settings': require('../../../../resources/templates/popup/pomodoro-settings.handlebars'),
+  'pomodoro-status': require('../../../../resources/templates/popup/pomodoro-status.handlebars'),
+  'stats': require('../../../../resources/templates/popup/stats.handlebars'),
+  'table-of-contents': require('../../../../resources/templates/popup/table-of-contents.handlebars'),
+  'table': require('../../../../resources/templates/popup/table.handlebars'),
+  'target': require('../../../../resources/templates/popup/target.handlebars'),
+  'textfield': require('../../../../resources/templates/popup/textfield.handlebars'),
+  'update-progress': require('../../../../resources/templates/popup/update-progress.handlebars'),
+  'update': require('../../../../resources/templates/popup/update.handlebars')
 }
 
 module.exports = class PopupProvider {
@@ -89,7 +89,7 @@ module.exports = class PopupProvider {
    * @param   {Object}         data           Data to pass to the template
    * @param   {Function|null}  callback       Optional callback to call
    *
-   * @return  {Popup|undefined}               Either the popup instance, or undefined
+   * @return  {Popup|null}                   Either the popup instance, or null
    */
   _createPopup (type, targetElement, data, callback) {
     if (this._hasPopup()) {
@@ -104,13 +104,13 @@ module.exports = class PopupProvider {
         // Finally check if this has been a duplicate.
         // If so, do not instantiate a new one.
         // This resembles a "toggling" of duplicate popups.
-        return undefined
+        return null
       }
     }
 
     if (!POPUP_MODULES.hasOwnProperty(type)) {
       console.error(`There is no popup template type "${type}" available.`)
-      return undefined
+      return null
     }
 
     try {
@@ -129,9 +129,13 @@ module.exports = class PopupProvider {
 
       this._currentPopupName = type
       this._currentPopupTarget = targetElement
+
+      // Return the popup instance so that the caller may hook into some
+      // functions, e.g. to indicate a change in the popup's contents.
+      return this._currentPopup
     } catch (error) {
       console.error(error)
-      return undefined // No luck
+      return null // No luck
     }
   }
 
