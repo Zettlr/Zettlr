@@ -1,5 +1,9 @@
 # 1.8.0
 
+## Breaking Changes
+
+- Renamed the **sidebar** to **file manager**. We finally decided on better terminology for distinguishing the right from the left sidebar. This means: The left sidebar, formerly known only as "sidebar," is now the "file manager." The right sidebar, formerly known as "attachment sidebar," is now "the" sidebar. This change was introduced to reduce user confusion and provide a better user experience.
+
 ## GUI and Functionality
 
 - **New Feature**: Typewriter mode. By pressing `Cmd/Ctrl+Alt+T`, you can activate the typewriter mode, which will keep the current line in the editor always centered so that you have to move your eyes less while editing a text. This also works in combination with the distraction free mode so that you can fully focus on what you're editing right at the moment.

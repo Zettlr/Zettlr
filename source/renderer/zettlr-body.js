@@ -114,11 +114,11 @@ class ZettlrBody {
       let cmdOrCtrl = (isDarwin && event.metaKey) || (!isDarwin && event.ctrlKey)
 
       let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && event.key === 'e')
-      let focusSidebarShortcut = (cmdOrCtrl && event.shiftKey && event.key === 't')
+      let focusFileManagerShortcut = (cmdOrCtrl && event.shiftKey && event.key === 't')
       if (focusEditorShortcut) { // Cmd/Ctrl+Shift+E
         // Obviously, focus the editor
         this._renderer.getEditor().getEditor().focus()
-      } else if (focusSidebarShortcut) { // Cmd/Ctrl+Shift+T
+      } else if (focusFileManagerShortcut) { // Cmd/Ctrl+Shift+T
         // You know what to do
         $('#file-list').focus()
       } else if (event.key === 'F2') {
@@ -206,7 +206,7 @@ class ZettlrBody {
       'placeholder': trans('dialog.file_new.placeholder')
     }
 
-    const targetElement = document.querySelector('#sidebar div[data-hash="' + file.hash + '"]')
+    const targetElement = document.querySelector('#file-manager div[data-hash="' + file.hash + '"]')
 
     // Show the appropriate popup
     global.popupProvider.show('textfield', targetElement, data, (form) => {
@@ -232,8 +232,8 @@ class ZettlrBody {
     let elem
 
     // Selection method stolen from requestNewDirName
-    if (!document.getElementById('#sidebar').classList.contains('expanded') && document.getElementById('file-tree').classList.contains('hidden')) {
-      // The sidebar is in thin mode and tree-view is hidden, so the file list
+    if (!document.getElementById('#file-manager').classList.contains('expanded') && document.getElementById('file-tree').classList.contains('hidden')) {
+      // The file manager is in thin mode and tree-view is hidden, so the file list
       // is visible -> find the div in there. (Should be the top containing dir)
       elem = document.querySelector('#file-list div[data-hash="' + dir.hash + '"]')
     } else {
@@ -242,9 +242,9 @@ class ZettlrBody {
     }
 
     // In case the combiner was not in an extended mode and the preview list did
-    // not contain the directory fall back to the sidebar element itself. But
+    // not contain the directory fall back to the file manager element itself. But
     // this should normally never happen.
-    if (elem.length === 0) elem = document.getElementById('sidebar')
+    if (elem.length === 0) elem = document.getElementById('file-manager')
 
     const data = {
       'val': trans('dialog.dir_new.value'),

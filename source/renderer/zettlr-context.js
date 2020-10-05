@@ -159,9 +159,9 @@ class ZettlrCon {
       selection.removeAllRanges()
     }
 
-    // First: determine where the click happened (Sidebar or editor)
-    if (elem.parents('#sidebar').length > 0) {
-      shouldSelectWordUnderCursor = false // Don't select when right-clicking the sidebar
+    // First: determine where the click happened (file manager or editor)
+    if (elem.parents('#file-manager').length > 0) {
+      shouldSelectWordUnderCursor = false // Don't select when right-clicking the file manager
       // Here's what the options of elements the user might click are:
       //
       // 1. The surrounding .container

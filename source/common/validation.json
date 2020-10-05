@@ -6,7 +6,7 @@
    "sortingTime": "required|string|in:modtime,creationtime|default:modtime",
    "newFileNamePattern": "required|string|default:%id.md",
    "appLang": "required|string|min:5|max:7|default:en_US",
-   "sidebarMode": "required|string|in:thin,expanded,combined|default:thin",
+   "fileManagerMode": "required|string|in:thin,expanded,combined|default:thin",
    "muteLines": "required|boolean|default:false",
    "export.dir": "required|string|in:temp,cwd|default:temp",
    "export.stripIDs": "required|boolean|default:false",

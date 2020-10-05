@@ -103,8 +103,8 @@
   /* eslint indent: 0 */
   const TagList = require('./tag-list.vue').default
   const Sorter = require('./sorter.vue').default
-  const formatDate = require('../../common/util/format-date.js')
-  const { trans } = require('../../common/lang/i18n.js')
+  const formatDate = require('../../../common/util/format-date.js')
+  const { trans } = require('../../../common/lang/i18n.js')
 
   module.exports = {
     name: 'file-item',
@@ -243,7 +243,7 @@
             event.preventDefault()
             return false
           }
-          // Tell the sidebar component to lock the directory tree (only necessary for thin mode)
+          // Tell the file manager component to lock the directory tree (only necessary for thin mode)
           this.$root.lockDirectoryTree()
           event.dataTransfer.effectAllowed = 'move'
           event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({

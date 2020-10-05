@@ -488,8 +488,8 @@ class ZettlrRendererIPC {
         this._app.getEditor().toggleTypewriterMode()
         break
 
-      case 'toggle-sidebar':
-        this._app.getSidebar().toggleFileList()
+      case 'toggle-file-manager':
+        this._app.getFileManager().toggleFileList()
         break
 
       case 'export':

@@ -22,7 +22,7 @@ const GlobalSearch = require('./util/global-search')
 
 const ZettlrStore = require('./zettlr-store')
 
-const createSidebar = require('./sidebar/sidebar').default
+const createFileManager = require('./modules/file-manager').default
 
 const path = require('path')
 
@@ -70,11 +70,11 @@ class ZettlrRenderer {
     this._toolbar = new ZettlrToolbar(this)
     this._pomodoro = new ZettlrPomodoro(this)
     this._attachments = new ZettlrAttachments(this)
-    // Create and mount the sidebar
-    this._sidebar = createSidebar()
+    // Create and mount the file manager
+    this._fileManager = createFileManager()
     // Create the store wrapper which will act as
     // a unifying interface to commit changes to the store.
-    this._store = new ZettlrStore(this, this._sidebar.$store)
+    this._store = new ZettlrStore(this, this._fileManager.$store)
 
     // Add a few convenience functions
     global.application = {
@@ -182,7 +182,7 @@ class ZettlrRenderer {
     global.store.set('fileMeta', global.config.get('fileMeta'))
     global.store.set('hideDirs', global.config.get('hideDirs')) // TODO: Not yet implemented
     global.store.set('displayTime', global.config.get('fileMetaTime'))
-    global.store.set('sidebarMode', global.config.get('sidebarMode'))
+    global.store.set('fileManagerMode', global.config.get('fileManagerMode'))
     global.store.set('useFirstHeadings', global.config.get('display.useFirstHeadings'))
     // Receive the application language
     this.setLocale(global.config.get('appLang'))
@@ -438,7 +438,7 @@ class ZettlrRenderer {
     this._ipc.send('force-open-if-exists', term)
 
     // Make sure the file list is visible
-    if (!this._sidebar.isFileListVisible()) this._sidebar.toggleFileList()
+    if (!this._fileManager.isFileListVisible()) this._fileManager.toggleFileList()
 
     // Now perform the actual search. For this we'll create a new search
     // object and pass all necessary data to it.
@@ -685,10 +685,10 @@ class ZettlrRenderer {
   getStatsView () { return this._stats }
 
   /**
-   * Returns the sidebar component
-   * @return {VueComponent} The sidebar
+   * Returns the file manager component
+   * @return {VueComponent} The file manager
    */
-  getSidebar () { return this._sidebar }
+  getFileManager () { return this._fileManager }
 
   /**
    * Returns a one-dimensional array of all files in the current directory and

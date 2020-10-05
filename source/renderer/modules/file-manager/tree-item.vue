@@ -7,7 +7,7 @@
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     Controls a single sub-tree in the sidebar.
+ * Description:     Controls a single sub-tree in the file manager.
  *
  * END HEADER
  */
@@ -131,8 +131,8 @@
 
 <script>
 // Tree View item component
-const findObject = require('../../common/util/find-object.js')
-const { trans } = require('../../common/lang/i18n')
+const findObject = require('../../../common/util/find-object.js')
+const { trans } = require('../../../common/lang/i18n')
 const Sorter = require('./sorter.vue').default
 
 module.exports = {
@@ -177,9 +177,9 @@ module.exports = {
     selectedFile: function () { return this.$store.state.selectedFile },
     selectedDir: function () { return this.$store.state.selectedDirectory },
     /**
-     * Returns true if the sidebarMode is set to "combined"
+     * Returns true if the file manager mode is set to "combined"
      */
-    combined: function () { return this.$store.state.sidebarMode === 'combined' },
+    combined: function () { return this.$store.state.fileManagerMode === 'combined' },
     /**
      * Returns true if there are children that can be displayed
      */
@@ -238,7 +238,7 @@ module.exports = {
     },
     /**
      * returns true, if this is the current selected directory, there
-     * are search results and the sidebar is in combined mode
+     * are search results and the file manager is in combined mode
      */
     hasSearchResults: function () {
       // Should return true, if this directory has search results in combined mode
@@ -258,7 +258,7 @@ module.exports = {
      */
     requestSelection: function (evt) {
       // Dead directories can't be opened, so stop the propagation to
-      // the sidebar and don't do a thing.
+      // the file manager and don't do a thing.
       if (this.obj.type === 'dead-directory') return evt.stopPropagation()
 
       if (this.obj.type === 'file' && event.altKey) {

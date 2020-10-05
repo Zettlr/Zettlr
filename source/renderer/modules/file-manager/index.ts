@@ -2,12 +2,12 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        Sidebar exporting module.
+ * Contains:        File manager exporting module.
  * CVM-Role:        Controller
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     In this module, the sidebar is assembled and the global
+ * Description:     In this module, the file manager is assembled and the global
  *                  store is initialised. The only necessary thing is that
  *                  the exported function needs to be called.
  *
@@ -15,7 +15,7 @@
  */
 
 import Vue from 'vue'
-import App from './sidebar.vue'
+import App from './file-manager.vue'
 import store from './store'
 import Vuex from 'vuex'
 
@@ -25,7 +25,7 @@ import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 Vue.use(Vuex)
 
 // Then create the global application store -- currently
-// it's only used for the sidebar, but in perspective
+// it's only used for the file manager, but in perspective
 // we'll be using it throughout the renderer.
 var applicationStore = new Vuex.Store(store)
 
@@ -34,6 +34,6 @@ export default (): Vue => {
     // Destructure the App config object, and enrich with store and hook
     ...App,
     store: applicationStore,
-    el: '#sidebar'
+    el: '#file-manager'
   })
 }

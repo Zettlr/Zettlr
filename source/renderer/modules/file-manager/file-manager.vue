@@ -2,19 +2,19 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        Sidebar Vue Component
+ * Contains:        File manager Vue Component
  * CVM-Role:        View
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     Controls the sidebar logic.
+ * Description:     Controls the file manager logic.
  *
  * END HEADER
  */
 <template>
   <div
-    id="sidebar"
-    v-bind:class="sidebarClass"
+    id="file-manager"
+    v-bind:class="getClass"
     v-on:mousemove="handleMouseOver"
     v-on:mouseleave="handleMouseOver"
     v-on:dragover="handleDragOver"
@@ -91,7 +91,7 @@
         </template>
         <template v-else-if="getDirectoryContents.length > 1">
           <!--
-            For the "real" sidelist, we need the virtual scroller to maintain
+            For the "real" file list, we need the virtual scroller to maintain
             performance, because it may contain thousands of elements.
             Provide the virtual scroller with the correct size of the list
             items (60px in mode with meta-data, 30 in cases without).
@@ -124,7 +124,7 @@
           </div>
         </template>
         <template v-else>
-          <!-- Same as above: Detect combined sidebar mode -->
+          <!-- Same as above: Detect combined file manager mode -->
           <div class="empty-file-list">
             {{ emptyFileListMessage }}
           </div>
@@ -133,14 +133,14 @@
     </div>
     <div
       v-if="isExpanded"
-      id="sidebar-inner-resizer"
-      ref="sidebarInnerResizer"
-      v-on:mousedown="sidebarStartInnerResize"
+      id="file-manager-inner-resizer"
+      ref="fileManagerInnerResizer"
+      v-on:mousedown="fileManagerStartInnerResize"
     ></div>
     <div
-      id="sidebar-resize"
-      ref="sidebarResizer"
-      v-on:mousedown="sidebarStartResize"
+      id="file-manager-resize"
+      ref="fileManagerResizer"
+      v-on:mousedown="fileManagerStartResize"
     ></div>
   </div>
 </template>
@@ -151,8 +151,8 @@
 // of some modules, but not others. The vue-loader is a mess when used with
 // ES6 CommonJS-modules in a exports/require-environment.
 const tippy = require('tippy.js').default
-const findObject = require('../../common/util/find-object.js')
-const { trans } = require('../../common/lang/i18n.js')
+const findObject = require('../../../common/util/find-object')
+const { trans } = require('../../../common/lang/i18n')
 const TreeItem = require('./tree-item.vue').default
 const FileItem = require('./file-item.vue').default
 const { RecycleScroller } = require('vue-virtual-scroller')
@@ -162,10 +162,10 @@ module.exports = {
     return {
       previous: '', // Can be "file-list" or "directories"
       lockedTree: false, // Is the file tree locked in?
-      sidebarResizing: false, // Only true during sidebar resizes
-      sidebarResizeX: 0, // Save the resize cursor position during resizes
-      sidebarInnerResizing: false,
-      sidebarInnerResizeX: 0
+      fileManagerResizing: false, // Only true during file manager resizes
+      fileManagerResizeX: 0, // Save the resize cursor position during resizes
+      fileManagerInnerResizing: false,
+      fileManagerInnerResizeX: 0
     }
   },
   components: {
@@ -208,10 +208,10 @@ module.exports = {
       this.$nextTick(function () { this.scrollIntoView() })
     },
     /**
-     * Listens to changes of the sidebarMode to reset
+     * Listens to changes of the fileManagerMode to reset
      * all styles to default for preventing display glitches.
      */
-    sidebarMode: function () {
+    fileManagerMode: function () {
       // Reset all properties from the resize operations.
       this.$refs.directories.style.removeProperty('width')
       this.$refs.directories.style.removeProperty('left')
@@ -222,12 +222,12 @@ module.exports = {
       // failsafes for the different modes
       if (this.isThin || this.isCombined) this.$refs.fileList.classList.add('hidden')
       if (this.isExpanded) this.$refs.fileList.classList.remove('hidden')
-      // Enlargen the sidebar, if applicable
+      // Enlargen the file manager, if applicable
       if (this.isExpanded && this.$el.offsetWidth < 100) this.$el.style.width = '100px'
     }
   },
   /**
-   * Updates associated stuff whenever an update operation on the sidebar
+   * Updates associated stuff whenever an update operation on the file manager
    * has finished (such as tippy).
    */
   updated: function () {
@@ -237,7 +237,7 @@ module.exports = {
   },
   computed: {
     /**
-     * Mapper functions to map state properties onto the sidebar.
+     * Mapper functions to map state properties onto the file manager.
      */
     getFiles: function () { return this.$store.getters.rootFiles },
     getDirectories: function () { return this.$store.getters.rootDirectories },
@@ -253,12 +253,12 @@ module.exports = {
     },
     selectedFile: function () { return this.$store.state.selectedFile },
     selectedDirectoryHash: function () { return this.$store.state.selectedDirectory },
-    sidebarClass: function () { return (this.isExpanded) ? 'expanded' : '' },
-    isThin: function () { return this.$store.state.sidebarMode === 'thin' },
-    isCombined: function () { return this.$store.state.sidebarMode === 'combined' },
-    isExpanded: function () { return this.$store.state.sidebarMode === 'expanded' },
-    // We need the sidebarMode separately to watch the property
-    sidebarMode: function () { return this.$store.state.sidebarMode },
+    getClass: function () { return (this.isExpanded) ? 'expanded' : '' },
+    isThin: function () { return this.$store.state.fileManagerMode === 'thin' },
+    isCombined: function () { return this.$store.state.fileManagerMode === 'combined' },
+    isExpanded: function () { return this.$store.state.fileManagerMode === 'expanded' },
+    // We need the fileManagerMode separately to watch the property
+    fileManagerMode: function () { return this.$store.state.fileManagerMode },
     noRootsMessage: function () { return trans('gui.empty_directories') },
     noResultsMessage: function () { return trans('gui.no_search_results') },
     fileSectionHeading: function () { return trans('gui.files') },
@@ -373,85 +373,85 @@ module.exports = {
       if (this.previous === 'file-list') this.toggleFileList()
     },
     /**
-     * Begins a sidebar resizing operation.
+     * Begins a file manager resizing operation.
      * @param {MouseEvent} evt The associated event.
      */
-    sidebarStartResize: function (evt) {
+    fileManagerStartResize: function (evt) {
       // Begin a resize movement
-      this.sidebarResizing = true
-      this.sidebarResizeX = evt.clientX
-      document.addEventListener('mousemove', this.sidebarResize)
-      document.addEventListener('mouseup', this.sidebarStopResize)
+      this.fileManagerResizing = true
+      this.fileManagerResizeX = evt.clientX
+      document.addEventListener('mousemove', this.fileManagerResize)
+      document.addEventListener('mouseup', this.fileManagerStopResize)
     },
     /**
-     * Resizes the sidebar according to the event's direction.
+     * Resizes the file manager according to the event's direction.
      * @param {MouseEvent} evt The associated event.
      */
-    sidebarResize: function (evt) {
-      // Resize the sidebar
-      if (!this.sidebarResizing) return
-      let x = this.sidebarResizeX - evt.clientX
+    fileManagerResize: function (evt) {
+      // Resize the file manager
+      if (!this.fileManagerResizing) return
+      let x = this.fileManagerResizeX - evt.clientX
       if (this.isExpanded && this.$refs.fileList.offsetWidth <= 50 && x > 0) return // Don't overdo it
-      if (this.$el.offsetWidth <= 50 && x > 0) return // The sidebar shouldn't become less than this
-      this.sidebarResizeX = evt.clientX
+      if (this.$el.offsetWidth <= 50 && x > 0) return // The file manager shouldn't become less than this
+      this.fileManagerResizeX = evt.clientX
       this.$el.style.width = (this.$el.offsetWidth - x) + 'px'
       // TODO: This is monkey-patched, emit regular events, like a grown up
       $('#editor').css('left', this.$el.offsetWidth + 10 + 'px') // 10px resizer width
       if (this.isExpanded) {
-        // We don't have a thin sidebar, so resize the fileList accordingly
+        // We don't have a thin file manager, so resize the fileList accordingly
         this.$refs.fileList.style.width = (this.$el.offsetWidth - this.$refs.directories.offsetWidth) + 'px'
       }
     },
     /**
-     * Stops the sidebar resize on mouse button release.
+     * Stops the file manager resize on mouse button release.
      * @param {MouseEvent} evt The associated event.
      */
-    sidebarStopResize: function (evt) {
+    fileManagerStopResize: function (evt) {
       // Stop the resize movement
-      this.sidebarResizing = false
-      this.sidebarResizeX = 0
-      document.removeEventListener('mousemove', this.sidebarResize)
-      document.removeEventListener('mouseup', this.sidebarStopResize)
+      this.fileManagerResizing = false
+      this.fileManagerResizeX = 0
+      document.removeEventListener('mousemove', this.fileManagerResize)
+      document.removeEventListener('mouseup', this.fileManagerStopResize)
     },
     /**
-     * Begins a resize of the inner sidebar components.
+     * Begins a resize of the inner file manager components.
      * @param {MouseEvent} evt The associated event.
      */
-    sidebarStartInnerResize: function (evt) {
-      // Begin to resize the inner sidebar
-      this.sidebarInnerResizing = true
-      this.sidebarInnerResizeX = evt.clientX
-      this.$el.addEventListener('mousemove', this.sidebarInnerResize)
-      this.$el.addEventListener('mouseup', this.sidebarStopInnerResize)
+    fileManagerStartInnerResize: function (evt) {
+      // Begin to resize the inner file manager
+      this.fileManagerInnerResizing = true
+      this.fileManagerInnerResizeX = evt.clientX
+      this.$el.addEventListener('mousemove', this.fileManagerInnerResize)
+      this.$el.addEventListener('mouseup', this.fileManagerStopInnerResize)
     },
     /**
      * Resizes the inner components according to the drag direction.
      * @param {MouseEvent} evt The associated event.
      */
-    sidebarInnerResize: function (evt) {
-      if (!this.sidebarInnerResizing) return
-      let x = this.sidebarInnerResizeX - evt.clientX
+    fileManagerInnerResize: function (evt) {
+      if (!this.fileManagerInnerResizing) return
+      let x = this.fileManagerInnerResizeX - evt.clientX
       // Make sure both the fileList and the tree view are at least 50 px in width
       if (!this.isThin && this.$refs.directories.offsetWidth <= 50 && x > 0) return
       if (!this.isThin && this.$refs.fileList.offsetWidth <= 50 && x < 0) return
-      this.sidebarInnerResizeX = evt.clientX
+      this.fileManagerInnerResizeX = evt.clientX
       // Now resize everything accordingly
       this.$refs.directories.style.width = (this.$refs.directories.offsetWidth - x) + 'px'
       this.$refs.fileList.style.left = this.$refs.directories.offsetWidth + 'px'
       // Reposition the resizer handle exactly on top of the divider, hence
       // substract the half width
-      this.$refs.sidebarInnerResizer.style.left = (this.$refs.directories.offsetWidth - 5) + 'px'
+      this.$refs.fileManagerInnerResizer.style.left = (this.$refs.directories.offsetWidth - 5) + 'px'
       this.$refs.fileList.style.width = (this.$el.offsetWidth - this.$refs.directories.offsetWidth) + 'px'
     },
     /**
      * Stops resizing of the inner elements on release of the mouse button.
      * @param {MouseEvent} evt The associated event
      */
-    sidebarStopInnerResize: function (evt) {
-      this.sidebarInnerResizing = false
-      this.sidebarInnerResizeX = 0
-      this.$el.removeEventListener('mousemove', this.sidebarInnerResize)
-      this.$el.removeEventListener('mouseup', this.sidebarStopInnerResize)
+    fileManagerStopInnerResize: function (evt) {
+      this.fileManagerInnerResizing = false
+      this.fileManagerInnerResizeX = 0
+      this.$el.removeEventListener('mousemove', this.fileManagerInnerResize)
+      this.$el.removeEventListener('mouseup', this.fileManagerStopInnerResize)
     },
     /**
      * Called whenever the user clicks on the "No open files or folders"
@@ -470,14 +470,14 @@ module.exports = {
       // the instances are all created in advance, we have to update
       // the content so that it reflects the current content of
       // the data-tippy-content-property.
-      let elements = document.querySelectorAll('#sidebar [data-tippy-content]')
+      let elements = document.querySelectorAll('#file-manager [data-tippy-content]')
       for (let elem of elements) {
         if (elem._tippy) elem._tippy.setContent(elem.dataset.tippyContent)
       }
 
       // Create instances for all elements without already existing
       // tippy-instances.
-      tippy('#sidebar [data-tippy-content]', {
+      tippy('#file-manager [data-tippy-content]', {
         delay: 100,
         arrow: true,
         duration: 100,

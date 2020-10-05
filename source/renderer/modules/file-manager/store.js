@@ -12,8 +12,8 @@
  */
 
 const Vue = require('vue').default
-const objectToArray = require('../../common/util/object-to-array')
-const findObject = require('../../common/util/find-object')
+const objectToArray = require('../../../common/util/object-to-array')
+const findObject = require('../../../common/util/find-object')
 
 // Make the Vuex-Store the default export
 module.exports = {
@@ -27,7 +27,7 @@ module.exports = {
     fileMeta: true,
     useFirstHeadings: false, // If the file list should attempt to use firstHeadings
     displayTime: 'modtime',
-    sidebarMode: 'thin', // Can be "thin", "expanded", or "combined"
+    fileManagerMode: 'thin', // Can be "thin", "expanded", or "combined"
     selectedFile: null,
     selectedDirectory: null
   },
@@ -48,7 +48,7 @@ module.exports = {
       if (state.searchResults.length > 0) {
         // Return the search results, if there are any
         return state.searchResults
-      } else if (state.sidebarMode !== 'combined') {
+      } else if (state.fileManagerMode !== 'combined') {
         // Return the file list if not in combined mode
         return state.fileList
       } else {
@@ -93,8 +93,8 @@ module.exports = {
 
       state.fileList = objectToArray(dir, 'children')
     },
-    sidebarMode: (state, mode) => {
-      state.sidebarMode = mode
+    fileManagerMode: (state, mode) => {
+      state.fileManagerMode = mode
     },
     searchResult: (state, res) => {
       if (res.result.length === 0) return

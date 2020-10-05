@@ -315,7 +315,7 @@ class ZettlrEditor {
     // display, mark the respective positions.
     this._searcher.markResults(file.fileObject)
 
-    // The sidebar needs to be informed that the active file has changed!
+    // The file manager needs to be informed that the active file has changed!
     global.store.set('selectedFile', this._currentHash)
     // Same for the main process
     global.ipc.send('set-active-file', { 'hash': this._currentHash })
