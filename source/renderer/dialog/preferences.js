@@ -20,6 +20,7 @@ const { ipcRenderer } = require('electron')
 const { trans } = require('../../common/lang/i18n')
 const generateId = require('../../common/util/generate-id')
 const renderTemplate = require('../util/render-template')
+const serializeFormData = require('../../common/util/serialize-form-data')
 
 class PreferencesDialog extends ZettlrDialog {
   constructor () {
@@ -112,8 +113,7 @@ class PreferencesDialog extends ZettlrDialog {
     form.addEventListener('submit', (e) => {
       e.preventDefault()
       // Give the ZettlrBody object the results
-      // TODO
-      this.proceed(form.serializeArray())
+      this.proceed(serializeFormData(form))
     })
 
     // Download not-available languages on select
@@ -282,7 +282,9 @@ class PreferencesDialog extends ZettlrDialog {
 
   proceed (data) {
     // First remove potential error-classes
-    this.getModal().find('input').removeClass('has-error')
+    for (const element of this.getModal().querySelectorAll('input')) {
+      element.classList.remove('has-error')
+    }
 
     let cfg = {}
 
