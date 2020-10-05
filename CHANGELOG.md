@@ -35,7 +35,7 @@
   - @teamsupercell/typings-for-css-modules-loader `2.3.0`
   - @typescript-eslint/eslint-plugin `4.1.0`
   - @typescript-eslint/parser `4.1.0`
-  - archiver `5.0.1`
+  - archiver `5.0.2`
   - chokidar `3.4.2`
   - codemirror `5.57.0`
   - copy-webpack-plugin `6.1.0`

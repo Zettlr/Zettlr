@@ -79,7 +79,9 @@
       "entitlementsInherit": "./scripts/assets/entitlements.plist"
     },
     "win": {
-      "target": [ "nsis" ],
+      "target": [
+        "nsis"
+      ],
       "artifactName": "Zettlr-${version}-${arch}.${ext}",
       "icon": "resources/icons/ico/icon.ico"
     },
@@ -139,7 +141,7 @@
     "@clr/icons": "^4.0.1",
     "@zettlr/citr": "1.2.1",
     "adm-zip": "^0.4.16",
-    "archiver": "^5.0.1",
+    "archiver": "^5.0.2",
     "astrocite": "^0.16.3",
     "bcp-47": "^1.0.7",
     "chart.js": "^2.9.3",
