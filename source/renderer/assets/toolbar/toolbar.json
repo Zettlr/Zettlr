@@ -121,11 +121,11 @@
         },
         {
             "role": "button",
-            "class": "toggle-attachments",
-            "command": "toggle-attachments",
+            "class": "toggle-sidebar",
+            "command": "toggle-sidebar",
             "content": "{}",
-            "title": "toolbar.toggle_attachments",
-            "icon": "attachment"
+            "title": "menu.toggle_sidebar",
+            "icon": "view-columns"
         }
 
     ]

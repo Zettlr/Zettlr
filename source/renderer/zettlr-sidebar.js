@@ -2,12 +2,12 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        ZettlrAttachments class
+ * Contains:        ZettlrSidebar class
  * CVM-Role:        View
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
  *
- * Description:     Displays the attachments of the current directory.
+ * Description:     Manages the sidebar
  *
  * END HEADER
  */
@@ -30,45 +30,112 @@ const FILETYPES_IMG = [
 ]
 
 /**
-  * Handles both display of files in the attachment sidebar and the list of
+  * Handles both display of files in the sidebar and the list of
   * references, if applicable.
   * @param {ZettlrRenderer} parent The renderer.
   */
-class ZettlrAttachments {
+module.exports = class ZettlrSidebar {
   constructor (parent) {
     this._renderer = parent
+
+    const tabs = renderTemplate(`
+    <div id="sidebar-tabs">
+      <div data-target="sidebar-files" class="sidebar-tab active" title="${trans('gui.attachments')}"><clr-icon shape="attachment"></clr-icon></div>
+      <div data-target="sidebar-bibliography" class="sidebar-tab" title="${trans('gui.citeproc.references_heading')}"><clr-icon shape="book"></clr-icon></div>
+      <div data-target="sidebar-toc" class="sidebar-tab" title="Table of Contents"><clr-icon shape="indented-view-list"></clr-icon></div>
+    </div>`)
+
+    // Immediately preset the container element with the necessary structure
+    const sidebarContents = renderTemplate(`
+    <div id="sidebar-tab-containers">
+      <div id="sidebar-files">
+        <h1>
+        ${trans('gui.attachments')}
+          <clr-icon shape="folder" class="is-solid" id="open-dir-external" title="${trans('gui.attachments_open_dir')}"></clr-icon>
+        </h1>
+        <div id="files">
+        <p>${trans('gui.no_attachments')}</p>
+        </div>
+      </div>
+      <div id="sidebar-bibliography" class="hidden">
+      <h1>${trans('gui.citeproc.references_heading')}</h1>
+        <div id="bibliography">
+          <p>${trans('gui.citeproc.references_none')}</p>
+        </div>
+      </div>
+      <div id="sidebar-toc" class="hidden">
+        <h1>${trans('gui.table_of_contents')}</h1>
+        <div id="sidebar-toc-contents">
+        </div>
+      </div>
+    </div>`)
+
+    document.getElementById('sidebar').appendChild(tabs)
+    document.getElementById('sidebar').appendChild(sidebarContents)
+
+    // Enable opening of the directory in Finder/Explorer/linux file browser
+    this.openDirButton.addEventListener('click', (e) => {
+      if (this._renderer.getCurrentDir() !== null) {
+        global.ipc.send('open-external', { href: this._renderer.getCurrentDir().path })
+      }
+    })
+
+    // Enable the tabs
+    const tabLinks = this.tabContainer.querySelectorAll('.sidebar-tab')
+    for (let tab of tabLinks) {
+      tab.addEventListener('click', (e) => {
+        let elem = e.target
+        if (elem.tagName === 'CLR-ICON') elem = elem.parentElement
+
+        const target = elem.dataset.target
+        const containers = this.tabTargetsContainer.children
+
+        // Apply the correct active class
+        for (let link of tabLinks) {
+          if (link === tab) {
+            link.classList.add('active')
+          } else {
+            link.classList.remove('active')
+          }
+        }
+
+        // Show the correct container
+        for (let elem of containers) {
+          if (elem.getAttribute('id') !== target) {
+            elem.classList.add('hidden')
+          } else {
+            elem.classList.remove('hidden')
+          }
+        }
+      }) // END addEventListener
+    } // END for let tab of tabs
   }
 
   /**
-   * Returns the rendered attachment container.
+   * Returns the rendered sidebar container.
    *
    * @return  {Element}  The container element.
    */
   get container () {
-    if (!this._container) {
-      this._container = renderTemplate(`<div id="attachments">
-  <h1>${trans('gui.attachments')}
-    <clr-icon shape="folder" class="is-solid" id="open-dir-external" title="${trans('gui.attachments_open_dir')}"></clr-icon>
-  </h1>
-  <div id="files">
-    <p>${trans('gui.no_attachments')}</p>
-  </div>
-  <h1>${trans('gui.citeproc.references_heading')}</h1>
-  <div id="bibliography">
-    <p>${trans('gui.citeproc.references_none')}</p>
-  </div>
-</div>`)
-      document.querySelector('body').append(this._container)
+    return document.getElementById('sidebar')
+  }
 
-      // Enable opening of the directory in Finder/Explorer/linux file browser
-      this.openDirButton.addEventListener('click', (e) => {
-        if (this._renderer.getCurrentDir() !== null) {
-          global.ipc.send('open-external', { href: this._renderer.getCurrentDir().path })
-        }
-      })
-    }
+  /**
+   * Returns the tab container
+   *
+   * @return  {Element}  The sidebar container
+   */
+  get tabContainer () {
+    return document.getElementById('sidebar-tabs')
+  }
 
-    return document.getElementById('attachments')
+  /**
+   * Get the wrapper of the tab targets
+   *
+   * @return  {Element}  The DOM element.
+   */
+  get tabTargetsContainer () {
+    return document.getElementById('sidebar-tab-containers')
   }
 
   /**
@@ -99,10 +166,19 @@ class ZettlrAttachments {
   }
 
   /**
+   * Returns the table of contents container
+   *
+   * @return  {Element}  The DOM element.
+   */
+  get tocContainer () {
+    return document.getElementById('sidebar-toc')
+  }
+
+  /**
     * Shows/hides the pane.
     */
   toggle () {
-    // Toggles the display of the attachment pane
+    // Toggles the display of the sidebar
     this.container.classList.toggle('open')
   }
 
@@ -263,5 +339,3 @@ class ZettlrAttachments {
     event.dataTransfer.setData('text', data)
   }
 }
-
-module.exports = ZettlrAttachments

@@ -7,6 +7,7 @@
 ## GUI and Functionality
 
 - **New Feature**: Typewriter mode. By pressing `Cmd/Ctrl+Alt+T`, you can activate the typewriter mode, which will keep the current line in the editor always centered so that you have to move your eyes less while editing a text. This also works in combination with the distraction free mode so that you can fully focus on what you're editing right at the moment.
+- **New Feature**: The sidebar (formerly attachment sidebar) is now tabbified. That means you have three distinct tabs to choose from with regard to displaying important information: the non-markdown files in your currently selected directory, the references in the current file, and the table of contents of the current file.
 - Fixed the fold-gutter being too close to the text.
 - The editor link autocompletion now respects the setting to use headings level 1 instead of YAML frontmatter titles where possible.
 - The paste image dialog now also provides the original image size as a default value, so that you simply can use the arrow buttons on the field to adjust the image size.

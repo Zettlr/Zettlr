@@ -17,7 +17,7 @@ const ZettlrEditor = require('./zettlr-editor')
 const ZettlrBody = require('./zettlr-body')
 const ZettlrToolbar = require('./zettlr-toolbar')
 const ZettlrPomodoro = require('./zettlr-pomodoro')
-const ZettlrAttachments = require('./zettlr-attachments')
+const ZettlrSidebar = require('./zettlr-sidebar')
 const GlobalSearch = require('./util/global-search')
 
 const ZettlrStore = require('./zettlr-store')
@@ -69,7 +69,7 @@ class ZettlrRenderer {
     this._body = new ZettlrBody(this)
     this._toolbar = new ZettlrToolbar(this)
     this._pomodoro = new ZettlrPomodoro(this)
-    this._attachments = new ZettlrAttachments(this)
+    this._sidebar = new ZettlrSidebar(this)
     // Create and mount the file manager
     this._fileManager = createFileManager()
     // Create the store wrapper which will act as
@@ -148,8 +148,8 @@ class ZettlrRenderer {
     }, 100)
 
     // Load the clarity icon modules, add custom icons and then refresh
-    // attachments (because it requires custom icons to be loaded).
-    setTimeout(() => loadicons().then(() => this._attachments.refresh()), 0)
+    // the sidebar (because it requires custom icons to be loaded).
+    setTimeout(() => loadicons().then(() => this._sidebar.refresh()), 0)
   }
 
   /**
@@ -274,10 +274,10 @@ class ZettlrRenderer {
   }
 
   /**
-    * Toggles display of the attachment pane.
-    */
-  toggleAttachments () {
-    this._attachments.toggle()
+   * Toggle the sidebar
+   */
+  toggleSidebar () {
+    this._sidebar.toggle()
   }
 
   /**
@@ -331,7 +331,7 @@ class ZettlrRenderer {
     global.store.renewItems(nData)
 
     // Trigger a refresh for all affected places
-    this._attachments.refresh()
+    this._sidebar.refresh()
     this._editor.signalUpdateFileAutocomplete()
 
     // Finally, synchronize the file descriptors in the editor
@@ -368,7 +368,7 @@ class ZettlrRenderer {
       this._preview.refresh()
 
       // Also, the bibliography has likely changed
-      this._attachments.refreshBibliography(this._editor.getValue())
+      this._sidebar.refreshBibliography(this._editor.getValue())
 
       // Finally, synchronize the file descriptors in the editor
       this._editor.syncFiles()
@@ -413,7 +413,7 @@ class ZettlrRenderer {
       // We'll be patching the store, as this
       // will also update the renderer._paths.
       global.store.patch(oldHash, dir)
-      this._attachments.refresh()
+      this._sidebar.refresh()
     }
   }
 
@@ -543,7 +543,7 @@ class ZettlrRenderer {
    */
   signalActiveFileChanged () {
     // Also, the bibliography has likely changed
-    this._attachments.refreshBibliography(this._editor.getValue())
+    this._sidebar.refreshBibliography(this._editor.getValue())
   }
 
   /**
@@ -618,7 +618,7 @@ class ZettlrRenderer {
     let hasActiveSearch = global.store.hasActiveSearch()
     this._currentDir = this.findObject(newdir) // Find the dir (hash) in our own paths object
     global.store.selectDirectory(newdir)
-    this._attachments.refresh()
+    this._sidebar.refresh()
     this._editor.signalUpdateFileAutocomplete() // On every directory change
     // "Re-do" the search
     if (hasActiveSearch) this.beginSearch(this._toolbar.getSearchTerm())
@@ -726,7 +726,7 @@ class ZettlrRenderer {
    * update it here.
    * @param {Object} bib A new citeproc bibliography object.
    */
-  setBibliography (bib) { this._attachments.setBibliographyContents(bib) }
+  setBibliography (bib) { this._sidebar.setBibliographyContents(bib) }
 
   /**
    * Simply indicates to main to set the modified flag.

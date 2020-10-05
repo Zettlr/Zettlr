@@ -1,6 +1,6 @@
-// Attachment pane
+// Sidebar
 
-#attachments {
+#sidebar {
     position: absolute;
     top: @toolbar-height;
     right: -20%;
@@ -8,12 +8,19 @@
     width: 20%;
     overflow-y: auto;
     overflow-x: hidden;
-    transition: all 1s ease 0s;
-    visibility: hidden;
+    transition: right 0.5s ease 0s;
 
-    &.open {
-      right: 0%;
-      visibility: visible;
+    &.open { right: 0%; }
+
+    // Enable tabs
+    #sidebar-tabs {
+      display: flex;
+      justify-content: space-evenly;
+
+      .sidebar-tab {
+        flex-grow: 1;
+        text-align: center;
+      }
     }
 
     #open-dir-external {

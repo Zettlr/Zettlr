@@ -240,9 +240,9 @@
         "command": "toggle-file-manager"
       },
       {
-        "label": "menu.toggle_attachments",
+        "label": "menu.toggle_sidebar",
         "accelerator": "CmdOrCtrl+?",
-        "command": "toggle-attachments"
+        "command": "toggle-sidebar"
       },
       {
         "type": "separator"

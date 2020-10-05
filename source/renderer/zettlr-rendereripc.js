@@ -606,8 +606,8 @@ class ZettlrRendererIPC {
         this._app.getBody().displayIconSelect(cnt)
         break
 
-      case 'toggle-attachments':
-        this._app.toggleAttachments()
+      case 'toggle-sidebar':
+        this._app.toggleSidebar()
         break
 
       // Stats
