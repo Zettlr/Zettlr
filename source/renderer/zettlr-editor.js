@@ -128,6 +128,10 @@ class ZettlrEditor {
 
       // Finally, update the file info in the toolbar
       this._renderer.updateFileInfo(this._editor.documentInfo)
+
+      // The sidebar needs the correct table of contents, so signal the
+      // corresponding event to the renderer
+      this._renderer.updateTOC(this._editor.tableOfContents)
     }) // END MarkdownEditor::onChange
 
     // We also need to update the document info on cursor activity
@@ -320,6 +324,7 @@ class ZettlrEditor {
     this.signalUpdateFileAutocomplete()
     this._renderer.signalActiveFileChanged()
     this._renderer.updateFileInfo(this._editor.documentInfo)
+    this._renderer.updateTOC(this._editor.tableOfContents)
 
     // Last but not least: If there are any search results currently
     // display, mark the respective positions.

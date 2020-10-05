@@ -205,6 +205,24 @@ module.exports = class ZettlrSidebar {
   }
 
   /**
+   * Creates a TOC element
+   *
+   * @param  {Object}  entry  The entry to render
+   *
+   * @return  {DOMElement}    The rendered DOM element
+   */
+  createTOCElement (entry) {
+    return renderTemplate(
+      `<a class="attachment toc-entry"
+          data-line="${entry.line}"
+          style="margin-left: ${entry.level * 10}px"
+       >
+        ${entry.renderedLevel}. ${entry.text}
+      </a>`
+    )
+  }
+
+  /**
    * Returns true if the provided path extension is a valid image file type
    *
    * @param   {String}  extension  The extension to be tested
@@ -294,6 +312,77 @@ module.exports = class ZettlrSidebar {
       this.setBibliographyContents(trans('gui.citeproc.references_error'))
     } else if (updateResult === 2) { // No database loaded
       this.setBibliographyContents(trans('gui.citeproc.no_db'))
+    }
+  }
+
+  /**
+   * Updates the Table of Contents with new contents
+   *
+   * @param   {Object}  tableOfContents  The new table
+   */
+  updateTOC (tableOfContents) {
+    this.tocContainer.innerHTML = ''
+
+    let lines = []
+    let h1 = 0
+    let h2 = 0
+    let h3 = 0
+    let h4 = 0
+    let h5 = 0
+    let h6 = 0
+    for (let entry of tableOfContents) {
+      let level = ''
+      switch (entry.level) {
+        case 1:
+          h1++
+          h2 = h3 = h4 = h5 = h6 = 0
+          level = h1
+          break
+        case 2:
+          h2++
+          h3 = h4 = h5 = h6 = 0
+          level = [ h1, h2 ].join('.')
+          break
+        case 3:
+          h3++
+          h4 = h5 = h6 = 0
+          level = [ h1, h2, h3 ].join('.')
+          break
+        case 4:
+          h4++
+          h5 = h6 = 0
+          level = [ h1, h2, h3, h4 ].join('.')
+          break
+        case 5:
+          h5++
+          h6 = 0
+          level = [ h1, h2, h3, h4, h5 ].join('.')
+          break
+        case 6:
+          h6++
+          level = [ h1, h2, h3, h4, h5, h6 ].join('.')
+      }
+
+      lines.push({
+        'line': entry.line,
+        'level': entry.level,
+        'renderedLevel': level,
+        'text': entry.text
+      })
+    }
+
+    for (let line of lines) {
+      const elem = this.createTOCElement(line)
+      this.tocContainer.appendChild(elem)
+    }
+
+    // Finally activate the links
+    const entries = this.tocContainer.querySelectorAll('.toc-entry')
+    for (let entry of entries) {
+      entry.addEventListener('click', (e) => {
+        const targetLine = entry.dataset.line
+        this._renderer.getEditor().jtl(targetLine)
+      })
     }
   }
 

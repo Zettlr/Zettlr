@@ -522,6 +522,13 @@ class ZettlrRenderer {
   updateFileInfo (fileInfo) { this._toolbar.updateFileInfo(fileInfo) }
 
   /**
+   * Updates the table of contents in the sidebar
+   *
+   * @param   {Object}  tableOfContents  The table of contents
+   */
+  updateTOC (tableOfContents) { this._sidebar.updateTOC(tableOfContents) }
+
+  /**
    * Opens a new file
    * @param  {ZettlrFile} f       The file to be opened
    * @param {Boolean}     isSync  If this is a synchronization request
