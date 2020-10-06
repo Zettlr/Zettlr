@@ -37,4 +37,20 @@
     .csl-bib-body a {
         color: var(--blue-0)
     }
+
+    // Table of Contents entries
+    div.toc-entry-container {
+        margin-bottom: 10px;
+        div.toc-level {
+          padding: 0px 5px;
+          font-weight: bold;
+          color: var(--c-primary);
+        }
+
+        div.toc-entry {
+          flex-grow: 3;
+          cursor: pointer;
+          &:hover { text-decoration: underline; }
+        }
+      }
 }

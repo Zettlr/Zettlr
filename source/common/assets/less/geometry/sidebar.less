@@ -73,4 +73,14 @@
         cursor: text;
       }
     }
+
+    // Table of Contents entries
+    div.toc-entry-container {
+      // Clever calculation based on the data-level property
+      margin-left: calc(attr(data-level, 0px) * 10px);
+      display: flex;
+
+      div.toc-level { flex-shrink: 1; }
+      div.toc-entry { flex-grow: 3; }
+    }
 }
