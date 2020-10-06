@@ -334,9 +334,6 @@ class ZettlrRenderer {
     this._sidebar.refresh()
     this._editor.signalUpdateFileAutocomplete()
 
-    // Finally, synchronize the file descriptors in the editor
-    this._editor.syncFiles() // DEBUG
-
     // NOTE: We have to set the directory last because it will re-execute a
     // potential search, leading to an error if the store, e.g., does not
     // have the correct list of files.
@@ -560,13 +557,6 @@ class ZettlrRenderer {
   closeFile (hash = null) {
     // We have received a close-file command.
     this._editor.close(hash)
-  }
-
-  /**
-   * Closes all open files
-   */
-  closeAllFiles () {
-    this._editor.closeAll()
   }
 
   /**

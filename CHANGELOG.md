@@ -31,6 +31,7 @@
 - File loading (especially on boot) is now much faster, because the opened tabs won't be switched through during load anymore. Only the relevant, last file will be opened and displayed.
 - Fixed a bug that would prevent you from exporting standalone files.
 - Non-breaking spaces (NBSP) are now considered word delimiters in the spellchecker.
+- Fixed a bug that would not close all tabs when the corresponding entry was selected from the tab context menu.
 
 ## Under the Hood
 

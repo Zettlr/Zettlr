@@ -795,6 +795,7 @@ module.exports = class FSAL extends EventEmitter {
   closeFile (file) {
     if (this._state.openFiles.includes(file)) {
       this._state.openFiles.splice(this._state.openFiles.indexOf(file), 1)
+      console.log('File ' + file.name + ' closed successfully in the FSAL. Emitting event ...')
       this.emit('fsal-state-changed', 'openFiles')
       return true
     } else {
@@ -803,10 +804,24 @@ module.exports = class FSAL extends EventEmitter {
   }
 
   /**
+   * Closes all open files.
+   */
+  closeAllFiles () {
+    this._state.openFiles = []
+    this.emit('fsal-state-changed', 'openFiles')
+  }
+
+  /**
    * Sets the active file pointer to the file identified by the hash.
    * @param {number} hash The hash of the file to set as active
    */
   setActiveFile (hash) {
+    if (hash === null) {
+      this._state.activeFile = null
+      this.emit('fsal-state-changed', 'activeFile')
+      return
+    }
+
     let file = this.findFile(hash)
     if (file && this._state.openFiles.includes(file)) {
       this._state.activeFile = file
@@ -818,10 +833,10 @@ module.exports = class FSAL extends EventEmitter {
 
   /**
    * Returns the hash of the currently active file.
-   * @returns {number} The hash of the active file.
+   * @returns {Number|null} The hash of the active file.
    */
   getActiveFile () {
-    return (this._state.activeFile) ? this._state.activeFile.hash : null
+    return (this._state.activeFile !== null) ? this._state.activeFile.hash : null
   }
 
   /**

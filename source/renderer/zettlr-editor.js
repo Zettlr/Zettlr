@@ -283,9 +283,17 @@ class ZettlrEditor {
       this._toSync.splice(this._toSync.indexOf(file.hash), 1)
 
       if (this._toSync.length === 0) {
-        // We have finished background-syncing the files. Now
-        // we need to open the active file.
-        this._swapFile(global.config.get('lastFile'))
+        const lastFile = global.config.get('lastFile')
+
+        if (lastFile === null && this._openFiles.length > 0) {
+          this._swapFile(this._openFiles[0].fileObject.hash)
+        } else if (lastFile !== null && this._openFiles.length > 0) {
+          // We have finished background-syncing the files. Now
+          // we need to open the active file.
+          this._swapFile(lastFile)
+        } else {
+          console.error('lastFile was null and there are no open files to switch to!')
+        }
       }
     }
 
@@ -304,7 +312,6 @@ class ZettlrEditor {
     // swapDoc returns the old doc, but we retain a reference in the
     // _openFiles array so we don't need to catch it.
     this._editor.swapDoc(file.cmDoc)
-    // this._cm.swapDoc(file.cmDoc)
     this._currentHash = hash
     this._editor.setOptions({
       'zettlr': {
@@ -313,27 +320,17 @@ class ZettlrEditor {
     })
 
     // Enable editing the editor contents, if applicable
-    if (this._editor.readOnly) {
-      this._editor.readOnly = false
-    }
+    this._editor.readOnly = false
 
     // Synchronise the file changes to the document tabs
     this._tabs.syncFiles(this._openFiles, this._currentHash)
-
-    // We also need to tell the autocompletion to rebuild the index
-    this.signalUpdateFileAutocomplete()
-    this._renderer.signalActiveFileChanged()
-    this._renderer.updateFileInfo(this._editor.documentInfo)
-    this._renderer.updateTOC(this._editor.tableOfContents)
 
     // Last but not least: If there are any search results currently
     // display, mark the respective positions.
     this._searcher.markResults(file.fileObject)
 
-    // The file manager needs to be informed that the active file has changed!
-    global.store.set('selectedFile', this._currentHash)
-    // Same for the main process
-    global.ipc.send('set-active-file', { 'hash': this._currentHash })
+    // The active file has changed
+    this._activeFileChanged()
 
     // TODO this._cm.focus() // DEBUG Check for side effects
   }
@@ -343,6 +340,21 @@ class ZettlrEditor {
    * @param {Array} newHashes A potential new list of hashes to open/sync.
    */
   syncFiles (newHashes = this._openFiles.map(elem => elem.fileObject.hash)) {
+    if (newHashes.length === 0) {
+      this._openFiles = []
+      // Clear out the editor (TODO: Not DRY, as copied from the close command)
+      this._editor.swapDoc(CodeMirror.Doc('', MD_MODE))
+      this._currentHash = null
+      // Reset the base path
+      this._editor.setOptions({ zettlr: { markdownImageBasePath: '' } })
+
+      // Enable editing the editor contents, if applicable
+      this._editor.readOnly = true
+
+      // The active file has changed (so to speak)
+      this._activeFileChanged()
+    }
+
     let oldHashes = this._openFiles.map(elem => elem.fileObject.hash)
     let lastHashIndex = oldHashes.indexOf(this._currentHash)
     if (lastHashIndex > newHashes.length) lastHashIndex = newHashes.length - 1
@@ -350,7 +362,8 @@ class ZettlrEditor {
     // First, close all files no longer present.
     for (let fileDescriptor of this._openFiles) {
       if (!newHashes.includes(fileDescriptor.fileObject.hash)) {
-        this.close(fileDescriptor.fileObject.hash)
+        // Remove from array
+        this._openFiles.splice(this._openFiles.indexOf(fileDescriptor), 1)
       }
     }
 
@@ -370,7 +383,9 @@ class ZettlrEditor {
     // We'll use the same index for that, because, purely from a visual
     // perspective, it makes absolutely sense that the new active file is at
     // roughly the same position than the former one.
-    if (!newHashes.includes(this._currentHash)) {
+    if (!newHashes.includes(this._currentHash) &&
+        this._currentHash !== null &&
+        this._openFiles.length > 0) {
       // In this case, we also need to swap files
       this._swapFile(newHashes[lastHashIndex])
     }
@@ -456,9 +471,7 @@ class ZettlrEditor {
       this.signalUpdateFileAutocomplete() // Autocomplete with no file match
 
       // Enable editing the editor contents, if applicable
-      if (!this._editor.readOnly) {
-        this._editor.readOnly = true
-      }
+      this._editor.readOnly = true
     }
 
     if (this._currentHash === fileToClose.fileObject.hash && this._openFiles.length > 0) {
@@ -468,21 +481,15 @@ class ZettlrEditor {
       } else {
         this._swapFile(this._openFiles[0].fileObject.hash)
       }
+    } else if (this._currentHash === fileToClose.fileObject.hash) {
+      // There are no more open files -> reset the currentHash pointer
+      this._currentHash = null
     }
 
-    // Synchronise the file changes to the document tabs
-    this._tabs.syncFiles(this._openFiles, this._currentHash)
+    // The active file has changed
+    this._activeFileChanged()
 
     return this
-  }
-
-  /**
-   * Closes all open files
-   */
-  closeAll () {
-    for (let file of this._openFiles) {
-      global.ipc.send('file-close', { 'hash': file.fileObject.hash })
-    }
   }
 
   /**
@@ -490,15 +497,13 @@ class ZettlrEditor {
    * @returns {boolean} True, if a tab has been closed, otherwise false.
    */
   attemptCloseTab () {
-    if (this._openFiles.length === 0) return false
-
-    if (!this._currentHash) return false
-
-    // Send the close request to main
-    global.ipc.send('file-close', { 'hash': this._currentHash })
-
-    // Indicate that we have indeed been able to close a tab
-    return true
+    if (this._currentHash !== null) {
+      // Send the close request to main
+      global.ipc.send('file-close', { 'hash': this._currentHash })
+      return true
+    } else {
+      return false
+    }
   }
 
   /**
@@ -681,6 +686,28 @@ class ZettlrEditor {
       this._renderer.getCurrentDir(),
       this._renderer.matchFile(this._currentHash)
     )
+  }
+
+  /**
+   * This function is called internally to start all processes whenever
+   * the active file has changed.
+   */
+  _activeFileChanged () {
+    // Synchronise the file changes to the document tabs
+    this._tabs.syncFiles(this._openFiles, this._currentHash)
+
+    // The file manager needs to be informed that the active file has changed
+    global.store.set('selectedFile', this._currentHash)
+    // Same for the main process
+    global.ipc.send('set-active-file', { 'hash': this._currentHash })
+
+    // Also, update the autocomplete
+    this.signalUpdateFileAutocomplete()
+
+    // Finally, inform the renderer about the necessary updates
+    this._renderer.signalActiveFileChanged()
+    this._renderer.updateFileInfo(this._editor.documentInfo)
+    this._renderer.updateTOC(this._editor.tableOfContents)
   }
 
   /**

@@ -16,7 +16,7 @@ const ZettlrCommand = require('./zettlr-command')
 
 class FileClose extends ZettlrCommand {
   constructor (app) {
-    super(app, 'file-close')
+    super(app, [ 'file-close', 'file-close-all' ])
   }
 
   /**
@@ -26,7 +26,13 @@ class FileClose extends ZettlrCommand {
    * @return {boolean}     True, if the file was successfully closed
    */
   async run (evt, arg) {
-    // Close the file
+    if (evt === 'file-close-all') {
+      // The renderer wants to close not just one, but all open files
+      this._app.getFileSystem().closeAllFiles()
+      return true
+    }
+
+    // Close one specific file
     try {
       if (!arg || !arg.hash) throw new Error('Could not close file! No hash provided!')
       let file = this._app.getFileSystem().findFile(arg.hash)

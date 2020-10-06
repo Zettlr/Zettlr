@@ -397,7 +397,7 @@ class ZettlrRendererIPC {
         break
 
       case 'file-close-all':
-        this._app.closeAllFiles()
+        this.send('file-close-all')
         break
 
       case 'file-save':
