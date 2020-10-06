@@ -30,7 +30,7 @@
   // highest identifier. So this function does not include special footnote refs
   // (such as [^a-footnote-ref]). But still it definitely yields unique footnotes.
   CodeMirror.commands.insertFootnote = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
 
     // Reset search indices
     fnRE.lastIndex = 0
@@ -79,7 +79,7 @@
   // Removes a footnote. It searches for a footnote under the cursor and
   // removes this as well as a (potentially found) reference to that.
   CodeMirror.commands.removeFootnote = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
 
     // Reset search indices
     fnRE.lastIndex = 0

@@ -24,7 +24,7 @@
   let unorderedListRE = /[*+-]\s/
 
   CodeMirror.commands.newlineAndIndentContinueMarkdownList = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     let ranges = cm.listSelections()
     let replacements = []
     for (let i = 0; i < ranges.length; i++) {

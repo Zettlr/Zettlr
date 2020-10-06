@@ -212,66 +212,66 @@ const { clipboard } = require('electron');
   // Either encapsulates the selection bold or "un-bolds" or inserts new
   // Bold-characters
   CodeMirror.commands.markdownBold = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     let boldChars = cm.getOption('zettlr').markdownBoldFormatting
     markdownInline(cm, boldChars, boldChars, 'strong')
   }
 
   // The same for italic
   CodeMirror.commands.markdownItalic = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     let italicChars = cm.getOption('zettlr').markdownItalicFormatting
     markdownInline(cm, italicChars, italicChars, 'em')
   }
 
   // Code blocks
   CodeMirror.commands.markdownCode = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     markdownInline(cm, '`', '`', 'comment')
   }
 
   // Commenting
   CodeMirror.commands.markdownComment = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     // Add spaces so that the commenting out looks nicer
     markdownInline(cm, '<!-- ', ' -->', 'comment')
   }
 
   // Headings 1-6
   CodeMirror.commands.markdownHeading1 = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '#')
   }
   CodeMirror.commands.markdownHeading2 = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '##')
   }
   CodeMirror.commands.markdownHeading3 = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '###')
   }
   CodeMirror.commands.markdownHeading4 = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '####')
   }
   CodeMirror.commands.markdownHeading5 = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '#####')
   }
   CodeMirror.commands.markdownHeading6 = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '######')
   }
 
   // Blockquotes
   CodeMirror.commands.markdownBlockquote = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     markdownBlock(cm, '>')
   }
 
   // Divider
   CodeMirror.commands.markdownDivider = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
 
     if (cm.doc.somethingSelected()) {
       cm.doc.setCursor(cm.doc.listSelections()[0].anchor)
@@ -281,7 +281,7 @@ const { clipboard } = require('electron');
 
   // Inserts a link template
   CodeMirror.commands.markdownLink = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
 
     let url = ''
     if (urlRE.test(clipboard.readText())) {
@@ -315,7 +315,7 @@ const { clipboard } = require('electron');
 
   // Inserts image template
   CodeMirror.commands.markdownImage = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
 
     let url = ''
     if (urlRE.test(clipboard.readText())) {
@@ -349,7 +349,7 @@ const { clipboard } = require('electron');
 
   // Create or uncreate an ordered list
   CodeMirror.commands.markdownMakeOrderedList = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
 
     // If nothing is selected we have a very short journey.
     if (!cm.doc.somethingSelected()) {
@@ -442,7 +442,7 @@ const { clipboard } = require('electron');
 
   // Create or uncreate an unordered list
   CodeMirror.commands.markdownMakeUnorderedList = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
 
     // If nothing is selected we have a very short journey.
     if (!cm.doc.somethingSelected()) {
@@ -516,7 +516,7 @@ const { clipboard } = require('electron');
 
   // Create or uncreate an unordered list
   CodeMirror.commands.markdownMakeTaskList = function (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
 
     // If nothing is selected we have a very short journey.
     if (!cm.doc.somethingSelected()) {

@@ -65,7 +65,7 @@
       textMarker.on('hide', () => { textMarker.clear() })
 
       cbox.onclick = (e) => {
-        if (cm.getOption('disableInput')) return // Don't do anything
+        if (cm.isReadOnly()) return // Don't do anything
 
         // First, recalculate where the checkbox actually is.
         let markerLine = textMarker.find().from.line

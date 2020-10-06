@@ -12,7 +12,7 @@ module.exports = (cm) => {
 
     if (process.platform === 'darwin' && !event.metaKey) return true
     if (process.platform !== 'darwin' && !event.ctrlKey) return true
-    if (cm.getOption('disableInput')) return true
+    if (cm.isReadOnly()) return true
     if (cm.getModeAt(cursor).name !== 'markdown') return true
 
     event.preventDefault()

@@ -218,7 +218,7 @@
    * @param {string} key The key that is currently being handled.
    */
   function handleKey (cm, candidates, key) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     var cursor = cm.getCursor()
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
@@ -250,7 +250,7 @@
    * @param {CodeMirror} cm The CodeMirror instance.
    */
   function handleSpecial (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
     var cursor = cm.getCursor()
@@ -300,7 +300,7 @@
    * @param {string} type The type of quote to be handled (single or double).
    */
   function handleQuote (cm, type) {
-    if (quotes === false || cm.getOption('disableInput')) return CodeMirror.Pass
+    if (quotes === false || cm.isReadOnly()) return CodeMirror.Pass
     var cursor = cm.getCursor()
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
@@ -325,7 +325,7 @@
    * @param {CodeMirror} cm The CodeMirror instance.
    */
   function handleBackspace (cm) {
-    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    if (cm.isReadOnly()) return CodeMirror.Pass
 
     if (hasJustAddedQuote) {
       hasJustAddedQuote = false // We can already reset this here
