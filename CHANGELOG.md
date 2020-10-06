@@ -32,6 +32,10 @@
 - Fixed a bug that would prevent you from exporting standalone files.
 - Non-breaking spaces (NBSP) are now considered word delimiters in the spellchecker.
 - Fixed a bug that would not close all tabs when the corresponding entry was selected from the tab context menu.
+- Added syntax highlighting modes (with keywords):
+    - **diff**: `diff`
+    - **Dockerfile**: `docker`/`dockerfile`
+    - **TOML**: `toml`/`ini`
 
 ## Under the Hood
 

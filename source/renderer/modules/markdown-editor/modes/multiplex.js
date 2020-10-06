@@ -177,6 +177,18 @@ const highlightingModes = {
   'application/dart': {
     'mode': 'dart',
     'selectors': [ 'dart', 'dt' ]
+  },
+  'text/x-toml': {
+    'mode': 'toml',
+    'selectors': [ 'toml', 'ini' ]
+  },
+  'text/x-dockerfile': {
+    'mode': 'dockerfile',
+    'selectors': [ 'docker', 'dockerfile' ]
+  },
+  'text/x-diff': {
+    'mode': 'diff',
+    'selectors': ['diff']
   }
 };
 
