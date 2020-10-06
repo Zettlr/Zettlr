@@ -54,6 +54,7 @@ const zoomHook = require('./hooks/zoom')
 const muteLinesHook = require('./hooks/mute-lines')
 const renderElementsHook = require('./hooks/render-elements')
 const typewriterHook = require('./hooks/typewriter')
+const initiateTablesHook = require('./hooks/initiate-tables')
 
 module.exports = class MarkdownEditor extends EventEmitter {
   /**
@@ -132,6 +133,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
     muteLinesHook(this._instance)
     renderElementsHook(this._instance)
     typewriterHook(this._instance)
+    initiateTablesHook(this._instance)
 
     // As a last step, listen to the change and click events, as this
     // is what will be needed by the holding instance to determine
