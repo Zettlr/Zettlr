@@ -213,16 +213,12 @@ module.exports = class ZettlrSidebar {
    */
   createTOCElement (entry) {
     return renderTemplate(
-      `<div class="toc-entry-container" data-level="${entry.level}>
+      `<div class="toc-entry-container" style="margin-left: ${entry.level * 10}px">
         <div class="toc-level">${entry.renderedLevel}</div>
-        <div
-          class="toc-entry"
-          data-line="${entry.line}"
-        >
+        <div class="toc-entry" data-line="${entry.line}">
           ${entry.text}
         </div>
-      </div>
-      `)
+      </div>`)
   }
 
   /**
