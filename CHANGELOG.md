@@ -30,6 +30,7 @@
 - The last opened file will now reliably open whenever you start the application again.
 - File loading (especially on boot) is now much faster, because the opened tabs won't be switched through during load anymore. Only the relevant, last file will be opened and displayed.
 - Fixed a bug that would prevent you from exporting standalone files.
+- Non-breaking spaces (NBSP) are now considered word delimiters in the spellchecker.
 
 ## Under the Hood
 

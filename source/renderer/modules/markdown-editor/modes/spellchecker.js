@@ -15,7 +15,8 @@
   var codeRE = /`.*?`/i
   var zknTagRE = /##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?/i
   var footnoteRefRE = /\[\^[^\]]+\]/
-  var delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»‹›„“”「」『』–—…÷‘’‚'
+  // NOTE: The whitespace after ~ are first a normal space, then an NBSP
+  var delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~  «»‹›„“”「」『』–—…÷‘’‚'
 
   /**
     * Define the spellchecker mode that will simply check all found words against
