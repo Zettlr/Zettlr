@@ -60,6 +60,10 @@
         }
       )
 
+      // Clear the textmarker once it's hidden b/c we'd rather
+      // re-render than having a wrong state associated with the marker
+      textMarker.on('hide', () => { textMarker.clear() })
+
       cbox.onclick = (e) => {
         if (cm.getOption('disableInput')) return // Don't do anything
 
