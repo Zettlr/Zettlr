@@ -134,8 +134,11 @@
           img.src = makeAbsoluteURL(cm.getOption('zettlr').markdownImageBasePath, linkImagePath)
           img.style.cursor = 'pointer' // Nicer cursor
           // Copied over from the other plugin
-          let width = (cm.getOption('imagePreviewWidth')) ? cm.getOption('imagePreviewWidth') + '%' : '100%'
-          let height = (cm.getOption('imagePreviewHeight') && cm.getOption('imagePreviewHeight') < 100) ? cm.getOption('imagePreviewHeight') + 'vh' : ''
+          // Retrieve the size constraints
+          const maxPreviewWidth = cm.getOption('zettlr').imagePreviewWidth
+          const maxPreviewHeight = cm.getOption('zettlr').imagePreviewHeight
+          let width = (maxPreviewWidth) ? maxPreviewWidth + '%' : '100%'
+          let height = (maxPreviewHeight && maxPreviewHeight < 100) ? maxPreviewHeight + 'vh' : ''
           img.style.maxWidth = width
           img.style.maxHeight = height
           a.appendChild(img)
