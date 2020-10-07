@@ -254,7 +254,7 @@ class ConfigProvider extends EventEmitter {
         } // END autoCorrect options
       },
       'display': {
-        'theme': 'berlin', // The theme used by the app, can be berlin, frankfurt, bielefeld, karl-marx-stadt
+        'theme': 'berlin', // The theme, can be berlin|frankfurt|bielefeld|karl-marx-stadt|bordeaux
         'imageWidth': 100, // Maximum preview image width
         'imageHeight': 50, // Maximum preview image height
         'renderCitations': true,

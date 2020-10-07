@@ -1,0 +1,89 @@
+# This is a test configuration file that will be read and parsed
+# to JSON during the preparation of the GUI-test environment.
+# It is a stub, because Zettlr will correctly fill in all missing
+# values. Copy this to the file test-config.yml and adapt to your
+# likings. The test-config.yml will not be committed to git, so it
+# will stay persistent between pulls.
+
+# Please view the comments in ./source/main/providers/config-provider.js
+# for full explanations on all possible values
+darkTheme: false
+alwaysReloadFiles: false
+autoDarkMode: schedule # 'off|system|schedule|auto
+autoDarkModeStart: '20:00'
+autoDarkModeEnd: '06:00'
+fileMeta: true
+fileMetaTime: modtime
+hideDirs: true
+sorting: natural
+sortingTime: creationtime
+muteLines: true
+fileManagerMode: thin
+enableRMarkdown: true
+newFileNamePattern: "%id.md"
+newFileDontPrompt: false
+pandoc: pandoc
+xelatex: xelatex
+pandocCommand: pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$
+  $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"
+export:
+  dir: temp # temp|cwd
+  stripIDs: false
+  stripTags: true
+  stripLinks: unlink # full|unlink|no
+pdf:
+  author: Zettlr GUI Tester
+  keywords: ''
+  papertype: a4paper
+  pagenumbering: arabic
+  tmargin: 3
+  rmargin: 3
+  bmargin: 3
+  lmargin: 3
+  margin_unit: cm
+  lineheight: 1.2
+  mainfont: Times New Roman
+  sansfont: Arial
+  fontsize: 12
+  textpl: ''
+zkn:
+  idRE: "(\\d{14})"
+  idGen: "%Y%M%D%h%m%s"
+  linkStart: "[["
+  linkEnd: "]]"
+  linkWithFilename: always # always|never|withID
+  autoCreateLinkedFiles: false
+editor:
+  autoCloseBrackets: true
+  defaultSaveImagePath: assets
+  homeEndBehaviour: true
+  enableTableHelper: true
+  indentUnit: 4
+  countChars: false
+  inputMode: default
+  boldFormatting: "**" # **|__
+  italicFormatting: _ # *|_
+  readabilityAlgorithm: dale-chall
+  direction: ltr
+  rtlMoveVisually: true
+  autoCorrect:
+    active: true
+    style: LibreOffice # LibreOffice|Word
+    quotes: false
+display:
+  theme: berlin # berlin|bielefeld|frankfurt|karl-marx-stadt|bordeaux
+  imageWidth: 100 # Maximal value 100
+  imageHeight: 50 # Maximal value 100
+  renderCitations: true
+  renderIframes: true
+  renderImages: true
+  renderLinks: true
+  renderMath: true
+  renderTasks: true
+  renderHTags: true
+  useFirstHeadings: false
+debug: true
+watchdog:
+  activatePolling: false
+  stabilityThreshold: 1000
+checkForBeta: true
