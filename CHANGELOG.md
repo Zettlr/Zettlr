@@ -38,6 +38,7 @@
 - Fixed a bug that would not close all tabs when the corresponding entry was selected from the tab context menu.
 - Fixed a bug where checkboxes of tasks would be strangely hidden on undo/redo operations that checked/unchecked those checkboxes.
 - Fixed a bug that would throw errors and not actually remove the file if said file was a root.
+- Fixed broken shortcuts `Cmd/Ctrl+Shift+E` (focus the editor) and `Cmd/Ctrl+Shift+T` (focus the file list).
 
 ## Under the Hood
 
