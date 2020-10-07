@@ -112,8 +112,13 @@ module.exports = class FSAL extends EventEmitter {
         // Will trigger a change that syncs the files
         this.closeFile(src) // Does nothing if the file is not open
 
-        // Now we're save to remove the file actually.
+        // Now we're safe to remove the file actually.
         await FSALFile.remove(src)
+
+        // In case it was a root file, we need to splice it
+        if (src.parent === null) {
+          this.unloadPath(src)
+        }
       },
       'save-file': async (src, target, options) => {
         // NOTE: Generates 1x change

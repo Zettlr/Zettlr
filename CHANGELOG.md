@@ -8,6 +8,10 @@
 
 - **New Feature**: Typewriter mode. By pressing `Cmd/Ctrl+Alt+T`, you can activate the typewriter mode, which will keep the current line in the editor always centered so that you have to move your eyes less while editing a text. This also works in combination with the distraction free mode so that you can fully focus on what you're editing right at the moment.
 - **New Feature**: The sidebar (formerly attachment sidebar) is now tabbified. That means you have three distinct tabs to choose from with regard to displaying important information: the non-markdown files in your currently selected directory, the references in the current file, and the table of contents of the current file.
+- Added syntax highlighting modes (with keywords):
+    - **diff**: `diff`
+    - **Dockerfile**: `docker`/`dockerfile`
+    - **TOML**: `toml`/`ini`
 - Fixed the fold-gutter being too close to the text.
 - The editor link autocompletion now respects the setting to use headings level 1 instead of YAML frontmatter titles where possible.
 - The paste image dialog now also provides the original image size as a default value, so that you simply can use the arrow buttons on the field to adjust the image size.
@@ -33,10 +37,7 @@
 - Non-breaking spaces (NBSP) are now considered word delimiters in the spellchecker.
 - Fixed a bug that would not close all tabs when the corresponding entry was selected from the tab context menu.
 - Fixed a bug where checkboxes of tasks would be strangely hidden on undo/redo operations that checked/unchecked those checkboxes.
-- Added syntax highlighting modes (with keywords):
-    - **diff**: `diff`
-    - **Dockerfile**: `docker`/`dockerfile`
-    - **TOML**: `toml`/`ini`
+- Fixed a bug that would throw errors and not actually remove the file if said file was a root.
 
 ## Under the Hood
 

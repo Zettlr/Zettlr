@@ -46,7 +46,11 @@ class FileDelete extends ZettlrCommand {
     }
 
     // Now we obviously need to update the directory
-    global.application.dirUpdate(file.parent.hash, file.parent.hash)
+    if (file.parent !== null) {
+      global.application.dirUpdate(file.parent.hash, file.parent.hash)
+    } // Root-file -> the FSAL will automatically unload it
+
+    global.log.info(`Removed file ${file.name}.`)
   }
 }
 
