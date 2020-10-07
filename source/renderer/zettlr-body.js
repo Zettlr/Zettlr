@@ -232,7 +232,9 @@ class ZettlrBody {
     let elem
 
     // Selection method stolen from requestNewDirName
-    if (!document.getElementById('#file-manager').classList.contains('expanded') && document.getElementById('file-tree').classList.contains('hidden')) {
+    const expandedFileManager = document.getElementById('file-manager').classList.contains('expanded')
+    const hiddenFileTree = document.getElementById('file-tree').classList.contains('hidden')
+    if (!expandedFileManager && hiddenFileTree) {
       // The file manager is in thin mode and tree-view is hidden, so the file list
       // is visible -> find the div in there. (Should be the top containing dir)
       elem = document.querySelector('#file-list div[data-hash="' + dir.hash + '"]')
