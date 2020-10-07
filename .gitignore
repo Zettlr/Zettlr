@@ -7,6 +7,15 @@ package-lock.json
 # Compiled releases
 release
 
+# Ignore electron-forge build output
+out/
+
+# Igrone webpack build output
+.webpack/
+
+# Ignore the custom user test config
+test-config.yml
+
 # Hidden files and stuff
 /**/.DS_Store
 
@@ -16,12 +25,6 @@ yarn.log
 
 # Don't commit ESLint error reports
 eslint_report.htm
-
-# Ignore electron-forge build output
-out/
-
-# Igrone webpack build output
-.webpack/
 
 # Taken from https://www.gitignore.io/api/visualstudiocode
 
