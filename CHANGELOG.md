@@ -39,6 +39,7 @@
 - Fixed a bug where checkboxes of tasks would be strangely hidden on undo/redo operations that checked/unchecked those checkboxes.
 - Fixed a bug that would throw errors and not actually remove the file if said file was a root.
 - Fixed broken shortcuts `Cmd/Ctrl+Shift+E` (focus the editor) and `Cmd/Ctrl+Shift+T` (focus the file list).
+- Markdown links to local files that are absolute are now attempted to be opened internally, without recurring to external programs.
 
 ## Under the Hood
 

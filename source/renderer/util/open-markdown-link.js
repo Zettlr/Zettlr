@@ -1,6 +1,10 @@
 const { shell } = require('electron')
 const makeValidUri = require('../../common/util/make-valid-uri')
-const { trans } = require('../../common/lang/i18n.js')
+const hash = require('../../common/util/hash')
+const { trans } = require('../../common/lang/i18n')
+const path = require('path')
+
+const VALID_FILETYPES = require('../../common/data.json').filetypes
 
 module.exports = function (url, cm) {
   if (url[0] === '#') {
@@ -23,13 +27,25 @@ module.exports = function (url, cm) {
     // we cannot rely on the errors thrown by new URL(), as,
     // e.g., file://./relative.md will not throw an error albeit
     // we need to convert it to absolute.
-    let base = cm.getOption('markdownImageBasePath')
+    let base = cm.getOption('zettlr').markdownImageBasePath
     let validURI = makeValidUri(url, base)
-    shell.openExternal(validURI).catch((err) => {
-      // Notify the user that we couldn't open the URL
-      if (err) {
-        global.notify(trans('system.error.open_url_error', validURI) + ': ' + err.message)
-      }
-    })
+
+    // Now we have a valid link. Finally, let's check if we can open the file
+    // internally, without having to switch to an external program.
+    const localPath = validURI.replace('file://', '')
+    const isValidFile = VALID_FILETYPES.includes(path.extname(localPath))
+    const isLocalMdFile = path.isAbsolute(localPath) && isValidFile
+
+    if (isLocalMdFile) {
+      // Attempt to open internally
+      global.ipc.send('file-get', hash(localPath))
+    } else {
+      shell.openExternal(validURI).catch((err) => {
+        // Notify the user that we couldn't open the URL
+        if (err) {
+          global.notify(trans('system.error.open_url_error', validURI) + ': ' + err.message)
+        }
+      })
+    }
   }
 }

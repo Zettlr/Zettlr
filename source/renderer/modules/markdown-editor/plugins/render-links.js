@@ -204,7 +204,6 @@
             // On ALT-Clicks, use the callback to have the user decide
             // what should happen when they click on links, defined
             // in the markdownOnLinkOpen option.
-            console.log(renderedLinkTarget, cm)
             openMarkdownLink(renderedLinkTarget, cm)
           } else {
             // Clear the textmarker and set the cursor to where the
