@@ -25,7 +25,6 @@ const getCodeMirrorDefaultOptions = require('./get-cm-options')
 const safeAssign = require('../../../common/util/safe-assign')
 const countWords = require('../../../common/util/count-words')
 const md2html = require('../../../common/util/md-to-html')
-const moveSection = require('../../../common/util/move-section')
 const generateKeymap = require('./generate-keymap.js')
 
 /**
@@ -55,6 +54,7 @@ const muteLinesHook = require('./hooks/mute-lines')
 const renderElementsHook = require('./hooks/render-elements')
 const typewriterHook = require('./hooks/typewriter')
 const initiateTablesHook = require('./hooks/initiate-tables')
+const { autocompleteHook, setAutocompleteDatabase } = require('./hooks/autocomplete')
 
 module.exports = class MarkdownEditor extends EventEmitter {
   /**
@@ -134,6 +134,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
     renderElementsHook(this._instance)
     typewriterHook(this._instance)
     initiateTablesHook(this._instance)
+    autocompleteHook(this._instance)
 
     // As a last step, listen to the change and click events, as this
     // is what will be needed by the holding instance to determine
@@ -201,7 +202,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
    * @param  {Number} line The line to pull into view
    */
   jtl (line) {
-    this._instance.doc.setCursor({ 'line': line, 'ch': 0 })
+    this._instance.setCursor({ 'line': line, 'ch': 0 })
     this._instance.refresh()
   }
 
@@ -221,18 +222,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
     }
     this._instance.getWrapperElement().style.fontSize = this._fontsize + '%'
     this._instance.refresh()
-  }
-
-  /**
-   * Moves a section demarcated by ATX headings to the given line
-   *
-   * @param   {Number}  fromLine  The starting line
-   * @param   {Number}  toLine    The target line after which to insert
-   */
-  moveSection (fromLine, toLine) {
-    let value = this._instance.getValue()
-    let newValue = moveSection(value, fromLine, toLine)
-    this._instance.setValue(newValue)
   }
 
   /**
@@ -309,6 +298,16 @@ module.exports = class MarkdownEditor extends EventEmitter {
    */
   focus () {
     this._instance.focus()
+  }
+
+  /**
+   * Sets an autocomplete database of given type to a new value
+   *
+   * @param   {String}  type      The type of the database
+   * @param   {Object}  database  The show-hint-addon compatible database
+   */
+  setCompletionDatabase (type, database) {
+    setAutocompleteDatabase(type, database)
   }
 
   /* * * * * * * * * * * *
