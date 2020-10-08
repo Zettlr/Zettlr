@@ -99,7 +99,16 @@ class ZettlrRendererIPC {
         // immediately receive the config value we need. Basically we are pulling
         // the get()-handler from main using the "remote" feature, but we'll
         // implement it ourselves.
-        return ipc.sendSync('config', key)
+        return ipc.sendSync('config-get', key)
+      },
+      set: (key, val) => {
+        if (typeof key !== 'string') {
+          console.error('Cannot request config value - key was not a string.')
+          return undefined // On error return undefined
+        }
+
+        // Send a synchronous event
+        return ipc.sendSync('config-set', key, val)
       }
     }
 

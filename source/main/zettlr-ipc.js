@@ -36,10 +36,15 @@ class ZettlrIPC {
 
     // Listen for synchronous messages from the renderer process to access
     // config options.
-    ipc.on('config', (event, key) => {
+    ipc.on('config-get', (event, key) => {
       // We have received a config event -> simply return back the respective
       // key.
       event.returnValue = global.config.get(key)
+    })
+
+    // We shall set a config value
+    ipc.on('config-set', (event, key, value) => {
+      event.returnValue = global.config.set(key, value)
     })
 
     // Beginn listening to messages
