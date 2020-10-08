@@ -220,10 +220,6 @@ class ZettlrEditor {
     if (!this._openFiles.find(elem => elem.fileObject.hash === file.hash)) {
       // We need to create a new doc for the file and then swap
       // the currently active doc.
-      // Switch modes based on the file type
-      let mode = MD_MODE
-      // Potentially helpful: $('.CodeMirror').addClass('cm-stex-mode')
-      if (file.ext === '.tex') mode = TEX_MODE
 
       // Bind the "correct" filetree object to the doc, because
       // we won't be accessing the content property at all, hence
@@ -250,14 +246,14 @@ class ZettlrEditor {
         this.attemptCloseTab()
         // Swap out all properties of the current tab
         activeFile.fileObject = fileTreeObject
-        activeFile.cmDoc = CodeMirror.Doc(file.content, mode)
+        activeFile.cmDoc = CodeMirror.Doc(file.content)
         activeFile.transient = shouldBeTransient
         activeFile.lastWordCount = countWords(file.content, this._countChars)
       } else {
         // Simply append to the end of the array
         this._openFiles.push({
           'fileObject': fileTreeObject,
-          'cmDoc': CodeMirror.Doc(file.content, mode),
+          'cmDoc': CodeMirror.Doc(file.content),
           'transient': shouldBeTransient,
           'lastWordCount': countWords(file.content, this._countChars)
         })
@@ -302,7 +298,6 @@ class ZettlrEditor {
    * @param {Number} hash The hash of the file to be swapped
    */
   _swapFile (hash) {
-    if (this.isReadabilityModeActive()) this.exitReadability()
     // Exchanges the CodeMirror document object
     let file = this._openFiles.find(elem => elem.fileObject.hash === hash)
     if (!file) return
@@ -310,7 +305,10 @@ class ZettlrEditor {
     // We need to set the markdownImageBasePath _before_ swapping the doc
     // as the CodeMirror instance will begin rendering images as soon as
     // this happens, and it needs the correct path for this.
+    console.log(file.fileObject)
     this._editor.setOptions({
+      // Set the mode based on the extension
+      'mode': (file.fileObject.ext === '.tex') ? 'stex' : 'multiplex',
       'zettlr': {
         'markdownImageBasePath': path.dirname(file.fileObject.path)
       }
