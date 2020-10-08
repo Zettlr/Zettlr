@@ -183,15 +183,14 @@ class ZettlrEditor {
    * Enters the readability mode
    */
   enterReadability () {
-    // TODO: Check if it's a Markdown file
-    this._editor.setOptions({ 'name': 'readability' })
+    this._editor.setOptions({ 'mode': 'readability' })
   }
 
   /**
    * Exits the readability mode.
    */
   exitReadability () {
-    this._editor.setOptions({ 'name': 'multiplex' })
+    this._editor.setOptions({ 'mode': 'multiplex' })
   }
 
   /**
