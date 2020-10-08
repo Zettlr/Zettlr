@@ -32,7 +32,6 @@ module.exports = function (editor) {
     keymap['Cmd-F'] = false // Disable the internal search
     keymap['Alt-B'] = false // Disable word-backwarding on macOS (handled by Alt+ArrowLeft)
     keymap['Alt-F'] = false // Disable word-forwarding on macOS (handled by Alt+ArrowRight)
-    keymap['Cmd-Shift-V'] = (cm) => { editor.pasteAsPlain() }
     keymap['Cmd-Alt-R'] = 'insertFootnote'
     keymap['Cmd-T'] = 'markdownMakeTaskList'
     keymap['Shift-Cmd-C'] = 'markdownComment'
@@ -47,7 +46,6 @@ module.exports = function (editor) {
     // false, use visible lines.
     keymap['Home'] = (homeEndBehaviour) ? 'goLineStart' : 'goLineLeftSmart'
     keymap['End'] = (homeEndBehaviour) ? 'golineEnd' : 'goLineRight'
-    keymap['Ctrl-Shift-V'] = (cm) => { editor.pasteAsPlain() }
     keymap['Ctrl-Alt-F'] = 'insertFootnote'
     keymap['Ctrl-T'] = 'markdownMakeTaskList'
     keymap['Shift-Ctrl-C'] = 'markdownComment'
