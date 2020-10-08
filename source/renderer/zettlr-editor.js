@@ -26,7 +26,6 @@ const MarkdownEditor = require('./modules/markdown-editor')
 const CodeMirror = require('codemirror')
 
 const MD_MODE = { name: 'multiplex' }
-const TEX_MODE = { name: 'stex' }
 
 const SAVE_TIMEOUT = 5000 // Save every 5 seconds
 
@@ -278,12 +277,16 @@ class ZettlrEditor {
       if (this._toSync.length === 0) {
         const lastFile = global.config.get('lastFile')
 
-        if (lastFile === null && this._openFiles.length > 0) {
+        const lastFileOpen = this._openFiles.map(e => e.fileObject.hash).includes(lastFile)
+
+        if (lastFileOpen) {
+          console.log('Finishing background sync, swapping lastFile ...', lastFile)
+          this._swapFile(lastFile)
+        } else if (!lastFileOpen && this._openFiles.length > 0) {
+          console.log('No last file but theres something in the openFiles, opening ...', this._openFiles)
           this._swapFile(this._openFiles[0].fileObject.hash)
-        } else if (lastFile !== null && this._openFiles.length > 0) {
           // We have finished background-syncing the files. Now
           // we need to open the active file.
-          this._swapFile(lastFile)
         } else {
           console.error('lastFile was null and there are no open files to switch to!')
         }
@@ -300,12 +303,11 @@ class ZettlrEditor {
   _swapFile (hash) {
     // Exchanges the CodeMirror document object
     let file = this._openFiles.find(elem => elem.fileObject.hash === hash)
-    if (!file) return
+    if (!file) return console.log('No file found to swap to!', hash, this._openFiles)
 
     // We need to set the markdownImageBasePath _before_ swapping the doc
     // as the CodeMirror instance will begin rendering images as soon as
     // this happens, and it needs the correct path for this.
-    console.log(file.fileObject)
     this._editor.setOptions({
       // Set the mode based on the extension
       'mode': (file.fileObject.ext === '.tex') ? 'stex' : 'multiplex',
@@ -343,23 +345,31 @@ class ZettlrEditor {
     if (newHashes.length === 0) {
       this._openFiles = []
       // Clear out the editor (TODO: Not DRY, as copied from the close command)
-      this._editor.swapDoc(CodeMirror.Doc('', MD_MODE))
+      this._editor.swapDoc(CodeMirror.Doc(''))
       this._currentHash = null
       // Reset the base path
       this._editor.setOptions({ zettlr: { markdownImageBasePath: '' } })
 
-      // Enable editing the editor contents, if applicable
+      // Disable the editor
       this._editor.readOnly = true
 
       // The active file has changed (so to speak)
       this._activeFileChanged()
+      return
     }
 
+    // Now we need all hashes that are currently open ...
     let oldHashes = this._openFiles.map(elem => elem.fileObject.hash)
+    // ... as well as the index of the currently selected file (in case
+    // it was closed)
     let lastHashIndex = oldHashes.indexOf(this._currentHash)
-    if (lastHashIndex > newHashes.length) lastHashIndex = newHashes.length - 1
+    // To prevent undefined in case something went wrong
+    if (lastHashIndex < 0) {
+      lastHashIndex = 0
+      console.warn('The current opened file was not found in the list of open files during sync!')
+    }
 
-    // First, close all files no longer present.
+    // Then, close all files no longer present.
     for (let fileDescriptor of this._openFiles) {
       if (!newHashes.includes(fileDescriptor.fileObject.hash)) {
         // Remove from array
@@ -367,7 +377,10 @@ class ZettlrEditor {
       }
     }
 
-    // Then, determine all files we have yet to open anew.
+    // Make sure we have a valid index to open later
+    if (lastHashIndex >= this._openFiles.length) lastHashIndex = this._openFiles.length - 1
+
+    // Now, determine all files we have yet to open anew.
     this._toSync = newHashes.filter(fileHash => !oldHashes.includes(fileHash))
     if (this._toSync.length > 0) {
       for (let fileHash of this._toSync) {
@@ -386,8 +399,7 @@ class ZettlrEditor {
     if (!newHashes.includes(this._currentHash) &&
         this._currentHash !== null &&
         this._openFiles.length > 0) {
-      // In this case, we also need to swap files
-      this._swapFile(newHashes[lastHashIndex])
+      this._swapFile(this._openFiles[lastHashIndex].fileObject.hash)
     }
 
     // Finally, propagate the changes to the tabs.
