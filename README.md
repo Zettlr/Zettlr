@@ -98,11 +98,11 @@ Starts `electron-forge`, which will build the application and launch it in devel
 
 Packages the application, but not bundle it into an installer. Without any suffix, this command will package the application for your current platform. To create specific packages (may require running on the corresponding platform), the following suffixes are available:
 
-- `package.mac`
+- `package:mac`
 - `package:win`
 - `package:win-arm`
 - `package:linux-x32`
-- `package.linux-x64`
+- `package:linux-x64`
 
 The resulting application packages are stored in `./out`.
 
@@ -163,7 +163,7 @@ This will direct the File System Abstraction Layer to fully clear its cache on b
 
 #### `--config [path]`
 
-Use this switch to temporarily override the default configuration file stored in your AppData-equivalent folder. This path should be absolute, but in case you need to provide a relative path, the application will use either the binary's directory name when the app is packaged, or the repository root, when the app is not packaged.
+Use this switch to temporarily override the default configuration file stored in your AppData-equivalent folder. This path should be absolute. In case you need to provide a relative path, the base for resolving the path will be: either the binary's directory name (when the app is packaged), or the repository root (when the app is not packaged).
 
 ## License
 
