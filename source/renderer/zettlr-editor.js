@@ -306,15 +306,20 @@ class ZettlrEditor {
     // Exchanges the CodeMirror document object
     let file = this._openFiles.find(elem => elem.fileObject.hash === hash)
     if (!file) return
-    // swapDoc returns the old doc, but we retain a reference in the
-    // _openFiles array so we don't need to catch it.
-    this._editor.swapDoc(file.cmDoc)
-    this._currentHash = hash
+
+    // We need to set the markdownImageBasePath _before_ swapping the doc
+    // as the CodeMirror instance will begin rendering images as soon as
+    // this happens, and it needs the correct path for this.
     this._editor.setOptions({
       'zettlr': {
         'markdownImageBasePath': path.dirname(file.fileObject.path)
       }
     })
+
+    // swapDoc returns the old doc, but we retain a reference in the
+    // _openFiles array so we don't need to catch it.
+    this._editor.swapDoc(file.cmDoc)
+    this._currentHash = hash
 
     // Enable editing the editor contents, if applicable
     this._editor.readOnly = false
