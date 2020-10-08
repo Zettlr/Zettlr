@@ -770,10 +770,10 @@ class ZettlrEditor {
     */
   replaceWord (word) {
     // We obviously need a selection to replace
-    if (!this._cm.somethingSelected()) return
+    if (!this._getActiveFile().cmDoc.somethingSelected()) return
 
     // Replace word and select new word
-    this._cm.replaceSelection(word, 'around')
+    this._getActiveFile().cmDoc.replaceSelection(word, 'around')
   }
 
   /**
