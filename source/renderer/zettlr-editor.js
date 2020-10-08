@@ -764,7 +764,7 @@ class ZettlrEditor {
    * @return {void}      Does not return.
    */
   insertText (text) {
-    this._cm.replaceSelection(text)
+    this._getActiveFile().cmDoc.replaceSelection(text)
   }
 
   /**
