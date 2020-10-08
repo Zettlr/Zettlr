@@ -359,10 +359,7 @@
       },
       {
         "label": "menu.toggle_devtools",
-        "accelerator": {
-          "darwin": "Alt+Command+I",
-          "other": "Ctrl+Shift+I"
-        },
+        "accelerator": "CmdOrCtrl+Alt+I",
         "id": "toggleDevTools"
       },
       {
