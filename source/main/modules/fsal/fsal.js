@@ -800,7 +800,6 @@ module.exports = class FSAL extends EventEmitter {
   closeFile (file) {
     if (this._state.openFiles.includes(file)) {
       this._state.openFiles.splice(this._state.openFiles.indexOf(file), 1)
-      console.log('File ' + file.name + ' closed successfully in the FSAL. Emitting event ...')
       this.emit('fsal-state-changed', 'openFiles')
       return true
     } else {
