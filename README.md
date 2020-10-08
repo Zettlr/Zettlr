@@ -71,7 +71,7 @@ If you have downloaded Zettlr, [head over to our website](https://docs.zettlr.co
 
 Zettlr is an [Electron](https://www.electronjs.org/)-based app, so to start developing, you'll need to have:
 
-1. A [NodeJS](https://nodejs.org/)-stack installed on your computer. Make sure it's Node 12+ (`lts/erbium`). To test what version you have, run `node -v`.
+1. A [NodeJS](https://nodejs.org/)-stack installed on your computer. Make sure it's at least Node 12 (`lts/erbium`). To test what version you have, run `node -v`.
 2. [Yarn](https://yarnpkg.com/en/) installed. Yarn is the required package manager for the project, as we do not commit `package-lock.json`-files and many commands require yarn. You can install this globally using `npm install -g yarn` or Homebrew, if you are on macOS.
 
 Then, simply clone the repository and install the dependencies on your local computer:
@@ -80,65 +80,66 @@ Then, simply clone the repository and install the dependencies on your local com
 $ git clone https://github.com/Zettlr/Zettlr.git
 $ cd Zettlr
 $ yarn install
-$ cd source
-$ yarn install
 ```
 
-_(Please note the second `yarn install` in the source directory. This is necessary to build the app locally.)_
+You can optionally add the `--frozen-lockfile` flag to ensure yarn will stick to the versions as listed in the `yarn.lock` and not attempt to update them.
 
-The `install`-scripts will automatically precompile all assets for the first time, so that you can immediately run `yarn start` after cloning the repository. However, whenever you change something of the resources, you should run these commands again. The next section will teach you everything you need to know about the commands at your disposal for developing the app.
+During development, hot module reloading is active so that you can edit the renderer's code easily and hit `F5` after the changes have been compiled by `electron-forge`. You can keep the developer tools open to see when HMR has finished loading your changes.
 
 ### Development Commands
 
 This section lists all available commands that you can use during application development. These are defined within the `package.json` and can be run from the command line by prefixing them with `yarn`. Run them from within the base directory of the repository.
 
-#### `build:quick`
+#### `start`
 
-This command builds the app locally without packing it. This means that within the `release`-directory you will find a pre-built binary, depending on your operating system.
+Starts `electron-forge`, which will build the application and launch it in development mode. This will use the normal settings, so if you use Zettlr on the same computer in production, it will use the same configuration files as the regular application. This means: be careful when breaking things. In that case, it's better to use `test-gui`.
 
-#### `csl:refresh`
+#### `package`
 
-This downloads the [Citation Style Language](https://citationstyles.org/) (CSL) files with which the application is shipped, and places them in the `source/main/assets/csl-locales`- and `source/main/assets/csl-styles`-directories respectively. You can occasionally run this command to pull potential updates from the repositories. _Please note, that an automated workflow will run from time to time on the repository to do this, so in almost all cases it should suffice to pull from the develop branch from time to time._
+Packages the application, but not bundle it into an installer. Without any suffix, this command will package the application for your current platform. To create specific packages (may require running on the corresponding platform), the following suffixes are available:
 
-#### `handlebars`
+- `package.mac`
+- `package:win`
+- `package:win-arm`
+- `package:linux-x32`
+- `package.linux-x64`
 
-This re-compiles the [Handlebars.js](https://handlebarsjs.com/) template files and places the pre-compiled templates in the `source/common/assets/handlebars`-directory.
+The resulting application packages are stored in `./out`.
+
+#### `release`
+
+Packages the application and then bundles it into an installer for the corresponding platform. Without any suffix, this command will package and bundle the application for your current platform. To create specific bundles (may require running on the corresponding platform), the following suffixes are available:
+
+- `release:mac`
+- `release:win`
+- `release:win-arm`
+- `release:linux-x32`
+- `release:linux-x64`
+- `release:linux` (shorthand for calling `yarn release:linux-x32 && yarn release:linux-x64`)
+
+The resulting setup bundles are stored in `./release`.
 
 #### `lang:refresh`
 
-This downloads the four default translations of the application from [Zettlr Translate](https://translate.zettlr.com/), with which it is shipped by default. It places the files in the `source/common/lang`-directory. Currently, the default languages are: German (Germany), English (USA), English (UK), and French (France). _Please note, that an automated workflow will run from time to time on the repository to do this, so in almost all cases it should suffice to pull from the develop branch from time to time._
+This downloads the four default translations of the application from [Zettlr Translate](https://translate.zettlr.com/), with which it is shipped by default. It places the files in the `source/common/lang`-directory. Currently, the default languages are: German (Germany), English (USA), English (UK), and French (France).
 
-#### `less`
+> Please note, that this command is intended for an automated workflow that runs from time to time on the repository to perform this action. This means: Do **not** commit updated files to the repository. Instead, the updated files will be downloaded whenever you `git fetch`.
 
-This re-generates the CSS files from the [LESS](http://lesscss.org/)-source and places the final stylesheets in the `source/common/assets/css`-directory. You need to run this command every time you modify the LESS-source in order to see the changes reflected in the app's appearance. _Note: During heavy development, it might be easier to watch the LESS files and automatically recompile them. You can do so by running the command `watch`._
+#### `csl:refresh`
+
+This downloads the [Citation Style Language](https://citationstyles.org/) (CSL) files with which the application is shipped, and places them in the `source/main/assets/csl-locales`- and `source/main/assets/csl-styles`-directories respectively.
+
+> Please note, that this command is intended for an automated workflow that runs from time to time on the repository to perform this action. This means: Do **not** commit updated files to the repository. Instead, the updated files will be downloaded whenever you `git fetch`.
 
 #### `lint`
 
 This simply runs [ESLint](https://eslint.org/) with the configuration and outputs a file `eslint_report.htm` into the base directory of the repository with the results. Apps such as [Atom](https://atom.io/) or [Visual Studio Code](https://code.visualstudio.com/) will automatically run ESLint in the background, but if you want to be extra-safe, make sure to run this command prior to submitting a Pull Request.
 
-#### `release:this`
-
-This command is basically `build:quick`, but additionally packages it for your platform. That means, it will spit out a `.deb`, `.rpm`, `.dmg` or `.exe`-installer, depending on your operating system.
-
-#### `release:linux`
-
-Explicitly creates installer packages for Linux, that is: One `.deb`-package, one `.rpm`-package as well as [AppImage](https://appimage.org/) installers (both 32bit and 64bit).
-
-#### `release:mac`
-
-Explicitly creates a release for macOS. _Note: This command only works on macOS._
-
-#### `release:win`
-
-Explicitly creates an installer for Windows. The installer package is significantly bigger than the other installers, as `electron-builder` ships the installer with both 32bit and 64bit versions of the app. _Note: This command requires either a Windows-based operating system or a Linux distribution. As long as the developers of [WINE](https://www.winehq.org/) do not port their library to 64 bit, this command will fail on macOS Catalina and newer._
+> This command will run automatically on each Pull Request to check your code for inconsistencies.
 
 #### `reveal:build`
 
 This re-compiles the source-files needed by the exporter for building [reveal.js](https://revealjs.com/)-presentations. Due to the nature of how [Pandoc](https://pandoc.org/) creates such presentations, Zettlr needs to modify the output by Pandoc, which is why these files need to be pre-compiled.
-
-#### `start`
-
-This command spins up Electron and runs the app. You will use this quite frequently during development.
 
 #### `test`
 
@@ -146,21 +147,23 @@ This runs the unit tests in the directory `./test`. Make sure to run this comman
 
 #### `test-gui`
 
-This prepares a test-directory (placed into your `./resources`-directory) and tells Zettlr to run with a modified simple configuration. This way you can test some things that might destroy files without actually touching your own files.
+Use this command to carefree test any changes you make to the application. This command will copy the test files from `./scripts/test-gui/test-files` to `./resources/test` and run with a custom configuration so that all your regular files remain untouched. The first time you run this command, it will copy the `test-config.example.yml` to the project's root directory and compile it into a correct `.json`-file to point Zettlr to. You can adapt the `test-config.yml` to your likings (and also programmatically test different settings on startup), as the file will not be committed by git.
 
-#### `watch`
-
-This spins up a process that watches the LESS-source for changes. As long as this process runs, every change to a LESS-file will trigger a build so that you can immediately see your changes in a running Electron-application by pressing `F5` to refresh the GUI.
-
-#### `wp:dev`
-
-Compiles the [Vue.js](https://vuejs.org/)-assets from the resources-directory. This tells [Webpack](https://webpack.js.org/) to compile in development mode, which increases logging and makes debugging easier. Please make sure to run `wp:prod` if you want to create a release.
-
-#### `wp:prod`
-
-Compiles the Vue-assets from the resources-directory. This tells Webpack to compile in production mode, which decreases logging and makes the generated scripts run faster. It is recommended to run `wp:dev` in case you need to debug the Vue-files.
+After the directory has been prepared, it will run the application similar to `yarn start`. Any file modifications are lost on each start of the app, as the directory will always be clean.
 
 To dive deeper into the development process, have a look at our [full development documentation](https://docs.zettlr.com/en/get-involved).
+
+## Command-Line Switches
+
+The Zettlr binary features a few command line switches that you can make use of for different purposes.
+
+#### `--clear-cache`
+
+This will direct the File System Abstraction Layer to fully clear its cache on boot. This can be used to mitigate issues regarding changes in the code base. To ensure compatibility with any changes to the information stored in the cache, the cache is also automatically cleared when the version field in your `config.json` does not match the one in the `package.json`, which means that, as long as you do not explicitly set the `version`-field in your `test-config.yml`, the cache will always be cleared on each run when you type `yarn test-gui`.
+
+#### `--config [path]`
+
+Use this switch to temporarily override the default configuration file stored in your AppData-equivalent folder. This path should be absolute, but in case you need to provide a relative path, the application will use either the binary's directory name when the app is packaged, or the repository root, when the app is not packaged.
 
 ## License
 
