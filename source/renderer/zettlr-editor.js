@@ -15,9 +15,10 @@
 
 const path = require('path')
 const countWords = require('../common/util/count-words')
+const objectToArray = require('../common/util/object-to-array')
+const moveSection = require('../common/util/move-section')
 const EditorTabs = require('./util/editor-tabs')
 const EditorSearch = require('./util/editor-search')
-const EditorAutocomplete = require('./util/editor-autocomplete')
 
 const MarkdownEditor = require('./modules/markdown-editor')
 
@@ -58,8 +59,6 @@ class ZettlrEditor {
     this._tabs = new EditorTabs()
     // The user can select or close documents on the tab bar
     this._tabs.setIntentCallback(this._onTabAction.bind(this))
-
-    this._autocomplete = new EditorAutocomplete()
 
     // All individual citations fetched during this session.
     this._citationBuffer = Object.create(null)
@@ -151,7 +150,6 @@ class ZettlrEditor {
 
     // Set up the helper classes with the CM instance
     this._searcher.setInstance(this._editor.codeMirror)
-    this._autocomplete.init(this._editor.codeMirror)
 
     // TODO this._cm.on('mousedown', (cm, event) => {
     //   // Ignore click events if they attempt to perform a special action
@@ -665,7 +663,7 @@ class ZettlrEditor {
    * @param {Object} tagDB An object (here with prototype due to JSON) containing tags
    */
   setTagDatabase (tagDB) {
-    this._autocomplete.setTagCompletion(tagDB)
+    this._editor.setCompletionDatabase('tags', tagDB)
   }
 
   /**
@@ -673,7 +671,7 @@ class ZettlrEditor {
    * @param {Array} idList An array containing the new IDs
    */
   setCiteprocIDs (idList) {
-    this._autocomplete.setCiteKeyCompletion(idList)
+    this._editor.setCompletionDatabase('citekeys', idList)
   }
 
   /**
@@ -681,10 +679,57 @@ class ZettlrEditor {
    * database.
    */
   signalUpdateFileAutocomplete () {
-    this._autocomplete.setFileCompletion(
-      this._renderer.getCurrentDir(),
-      this._renderer.matchFile(this._currentHash)
-    )
+    let dir = this._renderer.getCurrentDir()
+    if (!dir) return this._editor.setCompletionDatabase('files', [])
+
+    let fileDatabase = {}
+
+    // Navigate to the root to include as many files as possible
+    while (dir.parent) dir = dir.parent
+    let tree = objectToArray(dir, 'children').filter(elem => elem.type === 'file')
+
+    for (let file of tree) {
+      let fname = path.basename(file.name, path.extname(file.name))
+      let displayText = fname // Fallback: Only filename
+      if (global.config.get('display.useFirstHeadings') && file.firstHeading) {
+        // The user wants to use first headings as titles,
+        // so use them for autocomplete as well
+        displayText = fname + ': ' + file.firstHeading
+      } else if (file.frontmatter && file.frontmatter.title) {
+        // (Else) if there is a frontmatter, use that title
+        displayText = fname + ': ' + file.frontmatter.title
+      }
+
+      fileDatabase[fname] = {
+        'text': file.id || fname, // Use the ID, if given, or the filename
+        'displayText': displayText,
+        'id': file.id || false
+      }
+    }
+
+    // Modify all files that are potential matches
+    for (let candidate of this._renderer.matchFile(this._currentHash)) {
+      let entry = fileDatabase[candidate.fileDescriptor.name]
+      if (entry) {
+        // Modify
+        entry.className = 'cm-hint-colour'
+        entry.matches = candidate.matches
+      } else {
+        let file = candidate.fileDescriptor
+        let fname = path.basename(file.name, path.extname(file.name))
+        let displayText = fname // Always display the filename
+        if (file.frontmatter && file.frontmatter.title) displayText += ' ' + file.frontmatter.title
+        fileDatabase[candidate.fileDescriptor.name] = {
+          'text': file.id || fname, // Use the ID, if given, or the filename
+          'displayText': displayText,
+          'id': file.id || false,
+          'className': 'cm-hint-colour',
+          'matches': candidate.matches
+        }
+      }
+    }
+
+    this._editor.setCompletionDatabase('files', fileDatabase)
   }
 
   /**
@@ -754,7 +799,9 @@ class ZettlrEditor {
    * @param  {Number} toLine   The target line, above which the section should be inserted.
    */
   moveSection (fromLine, toLine) {
-    this._editor.moveSection(fromLine, toLine)
+    let value = this._getActiveFile().cmDoc.getValue()
+    let newValue = moveSection(value, fromLine, toLine)
+    this._getActiveFile().cmDoc.setValue(newValue)
   }
 
   /**
@@ -799,13 +846,6 @@ class ZettlrEditor {
     */
   focus () {
     this._editor.focus()
-  }
-
-  /**
-    * Refresh the CodeMirror instance
-    */
-  refresh () {
-    this._cm.refresh()
   }
 
   /**
