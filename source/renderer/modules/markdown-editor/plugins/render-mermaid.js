@@ -27,8 +27,9 @@ const mermaid = require('mermaid')
     let codeblock = [] // Holds a mermaid code block
     let currentCursorPosition = cm.getCursor('from').line
 
-    // Now render all potential new images
-    for (let i = 0; i < cm.lineCount(); i++) {
+    // We'll only render the viewport
+    const viewport = cm.getViewport()
+    for (let i = viewport.from; i < viewport.to; i++) {
       if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
 
       // Cursor is in here, so also don't render (for now)

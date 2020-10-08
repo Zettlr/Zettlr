@@ -321,16 +321,37 @@ module.exports = class MarkdownEditor extends EventEmitter {
    */
   get tableOfContents () {
     let toc = []
-    for (let i = 0; i < this._instance.doc.lineCount(); i++) {
-      // Don't include comments from code examples in the TOC
-      if (this._instance.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
-      let line = this._instance.doc.getLine(i)
-      if (/^#{1,6} /.test(line)) {
+
+    let lines = this.value.split('\n')
+
+    let inCodeBlock = false
+    let inYamlFrontMatter = lines[0] === '---'
+    for (let i = 0; i < lines.length; i++) {
+      if (inYamlFrontMatter && [ '...', '---' ].includes(lines[i])) {
+        inYamlFrontMatter = false
+        continue
+      }
+
+      if (inYamlFrontMatter && ![ '...', '---' ].includes(lines[i])) {
+        continue
+      }
+
+      if (/^\s*`{3,}/.test(lines[i])) {
+        inCodeBlock = !inCodeBlock
+        continue
+      }
+
+      if (inCodeBlock && !/^\s*`{3,}$/.test(lines[i])) {
+        continue
+      }
+
+      // Now that invalid sections are out of the way, test for a heading
+      if (/^#{1,6} /.test(lines[i])) {
         toc.push({
           'line': i,
           // From the line remove both the heading indicators and optional ending classes
-          'text': line.replace(/^#{1,6} /, '').replace(/\{.*\}$/, ''),
-          'level': (line.match(/^(#+)/) || [ [], [] ])[1].length
+          'text': lines[i].replace(/^#{1,6} /, '').replace(/\{.*\}$/, ''),
+          'level': (lines[i].match(/^(#+)/) || [ [], [] ])[1].length
         })
       }
     }

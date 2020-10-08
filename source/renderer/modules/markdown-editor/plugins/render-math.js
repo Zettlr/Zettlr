@@ -28,7 +28,9 @@
     let eq = ''
     let fromLine = 0
 
-    for (let i = 0; i < cm.lineCount(); i++) {
+    // We'll only render the viewport
+    const viewport = cm.getViewport()
+    for (let i = viewport.from; i < viewport.to; i++) {
       let modeName = cm.getModeAt({ 'line': i, 'ch': 0 }).name
       if (![ 'markdown', 'stex' ].includes(modeName)) continue
       if (modeName === 'stex') {

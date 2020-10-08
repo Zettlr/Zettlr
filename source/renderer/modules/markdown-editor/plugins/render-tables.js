@@ -23,10 +23,13 @@ const Table = require('../../table-editor');
   }
 
   CodeMirror.commands.markdownRenderTables = function (cm) {
-    // Now render all potential new links. We only check one line less
+    // Now render all potential new tables. We only check one line less
     // because such a table header WILL NEVER be on the last line, plus
     // this way we can check for Setext headers without having to worry.
-    for (let i = 1; i < cm.lineCount() - 1; i++) {
+
+    // We'll only render the viewport
+    const viewport = cm.getViewport()
+    for (let i = viewport.from; i < viewport.to; i++) {
       if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
 
       // First get the line and test if the contents resemble a table. We only

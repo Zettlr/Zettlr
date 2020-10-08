@@ -28,8 +28,9 @@
    * @return {void}    Commands do not return.
    */
   CodeMirror.commands.markdownRenderImages = function (cm) {
-    // Now render all potential new images
-    for (let i = 0; i < cm.lineCount(); i++) {
+    // We'll only render the viewport
+    const viewport = cm.getViewport()
+    for (let i = viewport.from; i < viewport.to; i++) {
       if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
 
       // Always reset lastIndex property, because test()-ing on regular

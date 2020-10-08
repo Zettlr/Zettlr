@@ -35,8 +35,9 @@
   CodeMirror.commands.markdownWYSIWYG = function (cm) {
     let match
 
-    // Now render all potential new links
-    for (let i = 0; i < cm.lineCount(); i++) {
+    // We'll only render the viewport
+    const viewport = cm.getViewport()
+    for (let i = viewport.from; i < viewport.to; i++) {
       if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
       // Always reset lastIndex property, because test()-ing on regular
       // expressions advance it.

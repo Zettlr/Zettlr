@@ -17,8 +17,9 @@
   CodeMirror.commands.markdownRenderIframes = function (cm) {
     let match
 
-    // Now render all potential new iFrames
-    for (let i = 0; i < cm.lineCount(); i++) {
+    // We'll only render the viewport
+    const viewport = cm.getViewport()
+    for (let i = viewport.from; i < viewport.to; i++) {
       if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
       // First get the line and test if the contents contain a link
       let line = cm.getLine(i)

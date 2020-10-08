@@ -41,6 +41,7 @@
 - Fixed a bug that would throw errors and not actually remove the file if said file was a root.
 - Fixed broken shortcuts `Cmd/Ctrl+Shift+E` (focus the editor) and `Cmd/Ctrl+Shift+T` (focus the file list).
 - Markdown links to local files that are absolute are now attempted to be opened internally, without recurring to external programs.
+- The various rendering methods now only update anything that is within the viewport, thereby increasing the performance vastly. This is especially noticable for large documents.
 
 ## Under the Hood
 
