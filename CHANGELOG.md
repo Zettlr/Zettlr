@@ -100,6 +100,7 @@
 - Documentation fix for `safeAssign`.
 - Fixes in the tests.
 - Completely refurbished the test command. Now, a full-fledged testing directory will be set up to test features within the GUI without endangering your regular configuration in case you use Zettlr regularly.
+- Better handling of the custom paths for both the Pandoc and the XeLaTeX executables in the advanced preferences.
 
 # 1.7.5
 

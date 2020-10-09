@@ -26,6 +26,7 @@ const { app } = require('electron')
 const ignoreFile = require('../../common/util/ignore-file')
 const safeAssign = require('../../common/util/safe-assign')
 const isDir = require('../../common/util/is-dir')
+const isFile = require('../../common/util/is-file')
 const isDictAvailable = require('../../common/util/is-dict-available')
 const { getLanguageFile } = require('../../common/lang/i18n')
 const COMMON_DATA = require('../../common/data.json')
@@ -138,8 +139,8 @@ class ConfigProvider extends EventEmitter {
       'newFileNamePattern': '%id.md',
       'newFileDontPrompt': false, // If true immediately creates files
       // Export options
-      'pandoc': 'pandoc',
-      'xelatex': 'xelatex',
+      'pandoc': '',
+      'xelatex': '',
       // The pandoc command to be run on export
       'pandocCommand': 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"',
       'export': {
@@ -442,17 +443,29 @@ class ConfigProvider extends EventEmitter {
       process.env.PATH = nPATH.join(delim)
     }
 
-    // Also add to PATH xelatex and pandoc-directories if these variables
-    // contain actual dirs.
-    if (path.dirname(this.get('xelatex')).length > 0) {
-      if (process.env.PATH.indexOf(path.dirname(this.get('xelatex'))) === -1) {
-        process.env.PATH += delim + path.dirname(this.get('xelatex'))
+    // Also add to PATH xelatex and pandoc-directories
+    // if these variables contain actual dirs.
+    if (this.get('xelatex').length > 0) {
+      let xelatex = this.get('xelatex').substr(0, this.get('xelatex').length - 1)
+      if (isFile(xelatex)) {
+        // The user provided the path including the executable name
+        xelatex = path.dirname(xelatex)
+      }
+
+      if (process.env.PATH.indexOf(xelatex) === -1) {
+        process.env.PATH += delim + xelatex
       }
     }
 
-    if (path.dirname(this.get('pandoc')).length > 0) {
-      if (process.env.PATH.indexOf(path.dirname(this.get('pandoc'))) === -1) {
-        process.env.PATH += delim + path.dirname(this.get('pandoc'))
+    if (this.get('pandoc').length > 0) {
+      let pandoc = this.get('pandoc')
+      if (isFile(pandoc)) {
+        // The user provided the path including the executable name
+        pandoc = path.dirname(pandoc)
+      }
+
+      if (process.env.PATH.indexOf(pandoc) === -1) {
+        process.envPATH += delim + pandoc
       }
     }
 
