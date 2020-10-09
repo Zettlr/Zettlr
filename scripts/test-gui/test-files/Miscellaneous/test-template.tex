@@ -1,4 +1,8 @@
-% Barebone template for use with Zettlr exporting engine
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%             ZETTLR TESTING TEMPLATE              %%%%%
+%%%%%                                                  %%%%%
+%%%%% THIS TEMPLATE IS PART OF THE TESTING ENVIRONMENT %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % We have to use KOMA classes (scrartcl instead of article and scrreprt instead of report as well as scrbook instead of book)
 % More info: https://ctan.org/pkg/koma-script?lang=de
@@ -175,12 +179,11 @@ $endif$
 % These are some styles applied to the test LaTeX document to distinguish it
 % from the regular template that is used by default.
 \usepackage{fancyhdr}
-
 \pagestyle{fancy}
 \fancyhf{}
-\rhead{Zettlr Test Template}
-\lhead{}
-\rfoot{Page \thepage}
+\fancyhead[LE,RO]{Zettlr Test Template}
+\fancyhead[RE,LO]{}
+\fancyfoot[LE,RO]{\thepage}
 
 \begin{document}
 
