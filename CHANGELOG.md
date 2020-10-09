@@ -43,6 +43,7 @@
 - Markdown links to local files that are absolute are now attempted to be opened internally, without recurring to external programs.
 - The various rendering methods now only update anything that is within the viewport, thereby increasing the performance vastly. This is especially noticable for large documents.
 - Fixed a bug that led to the exporter ignoring custom templates and always reverting to the default.
+- Fixed the date formatter, as the moment.js locales are not found when compiling using `electron-forge`.
 
 ## Under the Hood
 

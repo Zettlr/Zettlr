@@ -11,20 +11,18 @@
  * END HEADER
  */
 
-const moment = require('moment')
-
 /**
 * Format a date.
 * @param  {Date} dateObj Object of type date.
 * @return {String}       Returns the localized, human-readable date as a string
 */
 module.exports = function (dateObj) {
-  let date = moment(dateObj)
-  // Set the current locale of the application, with fallback to en-GB.
-  // Why en-GB in this specific case? Because nobody understands the imperial
-  // system, and at least the British have gotten that right.
-  date.locale('en-GB')
-  date.locale(global.config.get('appLang'))
+  // TODO: Enable settings for these
+  const options = {
+    dateStyle: 'long', // full|long|medium|short
+    timeStyle: 'short', // full|long|medium|short
+    fractionalSecondDigits: 0
+  }
 
-  return date.format('LLL')
+  return new Intl.DateTimeFormat(global.config.get('appLang'), options).format(dateObj)
 }
