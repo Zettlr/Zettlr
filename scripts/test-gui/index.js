@@ -65,6 +65,13 @@ async function prepareEnvironment () {
   // Set the README.md file as open
   cfg.openFiles = [ hash(readmeFile) ]
 
+  // We also want the dialogs to start at the test directory for easier navigation
+  cfg.dialogPaths = {
+    askFileDialog: TEST_DIRECTORY,
+    askDirDialog: TEST_DIRECTORY,
+    askLangFileDialog: TEST_DIRECTORY
+  }
+
   // Finally, write the config file
   await fs.writeFile(CONFIG_FILE, JSON.stringify(cfg))
   log.success(`Written file ${CONFIG_FILE}.`)
