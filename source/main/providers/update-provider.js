@@ -27,8 +27,6 @@ const { trans } = require('../../common/lang/i18n.js')
 const REPO_URL = require('../../common/data.json').repo_url
 const CUR_VER = require('electron').app.getVersion()
 
-// TODO: trans('dialog.update.no_update')
-
 module.exports = class UpdateProvider {
   constructor () {
     global.log.verbose('Update provider booting up ...')
