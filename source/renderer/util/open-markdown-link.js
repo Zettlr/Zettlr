@@ -6,6 +6,12 @@ const path = require('path')
 
 const VALID_FILETYPES = require('../../common/data.json').filetypes
 
+/**
+ * Resolves and opens a link safely (= not inside Zettlr, except it's a local MD file)
+ *
+ * @param   {String}      url  The URL to open
+ * @param   {CodeMirror}  cm   The instance to use if it's a heading link
+ */
 module.exports = function (url, cm) {
   if (url[0] === '#') {
     // We should open an internal link

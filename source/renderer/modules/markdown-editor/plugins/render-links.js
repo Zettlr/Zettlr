@@ -131,6 +131,7 @@
         a.className = 'cma' // CodeMirrorAnchors
         if (isLinkedImage) {
           let img = document.createElement('img')
+          renderedLinkTarget = linkImageTarget
           img.title = `${linkImageCaption} (${linkImageTarget})`
           img.src = makeAbsoluteURL(cm.getOption('zettlr').markdownImageBasePath, linkImagePath)
           img.style.cursor = 'pointer' // Nicer cursor
@@ -143,11 +144,9 @@
           img.style.maxWidth = width
           img.style.maxHeight = height
           a.appendChild(img)
-          renderedLinkTarget = linkImageTarget
         } else if (isStandaloneLink) {
           // In case of a standalone link, all is the same
           a.innerHTML = standaloneLinkTarget
-          a.title = standaloneLinkTarget
           renderedLinkTarget = standaloneLinkTarget
 
           // Make sure the link is not preceeded by ]( and not followed by )
@@ -160,7 +159,6 @@
           // In case of an email, the same except the URL (which gets
           // an added mailto protocol handler).
           a.innerHTML = email
-          a.title = 'mailto:' + email
           renderedLinkTarget = 'mailto:' + email
         } else {
           // Markdown URL
@@ -173,8 +171,12 @@
             regularLinkCaption = regularLinkCaption.replace(/^!\[(.*)\]\((.+)\)$/, '<img src="$2" title="$1">')
           }
           a.innerHTML = regularLinkCaption
-          a.title = renderedLinkTarget // Set the url as title to let users see where they're going
         }
+
+        // Set the correct link target as the title, both for users to show
+        // them where they are headed, and also to give the link tooltip
+        // hook the necessary information
+        a.title = renderedLinkTarget
 
         // Retain the outer formatting, if applicable
         let tk = cm.getTokenAt(curFrom, true).type

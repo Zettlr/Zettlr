@@ -55,6 +55,7 @@ const renderElementsHook = require('./hooks/render-elements')
 const typewriterHook = require('./hooks/typewriter')
 const initiateTablesHook = require('./hooks/initiate-tables')
 const { autocompleteHook, setAutocompleteDatabase } = require('./hooks/autocomplete')
+const linkTooltipsHook = require('./hooks/link-tooltips')
 
 module.exports = class MarkdownEditor extends EventEmitter {
   /**
@@ -135,6 +136,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
     typewriterHook(this._instance)
     initiateTablesHook(this._instance)
     autocompleteHook(this._instance)
+    linkTooltipsHook(this._instance)
 
     // As a last step, listen to the change and click events, as this
     // is what will be needed by the holding instance to determine
