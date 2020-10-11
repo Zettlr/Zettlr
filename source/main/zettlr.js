@@ -137,6 +137,10 @@ class Zettlr {
     this._fsal.on('fsal-state-changed', (objPath, info) => {
       // Emitted when anything in the state changes
       if (this.isBooting) return // Only propagate these results when not booting
+
+      // Sync links when the FSAL ius updated
+      global.links.sync(this._cache)
+
       switch (objPath) {
         case 'activeFile':
           // The active file has changed; set it in the config to
@@ -226,6 +230,7 @@ class Zettlr {
       'dictionary': require('./providers/dictionary-provider'),
       'recentDocs': require('./providers/recent-docs-provider'),
       'tags': require('./providers/tag-provider'),
+      'links': require('./providers/link-provider'),
       'targets': require('./providers/target-provider'),
       'css': require('./providers/css-provider'),
       'translations': require('./providers/translation-provider'),

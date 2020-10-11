@@ -28,6 +28,7 @@ const ThemeHandler = require('./../common/theme-handler').default
 // Dialogs
 const StatsDialog = require('./dialog/stats.js')
 const TagCloud = require('./dialog/tag-cloud.js')
+const NoteNetwork = require('./dialog/note-network.js')
 const UpdateDialog = require('./dialog/update.js')
 const AboutDialog = require('./dialog/about.js')
 const PreferencesDialog = require('./dialog/preferences.js')
@@ -514,6 +515,20 @@ class ZettlrBody {
   displayTagCloud () {
     global.ipc.send('get-tags-database', {}, (ret) => {
       this._currentDialog = new TagCloud()
+      this._currentDialog.init(ret).open()
+      this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
+    })
+  }
+
+  /**
+   * Display the note network dialog.
+   * @param  {Object} links The array containing all links
+   * @return {void}      Nothing to return.
+   */
+  displayNoteNetwork () {
+    if (this._currentDialog !== null) return // Only one dialog at a time
+    global.ipc.send('get-links-database', {}, (ret) => {
+      this._currentDialog = new NoteNetwork()
       this._currentDialog.init(ret).open()
       this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
     })

@@ -42,6 +42,14 @@
           "icon": "tags"
         },
         {
+          "role": "button",
+          "class": "note-network",
+          "command": "show-note-network",
+          "content": "{}",
+          "title": "toolbar.note_network",
+          "icon": "share"
+        },
+        {
             "role": "button",
             "class": "preferences",
             "command": "open-preferences",
