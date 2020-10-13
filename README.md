@@ -161,9 +161,9 @@ The Zettlr binary features a few command line switches that you can make use of 
 
 This will direct the File System Abstraction Layer to fully clear its cache on boot. This can be used to mitigate issues regarding changes in the code base. To ensure compatibility with any changes to the information stored in the cache, the cache is also automatically cleared when the version field in your `config.json` does not match the one in the `package.json`, which means that, as long as you do not explicitly set the `version`-field in your `test-config.yml`, the cache will always be cleared on each run when you type `yarn test-gui`.
 
-#### `--config [path]`
+#### `--config=path`
 
-Use this switch to temporarily override the default configuration file stored in your AppData-equivalent folder. This path should be absolute. In case you need to provide a relative path, the base for resolving the path will be: either the binary's directory name (when the app is packaged), or the repository root (when the app is not packaged).
+Use this switch to temporarily override the default configuration file stored in your AppData-equivalent folder. This path should be absolute. In case you need to provide a relative path, the base for resolving the path will be: either the binary's directory name (when the app is packaged), or the repository root (when the app is not packaged). If the path contains spaces, don't forget to escape it in quotes.
 
 ## License
 

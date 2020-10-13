@@ -81,7 +81,7 @@ async function prepareEnvironment () {
 prepareEnvironment().then(() => {
   console.log('') // Empty line
   log.info('Starting Zettlr with custom configuration ...')
-  let proc = spawn('electron-forge', [ 'start', '--', '--config', CONFIG_FILE ], {
+  let proc = spawn('electron-forge', [ 'start', '--', `--config="${CONFIG_FILE}"` ], {
     // Use the root directory as working dir
     'cwd': path.join(__dirname, '../../'),
     // Directly pipe stdio from the child process to the main process

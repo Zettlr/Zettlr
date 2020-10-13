@@ -57,9 +57,11 @@ class ConfigProvider extends EventEmitter {
     // The user may provide a temporary config to the process, which
     // leaves the "original" one untouched. This is very handy for
     // testing.
-    if (process.argv.includes('--config')) {
+    const configFlag = process.argv.find(elem => elem.indexOf('--config=') === 0)
+    if (configFlag !== undefined) {
       // A different configuration was, provided, so let's use that one instead!
-      let temporaryConfig = process.argv[process.argv.indexOf('--config') + 1]
+      let temporaryConfig = /^--config="?([^"]+)"?$/.exec(configFlag)[1]
+
       if (!path.isAbsolute(temporaryConfig)) {
         if (app.isPackaged) {
           // Attempt to use the executable file's path

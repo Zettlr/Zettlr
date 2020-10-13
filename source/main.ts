@@ -24,11 +24,8 @@ import extractFilesFromArgv from './common/util/extract-files-from-argv'
 // Developer tools
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 
-global.preBootLog = [{
-  'level': 2, // Info
-  // eslint-disable-next-line no-irregular-whitespace
-  'message': `こんにちは！　Booting Zettlr at ${(new Date()).toString()}.`
-}]
+// Set up the pre-boot log
+global.preBootLog = []
 
 /**
  * This will be overwritten by the log provider, once it has booted
@@ -47,6 +44,8 @@ global.log = {
     global.preBootLog.push({ 'level': 4, 'message': message })
   }
 }
+
+global.log.info(`こんにちは！ Booting Zettlr at ${(new Date()).toString()}.`)
 
 /**
  * The main Zettlr object. As long as this exists in memory, the app will run.
