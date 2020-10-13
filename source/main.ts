@@ -49,9 +49,9 @@ global.log.info(`こんにちは！ Booting Zettlr at ${(new Date()).toString()}
 
 /**
  * The main Zettlr object. As long as this exists in memory, the app will run.
- * @type {Zettlr}
+ * @type {Zettlr|null}
  */
-let zettlr: Zettlr
+let zettlr: Zettlr|null = null
 
 /**
  * Global array containing files collected from argv before process start
@@ -82,6 +82,11 @@ if (!isFirstInstance) app.exit(0)
  * @param {String} cwd The current working directory
  */
 app.on('second-instance', (event, argv, cwd) => {
+  if (zettlr === null) {
+    console.error('A second instance called this instance but a Zettlr object has not yet been instantiated. This may indicate a logical error.')
+    return
+  }
+
   let files = extractFilesFromArgv(argv) // Override process.argv with the correct one
 
   if (files.length === 0) return // Nothing to do
@@ -89,16 +94,18 @@ app.on('second-instance', (event, argv, cwd) => {
   global.log.info(`Opening ${files.length} files from a second instance.`, files)
 
   let win = zettlr.getWindow().getWindow()
-  if (!win) {
+  if (win === null) {
     zettlr.getWindow().open()
-  } else {
+  } else if (win?.isMinimized()) {
     // Restore the window in case it's minimised
-    if (win.isMinimized()) win.restore()
+    win.restore()
+    win.focus()
+  } else {
     win.focus()
   }
 
   // In case the user wants to open a file/folder with this running instance
-  zettlr.handleAddRoots(files)
+  zettlr.handleAddRoots(files).catch(err => { console.error(err) })
 })
 
 /**
@@ -107,8 +114,8 @@ app.on('second-instance', (event, argv, cwd) => {
 app.on('open-file', (e, p) => {
   e.preventDefault() // Need to explicitly set this b/c we're handling this
   // The user wants to open a file -> simply handle it.
-  if (zettlr) {
-    zettlr.handleAddRoots([p])
+  if (zettlr !== null) {
+    zettlr.handleAddRoots([p]).catch((err) => { global.log.error(err) })
   } else {
     // The Zettlr object has yet to be created -> use the global.
     global.filesToOpen.push(p)
@@ -151,27 +158,23 @@ app.whenReady().then(() => {
   })
 
   zettlr = new Zettlr()
-})
+}).catch(e => console.error(e))
 
 /**
  * Quit as soon as all windows are closed and we are not on macOS.
  */
-app.on('window-all-closed', async function () {
+app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    try {
-      // Shutdown the app before quitting
-      await zettlr.shutdown()
-    } catch (e) {
-      // Using a try/catch we prevent potential zombie processes. The console
-      // is here to inform the devs in case there's weird behaviour, so we can
-      // double-check if there's an error, e.g., in the provider shutdowns.
-      // This makes sure the app quits correctly on user systems, whereas we
-      // can have a look at the console for that.
-      console.error(e)
-    }
-    app.quit()
+  if (process.platform !== 'darwin' && zettlr !== null) {
+    // Shutdown the app before quitting
+    zettlr.shutdown()
+      .catch((err) => {
+        console.error(err)
+      })
+      .finally(() => {
+        app.quit()
+      })
   }
 })
 
@@ -179,15 +182,22 @@ app.on('window-all-closed', async function () {
  * Hook into the will-quit event to make sure we are able to shut down our app
  * properly.
  */
-app.on('will-quit', async function (event) {
-  if (zettlr) await zettlr.shutdown()
+app.on('will-quit', function (event) {
+  if (zettlr !== null) {
+    zettlr.shutdown()
+      .catch((err) => {
+        console.error('Error during will-quit event shutdown', err)
+      })
+  }
 })
 
 /**
  * On macOS, open a new window as soon as the user re-activates the app.
  */
 app.on('activate', function () {
-  zettlr.openWindow()
+  if (zettlr !== null) {
+    zettlr.openWindow()
+  }
 })
 
 /**

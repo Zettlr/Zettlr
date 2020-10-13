@@ -266,7 +266,7 @@ class ZettlrWindow {
 
   /**
     * Returns the current window instance (or null, if window is null)
-    * @return {Mixed} Either a BrowserWindow instance or null
+    * @return {BrowserWindow|null} Either a BrowserWindow instance or null
     */
   getWindow () { return this._win }
 

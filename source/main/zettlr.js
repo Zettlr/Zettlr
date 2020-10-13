@@ -279,7 +279,7 @@ class Zettlr {
 
   /**
     * Shutdown the app. This function is called on quit.
-    * @return {void} Does not return anything.
+    * @return {Promise} Resolves after the providers have shut down
     */
   async shutdown () {
     // Close all Quicklook Windows
