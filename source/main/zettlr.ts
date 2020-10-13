@@ -14,26 +14,39 @@
  * END HEADER
  */
 
-const { app } = require('electron')
-const path = require('path')
-const fs = require('fs')
+import { app } from 'electron'
+import path from 'path'
+import fs from 'fs'
 
 // Internal classes
-const ZettlrIPC = require('./zettlr-ipc.js')
-const ZettlrWindow = require('./zettlr-window.js')
-const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
-const ZettlrStats = require('./zettlr-stats.js')
-const FSAL = require('./modules/fsal')
-const { loadI18nMain, trans, findLangCandidates } = require('../common/lang/i18n')
-const ignoreDir = require('../common/util/ignore-dir')
-const ignoreFile = require('../common/util/ignore-file')
-const isDir = require('../common/util/is-dir')
-const isFile = require('../common/util/is-file')
-const { commands } = require('./commands')
-const hash = require('../common/util/hash')
+import ZettlrIPC from './zettlr-ipc'
+// const ZettlrIPC = require('./zettlr-ipc.js')
+import ZettlrWindow from './zettlr-window'
+import ZettlrQLStandalone from './zettlr-ql-standalone'
+import ZettlrStats from './zettlr-stats'
+import FSAL from './modules/fsal'
+import { loadI18nMain, trans, findLangCandidates } from '../common/lang/i18n'
+import ignoreDir from '../common/util/ignore-dir'
+import ignoreFile from '../common/util/ignore-file'
+import isDir from '../common/util/is-dir'
+import isFile from '../common/util/is-file'
+import { commands } from './commands'
+import hash from '../common/util/hash'
+
+// const ZettlrWindow = require('./zettlr-window.js')
+// const ZettlrQLStandalone = require('./zettlr-ql-standalone.js')
+// const ZettlrStats = require('./zettlr-stats.js')
+// const FSAL = require('./modules/fsal')
+// const { loadI18nMain, trans, findLangCandidates } = require('../common/lang/i18n')
+// const ignoreDir = require('../common/util/ignore-dir')
+// const ignoreFile = require('../common/util/ignore-file')
+// const isDir = require('../common/util/is-dir')
+// const isFile = require('../common/util/is-file')
+// const { commands } = require('./commands')
+// const hash = require('../common/util/hash')
 
 // Service providers
-const UpdateProvider = require('./providers/update-provider')
+import UpdateProvider from './providers/update-provider'
 
 /**
  * The Zettlr class handles every core functionality of Zettlr. Nothing works
@@ -44,6 +57,18 @@ const UpdateProvider = require('./providers/update-provider')
  * the 10.000 lines with this behemoth.
  */
 class Zettlr {
+  isBooting: Boolean
+  currentFile: any
+  editFlag: Boolean
+  _openPaths: any
+  _providers: any
+  _fsal: any
+  ipc: any
+  _commands: any
+  stats: any
+  _ql: any
+  window: any
+
   /**
     * Create a new application object
     * @param {electron.app} parentApp The app object.
@@ -62,7 +87,7 @@ class Zettlr {
       // Flag indicating whether or not the application is booting
       isBooting: () => { return this.isBooting },
       // TODO: Match the signatures of fileUpdate and dirUpdate
-      fileUpdate: (oldHash, fileMetadata) => {
+      fileUpdate: (oldHash: Number, fileMetadata: any) => {
         if (typeof fileMetadata === 'number') {
           // NOTE: This will become permanent later on
           fileMetadata = this._fsal.findFile(fileMetadata)
@@ -72,21 +97,21 @@ class Zettlr {
           'file': this._fsal.getMetadataFor(fileMetadata)
         })
       },
-      dirUpdate: (oldHash, newHash) => {
+      dirUpdate: (oldHash: Number, newHash: Number) => {
         let dir = this._fsal.findDir(newHash)
         this.ipc.send('dir-replace', {
           'hash': oldHash,
           'dir': this._fsal.getMetadataFor(dir)
         })
       },
-      notifyChange: (msg) => {
+      notifyChange: (msg: String) => {
         global.ipc.send('paths-update', this._fsal.getTreeMeta())
         global.ipc.notify(msg)
       },
-      findFile: (prop) => { return this._fsal.findFile(prop) },
-      findDir: (prop) => { return this._fsal.findDir(prop) },
+      findFile: (prop: any) => { return this._fsal.findFile(prop) },
+      findDir: (prop: any) => { return this._fsal.findDir(prop) },
       // Same as findFile, only with content
-      getFile: (fileDescriptor) => { return this._fsal.getFileContents(fileDescriptor) }
+      getFile: (fileDescriptor: any) => { return this._fsal.getFileContents(fileDescriptor) }
     }
 
     // First thing that has to be done is to load the service providers
@@ -96,7 +121,7 @@ class Zettlr {
     this._commands = commands.map(Command => new Command(this))
 
     // Init translations
-    let metadata = loadI18nMain(global.config.get('appLang'))
+    let metadata: any = loadI18nMain(global.config.get('appLang'))
 
     // It may be that only a fallback has been provided or else. In this case we
     // must update the config to reflect this.
@@ -134,7 +159,7 @@ class Zettlr {
     }
 
     // Listen to changes in the file system
-    this._fsal.on('fsal-state-changed', (objPath, info) => {
+    this._fsal.on('fsal-state-changed', (objPath: String, info: any) => {
       // Emitted when anything in the state changes
       if (this.isBooting) return // Only propagate these results when not booting
       switch (objPath) {
@@ -215,7 +240,7 @@ class Zettlr {
    * Boots the service providers
    * @return {void} Doesn't return
    */
-  _bootServiceProviders () {
+  _bootServiceProviders (): void {
     // NOTE: The order these providers are loaded is important.
     this._providers = {
       'log': require('./providers/log-provider'),
@@ -239,12 +264,12 @@ class Zettlr {
    * @param {object} info The info object originally passed to the event.
    * @memberof Zettlr
    */
-  _onFileContentsChanged (info) {
+  _onFileContentsChanged (info: any): void {
     let changedFile = this.findFile(info.hash)
     // The contents of one of the open files have changed.
     // What follows looks a bit ugly, welcome to callback hell.
     if (global.config.get('alwaysReloadFiles')) {
-      this._fsal.getFileContents(changedFile).then((file) => {
+      this._fsal.getFileContents(changedFile).then((file: any) => {
         this.ipc.send('replace-file-contents', {
           'hash': info.hash,
           'contents': file.content
@@ -252,13 +277,13 @@ class Zettlr {
       })
     } else {
       // The user did not check this option, so ask first
-      this.getWindow().askReplaceFile(changedFile.name, (ret, alwaysReload) => {
+      this.getWindow().askReplaceFile(changedFile.name, (ret: Number, alwaysReload: Boolean) => {
         // Set the corresponding config option
         global.config.set('alwaysReloadFiles', alwaysReload)
         // ret can have three status: cancel = 0, save = 1, omit = 2.
         if (ret !== 1) return
 
-        this._fsal.getFileContents(changedFile).then((file) => {
+        this._fsal.getFileContents(changedFile).then((file: any) => {
           this.ipc.send('replace-file-contents', {
             'hash': info.hash,
             'contents': file.content
@@ -271,7 +296,7 @@ class Zettlr {
   /**
    * Shuts down all service providers.
    */
-  async _shutdownServiceProviders () {
+  async _shutdownServiceProviders (): Promise<void> {
     for (let provider in this._providers) {
       await this._providers[provider].shutdown()
     }
@@ -281,7 +306,7 @@ class Zettlr {
     * Shutdown the app. This function is called on quit.
     * @return {Promise} Resolves after the providers have shut down
     */
-  async shutdown () {
+  async shutdown (): Promise<void> {
     // Close all Quicklook Windows
     this._ql.closeAll()
     // Save the config and stats
@@ -303,13 +328,13 @@ class Zettlr {
     * Returns false if the file should not close, and true if it's safe.
     * @return {Boolean} Either true, if the window can close, or false.
     */
-  async canClose () {
+  async canClose (): Promise<Boolean> {
     if (this.isModified()) {
       // There is at least one file currently modified
       let modifiedFiles = this._fsal.getOpenFiles()
-        .map(e => this._fsal.findFile(e))
-        .filter(e => e.modified)
-        .map(e => e.name) // Hello piping my old friend, I've come to use you once again ...
+        .map((e: Number) => this._fsal.findFile(e))
+        .filter((e: any) => e.modified)
+        .map((e: any) => e.name) // Hello piping my old friend, I've come to use you once again ...
 
       let ret = await this.window.askSaveChanges(modifiedFiles)
 
@@ -323,11 +348,11 @@ class Zettlr {
     * This function is mainly called by the browser window to close the app.
     * @return {void} Does not return anything.
     */
-  async saveAndClose () {
+  async saveAndClose (): Promise<void> {
     if (await this.canClose()) {
       // "Hard reset" any edit flags that might prevent closing down of the app
       this.getWindow().clearModified()
-      let modifiedFiles = this._fsal.getOpenFiles().map(e => this._fsal.findFile(e))
+      let modifiedFiles = this._fsal.getOpenFiles().map((e: Number) => this._fsal.findFile(e))
 
       // This is the programmatical middle finger to good state management
       for (let file of modifiedFiles) {
@@ -338,10 +363,10 @@ class Zettlr {
     }
   }
 
-  async runCommand (evt, arg) {
+  async runCommand (evt: String, arg: any): Promise<any> {
     // This function will be called from IPC with a command and an arg.
     // First find the command
-    let cmd = this._commands.find(elem => elem.respondsTo(evt))
+    let cmd = this._commands.find((elem: any) => elem.respondsTo(evt))
 
     if (cmd) {
       // Return the return value of the command, if there is any
@@ -355,17 +380,17 @@ class Zettlr {
     } else {
       // We need to throw, because the return value of a successful command run
       // may very well also evaluate to null, undefined, false or anything else.
-      global.log.verbose('No command registered with the application for command ' + evt)
-      throw new Error('No command registered with the application for command ' + evt)
+      global.log.verbose(`No command registered with the application for command ${evt.toString()}`)
+      throw new Error(`No command registered with the application for command ${evt.toString()}`)
     }
   }
 
   /**
     * Send a new directory list to the client.
-    * @param  {Integer} arg A hash identifying the directory.
+    * @param  {Number} arg A hash identifying the directory.
     * @return {void}     This function does not return anything.
     */
-  selectDir (arg) {
+  selectDir (arg: Number): void {
     // arg contains a hash for a directory.
     let obj = this._fsal.findDir(arg)
 
@@ -385,7 +410,7 @@ class Zettlr {
   /**
     * Open a new root.
     */
-  async open () {
+  async open (): Promise<void> {
     // TODO: Move this to a command
     // The user wants to open another file or directory.
     let ret = await this.window.askDir()
@@ -411,9 +436,9 @@ class Zettlr {
   /**
     * Handles a list of files and folders that the user in any way wants to add
     * to the app.
-    * @param  {Array} filelist An array of absolute paths
+    * @param  {string[]} filelist An array of absolute paths
     */
-  async handleAddRoots (filelist) {
+  async handleAddRoots (filelist: string[]): Promise<void> {
     // As long as it's not a forbidden file or ignored directory, add it.
     let newFile, newDir
     for (let f of filelist) {
@@ -447,31 +472,31 @@ class Zettlr {
    * @param  {number} hash The hash of the file to be displayed in the window
    * @return {void}      No return.
    */
-  openQL (hash) { this._ql.openQuicklook(this._fsal.findFile(hash)) }
+  openQL (hash: Number): void { this._ql.openQuicklook(this._fsal.findFile(hash)) }
 
-  /**
-   * In case a root directory gets removed, indicate that fact by marking it
-   * dead.
-   * @param  {ZettlrDir} dir The dir to be removed
-   * @return {void}     No return.
-   */
-  makeDead (dir) {
-    if (dir === this.getCurrentDir()) this.setCurrentDir(null) // Remove current directory
-    return console.log(`Marking directory ${dir.name} as dead!`)
-  }
+  // /**
+  //  * In case a root directory gets removed, indicate that fact by marking it
+  //  * dead.
+  //  * @param  {ZettlrDir} dir The dir to be removed
+  //  * @return {void}     No return.
+  //  */
+  // makeDead (dir: Object): void {
+  //   if (dir === this.getCurrentDir()) this.setCurrentDir(null) // Remove current directory
+  //   return console.log(`Marking directory ${dir.name} as dead!`)
+  // }
 
   /**
     * Reloads the complete directory tree.
     * @return {Promise} Resolved after the paths have been re-read
     */
-  async refreshPaths () {
+  async refreshPaths (): Promise<void> {
     // Reload all opened files, garbage collect will get the old ones.
     this._fsal.unloadAll()
     for (let p of global.config.get('openPaths')) {
       try {
         await this._fsal.loadPath(p)
       } catch (e) {
-        global.log.info(`FSAL Removing path ${p}, as it does no longer exist.`)
+        global.log.info(`FSAL Removing path ${String(p).toString()}, as it does no longer exist.`)
         global.config.removePath(p)
       }
     }
@@ -490,23 +515,23 @@ class Zettlr {
     if (lastFile) global.recentDocs.add(this._fsal.getMetadataFor(lastFile))
   }
 
-  findFile (arg) { return this._fsal.findFile(arg) }
-  findDir (arg) { return this._fsal.findDir(arg) }
+  findFile (arg: any): any { return this._fsal.findFile(arg) }
+  findDir (arg: any): any { return this._fsal.findDir(arg) }
 
   /**
     * Sets the current file to the given file.
-    * @param {number} f A file hash
+    * @param {Number} f A file hash
     */
-  setCurrentFile (f) {
+  setCurrentFile (f: Number): void {
     this.currentFile = f
-    global.config.set('lastFile', (f && f.hasOwnProperty('hash')) ? f.hash : f)
+    global.config.set('lastFile', f)
   }
 
   /**
     * Sets the current directory.
     * @param {ZettlrDir} d Directory to be selected.
     */
-  setCurrentDir (d) {
+  setCurrentDir (d: any): void {
     // Set the dir
     this._fsal.setOpenDirectory(d)
   }
@@ -515,7 +540,7 @@ class Zettlr {
    * Opens the file by moving it into the openFiles array on the FSAL.
    * @param {Number} arg The hash of a file to open
    */
-  async openFile (arg) {
+  async openFile (arg: Number): Promise<void> {
     // arg contains the hash of a file.
     // findFile now returns the file object
     let file = this.findFile(arg)
@@ -541,10 +566,10 @@ class Zettlr {
 
   /**
     * Send a file with its contents to the renderer process.
-    * @param  {Integer} arg An integer containing the file's hash.
+    * @param  {Number} arg An integer containing the file's hash.
     * @return {void}     This function does not return anything.
     */
-  async sendFile (arg) {
+  async sendFile (arg: Number): Promise<void> {
     // arg contains the hash of a file.
     // findFile now returns the file object
     let file = this._fsal.findFile(arg)
@@ -554,7 +579,8 @@ class Zettlr {
         file = await this._fsal.getFileContents(file)
         this.ipc.send('file-open', file)
       } catch (e) {
-        global.log.error(`Error sending file! ${file.name}`, e)
+        const fileName: String = file.name
+        global.log.error(`Error sending file! ${fileName.toString()}`, e)
       }
     }
   }
@@ -563,7 +589,7 @@ class Zettlr {
     * Indicate modifications.
     * @return {void} Nothing to return here.
     */
-  setModified (hash) {
+  setModified (hash: Number): void {
     // Set the modify-indicator on the window
     // and tell the FSAL that a file has been
     // modified.
@@ -580,7 +606,7 @@ class Zettlr {
     * Remove the modification flag.
     * @return {void} Nothing to return.
     */
-  clearModified (hash) {
+  clearModified (hash: Number): void {
     let file = this._fsal.findFile(hash)
     if (file) {
       this._fsal.markClean(file)
@@ -593,16 +619,16 @@ class Zettlr {
   /**
    * This function prepares the app on first start, which includes copying over the tutorial.
    */
-  _prepareFirstStart () {
+  _prepareFirstStart (): void {
     let tutorialPath = path.join(__dirname, 'tutorial')
     let targetPath = path.join(app.getPath('documents'), 'Zettlr Tutorial')
-    let candidates = fs.readdirSync(tutorialPath, { 'encoding': 'utf8' })
+    let availableLanguages = fs.readdirSync(tutorialPath, { 'encoding': 'utf8' })
 
-    candidates = candidates
+    let candidates = availableLanguages
       .map(e => { return { 'tag': e, 'path': path.join(tutorialPath, e) } })
       .filter(e => isDir(e.path))
 
-    let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates)
+    let { exact, close } = findLangCandidates(global.config.get('appLang'), candidates) as any
 
     let tutorial = path.join(tutorialPath, 'en')
     if (exact) tutorial = exact.path
@@ -636,12 +662,12 @@ class Zettlr {
   /**
    * Convenience function to send a full file object to the renderer
    */
-  sendPaths () { global.ipc.send('paths-update', this._fsal.getTreeMeta()) }
+  sendPaths (): void { global.ipc.send('paths-update', this._fsal.getTreeMeta()) }
 
   /**
    * Sends all currently opened files to the renderer
    */
-  sendOpenFiles () { global.ipc.send('sync-files', this._fsal.getOpenFiles()) }
+  sendOpenFiles (): void { global.ipc.send('sync-files', this._fsal.getOpenFiles()) }
 
   // Getters
 
@@ -649,54 +675,54 @@ class Zettlr {
     * Returns the window instance.
     * @return {ZettlrWindow} The main window
     */
-  getWindow () { return this.window }
+  getWindow (): ZettlrWindow { return this.window }
 
   /**
     * Returns the IPC instance.
     * @return {ZettlrIPC}  The IPC object
     */
-  getIPC () { return this.ipc }
+  getIPC (): ZettlrIPC { return this.ipc }
 
   /**
     * Returns the stats
     * @return {ZettlrStats} The stats object.
     */
-  getStats () { return this.stats }
+  getStats (): ZettlrStats { return this.stats }
 
   /**
     * Get the current directory.
     * @return {ZettlrDir} Current directory.
     */
-  getCurrentDir () { return this._fsal.getOpenDirectory() }
+  getCurrentDir (): any { return this._fsal.getOpenDirectory() }
 
   /**
     * Return the current file.
     * @return {Mixed} ZettlrFile or null.
     */
-  getCurrentFile () { return this.currentFile }
+  getCurrentFile (): any { return this.currentFile }
 
   /**
    * Returns the File System Abstraction Layer
    */
-  getFileSystem () { return this._fsal }
+  getFileSystem (): FSAL { return this._fsal }
 
   /**
     * Are there unsaved changes currently in the file system?
     * @return {Boolean} Return true, if there are unsaved changes, or false.
     */
-  isModified () { return !this._fsal.isClean() }
+  isModified (): Boolean { return !this._fsal.isClean() }
 
   /**
     * Open a new window.
     * @return {void} This does not return.
     */
-  openWindow () { this.window.open() }
+  openWindow (): void { this.window.open() }
 
   /**
     * Close the current window.
     * @return {void} Does not return.
     */
-  closeWindow () { this.window.close() }
+  closeWindow (): void { this.window.close() }
 }
 
 // Export the module on require()

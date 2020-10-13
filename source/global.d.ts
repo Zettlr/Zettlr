@@ -17,6 +17,8 @@ declare global {
       preBootLog: any
       tippy: any
       updates: any
+      targets: any
+      recentDocs: any
     }
   }
 }

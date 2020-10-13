@@ -66,7 +66,7 @@ function loadI18nMain (lang = 'en-US') {
 /**
  * This translates a given identifier string into the loaded language
  * @param  {String} string A dot-delimited string containing the translatable
- * @param  {String} args   Zero or more strings that will replace %s-placeholders in the string
+ * @param  {any} args   Zero or more strings that will replace %s-placeholders in the string
  * @return {String}        The translation with all potential replacements applied.
  */
 function trans (string, ...args) {
