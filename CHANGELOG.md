@@ -46,6 +46,7 @@
 - Fixed a bug that led to the exporter ignoring custom templates and always reverting to the default.
 - Fixed the date formatter, as the moment.js locales are not found when compiling using `electron-forge`.
 - Fixed a bug that would mess up the tag-tooltip on files under certain circumstances.
+- Fixed a bug that would throw errors instead of exporting, if the export-directory is set to the current working directory and a non-root file is being exported.
 
 ## Under the Hood
 
