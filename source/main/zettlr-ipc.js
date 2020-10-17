@@ -140,7 +140,7 @@ class ZettlrIPC {
   /**
     * This sends a message to the current window's renderer process.
     * @param  {String} command      The command to be sent
-    * @param  {Object} [content={}] Can be either simply a string or a whole object
+    * @param  {any} [content={}] Can be either simply a string or a whole object
     * @return {ZettlrIPC}              This for chainability.
     */
   send (command, content = {}) {
@@ -177,6 +177,7 @@ class ZettlrIPC {
       return res // In case the command has run there's no need to handle it.
     } catch (e) {
       // Simple fall through
+      if (e.message.indexOf('No command registered with the application') < 0) console.error(e)
     }
 
     switch (cmd) {
@@ -245,7 +246,7 @@ class ZettlrIPC {
 
       // Sent by the renderer to indicate the active file has changed
       case 'set-active-file':
-        this._app.getFileSystem().setActiveFile(cnt.hash)
+        this._app.getFileSystem().activeFile = cnt.hash
         break
 
       // The renderer requested that the editor
