@@ -212,7 +212,7 @@ class ZettlrBody {
     global.popupProvider.show('textfield', targetElement, data, (form) => {
       if (form !== null) {
         global.ipc.send('file-duplicate', {
-          'dir': file.parent.hash,
+          'dir': (file.parent != null) ? file.parent.hash : null,
           'file': file.hash,
           'name': form[0].value
         })
