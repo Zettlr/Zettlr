@@ -24,8 +24,27 @@ const hash = require('../../source/common/util/hash')
 const TEST_DIRECTORY = path.join(__dirname, '../../resources/test')
 const CONFIG_FILE = path.join(__dirname, '../../resources/test-config.json')
 
+// Test if we should nuke the old test environment, or simply start
+// with the old one (useful for testing persistence of settings)
+if (process.argv.includes('--clean')) {
+  log.info('☢️ Nuking test environment ...')
+  prepareEnvironment().then(() => {
+    console.log('') // Empty line
+    let argv = process.argv.slice(2)
+    argv.splice(argv.indexOf('--clean'), 1)
+    startApp(argv)
+  }).catch(err => {
+    log.error(err.message)
+    // Add a console.error with the full error for stack trace, etc.
+    console.error(err)
+  })
+} else {
+  // Start the app retaining the directory structure.
+  log.info('Starting app with old test environment ...')
+  startApp(process.argv.slice(2))
+}
+
 async function prepareEnvironment () {
-  log.info('Preparing test environment ...')
   // First, remove the ./resources/test folder
   try {
     await fs.lstat(TEST_DIRECTORY)
@@ -77,11 +96,14 @@ async function prepareEnvironment () {
   log.success(`Written file ${CONFIG_FILE}.`)
 }
 
-// Finally, run the function
-prepareEnvironment().then(() => {
-  console.log('') // Empty line
+function startApp(argv = []) {
   log.info('Starting Zettlr with custom configuration ...')
-  let proc = spawn('electron-forge', [ 'start', '--', `--config="${CONFIG_FILE}"` ], {
+
+  if (argv.length > 0) {
+    log.warn('Supplying additional arguments to process: [' + argv.join(', ') + ']')
+  }
+
+  let proc = spawn('electron-forge', [ 'start', '--', `--config="${CONFIG_FILE}"`, ...argv ], {
     // Use the root directory as working dir
     'cwd': path.join(__dirname, '../../'),
     // Directly pipe stdio from the child process to the main process
@@ -90,8 +112,4 @@ prepareEnvironment().then(() => {
   proc.on('close', (code) => {
     log.info(`Child process exited with code ${code}`)
   })
-}).catch(err => {
-  log.error(err.message)
-  // Add a console.error with the full error for stack trace, etc.
-  console.error(err)
-})
+}
