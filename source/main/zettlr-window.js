@@ -373,7 +373,7 @@ class ZettlrWindow {
 
   /**
     * Show the dialog for choosing a directory
-    * @return {Array}          An array containing all selected paths.
+    * @return {Electron.OpenDialogReturnValue} An array containing all selected paths.
     */
   async askDir () {
     let startDir = app.getPath('home')
@@ -461,7 +461,7 @@ class ZettlrWindow {
   /**
     * Ask to remove the given object (either ZettlrFile or ZettlrDirectory)
     * @param  {Mixed} obj Either ZettlrFile or ZettlrDirectory
-    * @return {Boolean}     True if user wishes to remove it, or false.
+    * @return {boolean}     True if user wishes to remove it, or false.
     */
   async confirmRemove (obj) {
     let ret = await dialog.showMessageBox(this._win, {
