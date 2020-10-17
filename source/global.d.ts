@@ -19,6 +19,7 @@ declare global {
       updates: any
       targets: any
       recentDocs: any
+      tags: any
     }
   }
 }
