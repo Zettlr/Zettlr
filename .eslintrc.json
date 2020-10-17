@@ -74,7 +74,7 @@
           "svg": "any",
           "math": "any"
         }],
-        
+
         // Disallow jquery
         "jquery/no-ajax": 2,
         "jquery/no-ajax-events": 2,
@@ -99,6 +99,7 @@
         // Disable a few typescript rules as we are not yet there to easily implement them
         "@typescript-eslint/no-floating-promises": [ "warn" ],
         "@typescript-eslint/no-misused-promises": [ "warn" ],
-        "@typescript-eslint/strict-boolean-expressions": [ "warn" ]
+        "@typescript-eslint/strict-boolean-expressions": [ "warn" ],
+        "@typescript-eslint/no-dynamic-delete": [ "warn" ]
     }
 }
