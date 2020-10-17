@@ -16,11 +16,19 @@ const path = require('path')
 const fs = require('fs').promises
 const { app, BrowserWindow } = require('electron')
 const hasProp = Object.prototype.hasOwnProperty
+const chalk = require('chalk')
 
 const LOG_LEVEL_VERBOSE = 1
 const LOG_LEVEL_INFO = 2
 const LOG_LEVEL_WARNING = 3
 const LOG_LEVEL_ERROR = 4
+
+const debugConsole = {
+  error: function (message) { console.error(chalk.bold.red(message)) },
+  warn: function (message) { console.warn(chalk.yellow(message)) },
+  info: function (message) { console.log(chalk.keyword('cornflowerblue')(message)) },
+  verbose: function (message) { console.log(chalk.grey(message)) }
+}
 
 class LogProvider {
   constructor () {
@@ -103,6 +111,25 @@ class LogProvider {
     }
 
     this._log.push(msg)
+
+    if (!app.isPackaged) {
+      // Also output to stdio
+      const output = `[${msg.time}] ${msg.message}`
+      switch (msg.level) {
+        case LOG_LEVEL_ERROR:
+          debugConsole.error(output)
+          break
+        case LOG_LEVEL_INFO:
+          debugConsole.info(output)
+          break
+        case LOG_LEVEL_VERBOSE:
+          debugConsole.verbose(output)
+          break
+        case LOG_LEVEL_WARNING:
+          debugConsole.warn(output)
+          break
+      }
+    }
 
     // Immediately append the log
     if (this._win) this._win.webContents.send('log-view-add', msg)
