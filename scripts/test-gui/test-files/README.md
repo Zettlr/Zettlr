@@ -4,7 +4,7 @@ You are viewing the Zettlr testing environment. This normally means that you hav
 
 But in case you did not expect this, there may be something off!
 
-> You can change anything in these files, as they will be overridden as soon as you re-start the `yarn test-gui` command.
+> You can change anything in these files, as these are dummy files that can be copied whenever you want to reset this test directory. This directory resides in your `./resources` subdirectory, and therefore will not be added to git. If you want to reset the directory to the initial state (for instance, if you removed every single file, or did some other naughty thing with it), you can do so by providing the `--clean`-flag to the command: `yarn test-gui --clean`.
 
 ## Adding more Test Cases
 

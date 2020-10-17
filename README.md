@@ -147,9 +147,15 @@ This runs the unit tests in the directory `./test`. Make sure to run this comman
 
 #### `test-gui`
 
-Use this command to carefree test any changes you make to the application. This command will copy the test files from `./scripts/test-gui/test-files` to `./resources/test` and run with a custom configuration so that all your regular files remain untouched. The first time you run this command, it will copy the `test-config.example.yml` to the project's root directory and compile it into a correct `.json`-file to point Zettlr to. You can adapt the `test-config.yml` to your likings (and also programmatically test different settings on startup), as the file will not be committed by git.
+Use this command to carefree test any changes you make to the application. This command will start the application as if you ran `yarn start`, but will provide a custom configuration and a custom directory.
 
-After the directory has been prepared, it will run the application similar to `yarn start`. Any file modifications are lost on each start of the app, as the directory will always be clean.
+**The first time you start this command**, pass the `--clean`-flag to copy a bunch of test-files to your `./resources`-directory, create a `test-config.yml` in your project root, and start the application with this clean configuration. Then, you can adapt the `test-config.yml` to your liking (so that certain settings which you would otherwise _always_ set will be pre-set without you having to open the preferences).
+
+Whenever you want to reset the test directory to its initial state (or you removed the directory, or cloned the whole project anew), pass the flag `--clean` to the command in order to create or reset the directory. **This is also necessary if you changed something in `test-config.yml`**.
+
+You can pass additional command-line switches such as `--clear-cache` to this command as well. They will be passed to the child process.
+
+> Attention: Before first running the command, you **must** run it with the `--clean`-flag to create the directory in the first place!
 
 To dive deeper into the development process, have a look at our [full development documentation](https://docs.zettlr.com/en/get-involved).
 
