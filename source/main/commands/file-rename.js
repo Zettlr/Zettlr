@@ -24,8 +24,8 @@ class FileRename extends ZettlrCommand {
   }
 
   /**
-   * Rename a directory
-   * @param {String} evt The event name
+   * Rename a file
+   * @param {string} evt The event name
    * @param  {Object} arg An object containing hash of containing and name of new dir.
    */
   async run (evt, arg) {
@@ -49,13 +49,17 @@ class FileRename extends ZettlrCommand {
     }
 
     // askOverwriteFile
-    await this._app.getFileSystem().runAction('rename-file', {
-      'source': file,
-      'info': { 'name': arg.name }
-    })
+    try {
+      await this._app.getFileSystem().runAction('rename-file', {
+        'source': file,
+        'info': { 'name': arg.name }
+      })
+    } catch (e) {
+      global.log.error('Error during renaming file: ' + e.message, e)
+    }
 
     // And done. FSAL has already notified the app of a necessary update
-    global.application.fileUpdate(file)
+    // global.application.fileUpdate(arg.hash, file.hash)
     return true
   }
 }

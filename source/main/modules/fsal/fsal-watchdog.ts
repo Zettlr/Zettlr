@@ -14,18 +14,25 @@
  * END HEADER
  */
 
-const chokidar = require('chokidar')
-const EventEmitter = require('events')
+import chokidar from 'chokidar'
+import EventEmitter from 'events'
 
-const ignoreDir = require('../../../common/util/ignore-dir')
-const ignoreFile = require('../../../common/util/ignore-file')
-const isFile = require('../../../common/util/is-file')
-const isDir = require('../../../common/util/is-dir')
-const isAttachment = require('../../../common/util/is-attachment')
+import ignoreDir from '../../../common/util/ignore-dir'
+import ignoreFile from '../../../common/util/ignore-file'
+import isFile from '../../../common/util/is-file'
+import isDir from '../../../common/util/is-dir'
+import isAttachment from '../../../common/util/is-attachment'
 
-const IGNORE_DIR_REGEXP = require('../../../common/data.json').ignoreDirs
+import { ignoreDirs as IGNORE_DIR_REGEXP } from '../../../common/data.json'
 
-module.exports = class FSALWatchdog extends EventEmitter {
+import { WatchdogEvent } from './types'
+
+export default class FSALWatchdog extends EventEmitter {
+  _booting: boolean
+  _process: any
+  _paths: string[]
+  _ignoredEvents: WatchdogEvent[]
+
   /**
    * Create a new watcher instance
    * @param {String} path The path to projectDir
@@ -42,7 +49,7 @@ module.exports = class FSALWatchdog extends EventEmitter {
    * Shuts down the service provider.
    * @return {void} No return.
    */
-  shutdown () {
+  shutdown (): void {
     if (!this._process) return
     this._process.close()
   }
@@ -50,10 +57,9 @@ module.exports = class FSALWatchdog extends EventEmitter {
   /**
    * Initiate watching process and stage all changes in the staged-array
    */
-  start () {
-    console.log('Starting chokidar ...')
+  start (): this {
     // Don't boot up twice and only boot if there's at least one path
-    if (this._paths.length < 1 || this.isBooting()) return
+    if (this._paths.length < 1 || this.isBooting()) return this
 
     this._booting = true // Lock the start function
 
@@ -76,16 +82,16 @@ module.exports = class FSALWatchdog extends EventEmitter {
     }
 
     if (global.config.get('watchdog.activatePolling')) {
-      let threshold = global.config.get('watchdog.stabilityThreshold')
+      let threshold: number = global.config.get('watchdog.stabilityThreshold')
       if (typeof threshold !== 'number') threshold = 1000
       if (threshold < 0) threshold = 1000
 
       // From chokidar docs: "[...] in some cases some change events will be
       // emitted while the file is being written." --> hence activate this.
-      options.awaitWriteFinish = {
-        'stabilityThreshold': threshold,
-        'pollInterval': 100
-      }
+      // options.awaitWriteFinish = { TODO
+      //   'stabilityThreshold': threshold,
+      //   'pollInterval': 100
+      // }
 
       global.log.info(`[FSAL Watchdog] Activating file polling with a threshold of ${threshold}ms.`)
     }
@@ -105,7 +111,7 @@ module.exports = class FSALWatchdog extends EventEmitter {
       this._booting = false // Unlock the start function
     })
 
-    this._process.on('all', (event, p) => {
+    this._process.on('all', (event: string, p: string) => {
       // Should we ignore that event?
       let shouldIgnore = this._ignoredEvents.findIndex(e => {
         return e.event === event && e.path === p
@@ -139,13 +145,15 @@ module.exports = class FSALWatchdog extends EventEmitter {
    * Is the process currently booting up?
    * @return {Boolean} True, if it's booting and false if it's not.
    */
-  isBooting () { return this._booting }
+  isBooting (): boolean {
+    return this._booting
+  }
 
   /**
    * Adds a path to the currently watched paths
    * @param {String} p A new directory or file to be watched
    */
-  watch (p) {
+  watch (p: string): this {
     if (this._paths.includes(p)) return this
 
     // Add the path to the watched
@@ -170,7 +178,7 @@ module.exports = class FSALWatchdog extends EventEmitter {
    * @param  {String} p The path to be unwatched
    * @return {ZettlrWatchdog}   This for chainability
    */
-  unwatch (p) {
+  unwatch (p: string): this {
     if (!this._paths.includes(p)) return this
 
     this._paths.splice(this._paths.indexOf(p), 1)
@@ -183,9 +191,8 @@ module.exports = class FSALWatchdog extends EventEmitter {
    * Adds events in the form { path: '', event: '' } to the ignore list.
    * @param {Array} events An array of path/event-objects to ignore
    */
-  ignoreEvents (events) {
-    if (!events) return false
-    if (!Array.isArray(events)) events = [events]
+  ignoreEvents (events: WatchdogEvent[]): boolean {
+    if (events.length === 0) return false
 
     this._ignoredEvents = this._ignoredEvents.concat(events)
 

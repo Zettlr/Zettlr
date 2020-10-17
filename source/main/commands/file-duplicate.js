@@ -32,46 +32,50 @@ class FileDuplicate extends ZettlrCommand {
    */
   async run (evt, arg) {
     // ARG structure: { dir, file, name }
-    let dir = this._app.findDir(arg.dir)
-    if (!dir) dir = this._app.getCurrentDir()
-    if (!dir) {
+
+    // First, retrieve our source file
+    let file = this._app.findFile(arg.file) // File is only a hash
+    if (file === null) {
+      global.log.error('Could not duplicate source file, because the source file was not found')
+      this._app.window.prompt({
+        type: 'error',
+        title: trans('system.error.could_not_create_file'),
+        message: 'Could not duplicate file, because the source file was not found'
+      })
+      return
+    }
+
+    // Then, the target directory.
+    let dir = this._app.findDir(arg.dir) // (1) A specified directory
+    if (dir === null) dir = file.parent // (2) The source file's dir
+    if (dir === null) dir = this._app.getCurrentDir() // (3) The current dir
+    if (dir === null) { // (4) Fail
       global.log.error('Could not create file, because no directory was found')
       this._app.window.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_file'),
         message: 'No directory provided'
       })
+      return
     }
 
-    let file = this._app.findFile(arg.file) // File is only a hash
-    if (!file) {
-      global.log.error('Could not duplicate source file, because the source file was not found')
-      this._app.window.prompt({
-        type: 'error',
-        title: trans('system.error.could_not_create_file'),
-        message: 'Could not duplicate source file, because the source file was not found'
-      })
-    }
-
-    // Then, make sure the name is correct.
+    // Afterwards, make sure the name is correct.
     let filename = sanitize(arg.name, { 'replacement': '-' })
-    if (filename.trim() === '') throw new Error('Could not create file: Filename was not valid')
+    if (filename.trim() === '') {
+      throw new Error('Could not create file: Filename was not valid')
+    }
+
     // If no valid filename is provided, assume .md
-    if (!ALLOWED_FILETYPES.includes(path.extname(filename))) filename += '.md'
+    if (!ALLOWED_FILETYPES.includes(path.extname(filename))) {
+      filename += '.md'
+    }
 
-    file = await this._app.getFileSystem().getFileContents(file)
-
-    // First create the file
-    await this._app.getFileSystem().runAction('duplicate-file', {
-      'source': dir,
-      'info': {
-        'name': filename,
-        'content': file.content
-      }
+    // Retrieve the file's content and create a new file with the same content
+    const fileMeta = await this._app.getFileSystem().getFileContents(file)
+    await this._app.getFileSystem().createFile(dir, {
+      name: filename,
+      content: fileMeta.content
     })
-
-    // Then, send a directory update
-    global.application.dirUpdate(dir.hash, dir.hash)
 
     // And directly thereafter, open the file
     let fileHash = hash(path.join(dir.path, filename))

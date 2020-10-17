@@ -31,11 +31,11 @@ class Export extends ZettlrCommand {
     */
   async run (evt, arg) {
     const fileDescriptor = global.application.findFile(arg.hash)
-    let fileMetadata = await global.application.getFile(fileDescriptor)
+    if (fileDescriptor === null) {
+      return global.ipc.notify(trans('system.error.fnf_message'))
+    }
 
-    // As we have introduced aliases into the app, it may be that the target
-    // returns null. In this case abort export and notify the user.
-    if (!fileMetadata) return global.ipc.notify(trans('system.error.fnf_message'))
+    let fileMetadata = await this._app.getFileSystem().getFileContents(fileDescriptor)
 
     let dest
     if (global.config.get('export.dir') === 'temp') {
@@ -53,8 +53,6 @@ class Export extends ZettlrCommand {
       // file.
       dest = path.dirname(fileMetadata.path)
     }
-
-    console.log('Destination is now: ', dest)
 
     // Title precedence is: Filename, but if there is a frontmatter title, use
     // that one instead. And if there is a H1 and the corresponding option is
@@ -113,8 +111,6 @@ class Export extends ZettlrCommand {
       'keywords': keywords,
       'cslStyle': global.config.get('export.cslStyle')
     }
-
-    console.log('Exporting ...', opt)
 
     // Call the exporter. Don't throw the "big" error as this is single-file export
     makeExport(opt)

@@ -47,6 +47,7 @@
 - Fixed the date formatter, as the moment.js locales are not found when compiling using `electron-forge`.
 - Fixed a bug that would mess up the tag-tooltip on files under certain circumstances.
 - Fixed a bug that would throw errors instead of exporting, if the export-directory is set to the current working directory and a non-root file is being exported.
+- Fixed a bug which would not let you create duplicates of root files. Now, you can and the duplicate is being placed in the currently selected directory.
 
 ## Under the Hood
 
@@ -105,6 +106,14 @@
 - Fixes in the tests.
 - Completely refurbished the test command. Now, a full-fledged testing directory will be set up to test features within the GUI without endangering your regular configuration in case you use Zettlr regularly.
 - Better handling of the custom paths for both the Pandoc and the XeLaTeX executables in the advanced preferences.
+- Migrated the FSAL to TypeScript so that the different descriptors can be better handled. Also, this showed countless logical errors, which are now mostly fixed.
+    - Furthermore, the responsibilities have been readjusted: The FSAL is now responsible for emitting events whenever the internal state changes. This is not being done by the commands anymore.
+    - The actions are now proper methods on the FSAL class in order to enable better tracking of the function arguments and to help ESLint fix possible signature errors.
+    - Moved every piece of state logic from the commands to the FSAL.
+    - Now, the general way anything regarding the files works is as follows: User --> one of the commands --> an action on the FSAL --> emits which part of the state has changed --> the application main class receives these notifications --> triggers potential updates in the renderer.
+    - Additionally, now the distinction between the meta objects which can be serialized and sent to the renderer and the tree objects within the FSAL is made more clear: Metadata files can have content attached to them (in order to save new content to a file), whereas the full objects, which are never getting sent to the renderer, do not contain a content property anymore.
+    - Also, we managed to fix errors regarding remote change detection.
+- The log provider now also outputs on the console, if the app runs unpacked (`app.isPackaged === false`).
 
 # 1.7.5
 

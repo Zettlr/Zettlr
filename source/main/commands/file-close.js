@@ -36,7 +36,9 @@ class FileClose extends ZettlrCommand {
     try {
       if (!arg || !arg.hash) throw new Error('Could not close file! No hash provided!')
       let file = this._app.getFileSystem().findFile(arg.hash)
-      if (!file) throw new Error(`Could not close file! No file with hash ${arg.hash} found!`)
+      if (file === null) {
+        throw new Error(`Could not close file! No file with hash ${arg.hash} found!`)
+      }
 
       // Now check if we can safely close the file
       if (file.modified) {
@@ -49,6 +51,8 @@ class FileClose extends ZettlrCommand {
       // If we're here the user really wants to close the file.
       if (!this._app.getFileSystem().closeFile(file)) {
         throw new Error('Could not close file!')
+      } else {
+        console.log('File closed successfully.')
       }
 
       return true

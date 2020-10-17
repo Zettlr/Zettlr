@@ -36,14 +36,14 @@ class DirProjectExport extends ZettlrCommand {
     // First get the directory
     let dir = this._app.findDir(arg.hash)
 
-    if (!dir) {
+    if (dir === null) {
       global.log.error('Could not export project: Directory not found.')
       return false
     }
 
     let config = dir._settings.project
 
-    if (!config) {
+    if (config === null) {
       global.log.error(`Could not export project: Directory ${dir.name} has no project.`)
       return false
     }
@@ -55,7 +55,7 @@ class DirProjectExport extends ZettlrCommand {
     files = files.filter((elem) => { return elem.type === 'file' })
 
     // Concat the files
-    let contents = ''
+    let contents = []
     for (let file of files) {
       let fileContents = await this._app.getFileSystem().getFileContents(file)
       fileContents = fileContents.content
@@ -65,11 +65,9 @@ class DirProjectExport extends ZettlrCommand {
       // assigning errors.
       fileContents = makeImgPathsAbsolute(file.dir, fileContents)
       fileContents = fileContents.replace(fnRE, (match, p1, offset, string) => `[^${String(file.hash)}${p1}]`)
-      contents += fileContents + '\n\n'
+      contents.push(fileContents)
     }
-
-    // Remove the two trailing linefeeds
-    contents = contents.substr(0, contents.length - 2)
+    contents = contents.join('\n\n')
 
     // Mock a file object to which ZettlrExport has access
     let tempfile = {

@@ -37,10 +37,11 @@ class FileNew extends ZettlrCommand {
     if (arg.hasOwnProperty('hash')) {
       dir = this._app.findDir(arg.hash)
     } else {
+      global.log.warn('No directory selected. Using currently selected directory ...')
       dir = this._app.getCurrentDir()
     }
 
-    if (!dir) {
+    if (dir === null) {
       global.log.error(`Could not create new file ${arg.name}: No directory selected!`)
       return false
     }
@@ -48,10 +49,15 @@ class FileNew extends ZettlrCommand {
     try {
       // Then, make sure the name is correct.
       let filename = sanitize(arg.name, { 'replacement': '-' })
-      if (filename.trim() === '') throw new Error('Could not create file: Filename was not valid')
+      if (filename.trim() === '') {
+        throw new Error('Could not create file: Filename was not valid')
+      }
+
       // If no valid filename is provided, assume .md
       let ext = path.extname(filename).toLowerCase()
-      if (!ALLOWED_FILETYPES.includes(ext)) filename += '.md'
+      if (!ALLOWED_FILETYPES.includes(ext)) {
+        filename += '.md'
+      }
 
       // Check if there's already a file with this name in the directory
       // NOTE: There are case-sensitive file systems, but we'll disallow this
@@ -63,19 +69,16 @@ class FileNew extends ZettlrCommand {
       }
 
       // First create the file
-      await this._app.getFileSystem().runAction('create-file', {
-        'source': dir,
-        'info': { 'name': filename }
+      await this._app.getFileSystem().createFile(dir, {
+        name: filename,
+        content: ''
       })
-
-      // Then, send a directory update
-      global.application.dirUpdate(dir.hash, dir.hash)
 
       // And directly thereafter, open the file
       let fileHash = hash(path.join(dir.path, filename))
       await this._app.openFile(fileHash)
     } catch (e) {
-      global.log.error(trans('system.error.could_not_create_file') + ': ' + e.message)
+      global.log.error('Could not create file: ' + e.message)
       this._app.window.prompt({
         type: 'error',
         title: trans('system.error.could_not_create_file'),

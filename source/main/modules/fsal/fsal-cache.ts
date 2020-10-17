@@ -20,11 +20,15 @@
  * END HEADER
  */
 
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 
-module.exports = class FSALCache {
-  constructor (datadir) {
+export default class FSALCache {
+  _datadir: string
+  _data: any
+  _accessed: any
+
+  constructor (datadir: string) {
     this._datadir = datadir
     this._data = {}
     // Hash table for all keys that were requested before persist is called
@@ -43,10 +47,10 @@ module.exports = class FSALCache {
 
   /**
    * Returns the value associated for a key without removing it.
-   * @param {String} key The key to get
-   * @returns {Mixed} The key's value or undefined
+   * @param {string} key The key to get
+   * @returns {any} The key's value or undefined
    */
-  get (key) {
+  get (key: string): any {
     if (!this._hasShard(key)) this._loadShard(key)
     if (this.has(key)) {
       this._accessed[key] = true
@@ -58,13 +62,22 @@ module.exports = class FSALCache {
 
   /**
    * Sets (potentially overwriting) a cache key.
-   * @param {String} key The key to set
-   * @param {Mixed} value Any JSONable data
+   * @param {string} key The key to set
+   * @param {any} value Any JSONable data
+   * @return {boolean} True on success, false otherwise.
    */
-  set (key, value) {
+  set (key: string, value: any): boolean {
+    try {
+      JSON.stringify(value)
+    } catch (error) {
+      global.log.error(`Could not set cache value ${key}: Not JSONable!`, error.message)
+      return false
+    }
+
     if (!this._hasShard(key)) this._loadShard(key)
     this._accessed[key] = true // Obviously, a set key has been accessed
     this._data[this._determineShard(key)][key] = value
+    return true
   }
 
   /**
@@ -72,7 +85,7 @@ module.exports = class FSALCache {
    * @param {String} key The key to remove
    * @returns {Boolean} Whether the adapter has removed the key
    */
-  del (key) {
+  del (key: string): boolean {
     if (this.has(key)) {
       delete this._data[this._determineShard(key)][key]
       if (this._accessed.hasOwnProperty(key)) delete this._accessed[key]
@@ -85,7 +98,7 @@ module.exports = class FSALCache {
    * Returns true if the cache has the given key in memory.
    * @param {String} key The key to be searched
    */
-  has (key) {
+  has (key: string): boolean {
     if (!this._hasShard(key)) this._loadShard(key)
     return this._data[this._determineShard(key)].hasOwnProperty(key)
   }
@@ -94,7 +107,7 @@ module.exports = class FSALCache {
    * Returns the value of key and removes the entry from the cache.
    * @param {String} key The key to pluck
    */
-  pluck (key) {
+  pluck (key: string): any {
     let val = JSON.parse(JSON.stringify(this.get(key)))
     this.del(key)
     return val
@@ -103,7 +116,7 @@ module.exports = class FSALCache {
   /**
    * Persist all cache data on disk.
    */
-  persist () {
+  persist (): void {
     let deleted = 0
     // Saves all currently loaded shards to disk
     for (let shard of Object.keys(this._data)) {
@@ -131,7 +144,7 @@ module.exports = class FSALCache {
   /**
    * Clears the cache during runtime
    */
-  clearCache () {
+  clearCache (): void {
     // Two things need to be done:
     // First, flush everything from memory
     // Second: Remove all cache files
@@ -166,7 +179,7 @@ module.exports = class FSALCache {
    * Lazily loads the shard for the given key.
    * @param {String} key The key for which the shard should be loaded
    */
-  _loadShard (key) {
+  _loadShard (key: string): void {
     // load a shard
     let shard = this._determineShard(key)
 
@@ -183,7 +196,7 @@ module.exports = class FSALCache {
    * Returns true if the given shard has already been loaded.
    * @param {String} key The key to query a shard for
    */
-  _hasShard (key) {
+  _hasShard (key: string): boolean {
     return this._data.hasOwnProperty(this._determineShard(key))
   }
 
@@ -191,7 +204,7 @@ module.exports = class FSALCache {
    * Algorithm to determine where to save the given key.
    * @param {String} key The key for which the shard should be determined
    */
-  _determineShard (key) {
+  _determineShard (key: string): string {
     // Here's the algorithm for choosing the shard:
     // Based off the first two characters of the key
     // whoooooooooooooo. Well, but the keys will only
