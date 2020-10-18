@@ -28,7 +28,7 @@ class DirSort extends ZettlrCommand {
     let dir = this._app.findDir(arg.hash)
     if (dir === null) return false
 
-    await this._app.getFileSystem.sortDirectory(dir, arg.type)
+    await this._app.getFileSystem().sortDirectory(dir, arg.type)
   }
 }
 
