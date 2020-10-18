@@ -28,7 +28,7 @@ const readFile = promisify(fs.readFile)
  * by the user on runtime. It provides functions that allow to search all
  * loaded dictionaries for words and even change the dictionaries during runtime.
  */
-class DictionaryProvider extends EventEmitter {
+module.exports = class DictionaryProvider extends EventEmitter {
   constructor () {
     super()
     global.log.verbose('Dictionary provider booting up ...')
@@ -258,5 +258,3 @@ class DictionaryProvider extends EventEmitter {
    */
   checks (lang) { return this._loadedDicts.includes(lang) }
 }
-
-module.exports = new DictionaryProvider()

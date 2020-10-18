@@ -17,7 +17,7 @@ const fs = require('fs')
 const { app } = require('electron')
 const EventEmitter = require('events')
 
-class CSSProvider extends EventEmitter {
+module.exports = class CssProvider extends EventEmitter {
   constructor () {
     super()
     global.log.verbose('CSS provider booting up ...')
@@ -81,5 +81,3 @@ class CSSProvider extends EventEmitter {
     }
   }
 }
-
-module.exports = new CSSProvider()

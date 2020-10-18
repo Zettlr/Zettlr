@@ -30,7 +30,7 @@ const debugConsole = {
   verbose: function (message) { console.log(chalk.grey(message)) }
 }
 
-class LogProvider {
+module.exports = class LogProvider {
   constructor () {
     this._logPath = path.join(app.getPath('userData'), 'logs')
     this._cleanLogs() // Remove all older logs
@@ -259,5 +259,3 @@ class LogProvider {
     return `${timestamp}[${level}] ${message.message}${details}`
   }
 }
-
-module.exports = new LogProvider()

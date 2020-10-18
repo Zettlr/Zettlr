@@ -43,7 +43,7 @@ const SUPPRESS_NOTIFICATION = [
  * variables. Basically, this class tells Zettlr what the user wants and what
  * the environment Zettlr is running in is capable of.
  */
-class ConfigProvider extends EventEmitter {
+module.exports = class ConfigProvider extends EventEmitter {
   /**
     * Preset sane defaults, then load the config and perform a system check.
     * @param {Zettlr} parent Parent Zettlr object.
@@ -736,5 +736,3 @@ class ConfigProvider extends EventEmitter {
     return true
   }
 }
-
-module.exports = new ConfigProvider()

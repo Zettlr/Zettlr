@@ -37,14 +37,14 @@ const READY = 4
 /**
  * This class enables to export citations from a CSL JSON file to HTML.
  */
-class CiteprocProvider {
+module.exports = class CiteprocProvider {
   constructor () {
     global.log.verbose('Citeproc provider booting up ...')
     this._mainLibrary = ''
     // The Zettlr internal preview of these citations will always use Chicago,
     // because (a) it's just a preview, and (b) Chicago is the default of Pandoc.
     this._lang = global.config.get('appLang')
-    this._mainStyle = require('./../assets/csl-styles/chicago-author-date.csl')
+    this._mainStyle = require('./assets/csl-styles/chicago-author-date.csl')
     this._engine = null // Holds the CSL engine
     this._cslData = null // Holds the parsed CSL data (JSON)
     this._bibtexAttachments = null // Holds the bibtex-attachments, if applicable
@@ -188,6 +188,7 @@ class CiteprocProvider {
     try {
       fs.readFile(this._mainLibrary, 'utf8', (err, data) => {
         if (err) {
+          global.log.error(`[Citeproc Provider] Could not load main CSL library: ${err.message}`, err)
           this._status = NO_DB
           return
         }
@@ -198,6 +199,7 @@ class CiteprocProvider {
         this._parse(data)
       })
     } catch (e) {
+      global.log.error(`[Citeproc Provider] Unknown error while loading main CSL library: ${e.message}`, e)
       this._status = NO_DB
     }
   }
@@ -218,9 +220,11 @@ class CiteprocProvider {
         try {
           let attachments = extractBibTexAttachments(cslData, path.dirname(this._mainLibrary))
           this._bibtexAttachments = attachments
-        } catch (err) { /* Do nothing */ }
+        } catch (err) {
+          global.log.error(`[Citeproc Provider] Could not extract BibTex attachments: ${err.message}`, err)
+        }
       } catch (e) {
-        global.log.error('[citeproc] Could not parse library file. ' + e.message, e)
+        global.log.error('[Citeproc Provider] Could not parse library file: ' + e.message, e)
         // Nopey.
         global.ipc.notify(trans('gui.citeproc.error_db'))
         this._status = ERROR
@@ -239,7 +243,7 @@ class CiteprocProvider {
         this._items[id] = item
         this._ids[id] = true
       } catch (err) {
-        global.log.warning(`[citeproc] Malformed CiteKey @${id}` + err.message)
+        global.log.warning(`[Citeproc Provider] Malformed CiteKey @${id}` + err.message)
         if (global.application.isBooting()) {
           // In case the application is still booting, cache the message and delay sending
           // TODO: This is goddamned ugly.
@@ -258,7 +262,7 @@ class CiteprocProvider {
   /**
    * Verifies the integrity of the database, which means: Test through all keys
    * and remove those that produce errors when processed by citeproc-js. Remove
-   * them to ensure that all other keys can be loaded, in the meantime.
+   * them to ensure that all other keys can be loaded in the meantime.
    */
   _verifyIntegrity () {
     let errors = []
@@ -267,7 +271,7 @@ class CiteprocProvider {
         // Try to make a citation "cluster" out of each single CiteKey
         this._engine.makeCitationCluster([this._sys.retrieveItem(key)])
       } catch (e) {
-        console.error(key, this._sys.retrieveItem(key))
+        console.error(e)
         // In this case, to ensure correct loading of the rest of the
         // database, remove the problematic cite key.
         delete this._ids[key]
@@ -277,7 +281,9 @@ class CiteprocProvider {
 
     // We all know that people can close dialog windows if they appear. If that
     // happens, let's make sure the errors are at least in the log file!
-    if (errors.length > 0) global.log.error(`[citeproc] ${errors.length} errors during database integrity check!`, errors)
+    if (errors.length > 0) {
+      global.log.error(`[Citeproc Provider] ${errors.length} errors during database integrity check!`, errors)
+    }
 
     return errors
   }
@@ -322,7 +328,7 @@ class CiteprocProvider {
 
       this._loadIdHint()
     } catch (e) {
-      global.log.error('[citeproc] Could not initialize the citation processor. ' + e.message, e)
+      global.log.error('[Citeproc Provider] Could not initialize citation processor: ' + e.message, e)
       this._status = ERROR
     }
   }
@@ -359,13 +365,24 @@ class CiteprocProvider {
    * Reads in a language XML file and returns either its contents, or false (in
    * which case the engine will fall back some times until it ends with en-US)
    * @param  {string} lang The language to be loaded.
-   * @return {Mixed}  Either the contents of the XML file, or false.
+   * @return {string|boolean}  Either the contents of the XML file, or false.
    */
   _getLocale (lang) {
     // Takes a lang in the format xx-XX and has to return the corresponding XML
     // file. Let's do just that!
+
+    if (lang === 'us') {
+      // From the docs: "The function _must_ return a value for the us locale."
+      // See https://citeproc-js.readthedocs.io/en/latest/running.html#retrievelocale
+      lang = 'en-US'
+    }
+
     try {
-      return require('./../assets/csl-locales/locales-en-US.xml')
+      const localePath = path.join(__dirname, `./assets/csl-locales/locales-${lang}.xml`)
+      global.log.info(`[Citeproc Provider] Loading CSL locale file at ${localePath} ...`)
+      // NOTE that this System function must be synchronous, so we cannot use
+      // the asynchronous promises API here.
+      return fs.readFileSync(localePath, { encoding: 'utf8' })
     } catch (e) {
       // File not found -> Let the engine fall back to a default.
       return false
@@ -510,5 +527,3 @@ class CiteprocProvider {
    */
   hasNoDB () { return this._status === NO_DB }
 }
-
-module.exports = new CiteprocProvider()

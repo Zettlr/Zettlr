@@ -25,7 +25,7 @@ const writeFileAsync = promisify(fs.writeFile)
 
 const TRANSLATION_API_URL = require('../../common/data.json').translation_api_url
 
-class TranslationProvider {
+module.exports = class TranslationProvider {
   constructor () {
     global.log.verbose('Translation provider booting up ...')
     this._availableLanguages = [] // Holds all translations able to download
@@ -130,5 +130,3 @@ class TranslationProvider {
     return true
   }
 }
-
-module.exports = new TranslationProvider()

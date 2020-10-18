@@ -33,7 +33,7 @@ const IGNORE_DIR_REGEXP = require('../../common/data.json').ignoreDirs
  * resources, we are only monitoring changes that are (1) not ignored, (2) not
  * in the blacklist of directories and (3) on the file whitelist.
  */
-class WatchdogProvider extends EventEmitter {
+module.exports = class WatchdogProvider extends EventEmitter {
   /**
    * Create a new watcher instance
    * @param {String} path The path to projectDir
@@ -279,5 +279,3 @@ class WatchdogProvider extends EventEmitter {
     return this
   }
 }
-
-module.exports = new WatchdogProvider()

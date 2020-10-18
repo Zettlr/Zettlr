@@ -114,6 +114,12 @@
     - Additionally, now the distinction between the meta objects which can be serialized and sent to the renderer and the tree objects within the FSAL is made more clear: Metadata files can have content attached to them (in order to save new content to a file), whereas the full objects, which are never getting sent to the renderer, do not contain a content property anymore.
     - Also, we managed to fix errors regarding remote change detection.
 - The log provider now also outputs on the console, if the app runs unpacked (`app.isPackaged === false`).
+- Updated all service providers. They are now loaded immediately after application boot (right after the `ready`-event fires on the `app`-object) and not when the Zettlr main class loads.
+- Created a new directory `app` which provides functionality that pertains only to the lifecycle of the application itself, such as boot and shutdown functionalities. Service providers have been migrated to there.
+- Fixed the issue that only the `en-US`-language of the CSL styles was loaded for the citation provider.
+- CSL locales and CSL styles are now bundled with the app as `native_modules`.
+- Began providing first global interfaces which the service providers make use of in order to enable ESLint to detect errors.
+- Provide a test library, which you can load to debug citeproc-related issues and test the provider.
 
 # 1.7.5
 

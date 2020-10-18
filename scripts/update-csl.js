@@ -22,6 +22,10 @@ const rimraf = require('rimraf')
 // const REPO_LOCALES_URL = 'https://api.github.com/repos/citation-style-language/locales/contents'
 const REPO_LOCALES_URL = 'https://github.com/citation-style-language/locales/archive/master.zip'
 const STYLE_URL = 'https://raw.githubusercontent.com/citation-style-language/styles/master/chicago-author-date.csl'
+
+const LOCALES_TARGET_DIRECTORY = path.join(__dirname, '../source/app/service-providers/assets/csl-locales')
+const STYLES_TARGET_DIRECTORY = path.join(__dirname, '../source/app/service-providers/assets/csl-styles')
+
 // First, let's download the list of contents from
 // the GitHub API.
 async function getCSLLocales () {
@@ -56,7 +60,7 @@ async function getCSLLocales () {
   for (let filePath of directoryContents) {
     let basename = path.basename(filePath)
     log.info(`Copying ${basename} ...`)
-    let targetPath = path.join(__dirname, '../source/main/assets/csl-locales', basename)
+    let targetPath = path.join(LOCALES_TARGET_DIRECTORY, basename)
     await fs.rename(filePath, targetPath)
     log.success(`Successfully written ${basename}!`)
   }
@@ -66,7 +70,7 @@ async function getCSLLocales () {
   let response = await got(STYLE_URL, { method: 'GET' })
   response = response.body
   let basename = path.basename(STYLE_URL)
-  let targetPath = path.join(__dirname, '../source/main/assets/csl-styles', basename)
+  let targetPath = path.join(STYLES_TARGET_DIRECTORY, basename)
   await fs.writeFile(targetPath, response, 'utf8')
   log.success('Updated CSL style!')
 

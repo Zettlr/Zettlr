@@ -22,7 +22,7 @@ const { systemPreferences, nativeTheme } = require('electron')
  * operating system's appearance if set to system, and switch the mode on a given
  * time if set to schedule.
  */
-class AppearanceProvider extends EventEmitter {
+module.exports = class AppearanceProvider extends EventEmitter {
   /**
    * Create the instance on program start and initially load the settings.
    */
@@ -165,5 +165,3 @@ class AppearanceProvider extends EventEmitter {
     return true
   }
 }
-
-module.exports = new AppearanceProvider()

@@ -19,7 +19,7 @@ const path = require('path')
  * This class manages the coloured tags of the app. It reads the tags on each
  * start of the app and writes them after they have been changed.
  */
-class TagProvider {
+module.exports = class TagProvider {
   /**
    * Create the instance on program start and initially load the tags.
    */
@@ -228,5 +228,3 @@ class TagProvider {
     return retVal
   }
 }
-
-module.exports = new TagProvider()

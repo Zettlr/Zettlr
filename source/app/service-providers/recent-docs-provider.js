@@ -19,7 +19,7 @@ const { app } = require('electron')
  * This class manages the coloured tags of the app. It reads the tags on each
  * start of the app and writes them after they have been changed.
  */
-class RecentDocsProvider extends EventEmitter {
+module.exports = class RecentDocsProvider extends EventEmitter {
   /**
    * Create the instance on program start and initially load the tags.
    */
@@ -103,5 +103,3 @@ class RecentDocsProvider extends EventEmitter {
     return true
   }
 }
-
-module.exports = new RecentDocsProvider()

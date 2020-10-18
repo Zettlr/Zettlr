@@ -32,8 +32,6 @@ import isFile from '../common/util/is-file'
 import { commands } from './commands'
 import hash from '../common/util/hash'
 
-// Service providers
-import UpdateProvider from './providers/update-provider'
 import { DirDescriptor, MDFileDescriptor } from './modules/fsal/types'
 
 /**
@@ -44,7 +42,7 @@ import { DirDescriptor, MDFileDescriptor } from './modules/fsal/types'
  * the main window to be opened. And, to complicate matters, my aim is to break
  * the 10.000 lines with this behemoth.
  */
-class Zettlr {
+export default class Zettlr {
   isBooting: boolean
   currentFile: any
   editFlag: boolean
@@ -107,9 +105,6 @@ class Zettlr {
         return await this._fsal.getFileContents(fileDescriptor)
       }
     }
-
-    // First thing that has to be done is to load the service providers
-    this._bootServiceProviders()
 
     // Load available commands
     this._commands = commands.map(Command => new Command(this))
@@ -236,28 +231,6 @@ class Zettlr {
         this.isBooting = false // Now we're done booting
       })
     })
-  }
-
-  /**
-   * Boots the service providers
-   * @return {void} Doesn't return
-   */
-  _bootServiceProviders (): void {
-    // NOTE: The order these providers are loaded is important.
-    this._providers = {
-      'log': require('./providers/log-provider'),
-      'config': require('./providers/config-provider'),
-      'appearance': require('./providers/appearance-provider'),
-      'watchdog': require('./providers/watchdog-provider'),
-      'citeproc': require('./providers/citeproc-provider'),
-      'dictionary': require('./providers/dictionary-provider'),
-      'recentDocs': require('./providers/recent-docs-provider'),
-      'tags': require('./providers/tag-provider'),
-      'targets': require('./providers/target-provider'),
-      'css': require('./providers/css-provider'),
-      'translations': require('./providers/translation-provider'),
-      'updates': new UpdateProvider()
-    }
   }
 
   /**
@@ -732,6 +705,3 @@ class Zettlr {
     */
   closeWindow (): void { this.window.close() }
 }
-
-// Export the module on require()
-module.exports = Zettlr

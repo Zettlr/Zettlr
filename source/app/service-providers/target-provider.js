@@ -20,7 +20,7 @@ const path = require('path')
  * This class manages the writing targets of directories and files. It reads the
  * targets on each start of the app and writes them after they have been changed.
  */
-class TargetProvider extends EventEmitter {
+module.exports = class TargetProvider extends EventEmitter {
   /**
    * Create the instance on program start and initially load the targets.
    */
@@ -208,5 +208,3 @@ class TargetProvider extends EventEmitter {
     return true
   }
 }
-
-module.exports = new TargetProvider()
