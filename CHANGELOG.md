@@ -48,8 +48,6 @@
 - Fixed a bug that would mess up the tag-tooltip on files under certain circumstances.
 - Fixed a bug that would throw errors instead of exporting, if the export-directory is set to the current working directory and a non-root file is being exported.
 - Fixed a bug which would not let you create duplicates of root files. Now, you can and the duplicate is being placed in the currently selected directory.
-- Converted the CSS Provider to TypeScript.
-- Converted the Log Provider to TypeScript.
 
 ## Under the Hood
 
@@ -122,6 +120,8 @@
 - CSL locales and CSL styles are now bundled with the app as `native_modules`.
 - Began providing first global interfaces which the service providers make use of in order to enable ESLint to detect errors.
 - Provide a test library, which you can load to debug citeproc-related issues and test the provider.
+- Converted the CSS Provider to TypeScript.
+- Converted the Log Provider to TypeScript.
 
 # 1.7.5
 
