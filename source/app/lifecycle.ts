@@ -1,11 +1,24 @@
 /**
- * This file contains lifecycle functions which boot and shutdown the
- * application.
+ * @ignore
+ * BEGIN HEADER
+ *
+ * CVM-Role:        <none>
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains lifecycle functions for boot and shutdown
+ *                  that boot up things like the service providers, and shut
+ *                  them down appropriately.
+ *
+ * END HEADER
  */
 
-// Helper function to extract files to open from process.argv
+// Helper functions
 import extractFilesFromArgv from '../common/util/extract-files-from-argv'
 import registerCustomProtocols from './util/custom-protocols'
+import environmentCheck from './util/environment-check'
+
+// Utility functions
 import resolveTimespanMs from './util/resolve-timespan-ms'
 
 // Developer tools
@@ -48,7 +61,7 @@ var upTimestamp: number
  *
  * @return  {void}    Nothing to return
  */
-export function bootApplication (): void {
+export async function bootApplication (): Promise<void> {
   upTimestamp = Date.now()
 
   global.log.info(`こんにちは！ Booting Zettlr at ${(new Date()).toString()}.`)
@@ -62,6 +75,8 @@ export function bootApplication (): void {
   } catch (e) {
     global.log.verbose('Electron DevTools Installer not found - proceeding without loading developer tools.')
   }
+
+  await environmentCheck()
 
   registerCustomProtocols()
 
@@ -116,9 +131,9 @@ export async function shutdownApplication (): Promise<void> {
 
   // Now construct the message. Always include minutes, seconds, and milliseconds
   let uptimeMessage: string = `${span.minutes} minutes, and ${span.seconds}.${span.ms} seconds`
-  if (span.hours > 0) uptimeMessage = span.hours.toString() + ' hours, ' + uptimeMessage
-  if (span.days > 0) uptimeMessage = span.days.toString() + ' days, ' + uptimeMessage
-  if (span.weeks > 0) uptimeMessage = span.weeks.toString() + ' weeks, ' + uptimeMessage
+  if (span.hours > 0) uptimeMessage = `${span.hours} hours, ${uptimeMessage}`
+  if (span.days > 0) uptimeMessage = `${span.days} days, ${uptimeMessage}`
+  if (span.weeks > 0) uptimeMessage = `${span.weeks} weeks, ${uptimeMessage}`
 
   global.log.info(`Shutdown almost complete. Application uptime was: ${uptimeMessage}.`)
 

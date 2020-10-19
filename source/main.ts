@@ -70,10 +70,10 @@ app.whenReady().then(() => {
   // Immediately boot the application. This function performs some initial
   // checks to make sure the environment is as expected for Zettlr, and boots
   // up the providers.
-  bootApplication()
-
-  // Now instantiate the main class which will care about everything else
-  zettlr = new Zettlr()
+  bootApplication().then(() => {
+    // Now instantiate the main class which will care about everything else
+    zettlr = new Zettlr()
+  }).catch(err => console.error(err))
 }).catch(e => console.error(e))
 
 /**

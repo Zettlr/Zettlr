@@ -1,3 +1,16 @@
+/**
+ * @ignore
+ * BEGIN HEADER
+ *
+ * CVM-Role:        Helper function
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     Registers custom protocols for the application.
+ *
+ * END HEADER
+ */
+
 import { protocol } from 'electron'
 
 export default function registerCustomProtocols (): void {

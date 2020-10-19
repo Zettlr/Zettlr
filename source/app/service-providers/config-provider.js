@@ -82,27 +82,6 @@ module.exports = class ConfigProvider extends EventEmitter {
 
     this._bulkSetInProgress = false // As long as this is true, a bulk set happens
 
-    // Additional environmental paths (for locating LaTeX and Pandoc)
-    switch (process.platform) {
-      case 'win32':
-        this._additional_paths = COMMON_DATA.additional_paths.win32
-        break
-      case 'linux':
-        this._additional_paths = COMMON_DATA.additional_paths.linux
-        break
-      case 'darwin':
-        this._additional_paths = COMMON_DATA.additional_paths.macos
-        break
-      default:
-        this._additional_paths = [] // Fallback: No additional paths
-        break
-    }
-
-    // This function makes sure necessary files and folders exist for the app to
-    // start up smoothly. These paths should exist before any deeper logic is
-    // executed.
-    this._assertPaths()
-
     // Config Template providing all necessary arguments
     this.cfgtpl = {
       'version': ZETTLR_VERSION, // Useful for migrating
@@ -353,27 +332,6 @@ module.exports = class ConfigProvider extends EventEmitter {
   }
 
   /**
-   * Makes sure absolutely essential paths of the app exist.
-   */
-  _assertPaths () {
-    let pathToCheck = [
-      this.configPath, // Main config directory
-      path.join(this.configPath, 'dict'), // Custom dictionary path
-      path.join(this.configPath, 'lang'), // Custom translation path
-      path.join(this.configPath, 'logs') // Log path
-    ]
-
-    // Make sure each path exists
-    for (let p of pathToCheck) {
-      try {
-        fs.lstatSync(p)
-      } catch (e) {
-        fs.mkdirSync(p)
-      }
-    }
-  }
-
-  /**
     * This function only (re-)reads the configuration file if present
     * @return {ZettlrConfig} This for chainability.
     */
@@ -429,22 +387,6 @@ module.exports = class ConfigProvider extends EventEmitter {
   checkSystem () {
     let delim = (process.platform === 'win32') ? ';' : ':'
 
-    if (this._additional_paths.length > 0) {
-      // First integrate the additional paths that we need.
-      let nPATH = process.env.PATH.split(delim)
-
-      for (let x of this._additional_paths) {
-        // Check for both trailing and non-trailing slashes (to not add any
-        // directory more than once)
-        let y = (x[x.length - 1] === '/') ? x.substr(0, x.length - 1) : x + '/'
-        if (!nPATH.includes(x) && !nPATH.includes(y)) {
-          nPATH.push(x)
-        }
-      }
-
-      process.env.PATH = nPATH.join(delim)
-    }
-
     // Also add to PATH xelatex and pandoc-directories
     // if these variables contain actual dirs.
     if (this.get('xelatex').length > 0) {
@@ -472,7 +414,7 @@ module.exports = class ConfigProvider extends EventEmitter {
     }
 
     // Finally, check whether or not a UUID exists, and, if not, generate one.
-    if (!this.config.uuid) {
+    if (this.config.uuid === null) {
       this.config.uuid = uuid4()
     }
 
