@@ -13,6 +13,14 @@ interface LogProvider {
   showLogViewer: () => void
 }
 
+interface CssProvider {
+  on: (event, callback) => void
+  off: (event, callback) => void
+  get: () => string
+  set: (newContent: string) => boolean
+  getPath: () => string
+}
+
 // Before the log provider has booted, these messages will be added to the
 // preBootLog
 interface BootLog {
@@ -26,6 +34,7 @@ interface BootLog {
  */
 declare module NodeJS {
   interface Global {
+    css: CssProvider
     log: LogProvider
     store: any
     notify: any

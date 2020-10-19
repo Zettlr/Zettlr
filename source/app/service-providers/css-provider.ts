@@ -12,12 +12,14 @@
  * END HEADER
  */
 
-const path = require('path')
-const fs = require('fs')
-const { app } = require('electron')
-const EventEmitter = require('events')
+import path from 'path'
+import fs from 'fs'
+import { app } from 'electron'
+import EventEmitter from 'events'
 
-module.exports = class CssProvider extends EventEmitter {
+export default class CssProvider extends EventEmitter {
+  private readonly _filePath: string
+
   constructor () {
     super()
     global.log.verbose('CSS provider booting up ...')
@@ -44,34 +46,34 @@ module.exports = class CssProvider extends EventEmitter {
 
   /**
    * Shuts down the provider
-   * @return {Boolean} Whether or not the shutdown was successful
+   * @return {boolean} Whether or not the shutdown was successful
    */
-  shutdown () {
+  shutdown (): boolean {
     global.log.verbose('CSS provider shutting down ...')
     return true
   }
 
   /**
    * Retrieves the content of the custom CSS file
-   * @return {String} The custom CSS
+   * @return {string} The custom CSS
    */
-  get () {
+  get (): string {
     let file = fs.readFileSync(this._filePath, 'utf8')
     return file
   }
 
   /**
    * The renderer will need this path to dynamically load it in.
-   * @return {String} The fully qualified path to the CSS file.
+   * @return {string} The fully qualified path to the CSS file.
    */
-  getPath () { return this._filePath }
+  getPath (): string { return this._filePath }
 
   /**
    * Writes new data to the custom CSS file, and returns if the call succeeded.
-   * @param {String} newContent The new contents
-   * @return {Boolean} Whether or not the call succeeded.
+   * @param {string} newContent The new contents
+   * @return {boolean} Whether or not the call succeeded.
    */
-  set (newContent) {
+  set (newContent: string): boolean {
     try {
       fs.writeFileSync(this._filePath, newContent)
       this.emit('update', this._filePath)
