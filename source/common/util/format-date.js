@@ -24,5 +24,7 @@ module.exports = function (dateObj) {
     fractionalSecondDigits: 0
   }
 
+  // NOTE: This does not work during any tests, as Node.js needs Intl locales
+  // which it does not provide by default. For Electron, this works fine.
   return new Intl.DateTimeFormat(global.config.get('appLang'), options).format(dateObj)
 }
