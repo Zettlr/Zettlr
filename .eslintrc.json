@@ -100,6 +100,9 @@
         "@typescript-eslint/no-floating-promises": [ "warn" ],
         "@typescript-eslint/no-misused-promises": [ "warn" ],
         "@typescript-eslint/strict-boolean-expressions": [ "warn" ],
-        "@typescript-eslint/no-dynamic-delete": [ "warn" ]
+        // This rule is necessary for the FSAL Cache (featuring safe deletion of keys)
+        "@typescript-eslint/no-dynamic-delete": [ "warn" ],
+        // Only warn if there's no array comparison given
+        "@typescript-eslint/require-array-sort-compare": [ "warn" ]
     }
 }

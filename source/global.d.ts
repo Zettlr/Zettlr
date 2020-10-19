@@ -24,8 +24,9 @@ interface CssProvider {
 // Before the log provider has booted, these messages will be added to the
 // preBootLog
 interface BootLog {
-  level: 1|2|3|4
+  level: 1|2|3|4 // Taken from the LogLevel enum in the Log Provider
   message: string
+  details: any
 }
 
 /**

@@ -49,6 +49,7 @@
 - Fixed a bug that would throw errors instead of exporting, if the export-directory is set to the current working directory and a non-root file is being exported.
 - Fixed a bug which would not let you create duplicates of root files. Now, you can and the duplicate is being placed in the currently selected directory.
 - Converted the CSS Provider to TypeScript.
+- Converted the Log Provider to TypeScript.
 
 ## Under the Hood
 
