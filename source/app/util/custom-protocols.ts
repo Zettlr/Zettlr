@@ -17,7 +17,7 @@ export default function registerCustomProtocols (): void {
         headers: { 'Cache-control': 'no-store', 'pragma': 'no-cache' }
       })
     } catch (error) {
-      global.log.error('Error loading external file', error)
+      global.log.error(`Error loading external file: ${error.message as string}`, error)
     }
   })
 }

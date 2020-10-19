@@ -6,6 +6,7 @@
 // Helper function to extract files to open from process.argv
 import extractFilesFromArgv from '../common/util/extract-files-from-argv'
 import registerCustomProtocols from './util/custom-protocols'
+import resolveTimespanMs from './util/resolve-timespan-ms'
 
 // Developer tools
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
@@ -106,45 +107,18 @@ export async function shutdownApplication (): Promise<void> {
 
   const downTimestamp = Date.now()
 
-  var ms: number = (downTimestamp - upTimestamp) // Milliseconds
-  let seconds: number = Math.floor(ms / 1_000) // Seconds
-  let minutes: number = 0
-  let hours: number = 0
-  let days: number = 0
-  let weeks: number = 0
+  // Get a nice resolved timespan with right properties
+  const span = resolveTimespanMs(downTimestamp - upTimestamp)
 
-  if (ms > 1000) {
-    ms = ms % 1_000
-  }
-
-  if (seconds > 60) {
-    minutes = Math.floor(seconds / 60)
-    seconds = seconds % 60
-  }
-
-  if (minutes > 60) {
-    hours = Math.floor(minutes / 60)
-    minutes = minutes % 60
-  }
-
-  if (hours > 24) {
-    days = Math.floor(hours / 60)
-    hours = hours % 24
-
-    // Issue a warning
-    global.log.warning(`The application ran for ${days} days! Please make sure to restart the application from time to time.`)
-  }
-
-  if (days > 7) {
-    weeks = Math.floor(days / 7)
-    days = days % 7
+  if (span.days > 0 || span.weeks > 0) {
+    global.log.warning('Zettlr has run for more than one day. Please make sure to regularly reboot your computer.')
   }
 
   // Now construct the message. Always include minutes, seconds, and milliseconds
-  let uptimeMessage: string = `${minutes} minutes, and ${seconds}.${ms} seconds`
-  if (hours > 0) uptimeMessage = hours.toString() + ' hours, ' + uptimeMessage
-  if (days > 0) uptimeMessage = days.toString() + ' days, ' + uptimeMessage
-  if (weeks > 0) uptimeMessage = weeks.toString() + ' weeks, ' + uptimeMessage
+  let uptimeMessage: string = `${span.minutes} minutes, and ${span.seconds}.${span.ms} seconds`
+  if (span.hours > 0) uptimeMessage = span.hours.toString() + ' hours, ' + uptimeMessage
+  if (span.days > 0) uptimeMessage = span.days.toString() + ' days, ' + uptimeMessage
+  if (span.weeks > 0) uptimeMessage = span.weeks.toString() + ' weeks, ' + uptimeMessage
 
   global.log.info(`Shutdown almost complete. Application uptime was: ${uptimeMessage}.`)
 
