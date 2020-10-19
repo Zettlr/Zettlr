@@ -16,16 +16,6 @@
     "repo_url": "https://api.zettlr.com/v1/releases/latest",
     "sponsors_url": "https://api.zettlr.com/v1/sponsors",
     "translation_api_url": "https://translate.zettlr.com/api/languages",
-    "additional_paths": {
-        "win32": [],
-        "linux": [
-            "/usr/bin"
-        ],
-        "macos": [
-            "/usr/local/bin",
-            "/Library/TeX/texbin"
-        ]
-    },
     "attachmentExtensions": [
       ".pdf",
       ".odt",
