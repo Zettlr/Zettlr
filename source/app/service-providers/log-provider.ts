@@ -52,7 +52,7 @@ interface LogMessage {
   details: any
 }
 
-module.exports = class LogProvider {
+export default class LogProvider {
   private readonly _logPath: string
   private readonly _log: LogMessage[]
   private _entryPointer: number

@@ -20,6 +20,7 @@ import environmentCheck from './util/environment-check'
 
 // Utility functions
 import resolveTimespanMs from './util/resolve-timespan-ms'
+import { loadI18nMain } from '../common/lang/i18n'
 
 // Developer tools
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
@@ -98,6 +99,15 @@ export async function bootApplication (): Promise<void> {
   cssProvider = new CssProvider()
   translationProvider = new TranslationProvider()
   updateProvider = new UpdateProvider()
+
+  // Initiate i18n after the config provider has definitely spun up
+  let metadata: any = loadI18nMain(global.config.get('appLang'))
+
+  // It may be that only a fallback has been provided or else. In this case we
+  // must update the config to reflect this.
+  if (metadata.tag !== global.config.get('appLang')) {
+    global.config.set('appLang', metadata.tag)
+  }
 }
 
 /**

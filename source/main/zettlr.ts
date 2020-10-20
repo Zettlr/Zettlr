@@ -24,7 +24,7 @@ import ZettlrWindow from './zettlr-window'
 import ZettlrQLStandalone from './zettlr-ql-standalone'
 import ZettlrStats from './zettlr-stats'
 import FSAL from './modules/fsal'
-import { loadI18nMain, trans, findLangCandidates } from '../common/lang/i18n'
+import { trans, findLangCandidates } from '../common/lang/i18n'
 import ignoreDir from '../common/util/ignore-dir'
 import ignoreFile from '../common/util/ignore-file'
 import isDir from '../common/util/is-dir'
@@ -108,13 +108,6 @@ export default class Zettlr {
 
     // Load available commands
     this._commands = commands.map(Command => new Command(this))
-
-    // Init translations
-    let metadata: any = loadI18nMain(global.config.get('appLang'))
-
-    // It may be that only a fallback has been provided or else. In this case we
-    // must update the config to reflect this.
-    if (metadata.tag !== global.config.get('appLang')) global.config.set('appLang', metadata.tag)
 
     // Now that the config provider is definitely set up, let's see if we
     // should copy the interactive tutorial to the documents directory.
