@@ -65,7 +65,7 @@ class ZettlrQuicklookWindow {
     ipc.on('custom-css', (evt, cnt) => {
       $('#custom-css-link').detach() // Remove any prior link
       let lnk = $('<link>').attr('rel', 'stylesheet')
-      lnk.attr('href', 'file://' + cnt + '?' + Date.now())
+      lnk.attr('href', 'safe-file://' + cnt)
       lnk.attr('type', 'text/css')
       lnk.attr('id', 'custom-css-link')
       $('head').first().append(lnk)
@@ -97,6 +97,7 @@ class ZettlrQuicklookWindow {
     // Quicklook windows open themselves automatically. We only have to indicate
     // that this thing is a standalone.
     this._ql = new ZettlrQuicklook(this, this._file)
+    console.log(this._ql)
   }
 
   _act () {

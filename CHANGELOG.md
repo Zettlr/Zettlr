@@ -10,6 +10,7 @@
 - **New Feature**: Typewriter mode. By pressing `Cmd/Ctrl+Alt+T`, you can activate the typewriter mode, which will keep the current line in the editor always centered so that you have to move your eyes less while editing a text. This also works in combination with the distraction free mode so that you can fully focus on what you're editing right at the moment.
 - **New Feature**: The sidebar (formerly attachment sidebar) is now tabbified. That means you have three distinct tabs to choose from with regard to displaying important information: the non-markdown files in your currently selected directory, the references in the current file, and the table of contents of the current file.
 - **New Feature**: When hovering over links, they now appear in a separate tooltip to click them without holding down Ctrl/Cmd.
+- **New Feature**: The QuickLook windows now share the main editor including its appearance. The same options apply for Quicklook windows as they are set in the global preferences (e.g. if you turned off image previewing, images would also not be displayed in the Quicklooks, etc).
 - Added syntax highlighting modes (with keywords):
     - **diff**: `diff`
     - **Dockerfile**: `docker`/`dockerfile`
