@@ -66,7 +66,6 @@
       "output": "release"
     },
     "afterPack": "./scripts/afterPack.js",
-    "afterSign": "./scripts/afterSign.js",
     "mac": {
       "category": "public.app-category.productivity",
       "target": "dmg",
