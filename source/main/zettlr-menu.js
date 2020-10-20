@@ -95,7 +95,7 @@ class ZettlrMenu {
         const menuItem = appMenu.getMenuItemById(payload)
 
         if (menuItem === null) {
-          global.log.error(`[Menu Provider] Could not rigger a click on item ${payload}: No item found.`)
+          global.log.error(`[Menu Provider] Could not rigger a click on item ${menuItem}: No item found.`)
           return
         }
 
@@ -300,6 +300,7 @@ class ZettlrMenu {
     mainMenu[0].submenu.push({ type: 'separator' },
       {
         label: trans('menu.quit'),
+        id: 'menu-quit',
         accelerator: 'CmdOrCtrl+Q',
         click (item, focusedWindow) {
           if (global.mainWindow) {
@@ -323,18 +324,6 @@ class ZettlrMenu {
   set () {
     const builtMenu = this._build()
     Menu.setApplicationMenu(builtMenu)
-  }
-
-  /**
-   * Instead of setting the application menu, this "pops up" the menu at the
-   * specified coordinates.
-   * @param  {integer} x The x position of the menu
-   * @param  {integer} y The y position of the menu
-   * @return {void}   Does not return.
-   */
-  popup (x = 15, y = 15) {
-    const builtMenu = this._build()
-    builtMenu.popup({ 'x': x, 'y': y })
   }
 }
 
