@@ -478,6 +478,11 @@ export default class FSAL extends EventEmitter {
       }
     }
 
+    if (this.openFiles.includes(root.hash) && root.type === DescriptorType.MDFile) {
+      // It's an open root file --> close before splicing from the tree
+      this.closeFile(root as MDFileDescriptor)
+    }
+
     this._state.filetree.splice(this._state.filetree.indexOf(root), 1)
     this.emit('fsal-state-changed', 'filetree')
     this._watchdog.unwatch(root.path)
