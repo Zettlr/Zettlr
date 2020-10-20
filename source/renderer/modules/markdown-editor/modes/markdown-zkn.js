@@ -78,21 +78,37 @@
           state.startOfFile = false
         }
 
-        // Second: If we don't have a frontmatter, escaping is possible.
-        if (state.hasJustEscaped) {
-          state.hasJustEscaped = false // Needs to be reset always
-          if (!stream.eol()) stream.next()
-          return null // No highlighting for escaped characters
-        }
-
-        // Third: Directly afterwards check for inline code or comments, so
+        // Directly afterwards check for inline code or comments, so
         // that stuff such as zkn-links are not highlighted:
         if (state.mdState.overlay.code || state.mdState.overlay.codeBlock || state.mdState.baseCur === 'comment') {
           return mdMode.token(stream, state.mdState)
         }
 
-        // Fourth: Handle block equations.
-        // ATTENTION: We have to check for inEquation first, because
+        // In everything that follows, escpaing things is allowed and possible.
+        // By immediately returning and checking right at the beginning of the
+        // method, we can prevent other modes from triggering.
+        if (stream.match('\\')) {
+          if (!stream.eol()) {
+            // Only set the escaped state if the backslash
+            // did not occur at the end of a line
+            state.hasJustEscaped = true
+          }
+          return 'escape-char'
+        }
+
+        // Then check if we have just escaped, and, if so, return an empty class
+        // which will also (intentionally) break any rendering that the next()
+        // char would have initiated.
+        if (state.hasJustEscaped) {
+          state.hasJustEscaped = false // Needs to be reset always
+          if (!stream.eol()) {
+            stream.next()
+            return null // No highlighting for escaped characters
+          } // Else: It might be sol(), but don't escape
+        }
+
+        // Then handle block equations.
+        // NOTE: We have to check for inEquation first, because
         // otherwise, stream.match() will ALWAYS be executed, hence
         // falsifying the otherwise correct else-if!!
         if (stream.sol() && !state.inEquation && stream.match(blockMathRE)) {
@@ -108,14 +124,6 @@
           stream.skipToEnd()
           return 'comment'
         }
-
-        // In everything that follows, escpaing things is allowed and possible.
-        // By immediately returning and checking right at the beginning of the
-        // method, we can prevent other modes from triggering.
-        if (stream.match('\\')) {
-          state.hasJustEscaped = true
-          return 'escape-char'
-        } // This is here because escaping link-endings is a thing. Maybe. For some.
 
         // Fifth: Are we in a link?
         if (state.inZknLink) {
