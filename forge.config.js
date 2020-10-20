@@ -42,7 +42,7 @@ module.exports = {
             },
             {
               'html': './source/print/index.htm',
-              'js': './source/print/zettlr-print-window.js',
+              'js': './source/print/zettlr-print-window.ts',
               'name': 'print'
             },
             {
@@ -52,7 +52,7 @@ module.exports = {
             },
             {
               'html': './source/quicklook/index.htm',
-              'js': './source/quicklook/zettlr-quicklook-window.js',
+              'js': './source/quicklook/zettlr-quicklook-window.ts',
               'name': 'quicklook'
             }
           ]

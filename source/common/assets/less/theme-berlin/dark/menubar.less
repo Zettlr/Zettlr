@@ -1,0 +1,33 @@
+// Styles for the menubar (for Windows and Linux)
+
+#menubar {
+  color: white;
+  span.top-level-item {
+    transition: 0.5s background-color ease;
+    &:hover { background-color: #666; }
+  }
+}
+
+div#submenu {
+  border: 1px solid #666;
+  background-color: #333;
+  color: #eee;
+
+  // Secondary sub menu
+  div.secondary-menu div.submenu-item {
+    background-color: #666;
+  }
+
+  div.submenu-item {
+    transition: 0.5s background-color ease;
+
+    div.after-element { color: #aaa; }
+
+    &.disabled { color: #aaa; }
+
+    // Separators are obviously very small
+    &.separator { background-color: #666; }
+
+    &:not(.separator):not(.disabled):hover { background-color: #999; }
+  }
+}

@@ -15,6 +15,7 @@
 
 const ZettlrDialog = require('./zettlr-dialog.js')
 const CodeMirror = require('codemirror')
+const { ipcRenderer } = require('electron')
 
 class CustomCSS extends ZettlrDialog {
   constructor () {
@@ -48,29 +49,12 @@ class CustomCSS extends ZettlrDialog {
 
     // Activate the sender
     $('div.dialog #save').click((e) => {
-      global.ipc.send('set-custom-css', this._cm.getValue(), (ret) => {
-        // TODO error handling
-        if (ret) {
-          let customCSS = $('#custom-css-link')
-          if (customCSS.length === 0) {
-            // We have to create the element
-            global.ipc.send('get-custom-css-path', {}, (ret) => {
-              let lnk = $('<link>').attr('rel', 'stylesheet')
-              lnk.attr('href', 'safe-file://' + ret)
-              lnk.attr('type', 'text/css')
-              lnk.attr('id', 'custom-css-link')
-              $('head').first().append(lnk)
-            })
-          } else {
-            // The element is already there. We need to simply re-use the CSS
-            // using a cachebreaker
-            customCSS = customCSS.first()
-            let file = customCSS.attr('href').split('?')[0]
-            customCSS.attr('href', file + '?' + Date.now())
-          }
-          this.close()
-        }
+      ipcRenderer.send('css-provider', {
+        command: 'set-custom-css',
+        payload: this._cm.getValue()
       })
+
+      this.close()
     })
   }
 }

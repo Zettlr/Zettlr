@@ -14,8 +14,10 @@
 
 import path from 'path'
 import fs from 'fs'
-import { app } from 'electron'
+import { app, ipcMain } from 'electron'
 import EventEmitter from 'events'
+
+import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
 
 export default class CssProvider extends EventEmitter {
   private readonly _filePath: string
@@ -42,6 +44,20 @@ export default class CssProvider extends EventEmitter {
       getPath: () => { return this.getPath() },
       set: (newContent) => { return this.set(newContent) }
     }
+
+    // Send the Custom CSS Path to whomever requires it
+    ipcMain.on('css-provider', (event, message) => {
+      const { command } = message
+      if (command === 'get-custom-css-path') {
+        event.sender.send('css-provider', {
+          command: 'get-custom-css-path',
+          payload: this._filePath
+        })
+      } else if (command === 'set-custom-css') {
+        const { payload } = message
+        this.set(payload)
+      }
+    })
   }
 
   /**
@@ -77,6 +93,10 @@ export default class CssProvider extends EventEmitter {
     try {
       fs.writeFileSync(this._filePath, newContent)
       this.emit('update', this._filePath)
+      broadcastIpcMessage('css-provider', {
+        command: 'get-custom-css-path',
+        payload: this._filePath
+      })
       return true
     } catch (e) {
       return false

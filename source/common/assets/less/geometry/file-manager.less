@@ -79,3 +79,8 @@
       right: auto;
     }
 }
+
+// If the menu bar is shown, pull down the file manager
+body.show-menubar #file-manager {
+  top: @toolbar-height + @menubar-height;
+}

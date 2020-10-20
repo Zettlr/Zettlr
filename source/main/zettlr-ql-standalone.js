@@ -54,7 +54,7 @@ class ZettlrQLStandalone {
         // Zettlr needs all the node features, so in preparation for Electron
         // 5.0 we'll need to explicitly request it.
         nodeIntegration: true,
-        additionalArguments: [ file.hash.toString(), global.config.get('darkTheme').toString(), global.config.get('display.theme') ]
+        additionalArguments: [file.hash.toString()]
       },
       backgroundColor: '#fff',
       frame: false, // No frame for quicklook windows. Mainly prevents the menu bar to be shown on win+linux
@@ -62,17 +62,25 @@ class ZettlrQLStandalone {
       defaultEncoding: 'utf8' // Why the hell does this default to ISO?
     }
 
-    // On macOS create a chromeless window with the window controls.
-    if (process.platform === 'darwin') {
-      winConf.titleBarStyle = 'hiddenInset'
-    }
+    const shouldUseNativeAppearance = global.config.get('window.nativeAppearance')
 
-    // Remove the frame on Linux and Windows
-    if (process.platform === 'linux' || process.platform === 'win32') {
+    // If the user wants to use native appearance, this means to use a frameless
+    // window with the traffic lights slightly inset.
+    if (process.platform === 'darwin' && shouldUseNativeAppearance) {
+      winConf.titleBarStyle = 'hiddenInset'
+    } else if (process.platform === 'darwin' && !shouldUseNativeAppearance) {
+      // Now we're simply creating a frameless window without everything.
       winConf.frame = false
     }
 
-    // Application icon for Linux. Cannot be not embedded in the executable.
+    // If the user wants to use non-native appearance on non-macOS platforms,
+    // this means we need a frameless window (so that the renderer instead can
+    // display the menu and window controls).
+    if (process.platform !== 'darwin' && !shouldUseNativeAppearance) {
+      winConf.frame = false
+    }
+
+    // Application icon for Linux. Cannot not be embedded in the executable.
     if (process.platform === 'linux') {
       winConf.icon = path.join(__dirname, 'assets/icons/128x128.png')
     }

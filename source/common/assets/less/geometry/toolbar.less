@@ -114,12 +114,17 @@
     }
 }
 
-// For macOS, we need to add some more margin
-body.darwin #toolbar {
+// If the menu bar is shown, pull down the toolbar
+body.show-menubar #toolbar {
+    top: @menubar-height;
+}
+
+// For macOS, we need to add some more margin when the native appearance is used
+body.darwin:not(.show-window-controls) #toolbar {
   padding-left: 70px;
 }
 
 // For Windows and Linux the same, only on the other side
-body.win32 #toolbar, body.linux #toolbar {
+body.show-window-controls:not(.show-menubar) #toolbar {
   padding-right: 140px; // Windows window controls are ... huge.
 }

@@ -82,9 +82,18 @@
     }
 }
 
-// Custom margins for different platforms
-body {
-  &.darwin .quicklook-standalone .title, &.darwin .print-window .title { padding-left: 70px; }
-  &.win32 .quicklook-standalone .title, &.win32 .print-window .title { padding-right: 140px; }
-  &.linux .quicklook-standalone .title, &.linux .print-window .title { padding-right: 100px; }
+// When the menubar is shown, adapt the sizes of the different elements accordingly
+body.show-menubar {
+  .quicklook-standalone .title, .print-window .title { top: @menubar-height; }
+  .quicklook-standalone #editor { top: @toolbar-height + @menubar-height; }
+}
+
+body.darwin:not(.show-window-controls) {
+  .quicklook-standalone .title, .print-window .title { padding-left: 70px; }
+}
+
+body.show-window-controls:not(.show-menubar) {
+  .quicklook-standalone .title, .print-window .title {
+    padding-right: 140px;
+  }
 }

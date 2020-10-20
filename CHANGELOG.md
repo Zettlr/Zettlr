@@ -11,6 +11,7 @@
 - **New Feature**: The sidebar (formerly attachment sidebar) is now tabbified. That means you have three distinct tabs to choose from with regard to displaying important information: the non-markdown files in your currently selected directory, the references in the current file, and the table of contents of the current file.
 - **New Feature**: When hovering over links, they now appear in a separate tooltip to click them without holding down Ctrl/Cmd.
 - **New Feature**: The QuickLook windows now share the main editor including its appearance. The same options apply for Quicklook windows as they are set in the global preferences (e.g. if you turned off image previewing, images would also not be displayed in the Quicklooks, etc).
+- **New Feature**: Now you have an additional option in the "Advanced" preferences to choose between a "native" appearance of all Zettlr Windows (that is, a frameless window with inset traffic lights on macOS, and standard window decorations on Windows and Linux) or a custom built-in appearance (that is, for all platforms a frameless window with custom drawn menu and window control buttons, which mimick the Windows 10 design).
 - Added syntax highlighting modes (with keywords):
     - **diff**: `diff`
     - **Dockerfile**: `docker`/`dockerfile`
@@ -124,6 +125,12 @@
 - Provide a test library, which you can load to debug citeproc-related issues and test the provider.
 - Converted the CSS Provider to TypeScript.
 - Converted the Log Provider to TypeScript.
+- Migrated the Quicklook and Print window classes to Typescript.
+- Added a utility function to quickly broadcast arbitrary IPC messages to all open Zettlr windows.
+- Migrated many functionalities that are important for all windows on the renderer side to a dedicated TypeScript module (`register-window`).
+- Divided the menu template into templates for macOS and Windows (+ all other platforms).
+- Simplified the menu building process.
+- Added classes and event listeners to show custom built menus within frameless BrowserWindow instances.
 
 # 1.7.5
 

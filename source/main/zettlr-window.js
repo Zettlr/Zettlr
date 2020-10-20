@@ -60,6 +60,7 @@ class ZettlrWindow {
     let winX = global.config.get('window.x')
     let winY = global.config.get('window.y')
     let winMax = global.config.get('window.max')
+    const shouldUseNativeAppearance = global.config.get('window.nativeAppearance')
 
     // Sanity checks
     // NOTE: We cannot require the screen module on module load b/c when this
@@ -90,17 +91,23 @@ class ZettlrWindow {
       defaultEncoding: 'utf8' // Why the hell does this default to ISO?
     }
 
-    // On macOS create a chromeless window with the window controls.
-    if (process.platform === 'darwin') {
+    // If the user wants to use native appearance, this means to use a frameless
+    // window with the traffic lights slightly inset.
+    if (process.platform === 'darwin' && shouldUseNativeAppearance) {
       winConf.titleBarStyle = 'hiddenInset'
+    } else if (process.platform === 'darwin' && !shouldUseNativeAppearance) {
+      // Now we're simply creating a frameless window without everything.
+      winConf.frame = false
     }
 
-    // Remove the frame on Windows
-    if (process.platform === 'win32') winConf.frame = false
+    // If the user wants to use non-native appearance on non-macOS platforms,
+    // this means we need a frameless window (so that the renderer instead can
+    // display the menu and window controls).
+    if (process.platform !== 'darwin' && !shouldUseNativeAppearance) {
+      winConf.frame = false
+    }
 
-    // On Linux we'll fall back to how the windows should look
-
-    // Application icon for Linux. Cannot be not embedded in the executable.
+    // Application icon for Linux. Cannot not be embedded in the executable.
     if (process.platform === 'linux') {
       winConf.icon = path.join(__dirname, 'assets/icons/128x128.png')
     }

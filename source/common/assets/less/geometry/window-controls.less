@@ -5,17 +5,11 @@
  */
 
 // Hide all controls initially
-.linux-window-controls,
-.windows-window-controls {
+.window-controls {
   cursor: default;
   display: none;
   -webkit-app-region: no-drag;
-}
-
- body.win32 {
-   .windows-window-controls {
-     display: block;
-     position: absolute;
+  position: absolute;
      top: 0;
      right: 0;
 
@@ -45,5 +39,18 @@
          svg polygon { fill: #ffffff; }
        }
      }
-   }
+}
+
+ body.show-window-controls .window-controls {
+    display: block;
+}
+
+body.is-maximised .window-controls .resize {
+  .maximise-svg { display: initial; }
+  .fullscreen-svg { display: none; }
+}
+
+body:not(.is-maximised) .window-controls .resize {
+  .maximise-svg { display: none; }
+  .fullscreen-svg { display: initial; }
 }

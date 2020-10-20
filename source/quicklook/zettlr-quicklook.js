@@ -16,7 +16,6 @@
 const makeSearchRegEx = require('../common/util/make-search-regex')
 const { trans } = require('../common/lang/i18n')
 const MarkdownEditor = require('../renderer/modules/markdown-editor')
-const { ipcRenderer } = require('electron')
 
 const CodeMirror = require('codemirror')
 
@@ -42,13 +41,6 @@ class ZettlrQuicklook {
     this._currentLocalSearch = '' // Used to not re-start a search everytime
     this._markedResults = [] // Stores marked results in case of a search
     this._scrollbarAnnotations = null // Contains an object to mark search results on the scrollbar
-
-    // Inject the config object to enable retrieval of config options
-    global.config = {
-      get: (key) => {
-        return ipcRenderer.sendSync('config-get', key)
-      }
-    }
 
     this._load()
 

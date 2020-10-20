@@ -1,15 +1,6 @@
 {
     "toolbar": [
         {
-          "role": "button",
-          "class": "menu-popup",
-          "context": [ "win32" ],
-          "command": "win-menu",
-          "content": "{ 'x': 15, 'y': 15 }",
-          "title": "toolbar.show_menu",
-          "icon": "bars"
-        },
-        {
             "role": "button",
             "class": "dir-open",
             "command": "dir-open",

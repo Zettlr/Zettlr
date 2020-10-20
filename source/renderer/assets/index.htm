@@ -9,6 +9,8 @@
 </head>
 <body>
     <div id="container">
+      <!-- This is the menu bar -- only visible on Windows & Linux -->
+      <div id="menubar"></div>
 
         <!-- Main toolbar -->
         <div id="toolbar">
@@ -31,13 +33,17 @@
           https://github.com/sidneys/electron-titlebar-windows (License: MIT)
         -->
 
-        <div class="windows-window-controls">
+        <div class="window-controls">
           <div class="minimise">
             <svg x="0px" y="0px" viewBox="0 0 10 1">
               <rect fill="#000000" width="10" height="1"></rect>
             </svg>
           </div>
           <div class="resize">
+            <svg class="fullscreen-svg" x="0px" y="0px" viewBox="0 0 10 10">
+              <path fill="#000000" d="M 0 0 L 0 10 L 10 10 L 10 0 L 0 0 z M 1 1 L 9 1 L 9 9 L 1 9 L 1 1 z "/>
+            </svg>
+
             <svg class="maximise-svg" x="0px" y="0px" viewBox="0 0 10 10">
               <mask id="Mask">
                 <rect fill="#FFFFFF" width="10" height="10"></rect>

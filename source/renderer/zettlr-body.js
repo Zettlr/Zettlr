@@ -23,7 +23,6 @@ require('jquery-ui/ui/widgets/sortable')
 
 const ZettlrCon = require('./zettlr-context.js')
 const ZettlrNotification = require('./zettlr-notification.js')
-const ThemeHandler = require('./../common/theme-handler').default
 
 // Dialogs
 const StatsDialog = require('./dialog/stats.js')
@@ -60,8 +59,6 @@ class ZettlrBody {
     this._n = [] // Holds all notifications currently displaying
     // Holds the current popup. Prevents multiple popups from appearing.
     this._currentPopup = null
-    // Handles switching between themes
-    this._themeHandler = new ThemeHandler()
 
     // This object caches the values of search and replace value, so they stay
     // persistent on a per-session basis.
@@ -130,28 +127,6 @@ class ZettlrBody {
     // Inject a global notify and notifyError function
     global.notify = (msg) => { this.notify(msg) }
     global.notifyError = (msg) => { this.notifyError(msg) }
-
-    // Afterwards, activate the event listeners of the window controls
-    $('.windows-window-controls .minimise').click((e) => {
-      global.ipc.send('win-minimise')
-    })
-    $('.windows-window-controls .resize').click((e) => {
-      global.ipc.send('win-maximise')
-    })
-    $('.windows-window-controls .close').click((e) => {
-      global.ipc.send('win-close')
-    })
-  }
-
-  /**
-   * Is called by the app on a configuration change so that the body can make
-   * necessary adjustments.
-   */
-  configChange () {
-    // On config change, change the theme according to the settings
-    // This is also invoked on initial load
-    let newThemeName = global.config.get('display.theme')
-    this._themeHandler.switchTo(newThemeName)
   }
 
   /**
@@ -437,17 +412,6 @@ class ZettlrBody {
   notifyError (message) {
     let d = new ErrorDialog()
     d.init(message).open()
-  }
-
-  /**
-   * Set the theme depending of a truthy or falsy value of val.
-   * @param  {Boolean} val Either true or false.
-   * @return {ZettlrBody}     Chainability.
-   */
-  darkTheme (val) {
-    if (val && !$('body').hasClass('dark')) $('body').addClass('dark')
-    else if (!val) $('body').removeClass('dark')
-    return this
   }
 
   /**

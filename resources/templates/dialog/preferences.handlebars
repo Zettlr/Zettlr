@@ -889,6 +889,13 @@
             </label>
             <label for="enableRMarkdown">{{i18n "dialog.preferences.enable_rmarkdown"}}</label>
           </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="window.nativeAppearance" value="yes" id="window.nativeAppearance" {{#if window.nativeAppearance}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="window.nativeAppearance">{{i18n "dialog.preferences.use_native_appearance"}}</label>
+          </div>
         </div>
         <div class="box-right">
           <p>{{i18n "dialog.preferences.attachments_info"}}</p>

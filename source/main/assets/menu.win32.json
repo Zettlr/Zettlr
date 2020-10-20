@@ -1,50 +1,16 @@
 {
-  "app": {
-    "label": "Zettlr",
-    "submenu": [
-      {
-        "label": "menu.about",
-        "role": "about"
-      },
-      {
-        "mixin": "darwin_prefs"
-      },
-      {
-        "type": "separator"
-      },
-      {
-        "label": "menu.services",
-        "role": "services",
-        "submenu": []
-      },
-      {
-        "type": "separator"
-      },
-      {
-        "label": "menu.hide",
-        "role": "hide"
-      },
-      {
-        "label": "menu.hide_others",
-        "role": "hideothers"
-      },
-      {
-        "label": "menu.unhide",
-        "role": "unhide"
-      }
-    ]
-  },
   "file": {
+    "id": "file-menu",
     "label": "menu.labels.file",
     "submenu": [
       {
         "label": "menu.new_file",
-        "accelerator": "CmdOrCtrl+N",
+        "accelerator": "Ctrl+N",
         "command": "file-new"
       },
       {
         "label": "menu.new_dir",
-        "accelerator": "CmdOrCtrl+Shift+N",
+        "accelerator": "Ctrl+Shift+N",
         "command": "dir-new"
       },
       {
@@ -52,12 +18,12 @@
       },
       {
         "label": "menu.open",
-        "accelerator": "CmdOrCtrl+O",
+        "accelerator": "Ctrl+O",
         "command": "dir-open"
       },
       {
         "label": "menu.save",
-        "accelerator": "CmdOrCtrl+S",
+        "accelerator": "Ctrl+S",
         "command": "file-save"
       },
       {
@@ -73,12 +39,12 @@
       },
       {
         "label": "menu.export",
-        "accelerator": "CmdOrCtrl+E",
+        "accelerator": "Ctrl+E",
         "command": "export"
       },
       {
         "label": "menu.print",
-        "accelerator": "CmdOrCtrl+P",
+        "accelerator": "Ctrl+P",
         "command": "print"
       },
       {
@@ -97,12 +63,12 @@
       },
       {
         "label": "menu.rename_file",
-        "accelerator": "CmdOrCtrl+R",
+        "accelerator": "Ctrl+R",
         "command": "file-rename"
       },
       {
         "label": "menu.rename_dir",
-        "accelerator": "CmdOrCtrl+Shift+R",
+        "accelerator": "Ctrl+Shift+R",
         "command": "dir-rename"
       },
       {
@@ -110,26 +76,36 @@
       },
       {
         "label": "menu.delete_file",
-        "accelerator": {
-          "darwin": "Cmd+Backspace",
-          "other": "Delete"
-        },
+        "accelerator": "Delete",
         "command": "file-delete"
       },
       {
         "label": "menu.delete_dir",
-        "accelerator": {
-          "darwin": "Cmd+Shift+Backspace",
-          "other": "Ctrl+Delete"
-        },
+        "accelerator": "Ctrl+Delete",
         "command": "dir-delete"
       },
       {
-        "mixin": "other_prefs"
+        "label": "menu.preferences",
+        "accelerator": "Ctrl+,",
+        "command": "open-preferences"
+      },
+      {
+        "label": "menu.pdf_preferences",
+        "accelerator": "Ctrl+Alt+,",
+        "command": "open-pdf-preferences"
+      },
+      {
+        "label": "menu.tags",
+        "command": "open-tags-preferences"
+      },
+      {
+        "label": "menu.custom_css",
+        "command": "open-custom-css"
       }
     ]
   },
   "edit": {
+    "id": "edit-menu",
     "label": "menu.labels.edit",
     "submenu": [
       {
@@ -153,7 +129,7 @@
       },
       {
         "label": "menu.copy_html",
-        "accelerator": "CmdOrCtrl+Alt+C",
+        "accelerator": "Ctrl+Alt+C",
         "command": "copy-as-html"
       },
       {
@@ -162,7 +138,7 @@
       },
       {
         "label": "menu.paste_plain",
-        "accelerator": "CmdOrCtrl+Shift+V",
+        "accelerator": "Ctrl+Shift+V",
         "command": "paste-as-plain"
       },
       {
@@ -174,12 +150,12 @@
       },
       {
         "label": "menu.find_file",
-        "accelerator": "CmdOrCtrl+F",
+        "accelerator": "Ctrl+F",
         "command": "file-find"
       },
       {
         "label": "menu.find_dir",
-        "accelerator": "CmdOrCtrl+Shift+F",
+        "accelerator": "Ctrl+Shift+F",
         "command": "dir-find"
       },
       {
@@ -187,46 +163,44 @@
       },
       {
         "label": "menu.generate_id",
-        "accelerator": "CmdOrCtrl+L",
+        "accelerator": "Ctrl+L",
         "command": "insert-id"
       },
       {
         "label": "menu.copy_id",
-        "accelerator": "CmdOrCtrl+Shift+L",
+        "accelerator": "Ctrl+Shift+L",
         "command": "copy-current-id"
-      },
-      {
-        "mixin": "darwin_speech"
       }
     ]
   },
   "view": {
+    "id": "view-menu",
     "label": "menu.labels.view",
     "submenu": [
       {
         "label": "menu.toggle_theme",
-        "accelerator": "CmdOrCtrl+Alt+L",
+        "accelerator": "Ctrl+Alt+L",
         "type": "checkbox",
         "checked": "darkTheme",
         "command": "toggle-theme"
       },
       {
         "label": "menu.toggle_file_meta",
-        "accelerator": "CmdOrCtrl+Alt+S",
+        "accelerator": "Ctrl+Alt+S",
         "type": "checkbox",
         "checked": "fileMeta",
         "command": "toggle-file-meta"
       },
       {
         "label": "menu.toggle_distraction_free",
-        "accelerator": "CmdOrCtrl+J",
+        "accelerator": "Ctrl+J",
         "type": "checkbox",
         "checked": "null",
         "command": "toggle-distraction-free"
       },
       {
         "label": "menu.toggle_typewriter_mode",
-        "accelerator": "CmdOrCtrl+Alt+T",
+        "accelerator": "Ctrl+Alt+T",
         "type": "checkbox",
         "checked": "null",
         "command": "toggle-typewriter-mode"
@@ -236,12 +210,12 @@
       },
       {
         "label": "menu.toggle_filemanager",
-        "accelerator": "CmdOrCtrl+!",
+        "accelerator": "Ctrl+!",
         "command": "toggle-file-manager"
       },
       {
         "label": "menu.toggle_sidebar",
-        "accelerator": "CmdOrCtrl+?",
+        "accelerator": "Ctrl+?",
         "command": "toggle-sidebar"
       },
       {
@@ -249,17 +223,17 @@
       },
       {
         "label": "menu.reset_zoom",
-        "accelerator": "CmdOrCtrl+0",
+        "accelerator": "Ctrl+0",
         "command": "zoom-reset"
       },
       {
         "label": "menu.zoom_in",
-        "accelerator": "CmdOrCtrl+Plus",
+        "accelerator": "Ctrl+Plus",
         "command": "zoom-in"
       },
       {
         "label": "menu.zoom_out",
-        "accelerator": "CmdOrCtrl+-",
+        "accelerator": "Ctrl+Minus",
         "command": "zoom-out"
       },
       {
@@ -271,31 +245,52 @@
       }
     ]
   },
+  "debug": {
+    "id": "debug-menu",
+    "label": "menu.labels.debug",
+    "submenu": [
+      {
+        "label": "menu.inspect_clipboard",
+        "command": "inspect-clipboard"
+      },
+      {
+        "label": "menu.reload",
+        "accelerator": "F5",
+        "id": "reloadWindow"
+      },
+      {
+        "label": "menu.toggle_devtools",
+        "accelerator": "Ctrl+Alt+I",
+        "id": "toggleDevTools"
+      },
+      {
+        "label": "menu.open_logs",
+        "accelerator": "Ctrl+Alt+Shift+L",
+        "id": "openLogViewer"
+      }
+    ]
+  },
   "window": {
+    "id": "window-menu",
     "label": "menu.labels.window",
     "role": "window",
     "submenu": [
       {
         "label": "menu.win_minimize",
-        "accelerator": "CmdOrCtrl+M",
+        "accelerator": "Ctrl+M",
         "role": "minimize"
       },
       {
         "label": "menu.win_close",
-        "accelerator": "CmdOrCtrl+Shift+W",
+        "accelerator": "Ctrl+Shift+W",
         "role": "close"
-      },
-      {
-        "label": "menu.all_front",
-        "platform": ["darwin"],
-        "role": "front"
       },
       {
         "type": "separator"
       },
       {
         "label": "menu.tab_close",
-        "accelerator": "CmdOrCtrl+W",
+        "accelerator": "Ctrl+W",
         "command": "attempt-close-tab"
       },
       {
@@ -311,6 +306,7 @@
     ]
   },
   "help": {
+    "id": "help-menu",
     "label": "menu.labels.help",
     "role": "help",
     "submenu": [
@@ -342,72 +338,6 @@
       {
         "label": "menu.update",
         "command": "update-check"
-      }
-    ]
-  },
-  "debug": {
-    "label": "menu.labels.debug",
-    "submenu": [
-      {
-        "label": "menu.inspect_clipboard",
-        "command": "inspect-clipboard"
-      },
-      {
-        "label": "menu.reload",
-        "accelerator": "F5",
-        "id": "reloadWindow"
-      },
-      {
-        "label": "menu.toggle_devtools",
-        "accelerator": "CmdOrCtrl+Alt+I",
-        "id": "toggleDevTools"
-      },
-      {
-        "label": "menu.open_logs",
-        "accelerator": "CmdOrCtrl+Alt+Shift+L",
-        "id": "openLogViewer"
-      }
-    ]
-  },
-  "mixin_preferences": {
-    "submenu": [
-      {
-        "label": "menu.preferences",
-        "accelerator": "CmdOrCtrl+,",
-        "command": "open-preferences"
-      },
-      {
-        "label": "menu.pdf_preferences",
-        "accelerator": "CmdOrCtrl+Alt+,",
-        "command": "open-pdf-preferences"
-      },
-      {
-        "label": "menu.tags",
-        "command": "open-tags-preferences"
-      },
-      {
-        "label": "menu.custom_css",
-        "command": "open-custom-css"
-      }
-    ]
-  },
-  "mixin_speech": {
-    "submenu": [
-      {
-        "type": "separator"
-      },
-      {
-        "label": "menu.speech",
-        "submenu": [
-          {
-            "label": "menu.start_speaking",
-            "role": "startspeaking"
-          },
-          {
-            "label": "menu.stop_speaking",
-            "role": "stopspeaking"
-          }
-        ]
       }
     ]
   }

@@ -96,6 +96,11 @@
     .katex { font-size: 1.1em; }
   }
 
+// If the menu bar is shown, pull down the editor
+body.show-menubar #editor {
+  top: @toolbar-height + @menubar-height;
+}
+
 
 // CodeMirror fullscreen
 .CodeMirror-fullscreen {

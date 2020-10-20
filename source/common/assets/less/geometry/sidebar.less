@@ -84,3 +84,8 @@
       div.toc-entry { flex-grow: 3; }
     }
 }
+
+// If the menu bar is shown, pull down the sidebar
+body.show-menubar #sidebar {
+  top: @toolbar-height + @menubar-height;
+}

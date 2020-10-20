@@ -47,6 +47,40 @@ class ZettlrIPC {
       event.returnValue = global.config.set(key, value)
     })
 
+    // Listen to window commands
+    ipc.on('window-controls', (event, command) => {
+      const callingWindow = BrowserWindow.fromWebContents(event.sender)
+
+      if (callingWindow === null) return
+
+      switch (command) {
+        // Window controls actions can be send either as callback IPC calls or as
+        // normals (which is why they are present both in runCall and handleEvent)
+        case 'win-maximise':
+          if (callingWindow.isMaximized()) {
+            callingWindow.unmaximize()
+          } else {
+            callingWindow.maximize()
+          }
+          event.sender.send('window-controls', {
+            command: 'win-size-changed',
+            payload: callingWindow.isMaximized()
+          })
+          break
+        case 'win-minimise':
+          callingWindow.minimize()
+          break
+        case 'win-close':
+          callingWindow.close()
+          break
+        case 'get-maximised-status':
+          event.sender.send('window-controls', {
+            command: 'get-maximised-status',
+            payload: callingWindow.isMaximized()
+          })
+      }
+    })
+
     // Beginn listening to messages
     ipc.on('message', (event, arg) => {
       // We always need a command
@@ -85,12 +119,6 @@ class ZettlrIPC {
         global.application.getFile(QLFile).then(file => {
           event.sender.send('file', file)
         })
-        return
-      }
-
-      if (arg.command === 'get-custom-css-path') {
-        // The main window's calls will be intercepted by having a cypher previously.
-        event.sender.send('custom-css', global.css.getPath())
         return
       }
 
@@ -354,27 +382,6 @@ class ZettlrIPC {
     // We received a new event and need to handle it.
 
     switch (cmd) {
-      // Window controls actions can be send either as callback IPC calls or as
-      // normals (which is why they are present both in runCall and handleEvent)
-      case 'win-maximise':
-        if (BrowserWindow.getFocusedWindow()) {
-          // Implements maximise-toggling for windows
-          if (BrowserWindow.getFocusedWindow().isMaximized()) {
-            BrowserWindow.getFocusedWindow().unmaximize()
-          } else {
-            BrowserWindow.getFocusedWindow().maximize()
-          }
-        }
-        break
-
-      case 'win-minimise':
-        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().minimize()
-        break
-
-      case 'win-close':
-        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().close()
-        break
-
       // We should show the askFile dialog to the user and return its result.
       case 'request-files':
         // The client only can choose what and how much it wants to get
@@ -397,12 +404,9 @@ class ZettlrIPC {
       case 'get-custom-css':
         return global.css.get()
 
-      // Returns the custom CSS's file name
-      case 'get-custom-css-path':
-        return global.css.getPath()
-
       // Updates the file contents
       case 'set-custom-css':
+        console.log('setting custom css', arg)
         return global.css.set(arg)
 
       default:

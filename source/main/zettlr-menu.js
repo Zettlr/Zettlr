@@ -12,10 +12,26 @@
 * END HEADER
 */
 
-const { Menu } = require('electron')
+const { Menu, ipcMain } = require('electron')
 const electron = require('electron')
 const app = electron.app
 const { trans } = require('../common/lang/i18n.js')
+
+const BLUEPRINTS = {
+  // Currently we ship two different sets of menu items -- one for macOS, and
+  // one for all other platforms. However, this setup enables us to in the
+  // future fulfill more platforms' special needs, if it's necessary.
+  win32: require('./assets/menu.win32.json'),
+  linux: require('./assets/menu.win32.json'),
+  darwin: require('./assets/menu.darwin.json'),
+  aix: require('./assets/menu.win32.json'),
+  android: require('./assets/menu.win32.json'),
+  freebsd: require('./assets/menu.win32.json'),
+  openbsd: require('./assets/menu.win32.json'),
+  sunos: require('./assets/menu.win32.json'),
+  cygwin: require('./assets/menu.win32.json'),
+  netbsd: require('./assets/menu.win32.json')
+}
 
 /**
 * This class generates the menu based upon the menu.tpl.json as well as additional
@@ -28,14 +44,97 @@ class ZettlrMenu {
   */
   constructor (parent) {
     this._window = parent
-    // Load the blueprint
-    this._blueprint = require('./assets/menu.tpl.json')
-    this._prebuilt = null
+    // This array holds the top-level menu items so that each renderer can
+    // easily request them
+    this._topLevelMenuItems = []
 
     // Begin listening to configuration update events that announce a change in
     // the recent docs list so that we can make sure the menu is always updated.
     global.recentDocs.on('update', () => { this.set() })
     global.config.on('update', () => { this.set() })
+
+    ipcMain.on('menu-provider', (event, message) => {
+      const { command } = message
+
+      if (command === 'get-top-level-items') {
+        event.sender.webContents.send('menu-provider', {
+          command: 'get-top-level-items',
+          payload: this._topLevelMenuItems
+        })
+      } else if (command === 'get-submenu') {
+        const { payload } = message // Payload contains the menu ID
+        const appMenu = Menu.getApplicationMenu()
+        if (appMenu === null) {
+          global.log.error(`[Menu Provider] Could not provide requested submenu for ID ${payload}: No menu set.`)
+          return
+        }
+
+        const menuItem = appMenu.getMenuItemById(payload)
+
+        if (menuItem === null) {
+          global.log.error(`[Menu Provider] Could not provide submenu: Menu Item ${payload} not found.`)
+          return
+        }
+
+        event.sender.webContents.send('menu-provider', {
+          command: 'get-submenu',
+          // We need to ensure to have a serializable submenu
+          // (containing only labels and IDs)
+          payload: this._makeItemSerializable(menuItem).submenu,
+          menuItemId: payload // Attach the original menu item ID for easier access in the renderer
+        })
+      } else if (command === 'click-menu-item') {
+        const { payload } = message
+
+        const appMenu = Menu.getApplicationMenu()
+        if (appMenu === null) {
+          global.log.error(`[Menu Provider] Could not trigger a click on item ${payload}: No menu set.`)
+          return
+        }
+
+        const menuItem = appMenu.getMenuItemById(payload)
+
+        if (menuItem === null) {
+          global.log.error(`[Menu Provider] Could not rigger a click on item ${payload}: No item found.`)
+          return
+        }
+
+        // And now trigger a click!
+        menuItem.click()
+      }
+    })
+  }
+
+  /**
+   * Turns a MenuItem into a serializable metadata object for sending through IPC
+   *
+   * @param   {MenuItem}  menuItem  The menu item to serialize
+   *
+   * @return  {any}            The serialized item
+   */
+  _makeItemSerializable (menuItem) {
+    let serializableItem = {
+      label: menuItem.label,
+      id: menuItem.id,
+      type: menuItem.type,
+      accelerator: menuItem.accelerator,
+      enabled: menuItem.enabled
+    }
+
+    // Also indicate checked-status
+    if ([ 'checkbox', 'radio' ].includes(menuItem.type)) {
+      serializableItem.checked = menuItem.checked
+    }
+
+    if (menuItem.submenu != null) {
+      serializableItem.submenu = []
+      // menuItem.submenu is a Menu instance containing items in this property
+      for (let subItem of menuItem.submenu.items) {
+        serializableItem.submenu.push(this._makeItemSerializable(subItem))
+      }
+    }
+
+    return serializableItem
   }
 
   /**
@@ -44,42 +143,27 @@ class ZettlrMenu {
    * @return {Object}         The ready menu
    */
   _buildFromSource (menutpl) {
-    if (!menutpl) {
-      throw new Error('No menutpl detected!')
-    }
     let menu = {
       'label': '',
       'submenu': []
     }
+
     if (menutpl.hasOwnProperty('label') && menutpl.label !== 'Zettlr') menu.label = trans(menutpl.label)
     if (menutpl.hasOwnProperty('label') && menutpl.label === 'Zettlr') menu.label = 'Zettlr'
 
     // Top level menus can also have a role (window or help)
     if (menutpl.hasOwnProperty('role')) menu.role = menutpl.role
+    // And also an ID.
+    if (menutpl.hasOwnProperty('id')) {
+      menu.id = menutpl.id
+    } else {
+      // In case there's no special ID, take the label translation string, which
+      // is in any case safe for transportation in any way (= ASCII only)
+      menu.id = menutpl.label
+    }
 
     // Traverse the submenu and apply
     for (let item of menutpl.submenu) {
-      // Mixins are used in pretty much the same way as they are in LESS:
-      // They append additional menu items that can be reused.
-      if (item.hasOwnProperty('mixin')) {
-        switch (item.mixin) {
-          case 'darwin_prefs':
-            // "replace" this menu item with some others
-            if (process.platform === 'darwin') menu.submenu = menu.submenu.concat(this._buildFromSource(this._blueprint.mixin_preferences).submenu)
-            break
-          case 'other_prefs':
-            if (process.platform !== 'darwin') menu.submenu = menu.submenu.concat(this._buildFromSource(this._blueprint.mixin_preferences).submenu)
-            break
-          case 'darwin_speech':
-            if (process.platform === 'darwin') menu.submenu = menu.submenu.concat(this._buildFromSource(this._blueprint.mixin_speech).submenu)
-            break
-        }
-        continue // No need to process further; mixins only have the mixin attribute
-      }
-
-      // Some menu items are only available on certain platforms
-      if (item.platform && !item.platform.includes(process.platform)) continue
-
       let builtItem = {}
       // Enable submenu recursion
       if (item.hasOwnProperty('submenu')) builtItem = this._buildFromSource(item)
@@ -88,16 +172,20 @@ class ZettlrMenu {
       if (item.hasOwnProperty('label')) builtItem.label = trans(item.label)
       if (item.hasOwnProperty('type')) builtItem.type = item.type
       if (item.hasOwnProperty('role')) builtItem.role = item.role
+      // Needed to address the items later on
+      if (item.hasOwnProperty('id')) {
+        builtItem.id = item.id
+      } else {
+        // In case there's no special ID, take the label translation string, which
+        // is in any case safe for transportation in any way (= ASCII only)
+        builtItem.id = item.label
+      }
 
       // Higher-order attributes
 
       // Accelerators may be system specific for macOS
       if (item.hasOwnProperty('accelerator')) {
-        if (typeof item.accelerator !== 'string') {
-          builtItem.accelerator = (process.platform === 'darwin') ? item.accelerator.darwin : item.accelerator.other
-        } else {
-          builtItem.accelerator = item.accelerator
-        }
+        builtItem.accelerator = item.accelerator
       }
 
       // Weblinks are "target"s
@@ -123,9 +211,8 @@ class ZettlrMenu {
       }
 
       // Methods are specialised commands that need to be hardcoded here.
-      if (item.hasOwnProperty('id')) {
-        builtItem.id = item.id // Save it to the menu for potential recovery
-        switch (item.id) {
+      if (item.hasOwnProperty('zettlrRole')) {
+        switch (item.zettlrRole) {
           case 'reloadWindow':
             builtItem.click = function (menuitem, focusedWindow) {
               if (focusedWindow) focusedWindow.reload()
@@ -149,6 +236,7 @@ class ZettlrMenu {
                     global.log.error('Could not open dictionary directory:' + potentialError)
                   }
                 })
+                .catch(err => global.log.error(`[Menu Provider] Could not open the dictionary directory: ${err.message}`, err))
             }
             break
           // Enumerate the recent docs
@@ -187,15 +275,26 @@ class ZettlrMenu {
    */
   _build () {
     let mainMenu = []
+    const blueprint = BLUEPRINTS[process.platform]
+
+    // First, retrieve the top level menu items and translate them
+    this._topLevelMenuItems = Object.keys(blueprint).map((key) => {
+      let label = blueprint[key].label
+      label = (label.indexOf('.') < 0) ? label : trans(label)
+      return {
+        label: label,
+        id: blueprint[key].id
+      }
+    })
 
     // Now concat
-    if (process.platform === 'darwin') mainMenu.push(this._buildFromSource(this._blueprint.app))
-    mainMenu.push(this._buildFromSource(this._blueprint.file))
-    mainMenu.push(this._buildFromSource(this._blueprint.edit))
-    mainMenu.push(this._buildFromSource(this._blueprint.view))
-    if (global.config.get('debug')) mainMenu.push(this._buildFromSource(this._blueprint.debug))
-    mainMenu.push(this._buildFromSource(this._blueprint.window))
-    mainMenu.push(this._buildFromSource(this._blueprint.help))
+    if (process.platform === 'darwin') mainMenu.push(this._buildFromSource(blueprint.app))
+    mainMenu.push(this._buildFromSource(blueprint.file))
+    mainMenu.push(this._buildFromSource(blueprint.edit))
+    mainMenu.push(this._buildFromSource(blueprint.view))
+    if (global.config.get('debug')) mainMenu.push(this._buildFromSource(blueprint.debug))
+    mainMenu.push(this._buildFromSource(blueprint.window))
+    mainMenu.push(this._buildFromSource(blueprint.help))
 
     // Last but not least add the Quit item (either app menu or file, always the first submenu)
     mainMenu[0].submenu.push({ type: 'separator' },
@@ -215,16 +314,15 @@ class ZettlrMenu {
       })
 
     // Last but not least build the template
-    this._prebuilt = Menu.buildFromTemplate(mainMenu)
+    return Menu.buildFromTemplate(mainMenu)
   }
 
   /**
    * Generates and sets the main application menu
    */
   set () {
-    if (!this._prebuilt) this._build()
-    Menu.setApplicationMenu(this._prebuilt)
-    this._prebuilt = null
+    const builtMenu = this._build()
+    Menu.setApplicationMenu(builtMenu)
   }
 
   /**
@@ -235,9 +333,8 @@ class ZettlrMenu {
    * @return {void}   Does not return.
    */
   popup (x = 15, y = 15) {
-    if (!this._prebuilt) this._build()
-    this._prebuilt.popup({ 'x': x, 'y': y })
-    this._prebuilt = null
+    const builtMenu = this._build()
+    builtMenu.popup({ 'x': x, 'y': y })
   }
 }
 

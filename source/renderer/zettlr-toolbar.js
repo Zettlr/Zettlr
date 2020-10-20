@@ -382,10 +382,6 @@ class ZettlrToolbar {
 
     // Append everything to the div.
     for (let elem of tpl) {
-      // Some buttons are only for certain platforms, so don't show them on the
-      // wrong one.
-      if (elem.context && !elem.context.includes(process.platform)) continue
-
       let child = document.createElement('div')
       child.classList.add(elem.role)
       if (elem.role === 'button') {

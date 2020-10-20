@@ -29,7 +29,6 @@ const path = require('path')
 const { remote, shell, clipboard } = require('electron')
 
 const generateId = require('../common/util/generate-id')
-const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
 const matchFilesByTags = require('../common/util/match-files-by-tags')
 
 const reconstruct = require('./util/reconstruct-tree')
@@ -55,13 +54,6 @@ class ZettlrRenderer {
 
     // Stores the current global search in order to access it.
     this._currentSearch = null
-
-    // Write translation data into renderer process's global var
-    loadI18nRenderer()
-
-    // Immediately add the operating system class to the body element to
-    // enable the correct font-family.
-    document.body.classList.add(process.platform)
 
     // Init the complete list of objects that we need
     this._ipc = new ZettlrRendererIPC(this)
@@ -125,16 +117,6 @@ class ZettlrRenderer {
       // that it's out of the first tick of the app.
       this.configChange()
 
-      // Apply the custom CSS stylesheet to the head element
-      global.ipc.send('get-custom-css-path', {}, (ret) => {
-        let link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.setAttribute('href', 'safe-file://' + ret)
-        link.setAttribute('type', 'text/css')
-        link.setAttribute('id', 'custom-css-link')
-        document.head.appendChild(link)
-      })
-
       // Receive an initial list of tags to display in the preview list
       this._ipc.send('get-tags')
       // Additionally, request the full database of already existing tags inside files.
@@ -169,15 +151,6 @@ class ZettlrRenderer {
    * and apply them.
    */
   configChange () {
-    // Tell the body that the config has changed. We need to do this first of
-    // all because the body will automatically switch the theme based on the
-    // config, and if we do it after the language is being received, there'll
-    // be an ugly display glitch, as the language is basically 2MB written to
-    // the IPC pipe, which'll block other files from loading.
-    this.getBody().configChange()
-
-    // Set dark theme
-    this.darkTheme(global.config.get('darkTheme'))
     // Set file meta
     global.store.set('fileMeta', global.config.get('fileMeta'))
     global.store.set('hideDirs', global.config.get('hideDirs')) // TODO: Not yet implemented
@@ -263,14 +236,6 @@ class ZettlrRenderer {
     } else {
       this._ipc.send('dir-delete', {})
     }
-  }
-
-  /**
-   * Set the dark theme of the app based upon the value of val.
-   * @param  {Boolean} val Whether or not we should enable the dark theme.
-   */
-  darkTheme (val) {
-    this._body.darkTheme(val)
   }
 
   /**

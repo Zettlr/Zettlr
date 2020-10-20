@@ -32,6 +32,8 @@ const { getLanguageFile } = require('../../common/lang/i18n')
 const COMMON_DATA = require('../../common/data.json')
 const ZETTLR_VERSION = app.getVersion()
 
+const broadcastIpcMessage = require('../../common/util/broadcast-ipc-message')
+
 // Suppress notifications on modification of the following settings
 const SUPPRESS_NOTIFICATION = [
   'window.x', 'window.y', 'window.width', 'window.height', 'window.max'
@@ -99,7 +101,11 @@ module.exports = class ConfigProvider extends EventEmitter {
         'y': 0,
         'width': require('electron').screen.getPrimaryDisplay().workAreaSize.width,
         'height': require('electron').screen.getPrimaryDisplay().workAreaSize.width,
-        'max': true
+        'max': true,
+        // Only use native window appearance by default on macOS. If this value
+        // is false, this means that Zettlr will display the menu bar and window
+        // controls as defined in the HTML.
+        'nativeAppearance': process.platform === 'darwin'
       },
       // Visible attachment filetypes
       'attachmentExtensions': COMMON_DATA.attachmentExtensions,
@@ -572,6 +578,9 @@ module.exports = class ConfigProvider extends EventEmitter {
       this.config[option] = value
       if (!SUPPRESS_NOTIFICATION.includes(option)) {
         this.emit('update', option) // Pass the option for info
+
+        // Broadcast to all open windows
+        broadcastIpcMessage('config-provider', { command: 'update', payload: option })
         if (!this._bulkSetInProgress && global.hasOwnProperty('ipc')) global.ipc.send('config-update') // Notify renderer process
       }
       return true
@@ -599,6 +608,8 @@ module.exports = class ConfigProvider extends EventEmitter {
         cfg[prop] = value
         if (!SUPPRESS_NOTIFICATION.includes(option)) {
           this.emit('update', option) // Pass the option for info
+          // Broadcast to all open windows
+          broadcastIpcMessage('config-provider', { command: 'update', payload: option })
           if (!this._bulkSetInProgress) global.ipc.send('config-update') // Notify renderer process
         }
         return true
@@ -626,6 +637,8 @@ module.exports = class ConfigProvider extends EventEmitter {
     this._bulkSetInProgress = false
     if (global.hasOwnProperty('ipc')) global.ipc.send('config-update')
     this.emit('update', this.getConfig()) // Notify everyone else
+    // Broadcast to all open windows
+    broadcastIpcMessage('config-provider', { command: 'update', payload: undefined })
 
     return ret
   }
@@ -641,6 +654,8 @@ module.exports = class ConfigProvider extends EventEmitter {
     // old deprecated values).
     this.config = safeAssign(newcfg, this.config)
     this.emit('update') // Emit an event to all listeners
+    // Broadcast to all open windows
+    broadcastIpcMessage('config-provider', { command: 'update', payload: undefined })
   }
 
   /**
