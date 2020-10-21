@@ -51,6 +51,8 @@
 - Fixed a bug that would throw errors instead of exporting, if the export-directory is set to the current working directory and a non-root file is being exported.
 - Fixed a bug which would not let you create duplicates of root files. Now, you can and the duplicate is being placed in the currently selected directory.
 - Fixed a rendering edge condition where if you wanted to retain multiple single-line breaks with backslashes, the backslashes positioned on the line would have had alternating colours.
+- Collocated the time-display and time-sorting settings for files to reduce confusion if users _display_ the modification time but sort using the creation time, or vice versa.
+- Improved the layouting of the display settings tab.
 
 ## Under the Hood
 
