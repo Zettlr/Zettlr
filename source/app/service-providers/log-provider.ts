@@ -73,7 +73,7 @@ export default class LogProvider {
     // Initialise log with pre-boot messages and an initialisation message
     this._migratePreBootLog()
 
-    this.log(LogLevel.info, 'Log provider booting up ...', null)
+    this.log(LogLevel.verbose, 'Log provider booting up ...', null)
 
     // Inject the global provider functions
     global.log = {
@@ -100,7 +100,7 @@ export default class LogProvider {
    * @return {Boolean} Whether or not the shutdown was successful
    */
   async shutdown (): Promise<boolean> {
-    this.log(LogLevel.info, 'Log provider shutting down ...', null)
+    this.log(LogLevel.verbose, 'Log provider shutting down ...', null)
     await this._append() // One final append to flush the log
     return true
   }
