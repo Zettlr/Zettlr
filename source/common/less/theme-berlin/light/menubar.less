@@ -6,27 +6,3 @@
     &:hover { background-color: #ddd; }
   }
 }
-
-div#submenu {
-  border: 1px solid #aaa;
-  background-color: #eee;
-  color: #333;
-
-  // Secondary sub menu
-  div.secondary-menu div.submenu-item {
-    background-color: #ccc;
-  }
-
-  div.submenu-item {
-    transition: 0.5s background-color ease;
-
-    div.after-element { color: #aaa; }
-
-    // Separators are obviously very small
-    &.separator { background-color: #aaa; }
-
-    &.disabled { color: #aaa; }
-
-    &:not(.separator):not(.disabled):hover { background-color: #ddd; }
-  }
-}

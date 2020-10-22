@@ -18,10 +18,10 @@ function send (command: string, payload: any = {}): void {
  *
  * @return  {HTMLElement}                The rendered element
  */
-function renderSubmenuItem (item: any, elementClass?: string): HTMLElement {
+function renderMenuItem (item: any, elementClass?: string): HTMLElement {
   // First create the item
   const menuItem = document.createElement('div')
-  menuItem.classList.add('submenu-item')
+  menuItem.classList.add('menu-item')
   if (item.enabled === false) menuItem.classList.add('disabled')
   menuItem.classList.add(item.type)
   menuItem.dataset.id = item.id
@@ -117,7 +117,7 @@ function setMenubar (items: any[]): void {
  */
 function showMenu (items: any[], attachTo: string): void {
   // Remove any possible former submenu
-  const previousSubmenu = document.getElementById('submenu')
+  const previousSubmenu = document.getElementById('application-menu')
   if (previousSubmenu !== null) {
     previousSubmenu.parentElement?.removeChild(previousSubmenu)
   }
@@ -126,11 +126,11 @@ function showMenu (items: any[], attachTo: string): void {
 
   // We have just received a serialized submenu which we should now display
   const submenu = document.createElement('div')
-  submenu.setAttribute('id', 'submenu')
+  submenu.setAttribute('id', 'application-menu')
   submenu.dataset.id = attachTo // Save the original ID for easy access
 
   for (let item of items) {
-    const menuItem = renderSubmenuItem(item)
+    const menuItem = renderMenuItem(item)
 
     submenu.appendChild(menuItem)
 
@@ -139,7 +139,7 @@ function showMenu (items: any[], attachTo: string): void {
       const secondarySubmenu = document.createElement('div')
       secondarySubmenu.classList.add('secondary-menu')
       for (let secondaryItem of item.submenu) {
-        const subItem = renderSubmenuItem(secondaryItem)
+        const subItem = renderMenuItem(secondaryItem)
         secondarySubmenu.appendChild(subItem)
       }
 
@@ -158,7 +158,7 @@ function showMenu (items: any[], attachTo: string): void {
   const targetElement = document.querySelector(`#menubar .top-level-item[data-id=${attachTo}]`)
   const rect = targetElement?.getBoundingClientRect()
   if (rect === undefined) {
-    return console.error('Cannot show submenu: Target has not been found!')
+    return console.error('Cannot show application menu: Target has not been found!')
   }
   submenu.style.top = `${rect.top + rect.height}px`
   submenu.style.left = `${rect.left}px`
@@ -192,7 +192,7 @@ export default function registerMenubar (shouldShowMenubar: boolean): void {
   })
 
   window.addEventListener('click', (event) => {
-    const submenu = document.getElementById('submenu')
+    const submenu = document.getElementById('application-menu')
     // On click, remove the submenu again
 
     if (submenu !== null) {
@@ -202,7 +202,7 @@ export default function registerMenubar (shouldShowMenubar: boolean): void {
 
   window.addEventListener('mousemove', (event) => {
     const menubar = document.getElementById('menubar')
-    const submenu = document.getElementById('submenu')
+    const submenu = document.getElementById('application-menu')
     if (menubar === null || submenu === null) {
       // Neither menubar nor submenu, so nothing to do
       return
