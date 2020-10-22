@@ -36,7 +36,9 @@ class ZettlrPrintWindow {
     this._file = ''
 
     // Register all window stuff
-    windowRegister()
+    windowRegister({
+      showMenubar: false // No menubar on print windows, only window controls
+    })
 
     // Get additional data passed to the window
     let name

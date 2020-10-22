@@ -169,11 +169,12 @@ function showMenu (items: any[], attachTo: string): void {
 /**
  * This function registers and handles the menu bar if requested by the design
  */
-export default function registerMenubar (): void {
-  const shouldUseNativeAppearance: boolean = global.config.get('window.nativeAppearance')
-  if (shouldUseNativeAppearance) return
+export default function registerMenubar (shouldShowMenubar: boolean): void {
+  // First, determine if the menubar should be shown at all
+  const usesNativeAppearance: boolean = global.config.get('window.nativeAppearance')
+  if (usesNativeAppearance || !shouldShowMenubar) return
 
-  // Show the menubar if applicable
+  // Show the menubar
   document.body.classList.add('show-menubar')
 
   send('get-top-level-items') // Request an initial batch of top level items

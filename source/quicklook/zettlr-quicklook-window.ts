@@ -41,7 +41,9 @@ class ZettlrQuicklookWindow {
     [hash] = window.process.argv.slice(-1)
 
     // Register everything necessary for the window
-    windowRegister()
+    windowRegister({
+      showMenubar: false // Do not show the menubar on Quicklook windows
+    })
 
     // First sending must go out of the first tick of the application
     setTimeout(() => {
