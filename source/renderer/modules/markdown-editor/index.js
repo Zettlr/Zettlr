@@ -30,7 +30,7 @@ const generateKeymap = require('./generate-keymap.js')
 /**
  * APIs
  */
-const { clipboard } = require('electron')
+const { clipboard, ipcRenderer } = require('electron')
 const EventEmitter = require('events')
 
 /**
@@ -56,6 +56,8 @@ const typewriterHook = require('./hooks/typewriter')
 const initiateTablesHook = require('./hooks/initiate-tables')
 const { autocompleteHook, setAutocompleteDatabase } = require('./hooks/autocomplete')
 const linkTooltipsHook = require('./hooks/link-tooltips')
+
+const displayContextMenu = require('./display-context-menu')
 
 module.exports = class MarkdownEditor extends EventEmitter {
   /**
@@ -94,6 +96,13 @@ module.exports = class MarkdownEditor extends EventEmitter {
      * @var {Number}
      */
     this._fontsize = 100
+
+    /**
+     * Can hold a close-callback from an opened context menu
+     *
+     * @var {Function}
+     */
+    this._contextCloseCallback = null
 
     /**
      * The CodeMirror options
@@ -169,6 +178,52 @@ module.exports = class MarkdownEditor extends EventEmitter {
         this.emit('zettelkasten-link', tokenInfo.string)
       } else if (tokenList.includes('zkn-tag')) {
         this.emit('zettelkasten-tag', tokenInfo.string)
+      }
+    })
+
+    // Display a context menu if appropriate
+    this._instance.getWrapperElement().addEventListener('contextmenu', (event) => {
+      let { callback, shouldSelectWordUnderCursor } = displayContextMenu(event, (command) => {
+        switch (command) {
+          case 'cut':
+          case 'copy':
+          case 'paste':
+            // NOTE: We do not send selectAll to main albeit there is such a command
+            // because in the specific case of CodeMirror this results in unwanted
+            // behaviour.
+            // Needs to be issued from main on the holding webContents
+            ipcRenderer.send('window-controls', command)
+            break
+          case 'pasteAsPlain':
+            this.pasteAsPlainText()
+            break
+          case 'copyAsHTML':
+            this.copyAsHTML()
+            break
+          default:
+            this._instance.execCommand(command)
+            break
+        }
+        // In any case, re-focus the editor, either for cut/copy/paste to work
+        // or to resume working afterwards
+        this._instance.focus()
+      }, (wordToReplace) => {
+        // Simply replace the selection with the given word
+        this._instance.replaceSelection(wordToReplace)
+      })
+
+      // Save the callback and whether to select the word under the cursor
+      this._contextCloseCallback = callback
+      if (shouldSelectWordUnderCursor) {
+        this._instance.execCommand('selectWordUnderCursor')
+      }
+    })
+
+    // Close a context menu, if applicable.
+    window.addEventListener('click', (event) => {
+      if (this._contextCloseCallback !== null) {
+        this._contextCloseCallback()
+        this._contextCloseCallback = null
       }
     })
   } // END CONSTRUCTOR

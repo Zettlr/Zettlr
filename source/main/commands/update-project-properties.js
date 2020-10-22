@@ -31,11 +31,8 @@ class UpdateProjectProperties extends ZettlrCommand {
     let expanded = expandOptionObject(arg.properties)
     // Find the directory, and apply the properties to it!
     let dir = this._app.findDir(arg.hash)
-    if (dir) {
-      this._app.getFileSystem().runAction('update-project', {
-        'source': dir,
-        'info': expanded
-      })
+    if (dir !== null) {
+      this._app.getFileSystem().updateProject(dir, expanded)
     } else {
       global.log.warning(`Could not update project properties for ${arg.hash}: No directory found!`)
     }

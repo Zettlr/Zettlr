@@ -1,5 +1,9 @@
 import { ipcRenderer } from 'electron'
 
+var currentSubMenu: string|null = null
+
+var menuCloseCallback: Function|null = null
+
 /**
  * Convenience function to save some typing in this module
  *
@@ -11,83 +15,11 @@ function send (command: string, payload: any = {}): void {
 }
 
 /**
- * Renders a single submenu item
- *
- * @param   {any}          item          The item with necessary properties
- * @param   {string}       elementClass  An optional elementClass to apply to the container
- *
- * @return  {HTMLElement}                The rendered element
- */
-function renderMenuItem (item: any, elementClass?: string): HTMLElement {
-  // First create the item
-  const menuItem = document.createElement('div')
-  menuItem.classList.add('menu-item')
-  if (item.enabled === false) menuItem.classList.add('disabled')
-  menuItem.classList.add(item.type)
-  menuItem.dataset.id = item.id
-
-  // In case the caller wants an additional class on the item
-  if (elementClass !== undefined) menuItem.classList.add(elementClass)
-
-  // Then the optional status element
-  const statusElement = document.createElement('div')
-  statusElement.classList.add('status')
-  menuItem.appendChild(statusElement)
-
-  // Specials for checkboxes and radios
-  if (item.type === 'checkbox' && item.checked === true) {
-    const icon = document.createElement('clr-icon')
-    icon.setAttribute('shape', 'check')
-    statusElement.appendChild(icon)
-  } else if (item.type === 'radio') {
-    const icon = document.createElement('clr-icon')
-    if (item.checked === true) {
-      icon.setAttribute('shape', 'dot-circle')
-    } else {
-      icon.setAttribute('shape', 'circle')
-    }
-    statusElement.appendChild(icon)
-  }
-
-  const labelElement = document.createElement('div')
-  labelElement.classList.add('label')
-  labelElement.textContent = item.label
-  menuItem.appendChild(labelElement)
-
-  // After the label, an additional accelerator (or submenu) indicator
-  const afterElement = document.createElement('div')
-  afterElement.classList.add('after-element')
-  menuItem.appendChild(afterElement)
-
-  if (item.type === 'submenu') {
-    const submenuIndicator = document.createElement('clr-icon')
-    submenuIndicator.setAttribute('shape', 'angle')
-    submenuIndicator.setAttribute('dir', 'right')
-    afterElement.appendChild(submenuIndicator)
-  } else if (item.accelerator != null) {
-    const accel = document.createElement('span')
-    accel.textContent = item.accelerator
-    afterElement.appendChild(accel)
-  }
-
-  // If this is a submenu, the caller needs to register a different
-  // event listener
-  if (item.type !== 'submenu' && item.enabled === true) {
-    // Trigger a click on the "real" menu item in the back
-    menuItem.addEventListener('click', (event) => {
-      send('click-menu-item', item.id)
-    })
-  }
-
-  return menuItem
-}
-
-/**
  * Sets the menubar with the given items
  *
  * @param   {any[]}  items  The items, containing label & id properties
  */
-function setMenubar (items: any[]): void {
+function setMenubar (items: SubmenuItem[]): void {
   const menubar = document.getElementById('menubar')
   if (menubar === null) return
 
@@ -112,58 +44,48 @@ function setMenubar (items: any[]): void {
 /**
  * Displays a submenu of a top-level menu item
  *
- * @param   {any[]}   items     The items in serialized form
- * @param   {string}  attachTo  The MenuItem.id of the item to attach to
+ * @param   {MenuItem[]}  items     The items in serialized form
+ * @param   {string}      attachTo  The MenuItem.id of the item to attach to
  */
-function showMenu (items: any[], attachTo: string): void {
-  // Remove any possible former submenu
-  const previousSubmenu = document.getElementById('application-menu')
-  if (previousSubmenu !== null) {
-    previousSubmenu.parentElement?.removeChild(previousSubmenu)
-  }
-
-  if (items.length === 0) return // No submenu to show :(
-
-  // We have just received a serialized submenu which we should now display
-  const submenu = document.createElement('div')
-  submenu.setAttribute('id', 'application-menu')
-  submenu.dataset.id = attachTo // Save the original ID for easy access
-
-  for (let item of items) {
-    const menuItem = renderMenuItem(item)
-
-    submenu.appendChild(menuItem)
-
-    // Zettlr menus support one level of submenu, which are immediately shown
-    if (item.type === 'submenu') {
-      const secondarySubmenu = document.createElement('div')
-      secondarySubmenu.classList.add('secondary-menu')
-      for (let secondaryItem of item.submenu) {
-        const subItem = renderMenuItem(secondaryItem)
-        secondarySubmenu.appendChild(subItem)
-      }
-
-      // Enable toggling (no click handler will be registered by the
-      // render method if this is a submenu)
-      menuItem.addEventListener('click', (event) => {
-        event.stopPropagation()
-        secondarySubmenu.classList.toggle('open')
-      })
-
-      submenu.appendChild(secondarySubmenu)
-    }
-  }
-
-  // Now position the element
+function showMenu (items: AnyMenuItem[], attachTo: string): void {
   const targetElement = document.querySelector(`#menubar .top-level-item[data-id=${attachTo}]`)
   const rect = targetElement?.getBoundingClientRect()
   if (rect === undefined) {
     return console.error('Cannot show application menu: Target has not been found!')
   }
-  submenu.style.top = `${rect.top + rect.height}px`
-  submenu.style.left = `${rect.left}px`
 
-  document.body.appendChild(submenu)
+  // Reset the application menu if shown
+  if (menuCloseCallback !== null) {
+    menuCloseCallback()
+    menuCloseCallback = null
+    currentSubMenu = null
+  }
+
+  // Display a new menu
+  menuCloseCallback = global.menuProvider.show(rect.left, rect.top + rect.height, items, (clickedID: string) => {
+    // The user has clicked a menu item
+    const selectedItem = items.find((elem) => {
+      if (elem.type === 'separator') {
+        return false
+      }
+
+      return elem.id === clickedID
+    })
+
+    if (selectedItem === undefined) {
+      return console.error(`Could not trigger a click on item ${clickedID}: Item was not found`)
+    }
+
+    if (selectedItem.type === 'separator') return
+
+    if (selectedItem.type !== 'submenu' && selectedItem.enabled) {
+      // Trigger a click on the "real" menu item in the back
+      send('click-menu-item', selectedItem.id)
+    }
+  })
+
+  // Save the original ID for easy access
+  currentSubMenu = attachTo
 }
 
 /**
@@ -192,18 +114,16 @@ export default function registerMenubar (shouldShowMenubar: boolean): void {
   })
 
   window.addEventListener('click', (event) => {
-    const submenu = document.getElementById('application-menu')
-    // On click, remove the submenu again
-
-    if (submenu !== null) {
-      submenu.parentElement?.removeChild(submenu)
+    if (menuCloseCallback !== null) {
+      menuCloseCallback()
+      menuCloseCallback = null
+      currentSubMenu = null
     }
   })
 
   window.addEventListener('mousemove', (event) => {
     const menubar = document.getElementById('menubar')
-    const submenu = document.getElementById('application-menu')
-    if (menubar === null || submenu === null) {
+    if (menuCloseCallback === null || menubar === null) {
       // Neither menubar nor submenu, so nothing to do
       return
     }
@@ -217,7 +137,7 @@ export default function registerMenubar (shouldShowMenubar: boolean): void {
       const target = event.target as HTMLElement
       if (target?.classList.contains('top-level-item')) {
         // We got a top-level-item as the target
-        if (submenu.dataset.id !== target.dataset.id) {
+        if (currentSubMenu !== target.dataset.id) {
           // Exchange the submenu
           send('get-submenu', target.dataset.id)
         }

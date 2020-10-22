@@ -3,6 +3,7 @@ import registerWindowControls from './register-window-controls'
 import registerGlobals from './register-globals'
 import loadI18nRenderer from '../../lang/load-i18n-renderer'
 import registerThemes from './register-themes'
+import registerDefaultContextMenu from './register-default-context'
 
 export interface RegistrationOptions {
   showMenubar?: boolean
@@ -36,9 +37,6 @@ export default function windowRegister (options?: RegistrationOptions): void {
     }
   }
 
-  if (!shouldShowMenubar) { console.warn('Hiding menubar on window!') }
-  if (!shouldShowWindowControls) { console.warn('Hiding window controls on window!') }
-
   // Load the translation strings
   loadI18nRenderer()
 
@@ -48,6 +46,8 @@ export default function windowRegister (options?: RegistrationOptions): void {
   registerWindowControls(shouldShowWindowControls)
   // ... register the menu bar ...
   registerMenubar(shouldShowMenubar)
-  // ... the theming functionality
+  // ... the theming functionality ...
   registerThemes()
+  // ... the default context menus
+  registerDefaultContextMenu()
 }

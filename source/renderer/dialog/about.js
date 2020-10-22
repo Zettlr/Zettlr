@@ -38,7 +38,7 @@ class AboutDialog extends ZettlrDialog {
 
   preInit (data) {
     process.getCPUUsage() // First call returns null, so we have to call it twice
-    data.version = remote.app.getVersion()
+    data.version = remote.app.getVersion() // TODO
     data.uuid = global.config.get('uuid')
 
     // Debug info: Versions, argv, env, and overall process uptime

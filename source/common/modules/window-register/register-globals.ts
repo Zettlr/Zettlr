@@ -1,4 +1,5 @@
 import { ipcRenderer } from 'electron'
+import applicationMenuHelper from './application-menu-helper'
 
 export default function registerGlobals (): void {
   // Register globals
@@ -19,5 +20,10 @@ export default function registerGlobals (): void {
       // Send a synchronous event
       return ipcRenderer.sendSync('config-set', key, val)
     }
+  }
+
+  // Export the menu provider
+  global.menuProvider = {
+    show: applicationMenuHelper
   }
 }

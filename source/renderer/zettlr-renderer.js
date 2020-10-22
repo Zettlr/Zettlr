@@ -26,7 +26,7 @@ const createFileManager = require('./modules/file-manager').default
 
 const path = require('path')
 
-const { remote, shell, clipboard } = require('electron')
+const { ipcRenderer, clipboard } = require('electron')
 
 const generateId = require('../common/util/generate-id')
 const matchFilesByTags = require('../common/util/match-files-by-tags')
@@ -180,7 +180,7 @@ class ZettlrRenderer {
     // Write an ID to the clipboard
     clipboard.writeText(generateId(global.config.get('zkn.idGen')))
     // Paste the ID
-    remote.getCurrentWebContents().paste()
+    ipcRenderer.send('window-controls', 'paste')
 
     // Now restore the clipboard's original contents
     setTimeout((e) => {
@@ -555,19 +555,6 @@ class ZettlrRenderer {
     } else {
       this._body.requestFileName(this.getCurrentDir())
     }
-  }
-
-  /**
-   * Shows a given file in finder/explorer/file browser.
-   * @param {Number} hash The file's hash
-   */
-  showInFinder (hash) {
-    if (!hash) return
-    let file = this.findObject(hash)
-
-    if (!file || file.type !== 'file') return
-
-    shell.showItemInFolder(file.path)
   }
 
   /**

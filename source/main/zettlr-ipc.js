@@ -53,6 +53,8 @@ class ZettlrIPC {
 
       if (callingWindow === null) return
 
+      console.log('Command received ' + command)
+
       switch (command) {
         // Window controls actions can be send either as callback IPC calls or as
         // normals (which is why they are present both in runCall and handleEvent)
@@ -78,6 +80,20 @@ class ZettlrIPC {
             command: 'get-maximised-status',
             payload: callingWindow.isMaximized()
           })
+          break
+        // Convenience APIs for the renderers to execute these commands
+        case 'cut':
+          event.sender.cut()
+          break
+        case 'copy':
+          event.sender.copy()
+          break
+        case 'paste':
+          event.sender.paste()
+          break
+        case 'selectAll':
+          event.sender.selectAll()
+          break
       }
     })
 

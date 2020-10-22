@@ -53,6 +53,7 @@
 - Fixed a rendering edge condition where if you wanted to retain multiple single-line breaks with backslashes, the backslashes positioned on the line would have had alternating colours.
 - Collocated the time-display and time-sorting settings for files to reduce confusion if users _display_ the modification time but sort using the creation time, or vice versa.
 - Improved the layouting of the display settings tab.
+- The context menu is now a custom one, making the experience more seamless.
 
 ## Under the Hood
 

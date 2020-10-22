@@ -18,6 +18,7 @@
     v-bind:style="getStyle"
     v-on:mouseenter="hover=true"
     v-on:mouseleave="hover=false"
+    v-on:contextmenu="handleContextMenu"
   >
     <div
       v-bind:class="classList"
@@ -105,6 +106,8 @@
   const Sorter = require('./sorter.vue').default
   const formatDate = require('../../../common/util/format-date.js')
   const { trans } = require('../../../common/lang/i18n.js')
+  const fileContextMenu = require('./file-item-context.js')
+  const dirContextMenu = require('./dir-item-context.js')
 
   module.exports = {
     name: 'file-item',
@@ -213,6 +216,13 @@
         }
       },
       methods: {
+        handleContextMenu: function (event) {
+          if (this.isDirectory) {
+            dirContextMenu(event, this.obj, this.$el)
+          } else {
+            fileContextMenu(event, this.obj, this.$el)
+          }
+        },
         requestSelection: function (event) {
           if (this.obj.type === 'file' && event.altKey) {
             // QuickLook the file

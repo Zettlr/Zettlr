@@ -20,6 +20,7 @@
     v-on:dragstart.stop="beginDragging"
     v-on:dragenter.stop="enterDragging"
     v-on:dragleave.stop="leaveDragging"
+    v-on:contextmenu="handleContextMenu"
   >
     <div
       ref="listElement"
@@ -134,6 +135,8 @@
 const findObject = require('../../../common/util/find-object.js')
 const { trans } = require('../../../common/lang/i18n')
 const Sorter = require('./sorter.vue').default
+const fileContextMenu = require('./file-item-context.js')
+const dirContextMenu = require('./dir-item-context.js')
 
 module.exports = {
   name: 'tree-item',
@@ -253,6 +256,13 @@ module.exports = {
    * Callable methods
    */
   methods: {
+    handleContextMenu: function (event) {
+      if (this.isDirectory) {
+        dirContextMenu(event, this.obj, this.$el)
+      } else {
+        fileContextMenu(event, this.obj, this.$el)
+      }
+    },
     /**
      * On click, this will call the selection function.
      */

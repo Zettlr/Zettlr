@@ -288,14 +288,14 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
   cacheFile(fileObject, cache)
 }
 
-export async function rename (fileObject: MDFileDescriptor, cache: any, options: any): Promise<void> {
+export async function rename (fileObject: MDFileDescriptor, cache: any, newName: string): Promise<void> {
   let oldPath = fileObject.path
-  let newPath = path.join(path.dirname(fileObject.path), options.name)
+  let newPath = path.join(fileObject.dir, newName)
   await fs.rename(oldPath, newPath)
   // Now update the object
   fileObject.path = newPath
   fileObject.hash = hash(newPath)
-  fileObject.name = options.name
+  fileObject.name = newName
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
   cacheFile(fileObject, cache)

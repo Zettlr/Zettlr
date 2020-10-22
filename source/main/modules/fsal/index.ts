@@ -786,7 +786,7 @@ export default class FSAL extends EventEmitter {
   }
 
   // WAS: RENAME-FILE
-  public async renameFile (src: MDFileDescriptor, options: any): Promise<void> {
+  public async renameFile (src: MDFileDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink, 1x add
     let oldHash = src.hash
@@ -799,10 +799,10 @@ export default class FSAL extends EventEmitter {
     }])
     this._watchdog.ignoreEvents([{
       'event': 'add',
-      'path': path.join(path.dirname(src.path), options.name)
+      'path': path.join(path.dirname(src.path), newName)
     }])
 
-    await FSALFile.rename(src, this._cache, options)
+    await FSALFile.rename(src, this._cache, newName)
     // Now we need to re-sort the parent directory
     if (src.parent !== null) {
       await FSALDir.sort(src.parent) // Omit sorting
