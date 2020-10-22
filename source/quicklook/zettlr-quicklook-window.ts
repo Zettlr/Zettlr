@@ -12,9 +12,6 @@
  * END HEADER
  */
 
-// Include the geometry style of the app (will be included in the html by webpack magic)
-import './../common/assets/less/main.less'
-
 import windowRegister from '../common/modules/window-register'
 
 import ZettlrQuicklook from './zettlr-quicklook'

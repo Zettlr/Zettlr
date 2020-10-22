@@ -12,9 +12,6 @@
  * END HEADER
  */
 
-// Include the geometry style of the app (will be included in the html by webpack magic)
-import './../common/assets/less/main.less'
-
 import { ipcRenderer as ipc } from 'electron'
 import path from 'path'
 import loadIcons from '../renderer/util/load-icons'
