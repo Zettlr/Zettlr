@@ -36,6 +36,9 @@ if (!app.requestSingleInstanceLock()) {
 // Set up the pre-boot log
 global.preBootLog = []
 
+// NOTE: This has to be set even before the application has been booted.
+global.filesToOpen = []
+
 /**
  * This will be overwritten by the log provider, once it has booted
  */

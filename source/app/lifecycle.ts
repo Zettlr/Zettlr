@@ -82,7 +82,7 @@ export async function bootApplication (): Promise<void> {
   registerCustomProtocols()
 
   // Then we need to extract possible files that should be opened from the argv
-  global.filesToOpen = extractFilesFromArgv()
+  extractFilesFromArgv()
 
   // Second, we need all providers. The order is sometimes important.
   // For instance, the first provider should be the log provider, and the second

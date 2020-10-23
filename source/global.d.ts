@@ -26,7 +26,7 @@ interface CssProvider {
 interface BootLog {
   level: 1|2|3|4 // Taken from the LogLevel enum in the Log Provider
   message: string
-  details: any
+  details?: any
 }
 
 /**

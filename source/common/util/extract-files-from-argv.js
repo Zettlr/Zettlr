@@ -26,11 +26,13 @@ const filetypes = require('../data.json').filetypes
 module.exports = function (argv = process.argv) {
   if (!argv || !Array.isArray(argv)) return []
 
-  return argv.filter(function (element) {
+  const filesToOpen = argv.filter(function (element) {
     // Filter out CLI arguments, non-files, and non-supported files
     return element.substring(0, 2) !== '--' &&
       isFile(element) &&
       // Include RMarkdown files here, filter them out later
       filetypes.includes(path.extname(element))
   })
+
+  global.filesToOpen = global.filesToOpen.concat(filesToOpen)
 }
