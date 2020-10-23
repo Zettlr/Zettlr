@@ -1,6 +1,6 @@
 [
   {
-    "label": "menu.rename_file",
+    "label": "menu.rename_file TODO",
     "command": "file-rename"
   },
   {

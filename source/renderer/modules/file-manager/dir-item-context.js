@@ -98,7 +98,7 @@ module.exports = function displayFileContext (event, dirObject, el) {
     console.log(dirObject.parent)
   }
 
-  const callback = global.menuProvider.show(event.clientX, event.clientY, items, (clickedID) => {
+  global.menuProvider.show(event.clientX, event.clientY, items, (clickedID) => {
     switch (clickedID) {
       case 'menu.rename_dir':
         displayTextPopup(dirObject.name, trans('dialog.dir_rename.placeholder'), el, (newValue) => {
@@ -168,14 +168,6 @@ module.exports = function displayFileContext (event, dirObject, el) {
         break
     }
   })
-
-  // Make sure to remove the popup menu again
-  let listener = function (event) {
-    callback()
-    window.removeEventListener('click', listener)
-  }
-
-  window.addEventListener('click', listener)
 }
 
 function displayTextPopup (value, placeholder, element, callback) {

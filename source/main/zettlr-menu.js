@@ -144,8 +144,8 @@ class ZettlrMenu {
    */
   _buildFromSource (menutpl) {
     let menu = {
-      'label': '',
-      'submenu': []
+      label: '',
+      submenu: []
     }
 
     if (menutpl.hasOwnProperty('label') && menutpl.label !== 'Zettlr') menu.label = trans(menutpl.label)
@@ -242,16 +242,18 @@ class ZettlrMenu {
           // Enumerate the recent docs
           case 'recent-docs':
             builtItem.submenu = [{
-              'label': trans('menu.clear_recent_docs'),
-              'click': (item, win) => { global.recentDocs.clear() }
-            }, { 'type': 'separator' }]
+              id: 'menu.clear_recent_docs',
+              label: trans('menu.clear_recent_docs'),
+              click: (item, win) => { global.recentDocs.clear() }
+            }, { type: 'separator' }]
             // Disable if there are no recent docs
             if (!global.recentDocs.hasDocs()) builtItem.submenu[0].enabled = false
             // Get the most recent 10 documents
             for (let recent of global.recentDocs.get().slice(0, 10)) {
               builtItem.submenu.push({
-                'label': recent.name,
-                'click': function (menuitem, focusedWindow) {
+                id: recent.name,
+                label: recent.name,
+                click: function (menuitem, focusedWindow) {
                   if (global.mainWindow) {
                     global.mainWindow.webContents.send('message', { 'command': 'file-get', 'content': recent.hash })
                   } else if (focusedWindow) {

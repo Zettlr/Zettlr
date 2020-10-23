@@ -156,15 +156,16 @@ module.exports = function displayContextMenu (event, commandCallback, replaceCal
     buildMenu.push({ type: 'separator' })
     buildMenu.push({
       label: trans('menu.open_attachment'),
-      type: 'normal'
+      type: 'submenu',
+      enabled: true,
+      submenu: keys.map(key => {
+        return {
+          id: `citekey-${key}`,
+          label: key,
+          enabled: true
+        }
+      })
     })
-    buildMenu = buildMenu.concat(keys.map(key => {
-      return {
-        id: `citekey-${key}`,
-        label: key,
-        enabled: true
-      }
-    }))
   }
 
   // If the word is spelled wrong, request suggestions
@@ -209,7 +210,8 @@ module.exports = function displayContextMenu (event, commandCallback, replaceCal
   currentMenu = buildMenu
 
   // Now we can display the menu
-  let callback = global.menuProvider.show(event.clientX, event.clientY, buildMenu, (clickedID) => {
+  const point = { x: event.clientX, y: event.clientY }
+  global.menuProvider.show(point, buildMenu, (clickedID) => {
     if (clickedID.startsWith('acceptSuggestion-')) {
       const idx = parseInt(clickedID.substr(17), 10) // Retrieve the ID
       console.log('Replacing with ' + currentSuggestions[idx])
@@ -238,8 +240,5 @@ module.exports = function displayContextMenu (event, commandCallback, replaceCal
   })
 
   // Return the callback and whether the word under cursor should be selected
-  return {
-    callback,
-    shouldSelectWordUnderCursor
-  }
+  return shouldSelectWordUnderCursor
 }

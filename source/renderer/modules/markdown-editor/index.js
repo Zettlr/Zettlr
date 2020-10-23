@@ -183,7 +183,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
 
     // Display a context menu if appropriate
     this._instance.getWrapperElement().addEventListener('contextmenu', (event) => {
-      let { callback, shouldSelectWordUnderCursor } = displayContextMenu(event, (command) => {
+      const shouldSelectWordUnderCursor = displayContextMenu(event, (command) => {
         switch (command) {
           case 'cut':
           case 'copy':
@@ -212,18 +212,9 @@ module.exports = class MarkdownEditor extends EventEmitter {
         this._instance.replaceSelection(wordToReplace)
       })
 
-      // Save the callback and whether to select the word under the cursor
-      this._contextCloseCallback = callback
+      // If applicable, select the word under cursor
       if (shouldSelectWordUnderCursor) {
         this._instance.execCommand('selectWordUnderCursor')
-      }
-    })
-
-    // Close a context menu, if applicable.
-    window.addEventListener('click', (event) => {
-      if (this._contextCloseCallback !== null) {
-        this._contextCloseCallback()
-        this._contextCloseCallback = null
       }
     })
   } // END CONSTRUCTOR

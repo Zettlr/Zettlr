@@ -29,8 +29,20 @@ interface NormalItem {
 
 type AnyMenuItem = CheckboxRadioItem | SeparatorItem | SubmenuItem | NormalItem
 
+interface Rect {
+  top: number
+  left: number
+  width: number
+  height: number
+}
+
+interface Point {
+  x: number
+  y: number
+}
+
 interface MenuProvider {
-  show: (posX: number, posY: number, items: AnyMenuItem[], callback: (clickedID: string) => void) => Function
+  show: (position: Rect|Point, items: AnyMenuItem[], callback: (clickedID: string) => void) => Function
 }
 
 declare module NodeJS {

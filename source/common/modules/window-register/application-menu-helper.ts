@@ -1,10 +1,19 @@
 // This function displays a custom styled popup menu at the given coordinates
+export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback: Function): Function {
+  // Get the correct rect to use for submenu placement
+  let targetRect: Rect = {
+    top: 0,
+    left: 0,
+    width: 0,
+    height: 0
+  }
 
-export default function showPopupMenu (posX: number, posY: number, items: AnyMenuItem[], callback: Function): Function {
-  // Remove any possible former submenu
-  const previousSubmenu = document.getElementById('application-menu')
-  if (previousSubmenu !== null) {
-    previousSubmenu.parentElement?.removeChild(previousSubmenu)
+  if (position.hasOwnProperty('width') && position.hasOwnProperty('height')) {
+    targetRect = position as Rect
+  } else {
+    // A point is basically a rect with no width or height
+    targetRect.top = (position as Point).y
+    targetRect.left = (position as Point).x
   }
 
   // We have just received a serialized submenu which we should now display
@@ -15,48 +24,70 @@ export default function showPopupMenu (posX: number, posY: number, items: AnyMen
   for (let item of items) {
     const menuItem = renderMenuItem(item)
 
-    // If this is a submenu, the caller needs to register a different
-    // event listener
-    const secondarySubmenu = document.createElement('div')
-    secondarySubmenu.classList.add('secondary-menu')
-
     if (item.type !== 'submenu' && item.type !== 'separator' && item.enabled) {
       // Trigger a click on the "real" menu item in the back
       menuItem.addEventListener('click', (event) => {
         callback((item as NormalItem).id)
       })
     } else if (item.type === 'submenu' && item.enabled) {
-      // Enable toggling (no click handler will be registered by the
-      // render method if this is a submenu)
-      menuItem.addEventListener('click', (event) => {
-        event.stopPropagation()
-        secondarySubmenu.classList.toggle('open')
+      // Enable displaying the sub menu
+      let closeSubmenu: Function|null = null
+
+      appMenu.addEventListener('mousemove', (event: MouseEvent) => {
+        const point = { x: event.clientX, y: event.clientY }
+        const rect: DOMRect = menuItem.getBoundingClientRect()
+        const menuRect: DOMRect = appMenu.getBoundingClientRect()
+        if (pointInRect(point, rect) && closeSubmenu === null) {
+          // It's on the menu item, so display the submenu. We need to pass a
+          // rect for eventual moving to the other side of the menu item.
+          const target: Rect = {
+            left: rect.left,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height
+          }
+          closeSubmenu = showPopupMenu(target, (item as SubmenuItem).submenu, (clickedID: string) => {
+            // Call the regular callback to basically "bubble up" the event
+            callback(clickedID)
+          })
+        } else if (
+          pointInRect(point, menuRect) &&
+          !pointInRect(point, rect) &&
+          closeSubmenu !== null
+        ) {
+          // It's within the menu but not over our item, so hide again
+          closeSubmenu()
+          closeSubmenu = null
+        } // Else: Keep it open
       })
     }
 
     appMenu.appendChild(menuItem)
-
-    // Zettlr menus support one level of submenu, which are immediately shown
-    if (item.type === 'submenu') {
-      for (let secondaryItem of item.submenu) {
-        const subItem = renderMenuItem(secondaryItem)
-        secondarySubmenu.appendChild(subItem)
-      }
-
-      appMenu.appendChild(secondarySubmenu)
-    }
   }
 
-  // Now position the element
-  appMenu.style.left = `${posX}px`
-  appMenu.style.top = `${posY}px`
-
-  // Finally, append it to the DOM tree to display it
+  // Now, append it to the DOM tree to display it
   document.body.appendChild(appMenu)
 
+  // After it's added we can correctly position it
+  positionMenu(appMenu, targetRect)
+
+  // Finally, add an event listener to determine if the user clicked somewhere
+  // on the window, because this indicates that the menu should be closed.
+  // Clicks on any menu item will be handled before the event bubbles up to the
+  // window so we don't need additional checks.
+  const clickCallback = (event: MouseEvent): void => {
+    appMenu.parentElement?.removeChild(appMenu)
+    window.removeEventListener('click', clickCallback)
+  }
+  window.addEventListener('click', clickCallback)
+
+  // Return a close-callback for the caller to programmatically close the menu
   return () => {
     // When the closing function is called, remove the menu again
     appMenu.parentElement?.removeChild(appMenu)
+    // Make sure to always remove the event listener, no matter how the menu is
+    // closed -- programmatically or automatically.
+    window.removeEventListener('click', clickCallback)
   }
 }
 
@@ -68,16 +99,23 @@ export default function showPopupMenu (posX: number, posY: number, items: AnyMen
  *
  * @return  {HTMLElement}                The rendered element
  */
-function renderMenuItem (item: any, elementClass?: string): HTMLElement {
+function renderMenuItem (item: AnyMenuItem, elementClass?: string): HTMLElement {
   // First create the item
   const menuItem = document.createElement('div')
   menuItem.classList.add('menu-item')
-  if (item.enabled === false) menuItem.classList.add('disabled')
+  if (item.type !== 'separator' && !item.enabled) {
+    menuItem.classList.add('disabled')
+  }
+
   menuItem.classList.add(item.type)
-  menuItem.dataset.id = item.id
+  if (item.hasOwnProperty('id')) {
+    menuItem.dataset.id = (item as NormalItem).id
+  }
 
   // In case the caller wants an additional class on the item
-  if (elementClass !== undefined) menuItem.classList.add(elementClass)
+  if (elementClass !== undefined) {
+    menuItem.classList.add(elementClass)
+  }
 
   // Then the optional status element
   const statusElement = document.createElement('div')
@@ -85,23 +123,21 @@ function renderMenuItem (item: any, elementClass?: string): HTMLElement {
   menuItem.appendChild(statusElement)
 
   // Specials for checkboxes and radios
-  if (item.type === 'checkbox' && item.checked === true) {
+  if (item.type === 'checkbox' && item.checked) {
     const icon = document.createElement('clr-icon')
     icon.setAttribute('shape', 'check')
     statusElement.appendChild(icon)
   } else if (item.type === 'radio') {
     const icon = document.createElement('clr-icon')
-    if (item.checked === true) {
-      icon.setAttribute('shape', 'dot-circle')
-    } else {
-      icon.setAttribute('shape', 'circle')
-    }
+    icon.setAttribute('shape', (item.checked) ? 'dot-circle' : 'circle')
     statusElement.appendChild(icon)
   }
 
   const labelElement = document.createElement('div')
   labelElement.classList.add('label')
-  labelElement.textContent = item.label
+  if (item.type !== 'separator') {
+    labelElement.textContent = item.label
+  }
   menuItem.appendChild(labelElement)
 
   // After the label, an additional accelerator (or submenu) indicator
@@ -114,7 +150,7 @@ function renderMenuItem (item: any, elementClass?: string): HTMLElement {
     submenuIndicator.setAttribute('shape', 'angle')
     submenuIndicator.setAttribute('dir', 'right')
     afterElement.appendChild(submenuIndicator)
-  } else if (item.accelerator != null) {
+  } else if (item.type !== 'separator' && item.accelerator != null) {
     const accel = document.createElement('span')
     let acc = item.accelerator
     // Make the accelerator system-specific
@@ -126,20 +162,72 @@ function renderMenuItem (item: any, elementClass?: string): HTMLElement {
     acc = acc.replace('Control', 'Ctrl')
     acc = acc.replace('Minus', '-')
     acc = acc.replace('Delete', 'Del')
-    acc = acc.replace('Backspace', 'Del')
 
     // Replace some common keycodes with their correct symbols
     acc = acc.replace('Cmd', '⌘')
     acc = acc.replace('Shift', '⇧')
     acc = acc.replace('Alt', '⎇')
     acc = acc.replace('Option', '⎇')
+    acc = acc.replace('Backspace', '←')
+    acc = acc.replace('Tab', '↹')
 
-    // Afterwards, remove all plus signs and replace them with spaces
-    acc = acc.replace(/\+/g, ' ')
-    acc = acc.replace('Plus', '+') // Obviously, needs to come afterwards
+    // Afterwards, remove all plus signs
+    acc = acc.replace(/\+/g, ' ') // Use a thin space (U+2009)
+    acc = acc.replace('Plus', '+') // Obviously, needs to come last
     accel.textContent = acc
     afterElement.appendChild(accel)
   }
 
   return menuItem
+}
+
+/**
+ * Determines if a point is within the given rect
+ *
+ * @param   {Point}    point  The point
+ * @param   {Rect}     rect   The rect
+ *
+ * @return  {boolean}         True, if the point is within the rect
+ */
+function pointInRect (point: Point, rect: Rect): boolean {
+  return (
+    point.x > rect.left &&
+    point.x < rect.left + rect.width &&
+    point.y > rect.top &&
+    point.y < rect.top + rect.height
+  )
+}
+
+/**
+ * Positions a menu correctly on the screen so that it is completely visible.
+ *
+ * @param   {HTMLElement}  menu    The menu to position
+ * @param   {Rect}         target  The target rectancle
+ */
+function positionMenu (menu: HTMLElement, target: Rect): void {
+  // Now position the element: First generally where it is supposed to be.
+  menu.style.top = `${target.top}px`
+  menu.style.left = `${target.left + target.width}px`
+  const bounds = menu.getBoundingClientRect()
+
+  const spaceToTheLeft = bounds.x
+  const spaceToTheRight = window.innerWidth - bounds.right
+  const isTooHigh = bounds.height > window.innerHeight
+
+  // Second, we have to check if it's on the right side. If not, and if on the
+  // other side is more space, swap it to there.
+  if (bounds.right > window.innerWidth && spaceToTheRight < spaceToTheLeft) {
+    // Swap the menu to the other side
+    menu.style.left = `${target.left - bounds.width}px`
+  }
+
+  // Third, check the height: Move it up until it's aligned with the bottom.
+  if (bounds.bottom > window.innerHeight && !isTooHigh) {
+    // Apply a margin of 10 pixels to not clutch it somewhere at the bottom
+    menu.style.top = `${window.innerHeight - bounds.height - 10}px`
+  } else if (isTooHigh) {
+    // Crunch it together (also apply a margin of 10px again)
+    menu.style.top = '10px'
+    menu.style.height = `${window.innerHeight - 20}px`
+  }
 }

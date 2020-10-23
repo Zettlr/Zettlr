@@ -62,26 +62,10 @@ function showMenu (items: AnyMenuItem[], attachTo: string): void {
   }
 
   // Display a new menu
-  menuCloseCallback = global.menuProvider.show(rect.left, rect.top + rect.height, items, (clickedID: string) => {
-    // The user has clicked a menu item
-    const selectedItem = items.find((elem) => {
-      if (elem.type === 'separator') {
-        return false
-      }
-
-      return elem.id === clickedID
-    })
-
-    if (selectedItem === undefined) {
-      return console.error(`Could not trigger a click on item ${clickedID}: Item was not found`)
-    }
-
-    if (selectedItem.type === 'separator') return
-
-    if (selectedItem.type !== 'submenu' && selectedItem.enabled) {
-      // Trigger a click on the "real" menu item in the back
-      send('click-menu-item', selectedItem.id)
-    }
+  const point = { x: rect.left, y: rect.top + rect.height }
+  menuCloseCallback = global.menuProvider.show(point, items, (clickedID: string) => {
+    // Trigger a click on the "real" menu item in the back
+    send('click-menu-item', clickedID)
   })
 
   // Save the original ID for easy access
@@ -114,8 +98,8 @@ export default function registerMenubar (shouldShowMenubar: boolean): void {
   })
 
   window.addEventListener('click', (event) => {
+    // The closing will be handled automatically by the menu
     if (menuCloseCallback !== null) {
-      menuCloseCallback()
       menuCloseCallback = null
       currentSubMenu = null
     }

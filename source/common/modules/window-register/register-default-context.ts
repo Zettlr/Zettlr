@@ -121,7 +121,8 @@ function displayContextMenu (posX: number, posY: number, target: HTMLInputElemen
     items.push(buildItem)
   }
 
-  currentCallback = global.menuProvider.show(posX, posY, items, (clickedID: string) => {
+  const point: Point = { x: posX, y: posY }
+  currentCallback = global.menuProvider.show(point, items, (clickedID: string) => {
     // In this easy instance, we can simply send the ID to main ...
     ipcRenderer.send('window-controls', clickedID)
     // ... and re-focus the input
