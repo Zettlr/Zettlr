@@ -93,5 +93,5 @@ Vous y êtes arrivé ! La première partie de l'introduction est terminée. Nous
 
 Mais maintenant que les bases sont suffisantes, nous sommes prêts à faire le grand saut ! Passons maintenant au tutoriel des Zettelkästen ! Pour y aller, il suffit de cliquer sur le lien wiki suivant : [[zettelkasten]]
 
-[^1]: Ce texte se trouve en bas de ce fichier. Mais, en fait, vous pouvez les mettre où vous voulez. Vous connaissez le meilleur ? Si vous cliquez sur cette note de bas de page tout en maintenant la touche `Cmd/Ctrl` enfoncée, vous pouvez changer le texte de place ! Essayez maintenant et enregistrez vos modifications en appuyant sur `Maj+Entrée`. Si vous voulez annuler vos modifications, cliquez simplement en dehors de la fenêtre popup !
+[^1]: Ce texte se trouve en bas de ce fichier. Mais, en fait, vous pouvez les mettre où vous voulez. Vous connaissez le meilleur ? Si vous cliquez sur cette note de bas de page tout en maintenant la touche `Cmd/Ctrl` enfoncée, vous pouvez éditer le texte de là ! Essayez maintenant et enregistrez vos modifications en appuyant sur `Maj+Entrée`. Si vous voulez annuler vos modifications, cliquez simplement en dehors de la fenêtre popup !
 
