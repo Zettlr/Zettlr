@@ -134,6 +134,7 @@
 - Divided the menu template into templates for macOS and Windows (+ all other platforms).
 - Simplified the menu building process.
 - Added classes and event listeners to show custom built menus within frameless BrowserWindow instances.
+- Deprecate the `remote`-module.
 
 # 1.7.5
 

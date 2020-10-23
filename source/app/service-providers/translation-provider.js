@@ -15,7 +15,7 @@
 const path = require('path')
 const fs = require('fs')
 const { promisify } = require('util')
-const { app } = require('electron')
+const { app, ipcMain } = require('electron')
 const got = require('got')
 const { getTranslationMetadata, trans } = require('../../common/lang/i18n.js')
 const moment = require('moment')
@@ -42,6 +42,18 @@ module.exports = class TranslationProvider {
 
     this.init().catch((err) => {
       global.log(err.message, err)
+    })
+
+    // NOTE: Possible race condition: If this provider is in the future being
+    // loaded AFTER the translations are loaded, this will return undefined,
+    // as both global.i18n and global.u18nFallback will not yet be set.
+    // loadi18nMain therefore has to be called BEFORE any browser window may
+    // request a translation.
+    ipcMain.on('get-translation', (event) => {
+      event.returnValue = {
+        i18n: global.i18n,
+        i18nFallback: global.i18nFallback
+      }
     })
   }
 
