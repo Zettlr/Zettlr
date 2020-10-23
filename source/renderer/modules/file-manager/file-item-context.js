@@ -92,7 +92,8 @@ module.exports = function displayFileContext (event, fileObject, el) {
     ])
   }
 
-  global.menuProvider.show(event.clientX, event.clientY, items, (clickedID) => {
+  const point = { x: event.clientX, y: event.clientY }
+  global.menuProvider.show(point, items, (clickedID) => {
     switch (clickedID) {
       case 'menu.rename_file':
         displayRenamePopup(fileObject, el)
