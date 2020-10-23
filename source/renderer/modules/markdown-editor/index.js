@@ -183,7 +183,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
 
     // Display a context menu if appropriate
     this._instance.getWrapperElement().addEventListener('contextmenu', (event) => {
-      const shouldSelectWordUnderCursor = displayContextMenu(event, (command) => {
+      const shouldSelectWordUnderCursor = displayContextMenu(event, this._instance.isReadOnly(), (command) => {
         switch (command) {
           case 'cut':
           case 'copy':

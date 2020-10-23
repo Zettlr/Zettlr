@@ -84,7 +84,23 @@ const TEMPLATE = [
   }
 ]
 
-module.exports = function displayContextMenu (event, commandCallback, replaceCallback) {
+// Contains a list of all labels that should be disabled
+// in readonly mode of the editor
+const readOnlyDisabled = [
+  'menu.bold',
+  'menu.italic',
+  'menu.insert_link',
+  'menu.insert_ol',
+  'menu.insert_ul',
+  'menu.insert_tasklist',
+  'gui.formatting.blockquote',
+  'gui.formatting.insert_table',
+  'menu.cut',
+  'menu.paste',
+  'menu.paste_plain'
+]
+
+module.exports = function displayContextMenu (event, isReadOnly, commandCallback, replaceCallback) {
   const elem = event.target
   let buildMenu = []
   let shouldSelectWordUnderCursor = true
@@ -111,7 +127,12 @@ module.exports = function displayContextMenu (event, commandCallback, replaceCal
       buildItem.command = item.command
     }
 
-    buildItem.enabled = true
+    if (isReadOnly && readOnlyDisabled.includes(item.label)) {
+      buildItem.enabled = false
+    } else {
+      buildItem.enabled = true
+    }
+
     buildMenu.push(buildItem)
   }
 
