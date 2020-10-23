@@ -38,8 +38,6 @@ Cliquez maintenant sur « Zettlr Tutorial » pour revenir à sa liste de fichier
 
 ## Comment utiliser le Markdown 📝
 
-Zettlr est un éditeur Markdown, ce qui signifie qu'il fonctionne pour l'essentiel 
-
 Zettlr est un éditeur Markdown, ce qui signifie qu'il fonctionne principalement comme des applications que vous connaissez déjà, comme Microsoft Word, LibreOffice ou OpenOffice. Mais au lieu de devoir cliquer sur une armada de boutons dans la barre d'outils, vous pouvez structurer vos éléments en utilisant uniquement des caractères, ce qui implique que vous n'avez jamais à quitter votre clavier ! C'est trop cool ! ✨
 
 Passons rapidement en revue les aspects les plus importants :
