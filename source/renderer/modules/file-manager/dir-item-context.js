@@ -89,8 +89,8 @@ module.exports = function displayFileContext (event, dirObject, el) {
         type: 'separator'
       },
       {
-        id: 'menu.close_dir',
-        label: trans('menu.close_dir'),
+        id: 'menu.close_workspace',
+        label: trans('menu.close_workspace'),
         enabled: true
       }
     ])
@@ -161,7 +161,7 @@ module.exports = function displayFileContext (event, dirObject, el) {
           content: { hash: dirObject.hash }
         })
         break
-      case 'menu.close_dir':
+      case 'menu.close_workspace':
         ipcRenderer.send('message', {
           command: 'root-close',
           content: dirObject.hash

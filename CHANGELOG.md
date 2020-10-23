@@ -4,6 +4,7 @@
 
 - Renamed the **sidebar** to **file manager**. We finally decided on better terminology for distinguishing the right from the left sidebar. This means: The left sidebar, formerly known only as "sidebar," is now the "file manager." The right sidebar, formerly known as "attachment sidebar," is now "the" sidebar. This change was introduced to reduce user confusion and provide a better user experience.
 - The shortcut for opening the developer tools on Windows and Linux is now `Ctrl+Alt+I` (was: `Ctrl+Shift+I`) to resolve a conflict with the shortcut `Ctrl+Shift+I` (insert images).
+- Renamed **Root Directories** to **Workspaces**. The term "root" is rather technical, and for most people, it makes most sense to think of those roots as workspaces, albeit other than being opened at the root level of the application, they have no difference to regular directories.
 
 ## GUI and Functionality
 
