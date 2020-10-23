@@ -304,9 +304,14 @@ class ZettlrIPC {
         global.targets.set(cnt)
         break
 
-      case 'dir-open':
+      case 'workspace-open':
         // Client requested a totally different folder.
-        this._app.open()
+        this._app.openWorkspace()
+        break
+
+      case 'root-file-open':
+        // Client requested a new file.
+        this._app.openRootFile()
         break
 
       // Change theme in config

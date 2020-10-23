@@ -375,9 +375,9 @@ export default class Zettlr {
   }
 
   /**
-    * Open a new root.
+    * Open a new workspace.
     */
-  async open (): Promise<void> {
+  async openWorkspace (): Promise<void> {
     // TODO: Move this to a command
     // The user wants to open another file or directory.
     let ret = await this.window.askDir()
@@ -387,7 +387,7 @@ export default class Zettlr {
 
     if ((isDir(retPath) && ignoreDir(retPath)) || (isFile(retPath) && ignoreFile(retPath)) || retPath === app.getPath('home')) {
       // We cannot add this dir, because it is in the list of ignored directories.
-      global.log.error('The chosen directory is on the ignore list.', ret)
+      global.log.error('The chosen workspace is on the ignore list.', ret)
       this.window.prompt({
         'type': 'error',
         'title': trans('system.error.ignored_dir_title'),
@@ -398,6 +398,25 @@ export default class Zettlr {
     global.ipc.notify(trans('system.open_root_directory', path.basename(retPath)))
     await this.handleAddRoots([retPath])
     global.ipc.notify(trans('system.open_root_directory_success', path.basename(retPath)))
+    global.ipc.send('paths-update', this._fsal.getTreeMeta())
+  }
+
+  /**
+   * Open a new root file
+   */
+  async openRootFile (): Promise<void> {
+    // TODO: Move this to a command
+    // The user wants to open another file or directory.
+    const rmdSupport = global.config.get('enableRMarkdown') as boolean
+    const extensions = [ '.markdown', '.md', '.txt' ]
+    if (rmdSupport) {
+      extensions.push('.rmd')
+    }
+
+    const filter = [{ 'name': trans('system.files'), 'extensions': extensions }]
+
+    let ret = await this.window.askFile(filter, true)
+    await this.handleAddRoots(ret)
     global.ipc.send('paths-update', this._fsal.getTreeMeta())
   }
 

@@ -71,7 +71,12 @@
       {
         "label": "menu.open",
         "accelerator": "Cmd+O",
-        "command": "dir-open"
+        "command": "root-file-open"
+      },
+      {
+        "label": "menu.open_workspace",
+        "accelerator": "Cmd+Shift+O",
+        "command": "workspace-open"
       },
       {
         "label": "menu.save",

@@ -292,9 +292,14 @@ class ZettlrRendererIPC {
         this._app.getToolbar().focusSearch()
         break
 
-      case 'dir-open':
+      case 'workspace-open':
       // User has requested to open another folder. Notify host process.
-        this.send('dir-open')
+        this.send('workspace-open')
+        break
+
+      case 'root-file-open':
+        // User wants to open a new root file
+        this.send('root-file-open')
         break
 
       // The user wants to open a dir externally (= in finder etc)

@@ -440,6 +440,8 @@ class ZettlrWindow {
       global.config.set('dialogPaths.askFileDialog', ret.filePaths[0])
     }
 
+    if (ret.canceled) throw new Error('The askFile dialog was cancelled')
+
     return ret.filePaths
   }
 

@@ -53,7 +53,7 @@
             v-show="getDirectories.length > 0"
             id="directories-dirs-header"
           >
-            <clr-icon shape="tree-view"></clr-icon>{{ dirSectionHeading }}
+            <clr-icon shape="tree-view"></clr-icon>{{ workspaceSectionHeading }}
           </div>
           <tree-item
             v-for="item in getDirectories"
@@ -262,7 +262,7 @@ module.exports = {
     noRootsMessage: function () { return trans('gui.empty_directories') },
     noResultsMessage: function () { return trans('gui.no_search_results') },
     fileSectionHeading: function () { return trans('gui.files') },
-    dirSectionHeading: function () { return trans('gui.dirs') },
+    workspaceSectionHeading: function () { return trans('gui.workspaces') },
     emptyFileListMessage: function () { return trans('gui.no_dir_selected') },
     emptyDirectoryMessage: function () { return trans('gui.empty_dir') },
     emptySearchResults: function () { return this.$store.state.searchNoResults }
