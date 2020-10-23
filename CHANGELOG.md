@@ -69,7 +69,7 @@
   - chokidar `3.4.2`
   - codemirror `5.57.0`
   - copy-webpack-plugin `6.1.0`
-  - electron `9.3.0`
+  - electron `10.1.4`
   - eslint `7.8.1`
   - eslint-config-standard-with-typescript `19.0.1`
   - eslint-plugin-vue `7.0.0-beta.3`
