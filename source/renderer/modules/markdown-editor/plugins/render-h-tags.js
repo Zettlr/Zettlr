@@ -125,7 +125,6 @@
         const point = { x: e.clientX, y: e.clientY }
         currentCallback = global.menuProvider.show(point, items, (id) => {
           const numID = parseInt(id, 10)
-          console.log(curFrom, curTo, '#'.repeat(numID))
 
           // Simply adapt the heading level, and clear the text marker.
           // On the next pass-through, the plugin will re-render the correct
