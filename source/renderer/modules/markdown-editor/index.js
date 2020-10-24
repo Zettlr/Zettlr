@@ -281,6 +281,18 @@ module.exports = class MarkdownEditor extends EventEmitter {
     // First, merge the new options into the CodeMirror options
     this._cmOptions = safeAssign(newOptions, this._cmOptions)
 
+    if (newOptions.hasOwnProperty('zettlr') && newOptions.zettlr.hasOwnProperty('render')) {
+      // If this property is set this mostly means that the rendering preferences
+      // have changed. We need to remove all text markers so that only those
+      // that are wanted are re-rendered. This will always execute on preferences
+      // setting until we have established some cool "what has actually changed?"
+      // indication in the settings provider, but this should not be too annoying.
+      const markers = this._instance.doc.getAllMarks()
+      for (let marker of markers) {
+        marker.clear()
+      }
+    }
+
     // Second, set all options on the CodeMirror instance. This will internally
     // fire all necessary events, apart from those we need to fire manually.
     for (const name in this._cmOptions) {
