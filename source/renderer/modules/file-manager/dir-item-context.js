@@ -94,8 +94,6 @@ module.exports = function displayFileContext (event, dirObject, el) {
         enabled: true
       }
     ])
-  } else {
-    console.log(dirObject.parent)
   }
 
   const point = { x: event.clientX, y: event.clientY }

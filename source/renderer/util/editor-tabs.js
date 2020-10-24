@@ -13,6 +13,7 @@
  */
 
 const { trans } = require('../../common/lang/i18n')
+const { ipcRenderer } = require('electron')
 const path = require('path')
 const tippy = require('tippy.js').default
 // Left the localize/localise here in order to confuse future generations.
@@ -37,6 +38,8 @@ module.exports = class EditorTabs {
     this._div.onclick = (event) => { this._onClick(event) }
     // Listen for non-primary clicks (= closing)
     this._div.onauxclick = (event) => { this._onClick(event) }
+
+    this._div.addEventListener('contextmenu', (event) => { this._onContext(event) })
 
     this._div.ondragstart = (evt) => {
       // The user has initated a drag operation, so we need some variables
@@ -234,6 +237,77 @@ module.exports = class EditorTabs {
         this._intentCallback(hash, (middleClick || closeIntent) ? 'close' : 'select')
       }
     }
+  }
+
+  _onContext (event) {
+    // Display the tab context menu
+
+    let elem = event.target
+    // Make sure that the element is not somewhere inside the close span
+    if (elem.tagName === 'PATH') elem = elem.parentElement
+    if (elem.tagName === 'SVG') elem = elem.parentElement
+    // After these IFs we should have the clr-icon if the user clicked the X
+
+    // Transient tabs further embed their filenames in an <em>-tag, which we
+    // account for here.
+    if (elem.tagName === 'EM') elem = elem.parentElement
+    if (elem.classList.contains('filename')) elem = elem.parentElement
+    if (elem.getAttribute('id') === 'document-tabs') return // No file selected
+    const currentHash = elem.dataset['hash']
+
+    const items = [
+      {
+        id: 'file-rename',
+        label: trans('menu.rename_file'),
+        command: 'file-rename',
+        type: 'normal',
+        enabled: true
+      },
+      {
+        id: 'file-delete',
+        label: trans('menu.delete_file'),
+        command: 'file-delete',
+        type: 'normal',
+        enabled: true
+      },
+      {
+        type: 'separator'
+      },
+      {
+        id: 'file-close-all',
+        label: trans('menu.close_all_tabs'),
+        command: 'file-close-all',
+        type: 'normal',
+        enabled: true
+      }
+    ]
+
+    const point = { x: event.clientX, y: event.clientY }
+    console.log(elem)
+
+    global.menuProvider.show(point, items, (clickedID) => {
+      switch (clickedID) {
+        case 'file-rename':
+          global.popupProvider.show('textfield', elem, { val: '', placeholder: trans('dialog.file_rename.placeholder') }, (form) => {
+            if (form !== null) {
+              ipcRenderer.send('message', {
+                command: 'file-rename',
+                content: { hash: currentHash, name: form[0].value }
+              })
+            }
+          })
+          break
+        case 'file-delete':
+          ipcRenderer.send('message', {
+            command: 'file-delete',
+            content: { hash: currentHash }
+          })
+          break
+        case 'file-close-all':
+          ipcRenderer.send('message', { command: 'file-close-all' })
+          break
+      }
+    })
   }
 
   /**
