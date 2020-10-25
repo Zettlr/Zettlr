@@ -57,6 +57,7 @@
 - Improved the layouting of the display settings tab.
 - The context menu is now a custom one, making the experience more seamless.
 - If you change the display settings for the editor, the editor will now also remove rendered elements that you do not wish to be rendered anymore.
+- Footnote tooltips are now interactive, which means you can select text from them, and also click on any link to visit it without having to scroll to the bottom and do the same action there.
 
 ## Under the Hood
 
@@ -138,6 +139,7 @@
 - Simplified the menu building process.
 - Added classes and event listeners to show custom built menus within frameless BrowserWindow instances.
 - Deprecate the `remote`-module.
+- The md2html-function can now make anchors renderer-safe, so that they don't open within the main window anymore.
 
 # 1.7.5
 

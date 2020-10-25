@@ -72,7 +72,7 @@ function showFootnoteTooltip (cm, element) {
   fnref = (fnref && fnref !== '') ? fnref : '_No reference text_'
 
   // For preview we should convert the footnote text to HTML.
-  fnref = md2html(fnref)
+  fnref = md2html(fnref, true) // Ensure safe links
 
   // Now we either got a match or an empty fnref. So create a tippy
   // instance
@@ -82,7 +82,9 @@ function showFootnoteTooltip (cm, element) {
     onHidden (instance) {
       instance.destroy() // Destroy the tippy instance.
     },
-    arrow: true
+    arrow: true,
+    interactive: true, // Enable clicking on links, etc.
+    appendTo: document.body // Necessary because these tippys are interactive
   }).show() // Immediately show the tooltip
 }
 

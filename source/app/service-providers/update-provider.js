@@ -162,7 +162,7 @@ module.exports = class UpdateProvider {
     // Convert links, so that they remain but do not open in the same
     // window. Security fallback: target="_blank" (then at least they "only"
     // open a new window)
-    let aRE = /<a(.+?)>(.*?)<\/a>/g
+    const aRE = /<a\s+(.+?)>(.*?)<\/a>/g
     html = html.replace(aRE, function (match, p1, p2, offset, string) {
       return `<a${p1} onclick="require('electron').shell.openExternal(this.getAttribute('href')); return false;" target="_blank">${p2}</a>`
     })
