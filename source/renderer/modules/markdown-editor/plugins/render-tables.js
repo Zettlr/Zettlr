@@ -45,7 +45,11 @@ const Table = require('../../table-editor');
 
       if (match[1]) {
         // Group 1 triggered, so we might have a simple table.
-        if (cm.getLine(i + 1).trim() === '') continue // It's a Setext heading
+        const nextLine = cm.getLine(i + 1)
+        if (nextLine === undefined || nextLine.trim() === '') {
+          // Either end of document or a setext heading
+          continue
+        }
         if (i === 0 || cm.getLine(i - 1).trim() === '') {
           // We have a headless table, so let's search the end.
           firstLine = i // First line in this case is i
