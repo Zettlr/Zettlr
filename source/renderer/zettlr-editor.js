@@ -619,6 +619,7 @@ class ZettlrEditor {
       indentUnit: global.config.get('editor.indentUnit'),
       autoCloseBrackets: global.config.get('editor.autoCloseBrackets'),
       keyMap: global.config.get('editor.inputMode'),
+      direction: global.config.get('editor.direction'),
       zettlr: {
         muteLines: global.config.get('muteLines'),
         imagePreviewWidth: global.config.get('display.imageWidth'),

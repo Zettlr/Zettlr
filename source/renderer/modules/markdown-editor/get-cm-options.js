@@ -56,7 +56,6 @@ module.exports = function () {
     fullScreen: false,
     // Placeholder for empty instances, necessary to maintain the styling
     placeholder: ' ',
-    // TODO:
     hintOptions: {
       completeSingle: false, // Don't auto-complete, even if there's only one word available
       hint: (cm, opt) => { return this._autocomplete.hint(cm, opt) }
