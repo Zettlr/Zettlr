@@ -20,7 +20,6 @@
     v-on:dragstart.stop="beginDragging"
     v-on:dragenter.stop="enterDragging"
     v-on:dragleave.stop="leaveDragging"
-    v-on:contextmenu="handleContextMenu"
   >
     <div
       ref="listElement"
@@ -33,6 +32,7 @@
       v-on:dragover="acceptDrags"
       v-on:mouseenter="hover=true"
       v-on:mouseleave="hover=false"
+      v-on:contextmenu="handleContextMenu"
     >
       <p
         class="filename"
