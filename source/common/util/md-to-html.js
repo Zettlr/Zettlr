@@ -1,7 +1,11 @@
 const { Converter } = require('showdown')
+const Citr = require('@zettlr/citr')
+const { ipcRenderer } = require('electron')
 
 // Spin up a showdown converter which can be used across the app
-var showdownConverter = new Converter()
+var showdownConverter = new Converter({
+  extensions: [showdownCitations]
+})
 showdownConverter.setFlavor('github')
 showdownConverter.setOption('strikethrough', true)
 showdownConverter.setOption('tables', true)
@@ -33,4 +37,40 @@ module.exports = (markdown, rendererSafeLinks = false) => {
     })
   }
   return html
+}
+
+/**
+ * Extension for showdown.js which parses citations using our citeproc provider.
+ *
+ * @return  {any}  The showdown extension
+ */
+function showdownCitations () {
+  return {
+    type: 'lang',
+    filter: function (text, converter, options) {
+      // First, extract all citations ...
+      const allCitations = Citr.util.extractCitations(text, false)
+      // ... and retrieve the final ones from the citeproc provider
+      let finalCitations = allCitations.map((elem) => {
+        if (ipcRenderer !== undefined) {
+          // We are in the renderer process
+          return ipcRenderer.sendSync('citation-renderer', {
+            command: 'get-citation-sync',
+            payload: { citation: elem }
+          })
+        } else {
+          // We are in the main process and can immediately access the provider
+          return global.citeproc.getCitation(elem)
+        }
+      })
+
+      // Finally, replace every citation with its designated replacement
+      for (let i = 0; i < allCitations.length; i++) {
+        text = text.replace(allCitations[i], finalCitations[i])
+      }
+
+      // Now return the text
+      return text
+    }
+  }
 }

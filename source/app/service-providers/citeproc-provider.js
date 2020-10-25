@@ -129,6 +129,8 @@ module.exports = class CiteprocProvider {
             'renderedCitation': this.getCitation(payload.citation)
           }
         })
+      } else if (command === 'get-citation-sync') {
+        event.returnValue = this.getCitation(payload.citation)
       }
     })
 
