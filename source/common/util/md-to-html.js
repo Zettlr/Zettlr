@@ -4,15 +4,16 @@ const { ipcRenderer } = require('electron')
 
 // Spin up a showdown converter which can be used across the app
 var showdownConverter = new Converter({
+  strikethrough: true,
+  tables: true,
+  omitExtraWLInCodeBlocks: true,
+  tasklists: true,
+  requireSpaceBeforeHeadingText: true,
+  ghMentions: false,
   extensions: [showdownCitations]
 })
+
 showdownConverter.setFlavor('github')
-showdownConverter.setOption('strikethrough', true)
-showdownConverter.setOption('tables', true)
-showdownConverter.setOption('omitExtraWLInCodeBlocks', true)
-showdownConverter.setOption('tasklists', true)
-showdownConverter.setOption('requireSpaceBeforeHeadingText', true)
-showdownConverter.setOption('ghMentions', false)
 
 /**
  * md2html converts the given Markdown to HTML, optionally making any link
