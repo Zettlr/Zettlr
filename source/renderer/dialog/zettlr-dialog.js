@@ -50,6 +50,7 @@ class ZettlrDialog extends EventEmitter {
     this._dialog = null // Must be overwritten by extension dialogs.
     this._statsData = []
     this._statsLabels = []
+    this._placeCallback = (event) => { this._place() }
   }
 
   /**
@@ -97,6 +98,7 @@ class ZettlrDialog extends EventEmitter {
     document.body.removeChild(this._modal)
     this._container.classList.remove('blur')
     this._modal.innerHTML = ''
+    window.removeEventListener('resize', this._placeCallback)
     this.emit('afterClose') // Notify listeners that the dialog is now closed.
     return this
   }
@@ -186,7 +188,7 @@ class ZettlrDialog extends EventEmitter {
     }
 
     // Always keep the dialog centered and nice
-    window.addEventListener('resize', (e) => { this._place() })
+    window.addEventListener('resize', this._placeCallback)
 
     // If there are any images in the tab, re-compute the size of the dialog
     // margins after the images load.
