@@ -267,6 +267,11 @@ module.exports = {
      * On click, this will call the selection function.
      */
     requestSelection: function (evt) {
+      // Determine if we have a middle (wheel) click
+      const middleClick = (event.type === 'auxclick' && event.button === 1)
+      const ctrl = event.ctrlKey && process.platform !== 'darwin'
+      const cmd = event.metaKey && process.platform === 'darwin'
+
       // Dead directories can't be opened, so stop the propagation to
       // the file manager and don't do a thing.
       if (this.obj.type === 'dead-directory') return evt.stopPropagation()
@@ -276,7 +281,9 @@ module.exports = {
         global.ipc.send('open-quicklook', this.obj.hash)
       } else if (this.obj.type === 'file') {
         // Request the clicked file
-        global.editor.announceTransientFile(this.obj.hash)
+        if (!middleClick && !ctrl && !cmd) {
+          global.editor.announceTransientFile(this.obj.hash)
+        }
         global.ipc.send('file-get', this.obj.hash)
       } else {
         // Select this directory

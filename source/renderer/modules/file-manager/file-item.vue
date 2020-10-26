@@ -224,12 +224,19 @@
           }
         },
         requestSelection: function (event) {
+          // Determine if we have a middle (wheel) click
+          const middleClick = (event.type === 'auxclick' && event.button === 1)
+          const ctrl = event.ctrlKey && process.platform !== 'darwin'
+          const cmd = event.metaKey && process.platform === 'darwin'
+
           if (this.obj.type === 'file' && event.altKey) {
             // QuickLook the file
             global.ipc.send('open-quicklook', this.obj.hash)
           } else if (this.obj.type === 'file') {
             // Request the clicked file
-            global.editor.announceTransientFile(this.obj.hash)
+            if (!middleClick && !ctrl && !cmd) {
+              global.editor.announceTransientFile(this.obj.hash)
+            }
             global.ipc.send('file-get', this.obj.hash)
           } else if (event.altKey && this.obj.parent) {
             // Select the parent directory
