@@ -68,34 +68,45 @@
 
 - Switched to Electron forge (thanks to @tobiasdiez for implementing).
 - Bumped dependencies:
-  - @clr/icons `4.0.1`
+  - @clr/icons `4.0.4`
   - @electron-forge/cli `6.0.0-beta.53`
   - @electron-forge/plugin-webpack `6.0.0-beta.53`
   - @teamsupercell/typings-for-css-modules-loader `2.3.0`
-  - @typescript-eslint/eslint-plugin `4.1.0`
-  - @typescript-eslint/parser `4.1.0`
+  - @typescript-eslint/eslint-plugin `4.5.0`
+  - @typescript-eslint/parser `4.5.0`
   - archiver `5.0.2`
-  - chokidar `3.4.2`
-  - codemirror `5.57.0`
+  - chokidar `3.4.3`
+  - citeproc `2.4.45`
+  - codemirror `5.58.2`
+  - chart.js `2.9.4`
   - copy-webpack-plugin `6.1.0`
-  - electron `10.1.4`
+  - electron `10.1.5`
   - eslint `7.8.1`
   - eslint-config-standard-with-typescript `19.0.1`
+  - eslint-plugin-import `2.22.1`
+  - eslint-plugin-standard `4.0.2`
   - eslint-plugin-vue `7.0.0-beta.3`
-  - file-loader `6.1.0`
+  - file-loader `6.1.1`
   - fork-ts-checker-webpack-plugin `5.1.0`
   - fsevents `2.1.3`
-  - got `11.6.2`
+  - got `11.8.0`
   - md5 `2.3.0`
-  - mocha `8.1.3`
-  - node-loader `1.0.1`
-  - on-change `2.1.2`
+  - mermaid `8.8.2`
+  - mocha `8.2.0`
+  - moment `2.29.1`
+  - node-loader `1.0.2`
+  - nspell `2.1.4`
+  - raw-loader `4.0.2`
   - reveal.js `4.1.0`
-  - ts-loader `8.0.3`
-  - typescript `4.0.2`
-  - uglify-js `3.10.4`
+  - tippy.js `6.2.7`
+  - ts-loader `8.0.7`
+  - typescript `4.0.3`
+  - uuid `8.3.1`
   - vue `2.6.12`
   - vue-template-compiler `2.6.12`
+- Removed dependencies:
+  - uglify-js
+  - on-change
 - Added a new Handlebars templating helper function, `i18n_value` that allows you to translate something passing a value to the translation helper (e.g. `{{i18n_value 'trans.identifier' someValue}}`).
 - Refactored the main build Workflow file. Now it doesn't run on a matrix, but due to the many dissimilar steps involved, there are three distinct jobs. Other than that, we switched to the GitHub tag name instead of utilizing a node script to retrieve the `package.json` version, switched to `yarn` everywhere and cleaned up the code.
 - Removed the now unused scripts `get-pkg-version.js` and `afterSign.js`.
