@@ -62,6 +62,7 @@
 - Footnote tooltips are now interactive, which means you can select text from them, and also click on any link to visit it without having to scroll to the bottom and do the same action there.
 - You can now forcefully open a file non-transient by either middle-clicking it, or holding down Ctrl/Cmd.
 - If you use YAML frontmatters demarcated by only dashes (`---`), for instance for compatibility with Jeckyll, these will not render as tables anymore.
+- Switched to reveal.js 4 and fixed an occasional error on export.
 
 ## Under the Hood
 
@@ -89,6 +90,7 @@
   - mocha `8.1.3`
   - node-loader `1.0.1`
   - on-change `2.1.2`
+  - reveal.js `4.1.0`
   - ts-loader `8.0.3`
   - typescript `4.0.2`
   - uglify-js `3.10.4`

@@ -316,14 +316,21 @@ class ZettlrBody {
     global.popupProvider.show('export', document.querySelector('.button.share'))
 
     $('.btn-share').click((e) => {
+      let elem = e.target
+
+      // Make sure to traverse up from the Clarity icon, if necessary
+      while (!elem.classList.contains('btn-share')) {
+        elem = elem.parentElement
+      }
+
       // The revealjs-button doesn't trigger an export, but the visibility
       // of the themes selection
-      if ($(e.target).hasClass('revealjs')) {
+      if ($(elem).hasClass('revealjs')) {
         $('#reveal-themes').toggleClass('hidden')
         return
       }
 
-      let ext = $(e.target).attr('data-ext')
+      let ext = $(elem).attr('data-ext')
       global.ipc.send('export', { 'hash': file.hash, 'ext': ext })
       global.popupProvider.close()
     })
