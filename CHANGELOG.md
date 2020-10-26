@@ -60,6 +60,7 @@
 - If you change the display settings for the editor, the editor will now also remove rendered elements that you do not wish to be rendered anymore.
 - Footnote tooltips are now interactive, which means you can select text from them, and also click on any link to visit it without having to scroll to the bottom and do the same action there.
 - You can now forcefully open a file non-transient by either middle-clicking it, or holding down Ctrl/Cmd.
+- If you use YAML frontmatters demarcated by only dashes (`---`), for instance for compatibility with Jeckyll, these will not render as tables anymore.
 
 ## Under the Hood
 

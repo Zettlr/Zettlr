@@ -38,7 +38,7 @@ const Table = require('../../table-editor');
       // tables have syntax highlighting -- CodeMirror modes cannot do that).
       let firstLine // First line of a given table
       let lastLine // Last line of a given table
-      let potentialTableType // Stores the potential type, can be "pipe", "simple"
+      let potentialTableType // Can be "grid", "pipe", "simple"
       let line = cm.getLine(i)
       let match = tableHeadingRE.exec(line)
       if (match == null) continue // No table heading
@@ -126,6 +126,15 @@ const Table = require('../../table-editor');
 
       // We can only have one marker at any given position at any given time
       if (cm.findMarks(curFrom, curTo).length > 0) continue
+
+      // A last sanity check: You could write YAML frontmatters by using only
+      // dashes at the beginning and ending, which demarcates an edge condition.
+      const beginningIsMd = cm.getModeAt(curFrom).name !== 'markdown'
+      const endingIsMd = cm.getModeAt(curTo).name !== 'markdown'
+
+      if (!beginningIsMd || !endingIsMd) {
+        continue
+      }
 
       // First grab the full table
       let markdownTable = ''
