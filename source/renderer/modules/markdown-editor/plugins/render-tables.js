@@ -129,8 +129,8 @@ const Table = require('../../table-editor');
 
       // A last sanity check: You could write YAML frontmatters by using only
       // dashes at the beginning and ending, which demarcates an edge condition.
-      const beginningIsMd = cm.getModeAt(curFrom).name !== 'markdown'
-      const endingIsMd = cm.getModeAt(curTo).name !== 'markdown'
+      const beginningIsMd = cm.getModeAt(curFrom).name === 'markdown'
+      const endingIsMd = cm.getModeAt(curTo).name === 'markdown'
 
       if (!beginningIsMd || !endingIsMd) {
         continue
@@ -141,6 +141,7 @@ const Table = require('../../table-editor');
       for (let i = firstLine; i <= lastLine; i++) {
         markdownTable += cm.getLine(i) + '\n'
       }
+      console.log('Rendering table!', markdownTable)
 
       // Now attempt to create a table from it.
       let tbl

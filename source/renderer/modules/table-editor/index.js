@@ -25,6 +25,7 @@ const buildSimpleTable = require('./build-simple')
 const buildGridTable = require('./build-grid')
 
 const renderTemplate = require('../../util/render-template')
+const md2html = require('../../../common/util/md-to-html')
 
 const computeCSS = require('./compute-css')
 
@@ -129,8 +130,12 @@ class TableHelper {
           this._colSizes[index] || 0 // default to 0
         )
 
+        // For better visual experience, render the Markdown source to HTML.
+        // This rendered HTML will be replaced with the source on focus.
+        const html = md2html(cell)
+
         row.append(
-          renderTemplate(`<td text-align="${colAlignments[index]}" contenteditable="true">${cell}</td>`)
+          renderTemplate(`<td text-align="${colAlignments[index]}" contenteditable="true" data-source="${cell}">${html}</td>`)
         )
       })
     }
@@ -259,6 +264,9 @@ class TableHelper {
     })
 
     $('table#' + this._tableID).off('focus', 'td').on('focus', 'td', (evt) => {
+      // Before the cell is focused, replace the contents with the source for
+      // easy editing, thereby removing any pre-rendered HTML
+      evt.target.innerHTML = evt.target.dataset.source || ''
       // As soon as any cell is focused, recalculate
       // the current cell and table dimensions.
       this._recalculateCurrentCell($(evt.target))
@@ -266,6 +274,10 @@ class TableHelper {
     })
 
     $('table#' + this._tableID).off('blur', 'td').on('blur', 'td', (evt) => {
+      // Re-render the table element and save the textContent as data-source
+      evt.target.dataset.source = evt.target.textContent
+      evt.target.innerHTML = md2html(evt.target.dataset.source)
+
       if (!this._elem.is(':focus-within')) {
         // If we are here, the full table has lost focus.
         // It's a good idea to update any content now!
@@ -485,7 +497,8 @@ class TableHelper {
       let columns = $(tableRows[i]).find('td')
       let rowAST = []
       for (let j = 0; j < columns.length; j++) {
-        let content = columns[j].textContent
+        // The real contents are in the source, not in the textContent
+        let content = columns[j].dataset.source || ''
         rowAST.push(content)
 
         if (!this._colSizes[j]) this._colSizes[j] = content.length
