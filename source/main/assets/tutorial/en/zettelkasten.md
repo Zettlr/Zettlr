@@ -15,6 +15,8 @@ Whenever you click an internal link, Zettlr will do two things at once: Start a 
 
 To exit the global search (and make the file list look “normal” again), click the small “x” in the search field now!
 
+> If you find yourself searching a lot and switching between search and “normal” file list, try to remember the key combination `Cmd/Ctrl+Shift+F` followed by `Escape`. The first keystroke focuses the search bar, whereas Escape resets the current search.
+
 ## Linking Files 🗄
 
 When it comes to cross-linking files within your Zettelkasten, there are two general ways of doing so: Either by using an ID, or its filename (without extension). So if you have a file called “zettelkasten.md” you can link to it by writing `[[zettelkasten]]`. Zettlr will try to find a file with that filename and open it.

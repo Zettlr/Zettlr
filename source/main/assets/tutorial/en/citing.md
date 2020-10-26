@@ -30,6 +30,8 @@ As soon as you write longer papers and even books, you may lose oversight over w
 
 In order to export these files, make sure to also have `pandoc-citeproc` installed, which is a small extra-program for Pandoc that can parse such citations during export.
 
+> Note that from Pandoc version 2.11 on, citeproc comes bundled with Pandoc, so you don't need to install it in an extra step.
+
 ## Final Thoughts 🔥
 
 This concludes our short introduction to Zettlr. You’re good to go!
