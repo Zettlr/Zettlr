@@ -63,6 +63,7 @@
 - You can now forcefully open a file non-transient by either middle-clicking it, or holding down Ctrl/Cmd.
 - If you use YAML frontmatters demarcated by only dashes (`---`), for instance for compatibility with Jeckyll, these will not render as tables anymore.
 - Switched to reveal.js 4 and fixed an occasional error on export.
+- The tutorial is now also available in German.
 
 ## Under the Hood
 
