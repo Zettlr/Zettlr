@@ -41,7 +41,7 @@ module.exports = class TranslationProvider {
     }
 
     this.init().catch((err) => {
-      global.log(err.message, err)
+      global.log.error(`[Translation Provider] Could not initialize provider: ${err.message}`, err)
     })
 
     // NOTE: Possible race condition: If this provider is in the future being
@@ -62,7 +62,14 @@ module.exports = class TranslationProvider {
    * @return {Promise} Resolves if everything worked out, rejects otherwise.
    */
   async init () {
-    let response = await got(TRANSLATION_API_URL, { method: 'GET' })
+    let response
+    try {
+      response = await got(TRANSLATION_API_URL, { method: 'GET' })
+    } catch (err) {
+      global.log.error(`[Translation Provider] Could not update translations: ${err.code}`, err)
+      return
+    }
+
     // Alright, we only need the body
     response = JSON.parse(response.body)
     this._availableLanguages = response // Let's save the response
@@ -95,6 +102,8 @@ module.exports = class TranslationProvider {
     }
 
     // Now we are done and can notify the user of all updated translations!
+    // TODO: Doesn't work right now, because the notification is sent before
+    // the main window is instantiated
     global.ipc.notify(
       trans(
         'dialog.preferences.translations.updated',
