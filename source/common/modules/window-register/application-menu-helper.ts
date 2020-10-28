@@ -26,8 +26,11 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
 
     if (item.type !== 'submenu' && item.type !== 'separator' && item.enabled) {
       // Trigger a click on the "real" menu item in the back
-      menuItem.addEventListener('click', (event) => {
+      menuItem.addEventListener('mousedown', (event) => {
+        event.preventDefault()
+        event.stopPropagation()
         callback((item as NormalItem).id)
+        appMenu.parentElement?.removeChild(appMenu) // Close the menu
       })
     } else if (item.type === 'submenu' && item.enabled) {
       // Enable displaying the sub menu
@@ -75,19 +78,17 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
   // on the window, because this indicates that the menu should be closed.
   // Clicks on any menu item will be handled before the event bubbles up to the
   // window so we don't need additional checks.
-  const clickCallback = (event: MouseEvent): void => {
+  const clickCallback = (event?: MouseEvent): void => {
     appMenu.parentElement?.removeChild(appMenu)
-    window.removeEventListener('click', clickCallback)
+    window.removeEventListener('mousedown', clickCallback)
   }
-  window.addEventListener('click', clickCallback)
+  window.addEventListener('mousedown', clickCallback)
 
   // Return a close-callback for the caller to programmatically close the menu
   return () => {
     // When the closing function is called, remove the menu again
-    appMenu.parentElement?.removeChild(appMenu)
-    // Make sure to always remove the event listener, no matter how the menu is
-    // closed -- programmatically or automatically.
-    window.removeEventListener('click', clickCallback)
+    console.log('Programmatic close')
+    clickCallback()
   }
 }
 

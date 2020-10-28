@@ -31,7 +31,7 @@ export default function registerMenubar (shouldShowMenubar: boolean): void {
     }
   })
 
-  window.addEventListener('click', (event) => {
+  window.addEventListener('mousedown', (event) => {
     // The closing will be handled automatically by the menu handler
     if (menuCloseCallback !== null) {
       menuCloseCallback = null
@@ -59,6 +59,11 @@ export default function registerMenubar (shouldShowMenubar: boolean): void {
       applicationMenu === null
     ) {
       return
+    }
+
+    // Close a previous menu if applicable.
+    if (menuCloseCallback !== null) {
+      menuCloseCallback()
     }
 
     // Exchange the submenu
@@ -105,7 +110,7 @@ function setMenu (): void {
     element.textContent = item.label
     element.dataset.id = item.id
 
-    element.addEventListener('click', (event) => {
+    element.addEventListener('mousedown', (event) => {
       event.preventDefault()
       event.stopPropagation()
       showSubmenu(item.submenu, item.id)
@@ -133,6 +138,11 @@ function showSubmenu (items: AnyMenuItem[], attachTo: string): void {
     menuCloseCallback()
     menuCloseCallback = null
     currentSubMenu = null
+  }
+
+  if (currentSubMenu === attachTo) {
+    // Emulate a toggle by not showing the same submenu again
+    return
   }
 
   // Display a new menu
