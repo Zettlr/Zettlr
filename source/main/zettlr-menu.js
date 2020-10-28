@@ -12,10 +12,14 @@
 * END HEADER
 */
 
-const { Menu, ipcMain } = require('electron')
-const electron = require('electron')
-const app = electron.app
+const {
+  app,
+  Menu,
+  ipcMain,
+  BrowserWindow
+} = require('electron')
 const { trans } = require('../common/lang/i18n.js')
+const broadcastIPCMessage = require('../common/util/broadcast-ipc-message')
 
 const BLUEPRINTS = {
   // Currently we ship two different sets of menu items -- one for macOS, and
@@ -44,9 +48,6 @@ class ZettlrMenu {
   */
   constructor (parent) {
     this._window = parent
-    // This array holds the top-level menu items so that each renderer can
-    // easily request them
-    this._topLevelMenuItems = []
 
     // Begin listening to configuration update events that announce a change in
     // the recent docs list so that we can make sure the menu is always updated.
@@ -59,7 +60,7 @@ class ZettlrMenu {
       if (command === 'get-top-level-items') {
         event.sender.webContents.send('menu-provider', {
           command: 'get-top-level-items',
-          payload: this._topLevelMenuItems
+          payload: this.topLevelItems
         })
       } else if (command === 'get-submenu') {
         const { payload } = message // Payload contains the menu ID
@@ -99,8 +100,10 @@ class ZettlrMenu {
           return
         }
 
-        // And now trigger a click!
-        menuItem.click()
+        // And now trigger a click! We need to pass the menuItem and the
+        // focusedWindow as well.
+        const focusedWindow = BrowserWindow.getFocusedWindow()
+        menuItem.click(menuItem, focusedWindow)
       }
     })
   }
@@ -279,16 +282,6 @@ class ZettlrMenu {
     let mainMenu = []
     const blueprint = BLUEPRINTS[process.platform]
 
-    // First, retrieve the top level menu items and translate them
-    this._topLevelMenuItems = Object.keys(blueprint).map((key) => {
-      let label = blueprint[key].label
-      label = (label.indexOf('.') < 0) ? label : trans(label)
-      return {
-        label: label,
-        id: blueprint[key].id
-      }
-    })
-
     // Now concat
     if (process.platform === 'darwin') mainMenu.push(this._buildFromSource(blueprint.app))
     mainMenu.push(this._buildFromSource(blueprint.file))
@@ -321,11 +314,32 @@ class ZettlrMenu {
   }
 
   /**
+   * Gets the top level application menu items
+   *
+   * @return  {AnyMenuItem[]}  The serialized items
+   */
+  get topLevelItems () {
+    const appMenu = Menu.getApplicationMenu()
+    return appMenu.items.map(item => {
+      return {
+        label: item.label,
+        id: item.id
+      }
+    })
+  }
+
+  /**
    * Generates and sets the main application menu
    */
   set () {
     const builtMenu = this._build()
     Menu.setApplicationMenu(builtMenu)
+    // Notify all open windows of a new menu, so that they can
+    // adapt their settings.
+    broadcastIPCMessage('menu-provider', {
+      command: 'get-top-level-items',
+      payload: this.topLevelItems
+    })
   }
 }
 
