@@ -122,7 +122,9 @@ app.on('open-file', (e, p) => {
   e.preventDefault() // Need to explicitly set this b/c we're handling this
   // The user wants to open a file -> simply handle it.
   if (zettlr !== null) {
-    zettlr.handleAddRoots([p]).catch((err) => { global.log.error(err) })
+    zettlr.handleAddRoots([p]).catch((err) => {
+      global.log.error('[Application] Error while adding new roots', err)
+    })
   } else {
     // The Zettlr object has yet to be created -> use the global.
     global.filesToOpen.push(p)
@@ -175,5 +177,5 @@ app.on('activate', function () {
  */
 process.on('unhandledRejection', (err: any) => {
   // Just log to console.
-  global.log.error(err.message)
+  global.log.error('[Application] Unhandled rejection received', err)
 })
