@@ -29,6 +29,9 @@ interface NormalItem {
 
 type AnyMenuItem = CheckboxRadioItem | SeparatorItem | SubmenuItem | NormalItem
 
+// Any menu item w/o separators
+type InteractiveMenuItem = CheckboxRadioItem | SubmenuItem | NormalItem
+
 interface Rect {
   top: number
   left: number

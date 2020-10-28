@@ -57,32 +57,10 @@ class ZettlrMenu {
     ipcMain.on('menu-provider', (event, message) => {
       const { command } = message
 
-      if (command === 'get-top-level-items') {
+      if (command === 'get-application-menu') {
         event.sender.webContents.send('menu-provider', {
-          command: 'get-top-level-items',
-          payload: this.topLevelItems
-        })
-      } else if (command === 'get-submenu') {
-        const { payload } = message // Payload contains the menu ID
-        const appMenu = Menu.getApplicationMenu()
-        if (appMenu === null) {
-          global.log.error(`[Menu Provider] Could not provide requested submenu for ID ${payload}: No menu set.`)
-          return
-        }
-
-        const menuItem = appMenu.getMenuItemById(payload)
-
-        if (menuItem === null) {
-          global.log.error(`[Menu Provider] Could not provide submenu: Menu Item ${payload} not found.`)
-          return
-        }
-
-        event.sender.webContents.send('menu-provider', {
-          command: 'get-submenu',
-          // We need to ensure to have a serializable submenu
-          // (containing only labels and IDs)
-          payload: this._makeItemSerializable(menuItem).submenu,
-          menuItemId: payload // Attach the original menu item ID for easier access in the renderer
+          command: 'application-menu',
+          payload: this.serializableApplicationMenu
         })
       } else if (command === 'click-menu-item') {
         const { payload } = message
@@ -318,14 +296,12 @@ class ZettlrMenu {
    *
    * @return  {AnyMenuItem[]}  The serialized items
    */
-  get topLevelItems () {
+  get serializableApplicationMenu () {
     const appMenu = Menu.getApplicationMenu()
-    return appMenu.items.map(item => {
-      return {
-        label: item.label,
-        id: item.id
-      }
+    const serialized = appMenu.items.map(item => {
+      return this._makeItemSerializable(item)
     })
+    return serialized
   }
 
   /**
@@ -337,8 +313,8 @@ class ZettlrMenu {
     // Notify all open windows of a new menu, so that they can
     // adapt their settings.
     broadcastIPCMessage('menu-provider', {
-      command: 'get-top-level-items',
-      payload: this.topLevelItems
+      command: 'application-menu',
+      payload: this.serializableApplicationMenu
     })
   }
 }

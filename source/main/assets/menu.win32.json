@@ -109,10 +109,12 @@
     "label": "menu.labels.edit",
     "submenu": [
       {
+        "accelerator": "Ctrl+Z",
         "label": "menu.undo",
         "role": "undo"
       },
       {
+        "accelerator": "Ctrl+Shift+Z",
         "label": "menu.redo",
         "role": "redo"
       },
@@ -120,10 +122,12 @@
         "type": "separator"
       },
       {
+        "accelerator": "Ctrl+X",
         "label": "menu.cut",
         "role": "cut"
       },
       {
+        "accelerator": "Ctrl+C",
         "label": "menu.copy",
         "role": "copy"
       },
@@ -133,6 +137,7 @@
         "command": "copy-as-html"
       },
       {
+        "accelerator": "Ctrl+V",
         "label": "menu.paste",
         "role": "paste"
       },
@@ -142,6 +147,7 @@
         "command": "paste-as-plain"
       },
       {
+        "accelerator": "Ctrl+A",
         "label": "menu.select_all",
         "role": "selectall"
       },
