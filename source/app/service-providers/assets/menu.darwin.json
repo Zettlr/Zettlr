@@ -48,6 +48,12 @@
       {
         "label": "menu.unhide",
         "role": "unhide"
+      },
+      { "type": "separator" },
+      {
+        "label": "menu.quit",
+        "id": "menu-quit",
+        "accelerator": "Cmd+Q"
       }
     ]
   },

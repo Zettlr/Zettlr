@@ -101,6 +101,12 @@
       {
         "label": "menu.custom_css",
         "command": "open-custom-css"
+      },
+      { "type": "separator" },
+      {
+        "label": "menu.quit",
+        "id": "menu-quit",
+        "accelerator": "Ctrl+Q"
       }
     ]
   },

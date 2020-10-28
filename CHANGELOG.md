@@ -159,6 +159,7 @@
 - Added classes and event listeners to show custom built menus within frameless BrowserWindow instances.
 - Deprecate the `remote`-module.
 - The md2html-function can now make anchors renderer-safe, so that they don't open within the main window anymore.
+- The menu handler is now a service provider.
 
 # 1.7.5
 

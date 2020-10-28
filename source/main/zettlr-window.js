@@ -19,7 +19,6 @@ const { dialog, BrowserWindow, app } = require('electron')
 const path = require('path')
 const { trans } = require('../common/lang/i18n')
 const isDir = require('../common/util/is-dir')
-const ZettlrMenu = require('./zettlr-menu.js')
 
 /**
  * This class is a wrapper for electron's BrowserWindow class with some functions
@@ -34,15 +33,6 @@ class ZettlrWindow {
   constructor (parent) {
     this._app = parent
     this._win = null
-    this._menu = null
-
-    // Enable classes from within the app to update the menu
-    global.refreshMenu = () => {
-      if (!this._win || !this._menu) {
-        return global.log.verbose('Not updating menu. Window not open.')
-      }
-      this._menu.set()
-    }
   }
 
   /**
@@ -192,10 +182,6 @@ class ZettlrWindow {
       }
     }
 
-    // Set the application menu
-    this._menu = new ZettlrMenu(this)
-    this._menu.set()
-
     // Push the window into the globals that the menu for instance can access it
     // to send commands.
     global.mainWindow = this._win
@@ -239,14 +225,6 @@ class ZettlrWindow {
 
     return this
   }
-
-  /**
-   * Shows a popup application menu at the specified coordinates
-   * @param  {number} x The x-position of the menu
-   * @param  {number} y The y-position of the menu
-   * @return {void}   Does not return
-   */
-  popupMenu (x, y) { this._menu.popup(x, y) }
 
   /**
     * Indicates that there are unsaved changes with a star in title and, on

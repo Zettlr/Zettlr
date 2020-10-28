@@ -33,6 +33,7 @@ import CssProvider from './service-providers/css-provider'
 import DictionaryProvider from './service-providers/dictionary-provider'
 import LogProvider from './service-providers/log-provider'
 import RecentDocsProvider from './service-providers/recent-docs-provider'
+import MenuProvider from './service-providers/menu-provider'
 import TagProvider from './service-providers/tag-provider'
 import TargetProvider from './service-providers/target-provider'
 import TranslationProvider from './service-providers/translation-provider'
@@ -53,6 +54,7 @@ var targetProvider: TargetProvider
 var translationProvider: TranslationProvider
 var updateProvider: UpdateProvider
 var watchdogProvider: WatchdogProvider
+var menuProvider: MenuProvider
 
 // Statistics: Record the uptime of the application
 var upTimestamp: number
@@ -94,6 +96,7 @@ export async function bootApplication (): Promise<void> {
   citeprocProvider = new CiteprocProvider()
   dictionaryProvider = new DictionaryProvider()
   recentDocsProvider = new RecentDocsProvider()
+  menuProvider = new MenuProvider()
   tagProvider = new TagProvider()
   targetProvider = new TargetProvider()
   cssProvider = new CssProvider()
@@ -123,6 +126,7 @@ export async function shutdownApplication (): Promise<void> {
   await cssProvider.shutdown()
   await targetProvider.shutdown()
   await tagProvider.shutdown()
+  await menuProvider.shutdown()
   await recentDocsProvider.shutdown()
   await dictionaryProvider.shutdown()
   await citeprocProvider.shutdown()

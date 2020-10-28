@@ -49,9 +49,6 @@ module.exports = class RecentDocsProvider extends EventEmitter {
         // Make sure we never exceed 100 recent docs
         this._recentDocs = this._recentDocs.slice(0, 100)
 
-        // Afterwards, refresh the menu
-        // global.refreshMenu()
-
         // Finally, announce the fact that the list of recent documents has
         // changed to whomever it may concern
         this.emit('update')
@@ -66,7 +63,6 @@ module.exports = class RecentDocsProvider extends EventEmitter {
         if ([ 'darwin', 'win32' ].includes(process.platform)) {
           app.clearRecentDocuments()
         }
-        // global.refreshMenu()
         // Announce that the list of recent docs has changed
         this.emit('update')
         return true
