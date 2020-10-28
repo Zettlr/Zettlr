@@ -141,7 +141,6 @@ const Table = require('../../table-editor');
       for (let i = firstLine; i <= lastLine; i++) {
         markdownTable += cm.getLine(i) + '\n'
       }
-      console.log('Rendering table!', markdownTable)
 
       // Now attempt to create a table from it.
       let tbl
