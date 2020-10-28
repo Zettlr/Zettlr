@@ -334,8 +334,6 @@ module.exports = class MenuProvider {
       mainMenu.unshift(this._buildFromSource(blueprint.app))
     }
 
-    console.log(mainMenu)
-
     // Last but not least build the template
     return Menu.buildFromTemplate(mainMenu)
   }
