@@ -171,6 +171,8 @@ export default class LogProvider {
       switch (msg.level) {
         case LogLevel.error:
           debugConsole.error(output)
+          // In case of an error, spit out anything that comes in
+          console.error(msg.details)
           break
         case LogLevel.info:
           debugConsole.info(output)
