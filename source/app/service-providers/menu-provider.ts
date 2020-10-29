@@ -339,7 +339,8 @@ module.exports = class MenuProvider {
   }
 
   /**
-   * Gets the top level application menu items
+   * Gets the application menu in a serializable state which can be sent through
+   * IPC calls or saved as JSON.
    *
    * @return  {AnyMenuItem[]}  The serialized items
    */
@@ -360,8 +361,7 @@ module.exports = class MenuProvider {
    * Generates and sets the main application menu
    */
   set (): void {
-    const builtMenu = this._build()
-    Menu.setApplicationMenu(builtMenu)
+    Menu.setApplicationMenu(this._build())
     // Notify all open windows of a new menu, so that they can
     // adapt their settings.
     broadcastIPCMessage('menu-provider', {

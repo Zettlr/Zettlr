@@ -5,14 +5,7 @@
 
 div#application-menu {
   position: fixed;
-
-  // Secondary sub menu
-  div.secondary-menu {
-    display: none;
-
-    // Display on request
-    &.open { display: initial; }
-  }
+  overflow-y: auto; // In case the menu is too small, enable scrolling
 
   div.menu-item {
     height: @menubar-height;

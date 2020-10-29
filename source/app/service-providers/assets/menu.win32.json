@@ -19,7 +19,12 @@
       {
         "label": "menu.open",
         "accelerator": "Ctrl+O",
-        "command": "dir-open"
+        "command": "root-file-open"
+      },
+      {
+        "label": "menu.open_workspace",
+        "accelerator": "Ctrl+Shift+O",
+        "command": "workspace-open"
       },
       {
         "label": "menu.save",
@@ -28,7 +33,7 @@
       },
       {
         "label": "menu.recent_docs",
-        "id": "recent-docs"
+        "zettlrRole": "recent-docs"
       },
       {
         "type": "separator"
@@ -56,7 +61,7 @@
       },
       {
         "label": "menu.import_dict_file",
-        "id": "openDictData"
+        "zettlrRole": "openDictData"
       },
       {
         "type": "separator"
@@ -268,17 +273,17 @@
       {
         "label": "menu.reload",
         "accelerator": "F5",
-        "id": "reloadWindow"
+        "zettlrRole": "reloadWindow"
       },
       {
         "label": "menu.toggle_devtools",
         "accelerator": "Ctrl+Alt+I",
-        "id": "toggleDevTools"
+        "zettlrRole": "toggleDevTools"
       },
       {
         "label": "menu.open_logs",
         "accelerator": "Ctrl+Alt+Shift+L",
-        "id": "openLogViewer"
+        "zettlrRole": "openLogViewer"
       }
     ]
   },
