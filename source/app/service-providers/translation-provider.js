@@ -66,7 +66,8 @@ module.exports = class TranslationProvider {
     try {
       response = await got(TRANSLATION_API_URL, { method: 'GET' })
     } catch (err) {
-      global.log.error(`[Translation Provider] Could not update translations: ${err.code}`, err)
+      // Not critical.
+      global.log.warning(`[Translation Provider] Could not update translations: ${err.code}`, err)
       return
     }
 
