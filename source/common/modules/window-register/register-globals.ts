@@ -14,11 +14,22 @@ export default function registerGlobals (): void {
       // immediately receive the config value we need. Basically we are pulling
       // the get()-handler from main using the "remote" feature, but we'll
       // implement it ourselves.
-      return ipcRenderer.sendSync('config-get', key)
+      return ipcRenderer.sendSync('config-provider', {
+        command: 'get-config',
+        payload: {
+          key: key
+        }
+      })
     },
     set: (key: string, val: any) => {
       // Send a synchronous event
-      return ipcRenderer.sendSync('config-set', key, val)
+      return ipcRenderer.sendSync('config-provider', {
+        command: 'set-config',
+        payload: {
+          key: key,
+          val: val
+        }
+      })
     }
   }
 

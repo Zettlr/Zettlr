@@ -22,7 +22,7 @@ const uuid4 = require('uuid').v4
 const EventEmitter = require('events')
 const bcp47 = require('bcp-47')
 const ZettlrValidation = require('../../common/zettlr-validation')
-const { app } = require('electron')
+const { app, ipcMain } = require('electron')
 const ignoreFile = require('../../common/util/ignore-file')
 const safeAssign = require('../../common/util/safe-assign')
 const isDir = require('../../common/util/is-dir')
@@ -324,7 +324,18 @@ module.exports = class ConfigProvider extends EventEmitter {
        * If true, Zettlr has detected a change in version in the config
        */
       newVersionDetected: () => { return this._newVersion }
-    }
+    } // END globals for the configuration
+
+    // Listen for renderer events
+    ipcMain.on('config-provider', (event, message) => {
+      const { command, payload } = message
+
+      if (command === 'get-config') {
+        event.returnValue = this.get(payload.key)
+      } else if (command === 'set-config') {
+        event.returnValue = this.set(payload.key, payload.val)
+      }
+    })
   }
 
   /**

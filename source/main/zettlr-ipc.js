@@ -34,19 +34,6 @@ class ZettlrIPC {
   constructor (zettlrObj) {
     this._app = zettlrObj
 
-    // Listen for synchronous messages from the renderer process to access
-    // config options.
-    ipc.on('config-get', (event, key) => {
-      // We have received a config event -> simply return back the respective
-      // key.
-      event.returnValue = global.config.get(key)
-    })
-
-    // We shall set a config value
-    ipc.on('config-set', (event, key, value) => {
-      event.returnValue = global.config.set(key, value)
-    })
-
     // Listen to window commands
     ipc.on('window-controls', (event, command) => {
       const callingWindow = BrowserWindow.fromWebContents(event.sender)
