@@ -2,10 +2,10 @@
     "toolbar": [
         {
             "role": "button",
-            "class": "dir-open",
-            "command": "dir-open",
+            "class": "workspace-open",
+            "command": "workspace-open",
             "content": "{}",
-            "title": "toolbar.dir_open",
+            "title": "menu.open_workspace",
             "icon": "folder-open"
         },
         {
