@@ -1,7 +1,7 @@
 // CODEMIRROR STYLING
 
 // Don't use text cursor on the scrollbar
-.CodeMirror-vscrollbar { cursor:default; }
+.CodeMirror-vscrollbar { cursor: default; }
 
 .CodeMirror {
   // The textarea element needs to have the same
@@ -40,17 +40,12 @@
     padding-top: 5em;
   }
 
-  &.CodeMirror-empty:not(.CodeMirror-readonly) {
-    // If the editor is empty, display a nice background image
-    // background-image: url('../../img/feather.svg');
-  }
-
   &.CodeMirror-empty.CodeMirror-readonly {
     // If the editor is empty, display a nice background image
     background-image: url('../../img/logo.svg');
   }
 
-  pre { padding:0; }
+  pre { padding: 0; }
 
   input[type="checkbox"] {
     transform: scale(1.2);
@@ -67,27 +62,27 @@
 
   .cm-table {
     font-family: @font-code;
-    font-weight:bold;
+    font-weight: bold;
   }
 
   .size-header-1 {
-    font-size:2em;
+    font-size: 2em;
     .CodeMirror-gutter-elt { line-height: 1.5em; }
   }
   .size-header-2 {
-    font-size:1.8em;
+    font-size: 1.8em;
     .CodeMirror-gutter-elt { line-height: 1.5em; }
   }
   .size-header-3 {
-    font-size:1.5em;
+    font-size: 1.5em;
     .CodeMirror-gutter-elt { line-height: 1.4em; }
   }
   .size-header-4 {
-    font-size:1.3em;
+    font-size: 1.3em;
     .CodeMirror-gutter-elt { line-height: 1.3em; }
   }
-  .size-header-5 { font-size:1em; }
-  .size-header-6 { font-size:1em; }
+  .size-header-5 { font-size: 1em; }
+  .size-header-6 { font-size: 1em; }
 
   .cm-comment,
   .cm-formatting-task,
@@ -116,7 +111,7 @@
   .cm-formatting-strong,
   .cm-formatting-em,
   .cm-zkn-link-formatting,
-  .cm-escape-char { opacity:.3; }
+  .cm-escape-char { opacity: 0.3; }
 
   .cm-formatting-quote,
   .cm-formatting-list-ul,
@@ -153,7 +148,7 @@
   .cm-zkn-link.meta-key:hover,
   a.cma { text-decoration: underline; }
 
-  .cm-zkn-tag { font-weight:bold; }
+  .cm-zkn-tag { font-weight: bold; }
 
   // Text-folding related stuff
   .CodeMirror-gutters {
@@ -178,11 +173,11 @@
   .CodeMirror-foldgutter-folded:after { content: "\25B8"; }
 
   .CodeMirror-foldmarker {
-    border-radius:@border-radius;
+    border-radius: @border-radius;
     display: inline-block;
     font-size: 75%;
     margin-left: 10px;
-    padding:2px;
+    padding: 2px;
     cursor: pointer;
     vertical-align: baseline;
   }

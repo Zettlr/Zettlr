@@ -82,7 +82,7 @@
       @media(min-width: 1025px) { padding-right: @editor-margin-normal-lg; }
       @media(max-width: 1024px) { padding-right: @editor-margin-normal-md; }
       @media(max-width:  900px) { padding-right: @editor-margin-normal-sm; }
-      overflow-x:hidden !important; // Necessary to hide the horizontal scrollbar
+      overflow-x: hidden !important; // Necessary to hide the horizontal scrollbar
 
       // We need to override a negative margin
       // and a bottom padding from the standard
@@ -126,6 +126,11 @@ body.show-menubar #editor {
     @media(max-width: 1000px) { padding-right: @editor-margin-fullscreen-md  !important; }
     @media(max-width:  800px) { padding-right: @editor-margin-fullscreen-sm  !important; }
   }
+}
+
+// Account for the menubar, if it is shown
+body.show-menubar .CodeMirror-fullscreen {
+  top: @toolbar-height + @menubar-height;
 }
 
 // Define the readability classes
