@@ -94,25 +94,6 @@ class ZettlrBody {
       }
     })
 
-    // React to global GUI shortcuts
-    $(document).on('keydown', (event) => {
-      let isDarwin = document.body.classList.contains('darwin')
-      let cmdOrCtrl = (isDarwin && event.metaKey) || (!isDarwin && event.ctrlKey)
-
-      let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && event.key === 'e')
-      let focusFileManagerShortcut = (cmdOrCtrl && event.shiftKey && event.key === 't')
-      if (focusEditorShortcut) { // Cmd/Ctrl+Shift+E
-        // Obviously, focus the editor
-        this._renderer.getEditor().focus()
-      } else if (focusFileManagerShortcut) { // Cmd/Ctrl+Shift+T
-        // You know what to do
-        document.getElementById('file-list').focus()
-      } else if (event.key === 'F2') {
-        // Trigger a rename
-        this.requestNewFileName(this._renderer.getActiveFile())
-      }
-    })
-
     // Inject a global notify and notifyError function
     global.notify = (msg) => { this.notify(msg) }
     global.notifyError = (msg) => { this.notifyError(msg) }

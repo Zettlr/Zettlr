@@ -289,6 +289,19 @@
         "type": "separator"
       },
       {
+        "label": "menu.focus_filemanager",
+        "accelerator": "Cmd+Shift+T",
+        "command": "focus-file-manager"
+      },
+      {
+        "label": "menu.focus_editor",
+        "accelerator": "Cmd+Shift+E",
+        "command": "focus-text-editor"
+      },
+      {
+        "type": "separator"
+      },
+      {
         "label": "menu.reset_zoom",
         "accelerator": "Cmd+0",
         "command": "zoom-reset"

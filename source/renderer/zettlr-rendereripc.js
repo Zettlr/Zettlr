@@ -485,6 +485,14 @@ class ZettlrRendererIPC {
         }
         break
 
+      case 'focus-file-manager':
+        document.getElementById('file-list').focus()
+        break
+  
+      case 'focus-text-editor':
+        this._app.getEditor().focus()
+        break
+  
       // An update in the config needs to be reflected in the renderer.
       case 'config-update':
         this._app.configChange()
