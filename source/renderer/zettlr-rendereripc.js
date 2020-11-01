@@ -486,7 +486,7 @@ class ZettlrRendererIPC {
         break
 
       case 'focus-file-manager':
-        document.getElementById('file-list').focus()
+        this._app.getFileManager().focusFileList()
         break
   
       case 'focus-text-editor':
