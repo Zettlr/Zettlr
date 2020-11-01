@@ -17,7 +17,7 @@
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-08-05T16:05:31.000000Z"
+        "updated_at": "2020-10-08T15:44:22.000000Z"
     },
     "dialog": {
         "about": {
@@ -86,10 +86,12 @@
             "replace_placeholder": "Remplacer par"
         },
         "paste_image": {
+            "current_directory": "R\u00e9pertoire actuel",
             "dimensions": "Dimensions de l'image",
             "info": "Ceci est un aper\u00e7u de l\u2019image actuellement dans le presse-papier. Appuyez sur entr\u00e9e pour l'enregistrer dans le r\u00e9pertoire actuel ou choisissez un r\u00e9pertoire personnalis\u00e9.",
             "name_label": "Nom de fichier",
             "name_placeholder": "Un nom de fichier unique",
+            "resize_to": "Redimensionner l'image en",
             "retain_aspect_label": "Conserver les proportions",
             "save_cwd": "Enregistrer dans le dossier courant",
             "title": "Ins\u00e9rer l\u2019image du presse-papier"
@@ -212,7 +214,7 @@
                 "direction_rtl": "Utiliser la direction d'\u00e9criture de droite \u00e0 gauche (D\u00e0G)",
                 "rtl_move_visually": "Utiliser l'ordre visuel pour le mouvement des touches fl\u00e9ch\u00e9es en mode D\u00e0G"
             },
-            "enable_rmarkdown": "Charger les fichiers RMarkdown",
+            "enable_rmarkdown": "Utiliser les fichiers RMarkdown",
             "enable_table_helper": "Activer l'\u00e9diteur de tableau",
             "export": {
                 "dest": "Dossier de destination pour les fichiers export\u00e9s. \u003Cem\u003EAttention\u003C/em\u003E les fichiers sont remplac\u00e9s si vous choisissez \u00ab dossier en cours \u00bb !",
@@ -227,6 +229,10 @@
                 "title": "Exporter"
             },
             "file_meta": "Propri\u00e9t\u00e9s du fichier",
+            "filemanager_combined": "Combin\u00e9 &mdash; affiche les fichiers et les r\u00e9pertoires dans l'arborescence de fichiers",
+            "filemanager_expanded": "D\u00e9velopp\u00e9 &mdash; affiche l'arborescence des fichiers et la liste des fichiers",
+            "filemanager_explanation": "Mode gestionnaire de fichiers",
+            "filemanager_thin": "Compact &mdash; affiche l'arborescence des fichiers ou la liste des fichiers",
             "filename_generator": "Mod\u00e8le pour les nouveaux noms de fichiers",
             "formatting_characters_explanation": "Choisissez les caract\u00e8res de formatage que les commandes en gras / d'emphase doivent utiliser",
             "general": "G\u00e9n\u00e9ral",
@@ -443,11 +449,14 @@
         "no_attachments": "Aucun annexe",
         "no_dir_selected": "Aucun r\u00e9pertoire s\u00e9lectionn\u00e9",
         "no_search_results": "Aucun r\u00e9sultat",
+        "number_selections": "%s s\u00e9lections",
         "statistics_more": "Plus de statistiques\u2026",
+        "table_of_contents": "Table des mati\u00e8res",
         "today_words": "mots aujourd'hui",
         "virtual_dirs": "Dossiers virtuels",
         "words": "%s mots",
-        "words_last_month": "mots au cours du mois"
+        "words_last_month": "mots au cours du mois",
+        "words_selected": "%s s\u00e9lectionn\u00e9s"
     },
     "localise": {
         "decimal_delimiter": ",",
@@ -459,6 +468,7 @@
         "all_front": "Tout au premier plan",
         "bold": "Gras",
         "clear_recent_docs": "Vider la liste",
+        "close_all_tabs": "Fermer tous les onglets",
         "close_dir": "Fermer le dossier",
         "close_file": "Fermer le fichier",
         "copy": "Copier",
@@ -543,9 +553,11 @@
         "toggle_devtools": "Outils du d\u00e9veloppeur",
         "toggle_distraction_free": "Mode sans distraction",
         "toggle_file_meta": "Propri\u00e9t\u00e9s du fichier",
+        "toggle_filemanager": "Activer / d\u00e9sactiver le gestionnaire de fichiers",
         "toggle_fullscreen": "Plein \u00e9cran",
         "toggle_sidebar": "Afficher la barre lat\u00e9rale",
         "toggle_theme": "Mode sombre",
+        "toggle_typewriter_mode": "Typewriter Mode",
         "undo": "Annuler",
         "unhide": "Remontrer",
         "update": "V\u00e9rifier les mises \u00e0 jour",

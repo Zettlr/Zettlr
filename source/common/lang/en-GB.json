@@ -7,7 +7,7 @@
             "lukecarrier \u003Cluke@carrier.im\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-09-23T11:34:18.000000Z"
+        "updated_at": "2020-10-23T21:56:36.000000Z"
     },
     "dialog": {
         "about": {
@@ -219,6 +219,10 @@
                 "title": "Export"
             },
             "file_meta": "Show file information",
+            "filemanager_combined": "Combined &mdash; show files and directories in the file tree",
+            "filemanager_expanded": "Expanded &mdash; show both file tree and file list",
+            "filemanager_explanation": "File manager mode",
+            "filemanager_thin": "Thin &mdash; show either file tree or file list",
             "filename_generator": "Pattern for new filenames",
             "formatting_characters_explanation": "Choose the formatting characters that the bold/emphasis commands should use",
             "general": "General",
@@ -309,6 +313,7 @@
                 "success": "Successfully downloaded %s!",
                 "updated": "Updated translations: %s"
             },
+            "use_native_appearance": "Use native window appearance",
             "user_dictionary": "User dictionary. Remove words by clicking them.",
             "watchdog_checkbox_label": "Activate Watchdog polling",
             "watchdog_explainer": "On some computers, Zettlr may report too many remote file changes. If this happens, try activating this setting.",
@@ -437,11 +442,13 @@
         "no_search_results": "No results",
         "number_selections": "%s selections",
         "statistics_more": "More statistics \u2026",
+        "table_of_contents": "Table of Contents",
         "today_words": "words today",
         "virtual_dirs": "Virtual Directories",
         "words": "%s words",
         "words_last_month": "words last month",
-        "words_selected": "%s selected"
+        "words_selected": "%s selected",
+        "workspaces": "Workspaces"
     },
     "localise": {
         "decimal_delimiter": ".",
@@ -456,6 +463,7 @@
         "close_all_tabs": "Close all tabs",
         "close_dir": "Close directory",
         "close_file": "Close file",
+        "close_workspace": "Close Workspace",
         "copy": "Copy",
         "copy_filename": "Copy filename",
         "copy_html": "Copy as HTML",
@@ -503,6 +511,7 @@
         "open_attachment": "Open Attachment",
         "open_link": "Open Link",
         "open_logs": "Open Logs",
+        "open_workspace": "Open Workspace \u2026",
         "pandoc": "Get Pandoc",
         "paste": "Paste",
         "paste_plain": "Paste without style",
@@ -538,9 +547,11 @@
         "toggle_devtools": "Toggle developer tools",
         "toggle_distraction_free": "Distraction free mode",
         "toggle_file_meta": "Additional Information",
+        "toggle_filemanager": "Toggle file manager",
         "toggle_fullscreen": "Toggle fullscreen",
         "toggle_sidebar": "Toggle Sidebar",
         "toggle_theme": "Night mode",
+        "toggle_typewriter_mode": "Typewriter Mode",
         "undo": "Undo",
         "unhide": "Show",
         "update": "Check for updates",
