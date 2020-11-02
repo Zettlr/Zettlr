@@ -48,8 +48,6 @@ class ZettlrQuicklookWindow {
     // First sending must go out of the first tick of the application
     setTimeout(() => {
       ipc.send('message', { 'command': 'ql-get-file', 'content': hash })
-      // Apply the custom CSS stylesheet to the head element
-      ipc.send('message', { 'command': 'get-custom-css-path', 'content': {} })
     }, 10)
     // Listen for the file event to receive the file to display from main.
     ipc.on('file', (e, file) => {
