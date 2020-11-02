@@ -24,13 +24,13 @@ module.exports = function (a, b) {
 
   // Check for firstHeadings, if applicable
   if (global.config.get('display.useFirstHeadings')) {
-    if (a.firstHeading !== undefined) aSort = a.firstHeading.toLowerCase()
-    if (b.firstHeading !== undefined) bSort = b.firstHeading.toLowerCase()
+    if (a.firstHeading != null) aSort = a.firstHeading.toLowerCase()
+    if (b.firstHeading != null) bSort = b.firstHeading.toLowerCase()
   }
 
   // Second, check for frontmatter, as this overwrites
-  if (a.frontmatter !== undefined && a.frontmatter.hasOwnProperty('title')) aSort = a.frontmatter.title.toLowerCase()
-  if (b.frontmatter !== undefined && b.frontmatter.hasOwnProperty('title')) bSort = b.frontmatter.title.toLowerCase()
+  if (a.frontmatter != null && a.frontmatter.hasOwnProperty('title')) aSort = a.frontmatter.title.toLowerCase()
+  if (b.frontmatter != null && b.frontmatter.hasOwnProperty('title')) bSort = b.frontmatter.title.toLowerCase()
 
   let coll = new Intl.Collator([ global.config.get('appLang'), 'en' ], { 'numeric': true })
 

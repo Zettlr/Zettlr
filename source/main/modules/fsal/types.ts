@@ -77,8 +77,8 @@ export interface MDFileDescriptor extends FSMetaInfo {
   wordCount: number
   charCount: number
   target: any // TODO
-  firstHeading: string|undefined
-  frontmatter: any|undefined
+  firstHeading: string|null
+  frontmatter: any|null
   linefeed: string
   modified: boolean
 }
@@ -126,8 +126,8 @@ export interface MDFileMeta extends FSMetaInfo {
   wordCount: number
   charCount: number
   target: any // TODO
-  firstHeading: string|undefined
-  frontmatter: any|undefined
+  firstHeading: string|null
+  frontmatter: any|null
   linefeed: string
   modified: boolean
   content: string

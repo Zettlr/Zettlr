@@ -95,15 +95,15 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   file.wordCount = countWords(content)
   file.charCount = countWords(content, true)
 
-  file.firstHeading = undefined
+  file.firstHeading = null
   let h1Match = /^#{1}\s(.+)$/m.exec(content)
   if (h1Match !== null) file.firstHeading = h1Match[1]
 
   // Extract a potential YAML frontmatter
-  file.frontmatter = undefined // Reset first
+  file.frontmatter = null // Reset first
   let frontmatter = extractYamlFrontmatter(content)
   if (frontmatter) {
-    if (!file.frontmatter) file.frontmatter = {}
+    if (file.frontmatter === null) file.frontmatter = {}
     for (let [ key, value ] of Object.entries(frontmatter)) {
       if (FRONTMATTER_VARS.includes(key)) {
         file.frontmatter[key] = value
@@ -209,8 +209,8 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
     'modtime': 0, // Modification time
     'creationtime': 0, // Creation time
     'linefeed': '\n',
-    'firstHeading': undefined, // May contain the first heading level 1
-    'frontmatter': undefined, // May contain frontmatter variables
+    'firstHeading': null, // May contain the first heading level 1
+    'frontmatter': null, // May contain frontmatter variables
     'modified': false // If true, it has been modified in the renderer
   }
 
