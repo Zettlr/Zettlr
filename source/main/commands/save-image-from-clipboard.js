@@ -35,7 +35,7 @@ class SaveImage extends ZettlrCommand {
   async run (evt, target) {
     // First check the name for sanity
     let targetFile = sanitize(target.name, '-')
-    let activeFile = this._app.getFileSystem().findFile(this._app.getFileSystem().getActiveFile())
+    let activeFile = this._app.getFileSystem().findFile(this._app.getFileSystem().activeFile)
 
     // A file must be opened and active, and the name valid
     if (targetFile === '') return global.ipc.notify(trans('system.error.no_allowed_chars'))
