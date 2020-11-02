@@ -51,6 +51,9 @@
       cbox.type = 'checkbox'
       if (checked) cbox.checked = true
 
+      // If the CodeMirror instance is readOnly, disable the checkbox
+      cbox.disabled = cm.isReadOnly()
+
       let textMarker = cm.markText(
         curFrom, curTo,
         {

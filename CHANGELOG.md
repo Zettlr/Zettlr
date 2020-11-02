@@ -65,6 +65,7 @@
 - Switched to reveal.js 4 and fixed an occasional error on export.
 - The tutorial is now also available in German.
 - The application menu now displays many more shortcuts which were already available albeit not visible.
+- Checkboxes are now disabled in Quicklooks.
 
 ## Under the Hood
 
