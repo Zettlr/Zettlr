@@ -17,13 +17,13 @@ export default function registerWindowControls (shouldShowWindowControls: boolea
   const close = document.querySelector('.window-controls .close')
 
   minimise?.addEventListener('click', (event) => {
-    ipcRenderer.send('window-controls', 'win-minimise')
+    ipcRenderer.send('window-controls', { command: 'win-minimise' })
   })
   resize?.addEventListener('click', (event) => {
-    ipcRenderer.send('window-controls', 'win-maximise')
+    ipcRenderer.send('window-controls', { command: 'win-maximise' })
   })
   close?.addEventListener('click', (event) => {
-    ipcRenderer.send('window-controls', 'win-close')
+    ipcRenderer.send('window-controls', { command: 'win-close' })
   })
 
   // Sometimes, the main process fires back a message with regard to the status
@@ -40,5 +40,5 @@ export default function registerWindowControls (shouldShowWindowControls: boolea
   })
 
   // Get the initial windowed/maximised-status
-  ipcRenderer.send('window-controls', 'get-maximised-status')
+  ipcRenderer.send('window-controls', { command: 'get-maximised-status' })
 }

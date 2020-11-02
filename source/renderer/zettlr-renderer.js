@@ -180,7 +180,7 @@ class ZettlrRenderer {
     // Write an ID to the clipboard
     clipboard.writeText(generateId(global.config.get('zkn.idGen')))
     // Paste the ID
-    ipcRenderer.send('window-controls', 'paste')
+    ipcRenderer.send('window-controls', { command: 'paste' })
 
     // Now restore the clipboard's original contents
     setTimeout((e) => {

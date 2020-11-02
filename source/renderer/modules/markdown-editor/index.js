@@ -192,7 +192,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
             // because in the specific case of CodeMirror this results in unwanted
             // behaviour.
             // Needs to be issued from main on the holding webContents
-            ipcRenderer.send('window-controls', command)
+            ipcRenderer.send('window-controls', { command: command })
             break
           case 'pasteAsPlain':
             this.pasteAsPlainText()

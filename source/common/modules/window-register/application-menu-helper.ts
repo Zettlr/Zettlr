@@ -1,3 +1,5 @@
+import { ipcRenderer } from 'electron'
+
 // This function displays a custom styled popup menu at the given coordinates
 export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[], callback: Function): Function {
   // Get the correct rect to use for submenu placement
@@ -68,6 +70,33 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
     appMenu.appendChild(menuItem)
   }
 
+  if (global.config.get('debug') === true) {
+    // In debug mode, add an "inspect element" menu item to each and every
+    // context menu that is being opened.
+    const menuItem = renderMenuItem({
+      id: 'inspect-element',
+      label: 'Inspect Element',
+      type: 'normal',
+      enabled: true
+    })
+
+    menuItem.addEventListener('mousedown', (event) => {
+      console.log('Inspecting!')
+      ipcRenderer.send('window-controls', {
+        command: 'inspect-element',
+        payload: {
+          // If we only have a point, width and height will be 0,
+          // and 0/2 = 0 ¯\_(ツ)_/¯
+          x: targetRect.left + targetRect.width / 2,
+          y: targetRect.top + targetRect.height / 2
+        }
+      })
+    })
+
+    appMenu.appendChild(renderMenuItem({ type: 'separator' }))
+    appMenu.appendChild(menuItem)
+  }
+
   // Now, append it to the DOM tree to display it
   document.body.appendChild(appMenu)
 
@@ -87,7 +116,6 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
   // Return a close-callback for the caller to programmatically close the menu
   return () => {
     // When the closing function is called, remove the menu again
-    console.log('Programmatic close')
     clickCallback()
   }
 }

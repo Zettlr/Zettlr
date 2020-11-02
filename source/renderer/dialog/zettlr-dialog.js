@@ -16,7 +16,7 @@
 
 const tippy = require('tippy.js').default
 const EventEmitter = require('events')
-const { clipboard } = require('electron')
+const { clipboard, ipcRenderer } = require('electron')
 const { trans } = require('../../common/lang/i18n.js')
 require('jquery-ui/ui/unique-id')
 require('jquery-ui/ui/widget')
@@ -213,14 +213,15 @@ class ZettlrDialog extends EventEmitter {
         multiSel: false
       }
 
-      // After all is done send an async callback message
-      global.ipc.send('request-files', payload, (ret) => {
-        // Don't update to empty paths.
-        if (!ret || ret.length === 0 || ret[0] === '') return
-        // Write the return value into the data-request-target of the clicked
-        // button, because each button has a designated text field.
-        document.querySelector(requestTarget).value = ret[0]
-      })
+      ipcRenderer.invoke('request-files', payload)
+        .then(result => {
+          // Don't update to empty paths.
+          if (result.length === 0 || result[0].trim() === '') return
+          // Write the return value into the data-request-target of the clicked
+          // button, because each button has a designated text field.
+          document.querySelector(requestTarget).value = result[0]
+        })
+        .catch(e => console.error(e))
     }
 
     let requestFileButtons = this._modal.querySelectorAll('.request-file')
