@@ -42,10 +42,8 @@ class FileClose extends ZettlrCommand {
 
       // Now check if we can safely close the file
       if (file.modified) {
-        // Ask the user if they REALLY want to close the file
-        let ret = await this._app.getWindow().askSaveChanges(file.name)
-        // The user does not want to close the file -> give them time to save
-        if (ret === 0) return false
+        global.log.error('[Command] Could not close file: The file has the modified flag set.')
+        return false
       }
 
       // If we're here the user really wants to close the file.

@@ -68,6 +68,12 @@
 
 ## Under the Hood
 
+- Moved (almost) all window functionality to a dedicated `WindowManager` module. The added benefits of this are:
+    - Centralised window functionality
+    - A correct place for `window-controls`-commands
+    - Sleeker design
+    - Enable a much better window handling: (1) Now all windows are closed automatically before the main window is being closed; (2) When someone requests a Quicklook/Print/Main window, an existing window is being searched first and made visible, instead of (re)creating it.
+    - New window types can be added much faster.
 - Switched to Electron forge (thanks to @tobiasdiez for implementing).
 - Bumped dependencies:
   - @clr/icons `4.0.4`

@@ -34,56 +34,6 @@ class ZettlrIPC {
   constructor (zettlrObj) {
     this._app = zettlrObj
 
-    // Listen to window commands
-    ipc.on('window-controls', (event, command) => {
-      const callingWindow = BrowserWindow.fromWebContents(event.sender)
-
-      if (callingWindow === null) return
-
-      console.log('Command received ' + command)
-
-      switch (command) {
-        // Window controls actions can be send either as callback IPC calls or as
-        // normals (which is why they are present both in runCall and handleEvent)
-        case 'win-maximise':
-          if (callingWindow.isMaximized()) {
-            callingWindow.unmaximize()
-          } else {
-            callingWindow.maximize()
-          }
-          event.sender.send('window-controls', {
-            command: 'win-size-changed',
-            payload: callingWindow.isMaximized()
-          })
-          break
-        case 'win-minimise':
-          callingWindow.minimize()
-          break
-        case 'win-close':
-          callingWindow.close()
-          break
-        case 'get-maximised-status':
-          event.sender.send('window-controls', {
-            command: 'get-maximised-status',
-            payload: callingWindow.isMaximized()
-          })
-          break
-        // Convenience APIs for the renderers to execute these commands
-        case 'cut':
-          event.sender.cut()
-          break
-        case 'copy':
-          event.sender.copy()
-          break
-        case 'paste':
-          event.sender.paste()
-          break
-        case 'selectAll':
-          event.sender.selectAll()
-          break
-      }
-    })
-
     // Beginn listening to messages
     ipc.on('message', (event, arg) => {
       // We always need a command
@@ -175,17 +125,8 @@ class ZettlrIPC {
     * @return {ZettlrIPC}              This for chainability.
     */
   send (command, content = {}) {
-    let focusedWindow = BrowserWindow.getFocusedWindow()
-    let mainWinFocused = this._app.window.getWindow() === focusedWindow
-    if (command === 'attempt-close-tab' && !mainWinFocused && focusedWindow) {
-      // DEBUG attention, monkey-patch
-      focusedWindow.close()
-      return this
-    }
-
-    if (!this._app.window.getWindow()) return this
-    let sender = this._app.window.getWindow().webContents
-    sender.webContents.send('message', {
+    if (this._app.getMainWindow() === null) return this
+    this._app.getMainWindow().webContents.send('message', {
       'command': command,
       'content': content
     })
@@ -237,11 +178,6 @@ class ZettlrIPC {
 
       case 'win-close':
         if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().close()
-        break
-
-      // Also the application menu must be shown on request
-      case 'win-menu':
-        this._app.getWindow().popupMenu(cnt.x, cnt.y)
         break
 
       case 'get-paths':
@@ -390,11 +326,6 @@ class ZettlrIPC {
     // We received a new event and need to handle it.
 
     switch (cmd) {
-      // We should show the askFile dialog to the user and return its result.
-      case 'request-files':
-        // The client only can choose what and how much it wants to get
-        return this._app.getWindow().askFile(arg.filters, arg.multiSel)
-
       // A quicklook window wants to pop-out of the main window
       case 'open-quicklook':
         this._app.openQL(arg)

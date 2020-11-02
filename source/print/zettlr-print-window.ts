@@ -41,28 +41,28 @@ class ZettlrPrintWindow {
     })
 
     // Get additional data passed to the window
-    let name
-    [name] = window.process.argv.slice(-1)
+    let filePath
+    [filePath] = window.process.argv.slice(-1)
 
     // Load the file into an iFrame
-    this.init(name)
+    this.init(filePath)
 
     // activate event listeners for the window
     this._act()
   }
 
-  init (name: string): void {
+  init (filePath: string): void {
     this._file = name
-    document.title = path.basename(name)
+    document.title = path.basename(filePath)
     const h1 = document.querySelector('.title h1')
     if (h1 === null) return
-    h1.textContent = path.basename(name)
+    h1.textContent = path.basename(filePath)
     // TODO: With safe-file:// added electron crashes as soon as the print window
     // is opened
     const content = document.querySelector('.content')
     if (content === null) return
 
-    content.innerHTML = `<iframe src="file://${name}"></iframe>`
+    content.innerHTML = `<iframe src="file://${filePath}"></iframe>`
 
     // Load the clarity icon modules, add custom icons and then refresh
     // attachments (because it requires custom icons to be loaded).
@@ -81,7 +81,7 @@ class ZettlrPrintWindow {
     // Toggle the maximisation of the window by double clicking. (Windows will
     // take care of this already, but not Linux and macOS.)
     document.querySelector('.title')?.addEventListener('dblclick', (e) => {
-      ipc.send('window-controls', 'win-maximise')
+      ipc.send('window-controls', { command: 'win-maximise' })
     })
 
     // Issue a print command for the frame.

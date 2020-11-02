@@ -64,8 +64,9 @@ class FileNew extends ZettlrCommand {
       let found = dir.children.find(e => e.name.toLowerCase() === filename.toLowerCase())
       if (found !== undefined) {
         // Ask before overwriting
-        let result = await this._app.getWindow().askOverwriteFile(filename)
-        if (result.response !== 1) return false // cancelId = 0; OkayID = 1
+        if (await this._app.askOverwriteFile(filename) === false) {
+          return false
+        }
       }
 
       // First create the file

@@ -100,16 +100,9 @@ app.on('second-instance', (event, argv, cwd) => {
 
   global.log.info(`Opening ${files.length} files from a second instance.`, files)
 
-  let win = zettlr.getWindow().getWindow()
-  if (win === null) {
-    zettlr.getWindow().open()
-  } else if (win?.isMinimized()) {
-    // Restore the window in case it's minimised
-    win.restore()
-    win.focus()
-  } else {
-    win.focus()
-  }
+  // openWindow calls the appropriate function of the windowManager, which deals
+  // with the nitty-gritty of actually making the main window visible.
+  zettlr.openWindow()
 
   // In case the user wants to open a file/folder with this running instance
   zettlr.handleAddRoots(files).catch(err => { console.error(err) })

@@ -55,8 +55,8 @@ class SaveImage extends ZettlrCommand {
     // Did the user want to choose the directory for this one? In this case,
     // that choice overrides the resolved path from earlier.
     if (target.mode === 'save-other') {
-      let dirs = await this._app.getWindow().askDir()
-      targetPath = dirs.filePaths[0] // We only take one directory
+      let dirs = await this._app.askDir()
+      targetPath = dirs[0] // We only take one directory
     }
 
     // Failsafe. Shouldn't be necessary, but you never know. (In that case log

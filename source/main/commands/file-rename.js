@@ -50,8 +50,9 @@ class FileRename extends ZettlrCommand {
     // Test if we are about to override a file
     if (isFile(path.join(file.dir, newName))) {
       // Ask for override
-      let result = await this._app.getWindow().askOverwriteFile(newName)
-      if (result.response === 0) return // No override wanted
+      if (await this._app.askOverwriteFile(newName) === false) {
+        return // No override wanted
+      }
     }
 
     try {
