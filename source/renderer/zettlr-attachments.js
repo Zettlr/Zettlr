@@ -21,6 +21,8 @@ const Citr = require('@zettlr/citr')
 
 const path = require('path')
 
+const generateFileLink = require('../common/util/generate-file-link')
+
 const FILETYPES_IMG = [
   '.jpg',
   '.jpeg',
@@ -106,15 +108,14 @@ class ZettlrAttachments {
         if (FILETYPES_IMG.includes(a.ext.toLowerCase())) {
           // Override the drag data with a link to the image
           let uri = decodeURIComponent(a.path)
-
-          // Make the link relative instead of absolute
-          uri = path.basename(uri)
-
-          dragData = `![${a.name}](${uri})`
+          
+          // Generate a relative image link
+          dragData = generateFileLink(uri,this._renderer.getCurrentDir().path,true)
+          
         } else {
-          // Standard file link
+          // Standard relativefile link
           let uri = decodeURIComponent(a.path)
-          dragData = `[${a.name}](${uri})`
+          dragData = generateFileLink(uri,this._renderer.getCurrentDir().path,false)
         }
 
         // Circumvent the jQuery event wrapping and use native events.
