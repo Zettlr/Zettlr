@@ -95,12 +95,12 @@ class ZettlrBody {
     })
 
     // React to global GUI shortcuts
-    $(document).on('keydown', (event) => {
+    window.addEventListener('keydown', (event) => {
       let isDarwin = document.body.classList.contains('darwin')
       let cmdOrCtrl = (isDarwin && event.metaKey) || (!isDarwin && event.ctrlKey)
 
-      let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && event.key === 'e')
-      let focusFileManagerShortcut = (cmdOrCtrl && event.shiftKey && event.key === 't')
+      let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && event.key.toLowerCase() === 'e')
+      let focusFileManagerShortcut = (cmdOrCtrl && event.shiftKey && event.key.toLowerCase() === 't')
       if (focusEditorShortcut) { // Cmd/Ctrl+Shift+E
         // Obviously, focus the editor
         this._renderer.getEditor().focus()
