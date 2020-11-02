@@ -30,6 +30,7 @@ function typewriter (cm) {
       codeElement.style.marginTop = ''
       codeElement.style.marginBottom = ''
       lastHighlightLine = -1
+      cm.refresh()
     }
     return
   }
@@ -53,6 +54,7 @@ function typewriter (cm) {
       const margin = window.innerHeight
       codeElement.style.marginTop = margin + 'px'
       codeElement.style.marginBottom = margin + 'px'
+      cm.refresh()
     }
   }
 
