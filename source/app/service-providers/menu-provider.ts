@@ -83,7 +83,7 @@ const BLUEPRINTS = {
 * This class generates the menu based upon the menu.tpl.json as well as additional
 * config variables and the platform.
 */
-module.exports = class MenuProvider {
+export default class MenuProvider {
   /**
   * Creates the main application menu and sets it.
   */
