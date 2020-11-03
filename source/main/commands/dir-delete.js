@@ -34,7 +34,7 @@ module.exports = class DirDelete extends ZettlrCommand {
     // Now that all files are corresponding files are closed, we can
     // proceed to remove the directory.
 
-    if (await this._app.window.confirmRemove(dirToDelete) === false) {
+    if (await this._app.confirmRemove(dirToDelete) === false) {
       return false
     }
 

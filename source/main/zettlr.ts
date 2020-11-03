@@ -729,4 +729,16 @@ export default class Zettlr {
   async askDir (): Promise<string[]> {
     return await this._windowManager.askDir()
   }
+
+  /**
+   * Presents a confirmation to the user whether or not they want to actually
+   * remove a file or directory from the system.
+   *
+   * @param   {MDFileDescriptor}    descriptor     The descriptor in question
+   *
+   * @return  {Promise<boolean>}                   Resolves to true if the user confirms
+   */
+  async confirmRemove (descriptor: MDFileDescriptor|DirDescriptor): Promise<boolean> {
+    return await this._windowManager.confirmRemove(descriptor)
+  }
 }
