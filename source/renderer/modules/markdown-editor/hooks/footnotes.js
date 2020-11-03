@@ -113,10 +113,9 @@ function editFootnote (cm, element) {
   global.popupProvider.show('footnote-edit', element, data)
 
   // Focus the textarea immediately.
-  document.getElementById('#footnote-edit-textarea').focus()
+  const fnTextarea = document.getElementById('footnote-edit-textarea')
 
-  const fnTextarea = document.querySelector('.popup .footnote-edit')
-
+  fnTextarea.focus()
   fnTextarea.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && e.shiftKey) {
       // Done editing.
