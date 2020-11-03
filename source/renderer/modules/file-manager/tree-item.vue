@@ -307,10 +307,19 @@ module.exports = {
      */
     beginDragging: function (event) {
       event.dataTransfer.effectAllowed = 'move'
-      event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
-        'hash': this.obj.hash,
-        'type': this.obj.type // Can be file or directory
-      }))
+      if (this.obj.type === 'file') {
+        event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
+          hash: this.obj.hash,
+          type: this.obj.type,
+          path: this.obj.path,
+          id: this.obj.id
+        }))
+      } else {
+        event.dataTransfer.setData('text/x-zettlr-dir', JSON.stringify({
+          hash: this.obj.hash,
+          type: this.obj.type
+        }))
+      }
     },
     /**
      * Called when a drag operation enters this item; adds a highlight class
@@ -337,8 +346,15 @@ module.exports = {
       // NOT a file, because these need to be handled by the
       // app itself.
       let data
+
       try {
-        data = JSON.parse(event.dataTransfer.getData('text/x-zettlr-file'))
+        let eventData = event.dataTransfer.getData('text/x-zettlr-file')
+        if (eventData === '') {
+          // If the eventData is empty, this suggests there was no corresponding
+          // data available, so it might be a directory.
+          eventData = event.dataTransfer.getData('text/x-zettlr-dir')
+        }
+        data = JSON.parse(eventData) // Throws error if eventData === ''
       } catch (e) {
         // Error in JSON stringifying (either b/c malformed or no text)
         return

@@ -67,6 +67,7 @@
 - The tutorial is now also available in German.
 - The application menu now displays many more shortcuts which were already available albeit not visible.
 - Checkboxes are now disabled in Quicklooks.
+- Fixed a bug that caused files dropped onto the editor from the file manager not to be linked when the file manager is in combined mode.
 
 ## Under the Hood
 

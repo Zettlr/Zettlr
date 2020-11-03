@@ -5,7 +5,7 @@ module.exports = (cm) => {
   cm.on('drop', (cm, event) => {
     // If the user has dropped a file onto the editor,
     // this strongly suggest they want to link it.
-    try {
+    if (event.dataTransfer.getData('text/x-zettlr-file') !== '') {
       let data = JSON.parse(event.dataTransfer.getData('text/x-zettlr-file'))
       let textToInsert = cm.getOption('zettlr').zettelkasten.linkStart
       textToInsert += data.id ? data.id : path.basename(data.path, path.extname(data.path))
@@ -15,11 +15,12 @@ module.exports = (cm) => {
         // We need to add the text after the link.
         textToInsert += ' ' + path.basename(data.path)
       }
+
+      // We have to set the cursor to the appropriate coordinates
+      let cursor = cm.coordsChar({ top: event.clientY, left: event.clientX })
+      cm.setSelection(cursor)
       cm.replaceSelection(textToInsert)
-    } catch (e) {
-      // Error in JSON stringifying (either b/c malformed or no text)
-      // --> proceed performing normally
-      console.error(e)
+      cm.focus() // Makes working with the text easier
     }
 
     if (event.dataTransfer.files.length > 0) {
