@@ -5,6 +5,7 @@
  */
 module.exports = (cm) => {
   cm.on('cursorActivity', applyCodeblockClasses)
+  cm.on('optionChange', applyCodeblockClasses)
 }
 
 function applyCodeblockClasses (cm) {

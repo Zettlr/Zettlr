@@ -94,7 +94,20 @@
             'inclusiveRight': false
           }
         )
+      } // END onclick
+
+      // We need to listen to readOnly state changes to enable/disable checkboxes
+      const updateHandler = (cm, option) => {
+        if (!document.body.contains(cbox)) {
+          // Remove the event listener again
+          cm.off('optionChange', updateHandler)
+        }
+
+        cbox.disabled = cm.isReadOnly()
       }
+
+      // Listen to option changes
+      cm.on('optionChange', updateHandler)
     }
   }
 })

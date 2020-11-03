@@ -11,9 +11,8 @@ var lastHighlightLine = -1
  * @param   {CodeMirror}  cm  The instance
  */
 module.exports = (cm) => {
-  cm.on('cursorActivity', (cm) => {
-    typewriter(cm)
-  })
+  cm.on('cursorActivity', typewriter)
+  cm.on('optionChange', typewriter)
 }
 
 /**

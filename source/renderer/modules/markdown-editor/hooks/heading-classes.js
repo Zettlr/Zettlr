@@ -6,6 +6,7 @@
 module.exports = (cm) => {
   cm.on('cursorActivity', applyHeadingClasses)
   cm.on('viewportChange', applyHeadingClasses)
+  cm.on('optionChange', applyHeadingClasses)
 }
 
 function applyHeadingClasses (cm) {

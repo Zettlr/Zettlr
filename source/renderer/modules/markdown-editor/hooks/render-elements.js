@@ -6,6 +6,7 @@
 module.exports = (cm) => {
   cm.on('cursorActivity', renderElements)
   cm.on('viewportChange', renderElements)
+  cm.on('optionChange', renderElements)
 }
 
 function renderElements (cm) {

@@ -306,9 +306,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
 
     // Clear the line indentation cache for the corresponding hook
     clearLineIndentationCache()
-
-    // After everything is done, signal necessary events
-    CodeMirror.signal(this._instance, 'cursorActivity', this._instance)
   }
 
   /**
