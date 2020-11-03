@@ -295,6 +295,14 @@ module.exports = {
       }
     },
     /**
+     * Set focus to file list
+     */
+    focusFileList: function () {
+      if (this.isFileListVisible()) {
+        this.$refs.fileList.focus()
+      }
+    },
+    /**
      * Display the arrow button for nagivation, if applicable.
      * @param {MouseEvent} evt The associated event.
      */
