@@ -39,6 +39,7 @@ import TargetProvider from './service-providers/target-provider'
 import TranslationProvider from './service-providers/translation-provider'
 import UpdateProvider from './service-providers/update-provider'
 import WatchdogProvider from './service-providers/watchdog-provider'
+import NotificationProvider from './service-providers/notification-provider'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
@@ -55,6 +56,7 @@ var translationProvider: TranslationProvider
 var updateProvider: UpdateProvider
 var watchdogProvider: WatchdogProvider
 var menuProvider: MenuProvider
+var notificationProvider: NotificationProvider
 
 // Statistics: Record the uptime of the application
 var upTimestamp: number
@@ -102,6 +104,7 @@ export async function bootApplication (): Promise<void> {
   cssProvider = new CssProvider()
   translationProvider = new TranslationProvider()
   updateProvider = new UpdateProvider()
+  notificationProvider = new NotificationProvider()
 
   // Initiate i18n after the config provider has definitely spun up
   let metadata: any = loadI18nMain(global.config.get('appLang'))
@@ -121,6 +124,7 @@ export async function bootApplication (): Promise<void> {
 export async function shutdownApplication (): Promise<void> {
   global.log.info(`さようなら！ Shutting down at ${(new Date()).toString()}`)
   // Shutdown all providers in the reverse order
+  await notificationProvider.shutdown()
   await updateProvider.shutdown()
   await translationProvider.shutdown()
   await cssProvider.shutdown()

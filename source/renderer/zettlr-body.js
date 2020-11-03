@@ -23,6 +23,8 @@ require('jquery-ui/ui/widgets/sortable')
 
 const ZettlrNotification = require('./zettlr-notification.js')
 
+const { ipcRenderer } = require('electron')
+
 // Dialogs
 const StatsDialog = require('./dialog/stats.js')
 const TagCloud = require('./dialog/tag-cloud.js')
@@ -112,9 +114,18 @@ class ZettlrBody {
       }
     })
 
-    // Inject a global notify and notifyError function
+    // Inject a global notify function TODO: Send notifications generated here to main
     global.notify = (msg) => { this.notify(msg) }
-    global.notifyError = (msg) => { this.notifyError(msg) }
+
+    // The notification provider never sends out commands. When a message from
+    // that one arrives, it's always a notification with a type and message.
+    ipcRenderer.on('notification-provider', (event, type, message) => {
+      if (type === 'normal') {
+        this.notify(message)
+      } else if (type === 'error') {
+        this.notifyError(message)
+      }
+    })
   }
 
   /**

@@ -103,13 +103,12 @@ module.exports = class TranslationProvider {
     }
 
     // Now we are done and can notify the user of all updated translations!
-    // TODO: Doesn't work right now, because the notification is sent before
-    // the main window is instantiated
-    global.ipc.notify(
+    global.notify.normal(
       trans(
         'dialog.preferences.translations.updated',
         toUpdate.map(elem => trans(`dialog.preferences.app_lang.${elem.bcp47}`)).join(', ')
-      )
+      ),
+      true // Show the notification on OS level
     )
   }
 

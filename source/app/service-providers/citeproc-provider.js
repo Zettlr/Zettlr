@@ -162,7 +162,7 @@ module.exports = class CiteprocProvider {
         // to complete writing the file.
         setTimeout(() => { this.load() }, 2000)
         global.log.verbose('Reloading citation database ...')
-        global.ipc.notify(trans('gui.citeproc.reloading'))
+        global.notify.normal(trans('gui.citeproc.reloading'))
       })
     } else {
       // Watcher is already running, so simply exchange the path.
@@ -176,7 +176,7 @@ module.exports = class CiteprocProvider {
    */
   _onConfigUpdate () {
     if (global.config.get('export.cslLibrary') !== this._mainLibrary) {
-      global.ipc.notify(trans('gui.citeproc.reloading'))
+      global.notify.normal(trans('gui.citeproc.reloading'))
       this.load()
     }
   }
@@ -235,7 +235,11 @@ module.exports = class CiteprocProvider {
       } catch (e) {
         global.log.error('[Citeproc Provider] Could not parse library file: ' + e.message, e)
         // Nopey.
-        global.ipc.notify(trans('gui.citeproc.error_db'))
+        global.notify.error({
+          title: trans('gui.citeproc.error_db'),
+          message: e.message,
+          additionalInfo: e.message
+        }, true)
         this._status = ERROR
         return
       }
@@ -253,14 +257,7 @@ module.exports = class CiteprocProvider {
         this._ids[id] = true
       } catch (err) {
         global.log.warning(`[Citeproc Provider] Malformed CiteKey @${id}` + err.message)
-        if (global.application.isBooting()) {
-          // In case the application is still booting, cache the message and delay sending
-          // TODO: This is goddamned ugly.
-          setTimeout(() => { global.ipc.notify(err.message) }, 5000)
-        } else {
-          // Otherwise immediately dispatch
-          global.ipc.notify(err.message)
-        }
+        global.notify.normal(`Malformed CiteKey @${id}`) // TODO translate
       }
     }
 
@@ -325,14 +322,7 @@ module.exports = class CiteprocProvider {
           'additionalInfo': errors.map(elem => elem.key + ': ' + elem.error).join('\n')
         }
 
-        if (global.application.isBooting()) {
-          // In case the application is still booting, cache the message and delay sending
-          // TODO: This is goddamned ugly.
-          setTimeout(() => { global.ipc.notifyError(report) }, 5000)
-        } else {
-          // Otherwise immediately dispatch
-          global.ipc.notifyError(report)
-        }
+        global.notify.error(report, true)
       }
 
       this._loadIdHint()

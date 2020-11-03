@@ -97,7 +97,11 @@ class DirProjectExport extends ZettlrCommand {
       .then((targetFile) => { /* Nothing to do */ })
       .catch((err) => {
         global.log.error(err.message, err)
-        global.ipc.notifyError(err)
+        global.notify.error({
+          title: err.title || err.message,
+          message: err.message,
+          additionalInfo: err.additionalInfo || ''
+        }, true)
       })
   }
 }

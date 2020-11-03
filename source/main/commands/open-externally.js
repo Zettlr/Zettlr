@@ -33,7 +33,7 @@ class OpenExternally extends ZettlrCommand {
         let potentialError = await shell.openPath(arg.href)
         if (potentialError !== '') {
           global.log.error('Could not open attachment:' + potentialError)
-          global.ipc.notify(`Could not open ${arg.href} externally.`)
+          global.notify.normal(`Could not open ${arg.href} externally.`)
         }
       } catch (e) {
         // openPath does not throw according to the logs.
@@ -46,7 +46,7 @@ class OpenExternally extends ZettlrCommand {
       await shell.openExternal(arg.href)
     } catch (e) {
       global.log.error(`Could not open ${arg.href} externally: ${e.message}`, e)
-      global.ipc.notify(`Could not open ${arg.href} externally.`) // TODO: Translate
+      global.notify.normal(`Could not open ${arg.href} externally.`) // TODO: Translate
     }
   }
 }

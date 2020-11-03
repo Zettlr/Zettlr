@@ -21,6 +21,17 @@ interface CssProvider {
   getPath: () => string
 }
 
+interface ErrorNotification {
+  title: string
+  message: string
+  additionalInfo: string
+}
+
+interface NotificationProvider {
+  normal: (message: string, showInOS?: boolean) => void
+  error: (error: ErrorNotification, showInOS?: boolean) => void
+}
+
 // Before the log provider has booted, these messages will be added to the
 // preBootLog
 interface BootLog {
@@ -38,8 +49,7 @@ declare module NodeJS {
     css: CssProvider
     log: LogProvider
     store: any
-    notify: any
-    notifyError: any
+    notify: NotificationProvider
     ipc: any
     citeproc: any // CiteprocProvider
     config: any

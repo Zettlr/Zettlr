@@ -554,16 +554,6 @@ class ZettlrRendererIPC {
         this._app.getEditor().toggleReadability()
         break
 
-      // Small notification
-      case 'notify':
-        global.notify(cnt)
-        break
-
-      // Dedicated dialog window for the error
-      case 'notify-error':
-        global.notifyError(cnt)
-        break
-
       case 'toc':
         this._app.getBody().displayTOC()
         break

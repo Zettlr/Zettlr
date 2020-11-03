@@ -86,23 +86,9 @@ class ZettlrIPC {
        * @param  {String} cmd The command to be sent
        * @param  {Object} arg An optional object with data.
        * @return {void}     Does not return.
+       * @deprecated
        */
-      send: (cmd, arg) => { this.send(cmd, arg) },
-      /**
-       * Sends a message to the renderer and displays it as a notification.
-       * @param  {String} msg The message to be sent.
-       * @return {void}       Does not return.
-       */
-      notify: (msg) => { this.send('notify', msg) },
-      /**
-       * Sends an error to the renderer process that should be displayed using
-       * a dedicated dialog window (is used, e.g., during export when Pandoc
-       * throws potentially a lot of useful information for fixing problems in
-       * the source files).
-       * @param  {Object} msg        The error object
-       * @return {void}            Does not return.
-       */
-      notifyError: (msg) => { this.send('notify-error', msg) }
+      send: (cmd, arg) => { this.send(cmd, arg) }
     }
   }
 

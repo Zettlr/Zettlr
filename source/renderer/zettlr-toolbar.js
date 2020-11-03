@@ -69,7 +69,7 @@ class ZettlrToolbar {
         'command': 'update-check',
         'content': {}
       })
-    }, 10000)
+    }, 1000)
 
     ipcRenderer.on('update-provider', (event, data) => {
       let { command, content } = data

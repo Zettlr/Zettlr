@@ -32,7 +32,7 @@ class Export extends ZettlrCommand {
   async run (evt, arg) {
     const fileDescriptor = global.application.findFile(arg.hash)
     if (fileDescriptor === null) {
-      return global.ipc.notify(trans('system.error.fnf_message'))
+      return global.notify.normal(trans('system.error.fnf_message'))
     }
 
     let fileMetadata = await this._app.getFileSystem().getFileContents(fileDescriptor)
@@ -116,16 +116,16 @@ class Export extends ZettlrCommand {
     makeExport(opt)
       .then((targetFile) => {
         global.log.info('Successfully exported file to ' + targetFile)
-        global.ipc.notify(trans('system.export_success', opt.format.toUpperCase()))
+        global.notify.normal(trans('system.export_success', opt.format.toUpperCase()), true)
       })
       .catch((err) => {
         global.log.error(err.message, err)
         // Error may be thrown. If there's additional info, spit out an extended
         // dialog.
         if (err.additionalInfo) {
-          global.ipc.notifyError(err)
+          global.notify.error(err, true)
         } else {
-          global.ipc.notify(err.name + ': ' + err.message)
+          global.notify.normal(err.name + ': ' + err.message, true)
         }
       })
   }

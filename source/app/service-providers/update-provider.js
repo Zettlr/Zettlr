@@ -47,7 +47,10 @@ module.exports = class UpdateProvider {
        */
       check: () => {
         this._check().then(() => {
-          /* Nothing to do */
+          if (this._lastResponse !== null && this._lastResponse.isNewer) {
+            // TODO: Translate
+            global.notify.normal(`An update to version ${this._lastResponse.newVer} is available!`, true)
+          }
         }).catch((err) => {
           this._lastError = err
         })
@@ -244,7 +247,7 @@ module.exports = class UpdateProvider {
 
     this._downloadReadStream.on('end', () => {
       global.log.info(`Successfully downloaded ${this._downloadProgress.name}. Transferred ${this._downloadProgress.size_downloaded} bytes overall.`)
-      global.ipc.notify(`Download of ${this._downloadProgress.name} successful!`)
+      global.notify.normal(`Download of ${this._downloadProgress.name} successful!`, true)
       this._downloadProgress.finished = true
       this._downloadWriteStream.close()
       this._downloadWriteStream = undefined
@@ -277,11 +280,11 @@ module.exports = class UpdateProvider {
     // 2. Check that the file is correct
     // 3. Launch the file
     // 4. Quit the app
-    global.ipc.notify('Verifying update ...')
+    global.notify.normal('Verifying update ...')
     let res = await this._retrieveSHA256Sums()
     if (!res) {
       await fs.unlink(this._downloadProgress.full_path)
-      return global.ipc.notify('Could not download the checksums to verify download. Aborting update process!')
+      return global.notify.normal('Could not download the checksums to verify download. Aborting update process!', true)
     }
 
     const correctSHA = this._sha256Data.find((release) => {
@@ -295,7 +298,7 @@ module.exports = class UpdateProvider {
     if (downloadSHA !== correctSHA.sha256) {
       global.log.error(`The SHA256 checksums did not match. Expected ${correctSHA.sha256}, but got ${downloadSHA}`)
       await fs.unlink(this._downloadProgress.full_path)
-      return global.ipc.notify('Could not verify update. Aborting update process!')
+      return global.notify.normal('Could not verify update. Aborting update process!', true)
     } else {
       global.log.info(`Successfully verified the checksum of ${this._downloadProgress.name} (${downloadSHA})!`)
     }
@@ -305,7 +308,7 @@ module.exports = class UpdateProvider {
       await shell.openPath(this._downloadProgress.full_path)
       app.quit()
     } catch (err) {
-      global.ipc.notify('Could not start update. Please install manually.')
+      global.notify.normal('Could not start update. Please install manually.', true)
       global.log.error('Could not start update: ' + err.message, err)
     }
   }

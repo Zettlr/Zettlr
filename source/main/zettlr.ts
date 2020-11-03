@@ -86,9 +86,9 @@ export default class Zettlr {
           'dir': this._fsal.getMetadataFor(dir)
         })
       },
-      notifyChange: (msg: String) => {
+      notifyChange: (msg: string) => {
         global.ipc.send('paths-update', this._fsal.getTreeMeta())
-        global.ipc.notify(msg)
+        global.notify.normal(msg)
       },
       findFile: (prop: any) => { return this._fsal.findFile(prop) },
       findDir: (prop: any) => { return this._fsal.findDir(prop) },
@@ -382,9 +382,9 @@ export default class Zettlr {
       })
     }
 
-    global.ipc.notify(trans('system.open_root_directory', path.basename(retPath)))
+    global.notify.normal(trans('system.open_root_directory', path.basename(retPath)))
     await this.handleAddRoots([retPath])
-    global.ipc.notify(trans('system.open_root_directory_success', path.basename(retPath)))
+    global.notify.normal(trans('system.open_root_directory_success', path.basename(retPath)))
     global.ipc.send('paths-update', this._fsal.getTreeMeta())
   }
 
@@ -432,7 +432,7 @@ export default class Zettlr {
         let file = this._fsal.findFile(f)
         if (file !== null) await this.openFile(file.hash)
       } else {
-        global.ipc.notify(trans('system.error.open_root_error', path.basename(f)))
+        global.notify.normal(trans('system.error.open_root_error', path.basename(f)))
         global.log.error(`Could not open new root file ${f}!`)
       }
     }

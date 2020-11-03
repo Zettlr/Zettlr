@@ -16,6 +16,7 @@
 - **New Feature**: The heading tag elements (those `h1` to `h6`-tags replacing the Markdown heading characters) finally serve a purpose: Clicking on them reveals a small menu which lets you quickly choose a different heading level.
 - **New Feature**: Improvement in the citation rendering capabilities: Both when copying Markdown as HTML, and when viewing footnote tooltips, any citation will be correctly rendered by the citeproc provider.
 - **New Feature**: The TableEditor now pre-renders table cells so that it looks more like it will when you export it!
+- **New Feature**: A selection of notifications will now be displayed using your operating system's notification service (if available), for instance export messages, errors, and updates. All notifications will still be displayed in the main window, so if you do not like this behaviour, you can turn notifications off for Zettlr within your operating system settings.
 - Added syntax highlighting modes (with keywords):
     - **diff**: `diff`
     - **Dockerfile**: `docker`/`dockerfile`
@@ -167,6 +168,7 @@
 - Deprecate the `remote`-module.
 - The md2html-function can now make anchors renderer-safe, so that they don't open within the main window anymore.
 - The menu handler is now a service provider.
+- Added a notification provider for better notification management, and to further reduce the main IPC classes.
 
 # 1.7.5
 
