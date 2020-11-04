@@ -1,6 +1,9 @@
 // Displays a context menu for the MarkdownEditor class
 const { trans } = require('../../../common/lang/i18n')
-const { clipboard } = require('electron')
+const {
+  clipboard,
+  ipcRenderer
+} = require('electron')
 
 var currentMenu = []
 var currentSuggestions = []
@@ -210,18 +213,13 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
     }
 
     // TODO: Re-implement
-    // typoPrefix.push({ type: 'separator' })
+    typoPrefix.push({ type: 'separator' })
     // Always add an option to add a word to the user dictionary
-    // typoPrefix.push({
-    //   label: trans('menu.add_to_dictionary') // ,
-    //   // 'click': (item, win) => {
-    //   //   // elem.text() contains the misspelled word
-    //   //   ipc.sendSync('typo', {
-    //   //     type: 'add',
-    //   //     'term': elem.text()
-    //   //   })
-    //   // }
-    // })
+    typoPrefix.push({
+      id: `typo-add-${elem.textContent}`,
+      label: trans('menu.add_to_dictionary'),
+      enabled: true
+    })
     // Final separator
     typoPrefix.push({ type: 'separator' })
 
@@ -240,9 +238,18 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
       return
     }
 
+    // If the ID resembles citekey-xxxx, open the corresponding attachment
     if (clickedID.startsWith('citekey-')) {
       global.ipc.send('open-attachment', { 'citekey': clickedID.substr(8) })
       return
+    }
+
+    // If the ID resembles typo-add-xxxx, add the given word to the dictionary
+    if (clickedID.startsWith('typo-add-')) {
+      ipcRenderer.sendSync('typo', {
+        type: 'add',
+        term: clickedID.substr(9) // Extract the word from the ID
+      })
     }
 
     let found = currentMenu.find((elem) => {
