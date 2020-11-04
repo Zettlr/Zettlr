@@ -15,7 +15,7 @@
 
 const path = require('path')
 
-const protocolRE = /^([a-z0-9]{1,10}):\/\//i
+const protocolRE = /^([a-z0-9]{1,100}):\/\//i
 const linkRE = /^.+\.[a-z0-9]+/i
 const mdFileRE = /.+\.(?:md|markdown|txt)$/i
 
@@ -37,6 +37,12 @@ module.exports = function (uri, base = '') {
   // the other three examples need the base and file:// prepended.
   //
   // So what we need to do first is distinguish between a URL and a Path.
+
+  if (uri.startsWith('mailto:')) {
+    // Shortcut for mailto-links, as these have a protocol (mailto) but with
+    // *only* a colon, not the double-slash (//).
+    return uri
+  }
 
   // Set the isFile var to undefined
   let isFile

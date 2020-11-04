@@ -68,6 +68,7 @@
 - The application menu now displays many more shortcuts which were already available albeit not visible.
 - Checkboxes are now disabled in Quicklooks.
 - Fixed a bug that caused files dropped onto the editor from the file manager not to be linked when the file manager is in combined mode.
+- Custom protocols for links (e.g. `zettlr://`, `thunderlink://`) can now be up to 100 characters long to be recognized by Zettlr.
 
 ## Under the Hood
 
