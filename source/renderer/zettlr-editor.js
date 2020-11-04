@@ -280,7 +280,6 @@ class ZettlrEditor {
         const lastFileOpen = this._openFiles.map(e => e.fileObject.hash).includes(lastFile)
 
         if (lastFileOpen) {
-          console.log('Finishing background sync, swapping lastFile ...', lastFile)
           this._swapFile(lastFile)
         } else if (!lastFileOpen && this._openFiles.length > 0) {
           console.log('No last file but theres something in the openFiles, opening ...', this._openFiles)

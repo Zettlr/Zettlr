@@ -34,7 +34,6 @@ module.exports = {
       currentDatabase = availableDatabases[autocompleteDatabase]
       cm.showHint({
         'hint': (cm, opt) => {
-          console.log('Autocomplete plugin has called our helper!')
           return hint(cm, opt)
         }
       }) // END showHint
