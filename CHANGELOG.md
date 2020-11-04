@@ -17,6 +17,7 @@
 - **New Feature**: Improvement in the citation rendering capabilities: Both when copying Markdown as HTML, and when viewing footnote tooltips, any citation will be correctly rendered by the citeproc provider.
 - **New Feature**: The TableEditor now pre-renders table cells so that it looks more like it will when you export it!
 - **New Feature**: A selection of notifications will now be displayed using your operating system's notification service (if available), for instance export messages, errors, and updates. All notifications will still be displayed in the main window, so if you do not like this behaviour, you can turn notifications off for Zettlr within your operating system settings.
+- **New Feature**: Whenever you begin a code block (`\`\`\``), Zettlr now offers you to autocomplete the syntax highlighting language.
 - Added syntax highlighting modes (with keywords):
     - **diff**: `diff`
     - **Dockerfile**: `docker`/`dockerfile`
