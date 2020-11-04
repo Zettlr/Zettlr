@@ -83,6 +83,8 @@ class ZettlrToolbar {
         let progress = document.getElementById('app-update-progress')
         let progressPercent = document.getElementById('app-update-progress-percent')
         let progressEta = document.getElementById('app-update-progress-eta')
+
+        // Update the progress bar if applicable
         if (progress && progressPercent) {
           progress.setAttribute('max', this._downloadProgress.size_total)
           progress.setAttribute('value', this._downloadProgress.size_downloaded)
@@ -94,6 +96,7 @@ class ZettlrToolbar {
             progressEta.textContent = '(' + seconds + 's)'
           }
         }
+
         if (this._downloadProgress.finished === false) {
           setTimeout(() => {
             ipcRenderer.send('update-provider', {
@@ -101,8 +104,15 @@ class ZettlrToolbar {
               'content': null
             })
           }, 1000)
-        } // end if
-      }
+        } else { // end if
+          // If the update is done and the corresponding popup still open,
+          // show the download button
+          const progressButton = document.getElementById('begin-update-progress-button')
+          if (progressButton !== null) {
+            progressButton.style.display = ''
+          }
+        }
+      } // End command: download-progress
     })
   }
 
@@ -304,7 +314,7 @@ class ZettlrToolbar {
               'content': null
             })
           })
-        } else {
+        } else { // END: if downloadProgress !== undefined
           // No download progress, so display the normal popup
           global.popupProvider.show('update', button, this._updateData)
 
@@ -328,7 +338,7 @@ class ZettlrToolbar {
               })
             })
           })
-        }
+        } // END: Else, no download progress
 
         // Display the changelog, if requested. Available in all popups
         document.getElementById('view-changelog-button').addEventListener('click', (e) => {
@@ -340,7 +350,7 @@ class ZettlrToolbar {
           })
           global.popupProvider.close()
         })
-      })
+      }) // END: Click handler
     } else {
       // No update available, remove button if applicable
       let button = document.getElementById('update-info-button')

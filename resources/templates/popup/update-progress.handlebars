@@ -9,6 +9,14 @@
   <span id="app-update-progress-eta"></span>
 </p>
 <p><a class="button" id="view-changelog-button">View changelog</a></p>
-{{#if finished}}
-<p><a class="button" id="begin-update-progress-button">Install update</a></p>
-{{/if}}
+<p>
+  <a
+    class="button"
+    id="begin-update-progress-button"
+    {{#unless finished}}
+    style="display: none;"
+    {{/unless}}
+  >
+    Install update
+  </a>
+</p>
