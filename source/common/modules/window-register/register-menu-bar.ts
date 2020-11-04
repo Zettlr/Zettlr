@@ -137,11 +137,11 @@ function showSubmenu (items: AnyMenuItem[], attachTo: string): void {
   if (menuCloseCallback !== null) {
     menuCloseCallback()
     menuCloseCallback = null
-    currentSubMenu = null
   }
 
   if (currentSubMenu === attachTo) {
     // Emulate a toggle by not showing the same submenu again
+    currentSubMenu = null
     return
   }
 
