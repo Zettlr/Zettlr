@@ -38,7 +38,6 @@ export default class Zettlr {
   currentFile: any
   editFlag: boolean
   _openPaths: any
-  _providers: any
   _fsal: FSAL
   ipc: ZettlrIPC
   _commands: any
@@ -56,7 +55,6 @@ export default class Zettlr {
     // this.currentDir = null // Current working directory (object)
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = [] // Holds all currently opened paths.
-    this._providers = {} // Holds all app providers (as properties of this object)
 
     this._windowManager = new WindowManager()
 
@@ -251,15 +249,6 @@ export default class Zettlr {
   }
 
   /**
-   * Shuts down all service providers.
-   */
-  async _shutdownServiceProviders (): Promise<void> {
-    for (let provider in this._providers) {
-      await this._providers[provider].shutdown()
-    }
-  }
-
-  /**
     * Shutdown the app. This function is called on quit.
     * @return {Promise} Resolves after the providers have shut down
     */
@@ -276,9 +265,6 @@ export default class Zettlr {
 
     // Finally shut down the file system
     this._fsal.shutdown()
-
-    // Finally, shut down the service providers
-    await this._shutdownServiceProviders()
   }
 
   /**
