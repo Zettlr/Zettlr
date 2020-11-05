@@ -43,7 +43,7 @@ module.exports = function () {
     // Default fold options
     foldOptions: {
       'widget': '\u00A0\u2026\u00A0', // nbsp ellipse nbsp
-      'scanUp': true // Search upwards if current line cannot be folded
+      'scanUp': false // Do not search upwards if current line cannot be folded
     },
     // Default direction left-to-right
     direction: 'ltr',
