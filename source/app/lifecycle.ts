@@ -38,7 +38,6 @@ import TagProvider from './service-providers/tag-provider'
 import TargetProvider from './service-providers/target-provider'
 import TranslationProvider from './service-providers/translation-provider'
 import UpdateProvider from './service-providers/update-provider'
-import WatchdogProvider from './service-providers/watchdog-provider'
 import NotificationProvider from './service-providers/notification-provider'
 
 // We need module-global variables so that garbage collect won't shut down the
@@ -54,7 +53,6 @@ var tagProvider: TagProvider
 var targetProvider: TargetProvider
 var translationProvider: TranslationProvider
 var updateProvider: UpdateProvider
-var watchdogProvider: WatchdogProvider
 var menuProvider: MenuProvider
 var notificationProvider: NotificationProvider
 
@@ -94,7 +92,6 @@ export async function bootApplication (): Promise<void> {
   logProvider = new LogProvider()
   configProvider = new ConfigProvider()
   appearanceProvider = new AppearanceProvider()
-  watchdogProvider = new WatchdogProvider()
   citeprocProvider = new CiteprocProvider()
   dictionaryProvider = new DictionaryProvider()
   recentDocsProvider = new RecentDocsProvider()
@@ -134,7 +131,6 @@ export async function shutdownApplication (): Promise<void> {
   await recentDocsProvider.shutdown()
   await dictionaryProvider.shutdown()
   await citeprocProvider.shutdown()
-  await watchdogProvider.shutdown()
   await appearanceProvider.shutdown()
   await configProvider.shutdown()
 

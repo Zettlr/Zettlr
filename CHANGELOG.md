@@ -176,6 +176,7 @@
 - The menu handler is now a service provider.
 - Added a notification provider for better notification management, and to further reduce the main IPC classes.
 - The tag list on file list items is now only shown when there are actually coloured tags available, and hidden otherwise. This enables a better UX for the users as the tag-list-tooltip will then consistently pop up, not being hidden behind an invisible div.
+- Removed the Watchdog service provider, as it is no longer being used.
 
 # 1.7.5
 
