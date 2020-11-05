@@ -69,10 +69,14 @@
  @c-primary-shade: @orange-1;
 
 body {
-  #editor {
-    background-color: var(--beige-0);
+  #editor .CodeMirror {
     // We only need to change the editor's font
     font-family: @font-liberation;
+  }
+
+  #editor {
+    // In light mode, use a beige background colour
+    background-color: var(--beige-0);
   }
 
   #file-tree { background-color: var(--beige-1); }

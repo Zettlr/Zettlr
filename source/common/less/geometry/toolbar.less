@@ -2,13 +2,13 @@
 
 #toolbar {
     position: absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:@toolbar-height;
-    padding:0;
-    display:flex;
-    align-items:center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: @toolbar-height;
+    padding: 0;
+    display: flex;
+    align-items: center;
 
     // We don't have window chrome, so we need the toolbar to be draggable.
     -webkit-app-region: drag;
@@ -37,15 +37,15 @@
             height: @button-icon-size;
         }
 
-        &:first-child { margin-left:@toolbar-margin * 2; }
-        &:last-child { margin-right:@toolbar-margin * 2; }
+        &:first-child { margin-left: @toolbar-margin * 2; }
+        &:last-child { margin-right: @toolbar-margin * 2; }
 
         // Pomodoro meter
         &.pomodoro {
-            padding:2px;
+            padding: 2px;
             // Don't display as button
-            background-image:none;
-            border:none;
+            background-image: none;
+            border: none;
 
             svg {
                 transform: rotate(-90deg);
@@ -55,17 +55,17 @@
         }
     }
 
-    .spacer { flex-grow:5; }
+    .spacer { flex-grow: 5; }
 
     .separator {
-        flex-grow:0.3;
-        width:1px;
-        text-align:center;
+        flex-grow: 0.3;
+        width: 1px;
+        text-align: center;
 
         &:before {
             content: "|";
-            display:inline;
-            font-size:@font-size-big;
+            display: inline;
+            font-size: @font-size-big;
         }
     }
 
@@ -84,15 +84,15 @@
 
     .searchbar {
         position: relative;
-        flex-grow:5;
+        flex-grow: 5;
 
         input {
-            height:@button-size;
-            width:90%; // Fill out the whole space
-            line-height:@button-size;
-            padding:0.2em 1em;
-            margin:@button-margin;
-            border-radius:@button-margin;
+            height: @toolbar-height; // @button-size;
+            width: 90%; // Fill out the whole space
+            line-height: @toolbar-height; // @button-size;
+            padding: 0.2em 1em;
+            margin: 0 @button-margin;
+            // border-radius: @button-margin;
             outline: none;
         }
 
