@@ -31,7 +31,7 @@ module.exports = function () {
     // Don't focus on instantiation
     autofocus: false,
     // Necessary to (de)activate the instance programmatically later
-    readOnly: 'nocursor',
+    readOnly: true,
     // Use the fold gutter
     foldGutter: true,
     // Keep the cursor 60px below/above the editor edges

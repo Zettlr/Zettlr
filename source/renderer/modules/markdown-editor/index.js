@@ -545,8 +545,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
    * @param   {Boolean}  shouldBeReadonly  Whether the editor contents should be readonly
    */
   set readOnly (shouldBeReadonly) {
-    // We're setting the nocursor property to hide the cursor altogether
-    this.setOptions({ readOnly: (shouldBeReadonly) ? 'nocursor' : false })
+    this.setOptions({ readOnly: shouldBeReadonly })
 
     // Set a special class to indicate not that it's an empty document,
     // but rather that none is open atm
