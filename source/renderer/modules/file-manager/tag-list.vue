@@ -15,7 +15,7 @@
 <template>
   <div class="taglist">
     <div
-      v-for="(tag, index) in getTags"
+      v-for="(tag, index) in tags"
       v-bind:key="index"
       class="tagspacer"
     >
@@ -38,9 +38,7 @@ module.exports = {
       // Nothing in here
     }
   },
-  computed: {
-    getTags: function () { return this.$store.getters.tags(this.tags) }
-  },
+  computed: {},
   methods: {
     col: function (col) {
       return 'background-color: ' + col

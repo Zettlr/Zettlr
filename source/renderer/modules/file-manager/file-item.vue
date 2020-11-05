@@ -41,8 +41,8 @@
         v-on:sort-change="sort"
       ></Sorter>
       <tag-list
-        v-if="!isDirectory"
-        v-bind:tags="getTags"
+        v-if="!isDirectory && getColoredTags.length > 0"
+        v-bind:tags="getColoredTags"
       ></tag-list>
       <template v-if="fileMeta">
         <div class="meta">
@@ -138,6 +138,7 @@
       getId: function () { return this.obj.id },
       getFilename: function () { return this.obj.name },
       getTags: function () { return this.obj.tags },
+      getColoredTags: function () { return this.$store.getters.tags(this.obj.tags) },
       getTagList: function () { return this.obj.tags.join(', ') },
       hasTags: function () { return this.obj.tags && this.obj.tags.length > 0 },
       isDirectory: function () { return this.obj.type !== 'file' },

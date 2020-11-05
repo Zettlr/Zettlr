@@ -174,6 +174,7 @@
 - The md2html-function can now make anchors renderer-safe, so that they don't open within the main window anymore.
 - The menu handler is now a service provider.
 - Added a notification provider for better notification management, and to further reduce the main IPC classes.
+- The tag list on file list items is now only shown when there are actually coloured tags available, and hidden otherwise. This enables a better UX for the users as the tag-list-tooltip will then consistently pop up, not being hidden behind an invisible div.
 
 # 1.7.5
 
