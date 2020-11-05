@@ -194,6 +194,7 @@ module.exports = class ZettlrSidebar {
     return renderTemplate(
       `<a
         class="attachment"
+        draggable="true"
         data-link="${attachment.path}"
         data-hash="${attachment.hash}"
         title="${attachment.path}"
