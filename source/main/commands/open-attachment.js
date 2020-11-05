@@ -82,7 +82,7 @@ class OpenAttachment extends ZettlrCommand {
         global.notify.normal(msg)
       } else {
         global.log.error('Could not open attachment.', err.message)
-        global.norify.normal(trans('system.error.open_attachment_error'))
+        global.notify.normal(trans('system.error.open_attachment_error'))
       }
       return false
     }
