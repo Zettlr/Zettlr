@@ -7,6 +7,15 @@
 @font-liberation: 'Liberation Mono', monospace;
 @font-inconsolata: 'Inconsolata', monospace;
 
+// This can be used to style certain UI elements (think of the custom menu bar)
+// using the operating system's default font. Font stack taken from
+// https://systemfontstack.com/
+
+// There's also the CSS-property system-ui, which can be used to fall back to
+// the default font on every operating system, but according to this blogpost,
+// we should not use it ever: https://infinnie.github.io/blog/2017/systemui.html
+@font-system: -apple-system, BlinkMacSystemFont, 'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Ubuntu, Roboto, Noto, 'Segoe UI', Arial, sans-serif;
+
 // Lato Webfonts (sans-serif)
 @font-face {
     font-family: 'Lato';
