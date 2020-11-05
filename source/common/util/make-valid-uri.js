@@ -14,6 +14,7 @@
  */
 
 const path = require('path')
+const fileExists = require('../../common/util/is-file')
 
 const protocolRE = /^([a-z0-9]{1,100}):\/\//i
 const linkRE = /^.+\.[a-z0-9]+/i
@@ -50,13 +51,19 @@ module.exports = function (uri, base = '') {
   // First, remove a potential protocol and save it for later use
   let protocol = protocolRE.exec(uri)
   // If there was a protocol, extract the capturing group
-  if (protocol !== null) protocol = protocol[1]
+  if (protocol !== null) {
+    protocol = protocol[1]
+  }
 
   if (protocol === 'file') {
     // We know it's a file
     isFile = true
   } else if (uri.indexOf('//') === 0) {
     // We know it's a link to a file on a shared drive
+    isFile = true
+  } else if (fileExists(uri)) {
+    // NOTE: fileExists is called "isFile" everywhere else, we have just renamed
+    // it because of the obvious naming conflict here ;)
     isFile = true
   }
 
