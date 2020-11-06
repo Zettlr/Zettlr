@@ -22,21 +22,23 @@ import {
   dialog,
   ipcMain,
   FileFilter,
-  OpenDialogOptions,
-  OpenDialogReturnValue,
   MessageBoxOptions,
   MessageBoxReturnValue
 } from 'electron'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { trans } from '../../../common/lang/i18n'
-import isDir from '../../../common/util/is-dir'
 import { DirDescriptor, MDFileDescriptor } from '../fsal/types'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createQuicklookWindow from './create-ql-window'
+import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
+import shouldReplaceFileDialog from './dialog/should-replace-file'
+import askDirectoryDialog from './dialog/ask-directory'
+import promptDialog from './dialog/prompt'
 import sanitizeWindowPosition from './sanitize-window-position'
 import { WindowPosition } from './types.d'
+import askFileDialog from './dialog/ask-file'
 
 interface QuicklookRecord {
   path: string
@@ -462,26 +464,7 @@ export default class WindowManager {
       return true
     }
 
-    let options: MessageBoxOptions = {
-      type: 'question',
-      title: trans('system.replace_file_title'),
-      message: trans('system.replace_file_message', filename),
-      checkboxLabel: trans('dialog.preferences.always_reload_files'),
-      checkboxChecked: global.config.get('alwaysReloadFiles'),
-      buttons: [
-        trans('system.cancel'),
-        trans('system.ok')
-      ],
-      cancelId: 0,
-      defaultId: 1
-    }
-
-    // Asynchronous message box to not block the main process
-    let response = await dialog.showMessageBox(this._mainWindow, options)
-
-    global.config.set('alwaysReloadFiles', response.checkboxChecked)
-
-    return response.response === 1
+    return await shouldReplaceFileDialog(this._mainWindow, filename)
   }
 
   /**
@@ -490,27 +473,7 @@ export default class WindowManager {
     * @return  {boolean}         Resolves with true if the file should be overwritten
     */
   async askOverwriteFile (filename: string): Promise<boolean> {
-    let options = {
-      type: 'question',
-      title: trans('system.overwrite_file_title'),
-      message: trans('system.overwrite_file_message', filename),
-      buttons: [
-        trans('system.cancel'),
-        trans('system.ok')
-      ],
-      cancelId: 0,
-      defaultId: 1
-    }
-
-    // showMessageBox returns a Promise, resolves to:
-    let response: MessageBoxReturnValue
-    if (this._mainWindow !== null) {
-      response = await dialog.showMessageBox(this._mainWindow, options)
-    } else {
-      response = await dialog.showMessageBox(options)
-    }
-
-    return (response.response === 1)
+    return await shouldOverwriteFileDialog(this._mainWindow, filename)
   }
 
   /**
@@ -518,38 +481,7 @@ export default class WindowManager {
     * @return {string[]} An array containing all selected paths.
     */
   async askDir (): Promise<string[]> {
-    let startDir = app.getPath('home')
-
-    if (isDir(global.config.get('dialogPaths.askDirDialog'))) {
-      startDir = global.config.get('dialogPaths.askDirDialog')
-    }
-
-    const options: OpenDialogOptions = {
-      title: trans('system.open_folder'),
-      defaultPath: startDir,
-      properties: [
-        'openDirectory',
-        'createDirectory' // macOS only
-      ]
-    }
-
-    let response: OpenDialogReturnValue
-    if (this._mainWindow !== null) {
-      response = await dialog.showOpenDialog(this._mainWindow, options)
-    } else {
-      response = await dialog.showOpenDialog(options)
-    }
-
-    // Save the path of the dir into the config
-    if (!response.canceled && response.filePaths.length > 0) {
-      global.config.set('dialogPaths.askDirDialog', response.filePaths[0])
-    }
-
-    if (response.canceled) {
-      return []
-    } else {
-      return response.filePaths
-    }
+    return await askDirectoryDialog(this._mainWindow)
   }
 
   /**
@@ -557,59 +489,11 @@ export default class WindowManager {
    *
    * @param  {FileFilter[]|null}  [filters=null]    An array of extension filters.
    * @param  {boolean}            [multiSel=false]  Determines if multiple files are allowed
-   * @param  {string}             [startDir]        The starting directory
    *
    * @return {string[]}                             An array containing all selected files.
    */
-  async askFile (
-    filters: FileFilter[]|null = null,
-    multiSel: boolean = false,
-    startDir: string = global.config.get('dialogPaths.askFileDialog')
-  ): Promise<string[]> {
-    // Sanity check for default start directory.
-    if (!isDir(startDir)) {
-      startDir = app.getPath('documents')
-    }
-
-    // Fallback filter: All files
-    if (filters === null) {
-      filters = [{
-        name: trans('system.all_files'),
-        extensions: ['*']
-      }]
-    }
-
-    // Prepare options
-    let opt: OpenDialogOptions = {
-      title: trans('system.open_file'),
-      defaultPath: startDir,
-      properties: ['openFile'],
-      filters: filters
-    }
-
-    // Should multiple selections be allowed?
-    if (multiSel) {
-      (opt.properties as string[]).push('multiSelections')
-    }
-
-    let response: OpenDialogReturnValue
-    if (this._mainWindow !== null) {
-      response = await dialog.showOpenDialog(this._mainWindow, opt)
-    } else {
-      response = await dialog.showOpenDialog(opt)
-    }
-
-    // Save the path of the containing dir of the first file into the config
-    if (!response.canceled && response.filePaths.length > 0) {
-      global.config.set('dialogPaths.askFileDialog', path.dirname(response.filePaths[0]))
-    }
-
-    // Return an empty array if the dialog was cancelled
-    if (response.canceled) {
-      return []
-    } else {
-      return response.filePaths
-    }
+  async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false): Promise<string[]> {
+    return await askFileDialog(this._mainWindow, filters, multiSel)
   }
 
   /**
@@ -617,35 +501,7 @@ export default class WindowManager {
     * @param  {any} options Necessary informations for displaying the prompt
     */
   prompt (options: any): void {
-    if (typeof options === 'string') {
-      options = { 'message': options }
-    }
-
-    const boxOptions: MessageBoxOptions = {
-      type: 'info',
-      buttons: ['Ok'],
-      defaultId: 0,
-      title: 'Zettlr',
-      message: options.message
-    }
-
-    if (options.type !== undefined) {
-      boxOptions.type = options.type as string
-    }
-
-    if (options.title !== undefined) {
-      boxOptions.title = options.title as string
-    }
-
-    // The showmessageBox-function returns a promise,
-    // nevertheless, we don't need a return.
-    if (this._mainWindow !== null) {
-      dialog.showMessageBox(this._mainWindow, options)
-        .catch(e => global.log.error('[Window Manager] Prompt threw an error', e))
-    } else {
-      dialog.showMessageBox(options)
-        .catch(e => global.log.error('[Window Manager] Prompt threw an error', e))
-    }
+    promptDialog(this._mainWindow, options)
   }
 
   /**
