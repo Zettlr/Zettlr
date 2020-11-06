@@ -57,6 +57,9 @@ export default class Zettlr {
     this._openPaths = [] // Holds all currently opened paths.
 
     this._windowManager = new WindowManager()
+    // Immediately load persisted session data from disk
+    this._windowManager.loadData()
+      .catch(e => global.log.error('[Application] Window Manager could not load data', e))
 
     // Inject some globals
     global.application = {

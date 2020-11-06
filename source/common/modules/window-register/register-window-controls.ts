@@ -31,7 +31,7 @@ export default function registerWindowControls (shouldShowWindowControls: boolea
     const { command } = message
     // win-size-changed is emitted by main, whereas get-maximised-status is
     // sent from this module to initially get the status
-    if ([ 'win-size-changed', 'get-maximised-status' ].includes(command)) {
+    if (command === 'get-maximised-status') {
       const { payload } = message
       // Reflect the maximisation flag in a body-class (payload is true if the
       // window is maximised)

@@ -73,6 +73,7 @@
 - Fixed an issue that Zettlr would sometimes attempt to open a link to a local file in the browser instead of the correct app.
 - Finally fixed the document tabs using the wrong font in the Frankfurt and Bielefeld theme.
 - Fixed a display glitch in the combined file manager in dark mode.
+- Now both Quicklook windows and the main window remember their last position. As long as the configuration of displays did not change, they will appear at the same positions as the last time they were open.
 
 ## Under the Hood
 
@@ -177,6 +178,7 @@
 - Added a notification provider for better notification management, and to further reduce the main IPC classes.
 - The tag list on file list items is now only shown when there are actually coloured tags available, and hidden otherwise. This enables a better UX for the users as the tag-list-tooltip will then consistently pop up, not being hidden behind an invisible div.
 - Removed the Watchdog service provider, as it is no longer being used.
+- The Window Manager now saves the positions of each window (main and Quicklooks), persists them on disk and ensures the windows are displayed properly. The corresponding settings have been removed from the configuration service provider.
 
 # 1.7.5
 

@@ -17,6 +17,7 @@
 
 import {
   app,
+  screen,
   BrowserWindow,
   dialog,
   ipcMain,
@@ -26,6 +27,7 @@ import {
   MessageBoxOptions,
   MessageBoxReturnValue
 } from 'electron'
+import { promises as fs } from 'fs'
 import path from 'path'
 import { trans } from '../../../common/lang/i18n'
 import isDir from '../../../common/util/is-dir'
@@ -33,6 +35,8 @@ import { DirDescriptor, MDFileDescriptor } from '../fsal/types'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createQuicklookWindow from './create-ql-window'
+import sanitizeWindowPosition from './sanitize-window-position'
+import { WindowPosition } from './types.d'
 
 interface QuicklookRecord {
   path: string
@@ -44,12 +48,19 @@ export default class WindowManager {
   private readonly _qlWindows: QuicklookRecord[]
   private _printWindow: BrowserWindow|null
   private _printWindowFile: string|undefined
+  private _windowState: WindowPosition[]
+  private readonly _configFile: string
+  private _fileLock: boolean
+  private _persistTimeout: ReturnType<typeof setTimeout>|undefined
 
   constructor () {
     this._mainWindow = null
     this._qlWindows = []
     this._printWindow = null
     this._printWindowFile = undefined
+    this._windowState = []
+    this._configFile = path.join(app.getPath('appData'), 'window_state.json')
+    this._fileLock = false
 
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
@@ -66,8 +77,10 @@ export default class WindowManager {
           } else {
             callingWindow.maximize()
           }
+          // fall through
+        case 'get-maximised-status':
           event.reply('window-controls', {
-            command: 'win-size-changed',
+            command: 'get-maximised-status',
             payload: callingWindow.isMaximized()
           })
           break
@@ -76,12 +89,6 @@ export default class WindowManager {
           break
         case 'win-close':
           callingWindow.close()
-          break
-        case 'get-maximised-status':
-          event.reply('window-controls', {
-            command: 'get-maximised-status',
-            payload: callingWindow.isMaximized()
-          })
           break
         // Convenience APIs for the renderers to execute these commands
         case 'cut':
@@ -113,6 +120,25 @@ export default class WindowManager {
       let files = await this.askFile(message.filters, message.multiSelection)
       return files
     })
+  }
+
+  /**
+   * Loads persisted window position data from disk
+   */
+  async loadData (): Promise<void> {
+    try {
+      const data = await fs.readFile(this._configFile, 'utf8')
+      this._windowState = JSON.parse(data) as WindowPosition[]
+    } catch (err) {
+      // Apparently no such file -> we'll leave the original (empty) array.
+    }
+  }
+
+  /**
+   * Shuts down the window manager and performs final operations
+   */
+  shutdown (): void {
+    this._persistWindowPositions()
   }
 
   /**
@@ -182,13 +208,120 @@ export default class WindowManager {
   }
 
   /**
+   * Persists the window positions to disk
+   */
+  private _persistWindowPositions (): void {
+    if (this._fileLock) {
+      if (this._persistTimeout !== undefined) {
+        clearTimeout(this._persistTimeout)
+        this._persistTimeout = undefined
+      }
+      // Try again after one second, because there is currently data being written
+      this._persistTimeout = setTimeout(() => { this._persistWindowPositions() }, 1000)
+      return
+    }
+
+    const data = JSON.stringify(this._windowState)
+    this._fileLock = true
+    fs.writeFile(this._configFile, data)
+      .then(() => {
+        this._fileLock = false
+      })
+      .catch((err) => {
+        global.log.error(`[Window Manager] Could not persist data: ${err.message as string}`, err)
+      })
+  }
+
+  /**
+   * This function hooks a callback to various resizing events of the provided
+   * window in order to update the provided configuration object in-place.
+   *
+   * @param   {BrowserWindow}   window  The window to hook
+   * @param   {WindowPosition}  conf    The configuration to update
+   */
+  private _hookWindowResize (window: BrowserWindow, conf: WindowPosition): void {
+    const callback = (): void => {
+      let newBounds = window.getBounds()
+      // The configuration object will be edited in place.
+      conf.top = newBounds.y
+      conf.left = newBounds.x
+      conf.width = newBounds.width
+      conf.height = newBounds.height
+      // On macOS there's no "unmaximize", therefore we have to check manually.
+      const workArea = screen.getDisplayMatching(newBounds).workArea
+      conf.isMaximised = (
+        newBounds.width === workArea.width &&
+        newBounds.height === workArea.height &&
+        newBounds.x === workArea.x &&
+        newBounds.y === workArea.y
+      )
+      // Persist the new window positions and notify the window of its own
+      // new size
+      this._persistWindowPositions()
+      window.webContents.send('window-controls', {
+        command: 'get-maximised-status',
+        payload: window.isMaximized()
+      })
+    }
+
+    // Now hook the resizing events to save the last positions to config
+    window.on('maximize', () => {
+      conf.isMaximised = true
+      // Persist the new window positions and notify the window of its own
+      // new size
+      this._persistWindowPositions()
+      window.webContents.send('window-controls', {
+        command: 'get-maximised-status',
+        payload: window.isMaximized()
+      })
+    })
+    window.on('unmaximize', () => {
+      conf.isMaximised = false
+      // Persist the new window positions and notify the window of its own
+      // new size
+      this._persistWindowPositions()
+      window.webContents.send('window-controls', {
+        command: 'get-maximised-status',
+        payload: window.isMaximized()
+      })
+    })
+    window.on('resize', callback)
+    window.on('move', callback)
+  }
+
+  /**
    * Shows the main window
    */
   showMainWindow (): void {
     if (this._mainWindow === null) {
-      // Instantiate ...
-      this._mainWindow = createMainWindow()
+      // Instantiate a new main window
+      let windowConfiguration = this._windowState.find(state => {
+        return state.windowType === 'main'
+      })
+
+      if (windowConfiguration === undefined) {
+        // Pass a default configuration
+        const display = screen.getPrimaryDisplay()
+        windowConfiguration = {
+          windowType: 'main',
+          top: display.workArea.y,
+          left: display.workArea.x,
+          width: display.workArea.width,
+          height: display.workArea.height,
+          isMaximised: true,
+          lastDisplayId: display.id
+        }
+
+        this._windowState.push(windowConfiguration)
+      }
+
+      const saneConfiguration = sanitizeWindowPosition(windowConfiguration)
+      // Exchange the sanitised configuration
+      this._windowState.splice(this._windowState.indexOf(windowConfiguration), 1, saneConfiguration)
+
+      this._mainWindow = createMainWindow(saneConfiguration)
       this._hookMainWindow()
+      this._hookWindowResize(this._mainWindow, saneConfiguration)
     } else {
       this._makeVisible(this._mainWindow)
     }
@@ -210,8 +343,39 @@ export default class WindowManager {
       // The window is already open -> make it visible
       this._makeVisible(record.win)
     } else {
+      let windowConfiguration = this._windowState.find(state => {
+        return state.windowType === 'quicklook' &&
+        state.quicklookFile === file.path
+      })
+
+      if (windowConfiguration === undefined) {
+        // Pass a default configuration
+        const display = screen.getPrimaryDisplay()
+        const width = Math.min(display.workArea.width, display.workArea.width / 2)
+        const height = Math.min(display.workArea.height, display.workArea.height / 2)
+        const top = (display.workArea.height - height) / 2
+        const left = (display.workArea.width - width) / 2
+        windowConfiguration = {
+          windowType: 'quicklook',
+          quicklookFile: file.path,
+          top: display.workArea.y + top, // Some displays begin at a y > 0
+          left: display.workArea.x + left, // Same as with the y-value
+          width: width,
+          height: height,
+          isMaximised: false,
+          lastDisplayId: display.id
+        }
+
+        this._windowState.push(windowConfiguration)
+      }
+
+      const saneConfiguration = sanitizeWindowPosition(windowConfiguration)
+      // Exchange the sanitised configuration
+      this._windowState.splice(this._windowState.indexOf(windowConfiguration), 1, saneConfiguration)
+
       // This particular file is not yet open -> open it
-      const window: BrowserWindow = createQuicklookWindow(file)
+      const window: BrowserWindow = createQuicklookWindow(file, saneConfiguration)
+      this._hookWindowResize(window, saneConfiguration)
       const qlWindow: QuicklookRecord = {
         path: file.path,
         win: window

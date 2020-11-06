@@ -34,11 +34,6 @@ const ZETTLR_VERSION = app.getVersion()
 
 const broadcastIpcMessage = require('../../common/util/broadcast-ipc-message')
 
-// Suppress notifications on modification of the following settings
-const SUPPRESS_NOTIFICATION = [
-  'window.x', 'window.y', 'window.width', 'window.height', 'window.max'
-]
-
 /**
  * This class represents the configuration of Zettlr, represented by the
  * config.json file in the user's data directory as well as some environment
@@ -97,11 +92,6 @@ module.exports = class ConfigProvider extends EventEmitter {
         'askLangFileDialog': ''
       },
       'window': {
-        'x': 0,
-        'y': 0,
-        'width': require('electron').screen.getPrimaryDisplay().workAreaSize.width,
-        'height': require('electron').screen.getPrimaryDisplay().workAreaSize.width,
-        'max': true,
         // Only use native window appearance by default on macOS. If this value
         // is false, this means that Zettlr will display the menu bar and window
         // controls as defined in the HTML.
@@ -587,13 +577,11 @@ module.exports = class ConfigProvider extends EventEmitter {
 
       // Set the new value and inform the listeners
       this.config[option] = value
-      if (!SUPPRESS_NOTIFICATION.includes(option)) {
-        this.emit('update', option) // Pass the option for info
+      this.emit('update', option) // Pass the option for info
 
-        // Broadcast to all open windows
-        broadcastIpcMessage('config-provider', { command: 'update', payload: option })
-        if (!this._bulkSetInProgress && global.hasOwnProperty('ipc')) global.ipc.send('config-update') // Notify renderer process
-      }
+      // Broadcast to all open windows
+      broadcastIpcMessage('config-provider', { command: 'update', payload: option })
+      if (!this._bulkSetInProgress && global.hasOwnProperty('ipc')) global.ipc.send('config-update') // Notify renderer process
       return true
     }
 
@@ -617,12 +605,10 @@ module.exports = class ConfigProvider extends EventEmitter {
 
         // Set the new value and inform the listeners
         cfg[prop] = value
-        if (!SUPPRESS_NOTIFICATION.includes(option)) {
-          this.emit('update', option) // Pass the option for info
-          // Broadcast to all open windows
-          broadcastIpcMessage('config-provider', { command: 'update', payload: option })
-          if (!this._bulkSetInProgress) global.ipc.send('config-update') // Notify renderer process
-        }
+        this.emit('update', option) // Pass the option for info
+        // Broadcast to all open windows
+        broadcastIpcMessage('config-provider', { command: 'update', payload: option })
+        if (!this._bulkSetInProgress) global.ipc.send('config-update') // Notify renderer process
         return true
       }
     }

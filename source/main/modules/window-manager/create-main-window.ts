@@ -16,9 +16,9 @@
 
 import {
   BrowserWindow,
-  BrowserWindowConstructorOptions,
-  screen
+  BrowserWindowConstructorOptions
 } from 'electron'
+import { WindowPosition } from './types.d'
 import setWindowChrome from './set-window-chrome'
 
 /**
@@ -27,8 +27,28 @@ import setWindowChrome from './set-window-chrome'
  *
  * @return  {BrowserWindow}  The loaded main window
  */
-export default function createMainWindow (): BrowserWindow {
-  const window = new BrowserWindow(getWindowConfig())
+export default function createMainWindow (conf: WindowPosition): BrowserWindow {
+  const winConf: BrowserWindowConstructorOptions = {
+    width: conf.width,
+    height: conf.height,
+    x: conf.left,
+    y: conf.top,
+    acceptFirstMouse: true,
+    minWidth: 300,
+    minHeight: 200,
+    show: false,
+    webPreferences: {
+      // Zettlr needs all the node features, so in preparation for Electron
+      // 5.0 we'll need to explicitly request it.
+      nodeIntegration: true,
+      enableRemoteModule: false
+    },
+    backgroundColor: '#fff'
+  }
+
+  setWindowChrome(winConf)
+
+  const window = new BrowserWindow(winConf)
 
   // Load the index.html of the app.
   // The variable MAIN_WINDOW_WEBPACK_ENTRY is automatically resolved by electron forge / webpack
@@ -44,7 +64,7 @@ export default function createMainWindow (): BrowserWindow {
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
     window.show()
-    if (global.config.get('window.max') as boolean) {
+    if (conf.isMaximised) {
       window.maximize()
     }
   })
@@ -66,67 +86,5 @@ export default function createMainWindow (): BrowserWindow {
     })
   })
 
-  // Now resizing events to save the last positions to config
-  window.on('maximize', () => { global.config.set('window.max', true) })
-  window.on('unmaximize', () => { global.config.set('window.max', false) })
-  window.on('resize', onWindowResize(window))
-  window.on('move', onWindowResize(window))
-
   return window
-}
-
-function onWindowResize (window: BrowserWindow): Function {
-  return function () {
-    let newBounds = window.getBounds()
-    global.config.set('window.x', newBounds.x)
-    global.config.set('window.y', newBounds.y)
-    global.config.set('window.width', newBounds.width)
-    global.config.set('window.height', newBounds.height)
-    // On macOS there's no "unmaximize", therefore we have to check manually.
-    let s = screen.getPrimaryDisplay().workArea
-    if (newBounds.width < s.width || newBounds.height < s.height || newBounds.x > s.x || newBounds.y > s.y) {
-      global.config.set('window.max', false)
-    } else {
-      global.config.set('window.max', true)
-    }
-  }
-}
-
-function getWindowConfig (): BrowserWindowConstructorOptions {
-  // Prepare saved attributes from the config.
-  let winWidth = global.config.get('window.width')
-  let winHeight = global.config.get('window.height')
-  let winX = global.config.get('window.x')
-  let winY = global.config.get('window.y')
-  let winMax = global.config.get('window.max')
-
-  // Sanity checks
-  let screensize = screen.getPrimaryDisplay().workAreaSize
-  if (typeof winWidth !== 'number' || winWidth > screensize.width) winWidth = screensize.width
-  if (typeof winHeight !== 'number' || winHeight > screensize.height) winHeight = screensize.height
-  if (typeof winX !== 'number' || winX > screensize.width) winX = 0
-  if (typeof winY !== 'number' || winY > screensize.height) winY = 0
-  if (typeof winMax !== 'boolean') winMax = true
-
-  const winConf: BrowserWindowConstructorOptions = {
-    width: winWidth,
-    height: winHeight,
-    x: winX,
-    y: winY,
-    acceptFirstMouse: true,
-    minWidth: 176,
-    minHeight: 144,
-    show: false,
-    webPreferences: {
-      // Zettlr needs all the node features, so in preparation for Electron
-      // 5.0 we'll need to explicitly request it.
-      nodeIntegration: true,
-      enableRemoteModule: false
-    },
-    backgroundColor: '#fff'
-  }
-
-  setWindowChrome(winConf)
-
-  return winConf
 }
