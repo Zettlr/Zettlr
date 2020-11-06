@@ -85,9 +85,17 @@ const BLUEPRINTS = {
 */
 export default class MenuProvider {
   /**
+   * Keeps track of the state of checkboxes which are not controlled by a
+   * configuration setting.
+   */
+  _checkboxState: any
+
+  /**
   * Creates the main application menu and sets it.
   */
   constructor () {
+    this._checkboxState = Object.create(null)
+
     // Begin listening to configuration update events that announce a change in
     // the recent docs list so that we can make sure the menu is always updated.
     global.recentDocs.on('update', () => { this.set() })
@@ -97,9 +105,26 @@ export default class MenuProvider {
       const { command } = message
 
       if (command === 'get-application-menu') {
-        event.sender.send('menu-provider', {
+        event.reply('menu-provider', {
           command: 'application-menu',
           payload: this.serializableApplicationMenu
+        })
+      } else if (command === 'get-application-submenu') {
+        const itemID = message.payload as string
+        const appMenu = Menu.getApplicationMenu()
+        if (appMenu === null) {
+          // Cannot send submenu: No menu set
+          return
+        }
+
+        // Send the serialized submenu to the renderer
+        const menuItem = appMenu.getMenuItemById(itemID)
+        event.reply('menu-provider', {
+          command: 'application-submenu',
+          payload: {
+            id: itemID,
+            submenu: (this._makeItemSerializable(menuItem) as SubmenuItem).submenu
+          }
         })
       } else if (command === 'click-menu-item') {
         const itemID = message.payload as string
@@ -175,6 +200,9 @@ export default class MenuProvider {
   _buildFromSource (menutpl: MenuItemConstructorOptions): MenuItemConstructorOptions {
     let menu: MenuItemConstructorOptions = {}
 
+    // First, assign the correct type
+    menu.type = menutpl.type
+
     // First, we need the label, if applicable
     if (menutpl.type !== 'separator') {
       if (menutpl.label !== 'Zettlr') {
@@ -227,16 +255,30 @@ export default class MenuProvider {
     if (menutpl.checked !== undefined && (menutpl as any).checked !== 'null') {
       menu.checked = global.config.get(menutpl.checked)
     } else if (menutpl.checked !== undefined && (menutpl as any).checked === 'null') {
-      // If it's null, simply preset with false
-      menu.checked = false
+      // If it's null, simply preset with false and add it to the checkboxState
+      // property so the status can be tracked across instantiations
+      if (this._checkboxState[menu.id as string] !== undefined) {
+        menu.checked = this._checkboxState[menu.id as string]
+      } else {
+        menu.checked = false
+        this._checkboxState[menu.id as string] = false
+      }
+
+      const state = this._checkboxState
+
+      // Re-define the click handler to keep track of the checkboxState
+      // NOTE/ATTENTION: This means that every "checked"-menuitem MUST have
+      // a command property. Right now this is the case, but double-check
+      menu.click = function (menuItem, focusedWindow) {
+        global.ipc.send((menutpl as any).command)
+        state[menu.id as string] = !(state[menu.id as string] as boolean)
+      }
     }
 
     // Custom quit item
     if (menutpl.id === 'menu-quit') {
       menu.click = function (item, focusedWindow) {
-        if ((global as any).mainWindow) {
-          (global as any).mainWindow.send('message', { 'command': 'app-quit' })
-        } else if (focusedWindow) {
+        if (focusedWindow != null) {
           focusedWindow.webContents.send('message', { 'command': 'app-quit' })
         } else {
           // If this part is executed it means there's no window, so simply quit.

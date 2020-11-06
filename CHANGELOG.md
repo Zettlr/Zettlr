@@ -74,6 +74,7 @@
 - Finally fixed the document tabs using the wrong font in the Frankfurt and Bielefeld theme.
 - Fixed a display glitch in the combined file manager in dark mode.
 - Now both Quicklook windows and the main window remember their last position. As long as the configuration of displays did not change, they will appear at the same positions as the last time they were open.
+- Menu items in the application menu that can have a "checked" state (indicated by, e.g., a checkmark) now remember their correct state if other settings change consistently.
 
 ## Under the Hood
 
@@ -179,6 +180,7 @@
 - The tag list on file list items is now only shown when there are actually coloured tags available, and hidden otherwise. This enables a better UX for the users as the tag-list-tooltip will then consistently pop up, not being hidden behind an invisible div.
 - Removed the Watchdog service provider, as it is no longer being used.
 - The Window Manager now saves the positions of each window (main and Quicklooks), persists them on disk and ensures the windows are displayed properly. The corresponding settings have been removed from the configuration service provider.
+- The menu provider now keeps track of the state of those checkbox menu items which are not controlled externally by a configuration setting, but rather always begin unchecked when the application starts.
 
 # 1.7.5
 

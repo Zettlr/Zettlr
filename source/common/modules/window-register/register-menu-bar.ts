@@ -28,6 +28,9 @@ export default function registerMenubar (shouldShowMenubar: boolean): void {
       const { payload } = message
       applicationMenu = payload
       setMenu()
+    } else if (command === 'application-submenu') {
+      const { payload } = message
+      showSubmenu(payload.submenu, payload.id)
     }
   })
 
@@ -69,7 +72,7 @@ export default function registerMenubar (shouldShowMenubar: boolean): void {
     // Exchange the submenu
     const targetItem = applicationMenu.find(elem => elem.id === id)
     if (targetItem != null) {
-      showSubmenu(targetItem.submenu, targetItem.id)
+      send('get-application-submenu', targetItem.id)
     }
   })
 }
@@ -113,7 +116,7 @@ function setMenu (): void {
     element.addEventListener('mousedown', (event) => {
       event.preventDefault()
       event.stopPropagation()
-      showSubmenu(item.submenu, item.id)
+      send('get-application-submenu', item.id)
     })
 
     menubar.appendChild(element)
