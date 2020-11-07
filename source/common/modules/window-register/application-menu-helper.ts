@@ -195,14 +195,21 @@ function renderMenuItem (item: AnyMenuItem, elementClass?: string): HTMLElement 
     // Replace some common keycodes with their correct symbols
     acc = acc.replace('Cmd', '⌘')
     acc = acc.replace('Shift', '⇧')
-    acc = acc.replace('Alt', '⎇')
-    acc = acc.replace('Option', '⎇')
+    if (process.platform === 'darwin') {
+      acc = acc.replace('Alt', '⎇')
+      acc = acc.replace('Option', '⎇')
+    }
+
     acc = acc.replace('Backspace', '←')
     acc = acc.replace('Tab', '↹')
 
-    // Afterwards, remove all plus signs
-    acc = acc.replace(/\+/g, ' ') // Use a thin space (U+2009)
-    acc = acc.replace('Plus', '+') // Obviously, needs to come last
+    // Afterwards, remove all plus signs for macOS. Windows and Linux still
+    // use Plus-signs to display accelerators
+    if (process.platform === 'darwin') {
+      acc = acc.replace(/\+/g, ' ') // Use a thin space (U+2009)
+      acc = acc.replace('Plus', '+') // Obviously, needs to come last
+    }
+
     accel.textContent = acc
     afterElement.appendChild(accel)
   }
