@@ -3,8 +3,8 @@ const IMAGE_REGEXP = require('../../../../common/regular-expressions').getImageF
 
 module.exports = (cm) => {
   cm.on('drop', (cm, event) => {
-    // If the user has dropped a file onto the editor,
-    // this strongly suggest they want to link it.
+    // If the user has dropped a file from the manager onto the editor,
+    // this strongly suggest they want to link it using their preferred method.
     if (event.dataTransfer.getData('text/x-zettlr-file') !== '') {
       let data = JSON.parse(event.dataTransfer.getData('text/x-zettlr-file'))
       let textToInsert = cm.getOption('zettlr').zettelkasten.linkStart
@@ -24,36 +24,33 @@ module.exports = (cm) => {
     }
 
     if (event.dataTransfer.files.length > 0) {
-      // In case of files being dropped, do *not* let CodeMirror handle them.
+      // In case of files being dropped, do *not* let CodeMirror or the
+      // paste-image hook handle them.
       event.codemirrorIgnore = true
-      let imagesToInsert = []
-      for (let x of event.dataTransfer.files) {
-        if (IMAGE_REGEXP.test(x.path)) {
-          imagesToInsert.push(x.path)
-        }
-      }
-      if (imagesToInsert.length > 0) {
-        let where = cm.coordsChar({ 'left': event.clientX, 'top': event.clientY })
-        // Don't let Zettlr handle this because opening something Additionally
-        // to images would be weird.
-        event.stopPropagation()
-        event.preventDefault()
+      event.stopPropagation()
+      event.preventDefault()
 
-        cm.setCursor(where)
+      const where = cm.coordsChar({ 'left': event.clientX, 'top': event.clientY })
+      cm.setCursor(where)
+      const basePath = cm.getOption('zettlr').markdownImageBasePath
 
-        let isSingleInline = imagesToInsert.length === 1 && cm.getLine(where.line).trim() !== ''
-        if (isSingleInline) {
-          // Only add a single inline image
-          cm.replaceSelection(`![${path.basename(imagesToInsert[0])}](${imagesToInsert[0]})`)
+      const filesToAdd = []
+
+      for (let file of event.dataTransfer.files) {
+        // For each file, see if it's an image or not. If not, simply link,
+        // if it's an image, make one out of it. The difference is exactly one
+        // character, so piece of cake.
+
+        const relativePath = path.relative(basePath, file.path)
+
+        if (IMAGE_REGEXP.test(file.path)) {
+          filesToAdd.push(`![${path.basename(file.path)}](${relativePath})`)
         } else {
-          // Add all images.
-          let str = '\n'
-          for (let p of imagesToInsert) {
-            str += `![${path.basename(p)}](${p})\n`
-          }
-          cm.replaceSelection(str)
+          filesToAdd.push(`[${path.basename(file.path)}](${relativePath})`)
         }
       }
-    }
+
+      cm.replaceSelection(filesToAdd.join('\n'))
+    } // END: if dataTransfer.files.length
   })
 }

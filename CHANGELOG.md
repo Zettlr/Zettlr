@@ -75,6 +75,8 @@
 - Fixed a display glitch in the combined file manager in dark mode.
 - Now both Quicklook windows and the main window remember their last position. As long as the configuration of displays did not change, they will appear at the same positions as the last time they were open.
 - Menu items in the application menu that can have a "checked" state (indicated by, e.g., a checkmark) now remember their correct state if other settings change consistently.
+- Non-image files being dropped onto the editor are now being linked.
+- Files that are dropped from the outside onto the editor are now linked using a relative path.
 
 ## Under the Hood
 
