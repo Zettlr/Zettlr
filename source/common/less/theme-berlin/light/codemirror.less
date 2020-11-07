@@ -169,41 +169,42 @@
       margin-top: -2px;
       margin-bottom: -2px;
     }
-
-    // Hint related stuff
-    .CodeMirror-hints {
-      -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
-      -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
-      box-shadow: 2px 3px 5px rgba(0,0,0,.2);
-      border-radius: @border-radius;
-      border: 1px solid var(--grey-1);
-
-      background: white;
-      font-size: 90%;
-      li.CodeMirror-hint {
-        color: var(--grey-7);
-
-        &:hover { background-color: var(--grey-0); }
-      }
-
-      li.CodeMirror-hint-active {
-        background: var(--c-primary);
-        color: var(--grey-0);
-
-        &:hover { background-color: var(--c-primary-shade); }
-      }
-
-      // Special tags
-      .cm-hint-colour {
-        color: var(--grey-3);
-        background-color: var(--grey-2);
-      }
-    }
 }
 
 .CodeMirror-focused .CodeMirror-selected { background-color: var(--selection-light); }
 .CodeMirror .CodeMirror-selected { background-color: var(--selection-light); }
 .CodeMirror-cursor { background: var(--c-primary); }
+
+// Hint related stuff. Hints mustn't be scoped by .CodeMirror as they are
+// attached to document.body, not the editor
+.CodeMirror-hints {
+  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  border-radius: @border-radius;
+  border: 1px solid var(--grey-1);
+
+  background: white;
+  font-size: 90%;
+  li.CodeMirror-hint {
+    color: var(--grey-7);
+
+    &:hover { background-color: var(--grey-0); }
+  }
+
+  li.CodeMirror-hint-active {
+    background: var(--c-primary);
+    color: var(--grey-0);
+
+    &:hover { background-color: var(--c-primary-shade); }
+  }
+
+  // Special tags
+  .cm-hint-colour {
+    color: var(--grey-3);
+    background-color: var(--grey-2);
+  }
+}
 
 // Custom styling for the various editors across the app
 // -----------------------------------------------------------------------------

@@ -12,6 +12,8 @@
  * END HEADER
  */
 
+const codeBlockRE = /^\s{0,3}(`{3,}|~{3,})/
+
 var autocompleteStart = null
 var currentDatabase = null
 var availableDatabases = {
@@ -19,6 +21,7 @@ var availableDatabases = {
   'citekeys': [],
   'files': [],
   'syntaxHighlighting': [
+    { text: '', displayText: 'No highlighting' }, // TODO: translate
     { text: 'javascript', displayText: 'JavaScript/Node.JS' },
     { text: 'json', displayText: 'JSON' },
     { text: 'typescript', displayText: 'TypeScript' },
@@ -106,8 +109,16 @@ module.exports = {
 }
 
 function shouldBeginAutocomplete (cm, changeObj) {
+  // First, get cursor and line.
   const cursor = cm.getCursor()
   const line = cm.getLine(cursor.line)
+
+  // Determine if we are at the start of line (ch equals 1, because the cursor
+  // is now _after_ the first character of the line -- isSOL refers to the char
+  // that was just typed).
+  const isSOL = cursor.ch === 1
+  // charAt returns an empty string if the index is out of range (e.g. -1)
+  const charBefore = line.charAt(cursor.ch - 2)
 
   // Can we begin citekey autocompletion?
   // A valid citekey position is: Beginning of the line (citekey without square
@@ -115,16 +126,14 @@ function shouldBeginAutocomplete (cm, changeObj) {
   // or after a space (either a standalone citation or within square brackets
   // but with a prefix).
   if (
-    changeObj.text[0] === '@' &&
-    (cursor.ch === 1 || [ ' ', '[' ].includes(line.charAt(cursor.ch - 2)))
+    changeObj.text[0] === '@' && (isSOL || [ ' ', '[' ].includes(charBefore))
   ) {
     return 'citekeys'
   }
 
   // Can we begin tag autocompletion?
   if (
-    changeObj.text[0] === '#' &&
-    (cursor.ch === 1 || line.charAt(cursor.ch - 2) === ' ')
+    changeObj.text[0] === '#' && (isSOL || charBefore === ' ')
   ) {
     return 'tags'
   }
@@ -142,10 +151,7 @@ function shouldBeginAutocomplete (cm, changeObj) {
   if (linkStartRange === linkStart) return 'files'
 
   // Now check for syntax highlighting
-  if (
-    (line.startsWith('```') || line.startsWith('~~~')) &&
-    cursor.ch === 3 // We should only begin autocomplete immediately after the delimiters
-  ) {
+  if (codeBlockRE.test(line)) {
     // First line means it's definitely the beginning of the block
     if (cursor.line === 0) {
       return 'syntaxHighlighting'
@@ -232,17 +238,20 @@ function hint (cm, opt) {
       // closing part of the code block and set the cursor in the middle of the
       // newly rendered codeblock.
       const line = cm.getLine(autocompleteStart.line)
-      if (line.startsWith('```')) {
-        // completion.text += '\n\n```'
-        cm.replaceSelection('\n\n```')
-        cm.setCursor({ line: autocompleteStart.line + 1, ch: 0 })
-      } else if (line.startsWith('~~~')) {
-        cm.replaceSelection('\n\n```')
+      const match = codeBlockRE.exec(line)
+      if (match !== null) {
+        cm.replaceSelection('\n\n' + match[1])
         cm.setCursor({ line: autocompleteStart.line + 1, ch: 0 })
       }
     }
     autocompleteStart = null
     currentDatabase = null // Reset the database used for the hints.
+  })
+
+  // If the hint disappears, always reset the variables
+  CodeMirror.on(completionObject, 'close', () => {
+    autocompleteStart = null
+    currentDatabase = null
   })
 
   return completionObject
