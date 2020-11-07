@@ -230,7 +230,7 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
 
   // Now we can display the menu
   const point = { x: event.clientX, y: event.clientY }
-  global.menuProvider.show(point, buildMenu, (clickedID) => {
+  const closeCallback = global.menuProvider.show(point, buildMenu, (clickedID) => {
     if (clickedID.startsWith('acceptSuggestion-')) {
       const idx = parseInt(clickedID.substr(17), 10) // Retrieve the ID
       console.log('Replacing with ' + currentSuggestions[idx])
@@ -245,6 +245,7 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
         command: 'open-attachment',
         content: { 'citekey': clickedID.substr(8) }
       })
+      closeCallback()
       return
     }
 
