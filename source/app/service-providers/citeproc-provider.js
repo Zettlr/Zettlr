@@ -472,9 +472,9 @@ module.exports = class CiteprocProvider {
   }
 
   /**
-   * Takes IDs as set in Zotero and returns Author-Date citations for them.
+   * Takes IDs as set in Zotero and returns the corresponding titles.
    * @param  {String} citation Array containing the IDs to be returned
-   * @return {String}     The rendered string
+   * @return {String}     A string containing the titles for the sources, seperated by semicolons.
    */
   getCitationTitleText (citation) {
     if (this._status !== READY) return undefined
