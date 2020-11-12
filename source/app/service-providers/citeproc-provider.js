@@ -126,7 +126,8 @@ module.exports = class CiteprocProvider {
           'command': 'get-citation',
           'payload': {
             'originalCitation': payload.citation,
-            'renderedCitation': this.getCitation(payload.citation)
+            'renderedCitation': this.getCitation(payload.citation),
+            'titleText': this.getCitationTitleText(payload.citation)
           }
         })
       } else if (command === 'get-citation-sync') {
@@ -468,6 +469,28 @@ module.exports = class CiteprocProvider {
       global.log.error(`[citeproc] makeCitationCluster: Could not create citation cluster ${citations}. ` + e.message, e)
       return undefined
     }
+  }
+
+  /**
+   * Takes IDs as set in Zotero and returns Author-Date citations for them.
+   * @param  {String} citation Array containing the IDs to be returned
+   * @return {String}     The rendered string
+   */
+  getCitationTitleText (citation) {
+    if (this._status !== READY) return undefined
+    let citations
+    try {
+      citations = Citr.parseSingle(citation)
+    } catch (err) {
+      return null
+    }
+    return citations.map(item => {
+      try {
+        return this._engine.retrieveItem(item.id)
+      } catch (err) {
+        return null
+      }
+    }).filter(item => item != null && 'title' in item).map(item => item.title).join('; ')
   }
 
   /**
