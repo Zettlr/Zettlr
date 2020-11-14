@@ -166,9 +166,9 @@ function shouldBeginAutocomplete (cm, changeObj) {
   // A valid citekey position is: Beginning of the line (citekey without square
   // brackets), after a square bracket open (regular citation without prefix),
   // or after a space (either a standalone citation or within square brackets
-  // but with a prefix).
+  // but with a prefix). Also, the citekey can be prefixed with a -.
   if (
-    changeObj.text[0] === '@' && (isSOL || [ ' ', '[' ].includes(charBefore))
+    changeObj.text[0] === '@' && (isSOL || [ ' ', '[', '-' ].includes(charBefore))
   ) {
     return 'citekeys'
   }
