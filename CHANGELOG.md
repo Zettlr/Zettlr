@@ -77,6 +77,7 @@
 - Menu items in the application menu that can have a "checked" state (indicated by, e.g., a checkmark) now remember their correct state if other settings change consistently.
 - Non-image files being dropped onto the editor are now being linked.
 - Files that are dropped from the outside onto the editor are now linked using a relative path.
+- Fixed a behaviour that would lead to the autocomplete to stop working completely until a full refresh of the window.
 
 ## Under the Hood
 
