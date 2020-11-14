@@ -10,8 +10,6 @@
 * Description:     Handles communication with the main process. There are
 *                  three channels that are used for communication:
 *                  - message: The default channel for most of the stuff (async)
-*                  - config: Retrieve configuration values (sync)
-*                  - typo: Retrieve dictionary functions (sync)
 *
 * END HEADER
 */
@@ -76,32 +74,6 @@ class ZettlrRendererIPC {
     this._bufferedMessage = null
     this._callbackBuffer = {}
     this._onceCallbacks = []
-
-    // This is an object that will hold all previously checked words in the form
-    // of word: correct?
-    // We are explicitly omitting the prototype stuff, as we don't access this.
-    this._invalidateDictionaryBuffer()
-    this._typoCheck = false
-    // Activate typocheck after 2 seconds to speed up the app's start
-    setTimeout(() => { this._typoCheck = true }, 2000)
-
-    // Inject typo spellcheck and suggest functions into the globals
-    global.typo = {
-      check: (term) => {
-        if (!this._typoCheck) return true // Give the dictionaries some time to heat up
-        // Return cache if possible
-        if (this._typoCache[term] !== undefined) return this._typoCache[term]
-        // Save into the corresponding cache and return the query result
-        // Return the query result
-        let correct = ipc.sendSync('typo', { 'type': 'check', 'term': term })
-        if (correct === 'not-ready') return true // Don't check unless its ready
-        this._typoCache[term] = correct
-        return correct
-      },
-      suggest: (term) => {
-        return ipc.sendSync('typo', { 'type': 'suggest', 'term': term })
-      }
-    }
 
     // Sends an array of IDs to main. If they are found in the JSON, cool! Otherwise
     // this will return false.
@@ -207,15 +179,6 @@ class ZettlrRendererIPC {
       'command': command,
       'content': arg
     })
-  }
-
-  /**
-   * Invalidates the complete dictionary buffer. Necessary to retrieve accurate
-   * messages whenever the dictionaries change during runtime.
-   * @return {void} Does not return.
-   */
-  _invalidateDictionaryBuffer () {
-    this._typoCache = Object.create(null)
   }
 
   /**

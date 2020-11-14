@@ -183,6 +183,8 @@
 - Removed the Watchdog service provider, as it is no longer being used.
 - The Window Manager now saves the positions of each window (main and Quicklooks), persists them on disk and ensures the windows are displayed properly. The corresponding settings have been removed from the configuration service provider.
 - The menu provider now keeps track of the state of those checkbox menu items which are not controlled externally by a configuration setting, but rather always begin unchecked when the application starts.
+- Moved the typo-logic to their respective places in the renderer.
+- The dictionary provider now listens on the correct channel and is additionally based on `fs.promises` thoroughly.
 
 # 1.7.5
 
