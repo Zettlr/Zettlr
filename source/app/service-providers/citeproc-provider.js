@@ -126,14 +126,18 @@ module.exports = class CiteprocProvider {
           'command': 'get-citation',
           'payload': {
             'originalCitation': payload.citation,
-            'renderedCitation': this.getCitation(payload.citation),
-            'titleText': this.getCitationTitleText(payload.citation)
+            'renderedCitation': this.getCitation(payload.citation)
           }
         })
       } else if (command === 'get-citation-sync') {
         event.returnValue = this.getCitation(payload.citation)
       }
     })
+
+    ipcMain.handle('get-citation-reference',
+      async (event, citationKeys) => {
+        return this.getCitationReference(citationKeys)
+      })
 
     // Read in the main library
     this.load()
@@ -473,24 +477,19 @@ module.exports = class CiteprocProvider {
 
   /**
    * Takes IDs as set in Zotero and returns the corresponding titles.
-   * @param  {String} citation Array containing the IDs to be returned
-   * @return {String}     A string containing the titles for the sources, seperated by semicolons.
+   * @param  {String[]} citation Array containing the IDs to be returned.
+   * @return {Array[]}     An array containing a tuple [id, rendered reference] for each given citation.
    */
-  getCitationTitleText (citation) {
+  getCitationReference (citations) {
     if (this._status !== READY) return undefined
-    let citations
-    try {
-      citations = Citr.parseSingle(citation)
-    } catch (err) {
+
+    this.updateItems(citations)
+    const bibliography = this.makeBibliography()
+
+    if (bibliography === false) {
       return null
     }
-    return citations.map(item => {
-      try {
-        return this._engine.retrieveItem(item.id)
-      } catch (err) {
-        return null
-      }
-    }).filter(item => item != null && 'title' in item).map(item => item.title).join('; ')
+    return bibliography[1].map((val, i) => [ bibliography[0]['entry_ids'][i], val ])
   }
 
   /**

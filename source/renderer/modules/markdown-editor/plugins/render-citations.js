@@ -26,7 +26,6 @@
         // Replace HTML content and remove item from array
         // We need to set the HTML as citeproc may spit out <i>-tags etc.
         spanToRender.element.innerHTML = payload.renderedCitation
-        spanToRender.element.title = payload.titleText
         // The textMarker's contents have changed, we need to inform CodeMirror
         spanToRender.textMarker.changed()
         toRender.splice(toRender.indexOf(spanToRender), 1)

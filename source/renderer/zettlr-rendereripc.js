@@ -112,6 +112,9 @@ class ZettlrRendererIPC {
           'content': citation
         })
       },
+      getCitationReference: (citation) => {
+        return ipc.invoke('get-citation-reference', citation)
+      },
       updateItems: (keyList) => {
         return ipc.sendSync('cite', {
           'type': 'update-items',
