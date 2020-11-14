@@ -39,7 +39,7 @@ class ForceOpen extends ZettlrCommand {
     // First try the ID
     let file = this._app.getFileSystem().findExact(filename, 'id')
     // No luck? Then try the name property
-    if (!file) {
+    if (file === null) {
       file = this._app.getFileSystem().findExact(filename, 'name')
       let ext = path.extname(filename)
       if (ext.length > 1) {
@@ -49,7 +49,7 @@ class ForceOpen extends ZettlrCommand {
         // No file ending given, so let's test all allowed
         for (let type of FILETYPES) {
           file = this._app.getFileSystem().findExact(filename + type, 'name')
-          if (file) break
+          if (file !== null) break
         }
       }
     }
