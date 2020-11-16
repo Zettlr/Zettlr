@@ -300,7 +300,7 @@
       },
       {
         "label": "menu.zoom_out",
-        "accelerator": "Cmd+Minus",
+        "accelerator": "Cmd+-",
         "command": "zoom-out"
       },
       {

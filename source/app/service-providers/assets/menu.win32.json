@@ -250,7 +250,7 @@
       },
       {
         "label": "menu.zoom_out",
-        "accelerator": "Ctrl+Minus",
+        "accelerator": "Ctrl+-",
         "command": "zoom-out"
       },
       {
@@ -258,6 +258,7 @@
       },
       {
         "label": "menu.toggle_fullscreen",
+        "accelerator": "F11",
         "role": "togglefullscreen"
       }
     ]

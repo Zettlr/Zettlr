@@ -79,6 +79,7 @@
 - Files that are dropped from the outside onto the editor are now linked using a relative path.
 - Fixed a behaviour that would lead to the autocomplete to stop working completely until a full refresh of the window.
 - Fix a bug that prevent non-existing documents to be created upon following a link despite the option being activated.
+- Added `F11` as an accelerator for fullscreen on Windows.
 
 ## Under the Hood
 
