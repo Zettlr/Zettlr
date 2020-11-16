@@ -81,6 +81,7 @@
 - Fix a bug that prevent non-existing documents to be created upon following a link despite the option being activated.
 - Added `F11` as an accelerator for fullscreen on Windows.
 - Fixed a display bug (= the window would reload itself) when there were no tags in the tag manager.
+- Fixed the padding of dialog buttons and input fields also in dark mode.
 
 ## Under the Hood
 
