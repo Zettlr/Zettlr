@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, FileFilter } from 'electron'
 import path from 'path'
 import fs from 'fs'
 
@@ -182,6 +182,9 @@ export default class Zettlr {
     process.nextTick(() => {
       let start = Date.now()
       // Read all paths into the app
+      // TODO: This function is only called once: Here. So we can trash a lot
+      // of the logic here. Furthermore, process.nextTick() in a constructor?
+      // Seriously?
       this.refreshPaths().then(() => {
         // If there are any, open argv-files
         this.handleAddRoots(global.filesToOpen).then(() => {
@@ -717,6 +720,10 @@ export default class Zettlr {
 
   async askDir (): Promise<string[]> {
     return await this._windowManager.askDir()
+  }
+
+  async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false): Promise<string[]> {
+    return await this._windowManager.askFile(filters, multiSel)
   }
 
   /**
