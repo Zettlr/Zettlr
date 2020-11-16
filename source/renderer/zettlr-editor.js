@@ -184,7 +184,7 @@ class ZettlrEditor {
         let image = clipboard.readImage()
         let html = clipboard.readHTML()
         let plain = clipboard.readText()
-        let explicitPaste = plain === changeObj.text.join('\n')
+        let explicitPaste = plain.replace(/\r/g, '') === changeObj.text.join('\n')
 
         if (!image.isEmpty() && (explicitPaste || !changeObj.text)) {
           // We've got an image. So we need to handle it.
