@@ -152,7 +152,7 @@ class ZettlrDialog extends EventEmitter {
   _act () {
     // Focus the first input, if there is a form.
     let form = this._modal.querySelector('form#dialog')
-    if (form !== null) {
+    if (form !== null && form.querySelector('input') !== null) {
       form.querySelector('input').select()
     }
 
