@@ -18,7 +18,7 @@ module.exports = (cm) => {
       // need to cancel the paste event and handle the image ourselves.
       let image = clipboard.readImage()
       let plain = clipboard.readText()
-      let explicitPaste = plain === changeObj.text.join('\n')
+      let explicitPaste = plain.replace(/\r/g, '') === changeObj.text.join('\n')
 
       if (!image.isEmpty() && (explicitPaste || !changeObj.text)) {
         // We've got an image. So we need to handle it.
