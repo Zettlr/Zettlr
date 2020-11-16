@@ -27,26 +27,19 @@ class FileDelete extends ZettlrCommand {
     */
   async run (evt, arg) {
     let file = this._app.findFile(arg.hash)
-    if (!file) {
+    if (file === null) {
       global.log.error('Cannot delete file: Not found.')
       return false
     }
 
-    if (!await this._app.window.confirmRemove(file)) return false
-
-    // Now, remove the file
-    try {
-      await this._app.getFileSystem().runAction('remove-file', {
-        'source': file,
-        'info': null
-      })
-    } catch (e) {
-      console.error(e)
+    if (await this._app.confirmRemove(file) === false) {
       return false
     }
 
-    // Now we obviously need to update the directory
-    global.application.dirUpdate(file.parent.hash, file.parent.hash)
+    // Now, remove the file
+    await this._app.getFileSystem().removeFile(file)
+
+    global.log.info(`Removed file ${file.name}.`)
   }
 }
 

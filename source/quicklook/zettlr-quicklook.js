@@ -15,14 +15,8 @@
 
 const makeSearchRegEx = require('../common/util/make-search-regex')
 const { trans } = require('../common/lang/i18n')
+const MarkdownEditor = require('../renderer/modules/markdown-editor')
 
-// CodeMirror related includes
-// The autoloader requires all necessary CodeMirror addons and modes that are
-// used by the main class. It simply folds about 70 lines of code into an extra
-// file.
-require('../renderer/assets/codemirror/autoload')
-
-// Finally CodeMirror itself
 const CodeMirror = require('codemirror')
 
 /**
@@ -41,17 +35,14 @@ class ZettlrQuicklook {
   constructor (parent, file) {
     this._parent = parent
     this._file = file
-    this._cm = null
     this._findTimeout = null // Timeout to begin search after
     this._bodyHeight = 0 // Contains the height of the element, in case it was minimized
     this._searchcursor = null // The search cursor used for searching
     this._currentLocalSearch = '' // Used to not re-start a search everytime
     this._markedResults = [] // Stores marked results in case of a search
     this._scrollbarAnnotations = null // Contains an object to mark search results on the scrollbar
-    this._load()
 
-    // Focus the search bar
-    CodeMirror.commands.focusFind = (cm) => { document.getElementById('searchWhat').focus() }
+    this._load()
 
     document.getElementById('searchWhat').addEventListener('keydown', (e) => {
       const textToFind = document.getElementById('searchWhat').value
@@ -73,8 +64,19 @@ class ZettlrQuicklook {
       }
     })
 
-    // Finally create the annotateScrollbar object to be able to annotate the scrollbar with search results.
-    this._scrollbarAnnotations = this._cm.annotateScrollbar('sb-annotation')
+    window.addEventListener('keydown', (event) => {
+      if (!event.metaKey && process.platform === 'darwin') return
+      if (!event.ctrlKey && process.platform !== 'darwin') return
+
+      if ([ 'f', 'F' ].includes(event.key)) {
+        event.stopPropagation()
+        document.getElementById('searchWhat').focus()
+      }
+    })
+
+    // Finally create the annotateScrollbar object to be able to annotate the
+    // scrollbar with search results.
+    this._scrollbarAnnotations = this._editor.codeMirror.annotateScrollbar('sb-annotation')
     this._scrollbarAnnotations.update([])
   }
 
@@ -82,36 +84,43 @@ class ZettlrQuicklook {
     * Load the Quicklook template and prepare everything
     */
   _load () {
-    this._cm = CodeMirror.fromTextArea(document.querySelector('textarea'), {
-      readOnly: true,
-      mode: 'multiplex',
-      lineWrapping: true,
-      extraKeys: {
-        'Cmd-F': 'focusFind',
-        'Ctrl-F': 'focusFind'
-      },
-      zkn: {
-        idRE: '(\\d{14})', // What do the IDs look like?
-        linkStart: '[[', // Start of links?
-        linkEnd: ']]' // End of links?
-      },
-      theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
-      cursorBlinkRate: -1 // Hide the cursor
+    this._editor = new MarkdownEditor(document.querySelector('textarea'), {
+      // If there are images in the Quicklook file, the image renderer needs
+      // the directory path of the file to correctly render the images.
+      zettlr: { markdownImageBasePath: this._file.dir }
     })
 
+    // We're fancy now, and the MarkdownEditor requires us to set a document,
+    // instead of directly manipulating the value, which indeed is much cleaner.
+    const mode = (this._file.ext === '.tex') ? 'stex' : 'multiplex'
+    this._editor.swapDoc(CodeMirror.Doc(this._file.content, mode))
+
     document.querySelector('h1').textContent = this._file.name
-    this._cm.setValue(this._file.content)
-    // Apply heading line classes immediately
-    this._cm.execCommand('markdownHeaderClasses')
 
     document.getElementById('searchWhat').setAttribute('placeholder', trans('dialog.find.find_placeholder'))
   }
 
   onConfigUpdate (config) {
-    this._cm.setOption('zkn', config.zkn)
-    // Quote Marijn: "Resetting the mode option with setOption will trigger a full re-parse."
-    // Source: https://github.com/codemirror/CodeMirror/issues/3318#issuecomment-111067281
-    this._cm.setOption('mode', this._cm.getOption('mode'))
+    this._editor.setOptions({
+      zettlr: {
+        imagePreviewWidth: global.config.get('display.imageWidth'),
+        imagePreviewHeight: global.config.get('display.imageHeight'),
+        markdownBoldFormatting: global.config.get('editor.boldFormatting'),
+        markdownItalicFormatting: global.config.get('editor.italicFormatting'),
+        zettelkasten: global.config.get('zkn'),
+        readabilityAlgorithm: global.config.get('editor.readabilityAlgorithm'),
+        render: {
+          citations: global.config.get('display.renderCitations'),
+          iframes: global.config.get('display.renderIframes'),
+          images: global.config.get('display.renderImages'),
+          links: global.config.get('display.renderLinks'),
+          math: global.config.get('display.renderMath'),
+          tasks: global.config.get('display.renderTasks'),
+          headingTags: global.config.get('display.renderHTags'),
+          tables: global.config.get('editor.enableTableHelper')
+        }
+      }
+    })
   }
 
   // SEARCH FUNCTIONS STOLEN FROM THE ZETTLREDITOR CLASS
@@ -128,12 +137,12 @@ class ZettlrQuicklook {
     }
 
     if (this._searchCursor.findNext()) {
-      this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
+      this._editor.codeMirror.setSelection(this._searchCursor.from(), this._searchCursor.to())
     } else {
       // Start from beginning
-      this._searchCursor = this._cm.getSearchCursor(makeSearchRegEx(term), { 'line': 0, 'ch': 0 })
+      this._searchCursor = this._editor.codeMirror.getSearchCursor(makeSearchRegEx(term), { 'line': 0, 'ch': 0 })
       if (this._searchCursor.findNext()) {
-        this._cm.setSelection(this._searchCursor.from(), this._searchCursor.to())
+        this._editor.codeMirror.setSelection(this._searchCursor.from(), this._searchCursor.to())
       }
     }
   }
@@ -146,15 +155,17 @@ class ZettlrQuicklook {
     */
   startSearch (term) {
     // Create a new search cursor
-    this._searchCursor = this._cm.getSearchCursor(makeSearchRegEx(term), this._cm.getCursor())
+    const cursor = this._editor.codeMirror.getCursor()
+    let regex = makeSearchRegEx(term)
+    this._searchCursor = this._editor.codeMirror.getSearchCursor(regex, cursor)
     this._currentLocalSearch = term
 
     // Find all matches
     let tRE = makeSearchRegEx(term, 'gi')
     let res = []
     let match = null
-    for (let i = 0; i < this._cm.lineCount(); i++) {
-      let l = this._cm.getLine(i)
+    for (let i = 0; i < this._editor.codeMirror.lineCount(); i++) {
+      let l = this._editor.codeMirror.getLine(i)
       tRE.lastIndex = 0
       while ((match = tRE.exec(l)) != null) {
         res.push({
@@ -218,7 +229,7 @@ class ZettlrQuicklook {
         continue
       }
       sbannotate.push({ 'from': result.from, 'to': result.to })
-      this._markedResults.push(this._cm.markText(result.from, result.to, { className: 'search-result' }))
+      this._markedResults.push(this._editor.codeMirror.markText(result.from, result.to, { className: 'search-result' }))
     }
 
     this._scrollbarAnnotations.update(sbannotate)

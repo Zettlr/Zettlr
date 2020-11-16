@@ -18,12 +18,25 @@
  * @return {number}   0, 1, or -1, depending upon what the comparision yields.
  */
 module.exports = function (a, b) {
-  // Negative return: a is smaller b (case insensitive)
-  if (a.name.toLowerCase() < b.name.toLowerCase()) {
-    return -1
-  } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
-    return 1
-  } else {
-    return 0
+  let aSort = a.name.toLowerCase()
+  let bSort = b.name.toLowerCase()
+
+  // Check for firstHeadings, if applicable
+  if (global.config.get('display.useFirstHeadings')) {
+    if (a.firstHeading != null) aSort = a.firstHeading.toLowerCase()
+    if (b.firstHeading != null) bSort = b.firstHeading.toLowerCase()
   }
+
+  // Second, check for frontmatter, as this overwrites
+  if (a.frontmatter != null && a.frontmatter.hasOwnProperty('title')) aSort = a.frontmatter.title.toLowerCase()
+  if (b.frontmatter != null && b.frontmatter.hasOwnProperty('title')) bSort = b.frontmatter.title.toLowerCase()
+
+  // Negative return: a is smaller b (case insensitive)
+  if (aSort < bSort) {
+    return -1
+  } else if (aSort > bSort) {
+    return 1
+  }
+
+  return 0
 }

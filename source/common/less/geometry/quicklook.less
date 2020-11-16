@@ -1,0 +1,99 @@
+// Quicklook and Print window options
+
+.quicklook-standalone, .print-window {
+    position:fixed;
+
+    .title {
+        // Title bar options
+        cursor:-webkit-grab;
+        -webkit-app-region: drag;
+
+        height: @title-bar-height;
+        border-top-left-radius: @border-radius;
+        border-top-right-radius: @border-radius;
+        display: flex;
+        padding:0;
+        margin:0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+
+        h1 {
+            flex-grow:5;
+            display: inline-block;
+            padding: 0 1em;
+            line-height: @title-bar-height;
+            white-space: nowrap;
+            max-width: 90%;
+            overflow: hidden;
+        }
+
+        .find {
+          -webkit-app-region: no-drag;
+          flex-grow:4;
+          display: inline-block;
+          width:30%;
+          float: right;
+          height:100%;
+          padding:0;
+          margin:0;
+
+          input {
+            width:100%;
+            padding:0.2em 1em;
+            margin:0;
+            outline: none;
+            border:none;
+            height: 100%;
+            line-height: @title-bar-height;
+          }
+        }
+    }
+
+    // Initialise print-button.
+    #init-print {
+      padding: @title-bar-height * 0.4;
+      cursor: pointer;
+      -webkit-app-region: no-drag;
+      width: 20px;
+      height: @title-bar-height;
+    }
+
+    .body .CodeMirror {
+        cursor:text;
+        font-size:1em;
+        font-family: inherit;
+        padding:0.3em;
+        height:100%;
+        border-bottom-left-radius: @border-radius;
+        border-bottom-right-radius: @border-radius;
+    }
+
+    .CodeMirror-scroll .CodeMirror-sizer { margin-bottom:1em; }
+
+    // CodeMirror inside Quicklook standalone windows need another top-distance
+    .quicklook-standalone #editor { top: @toolbar-height; }
+
+    .print-window .content {
+      top: @toolbar-height;
+      width: 100%;
+      height:100%;
+    }
+}
+
+// When the menubar is shown, adapt the sizes of the different elements accordingly
+body.show-menubar {
+  .quicklook-standalone .title, .print-window .title { top: @menubar-height; }
+  .quicklook-standalone #editor { top: @toolbar-height + @menubar-height; }
+}
+
+body.darwin:not(.show-window-controls) {
+  .quicklook-standalone .title, .print-window .title { padding-left: 70px; }
+}
+
+body.show-window-controls:not(.show-menubar) {
+  .quicklook-standalone .title, .print-window .title {
+    padding-right: 140px;
+  }
+}

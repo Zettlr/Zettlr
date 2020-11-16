@@ -1,0 +1,86 @@
+// The combiner holds together preview and directories
+
+#file-manager {
+    position:fixed;
+    top:@toolbar-height;
+    left:0;
+    width:20%;
+    bottom:0;
+
+    #component-container {
+      position: absolute;
+      overflow-x: hidden;
+      width: 100%;
+      height: 100%;
+    } // End component container
+
+    &.expanded {
+        #file-tree, #file-list { width:50%; }
+
+        #file-list {
+            left:50%;
+            &.hidden { left:50%; }
+        }
+
+        #file-tree {
+            left:0%;
+            &.hidden { left:0%; }
+        }
+    }
+
+    #arrow-button {
+        line-height: 25px;
+        text-align:center;
+        vertical-align: middle;
+        z-index:400;
+
+        position:absolute;
+        top:10px;
+        left:10px;
+        width:30px;
+        height:30px;
+        transition:0.4s left ease;
+
+        &.hidden { left:-60px; }
+    }
+
+    // The directory's resizable handler
+    #file-manager-resize, #file-manager-inner-resizer {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 10px;
+      right: -10px;
+      padding: 2px;
+      cursor: ew-resize;
+
+      &::after {
+        content: "";
+        position: absolute;
+        width: 6px;
+        height: calc(100% - 4px);
+      }
+
+      &::after {
+        border-radius:10px;
+        transition: 0.4s all ease;
+      }
+
+      &:hover {
+        &::after {
+          background-color: rgba(0, 0, 0, .4);
+          box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, .25);
+        }
+      }
+    }
+
+    #file-manager-inner-resizer {
+      left: calc(50% - 5px); // Position it exactly on top of the divider
+      right: auto;
+    }
+}
+
+// If the menu bar is shown, pull down the file manager
+body.show-menubar #file-manager {
+  top: @toolbar-height + @menubar-height;
+}

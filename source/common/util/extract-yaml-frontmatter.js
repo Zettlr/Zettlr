@@ -28,7 +28,7 @@ module.exports = function (markdown) {
     }
   }
 
-  if (start < 0) return undefined // No frontmatter
+  if (start < 0) return null // No frontmatter
 
   for (let i = start + 1; i < lines.length; i++) {
     if ([ '---', '...' ].includes(lines[i])) {
@@ -37,7 +37,7 @@ module.exports = function (markdown) {
     }
   }
 
-  if (end < 0) return undefined // The frontmatter did not end
+  if (end < 0) return null // The frontmatter did not end
 
   // Now we have a frontmatter (if there was any) -> extract!
   let frontmatter = ''
@@ -49,6 +49,6 @@ module.exports = function (markdown) {
   try {
     return YAML.parse(frontmatter)
   } catch (err) {
-    return undefined
+    return null
   }
 }

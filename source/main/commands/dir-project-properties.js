@@ -26,7 +26,7 @@ class DirProjectProperties extends ZettlrCommand {
     */
   run (evt, arg) {
     let dir = this._app.findDir(arg.hash)
-    if (dir) {
+    if (dir !== null) {
       arg.properties = dir._settings.project
       // Send the properties back to the renderer
       global.ipc.send('project-properties', arg)

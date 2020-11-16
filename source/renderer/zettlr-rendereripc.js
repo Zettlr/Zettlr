@@ -10,8 +10,6 @@
 * Description:     Handles communication with the main process. There are
 *                  three channels that are used for communication:
 *                  - message: The default channel for most of the stuff (async)
-*                  - config: Retrieve configuration values (sync)
-*                  - typo: Retrieve dictionary functions (sync)
 *
 * END HEADER
 */
@@ -27,6 +25,7 @@ const CLOSING_COMMANDS = [
   'file-get',
   'file-new',
   'file-delete',
+  'file-rename', // No visible closing, but files are being swapped under the hood
   'close-root',
   'force-open',
   'win-close',
@@ -75,50 +74,6 @@ class ZettlrRendererIPC {
     this._bufferedMessage = null
     this._callbackBuffer = {}
     this._onceCallbacks = []
-
-    // This is an object that will hold all previously checked words in the form
-    // of word: correct?
-    // We are explicitly omitting the prototype stuff, as we don't access this.
-    this._invalidateDictionaryBuffer()
-    this._typoCheck = false
-    // Activate typocheck after 2 seconds to speed up the app's start
-    setTimeout(() => { this._typoCheck = true }, 2000)
-
-    // What we are doing here is setting up a special communications channel
-    // with the main process to receive config values. This way it is much
-    // easier to access the configuration from throughout the whole renderer
-    // process.
-    global.config = {
-      get: (key) => {
-        if (typeof key !== 'string') {
-          console.error('Cannot request config value - key was not a string.')
-          return undefined // On error return undefined
-        }
-        // We will send a synchronous event to the main process in order to
-        // immediately receive the config value we need. Basically we are pulling
-        // the get()-handler from main using the "remote" feature, but we'll
-        // implement it ourselves.
-        return ipc.sendSync('config', key)
-      }
-    }
-
-    // Inject typo spellcheck and suggest functions into the globals
-    global.typo = {
-      check: (term) => {
-        if (!this._typoCheck) return true // Give the dictionaries some time to heat up
-        // Return cache if possible
-        if (this._typoCache[term] !== undefined) return this._typoCache[term]
-        // Save into the corresponding cache and return the query result
-        // Return the query result
-        let correct = ipc.sendSync('typo', { 'type': 'check', 'term': term })
-        if (correct === 'not-ready') return true // Don't check unless its ready
-        this._typoCache[term] = correct
-        return correct
-      },
-      suggest: (term) => {
-        return ipc.sendSync('typo', { 'type': 'suggest', 'term': term })
-      }
-    }
 
     // Sends an array of IDs to main. If they are found in the JSON, cool! Otherwise
     // this will return false.
@@ -227,15 +182,6 @@ class ZettlrRendererIPC {
   }
 
   /**
-   * Invalidates the complete dictionary buffer. Necessary to retrieve accurate
-   * messages whenever the dictionaries change during runtime.
-   * @return {void} Does not return.
-   */
-  _invalidateDictionaryBuffer () {
-    this._typoCache = Object.create(null)
-  }
-
-  /**
   * Switch over the received message.
   * @param {String} cmd The command
   * @param  {Object} cnt   The message's body
@@ -309,9 +255,14 @@ class ZettlrRendererIPC {
         this._app.getToolbar().focusSearch()
         break
 
-      case 'dir-open':
+      case 'workspace-open':
       // User has requested to open another folder. Notify host process.
-        this.send('dir-open')
+        this.send('workspace-open')
+        break
+
+      case 'root-file-open':
+        // User wants to open a new root file
+        this.send('root-file-open')
         break
 
       // The user wants to open a dir externally (= in finder etc)
@@ -380,6 +331,9 @@ class ZettlrRendererIPC {
         // FILES
 
       case 'file-request-sync':
+        // Indicate with "true" that it should open the file in background
+        this._app.openFile(cnt, true)
+        break
       case 'file-open':
         this._app.openFile(cnt)
         break
@@ -390,6 +344,10 @@ class ZettlrRendererIPC {
 
       case 'file-close':
         this._app.closeFile(cnt.hash)
+        break
+
+      case 'file-close-all':
+        this.send('file-close-all')
         break
 
       case 'file-save':
@@ -476,8 +434,12 @@ class ZettlrRendererIPC {
         this._app.getToolbar().toggleDistractionFree()
         break
 
-      case 'toggle-sidebar':
-        this._app.getSidebar().toggleFileList()
+      case 'toggle-typewriter-mode':
+        this._app.getEditor().toggleTypewriterMode()
+        break
+
+      case 'toggle-file-manager':
+        this._app.getFileManager().toggleFileList()
         break
 
       case 'export':
@@ -555,16 +517,6 @@ class ZettlrRendererIPC {
         this._app.getEditor().toggleReadability()
         break
 
-      // Small notification
-      case 'notify':
-        global.notify(cnt)
-        break
-
-      // Dedicated dialog window for the error
-      case 'notify-error':
-        global.notifyError(cnt)
-        break
-
       case 'toc':
         this._app.getBody().displayTOC()
         break
@@ -585,15 +537,6 @@ class ZettlrRendererIPC {
         this._app.getEditor().zoom(-1)
         break
 
-      // Updater
-      case 'update-check':
-        this.send('update-check')
-        break
-
-      case 'update-available':
-        this._app.getBody().displayUpdate(cnt)
-        break
-
       // About dialog
       case 'display-about':
         this._app.getBody().displayAbout()
@@ -603,8 +546,8 @@ class ZettlrRendererIPC {
         this._app.getBody().displayIconSelect(cnt)
         break
 
-      case 'toggle-attachments':
-        this._app.toggleAttachments()
+      case 'toggle-sidebar':
+        this._app.toggleSidebar()
         break
 
       // Stats

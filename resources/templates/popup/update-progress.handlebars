@@ -1,0 +1,22 @@
+<p><strong>Downloading {{name}} &hellip;</strong></p>
+<p>
+  <progress id="app-update-progress" max="{{size_total}}" value="{{size_downloaded}}">
+    {{ download_percent }} %
+  </progress>
+</p>
+<p>
+  <span id="app-update-progress-percent">{{ download_percent }} %</span>
+  <span id="app-update-progress-eta"></span>
+</p>
+<p><a class="button" id="view-changelog-button">View changelog</a></p>
+<p>
+  <a
+    class="button"
+    id="begin-update-progress-button"
+    {{#unless finished}}
+    style="display: none;"
+    {{/unless}}
+  >
+    Install update
+  </a>
+</p>

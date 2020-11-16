@@ -66,7 +66,7 @@ function loadI18nMain (lang = 'en-US') {
 /**
  * This translates a given identifier string into the loaded language
  * @param  {String} string A dot-delimited string containing the translatable
- * @param  {String} args   Zero or more strings that will replace %s-placeholders in the string
+ * @param  {any} args   Zero or more strings that will replace %s-placeholders in the string
  * @return {String}        The translation with all potential replacements applied.
  */
 function trans (string, ...args) {
@@ -119,8 +119,8 @@ function getDictionaryFile (query) {
   let ret = {
     'tag': 'en-US',
     'status': FALLBACK,
-    'aff': path.join(__dirname, '../../main/assets/dict/en-US/en-US.aff'),
-    'dic': path.join(__dirname, '../../main/assets/dict/en-US/en-US.dic')
+    'aff': path.join(__dirname, 'dict/en-US/en-US.aff'),
+    'dic': path.join(__dirname, 'dict/en-US/en-US.dic')
   }
 
   let lang = bcp47.parse(query)
@@ -296,7 +296,7 @@ function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), _
  * @param  {Array} [paths=[]] An array of paths to be searched. Defaults to standard paths.
  * @return {Array}       An array containing metadata for all found dictionaries.
  */
-function enumDictFiles (paths = [ path.join(app.getPath('userData'), '/dict'), path.join(__dirname, '../../main/assets/dict') ]) {
+function enumDictFiles (paths = [ path.join(app.getPath('userData'), '/dict'), path.join(__dirname, 'dict') ]) {
   let candidates = []
   for (let p of paths) {
     let list = fs.readdirSync(p)

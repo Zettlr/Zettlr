@@ -1,0 +1,30 @@
+/**
+ * SIDEBAR
+ */
+
+#sidebar {
+    background-color: rgba(0,0,0,.8);
+    color:var(--grey-0);
+
+    // Style the tabs
+    #sidebar-tabs {
+        .sidebar-tab {
+            &.active { background-color: var(--grey-3); }
+            &:hover { background-color: var(--grey-5); }
+        }
+      }
+
+    #open-dir-external {
+        fill: var(--grey-0);
+        transition: @mode-transition background-color ease;
+
+        &:hover {
+            background-color: var(--grey-6);
+        }
+    }
+
+    .csl-bib-body a {
+        color: var(--grey-1);
+        font-weight: bold;
+    }
+}

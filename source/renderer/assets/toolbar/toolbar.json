@@ -1,20 +1,11 @@
 {
     "toolbar": [
         {
-          "role": "button",
-          "class": "menu-popup",
-          "context": [ "win32" ],
-          "command": "win-menu",
-          "content": "{ 'x': 15, 'y': 15 }",
-          "title": "toolbar.show_menu",
-          "icon": "bars"
-        },
-        {
             "role": "button",
-            "class": "dir-open",
-            "command": "dir-open",
+            "class": "workspace-open",
+            "command": "workspace-open",
             "content": "{}",
-            "title": "toolbar.dir_open",
+            "title": "menu.open_workspace",
             "icon": "folder-open"
         },
         {
@@ -121,11 +112,11 @@
         },
         {
             "role": "button",
-            "class": "toggle-attachments",
-            "command": "toggle-attachments",
+            "class": "toggle-sidebar",
+            "command": "toggle-sidebar",
             "content": "{}",
-            "title": "toolbar.toggle_attachments",
-            "icon": "attachment"
+            "title": "menu.toggle_sidebar",
+            "icon": "view-columns"
         }
 
     ]

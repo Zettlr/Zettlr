@@ -26,12 +26,9 @@ class DirSort extends ZettlrCommand {
     */
   async run (evt, arg) {
     let dir = this._app.findDir(arg.hash)
-    if (!dir) return false
-    await this._app.getFileSystem().runAction('sort', {
-      'source': dir,
-      'info': arg.type
-    })
-    global.application.dirUpdate(dir.hash, dir.hash) // Hash has not changed
+    if (dir === null) return false
+
+    await this._app.getFileSystem().sortDirectory(dir, arg.type)
   }
 }
 

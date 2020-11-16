@@ -16,7 +16,7 @@ const ZettlrCommand = require('./zettlr-command')
 
 class FileClose extends ZettlrCommand {
   constructor (app) {
-    super(app, 'file-close')
+    super(app, [ 'file-close', 'file-close-all' ])
   }
 
   /**
@@ -26,23 +26,31 @@ class FileClose extends ZettlrCommand {
    * @return {boolean}     True, if the file was successfully closed
    */
   async run (evt, arg) {
-    // Close the file
+    if (evt === 'file-close-all') {
+      // The renderer wants to close not just one, but all open files
+      this._app.getFileSystem().closeAllFiles()
+      return true
+    }
+
+    // Close one specific file
     try {
       if (!arg || !arg.hash) throw new Error('Could not close file! No hash provided!')
       let file = this._app.getFileSystem().findFile(arg.hash)
-      if (!file) throw new Error(`Could not close file! No file with hash ${arg.hash} found!`)
+      if (file === null) {
+        throw new Error(`Could not close file! No file with hash ${arg.hash} found!`)
+      }
 
       // Now check if we can safely close the file
       if (file.modified) {
-        // Ask the user if they REALLY want to close the file
-        let ret = await this._app.getWindow().askSaveChanges(file.name)
-        // The user does not want to close the file -> give them time to save
-        if (ret === 0) return false
+        global.log.error('[Command] Could not close file: The file has the modified flag set.')
+        return false
       }
 
       // If we're here the user really wants to close the file.
       if (!this._app.getFileSystem().closeFile(file)) {
         throw new Error('Could not close file!')
+      } else {
+        console.log('File closed successfully.')
       }
 
       return true

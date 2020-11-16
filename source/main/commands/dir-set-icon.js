@@ -14,7 +14,7 @@
 
 const ZettlrCommand = require('./zettlr-command')
 
-class DirSetIcon extends ZettlrCommand {
+module.exports = class DirSetIcon extends ZettlrCommand {
   constructor (app) {
     super(app, 'dir-set-icon')
   }
@@ -26,13 +26,10 @@ class DirSetIcon extends ZettlrCommand {
     */
   async run (evt, arg) {
     let dir = this._app.findDir(arg.hash)
-    if (!dir) return false
-    await this._app.getFileSystem().runAction('set-directory-setting', {
-      'source': dir,
-      'info': { 'icon': arg.icon }
-    })
-    global.application.dirUpdate(dir.hash, dir.hash) // Hash has not changed
+    if (dir === null) return false
+
+    console.log('Setting directory icon', arg.icon)
+
+    await this._app.getFileSystem().setDirectorySetting(dir, { 'icon': arg.icon })
   }
 }
-
-module.exports = DirSetIcon

@@ -29,13 +29,13 @@ class FileSearch extends ZettlrCommand {
     // arg.content contains a hash of the file to be searched
     // and the prepared terms.
     let file = this._app.findFile(arg.hash)
-    if (!file) return false // File not found
+    if (file === null) {
+      global.log.error('Could not search file: File not found.', arg.terms)
+      return false // File not found
+    }
 
     try {
-      let result = await this._app.getFileSystem().runAction('search-file', {
-        'source': file,
-        'info': arg.terms
-      })
+      let result = await this._app.getFileSystem().searchFile(file, arg.terms)
 
       this._app.ipc.send('file-search-result', {
         'hash': arg.hash,

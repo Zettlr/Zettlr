@@ -18,6 +18,7 @@ const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
 const SUPPORTED_PAPERTYPES = require('../../common/data.json').papertypes
 const PAPERNAMES = require('../../common/data.json').papernames
+const serializeFormData = require('../../common/util/serialize-form-data')
 
 class PDFPreferences extends ZettlrDialog {
   constructor () {
@@ -36,12 +37,12 @@ class PDFPreferences extends ZettlrDialog {
 
   postAct () {
     // Activate the form to be submitted
-    let form = this._modal.find('form#dialog')
-    form.on('submit', (e) => {
+    let form = this._modal.querySelector('form#dialog')
+    form.addEventListener('submit', (e) => {
       e.preventDefault()
       // Give the ZettlrBody object the results
       // Form: dialog type, values, the originally passed object
-      this.proceed(form.serializeArray())
+      this.proceed(serializeFormData(form))
     })
 
     // These scripts only are used to update the preview paragraph

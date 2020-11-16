@@ -13,7 +13,6 @@
  * END HEADER
  */
 
-const { remote } = require('electron')
 const ZettlrDialog = require('./zettlr-dialog.js')
 const { trans } = require('../../common/lang/i18n')
 const formatDate = require('../../common/util/format-date')
@@ -38,7 +37,7 @@ class AboutDialog extends ZettlrDialog {
 
   preInit (data) {
     process.getCPUUsage() // First call returns null, so we have to call it twice
-    data.version = remote.app.getVersion()
+    data.version = global.config.get('version')
     data.uuid = global.config.get('uuid')
 
     // Debug info: Versions, argv, env, and overall process uptime

@@ -14,40 +14,20 @@
 */
 
 const path = require('path')
-const hash = require('../common/util/hash')
-const popup = require('./zettlr-popup.js')
-const showdown = require('showdown')
-const Turndown = require('joplin-turndown')
-const tippy = require('tippy.js').default
 const countWords = require('../common/util/count-words')
+const objectToArray = require('../common/util/object-to-array')
+const moveSection = require('../common/util/move-section')
 const EditorTabs = require('./util/editor-tabs')
-const turndownGfm = require('joplin-turndown-plugin-gfm')
-const moveSection = require('./util/editor-move-section')
 const EditorSearch = require('./util/editor-search')
-const { clipboard } = require('electron')
-const generateKeymap = require('./assets/codemirror/generate-keymap.js')
-const openMarkdownLink = require('./util/open-markdown-link')
-const EditorAutocomplete = require('./util/editor-autocomplete')
 
-// The autoloader requires all necessary CodeMirror addons and modes that are
-// used by the main class. It simply folds about 70 lines of code into an extra
-// file.
-require('./assets/codemirror/autoload.js')
+const MarkdownEditor = require('./modules/markdown-editor')
 
 // Finally load CodeMirror itself
 const CodeMirror = require('codemirror')
 
-// The timeout after which a "save"-command is triggered to automatically save changes
-const SAVE_TIMOUT = require('../common/data.json').poll_time
-const AUTOCLOSEBRACKETS = {
-  pairs: '()[]{}\'\'""__``', // Autoclose markdown specific stuff
-  override: true
-}
-
-const IMAGE_REGEX = /(jpg|jpeg|png|gif|svg|tiff|tif)$/i
-
 const MD_MODE = { name: 'multiplex' }
-const TEX_MODE = { name: 'stex' }
+
+const SAVE_TIMEOUT = 5000 // Save every 5 seconds
 
 /**
 * This class propably has the most `require`s in it, because it loads all
@@ -70,48 +50,14 @@ class ZettlrEditor {
     this._currentHash = null // Needed for positions
     this._transientHashes = [] // An array of hashes that when opened should be opened transient
 
-    this._fontsize = 100 // Font size (used for zooming)
     this._timeout = null // Stores a current timeout for a save-command
+
+    this._toSync = [] // Holds an array of files that have yet to be synced
 
     this._searcher = new EditorSearch(null)
     this._tabs = new EditorTabs()
     // The user can select or close documents on the tab bar
     this._tabs.setIntentCallback(this._onTabAction.bind(this))
-
-    this._autocomplete = new EditorAutocomplete()
-
-    // What elements should be rendered?
-    this._renderCitations = false
-    this._renderIframes = false
-    this._renderImages = false
-    this._renderLinks = false
-    this._renderMath = false
-    this._renderTasks = false
-    this._renderHTags = false
-    this._wysiwyg = false // TODO TESTING
-    this._renderTables = false
-
-    // Remembers the last mode when entering readability
-    this._lastMode = MD_MODE // Default mode
-
-    this._countChars = false // Whether or not Zettlr should count characters as words (e.g., for Chinese)
-
-    // This Markdown to HTML converter is used in various parts of the
-    // class to perform converting operations.
-    this._showdown = new showdown.Converter()
-    this._showdown.setFlavor('github')
-    this._showdown.setOption('strikethrough', true)
-    this._showdown.setOption('tables', true)
-    this._showdown.setOption('omitExtraWLInCodeBlocks', true)
-    this._showdown.setOption('tasklists', true)
-    this._showdown.setOption('requireSpaceBeforeHeadingText', true)
-
-    // HTML to Markdown conversion is better done with Turndown.
-    this._turndown = new Turndown({
-      headingStyle: 'atx',
-      hr: '---'
-    })
-    this._turndown.use(turndownGfm.gfm)
 
     // All individual citations fetched during this session.
     this._citationBuffer = Object.create(null)
@@ -130,107 +76,25 @@ class ZettlrEditor {
       this._transientHashes.push(hash)
     }
 
-    this._cm = CodeMirror.fromTextArea(document.getElementById('cm-text'), {
-      mode: MD_MODE,
-      theme: 'zettlr', // We don't actually use the cm-s-zettlr class, but this way we prevent the default theme from overriding.
-      autofocus: false,
-      autoCorrect: false, // Default to false to keep this thing clean
-      foldGutter: true,
-      cursorScrollMargin: 60, // Keep the cursor 60px below/above editor edges
-      cursorBlinkRate: 0, // Disable cursor blinking (we'll do this with a @keyframes animation)
-      gutters: ['CodeMirror-foldgutter'],
-      foldOptions: {
-        'widget': '\u00A0\u2026\u00A0', // nbsp ellipse nbsp
-        'scanUp': true // If nothing on current line can be folded, attempt the Markdown heading
-      },
-      direction: 'ltr',
-      rtlMoveVisually: true,
-      placeholder: ' ', // Just an invisible space.
-      hintOptions: {
-        completeSingle: false, // Don't auto-complete, even if there's only one word available
-        hint: (cm, opt) => { return this._autocomplete.hint(cm, opt) }
-      },
-      lineWrapping: true,
-      indentUnit: 4, // Indent lists etc. by 4, not 2 spaces (necessary, e.g., for pandoc)
-      // inputStyle: "contenteditable", // Will enable this in a future version
-      autoCloseBrackets: AUTOCLOSEBRACKETS,
-      markdownImageBasePath: '', // The base path used to render the image in case of relative URLs
-      markdownBoldFormatting: '**', // The characters used for bold
-      markdownItalicFormatting: '_', // The characters used for italic
-      markdownOnLinkOpen: (url) => { return openMarkdownLink(url, this) }, // Action for ALT-Clicks
-      zkn: {
-        idRE: '(\\d{14})', // What do the IDs look like?
-        linkStart: '[[', // Start of links?
-        linkEnd: ']]' // End of links?
-      },
-      continuelistModes: [ 'markdown', 'markdown-zkn' ],
-      extraKeys: generateKeymap(this)
-    })
+    this._editor = new MarkdownEditor('cm-text')
 
-    // Set up the helper classes with the CM instance
-    this._searcher.setInstance(this._cm)
-    this._autocomplete.init(this._cm)
-
-    /**
-     * Listen to the beforeChange event to modify pasted image paths into real
-     * markdown images.
-     * @type {function}
-     */
-    this._cm.on('beforeChange', (cm, changeObj) => {
-      // Tap into pasting
-      if (changeObj.origin === 'paste') {
-        // First check if there's an image in the clipboard. In this case we
-        // need to cancel the paste event and handle the image ourselves.
-        let image = clipboard.readImage()
-        let html = clipboard.readHTML()
-        let plain = clipboard.readText()
-        let explicitPaste = plain.replace(/\r/g, '') === changeObj.text.join('\n')
-
-        if (!image.isEmpty() && (explicitPaste || !changeObj.text)) {
-          // We've got an image. So we need to handle it.
-          this._renderer.handleEvent('paste-image')
-          return changeObj.cancel() // Cancel handling of the event
-        }
-
-        // Next possibility: There's HTML formatted text in the clipboard. In
-        // this case we'll be sneaky and simply exchange the plain text with
-        // the Markdown formatted version. We need an additional check to make
-        // sure the HTML version is indeed different than the plain text
-        // version, as some apps may write the same plain text stuff into the
-        // HTML part of the clipboard, in which case dragging it through the
-        // converter will result in unwanted behaviour (including Electron).
-        // We have the problem that CodeMirror treats moving text around and
-        // dropping links exactly the same as explicitly hitting Cmd/Ctrl+V.
-        // The only way we can be sure is to make sure the changeObject is the
-        // same as the plain text from the clipboard. ONLY in this instance
-        // is it a regular, explicit paste. Else the text in the changeObject
-        // takes precedence.
-        if (html && html.length > 0 && (!plain || html !== plain) && explicitPaste) {
-          // We've got HTML, so let's fire up Turndown.
-          plain = this._turndown.turndown(html)
-          // Let's update the (very likely plain) HTML text with some Markdown
-          // that retains the formatting. PLEASE NOTE that we have to split the
-          // resulting string as the update method expects an Array of lines,
-          // not a complete string with line breaks.
-          return changeObj.update(changeObj.from, changeObj.to, plain.split('\n'))
-        }
-      }
-    })
-
-    this._cm.on('change', (cm, changeObj) => {
-      let newText = changeObj.text
+    this._editor.on('change', (changeOrigin, newTextCharCount, newTextWordCount) => {
       let file = this._getActiveFile()
 
-      if (changeObj.origin === 'paste' && newText.join(' ').split(' ').length > 10) {
+      if (changeOrigin === 'paste') {
         // In case the user pasted more than ten words don't let these count towards
         // the word counter. Simply update the word count before the save function
         // is triggered. This way none of the just pasted words will count.
-        file.lastWordCount = countWords(file.cmDoc.getValue(), this._countChar)
+        if (this._countChar && newTextCharCount > 10) {
+          file.lastWordCount = this._editor.charCount
+        } else if (newTextWordCount > 10) {
+          file.lastWordCount = this._editor.wordCount
+        }
       }
 
-      if (changeObj.origin !== 'setValue') {
+      if (changeOrigin !== 'setValue') {
         // If origin is setValue this means that the contents have been
-        // programatically changed -> no need to flag any modification!
+        // programatically changed -> no need to flag any modification.
         // Clear the timeouts in any case
         if (this._timeout) clearTimeout(this._timeout)
         if (this._citationTimeout) clearTimeout(this._citationTimeout)
@@ -243,7 +107,7 @@ class ZettlrEditor {
         }
 
         // Check if the change actually modified the doc or not.
-        if (this._cm.doc.isClean()) {
+        if (this._editor.isClean()) {
           this._renderer.clearModified(this._currentHash)
           // NOTE in case you notice we're either calling this.markClean or
           // this._tabs.markDirty, this is because on markClean we also have to
@@ -256,282 +120,74 @@ class ZettlrEditor {
           // Set the autosave timeout
           this._timeout = setTimeout((e) => {
             this.saveFiles()
-          }, SAVE_TIMOUT)
+          }, SAVE_TIMEOUT)
         }
       }
+
+      // Finally, update the file info in the toolbar
+      this._renderer.updateFileInfo(this._editor.documentInfo)
+
+      // The sidebar needs the correct table of contents, so signal the
+      // corresponding event to the renderer
+      this._renderer.updateTOC(this._editor.tableOfContents)
+    }) // END MarkdownEditor::onChange
+
+    // We also need to update the document info on cursor activity
+    // to capture changes in the selections.
+    this._editor.on('cursorActivity', (e) => {
+      this._renderer.updateFileInfo(this._editor.documentInfo)
     })
 
-    // On cursor activity (not the mouse one but the text one), render all
-    // things we should replace in the sense of render directly in the text
-    // such as images, links, other stuff.
-    this._cm.on('cursorActivity', (cm) => {
-      // This event fires on either editor changes (because, obviously the
-      // cursor changes its position as well then) or when the cursor moves.
-      this._fireRenderers()
+    // Listen to special click events on the MarkdownEditor
+    this._editor.on('zettelkasten-link', (linkContents) => {
+      this._renderer.autoSearch(linkContents, true)
     })
 
-    // We need to update citations also on updates, as this is the moment when
-    // new spans get added to the DOM which we might have to render.
-    this._cm.on('update', (cm) => {
-      this.renderCitations()
-      // Must be called to ensure all tables have active event listeners.
-      if (this._renderTables) this._cm.execCommand('markdownInitiateTables')
+    this._editor.on('zettelkasten-tag', (tag) => {
+      this._renderer.autoSearch(tag)
     })
 
-    this._cm.on('drop', (cm, event) => {
-      // If the user has dropped a file onto the editor, this strongly suggest
-      // they want to link it.
-      try {
-        let data = JSON.parse(event.dataTransfer.getData('text/x-zettlr-file'))
-        let textToInsert = cm.getOption('zkn').linkStart
-        textToInsert += data.id ? data.id : path.basename(data.path, path.extname(data.path))
-        textToInsert += cm.getOption('zkn').linkEnd
-        let linkPref = global.config.get('zkn.linkWithFilename')
-        if (linkPref === 'always' || (linkPref === 'withID' && data.id)) {
-          // We need to add the text after the link.
-          textToInsert += ' ' + path.basename(data.path)
-        }
-        this.insertText(textToInsert)
-      } catch (e) {
-        // Error in JSON stringifying (either b/c malformed or no text)
-        // --> proceed performing normally
-      }
+    // Set up the helper classes with the CM instance
+    this._searcher.setInstance(this._editor.codeMirror)
 
-      if (event.dataTransfer.files.length > 0) {
-        // In case of files being dropped, do *not* let CodeMirror handle them.
-        event.codemirrorIgnore = true
-        let imagesToInsert = []
-        for (let x of event.dataTransfer.files) {
-          if (IMAGE_REGEX.test(x.path)) {
-            imagesToInsert.push(x.path)
-          }
-        }
-        if (imagesToInsert.length > 0) {
-          let where = this._cm.coordsChar({ 'left': event.clientX, 'top': event.clientY })
-          // Don't let Zettlr handle this because opening something Additionally
-          // to images would be weird.
-          event.stopPropagation()
-          event.preventDefault()
+    // TODO this._cm.on('mousedown', (cm, event) => {
+    //   // Ignore click events if they attempt to perform a special action
+    //   let target = event.target
+    //   let specialClasses = [ 'cma', 'cm-zkn-tag', 'cm-zkn-link' ]
+    //   let macMeta = process.platform === 'darwin' && event.metaKey
+    //   let otherCtrl = process.platform !== 'darwin' && event.ctrlKey
+    //   let isSpecial = false
+    //   for (let c of specialClasses) {
+    //     if (target.classList.contains(c)) isSpecial = true
+    //   }
+    //   let isFootnote = target.classList.contains('cm-link') && target.innerText.indexOf('^') === 0
 
-          this._cm.setCursor(where)
-
-          let isSingleInline = imagesToInsert.length === 1 && this._cm.getLine(where.line).trim() !== ''
-          if (isSingleInline) {
-            // Only add a single inline image
-            this._cm.replaceSelection(`![${path.basename(imagesToInsert[0])}](${imagesToInsert[0]})`)
-          } else {
-            // Add all images.
-            let str = '\n'
-            for (let p of imagesToInsert) {
-              str += `![${path.basename(p)}](${p})\n`
-            }
-            this._cm.replaceSelection(str)
-          }
-        }
-      }
-    })
-
-    this._cm.on('renderLine', (cm, line, elt) => {
-      // Disable on non-Markdown text
-      if (cm.getModeAt({ 'line': cm.doc.getLineNumber(line), 'ch': 0 }).name !== 'markdown') return
-      // Need to calculate indent and padding in order to provide a proper hanging indent
-      // Originally based on https://discuss.codemirror.net/t/hanging-indent/243/2
-      let monospaceWidth = this.computeMonospaceWidth()
-      let spaceWidth = this.computeSpaceWidth()
-
-      // Determine everything before the meaningful text begins. This will match the following:
-      //     Text indentended by 4 (or any number of) spaces
-      //     - List indented by 4 (or any number of) spaces
-      // - List non-indented
-      //   - - - - - Some text here (will only match first hyphen)
-      let match = /^(?<spaces>\s*)(?<ordinal>[*+-]\s+|\d+[.)]\s+|>\s*)?/.exec(line.text)
-
-      if (!match) return // No need to indent
-
-      // Extract full match, leading spaces and an optional ordinal
-      let padding = match[1]
-      let ordinal = match[2] || ''
-
-      // The following code is a bit complicated as the as the HTML structure is the following:
-      //  - some spaces or tabs in normal font (length = numberOfSpaces)
-      //  - the sequence "- " or "1. " in monospaced font (length = numberOfOrdinal)
-      //  - text in normal font
-
-      // Tabs are another story. They are inserted as spans with class "cm-tab" and consequently change the layout again
-      // The following tries to align tab-indented list with space-indented lists (works quite ok at least on the first level)
-      let numberOfTabs = (padding.match(/\t/g) || []).length
-      let numberOfSpaces = padding.length - numberOfTabs
-      let numberOfOrdinal = ordinal.length
-
-      elt.style.textIndent = '-' + (numberOfSpaces * spaceWidth + numberOfOrdinal * monospaceWidth) + 'px'
-      elt.style.paddingLeft = (numberOfSpaces * spaceWidth + numberOfOrdinal * monospaceWidth) + 'px'
-    })
-
-    // Display a footnote if the target is a link (and begins with ^)
-    this._cm.getWrapperElement().addEventListener('mousemove', (e) => {
-      let t = $(e.target)
-      if (t.hasClass('cm-link') && t.text().indexOf('^') === 0) {
-        this._fntooltip(t)
-      }
-    })
-
-    this._cm.on('mousedown', (cm, event) => {
-      // Ignore click events if they attempt to perform a special action
-      let target = event.target
-      let specialClasses = [ 'cma', 'cm-zkn-tag', 'cm-zkn-link' ]
-      let macMeta = process.platform === 'darwin' && event.metaKey
-      let otherCtrl = process.platform !== 'darwin' && event.ctrlKey
-      let isSpecial = false
-      for (let c of specialClasses) {
-        if (target.classList.contains(c)) isSpecial = true
-      }
-      let isFootnote = target.classList.contains('cm-link') && target.innerText.indexOf('^') === 0
-
-      if ((isSpecial || isFootnote) && (macMeta || otherCtrl)) event.codemirrorIgnore = true
-    })
-
-    this._cm.getWrapperElement().addEventListener('click', (e) => {
-      // Open links on both Cmd and Ctrl clicks - otherwise stop handling event
-      if (process.platform === 'darwin' && !e.metaKey) return true
-      if (process.platform !== 'darwin' && !e.ctrlKey) return true
-
-      e.preventDefault()
-
-      let cursor = this._cm.coordsChar({ left: e.clientX, top: e.clientY })
-      let tokenInfo = this._cm.getTokenAt(cursor)
-      let tokenList = tokenInfo.type.split(' ')
-      let startsWithCirc = tokenInfo.string.indexOf('^') === 0
-
-      if (tokenList.includes('zkn-link')) {
-        this._renderer.autoSearch(tokenInfo.string, true)
-      } else if (tokenList.includes('zkn-tag')) {
-        this._renderer.autoSearch(tokenInfo.string)
-      } else if (tokenList.includes('link') && startsWithCirc) {
-        this._editFootnote($(e.target))
-      } else {
-        console.log('No success', tokenInfo)
-      }
-    })
-
-    this._cm.getWrapperElement().addEventListener('paste', (e) => {
-      let image = clipboard.readImage()
-      // Trigger the insertion process from here only if there is no text in the
-      // clipboard (because then CodeMirror will not do anything). If there is
-      // text in the clipboard, do not try to trigger the process from here
-      // because this way two dialogs would be opened -- first from the
-      // beforeChange handler of CodeMirror, and, after the event has bubbled
-      // to the wrapper, from here.
-      if (!image.isEmpty() && clipboard.readText().length === 0) {
-        // We've got an image. So we need to handle it.
-        this._renderer.handleEvent('paste-image')
-      }
-    })
-
-    // Enable zooming by Cmd/Ctrl-scrolling
-    this._cm.getWrapperElement().addEventListener('wheel', (e) => {
-      if (
-        (process.platform !== 'darwin' && e.ctrlKey) ||
-        (process.platform === 'darwin' && e.metaKey)
-      ) {
-        // NOTE: Did you know that pinching events get reported as "wheel" events as well?
-        // Me neither.
-        e.preventDefault()
-        // Divide by itself as absolute to either get -1 or +1
-        let direction = e.deltaY / Math.abs(e.deltaY)
-        this.zoom(isNaN(direction) ? 0 : direction)
-      }
-    })
-
-    this._cm.refresh()
+    //   if ((isSpecial || isFootnote) && (macMeta || otherCtrl)) event.codemirrorIgnore = true
+    // })
 
     // Finally create the annotateScrollbar object to be able to annotate the
     // scrollbar with search results.
-    this._scrollbarAnnotations = this._cm.annotateScrollbar('sb-annotation')
+    this._scrollbarAnnotations = this._editor.codeMirror.annotateScrollbar('sb-annotation')
     this._scrollbarAnnotations.update([])
   }
   // END constructor
 
-  /**
-  * Computes and returns the width of a character in the monospace font in pixels.
-  */
-  computeMonospaceWidth () {
-    if (this._monospaceWidth === 0) {
-      this._monospaceWidth = this.measureCharWidth('measureMonoWidth')
-    }
-    return this._monospaceWidth
-  }
-
-  /**
-  * Computes and returns the width of a character in the monospace font in pixels.
-  */
-  computeSpaceWidth () {
-    if (this._spaceWidth === 0) {
-      this._spaceWidth = this.measureCharWidth('measureWidth')
-    }
-    return this._spaceWidth
-  }
-
-  /**
-   * Computes and returns the width of a character for a character that is placed in a (new) node with the given id
-   * @param {String} id
-   * @see https://stackoverflow.com/a/118251/873661
-   */
-  measureCharWidth (id) {
-    // Idea: Create a span containing a space and measure its size
-    // Infact, We use 100 characters in order to get an approximately correct width (clientWidth is an integer)
-    var container = document.createElement('div')
-    container.id = id
-    container.innerHTML = '<span>' + '&nbsp'.repeat(100) + '</span>'
-    this._cm.getWrapperElement().appendChild(container)
-    var width = (container.clientWidth + 1) / 100
-    this._cm.getWrapperElement().removeChild(container)
-    return width
-  }
-
-  /**
-   * Apply all renderers and other fancy stuff on the editor.
-   */
-  _fireRenderers () {
-    this._cm.execCommand('markdownRenderMermaid') // Render mermaid codeblocks
-    if (this._renderTables) this._cm.execCommand('markdownRenderTables') // Render tables
-    if (this._renderLinks) this._cm.execCommand('markdownRenderLinks') // Render links
-    if (this._renderImages) this._cm.execCommand('markdownRenderImages') // Render images
-    if (this._renderMath) this._cm.execCommand('markdownRenderMath') // Render equations
-    if (this._renderCitations) this._cm.execCommand('markdownRenderCitations') // Render citations
-    if (this._renderTasks) this._cm.execCommand('markdownRenderTasks') // Render tasks
-    if (this._renderHTags) this._cm.execCommand('markdownRenderHTags') // Render heading levels
-    if (this._renderIframes) this._cm.execCommand('markdownRenderIframes') // Render iFrames
-    if (this._wysiwyg) this._cm.execCommand('markdownWYSIWYG') // Render all other elements
-    if (this._cm.getOption('mode').name !== 'readability') this._cm.execCommand('markdownHeaderClasses') // Apply heading line classes
-    this._cm.execCommand('markdownCodeblockClasses') // Apply code block classes
-    if (this._cm.getOption('fullScreen') && this._mute) this._muteLines()
-
-    // Additionally, render all citations that may have been newly added to
-    // the DOM by CodeMirror.
-    this.renderCitations()
-
-    // Update fileInfo
-    this._renderer.updateFileInfo(this.getFileInfo())
+  pasteAsPlain () {
+    this._editor.pasteAsPlainText()
   }
 
   /**
    * Enters the readability mode
    */
   enterReadability () {
-    this._lastMode = this._cm.getOption('mode')
-    this._cm.setOption('mode', {
-      name: 'readability',
-      algorithm: global.config.get('editor.readabilityAlgorithm')
-    })
-    this._cm.refresh()
+    this._editor.setOptions({ 'mode': 'readability' })
   }
 
   /**
    * Exits the readability mode.
    */
   exitReadability () {
-    this._cm.setOption('mode', this._lastMode)
-    this._cm.refresh()
+    this._editor.setOptions({ 'mode': 'multiplex' })
   }
 
   /**
@@ -539,9 +195,7 @@ class ZettlrEditor {
    * @return {Boolean} Whether or not readability mode is active.
    */
   isReadabilityModeActive () {
-    let mode = this._cm.getOption('mode')
-    if (!mode) return false // Before a doc has been loaded, mode can be undefined
-    return mode.hasOwnProperty('name') && mode.name === 'readability'
+    return this._editor.getOption('mode') === 'readability'
   }
 
   /**
@@ -557,18 +211,14 @@ class ZettlrEditor {
 
   /**
     * Opens a file, i.e. replaced the editor's content
-    * @param  {ZettlrFile}   file The file to be renderer
-    * @param  {Mixed}        flag An optional flag
+    * @param  {ZettlrFile}   file   The file to be renderer
+    * @param  {Boolean}      isSync If set to true, will open "in background"
     * @return {ZettlrEditor}       Chainability.
     */
-  open (file, flag = null) {
+  open (file, isSync = false) {
     if (!this._openFiles.find(elem => elem.fileObject.hash === file.hash)) {
       // We need to create a new doc for the file and then swap
       // the currently active doc.
-      // Switch modes based on the file type
-      let mode = MD_MODE
-      // Potentially helpful: $('.CodeMirror').addClass('cm-stex-mode')
-      if (file.ext === '.tex') mode = TEX_MODE
 
       // Bind the "correct" filetree object to the doc, because
       // we won't be accessing the content property at all, hence
@@ -578,6 +228,9 @@ class ZettlrEditor {
 
       let shouldBeTransient = false
       if (this._transientHashes.includes(file.hash)) {
+        // If the _transientHashes array includes the file's hash, initialize
+        // it as a transient file, and remove it from the array (it's simply)
+        // our way to maintain the information due to asynchronous requests
         let idx = this._transientHashes.indexOf(file.hash)
         this._transientHashes.splice(idx, 1)
         shouldBeTransient = true
@@ -592,14 +245,14 @@ class ZettlrEditor {
         this.attemptCloseTab()
         // Swap out all properties of the current tab
         activeFile.fileObject = fileTreeObject
-        activeFile.cmDoc = CodeMirror.Doc(file.content, mode)
+        activeFile.cmDoc = CodeMirror.Doc(file.content)
         activeFile.transient = shouldBeTransient
         activeFile.lastWordCount = countWords(file.content, this._countChars)
       } else {
         // Simply append to the end of the array
         this._openFiles.push({
           'fileObject': fileTreeObject,
-          'cmDoc': CodeMirror.Doc(file.content, mode),
+          'cmDoc': CodeMirror.Doc(file.content),
           'transient': shouldBeTransient,
           'lastWordCount': countWords(file.content, this._countChars)
         })
@@ -610,7 +263,34 @@ class ZettlrEditor {
     // don't swap the file.content property during this: Because there's a
     // different function to do so. Use it! Don't monkey path _swapFiles. NO
     // content replacement here!
-    this._swapFile(file.hash)
+    // ***
+    // Only actually swap the file if it's a synchronized file (e.g. no active
+    // opening by the user, it's rather to keep the editor up in sync with the
+    // FSAL)
+    if (!isSync) {
+      this._swapFile(file.hash)
+    } else {
+      // We need to at least announce the file in the tab bar
+      this._tabs.syncFiles(this._openFiles, this._currentHash)
+      this._toSync.splice(this._toSync.indexOf(file.hash), 1)
+
+      if (this._toSync.length === 0) {
+        const lastFile = global.config.get('lastFile')
+
+        const lastFileOpen = this._openFiles.map(e => e.fileObject.hash).includes(lastFile)
+
+        if (lastFileOpen) {
+          this._swapFile(lastFile)
+        } else if (!lastFileOpen && this._openFiles.length > 0) {
+          console.log('No last file but theres something in the openFiles, opening ...', this._openFiles)
+          this._swapFile(this._openFiles[0].fileObject.hash)
+          // We have finished background-syncing the files. Now
+          // we need to open the active file.
+        } else {
+          console.error('lastFile was null and there are no open files to switch to!')
+        }
+      }
+    }
 
     return this
   }
@@ -620,36 +300,40 @@ class ZettlrEditor {
    * @param {Number} hash The hash of the file to be swapped
    */
   _swapFile (hash) {
-    if (this.isReadabilityModeActive()) this.exitReadability()
     // Exchanges the CodeMirror document object
     let file = this._openFiles.find(elem => elem.fileObject.hash === hash)
-    if (!file) return
+    if (!file) return console.log('No file found to swap to!', hash, this._openFiles)
+
+    // We need to set the markdownImageBasePath _before_ swapping the doc
+    // as the CodeMirror instance will begin rendering images as soon as
+    // this happens, and it needs the correct path for this.
+    this._editor.setOptions({
+      // Set the mode based on the extension
+      'mode': (file.fileObject.ext === '.tex') ? 'stex' : 'multiplex',
+      'zettlr': {
+        'markdownImageBasePath': path.dirname(file.fileObject.path)
+      }
+    })
+
     // swapDoc returns the old doc, but we retain a reference in the
     // _openFiles array so we don't need to catch it.
-    this._cm.swapDoc(file.cmDoc)
+    this._editor.swapDoc(file.cmDoc)
     this._currentHash = hash
-    this._cm.setOption('markdownImageBasePath', path.dirname(file.fileObject.path))
+
+    // Enable editing the editor contents, if applicable
+    this._editor.readOnly = false
 
     // Synchronise the file changes to the document tabs
     this._tabs.syncFiles(this._openFiles, this._currentHash)
-
-    // Make sure all headings are rendered etc. pp
-    this._fireRenderers()
-
-    // We also need to tell the autocompletion to rebuild the index
-    this.signalUpdateFileAutocomplete()
-    this._renderer.signalActiveFileChanged()
 
     // Last but not least: If there are any search results currently
     // display, mark the respective positions.
     this._searcher.markResults(file.fileObject)
 
-    // The sidebar needs to be informed that the active file has changed!
-    global.store.set('selectedFile', this._currentHash)
-    // Same for the main process
-    global.ipc.send('set-active-file', { 'hash': this._currentHash })
+    // The active file has changed
+    this._activeFileChanged()
 
-    this._cm.focus() // DEBUG Check for side effects
+    // TODO this._cm.focus() // DEBUG Check for side effects
   }
 
   /**
@@ -657,21 +341,48 @@ class ZettlrEditor {
    * @param {Array} newHashes A potential new list of hashes to open/sync.
    */
   syncFiles (newHashes = this._openFiles.map(elem => elem.fileObject.hash)) {
-    let oldHashes = this._openFiles.map(elem => elem.fileObject.hash)
-    let lastHashIndex = oldHashes.indexOf(this._currentHash)
-    if (lastHashIndex > newHashes.length) lastHashIndex = newHashes.length - 1
+    if (newHashes.length === 0) {
+      this._openFiles = []
+      // Clear out the editor (TODO: Not DRY, as copied from the close command)
+      this._editor.swapDoc(CodeMirror.Doc(''))
+      this._currentHash = null
+      // Reset the base path
+      this._editor.setOptions({ zettlr: { markdownImageBasePath: '' } })
 
-    // First, close all files no longer present.
+      // Disable the editor
+      this._editor.readOnly = true
+
+      // The active file has changed (so to speak)
+      this._activeFileChanged()
+      return
+    }
+
+    // Now we need all hashes that are currently open ...
+    let oldHashes = this._openFiles.map(elem => elem.fileObject.hash)
+    // ... as well as the index of the currently selected file (in case
+    // it was closed)
+    let lastHashIndex = oldHashes.indexOf(this._currentHash)
+    // To prevent undefined in case something went wrong
+    if (lastHashIndex < 0) {
+      lastHashIndex = 0
+      console.warn('The current opened file was not found in the list of open files during sync!')
+    }
+
+    // Then, close all files no longer present.
     for (let fileDescriptor of this._openFiles) {
       if (!newHashes.includes(fileDescriptor.fileObject.hash)) {
-        this.close(fileDescriptor.fileObject.hash)
+        // Remove from array
+        this._openFiles.splice(this._openFiles.indexOf(fileDescriptor), 1)
       }
     }
 
-    // Then, determine all files we have yet to open anew.
-    let toOpen = newHashes.filter(fileHash => !oldHashes.includes(fileHash))
-    if (toOpen.length > 0) {
-      for (let fileHash of toOpen) {
+    // Make sure we have a valid index to open later
+    if (lastHashIndex >= this._openFiles.length) lastHashIndex = this._openFiles.length - 1
+
+    // Now, determine all files we have yet to open anew.
+    this._toSync = newHashes.filter(fileHash => !oldHashes.includes(fileHash))
+    if (this._toSync.length > 0) {
+      for (let fileHash of this._toSync) {
         global.ipc.send('file-request-sync', { 'hash': fileHash })
       }
     }
@@ -684,9 +395,10 @@ class ZettlrEditor {
     // We'll use the same index for that, because, purely from a visual
     // perspective, it makes absolutely sense that the new active file is at
     // roughly the same position than the former one.
-    if (!newHashes.includes(this._currentHash)) {
-      // In this case, we also need to swap files
-      this._swapFile(newHashes[lastHashIndex])
+    if (!newHashes.includes(this._currentHash) &&
+        this._currentHash !== null &&
+        this._openFiles.length > 0) {
+      this._swapFile(this._openFiles[lastHashIndex].fileObject.hash)
     }
 
     // Finally, propagate the changes to the tabs.
@@ -718,6 +430,10 @@ class ZettlrEditor {
       // because otherwise the new sorting won't be persisted in the tabbar.
       this._openFiles = hash.map(e => this._openFiles.find(file => file.fileObject.hash === e))
       global.ipc.send('sort-open-files', hash)
+    } else if (intent === 'make-intransient') {
+      let requestedFile = this._openFiles.find((elem) => { return elem.fileObject.hash === hash })
+      requestedFile.transient = false
+      this._tabs.syncFiles(this._openFiles, this._currentHash)
     }
   }
 
@@ -759,10 +475,14 @@ class ZettlrEditor {
 
     if (this._openFiles.length === 0) {
       // Replace with an empty new doc
-      this._cm.swapDoc(CodeMirror.Doc('', MD_MODE))
+      this._editor.swapDoc(CodeMirror.Doc('', MD_MODE))
       this._currentHash = null
-      this._cm.setOption('markdownImageBasePath', '') // Reset base path
+      // Reset the base path
+      this._editor.setOptions({ zettlr: { markdownImageBasePath: '' } })
       this.signalUpdateFileAutocomplete() // Autocomplete with no file match
+
+      // Enable editing the editor contents, if applicable
+      this._editor.readOnly = true
     }
 
     if (this._currentHash === fileToClose.fileObject.hash && this._openFiles.length > 0) {
@@ -772,10 +492,13 @@ class ZettlrEditor {
       } else {
         this._swapFile(this._openFiles[0].fileObject.hash)
       }
+    } else if (this._currentHash === fileToClose.fileObject.hash) {
+      // There are no more open files -> reset the currentHash pointer
+      this._currentHash = null
     }
 
-    // Synchronise the file changes to the document tabs
-    this._tabs.syncFiles(this._openFiles, this._currentHash)
+    // The active file has changed
+    this._activeFileChanged()
 
     return this
   }
@@ -785,15 +508,13 @@ class ZettlrEditor {
    * @returns {boolean} True, if a tab has been closed, otherwise false.
    */
   attemptCloseTab () {
-    if (this._openFiles.length === 0) return false
-
-    if (!this._currentHash) return false
-
-    // Send the close request to main
-    global.ipc.send('file-close', { 'hash': this._currentHash })
-
-    // Indicate that we have indeed been able to close a tab
-    return true
+    if (this._currentHash !== null) {
+      // Send the close request to main
+      global.ipc.send('file-close', { 'hash': this._currentHash })
+      return true
+    } else {
+      return false
+    }
   }
 
   /**
@@ -829,7 +550,7 @@ class ZettlrEditor {
    * Returns the file that is active (i.e. visible), but only the object, NOT the doc
    */
   getActiveFile () {
-    let activeFile = this._openFiles.find(elem => elem.fileObject.hash === this._currentHash)
+    let activeFile = this._getActiveFile()
     return (activeFile) ? activeFile.fileObject : undefined
   }
 
@@ -837,31 +558,53 @@ class ZettlrEditor {
    * Returns the current active file content. NOTE: This is the internal version
    * that returns the full object, not just the fileObject.
    */
-  _getActiveFile () { return this._openFiles.find(e => e.fileObject.hash === this._currentHash) }
+  _getActiveFile () {
+    return this._openFiles.find(e => e.fileObject.hash === this._currentHash)
+  }
 
   /**
     * Toggles the distraction free mode
     */
   toggleDistractionFree () {
-    this._cm.setOption('fullScreen', !this._cm.getOption('fullScreen'))
-    if (!this._cm.getOption('fullScreen')) {
-      this._unmuteLines()
+    if (this._editor.isFullscreen) {
+      this._editor.isFullscreen = false
       this._div.removeClass('fullscreen')
       this._div.css('left', this._leftBeforeDistractionFree)
     } else {
-      if (this._mute) this._muteLines()
+      this._editor.isFullscreen = true
       this._div.addClass('fullscreen')
       this._leftBeforeDistractionFree = this._div.css('left')
       if (this._leftBeforeDistractionFree === '0px') this._leftBeforeDistractionFree = ''
       this._div.css('left', '') // Remove the "left" property
     }
+  }
 
-    // We have to re-apply the font-size to the editor because this style gets
-    // overwritten by one of the above operations.
-    if (this._fontsize !== 100) this._cm.getWrapperElement().style.fontSize = this._fontsize + '%'
+  /**
+   * Toggles the typewriter mode of the editor on and off
+   */
+  toggleTypewriterMode () {
+    if (this._editor.hasTypewriterMode) {
+      this._editor.hasTypewriterMode = false
+    } else {
+      this._editor.hasTypewriterMode = true
+    }
+  }
 
-    // Refresh to reflect the size changes
-    this._cm.refresh()
+  /**
+   * Alter the font size of the editor.
+   * @param  {Number}  direction  The direction, can be 1 (increase), -1 (decrease) or 0 (reset)
+   */
+  zoom (direction) {
+    this._editor.zoom(direction)
+  }
+
+  /**
+    * Run a CodeMirror command.
+    * @param  {String} cmd The command to be passed to cm.
+    * @return {void}     Nothing to return.
+    */
+  runCommand (cmd) {
+    this._editor.runCommand(cmd)
   }
 
   /**
@@ -871,85 +614,61 @@ class ZettlrEditor {
    */
   configChange () {
     // The configuration has changed, so reload everything
-
-    // Re-generate the keymap
-    this._cm.setOption('extraKeys', generateKeymap(this))
-
-    // Should lines be muted in distraction free?
-    this._mute = global.config.get('muteLines')
-    if (this._cm.getOption('fullScreen') && !this._mute) {
-      this._unmuteLines() // Unmute
-    } else if (this._cm.getOption('fullScreen') && this._mute) {
-      this._muteLines() // Mute
+    let newOptions = {
+      indentUnit: global.config.get('editor.indentUnit'),
+      autoCloseBrackets: global.config.get('editor.autoCloseBrackets'),
+      keyMap: global.config.get('editor.inputMode'),
+      direction: global.config.get('editor.direction'),
+      zettlr: {
+        muteLines: global.config.get('muteLines'),
+        imagePreviewWidth: global.config.get('display.imageWidth'),
+        imagePreviewHeight: global.config.get('display.imageHeight'),
+        markdownBoldFormatting: global.config.get('editor.boldFormatting'),
+        markdownItalicFormatting: global.config.get('editor.italicFormatting'),
+        zettelkasten: global.config.get('zkn'),
+        readabilityAlgorithm: global.config.get('editor.readabilityAlgorithm'),
+        render: {
+          citations: global.config.get('display.renderCitations'),
+          iframes: global.config.get('display.renderIframes'),
+          images: global.config.get('display.renderImages'),
+          links: global.config.get('display.renderLinks'),
+          math: global.config.get('display.renderMath'),
+          tasks: global.config.get('display.renderTasks'),
+          headingTags: global.config.get('display.renderHTags'),
+          tables: global.config.get('editor.enableTableHelper')
+        }
+      }
     }
 
-    // Set the autoCloseBrackets option
-    if (global.config.get('editor.autoCloseBrackets')) {
-      this._cm.setOption('autoCloseBrackets', AUTOCLOSEBRACKETS)
-    } else {
-      this._cm.setOption('autoCloseBrackets', false)
-    }
-
-    // Set the image dimension constraints
-    this._cm.setOption('imagePreviewWidth', global.config.get('display.imageWidth'))
-    this._cm.setOption('imagePreviewHeight', global.config.get('display.imageHeight'))
-
-    // Set indent unit
-    this._cm.setOption('indentUnit', global.config.get('editor.indentUnit'))
-
-    // Set the bold and italic formatting characters
-    this._cm.setOption('markdownBoldFormatting', global.config.get('editor.boldFormatting'))
-    this._cm.setOption('markdownItalicFormatting', global.config.get('editor.italicFormatting'))
-
-    // Set the preview options
-    this._renderCitations = global.config.get('display.renderCitations')
-    this._renderIframes = global.config.get('display.renderIframes')
-    this._renderImages = global.config.get('display.renderImages')
-    this._renderLinks = global.config.get('display.renderLinks')
-    this._renderMath = global.config.get('display.renderMath')
-    this._renderTasks = global.config.get('display.renderTasks')
-    this._renderHTags = global.config.get('display.renderHTags')
-    this._renderTables = global.config.get('editor.enableTableHelper')
-
-    this._countChars = global.config.get('editor.countChars')
+    // this._countChars = global.config.get('editor.countChars')
 
     // Set the autoCorrect options
     let conf = global.config.get('editor.autoCorrect')
     if (!conf.active) {
-      this._cm.setOption('autoCorrect', false)
+      newOptions.autoCorrect = false
     } else {
       // Convert the replacements into the correct format for the plugin
       let keys = {}
       for (let repl of conf.replacements) {
         keys[repl.key] = repl.val
       }
-      this._cm.setOption('autoCorrect', {
+      newOptions.autoCorrect = {
         style: conf.style,
         quotes: conf.quotes,
         replacements: keys
-      })
+      }
     }
+
+    // Finally set the updated values
+    this._editor.setOptions(newOptions)
 
     // Check for RTL-support
     setTimeout(() => {
       // Why wrap it in a timeout? Because this specific setting requires the
       // instance to be rendered before we can actually set that thing.
-      this._cm.setOption('direction', global.config.get('editor.direction'))
-      this._cm.setOption('rtlMoveVisually', global.config.get('editor.rtlMoveVisually'))
+      // this._cm.setOption('direction', global.config.get('editor.direction'))
+      // this._cm.setOption('rtlMoveVisually', global.config.get('editor.rtlMoveVisually'))
     }, 100)
-
-    // Set input mode (vim, emacs, default (sublime))
-    this._cm.setOption('keyMap', global.config.get('editor.inputMode'))
-
-    // Reset cached widths
-    this._spaceWidth = 0
-    this.monospaceWidth = 0
-
-    // Last but not least set the Zettelkasten options
-    this._cm.setOption('zkn', global.config.get('zkn'))
-
-    // Fire the renderers in order to apply potential changed styles and settings
-    this._fireRenderers()
 
     return this
   }
@@ -958,45 +677,96 @@ class ZettlrEditor {
    * This sets the tag database necessary for the tag autocomplete.
    * @param {Object} tagDB An object (here with prototype due to JSON) containing tags
    */
-  setTagDatabase (tagDB) { this._autocomplete.setTagCompletion(tagDB) }
+  setTagDatabase (tagDB) {
+    this._editor.setCompletionDatabase('tags', tagDB)
+  }
 
   /**
    * Sets the citeprocIDs available to autocomplete to a new list
    * @param {Array} idList An array containing the new IDs
    */
-  setCiteprocIDs (idList) { this._autocomplete.setCiteKeyCompletion(idList) }
+  setCiteprocIDs (idList) {
+    this._editor.setCompletionDatabase('citekeys', idList)
+  }
 
   /**
    * Signals an update to the autocompletion to update its internal file
    * database.
    */
   signalUpdateFileAutocomplete () {
-    this._autocomplete.setFileCompletion(
-      this._renderer.getCurrentDir(),
-      this._renderer.matchFile(this._currentHash)
-    )
-  }
+    let dir = this._renderer.getCurrentDir()
+    if (!dir) return this._editor.setCompletionDatabase('files', [])
 
-  /**
-    * Removes the mute-class from all lines
-    */
-  _unmuteLines () {
-    for (let i = 0; i < this._cm.lineCount(); i++) {
-      this._cm.doc.removeLineClass(i, 'text', 'mute')
-    }
-  }
+    let fileDatabase = {}
 
-  /**
-    * Adds the mute-class to all lines except where the cursor is at.
-    */
-  _muteLines () {
-    this._unmuteLines()
-    let highlightLine = this._cm.getCursor().line
-    for (let i = 0; i < this._cm.lineCount(); i++) {
-      if (highlightLine !== i) {
-        this._cm.doc.addLineClass(i, 'text', 'mute')
+    // Navigate to the root to include as many files as possible
+    while (dir.parent) dir = dir.parent
+    let tree = objectToArray(dir, 'children').filter(elem => elem.type === 'file')
+
+    for (let file of tree) {
+      let fname = path.basename(file.name, path.extname(file.name))
+      let displayText = fname // Fallback: Only filename
+      if (global.config.get('display.useFirstHeadings') && file.firstHeading) {
+        // The user wants to use first headings as titles,
+        // so use them for autocomplete as well
+        displayText = fname + ': ' + file.firstHeading
+      } else if (file.frontmatter && file.frontmatter.title) {
+        // (Else) if there is a frontmatter, use that title
+        displayText = fname + ': ' + file.frontmatter.title
+      }
+
+      fileDatabase[fname] = {
+        'text': file.id || fname, // Use the ID, if given, or the filename
+        'displayText': displayText,
+        'id': file.id || false
       }
     }
+
+    // Modify all files that are potential matches
+    for (let candidate of this._renderer.matchFile(this._currentHash)) {
+      let entry = fileDatabase[candidate.fileDescriptor.name]
+      if (entry) {
+        // Modify
+        entry.className = 'cm-hint-colour'
+        entry.matches = candidate.matches
+      } else {
+        let file = candidate.fileDescriptor
+        let fname = path.basename(file.name, path.extname(file.name))
+        let displayText = fname // Always display the filename
+        if (file.frontmatter && file.frontmatter.title) displayText += ' ' + file.frontmatter.title
+        fileDatabase[candidate.fileDescriptor.name] = {
+          'text': file.id || fname, // Use the ID, if given, or the filename
+          'displayText': displayText,
+          'id': file.id || false,
+          'className': 'cm-hint-colour',
+          'matches': candidate.matches
+        }
+      }
+    }
+
+    this._editor.setCompletionDatabase('files', fileDatabase)
+  }
+
+  /**
+   * This function is called internally to start all processes whenever
+   * the active file has changed.
+   */
+  _activeFileChanged () {
+    // Synchronise the file changes to the document tabs
+    this._tabs.syncFiles(this._openFiles, this._currentHash)
+
+    // The file manager needs to be informed that the active file has changed
+    global.store.set('selectedFile', this._currentHash)
+    // Same for the main process
+    global.ipc.send('set-active-file', { 'hash': this._currentHash })
+
+    // Also, update the autocomplete
+    this.signalUpdateFileAutocomplete()
+
+    // Finally, inform the renderer about the necessary updates
+    this._renderer.signalActiveFileChanged()
+    this._renderer.updateFileInfo(this._editor.documentInfo)
+    this._renderer.updateTOC(this._editor.tableOfContents)
   }
 
   /**
@@ -1004,21 +774,7 @@ class ZettlrEditor {
     * @return {Object} An object containing words, chars, chars_wo_spaces, if selection: words_sel and chars_sel
     */
   getFileInfo () {
-    let currentValue = this._cm.getValue()
-    let ret = {
-      'words': countWords(currentValue, this._countChars),
-      'chars': currentValue.length,
-      'chars_wo_spaces': currentValue.replace(/[\s ]+/g, '').length,
-      'cursor': JSON.parse(JSON.stringify(this._cm.getCursor()))
-    }
-
-    if (this._cm.somethingSelected()) {
-      let selections = this._cm.getSelections()
-      ret.words_sel = countWords(selections.join(' '), this._countChars)
-      ret.chars_sel = selections.join('').length
-    }
-
-    return ret
+    return this._editor.documentInfo
   }
 
   /**
@@ -1029,96 +785,10 @@ class ZettlrEditor {
     */
   replaceWord (word) {
     // We obviously need a selection to replace
-    if (!this._cm.somethingSelected()) return
+    if (!this._getActiveFile().cmDoc.somethingSelected()) return
 
     // Replace word and select new word
-    this._cm.replaceSelection(word, 'around')
-  }
-
-  /**
-    * Displays the footnote content for a given footnote (element)
-    * @param  {jQuery} element The footnote element
-    * @return {void}         Nothing to return.
-    */
-  _fntooltip (element) {
-    // First let us see if there is already a tippy-instance bound to this.
-    // If so, we can abort now.
-    if (element[0].hasOwnProperty('_tippy') && element[0]._tippy) {
-      return
-    }
-
-    // Because we highlight the formatting as well, the element's text will
-    // only contain ^<id> without the brackets
-    let fn = element.text().substr(1)
-    let fnref = ''
-
-    // Now find the respective line and extract the footnote content using
-    // our RegEx from the footnotes plugin.
-    let fnrefRE = /^\[\^([\da-zA-Z_-]+)\]: (.+)/gm
-
-    for (let lineNo = this._cm.doc.lastLine(); lineNo > -1; lineNo--) {
-      fnrefRE.lastIndex = 0
-      let line = this._cm.doc.getLine(lineNo)
-      let match = null
-      if (((match = fnrefRE.exec(line)) != null) && (match[1] === fn)) {
-        fnref = match[2]
-        break
-      }
-    }
-
-    // TODO translate this message!
-    fnref = (fnref && fnref !== '') ? fnref : '_No reference text_'
-
-    // For preview we should convert the footnote text to HTML.
-    fnref = this._showdown.makeHtml(fnref)
-
-    // Now we either got a match or an empty fnref. So create a tippy
-    // instance
-    tippy(element[0], {
-      'content': fnref,
-      allowHTML: true,
-      onHidden (instance) {
-        instance.destroy() // Destroy the tippy instance.
-      },
-      arrow: true
-    }).show() // Immediately show the tooltip
-  }
-
-  /**
-    * This displays a small popup to allow editing the text from within the text, without the need to scroll.
-    * @param  {jQuery} elem The (jQuery) encapsulated footnote reference.
-    */
-  _editFootnote (elem) {
-    let ref = elem.text().substr(1)
-    let line = null
-    this._cm.eachLine((handle) => {
-      if (handle.text.indexOf(`[^${ref}]:`) === 0) {
-        // Got the line
-        line = handle
-      }
-    })
-
-    let cnt = '<div class="footnote-edit">'
-    cnt += `<textarea id="footnote-edit-textarea">${line.text.substr(5 + ref.length)}</textarea>`
-    cnt += '</div>'
-
-    let p = popup(elem, cnt)
-
-    // Focus the textarea immediately.
-    $('#footnote-edit-textarea').focus()
-
-    $('.popup .footnote-edit').on('keydown', (e) => {
-      // TODO switch from which to key
-      if (e.which === 13 && e.shiftKey) {
-        // Done editing.
-        e.preventDefault()
-        let newtext = `[^${ref}]: ${e.target.value}`
-        let sc = this._cm.getSearchCursor(line.text, { 'line': 0, 'ch': 0 })
-        sc.findNext()
-        sc.replace(newtext)
-        p.close()
-      }
-    })
+    this._getActiveFile().cmDoc.replaceSelection(word, 'around')
   }
 
   /**
@@ -1126,22 +796,7 @@ class ZettlrEditor {
     * @return {Array} An array containing objects with all headings
     */
   buildTOC () {
-    let toc = []
-    for (let i = 0; i < this._cm.doc.lineCount(); i++) {
-      // Don't include comments from code examples in the TOC
-      if (this._cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') continue
-      let line = this._cm.doc.getLine(i)
-      if (/^#{1,6} /.test(line)) {
-        toc.push({
-          'line': i,
-          // From the line remove both the heading indicators and optional ending classes
-          'text': line.replace(/^#{1,6} /, '').replace(/\{.*\}$/, ''),
-          'level': (line.match(/^(#+)/) || [ [], [] ])[1].length
-        })
-      }
-    }
-
-    return toc
+    return this._editor.tableOfContents
   }
 
   /**
@@ -1150,110 +805,18 @@ class ZettlrEditor {
     * @return {void}      No return.
     */
   jtl (line) {
-    // Wow. Such magic.
-    this._cm.doc.setCursor({ 'line': line, 'ch': 0 })
-    this._cm.refresh()
+    this._editor.jtl(line)
   }
 
   /**
    * Moves a whole section (as demarcated by ATX headings)
-   * @param  {number} fromLine The line at which the section to be moved begins
-   * @param  {number} toLine   The target line, above which the section should be inserted.
-   * @return {ZettlrEditor}    This for chainability.
+   * @param  {Number} fromLine The line at which the section to be moved begins
+   * @param  {Number} toLine   The target line, above which the section should be inserted.
    */
   moveSection (fromLine, toLine) {
-    this._cm.setValue(moveSection(this._cm.getValue(), fromLine, toLine))
-    return this
-  }
-
-  /**
-    * Alter the font size of the editor.
-    * @param  {Integer} direction The direction, can be 1 (increase), -1 (decrease) or 0 (reset)
-    * @return {ZettlrEditor}           Chainability.
-    */
-  zoom (direction) {
-    if (direction === 0) {
-      this._fontsize = 100
-    } else {
-      let newSize = this._fontsize + 10 * direction
-      // Constrain the size so it doesn't run into errors
-      if (newSize < 30) newSize = 30 // Less than thirty and CodeMirror doesn't display the text anymore.
-      if (newSize > 400) newSize = 400 // More than 400 and you'll run into problems concerning headings 1
-      this._fontsize = newSize
-    }
-    this._cm.getWrapperElement().style.fontSize = this._fontsize + '%'
-    this._cm.refresh()
-    return this
-  }
-
-  /**
-    * This function copies text as HTML, if there are selections
-    * @return {ZettlrEditor} This (chainabiltiy)
-    */
-  copyAsHTML () {
-    if (this._cm.somethingSelected()) {
-      let md = this._cm.getSelections().join(' ')
-      let html = this._showdown.makeHtml(md)
-      // Write both the HTML and the Markdown
-      // (as fallback plain text) to the clipboard
-      clipboard.write({ 'text': md, 'html': html })
-    }
-    return this
-  }
-
-  /**
-   * This function pastes a clipboard selection as plain text regardless of what
-   * the formatted HTML contents say.
-   * @return {ZettlrEditor} Chainability.
-   */
-  pasteAsPlain () {
-    // Simply overwrite the clipboard's HTML with the plain text contents to
-    // make it appear we've "matched style" lol
-    let plain = clipboard.readText()
-
-    // Simple programmatical paste.
-    if (plain && plain.length > 0) this.insertText(plain)
-
-    return this
-  }
-
-  /**
-   * Renders all citations that haven't been rendered yet.
-   * @return {void} Does not return.
-   */
-  renderCitations () {
-    let needRefresh = false
-    let elements = $('.CodeMirror .citeproc-citation')
-    elements.each((index, elem) => {
-      elem = $(elem)
-      if (elem.attr('data-rendered') !== 'yes') {
-        let item = elem.text()
-        let id = hash(item)
-        if (this._citationBuffer[id] !== undefined) {
-          elem.html(this._citationBuffer[id]).removeClass('error').attr('data-rendered', 'yes')
-          needRefresh = true
-        } else {
-          let newCite = global.citeproc.getCitation(item)
-          switch (newCite.status) {
-            case 4: // Engine was ready, newCite.citation contains the citation
-              elem.html(newCite.citation).removeClass('error').attr('data-rendered', 'yes')
-              this._citationBuffer[id] = newCite.citation
-              needRefresh = true
-              break
-            case 3: // There was an error loading the database
-              elem.addClass('error')
-              break
-            case 2: // There was no database, so don't do anything.
-              elem.attr('data-rendered', 'yes')
-              break
-          }
-        }
-      }
-    })
-
-    // We need to refresh the editor, because the updating process has certainly
-    // altered the widths of the spans.
-    if (needRefresh) this._cm.refresh()
+    let value = this._getActiveFile().cmDoc.getValue()
+    let newValue = moveSection(value, fromLine, toLine)
+    this._getActiveFile().cmDoc.setValue(newValue)
   }
 
   /**
@@ -1262,7 +825,9 @@ class ZettlrEditor {
    * @param  {String} text The text to insert
    * @return {void}      Does not return.
    */
-  insertText (text) { this._cm.replaceSelection(text) }
+  insertText (text) {
+    this._getActiveFile().cmDoc.replaceSelection(text)
+  }
 
   /**
    * Marks the specified document clean
@@ -1292,58 +857,34 @@ class ZettlrEditor {
   }
 
   /**
-    * Run a CodeMirror command.
-    * @param  {String} cmd The command to be passed to cm.
-    * @return {void}     Nothing to return.
-    */
-  runCommand (cmd) {
-    // Shortcut for the only command that
-    // actively should change the selection.
-    if (cmd === 'selectWordUnderCursor') {
-      this._cm.execCommand(cmd)
-      return
-    }
-
-    let sel = this._cm.doc.listSelections()
-    let oldCur = JSON.parse(JSON.stringify(this._cm.getCursor()))
-    this._cm.execCommand(cmd)
-
-    if (sel.length > 0) this._cm.doc.setSelections(sel)
-
-    if (cmd === 'insertFootnote') {
-      // In case the user inserted a footnote, we have to re-set the cursor
-      // for ease of access.
-      oldCur.ch += 2 // This sets the cursor inside, so the user has a visual on where to ALT-Click
-      this._cm.setCursor(oldCur)
-    }
-  }
-
-  /**
     * Focus the CodeMirror instance
     */
-  focus () { this._cm.focus() }
-
-  /**
-    * Refresh the CodeMirror instance
-    */
-  refresh () { this._cm.refresh() }
+  focus () {
+    this._editor.focus()
+  }
 
   /**
    * Returns the current value of the editor.
    * @return {String} The current editor contents.
    */
-  getValue () { return this._cm.getValue() }
+  getValue () {
+    return this._editor.value
+  }
 
   /**
    * Returns all selections in the current document.
    */
-  getSelections () { return this._cm.doc.getSelections() }
+  getSelections () {
+    return this._getActiveFile().cmDoc.getSelections()
+  }
 
   /**
    * Get the CodeMirror instance
    * @return {CodeMirror} The editor instance
    */
-  getEditor () { return this._cm }
+  getEditor () {
+    return this._cm
+  }
 }
 
 module.exports = ZettlrEditor

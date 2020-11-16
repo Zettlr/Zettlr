@@ -1,3 +1,196 @@
+# 1.8.0
+
+## Breaking Changes
+
+- Renamed the **sidebar** to **file manager**. We finally decided on better terminology for distinguishing the right from the left sidebar. This means: The left sidebar, formerly known only as "sidebar," is now the "file manager." The right sidebar, formerly known as "attachment sidebar," is now "the" sidebar. This change was introduced to reduce user confusion and provide a better user experience.
+- The shortcut for opening the developer tools on Windows and Linux is now `Ctrl+Alt+I` (was: `Ctrl+Shift+I`) to resolve a conflict with the shortcut `Ctrl+Shift+I` (insert images).
+- Renamed **Root Directories** to **Workspaces**. The term "root" is rather technical, and for most people, it makes most sense to think of those roots as workspaces, albeit other than being opened at the root level of the application, they have no difference to regular directories.
+
+## GUI and Functionality
+
+- **New Feature**: Typewriter mode. By pressing `Cmd/Ctrl+Alt+T`, you can activate the typewriter mode, which will keep the current line in the editor always centered so that you have to move your eyes less while editing a text. This also works in combination with the distraction free mode so that you can fully focus on what you're editing right at the moment.
+- **New Feature**: The sidebar (formerly attachment sidebar) is now tabbified. That means you have three distinct tabs to choose from with regard to displaying important information: the non-markdown files in your currently selected directory, the references in the current file, and the table of contents of the current file.
+- **New Feature**: When hovering over links, they now appear in a separate tooltip to click them without holding down Ctrl/Cmd.
+- **New Feature**: The QuickLook windows now share the main editor including its appearance. The same options apply for Quicklook windows as they are set in the global preferences (e.g. if you turned off image previewing, images would also not be displayed in the Quicklooks, etc).
+- **New Feature**: Now you have an additional option in the "Advanced" preferences to choose between a "native" appearance of all Zettlr Windows (that is, a frameless window with inset traffic lights on macOS, and standard window decorations on Windows and Linux) or a custom built-in appearance (that is, for all platforms a frameless window with custom drawn menu and window control buttons, which mimick the Windows 10 design).
+- **New Feature**: The heading tag elements (those `h1` to `h6`-tags replacing the Markdown heading characters) finally serve a purpose: Clicking on them reveals a small menu which lets you quickly choose a different heading level.
+- **New Feature**: Improvement in the citation rendering capabilities: Both when copying Markdown as HTML, and when viewing footnote tooltips, any citation will be correctly rendered by the citeproc provider.
+- **New Feature**: The TableEditor now pre-renders table cells so that it looks more like it will when you export it!
+- **New Feature**: A selection of notifications will now be displayed using your operating system's notification service (if available), for instance export messages, errors, and updates. All notifications will still be displayed in the main window, so if you do not like this behaviour, you can turn notifications off for Zettlr within your operating system settings.
+- **New Feature**: Whenever you begin a code block (`\`\`\``), Zettlr now offers you to autocomplete the syntax highlighting language.
+- Added syntax highlighting modes (with keywords):
+    - **diff**: `diff`
+    - **Dockerfile**: `docker`/`dockerfile`
+    - **TOML**: `toml`/`ini`
+- Fixed the fold-gutter being too close to the text.
+- The editor link autocompletion now respects the setting to use headings level 1 instead of YAML frontmatter titles where possible.
+- The paste image dialog now also provides the original image size as a default value, so that you simply can use the arrow buttons on the field to adjust the image size.
+- Fixed a rare bug where changes would be discarded if you renamed the modified file quickly enough.
+- HTML export should now centre both figures and figure captions.
+- Sorting files by name now takes into account possible settings such as using headings of level 1 or YAML frontmatter titles so that sorted files now correspond to their display again.
+- You can now select rendered references from the right sidebar.
+- The file tabs now have their own, dedicated menu, containing a new "Close all tabs" command to close all open file tabs (thanks to @anoopengineer for implementing).
+- The file info now displays the selection information, if there is any. The popup that opens when you click the counter then lists all selections within your document.
+- When you initiate a keyword search from the tag cloud by clicking on a tag, it'll be automatically enclosed in quotes, enabling searches for keywords with spaces in them.
+- The image paste dialog now shows you the resolved path of the directory into which the image you are about to paste will be saved to.
+- Fixed a missing translatable string from the paste image dialog.
+- Fixed the width of the word counter in order to make the toolbar more "stiff."
+- Enabled Dart syntax highlighting (thanks to @Kangie for implementing).
+- Reduced the added margins for overflowing dialog windows from 15 % to 2 %, making the visible gap on smaller screens smaller.
+- Remove the intermediary `.ztr-project`-migration code, which means you should update to Zettlr 1.7.x before updating to 1.8.x, if you still use an older version of Zettlr.
+- Fixed (= monkeypatched) a weird bug that would cause selections on specially indented lines (e.g. wrapped blockquotes, list items, etc.) to be padded by precisely four pixels, making the selection not look like a box.
+- Double clicks on file tabs now make files intransient (if they were transient before).
+- The editor is now in a non-editable mode if no file is open. If the editor is read-only, the Zettlr logo will display in the background to indicate that fact. Empty files, on the other hand, will not yield the feather logo anymore. This should now meet up with users' expectations about file editing better.
+- The last opened file will now reliably open whenever you start the application again.
+- File loading (especially on boot) is now much faster, because the opened tabs won't be switched through during load anymore. Only the relevant, last file will be opened and displayed.
+- Fixed a bug that would prevent you from exporting standalone files.
+- Non-breaking spaces (NBSP) are now considered word delimiters in the spellchecker.
+- Fixed a bug that would not close all tabs when the corresponding entry was selected from the tab context menu.
+- Fixed a bug where checkboxes of tasks would be strangely hidden on undo/redo operations that checked/unchecked those checkboxes.
+- Fixed a bug that would throw errors and not actually remove the file if said file was a root.
+- Fixed broken shortcuts `Cmd/Ctrl+Shift+E` (focus the editor) and `Cmd/Ctrl+Shift+T` (focus the file list).
+- Markdown links to local files that are absolute are now attempted to be opened internally, without recurring to external programs.
+- The various rendering methods now only update anything that is within the viewport, thereby increasing the performance vastly. This is especially noticable for large documents.
+- Fixed a bug that led to the exporter ignoring custom templates and always reverting to the default.
+- Fixed the date formatter, as the moment.js locales are not found when compiling using `electron-forge`.
+- Fixed a bug that would mess up the tag-tooltip on files under certain circumstances.
+- Fixed a bug that would throw errors instead of exporting, if the export-directory is set to the current working directory and a non-root file is being exported.
+- Fixed a bug which would not let you create duplicates of root files. Now, you can and the duplicate is being placed in the currently selected directory.
+- Fixed a rendering edge condition where if you wanted to retain multiple single-line breaks with backslashes, the backslashes positioned on the line would have had alternating colours.
+- Collocated the time-display and time-sorting settings for files to reduce confusion if users _display_ the modification time but sort using the creation time, or vice versa.
+- Improved the layouting of the display settings tab.
+- The context menu is now a custom one, making the experience more seamless.
+- If you change the display settings for the editor, the editor will now also remove rendered elements that you do not wish to be rendered anymore.
+- Footnote tooltips are now interactive, which means you can select text from them, and also click on any link to visit it without having to scroll to the bottom and do the same action there.
+- You can now forcefully open a file non-transient by either middle-clicking it, or holding down Ctrl/Cmd.
+- If you use YAML frontmatters demarcated by only dashes (`---`), for instance for compatibility with Jeckyll, these will not render as tables anymore.
+- Switched to reveal.js 4 and fixed an occasional error on export.
+- The tutorial is now also available in German.
+- The application menu now displays many more shortcuts which were already available albeit not visible.
+- Checkboxes are now disabled in Quicklooks.
+- Fixed a bug that caused files dropped onto the editor from the file manager not to be linked when the file manager is in combined mode.
+- Custom protocols for links (e.g. `zettlr://`, `thunderlink://`) can now be up to 100 characters long to be recognized by Zettlr.
+- Fixed an issue that Zettlr would sometimes attempt to open a link to a local file in the browser instead of the correct app.
+- Finally fixed the document tabs using the wrong font in the Frankfurt and Bielefeld theme.
+- Fixed a display glitch in the combined file manager in dark mode.
+- Now both Quicklook windows and the main window remember their last position. As long as the configuration of displays did not change, they will appear at the same positions as the last time they were open.
+- Menu items in the application menu that can have a "checked" state (indicated by, e.g., a checkmark) now remember their correct state if other settings change consistently.
+- Non-image files being dropped onto the editor are now being linked.
+- Files that are dropped from the outside onto the editor are now linked using a relative path.
+- Fixed a behaviour that would lead to the autocomplete to stop working completely until a full refresh of the window.
+- Fix a bug that prevent non-existing documents to be created upon following a link despite the option being activated.
+- Added `F11` as an accelerator for fullscreen on Windows.
+- Fixed a display bug (= the window would reload itself) when there were no tags in the tag manager.
+- Fixed the padding of dialog buttons and input fields also in dark mode.
+
+## Under the Hood
+
+- Moved (almost) all window functionality to a dedicated `WindowManager` module. The added benefits of this are:
+    - Centralised window functionality
+    - A correct place for `window-controls`-commands
+    - Sleeker design
+    - Enable a much better window handling: (1) Now all windows are closed automatically before the main window is being closed; (2) When someone requests a Quicklook/Print/Main window, an existing window is being searched first and made visible, instead of (re)creating it.
+    - New window types can be added much faster.
+- Switched to Electron forge (thanks to @tobiasdiez for implementing).
+- Bumped dependencies:
+  - @clr/icons `4.0.4`
+  - @electron-forge/cli `6.0.0-beta.53`
+  - @electron-forge/plugin-webpack `6.0.0-beta.53`
+  - @teamsupercell/typings-for-css-modules-loader `2.3.0`
+  - @typescript-eslint/eslint-plugin `4.5.0`
+  - @typescript-eslint/parser `4.5.0`
+  - archiver `5.0.2`
+  - chokidar `3.4.3`
+  - citeproc `2.4.45`
+  - codemirror `5.58.2`
+  - chart.js `2.9.4`
+  - copy-webpack-plugin `6.1.0`
+  - electron `10.1.5`
+  - eslint `7.8.1`
+  - eslint-config-standard-with-typescript `19.0.1`
+  - eslint-plugin-import `2.22.1`
+  - eslint-plugin-standard `4.0.2`
+  - eslint-plugin-vue `7.0.0-beta.3`
+  - file-loader `6.1.1`
+  - fork-ts-checker-webpack-plugin `5.1.0`
+  - fsevents `2.1.3`
+  - got `11.8.0`
+  - md5 `2.3.0`
+  - mermaid `8.8.2`
+  - mocha `8.2.0`
+  - moment `2.29.1`
+  - node-loader `1.0.2`
+  - nspell `2.1.4`
+  - raw-loader `4.0.2`
+  - reveal.js `4.1.0`
+  - tippy.js `6.2.7`
+  - ts-loader `8.0.7`
+  - typescript `4.0.3`
+  - uuid `8.3.1`
+  - vue `2.6.12`
+  - vue-template-compiler `2.6.12`
+- Removed dependencies:
+  - uglify-js
+  - on-change
+- Added a new Handlebars templating helper function, `i18n_value` that allows you to translate something passing a value to the translation helper (e.g. `{{i18n_value 'trans.identifier' someValue}}`).
+- Refactored the main build Workflow file. Now it doesn't run on a matrix, but due to the many dissimilar steps involved, there are three distinct jobs. Other than that, we switched to the GitHub tag name instead of utilizing a node script to retrieve the `package.json` version, switched to `yarn` everywhere and cleaned up the code.
+- Removed the now unused scripts `get-pkg-version.js` and `afterSign.js`.
+- Finally removed the verbose IPC calls from the logs.
+- Migrated the toolbar logic from jQuery to vanilla JS.
+- Migrated the main renderer from jQuery to vanilla JS.
+- Migrated the popup class from jQuery to vanilla JS.
+- (Mostly) migrated the dialog classes from jQuery to vanilla JS (tabs are still done using jQueryUI).
+- Added a popup provider for easy creation of popups across the main renderer process.
+- Added an update provider for easy access to specific updating functionality (such as downloading an update, and automatically running it).
+- Migrated any popups that were defined inline into their respective handlebars template files.
+- The TableEditor is now finally a module.
+- Outsourced the CSS computations from the main module of the TableEditor.
+- Migrated the CodeMirror editor instantiation into its own module (MarkdownEditor).
+- Transformed all event listeners on the CodeMirror instance to "hooks" to reflect the fact that they are plugins, except they are not run like parameterless commands but hook into certain events of the application.
+- Moved the CodeMirror assets from the old folder into the MarkdownEditor module.
+- Moved some general utility functions to the `common/util`-folder.
+- The rendering plugins have been optimized. They now take less time to run and also don't keep an additional array of all the textmarkers in memory, decreasing the computational load especially for big documents.
+- The app now saves the last opened file again.
+- Moved the Turndown and Showdown converters to two utility functions, md2html and html2md.
+- Moved the regular expression for detecting image files by extension into the global RegExp module.
+- Moved the `moveSection` helper function to the `common/util`-folder.
+- Documentation fix for `safeAssign`.
+- Fixes in the tests.
+- Completely refurbished the test command. Now, a full-fledged testing directory will be set up to test features within the GUI without endangering your regular configuration in case you use Zettlr regularly.
+- Better handling of the custom paths for both the Pandoc and the XeLaTeX executables in the advanced preferences.
+- Migrated the FSAL to TypeScript so that the different descriptors can be better handled. Also, this showed countless logical errors, which are now mostly fixed.
+    - Furthermore, the responsibilities have been readjusted: The FSAL is now responsible for emitting events whenever the internal state changes. This is not being done by the commands anymore.
+    - The actions are now proper methods on the FSAL class in order to enable better tracking of the function arguments and to help ESLint fix possible signature errors.
+    - Moved every piece of state logic from the commands to the FSAL.
+    - Now, the general way anything regarding the files works is as follows: User --> one of the commands --> an action on the FSAL --> emits which part of the state has changed --> the application main class receives these notifications --> triggers potential updates in the renderer.
+    - Additionally, now the distinction between the meta objects which can be serialized and sent to the renderer and the tree objects within the FSAL is made more clear: Metadata files can have content attached to them (in order to save new content to a file), whereas the full objects, which are never getting sent to the renderer, do not contain a content property anymore.
+    - Also, we managed to fix errors regarding remote change detection.
+- The log provider now also outputs on the console, if the app runs unpacked (`app.isPackaged === false`).
+- Updated all service providers. They are now loaded immediately after application boot (right after the `ready`-event fires on the `app`-object) and not when the Zettlr main class loads.
+- Created a new directory `app` which provides functionality that pertains only to the lifecycle of the application itself, such as boot and shutdown functionalities. Service providers have been migrated to there.
+- Fixed the issue that only the `en-US`-language of the CSL styles was loaded for the citation provider.
+- CSL locales and CSL styles are now bundled with the app as `native_modules`.
+- Began providing first global interfaces which the service providers make use of in order to enable ESLint to detect errors.
+- Provide a test library, which you can load to debug citeproc-related issues and test the provider.
+- Converted the CSS Provider to TypeScript.
+- Converted the Log Provider to TypeScript.
+- Migrated the Quicklook and Print window classes to Typescript.
+- Added a utility function to quickly broadcast arbitrary IPC messages to all open Zettlr windows.
+- Migrated many functionalities that are important for all windows on the renderer side to a dedicated TypeScript module (`register-window`).
+- Divided the menu template into templates for macOS and Windows (+ all other platforms).
+- Simplified the menu building process.
+- Added classes and event listeners to show custom built menus within frameless BrowserWindow instances.
+- Deprecate the `remote`-module.
+- The md2html-function can now make anchors renderer-safe, so that they don't open within the main window anymore.
+- The menu handler is now a service provider.
+- Added a notification provider for better notification management, and to further reduce the main IPC classes.
+- The tag list on file list items is now only shown when there are actually coloured tags available, and hidden otherwise. This enables a better UX for the users as the tag-list-tooltip will then consistently pop up, not being hidden behind an invisible div.
+- Removed the Watchdog service provider, as it is no longer being used.
+- The Window Manager now saves the positions of each window (main and Quicklooks), persists them on disk and ensures the windows are displayed properly. The corresponding settings have been removed from the configuration service provider.
+- The menu provider now keeps track of the state of those checkbox menu items which are not controlled externally by a configuration setting, but rather always begin unchecked when the application starts.
+- Moved the typo-logic to their respective places in the renderer.
+- The dictionary provider now listens on the correct channel and is additionally based on `fs.promises` thoroughly.
+
 # 1.7.5
 
 ## GUI and Functionality

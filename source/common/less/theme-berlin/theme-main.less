@@ -1,0 +1,113 @@
+/*!
+ * BEGIN HEADER
+ *
+ * Contains:        Base Theme CSS
+ * CVM-Role:        Theme
+ * Maintainer:      Hendrik Erz
+ * License:         GNU GPL v3
+ *
+ * Description:     This file contains all CSS directives to colour up the app.
+ *                  No actual geometry is done here, only the colouring. It
+ *                  includes both a light and a dark main less file, which then
+ *                  subsequently include everything else.
+ *
+ * END HEADER
+ */
+
+// Import the colour variables
+@import "colours.less";
+
+// Import the fonts
+@import "../fonts.less";
+
+// Import the generic theme variables
+@import "theme-vars.less";
+
+body {
+    // First stylesheet-specific geometry (font sizes, paddings)
+    @import "theme-geometry.less";
+
+    // Now the light theming
+    @import "light/main.less";
+
+    // After here come colours that don't change with light/dark theming.
+
+    // COMBINER ARROW BUTTON
+    #file-manager #arrow-button {
+        background-color: white;
+        border-radius:100%;
+        box-shadow:1px 1px 10px 0px rgba(0,0,0,.25);
+    }
+
+    // Notifications
+    .notify {
+        background-color:rgba(0,0,0,.7);
+        color:white;
+        border-radius:3px;
+    }
+
+    .dragger {
+        // This class is applied to dragged elements
+        font-size: @font-size-small;
+        border-radius:5px;
+        background-color: var(--grey-1);
+        padding:4px;
+        box-shadow:5px 5px 15px 0px rgba(0,0,0,.25);
+    }
+
+    // Fixes the non-readable blue colour of the links and prevents them from
+    // breaking out of the container.
+    .tippy-box .tippy-content {
+      a {
+        color: white;
+        word-wrap: break-word;
+      }
+
+      // The document tabs use the class "tag" to mark tags in the tippy preview
+      .tag {
+        border-radius: 5px;
+        margin: 3px;
+        padding: 3px;
+        display: inline-block;
+        background-color: #999;
+      }
+    }
+
+    // The table helper injects CSS that we need to override
+    .table-helper-align-button-container,
+    .table-helper-remove-button-container,
+    .table-helper-add-button {
+      color: var(--c-primary);
+      background-color: var(--grey-2); // Make it more visible
+    }
+
+    .table-helper-align-button-line {
+      background-color: var(--c-primary);
+    }
+
+    .table-helper-remove-button-line { background-color: black; }
+
+    table.table-helper td:focus {
+      outline-color: var(--c-primary);
+    }
+
+    .taglist .tagspacer:only-child .tag { border:2px solid white; }
+
+    // Fallback for all systems not identified as win32, darwin, or linux.
+    font-family: @font-main;
+
+    &.win32 {
+        // Lato on Windows looks bad b/c of very strange font antialiasing,
+        // therefore we have to use Segoe UI, if available.
+        font-family: @font-main-win;
+    }
+
+    &.darwin, &.linux {
+        // Use built-in Lato for other systems.
+        font-family: @font-main;
+    }
+
+}
+
+// now import the dark styles
+@import "dark/main.less";

@@ -1,0 +1,91 @@
+// Sidebar
+
+#sidebar {
+    // Helper class for the divs in the sidebar
+    .hidden { display: none; }
+
+    position: absolute;
+    top: @toolbar-height;
+    right: -20%;
+    bottom: 0;
+    width: 20%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: right 0.5s ease 0s;
+
+    &.open { right: 0%; }
+
+    // Enable tabs
+    #sidebar-tabs {
+      display: flex;
+      justify-content: space-evenly;
+
+      .sidebar-tab {
+        flex-grow: 1;
+        text-align: center;
+      }
+    }
+
+    #open-dir-external {
+        padding: @button-margin;
+        border-radius: @border-radius;
+        display: inline-block;
+        width: @button-size;
+        height: @button-size;
+
+        clr-icon {
+            width: @button-icon-size;
+            height: @button-icon-size;
+        }
+    }
+
+    h1 {
+        padding: 10px;
+        font-size: @font-size-big;
+    }
+
+    p { padding: 10px; }
+
+    a.attachment {
+        display: block;
+        margin: 10px;
+        padding: 4px;
+        text-decoration: none;
+        color: inherit;
+        white-space: nowrap;
+        svg {
+          width: 24px;
+          height: 24px;
+          margin-right: 4px;
+          vertical-align: bottom;
+          margin-bottom: -1px;
+        }
+    }
+
+    // Bibliography entries
+    div.csl-bib-body {
+      div.csl-entry {
+        display: list-item;
+        list-style-type: square;
+        margin: 1em 0.2em 1em 1.8em;
+        font-size: 80%;
+        user-select: text;
+        cursor: text;
+      }
+    }
+
+    // Table of Contents entries
+    div.toc-entry-container {
+      // Clever calculation based on the data-level property
+      // margin-left: calc(attr(data-level) * 10px);
+      display: flex;
+
+      div.toc-level { flex-shrink: 1; }
+      div.toc-entry { flex-grow: 3; }
+    }
+}
+
+// If the menu bar is shown, pull down the sidebar
+body.show-menubar #sidebar {
+  top: @toolbar-height + @menubar-height;
+}

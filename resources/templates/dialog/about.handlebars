@@ -1,6 +1,6 @@
 <div class="dialog">
-  <img src="img/zettlr-official-logo.png" alt="Zettlr Logo" style="width:10%; float:left;">
-  <h1>{{i18n "dialog.about.title"}} <small>Version {{version}}</small></h1>
+  <img src="../../../source/renderer/assets/img/zettlr-official-logo.png" alt="Zettlr Logo" style="width:10%; float:left;">
+  <h1>{{i18n "dialog.about.title"}} <small>{{version}}</small></h1>
   <span class="uuid">Application ID: {{uuid}}</span>
   <div id="prefs-tabs" class="clear">
     <ul>
@@ -20,21 +20,21 @@
       <div class="projects">
         <div class="flex">
           <a href="#" onclick="require('electron').shell.openExternal('http://electronjs.org/')">
-            <img src="img/electron-official-logo.svg" alt="Electron Logo" title="Electron">
+            <img src="../../../source/renderer/assets/img/electron-official-logo.svg" alt="Electron Logo" title="Electron">
           </a>
         </div>
         <div class="flex">
           <a href="#" onclick="require('electron').shell.openExternal('https://nodejs.org/')"><img
-              src="img/nodejs-official-logo.png" style="margin-top: 5%" alt="Node.js Logo" title="Node.js"></a>
+              src="../../../source/renderer/assets/img/nodejs-official-logo.png" style="margin-top: 5%" alt="Node.js Logo" title="Node.js"></a>
         </div>
         <div class="flex">
           <a href="#" onclick="require('electron').shell.openExternal('https://codemirror.net/')"><img
-              src="img/codemirror-official-logo.png" style="width:60%; margin:0 20%" alt="CodeMirror Logo"
+              src="../../../source/renderer/assets/img/codemirror-official-logo.png" style="width:60%; margin:0 20%" alt="CodeMirror Logo"
               title="CodeMirror"></a>
         </div>
         <div class="flex">
           <a href="#" onclick="require('electron').shell.openExternal('https://citationstyles.org/')">
-            <img src="img/csl-official-logo.svg" style="margin-top: 25%" alt="Citation Style Language Logo" title="Citation Style Language (CSL)">
+            <img src="../../../source/renderer/assets/img/csl-official-logo.svg" style="margin-top: 25%" alt="Citation Style Language Logo" title="Citation Style Language (CSL)">
           </a>
         </div>
       </div>
@@ -920,7 +920,7 @@
       </p>
       <div class="changelog">
         <h2>General Information</h2>
-        <p>Zettlr Version: <strong>v{{ version }}</strong></p>
+        <p>Zettlr Version: <strong>{{ version }}</strong></p>
         <p>System: <strong>{{ platform }} {{ platformVersion }}</strong> (architecture: {{ architecture }})</p>
         <h2>Build Dependencies</h2>
         <p>

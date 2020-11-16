@@ -102,33 +102,34 @@
           </div>
           {{/if}}
         </div>
+        {{!-- Right-hand side of the dialog window --}}
         <div class="box-right">
           <p>
-            {{i18n "dialog.preferences.sidebar_explanation"}}
+            {{i18n "dialog.preferences.filemanager_explanation"}}
           </p>
           <div class="cb-group">
             <label class="radio-toggle">
-              <input type="radio" name="sidebarMode" value="thin" id="pref-sidebar-state-thin" {{#ifCond sidebarMode '=' 'thin'}}checked="checked"{{/ifCond}}>
+              <input type="radio" name="fileManagerMode" value="thin" id="pref-file-manager-state-thin" {{#ifCond fileManagerMode '=' 'thin'}}checked="checked"{{/ifCond}}>
               <div class="toggle"></div>
             </label>
-            <label for="pref-sidebar-state-thin">{{i18n "dialog.preferences.sidebar_thin"}}</label>
+            <label for="pref-file-manager-state-thin">{{i18n "dialog.preferences.filemanager_thin"}}</label>
           </div>
           <div class="cb-group">
             <label class="radio-toggle">
-              <input type="radio" name="sidebarMode" value="expanded" id="pref-sidebar-state-exp" {{#ifCond sidebarMode '=' 'expanded'}}checked="checked"{{/ifCond}}>
+              <input type="radio" name="fileManagerMode" value="expanded" id="pref-file-manager-state-exp" {{#ifCond fileManagerMode '=' 'expanded'}}checked="checked"{{/ifCond}}>
               <div class="toggle"></div>
             </label>
-            <label for="pref-sidebar-state-exp">{{i18n "dialog.preferences.sidebar_expanded"}}</label>
+            <label for="pref-file-manager-state-exp">{{i18n "dialog.preferences.filemanager_expanded"}}</label>
           </div>
           <div class="cb-group">
             <label class="radio-toggle">
-              <input type="radio" name="sidebarMode" value="combined" id="pref-sidebar-state-combined" {{#ifCond sidebarMode '=' 'combined'}}checked="checked"{{/ifCond}}>
+              <input type="radio" name="fileManagerMode" value="combined" id="pref-file-manager-state-combined" {{#ifCond fileManagerMode '=' 'combined'}}checked="checked"{{/ifCond}}>
               <div class="toggle"></div>
             </label>
-            <label for="pref-sidebar-state-combined">{{i18n "dialog.preferences.sidebar_combined"}}</label>
+            <label for="pref-file-manager-state-combined">{{i18n "dialog.preferences.filemanager_combined"}}</label>
           </div>
           <hr>
-          <!-- Sorting stuff -->
+          {{!-- Sorting of files by name (natural vs. ASCII) --}}
           <p>
             {{i18n "dialog.preferences.sorting_explanation"}}
           </p>
@@ -146,23 +147,48 @@
             </label>
             <label for="pref-sorting-ascii">{{i18n "dialog.preferences.sorting_ascii"}}</label>
           </div>
-          <p>
+          {{!-- Sorting of files by time (modification vs. creation time) --}}
+          <hr>
+          {{!-- Use boxes for better alignment, as both options contain only a few words of text --}}
+          <div class="box-left">
+            <p>
             {{i18n "dialog.preferences.sorting_time_explanation"}}
-          </p>
-          <div class="cb-group">
-            <label class="radio-toggle">
-              <input type="radio" name="sortingTime" value="modtime" id="pref-sorting-modtime" {{#ifCond sortingTime '=' 'modtime'}}checked="checked"{{/ifCond}}>
-              <div class="toggle"></div>
-            </label>
-            <label for="pref-sorting-modtime">{{i18n "dialog.preferences.modtime"}}</label>
+            </p>
+            <div class="cb-group">
+              <label class="radio-toggle">
+                <input type="radio" name="sortingTime" value="modtime" id="pref-sorting-modtime" {{#ifCond sortingTime '=' 'modtime'}}checked="checked"{{/ifCond}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="pref-sorting-modtime">{{i18n "dialog.preferences.modtime"}}</label>
+            </div>
+            <div class="cb-group">
+              <label class="radio-toggle">
+                <input type="radio" name="sortingTime" value="creationtime" id="pref-sorting-creationtime" {{#ifCond sortingTime '=' 'creationtime'}}checked="checked"{{/ifCond}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="pref-sorting-creationtime">{{i18n "dialog.preferences.creationtime"}}</label>
+            </div>
           </div>
-          <div class="cb-group">
-            <label class="radio-toggle">
-              <input type="radio" name="sortingTime" value="creationtime" id="pref-sorting-creationtime" {{#ifCond sortingTime '=' 'creationtime'}}checked="checked"{{/ifCond}}>
-              <div class="toggle"></div>
-            </label>
-            <label for="pref-sorting-creationtime">{{i18n "dialog.preferences.creationtime"}}</label>
-          </div>
+          <div class="box-right">
+            {{!-- The display of said sorting (needs to be here, not in the Display tab to reduce confusion of users) --}}
+            <p>
+              {{i18n "dialog.preferences.display_time_explanation"}}
+            </p>
+            <div class="cb-group">
+              <label class="radio-toggle">
+                <input type="radio" name="fileMetaTime" value="modtime" id="pref-display-modtime" {{#ifCond fileMetaTime '=' 'modtime'}}checked="checked"{{/ifCond}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="pref-display-modtime">{{i18n "dialog.preferences.modtime"}}</label>
+            </div>
+            <div class="cb-group">
+              <label class="radio-toggle">
+                <input type="radio" name="fileMetaTime" value="creationtime" id="pref-display-creationtime" {{#ifCond fileMetaTime '=' 'creationtime'}}checked="checked"{{/ifCond}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="pref-display-creationtime">{{i18n "dialog.preferences.creationtime"}}</label>
+            </div>
+          </div> {{!-- End inner box right --}}
         </div> <!-- End box right -->
       </div>
 
@@ -479,83 +505,71 @@
             <input type="range" min="1" max="100" id="imageHeight" name="display.imageHeight" value="{{display.imageHeight}}">
             <div id="preview-image-sizes">{{display.imageWidth}}% &times; {{display.imageHeight}}%</div>
           </div>
-          <hr>
-          <p>
-            {{i18n "dialog.preferences.display_time_explanation"}}
-          </p>
-          <div class="cb-group">
-            <label class="radio-toggle">
-              <input type="radio" name="fileMetaTime" value="modtime" id="pref-display-modtime" {{#ifCond fileMetaTime '=' 'modtime'}}checked="checked"{{/ifCond}}>
-              <div class="toggle"></div>
-            </label>
-            <label for="pref-display-modtime">{{i18n "dialog.preferences.modtime"}}</label>
+        </div>
+        <div class="box-right">
+          <p>{{i18n "dialog.preferences.display.preview_info"}}</p>
+          {{!-- Again, divide those settings into two inner blocks due to short explanations --}}
+          <div class="box-left">
+            <div class="cb-group">
+              <label class="cb-toggle">
+                <input type="checkbox" name="display.renderCitations" value="yes" id="display.renderCitations" {{#if display.renderCitations}}checked="checked"{{/if}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="display.renderCitations">{{i18n "dialog.preferences.display.render_citations"}}</label>
+            </div>
+            <div class="cb-group">
+              <label class="cb-toggle">
+                <input type="checkbox" name="display.renderIframes" value="yes" id="display.renderIframes" {{#if display.renderIframes}}checked="checked"{{/if}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="display.renderIframes">{{i18n "dialog.preferences.display.render_iframes"}}</label>
+            </div>
+            <div class="cb-group">
+              <label class="cb-toggle">
+                <input type="checkbox" name="display.renderImages" value="yes" id="display.renderImages" {{#if display.renderImages}}checked="checked"{{/if}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="display.renderImages">{{i18n "dialog.preferences.display.render_images"}}</label>
+            </div>
+            <div class="cb-group">
+              <label class="cb-toggle">
+                <input type="checkbox" name="display.renderLinks" value="yes" id="display.renderLinks" {{#if display.renderLinks}}checked="checked"{{/if}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="display.renderLinks">{{i18n "dialog.preferences.display.render_links"}}</label>
+            </div>
           </div>
-          <div class="cb-group">
-            <label class="radio-toggle">
-              <input type="radio" name="fileMetaTime" value="creationtime" id="pref-display-creationtime" {{#ifCond fileMetaTime '=' 'creationtime'}}checked="checked"{{/ifCond}}>
-              <div class="toggle"></div>
-            </label>
-            <label for="pref-display-creationtime">{{i18n "dialog.preferences.creationtime"}}</label>
-          </div>
-          <hr>
+          {{!-- Second block of settings --}}
+          <div class="box-right">
+            <div class="cb-group">
+              <label class="cb-toggle">
+                <input type="checkbox" name="display.renderMath" value="yes" id="display.renderMath" {{#if display.renderMath}}checked="checked"{{/if}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="display.renderMath">{{i18n "dialog.preferences.display.render_math"}}</label>
+            </div>
+            <div class="cb-group">
+              <label class="cb-toggle">
+                <input type="checkbox" name="display.renderTasks" value="yes" id="display.renderTasks" {{#if display.renderTasks}}checked="checked"{{/if}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="display.renderTasks">{{i18n "dialog.preferences.display.render_tasks"}}</label>
+            </div>
+            <div class="cb-group">
+              <label class="cb-toggle">
+                <input type="checkbox" name="display.renderHTags" value="yes" id="display.renderHTags" {{#if display.renderHTags}}checked="checked"{{/if}}>
+                <div class="toggle"></div>
+              </label>
+              <label for="display.renderHTags">{{i18n "dialog.preferences.display.render_htags"}}</label>
+            </div>
+          </div> {{!-- end inner box-right --}}
+          <hr class="clearfix">
           <div class="cb-group">
             <label class="cb-toggle">
               <input type="checkbox" name="display.useFirstHeadings" value="yes" id="display.useFirstHeadings" {{#if display.useFirstHeadings}}checked="checked"{{/if}}>
               <div class="toggle"></div>
             </label>
             <label for="display.useFirstHeadings">{{i18n "dialog.preferences.display.use_first_headings"}}</label>
-          </div>
-        </div>
-        <div class="box-right">
-          <p>{{i18n "dialog.preferences.display.preview_info"}}</p>
-          <div class="cb-group">
-            <label class="cb-toggle">
-              <input type="checkbox" name="display.renderCitations" value="yes" id="display.renderCitations" {{#if display.renderCitations}}checked="checked"{{/if}}>
-              <div class="toggle"></div>
-            </label>
-            <label for="display.renderCitations">{{i18n "dialog.preferences.display.render_citations"}}</label>
-          </div>
-          <div class="cb-group">
-            <label class="cb-toggle">
-              <input type="checkbox" name="display.renderIframes" value="yes" id="display.renderIframes" {{#if display.renderIframes}}checked="checked"{{/if}}>
-              <div class="toggle"></div>
-            </label>
-            <label for="display.renderIframes">{{i18n "dialog.preferences.display.render_iframes"}}</label>
-          </div>
-          <div class="cb-group">
-            <label class="cb-toggle">
-              <input type="checkbox" name="display.renderImages" value="yes" id="display.renderImages" {{#if display.renderImages}}checked="checked"{{/if}}>
-              <div class="toggle"></div>
-            </label>
-            <label for="display.renderImages">{{i18n "dialog.preferences.display.render_images"}}</label>
-          </div>
-          <div class="cb-group">
-            <label class="cb-toggle">
-              <input type="checkbox" name="display.renderLinks" value="yes" id="display.renderLinks" {{#if display.renderLinks}}checked="checked"{{/if}}>
-              <div class="toggle"></div>
-            </label>
-            <label for="display.renderLinks">{{i18n "dialog.preferences.display.render_links"}}</label>
-          </div>
-          <div class="cb-group">
-            <label class="cb-toggle">
-              <input type="checkbox" name="display.renderMath" value="yes" id="display.renderMath" {{#if display.renderMath}}checked="checked"{{/if}}>
-              <div class="toggle"></div>
-            </label>
-            <label for="display.renderMath">{{i18n "dialog.preferences.display.render_math"}}</label>
-          </div>
-          <div class="cb-group">
-            <label class="cb-toggle">
-              <input type="checkbox" name="display.renderTasks" value="yes" id="display.renderTasks" {{#if display.renderTasks}}checked="checked"{{/if}}>
-              <div class="toggle"></div>
-            </label>
-            <label for="display.renderTasks">{{i18n "dialog.preferences.display.render_tasks"}}</label>
-          </div>
-          <div class="cb-group">
-            <label class="cb-toggle">
-              <input type="checkbox" name="display.renderHTags" value="yes" id="display.renderHTags" {{#if display.renderHTags}}checked="checked"{{/if}}>
-              <div class="toggle"></div>
-            </label>
-            <label for="display.renderHTags">{{i18n "dialog.preferences.display.render_htags"}}</label>
           </div>
         </div>
       </div>
@@ -888,6 +902,13 @@
               <div class="toggle"></div>
             </label>
             <label for="enableRMarkdown">{{i18n "dialog.preferences.enable_rmarkdown"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="window.nativeAppearance" value="yes" id="window.nativeAppearance" {{#if window.nativeAppearance}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="window.nativeAppearance">{{i18n "dialog.preferences.use_native_appearance"}}</label>
           </div>
         </div>
         <div class="box-right">

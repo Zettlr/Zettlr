@@ -5,18 +5,23 @@
         "node": true
     },
     "plugins": [
-        "jquery"
+        "jquery",
+        "@typescript-eslint"
     ],
     "extends": [
-        "standard",
+        "standard-with-typescript",
         "plugin:vue/vue3-recommended"
     ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
+    "parser": "vue-eslint-parser",
     "parserOptions": {
-        "ecmaVersion": 2018
+        "parser": "@typescript-eslint/parser",
+        "ecmaVersion": 2018,
+        "project": "./tsconfig.json",
+        "extraFileExtensions": [".vue"]
     },
     "rules": {
         "space-before-function-paren": [
@@ -69,6 +74,8 @@
           "svg": "any",
           "math": "any"
         }],
+
+        // Disallow jquery
         "jquery/no-ajax": 2,
         "jquery/no-ajax-events": 2,
         "jquery/no-animate": 2,
@@ -77,11 +84,25 @@
         "jquery/no-load": 2,
         "jquery/no-param": 2,
         "jquery/no-serialize": 2,
+        "jquery/no-size": 2,
         "jquery/no-sizzle": 2,
         "jquery/no-slide": 2,
+        "jquery/no-submit": 2,
+        "jquery/no-text": 2,
         "jquery/no-toggle": 2,
+        "jquery/no-trigger": 2,
+        "jquery/no-trim": 2,
         "jquery/no-val": 2,
         "jquery/no-when": 2,
-        "jquery/no-wrap": 2
+        "jquery/no-wrap": 2,
+
+        // Disable a few typescript rules as we are not yet there to easily implement them
+        "@typescript-eslint/no-floating-promises": [ "warn" ],
+        "@typescript-eslint/no-misused-promises": [ "warn" ],
+        "@typescript-eslint/strict-boolean-expressions": [ "warn" ],
+        // This rule is necessary for the FSAL Cache (featuring safe deletion of keys)
+        "@typescript-eslint/no-dynamic-delete": [ "warn" ],
+        // Only warn if there's no array comparison given
+        "@typescript-eslint/require-array-sort-compare": [ "warn" ]
     }
 }

@@ -1,0 +1,56 @@
+// Sidebar styles
+
+#sidebar {
+    background-color: fade(@grey-1, 90%);
+
+    a:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    // Style the tabs
+    #sidebar-tabs {
+        .sidebar-tab {
+            border-radius: 20px;
+            margin: 2px;
+            padding: 4px 2px;
+            transition: 0.4s background-color ease;
+
+            &.active {
+                background-color: var(--grey-4);
+                color: white;
+            }
+            &:hover {
+                background-color: var(--grey-3);
+                color: white;
+            }
+        }
+    }
+
+    #open-dir-external {
+        transition: @mode-transition background-color ease;
+        &:hover {
+            background-color: var(--grey-2);
+        }
+    }
+
+    .csl-bib-body a {
+        color: var(--blue-0)
+    }
+
+    // Table of Contents entries
+    div.toc-entry-container {
+        margin-bottom: 10px;
+
+        div.toc-level {
+          padding: 0px 5px;
+          font-weight: bold;
+          color: var(--c-primary);
+        }
+
+        div.toc-entry {
+          cursor: pointer;
+          &:hover { text-decoration: underline; }
+        }
+      }
+}

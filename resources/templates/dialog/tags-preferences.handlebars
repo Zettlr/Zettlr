@@ -11,7 +11,7 @@
                 <input type="text" name="prefs-tags-name" value="{{name}}" placeholder="{{i18n "dialog.tags.name_desc"}}">
                 <input type="color" name="prefs-tags-color" value="{{color}}" placeholder="{{i18n "dialog.tags.color_desc"}}">
                 <input type="text" name="prefs-tags-desc" value="{{desc}}" placeholder="{{i18n "dialog.tags.desc_desc"}}">
-                <button type="button" onclick="$(this).parent().detach()">-</button></div>
+                <button type="button" onclick="this.parentElement.parentElement.removeChild(this.parentElement)">-</button></div>
               {{/each}}
             </div>
         </div>

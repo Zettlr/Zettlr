@@ -79,10 +79,10 @@ class OpenAttachment extends ZettlrCommand {
         // Better error message
         let msg = trans('system.error.citation_no_attachments', arg.citekey)
         global.log.info(msg)
-        global.ipc.notify(msg)
+        global.notify.normal(msg)
       } else {
         global.log.error('Could not open attachment.', err.message)
-        global.ipc.notify(trans('system.error.open_attachment_error'))
+        global.notify.normal(trans('system.error.open_attachment_error'))
       }
       return false
     }

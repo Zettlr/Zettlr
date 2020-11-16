@@ -55,12 +55,12 @@ class ImportLangFile extends ZettlrCommand {
         // It's a language file!
         try {
           fs.copyFileSync(f, path.join(langDir, path.basename(f)))
-          global.ipc.notify(trans('system.lang_import_success', path.basename(f)))
+          global.notify.normal(trans('system.lang_import_success', path.basename(f)))
         } catch (e) {
-          global.ipc.notify(trans('system.lang_import_error', path.basename(f)))
+          global.notify.normal(trans('system.lang_import_error', path.basename(f)))
         }
       } else {
-        global.ipc.notify(trans('system.lang_import_error', path.basename(f)))
+        global.notify.normal(trans('system.lang_import_error', path.basename(f)))
       }
     }
   }

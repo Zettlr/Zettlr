@@ -14,9 +14,9 @@
 
 const path = require('path')
 const ZettlrCommand = require('./zettlr-command')
-const ignoreFile = require('../../common/util/ignore-file')
 const sanitize = require('sanitize-filename')
-const hash = require('../../common/util/hash')
+const isFile = require('../../common/util/is-file')
+const ALLOWED_FILETYPES = require('../../common/data.json').filetypes
 
 class FileRename extends ZettlrCommand {
   constructor (app) {
@@ -24,8 +24,8 @@ class FileRename extends ZettlrCommand {
   }
 
   /**
-   * Rename a directory
-   * @param {String} evt The event name
+   * Rename a file
+   * @param {string} evt The event name
    * @param  {Object} arg An object containing hash of containing and name of new dir.
    */
   async run (evt, arg) {
@@ -34,28 +34,32 @@ class FileRename extends ZettlrCommand {
     // We need to prepare the name to be correct for
     // accurate checking whether or not the file
     // already exists
-    arg.name = sanitize(arg.name, { replacement: '-' })
-    // Make sure we got an extension.
-    if (ignoreFile(arg.name)) arg.name += '.md'
+    let newName = sanitize(arg.name, { replacement: '-' })
 
-    let file = this._app.findFile(arg.hash)
-    if (!file) return global.log.error(`Could not find file ${arg.hash}`)
-
-    // Test if we are about to override a file
-    if (this._app.findFile(hash(path.join(file.dir, arg.name)))) {
-      // Ask for override
-      let result = await this._app.getWindow().askOverwriteFile(arg.name)
-      if (result.response === 0) return // No override wanted
+    // If no valid filename is provided, assume .md
+    let ext = path.extname(newName).toLowerCase()
+    if (!ALLOWED_FILETYPES.includes(ext)) {
+      newName += '.md'
     }
 
-    // askOverwriteFile
-    await this._app.getFileSystem().runAction('rename-file', {
-      'source': file,
-      'info': { 'name': arg.name }
-    })
+    let file = this._app.findFile(arg.hash)
+    if (file === null) {
+      return global.log.error(`Could not find file ${arg.hash}`)
+    }
 
-    // And done. FSAL has already notified the app of a necessary update
-    global.application.fileUpdate(file)
+    // Test if we are about to override a file
+    if (isFile(path.join(file.dir, newName))) {
+      // Ask for override
+      if (await this._app.askOverwriteFile(newName) === false) {
+        return // No override wanted
+      }
+    }
+
+    try {
+      await this._app.getFileSystem().renameFile(file, newName)
+    } catch (e) {
+      global.log.error('Error during renaming file: ' + e.message, e)
+    }
     return true
   }
 }

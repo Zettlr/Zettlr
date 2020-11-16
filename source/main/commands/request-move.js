@@ -34,14 +34,14 @@ class RequestMove extends ZettlrCommand {
     let to = this._app.findDir(arg.to)
     let fsal = this._app.getFileSystem() // We need this quite often here
 
-    if (!to) {
+    if (to === null) {
       // If findDir doesn't return anything then it's a file
-      global.log.warning('Cannot move anything into a file!')
+      global.log.error('Could not find the target directory for moving.')
       return
     }
 
-    // Let's check if the destination is a children of the source:
-    if (fsal.findFile(to, from) || fsal.findDir(to, from)) {
+    // Let's check if the destination is a child of the source:
+    if (fsal.findFile(to, [from]) || fsal.findDir(to, [from])) {
       return this._app.window.prompt({
         type: 'error',
         title: trans('system.error.move_into_child_title'),
@@ -58,13 +58,8 @@ class RequestMove extends ZettlrCommand {
       })
     }
 
-    // Now we can move. There are two possibilities: file or directory.
-    // First, let's move the thing, and afterwards deal with the consequences.
-    await fsal.runAction('move', { 'source': from, 'target': to, 'info': null })
-
-    // On a second thought: The FSAL first makes sure its internal state is
-    // correct again, and then notifies the application of all necessary
-    // changes. So nothing to do for us here :)
+    // Now we can move the source to the target.
+    await fsal.move(from, to)
     return true
   }
 }

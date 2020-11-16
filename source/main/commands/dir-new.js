@@ -30,7 +30,7 @@ class DirNew extends ZettlrCommand {
     */
   async run (evt, arg) {
     let sourceDir = this._app.findDir(arg.hash)
-    if (!sourceDir) {
+    if (sourceDir === null) {
       global.log.error('Could not create directory: No source given.')
       this._app.window.prompt({
         type: 'error',
@@ -40,9 +40,9 @@ class DirNew extends ZettlrCommand {
       return false
     }
 
-    arg.name = sanitize(arg.name, { replacement: '-' }).trim()
+    const sanitizedName = sanitize(arg.name, { replacement: '-' }).trim()
 
-    if (arg.name.length === 0) {
+    if (sanitizedName.length === 0) {
       global.log.error('New directory name was empty after sanitization.')
       this._app.window.prompt({
         type: 'error',
@@ -53,10 +53,7 @@ class DirNew extends ZettlrCommand {
     }
 
     try {
-      await this._app.getFileSystem().runAction('create-directory', {
-        'source': sourceDir,
-        'info': { 'name': arg.name }
-      })
+      await this._app.getFileSystem().createDir(sourceDir, sanitizedName)
     } catch (e) {
       this._app.window.prompt({
         type: 'error',

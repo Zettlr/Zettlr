@@ -13,16 +13,12 @@
  */
 
 const ZettlrCommand = require('./zettlr-command')
-const ZettlrPrint = require('../zettlr-print.js')
 const { app } = require('electron')
 const makeExport = require('../modules/export')
 
 class Print extends ZettlrCommand {
   constructor (app) {
     super(app, 'print')
-
-    // Load the print window handler class
-    this._printWindow = new ZettlrPrint()
   }
 
   /**
@@ -58,9 +54,9 @@ class Print extends ZettlrCommand {
     makeExport(opt)
       .then((target) => {
         // Now we'll need to open the print window.
-        this._printWindow.openPrint(target)
+        this._app.showPrintWindow(target)
       })
-      .catch((err) => { global.ipc.notify(err.name + ': ' + err.message) }) // Error may be thrown
+      .catch((err) => { global.notify.normal(err.name + ': ' + err.message) }) // Error may be thrown
   }
 }
 

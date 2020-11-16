@@ -45,7 +45,7 @@ If you have some experiences with developing, we would gladly welcome your help 
 #### Our Stack (with linked documentation)
 
 - [Electron.js](https://www.electronjs.org/docs) based on [Node.js](https://nodejs.org/api/) for backend
-- [Webpack](https://webpack.js.org/concepts/), [Gulp](https://gulpjs.com/docs/en/getting-started/quick-start), [Handlebars](https://handlebarsjs.com/guide/), and [Less](http://lesscss.org/features/) for frontend
+- [Webpack](https://webpack.js.org/concepts/), [Handlebars](https://handlebarsjs.com/guide/), and [Less](http://lesscss.org/features/) for frontend
 
 #### Issue Labels
 

@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -14,6 +13,7 @@
  *
  * END HEADER
  */
+const $ = require('jquery')
 require('jquery-ui/ui/data')
 require('jquery-ui/ui/scroll-parent')
 require('jquery-ui/ui/version')
@@ -21,17 +21,15 @@ require('jquery-ui/ui/widget')
 require('jquery-ui/ui/widgets/mouse')
 require('jquery-ui/ui/widgets/sortable')
 
-const ZettlrCon = require('./zettlr-context.js')
 const ZettlrNotification = require('./zettlr-notification.js')
-const popup = require('./zettlr-popup.js')
-const makeTemplate = require('../common/zettlr-template.js')
+
+const { ipcRenderer } = require('electron')
 
 // Dialogs
 const StatsDialog = require('./dialog/stats.js')
 const TagCloud = require('./dialog/tag-cloud.js')
 const UpdateDialog = require('./dialog/update.js')
 const AboutDialog = require('./dialog/about.js')
-const PasteImage = require('./dialog/paste-image.js')
 const PreferencesDialog = require('./dialog/preferences.js')
 const PDFPreferences = require('./dialog/pdf-preferences.js')
 const TagsPreferences = require('./dialog/tags-preferences.js')
@@ -60,23 +58,10 @@ class ZettlrBody {
     this._renderer = parent
     this._spellcheckLangs = null // This holds all available languages
     this._n = [] // Holds all notifications currently displaying
-    // Holds the currently displayed dialog. Prevents multiple dialogs from appearing.
-    this._currentDialog = null
-    // Holds the current popup. Prevents multiple popups from appearing.
-    this._currentPopup = null
-    this._currentTheme = 'berlin' // Default theme is Berlin
 
     // This object caches the values of search and replace value, so they stay
     // persistent on a per-session basis.
     this._findPopup = { 'searchVal': '', 'replaceVal': '' }
-
-    // Event listener for the context menu
-    window.addEventListener('contextmenu', (e) => {
-      e.preventDefault()
-      e.stopPropagation()
-      let menu = new ZettlrCon(this)
-      menu.popup(e)
-    }, false)
 
     document.addEventListener('dragover', function (event) {
       event.preventDefault()
@@ -112,56 +97,35 @@ class ZettlrBody {
     })
 
     // React to global GUI shortcuts
-    $(document).on('keydown', (event) => {
-      let isDarwin = $('body').hasClass('darwin')
+    window.addEventListener('keydown', (event) => {
+      let isDarwin = document.body.classList.contains('darwin')
       let cmdOrCtrl = (isDarwin && event.metaKey) || (!isDarwin && event.ctrlKey)
 
-      let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && event.key === 'e')
-      let focusSidebarShortcut = (cmdOrCtrl && event.shiftKey && event.key === 't')
+      let focusEditorShortcut = (cmdOrCtrl && event.shiftKey && event.key.toLowerCase() === 'e')
+      let focusFileManagerShortcut = (cmdOrCtrl && event.shiftKey && event.key.toLowerCase() === 't')
       if (focusEditorShortcut) { // Cmd/Ctrl+Shift+E
         // Obviously, focus the editor
-        this._renderer.getEditor().getEditor().focus()
-      } else if (focusSidebarShortcut) { // Cmd/Ctrl+Shift+T
-        // You know what to do
-        $('#file-list').focus()
+        this._renderer.getEditor().focus()
+      } else if (focusFileManagerShortcut) { // Cmd/Ctrl+Shift+T
+        this._renderer.getFileManager().focusFileList()
       } else if (event.key === 'F2') {
         // Trigger a rename
         this.requestNewFileName(this._renderer.getActiveFile())
       }
     })
 
-    // Inject a global notify and notifyError function
+    // Inject a global notify function TODO: Send notifications generated here to main
     global.notify = (msg) => { this.notify(msg) }
-    global.notifyError = (msg) => { this.notifyError(msg) }
 
-    // Afterwards, activate the event listeners of the window controls
-    $('.windows-window-controls .minimise').click((e) => {
-      global.ipc.send('win-minimise')
+    // The notification provider never sends out commands. When a message from
+    // that one arrives, it's always a notification with a type and message.
+    ipcRenderer.on('notification-provider', (event, type, message) => {
+      if (type === 'normal') {
+        this.notify(message)
+      } else if (type === 'error') {
+        this.notifyError(message)
+      }
     })
-    $('.windows-window-controls .resize').click((e) => {
-      global.ipc.send('win-maximise')
-    })
-    $('.windows-window-controls .close').click((e) => {
-      global.ipc.send('win-close')
-    })
-  }
-
-  /**
-   * Is called by the app on a configuration change so that the body can make
-   * necessary adjustments.
-   */
-  configChange () {
-    let newTheme = global.config.get('display.theme')
-    // Check if we really need to replace the style to prevent ugly flickering
-    // when replacing the same theme with the same.
-    if (this._currentTheme === newTheme) return
-
-    // On config change, change the theme according to the settings
-    let href = $('link#theme-css').attr('href')
-    href = href.replace(/bielefeld|berlin|frankfurt|karl-marx-stadt|bordeaux/, newTheme)
-    $('link#theme-css').attr('href', href)
-    this._renderer.getEditor().refresh()
-    this._currentTheme = newTheme
   }
 
   /**
@@ -173,9 +137,6 @@ class ZettlrBody {
     // No directory selected.
     if (!dir) return this.notify(trans('system.please_select_directory'))
 
-    // Don't open multiple popups
-    if (this._currentPopup) this._currentPopup.close(true)
-
     // Check if the file should be created immediately. Do this after check for
     // popups due to semantic reasons (this way the action always closes any
     // other popup, which makes sense for users).
@@ -183,54 +144,19 @@ class ZettlrBody {
       return global.ipc.send('file-new', { 'name': generateFileName(), 'hash': dir.hash })
     }
 
-    let cnt = makeTemplate('popup', 'textfield', {
+    // If the newFileButton has been clicked, center the popup there, not someplace else
+    let targetElement = (newFileButton) ? document.querySelector('#document-tabs .add-new-file') : document.querySelector('.button.file-new')
+
+    const data = {
       'val': generateFileName(),
       'placeholder': trans('dialog.file_new.placeholder')
-    })
+    }
 
-    // If the newFileButton has been clicked, center the popup there, not someplace else
-    let targetElement = (newFileButton) ? $('#document-tabs .add-new-file') : $('.button.file-new')
-
-    this._currentPopup = popup(targetElement, cnt, (form) => {
-      if (form) {
+    // Show the appropriate popup
+    global.popupProvider.show('textfield', targetElement, data, (form) => {
+      if (form !== null) {
         global.ipc.send('file-new', { 'name': form[0].value, 'hash': dir.hash })
       }
-      this._currentPopup = null // Reset current popup
-    })
-  }
-
-  /**
-    * Display a small popup to ask for a new file name
-    * @param  {Object} file A file hash.
-    * @return {void}     Nothing to return.
-    */
-  requestDuplicate (file) {
-    // No file given.
-    if (!file) return
-
-    // Retrieve the file
-    file = this._renderer.findObject(file.hash)
-
-    // Don't open multiple popups
-    if (this._currentPopup) this._currentPopup.close(true)
-
-    // Cannot duplicate aliases
-    if (file.hasOwnProperty('isAlias') && file.isAlias) return
-
-    let cnt = makeTemplate('popup', 'textfield', {
-      'val': 'Copy of ' + file.name,
-      'placeholder': trans('dialog.file_new.placeholder')
-    })
-
-    this._currentPopup = popup($('#sidebar div[data-hash="' + file.hash + '"]'), cnt, (form) => {
-      if (form) {
-        global.ipc.send('file-duplicate', {
-          'dir': file.parent.hash,
-          'file': file.hash,
-          'name': form[0].value
-        })
-      }
-      this._currentPopup = null // Reset current popup
     })
   }
 
@@ -242,36 +168,36 @@ class ZettlrBody {
   requestDirName (dir) {
     // No directory selected.
     if (!dir) return this.notify(trans('system.please_select_directory'))
-    // Prevent multiple popups
-    if (this._currentPopup) this._currentPopup.close(true)
 
     let elem
 
     // Selection method stolen from requestNewDirName
-    if (!$('#sidebar').hasClass('expanded') && $('#file-tree').hasClass('hidden')) {
-      // The sidebar is in thin mode and tree-view is hidden, so the file list
+    const expandedFileManager = document.getElementById('file-manager').classList.contains('expanded')
+    const hiddenFileTree = document.getElementById('file-tree').classList.contains('hidden')
+    if (!expandedFileManager && hiddenFileTree) {
+      // The file manager is in thin mode and tree-view is hidden, so the file list
       // is visible -> find the div in there. (Should be the top containing dir)
-      elem = $('#file-list').find('div[data-hash="' + dir.hash + '"]').first()
+      elem = document.querySelector('#file-list div[data-hash="' + dir.hash + '"]')
     } else {
       // The combiner is in extended mode and/or the tree view is visible.
-      elem = $('#file-tree').find('div[data-hash="' + dir.hash + '"]').first()
+      elem = document.querySelector('#file-tree div[data-hash="' + dir.hash + '"]')
     }
 
     // In case the combiner was not in an extended mode and the preview list did
-    // not contain the directory fall back to the sidebar element itself. But
+    // not contain the directory fall back to the file manager element itself. But
     // this should normally never happen.
-    if (elem.length === 0) elem = $('#sidebar')
+    if (elem.length === 0) elem = document.getElementById('file-manager')
 
-    let cnt = makeTemplate('popup', 'textfield', {
+    const data = {
       'val': trans('dialog.dir_new.value'),
       'placeholder': trans('dialog.dir_new.placeholder')
-    })
+    }
 
-    this._currentPopup = popup(elem, cnt, (form) => {
-      if (form) {
+    // Show the appropriate popup
+    global.popupProvider.show('textfield', elem, data, (form) => {
+      if (form !== null) {
         global.ipc.send('dir-new', { 'name': form[0].value, 'hash': dir.hash })
       }
-      this._currentPopup = null // Reset current popup
     })
   }
 
@@ -281,18 +207,19 @@ class ZettlrBody {
     * @return {void}     Nothing to return.
     */
   requestNewDirName (dir) {
-    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
-    let elem = $('#file-tree').find('div[data-hash="' + dir.hash + '"]').first()
-    let cnt = makeTemplate('popup', 'textfield', {
+    if (dir === null) return
+
+    let elem = document.querySelector('#file-tree div[data-hash="' + dir.hash + '"]')
+    const data = {
       'val': dir.name,
       'placeholder': trans('dialog.dir_rename.placeholder')
-    })
+    }
 
-    this._currentPopup = popup(elem, cnt, (form) => {
-      if (form) {
+    // Show the appropriate popup
+    global.popupProvider.show('textfield', elem, data, (form) => {
+      if (form !== null) {
         global.ipc.send('dir-rename', { 'name': form[0].value, 'hash': dir.hash })
       }
-      this._currentPopup = null
     })
   }
 
@@ -302,121 +229,58 @@ class ZettlrBody {
     * @return {void}      Nothing to return.
     */
   requestNewFileName (file) {
-    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
     let elem = ''
     if (this._renderer.getActiveFile() != null && this._renderer.getActiveFile().hash === file.hash) {
       // TODO: Need to make this appropriate for all open files (open popup under their respective tabs)
-      elem = $('.button.file-rename')
+      elem = document.querySelector('.button.file-rename')
     } else {
-      elem = $('#file-list').find('div[data-hash="' + file.hash + '"]').first()
+      elem = document.querySelector('#file-list div[data-hash="' + file.hash + '"]')
       if (elem.length === 0) {
         // Obviously the file is standalone
-        elem = $('#file-tree').find('div[data-hash="' + file.hash + '"]').first()
+        elem = document.querySelector('#file-tree div[data-hash="' + file.hash + '"]')
       }
     }
 
-    let cnt = makeTemplate('popup', 'textfield', {
+    const data = {
       'val': file.name,
       'placeholder': trans('dialog.file_rename.placeholder')
-    })
-
-    this._currentPopup = popup(elem, cnt, (form) => {
-      if (form) {
-        global.ipc.send('file-rename', { 'name': form[0].value, 'hash': file.hash })
-      }
-      this._currentPopup = null
-    })
-  }
-
-  /**
-    * Display a small popup to ask for a new icon for that directory.
-    * @param  {number} directoryHash The directory's hash
-    * @return {void}     Nothing to return.
-    */
-  displayIconSelect (arg) {
-    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
-    let dir = this._renderer.findObject(arg.hash)
-    if (!dir) return // No directory found
-
-    let elem = $('#file-tree').find('div[data-hash="' + arg.hash + '"]').first()
-    let cnt = makeTemplate('popup', 'icon-selector', {})
-
-    this._currentPopup = popup(elem, cnt, (form) => {
-      this._currentPopup = null
-    })
-
-    $('#icon-selector-popup').on('click', '.icon-block', (event) => {
-      let div = event.currentTarget
-      let icon = div.dataset['shape']
-      global.ipc.send('dir-set-icon', {
-        'hash': dir.hash,
-        'icon': (icon === '__reset') ? null : icon
-      })
-
-      // Close & dereference
-      this._currentPopup.close()
-      this._currentPopup = null
-    })
-  }
-
-  /**
-   * Shows the popup to set or update a target on a file.
-   * @param {number} hash The hash for which the popup should be shown.
-   */
-  setTarget (hash) {
-    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
-    let file = this._renderer.findObject(hash)
-    if (!file) return // No file given
-
-    let targetMode = 'words'
-    let targetCount = 0
-
-    if (file.hasOwnProperty('target') && file.target != null) {
-      // Overwrite the properties with the ones given
-      targetMode = file.target.mode || 'words' // Fallback
-      targetCount = file.target.count || 0
     }
 
-    let cnt = makeTemplate('popup', 'target', {
-      'mode': targetMode,
-      'count': targetCount
-    })
-
-    this._currentPopup = popup($(`[data-hash=${hash}]`), cnt, (form) => {
-      if (form) {
-        global.ipc.send('set-target', {
-          'hash': parseInt(hash),
-          'mode': form[1].value,
-          'count': parseInt(form[0].value)
-        })
+    // Show the appropriate popup
+    global.popupProvider.show('textfield', elem, data, (form) => {
+      if (form !== null) {
+        global.ipc.send('file-rename', { 'name': form[0].value, 'hash': file.hash })
       }
-
-      this._currentPopup = null
     })
   }
 
   /**
     * Displays file information (such as word count etc)
-    * @return {ZettlrPopup} The popup that is shown.
     */
   showFileInfo () {
-    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
-
     let info = this._renderer.getEditor().getFileInfo()
 
     let data = {
       'words': localiseNumber(info.words),
       'chars': localiseNumber(info.chars),
       'chars_wo_spaces': localiseNumber(info.chars_wo_spaces),
-      'words_sel': (info.words_sel) ? localiseNumber(info.words_sel) : null,
-      'chars_sel': (info.chars_sel) ? localiseNumber(info.chars_sel) : null
+      'selections': info.selections.map(sel => {
+        return {
+          'selectionLength': localiseNumber(sel.selectionLength),
+          'start': {
+            'line': sel.start.line + 1,
+            'ch': sel.start.ch + 1
+          },
+          'end': {
+            'line': sel.end.line + 1,
+            'ch': sel.end.ch + 1
+          }
+        }
+      })
     }
 
-    let cnt = makeTemplate('popup', 'file-info', data)
-    this._currentPopup = popup($('#toolbar .file-info'), cnt, () => {
-      this._currentPopup = null
-    })
-    return this._currentPopup
+    // Show the appropriate popup
+    global.popupProvider.show('file-info', document.querySelector('#toolbar .file-info'), data)
   }
 
   /**
@@ -453,43 +317,32 @@ class ZettlrBody {
   }
 
   /**
-   * Set the theme depending of a truthy or falsy value of val.
-   * @param  {Boolean} val Either true or false.
-   * @return {ZettlrBody}     Chainability.
-   */
-  darkTheme (val) {
-    if (val && !$('body').hasClass('dark')) $('body').addClass('dark')
-    else if (!val) $('body').removeClass('dark')
-    return this
-  }
-
-  /**
     * Opens the exporting popup
     * @param  {ZettlrFile} file Which file should be exported?
     * @return {ZettlrBody}      Chainability.
     */
   displayExport (file) {
-    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
-    // Create a popup
-
-    let cnt = makeTemplate('popup', 'export', { 'hash': file.hash })
-    if (!cnt) return this
-
-    this._currentPopup = popup($('.button.share'), cnt)
+    // Show the appropriate popup
+    global.popupProvider.show('export', document.querySelector('.button.share'))
 
     $('.btn-share').click((e) => {
+      let elem = e.target
+
+      // Make sure to traverse up from the Clarity icon, if necessary
+      while (!elem.classList.contains('btn-share')) {
+        elem = elem.parentElement
+      }
+
       // The revealjs-button doesn't trigger an export, but the visibility
       // of the themes selection
-      if ($(e.target).hasClass('revealjs')) {
+      if ($(elem).hasClass('revealjs')) {
         $('#reveal-themes').toggleClass('hidden')
         return
       }
 
-      let ext = $(e.target).attr('data-ext')
-      let hash = $(e.target).attr('data-hash')
-      global.ipc.send('export', { 'hash': hash, 'ext': ext })
-      this._currentPopup.close()
-      this._currentPopup = null
+      let ext = $(elem).attr('data-ext')
+      global.ipc.send('export', { 'hash': file.hash, 'ext': ext })
+      global.popupProvider.close()
     })
   }
 
@@ -499,7 +352,6 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayPreferences (prefs) {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     this._currentDialog = new PreferencesDialog()
     this._currentDialog.init(prefs).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
@@ -511,7 +363,6 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayPDFPreferences (prefs) {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     this._currentDialog = new PDFPreferences()
     this._currentDialog.init(prefs).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
@@ -523,7 +374,6 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayTagsPreferences (prefs) {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     this._currentDialog = new TagsPreferences()
     this._currentDialog.init(prefs).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
@@ -535,7 +385,6 @@ class ZettlrBody {
    * @return {void}      Nothing to return.
    */
   displayTagCloud () {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     global.ipc.send('get-tags-database', {}, (ret) => {
       this._currentDialog = new TagCloud()
       this._currentDialog.init(ret).open()
@@ -549,7 +398,6 @@ class ZettlrBody {
     * @return {void}       Nothing to return.
     */
   displayProjectProperties (prefs) {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     this._currentDialog = new ProjectProperties()
     // We need the project directory's name as a default value
     prefs.projectDirectory = this.getRenderer().findObject(prefs.hash).name
@@ -562,7 +410,6 @@ class ZettlrBody {
     * @param  {Object} cnt An object containing information on the update.
     */
   displayUpdate (cnt) {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     this._currentDialog = new UpdateDialog()
     this._currentDialog.init(cnt).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
@@ -572,18 +419,7 @@ class ZettlrBody {
     * Displays the about dialog
     */
   displayAbout () {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     this._currentDialog = new AboutDialog()
-    this._currentDialog.init().open()
-    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
-  }
-
-  /**
-   * This dialog is shown when the user has pasted an image from the clipboard.
-   */
-  displayPasteImage () {
-    if (this._currentDialog !== null) return // Only one dialog at a time
-    this._currentDialog = new PasteImage()
     this._currentDialog.init().open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
@@ -592,7 +428,6 @@ class ZettlrBody {
    * This dialog lets the user edit his/her custom CSS
    */
   displayCustomCss () {
-    if (this._currentDialog !== null) return // Only one dialog at a time
     global.ipc.send('get-custom-css', {}, (ret) => {
       this._currentDialog = new CustomCSS()
       this._currentDialog.init(ret).open()
@@ -606,8 +441,6 @@ class ZettlrBody {
    * @return {void}      No return.
    */
   displayStats (data) {
-    if (this._currentDialog !== null) return // Only one dialog at a time
-    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
     let context = {
       'displaySum': (data.sumMonth > 99999) ? '>100k' : localiseNumber(data.sumMonth),
       'avgMonth': localiseNumber(data.avgMonth),
@@ -616,8 +449,10 @@ class ZettlrBody {
       'cmpAvg': data.avgMonth,
       'cmpAvgHalf': data.avgMonth / 2
     }
-    let cnt = makeTemplate('popup', 'stats', context)
-    this._currentPopup = popup($('#toolbar .stats'), cnt)
+
+    // Show the appropriate popup
+    global.popupProvider.show('stats', document.querySelector('#toolbar .stats'), context)
+
     $('#more-stats').on('click', (e) => {
       // Theres no form but the user has clicked the more button
       this._currentDialog = new StatsDialog()
@@ -625,8 +460,7 @@ class ZettlrBody {
       this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
       // After opening the dialog, close the popup. The user probably doesn't
       // want to click twice to continue writing.
-      this._currentPopup.close()
-      this._currentPopup = null
+      global.popupProvider.close()
     })
   }
 
@@ -635,7 +469,6 @@ class ZettlrBody {
     * @return {void} Nothing to return.
     */
   displayFind () {
-    if (this._currentPopup) this._currentPopup.close(true)
     if (this._renderer.getActiveFile() == null) return
     let regexRE = /^\/.+\/[gimy]{0,4}$/ // It's meta, dude!
 
@@ -644,17 +477,10 @@ class ZettlrBody {
     let selections = this._renderer.getEditor().getSelections()
     if (selections.length > 0) this._findPopup.searchVal = selections[0]
 
-    // Create the popup template. Make sure we pre-set the value, if given.
-    let cnt = makeTemplate('popup', 'find', {
-      'search': this._findPopup.searchVal || '',
-      'replace': this._findPopup.replaceVal || ''
-    })
-
-    // This must be a persistent popup
-    this._currentPopup = popup($('.button.find'), cnt, (x) => {
+    // Display the popup
+    global.popupProvider.show('find', document.querySelector('.button.find'), this._findPopup, (form) => {
       // Remove search cursor once the popup is closed
       global.editorSearch.stop()
-      this._currentPopup = null
     }) // .makePersistent()
 
     const searchForElement = document.getElementById('searchWhat')
@@ -722,15 +548,15 @@ class ZettlrBody {
     * Displays a popup containing all formattings
     */
   displayFormatting () {
-    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
-    let cnt = makeTemplate('popup', 'format')
-    this._currentPopup = popup($('.button.formatting'), cnt)
+    // Show the popup
+    global.popupProvider.show('format', document.querySelector('.button.formatting'))
 
-    $('.formatting #header-formatting').on('mousemove', (e) => {
+    const headerFormattingElement = document.getElementById('header-formatting')
+    headerFormattingElement.addEventListener('mousemove', (e) => {
       let elem = $(e.target)
       $('.formatting span').removeClass('active')
       if (!elem.is('span')) {
-        $('.formatting #header-formatting').prop('class', 'markdownHeading1')
+        headerFormattingElement.classList.add('markdownHeading1')
         return
       }
       // Nice little effect
@@ -753,7 +579,7 @@ class ZettlrBody {
         case 'markdownHeading1':
           $('.formatting .markdownHeading1').addClass('active')
       }
-      $('.formatting #header-formatting').prop('class', e.target.className)
+      headerFormattingElement.className = e.target.className
     })
 
     $('.formatting a').click((e) => {
@@ -765,15 +591,13 @@ class ZettlrBody {
       }
       $('.formatting span').removeClass('active')
       this._renderer.handleEvent('cm-command', e.target.className)
-      this._currentPopup.close()
-      this._currentPopup = null
+      global.popupProvider.close()
     })
   }
 
   displayTableGenerator () {
-    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple instances
-    let cnt = makeTemplate('popup', 'table')
-    this._currentPopup = popup($('.button.formatting'), cnt)
+    // Show the popup
+    global.popupProvider.show('table', document.querySelector('.button.formatting'))
 
     $('.table-generator').mouseleave(e => { $('.table-generator .cell').removeClass('active') })
 
@@ -792,8 +616,7 @@ class ZettlrBody {
     $('.table-generator .cell').click(e => {
       let table = generateTable(e.target.dataset.rows, e.target.dataset.cols)
       this._renderer.getEditor().insertText(table)
-      this._currentPopup.close()
-      this._currentPopup = null
+      global.popupProvider.close()
     })
   }
 
@@ -802,64 +625,14 @@ class ZettlrBody {
     * @return {void} (Point of) No return.
     */
   displayTOC () {
-    if (this._currentPopup) this._currentPopup.close(true) // Prevent multiple popups
     if (this._renderer.getActiveFile() == null) return
 
     let toc = this._renderer.getEditor().buildTOC()
 
     if (toc.length === 0) return
 
-    let idUniquifier = Date.now()
-
-    let cnt = $('<div id="toc-container-' + idUniquifier + '">')
-    let h1 = 0
-    let h2 = 0
-    let h3 = 0
-    let h4 = 0
-    let h5 = 0
-    let h6 = 0
-    for (let entry of toc) {
-      let level = ''
-      switch (entry.level) {
-        case 1:
-          h1++
-          h2 = h3 = h4 = h5 = h6 = 0
-          level = h1
-          break
-        case 2:
-          h2++
-          h3 = h4 = h5 = h6 = 0
-          level = [ h1, h2 ].join('.')
-          break
-        case 3:
-          h3++
-          h4 = h5 = h6 = 0
-          level = [ h1, h2, h3 ].join('.')
-          break
-        case 4:
-          h4++
-          h5 = h6 = 0
-          level = [ h1, h2, h3, h4 ].join('.')
-          break
-        case 5:
-          h5++
-          h6 = 0
-          level = [ h1, h2, h3, h4, h5 ].join('.')
-          break
-        case 6:
-          h6++
-          level = [ h1, h2, h3, h4, h5, h6 ].join('.')
-      }
-
-      cnt.append(
-        $('<a>').text(level + '. ' + entry.text)
-          .attr('data-line', entry.line)
-          .attr('href', '#')
-          .addClass('toc-link')
-      )
-    }
-
-    this._currentPopup = popup($('.button.show-toc'), cnt)
+    // Show the popup
+    global.popupProvider.show('table-of-contents', document.querySelector('.button.show-toc'), { 'entries': toc })
 
     // On click jump to line
     $('.toc-link').click((event) => {
@@ -868,16 +641,16 @@ class ZettlrBody {
     })
 
     // Sortable
-    $('#toc-container-' + idUniquifier).sortable({
+    $('#toc-popup').sortable({
       axis: 'y',
       items: '> .toc-link',
       update: (event, ui) => {
         // The user has dropped the item someplace else.
         let newIndex = ui.item.index()
         let originalLine = parseInt(ui.item.attr('data-line'))
-        let sumLength = $('#toc-container-' + idUniquifier + ' > .toc-link').length
+        let sumLength = $('#toc-popup > .toc-link').length
         if (newIndex < sumLength - 1) {
-          let elementBelow = $('#toc-container-' + idUniquifier + ' > .toc-link').eq(newIndex + 1)
+          let elementBelow = $('#toc-popup > .toc-link').eq(newIndex + 1)
           let aboveLine = parseInt(elementBelow.attr('data-line'))
           this._renderer.getEditor().moveSection(originalLine, aboveLine)
         } else {
@@ -886,9 +659,8 @@ class ZettlrBody {
 
         // Cool, now destroy the sortable, rebuild the TOC, and re-fill the div
         // again.
-        $('#toc-container-' + idUniquifier).sortable('destroy')
-        this._currentPopup.close()
-        this._currentPopup = null
+        $('#toc-popup').sortable('destroy')
+        global.popupProvider.close()
         this.displayTOC()
       }
     })
@@ -896,8 +668,7 @@ class ZettlrBody {
 
   displayDevClipboard () {
     // DevClipboard
-    if (this._currentDialog !== null) return // Only one dialog at a time
-    if (this._currentPopup) this._currentPopup.close(true) // Close popups
+    global.popupProvider.close()
     this._currentDialog = new DevClipboard()
     this._currentDialog.init({}).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })

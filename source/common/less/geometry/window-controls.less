@@ -1,0 +1,56 @@
+/**
+ * This file contains the window controls for Linux and Windows packages. There
+ * are none for macOS, as we can make use of the hiddenInset window style to
+ * display the traffic lights even with no other chrome around the window.
+ */
+
+// Hide all controls initially
+.window-controls {
+  cursor: default;
+  display: none;
+  -webkit-app-region: no-drag;
+  position: absolute;
+     top: 0;
+     right: 0;
+
+     .minimise, .resize, .close {
+       float: left;
+       width: 45px;
+       height: 31px;
+       margin: 1px 1px 0 0;
+       text-align: center;
+       line-height: 29px;
+       transition: background-color .2s;
+
+       svg {
+         width: 10px;
+         height: 10px;
+         shape-rendering: crispEdges;
+       }
+
+       &:hover { background-color: rgba(255, 255, 255, 0.5); }
+     }
+
+     .close {
+       svg polygon { transition: fill .2s; }
+
+       &:hover {
+         background-color: rgba(232, 17, 35, 0.9);
+         svg polygon { fill: #ffffff; }
+       }
+     }
+}
+
+ body.show-window-controls .window-controls {
+    display: block;
+}
+
+body.is-maximised .window-controls .resize {
+  .maximise-svg { display: initial; }
+  .fullscreen-svg { display: none; }
+}
+
+body:not(.is-maximised) .window-controls .resize {
+  .maximise-svg { display: none; }
+  .fullscreen-svg { display: initial; }
+}

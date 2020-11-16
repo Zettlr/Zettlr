@@ -1,0 +1,7 @@
+<div id="toc-popup">
+  {{#each entries}}
+  <a href="#" class="toc-link" data-line="{{this.line}}">
+    {{this.renderedLevel}}. {{this.text}}
+  </a>
+  {{/each}}
+</div>

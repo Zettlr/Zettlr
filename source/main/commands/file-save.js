@@ -13,7 +13,6 @@
  */
 
 const ZettlrCommand = require('./zettlr-command')
-const generateFilename = require('../../common/util/generate-filename')
 
 class SaveFile extends ZettlrCommand {
   constructor (app) {
@@ -36,31 +35,19 @@ class SaveFile extends ZettlrCommand {
 
     try {
       let realFile = this._app.getFileSystem().findFile(file.hash)
-      if (!realFile) {
-        console.log('No file found - creating')
-        realFile = await this._app.getFileSystem().runAction('create-file', {
-          'source': this._app.getCurrentDir(),
-          'info': generateFilename()
-        })
+      if (realFile === null) {
+        throw new Error('File to save not found!')
       }
 
-      global.log.info(`Saving file ${realFile.name} (modtime ${realFile.modtime})...`)
-      await this._app.getFileSystem().runAction('save-file', {
-        'source': realFile,
-        'info': file.content
-      })
+      global.log.info(`Saving file ${realFile.name}...`)
+      await this._app.getFileSystem().saveFile(realFile, file.content)
 
       // Update word count
       this._app.stats.updateWordCount(file.offsetWordcount || 0)
 
-      global.log.info(`File ${realFile.name} saved! New modtime: ${realFile.modtime}.`)
-
-      // Mark this file as clean
-      global.ipc.send('mark-clean', { 'hash': realFile.hash })
-      // Re-send the file
-      global.application.fileUpdate(realFile.hash, global.application.findFile(realFile.hash))
+      global.log.info(`File ${realFile.name} saved.`)
     } catch (e) {
-      global.log.error(`Error saving file: ${e.message}!`, e)
+      global.log.error(`Error saving file: ${e.message}`, e)
     }
 
     return true

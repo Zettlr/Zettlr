@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -18,22 +17,25 @@ const ZettlrEditor = require('./zettlr-editor')
 const ZettlrBody = require('./zettlr-body')
 const ZettlrToolbar = require('./zettlr-toolbar')
 const ZettlrPomodoro = require('./zettlr-pomodoro')
-const ZettlrAttachments = require('./zettlr-attachments')
+const ZettlrSidebar = require('./zettlr-sidebar')
 const GlobalSearch = require('./util/global-search')
 
 const ZettlrStore = require('./zettlr-store')
-const createSidebar = require('./assets/vue/vue-sidebar')
+
+const createFileManager = require('./modules/file-manager').default
 
 const path = require('path')
 
-const { remote, shell, clipboard } = require('electron')
+const { ipcRenderer, clipboard } = require('electron')
 
 const generateId = require('../common/util/generate-id')
-const loadI18nRenderer = require('../common/lang/load-i18n-renderer')
 const matchFilesByTags = require('../common/util/match-files-by-tags')
 
 const reconstruct = require('./util/reconstruct-tree')
 const loadicons = require('./util/load-icons')
+
+// Service providers
+const PopupProvider = require('./providers/popup-provider')
 
 /**
  * This is the pendant class to the Zettlr class in the main process. It mirrors
@@ -53,25 +55,18 @@ class ZettlrRenderer {
     // Stores the current global search in order to access it.
     this._currentSearch = null
 
-    // Write translation data into renderer process's global var
-    loadI18nRenderer()
-
-    // Immediately add the operating system class to the body element to
-    // enable the correct font-family.
-    $('body').addClass(process.platform)
-
     // Init the complete list of objects that we need
     this._ipc = new ZettlrRendererIPC(this)
     this._editor = new ZettlrEditor(this)
     this._body = new ZettlrBody(this)
     this._toolbar = new ZettlrToolbar(this)
     this._pomodoro = new ZettlrPomodoro(this)
-    this._attachments = new ZettlrAttachments(this)
-    // Create and mount the sidebar
-    this._sidebar = createSidebar()
+    this._sidebar = new ZettlrSidebar(this)
+    // Create and mount the file manager
+    this._fileManager = createFileManager()
     // Create the store wrapper which will act as
     // a unifying interface to commit changes to the store.
-    this._store = new ZettlrStore(this, this._sidebar.$store)
+    this._store = new ZettlrStore(this, this._fileManager.$store)
 
     // Add a few convenience functions
     global.application = {
@@ -80,6 +75,11 @@ class ZettlrRenderer {
         this._toolbar.setSearch(term)
         this.beginSearch(term)
       }
+    }
+
+    // Boot the service providers
+    this._providers = {
+      'popup': new PopupProvider()
     }
   }
 
@@ -117,15 +117,6 @@ class ZettlrRenderer {
       // that it's out of the first tick of the app.
       this.configChange()
 
-      // Apply the custom CSS stylesheet to the head element
-      global.ipc.send('get-custom-css-path', {}, (ret) => {
-        let lnk = $('<link>').attr('rel', 'stylesheet')
-        lnk.attr('href', 'file://' + ret + '?' + Date.now())
-        lnk.attr('type', 'text/css')
-        lnk.attr('id', 'custom-css-link')
-        $('head').first().append(lnk)
-      })
-
       // Receive an initial list of tags to display in the preview list
       this._ipc.send('get-tags')
       // Additionally, request the full database of already existing tags inside files.
@@ -136,14 +127,11 @@ class ZettlrRenderer {
 
       // Send an initial request to the reference database.
       this._ipc.send('citeproc-get-ids')
-
-      // Send an initial check for an update
-      this._ipc.send('update-check')
     }, 100)
 
     // Load the clarity icon modules, add custom icons and then refresh
-    // attachments (because it requires custom icons to be loaded).
-    setTimeout(() => loadicons().then(() => this._attachments.refresh()), 0)
+    // the sidebar (because it requires custom icons to be loaded).
+    setTimeout(() => loadicons().then(() => this._sidebar.refresh()), 0)
   }
 
   /**
@@ -163,20 +151,11 @@ class ZettlrRenderer {
    * and apply them.
    */
   configChange () {
-    // Tell the body that the config has changed. We need to do this first of
-    // all because the body will automatically switch the theme based on the
-    // config, and if we do it after the language is being received, there'll
-    // be an ugly display glitch, as the language is basically 2MB written to
-    // the IPC pipe, which'll block other files from loading.
-    this.getBody().configChange()
-
-    // Set dark theme
-    this.darkTheme(global.config.get('darkTheme'))
     // Set file meta
     global.store.set('fileMeta', global.config.get('fileMeta'))
     global.store.set('hideDirs', global.config.get('hideDirs')) // TODO: Not yet implemented
     global.store.set('displayTime', global.config.get('fileMetaTime'))
-    global.store.set('sidebarMode', global.config.get('sidebarMode'))
+    global.store.set('fileManagerMode', global.config.get('fileManagerMode'))
     global.store.set('useFirstHeadings', global.config.get('display.useFirstHeadings'))
     // Receive the application language
     this.setLocale(global.config.get('appLang'))
@@ -201,7 +180,7 @@ class ZettlrRenderer {
     // Write an ID to the clipboard
     clipboard.writeText(generateId(global.config.get('zkn.idGen')))
     // Paste the ID
-    remote.getCurrentWebContents().paste()
+    ipcRenderer.send('window-controls', { command: 'paste' })
 
     // Now restore the clipboard's original contents
     setTimeout((e) => {
@@ -260,27 +239,10 @@ class ZettlrRenderer {
   }
 
   /**
-   * Set the dark theme of the app based upon the value of val.
-   * @param  {Boolean} val Whether or not we should enable the dark theme.
+   * Toggle the sidebar
    */
-  darkTheme (val) {
-    this._body.darkTheme(val)
-  }
-
-  /**
-    * Toggle the display of the directory pane.
-    * @return {void} No return.
-    */
-  toggleCombiner () {
-    $('#combiner').hide() // bruh
-    this._editor.toggleCombiner() // Need a better name for this thing. Definitely.
-  }
-
-  /**
-    * Toggles display of the attachment pane.
-    */
-  toggleAttachments () {
-    this._attachments.toggle()
+  toggleSidebar () {
+    this._sidebar.toggle()
   }
 
   /**
@@ -334,11 +296,8 @@ class ZettlrRenderer {
     global.store.renewItems(nData)
 
     // Trigger a refresh for all affected places
-    this._attachments.refresh()
+    this._sidebar.refresh()
     this._editor.signalUpdateFileAutocomplete()
-
-    // Finally, synchronize the file descriptors in the editor
-    this._editor.syncFiles() // DEBUG
 
     // NOTE: We have to set the directory last because it will re-execute a
     // potential search, leading to an error if the store, e.g., does not
@@ -371,7 +330,7 @@ class ZettlrRenderer {
       this._preview.refresh()
 
       // Also, the bibliography has likely changed
-      this._attachments.refreshBibliography(this._editor.getValue())
+      this._sidebar.refreshBibliography(this._editor.getValue())
 
       // Finally, synchronize the file descriptors in the editor
       this._editor.syncFiles()
@@ -416,7 +375,7 @@ class ZettlrRenderer {
       // We'll be patching the store, as this
       // will also update the renderer._paths.
       global.store.patch(oldHash, dir)
-      this._attachments.refresh()
+      this._sidebar.refresh()
     }
   }
 
@@ -427,10 +386,11 @@ class ZettlrRenderer {
    * This function is called by ZettlrToolbar. The term gets passed on to
    * ZettlrPreview, but also a force-open event is sent to main, in case there
    * is a file that completely matches the file name.
-   * @param  {String} term The term to be searched for.
-   * @return {void}      Nothing to return.
+   *
+   * @param   {string}   term           The term to be searched for.
+   * @param   {boolean}  sendOpenEvent  If true, sends a "soft" force-open command to main
    */
-  beginSearch (term) {
+  beginSearch (term, sendOpenEvent = true) {
     // If there is a search running, set the interrupt flag
     if (this._currentSearch) this._currentSearch.setInterrupt()
 
@@ -438,10 +398,12 @@ class ZettlrRenderer {
     global.store.commitEndSearch()
 
     // Also send a "soft" force-open command in order to open
-    this._ipc.send('force-open-if-exists', term)
+    if (sendOpenEvent) {
+      this._ipc.send('force-open-if-exists', term)
+    }
 
     // Make sure the file list is visible
-    if (!this._sidebar.isFileListVisible()) this._sidebar.toggleFileList()
+    if (!this._fileManager.isFileListVisible()) this._fileManager.toggleFileList()
 
     // Now perform the actual search. For this we'll create a new search
     // object and pass all necessary data to it.
@@ -487,8 +449,11 @@ class ZettlrRenderer {
     // Also initiate a search to be run accordingly for any files that
     // might reference the file.
     this._toolbar.setSearch(term)
-    this.beginSearch(term)
-    if (forceOpen) this._ipc.send('force-open', term)
+    this.beginSearch(term, !forceOpen)
+
+    if (forceOpen) {
+      this._ipc.send('force-open', term)
+    }
   }
 
   /**
@@ -525,20 +490,27 @@ class ZettlrRenderer {
   updateFileInfo (fileInfo) { this._toolbar.updateFileInfo(fileInfo) }
 
   /**
-   * Opens a new file
-   * @param  {ZettlrFile} f The file to be opened
+   * Updates the table of contents in the sidebar
+   *
+   * @param   {Object}  tableOfContents  The table of contents
    */
-  openFile (f) {
-    let flag = null
+  updateTOC (tableOfContents) { this._sidebar.updateTOC(tableOfContents) }
+
+  /**
+   * Opens a new file
+   * @param  {ZettlrFile} f       The file to be opened
+   * @param {Boolean}     isSync  If this is a synchronization request
+   */
+  openFile (f, isSync = false) {
     if (f.hasOwnProperty('flag')) {
       // We have a flag, so we need to extract the file
-      flag = f.flag
+      // flag = f.flag
       f = f.file
     }
     // We have received a new file. So close the old and open the new
     // Select the file either in the preview list or in the directory tree
     global.store.set('selectedFile', f.hash)
-    this._editor.open(f, flag)
+    this._editor.open(f, isSync)
   }
 
   /**
@@ -546,7 +518,7 @@ class ZettlrRenderer {
    */
   signalActiveFileChanged () {
     // Also, the bibliography has likely changed
-    this._attachments.refreshBibliography(this._editor.getValue())
+    this._sidebar.refreshBibliography(this._editor.getValue())
   }
 
   /**
@@ -592,19 +564,6 @@ class ZettlrRenderer {
   }
 
   /**
-   * Shows a given file in finder/explorer/file browser.
-   * @param {Number} hash The file's hash
-   */
-  showInFinder (hash) {
-    if (!hash) return
-    let file = this.findObject(hash)
-
-    if (!file || file.type !== 'file') return
-
-    shell.showItemInFolder(file.path)
-  }
-
-  /**
    * Sets the current dir pointer to the new.
    * @param {ZettlrDir} newdir The new dir.
    */
@@ -614,7 +573,7 @@ class ZettlrRenderer {
     let hasActiveSearch = global.store.hasActiveSearch()
     this._currentDir = this.findObject(newdir) // Find the dir (hash) in our own paths object
     global.store.selectDirectory(newdir)
-    this._attachments.refresh()
+    this._sidebar.refresh()
     this._editor.signalUpdateFileAutocomplete() // On every directory change
     // "Re-do" the search
     if (hasActiveSearch) this.beginSearch(this._toolbar.getSearchTerm())
@@ -681,10 +640,10 @@ class ZettlrRenderer {
   getStatsView () { return this._stats }
 
   /**
-   * Returns the sidebar component
-   * @return {VueComponent} The sidebar
+   * Returns the file manager component
+   * @return {VueComponent} The file manager
    */
-  getSidebar () { return this._sidebar }
+  getFileManager () { return this._fileManager }
 
   /**
    * Returns a one-dimensional array of all files in the current directory and
@@ -722,7 +681,7 @@ class ZettlrRenderer {
    * update it here.
    * @param {Object} bib A new citeproc bibliography object.
    */
-  setBibliography (bib) { this._attachments.setBibliographyContents(bib) }
+  setBibliography (bib) { this._sidebar.setBibliographyContents(bib) }
 
   /**
    * Simply indicates to main to set the modified flag.

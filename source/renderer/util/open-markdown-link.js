@@ -1,17 +1,28 @@
 const { shell } = require('electron')
 const makeValidUri = require('../../common/util/make-valid-uri')
-const { trans } = require('../../common/lang/i18n.js')
+const hash = require('../../common/util/hash')
+const { trans } = require('../../common/lang/i18n')
+const path = require('path')
 
-module.exports = function (url, editorInstance) {
+const VALID_FILETYPES = require('../../common/data.json').filetypes
+
+/**
+ * Resolves and opens a link safely (= not inside Zettlr, except it's a local MD file)
+ *
+ * @param   {String}      url  The URL to open
+ * @param   {CodeMirror}  cm   The instance to use if it's a heading link
+ */
+module.exports = function (url, cm) {
   if (url[0] === '#') {
     // We should open an internal link
     let re = new RegExp('#\\s[^\\r\\n]*?' +
     url.replace(/-/g, '[^\\r\\n]+?').replace(/^#/, ''), 'i')
     // The new regex should now match the corresponding heading in the document
-    for (let i = 0; i < editorInstance._cm.lineCount(); i++) {
-      let line = editorInstance._cm.getLine(i)
+    for (let i = 0; i < cm.lineCount(); i++) {
+      let line = cm.getLine(i)
       if (re.test(line)) {
-        editorInstance.jtl(i)
+        cm.setCursor({ 'line': i, 'ch': 0 })
+        cm.refresh()
         break
       }
     }
@@ -22,13 +33,25 @@ module.exports = function (url, editorInstance) {
     // we cannot rely on the errors thrown by new URL(), as,
     // e.g., file://./relative.md will not throw an error albeit
     // we need to convert it to absolute.
-    let base = editorInstance._cm.getOption('markdownImageBasePath')
+    let base = cm.getOption('zettlr').markdownImageBasePath
     let validURI = makeValidUri(url, base)
-    shell.openExternal(validURI).catch((err) => {
-      // Notify the user that we couldn't open the URL
-      if (err) {
-        global.notify(trans('system.error.open_url_error', validURI) + ': ' + err.message)
-      }
-    })
+
+    // Now we have a valid link. Finally, let's check if we can open the file
+    // internally, without having to switch to an external program.
+    const localPath = validURI.replace('file://', '')
+    const isValidFile = VALID_FILETYPES.includes(path.extname(localPath))
+    const isLocalMdFile = path.isAbsolute(localPath) && isValidFile
+
+    if (isLocalMdFile) {
+      // Attempt to open internally
+      global.ipc.send('file-get', hash(localPath))
+    } else {
+      shell.openExternal(validURI).catch((err) => {
+        // Notify the user that we couldn't open the URL
+        if (err) {
+          global.notify(trans('system.error.open_url_error', validURI) + ': ' + err.message)
+        }
+      })
+    }
   }
 }
