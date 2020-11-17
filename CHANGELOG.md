@@ -103,7 +103,7 @@
   - archiver `5.0.2`
   - astrocite `0.16.4`
   - chokidar `3.4.3`
-  - citeproc `2.4.45`
+  - citeproc `2.4.48`
   - codemirror `5.58.2`
   - chart.js `2.9.4`
   - copy-webpack-plugin `6.1.0`
@@ -117,6 +117,7 @@
   - fork-ts-checker-webpack-plugin `5.1.0`
   - fsevents `2.1.3`
   - got `11.8.0`
+  - joplin-turndown `4.0.30`
   - md5 `2.3.0`
   - mermaid `8.8.2`
   - mocha `8.2.0`
