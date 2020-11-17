@@ -101,6 +101,7 @@
   - @typescript-eslint/eslint-plugin `4.5.0`
   - @typescript-eslint/parser `4.5.0`
   - archiver `5.0.2`
+  - astrocite `0.16.4`
   - chokidar `3.4.3`
   - citeproc `2.4.45`
   - codemirror `5.58.2`
@@ -191,6 +192,7 @@
 - The menu provider now keeps track of the state of those checkbox menu items which are not controlled externally by a configuration setting, but rather always begin unchecked when the application starts.
 - Moved the typo-logic to their respective places in the renderer.
 - The dictionary provider now listens on the correct channel and is additionally based on `fs.promises` thoroughly.
+- The app bundle now contains all language files; the i18n-modules have been moved.
 
 # 1.7.5
 
