@@ -368,9 +368,10 @@ export default class FSAL extends EventEmitter {
    *
    * @returns {boolean} Whether or not the shutdown was successful
    */
-  public shutdown (): boolean {
+  public async shutdown (): Promise<boolean> {
     global.log.verbose('FSAL shutting down ...')
     this._cache.persist()
+    await this._watchdog.shutdown()
     return true
   }
 

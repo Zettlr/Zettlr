@@ -29,7 +29,7 @@ import { WatchdogEvent } from './types'
 
 export default class FSALWatchdog extends EventEmitter {
   _booting: boolean
-  _process: any
+  _process: chokidar.FSWatcher|null
   _paths: string[]
   _ignoredEvents: WatchdogEvent[]
 
@@ -49,9 +49,10 @@ export default class FSALWatchdog extends EventEmitter {
    * Shuts down the service provider.
    * @return {void} No return.
    */
-  shutdown (): void {
-    if (!this._process) return
-    this._process.close()
+  async shutdown (): Promise<void> {
+    if (this._process !== null) {
+      await this._process.close()
+    }
   }
 
   /**
@@ -73,25 +74,43 @@ export default class FSALWatchdog extends EventEmitter {
     // Create new regexps from the strings
     for (let x of IGNORE_DIR_REGEXP) ignoreDirs.push(new RegExp(x, 'i'))
 
-    let options = {
-      'ignored': ignoreDirs,
-      'persistent': true,
-      'ignoreInitial': true, // Do not track the initial watch as changes
-      'followSymlinks': true, // Follow symlinks TODO need to implement that in the FSAL as well
-      'ignorePermissionErrors': true // In the worst case one has to reboot the software, but so it looks nicer.
+    let options: chokidar.WatchOptions = {
+      ignored: ignoreDirs,
+      persistent: true,
+      ignoreInitial: true, // Do not track the initial watch as changes
+      followSymlinks: true, // Follow symlinks TODO need to implement that in the FSAL as well
+      ignorePermissionErrors: true, // In the worst case one has to reboot the software, but so it looks nicer.
+
+      // Chokidar is an asshole to deal with, and as long as we cannot get fsevents
+      // to be compiled together with Electron, chokidar will *always* fall back
+      // to polling on macOS platforms. This is the bad news. The good news,
+      // however, is, that even Microsoft itself has this problem. So their
+      // approach was simply to only poll the file system every 5 seconds, which
+      // does, in fact, reduce the load on the CPU *big time*. This means that
+      // we simply use this setting and then be done with it for the time being.
+      //
+      // Thank you for reading this far! If you, person from the future, have
+      // the cure for what ails our file watching, please come forward and
+      // propose a Pull Request like a lover proposes to their loved ones!
+      //
+      // cf. on ye misery:
+      // https://github.com/microsoft/vscode/blob/master/src/vs/platform/files/node/watcher/unix/chokidarWatcherService.ts
+      interval: 5000,
+      binaryInterval: 5000
     }
 
-    if (global.config.get('watchdog.activatePolling')) {
+    if (global.config.get('watchdog.activatePolling') as boolean) {
       let threshold: number = global.config.get('watchdog.stabilityThreshold')
-      if (typeof threshold !== 'number') threshold = 1000
-      if (threshold < 0) threshold = 1000
+      if (typeof threshold !== 'number' || threshold < 0) {
+        threshold = 1000
+      }
 
       // From chokidar docs: "[...] in some cases some change events will be
       // emitted while the file is being written." --> hence activate this.
-      // options.awaitWriteFinish = { TODO
-      //   'stabilityThreshold': threshold,
-      //   'pollInterval': 100
-      // }
+      options.awaitWriteFinish = {
+        'stabilityThreshold': threshold,
+        'pollInterval': 100
+      }
 
       global.log.info(`[FSAL Watchdog] Activating file polling with a threshold of ${threshold}ms.`)
     }
@@ -100,6 +119,15 @@ export default class FSALWatchdog extends EventEmitter {
     this._process = chokidar.watch(this._paths, options)
 
     this._process.on('ready', () => {
+      if (this._process === null) {
+        global.log.error('[FSAL Watchdog] The chokidar process fired a ready event but the process itself is gone!')
+        return
+      }
+
+      if (process.platform === 'darwin' && this._process.options.useFsEvents === false) {
+        global.log.warning('[FSAL Watchdog] The chokidar process falls back to polling. This may lead to a high CPU usage.')
+      }
+
       // Add all paths that may have been added to the array while the process
       // was starting up.
       let alreadyWatched = Object.keys(this._process.getWatched())
@@ -154,15 +182,17 @@ export default class FSALWatchdog extends EventEmitter {
    * @param {String} p A new directory or file to be watched
    */
   watch (p: string): this {
-    if (this._paths.includes(p)) return this
+    if (this._paths.includes(p)) {
+      return this
+    }
 
     // Add the path to the watched
     this._paths.push(p)
 
-    if (!this._process && !this.isBooting()) {
+    if (this._process === null && !this.isBooting()) {
       // Boot the watchdog if not done yet.
       this.start()
-    } else if (!this.isBooting()) {
+    } else if (this._process !== null && !this.isBooting()) {
       // If the watchdog is ready, the _process may accept new files and
       // folders. As soon as the watchdog becomes ready, it will automatically
       // add all _paths to watch that have been collected during the startup
@@ -179,10 +209,16 @@ export default class FSALWatchdog extends EventEmitter {
    * @return {ZettlrWatchdog}   This for chainability
    */
   unwatch (p: string): this {
-    if (!this._paths.includes(p)) return this
+    if (!this._paths.includes(p)) {
+      return this
+    }
 
     this._paths.splice(this._paths.indexOf(p), 1)
-    this._process.unwatch(p)
+    if (this._process !== null) {
+      this._process.unwatch(p)
+    } else {
+      global.log.error(`[FSAL Watchdog] Unwatching path ${p}, but the chokidar process is gone. This may indicate a bug.`)
+    }
 
     return this
   }

@@ -194,6 +194,7 @@
 - Moved the typo-logic to their respective places in the renderer.
 - The dictionary provider now listens on the correct channel and is additionally based on `fs.promises` thoroughly.
 - The app bundle now contains all language files; the i18n-modules have been moved.
+- "Fixed" the high CPU usage of Zettlr when having many files and directories open in the app.
 
 # 1.7.5
 

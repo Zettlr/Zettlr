@@ -259,18 +259,11 @@ export default class Zettlr {
     * @return {Promise} Resolves after the providers have shut down
     */
   async shutdown (): Promise<void> {
-    // Close all Quicklook Windows
-    // this._ql.closeAll() TODO: Do we need to close anything here?
-    // Save the config and stats
-    global.config.save()
+    // Save the stats
     this.stats.save()
-    // Perform closing activity in the path.
-    for (let p of this._openPaths) {
-      p.shutdown()
-    }
 
     // Finally shut down the file system
-    this._fsal.shutdown()
+    await this._fsal.shutdown()
   }
 
   /**
