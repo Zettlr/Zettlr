@@ -22,12 +22,20 @@
       // Find the correct citation and replace the span's text content
       // with the correct, rendered citation
       let spanToRender = toRender.find(elem => elem.citation === payload.originalCitation)
+      let contents = payload.renderedCitation
+
+      // If we have a span and the contents are not undefined
       if (spanToRender !== undefined) {
         // Replace HTML content and remove item from array
-        // We need to set the HTML as citeproc may spit out <i>-tags etc.
-        spanToRender.element.innerHTML = payload.renderedCitation
-        // The textMarker's contents have changed, we need to inform CodeMirror
-        spanToRender.textMarker.changed()
+        if (contents !== undefined) {
+          // We need to set the HTML as citeproc may spit out <i>-tags etc.
+          spanToRender.element.innerHTML = contents
+          // The textMarker's contents have changed, we need to inform CodeMirror
+          spanToRender.textMarker.changed()
+        } else {
+          spanToRender.element.classList.add('error')
+        }
+
         toRender.splice(toRender.indexOf(spanToRender), 1)
       }
     }
