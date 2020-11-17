@@ -140,7 +140,7 @@
     "@zettlr/citr": "1.2.1",
     "adm-zip": "^0.4.16",
     "archiver": "^5.0.2",
-    "astrocite": "^0.16.3",
+    "astrocite": "^0.16.4",
     "bcp-47": "^1.0.7",
     "chalk": "^4.1.0",
     "chart.js": "^2.9.4",

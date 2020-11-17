@@ -1391,10 +1391,10 @@ astral-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
   integrity sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
 
-astrocite-bibtex@^0.16.3:
-  version "0.16.3"
-  resolved "https://registry.yarnpkg.com/astrocite-bibtex/-/astrocite-bibtex-0.16.3.tgz#f0586543a9897e4f22bd87cb59adb3e44a906181"
-  integrity sha512-9PPKyxqWEJH+/eAcbWF33Goued2ymoP5/dzbr+PrfUlsXsi+2B4vOT/4sFlS6FLrulsntBoqjeHqF48QyH57hA==
+astrocite-bibtex@^0.16.4:
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/astrocite-bibtex/-/astrocite-bibtex-0.16.4.tgz#e90ba7012cbd41befd633c783691a55e5710e78c"
+  integrity sha512-5u6uNPDzqxYoJL4x2ekGeZbcBPCIHUt3JBKX0nurpOfHzJjP8SMuVO6u/fcUaG92XPoa/oKhUAFHvtwFab49iQ==
   dependencies:
     astrocite-core "^0.16.0"
     csl-json "^0.1.0"
@@ -1406,10 +1406,10 @@ astrocite-core@^0.16.0:
   dependencies:
     csl-json "^0.1.0"
 
-astrocite-eutils@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/astrocite-eutils/-/astrocite-eutils-0.16.0.tgz#b2d7336dcf4965966eb630031f86aabad3219f9e"
-  integrity sha512-Yn8PW20mTKusgdJp6tdjpeS6KGXbhgHoS67aoX/bVBZnLFVQAn3+QIii1zNZXx1i6BQ0exo4nZH8xhnKf/1QRg==
+astrocite-eutils@^0.16.4:
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/astrocite-eutils/-/astrocite-eutils-0.16.4.tgz#4bddb17adf53d548ee745cef09f4a925609cb90d"
+  integrity sha512-TMBxlSQR0Ot9Ai8JG0N5/TFbGJoEP7q6/VhCNuN6Fyg5a7mk58OiAuLg23eXsAdU404OSnpdnVSDMs+m45VcWg==
   dependencies:
     astrocite-core "^0.16.0"
     csl-json "^0.1.0"
@@ -1423,23 +1423,23 @@ astrocite-googlebooks@^0.16.0:
     astrocite-core "^0.16.0"
     csl-json "^0.1.0"
 
-astrocite-ris@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/astrocite-ris/-/astrocite-ris-0.16.0.tgz#a44275a7774b8cee85044fd8b523a60462cc5a89"
-  integrity sha512-astB/rYaYDuHnbBhcRWl64sYRFDui7KwlEsbCw+FXahMRAS+Oj2V7Q+Q846puyvubpVhVl4qJku+V7+eexD8ww==
+astrocite-ris@^0.16.4:
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/astrocite-ris/-/astrocite-ris-0.16.4.tgz#163094b402ef4bc7c63fd3c7f9fb91694996cde8"
+  integrity sha512-O6TjeuJGugxhn07JQSmTl3zTXS67crQr99pXbq+0XYRS+8Z+kYMVJNe6Eam2VZKFl4t6E3jm+0rZN2aUmsSAGA==
   dependencies:
     astrocite-core "^0.16.0"
     csl-json "^0.1.0"
 
-astrocite@^0.16.3:
-  version "0.16.3"
-  resolved "https://registry.yarnpkg.com/astrocite/-/astrocite-0.16.3.tgz#b6934d0ffc228e6f4fe4e9cc3420d4ecf5ca1063"
-  integrity sha512-fjhMmzs8GW/D7G/N7Erb3p0lv4VgHpoTAj0VmWGfT/MQKnx3ggpjqgyBgKrZg1iN0CyLSWdrcVTu/2mDN8yZyw==
+astrocite@^0.16.4:
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/astrocite/-/astrocite-0.16.4.tgz#f49dc376b6a525fb53dcb4a085a1fad4c1b10d7e"
+  integrity sha512-SnBVQWjjyDvzfCJ5U/yc1H2SqibutvnZ5fG0waG5dCUt2w9HMEZbsdZN3iezlUHRW14gL/0wAFURiy1TTfOqgQ==
   dependencies:
-    astrocite-bibtex "^0.16.3"
-    astrocite-eutils "^0.16.0"
+    astrocite-bibtex "^0.16.4"
+    astrocite-eutils "^0.16.4"
     astrocite-googlebooks "^0.16.0"
-    astrocite-ris "^0.16.0"
+    astrocite-ris "^0.16.4"
 
 async-each@^1.0.1:
   version "1.0.3"
