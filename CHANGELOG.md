@@ -83,6 +83,7 @@
 - Fixed a display bug (= the window would reload itself) when there were no tags in the tag manager.
 - Fixed the padding of dialog buttons and input fields also in dark mode.
 - Fix pasting on Windows 10 (thanks to @graphixillusion for fixing).
+- Fixed a sometimes weird behaviour when linking files.
 
 ## Under the Hood
 

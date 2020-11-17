@@ -130,7 +130,8 @@ module.exports = {
         return {
           text: database[key].text,
           displayText: database[key].displayText,
-          className: database[key].className
+          className: database[key].className,
+          id: database[key].id // We need to add the ID property (if applicable)
         }
       })
 
@@ -279,6 +280,14 @@ function hintFunction (cm, opt) {
       let text = completion.displayText
       if (completion.id && text.indexOf(completion.id) >= 0) {
         text = text.replace(completion.id, '').trim()
+
+        // The file database has this id: filename thing which we need to
+        // account for. TODO: Do it like a grown up and retrieve the filename
+        // from somewhere else -- CodeMirror allows for arbitrary objects to be
+        // present here, so possibly this is the more elegant solution.
+        if (text.substr(0, 2) === ': ') {
+          text = text.substr(2)
+        }
       }
       // In case the whole filename consists of the ID, well.
       // Then, have your ID duplicated.
@@ -298,11 +307,14 @@ function hintFunction (cm, opt) {
         cur.ch += end.length
         cm.setCursor(cur)
       }
-      if (linkPref === 'always' || (linkPref === 'withID' && completion.id)) {
+
+      if (linkEndMissing) {
+        cm.replaceSelection(end) // Add the link ending
+      }
+
+      if (linkPref === 'always' || (linkPref === 'withID' && completion.id !== '')) {
         // We need to add the text after the link.
         cm.replaceSelection(prefix + text)
-      } else if (linkEndMissing) {
-        cm.replaceSelection(end) // Add the link ending
       }
     } else if (currentDatabase === availableDatabases['syntaxHighlighting']) {
       // In the case of an accepted syntax highlighting, we can assume the user

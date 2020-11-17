@@ -706,19 +706,22 @@ class ZettlrEditor {
     for (let file of tree) {
       let fname = path.basename(file.name, path.extname(file.name))
       let displayText = fname // Fallback: Only filename
-      if (global.config.get('display.useFirstHeadings') && file.firstHeading) {
-        // The user wants to use first headings as titles,
-        // so use them for autocomplete as well
-        displayText = fname + ': ' + file.firstHeading
-      } else if (file.frontmatter && file.frontmatter.title) {
+      if (file.frontmatter && file.frontmatter.title) {
         // (Else) if there is a frontmatter, use that title
-        displayText = fname + ': ' + file.frontmatter.title
+        displayText = file.frontmatter.title
+      } else if (global.config.get('display.useFirstHeadings') && file.firstHeading) {
+        // The user wants to use first headings as fallbacks
+        displayText = file.firstHeading
+      }
+
+      if (file.id !== '') {
+        displayText = `${file.id}: ${displayText}`
       }
 
       fileDatabase[fname] = {
         'text': file.id || fname, // Use the ID, if given, or the filename
         'displayText': displayText,
-        'id': file.id || false
+        'id': file.id
       }
     }
 
@@ -733,11 +736,22 @@ class ZettlrEditor {
         let file = candidate.fileDescriptor
         let fname = path.basename(file.name, path.extname(file.name))
         let displayText = fname // Always display the filename
-        if (file.frontmatter && file.frontmatter.title) displayText += ' ' + file.frontmatter.title
-        fileDatabase[candidate.fileDescriptor.name] = {
+        if (file.frontmatter && file.frontmatter.title) {
+          // (Else) if there is a frontmatter, use that title
+          displayText = file.frontmatter.title
+        } else if (global.config.get('display.useFirstHeadings') && file.firstHeading) {
+          // The user wants to use first headings as fallbacks
+          displayText = file.firstHeading
+        }
+
+        if (file.id !== '') {
+          displayText = `${file.id}: ${displayText}`
+        }
+
+        fileDatabase[file.name] = {
           'text': file.id || fname, // Use the ID, if given, or the filename
           'displayText': displayText,
-          'id': file.id || false,
+          'id': file.id,
           'className': 'cm-hint-colour',
           'matches': candidate.matches
         }
