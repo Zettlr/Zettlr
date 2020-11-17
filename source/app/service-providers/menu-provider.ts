@@ -22,7 +22,7 @@ import {
 } from 'electron'
 
 import path from 'path'
-import { trans } from '../../common/lang/i18n.js'
+import { trans } from '../../common/i18n.js'
 import broadcastIPCMessage from '../../common/util/broadcast-ipc-message'
 
 // Types from the global.d.ts of the window-register module

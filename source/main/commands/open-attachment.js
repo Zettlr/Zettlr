@@ -17,7 +17,7 @@
  */
 
 const ZettlrCommand = require('./zettlr-command')
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
 const got = require('got')
 const { shell } = require('electron')
 const pdfSorter = require('../../common/util/sort-by-pdf')

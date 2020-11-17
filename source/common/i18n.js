@@ -16,8 +16,8 @@ const fs = require('fs')
 const path = require('path')
 const bcp47 = require('bcp-47')
 const { app } = require('electron')
-const isDir = require('../util/is-dir')
-const isFile = require('../util/is-file')
+const isDir = require('./util/is-dir')
+const isFile = require('./util/is-file')
 
 /**
  * Status mode that describes a returned language metadata object as an exact
@@ -145,7 +145,7 @@ function getLanguageFile (query) {
   let ret = {
     'tag': 'en-US',
     'status': FALLBACK,
-    'path': path.join(__dirname, '/en-US.json')
+    'path': path.join(__dirname, '/lang/en-US.json')
   }
 
   let lang = bcp47.parse(query)
@@ -233,7 +233,7 @@ function findLangCandidates (lang, candidates) {
  * @param  {Array}  [paths=[ __dirname,    path.join(app.getPath('userData'] Paths to be searched for
  * @return {Array}          An array containing the language metadata (keys = bcp-47 tags)
  */
-function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/lang'), __dirname ]) {
+function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/lang'), path.join(__dirname, '/lang') ]) {
   let metadata = []
 
   // First get all translations available

@@ -1,4 +1,4 @@
-const { trans } = require('../../../common/lang/i18n')
+const { trans } = require('../../../common/i18n')
 const { ipcRenderer, shell } = require('electron')
 const generateFileName = require('../../../common/util/generate-filename')
 

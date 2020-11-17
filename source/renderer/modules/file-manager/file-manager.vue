@@ -152,7 +152,7 @@
 // ES6 CommonJS-modules in a exports/require-environment.
 const tippy = require('tippy.js').default
 const findObject = require('../../../common/util/find-object')
-const { trans } = require('../../../common/lang/i18n')
+const { trans } = require('../../../common/i18n')
 const TreeItem = require('./tree-item.vue').default
 const FileItem = require('./file-item.vue').default
 const { RecycleScroller } = require('vue-virtual-scroller')

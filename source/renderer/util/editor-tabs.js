@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
 const { ipcRenderer } = require('electron')
 const path = require('path')
 const tippy = require('tippy.js').default

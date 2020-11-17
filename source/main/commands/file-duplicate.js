@@ -13,7 +13,7 @@
  */
 
 const ZettlrCommand = require('./zettlr-command')
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
 const hash = require('../../common/util/hash')
 const ALLOWED_FILETYPES = require('../../common/data.json').filetypes
 const path = require('path')

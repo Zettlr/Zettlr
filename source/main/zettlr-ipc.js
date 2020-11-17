@@ -16,7 +16,7 @@
  * END HEADER
  */
 
-const { trans, getTranslationMetadata } = require('../common/lang/i18n.js')
+const { trans, getTranslationMetadata } = require('../common/i18n.js')
 const ipc = require('electron').ipcMain
 const { BrowserWindow } = require('electron') // Needed for close and maximise commands
 

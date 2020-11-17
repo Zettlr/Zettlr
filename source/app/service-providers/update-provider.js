@@ -22,7 +22,7 @@ const showdown = require('showdown')
 
 const { ipcMain, app, shell } = require('electron')
 
-const { trans } = require('../../common/lang/i18n.js')
+const { trans } = require('../../common/i18n.js')
 
 const REPO_URL = require('../../common/data.json').repo_url
 const CUR_VER = require('electron').app.getVersion()

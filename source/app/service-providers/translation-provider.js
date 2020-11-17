@@ -17,7 +17,7 @@ const fs = require('fs')
 const { promisify } = require('util')
 const { app, ipcMain } = require('electron')
 const got = require('got')
-const { getTranslationMetadata, trans } = require('../../common/lang/i18n.js')
+const { getTranslationMetadata, trans } = require('../../common/i18n.js')
 const moment = require('moment')
 
 // We'll use the asynchronous version for convenience

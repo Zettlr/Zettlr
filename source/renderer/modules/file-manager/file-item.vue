@@ -105,7 +105,7 @@
   const TagList = require('./tag-list.vue').default
   const Sorter = require('./sorter.vue').default
   const formatDate = require('../../../common/util/format-date.js')
-  const { trans } = require('../../../common/lang/i18n.js')
+  const { trans } = require('../../../common/i18n.js')
   const fileContextMenu = require('./file-item-context.js')
   const dirContextMenu = require('./dir-item-context.js')
 

@@ -15,7 +15,7 @@
 const tippy = require('tippy.js').default
 const localiseNumber = require('../common/util/localise-number')
 const renderTemplate = require('./util/render-template')
-const { trans } = require('../common/lang/i18n')
+const { trans } = require('../common/i18n')
 
 const { ipcRenderer } = require('electron')
 

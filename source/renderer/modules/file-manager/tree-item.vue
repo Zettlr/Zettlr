@@ -133,7 +133,7 @@
 <script>
 // Tree View item component
 const findObject = require('../../../common/util/find-object.js')
-const { trans } = require('../../../common/lang/i18n')
+const { trans } = require('../../../common/i18n')
 const Sorter = require('./sorter.vue').default
 const fileContextMenu = require('./file-item-context.js')
 const dirContextMenu = require('./dir-item-context.js')

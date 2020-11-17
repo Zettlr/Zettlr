@@ -14,7 +14,7 @@
 * END HEADER
 */
 
-const { trans } = require('../common/lang/i18n.js')
+const { trans } = require('../common/i18n.js')
 const { clipboard } = require('electron')
 const ipc = require('electron').ipcRenderer
 

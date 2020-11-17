@@ -28,7 +28,7 @@ const safeAssign = require('../../common/util/safe-assign')
 const isDir = require('../../common/util/is-dir')
 const isFile = require('../../common/util/is-file')
 const isDictAvailable = require('../../common/util/is-dict-available')
-const { getLanguageFile } = require('../../common/lang/i18n')
+const { getLanguageFile } = require('../../common/i18n')
 const COMMON_DATA = require('../../common/data.json')
 const ZETTLR_VERSION = app.getVersion()
 

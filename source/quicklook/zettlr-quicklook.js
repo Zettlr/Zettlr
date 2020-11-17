@@ -14,7 +14,7 @@
  */
 
 const makeSearchRegEx = require('../common/util/make-search-regex')
-const { trans } = require('../common/lang/i18n')
+const { trans } = require('../common/i18n')
 const MarkdownEditor = require('../renderer/modules/markdown-editor')
 
 const CodeMirror = require('codemirror')

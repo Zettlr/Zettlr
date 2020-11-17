@@ -16,7 +16,7 @@ const fs = require('fs').promises
 const path = require('path')
 const { exec } = require('child_process')
 const commandExists = require('command-exists')
-const { trans } = require('../../../common/lang/i18n')
+const { trans } = require('../../../common/i18n')
 const isFile = require('../../../common/util/is-file')
 
 module.exports = async function (options) {

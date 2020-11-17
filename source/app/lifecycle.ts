@@ -20,7 +20,7 @@ import environmentCheck from './util/environment-check'
 
 // Utility functions
 import resolveTimespanMs from './util/resolve-timespan-ms'
-import { loadI18nMain } from '../common/lang/i18n'
+import { loadI18nMain } from '../common/i18n'
 
 // Developer tools
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'

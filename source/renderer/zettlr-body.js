@@ -38,7 +38,7 @@ const CustomCSS = require('./dialog/custom-css.js')
 const ErrorDialog = require('./dialog/error-dialog.js')
 const DevClipboard = require('./dialog/clipboard.js')
 
-const { trans } = require('../common/lang/i18n.js')
+const { trans } = require('../common/i18n.js')
 const localiseNumber = require('../common/util/localise-number')
 const generateFileName = require('../common/util/generate-filename')
 const generateTable = require('../common/util/generate-markdown-table')

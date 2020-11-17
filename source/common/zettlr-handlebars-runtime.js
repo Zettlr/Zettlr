@@ -16,7 +16,7 @@
 // Based on https://github.com/pcardune/handlebars-loader/issues/110#issuecomment-401445723
 
 const Handlebars = require('handlebars/runtime')
-const { trans } = require('./lang/i18n')
+const { trans } = require('./i18n')
 
 /**
  * Translates strings within the templates

@@ -17,7 +17,7 @@
 const tippy = require('tippy.js').default
 const EventEmitter = require('events')
 const { clipboard, ipcRenderer } = require('electron')
-const { trans } = require('../../common/lang/i18n.js')
+const { trans } = require('../../common/i18n.js')
 require('jquery-ui/ui/unique-id')
 require('jquery-ui/ui/widget')
 require('jquery-ui/ui/widgets/tabs')

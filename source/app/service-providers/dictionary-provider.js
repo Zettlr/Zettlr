@@ -19,7 +19,7 @@ const path = require('path')
 const fs = require('fs').promises
 
 const { ipcMain, app } = require('electron')
-const { getDictionaryFile } = require('../../common/lang/i18n')
+const { getDictionaryFile } = require('../../common/i18n')
 const broadcastIpcMessage = require('../../common/util/broadcast-ipc-message')
 
 /**

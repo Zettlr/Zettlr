@@ -11,6 +11,7 @@ module.exports = {
       patterns: [
         { from: 'source/main/assets/tutorial', to: 'tutorial' },
         { from: 'source/main/assets/dict', to: 'dict' },
+        { from: 'source/common/lang', to: 'lang' },
         { from: 'source/app/service-providers/assets/csl-locales', to: 'assets/csl-locales' },
         { from: 'source/app/service-providers/assets/csl-styles', to: 'assets/csl-styles' }
       ]

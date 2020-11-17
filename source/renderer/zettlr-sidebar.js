@@ -13,7 +13,7 @@
  */
 const renderTemplate = require('./util/render-template')
 
-const { trans } = require('../common/lang/i18n.js')
+const { trans } = require('../common/i18n.js')
 const clarityIcons = require('@clr/icons').ClarityIcons
 const Citr = require('@zettlr/citr')
 
