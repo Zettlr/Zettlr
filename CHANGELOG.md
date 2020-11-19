@@ -84,6 +84,7 @@
 - Fixed the padding of dialog buttons and input fields also in dark mode.
 - Fix pasting on Windows 10 (thanks to @graphixillusion for fixing).
 - Fixed a sometimes weird behaviour when linking files.
+- Following Zettelkasten-links should now be way faster.
 
 ## Under the Hood
 
@@ -196,6 +197,9 @@
 - The dictionary provider now listens on the correct channel and is additionally based on `fs.promises` thoroughly.
 - The app bundle now contains all language files; the i18n-modules have been moved.
 - "Fixed" the high CPU usage of Zettlr when having many files and directories open in the app.
+- Fixed the force-open command. It now only searches for an exact filename-match, if the given argument (the contents of the link) do not look like an ID. This way we save at least one full file-tree search, which improves the speed notably especially with large setups.
+- Re-ordered the filetypes array so that expensive functions will attempt to match those extensions first which are more likely to occur.
+- Moved the ID regular expression generation into the corresponding file.
 
 # 1.7.5
 

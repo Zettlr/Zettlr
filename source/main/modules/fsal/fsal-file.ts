@@ -18,6 +18,7 @@ import hash from '../../../common/util/hash'
 import searchFile from './search-file'
 import countWords from '../../../common/util/count-words'
 import extractYamlFrontmatter from '../../../common/util/extract-yaml-frontmatter'
+import { getIDRE } from '../../../common/regular-expressions'
 import { shell } from 'electron'
 import safeAssign from '../../../common/util/safe-assign'
 // Import the interfaces that we need
@@ -75,13 +76,8 @@ async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> 
 }
 
 function parseFileContents (file: MDFileDescriptor, content: string): void {
-  // Now parse that thing
-  let idStr = global.config.get('zkn.idRE') as string
-  // Make sure the ID definitely has at least one
-  // capturing group to not produce errors.
-  if (!(/\(.+?\)/.test(idStr))) idStr = `(${idStr})`
-
-  let idRE = new RegExp(idStr, 'g')
+  // Parse the file
+  let idRE = getIDRE()
   let linkStart = global.config.get('zkn.linkStart')
   let linkEnd = global.config.get('zkn.linkEnd')
   // To detect tags in accordance with what the engine will render as tags,

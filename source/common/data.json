@@ -1,10 +1,10 @@
 {
     "filetypes": [
-        ".txt",
         ".md",
+        ".rmd",
         ".markdown",
-        ".tex",
-        ".rmd"
+        ".txt",
+        ".tex"
     ],
     "ignoreDirs": [
         "^\\.",
