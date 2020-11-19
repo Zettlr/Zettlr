@@ -35,4 +35,6 @@ module.exports = function (argv = process.argv) {
   })
 
   global.filesToOpen = global.filesToOpen.concat(filesToOpen)
+  // TODO: Side effects are not good!
+  return filesToOpen
 }
