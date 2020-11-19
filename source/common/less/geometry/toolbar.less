@@ -10,13 +10,9 @@
     display: flex;
     align-items: center;
 
-    // We don't have window chrome, so we need the toolbar to be draggable.
-    -webkit-app-region: drag;
-
     & > .searchbar, & > .file-info, & > .button, & > svg:not(#search-progress-indicator) {
-      -webkit-app-region: no-drag;
-
-      &:focus { outline: 0; }
+        // Remove the outline everywhere
+        &:focus { outline: 0; }
     }
 
 
@@ -119,12 +115,30 @@ body.show-menubar #toolbar {
     top: @menubar-height;
 }
 
+// On Windows + Linux, the toolbar should never be draggable, because we always
+// either have the native title bar _or_ the draggable menubar. On macOS,
+// however, if there is no menubar, we need the toolbar to be draggable.
+body.darwin:not(.show-menubar) #toolbar {
+    -webkit-app-region: drag;
+
+    & > .searchbar,
+    & > .file-info,
+    & > .button,
+    & > svg:not(#search-progress-indicator),
+    #toolbar-misc-buttons {
+      -webkit-app-region: no-drag;
+    }
+}
+
 // For macOS, we need to add some more margin when the native appearance is used
 body.darwin:not(.show-window-controls) #toolbar {
   padding-left: 70px;
 }
 
 // For Windows and Linux the same, only on the other side
+// NOTE: We do not check for :not(.darwin), because if the native appearance on
+// macOS is not being used, the Windows window controls will be displayed, so
+// the same padding applies to all platforms in this situation.
 body.show-window-controls:not(.show-menubar) #toolbar {
   padding-right: 140px; // Windows window controls are ... huge.
 }
