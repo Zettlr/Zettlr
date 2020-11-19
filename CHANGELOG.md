@@ -85,6 +85,7 @@
 - Fix pasting on Windows 10 (thanks to @graphixillusion for fixing).
 - Fixed a sometimes weird behaviour when linking files.
 - Following Zettelkasten-links should now be way faster.
+- Fixed an issue with number-only frontmatter keywords.
 
 ## Under the Hood
 

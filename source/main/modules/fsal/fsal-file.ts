@@ -134,7 +134,11 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
 
   // Merge possible keywords from the frontmatter
   if (file.frontmatter?.keywords) {
-    file.tags = file.tags.concat(file.frontmatter.keywords)
+    // If the user decides to use just numbers for the keywords (e.g. #1997),
+    // the YAML parser will obviously cast those to numbers, but we don't want
+    // this, so forcefully cast everything to string (see issue #1433).
+    const sanitizedKeywords = file.frontmatter.keywords.map((tag: any) => String(tag).toString())
+    file.tags = file.tags.concat(sanitizedKeywords)
   }
 
   // Remove duplicates
