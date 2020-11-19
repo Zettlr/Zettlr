@@ -98,8 +98,10 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   // Extract a potential YAML frontmatter
   file.frontmatter = null // Reset first
   let frontmatter = extractYamlFrontmatter(content)
-  if (frontmatter) {
-    if (file.frontmatter === null) file.frontmatter = {}
+  if (frontmatter !== null) {
+    if (file.frontmatter === null) {
+      file.frontmatter = {}
+    }
     for (let [ key, value ] of Object.entries(frontmatter)) {
       if (FRONTMATTER_VARS.includes(key)) {
         file.frontmatter[key] = value
@@ -133,7 +135,14 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   }
 
   // Merge possible keywords from the frontmatter
-  if (file.frontmatter?.keywords) {
+  if (file.frontmatter?.keywords != null) {
+    // The user can just write "keywords: something", in which case it won't be
+    // an array, but a simple string (or even a number <.<). I am beginning to
+    // understand why programmers despise the YAML-format.
+    if (!Array.isArray(file.frontmatter.keywords)) {
+      file.frontmatter.keywords = [file.frontmatter.keywords]
+    }
+
     // If the user decides to use just numbers for the keywords (e.g. #1997),
     // the YAML parser will obviously cast those to numbers, but we don't want
     // this, so forcefully cast everything to string (see issue #1433).
