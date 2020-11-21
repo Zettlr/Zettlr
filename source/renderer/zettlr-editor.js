@@ -834,6 +834,15 @@ class ZettlrEditor {
   }
 
   /**
+   * Pass-through function to trigger a copy-to-html on the editor
+   *
+   * @deprecated
+   */
+  copyAsHTML () {
+    this._editor.copyAsHTML()
+  }
+
+  /**
    * This method can be used to insert some text at the current cursor position.
    * ATTENTION: It WILL overwrite any given selection!
    * @param  {String} text The text to insert
@@ -890,14 +899,6 @@ class ZettlrEditor {
    */
   getSelections () {
     return this._getActiveFile().cmDoc.getSelections()
-  }
-
-  /**
-   * Get the CodeMirror instance
-   * @return {CodeMirror} The editor instance
-   */
-  getEditor () {
-    return this._cm
   }
 }
 
