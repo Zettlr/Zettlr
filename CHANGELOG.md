@@ -87,6 +87,7 @@
 - Following Zettelkasten-links should now be way faster.
 - Fixed an issue with number-only frontmatter keywords.
 - Clean up the application menus on Linux and Windows: Now all preferences live under a shared menu item.
+- Prevent multiple cursors while following internal links.
 
 ## Under the Hood
 
