@@ -88,6 +88,7 @@
 - Fixed an issue with number-only frontmatter keywords.
 - Clean up the application menus on Linux and Windows: Now all preferences live under a shared menu item.
 - Prevent multiple cursors while following internal links.
+- Fix display glitches on the sorters.
 
 ## Under the Hood
 
