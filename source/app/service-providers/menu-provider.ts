@@ -290,6 +290,11 @@ export default class MenuProvider {
     // Methods are specialised commands that need to be hardcoded here.
     if ((menutpl as any).zettlrRole !== undefined) {
       switch ((menutpl as any).zettlrRole) {
+        case 'minimize':
+          menu.click = function (menuitem, focusedWindow) {
+            focusedWindow?.minimize()
+          }
+          break
         case 'reloadWindow':
           menu.click = function (menuitem, focusedWindow) {
             if (focusedWindow != null) focusedWindow.reload()

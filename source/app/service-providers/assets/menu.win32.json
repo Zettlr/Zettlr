@@ -301,7 +301,7 @@
       {
         "label": "menu.win_minimize",
         "accelerator": "Ctrl+M",
-        "role": "minimize"
+        "zettlrRole": "minimize"
       },
       {
         "label": "menu.win_close",
