@@ -11,7 +11,7 @@ module.exports = (cm) => {
 
 function renderElements (cm) {
   const render = cm.getOption('zettlr').render
-  // this._cm.execCommand('markdownRenderMermaid') // Render mermaid codeblocks TODO
+  cm.execCommand('markdownRenderMermaid')
   if (render.links) cm.execCommand('markdownRenderLinks')
   if (render.images) cm.execCommand('markdownRenderImages')
   if (render.math) cm.execCommand('markdownRenderMath')
