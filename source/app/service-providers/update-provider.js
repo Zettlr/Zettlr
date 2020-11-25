@@ -194,7 +194,7 @@ module.exports = class UpdateProvider {
             return !/\.dmg$|\.exe$/.test(asset.name)
         }
       }),
-      // TODO: We can check the checksum after download to make it extra secure!
+      // We can check the checksum after download to make it extra secure!
       'sha256Url': response.assets.find((asset) => {
         return asset.name === 'SHA256SUMS.txt'
       })

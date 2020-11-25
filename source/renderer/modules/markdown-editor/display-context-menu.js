@@ -215,7 +215,6 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
       })
     }
 
-    // TODO: Re-implement
     typoPrefix.push({ type: 'separator' })
     // Always add an option to add a word to the user dictionary
     typoPrefix.push({

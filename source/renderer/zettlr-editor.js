@@ -150,21 +150,6 @@ class ZettlrEditor {
     // Set up the helper classes with the CM instance
     this._searcher.setInstance(this._editor.codeMirror)
 
-    // TODO this._cm.on('mousedown', (cm, event) => {
-    //   // Ignore click events if they attempt to perform a special action
-    //   let target = event.target
-    //   let specialClasses = [ 'cma', 'cm-zkn-tag', 'cm-zkn-link' ]
-    //   let macMeta = process.platform === 'darwin' && event.metaKey
-    //   let otherCtrl = process.platform !== 'darwin' && event.ctrlKey
-    //   let isSpecial = false
-    //   for (let c of specialClasses) {
-    //     if (target.classList.contains(c)) isSpecial = true
-    //   }
-    //   let isFootnote = target.classList.contains('cm-link') && target.innerText.indexOf('^') === 0
-
-    //   if ((isSpecial || isFootnote) && (macMeta || otherCtrl)) event.codemirrorIgnore = true
-    // })
-
     // Finally create the annotateScrollbar object to be able to annotate the
     // scrollbar with search results.
     this._scrollbarAnnotations = this._editor.codeMirror.annotateScrollbar('sb-annotation')

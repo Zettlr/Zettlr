@@ -41,6 +41,7 @@ var availableDatabases = {
     { text: 'less', displayText: 'LESS' },
     { text: 'html', displayText: 'HTML' },
     { text: 'markdown', displayText: 'Markdown' },
+    { text: 'mermaid', displayText: 'Mermaid' },
     { text: 'xml', displayText: 'XML' },
     { text: 'tex', displayText: 'TeX' },
     { text: 'php', displayText: 'PHP' },
