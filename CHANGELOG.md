@@ -1,3 +1,13 @@
+# 1.8.1
+
+## GUI and Functionality
+
+- Fixed the non-working reveal.js exports.
+
+## Under the Hood
+
+(nothing here)
+
 # 1.8.0
 
 ## Breaking Changes
