@@ -126,7 +126,9 @@
         // Enable on-click closing of rendered Math elements.
         elem.onclick = (e) => { textMarker.clear() }
 
-        require('katex').render(myMarker.eq, elem, { throwOnError: false })
+        const katex = require('katex')
+        require('katex/dist/contrib/mhchem.js') // modify katex module
+        katex.render(myMarker.eq, elem, { throwOnError: false })
 
         // Now the marker has obviously changed
         textMarker.changed()
