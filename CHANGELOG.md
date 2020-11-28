@@ -5,6 +5,7 @@
 - Fixed the non-working reveal.js exports.
 - Add support for chemical formulae in KaTeX (thanks to @likeadoc for implementing).
 - Design fix for the color swatches in the tag manager.
+- Fix preferences not opening on the corresponding menu item (Windows/Linux).
 
 ## Under the Hood
 
