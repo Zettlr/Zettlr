@@ -21,6 +21,7 @@
     "source/**/*"
   ],
   "files": [
+    "source/renderer/renderer.d.ts",
     "source/global.d.ts"
   ]
 }

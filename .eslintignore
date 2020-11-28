@@ -7,6 +7,3 @@ source/renderer/assets/vue
 source/common/assets/handlebars
 # Ignore the compiled templates
 source/common/assets/tpl
-# Ignore jQuery UI and the copied indentlist-addon
-source/common/assets/js/jquery-ui.min.js
-source/renderer/assets/codemirror/indentlist.js
