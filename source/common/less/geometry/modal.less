@@ -301,6 +301,7 @@
     div#prefs-taglist {
       div {
         display: flex;
+        align-items: stretch;
 
         input, button {
           flex: 5;
@@ -308,7 +309,22 @@
           margin: 0.5em;
         }
 
-        input[type="color"] { flex: 1; }
+        // The color swatches need to be custom styled in that
+        // they should not be affected by any padding -- the more
+        // color users see, the better. TODO: They're not aligned
+        // perfectly vertically right now.
+        input[type="color"] {
+          flex: 1;
+          padding: 0;
+
+          &::-webkit-color-swatch-wrapper {
+            padding: 0;
+          }
+
+          &::-webkit-color-swatch {
+            border: none;
+          }
+        }
         button { flex: 1; }
       }
     }
