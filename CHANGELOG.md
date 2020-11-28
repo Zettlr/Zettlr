@@ -6,6 +6,7 @@
 - Add support for chemical formulae in KaTeX (thanks to @likeadoc for implementing).
 - Design fix for the color swatches in the tag manager.
 - Fix preferences not opening on the corresponding menu item (Windows/Linux).
+- Fix the parent menu not closing on a click in the child menu (submenu).
 
 ## Under the Hood
 
