@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Fixed the non-working reveal.js exports.
+- Add support for chemical formulae in KaTeX (thanks to @likeadoc for implementing).
 
 ## Under the Hood
 
