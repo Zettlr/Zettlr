@@ -269,7 +269,7 @@ function getTranslationMetadata (paths = [ path.join(app.getPath('userData'), '/
  * @param  {Array} [paths=[]] An array of paths to search for. Optional.
  * @return {Array}       An array containing metadata for all found files.
  */
-function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), __dirname ]) {
+function enumLangFiles (paths = [ path.join(app.getPath('userData'), '/lang'), path.join(__dirname, '/lang') ]) {
   // Now go through all search paths and enumerate all available files of interest
   let candidates = []
   for (let p of paths) {
