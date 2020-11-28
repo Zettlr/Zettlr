@@ -178,45 +178,6 @@ export default class Zettlr {
           break
       }
     })
-
-    process.nextTick(() => {
-      let start = Date.now()
-      // Read all paths into the app
-      // TODO: This function is only called once: Here. So we can trash a lot
-      // of the logic here. Furthermore, process.nextTick() in a constructor?
-      // Seriously?
-      this.refreshPaths().then(() => {
-        // If there are any, open argv-files
-        this.handleAddRoots(global.filesToOpen).then(() => {
-          // Reset the global so that no old paths are re-added
-          global.filesToOpen = []
-          // Verify the integrity of the targets after all paths have been loaded
-          global.targets.verify()
-          this.isBooting = false // Now we're done booting
-          let duration = Date.now() - start
-          duration /= 1000 // Convert to seconds
-          global.log.info(`Loaded all roots in ${duration} seconds`)
-
-          // Also, we need to (re)open all files in tabs
-          this._fsal.openFiles = global.config.get('openFiles')
-
-          // Now after all paths have been loaded, we are ready to load the
-          // main window to get this party started!
-          this.openWindow()
-
-          // Finally, initiate a first check for updates
-          global.updates.check()
-        }).catch((err) => {
-          console.error(err)
-          global.log.error('Could not add additional roots!', err.message)
-          this.isBooting = false // Now we're done booting
-        })
-      }).catch((err) => {
-        console.error(err)
-        global.log.error('Could not load paths!', err.message)
-        this.isBooting = false // Now we're done booting
-      })
-    })
   }
 
   /**
@@ -252,6 +213,61 @@ export default class Zettlr {
           }).catch(e => global.log.error(e.message, e))
         }).catch(e => global.log.error(e.message, e)) // END ask replace file
     }
+  }
+
+  /**
+   * Initiate the main process logic after boot.
+   */
+  async init (): Promise<void> {
+    let start = Date.now()
+    // First: Initially load all paths
+    for (let p of global.config.get('openPaths') as string[]) {
+      try {
+        await this._fsal.loadPath(p)
+      } catch (e) {
+        console.error(e)
+        global.log.info(`FSAL Removing path ${p}, as it does no longer exist.`)
+        // global.config.removePath(p) TODO
+      }
+    }
+
+    // Set the pointers either to null or last opened dir/file
+    let lastDir = null
+    let lastFile = null
+
+    try {
+      lastDir = this._fsal.findDir(global.config.get('lastDir'))
+      lastFile = this._fsal.findFile(global.config.get('lastFile'))
+    } catch (e) {
+      console.log('Error on finding last dir or file', e)
+    }
+
+    this.setCurrentDir(lastDir)
+    this.setCurrentFile((lastFile !== null) ? lastFile.hash : null)
+    if (lastFile !== null) {
+      global.recentDocs.add(this._fsal.getMetadataFor(lastFile))
+    }
+    // Second: handleAddRoots with global.filesToOpen
+    await this.handleAddRoots(global.filesToOpen) // TODO
+
+    // Reset the global so that no old paths are re-added
+    global.filesToOpen = []
+    // Verify the integrity of the targets after all paths have been loaded
+    global.targets.verify()
+    this.isBooting = false // Now we're done booting
+    let duration = Date.now() - start
+    duration /= 1000 // Convert to seconds
+    global.log.info(`Loaded all roots in ${duration} seconds`)
+
+    // Also, we need to (re)open all files in tabs
+    this._fsal.openFiles = global.config.get('openFiles')
+
+    // Now after all paths have been loaded, we are ready to load the
+    // main window to get this party started!
+    this.openWindow()
+
+    // Finally, initiate a first check for updates
+    global.updates.check()
   }
 
   /**
@@ -456,37 +472,6 @@ export default class Zettlr {
   //   if (dir === this.getCurrentDir()) this.setCurrentDir(null) // Remove current directory
   //   return console.log(`Marking directory ${dir.name} as dead!`)
   // }
-
-  /**
-    * Reloads the complete directory tree.
-    * @return {Promise} Resolved after the paths have been re-read
-    */
-  async refreshPaths (): Promise<void> {
-    // Reload all opened files, garbage collect will get the old ones.
-    this._fsal.unloadAll()
-    for (let p of global.config.get('openPaths') as string[]) {
-      try {
-        await this._fsal.loadPath(p)
-      } catch (e) {
-        console.error(e)
-        global.log.info(`FSAL Removing path ${p}, as it does no longer exist.`)
-        // global.config.removePath(p)
-      }
-    }
-
-    // Set the pointers either to null or last opened dir/file
-    let lastDir = null
-    let lastFile = null
-    try {
-      lastDir = this._fsal.findDir(global.config.get('lastDir'))
-      lastFile = this._fsal.findFile(global.config.get('lastFile'))
-    } catch (e) {
-      console.log('Error on finding last dir or file', e)
-    }
-    this.setCurrentDir(lastDir)
-    this.setCurrentFile((lastFile !== null) ? lastFile.hash : null)
-    if (lastFile !== null) global.recentDocs.add(this._fsal.getMetadataFor(lastFile))
-  }
 
   findFile (arg: any): any { return this._fsal.findFile(arg) }
   findDir (arg: any): any { return this._fsal.findDir(arg) }
