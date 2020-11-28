@@ -10,7 +10,7 @@
 
 ## Under the Hood
 
-(nothing here)
+- The release tags will now be created with a prefix "v" again. This should fix various issues around the assumption of the "v" being the correct GitHub tag.
 
 # 1.8.0
 
