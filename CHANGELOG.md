@@ -14,6 +14,7 @@
 - The release tags will now be created with a prefix "v" again. This should fix various issues around the assumption of the "v" being the correct GitHub tag.
 - Fix all linter errors. PRs should now receive a nice green checkmark instead of the error symbol (unless there are new errors in the PR itself).
 - Remove asynchronous initialisation logic from the main object's constructor.
+- Added a footnote testing file.
 
 # 1.8.0
 
