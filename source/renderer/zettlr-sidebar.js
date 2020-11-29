@@ -332,7 +332,7 @@ module.exports = class ZettlrSidebar {
     const entries = this.tocContainer.querySelectorAll('.toc-entry')
     for (let entry of entries) {
       entry.addEventListener('click', (e) => {
-        const targetLine = entry.dataset.line
+        const targetLine = parseInt(entry.dataset.line, 10)
         this._renderer.getEditor().jtl(targetLine)
       })
     }

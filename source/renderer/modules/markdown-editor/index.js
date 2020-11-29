@@ -251,8 +251,22 @@ module.exports = class MarkdownEditor extends EventEmitter {
    * @param  {Number} line The line to pull into view
    */
   jtl (line) {
-    this._instance.setCursor({ 'line': line, 'ch': 0 })
-    this._instance.refresh()
+    const { from, to } = this._instance.getViewport()
+    const viewportSize = to - from
+    // scrollIntoView first and foremost pulls something simply into view, but
+    // we want it to be at the top of the window as expected by the user, so
+    // we need to pull in a full viewport, beginning at the corresponding line
+    // and expanding unto one full viewport size.
+    this._instance.scrollIntoView({
+      from: {
+        line: line,
+        ch: 0
+      },
+      to: {
+        line: line + viewportSize,
+        ch: 0
+      }
+    })
   }
 
   /**
