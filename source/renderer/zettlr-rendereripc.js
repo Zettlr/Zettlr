@@ -309,11 +309,6 @@ class ZettlrRendererIPC {
         this.send('dir-project-export', cnt)
         break
 
-      // Emanates from the context menu, so simply send it to main
-      case 'dir-rescan':
-        this.send(cmd, cnt)
-        break
-
       // Copy the current file's ID to the clipboard
       case 'copy-current-id':
         try {

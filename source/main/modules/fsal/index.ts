@@ -406,6 +406,22 @@ export default class FSAL extends EventEmitter {
   private async _loadPlaceholder (dirPath: string): Promise<void> {
     // Load a "dead" directory
     console.log('Creating placeholder for dir ' + dirPath) // DEBUG
+    let dir: DirDescriptor = FSALDir.getDirNotFoundDescriptor(dirPath)
+    this._state.filetree.push(dir)
+  }
+
+  public async rescanForDirectory (descriptor: DirDescriptor): Promise<void> {
+    // Rescans a not found directory and, if found, replaces the directory
+    // descriptor.
+    if (isDir(descriptor.path)) {
+      // Remove this descriptor, and have the FSAL load the real one
+      const idx = this._state.filetree.indexOf(descriptor)
+      this._state.filetree.splice(idx, 1)
+      global.log.info(`Directory ${descriptor.name} found - Adding to file tree ...`)
+      await this.loadPath(descriptor.path)
+    } else {
+      global.log.info(`Rescanned directory ${descriptor.name}, but the directory still does not exist.`)
+    }
   }
 
   /**
@@ -755,7 +771,6 @@ export default class FSAL extends EventEmitter {
     return this._cache.clearCache()
   }
 
-  // WAS: SORT
   public async sortDirectory (src: DirDescriptor, sorting: string = ''): Promise<void> {
     this._fsalIsBusy = true
     await FSALDir.sort(src, sorting)
@@ -767,7 +782,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: CREATE-FILE
   public async createFile (src: DirDescriptor, options: any): Promise<void> {
     this._fsalIsBusy = true
     // This action needs the cache because it'll parse a file
@@ -786,7 +800,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: RENAME-FILE
   public async renameFile (src: MDFileDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink, 1x add
@@ -818,7 +831,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: REMOVE-FILE
   public async removeFile (src: MDFileDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink
@@ -847,7 +859,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: SAVE-FILE
   public async saveFile (src: MDFileDescriptor, content: string): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x change
@@ -860,14 +871,12 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: SEARCH-FILE
   public async searchFile (src: MDFileDescriptor, searchTerms: any): Promise<any> { // TODO: Implement search results type
     // NOTE: Generates no events
     // Searches a file and returns the result
     return await FSALFile.search(src, searchTerms)
   }
 
-  // WAS: SET-DIRECTORY-SETTING
   public async setDirectorySetting (src: DirDescriptor, settings: any): Promise<void> {
     this._fsalIsBusy = true
     // Sets a setting on the directory
@@ -881,7 +890,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: CREATE-PROJECT
   public async createProject (src: DirDescriptor, initialProps: any): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates no events as dotfiles are not watched
@@ -894,7 +902,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: UPDATE-PROJECT
   public async updateProject (src: DirDescriptor, options: any): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates no events as dotfiles are not watched
@@ -908,7 +915,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: REMOVE-PROJECT
   public async removeProject (src: DirDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates no events as dotfiles are not watched
@@ -921,7 +927,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: CREATE-DIRECTORY
   public async createDir (src: DirDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
     // Parses a directory and henceforth needs the cache
@@ -949,7 +954,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: RENAME-DIRECTORY
   public async renameDir (src: DirDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
     // We are probably going to need that code from the move action
@@ -1043,7 +1047,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: REMOVE-DIRECTORY
   public async removeDir (src: DirDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink for each child + src!
@@ -1085,7 +1088,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: move
   public async move (src: AnyDescriptor, target: DirDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink, 1x add for each child, src and on the target!

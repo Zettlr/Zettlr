@@ -30,6 +30,7 @@ import * as SaveImageFromClipboard from './save-image-from-clipboard'
 import * as SortOpenFiles from './sort-open-files'
 import * as UpdateProjectProperties from './update-project-properties'
 import * as UpdateUserDictionary from './update-user-dictionary'
+import * as DirRescan from './dir-rescan'
 
 export const commands = [
   DirDelete,
@@ -41,6 +42,7 @@ export const commands = [
   DirRename,
   DirSetIcon,
   DirSort,
+  DirRescan,
   Export,
   FileClose,
   FileDelete,

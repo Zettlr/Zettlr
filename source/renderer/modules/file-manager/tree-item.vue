@@ -38,59 +38,59 @@
         class="filename"
         v-bind:data-hash="obj.hash"
       >
-      <!-- First: Primary icon (either directory icon, file icon, or project icon) -->
-      <span class="item-icon">
-        <!-- Is this a project? -->
-        <clr-icon
-          v-if="obj.project && hasChildren"
-          shape="blocks-group"
-          class="is-solid"
-        />
-        <!-- Indicate if this is a dead directory -->
-        <clr-icon
-          v-else-if="obj.type === 'dead-directory' && hasChildren"
-          shape="disconnect"
-          class="is-solid"
-        />
-        <!-- Display a custom icon, if applicable -->
-        <clr-icon
-          v-else-if="isDirectory && hasChildren"
-          v-show="obj.icon"
-          v-bind:shape="obj.icon"
-        />
-        <!-- Display a file icon -->
-        <clr-icon v-else-if="obj.type === 'file' && hasChildren" shape="file"></clr-icon>
-      </span> <!-- End primary (item) icon -->
-      <!-- Second: Secondary icon (the collapse/expand icon) -->
-      <span class="toggle-icon">
-        <!-- Display a toggle to collapse/expand the file list -->
-        <!-- Only display in this position if the item has a primary icon -->
-        <clr-icon
-          v-if="hasChildren"
-          v-bind:shape="indicatorShape"
-          v-on:click.stop="toggleCollapse"
-        />
-        <!-- Is this a project? -->
-        <clr-icon
-          v-else-if="obj.project && !hasChildren"
-          shape="blocks-group"
-          class="is-solid"
-        />
-        <!-- Indicate if this is a dead directory -->
-        <clr-icon
-          v-else-if="obj.type === 'dead-directory' && !hasChildren"
-          shape="disconnect"
-          class="is-solid"
-        />
-        <!-- Display a custom icon, if applicable -->
-        <clr-icon
-          v-else-if="isDirectory && !hasChildren"
-          v-show="obj.icon"
-          v-bind:shape="obj.icon"
-        />
-        <!-- Display a file icon -->
-        <clr-icon v-else-if="obj.type === 'file' && !hasChildren" shape="file"></clr-icon>
-      </span>
+        <!-- First: Primary icon (either directory icon, file icon, or project icon) -->
+        <span class="item-icon">
+          <!-- Is this a project? -->
+          <clr-icon
+            v-if="obj.project && hasChildren"
+            shape="blocks-group"
+            class="is-solid"
+          />
+          <!-- Display a custom icon, if applicable -->
+          <clr-icon
+            v-else-if="isDirectory && hasChildren"
+            v-show="obj.icon"
+            v-bind:shape="obj.icon"
+          />
+          <!-- Display a file icon -->
+          <clr-icon
+            v-else-if="obj.type === 'file' && hasChildren"
+            shape="file"
+          />
+        </span> <!-- End primary (item) icon -->
+        <!-- Second: Secondary icon (the collapse/expand icon) -->
+        <span class="toggle-icon">
+          <!-- Display a toggle to collapse/expand the file list -->
+          <!-- Only display in this position if the item has a primary icon -->
+          <clr-icon
+            v-if="hasChildren"
+            v-bind:shape="indicatorShape"
+            v-on:click.stop="toggleCollapse"
+          />
+          <!-- Is this a project? -->
+          <clr-icon
+            v-else-if="obj.project && !hasChildren"
+            shape="blocks-group"
+            class="is-solid"
+          />
+          <!-- Indicate if this is a dead directory -->
+          <clr-icon
+            v-else-if="obj.dirNotFoundFlag === true"
+            shape="disconnect"
+            class="is-solid"
+          />
+          <!-- Display a custom icon, if applicable -->
+          <clr-icon
+            v-else-if="isDirectory && !hasChildren"
+            v-show="obj.icon"
+            v-bind:shape="obj.icon"
+          />
+          <!-- Display a file icon -->
+          <clr-icon
+            v-else-if="obj.type === 'file' && !hasChildren"
+            shape="file"
+          />
+        </span>
         {{ obj.name }}
         <span
           v-if="hasDuplicateName"
@@ -274,7 +274,7 @@ module.exports = {
 
       // Dead directories can't be opened, so stop the propagation to
       // the file manager and don't do a thing.
-      if (this.obj.type === 'dead-directory') return evt.stopPropagation()
+      if (this.obj.dirNotFoundFlag === true) return evt.stopPropagation()
 
       if (this.obj.type === 'file' && event.altKey) {
         // QuickLook the file

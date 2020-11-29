@@ -35,10 +35,24 @@ const TEMPLATE = [
   }
 ]
 
+const NOT_FOUND_TEMPLATE = [
+  {
+    id: 'menu.rescan_dir',
+    label: 'menu.rescan_dir',
+    enabled: true
+  }
+]
+
 module.exports = function displayFileContext (event, dirObject, el) {
   let items = []
 
-  for (const item of TEMPLATE) {
+  // Determine the template to use
+  let template = TEMPLATE
+  if (dirObject.dirNotFoundFlag === true) {
+    template = NOT_FOUND_TEMPLATE
+  }
+
+  for (const item of template) {
     const buildItem = {}
 
     buildItem.id = item.label
@@ -58,13 +72,13 @@ module.exports = function displayFileContext (event, dirObject, el) {
   }
 
   // Now check for a project
-  if (dirObject.project === null) {
+  if (dirObject.project === null && dirObject.dirNotFoundFlag !== true) {
     items.push({
       id: 'menu.new_project',
       label: trans('menu.new_project'),
       enabled: true
     })
-  } else {
+  } else if (dirObject.dirNotFoundFlag !== true) {
     items = items.concat([{
       id: 'menu.remove_project',
       label: trans('menu.remove_project'),
@@ -165,6 +179,11 @@ module.exports = function displayFileContext (event, dirObject, el) {
           content: dirObject.hash
         })
         break
+      case 'menu.rescan_dir':
+        ipcRenderer.send('message', {
+          command: 'rescan-dir',
+          content: dirObject.hash
+        })
     }
   })
 }
