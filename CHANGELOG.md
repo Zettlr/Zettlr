@@ -9,6 +9,7 @@
 - Fix the parent menu not closing on a click in the child menu (submenu).
 - Fixed rendering of footnote references.
 - Jumping to specific headings now places those headings at the top of the viewport, instead of simply pulling it into view.
+- Fix an edge condition where tags within code blocks would be detected if they contained an odd number of `-characters.
 
 ## Under the Hood
 

@@ -109,9 +109,9 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
     }
   }
 
-  // Create a copy of the code without any code blocks and inline
+  // Create a copy of the text contents without any code blocks and inline
   // code for the tag and ID extraction methods.
-  let mdWithoutCode = content.replace(/`{1,3}[^`]+`{1,3}/g, '')
+  let mdWithoutCode = content.replace(/^`{3,}.+`{3,}$|`[^`]+`|~{3,}[^~]+~{3,}/gms, '')
 
   // Determine linefeed to preserve on saving so that version control
   // systems don't complain.
