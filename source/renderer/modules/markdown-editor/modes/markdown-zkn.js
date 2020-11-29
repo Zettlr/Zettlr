@@ -18,6 +18,7 @@
   var tableRE = /^\|.+\|$/i
   var inlineMathRE = /^(?:\${1,2}[^\s\\]\${1,2}(?!\d)|\${1,2}[^\s].*?[^\s\\]\${1,2}(?!\d))/
   var blockMathRE = /^\s*\$\$\s*$/
+  var fnReferenceRE = /^\[\^.+\]:\s/
 
   /**
     * This defines the Markdown Zettelkasten system mode, which highlights IDs
@@ -111,6 +112,9 @@
         // NOTE: We have to check for inEquation first, because
         // otherwise, stream.match() will ALWAYS be executed, hence
         // falsifying the otherwise correct else-if!!
+        // TODO: We are currently using the multiplex mode to enhance block
+        // equations with syntax highlight, so I'm unsure if this code is
+        // executed at all or if we can just trash it …?
         if (stream.sol() && !state.inEquation && stream.match(blockMathRE)) {
           // We have a multiline equation
           state.inEquation = true
@@ -123,6 +127,12 @@
           // While we're in an equation, simply return fenced-codes.
           stream.skipToEnd()
           return 'comment'
+        }
+
+        // Now let's check for footnotes. Other than reference style links these
+        // require a different formatting, which we'll implement here.
+        if (stream.sol() && stream.match(fnReferenceRE)) {
+          return 'footnote-formatting' // TODO: Do we want rendering in footnotes?
         }
 
         // Fifth: Are we in a link?

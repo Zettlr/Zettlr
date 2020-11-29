@@ -78,7 +78,18 @@
       // Prevent skipping of low-baseline chars to prevent strange artefacts
       text-decoration-skip-ink: none;
     }
-    .cm-zkn-tag, .cm-zkn-id, .cm-zkn-link, .cm-zkn-link-formatting { color:var(--c-primary); }
+    .cm-zkn-tag,
+    .cm-zkn-id,
+    .cm-zkn-link,
+    .cm-zkn-link-formatting,
+    .cm-footnote-formatting {
+      color:var(--c-primary);
+    }
+
+    .cm-footnote-formatting {
+      font-weight: bold;
+    }
+
     // cma = code-mirror-anchor
     .cma { color: var(--c-primary); font-weight: inherit; }
 
