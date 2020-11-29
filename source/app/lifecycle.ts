@@ -121,18 +121,22 @@ export async function bootApplication (): Promise<void> {
 export async function shutdownApplication (): Promise<void> {
   global.log.info(`さようなら！ Shutting down at ${(new Date()).toString()}`)
   // Shutdown all providers in the reverse order
-  await notificationProvider.shutdown()
-  await updateProvider.shutdown()
-  await translationProvider.shutdown()
-  await cssProvider.shutdown()
-  await targetProvider.shutdown()
-  await tagProvider.shutdown()
-  await menuProvider.shutdown()
-  await recentDocsProvider.shutdown()
-  await dictionaryProvider.shutdown()
-  await citeprocProvider.shutdown()
-  await appearanceProvider.shutdown()
-  await configProvider.shutdown()
+  try {
+    await notificationProvider.shutdown()
+    await updateProvider.shutdown()
+    await translationProvider.shutdown()
+    await cssProvider.shutdown()
+    await targetProvider.shutdown()
+    await tagProvider.shutdown()
+    await menuProvider.shutdown()
+    await recentDocsProvider.shutdown()
+    await dictionaryProvider.shutdown()
+    await citeprocProvider.shutdown()
+    await appearanceProvider.shutdown()
+    await configProvider.shutdown()
+  } catch (e) {
+    global.log.error(`Error trying to shut down one of the providers: ${e.message as string}`, e)
+  }
 
   const downTimestamp = Date.now()
 
