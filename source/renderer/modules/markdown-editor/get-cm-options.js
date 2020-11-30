@@ -77,7 +77,7 @@ module.exports = function () {
     zettlr: {
       // Element rendering
       render: {
-        citations: true,
+        citations: false,
         iframes: true,
         images: true,
         links: true,
