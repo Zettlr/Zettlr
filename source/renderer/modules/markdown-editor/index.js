@@ -302,10 +302,18 @@ module.exports = class MarkdownEditor extends EventEmitter {
       // that are wanted are re-rendered. This will always execute on preferences
       // setting until we have established some cool "what has actually changed?"
       // indication in the settings provider, but this should not be too annoying.
-      const markers = this._instance.doc.getAllMarks()
-      for (let marker of markers) {
-        marker.clear()
-      }
+
+      // DEBUG: This function is always called during document swap which
+      // increases load time and induces a significant visual lag.
+      // Right now it seems prudent to simply leave "unwanted" markers in place.
+      // TODO: Devise a better mechanism of value caching to determine which
+      // marks need to be removed, and only do so when one of the values have
+      // indeed changed.
+
+      // const markers = this._instance.doc.getAllMarks()
+      // for (let marker of markers) {
+      //   marker.clear()
+      // }
     }
 
     // Second, set all options on the CodeMirror instance. This will internally

@@ -4,9 +4,25 @@
  * @param   {CodeMirror}  cm  The calling instance
  */
 module.exports = (cm) => {
-  cm.on('cursorActivity', renderElements)
-  cm.on('viewportChange', renderElements)
-  cm.on('optionChange', renderElements)
+  // DEBUG TESTING of requestIdleCallbacks
+
+  // While taskHandle is undefined, there's no task scheduled. Else, there is.
+  let taskHandle
+
+  const callback = function (cm) {
+    if (taskHandle !== undefined) {
+      return // Already a task registered
+    }
+
+    taskHandle = requestIdleCallback(function () {
+      renderElements(cm)
+      taskHandle = undefined // Next task can be scheduled now
+    }, { timeout: 1000 }) // Don't wait more than 1 sec before executing this
+  }
+
+  cm.on('cursorActivity', callback)
+  cm.on('viewportChange', callback) // renderElements)
+  cm.on('optionChange', callback)
 }
 
 function renderElements (cm) {
