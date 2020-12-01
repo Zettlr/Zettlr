@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-10-23T21:57:20.000000Z"
+        "updated_at": "2020-11-30T07:31:28.000000Z"
     },
     "dialog": {
         "about": {
@@ -626,6 +626,7 @@
         "lang_import_success": "Sprachdatei %s wurde erfolgreich importiert!",
         "no_command": "Nachricht ohne Befehl erhalten: %s",
         "ok": "Ok",
+        "open_file": "Datei \u00f6ffnen",
         "open_folder": "Projektverzeichnis \u00f6ffnen",
         "open_root_directory": "\u00d6ffne Verzeichnis %s \u2026",
         "open_root_directory_success": "Verzeichnis %s wurde geladen.",

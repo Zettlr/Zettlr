@@ -7,7 +7,7 @@
             "Huey"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-10-23T21:56:56.000000Z"
+        "updated_at": "2020-11-30T07:30:50.000000Z"
     },
     "dialog": {
         "about": {
@@ -629,6 +629,7 @@
         "lang_import_success": "Language file imported: %s",
         "no_command": "Received a message with no command: %s",
         "ok": "Ok",
+        "open_file": "Open file",
         "open_folder": "Open project folder",
         "open_root_directory": "Opening new root %s \u2026",
         "open_root_directory_success": "%s has been loaded.",
