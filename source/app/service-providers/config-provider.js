@@ -364,6 +364,11 @@ module.exports = class ConfigProvider extends EventEmitter {
       global.log.info(`Migrating from ${oldVersion} to ${this.config.version}!`)
     }
 
+    // DEBUG: Disable vim if it's activated
+    if (readConfig.editor.inputMode === 'vim') {
+      readConfig.editor.inputMode = 'default'
+    }
+
     this.update(readConfig)
 
     // Don't forget to update the version

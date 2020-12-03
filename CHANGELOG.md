@@ -11,6 +11,7 @@
 - Jumping to specific headings now places those headings at the top of the viewport, instead of simply pulling it into view.
 - Fix an edge condition where tags within code blocks would be detected if they contained an odd number of `-characters.
 - Re-instated the directory rescanning functionality.
+- Disable VIM editor input mode until further notice.
 
 ## Under the Hood
 
