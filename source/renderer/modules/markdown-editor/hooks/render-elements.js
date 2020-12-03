@@ -22,4 +22,7 @@ function renderElements (cm) {
   if (render.tables) cm.execCommand('markdownRenderTables')
   if (render.wysiwyg) cm.execCommand('markdownWYSIWYG')
   cm.execCommand('markdownRenderAtTags')
+  cm.execCommand('markdownRenderListTags')
+  cm.execCommand('markdownRenderListSubtags')
+  cm.execCommand('markdownRenderHrTags');
 }
