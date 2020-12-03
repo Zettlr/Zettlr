@@ -20,6 +20,7 @@
 - Remove asynchronous initialisation logic from the main object's constructor.
 - Added a footnote testing file.
 - Significantly increase document loading times by deferring text marking functions to idle times in the browser's event loop, using `requestIdleCallback`. This induces a small visual lag, but the documents load much faster, and arguably, it's better this way because one doesn't have to wait until the document has fully rendered before one can start to write. (Some testing with regard to long-term writing performance might make sense.)
+- Add debug logging to the configuration provider to check errors on config save and load.
 
 # 1.8.0
 

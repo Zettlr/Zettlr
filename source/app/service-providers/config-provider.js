@@ -345,12 +345,15 @@ module.exports = class ConfigProvider extends EventEmitter {
   load () {
     this.config = this.cfgtpl
     let readConfig = {}
+    global.log.verbose(`[Config Provider] Loading configuration file from ${this.configFile} ...`)
 
     // Does the file already exist?
     try {
       fs.lstatSync(this.configFile)
       readConfig = JSON.parse(fs.readFileSync(this.configFile, { encoding: 'utf8' }))
+      global.log.verbose('[Config Provider] Successfully loaded configuration')
     } catch (e) {
+      global.log.info('[Config Provider] No configuration file found - using defaults.')
       fs.writeFileSync(this.configFile, JSON.stringify(this.cfgtpl), { encoding: 'utf8' })
       this._firstStart = true // Assume first start
       this._newVersion = true // Obviously
@@ -386,7 +389,13 @@ module.exports = class ConfigProvider extends EventEmitter {
       this.load()
     }
     // (Over-)write the configuration
-    fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
+    global.log.verbose(`[Config Provider] Writing configuration file to ${this.configFile}...`)
+
+    try {
+      fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
+    } catch (e) {
+      global.log.error(`[Config Provider] Error during file write: ${e.message}`, e)
+    }
 
     return this
   }
