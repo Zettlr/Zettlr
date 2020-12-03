@@ -191,7 +191,7 @@
     }
   }
 
-  var headRE4 = /^\-\-\-\-.+$/g
+  var headRE4 = /^\-{4,}$/g
 
   CodeMirror.commands.markdownRenderHrTags = function (cm) {
     let match
