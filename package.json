@@ -137,6 +137,7 @@
   },
   "dependencies": {
     "@clr/icons": "^4.0.4",
+    "@types/semver": "^7.3.4",
     "@zettlr/citr": "1.2.1",
     "adm-zip": "^0.4.16",
     "archiver": "^5.0.2",

@@ -1,3 +1,13 @@
+# 1.8.2
+
+## GUI and Functionality
+
+(nothing here)
+
+## Under the Hood
+
+- Migrated the UpdateProvider to TypeScript.
+
 # 1.8.1
 
 ## GUI and Functionality
