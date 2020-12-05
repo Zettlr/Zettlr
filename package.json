@@ -26,7 +26,7 @@
     "release:win": "yarn package:win && electron-builder --win --x64 --publish \"never\" --prepackaged out/Zettlr-win32-x64",
     "release:win-arm": "yarn package:win-arm && electron-builder --win --ia32 --arm64 --publish \"never\" --prepackaged out/Zettlr-win32-arm64",
     "release:linux-x32": "yarn package:linux-x32 && electron-builder --linux AppImage --ia32 --publish \"never\" --prepackaged out/Zettlr-linux-ia32",
-    "release:linux-x64": "yarn package:linux-x64 && electron-builder --linux AppImage deb rpm --x64 --publish \"never\" --prepackaged out/Zettlr-linux-x64",
+    "release:linux-x64": "yarn package:linux-x64 && electron-builder --linux AppImage deb rpm zip --x64 --publish \"never\" --prepackaged out/Zettlr-linux-x64",
     "release:linux": "yarn release:linux-x32 && yarn release:linux-x64",
     "lang:refresh": "node scripts/refresh-language.js",
     "csl:refresh": "node scripts/update-csl.js",
@@ -87,7 +87,8 @@
       "target": [
         "AppImage",
         "deb",
-        "rpm"
+        "rpm",
+        "zip"
       ],
       "artifactName": "Zettlr-${version}-${arch}.${ext}",
       "executableName": "Zettlr",
@@ -177,6 +178,7 @@
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.53",
     "@electron-forge/plugin-webpack": "^6.0.0-beta.53",
+    "@electron-forge/maker-zip": "^6.0.0-beta.53",
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.3.0",
     "@types/electron-devtools-installer": "^2.2.0",
