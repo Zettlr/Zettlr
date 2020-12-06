@@ -9,6 +9,11 @@ The default Pandoc command now targets Pandoc 2.11 and above. **In order to use 
 - The file search popup now retains your last search again.
 - The global search now lets you select all text again.
 - Removed deprecated Pandoc command variable `$citeproc$` and added the two variables `$bibliography$` and `$cslstyle$`.
+- Began implementing better screen reader support for Zettlr. Now, a certain amount of elements have received correct labels according to the ARIA guidelines so that screenreader are now better in handling the app:
+    - The toolbar is now being recognised as such, the toolbar buttons themselves have correct labels
+    - The editor tabs are recognised as a tabbar and you can easily switch tabs now.
+    - The sidebar buttons are now being correctly identified as tabs.
+    - Added region landmark roles to a few of the components in order to facilitate quicker voice over navigation.
 
 ## Under the Hood
 

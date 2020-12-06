@@ -326,6 +326,8 @@ module.exports = class EditorTabs {
     // Then create the document div
     let doc = document.createElement('div')
     doc.classList.add('document')
+    doc.setAttribute('role', 'tab')
+    doc.setAttribute('aria-label', displayTitle)
     doc.setAttribute('draggable', 'true') // Users can drag that thing around
     doc.dataset['hash'] = file.hash
     doc.dataset['id'] = file.id
@@ -339,7 +341,10 @@ module.exports = class EditorTabs {
     if (file.tags.length > 0) doc.dataset['tippyContent'] += '<br>' + file.tags.map(tag => '<span class="tag">#' + tag + '</span>').join(' ')
 
     // Mark it as active and/or modified, if applicable
-    if (active) doc.classList.add('active')
+    if (active) {
+      doc.classList.add('active')
+      doc.setAttribute('aria-selected', 'true')
+    }
     if (!clean) doc.classList.add('modified')
 
     // Next create the name span containing the display title
@@ -358,6 +363,8 @@ module.exports = class EditorTabs {
     // Also enable closing of the document
     let closeIcon = document.createElement('clr-icon')
     closeIcon.classList.add('close')
+    closeIcon.setAttribute('role', 'button')
+    closeIcon.setAttribute('aria-label', 'Close file')
     closeIcon.setAttribute('shape', 'window-close')
 
     doc.appendChild(nameSpan)
