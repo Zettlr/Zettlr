@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - The file search popup now retains your last search again.
+- The global search now lets you select all text again.
 
 ## Under the Hood
 

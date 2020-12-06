@@ -182,9 +182,17 @@ class ZettlrToolbar {
       // is the keyword here, because if the isComposing flag is set, simply
       // don't handle that event and wait for the compositionend-event to fire
       // on the textfield for the magic to happen!
-      if (e.isComposing) return
+      if (e.isComposing) {
+        return
+      }
       // Check for non triggering keys
-      if (NON_TRIGGERING_KEYS.includes(e.key)) return
+      if (NON_TRIGGERING_KEYS.includes(e.key)) {
+        return
+      }
+      // Check for modifiers
+      if (e.metaKey || e.ctrlKey) {
+        return
+      }
 
       if (e.key === 'Escape') {
         this.searchBarInput.blur()
