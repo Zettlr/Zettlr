@@ -31,7 +31,12 @@
       v-on:dragend.stop="stopDragging"
     >
       <p class="filename">
-        <clr-icon shape="blocks-group" class="is-solid" v-if="isProject"></clr-icon>
+        <clr-icon
+          v-if="isProject"
+          aria-label="Project"
+          shape="blocks-group"
+          class="is-solid"
+        ></clr-icon>
         {{ basename }}
       </p>
       <Sorter
@@ -53,6 +58,7 @@
           <template v-else>
             <span
               v-if="isTex"
+              aria-label="TeX-file"
               class="tex-indicator"
             >
               TeX
