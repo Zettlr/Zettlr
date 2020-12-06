@@ -1,9 +1,14 @@
 # 1.8.2
 
+## Support for Pandoc 2.11
+
+The default Pandoc command now targets Pandoc 2.11 and above. **In order to use the new command, make sure to "reset" it once, or (if it contains customisations) replace `$citeproc$` with `--citeproc --bibliography $bibliography$ $cslstyle$`.** However, you can retain compatibility with older versions by replacing the new part `--citeproc` with `--filter pandoc-citeproc`. The new `$bibliography$` variable will be replaced with `--bibliography /path/to/your/library.json`. Furthermore, the `$cslstyle$`-variable will be replaced with `--csl /path/to/your/style.json`, if applicable.
+
 ## GUI and Functionality
 
 - The file search popup now retains your last search again.
 - The global search now lets you select all text again.
+- Removed deprecated Pandoc command variable `$citeproc$` and added the two variables `$bibliography$` and `$cslstyle$`.
 
 ## Under the Hood
 
