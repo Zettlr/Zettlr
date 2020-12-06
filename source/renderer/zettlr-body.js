@@ -475,16 +475,21 @@ class ZettlrBody {
     // Now we need to find out if there are selections in the editor that we
     // should respect (i.e. automatically search for this).
     let selections = this._renderer.getEditor().getSelections()
-    if (selections.length > 0) this._findPopup.searchVal = selections[0]
+    if (selections.length > 0 && selections[0].trim().length > 0) {
+      this._findPopup.searchVal = selections[0]
+    }
 
     // Display the popup
-    global.popupProvider.show('find', document.querySelector('.button.find'), this._findPopup, (form) => {
+    global.popupProvider.show('find', document.querySelector('.button.find'), {
+      search: this._findPopup.searchVal,
+      replace: this._findPopup.replaceVal
+    }, (form) => {
       // Remove search cursor once the popup is closed
       global.editorSearch.stop()
     }) // .makePersistent()
 
     const searchForElement = document.getElementById('searchWhat')
-    const searchFor = () => searchForElement.value || ''
+    const searchFor = () => searchForElement.value
     const replaceWithElement = document.getElementById('replaceWhat')
     const replaceWith = () => replaceWithElement.value
     // If a regular expression was restored to the find popup, make sure to set

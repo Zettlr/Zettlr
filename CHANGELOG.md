@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- The file search popup now retains your last search again.
 
 ## Under the Hood
 
