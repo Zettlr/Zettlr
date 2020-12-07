@@ -921,7 +921,7 @@
             {{i18n "dialog.preferences.pandoc_command"}}
           </label>
           <div class="input-button-group">
-            <input type="text" id="pandocCommand" name="pandocCommand" placeholder="pandoc &quot;$infile$&quot; -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ --citeproc --bibliography $bibliography$ $cslstyle$ $standalone$ --pdf-engine=xelatex --mathjax -o &quot;$outfile$&quot;" value="{{ pandocCommand }}">
+            <input type="text" id="pandocCommand" name="pandocCommand" placeholder="pandoc &quot;$infile$&quot; -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ --citeproc --bibliography &quot;$bibliography$&quot; $cslstyle$ $standalone$ --pdf-engine=xelatex --mathjax -o &quot;$outfile$&quot;" value="{{ pandocCommand }}">
             <button type="button" id="reset-pandoc-command" data-tippy-content="{{i18n "dialog.preferences.reset_pandoc_command"}}"><clr-icon shape="refresh"></clr></button>
           </div>
           <span class="info">Variables: $bibliography$, $cslstyle$, $format$, $infile$, $indir$, $outfile$, $outflag$, $standalone$, $toc$, $tocdepth$, $tpl$</span>
