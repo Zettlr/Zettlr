@@ -13,7 +13,7 @@
  */
 const renderTemplate = require('./util/render-template')
 
-const { trans } = require('../common/lang/i18n.js')
+const { trans } = require('../common/i18n.js')
 const clarityIcons = require('@clr/icons').ClarityIcons
 const Citr = require('@zettlr/citr')
 
@@ -39,10 +39,10 @@ module.exports = class ZettlrSidebar {
     this._renderer = parent
 
     const tabs = renderTemplate(`
-    <div id="sidebar-tabs">
-      <div data-target="sidebar-files" class="sidebar-tab active" title="${trans('gui.attachments')}"><clr-icon shape="attachment"></clr-icon></div>
-      <div data-target="sidebar-bibliography" class="sidebar-tab" title="${trans('gui.citeproc.references_heading')}"><clr-icon shape="book"></clr-icon></div>
-      <div data-target="sidebar-toc" class="sidebar-tab" title="Table of Contents"><clr-icon shape="indented-view-list"></clr-icon></div>
+    <div id="sidebar-tabs" role="tablist">
+      <div role="tab" aria-label="${trans('gui.attachments')}" data-target="sidebar-files" class="sidebar-tab active" title="${trans('gui.attachments')}"><clr-icon shape="attachment" role="presentation"></clr-icon></div>
+      <div role="tab" aria-label="${trans('gui.citeproc.references_heading')}" data-target="sidebar-bibliography" class="sidebar-tab" title="${trans('gui.citeproc.references_heading')}"><clr-icon shape="book" role="presentation"></clr-icon></div>
+      <div role="tab" aria-label="Table of Contents" data-target="sidebar-toc" class="sidebar-tab" title="Table of Contents"><clr-icon shape="indented-view-list" role="presentation"></clr-icon></div>
     </div>`)
 
     // Immediately preset the container element with the necessary structure
@@ -332,7 +332,7 @@ module.exports = class ZettlrSidebar {
     const entries = this.tocContainer.querySelectorAll('.toc-entry')
     for (let entry of entries) {
       entry.addEventListener('click', (e) => {
-        const targetLine = entry.dataset.line
+        const targetLine = parseInt(entry.dataset.line, 10)
         this._renderer.getEditor().jtl(targetLine)
       })
     }

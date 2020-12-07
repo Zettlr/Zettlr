@@ -26,7 +26,12 @@
       class="hidden"
       v-on:click="toggleFileList"
     >
-      <clr-icon shape="caret left" class="is-solid" size="20"></clr-icon>
+      <clr-icon
+        role="presentation"
+        shape="caret left"
+        class="is-solid"
+        size="20"
+      ></clr-icon>
     </div>
     <!-- Render a the file-tree -->
     <div id="component-container">
@@ -40,7 +45,10 @@
             v-show="getFiles.length > 0"
             id="directories-files-header"
           >
-            <clr-icon shape="file"></clr-icon>{{ fileSectionHeading }}
+            <clr-icon
+              shape="file"
+              role="presentation"
+            ></clr-icon>{{ fileSectionHeading }}
           </div>
           <tree-item
             v-for="item in getFiles"
@@ -53,7 +61,10 @@
             v-show="getDirectories.length > 0"
             id="directories-dirs-header"
           >
-            <clr-icon shape="tree-view"></clr-icon>{{ workspaceSectionHeading }}
+            <clr-icon
+              shape="tree-view"
+              role="presentation"
+            ></clr-icon>{{ workspaceSectionHeading }}
           </div>
           <tree-item
             v-for="item in getDirectories"
@@ -152,7 +163,7 @@
 // ES6 CommonJS-modules in a exports/require-environment.
 const tippy = require('tippy.js').default
 const findObject = require('../../../common/util/find-object')
-const { trans } = require('../../../common/lang/i18n')
+const { trans } = require('../../../common/i18n')
 const TreeItem = require('./tree-item.vue').default
 const FileItem = require('./file-item.vue').default
 const { RecycleScroller } = require('vue-virtual-scroller')

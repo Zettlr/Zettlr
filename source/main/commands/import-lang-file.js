@@ -16,7 +16,7 @@ const ZettlrCommand = require('./zettlr-command')
 const path = require('path')
 const fs = require('fs')
 const bcp47 = require('bcp-47')
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
 const isDir = require('../../common/util/is-dir')
 const { app, dialog } = require('electron')
 

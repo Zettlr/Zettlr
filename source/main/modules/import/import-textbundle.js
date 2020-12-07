@@ -17,7 +17,7 @@ const fs = require('fs').promises
 const { app } = require('electron')
 const ZIP = require('adm-zip')
 
-const { trans } = require('../../../common/lang/i18n.js')
+const { trans } = require('../../../common/i18n.js')
 const isFile = require('../../../common/util/is-file')
 
 /**

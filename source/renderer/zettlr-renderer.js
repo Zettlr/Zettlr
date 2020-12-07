@@ -386,10 +386,11 @@ class ZettlrRenderer {
    * This function is called by ZettlrToolbar. The term gets passed on to
    * ZettlrPreview, but also a force-open event is sent to main, in case there
    * is a file that completely matches the file name.
-   * @param  {String} term The term to be searched for.
-   * @return {void}      Nothing to return.
+   *
+   * @param   {string}   term           The term to be searched for.
+   * @param   {boolean}  sendOpenEvent  If true, sends a "soft" force-open command to main
    */
-  beginSearch (term) {
+  beginSearch (term, sendOpenEvent = true) {
     // If there is a search running, set the interrupt flag
     if (this._currentSearch) this._currentSearch.setInterrupt()
 
@@ -397,7 +398,9 @@ class ZettlrRenderer {
     global.store.commitEndSearch()
 
     // Also send a "soft" force-open command in order to open
-    this._ipc.send('force-open-if-exists', term)
+    if (sendOpenEvent) {
+      this._ipc.send('force-open-if-exists', term)
+    }
 
     // Make sure the file list is visible
     if (!this._fileManager.isFileListVisible()) this._fileManager.toggleFileList()
@@ -446,8 +449,11 @@ class ZettlrRenderer {
     // Also initiate a search to be run accordingly for any files that
     // might reference the file.
     this._toolbar.setSearch(term)
-    this.beginSearch(term)
-    if (forceOpen) this._ipc.send('force-open', term)
+    this.beginSearch(term, !forceOpen)
+
+    if (forceOpen) {
+      this._ipc.send('force-open', term)
+    }
   }
 
   /**

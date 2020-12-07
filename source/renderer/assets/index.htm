@@ -8,25 +8,25 @@
     <title>Zettlr</title>
 </head>
 <body>
-    <div id="container">
+    <div id="container" role="main">
       <!-- This is the menu bar -- only visible on Windows & Linux -->
-      <div id="menubar"></div>
+      <div id="menubar" role="navigation"></div>
 
         <!-- Main toolbar -->
-        <div id="toolbar">
+        <div id="toolbar" role="toolbar">
         </div>
 
         <!-- Mount the Sidebar -->
-        <div id="file-manager"></div>
+        <div id="file-manager" role="region" aria-label="File Manager"></div>
 
         <!-- Three: The editor itself -->
-        <div id="editor">
-          <div id="document-tabs"></div>
+        <div id="editor" role="region" aria-label="Main Editor">
+          <div id="document-tabs" role="tablist"></div>
             <textarea id="cm-text" style="display:none;" placeholder=""></textarea>
         </div>
 
         <!-- Four: The sidebar -->
-        <div id="sidebar"></div>
+        <div id="sidebar" role="region" aria-label="Sidebar"></div>
 
         <!--
           Windows window controls, taken from

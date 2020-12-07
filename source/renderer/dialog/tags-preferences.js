@@ -14,7 +14,7 @@
 
 const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
 const serializeFormData = require('../../common/util/serialize-form-data')
 const renderTemplate = require('../util/render-template')
 

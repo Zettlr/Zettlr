@@ -56,10 +56,6 @@ module.exports = function () {
     fullScreen: false,
     // Placeholder for empty instances, necessary to maintain the styling
     placeholder: ' ',
-    hintOptions: {
-      completeSingle: false, // Don't auto-complete, even if there's only one word available
-      hint: (cm, opt) => { return this._autocomplete.hint(cm, opt) }
-    },
     // Soft-wrap longer lines
     lineWrapping: true,
     // Pandoc requires 4 spaces indentation, which is the default

@@ -18,7 +18,7 @@ const ZettlrDialog = require('./zettlr-dialog.js')
 const Chart = require('chart.js')
 const localiseNumber = require('../../common/util/localise-number')
 const formatDate = require('../../common/util/format-date')
-const { trans } = require('../../common/lang/i18n.js')
+const { trans } = require('../../common/i18n.js')
 const moment = require('moment')
 
 class StatsDialog extends ZettlrDialog {

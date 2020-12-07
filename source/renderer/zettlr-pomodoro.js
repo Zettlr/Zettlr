@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const { trans } = require('../common/lang/i18n.js')
+const { trans } = require('../common/i18n.js')
 
 /**
  * This class is pretty straight-forward: It handles clicks on the pomodoro button,

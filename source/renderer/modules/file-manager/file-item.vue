@@ -31,7 +31,12 @@
       v-on:dragend.stop="stopDragging"
     >
       <p class="filename">
-        <clr-icon shape="blocks-group" class="is-solid" v-if="isProject"></clr-icon>
+        <clr-icon
+          v-if="isProject"
+          aria-label="Project"
+          shape="blocks-group"
+          class="is-solid"
+        ></clr-icon>
         {{ basename }}
       </p>
       <Sorter
@@ -53,6 +58,7 @@
           <template v-else>
             <span
               v-if="isTex"
+              aria-label="TeX-file"
               class="tex-indicator"
             >
               TeX
@@ -105,7 +111,7 @@
   const TagList = require('./tag-list.vue').default
   const Sorter = require('./sorter.vue').default
   const formatDate = require('../../../common/util/format-date.js')
-  const { trans } = require('../../../common/lang/i18n.js')
+  const { trans } = require('../../../common/i18n.js')
   const fileContextMenu = require('./file-item-context.js')
   const dirContextMenu = require('./dir-item-context.js')
 

@@ -150,21 +150,6 @@ class ZettlrEditor {
     // Set up the helper classes with the CM instance
     this._searcher.setInstance(this._editor.codeMirror)
 
-    // TODO this._cm.on('mousedown', (cm, event) => {
-    //   // Ignore click events if they attempt to perform a special action
-    //   let target = event.target
-    //   let specialClasses = [ 'cma', 'cm-zkn-tag', 'cm-zkn-link' ]
-    //   let macMeta = process.platform === 'darwin' && event.metaKey
-    //   let otherCtrl = process.platform !== 'darwin' && event.ctrlKey
-    //   let isSpecial = false
-    //   for (let c of specialClasses) {
-    //     if (target.classList.contains(c)) isSpecial = true
-    //   }
-    //   let isFootnote = target.classList.contains('cm-link') && target.innerText.indexOf('^') === 0
-
-    //   if ((isSpecial || isFootnote) && (macMeta || otherCtrl)) event.codemirrorIgnore = true
-    // })
-
     // Finally create the annotateScrollbar object to be able to annotate the
     // scrollbar with search results.
     this._scrollbarAnnotations = this._editor.codeMirror.annotateScrollbar('sb-annotation')
@@ -706,19 +691,22 @@ class ZettlrEditor {
     for (let file of tree) {
       let fname = path.basename(file.name, path.extname(file.name))
       let displayText = fname // Fallback: Only filename
-      if (global.config.get('display.useFirstHeadings') && file.firstHeading) {
-        // The user wants to use first headings as titles,
-        // so use them for autocomplete as well
-        displayText = fname + ': ' + file.firstHeading
-      } else if (file.frontmatter && file.frontmatter.title) {
+      if (file.frontmatter && file.frontmatter.title) {
         // (Else) if there is a frontmatter, use that title
-        displayText = fname + ': ' + file.frontmatter.title
+        displayText = file.frontmatter.title
+      } else if (global.config.get('display.useFirstHeadings') && file.firstHeading) {
+        // The user wants to use first headings as fallbacks
+        displayText = file.firstHeading
+      }
+
+      if (file.id !== '') {
+        displayText = `${file.id}: ${displayText}`
       }
 
       fileDatabase[fname] = {
         'text': file.id || fname, // Use the ID, if given, or the filename
         'displayText': displayText,
-        'id': file.id || false
+        'id': file.id
       }
     }
 
@@ -733,11 +721,22 @@ class ZettlrEditor {
         let file = candidate.fileDescriptor
         let fname = path.basename(file.name, path.extname(file.name))
         let displayText = fname // Always display the filename
-        if (file.frontmatter && file.frontmatter.title) displayText += ' ' + file.frontmatter.title
-        fileDatabase[candidate.fileDescriptor.name] = {
+        if (file.frontmatter && file.frontmatter.title) {
+          // (Else) if there is a frontmatter, use that title
+          displayText = file.frontmatter.title
+        } else if (global.config.get('display.useFirstHeadings') && file.firstHeading) {
+          // The user wants to use first headings as fallbacks
+          displayText = file.firstHeading
+        }
+
+        if (file.id !== '') {
+          displayText = `${file.id}: ${displayText}`
+        }
+
+        fileDatabase[file.name] = {
           'text': file.id || fname, // Use the ID, if given, or the filename
           'displayText': displayText,
-          'id': file.id || false,
+          'id': file.id,
           'className': 'cm-hint-colour',
           'matches': candidate.matches
         }
@@ -820,6 +819,15 @@ class ZettlrEditor {
   }
 
   /**
+   * Pass-through function to trigger a copy-to-html on the editor
+   *
+   * @deprecated
+   */
+  copyAsHTML () {
+    this._editor.copyAsHTML()
+  }
+
+  /**
    * This method can be used to insert some text at the current cursor position.
    * ATTENTION: It WILL overwrite any given selection!
    * @param  {String} text The text to insert
@@ -876,14 +884,6 @@ class ZettlrEditor {
    */
   getSelections () {
     return this._getActiveFile().cmDoc.getSelections()
-  }
-
-  /**
-   * Get the CodeMirror instance
-   * @return {CodeMirror} The editor instance
-   */
-  getEditor () {
-    return this._cm
   }
 }
 

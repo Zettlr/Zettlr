@@ -23,7 +23,7 @@ const { ipcMain } = require('electron')
 const Citr = require('@zettlr/citr') // Parse the citations from the renderer
 const fs = require('fs')
 const path = require('path')
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
 const extractBibTexAttachments = require('../../common/util/extract-bibtex-attachments')
 const BibTexParser = require('astrocite-bibtex')
 
@@ -359,6 +359,8 @@ module.exports = class CiteprocProvider {
 
     // Now the whole library is fully loaded. Let's send the citeproc-IDs to the
     // renderer.
+
+    // TODO: This needs to be a broadcast so that renderers can retrieve it themselves
     global.ipc.send('citeproc-ids', {
       'ids': JSON.parse(JSON.stringify(this._idHint)),
       'status': this._status

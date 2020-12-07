@@ -1,5 +1,5 @@
 // Displays a context menu for the MarkdownEditor class
-const { trans } = require('../../../common/lang/i18n')
+const { trans } = require('../../../common/i18n')
 const {
   clipboard,
   ipcRenderer
@@ -195,7 +195,10 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
   // If the word is spelled wrong, request suggestions
   let typoPrefix = []
   if (elem.classList.contains('cm-spell-error')) {
-    currentSuggestions = global.typo.suggest(elem.textContent)
+    currentSuggestions = ipcRenderer.sendSync('dictionary-provider', {
+      command: 'suggest',
+      term: elem.textContent
+    })
     if (currentSuggestions.length > 0) {
       for (let i = 0; i < currentSuggestions.length; i++) {
         typoPrefix.push({
@@ -212,7 +215,6 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
       })
     }
 
-    // TODO: Re-implement
     typoPrefix.push({ type: 'separator' })
     // Always add an option to add a word to the user dictionary
     typoPrefix.push({
@@ -233,14 +235,12 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
   const closeCallback = global.menuProvider.show(point, buildMenu, (clickedID) => {
     if (clickedID.startsWith('acceptSuggestion-')) {
       const idx = parseInt(clickedID.substr(17), 10) // Retrieve the ID
-      console.log('Replacing with ' + currentSuggestions[idx])
       replaceCallback(currentSuggestions[idx])
       return
     }
 
     // If the ID resembles citekey-xxxx, open the corresponding attachment
     if (clickedID.startsWith('citekey-')) {
-      console.log('Opening attachment: ' + clickedID.substr(8))
       ipcRenderer.send('message', {
         command: 'open-attachment',
         content: { 'citekey': clickedID.substr(8) }
@@ -251,8 +251,8 @@ module.exports = function displayContextMenu (event, isReadOnly, commandCallback
 
     // If the ID resembles typo-add-xxxx, add the given word to the dictionary
     if (clickedID.startsWith('typo-add-')) {
-      ipcRenderer.sendSync('typo', {
-        type: 'add',
+      ipcRenderer.sendSync('dictionary-provider', {
+        command: 'add',
         term: clickedID.substr(9) // Extract the word from the ID
       })
     }

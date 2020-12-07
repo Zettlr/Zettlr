@@ -18,6 +18,7 @@ import hash from '../../../common/util/hash'
 import searchFile from './search-file'
 import countWords from '../../../common/util/count-words'
 import extractYamlFrontmatter from '../../../common/util/extract-yaml-frontmatter'
+import { getIDRE } from '../../../common/regular-expressions'
 import { shell } from 'electron'
 import safeAssign from '../../../common/util/safe-assign'
 // Import the interfaces that we need
@@ -75,13 +76,8 @@ async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> 
 }
 
 function parseFileContents (file: MDFileDescriptor, content: string): void {
-  // Now parse that thing
-  let idStr = global.config.get('zkn.idRE') as string
-  // Make sure the ID definitely has at least one
-  // capturing group to not produce errors.
-  if (!(/\(.+?\)/.test(idStr))) idStr = `(${idStr})`
-
-  let idRE = new RegExp(idStr, 'g')
+  // Parse the file
+  let idRE = getIDRE()
   let linkStart = global.config.get('zkn.linkStart')
   let linkEnd = global.config.get('zkn.linkEnd')
   // To detect tags in accordance with what the engine will render as tags,
@@ -102,8 +98,10 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   // Extract a potential YAML frontmatter
   file.frontmatter = null // Reset first
   let frontmatter = extractYamlFrontmatter(content)
-  if (frontmatter) {
-    if (file.frontmatter === null) file.frontmatter = {}
+  if (frontmatter !== null) {
+    if (file.frontmatter === null) {
+      file.frontmatter = {}
+    }
     for (let [ key, value ] of Object.entries(frontmatter)) {
       if (FRONTMATTER_VARS.includes(key)) {
         file.frontmatter[key] = value
@@ -111,9 +109,9 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
     }
   }
 
-  // Create a copy of the code without any code blocks and inline
+  // Create a copy of the text contents without any code blocks and inline
   // code for the tag and ID extraction methods.
-  let mdWithoutCode = content.replace(/`{1,3}[^`]+`{1,3}/g, '')
+  let mdWithoutCode = content.replace(/^`{3,}.+`{3,}$|`[^`]+`|~{3,}[^~]+~{3,}/gms, '')
 
   // Determine linefeed to preserve on saving so that version control
   // systems don't complain.
@@ -137,8 +135,19 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   }
 
   // Merge possible keywords from the frontmatter
-  if (file.frontmatter?.keywords) {
-    file.tags = file.tags.concat(file.frontmatter.keywords)
+  if (file.frontmatter?.keywords != null) {
+    // The user can just write "keywords: something", in which case it won't be
+    // an array, but a simple string (or even a number <.<). I am beginning to
+    // understand why programmers despise the YAML-format.
+    if (!Array.isArray(file.frontmatter.keywords)) {
+      file.frontmatter.keywords = [file.frontmatter.keywords]
+    }
+
+    // If the user decides to use just numbers for the keywords (e.g. #1997),
+    // the YAML parser will obviously cast those to numbers, but we don't want
+    // this, so forcefully cast everything to string (see issue #1433).
+    const sanitizedKeywords = file.frontmatter.keywords.map((tag: any) => String(tag).toString())
+    file.tags = file.tags.concat(sanitizedKeywords)
   }
 
   // Remove duplicates

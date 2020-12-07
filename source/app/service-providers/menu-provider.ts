@@ -22,7 +22,7 @@ import {
 } from 'electron'
 
 import path from 'path'
-import { trans } from '../../common/lang/i18n.js'
+import { trans } from '../../common/i18n.js'
 import broadcastIPCMessage from '../../common/util/broadcast-ipc-message'
 
 // Types from the global.d.ts of the window-register module
@@ -290,6 +290,11 @@ export default class MenuProvider {
     // Methods are specialised commands that need to be hardcoded here.
     if ((menutpl as any).zettlrRole !== undefined) {
       switch ((menutpl as any).zettlrRole) {
+        case 'minimize':
+          menu.click = function (menuitem, focusedWindow) {
+            focusedWindow?.minimize()
+          }
+          break
         case 'reloadWindow':
           menu.click = function (menuitem, focusedWindow) {
             if (focusedWindow != null) focusedWindow.reload()

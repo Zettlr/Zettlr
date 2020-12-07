@@ -17,7 +17,7 @@
 const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
 const { ipcRenderer } = require('electron')
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
 const generateId = require('../../common/util/generate-id')
 const renderTemplate = require('../util/render-template')
 const serializeFormData = require('../../common/util/serialize-form-data')
@@ -194,7 +194,7 @@ class PreferencesDialog extends ZettlrDialog {
 
     // Reset the pandoc command
     $('#reset-pandoc-command').on('click', (e) => {
-      document.getElementById('pandocCommand').value = 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"'
+      document.getElementById('pandocCommand').value = 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ --citeproc --bibliography "$bibliography$" $cslstyle$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"'
     })
 
     const reportTestResult = (resultTranslationKey) => {

@@ -1,3 +1,50 @@
+# 1.8.2
+
+## Support for Pandoc 2.11
+
+The default Pandoc command now targets Pandoc 2.11 and above. **In order to use the new command, make sure to "reset" it once, or (if it contains customisations) replace `$citeproc$` with `--citeproc --bibliography "$bibliography$" $cslstyle$`.** However, you can retain compatibility with older versions by replacing the new part `--citeproc` with `--filter pandoc-citeproc`. The new `$bibliography$` variable will be replaced with `/path/to/your/library.json`. Furthermore, the `$cslstyle$`-variable will be replaced with `--csl /path/to/your/style.json`, if applicable.
+
+## GUI and Functionality
+
+- The file search popup now retains your last search again.
+- The global search now lets you select all text again.
+- Removed deprecated Pandoc command variable `$citeproc$` and added the two variables `$bibliography$` and `$cslstyle$`.
+- Began implementing better screen reader support for Zettlr. Now, a certain amount of elements has received correct labels according to the ARIA guidelines so that screenreader are now better in handling the app:
+    - The toolbar is now being recognised as such, the toolbar buttons themselves have correct labels
+    - The editor tabs are recognised as a tabbar and you can easily switch tabs now.
+    - The sidebar buttons are now being correctly identified as tabs.
+    - Added region landmark roles to a few of the components in order to facilitate quicker voice over navigation.
+    - The icons in the file manager now have `role="presentation"` set to not have the screen reader name all of those "unlabelled images" one by one.
+- Show tooltip with full reference of cited sources on hover.
+
+## Under the Hood
+
+- Migrated the UpdateProvider to TypeScript.
+
+# 1.8.1
+
+## GUI and Functionality
+
+- Fixed the non-working reveal.js exports.
+- Add support for chemical formulae in KaTeX (thanks to @likeadoc for implementing).
+- Design fix for the color swatches in the tag manager.
+- Fix preferences not opening on the corresponding menu item (Windows/Linux).
+- Fix the parent menu not closing on a click in the child menu (submenu).
+- Fixed rendering of footnote references.
+- Jumping to specific headings now places those headings at the top of the viewport, instead of simply pulling it into view.
+- Fix an edge condition where tags within code blocks would be detected if they contained an odd number of `-characters.
+- Re-instated the directory rescanning functionality.
+- Disable VIM editor input mode until further notice.
+
+## Under the Hood
+
+- The release tags will now be created with a prefix "v" again. This should fix various issues around the assumption of the "v" being the correct GitHub tag.
+- Fix all linter errors. PRs should now receive a nice green checkmark instead of the error symbol (unless there are new errors in the PR itself).
+- Remove asynchronous initialisation logic from the main object's constructor.
+- Added a footnote testing file.
+- Significantly increase document loading times by deferring text marking functions to idle times in the browser's event loop, using `requestIdleCallback`. This induces a small visual lag, but the documents load much faster, and arguably, it's better this way because one doesn't have to wait until the document has fully rendered before one can start to write. (Some testing with regard to long-term writing performance might make sense.)
+- Add debug logging to the configuration provider to check errors on config save and load.
+
 # 1.8.0
 
 ## Breaking Changes
@@ -5,6 +52,7 @@
 - Renamed the **sidebar** to **file manager**. We finally decided on better terminology for distinguishing the right from the left sidebar. This means: The left sidebar, formerly known only as "sidebar," is now the "file manager." The right sidebar, formerly known as "attachment sidebar," is now "the" sidebar. This change was introduced to reduce user confusion and provide a better user experience.
 - The shortcut for opening the developer tools on Windows and Linux is now `Ctrl+Alt+I` (was: `Ctrl+Shift+I`) to resolve a conflict with the shortcut `Ctrl+Shift+I` (insert images).
 - Renamed **Root Directories** to **Workspaces**. The term "root" is rather technical, and for most people, it makes most sense to think of those roots as workspaces, albeit other than being opened at the root level of the application, they have no difference to regular directories.
+- The shortcut `Cmd/Ctrl+O`, which previously would let you open _workspaces_, now opens files. To open a workspace, use `Cmd/Ctrl+Shift+O`. This is now in line with many other programs.
 
 ## GUI and Functionality
 
@@ -77,7 +125,18 @@
 - Menu items in the application menu that can have a "checked" state (indicated by, e.g., a checkmark) now remember their correct state if other settings change consistently.
 - Non-image files being dropped onto the editor are now being linked.
 - Files that are dropped from the outside onto the editor are now linked using a relative path.
-- Show tooltip with full reference of cited sources on hover.
+- Fixed a behaviour that would lead to the autocomplete to stop working completely until a full refresh of the window.
+- Fix a bug that prevent non-existing documents to be created upon following a link despite the option being activated.
+- Added `F11` as an accelerator for fullscreen on Windows.
+- Fixed a display bug (= the window would reload itself) when there were no tags in the tag manager.
+- Fixed the padding of dialog buttons and input fields also in dark mode.
+- Fix pasting on Windows 10 (thanks to @graphixillusion for fixing).
+- Fixed a sometimes weird behaviour when linking files.
+- Following Zettelkasten-links should now be way faster.
+- Fixed an issue with number-only frontmatter keywords.
+- Clean up the application menus on Linux and Windows: Now all preferences live under a shared menu item.
+- Prevent multiple cursors while following internal links.
+- Fix display glitches on the sorters.
 
 ## Under the Hood
 
@@ -96,8 +155,9 @@
   - @typescript-eslint/eslint-plugin `4.5.0`
   - @typescript-eslint/parser `4.5.0`
   - archiver `5.0.2`
+  - astrocite `0.16.4`
   - chokidar `3.4.3`
-  - citeproc `2.4.45`
+  - citeproc `2.4.48`
   - codemirror `5.58.2`
   - chart.js `2.9.4`
   - copy-webpack-plugin `6.1.0`
@@ -111,6 +171,7 @@
   - fork-ts-checker-webpack-plugin `5.1.0`
   - fsevents `2.1.3`
   - got `11.8.0`
+  - joplin-turndown `4.0.30`
   - md5 `2.3.0`
   - mermaid `8.8.2`
   - mocha `8.2.0`
@@ -129,8 +190,8 @@
   - uglify-js
   - on-change
 - Added a new Handlebars templating helper function, `i18n_value` that allows you to translate something passing a value to the translation helper (e.g. `{{i18n_value 'trans.identifier' someValue}}`).
-- Refactored the main build Workflow file. Now it doesn't run on a matrix, but due to the many dissimilar steps involved, there are three distinct jobs. Other than that, we switched to the GitHub tag name instead of utilizing a node script to retrieve the `package.json` version, switched to `yarn` everywhere and cleaned up the code.
-- Removed the now unused scripts `get-pkg-version.js` and `afterSign.js`.
+- Refactored the main build Workflow file. Now it doesn't run on a matrix, but due to the many dissimilar steps involved, there are three distinct jobs. Other than that, we switched to `yarn` everywhere and cleaned up the code.
+- Removed the now unused script `afterSign.js`.
 - Finally removed the verbose IPC calls from the logs.
 - Migrated the toolbar logic from jQuery to vanilla JS.
 - Migrated the main renderer from jQuery to vanilla JS.
@@ -184,6 +245,13 @@
 - Removed the Watchdog service provider, as it is no longer being used.
 - The Window Manager now saves the positions of each window (main and Quicklooks), persists them on disk and ensures the windows are displayed properly. The corresponding settings have been removed from the configuration service provider.
 - The menu provider now keeps track of the state of those checkbox menu items which are not controlled externally by a configuration setting, but rather always begin unchecked when the application starts.
+- Moved the typo-logic to their respective places in the renderer.
+- The dictionary provider now listens on the correct channel and is additionally based on `fs.promises` thoroughly.
+- The app bundle now contains all language files; the i18n-modules have been moved.
+- "Fixed" the high CPU usage of Zettlr when having many files and directories open in the app.
+- Fixed the force-open command. It now only searches for an exact filename-match, if the given argument (the contents of the link) do not look like an ID. This way we save at least one full file-tree search, which improves the speed notably especially with large setups.
+- Re-ordered the filetypes array so that expensive functions will attempt to match those extensions first which are more likely to occur.
+- Moved the ID regular expression generation into the corresponding file.
 
 # 1.7.5
 

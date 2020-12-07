@@ -17,7 +17,7 @@ const fs = require('fs').promises
 const path = require('path')
 const { exec } = require('child_process')
 
-const { trans } = require('../../../common/lang/i18n.js')
+const { trans } = require('../../../common/i18n.js')
 
 // Module utilities
 const checkImportIntegrity = require('./check-import-integrity')

@@ -27,7 +27,7 @@ import {
 } from 'electron'
 import { promises as fs } from 'fs'
 import path from 'path'
-import { trans } from '../../../common/lang/i18n'
+import { trans } from '../../../common/i18n'
 import { DirDescriptor, MDFileDescriptor } from '../fsal/types'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
@@ -61,7 +61,7 @@ export default class WindowManager {
     this._printWindow = null
     this._printWindowFile = undefined
     this._windowState = []
-    this._configFile = path.join(app.getPath('appData'), 'window_state.json')
+    this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
 
     // Listen to window control commands

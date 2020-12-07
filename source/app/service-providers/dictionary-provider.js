@@ -16,12 +16,11 @@
 const EventEmitter = require('events')
 const NSpell = require('nspell')
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs').promises
 
 const { ipcMain, app } = require('electron')
-const { getDictionaryFile } = require('../../common/lang/i18n')
-const { promisify } = require('util')
-const readFile = promisify(fs.readFile)
+const { getDictionaryFile } = require('../../common/i18n')
+const broadcastIpcMessage = require('../../common/util/broadcast-ipc-message')
 
 /**
  * This class loads and unloads dictionaries according to the configuration set
@@ -59,19 +58,20 @@ module.exports = class DictionaryProvider extends EventEmitter {
         if (!Array.isArray(dict)) return false
         this._userDictionary = dict
         // Send an invalidation message to the renderer
-        global.ipc.send('invalidate-dict')
+        broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
         return true
       }
     }
 
     // Listen for synchronous messages from the renderer process for typos.
-    ipcMain.on('typo', (event, message) => {
-      if (message.type === 'check') {
-        event.returnValue = this.check(message.term)
-      } else if (message.type === 'suggest') {
-        event.returnValue = this.suggest(message.term)
-      } else if (message.type === 'add') {
-        event.returnValue = this.add(message.term)
+    ipcMain.on('dictionary-provider', (event, message) => {
+      const { command, term } = message
+      if (command === 'check') {
+        event.returnValue = this.check(term)
+      } else if (command === 'suggest') {
+        event.returnValue = this.suggest(term)
+      } else if (command === 'add') {
+        event.returnValue = this.add(term)
       }
     })
 
@@ -93,9 +93,9 @@ module.exports = class DictionaryProvider extends EventEmitter {
    * Shuts down the provider
    * @return {Boolean} Whether or not the shutdown was successful
    */
-  shutdown () {
+  async shutdown () {
     global.log.verbose('Dictionary provider shutting down ...')
-    fs.writeFileSync(this._userDictionaryPath, this._userDictionary.join('\n'), 'utf8')
+    await fs.writeFile(this._userDictionaryPath, this._userDictionary.join('\n'), 'utf8')
     return true
   }
 
@@ -131,13 +131,13 @@ module.exports = class DictionaryProvider extends EventEmitter {
       let dic = null
 
       try {
-        aff = await readFile(dictMeta.aff, 'utf8')
+        aff = await fs.readFile(dictMeta.aff, 'utf8')
       } catch (e) {
         continue
       }
 
       try {
-        dic = await readFile(dictMeta.dic, 'utf8')
+        dic = await fs.readFile(dictMeta.dic, 'utf8')
       } catch (e) {
         continue
       }
@@ -150,7 +150,7 @@ module.exports = class DictionaryProvider extends EventEmitter {
     this.emit('update', this._loadedDicts)
 
     // Send an invalidation message to the renderer
-    global.ipc.send('invalidate-dict')
+    broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
   }
 
   /**
@@ -159,16 +159,16 @@ module.exports = class DictionaryProvider extends EventEmitter {
    */
   async _loadUserDict () {
     try {
-      fs.lstatSync(this._userDictionaryPath)
+      await fs.lstat(this._userDictionaryPath)
     } catch (e) {
       // Create a new file (and add Zettlr as a correct word :3)
-      fs.writeFileSync(this._userDictionaryPath, 'Zettlr', 'utf8')
+      await fs.writeFile(this._userDictionaryPath, 'Zettlr', 'utf8')
     }
-    this._userDictionary = await readFile(this._userDictionaryPath, 'utf8')
+    this._userDictionary = await fs.readFile(this._userDictionaryPath, 'utf8')
     this._userDictionary = this._userDictionary.split(/\n/)
     // If the user dictionary is empty, the split will not create an array
     // Send an invalidation message to the renderer so that it reloads all words
-    global.ipc.send('invalidate-dict')
+    broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
   }
 
   /**
@@ -180,7 +180,7 @@ module.exports = class DictionaryProvider extends EventEmitter {
   check (term) {
     // Don't check until all are loaded
     if (global.config.get('selectedDicts').length !== this._typos.length) {
-      return 'not-ready'
+      return undefined
     }
 
     // We need to differentiate between not ready and ready, but there are no
@@ -227,7 +227,7 @@ module.exports = class DictionaryProvider extends EventEmitter {
     if (!this._userDictionary.includes(term)) {
       this._userDictionary.push(term)
       // Send an invalidation message to the renderer so that it reloads all words
-      global.ipc.send('invalidate-dict')
+      broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
     }
 
     // Always return true (it'll get send to the renderer, but it won't deal with it.)

@@ -32,6 +32,11 @@ interface NotificationProvider {
   error: (error: ErrorNotification, showInOS?: boolean) => void
 }
 
+interface UpdateProvider {
+  check: () => void // Initiates an update check programmatically
+  applicationUpdateAvailable: () => boolean // True if an update is available
+}
+
 // Before the log provider has booted, these messages will be added to the
 // preBootLog
 interface BootLog {
@@ -58,7 +63,7 @@ declare module NodeJS {
     filesToOpen: string[]
     preBootLog: BootLog[]
     tippy: any
-    updates: any
+    updates: UpdateProvider
     targets: any
     recentDocs: any
     tags: any

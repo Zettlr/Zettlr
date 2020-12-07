@@ -13,7 +13,7 @@
  */
 
 const ZettlrCommand = require('./zettlr-command')
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
 const sanitize = require('sanitize-filename')
 const path = require('path')
 const fs = require('fs')

@@ -13,7 +13,7 @@
  */
 
 const ZettlrCommand = require('./zettlr-command')
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
 const makeImport = require('../modules/import')
 const path = require('path')
 
@@ -46,8 +46,8 @@ class ImportFiles extends ZettlrCommand {
     }
 
     // First ask the user for a fileList
-    let fileList = await this._app.window.askFile(fltr, true)
-    if (!fileList || fileList.length === 0) {
+    let fileList = await this._app.askFile(fltr, true)
+    if (fileList.length === 0) {
       // The user seems to have decided not to import anything. Gracefully
       // fail. Not like the German SPD.
       return false

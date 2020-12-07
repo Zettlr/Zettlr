@@ -17,7 +17,7 @@
 const tippy = require('tippy.js').default
 const EventEmitter = require('events')
 const { clipboard, ipcRenderer } = require('electron')
-const { trans } = require('../../common/lang/i18n.js')
+const { trans } = require('../../common/i18n.js')
 require('jquery-ui/ui/unique-id')
 require('jquery-ui/ui/widget')
 require('jquery-ui/ui/widgets/tabs')
@@ -152,7 +152,7 @@ class ZettlrDialog extends EventEmitter {
   _act () {
     // Focus the first input, if there is a form.
     let form = this._modal.querySelector('form#dialog')
-    if (form !== null) {
+    if (form !== null && form.querySelector('input') !== null) {
       form.querySelector('input').select()
     }
 

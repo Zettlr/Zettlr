@@ -143,6 +143,17 @@
     ora "^5.0.0"
     pretty-ms "^7.0.0"
 
+"@electron-forge/async-ora@6.0.0-beta.54":
+  version "6.0.0-beta.54"
+  resolved "https://registry.yarnpkg.com/@electron-forge/async-ora/-/async-ora-6.0.0-beta.54.tgz#2bb9bec05486106b5fd6c45b9f392f1b4b5841a3"
+  integrity sha512-OCoHds0BIXaB54HgKw6pjlHC1cnaTcfJfVVkPSJl1GLC3VShZ5bETJfsitwbiP2kbfKLUQFayW27sqbwnwQR2w==
+  dependencies:
+    colors "^1.4.0"
+    debug "^4.1.0"
+    log-symbols "^4.0.0"
+    ora "^5.0.0"
+    pretty-ms "^7.0.0"
+
 "@electron-forge/cli@^6.0.0-beta.53":
   version "6.0.0-beta.53"
   resolved "https://registry.yarnpkg.com/@electron-forge/cli/-/cli-6.0.0-beta.53.tgz#a5cbe3cb62749f16fd508fdaa7356a4ca14699ad"
@@ -274,6 +285,25 @@
     fs-extra "^9.0.1"
     which "^2.0.2"
 
+"@electron-forge/maker-base@6.0.0-beta.54":
+  version "6.0.0-beta.54"
+  resolved "https://registry.yarnpkg.com/@electron-forge/maker-base/-/maker-base-6.0.0-beta.54.tgz#f5679d6c472d9c3ada4eb0b210ea28067f95f568"
+  integrity sha512-4y0y15ieb1EOR5mibtFM9tZzaShbAO0RZu6ARLCpD5BgKuJBzXRPfWvEmY6WeDNzoWTJ+mQdYikLAeOL2E9mew==
+  dependencies:
+    "@electron-forge/shared-types" "6.0.0-beta.54"
+    fs-extra "^9.0.1"
+    which "^2.0.2"
+
+"@electron-forge/maker-zip@^6.0.0-beta.53":
+  version "6.0.0-beta.54"
+  resolved "https://registry.yarnpkg.com/@electron-forge/maker-zip/-/maker-zip-6.0.0-beta.54.tgz#83d322afd912587fd233e87c30339d8150f29bed"
+  integrity sha512-wbJhK1rDOCZMTtKrjvavT8R+Yi+v/6axsnTXvzbkzzMQ0xADKNslTwzO6mmbBJea4oIbYmQ44DRAjI21TNyQ/A==
+  dependencies:
+    "@electron-forge/maker-base" "6.0.0-beta.54"
+    "@electron-forge/shared-types" "6.0.0-beta.54"
+    cross-zip "^3.0.0"
+    fs-extra "^9.0.1"
+
 "@electron-forge/plugin-base@6.0.0-beta.53":
   version "6.0.0-beta.53"
   resolved "https://registry.yarnpkg.com/@electron-forge/plugin-base/-/plugin-base-6.0.0-beta.53.tgz#d6430ec3cb51f9bfe7386ea6b4a54a582fade8d9"
@@ -315,6 +345,16 @@
     "@electron-forge/async-ora" "6.0.0-beta.53"
     electron-packager "^15.0.0"
     electron-rebuild "^2.0.0"
+    ora "^5.0.0"
+
+"@electron-forge/shared-types@6.0.0-beta.54":
+  version "6.0.0-beta.54"
+  resolved "https://registry.yarnpkg.com/@electron-forge/shared-types/-/shared-types-6.0.0-beta.54.tgz#61ceb5e0754314035dc934e86eb21b29f893ac19"
+  integrity sha512-6CzWKFR17rxxeIqm1w5ZyT9uTAHSVAjhqL8c+TmizF2703GyCEusUkjP2UXt/tZNY4MJlukZoJM66Bct6oZJ+w==
+  dependencies:
+    "@electron-forge/async-ora" "6.0.0-beta.54"
+    electron-packager "^15.0.0"
+    electron-rebuild "^2.0.3"
     ora "^5.0.0"
 
 "@electron-forge/template-base@6.0.0-beta.53":
@@ -422,13 +462,6 @@
   integrity sha512-GeIK5rfU1Yd7BZJQPTGZMMmcZy5nhRToPXZcjaDwQDRSewdhp648GT2E4dh+L7+Io7AOW6WQ+GR44QSzja4qxg==
   dependencies:
     cross-spawn "^7.0.1"
-
-"@marshallofsound/webpack-asset-relocator-loader@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@marshallofsound/webpack-asset-relocator-loader/-/webpack-asset-relocator-loader-0.5.0.tgz#e764e9c1edf7dfc0db7aa5d67767f4f6f0a681c5"
-  integrity sha512-X50R97SiDNTpOckiplghBo63Vo8GxSsr98s3VTwEu3qyVr+TY4I91KRtKelEj2OAfgMnkTymw89+psFVq8aB1g==
-  dependencies:
-    sourcemap-codec "^1.4.4"
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
@@ -606,6 +639,11 @@
   integrity sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==
   dependencies:
     "@types/node" "*"
+
+"@types/semver@^7.3.4":
+  version "7.3.4"
+  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.3.4.tgz#43d7168fec6fa0988bb1a513a697b29296721afb"
+  integrity sha512-+nVsLKlcUCeMzD2ufHEYuJ9a2ovstb6Dp52A5VsoKxDXgvE051XgHI/33I1EymwkRGQkwnA0LkhnUzituGs4EQ==
 
 "@types/source-list-map@*":
   version "0.1.2"
@@ -953,6 +991,11 @@
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
+
+"@zeit/webpack-asset-relocator-loader@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@zeit/webpack-asset-relocator-loader/-/webpack-asset-relocator-loader-0.8.0.tgz#aeba5baefb9908caf3865807fc175a211c4746b0"
+  integrity sha512-PNx8BUlOv3aLWWKJP7OtHF9hwpc7mhv/iToWmFTF22mwltRMeJT70EmgbYj+70+apY+lDwx5IrDuorzeRCDxiA==
 
 "@zettlr/citr@1.2.1":
   version "1.2.1"
@@ -1391,10 +1434,10 @@ astral-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
   integrity sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
 
-astrocite-bibtex@^0.16.3:
-  version "0.16.3"
-  resolved "https://registry.yarnpkg.com/astrocite-bibtex/-/astrocite-bibtex-0.16.3.tgz#f0586543a9897e4f22bd87cb59adb3e44a906181"
-  integrity sha512-9PPKyxqWEJH+/eAcbWF33Goued2ymoP5/dzbr+PrfUlsXsi+2B4vOT/4sFlS6FLrulsntBoqjeHqF48QyH57hA==
+astrocite-bibtex@^0.16.4:
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/astrocite-bibtex/-/astrocite-bibtex-0.16.4.tgz#e90ba7012cbd41befd633c783691a55e5710e78c"
+  integrity sha512-5u6uNPDzqxYoJL4x2ekGeZbcBPCIHUt3JBKX0nurpOfHzJjP8SMuVO6u/fcUaG92XPoa/oKhUAFHvtwFab49iQ==
   dependencies:
     astrocite-core "^0.16.0"
     csl-json "^0.1.0"
@@ -1406,10 +1449,10 @@ astrocite-core@^0.16.0:
   dependencies:
     csl-json "^0.1.0"
 
-astrocite-eutils@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/astrocite-eutils/-/astrocite-eutils-0.16.0.tgz#b2d7336dcf4965966eb630031f86aabad3219f9e"
-  integrity sha512-Yn8PW20mTKusgdJp6tdjpeS6KGXbhgHoS67aoX/bVBZnLFVQAn3+QIii1zNZXx1i6BQ0exo4nZH8xhnKf/1QRg==
+astrocite-eutils@^0.16.4:
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/astrocite-eutils/-/astrocite-eutils-0.16.4.tgz#4bddb17adf53d548ee745cef09f4a925609cb90d"
+  integrity sha512-TMBxlSQR0Ot9Ai8JG0N5/TFbGJoEP7q6/VhCNuN6Fyg5a7mk58OiAuLg23eXsAdU404OSnpdnVSDMs+m45VcWg==
   dependencies:
     astrocite-core "^0.16.0"
     csl-json "^0.1.0"
@@ -1423,23 +1466,23 @@ astrocite-googlebooks@^0.16.0:
     astrocite-core "^0.16.0"
     csl-json "^0.1.0"
 
-astrocite-ris@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/astrocite-ris/-/astrocite-ris-0.16.0.tgz#a44275a7774b8cee85044fd8b523a60462cc5a89"
-  integrity sha512-astB/rYaYDuHnbBhcRWl64sYRFDui7KwlEsbCw+FXahMRAS+Oj2V7Q+Q846puyvubpVhVl4qJku+V7+eexD8ww==
+astrocite-ris@^0.16.4:
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/astrocite-ris/-/astrocite-ris-0.16.4.tgz#163094b402ef4bc7c63fd3c7f9fb91694996cde8"
+  integrity sha512-O6TjeuJGugxhn07JQSmTl3zTXS67crQr99pXbq+0XYRS+8Z+kYMVJNe6Eam2VZKFl4t6E3jm+0rZN2aUmsSAGA==
   dependencies:
     astrocite-core "^0.16.0"
     csl-json "^0.1.0"
 
-astrocite@^0.16.3:
-  version "0.16.3"
-  resolved "https://registry.yarnpkg.com/astrocite/-/astrocite-0.16.3.tgz#b6934d0ffc228e6f4fe4e9cc3420d4ecf5ca1063"
-  integrity sha512-fjhMmzs8GW/D7G/N7Erb3p0lv4VgHpoTAj0VmWGfT/MQKnx3ggpjqgyBgKrZg1iN0CyLSWdrcVTu/2mDN8yZyw==
+astrocite@^0.16.4:
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/astrocite/-/astrocite-0.16.4.tgz#f49dc376b6a525fb53dcb4a085a1fad4c1b10d7e"
+  integrity sha512-SnBVQWjjyDvzfCJ5U/yc1H2SqibutvnZ5fG0waG5dCUt2w9HMEZbsdZN3iezlUHRW14gL/0wAFURiy1TTfOqgQ==
   dependencies:
-    astrocite-bibtex "^0.16.3"
-    astrocite-eutils "^0.16.0"
+    astrocite-bibtex "^0.16.4"
+    astrocite-eutils "^0.16.4"
     astrocite-googlebooks "^0.16.0"
-    astrocite-ris "^0.16.0"
+    astrocite-ris "^0.16.4"
 
 async-each@^1.0.1:
   version "1.0.3"
@@ -2143,10 +2186,10 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-citeproc@^2.4.45:
-  version "2.4.45"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.4.45.tgz#5ece5bb9e3d9020867f18a93654132a3ddb66e7c"
-  integrity sha512-o7LJkGAGCvIwNyWhvUk63TiTb37PL4K6xrMI2kfZNrXh8gAnS6A4S4fBvKkgXjvSKqSr+5/p1ZjmY/Apto/qMA==
+citeproc@^2.4.48:
+  version "2.4.48"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.4.48.tgz#246819bc3cd7f53ec653087be7cecf291cf3976e"
+  integrity sha512-R0FuUoiJk7R4LDnA1w8zBoUf53WwT19+Xb51PhCIUHb3pc7wPqtlPAPefRRA07KVauVGdaEeVRS2H2Zl6ySKNw==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -2574,6 +2617,13 @@ cross-spawn@^7.0.2:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
+
+cross-zip@^3.0.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/cross-zip/-/cross-zip-3.1.0.tgz#2b7d33f2a893bf83e232ccbabf4c6c706f6b313c"
+  integrity sha512-aX02l0SD3KE27pMl69gkxDdDM5D3u9Ic4Je+2b1B2fP0dWnlWWY6ns2Vk5DEgCXJRhL3GasSpicNQRNbDkq0+w==
+  dependencies:
+    rimraf "^3.0.0"
 
 crypt@0.0.2:
   version "0.0.2"
@@ -3485,6 +3535,24 @@ electron-rebuild@^2.0.0:
     node-abi "^2.19.1"
     node-gyp "^7.1.0"
     ora "^5.1.0"
+    yargs "^16.0.0"
+
+electron-rebuild@^2.0.3:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/electron-rebuild/-/electron-rebuild-2.3.4.tgz#59d49b37d5cc690aa60500aa5e5ecd168cbb5ba2"
+  integrity sha512-EHr1bkqXTN/jQJuh2/IunF9QGa9yOgpE9KdQ9A7VHshd7ycWvoXjWzaXaimfa1nu1l7vKqLLu7N2COe3Jn9NuA==
+  dependencies:
+    "@malept/cross-spawn-promise" "^1.1.0"
+    colors "^1.3.3"
+    debug "^4.1.1"
+    detect-libc "^1.0.3"
+    fs-extra "^9.0.1"
+    got "^11.7.0"
+    lzma-native "^6.0.1"
+    node-abi "^2.19.2"
+    node-gyp "^7.1.0"
+    ora "^5.1.0"
+    tar "^6.0.5"
     yargs "^16.0.0"
 
 electron@^10.1.5:
@@ -4743,7 +4811,7 @@ globby@^11.0.1:
     merge2 "^1.3.0"
     slash "^3.0.0"
 
-got@^11.8.0:
+got@^11.7.0, got@^11.8.0:
   version "11.8.0"
   resolved "https://registry.yarnpkg.com/got/-/got-11.8.0.tgz#be0920c3586b07fd94add3b5b27cb28f49e6545f"
   integrity sha512-k9noyoIIY9EejuhaBNLyZ31D5328LeqnyPNXJQb2XlJZcKakLqN5m6O/ikhq/0lw56kUYS54fVm+D1x57YC9oQ==
@@ -5619,10 +5687,10 @@ joplin-turndown-plugin-gfm@^1.0.12:
   resolved "https://registry.yarnpkg.com/joplin-turndown-plugin-gfm/-/joplin-turndown-plugin-gfm-1.0.12.tgz#f0774183177895c6fedeec951053cab6046dede8"
   integrity sha512-qL4+1iycQjZ1fs8zk3jSRk7cg3ROBUHk7GKtiLAQLFzLPKErnILUvz5DLszSQvz3s1sTjPbywLDISVUtBY6HaA==
 
-joplin-turndown@^4.0.29:
-  version "4.0.29"
-  resolved "https://registry.yarnpkg.com/joplin-turndown/-/joplin-turndown-4.0.29.tgz#2b26bb6e77563144173f11c7929bbd079f9d2756"
-  integrity sha512-rVGu8u4TpSRETo59/jiVW9iaXnpdxxpBHjb7nyCflkDfWhg1Kska4uagBQGw7cD2yxw7mB2YUIB/fAgtlIzcDQ==
+joplin-turndown@^4.0.30:
+  version "4.0.30"
+  resolved "https://registry.yarnpkg.com/joplin-turndown/-/joplin-turndown-4.0.30.tgz#c145651abdb07b9a47b85779273fdc06e0fce820"
+  integrity sha512-OrGdNTsjI6/cbx/es9Hl0YI3YTql4SopduFcYCnWTZgqT0SJqILnF2JQxSNnbPnkSDIIRdNOG4+iNzlY6bS1nw==
   dependencies:
     css "^2.2.4"
     html-entities "^1.2.1"
@@ -6176,6 +6244,16 @@ lru-cache@^6.0.0:
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
+
+lzma-native@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/lzma-native/-/lzma-native-6.0.1.tgz#eec231d31b9f9ba5aea5afc86326669f01dedb58"
+  integrity sha512-O6oWF0xe1AFvOCjU8uOZBZ/lhjaMNwHfVNaqVMqmoQXlRwBcFWpCAToiZOdXcKVMdo/5s/D0a2QgA5laMErxHQ==
+  dependencies:
+    node-addon-api "^1.6.0"
+    node-pre-gyp "^0.11.0"
+    readable-stream "^2.3.5"
+    rimraf "^2.7.1"
 
 make-dir@^2.0.0, make-dir@^2.1.0:
   version "2.1.0"
@@ -6733,6 +6811,18 @@ node-abi@^2.19.1:
   dependencies:
     semver "^5.4.1"
 
+node-abi@^2.19.2:
+  version "2.19.3"
+  resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-2.19.3.tgz#252f5dcab12dad1b5503b2d27eddd4733930282d"
+  integrity sha512-9xZrlyfvKhWme2EXFKQhZRp1yNWT/uI1luYPr3sFl+H4keYY4xR+1jO7mvTTijIsHf1M+QDe9uWuKeEpLInIlg==
+  dependencies:
+    semver "^5.4.1"
+
+node-addon-api@^1.6.0:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-1.7.2.tgz#3df30b95720b53c24e59948b49532b662444f54d"
+  integrity sha512-ibPK3iA+vaY1eEjESkQkM0BbCqFOaZMiXRTtdB0u7b4djtY6JnsjvPdUHVMg6xQt3B8fpTTWHI9A+ADjM9frzg==
+
 node-fetch@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
@@ -6790,6 +6880,22 @@ node-loader@^1.0.2:
   dependencies:
     loader-utils "^2.0.0"
     schema-utils "^3.0.0"
+
+node-pre-gyp@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.11.0.tgz#db1f33215272f692cd38f03238e3e9b47c5dd054"
+  integrity sha512-TwWAOZb0j7e9eGaf9esRx3ZcLaE5tQ2lvYy1pb5IAaG1a2e2Kv5Lms1Y4hpj+ciXJRofIxxlt5haeQ/2ANeE0Q==
+  dependencies:
+    detect-libc "^1.0.2"
+    mkdirp "^0.5.1"
+    needle "^2.2.1"
+    nopt "^4.0.1"
+    npm-packlist "^1.1.6"
+    npmlog "^4.0.2"
+    rc "^1.2.7"
+    rimraf "^2.6.1"
+    semver "^5.3.0"
+    tar "^4"
 
 node-pre-gyp@^0.12.0:
   version "0.12.0"
@@ -7863,6 +7969,19 @@ read-pkg@^2.0.0:
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
+readable-stream@^2.3.5:
+  version "2.3.7"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.7.tgz#1eca1cf711aef814c04f62252a36a62f6cb23b57"
+  integrity sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw==
+  dependencies:
+    core-util-is "~1.0.0"
+    inherits "~2.0.3"
+    isarray "~1.0.0"
+    process-nextick-args "~2.0.0"
+    safe-buffer "~5.1.1"
+    string_decoder "~1.1.1"
+    util-deprecate "~1.0.1"
+
 readable-stream@^3.1.1, readable-stream@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.4.0.tgz#a51c26754658e0a3c21dbf59163bd45ba6f447fc"
@@ -8170,14 +8289,14 @@ rimraf@2.6.3:
   dependencies:
     glob "^7.1.3"
 
-rimraf@^2.5.4, rimraf@^2.6.1, rimraf@^2.6.3:
+rimraf@^2.5.4, rimraf@^2.6.1, rimraf@^2.6.3, rimraf@^2.7.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.7.1.tgz#35797f13a7fdadc566142c29d4f07ccad483e3ec"
   integrity sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==
   dependencies:
     glob "^7.1.3"
 
-rimraf@^3.0.2:
+rimraf@^3.0.0, rimraf@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-3.0.2.tgz#f1a5402ba6220ad52cc1282bac1ae3aa49fd061a"
   integrity sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==
@@ -8617,11 +8736,6 @@ source-map@^0.7.3:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
   integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
 
-sourcemap-codec@^1.4.4:
-  version "1.4.8"
-  resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
-  integrity sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
-
 spdx-correct@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/spdx-correct/-/spdx-correct-3.1.0.tgz#fb83e504445268f154b074e218c87c003cd31df4"
@@ -9029,7 +9143,7 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.3"
 
-tar@^6.0.1:
+tar@^6.0.1, tar@^6.0.5:
   version "6.0.5"
   resolved "https://registry.yarnpkg.com/tar/-/tar-6.0.5.tgz#bde815086e10b39f1dcd298e89d596e1535e200f"
   integrity sha512-0b4HOimQHj9nXNEAA7zWwMM91Zhhba3pspja6sQbgTpynOJf+bkjBnfybNYzbpLbnwXnbyB4LOREvlyXLkCHSg==

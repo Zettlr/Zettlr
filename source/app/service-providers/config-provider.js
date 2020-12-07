@@ -28,7 +28,7 @@ const safeAssign = require('../../common/util/safe-assign')
 const isDir = require('../../common/util/is-dir')
 const isFile = require('../../common/util/is-file')
 const isDictAvailable = require('../../common/util/is-dict-available')
-const { getLanguageFile } = require('../../common/lang/i18n')
+const { getLanguageFile } = require('../../common/i18n')
 const COMMON_DATA = require('../../common/data.json')
 const ZETTLR_VERSION = app.getVersion()
 
@@ -119,7 +119,7 @@ module.exports = class ConfigProvider extends EventEmitter {
       'pandoc': '',
       'xelatex': '',
       // The pandoc command to be run on export
-      'pandocCommand': 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"',
+      'pandocCommand': 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ --citeproc --bibliography "$bibliography$" $cslstyle$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"',
       'export': {
         'dir': 'temp', // Can either be "temp" or "cwd" (current working directory)
         'stripIDs': false, // Strip ZKN IDs such as @ID:<id>
@@ -345,12 +345,15 @@ module.exports = class ConfigProvider extends EventEmitter {
   load () {
     this.config = this.cfgtpl
     let readConfig = {}
+    global.log.verbose(`[Config Provider] Loading configuration file from ${this.configFile} ...`)
 
     // Does the file already exist?
     try {
       fs.lstatSync(this.configFile)
       readConfig = JSON.parse(fs.readFileSync(this.configFile, { encoding: 'utf8' }))
+      global.log.verbose('[Config Provider] Successfully loaded configuration')
     } catch (e) {
+      global.log.info('[Config Provider] No configuration file found - using defaults.')
       fs.writeFileSync(this.configFile, JSON.stringify(this.cfgtpl), { encoding: 'utf8' })
       this._firstStart = true // Assume first start
       this._newVersion = true // Obviously
@@ -362,6 +365,11 @@ module.exports = class ConfigProvider extends EventEmitter {
     this._newVersion = oldVersion !== this.config.version
     if (this._newVersion) {
       global.log.info(`Migrating from ${oldVersion} to ${this.config.version}!`)
+    }
+
+    // DEBUG: Disable vim if it's activated
+    if (readConfig.editor.inputMode === 'vim') {
+      readConfig.editor.inputMode = 'default'
     }
 
     this.update(readConfig)
@@ -381,7 +389,13 @@ module.exports = class ConfigProvider extends EventEmitter {
       this.load()
     }
     // (Over-)write the configuration
-    fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
+    global.log.verbose(`[Config Provider] Writing configuration file to ${this.configFile}...`)
+
+    try {
+      fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
+    } catch (e) {
+      global.log.error(`[Config Provider] Error during file write: ${e.message}`, e)
+    }
 
     return this
   }

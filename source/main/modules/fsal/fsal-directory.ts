@@ -110,21 +110,23 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
     // both lean AND it can be reconstructed into a
     // circular structure with NO overheads in the
     // renderer.
-    'parent': (dirObject.parent !== null) ? dirObject.parent.hash : null,
-    'path': dirObject.path,
-    'dir': dirObject.dir,
-    'name': dirObject.name,
-    'hash': dirObject.hash,
+    parent: (dirObject.parent !== null) ? dirObject.parent.hash : null,
+    path: dirObject.path,
+    dir: dirObject.dir,
+    name: dirObject.name,
+    hash: dirObject.hash,
     // The project itself is not needed, renderer only checks if it equals
     // null, or not (then it means there is a project)
-    'project': (dirObject._settings.project !== null) ? true : null,
-    'children': children,
-    'attachments': dirObject.attachments.map(elem => FSALAttachment.metadata(elem)),
-    'type': dirObject.type,
-    'sorting': dirObject._settings.sorting,
-    'icon': dirObject._settings.icon,
-    'modtime': dirObject.modtime,
-    'creationtime': dirObject.creationtime
+    project: (dirObject._settings.project !== null) ? true : null,
+    children: children,
+    attachments: dirObject.attachments.map(elem => FSALAttachment.metadata(elem)),
+    type: dirObject.type,
+    sorting: dirObject._settings.sorting,
+    icon: dirObject._settings.icon,
+    modtime: dirObject.modtime,
+    creationtime: dirObject.creationtime,
+    // Include the optional dirNotFoundFlag
+    dirNotFoundFlag: dirObject.dirNotFoundFlag
   }
 }
 
@@ -249,6 +251,24 @@ async function readTree (currentPath: string, cache: FSALCache, parent: DirDescr
 
 export async function parse (dirPath: string, cache: FSALCache, parent: DirDescriptor|null = null): Promise<DirDescriptor> {
   return await readTree(dirPath, cache, parent)
+}
+
+export function getDirNotFoundDescriptor (dirPath: string): DirDescriptor {
+  return {
+    parent: null, // Always a root
+    path: dirPath,
+    name: path.basename(dirPath),
+    dir: path.dirname(dirPath),
+    hash: hash(dirPath),
+    children: [], // Always empty
+    attachments: [], // Always empty
+    type: DescriptorType.Directory,
+    modtime: 0, // ¯\_(ツ)_/¯
+    creationtime: 0,
+    // Settings are expected by some functions
+    _settings: JSON.parse(JSON.stringify(SETTINGS_TEMPLATE)),
+    dirNotFoundFlag: true
+  }
 }
 
 // Sets an arbitrary setting on the directory object.

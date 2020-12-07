@@ -4,9 +4,26 @@
  * @param   {CodeMirror}  cm  The instance
  */
 module.exports = (cm) => {
-  cm.on('cursorActivity', applyHeadingClasses)
-  cm.on('viewportChange', applyHeadingClasses)
-  cm.on('optionChange', applyHeadingClasses)
+  // DEBUG TESTING
+
+  // While taskHandle is undefined, there's no task scheduled. Else, there is.
+  let taskHandle
+
+  const callback = function (cm) {
+    if (taskHandle !== undefined) {
+      return // There's already a task scheduled
+    }
+
+    taskHandle = requestIdleCallback(function () {
+      applyHeadingClasses(cm)
+      taskHandle = undefined // Reset task handle
+    }, { timeout: 1000 }) // Execute after 1 seconds, even if there's a performance penalty involved
+  }
+
+  cm.on('cursorActivity', callback)
+  cm.on('viewportChange', callback)
+  cm.on('optionChange', callback)
+  // cm.on('optionChange', applyHeadingClasses) // DEBUG
 }
 
 function applyHeadingClasses (cm) {

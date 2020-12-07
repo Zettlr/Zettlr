@@ -16,7 +16,7 @@ const fs = require('fs').promises
 const path = require('path')
 const { exec } = require('child_process')
 const commandExists = require('command-exists')
-const { trans } = require('../../../common/lang/i18n')
+const { trans } = require('../../../common/i18n')
 const isFile = require('../../../common/util/is-file')
 
 module.exports = async function (options) {
@@ -47,14 +47,10 @@ module.exports = async function (options) {
     throw new Error(trans('system.error.no_xelatex_message'), trans('system.error.no_xelatex_title'))
   }
 
-  // Also check if we can have pandoc-citeproc run over the file
-  let citeproc = ''
-  if (isFile(global.config.get('export.cslLibrary'))) {
-    citeproc += `--filter pandoc-citeproc --bibliography "${global.config.get('export.cslLibrary')}"`
-  }
-
+  // Add a custom CSL style if applicable
+  let cslstyle = ''
   if (options.hasOwnProperty('cslStyle') && isFile(options.cslStyle)) {
-    citeproc += ` --csl "${options.cslStyle}"`
+    cslstyle = `--csl "${options.cslStyle}"`
   }
 
   // Pandoc flags to be passed to the compiler
@@ -63,7 +59,8 @@ module.exports = async function (options) {
     'infile': options.sourceFile,
     'toc': (options.pdf.toc && options.format === 'pdf') ? '--toc' : '',
     'tocdepth': (options.pdf.tocDepth) ? '--toc-depth=' + options.pdf.tocDepth : '',
-    'citeproc': citeproc,
+    'bibliography': global.config.get('export.cslLibrary'),
+    'cslstyle': cslstyle,
     'outfile': options.targetFile,
     'outflag': '-t ' + ((options.format === 'pdf') ? 'latex' : options.format),
     'format': options.format,

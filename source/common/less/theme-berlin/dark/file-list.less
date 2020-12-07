@@ -38,9 +38,13 @@
         background-color:var(--grey-8);
         color: var(--c-primary-shade);
 
-        .sorter .sortDirection, .sorter .sortType {
+        .sorter {
           background-color: var(--grey-8);
-          &:hover { color: var(--grey-2); }
+        }
+
+        .sorter .sortDirection:hover,
+        .sorter .sortType:hover {
+          color: var(--grey-2);
         }
       }
     }

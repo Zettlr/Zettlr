@@ -41,6 +41,7 @@ var availableDatabases = {
     { text: 'less', displayText: 'LESS' },
     { text: 'html', displayText: 'HTML' },
     { text: 'markdown', displayText: 'Markdown' },
+    { text: 'mermaid', displayText: 'Mermaid' },
     { text: 'xml', displayText: 'XML' },
     { text: 'tex', displayText: 'TeX' },
     { text: 'php', displayText: 'PHP' },
@@ -89,25 +90,68 @@ module.exports = {
         return
       }
 
+      // If we're here, we can begin an autocompletion
       autocompleteStart = Object.assign({}, cm.getCursor())
       currentDatabase = availableDatabases[autocompleteDatabase]
       cm.showHint({
-        'hint': (cm, opt) => {
-          return hint(cm, opt)
-        }
+        hint: hintFunction,
+        completeSingle: false
       }) // END showHint
+    })
+
+    // endCompletion
+
+    // The "endCompletion" event (currently undocumented) is only fired on
+    // the CodeMirror instance, and _not_ the completion object. Hence, we
+    // define it here.
+    cm.on('endCompletion', () => {
+      autocompleteStart = null
+      currentDatabase = null
     })
   },
   'setAutocompleteDatabase': (type, database) => {
-    const types = Object.keys(availableDatabases)
-    if (!types.includes(type)) {
-      console.error('Unsupported autocomplete database type! Supported are: ' + types.join(', '))
-    } else {
+    // Make additional adjustments if necessary
+    if (type === 'tags') {
+      // Here, we get an object from main which is not in the right data format
+      // (it's a hashmap, not an array)
+      let tagHints = Object.keys(database).map(key => {
+        return {
+          text: database[key].text,
+          displayText: '#' + database[key].text,
+          className: database[key].className // Optional, can be undefined
+        }
+      })
+
+      availableDatabases[type] = tagHints
+    } else if (type === 'citekeys') {
+      // This database works as-is
       availableDatabases[type] = database
+    } else if (type === 'files') {
+      let fileHints = Object.keys(database).map(key => {
+        return {
+          text: database[key].text,
+          displayText: database[key].displayText,
+          className: database[key].className,
+          id: database[key].id // We need to add the ID property (if applicable)
+        }
+      })
+
+      availableDatabases[type] = fileHints
+    } else {
+      const types = Object.keys(availableDatabases)
+      console.error('Unsupported autocomplete database type! Supported are: ' + types.join(', '))
     }
   }
 }
 
+/**
+ * Determins the correct database for an autocomplete operation, if applicable.
+ *
+ * @param   {CodeMirror}  cm           The editor instance
+ * @param   {any}         changeObj    The changeObject to be used to determine the database.
+ *
+ * @return  {string|undefined}         Either the database name, or undefined
+ */
 function shouldBeginAutocomplete (cm, changeObj) {
   // First, get cursor and line.
   const cursor = cm.getCursor()
@@ -124,9 +168,9 @@ function shouldBeginAutocomplete (cm, changeObj) {
   // A valid citekey position is: Beginning of the line (citekey without square
   // brackets), after a square bracket open (regular citation without prefix),
   // or after a space (either a standalone citation or within square brackets
-  // but with a prefix).
+  // but with a prefix). Also, the citekey can be prefixed with a -.
   if (
-    changeObj.text[0] === '@' && (isSOL || [ ' ', '[' ].includes(charBefore))
+    changeObj.text[0] === '@' && (isSOL || [ ' ', '[', '-' ].includes(charBefore))
   ) {
     return 'citekeys'
   }
@@ -168,28 +212,59 @@ function shouldBeginAutocomplete (cm, changeObj) {
   return undefined // Nothing to do for us here
 }
 
-function hint (cm, opt) {
+/**
+ * Called everytime the selection changes by the showHint addon to provide an
+ * updated list of hint items.
+ *
+ * @param   {string}  term  The term used to find matches
+ *
+ * @return  {any[]}         An array of completion items
+ */
+function getHints (term) {
+  let results = currentDatabase.filter((entry) => {
+    // First search the display text, then the entry text itself
+    if (
+      entry.displayText !== undefined &&
+      entry.displayText.toLowerCase().indexOf(term) >= 0
+    ) {
+      return true
+    }
+
+    if (entry.text.toLowerCase().indexOf(term) >= 0) {
+      return true
+    }
+
+    // No match
+    return false
+  })
+
+  results = results.sort((entryA, entryB) => {
+    // This sorter makes sure "special" things are always sorted top
+    let aClass = entryA.className !== undefined
+    let bClass = entryB.className !== undefined
+    let aMatch = (entryA.matches !== undefined) ? entryA.matches : 0
+    let bMatch = (entryB.matches !== undefined) ? entryB.matches : 0
+    if (aClass && !bClass) return -1
+    if (!aClass && bClass) return 1
+    if (aClass && bClass) return aMatch - bMatch
+    return 0
+  })
+
+  return results
+}
+
+/**
+ * Hinting function used for the autocomplete functionality
+ *
+ * @param   {CodeMirror}  cm   The editor instance
+ * @param   {any}  opt         The options passed to the showHint option
+ *
+ * @return  {any}              The completion object
+ */
+function hintFunction (cm, opt) {
   let term = cm.getRange(autocompleteStart, cm.getCursor()).toLowerCase()
   let completionObject = {
-    'list': Object.keys(currentDatabase).filter((key) => {
-      // First search the ID. Second, search the displayText, if available.
-      // Third: return false if nothing else has matched.
-      if (currentDatabase[key].text.toLowerCase().indexOf(term) >= 0) return true
-      if (currentDatabase[key].hasOwnProperty('displayText') && currentDatabase[key].displayText.toLowerCase().indexOf(term) >= 0) return true
-      return false
-    })
-      .sort((a, b) => {
-        // This sorter makes sure "special" things are always sorted top
-        let aClass = currentDatabase[a].className !== undefined
-        let bClass = currentDatabase[b].className !== undefined
-        let aMatch = currentDatabase[a].matches || 0
-        let bMatch = currentDatabase[b].matches || 0
-        if (aClass && !bClass) return -1
-        if (!aClass && bClass) return 1
-        if (aClass && bClass) return aMatch - bMatch
-        return 0
-      })
-      .map(key => currentDatabase[key]),
+    'list': getHints(term),
     'from': autocompleteStart,
     'to': cm.getCursor()
   }
@@ -206,6 +281,14 @@ function hint (cm, opt) {
       let text = completion.displayText
       if (completion.id && text.indexOf(completion.id) >= 0) {
         text = text.replace(completion.id, '').trim()
+
+        // The file database has this id: filename thing which we need to
+        // account for. TODO: Do it like a grown up and retrieve the filename
+        // from somewhere else -- CodeMirror allows for arbitrary objects to be
+        // present here, so possibly this is the more elegant solution.
+        if (text.substr(0, 2) === ': ') {
+          text = text.substr(2)
+        }
       }
       // In case the whole filename consists of the ID, well.
       // Then, have your ID duplicated.
@@ -225,11 +308,14 @@ function hint (cm, opt) {
         cur.ch += end.length
         cm.setCursor(cur)
       }
-      if (linkPref === 'always' || (linkPref === 'withID' && completion.id)) {
+
+      if (linkEndMissing) {
+        cm.replaceSelection(end) // Add the link ending
+      }
+
+      if (linkPref === 'always' || (linkPref === 'withID' && completion.id !== '')) {
         // We need to add the text after the link.
         cm.replaceSelection(prefix + text)
-      } else if (linkEndMissing) {
-        cm.replaceSelection(end) // Add the link ending
       }
     } else if (currentDatabase === availableDatabases['syntaxHighlighting']) {
       // In the case of an accepted syntax highlighting, we can assume the user
@@ -248,7 +334,10 @@ function hint (cm, opt) {
     currentDatabase = null // Reset the database used for the hints.
   })
 
-  // If the hint disappears, always reset the variables
+  // If the hint is being closed, always reset the variables.
+  // NOTE: There's also the endCompletion event, which does the same,
+  // only that that event is being fired if the user types an, e.g., space
+  // closingCharacters on the hintOption.
   CodeMirror.on(completionObject, 'close', () => {
     autocompleteStart = null
     currentDatabase = null

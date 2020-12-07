@@ -1,3 +1,4 @@
+/* global CodeMirror define */
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -10,70 +11,72 @@
  */
 
 // Additional fix: Different paths to CodeMirror
- (function(mod) {
-  if (typeof exports == "object" && typeof module == "object") // CommonJS
-    mod(require("codemirror/lib/codemirror"));
-  else if (typeof define == "function" && define.amd) // AMD
-    define(["codemirror/lib/codemirror"], mod);
-  else // Plain browser env
-    mod(CodeMirror);
- })(function(CodeMirror) {
-  "use strict";
+(function (mod) {
+  if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
+    mod(require('codemirror/lib/codemirror'))
+  } else if (typeof define === 'function' && define.amd) { // AMD
+    define(['codemirror/lib/codemirror'], mod)
+  } else { // Plain browser env
+    mod(CodeMirror)
+  }
+})(function (CodeMirror) {
+  'use strict'
 
-  var Pos = CodeMirror.Pos;
-  var listTokenRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/;
+  var Pos = CodeMirror.Pos
+  var listTokenRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/
 
-  function matchListToken(pos, cm) {
+  function matchListToken (pos, cm) {
     /* Get some info about the current state */
-    var eolState = cm.getStateAfter(pos.line);
-    var inList = eolState.list !== false;
-    var inQuote = eolState.quote !== 0;
+    var eolState = cm.getStateAfter(pos.line)
+    var inList = eolState.list !== false
+    var inQuote = eolState.quote !== 0
 
     /* Get the line from the start to where the cursor currently is */
-    var lineStart = cm.getRange(Pos(pos.line, 0), pos);
+    var lineStart = cm.getRange(Pos(pos.line, 0), pos)
 
     /* Matches the beginning of the list line with the list token RE */
-    var match = listTokenRE.exec(lineStart);
+    var match = listTokenRE.exec(lineStart)
 
     /* Not being in a list, or being in a list but not right after the list
      * token, are both not considered a match */
-    if ((!inList && !inQuote) || !match)
+    if ((!inList && !inQuote) || !match) {
       return false
-    else
+    } else {
       return true
+    }
   }
 
-  CodeMirror.commands.autoIndentMarkdownList = function(cm) {
-    if (cm.getOption("disableInput")) return CodeMirror.Pass;
-    var ranges = cm.listSelections();
+  CodeMirror.commands.autoIndentMarkdownList = function (cm) {
+    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    var ranges = cm.listSelections()
     for (var i = 0; i < ranges.length; i++) {
-      var pos = ranges[i].head;
+      var pos = ranges[i].head
 
       if (!ranges[i].empty() || !matchListToken(pos, cm)) {
         /* If no match, call regular Tab handler */
-        cm.execCommand("indentMore");
-        return;
+        cm.execCommand('indentMore')
+        return
       }
 
       /* Select the whole list line and indent it by one unit */
-      cm.indentLine(pos.line, "add");
+      cm.indentLine(pos.line, 'add')
     }
-  };
+  }
 
-  CodeMirror.commands.autoUnindentMarkdownList = function(cm) {
-    if (cm.getOption("disableInput")) return CodeMirror.Pass;
-    var ranges = cm.listSelections();
+  CodeMirror.commands.autoUnindentMarkdownList = function (cm) {
+    if (cm.getOption('disableInput')) return CodeMirror.Pass
+    var ranges = cm.listSelections()
     for (var i = 0; i < ranges.length; i++) {
-      var pos = ranges[i].head;
+      var pos = ranges[i].head
 
       if (!ranges[i].empty() || !matchListToken(pos, cm)) {
         /* If no match, call regular Shift-Tab handler */
-        cm.execCommand("indentLess");
-        return;
+        cm.execCommand('indentLess')
+        return
       }
 
       /* Select the whole list line and unindent it by one unit */
-      cm.indentLine(pos.line, "subtract");
+      cm.indentLine(pos.line, 'subtract')
     }
-  };
-});
+  }
+})

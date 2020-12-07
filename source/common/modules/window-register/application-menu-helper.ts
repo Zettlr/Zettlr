@@ -51,10 +51,15 @@ export default function showPopupMenu (position: Point|Rect, items: AnyMenuItem[
             width: rect.width,
             height: rect.height
           }
-          closeSubmenu = showPopupMenu(target, (item as SubmenuItem).submenu, (clickedID: string) => {
+
+          const subCB = (clickedID: string): void => {
             // Call the regular callback to basically "bubble up" the event
             callback(clickedID)
-          })
+            // Furthermore, we need to close the parent menu
+            appMenu.parentElement?.removeChild(appMenu)
+          }
+
+          closeSubmenu = showPopupMenu(target, (item as SubmenuItem).submenu, subCB)
         } else if (
           pointInRect(point, menuRect) &&
           !pointInRect(point, rect) &&

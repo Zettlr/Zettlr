@@ -53,6 +53,30 @@
         "command": "print"
       },
       {
+        "label": "menu.preferences",
+        "submenu": [
+          {
+            "label": "menu.preferences",
+            "id": "preferences-item",
+            "accelerator": "Ctrl+,",
+            "command": "open-preferences"
+          },
+          {
+            "label": "menu.pdf_preferences",
+            "accelerator": "Ctrl+Alt+,",
+            "command": "open-pdf-preferences"
+          },
+          {
+            "label": "menu.tags",
+            "command": "open-tags-preferences"
+          },
+          {
+            "label": "menu.custom_css",
+            "command": "open-custom-css"
+          }
+        ]
+      },
+      {
         "type": "separator"
       },
       {
@@ -88,24 +112,6 @@
         "label": "menu.delete_dir",
         "accelerator": "Ctrl+Delete",
         "command": "dir-delete"
-      },
-      {
-        "label": "menu.preferences",
-        "accelerator": "Ctrl+,",
-        "command": "open-preferences"
-      },
-      {
-        "label": "menu.pdf_preferences",
-        "accelerator": "Ctrl+Alt+,",
-        "command": "open-pdf-preferences"
-      },
-      {
-        "label": "menu.tags",
-        "command": "open-tags-preferences"
-      },
-      {
-        "label": "menu.custom_css",
-        "command": "open-custom-css"
       },
       { "type": "separator" },
       {
@@ -250,7 +256,7 @@
       },
       {
         "label": "menu.zoom_out",
-        "accelerator": "Ctrl+Minus",
+        "accelerator": "Ctrl+-",
         "command": "zoom-out"
       },
       {
@@ -258,6 +264,7 @@
       },
       {
         "label": "menu.toggle_fullscreen",
+        "accelerator": "F11",
         "role": "togglefullscreen"
       }
     ]
@@ -295,7 +302,7 @@
       {
         "label": "menu.win_minimize",
         "accelerator": "Ctrl+M",
-        "role": "minimize"
+        "zettlrRole": "minimize"
       },
       {
         "label": "menu.win_close",

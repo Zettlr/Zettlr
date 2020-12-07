@@ -300,7 +300,7 @@
       },
       {
         "label": "menu.zoom_out",
-        "accelerator": "Cmd+Minus",
+        "accelerator": "Cmd+-",
         "command": "zoom-out"
       },
       {
@@ -345,7 +345,7 @@
       {
         "label": "menu.win_minimize",
         "accelerator": "Cmd+M",
-        "role": "minimize"
+        "zettlrRole": "minimize"
       },
       {
         "label": "menu.win_close",

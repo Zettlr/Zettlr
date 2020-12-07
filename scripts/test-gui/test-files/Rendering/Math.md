@@ -35,6 +35,50 @@ $$
 p(x\vert y) = \frac{p(y \vert x)p(x)}{p(y)}
 $$
 
+## Chemical Formulae
+
+These are enabled by the mhchem extension to KaTeX. These examples are taken from the [official package's manpage](https://mhchem.github.io/MathJax-mhchem/). Feel free to add more if necessary.
+
+One:
+
+$\ce{CO2 + C -> 2 CO}$
+
+Two:
+
+$\ce{Hg^2+ ->[I-] HgI2 ->[I-] [Hg^{II}I4]^2-}$
+
+Three:
+
+$C_p[\ce{H2O(l)}] = \pu{75.3 J // mol K}$
+
+### Chemical Formula
+
+$\ce{Sb2O3}$
+
+### Charges
+
+$\ce{CrO4^2-}$
+
+$\ce{[AgCl2]-}$
+
+$\ce{Y^99+}$
+
+### Stoichiometric Numbers
+
+$\ce{3 H2O}$
+
+### Isotopes
+
+$\ce{^227_90Th+}$
+
+$\ce{^{0}_{-1}n^{-}}$
+
+### Bonds
+
+$\ce{A\bond{1}B\bond{2}C\bond{3}D}$
+
+$\ce{O\bond{2}C\bond{2}O}$
+
 ## Inline Rendering
 
 Lorem ipsum dolor sit amet, $a^2 + b^2 = c^2$ consectetur adipiscing elit. Nam eros velit, fringilla et magna nec, posuere mattis orci. Sed suscipit non $$e=mc^2$$ mauris et rutrum. In tristique risus volutpat nisl laoreet fringilla. $a^2 + b^2 = c^2$ Sed consequat placerat ligula, ut consequat lacus gravida in. $a^2 + b^2 = c^2$ Curabitur nulla urna, maximus in eros vitae, $a^2 + b^2 = c^2$ gravida suscipit odio. Sed facilisis tincidunt placerat. Pellentesque dignissim feugiat $a^2 + b^2 = c^2$ facilisis. Maecenas ligula sapien, vehicula nec tristique molestie, $a^2 + b^2 = c^2$ molestie ut nulla. Ut ut rhoncus nibh.

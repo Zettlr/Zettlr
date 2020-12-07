@@ -13,7 +13,7 @@
  */
 
 const ZettlrCommand = require('./zettlr-command')
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
 const hash = require('../../common/util/hash')
 const path = require('path')
 const sanitize = require('sanitize-filename')
@@ -37,7 +37,7 @@ class FileNew extends ZettlrCommand {
     if (arg.hasOwnProperty('hash')) {
       dir = this._app.findDir(arg.hash)
     } else {
-      global.log.warn('No directory selected. Using currently selected directory ...')
+      global.log.warning('No directory selected. Using currently selected directory ...')
       dir = this._app.getCurrentDir()
     }
 
