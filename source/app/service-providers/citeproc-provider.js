@@ -81,6 +81,9 @@ module.exports = class CiteprocProvider {
           'status': this._status
         }
       },
+      getCitationReference: (citationKeys) => {
+        return this.getCitationReference(citationKeys)
+      },
       updateItems: (idList) => { return this.updateItems(idList) },
       makeBibliography: () => { return this.makeBibliography() },
       hasBibTexAttachments: () => {
