@@ -396,9 +396,9 @@ export default class Zettlr {
     // TODO: Move this to a command
     // The user wants to open another file or directory.
     const rmdSupport = global.config.get('enableRMarkdown') as boolean
-    const extensions = [ '.markdown', '.md', '.txt' ]
+    const extensions = [ 'markdown', 'md', 'txt' ]
     if (rmdSupport) {
-      extensions.push('.rmd')
+      extensions.push('rmd')
     }
 
     const filter = [{ 'name': trans('system.files'), 'extensions': extensions }]
