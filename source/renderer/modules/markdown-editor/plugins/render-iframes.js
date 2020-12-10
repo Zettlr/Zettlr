@@ -36,13 +36,13 @@
       let curTo = { 'line': i, 'ch': match[0].length }
 
       // We can only have one marker at any given position at any given time
-      if (cm.findMarks(curFrom, curTo).length > 0) continue
+      if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
 
       // Now we can render it finally.
 
       let iframe = $(match[0])[0] // Use jQuery for simple creation of the DOM element
 
-      cm.markText(
+      cm.doc.markText(
         curFrom, curTo,
         {
           'clearOnEnter': true,

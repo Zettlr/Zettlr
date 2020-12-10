@@ -100,7 +100,7 @@
         }
 
         // We can only have one marker at any given position at any given time
-        if (cm.findMarks(myMarker.curFrom, myMarker.curTo).length > 0) continue
+        if (cm.doc.findMarks(myMarker.curFrom, myMarker.curTo).length > 0) continue
 
         // Do not render if it's inside a comment (in this case the mode will be
         // markdown, but comments shouldn't be included in rendering)
@@ -116,7 +116,7 @@
         // Use jQuery for simple creation of the DOM element
         let elem = $('<span class="preview-math"></span>')[0]
 
-        let textMarker = cm.markText(
+        let textMarker = cm.doc.markText(
           myMarker.curFrom, myMarker.curTo,
           {
             'clearOnEnter': true,

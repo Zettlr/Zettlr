@@ -125,7 +125,7 @@ const Table = require('../../table-editor');
       let curTo = { 'line': lastLine, 'ch': cm.getLine(lastLine).length }
 
       // We can only have one marker at any given position at any given time
-      if (cm.findMarks(curFrom, curTo).length > 0) continue
+      if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
 
       // A last sanity check: You could write YAML frontmatters by using only
       // dashes at the beginning and ending, which demarcates an edge condition.
@@ -187,7 +187,7 @@ const Table = require('../../table-editor');
       // the DOM.
 
       // Apply TextMarker
-      textMarker = cm.markText(
+      textMarker = cm.doc.markText(
         curFrom, curTo,
         {
           'clearOnEnter': false,

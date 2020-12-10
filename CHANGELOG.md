@@ -20,6 +20,7 @@ The default Pandoc command now targets Pandoc 2.11 and above. **In order to use 
 ## Under the Hood
 
 - Migrated the UpdateProvider to TypeScript.
+- TextMarkers are now bound to the Document instances, not the editor overall. This increases the speed of document switching.
 
 # 1.8.1
 

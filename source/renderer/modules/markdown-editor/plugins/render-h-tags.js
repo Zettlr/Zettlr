@@ -45,7 +45,7 @@
       curFrom = { 'line': i, 'ch': 0 }
 
       // We can only have one marker at any given position at any given time
-      if (cm.findMarks(curFrom, curTo).length > 0) continue
+      if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
 
       let hTagWrapper = document.createElement('div')
       hTagWrapper.className = 'heading-tag'
@@ -54,7 +54,7 @@
       hTag.textContent = 'h' + headingLevel
       hTagWrapper.appendChild(hTag)
 
-      let textMarker = cm.markText(
+      let textMarker = cm.doc.markText(
         curFrom, curTo,
         {
           'clearOnEnter': true,

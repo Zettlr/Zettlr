@@ -113,7 +113,7 @@
         }
 
         // We can only have one marker at any given position at any given time
-        if (cm.findMarks(curFrom, curTo).length > 0) continue
+        if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
 
         // Do not render if it's inside a comment (in this case the mode will be
         // markdown, but comments shouldn't be included in rendering)
@@ -187,7 +187,7 @@
         }
 
         // Apply TextMarker
-        let textMarker = cm.markText(
+        let textMarker = cm.doc.markText(
           curFrom, curTo,
           {
             'clearOnEnter': true,
