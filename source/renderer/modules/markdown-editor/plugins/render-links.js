@@ -216,7 +216,7 @@
             cm.focus()
           }
         }
-      }
-    }
+      } // END while-loop
+    } // END for-loop
   }
 })
