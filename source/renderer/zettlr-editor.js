@@ -25,8 +25,6 @@ const MarkdownEditor = require('./modules/markdown-editor')
 // Finally load CodeMirror itself
 const CodeMirror = require('codemirror')
 
-const MD_MODE = { name: 'multiplex' }
-
 const SAVE_TIMEOUT = 5000 // Save every 5 seconds
 
 /**
@@ -211,6 +209,8 @@ class ZettlrEditor {
       // of the renderer is working with.
       let fileTreeObject = this._renderer.findObject(file.hash)
 
+      const docMode = (fileTreeObject.ext === '.tex') ? 'stex' : 'multiplex'
+
       let shouldBeTransient = false
       if (this._transientHashes.includes(file.hash)) {
         // If the _transientHashes array includes the file's hash, initialize
@@ -230,14 +230,14 @@ class ZettlrEditor {
         this.attemptCloseTab()
         // Swap out all properties of the current tab
         activeFile.fileObject = fileTreeObject
-        activeFile.cmDoc = CodeMirror.Doc(file.content)
+        activeFile.cmDoc = CodeMirror.Doc(file.content, docMode)
         activeFile.transient = shouldBeTransient
         activeFile.lastWordCount = countWords(file.content, this._countChars)
       } else {
         // Simply append to the end of the array
         this._openFiles.push({
           'fileObject': fileTreeObject,
-          'cmDoc': CodeMirror.Doc(file.content),
+          'cmDoc': CodeMirror.Doc(file.content, docMode),
           'transient': shouldBeTransient,
           'lastWordCount': countWords(file.content, this._countChars)
         })
@@ -293,8 +293,6 @@ class ZettlrEditor {
     // as the CodeMirror instance will begin rendering images as soon as
     // this happens, and it needs the correct path for this.
     this._editor.setOptions({
-      // Set the mode based on the extension
-      'mode': (file.fileObject.ext === '.tex') ? 'stex' : 'multiplex',
       'zettlr': {
         'markdownImageBasePath': path.dirname(file.fileObject.path)
       }
@@ -460,7 +458,7 @@ class ZettlrEditor {
 
     if (this._openFiles.length === 0) {
       // Replace with an empty new doc
-      this._editor.swapDoc(CodeMirror.Doc('', MD_MODE))
+      this._editor.swapDoc(CodeMirror.Doc('', 'multiplex'))
       this._currentHash = null
       // Reset the base path
       this._editor.setOptions({ zettlr: { markdownImageBasePath: '' } })

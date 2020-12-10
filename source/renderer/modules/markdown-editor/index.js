@@ -351,7 +351,15 @@ module.exports = class MarkdownEditor extends EventEmitter {
    */
   swapDoc (cmDoc) {
     let oldDoc = this._instance.swapDoc(cmDoc)
-    CodeMirror.signal(this._instance, 'cursorActivity', this._instance)
+
+    // Switch the mode, if we're coming from TeX to MD or vice versa.
+    const docMode = (typeof cmDoc.mode === 'string') ? cmDoc.mode : cmDoc.mode.name
+    const cmMode = (typeof this._cmOptions.mode === 'string') ? this._cmOptions['mode'] : this._cmOptions['mode'].name
+
+    if (docMode !== cmMode) {
+      this.setOptions({ 'mode': cmDoc.mode })
+    }
+    // CodeMirror.signal(this._instance, 'cursorActivity', this._instance)
     return oldDoc
   }
 
@@ -568,6 +576,12 @@ module.exports = class MarkdownEditor extends EventEmitter {
    * @param   {Boolean}  shouldBeReadonly  Whether the editor contents should be readonly
    */
   set readOnly (shouldBeReadonly) {
+    // Make sure we only set readOnly if the state has changed to prevent any
+    // lag due to the setOptions handler taking quite some time.
+    if (this.readOnly === shouldBeReadonly) {
+      return
+    }
+
     this.setOptions({ readOnly: shouldBeReadonly })
 
     // Set a special class to indicate not that it's an empty document,
