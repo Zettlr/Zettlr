@@ -1,6 +1,6 @@
 module.exports = {
   'packagerConfig': {
-    'asar': true,
+    'asar': false,
     'darwinDarkModeSupport': 'true',
     // Electron-forge automatically adds the file extension based on OS
     'icon': './resources/icons/icon',
