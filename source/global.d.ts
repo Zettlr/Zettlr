@@ -37,6 +37,13 @@ interface UpdateProvider {
   applicationUpdateAvailable: () => boolean // True if an update is available
 }
 
+interface DictionaryProvider {
+  on: (message: string, callback: Function) => void
+  off: (message: string, callback: Function) => void
+  getUserDictionary: () => string[]
+  setUserDictionary: (dict: string[]) => void
+}
+
 // Before the log provider has booted, these messages will be added to the
 // preBootLog
 interface BootLog {
@@ -52,6 +59,7 @@ interface BootLog {
 declare module NodeJS {
   interface Global {
     css: CssProvider
+    dict: DictionaryProvider
     log: LogProvider
     store: any
     notify: NotificationProvider

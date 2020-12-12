@@ -20,6 +20,7 @@ The default Pandoc command now targets Pandoc 2.11 and above. **In order to use 
 ## Under the Hood
 
 - Migrated the UpdateProvider to TypeScript.
+- Migrated the DictionaryProvider to TypeScript.
 - TextMarkers are now bound to the Document instances, not the editor overall. This increases the speed of document switching.
 - Updated dependencies:
     - @clr/icons `4.0.8`
