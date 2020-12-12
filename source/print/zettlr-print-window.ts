@@ -26,15 +26,12 @@ import windowRegister from '../common/modules/window-register'
  * and make use of the necessary CodeMirror functionality, such as Searching.
  */
 class ZettlrPrintWindow {
-  private _file: string
   /**
     * Create a window
     * @param {ZettlrBody} parent   Calling object
     * @param {ZettlrFile} file     The file whose content should be displayed
     */
   constructor () {
-    this._file = ''
-
     // Register all window stuff
     windowRegister({
       showMenubar: false // No menubar on print windows, only window controls
@@ -52,7 +49,6 @@ class ZettlrPrintWindow {
   }
 
   init (filePath: string): void {
-    this._file = name
     document.title = path.basename(filePath)
     const h1 = document.querySelector('.title h1')
     if (h1 === null) return
