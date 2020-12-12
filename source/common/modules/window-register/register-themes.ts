@@ -22,11 +22,11 @@ type Theme = 'berlin'|'bielefeld'|'frankfurt'|'karl-marx-stadt'|'bordeaux'
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 var availableThemes: Record<Theme, ThemeLoader> = {
-  'berlin': require('../../less/theme-berlin/theme-main.less') as ThemeLoader,
-  'bielefeld': require('../../less/theme-bielefeld/theme-main.less') as ThemeLoader,
-  'frankfurt': require('../../less/theme-frankfurt/theme-main.less') as ThemeLoader,
-  'karl-marx-stadt': require('../../less/theme-karl-marx-stadt/theme-main.less') as ThemeLoader,
-  'bordeaux': require('../../less/theme-bordeaux/theme-main.less') as ThemeLoader
+  'berlin': require('../../less/theme-berlin/theme-main.less').default as ThemeLoader,
+  'bielefeld': require('../../less/theme-bielefeld/theme-main.less').default as ThemeLoader,
+  'frankfurt': require('../../less/theme-frankfurt/theme-main.less').default as ThemeLoader,
+  'karl-marx-stadt': require('../../less/theme-karl-marx-stadt/theme-main.less').default as ThemeLoader,
+  'bordeaux': require('../../less/theme-bordeaux/theme-main.less').default as ThemeLoader
 }
 
 /**
