@@ -19,8 +19,6 @@ import App from './file-manager.vue'
 import store from './store'
 import Vuex from 'vuex'
 
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-
 // Indicate that we would like to use a vuex store
 Vue.use(Vuex)
 
