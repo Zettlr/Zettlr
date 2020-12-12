@@ -21,6 +21,43 @@ The default Pandoc command now targets Pandoc 2.11 and above. **In order to use 
 
 - Migrated the UpdateProvider to TypeScript.
 - TextMarkers are now bound to the Document instances, not the editor overall. This increases the speed of document switching.
+- Updated dependencies:
+    - @clr/icons `4.0.8`
+    - adm-zip `0.5.1`
+    - archiver `5.1.0`
+    - bcp-47 `1.0.8`
+    - citeproc `2.4.52`
+    - codemirror `5.58.3`
+    - got `11.8.1`
+    - mermaid `8.8.4`
+    - semver `7.3.4`
+    - uuid `8.3.2`
+    - vuex `3.6.0`
+    - fsevents `2.2.1`
+    - @electron-forge/cli `6.0.0-beta.54`
+    - @electron-forge/plugin-webpack `6.0.0-beta.54`
+    - @teamsupercell/typings-for-css-modules-loader `2.4.0`
+    - @typescript-eslint/eslint-plugin `4.9.1`
+    - @typescript-eslint/parser `4.9.1`
+    - cross-env `7.0.3`
+    - css-loader `5.0.1`
+    - csso `4.2.0`
+    - electron `11.1.0`
+    - electron-bundler `22.9.1`
+    - eslint `7.15.0`
+    - eslint-config-standard `16.0.2`
+    - eslint-plugin-standard `5.0.0`
+    - eslint-plugin-vue `7.2.0`
+    - file-loader `6.2.0`
+    - fork-ts-checker-webpack-plugin `6.0.6`
+    - less `3.13.0`
+    - less-loader `7.1.0`
+    - mocha `8.2.1`
+    - style-loader `2.0.0`
+    - ts-loader `8.0.12`
+    - typescript `4.1.3`
+    - vue-loader `15.9.5`
+- Removed dependency `v8-compile-cache`
 
 # 1.8.1
 
