@@ -1,8 +1,5 @@
 // Log viewer window entry file
 
-// Include the style file (will be included in the html by webpack magic)
-require('./main.css')
-
 const { ipcRenderer } = require('electron')
 
 const LOG_LEVEL_VERBOSE = 1
