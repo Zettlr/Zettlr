@@ -215,7 +215,7 @@ const highlightingModes = {
     let codeModes = []
 
     for (let [ mimeType, highlightingMode ] of Object.entries(highlightingModes)) {
-      let openRegex = new RegExp('(?:`{3}|~{3})\\s*(' + highlightingMode.selectors.join('|') + ')\\b.*$')
+      let openRegex = new RegExp('\\s*(?:`{3}|~{3})\\s*(' + highlightingMode.selectors.join('|') + ')\\b.*$')
       codeModes.push({
         open: openRegex,
         close: /`{3}|~{3}/,

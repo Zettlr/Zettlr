@@ -16,6 +16,7 @@ The default Pandoc command now targets Pandoc 2.11 and above. **In order to use 
     - Added region landmark roles to a few of the components in order to facilitate quicker voice over navigation.
     - The icons in the file manager now have `role="presentation"` set to not have the screen reader name all of those "unlabelled images" one by one.
 - Fixed some relative links to files on your system not being resolved correctly.
+- Fix weird indentation rendering in the syntax code highlighting blocks.
 
 ## Under the Hood
 

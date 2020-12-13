@@ -135,7 +135,7 @@
           return 'footnote-formatting' // TODO: Do we want rendering in footnotes?
         }
 
-        // Fifth: Are we in a link?
+        // Are we in a link?
         if (state.inZknLink) {
           if (stream.match(config.zettlr.zettelkasten.linkEnd)) {
             state.inZknLink = false
