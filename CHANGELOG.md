@@ -21,6 +21,7 @@ The default Pandoc command now targets Pandoc 2.11 and above. **In order to use 
 - Fixed an issue in which user dictionary-entries were not actually removed when removed from the preferences.
 - The citation engine now also supports loading CSL YAML files as bibliographies.
 - Fixed some issues with the citeproc provider.
+- Fixed multi-cursor placement.
 
 ## Under the Hood
 

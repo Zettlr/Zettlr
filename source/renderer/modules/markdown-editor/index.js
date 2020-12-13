@@ -168,16 +168,22 @@ module.exports = class MarkdownEditor extends EventEmitter {
       if (process.platform === 'darwin' && !event.metaKey) return true
       if (process.platform !== 'darwin' && !event.ctrlKey) return true
 
-      event.preventDefault()
-      event.codemirrorIgnore = true
-
       let cursor = this._instance.coordsChar({ left: event.clientX, top: event.clientY })
       let tokenInfo = this._instance.getTokenAt(cursor)
+
+      if (tokenInfo.type === null) {
+        return true
+      }
+
       let tokenList = tokenInfo.type.split(' ')
 
       if (tokenList.includes('zkn-link')) {
+        event.preventDefault()
+        event.codemirrorIgnore = true
         this.emit('zettelkasten-link', tokenInfo.string)
       } else if (tokenList.includes('zkn-tag')) {
+        event.preventDefault()
+        event.codemirrorIgnore = true
         this.emit('zettelkasten-tag', tokenInfo.string)
       }
     })
