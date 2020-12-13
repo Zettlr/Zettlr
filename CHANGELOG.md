@@ -24,6 +24,7 @@ The default Pandoc command now targets Pandoc 2.11 and above. **In order to use 
 - Fixed multi-cursor placement.
 - Fix duplicate IDs when linking files whose filename contains the ID with the setting "Always link with filename."
 - Fix a few visual link rendering oddities.
+- Fix the ToC navigation sometimes not working.
 
 ## Under the Hood
 

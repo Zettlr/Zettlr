@@ -263,13 +263,20 @@ module.exports = class MarkdownEditor extends EventEmitter {
     // we want it to be at the top of the window as expected by the user, so
     // we need to pull in a full viewport, beginning at the corresponding line
     // and expanding unto one full viewport size.
+    let lastLine = line + viewportSize
+
+    // CodeMirror will not sanitise the viewport size.
+    if (lastLine >= this._instance.doc.lineCount()) {
+      lastLine = this._instance.doc.lineCount() - 1
+    }
+
     this._instance.scrollIntoView({
       from: {
         line: line,
         ch: 0
       },
       to: {
-        line: line + viewportSize,
+        line: lastLine,
         ch: 0
       }
     })
