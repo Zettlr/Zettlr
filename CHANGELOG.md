@@ -23,6 +23,7 @@ The default Pandoc command now targets Pandoc 2.11 and above. **In order to use 
 - Fixed some issues with the citeproc provider.
 - Fixed multi-cursor placement.
 - Fix duplicate IDs when linking files whose filename contains the ID with the setting "Always link with filename."
+- Fix a few visual link rendering oddities.
 
 ## Under the Hood
 

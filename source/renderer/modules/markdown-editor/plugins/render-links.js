@@ -14,6 +14,7 @@
 
   const makeAbsoluteURL = require('../../../../common/util/make-absolute-url')
   const openMarkdownLink = require('../../../util/open-markdown-link')
+  const md2html = require('../../../../common/util/md-to-html')
 
   // This regular expression matches three different kinds of URLs:
   // 1. Linked images in the format [![Alt text](image/path.png)](www.link-target.tld)
@@ -162,15 +163,7 @@
           renderedLinkTarget = 'mailto:' + email
         } else {
           // Markdown URL
-          regularLinkCaption = regularLinkCaption.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>')
-          regularLinkCaption = regularLinkCaption.replace(/__([^_]+?)__/g, '<strong>$1</strong>')
-          regularLinkCaption = regularLinkCaption.replace(/\*([^*]+?)\*/g, '<em>$1</em>')
-          regularLinkCaption = regularLinkCaption.replace(/_([^_]+?)_/g, '<em>$1</em>')
-          regularLinkCaption = regularLinkCaption.replace(/~~([^~]+?)~~/g, '<del>$1</del>')
-          if (/^!\[.+\]\(.+\)$/.test(regularLinkCaption)) {
-            regularLinkCaption = regularLinkCaption.replace(/^!\[(.*)\]\((.+)\)$/, '<img src="$2" title="$1">')
-          }
-          a.innerHTML = regularLinkCaption
+          a.innerHTML = md2html(regularLinkCaption)
         }
 
         // Set the correct link target as the title, both for users to show
