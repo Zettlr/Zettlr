@@ -539,6 +539,7 @@ module.exports = class ConfigProvider extends EventEmitter {
         if (cfg.hasOwnProperty(arg)) {
           cfg = cfg[arg]
         } else {
+          global.log.warning(`[Config Provider] Someone has requested a non-existent key: ${attr}`)
           return null // The config option must match exactly
         }
       }
@@ -550,6 +551,7 @@ module.exports = class ConfigProvider extends EventEmitter {
     if (this.config.hasOwnProperty(attr)) {
       return this.config[attr]
     } else {
+      global.log.warning(`[Config Provider] Someone has requested a non-existent key: ${attr}`)
       return null
     }
   }

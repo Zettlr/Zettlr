@@ -26,6 +26,7 @@ const path = require('path')
 const { trans } = require('../../common/i18n')
 const extractBibTexAttachments = require('../../common/util/extract-bibtex-attachments')
 const BibTexParser = require('astrocite-bibtex')
+const YAML = require('yaml')
 
 // Statuses the engine can be in
 const NOT_LOADED = 0
@@ -108,7 +109,7 @@ module.exports = class CiteprocProvider {
         event.returnValue = this.updateItems(message.content)
       } else if (message.type === 'make-bibliography') {
         // Make and send out a bibliography based on the state of the registry
-        event.sender.send('message', {
+        event.reply('message', {
           'command': 'citeproc-bibliography',
           'content': this.makeBibliography()
         })
@@ -122,7 +123,7 @@ module.exports = class CiteprocProvider {
       const { command, payload } = content
 
       if (command === 'get-citation') {
-        event.sender.webContents.send('citation-renderer', {
+        event.reply('citation-renderer', {
           'command': 'get-citation',
           'payload': {
             'originalCitation': payload.citation,
@@ -219,12 +220,28 @@ module.exports = class CiteprocProvider {
    * @return {void}     Does not return.
    */
   _parse (cslData) {
+    const libraryType = path.extname(this._mainLibrary)
+
     try {
-      this._cslData = JSON.parse(cslData)
-    } catch (e) {
-      try {
-        // Didn't work, so let's try to parse it as BibTex data.
+      if (libraryType === '.json') {
+        global.log.info(`[Citeproc Provider] Parsing file ${this._mainLibrary} as CSL JSON ...`)
+        this._cslData = JSON.parse(cslData)
+      } else if ([ '.yaml', '.yml' ].includes(libraryType)) {
+        global.log.info(`[Citeproc Provider] Parsing file ${this._mainLibrary} as CSL YAML ...`)
+        const yamlData = YAML.parse(cslData)
+        if ('references' in yamlData) {
+          this._cslData = yamlData.references // CSL YAML is stored in references
+        } else if (Array.isArray(yamlData)) {
+          this._cslData = yamlData // It may be that it's simply an array of entries
+        } else {
+          global.log.error('[Citeproc Provider] The CSL YAML file did not contain valid contents. Aborting load.')
+          this._status = ERROR
+          return
+        }
+      } else if (libraryType === '.bib') {
+        global.log.info(`[Citeproc Provider] Parsing file ${this._mainLibrary} as BibTex ...`)
         this._cslData = BibTexParser.parse(cslData)
+
         // If we're here, we had a BibTex library --> extract the attachments
         try {
           let attachments = extractBibTexAttachments(cslData, path.dirname(this._mainLibrary))
@@ -232,18 +249,18 @@ module.exports = class CiteprocProvider {
         } catch (err) {
           global.log.error(`[Citeproc Provider] Could not extract BibTex attachments: ${err.message}`, err)
         }
-      } catch (e) {
-        global.log.error('[Citeproc Provider] Could not parse library file: ' + e.message, e)
-        // Nopey.
-        global.notify.error({
-          title: trans('gui.citeproc.error_db'),
-          message: e.message,
-          additionalInfo: e.message
-        }, true)
-        this._status = ERROR
-        return
       }
+    } catch (e) {
+      global.log.error('[Citeproc Provider] Could not parse library file: ' + e.message, e)
+      global.notify.error({
+        title: trans('gui.citeproc.error_db'),
+        message: e.message,
+        additionalInfo: e.message
+      }, true)
+      this._status = ERROR
+      return
     }
+
     // First we need to reorder the read data so that it can be passed to the
     // sys object
     for (let i = 0, ilen = this._cslData.length; i < ilen; i++) {
@@ -301,6 +318,7 @@ module.exports = class CiteprocProvider {
    * @return {void} Does not return.
    */
   _initProcessor () {
+    global.log.info('[Citeproc Provider] Initiating processor ...')
     try {
       // Load the engine with the current application language. As this citing
       // is only for preview purposes, it should follow the language like the

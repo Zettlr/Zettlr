@@ -19,6 +19,8 @@ The default Pandoc command now targets Pandoc 2.11 and above. **In order to use 
 - Fix weird indentation rendering in the syntax code highlighting blocks.
 - Fixed an issue that sometimes did not fully shut down the application before exit. This lead to numerous issues, the most visible of which was that sometimes configuration changes were not persisted.
 - Fixed an issue in which user dictionary-entries were not actually removed when removed from the preferences.
+- The citation engine now also supports loading CSL YAML files as bibliographies.
+- Fixed some issues with the citeproc provider.
 
 ## Under the Hood
 
