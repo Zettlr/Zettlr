@@ -28,7 +28,7 @@ import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
  * loaded dictionaries for words and even change the dictionaries during runtime.
  */
 export default class DictionaryProvider extends EventEmitter {
-  private readonly _typos: string[]
+  private readonly _typos: NSpell[]
   private readonly _loadedDicts: string[]
   private readonly _userDictionaryPath: string
   private _userDictionary: string[]
@@ -43,7 +43,7 @@ export default class DictionaryProvider extends EventEmitter {
     // Path to the user dictionary
     this._userDictionaryPath = path.join(app.getPath('userData'), 'user.dic')
     // The user dictionary
-    this._userDictionary = []
+    this._userDictionary = ['Zettlr']
 
     // Inject global methods
     global.dict = {
@@ -178,11 +178,19 @@ export default class DictionaryProvider extends EventEmitter {
     try {
       await fs.lstat(this._userDictionaryPath)
     } catch (e) {
-      // Create a new file (and add Zettlr as a correct word :3)
-      await fs.writeFile(this._userDictionaryPath, 'Zettlr', 'utf8')
+      // Create a new file and add the current user dictionary to it
+      await fs.writeFile(this._userDictionaryPath, this._userDictionary.join('\n'), 'utf8')
     }
+
     const fileContents = await fs.readFile(this._userDictionaryPath, 'utf8')
     this._userDictionary = fileContents.split('\n')
+
+    // String.split() returns an array with one empty string if the file is
+    // empty, so we need to perform in total two operations: Make a set out of
+    // it (remove duplicates) and remove empty strings
+    this._userDictionary = [...new Set(this._userDictionary)]
+    this._userDictionary = this._userDictionary.filter(elem => elem.trim() !== '')
+
     // If the user dictionary is empty, the split will not create an array
     // Send an invalidation message to the renderer so that it reloads all words
     broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
@@ -240,7 +248,7 @@ export default class DictionaryProvider extends EventEmitter {
 
     let suggestions: string[] = []
     for (let typo of this._typos) {
-      suggestions = suggestions.concat((typo as any).suggest(term))
+      suggestions = suggestions.concat(typo.suggest(term))
     }
 
     return suggestions
