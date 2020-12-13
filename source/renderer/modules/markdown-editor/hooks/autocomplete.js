@@ -279,6 +279,12 @@ function hintFunction (cm, opt) {
       let linkPref = global.config.get('zkn.linkWithFilename')
       // Prepare the text to insert, removing the ID if found in the filename
       let text = completion.displayText
+      if (completion.id) {
+        // The displayText in this regard contains <ID>: <filename>, so remove
+        // the first part because we don't need it.
+        text = text.substring(completion.id.length + 2).trim()
+      }
+
       if (completion.id && text.indexOf(completion.id) >= 0) {
         text = text.replace(completion.id, '').trim()
 

@@ -22,6 +22,7 @@ The default Pandoc command now targets Pandoc 2.11 and above. **In order to use 
 - The citation engine now also supports loading CSL YAML files as bibliographies.
 - Fixed some issues with the citeproc provider.
 - Fixed multi-cursor placement.
+- Fix duplicate IDs when linking files whose filename contains the ID with the setting "Always link with filename."
 
 ## Under the Hood
 
