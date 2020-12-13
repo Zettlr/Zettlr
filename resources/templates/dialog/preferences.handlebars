@@ -395,8 +395,8 @@
             <input type="text" name="export.cslLibrary" id="cslLibrary" value="{{export.cslLibrary}}">
             <button type="button" class="request-file"
             data-tippy-content="{{i18n "dialog.preferences.choose_file"}}"
-            data-request-name="CSL JSON or BibTex"
-            data-request-ext="json,bib"
+            data-request-name="CSL JSON, CSL YAML or BibTex"
+            data-request-ext="json,yaml,yml,bib"
             data-request-target="#cslLibrary"><clr-icon shape="file"></clr-icon></button>
           </div>
           <label for="cslStyle">{{i18n "dialog.preferences.project.csl_style"}}</label>
@@ -731,8 +731,8 @@
           <p>{{i18n "dialog.preferences.user_dictionary"}}</p>
           <ul class="user-dict">
             {{#each userDictionary}}
-            <li class="user-dict-item">
-              <input type="hidden" value="{{this}}" name="userDictionary">
+            <li class="user-dict-item" onclick="this.parentElement.removeChild(this)">
+              <input type="hidden" value="{{this}}" name="userDictionary[]">
               <span>{{this}}</span>
               <clr-icon shape="times"></clr-icon>
             </li>

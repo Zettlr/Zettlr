@@ -32,6 +32,8 @@ export default class DictionaryProvider extends EventEmitter {
   private readonly _loadedDicts: string[]
   private readonly _userDictionaryPath: string
   private _userDictionary: string[]
+  private _fileLock: boolean
+  private _unwrittenChanges: boolean
 
   constructor () {
     super()
@@ -44,6 +46,10 @@ export default class DictionaryProvider extends EventEmitter {
     this._userDictionaryPath = path.join(app.getPath('userData'), 'user.dic')
     // The user dictionary
     this._userDictionary = ['Zettlr']
+
+    // Flags for writing the file
+    this._fileLock = false
+    this._unwrittenChanges = false
 
     // Inject global methods
     global.dict = {
@@ -58,7 +64,7 @@ export default class DictionaryProvider extends EventEmitter {
        * @return {Array} The user dictionary.
        */
       getUserDictionary: () => {
-        // Clone the arrayy
+        // Clone the array
         return this._userDictionary.map(elem => elem)
       },
       /**
@@ -72,8 +78,12 @@ export default class DictionaryProvider extends EventEmitter {
         }
 
         this._userDictionary = dict
+        this._userDictionary = [...new Set(this._userDictionary)]
+        this._userDictionary = this._userDictionary.filter(word => word.trim() !== '')
+
         // Send an invalidation message to the renderer
         broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
+
         return true
       }
     }
@@ -111,9 +121,10 @@ export default class DictionaryProvider extends EventEmitter {
   /**
    * Shuts down the provider
    */
-  async shutdown (): Promise<void> {
+  async shutdown (): Promise<boolean> {
     global.log.verbose('Dictionary provider shutting down ...')
-    await fs.writeFile(this._userDictionaryPath, this._userDictionary.join('\n'), 'utf8')
+    await this._persist()
+    return true
   }
 
   /**
@@ -179,7 +190,7 @@ export default class DictionaryProvider extends EventEmitter {
       await fs.lstat(this._userDictionaryPath)
     } catch (e) {
       // Create a new file and add the current user dictionary to it
-      await fs.writeFile(this._userDictionaryPath, this._userDictionary.join('\n'), 'utf8')
+      await this._persist()
     }
 
     const fileContents = await fs.readFile(this._userDictionaryPath, 'utf8')
@@ -194,6 +205,30 @@ export default class DictionaryProvider extends EventEmitter {
     // If the user dictionary is empty, the split will not create an array
     // Send an invalidation message to the renderer so that it reloads all words
     broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
+  }
+
+  /**
+   * Persists the user dictionary to disk
+   */
+  private async _persist (): Promise<void> {
+    if (this._fileLock) {
+      // If there is a file lock, set the changes flag and abort
+      this._unwrittenChanges = true
+      return
+    }
+
+    // Initiate the filelock, write, release the lock
+    this._fileLock = true
+    this._unwrittenChanges = false
+    const data = this._userDictionary.join('\n')
+    await fs.writeFile(this._userDictionaryPath, data)
+    this._fileLock = false
+
+    // After we're done, check if someone tried to call the function in the
+    // meantime. If so, the flag will be true by now: immediately call it again.
+    if (this._unwrittenChanges) {
+      return await this._persist()
+    }
   }
 
   /**
@@ -259,15 +294,21 @@ export default class DictionaryProvider extends EventEmitter {
    * @param {String} term The term to add
    */
   add (term: string): boolean {
+    term = term.trim()
+    if (term === '') {
+      return false
+    }
+
     // Adds the given term to the user dictionary
     if (!this._userDictionary.includes(term)) {
       this._userDictionary.push(term)
       // Send an invalidation message to the renderer so that it reloads all words
       broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
+
+      return true
     }
 
-    // Always return true (it'll get send to the renderer, but it won't deal with it.)
-    return true
+    return false
   }
 
   /**

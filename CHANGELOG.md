@@ -17,6 +17,8 @@ The default Pandoc command now targets Pandoc 2.11 and above. **In order to use 
     - The icons in the file manager now have `role="presentation"` set to not have the screen reader name all of those "unlabelled images" one by one.
 - Fixed some relative links to files on your system not being resolved correctly.
 - Fix weird indentation rendering in the syntax code highlighting blocks.
+- Fixed an issue that sometimes did not fully shut down the application before exit. This lead to numerous issues, the most visible of which was that sometimes configuration changes were not persisted.
+- Fixed an issue in which user dictionary-entries were not actually removed when removed from the preferences.
 
 ## Under the Hood
 

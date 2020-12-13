@@ -65,6 +65,14 @@ global.log = {
 let zettlr: Zettlr|null = null
 
 /**
+ * This variable is being used to determine if all servive providers have
+ * successfully shut down and we can actually quit the app.
+ *
+ * @var {boolean}
+ */
+let canQuit: boolean = false
+
+/**
  * Hook into the ready event and initialize the main object creating everything
  * else. It is necessary to wait for the ready event, because prior, some APIs
  * may not work correctly.
@@ -131,14 +139,8 @@ app.on('open-file', (e, p) => {
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin' && zettlr !== null) {
-    // Shutdown the app before quitting
-    Promise.all([
-      shutdownApplication(),
-      zettlr.shutdown()
-    ])
-      .catch(err => console.error(err))
-      .finally(() => app.quit())
+  if (process.platform !== 'darwin') {
+    app.quit()
   }
 })
 
@@ -147,13 +149,25 @@ app.on('window-all-closed', function () {
  * properly.
  */
 app.on('will-quit', function (event) {
-  if (zettlr !== null) {
-    Promise.all([
-      shutdownApplication(),
-      zettlr.shutdown()
-    ])
-      .catch(err => console.error(err))
+  if (!canQuit) {
+    // Prevent immediate shutdown and allow the process to shut down first
+    event.preventDefault()
+  } else {
+    return // Don't prevent quitting, but we don't need to shut down again.
   }
+
+  const promises = [shutdownApplication()]
+  if (zettlr !== null) {
+    promises.push(zettlr.shutdown())
+  }
+  Promise.all(promises)
+    .then(() => {
+      // Now we can safely quit the app. Set the flag so that the callback
+      // won't stop the shutdown, and programmatically quit the app.
+      canQuit = true
+      app.quit()
+    })
+    .catch(err => console.error(err))
 })
 
 /**

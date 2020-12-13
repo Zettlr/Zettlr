@@ -166,16 +166,6 @@ class PreferencesDialog extends ZettlrDialog {
     })
     // END searchfield functions.
 
-    // Remove the list items on click
-    $('.user-dict-item').on('click', (e) => {
-      let elem = $(e.target)
-      elem.animate({
-        'height': '0px'
-      }, 500, function () {
-        $(this).detach()
-      })
-    })
-
     // Begin: functions for the zkn regular expression fields
     const zknFreeIdElement = document.getElementById('pref-zkn-free-id')
     $('#reset-id-regex').on('click', (e) => {
@@ -348,6 +338,7 @@ class PreferencesDialog extends ZettlrDialog {
     }
 
     // Copy over all other field values from the result set.
+    // TODO: This means that more data is being transmitted as necessary.
     for (let r of data) {
       // Only non-missing to not overwrite the checkboxes that ARE checked with a "yes"
       if (!cfg.hasOwnProperty(r.name)) {
@@ -391,7 +382,7 @@ class PreferencesDialog extends ZettlrDialog {
     }
 
     // We're done. But before sending retrieve all remaining user dictionary words ...
-    let userDictionary = data.filter(elem => elem.name === 'userDictionary' && elem.value.length > 0).map(elem => elem.value)
+    let userDictionary = data.filter(elem => elem.name === 'userDictionary[]').map(elem => elem.value)
     // ... and send them to main separately
     global.ipc.send('update-user-dictionary', userDictionary)
 
