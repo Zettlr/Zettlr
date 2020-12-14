@@ -1,3 +1,13 @@
+# 1.8.3
+
+## GUI and Functionality
+
+- Fixed broken link rendering from 1.8.2.
+
+## Under the Hood
+
+(nothing here)
+
 # 1.8.2
 
 ## Support for Pandoc 2.11

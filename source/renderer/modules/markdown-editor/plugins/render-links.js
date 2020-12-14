@@ -163,7 +163,12 @@
           renderedLinkTarget = 'mailto:' + email
         } else {
           // Markdown URL
-          a.innerHTML = md2html(regularLinkCaption)
+          const html = document.createElement('div')
+          // Showdown will wrap even inline-Markdown into a dedicated p-tag
+          // So we'll use a div, and set the anchor's inner HTML to the inner
+          // HTML of said p-tag (which will be the firstChild of our div).
+          html.innerHTML = md2html(regularLinkCaption)
+          a.innerHTML = html.firstChild.innerHTML
         }
 
         // Set the correct link target as the title, both for users to show
