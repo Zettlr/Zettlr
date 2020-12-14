@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Fixed broken link rendering from 1.8.2.
+- The default PDF template of Zettlr is now compatible with Pandoc 2.11. This means it won't work with Pandoc 2.10 or less anymore. (Thanks to @Kangie for implementing.)
 
 ## Under the Hood
 
