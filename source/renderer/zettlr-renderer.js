@@ -89,9 +89,16 @@ class ZettlrRenderer {
    * @returns {Array} An array with potential candidates
    */
   matchFile (hash) {
-    if (!hash) return []
+    if (!hash) {
+      return []
+    }
+
     let fileDescriptor = this.findObject(hash)
-    if (!fileDescriptor) return []
+
+    if (!fileDescriptor || fileDescriptor.type !== 'file') {
+      return []
+    }
+
     return matchFilesByTags(fileDescriptor, this._paths).map(e => {
       return {
         'fileDescriptor': this.findObject(e.hash),

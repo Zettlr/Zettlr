@@ -31,7 +31,7 @@ import isFile from '../common/util/is-file'
 import { commands } from './commands'
 import hash from '../common/util/hash'
 
-import { DirDescriptor, MDFileDescriptor } from './modules/fsal/types'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from './modules/fsal/types'
 
 export default class Zettlr {
   isBooting: boolean
@@ -453,8 +453,8 @@ export default class Zettlr {
    * @return {void}      No return.
    */
   openQL (hash: number): void {
-    let file: MDFileDescriptor|null = this._fsal.findFile(hash)
-    if (file === null) {
+    let file: MDFileDescriptor|CodeFileDescriptor|null = this._fsal.findFile(hash)
+    if (file === null || file.type !== 'file') {
       global.log.error(`[Application] A Quicklook window for ${hash} was requested, but the file was not found.`)
       return
     }

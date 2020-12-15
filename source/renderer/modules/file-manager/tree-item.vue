@@ -215,10 +215,6 @@ module.exports = {
       return list
     },
     /**
-     * Returns true, if this is actually a TeX-file
-     */
-    isTex: function () { return this.obj.ext === '.tex' },
-    /**
      * Returns a list of children that can be displayed inside the tree view
      */
     filteredChildren: function () {

@@ -39,7 +39,7 @@ interface FSMetaInfo {
   dir: string // path.dirname(absolutePath)
   path: string // absolutePath
   hash: number // Hashed absolute path
-  type: 'file' | 'directory' | 'code' | 'attachment'
+  type: 'file' | 'directory' | 'code' | 'other'
   modtime: number
   creationtime: number
 }
@@ -51,7 +51,7 @@ export interface DirDescriptor extends FSMetaInfo {
   parent: DirDescriptor|null
   _settings: any
   type: 'directory'
-  children: Array<MDFileDescriptor|DirDescriptor>
+  children: Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor>
   attachments: OtherFileDescriptor[]
   dirNotFoundFlag?: boolean // If the flag is set & true this directory has not been found
 }
@@ -75,10 +75,10 @@ export interface MDFileDescriptor extends FSMetaInfo {
 }
 
 /**
- * The FSAL Tex file descriptor
+ * The FSAL code file descriptor (.tex, .yml)
  */
-export interface TexFileDescriptor extends FSMetaInfo {
-  parent: DirDescriptor
+export interface CodeFileDescriptor extends FSMetaInfo {
+  parent: DirDescriptor|null
   ext: string
   type: 'code'
   id: string
@@ -92,7 +92,7 @@ export interface TexFileDescriptor extends FSMetaInfo {
  */
 export interface OtherFileDescriptor extends FSMetaInfo {
   parent: DirDescriptor
-  type: 'attachment'
+  type: 'other'
   ext: string
 }
 
@@ -102,7 +102,7 @@ export interface OtherFileDescriptor extends FSMetaInfo {
 export interface DirMeta extends FSMetaInfo {
   parent: number|null
   attachments: OtherFileMeta[]
-  children: Array<DirMeta|MDFileMeta>
+  children: Array<DirMeta|MDFileMeta|CodeFileMeta>
   project: any
   type: 'directory'
   sorting: string
@@ -130,12 +130,15 @@ export interface MDFileMeta extends FSMetaInfo {
 }
 
 /**
- * Represents a non-circular Tex file
+ * Represents a non-circular code file (.tex or .yml)
  */
-export interface TexFileMeta extends FSMetaInfo {
-  parent: number
+export interface CodeFileMeta extends FSMetaInfo {
+  parent: number|null
   type: 'code'
+  linefeed: string
+  modified: boolean
   ext: string
+  content: string
 }
 
 /**
@@ -143,15 +146,15 @@ export interface TexFileMeta extends FSMetaInfo {
  */
 export interface OtherFileMeta extends FSMetaInfo {
   parent: number
-  type: 'attachment'
+  type: 'other'
   ext: string
 }
 
 // Convenience types to prevent too much typing:
 // - AnyDescriptor: Anything that looks like a descriptor
-export type AnyDescriptor = DirDescriptor | MDFileDescriptor | TexFileDescriptor | OtherFileDescriptor
+export type AnyDescriptor = DirDescriptor | MDFileDescriptor | CodeFileDescriptor | OtherFileDescriptor
 // Anything that can also be a root
-export type MaybeRootDescriptor = DirDescriptor | MDFileDescriptor
+export type MaybeRootDescriptor = DirDescriptor | MDFileDescriptor | CodeFileDescriptor
 // The same, only for meta descriptors
-export type AnyMetaDescriptor = DirMeta | MDFileMeta | TexFileMeta | OtherFileMeta
+export type AnyMetaDescriptor = DirMeta | MDFileMeta | CodeFileMeta | OtherFileMeta
 export type MaybeRootMeta = DirMeta | MDFileMeta

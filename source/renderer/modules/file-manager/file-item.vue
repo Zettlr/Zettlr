@@ -57,11 +57,11 @@
           </template>
           <template v-else>
             <span
-              v-if="isTex"
-              aria-label="TeX-file"
-              class="tex-indicator"
+              v-if="isCode"
+              aria-label="Code-file"
+              class="code-indicator"
             >
-              TeX
+              {{ obj.ext }}
             </span>
             <span class="date">{{ getDate }}</span>
             <span
@@ -147,24 +147,18 @@
       getColoredTags: function () { return this.$store.getters.tags(this.obj.tags) },
       getTagList: function () { return this.obj.tags.join(', ') },
       hasTags: function () { return this.obj.tags && this.obj.tags.length > 0 },
-      isDirectory: function () { return this.obj.type !== 'file' },
+      isDirectory: function () { return this.obj.type === 'directory' },
       isProject: function () { return this.isDirectory && this.obj.project !== null },
       isDraggable: function () { return !this.isDirectory },
       fileMeta: function () { return this.$store.state.fileMeta },
       displayTime: function () { return this.$store.state.displayTime },
-      hasChildren: function () {
-        // Return true if it's a directory, with at least one directory as children
-        if (!this.obj.hasOwnProperty('children')) return false
-        let dirChildren = this.obj.children.filter(e => e.type === 'directory')
-        return this.isDirectory && dirChildren.length > 0
-      },
       classList: function () {
         let list = 'list-item ' + this.obj.type
         if (this.$store.state.selectedFile === this.obj.hash) list += ' selected'
         if (this.obj.type === 'directory' && this.obj.project !== null) list += ' project'
         return list
       },
-      isTex: function () { return this.obj.ext === '.tex' },
+      isCode: function () { return this.obj.type === 'code' },
       getDate: function () {
         let time = (this.displayTime === 'modtime') ? this.obj.modtime : this.obj.creationtime
         if (!time) return 'Wrong Date provided!'
@@ -183,16 +177,27 @@
         return ''
       },
       countDirs: function () {
-        if (!this.obj.hasOwnProperty('children')) return 0
+        if (!this.isDirectory) {
+          return 0
+        }
         return this.obj.children.filter(e => e.type === 'directory').length + ' ' + trans('system.directories') || 0
       },
       countFiles: function () {
-        if (!this.obj.hasOwnProperty('children')) return 0
-        return this.obj.children.filter(e => e.type === 'file').length + ' ' + trans('system.files') || 0
+        if (!this.isDirectory) {
+          return 0
+        }
+        return this.obj.children.filter(e => [ 'file', 'code' ].includes(e.type)).length + ' ' + trans('system.files') || 0
       },
-      countTags: function () { return this.obj.tags.length },
+      countTags: function () {
+        if (this.obj.type !== 'file') {
+          return 0
+        }
+        return this.obj.tags.length
+      },
       hasWritingTarget: function () {
-        if (!this.obj.hasOwnProperty('target') || !this.obj.target) return false
+        if (this.obj.type !== 'file' || !this.obj.target) {
+          return false
+        }
         if (!this.obj.target.mode ||
           !this.obj.target.count ||
           ![ 'words', 'chars' ].includes(this.obj.target.mode)) {
@@ -239,7 +244,7 @@
           if (this.obj.type === 'file' && event.altKey) {
             // QuickLook the file
             global.ipc.send('open-quicklook', this.obj.hash)
-          } else if (this.obj.type === 'file') {
+          } else if ([ 'file', 'code' ].includes(this.obj.type)) {
             // Request the clicked file
             if (!middleClick && !ctrl && !cmd) {
               global.editor.announceTransientFile(this.obj.hash)

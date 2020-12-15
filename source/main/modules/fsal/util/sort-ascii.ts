@@ -11,7 +11,11 @@
  * END HEADER
  */
 
-import { DirDescriptor, MDFileDescriptor } from '../types'
+import {
+  CodeFileDescriptor,
+  DirDescriptor,
+  MDFileDescriptor
+} from '../types'
 
 /**
  * Helper function to sort files by ascii characters
@@ -20,8 +24,8 @@ import { DirDescriptor, MDFileDescriptor } from '../types'
  * @return {number}                              0, 1, or -1
  */
 export default function (
-  a: MDFileDescriptor | DirDescriptor,
-  b: MDFileDescriptor | DirDescriptor
+  a: MDFileDescriptor | DirDescriptor | CodeFileDescriptor,
+  b: MDFileDescriptor | DirDescriptor | CodeFileDescriptor
 ): number {
   let aSort = a.name.toLowerCase()
   let bSort = b.name.toLowerCase()

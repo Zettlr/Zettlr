@@ -15,7 +15,7 @@ import asciiSorting from './sort-ascii'
 import naturalSorting from './sort-natural'
 import dateSorting from './sort-date'
 
-import { DirDescriptor, MDFileDescriptor } from '../types'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../types'
 
 /**
 * This function can sort an array of ZettlrFile and ZettlrDir objects
@@ -24,15 +24,15 @@ import { DirDescriptor, MDFileDescriptor } from '../types'
 * @return {Array<DirDescriptor | MDFileDescriptor>}     The sorted array
 */
 export default function (
-  arr: Array<DirDescriptor | MDFileDescriptor>,
+  arr: Array<DirDescriptor | MDFileDescriptor | CodeFileDescriptor>,
   type = 'name-up'
-): Array<DirDescriptor | MDFileDescriptor> {
+): Array<DirDescriptor | MDFileDescriptor | CodeFileDescriptor> {
   // First split the array based on type
-  let f: MDFileDescriptor[] = []
+  let f: Array<MDFileDescriptor | CodeFileDescriptor> = []
   let d: DirDescriptor[] = []
 
   // Should we use natural sorting or ascii?
-  let useNatural = (global.config.get('sorting') === 'natural')
+  let useNatural = global.config.get('sorting') === 'natural'
 
   // Write in the sortingFunc whatever we should be using
   let sortingFunc = (useNatural) ? naturalSorting : asciiSorting
@@ -41,6 +41,7 @@ export default function (
   for (let c of arr) {
     switch (c.type) {
       case 'file':
+      case 'code':
         f.push(c)
         break
       case 'directory':
@@ -68,7 +69,7 @@ export default function (
       break
   }
 
-  const ret: Array<MDFileDescriptor | DirDescriptor> = []
+  const ret: Array<MDFileDescriptor | DirDescriptor | CodeFileDescriptor> = []
 
   // Return sorted array files -> directories
   return ret.concat(f).concat(d)

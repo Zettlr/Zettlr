@@ -21,6 +21,7 @@ import isAttachment from '../../../common/util/is-attachment'
 import objectToArray from '../../../common/util/object-to-array'
 import findObject from '../../../common/util/find-object'
 import * as FSALFile from './fsal-file'
+import * as FSALCodeFile from './fsal-code-file'
 import * as FSALDir from './fsal-directory'
 import * as FSALAttachment from './fsal-attachment'
 import FSALWatchdog from './fsal-watchdog'
@@ -35,13 +36,26 @@ import {
   MaybeRootMeta,
   WatchdogEvent,
   AnyMetaDescriptor,
-  MaybeRootDescriptor
+  MaybeRootDescriptor,
+  CodeFileDescriptor,
+  CodeFileMeta
 } from './types'
+
+const ALLOWED_CODE_FILES = [
+  '.tex'
+]
+
+const MARKDOWN_FILES = [
+  '.md',
+  '.rmd',
+  '.markdown',
+  '.txt'
+]
 
 interface FSALState {
   openDirectory: DirDescriptor|null
-  openFiles: MDFileDescriptor[]
-  activeFile: MDFileDescriptor|null
+  openFiles: Array<MDFileDescriptor|CodeFileDescriptor>
+  activeFile: MDFileDescriptor|CodeFileDescriptor|null
   filetree: MaybeRootDescriptor[]
 }
 
@@ -74,7 +88,7 @@ export default class FSAL extends EventEmitter {
     // Finally, set up listeners for global targets
     global.targets.on('update', (hash: number) => {
       let file = this.findFile(hash)
-      if (file === null) return // Not our business
+      if (file === null || file.type !== 'file') return // Not our business
       // Simply pull in the new target
       FSALFile.setTarget(file, global.targets.get(hash))
       this.emit('fsal-state-changed', 'file', {
@@ -84,7 +98,7 @@ export default class FSAL extends EventEmitter {
     })
     global.targets.on('remove', (hash: number) => {
       let file = this.findFile(hash)
-      if (file === null) return // Also not our business
+      if (file === null || file.type !== 'file') return // Also not our business
       FSALFile.setTarget(file, null) // Reset
       this.emit('fsal-state-changed', 'file', {
         'oldHash': file.hash,
@@ -379,9 +393,17 @@ export default class FSAL extends EventEmitter {
    */
   private async _loadFile (filePath: string): Promise<void> {
     // Loads a standalone file
+    const isCode = ALLOWED_CODE_FILES.includes(path.extname(filePath))
+    const isMD = MARKDOWN_FILES.includes(path.extname(filePath))
+
     let start = Date.now()
-    let file = await FSALFile.parse(filePath, this._cache)
-    this._state.filetree.push(file)
+    if (isCode) {
+      let file = await FSALCodeFile.parse(filePath, this._cache)
+      this._state.filetree.push(file)
+    } else if (isMD) {
+      let file = await FSALFile.parse(filePath, this._cache)
+      this._state.filetree.push(file)
+    }
     console.log(`${Date.now() - start} ms: Loaded file ${filePath}`) // DEBUG
   }
 
@@ -534,7 +556,7 @@ export default class FSAL extends EventEmitter {
    * @param {Array} hashArray An array with hashes to sort with
    * @return {Array} The new sorting
    */
-  public sortOpenFiles (hashArray: number[]): MDFileDescriptor[] {
+  public sortOpenFiles (hashArray: number[]): Array<MDFileDescriptor|CodeFileDescriptor> {
     if (!Array.isArray(hashArray)) return this._state.openFiles
     // Expand the hash array
     let notFound = this._state.openFiles.filter(e => !hashArray.includes(e.hash))
@@ -616,34 +638,50 @@ export default class FSAL extends EventEmitter {
    * Returns a file metadata object including the file contents.
    * @param {Object} file The file descriptor
    */
-  public async getFileContents (file: MDFileDescriptor): Promise<MDFileMeta> {
-    let returnFile = FSALFile.metadata(file)
-    returnFile.content = await FSALFile.load(file)
-    return returnFile
+  public async getFileContents (file: MDFileDescriptor|CodeFileDescriptor): Promise<MDFileMeta|CodeFileMeta> {
+    if (file.type === 'file') {
+      let returnFile = FSALFile.metadata(file)
+      returnFile.content = await FSALFile.load(file)
+      return returnFile
+    } else if (file.type === 'code') {
+      let returnFile = FSALCodeFile.metadata(file)
+      returnFile.content = await FSALCodeFile.load(file)
+      return returnFile
+    }
+
+    throw new Error('[FSAL] Could not retrieve file contents: Invalid type or invalid descriptor.')
   }
 
   /**
    * Sets the modification flag on an open file
    */
-  public markDirty (file: MDFileDescriptor): void {
+  public markDirty (file: MDFileDescriptor|CodeFileDescriptor): void {
     if (!this._state.openFiles.includes(file)) {
       console.error('Cannot mark dirty a non-open file!')
       return
     }
 
-    FSALFile.markDirty(file)
+    if (file.type === 'file') {
+      FSALFile.markDirty(file)
+    } else if (file.type === 'code') {
+      FSALCodeFile.markDirty(file)
+    }
   }
 
   /**
    * Removes the modification flag on an open file
    */
-  public markClean (file: MDFileDescriptor): void {
+  public markClean (file: MDFileDescriptor|CodeFileDescriptor): void {
     if (!this._state.openFiles.includes(file)) {
       console.error('Cannot mark clean a non-open file!')
       return
     }
 
-    FSALFile.markClean(file)
+    if (file.type === 'file') {
+      FSALFile.markClean(file)
+    } else if (file.type === 'code') {
+      FSALCodeFile.markClean(file)
+    }
   }
 
   /**
@@ -679,7 +717,8 @@ export default class FSAL extends EventEmitter {
   public getMetadataFor (descriptor: AnyDescriptor): AnyMetaDescriptor|undefined {
     if (descriptor.type === 'directory') return FSALDir.metadata(descriptor)
     if (descriptor.type === 'file') return FSALFile.metadata(descriptor)
-    if (descriptor.type === 'attachment') return FSALAttachment.metadata(descriptor)
+    if (descriptor.type === 'code') return FSALCodeFile.metadata(descriptor)
+    if (descriptor.type === 'other') return FSALAttachment.metadata(descriptor)
     return undefined
   }
 
@@ -707,15 +746,20 @@ export default class FSAL extends EventEmitter {
    * @param {Mixed} val Either an absolute path or a hash
    * @return {Mixed} Either null or the wanted file
    */
-  public findFile (val: string|number, baseTree = this._state.filetree): MDFileDescriptor|null {
+  public findFile (
+    val: string|number,
+    baseTree = this._state.filetree
+  ): MDFileDescriptor|CodeFileDescriptor|null {
     // We'll only search for hashes, so if the user searches for a path,
     // convert it to the hash prior to searching the tree.
     if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
     if (typeof val !== 'number') val = parseInt(val, 10)
 
-    // let found = findObject(this._roots, 'hash', val, 'children')
     let found = findObject(baseTree, 'hash', val, 'children')
-    if (!found || found.type !== 'file') return null
+    if (!found || ![ 'code', 'file' ].includes(found.type)) {
+      return null
+    }
+
     return found
   }
 
@@ -723,7 +767,7 @@ export default class FSAL extends EventEmitter {
    * Convenience wrapper for findFile && findDir
    * @param {number|string} val The value to search for (hash or path)
    */
-  public find (val: number|string): MDFileDescriptor|DirDescriptor|null {
+  public find (val: number|string): MDFileDescriptor|DirDescriptor|CodeFileDescriptor|null {
     let res = this.findFile(val)
     if (res === null) return this.findDir(val)
     return res

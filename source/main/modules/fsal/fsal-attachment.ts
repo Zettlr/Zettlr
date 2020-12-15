@@ -31,7 +31,7 @@ export async function parse (absPath: string, parent: DirDescriptor): Promise<Ot
     dir: path.dirname(absPath),
     modtime: 0,
     creationtime: 0,
-    type: 'attachment'
+    type: 'other'
   }
 
   try {

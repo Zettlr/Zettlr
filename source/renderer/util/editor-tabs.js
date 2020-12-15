@@ -283,7 +283,6 @@ module.exports = class EditorTabs {
     ]
 
     const point = { x: event.clientX, y: event.clientY }
-    console.log(elem)
 
     global.menuProvider.show(point, items, (clickedID) => {
       switch (clickedID) {
@@ -334,11 +333,13 @@ module.exports = class EditorTabs {
     // Show some additional information on hover
     doc.dataset['tippyContent'] = `<strong>${file.name}</strong><br>`
     doc.dataset['tippyContent'] += `<small>(${path.basename(path.dirname(file.path))})</small><br>`
-    doc.dataset['tippyContent'] += localizeNumber(file.wordCount) + ' ' + trans('dialog.target.words')
-    doc.dataset['tippyContent'] += ', ' + localizeNumber(file.charCount) + ' ' + trans('dialog.target.chars')
-    // From here on, possible information begins, so we have to add <br>s before
-    if (file.id !== '') doc.dataset['tippyContent'] += '<br>ID: ' + file.id
-    if (file.tags.length > 0) doc.dataset['tippyContent'] += '<br>' + file.tags.map(tag => '<span class="tag">#' + tag + '</span>').join(' ')
+    if (file.type === 'file') {
+      doc.dataset['tippyContent'] += localizeNumber(file.wordCount) + ' ' + trans('dialog.target.words')
+      doc.dataset['tippyContent'] += ', ' + localizeNumber(file.charCount) + ' ' + trans('dialog.target.chars')
+      // From here on, possible information begins, so we have to add <br>s before
+      if (file.id !== '') doc.dataset['tippyContent'] += '<br>ID: ' + file.id
+      if (file.tags.length > 0) doc.dataset['tippyContent'] += '<br>' + file.tags.map(tag => '<span class="tag">#' + tag + '</span>').join(' ')
+    }
 
     // Mark it as active and/or modified, if applicable
     if (active) {

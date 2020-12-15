@@ -26,6 +26,7 @@ import isAttachment from '../../../common/util/is-attachment'
 import { shell } from 'electron'
 
 import * as FSALFile from './fsal-file'
+import * as FSALCodeFile from './fsal-code-file'
 import * as FSALAttachment from './fsal-attachment'
 import {
   DirDescriptor,
@@ -44,6 +45,17 @@ const SETTINGS_TEMPLATE = {
   'project': null, // Default: no project
   'icon': null // Default: no icon
 }
+
+const ALLOWED_CODE_FILES = [
+  '.tex'
+]
+
+const MARKDOWN_FILES = [
+  '.md',
+  '.rmd',
+  '.markdown',
+  '.txt'
+]
 
 /**
  * Used to insert a default project
@@ -98,8 +110,10 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
   let children = dirObject.children.map((elem) => {
     if (elem.type === 'directory') {
       return metadata(elem)
-    } else if ([ 'file', 'tex' ].includes(elem.type)) {
+    } else if (elem.type === 'file') {
       return FSALFile.metadata(elem)
+    } else if (elem.type === 'code') {
+      return FSALCodeFile.metadata(elem)
     }
   }) as MaybeRootMeta[]
 
@@ -236,7 +250,13 @@ async function readTree (currentPath: string, cache: FSALCache, parent: DirDescr
     if (isAttachment(absolutePath)) {
       dir.attachments.push(await FSALAttachment.parse(absolutePath, dir))
     } else if (isFile(absolutePath)) {
-      dir.children.push(await FSALFile.parse(absolutePath, cache, dir))
+      const isCode = ALLOWED_CODE_FILES.includes(path.extname(absolutePath))
+      const isMD = MARKDOWN_FILES.includes(path.extname(absolutePath))
+      if (isCode) {
+        dir.children.push(await FSALCodeFile.parse(absolutePath, cache, dir))
+      } else if (isMD) {
+        dir.children.push(await FSALFile.parse(absolutePath, cache, dir))
+      }
     } else if (isDir(absolutePath)) {
       dir.children.push(await readTree(absolutePath, cache, dir))
     }
