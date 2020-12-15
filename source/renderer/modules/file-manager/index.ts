@@ -32,6 +32,6 @@ export default (): Vue => {
     // Destructure the App config object, and enrich with store and hook
     ...App,
     store: applicationStore,
-    el: '#file-manager'
+    el: '#app'
   })
 }

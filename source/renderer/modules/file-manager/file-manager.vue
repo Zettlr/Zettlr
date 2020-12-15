@@ -14,6 +14,8 @@
 <template>
   <div
     id="file-manager"
+    role="region"
+    aria-label="File Manager"
     v-bind:class="getClass"
     v-on:mousemove="handleMouseOver"
     v-on:mouseleave="handleMouseOver"

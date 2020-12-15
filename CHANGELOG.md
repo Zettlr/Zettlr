@@ -14,6 +14,7 @@
 - Changed the FSAL parsing logic to separate the Markdown and code file logics.
 - Fix a hidden error with the continuelist addon.
 - Improved logging when certain files and directories take a significant amount of time to load.
+- Fixed an ID problem where the ID `file-manager` was given twice.
 
 # 1.8.2
 
