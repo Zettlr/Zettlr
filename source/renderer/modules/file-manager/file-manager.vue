@@ -103,24 +103,39 @@
           </div>
         </template>
         <template v-else-if="getDirectoryContents.length > 1">
-          <!--
+          <div id="file-manager-filter">
+            <input
+              id="file-manager-filter-input"
+              v-model="filterQuery"
+              type="search"
+              placeholder="Filter …"
+            />
+          </div>
+          <template v-if="getFilteredDirectoryContents.length === 0">
+            <div class="empty-file-list">
+              {{ noResultsMessage }}
+            </div>
+          </template>
+          <template v-else>
+            <!--
             For the "real" file list, we need the virtual scroller to maintain
             performance, because it may contain thousands of elements.
             Provide the virtual scroller with the correct size of the list
             items (60px in mode with meta-data, 30 in cases without).
             NOTE: The page-mode MUST be true, because it will speed up
             performance incredibly!
-          -->
-          <recycle-scroller
-            v-slot="{ item }"
-            v-bind:items="getDirectoryContents"
-            v-bind:item-size="($store.state.fileMeta) ? 61 : 31"
-            v-bind:emit-update="true"
-            v-bind:page-mode="true"
-            v-on:update="updateDynamics"
-          >
-            <file-item v-bind:obj="item.props"></file-item>
-          </recycle-scroller>
+            -->
+            <recycle-scroller
+              v-slot="{ item }"
+              v-bind:items="getFilteredDirectoryContents"
+              v-bind:item-size="($store.state.fileMeta) ? 61 : 31"
+              v-bind:emit-update="true"
+              v-bind:page-mode="true"
+              v-on:update="updateDynamics"
+            >
+              <file-item v-bind:obj="item.props"></file-item>
+            </recycle-scroller>
+          </template>
         </template>
         <template v-else-if="getDirectoryContents.length === 1">
           <file-item
@@ -178,7 +193,8 @@ module.exports = {
       fileManagerResizing: false, // Only true during file manager resizes
       fileManagerResizeX: 0, // Save the resize cursor position during resizes
       fileManagerInnerResizing: false,
-      fileManagerInnerResizeX: 0
+      fileManagerInnerResizeX: 0,
+      filterQuery: ''
     }
   },
   components: {
@@ -263,6 +279,61 @@ module.exports = {
         })
       }
       return ret
+    },
+    getFilteredDirectoryContents: function () {
+      // Returns a list of directory contents, filtered
+      const originalContents = this.getDirectoryContents
+
+      const q = this.filterQuery.trim().toLowerCase() // Easy access
+
+      if (q === '') {
+        return originalContents
+      }
+
+      // Filter based on the query (remember: there's an ID and a "props" property)
+      return originalContents.filter(element => {
+        const item = element.props
+
+        // If the query only consists of a "#" also include files that
+        // contain tags, no matter which
+        if (q === '#') {
+          if (item.type === 'file' && item.tags.length > 0) {
+            return true
+          }
+        }
+
+        // Let's check for tag matches
+        if (q.startsWith('#') && item.type === 'file') {
+          const tagMatch = item.tags.find(tag => tag.indexOf(q.substr(1)) >= 0)
+          if (tagMatch !== undefined) {
+            return true
+          }
+        }
+
+        // First, see if the name gives a match.
+        if (item.name.toLowerCase().indexOf(q) >= 0) {
+          return true
+        }
+
+        const hasFrontmatter = item.frontmatter && item.frontmatter.title
+
+        // Does the frontmatter work?
+        if (item.type === 'file' && hasFrontmatter) {
+          if (item.frontmatter.title.toLowerCase().indexOf(q) >= 0) {
+            return true
+          }
+        }
+
+        // Third, should we use headings 1 and, if so, does it match?
+        const useH1 = this.$store.state.useFirstHeadings
+        if (useH1 && item.type === 'file' && item.firstHeading) {
+          if (item.firstHeading.toLowerCase().indexOf(q) >= 0) {
+            return true
+          }
+        }
+
+        return false
+      })
     },
     selectedFile: function () { return this.$store.state.selectedFile },
     selectedDirectoryHash: function () { return this.$store.state.selectedDirectory },

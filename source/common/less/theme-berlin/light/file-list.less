@@ -6,6 +6,16 @@
   font-size: @font-size-small;
   box-shadow: inset -14px 2px 54px -23px rgba(0,0,0,0.25);
 
+  #file-manager-filter {
+    #file-manager-filter-input {
+      font-family: inherit;
+
+      &:focus {
+        border-color: var(--c-primary);
+      }
+    }
+  }
+
   div.list-item {
     border-bottom:1px solid var(--grey-2);
     border-left: 5px solid transparent;

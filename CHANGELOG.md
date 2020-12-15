@@ -2,6 +2,7 @@
 
 ## GUI and Functionality
 
+- **New Feature**: Added a quick filter to the file list that will filter the directory contents much more quickly than a full text search. Currently, it does not account for typos. It will attempt to match the filename, YAML frontmatter title, and first heading level 1 according to your preferences. If you simply type a `#`-symbol, the list will be filtered for files containing tags. Add a full tag behind it and the files containing that tag will be shown.
 - Fixed broken link rendering from 1.8.2.
 - The default PDF template of Zettlr is now compatible with Pandoc 2.11. This means it won't work with Pandoc 2.10 or less anymore. (Thanks to @Kangie for implementing.)
 - Renaming files from the context menu of the document tabs now contains the original file name.
