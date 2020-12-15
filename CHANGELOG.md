@@ -8,6 +8,7 @@
 - Renaming files from the context menu of the document tabs now contains the original file name.
 - Code files now have monospace fonts applied consistently.
 - You have an additional option now to direct Zettlr to remove an object irreversibly, if moving it to trash fails due to some reason.
+- Citations are now easier than ever as you do not have to put square brackets around them – Zettlr will do this automatically for you.
 
 ## Under the Hood
 
