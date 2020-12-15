@@ -11,6 +11,7 @@
 
 - Migrated sorting functions into the FSAL module and converted them to TypeScript.
 - Changed the FSAL parsing logic to separate the Markdown and code file logics.
+- Fix a hidden error with the continuelist addon.
 
 # 1.8.2
 
