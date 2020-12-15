@@ -6,6 +6,7 @@
 - The default PDF template of Zettlr is now compatible with Pandoc 2.11. This means it won't work with Pandoc 2.10 or less anymore. (Thanks to @Kangie for implementing.)
 - Renaming files from the context menu of the document tabs now contains the original file name.
 - Code files now have monospace fonts applied consistently.
+- You have an additional option now to direct Zettlr to remove an object irreversibly, if moving it to trash fails due to some reason.
 
 ## Under the Hood
 

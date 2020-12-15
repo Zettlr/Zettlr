@@ -855,7 +855,7 @@
 
 
 
-      <!-- Export/seldomly used options -->
+      <!-- Advanced options -->
       <div id="prefs-tabs-advanced">
         <div class="box-left">
           <label for="filename-generator">
@@ -871,6 +871,8 @@
             </label>
             <label for="newFileDontPrompt">{{i18n "dialog.preferences.new_file_dont_prompt"}}</label>
           </div>
+          <hr>
+
 
           <label for="pandoc">
             {{i18n "dialog.preferences.pandoc"}}
@@ -882,6 +884,8 @@
           </label>
           <input type="text" id="xelatex" name="xelatex" placeholder="{{i18n "dialog.preferences.xelatex_default"}}" value="{{xelatex}}">
           <hr>
+
+
           <div class="cb-group">
             <label class="cb-toggle">
               <input type="checkbox" name="debug" value="yes" id="debug" {{#if debug}}checked="checked"{{/if}}>
@@ -909,6 +913,13 @@
               <div class="toggle"></div>
             </label>
             <label for="window.nativeAppearance">{{i18n "dialog.preferences.use_native_appearance"}}</label>
+          </div>
+          <div class="cb-group">
+            <label class="cb-toggle">
+              <input type="checkbox" name="system.deleteOnFail" value="yes" id="system.deleteOnFail" {{#if system.deleteOnFail}}checked="checked"{{/if}}>
+              <div class="toggle"></div>
+            </label>
+            <label for="system.deleteOnFail">{{i18n "dialog.preferences.delete_on_fail"}}</label>
           </div>
         </div>
         <div class="box-right">

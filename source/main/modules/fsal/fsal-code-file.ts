@@ -187,12 +187,21 @@ export async function rename (fileObject: CodeFileDescriptor, cache: any, newNam
 }
 
 export function remove (fileObject: CodeFileDescriptor): void {
-  if (shell.moveItemToTrash(fileObject.path)) {
+  const deleteOnFail: boolean = global.config.get('system.deleteOnFail')
+  const deleteSuccess = shell.moveItemToTrash(fileObject.path, deleteOnFail)
+
+  if (deleteSuccess && fileObject.parent !== null) {
     // Splice it from the parent directory
-    if (fileObject.parent !== null) {
-      const idx = fileObject.parent.children.indexOf(fileObject)
-      fileObject.parent.children.splice(idx, 1)
-    }
+    const idx = fileObject.parent.children.indexOf(fileObject)
+    fileObject.parent.children.splice(idx, 1)
+  }
+
+  if (!deleteSuccess) {
+    // Forcefully remove the file
+    fs.unlink(fileObject.path)
+      .catch(err => {
+        global.log.error(`[FSAL CodeFile] Could not remove file ${fileObject.path}: ${err.message as string}`, err)
+      })
   }
 }
 

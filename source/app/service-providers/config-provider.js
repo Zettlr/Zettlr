@@ -252,6 +252,9 @@ module.exports = class ConfigProvider extends EventEmitter {
         'activatePolling': false, // Set to true to enable polling in chokidar
         'stabilityThreshold': 1000 // Positive int in milliseconds
       },
+      'system': {
+        'deleteOnFail': false // Whether to delete files if trashing them fails
+      },
       'checkForBeta': false, // Should the user be notified of beta releases?
       'uuid': null // The app's unique anonymous identifier
     }

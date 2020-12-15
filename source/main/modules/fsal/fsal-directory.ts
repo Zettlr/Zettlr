@@ -391,10 +391,20 @@ export async function rename (dirObject: DirDescriptor, newName: string, cache: 
 export async function remove (dirObject: DirDescriptor): Promise<void> {
   // First, get the parent, if there is any
   let parentDir = dirObject.parent
+  const deleteOnFail: boolean = global.config.get('system.deleteOnFail')
+  const deleteSuccess = shell.moveItemToTrash(dirObject.path, deleteOnFail)
   // Now, remove the directory
-  if (shell.moveItemToTrash(dirObject.path) && parentDir) {
+  if (deleteSuccess && parentDir !== null) {
     // Splice it from the parent directory
     parentDir.children.splice(parentDir.children.indexOf(dirObject), 1)
+  }
+
+  if (!deleteSuccess) {
+    // Forcefully remove the directory
+    fs.rmdir(dirObject.path)
+      .catch(err => {
+        global.log.error(`[FSAL Directory] Could not remove directory ${dirObject.path}: ${err.message as string}`, err)
+      })
   }
 }
 

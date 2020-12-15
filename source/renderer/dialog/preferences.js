@@ -312,6 +312,8 @@ class PreferencesDialog extends ZettlrDialog {
 
     cfg['watchdog.activatePolling'] = (data.find(elem => elem.name === 'watchdog.activatePolling') !== undefined)
 
+    cfg['system.deleteOnFail'] = (data.find(elem => elem.name === 'system.deleteOnFail') !== undefined)
+
     // Extract selected dictionaries
     cfg['selectedDicts'] = data.filter(elem => elem.name === 'selectedDicts').map(elem => elem.value)
 
