@@ -17,7 +17,7 @@
             "Adrien H \u003Cadrien.h@tuta.io\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-10-08T15:44:22.000000Z"
+        "updated_at": "2020-12-08T14:01:53.000000Z"
     },
     "dialog": {
         "about": {
@@ -323,6 +323,7 @@
                 "success": "%s t\u00e9l\u00e9charg\u00e9 avec succ\u00e8s!",
                 "updated": "Traductions mises \u00e0 jour : %s"
             },
+            "use_native_appearance": "Utiliser l'apparence native des fen\u00eatres",
             "user_dictionary": "Dictionnaire personnalis\u00e9. Enlever des mots avec un clic.",
             "watchdog_checkbox_label": "Activer le d\u00e9compte du chien de garde",
             "watchdog_explainer": "Sur certains ordinateurs, Zettlr peut signaler trop de modifications de fichiers \u00e0 distance. Si cela se produit, essayez d'activer ce param\u00e8tre.",
@@ -456,7 +457,8 @@
         "virtual_dirs": "Dossiers virtuels",
         "words": "%s mots",
         "words_last_month": "mots au cours du mois",
-        "words_selected": "%s s\u00e9lectionn\u00e9s"
+        "words_selected": "%s s\u00e9lectionn\u00e9s",
+        "workspaces": "Espaces de travail"
     },
     "localise": {
         "decimal_delimiter": ",",
@@ -471,6 +473,7 @@
         "close_all_tabs": "Fermer tous les onglets",
         "close_dir": "Fermer le dossier",
         "close_file": "Fermer le fichier",
+        "close_workspace": "Fermer l'espace de travail",
         "copy": "Copier",
         "copy_filename": "Copier le nom de fichier",
         "copy_html": "Copier en HTML",
@@ -518,6 +521,7 @@
         "open_attachment": "Ouvrir annexe",
         "open_link": "Ouvrir le lien",
         "open_logs": "Ouvrir les journaux",
+        "open_workspace": "Ouvrir un espace de travail...",
         "pandoc": "T\u00e9l\u00e9charger Pandoc",
         "paste": "Coller",
         "paste_plain": "Coller sans format",
@@ -635,6 +639,7 @@
         "lang_import_success": "Le fichier de langue %s a \u00e9t\u00e9 import\u00e9 !",
         "no_command": "R\u00e9ception d'un message sans commande : %s",
         "ok": "Ok",
+        "open_file": "Ouvrir un fichier",
         "open_folder": "Ouvrir le dossier racine.",
         "open_root_directory": "Ouvrir le dossier %s \u2026",
         "open_root_directory_success": "%s a \u00e9t\u00e9 charg\u00e9.",
