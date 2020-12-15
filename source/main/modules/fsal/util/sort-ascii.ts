@@ -43,13 +43,19 @@ export default function (
 
   // Second, check for frontmatter, as this overwrites
   if (a.type === 'file' && a.frontmatter !== null) {
-    if (a.frontmatter.hasOwnProperty('title') === true) {
+    if (
+      a.frontmatter.hasOwnProperty('title') === true &&
+      typeof a.frontmatter.title === 'string'
+    ) {
       aSort = a.frontmatter.title.toLowerCase()
     }
   }
 
   if (b.type === 'file' && b.frontmatter !== null) {
-    if (b.frontmatter.hasOwnProperty('title') === true) {
+    if (
+      b.frontmatter.hasOwnProperty('title') === true &&
+      typeof b.frontmatter.title === 'string'
+    ) {
       bSort = b.frontmatter.title.toLowerCase()
     }
   }

@@ -9,6 +9,7 @@
 - Code files now have monospace fonts applied consistently.
 - You have an additional option now to direct Zettlr to remove an object irreversibly, if moving it to trash fails due to some reason.
 - Citations are now easier than ever as you do not have to put square brackets around them – Zettlr will do this automatically for you.
+- Fixed another error where empty `title`-attributes inside YAML frontmatter would break down the complete file tree within which such a "malicious" file resides, resulting in the whole tree being offloaded and unusable.
 
 ## Under the Hood
 
