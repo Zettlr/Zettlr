@@ -16,6 +16,10 @@
 - Fix a hidden error with the continuelist addon.
 - Improved logging when certain files and directories take a significant amount of time to load.
 - Fixed an ID problem where the ID `file-manager` was given twice.
+- Updated dependencies:
+    - @typescript-eslint/eslint-plugin `4.10.0`
+    - @typescript-eslint/parser `4.10.0`
+    - fork-ts-checker-webpack-plugin `6.0.7`
 
 # 1.8.2
 
