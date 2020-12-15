@@ -26,14 +26,12 @@ import * as FSALAttachment from './fsal-attachment'
 import FSALWatchdog from './fsal-watchdog'
 import FSALCache from './fsal-cache'
 import hash from '../../../common/util/hash'
-import sort from '../../../common/util/sort'
+import sort from './util/sort'
 import {
-  OtherFileDescriptor,
   DirDescriptor,
   MDFileDescriptor,
   MDFileMeta,
   AnyDescriptor,
-  DescriptorType,
   MaybeRootMeta,
   WatchdogEvent,
   AnyMetaDescriptor,
@@ -279,7 +277,7 @@ export default class FSAL extends EventEmitter {
         // It was a root directory, so we need to find another root dir
         if (rootIndex === this._state.filetree.length) {
           // Last directory has been removed, check if there are any before it
-          let dirs = this._state.filetree.filter(dir => dir.type === DescriptorType.Directory) as DirDescriptor[]
+          let dirs = this._state.filetree.filter(dir => dir.type === 'directory') as DirDescriptor[]
           if (dirs.length > 0) this._state.openDirectory = dirs[dirs.length - 1]
         } else {
           // Either the first root or something in between has been removed -->
@@ -484,8 +482,8 @@ export default class FSAL extends EventEmitter {
     // Set the open directory to an appropriate value
     if (this.openDirectory === root) {
       const rootIdx = this._state.filetree.indexOf(root)
-      const dirAfter = this._state.filetree[rootIdx + 1]?.type === DescriptorType.Directory
-      const dirBefore = this._state.filetree[rootIdx - 1]?.type === DescriptorType.Directory
+      const dirAfter = this._state.filetree[rootIdx + 1]?.type === 'directory'
+      const dirBefore = this._state.filetree[rootIdx - 1]?.type === 'directory'
       if (rootIdx === this._state.filetree.length - 1 && dirBefore) {
         this.openDirectory = this._state.filetree[rootIdx - 1] as DirDescriptor
       } else if (rootIdx >= 0 && dirAfter) {
@@ -495,9 +493,9 @@ export default class FSAL extends EventEmitter {
       }
     }
 
-    if (this.openFiles.includes(root.hash) && root.type === DescriptorType.MDFile) {
+    if (this.openFiles.includes(root.hash) && root.type === 'file') {
       // It's an open root file --> close before splicing from the tree
-      this.closeFile(root as MDFileDescriptor)
+      this.closeFile(root)
     }
 
     this._state.filetree.splice(this._state.filetree.indexOf(root), 1)
@@ -679,9 +677,9 @@ export default class FSAL extends EventEmitter {
    * @return  {AnyMetaDescriptor}          The metadata for that descriptor
    */
   public getMetadataFor (descriptor: AnyDescriptor): AnyMetaDescriptor|undefined {
-    if (descriptor.type === DescriptorType.Directory) return FSALDir.metadata(descriptor as DirDescriptor)
-    if (descriptor.type === DescriptorType.MDFile) return FSALFile.metadata(descriptor as MDFileDescriptor)
-    if (descriptor.type === DescriptorType.Other) return FSALAttachment.metadata(descriptor as OtherFileDescriptor)
+    if (descriptor.type === 'directory') return FSALDir.metadata(descriptor)
+    if (descriptor.type === 'file') return FSALFile.metadata(descriptor)
+    if (descriptor.type === 'attachment') return FSALAttachment.metadata(descriptor)
     return undefined
   }
 
@@ -996,12 +994,12 @@ export default class FSAL extends EventEmitter {
     let removes = []
     for (const child of objectToArray(src, 'children')) {
       adds.push({
-        'event': child.type === DescriptorType.MDFile ? 'add' : 'addDir',
+        'event': child.type === 'file' ? 'add' : 'addDir',
         // Converts /old/path/oldname/file.md --> /old/path/newname/file.md
         'path': child.path.replace(oldPrefix, newPrefix)
       })
       removes.push({
-        'event': child.type === DescriptorType.MDFile ? 'unlink' : 'unlinkDir',
+        'event': child.type === 'file' ? 'unlink' : 'unlinkDir',
         'path': child.path
       })
     }
@@ -1096,8 +1094,8 @@ export default class FSAL extends EventEmitter {
     let newOpenDirHash
     let newFileHashes: number[] = []
     const hasOpenDir = this.openDirectory !== null
-    const srcIsDir = src.type === DescriptorType.Directory
-    const srcIsFile = src.type === DescriptorType.MDFile
+    const srcIsDir = src.type === 'directory'
+    const srcIsFile = src.type === 'file'
     const srcIsOpenDir = src === this.openDirectory
     const srcContainsOpenDir = srcIsDir && hasOpenDir && this.findDir((this.openDirectory as DirDescriptor).hash, [src as DirDescriptor]) !== null
     const srcContainsActiveFile = srcIsDir && this.activeFile !== null && this.findFile(this.activeFile, [src as DirDescriptor]) !== null
@@ -1152,12 +1150,12 @@ export default class FSAL extends EventEmitter {
     let removes = []
     for (let obj of arr) {
       adds.push({
-        'event': obj.type === DescriptorType.MDFile ? 'add' : 'addDir',
+        'event': obj.type === 'file' ? 'add' : 'addDir',
         // Converts /path/source/file.md --> /path/target/file.md
         'path': obj.path.replace(sourcePath, targetPath)
       })
       removes.push({
-        'event': obj.type === DescriptorType.MDFile ? 'unlink' : 'unlinkDir',
+        'event': obj.type === 'file' ? 'unlink' : 'unlinkDir',
         'path': obj.path
       })
     }

@@ -23,18 +23,6 @@
  */
 
 /**
- * We do not use classes to represent the different descriptors
- * to save computational overhead, which means we need a type
- * property to distinguish all of them.
- */
-export enum DescriptorType {
-  MDFile = 'file',
-  TexFile = 'tex',
-  Directory = 'directory',
-  Other = 'attachment' // TODO: Rename to other in the renderer as well
-}
-
-/**
  * Represents an event the watchdog can work with
  */
 export interface WatchdogEvent {
@@ -51,7 +39,7 @@ interface FSMetaInfo {
   dir: string // path.dirname(absolutePath)
   path: string // absolutePath
   hash: number // Hashed absolute path
-  type: DescriptorType // Descriptor type (MD, Tex, dir or other)
+  type: 'file' | 'directory' | 'code' | 'attachment'
   modtime: number
   creationtime: number
 }
@@ -62,6 +50,7 @@ interface FSMetaInfo {
 export interface DirDescriptor extends FSMetaInfo {
   parent: DirDescriptor|null
   _settings: any
+  type: 'directory'
   children: Array<MDFileDescriptor|DirDescriptor>
   attachments: OtherFileDescriptor[]
   dirNotFoundFlag?: boolean // If the flag is set & true this directory has not been found
@@ -74,6 +63,7 @@ export interface MDFileDescriptor extends FSMetaInfo {
   parent: DirDescriptor|null
   ext: string
   id: string
+  type: 'file'
   tags: string[]
   wordCount: number
   charCount: number
@@ -90,6 +80,7 @@ export interface MDFileDescriptor extends FSMetaInfo {
 export interface TexFileDescriptor extends FSMetaInfo {
   parent: DirDescriptor
   ext: string
+  type: 'code'
   id: string
   tags: string[]
   linefeed: string
@@ -101,6 +92,7 @@ export interface TexFileDescriptor extends FSMetaInfo {
  */
 export interface OtherFileDescriptor extends FSMetaInfo {
   parent: DirDescriptor
+  type: 'attachment'
   ext: string
 }
 
@@ -112,6 +104,7 @@ export interface DirMeta extends FSMetaInfo {
   attachments: OtherFileMeta[]
   children: Array<DirMeta|MDFileMeta>
   project: any
+  type: 'directory'
   sorting: string
   icon: string
   dirNotFoundFlag?: boolean // If the flag is set & true this directory has not been found
@@ -124,6 +117,7 @@ export interface MDFileMeta extends FSMetaInfo {
   parent: number|null
   ext: string
   id: string
+  type: 'file'
   tags: string[]
   wordCount: number
   charCount: number
@@ -140,6 +134,7 @@ export interface MDFileMeta extends FSMetaInfo {
  */
 export interface TexFileMeta extends FSMetaInfo {
   parent: number
+  type: 'code'
   ext: string
 }
 
@@ -148,6 +143,7 @@ export interface TexFileMeta extends FSMetaInfo {
  */
 export interface OtherFileMeta extends FSMetaInfo {
   parent: number
+  type: 'attachment'
   ext: string
 }
 

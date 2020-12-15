@@ -7,7 +7,7 @@
 
 ## Under the Hood
 
-(nothing here)
+- Migrated sorting functions into the FSAL module and converted them to TypeScript.
 
 # 1.8.2
 

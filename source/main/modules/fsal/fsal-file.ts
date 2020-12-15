@@ -22,7 +22,7 @@ import { getIDRE } from '../../../common/regular-expressions'
 import { shell } from 'electron'
 import safeAssign from '../../../common/util/safe-assign'
 // Import the interfaces that we need
-import { DirDescriptor, MDFileDescriptor, MDFileMeta, DescriptorType } from './types'
+import { DirDescriptor, MDFileDescriptor, MDFileMeta } from './types'
 import FSALCache from './fsal-cache'
 
 // Here are all supported variables for Pandoc:
@@ -178,49 +178,49 @@ export function metadata (fileObject: MDFileDescriptor): MDFileMeta {
     // both lean AND it can be reconstructed into a
     // circular structure with NO overheads in the
     // renderer.
-    'parent': (fileObject.parent !== null) ? fileObject.parent.hash : null,
-    'dir': fileObject.dir,
-    'path': fileObject.path,
-    'name': fileObject.name,
-    'hash': fileObject.hash,
-    'ext': fileObject.ext,
-    'id': fileObject.id,
-    'tags': fileObject.tags,
-    'type': fileObject.type,
-    'wordCount': fileObject.wordCount,
-    'charCount': fileObject.charCount,
-    'target': fileObject.target,
-    'modtime': fileObject.modtime,
-    'creationtime': fileObject.creationtime,
-    'firstHeading': fileObject.firstHeading,
-    'frontmatter': fileObject.frontmatter,
-    'linefeed': fileObject.linefeed,
-    'modified': fileObject.modified,
-    'content': ''
+    parent: (fileObject.parent !== null) ? fileObject.parent.hash : null,
+    dir: fileObject.dir,
+    path: fileObject.path,
+    name: fileObject.name,
+    hash: fileObject.hash,
+    ext: fileObject.ext,
+    id: fileObject.id,
+    tags: fileObject.tags,
+    type: fileObject.type,
+    wordCount: fileObject.wordCount,
+    charCount: fileObject.charCount,
+    target: fileObject.target,
+    modtime: fileObject.modtime,
+    creationtime: fileObject.creationtime,
+    firstHeading: fileObject.firstHeading,
+    frontmatter: fileObject.frontmatter,
+    linefeed: fileObject.linefeed,
+    modified: fileObject.modified,
+    content: ''
   }
 }
 
 export async function parse (filePath: string, cache: FSALCache, parent: DirDescriptor|null = null): Promise<MDFileDescriptor> {
   // First of all, prepare the file descriptor
   let file: MDFileDescriptor = {
-    'parent': null, // We have to set this AFTERWARDS, as safeAssign() will traverse down this parent property, thereby introducing a circular structure
-    'dir': path.dirname(filePath), // Containing dir
-    'path': filePath,
-    'name': path.basename(filePath),
-    'hash': hash(filePath),
-    'ext': path.extname(filePath),
-    'id': '', // The ID, if there is one inside the file.
-    'tags': [], // All tags that are to be found inside the file's contents.
-    'type': DescriptorType.MDFile,
-    'wordCount': 0,
-    'charCount': 0,
-    'target': null, // Contains the target object
-    'modtime': 0, // Modification time
-    'creationtime': 0, // Creation time
-    'linefeed': '\n',
-    'firstHeading': null, // May contain the first heading level 1
-    'frontmatter': null, // May contain frontmatter variables
-    'modified': false // If true, it has been modified in the renderer
+    parent: null, // We have to set this AFTERWARDS, as safeAssign() will traverse down this parent property, thereby introducing a circular structure
+    dir: path.dirname(filePath), // Containing dir
+    path: filePath,
+    name: path.basename(filePath),
+    hash: hash(filePath),
+    ext: path.extname(filePath),
+    id: '', // The ID, if there is one inside the file.
+    tags: [], // All tags that are to be found inside the file's contents.
+    type: 'file',
+    wordCount: 0,
+    charCount: 0,
+    target: null, // Contains the target object
+    modtime: 0, // Modification time
+    creationtime: 0, // Creation time
+    linefeed: '\n',
+    firstHeading: null, // May contain the first heading level 1
+    frontmatter: null, // May contain frontmatter variables
+    modified: false // If true, it has been modified in the renderer
   }
 
   // In any case, we need the most recent times.

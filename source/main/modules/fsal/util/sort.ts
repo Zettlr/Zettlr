@@ -11,23 +11,28 @@
  * END HEADER
  */
 
-const asciiSorting = require('./sort-ascii')
-const naturalSorting = require('./sort-natural')
-const dateSorting = require('./sort-date')
+import asciiSorting from './sort-ascii'
+import naturalSorting from './sort-natural'
+import dateSorting from './sort-date'
+
+import { DirDescriptor, MDFileDescriptor } from '../types'
 
 /**
 * This function can sort an array of ZettlrFile and ZettlrDir objects
-* @param  {Array} arr An array containing file and directory descriptors
-* @param {String} [type='name-up'] The type of sorting - can be time-up, time-down, name-up or name-down
-* @return {Array}     The sorted array
+* @param  {Array<DirDescriptor | MDFileDescriptor>} arr An array containing file and directory descriptors
+* @param {string} [type='name-up'] The type of sorting - can be time-up, time-down, name-up or name-down
+* @return {Array<DirDescriptor | MDFileDescriptor>}     The sorted array
 */
-module.exports = function (arr, type = 'name-up') {
+export default function (
+  arr: Array<DirDescriptor | MDFileDescriptor>,
+  type = 'name-up'
+): Array<DirDescriptor | MDFileDescriptor> {
   // First split the array based on type
-  let f = []
-  let d = []
+  let f: MDFileDescriptor[] = []
+  let d: DirDescriptor[] = []
 
   // Should we use natural sorting or ascii?
-  let useNatural = (global.config && global.config.get('sorting') === 'natural')
+  let useNatural = (global.config.get('sorting') === 'natural')
 
   // Write in the sortingFunc whatever we should be using
   let sortingFunc = (useNatural) ? naturalSorting : asciiSorting
@@ -63,6 +68,8 @@ module.exports = function (arr, type = 'name-up') {
       break
   }
 
+  const ret: Array<MDFileDescriptor | DirDescriptor> = []
+
   // Return sorted array files -> directories
-  return f.concat(d)
+  return ret.concat(f).concat(d)
 }

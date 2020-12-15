@@ -15,7 +15,7 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 import hash from '../../../common/util/hash'
-import sortDir from '../../../common/util/sort'
+import sortDir from './util/sort'
 import isDir from '../../../common/util/is-dir'
 import isFile from '../../../common/util/is-file'
 import ignoreDir from '../../../common/util/ignore-dir'
@@ -30,8 +30,6 @@ import * as FSALAttachment from './fsal-attachment'
 import {
   DirDescriptor,
   DirMeta,
-  MDFileDescriptor,
-  DescriptorType,
   MaybeRootMeta,
   AnyDescriptor,
   MaybeRootDescriptor
@@ -99,9 +97,9 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
   // Handle the children
   let children = dirObject.children.map((elem) => {
     if (elem.type === 'directory') {
-      return metadata(elem as DirDescriptor)
-    } else if ([ DescriptorType.MDFile, DescriptorType.TexFile ].includes(elem.type)) {
-      return FSALFile.metadata(elem as MDFileDescriptor)
+      return metadata(elem)
+    } else if ([ 'file', 'tex' ].includes(elem.type)) {
+      return FSALFile.metadata(elem)
     }
   }) as MaybeRootMeta[]
 
@@ -193,17 +191,17 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
 async function readTree (currentPath: string, cache: FSALCache, parent: DirDescriptor|null): Promise<DirDescriptor> {
   // Prepopulate
   let dir: DirDescriptor = {
-    'parent': parent,
-    'path': currentPath,
-    'name': path.basename(currentPath),
-    'dir': path.dirname(currentPath),
-    'hash': hash(currentPath),
-    'children': [],
-    'attachments': [],
-    'type': DescriptorType.Directory,
-    'modtime': 0, // You know when something has gone wrong: 01.01.1970
-    'creationtime': 0,
-    '_settings': JSON.parse(JSON.stringify(SETTINGS_TEMPLATE))
+    parent: parent,
+    path: currentPath,
+    name: path.basename(currentPath),
+    dir: path.dirname(currentPath),
+    hash: hash(currentPath),
+    children: [],
+    attachments: [],
+    type: 'directory',
+    modtime: 0, // You know when something has gone wrong: 01.01.1970
+    creationtime: 0,
+    _settings: JSON.parse(JSON.stringify(SETTINGS_TEMPLATE))
   }
 
   // Retrieve the metadata
@@ -262,7 +260,7 @@ export function getDirNotFoundDescriptor (dirPath: string): DirDescriptor {
     hash: hash(dirPath),
     children: [], // Always empty
     attachments: [], // Always empty
-    type: DescriptorType.Directory,
+    type: 'directory',
     modtime: 0, // ¯\_(ツ)_/¯
     creationtime: 0,
     // Settings are expected by some functions
@@ -390,7 +388,7 @@ export async function move (sourceObject: AnyDescriptor, targetDir: DirDescripto
 
   // Re-read the source
   let newSource
-  if (sourceObject.type === DescriptorType.Directory) {
+  if (sourceObject.type === 'directory') {
     newSource = await readTree(targetPath, cache, targetDir)
   } else {
     newSource = await FSALFile.parse(targetPath, cache, targetDir)

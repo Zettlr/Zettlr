@@ -12,27 +12,48 @@
  * END HEADER
  */
 
+import { DirDescriptor, MDFileDescriptor } from '../types'
+
 /**
  * Helper function to sort files using a collator
  * @param  {ZettlrFile} a A ZettlrFile exposing a name property
  * @param  {ZettlrFile} b A ZettlrFile exposing a name property
  * @return {number}   0, 1, or -1, depending upon what the comparision yields.
  */
-module.exports = function (a, b) {
+export default function (
+  a: MDFileDescriptor | DirDescriptor,
+  b: MDFileDescriptor | DirDescriptor
+): number {
   let aSort = a.name.toLowerCase()
   let bSort = b.name.toLowerCase()
 
+  const useH1: boolean = global.config.get('display.useFirstHeadings')
+
   // Check for firstHeadings, if applicable
-  if (global.config.get('display.useFirstHeadings')) {
+  if (useH1 && a.type === 'file') {
     if (a.firstHeading != null) aSort = a.firstHeading.toLowerCase()
+  }
+
+  if (useH1 && b.type === 'file') {
     if (b.firstHeading != null) bSort = b.firstHeading.toLowerCase()
   }
 
   // Second, check for frontmatter, as this overwrites
-  if (a.frontmatter != null && a.frontmatter.hasOwnProperty('title')) aSort = a.frontmatter.title.toLowerCase()
-  if (b.frontmatter != null && b.frontmatter.hasOwnProperty('title')) bSort = b.frontmatter.title.toLowerCase()
+  if (a.type === 'file' && a.frontmatter !== null) {
+    if (a.frontmatter.hasOwnProperty('title') === true) {
+      aSort = a.frontmatter.title.toLowerCase()
+    }
+  }
 
-  let coll = new Intl.Collator([ global.config.get('appLang'), 'en' ], { 'numeric': true })
+  if (b.type === 'file' && b.frontmatter !== null) {
+    if (b.frontmatter.hasOwnProperty('title') === true) {
+      bSort = b.frontmatter.title.toLowerCase()
+    }
+  }
+
+  const languagePreferences = [ global.config.get('appLang'), 'en' ]
+
+  let coll = new Intl.Collator(languagePreferences, { 'numeric': true })
 
   return coll.compare(aSort, bSort)
 }
