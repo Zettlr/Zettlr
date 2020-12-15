@@ -247,6 +247,7 @@ async function readTree (currentPath: string, cache: FSALCache, parent: DirDescr
     if (isInvalidDir || (isInvalidFile && !isAttachment(absolutePath))) continue
 
     // Parse accordingly
+    let start = Date.now()
     if (isAttachment(absolutePath)) {
       dir.attachments.push(await FSALAttachment.parse(absolutePath, dir))
     } else if (isFile(absolutePath)) {
@@ -259,6 +260,11 @@ async function readTree (currentPath: string, cache: FSALCache, parent: DirDescr
       }
     } else if (isDir(absolutePath)) {
       dir.children.push(await readTree(absolutePath, cache, dir))
+    }
+
+    if (Date.now() - start > 100) {
+      // Only log if it took longer than 50ms
+      global.log.warning(`[FSAL Directory] Path ${absolutePath} took ${Date.now() - start}ms to load.`)
     }
   }
 

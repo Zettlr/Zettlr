@@ -396,7 +396,6 @@ export default class FSAL extends EventEmitter {
     const isCode = ALLOWED_CODE_FILES.includes(path.extname(filePath))
     const isMD = MARKDOWN_FILES.includes(path.extname(filePath))
 
-    let start = Date.now()
     if (isCode) {
       let file = await FSALCodeFile.parse(filePath, this._cache)
       this._state.filetree.push(file)
@@ -404,7 +403,6 @@ export default class FSAL extends EventEmitter {
       let file = await FSALFile.parse(filePath, this._cache)
       this._state.filetree.push(file)
     }
-    console.log(`${Date.now() - start} ms: Loaded file ${filePath}`) // DEBUG
   }
 
   /**
@@ -413,10 +411,8 @@ export default class FSAL extends EventEmitter {
    */
   private async _loadDir (dirPath: string): Promise<void> {
     // Loads a directory
-    let start = Date.now()
     let dir = await FSALDir.parse(dirPath, this._cache)
     this._state.filetree.push(dir)
-    console.log(`${Date.now() - start} ms: Loaded directory ${dirPath}`) // DEBUG
   }
 
   /**
@@ -425,7 +421,6 @@ export default class FSAL extends EventEmitter {
    */
   private async _loadPlaceholder (dirPath: string): Promise<void> {
     // Load a "dead" directory
-    console.log('Creating placeholder for dir ' + dirPath) // DEBUG
     let dir: DirDescriptor = FSALDir.getDirNotFoundDescriptor(dirPath)
     this._state.filetree.push(dir)
   }
@@ -450,6 +445,7 @@ export default class FSAL extends EventEmitter {
    */
   public async loadPath (p: string): Promise<boolean> {
     // Load a path
+    let start = Date.now()
     if (isFile(p)) {
       await this._loadFile(p)
       this._watchdog.watch(p)
@@ -463,6 +459,10 @@ export default class FSAL extends EventEmitter {
     } else {
       // If we've reached here the path poses a problem -> notify caller
       return false
+    }
+
+    if (Date.now() - start > 500) {
+      global.log.warning(`[FSAL] Path ${p} took ${Date.now() - start}ms to load.`)
     }
 
     this._state.filetree = sort(this._state.filetree)
