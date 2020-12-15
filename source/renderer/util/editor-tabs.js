@@ -254,6 +254,7 @@ module.exports = class EditorTabs {
     if (elem.classList.contains('filename')) elem = elem.parentElement
     if (elem.getAttribute('id') === 'document-tabs') return // No file selected
     const currentHash = elem.dataset['hash']
+    const filename = elem.dataset['filename']
 
     const items = [
       {
@@ -287,7 +288,10 @@ module.exports = class EditorTabs {
     global.menuProvider.show(point, items, (clickedID) => {
       switch (clickedID) {
         case 'file-rename':
-          global.popupProvider.show('textfield', elem, { val: '', placeholder: trans('dialog.file_rename.placeholder') }, (form) => {
+          global.popupProvider.show('textfield', elem, {
+            val: filename,
+            placeholder: trans('dialog.file_rename.placeholder')
+          }, (form) => {
             if (form !== null) {
               ipcRenderer.send('message', {
                 command: 'file-rename',
@@ -329,6 +333,7 @@ module.exports = class EditorTabs {
     doc.setAttribute('aria-label', displayTitle)
     doc.setAttribute('draggable', 'true') // Users can drag that thing around
     doc.dataset['hash'] = file.hash
+    doc.dataset['filename'] = file.name
     doc.dataset['id'] = file.id
     // Show some additional information on hover
     doc.dataset['tippyContent'] = `<strong>${file.name}</strong><br>`
