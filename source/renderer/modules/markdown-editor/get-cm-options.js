@@ -27,7 +27,7 @@ module.exports = function () {
     // Default mode: Markdown multiplex (+ syntax highlighting for code blocks)
     mode: 'multiplex',
     // Apply this theme class to prevent the default theme from overriding
-    theme: 'zettlr',
+    theme: 'zettlr-markdown', // Can be zettlr-markdown or zettlr-code
     // Don't focus on instantiation
     autofocus: false,
     // Necessary to (de)activate the instance programmatically later

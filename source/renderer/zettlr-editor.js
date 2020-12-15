@@ -293,6 +293,7 @@ class ZettlrEditor {
     // as the CodeMirror instance will begin rendering images as soon as
     // this happens, and it needs the correct path for this.
     this._editor.setOptions({
+      'theme': (file.fileObject.type === 'file') ? 'zettlr-markdown' : 'zettlr-code',
       'zettlr': {
         'markdownImageBasePath': path.dirname(file.fileObject.path)
       }

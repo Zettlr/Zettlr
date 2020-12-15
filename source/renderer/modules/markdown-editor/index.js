@@ -372,7 +372,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
     if (docMode !== cmMode) {
       this.setOptions({ 'mode': cmDoc.mode })
     }
-    // CodeMirror.signal(this._instance, 'cursorActivity', this._instance)
     return oldDoc
   }
 

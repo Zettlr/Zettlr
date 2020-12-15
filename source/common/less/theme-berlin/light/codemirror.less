@@ -7,6 +7,11 @@
 #editor .CodeMirror, .quicklook .body .CodeMirror, .dialog .CodeMirror {
     color:rgb(46, 56, 60);
 
+    &.cm-s-zettlr-code {
+      // Code files have this theme applied (others have cm-s-zettlr-markdown)
+      font-family: @font-code;
+    }
+
     &.cm-stex-mode, &.cm-css-mode {
       font-family: @font-code;
         .cm-comment    { color: var(--grey-2); }
