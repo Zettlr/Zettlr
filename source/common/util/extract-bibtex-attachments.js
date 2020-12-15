@@ -41,7 +41,7 @@ module.exports = function (fileContents, baseDir = '') {
         let f = property.value[0].value.split(';')
         f = f.map(elem => {
           // Extract the file paths
-          if (elem.indexOf(':') > 0) {
+          if (elem.indexOf(':') >= 0) {
             return elem.split(':')[1]
           } else {
             return elem
