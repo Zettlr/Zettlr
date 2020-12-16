@@ -364,6 +364,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
    */
   swapDoc (cmDoc) {
     let oldDoc = this._instance.swapDoc(cmDoc)
+    this._instance.focus()
 
     // Switch the mode, if we're coming from TeX to MD or vice versa.
     const docMode = (typeof cmDoc.mode === 'string') ? cmDoc.mode : cmDoc.mode.name
@@ -372,6 +373,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
     if (docMode !== cmMode) {
       this.setOptions({ 'mode': cmDoc.mode })
     }
+
     return oldDoc
   }
 
