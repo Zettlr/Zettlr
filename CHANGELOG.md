@@ -2,7 +2,7 @@
 
 ## GUI and Functionality
 
-(nothing here)
+- Visual improvements to the quick filter. The "back"-arrow now appears below the input.
 
 ## Under the Hood
 

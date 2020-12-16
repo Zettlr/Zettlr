@@ -400,7 +400,7 @@ module.exports = {
       // fileList is displayed and the user moves
       // up to an area about 100px at the top
       if (this.combined && this.$store.state.searchResults.length < 1) return
-      if (evt.clientY > 100 || evt.clientY < this.$el.offsetTop || evt.clientX < 0 || evt.clientX > this.$el.offsetWidth) {
+      if (evt.clientY > 150 || evt.clientY < this.$el.offsetTop || evt.clientX < 0 || evt.clientX > this.$el.offsetWidth) {
         this.$refs.arrowButton.classList.add('hidden')
       } else {
         this.$refs.arrowButton.classList.remove('hidden')
