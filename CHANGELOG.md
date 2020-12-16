@@ -1,3 +1,14 @@
+# 1.8.4
+
+## GUI and Functionality
+
+(nothing here)
+
+## Under the Hood
+
+- The statistics controller is now the Stats Provider.
+- Migrated the Stats Provider to TypeScript.
+
 # 1.8.3
 
 ## GUI and Functionality

@@ -268,11 +268,6 @@ class ZettlrIPC {
         this._app.handleAddRoots(cnt)
         break
 
-      // Statistics
-      case 'request-stats-data':
-        this.send('stats-data', this._app.getStats().getStats())
-        break
-
       // Return a list of all available IDs in the currently loaded database
       case 'citeproc-get-ids':
         this.send('citeproc-ids', (global.citeproc) ? global.citeproc.getIDs() : [])

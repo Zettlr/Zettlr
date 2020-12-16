@@ -25,7 +25,7 @@ class IncreasePomodoro extends ZettlrCommand {
     * @param  {Object} arg Empty
     */
   run (evt, arg) {
-    this._app.getStats().increasePomodoros()
+    global.stats.increasePomodoros()
   }
 }
 

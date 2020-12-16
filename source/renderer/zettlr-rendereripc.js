@@ -547,11 +547,7 @@ class ZettlrRendererIPC {
 
       // Stats
       case 'show-stats':
-        this.send('request-stats-data')
-        break
-
-      case 'stats-data':
-        this._app.getBody().displayStats(cnt)
+        this._app.getBody().displayStats()
         break
 
       // Generate a new ID

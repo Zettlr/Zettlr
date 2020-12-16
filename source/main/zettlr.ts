@@ -20,7 +20,6 @@ import fs from 'fs'
 
 // Internal classes
 import ZettlrIPC from './zettlr-ipc'
-import ZettlrStats from './zettlr-stats'
 import WindowManager from './modules/window-manager'
 import FSAL from './modules/fsal'
 import { trans, findLangCandidates } from '../common/i18n'
@@ -41,7 +40,6 @@ export default class Zettlr {
   _fsal: FSAL
   ipc: ZettlrIPC
   _commands: any
-  stats: ZettlrStats
   private readonly _windowManager: WindowManager
 
   /**
@@ -111,9 +109,6 @@ export default class Zettlr {
 
     // Boot up the IPC.
     this.ipc = new ZettlrIPC(this)
-
-    // Statistics TODO: Convert to provider
-    this.stats = new ZettlrStats(this)
 
     // File System Abstraction Layer, pass the folder
     // where it can store its internal files.
@@ -275,9 +270,6 @@ export default class Zettlr {
     * @return {Promise} Resolves after the providers have shut down
     */
   async shutdown (): Promise<void> {
-    // Save the stats
-    this.stats.save()
-
     // Finally shut down the file system
     await this._fsal.shutdown()
   }
@@ -634,12 +626,6 @@ export default class Zettlr {
     * @return {ZettlrIPC}  The IPC object
     */
   getIPC (): ZettlrIPC { return this.ipc }
-
-  /**
-    * Returns the stats
-    * @return {ZettlrStats} The stats object.
-    */
-  getStats (): ZettlrStats { return this.stats }
 
   /**
     * Get the current directory.

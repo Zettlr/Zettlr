@@ -440,7 +440,9 @@ class ZettlrBody {
    * @param  {Object} data The statistical data to be shown
    * @return {void}      No return.
    */
-  displayStats (data) {
+  async displayStats () {
+    const data = await ipcRenderer.invoke('stats-provider', { command: 'get-data' })
+
     let context = {
       'displaySum': (data.sumMonth > 99999) ? '>100k' : localiseNumber(data.sumMonth),
       'avgMonth': localiseNumber(data.avgMonth),
