@@ -108,6 +108,7 @@
           <div id="file-manager-filter">
             <input
               id="file-manager-filter-input"
+              ref="quickFilter"
               v-model="filterQuery"
               type="search"
               placeholder="Filter …"
@@ -407,6 +408,7 @@ module.exports = {
     focusFileList: function () {
       if (this.isFileListVisible()) {
         this.$refs.fileList.focus()
+        this.$refs.quickFilter.focus()
       }
     },
     /**
