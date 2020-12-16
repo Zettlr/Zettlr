@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Visual improvements to the quick filter. The "back"-arrow now appears below the input.
+- The quick filter now searches for all search terms (delimited by space) separately.
 
 ## Under the Hood
 

@@ -290,47 +290,51 @@ module.exports = {
         return originalContents
       }
 
+      const queries = q.split(' ')
+
       // Filter based on the query (remember: there's an ID and a "props" property)
       return originalContents.filter(element => {
         const item = element.props
 
-        // If the query only consists of a "#" also include files that
-        // contain tags, no matter which
-        if (q === '#') {
-          if (item.type === 'file' && item.tags.length > 0) {
+        for (const q of queries) {
+          // If the query only consists of a "#" also include files that
+          // contain tags, no matter which
+          if (q === '#') {
+            if (item.type === 'file' && item.tags.length > 0) {
+              return true
+            }
+          }
+
+          // Let's check for tag matches
+          if (q.startsWith('#') && item.type === 'file') {
+            const tagMatch = item.tags.find(tag => tag.indexOf(q.substr(1)) >= 0)
+            if (tagMatch !== undefined) {
+              return true
+            }
+          }
+
+          // First, see if the name gives a match.
+          if (item.name.toLowerCase().indexOf(q) >= 0) {
             return true
           }
-        }
 
-        // Let's check for tag matches
-        if (q.startsWith('#') && item.type === 'file') {
-          const tagMatch = item.tags.find(tag => tag.indexOf(q.substr(1)) >= 0)
-          if (tagMatch !== undefined) {
-            return true
+          const hasFrontmatter = item.frontmatter && item.frontmatter.title
+
+          // Does the frontmatter work?
+          if (item.type === 'file' && hasFrontmatter) {
+            if (item.frontmatter.title.toLowerCase().indexOf(q) >= 0) {
+              return true
+            }
           }
-        }
 
-        // First, see if the name gives a match.
-        if (item.name.toLowerCase().indexOf(q) >= 0) {
-          return true
-        }
-
-        const hasFrontmatter = item.frontmatter && item.frontmatter.title
-
-        // Does the frontmatter work?
-        if (item.type === 'file' && hasFrontmatter) {
-          if (item.frontmatter.title.toLowerCase().indexOf(q) >= 0) {
-            return true
+          // Third, should we use headings 1 and, if so, does it match?
+          const useH1 = this.$store.state.useFirstHeadings
+          if (useH1 && item.type === 'file' && item.firstHeading) {
+            if (item.firstHeading.toLowerCase().indexOf(q) >= 0) {
+              return true
+            }
           }
-        }
-
-        // Third, should we use headings 1 and, if so, does it match?
-        const useH1 = this.$store.state.useFirstHeadings
-        if (useH1 && item.type === 'file' && item.firstHeading) {
-          if (item.firstHeading.toLowerCase().indexOf(q) >= 0) {
-            return true
-          }
-        }
+        } // END for
 
         return false
       })
