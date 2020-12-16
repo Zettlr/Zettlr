@@ -118,7 +118,10 @@
   module.exports = {
     name: 'file-item',
     // Bind the actual object to the container
-    props: ['obj'],
+    props: [
+      'obj',
+      'activeFile'
+    ],
     data: () => {
       return {
         hover: false // True as long as the user hovers over the element
@@ -153,10 +156,17 @@
       fileMeta: function () { return this.$store.state.fileMeta },
       displayTime: function () { return this.$store.state.displayTime },
       classList: function () {
-        let list = 'list-item ' + this.obj.type
-        if (this.$store.state.selectedFile === this.obj.hash) list += ' selected'
-        if (this.obj.type === 'directory' && this.obj.project !== null) list += ' project'
-        return list
+        let list = [ 'list-item', this.obj.type ]
+        if (this.$store.state.selectedFile === this.obj.hash) {
+          list.push('selected')
+        }
+        if (this.obj.type === 'directory' && this.obj.project !== null) {
+          list.push('project')
+        }
+        if (this.obj.hash === this.activeFile) {
+          list.push('active')
+        }
+        return list.join(' ')
       },
       isCode: function () { return this.obj.type === 'code' },
       getDate: function () {

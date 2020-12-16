@@ -95,6 +95,8 @@
         tabindex="1"
         v-bind:data-hash="selectedDirectoryHash"
         v-on:keydown="navigate"
+        v-on:focus="activeFile = selectedFile"
+        v-on:blur="activeFile = null"
       >
         <template v-if="emptySearchResults">
           <!-- Did we have no search results? -->
@@ -133,7 +135,7 @@
               v-bind:page-mode="true"
               v-on:update="updateDynamics"
             >
-              <file-item v-bind:obj="item.props"></file-item>
+              <file-item v-bind:obj="item.props" v-bind:activeFile="activeFile"></file-item>
             </recycle-scroller>
           </template>
         </template>
@@ -194,7 +196,8 @@ module.exports = {
       fileManagerResizeX: 0, // Save the resize cursor position during resizes
       fileManagerInnerResizing: false,
       fileManagerInnerResizeX: 0,
-      filterQuery: ''
+      filterQuery: '',
+      activeFile: null // Can contain a hash of the active ("focused") file item
     }
   },
   components: {
@@ -232,9 +235,25 @@ module.exports = {
         this.$refs.fileList.classList.add('hidden')
         this.$refs.directories.classList.remove('hidden')
       }
+    },
+    getFilteredDirectoryContents: function () {
+      // Whenever the directory contents change, reset the active file if it's
+      // no longer in the list
+      const foundActiveFile = this.getFilteredDirectoryContents.find((elem) => {
+        return elem.props.hash === this.activeFile
+      })
+
+      if (foundActiveFile === undefined) {
+        this.activeFile = null
+      }
 
       // As soon as the directory contents have changed, scroll to the right file
-      this.$nextTick(function () { this.scrollIntoView() })
+      this.$nextTick(function () {
+        this.scrollIntoView()
+      })
+    },
+    activeFile: function () {
+      this.scrollIntoView()
     },
     /**
      * Listens to changes of the fileManagerMode to reset
@@ -589,43 +608,61 @@ module.exports = {
      */
     navigate: function (evt) {
       // Only capture arrow movements
-      if (![ 'ArrowDown', 'ArrowUp' ].includes(evt.key)) return
+      if (![ 'ArrowDown', 'ArrowUp', 'Enter' ].includes(evt.key)) {
+        return
+      }
+
       evt.stopPropagation()
       evt.preventDefault()
 
+      if (evt.key === 'Enter' && this.activeFile !== null) {
+        // Select the active file (if there is one)
+        global.editor.announceTransientFile(this.activeFile)
+        global.ipc.send('file-get', this.activeFile)
+        return
+      }
+
       // getDirectoryContents accomodates the virtual scroller
       // by packing the actual items in a props property.
-      let list = this.getDirectoryContents.map(e => e.props)
+      let list = this.getFilteredDirectoryContents.map(e => e.props)
       list = list.filter(e => e.type === 'file')
-      let index = list.indexOf(list.find(e => e.hash === this.selectedFile))
+      let index = list.indexOf(list.find(e => {
+        if (this.activeFile !== null) {
+          return e.hash === this.activeFile
+        } else {
+          return e.hash === this.selectedFile
+        }
+      }))
 
       switch (evt.key) {
         case 'ArrowDown':
           index++
-          if (evt.shiftKey) index += 9 // Fast-scrolling
-          if (index >= list.length) index = list.length - 1
+          if (evt.shiftKey) {
+            index += 9 // Fast-scrolling
+          }
+          if (index >= list.length) {
+            index = list.length - 1
+          }
           if (evt.ctrlKey || evt.metaKey) {
             // Select the last file
-            global.editor.announceTransientFile(list[list.length - 1].hash)
-            return global.ipc.send('file-get', list[list.length - 1].hash)
-          }
-          if (index < list.length) {
-            global.editor.announceTransientFile(list[index].hash)
-            global.ipc.send('file-get', list[index].hash)
+            this.activeFile = list[list.length - 1].hash
+          } else if (index < list.length) {
+            this.activeFile = list[index].hash
           }
           break
         case 'ArrowUp':
           index--
-          if (evt.shiftKey) index -= 9 // Fast-scrolling
-          if (index < 0) index = 0
+          if (evt.shiftKey) {
+            index -= 9 // Fast-scrolling
+          }
+          if (index < 0) {
+            index = 0
+          }
           if (evt.ctrlKey || evt.metaKey) {
             // Select the first file
-            global.editor.announceTransientFile(list[0].hash)
-            return global.ipc.send('file-get', list[0].hash)
-          }
-          if (index >= 0) {
-            global.editor.announceTransientFile(list[index].hash)
-            global.ipc.send('file-get', list[index].hash)
+            this.activeFile = list[0].hash
+          } else if (index >= 0) {
+            this.activeFile = list[index].hash
           }
           break
       }
@@ -633,14 +670,28 @@ module.exports = {
     scrollIntoView: function () {
       // In case the file changed, make sure it's in view.
       let scrollTop = this.$refs.fileList.scrollTop
-      let index = this.getDirectoryContents.find(e => e.props.hash === this.selectedFile)
-      if (!index) return
-      index = this.getDirectoryContents.indexOf(index)
+      let index = this.getFilteredDirectoryContents.find(e => {
+        if (this.activeFile !== null) {
+          return e.props.hash === this.activeFile
+        } else {
+          return e.props.hash === this.selectedFile
+        }
+      })
+
+      if (!index) {
+        return
+      }
+
+      index = this.getFilteredDirectoryContents.indexOf(index)
+
       let modifier = (this.$store.state.fileMeta) ? 61 : 31
       let position = index * modifier
-      if (position < scrollTop) this.$refs.fileList.scrollTop = position
-      else if (position > scrollTop + this.$refs.fileList.offsetHeight - modifier) {
-        this.$refs.fileList.scrollTop = position - this.$refs.fileList.offsetHeight + modifier
+      const quickFilterModifier = 40 // Height of the quick filter TODO: This is monkey patched
+
+      if (position < scrollTop) {
+        this.$refs.fileList.scrollTop = position
+      } else if (position > scrollTop + this.$refs.fileList.offsetHeight - modifier) {
+        this.$refs.fileList.scrollTop = position - this.$refs.fileList.offsetHeight + modifier + quickFilterModifier
       }
     }
   }

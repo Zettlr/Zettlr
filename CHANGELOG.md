@@ -2,6 +2,7 @@
 
 ## GUI and Functionality
 
+- **Enhancement**: Navigating the file list has just become easier. Now when you navigate the list **files will not be opened immediately**! Rather, they are being marked as "active," making the navigation much less cumbersome. To open an activated file, simply hit **Enter**.
 - Visual improvements to the quick filter. The "back"-arrow now appears below the input.
 - The quick filter now searches for all search terms (delimited by space) separately.
 
