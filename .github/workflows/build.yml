@@ -46,10 +46,10 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
-      - name: Setup NodeJS 12.x
+      - name: Setup NodeJS 14.x
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '14'
       - name: Retrieve tag version
         id: ref
         run: |
@@ -100,10 +100,10 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
-      - name: Setup NodeJS 12.x
+      - name: Setup NodeJS 14.x
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '14'
       - name: Retrieve tag version
         id: ref
         run: |
@@ -144,10 +144,10 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
-      - name: Setup NodeJS 12.x
+      - name: Setup NodeJS 14.x
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '14'
       - name: Retrieve tag version
         id: ref
         run: |
@@ -191,10 +191,10 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
-      - name: Setup NodeJS 12.x
+      - name: Setup NodeJS 14.x
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '14'
       - name: Retrieve tag version
         id: ref
         run: |

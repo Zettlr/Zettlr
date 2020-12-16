@@ -11,6 +11,8 @@
 
 - The statistics controller is now the Stats Provider.
 - Migrated the Stats Provider to TypeScript.
+- ASAR support reinstated
+- Switched GitHub Actions CI to use Node 14.x.
 
 # 1.8.3
 
