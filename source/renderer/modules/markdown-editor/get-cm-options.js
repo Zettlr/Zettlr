@@ -28,6 +28,8 @@ module.exports = function () {
     mode: 'multiplex',
     // Apply this theme class to prevent the default theme from overriding
     theme: 'zettlr-markdown', // Can be zettlr-markdown or zettlr-code
+    // We have different line heights (headings, e.g.)
+    singleCursorHeightPerLine: false,
     // Don't focus on instantiation
     autofocus: false,
     // Necessary to (de)activate the instance programmatically later

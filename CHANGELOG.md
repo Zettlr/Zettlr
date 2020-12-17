@@ -6,6 +6,7 @@
 - Visual improvements to the quick filter. The "back"-arrow now appears below the input.
 - The quick filter now searches for all search terms (delimited by space) separately.
 - The editor will now be focused whenever the containing document is changed.
+- The cursor will now be of the correct height no matter whether you are on a heading class or within a normal-height text line.
 
 ## Under the Hood
 
