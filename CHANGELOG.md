@@ -14,6 +14,7 @@
 - Migrated the Stats Provider to TypeScript.
 - ASAR support reinstated
 - Switched GitHub Actions CI to use Node 14.x.
+- Prepared everything so that Pandoc can be bundled with Zettlr at every time. However, the corresponding code is not yet active to provide for a transition phase where we still ship 32bit builds.
 
 # 1.8.3
 
