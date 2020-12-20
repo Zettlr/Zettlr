@@ -1,6 +1,8 @@
 /* global CodeMirror define */
 // This plugin renders GitHub Flavoured Markdown Task items
 
+const { getTaskRE } = require('../../../../common/regular-expressions');
+
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
     mod(require('codemirror/lib/codemirror'))
@@ -12,7 +14,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  var taskRE = /^(\s*)([-+*]) \[( |x)\] /g // Matches `- [ ]` and `- [x]`
+  var taskRE = getTaskRE() // Matches `- [ ]` and `- [x]`
 
   CodeMirror.commands.markdownRenderTasks = function (cm) {
     let match

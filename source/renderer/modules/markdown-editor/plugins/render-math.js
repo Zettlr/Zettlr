@@ -1,6 +1,8 @@
 /* global CodeMirror $ define */
 // This plugin renders MathJax parts in CodeMirror instances
 
+const { getBlockMathRE, getInlineMathRE } = require('../../../../common/regular-expressions');
+
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
     mod(require('codemirror/lib/codemirror'))
@@ -20,8 +22,8 @@
   // More information: https://pandoc.org/MANUAL.html#math
   // First alternative is only for single-character-equations
   // such as $x$. All others are captured by the second alternative.
-  var inlineMathRE = /(?<!\\)\${1,2}([^\s\\])\${1,2}(?!\d)|(?<!\\)\${1,2}([^\s].*?[^\s\\])\${1,2}(?!\d)/g
-  var multilineMathRE = /^\s*\$\$\s*$/
+  var inlineMathRE = getInlineMathRE()
+  var multilineMathRE = getBlockMathRE()
 
   CodeMirror.commands.markdownRenderMath = function (cm) {
     let match

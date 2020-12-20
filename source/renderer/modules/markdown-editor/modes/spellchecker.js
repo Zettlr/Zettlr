@@ -13,10 +13,11 @@
   'use strict'
 
   const { ipcRenderer } = require('electron')
+  const { getCodeRE, getFootnoteRefRE, getZknTagRE } = require('../../../../common/regular-expressions.js')
 
-  var codeRE = /`.*?`/i
-  var zknTagRE = /##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?/i
-  var footnoteRefRE = /\[\^[^\]]+\]/
+  var codeRE = getCodeRE()
+  var zknTagRE = getZknTagRE()
+  var footnoteRefRE = getFootnoteRefRE()
   // NOTE: The whitespace after ~ are first a normal space, then an NBSP
   var delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~  «»‹›„“”「」『』–—…÷‘’‚'
 

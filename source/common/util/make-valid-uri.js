@@ -17,10 +17,11 @@ const path = require('path')
 // NOTE: fileExists is called "isFile" everywhere else, we have just renamed
 // it because of a naming conflict in the function.
 const fileExists = require('../../common/util/is-file')
+const { getProtocolRE, getLinkRE, getMarkDownFileRE } = require('../regular-expressions')
 
-const protocolRE = /^([a-z0-9]{1,100}):\/\//i
-const linkRE = /^.+\.[a-z0-9]+/i
-const mdFileRE = /.+\.(?:md|markdown|txt)$/i
+const protocolRE = getProtocolRE()
+const linkRE = getLinkRE()
+const mdFileRE = getMarkDownFileRE()
 
 /**
  * Returns a valid URI, using the available context information
