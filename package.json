@@ -17,7 +17,7 @@
     "postinstall": "electron-builder install-app-deps",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "package:mac": "electron-forge package --platform=darwin",
+    "package:mac": "electron-forge package --platform=darwin --arch=x64",
     "package:win": "electron-forge package --platform=win32 --arch=x64",
     "package:win-arm": "electron-forge package --platform=win32 --arch=arm64",
     "package:linux-x32": "electron-forge package --platform=linux --arch=ia32",

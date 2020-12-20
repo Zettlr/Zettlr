@@ -7,6 +7,7 @@
 - The quick filter now searches for all search terms (delimited by space) separately.
 - The editor will now be focused whenever the containing document is changed.
 - The cursor will now be of the correct height no matter whether you are on a heading class or within a normal-height text line.
+- Pandoc will now be pre-bundled with 64 bit installers.
 
 ## Under the Hood
 

@@ -59,6 +59,8 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build the reveal.js templates
         run: yarn reveal:build
+      - name: Download Pandoc (64 bit)
+        run: ./scripts/get-pandoc.sh win32
       - name: Build Windows NSIS installer (x32 and x64)
         # Make sure to sign the windows installer using the corresponding SSL EV.
         run: yarn release:win
@@ -113,6 +115,8 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build the reveal.js templates
         run: yarn reveal:build
+      - name: Download Pandoc (64 bit)
+        run: ./scripts/get-pandoc.sh darwin
       # Save the macOS certificate on this runner for forge to access it in the
       # next step below.
       - name: Retrieve code signing certificate
@@ -157,6 +161,8 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build the reveal.js templates
         run: yarn reveal:build
+      - name: Download Pandoc (64 bit)
+        run: ./scripts/get-pandoc.sh linux
       - name: Build Linux targets
         run: yarn release:linux
       - name: Cache .deb release
