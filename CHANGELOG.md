@@ -8,6 +8,7 @@
 - The editor will now be focused whenever the containing document is changed.
 - The cursor will now be of the correct height no matter whether you are on a heading class or within a normal-height text line.
 - Pandoc will now be pre-bundled with 64 bit installers.
+- Fixed a bug that the TableEditor would oftentimes "swallow" table cell content, making it almost unusable.
 
 ## Under the Hood
 
@@ -16,6 +17,7 @@
 - ASAR support reinstated
 - Switched GitHub Actions CI to use Node 14.x.
 - Prepared everything so that Pandoc can be bundled with Zettlr at every time. However, the corresponding code is not yet active to provide for a transition phase where we still ship 32bit builds.
+- Fixed the TableEditor. The two major changes are that it does not depend on jQuery anymore, and that now all changes are always applied to the AST, not the DOM element. The DOM element is always rebuilt after the AST has changed so that the single source of truth is always the AST.
 
 # 1.8.3
 

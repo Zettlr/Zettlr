@@ -13,7 +13,10 @@
  * END HEADER
  */
 
-module.exports = function (ast, colAlignment, colSizes) {
+const calculateColSizes = require('./calculate-col-sizes')
+
+module.exports = function (ast, colAlignment) {
+  const colSizes = calculateColSizes(ast)
   let separatorRow = colSizes.map(elem => '-'.repeat(elem + 2))
   separatorRow = '+' + separatorRow.join('+') + '+\n'
 

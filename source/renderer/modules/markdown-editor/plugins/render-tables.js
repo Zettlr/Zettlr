@@ -1,7 +1,7 @@
 /* global define CodeMirror */
 // This plugin renders markdown tables for easy editability
 
-const Table = require('../../table-editor');
+const TableEditor = require('../../table-editor');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -149,34 +149,33 @@ const Table = require('../../table-editor');
       // Now attempt to create a table from it.
       let tbl
       let textMarker
-      tbl = new Table(0, 0, {
-        // Detect mouse movement on the scroll element (so that
-        // scroll detection in the helper works as expected)
-        'container': '#editor .CodeMirror .CodeMirror-scroll',
-        'onBlur': (t) => {
-          // Don't replace some arbitrary text somewhere in the document!
-          if (!textMarker || !textMarker.find()) return
-
-          let found = tables.indexOf(t)
-          let md = t.getMarkdownTable()
-          // The markdown table has a trailing newline, which we need to
-          // remove at all costs.
-          md = md.substr(0, md.length - 1)
-
-          // We'll simply replace the range with the new table. The plugin will
-          // be called to re-render the table once again.
-          let { from, to } = textMarker.find()
-          cm.replaceRange(md.split('\n'), from, to)
-          // If there's still the textmarker, remove it by force to re-render
-          // the table immediately.
-          if (textMarker) textMarker.clear()
-          // Splice the table and corresponding marker from the arrays
-          if (found) tables.splice(found, 1)
-        }
-      }) // END constructor
       try {
         // Will raise an error if the table is malformed
-        tbl.fromMarkdown(markdownTable, potentialTableType)
+        tbl = TableEditor.fromMarkdown(markdownTable, potentialTableType, {
+          // Detect mouse movement on the scroll element (so that
+          // scroll detection in the helper works as expected)
+          'container': '#editor .CodeMirror .CodeMirror-scroll',
+          'onBlur': (t) => {
+            // Don't replace some arbitrary text somewhere in the document!
+            if (!textMarker || !textMarker.find()) return
+
+            let found = tables.indexOf(t)
+            let md = t.getMarkdownTable()
+            // The markdown table has a trailing newline, which we need to
+            // remove at all costs.
+            md = md.substr(0, md.length - 1)
+
+            // We'll simply replace the range with the new table. The plugin will
+            // be called to re-render the table once again.
+            let { from, to } = textMarker.find()
+            cm.replaceRange(md.split('\n'), from, to)
+            // If there's still the textmarker, remove it by force to re-render
+            // the table immediately.
+            if (textMarker) textMarker.clear()
+            // Splice the table and corresponding marker from the arrays
+            if (found) tables.splice(found, 1)
+          }
+        })
       } catch (err) {
         console.error(`Could not instantiate table between ${firstLine} and ${lastLine}: ${err.message}`)
         // Error, so abort rendering.
@@ -204,10 +203,5 @@ const Table = require('../../table-editor');
   CodeMirror.commands.markdownInitiateTables = function (cm) {
     // This function is called to initate the tables that have
     // actually been rendered.
-    for (let table of tables) {
-      if (document.getElementById(table.getTableID())) {
-        table.initiate()
-      }
-    }
   }
 })

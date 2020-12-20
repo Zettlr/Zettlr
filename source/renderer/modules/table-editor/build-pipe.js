@@ -15,7 +15,10 @@
  * END HEADER
  */
 
-module.exports = function (ast, colAlignment, colSizes) {
+const calculateColSizes = require('./calculate-col-sizes')
+
+module.exports = function (ast, colAlignment) {
+  const colSizes = calculateColSizes(ast)
   let markdownTable = ''
   // Now build from AST
   for (let i = 0; i < ast.length; i++) {
