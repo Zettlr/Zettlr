@@ -200,9 +200,7 @@ module.exports = class TableEditor {
     // easy editing, thereby removing any pre-rendered HTML
     cell.innerHTML = this._ast[this._rowIndex][this._cellIndex]
 
-    if (this._edgeButtonsVisible) {
-      this._recalculateEdgeButtonPositions()
-    }
+    this._recalculateEdgeButtonPositions()
   }
 
   /**
@@ -661,7 +659,6 @@ module.exports = class TableEditor {
 
     // (Re-)select the now correct new cell after correctly blurring the
     // former one
-    this._cellIndex++
     this.selectCell()
     this._recalculateEdgeButtonPositions()
     this._signalContentChange() // Notify the caller
@@ -705,7 +702,6 @@ module.exports = class TableEditor {
 
     // Select the now again correct rowIndex after correctly blurring the
     // former one.
-    this._rowIndex++
     this.selectCell()
     this._recalculateEdgeButtonPositions()
     this._signalContentChange() // Notify the caller
