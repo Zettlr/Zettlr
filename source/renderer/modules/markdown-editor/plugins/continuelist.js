@@ -20,9 +20,9 @@
   'use strict'
 
   const { getListUnorderedRE, getListEmptyRE, getListRE } = require('../../../../common/regular-expressions')
-  var listRE = getListRE()
-  let emptyListRE = getListEmptyRE()
-  let unorderedListRE = getListUnorderedRE()
+  const listRE = getListRE()
+  const emptyListRE = getListEmptyRE()
+  const unorderedListRE = getListUnorderedRE()
 
   CodeMirror.commands.newlineAndIndentContinueMarkdownList = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
