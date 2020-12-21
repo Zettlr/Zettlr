@@ -42,10 +42,6 @@
     }
   })
 
-  // Should match everything permittible -- first alternative are the huge
-  // blocks, second alternative are the simple @ID-things, both recognised by
-  // Pandoc citeproc.
-  // citationRE is taken from the Citr library (the extraction regex)
   var citationRE = getCitationRE()
   var Citr = require('@zettlr/citr')
 

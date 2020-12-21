@@ -11,6 +11,8 @@
  */
 
 // Additional fix: Different paths to CodeMirror
+const { getListTokenRE } = require('../../../../common/regular-expressions');
+
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
     mod(require('codemirror/lib/codemirror'))
@@ -23,7 +25,7 @@
   'use strict'
 
   var Pos = CodeMirror.Pos
-  var listTokenRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/
+  const listTokenRE = getListTokenRE()
 
   function matchListToken (pos, cm) {
     /* Get some info about the current state */

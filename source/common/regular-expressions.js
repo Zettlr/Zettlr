@@ -27,7 +27,11 @@ module.exports = {
   },
 
   /**
-   * Returns a regular expression that matches MarkDown Blocks (???).
+   * Returns a regular expression that matches MarkDown Blocks.
+   *
+   * First capturing group: preceding whitespace. Second cap.: line contents
+   * Non-capturing group in the middle: all block elements.
+   * Non-capturing group afterwards: catches all whitespace
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
@@ -39,6 +43,11 @@ module.exports = {
 
   /**
    * Returns a regular expression that matches MarkDown Citations.
+   *
+   * Should match everything permittible -- first alternative are the huge
+   * blocks, second alternative are the simple @ID-things, both recognised by
+   * Pandoc citeproc.
+   * citationRE is taken from the Citr library (the extraction regex)
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
@@ -155,7 +164,7 @@ module.exports = {
   },
 
   /**
-   * Returns a regular expression that matches MarkDown highlighting (???).
+   * Returns a regular expression that matches Zettlr's MarkDown highlighting extension.
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
@@ -298,6 +307,8 @@ module.exports = {
   /**
    * Returns a regular expression that matches unordered Markdown lists.
    *
+   * Includes a capture group to capture list tokens.
+   *
    * @return  {RegExp}              The compiled Regular Expression
    */
   'getListTokenRE': function () {
@@ -319,6 +330,8 @@ module.exports = {
 
   /**
    * Returns a regular expression that matches unordered MarkDown lists.
+   *
+   * Used in CodeMirror.
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
@@ -366,7 +379,7 @@ module.exports = {
   },
 
   /**
-   * Returns a regular expression that matches inline frames.
+   * Returns a regular expression that matches MarkDown table headings.
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
@@ -399,7 +412,16 @@ module.exports = {
   },
 
   /**
-   * Returns a regular expression that matches inline frames.
+   * Returns a regular expression that matches:
+   *
+   * 1. Underscore strong
+   * 2. Underscore emphasis
+   * 3. Asterisk strong
+   * 4. Asterisk emphasis
+   * 5. Heading levels 1-6 (mark)
+   * 6. Heading levels 1-6 (content)
+   * 7. Blockquotes
+   * 8. Inline code
    *
    * @return  {RegExp}              The compiled Regular Expression
    */

@@ -24,9 +24,6 @@ const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, get
 
   var reservedChars = '+.*_/\\[](){}?^$'.split('')
   var urlRE = getUrlRE()
-  // First capturing group: preceding whitespace. Second cap.: line contents
-  // Non-capturing group in the middle: all block elements.
-  // Non-capturing group afterwards: catches all whitespace
   var blockRE = getBlockRE()
 
   /**
