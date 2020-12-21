@@ -39,7 +39,10 @@
         v-bind:data-hash="obj.hash"
       >
         <!-- First: Primary icon (either directory icon, file icon, or project icon) -->
-        <span class="item-icon" role="presentation">
+        <span
+          class="item-icon"
+          role="presentation"
+        >
           <!-- Is this a project? -->
           <clr-icon
             v-if="obj.project && hasChildren"
@@ -59,7 +62,10 @@
           />
         </span> <!-- End primary (item) icon -->
         <!-- Second: Secondary icon (the collapse/expand icon) -->
-        <span class="toggle-icon" role="presentation">
+        <span
+          class="toggle-icon"
+          role="presentation"
+        >
           <!-- Display a toggle to collapse/expand the file list -->
           <!-- Only display in this position if the item has a primary icon -->
           <clr-icon

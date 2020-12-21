@@ -136,7 +136,10 @@
               v-bind:page-mode="true"
               v-on:update="updateDynamics"
             >
-              <file-item v-bind:obj="item.props" v-bind:activeFile="activeFile"></file-item>
+              <file-item
+                v-bind:obj="item.props"
+                v-bind:active-file="activeFile"
+              ></file-item>
             </recycle-scroller>
           </template>
         </template>
