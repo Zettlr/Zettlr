@@ -1,7 +1,7 @@
 /* global CodeMirror $ define */
 // This plugin renders MathJax parts in CodeMirror instances
 
-const { getBlockMathRE, getInlineMathRE } = require('../../../../common/regular-expressions');
+const { getBlockMathRE, getInlineMathRenderRE } = require('../../../../common/regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -17,7 +17,7 @@ const { getBlockMathRE, getInlineMathRE } = require('../../../../common/regular-
   const katex = require('katex')
   require('katex/dist/contrib/mhchem.js') // modify katex module
 
-  var inlineMathRE = getInlineMathRE(true) // Get the RE with the global flag set.
+  var inlineMathRE = getInlineMathRenderRE(true) // Get the RE with the global flag set.
   var multilineMathRE = getBlockMathRE()
 
   CodeMirror.commands.markdownRenderMath = function (cm) {
