@@ -199,9 +199,4 @@ const TableEditor = require('../../table-editor');
       tables.push(tbl)
     }
   }
-
-  CodeMirror.commands.markdownInitiateTables = function (cm) {
-    // This function is called to initate the tables that have
-    // actually been rendered.
-  }
 })

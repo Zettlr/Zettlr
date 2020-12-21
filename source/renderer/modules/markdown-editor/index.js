@@ -53,7 +53,6 @@ const zoomHook = require('./hooks/zoom')
 const muteLinesHook = require('./hooks/mute-lines')
 const renderElementsHook = require('./hooks/render-elements')
 const typewriterHook = require('./hooks/typewriter')
-const initiateTablesHook = require('./hooks/initiate-tables')
 const { autocompleteHook, setAutocompleteDatabase } = require('./hooks/autocomplete')
 const linkTooltipsHook = require('./hooks/link-tooltips')
 
@@ -143,7 +142,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
     muteLinesHook(this._instance)
     renderElementsHook(this._instance)
     typewriterHook(this._instance)
-    initiateTablesHook(this._instance)
     autocompleteHook(this._instance)
     linkTooltipsHook(this._instance)
 

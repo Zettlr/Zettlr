@@ -41,8 +41,15 @@ module.exports = class TableEditor {
     this._rowIndex = 0
     this._options = options
     this._mdTableType = tableType
-    this._containerElement = options.container || document.body
-    if (typeof this._containerElement === 'string') this._containerElement = document.querySelector(this._containerElement)
+    if (options.hasOwnProperty('container')) {
+      this._containerElement = options.container
+    } else {
+      this._containerElement = document.body
+    }
+
+    if (typeof this._containerElement === 'string') {
+      this._containerElement = document.querySelector(this._containerElement)
+    }
 
     this._elem = null
     this._ast = ast // The Abstract Syntax Tree representing the table contents
@@ -67,7 +74,12 @@ module.exports = class TableEditor {
     let maxX = minX + rect.width + this._edgeButtonSize // Not half to account for the lower minY
     let maxY = minY + rect.height + this._edgeButtonSize // Not half to account for the lower minY
 
-    if (evt.clientX >= minX && evt.clientX <= maxX && evt.clientY >= minY && evt.clientY <= maxY) {
+    if (
+      evt.clientX >= minX &&
+      evt.clientX <= maxX &&
+      evt.clientY >= minY &&
+      evt.clientY <= maxY
+    ) {
       this._showEdgeButtons()
       // Always recalculate the positions to make sure
       // their position is always updated asap.
@@ -75,14 +87,6 @@ module.exports = class TableEditor {
     } else {
       this._hideEdgeButtons()
     }
-  }
-
-  /**
-   * In case the edge buttons are visible, recalculate their positions.
-   * @param {ScrollEvent} evt The scroll event
-   */
-  _scrollHelper (evt) {
-    if (this._edgeButtonsVisible) this._recalculateEdgeButtonPositions()
   }
 
   _rebuildDOMElement () {
@@ -143,16 +147,23 @@ module.exports = class TableEditor {
     // previous row, if applicable.
     this._elem.addEventListener('keydown', this._onKeyDown.bind(this))
     this._elem.addEventListener('keyup', this._onKeyUp.bind(this))
-    // this._elem.addEventListener('focus', this._onFocus.bind(this))
-    // this._elem.addEventListener('blur', this._onBlur.bind(this))
 
     // Finally instantiate the move helper
     this._containerElement.addEventListener('mousemove', this._moveHelper.bind(this))
-    this._containerElement.addEventListener('scroll', this._scrollHelper.bind(this))
+    this._containerElement.addEventListener('scroll', (event) => {
+      if (this._edgeButtonsVisible) {
+        this._recalculateEdgeButtonPositions()
+      }
+    })
 
     return this._elem
   }
 
+  /**
+   * Handles blur events on cells
+   *
+   * @param   {DOMElement}  cell  The cell on which the event was triggered
+   */
   _onCellBlur (cell) {
     const col = cell.cellIndex
     const row = cell.parentElement.rowIndex
@@ -175,6 +186,11 @@ module.exports = class TableEditor {
     }, 10)
   }
 
+  /**
+   * Handles a focus event on table cells
+   *
+   * @param   {DOMElement}  cell  The cell on which the event has triggered
+   */
   _onCellFocus (cell) {
     // As soon as any cell is focused, recalculate
     // the current cell and table dimensions.
@@ -237,12 +253,12 @@ module.exports = class TableEditor {
       }
     }
 
-    if (event.key === 'Enter') { // Return
+    if (event.key === 'Enter') {
       event.preventDefault()
       this.nextRow()
       // In this case, also select the full text content
       // this._selectElementContents(evt.target)
-    } else if (event.key === 'Tab') { // Tab
+    } else if (event.key === 'Tab') {
       event.preventDefault()
       // Move to next column, or to previous if shift was pressed.
       if (event.shiftKey) {
@@ -261,11 +277,6 @@ module.exports = class TableEditor {
     if (this._edgeButtonsVisible) {
       return
     }
-
-    // We need to show four edge buttons
-    const template = document.createElement('div')
-    template.classList.add('table-helper-add-button')
-    template.innerHTML = '+'
 
     // We also need the alignment buttons
     this._alignButtons = document.createElement('div')
@@ -307,6 +318,11 @@ module.exports = class TableEditor {
     this._removeButtons.appendChild(this._removeColButton)
 
     // Edge buttons for adding columns and rows.
+    const template = document.createElement('div')
+    template.classList.add('table-helper-add-button')
+    template.innerHTML = '+'
+
+    // We need to show four edge buttons
     this._addTopButton = template.cloneNode(true)
     this._addBottomButton = template.cloneNode(true)
     this._addLeftButton = template.cloneNode(true)
@@ -335,15 +351,11 @@ module.exports = class TableEditor {
 
     // First we need the measurements of both the current cell and the container element.
     let currentCell = this._elem.rows[this._rowIndex].cells[this._cellIndex]
+
+    // We need a lot of bounding boxes, actually
     const cellRect = currentCell.getBoundingClientRect()
     const containerRect = this._containerElement.getBoundingClientRect()
     const tableRect = this._elem.getBoundingClientRect()
-    const alignButtonsRect = this._alignButtons.getBoundingClientRect()
-    const removeButtonsRect = this._removeButtons.getBoundingClientRect()
-    const topButtonRect = this._addTopButton.getBoundingClientRect()
-    const bottomButtonRect = this._addBottomButton.getBoundingClientRect()
-    const leftButtonRect = this._addLeftButton.getBoundingClientRect()
-    const rightButtonRect = this._addRightButton.getBoundingClientRect()
 
     let cellTop = cellRect.top
     let cellLeft = cellRect.left
@@ -365,13 +377,25 @@ module.exports = class TableEditor {
     this._removeButtons.style.top = (tableRect.top - this._edgeButtonSize / 2) + 'px'
     this._removeButtons.style.left = (tableRect.left + tableRect.width - this._edgeButtonSize * 2.5) + 'px'
 
+    // After changing the bounding rects, we can get them now
+    const alignButtonsRect = this._alignButtons.getBoundingClientRect()
+    const removeButtonsRect = this._removeButtons.getBoundingClientRect()
+
     // Also make sure the button groups stay visible
     // if the user scrolls to one of the edges of the
     // container element
-    if (alignButtonsRect.top < containerTop) this._alignButtons.style.top = containerTop + 'px'
-    if (alignButtonsRect.top + this._edgeButtonSize > containerBottom) this._alignButtons.style.top = (containerBottom - this._edgeButtonSize) + 'px'
-    if (removeButtonsRect.top < containerTop) this._removeButtons.style.top = containerTop + 'px'
-    if (removeButtonsRect.top + this._edgeButtonSize > containerBottom) this._removeButtons.style.top = (containerBottom - this._edgeButtonSize) + 'px'
+    if (alignButtonsRect.top < containerTop) {
+      this._alignButtons.style.top = containerTop + 'px'
+    }
+    if (alignButtonsRect.top + this._edgeButtonSize > containerBottom) {
+      this._alignButtons.style.top = (containerBottom - this._edgeButtonSize) + 'px'
+    }
+    if (removeButtonsRect.top < containerTop) {
+      this._removeButtons.style.top = containerTop + 'px'
+    }
+    if (removeButtonsRect.top + this._edgeButtonSize > containerBottom) {
+      this._removeButtons.style.top = (containerBottom - this._edgeButtonSize) + 'px'
+    }
 
     // Move the buttons if the cell is visible.
     if (cellIsOnScreen) {
@@ -384,17 +408,39 @@ module.exports = class TableEditor {
       this._addRightButton.style.top = (cellTop + cellHeight / 2 - this._edgeButtonSize / 2) + 'px'
       this._addRightButton.style.left = (cellRight - this._edgeButtonSize / 2) + 'px'
 
+      // Now we can get the bounding boxes of the four buttons
+      const topButtonRect = this._addTopButton.getBoundingClientRect()
+      const bottomButtonRect = this._addBottomButton.getBoundingClientRect()
+      const leftButtonRect = this._addLeftButton.getBoundingClientRect()
+      const rightButtonRect = this._addRightButton.getBoundingClientRect()
+
       // Then make sure the buttons are actually fully visible when nearing the top edge ...
-      if (topButtonRect.top < containerTop) this._addTopButton.style.top = containerTop + 'px'
-      if (bottomButtonRect.top < containerTop) this._addBottomButton.style.top = containerTop + 'px'
-      if (leftButtonRect.top < containerTop) this._addLeftButton.style.top = containerTop + 'px'
-      if (rightButtonRect.top < containerTop) this._addRightButton.style.top = containerTop + 'px'
+      if (topButtonRect.top < containerTop) {
+        this._addTopButton.style.top = containerTop + 'px'
+      }
+      if (bottomButtonRect.top < containerTop) {
+        this._addBottomButton.style.top = containerTop + 'px'
+      }
+      if (leftButtonRect.top < containerTop) {
+        this._addLeftButton.style.top = containerTop + 'px'
+      }
+      if (rightButtonRect.top < containerTop) {
+        this._addRightButton.style.top = containerTop + 'px'
+      }
 
       // ... and when nearing the bottom edge.
-      if (topButtonRect.top + this._edgeButtonSize > containerBottom) this._addTopButton.style.top = (containerBottom - this._edgeButtonSize) + 'px'
-      if (bottomButtonRect.top + this._edgeButtonSize > containerBottom) this._addBottomButton.style.top = (containerBottom - this._edgeButtonSize) + 'px'
-      if (leftButtonRect.top + this._edgeButtonSize > containerBottom) this._addLeftButton.style.top = (containerBottom - this._edgeButtonSize) + 'px'
-      if (rightButtonRect.top + this._edgeButtonSIze > containerBottom) this._addRightButton.style.top = (containerBottom - this._edgeButtonSize) + 'px'
+      if (topButtonRect.top + this._edgeButtonSize > containerBottom) {
+        this._addTopButton.style.top = (containerBottom - this._edgeButtonSize) + 'px'
+      }
+      if (bottomButtonRect.top + this._edgeButtonSize > containerBottom) {
+        this._addBottomButton.style.top = (containerBottom - this._edgeButtonSize) + 'px'
+      }
+      if (leftButtonRect.top + this._edgeButtonSize > containerBottom) {
+        this._addLeftButton.style.top = (containerBottom - this._edgeButtonSize) + 'px'
+      }
+      if (rightButtonRect.top + this._edgeButtonSIze > containerBottom) {
+        this._addRightButton.style.top = (containerBottom - this._edgeButtonSize) + 'px'
+      }
     } else {
       // Hide the buttons as the cell is not visible.
       this._addTopButton.style.top = '-1000px'
@@ -441,12 +487,10 @@ module.exports = class TableEditor {
       e.preventDefault()
       this.changeColAlignment('right')
     })
-
     this._removeRowButton.addEventListener('mousedown', (e) => {
       e.preventDefault()
       this.pluckRow()
     })
-
     this._removeColButton.addEventListener('mousedown', (e) => {
       e.preventDefault()
       this.pluckCol()
@@ -458,36 +502,17 @@ module.exports = class TableEditor {
    * @return {void} Does not return.
    */
   _hideEdgeButtons () {
+    if (!this._edgeButtonsVisible) {
+      return
+    }
+
     // Hide the edge detection buttons again
-    if (this._addTopButton !== undefined) {
-      this._addTopButton.parentElement.removeChild(this._addTopButton)
-      this._addTopButton = undefined
-    }
-
-    if (this._addBottomButton !== undefined) {
-      this._addBottomButton.parentElement.removeChild(this._addBottomButton)
-      this._addBottomButton = undefined
-    }
-
-    if (this._addLeftButton !== undefined) {
-      this._addLeftButton.parentElement.removeChild(this._addLeftButton)
-      this._addLeftButton = undefined
-    }
-
-    if (this._addRightButton !== undefined) {
-      this._addRightButton.parentElement.removeChild(this._addRightButton)
-      this._addRightButton = undefined
-    }
-
-    if (this._alignButtons !== undefined) {
-      this._alignButtons.parentElement.removeChild(this._alignButtons)
-      this._alignButtons = undefined
-    }
-
-    if (this._removeButtons !== undefined) {
-      this._removeButtons.parentElement.removeChild(this._removeButtons)
-      this._removeButtons = undefined
-    }
+    this._addTopButton.parentElement.removeChild(this._addTopButton)
+    this._addBottomButton.parentElement.removeChild(this._addBottomButton)
+    this._addLeftButton.parentElement.removeChild(this._addLeftButton)
+    this._addRightButton.parentElement.removeChild(this._addRightButton)
+    this._alignButtons.parentElement.removeChild(this._alignButtons)
+    this._removeButtons.parentElement.removeChild(this._removeButtons)
 
     this._edgeButtonsVisible = false
   }
@@ -634,7 +659,9 @@ module.exports = class TableEditor {
     this._cols++
     this._rebuildDOMElement()
 
-    // (Re-)select the now correct new cell
+    // (Re-)select the now correct new cell after correctly blurring the
+    // former one
+    this._cellIndex++
     this.selectCell()
     this._recalculateEdgeButtonPositions()
     this._signalContentChange() // Notify the caller
@@ -676,7 +703,10 @@ module.exports = class TableEditor {
     this._rows++
     this._rebuildDOMElement()
 
-    this.selectCell() // Select the now again correct rowIndex
+    // Select the now again correct rowIndex after correctly blurring the
+    // former one.
+    this._rowIndex++
+    this.selectCell()
     this._recalculateEdgeButtonPositions()
     this._signalContentChange() // Notify the caller
   }
