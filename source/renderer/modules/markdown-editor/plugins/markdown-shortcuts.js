@@ -18,13 +18,13 @@ const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, get
 })(function (CodeMirror) {
   'use strict'
 
-  var unorderedListRE = getListUnorderedCMRE()
-  var taskListRE = getListTaskListRE()
-  var orderedListRE = getListOrderedRE()
+  const unorderedListRE = getListUnorderedCMRE()
+  const taskListRE = getListTaskListRE()
+  const orderedListRE = getListOrderedRE()
 
   var reservedChars = '+.*_/\\[](){}?^$'.split('')
-  var urlRE = getUrlRE()
-  var blockRE = getBlockRE()
+  const urlRE = getUrlRE()
+  const blockRE = getBlockRE()
 
   /**
    * This function undoes a block formatting and then re-applies another one.
