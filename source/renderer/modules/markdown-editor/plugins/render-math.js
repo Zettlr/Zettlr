@@ -17,12 +17,7 @@ const { getBlockMathRE, getInlineMathRE } = require('../../../../common/regular-
   const katex = require('katex')
   require('katex/dist/contrib/mhchem.js') // modify katex module
 
-  // Matches all inlines according to the Pandoc documentation
-  // on its tex_math_dollars-extension.
-  // More information: https://pandoc.org/MANUAL.html#math
-  // First alternative is only for single-character-equations
-  // such as $x$. All others are captured by the second alternative.
-  var inlineMathRE = getInlineMathRE()
+  var inlineMathRE = getInlineMathRE(true) // Get the RE with the global flag set.
   var multilineMathRE = getBlockMathRE()
 
   CodeMirror.commands.markdownRenderMath = function (cm) {

@@ -253,12 +253,21 @@ module.exports = {
   /**
    * Returns a regular expression that matches inline Maths.
    *
+   * Matches all inlines according to the Pandoc documentation
+   * on its tex_math_dollars-extension.
+   * More information: https://pandoc.org/MANUAL.html#math
+   * First alternative is only for single-character-equations
+   * such as $x$. All others are captured by the second alternative.
+   *
+   * @param   {boolean} global      whether the expression should be global
+   *
    * @return  {RegExp}              The compiled Regular Expression
    */
-  'getInlineMathRE': function () {
+  'getInlineMathRE': function (global = false) {
+    let flag = (global) ? 'g' : ''
     return RegExp(
-      /^(?:\${1,2}[^\s\\]\${1,2}(?!\d)|\${1,2}[^\s].*?[^\s\\]\${1,2}(?!\d))/.source
-    )
+      /^(?:\${1,2}[^\s\\]\${1,2}(?!\d)|\${1,2}[^\s].*?[^\s\\]\${1,2}(?!\d))/.source,
+      flag)
   },
 
   /**
@@ -343,7 +352,7 @@ module.exports = {
   /**
    * Returns a regular expression that matches unordered MarkDown lists.
    *
-   * Used in CodeMirror.
+   * Used in CodeMirror MarkDown shortcuts.
    *
    * @return  {RegExp}              The compiled Regular Expression
    */
