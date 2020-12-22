@@ -13,7 +13,6 @@
 * END HEADER
 */
 
-
 /**
  * Calculates the maximum size (characters) of each column of a table AST
  *
