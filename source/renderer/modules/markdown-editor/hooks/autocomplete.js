@@ -12,7 +12,8 @@
  * END HEADER
  */
 
-const codeBlockRE = /^\s{0,3}(`{3,}|~{3,})/
+const { getCodeBlockRE } = require('../../../../common/regular-expressions')
+const codeBlockRE = getCodeBlockRE()
 
 var autocompleteStart = null
 var currentDatabase = null

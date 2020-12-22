@@ -1,5 +1,9 @@
 /* global CodeMirror define */
 // ZETTLR SPELLCHECKER PLUGIN
+const {
+  getZknTagRE, getHeadingRE, getHighlightRE,
+  getTableRE, getInlineMathRE, getBlockMathRE, getFnReferenceRE
+} = require('../../../../common/regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -12,13 +16,13 @@
 })(function (CodeMirror) {
   'use strict'
 
-  var zknTagRE = /##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?/i
-  var headingRE = /(#+)\s+/
-  var highlightRE = /::.+?::|==.+?==/
-  var tableRE = /^\|.+\|$/i
-  var inlineMathRE = /^(?:\${1,2}[^\s\\]\${1,2}(?!\d)|\${1,2}[^\s].*?[^\s\\]\${1,2}(?!\d))/
-  var blockMathRE = /^\s*\$\$\s*$/
-  var fnReferenceRE = /^\[\^.+\]:\s/
+  var zknTagRE = getZknTagRE()
+  var headingRE = getHeadingRE()
+  var highlightRE = getHighlightRE()
+  var tableRE = getTableRE()
+  var inlineMathRE = getInlineMathRE()
+  var blockMathRE = getBlockMathRE()
+  var fnReferenceRE = getFnReferenceRE()
 
   /**
     * This defines the Markdown Zettelkasten system mode, which highlights IDs

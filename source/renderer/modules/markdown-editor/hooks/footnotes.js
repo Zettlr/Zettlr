@@ -2,6 +2,7 @@
 // it's not in the plugins folder.
 
 const tippy = require('tippy.js').default
+const { getFnRefRE } = require('../../../../common/regular-expressions')
 const md2html = require('../../../../common/util/md-to-html')
 
 module.exports = (cm) => {
@@ -60,7 +61,7 @@ function showFootnoteTooltip (cm, element) {
 
   // Now find the respective line and extract the footnote content using
   // our RegEx from the footnotes plugin.
-  let fnrefRE = /^\[\^([\da-zA-Z_-]+)\]: (.+)/gm
+  let fnrefRE = getFnRefRE(true) // Get the multiline version
 
   for (let lineNo = cm.doc.lastLine(); lineNo > -1; lineNo--) {
     fnrefRE.lastIndex = 0

@@ -19,9 +19,10 @@
 })(function (CodeMirror) {
   'use strict'
 
-  var listRE = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/
-  let emptyListRE = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/
-  let unorderedListRE = /[*+-]\s/
+  const { getListUnorderedRE, getListEmptyRE, getListRE } = require('../../../../common/regular-expressions')
+  const listRE = getListRE()
+  const emptyListRE = getListEmptyRE()
+  const unorderedListRE = getListUnorderedRE()
 
   CodeMirror.commands.newlineAndIndentContinueMarkdownList = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass

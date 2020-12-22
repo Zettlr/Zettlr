@@ -1,6 +1,8 @@
 /* global define CodeMirror */
 // This plugin gives the editor a real WYSIWYG feeling
 
+const { getWysiwygRE } = require('../../../../common/regular-expressions');
+
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
     mod(require('codemirror/lib/codemirror'))
@@ -12,21 +14,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  // Should match everything permittible -- first alternative are the huge
-  // blocks, second alternative are the simple @ID-things, both recognised by
-  // Pandoc citeproc.
-  var wysiwygRE = /__(.+?)__|_(.+?)_|\*\*(.+?)\*\*|\*(.+?)\*|^(#{1,6}) (.+?)$|^(?:\s*)> (.+)$|`(.+?)`/gi
-  /**
-   * Match explanation:
-   * 1. Underscore strong
-   * 2. Underscore emphasis
-   * 3. Asterisk strong
-   * 4. Asterisk emphasis
-   * 5. Heading levels 1-6 (mark)
-   * 6. Heading levels 1-6 (content)
-   * 7. Blockquotes
-   * 8. Inline code
-   */
+  var wysiwygRE = getWysiwygRE()
 
   // WYSIWYG means you need HTML elements rendered instead of
   // the underlying Markdown code

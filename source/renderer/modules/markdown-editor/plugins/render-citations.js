@@ -13,6 +13,7 @@
   'use strict'
 
   const { ipcRenderer } = require('electron')
+  const { getCitationRE } = require('../../../../common/regular-expressions')
 
   // Listen to IPC events to update the citations
   ipcRenderer.on('citation-renderer', (event, message) => {
@@ -41,11 +42,7 @@
     }
   })
 
-  // Should match everything permittible -- first alternative are the huge
-  // blocks, second alternative are the simple @ID-things, both recognised by
-  // Pandoc citeproc.
-  // citationRE is taken from the Citr library (the extraction regex)
-  var citationRE = /(\[(?:[^[\]]*@[^[\]]+)\])|(?<=\s|^)(@[\p{L}\d_][\p{L}\d_:.#$%&\-+?<>~/]*)/gu
+  var citationRE = getCitationRE()
   var Citr = require('@zettlr/citr')
 
   /**

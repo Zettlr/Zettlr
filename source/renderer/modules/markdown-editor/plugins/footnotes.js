@@ -11,19 +11,9 @@
   }
 })(function (CodeMirror) {
   'use strict'
-
-  // This matches footnote links in the style of [^<text>] but only if it includes
-  // numbers, letters (without umlauts) and _ as well as - chars.
-  // The second or third capturing group contains the identifier. The other
-  // will then be `undefined`
-  // This also matches strings where ] is the end of a string, but
-  // still ensures, ":" is NOT behind the closing bracket.
-  var fnRE = /(\[\^([\da-zA-Z_-]+)\][^:]|\[\^([\da-zA-Z_-]+)\]$)/g
-
-  // This matches footnote references in the style of [^<text>]: <reference text>
-  // This matches the same type of footnotes as the fnRE and includes two
-  // capturing groups: match[1] holds the identifier, match[2] the reference text.
-  var fnrefRE = /^\[\^([\da-zA-Z_-]+)\]: (.+)/gm // group 1: footnote number; group 2: text
+  const { getFnRE, getFnRefRE } = require('../../../../common/regular-expressions')
+  var fnRE = getFnRE()
+  var fnrefRE = getFnRefRE(true) // Get the multiline version
 
   // Inserts a footnote
   // This is done by parseInt()-ing the existing footnotes and search for the

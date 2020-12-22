@@ -1,7 +1,8 @@
 /* global define CodeMirror */
 // This plugin renders markdown tables for easy editability
 
-const TableEditor = require('../../table-editor');
+const TableEditor = require('../../table-editor')
+const { getTableHeadingRE } = require('../../../../common/regular-expressions.js');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -15,7 +16,7 @@ const TableEditor = require('../../table-editor');
   'use strict'
 
   var tables = []
-  var tableHeadingRE = /(^[- ]+$)|(^[- +:]+$)|(^[- |:+]+$)/
+  var tableHeadingRE = getTableHeadingRE()
 
   CodeMirror.commands.markdownInsertTable = function (cm) {
     // A small command that inserts a 2x2 table at the current cursor position.

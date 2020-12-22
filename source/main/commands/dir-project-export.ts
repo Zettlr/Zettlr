@@ -19,8 +19,7 @@ import makeExport from '../modules/export'
 import objectToArray from '../../common/util/object-to-array'
 import makeImgPathsAbsolute from '../../common/util/make-img-paths-absolute'
 
-// Extracts footnotes
-const fnRE = /\[\^([\w]+?)\]/gm
+import { getFnExportRE } from '../../common/regular-expressions'
 
 export default class DirProjectExport extends ZettlrCommand {
   constructor (app: any) {
@@ -54,6 +53,9 @@ export default class DirProjectExport extends ZettlrCommand {
     // Reduce to files-only
     files = files.filter((elem) => { return elem.type === 'file' })
 
+    // Import our RE
+    let fnExportRE = getFnExportRE(true) // We want the multiline version.
+
     // Concat the files
     let contents: string[] = []
     for (let file of files) {
@@ -64,7 +66,9 @@ export default class DirProjectExport extends ZettlrCommand {
       // same for all files). Also make the footnotes unique to prevent
       // assigning errors.
       fileContents = makeImgPathsAbsolute(file.dir, fileContents)
-      fileContents = fileContents.replace(fnRE, (match, p1: string, offset, string) => `[^${String(file.hash)}${p1}]`)
+
+      fileContents = fileContents.replace(fnExportRE, (match, p1: string, offset, string) => `[^${String(file.hash)}${p1}]`)
+
       contents.push(fileContents)
     }
     const finalContents = contents.join('\n\n')
