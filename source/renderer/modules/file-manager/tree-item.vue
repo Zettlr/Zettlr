@@ -218,7 +218,7 @@ module.exports = {
      * Returns a list of children that can be displayed inside the tree view
      */
     filteredChildren: function () {
-      return this.combined ? this.obj.children : this.obj.children.filter(e => e.type !== 'file')
+      return this.combined ? this.obj.children : this.obj.children.filter(e => e.type === 'directory')
     },
     /**
      * Returns the correct indicator shape

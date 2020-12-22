@@ -9,6 +9,7 @@
 - The cursor will now be of the correct height no matter whether you are on a heading class or within a normal-height text line.
 - Pandoc will now be pre-bundled with 64 bit installers.
 - Fixed a bug that the TableEditor would oftentimes "swallow" table cell content, making it almost unusable.
+- Fixed a logical error that would display `.tex`-files as if they were directories in the file manager's tree view.
 
 ## Under the Hood
 
