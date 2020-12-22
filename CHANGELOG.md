@@ -21,6 +21,7 @@
 - Made sure that environmentally necessary directories are now created recursively.
 - Added a `prompt`-passthrough to the main Zettlr class.
 - Fix function signatures in the FSAL.
+- Fix function signatures in the WindowManager.
 
 # 1.8.3
 

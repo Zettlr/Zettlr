@@ -28,7 +28,7 @@ import {
 import { promises as fs } from 'fs'
 import path from 'path'
 import { trans } from '../../../common/i18n'
-import { DirDescriptor, MDFileDescriptor } from '../fsal/types'
+import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../fsal/types'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createQuicklookWindow from './create-ql-window'
@@ -509,7 +509,7 @@ export default class WindowManager {
     * @param  {MDFileDescriptor|DirDescriptor} descriptor The corresponding descriptor
     * @return {boolean}                                   True if user wishes to remove it.
     */
-  async confirmRemove (descriptor: MDFileDescriptor|DirDescriptor): Promise<boolean> {
+  async confirmRemove (descriptor: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): Promise<boolean> {
     const options: MessageBoxOptions = {
       type: 'warning',
       buttons: [ 'Ok', trans('system.error.cancel_remove') ],
