@@ -41,6 +41,7 @@ module.exports = class TableEditor {
     this._rowIndex = 0
     this._options = options
     this._mdTableType = tableType
+    this._eventLock = false // See _rebuildDOMElement for details
     if (options.hasOwnProperty('container')) {
       this._containerElement = options.container
     } else {
@@ -92,7 +93,13 @@ module.exports = class TableEditor {
   _rebuildDOMElement () {
     // Rebuilds the inner contents of the dom element
     const elem = this.getDOMElement()
+    this._eventLock = true
+    // Removing any innerHTML will trigger events on the cells, namely
+    // blur events. If we change the table (adding/removing cols/rows)
+    // we are rebuilding the internal DOM. However, having blur trigger
+    // during this would modify the internal AST, which we do not want.
     elem.innerHTML = '' // Reset
+    this._eventLock = false
 
     const tbody = elem.createTBody()
 
@@ -114,7 +121,6 @@ module.exports = class TableEditor {
       }
     }
 
-    this._recalculateEdgeButtonPositions()
     this.selectCell()
   }
 
@@ -165,8 +171,13 @@ module.exports = class TableEditor {
    * @param   {DOMElement}  cell  The cell on which the event was triggered
    */
   _onCellBlur (cell) {
+    if (this._eventLock) {
+      return // Ignore events
+    }
+
     const col = cell.cellIndex
     const row = cell.parentElement.rowIndex
+
     // Re-render the table element and save the textContent as data-source
     this._ast[row][col] = cell.textContent
     cell.innerHTML = md2html(this._ast[row][col])
@@ -192,12 +203,20 @@ module.exports = class TableEditor {
    * @param   {DOMElement}  cell  The cell on which the event has triggered
    */
   _onCellFocus (cell) {
+    if (this._eventLock) {
+      return // Ignore events
+    }
+
     // As soon as any cell is focused, recalculate
     // the current cell and table dimensions.
-    this._recalculateCurrentCell(cell)
+    const col = cell.cellIndex
+    const row = cell.parentElement.rowIndex
     // Before the cell is focused, replace the contents with the source for
     // easy editing, thereby removing any pre-rendered HTML
-    cell.innerHTML = this._ast[this._rowIndex][this._cellIndex]
+    cell.innerHTML = this._ast[row][col]
+
+    this._rowIndex = row
+    this._cellIndex = col
 
     this._recalculateEdgeButtonPositions()
   }
@@ -208,6 +227,11 @@ module.exports = class TableEditor {
    * @param   {KeyboardEvent}  event  The keyboard event
    */
   _onKeyUp (event) {
+    // Update the AST after the cells contents have been updated correctly.
+    // This way we prevent glitches if someone edits a cell's contents and
+    // immediately adds rows or columns.
+    const val = this._elem.rows[this._rowIndex].cells[this._cellIndex].textContent
+    this._ast[this._rowIndex][this._cellIndex] = val
     // After everything is done, and potentially new rows, cols and content has been
     // added, we need to notify some third actor that the table has been changed.
     // Why do this on a separate, keyup event? To include the last pressed character.
@@ -225,7 +249,14 @@ module.exports = class TableEditor {
     // Also recalculate the button positions as the table's size may have changed.
     this._recalculateEdgeButtonPositions()
 
-    if ([ 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight' ].includes(event.key)) {
+    const isArrow = [
+      'ArrowUp',
+      'ArrowDown',
+      'ArrowLeft',
+      'ArrowRight'
+    ].includes(event.key)
+
+    if (isArrow) {
       let cursorPosition = this._getCursorPositionInElement(event.target)
       let isAtEnd = cursorPosition === event.target.textContent.length
       let isAtBegin = cursorPosition === 0
@@ -248,9 +279,7 @@ module.exports = class TableEditor {
           this.nextRow(false)
           break
       }
-    }
-
-    if (event.key === 'Enter') {
+    } else if (event.key === 'Enter') {
       event.preventDefault()
       this.nextRow()
       // In this case, also select the full text content
@@ -515,17 +544,6 @@ module.exports = class TableEditor {
   }
 
   /**
-  *
-  * @param {jQuery} currentCell Recalculate the complete dimensions of the table
-  */
-  _recalculateCurrentCell (currentCell) {
-    this._cellIndex = currentCell.cellIndex
-    this._rowIndex = currentCell.parentElement.rowIndex
-    this._rows = this._elem.rows.length
-    this._cols = currentCell.parentElement.cells.length
-  }
-
-  /**
    * Rebuilds the Abstract Syntax Tree after something has changed. Optionally
    * notifies the callback, if given.
    * @return {void} Does not return.
@@ -656,10 +674,6 @@ module.exports = class TableEditor {
     this._cols++
     this._rebuildDOMElement()
 
-    // (Re-)select the now correct new cell after correctly blurring the
-    // former one
-    this.selectCell()
-    this._recalculateEdgeButtonPositions()
     this._signalContentChange() // Notify the caller
   }
 
@@ -678,9 +692,7 @@ module.exports = class TableEditor {
     this._rebuildDOMElement()
 
     // Move into the next cell of the current row
-    this._cellIndex++
-    this.selectCell()
-    this._recalculateEdgeButtonPositions()
+    this.nextCell()
     this._signalContentChange() // Notify the caller
   }
 
@@ -699,10 +711,6 @@ module.exports = class TableEditor {
     this._rows++
     this._rebuildDOMElement()
 
-    // Select the now again correct rowIndex after correctly blurring the
-    // former one.
-    this.selectCell()
-    this._recalculateEdgeButtonPositions()
     this._signalContentChange() // Notify the caller
   }
 
@@ -721,8 +729,7 @@ module.exports = class TableEditor {
     this._rows++
     this._rebuildDOMElement()
 
-    this._rowIndex++
-    this.selectCell()
+    this.nextRow()
     this._recalculateEdgeButtonPositions()
     this._signalContentChange() // Notify the caller
   }
@@ -831,6 +838,7 @@ module.exports = class TableEditor {
   */
   selectCell () {
     this._elem.rows[this._rowIndex].cells[this._cellIndex].focus()
+    this._recalculateEdgeButtonPositions()
   }
 
   /**
