@@ -591,7 +591,7 @@ export default class FSAL extends EventEmitter {
    * Closes a given file.
    * @param {Object} file The file descriptor
    */
-  public closeFile (file: MDFileDescriptor): boolean {
+  public closeFile (file: MDFileDescriptor|CodeFileDescriptor): boolean {
     if (this._state.openFiles.includes(file)) {
       this._state.openFiles.splice(this._state.openFiles.indexOf(file), 1)
       this.emit('fsal-state-changed', 'openFiles')
@@ -787,7 +787,7 @@ export default class FSAL extends EventEmitter {
    * @param {DirDescriptor} haystack A dir descriptor
    * @param {MDFileDescriptor|DirDescriptor} needle A file or directory descriptor
    */ // TODO: Only Directories!
-  public hasChild (haystack: DirDescriptor, needle: MDFileDescriptor|DirDescriptor): boolean {
+  public hasChild (haystack: DirDescriptor, needle: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): boolean {
     // Hello, PHP
     // If a name checks out, return true
     for (let child of (haystack).children) {
@@ -873,7 +873,7 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  public async removeFile (src: MDFileDescriptor): Promise<void> {
+  public async removeFile (src: MDFileDescriptor|CodeFileDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink
     // First remove the file
@@ -885,7 +885,11 @@ export default class FSAL extends EventEmitter {
     this.closeFile(src) // Does nothing if the file is not open
 
     // Now we're safe to remove the file actually.
-    await FSALFile.remove(src)
+    if (src.type === 'file') {
+      await FSALFile.remove(src)
+    } else {
+      await FSALCodeFile.remove(src)
+    }
 
     // In case it was a root file, we need to splice it
     if (src.parent === null) {
@@ -901,11 +905,17 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  public async saveFile (src: MDFileDescriptor, content: string): Promise<void> {
+  public async saveFile (src: MDFileDescriptor|CodeFileDescriptor, content: string): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x change
     this._watchdog.ignoreEvents([{ 'event': 'change', 'path': src.path }])
-    await FSALFile.save(src, content, this._cache)
+
+    if (src.type === 'file') {
+      await FSALFile.save(src, content, this._cache)
+    } else {
+      await FSALCodeFile.save(src, content, this._cache)
+    }
+
     // Notify that a file has saved, which strictly speaking does not
     // modify the openFiles array, but does change the modification flag.
     this.emit('fsal-state-changed', 'fileSaved', { fileHash: src.hash })
@@ -913,10 +923,14 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  public async searchFile (src: MDFileDescriptor, searchTerms: any): Promise<any> { // TODO: Implement search results type
+  public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: any): Promise<any> { // TODO: Implement search results type
     // NOTE: Generates no events
     // Searches a file and returns the result
-    return await FSALFile.search(src, searchTerms)
+    if (src.type === 'file') {
+      return await FSALFile.search(src, searchTerms)
+    } else {
+      return await FSALCodeFile.search(src, searchTerms)
+    }
   }
 
   public async setDirectorySetting (src: DirDescriptor, settings: any): Promise<void> {

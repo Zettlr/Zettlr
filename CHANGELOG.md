@@ -20,6 +20,7 @@
 - Fixed the TableEditor. The two major changes are that it does not depend on jQuery anymore, and that now all changes are always applied to the AST, not the DOM element. The DOM element is always rebuilt after the AST has changed so that the single source of truth is always the AST.
 - Made sure that environmentally necessary directories are now created recursively.
 - Added a `prompt`-passthrough to the main Zettlr class.
+- Fix function signatures in the FSAL.
 
 # 1.8.3
 
