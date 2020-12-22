@@ -195,7 +195,6 @@ module.exports = class TableEditor {
     // As soon as any cell is focused, recalculate
     // the current cell and table dimensions.
     this._recalculateCurrentCell(cell)
-
     // Before the cell is focused, replace the contents with the source for
     // easy editing, thereby removing any pre-rendered HTML
     cell.innerHTML = this._ast[this._rowIndex][this._cellIndex]
