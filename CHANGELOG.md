@@ -26,6 +26,7 @@
 - Fix function signatures in the WindowManager.
 - Migrate the command infrastructure to TypeScript.
 - The regular expressions are now unified within the `./source/common/regular-expressions.js`-file (thanks to @Kangie for implementing).
+- The recent docs provider is now written in TypeScript.
 
 # 1.8.3
 

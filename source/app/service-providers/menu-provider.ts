@@ -331,7 +331,7 @@ export default class MenuProvider {
             click: (item, win) => { global.recentDocs.clear() }
           }, { type: 'separator' }]
           // Disable if there are no recent docs
-          if (global.recentDocs.hasDocs() === false) menu.submenu[0].enabled = false
+          if (global.recentDocs.hasDocs()) menu.submenu[0].enabled = false
           // Get the most recent 10 documents
           for (let recent of global.recentDocs.get().slice(0, 10)) {
             menu.submenu.push({

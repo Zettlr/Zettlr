@@ -44,6 +44,15 @@ interface DictionaryProvider {
   setUserDictionary: (dict: string[]) => void
 }
 
+interface RecentDocumentsProvider {
+  add: (doc: MDFileDescriptor|CodeFileMeta) => void
+  clear: () => void
+  get: () => any[]
+  hasDocs: () => boolean
+  on: (message: string, callback: Function) => void
+  off: (message: string, callback: Function) => void
+}
+
 // Dictionary in the form dic['yyyy-mm-dd'] = value
 interface DailyDictionary {
   [day: string]: number
@@ -94,7 +103,7 @@ declare module NodeJS {
     updates: UpdateProvider
     translations: any
     targets: any
-    recentDocs: any
+    recentDocs: RecentDocumentsProvider
     tags: any
     stats: StatsProvider
   }

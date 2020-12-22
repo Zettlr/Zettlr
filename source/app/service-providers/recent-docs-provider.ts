@@ -12,14 +12,16 @@
  * END HEADER
  */
 
-const EventEmitter = require('events')
-const { app } = require('electron')
+import EventEmitter from 'events'
+import { app } from 'electron'
+import { MDFileMeta, CodeFileMeta } from '../../main/modules/fsal/types'
 
 /**
  * This class manages the coloured tags of the app. It reads the tags on each
  * start of the app and writes them after they have been changed.
  */
-module.exports = class RecentDocsProvider extends EventEmitter {
+export default class RecentDocsProvider extends EventEmitter {
+  private _recentDocs: Array<MDFileMeta | CodeFileMeta>
   /**
    * Create the instance on program start and initially load the tags.
    */
@@ -36,8 +38,10 @@ module.exports = class RecentDocsProvider extends EventEmitter {
        * @param {Object} doc A document exposing at least the metadata of the file
        */
       add: (doc) => {
-        let found = this._recentDocs.find((e) => e.hash === doc.hash)
-        if (found) this._recentDocs.splice(this._recentDocs.indexOf(found), 1)
+        const found = this._recentDocs.find((e) => e.hash === doc.hash)
+        if (found !== undefined) {
+          this._recentDocs.splice(this._recentDocs.indexOf(found), 1)
+        }
 
         // Push the file into the global array (to the beginning)
         this._recentDocs.unshift(doc)
@@ -65,7 +69,6 @@ module.exports = class RecentDocsProvider extends EventEmitter {
         }
         // Announce that the list of recent docs has changed
         this.emit('update')
-        return true
       },
       /**
        * Retrieve the list of recent documents
@@ -82,11 +85,15 @@ module.exports = class RecentDocsProvider extends EventEmitter {
       /**
        * Registers a callback for the given event
        */
-      on: (event, callback) => { return this.on(event, callback) },
+      on: (event, callback) => {
+        return this.on(event, callback as any)
+      },
       /**
        * Deregisters a callback for the given event
        */
-      off: (event, callback) => { return this.off(event, callback) }
+      off: (event, callback) => {
+        return this.off(event, callback as any)
+      }
     }
   }
 
@@ -94,7 +101,7 @@ module.exports = class RecentDocsProvider extends EventEmitter {
    * Shuts down the provider
    * @return {Boolean} Always returns true
    */
-  shutdown () {
+  async shutdown (): Promise<boolean> {
     global.log.verbose('Recent documents provider shutting down ...')
     return true
   }
