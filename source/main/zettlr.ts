@@ -698,7 +698,16 @@ export default class Zettlr {
    *
    * @return  {Promise<boolean>}                   Resolves to true if the user confirms
    */
-  async confirmRemove (descriptor: MDFileDescriptor|DirDescriptor): Promise<boolean> {
+  async confirmRemove (descriptor: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): Promise<boolean> {
     return await this._windowManager.confirmRemove(descriptor)
+  }
+
+  /**
+   * Prompts the user with information
+   *
+   * @param   {any}   options  The options
+   */
+  prompt (options: any): void {
+    this._windowManager.prompt(options)
   }
 }
