@@ -10,6 +10,7 @@
 - Pandoc will now be pre-bundled with 64 bit installers.
 - Fixed a bug that the TableEditor would oftentimes "swallow" table cell content, making it almost unusable.
 - Fixed a logical error that would display `.tex`-files as if they were directories in the file manager's tree view.
+- Added two more variables, `%y` and `%X` for Zettelkasten-IDs, which allow you to use a two-digit year or the unix epoch (seconds since Jan 1st, 1970) in your IDs (thanks to @cdaven for implementing).
 
 ## Under the Hood
 
@@ -24,6 +25,7 @@
 - Fix function signatures in the FSAL.
 - Fix function signatures in the WindowManager.
 - Migrate the command infrastructure to TypeScript.
+- The regular expressions are now unified within the `./source/common/regular-expressions.js`-file (thanks to @Kangie for implementing).
 
 # 1.8.3
 
