@@ -87,7 +87,7 @@ export default async function environmentCheck (): Promise<void> {
       await fs.lstat(p)
     } catch (e) {
       global.log.info(`Creating required directory ${p} ...`)
-      await fs.mkdir(p)
+      await fs.mkdir(p, { recursive: true })
     }
   }
 

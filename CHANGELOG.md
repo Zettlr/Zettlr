@@ -18,6 +18,7 @@
 - Switched GitHub Actions CI to use Node 14.x.
 - Prepared everything so that Pandoc can be bundled with Zettlr at every time. However, the corresponding code is not yet active to provide for a transition phase where we still ship 32bit builds.
 - Fixed the TableEditor. The two major changes are that it does not depend on jQuery anymore, and that now all changes are always applied to the AST, not the DOM element. The DOM element is always rebuilt after the AST has changed so that the single source of truth is always the AST.
+- Made sure that environmentally necessary directories are now created recursively.
 
 # 1.8.3
 
