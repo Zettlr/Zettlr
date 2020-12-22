@@ -19,7 +19,7 @@ import makeExport from '../modules/export'
 import objectToArray from '../../common/util/object-to-array'
 import makeImgPathsAbsolute from '../../common/util/make-img-paths-absolute'
 
-const { getFnExportRE } = require('../../common/regular-expressions')
+import { getFnExportRE } from '../../common/regular-expressions'
 
 export default class DirProjectExport extends ZettlrCommand {
   constructor (app: any) {
