@@ -22,6 +22,7 @@
 - Added a `prompt`-passthrough to the main Zettlr class.
 - Fix function signatures in the FSAL.
 - Fix function signatures in the WindowManager.
+- Migrate the command infrastructure to TypeScript.
 
 # 1.8.3
 
