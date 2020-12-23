@@ -228,7 +228,8 @@ module.exports = class ConfigProvider extends EventEmitter {
             { key: '--', val: '–' },
             { key: '---', val: '—' }
           ]
-        } // END autoCorrect options
+        }, // END autoCorrect options
+        'enableScrollToZoom': true
       },
       'display': {
         'theme': 'berlin', // The theme, can be berlin|frankfurt|bielefeld|karl-marx-stadt|bordeaux

@@ -212,7 +212,8 @@
             "editor_setting": {
                 "direction_ltr": "Utiliser la direction d'\u00e9criture de gauche \u00e0 droite (G\u00e0D)",
                 "direction_rtl": "Utiliser la direction d'\u00e9criture de droite \u00e0 gauche (D\u00e0G)",
-                "rtl_move_visually": "Utiliser l'ordre visuel pour le mouvement des touches fl\u00e9ch\u00e9es en mode D\u00e0G"
+                "rtl_move_visually": "Utiliser l'ordre visuel pour le mouvement des touches fl\u00e9ch\u00e9es en mode D\u00e0G",
+                "enable_scroll_to_zoom" : "Activer le d\u00e9filement pour zoomer"
             },
             "enable_rmarkdown": "Utiliser les fichiers RMarkdown",
             "enable_table_helper": "Activer l'\u00e9diteur de tableau",

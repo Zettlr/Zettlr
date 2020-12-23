@@ -199,7 +199,8 @@
             "editor_setting": {
                 "direction_ltr": "Dokumentenschreibrichtung von links nach rechts (LTR)",
                 "direction_rtl": "Dokumentenschreibrichtung von rechts nach links (RTL)",
-                "rtl_move_visually": "Navigiere visuell mit den Pfeiltasten im RTL-Modus"
+                "rtl_move_visually": "Navigiere visuell mit den Pfeiltasten im RTL-Modus",
+                "enable_scroll_to_zoom" : "Aktivieren Sie den Bildlauf zum Zoomen"
             },
             "enable_rmarkdown": "RMarkdown-Dateisupport aktivieren",
             "enable_table_helper": "Tabelleneditor aktivieren",

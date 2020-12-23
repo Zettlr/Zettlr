@@ -921,6 +921,13 @@
             </label>
             <label for="system.deleteOnFail">{{i18n "dialog.preferences.delete_on_fail"}}</label>
           </div>
+          <div class="cb-group">
+              <label class="cb-toggle">
+                  <input type="checkbox" name="editor.enableScrollToZoom" value="yes" id="editor.enableScrollToZoom" {{#if editor.enableScrollToZoom}}checked="checked"{{/if}}>
+                  <div class="toggle"></div>
+              </label>
+              <label for="editor.enableScrollToZoom">{{i18n "dialog.preferences.editor_setting.enable_scroll_to_zoom"}}</label>
+          </div>
         </div>
         <div class="box-right">
           <p>{{i18n "dialog.preferences.attachments_info"}}</p>

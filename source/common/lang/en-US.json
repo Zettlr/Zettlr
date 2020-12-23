@@ -202,7 +202,8 @@
             "editor_setting": {
                 "direction_ltr": "Use left-to-right (LTR) writing direction",
                 "direction_rtl": "Use right-to-left (RTL) writing direction",
-                "rtl_move_visually": "Use visual order for arrow key movement while in RTL-mode"
+                "rtl_move_visually": "Use visual order for arrow key movement while in RTL-mode",
+                "enable_scroll_to_zoom" : "Enable scroll to zoom"
             },
             "enable_rmarkdown": "Enable RMarkdown file support",
             "enable_table_helper": "Enable Table Editor",

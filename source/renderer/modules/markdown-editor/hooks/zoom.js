@@ -1,8 +1,7 @@
 module.exports = (cm) => {
   cm.getWrapperElement().addEventListener('wheel', (e) => {
-    if (
-      (process.platform !== 'darwin' && e.ctrlKey) ||
-      (process.platform === 'darwin' && e.metaKey)
+    if (Boolean(global.config.get('editor.enableScrollToZoom')) &&
+              ((process.platform !== 'darwin' && e.ctrlKey) || (process.platform === 'darwin' && e.metaKey))
     ) {
       // Did you know that pinching events get reported
       // as "wheel" events as well? Me neither.

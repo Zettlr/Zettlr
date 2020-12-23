@@ -313,6 +313,7 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['editor.countChars'] = (data.find(elem => elem.name === 'editor.countChars') !== undefined)
     cfg['editor.autoCorrect.active'] = (data.find(elem => elem.name === 'editor.autoCorrect.active') !== undefined)
     cfg['editor.rtlMoveVisually'] = (data.find(elem => elem.name === 'editor.rtlMoveVisually') !== undefined)
+    cfg['editor.enableScrollToZoom'] = (data.find(elem => elem.name === 'editor.enableScrollToZoom') !== undefined)
     cfg['zkn.autoCreateLinkedFiles'] = (data.find(elem => elem.name === 'zkn.autoCreateLinkedFiles') !== undefined)
 
     cfg['watchdog.activatePolling'] = (data.find(elem => elem.name === 'watchdog.activatePolling') !== undefined)
