@@ -33,6 +33,7 @@ This version ships with a debug notification that will inform users of deprecate
 - The regular expressions are now unified within the `./source/common/regular-expressions.js`-file (thanks to @Kangie for implementing).
 - The recent docs provider is now written in TypeScript.
 - Removed conditional RMarkdown checks.
+- Remove empty strings, if applicable.
 
 # 1.8.3
 

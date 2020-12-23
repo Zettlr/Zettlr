@@ -79,7 +79,8 @@ export default async function environmentCheck (): Promise<void> {
     }
   }
 
-  process.env.PATH = tempPATH.join(DELIM)
+  // Make sure to remove accidental empty strings
+  process.env.PATH = tempPATH.filter(e => e.trim() !== '').join(DELIM)
 
   // Then ensure all required directories exist
   for (let p of REQUIRED_DIRECTORIES) {
