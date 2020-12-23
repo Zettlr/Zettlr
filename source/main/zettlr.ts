@@ -387,12 +387,7 @@ export default class Zettlr {
   async openRootFile (): Promise<void> {
     // TODO: Move this to a command
     // The user wants to open another file or directory.
-    const rmdSupport = global.config.get('enableRMarkdown') as boolean
-    const extensions = [ '.markdown', '.md', '.txt' ]
-    if (rmdSupport) {
-      extensions.push('.rmd')
-    }
-
+    const extensions = [ '.markdown', '.md', '.txt', '.rmd' ]
     const filter = [{ 'name': trans('system.files'), 'extensions': extensions }]
 
     let ret = await this._windowManager.askFile(filter, true)

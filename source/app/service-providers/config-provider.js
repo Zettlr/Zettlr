@@ -112,7 +112,6 @@ module.exports = class ConfigProvider extends EventEmitter {
       'sortingTime': 'modtime', // can be modtime or creationtime
       'muteLines': true, // Should the editor mute lines in distraction free mode?
       'fileManagerMode': 'thin', // thin = Preview or directories visible --- expanded = both visible --- combined = tree view displays also files
-      'enableRMarkdown': false, // Whether or not RMarkdown files should be recognised
       'newFileNamePattern': '%id.md',
       'newFileDontPrompt': false, // If true immediately creates files
       // Export options

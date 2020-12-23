@@ -384,7 +384,7 @@ module.exports = {
    */
   'getMarkDownFileRE': function () {
     return RegExp(
-      /.+\.(?:md|markdown|txt)$/.source,
+      /.+\.(?:md|markdown|txt|rmd)$/.source,
       'i')
   },
 

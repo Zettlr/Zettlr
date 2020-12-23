@@ -288,7 +288,6 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['export.stripTags'] = (data.find(elem => elem.name === 'export.stripTags') !== undefined)
     cfg['debug'] = (data.find(elem => elem.name === 'debug') !== undefined)
     cfg['checkForBeta'] = (data.find(elem => elem.name === 'checkForBeta') !== undefined)
-    cfg['enableRMarkdown'] = (data.find(elem => elem.name === 'enableRMarkdown') !== undefined)
     cfg['window.nativeAppearance'] = (data.find(elem => elem.name === 'window.nativeAppearance') !== undefined)
     cfg['newFileDontPrompt'] = (data.find(elem => elem.name === 'newFileDontPrompt') !== undefined)
 

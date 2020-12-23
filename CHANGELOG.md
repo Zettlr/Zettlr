@@ -11,6 +11,7 @@
 - Fixed a bug that the TableEditor would oftentimes "swallow" table cell content, making it almost unusable.
 - Fixed a logical error that would display `.tex`-files as if they were directories in the file manager's tree view.
 - Added two more variables, `%y` and `%X` for Zettelkasten-IDs, which allow you to use a two-digit year or the unix epoch (seconds since Jan 1st, 1970) in your IDs (thanks to @cdaven for implementing).
+- RMarkdown files (`.rmd`) are now supported in general.
 
 ## Under the Hood
 
@@ -27,6 +28,7 @@
 - Migrate the command infrastructure to TypeScript.
 - The regular expressions are now unified within the `./source/common/regular-expressions.js`-file (thanks to @Kangie for implementing).
 - The recent docs provider is now written in TypeScript.
+- Removed conditional RMarkdown checks.
 
 # 1.8.3
 
