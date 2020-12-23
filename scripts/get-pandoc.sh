@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # This script downloads and extracts the pandoc releases. This script needs
 # to be updated in order to ship newer versions. The versions are hardcoded here
@@ -38,7 +38,7 @@ echo "Working directory is $(pwd)"
 # Retrieve only the basename of the full path
 BASENAME="${RELEASE##*/}"
 echo "Downloading: $BASENAME"
-wget $RELEASE # Download to current working dir
+curl -L $RELEASE -o $BASENAME # Download to current working dir
 
 # Now we need to extract it and handle it appropriately
 if [ "$PLATFORM" == "darwin" ]
