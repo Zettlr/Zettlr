@@ -880,6 +880,11 @@
             {{i18n "dialog.preferences.pandoc"}}
           </label>
           <input type="text" id="pandoc" name="pandoc" placeholder="{{i18n "dialog.preferences.pandoc_default"}}" value="{{pandoc}}">
+          {{#if PANDOC_PATH}}
+          <span class="info">Pandoc is included in this release at {{PANDOC_PATH}}</span>
+          {{else}}
+          <span class="info">Pandoc has <strong>not</strong> been included in this release.</span>
+          {{/if}}
 
           <label for="xelatex">
             {{i18n "dialog.preferences.xelatex"}}

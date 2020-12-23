@@ -15,6 +15,7 @@
 import path from 'path'
 import { app } from 'electron'
 import { promises as fs } from 'fs'
+import isFile from '../../common/util/is-file'
 
 /**
  * Contains custom paths that should be present on the process.env.PATH property
@@ -58,6 +59,19 @@ const DELIM = (process.platform === 'win32') ? ';' : ':'
 
 export default async function environmentCheck (): Promise<void> {
   global.log.info('Performing environment check ...')
+
+  // We need to check if Pandoc has been bundled with this package.
+  // Because if it is, we can simply use that one instead.
+  const executable = (process.platform === 'win32') ? 'pandoc.exe' : 'pandoc'
+  const pandocPath = path.join(process.resourcesPath, executable)
+  if (isFile(pandocPath)) {
+    global.log.info(`[Application] Pandoc has been bundled with this release. Path: ${pandocPath}`)
+    process.env.PANDOC_PATH = pandocPath
+  } else {
+    global.log.warning('[Application] Pandoc has not been bundled with this release. Falling back to system version instead.')
+    process.env.PANDOC_PATH = undefined
+  }
+
   // Make sure the PATH property exists
   if (process.env.PATH === undefined) {
     process.env.PATH = ''

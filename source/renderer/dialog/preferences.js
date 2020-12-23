@@ -44,6 +44,12 @@ class PreferencesDialog extends ZettlrDialog {
     // The template expects a simple string
     data.attachmentExtensions = data.attachmentExtensions.join(', ')
 
+    if (process.env.PANDOC_PATH !== undefined) {
+      data.PANDOC_PATH = process.env.PANDOC_PATH
+    } else {
+      data.PANDOC_PATH = false
+    }
+
     // Determine the ability of the OS to switch to dark mode
     data.hasOSDarkMode = [ 'darwin', 'win32' ].includes(process.platform)
 
