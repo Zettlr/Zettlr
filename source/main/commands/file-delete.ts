@@ -32,7 +32,7 @@ export default class FileDelete extends ZettlrCommand {
       return false
     }
 
-    if (await this._app.confirmRemove(file)) {
+    if (!await this._app.confirmRemove(file)) {
       return false
     }
 
