@@ -1,5 +1,9 @@
 # 1.8.4
 
+## Deprecating 32 bit builds
+
+This version ships with a debug notification that will inform users of deprecated operating systems about that fact. This debug notification cannot be turned off, but will be removed in Zettlr 1.8.5, which will use the bundled Pandoc version first of all. Beginning with Zettlr 1.9.0, we will no longer support 32 bit applications, so you have to make sure your operating system supports 64 bit. If your Windows is still 32 bit, there is a _very high chance_ that your processor actually supports 64 bit. Please check this, if you want to continue using Zettlr.
+
 ## GUI and Functionality
 
 - **Enhancement**: Navigating the file list has just become easier. Now when you navigate the list **files will not be opened immediately**! Rather, they are being marked as "active," making the navigation much less cumbersome. To open an activated file, simply hit **Enter**.
@@ -19,7 +23,7 @@
 - Migrated the Stats Provider to TypeScript.
 - ASAR support reinstated
 - Switched GitHub Actions CI to use Node 14.x.
-- Prepared everything so that Pandoc can be bundled with Zettlr at every time. However, the corresponding code is not yet active to provide for a transition phase where we still ship 32bit builds.
+- Prepared everything so that Pandoc can be bundled with Zettlr at every time. However, the corresponding code is not yet active to provide for a transition phase where we still ship 32 bit builds.
 - Fixed the TableEditor. The two major changes are that it does not depend on jQuery anymore, and that now all changes are always applied to the AST, not the DOM element. The DOM element is always rebuilt after the AST has changed so that the single source of truth is always the AST.
 - Made sure that environmentally necessary directories are now created recursively.
 - Added a `prompt`-passthrough to the main Zettlr class.

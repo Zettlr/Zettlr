@@ -70,7 +70,7 @@ async function safeShutdown (provider: any): Promise<void> {
   try {
     await provider.shutdown()
   } catch (err) {
-    global.log.error(`[Shutdown] Could not shut down provider: ${err.message as string}`, err)
+    global.log.error(`[Shutdown] Could not shut down provider ${provider.constructor.name as string}: ${err.message as string}`, err)
   }
 }
 
@@ -118,6 +118,24 @@ export async function bootApplication (): Promise<void> {
   updateProvider = new UpdateProvider()
   notificationProvider = new NotificationProvider()
   statsProvider = new StatsProvider()
+
+  // DEBUG Make sure to notify users of the wrong platform, if they have one
+  const is64Bit = process.arch === 'x64'
+  const isAppleSilicon = process.platform === 'darwin' && process.arch === 'arm64'
+  if (!is64Bit && !isAppleSilicon) {
+    setTimeout(() => {
+      global.log.error(`[Application] Attention, your platform/architecture combination (${process.platform}; ${process.arch}) will no longer be supported after Zettlr 1.9.0!`)
+      global.notify.normal([
+        'Your platform/architecture combination is deprecated. You must upgrade',
+        'to a supported operating system that supports 64 bit, if you wish to',
+        'continue using Zettlr after release 1.9.0. This message will only',
+        'appear during 1.8.4 and will be removed in the next release.',
+        `Your platform: <strong>${process.platform} (${process.arch})</strong>`
+      ].join(' '), true)
+    }, 30000)
+  } else {
+    global.log.info(`[Application] You are prepared for Zettlr 1.9.0, as your platform/architecture combination (${process.platform}; ${process.arch}) will continue to be supported!`)
+  }
 
   // Initiate i18n after the config provider has definitely spun up
   let metadata: any = loadI18nMain(global.config.get('appLang'))
