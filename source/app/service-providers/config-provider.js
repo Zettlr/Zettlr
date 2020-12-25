@@ -118,7 +118,7 @@ module.exports = class ConfigProvider extends EventEmitter {
       'pandoc': '',
       'xelatex': '',
       // The pandoc command to be run on export
-      'pandocCommand': 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $cslstyle$ $bibliography$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"',
+      'pandocCommand': 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $bibliography$ $cslstyle$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"',
       'export': {
         'dir': 'temp', // Can either be "temp" or "cwd" (current working directory)
         'stripIDs': false, // Strip ZKN IDs such as @ID:<id>
