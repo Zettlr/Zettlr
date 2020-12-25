@@ -14,6 +14,7 @@
 - Removed jQuery from PDF preferences.
 - Removed jQuery from the CSS dialog.
 - Removed jQuery from the file manager.
+- Removed jQuery from the Pomodoro counter.
 
 # 1.8.4
 

@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -53,9 +52,7 @@ class ZettlrPomodoro {
 
     this._running = false // Is timer currently running?
 
-    this._svg = $('#toolbar .button.pomodoro svg').first()
-    this._progressMeter = $('.pomodoro-value')
-    this._progressValue = this._svg.find('.pomodoro-value').first()
+    this._progressValue = document.querySelector('#toolbar .button.pomodoro svg .pomodoro-value')
 
     // For playing optional sound effects
     this._sound = new window.Audio()
@@ -82,7 +79,7 @@ class ZettlrPomodoro {
     this._phase.type = 'task'
     this._phase.cur = 0
     this._phase.max = this._duration.task
-    this._progressValue.addClass('task')
+    this._progressValue.classList.add('task')
 
     // Commence
     setTimeout(() => { this._progress() }, 1000)
@@ -101,7 +98,7 @@ class ZettlrPomodoro {
     // Check if phase is ending
     if (this._phase.cur === this._phase.max) {
       // Remove phase classes
-      this._progressValue.removeClass('long short task')
+      this._progressValue.classList.remove('long', 'short', 'task')
       // Reset and start next
       this._phase.cur = 0
       if (this._phase.type === 'task') {
@@ -131,7 +128,7 @@ class ZettlrPomodoro {
       }
 
       // Set the class of the value accordingly
-      this._progressValue.addClass(this._phase.type)
+      this._progressValue.classList.add(this._phase.type)
       const pomodoroTimerPhaseElement = document.getElementById('pomodoro-phase-type')
       if (pomodoroTimerPhaseElement) {
         pomodoroTimerPhaseElement.textContent = trans('pomodoro.phase.' + this._phase.type)
@@ -145,7 +142,7 @@ class ZettlrPomodoro {
     let large = (progress > 0.5) ? 1 : 0
     let x = Math.cos(2 * Math.PI * progress)
     let y = Math.sin(2 * Math.PI * progress)
-    this._progressValue.attr('d', `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`)
+    this._progressValue.setAttribute('d', `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`)
 
     let sec = ((this._phase.max - this._phase.cur) % 60)
     if (sec < 10) sec = '0' + sec
@@ -174,8 +171,8 @@ class ZettlrPomodoro {
     // Reset everything
     this._running = false
     // Reset timer to none
-    this._progressValue.attr('d', '')
-    this._progressValue.removeClass('long short task')
+    this._progressValue.setAttribute('d', '')
+    this._progressValue.classList.remove('long', 'short', 'task')
 
     // Now reset counters
     this._counter = {
@@ -248,7 +245,7 @@ class ZettlrPomodoro {
         this._pref = null
       })
 
-      $('#pomodoro-stop-button').on('click', (e) => {
+      document.getElementById('pomodoro-stop-button').addEventListener('click', (e) => {
         global.popupProvider.close()
         this._pref = null
         this._stop()
