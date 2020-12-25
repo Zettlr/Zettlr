@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -138,7 +137,7 @@ class StatsDialog extends ZettlrDialog {
     this._updateChart()
 
     // Now we need to activate the previous/next buttons
-    $('#prev-sheet').click((e) => {
+    document.getElementById('prev-sheet').addEventListener('click', (e) => {
       if (this._currentSheet > 0) {
         this._currentSheet--
         this._updateChart()
@@ -146,7 +145,7 @@ class StatsDialog extends ZettlrDialog {
     })
 
     // Next button
-    $('#next-sheet').click((e) => {
+    document.getElementById('next-sheet').addEventListener('click', (e) => {
       if (this._currentSheet < this._backgroundData.length - 1) {
         this._currentSheet++
         this._updateChart()
@@ -162,7 +161,7 @@ class StatsDialog extends ZettlrDialog {
     })
 
     // If the user wants to compare with the previous time frame.
-    $('#data-compare').change((e) => {
+    document.getElementById('data-compare').addEventListener('change', (e) => {
       this._compare = !this._compare
       this._updateChart()
     })
@@ -285,10 +284,12 @@ class StatsDialog extends ZettlrDialog {
     }
 
     // Pre-set the progress bar
-    $('#current-sheet-info').attr('max', this._backgroundData.length - 1)
+    document.getElementById('current-sheet-info')
+      .setAttribute('max', this._backgroundData.length - 1)
 
     // Indicate the current sheet on the progress indicator
-    $('#current-sheet-info').attr('value', this._currentSheet)
+    document.getElementById('current-sheet-info')
+      .setAttribute('value', this._currentSheet)
 
     // Update the chart's title
     this._chart.options.title.text = (this._mode === 'year') ? trans('dialog.statistics.words_per_week') : trans('dialog.statistics.words_per_day')
