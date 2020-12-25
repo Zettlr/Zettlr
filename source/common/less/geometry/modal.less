@@ -9,7 +9,8 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  overflow-x: hidden; /* For longer settings(?) and stuff dialogs */
+  overflow-x: hidden;
+  /* For longer settings(?) and stuff dialogs */
   overflow-y: auto;
 
   .dialog {
@@ -21,7 +22,9 @@
       font-size: 1.5em;
       margin-bottom: 1.5em;
 
-      small { font-size: 75%; }
+      small {
+        font-size: 75%;
+      }
     }
 
     span.uuid {
@@ -33,15 +36,29 @@
       cursor: text;
     }
 
-    h2, h3, h4, h5, h6 {
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       margin-bottom: 1em;
 
-      small { font-size: 75%; }
+      small {
+        font-size: 75%;
+      }
     }
 
-    p, li { line-height: 150%; }
+    p,
+    li {
+      line-height: 150%;
+    }
 
-    ul, ol, p, li { margin-bottom: 0.5em; }
+    ul,
+    ol,
+    p,
+    li {
+      margin-bottom: 0.5em;
+    }
 
     hr {
       border: none;
@@ -121,7 +138,8 @@
       margin: 0.5em;
     }
 
-    input[type="checkbox"], input[type="radio"] {
+    input[type="checkbox"],
+    input[type="radio"] {
       margin: 0.5em;
       display: inline;
     }
@@ -133,25 +151,28 @@
       border-radius: @border-radius;
     }
 
-    button, a.button {
+    button,
+    a.button {
       display: inline-block;
       font-size: 1em;
       margin: 1em;
       padding: 0.5em 1em;
       cursor: pointer;
-      text-decoration:  none;
+      text-decoration: none;
     }
 
 
     div.input-button-group {
       display: flex;
       margin-bottom: 1em;
+
       input {
         flex: 0 5 auto;
         margin: 0;
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
       }
+
       button {
         flex: 0 1 auto;
         border-top-left-radius: 0;
@@ -171,7 +192,8 @@
     // Why the .code-class? Because sometimes we have a small code area,
     // sometimes it's the only content of the dialog (in which case we
     // need to constrain its size in the geometry part)
-    .changelog, .code {
+    .changelog,
+    .code {
       max-height: 300px;
       overflow-y: auto;
       border-radius: 2px;
@@ -187,12 +209,16 @@
       user-select: text; // The code contents may be copied
     }
 
-    div.clear { clear: both; }
+    div.clear {
+      clear: both;
+    }
 
     // box-left and box-right are used on normal fullscreen to display content
     // side-by-side, while on smaller screens (i.e. less than 800px) for the
     // sake of readability it will be displayed full width on the modals.
-    div.box-left, div.box-right {
+    div.box-left,
+    div.box-right {
+      display: block;
       width: 100%;
       padding: 0;
       margin: 0;
@@ -206,15 +232,22 @@
 
     // On larger screens, box-left and box-right are displayed next to each other.
     @media(min-width: @dialog-breakpoint) {
-      div.box-left,
-      div.box-right { width: 50%; }
-      div.box-left {
-        padding-right: 1%;
-        float: left;
-      }
-      div.box-right {
-        padding-left: 1%;
-        float: right;
+      div.box-container {
+        display: flex;
+
+        div.box-left,
+        div.box-right {
+          width: 49%;
+          flex-basis: 1fr;
+        }
+
+        div.box-left {
+          padding-right: 1%;
+        }
+
+        div.box-right {
+          padding-left: 1%;
+        }
       }
     }
 
@@ -233,17 +266,39 @@
         text-align: center;
         width: 4em;
 
-        &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button {
           -webkit-appearance: none;
           margin: 0;
         }
       }
 
-      .tmargin, .rmargin, .bmargin, .lmargin { position: absolute; }
-      .tmargin { top: -2em;     margin: 0 0.5em; }
-      .rmargin { right: -4.1em; top: 2.5em;      }
-      .bmargin { bottom: -2em;  margin: 0 0.5em; }
-      .lmargin { left: -4.2em;  top: 2.5em;      }
+      .tmargin,
+      .rmargin,
+      .bmargin,
+      .lmargin {
+        position: absolute;
+      }
+
+      .tmargin {
+        top: -2em;
+        margin: 0 0.5em;
+      }
+
+      .rmargin {
+        right: -4.1em;
+        top: 2.5em;
+      }
+
+      .bmargin {
+        bottom: -2em;
+        margin: 0 0.5em;
+      }
+
+      .lmargin {
+        left: -4.2em;
+        top: 2.5em;
+      }
     }
 
     // Positioning of the image size constraint sliders
@@ -303,7 +358,8 @@
         display: flex;
         align-items: stretch;
 
-        input, button {
+        input,
+        button {
           flex: 5;
           display: inline;
           margin: 0.5em;
@@ -325,7 +381,10 @@
             border: none;
           }
         }
-        button { flex: 1; }
+
+        button {
+          flex: 1;
+        }
       }
     }
 
@@ -335,7 +394,7 @@
 
       .flex {
         flex: 1;
-        padding:1em;
+        padding: 1em;
 
         img {
           width: 100%;
@@ -345,30 +404,29 @@
     }
 
     // Tabs styles
-    .ui-tabs-nav {
-      display: flex;
-      flex-wrap: wrap;
-      padding: 0;
-      margin-bottom: 20px;
-
-      .ui-tabs-tab {
-        flex: 1;
-        display: inline-block;
-        line-height: 200%;
+    .modal-tab-container {
+      .tab-list {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+        margin: 20px 0px;
         list-style-type: none;
-        margin-bottom: 0;
-        padding: 0 6px;
 
-        a {
-          text-decoration: none;
+        .tab-list-tab {
+          flex: 1;
           display: inline-block;
-          width: 100%;
+          line-height: 200%;
+          list-style-type: none;
+          margin: 0px;
+          padding: 0 6px;
           text-align: center;
           outline: none;
           white-space: nowrap;
         }
       }
-      // END tabs styles
+      [role="tabpanel"] {
+        overflow: auto; // Enable scrolling, if necessary
+      }
     }
 
     // Dictionary list geometry
@@ -398,9 +456,11 @@
         cursor: pointer;
         margin: 0;
         padding: 5px;
+
         span {
           flex: 1 0 auto;
         }
+
         clr-icon {
           flex: 0 1 auto;
         }
@@ -418,7 +478,9 @@
     .tag clr-icon {
       vertical-align: text-bottom;
     }
+
     // END dialog styles
   }
+
   // END modal styles
 }

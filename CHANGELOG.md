@@ -1,3 +1,13 @@
+# 1.8.5
+
+## GUI and Functionality
+
+- Made the dialogs' tab lists more accessible for screen readers.
+
+## Under the Hood
+
+- Removed jQuery UI from the dialog classes completely.
+
 # 1.8.4
 
 ## Deprecating 32 bit builds

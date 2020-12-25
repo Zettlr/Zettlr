@@ -1,40 +1,71 @@
 <div class="dialog" role="dialog">
-  <img src="../../../source/renderer/assets/img/zettlr-official-logo.png" alt="Zettlr Logo" style="width:10%; float:left;">
+  <img src="../../../source/renderer/assets/img/zettlr-official-logo.png"
+    alt="Zettlr Logo" style="width:10%; float:left;">
   <h1>{{i18n "dialog.about.title"}} <small>{{version}}</small></h1>
   <span class="uuid">Application ID: {{uuid}}</span>
-  <div id="prefs-tabs" class="clear">
-    <ul>
-      <li><a href="#about-tabs-main">{{i18n "dialog.about.main"}}</a></li>
-      <li><a href="#about-tabs-projects">{{i18n "dialog.about.projects"}}</a></li>
-      <li><a href="#about-tabs-sponsors">{{i18n "dialog.about.sponsors"}}</a></li>
-      <li><a href="#about-tabs-contributors">{{i18n "dialog.about.contributors"}}</a></li>
-      <li><a href="#about-tabs-license">{{i18n "dialog.about.license"}}</a></li>
-      <li><a href="#about-tabs-debug">Debug Information</a></li>
-    </ul>
+  <div class="modal-tab-container clear">
+    <div class="tab-list" role="tablist">
+      <button class="tab-list-tab" role="tab" aria-selected="false"
+        aria-controls="about-tabs-main" id="about-tabs-main-control">
+        {{i18n "dialog.about.main"}}
+      </button>
+      <button class="tab-list-tab" role="tab" aria-selected="false"
+        aria-controls="about-tabs-projects" id="about-tabs-projects-control">
+        {{i18n "dialog.about.projects"}}
+      </button>
+      <button class="tab-list-tab" role="tab" aria-selected="false"
+        aria-controls="about-tabs-sponsors" id="about-tabs-sponsors-control">
+        {{i18n "dialog.about.sponsors"}}
+      </button>
+      <button class="tab-list-tab" role="tab" aria-selected="false"
+        aria-controls="about-tabs-contributors"
+        id="about-tabs-contributors-control">
+        {{i18n "dialog.about.contributors"}}
+      </button>
+      <button class="tab-list-tab" role="tab" aria-selected="false"
+        aria-controls="about-tabs-license" id="about-tabs-license-control">
+        {{i18n "dialog.about.license"}}
+      </button>
+      <button class="tab-list-tab" role="tab" aria-selected="false"
+        aria-controls="about-tabs-debug" id="about-tabs-debug-control">
+        Debug Information
+      </button>
+    </div>
 
     {{!-- Main tab --}}
-    <div id="about-tabs-main">
+    <div id="about-tabs-main" role="tabpanel"
+      aria-labelledby="about-tabs-main-control">
       <p>
         {{i18n "dialog.about.lead"}}
       </p>
       <div class="projects">
         <div class="flex">
-          <a href="#" onclick="require('electron').shell.openExternal('http://electronjs.org/')">
-            <img src="../../../source/renderer/assets/img/electron-official-logo.svg" alt="Electron Logo" title="Electron">
+          <a href="#"
+            onclick="require('electron').shell.openExternal('http://electronjs.org/')">
+            <img
+              src="../../../source/renderer/assets/img/electron-official-logo.svg"
+              alt="Electron Logo" title="Electron">
           </a>
         </div>
         <div class="flex">
-          <a href="#" onclick="require('electron').shell.openExternal('https://nodejs.org/')"><img
-              src="../../../source/renderer/assets/img/nodejs-official-logo.png" style="margin-top: 5%" alt="Node.js Logo" title="Node.js"></a>
+          <a href="#"
+            onclick="require('electron').shell.openExternal('https://nodejs.org/')"><img
+              src="../../../source/renderer/assets/img/nodejs-official-logo.png"
+              style="margin-top: 5%" alt="Node.js Logo" title="Node.js"></a>
         </div>
         <div class="flex">
-          <a href="#" onclick="require('electron').shell.openExternal('https://codemirror.net/')"><img
-              src="../../../source/renderer/assets/img/codemirror-official-logo.png" style="width:60%; margin:0 20%" alt="CodeMirror Logo"
+          <a href="#"
+            onclick="require('electron').shell.openExternal('https://codemirror.net/')"><img
+              src="../../../source/renderer/assets/img/codemirror-official-logo.png"
+              style="width:60%; margin:0 20%" alt="CodeMirror Logo"
               title="CodeMirror"></a>
         </div>
         <div class="flex">
-          <a href="#" onclick="require('electron').shell.openExternal('https://citationstyles.org/')">
-            <img src="../../../source/renderer/assets/img/csl-official-logo.svg" style="margin-top: 25%" alt="Citation Style Language Logo" title="Citation Style Language (CSL)">
+          <a href="#"
+            onclick="require('electron').shell.openExternal('https://citationstyles.org/')">
+            <img src="../../../source/renderer/assets/img/csl-official-logo.svg"
+              style="margin-top: 25%" alt="Citation Style Language Logo"
+              title="Citation Style Language (CSL)">
           </a>
         </div>
       </div>
@@ -51,7 +82,8 @@
 
 
     {{!-- Projects tab --}}
-    <div id="about-tabs-projects">
+    <div id="about-tabs-projects" role="tabpanel"
+      aria-labelledby="about-tabs-projects-control">
       <p>
         {{i18n "dialog.about.other_projects"}}
       </p>
@@ -60,7 +92,8 @@
           <li><a href="#"
               onclick="require('electron').shell.openExternal('https://github.com/dsifford/astrocite')">astrocite</a>
             &mdash; {{i18n "dialog.about.astrocite"}}</li>
-          <li><a href="#" onclick="require('electron').shell.openExternal('https://www.chartjs.org/')">Chart.js</a>
+          <li><a href="#"
+              onclick="require('electron').shell.openExternal('https://www.chartjs.org/')">Chart.js</a>
             &mdash; {{i18n "dialog.about.chartjs"}}</li>
           <li><a href="#"
               onclick="require('electron').shell.openExternal('https://github.com/paulmillr/chokidar')">Chokidar</a>
@@ -68,19 +101,27 @@
           <li><a href="#"
               onclick="require('electron').shell.openExternal('https://github.com/Juris-M/citeproc-js')">citeproc.js</a>
             &mdash; {{i18n "dialog.about.citeproc"}}</li>
-          <li><a href="#" onclick="require('electron').shell.openExternal('https://jquery.com/')">jQuery &amp; jQuery
+          <li><a href="#"
+              onclick="require('electron').shell.openExternal('https://jquery.com/')">jQuery
+              &amp; jQuery
               UI</a> &mdash; {{i18n "dialog.about.jquery"}}</li>
-          <li><a href="#" onclick="require('electron').shell.openExternal('https://katex.org/')">KaTeX</a> &mdash;
+          <li><a href="#"
+              onclick="require('electron').shell.openExternal('https://katex.org/')">KaTeX</a>
+            &mdash;
             {{i18n "dialog.about.katex"}}</li>
-          <li><a href="#" onclick="require('electron').shell.openExternal('http://lesscss.org/')">Less.js</a> &mdash;
+          <li><a href="#"
+              onclick="require('electron').shell.openExternal('http://lesscss.org/')">Less.js</a>
+            &mdash;
             {{i18n "dialog.about.lessjs"}}</li>
-          <li><a href="#" onclick="require('electron').shell.openExternal('http://showdownjs.com/')">Showdown.js</a>
+          <li><a href="#"
+              onclick="require('electron').shell.openExternal('http://showdownjs.com/')">Showdown.js</a>
             &mdash; {{i18n "dialog.about.showdownjs"}}</li>
           <li><a href="#"
               onclick="require('electron').shell.openExternal('https://atomiks.github.io/tippyjs/')">Tippy.js</a>
             &mdash; {{i18n "dialog.about.tippyjs"}}</li>
           <li><a href="#"
-              onclick="require('electron').shell.openExternal('https://github.com/wooorm/nspell/')">nspell</a> &mdash;
+              onclick="require('electron').shell.openExternal('https://github.com/wooorm/nspell/')">nspell</a>
+            &mdash;
             {{i18n "dialog.about.nspell"}}</li>
         </ul>
       </div>
@@ -88,7 +129,8 @@
 
 
     {{!-- Sponsors tab --}}
-    <div id="about-tabs-sponsors">
+    <div id="about-tabs-sponsors" role="tabpanel"
+      aria-labelledby="about-tabs-sponsors-control">
       <h1>{{i18n "dialog.about.sponsors"}}</h1>
       <div id="sponsorList" class="changelog">
         <!-- The Sponsors will be dynamically loaded -->
@@ -97,7 +139,8 @@
 
 
     {{!-- Language contributors tab --}}
-    <div id="about-tabs-contributors">
+    <div id="about-tabs-contributors" role="tabpanel"
+      aria-labelledby="about-tabs-contributors-control">
       <h1>{{i18n "dialog.about.contributors"}}</h1>
       <div id="contrib" class="changelog">
         <!-- The Contributors will be dynamically loaded -->
@@ -106,7 +149,8 @@
 
 
     {{!-- The full GNU GPLv3-license --}}
-    <div id="about-tabs-license">
+    <div id="about-tabs-license" role="tabpanel"
+      aria-labelledby="about-tabs-license-control">
       <!-- We'll just reuse the changelog thingy here. -->
       <div class="changelog">
         <h1 style="text-align: center;">GNU GENERAL PUBLIC LICENSE</h1>
@@ -114,7 +158,8 @@
 
         <p>
           Copyright &copy; 2007 Free Software Foundation, Inc.
-          &lt;<a href="#" onclick="require('electron').shell.openExternal('https://fsf.org/')">https://fsf.org/</a>&gt;
+          &lt;<a href="#"
+            onclick="require('electron').shell.openExternal('https://fsf.org/')">https://fsf.org/</a>&gt;
         </p>
         <p>
           Everyone is permitted to copy and distribute verbatim copies
@@ -131,10 +176,13 @@
         <p>
           The licenses for most software and other practical works are designed
           to take away your freedom to share and change the works. By contrast,
-          the GNU General Public License is intended to guarantee your freedom to
-          share and change all versions of a program--to make sure it remains free
+          the GNU General Public License is intended to guarantee your freedom
+          to
+          share and change all versions of a program--to make sure it remains
+          free
           software for all its users. We, the Free Software Foundation, use the
-          GNU General Public License for most of our software; it applies also to
+          GNU General Public License for most of our software; it applies also
+          to
           any other work released this way by its authors. You can apply it to
           your programs, too.
         </p>
@@ -150,8 +198,10 @@
 
         <p>
           To protect your rights, we need to prevent others from denying you
-          these rights or asking you to surrender the rights. Therefore, you have
-          certain responsibilities if you distribute copies of the software, or if
+          these rights or asking you to surrender the rights. Therefore, you
+          have
+          certain responsibilities if you distribute copies of the software, or
+          if
           you modify it: responsibilities to respect the freedom of others.
         </p>
 
@@ -179,21 +229,26 @@
 
         <p>
           Some devices are designed to deny users access to install or run
-          modified versions of the software inside them, although the manufacturer
+          modified versions of the software inside them, although the
+          manufacturer
           can do so. This is fundamentally incompatible with the aim of
           protecting users' freedom to change the software. The systematic
-          pattern of such abuse occurs in the area of products for individuals to
+          pattern of such abuse occurs in the area of products for individuals
+          to
           use, which is precisely where it is most unacceptable. Therefore, we
-          have designed this version of the GPL to prohibit the practice for those
+          have designed this version of the GPL to prohibit the practice for
+          those
           products. If such problems arise substantially in other domains, we
-          stand ready to extend this provision to those domains in future versions
+          stand ready to extend this provision to those domains in future
+          versions
           of the GPL, as needed to protect the freedom of users.
         </p>
 
         <p>
           Finally, every program is threatened constantly by software patents.
           States should not allow patents to restrict development and use of
-          software on general-purpose computers, but in those that do, we wish to
+          software on general-purpose computers, but in those that do, we wish
+          to
           avoid the special danger that patents applied to a free program could
           make it effectively proprietary. To prevent this, the GPL assures that
           patents cannot be used to render the program non-free.
@@ -208,33 +263,42 @@
 
         <h3><a name="section0"></a>0. Definitions.</h3>
 
-        <p>&ldquo;This License&rdquo; refers to version 3 of the GNU General Public License.</p>
+        <p>&ldquo;This License&rdquo; refers to version 3 of the GNU General
+          Public License.</p>
 
         <p>
-          &ldquo;Copyright&rdquo; also means copyright-like laws that apply to other kinds of
+          &ldquo;Copyright&rdquo; also means copyright-like laws that apply to
+          other kinds of
           works, such as semiconductor masks.
         </p>
 
         <p>
-          &ldquo;The Program&rdquo; refers to any copyrightable work licensed under this
-          License. Each licensee is addressed as &ldquo;you&rdquo;. &ldquo;Licensees&rdquo; and
+          &ldquo;The Program&rdquo; refers to any copyrightable work licensed
+          under this
+          License. Each licensee is addressed as &ldquo;you&rdquo;.
+          &ldquo;Licensees&rdquo; and
           &ldquo;recipients&rdquo; may be individuals or organizations.
         </p>
 
         <p>
-          To &ldquo;modify&rdquo; a work means to copy from or adapt all or part of the work
-          in a fashion requiring copyright permission, other than the making of an
-          exact copy. The resulting work is called a &ldquo;modified version&rdquo; of the
+          To &ldquo;modify&rdquo; a work means to copy from or adapt all or part
+          of the work
+          in a fashion requiring copyright permission, other than the making of
+          an
+          exact copy. The resulting work is called a &ldquo;modified
+          version&rdquo; of the
           earlier work or a work &ldquo;based on&rdquo; the earlier work.
         </p>
 
         <p>
-          A &ldquo;covered work&rdquo; means either the unmodified Program or a work based
+          A &ldquo;covered work&rdquo; means either the unmodified Program or a
+          work based
           on the Program.
         </p>
 
         <p>
-          To &ldquo;propagate&rdquo; a work means to do anything with it that, without
+          To &ldquo;propagate&rdquo; a work means to do anything with it that,
+          without
           permission, would make you directly or secondarily liable for
           infringement under applicable copyright law, except executing it on a
           computer or modifying a private copy. Propagation includes copying,
@@ -243,13 +307,16 @@
         </p>
 
         <p>
-          To &ldquo;convey&rdquo; a work means any kind of propagation that enables other
-          parties to make or receive copies. Mere interaction with a user through
+          To &ldquo;convey&rdquo; a work means any kind of propagation that
+          enables other
+          parties to make or receive copies. Mere interaction with a user
+          through
           a computer network, with no transfer of a copy, is not conveying.
         </p>
 
         <p>
-          An interactive user interface displays &ldquo;Appropriate Legal Notices&rdquo;
+          An interactive user interface displays &ldquo;Appropriate Legal
+          Notices&rdquo;
           to the extent that it includes a convenient and prominently visible
           feature that (1) displays an appropriate copyright notice, and (2)
           tells the user that there is no warranty for the work (except to the
@@ -262,33 +329,39 @@
         <h3><a name="section1"></a>1. Source Code.</h3>
 
         <p>
-          The &ldquo;source code&rdquo; for a work means the preferred form of the work
-          for making modifications to it. &ldquo;Object code&rdquo; means any non-source
+          The &ldquo;source code&rdquo; for a work means the preferred form of
+          the work
+          for making modifications to it. &ldquo;Object code&rdquo; means any
+          non-source
           form of a work.
         </p>
 
         <p>
-          A &ldquo;Standard Interface&rdquo; means an interface that either is an official
+          A &ldquo;Standard Interface&rdquo; means an interface that either is
+          an official
           standard defined by a recognized standards body, or, in the case of
           interfaces specified for a particular programming language, one that
           is widely used among developers working in that language.
         </p>
 
         <p>
-          The &ldquo;System Libraries&rdquo; of an executable work include anything, other
+          The &ldquo;System Libraries&rdquo; of an executable work include
+          anything, other
           than the work as a whole, that (a) is included in the normal form of
           packaging a Major Component, but which is not part of that Major
           Component, and (b) serves only to enable use of the work with that
           Major Component, or to implement a Standard Interface for which an
           implementation is available to the public in source code form. A
-          &ldquo;Major Component&rdquo;, in this context, means a major essential component
+          &ldquo;Major Component&rdquo;, in this context, means a major
+          essential component
           (kernel, window system, and so on) of the specific operating system
           (if any) on which the executable work runs, or a compiler used to
           produce the work, or an object code interpreter used to run it.
         </p>
 
         <p>
-          The &ldquo;Corresponding Source&rdquo; for a work in object code form means all
+          The &ldquo;Corresponding Source&rdquo; for a work in object code form
+          means all
           the source code needed to generate, install, and (for an executable
           work) run the object code and to modify the work, including scripts to
           control those activities. However, it does not include the work's
@@ -300,7 +373,7 @@
           linked subprograms that the work is specifically designed to require,
           such as by intimate data communication or control flow between those
           subprograms and other parts of the work.
-          </p>
+        </p>
 
         <p>
           The Corresponding Source need not include anything that users
@@ -344,7 +417,8 @@
           makes it unnecessary.
         </p>
 
-        <h3><a name="section3"></a>3. Protecting Users' Legal Rights From Anti-Circumvention Law.</h3>
+        <h3><a name="section3"></a>3. Protecting Users' Legal Rights From
+          Anti-Circumvention Law.</h3>
 
         <p>
           No covered work shall be deemed part of an effective technological
@@ -356,7 +430,8 @@
 
         <p>
           When you convey a covered work, you waive any legal power to forbid
-          circumvention of technological measures to the extent such circumvention
+          circumvention of technological measures to the extent such
+          circumvention
           is effected by exercising rights under this License with respect to
           the covered work, and you disclaim any intention to limit operation or
           modification of the work as a means of enforcing, against the work's
@@ -386,7 +461,8 @@
         <p>
           You may convey a work based on the Program, or the modifications to
           produce it from the Program, in the form of source code under the
-          terms of section 4, provided that you also meet all of these conditions:
+          terms of section 4, provided that you also meet all of these
+          conditions:
         </p>
 
         <ul>
@@ -501,26 +577,40 @@
         </p>
 
         <p>
-          A &ldquo;User Product&rdquo; is either (1) a &ldquo;consumer product&rdquo;, which means any
-          tangible personal property which is normally used for personal, family,
-          or household purposes, or (2) anything designed or sold for incorporation
-          into a dwelling. In determining whether a product is a consumer product,
-          doubtful cases shall be resolved in favor of coverage. For a particular
-          product received by a particular user, &ldquo;normally used&rdquo; refers to a
-          typical or common use of that class of product, regardless of the status
+          A &ldquo;User Product&rdquo; is either (1) a &ldquo;consumer
+          product&rdquo;, which means any
+          tangible personal property which is normally used for personal,
+          family,
+          or household purposes, or (2) anything designed or sold for
+          incorporation
+          into a dwelling. In determining whether a product is a consumer
+          product,
+          doubtful cases shall be resolved in favor of coverage. For a
+          particular
+          product received by a particular user, &ldquo;normally used&rdquo;
+          refers to a
+          typical or common use of that class of product, regardless of the
+          status
           of the particular user or of the way in which the particular user
-          actually uses, or expects or is expected to use, the product. A product
-          is a consumer product regardless of whether the product has substantial
-          commercial, industrial or non-consumer uses, unless such uses represent
+          actually uses, or expects or is expected to use, the product. A
+          product
+          is a consumer product regardless of whether the product has
+          substantial
+          commercial, industrial or non-consumer uses, unless such uses
+          represent
           the only significant mode of use of the product.
         </p>
 
         <p>
-          &ldquo;Installation Information&rdquo; for a User Product means any methods,
-          procedures, authorization keys, or other information required to install
-          and execute modified versions of a covered work in that User Product from
+          &ldquo;Installation Information&rdquo; for a User Product means any
+          methods,
+          procedures, authorization keys, or other information required to
+          install
+          and execute modified versions of a covered work in that User Product
+          from
           a modified version of its Corresponding Source. The information must
-          suffice to ensure that the continued functioning of the modified object
+          suffice to ensure that the continued functioning of the modified
+          object
           code is in no case prevented or interfered with solely because
           modification has been made.
         </p>
@@ -540,11 +630,15 @@
 
         <p>
           The requirement to provide Installation Information does not include a
-          requirement to continue to provide support service, warranty, or updates
-          for a work that has been modified or installed by the recipient, or for
-          the User Product in which it has been modified or installed. Access to a
+          requirement to continue to provide support service, warranty, or
+          updates
+          for a work that has been modified or installed by the recipient, or
+          for
+          the User Product in which it has been modified or installed. Access to
+          a
           network may be denied when the modification itself materially and
-          adversely affects the operation of the network or violates the rules and
+          adversely affects the operation of the network or violates the rules
+          and
           protocols for communication across the network.
         </p>
 
@@ -559,7 +653,8 @@
         <h3><a name="section7"></a>7. Additional Terms.</h3>
 
         <p>
-          &ldquo;Additional permissions&rdquo; are terms that supplement the terms of this
+          &ldquo;Additional permissions&rdquo; are terms that supplement the
+          terms of this
           License by making exceptions from one or more of its conditions.
           Additional permissions that are applicable to the entire Program shall
           be treated as though they were included in this License, to the extent
@@ -580,7 +675,8 @@
 
         <p>
           Notwithstanding any other provision of this License, for material you
-          add to a covered work, you may (if authorized by the copyright holders of
+          add to a covered work, you may (if authorized by the copyright holders
+          of
           that material) supplement the terms of this License with terms:
         </p>
 
@@ -622,8 +718,10 @@
         </ul>
 
         <p>
-          All other non-permissive additional terms are considered &ldquo;further
-          restrictions&rdquo; within the meaning of section 10. If the Program as you
+          All other non-permissive additional terms are considered
+          &ldquo;further
+          restrictions&rdquo; within the meaning of section 10. If the Program
+          as you
           received it, or any part of it, contains a notice stating that it is
           governed by this License along with a term that is a further
           restriction, you may remove that term. If a license document contains
@@ -682,7 +780,8 @@
           material under section 10.
         </p>
 
-        <h3><a name="section9"></a>9. Acceptance Not Required for Having Copies.</h3>
+        <h3><a name="section9"></a>9. Acceptance Not Required for Having Copies.
+        </h3>
 
         <p>
           You are not required to accept this License in order to receive or
@@ -695,7 +794,8 @@
           covered work, you indicate your acceptance of this License to do so.
         </p>
 
-        <h3><a name="section10"></a>10. Automatic Licensing of Downstream Recipients.</h3>
+        <h3><a name="section10"></a>10. Automatic Licensing of Downstream
+          Recipients.</h3>
 
         <p>
           Each time you convey a covered work, the recipient automatically
@@ -705,7 +805,8 @@
         </p>
 
         <p>
-          An &ldquo;entity transaction&rdquo; is a transaction transferring control of an
+          An &ldquo;entity transaction&rdquo; is a transaction transferring
+          control of an
           organization, or substantially all assets of one, or subdividing an
           organization, or merging organizations. If propagation of a covered
           work results from an entity transaction, each party to that
@@ -729,19 +830,23 @@
         <h3><a name="section11"></a>11. Patents.</h3>
 
         <p>
-          A &ldquo;contributor&rdquo; is a copyright holder who authorizes use under this
+          A &ldquo;contributor&rdquo; is a copyright holder who authorizes use
+          under this
           License of the Program or a work on which the Program is based. The
-          work thus licensed is called the contributor's &ldquo;contributor version&rdquo;.
+          work thus licensed is called the contributor's &ldquo;contributor
+          version&rdquo;.
         </p>
 
         <p>
-          A contributor's &ldquo;essential patent claims&rdquo; are all patent claims
+          A contributor's &ldquo;essential patent claims&rdquo; are all patent
+          claims
           owned or controlled by the contributor, whether already acquired or
           hereafter acquired, that would be infringed by some manner, permitted
           by this License, of making, using, or selling its contributor version,
           but do not include claims that would be infringed only as a
           consequence of further modification of the contributor version. For
-          purposes of this definition, &ldquo;control&rdquo; includes the right to grant
+          purposes of this definition, &ldquo;control&rdquo; includes the right
+          to grant
           patent sublicenses in a manner consistent with the requirements of
           this License.
         </p>
@@ -754,10 +859,12 @@
         </p>
 
         <p>
-          In the following three paragraphs, a &ldquo;patent license&rdquo; is any express
+          In the following three paragraphs, a &ldquo;patent license&rdquo; is
+          any express
           agreement or commitment, however denominated, not to enforce a patent
           (such as an express permission to practice a patent or covenant not to
-          sue for patent infringement). To &ldquo;grant&rdquo; such a patent license to a
+          sue for patent infringement). To &ldquo;grant&rdquo; such a patent
+          license to a
           party means to make such an agreement or commitment not to enforce a
           patent against the party.
         </p>
@@ -771,7 +878,8 @@
           available, or (2) arrange to deprive yourself of the benefit of the
           patent license for this particular work, or (3) arrange, in a manner
           consistent with the requirements of this License, to extend the patent
-          license to downstream recipients. &ldquo;Knowingly relying&rdquo; means you have
+          license to downstream recipients. &ldquo;Knowingly relying&rdquo;
+          means you have
           actual knowledge that, but for the patent license, your conveying the
           covered work in a country, or your recipient's use of the covered work
           in a country, would infringe one or more identifiable patents in that
@@ -789,7 +897,8 @@
         </p>
 
         <p>
-          A patent license is &ldquo;discriminatory&rdquo; if it does not include within
+          A patent license is &ldquo;discriminatory&rdquo; if it does not
+          include within
           the scope of its coverage, prohibits the exercise of, or is
           conditioned on the non-exercise of one or more of the rights that are
           specifically granted under this License. You may not convey a covered
@@ -817,15 +926,20 @@
           If conditions are imposed on you (whether by court order, agreement or
           otherwise) that contradict the conditions of this License, they do not
           excuse you from the conditions of this License. If you cannot convey a
-          covered work so as to satisfy simultaneously your obligations under this
-          License and any other pertinent obligations, then as a consequence you may
-          not convey it at all. For example, if you agree to terms that obligate you
-          to collect a royalty for further conveying from those to whom you convey
+          covered work so as to satisfy simultaneously your obligations under
+          this
+          License and any other pertinent obligations, then as a consequence you
+          may
+          not convey it at all. For example, if you agree to terms that obligate
+          you
+          to collect a royalty for further conveying from those to whom you
+          convey
           the Program, the only way you could satisfy both those terms and this
           License would be to refrain entirely from conveying the Program.
         </p>
 
-        <h3><a name="section13"></a>13. Use with the GNU Affero General Public License.</h3>
+        <h3><a name="section13"></a>13. Use with the GNU Affero General Public
+          License.</h3>
 
         <p>
           Notwithstanding any other provision of this License, you have
@@ -841,16 +955,20 @@
         <h3><a name="section14"></a>14. Revised Versions of this License.</h3>
 
         <p>
-          The Free Software Foundation may publish revised and/or new versions of
-          the GNU General Public License from time to time. Such new versions will
-          be similar in spirit to the present version, but may differ in detail to
+          The Free Software Foundation may publish revised and/or new versions
+          of
+          the GNU General Public License from time to time. Such new versions
+          will
+          be similar in spirit to the present version, but may differ in detail
+          to
           address new problems or concerns.
         </p>
 
         <p>
           Each version is given a distinguishing version number. If the
           Program specifies that a certain numbered version of the GNU General
-          Public License &ldquo;or any later version&rdquo; applies to it, you have the
+          Public License &ldquo;or any later version&rdquo; applies to it, you
+          have the
           option of following the terms and conditions either of that numbered
           version or of any later version published by the Free Software
           Foundation. If the Program does not specify a version number of the
@@ -877,11 +995,15 @@
         <p>
           THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
           APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
-          HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM &ldquo;AS IS&rdquo; WITHOUT WARRANTY
-          OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+          HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM &ldquo;AS IS&rdquo;
+          WITHOUT WARRANTY
+          OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED
+          TO,
           THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-          PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
-          IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
+          PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE
+          PROGRAM
+          IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST
+          OF
           ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
         </p>
 
@@ -889,17 +1011,25 @@
 
         <p>
           IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
-          WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS
-          THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY
-          GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE
-          USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF
-          DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD
-          PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
-          EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+          WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR
+          CONVEYS
+          THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
+          INCLUDING ANY
+          GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF
+          THE
+          USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS
+          OF
+          DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR
+          THIRD
+          PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER
+          PROGRAMS),
+          EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY
+          OF
           SUCH DAMAGES.
         </p>
 
-        <h3><a name="section17"></a>17. Interpretation of Sections 15 and 16.</h3>
+        <h3><a name="section17"></a>17. Interpretation of Sections 15 and 16.
+        </h3>
 
         <p>
           If the disclaimer of warranty and limitation of liability provided
@@ -914,14 +1044,17 @@
 
 
     {{!-- Debug information --}}
-    <div id="about-tabs-debug">
+    <div id="about-tabs-debug" role="tabpanel"
+      aria-labelledby="about-tabs-debug-control">
       <p>
-        This page contains internal debug information for this installation of Zettlr.
+        This page contains internal debug information for this installation of
+        Zettlr.
       </p>
       <div class="changelog">
         <h2>General Information</h2>
         <p>Zettlr Version: <strong>{{ version }}</strong></p>
-        <p>System: <strong>{{ platform }} {{ platformVersion }}</strong> (architecture: {{ architecture }})</p>
+        <p>System: <strong>{{ platform }} {{ platformVersion }}</strong>
+          (architecture: {{ architecture }})</p>
         <h2>Build Dependencies</h2>
         <p>
           This build was compiled using
@@ -936,24 +1069,31 @@
         </p>
         <h2>Current System Load</h2>
         <ul>
-          <li>CPU Load: <strong><span id="realtime-cpu-load">{{ cpu }}</span> %</strong></li>
-          <li>Resident Set Size: <strong><span id="realtime-rss">{{ memory.rss }}</span></strong> MB</li>
-          <li>C++ memory for JS Objects: <strong><span id="realtime-external">{{ memory.external }}</span></strong> MB</li>
+          <li>CPU Load: <strong><span id="realtime-cpu-load">{{ cpu }}</span>
+              %</strong></li>
+          <li>Resident Set Size: <strong><span
+                id="realtime-rss">{{ memory.rss }}</span></strong> MB</li>
+          <li>C++ memory for JS Objects: <strong><span
+                id="realtime-external">{{ memory.external }}</span></strong> MB
+          </li>
           <li>Heap:
             <strong>
-              <span id="realtime-heap-used">{{ heap.used }}</span></strong> from <strong><span id="realtime-heap-total">{{ heap.total }}</span></strong> MB (Limit: <strong>{{ heap.limit }}</strong> MB)</li>
+              <span id="realtime-heap-used">{{ heap.used }}</span></strong> from
+            <strong><span
+                id="realtime-heap-total">{{ heap.total }}</span></strong> MB
+            (Limit: <strong>{{ heap.limit }}</strong> MB)</li>
         </ul>
         <h2>Renderer flags</h2>
         <ul>
-        {{#each argv }}
-          <li>{{ this }}</li>
-        {{/each}}
+          {{#each argv }}
+            <li>{{ this }}</li>
+          {{/each}}
         </ul>
         <h2>Environment Variables</h2>
         <ul>
-        {{#each env }}
-          <li><strong>{{ key }}</strong>: {{ value }}</li>
-        {{/each}}
+          {{#each env }}
+            <li><strong>{{ key }}</strong>: {{ value }}</li>
+          {{/each}}
         </ul>
       </div>
     </div>
