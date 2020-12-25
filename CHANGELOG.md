@@ -11,6 +11,7 @@
 - Removed jQuery from the updater.
 - Removed jQuery from the tag cloud dialog.
 - Removed jQuery from the stats dialog.
+- Removed jQuery from PDF preferences.
 
 # 1.8.4
 
