@@ -2,7 +2,7 @@
 
 ## Pandoc Command update
 
-**In order to use the new command, make sure to "reset" it once, or (if it contains customisations) replace `--bibliography "$bibliography$" $cslstyle$` with `$bibliography$ $cslstyle$`.**
+**In order to use the new command, make sure to "reset" it once, or (if it contains customisations) replace `--citeproc --bibliography "$bibliography$" $cslstyle$` with `$bibliography$ $cslstyle$`.**
 
 # 1.8.4
 

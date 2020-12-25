@@ -47,16 +47,13 @@ module.exports = async function (options) {
     throw new Error(trans('system.error.no_xelatex_message'), trans('system.error.no_xelatex_title'))
   }
 
-  // Add bibliography if exists
-  let bibliography = global.config.get('export.cslLibrary')
-
   // Pandoc flags to be passed to the compiler
   let pandocFlags = {
     'tpl': (options.template) ? `--template="${options.template}"` : '',
     'infile': options.sourceFile,
     'toc': (options.pdf.toc && options.format === 'pdf') ? '--toc' : '',
     'tocdepth': (options.pdf.tocDepth) ? '--toc-depth=' + options.pdf.tocDepth : '',
-    'bibliography': (global.config.get('export.cslLibrary')) ? `--citeproc --bibliography "${bibliography}"` : '',
+    'bibliography': (global.config.get('export.cslLibrary')) ? `--citeproc --bibliography "${global.config.get('export.cslLibrary')}"` : '',
     'cslstyle': (options.hasOwnProperty('cslStyle') && isFile(options.cslStyle)) ? `--csl "${options.cslStyle}"` : '',
     'outfile': options.targetFile,
     'outflag': '-t ' + ((options.format === 'pdf') ? 'latex' : options.format),
