@@ -47,14 +47,26 @@ module.exports = async function (options) {
     throw new Error(trans('system.error.no_xelatex_message'), trans('system.error.no_xelatex_title'))
   }
 
+  // Include CSL library if exist
+  let bibliography = ''
+  if (global.config.get('export.cslLibrary')) {
+    bibliography = `--citeproc --bibliography "${global.config.get('export.cslLibrary')}"`
+  }
+
+  // Add a custom CSL style if applicable
+  let cslstyle = ''
+  if (options.hasOwnProperty('cslStyle') && isFile(options.cslStyle)) {
+    cslstyle = `--csl "${options.cslStyle}"`
+  }
+
   // Pandoc flags to be passed to the compiler
   let pandocFlags = {
     'tpl': (options.template) ? `--template="${options.template}"` : '',
     'infile': options.sourceFile,
     'toc': (options.pdf.toc && options.format === 'pdf') ? '--toc' : '',
     'tocdepth': (options.pdf.tocDepth) ? '--toc-depth=' + options.pdf.tocDepth : '',
-    'bibliography': (global.config.get('export.cslLibrary')) ? `--citeproc --bibliography "${global.config.get('export.cslLibrary')}"` : '',
-    'cslstyle': (options.hasOwnProperty('cslStyle') && isFile(options.cslStyle)) ? `--csl "${options.cslStyle}"` : '',
+    'bibliography': bibliography,
+    'cslstyle': cslstyle,
     'outfile': options.targetFile,
     'outflag': '-t ' + ((options.format === 'pdf') ? 'latex' : options.format),
     'format': options.format,
