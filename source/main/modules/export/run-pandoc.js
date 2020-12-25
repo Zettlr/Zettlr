@@ -47,11 +47,8 @@ module.exports = async function (options) {
     throw new Error(trans('system.error.no_xelatex_message'), trans('system.error.no_xelatex_title'))
   }
 
-  // Add a custom CSL style if applicable
-  let cslstyle = ''
-  if (options.hasOwnProperty('cslStyle') && isFile(options.cslStyle)) {
-    cslstyle = `--csl "${options.cslStyle}"`
-  }
+  // Add bibliography if exists
+  let bibliography = global.config.get('export.cslLibrary')
 
   // Pandoc flags to be passed to the compiler
   let pandocFlags = {
@@ -59,8 +56,8 @@ module.exports = async function (options) {
     'infile': options.sourceFile,
     'toc': (options.pdf.toc && options.format === 'pdf') ? '--toc' : '',
     'tocdepth': (options.pdf.tocDepth) ? '--toc-depth=' + options.pdf.tocDepth : '',
-    'bibliography': global.config.get('export.cslLibrary'),
-    'cslstyle': cslstyle,
+    'bibliography': (global.config.get('export.cslLibrary')) ? `--bibliography "${bibliography}"` : '',
+    'cslstyle': (options.hasOwnProperty('cslStyle') && isFile(options.cslStyle)) ? `--csl + "${options.cslStyle}"` : '',
     'outfile': options.targetFile,
     'outflag': '-t ' + ((options.format === 'pdf') ? 'latex' : options.format),
     'format': options.format,
