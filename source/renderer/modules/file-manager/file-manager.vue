@@ -180,7 +180,6 @@
 </template>
 
 <script>
-/* global $ */
 // Please do not ask me why I have to explicitly use the "default" property
 // of some modules, but not others. The vue-loader is a mess when used with
 // ES6 CommonJS-modules in a exports/require-environment.
@@ -516,7 +515,8 @@ module.exports = {
       this.fileManagerResizeX = evt.clientX
       this.$el.style.width = (this.$el.offsetWidth - x) + 'px'
       // TODO: This is monkey-patched, emit regular events, like a grown up
-      $('#editor').css('left', this.$el.offsetWidth + 10 + 'px') // 10px resizer width
+      // 10px resizer width
+      document.getElementById('editor').style.left = this.$el.offsetWidth + 10 + 'px'
       if (this.isExpanded) {
         // We don't have a thin file manager, so resize the fileList accordingly
         this.$refs.fileList.style.width = (this.$el.offsetWidth - this.$refs.directories.offsetWidth) + 'px'

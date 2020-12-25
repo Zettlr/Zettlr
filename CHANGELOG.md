@@ -13,6 +13,7 @@
 - Removed jQuery from the stats dialog.
 - Removed jQuery from PDF preferences.
 - Removed jQuery from the CSS dialog.
+- Removed jQuery from the file manager.
 
 # 1.8.4
 
