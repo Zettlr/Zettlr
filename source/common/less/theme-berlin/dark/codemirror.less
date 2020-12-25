@@ -7,16 +7,19 @@
     .cm-comment, .cm-fenced-code, .cm-inline-math { color:var(--grey-1); }
     .cm-fenced-code {
         &.cm-comment    { color: var(--grey-3); }
-        &.cm-attribute  { color: var(--blue-3); }
-        &.cm-builtin    { color: var(--blue-3); } // Some modes use this for keywords
+        &.cm-attribute  { color: var(--blue-0); }
+        &.cm-builtin    { color: var(--blue-0); } // Some modes use this for keywords
         &.cm-string     { color: var(--green-0); }
         &.cm-string-2   { color: var(--gold-selection-dark); }
         &.cm-variable   { color: var(--grey-1); }
-        &.cm-variable-2 { color: var(--blue-0); }
+        &.cm-variable-2 {
+          color: var(--blue-0);
+          font-weight: bold;
+        }
         &.cm-keyword    { color: var(--purple-selection); }
         &.cm-property   { color: var(--orange-1); }
         &.cm-atom       { color: var(--green-selection-dark); }
-        &.cm-number     { color: var(--blue-3); }
+        &.cm-number     { color: var(--blue-0); }
         &.cm-positive   { color: var(--green-1); }
         &.cm-negative   { color: var(--red-2); }
     }
