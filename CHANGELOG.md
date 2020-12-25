@@ -12,6 +12,7 @@
 - Removed jQuery from the tag cloud dialog.
 - Removed jQuery from the stats dialog.
 - Removed jQuery from PDF preferences.
+- Removed jQuery from the CSS dialog.
 
 # 1.8.4
 

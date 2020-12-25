@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -42,13 +41,13 @@ class CustomCSS extends ZettlrDialog {
     })
 
     // Add a CSS mode option so that it becomes a "real" code editor
-    $('.dialog .CodeMirror').addClass('cm-css-mode')
+    document.querySelector('.dialog .CodeMirror').classList.add('cm-css-mode')
 
     // We need to refresh it afterwards to apply changed font sizes etc.
     this._cm.refresh()
 
     // Activate the sender
-    $('div.dialog #save').click((e) => {
+    document.querySelector('div.dialog #save').addEventListener('click', (e) => {
       ipcRenderer.send('css-provider', {
         command: 'set-custom-css',
         payload: this._cm.getValue()
