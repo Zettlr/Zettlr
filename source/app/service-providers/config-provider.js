@@ -156,6 +156,7 @@ module.exports = class ConfigProvider extends EventEmitter {
       },
       // Editor related stuff
       'editor': {
+        'autocompleteAcceptSpace': false, // Whether you can type spaces in autocorrect
         'autoCloseBrackets': true,
         'defaultSaveImagePath': '',
         'homeEndBehaviour': true, // If checked (true), CodeMirror goes to start/end of a paragraph, not a line.
@@ -588,6 +589,7 @@ module.exports = class ConfigProvider extends EventEmitter {
     * @return {Boolean} Whether or not the option was successfully set.
     */
   set (option, value) {
+    console.log(option, value)
     // Don't add non-existent options
     if (this.config.hasOwnProperty(option) && this._validate(option, value)) {
       // Do not set the option if it already has the requested value
@@ -600,6 +602,7 @@ module.exports = class ConfigProvider extends EventEmitter {
       // Broadcast to all open windows
       broadcastIpcMessage('config-provider', { command: 'update', payload: option })
       if (!this._bulkSetInProgress && global.hasOwnProperty('ipc')) global.ipc.send('config-update') // Notify renderer process
+      console.log(this.config)
       return true
     }
 

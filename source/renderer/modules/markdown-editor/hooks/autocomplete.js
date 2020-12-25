@@ -91,12 +91,16 @@ module.exports = {
         return
       }
 
+      // Determine if we accept spaces within the autocomplete
+      const space = Boolean(global.config.get('editor.autocompleteAcceptSpace'))
+
       // If we're here, we can begin an autocompletion
       autocompleteStart = Object.assign({}, cm.getCursor())
       currentDatabase = availableDatabases[autocompleteDatabase]
       cm.showHint({
         hint: hintFunction,
-        completeSingle: false
+        completeSingle: false,
+        closeCharacters: (space) ? /[()[\]{};:>,]/ : undefined
       }) // END showHint
     })
 
@@ -280,13 +284,13 @@ function hintFunction (cm, opt) {
       let linkPref = global.config.get('zkn.linkWithFilename')
       // Prepare the text to insert, removing the ID if found in the filename
       let text = completion.displayText
-      if (completion.id) {
+      if (completion.id !== '') {
         // The displayText in this regard contains <ID>: <filename>, so remove
         // the first part because we don't need it.
         text = text.substring(completion.id.length + 2).trim()
       }
 
-      if (completion.id && text.indexOf(completion.id) >= 0) {
+      if (completion.id !== '' && text.indexOf(completion.id) >= 0) {
         text = text.replace(completion.id, '').trim()
 
         // The file database has this id: filename thing which we need to

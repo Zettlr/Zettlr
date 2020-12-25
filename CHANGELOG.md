@@ -11,6 +11,7 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Fixed the other files's extension icons in the sidebar -- they now also display in dark mode.
 - Fixes to the stylesheets.
 - Fix too dark colours for some variables in CodeMirror.
+- Added a new option to allow spaces during autocompletion (of tags, citations, or internal links).
 
 ## Under the Hood
 

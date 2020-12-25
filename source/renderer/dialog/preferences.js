@@ -307,6 +307,7 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['display.renderHTags'] = (data.find(elem => elem.name === 'display.renderHTags') !== undefined)
     cfg['display.useFirstHeadings'] = (data.find(elem => elem.name === 'display.useFirstHeadings') !== undefined)
 
+    cfg['editor.autocompleteAcceptSpace'] = (data.find(elem => elem.name === 'editor.autocompleteAcceptSpace') !== undefined)
     cfg['editor.autoCloseBrackets'] = (data.find(elem => elem.name === 'editor.autoCloseBrackets') !== undefined)
     cfg['editor.homeEndBehaviour'] = (data.find(elem => elem.name === 'editor.homeEndBehaviour') !== undefined)
     cfg['editor.enableTableHelper'] = (data.find(elem => elem.name === 'editor.enableTableHelper') !== undefined)

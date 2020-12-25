@@ -403,6 +403,16 @@
             </div>
             <div class="cb-group">
               <label class="cb-toggle">
+                <input type="checkbox" name="editor.autocompleteAcceptSpace"
+                  value="yes" id="autocompleteAcceptSpace"
+                  {{#if editor.autocompleteAcceptSpace}}checked="checked" {{/if}}>
+                <div class="toggle"></div>
+              </label>
+              <label
+                for="autocompleteAcceptSpace">{{i18n "dialog.preferences.autocomplete_accept_space"}}</label>
+            </div>
+            <div class="cb-group">
+              <label class="cb-toggle">
                 <input type="checkbox" name="editor.homeEndBehaviour"
                   value="yes" id="homeEndBehaviour"
                   {{#if editor.homeEndBehaviour}}checked="checked" {{/if}}>
