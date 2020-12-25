@@ -57,7 +57,7 @@ module.exports = async function (options) {
     'toc': (options.pdf.toc && options.format === 'pdf') ? '--toc' : '',
     'tocdepth': (options.pdf.tocDepth) ? '--toc-depth=' + options.pdf.tocDepth : '',
     'bibliography': (global.config.get('export.cslLibrary')) ? `--bibliography "${bibliography}"` : '',
-    'cslstyle': (options.hasOwnProperty('cslStyle') && isFile(options.cslStyle)) ? `--csl + "${options.cslStyle}"` : '',
+    'cslstyle': (options.hasOwnProperty('cslStyle') && isFile(options.cslStyle)) ? `--citeproc --csl "${options.cslStyle}"` : '',
     'outfile': options.targetFile,
     'outflag': '-t ' + ((options.format === 'pdf') ? 'latex' : options.format),
     'format': options.format,
