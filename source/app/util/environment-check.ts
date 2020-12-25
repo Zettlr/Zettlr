@@ -69,7 +69,6 @@ export default async function environmentCheck (): Promise<void> {
     process.env.PANDOC_PATH = pandocPath
   } else {
     global.log.warning('[Application] Pandoc has not been bundled with this release. Falling back to system version instead.')
-    process.env.PANDOC_PATH = undefined
   }
 
   // Make sure the PATH property exists

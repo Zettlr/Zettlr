@@ -23,6 +23,8 @@ module.exports = async function (options) {
   // Pull in the pandoc command from config
   let command = global.config.get('pandocCommand')
 
+  const bundledPandoc = process.env.PANDOC_PATH !== undefined
+
   let hasPandoc = true
   let hasLaTeX = true
   try {
@@ -34,6 +36,10 @@ module.exports = async function (options) {
     await commandExists('xelatex')
   } catch (err) {
     hasLaTeX = false
+  }
+
+  if (bundledPandoc) {
+    hasPandoc = true
   }
 
   // This is the right time & place to check for
@@ -73,6 +79,13 @@ module.exports = async function (options) {
   // Recursively replace all flags in the command
   for (let key in pandocFlags) {
     command = command.replace(new RegExp('\\$' + key + '\\$', 'g'), pandocFlags[key])
+  }
+
+  if (bundledPandoc && command.substr(0, 6) === 'pandoc') {
+    command = process.env.PANDOC_PATH + command.substr(6)
+    global.log.info('[Export] Using bundled Pandoc instead of system-wide!')
+  } else {
+    global.log.warning('[Export] No bundled pandoc was found. Proceeding with system installation.')
   }
 
   // Finally, run the command.
