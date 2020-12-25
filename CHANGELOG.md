@@ -8,7 +8,8 @@
 
 - Removed jQuery UI from the dialog classes completely.
 - Removed jQuery from the editor controller.
-- Remove jQuery from the updater.
+- Removed jQuery from the updater.
+- Removed jQuery from the tag cloud dialog.
 
 # 1.8.4
 

@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -29,12 +28,14 @@ class TagCloud extends ZettlrDialog {
 
   postAct () {
     // Activate searches on click on the spans
-    $('span.tag').click((evt) => {
-      let elem = $(evt.target)
-      // TODO: Don't access the renderer element via window
-      window.renderer.autoSearch(`"${elem.attr('data-tag')}"`)
-      this.close()
-    })
+    const spans = document.querySelectorAll('span.tag')
+    for (const tag of spans) {
+      tag.addEventListener('click', (evt) => {
+        // TODO: Don't access the renderer element via window
+        window.renderer.autoSearch(`"${evt.target.getAttribute('data-tag')}"`)
+        this.close()
+      })
+    }
 
     const tagSearch = document.getElementById('filter-tags')
     tagSearch.addEventListener('keyup', (evt) => {
@@ -42,14 +43,15 @@ class TagCloud extends ZettlrDialog {
       let remainingTags = []
       document.querySelectorAll('.dialog .tag').forEach((element) => {
         if (element.textContent.toLowerCase().includes(tag)) {
-          $(element).show()
+          element.style.display = ''
           remainingTags.push(element.dataset.tag)
         } else {
-          $(element).hide()
+          element.style.display = 'none'
         }
       })
 
-      $('.dialog #copy-to-clipboard').attr('data-copy-clipboard', remainingTags.join('\n'))
+      document.querySelector('.dialog #copy-to-clipboard')
+        .setAttribute('data-copy-clipboard', remainingTags.join('\n'))
     })
   }
 }
