@@ -49,9 +49,15 @@ module.exports = async function makeImport (fileOrFolder, dirToImport, errorCall
         errorCallback(file.path, err.message)
       }
     } else if (file.knownFormat) {
+      let binary = 'pandoc'
+      if (process.env.PANDOC_PATH !== undefined) {
+        global.log.info(`[Import] Using the bundled Pandoc binary at ${process.env.PANDOC_PATH}`)
+        binary = process.env.PANDOC_PATH
+      }
+
       // The file is known -> let's import it!
       let newName = path.join(dirToImport.path, path.basename(file.path, path.extname(file.path))) + '.md'
-      let cmd = `pandoc -f ${file.knownFormat} -t markdown -o "${newName}" --wrap=none --atx-headers "${file.path}"`
+      let cmd = `${binary} -f ${file.knownFormat} -t markdown -o "${newName}" --wrap=none --atx-headers "${file.path}"`
 
       exec(cmd, { 'cwd': dirToImport.path }, (error, stdout, stderr) => {
         if (error && errorCallback) {
