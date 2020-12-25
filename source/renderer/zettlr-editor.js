@@ -1,4 +1,3 @@
-/* global $ */
 /**
 * @ignore
 * BEGIN HEADER
@@ -43,7 +42,7 @@ class ZettlrEditor {
     */
   constructor (parent) {
     this._renderer = parent
-    this._div = $('#editor')
+    this._div = document.getElementById('editor')
     this._openFiles = [] // Holds all open files in the editor
     this._currentHash = null // Needed for positions
     this._transientHashes = [] // An array of hashes that when opened should be opened transient
@@ -552,14 +551,16 @@ class ZettlrEditor {
   toggleDistractionFree () {
     if (this._editor.isFullscreen) {
       this._editor.isFullscreen = false
-      this._div.removeClass('fullscreen')
-      this._div.css('left', this._leftBeforeDistractionFree)
+      this._div.classList.remove('fullscreen')
+      this._div.style.left = this._leftBeforeDistractionFree
     } else {
       this._editor.isFullscreen = true
-      this._div.addClass('fullscreen')
-      this._leftBeforeDistractionFree = this._div.css('left')
-      if (this._leftBeforeDistractionFree === '0px') this._leftBeforeDistractionFree = ''
-      this._div.css('left', '') // Remove the "left" property
+      this._div.classList.add('fullscreen')
+      this._leftBeforeDistractionFree = this._div.style.left
+      if (this._leftBeforeDistractionFree === '0px') {
+        this._leftBeforeDistractionFree = ''
+      }
+      this._div.style.left = '' // Remove the "left" property
     }
   }
 

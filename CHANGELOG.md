@@ -7,6 +7,7 @@
 ## Under the Hood
 
 - Removed jQuery UI from the dialog classes completely.
+- Removed jQuery from the editor controller.
 
 # 1.8.4
 
