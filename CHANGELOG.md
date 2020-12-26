@@ -29,6 +29,7 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Removed jQuery from the file manager.
 - Removed jQuery from the Pomodoro counter.
 - Fix a bug in the error handler during update checks.
+- Removed the timeout on the dictionary provider, as the dictionaries are likely to be loaded prior either way.
 
 # 1.8.4
 

@@ -117,15 +117,13 @@ export default class DictionaryProvider extends EventEmitter {
       this._cacheAutoCorrectValues()
     })
 
-    // Afterwards, set the timeout for loading the dictionaries
-    setTimeout(() => {
-      this.reload()
-      this._cacheAutoCorrectValues()
-      this._loadUserDict() // On first start, load the user dictionary as well
-        .catch(err => {
-          global.log.error(`[Dictionary Provider] Could not read user dictionary: ${err.message as string}`, err)
-        })
-    }, 5000)
+    // Afterwards, load the first batch of dictionaries
+    this.reload()
+    this._cacheAutoCorrectValues()
+    this._loadUserDict() // On first start, load the user dictionary as well
+      .catch(err => {
+        global.log.error(`[Dictionary Provider] Could not read user dictionary: ${err.message as string}`, err)
+      })
   }
 
   /**
