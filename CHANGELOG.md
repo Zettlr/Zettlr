@@ -16,6 +16,7 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Added a configuration option to programmatically set the editor's base font size. Additionally, the zooming now works reliably. (This setting is independent of the base font size above.)
 - Fixed a race condition in the dictionary provider that would render spellchecking unfunctional in certain edge cases.
 - Values from the AutoCorrect replacement table will now also be indicated as correct, so you don't have to add them to your user dictionary anymore.
+- Revamped the about dialog's other project tab.
 
 ## Under the Hood
 

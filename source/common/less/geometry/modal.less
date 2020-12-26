@@ -424,8 +424,38 @@
           white-space: nowrap;
         }
       }
+
       [role="tabpanel"] {
         overflow: auto; // Enable scrolling, if necessary
+      }
+    }
+
+    // Project boxes on the about panel
+    div.project-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      overflow: hidden;
+      padding: 10px;
+
+      div.project-box {
+        flex: 1;
+        border: 1px solid transparent;
+        margin: 10px;
+        padding: 10px;
+        cursor: pointer;
+        transition: 0.2s all ease;
+        // width: 200px doesn't work as expected in flexbox
+        min-width: 200px;
+        max-width: 200px;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+
+        h4.project-name, p.project-description {
+          margin: 0;
+        }
       }
     }
 
