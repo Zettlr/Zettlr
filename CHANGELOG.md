@@ -28,6 +28,7 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Removed jQuery from the CSS dialog.
 - Removed jQuery from the file manager.
 - Removed jQuery from the Pomodoro counter.
+- Fix a bug in the error handler during update checks.
 
 # 1.8.4
 
