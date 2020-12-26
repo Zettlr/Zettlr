@@ -14,6 +14,8 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Added a new option to allow spaces during autocompletion (of tags, citations, or internal links).
 - Added a new CSS variable that allows you to set the font-size of the whole application, `--base-font-size`. You can set it in your custom CSS to increase or decrease the overall font-size of everything persistently. Remember to apply it to the `:root`-pseudo element.
 - Added a configuration option to programmatically set the editor's base font size. Additionally, the zooming now works reliably. (This setting is independent of the base font size above.)
+- Fixed a race condition in the dictionary provider that would render spellchecking unfunctional in certain edge cases.
+- Values from the AutoCorrect replacement table will now also be indicated as correct, so you don't have to add them to your user dictionary anymore.
 
 ## Under the Hood
 
