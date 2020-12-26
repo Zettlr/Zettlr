@@ -69,8 +69,9 @@ class ZettlrEditor {
     this._monospaceWidth = 0
 
     global.editor.announceTransientFile = (hash) => {
-      if (this._openFiles.find(e => e.fileObject.hash === hash)) return
-      this._transientHashes.push(hash)
+      if (this._openFiles.find(e => e.fileObject.hash === hash) === undefined) {
+        this._transientHashes.push(hash)
+      }
     }
 
     this._editor = new MarkdownEditor('cm-text')
@@ -651,9 +652,14 @@ class ZettlrEditor {
     setTimeout(() => {
       // Why wrap it in a timeout? Because this specific setting requires the
       // instance to be rendered before we can actually set that thing.
-      // this._cm.setOption('direction', global.config.get('editor.direction'))
-      // this._cm.setOption('rtlMoveVisually', global.config.get('editor.rtlMoveVisually'))
+      this._editor.setOptions({
+        direction: global.config.get('editor.direction'),
+        rtlMoveVisually: global.config.get('editor.rtlMoveVisually')
+      })
     }, 100)
+
+    // Finally, set the font size of the editor div
+    this._div.style.fontSize = global.config.get('editor.fontSize') + 'px'
 
     return this
   }

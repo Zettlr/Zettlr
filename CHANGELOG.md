@@ -12,6 +12,8 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Fixes to the stylesheets.
 - Fix too dark colours for some variables in CodeMirror.
 - Added a new option to allow spaces during autocompletion (of tags, citations, or internal links).
+- Added a new CSS variable that allows you to set the font-size of the whole application, `--base-font-size`. You can set it in your custom CSS to increase or decrease the overall font-size of everything persistently. Remember to apply it to the `:root`-pseudo element.
+- Added a configuration option to programmatically set the editor's base font size. Additionally, the zooming now works reliably. (This setting is independent of the base font size above.)
 
 ## Under the Hood
 

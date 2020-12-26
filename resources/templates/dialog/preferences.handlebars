@@ -357,12 +357,23 @@
             <input type="text" name="editor.defaultSaveImagePath"
               id="editor.defaultSaveImagePath"
               value="{{ editor.defaultSaveImagePath }}">
-            <label for="editor.indentUnit">
-              {{i18n "dialog.preferences.indent_unit"}}
-            </label>
-            <input type="number" min="1" max="12" class="inline"
-              name="editor.indentUnit" id="editor.indentUnit"
-              value="{{ editor.indentUnit }}">
+
+            <div class="box-container">
+              <div class="box-left">
+                <label for="editor.indentUnit">
+                  {{i18n "dialog.preferences.indent_unit"}}
+                </label>
+                <input type="number" min="1" max="12" name="editor.indentUnit"
+                  id="editor.indentUnit" value="{{ editor.indentUnit }}"><br>
+              </div>
+              <div class="box-right">
+                <label for="editor.fontSize">
+                  {{i18n "dialog.preferences.editor_font_size"}} (px)
+                </label>
+                <input type="number" min="6" max="96" name="editor.fontSize"
+                  id="editor.fontSize" value="{{ editor.fontSize }}">
+              </div>
+            </div>
             <hr>
             {{i18n "dialog.preferences.readability_algorithm"}}
             <select name="editor.readabilityAlgorithm">
