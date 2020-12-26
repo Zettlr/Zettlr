@@ -1,57 +1,112 @@
-% Barebone template for use with Zettlr exporting engine
+% XeLaTeX template for Lackadaisical\Zettlr
+% Based on the pandoc default template.
 
-% We have to use KOMA classes (scrartcl instead of article and scrreprt instead of report as well as scrbook instead of book)
-% More info: https://ctan.org/pkg/koma-script?lang=de
+% Variables/Metadata:
+% block-subheadings - \paragraph and \subparagraph headings not typset as inline.
+% draft: Enable draft mode for document class & insert 'DRAFT' watermark.
+% font:
+%   fontsize - Base font size.
+%   mainfont - Body font
+%   sansfont - Heading font
+%   monofont - Monospaced font
+% line-spacing - The line spacing. 1.2 = 120%
+% links-as-notes - Turns hyperlinks into footnotes instead of making them clickable.
+% margin - Set all margins (cm, in, pt)
+% *-margin - Set the value (cm, in, pt) for:
+%   top-margin
+%   bottom-margin
+%   left-margin
+%   right-margin
+%
+% page-size - The size of the paper, e.g. a4 (default)
+% title-page - Generate a title page (boolean - if passed at all title page will generate)
+% toc-depth - How many heading levels should the TOC show?
+% Can be a number or a koma script variable; https://mirror.aarnet.edu.au/pub/CTAN/macros/latex/contrib/koma-script/doc/scrguien.pdf#desc%3Amaincls.counter.tocdepth
+
+% We use KOMA classes
+% More info: https://ctan.org/pkg/koma-script?lang=en
+
+\PassOptionsToPackage{table,dvipsnames,svgnames*,x11names*}{xcolor}
+
 \documentclass[
-$FONT_SIZE$,
+$if(page-size)$
+  $page-size$paper,
+$else$
+  a4paper,
+$endif$
+$if(fontsize)$
+  $font-size$,
+$else$
+  10pt,
+$endif$
 $if(lang)$
   $babel-lang$,
 $endif$
+$if(draft)$
+  draft,
+$endif$
+  parskip=half
 ]{scrartcl}
+
+%
+% Early package loading
+%
 
 % The following packages are needed for the combined use of Pandoc and XeTeX engine
 \usepackage{fontspec,xltxtra,xunicode}
 
-% These directives are necessary for Pandoc to correctly set the language of the
-% document. If the user uses XeLaTeX (the default for Zettlr), it will use
-% polyglossia, else it will use babel. We've simply copied that from the default
-% template -- thanks to the Pandoc community at this point!
-$if(lang)$
-\ifxetex
-  \usepackage{polyglossia}
-  \setmainlanguage[$polyglossia-lang.options$]{$polyglossia-lang.name$}
-$for(polyglossia-otherlangs)$
-  \setotherlanguage[$polyglossia-otherlangs.options$]{$polyglossia-otherlangs.name$}
-$endfor$
-\else
-  \usepackage[shorthands=off,$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
-\fi
-$endif$
+% Calc is needed to compute the image width (to prevent up-scaling of small images)
+\usepackage{xcolor, graphics, calc}
 
-% Captions for tables and images
-\usepackage{caption}
-\captionsetup{format=plain, font=small, labelfont=bf}
-
-% This package is needed for better rendering of images (including captions)
-\usepackage{graphicx}
+% Define any colours
+\definecolor{lightgrey}{HTML}{D3D3D3}
 
 % These packages are needed by pandoc for certain special glyphs, such as the
 % \square symbol for checkboxes.
 \usepackage{amssymb,amsmath}
 
-% Calc is needed to compute the image width (to prevent up-scaling of small images)
-\usepackage{calc}
+% Captions for tables and images
+\usepackage[format=plain, font=small, labelfont=bf]{caption}
+
+% This package is needed for better rendering of images (including captions)
+\usepackage{graphicx}
 
 % ulem is needed for underlining and strikethrough text commands.
 % the option "normalem" is needed to preserve _italics_. Without the option,
 % _italics_ will become underlines, which is not desirable.
 \usepackage[normalem]{ulem}
 
+% The nowidow package attempts to prevent line breaks in the middle of paragraphs and lists.
+\usepackage[defaultlines=4,all]{nowidow}
+
+% These directives are necessary for Pandoc to correctly set the language of the
+% document.
+$if(lang)$
+  \usepackage{polyglossia}
+  \setmainlanguage[$polyglossia-lang.options$]{$polyglossia-lang.name$}
+  $for(polyglossia-otherlangs)$
+    \setotherlanguage[$polyglossia-otherlangs.options$]{$polyglossia-otherlangs.name$}
+  $endfor$
+$endif$
+
+%
+% Configure page margins
+%
+
+\usepackage{geometry}
+% Additional options for geometry can be found here: http://texdoc.net/texmf-dist/doc/latex/geometry/geometry.
+\geometry{verbose,$if(margins)$margin=$margin$$else$margin=2cm$endif$$if(top-margin)$,tmargin=$top-margin$$endif$$if(bottom-margin)$,bmargin=$bottom-margin$$endif$$if(left-margin)$,lmargin=$left_margin$$endif$$if(right-margin)$,rmargin=$right-margin$$endif$}
+
+%
+% Image Handling
+%
+
 % Image scaling code from pandoc default.latex template
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
 \makeatother
+
 % Scale images if necessary, so that they will not overflow the page
 % margins by default, and it is still possible to overwrite the defaults
 % using explicit options in \includegraphics[width, height, ...]{}
@@ -63,31 +118,137 @@ $endif$
 \usepackage{float}
 \floatplacement{figure}{H} % ensure default position as H (exactly where the figure is in the text)
 
+<<<<<<< HEAD
 % Needed for pandoc's table generation
 \usepackage{longtable, booktabs, array}
+=======
+%
+% Required for pandoc to generate tables.
+%
 
-% Optional packages that Zettlr makes use of
-% fontspec is used to set the different fonts to the user's whishes
-\setmainfont{$MAIN_FONT$}
-\setsansfont{$SANS_FONT$}
+$if(tables)$
+  \usepackage{longtable,booktabs,array}
+  % Correct order of tables after \paragraph or \subparagraph
+  \usepackage{etoolbox}
+  \makeatletter
+  \patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+  \makeatother
+  % Allow footnotes in longtable head/foot
+  \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+  \makesavenoteenv{longtable}
+$endif$
+>>>>>>> 252084d5... First pass at template. Works when appropriate variables are passed via frontmatter.
 
-% With geometry we can let the user decide on the margin
-\usepackage{geometry}
-% Additional options for geometry can be found here: http://texdoc.net/texmf-dist/doc/latex/geometry/geometry.pdf
-\geometry{verbose,$PAPER_TYPE$,tmargin=$TOP_MARGIN$,bmargin=$BOTTOM_MARGIN$,lmargin=$LEFT_MARGIN$,rmargin=$RIGHT_MARGIN$}
+$if(table-row-highlighting)$
+  \let\oldtabular\tabular
+  \let\endoldtabular\endtabular
+  \renewenvironment{tabular}{%
+    \rowcolors{2}{}{lightgrey}
+    \oldtabular
+  }{\endoldtabular}
+$endif$
 
-% PAGE NUMBERING OPTIONS: https://de.sharelatex.com/learn/Page_numbering
-\pagenumbering{$PAGE_NUMBERING$}
+%
+% Configure Fonts
+%
+
+% fontspec provides an easy interface to XeTeX's font configuration.
+
+$if(monofont)$
+  \setmonofont{$monofont$}
+$else$
+  \setmonofont{Inconsolata}[Scale=MatchLowercase]
+$endif$
+
+\defaultfontfeatures{ Ligatures=TeX } % This is actually a default option for main and sans font, but applies to all fonts set after this point.
+$if(mainfont)$
+  \setmainfont{$mainfont$}
+$else$
+  \setmainfont[%
+    BoldFont = Noto Sans Bold,
+    ItalicFont = Noto Sans Italic,
+    BoldItalicFont = Noto Sans Bold Italic
+  ]{Noto Sans}
+    % We can use ucharclasses to setup font transitions based on unicode blocks.
+  \usepackage[CJK, Latin, Mathematics, Malayalam, Thai, Sinhala, Symbols]{ucharclasses}
+  \newfontfamily{\defaultfont}{Noto Sans}[%
+    BoldFont = Noto Sans Bold,
+    ItalicFont = Noto Sans Italic,
+    BoldItalicFont = Noto Sans Bold Italic
+  ]
+
+  \newfontfamily{\cjkfont}{NotoSansCJK-Regular.ttc}
+  \newfontfamily{\japanesefont}{NotoSansCJK-Regular.ttc}
+  \newfontfamily{\latinfont}{Noto Sans}
+  \newfontfamily{\malayalamfont}{Noto Sans Malayalam}
+  \newfontfamily{\sinhalafont}{Noto Sans Sinhala}
+  \newfontfamily{\thaifont}{Noto Sans Thai}
+  \newfontfamily{\unifiedCJKfont}{NotoSansCJK-Regular.ttc}
+  \newfontfamily{\mathsfont}{Noto Sans Math}
+  \newfontfamily{\symbolfont}{Noto Sans Symbols}
+
+
+  \setTransitionsForCJK{\cjkfont}{\defaultfont}
+  \setTransitionsForJapanese{\japanesefont}{\defaultfont}
+  \setTransitionsForMathematics{\mathsfont}{\defaultfont}
+  \setTransitionsForSymbols{\symbolfont}{\defaultfont}
+
+  \setTransitionFrom{Malayalam}{\defaultfont}
+  \setTransitionFrom{Sinhala}{\defaultfont}
+  \setTransitionFrom{Thai}{\defaultfont}
+  \setTransitionTo{Malayalam}{\malayalamfont}
+  \setTransitionTo{Sinhala}{\sinhalafont}
+  \setTransitionTo{Thai}{\thaifont}
+$endif$
+
+$if(sansfont)$
+  \setsansfont{$sansfont$}
+$else$
+  \setsansfont{Liberation Sans}
+$endif$
+
+
+%
+% Setup page content
+%
 
 % Line spacing
 \usepackage{setspace}
-
 % Can be a multiple of 1 (i.e. 1.5 for 150 percent)
-\setstretch{$LINE_SPACING$}
+$if(line-spacing)$
+  \setstretch{$line-spacing$}
+$else$
+  \setstretch{1.2}
+$endif$
 
-% PDF metadata generated by Zettlr or given by the user, also some other URL
-% options (breaklinks breaks URLs so they aren't ugly)
-\usepackage[hyphens]{url} % This package breaks links even better
+$if(links-as-notes)$
+% Make links footnotes instead of hotlinks:
+\DeclareRobustCommand{\href}[2]{#2\footnote{\url{#1}}}
+$endif$
+
+$if(block-headings)$
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+$endif$
+
+% The following commands must be provided for Pandoc to work correctly.
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+%
+% Configure PDF metadata
+%
+
+% hypens breaks URLs so they aren't ugly
+\usepackage[hyphens]{url}
 \usepackage{hyperref}
 \hypersetup{
 unicode=true,
@@ -95,27 +256,25 @@ breaklinks=true,
 colorlinks=true,
 linkcolor=[rgb]{0.00,0.00,0.00},
 urlcolor=[rgb]{0.00,0.00,0.00},
-pdftitle={$PDF_TITLE$},
-pdfsubject={$PDF_SUBJECT$},
-pdfauthor={$PDF_AUTHOR$},
-pdfkeywords={$PDF_KEYWORDS$},
+pdftitle={$title$},
+pdfsubject={$subject$},
+pdfauthor={$author$},
+pdfkeywords={$keywords$},
 pdfproducer={Zettlr with Pandoc and XeLaTeX},
 pdfborder={0 0 0}
 }
 
-% Setup pandoc code highlighting
-% pandoc uses an if statement, but until we have code
-% to enable or disable highlighting we'll ignore that.
+%
+% Setup pandoc code highlighting environment
+%
 
-$highlighting-macros$
+$if(highlighting-macros)$
+  $highlighting-macros$
+$endif$
 
-
-% Set the date (either \today or a date from the frontmatter)
-\date{$PDF_DATE$}
-
-% The following commands must be provided for Pandoc to work correctly.
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+%
+% References
+%
 
 % The following commands are used by Pandoc if a CSL bibliography is present
 % to create proper indentation, especially for styles with hanging indentation.
@@ -142,16 +301,89 @@ $if(csl-refs)$
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 $endif$
 
-\title{$PDF_TITLE$}
-\author{$PDF_AUTHOR$}
+$if(csquotes)$
+\usepackage{csquotes}
+$endif$
+
+%
+% Header and Footer
+%
+\usepackage{pageslts}
+\addtokomafont{pagenumber}{\color{lightgrey}}
+\renewcommand{\pagemark}{} % Suppress default page mark.
+
+% Koma-Script safe header and footer options. See scrlayer documentation for more information.
+\usepackage{scrlayer-scrpage}
+\refoot*{\begin{flushright}\color{lightgrey}\theCurrentPage of \lastpageref*{VeryLastPage}\end{flushright}}
+\rofoot*{\begin{flushright}\color{lightgrey}\theCurrentPage of \lastpageref*{VeryLastPage}\end{flushright}}
+
+%
+% Title Page
+%
+
+% KOMA classes use a table to align the title page content.
+% We can patch it to be right-aligned rather than centred.
+\usepackage{xpatch}
+\makeatletter
+\xpatchcmd{\@maketitle}{\begin{center}}{\begin{flushright}}{}{}
+\xpatchcmd{\@maketitle}{\end{center}}{\end{flushright}}{}{}
+\xpatchcmd{\@maketitle}{\begin{tabular}[t]{c}}{\begin{tabular}[t]{@{}r@{}}}{}{}
+\makeatother
+
+%
+% Set Variables
+%
+
+$if(title)$
+  \title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
+$endif$
+
+$if(subtitle)$
+  \subtitle{$subtitle$}
+$endif$
+
+\author{$for(author)$$author$$sep$ \and $endfor$}
+
+$if(logo)$
+  \logo{\includegraphics{$logo$}}
+$endif$
+
+% Set the date (either \today or a date from the frontmatter)
+$if(date)$
+  \date{$date$}
+$else$
+  \date{\today}
+$endif$
 
 \begin{document}
+% PAGE NUMBERING OPTIONS: https://de.sharelatex.com/learn/Page_numbering
+$if(page-numbering)$
+  \pagenumbering{$page-numbering$}
+$else$
+  \pagenumbering{arabic}
+$endif$
 
-% Title page?
-$TITLEPAGE$
+$if(title-page)$
+  \maketitle
+  \pagebreak
+$endif$
 
 % Generate a table of contents?
-$GENERATE_TOC$
+$if(toc)$
+  $if(toc-title)$
+    \renewcommand*\contentsname{$toc-title$}
+  $endif$
+$else$
+{
+  $if(colorlinks)$
+    \hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
+  $endif$
+  \setcounter{tocdepth}{$toc-depth$}
+  \tableofcontents
+  }
+  \pagebreak
+$endif$
+
 
 % LIST OF TABLES?
 $if(lot)$
