@@ -93,7 +93,7 @@ $if(draft)$
 \newcommand\watermark[1]{
   \makebox[0pt][c]{
     \scalebox{3.1}{% scaling
-      \rotatebox[origin=bc]{45}{% rotating
+      \rotatebox[origin=bc]{45}{% rotation
         \Huge\bfseries\textcolor{lightgrey}{% font settings
           \watermarktext}{}
   }}}}
@@ -102,10 +102,13 @@ $if(draft)$
   background,
   %textarea,
   mode=picture,
-  contents={\putC{\watermark{\the\value{page}}}}
+  contents={\putC{\watermark}}
 ]{watermark}
 \AddLayersToPageStyle{@everystyle@}{watermark}
 $endif$
+
+% Lets us show date and time information in local format (if lang is set)
+\usepackage[calc,useregional,showdow]{datetime2}
 
 % These directives are necessary for Pandoc to correctly set the language of the
 % document.
@@ -386,6 +389,19 @@ $endif$
 \xpatchcmd{\@maketitle}{\begin{tabular}[t]{c}}{\begin{tabular}[t]{@{}r@{}}}{}{}
 \makeatother
 
+$if(title-page-background)$
+  \usepackage{eso-pic}
+  \newcommand\BackgroundPic{%
+    \put(0,0){%
+    \parbox[b][\paperheight]{\paperwidth}{%
+      \vfill
+        \centering
+        \includegraphics[width=\paperwidth,height=\paperheight,%
+  keepaspectratio]{$title-page-background$}%
+  \vfill
+  }}}
+$endif$
+
 %
 % Set Variables
 %
@@ -420,6 +436,9 @@ $else$
 $endif$
 
 $if(title-page)$
+  $if(title-page-background)$
+    \AddToShipoutPicture*{\includegraphics[width=\paperwidth,height=\paperheight]{$title-page-background$}} % XeLatex does not like being passed a string here, but hardcoding this value into Zettlr right now is also bad.
+  $endif$
   \maketitle
   \pagebreak
 $endif$
