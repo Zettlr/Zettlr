@@ -121,10 +121,6 @@ $endif$
 \usepackage{float}
 \floatplacement{figure}{H} % ensure default position as H (exactly where the figure is in the text)
 
-<<<<<<< HEAD
-% Needed for pandoc's table generation
-\usepackage{longtable, booktabs, array}
-=======
 %
 % Required for pandoc to generate tables.
 %
@@ -140,7 +136,6 @@ $if(tables)$
   \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
   \makesavenoteenv{longtable}
 $endif$
->>>>>>> 252084d5... First pass at template. Works when appropriate variables are passed via frontmatter.
 
 $if(table-row-highlighting)$
   \let\oldtabular\tabular
@@ -312,13 +307,13 @@ $endif$
 % Header and Footer
 %
 \usepackage{pageslts}
-\addtokomafont{pagenumber}{\color{lightgrey}}
-\renewcommand{\pagemark}{} % Suppress default page mark.
+\renewcommand{\pagemark}{\begin{flushright}\color{lightgrey}\theCurrentPage of \lastpageref*{VeryLastPage}\end{flushright}} % Suppress default page mark.
 
 % Koma-Script safe header and footer options. See scrlayer documentation for more information.
 \usepackage{scrlayer-scrpage}
-\refoot*{\begin{flushright}\color{lightgrey}\theCurrentPage of \lastpageref*{VeryLastPage}\end{flushright}}
-\rofoot*{\begin{flushright}\color{lightgrey}\theCurrentPage of \lastpageref*{VeryLastPage}\end{flushright}}
+\clearpairofpagestyles
+\refoot{\begin{flushright}\color{lightgrey}\theCurrentPage of \lastpageref*{VeryLastPage}\end{flushright}}
+\rofoot{\begin{flushright}\color{lightgrey}\theCurrentPage of \lastpageref*{VeryLastPage}\end{flushright}}
 
 %
 % Title Page
@@ -376,11 +371,11 @@ $if(toc)$
   $if(toc-title)$
     \renewcommand*\contentsname{$toc-title$}
   $endif$
-$else$
-{
-  $if(colorlinks)$
-    \hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
-  $endif$
+  $else$
+  {
+    $if(colorlinks)$
+      \hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
+    $endif$
   \setcounter{tocdepth}{$toc-depth$}
   \tableofcontents
   }
