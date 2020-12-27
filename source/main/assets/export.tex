@@ -112,9 +112,12 @@ $endif$
 % using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 
-% Now we also have to make sure that the figures Pandoc inserts are positioned
-% approximately where they are at. Therefore we have to overwrite the
-% \begin{figure} command a little bit by using the float package:
+% We use the float package to configure figure placement.
+% while pandoc uses \def\fps@figure{htbp} where h=here t=top b=bottom p=somewhere on page
+% The float package attempts to position the float where we've put it, rather than where LaTeX thinks it should go.
+% Available float styles \floatstyle: plain (default), plaintop, bottom, ruled
+% For more info: https://mirror.aarnet.edu.au/pub/CTAN/macros/latex/contrib/float/float.pdf
+
 \usepackage{float}
 \floatplacement{figure}{H} % ensure default position as H (exactly where the figure is in the text)
 
