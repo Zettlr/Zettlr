@@ -20,6 +20,7 @@
 %
 % page-size - The size of the paper, e.g. a4 (default)
 % title-page - Generate a title page (boolean - if passed at all title page will generate)
+% toc - Generate a TOC?
 % toc-depth - How many heading levels should the TOC show?
 % Can be a number or a koma script variable; https://mirror.aarnet.edu.au/pub/CTAN/macros/latex/contrib/koma-script/doc/scrguien.pdf#desc%3Amaincls.counter.tocdepth
 
@@ -30,20 +31,20 @@
 
 \documentclass[
 $if(page-size)$
-  $page-size$paper,
+  paper=$page-size$,
 $else$
-  a4paper,
+  paper=a4,
 $endif$
 $if(fontsize)$
-  $font-size$,
+  fontsize=$font-size$pt,
 $else$
-  10pt,
+  fontsize=10pt,
 $endif$
 $if(lang)$
   $babel-lang$,
 $endif$
 $if(draft)$
-  draft,
+  draft=true,
 $endif$
   parskip=half
 ]{scrartcl}
@@ -79,8 +80,36 @@ $endif$
 % The nowidow package attempts to prevent line breaks in the middle of paragraphs and lists.
 \usepackage[defaultlines=4,all]{nowidow}
 
+% Enable character protrusion.
+\usepackage{microtype}
+
+% Control of page styles (incl header and footer)
+\usepackage{scrlayer-scrpage}
+
+$if(draft)$
+% Create a custom watermark
+\newcommand\watermarktext{DRAFT}
+
+\newcommand\watermark[1]{
+  \makebox[0pt][c]{
+    \scalebox{3.1}{% scaling
+      \rotatebox[origin=bc]{45}{% rotating
+        \Huge\bfseries\textcolor{lightgrey}{% font settings
+          \watermarktext}{}
+  }}}}
+
+\DeclareLayer[
+  background,
+  %textarea,
+  mode=picture,
+  contents={\putC{\watermark{\the\value{page}}}}
+]{watermark}
+\AddLayersToPageStyle{@everystyle@}{watermark}
+$endif$
+
 % These directives are necessary for Pandoc to correctly set the language of the
 % document.
+% Polyglossia changes the way that some other packages (e.g. bidi) work, so should be loaded late.
 $if(lang)$
   \usepackage{polyglossia}
   \setmainlanguage[$polyglossia-lang.options$]{$polyglossia-lang.name$}
@@ -141,9 +170,16 @@ $if(table-row-highlighting)$
   \let\oldtabular\tabular
   \let\endoldtabular\endtabular
   \renewenvironment{tabular}{%
-    \rowcolors{2}{}{lightgrey}
+    \rowcolors{2}{lightgrey}{}
     \oldtabular
   }{\endoldtabular}
+
+  \let\oldlongtable\longtable
+  \let\endoldlongtable\endlongtable
+  \renewenvironment{longtable}{%
+    \rowcolors{2}{lightgray}{}
+    \oldlongtable
+  }{\endoldlongtable}
 $endif$
 
 %
@@ -236,7 +272,29 @@ $if(block-headings)$
 \fi
 $endif$
 
+$if(numbersections)$
+  \setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+$else$
+  \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+$endif$
+
+$if(pagestyle)$
+  \pagestyle{$pagestyle$}
+$endif$
+
+%
+% This is where the values can be inserted into the template from metadata.
+%
+
+$for(header-includes)$
+  $header-includes$
+$endfor$
+
+%
 % The following commands must be provided for Pandoc to work correctly.
+%
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
@@ -307,13 +365,13 @@ $endif$
 % Header and Footer
 %
 \usepackage{pageslts}
-\renewcommand{\pagemark}{\begin{flushright}\color{lightgrey}\theCurrentPage of \lastpageref*{VeryLastPage}\end{flushright}} % Suppress default page mark.
+\renewcommand{\pagemark}{} % Suppress default page mark.
 
 % Koma-Script safe header and footer options. See scrlayer documentation for more information.
-\usepackage{scrlayer-scrpage}
 \clearpairofpagestyles
-\refoot{\begin{flushright}\color{lightgrey}\theCurrentPage of \lastpageref*{VeryLastPage}\end{flushright}}
-\rofoot{\begin{flushright}\color{lightgrey}\theCurrentPage of \lastpageref*{VeryLastPage}\end{flushright}}
+\setkomafont{pageheadfoot}{\color{lightgrey}\small}
+\refoot{\theCurrentPage  of \lastpageref*{VeryLastPage}}
+\rofoot{\theCurrentPage  of \lastpageref*{VeryLastPage}}
 
 %
 % Title Page
@@ -371,11 +429,11 @@ $if(toc)$
   $if(toc-title)$
     \renewcommand*\contentsname{$toc-title$}
   $endif$
-  $else$
-  {
-    $if(colorlinks)$
-      \hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
-    $endif$
+$else$
+{
+  $if(colorlinks)$
+    \hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
+  $endif$
   \setcounter{tocdepth}{$toc-depth$}
   \tableofcontents
   }
