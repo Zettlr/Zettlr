@@ -256,7 +256,7 @@ export default class UpdateProvider {
         // Filter out the assets unusable on the current platform.
         switch (process.platform) {
           case 'darwin':
-            // We provide a DMG image for macOS
+            // We provide a DMG image for macOS (x64 and arm64)
             return /\.dmg$/.test(asset.name)
           case 'win32':
             // We provide EXE-installers for both ARM and intel

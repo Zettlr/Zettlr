@@ -1,8 +1,12 @@
 # 1.8.5
 
+## Apple Silicon Support
+
+This version provides native Apple Silicon/M1 support, a.k.a. the darwin/arm64 architecture. Make sure to download the correct update file (either x64 for Intel-based Macs or arm64 for the new Apple Silicon chips).
+
 ## A Note to Apple Silicon users
 
-If you possess one of the new Apple devices sporting Apple's M1 chip, please see whether or not the application is able to run the built-in pandoc (which is still compiled for 64 bit). If your bundled exporter fails, please report an issue. We are also planning to ship native M1 builds as well soon, and this might also cause some issues, so please keep an eye out for such errors.
+If you possess one of the new Apple devices sporting Apple's M1 chip, please see whether or not the application is able to run the built-in pandoc (which is still compiled for 64 bit). If your bundled exporter fails, please report an issue.
 
 ## GUI and Functionality
 

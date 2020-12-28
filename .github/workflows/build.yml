@@ -126,16 +126,36 @@ jobs:
           MACOS_CERT_PASS: ${{ secrets.MACOS_CERT_PASS }}
       # This step also signs and notarizes the app. NOTE that forge does this,
       # as we shall not notarize and/or sign the resulting DMG file as well!
-      - name: Build macOS DMG file
-        run: yarn release:mac
+      - name: Build macOS DMG file (x64)
+        run: yarn release:mac-x64
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
-      - name: Cache macOS release
+      - name: Rename x64 artifact
+        # We need to rename the artifact prior to uploading so that the x64 and
+        # arm64 releases do not overwrite themselves.
+        run: mv ./release/Zettlr-${{steps.ref.outputs.version}}.dmg ./release/Zettlr-${{steps.ref.outputs.version}}-x64.dmg
+      # Now the same procedure for arm64: First build ...
+      - name: Build macOS DMG file (arm64)
+        run: yarn release:mac-arm
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
+      # ... then rename
+      - name: Rename arm64 artifact
+        run: mv ./release/Zettlr-${{steps.ref.outputs.version}}.dmg ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
+      # Finally upload both
+      - name: Cache macOS release (x64)
         uses: actions/upload-artifact@v1
         with:
-          name: Zettlr-${{steps.ref.outputs.version}}.dmg
-          path: ./release/Zettlr-${{steps.ref.outputs.version}}.dmg
+          name: Zettlr-${{steps.ref.outputs.version}}-x64.dmg
+          path: ./release/Zettlr-${{steps.ref.outputs.version}}-x64.dmg
+      # And now the same for arm64
+      - name: Cache macOS release (arm64)
+        uses: actions/upload-artifact@v1
+        with:
+          name: Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
+          path: ./release/Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                                                                           #
@@ -217,10 +237,15 @@ jobs:
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-arm64.exe
           path: .
-      - name: Download macOS image
+      - name: Download macOS image (x64)
         uses: actions/download-artifact@v1
         with:
-          name: Zettlr-${{steps.ref.outputs.version}}.dmg
+          name: Zettlr-${{steps.ref.outputs.version}}-x64.dmg
+          path: .
+      - name: Download macOS image (arm64)
+        uses: actions/download-artifact@v1
+        with:
+          name: Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
           path: .
       - name: Download .deb-installer
         uses: actions/download-artifact@v1
@@ -248,7 +273,8 @@ jobs:
         run: |
           sha256sum "Zettlr-${{steps.ref.outputs.version}}.exe" > "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.exe" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{steps.ref.outputs.version}}.dmg" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{steps.ref.outputs.version}}-x64.dmg" >> "SHA256SUMS.txt"
+          sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.dmg" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-amd64.deb" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-i386.AppImage" >> "SHA256SUMS.txt"
@@ -286,14 +312,23 @@ jobs:
           asset_path: ./Zettlr-${{steps.ref.outputs.version}}-arm64.exe
           asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.exe
           asset_content_type: application/x-msdownload
-      - name: Upload macOS image
+      - name: Upload macOS image (x64)
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{steps.ref.outputs.version}}.dmg
-          asset_name: Zettlr-${{steps.ref.outputs.version}}.dmg
+          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-x64.dmg
+          asset_name: Zettlr-${{steps.ref.outputs.version}}-x64.dmg
+          asset_content_type: application/octet-stream
+      - name: Upload macOS image (arm64)
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
+          asset_name: Zettlr-${{steps.ref.outputs.version}}-arm64.dmg
           asset_content_type: application/octet-stream
       - name: Upload .deb installer
         uses: actions/upload-release-asset@v1.0.1
