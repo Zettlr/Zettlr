@@ -20,7 +20,7 @@
     v-on:mousemove="handleMouseOver"
     v-on:mouseleave="handleMouseOver"
     v-on:dragover="handleDragOver"
-    v-on:mousewheel="handleMousewheel"
+    v-on:wheel="handleWheel"
   >
     <!-- Display the arrow button in case we have a non-combined view -->
     <div
@@ -459,10 +459,14 @@ module.exports = {
         elem.scrollTop -= 10 - distanceTop / 10
       }
     },
-    handleMousewheel: function (event) {
+    handleWheel: function (event) {
       // Determine if we can scroll back & forth
       if (process.platform !== 'darwin') {
         return // macOS only
+      }
+
+      if (event.deltaY !== 0) {
+        return // Don't interfere with vertical scrolling
       }
 
       // Toggle back and forth depending on the current state. toggleFileList
