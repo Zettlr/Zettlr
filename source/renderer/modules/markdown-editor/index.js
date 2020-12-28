@@ -547,10 +547,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
   set isFullscreen (shouldBeFullscreen) {
     this.setOptions({ 'fullScreen': shouldBeFullscreen })
 
-    if (this._fontsize !== 100) {
-      this._instance.getWrapperElement().style.fontSize = this._fontsize + '%'
-    }
-
     // Refresh to reflect the size changes
     this._instance.refresh()
   }
