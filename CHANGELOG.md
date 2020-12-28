@@ -33,6 +33,7 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Removed jQuery from the Pomodoro counter.
 - Fix a bug in the error handler during update checks.
 - Removed the timeout on the dictionary provider, as the dictionaries are likely to be loaded prior either way.
+- Force `electron-packager` to 15.2.0 to enable darwin/arm64 (Apple Silicon) builds.
 
 # 1.8.4
 
