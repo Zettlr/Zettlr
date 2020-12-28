@@ -49,7 +49,7 @@ module.exports = async function (options) {
 
   // Include CSL library if exist
   let bibliography = ''
-  if (global.config.get('export.cslLibrary')) {
+  if (global.config.get('export.cslLibrary') && isFile(options.cslLibrary)) {
     bibliography = `--citeproc --bibliography "${global.config.get('export.cslLibrary')}"`
   }
 
