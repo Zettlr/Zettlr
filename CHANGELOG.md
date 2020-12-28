@@ -6,7 +6,8 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 
 ## GUI and Functionality
 
-- 64bit applications will now run the built-in Pandoc. To see whether your application runs using the bundled Pandoc, open the developer logs and look for "pandoc." If Zettlr has used the built-in Pandoc for an export, the pandoc command will not begin with "pandoc" but with the full, absolute path to the bundled Pandoc binary. **If your application does use the bundled Pandoc, you can uninstall any system-wide Pandoc installationn; Zettlr should still be able to export. If not, please consider reporting a bug**!
+- **Feature**: 64bit applications will now run the built-in Pandoc. To see whether your application runs using the bundled Pandoc, open the developer logs and look for "pandoc." If Zettlr has used the built-in Pandoc for an export, the pandoc command will not begin with "pandoc" but with the full, absolute path to the bundled Pandoc binary. **If your application does use the bundled Pandoc, you can uninstall any system-wide Pandoc installationn; Zettlr should still be able to export. If not, please consider reporting a bug**!
+- **Feature**: macOS-users can now use horizontal scrolling instead of using the arrow button to toggle between the file tree and the file list (only available in thin file manager mode; this behaves exactly like back and forth navigating in browsers such as Safari and Chrome).
 - Made the dialogs' tab lists more accessible for screen readers.
 - Fixed the other files's extension icons in the sidebar -- they now also display in dark mode.
 - Fixes to the stylesheets.

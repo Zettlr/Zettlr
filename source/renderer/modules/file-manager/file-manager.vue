@@ -20,6 +20,7 @@
     v-on:mousemove="handleMouseOver"
     v-on:mouseleave="handleMouseOver"
     v-on:dragover="handleDragOver"
+    v-on:mousewheel="handleMousewheel"
   >
     <!-- Display the arrow button in case we have a non-combined view -->
     <div
@@ -456,6 +457,30 @@ module.exports = {
       }
       if (distanceTop > 0 && distanceTop < 100) {
         elem.scrollTop -= 10 - distanceTop / 10
+      }
+    },
+    handleMousewheel: function (event) {
+      // Determine if we can scroll back & forth
+      if (process.platform !== 'darwin') {
+        return // macOS only
+      }
+
+      // Toggle back and forth depending on the current state. toggleFileList
+      // will make sure to catch things such as whether we are in combined mode
+      if (event.deltaX > 0) {
+        // Switch to the file list
+        if (!this.isFileListVisible()) {
+          event.preventDefault()
+          event.stopPropagation()
+          this.toggleFileList()
+        }
+      } else if (event.deltaX < 0) {
+        // Switch to the tree view
+        if (this.isFileListVisible()) {
+          event.preventDefault()
+          event.stopPropagation()
+          this.toggleFileList()
+        }
       }
     },
     /**
