@@ -212,7 +212,7 @@
     "handlebars-loader": "^1.7.1",
     "jsdom": "^16.4.0",
     "less": "^3.13.1",
-    "less-loader": "^7.2.0",
+    "less-loader": "^7.2.1",
     "lorem-ipsum": "^2.0.3",
     "mocha": "^8.2.1",
     "node-loader": "^1.0.2",
