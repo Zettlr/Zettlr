@@ -186,7 +186,7 @@
     "@teamsupercell/typings-for-css-modules-loader": "^2.4.0",
     "@types/electron-devtools-installer": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^4.11.0",
-    "@typescript-eslint/parser": "^4.11.0",
+    "@typescript-eslint/parser": "^4.11.1",
     "@zeit/webpack-asset-relocator-loader": "^0.8.0",
     "copy-webpack-plugin": "^6.1.0",
     "cross-env": "^7.0.3",
