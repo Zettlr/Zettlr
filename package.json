@@ -17,12 +17,14 @@
     "postinstall": "electron-builder install-app-deps",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "package:mac": "electron-forge package --platform=darwin --arch=x64",
+    "package:mac-x64": "electron-forge package --platform=darwin --arch=x64",
+    "package:mac-arm": "electron-forge package --platform=darwin --arch=arm64",
     "package:win": "electron-forge package --platform=win32 --arch=x64",
     "package:win-arm": "electron-forge package --platform=win32 --arch=arm64",
     "package:linux-x32": "electron-forge package --platform=linux --arch=ia32",
     "package:linux-x64": "electron-forge package --platform=linux --arch=x64",
-    "release:mac": "yarn package:mac && electron-builder --mac --publish \"never\" --prepackaged out/Zettlr-darwin-x64/Zettlr.app",
+    "release:mac-x64": "yarn package:mac-x64 && electron-builder --mac --publish \"never\" --prepackaged out/Zettlr-darwin-x64/Zettlr.app",
+    "release:mac-arm": "yarn package:mac-arm && electron-builder --mac --publish \"never\" --prepackaged out/Zettlr-darwin-arm64/Zettlr.app",
     "release:win": "yarn package:win && electron-builder --win --x64 --publish \"never\" --prepackaged out/Zettlr-win32-x64",
     "release:win-arm": "yarn package:win-arm && electron-builder --win --ia32 --arm64 --publish \"never\" --prepackaged out/Zettlr-win32-arm64",
     "release:linux-x32": "yarn package:linux-x32 && electron-builder --linux AppImage --ia32 --publish \"never\" --prepackaged out/Zettlr-linux-ia32",
@@ -174,6 +176,9 @@
   "optionalDependencies": {
     "fsevents": "^2.2.1"
   },
+  "resolutions": {
+    "**/electron-packager": "15.2.0"
+  },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.53",
@@ -207,7 +212,7 @@
     "handlebars-loader": "^1.7.1",
     "jsdom": "^16.4.0",
     "less": "^3.13.1",
-    "less-loader": "^7.1.0",
+    "less-loader": "^7.2.0",
     "lorem-ipsum": "^2.0.3",
     "mocha": "^8.2.1",
     "node-loader": "^1.0.2",

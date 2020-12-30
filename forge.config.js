@@ -1,3 +1,32 @@
+const resourcePaths = []
+
+// Determine whether we can bundle Pandoc (and which version) based
+// on the arguments passed to Electron forge and the process environment
+const idxPlatform = process.argv.indexOf('--platform')
+const idxArch = process.argv.indexOf('--arch')
+
+const thisPlatform = process.platform
+const thisArch = process.arch
+
+const isWin32 = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'win32') || thisPlatform === 'win32'
+const isMacOS = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'darwin') || thisPlatform === 'darwin'
+const isLinux = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'linux') || thisPlatform === 'linux'
+const isArm64 = (idxArch > -1 && process.argv[idxArch + 1] === 'arm64') || thisArch === 'arm64'
+const is64Bit = (idxArch > -1 && process.argv[idxArch + 1] === 'x64') || thisArch === 'x64'
+
+// macOS has Rosetta 2 built-in, so we can bundle Pandoc 64bit
+const supportsPandoc = is64Bit || (isMacOS && isArm64)
+
+if (supportsPandoc && isWin32) {
+  console.log('\nBundling Pandoc for Windows 64 bit!')
+  resourcePaths.push('./resources/pandoc.exe')
+} else if (supportsPandoc && (isMacOS || isLinux)) {
+  console.log('\nBundling Pandoc for 64 bit or Apple M1!')
+  resourcePaths.push('./resources/pandoc')
+} else {
+  console.log('\nBuilding for an unsupported platform/arch-combination - not bundling Pandoc.')
+}
+
 module.exports = {
   packagerConfig: {
     asar: true,
@@ -26,41 +55,10 @@ module.exports = {
       appleId: process.env['APPLE_ID'],
       appleIdPassword: process.env['APPLE_ID_PASS'],
     },
-    extraResource: [
-      // This self-executing function returns a string to the Pandoc binary if
-      // we can include one in the built installer. NOTE: This logic relies
-      // upon the Pandoc binary being downloaded after executing
-      // ./scripts/get-pandoc.sh
-      (function () {
-        // Determine whether we can bundle Pandoc (and which version) based
-        // on the arguments passed to Electron forge and the process environment
-        const idxPlatform = process.argv.indexOf('--platform')
-        const idxArch = process.argv.indexOf('--arch')
-
-        const thisPlatform = process.platform
-        const thisArch = process.arch
-
-        const isWin32 = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'win32') || thisPlatform === 'win32'
-        const isMacOS = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'darwin') || thisPlatform === 'darwin'
-        const isLinux = (idxPlatform > -1 && process.argv[idxPlatform + 1] === 'linux') || thisPlatform === 'linux'
-        const isArm64 = (idxArch > -1 && process.argv[idxArch + 1] === 'arm64') || thisArch === 'arm64'
-        const is64Bit = (idxArch > -1 && process.argv[idxArch + 1] === 'x64') || thisArch === 'x64'
-
-        // macOS has Rosetta 2 built-in, so we can bundle Pandoc 64bit
-        const supportsPandoc = is64Bit || (isMacOS && isArm64)
-
-        if (supportsPandoc && isWin32) {
-          console.log('\nBundling Pandoc for Windows 64 bit!')
-          return './resources/pandoc.exe'
-        } else if (supportsPandoc && (isMacOS || isLinux)) {
-          console.log('\nBundling Pandoc for 64 bit or Apple M1!')
-          return './resources/pandoc'
-        } else {
-          console.log('\nBuilding for an unsupported platform/arch-combination - not bundling Pandoc.')
-          return '' // Don't bundle Pandoc
-        }
-      })()
-    ]
+    extraResource:
+      // NOTE: This logic relies upon the Pandoc binary being downloaded
+      // after executing ./scripts/get-pandoc.sh
+      resourcePaths
   },
   plugins: [
     [

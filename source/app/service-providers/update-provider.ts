@@ -201,10 +201,12 @@ export default class UpdateProvider {
       return await this._parseResponse(response)
     } catch (error) {
       // Determine the error
-      let serverError = error.response.statusCode >= 500
-      let clientError = error.response.statusCode >= 400
-      let redirectError = error.response.statusCode >= 300
       let notFoundError = error.code === 'ENOTFOUND'
+      // If we have an ENOTFOUND error there is no response and no statusCode
+      // so we'll use TypeScript shortcuts to save us from ugly errors.
+      let serverError = error?.response?.statusCode >= 500
+      let clientError = error?.response?.statusCode >= 400
+      let redirectError = error?.response?.statusCode >= 300
 
       // Give a more detailed error message
       if (serverError) {
@@ -254,7 +256,7 @@ export default class UpdateProvider {
         // Filter out the assets unusable on the current platform.
         switch (process.platform) {
           case 'darwin':
-            // We provide a DMG image for macOS
+            // We provide a DMG image for macOS (x64 and arm64)
             return /\.dmg$/.test(asset.name)
           case 'win32':
             // We provide EXE-installers for both ARM and intel

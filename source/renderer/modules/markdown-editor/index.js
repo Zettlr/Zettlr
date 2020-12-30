@@ -90,11 +90,11 @@ module.exports = class MarkdownEditor extends EventEmitter {
     this._lastMode = undefined
 
     /**
-     * Holds the font size of the CodeMirror instance
+     * Holds the font size of the CodeMirror instance (in em)
      *
      * @var {Number}
      */
-    this._fontsize = 100
+    this._fontsize = 1
 
     /**
      * Can hold a close-callback from an opened context menu
@@ -286,15 +286,15 @@ module.exports = class MarkdownEditor extends EventEmitter {
    */
   zoom (direction) {
     if (direction === 0) {
-      this._fontsize = 100
+      this._fontsize = 1
     } else {
-      let newSize = this._fontsize + 10 * direction
+      let newSize = this._fontsize + 0.1 * direction
       // Constrain the size so it doesn't run into errors
-      if (newSize < 30) newSize = 30 // Less than thirty and CodeMirror doesn't display the text anymore.
-      if (newSize > 400) newSize = 400 // More than 400 and you'll run into problems concerning headings 1
+      if (newSize < 0.3) newSize = 0.3 // Less than 30% and CodeMirror doesn't display the text anymore.
+      if (newSize > 4.0) newSize = 4.0 // More than 400% and you'll run into problems concerning headings 1
       this._fontsize = newSize
     }
-    this._instance.getWrapperElement().style.fontSize = this._fontsize + '%'
+    this._instance.getWrapperElement().style.fontSize = this._fontsize + 'em'
     this._instance.refresh()
   }
 
@@ -546,10 +546,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
    */
   set isFullscreen (shouldBeFullscreen) {
     this.setOptions({ 'fullScreen': shouldBeFullscreen })
-
-    if (this._fontsize !== 100) {
-      this._instance.getWrapperElement().style.fontSize = this._fontsize + '%'
-    }
 
     // Refresh to reflect the size changes
     this._instance.refresh()

@@ -1,14 +1,21 @@
 <div class="dialog" role="dialog">
     <h1>{{i18n "dialog.preferences.pdf.title"}}</h1>
     <form action="" method="GET" id="dialog">
-        <div id="prefs-tabs" class="clear">
-            <ul>
-                <li><a href="#prefs-tabs-general">{{i18n "dialog.preferences.pdf.metadata"}}</a></li>
-                <li><a href="#prefs-tabs-page">{{i18n "dialog.preferences.pdf.page"}}</a></li>
-                <li><a href="#prefs-tabs-font">{{i18n "dialog.preferences.pdf.font"}}</a></li>
-            </ul>
+        <div class="modal-tab-container">
+          <div class="tab-list" role="tablist" aria-label="{{i18n "dialog.preferences.pdf.title"}}">
+            <button class="tab-list-tab" role="tab" aria-selected="false" aria-controls="prefs-tabs-general" id="prefs-tabs-general-control">
+              {{i18n "dialog.preferences.pdf.metadata"}}
+            </button>
+            <button class="tab-list-tab" role="tab" aria-selected="false" aria-controls="prefs-tabs-page" id="prefs-tabs-page-control">
+              {{i18n "dialog.preferences.pdf.page"}}
+            </button>
+            <button class="tab-list-tab" role="tab" aria-selected="false" aria-controls="prefs-tabs-font" id="prefs-tabs-font-control">
+              {{i18n "dialog.preferences.pdf.font"}}
+            </button>
+          </div>
+
             <!-- Metadata for PDF files -->
-            <div id="prefs-tabs-general">
+            <div id="prefs-tabs-general" role="tabpanel" aria-labelledby="prefs-tabs-general-control">
                 <p>{{i18n "dialog.preferences.pdf.metadata_intro"}}</p>
                 <label for="pdf.author">{{i18n "dialog.preferences.pdf.author_label"}}</label>
                 <input type="text" name="pdf.author" id="pdf.author" value="{{pdf.author}}" placeholder="{{i18n "dialog.preferences.pdf.author"}}">
@@ -26,11 +33,11 @@
                 </div>
             </div>
             <!-- Page layout -->
-            <div id="prefs-tabs-page">
+            <div id="prefs-tabs-page" role="tabpanel" aria-labelledby="prefs-tabs-page-control">
                 <p>{{i18n "dialog.preferences.pdf.page_intro"}}</p>
                 <hr>
-                <div class="clear"></div>
-                <div class="box-left">
+                <div class="box-container">
+                  <div class="box-left">
                     <div class="paper a4paper">
                         <input class="tmargin" type="number" min="0" max="9999" step="0.1" name="pdf.tmargin" id="pdf.tmargin" value="{{pdf.tmargin}}" placeholder="{{i18n "dialog.preferences.pdf.tmargin"}}" data-tippy-content="{{i18n "dialog.preferences.pdf.tmargin_label"}}">
                         <input class="rmargin" type="number" min="0" max="9999" step="0.1" name="pdf.rmargin" id="pdf.rmargin" value="{{pdf.rmargin}}" placeholder="{{i18n "dialog.preferences.pdf.rmargin"}}" data-tippy-content="{{i18n "dialog.preferences.pdf.rmargin_label"}}">
@@ -60,12 +67,13 @@
                       {{/each}}
                     </select>
                 </div>
-                <div class="clear"></div>
+                </div>
             </div>
             <!-- Font options -->
-            <div id="prefs-tabs-font">
+            <div id="prefs-tabs-font" role="tabpanel" aria-labelledby="prefs-tabs-font-control">
                 <p>{{i18n "dialog.preferences.pdf.font_intro"}}</p>
-                <div class="box-left">
+                <div class="box-container">
+                  <div class="box-left">
                     <label for="pdf.mainfont">{{i18n "dialog.preferences.pdf.mainfont_label"}}</label>
                     <input type="text" name="pdf.mainfont" id="mainfont" value="{{pdf.mainfont}}" placeholder="{{i18n "dialog.preferences.pdf.mainfont"}}">
                     <label for="pdf.sansfont">{{i18n "dialog.preferences.pdf.sansfont_label"}}</label>
@@ -90,9 +98,10 @@
                         laborum.
                     </p>
                 </div>
+                </div>
             </div>
         </div>
-        <div class="clearfix">
+        <div>
             <button type="submit" id="pref-save">{{i18n "dialog.button.save"}}</button>
             <button id="abort">{{i18n "dialog.button.cancel"}}</button>
             <span class="error-info"></span>

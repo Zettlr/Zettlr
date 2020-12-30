@@ -52,13 +52,17 @@
         padding: 4px;
         text-decoration: none;
         color: inherit;
-        white-space: nowrap;
+        // Padding 4px + 4px margin + 24px icon width = 32px
+        text-indent: -32px;
+        padding-left: 32px;
         svg {
           width: 24px;
           height: 24px;
           margin-right: 4px;
           vertical-align: bottom;
           margin-bottom: -1px;
+          // Necessary to give the extension icons the correct colour
+          fill: currentColor;
         }
     }
 

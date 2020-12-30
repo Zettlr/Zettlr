@@ -156,11 +156,13 @@ module.exports = class ConfigProvider extends EventEmitter {
       },
       // Editor related stuff
       'editor': {
+        'autocompleteAcceptSpace': false, // Whether you can type spaces in autocorrect
         'autoCloseBrackets': true,
         'defaultSaveImagePath': '',
         'homeEndBehaviour': true, // If checked (true), CodeMirror goes to start/end of a paragraph, not a line.
         'enableTableHelper': true, // Enable the table helper plugin
         'indentUnit': 4, // The number of spaces to be added
+        'fontSize': 16, // The editor's font size in pixels
         'countChars': false, // Set to true to enable counting characters instead of words
         'inputMode': 'default', // Can be default, vim, emacs
         'boldFormatting': '**', // Can be ** or __
@@ -193,10 +195,10 @@ module.exports = class ConfigProvider extends EventEmitter {
             { key: '>=', val: '≥' },
             { key: '1/2', val: '½' },
             { key: '1/3', val: '⅓' },
-            { key: '1/4', val: '¼' },
-            { key: '1/8', val: '⅛' },
             { key: '2/3', val: '⅔' },
+            { key: '1/4', val: '¼' },
             { key: '3/4', val: '¾' },
+            { key: '1/8', val: '⅛' },
             { key: '3/8', val: '⅜' },
             { key: '5/8', val: '⅝' },
             { key: '7/8', val: '⅞' },
@@ -591,7 +593,9 @@ module.exports = class ConfigProvider extends EventEmitter {
     // Don't add non-existent options
     if (this.config.hasOwnProperty(option) && this._validate(option, value)) {
       // Do not set the option if it already has the requested value
-      if (this.config[option] === value) return true
+      if (this.config[option] === value) {
+        return true
+      }
 
       // Set the new value and inform the listeners
       this.config[option] = value
@@ -599,7 +603,9 @@ module.exports = class ConfigProvider extends EventEmitter {
 
       // Broadcast to all open windows
       broadcastIpcMessage('config-provider', { command: 'update', payload: option })
-      if (!this._bulkSetInProgress && global.hasOwnProperty('ipc')) global.ipc.send('config-update') // Notify renderer process
+      if (!this._bulkSetInProgress && global.hasOwnProperty('ipc')) {
+        global.ipc.send('config-update') // Notify renderer process
+      }
       return true
     }
 

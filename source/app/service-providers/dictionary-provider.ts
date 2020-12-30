@@ -34,6 +34,9 @@ export default class DictionaryProvider extends EventEmitter {
   private _userDictionary: string[]
   private _fileLock: boolean
   private _unwrittenChanges: boolean
+  private _cachedAutocorrect: string[]
+  private _reloadWanted: boolean
+  private _reloadLock: boolean
 
   constructor () {
     super()
@@ -46,6 +49,12 @@ export default class DictionaryProvider extends EventEmitter {
     this._userDictionaryPath = path.join(app.getPath('userData'), 'user.dic')
     // The user dictionary
     this._userDictionary = ['Zettlr']
+
+    this._cachedAutocorrect = []
+
+    // If this flag is set, this indicates that a reload is wanted
+    this._reloadWanted = false
+    this._reloadLock = false // True during reload
 
     // Flags for writing the file
     this._fileLock = false
@@ -102,20 +111,19 @@ export default class DictionaryProvider extends EventEmitter {
 
     // Reload as soon as the config has been updated
     global.config.on('update', (opt: string) => {
-      // We are only interested in changes to the selectedDicts option
-      if (opt === 'selectedDicts') {
-        this.reload()
-      }
+      // Reload the dictionaries (if applicable) ...
+      this.reload()
+      // ... and add cache the autocorrect replacements so they are not seen as "wrong"
+      this._cacheAutoCorrectValues()
     })
 
-    // Afterwards, set the timeout for loading the dictionaries
-    setTimeout(() => {
-      this.reload()
-      this._loadUserDict() // On first start, load the user dictionary as well
-        .catch(err => {
-          global.log.error(`[Dictionary Provider] Could not read user dictionary: ${err.message as string}`, err)
-        })
-    }, 5000)
+    // Afterwards, load the first batch of dictionaries
+    this.reload()
+    this._cacheAutoCorrectValues()
+    this._loadUserDict() // On first start, load the user dictionary as well
+      .catch(err => {
+        global.log.error(`[Dictionary Provider] Could not read user dictionary: ${err.message as string}`, err)
+      })
   }
 
   /**
@@ -128,18 +136,41 @@ export default class DictionaryProvider extends EventEmitter {
   }
 
   /**
+   * Caches the autocorrect replacement table in order to mark the replacements
+   * as correct.
+   */
+  _cacheAutoCorrectValues (): void {
+    const table = global.config.get('editor.autoCorrect.replacements')
+    this._cachedAutocorrect = table.map((e: any) => e.val)
+  }
+
+  /**
    * (Re)Loads the dictionaries efficiently based upon the selected dictionaries
    * @return {Promise} Does not throw, as we catch errors. TODO: Log misloads!
    */
   async _load (): Promise<void> {
+    if (this._reloadLock) {
+      // Another reload is wanted
+      this._reloadWanted = true
+      return
+    }
+
+    this._reloadWanted = false
+    this._reloadLock = true
+
     let selectedDicts = global.config.get('selectedDicts') as string[]
     let dictsToLoad = []
+
+    let changeWanted = false
 
     // This function can also be called during runtime to exchange some dicts,
     // so make sure we don't reload these monstrous things all too often.
     // 1. Which dicts do we have to load?
     for (let dict of selectedDicts) {
-      if (!this._loadedDicts.includes(dict)) dictsToLoad.push(dict)
+      if (!this._loadedDicts.includes(dict)) {
+        dictsToLoad.push(dict)
+        changeWanted = true
+      }
     }
 
     // 2. Which of the already loaded dicts can be trashed?
@@ -148,37 +179,52 @@ export default class DictionaryProvider extends EventEmitter {
         let index = this._loadedDicts.indexOf(dict)
         this._loadedDicts.splice(index, 1) // Remove both from the loadedDicts...
         this._typos.splice(index, 1) // ... and the typos themselves
+        changeWanted = true
       }
     }
 
     for (let dict of dictsToLoad) {
       // First request a dictionary.
       let dictMeta = getDictionaryFile(dict) as any // TODO
-      if (dictMeta.status !== 'exact') continue // Only consider exact matches
+      if (dictMeta.status !== 'exact') {
+        global.log.error(`[Dictionary Provider] Could not load ${dict}: No exact match found.`, dictMeta)
+        continue // Only consider exact matches
+      }
       let aff = null
       let dic = null
 
       try {
         aff = await fs.readFile(dictMeta.aff, 'utf8')
       } catch (e) {
+        global.log.error(`[Dictionary Provider] Could not load affix file for ${dict}`, e)
         continue
       }
 
       try {
         dic = await fs.readFile(dictMeta.dic, 'utf8')
       } catch (e) {
+        global.log.error(`[Dictionary Provider] Could not load .dic-file for ${dict}`, e)
         continue
       }
 
-      this._typos.push(new NSpell(aff, dic))
       this._loadedDicts.push(dict)
+      this._typos.push(new NSpell(aff, dic))
     } // END for
 
-    // Finally emit the update event
-    this.emit('update', this._loadedDicts)
+    if (changeWanted) {
+      // Don't be noisy: Only emit if necessary
+      // Finally emit the update event
+      this.emit('update', this._loadedDicts)
+      global.log.info(`[Dictionary Provider] Loaded dictionaries: ${this._loadedDicts.join(', ')}`)
 
-    // Send an invalidation message to the renderer
-    broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
+      // Send an invalidation message to the renderer
+      broadcastIpcMessage('dictionary-provider', { command: 'invalidate-dict' })
+    }
+
+    this._reloadLock = false
+    if (this._reloadWanted) {
+      await this._load() // Reload again
+    }
   }
 
   /**
@@ -251,19 +297,22 @@ export default class DictionaryProvider extends EventEmitter {
       return true
     }
 
-    let correct = false
+    // First, check the small tables: user dictionary and replacement table
+    if (this._cachedAutocorrect.includes(term)) {
+      return true
+    }
+
+    if (this._userDictionary.includes(term)) {
+      return true
+    }
+
     for (let typo of this._typos) {
       if ((typo as any).correct(term) === true) {
-        correct = true
+        return true
       }
     }
 
-    // Last but not least check the user dictionary
-    if (this._userDictionary.includes(term)) {
-      correct = true
-    }
-
-    return correct
+    return false
   }
 
   /**
@@ -316,6 +365,9 @@ export default class DictionaryProvider extends EventEmitter {
    * @return {void} Does not return.
    */
   reload (): void {
+    // TODO: Below's if will never return true, so we can refactor this to look
+    // cleaner for sure. (The load mechanism will make sure we never perform
+    // unnecessary operations).
     if (global.config.get('selectedDicts') === this._loadedDicts) return
 
     // Reload the dictionary based upon the new selected dictionaries.

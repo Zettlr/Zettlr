@@ -24,6 +24,7 @@ import safeAssign from '../../../common/util/safe-assign'
 // Import the interfaces that we need
 import { DirDescriptor, MDFileDescriptor, MDFileMeta } from './types'
 import FSALCache from './fsal-cache'
+import extractBOM from './util/extract-bom'
 
 // Here are all supported variables for Pandoc:
 // https://pandoc.org/MANUAL.html#variables
@@ -80,6 +81,8 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   let idRE = getIDRE()
   let linkStart = global.config.get('zkn.linkStart')
   let linkEnd = global.config.get('zkn.linkEnd')
+
+  file.bom = extractBOM(content)
   // To detect tags in accordance with what the engine will render as tags,
   // we need to exclude everything that is not preceded by either a newline
   // or a space.
@@ -211,6 +214,7 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
     ext: path.extname(filePath),
     id: '', // The ID, if there is one inside the file.
     tags: [], // All tags that are to be found inside the file's contents.
+    bom: '', // Default: No BOM
     type: 'file',
     wordCount: 0,
     charCount: 0,
@@ -277,7 +281,9 @@ export function setTarget (fileObject: MDFileDescriptor, target: any): void {
 
 export async function load (fileObject: MDFileDescriptor): Promise<string> {
   // Loads the content of a file from disk
-  return await fs.readFile(fileObject.path, { encoding: 'utf8' })
+  const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
+  // Account for an optional BOM, if present
+  return content.substr(fileObject.bom.length)
 }
 
 export async function hasChangedOnDisk (fileObject: MDFileDescriptor): Promise<boolean> {
@@ -286,7 +292,8 @@ export async function hasChangedOnDisk (fileObject: MDFileDescriptor): Promise<b
 }
 
 export async function save (fileObject: MDFileDescriptor, content: string, cache: any): Promise<void> {
-  await fs.writeFile(fileObject.path, content)
+  // Make sure to retain the BOM if applicable
+  await fs.writeFile(fileObject.path, fileObject.bom + content)
   // Afterwards, retrieve the now current modtime
   await updateFileMetadata(fileObject)
   // Make sure to keep the file object itself as well as the tags updated

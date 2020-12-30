@@ -20,6 +20,7 @@
     v-on:mousemove="handleMouseOver"
     v-on:mouseleave="handleMouseOver"
     v-on:dragover="handleDragOver"
+    v-on:wheel="handleWheel"
   >
     <!-- Display the arrow button in case we have a non-combined view -->
     <div
@@ -180,7 +181,6 @@
 </template>
 
 <script>
-/* global $ */
 // Please do not ask me why I have to explicitly use the "default" property
 // of some modules, but not others. The vue-loader is a mess when used with
 // ES6 CommonJS-modules in a exports/require-environment.
@@ -459,6 +459,34 @@ module.exports = {
         elem.scrollTop -= 10 - distanceTop / 10
       }
     },
+    handleWheel: function (event) {
+      // Determine if we can scroll back & forth
+      if (process.platform !== 'darwin') {
+        return // macOS only
+      }
+
+      if (event.deltaY !== 0) {
+        return // Don't interfere with vertical scrolling
+      }
+
+      // Toggle back and forth depending on the current state. toggleFileList
+      // will make sure to catch things such as whether we are in combined mode
+      if (event.deltaX > 0) {
+        // Switch to the file list
+        if (!this.isFileListVisible()) {
+          event.preventDefault()
+          event.stopPropagation()
+          this.toggleFileList()
+        }
+      } else if (event.deltaX < 0) {
+        // Switch to the tree view
+        if (this.isFileListVisible()) {
+          event.preventDefault()
+          event.stopPropagation()
+          this.toggleFileList()
+        }
+      }
+    },
     /**
      * Registers a click event on an item and toggles
      * the file list, if it's not visible.
@@ -516,7 +544,8 @@ module.exports = {
       this.fileManagerResizeX = evt.clientX
       this.$el.style.width = (this.$el.offsetWidth - x) + 'px'
       // TODO: This is monkey-patched, emit regular events, like a grown up
-      $('#editor').css('left', this.$el.offsetWidth + 10 + 'px') // 10px resizer width
+      // 10px resizer width
+      document.getElementById('editor').style.left = this.$el.offsetWidth + 10 + 'px'
       if (this.isExpanded) {
         // We don't have a thin file manager, so resize the fileList accordingly
         this.$refs.fileList.style.width = (this.$el.offsetWidth - this.$refs.directories.offsetWidth) + 'px'
