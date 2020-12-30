@@ -65,6 +65,7 @@ export interface MDFileDescriptor extends FSMetaInfo {
   id: string
   type: 'file'
   tags: string[]
+  bom: string // An optional BOM
   wordCount: number
   charCount: number
   target: any // TODO
@@ -83,6 +84,7 @@ export interface CodeFileDescriptor extends FSMetaInfo {
   type: 'code'
   id: string
   tags: string[]
+  bom: string // An optional BOM
   linefeed: string
   modified: boolean
 }
