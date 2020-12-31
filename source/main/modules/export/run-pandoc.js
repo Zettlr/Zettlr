@@ -53,6 +53,12 @@ module.exports = async function (options) {
     throw new Error(trans('system.error.no_xelatex_message'), trans('system.error.no_xelatex_title'))
   }
 
+  // Include CSL library if exist
+  let bibliography = ''
+  if (options.hasOwnProperty('cslLibrary') && isFile(options.cslLibrary)) {
+    bibliography = `--citeproc --bibliography "${options.cslLibrary}"`
+  }
+
   // Add a custom CSL style if applicable
   let cslstyle = ''
   if (options.hasOwnProperty('cslStyle') && isFile(options.cslStyle)) {
@@ -65,7 +71,7 @@ module.exports = async function (options) {
     'infile': options.sourceFile,
     'toc': (options.pdf.toc && options.format === 'pdf') ? '--toc' : '',
     'tocdepth': (options.pdf.tocDepth) ? '--toc-depth=' + options.pdf.tocDepth : '',
-    'bibliography': global.config.get('export.cslLibrary'),
+    'bibliography': bibliography,
     'cslstyle': cslstyle,
     'outfile': options.targetFile,
     'outflag': '-t ' + ((options.format === 'pdf') ? 'latex' : options.format),
