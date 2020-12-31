@@ -33,11 +33,6 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-3.1.0.tgz#8ff71d51053cd5ee4981e5a501d80a536244f7fd"
   integrity sha512-GcIY79elgB+azP74j8vqkiXz8xLFfIzbQJdlwOPisgbKT00tviJQuEghOXSMVxJ00HoYJbGswr4kcllUc4xCcg==
 
-"@citeproc-rs/wasm@0.0.0-canary-88f356a":
-  version "0.0.0-canary-88f356a"
-  resolved "https://registry.yarnpkg.com/@citeproc-rs/wasm/-/wasm-0.0.0-canary-88f356a.tgz#be3ca0f6d9c7f1398da1409c31ef7df062047451"
-  integrity sha512-Gf+uiM9AIWrYdaZYfTWcVZJYoqnbjRzVOxF4fdnlf99JZ4zdcNPt8FdecMFAkpLKFASDIp+BS7EETpLPePmDOw==
-
 "@clr/icons@^4.0.8":
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/@clr/icons/-/icons-4.0.8.tgz#3ca645ff7eaeb25db6f5cd35ccf55f06f92c4c28"
@@ -1927,12 +1922,10 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-citeproc@^2.4.52:
-  version "2.4.52"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.4.52.tgz#2b1c0d0b9eaebf5c6c65c990f2987891a91b60c3"
-  integrity sha512-hxCKQYOOu22gbMLx9OcdEbitkT81O/xgLyF80cIec5sCzaF30GNnQXJ+p8fySB8LXa2GHIbYm98wPdlSQY8X+A==
-  dependencies:
-    "@citeproc-rs/wasm" "0.0.0-canary-88f356a"
+citeproc@^2.4.56:
+  version "2.4.56"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.4.56.tgz#6e73b9811b969e843edad55a90046a4645fc1b6f"
+  integrity sha512-abdMJeYh+vAKz6ejcePrdNBxaoySktwWa/rOs+KjfkWGwMXDvUVjT5ZOC5oRJF1UxAyh/US68NfOTr1o+e24Iw==
 
 class-utils@^0.3.5:
   version "0.3.6"
