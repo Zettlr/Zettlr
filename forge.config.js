@@ -80,7 +80,7 @@ module.exports = {
             },
             {
               html: './source/log-viewer/index.htm',
-              js: './source/log-viewer/index.js',
+              js: './source/log-viewer/index.ts',
               name: 'log_viewer'
             },
             {

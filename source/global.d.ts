@@ -5,12 +5,24 @@
 /**
  * DECLARE THE GLOBAL INTERFACES
  */
+interface Application {
+  isBooting: () => boolean
+  showLogViewer: () => void
+  // TODO: Match the signatures of fileUpdate and dirUpdate
+  fileUpdate: (oldHash: number, fileMetadata: any) => void
+  dirUpdate: (oldHash: number, newHash: number) => void
+  notifyChange: (msg: string) => void
+  findFile: (prop: any) => MDFileDescriptor | CodeFileDescriptor | null
+  findDir: (prop: any) => DirDescriptor | null
+  // Same as findFile, only with content
+  getFile: (fileDescriptor: MDFileDescriptor | CodeFileDescriptor) => Promise<MDFileMeta | CodeFileMeta>
+}
+
 interface LogProvider {
   verbose: (message: string, details?: any) => void
   info: (message: string, details?: any) => void
   warning: (message: string, details?: any) => void
   error: (message: string, details?: any) => void
-  showLogViewer: () => void
 }
 
 interface CssProvider {
@@ -95,7 +107,7 @@ declare module NodeJS {
     ipc: any
     citeproc: any // CiteprocProvider
     config: any
-    application: any
+    application: Application
     typo: any
     filesToOpen: string[]
     preBootLog: BootLog[]

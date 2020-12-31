@@ -31,6 +31,7 @@ import { trans } from '../../../common/i18n'
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../fsal/types'
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
+import createLogWindow from './create-log-window'
 import createQuicklookWindow from './create-ql-window'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
 import shouldReplaceFileDialog from './dialog/should-replace-file'
@@ -49,6 +50,7 @@ export default class WindowManager {
   private _mainWindow: BrowserWindow|null
   private readonly _qlWindows: QuicklookRecord[]
   private _printWindow: BrowserWindow|null
+  private _logWindow: BrowserWindow|null
   private _printWindowFile: string|undefined
   private _windowState: WindowPosition[]
   private readonly _configFile: string
@@ -60,6 +62,7 @@ export default class WindowManager {
     this._qlWindows = []
     this._printWindow = null
     this._printWindowFile = undefined
+    this._logWindow = null
     this._windowState = []
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
@@ -173,6 +176,9 @@ export default class WindowManager {
         } else if (this._printWindow === win) {
           win.close()
           this._printWindow = null
+        } else if (this._logWindow === win) {
+          win.close()
+          this._logWindow = null
         } else {
           global.log.warning(`[Window Manager] The window "${win.getTitle()}" (ID: ${win.id}) is not managed by the window manager.`)
           win.close()
@@ -397,6 +403,17 @@ export default class WindowManager {
 
   showLogWindow (): void {
     // Shows the log window TODO
+    // Shows the print window
+    if (this._logWindow === null) {
+      this._logWindow = createLogWindow()
+
+      // Dereference the window as soon as it is closed
+      this._logWindow.on('closed', () => {
+        this._logWindow = null
+      })
+    } else {
+      this._makeVisible(this._logWindow)
+    }
   }
 
   /**

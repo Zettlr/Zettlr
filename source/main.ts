@@ -54,8 +54,7 @@ global.log = {
   },
   error: (message: string) => {
     global.preBootLog.push({ 'level': 4, 'message': message })
-  },
-  showLogViewer: () => { /* Dummy method to fulfill interface contract */ }
+  }
 }
 
 /**

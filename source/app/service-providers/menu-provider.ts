@@ -307,7 +307,7 @@ export default class MenuProvider {
           break
         case 'openLogViewer':
           menu.click = function (menuitem, focusedWindow) {
-            global.log.showLogViewer()
+            global.application.showLogViewer()
           }
           break
         case 'openDictData':

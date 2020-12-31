@@ -63,6 +63,9 @@ export default class Zettlr {
     global.application = {
       // Flag indicating whether or not the application is booting
       isBooting: () => { return this.isBooting },
+      showLogViewer: () => {
+        this._windowManager.showLogWindow()
+      },
       // TODO: Match the signatures of fileUpdate and dirUpdate
       fileUpdate: (oldHash: number, fileMetadata: any) => {
         if (typeof fileMetadata === 'number') {
