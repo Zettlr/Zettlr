@@ -224,7 +224,9 @@ module.exports = {
       // will return if the mode is combined or expanded)
       else if (!this.isFileListVisible()) this.toggleFileList()
     },
-    selectedFile: function () { this.scrollIntoView() },
+    selectedFile: function () {
+      this.scrollIntoView()
+    },
     /**
      * Whenever the directoryContents change, determine if we should
      * display the file list.
@@ -255,9 +257,6 @@ module.exports = {
       this.$nextTick(function () {
         this.scrollIntoView()
       })
-    },
-    activeFile: function () {
-      this.scrollIntoView()
     },
     /**
      * Listens to changes of the fileManagerMode to reset
@@ -700,6 +699,7 @@ module.exports = {
           }
           break
       }
+      this.scrollIntoView()
     },
     scrollIntoView: function () {
       // In case the file changed, make sure it's in view.
