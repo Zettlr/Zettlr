@@ -21,6 +21,7 @@ import safeAssign from '../../../common/util/safe-assign'
 // Import the interfaces that we need
 import { DirDescriptor, CodeFileDescriptor, CodeFileMeta } from './types'
 import FSALCache from './fsal-cache'
+import extractBOM from './util/extract-bom'
 
 /**
  * Applies a cached file, saving time where the file is not being parsed.
@@ -64,6 +65,7 @@ function parseFileContents (file: CodeFileDescriptor, content: string): void {
   // Determine linefeed to preserve on saving so that version control
   // systems don't complain.
   file.linefeed = '\n'
+  file.bom = extractBOM(content)
   if (content.includes('\r\n')) file.linefeed = '\r\n'
   if (content.includes('\n\r')) file.linefeed = '\n\r'
 }
@@ -104,6 +106,7 @@ export async function parse (
     ext: path.extname(filePath),
     id: '', // The ID, if there is one inside the file.
     tags: [], // All tags that are to be found inside the file's contents.
+    bom: '', // Default: No BOM
     type: 'code',
     modtime: 0, // Modification time
     creationtime: 0, // Creation time
@@ -155,7 +158,8 @@ export async function search (fileObject: CodeFileDescriptor, terms: string[]): 
 
 export async function load (fileObject: CodeFileDescriptor): Promise<string> {
   // Loads the content of a file from disk
-  return await fs.readFile(fileObject.path, { encoding: 'utf8' })
+  const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
+  return content.substr(fileObject.bom.length)
 }
 
 export async function hasChangedOnDisk (fileObject: CodeFileDescriptor): Promise<boolean> {

@@ -1,12 +1,17 @@
 # 1.8.5
 
+## Apple Silicon Support
+
+This version provides native Apple Silicon/M1 support, a.k.a. the darwin/arm64 architecture. Make sure to download the correct update file (either x64 for Intel-based Macs or arm64 for the new Apple Silicon chips).
+
 ## A Note to Apple Silicon users
 
-If you possess one of the new Apple devices sporting Apple's M1 chip, please see whether or not the application is able to run the built-in pandoc (which is still compiled for 64 bit). If your bundled exporter fails, please report an issue. We are also planning to ship native M1 builds as well soon, and this might also cause some issues, so please keep an eye out for such errors.
+If you possess one of the new Apple devices sporting Apple's M1 chip, please see whether or not the application is able to run the built-in pandoc (which is still compiled for 64 bit). If your bundled exporter fails, please report an issue.
 
 ## GUI and Functionality
 
-- 64bit applications will now run the built-in Pandoc. To see whether your application runs using the bundled Pandoc, open the developer logs and look for "pandoc." If Zettlr has used the built-in Pandoc for an export, the pandoc command will not begin with "pandoc" but with the full, absolute path to the bundled Pandoc binary. **If your application does use the bundled Pandoc, you can uninstall any system-wide Pandoc installationn; Zettlr should still be able to export. If not, please consider reporting a bug**!
+- **Feature**: 64bit applications will now run the built-in Pandoc. To see whether your application runs using the bundled Pandoc, open the developer logs and look for "pandoc." If Zettlr has used the built-in Pandoc for an export, the pandoc command will not begin with "pandoc" but with the full, absolute path to the bundled Pandoc binary. **If your application does use the bundled Pandoc, you can uninstall any system-wide Pandoc installationn; Zettlr should still be able to export. If not, please consider reporting a bug**!
+- **Feature**: macOS-users can now use horizontal scrolling instead of using the arrow button to toggle between the file tree and the file list (only available in thin file manager mode; this behaves exactly like back and forth navigating in browsers such as Safari and Chrome).
 - Made the dialogs' tab lists more accessible for screen readers.
 - Fixed the other files's extension icons in the sidebar -- they now also display in dark mode.
 - Fixes to the stylesheets.
@@ -17,6 +22,7 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Fixed a race condition in the dictionary provider that would render spellchecking unfunctional in certain edge cases.
 - Values from the AutoCorrect replacement table will now also be indicated as correct, so you don't have to add them to your user dictionary anymore.
 - Revamped the about dialog's other project tab.
+- Removed the deprecation warning for deprecated installations.
 
 ## Under the Hood
 
@@ -31,6 +37,8 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Removed jQuery from the Pomodoro counter.
 - Fix a bug in the error handler during update checks.
 - Removed the timeout on the dictionary provider, as the dictionaries are likely to be loaded prior either way.
+- Force `electron-packager` to 15.2.0 to enable darwin/arm64 (Apple Silicon) builds.
+- Zettlr now detects Byte Order Marks (BOM) if present in a file.
 
 # 1.8.4
 
