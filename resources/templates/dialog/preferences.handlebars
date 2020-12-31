@@ -1130,7 +1130,7 @@
                   {{!-- ATTENTION when adding new pairs: They will be SPLIT using the hyphen character! --}}
                   <option value='"…"'
                     {{#ifCond primaryQuotes '=' '"…"'}}selected="selected"
-                    {{/ifCond}}>"…"</option>
+                    {{/ifCond}}>{{ i18n "dialog.preferences.autocorrect.quick_select_none_label" }}</option>
                   <option value="“…”"
                     {{#ifCond primaryQuotes '=' '“…”'}}selected="selected"
                     {{/ifCond}}>“…”</option>
@@ -1181,7 +1181,7 @@
                   {{!-- ATTENTION when adding new pairs: They will be SPLIT using the hyphen character! --}}
                   <option value="'…'"
                     {{#ifCond secondaryQuotes '=' "'…'"}}selected="selected"
-                    {{/ifCond}}>'…'</option>
+                    {{/ifCond}}>{{ i18n "dialog.preferences.autocorrect.quick_select_none_label" }}</option>
                   <option value="‘…’"
                     {{#ifCond secondaryQuotes '=' '‘…’'}}selected="selected"
                     {{/ifCond}}>‘…’</option>
@@ -1231,10 +1231,7 @@
               </div>
             </div>
             {{!-- Add the quick-selectors --}}
-            <p>{{ i18n "dialog.preferences.autocorrect.quick_select_label" }}
-            </p>
-            <button class="mq-select" data-primary="0"
-              data-secondary="0">{{ i18n "dialog.preferences.autocorrect.quick_select_none_label" }}</button>
+            <p>{{ i18n "dialog.preferences.autocorrect.quick_select_label" }}</p>
             <button class="mq-select" data-primary="1"
               data-secondary="1">{{ i18n "dialog.preferences.app_lang.en-GB" }}</button>
             <button class="mq-select" data-primary="3"
