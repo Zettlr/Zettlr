@@ -252,11 +252,6 @@ module.exports = {
       if (foundActiveFile === undefined) {
         this.activeFile = null
       }
-
-      // As soon as the directory contents have changed, scroll to the right file
-      this.$nextTick(function () {
-        this.scrollIntoView()
-      })
     },
     /**
      * Listens to changes of the fileManagerMode to reset
