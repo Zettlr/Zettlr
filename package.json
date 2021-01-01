@@ -150,7 +150,7 @@
     "chart.js": "^2.9.4",
     "chokidar": "^3.4.3",
     "citeproc": "^2.4.56",
-    "codemirror": "^5.59.0",
+    "codemirror": "^5.59.1",
     "command-exists": "^1.2.9",
     "got": "^11.8.1",
     "joplin-turndown": "^4.0.30",
