@@ -4,7 +4,7 @@
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-11-30T07:31:28.000000Z"
+        "updated_at": "2020-12-31T13:52:23.000000Z"
     },
     "dialog": {
         "about": {
@@ -163,15 +163,16 @@
             "auto_dark_mode_schedule": "Zeit",
             "auto_dark_mode_schedule_format": "HH:MM",
             "auto_dark_mode_system": "Folge Betriebssystem",
+            "autocomplete_accept_space": "Erlaube Leerzeichen in der Autovervollst\u00e4ndigung",
             "autocorrect": {
                 "active_label": "AutoCorrect einschalten",
                 "quick_select_label": "Schnellauswahl",
-                "quick_select_none_label": "Standard",
+                "quick_select_none_label": "Magic Quotes ausschalten",
                 "quotes_double_label": "Prim\u00e4re Anf\u00fchrungszeichen",
                 "quotes_single_label": "Sekund\u00e4re Anf\u00fchrungszeichen",
                 "replacement_info": "Hier kannst du Zeichenketten definieren, die ersetzt werden, sobald AutoCorrect eingeschaltet ist. Die Zeichen links werden mit den Zeichen rechts ersetzt.",
-                "style_libre_office_label": "LibreOffice-Stil",
-                "style_word_label": "Word-Stil",
+                "style_libre_office_label": "LibreOffice-Stil (ersetzen mit Leerzeichen oder Enter)",
+                "style_word_label": "Word-Stil (sofort ersetzen, ohne Leerzeichen/Enter)",
                 "title": "AutoCorrect"
             },
             "checkForBeta": "Informiere mich \u00fcber Beta-Releases",
@@ -181,6 +182,7 @@
             "creationtime": "Dateierstellungszeitpunkt",
             "debug": "Entwicklermodus aktivieren",
             "default_image_save_path": "Standard-Bildspeicherort (relativ oder absolut)",
+            "delete_on_fail": "L\u00f6sche Objekte unwiderruflich, wenn sie nicht in den Papierkorb verschoben werden k\u00f6nnen",
             "display": {
                 "image_size_info": "Hiermit bestimmst du die maximale Gr\u00f6\u00dfe der Bildvorschauen",
                 "preview_info": "Hiermit bestimmst du, welche Elemente Zettlr darstellt",
@@ -196,6 +198,7 @@
             },
             "display_time_explanation": "Zeige folgende Zeit in den Dateiinformationen an",
             "editor": "Editor",
+            "editor_font_size": "Schriftgr\u00f6\u00dfe im Editor",
             "editor_setting": {
                 "direction_ltr": "Dokumentenschreibrichtung von links nach rechts (LTR)",
                 "direction_rtl": "Dokumentenschreibrichtung von rechts nach links (RTL)",
@@ -283,10 +286,6 @@
             },
             "readability_algorithm": "Algorithmus f\u00fcr den Lesbarkeits-Modus",
             "reset_pandoc_command": "Pandoc-Befehl auf Werkseinstellungen zur\u00fccksetzen",
-            "sidebar_combined": "Verbunden &mdash; Dateibaum zeigt Dateien",
-            "sidebar_expanded": "Erweitert &mdash; zeige Dateibaum und Liste",
-            "sidebar_explanation": "Sidebar-Modus",
-            "sidebar_thin": "D\u00fcnn &mdash; zeige Dateibaum oder Liste",
             "sorting_ascii": "ASCII-Reihenfolge (2 kommt nach 10)",
             "sorting_explanation": "Sortierreihenfolge f\u00fcr Dateien (bei Sortierung nach Dateinamen)",
             "sorting_natural": "Nat\u00fcrliche Reihenfolge (10 kommt nach 2)",
@@ -342,8 +341,10 @@
                 "var_minute": "Minuten (f\u00fchrende Null)",
                 "var_month": "Monat (f\u00fchrende Null)",
                 "var_second": "Sekunden (f\u00fchrende Null)",
+                "var_unix_epoch": "Unix-Zeit",
                 "var_week_number": "Nummer der Woche (f\u00fchrende Null)",
-                "var_year": "Jahr (vierstellig)"
+                "var_year": "Jahr (vierstellig)",
+                "var_year_two": "Jahr (zweistellig)"
             }
         },
         "statistics": {
@@ -381,7 +382,6 @@
             "connection_error": "Konnte nicht nach Updates suchen: Verbindung konnte nicht hergestellt werden",
             "current_version": "Deine Version",
             "no_data": "Konnte nicht nach Updates suchen: Server hat keine Daten gesendet",
-            "no_update": "Du nutzt die aktuelle Version von Zettlr",
             "notification": "Eine neue Version von Zettlr steht zum Download bereit. Bitte lies die \u00c4nderungsdatei unten.",
             "redirect_error": "Konnte nicht nach Updates suchen: Der Server hat eine Weiterleitung gesendet (Statuscode: %s)",
             "release_url": "Zum Download",
@@ -441,7 +441,6 @@
         "statistics_more": "Mehr Statistiken \u2026",
         "table_of_contents": "Inhaltsverzeichnis",
         "today_words": "W\u00f6rter heute",
-        "virtual_dirs": "Virtuelle Ordner",
         "words": "%s W\u00f6rter",
         "words_last_month": "W\u00f6rter (Monat)",
         "words_selected": "%s ausgew\u00e4hlt",
@@ -502,7 +501,6 @@
         "new_dir": "Neues Verzeichnis\u2026",
         "new_file": "Neue Datei\u2026",
         "new_project": "Projekt erstellen",
-        "new_vd": "Neues virtuelles Verzeichnis\u2026",
         "no_suggestions": "Keine Vorschl\u00e4ge",
         "open": "\u00d6ffnen\u2026",
         "open_attachment": "Dateianhang \u00f6ffnen",
@@ -540,7 +538,6 @@
         "tab_next": "N\u00e4chster Tab",
         "tab_previous": "Voriger Tab",
         "tags": "Schlagw\u00f6rter\u2026",
-        "toggle_attachments": "Anh\u00e4nge anzeigen",
         "toggle_devtools": "Entwicklerwerkzeuge",
         "toggle_distraction_free": "Ablenkungsfreier Modus",
         "toggle_file_meta": "Zus\u00e4tzliche Informationen",
@@ -559,7 +556,6 @@
         "zoom_out": "Herauszoomen"
     },
     "pomodoro": {
-        "mute": "Ton",
         "phase": {
             "long": "Lange Pause",
             "short": "Kurze Pause",
@@ -582,7 +578,6 @@
             "could_not_create_file": "Konnte Datei nicht erstellen",
             "could_not_save_image": "Konnte Bild nicht speichern",
             "delete_root_message": "Du kannst das Wurzelverzeichnis nicht l\u00f6schen.",
-            "delete_root_title": "Kann Wurzel nicht l\u00f6schen",
             "dnf_message": "Das angefragte Verzeichnis wurde nicht gefunden.",
             "dnf_title": "Verzeichnis nicht gefunden",
             "export_error_message": "Ein Fehler ist beim Export aufgetreten: %s",
@@ -602,15 +597,11 @@
             "no_xelatex_message": "Es wurde keine LaTeX-Installation gefunden. Bitte installiere zun\u00e4chst LaTeX, um nach PDF zu exportieren.",
             "no_xelatex_title": "LaTeX nicht gefunden",
             "open_attachment_error": "Konnte Anhang nicht \u00f6ffnen. L\u00e4uft Zotero?",
-            "open_root_error": "Konnte Datei %s nicht \u00f6ffnen",
             "open_url_error": "Konnte %s nicht \u00f6ffnen",
             "pandoc_error_message": "Pandoc hat beim Export folgenden Fehler ausgegeben: %s",
             "pandoc_error_title": "Fehler bei Dateiexport",
             "remove_message": "M\u00f6chtest du %s wirklich l\u00f6schen?",
-            "remove_title": "Wirklich l\u00f6schen?",
-            "rename_root_message": "Du kannst das Wurzelverzeichnis nicht umbenennen.",
-            "rename_root_title": "Kann Wurzel nicht umbenennen",
-            "virtual_dir_exists": "Das virtuelle Verzeichnis &quot;%s&quot; existiert bereits."
+            "remove_title": "Wirklich l\u00f6schen?"
         },
         "export_success": "Exportiere nach %s",
         "file_changed": "Datei %s wurde au\u00dferhalb bearbeitet.",

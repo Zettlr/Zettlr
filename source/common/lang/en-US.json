@@ -7,7 +7,7 @@
             "Huey"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-11-30T07:30:50.000000Z"
+        "updated_at": "2020-12-31T13:50:52.000000Z"
     },
     "dialog": {
         "about": {
@@ -166,15 +166,16 @@
             "auto_dark_mode_schedule": "Schedule",
             "auto_dark_mode_schedule_format": "HH:MM (24h format)",
             "auto_dark_mode_system": "Follow Operating System",
+            "autocomplete_accept_space": "Accept spaces during autocompletion",
             "autocorrect": {
                 "active_label": "Turn on AutoCorrect",
                 "quick_select_label": "Quick select",
-                "quick_select_none_label": "None",
+                "quick_select_none_label": "Disable Magic Quotes",
                 "quotes_double_label": "Primary Magic Quotes",
                 "quotes_single_label": "Secondary Magic Quotes",
                 "replacement_info": "Here you can define certain strings that will be replaced when AutoCorrect is on. The characters on the left side will be replaced with whatever comes on the right.",
-                "style_libre_office_label": "LibreOffice style",
-                "style_word_label": "Word style",
+                "style_libre_office_label": "LibreOffice style (press Space or Enter to replace)",
+                "style_word_label": "Word style (replace immediately without pressing Space/Enter)",
                 "title": "AutoCorrect"
             },
             "checkForBeta": "Notify me about beta releases",
@@ -184,6 +185,7 @@
             "creationtime": "File creation time",
             "debug": "Enable debug mode",
             "default_image_save_path": "Default image path (relative or absolute)",
+            "delete_on_fail": "Delete items irreversibly, if moving them to trash fails",
             "display": {
                 "image_size_info": "With these controls you can control the dimensions of the image previews.",
                 "preview_info": "These options determine which elements are rendered in documents.",
@@ -199,6 +201,7 @@
             },
             "display_time_explanation": "In the file metadata display",
             "editor": "Editor",
+            "editor_font_size": "Editor font size",
             "editor_setting": {
                 "direction_ltr": "Use left-to-right (LTR) writing direction",
                 "direction_rtl": "Use right-to-left (RTL) writing direction",
@@ -286,10 +289,6 @@
             },
             "readability_algorithm": "Algorithm to use for the readability mode",
             "reset_pandoc_command": "Reset pandoc command",
-            "sidebar_combined": "Combined &mdash; show files and directories in the file tree",
-            "sidebar_expanded": "Expanded &mdash; Show both file tree and file list",
-            "sidebar_explanation": "Sidebar mode",
-            "sidebar_thin": "Thin &mdash; show either file tree or file list",
             "sorting_ascii": "ASCII order (2 after 10)",
             "sorting_explanation": "Sorting order for files (used for sorting by name)",
             "sorting_natural": "Natural order (10 after 2)",
@@ -345,8 +344,10 @@
                 "var_minute": "Minutes (leading zeroes)",
                 "var_month": "Month (leading zeroes)",
                 "var_second": "Seconds (leading zeroes)",
+                "var_unix_epoch": "Unix time",
                 "var_week_number": "Week of the year (leading zeroes)",
-                "var_year": "Year (four digit)"
+                "var_year": "Year (four digit)",
+                "var_year_two": "Year (two digits)"
             }
         },
         "statistics": {
@@ -384,7 +385,6 @@
             "connection_error": "Could not check for updates: Could not establish connection",
             "current_version": "Your version",
             "no_data": "Could not check for updates: Server hasn't sent any data",
-            "no_update": "You got the newest version of Zettlr",
             "notification": "There is a new version of Zettlr available to download. Please read the changelog below.",
             "redirect_error": "Could not check for updates: The server tried to redirect (Status code: %s)",
             "release_url": "Open download page",
@@ -444,7 +444,6 @@
         "statistics_more": "More statistics \u2026",
         "table_of_contents": "Table of Contents",
         "today_words": "words today",
-        "virtual_dirs": "Virtual Directories",
         "words": "%s words",
         "words_last_month": "words last month",
         "words_selected": "%s selected",
@@ -505,7 +504,6 @@
         "new_dir": "New directory\u2026",
         "new_file": "New File\u2026",
         "new_project": "Create Project",
-        "new_vd": "New virtual directory\u2026",
         "no_suggestions": "No suggestions",
         "open": "Open\u2026",
         "open_attachment": "Open Attachment",
@@ -543,7 +541,6 @@
         "tab_next": "Next Tab",
         "tab_previous": "Previous Tab",
         "tags": "Manage Tags\u2026",
-        "toggle_attachments": "View attachments",
         "toggle_devtools": "Toggle developer tools",
         "toggle_distraction_free": "Distraction free mode",
         "toggle_file_meta": "Additional Information",
@@ -562,7 +559,6 @@
         "zoom_out": "Zoom out"
     },
     "pomodoro": {
-        "mute": "Sound",
         "phase": {
             "long": "Break",
             "short": "Short break",
@@ -585,7 +581,6 @@
             "could_not_create_file": "Could not create file",
             "could_not_save_image": "Could not save image",
             "delete_root_message": "You cannot remove the root directory.",
-            "delete_root_title": "Cannot remove root",
             "dnf_message": "The requested directory was not found.",
             "dnf_title": "Directory not found",
             "export_error_message": "An error occurred on export: %s",
@@ -605,15 +600,11 @@
             "no_xelatex_message": "Zettlr couldn't detect a LaTeX-distribution on this system. Please install LaTeX prior to exporting to PDF.",
             "no_xelatex_title": "LaTeX not found",
             "open_attachment_error": "Could not open attachment. Is Zotero running?",
-            "open_root_error": "Could not open %s",
             "open_url_error": "Could not open %s",
             "pandoc_error_message": "Pandoc reported an error: %s",
             "pandoc_error_title": "Could not export file",
             "remove_message": "Do you really want to remove %s?",
-            "remove_title": "Really delete?",
-            "rename_root_message": "You cannot rename the root directory.",
-            "rename_root_title": "Cannot rename root",
-            "virtual_dir_exists": "The virtual directory &quot;%s&quot; already exists."
+            "remove_title": "Really delete?"
         },
         "export_success": "Exporting to %s",
         "file_changed": "File %s has changed remotely.",
