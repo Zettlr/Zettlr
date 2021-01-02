@@ -1,5 +1,5 @@
 <template>
-  <div ref="log-viewer" id="log-viewer">
+  <div id="log-viewer" ref="log-viewer">
     <Message
       v-for="(entry, idx) in filteredMessages"
       v-bind:key="idx"
@@ -57,6 +57,11 @@ export default {
     }, 1000)
   },
   methods: {
+    /**
+     * Fetches new log data, beginning at nextIndex
+     *
+     * @return  {void}
+     */
     fetchData: async function () {
       const newLogs = await ipcRenderer.invoke('log-provider', {
         command: 'retrieve-log-chunk',
@@ -74,6 +79,11 @@ export default {
         })
       }
     },
+    /**
+     * Returns true if the container is currently scrolled to bottom.
+     *
+     * @return  {boolean}  Whether the container is at the bottom
+     */
     containerScrolledToBottom: function () {
       const elem = this.$refs['log-viewer']
       const lastVisiblePixel = elem.getBoundingClientRect().height + elem.scrollTop
@@ -81,6 +91,11 @@ export default {
 
       return leftToShow === 0
     },
+    /**
+     * Scrolls the container to the bottom programmatically
+     *
+     * @return  {void}
+     */
     scrollToBottom: function () {
       const elem = this.$refs['log-viewer']
       elem.scrollTop = elem.scrollHeight - elem.getBoundingClientRect().height

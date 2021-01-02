@@ -32,8 +32,6 @@ export default function createLogWindow (): BrowserWindow {
     minHeight: 200,
     show: false,
     webPreferences: {
-      // Zettlr needs all the node features, so in preparation for Electron
-      // 5.0 we'll need to explicitly request it.
       nodeIntegration: true
     },
     backgroundColor: '#fff'
@@ -50,7 +48,7 @@ export default function createLogWindow (): BrowserWindow {
   window.loadURL(LOG_VIEWER_WEBPACK_ENTRY)
     .catch(e => {
       // @ts-expect-error
-      global.log.error(`Could not load URL ${PRINT_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${LOG_VIEWER_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS
