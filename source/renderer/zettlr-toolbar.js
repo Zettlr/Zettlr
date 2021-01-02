@@ -223,14 +223,7 @@ class ZettlrToolbar {
 
     this.searchBarInput.addEventListener('focus', () => {
       this._autocomplete = this._renderer.getFilesInDirectory()
-      if (this.searchBarInput.value === '') {
-        // Let's prefill this with the selection from the editor if possible.
-        let selections = this._renderer.getEditor().getSelections()
-        if (selections.length > 0) {
-          this.searchBarInput.value = selections[0]
-          this.searchBarInput.select() // Ease of access
-        }
-      }
+      this.searchBarInput.select() // Ease of access
     })
 
     this.searchBarInput.addEventListener('blur', () => {
@@ -499,7 +492,10 @@ class ZettlrToolbar {
     * Focuses the search area
     * @return {ZettlrToolbar} Chainability.
     */
-  focusSearch () {
+  focusSearch (query) {
+    if (query !== undefined) {
+      this.searchBarInput.value = query
+    }
     this.searchBarInput.focus()
     this.searchBarInput.select()
     return this

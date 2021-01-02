@@ -251,8 +251,13 @@ class ZettlrRendererIPC {
 
       // TODO: What the heck is that a kind of "name"?
       case 'dir-find':
-      // User wants to search in current directory.
-        this._app.getToolbar().focusSearch()
+        // User wants to search in current directory.
+        let query = ""
+        let selections = this._app.getEditor().getSelections()
+        if (selections.length > 0) {
+          query = selections[0]
+        }
+        this._app.getToolbar().focusSearch(query)
         break
 
       case 'workspace-open':
