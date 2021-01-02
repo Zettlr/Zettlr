@@ -19,7 +19,15 @@ export interface ToolbarSpacerControl {
   size?: '1x'|'3x'|'5x' // Spacer size
 }
 
-export type ToolbarControl = ToolbarTextControl | ToolbarToggleControl | ToolbarSpacerControl
+export interface ToolbarSearchControl {
+  type: 'search'
+  placeholder: string
+  onInputHandler?: (value: string) => void
+  onSubmitHandler?: (value: string) => void
+}
+
+export type ToolbarControl =
+  ToolbarTextControl | ToolbarToggleControl | ToolbarSpacerControl | ToolbarSearchControl
 
 export default function registerToolbar (toolbarControls: ToolbarControl[]): void {
   const toolbar = document.getElementById('toolbar')
@@ -79,6 +87,25 @@ export default function registerToolbar (toolbarControls: ToolbarControl[]): voi
         default:
           elem.classList.add('spacer')
       }
+    } else if (control.type === 'search') {
+      const input = document.createElement('input')
+      input.placeholder = control.placeholder
+      input.type = 'search'
+      input.setAttribute('role', 'search')
+
+      elem.setAttribute('role', 'presentation') // ARIA role
+      elem.classList.add('searchbar')
+      elem.appendChild(input)
+
+      input.addEventListener('keyup', (event) => {
+        if (control.onInputHandler !== undefined) {
+          control.onInputHandler(input.value)
+        }
+
+        if (event.key === 'Enter' && control.onSubmitHandler !== undefined) {
+          control.onSubmitHandler(input.value)
+        }
+      })
     }
 
     // Afterwards, activate event hooks for this element

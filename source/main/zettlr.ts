@@ -14,7 +14,7 @@
  * END HEADER
  */
 
-import { app, BrowserWindow, FileFilter } from 'electron'
+import { app, BrowserWindow, FileFilter, ipcMain } from 'electron'
 import path from 'path'
 import fs from 'fs'
 
@@ -176,6 +176,23 @@ export default class Zettlr {
           break
       }
     })
+
+    // Handle Quicklook window requests for files TODO: Move this someplace else!
+    ipcMain.handle('quicklook-controller', async (event, payload) => {
+      const { command, hash } = payload
+      // Last possibility: A quicklook window has requested a file. In this case
+      // we mustn't obliterate the "event" because this way we don't need to
+      // search for the window.
+      if (command === 'get-file') {
+        const fileDescriptor = this._fsal.findFile(hash)
+        if (fileDescriptor === null) {
+          global.log.error(`[Application] Could not get file descriptor for file ${String(hash)}.`)
+          return
+        }
+        const fileMeta = await this._fsal.getFileContents(fileDescriptor)
+        return fileMeta
+      }
+    })
   }
 
   /**
@@ -186,6 +203,11 @@ export default class Zettlr {
    */
   _onFileContentsChanged (info: any): void {
     let changedFile = this.findFile(info.hash)
+    if (changedFile === null) {
+      global.log.error('[Application] Could not handle remote change, as no descriptor was found.', info)
+      return
+    }
+
     // The contents of one of the open files have changed.
     // What follows looks a bit ugly, welcome to callback hell.
     if (global.config.get('alwaysReloadFiles') === true) {
@@ -200,6 +222,11 @@ export default class Zettlr {
       this._windowManager.askReplaceFile(changedFile.name)
         .then((shouldReplace) => {
           if (!shouldReplace) {
+            return
+          }
+
+          if (changedFile === null) {
+            global.log.error('[Application] Cannot replace file.', changedFile)
             return
           }
 
@@ -463,8 +490,13 @@ export default class Zettlr {
   //   return console.log(`Marking directory ${dir.name} as dead!`)
   // }
 
-  findFile (arg: any): any { return this._fsal.findFile(arg) }
-  findDir (arg: any): any { return this._fsal.findDir(arg) }
+  findFile (arg: string | number): MDFileDescriptor | CodeFileDescriptor | null {
+    return this._fsal.findFile(arg)
+  }
+
+  findDir (arg: string | number): DirDescriptor | null {
+    return this._fsal.findDir(arg)
+  }
 
   /**
     * Sets the current file to the given file.

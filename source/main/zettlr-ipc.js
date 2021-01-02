@@ -64,17 +64,6 @@ class ZettlrIPC {
         return // Also, don't dispatch further
       }
 
-      // Last possibility: A quicklook window has requested a file. In this case
-      // we mustn't obliterate the "event" because this way we don't need to
-      // search for the window.
-      if (arg.command === 'ql-get-file') {
-        let QLFile = this._app.findFile(arg.content)
-        global.application.getFile(QLFile).then(file => {
-          event.sender.send('file', file)
-        })
-        return
-      }
-
       // In all other occasions omit the event.
       this.dispatch(arg)
     })

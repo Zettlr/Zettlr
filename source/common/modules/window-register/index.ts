@@ -12,6 +12,9 @@ export interface RegistrationOptions {
   toolbarControls?: ToolbarControl[]
 }
 
+// Provide the registerToolbar function to programmatically update it afterwards
+export { registerToolbar }
+
 /**
  * This function is the renderer's counterpart to the main process's window
  * configuration and registers stuff like custom window controls and the menu

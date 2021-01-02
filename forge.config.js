@@ -85,7 +85,7 @@ module.exports = {
             },
             {
               html: './source/quicklook/index.htm',
-              js: './source/quicklook/zettlr-quicklook-window.ts',
+              js: './source/quicklook/index.ts',
               name: 'quicklook'
             }
           ]
