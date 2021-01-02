@@ -18,7 +18,7 @@ export default {
   },
   data: function () {
     return {
-      lastIndex: 0, // Last log message array index; updated from the main process
+      nextIndex: 0, // Last log message array index; updated from the main process
       messages: [], // Holds all the log files
       // Filters TODO: Actually enable setting and getting these
       includeVerbose: true,
@@ -60,12 +60,12 @@ export default {
     fetchData: async function () {
       const newLogs = await ipcRenderer.invoke('log-provider', {
         command: 'retrieve-log-chunk',
-        lastIndex: this.lastIndex
+        nextIndex: this.nextIndex
       })
 
       const shouldScroll = this.containerScrolledToBottom()
 
-      this.lastIndex += newLogs.length
+      this.nextIndex += newLogs.length
       this.messages = this.messages.concat(newLogs)
       // Vue will update itself only on the next tick, so let's await that
       if (shouldScroll) {

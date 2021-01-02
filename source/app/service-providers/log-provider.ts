@@ -94,12 +94,12 @@ export default class LogProvider {
       const { command } = payload
 
       if (command === 'retrieve-log-chunk') {
-        let { lastIndex } = payload
-        if (lastIndex >= this._log.length) {
+        let { nextIndex } = payload
+        if (nextIndex >= this._log.length) {
           return []
         }
 
-        return this._log.slice(lastIndex)
+        return this._log.slice(nextIndex)
       }
     })
   }
