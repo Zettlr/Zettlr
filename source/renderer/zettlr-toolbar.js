@@ -493,6 +493,7 @@ class ZettlrToolbar {
     * @return {ZettlrToolbar} Chainability.
     */
   focusSearch () {
+    // Let's prefill this with the selection from the editor if possible.
     let query = this._renderer.getEditor().getSelections().pop()
     this.searchBarInput.value = query
     this.searchBarInput.focus()

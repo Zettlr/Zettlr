@@ -251,7 +251,7 @@ class ZettlrRendererIPC {
 
       // TODO: What the heck is that a kind of "name"?
       case 'dir-find':
-        // User wants to search in current directory.
+      // User wants to search in current directory.
         this._app.getToolbar().focusSearch()
         break
 
