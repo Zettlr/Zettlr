@@ -40,8 +40,9 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Removed the timeout on the dictionary provider, as the dictionaries are likely to be loaded prior either way.
 - Force `electron-packager` to 15.2.0 to enable darwin/arm64 (Apple Silicon) builds.
 - Zettlr now detects Byte Order Marks (BOM) if present in a file.
-- The LogViewer got a new paint job: It's now based on Vue, much less resource-heavy and it includes filters to only show certain log levels (right now they can only be triggered using the Vue development console in the DevTools).
+- The LogViewer got a new paint job: It's now based on Vue, much less resource-heavy and it includes filters to only show certain log levels.
 - Moved the log window creation to the Window Manager.
+- The window registration procedure now supports handling the toolbar which now also doubles as a title bar (if you don't want a toolbar).
 
 # 1.8.4
 

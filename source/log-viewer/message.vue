@@ -96,6 +96,27 @@ export default {
 </script>
 
 <style lang="less">
+  // This is bad style, but let's add the toolbar button classes here
+  .verbose-control-active {
+    background-color: #d8d8d8;
+    color: rgb(131, 131, 131);
+  }
+
+  .warning-control-active {
+    background-color: rgb(236, 238, 97);
+    color: rgb(139, 139, 24);
+  }
+
+  .info-control-active {
+    background-color: rgb(165, 204, 255);
+    color: rgb(61, 136, 233);
+  }
+
+  .error-control-active {
+    background-color: rgb(255, 130, 130);
+    color: rgb(139, 27, 27);
+  }
+
   .message {
     display: table-row;
     transition: 0.5s all ease;
@@ -129,29 +150,29 @@ export default {
     .message .details .more { color: #000; }
 
     &.verbose {
-      background-color: #d6d6d6;
-      color: #aaa;
+      background-color: #d8d8d8;
+      color: rgb(131, 131, 131);
 
       &:hover { background-color: white; }
     }
 
     &.warning {
-      background-color: rgb(221, 221, 81);
-      color: rgb(109, 109, 8);
+      background-color: rgb(236, 238, 97);
+      color: rgb(139, 139, 24);
 
       &:hover { background-color: rgb(253, 253, 176); }
     }
 
     &.info {
-      background-color: rgb(144, 190, 251);
-      color: rgb(38, 94, 168);
+      background-color: rgb(165, 204, 255);
+      color: rgb(61, 136, 233);
 
       &:hover { background-color: rgb(217, 233, 255); }
     }
 
     &.error {
-      background-color: rgb(230, 121, 121);
-      color: rgb(126, 47, 47);
+      background-color: rgb(255, 130, 130);
+    color: rgb(139, 27, 27);
 
       &:hover { background-color: rgb(247, 188, 188); }
     }

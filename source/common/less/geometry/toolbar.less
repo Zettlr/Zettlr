@@ -9,6 +9,7 @@
     padding: 0;
     display: flex;
     align-items: center;
+    justify-content: space-around;
 
     & > .searchbar, & > .file-info, & > .button, & > svg:not(#search-progress-indicator) {
         // Remove the outline everywhere
@@ -17,7 +18,7 @@
 
 
     .button {
-        flex-grow: 0.1;
+        flex-grow: 1;
         outline: 0;
         display: inline-block;
         width: @button-size;
@@ -51,7 +52,16 @@
         }
     }
 
+    .text {
+      // A text-label
+      padding: 0px 5px;
+      flex-grow: 2; // At least double the size of buttons
+    }
+
     .spacer { flex-grow: 5; }
+    .spacer-5x { flex-grow: 5; }
+    .spacer-3x { flex-grow: 3; }
+    .spacer-1x { flex-grow: 1; }
 
     .separator {
         flex-grow: 0.3;

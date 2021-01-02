@@ -1,4 +1,5 @@
 import registerMenubar from './register-menu-bar'
+import registerToolbar, { ToolbarControl } from './register-toolbar'
 import registerWindowControls from './register-window-controls'
 import registerGlobals from './register-globals'
 import loadI18nRenderer from '../../load-i18n-renderer'
@@ -8,6 +9,7 @@ import registerDefaultContextMenu from './register-default-context'
 export interface RegistrationOptions {
   showMenubar?: boolean
   showWindowControls?: boolean
+  toolbarControls?: ToolbarControl[]
 }
 
 /**
@@ -47,6 +49,16 @@ export default function windowRegister (options?: RegistrationOptions): void {
     }
   }
 
+  // Determine if this code should handle the toolbar (default: no).
+  // The default is set to give this code backward compatibility (only
+  // touch the toolbar where we explicitly set this)
+  let shouldHandleToolbar: boolean = false
+  if (options !== undefined) {
+    if (options.toolbarControls !== undefined) {
+      shouldHandleToolbar = true // Existence of toolbarControls implies a toolbar
+    }
+  }
+
   // Load the translation strings
   loadI18nRenderer()
 
@@ -56,6 +68,10 @@ export default function windowRegister (options?: RegistrationOptions): void {
   registerWindowControls(shouldShowWindowControls)
   // ... register the menu bar ...
   registerMenubar(shouldShowMenubar)
+  // ... the toolbar ...
+  if (shouldHandleToolbar && options?.toolbarControls !== undefined) {
+    registerToolbar(options.toolbarControls)
+  }
   // ... the theming functionality ...
   registerThemes()
   // ... the default context menus
