@@ -5,19 +5,19 @@
             "Le Monolecte \u003Cmonolecte@gmail.com\u003E",
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E",
             "free1fox",
+            "concretx",
             "metal3d",
+            "Adrien H \u003Cadrien.h@tuta.io\u003E",
             "ScaredCoward",
             "Alexis M\u00e9taireau",
             "YannB",
             "Lexane",
             "Taylan TATLI",
-            "concretx",
             "\u00c9ric Guirbal",
-            "Joris",
-            "Adrien H \u003Cadrien.h@tuta.io\u003E"
+            "Joris"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-12-08T14:01:53.000000Z"
+        "updated_at": "2020-12-24T12:40:26.000000Z"
     },
     "dialog": {
         "about": {
@@ -49,8 +49,8 @@
             "save": "Enregistrer"
         },
         "custom_css": {
-            "info": "Vous pouvez modifier l'apparence de l'application ici. \u003Cstrong\u003EAttention: Ce fichier peut \u00e9craser toutes les directives de CSS! Ne jamais modifier la g\u00e9om\u00e9trie des \u00e9l\u00e9ments, sinon l'application pourrait avoir un comportement d'affichage ind\u00e9sirable!\u003C/strong\u003E",
-            "title": "CSS Personnalis\u00e9"
+            "info": "Vous pouvez modifier l'apparence de l'application ici. \u003Cstrong\u003EAttention : ce fichier peut \u00e9craser toutes les directives de CSS ! Ne jamais modifier la g\u00e9om\u00e9trie des \u00e9l\u00e9ments, sinon l'application pourrait avoir un comportement d'affichage ind\u00e9sirable !\u003C/strong\u003E",
+            "title": "CSS personnalis\u00e9"
         },
         "dir_new": {
             "placeholder": "Nom du dossier",
@@ -63,7 +63,7 @@
             "message": "N'a pas pu cr\u00e9er le dialogue %s !",
             "name": "Dialogue d'erreur",
             "no_data": "Le dialogue n'a pas \u00e9t\u00e9 charg\u00e9, L'objet des donn\u00e9es contient: %s.",
-            "no_init": "Le dialogue n'a pas \u00e9t\u00e9 charg\u00e9 !",
+            "no_init": "Le dialogue n'a pas \u00e9t\u00e9 initialis\u00e9\u00a0!",
             "no_template": "Mod\u00e8le de dialogue non trouv\u00e9 '%s' !",
             "unknown_dialog": "Le dialogue '%s' n'existe pas et n'a pas \u00e9t\u00e9 charg\u00e9."
         },
@@ -77,7 +77,7 @@
         "file_rename": {
             "placeholder": "Nom du fichier"
         },
-        "filter_tags": "Filtrer les \u00e9tiquettes",
+        "filter_tags": "filtrer les mots-cl\u00e9s",
         "find": {
             "find_label": "Trouver",
             "find_placeholder": "Trouver\u2026",
@@ -194,6 +194,7 @@
             "creationtime": "Temps de cr\u00e9ation du fichier",
             "debug": "Activer le mode debug",
             "default_image_save_path": "Chemin par d\u00e9faut des images (relatif ou absolu)",
+            "delete_on_fail": "Supprimer les \u00e9l\u00e9ments de mani\u00e8re irr\u00e9versible, si leur d\u00e9placement vers la corbeille \u00e9choue",
             "display": {
                 "image_size_info": "Contr\u00f4ler la taille des aper\u00e7us d\u2019images.",
                 "preview_info": "Choisir les \u00e9l\u00e9ments qui sont visibles dans les documents.",
@@ -296,10 +297,6 @@
             },
             "readability_algorithm": "Algorithme \u00e0 utiliser pour le mode de lisibilit\u00e9",
             "reset_pandoc_command": "R\u00e9initialiser la commande Pandoc",
-            "sidebar_combined": "&mdash; combin\u00e9e affiche les fichiers et les r\u00e9pertoires dans l'arborescence",
-            "sidebar_expanded": "&mdash; large affiche l'arborescence et la liste de fichiers",
-            "sidebar_explanation": "Mode d\u2019affichage de la barre lat\u00e9rale",
-            "sidebar_thin": "&mdash; \u00e9troite affiche soit l'arborescence, soit la liste des fichiers",
             "sorting_ascii": "Ordre ASCII (2 apr\u00e8s 10)",
             "sorting_explanation": "Ordre de tri des fichiers (utilis\u00e9 pour le tri par nom)",
             "sorting_natural": "Ordre naturel (10 apr\u00e8s 2)",
@@ -355,8 +352,10 @@
                 "var_minute": "Minutes (sur 2 chiffres)",
                 "var_month": "Mois (sur 2 chiffres)",
                 "var_second": "Secondes (sur 2 chiffres)",
+                "var_unix_epoch": "Heure Unix",
                 "var_week_number": "Semaine (sur 2 chiffres)",
-                "var_year": "Ann\u00e9e (sur 4 chiffres)"
+                "var_year": "Ann\u00e9e (sur 4 chiffres)",
+                "var_year_two": "Ann\u00e9e (deux chiffres)"
             }
         },
         "statistics": {
@@ -394,7 +393,6 @@
             "connection_error": "Impossible de v\u00e9rifier les mises \u00e0 jour : pas de connexion",
             "current_version": "Votre version",
             "no_data": "Impossible de v\u00e9rifier les mises \u00e0 jour : le serveur n\u2019a pas envoy\u00e9 de donn\u00e9es",
-            "no_update": "Vous avez la version la plus r\u00e9cente de Zettlr",
             "notification": "Une nouvelle version de Zettlr est disponible. La liste des changements est ci-dessous.",
             "redirect_error": "Impossible de v\u00e9rifier les mises \u00e0 jour : le serveur a essay\u00e9 de rediriger (Code d'\u00e9tat : %s)",
             "release_url": "Ouvrir la page de t\u00e9l\u00e9chargement",
@@ -454,7 +452,6 @@
         "statistics_more": "Plus de statistiques\u2026",
         "table_of_contents": "Table des mati\u00e8res",
         "today_words": "mots aujourd'hui",
-        "virtual_dirs": "Dossiers virtuels",
         "words": "%s mots",
         "words_last_month": "mots au cours du mois",
         "words_selected": "%s s\u00e9lectionn\u00e9s",
@@ -515,7 +512,6 @@
         "new_dir": "Nouveau dossier\u2026",
         "new_file": "Nouveau fichier\u2026",
         "new_project": "Nouveau Projet",
-        "new_vd": "Nouveau dossier virtuel\u2026",
         "no_suggestions": "Pas de suggestions",
         "open": "Ouvrir...",
         "open_attachment": "Ouvrir annexe",
@@ -553,7 +549,6 @@
         "tab_next": "Onglet suivant",
         "tab_previous": "Onglet pr\u00e9c\u00e9dent",
         "tags": "G\u00e9rer les mots-cl\u00e9s",
-        "toggle_attachments": "Voir les annexes",
         "toggle_devtools": "Outils du d\u00e9veloppeur",
         "toggle_distraction_free": "Mode sans distraction",
         "toggle_file_meta": "Propri\u00e9t\u00e9s du fichier",
@@ -572,7 +567,6 @@
         "zoom_out": "D\u00e9zoomer"
     },
     "pomodoro": {
-        "mute": "Muet",
         "phase": {
             "long": "Pause longue",
             "short": "Pause br\u00e8ve",
@@ -595,7 +589,6 @@
             "could_not_create_file": "Erreur lors de la cr\u00e9ation du fichier",
             "could_not_save_image": "Erreur lors de la cr\u00e9ation de l'image",
             "delete_root_message": "Vous ne pouvez pas supprimer le dossier racine.",
-            "delete_root_title": "Le dossier racine ne peut \u00eatre supprim\u00e9",
             "dnf_message": "Le dossier demand\u00e9 n'a pas \u00e9t\u00e9 trouv\u00e9.",
             "dnf_title": "Dossier non trouv\u00e9",
             "export_error_message": "Une erreur est survenue lors de l'exportation : %s",
@@ -615,15 +608,11 @@
             "no_xelatex_message": "LaTeX n\u2019a pas \u00e9t\u00e9 trouv\u00e9 dans votre ordinateur. Veuillez t\u00e9l\u00e9charger LaTeX pour exporter en PDF.",
             "no_xelatex_title": "Impossible de trouver LaTeX",
             "open_attachment_error": "Impossible d'ouvrir la pi\u00e8ce jointe. Zotero fonctionne-t-il\u202f?",
-            "open_root_error": "Impossible d'ouvrir %s",
             "open_url_error": "Impossible d'ouvrir %s",
             "pandoc_error_message": "Pandoc a rapport\u00e9 une erreur : %s",
             "pandoc_error_title": "Erreur lors de l'exportation du fichier",
             "remove_message": "Voulez-vous vraiment supprimer %s ?",
-            "remove_title": "Vraiment supprimer ?",
-            "rename_root_message": "Le dossier racine ne peut \u00eatre renomm\u00e9.",
-            "rename_root_title": "Impossible de renommer la racine",
-            "virtual_dir_exists": "Le dossier virtuel &quot;%s&quot; existe d\u00e9j\u00e0."
+            "remove_title": "Vraiment supprimer ?"
         },
         "export_success": "Exportation vers %s",
         "file_changed": "Le fichier %s a \u00e9t\u00e9 modifi\u00e9 par un programme ext\u00e9rieur.",
@@ -678,7 +667,7 @@
         "readability": "Activer le mode de lisibilit\u00e9",
         "remove_fn": "Supprimer la note de pied de page sous le curseur",
         "share": "Exporter le fichier courant en HTML, DOCX, ODT ou PDF",
-        "show_menu": "Ouvrir le menu d'application",
+        "show_menu": "Ouvrir le menu",
         "show_toc": "Afficher la table des mati\u00e8res",
         "stats": "Voir les statistiques",
         "tag_cloud": "Mots-cl\u00e9s",
