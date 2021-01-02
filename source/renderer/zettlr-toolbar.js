@@ -492,10 +492,9 @@ class ZettlrToolbar {
     * Focuses the search area
     * @return {ZettlrToolbar} Chainability.
     */
-  focusSearch (query) {
-    if (query !== undefined) {
-      this.searchBarInput.value = query
-    }
+  focusSearch () {
+    let query = this._renderer.getEditor().getSelections().pop()
+    this.searchBarInput.value = query
     this.searchBarInput.focus()
     this.searchBarInput.select()
     return this
