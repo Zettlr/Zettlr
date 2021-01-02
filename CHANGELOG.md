@@ -24,6 +24,7 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Revamped the about dialog's other project tab.
 - Removed the deprecation warning for deprecated installations.
 - Improved the preferences explanations with regard to AutoCorrect modes and the Magic Quotes section (some require adaptions by the users in the corresponding translations!)
+- Re-built the QuickLooks. Now they share even more code with the rest of the app, should react more snappy, and are more responsive then ever.
 
 ## Under the Hood
 
@@ -43,6 +44,7 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - The LogViewer got a new paint job: It's now based on Vue, much less resource-heavy and it includes filters to only show certain log levels.
 - Moved the log window creation to the Window Manager.
 - The window registration procedure now supports handling the toolbar which now also doubles as a title bar (if you don't want a toolbar).
+- Migrated the Quicklook windows to Vue.js.
 
 # 1.8.4
 
