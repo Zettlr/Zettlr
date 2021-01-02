@@ -579,7 +579,7 @@ export default class FSAL extends EventEmitter {
    * Returns a file's metadata including the contents.
    * @param {Object} file The file descriptor
    */
-  public openFile (file: MDFileDescriptor): boolean {
+  public openFile (file: MDFileDescriptor|CodeFileDescriptor): boolean {
     if (this._state.openFiles.includes(file)) return false
     if (file.type !== 'file') return false
     this._state.openFiles.push(file)
@@ -842,7 +842,7 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  public async renameFile (src: MDFileDescriptor, newName: string): Promise<void> {
+  public async renameFile (src: MDFileDescriptor|CodeFileDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink, 1x add
     let oldHash = src.hash
@@ -858,7 +858,12 @@ export default class FSAL extends EventEmitter {
       'path': path.join(path.dirname(src.path), newName)
     }])
 
-    await FSALFile.rename(src, this._cache, newName)
+    if (src.type === 'file') {
+      await FSALFile.rename(src, this._cache, newName)
+    } else if (src.type === 'code') {
+      await FSALCodeFile.rename(src, this._cache, newName)
+    }
+
     // Now we need to re-sort the parent directory
     if (src.parent !== null) {
       await FSALDir.sort(src.parent) // Omit sorting
