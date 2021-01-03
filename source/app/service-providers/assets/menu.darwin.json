@@ -202,7 +202,7 @@
       {
         "label": "menu.find_file",
         "accelerator": "Cmd+F",
-        "command": "file-find"
+        "shortcut": "search"
       },
       {
         "label": "menu.find_dir",

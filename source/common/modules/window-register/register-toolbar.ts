@@ -1,3 +1,5 @@
+import { ipcRenderer } from 'electron'
+
 export interface ToolbarTextControl {
   type: 'text'
   content: string
@@ -36,14 +38,42 @@ export interface ToolbarSearchControl {
 export type ToolbarControl =
   ToolbarTextControl | ToolbarToggleControl | ToolbarSpacerControl | ToolbarSearchControl | ToolbarButtonControl
 
+/**
+ * For easy access, stored all toolbar elements
+ *
+ * @var {Element[]}
+ */
+let toolbarElements: Element[] = []
+
+/**
+ * Listen to shortcuts from the menu provider
+ *
+ * @param   {string}  shortcut  The shortcut to be triggered
+ */
+ipcRenderer.on('shortcut', (event, shortcut) => {
+  if (shortcut === 'search') {
+    // Focus the first search, if applicable
+    const searchControl = toolbarElements.find(elem => elem.classList.contains('searchbar'))
+    searchControl?.querySelector('input')?.focus()
+  }
+})
+
+/**
+ * Sets the toolbar with the given controls
+ *
+ * @param   {ToolbarControl[]}  toolbarControls  The controls for the toolbar
+ */
 export default function registerToolbar (toolbarControls: ToolbarControl[]): void {
   const toolbar = document.getElementById('toolbar')
   if (toolbar === null) {
     throw new Error('Configuration indicated the registration should handle the toolbar, but none was found.')
   }
 
+  toolbar.setAttribute('role', 'toolbar')
+
   // Preset the toolbar
   toolbar.innerHTML = ''
+  toolbarElements = []
 
   for (const control of toolbarControls) {
     const elem = document.createElement('div')
@@ -51,6 +81,7 @@ export default function registerToolbar (toolbarControls: ToolbarControl[]): voi
       // We have a text control
       elem.textContent = control.content
       elem.classList.add('text')
+      elem.setAttribute('role', 'presentation')
       if (control.style !== undefined) {
         if (control.style === 'strong') {
           elem.style.fontWeight = 'bold'
@@ -64,12 +95,12 @@ export default function registerToolbar (toolbarControls: ToolbarControl[]): voi
       elem.setAttribute('role', 'button') // ARIA role
       // Should we activate the toggle now?
       if (control.type === 'toggle' && control?.initialState === 'active') {
-        elem.dataset.active = 'true'
+        elem.setAttribute('aria-pressed', 'true')
         if (control.activeClass !== undefined) {
           elem.classList.add(control.activeClass)
         }
       } else {
-        elem.dataset.active = 'false'
+        elem.setAttribute('aria-pressed', 'false')
       }
       // Determine if we have an icon
       if (control.icon !== undefined) {
@@ -81,6 +112,7 @@ export default function registerToolbar (toolbarControls: ToolbarControl[]): voi
       // Now the label
       elem.appendChild(document.createTextNode(control.label))
     } else if (control.type === 'spacer') {
+      elem.setAttribute('role', 'presentation')
       switch (control.size) {
         case '1x':
           elem.classList.add('spacer-1x')
@@ -100,7 +132,7 @@ export default function registerToolbar (toolbarControls: ToolbarControl[]): voi
       input.type = 'search'
       input.setAttribute('role', 'search')
 
-      elem.setAttribute('role', 'presentation') // ARIA role
+      elem.setAttribute('role', 'search') // ARIA role
       elem.classList.add('searchbar')
       elem.appendChild(input)
 
@@ -118,16 +150,16 @@ export default function registerToolbar (toolbarControls: ToolbarControl[]): voi
     // Afterwards, activate event hooks for this element
     elem.addEventListener('click', (event) => {
       if (control.type === 'toggle' && control.onClickHandler !== undefined) {
-        const state = elem.dataset.active
+        const state = elem.getAttribute('aria-pressed')
         if (state === 'true') { // Element was active -> set inactive
-          elem.dataset.active = 'false'
+          elem.setAttribute('aria-pressed', 'false')
           if (control.activeClass !== undefined) {
             elem.classList.remove(control.activeClass)
           }
           control.onClickHandler(false)
         } else {
           // Element was inactive -> activate
-          elem.dataset.active = 'true'
+          elem.setAttribute('aria-pressed', 'true')
           if (control.activeClass !== undefined) {
             elem.classList.add(control.activeClass)
           }
@@ -140,5 +172,6 @@ export default function registerToolbar (toolbarControls: ToolbarControl[]): voi
 
     // After everything is done, add the toolbar control
     toolbar.appendChild(elem)
+    toolbarElements.push(elem)
   }
 }

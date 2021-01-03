@@ -126,6 +126,17 @@ class ZettlrBody {
         this.notifyError(message)
       }
     })
+
+    /**
+     * Listen to shortcuts from the menu provider
+     *
+     * @param   {string}  shortcut  The shortcut to be triggered
+     */
+    ipcRenderer.on('shortcut', (event, shortcut) => {
+      if (shortcut === 'search') {
+        this.displayFind()
+      }
+    })
   }
 
   /**

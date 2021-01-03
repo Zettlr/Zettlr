@@ -174,7 +174,7 @@
       {
         "label": "menu.find_file",
         "accelerator": "Ctrl+F",
-        "command": "file-find"
+        "shortcut": "search"
       },
       {
         "label": "menu.find_dir",

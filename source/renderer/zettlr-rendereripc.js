@@ -397,10 +397,6 @@ class ZettlrRendererIPC {
         this._app.newFile(cnt)
         break
 
-      case 'file-find':
-        this._app.getBody().displayFind()
-        break
-
       case 'file-duplicate':
         this._app.getBody().requestDuplicate(cnt)
         break

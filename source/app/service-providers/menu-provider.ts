@@ -234,23 +234,6 @@ export default class MenuProvider {
       menu.accelerator = menutpl.accelerator
     }
 
-    // Weblinks are "target"s
-    if ((menutpl as any).target !== undefined) {
-      menu.click = function (menuitem, focusedWindow) {
-        const target = (menutpl as any).target as string
-        shell.openExternal(target).catch(e => {
-          global.log.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
-        })
-      }
-    }
-
-    // Commands need to be simply sent to the renderer
-    if ((menutpl as any).command !== undefined) {
-      menu.click = function (menuItem, focusedWindow) {
-        global.ipc.send((menutpl as any).command)
-      }
-    }
-
     // Checkboxes can be checked based on a config value
     if (menutpl.checked !== undefined && (menutpl as any).checked !== 'null') {
       menu.checked = global.config.get(menutpl.checked)
@@ -287,6 +270,32 @@ export default class MenuProvider {
       }
     }
 
+    // Weblinks are "target"s
+    if ((menutpl as any).target !== undefined) {
+      menu.click = function (menuitem, focusedWindow) {
+        const target = (menutpl as any).target as string
+        shell.openExternal(target).catch(e => {
+          global.log.error(`[Menu Provider] Cannot open target: ${target}`, e.message)
+        })
+      }
+    }
+
+    // Commands need to be simply sent to the renderer
+    if ((menutpl as any).command !== undefined) {
+      menu.click = function (menuItem, focusedWindow) {
+        global.ipc.send((menutpl as any).command)
+      }
+    }
+
+    // // "command": "file-find"
+    // Shortcuts are commands that need to be send to the currently focused
+    // window.
+    if ((menutpl as any).shortcut !== undefined) {
+      menu.click = function (menuItem, focusedWindow) {
+        focusedWindow?.webContents.send('shortcut', (menutpl as any).shortcut)
+      }
+    }
+
     // Methods are specialised commands that need to be hardcoded here.
     if ((menutpl as any).zettlrRole !== undefined) {
       switch ((menutpl as any).zettlrRole) {
@@ -297,12 +306,12 @@ export default class MenuProvider {
           break
         case 'reloadWindow':
           menu.click = function (menuitem, focusedWindow) {
-            if (focusedWindow != null) focusedWindow.reload()
+            focusedWindow?.reload()
           }
           break
         case 'toggleDevTools':
           menu.click = function (menuitem, focusedWindow) {
-            if (focusedWindow != null) focusedWindow.webContents.toggleDevTools()
+            focusedWindow?.webContents.toggleDevTools()
           }
           break
         case 'openLogViewer':

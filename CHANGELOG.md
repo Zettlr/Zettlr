@@ -55,6 +55,7 @@ As of the current development build, Microsoft has finished support for running 
 - Overhauled the print window.
 - Changed function name `askOverwriteFile` to `shouldOverwriteFile` to make it semantically more correct.
 - Aligned the exact behaviour of the `file-rename` and `file-new` commands to be the same when it comes to overwriting files.
+- Began implementing another new menu functionality: A `shortcut` property will send a shortcut-message to the currently focused window.
 
 # 1.8.4
 
