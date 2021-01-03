@@ -218,7 +218,7 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
     type: 'file',
     wordCount: 0,
     charCount: 0,
-    target: null, // Contains the target object
+    target: undefined, // Contains the target object
     modtime: 0, // Modification time
     creationtime: 0, // Creation time
     linefeed: '\n',
@@ -275,7 +275,7 @@ export async function search (fileObject: MDFileDescriptor, terms: string[]): Pr
   return searchFile(fileObject, terms, cnt)
 }
 
-export function setTarget (fileObject: MDFileDescriptor, target: any): void {
+export function setTarget (fileObject: MDFileDescriptor, target: WritingTarget|undefined): void {
   fileObject.target = target
 }
 

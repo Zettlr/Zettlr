@@ -205,97 +205,92 @@
         return this.obj.tags.length
       },
       hasWritingTarget: function () {
-        if (this.obj.type !== 'file' || !this.obj.target) {
+        if (this.obj.type !== 'file' || this.obj.target === undefined) {
           return false
         }
-        if (!this.obj.target.mode ||
-          !this.obj.target.count ||
-          ![ 'words', 'chars' ].includes(this.obj.target.mode)) {
-            return false
-          }
 
-          // We definitely have a target
-          return true
-        },
-        writingTargetPath: function () {
-          let current = this.obj.charCount
-          if (this.obj.target.mode === 'words') current = this.obj.wordCount
-          let progress = current / this.obj.target.count
-          let large = (progress > 0.5) ? 1 : 0
-          if (progress > 1) progress = 1 // Never exceed 100 %
-          let x = Math.cos(2 * Math.PI * progress)
-          let y = Math.sin(2 * Math.PI * progress)
-          return `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`
-        },
-        writingTargetInfo: function () {
-          let current = this.obj.charCount
-          if (this.obj.target.mode === 'words') current = this.obj.wordCount
+        // We definitely have a target
+        return true
+      },
+      writingTargetPath: function () {
+        let current = this.obj.charCount
+        if (this.obj.target.mode === 'words') current = this.obj.wordCount
+        let progress = current / this.obj.target.count
+        let large = (progress > 0.5) ? 1 : 0
+        if (progress > 1) progress = 1 // Never exceed 100 %
+        let x = Math.cos(2 * Math.PI * progress)
+        let y = Math.sin(2 * Math.PI * progress)
+        return `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`
+      },
+      writingTargetInfo: function () {
+        let current = this.obj.charCount
+        if (this.obj.target.mode === 'words') current = this.obj.wordCount
 
-          let progress = Math.round(current / this.obj.target.count * 100)
-          if (progress > 100) progress = 100 // Never exceed 100 %
+        let progress = Math.round(current / this.obj.target.count * 100)
+        if (progress > 100) progress = 100 // Never exceed 100 %
 
-          return `${current} / ${this.obj.target.count} (${progress} %)`
+        return `${current} / ${this.obj.target.count} (${progress} %)`
+      }
+    },
+    methods: {
+      handleContextMenu: function (event) {
+        if (this.isDirectory) {
+          dirContextMenu(event, this.obj, this.$el)
+        } else {
+          fileContextMenu(event, this.obj, this.$el)
         }
       },
-      methods: {
-        handleContextMenu: function (event) {
-          if (this.isDirectory) {
-            dirContextMenu(event, this.obj, this.$el)
-          } else {
-            fileContextMenu(event, this.obj, this.$el)
-          }
-        },
-        requestSelection: function (event) {
-          // Determine if we have a middle (wheel) click
-          const middleClick = (event.type === 'auxclick' && event.button === 1)
-          const ctrl = event.ctrlKey && process.platform !== 'darwin'
-          const cmd = event.metaKey && process.platform === 'darwin'
+      requestSelection: function (event) {
+        // Determine if we have a middle (wheel) click
+        const middleClick = (event.type === 'auxclick' && event.button === 1)
+        const ctrl = event.ctrlKey && process.platform !== 'darwin'
+        const cmd = event.metaKey && process.platform === 'darwin'
 
-          if (this.obj.type === 'file' && event.altKey) {
-            // QuickLook the file
-            global.ipc.send('open-quicklook', this.obj.hash)
-          } else if ([ 'file', 'code' ].includes(this.obj.type)) {
-            // Request the clicked file
-            if (!middleClick && !ctrl && !cmd) {
-              global.editor.announceTransientFile(this.obj.hash)
-            }
-            global.ipc.send('file-get', this.obj.hash)
-          } else if (event.altKey && this.obj.parent) {
-            // Select the parent directory
-            global.ipc.send('dir-select', this.obj.parent.hash)
-          } else {
-            // Select this directory
-            global.ipc.send('dir-select', this.obj.hash)
+        if (this.obj.type === 'file' && event.altKey) {
+          // QuickLook the file
+          global.ipc.send('open-quicklook', this.obj.hash)
+        } else if ([ 'file', 'code' ].includes(this.obj.type)) {
+          // Request the clicked file
+          if (!middleClick && !ctrl && !cmd) {
+            global.editor.announceTransientFile(this.obj.hash)
           }
-        },
-        /**
-         * Request to re-sort this directory
-         */
-        sort: function (sorting) {
-          global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': sorting })
-        },
-        beginDragging: function (event) {
-          if (event.ctrlKey || event.altKey) {
-            // If the alt key was pressed when the drag begins, initiate
-            // an out-of-window drag
-            global.ipc.send('file-drag-start', { 'hash': this.obj.hash })
-            event.preventDefault()
-            return false
-          }
-          // Tell the file manager component to lock the directory tree (only necessary for thin mode)
-          this.$root.lockDirectoryTree()
-          event.dataTransfer.effectAllowed = 'move'
-          event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
-            'hash': this.obj.hash,
-            'type': this.obj.type, // Can be file or directory
-            'path': this.obj.path,
-            'id': this.obj.id // Convenience
-          }))
-        },
-        stopDragging: function (evt) {
-          // Unlock the directory tree
-          this.$root.unlockDirectoryTree()
+          global.ipc.send('file-get', this.obj.hash)
+        } else if (event.altKey && this.obj.parent) {
+          // Select the parent directory
+          global.ipc.send('dir-select', this.obj.parent.hash)
+        } else {
+          // Select this directory
+          global.ipc.send('dir-select', this.obj.hash)
         }
+      },
+      /**
+       * Request to re-sort this directory
+       */
+      sort: function (sorting) {
+        global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': sorting })
+      },
+      beginDragging: function (event) {
+        if (event.ctrlKey || event.altKey) {
+          // If the alt key was pressed when the drag begins, initiate
+          // an out-of-window drag
+          global.ipc.send('file-drag-start', { 'hash': this.obj.hash })
+          event.preventDefault()
+          return false
+        }
+        // Tell the file manager component to lock the directory tree (only necessary for thin mode)
+        this.$root.lockDirectoryTree()
+        event.dataTransfer.effectAllowed = 'move'
+        event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
+          'hash': this.obj.hash,
+          'type': this.obj.type, // Can be file or directory
+          'path': this.obj.path,
+          'id': this.obj.id // Convenience
+        }))
+      },
+      stopDragging: function (evt) {
+        // Unlock the directory tree
+        this.$root.unlockDirectoryTree()
       }
     }
-  </script>
+  }
+</script>

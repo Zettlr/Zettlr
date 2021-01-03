@@ -68,7 +68,7 @@ export interface MDFileDescriptor extends FSMetaInfo {
   bom: string // An optional BOM
   wordCount: number
   charCount: number
-  target: any // TODO
+  target: WritingTarget|undefined
   firstHeading: string|null
   frontmatter: any|null
   linefeed: string

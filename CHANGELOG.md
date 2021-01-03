@@ -61,6 +61,7 @@ As of the current development build, Microsoft has finished support for running 
 - Began implementing another new menu functionality: A `shortcut` property will send a shortcut-message to the currently focused window.
 - Migrated the Appearance Provider to TypeScript.
 - Renamed `darkTheme` to `darkMode`.
+- Migrated the Target Provider to TypeScript.
 
 # 1.8.4
 

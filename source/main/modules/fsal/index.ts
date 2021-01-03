@@ -99,7 +99,7 @@ export default class FSAL extends EventEmitter {
     global.targets.on('remove', (hash: number) => {
       let file = this.findFile(hash)
       if (file === null || file.type !== 'file') return // Also not our business
-      FSALFile.setTarget(file, null) // Reset
+      FSALFile.setTarget(file, undefined) // Reset
       this.emit('fsal-state-changed', 'file', {
         'oldHash': file.hash,
         'newHash': file.hash

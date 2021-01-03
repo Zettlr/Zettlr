@@ -12,15 +12,18 @@
  * END HEADER
  */
 
-const fs = require('fs')
-const EventEmitter = require('events')
-const path = require('path')
+import fs from 'fs'
+import EventEmitter from 'events'
+import path from 'path'
+import { app } from 'electron'
 
 /**
  * This class manages the writing targets of directories and files. It reads the
  * targets on each start of the app and writes them after they have been changed.
  */
-module.exports = class TargetProvider extends EventEmitter {
+export default class TargetProvider extends EventEmitter {
+  private readonly _file: string
+  private _targets: WritingTarget[]
   /**
    * Create the instance on program start and initially load the targets.
    */
@@ -31,7 +34,7 @@ module.exports = class TargetProvider extends EventEmitter {
     // case we don't want only 10 listeners, but as many as needed.
     this.setMaxListeners(Infinity)
 
-    this._file = path.join(require('electron').app.getPath('userData'), 'targets.json')
+    this._file = path.join(app.getPath('userData'), 'targets.json')
     this._targets = []
 
     this._load()
@@ -43,51 +46,62 @@ module.exports = class TargetProvider extends EventEmitter {
        * @param  {Object} target An object describing the new target.
        * @return {void}          Does not return.
        */
-      set: (target) => { this.set(target.hash, target.mode, target.count) },
+      set: (target: WritingTarget) => {
+        this.set(target)
+      },
       /**
        * Returns a writing target
-       * @param  {number} hash The hash to be searched for.
-       * @return {Object}      The writing target.
+       * @param  {number}                   hash  The hash to be searched for.
+       * @return {WritingTarget|undefined}        The writing target.
        */
-      get: (hash) => {
-        let t = this.get(hash)
-        if (!t) return undefined
-        // Create a copy to prevent intrusion.
-        return JSON.parse(JSON.stringify(t))
+      get: (hash: number) => {
+        let target = this.get(hash)
+        if (target === undefined) {
+          return undefined
+        }
+
+        return Object.assign({}, target)
       },
       /**
        * Removes a target from the database and returns the operation status.
        * @return {Boolean} Whether or not the target was removed.
        */
-      remove: (hash) => { return this.remove(hash) },
+      remove: (hash: number) => {
+        return this.remove(hash)
+      },
       /**
        * Adds callback to the event listeners
        * @param  {String}   event    The event to be listened for.
        * @param  {Function} callback The callback when the event is emitted.
        * @return {void}              Nothing to return.
        */
-      on: (event, callback) => { this.on(event, callback) },
+      on: (event: string, callback: (...args: any[]) => void) => {
+        this.on(event, callback)
+      },
       /**
        * Removes an event listener
        * @param  {String}   event    The event the listener was subscribed to
        * @param  {Function} callback The callback
        * @return {void}              Nothing to return.
        */
-      off: (event, callback) => { this.off(event, callback) },
-      verify: () => { return this.verify() }
+      off: (event: string, callback: (...args: any[]) => void) => {
+        this.off(event, callback)
+      },
+      verify: () => {
+        return this.verify()
+      }
     }
   } // End constructor
 
-  async shutdown () {
+  async shutdown (): Promise<void> {
     global.log.verbose('Target provider shutting down ...')
     this._save() // Persist to disk
   }
 
   /**
    * This function loads the targets from disk.
-   * @return {ZettlrTargets} This for chainability.
    */
-  _load () {
+  _load (): void {
     // We are not checking if the user directory exists, b/c this file will
     // be loaded after the ZettlrConfig, which makes sure the dir exists.
 
@@ -97,39 +111,41 @@ module.exports = class TargetProvider extends EventEmitter {
       this._targets = JSON.parse(fs.readFileSync(this._file, { encoding: 'utf8' }))
     } catch (e) {
       fs.writeFileSync(this._file, JSON.stringify([]), { encoding: 'utf8' })
-      return this // No need to iterate over objects anymore
     }
-
-    return this
   }
 
   /**
    * Simply writes the tag data to disk.
-   * @return {ZettlrTargets} This for chainability.
    */
-  _save () {
+  _save (): void {
     // (Over-)write the targets
     fs.writeFileSync(this._file, JSON.stringify(this._targets), { encoding: 'utf8' })
-
-    return this
   }
 
   /**
    * Verifies the validity of all targets.
    * @return {ZettlrTargets} Chainability.
    */
-  verify () {
+  verify (): void {
     // A target is defined to be "valid" if it contains a valid integer number
     // as the target word/char count, and the corresponding file/folder is still
     // loaded within the app.
     let validTargets = []
     for (let target of this._targets) {
       // count must be a number
-      if (typeof target.count !== 'number') continue
+      if (typeof target.count !== 'number') {
+        continue
+      }
+
       // Mode must be either words or chars
-      if (![ 'words', 'chars' ].includes(target.mode)) continue
+      if (![ 'words', 'chars' ].includes(target.mode)) {
+        continue
+      }
+
       // Now check if the file still exists.
-      if (!global.application.findFile(target.hash)) continue
+      if (global.application.findFile(target.hash) === null) {
+        continue
+      }
 
       // If a target made it until here, push it (to the limit)
       validTargets.push(target)
@@ -137,20 +153,25 @@ module.exports = class TargetProvider extends EventEmitter {
 
     // Overwrite with only the list of valid targets
     this._targets = validTargets
-
-    return this
   }
 
   /**
    * Returns a target based upon the file's/dir's hash (or all, if no has was provided)
-   * @param  {String} [hash=null] The hash to be searched for
-   * @return {Object}      Either undefined (as returned by Array.find()) or the tag
+   * @param  {number|null} hash The hash to be searched for
+   * @return {WritingTarget|undefined}      Either undefined (as returned by Array.find()) or the tag
    */
-  get (hash = null) {
-    if (!hash) return this._targets
-    if (typeof hash !== 'number') hash = parseInt(hash)
+  get (hash: number): WritingTarget|undefined {
+    if (hash === undefined) {
+      return undefined
+    }
 
-    return this._targets.find((elem) => { return elem.hash === hash })
+    if (typeof hash !== 'number') {
+      hash = parseInt(hash)
+    }
+
+    return this._targets.find((elem) => {
+      return elem.hash === hash
+    })
   }
 
   /**
@@ -159,32 +180,26 @@ module.exports = class TargetProvider extends EventEmitter {
    * @param {string} mode  The mode. Must be either words or chars, defaults to words.
    * @param {number} count The word count to reach.
    */
-  set (hash, mode, count) {
-    console.log('***** SETTING TARGET!', hash, mode, count)
-    // Sanity checks
-    if (![ 'words', 'chars' ].includes(mode)) mode = 'words'
-
-    if (typeof count !== 'number') count = parseInt(count)
-    if (typeof hash !== 'number') hash = parseInt(hash)
-
+  set (target: WritingTarget): void {
     // Pass a count smaller or equal zero to remove.
-    if (count <= 0) return this.remove(hash)
+    if (target.count <= 0) {
+      this.remove(target.hash)
+      return
+    }
 
     // Either update or add the target.
-    let target = this._targets.find(e => e.hash === hash)
-    if (target) {
-      target.mode = mode
-      target.count = count
+    let existingTarget = this._targets.find(e => e.hash === target.hash)
+    if (existingTarget !== undefined) {
+      existingTarget.mode = target.mode
+      existingTarget.count = target.count
     } else {
-      this._targets.push({ 'hash': hash, 'mode': mode, 'count': count })
+      this._targets.push(target)
     }
 
     this._save()
 
     // Inform the respective file that its target has been updated.
-    this.emit('update', hash)
-
-    return this
+    this.emit('update', target.hash)
   }
 
   /**
@@ -192,12 +207,17 @@ module.exports = class TargetProvider extends EventEmitter {
    * @param  {number} hash The hash to be searched for and removed.
    * @return {boolean}      Whether or not the operation succeeded.
    */
-  remove (hash) {
+  remove (hash: number): boolean {
     // Make sure hash is really a number
-    if (typeof hash !== 'number') hash = parseInt(hash)
+    if (typeof hash !== 'number') {
+      hash = parseInt(hash)
+    }
 
     let target = this._targets.find(e => e.hash === hash)
-    if (!target) return false
+
+    if (target === undefined) {
+      return false
+    }
 
     this._targets.splice(this._targets.indexOf(target), 1)
     this._save()
