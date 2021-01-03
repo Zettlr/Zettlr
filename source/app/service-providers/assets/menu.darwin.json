@@ -248,7 +248,7 @@
         "label": "menu.toggle_theme",
         "accelerator": "Cmd+Alt+L",
         "type": "checkbox",
-        "checked": "darkTheme",
+        "checked": "darkMode",
         "command": "toggle-theme"
       },
       {

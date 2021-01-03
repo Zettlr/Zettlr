@@ -13,8 +13,8 @@
  * END HEADER
  */
 
-const EventEmitter = require('events')
-const { systemPreferences, nativeTheme } = require('electron')
+import EventEmitter from 'events'
+import { nativeTheme } from 'electron'
 
 /**
  * This class manages automatic changes in the appearance of the app. It won't
@@ -22,7 +22,14 @@ const { systemPreferences, nativeTheme } = require('electron')
  * operating system's appearance if set to system, and switch the mode on a given
  * time if set to schedule.
  */
-module.exports = class AppearanceProvider extends EventEmitter {
+export default class AppearanceProvider extends EventEmitter {
+  private _mode: 'off'|'system'|'schedule'|'auto'
+  private _scheduleWasDark: boolean
+  private _isDarkMode: boolean
+  private _startHour: number
+  private _startMin: number
+  private _endHour: number
+  private _endMin: number
   /**
    * Create the instance on program start and initially load the settings.
    */
@@ -38,65 +45,67 @@ module.exports = class AppearanceProvider extends EventEmitter {
     // Initiate everything
     this._mode = global.config.get('autoDarkMode')
     this._scheduleWasDark = this._isItDark() // Preset where we currently are
-    this._isDarkMode = global.config.get('darkTheme')
+    this._isDarkMode = global.config.get('darkMode')
+
+    // The TypeScript linter is not clever enough to see that the function will
+    // definitely set the initial values ...
+    this._startHour = 0
+    this._startMin = 0
+    this._endHour = 0
+    this._endMin = 0
     this._recalculateSchedule() // Parse the start and end times
 
     /**
-     * On macOS, subscribe to AppleInterfaceThemeChangedNotifications to be notified
-     * whenever the system's theme changes. The actual theme change is only applied,
-     * if the config setting is set to "system", i.e.: follow system appearance.
+     * Subscribe to the updated-event in order to determine when the underlying
+     * state has changed.
      */
-    if (process.platform === 'darwin') {
-      nativeTheme.on('updated', () => {
-        // Only react to these notifications if the schedule is set to 'system'
-        if (this._mode !== 'system') return
-        global.log.verbose('Switching to ' + (nativeTheme.shouldUseDarkColors ? 'dark' : 'light') + ' mode')
+    nativeTheme.on('updated', () => {
+      // Only react to these notifications if the schedule is set to 'system'
+      if (this._mode === 'system') {
+        global.log.info(
+          'Switching to ' +
+          (nativeTheme.shouldUseDarkColors ? 'dark' : 'light') +
+          ' mode'
+        )
+
         // Set the var accordingly
-        global.config.set('darkTheme', nativeTheme.shouldUseDarkColors)
-      })
-    } else if (process.platform === 'win32') {
-      // On Windows, we achieve the same effect by listening for inverted colour
-      // scheme changes.
-      systemPreferences.on('inverted-color-scheme-changed', (event, invertedColorScheme) => {
-        if (this._mode !== 'system') return
-        let isItDark = invertedColorScheme ? 'dark' : 'light'
-        global.log.verbose('Switching appearance to ' + isItDark)
-        // Also set the var accordingly
-        global.config.set('darkTheme', invertedColorScheme)
-      })
-    }
+        global.config.set('darkMode', nativeTheme.shouldUseDarkColors)
+      }
+    })
 
     // Initially set the dark mode after startup, if the mode is set to "system"
     if (this._mode === 'system') {
-      if (process.platform === 'win32') {
-        global.config.set('darkTheme', systemPreferences.isInvertedColorScheme())
-      } else if (process.platform === 'darwin') {
-        global.config.set('darkTheme', nativeTheme.shouldUseDarkColors)
-      }
+      global.config.set('darkMode', nativeTheme.shouldUseDarkColors)
     }
 
     // It may be that it was already dark when the user started the app, but the
     // theme was light. This makes sure the theme gets set once after application
     // start --- But if the user decides to change it back, it'll not be altered.
-    if (this._mode === 'schedule' && global.config.get('darkTheme') !== this._isItDark()) {
-      global.config.set('darkTheme', this._isItDark())
+    if (this._mode === 'schedule' && global.config.get('darkMode') !== this._isItDark()) {
+      global.config.set('darkMode', this._isItDark())
       this._scheduleWasDark = this._isItDark()
     }
 
     // Subscribe to configuration updates
-    global.config.on('update', (option) => {
+    global.config.on('update', (option: string) => {
       // Set internal vars accordingly
-      if (option === 'autoDarkMode') this._mode = global.config.get('autoDarkMode')
-      if (option === 'darkTheme') this._isDarkMode = global.config.get('darkTheme')
-      if (option === 'autoDarkModeStart') this._recalculateSchedule()
-      if (option === 'autoDarkModeEnd') this._recalculateSchedule()
+      if (option === 'autoDarkMode') {
+        this._mode = global.config.get('autoDarkMode')
+      }
+
+      if (option === 'darkMode') {
+        this._isDarkMode = global.config.get('darkMode')
+      }
+
+      if ([ 'autoDarkModeEnd', 'autoDarkModeStart' ].includes(option)) {
+        this._recalculateSchedule()
+      }
     })
 
-    // new Date().getTimezoneOffset() <-- This returns the LOCAL timezone offset in minutes, so divide by 60 then you have the hours
     this.tick() // Begin the tick
   }
 
-  tick () {
+  tick (): void {
     if (this._mode === 'schedule') {
       // By tracking the status of the time, we avoid annoying people by forcing
       // the dark or light theme even if they decide to change it later on. This
@@ -105,20 +114,21 @@ module.exports = class AppearanceProvider extends EventEmitter {
       // mode has been active or not.
       if (this._scheduleWasDark !== this._isItDark()) {
         // The schedule just changed -> change the theme
-        global.log.verbose('Switching appearance to ' + (this._isItDark() ? 'dark' : 'light'))
-        global.config.set('darkTheme', this._isItDark())
+        global.log.info('Switching appearance to ' + (this._isItDark() ? 'dark' : 'light'))
+        global.config.set('darkMode', this._isItDark())
         this._scheduleWasDark = this._isItDark()
       }
     }
     // Have a tick (tac)
-    setTimeout(() => { this.tick() }, 1000)
+    setTimeout(() => {
+      this.tick()
+    }, 1000)
   }
 
   /**
    * Parses the current auto dark mode start and end times for quick access.
-   * @return {void} No return.
    */
-  _recalculateSchedule () {
+  _recalculateSchedule (): void {
     let start = global.config.get('autoDarkModeStart').split(':')
     let end = global.config.get('autoDarkModeEnd').split(':')
 
@@ -128,15 +138,21 @@ module.exports = class AppearanceProvider extends EventEmitter {
     this._endMin = parseInt(end[1], 10)
 
     // Make sure the times differ.
-    if (this._startHour === this._endHour && this._startMin === this._endMin) this._endMin++
+    if (
+      this._startHour === this._endHour &&
+      this._startMin === this._endMin
+    ) {
+      this._endMin++
+    }
   }
 
   /**
    * Returns true if, according to the schedule, Zettlr should now be in dark
    * mode.
-   * @return {Boolean} Whether or not time indicates it should be dark now.
+   *
+   * @return {boolean} Whether or not time indicates it should be dark now.
    */
-  _isItDark () {
+  _isItDark (): boolean {
     let now = new Date()
     let nowMin = now.getMinutes()
     let nowHours = now.getHours()
@@ -158,9 +174,10 @@ module.exports = class AppearanceProvider extends EventEmitter {
 
   /**
    * Shuts down the provider
-   * @return {Boolean} Always returns true
+   *
+   * @return {boolean} Always returns true
    */
-  shutdown () {
+  shutdown (): boolean {
     global.log.verbose('Appearance provider shutting down ...')
     return true
   }

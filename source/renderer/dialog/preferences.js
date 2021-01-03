@@ -285,7 +285,7 @@ class PreferencesDialog extends ZettlrDialog {
     let cfg = {}
 
     // Standard preferences
-    cfg['darkTheme'] = (data.find(elem => elem.name === 'darkTheme') !== undefined)
+    cfg['darkMode'] = (data.find(elem => elem.name === 'darkMode') !== undefined)
     cfg['fileMeta'] = (data.find(elem => elem.name === 'fileMeta') !== undefined)
     cfg['hideDirs'] = (data.find(elem => elem.name === 'hideDirs') !== undefined)
     cfg['alwaysReloadFiles'] = (data.find(elem => elem.name === 'alwaysReloadFiles') !== undefined)

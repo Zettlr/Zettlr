@@ -214,7 +214,7 @@ class ZettlrIPC {
 
       // Change theme in config
       case 'toggle-theme':
-        global.config.set('darkTheme', !global.config.get('darkTheme'))
+        global.config.set('darkMode', !global.config.get('darkMode'))
         break
 
       // Change file meta setting in config

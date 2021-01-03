@@ -49,7 +49,7 @@ export default function registerThemes (): void {
       switchTheme(global.config.get('display.theme'))
 
       // Switch to light/dark mode based on the configuration variable
-      document.body.classList.toggle('dark', global.config.get('darkTheme'))
+      document.body.classList.toggle('dark', global.config.get('darkMode'))
     }
   })
 
@@ -63,7 +63,7 @@ export default function registerThemes (): void {
 
   // Initial theme change
   switchTheme(global.config.get('display.theme'))
-  document.body.classList.toggle('dark', global.config.get('darkTheme'))
+  document.body.classList.toggle('dark', global.config.get('darkMode'))
 
   // Initial rendering of the Custom CSS
   ipcRenderer.send('css-provider', {

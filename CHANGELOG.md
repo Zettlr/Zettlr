@@ -59,6 +59,8 @@ As of the current development build, Microsoft has finished support for running 
 - Changed function name `askOverwriteFile` to `shouldOverwriteFile` to make it semantically more correct.
 - Aligned the exact behaviour of the `file-rename` and `file-new` commands to be the same when it comes to overwriting files.
 - Began implementing another new menu functionality: A `shortcut` property will send a shortcut-message to the currently focused window.
+- Migrated the Appearance Provider to TypeScript.
+- Renamed `darkTheme` to `darkMode`.
 
 # 1.8.4
 
