@@ -43,7 +43,7 @@ export default class DirProjectExport extends ZettlrCommand {
     let config = dir._settings.project
 
     if (config === null) {
-      global.log.error(`Could not export project: Directory ${dir.name as string} has no project.`)
+      global.log.error(`Could not export project: Directory ${dir.name} has no project.`)
       return false
     }
 
