@@ -125,7 +125,8 @@ module.exports = class ConfigProvider extends EventEmitter {
         'stripTags': false, // Strip tags a.k.a. #tag
         'stripLinks': 'full', // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
         'cslLibrary': '', // Path to a CSL JSON library file
-        'cslStyle': '' // Path to a CSL Style file
+        'cslStyle': '', // Path to a CSL Style file
+        'useBundledPandoc': true // Whether to use the bundled Pandoc
       },
       // PDF options (for all documents; projects will copy this object over)
       'pdf': {

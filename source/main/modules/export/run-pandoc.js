@@ -24,6 +24,8 @@ module.exports = async function (options) {
   let command = global.config.get('pandocCommand')
 
   const bundledPandoc = process.env.PANDOC_PATH !== undefined
+  const useBundledPandoc = Boolean(global.config.get('export.useBundledPandoc'))
+  const isAppleSilicon = process.platform === 'darwin' && process.arch === 'arm64'
 
   let hasPandoc = true
   let hasLaTeX = true
@@ -87,11 +89,17 @@ module.exports = async function (options) {
     command = command.replace(new RegExp('\\$' + key + '\\$', 'g'), pandocFlags[key])
   }
 
-  if (bundledPandoc && command.substr(0, 6) === 'pandoc') {
+  if (bundledPandoc && useBundledPandoc && command.substr(0, 6) === 'pandoc') {
     command = process.env.PANDOC_PATH + command.substr(6)
     global.log.info('[Export] Using bundled Pandoc instead of system-wide!')
   } else {
     global.log.warning('[Export] No bundled pandoc was found. Proceeding with system installation.')
+  }
+
+  if (bundledPandoc && useBundledPandoc && isAppleSilicon) {
+    // On Apple M1/ARM64 chips, we need to run the 64 bit Intel-compiled Pandoc
+    // through Rosetta 2, which we can do by prepending with arch -x86_64.
+    command = 'arch -x86_64 ' + command
   }
 
   // Finally, run the command.

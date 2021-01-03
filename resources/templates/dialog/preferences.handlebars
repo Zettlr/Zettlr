@@ -569,6 +569,18 @@
               <label
                 for="pref-export-strip-link-no">{{i18n "dialog.preferences.export.strip_links_no_label"}}</label>
             </div>
+            <hr>
+            {{!-- Miscellaneous export options --}}
+            <div class="cb-group">
+                <label class="cb-toggle">
+                  <input type="checkbox" name="export.useBundledPandoc" value="yes"
+                    id="export.useBundledPandoc"
+                    {{#if export.useBundledPandoc}}checked="checked" {{/if}}>
+                  <div class="toggle"></div>
+                </label>
+                <label
+                  for="export.useBundledPandoc">{{i18n "dialog.preferences.export.use_bundled_pandoc"}}</label>
+              </div>
           </div>
           <div class="box-right">
             <p>

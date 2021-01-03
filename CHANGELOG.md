@@ -27,6 +27,7 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Re-built the QuickLooks. Now they share even more code with the rest of the app, should react more snappy, and are more responsive then ever.
 - Fixed a few logical bugs where the meaning of the "Overwrite file?"-dialog's buttons were swapped, overwriting a file if you chose "Cancel" and not overwriting a file if you chose "Ok."
 - Fixed a bug that would mistakenly show a file twice in the file manager if a file rename or the creation of a new file would overwrite a file that was already present.
+- Added a switch in the export options to choose whether to use the internal Pandoc or the system wide application.
 
 ## Under the Hood
 

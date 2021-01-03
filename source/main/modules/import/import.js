@@ -49,10 +49,21 @@ module.exports = async function makeImport (fileOrFolder, dirToImport, errorCall
         errorCallback(file.path, err.message)
       }
     } else if (file.knownFormat) {
+      const useBundledPandoc = Boolean(global.config.get('export.useBundledPandoc'))
+      const bundledPandoc = process.env.PANDOC_PATH !== undefined
+      const isAppleSilicon = process.platform === 'darwin' && process.arch === 'arm64'
+
+      // Determine whether to use the bundled Pandoc
       let binary = 'pandoc'
-      if (process.env.PANDOC_PATH !== undefined) {
+      if (bundledPandoc && useBundledPandoc) {
         global.log.info(`[Import] Using the bundled Pandoc binary at ${process.env.PANDOC_PATH}`)
         binary = process.env.PANDOC_PATH
+      }
+
+      if (bundledPandoc && useBundledPandoc && isAppleSilicon) {
+        // On Apple M1/ARM64 chips, we need to run the 64 bit Intel-compiled Pandoc
+        // through Rosetta 2, which we can do by prepending with arch -x86_64.
+        binary = 'arch -x86_64 ' + binary
       }
 
       // The file is known -> let's import it!

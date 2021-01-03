@@ -290,11 +290,8 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['hideDirs'] = (data.find(elem => elem.name === 'hideDirs') !== undefined)
     cfg['alwaysReloadFiles'] = (data.find(elem => elem.name === 'alwaysReloadFiles') !== undefined)
     cfg['muteLines'] = (data.find(elem => elem.name === 'muteLines') !== undefined)
-    cfg['export.stripIDs'] = (data.find(elem => elem.name === 'export.stripIDs') !== undefined)
-    cfg['export.stripTags'] = (data.find(elem => elem.name === 'export.stripTags') !== undefined)
     cfg['debug'] = (data.find(elem => elem.name === 'debug') !== undefined)
     cfg['checkForBeta'] = (data.find(elem => elem.name === 'checkForBeta') !== undefined)
-    cfg['window.nativeAppearance'] = (data.find(elem => elem.name === 'window.nativeAppearance') !== undefined)
     cfg['newFileDontPrompt'] = (data.find(elem => elem.name === 'newFileDontPrompt') !== undefined)
 
     // Display checkboxes
@@ -314,6 +311,13 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['editor.countChars'] = (data.find(elem => elem.name === 'editor.countChars') !== undefined)
     cfg['editor.autoCorrect.active'] = (data.find(elem => elem.name === 'editor.autoCorrect.active') !== undefined)
     cfg['editor.rtlMoveVisually'] = (data.find(elem => elem.name === 'editor.rtlMoveVisually') !== undefined)
+
+    cfg['export.stripIDs'] = (data.find(elem => elem.name === 'export.stripIDs') !== undefined)
+    cfg['export.stripTags'] = (data.find(elem => elem.name === 'export.stripTags') !== undefined)
+    cfg['export.useBundledPandoc'] = (data.find(elem => elem.name === 'export.useBundledPandoc') !== undefined)
+
+    cfg['window.nativeAppearance'] = (data.find(elem => elem.name === 'window.nativeAppearance') !== undefined)
+
     cfg['zkn.autoCreateLinkedFiles'] = (data.find(elem => elem.name === 'zkn.autoCreateLinkedFiles') !== undefined)
 
     cfg['watchdog.activatePolling'] = (data.find(elem => elem.name === 'watchdog.activatePolling') !== undefined)
