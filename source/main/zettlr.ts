@@ -708,8 +708,8 @@ export default class Zettlr {
 
   // Convenience wrappers: Modules that have access to the application object
   // are able to prompt, ask for stuff, etc.
-  async askOverwriteFile (filename: string): Promise<boolean> {
-    return await this._windowManager.askOverwriteFile(filename)
+  async shouldOverwriteFile (filename: string): Promise<boolean> {
+    return await this._windowManager.shouldOverwriteFile(filename)
   }
 
   async askDir (): Promise<string[]> {

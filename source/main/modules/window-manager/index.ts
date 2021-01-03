@@ -489,7 +489,7 @@ export default class WindowManager {
     * @param   {string} filename The filename that should be contained in the message
     * @return  {boolean}         Resolves with true if the file should be overwritten
     */
-  async askOverwriteFile (filename: string): Promise<boolean> {
+  async shouldOverwriteFile (filename: string): Promise<boolean> {
     return await shouldOverwriteFileDialog(this._mainWindow, filename)
   }
 

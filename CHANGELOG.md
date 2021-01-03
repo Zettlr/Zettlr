@@ -25,6 +25,8 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Removed the deprecation warning for deprecated installations.
 - Improved the preferences explanations with regard to AutoCorrect modes and the Magic Quotes section (some require adaptions by the users in the corresponding translations!)
 - Re-built the QuickLooks. Now they share even more code with the rest of the app, should react more snappy, and are more responsive then ever.
+- Fixed a few logical bugs where the meaning of the "Overwrite file?"-dialog's buttons were swapped, overwriting a file if you chose "Cancel" and not overwriting a file if you chose "Ok."
+- Fixed a bug that would mistakenly show a file twice in the file manager if a file rename or the creation of a new file would overwrite a file that was already present.
 
 ## Under the Hood
 
@@ -46,6 +48,8 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - The window registration procedure now supports handling the toolbar which now also doubles as a title bar (if you don't want a toolbar).
 - Migrated the Quicklook windows to Vue.js.
 - Overhauled the print window.
+- Changed function name `askOverwriteFile` to `shouldOverwriteFile` to make it semantically more correct.
+- Aligned the exact behaviour of the `file-rename` and `file-new` commands to be the same when it comes to overwriting files.
 
 # 1.8.4
 

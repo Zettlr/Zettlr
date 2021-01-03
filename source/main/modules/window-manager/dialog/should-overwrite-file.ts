@@ -44,5 +44,5 @@ export default async function shouldOverwriteFileDialog (win: BrowserWindow|null
     response = await dialog.showMessageBox(options)
   }
 
-  return (response.response === 1)
+  return response.response === 1
 }

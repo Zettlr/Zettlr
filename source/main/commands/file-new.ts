@@ -62,10 +62,14 @@ export default class FileNew extends ZettlrCommand {
       // Check if there's already a file with this name in the directory
       // NOTE: There are case-sensitive file systems, but we'll disallow this
       let found = dir.children.find(e => e.name.toLowerCase() === filename.toLowerCase())
-      if (found !== undefined) {
+      if (found !== undefined && found.type !== 'directory') {
         // Ask before overwriting
-        if (await this._app.askOverwriteFile(filename)) {
+        if (!await this._app.shouldOverwriteFile(filename)) {
           return
+        } else {
+          // Remove the file before creating it anew. We'll use the
+          // corresponding command for that.
+          await this._app.getFileSystem().removeFile(found)
         }
       }
 

@@ -15,7 +15,6 @@
 import path from 'path'
 import ZettlrCommand from './zettlr-command'
 import sanitize from 'sanitize-filename'
-import isFile from '../../common/util/is-file'
 import { filetypes as ALLOWED_FILETYPES } from '../../common/data.json'
 
 export default class FileRename extends ZettlrCommand {
@@ -48,10 +47,15 @@ export default class FileRename extends ZettlrCommand {
     }
 
     // Test if we are about to override a file
-    if (isFile(path.join(file.dir, newName))) {
+    const dir = file.parent
+    let found = dir?.children.find(e => e.name.toLowerCase() === newName.toLowerCase())
+    if (found !== undefined && found.type !== 'directory') {
       // Ask for override
-      if (await this._app.askOverwriteFile(newName)) {
+      if (!await this._app.shouldOverwriteFile(newName)) {
         return // No override wanted
+      } else {
+        // Remove the file to be overwritten prior
+        await this._app.getFileSystem().removeFile(found)
       }
     }
 
