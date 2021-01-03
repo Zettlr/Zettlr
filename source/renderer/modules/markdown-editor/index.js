@@ -138,7 +138,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
     indentLinesHook(this._instance)
     headingClassHook(this._instance)
     codeblockClassHook(this._instance)
-    zoomHook(this._instance)
+    zoomHook(this._instance, this.zoom.bind(this))
     muteLinesHook(this._instance)
     renderElementsHook(this._instance)
     typewriterHook(this._instance)
