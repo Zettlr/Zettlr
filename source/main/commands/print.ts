@@ -56,6 +56,7 @@ export default class Print extends ZettlrCommand {
       // Now we'll need to open the print window.
       this._app.showPrintWindow(target)
     } catch (err) {
+      global.log.error(`[Print] Could not export document: ${err.message as string}`, err)
       global.notify.normal(`${err.name as string}: ${err.message as string}`)
     }
   }
