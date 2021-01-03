@@ -34,6 +34,7 @@ As of the current development build, Microsoft has finished support for running 
 - Added a switch in the export options to choose whether to use the internal Pandoc or the system wide application.
 - Messages can now be filtered in the log viewer.
 - Windows can now be regularly closed using the `Cmd/Ctrl+W`-shortcut without interfering with the open tabs in the main window anymore.
+- On macOS, Zettlr will not force-show the main window anymore when you click on its Dock icon, but rather restore the default behaviour on macOS.
 
 ## Under the Hood
 

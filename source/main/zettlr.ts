@@ -689,6 +689,13 @@ export default class Zettlr {
   }
 
   /**
+   * Shows any open window, or the main window, if none are open.
+   */
+  openAnyWindow (): void {
+    this._windowManager.showAnyWindow()
+  }
+
+  /**
    * Returns the main application window
    *
    * @return  {BrowserWindow}  The main application window

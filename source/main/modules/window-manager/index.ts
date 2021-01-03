@@ -336,6 +336,18 @@ export default class WindowManager {
   }
 
   /**
+   * Shows any window. If none are open, the main window will be opened and shown.
+   */
+  showAnyWindow (): void {
+    const windows = BrowserWindow.getAllWindows()
+    if (windows.length === 0) {
+      this.showMainWindow()
+    } else {
+      this._makeVisible(windows[0])
+    }
+  }
+
+  /**
    * Opens a new Quicklook window for the given file.
    *
    * @param   {MDFileDescriptor}  file  The file to display in the Quicklook

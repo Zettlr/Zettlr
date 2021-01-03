@@ -174,7 +174,7 @@ app.on('will-quit', function (event) {
  */
 app.on('activate', function () {
   if (zettlr !== null) {
-    zettlr.openWindow()
+    zettlr.openAnyWindow()
   }
 })
 
