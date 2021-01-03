@@ -28,6 +28,13 @@ windowRegister({
   showMenubar: false
 })
 
+// This window will be closed immediately on a window-close command
+ipcRenderer.on('shortcut', (event, shortcut) => {
+  if (shortcut === 'close-window') {
+    ipcRenderer.send('window-controls', { command: 'win-close' })
+  }
+})
+
 // Create the Vue app because we need to reference it in our toolbar controls
 const app = new Vue(Quicklook)
 

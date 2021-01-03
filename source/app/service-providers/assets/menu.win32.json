@@ -315,7 +315,7 @@
       {
         "label": "menu.tab_close",
         "accelerator": "Ctrl+W",
-        "command": "attempt-close-tab"
+        "shortcut": "close-window"
       },
       {
         "label": "menu.tab_previous",

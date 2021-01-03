@@ -81,6 +81,16 @@ class ZettlrRenderer {
     this._providers = {
       'popup': new PopupProvider()
     }
+
+    // This window will be closed if, and only if, there is no tab that can be closed
+    ipcRenderer.on('shortcut', (event, shortcut) => {
+      if (shortcut === 'close-window') {
+        const hasClosedTab = this.getEditor().attemptCloseTab()
+        if (!hasClosedTab) {
+          ipcRenderer.send('window-controls', { command: 'win-close' })
+        }
+      }
+    })
   }
 
   /**

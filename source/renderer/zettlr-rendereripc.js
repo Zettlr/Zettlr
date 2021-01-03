@@ -604,12 +604,6 @@ class ZettlrRendererIPC {
       /**
        * TAB FUNCTIONALITY
        */
-      case 'attempt-close-tab':
-        // First, attempt to close a tab. If this function returns false, this
-        // means there are no open tabs, so we can safely close the window.
-        if (!this._app.getEditor().attemptCloseTab()) this.send('win-close')
-        break
-
       case 'select-next-tab':
         this._app.getEditor().selectNextTab()
         break

@@ -362,7 +362,7 @@
       {
         "label": "menu.tab_close",
         "accelerator": "Cmd+W",
-        "command": "attempt-close-tab"
+        "shortcut": "close-window"
       },
       {
         "label": "menu.tab_previous",

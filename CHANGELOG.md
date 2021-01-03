@@ -33,6 +33,7 @@ As of the current development build, Microsoft has finished support for running 
 - Fixed a bug that would mistakenly show a file twice in the file manager if a file rename or the creation of a new file would overwrite a file that was already present.
 - Added a switch in the export options to choose whether to use the internal Pandoc or the system wide application.
 - Messages can now be filtered in the log viewer.
+- Windows can now be regularly closed using the `Cmd/Ctrl+W`-shortcut without interfering with the open tabs in the main window anymore.
 
 ## Under the Hood
 

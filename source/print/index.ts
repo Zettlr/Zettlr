@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-import { ipcRenderer as ipc } from 'electron'
+import { ipcRenderer } from 'electron'
 import path from 'path'
 import loadIcons from '../renderer/util/load-icons'
 
@@ -22,6 +22,13 @@ import { trans } from '../common/i18n'
 // Register all window stuff
 windowRegister({
   showMenubar: false // No menubar on print windows, only window controls
+})
+
+// This window will be closed immediately on a window-close command
+ipcRenderer.on('shortcut', (event, shortcut) => {
+  if (shortcut === 'close-window') {
+    ipcRenderer.send('window-controls', { command: 'win-close' })
+  }
 })
 
 // Get additional data passed to the window
@@ -70,7 +77,7 @@ window.addEventListener('resize', (e) => {
 // Toggle the maximisation of the window by double clicking. (Windows will
 // take care of this already, but not Linux and macOS.)
 document.getElementById('toolbar')?.addEventListener('dblclick', (e) => {
-  ipc.send('window-controls', { command: 'win-maximise' })
+  ipcRenderer.send('window-controls', { command: 'win-maximise' })
 })
 
 function reposition (): void {
