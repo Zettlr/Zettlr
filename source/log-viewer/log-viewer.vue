@@ -18,6 +18,7 @@ export default {
   },
   data: function () {
     return {
+      filter: '', // Optionally filter the messages with a string
       nextIndex: 0, // Last log message array index; updated from the main process
       messages: [], // Holds all the log files
       // Filters TODO: Actually enable setting and getting these
@@ -29,7 +30,7 @@ export default {
   },
   computed: {
     filteredMessages: function () {
-      return this.messages.filter(message => {
+      const preFiltered = this.messages.filter(message => {
         if (this.includeVerbose && message.level === 1) {
           return true
         }
@@ -48,6 +49,16 @@ export default {
 
         return false
       })
+
+      const filter = this.filter.trim().toLowerCase()
+
+      if (filter !== '') {
+        return preFiltered.filter(message => {
+          return message.message.toLowerCase().indexOf(filter) >= 0
+        })
+      } else {
+        return preFiltered
+      }
     }
   },
   mounted: function () {

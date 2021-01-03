@@ -68,7 +68,14 @@ windowRegister({
     },
     {
       type: 'spacer', // Make sure the content is flushed to the left
-      size: '5x'
+      size: '3x'
+    },
+    {
+      type: 'search',
+      placeholder: 'Filter …',
+      onInputHandler: (value: string) => {
+        app.$data.filter = value
+      }
     }
   ]
 })

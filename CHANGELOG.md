@@ -32,6 +32,7 @@ As of the current development build, Microsoft has finished support for running 
 - Fixed a few logical bugs where the meaning of the "Overwrite file?"-dialog's buttons were swapped, overwriting a file if you chose "Cancel" and not overwriting a file if you chose "Ok."
 - Fixed a bug that would mistakenly show a file twice in the file manager if a file rename or the creation of a new file would overwrite a file that was already present.
 - Added a switch in the export options to choose whether to use the internal Pandoc or the system wide application.
+- Messages can now be filtered in the log viewer.
 
 ## Under the Hood
 
