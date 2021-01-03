@@ -60,6 +60,20 @@ const DELIM = (process.platform === 'win32') ? ';' : ':'
 export default async function environmentCheck (): Promise<void> {
   global.log.info('Performing environment check ...')
 
+  const is64Bit = process.arch === 'x64'
+  const isARM64 = process.arch === 'arm64'
+  const isDarwin = process.platform === 'darwin'
+  const isLinux = process.platform === 'linux'
+  const isWindows = process.platform === 'win32'
+  const winARM = isWindows && isARM64
+  const macARM = isDarwin && isARM64
+
+  if (!winARM && !macARM && !is64Bit && !isLinux) {
+    // We support: Windows ARM and macOS ARM
+    // and anything 64bit. Warn for everything else.
+    global.log.warning(`[Application] Your platform/arch (${process.platform}/${process.arch}) combination is not officially supported. Zettlr might not function correctly.`)
+  }
+
   // We need to check if Pandoc has been bundled with this package.
   // Because if it is, we can simply use that one instead.
   const executable = (process.platform === 'win32') ? 'pandoc.exe' : 'pandoc'
