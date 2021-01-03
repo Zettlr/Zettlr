@@ -14,6 +14,13 @@ export interface ToolbarToggleControl {
   onClickHandler?: (state: boolean) => void
 }
 
+export interface ToolbarButtonControl {
+  type: 'button'
+  label: string // Optional text label (empty string if icon-only is wanted)
+  icon?: string // Optional icon (one of both needs to be set)
+  onClickHandler?: () => void
+}
+
 export interface ToolbarSpacerControl {
   type: 'spacer'
   size?: '1x'|'3x'|'5x' // Spacer size
@@ -27,7 +34,7 @@ export interface ToolbarSearchControl {
 }
 
 export type ToolbarControl =
-  ToolbarTextControl | ToolbarToggleControl | ToolbarSpacerControl | ToolbarSearchControl
+  ToolbarTextControl | ToolbarToggleControl | ToolbarSpacerControl | ToolbarSearchControl | ToolbarButtonControl
 
 export default function registerToolbar (toolbarControls: ToolbarControl[]): void {
   const toolbar = document.getElementById('toolbar')
@@ -51,12 +58,12 @@ export default function registerToolbar (toolbarControls: ToolbarControl[]): voi
           elem.style.fontStyle = 'italics'
         }
       }
-    } else if (control.type === 'toggle') {
+    } else if (control.type === 'toggle' || control.type === 'button') {
       // Toggle button
       elem.classList.add('button') // Behaves mostly like a button
       elem.setAttribute('role', 'button') // ARIA role
       // Should we activate the toggle now?
-      if (control.initialState !== undefined && control.initialState === 'active') {
+      if (control.type === 'toggle' && control?.initialState === 'active') {
         elem.dataset.active = 'true'
         if (control.activeClass !== undefined) {
           elem.classList.add(control.activeClass)
@@ -126,7 +133,9 @@ export default function registerToolbar (toolbarControls: ToolbarControl[]): voi
           }
           control.onClickHandler(true)
         }
-      } // END toggle check
+      } else if (control.type === 'button' && control.onClickHandler !== undefined) {
+        control.onClickHandler()
+      }
     })
 
     // After everything is done, add the toolbar control
