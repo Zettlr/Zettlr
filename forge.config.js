@@ -75,7 +75,7 @@ module.exports = {
             },
             {
               html: './source/print/index.htm',
-              js: './source/print/zettlr-print-window.ts',
+              js: './source/print/index.ts',
               name: 'print'
             },
             {

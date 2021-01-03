@@ -45,6 +45,7 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 - Moved the log window creation to the Window Manager.
 - The window registration procedure now supports handling the toolbar which now also doubles as a title bar (if you don't want a toolbar).
 - Migrated the Quicklook windows to Vue.js.
+- Overhauled the print window.
 
 # 1.8.4
 
