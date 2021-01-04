@@ -222,6 +222,21 @@ module.exports = class MarkdownEditor extends EventEmitter {
         this._instance.execCommand('selectWordUnderCursor')
       }
     })
+
+    // Listen to zoom-shortcuts from main
+    ipcRenderer.on('shortcut', (event, shortcut) => {
+      switch (shortcut) {
+        case 'zoom-reset':
+          this.zoom(0)
+          break
+        case 'zoom-in':
+          this.zoom(1)
+          break
+        case 'zoom-out':
+          this.zoom(-1)
+          break
+      }
+    })
   } // END CONSTRUCTOR
 
   /**

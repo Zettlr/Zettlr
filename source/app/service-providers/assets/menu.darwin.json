@@ -291,17 +291,17 @@
       {
         "label": "menu.reset_zoom",
         "accelerator": "Cmd+0",
-        "command": "zoom-reset"
+        "shortcut": "zoom-reset"
       },
       {
         "label": "menu.zoom_in",
         "accelerator": "Cmd+Plus",
-        "command": "zoom-in"
+        "shortcut": "zoom-in"
       },
       {
         "label": "menu.zoom_out",
         "accelerator": "Cmd+-",
-        "command": "zoom-out"
+        "shortcut": "zoom-out"
       },
       {
         "type": "separator"

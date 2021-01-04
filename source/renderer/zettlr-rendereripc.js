@@ -517,17 +517,6 @@ class ZettlrRendererIPC {
         this._app.getPomodoro().popup()
         break
 
-      // Zoom
-      case 'zoom-reset':
-        this._app.getEditor().zoom(0) // <-- Sometimes I think I am stupid. Well, but it works, I guess.
-        break
-      case 'zoom-in':
-        this._app.getEditor().zoom(1)
-        break
-      case 'zoom-out':
-        this._app.getEditor().zoom(-1)
-        break
-
       // About dialog
       case 'display-about':
         this._app.getBody().displayAbout()

@@ -35,6 +35,7 @@ As of the current development build, Microsoft has finished support for running 
 - Messages can now be filtered in the log viewer.
 - Windows can now be regularly closed using the `Cmd/Ctrl+W`-shortcut without interfering with the open tabs in the main window anymore.
 - On macOS, Zettlr will not force-show the main window anymore when you click on its Dock icon, but rather restore the default behaviour on macOS.
+- You can now zoom both Quicklook editors and the main editor independently using the zoom shortcuts.
 
 ## Under the Hood
 
@@ -62,6 +63,7 @@ As of the current development build, Microsoft has finished support for running 
 - Migrated the Appearance Provider to TypeScript.
 - Renamed `darkTheme` to `darkMode`.
 - Migrated the Target Provider to TypeScript.
+- Transform the zoom-commands to shortcuts.
 
 # 1.8.4
 
