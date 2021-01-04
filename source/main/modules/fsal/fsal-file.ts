@@ -35,6 +35,7 @@ const FRONTMATTER_VARS = [
   'author',
   'date',
   'keywords',
+  'tags',
   'lang'
 ]
 
