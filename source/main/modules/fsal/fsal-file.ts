@@ -77,6 +77,12 @@ async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> 
   }
 }
 
+/**
+ * Parses the given file contents and updates the file descriptor with these.
+ *
+ * @param   {MDFileDescriptor}  file     The file descriptor to be updated
+ * @param   {string}            content  The file contents
+ */
 function parseFileContents (file: MDFileDescriptor, content: string): void {
   // Parse the file
   let idRE = getIDRE()
@@ -185,6 +191,13 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   }
 }
 
+/**
+ * Returns a metadata descriptor for the given file descriptor
+ *
+ * @param   {MDFileDescriptor}  fileObject  The source descriptor
+ *
+ * @return  {MDFileMeta}                    The metadata descriptor
+ */
 export function metadata (fileObject: MDFileDescriptor): MDFileMeta {
   return {
     // By only passing the hash, the object becomes
@@ -213,6 +226,15 @@ export function metadata (fileObject: MDFileDescriptor): MDFileMeta {
   }
 }
 
+/**
+ * Parses an absolute file path into a file descriptor, applying cache if appropriate
+ *
+ * @param   {string}                     filePath  The absolute file path
+ * @param   {FSALCache}                  cache     The cache connector for retrieval without parsing
+ * @param   {DirDescriptor}              parent    The parent descriptor (if non-root file)
+ *
+ * @return  {Promise<MDFileDescriptor>}            Resolves with a file descriptor
+ */
 export async function parse (filePath: string, cache: FSALCache, parent: DirDescriptor|null = null): Promise<MDFileDescriptor> {
   // First of all, prepare the file descriptor
   let file: MDFileDescriptor = {
@@ -279,16 +301,37 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
   return file
 }
 
+/**
+ * Searches the file associated with the file descriptor
+ *
+ * @param   {MDFileDescriptor}  fileObject  The corresponding file descriptor
+ * @param   {string[]}          terms       The (already compiled) search terms
+ *
+ * @return  {Promise<any>}                  Resolves with search results
+ */
 export async function search (fileObject: MDFileDescriptor, terms: string[]): Promise<any> {
   // Initialise the content variables (needed to check for NOT operators)
   let cnt = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   return searchFile(fileObject, terms, cnt)
 }
 
+/**
+ * Sets the given file descriptor's target
+ *
+ * @param   {MDFileDescriptor}  fileObject  The file descriptor
+ * @param   {WritingTarget}     target      The target descriptor
+ */
 export function setTarget (fileObject: MDFileDescriptor, target: WritingTarget|undefined): void {
   fileObject.target = target
 }
 
+/**
+ * Loads the file contents for the given descriptor
+ *
+ * @param   {MDFileDescriptor}  fileObject  The file descriptor
+ *
+ * @return  {Promise<string>}               Resolves with the file contents
+ */
 export async function load (fileObject: MDFileDescriptor): Promise<string> {
   // Loads the content of a file from disk
   const content = await fs.readFile(fileObject.path, { encoding: 'utf8' })
@@ -296,12 +339,28 @@ export async function load (fileObject: MDFileDescriptor): Promise<string> {
   return content.substr(fileObject.bom.length)
 }
 
+/**
+ * Determines if the file described has changed on disk.
+ *
+ * @param   {MDFileDescriptor}  fileObject  The file descriptor in question
+ *
+ * @return  {Promise<boolean>}              Resolves to true if the file differs from the file descriptor.
+ */
 export async function hasChangedOnDisk (fileObject: MDFileDescriptor): Promise<boolean> {
   let stat = await fs.lstat(fileObject.path)
   return stat.mtime.getTime() !== fileObject.modtime
 }
 
-export async function save (fileObject: MDFileDescriptor, content: string, cache: any): Promise<void> {
+/**
+ * Saves the content into the given file descriptor
+ *
+ * @param   {MDFileDescriptor}  fileObject  The file descriptor
+ * @param   {string}            content     The content to be written to file
+ * @param   {FSALCache}         cache       The cache descriptor
+ *
+ * @return  {Promise<void>}                 Resolves upon save.
+ */
+export async function save (fileObject: MDFileDescriptor, content: string, cache: FSALCache): Promise<void> {
   // Make sure to retain the BOM if applicable
   await fs.writeFile(fileObject.path, fileObject.bom + content)
   // Afterwards, retrieve the now current modtime
@@ -314,7 +373,16 @@ export async function save (fileObject: MDFileDescriptor, content: string, cache
   cacheFile(fileObject, cache)
 }
 
-export async function rename (fileObject: MDFileDescriptor, cache: any, newName: string): Promise<void> {
+/**
+ * Renames the file represented by the descriptor
+ *
+ * @param   {MDFileDescriptor}  fileObject  The file descriptor
+ * @param   {FSALCache}         cache       The cache connector for updates
+ * @param   {string}            newName     The new filename
+ *
+ * @return  {Promise<void>}                 Resolves upon success
+ */
+export async function rename (fileObject: MDFileDescriptor, cache: FSALCache, newName: string): Promise<void> {
   let oldPath = fileObject.path
   let newPath = path.join(fileObject.dir, newName)
   await fs.rename(oldPath, newPath)
@@ -327,6 +395,11 @@ export async function rename (fileObject: MDFileDescriptor, cache: any, newName:
   cacheFile(fileObject, cache)
 }
 
+/**
+ * Removes the file described by fileObject
+ *
+ * @param   {MDFileDescriptor}  fileObject  The file descriptor
+ */
 export function remove (fileObject: MDFileDescriptor): void {
   const deleteOnFail: boolean = global.config.get('system.deleteOnFail')
   const deleteSuccess = shell.moveItemToTrash(fileObject.path, deleteOnFail)
@@ -346,10 +419,20 @@ export function remove (fileObject: MDFileDescriptor): void {
   }
 }
 
+/**
+ * Sets the dirty flag on the file descriptor
+ *
+ * @param   {MDFileDescriptor}  fileObject  The file descriptor
+ */
 export function markDirty (fileObject: MDFileDescriptor): void {
   fileObject.modified = true
 }
 
+/**
+ * Clears the dirty flag on the file descriptor
+ *
+ * @param   {MDFileDescriptor}  fileObject  The file descriptor
+ */
 export function markClean (fileObject: MDFileDescriptor): void {
   fileObject.modified = false
 }
