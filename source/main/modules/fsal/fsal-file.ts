@@ -153,6 +153,15 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
     file.tags = file.tags.concat(sanitizedKeywords)
   }
 
+  // Now the same for the tags-property.
+  if (file.frontmatter?.tags != null) {
+    if (!Array.isArray(file.frontmatter.tags)) {
+      file.frontmatter.tags = [file.frontmatter.tags]
+    }
+    const sanitizedKeywords = file.frontmatter.tags.map((tag: any) => String(tag).toString())
+    file.tags = file.tags.concat(sanitizedKeywords)
+  }
+
   // Remove duplicates
   file.tags = [...new Set(file.tags)]
 
