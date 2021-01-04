@@ -5,6 +5,7 @@ import registerGlobals from './register-globals'
 import loadI18nRenderer from '../../load-i18n-renderer'
 import registerThemes from './register-themes'
 import registerDefaultContextMenu from './register-default-context'
+import loadIcons from './load-icons'
 
 export interface RegistrationOptions {
   showMenubar?: boolean
@@ -25,6 +26,9 @@ export default function windowRegister (options?: RegistrationOptions): void {
   // certain styling, for instance a minimal top-bar for Windows and Linux non-
   // native styles.
   document.body.classList.add(process.platform)
+
+  // Load the clarity icons
+  loadIcons().catch(e => { console.error(e) })
 
   // Prevent any funny navigation -- Zettlr does not allow any other file
   // to be open here, so if anyone wants to navigate, open the link externally

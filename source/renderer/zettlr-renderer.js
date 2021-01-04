@@ -32,7 +32,6 @@ const generateId = require('../common/util/generate-id')
 const matchFilesByTags = require('../common/util/match-files-by-tags')
 
 const reconstruct = require('./util/reconstruct-tree')
-const loadicons = require('./util/load-icons')
 
 // Service providers
 const PopupProvider = require('./providers/popup-provider')
@@ -146,9 +145,8 @@ class ZettlrRenderer {
       this._ipc.send('citeproc-get-ids')
     }, 100)
 
-    // Load the clarity icon modules, add custom icons and then refresh
-    // the sidebar (because it requires custom icons to be loaded).
-    setTimeout(() => loadicons().then(() => this._sidebar.refresh()), 0)
+    // Initial sidebar refresh
+    this._sidebar.refresh()
   }
 
   /**

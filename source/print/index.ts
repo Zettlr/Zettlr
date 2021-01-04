@@ -14,7 +14,6 @@
 
 import { ipcRenderer } from 'electron'
 import path from 'path'
-import loadIcons from '../renderer/util/load-icons'
 
 import windowRegister, { registerToolbar } from '../common/modules/window-register'
 import { trans } from '../common/i18n'
@@ -61,12 +60,6 @@ const content = document.getElementById('app')
 if (content !== null) {
   content.innerHTML = `<iframe src="file://${filePath}"></iframe>`
 }
-
-// Load the clarity icon modules, add custom icons and then refresh
-// attachments (because it requires custom icons to be loaded).
-setTimeout(() => {
-  loadIcons().catch(e => console.error(e))
-}, 0)
 
 reposition() // Initial reposition
 
