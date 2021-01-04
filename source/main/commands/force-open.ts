@@ -20,6 +20,7 @@ import { filetypes as FILETYPES } from '../../common/data.json'
 
 export default class ForceOpen extends ZettlrCommand {
   constructor (app: any) {
+    // TODO: Do we need the force-open-if-exists event for anything?
     super(app, [ 'force-open', 'force-open-if-exists' ])
   }
 
@@ -33,7 +34,7 @@ export default class ForceOpen extends ZettlrCommand {
     // Determine if the file should be created, if it can't be found. For this
     // we need both the respective preferences setting and an auto-search
     // command.
-    let autoCreate: boolean = global.config.get('zkn.autoCreateLinkedFiles') && evt === 'force-open'
+    let autoCreate = Boolean(global.config.get('zkn.autoCreateLinkedFiles')) && evt === 'force-open'
 
     const idRE = getIDRE()
     let file = null

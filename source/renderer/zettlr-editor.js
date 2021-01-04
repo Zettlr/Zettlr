@@ -19,6 +19,8 @@ const moveSection = require('../common/util/move-section')
 const EditorTabs = require('./util/editor-tabs')
 const EditorSearch = require('./util/editor-search')
 
+const { ipcRenderer } = require('electron')
+
 const MarkdownEditor = require('./modules/markdown-editor')
 
 // Finally load CodeMirror itself
@@ -138,10 +140,22 @@ class ZettlrEditor {
 
     // Listen to special click events on the MarkdownEditor
     this._editor.on('zettelkasten-link', (linkContents) => {
-      this._renderer.autoSearch(linkContents, true)
+      const autoSearch = Boolean(global.config.get('zkn.autoSearch'))
+
+      // Automatically open the file.
+      ipcRenderer.send('message', {
+        command: 'force-open',
+        content: linkContents
+      })
+
+      if (autoSearch) {
+        this._renderer.autoSearch(linkContents)
+      }
     })
 
     this._editor.on('zettelkasten-tag', (tag) => {
+      // Tags ONLY have a search attached to them, so we don't look up the
+      // autoSearch preference here.
       this._renderer.autoSearch(tag)
     })
 

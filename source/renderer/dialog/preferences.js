@@ -319,6 +319,7 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['window.nativeAppearance'] = (data.find(elem => elem.name === 'window.nativeAppearance') !== undefined)
 
     cfg['zkn.autoCreateLinkedFiles'] = (data.find(elem => elem.name === 'zkn.autoCreateLinkedFiles') !== undefined)
+    cfg['zkn.autoSearch'] = (data.find(elem => elem.name === 'zkn.autoSearch') !== undefined)
 
     cfg['watchdog.activatePolling'] = (data.find(elem => elem.name === 'watchdog.activatePolling') !== undefined)
 

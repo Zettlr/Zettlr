@@ -405,17 +405,15 @@ class ZettlrRenderer {
    * is a file that completely matches the file name.
    *
    * @param   {string}   term           The term to be searched for.
-   * @param   {boolean}  sendOpenEvent  If true, sends a "soft" force-open command to main
    */
-  beginSearch (term, sendOpenEvent = true) {
+  beginSearch (term, attemptToOpen = true) {
     // If there is a search running, set the interrupt flag
     if (this._currentSearch) this._currentSearch.setInterrupt()
 
     // First end any search in the store, if applicable.
     global.store.commitEndSearch()
 
-    // Also send a "soft" force-open command in order to open
-    if (sendOpenEvent) {
+    if (attemptToOpen) {
       this._ipc.send('force-open-if-exists', term)
     }
 
@@ -459,18 +457,16 @@ class ZettlrRenderer {
   /**
    * Initiates an auto-search that either directly opens a file (forceOpen=true)
    * or simply automatically searches for something and displays the results.
+   *
    * @param  {String} term The content of the Wikilink or Tag that has been clicked
-   * @param {Boolean} [forceOpen=false] If true, Zettlr will directly open the file
    */
-  autoSearch (term, forceOpen = false) {
+  autoSearch (term) {
     // Also initiate a search to be run accordingly for any files that
     // might reference the file.
     this._toolbar.setSearch(term)
-    this.beginSearch(term, !forceOpen)
-
-    if (forceOpen) {
-      this._ipc.send('force-open', term)
-    }
+    // Never attempt to open during autoSearch, because autoSearch is only called
+    // when a Zettelkasten link is opened.
+    this.beginSearch(term, false)
   }
 
   /**

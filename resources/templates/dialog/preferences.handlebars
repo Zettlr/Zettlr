@@ -738,9 +738,9 @@
               <li><strong>%X</strong>:
                 {{i18n "dialog.preferences.zkn.var_unix_epoch"}}
               </li>
-              <li><strong>%uuid4</strong>: Universally Unique
-                Identifier
-                (UUID) v4</li>
+              <li><strong>%uuid4</strong>:
+                Universally Unique Identifier (UUID) v4
+              </li>
             </ul>
             {{!-- Add the preferences to determine file linking --}}
             <hr>
@@ -779,6 +779,8 @@
                 for="pref-link-never">{{i18n "dialog.preferences.zkn.link_behaviour_never"}}</label>
             </div>
 
+            <hr>
+
             {{!-- Should Zettlr automatically create files that it did not find when following a ZKN link? --}}
             <div class="cb-group">
               <label class="cb-toggle">
@@ -789,6 +791,18 @@
               </label>
               <label
                 for="zkn.autoCreateLinkedFiles">{{i18n "dialog.preferences.zkn.auto_create_file" }}</label>
+            </div>
+
+            {{!-- Automatically start a search when clicking on links? --}}
+            <div class="cb-group">
+              <label class="cb-toggle">
+                <input type="checkbox" name="zkn.autoSearch"
+                  value="yes" id="zkn.autoSearch"
+                  {{#if zkn.autoSearch}}checked="checked" {{/if}}>
+                <div class="toggle"></div>
+              </label>
+              <label
+                for="zkn.autoSearch">{{i18n "dialog.preferences.zkn.auto_search" }}</label>
             </div>
           </div>
         </div>

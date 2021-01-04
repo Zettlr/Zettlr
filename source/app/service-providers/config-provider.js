@@ -153,7 +153,8 @@ module.exports = class ConfigProvider extends EventEmitter {
         'linkEnd': ']]',
         'linkWithFilename': 'always', // can be always|never|withID
         // If true, create files that are not found, if forceOpen is called
-        'autoCreateLinkedFiles': false
+        'autoCreateLinkedFiles': false,
+        'autoSearch': true // Automatically start a search upon following a link?
       },
       // Editor related stuff
       'editor': {

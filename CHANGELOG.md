@@ -16,15 +16,16 @@ As of the current development build, Microsoft has finished support for running 
 
 - **Feature**: 64bit applications will now run the built-in Pandoc. To see whether your application runs using the bundled Pandoc, open the developer logs and look for "pandoc." If Zettlr has used the built-in Pandoc for an export, the pandoc command will not begin with "pandoc" but with the full, absolute path to the bundled Pandoc binary. **If your application does use the bundled Pandoc, you can uninstall any system-wide Pandoc installationn; Zettlr should still be able to export. If not, please consider reporting a bug**!
 - **Feature**: macOS-users can now use horizontal scrolling instead of using the arrow button to toggle between the file tree and the file list (only available in thin file manager mode; this behaves exactly like back and forth navigating in browsers such as Safari and Chrome).
+- **Enhancement**: Added a new option to allow spaces during autocompletion (of tags, citations, or internal links).
+- **Enhancement**: Added a configuration option to programmatically set the editor's base font size. Additionally, the zooming now works reliably. (This setting is independent of the base font size above.)
+- **Enhancement**: Values from the AutoCorrect replacement table will now also be indicated as correct, so you don't have to add them to your user dictionary anymore.
+- **Enhancement**: Added an option to prevent auto-searches when following Zettelkasten-links.
 - Made the dialogs' tab lists more accessible for screen readers.
 - Fixed the other files's extension icons in the sidebar -- they now also display in dark mode.
 - Fixes to the stylesheets.
 - Fix too dark colours for some variables in CodeMirror.
-- Added a new option to allow spaces during autocompletion (of tags, citations, or internal links).
 - Added a new CSS variable that allows you to set the font-size of the whole application, `--base-font-size`. You can set it in your custom CSS to increase or decrease the overall font-size of everything persistently. Remember to apply it to the `:root`-pseudo element.
-- Added a configuration option to programmatically set the editor's base font size. Additionally, the zooming now works reliably. (This setting is independent of the base font size above.)
 - Fixed a race condition in the dictionary provider that would render spellchecking unfunctional in certain edge cases.
-- Values from the AutoCorrect replacement table will now also be indicated as correct, so you don't have to add them to your user dictionary anymore.
 - Revamped the about dialog's other project tab.
 - Removed the deprecation warning for deprecated installations.
 - Improved the preferences explanations with regard to AutoCorrect modes and the Magic Quotes section (some require adaptions by the users in the corresponding translations!)
