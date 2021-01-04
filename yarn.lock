@@ -1922,10 +1922,10 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-citeproc@^2.4.56:
-  version "2.4.56"
-  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.4.56.tgz#6e73b9811b969e843edad55a90046a4645fc1b6f"
-  integrity sha512-abdMJeYh+vAKz6ejcePrdNBxaoySktwWa/rOs+KjfkWGwMXDvUVjT5ZOC5oRJF1UxAyh/US68NfOTr1o+e24Iw==
+citeproc@^2.4.58:
+  version "2.4.58"
+  resolved "https://registry.yarnpkg.com/citeproc/-/citeproc-2.4.58.tgz#166616035f5b13189805a3fbe8496bc482a7f358"
+  integrity sha512-6qdKweersl4fSSXrFvxJRsD59uwki8V5J7lHcjvT67aiyNBfb93cna4fvuocOYo9Efl/RR6YoC/uLP+YBku6CQ==
 
 class-utils@^0.3.5:
   version "0.3.6"
