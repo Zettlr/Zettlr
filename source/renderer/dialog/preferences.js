@@ -50,9 +50,6 @@ class PreferencesDialog extends ZettlrDialog {
       data.PANDOC_PATH = false
     }
 
-    // Determine the ability of the OS to switch to dark mode
-    data.hasOSDarkMode = [ 'darwin', 'win32' ].includes(process.platform)
-
     data.languages = [] // Initialise
     // Make sure the languages are unique and
     // the duplicates (internal + external files)
