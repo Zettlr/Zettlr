@@ -1,5 +1,5 @@
 <template>
-  <div id="editor" class="fullscreen">
+  <div id="editor" v-bind:style="editorStyles" class="fullscreen">
     <textarea id="cm-text" ref="editor" style="display:none;"></textarea>
   </div>
 </template>
@@ -12,6 +12,10 @@ const makeSearchRegEx = require('../common/util/make-search-regex')
 export default {
   name: 'Editor',
   props: {
+    fontSize: {
+      type: Number,
+      default: 16
+    },
     query: {
       type: String,
       default: ''
@@ -91,6 +95,11 @@ export default {
       searchCursor: null,
       currentLocalSearch: '',
       scrollbarAnnotations: null
+    }
+  },
+  computed: {
+    editorStyles: function () {
+      return `font-size: ${this.fontSize}px`
     }
   },
   watch: {

@@ -35,6 +35,12 @@ ipcRenderer.on('shortcut', (event, shortcut) => {
   }
 })
 
+ipcRenderer.on('config-provider', (event, payload) => {
+  if (payload.command === 'update') {
+    app.$data.fontSize = global.config.get('editor.fontSize')
+  }
+})
+
 // Create the Vue app because we need to reference it in our toolbar controls
 const app = new Vue(Quicklook)
 
@@ -104,6 +110,9 @@ setTimeout(() => {
           title = file.frontmatter.title
         }
       }
+
+      // Set the correct font size
+      app.$data.fontSize = global.config.get('editor.fontSize')
 
       // Update the toolbar
       registerToolbar(getToolbarControls(title))

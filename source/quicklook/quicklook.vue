@@ -5,6 +5,7 @@
   >
     <Editor
       v-bind:id="id"
+      v-bind:fontSize="fontSize"
       v-bind:query="query"
       v-bind:name="name"
       v-bind:dir="dir"
@@ -36,6 +37,7 @@ export default {
   },
   data: function () {
     return {
+      fontSize: 16,
       query: '', // Search
       name: '',
       dir: '',
