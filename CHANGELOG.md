@@ -68,6 +68,8 @@ As of the current development build, Microsoft has finished support for running 
 - Migrated the Target Provider to TypeScript.
 - Transform the zoom-commands to shortcuts.
 - Move the `loadIcons` function to a more central place in the window registration module.
+- Moved the tree view functionality to its dedicated Vue component.
+- Fixed a regression error from updating LESS.
 
 # 1.8.4
 

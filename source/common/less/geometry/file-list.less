@@ -93,7 +93,7 @@
 
           .tag {
             width: @tag-size;
-            border-radius: @tag-size / 2;
+            border-radius: (@tag-size / 2);
             transition: 0.2s all ease-in;
           }
         }
@@ -111,18 +111,18 @@
 
         .tagspacer:only-child .tag {
           width: @tag-size;
-          border-radius: @tag-size / 2;
+          border-radius: (@tag-size / 2);
         }
 
         .tagspacer:first-child .tag {
-          border-top-left-radius: @tag-size / 2;
-          border-bottom-left-radius: @tag-size / 2;
+          border-top-left-radius: (@tag-size / 2);
+          border-bottom-left-radius: (@tag-size / 2);
           border-left: 2px solid white;
         }
 
         .tagspacer:last-child .tag {
-          border-top-right-radius: @tag-size / 2;
-          border-bottom-right-radius: @tag-size / 2;
+          border-top-right-radius: (@tag-size / 2);
+          border-bottom-right-radius: (@tag-size / 2);
           border-right: 2px solid white;
         }
       }
