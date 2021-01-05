@@ -39,6 +39,7 @@ As of the current development build, Microsoft has finished support for running 
 - On macOS, Zettlr will not force-show the main window anymore when you click on its Dock icon, but rather restore the default behaviour on macOS.
 - You can now zoom both Quicklook editors and the main editor independently using the zoom shortcuts.
 - Unlocked the ability to select "Follow Operating System" in the auto dark mode settings. _Please note that this setting might have no effect on certain linuxoid Operating Systems._
+- Modified the syntax highlighting multiplexer to mitigate performance issues on long lines
 
 ## Under the Hood
 
