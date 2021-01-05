@@ -31,8 +31,15 @@
 </template>
 
 <script>
-module.exports = {
-  props: ['tags'],
+export default {
+  props: {
+    tags: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    }
+  },
   data: () => {
     return {
       // Nothing in here

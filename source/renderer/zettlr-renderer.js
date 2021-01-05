@@ -415,9 +415,6 @@ class ZettlrRenderer {
       this._ipc.send('force-open-if-exists', term)
     }
 
-    // Make sure the file list is visible
-    if (!this._fileManager.isFileListVisible()) this._fileManager.toggleFileList()
-
     // Now perform the actual search. For this we'll create a new search
     // object and pass all necessary data to it.
     let dirContents = this._store.getVuex().getters.currentDirectoryContent

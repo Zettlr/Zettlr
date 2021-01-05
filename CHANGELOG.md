@@ -70,6 +70,8 @@ As of the current development build, Microsoft has finished support for running 
 - Move the `loadIcons` function to a more central place in the window registration module.
 - Moved the tree view functionality to its dedicated Vue component.
 - Fixed a regression error from updating LESS.
+- Moved the file list functionality to its dedicated Vue component.
+- Unified ES6 syntax within the file manager components.
 
 # 1.8.4
 
