@@ -1,17 +1,22 @@
 // Preview pane
 
-#file-list {
-    position:absolute;
-    top:0;
-    left:0%;
-    bottom:0;
-    width:100%;
-    overflow-y: auto;
-    overflow-x:hidden;
-    outline: none;
-    transition:0.3s left ease;
+#file-manager:not(.expanded) #file-list {
+  transition: 0.3s left ease;
+}
 
-    &.hidden { left:100%; }
+#file-list {
+    position: absolute;
+    top: 0;
+    left: 0%;
+    bottom:0;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    outline: none;
+
+    &.hidden {
+      left: 100%;
+    }
 
     #file-manager-filter {
       padding: 5px;
@@ -43,9 +48,9 @@
         // Small info blocks inside the file meta
         .date, .id, .tags, .code-indicator,
         .directories, .files {
-          font-size:75%;
-          border-radius:4px;
-          padding:2px 4px;
+          font-size: 75%;
+          border-radius: 4px;
+          padding: 2px 4px;
           margin-right: 4px;
         }
 
@@ -134,8 +139,6 @@
           display: block;
           position: absolute;
           top: 0;
-          // left:0;
-          // bottom:0;
           right: 0;
           text-align: right;
           margin: 0;

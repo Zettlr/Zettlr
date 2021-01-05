@@ -77,6 +77,7 @@ Due to efforts within the file manager structure, we could re-enable the functio
 - Fixed a regression error from updating LESS.
 - Moved the file list functionality to its dedicated Vue component.
 - Unified ES6 syntax within the file manager components.
+- Migrated the Vuex store to TypeScript.
 
 # 1.8.4
 

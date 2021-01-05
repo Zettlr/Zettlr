@@ -12,11 +12,26 @@
  */
 
 import Vue from 'vue'
+import Vuex, { Store, StoreOptions } from 'vuex'
 import objectToArray from '../../../common/util/object-to-array'
 import findObject from '../../../common/util/find-object'
 
-// Make the Vuex-Store the default export
-export default {
+interface ZettlrState {
+  items: any[]
+  tags: any[]
+  fileList: any[] // Computed property based on selectedDirectory
+  searchResults: any[] // Can contain search results, but mustn't
+  searchNoResults: boolean // Will be true during resultless searches.
+  maxWeight: number // Maximum weight of the search results
+  fileMeta: boolean
+  useFirstHeadings: false // If the file list should attempt to use firstHeadings
+  displayTime: 'modtime'|'creationtime'
+  fileManagerMode: 'thin'|'expannded'|'combined'
+  selectedFile: null|number
+  selectedDirectory: null|number
+}
+
+const config: StoreOptions<ZettlrState> = {
   state: {
     items: [],
     tags: [],
@@ -63,13 +78,22 @@ export default {
       // (Necessary to get the directory contents in combined mode)
       return state.fileList
     },
-    tags: (state) => (tags) => {
-      if (!tags) return []
-      if (!Array.isArray(tags)) return []
+    tags: (state) => (tags: any[]) => {
+      if (tags == null) {
+        return []
+      }
+
+      if (!Array.isArray(tags)) {
+        return []
+      }
+
       let arr = []
-      let t
+
       for (let tag of tags) {
-        if ((t = state.tags.find(e => e.name === tag))) arr.push(t)
+        const found = state.tags.find(e => e.name === tag)
+        if (found !== undefined) {
+          arr.push(found)
+        }
       }
       return arr
     }
@@ -86,7 +110,7 @@ export default {
       // First we need to find the directory in our tree.
       // Signature: Tree, Property, Property value, Property to traverse
       let dir = findObject(state.items, 'hash', state.selectedDirectory, 'children')
-      if (!state.selectedDirectory || !dir) {
+      if (state.selectedDirectory === null || dir === undefined) {
         state.fileList = []
         return
       }
@@ -109,12 +133,20 @@ export default {
       // Recalculate the maxWeight, if applicable, b/c it's the least
       // resource intensive and can cause the commit to abort.
       let w = 0
-      for (let r of res.result) { w += r.weight }
-      if (w === 0) return // Don't commit empty results
+      for (let r of res.result) {
+        w += r.weight as number
+      }
+
+      if (w === 0) {
+        return // Don't commit empty results
+      }
 
       let file = findObject(state.items, 'hash', res.hash, 'children')
       // Make sure we have a corresponding file!
-      if (!file) return
+      if (file === undefined) {
+        return
+      }
+
       let result = {}
 
       // Commit
@@ -145,7 +177,10 @@ export default {
     remove: function (context, hash) {
       if (!hash || !(hash instanceof Number)) return
       let obj = findObject(context.state.items, 'hash', hash, 'children')
-      if (!obj) return
+      if (obj === undefined) {
+        return
+      }
+
       // I'm not exactly sure why this happens, but while each found object
       // contains a valid reference to a given object within the main item
       // tree, the returned references somehow don't contain the children
@@ -164,7 +199,7 @@ export default {
         if (parent !== undefined) {
           return
         }
-        let found = parent.children.find(e => e.hash === hash)
+        let found = parent.children.find((e: any) => e.hash === hash)
         // Now simply splice it, the observers by Vue.js will get notified and update the view.
         parent.children.splice(parent.children.indexOf(found), 1)
       }
@@ -195,8 +230,11 @@ export default {
       context.commit('computeFileList')
       // Make sure to re-select the file or directory, if necessary
       if (isCurrentlySelected) {
-        if (obj.type === 'file') context.selectedFile = obj.hash
-        else context.selectedDirectory = obj.hash
+        if (obj.type === 'file') {
+          context.state.selectedFile = obj.hash
+        } else {
+          context.state.selectedDirectory = obj.hash
+        }
       }
     },
     renewItems: function (context, newItems) {
@@ -205,4 +243,9 @@ export default {
       context.commit('computeFileList')
     }
   }
+}
+
+// Make the Vuex-Store the default export
+export default function (): Store<ZettlrState> {
+  return new Vuex.Store(config)
 }

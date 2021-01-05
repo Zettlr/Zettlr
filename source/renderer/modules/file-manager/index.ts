@@ -16,7 +16,7 @@
 
 import Vue from 'vue'
 import App from './file-manager.vue'
-import store from './store'
+import createStore from './store'
 import Vuex from 'vuex'
 
 // Indicate that we would like to use a vuex store
@@ -25,13 +25,12 @@ Vue.use(Vuex)
 // Then create the global application store -- currently
 // it's only used for the file manager, but in perspective
 // we'll be using it throughout the renderer.
-var applicationStore = new Vuex.Store(store)
 
 export default (): Vue => {
   return new Vue({
     // Destructure the App config object, and enrich with store and hook
     ...App,
-    store: applicationStore,
+    store: createStore(),
     el: '#app'
   })
 }

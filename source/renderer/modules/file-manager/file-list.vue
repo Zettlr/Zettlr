@@ -4,7 +4,7 @@
     tabindex="1"
     v-bind:data-hash="selectedDirectoryHash"
     v-on:keydown="navigate"
-    v-on:focus="activeFile = selectedFile"
+    v-on:focus="onFocusHandler"
     v-on:blur="activeFile = null"
   >
     <template v-if="emptySearchResults">
@@ -167,7 +167,7 @@ export default {
             return true
           }
 
-          const hasFrontmatter = item.frontmatter !== null
+          const hasFrontmatter = item.frontmatter != null
           const hasTitle = hasFrontmatter && item.frontmatter.title !== undefined
 
           // Does the frontmatter work?
@@ -345,6 +345,10 @@ export default {
           })
         }
       }
+    },
+    onFocusHandler: function (event) {
+      this.activeFile = this.selectedFile
+      this.$refs.quickFilter.focus()
     }
   }
 }

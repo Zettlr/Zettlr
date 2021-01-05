@@ -15,33 +15,41 @@
     } // End component container
 
     &.expanded {
-        #file-tree, #file-list { width:50%; }
+        #file-tree, #file-list {
+          width: 50%;
+        }
 
         #file-list {
-            left:50%;
-            &.hidden { left:50%; }
+            left: 50%;
+            &.hidden {
+              left: 50%;
+            }
         }
 
         #file-tree {
-            left:0%;
-            &.hidden { left:0%; }
+            left: 0%;
+            &.hidden {
+              left: 0%;
+            }
         }
     }
 
     #arrow-button {
         line-height: 25px;
-        text-align:center;
+        text-align: center;
         vertical-align: middle;
-        z-index:400;
+        z-index: 400;
 
-        position:absolute;
-        top:50px;
-        left:10px;
-        width:30px;
-        height:30px;
-        transition:0.4s left ease;
+        position: absolute;
+        top: 50px;
+        left: 10px;
+        width: 30px;
+        height: 30px;
+        transition: 0.4s left ease;
 
-        &.hidden { left:-60px; }
+        &.hidden {
+          left:-60px;
+        }
     }
 
     // The directory's resizable handler

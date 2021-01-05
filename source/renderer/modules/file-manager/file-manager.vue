@@ -160,13 +160,15 @@ export default {
      */
     fileManagerMode: function () {
       // Reset all properties from the resize operations.
-      this.$refs.directories.style.removeProperty('width')
-      this.$refs.directories.style.removeProperty('left')
-      this.$refs.fileList.style.removeProperty('width')
-      this.$refs.fileList.style.removeProperty('left')
+      const fileTree = this.$refs.directories.$el
+      const fileList = this.$refs.fileList.$el
+      fileTree.style.removeProperty('width')
+      fileTree.style.removeProperty('left')
+      fileList.style.removeProperty('width')
+      fileList.style.removeProperty('left')
       this.fileTreeVisible = true
       this.fileListVisible = false
-      this.$refs.directories.classList.remove('hidden')
+      fileTree.classList.remove('hidden')
       // Then we want to do some additional
       // failsafes for the different modes
       if (this.isThin || this.isCombined) {
@@ -215,8 +217,7 @@ export default {
      */
     focusFileList: function () {
       if (this.isFileListVisible) {
-        this.$refs.fileList.focus()
-        this.$refs.quickFilter.focus()
+        this.$refs.fileList.$el.focus()
       }
     },
     /**
@@ -253,7 +254,7 @@ export default {
       // mouse and keyboard events are suppressed during a drag operation.
       // We need to scroll the tree container probably, and have to check it.
       let y = evt.clientY
-      let elem = this.$refs.directories
+      let elem = this.$refs.directories.$el
       let scroll = elem.scrollTop
       let distanceBottom = elem.offsetHeight - y // The less the value, the closer
       let distanceTop = (scroll > 0) ? y - elem.offsetTop : 0
@@ -362,8 +363,11 @@ export default {
         return
       }
 
+      const fileTree = this.$refs.directories.$el
+      const fileList = this.$refs.fileList.$el
+
       let x = this.fileManagerResizeX - evt.clientX
-      if (this.isExpanded && this.$refs.fileList.offsetWidth <= 50 && x > 0) {
+      if (this.isExpanded && fileList.offsetWidth <= 50 && x > 0) {
         return // Don't overdo it
       }
 
@@ -378,7 +382,7 @@ export default {
       document.getElementById('editor').style.left = this.$el.offsetWidth + 10 + 'px'
       if (this.isExpanded) {
         // We don't have a thin file manager, so resize the fileList accordingly
-        this.$refs.fileList.style.width = (this.$el.offsetWidth - this.$refs.directories.offsetWidth) + 'px'
+        fileList.style.width = (this.$el.offsetWidth - fileTree.offsetWidth) + 'px'
       }
     },
     /**
@@ -412,24 +416,29 @@ export default {
         return
       }
 
-      let x = this.fileManagerInnerResizeX - evt.clientX
+      const fileTree = this.$refs.directories.$el
+      const fileList = this.$refs.fileList.$el
+
+      // x > 0 means: Direction -->
+      // x < 0 means: Direction <--
+      let x = evt.clientX - this.fileManagerInnerResizeX
       // Make sure both the fileList and the tree view are at least 50 px in width
-      if (!this.isThin && this.$refs.directories.offsetWidth <= 50 && x > 0) {
-        return
+      if (!this.isThin && fileTree.offsetWidth <= 50 && x < 0) {
+        x = 0
       }
 
-      if (!this.isThin && this.$refs.fileList.offsetWidth <= 50 && x < 0) {
-        return
+      if (!this.isThin && fileList.offsetWidth <= 50 && x > 0) {
+        x = 0
       }
 
       this.fileManagerInnerResizeX = evt.clientX
       // Now resize everything accordingly
-      this.$refs.directories.style.width = (this.$refs.directories.offsetWidth - x) + 'px'
-      this.$refs.fileList.style.left = this.$refs.directories.offsetWidth + 'px'
+      fileTree.style.width = (fileTree.offsetWidth + x) + 'px'
+      fileList.style.left = (fileTree.offsetWidth + x) + 'px'
+      fileList.style.width = (this.$el.offsetWidth - fileTree.offsetWidth + x) + 'px'
       // Reposition the resizer handle exactly on top of the divider, hence
       // substract the half width
-      this.$refs.fileManagerInnerResizer.style.left = (this.$refs.directories.offsetWidth - 5) + 'px'
-      this.$refs.fileList.style.width = (this.$el.offsetWidth - this.$refs.directories.offsetWidth) + 'px'
+      this.$refs.fileManagerInnerResizer.style.left = (fileTree.offsetWidth + x - 5) + 'px'
     },
     /**
      * Stops resizing of the inner elements on release of the mouse button.
