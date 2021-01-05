@@ -15,7 +15,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import hash from '../../../common/util/hash'
-import searchFile from './search-file'
+import searchFile from './util/search-file'
 import countWords from '../../../common/util/count-words'
 import extractYamlFrontmatter from '../../../common/util/extract-yaml-frontmatter'
 import { getIDRE } from '../../../common/regular-expressions'
@@ -321,7 +321,7 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
  *
  * @return  {Promise<any>}                  Resolves with search results
  */
-export async function search (fileObject: MDFileDescriptor, terms: string[]): Promise<any> {
+export async function search (fileObject: MDFileDescriptor, terms: any[]): Promise<any> {
   // Initialise the content variables (needed to check for NOT operators)
   let cnt = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   return searchFile(fileObject, terms, cnt)
