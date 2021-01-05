@@ -21,6 +21,8 @@
     v-on:mouseleave="handleMouseOver"
     v-on:dragover="handleDragOver"
     v-on:wheel="handleWheel"
+    v-on:dragstart="lockDirectoryTree"
+    v-on:dragend="unlockDirectoryTree"
   >
     <!-- Display the arrow button in case we have a non-combined view -->
     <div
@@ -318,8 +320,8 @@ export default {
       // This function is called whenever the file list
       // should be hidden and only the file tree should
       // be visible
-      this.previous = this.isFileListVisible ? 'file-list' : 'directories'
       if (this.isFileListVisible) {
+        this.previous = 'file-list'
         this.toggleFileList()
       }
 
@@ -336,6 +338,7 @@ export default {
       this.lockedTree = false
       if (this.previous === 'file-list') {
         this.toggleFileList()
+        this.previous = ''
       }
     },
     /**

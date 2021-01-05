@@ -27,8 +27,8 @@
       v-bind:data-filename="getFilename"
       v-bind:draggable="isDraggable"
       v-on:click="requestSelection"
-      v-on:dragstart.stop="beginDragging"
-      v-on:dragend.stop="stopDragging"
+      v-on:dragstart="beginDragging"
+      v-on:drag="onDragHandler"
     >
       <p class="filename">
         <clr-icon
@@ -147,13 +147,17 @@ export default {
       return this.obj.name
     },
     getColoredTags: function () {
-      return this.$store.getters.tags(this.obj.tags)
+      if (this.obj.tags === undefined) {
+        return []
+      } else {
+        return this.$store.getters.tags(this.obj.tags)
+      }
     },
     getTagList: function () {
       return this.obj.tags.join(', ')
     },
     hasTags: function () {
-      return this.obj.tags.length > 0
+      return this.obj.tags !== undefined && this.obj.tags.length > 0
     },
     isDirectory: function () {
       return this.obj.type === 'directory'
@@ -290,16 +294,9 @@ export default {
       global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': sorting })
     },
     beginDragging: function (event) {
-      if (event.ctrlKey === true || event.altKey === true) {
-        // If the alt key was pressed when the drag begins, initiate
-        // an out-of-window drag
-        global.ipc.send('file-drag-start', { 'hash': this.obj.hash })
-        event.preventDefault()
-        return false
-      }
+      event.dataTransfer.dropEffect = 'move'
       // Tell the file manager component to lock the directory tree (only necessary for thin mode)
       this.$root.lockDirectoryTree()
-      event.dataTransfer.effectAllowed = 'move'
       event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
         'hash': this.obj.hash,
         'type': this.obj.type, // Can be file or directory
@@ -307,9 +304,22 @@ export default {
         'id': this.obj.id // Convenience
       }))
     },
-    stopDragging: function (evt) {
-      // Unlock the directory tree
-      this.$root.unlockDirectoryTree()
+    onDragHandler: function (event) {
+      // We don't need to check if it's a directory because only files are
+      // draggable in the file list.
+      // If the drag x/y-coordinates are about to leave the window, we
+      // have to continue the drag in the main process (as it's being
+      // dragged out of the window)
+      const x = Number(event.x)
+      const y = Number(event.y)
+      const w = window.innerWidth
+      const h = window.innerHeight
+
+      if (x === 0 || y === 0 || x === w || y === h) {
+        event.stopPropagation()
+        event.preventDefault()
+        global.ipc.send('file-drag-start', { hash: this.obj.hash })
+      }
     }
   }
 }

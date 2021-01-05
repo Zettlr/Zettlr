@@ -12,6 +12,10 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 
 As of the current development build, Microsoft has finished support for running 64 bit applications on ARM computers. However, this is not yet officially released, so the bundled Pandoc might not work and you have to return back to the system-wide installation. However, if the bundled 64 bit Pandoc _does_ work on your ARM computer, please notify us so we know that we can officially support Windows ARM again!
 
+## Drag Behaviour Fixes
+
+Due to efforts within the file manager structure, we could re-enable the functionality to drag files out of the app without having to press any modification key before actually dragging something.
+
 ## GUI and Functionality
 
 - **Feature**: 64bit applications will now run the built-in Pandoc. To see whether your application runs using the bundled Pandoc, open the developer logs and look for "pandoc." If Zettlr has used the built-in Pandoc for an export, the pandoc command will not begin with "pandoc" but with the full, absolute path to the bundled Pandoc binary. **If your application does use the bundled Pandoc, you can uninstall any system-wide Pandoc installationn; Zettlr should still be able to export. If not, please consider reporting a bug**!

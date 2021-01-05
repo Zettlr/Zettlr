@@ -17,7 +17,8 @@
     class="container"
     v-bind:data-hash="obj.hash"
     v-bind:draggable="!isRoot"
-    v-on:dragstart.stop="beginDragging"
+    v-on:dragstart="beginDragging"
+    v-on:drag="onDragHandler"
     v-on:dragenter.stop="enterDragging"
     v-on:dragleave.stop="leaveDragging"
   >
@@ -165,10 +166,11 @@ export default {
   },
   computed: {
     /**
-     * Returns true if this component is a root
+     * Returns true if this item is a root item
      */
     isRoot: function () {
-      return this.$root === this.$parent
+      // Parent apparently can also be undefined BUG
+      return this.obj.parent == null
     },
     /**
      * Returns true if this is a directory
@@ -359,7 +361,7 @@ export default {
      * @param {DragEvent} event The drag event
      */
     beginDragging: function (event) {
-      event.dataTransfer.effectAllowed = 'move'
+      event.dataTransfer.dropEffect = 'move'
       if (this.obj.type === 'file') {
         event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
           hash: this.obj.hash,
@@ -372,6 +374,25 @@ export default {
           hash: this.obj.hash,
           type: this.obj.type
         }))
+      }
+    },
+    onDragHandler: function (event) {
+      if (this.isDirectory) {
+        return // Directories cannot be dragged out of the app
+      }
+
+      // If the drag x/y-coordinates are about to leave the window, we
+      // have to continue the drag in the main process (as it's being
+      // dragged out of the window)
+      const x = Number(event.x)
+      const y = Number(event.y)
+      const w = window.innerWidth
+      const h = window.innerHeight
+
+      if (x === 0 || y === 0 || x === w || y === h) {
+        event.stopPropagation()
+        event.preventDefault()
+        global.ipc.send('file-drag-start', { hash: this.obj.hash })
       }
     },
     /**
