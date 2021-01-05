@@ -864,15 +864,15 @@ export default class FSAL extends EventEmitter {
     const sdWords = Math.sqrt(wordsSS / mdArray.length)
 
     // Calculate the standard deviation interval bounds
-    const chars95PercentLower = Math.round(meanChars - sdChars)
-    const chars95PercentUpper = Math.round(meanChars + sdChars)
-    const chars99PercentLower = Math.round(meanChars - 2 * sdChars)
-    const chars99PercentUpper = Math.round(meanChars + 2 * sdChars)
+    const chars68PercentLower = Math.round(meanChars - sdChars)
+    const chars68PercentUpper = Math.round(meanChars + sdChars)
+    const chars95PercentLower = Math.round(meanChars - 2 * sdChars)
+    const chars95PercentUpper = Math.round(meanChars + 2 * sdChars)
 
-    const words95PercentLower = Math.round(meanWords - sdWords)
-    const words95PercentUpper = Math.round(meanWords + sdWords)
-    const words99PercentLower = Math.round(meanWords - 2 * sdWords)
-    const words99PercentUpper = Math.round(meanWords + 2 * sdWords)
+    const words68PercentLower = Math.round(meanWords - sdWords)
+    const words68PercentUpper = Math.round(meanWords + sdWords)
+    const words95PercentLower = Math.round(meanWords - 2 * sdWords)
+    const words95PercentUpper = Math.round(meanWords + 2 * sdWords)
 
     return {
       minChars: minChars,
@@ -885,14 +885,14 @@ export default class FSAL extends EventEmitter {
       meanWords: meanWords,
       sdChars: Math.round(sdChars),
       sdWords: Math.round(sdWords),
+      chars68PercentLower: (chars68PercentLower < minChars) ? minChars : chars68PercentLower,
+      chars68PercentUpper: (chars68PercentUpper > maxChars) ? maxChars : chars68PercentUpper,
       chars95PercentLower: (chars95PercentLower < minChars) ? minChars : chars95PercentLower,
       chars95PercentUpper: (chars95PercentUpper > maxChars) ? maxChars : chars95PercentUpper,
-      chars99PercentLower: (chars99PercentLower < minChars) ? minChars : chars99PercentLower,
-      chars99PercentUpper: (chars99PercentUpper > maxChars) ? maxChars : chars99PercentUpper,
+      words68PercentLower: (words68PercentLower < minWords) ? minWords : words68PercentLower,
+      words68PercentUpper: (words68PercentUpper > maxWords) ? maxWords : words68PercentUpper,
       words95PercentLower: (words95PercentLower < minWords) ? minWords : words95PercentLower,
       words95PercentUpper: (words95PercentUpper > maxWords) ? maxWords : words95PercentUpper,
-      words99PercentLower: (words99PercentLower < minWords) ? minWords : words99PercentLower,
-      words99PercentUpper: (words99PercentUpper > maxWords) ? maxWords : words99PercentUpper,
       mdFileCount: pathsArray.filter(d => d.type === 'file').length,
       codeFileCount: pathsArray.filter(d => d.type === 'code').length,
       dirCount: pathsArray.filter(d => d.type === 'directory').length

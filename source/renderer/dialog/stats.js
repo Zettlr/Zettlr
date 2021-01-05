@@ -68,20 +68,20 @@ class StatsDialog extends ZettlrDialog {
       return width * percent
     }
 
-    const ninetyFiveStart = zTransform(data.fsalStatistics.words95PercentLower)
-    const ninetyFiveEnd = zTransform(data.fsalStatistics.words95PercentUpper)
-    const ninetyNineStart = zTransform(data.fsalStatistics.words99PercentLower)
-    const ninetyNineEnd = zTransform(data.fsalStatistics.words99PercentUpper)
+    const ninetyFiveStart = zTransform(data.fsalStatistics.words68PercentLower)
+    const ninetyFiveEnd = zTransform(data.fsalStatistics.words68PercentUpper)
+    const ninetyNineStart = zTransform(data.fsalStatistics.words95PercentLower)
+    const ninetyNineEnd = zTransform(data.fsalStatistics.words95PercentUpper)
 
     // We need to calculate some sizes here for the FSAL statistics graphic to display properly
     data.boxPlotWords = {
       width: width,
       height: height,
       mean: zTransform(data.fsalStatistics.meanWords),
-      interval95Start: ninetyFiveStart,
-      interval95End: ninetyFiveEnd - ninetyFiveStart,
-      interval99Start: ninetyNineStart,
-      interval99End: ninetyNineEnd - ninetyNineStart
+      interval68Start: ninetyFiveStart,
+      interval68End: ninetyFiveEnd - ninetyFiveStart,
+      interval95Start: ninetyNineStart,
+      interval95End: ninetyNineEnd - ninetyNineStart
     }
 
     // After the graphic has been calculated, let's ensure those numbers are
@@ -98,15 +98,15 @@ class StatsDialog extends ZettlrDialog {
     data.fsalStatistics.sumChars = localiseNumber(data.fsalStatistics.sumChars)
     data.fsalStatistics.sdChars = localiseNumber(data.fsalStatistics.sdChars)
 
+    data.fsalStatistics.words68PercentLower = localiseNumber(data.fsalStatistics.words68PercentLower)
+    data.fsalStatistics.words68PercentUpper = localiseNumber(data.fsalStatistics.words68PercentUpper)
     data.fsalStatistics.words95PercentLower = localiseNumber(data.fsalStatistics.words95PercentLower)
     data.fsalStatistics.words95PercentUpper = localiseNumber(data.fsalStatistics.words95PercentUpper)
-    data.fsalStatistics.words99PercentLower = localiseNumber(data.fsalStatistics.words99PercentLower)
-    data.fsalStatistics.words99PercentUpper = localiseNumber(data.fsalStatistics.words99PercentUpper)
 
+    data.fsalStatistics.chars68PercentLower = localiseNumber(data.fsalStatistics.chars68PercentLower)
+    data.fsalStatistics.chars68PercentUpper = localiseNumber(data.fsalStatistics.chars68PercentUpper)
     data.fsalStatistics.chars95PercentLower = localiseNumber(data.fsalStatistics.chars95PercentLower)
     data.fsalStatistics.chars95PercentUpper = localiseNumber(data.fsalStatistics.chars95PercentUpper)
-    data.fsalStatistics.chars99PercentLower = localiseNumber(data.fsalStatistics.chars99PercentLower)
-    data.fsalStatistics.chars99PercentUpper = localiseNumber(data.fsalStatistics.chars99PercentUpper)
 
     return data
   }
