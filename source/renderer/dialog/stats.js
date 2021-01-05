@@ -54,10 +54,59 @@ class StatsDialog extends ZettlrDialog {
     date = formatDate(date)
     data.firstDay = date
 
-    data.fsalStatistics.chars95Span = data.fsalStatistics.chars95PercentUpper - data.fsalStatistics.chars95PercentLower
-    data.fsalStatistics.chars99Span = data.fsalStatistics.chars99PercentUpper - data.fsalStatistics.chars99PercentLower
-    data.fsalStatistics.words95Span = data.fsalStatistics.words95PercentUpper - data.fsalStatistics.words95PercentLower
-    data.fsalStatistics.words99Span = data.fsalStatistics.words99PercentUpper - data.fsalStatistics.words99PercentLower
+    // Now calculate the FSAL graphic
+
+    // Approximately aspect ratio 8:1. This will be stretched and squeezed on
+    // non standard compliant window sizes, but alas. We assume Zettlr will
+    // -- most of the time -- be run in default maximized/full screen state on
+    // landscape displays.
+    const height = 200
+    const width = 1400
+
+    const zTransform = function (val) {
+      const percent = val / (data.fsalStatistics.maxWords - data.fsalStatistics.minWords)
+      return width * percent
+    }
+
+    const ninetyFiveStart = zTransform(data.fsalStatistics.words95PercentLower)
+    const ninetyFiveEnd = zTransform(data.fsalStatistics.words95PercentUpper)
+    const ninetyNineStart = zTransform(data.fsalStatistics.words99PercentLower)
+    const ninetyNineEnd = zTransform(data.fsalStatistics.words99PercentUpper)
+
+    // We need to calculate some sizes here for the FSAL statistics graphic to display properly
+    data.boxPlotWords = {
+      width: width,
+      height: height,
+      mean: zTransform(data.fsalStatistics.meanWords),
+      interval95Start: ninetyFiveStart,
+      interval95End: ninetyFiveEnd - ninetyFiveStart,
+      interval99Start: ninetyNineStart,
+      interval99End: ninetyNineEnd - ninetyNineStart
+    }
+
+    // After the graphic has been calculated, let's ensure those numbers are
+    // readable.
+    data.fsalStatistics.minWords = localiseNumber(data.fsalStatistics.minWords)
+    data.fsalStatistics.meanWords = localiseNumber(data.fsalStatistics.meanWords)
+    data.fsalStatistics.maxWords = localiseNumber(data.fsalStatistics.maxWords)
+    data.fsalStatistics.sumWords = localiseNumber(data.fsalStatistics.sumWords)
+    data.fsalStatistics.sdWords = localiseNumber(data.fsalStatistics.sdWords)
+
+    data.fsalStatistics.minChars = localiseNumber(data.fsalStatistics.minChars)
+    data.fsalStatistics.meanChars = localiseNumber(data.fsalStatistics.meanChars)
+    data.fsalStatistics.maxChars = localiseNumber(data.fsalStatistics.maxChars)
+    data.fsalStatistics.sumChars = localiseNumber(data.fsalStatistics.sumChars)
+    data.fsalStatistics.sdChars = localiseNumber(data.fsalStatistics.sdChars)
+
+    data.fsalStatistics.words95PercentLower = localiseNumber(data.fsalStatistics.words95PercentLower)
+    data.fsalStatistics.words95PercentUpper = localiseNumber(data.fsalStatistics.words95PercentUpper)
+    data.fsalStatistics.words99PercentLower = localiseNumber(data.fsalStatistics.words99PercentLower)
+    data.fsalStatistics.words99PercentUpper = localiseNumber(data.fsalStatistics.words99PercentUpper)
+
+    data.fsalStatistics.chars95PercentLower = localiseNumber(data.fsalStatistics.chars95PercentLower)
+    data.fsalStatistics.chars95PercentUpper = localiseNumber(data.fsalStatistics.chars95PercentUpper)
+    data.fsalStatistics.chars99PercentLower = localiseNumber(data.fsalStatistics.chars99PercentLower)
+    data.fsalStatistics.chars99PercentUpper = localiseNumber(data.fsalStatistics.chars99PercentUpper)
 
     return data
   }

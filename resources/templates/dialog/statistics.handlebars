@@ -68,14 +68,14 @@
           In below's graphic, you can see certain measurements that have been
           taken across all your files in what is known as a "box-plot." The
           three vertical lines indicate the <strong>smallest file ({{ fsalStatistics.minWords}} words)</strong>,
-          the average file size <strong>({{ fsalStatistics.meanWords }} words)</strong>, and the
+          the <strong>average file size ({{ fsalStatistics.meanWords }} words)</strong>, and the
           <strong>largest file ({{ fsalStatistics.maxWords}} words)</strong>. The lean rectangle
           indicates the so-called <strong>99 percent interval</strong>, and the
           slightly higher rectangle indicates the <strong>95 percent interval</strong>.
           This means that 95 percent of your files contain between
-          {{ fsalStatistics.words95PercentLower}} and {{ fsalStatistics.words95PercentUpper }} words,
-          and 99 percent of your files contain between {{ fsalStatistics.words99PercentLower}} and
-          {{ fsalStatistics.words99PercentUpper }} words.
+          <strong>{{ fsalStatistics.words95PercentLower}} and {{ fsalStatistics.words95PercentUpper }} words</strong>,
+          and 99 percent of your files contain between <strong>{{ fsalStatistics.words99PercentLower}} and
+          {{ fsalStatistics.words99PercentUpper }} words</strong>.
         </p>
         <p>
           If your mean and both intervals are cramped to the left side of the
@@ -85,91 +85,108 @@
           are balanced and resemble a bell curve.
         </p>
         <div id="box-plot-fsal-stats-words">
+          {{!--
+          This SVG has an aspect ratio of around 8:1. By setting preserveAspectRatio
+          to xMidYMid, we ensure the graphic will be centered (regardless of the viewBox).
+           --}}
           <svg
             width="100%"
-            height="80px"
-            viewBox="0 0 {{ fsalStatistics.maxWords }} 140"
+            height="120px"
+            viewBox="0 0 {{ boxPlotWords.width }} {{ boxPlotWords.height}}"
             style="background-color: #333333"
-            preserveAspectRatio="none"
+            preserveAspectRatio="xMidYMid"
           >
-          {{!-- We have a viewbox from zero to maximum, so we can calculate everything --}}
-          {{!-- Before everything, mark the full range that we have --}}
-          <rect x="0" y="38" width="100%" height="4" fill="#ff00ff"/>
-            {{!-- First, the bigger box, includes the 99% interval --}}
-            <rect
-              x="{{ fsalStatistics.words99PercentLower }}"
-              y="30"
-              width="{{ fsalStatistics.words99Span }}"
-              height="20"
-              fill="#66cc66"
-              title="99 % of your files contain between {{ fsalStatistics.words99PercentLower }} and {{ fsalStatistics.words99PercentUpper }} words"
-            />
-            {{!-- Second, the smaller box, includes the 95% interval --}}
-            <rect
-              x="{{ fsalStatistics.words95PercentLower }}"
-              y="20"
-              width="{{ fsalStatistics.words95Span }}"
-              height="40"
-              fill="#aaffaa"
-              title="95 % of your files contain between {{ fsalStatistics.words95PercentLower }} and {{ fsalStatistics.words95PercentUpper }} words"
-            />
-            {{!-- Third, the other values: mean, min, and max --}}
-            <rect
-              x="{{ fsalStatistics.meanWords }}"
-              y="0"
-              width="1%"
-              height="80"
-              fill="#00ffff"
-              title="On average, your files have {{ fsalStatistics.meanWords }} words"
-            />
-            <rect
-              x="0"
-              y="0"
-              width="1%"
-              height="80"
-              fill="#00ffff"
-              title="Your shortest file contains {{ fsalStatistics.minWords }} words"
-            />
-            <rect
-              x="99%"
-              y="0"
-              width="1%"
-              height="80"
-              fill="#00ffff"
-              title="Your largest file contains {{ fsalStatistics.maxWords }} words"
-            />
+            <style>
+              .interactive {
+                opacity: 0.6;
+                transition: opacity 0.5s ease;
+              }
+              .interactive:hover { opacity: 1.0; }
 
-            {{!--
-            Now, indicate both the 95% and 99% interval a little bit nicer.
-            --}}
-            <path d="M{{ fsalStatistics.words95PercentLower }} 70 l0 20 l{{ fsalStatistics.words95Span }} 0 l0 -20" stroke-width="5" stroke="white" fill="none" />
-            <path d="M{{ fsalStatistics.words99PercentLower }} 70 l0 40 l{{ fsalStatistics.words99Span }} 0 l0 -40" stroke-width="5" stroke="white" fill="none" />
+              .hover-text text {
+                opacity: 0.0;
+                transition: opacity 0.5s ease;
+              }
+              .hover-text:hover text { opacity: 1.0; }
+
+              .cyan { fill: #00ffff; }
+              .blue { fill: #136df5; }
+              .navy { fill: #0a1dca; }
+              .magenta { fill: #ff00ff; }
+            </style>
+            {{!-- We have a viewbox from zero to maximum, so we can calculate everything --}}
+            {{!-- Before everything, mark the full range that we have --}}
+            <rect x="0" y="43" width="100%" height="4" class="magenta"/>
+
+            {{!-- First, the bigger box, includes the 99% interval --}}
+            <g class="interactive hover-text">
+              <rect
+                class="navy"
+                x="{{ boxPlotWords.interval99Start }}"
+                y="25"
+                width="{{ boxPlotWords.interval99End }}"
+                height="40"
+              />
+              {{!-- Interval bracket --}}
+              <path d="M{{ boxPlotWords.interval99Start }} 100 l0 40 l{{ boxPlotWords.interval99End }} 0 l0 -40" stroke-width="5" stroke="white" fill="none" />
+              <text x="50%" y="180" fill="white" stroke="white" font-size="30px">99% Interval</text>
+            </g>
+            {{!-- Second, the smaller box, includes the 95% interval --}}
+            <g class="interactive hover-text">
+              <rect
+                class="blue"
+                x="{{ boxPlotWords.interval95Start }}"
+                y="15"
+                width="{{ boxPlotWords.interval95End }}"
+                height="60"
+              />
+              {{!-- Interval bracket --}}
+              <path d="M{{ boxPlotWords.interval95Start }} 100 l0 20 l{{ boxPlotWords.interval95End }} 0 l0 -20" stroke-width="5" stroke="white" fill="none" />
+              <text x="50%" y="180" fill="white" stroke="white" font-size="30px">95% Interval</text>
+            </g>
+
+            {{!-- Third, the other values: mean, min, and max --}}
+            <g class="interactive hover-text">
+              {{!-- minWords --}}
+              <rect class="interactive cyan" x="-0.5%" y="5" width="1%" height="80" />
+              <text x="50%" y="180" fill="white" stroke="white" font-size="30px">Minimum: {{ fsalStatistics.minWords }}</text>
+            </g>
+            <g class="interactive hover-text">
+              {{!-- meanWords --}}
+              <rect class="interactive cyan" x="{{ boxPlotWords.mean }}" y="5" width="1%" height="80" />
+              <text x="50%" y="180" fill="white" stroke="white" font-size="30px">Average: {{ fsalStatistics.meanWords }}</text>
+            </g>
+            <g class="interactive hover-text">
+              {{!-- maxWords --}}
+              <rect class="interactive cyan" x="99.5%" y="5" width="1%" height="80" />
+              <text x="50%" y="180" fill="white" stroke="white" font-size="30px">Maximum: {{ fsalStatistics.maxWords }}</text>
+            </g>
           </svg>
         </div>
         <div class="box-container">
           <div class="box-left">
-            Number of Markdown files: {{ fsalStatistics.mdFileCount }}<br>
-            Number of Code files: {{ fsalStatistics.codeFileCount }}<br>
-            Number of directories: {{ fsalStatistics.dirCount }}<br>
+            Number of Markdown files: <strong>{{ fsalStatistics.mdFileCount }}</strong><br>
+            Number of Code files: <strong>{{ fsalStatistics.codeFileCount }}</strong><br>
+            Number of directories: <strong>{{ fsalStatistics.dirCount }}</strong><br>
             <br>
-            Sum of characters in all files: {{ fsalStatistics.sumChars }}<br>
-            Sum of words in all files: {{ fsalStatistics.sumWords }}<br>
-            Standard deviation: {{ fsalStatistics.sdChars }} characters / {{ fsalStatistics.sdWords }} words<br>
+            Sum of characters in all files: <strong>{{ fsalStatistics.sumChars }}</strong><br>
+            Sum of words in all files: <strong>{{ fsalStatistics.sumWords }}</strong><br>
+            Standard deviation: <strong>{{ fsalStatistics.sdChars }} characters / {{ fsalStatistics.sdWords }} words</strong><br>
             <br>
-            Your smallest file: {{ fsalStatistics.minChars }} characters / {{ fsalStatistics.minWords }} words<br>
-            Your largest file: {{ fsalStatistics.maxChars }} characters / {{ fsalStatistics.maxWords}} words<br>
-            The average file: {{ fsalStatistics.meanChars }} characters / {{ fsalStatistics.meanWords }} words<br>
+            Your smallest file: <strong>{{ fsalStatistics.minChars }} characters / {{ fsalStatistics.minWords }} words</strong><br>
+            Your largest file: <strong>{{ fsalStatistics.maxChars }} characters / {{ fsalStatistics.maxWords}} words</strong><br>
+            The average file: <strong>{{ fsalStatistics.meanChars }} characters / {{ fsalStatistics.meanWords }} words</strong><br>
           </div>
           <div class="box-right">
-            Lower bound of 95% interval (chars): {{ fsalStatistics.chars95PercentLower }}<br>
-            Upper bound of 95% interval (chars): {{ fsalStatistics.chars95PercentUpper }}<br>
-            Lower bound of 99% interval (chars): {{ fsalStatistics.chars99PercentLower }}<br>
-            Upper bound of 99% interval (chars): {{ fsalStatistics.chars99PercentUpper }}<br>
+            Lower bound of 95% interval (chars): <strong>{{ fsalStatistics.chars95PercentLower }}</strong><br>
+            Upper bound of 95% interval (chars): <strong>{{ fsalStatistics.chars95PercentUpper }}</strong><br>
+            Lower bound of 99% interval (chars): <strong>{{ fsalStatistics.chars99PercentLower }}</strong><br>
+            Upper bound of 99% interval (chars): <strong>{{ fsalStatistics.chars99PercentUpper }}</strong><br>
             <br>
-            Lower bound of 95% interval (words): {{ fsalStatistics.words95PercentLower }}<br>
-            Upper bound of 95% interval (words): {{ fsalStatistics.words95PercentUpper }}<br>
-            Lower bound of 99% interval (words): {{ fsalStatistics.words99PercentLower }}<br>
-            Upper bound of 99% interval (words): {{ fsalStatistics.words99PercentUpper }}
+            Lower bound of 95% interval (words): <strong>{{ fsalStatistics.words95PercentLower }}</strong><br>
+            Upper bound of 95% interval (words): <strong>{{ fsalStatistics.words95PercentUpper }}</strong><br>
+            Lower bound of 99% interval (words): <strong>{{ fsalStatistics.words99PercentLower }}</strong><br>
+            Upper bound of 99% interval (words): <strong>{{ fsalStatistics.words99PercentUpper }}</strong>
           </div>
         </div>
       </div>
