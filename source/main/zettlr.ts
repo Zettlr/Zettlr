@@ -193,6 +193,14 @@ export default class Zettlr {
         return fileMeta
       }
     })
+
+    ipcMain.handle('application', async (event, payload) => {
+      const { command } = payload
+
+      if (command === 'get-statistics-data') {
+        return this._fsal.statistics
+      }
+    })
   }
 
   /**

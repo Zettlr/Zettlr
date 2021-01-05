@@ -470,13 +470,22 @@ class ZettlrBody {
     global.popupProvider.show('stats', document.querySelector('#toolbar .stats'), context)
 
     $('#more-stats').on('click', (e) => {
-      // Theres no form but the user has clicked the more button
-      this._currentDialog = new StatsDialog()
-      this._currentDialog.init(data.wordCount).open()
-      this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
-      // After opening the dialog, close the popup. The user probably doesn't
-      // want to click twice to continue writing.
-      global.popupProvider.close()
+      // There's no form but the user has clicked the more button
+      ipcRenderer.invoke('application', { command: 'get-statistics-data' })
+        .then((additionalData) => {
+          this._currentDialog = new StatsDialog()
+          this._currentDialog.init({
+            wordCounts: data.wordCount,
+            fsalStatistics: additionalData
+          }).open()
+          this._currentDialog.on('afterClose', (e) => {
+            this._currentDialog = null
+          })
+          // After opening the dialog, close the popup. The user probably doesn't
+          // want to click twice to continue writing.
+          global.popupProvider.close()
+        })
+        .catch(e => console.error(e))
     })
   }
 

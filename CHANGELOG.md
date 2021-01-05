@@ -25,6 +25,7 @@ Due to efforts within the file manager structure, we could re-enable the functio
 - **Enhancement**: Values from the AutoCorrect replacement table will now also be indicated as correct, so you don't have to add them to your user dictionary anymore.
 - **Enhancement**: Added an option to prevent auto-searches when following Zettelkasten-links.
 - **Enhancement**: Zettlr now recognizes the `tags` frontmatter property. _Please note that Pandoc does not recognize the `tags`-property, so if you need tags to be processed with Pandoc, consider using the `keywords`-property._
+- **Enhancement**: The File System Abstraction Layer (FSAL) now spits out a few descriptive statistics collected across all loaded files and folders.
 - Made the dialogs' tab lists more accessible for screen readers.
 - Fixed the other files's extension icons in the sidebar -- they now also display in dark mode.
 - Fixes to the stylesheets.

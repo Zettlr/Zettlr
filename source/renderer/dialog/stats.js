@@ -41,9 +41,11 @@ class StatsDialog extends ZettlrDialog {
    * @return {Object}             The modified data object.
    */
   preInit (data = null) {
-    if (!data) throw new Error('No statistical data provided')
+    if (data == null) {
+      throw new Error('No statistical data provided')
+    }
 
-    this._rawData = JSON.parse(JSON.stringify(data)) // Save the raw word counts into this object
+    this._rawData = JSON.parse(JSON.stringify(data.wordCounts)) // Save the raw word counts into this object
     this._sanitiseData() // Fill in holes in the data.
     this._prepareData() // By default start with weeks
     data.days = Object.keys(this._rawData).length
@@ -51,6 +53,11 @@ class StatsDialog extends ZettlrDialog {
     date = new Date(date[0], date[1] - 1, date[2]) // Remember months need to be 0-based
     date = formatDate(date)
     data.firstDay = date
+
+    data.fsalStatistics.chars95Span = data.fsalStatistics.chars95PercentUpper - data.fsalStatistics.chars95PercentLower
+    data.fsalStatistics.chars99Span = data.fsalStatistics.chars99PercentUpper - data.fsalStatistics.chars99PercentLower
+    data.fsalStatistics.words95Span = data.fsalStatistics.words95PercentUpper - data.fsalStatistics.words95PercentLower
+    data.fsalStatistics.words99Span = data.fsalStatistics.words99PercentUpper - data.fsalStatistics.words99PercentLower
 
     return data
   }
