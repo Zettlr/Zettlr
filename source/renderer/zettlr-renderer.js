@@ -417,7 +417,7 @@ class ZettlrRenderer {
 
     // Now perform the actual search. For this we'll create a new search
     // object and pass all necessary data to it.
-    let dirContents = this._store.getVuex().getters.currentDirectoryContent
+    let dirContents = this._fileManager.$store.getters.currentDirectoryContent
     this._currentSearch = new GlobalSearch(term)
     this._currentSearch.with(
       // Filter by file and then only retain the hashes
