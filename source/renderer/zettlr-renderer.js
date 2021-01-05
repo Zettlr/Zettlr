@@ -636,12 +636,6 @@ class ZettlrRenderer {
   getPomodoro () { return this._pomodoro }
 
   /**
-   * Returns the current paths
-   * @return {Object} The paths object
-   */
-  getPaths () { return this._paths }
-
-  /**
    * Returns the stats view
    * @return {ZettlrStatsView} The view instance
    */
