@@ -246,7 +246,7 @@ module.exports = class ZettlrSidebar {
 
     let currentDir = this._renderer.getCurrentDir()
     // Grab the newest attachments and refresh
-    if (currentDir === null || currentDir.attachments.length === 0) {
+    if (currentDir == null || currentDir.attachments.length === 0) {
       this.fileContainer.append(renderTemplate(`<p>${trans('gui.no_attachments')}</p>`))
       return // Don't activate in this instance
     }

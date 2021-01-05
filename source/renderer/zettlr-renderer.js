@@ -30,6 +30,7 @@ const { ipcRenderer, clipboard } = require('electron')
 
 const generateId = require('../common/util/generate-id')
 const matchFilesByTags = require('../common/util/match-files-by-tags')
+const findObject = require('../common/util/find-object')
 
 const reconstruct = require('./util/reconstruct-tree')
 
@@ -46,9 +47,6 @@ class ZettlrRenderer {
     * Initialize all dynamic elements in the renderer process
     */
   constructor () {
-    this._currentFile = null
-    this._currentDir = null
-    this._paths = null
     this._lang = 'en-US' // Default fallback
 
     // Stores the current global search in order to access it.
@@ -102,15 +100,16 @@ class ZettlrRenderer {
       return []
     }
 
-    let fileDescriptor = this.findObject(hash)
+    let fileDescriptor = this.find(hash)
 
-    if (!fileDescriptor || fileDescriptor.type !== 'file') {
+    if (fileDescriptor === undefined || fileDescriptor.type !== 'file') {
       return []
     }
 
-    return matchFilesByTags(fileDescriptor, this._paths).map(e => {
+    const items = this._fileManager.$store.state.items
+    return matchFilesByTags(fileDescriptor, items).map(e => {
       return {
-        'fileDescriptor': this.findObject(e.hash),
+        'fileDescriptor': this.find(e.hash),
         'matches': e.matches
       }
     })
@@ -217,7 +216,7 @@ class ZettlrRenderer {
     if (arg.hasOwnProperty('hash')) {
       // Another dir should be renamed
       // Rename a dir based on a hash -> find it
-      this._body.requestNewDirName(this.findObject(arg.hash))
+      this._body.requestNewDirName(this.find(arg.hash))
     } else if (this.getCurrentDir() != null) {
       this._body.requestNewDirName(this.getCurrentDir())
     }
@@ -232,7 +231,7 @@ class ZettlrRenderer {
     // User wants to create a new directory. Display modal
     if (arg.hasOwnProperty('hash')) {
       // User has probably right clicked
-      this._body.requestDirName(this.findObject(arg.hash))
+      this._body.requestDirName(this.find(arg.hash))
     } else {
       this._body.requestDirName(this.getCurrentDir())
     }
@@ -265,31 +264,9 @@ class ZettlrRenderer {
     * @param  {Number} hash The hash to be searched for
     * @return {Object}      Either a file or a directory object
     */
-  findObject (hash) {
-    for (let p of this._paths) {
-      let o = this._find(hash, p)
-      if (o != null) return o
-    }
-
-    return null
-  }
-
-  /**
-    * Helper function to find dummy file/dir objects based on a hash
-    * @param  {Integer} hash             The hash identifying whatever is to be searched for.
-    * @param  {Object} [obj=this._paths] A sub-object or the whole tree to be searched.
-    * @return {Mixed}                  Either null, or ZettlrFile/ZettlrDir if found.
-    */
-  _find (hash, obj = this._paths) {
-    if (parseInt(obj.hash) === parseInt(hash)) {
-      return obj
-    } else if (obj.hasOwnProperty('children')) {
-      for (let c of obj.children) {
-        let ret = this._find(hash, c)
-        if (ret != null) return ret
-      }
-    }
-    return null
+  find (hash) {
+    const items = this._fileManager.$store.state.items
+    return findObject(items, 'hash', hash, 'children')
   }
 
   /**
@@ -305,7 +282,6 @@ class ZettlrRenderer {
     // object, so that we have in principle the same structure
     // than in main.
     reconstruct(nData)
-    this._paths = nData
 
     // Pass on the new paths object as is to the store.
     global.store.renewItems(nData)
@@ -360,7 +336,7 @@ class ZettlrRenderer {
   replaceFile (oldHash, file) {
     if (!file) return // No file given; main has screwed up
 
-    let oldFile = this.findObject(oldHash)
+    let oldFile = this.find(oldHash)
 
     if (oldFile && oldFile.type === 'file') {
       // We'll be patching the store, as this will
@@ -380,12 +356,12 @@ class ZettlrRenderer {
   replaceDir (oldHash, dir) {
     if (!dir) return // No file given; main has screwed up
 
-    let oldDir = this.findObject(oldHash)
+    let oldDir = this.find(oldHash)
 
     if (oldDir && oldDir.type === 'directory') {
       let tempParent = dir.parent
       reconstruct(dir) // Reconstruct may overwrite the parent with null
-      dir.parent = this.findObject(tempParent)
+      dir.parent = this.find(tempParent)
 
       // We'll be patching the store, as this
       // will also update the renderer._paths.
@@ -547,7 +523,7 @@ class ZettlrRenderer {
       // Make sure preview is visible for this to work correctly
       // Another file should be renamed
       // Rename a file based on a hash -> find it
-      this._body.requestNewFileName(this.findObject(f.hash))
+      this._body.requestNewFileName(this.find(f.hash))
     } else if (this.getActiveFile() != null) {
       this._body.requestNewFileName(this.getActiveFile())
     }
@@ -561,7 +537,7 @@ class ZettlrRenderer {
     // User wants to create a new file. Display popup
     if ((d != null) && d.hasOwnProperty('hash')) {
       // User has probably right clicked
-      this._body.requestFileName(this.findObject(d.hash))
+      this._body.requestFileName(this.find(d.hash))
     } else if (d === 'new-file-button') {
       // The user has requested a new file from the new file button
       // on the tab bar - so let's display it there
@@ -578,13 +554,14 @@ class ZettlrRenderer {
   setCurrentDir (newdir = null) {
     // We need to query this before altering the state, as otherwise it'll
     // report that there is no active search.
-    let hasActiveSearch = global.store.hasActiveSearch()
-    this._currentDir = this.findObject(newdir) // Find the dir (hash) in our own paths object
+    let hasActiveSearch = Boolean(global.store.hasActiveSearch())
     global.store.selectDirectory(newdir)
     this._sidebar.refresh()
     this._editor.signalUpdateFileAutocomplete() // On every directory change
     // "Re-do" the search
-    if (hasActiveSearch) this.beginSearch(this._toolbar.getSearchTerm())
+    if (hasActiveSearch) {
+      this.beginSearch(this._toolbar.getSearchTerm())
+    }
   }
 
   /**
@@ -593,17 +570,22 @@ class ZettlrRenderer {
    */
   getActiveFile () {
     let activeFile = this._editor.getActiveFile()
-    if (!activeFile) return undefined
+    if (activeFile === undefined) {
+      return undefined
+    }
+
     // Don't return the editor's object (with all
     // content etc) but our own's without content!
-    return this.findObject(activeFile.hash)
+    return this.find(activeFile.hash)
   }
 
   /**
    * Returns the current directory's pointer.
    * @return {ZettlrDir} The dir object.
    */
-  getCurrentDir () { return this._currentDir }
+  getCurrentDir () {
+    return this.find(this._fileManager.$store.state.selectedDirectory)
+  }
 
   /**
    * Sets the GUI language

@@ -267,7 +267,7 @@ class ZettlrRendererIPC {
 
       // The user wants to open a dir externally (= in finder etc)
       case 'dir-open-externally':
-        require('electron').shell.openPath(this._app.findObject(parseInt(cnt.hash, 10)).path)
+        require('electron').shell.openPath(this._app.find(parseInt(cnt.hash, 10)).path)
           .then(potentialError => {
             if (potentialError !== '') {
               console.error('Could not open attachment:' + potentialError)

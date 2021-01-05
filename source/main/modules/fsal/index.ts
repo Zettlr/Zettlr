@@ -735,7 +735,6 @@ export default class FSAL extends EventEmitter {
     if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
     if (typeof val !== 'number') val = parseInt(val, 10)
 
-    // let found = findObject(this._roots, 'hash', val, 'children')
     let found = findObject(baseTree, 'hash', val, 'children')
     if (!found || found.type !== 'directory') return null
     return found

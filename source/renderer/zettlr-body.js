@@ -411,7 +411,7 @@ class ZettlrBody {
   displayProjectProperties (prefs) {
     this._currentDialog = new ProjectProperties()
     // We need the project directory's name as a default value
-    prefs.projectDirectory = this.getRenderer().findObject(prefs.hash).name
+    prefs.projectDirectory = this.getRenderer().find(prefs.hash).name
     this._currentDialog.init(prefs).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
