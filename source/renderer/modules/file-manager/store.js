@@ -11,12 +11,12 @@
  * END HEADER
  */
 
-const Vue = require('vue').default
-const objectToArray = require('../../../common/util/object-to-array')
-const findObject = require('../../../common/util/find-object')
+import Vue from 'vue'
+import objectToArray from '../../../common/util/object-to-array'
+import findObject from '../../../common/util/find-object'
 
 // Make the Vuex-Store the default export
-module.exports = {
+export default {
   state: {
     items: [],
     tags: [],
@@ -161,7 +161,9 @@ module.exports = {
       } else {
         // Retrieve the parent
         let parent = findObject(context.state.items, 'hash', obj.parent.hash, 'children')
-        if (!parent) return
+        if (parent !== undefined) {
+          return
+        }
         let found = parent.children.find(e => e.hash === hash)
         // Now simply splice it, the observers by Vue.js will get notified and update the view.
         parent.children.splice(parent.children.indexOf(found), 1)
