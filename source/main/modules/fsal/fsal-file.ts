@@ -150,7 +150,13 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
     // an array, but a simple string (or even a number <.<). I am beginning to
     // understand why programmers despise the YAML-format.
     if (!Array.isArray(file.frontmatter.keywords)) {
-      file.frontmatter.keywords = [file.frontmatter.keywords]
+      const keys = file.frontmatter.keywords.split(',')
+      if (keys.length > 1) {
+        // The user decided to split the tags by comma
+        file.frontmatter.keywords = keys.map((tag: string) => tag.trim())
+      } else {
+        file.frontmatter.keywords = [file.frontmatter.keywords]
+      }
     }
 
     // If the user decides to use just numbers for the keywords (e.g. #1997),
@@ -163,7 +169,13 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   // Now the same for the tags-property.
   if (file.frontmatter?.tags != null) {
     if (!Array.isArray(file.frontmatter.tags)) {
-      file.frontmatter.tags = [file.frontmatter.tags]
+      const keys = file.frontmatter.tags.split(',')
+      if (keys.length > 1) {
+        // The user decided to split the tags by comma
+        file.frontmatter.tags = keys.map((tag: string) => tag.trim())
+      } else {
+        file.frontmatter.tags = [file.frontmatter.tags]
+      }
     }
     const sanitizedKeywords = file.frontmatter.tags.map((tag: any) => String(tag).toString())
     file.tags = file.tags.concat(sanitizedKeywords)
