@@ -346,13 +346,16 @@ class ZettlrBody {
 
       // The revealjs-button doesn't trigger an export, but the visibility
       // of the themes selection
-      if ($(elem).hasClass('revealjs')) {
+      if (elem.classList.contains('revealjs')) {
         $('#reveal-themes').toggleClass('hidden')
         return
       }
 
-      let ext = $(elem).attr('data-ext')
-      global.ipc.send('export', { 'hash': file.hash, 'ext': ext })
+      global.ipc.send('export', {
+        hash: file.hash,
+        ext: elem.dataset.ext
+      })
+
       global.popupProvider.close()
     })
   }
