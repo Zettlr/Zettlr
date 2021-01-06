@@ -45,6 +45,7 @@ Due to efforts within the file manager structure, we could re-enable the functio
 - You can now zoom both Quicklook editors and the main editor independently using the zoom shortcuts.
 - Unlocked the ability to select "Follow Operating System" in the auto dark mode settings. _Please note that this setting might have no effect on certain linuxoid Operating Systems._
 - Improved tag/keyword detection in frontmatters. Comma-separated lists should now also work.
+- Fixed a bug making it impossible to open Markdown files from the menu.
 
 ## Under the Hood
 
