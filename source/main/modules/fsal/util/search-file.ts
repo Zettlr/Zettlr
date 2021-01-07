@@ -17,20 +17,36 @@
  * END HEADER
  */
 
-module.exports = function searchFile (fileObject, terms, cnt) {
+import { MDFileDescriptor, CodeFileDescriptor } from '../types'
+
+interface SearchOperator {
+  operator: 'AND'|'NOT'
+  word: string
+}
+
+interface SearchOrOperator {
+  operator: 'OR'
+  word: string[]
+}
+
+export default function searchFile (
+  fileObject: MDFileDescriptor|CodeFileDescriptor,
+  terms: Array<SearchOperator|SearchOrOperator>,
+  cnt: string
+): any[] {
   let matches = 0
   let cntLower = cnt.toLowerCase()
 
   // Immediately search for not operators
-  let notOperators = terms.filter(elem => elem.operator === 'NOT')
+  let notOperators = terms.filter(elem => elem.operator === 'NOT') as SearchOperator[]
   if (notOperators.length > 0) {
     for (let not of notOperators) {
       // NOT is a strict stop indicator, meaning that if
       // one NOT is found in the file, the whole file is
       // disqualified as a candidate.
       if (
-        cntLower.indexOf(not.word.toLowerCase()) > -1 ||
-        fileObject.name.toLowerCase().indexOf(not.word.toLowerCase()) > -1
+        cntLower.includes(not.word.toLowerCase()) ||
+        fileObject.name.toLowerCase().includes(not.word.toLowerCase())
       ) {
         return []
       }
@@ -52,7 +68,7 @@ module.exports = function searchFile (fileObject, terms, cnt) {
   // First try to match the title and tags
   for (let t of termsToSearch) {
     if (t.operator === 'AND') {
-      if (fileObject.name.toLowerCase().indexOf(t.word.toLowerCase()) > -1 || fileObject.tags.includes(t.word.toLowerCase())) {
+      if (fileObject.name.toLowerCase().includes(t.word.toLowerCase()) || fileObject.tags.includes(t.word.toLowerCase())) {
         matches++
       } else if (t.word[0] === '#' && fileObject.tags.includes(t.word.substr(1))) {
         // Account for a potential # in front of the tag
@@ -61,7 +77,7 @@ module.exports = function searchFile (fileObject, terms, cnt) {
     } else if (t.operator === 'OR') {
       // OR operator
       for (let wd of t.word) {
-        if (fileObject.name.toLowerCase().indexOf(wd.toLowerCase()) > -1 || fileObject.tags.includes(wd.toLowerCase())) {
+        if (fileObject.name.toLowerCase().includes(wd.toLowerCase()) || fileObject.tags.includes(wd.toLowerCase())) {
           matches++
           // Break because only one match necessary
           break
@@ -75,10 +91,12 @@ module.exports = function searchFile (fileObject, terms, cnt) {
   }
 
   // Return immediately with an object of line -1 (indicating filename or tag matches) and a huge weight
-  if (matches === termsToSearch.length) { return [{ line: -1, restext: fileObject.name, 'weight': 2 }] }
+  if (matches === termsToSearch.length) {
+    return [{ line: -1, restext: fileObject.name, 'weight': 2 }]
+  }
 
-  // Reset the matches, now to hold an array
-  matches = []
+  // Now begin to search
+  const fileMatches = []
 
   // Initialise the rest of the necessary variables
   let lines = cnt.split('\n')
@@ -88,33 +106,21 @@ module.exports = function searchFile (fileObject, terms, cnt) {
   for (let t of termsToSearch) {
     let hasTermMatched = false
     if (t.operator === 'AND') {
-      for (let index in lines) {
+      for (let index = 0; index < lines.length; index++) {
         // Try both normal and lowercase
-        if (lines[index].indexOf(t.word) > -1) {
-          matches.push({
+        if (lines[index].includes(t.word)) {
+          fileMatches.push({
             'term': t.word,
-            'from': {
-              'line': parseInt(index),
-              'ch': lines[index].indexOf(t.word)
-            },
-            'to': {
-              'line': parseInt(index),
-              'ch': lines[index].indexOf(t.word) + t.word.length
-            },
+            'from': { 'line': index, 'ch': lines[index].indexOf(t.word) },
+            'to': { 'line': index, 'ch': lines[index].indexOf(t.word) + t.word.length },
             'weight': 1 // Weight indicates that this was an exact match
           })
           hasTermMatched = true
-        } else if (linesLower[index].indexOf(t.word.toLowerCase()) > -1) {
-          matches.push({
+        } else if (linesLower[index].includes(t.word.toLowerCase())) {
+          fileMatches.push({
             'term': t.word,
-            'from': {
-              'line': parseInt(index),
-              'ch': linesLower[index].indexOf(t.word.toLowerCase())
-            },
-            'to': {
-              'line': parseInt(index),
-              'ch': linesLower[index].indexOf(t.word.toLowerCase()) + t.word.length
-            },
+            'from': { 'line': index, 'ch': linesLower[index].indexOf(t.word.toLowerCase()) },
+            'to': { 'line': index, 'ch': linesLower[index].indexOf(t.word.toLowerCase()) + t.word.length },
             'weight': 0.5 // Weight indicates that this was an approximate match
           })
           hasTermMatched = true
@@ -125,34 +131,22 @@ module.exports = function searchFile (fileObject, terms, cnt) {
       // OR operator.
       for (let wd of t.word) {
         let br = false
-        for (let index in lines) {
+        for (let index = 0; index < lines.length; index++) {
           // Try both normal and lowercase
-          if (lines[index].indexOf(wd) > -1) {
-            matches.push({
+          if (lines[index].includes(wd)) {
+            fileMatches.push({
               'term': wd,
-              'from': {
-                'line': parseInt(index),
-                'ch': lines[index].indexOf(wd)
-              },
-              'to': {
-                'line': parseInt(index),
-                'ch': lines[index].indexOf(wd) + wd.length
-              },
+              'from': { 'line': index, 'ch': lines[index].indexOf(wd) },
+              'to': { 'line': index, 'ch': lines[index].indexOf(wd) + wd.length },
               'weight': 1 // Weight indicates that this was an exact match
             })
             hasTermMatched = true
             br = true
-          } else if (linesLower[index].indexOf(wd.toLowerCase()) > -1) {
-            matches.push({
+          } else if (linesLower[index].includes(wd.toLowerCase())) {
+            fileMatches.push({
               'term': wd,
-              'from': {
-                'line': parseInt(index),
-                'ch': linesLower[index].indexOf(wd.toLowerCase())
-              },
-              'to': {
-                'line': parseInt(index),
-                'ch': linesLower[index].indexOf(wd.toLowerCase()) + wd.length
-              },
+              'from': { 'line': index, 'ch': linesLower[index].indexOf(wd.toLowerCase()) },
+              'to': { 'line': index, 'ch': linesLower[index].indexOf(wd.toLowerCase()) + wd.length },
               'weight': 1 // Weight indicates that this was an exact match
             })
             hasTermMatched = true
@@ -165,6 +159,10 @@ module.exports = function searchFile (fileObject, terms, cnt) {
     if (hasTermMatched) termsMatched++
   }
 
-  if (termsMatched === termsToSearch.length) return matches
-  return [] // Empty array indicating that not all required terms have matched
+  if (termsMatched === termsToSearch.length) {
+    return fileMatches
+  } else {
+    // Empty array indicating that not all required terms have matched
+    return []
+  }
 }

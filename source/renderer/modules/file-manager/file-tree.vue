@@ -39,11 +39,11 @@
 </template>
 
 <script>
-const { trans } = require('../../../common/i18n')
-const TreeItem = require('./tree-item.vue').default
+import { trans } from '../../../common/i18n'
+import TreeItem from './tree-item.vue'
 
 export default {
-  name: 'FileList',
+  name: 'FileTree',
   components: {
     TreeItem
   },

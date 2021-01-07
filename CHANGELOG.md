@@ -12,15 +12,20 @@ If you possess one of the new Apple devices sporting Apple's M1 chip, please see
 
 As of the current development build, Microsoft has finished support for running 64 bit applications on ARM computers. However, this is not yet officially released, so the bundled Pandoc might not work and you have to return back to the system-wide installation. However, if the bundled 64 bit Pandoc _does_ work on your ARM computer, please notify us so we know that we can officially support Windows ARM again!
 
+## Drag Behaviour Fixes
+
+Due to efforts within the file manager structure, we could re-enable the functionality to drag files out of the app without having to press any modification key before actually dragging something.
+
 ## GUI and Functionality
 
-- **Feature**: 64bit applications will now run the built-in Pandoc. To see whether your application runs using the bundled Pandoc, open the developer logs and look for "pandoc." If Zettlr has used the built-in Pandoc for an export, the pandoc command will not begin with "pandoc" but with the full, absolute path to the bundled Pandoc binary. **If your application does use the bundled Pandoc, you can uninstall any system-wide Pandoc installationn; Zettlr should still be able to export. If not, please consider reporting a bug**!
+- **Feature**: 64bit applications will now run the built-in Pandoc. To see whether your application runs using the bundled Pandoc, open the developer logs and look for "pandoc." If Zettlr has used the built-in Pandoc for an export, the pandoc command will not begin with "pandoc" but with the full, absolute path to the bundled Pandoc binary. **If your application does use the bundled Pandoc, you can uninstall any system-wide Pandoc installationn; Zettlr should still be able to export. If not, please report a bug**!
 - **Feature**: macOS-users can now use horizontal scrolling instead of using the arrow button to toggle between the file tree and the file list (only available in thin file manager mode; this behaves exactly like back and forth navigating in browsers such as Safari and Chrome).
 - **Enhancement**: Added a new option to allow spaces during autocompletion (of tags, citations, or internal links).
 - **Enhancement**: Added a configuration option to programmatically set the editor's base font size. Additionally, the zooming now works reliably. (This setting is independent of the base font size above.)
 - **Enhancement**: Values from the AutoCorrect replacement table will now also be indicated as correct, so you don't have to add them to your user dictionary anymore.
 - **Enhancement**: Added an option to prevent auto-searches when following Zettelkasten-links.
-- **Enhancement**: Zettlr now recognizes the `tags` frontmatter property. _Please note that Pandoc does not recognize the `tags`-property, so if you need tags to be processed with Pandoc, consider using the `keywords`-property._
+- **Enhancement**: Zettlr now recognizes the `tags` frontmatter property. _Please note that Pandoc does not recognize the `tags`-property, so if you need tags to be processed by Pandoc, consider using the `keywords`-property._
+- **Enhancement**: The File System Abstraction Layer (FSAL) now spits out a few descriptive statistics collected across all loaded files and folders.
 - Made the dialogs' tab lists more accessible for screen readers.
 - Fixed the other files's extension icons in the sidebar -- they now also display in dark mode.
 - Fixes to the stylesheets.
@@ -39,7 +44,8 @@ As of the current development build, Microsoft has finished support for running 
 - On macOS, Zettlr will not force-show the main window anymore when you click on its Dock icon, but rather restore the default behaviour on macOS.
 - You can now zoom both Quicklook editors and the main editor independently using the zoom shortcuts.
 - Unlocked the ability to select "Follow Operating System" in the auto dark mode settings. _Please note that this setting might have no effect on certain linuxoid Operating Systems._
-- Modified the syntax highlighting multiplexer to mitigate performance issues on long lines
+- Improved tag/keyword detection in frontmatters. Comma-separated lists should now also work.
+- Fixed a bug making it impossible to open Markdown files from the menu.
 
 ## Under the Hood
 
@@ -71,6 +77,9 @@ As of the current development build, Microsoft has finished support for running 
 - Move the `loadIcons` function to a more central place in the window registration module.
 - Moved the tree view functionality to its dedicated Vue component.
 - Fixed a regression error from updating LESS.
+- Moved the file list functionality to its dedicated Vue component.
+- Unified ES6 syntax within the file manager components.
+- Migrated the Vuex store to TypeScript.
 
 # 1.8.4
 

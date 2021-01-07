@@ -2,7 +2,9 @@
 
 #file-list {
   background-color: var(--bg-preview);
-  transition: @mode-transition all ease;
+  transition:
+    background-color @mode-transition ease,
+    color @mode-transition ease;
   font-size: @font-size-small;
   box-shadow: inset -14px 2px 54px -23px rgba(0,0,0,0.25);
 

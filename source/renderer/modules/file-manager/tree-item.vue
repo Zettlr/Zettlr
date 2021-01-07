@@ -17,7 +17,8 @@
     class="container"
     v-bind:data-hash="obj.hash"
     v-bind:draggable="!isRoot"
-    v-on:dragstart.stop="beginDragging"
+    v-on:dragstart="beginDragging"
+    v-on:drag="onDragHandler"
     v-on:dragenter.stop="enterDragging"
     v-on:dragleave.stop="leaveDragging"
   >
@@ -142,33 +143,21 @@
 
 <script>
 // Tree View item component
-const findObject = require('../../../common/util/find-object.js')
-const { trans } = require('../../../common/i18n')
-const Sorter = require('./sorter.vue').default
-const fileContextMenu = require('./file-item-context.js')
-const dirContextMenu = require('./dir-item-context.js')
+import findObject from '../../../common/util/find-object.js'
+import { trans } from '../../../common/i18n'
+import Sorter from './sorter.vue'
+import fileContextMenu from './util/file-item-context.js'
+import dirContextMenu from './util/dir-item-context.js'
 
-module.exports = {
-  name: 'tree-item',
+export default {
+  name: 'TreeItem',
+  components: {
+    'Sorter': Sorter
+  },
   props: [
     'obj', // The actual object
     'depth' // How deep is this item nested?
   ],
-  components: {
-    'Sorter': Sorter
-  },
-  watch: {
-    selectedFile: function (oldVal, newVal) {
-      // Open the tree on selectedFile change, if the
-      // selected file is contained in this dir somewhere
-      if (findObject(this.obj, 'hash', this.selectedFile, 'children')) this.collapsed = false
-    },
-    selectedDir: function (oldVal, newVal) {
-      // If a directory within this has been selected,
-      // open up, lads!
-      if (findObject(this.obj, 'hash', this.selectedDir, 'children')) this.collapsed = false
-    }
-  },
   data: () => {
     return {
       collapsed: true, // Initial: collapsed list (if there are children)
@@ -177,28 +166,42 @@ module.exports = {
   },
   computed: {
     /**
-     * Returns true if this component is a root
+     * Returns true if this item is a root item
      */
-    isRoot: function () { return this.$root === this.$parent },
+    isRoot: function () {
+      // Parent apparently can also be undefined BUG
+      return this.obj.parent == null
+    },
     /**
      * Returns true if this is a directory
      */
-    isDirectory: function () { return this.obj.type === 'directory' },
+    isDirectory: function () {
+      return this.obj.type === 'directory'
+    },
     /**
      * Shortcut methods to access the store
      */
-    selectedFile: function () { return this.$store.state.selectedFile },
-    selectedDir: function () { return this.$store.state.selectedDirectory },
+    selectedFile: function () {
+      return this.$store.state.selectedFile
+    },
+    selectedDir: function () {
+      return this.$store.state.selectedDirectory
+    },
     /**
      * Returns true if the file manager mode is set to "combined"
      */
-    combined: function () { return this.$store.state.fileManagerMode === 'combined' },
+    combined: function () {
+      return this.$store.state.fileManagerMode === 'combined'
+    },
     /**
      * Returns true if there are children that can be displayed
      */
     hasChildren: function () {
       // Return true if it's a directory, with at least one directory as children
-      if (!this.obj.hasOwnProperty('children')) return false
+      if (this.obj.type !== 'directory') {
+        return false
+      }
+
       return this.isDirectory && this.filteredChildren.length > 0
     },
     /**
@@ -214,34 +217,54 @@ module.exports = {
      */
     classList: function () {
       let list = 'list-item ' + this.obj.type
-      if ([ this.selectedFile, this.selectedDir ].includes(this.obj.hash)) list += ' selected'
-      if (this.obj.project) list += ' project'
+      if ([ this.selectedFile, this.selectedDir ].includes(this.obj.hash)) {
+        list += ' selected'
+      }
+
+      if (this.obj.project != null) {
+        list += ' project'
+      }
       // Determine if this is a root component
-      if (this.isRoot) list += ' root'
+      if (this.isRoot) {
+        list += ' root'
+      }
+
       return list
     },
     /**
      * Returns a list of children that can be displayed inside the tree view
      */
     filteredChildren: function () {
-      return this.combined ? this.obj.children : this.obj.children.filter(e => e.type === 'directory')
+      if (this.combined) {
+        return this.obj.children
+      } else {
+        return this.obj.children.filter(e => e.type === 'directory')
+      }
     },
     /**
      * Returns the correct indicator shape
      */
-    indicatorShape: function () { return this.collapsed ? 'caret right' : 'caret down' },
+    indicatorShape: function () {
+      return this.collapsed ? 'caret right' : 'caret down'
+    },
     /**
      * Returns the amount of padding that should be applied, based on the depth
      */
-    pad: function () { return `padding-left: ${this.depth}em` },
-    searchResultMessagePadding: function () { return `padding-left: ${this.depth + 1}em` },
+    pad: function () {
+      return `padding-left: ${this.depth}em`
+    },
+    searchResultMessagePadding: function () {
+      return `padding-left: ${this.depth + 1}em`
+    },
     /**
      * Returns true if this is a root file and has the same name as another root file
      */
     hasDuplicateName: function () {
       if (this.isRoot) {
         let elem = this.$store.state.items.filter(elem => elem.name === this.obj.name)
-        if (elem.length > 1) return true
+        if (elem.length > 1) {
+          return true
+        }
       }
       return false
     },
@@ -251,16 +274,37 @@ module.exports = {
      */
     hasSearchResults: function () {
       // Should return true, if this directory has search results in combined mode
-      if (!this.combined) return false
-      if (this.$store.state.searchResults.length < 1) return false
-      if (this.obj.hash !== this.selectedDir) return false
+      if (!this.combined) {
+        return false
+      }
+      if (this.$store.state.searchResults.length < 1) {
+        return false
+      }
+      if (this.obj.hash !== this.selectedDir) {
+        return false
+      }
       return true
     },
-    displayResultsMessage: function () { return trans('gui.display_search_results') }
+    displayResultsMessage: function () {
+      return trans('gui.display_search_results')
+    }
   },
-  /**
-   * Callable methods
-   */
+  watch: {
+    selectedFile: function (oldVal, newVal) {
+      // Open the tree on selectedFile change, if the
+      // selected file is contained in this dir somewhere
+      if (findObject(this.obj, 'hash', this.selectedFile, 'children')) {
+        this.collapsed = false
+      }
+    },
+    selectedDir: function (oldVal, newVal) {
+      // If a directory within this has been selected,
+      // open up, lads!
+      if (findObject(this.obj, 'hash', this.selectedDir, 'children')) {
+        this.collapsed = false
+      }
+    }
+  },
   methods: {
     handleContextMenu: function (event) {
       if (this.isDirectory) {
@@ -275,14 +319,17 @@ module.exports = {
     requestSelection: function (evt) {
       // Determine if we have a middle (wheel) click
       const middleClick = (event.type === 'auxclick' && event.button === 1)
-      const ctrl = event.ctrlKey && process.platform !== 'darwin'
-      const cmd = event.metaKey && process.platform === 'darwin'
+      const ctrl = event.ctrlKey === true && process.platform !== 'darwin'
+      const cmd = event.metaKey === true && process.platform === 'darwin'
+      const alt = event.altkey === true
 
       // Dead directories can't be opened, so stop the propagation to
       // the file manager and don't do a thing.
-      if (this.obj.dirNotFoundFlag === true) return evt.stopPropagation()
+      if (this.obj.dirNotFoundFlag === true) {
+        return evt.stopPropagation()
+      }
 
-      if (this.obj.type === 'file' && event.altKey) {
+      if (this.obj.type === 'file' && alt) {
         // QuickLook the file
         global.ipc.send('open-quicklook', this.obj.hash)
       } else if (this.obj.type === 'file') {
@@ -300,7 +347,9 @@ module.exports = {
     /**
      * On a click on the indicator, this'll toggle the collapsed state
      */
-    toggleCollapse: function (event) { this.collapsed = !this.collapsed },
+    toggleCollapse: function (event) {
+      this.collapsed = !this.collapsed
+    },
     /**
      * Request to re-sort this directory
      */
@@ -312,7 +361,7 @@ module.exports = {
      * @param {DragEvent} event The drag event
      */
     beginDragging: function (event) {
-      event.dataTransfer.effectAllowed = 'move'
+      event.dataTransfer.dropEffect = 'move'
       if (this.obj.type === 'file') {
         event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
           hash: this.obj.hash,
@@ -327,17 +376,40 @@ module.exports = {
         }))
       }
     },
+    onDragHandler: function (event) {
+      if (this.isDirectory) {
+        return // Directories cannot be dragged out of the app
+      }
+
+      // If the drag x/y-coordinates are about to leave the window, we
+      // have to continue the drag in the main process (as it's being
+      // dragged out of the window)
+      const x = Number(event.x)
+      const y = Number(event.y)
+      const w = window.innerWidth
+      const h = window.innerHeight
+
+      if (x === 0 || y === 0 || x === w || y === h) {
+        event.stopPropagation()
+        event.preventDefault()
+        global.ipc.send('file-drag-start', { hash: this.obj.hash })
+      }
+    },
     /**
      * Called when a drag operation enters this item; adds a highlight class
      */
     enterDragging: function (event) {
-      if (this.isDirectory) this.$refs.listElement.classList.add('highlight')
+      if (this.isDirectory) {
+        this.$refs.listElement.classList.add('highlight')
+      }
     },
     /**
      * The oppossite of enterDragging; removes the highlight class
      */
     leaveDragging: function (event) {
-      if (this.isDirectory) this.$refs.listElement.classList.remove('highlight')
+      if (this.isDirectory) {
+        this.$refs.listElement.classList.remove('highlight')
+      }
     },
     /**
      * Called whenever something is dropped onto the element.
@@ -367,10 +439,15 @@ module.exports = {
       }
 
       // The user dropped the file onto itself
-      if (data.hash === this.obj.hash) return
+      if (data.hash === this.obj.hash) {
+        return
+      }
 
       // Finally, request the move!
-      global.ipc.send('request-move', { 'from': parseInt(data.hash), 'to': this.obj.hash })
+      global.ipc.send('request-move', {
+        from: parseInt(data.hash),
+        to: this.obj.hash
+      })
     },
     /**
      * Makes sure the browser doesn't do unexpected stuff when dragging, e.g., external files.

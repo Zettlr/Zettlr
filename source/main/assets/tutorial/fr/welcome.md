@@ -38,8 +38,6 @@ Cliquez maintenant sur « Zettlr Tutorial » pour revenir à sa liste de fichier
 
 ## Comment utiliser le Markdown 📝
 
-Zettlr est un éditeur Markdown, ce qui signifie qu'il fonctionne pour l'essentiel 
-
 Zettlr est un éditeur Markdown, ce qui signifie qu'il fonctionne principalement comme des applications que vous connaissez déjà, comme Microsoft Word, LibreOffice ou OpenOffice. Mais au lieu de devoir cliquer sur une armada de boutons dans la barre d'outils, vous pouvez structurer vos éléments en utilisant uniquement des caractères, ce qui implique que vous n'avez jamais à quitter votre clavier ! C'est trop cool ! ✨
 
 Passons rapidement en revue les aspects les plus importants :
@@ -61,9 +59,15 @@ Mais Zettlr ne prend pas seulement en charge les liens internet courants. Si vou
 
 ## La barre latérale 📎
 
-Maintenant que nous vous avons présenté les bases du Markdown, il est temps de vous montrer d'autres trucs que Zettlr peut faire ! Cliquez maintenant sur l'icône du trombone dans le coin supérieur droit de la barre d'outils. Cela ouvrira la barre latérale, qui contient une section « Annexes ». Zettlr vous y montre tous les fichiers non Markdown que vous stockez dans le répertoire sélectionné. Vous pouvez aussi glisser et déposer des fichiers à partir de là vers l'éditeur pour les inclure dans vos documents.
+Maintenant que nous vous avons présenté les bases du Markdown, il est temps de vous montrer d'autres trucs que Zettlr peut faire ! Cliquez maintenant sur l'icône « trois-colonnes » dans le coin supérieur droit de la barre d'outils. Cela ouvrira la barre latérale, qui contient une section « Annexes ». Zettlr vous y montre tous les fichiers non Markdown que vous stockez dans le répertoire sélectionné. Vous pouvez aussi glisser et déposer des fichiers à partir de là vers l'éditeur pour les inclure dans vos documents.
 
 En outre, vous pouvez voir le fichier « Pandoc and LaTeX Guide.pdf ». Vous vous demandez ce que c'est ? Voyons voir : maintenant, cliquez dessus pour ouvrir le fichier avec votre visionneuse PDF par défaut !
+
+Mais la barre latérale ne vous montre pas seulement les fichiers. Dans les deuxième et troisième onglets, vous trouverez les références bibliographiques et une table des matières. La section bibliographie répertorie toutes les références citées du fichier actuellement ouvert — exactement comme la bibliographie d'un article.
+
+> Notez que les références sont formatées en utilisant le style de citation intégré. Lorsque vous exportez votre document, Zettlr veillera à utiliser le style de citation que vous avez choisi, si vous en avez défini un dans les préférences "Exporter".
+
+La table des matières du troisième onglet est une liste des liens vers chaque section de votre document actuel. Cliquez sur l'une des entrées pour passer immédiatement à la section correspondante. Vous pouvez également voir la même table des matières et même trier vos sections en cliquant sur le bouton correspondant de la barre d'outils. L'avantage de la barre latérale est que vous pouvez la garder ouverte pendant que vous travaillez dans votre document, juste avec l'onglet des références.
 
 ## Éléments intéractifs ⏯
 
@@ -82,8 +86,6 @@ Certains éléments de l'éditeur sont interactifs, tout comme les cases à coch
 | Bienvenue sur Zettlr !           | Donne un aperçu rapide des capacités de Zettlr                                | welcome.md      |
 | Travailler avec les Zettelkästen | Introduction aux différentes caractéristiques des Zettelkästen dans Zettlr    | zettelkasten.md |
 | Les références avec Zettlr       | Souligne les potentialités du travail avec des bases de données de références | references.md   |
-
-You can align columns as well as add and remove both rows and columns in the table. The table editor will always work on the column or row that is currently active. So, to remove a certain row, make sure that one cell within that row is selected. Feel free to play around a little bit with the table to get used to how it works!
 
 Dans le tableau, vous modifier l'alignement ou ajouter et supprimer des lignes et des colonnes. L'éditeur de tableau fonctionnera toujours sur la colonne ou la ligne active. Ainsi, pour supprimer une ligne, assurez-vous qu'une cellule de cette ligne est sélectionnée. N'hésitez pas à jouer un peu avec le tableau pour vous habituer à son maniement !
 

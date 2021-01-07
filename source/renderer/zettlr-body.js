@@ -346,13 +346,16 @@ class ZettlrBody {
 
       // The revealjs-button doesn't trigger an export, but the visibility
       // of the themes selection
-      if ($(elem).hasClass('revealjs')) {
+      if (elem.classList.contains('revealjs')) {
         $('#reveal-themes').toggleClass('hidden')
         return
       }
 
-      let ext = $(elem).attr('data-ext')
-      global.ipc.send('export', { 'hash': file.hash, 'ext': ext })
+      global.ipc.send('export', {
+        hash: file.hash,
+        ext: elem.dataset.ext
+      })
+
       global.popupProvider.close()
     })
   }
@@ -411,7 +414,7 @@ class ZettlrBody {
   displayProjectProperties (prefs) {
     this._currentDialog = new ProjectProperties()
     // We need the project directory's name as a default value
-    prefs.projectDirectory = this.getRenderer().findObject(prefs.hash).name
+    prefs.projectDirectory = this.getRenderer().find(prefs.hash).name
     this._currentDialog.init(prefs).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
@@ -467,13 +470,22 @@ class ZettlrBody {
     global.popupProvider.show('stats', document.querySelector('#toolbar .stats'), context)
 
     $('#more-stats').on('click', (e) => {
-      // Theres no form but the user has clicked the more button
-      this._currentDialog = new StatsDialog()
-      this._currentDialog.init(data.wordCount).open()
-      this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
-      // After opening the dialog, close the popup. The user probably doesn't
-      // want to click twice to continue writing.
-      global.popupProvider.close()
+      // There's no form but the user has clicked the more button
+      ipcRenderer.invoke('application', { command: 'get-statistics-data' })
+        .then((additionalData) => {
+          this._currentDialog = new StatsDialog()
+          this._currentDialog.init({
+            wordCounts: data.wordCount,
+            fsalStatistics: additionalData
+          }).open()
+          this._currentDialog.on('afterClose', (e) => {
+            this._currentDialog = null
+          })
+          // After opening the dialog, close the popup. The user probably doesn't
+          // want to click twice to continue writing.
+          global.popupProvider.close()
+        })
+        .catch(e => console.error(e))
     })
   }
 

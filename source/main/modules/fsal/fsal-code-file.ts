@@ -15,7 +15,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import hash from '../../../common/util/hash'
-import searchFile from './search-file'
+import searchFile from './util/search-file'
 import { shell } from 'electron'
 import safeAssign from '../../../common/util/safe-assign'
 // Import the interfaces that we need
@@ -150,7 +150,7 @@ export async function parse (
   return file
 }
 
-export async function search (fileObject: CodeFileDescriptor, terms: string[]): Promise<any> {
+export async function search (fileObject: CodeFileDescriptor, terms: any[]): Promise<any> {
   // Initialise the content variables (needed to check for NOT operators)
   let cnt = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   return searchFile(fileObject, terms, cnt)

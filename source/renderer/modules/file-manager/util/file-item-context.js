@@ -1,4 +1,4 @@
-const { trans } = require('../../../common/i18n')
+const { trans } = require('../../../../common/i18n')
 const { ipcRenderer, shell, clipboard } = require('electron')
 
 const TEMPLATE = [

@@ -21,6 +21,8 @@
     v-on:mouseleave="handleMouseOver"
     v-on:dragover="handleDragOver"
     v-on:wheel="handleWheel"
+    v-on:dragstart="lockDirectoryTree"
+    v-on:dragend="unlockDirectoryTree"
   >
     <!-- Display the arrow button in case we have a non-combined view -->
     <div
@@ -36,86 +38,18 @@
         size="20"
       ></clr-icon>
     </div>
-    <!-- Render a the file-tree -->
     <div id="component-container">
-      <FileTree ref="directories" v-bind:class="{ hidden: !fileTreeVisible }" v-on:selection="selectionListener"></FileTree>
+      <!-- Render a the file-tree -->
+      <FileTree
+        ref="directories"
+        v-bind:class="{ hidden: !fileTreeVisible }"
+        v-on:selection="selectionListener"
+      ></FileTree>
       <!-- Now render the file list -->
-      <div
-        id="file-list"
+      <FileList
         ref="fileList"
         v-bind:class="{hidden: !fileListVisible}"
-        tabindex="1"
-        v-bind:data-hash="selectedDirectoryHash"
-        v-on:keydown="navigate"
-        v-on:focus="activeFile = selectedFile"
-        v-on:blur="activeFile = null"
-      >
-        <template v-if="emptySearchResults">
-          <!-- Did we have no search results? -->
-          <div class="empty-file-list">
-            {{ noResultsMessage }}
-          </div>
-        </template>
-        <template v-else-if="getDirectoryContents.length > 1">
-          <div id="file-manager-filter">
-            <input
-              id="file-manager-filter-input"
-              ref="quickFilter"
-              v-model="filterQuery"
-              type="search"
-              placeholder="Filter …"
-            />
-          </div>
-          <template v-if="getFilteredDirectoryContents.length === 0">
-            <div class="empty-file-list">
-              {{ noResultsMessage }}
-            </div>
-          </template>
-          <template v-else>
-            <!--
-            For the "real" file list, we need the virtual scroller to maintain
-            performance, because it may contain thousands of elements.
-            Provide the virtual scroller with the correct size of the list
-            items (60px in mode with meta-data, 30 in cases without).
-            NOTE: The page-mode MUST be true, because it will speed up
-            performance incredibly!
-            -->
-            <recycle-scroller
-              v-slot="{ item }"
-              v-bind:items="getFilteredDirectoryContents"
-              v-bind:item-size="($store.state.fileMeta) ? 61 : 31"
-              v-bind:emit-update="true"
-              v-bind:page-mode="true"
-              v-on:update="updateDynamics"
-            >
-              <file-item
-                v-bind:obj="item.props"
-                v-bind:active-file="activeFile"
-              ></file-item>
-            </recycle-scroller>
-          </template>
-        </template>
-        <template v-else-if="getDirectoryContents.length === 1">
-          <file-item
-            v-for="item in getDirectoryContents"
-            v-bind:key="item.hash"
-            v-bind:obj="item.props"
-          >
-          </file-item>
-          <div
-            v-if="getDirectoryContents[0].type === 'directory'"
-            class="empty-directory"
-          >
-            {{ emptyDirectoryMessage }}
-          </div>
-        </template>
-        <template v-else>
-          <!-- Same as above: Detect combined file manager mode -->
-          <div class="empty-file-list">
-            {{ emptyFileListMessage }}
-          </div>
-        </template>
-      </div>
+      ></FileList>
     </div>
     <div
       v-if="isExpanded"
@@ -135,14 +69,15 @@
 // Please do not ask me why I have to explicitly use the "default" property
 // of some modules, but not others. The vue-loader is a mess when used with
 // ES6 CommonJS-modules in a exports/require-environment.
-const tippy = require('tippy.js').default
-const findObject = require('../../../common/util/find-object')
-const { trans } = require('../../../common/i18n')
-const FileItem = require('./file-item.vue').default
-const FileTree = require('./file-tree.vue').default
-const { RecycleScroller } = require('vue-virtual-scroller')
+import findObject from '../../../common/util/find-object'
+import FileTree from './file-tree.vue'
+import FileList from './file-list.vue'
 
-module.exports = {
+export default {
+  components: {
+    FileTree,
+    FileList
+  },
   data: () => {
     return {
       previous: '', // Can be "file-list" or "directories"
@@ -151,21 +86,42 @@ module.exports = {
       fileManagerResizeX: 0, // Save the resize cursor position during resizes
       fileManagerInnerResizing: false,
       fileManagerInnerResizeX: 0,
-      filterQuery: '',
-      activeFile: null, // Can contain a hash of the active ("focused") file item
       // Whether file tree and list are visible
       fileTreeVisible: true,
       fileListVisible: false
     }
   },
-  components: {
-    FileTree,
-    'file-item': FileItem,
-    'recycle-scroller': RecycleScroller
+  computed: {
+    /**
+     * Mapper functions to map state properties onto the file manager.
+     */
+    selectedDirectoryHash: function () {
+      return this.$store.state.selectedDirectory
+    },
+    isThin: function () {
+      return this.$store.state.fileManagerMode === 'thin'
+    },
+    isCombined: function () {
+      return this.$store.state.fileManagerMode === 'combined'
+    },
+    isExpanded: function () {
+      return this.$store.state.fileManagerMode === 'expanded'
+    },
+    // We need the fileManagerMode separately to watch the property
+    fileManagerMode: function () {
+      return this.$store.state.fileManagerMode
+    },
+    /**
+     * Determines whether the file list is currently visible
+     * @returns {Boolean}  Whether the file list is visible.
+     */
+    isFileListVisible: function () {
+      return this.isExpanded || this.fileListVisible
+    },
+    getDirectoryContents: function () {
+      return this.$store.getters.directoryContents
+    }
   },
-  /**
-   * Watches some properties to perform actions, if necessary.
-   */
   watch: {
     /**
      * Switches to the fileList, if applicable.
@@ -180,9 +136,6 @@ module.exports = {
         // will return if the mode is combined or expanded)
         this.toggleFileList()
       }
-    },
-    selectedFile: function () {
-      this.scrollIntoView()
     },
     /**
      * Whenever the directoryContents change, determine if we should
@@ -200,21 +153,6 @@ module.exports = {
         this.fileTreeVisible = true
         this.fileListVisible = false
       }
-
-      this.$nextTick(function () {
-        this.scrollIntoView()
-      })
-    },
-    getFilteredDirectoryContents: function () {
-      // Whenever the directory contents change, reset the active file if it's
-      // no longer in the list
-      const foundActiveFile = this.getFilteredDirectoryContents.find((elem) => {
-        return elem.props.hash === this.activeFile
-      })
-
-      if (foundActiveFile === undefined) {
-        this.activeFile = null
-      }
     },
     /**
      * Listens to changes of the fileManagerMode to reset
@@ -222,13 +160,15 @@ module.exports = {
      */
     fileManagerMode: function () {
       // Reset all properties from the resize operations.
-      this.$refs.directories.style.removeProperty('width')
-      this.$refs.directories.style.removeProperty('left')
-      this.$refs.fileList.style.removeProperty('width')
-      this.$refs.fileList.style.removeProperty('left')
+      const fileTree = this.$refs.directories.$el
+      const fileList = this.$refs.fileList.$el
+      fileTree.style.removeProperty('width')
+      fileTree.style.removeProperty('left')
+      fileList.style.removeProperty('width')
+      fileList.style.removeProperty('left')
       this.fileTreeVisible = true
       this.fileListVisible = false
-      this.$refs.directories.classList.remove('hidden')
+      fileTree.classList.remove('hidden')
       // Then we want to do some additional
       // failsafes for the different modes
       if (this.isThin || this.isCombined) {
@@ -241,107 +181,6 @@ module.exports = {
       if (this.isExpanded && this.$el.offsetWidth < 100) {
         this.$el.style.width = '100px'
       }
-    }
-  },
-  /**
-   * Updates associated stuff whenever an update operation on the file manager
-   * has finished (such as tippy).
-   */
-  updated: function () {
-    this.$nextTick(function () {
-      this.updateDynamics()
-    })
-  },
-  computed: {
-    /**
-     * Mapper functions to map state properties onto the file manager.
-     */
-    getDirectoryContents: function () {
-      let ret = []
-      for (let i = 0; i < this.$store.getters.directoryContents.length; i++) {
-        ret.push({
-          id: i, // This helps the virtual scroller to adequately position the items
-          props: this.$store.getters.directoryContents[i] // The actual item
-        })
-      }
-      return ret
-    },
-    getFilteredDirectoryContents: function () {
-      // Returns a list of directory contents, filtered
-      const originalContents = this.getDirectoryContents
-
-      const q = this.filterQuery.trim().toLowerCase() // Easy access
-
-      if (q === '') {
-        return originalContents
-      }
-
-      const queries = q.split(' ')
-
-      // Filter based on the query (remember: there's an ID and a "props" property)
-      return originalContents.filter(element => {
-        const item = element.props
-
-        for (const q of queries) {
-          // If the query only consists of a "#" also include files that
-          // contain tags, no matter which
-          if (q === '#') {
-            if (item.type === 'file' && item.tags.length > 0) {
-              return true
-            }
-          }
-
-          // Let's check for tag matches
-          if (q.startsWith('#') && item.type === 'file') {
-            const tagMatch = item.tags.find(tag => tag.indexOf(q.substr(1)) >= 0)
-            if (tagMatch !== undefined) {
-              return true
-            }
-          }
-
-          // First, see if the name gives a match.
-          if (item.name.toLowerCase().indexOf(q) >= 0) {
-            return true
-          }
-
-          const hasFrontmatter = item.frontmatter && item.frontmatter.title
-
-          // Does the frontmatter work?
-          if (item.type === 'file' && hasFrontmatter) {
-            if (item.frontmatter.title.toLowerCase().indexOf(q) >= 0) {
-              return true
-            }
-          }
-
-          // Third, should we use headings 1 and, if so, does it match?
-          const useH1 = this.$store.state.useFirstHeadings
-          if (useH1 && item.type === 'file' && item.firstHeading) {
-            if (item.firstHeading.toLowerCase().indexOf(q) >= 0) {
-              return true
-            }
-          }
-        } // END for
-
-        return false
-      })
-    },
-    selectedFile: function () { return this.$store.state.selectedFile },
-    selectedDirectoryHash: function () { return this.$store.state.selectedDirectory },
-    isThin: function () { return this.$store.state.fileManagerMode === 'thin' },
-    isCombined: function () { return this.$store.state.fileManagerMode === 'combined' },
-    isExpanded: function () { return this.$store.state.fileManagerMode === 'expanded' },
-    // We need the fileManagerMode separately to watch the property
-    fileManagerMode: function () { return this.$store.state.fileManagerMode },
-    noResultsMessage: function () { return trans('gui.no_search_results') },
-    emptyFileListMessage: function () { return trans('gui.no_dir_selected') },
-    emptyDirectoryMessage: function () { return trans('gui.empty_dir') },
-    emptySearchResults: function () { return this.$store.state.searchNoResults },
-    /**
-     * Determines whether the file list is currently visible
-     * @returns {Boolean}  Whether the file list is visible.
-     */
-    isFileListVisible: function () {
-      return this.isExpanded || this.fileListVisible
     }
   },
   methods: {
@@ -378,8 +217,7 @@ module.exports = {
      */
     focusFileList: function () {
       if (this.isFileListVisible) {
-        this.$refs.fileList.focus()
-        this.$refs.quickFilter.focus()
+        this.$refs.fileList.$el.focus()
       }
     },
     /**
@@ -416,7 +254,7 @@ module.exports = {
       // mouse and keyboard events are suppressed during a drag operation.
       // We need to scroll the tree container probably, and have to check it.
       let y = evt.clientY
-      let elem = this.$refs.directories
+      let elem = this.$refs.directories.$el
       let scroll = elem.scrollTop
       let distanceBottom = elem.offsetHeight - y // The less the value, the closer
       let distanceTop = (scroll > 0) ? y - elem.offsetTop : 0
@@ -483,8 +321,8 @@ module.exports = {
       // This function is called whenever the file list
       // should be hidden and only the file tree should
       // be visible
-      this.previous = this.isFileListVisible ? 'file-list' : 'directories'
       if (this.isFileListVisible) {
+        this.previous = 'file-list'
         this.toggleFileList()
       }
 
@@ -501,6 +339,7 @@ module.exports = {
       this.lockedTree = false
       if (this.previous === 'file-list') {
         this.toggleFileList()
+        this.previous = ''
       }
     },
     /**
@@ -524,8 +363,11 @@ module.exports = {
         return
       }
 
+      const fileTree = this.$refs.directories.$el
+      const fileList = this.$refs.fileList.$el
+
       let x = this.fileManagerResizeX - evt.clientX
-      if (this.isExpanded && this.$refs.fileList.offsetWidth <= 50 && x > 0) {
+      if (this.isExpanded && fileList.offsetWidth <= 50 && x > 0) {
         return // Don't overdo it
       }
 
@@ -540,7 +382,7 @@ module.exports = {
       document.getElementById('editor').style.left = this.$el.offsetWidth + 10 + 'px'
       if (this.isExpanded) {
         // We don't have a thin file manager, so resize the fileList accordingly
-        this.$refs.fileList.style.width = (this.$el.offsetWidth - this.$refs.directories.offsetWidth) + 'px'
+        fileList.style.width = (this.$el.offsetWidth - fileTree.offsetWidth) + 'px'
       }
     },
     /**
@@ -574,24 +416,29 @@ module.exports = {
         return
       }
 
-      let x = this.fileManagerInnerResizeX - evt.clientX
+      const fileTree = this.$refs.directories.$el
+      const fileList = this.$refs.fileList.$el
+
+      // x > 0 means: Direction -->
+      // x < 0 means: Direction <--
+      let x = evt.clientX - this.fileManagerInnerResizeX
       // Make sure both the fileList and the tree view are at least 50 px in width
-      if (!this.isThin && this.$refs.directories.offsetWidth <= 50 && x > 0) {
-        return
+      if (!this.isThin && fileTree.offsetWidth <= 50 && x < 0) {
+        x = 0
       }
 
-      if (!this.isThin && this.$refs.fileList.offsetWidth <= 50 && x < 0) {
-        return
+      if (!this.isThin && fileList.offsetWidth <= 50 && x > 0) {
+        x = 0
       }
 
       this.fileManagerInnerResizeX = evt.clientX
       // Now resize everything accordingly
-      this.$refs.directories.style.width = (this.$refs.directories.offsetWidth - x) + 'px'
-      this.$refs.fileList.style.left = this.$refs.directories.offsetWidth + 'px'
+      fileTree.style.width = (fileTree.offsetWidth + x) + 'px'
+      fileList.style.left = (fileTree.offsetWidth + x) + 'px'
+      fileList.style.width = (this.$el.offsetWidth - fileTree.offsetWidth + x) + 'px'
       // Reposition the resizer handle exactly on top of the divider, hence
       // substract the half width
-      this.$refs.fileManagerInnerResizer.style.left = (this.$refs.directories.offsetWidth - 5) + 'px'
-      this.$refs.fileList.style.width = (this.$el.offsetWidth - this.$refs.directories.offsetWidth) + 'px'
+      this.$refs.fileManagerInnerResizer.style.left = (fileTree.offsetWidth + x - 5) + 'px'
     },
     /**
      * Stops resizing of the inner elements on release of the mouse button.
@@ -602,126 +449,6 @@ module.exports = {
       this.fileManagerInnerResizeX = 0
       this.$el.removeEventListener('mousemove', this.fileManagerInnerResize)
       this.$el.removeEventListener('mouseup', this.fileManagerStopInnerResize)
-    },
-    /**
-     * Called everytime when there is an update to the DOM, so that we can
-     * dynamically enable all newly rendered tippy instances.
-     * @return {void}     Does not return.
-     */
-    updateDynamics: function () {
-      // Tippy.js cannot observe changes within attributes, so because
-      // the instances are all created in advance, we have to update
-      // the content so that it reflects the current content of
-      // the data-tippy-content-property.
-      let elements = document.querySelectorAll('#file-manager [data-tippy-content]')
-      for (let elem of elements) {
-        // Either there's already an instance on the element,
-        // then only update its contents ...
-        if (elem.hasOwnProperty('_tippy')) {
-          elem._tippy.setContent(elem.dataset.tippyContent)
-        } else {
-          // ... or there is none, so let's add a tippy instance.
-          tippy(elem, {
-            delay: 100,
-            arrow: true,
-            duration: 100
-          })
-        }
-      }
-    },
-    /**
-     * Navigates the filelist to the next/prev file.
-     * Hold Shift for moving by 10 files, Command or Control to
-     * jump to the very end.
-     */
-    navigate: function (evt) {
-      // Only capture arrow movements
-      if (![ 'ArrowDown', 'ArrowUp', 'Enter' ].includes(evt.key)) {
-        return
-      }
-
-      evt.stopPropagation()
-      evt.preventDefault()
-
-      if (evt.key === 'Enter' && this.activeFile !== null) {
-        // Select the active file (if there is one)
-        global.editor.announceTransientFile(this.activeFile)
-        global.ipc.send('file-get', this.activeFile)
-        return
-      }
-
-      // getDirectoryContents accomodates the virtual scroller
-      // by packing the actual items in a props property.
-      let list = this.getFilteredDirectoryContents.map(e => e.props)
-      list = list.filter(e => e.type === 'file')
-      let index = list.indexOf(list.find(e => {
-        if (this.activeFile !== null) {
-          return e.hash === this.activeFile
-        } else {
-          return e.hash === this.selectedFile
-        }
-      }))
-
-      switch (evt.key) {
-        case 'ArrowDown':
-          index++
-          if (evt.shiftKey) {
-            index += 9 // Fast-scrolling
-          }
-          if (index >= list.length) {
-            index = list.length - 1
-          }
-          if (evt.ctrlKey || evt.metaKey) {
-            // Select the last file
-            this.activeFile = list[list.length - 1].hash
-          } else if (index < list.length) {
-            this.activeFile = list[index].hash
-          }
-          break
-        case 'ArrowUp':
-          index--
-          if (evt.shiftKey) {
-            index -= 9 // Fast-scrolling
-          }
-          if (index < 0) {
-            index = 0
-          }
-          if (evt.ctrlKey || evt.metaKey) {
-            // Select the first file
-            this.activeFile = list[0].hash
-          } else if (index >= 0) {
-            this.activeFile = list[index].hash
-          }
-          break
-      }
-      this.scrollIntoView()
-    },
-    scrollIntoView: function () {
-      // In case the file changed, make sure it's in view.
-      let scrollTop = this.$refs.fileList.scrollTop
-      let index = this.getFilteredDirectoryContents.find(e => {
-        if (this.activeFile !== null) {
-          return e.props.hash === this.activeFile
-        } else {
-          return e.props.hash === this.selectedFile
-        }
-      })
-
-      if (!index) {
-        return
-      }
-
-      index = this.getFilteredDirectoryContents.indexOf(index)
-
-      let modifier = (this.$store.state.fileMeta) ? 61 : 31
-      let position = index * modifier
-      const quickFilterModifier = 40 // Height of the quick filter TODO: This is monkey patched
-
-      if (position < scrollTop) {
-        this.$refs.fileList.scrollTop = position
-      } else if (position > scrollTop + this.$refs.fileList.offsetHeight - modifier) {
-        this.$refs.fileList.scrollTop = position - this.$refs.fileList.offsetHeight + modifier + quickFilterModifier
-      }
     }
   }
 }

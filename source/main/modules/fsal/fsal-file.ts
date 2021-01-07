@@ -15,7 +15,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import hash from '../../../common/util/hash'
-import searchFile from './search-file'
+import searchFile from './util/search-file'
 import countWords from '../../../common/util/count-words'
 import extractYamlFrontmatter from '../../../common/util/extract-yaml-frontmatter'
 import { getIDRE } from '../../../common/regular-expressions'
@@ -150,7 +150,13 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
     // an array, but a simple string (or even a number <.<). I am beginning to
     // understand why programmers despise the YAML-format.
     if (!Array.isArray(file.frontmatter.keywords)) {
-      file.frontmatter.keywords = [file.frontmatter.keywords]
+      const keys = file.frontmatter.keywords.split(',')
+      if (keys.length > 1) {
+        // The user decided to split the tags by comma
+        file.frontmatter.keywords = keys.map((tag: string) => tag.trim())
+      } else {
+        file.frontmatter.keywords = [file.frontmatter.keywords]
+      }
     }
 
     // If the user decides to use just numbers for the keywords (e.g. #1997),
@@ -163,7 +169,13 @@ function parseFileContents (file: MDFileDescriptor, content: string): void {
   // Now the same for the tags-property.
   if (file.frontmatter?.tags != null) {
     if (!Array.isArray(file.frontmatter.tags)) {
-      file.frontmatter.tags = [file.frontmatter.tags]
+      const keys = file.frontmatter.tags.split(',')
+      if (keys.length > 1) {
+        // The user decided to split the tags by comma
+        file.frontmatter.tags = keys.map((tag: string) => tag.trim())
+      } else {
+        file.frontmatter.tags = [file.frontmatter.tags]
+      }
     }
     const sanitizedKeywords = file.frontmatter.tags.map((tag: any) => String(tag).toString())
     file.tags = file.tags.concat(sanitizedKeywords)
@@ -309,7 +321,7 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
  *
  * @return  {Promise<any>}                  Resolves with search results
  */
-export async function search (fileObject: MDFileDescriptor, terms: string[]): Promise<any> {
+export async function search (fileObject: MDFileDescriptor, terms: any[]): Promise<any> {
   // Initialise the content variables (needed to check for NOT operators)
   let cnt = await fs.readFile(fileObject.path, { encoding: 'utf8' })
   return searchFile(fileObject, terms, cnt)

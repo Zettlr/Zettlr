@@ -10,7 +10,7 @@
   position: relative;
   display: inline-block !important;
   width: @input-size;
-  height: @input-size / 2;
+  height: (@input-size / 2);
   margin:0 !important;
   padding: 0;
 
@@ -24,14 +24,14 @@
     right: 0;
     bottom: 0;
     transition: .4s;
-    border-radius: @input-size / 3 - @input-margin;
+    border-radius: (@input-size / 3 - @input-margin);
     box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, .25);
 
     &:before {
       position: absolute;
       content: "";
-      height: @input-size / 2 - @input-margin * 2; // Fancy equations here!
-      width: @input-size / 2 - @input-margin * 2;
+      height: (@input-size / 2 - @input-margin * 2); // Fancy equations here!
+      width: (@input-size / 2 - @input-margin * 2);
       box-shadow: @input-margin @input-margin 5px 0px rgba(0, 0, 0, .5);
       left: @input-margin;
       bottom: @input-margin;
@@ -41,14 +41,14 @@
     }
   }
 
-  input:checked + .toggle:before { transform: translateX(@input-size / 2); }
+  input:checked + .toggle:before { transform: translateX((@input-size / 2)); }
 }
 
 .radio-toggle {
   position: relative;
   display: inline-block !important;
-  width: @input-size / 2;
-  height: @input-size / 2;
+  width: (@input-size / 2);
+  height: (@input-size / 2);
   margin:0 !important;
   padding: 0;
 
@@ -61,16 +61,16 @@
     left: 0;
     right: 0;
     bottom: 0;
-    border-radius: @input-size / 3 - @input-margin;
+    border-radius: (@input-size / 3) - @input-margin;
 
     // Inner part
     &:before {
       position: absolute;
       content: "";
-      height: @input-size / 2 - @input-margin * 4; // Fancy equations here!
-      width: @input-size / 2 - @input-margin * 4;
-      left: @input-margin * 2;
-      bottom: @input-margin * 2;
+      height: (@input-size / 2) - @input-margin * 4; // Fancy equations here!
+      width: (@input-size / 2) - @input-margin * 4;
+      left: (@input-margin * 2);
+      bottom: (@input-margin * 2);
       background-color: transparent;
       border-radius: 50%;
       transition: .4s;
@@ -82,7 +82,7 @@
 // make the label and the toggle align on the same level.
 .cb-group {
   margin: 5px;
-  & > label { line-height: @input-size / 2 + @input-margin * 2; vertical-align: middle; }
+  & > label { line-height: (@input-size / 2 + @input-margin * 2); vertical-align: middle; }
   & > input[type="radio"] { margin:0 !important; }
   & > .cb-toggle { margin-right:0.2em; }
 }
@@ -98,16 +98,16 @@
    &:focus { outline: none; }
    &::-webkit-slider-runnable-track {
      width: 100%;
-     height: @input-size / 2;
+     height: (@input-size / 2);
      cursor: pointer;
-     border-radius: @input-size / 4 + @input-margin;
+     border-radius: (@input-size / 4 + @input-margin);
      padding: @input-margin;
      box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, .25);
    }
 
    &::-webkit-slider-thumb {
-     height: @input-size / 2 - @input-margin * 2;
-     width: @input-size / 2 - @input-margin * 2;
+     height: (@input-size / 2 - @input-margin * 2);
+     width: (@input-size / 2 - @input-margin * 2);
      border-radius: 100%; // Round thumb
      cursor: pointer;
      -webkit-appearance: none;

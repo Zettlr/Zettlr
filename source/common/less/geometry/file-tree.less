@@ -1,16 +1,22 @@
 // Geometry for the tree view
 
+#file-manager:not(.expanded) #file-tree {
+  transition: 0.3s left ease;
+}
+
 #file-tree {
-    position:absolute;
-    top:0;
-    left:0%;
-    width:100%;
-    bottom:0;
+    position: absolute;
+    top: 0;
+    left: 0%;
+    width: 100%;
+    bottom: 0;
     overflow-y: auto;
     outline: none;
-    transition:0.3s left ease;
+    transition: 0.3s left ease;
 
-    &.hidden { left:-100%; }
+    &.hidden {
+      left:-100%;
+    }
 
     #directories-dirs-header, #directories-files-header {
       height: @ribbon-height;
@@ -28,10 +34,10 @@
 
     .filename {
         line-height: @ribbon-height;
-        padding:@ribbon-padding;
+        padding: @ribbon-padding;
         white-space: nowrap;
-        padding-left:5px;
-        margin:5px 0px;
+        padding-left: 5px;
+        margin: 5px 0px;
         overflow: hidden;
 
         .item-icon, .toggle-icon {

@@ -221,7 +221,7 @@ class ZettlrEditor {
       // we won't be accessing the content property at all, hence
       // it's easier to have the file object bound here that all
       // of the renderer is working with.
-      let fileTreeObject = this._renderer.findObject(file.hash)
+      let fileTreeObject = this._renderer.find(file.hash)
 
       const docMode = (fileTreeObject.ext === '.tex') ? 'stex' : 'multiplex'
 

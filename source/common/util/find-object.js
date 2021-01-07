@@ -13,11 +13,13 @@
 
 /**
  * Traverses an arbitrary recursive object tree to find an object with a specific prop=val.
- * @param {Object} tree The tree to traverse
- * @param {String} prop The property that should be matched
- * @param {Mixed} val The value that the property should be checked for
- * @param {string} traverse The property over which the function traverses the tree
- * @returns {Mixed} Either an object with the correct hash, or undefined.
+ *
+ * @param   {any}            tree     The tree to traverse
+ * @param   {string}         prop     The property that should be matched
+ * @param   {any}            val      The value that the property should be checked for
+ * @param   {string}         traverse The property over which the function traverses the tree
+ *
+ * @returns {any|undefined}           Either an object with the correct hash, or undefined.
  */
 module.exports = function findObject (tree, prop, val, traverse) {
   // Is the tree even defined?

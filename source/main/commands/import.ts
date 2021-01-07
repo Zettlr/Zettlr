@@ -42,7 +42,7 @@ export default class ImportFiles extends ZettlrCommand {
       // The import_files array has the structure "pandoc format" "readable format" "extensions"...
       // Here we set index 1 as readable name and all following elements (without leading dots)
       // as extensions
-      fltr.push({ 'name': f[1], 'extensions': f.slice(2).map((val) => { return val.substr(1) }) })
+      fltr.push({ 'name': f[1], 'extensions': f.slice(2) })
     }
 
     // First ask the user for a fileList

@@ -1,6 +1,6 @@
-const { trans } = require('../../../common/i18n')
+const { trans } = require('../../../../common/i18n')
 const { ipcRenderer, shell } = require('electron')
-const generateFileName = require('../../../common/util/generate-filename')
+const generateFileName = require('../../../../common/util/generate-filename')
 
 const TEMPLATE = [
   {
@@ -210,9 +210,11 @@ function displayIconPopup (dirObject, element) {
   popup.addEventListener('click', (event) => {
     let target = event.target
 
-    if (target.tagName === 'CLR-ICON') target = target.parentElement
+    if (target.tagName === 'CLR-ICON') {
+      target = target.parentElement
+    }
 
-    if (!target.classList.contains('icon-block')) {
+    if (target.classList.contains('icon-block') === false) {
       return
     }
 
