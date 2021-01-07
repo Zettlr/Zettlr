@@ -83,8 +83,6 @@ Certains éléments de l'éditeur sont interactifs, tout comme les cases à coch
 | Travailler avec les Zettelkästen | Introduction aux différentes caractéristiques des Zettelkästen dans Zettlr    | zettelkasten.md |
 | Les références avec Zettlr       | Souligne les potentialités du travail avec des bases de données de références | references.md   |
 
-You can align columns as well as add and remove both rows and columns in the table. The table editor will always work on the column or row that is currently active. So, to remove a certain row, make sure that one cell within that row is selected. Feel free to play around a little bit with the table to get used to how it works!
-
 Dans le tableau, vous modifier l'alignement ou ajouter et supprimer des lignes et des colonnes. L'éditeur de tableau fonctionnera toujours sur la colonne ou la ligne active. Ainsi, pour supprimer une ligne, assurez-vous qu'une cellule de cette ligne est sélectionnée. N'hésitez pas à jouer un peu avec le tableau pour vous habituer à son maniement !
 
 ## Ressources complémentaires 📚
