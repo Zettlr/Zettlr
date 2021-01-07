@@ -148,7 +148,7 @@
     "bcp-47": "^1.0.8",
     "chalk": "^4.1.0",
     "chart.js": "^2.9.4",
-    "chokidar": "^3.4.3",
+    "chokidar": "^3.5.0",
     "citeproc": "^2.4.59",
     "codemirror": "^5.59.1",
     "command-exists": "^1.2.9",
