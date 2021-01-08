@@ -1,3 +1,13 @@
+# 1.8.6
+
+## GUI and Functionality
+
+- Your typing speed is now as fast as previously again, even for long paragraphs and files (thanks to @mattj23 for implementing the fixes in the multiplexer).
+
+## Under the Hood
+
+- Fixed a performance sink in the multiplexer module which introduced noticeable lag while writing long paragraphs and documents (implemented by @mattj23).
+
 # 1.8.5
 
 ## Apple Silicon Support
