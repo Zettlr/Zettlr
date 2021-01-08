@@ -139,7 +139,7 @@
     }
   },
   "dependencies": {
-    "@clr/icons": "^4.0.8",
+    "@clr/icons": "^4.0.9",
     "@types/semver": "^7.3.4",
     "@zettlr/citr": "1.2.1",
     "adm-zip": "^0.5.1",
