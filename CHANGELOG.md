@@ -3,6 +3,7 @@
 ## GUI and Functionality
 
 - Your typing speed is now as fast as previously again, even for long paragraphs and files (thanks to @mattj23 for implementing the fixes in the multiplexer).
+- You can now also switch to sub-directories using the file list navigation; it is not limited to files only anymore.
 
 ## Under the Hood
 

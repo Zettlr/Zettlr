@@ -5,7 +5,7 @@
     v-bind:data-hash="selectedDirectoryHash"
     v-on:keydown="navigate"
     v-on:focus="onFocusHandler"
-    v-on:blur="activeFile = null"
+    v-on:blur="activeDescriptor = null"
   >
     <template v-if="emptySearchResults">
       <!-- Did we have no search results? -->
@@ -47,7 +47,7 @@
         >
           <FileItem
             v-bind:obj="item.props"
-            v-bind:active-file="activeFile"
+            v-bind:active-file="activeDescriptor"
           ></FileItem>
         </RecycleScroller>
       </template>
@@ -90,7 +90,7 @@ export default {
   data: function () {
     return {
       filterQuery: '',
-      activeFile: null // Can contain a hash of the active ("focused") file item
+      activeDescriptor: null // Can contain a hash of the active ("focused") item
     }
   },
   computed: {
@@ -194,12 +194,12 @@ export default {
     getFilteredDirectoryContents: function () {
       // Whenever the directory contents change, reset the active file if it's
       // no longer in the list
-      const foundActiveFile = this.getFilteredDirectoryContents.find((elem) => {
-        return elem.props.hash === this.activeFile
+      const foundDescriptor = this.getFilteredDirectoryContents.find((elem) => {
+        return elem.props.hash === this.activeDescriptor
       })
 
-      if (foundActiveFile === undefined) {
-        this.activeFile = null
+      if (foundDescriptor === undefined) {
+        this.activeDescriptor = null
       }
     },
     selectedFile: function () {
@@ -209,6 +209,10 @@ export default {
       this.$nextTick(function () {
         this.scrollIntoView()
       })
+    },
+    selectedDirectoryHash: function () {
+      // Reset the local search when a new directory has been selected
+      this.filterQuery = ''
     }
   },
   /**
@@ -222,7 +226,7 @@ export default {
   },
   methods: {
     /**
-     * Navigates the filelist to the next/prev file.
+     * Navigates the filelist to the next/prev file or directory.
      * Hold Shift for moving by 10 files, Command or Control to
      * jump to the very end.
      */
@@ -240,24 +244,30 @@ export default {
       const ctrl = evt.ctrlKey === true && process.platform !== 'darwin'
       const cmdOrCtrl = cmd || ctrl
 
-      if (evt.key === 'Enter' && this.activeFile !== null) {
-        // Select the active file (if there is one)
-        global.editor.announceTransientFile(this.activeFile)
-        global.ipc.send('file-get', this.activeFile)
-        return
-      }
-
       // getDirectoryContents accomodates the virtual scroller
       // by packing the actual items in a props property.
-      let list = this.getFilteredDirectoryContents.map(e => e.props)
-      list = list.filter(e => e.type === 'file')
-      let index = list.indexOf(list.find(e => {
-        if (this.activeFile !== null) {
-          return e.hash === this.activeFile
+      const list = this.getFilteredDirectoryContents.map(e => e.props)
+      const descriptor = list.find(e => {
+        if (this.activeDescriptor !== null) {
+          return e.hash === this.activeDescriptor
         } else {
           return e.hash === this.selectedFile
         }
-      }))
+      })
+
+      // On pressing enter, that's the same as clicking
+      if (evt.key === 'Enter' && this.activeDescriptor !== null) {
+        if (descriptor.type === 'directory') {
+          global.ipc.send('dir-select', this.activeDescriptor)
+        } else {
+          // Select the active file (if there is one)
+          global.editor.announceTransientFile(this.activeDescriptor)
+          global.ipc.send('file-get', this.activeDescriptor)
+        }
+        return // Stop handling
+      }
+
+      let index = list.indexOf(descriptor)
 
       switch (evt.key) {
         case 'ArrowDown':
@@ -270,9 +280,9 @@ export default {
           }
           if (cmdOrCtrl) {
             // Select the last file
-            this.activeFile = list[list.length - 1].hash
+            this.activeDescriptor = list[list.length - 1].hash
           } else if (index < list.length) {
-            this.activeFile = list[index].hash
+            this.activeDescriptor = list[index].hash
           }
           break
         case 'ArrowUp':
@@ -285,9 +295,9 @@ export default {
           }
           if (cmdOrCtrl) {
             // Select the first file
-            this.activeFile = list[0].hash
+            this.activeDescriptor = list[0].hash
           } else if (index >= 0) {
-            this.activeFile = list[index].hash
+            this.activeDescriptor = list[index].hash
           }
           break
       }
@@ -297,8 +307,8 @@ export default {
       // In case the file changed, make sure it's in view.
       let scrollTop = this.$el.scrollTop
       let index = this.getFilteredDirectoryContents.find(e => {
-        if (this.activeFile !== null) {
-          return e.props.hash === this.activeFile
+        if (this.activeDescriptor !== null) {
+          return e.props.hash === this.activeDescriptor
         } else {
           return e.props.hash === this.selectedFile
         }
@@ -347,7 +357,7 @@ export default {
       }
     },
     onFocusHandler: function (event) {
-      this.activeFile = this.selectedFile
+      this.activeDescriptor = this.selectedFile
       this.$refs.quickFilter.focus()
     }
   }
