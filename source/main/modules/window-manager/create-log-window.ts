@@ -16,6 +16,7 @@ import {
   BrowserWindow,
   BrowserWindowConstructorOptions
 } from 'electron'
+import attachLogger from './attach-logger'
 import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
 
@@ -56,6 +57,9 @@ export default function createLogWindow (): BrowserWindow {
 
   // Prevent arbitrary navigation away from our WEBPACK_ENTRY
   preventNavigation(window)
+
+  // Implement main process logging
+  attachLogger(window, 'Log Window')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {

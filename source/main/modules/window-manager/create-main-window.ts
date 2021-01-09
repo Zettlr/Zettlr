@@ -21,6 +21,7 @@ import {
 import { WindowPosition } from './types.d'
 import setWindowChrome from './set-window-chrome'
 import preventNavigation from './prevent-navigation'
+import attachLogger from './attach-logger'
 
 /**
  * Creates a BrowserWindow with main window configuration and loads the main
@@ -64,6 +65,8 @@ export default function createMainWindow (conf: WindowPosition): BrowserWindow {
 
   // Prevent arbitrary navigation away from our WEBPACK_ENTRY
   preventNavigation(window)
+  // Implement main process logging
+  attachLogger(window, 'Main Window')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
