@@ -20,6 +20,7 @@ import {
 } from 'electron'
 import { WindowPosition } from './types.d'
 import setWindowChrome from './set-window-chrome'
+import preventNavigation from './prevent-navigation'
 
 /**
  * Creates a BrowserWindow with main window configuration and loads the main
@@ -60,6 +61,9 @@ export default function createMainWindow (conf: WindowPosition): BrowserWindow {
     })
 
   // EVENT LISTENERS
+
+  // Prevent arbitrary navigation away from our WEBPACK_ENTRY
+  preventNavigation(window)
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {

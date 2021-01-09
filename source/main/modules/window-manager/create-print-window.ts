@@ -16,6 +16,7 @@ import {
   BrowserWindow,
   BrowserWindowConstructorOptions
 } from 'electron'
+import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
 
 /**
@@ -57,6 +58,9 @@ export default function createPrintWindow (file: string): BrowserWindow {
     })
 
   // EVENT LISTENERS
+
+  // Prevent arbitrary navigation away from our WEBPACK_ENTRY
+  preventNavigation(window)
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {

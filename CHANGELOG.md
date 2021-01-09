@@ -8,6 +8,7 @@
 ## Under the Hood
 
 - Fixed a performance sink in the multiplexer module which introduced noticeable lag while writing long paragraphs and documents (implemented by @mattj23).
+- Implemented a global event listener that prevents any arbitrary navigation away from the loaded URL that occurs within webContents. So this way we do not need to sanitize any anchors or take care about setting `window.location`, because all of these events will be captured and navigation will be prevented. For opening local files and directories, make sure to prepend the path with `safe-file://`, which is recognized by this listener.
 
 # 1.8.5
 

@@ -76,7 +76,7 @@ module.exports = class ZettlrSidebar {
     // Enable opening of the directory in Finder/Explorer/linux file browser
     this.openDirButton.addEventListener('click', (e) => {
       if (this._renderer.getCurrentDir() !== null) {
-        global.ipc.send('open-external', { href: this._renderer.getCurrentDir().path })
+        window.location = `safe-file://${this._renderer.getCurrentDir().path}`
       }
     })
 
@@ -198,7 +198,7 @@ module.exports = class ZettlrSidebar {
         data-link="${attachment.path}"
         data-hash="${attachment.hash}"
         title="${attachment.path}"
-        onclick="global.ipc.send('open-external', { href: '${attachment.path}' })"
+        href="safe-file://${attachment.path}"
       >
         ${icon} ${attachment.name}
       </a>`
@@ -350,25 +350,8 @@ module.exports = class ZettlrSidebar {
       this.bibliographyContainer.innerHTML = `<p>${bib}</p>`
       return
     }
-    // Convert links, so that they remain but do not open in the same
-    // window.
-    let aRE = /<a(.+?)>(.*?)<\/a>/g
-    let hrefRE = /href="(.+)"/i
-    let output = []
-    for (let entry of bib[1]) {
-      aRE.lastIndex = 0
-      output.push(
-        entry.replace(aRE, function (match, p1, p2, offset, string) {
-          let href = hrefRE.exec(p1)
-          if (href !== null) {
-            return `<a onclick="global.ipc.send('open-external', { href: '${href[1]}'})">${p2}</a>`
-          }
-          // If we can't link it, return an unlinked link
-          return p2
-        })
-      )
-    }
-    this.bibliographyContainer.innerHTML = bib[0].bibstart + output.join('\n') + bib[0].bibend
+
+    this.bibliographyContainer.innerHTML = bib[0].bibstart + bib[1].join('\n') + bib[0].bibend
   }
 
   /**

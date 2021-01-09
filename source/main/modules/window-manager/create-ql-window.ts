@@ -19,6 +19,7 @@ import {
 import { MDFileDescriptor } from '../fsal/types'
 import { WindowPosition } from './types'
 import setWindowChrome from './set-window-chrome'
+import preventNavigation from './prevent-navigation'
 
 /**
  * Creates a BrowserWindow with Quicklook Window configuration and loads the
@@ -59,6 +60,9 @@ export default function createQuicklookWindow (file: MDFileDescriptor, conf: Win
     })
 
   // EVENT LISTENERS
+
+  // Prevent arbitrary navigation away from our WEBPACK_ENTRY
+  preventNavigation(window)
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
