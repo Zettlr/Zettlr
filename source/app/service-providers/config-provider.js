@@ -367,21 +367,17 @@ module.exports = class ConfigProvider extends EventEmitter {
     }
 
     // Determine if this is a different version
-    let oldVersion = readConfig.version || undefined
-    this._newVersion = oldVersion !== this.config.version
+    this._newVersion = readConfig.version !== this.config.version
     if (this._newVersion) {
-      global.log.info(`Migrating from ${oldVersion} to ${this.config.version}!`)
-    }
-
-    // DEBUG: Disable vim if it's activated
-    if (readConfig.editor.inputMode === 'vim') {
-      readConfig.editor.inputMode = 'default'
+      global.log.info(`Migrating from ${readConfig.version} to ${this.config.version}!`)
     }
 
     this.update(readConfig)
 
     // Don't forget to update the version
-    if (this._newVersion) this.set('version', ZETTLR_VERSION)
+    if (this._newVersion) {
+      this.set('version', ZETTLR_VERSION)
+    }
 
     return this
   }
