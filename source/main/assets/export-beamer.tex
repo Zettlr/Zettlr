@@ -26,9 +26,9 @@ xcolor={table},]{beamer}
 % Background image for each slide.
 $if(background-image)$
 \usebackgroundtemplate{%
-\includegraphics[width=\paperwidth, height=\paperheight]{/working/templates/template_resources/lackadaisical_beamer_background.pdf}%
-$endif$
+\includegraphics[width=\paperwidth, height=\paperheight]{$background-image$}%
 }
+$endif$
 
 % Navigation symbols should be suppressed by default, but can be enabled.
 \setbeamercolor{caption name}{fg=normal text.fg}
@@ -309,6 +309,7 @@ $endif$
     \raisebox{5pt}{\makebox[\paperwidth]{\hfill\makebox[20pt]{\color{white}
           \scriptsize\insertframenumber}}}\hspace*{5pt}}
 
+$if(title-page-background)$
 % Required for title page background. Provides \AddToShipoutPicture
 % We use the PDF for a vector image because XeLaTeX can't determine the SVG width.
 \usepackage[pscoord]{eso-pic}
@@ -317,8 +318,9 @@ $endif$
     \put(0,0){
     \parbox[b][\paperheight]{\paperwidth}{%
     \centering
-    \includegraphics[width=\paperwidth,height=\paperheight]{/working/templates/template_resources/lackadaisical_beamer_title.pdf}
+    \includegraphics[width=\paperwidth,height=\paperheight]{$title-page-background$}
 }}}
+$endif$
 
 %
 % Set metadata & content variables
@@ -357,8 +359,9 @@ $else$
 \date{\today}
 $endif$
 
+
 %
-% Customise beamer title page
+% Customise beamer title page, if it makes sense
 %
 \defbeamertemplate*{title page}{customised}[1][]
 {
@@ -372,6 +375,7 @@ $endif$
   %\usebeamerfont{subtitle}\insertsubtitle\par
 \end{flushright}
 }
+$endif$
 
 $if(logo)$
 \logo{\includegraphics{$logo$}}
