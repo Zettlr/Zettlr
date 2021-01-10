@@ -2,6 +2,16 @@
 % Use to generate presentations from MarkDown via Pandoc
 % Heavily based on the pandoc default template, but customised for beamer (i.e. removed all if/else statements relating to beamer)
 
+% Variables:
+% background-image          String - Path to image to be used as background on every slide.
+% links-as-notes            Boolean - Make links footnotes rather than hyperlinks.
+% navigation                String - Navigation Symbols:
+%                               - default: none
+%                               - Not sure what other values are valid, but they're rarely used!
+% table-row-highlighting    Boolean - Enable alternate row colours.
+% title-page-background     String - Path to image to be used as background on title page.
+% toc-title                 String - Title on the Table of Contents slide. Default: none
+
 \PassOptionsToPackage{hyphens}{url}
 
 \documentclass[
@@ -359,7 +369,7 @@ $else$
 \date{\today}
 $endif$
 
-
+$if(title-page-background)$
 %
 % Customise beamer title page, if it makes sense
 %
