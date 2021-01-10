@@ -231,25 +231,9 @@ class ZettlrIPC {
         this.send('pdf-preferences', global.config.get())
         break
 
-      case 'get-tags-preferences':
-        this.send('tags-preferences', global.tags.getSpecialTags())
-        break
-
       // Got a new config object
       case 'update-config':
         global.config.bulkSet(cnt)
-        break
-
-      case 'update-tags':
-        global.tags.update(cnt)
-        // fall through
-      case 'get-tags':
-        this.send('set-tags', global.tags.getSpecialTags())
-        break
-
-      // Send the global tag database to the renderer process.
-      case 'get-tags-database':
-        this.send('tags-database', global.tags.getTagDatabase())
         break
 
       // Handle dropped files/folders
@@ -304,10 +288,6 @@ class ZettlrIPC {
       // Return the metadata for the translation files
       case 'get-translation-metadata':
         return getTranslationMetadata()
-
-      // Send the global tag database to the renderer process.
-      case 'get-tags-database':
-        return global.tags.getTagDatabase()
 
       // Returns the custom CSS's file contents
       case 'get-custom-css':

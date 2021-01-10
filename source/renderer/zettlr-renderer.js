@@ -132,11 +132,6 @@ class ZettlrRenderer {
       // that it's out of the first tick of the app.
       this.configChange()
 
-      // Receive an initial list of tags to display in the preview list
-      this._ipc.send('get-tags')
-      // Additionally, request the full database of already existing tags inside files.
-      this._ipc.send('get-tags-database')
-
       // Request a first batch of files
       this._ipc.send('get-paths')
 

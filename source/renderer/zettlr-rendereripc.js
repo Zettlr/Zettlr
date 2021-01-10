@@ -442,10 +442,6 @@ class ZettlrRendererIPC {
         this.send('get-pdf-preferences')
         break
 
-      case 'open-tags-preferences':
-        this.send('get-tags-preferences')
-        break
-
       case 'open-custom-css':
         this._app.getBody().displayCustomCss()
         break
@@ -468,11 +464,6 @@ class ZettlrRendererIPC {
 
       case 'set-tags':
         global.store.set('tags', cnt)
-        break
-
-      // Update the editor's tag database
-      case 'tags-database':
-        this._app.getEditor().setTagDatabase(cnt)
         break
 
       // Display the informative tag cloud

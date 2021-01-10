@@ -10,6 +10,7 @@
 - Fixed a performance sink in the multiplexer module which introduced noticeable lag while writing long paragraphs and documents (implemented by @mattj23).
 - Implemented a global event listener that prevents any arbitrary navigation away from the loaded URL that occurs within webContents. So this way we do not need to sanitize any anchors or take care about setting `window.location`, because all of these events will be captured and navigation will be prevented. For opening local files and directories, make sure to prepend the path with `safe-file://`, which is recognized by this listener.
 - Implemented a global event listener that makes sure any call to `console.log` is also received in the main process so that we can intercept those and add them to our global logging interface as well. This way, debugging errors in the renderer process can be debugged together with users as well. _Messages from the renderers are indicated by a [R] including the window identifier (e.g. "[Main Window]")._
+- Migrated the Tags Provider to TypeScript. Cleaned up the IPC calls.
 
 # 1.8.5
 

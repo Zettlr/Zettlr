@@ -135,6 +135,8 @@ class ZettlrBody {
     ipcRenderer.on('shortcut', (event, shortcut) => {
       if (shortcut === 'search') {
         this.displayFind()
+      } else if (shortcut === 'open-tags-preferences') {
+        this.displayTagsPreferences()
       }
     })
   }
@@ -384,13 +386,20 @@ class ZettlrBody {
 
   /**
     * Displays the tag preferences with the current settings.
-    * @param  {Object} prefs An object containing the current tags.
     * @return {void}       Nothing to return.
     */
-  displayTagsPreferences (prefs) {
-    this._currentDialog = new TagsPreferences()
-    this._currentDialog.init(prefs).open()
-    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
+  displayTagsPreferences () {
+    ipcRenderer.invoke('tag-provider', {
+      command: 'get-coloured-tags'
+    })
+      .then((tags) => {
+        this._currentDialog = new TagsPreferences()
+        this._currentDialog.init(tags).open()
+        this._currentDialog.on('afterClose', (e) => {
+          this._currentDialog = null
+        })
+      })
+      .catch(e => console.error(e))
   }
 
   /**
@@ -399,11 +408,17 @@ class ZettlrBody {
    * @return {void}      Nothing to return.
    */
   displayTagCloud () {
-    global.ipc.send('get-tags-database', {}, (ret) => {
-      this._currentDialog = new TagCloud()
-      this._currentDialog.init(ret).open()
-      this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
+    ipcRenderer.invoke('tag-provider', {
+      command: 'get-tags-database'
     })
+      .then(tags => {
+        this._currentDialog = new TagCloud()
+        this._currentDialog.init(tags).open()
+        this._currentDialog.on('afterClose', (e) => {
+          this._currentDialog = null
+        })
+      })
+      .catch(e => console.error(e))
   }
 
   /**

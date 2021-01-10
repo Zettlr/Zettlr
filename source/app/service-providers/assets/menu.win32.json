@@ -68,7 +68,7 @@
           },
           {
             "label": "menu.tags",
-            "command": "open-tags-preferences"
+            "shortcut": "open-tags-preferences"
           },
           {
             "label": "menu.custom_css",

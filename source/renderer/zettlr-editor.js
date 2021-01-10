@@ -159,6 +159,26 @@ class ZettlrEditor {
       this._renderer.autoSearch(tag)
     })
 
+    // Listen for updates to the tag database ...
+    ipcRenderer.on('tags', (event) => {
+      ipcRenderer.invoke('tag-provider', {
+        command: 'get-tags-database'
+      })
+        .then(tags => {
+          this._editor.setCompletionDatabase('tags', tags)
+        })
+        .catch(e => console.error(e))
+    })
+
+    // ... also, request the first batch of tags right now
+    ipcRenderer.invoke('tag-provider', {
+      command: 'get-tags-database'
+    })
+      .then(tags => {
+        this._editor.setCompletionDatabase('tags', tags)
+      })
+      .catch(e => console.error(e))
+
     // Set up the helper classes with the CM instance
     this._searcher.setInstance(this._editor.codeMirror)
 
@@ -676,14 +696,6 @@ class ZettlrEditor {
     this._div.style.fontSize = global.config.get('editor.fontSize') + 'px'
 
     return this
-  }
-
-  /**
-   * This sets the tag database necessary for the tag autocomplete.
-   * @param {Object} tagDB An object (here with prototype due to JSON) containing tags
-   */
-  setTagDatabase (tagDB) {
-    this._editor.setCompletionDatabase('tags', tagDB)
   }
 
   /**

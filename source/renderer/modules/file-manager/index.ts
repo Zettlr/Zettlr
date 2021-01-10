@@ -18,9 +18,23 @@ import Vue from 'vue'
 import App from './file-manager.vue'
 import createStore from './store'
 import Vuex from 'vuex'
+import { ipcRenderer } from 'electron'
 
 // Indicate that we would like to use a vuex store
 Vue.use(Vuex)
+
+const store = createStore()
+
+ipcRenderer.on('coloured-tags', (event) => {
+  // Update the tags
+  ipcRenderer.invoke('tag-provider', {
+    command: 'get-coloured-tags'
+  })
+    .then(tags => {
+      store.commit('tags', tags)
+    })
+    .catch(e => console.error(e))
+})
 
 // Then create the global application store -- currently
 // it's only used for the file manager, but in perspective
@@ -30,7 +44,7 @@ export default (): Vue => {
   return new Vue({
     // Destructure the App config object, and enrich with store and hook
     ...App,
-    store: createStore(),
+    store: store,
     el: '#app'
   })
 }

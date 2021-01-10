@@ -17,6 +17,7 @@ const validate = require('../../common/validate.js')
 const { trans } = require('../../common/i18n')
 const serializeFormData = require('../../common/util/serialize-form-data')
 const renderTemplate = require('../util/render-template')
+const { ipcRenderer } = require('electron')
 
 class TagsPreferences extends ZettlrDialog {
   constructor () {
@@ -80,8 +81,12 @@ class TagsPreferences extends ZettlrDialog {
     }
 
     // Send and close
-    global.ipc.send('update-tags', cfg['tags'])
-    this.close()
+    ipcRenderer.invoke('tag-provider', {
+      command: 'set-coloured-tags',
+      colouredTags: cfg['tags']
+    })
+      .then(() => this.close())
+      .catch(e => console.error(e))
   }
 }
 
