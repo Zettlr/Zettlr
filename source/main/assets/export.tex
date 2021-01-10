@@ -61,6 +61,9 @@ $endif$
 
 % Define any colours
 \definecolor{lightgrey}{HTML}{D3D3D3}
+\definecolor{charcoal}{RGB}{56,63,69}
+\definecolor{blue}{RGB}{38,63,126}
+\definecolor{grey}{RGB}{120,128,128}
 
 % These packages are needed by pandoc for certain special glyphs, such as the
 % \square symbol for checkboxes.
@@ -127,7 +130,7 @@ $endif$
 
 \usepackage{geometry}
 % Additional options for geometry can be found here: http://texdoc.net/texmf-dist/doc/latex/geometry/geometry.
-\geometry{verbose,$if(margins)$margin=$margin$$else$margin=2cm$endif$$if(top-margin)$,tmargin=$top-margin$$endif$$if(bottom-margin)$,bmargin=$bottom-margin$$endif$$if(left-margin)$,lmargin=$left_margin$$endif$$if(right-margin)$,rmargin=$right-margin$$endif$}
+\geometry{verbose,$if(page-size)$$page-size$paper,$else$a4paper,$endif$$if(margins)$margin=$margin$$else$margin=2cm$endif$$if(top-margin)$,tmargin=$top-margin$$endif$$if(bottom-margin)$,bmargin=$bottom-margin$$endif$$if(left-margin)$,lmargin=$left_margin$$endif$$if(right-margin)$,rmargin=$right-margin$$endif$}
 
 %
 % Image Handling
@@ -180,7 +183,7 @@ $if(table-row-highlighting)$
   \let\oldlongtable\longtable
   \let\endoldlongtable\endlongtable
   \renewenvironment{longtable}{%
-    \rowcolors{2}{lightgray}{}
+    \rowcolors{2}{lightgrey}{}
     \oldlongtable
   }{\endoldlongtable}
 $endif$
@@ -202,17 +205,12 @@ $if(mainfont)$
   \setmainfont{$mainfont$}
 $else$
   \setmainfont[%
-    BoldFont = Noto Sans Bold,
-    ItalicFont = Noto Sans Italic,
-    BoldItalicFont = Noto Sans Bold Italic
+    BoldFont={Noto Sans Bold},
+    ItalicFont={Noto Sans Italic},
+    BoldItalicFont={Noto Sans Bold Italic}
   ]{Noto Sans}
     % We can use ucharclasses to setup font transitions based on unicode blocks.
   \usepackage[CJK, Latin, Mathematics, Malayalam, Thai, Sinhala, Symbols]{ucharclasses}
-  \newfontfamily{\defaultfont}{Noto Sans}[%
-    BoldFont = Noto Sans Bold,
-    ItalicFont = Noto Sans Italic,
-    BoldItalicFont = Noto Sans Bold Italic
-  ]
 
   \newfontfamily{\cjkfont}{NotoSansCJK-Regular.ttc}
   \newfontfamily{\japanesefont}{NotoSansCJK-Regular.ttc}
@@ -225,17 +223,21 @@ $else$
   \newfontfamily{\symbolfont}{Noto Sans Symbols}
 
 
-  \setTransitionsForCJK{\cjkfont}{\defaultfont}
-  \setTransitionsForJapanese{\japanesefont}{\defaultfont}
-  \setTransitionsForMathematics{\mathsfont}{\defaultfont}
-  \setTransitionsForSymbols{\symbolfont}{\defaultfont}
+% We're beginning and ending groups here so that the transition works anywhere.
+% This means that if e.g. a symbol is used within monospaced text that it will return to being monospaced
+% instead of going back to our default\main font!
 
-  \setTransitionFrom{Malayalam}{\defaultfont}
-  \setTransitionFrom{Sinhala}{\defaultfont}
-  \setTransitionFrom{Thai}{\defaultfont}
-  \setTransitionTo{Malayalam}{\malayalamfont}
-  \setTransitionTo{Sinhala}{\sinhalafont}
-  \setTransitionTo{Thai}{\thaifont}
+  \setTransitionsForCJK{\begingroup\cjkfont}{\endgroup}
+  \setTransitionsForJapanese{\begingroup\japanesefont}{\endgroup}
+  \setTransitionsForMathematics{\begingroup\mathsfont}{\endgroup}
+  \setTransitionsForSymbols{\begingroup\symbolfont}{\endgroup}
+
+  \setTransitionFrom{Malayalam}{\endgroup}
+  \setTransitionFrom{Sinhala}{\endgroup}
+  \setTransitionFrom{Thai}{\endgroup}
+  \setTransitionTo{Malayalam}{\begingroup\malayalamfont}
+  \setTransitionTo{Sinhala}{\begingroup\sinhalafont}
+  \setTransitionTo{Thai}{\begingroup\thaifont}
 $endif$
 
 $if(sansfont)$
@@ -248,6 +250,11 @@ $endif$
 %
 % Setup page content
 %
+
+% Control spacing around enumeration (lists).
+\usepackage{enumitem}
+%The key noitemsep kills the space between items and paragraphs (i.e., itemsep=0pt and parsep=0pt), while nosep kills all vertical spacing.
+\setlist{noitemsep}
 
 % Line spacing
 \usepackage{setspace}
@@ -264,15 +271,17 @@ $if(links-as-notes)$
 $endif$
 
 $if(block-headings)$
-% Make \paragraph and \subparagraph free-standing
-\ifx\paragraph\undefined\else
-  \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
-\fi
-\ifx\subparagraph\undefined\else
-  \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-\fi
+% Make \paragraph and \subparagraph (H4, H5) free-standing
+% Also style the headings so that they stand out. Issue: H4 is bigger than H3 - It should also be redeclared!
+\RedeclareSectionCommand[
+    beforeskip=-10pt plus -2pt minus -1pt,
+    afterskip=1sp plus -1sp minus 1sp,
+    font=\normalfont\bfseries]{paragraph}
+\RedeclareSectionCommand[
+    beforeskip=-10pt plus -2pt minus -1pt,
+    afterskip=1sp plus -1sp minus 1sp,
+    font=\normalfont\scshape,
+    indent=0pt]{subparagraph}
 $endif$
 
 $if(numbersections)$
@@ -284,6 +293,14 @@ $endif$
 $if(pagestyle)$
   \pagestyle{$pagestyle$}
 $endif$
+
+%
+% The Tikz package is unhappy if codeblock line numbers are enabled and forces the build to stop.
+% Let's prevent that.
+
+\makeatletter
+\let\tikz@ensure@dollar@catcode\relax
+\makeatother
 
 %
 % This is where the values can be inserted into the template from metadata.
@@ -365,6 +382,13 @@ $if(csquotes)$
 $endif$
 
 %
+% Style blockquotes so that they're distinct from body text
+%
+
+\usepackage{etoolbox}
+\AtBeginEnvironment{quote}{\color{grey}}
+
+%
 % Header and Footer
 %
 \usepackage{pageslts}
@@ -388,6 +412,9 @@ $endif$
 \xpatchcmd{\@maketitle}{\end{center}}{\end{flushright}}{}{}
 \xpatchcmd{\@maketitle}{\begin{tabular}[t]{c}}{\begin{tabular}[t]{@{}r@{}}}{}{}
 \makeatother
+
+% Change the colour of the subtitle.
+\addtokomafont{subtitle}{\color{lightgrey}}
 
 $if(title-page-background)$
   \usepackage{eso-pic}
