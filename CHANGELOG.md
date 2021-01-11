@@ -12,6 +12,7 @@
 - Implemented a global event listener that makes sure any call to `console.log` is also received in the main process so that we can intercept those and add them to our global logging interface as well. This way, debugging errors in the renderer process can be debugged together with users as well. _Messages from the renderers are indicated by a [R] including the window identifier (e.g. "[Main Window]")._
 - Migrated the Tags Provider to TypeScript. Cleaned up the IPC calls.
 - Moved electron-builder configuration to `electron-builder.yml`.
+- Removed no longer necessary scripts.
 
 # 1.8.5
 
