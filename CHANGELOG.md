@@ -13,6 +13,7 @@
 - Migrated the Tags Provider to TypeScript. Cleaned up the IPC calls.
 - Moved electron-builder configuration to `electron-builder.yml`.
 - Removed no longer necessary scripts.
+- Moved most type annotations to corresponding types files. The structure is currently: All `node_modules` without type support reside within `./source`, whereas the service provider types are stored in `./source/app/service-providers/assets`.
 
 # 1.8.5
 

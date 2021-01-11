@@ -32,26 +32,6 @@ const debugConsole = {
   verbose: function (message: string) { console.log(chalk.grey(message)) }
 }
 
-/**
- * Available LogLevels
- */
-enum LogLevel {
-  verbose = 1,
-  info = 2,
-  warning = 3,
-  error = 4
-}
-
-/**
- * A single log message
- */
-interface LogMessage {
-  time: string
-  level: LogLevel
-  message: string
-  details: any
-}
-
 export default class LogProvider {
   private readonly _logPath: string
   private readonly _log: LogMessage[]
