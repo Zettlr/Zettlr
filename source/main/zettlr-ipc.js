@@ -289,15 +289,6 @@ class ZettlrIPC {
       case 'get-translation-metadata':
         return getTranslationMetadata()
 
-      // Returns the custom CSS's file contents
-      case 'get-custom-css':
-        return global.css.get()
-
-      // Updates the file contents
-      case 'set-custom-css':
-        console.log('setting custom css', arg)
-        return global.css.set(arg)
-
       default:
         global.log.error(trans('system.unknown_command', cmd))
         return null

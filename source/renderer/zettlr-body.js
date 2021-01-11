@@ -137,6 +137,8 @@ class ZettlrBody {
         this.displayFind()
       } else if (shortcut === 'open-tags-preferences') {
         this.displayTagsPreferences()
+      } else if (shortcut === 'open-custom-css') {
+        this.displayCustomCss()
       }
     })
   }
@@ -457,11 +459,17 @@ class ZettlrBody {
    * This dialog lets the user edit his/her custom CSS
    */
   displayCustomCss () {
-    global.ipc.send('get-custom-css', {}, (ret) => {
-      this._currentDialog = new CustomCSS()
-      this._currentDialog.init(ret).open()
-      this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
+    ipcRenderer.invoke('css-provider', {
+      command: 'get-custom-css'
     })
+      .then(css => {
+        this._currentDialog = new CustomCSS()
+        this._currentDialog.init(css).open()
+        this._currentDialog.on('afterClose', (e) => {
+          this._currentDialog = null
+        })
+      })
+      .catch(e => console.error(e))
   }
 
   /**

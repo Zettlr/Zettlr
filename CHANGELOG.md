@@ -14,6 +14,7 @@
 - Moved electron-builder configuration to `electron-builder.yml`.
 - Removed no longer necessary scripts.
 - Moved most type annotations to corresponding types files. The structure is currently: All `node_modules` without type support reside within `./source`, whereas the service provider types are stored in `./source/app/service-providers/assets`.
+- Removed generic IPC calls for the CSS Provider and migrated that to the provider class.
 
 # 1.8.5
 

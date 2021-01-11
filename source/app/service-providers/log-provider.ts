@@ -25,6 +25,17 @@ const hasProp = Object.prototype.hasOwnProperty
  */
 const LOG_FILES_TO_KEEP = 30
 
+/**
+ * Available LogLevels BUG: Somehow I have to declare this twice. That happens
+ * if you devise a system for typings where you can put types "somewhere."
+ */
+enum LogLevel {
+  verbose = 1,
+  info = 2,
+  warning = 3,
+  error = 4
+}
+
 const debugConsole = {
   error: function (message: string) { console.error(chalk.bold.red(message)) },
   warn: function (message: string) { console.warn(chalk.yellow(message)) },

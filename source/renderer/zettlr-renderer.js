@@ -124,9 +124,6 @@ class ZettlrRenderer {
     // first tick of the renderer event loop, because at this early stage (init
     // is called right after the DOM has loaded) the ipc is not yet ready. This
     // short delay gives us the time the IPC needs to get ready.
-
-    // Requesting the CSS file path obviously also needs to be out of the first
-    // tick.
     setTimeout(() => {
       // 10ms should suffice - the number is irrelevant. The important part is
       // that it's out of the first tick of the app.

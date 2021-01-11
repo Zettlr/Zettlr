@@ -48,10 +48,11 @@ class CustomCSS extends ZettlrDialog {
 
     // Activate the sender
     document.querySelector('div.dialog #save').addEventListener('click', (e) => {
-      ipcRenderer.send('css-provider', {
+      ipcRenderer.invoke('css-provider', {
         command: 'set-custom-css',
-        payload: this._cm.getValue()
+        css: this._cm.getValue()
       })
+        .catch(e => console.error(e))
 
       this.close()
     })

@@ -66,10 +66,9 @@ export default function registerThemes (): void {
   document.body.classList.toggle('dark', global.config.get('darkMode'))
 
   // Initial rendering of the Custom CSS
-  ipcRenderer.send('css-provider', {
-    command: 'get-custom-css-path',
-    payload: undefined
-  })
+  ipcRenderer.invoke('css-provider', { command: 'get-custom-css-path' })
+    .then(cssPath => setCustomCss(cssPath))
+    .catch(e => console.error(e))
 }
 
 /**
