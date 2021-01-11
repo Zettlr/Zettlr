@@ -77,6 +77,19 @@ let canQuit: boolean = false
  * may not work correctly.
  */
 app.whenReady().then(() => {
+  // Override the about panel options so that a little bit more is being shown.
+  // Makes only sense for macOS, as we don't call the showAboutPanel() method
+  // programmatically, but either way, it's a little bit nicer.
+  app.setAboutPanelOptions({
+    applicationName: 'Zettlr',
+    applicationVersion: app.getVersion(),
+    copyright: `Copyright (c) 2017 - ${(new Date()).getFullYear()} by Hendrik Erz. Licensed via GNU GPL 3.0`,
+    // version: If we ever introduce a build number. This defaults to the Electron version.
+    credits: 'We would like to thank all contributors to the app, its translators, and those who meticulously update the documentation.',
+    authors: ['Hendrik Erz'], // TODO: Somehow generate the contributors list.
+    website: 'https://www.zettlr.com/',
+    iconPath: process.execPath
+  })
   // Immediately boot the application. This function performs some initial
   // checks to make sure the environment is as expected for Zettlr, and boots
   // up the providers.
