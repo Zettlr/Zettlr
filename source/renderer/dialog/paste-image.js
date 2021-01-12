@@ -29,9 +29,11 @@ class PasteImage extends ZettlrDialog {
     data.size = clipboard.readImage().getSize() // First get the original size
     data.aspect = clipboard.readImage().getAspectRatio() // Then the aspect
 
+    console.log(data.currentPath)
+    console.log(global.config.get('editor.defaultSaveImagePath'))
     // Taken from the path resolving logic in save-image-from-clipboard.js
     data.savePath = path.resolve(
-      path.dirname(data.activeFile.path),
+      data.currentPath, // Unlike the main process, we already have the directory name
       global.config.get('editor.defaultSaveImagePath') || ''
     )
 

@@ -51,6 +51,6 @@ module.exports = (cm) => {
 function displayPasteImageDialog (cm) {
   const basePath = cm.getOption('zettlr').markdownImageBasePath
   this._currentDialog = new PasteImage()
-  this._currentDialog.init({ 'activeFile': { path: basePath } }).open()
+  this._currentDialog.init({ currentPath: basePath }).open()
   this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
 }
