@@ -484,7 +484,7 @@ export default class WindowManager {
    * @param {string}   filename The filename to be displayed.
    * @return {boolean} True if the file should be replaced
    */
-  async askReplaceFile (filename: string): Promise<boolean> {
+  async shouldReplaceFile (filename: string): Promise<boolean> {
     if (this._mainWindow === null) {
       // If the main window is not open, there is no sense in showing this
       // box, as the file is not really "open". It will be shown once a new

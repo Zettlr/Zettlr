@@ -41,6 +41,7 @@ export default class Zettlr {
   ipc: ZettlrIPC
   _commands: any
   private readonly _windowManager: WindowManager
+  private readonly isShownFor: string[]
 
   /**
     * Create a new application object
@@ -53,6 +54,7 @@ export default class Zettlr {
     // this.currentDir = null // Current working directory (object)
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = [] // Holds all currently opened paths.
+    this.isShownFor = [] // Contains all files for which remote notifications are currently shown
 
     this._windowManager = new WindowManager()
     // Immediately load persisted session data from disk
@@ -226,9 +228,19 @@ export default class Zettlr {
         })
       }).catch(e => global.log.error(e.message, e))
     } else {
-      // The user did not check this option, so ask first
-      this._windowManager.askReplaceFile(changedFile.name)
+      // Prevent multiple instances of the dialog, just ask once. The logic
+      // always retrieves the most recent version either way
+      const filePath = changedFile.path
+      if (this.isShownFor.includes(filePath)) {
+        return
+      }
+      this.isShownFor.push(filePath)
+
+      // Ask the user if we should replace the file
+      this._windowManager.shouldReplaceFile(changedFile.name)
         .then((shouldReplace) => {
+          // In any case remove the isShownFor for this file.
+          this.isShownFor.splice(this.isShownFor.indexOf(filePath), 1)
           if (!shouldReplace) {
             return
           }
