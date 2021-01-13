@@ -4,6 +4,9 @@
     <translator>
       <name>FI App Development</name>
     </translator>
+    <translator>
+      <name>Monica Thuegaz</name>
+    </translator>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
     <updated>2012-07-04T23:31:02+00:00</updated>
   </info>
@@ -25,12 +28,13 @@
     <term name="anonymous">anonimo</term>
     <term name="anonymous" form="short">anon.</term>
     <term name="at">a</term>
-    <term name="available at">available at</term>
+    <term name="available at">disponibile su</term>
+    <term name="available at" form="short">su</term>
     <term name="by">di</term>
     <term name="circa">circa</term>
     <term name="circa" form="short">c.</term>
     <term name="cited">citato</term>
-    <term name="edition">
+    <term name="edition" gender="feminine">
       <single>edizione</single>
       <multiple>edizioni</multiple>
     </term>
@@ -39,6 +43,8 @@
     <term name="forthcoming">futuro</term>
     <term name="from">da</term>
     <term name="ibid">ibid.</term>
+    <term name="ibid">ibidem</term>
+    <term name="ibid" form="short">ibid.</term>
     <term name="in">in</term>
     <term name="in press">in stampa</term>
     <term name="internet">internet</term>
@@ -46,7 +52,7 @@
     <term name="letter">lettera</term>
     <term name="no date">senza data</term>
     <term name="no date" form="short">s.d.</term>
-    <term name="online">in linea</term>
+    <term name="online">online</term>
     <term name="presented at">presentato al</term>
     <term name="reference">
       <single>reference</single>
@@ -57,8 +63,8 @@
       <multiple>refs.</multiple>
     </term>
     <term name="retrieved">recuperato</term>
-    <term name="scale">scale</term>
-    <term name="version">version</term>
+    <term name="scale">scala</term>
+    <term name="version">versione</term>
 
     <!-- ANNO DOMINI; BEFORE CHRIST -->
     <term name="ad">d.C.</term>
@@ -73,18 +79,40 @@
 
     <!-- ORDINALS -->
     <term name="ordinal">º</term>
+    <term name="ordinal" gender-form="masculine">º</term>
+    <term name="ordinal" gender-form="feminine">ª</term>
 
     <!-- LONG ORDINALS -->
     <term name="long-ordinal-01">prima</term>
+    <term name="long-ordinal-01" gender-form="masculine">primo</term>
+    <term name="long-ordinal-01" gender-form="feminine">prima</term>
     <term name="long-ordinal-02">seconda</term>
+    <term name="long-ordinal-02" gender-form="masculine">secondo</term>
+    <term name="long-ordinal-02" gender-form="feminine">seconda</term>
     <term name="long-ordinal-03">terza</term>
+    <term name="long-ordinal-03" gender-form="masculine">terzo</term>
+    <term name="long-ordinal-03" gender-form="feminine">terza</term>
     <term name="long-ordinal-04">quarta</term>
+    <term name="long-ordinal-04" gender-form="masculine">quarto</term>
+    <term name="long-ordinal-04" gender-form="feminine">quarta</term>
     <term name="long-ordinal-05">quinta</term>
+    <term name="long-ordinal-05" gender-form="masculine">quinto</term>
+    <term name="long-ordinal-05" gender-form="feminine">quinta</term>
     <term name="long-ordinal-06">sesta</term>
+    <term name="long-ordinal-06" gender-form="masculine">sesto</term>
+    <term name="long-ordinal-06" gender-form="feminine">sesta</term>
     <term name="long-ordinal-07">settima</term>
+    <term name="long-ordinal-07" gender-form="masculine">settimo</term>
+    <term name="long-ordinal-07" gender-form="feminine">settima</term>
     <term name="long-ordinal-08">ottava</term>
+    <term name="long-ordinal-08" gender-form="masculine">ottavo</term>
+    <term name="long-ordinal-08" gender-form="feminine">ottava</term>
     <term name="long-ordinal-09">nona</term>
+    <term name="long-ordinal-09" gender-form="masculine">nono</term>
+    <term name="long-ordinal-09" gender-form="feminine">nona</term>
     <term name="long-ordinal-10">decima</term>
+    <term name="long-ordinal-10" gender-form="masculine">decimo</term>
+    <term name="long-ordinal-10" gender-form="feminine">decima</term>
 
     <!-- LONG LOCATOR FORMS -->
     <term name="book">
@@ -107,7 +135,7 @@
       <single>foglio</single>
       <multiple>fogli</multiple>
     </term>
-    <term name="issue">
+    <term name="issue" gender="masculine">
       <single>numero</single>
       <multiple>numeri</multiple>
     </term>
@@ -151,14 +179,17 @@
       <single>verso</single>
       <multiple>versi</multiple>
     </term>
-    <term name="volume">
+    <term name="volume" gender="masculine">
       <single>volume</single>
       <multiple>volumi</multiple>
     </term>
 
     <!-- SHORT LOCATOR FORMS -->
     <term name="book" form="short">lib.</term>
-    <term name="chapter" form="short">cap.</term>
+    <term name="chapter" form="short">
+      <single>cap.</single>
+      <multiple>capp.</multiple>
+    </term>
     <term name="column" form="short">col.</term>
     <term name="figure" form="short">fig.</term>
     <term name="folio" form="short">fgl.</term>
@@ -187,7 +218,7 @@
     </term>
     <term name="volume" form="short">
       <single>vol.</single>
-      <multiple>vol.</multiple>
+      <multiple>voll.</multiple>
     </term>
 
     <!-- SYMBOL LOCATOR FORMS -->
@@ -214,8 +245,8 @@
       <multiple>editors</multiple>
     </term>
     <term name="illustrator">
-      <single>illustrator</single>
-      <multiple>illustrators</multiple>
+      <single>illustratore</single>
+      <multiple>illustratori</multiple>
     </term>
     <term name="translator">
       <single>traduttore</single>
@@ -229,7 +260,7 @@
     <!-- SHORT ROLE FORMS -->
     <term name="director" form="short">
       <single>dir.</single>
-      <multiple>dirs.</multiple>
+      <multiple>dir.</multiple>
     </term>
     <term name="editor" form="short">
       <single>a c. di</single>
@@ -237,11 +268,11 @@
     </term>
     <term name="editorial-director" form="short">
       <single>ed.</single>
-      <multiple>eds.</multiple>
+      <multiple>ed.</multiple>
     </term>
     <term name="illustrator" form="short">
       <single>ill.</single>
-      <multiple>ills.</multiple>
+      <multiple>ill.</multiple>
     </term>
     <term name="translator" form="short">
       <single>trad.</single>
@@ -254,37 +285,37 @@
 
     <!-- VERB ROLE FORMS -->
     <term name="container-author" form="verb">di</term>
-    <term name="director" form="verb">directed by</term>
+    <term name="director" form="verb">diretto da</term>
     <term name="editor" form="verb">a cura di</term>
     <term name="editorial-director" form="verb">edited by</term>
-    <term name="illustrator" form="verb">illustrated by</term>
+    <term name="illustrator" form="verb">illustrato da</term>
     <term name="interviewer" form="verb">intervista di</term>
     <term name="recipient" form="verb">a</term>
-    <term name="reviewed-author" form="verb">by</term>
+    <term name="reviewed-author" form="verb">di</term>
     <term name="translator" form="verb">tradotto da</term>
     <term name="editortranslator" form="verb">a cura di e tradotto da</term>
 
     <!-- SHORT VERB ROLE FORMS -->
-    <term name="director" form="verb-short">dir.</term>
+    <term name="director" form="verb-short">dir. da</term>
     <term name="editor" form="verb-short">a c. di</term>
     <term name="editorial-director" form="verb-short">ed.</term>
-    <term name="illustrator" form="verb-short">illus.</term>
+    <term name="illustrator" form="verb-short">ill. da</term>
     <term name="translator" form="verb-short">trad. da</term>
     <term name="editortranslator" form="verb-short">a c. di e trad. da</term>
 
     <!-- LONG MONTH FORMS -->
-    <term name="month-01">gennaio</term>
-    <term name="month-02">febbraio</term>
-    <term name="month-03">marzo</term>
-    <term name="month-04">aprile</term>
-    <term name="month-05">maggio</term>
-    <term name="month-06">giugno</term>
-    <term name="month-07">luglio</term>
-    <term name="month-08">agosto</term>
-    <term name="month-09">settembre</term>
-    <term name="month-10">ottobre</term>
-    <term name="month-11">novembre</term>
-    <term name="month-12">dicembre</term>
+    <term name="month-01" gender="masculine">gennaio</term>
+    <term name="month-02" gender="masculine">febbraio</term>
+    <term name="month-03" gender="masculine">marzo</term>
+    <term name="month-04" gender="masculine">aprile</term>
+    <term name="month-05" gender="masculine">maggio</term>
+    <term name="month-06" gender="masculine">giugno</term>
+    <term name="month-07" gender="masculine">luglio</term>
+    <term name="month-08" gender="masculine">agosto</term>
+    <term name="month-09" gender="masculine">settembre</term>
+    <term name="month-10" gender="masculine">ottobre</term>
+    <term name="month-11" gender="masculine">novembre</term>
+    <term name="month-12" gender="masculine">dicembre</term>
 
     <!-- SHORT MONTH FORMS -->
     <term name="month-01" form="short">gen.</term>

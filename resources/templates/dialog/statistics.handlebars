@@ -1,29 +1,205 @@
-<div class="dialog">
+<div class="dialog" role="dialog">
   <h1>{{i18n "dialog.statistics.title"}}</h1>
   <p>{{i18n "dialog.statistics.intro"}}</p>
-  <div style="text-align: center;">
-    <span id="prev-sheet">
-      <clr-icon shape="caret left"></clr-icon>
-    </span>
-    <select id="data-mode">
-      <option value="week">{{i18n "dialog.statistics.week"}}</option>
-      <option value="month">{{i18n "dialog.statistics.month"}}</option>
-      <option value="year">{{i18n "dialog.statistics.year"}}</option>
-    </select>
-    <span id="next-sheet">
-      <clr-icon shape="caret right"></clr-icon>
-    </span>
-    <br>
-    <progress id="current-sheet-info" value="0" max="0"></progress>
+
+  {{!-- Create two tabs --}}
+  <div class="modal-tab-container">
+    <div class="tab-list" role="tablist"
+        aria-label="{{i18n "dialog.preferences.title"}}">
+        <button class="tab-list-tab" role="tab" aria-selected="false"
+          aria-controls="statistics-writing" id="statistics-writing-control">
+          Writing Statistics
+        </button>
+        <button class="tab-list-tab" role="tab" aria-selected="false"
+          aria-controls="statistics-fsal" id="statistics-fsal-control">
+          FSAL Statistics
+        </button>
+      </div>
+
+      <div id="statistics-writing" role="tabpanel"
+        aria-labelledby="statistics-writing-control">
+        <div style="text-align: center;">
+          <span id="prev-sheet">
+            <clr-icon shape="caret left"></clr-icon>
+          </span>
+          <select id="data-mode">
+            <option value="week">{{i18n "dialog.statistics.week"}}</option>
+            <option value="month">{{i18n "dialog.statistics.month"}}</option>
+            <option value="year">{{i18n "dialog.statistics.year"}}</option>
+          </select>
+          <span id="next-sheet">
+            <clr-icon shape="caret right"></clr-icon>
+          </span>
+          <br>
+          <progress id="current-sheet-info" value="0" max="0"></progress>
+        </div>
+        <canvas id="canvas"></canvas>
+        <div class="cb-group">
+          <label class="cb-toggle">
+            <input type="checkbox" value="yes" id="data-compare">
+            <div class="toggle"></div>
+          </label>
+          <label for="data-compare">{{i18n "dialog.statistics.compare"}}</label>
+          <p><small>{{ days }} days logged since {{ firstDay }}.</small></p>
+        </div>
+      </div>
+
+      <div id="statistics-fsal" role="tabpanel"
+        aria-labelledby="statistics-fsal-control">
+        {{!-- fsalStatistics --}}
+        {{!--
+        We want to draw two box-plots, one for characters and one for words:
+
+        |         |----------|==========|======|---------|         |
+        Minimum   Lower 99%  Lower 95%  Mean  Upper 95%  Upper 99% Maximum
+
+        We're gonna use SVG for that shit. Because we can.
+        --}}
+
+        {{!--
+        TODO: We need to differentiate between the words- and chars setting
+        and show the corresponding graph and NOT just the word-graph as we do here!
+        --}}
+        {{!--
+        TODO: Apply better styling!
+        --}}
+        <h3>Word and file frequency</h3>
+        <p>
+          In below's graphic, you can see certain measurements that have been
+          taken across all your files in what is known as a "box-plot." The
+          three vertical lines indicate the <strong>smallest file ({{ fsalStatistics.minWords}} words)</strong>,
+          the <strong>average file size ({{ fsalStatistics.meanWords }} words)</strong>, and the
+          <strong>largest file ({{ fsalStatistics.maxWords}} words)</strong>. The lean rectangle
+          indicates the so-called <strong>95 percent interval</strong>, and the
+          slightly higher rectangle indicates the <strong>68 percent interval</strong>.
+          This means that 68 percent of your files contain between
+          <strong>{{ fsalStatistics.words68PercentLower}} and {{ fsalStatistics.words68PercentUpper }} words</strong>,
+          and 95 percent of your files contain between <strong>{{ fsalStatistics.words95PercentLower}} and
+          {{ fsalStatistics.words95PercentUpper }} words</strong>.
+        </p>
+        <p>
+          If your mean and both intervals are cramped to the left side of the
+          graphic, this means that you have a few extraordinarily large files.
+          If your mean is close to the center of the graphic and the intervals
+          arrange neatly around it, this indicates that the sizes of your files
+          are balanced and resemble a bell curve.
+        </p>
+        {{!--
+        NOTE: We are using a small hack to keep the aspect ratio. If you use a
+        padding-top on a relatively positioned container with width 100 %, any
+        absolutely positioned child that is supposed to fill the whole container
+        will be resized relatively. padding-top in the parent container
+        corresponds to the wanted aspect ratio (e.g. 16:9 --> about 56 %)
+        --}}
+        <div
+          id="box-plot-fsal-stats-words"
+          style="position: relative; width: 100%; padding-top: 15%"
+        >
+          {{!--
+          This SVG has an aspect ratio of around 8:1. By setting preserveAspectRatio
+          to xMidYMid, we ensure the graphic will be centered (regardless of the viewBox).
+           --}}
+          <svg
+            style="background-color: #333333; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"
+            viewBox="0 0 {{ boxPlotWords.width }} {{ boxPlotWords.height}}"
+            preserveAspectRatio="xMidYMid"
+          >
+            <style>
+              .interactive {
+                opacity: 0.6;
+                transition: opacity 0.5s ease;
+              }
+              .interactive:hover { opacity: 1.0; }
+
+              .hover-text text {
+                opacity: 0.0;
+                transition: opacity 0.5s ease;
+              }
+              .hover-text:hover text { opacity: 1.0; }
+
+              .cyan { fill: #00ffff; }
+              .blue { fill: #136df5; }
+              .navy { fill: #0a1dca; }
+              .magenta { fill: #ff00ff; }
+            </style>
+            {{!-- We have a viewbox from zero to maximum, so we can calculate everything --}}
+            {{!-- Before everything, mark the full range that we have --}}
+            <rect x="0" y="43" width="100%" height="4" class="magenta"/>
+
+            {{!-- First, the bigger box, includes the 95% interval --}}
+            <g class="interactive hover-text">
+              <rect
+                class="navy"
+                x="{{ boxPlotWords.interval95Start }}"
+                y="25"
+                width="{{ boxPlotWords.interval95End }}"
+                height="40"
+              />
+              {{!-- Interval bracket --}}
+              <path d="M{{ boxPlotWords.interval95Start }} 100 l0 40 l{{ boxPlotWords.interval95End }} 0 l0 -40" stroke-width="5" stroke="white" fill="none" />
+              <text x="50%" y="180" fill="white" stroke="white" font-size="30px">95% Interval: {{ fsalStatistics.words95PercentLower}} – {{ fsalStatistics.words95PercentUpper }}</text>
+            </g>
+            {{!-- Second, the smaller box, includes the 68% interval --}}
+            <g class="interactive hover-text">
+              <rect
+                class="blue"
+                x="{{ boxPlotWords.interval68Start }}"
+                y="15"
+                width="{{ boxPlotWords.interval68End }}"
+                height="60"
+              />
+              {{!-- Interval bracket --}}
+              <path d="M{{ boxPlotWords.interval68Start }} 100 l0 20 l{{ boxPlotWords.interval68End }} 0 l0 -20" stroke-width="5" stroke="white" fill="none" />
+              <text x="50%" y="180" fill="white" stroke="white" font-size="30px">68% Interval: {{ fsalStatistics.words68PercentLower}} – {{ fsalStatistics.words68PercentUpper }}</text>
+            </g>
+
+            {{!-- Third, the other values: mean, min, and max --}}
+            <g class="interactive hover-text">
+              {{!-- minWords --}}
+              <rect class="interactive cyan" x="-0.5%" y="5" width="1%" height="80" />
+              <text x="50%" y="180" fill="white" stroke="white" font-size="30px">Minimum: {{ fsalStatistics.minWords }}</text>
+            </g>
+            <g class="interactive hover-text">
+              {{!-- meanWords --}}
+              <rect class="interactive cyan" x="{{ boxPlotWords.mean }}" y="5" width="1%" height="80" />
+              <text x="50%" y="180" fill="white" stroke="white" font-size="30px">Average: {{ fsalStatistics.meanWords }}</text>
+            </g>
+            <g class="interactive hover-text">
+              {{!-- maxWords --}}
+              <rect class="interactive cyan" x="99.5%" y="5" width="1%" height="80" />
+              <text x="50%" y="180" fill="white" stroke="white" font-size="30px">Maximum: {{ fsalStatistics.maxWords }}</text>
+            </g>
+          </svg>
+        </div>
+        <div class="box-container">
+          <div class="box-left">
+            Number of Markdown files: <strong>{{ fsalStatistics.mdFileCount }}</strong><br>
+            Number of Code files: <strong>{{ fsalStatistics.codeFileCount }}</strong><br>
+            Number of directories: <strong>{{ fsalStatistics.dirCount }}</strong><br>
+            <br>
+            Sum of characters in all files: <strong>{{ fsalStatistics.sumChars }}</strong><br>
+            Sum of words in all files: <strong>{{ fsalStatistics.sumWords }}</strong><br>
+            Standard deviation: <strong>{{ fsalStatistics.sdChars }} characters / {{ fsalStatistics.sdWords }} words</strong><br>
+            <br>
+            Your smallest file: <strong>{{ fsalStatistics.minChars }} characters / {{ fsalStatistics.minWords }} words</strong><br>
+            Your largest file: <strong>{{ fsalStatistics.maxChars }} characters / {{ fsalStatistics.maxWords}} words</strong><br>
+            The average file: <strong>{{ fsalStatistics.meanChars }} characters / {{ fsalStatistics.meanWords }} words</strong><br>
+          </div>
+          <div class="box-right">
+            Lower bound of 68% interval (chars): <strong>{{ fsalStatistics.chars68PercentLower }}</strong><br>
+            Upper bound of 68% interval (chars): <strong>{{ fsalStatistics.chars68PercentUpper }}</strong><br>
+            Lower bound of 95% interval (chars): <strong>{{ fsalStatistics.chars95PercentLower }}</strong><br>
+            Upper bound of 95% interval (chars): <strong>{{ fsalStatistics.chars95PercentUpper }}</strong><br>
+            <br>
+            Lower bound of 68% interval (words): <strong>{{ fsalStatistics.words68PercentLower }}</strong><br>
+            Upper bound of 68% interval (words): <strong>{{ fsalStatistics.words68PercentUpper }}</strong><br>
+            Lower bound of 95% interval (words): <strong>{{ fsalStatistics.words95PercentLower }}</strong><br>
+            Upper bound of 95% interval (words): <strong>{{ fsalStatistics.words95PercentUpper }}</strong>
+          </div>
+        </div>
+      </div>
   </div>
-  <canvas id="canvas"></canvas>
-  <div class="cb-group">
-    <label class="cb-toggle">
-      <input type="checkbox" value="yes" id="data-compare">
-      <div class="toggle"></div>
-    </label>
-    <label for="data-compare">{{i18n "dialog.statistics.compare"}}</label>
-    <p><small>{{ days }} days logged since {{ firstDay }}.</small></p>
+  <div class="prefs-submit-group">
+    <button id="abort">{{i18n "dialog.button.close"}}</button>
   </div>
-  <button id="abort">{{i18n "dialog.button.close"}}</button>
 </div>

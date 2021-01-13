@@ -17,7 +17,7 @@
 const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
 const { ipcRenderer } = require('electron')
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
 const generateId = require('../../common/util/generate-id')
 const renderTemplate = require('../util/render-template')
 const serializeFormData = require('../../common/util/serialize-form-data')
@@ -44,8 +44,11 @@ class PreferencesDialog extends ZettlrDialog {
     // The template expects a simple string
     data.attachmentExtensions = data.attachmentExtensions.join(', ')
 
-    // Determine the ability of the OS to switch to dark mode
-    data.hasOSDarkMode = [ 'darwin', 'win32' ].includes(process.platform)
+    if (process.env.PANDOC_PATH !== undefined) {
+      data.PANDOC_PATH = process.env.PANDOC_PATH
+    } else {
+      data.PANDOC_PATH = false
+    }
 
     data.languages = [] // Initialise
     // Make sure the languages are unique and
@@ -166,16 +169,6 @@ class PreferencesDialog extends ZettlrDialog {
     })
     // END searchfield functions.
 
-    // Remove the list items on click
-    $('.user-dict-item').on('click', (e) => {
-      let elem = $(e.target)
-      elem.animate({
-        'height': '0px'
-      }, 500, function () {
-        $(this).detach()
-      })
-    })
-
     // Begin: functions for the zkn regular expression fields
     const zknFreeIdElement = document.getElementById('pref-zkn-free-id')
     $('#reset-id-regex').on('click', (e) => {
@@ -194,7 +187,7 @@ class PreferencesDialog extends ZettlrDialog {
 
     // Reset the pandoc command
     $('#reset-pandoc-command').on('click', (e) => {
-      document.getElementById('pandocCommand').value = 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"'
+      document.getElementById('pandocCommand').value = 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $bibliography$ $cslstyle$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"'
     })
 
     const reportTestResult = (resultTranslationKey) => {
@@ -289,16 +282,13 @@ class PreferencesDialog extends ZettlrDialog {
     let cfg = {}
 
     // Standard preferences
-    cfg['darkTheme'] = (data.find(elem => elem.name === 'darkTheme') !== undefined)
+    cfg['darkMode'] = (data.find(elem => elem.name === 'darkMode') !== undefined)
     cfg['fileMeta'] = (data.find(elem => elem.name === 'fileMeta') !== undefined)
     cfg['hideDirs'] = (data.find(elem => elem.name === 'hideDirs') !== undefined)
     cfg['alwaysReloadFiles'] = (data.find(elem => elem.name === 'alwaysReloadFiles') !== undefined)
     cfg['muteLines'] = (data.find(elem => elem.name === 'muteLines') !== undefined)
-    cfg['export.stripIDs'] = (data.find(elem => elem.name === 'export.stripIDs') !== undefined)
-    cfg['export.stripTags'] = (data.find(elem => elem.name === 'export.stripTags') !== undefined)
     cfg['debug'] = (data.find(elem => elem.name === 'debug') !== undefined)
     cfg['checkForBeta'] = (data.find(elem => elem.name === 'checkForBeta') !== undefined)
-    cfg['enableRMarkdown'] = (data.find(elem => elem.name === 'enableRMarkdown') !== undefined)
     cfg['newFileDontPrompt'] = (data.find(elem => elem.name === 'newFileDontPrompt') !== undefined)
 
     // Display checkboxes
@@ -311,15 +301,26 @@ class PreferencesDialog extends ZettlrDialog {
     cfg['display.renderHTags'] = (data.find(elem => elem.name === 'display.renderHTags') !== undefined)
     cfg['display.useFirstHeadings'] = (data.find(elem => elem.name === 'display.useFirstHeadings') !== undefined)
 
+    cfg['editor.autocompleteAcceptSpace'] = (data.find(elem => elem.name === 'editor.autocompleteAcceptSpace') !== undefined)
     cfg['editor.autoCloseBrackets'] = (data.find(elem => elem.name === 'editor.autoCloseBrackets') !== undefined)
     cfg['editor.homeEndBehaviour'] = (data.find(elem => elem.name === 'editor.homeEndBehaviour') !== undefined)
     cfg['editor.enableTableHelper'] = (data.find(elem => elem.name === 'editor.enableTableHelper') !== undefined)
     cfg['editor.countChars'] = (data.find(elem => elem.name === 'editor.countChars') !== undefined)
     cfg['editor.autoCorrect.active'] = (data.find(elem => elem.name === 'editor.autoCorrect.active') !== undefined)
     cfg['editor.rtlMoveVisually'] = (data.find(elem => elem.name === 'editor.rtlMoveVisually') !== undefined)
+
+    cfg['export.stripIDs'] = (data.find(elem => elem.name === 'export.stripIDs') !== undefined)
+    cfg['export.stripTags'] = (data.find(elem => elem.name === 'export.stripTags') !== undefined)
+    cfg['export.useBundledPandoc'] = (data.find(elem => elem.name === 'export.useBundledPandoc') !== undefined)
+
+    cfg['window.nativeAppearance'] = (data.find(elem => elem.name === 'window.nativeAppearance') !== undefined)
+
     cfg['zkn.autoCreateLinkedFiles'] = (data.find(elem => elem.name === 'zkn.autoCreateLinkedFiles') !== undefined)
+    cfg['zkn.autoSearch'] = (data.find(elem => elem.name === 'zkn.autoSearch') !== undefined)
 
     cfg['watchdog.activatePolling'] = (data.find(elem => elem.name === 'watchdog.activatePolling') !== undefined)
+
+    cfg['system.deleteOnFail'] = (data.find(elem => elem.name === 'system.deleteOnFail') !== undefined)
 
     // Extract selected dictionaries
     cfg['selectedDicts'] = data.filter(elem => elem.name === 'selectedDicts').map(elem => elem.value)
@@ -347,6 +348,7 @@ class PreferencesDialog extends ZettlrDialog {
     }
 
     // Copy over all other field values from the result set.
+    // TODO: This means that more data is being transmitted as necessary.
     for (let r of data) {
       // Only non-missing to not overwrite the checkboxes that ARE checked with a "yes"
       if (!cfg.hasOwnProperty(r.name)) {
@@ -390,7 +392,7 @@ class PreferencesDialog extends ZettlrDialog {
     }
 
     // We're done. But before sending retrieve all remaining user dictionary words ...
-    let userDictionary = data.filter(elem => elem.name === 'userDictionary' && elem.value.length > 0).map(elem => elem.value)
+    let userDictionary = data.filter(elem => elem.name === 'userDictionary[]').map(elem => elem.value)
     // ... and send them to main separately
     global.ipc.send('update-user-dictionary', userDictionary)
 

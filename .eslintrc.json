@@ -10,7 +10,7 @@
     ],
     "extends": [
         "standard-with-typescript",
-        "plugin:vue/vue3-recommended"
+        "plugin:vue/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -73,6 +73,15 @@
           },
           "svg": "any",
           "math": "any"
+        }],
+        // Allow up to three attributes per line so that the contributor can
+        // decide if the attributes are too long for the 80 character column
+        "vue/max-attributes-per-line": [ "error", {
+          "singleline": 3,
+          "multiline": {
+            "max": 3,
+            "allowFirstLine": true
+          }
         }],
 
         // Disallow jquery

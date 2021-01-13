@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -46,25 +45,31 @@ class PDFPreferences extends ZettlrDialog {
     })
 
     // These scripts only are used to update the preview paragraph
-    $('#lineheight').change((e) => {
-      $('p.pdf-preview').css('line-height', e.target.value + '%')
+    const lineheight = document.getElementById('lineheight')
+    const fontsize = document.getElementById('fontsize')
+    const mainfont = document.getElementById('mainfont')
+    const sansfont = document.getElementById('sansfont')
+    const para = document.querySelector('p.pdf-preview')
+    const head = document.querySelector('h1.pdf-preview')
+    lineheight.addEventListener('change', (e) => {
+      para.style.lineHeight = lineheight.value + '%'
     })
-    $('#fontsize').change((e) => {
+    fontsize.addEventListener('change', (e) => {
       // 1pt is approx. 1.333333 px
-      $('p.pdf-preview').css('font-size', (e.target.value * 1.3) + 'px')
+      para.style.fontsize = (parseInt(fontsize.value, 10) * 1.3) + 'px'
     })
-    $('#mainfont').change((e) => {
-      $('p.pdf-preview').css('font-family', e.target.value)
+    mainfont.addEventListener('change', (e) => {
+      para.style.fontFamily = mainfont.value
     })
-    $('#sansfont').change((e) => {
-      $('h1.pdf-preview').css('font-family', e.target.value)
+    sansfont.addEventListener('change', (e) => {
+      head.style.fontFamily = sansfont.value
     })
 
     // Initial changing of CSS
-    $('p.pdf-preview').css('line-height', document.getElementById('lineheight').value + '%')
-    $('p.pdf-preview').css('font-size', (document.getElementById('fontsize').value * 1.3) + 'px')
-    $('p.pdf-preview').css('font-family', document.getElementById('mainfont').value)
-    $('h1.pdf-preview').css('font-family', document.getElementById('sansfont').value)
+    para.style.lineHeight = lineheight.value + '%'
+    para.style.fontSize = (parseInt(fontsize.value, 10) * 1.3) + 'px'
+    para.style.fontFamily = mainfont.value
+    head.style.fontFamily = sansfont.value
   }
 
   proceed (data) {

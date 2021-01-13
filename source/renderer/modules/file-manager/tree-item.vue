@@ -16,10 +16,6 @@
   <div
     class="container"
     v-bind:data-hash="obj.hash"
-    v-bind:draggable="!isRoot"
-    v-on:dragstart.stop="beginDragging"
-    v-on:dragenter.stop="enterDragging"
-    v-on:dragleave.stop="leaveDragging"
   >
     <div
       ref="listElement"
@@ -27,69 +23,85 @@
       v-bind:data-hash="obj.hash"
       v-bind:data-id="obj.id || ''"
       v-bind:style="pad"
+      v-bind:draggable="!isRoot"
       v-on:click="requestSelection"
-      v-on:drop="handleDrop"
       v-on:dragover="acceptDrags"
+      v-on:dragstart="beginDragging"
+      v-on:drag="onDragHandler"
+      v-on:dragenter="enterDragging"
+      v-on:dragleave="leaveDragging"
+      v-on:drop="handleDrop"
       v-on:mouseenter="hover=true"
       v-on:mouseleave="hover=false"
+      v-on:contextmenu="handleContextMenu"
     >
       <p
         class="filename"
         v-bind:data-hash="obj.hash"
       >
-      <!-- First: Primary icon (either directory icon, file icon, or project icon) -->
-      <span class="item-icon">
-        <!-- Is this a project? -->
-        <clr-icon
-          v-if="obj.project && hasChildren"
-          shape="blocks-group"
-          class="is-solid"
-        />
-        <!-- Indicate if this is a dead directory -->
-        <clr-icon
-          v-else-if="obj.type === 'dead-directory' && hasChildren"
-          shape="disconnect"
-          class="is-solid"
-        />
-        <!-- Display a custom icon, if applicable -->
-        <clr-icon
-          v-else-if="isDirectory && hasChildren"
-          v-show="obj.icon"
-          v-bind:shape="obj.icon"
-        />
-        <!-- Display a file icon -->
-        <clr-icon v-else-if="obj.type === 'file' && hasChildren" shape="file"></clr-icon>
-      </span> <!-- End primary (item) icon -->
-      <!-- Second: Secondary icon (the collapse/expand icon) -->
-      <span class="toggle-icon">
-        <!-- Display a toggle to collapse/expand the file list -->
-        <!-- Only display in this position if the item has a primary icon -->
-        <clr-icon
-          v-if="hasChildren"
-          v-bind:shape="indicatorShape"
-          v-on:click.stop="toggleCollapse"
-        />
-        <!-- Is this a project? -->
-        <clr-icon
-          v-else-if="obj.project && !hasChildren"
-          shape="blocks-group"
-          class="is-solid"
-        />
-        <!-- Indicate if this is a dead directory -->
-        <clr-icon
-          v-else-if="obj.type === 'dead-directory' && !hasChildren"
-          shape="disconnect"
-          class="is-solid"
-        />
-        <!-- Display a custom icon, if applicable -->
-        <clr-icon
-          v-else-if="isDirectory && !hasChildren"
-          v-show="obj.icon"
-          v-bind:shape="obj.icon"
-        />
-        <!-- Display a file icon -->
-        <clr-icon v-else-if="obj.type === 'file' && !hasChildren" shape="file"></clr-icon>
-      </span>
+        <!-- First: Primary icon (either directory icon, file icon, or project icon) -->
+        <span
+          class="item-icon"
+          role="presentation"
+        >
+          <!-- Is this a project? -->
+          <clr-icon
+            v-if="obj.project && hasChildren"
+            shape="blocks-group"
+            class="is-solid"
+          />
+          <!-- Display a custom icon, if applicable -->
+          <clr-icon
+            v-else-if="isDirectory && hasChildren"
+            v-show="obj.icon"
+            v-bind:shape="obj.icon"
+          />
+          <!-- Display a file icon -->
+          <clr-icon
+            v-else-if="obj.type === 'file' && hasChildren"
+            shape="file"
+          />
+        </span> <!-- End primary (item) icon -->
+        <!-- Second: Secondary icon (the collapse/expand icon) -->
+        <span
+          class="toggle-icon"
+          role="presentation"
+        >
+          <!-- Display a toggle to collapse/expand the file list -->
+          <!-- Only display in this position if the item has a primary icon -->
+          <clr-icon
+            v-if="hasChildren"
+            v-bind:shape="indicatorShape"
+            v-on:click.stop="toggleCollapse"
+          />
+          <!-- Is this a project? -->
+          <clr-icon
+            v-else-if="obj.project && !hasChildren"
+            aria-label="Project"
+            shape="blocks-group"
+            class="is-solid"
+          />
+          <!-- Indicate if this is a dead directory -->
+          <clr-icon
+            v-else-if="obj.dirNotFoundFlag === true"
+            aria-label="Directory not found"
+            shape="disconnect"
+            class="is-solid"
+          />
+          <!-- Display a custom icon, if applicable -->
+          <clr-icon
+            v-else-if="isDirectory && !hasChildren"
+            v-show="obj.icon"
+            v-bind:shape="obj.icon"
+            role="presentation"
+          />
+          <!-- Display a file icon -->
+          <clr-icon
+            v-else-if="obj.type === 'file' && !hasChildren"
+            shape="file"
+            role="presentation"
+          />
+        </span>
         {{ obj.name }}
         <span
           v-if="hasDuplicateName"
@@ -131,31 +143,21 @@
 
 <script>
 // Tree View item component
-const findObject = require('../../../common/util/find-object.js')
-const { trans } = require('../../../common/lang/i18n')
-const Sorter = require('./sorter.vue').default
+import findObject from '../../../common/util/find-object.js'
+import { trans } from '../../../common/i18n'
+import Sorter from './sorter.vue'
+import fileContextMenu from './util/file-item-context.js'
+import dirContextMenu from './util/dir-item-context.js'
 
-module.exports = {
-  name: 'tree-item',
+export default {
+  name: 'TreeItem',
+  components: {
+    'Sorter': Sorter
+  },
   props: [
     'obj', // The actual object
     'depth' // How deep is this item nested?
   ],
-  components: {
-    'Sorter': Sorter
-  },
-  watch: {
-    selectedFile: function (oldVal, newVal) {
-      // Open the tree on selectedFile change, if the
-      // selected file is contained in this dir somewhere
-      if (findObject(this.obj, 'hash', this.selectedFile, 'children')) this.collapsed = false
-    },
-    selectedDir: function (oldVal, newVal) {
-      // If a directory within this has been selected,
-      // open up, lads!
-      if (findObject(this.obj, 'hash', this.selectedDir, 'children')) this.collapsed = false
-    }
-  },
   data: () => {
     return {
       collapsed: true, // Initial: collapsed list (if there are children)
@@ -164,28 +166,42 @@ module.exports = {
   },
   computed: {
     /**
-     * Returns true if this component is a root
+     * Returns true if this item is a root item
      */
-    isRoot: function () { return this.$root === this.$parent },
+    isRoot: function () {
+      // Parent apparently can also be undefined BUG
+      return this.obj.parent == null
+    },
     /**
      * Returns true if this is a directory
      */
-    isDirectory: function () { return this.obj.type === 'directory' },
+    isDirectory: function () {
+      return this.obj.type === 'directory'
+    },
     /**
      * Shortcut methods to access the store
      */
-    selectedFile: function () { return this.$store.state.selectedFile },
-    selectedDir: function () { return this.$store.state.selectedDirectory },
+    selectedFile: function () {
+      return this.$store.state.selectedFile
+    },
+    selectedDir: function () {
+      return this.$store.state.selectedDirectory
+    },
     /**
      * Returns true if the file manager mode is set to "combined"
      */
-    combined: function () { return this.$store.state.fileManagerMode === 'combined' },
+    combined: function () {
+      return this.$store.state.fileManagerMode === 'combined'
+    },
     /**
      * Returns true if there are children that can be displayed
      */
     hasChildren: function () {
       // Return true if it's a directory, with at least one directory as children
-      if (!this.obj.hasOwnProperty('children')) return false
+      if (this.obj.type !== 'directory') {
+        return false
+      }
+
       return this.isDirectory && this.filteredChildren.length > 0
     },
     /**
@@ -201,38 +217,54 @@ module.exports = {
      */
     classList: function () {
       let list = 'list-item ' + this.obj.type
-      if ([ this.selectedFile, this.selectedDir ].includes(this.obj.hash)) list += ' selected'
-      if (this.obj.project) list += ' project'
+      if ([ this.selectedFile, this.selectedDir ].includes(this.obj.hash)) {
+        list += ' selected'
+      }
+
+      if (this.obj.project != null) {
+        list += ' project'
+      }
       // Determine if this is a root component
-      if (this.isRoot) list += ' root'
+      if (this.isRoot) {
+        list += ' root'
+      }
+
       return list
     },
-    /**
-     * Returns true, if this is actually a TeX-file
-     */
-    isTex: function () { return this.obj.ext === '.tex' },
     /**
      * Returns a list of children that can be displayed inside the tree view
      */
     filteredChildren: function () {
-      return this.combined ? this.obj.children : this.obj.children.filter(e => e.type !== 'file')
+      if (this.combined) {
+        return this.obj.children
+      } else {
+        return this.obj.children.filter(e => e.type === 'directory')
+      }
     },
     /**
      * Returns the correct indicator shape
      */
-    indicatorShape: function () { return this.collapsed ? 'caret right' : 'caret down' },
+    indicatorShape: function () {
+      return this.collapsed ? 'caret right' : 'caret down'
+    },
     /**
      * Returns the amount of padding that should be applied, based on the depth
      */
-    pad: function () { return `padding-left: ${this.depth}em` },
-    searchResultMessagePadding: function () { return `padding-left: ${this.depth + 1}em` },
+    pad: function () {
+      return `padding-left: ${this.depth}em`
+    },
+    searchResultMessagePadding: function () {
+      return `padding-left: ${this.depth + 1}em`
+    },
     /**
      * Returns true if this is a root file and has the same name as another root file
      */
     hasDuplicateName: function () {
       if (this.isRoot) {
         let elem = this.$store.state.items.filter(elem => elem.name === this.obj.name)
-        if (elem.length > 1) return true
+        if (elem.length > 1) {
+          return true
+        }
       }
       return false
     },
@@ -242,31 +274,69 @@ module.exports = {
      */
     hasSearchResults: function () {
       // Should return true, if this directory has search results in combined mode
-      if (!this.combined) return false
-      if (this.$store.state.searchResults.length < 1) return false
-      if (this.obj.hash !== this.selectedDir) return false
+      if (!this.combined) {
+        return false
+      }
+      if (this.$store.state.searchResults.length < 1) {
+        return false
+      }
+      if (this.obj.hash !== this.selectedDir) {
+        return false
+      }
       return true
     },
-    displayResultsMessage: function () { return trans('gui.display_search_results') }
+    displayResultsMessage: function () {
+      return trans('gui.display_search_results')
+    }
   },
-  /**
-   * Callable methods
-   */
+  watch: {
+    selectedFile: function (oldVal, newVal) {
+      // Open the tree on selectedFile change, if the
+      // selected file is contained in this dir somewhere
+      if (findObject(this.obj, 'hash', this.selectedFile, 'children')) {
+        this.collapsed = false
+      }
+    },
+    selectedDir: function (oldVal, newVal) {
+      // If a directory within this has been selected,
+      // open up, lads!
+      if (findObject(this.obj, 'hash', this.selectedDir, 'children')) {
+        this.collapsed = false
+      }
+    }
+  },
   methods: {
+    handleContextMenu: function (event) {
+      if (this.isDirectory) {
+        dirContextMenu(event, this.obj, this.$el)
+      } else {
+        fileContextMenu(event, this.obj, this.$el)
+      }
+    },
     /**
      * On click, this will call the selection function.
      */
     requestSelection: function (evt) {
+      // Determine if we have a middle (wheel) click
+      const middleClick = (event.type === 'auxclick' && event.button === 1)
+      const ctrl = event.ctrlKey === true && process.platform !== 'darwin'
+      const cmd = event.metaKey === true && process.platform === 'darwin'
+      const alt = event.altkey === true
+
       // Dead directories can't be opened, so stop the propagation to
       // the file manager and don't do a thing.
-      if (this.obj.type === 'dead-directory') return evt.stopPropagation()
+      if (this.obj.dirNotFoundFlag === true) {
+        return evt.stopPropagation()
+      }
 
-      if (this.obj.type === 'file' && event.altKey) {
+      if (this.obj.type === 'file' && alt) {
         // QuickLook the file
         global.ipc.send('open-quicklook', this.obj.hash)
       } else if (this.obj.type === 'file') {
         // Request the clicked file
-        global.editor.announceTransientFile(this.obj.hash)
+        if (!middleClick && !ctrl && !cmd) {
+          global.editor.announceTransientFile(this.obj.hash)
+        }
         global.ipc.send('file-get', this.obj.hash)
       } else {
         // Select this directory
@@ -277,7 +347,9 @@ module.exports = {
     /**
      * On a click on the indicator, this'll toggle the collapsed state
      */
-    toggleCollapse: function (event) { this.collapsed = !this.collapsed },
+    toggleCollapse: function (event) {
+      this.collapsed = !this.collapsed
+    },
     /**
      * Request to re-sort this directory
      */
@@ -289,23 +361,55 @@ module.exports = {
      * @param {DragEvent} event The drag event
      */
     beginDragging: function (event) {
-      event.dataTransfer.effectAllowed = 'move'
-      event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
-        'hash': this.obj.hash,
-        'type': this.obj.type // Can be file or directory
-      }))
+      event.dataTransfer.dropEffect = 'move'
+      if (this.obj.type === 'file') {
+        event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
+          hash: this.obj.hash,
+          type: this.obj.type,
+          path: this.obj.path,
+          id: this.obj.id
+        }))
+      } else {
+        event.dataTransfer.setData('text/x-zettlr-dir', JSON.stringify({
+          hash: this.obj.hash,
+          type: this.obj.type
+        }))
+      }
+    },
+    onDragHandler: function (event) {
+      if (this.isDirectory) {
+        return // Directories cannot be dragged out of the app
+      }
+
+      // If the drag x/y-coordinates are about to leave the window, we
+      // have to continue the drag in the main process (as it's being
+      // dragged out of the window)
+      const x = Number(event.x)
+      const y = Number(event.y)
+      const w = window.innerWidth
+      const h = window.innerHeight
+
+      if (x === 0 || y === 0 || x === w || y === h) {
+        event.stopPropagation()
+        event.preventDefault()
+        global.ipc.send('file-drag-start', { hash: this.obj.hash })
+      }
     },
     /**
      * Called when a drag operation enters this item; adds a highlight class
      */
     enterDragging: function (event) {
-      if (this.isDirectory) this.$refs.listElement.classList.add('highlight')
+      if (this.isDirectory) {
+        this.$refs.listElement.classList.add('highlight')
+      }
     },
     /**
      * The oppossite of enterDragging; removes the highlight class
      */
     leaveDragging: function (event) {
-      if (this.isDirectory) this.$refs.listElement.classList.remove('highlight')
+      if (this.isDirectory) {
+        this.$refs.listElement.classList.remove('highlight')
+      }
     },
     /**
      * Called whenever something is dropped onto the element.
@@ -320,18 +424,30 @@ module.exports = {
       // NOT a file, because these need to be handled by the
       // app itself.
       let data
+
       try {
-        data = JSON.parse(event.dataTransfer.getData('text/x-zettlr-file'))
+        let eventData = event.dataTransfer.getData('text/x-zettlr-file')
+        if (eventData === '') {
+          // If the eventData is empty, this suggests there was no corresponding
+          // data available, so it might be a directory.
+          eventData = event.dataTransfer.getData('text/x-zettlr-dir')
+        }
+        data = JSON.parse(eventData) // Throws error if eventData === ''
       } catch (e) {
         // Error in JSON stringifying (either b/c malformed or no text)
         return
       }
 
       // The user dropped the file onto itself
-      if (data.hash === this.obj.hash) return
+      if (data.hash === this.obj.hash) {
+        return
+      }
 
       // Finally, request the move!
-      global.ipc.send('request-move', { 'from': parseInt(data.hash), 'to': this.obj.hash })
+      global.ipc.send('request-move', {
+        from: parseInt(data.hash),
+        to: this.obj.hash
+      })
     },
     /**
      * Makes sure the browser doesn't do unexpected stuff when dragging, e.g., external files.

@@ -1,7 +1,7 @@
 const { shell } = require('electron')
 const makeValidUri = require('../../common/util/make-valid-uri')
 const hash = require('../../common/util/hash')
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
 const path = require('path')
 
 const VALID_FILETYPES = require('../../common/data.json').filetypes

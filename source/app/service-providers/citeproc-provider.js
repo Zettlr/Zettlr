@@ -23,9 +23,10 @@ const { ipcMain } = require('electron')
 const Citr = require('@zettlr/citr') // Parse the citations from the renderer
 const fs = require('fs')
 const path = require('path')
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
 const extractBibTexAttachments = require('../../common/util/extract-bibtex-attachments')
 const BibTexParser = require('astrocite-bibtex')
+const YAML = require('yaml')
 
 // Statuses the engine can be in
 const NOT_LOADED = 0
@@ -108,7 +109,7 @@ module.exports = class CiteprocProvider {
         event.returnValue = this.updateItems(message.content)
       } else if (message.type === 'make-bibliography') {
         // Make and send out a bibliography based on the state of the registry
-        event.sender.send('message', {
+        event.reply('message', {
           'command': 'citeproc-bibliography',
           'content': this.makeBibliography()
         })
@@ -122,13 +123,15 @@ module.exports = class CiteprocProvider {
       const { command, payload } = content
 
       if (command === 'get-citation') {
-        event.sender.webContents.send('citation-renderer', {
+        event.reply('citation-renderer', {
           'command': 'get-citation',
           'payload': {
             'originalCitation': payload.citation,
             'renderedCitation': this.getCitation(payload.citation)
           }
         })
+      } else if (command === 'get-citation-sync') {
+        event.returnValue = this.getCitation(payload.citation)
       }
     })
 
@@ -160,7 +163,7 @@ module.exports = class CiteprocProvider {
         // to complete writing the file.
         setTimeout(() => { this.load() }, 2000)
         global.log.verbose('Reloading citation database ...')
-        global.ipc.notify(trans('gui.citeproc.reloading'))
+        global.notify.normal(trans('gui.citeproc.reloading'))
       })
     } else {
       // Watcher is already running, so simply exchange the path.
@@ -174,7 +177,7 @@ module.exports = class CiteprocProvider {
    */
   _onConfigUpdate () {
     if (global.config.get('export.cslLibrary') !== this._mainLibrary) {
-      global.ipc.notify(trans('gui.citeproc.reloading'))
+      global.notify.normal(trans('gui.citeproc.reloading'))
       this.load()
     }
   }
@@ -185,6 +188,13 @@ module.exports = class CiteprocProvider {
    */
   _read () {
     this._mainLibrary = global.config.get('export.cslLibrary')
+    if (this._mainLibrary.trim() === '') {
+      // There is no library to load.
+      this._status = NO_DB
+      global.log.info('[Citeproc Provider] There is no CSL library selected in the preferences. Nothing to do.')
+      return
+    }
+
     try {
       fs.readFile(this._mainLibrary, 'utf8', (err, data) => {
         if (err) {
@@ -210,12 +220,28 @@ module.exports = class CiteprocProvider {
    * @return {void}     Does not return.
    */
   _parse (cslData) {
+    const libraryType = path.extname(this._mainLibrary)
+
     try {
-      this._cslData = JSON.parse(cslData)
-    } catch (e) {
-      try {
-        // Didn't work, so let's try to parse it as BibTex data.
+      if (libraryType === '.json') {
+        global.log.info(`[Citeproc Provider] Parsing file ${this._mainLibrary} as CSL JSON ...`)
+        this._cslData = JSON.parse(cslData)
+      } else if ([ '.yaml', '.yml' ].includes(libraryType)) {
+        global.log.info(`[Citeproc Provider] Parsing file ${this._mainLibrary} as CSL YAML ...`)
+        const yamlData = YAML.parse(cslData)
+        if ('references' in yamlData) {
+          this._cslData = yamlData.references // CSL YAML is stored in references
+        } else if (Array.isArray(yamlData)) {
+          this._cslData = yamlData // It may be that it's simply an array of entries
+        } else {
+          global.log.error('[Citeproc Provider] The CSL YAML file did not contain valid contents. Aborting load.')
+          this._status = ERROR
+          return
+        }
+      } else if (libraryType === '.bib') {
+        global.log.info(`[Citeproc Provider] Parsing file ${this._mainLibrary} as BibTex ...`)
         this._cslData = BibTexParser.parse(cslData)
+
         // If we're here, we had a BibTex library --> extract the attachments
         try {
           let attachments = extractBibTexAttachments(cslData, path.dirname(this._mainLibrary))
@@ -223,14 +249,18 @@ module.exports = class CiteprocProvider {
         } catch (err) {
           global.log.error(`[Citeproc Provider] Could not extract BibTex attachments: ${err.message}`, err)
         }
-      } catch (e) {
-        global.log.error('[Citeproc Provider] Could not parse library file: ' + e.message, e)
-        // Nopey.
-        global.ipc.notify(trans('gui.citeproc.error_db'))
-        this._status = ERROR
-        return
       }
+    } catch (e) {
+      global.log.error('[Citeproc Provider] Could not parse library file: ' + e.message, e)
+      global.notify.error({
+        title: trans('gui.citeproc.error_db'),
+        message: e.message,
+        additionalInfo: e.message
+      }, true)
+      this._status = ERROR
+      return
     }
+
     // First we need to reorder the read data so that it can be passed to the
     // sys object
     for (let i = 0, ilen = this._cslData.length; i < ilen; i++) {
@@ -244,14 +274,7 @@ module.exports = class CiteprocProvider {
         this._ids[id] = true
       } catch (err) {
         global.log.warning(`[Citeproc Provider] Malformed CiteKey @${id}` + err.message)
-        if (global.application.isBooting()) {
-          // In case the application is still booting, cache the message and delay sending
-          // TODO: This is goddamned ugly.
-          setTimeout(() => { global.ipc.notify(err.message) }, 5000)
-        } else {
-          // Otherwise immediately dispatch
-          global.ipc.notify(err.message)
-        }
+        global.notify.normal(`Malformed CiteKey @${id}`) // TODO translate
       }
     }
 
@@ -295,6 +318,7 @@ module.exports = class CiteprocProvider {
    * @return {void} Does not return.
    */
   _initProcessor () {
+    global.log.info('[Citeproc Provider] Initiating processor ...')
     try {
       // Load the engine with the current application language. As this citing
       // is only for preview purposes, it should follow the language like the
@@ -316,14 +340,7 @@ module.exports = class CiteprocProvider {
           'additionalInfo': errors.map(elem => elem.key + ': ' + elem.error).join('\n')
         }
 
-        if (global.application.isBooting()) {
-          // In case the application is still booting, cache the message and delay sending
-          // TODO: This is goddamned ugly.
-          setTimeout(() => { global.ipc.notifyError(report) }, 5000)
-        } else {
-          // Otherwise immediately dispatch
-          global.ipc.notifyError(report)
-        }
+        global.notify.error(report, true)
       }
 
       this._loadIdHint()
@@ -355,6 +372,8 @@ module.exports = class CiteprocProvider {
 
     // Now the whole library is fully loaded. Let's send the citeproc-IDs to the
     // renderer.
+
+    // TODO: This needs to be a broadcast so that renderers can retrieve it themselves
     global.ipc.send('citeproc-ids', {
       'ids': JSON.parse(JSON.stringify(this._idHint)),
       'status': this._status

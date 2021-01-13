@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -18,7 +17,7 @@ const ZettlrDialog = require('./zettlr-dialog.js')
 const Chart = require('chart.js')
 const localiseNumber = require('../../common/util/localise-number')
 const formatDate = require('../../common/util/format-date')
-const { trans } = require('../../common/lang/i18n.js')
+const { trans } = require('../../common/i18n.js')
 const moment = require('moment')
 
 class StatsDialog extends ZettlrDialog {
@@ -42,9 +41,11 @@ class StatsDialog extends ZettlrDialog {
    * @return {Object}             The modified data object.
    */
   preInit (data = null) {
-    if (!data) throw new Error('No statistical data provided')
+    if (data == null) {
+      throw new Error('No statistical data provided')
+    }
 
-    this._rawData = JSON.parse(JSON.stringify(data)) // Save the raw word counts into this object
+    this._rawData = JSON.parse(JSON.stringify(data.wordCounts)) // Save the raw word counts into this object
     this._sanitiseData() // Fill in holes in the data.
     this._prepareData() // By default start with weeks
     data.days = Object.keys(this._rawData).length
@@ -52,6 +53,60 @@ class StatsDialog extends ZettlrDialog {
     date = new Date(date[0], date[1] - 1, date[2]) // Remember months need to be 0-based
     date = formatDate(date)
     data.firstDay = date
+
+    // Now calculate the FSAL graphic
+
+    // Approximately aspect ratio 8:1. This will be stretched and squeezed on
+    // non standard compliant window sizes, but alas. We assume Zettlr will
+    // -- most of the time -- be run in default maximized/full screen state on
+    // landscape displays.
+    const height = 200
+    const width = 1400
+
+    const zTransform = function (val) {
+      const percent = val / (data.fsalStatistics.maxWords - data.fsalStatistics.minWords)
+      return width * percent
+    }
+
+    const ninetyFiveStart = zTransform(data.fsalStatistics.words68PercentLower)
+    const ninetyFiveEnd = zTransform(data.fsalStatistics.words68PercentUpper)
+    const ninetyNineStart = zTransform(data.fsalStatistics.words95PercentLower)
+    const ninetyNineEnd = zTransform(data.fsalStatistics.words95PercentUpper)
+
+    // We need to calculate some sizes here for the FSAL statistics graphic to display properly
+    data.boxPlotWords = {
+      width: width,
+      height: height,
+      mean: zTransform(data.fsalStatistics.meanWords),
+      interval68Start: ninetyFiveStart,
+      interval68End: ninetyFiveEnd - ninetyFiveStart,
+      interval95Start: ninetyNineStart,
+      interval95End: ninetyNineEnd - ninetyNineStart
+    }
+
+    // After the graphic has been calculated, let's ensure those numbers are
+    // readable.
+    data.fsalStatistics.minWords = localiseNumber(data.fsalStatistics.minWords)
+    data.fsalStatistics.meanWords = localiseNumber(data.fsalStatistics.meanWords)
+    data.fsalStatistics.maxWords = localiseNumber(data.fsalStatistics.maxWords)
+    data.fsalStatistics.sumWords = localiseNumber(data.fsalStatistics.sumWords)
+    data.fsalStatistics.sdWords = localiseNumber(data.fsalStatistics.sdWords)
+
+    data.fsalStatistics.minChars = localiseNumber(data.fsalStatistics.minChars)
+    data.fsalStatistics.meanChars = localiseNumber(data.fsalStatistics.meanChars)
+    data.fsalStatistics.maxChars = localiseNumber(data.fsalStatistics.maxChars)
+    data.fsalStatistics.sumChars = localiseNumber(data.fsalStatistics.sumChars)
+    data.fsalStatistics.sdChars = localiseNumber(data.fsalStatistics.sdChars)
+
+    data.fsalStatistics.words68PercentLower = localiseNumber(data.fsalStatistics.words68PercentLower)
+    data.fsalStatistics.words68PercentUpper = localiseNumber(data.fsalStatistics.words68PercentUpper)
+    data.fsalStatistics.words95PercentLower = localiseNumber(data.fsalStatistics.words95PercentLower)
+    data.fsalStatistics.words95PercentUpper = localiseNumber(data.fsalStatistics.words95PercentUpper)
+
+    data.fsalStatistics.chars68PercentLower = localiseNumber(data.fsalStatistics.chars68PercentLower)
+    data.fsalStatistics.chars68PercentUpper = localiseNumber(data.fsalStatistics.chars68PercentUpper)
+    data.fsalStatistics.chars95PercentLower = localiseNumber(data.fsalStatistics.chars95PercentLower)
+    data.fsalStatistics.chars95PercentUpper = localiseNumber(data.fsalStatistics.chars95PercentUpper)
 
     return data
   }
@@ -138,7 +193,7 @@ class StatsDialog extends ZettlrDialog {
     this._updateChart()
 
     // Now we need to activate the previous/next buttons
-    $('#prev-sheet').click((e) => {
+    document.getElementById('prev-sheet').addEventListener('click', (e) => {
       if (this._currentSheet > 0) {
         this._currentSheet--
         this._updateChart()
@@ -146,7 +201,7 @@ class StatsDialog extends ZettlrDialog {
     })
 
     // Next button
-    $('#next-sheet').click((e) => {
+    document.getElementById('next-sheet').addEventListener('click', (e) => {
       if (this._currentSheet < this._backgroundData.length - 1) {
         this._currentSheet++
         this._updateChart()
@@ -162,7 +217,7 @@ class StatsDialog extends ZettlrDialog {
     })
 
     // If the user wants to compare with the previous time frame.
-    $('#data-compare').change((e) => {
+    document.getElementById('data-compare').addEventListener('change', (e) => {
       this._compare = !this._compare
       this._updateChart()
     })
@@ -285,10 +340,12 @@ class StatsDialog extends ZettlrDialog {
     }
 
     // Pre-set the progress bar
-    $('#current-sheet-info').attr('max', this._backgroundData.length - 1)
+    document.getElementById('current-sheet-info')
+      .setAttribute('max', this._backgroundData.length - 1)
 
     // Indicate the current sheet on the progress indicator
-    $('#current-sheet-info').attr('value', this._currentSheet)
+    document.getElementById('current-sheet-info')
+      .setAttribute('value', this._currentSheet)
 
     // Update the chart's title
     this._chart.options.title.text = (this._mode === 'year') ? trans('dialog.statistics.words_per_week') : trans('dialog.statistics.words_per_day')

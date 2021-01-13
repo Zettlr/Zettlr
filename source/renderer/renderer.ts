@@ -2,7 +2,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        main.js
+ * Contains:        renderer.ts
  * CVM-Role:        <none>
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -14,8 +14,7 @@
  * END HEADER
  */
 
-// Include the geometry style of the app (will be included in the html by webpack magic)
-import './../common/assets/less/main.less'
+import windowRegister from '../common/modules/window-register'
 
 import ZettlrRenderer from './zettlr-renderer'
 
@@ -25,6 +24,9 @@ declare global {
     renderer: any
   }
 }
+
+// First register the window itself (controls, the menu, etc.)
+windowRegister()
 
 // We need a global for our renderer element
 var renderer = new ZettlrRenderer()

@@ -1,4 +1,3 @@
-/* global $ */
 /**
 * @ignore
 * BEGIN HEADER
@@ -20,12 +19,12 @@ const moveSection = require('../common/util/move-section')
 const EditorTabs = require('./util/editor-tabs')
 const EditorSearch = require('./util/editor-search')
 
+const { ipcRenderer } = require('electron')
+
 const MarkdownEditor = require('./modules/markdown-editor')
 
 // Finally load CodeMirror itself
 const CodeMirror = require('codemirror')
-
-const MD_MODE = { name: 'multiplex' }
 
 const SAVE_TIMEOUT = 5000 // Save every 5 seconds
 
@@ -45,7 +44,7 @@ class ZettlrEditor {
     */
   constructor (parent) {
     this._renderer = parent
-    this._div = $('#editor')
+    this._div = document.getElementById('editor')
     this._openFiles = [] // Holds all open files in the editor
     this._currentHash = null // Needed for positions
     this._transientHashes = [] // An array of hashes that when opened should be opened transient
@@ -72,8 +71,9 @@ class ZettlrEditor {
     this._monospaceWidth = 0
 
     global.editor.announceTransientFile = (hash) => {
-      if (this._openFiles.find(e => e.fileObject.hash === hash)) return
-      this._transientHashes.push(hash)
+      if (this._openFiles.find(e => e.fileObject.hash === hash) === undefined) {
+        this._transientHashes.push(hash)
+      }
     }
 
     this._editor = new MarkdownEditor('cm-text')
@@ -140,30 +140,47 @@ class ZettlrEditor {
 
     // Listen to special click events on the MarkdownEditor
     this._editor.on('zettelkasten-link', (linkContents) => {
-      this._renderer.autoSearch(linkContents, true)
+      const autoSearch = Boolean(global.config.get('zkn.autoSearch'))
+
+      // Automatically open the file.
+      ipcRenderer.send('message', {
+        command: 'force-open',
+        content: linkContents
+      })
+
+      if (autoSearch) {
+        this._renderer.autoSearch(linkContents)
+      }
     })
 
     this._editor.on('zettelkasten-tag', (tag) => {
+      // Tags ONLY have a search attached to them, so we don't look up the
+      // autoSearch preference here.
       this._renderer.autoSearch(tag)
     })
 
+    // Listen for updates to the tag database ...
+    ipcRenderer.on('tags', (event) => {
+      ipcRenderer.invoke('tag-provider', {
+        command: 'get-tags-database'
+      })
+        .then(tags => {
+          this._editor.setCompletionDatabase('tags', tags)
+        })
+        .catch(e => console.error(e))
+    })
+
+    // ... also, request the first batch of tags right now
+    ipcRenderer.invoke('tag-provider', {
+      command: 'get-tags-database'
+    })
+      .then(tags => {
+        this._editor.setCompletionDatabase('tags', tags)
+      })
+      .catch(e => console.error(e))
+
     // Set up the helper classes with the CM instance
     this._searcher.setInstance(this._editor.codeMirror)
-
-    // TODO this._cm.on('mousedown', (cm, event) => {
-    //   // Ignore click events if they attempt to perform a special action
-    //   let target = event.target
-    //   let specialClasses = [ 'cma', 'cm-zkn-tag', 'cm-zkn-link' ]
-    //   let macMeta = process.platform === 'darwin' && event.metaKey
-    //   let otherCtrl = process.platform !== 'darwin' && event.ctrlKey
-    //   let isSpecial = false
-    //   for (let c of specialClasses) {
-    //     if (target.classList.contains(c)) isSpecial = true
-    //   }
-    //   let isFootnote = target.classList.contains('cm-link') && target.innerText.indexOf('^') === 0
-
-    //   if ((isSpecial || isFootnote) && (macMeta || otherCtrl)) event.codemirrorIgnore = true
-    // })
 
     // Finally create the annotateScrollbar object to be able to annotate the
     // scrollbar with search results.
@@ -224,7 +241,9 @@ class ZettlrEditor {
       // we won't be accessing the content property at all, hence
       // it's easier to have the file object bound here that all
       // of the renderer is working with.
-      let fileTreeObject = this._renderer.findObject(file.hash)
+      let fileTreeObject = this._renderer.find(file.hash)
+
+      const docMode = (fileTreeObject.ext === '.tex') ? 'stex' : 'multiplex'
 
       let shouldBeTransient = false
       if (this._transientHashes.includes(file.hash)) {
@@ -245,14 +264,14 @@ class ZettlrEditor {
         this.attemptCloseTab()
         // Swap out all properties of the current tab
         activeFile.fileObject = fileTreeObject
-        activeFile.cmDoc = CodeMirror.Doc(file.content)
+        activeFile.cmDoc = CodeMirror.Doc(file.content, docMode)
         activeFile.transient = shouldBeTransient
         activeFile.lastWordCount = countWords(file.content, this._countChars)
       } else {
         // Simply append to the end of the array
         this._openFiles.push({
           'fileObject': fileTreeObject,
-          'cmDoc': CodeMirror.Doc(file.content),
+          'cmDoc': CodeMirror.Doc(file.content, docMode),
           'transient': shouldBeTransient,
           'lastWordCount': countWords(file.content, this._countChars)
         })
@@ -280,7 +299,6 @@ class ZettlrEditor {
         const lastFileOpen = this._openFiles.map(e => e.fileObject.hash).includes(lastFile)
 
         if (lastFileOpen) {
-          console.log('Finishing background sync, swapping lastFile ...', lastFile)
           this._swapFile(lastFile)
         } else if (!lastFileOpen && this._openFiles.length > 0) {
           console.log('No last file but theres something in the openFiles, opening ...', this._openFiles)
@@ -309,8 +327,7 @@ class ZettlrEditor {
     // as the CodeMirror instance will begin rendering images as soon as
     // this happens, and it needs the correct path for this.
     this._editor.setOptions({
-      // Set the mode based on the extension
-      'mode': (file.fileObject.ext === '.tex') ? 'stex' : 'multiplex',
+      'theme': (file.fileObject.type === 'file') ? 'zettlr-markdown' : 'zettlr-code',
       'zettlr': {
         'markdownImageBasePath': path.dirname(file.fileObject.path)
       }
@@ -476,7 +493,7 @@ class ZettlrEditor {
 
     if (this._openFiles.length === 0) {
       // Replace with an empty new doc
-      this._editor.swapDoc(CodeMirror.Doc('', MD_MODE))
+      this._editor.swapDoc(CodeMirror.Doc('', 'multiplex'))
       this._currentHash = null
       // Reset the base path
       this._editor.setOptions({ zettlr: { markdownImageBasePath: '' } })
@@ -569,14 +586,16 @@ class ZettlrEditor {
   toggleDistractionFree () {
     if (this._editor.isFullscreen) {
       this._editor.isFullscreen = false
-      this._div.removeClass('fullscreen')
-      this._div.css('left', this._leftBeforeDistractionFree)
+      this._div.classList.remove('fullscreen')
+      this._div.style.left = this._leftBeforeDistractionFree
     } else {
       this._editor.isFullscreen = true
-      this._div.addClass('fullscreen')
-      this._leftBeforeDistractionFree = this._div.css('left')
-      if (this._leftBeforeDistractionFree === '0px') this._leftBeforeDistractionFree = ''
-      this._div.css('left', '') // Remove the "left" property
+      this._div.classList.add('fullscreen')
+      this._leftBeforeDistractionFree = this._div.style.left
+      if (this._leftBeforeDistractionFree === '0px') {
+        this._leftBeforeDistractionFree = ''
+      }
+      this._div.style.left = '' // Remove the "left" property
     }
   }
 
@@ -619,6 +638,7 @@ class ZettlrEditor {
       indentUnit: global.config.get('editor.indentUnit'),
       autoCloseBrackets: global.config.get('editor.autoCloseBrackets'),
       keyMap: global.config.get('editor.inputMode'),
+      direction: global.config.get('editor.direction'),
       zettlr: {
         muteLines: global.config.get('muteLines'),
         imagePreviewWidth: global.config.get('display.imageWidth'),
@@ -666,19 +686,16 @@ class ZettlrEditor {
     setTimeout(() => {
       // Why wrap it in a timeout? Because this specific setting requires the
       // instance to be rendered before we can actually set that thing.
-      // this._cm.setOption('direction', global.config.get('editor.direction'))
-      // this._cm.setOption('rtlMoveVisually', global.config.get('editor.rtlMoveVisually'))
+      this._editor.setOptions({
+        direction: global.config.get('editor.direction'),
+        rtlMoveVisually: global.config.get('editor.rtlMoveVisually')
+      })
     }, 100)
 
-    return this
-  }
+    // Finally, set the font size of the editor div
+    this._div.style.fontSize = global.config.get('editor.fontSize') + 'px'
 
-  /**
-   * This sets the tag database necessary for the tag autocomplete.
-   * @param {Object} tagDB An object (here with prototype due to JSON) containing tags
-   */
-  setTagDatabase (tagDB) {
-    this._editor.setCompletionDatabase('tags', tagDB)
+    return this
   }
 
   /**
@@ -706,19 +723,22 @@ class ZettlrEditor {
     for (let file of tree) {
       let fname = path.basename(file.name, path.extname(file.name))
       let displayText = fname // Fallback: Only filename
-      if (global.config.get('display.useFirstHeadings') && file.firstHeading) {
-        // The user wants to use first headings as titles,
-        // so use them for autocomplete as well
-        displayText = fname + ': ' + file.firstHeading
-      } else if (file.frontmatter && file.frontmatter.title) {
+      if (file.frontmatter && file.frontmatter.title) {
         // (Else) if there is a frontmatter, use that title
-        displayText = fname + ': ' + file.frontmatter.title
+        displayText = file.frontmatter.title
+      } else if (global.config.get('display.useFirstHeadings') && file.firstHeading) {
+        // The user wants to use first headings as fallbacks
+        displayText = file.firstHeading
+      }
+
+      if (file.id !== '') {
+        displayText = `${file.id}: ${displayText}`
       }
 
       fileDatabase[fname] = {
         'text': file.id || fname, // Use the ID, if given, or the filename
         'displayText': displayText,
-        'id': file.id || false
+        'id': file.id
       }
     }
 
@@ -733,11 +753,22 @@ class ZettlrEditor {
         let file = candidate.fileDescriptor
         let fname = path.basename(file.name, path.extname(file.name))
         let displayText = fname // Always display the filename
-        if (file.frontmatter && file.frontmatter.title) displayText += ' ' + file.frontmatter.title
-        fileDatabase[candidate.fileDescriptor.name] = {
+        if (file.frontmatter && file.frontmatter.title) {
+          // (Else) if there is a frontmatter, use that title
+          displayText = file.frontmatter.title
+        } else if (global.config.get('display.useFirstHeadings') && file.firstHeading) {
+          // The user wants to use first headings as fallbacks
+          displayText = file.firstHeading
+        }
+
+        if (file.id !== '') {
+          displayText = `${file.id}: ${displayText}`
+        }
+
+        fileDatabase[file.name] = {
           'text': file.id || fname, // Use the ID, if given, or the filename
           'displayText': displayText,
-          'id': file.id || false,
+          'id': file.id,
           'className': 'cm-hint-colour',
           'matches': candidate.matches
         }
@@ -820,6 +851,15 @@ class ZettlrEditor {
   }
 
   /**
+   * Pass-through function to trigger a copy-to-html on the editor
+   *
+   * @deprecated
+   */
+  copyAsHTML () {
+    this._editor.copyAsHTML()
+  }
+
+  /**
    * This method can be used to insert some text at the current cursor position.
    * ATTENTION: It WILL overwrite any given selection!
    * @param  {String} text The text to insert
@@ -876,14 +916,6 @@ class ZettlrEditor {
    */
   getSelections () {
     return this._getActiveFile().cmDoc.getSelections()
-  }
-
-  /**
-   * Get the CodeMirror instance
-   * @return {CodeMirror} The editor instance
-   */
-  getEditor () {
-    return this._cm
   }
 }
 

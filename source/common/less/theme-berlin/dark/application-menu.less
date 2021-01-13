@@ -1,0 +1,16 @@
+div#application-menu {
+  border: 1px solid #666;
+  background-color: #333;
+  color: #eee;
+
+  div.menu-item {
+    div.after-element { color: #aaa; }
+
+    &.disabled { color: #aaa; }
+
+    // Separators are obviously very small
+    &.separator { background-color: #666; }
+
+    &:not(.separator):not(.disabled):hover { background-color: #999; }
+  }
+}

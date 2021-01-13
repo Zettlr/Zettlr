@@ -30,7 +30,7 @@ const generateKeymap = require('./generate-keymap.js')
 /**
  * APIs
  */
-const { clipboard } = require('electron')
+const { clipboard, ipcRenderer } = require('electron')
 const EventEmitter = require('events')
 
 /**
@@ -53,9 +53,10 @@ const zoomHook = require('./hooks/zoom')
 const muteLinesHook = require('./hooks/mute-lines')
 const renderElementsHook = require('./hooks/render-elements')
 const typewriterHook = require('./hooks/typewriter')
-const initiateTablesHook = require('./hooks/initiate-tables')
 const { autocompleteHook, setAutocompleteDatabase } = require('./hooks/autocomplete')
 const linkTooltipsHook = require('./hooks/link-tooltips')
+
+const displayContextMenu = require('./display-context-menu')
 
 module.exports = class MarkdownEditor extends EventEmitter {
   /**
@@ -89,11 +90,18 @@ module.exports = class MarkdownEditor extends EventEmitter {
     this._lastMode = undefined
 
     /**
-     * Holds the font size of the CodeMirror instance
+     * Holds the font size of the CodeMirror instance (in em)
      *
      * @var {Number}
      */
-    this._fontsize = 100
+    this._fontsize = 1
+
+    /**
+     * Can hold a close-callback from an opened context menu
+     *
+     * @var {Function}
+     */
+    this._contextCloseCallback = null
 
     /**
      * The CodeMirror options
@@ -130,11 +138,10 @@ module.exports = class MarkdownEditor extends EventEmitter {
     indentLinesHook(this._instance)
     headingClassHook(this._instance)
     codeblockClassHook(this._instance)
-    zoomHook(this._instance)
+    zoomHook(this._instance, this.zoom.bind(this))
     muteLinesHook(this._instance)
     renderElementsHook(this._instance)
     typewriterHook(this._instance)
-    initiateTablesHook(this._instance)
     autocompleteHook(this._instance)
     linkTooltipsHook(this._instance)
 
@@ -154,21 +161,80 @@ module.exports = class MarkdownEditor extends EventEmitter {
       this.emit('cursorActivity')
     })
 
-    this._instance.getWrapperElement().addEventListener('click', (event) => {
+    this._instance.on('mousedown', (cm, event) => {
       // Open links on both Cmd and Ctrl clicks - otherwise stop handling event
       if (process.platform === 'darwin' && !event.metaKey) return true
       if (process.platform !== 'darwin' && !event.ctrlKey) return true
 
-      event.preventDefault()
-
       let cursor = this._instance.coordsChar({ left: event.clientX, top: event.clientY })
       let tokenInfo = this._instance.getTokenAt(cursor)
+
+      if (tokenInfo.type === null) {
+        return true
+      }
+
       let tokenList = tokenInfo.type.split(' ')
 
       if (tokenList.includes('zkn-link')) {
+        event.preventDefault()
+        event.codemirrorIgnore = true
         this.emit('zettelkasten-link', tokenInfo.string)
       } else if (tokenList.includes('zkn-tag')) {
+        event.preventDefault()
+        event.codemirrorIgnore = true
         this.emit('zettelkasten-tag', tokenInfo.string)
+      }
+    })
+
+    // Display a context menu if appropriate
+    this._instance.getWrapperElement().addEventListener('contextmenu', (event) => {
+      const shouldSelectWordUnderCursor = displayContextMenu(event, this._instance.isReadOnly(), (command) => {
+        switch (command) {
+          case 'cut':
+          case 'copy':
+          case 'paste':
+            // NOTE: We do not send selectAll to main albeit there is such a command
+            // because in the specific case of CodeMirror this results in unwanted
+            // behaviour.
+            // Needs to be issued from main on the holding webContents
+            ipcRenderer.send('window-controls', { command: command })
+            break
+          case 'pasteAsPlain':
+            this.pasteAsPlainText()
+            break
+          case 'copyAsHTML':
+            this.copyAsHTML()
+            break
+          default:
+            this._instance.execCommand(command)
+            break
+        }
+        // In any case, re-focus the editor, either for cut/copy/paste to work
+        // or to resume working afterwards
+        this._instance.focus()
+      }, (wordToReplace) => {
+        // Simply replace the selection with the given word
+        this._instance.replaceSelection(wordToReplace)
+      })
+
+      // If applicable, select the word under cursor
+      if (shouldSelectWordUnderCursor) {
+        this._instance.execCommand('selectWordUnderCursor')
+      }
+    })
+
+    // Listen to zoom-shortcuts from main
+    ipcRenderer.on('shortcut', (event, shortcut) => {
+      switch (shortcut) {
+        case 'zoom-reset':
+          this.zoom(0)
+          break
+        case 'zoom-in':
+          this.zoom(1)
+          break
+        case 'zoom-out':
+          this.zoom(-1)
+          break
       }
     })
   } // END CONSTRUCTOR
@@ -204,8 +270,29 @@ module.exports = class MarkdownEditor extends EventEmitter {
    * @param  {Number} line The line to pull into view
    */
   jtl (line) {
-    this._instance.setCursor({ 'line': line, 'ch': 0 })
-    this._instance.refresh()
+    const { from, to } = this._instance.getViewport()
+    const viewportSize = to - from
+    // scrollIntoView first and foremost pulls something simply into view, but
+    // we want it to be at the top of the window as expected by the user, so
+    // we need to pull in a full viewport, beginning at the corresponding line
+    // and expanding unto one full viewport size.
+    let lastLine = line + viewportSize
+
+    // CodeMirror will not sanitise the viewport size.
+    if (lastLine >= this._instance.doc.lineCount()) {
+      lastLine = this._instance.doc.lineCount() - 1
+    }
+
+    this._instance.scrollIntoView({
+      from: {
+        line: line,
+        ch: 0
+      },
+      to: {
+        line: lastLine,
+        ch: 0
+      }
+    })
   }
 
   /**
@@ -214,15 +301,15 @@ module.exports = class MarkdownEditor extends EventEmitter {
    */
   zoom (direction) {
     if (direction === 0) {
-      this._fontsize = 100
+      this._fontsize = 1
     } else {
-      let newSize = this._fontsize + 10 * direction
+      let newSize = this._fontsize + 0.1 * direction
       // Constrain the size so it doesn't run into errors
-      if (newSize < 30) newSize = 30 // Less than thirty and CodeMirror doesn't display the text anymore.
-      if (newSize > 400) newSize = 400 // More than 400 and you'll run into problems concerning headings 1
+      if (newSize < 0.3) newSize = 0.3 // Less than 30% and CodeMirror doesn't display the text anymore.
+      if (newSize > 4.0) newSize = 4.0 // More than 400% and you'll run into problems concerning headings 1
       this._fontsize = newSize
     }
-    this._instance.getWrapperElement().style.fontSize = this._fontsize + '%'
+    this._instance.getWrapperElement().style.fontSize = this._fontsize + 'em'
     this._instance.refresh()
   }
 
@@ -234,6 +321,26 @@ module.exports = class MarkdownEditor extends EventEmitter {
   setOptions (newOptions) {
     // First, merge the new options into the CodeMirror options
     this._cmOptions = safeAssign(newOptions, this._cmOptions)
+
+    if (newOptions.hasOwnProperty('zettlr') && newOptions.zettlr.hasOwnProperty('render')) {
+      // If this property is set this mostly means that the rendering preferences
+      // have changed. We need to remove all text markers so that only those
+      // that are wanted are re-rendered. This will always execute on preferences
+      // setting until we have established some cool "what has actually changed?"
+      // indication in the settings provider, but this should not be too annoying.
+
+      // DEBUG: This function is always called during document swap which
+      // increases load time and induces a significant visual lag.
+      // Right now it seems prudent to simply leave "unwanted" markers in place.
+      // TODO: Devise a better mechanism of value caching to determine which
+      // marks need to be removed, and only do so when one of the values have
+      // indeed changed.
+
+      // const markers = this._instance.doc.getAllMarks()
+      // for (let marker of markers) {
+      //   marker.clear()
+      // }
+    }
 
     // Second, set all options on the CodeMirror instance. This will internally
     // fire all necessary events, apart from those we need to fire manually.
@@ -248,9 +355,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
 
     // Clear the line indentation cache for the corresponding hook
     clearLineIndentationCache()
-
-    // After everything is done, signal necessary events
-    CodeMirror.signal(this._instance, 'cursorActivity', this._instance)
   }
 
   /**
@@ -273,7 +377,16 @@ module.exports = class MarkdownEditor extends EventEmitter {
    */
   swapDoc (cmDoc) {
     let oldDoc = this._instance.swapDoc(cmDoc)
-    CodeMirror.signal(this._instance, 'cursorActivity', this._instance)
+    this._instance.focus()
+
+    // Switch the mode, if we're coming from TeX to MD or vice versa.
+    const docMode = (typeof cmDoc.mode === 'string') ? cmDoc.mode : cmDoc.mode.name
+    const cmMode = (typeof this._cmOptions.mode === 'string') ? this._cmOptions['mode'] : this._cmOptions['mode'].name
+
+    if (docMode !== cmMode) {
+      this.setOptions({ 'mode': cmDoc.mode })
+    }
+
     return oldDoc
   }
 
@@ -449,10 +562,6 @@ module.exports = class MarkdownEditor extends EventEmitter {
   set isFullscreen (shouldBeFullscreen) {
     this.setOptions({ 'fullScreen': shouldBeFullscreen })
 
-    if (this._fontsize !== 100) {
-      this._instance.getWrapperElement().style.fontSize = this._fontsize + '%'
-    }
-
     // Refresh to reflect the size changes
     this._instance.refresh()
   }
@@ -490,8 +599,13 @@ module.exports = class MarkdownEditor extends EventEmitter {
    * @param   {Boolean}  shouldBeReadonly  Whether the editor contents should be readonly
    */
   set readOnly (shouldBeReadonly) {
-    // We're setting the nocursor property to hide the cursor altogether
-    this.setOptions({ readOnly: (shouldBeReadonly) ? 'nocursor' : false })
+    // Make sure we only set readOnly if the state has changed to prevent any
+    // lag due to the setOptions handler taking quite some time.
+    if (this.readOnly === shouldBeReadonly) {
+      return
+    }
+
+    this.setOptions({ readOnly: shouldBeReadonly })
 
     // Set a special class to indicate not that it's an empty document,
     // but rather that none is open atm

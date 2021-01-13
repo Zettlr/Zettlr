@@ -15,9 +15,9 @@
 const path = require('path')
 const fs = require('fs')
 const { promisify } = require('util')
-const { app } = require('electron')
+const { app, ipcMain } = require('electron')
 const got = require('got')
-const { getTranslationMetadata, trans } = require('../../common/lang/i18n.js')
+const { getTranslationMetadata, trans } = require('../../common/i18n.js')
 const moment = require('moment')
 
 // We'll use the asynchronous version for convenience
@@ -41,7 +41,19 @@ module.exports = class TranslationProvider {
     }
 
     this.init().catch((err) => {
-      global.log(err.message, err)
+      global.log.error(`[Translation Provider] Could not initialize provider: ${err.message}`, err)
+    })
+
+    // NOTE: Possible race condition: If this provider is in the future being
+    // loaded AFTER the translations are loaded, this will return undefined,
+    // as both global.i18n and global.u18nFallback will not yet be set.
+    // loadi18nMain therefore has to be called BEFORE any browser window may
+    // request a translation.
+    ipcMain.on('get-translation', (event) => {
+      event.returnValue = {
+        i18n: global.i18n,
+        i18nFallback: global.i18nFallback
+      }
     })
   }
 
@@ -50,7 +62,15 @@ module.exports = class TranslationProvider {
    * @return {Promise} Resolves if everything worked out, rejects otherwise.
    */
   async init () {
-    let response = await got(TRANSLATION_API_URL, { method: 'GET' })
+    let response
+    try {
+      response = await got(TRANSLATION_API_URL, { method: 'GET' })
+    } catch (err) {
+      // Not critical.
+      global.log.warning(`[Translation Provider] Could not update translations: ${err.code}`, err)
+      return
+    }
+
     // Alright, we only need the body
     response = JSON.parse(response.body)
     this._availableLanguages = response // Let's save the response
@@ -83,11 +103,12 @@ module.exports = class TranslationProvider {
     }
 
     // Now we are done and can notify the user of all updated translations!
-    global.ipc.notify(
+    global.notify.normal(
       trans(
         'dialog.preferences.translations.updated',
         toUpdate.map(elem => trans(`dialog.preferences.app_lang.${elem.bcp47}`)).join(', ')
-      )
+      ),
+      true // Show the notification on OS level
     )
   }
 

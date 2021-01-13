@@ -15,7 +15,7 @@
 import path from 'path'
 import { promises as fs } from 'fs'
 import hash from '../../../common/util/hash'
-import sortDir from '../../../common/util/sort'
+import sortDir from './util/sort'
 import isDir from '../../../common/util/is-dir'
 import isFile from '../../../common/util/is-file'
 import ignoreDir from '../../../common/util/ignore-dir'
@@ -26,12 +26,11 @@ import isAttachment from '../../../common/util/is-attachment'
 import { shell } from 'electron'
 
 import * as FSALFile from './fsal-file'
+import * as FSALCodeFile from './fsal-code-file'
 import * as FSALAttachment from './fsal-attachment'
 import {
   DirDescriptor,
   DirMeta,
-  MDFileDescriptor,
-  DescriptorType,
   MaybeRootMeta,
   AnyDescriptor,
   MaybeRootDescriptor
@@ -46,6 +45,17 @@ const SETTINGS_TEMPLATE = {
   'project': null, // Default: no project
   'icon': null // Default: no icon
 }
+
+const ALLOWED_CODE_FILES = [
+  '.tex'
+]
+
+const MARKDOWN_FILES = [
+  '.md',
+  '.rmd',
+  '.markdown',
+  '.txt'
+]
 
 /**
  * Used to insert a default project
@@ -99,9 +109,11 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
   // Handle the children
   let children = dirObject.children.map((elem) => {
     if (elem.type === 'directory') {
-      return metadata(elem as DirDescriptor)
-    } else if ([ DescriptorType.MDFile, DescriptorType.TexFile ].includes(elem.type)) {
-      return FSALFile.metadata(elem as MDFileDescriptor)
+      return metadata(elem)
+    } else if (elem.type === 'file') {
+      return FSALFile.metadata(elem)
+    } else if (elem.type === 'code') {
+      return FSALCodeFile.metadata(elem)
     }
   }) as MaybeRootMeta[]
 
@@ -110,21 +122,23 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
     // both lean AND it can be reconstructed into a
     // circular structure with NO overheads in the
     // renderer.
-    'parent': (dirObject.parent !== null) ? dirObject.parent.hash : null,
-    'path': dirObject.path,
-    'dir': dirObject.dir,
-    'name': dirObject.name,
-    'hash': dirObject.hash,
+    parent: (dirObject.parent !== null) ? dirObject.parent.hash : null,
+    path: dirObject.path,
+    dir: dirObject.dir,
+    name: dirObject.name,
+    hash: dirObject.hash,
     // The project itself is not needed, renderer only checks if it equals
     // null, or not (then it means there is a project)
-    'project': (dirObject._settings.project !== null) ? true : null,
-    'children': children,
-    'attachments': dirObject.attachments.map(elem => FSALAttachment.metadata(elem)),
-    'type': dirObject.type,
-    'sorting': dirObject._settings.sorting,
-    'icon': dirObject._settings.icon,
-    'modtime': dirObject.modtime,
-    'creationtime': dirObject.creationtime
+    project: (dirObject._settings.project !== null) ? true : null,
+    children: children,
+    attachments: dirObject.attachments.map(elem => FSALAttachment.metadata(elem)),
+    type: dirObject.type,
+    sorting: dirObject._settings.sorting,
+    icon: dirObject._settings.icon,
+    modtime: dirObject.modtime,
+    creationtime: dirObject.creationtime,
+    // Include the optional dirNotFoundFlag
+    dirNotFoundFlag: dirObject.dirNotFoundFlag
   }
 }
 
@@ -191,17 +205,17 @@ async function parseSettings (dir: DirDescriptor): Promise<void> {
 async function readTree (currentPath: string, cache: FSALCache, parent: DirDescriptor|null): Promise<DirDescriptor> {
   // Prepopulate
   let dir: DirDescriptor = {
-    'parent': parent,
-    'path': currentPath,
-    'name': path.basename(currentPath),
-    'dir': path.dirname(currentPath),
-    'hash': hash(currentPath),
-    'children': [],
-    'attachments': [],
-    'type': DescriptorType.Directory,
-    'modtime': 0, // You know when something has gone wrong: 01.01.1970
-    'creationtime': 0,
-    '_settings': JSON.parse(JSON.stringify(SETTINGS_TEMPLATE))
+    parent: parent,
+    path: currentPath,
+    name: path.basename(currentPath),
+    dir: path.dirname(currentPath),
+    hash: hash(currentPath),
+    children: [],
+    attachments: [],
+    type: 'directory',
+    modtime: 0, // You know when something has gone wrong: 01.01.1970
+    creationtime: 0,
+    _settings: JSON.parse(JSON.stringify(SETTINGS_TEMPLATE))
   }
 
   // Retrieve the metadata
@@ -233,12 +247,24 @@ async function readTree (currentPath: string, cache: FSALCache, parent: DirDescr
     if (isInvalidDir || (isInvalidFile && !isAttachment(absolutePath))) continue
 
     // Parse accordingly
+    let start = Date.now()
     if (isAttachment(absolutePath)) {
       dir.attachments.push(await FSALAttachment.parse(absolutePath, dir))
     } else if (isFile(absolutePath)) {
-      dir.children.push(await FSALFile.parse(absolutePath, cache, dir))
+      const isCode = ALLOWED_CODE_FILES.includes(path.extname(absolutePath))
+      const isMD = MARKDOWN_FILES.includes(path.extname(absolutePath))
+      if (isCode) {
+        dir.children.push(await FSALCodeFile.parse(absolutePath, cache, dir))
+      } else if (isMD) {
+        dir.children.push(await FSALFile.parse(absolutePath, cache, dir))
+      }
     } else if (isDir(absolutePath)) {
       dir.children.push(await readTree(absolutePath, cache, dir))
+    }
+
+    if (Date.now() - start > 100) {
+      // Only log if it took longer than 50ms
+      global.log.warning(`[FSAL Directory] Path ${absolutePath} took ${Date.now() - start}ms to load.`)
     }
   }
 
@@ -249,6 +275,24 @@ async function readTree (currentPath: string, cache: FSALCache, parent: DirDescr
 
 export async function parse (dirPath: string, cache: FSALCache, parent: DirDescriptor|null = null): Promise<DirDescriptor> {
   return await readTree(dirPath, cache, parent)
+}
+
+export function getDirNotFoundDescriptor (dirPath: string): DirDescriptor {
+  return {
+    parent: null, // Always a root
+    path: dirPath,
+    name: path.basename(dirPath),
+    dir: path.dirname(dirPath),
+    hash: hash(dirPath),
+    children: [], // Always empty
+    attachments: [], // Always empty
+    type: 'directory',
+    modtime: 0, // ¯\_(ツ)_/¯
+    creationtime: 0,
+    // Settings are expected by some functions
+    _settings: JSON.parse(JSON.stringify(SETTINGS_TEMPLATE)),
+    dirNotFoundFlag: true
+  }
 }
 
 // Sets an arbitrary setting on the directory object.
@@ -347,10 +391,20 @@ export async function rename (dirObject: DirDescriptor, newName: string, cache: 
 export async function remove (dirObject: DirDescriptor): Promise<void> {
   // First, get the parent, if there is any
   let parentDir = dirObject.parent
+  const deleteOnFail: boolean = global.config.get('system.deleteOnFail')
+  const deleteSuccess = shell.moveItemToTrash(dirObject.path, deleteOnFail)
   // Now, remove the directory
-  if (shell.moveItemToTrash(dirObject.path) && parentDir) {
+  if (deleteSuccess && parentDir !== null) {
     // Splice it from the parent directory
     parentDir.children.splice(parentDir.children.indexOf(dirObject), 1)
+  }
+
+  if (!deleteSuccess) {
+    // Forcefully remove the directory
+    fs.rmdir(dirObject.path)
+      .catch(err => {
+        global.log.error(`[FSAL Directory] Could not remove directory ${dirObject.path}: ${err.message as string}`, err)
+      })
   }
 }
 
@@ -370,7 +424,7 @@ export async function move (sourceObject: AnyDescriptor, targetDir: DirDescripto
 
   // Re-read the source
   let newSource
-  if (sourceObject.type === DescriptorType.Directory) {
+  if (sourceObject.type === 'directory') {
     newSource = await readTree(targetPath, cache, targetDir)
   } else {
     newSource = await FSALFile.parse(targetPath, cache, targetDir)

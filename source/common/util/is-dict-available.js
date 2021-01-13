@@ -11,7 +11,7 @@
  * END HEADER
  */
 
-const { enumDictFiles } = require('../lang/i18n')
+const { enumDictFiles } = require('../i18n')
 
 /**
  * This function checks the integrity of a given dictionary. Simply pass it the

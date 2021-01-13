@@ -11,9 +11,8 @@ var lastHighlightLine = -1
  * @param   {CodeMirror}  cm  The instance
  */
 module.exports = (cm) => {
-  cm.on('cursorActivity', (cm) => {
-    typewriter(cm)
-  })
+  cm.on('cursorActivity', typewriter)
+  cm.on('optionChange', typewriter)
 }
 
 /**
@@ -22,15 +21,15 @@ module.exports = (cm) => {
  * @param   {CodeMirror}  cm  The CodeMirror instance
  */
 function typewriter (cm) {
-  // TODO: Apply bigger margins to the beginning and end of the document to REALLY keep the lines in the middle
   if (!cm.getOption('zettlr').typewriterMode) {
     if (lastHighlightLine > -1) {
       // Cleanup after option change
-      cm.removeLineClass(lastHighlightLine, 'text', 'typewriter-active-line')
+      cm.removeLineClass(lastHighlightLine, 'background', 'typewriter-active-line')
       const codeElement = cm.getWrapperElement().querySelector('.CodeMirror-code')
       codeElement.style.marginTop = ''
       codeElement.style.marginBottom = ''
       lastHighlightLine = -1
+      cm.refresh()
     }
     return
   }
@@ -42,9 +41,9 @@ function typewriter (cm) {
     // Line has changed
     for (let i = 0; i < cm.lineCount(); i++) {
       if (highlightLine === i) {
-        cm.addLineClass(i, 'text', 'typewriter-active-line')
+        cm.addLineClass(i, 'background', 'typewriter-active-line')
       } else {
-        cm.removeLineClass(i, 'text', 'typewriter-active-line')
+        cm.removeLineClass(i, 'background', 'typewriter-active-line')
       }
     }
 
@@ -54,6 +53,7 @@ function typewriter (cm) {
       const margin = window.innerHeight
       codeElement.style.marginTop = margin + 'px'
       codeElement.style.marginBottom = margin + 'px'
+      cm.refresh()
     }
   }
 

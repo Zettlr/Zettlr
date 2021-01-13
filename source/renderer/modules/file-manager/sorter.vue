@@ -16,14 +16,21 @@
 </template>
 
 <script>
-module.exports = {
-  props: [
-    'sorting'
-  ],
-  name: 'sorter',
+export default {
+  name: 'Sorter',
+  props: {
+    sorting: {
+      type: String,
+      default: 'name-up'
+    }
+  },
   computed: {
-    type: function () { return this.sorting.startsWith('time') ? 'clock' : 'text' },
-    flip: function () { return this.sorting.endsWith('up') ? 'vertical' : '' }
+    type: function () {
+      return this.sorting.startsWith('time') ? 'clock' : 'text'
+    },
+    flip: function () {
+      return this.sorting.endsWith('up') ? 'vertical' : ''
+    }
   },
   methods: {
     toggleType: function () {

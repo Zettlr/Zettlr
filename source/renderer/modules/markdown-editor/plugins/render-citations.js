@@ -13,6 +13,7 @@
   'use strict'
 
   const { ipcRenderer } = require('electron')
+  const { getCitationRE } = require('../../../../common/regular-expressions')
 
   // Listen to IPC events to update the citations
   ipcRenderer.on('citation-renderer', (event, message) => {
@@ -22,20 +23,26 @@
       // Find the correct citation and replace the span's text content
       // with the correct, rendered citation
       let spanToRender = toRender.find(elem => elem.citation === payload.originalCitation)
+      let contents = payload.renderedCitation
+
+      // If we have a span and the contents are not undefined
       if (spanToRender !== undefined) {
         // Replace HTML content and remove item from array
-        // We need to set the HTML as citeproc may spit out <i>-tags etc.
-        spanToRender.element.innerHTML = payload.renderedCitation
+        if (contents !== undefined) {
+          // We need to set the HTML as citeproc may spit out <i>-tags etc.
+          spanToRender.element.innerHTML = contents
+          // The textMarker's contents have changed, we need to inform CodeMirror
+          spanToRender.textMarker.changed()
+        } else {
+          spanToRender.element.classList.add('error')
+        }
+
         toRender.splice(toRender.indexOf(spanToRender), 1)
       }
     }
   })
 
-  // Should match everything permittible -- first alternative are the huge
-  // blocks, second alternative are the simple @ID-things, both recognised by
-  // Pandoc citeproc.
-  // citationRE is taken from the Citr library (the extraction regex)
-  var citationRE = /(\[(?:[^[\]]*@[^[\]]+)\])|(?<=\s|^)(@[\p{L}\d_][\p{L}\d_:.#$%&\-+?<>~/]*)/gu
+  var citationRE = getCitationRE()
   var Citr = require('@zettlr/citr')
 
   /**
@@ -77,7 +84,7 @@
         }
 
         // We can only have one marker at any given position at any given time
-        if (cm.findMarks(curFrom, curTo).length > 0) continue
+        if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
 
         // Do not render if it's inside a comment (in this case the mode will be
         // markdown, but comments shouldn't be included in rendering)
@@ -112,7 +119,7 @@
         span.textContent = citation
         // Apply TextMarker
         try {
-          let textMarker = cm.markText(
+          let textMarker = cm.doc.markText(
             curFrom, curTo,
             {
               'clearOnEnter': true,
@@ -131,8 +138,9 @@
           // Now that everything is done, request the citation and replace the
           // text contents accordingly
           toRender.push({
-            'citation': citation,
-            'element': span
+            citation: citation,
+            element: span,
+            textMarker: textMarker
           })
 
           ipcRenderer.send('citation-renderer', {

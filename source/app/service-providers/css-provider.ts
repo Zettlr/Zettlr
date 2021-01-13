@@ -13,9 +13,11 @@
  */
 
 import path from 'path'
-import fs from 'fs'
-import { app } from 'electron'
+import { promises as fs } from 'fs'
+import { app, ipcMain } from 'electron'
 import EventEmitter from 'events'
+
+import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
 
 export default class CssProvider extends EventEmitter {
   private readonly _filePath: string
@@ -27,21 +29,34 @@ export default class CssProvider extends EventEmitter {
 
     // Check for the existence of the custom CSS file. If it is not existent,
     // create an empty one.
-    try {
-      fs.lstatSync(this._filePath)
-    } catch (e) {
-      // Create an empty file with a nice initial comment in it.
-      fs.writeFileSync(this._filePath, '/* Enter your custom CSS here */\n\n')
-    }
+    fs.lstat(this._filePath)
+      .catch(e => {
+        // Create an empty file with a nice initial comment in it.
+        fs.writeFile(this._filePath, '/* Enter your custom CSS here */\n\n', { encoding: 'utf8' })
+          .catch(e => {
+            global.log.error(`[CSS Provider] Could not create Custom CSS file: ${e.message as string}`, e)
+          })
+      })
 
     // Inject the global provider functions
     global.css = {
       on: (event, callback) => { this.on(event, callback) },
       off: (event, callback) => { this.off(event, callback) },
-      get: () => { return this.get() },
-      getPath: () => { return this.getPath() },
-      set: (newContent) => { return this.set(newContent) }
+      getPath: () => { return this.getPath() }
     }
+
+    // Send the Custom CSS Path to whomever requires it
+    ipcMain.handle('css-provider', async (event, payload) => {
+      const { command } = payload
+      if (command === 'get-custom-css-path') {
+        return this._filePath
+      } else if (command === 'get-custom-css') {
+        return await this.get()
+      } else if (command === 'set-custom-css') {
+        const { css } = payload
+        return await this.set(css)
+      }
+    })
   }
 
   /**
@@ -57,8 +72,8 @@ export default class CssProvider extends EventEmitter {
    * Retrieves the content of the custom CSS file
    * @return {string} The custom CSS
    */
-  get (): string {
-    let file = fs.readFileSync(this._filePath, 'utf8')
+  async get (): Promise<string> {
+    const file = await fs.readFile(this._filePath, { encoding: 'utf8' })
     return file
   }
 
@@ -73,12 +88,17 @@ export default class CssProvider extends EventEmitter {
    * @param {string} newContent The new contents
    * @return {boolean} Whether or not the call succeeded.
    */
-  set (newContent: string): boolean {
+  async set (newContent: string): Promise<boolean> {
     try {
-      fs.writeFileSync(this._filePath, newContent)
+      await fs.writeFile(this._filePath, newContent, { encoding: 'utf8' })
       this.emit('update', this._filePath)
+      broadcastIpcMessage('css-provider', {
+        command: 'get-custom-css-path',
+        payload: this._filePath
+      })
       return true
     } catch (e) {
+      global.log.error(`[CSS Provider] Could not set custom css: ${e.message as string}`, e)
       return false
     }
   }

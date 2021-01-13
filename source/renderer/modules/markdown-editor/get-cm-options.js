@@ -27,11 +27,13 @@ module.exports = function () {
     // Default mode: Markdown multiplex (+ syntax highlighting for code blocks)
     mode: 'multiplex',
     // Apply this theme class to prevent the default theme from overriding
-    theme: 'zettlr',
+    theme: 'zettlr-markdown', // Can be zettlr-markdown or zettlr-code
+    // We have different line heights (headings, e.g.)
+    singleCursorHeightPerLine: false,
     // Don't focus on instantiation
     autofocus: false,
     // Necessary to (de)activate the instance programmatically later
-    readOnly: 'nocursor',
+    readOnly: true,
     // Use the fold gutter
     foldGutter: true,
     // Keep the cursor 60px below/above the editor edges
@@ -43,7 +45,7 @@ module.exports = function () {
     // Default fold options
     foldOptions: {
       'widget': '\u00A0\u2026\u00A0', // nbsp ellipse nbsp
-      'scanUp': true // Search upwards if current line cannot be folded
+      'scanUp': false // Do not search upwards if current line cannot be folded
     },
     // Default direction left-to-right
     direction: 'ltr',
@@ -56,11 +58,6 @@ module.exports = function () {
     fullScreen: false,
     // Placeholder for empty instances, necessary to maintain the styling
     placeholder: ' ',
-    // TODO:
-    hintOptions: {
-      completeSingle: false, // Don't auto-complete, even if there's only one word available
-      hint: (cm, opt) => { return this._autocomplete.hint(cm, opt) }
-    },
     // Soft-wrap longer lines
     lineWrapping: true,
     // Pandoc requires 4 spaces indentation, which is the default

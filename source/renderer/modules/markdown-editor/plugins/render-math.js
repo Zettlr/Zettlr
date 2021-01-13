@@ -1,5 +1,7 @@
-/* global CodeMirror $ define */
+/* global CodeMirror define */
 // This plugin renders MathJax parts in CodeMirror instances
+
+const { getBlockMathRE, getInlineMathRenderRE } = require('../../../../common/regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -12,13 +14,11 @@
 })(function (CodeMirror) {
   'use strict'
 
-  // Matches all inlines according to the Pandoc documentation
-  // on its tex_math_dollars-extension.
-  // More information: https://pandoc.org/MANUAL.html#math
-  // First alternative is only for single-character-equations
-  // such as $x$. All others are captured by the second alternative.
-  var inlineMathRE = /(?<!\\)\${1,2}([^\s\\])\${1,2}(?!\d)|(?<!\\)\${1,2}([^\s].*?[^\s\\])\${1,2}(?!\d)/g
-  var multilineMathRE = /^\s*\$\$\s*$/
+  const katex = require('katex')
+  require('katex/dist/contrib/mhchem.js') // modify katex module
+
+  var inlineMathRE = getInlineMathRenderRE(true) // Get the RE with the global flag set.
+  var multilineMathRE = getBlockMathRE()
 
   CodeMirror.commands.markdownRenderMath = function (cm) {
     let match
@@ -97,7 +97,7 @@
         }
 
         // We can only have one marker at any given position at any given time
-        if (cm.findMarks(myMarker.curFrom, myMarker.curTo).length > 0) continue
+        if (cm.doc.findMarks(myMarker.curFrom, myMarker.curTo).length > 0) continue
 
         // Do not render if it's inside a comment (in this case the mode will be
         // markdown, but comments shouldn't be included in rendering)
@@ -110,10 +110,10 @@
           continue
         }
 
-        // Use jQuery for simple creation of the DOM element
-        let elem = $('<span class="preview-math"></span>')[0]
+        let elem = document.createElement('span')
+        elem.classList.add('preview-math')
 
-        let textMarker = cm.markText(
+        let textMarker = cm.doc.markText(
           myMarker.curFrom, myMarker.curTo,
           {
             'clearOnEnter': true,
@@ -126,7 +126,7 @@
         // Enable on-click closing of rendered Math elements.
         elem.onclick = (e) => { textMarker.clear() }
 
-        require('katex').render(myMarker.eq, elem, { throwOnError: false })
+        katex.render(myMarker.eq, elem, { throwOnError: false })
 
         // Now the marker has obviously changed
         textMarker.changed()

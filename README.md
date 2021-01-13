@@ -106,9 +106,9 @@ Packages the application, but not bundle it into an installer. Without any suffi
 
 The resulting application packages are stored in `./out`.
 
-#### `release`
+#### `release:{platform}`
 
-Packages the application and then bundles it into an installer for the corresponding platform. Without any suffix, this command will package and bundle the application for your current platform. To create specific bundles (may require running on the corresponding platform), the following suffixes are available:
+Packages the application and then bundles it into an installer for the corresponding platform. To create such a bundle (may require running on the corresponding platform), one of the following values for `{platform}` is required:
 
 - `release:mac`
 - `release:win`
@@ -118,6 +118,8 @@ Packages the application and then bundles it into an installer for the correspon
 - `release:linux` (shorthand for calling `yarn release:linux-x32 && yarn release:linux-x64`)
 
 The resulting setup bundles are stored in `./release`.
+
+> Please note that, while you can `package` directly for your platform without any suffix, for creating a release specifying the platform is required as electron-builder would otherwise include the development-dependencies in the `app.asar`, resulting in a bloated application.
 
 #### `lang:refresh`
 

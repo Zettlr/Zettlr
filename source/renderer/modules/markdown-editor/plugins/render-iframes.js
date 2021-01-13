@@ -1,6 +1,8 @@
 /* global CodeMirror $ define */
 // This plugin renders iFrames in CodeMirror instances
 
+const { getIframeRE } = require('../../../../common/regular-expressions');
+
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
     mod(require('codemirror/lib/codemirror'))
@@ -12,7 +14,7 @@
 })(function (CodeMirror) {
   'use strict'
 
-  var iframeRE = /^<iframe.*?>.*?<\/iframe>$/i // Matches all iframes
+  var iframeRE = getIframeRE() // Matches all iframes
 
   CodeMirror.commands.markdownRenderIframes = function (cm) {
     let match
@@ -36,13 +38,13 @@
       let curTo = { 'line': i, 'ch': match[0].length }
 
       // We can only have one marker at any given position at any given time
-      if (cm.findMarks(curFrom, curTo).length > 0) continue
+      if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
 
       // Now we can render it finally.
 
       let iframe = $(match[0])[0] // Use jQuery for simple creation of the DOM element
 
-      cm.markText(
+      cm.doc.markText(
         curFrom, curTo,
         {
           'clearOnEnter': true,

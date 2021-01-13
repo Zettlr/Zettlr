@@ -5,52 +5,46 @@
 /**
  * DECLARE THE GLOBAL INTERFACES
  */
-interface LogProvider {
-  verbose: (message: string, details?: any) => void
-  info: (message: string, details?: any) => void
-  warning: (message: string, details?: any) => void
-  error: (message: string, details?: any) => void
+interface Application {
+  isBooting: () => boolean
   showLogViewer: () => void
-}
-
-interface CssProvider {
-  on: (event, callback) => void
-  off: (event, callback) => void
-  get: () => string
-  set: (newContent: string) => boolean
-  getPath: () => string
-}
-
-// Before the log provider has booted, these messages will be added to the
-// preBootLog
-interface BootLog {
-  level: 1|2|3|4 // Taken from the LogLevel enum in the Log Provider
-  message: string
-  details: any
+  // TODO: Match the signatures of fileUpdate and dirUpdate
+  fileUpdate: (oldHash: number, fileMetadata: any) => void
+  dirUpdate: (oldHash: number, newHash: number) => void
+  notifyChange: (msg: string) => void
+  findFile: (prop: any) => MDFileDescriptor | CodeFileDescriptor | null
+  findDir: (prop: any) => DirDescriptor | null
+  // Same as findFile, only with content
+  getFile: (fileDescriptor: MDFileDescriptor | CodeFileDescriptor) => Promise<MDFileMeta | CodeFileMeta>
 }
 
 /**
- * Finally, declare and extend the global NodeJS object to enable the globals
+ * Declare and extend the global NodeJS object to enable the globals
  * for the service providers.
+ *
+ * NOTE: Most service providers define these interfaces in the corresponding
+ * types files in ./source/app/service-providers/assets
  */
 declare module NodeJS {
   interface Global {
     css: CssProvider
+    dict: DictionaryProvider
     log: LogProvider
     store: any
-    notify: any
-    notifyError: any
+    notify: NotificationProvider
     ipc: any
     citeproc: any // CiteprocProvider
     config: any
-    application: any
+    application: Application
     typo: any
     filesToOpen: string[]
     preBootLog: BootLog[]
     tippy: any
-    updates: any
-    targets: any
-    recentDocs: any
-    tags: any
+    updates: UpdateProvider
+    translations: any
+    targets: TargetProvider
+    recentDocs: RecentDocumentsProvider
+    tags: TagProvider
+    stats: StatsProvider
   }
 }

@@ -23,7 +23,5 @@ const filetypes = require('../data.json').filetypes
 */
 module.exports = function (p) {
   let ext = path.extname(p).toLowerCase()
-  // Check for RMarkdown files
-  if (ext === '.rmd' && !global.config.get('enableRMarkdown')) return true
   return (!filetypes.includes(ext))
 }

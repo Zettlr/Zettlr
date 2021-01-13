@@ -22,20 +22,17 @@ const uuid4 = require('uuid').v4
 const EventEmitter = require('events')
 const bcp47 = require('bcp-47')
 const ZettlrValidation = require('../../common/zettlr-validation')
-const { app } = require('electron')
+const { app, ipcMain } = require('electron')
 const ignoreFile = require('../../common/util/ignore-file')
 const safeAssign = require('../../common/util/safe-assign')
 const isDir = require('../../common/util/is-dir')
 const isFile = require('../../common/util/is-file')
 const isDictAvailable = require('../../common/util/is-dict-available')
-const { getLanguageFile } = require('../../common/lang/i18n')
+const { getLanguageFile } = require('../../common/i18n')
 const COMMON_DATA = require('../../common/data.json')
 const ZETTLR_VERSION = app.getVersion()
 
-// Suppress notifications on modification of the following settings
-const SUPPRESS_NOTIFICATION = [
-  'window.x', 'window.y', 'window.width', 'window.height', 'window.max'
-]
+const broadcastIpcMessage = require('../../common/util/broadcast-ipc-message')
 
 /**
  * This class represents the configuration of Zettlr, represented by the
@@ -95,16 +92,15 @@ module.exports = class ConfigProvider extends EventEmitter {
         'askLangFileDialog': ''
       },
       'window': {
-        'x': 0,
-        'y': 0,
-        'width': require('electron').screen.getPrimaryDisplay().workAreaSize.width,
-        'height': require('electron').screen.getPrimaryDisplay().workAreaSize.width,
-        'max': true
+        // Only use native window appearance by default on macOS. If this value
+        // is false, this means that Zettlr will display the menu bar and window
+        // controls as defined in the HTML.
+        'nativeAppearance': process.platform === 'darwin'
       },
       // Visible attachment filetypes
       'attachmentExtensions': COMMON_DATA.attachmentExtensions,
       // UI related options
-      'darkTheme': false, // TODO DEPRECATED to be renamed to darkMode
+      'darkMode': false,
       'alwaysReloadFiles': false, // Should Zettlr automatically load remote changes?
       'autoDarkMode': 'off', // Possible values: 'off', 'system', 'schedule', 'auto'
       'autoDarkModeStart': '22:00', // Switch into dark mode at this time
@@ -116,21 +112,21 @@ module.exports = class ConfigProvider extends EventEmitter {
       'sortingTime': 'modtime', // can be modtime or creationtime
       'muteLines': true, // Should the editor mute lines in distraction free mode?
       'fileManagerMode': 'thin', // thin = Preview or directories visible --- expanded = both visible --- combined = tree view displays also files
-      'enableRMarkdown': false, // Whether or not RMarkdown files should be recognised
       'newFileNamePattern': '%id.md',
       'newFileDontPrompt': false, // If true immediately creates files
       // Export options
       'pandoc': '',
       'xelatex': '',
       // The pandoc command to be run on export
-      'pandocCommand': 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $citeproc$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"',
+      'pandocCommand': 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $bibliography$ $cslstyle$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"',
       'export': {
         'dir': 'temp', // Can either be "temp" or "cwd" (current working directory)
         'stripIDs': false, // Strip ZKN IDs such as @ID:<id>
         'stripTags': false, // Strip tags a.k.a. #tag
         'stripLinks': 'full', // Strip internal links: "full" - remove completely, "unlink" - only remove brackets, "no" - don't alter
         'cslLibrary': '', // Path to a CSL JSON library file
-        'cslStyle': '' // Path to a CSL Style file
+        'cslStyle': '', // Path to a CSL Style file
+        'useBundledPandoc': true // Whether to use the bundled Pandoc
       },
       // PDF options (for all documents; projects will copy this object over)
       'pdf': {
@@ -157,15 +153,18 @@ module.exports = class ConfigProvider extends EventEmitter {
         'linkEnd': ']]',
         'linkWithFilename': 'always', // can be always|never|withID
         // If true, create files that are not found, if forceOpen is called
-        'autoCreateLinkedFiles': false
+        'autoCreateLinkedFiles': false,
+        'autoSearch': true // Automatically start a search upon following a link?
       },
       // Editor related stuff
       'editor': {
+        'autocompleteAcceptSpace': false, // Whether you can type spaces in autocorrect
         'autoCloseBrackets': true,
         'defaultSaveImagePath': '',
         'homeEndBehaviour': true, // If checked (true), CodeMirror goes to start/end of a paragraph, not a line.
         'enableTableHelper': true, // Enable the table helper plugin
         'indentUnit': 4, // The number of spaces to be added
+        'fontSize': 16, // The editor's font size in pixels
         'countChars': false, // Set to true to enable counting characters instead of words
         'inputMode': 'default', // Can be default, vim, emacs
         'boldFormatting': '**', // Can be ** or __
@@ -198,10 +197,10 @@ module.exports = class ConfigProvider extends EventEmitter {
             { key: '>=', val: '≥' },
             { key: '1/2', val: '½' },
             { key: '1/3', val: '⅓' },
-            { key: '1/4', val: '¼' },
-            { key: '1/8', val: '⅛' },
             { key: '2/3', val: '⅔' },
+            { key: '1/4', val: '¼' },
             { key: '3/4', val: '¾' },
+            { key: '1/8', val: '⅛' },
             { key: '3/8', val: '⅜' },
             { key: '5/8', val: '⅝' },
             { key: '7/8', val: '⅞' },
@@ -255,6 +254,9 @@ module.exports = class ConfigProvider extends EventEmitter {
       'watchdog': {
         'activatePolling': false, // Set to true to enable polling in chokidar
         'stabilityThreshold': 1000 // Positive int in milliseconds
+      },
+      'system': {
+        'deleteOnFail': false // Whether to delete files if trashing them fails
       },
       'checkForBeta': false, // Should the user be notified of beta releases?
       'uuid': null // The app's unique anonymous identifier
@@ -318,7 +320,18 @@ module.exports = class ConfigProvider extends EventEmitter {
        * If true, Zettlr has detected a change in version in the config
        */
       newVersionDetected: () => { return this._newVersion }
-    }
+    } // END globals for the configuration
+
+    // Listen for renderer events
+    ipcMain.on('config-provider', (event, message) => {
+      const { command, payload } = message
+
+      if (command === 'get-config') {
+        event.returnValue = this.get(payload.key)
+      } else if (command === 'set-config') {
+        event.returnValue = this.set(payload.key, payload.val)
+      }
+    })
   }
 
   /**
@@ -338,12 +351,15 @@ module.exports = class ConfigProvider extends EventEmitter {
   load () {
     this.config = this.cfgtpl
     let readConfig = {}
+    global.log.verbose(`[Config Provider] Loading configuration file from ${this.configFile} ...`)
 
     // Does the file already exist?
     try {
       fs.lstatSync(this.configFile)
       readConfig = JSON.parse(fs.readFileSync(this.configFile, { encoding: 'utf8' }))
+      global.log.verbose('[Config Provider] Successfully loaded configuration')
     } catch (e) {
+      global.log.info('[Config Provider] No configuration file found - using defaults.')
       fs.writeFileSync(this.configFile, JSON.stringify(this.cfgtpl), { encoding: 'utf8' })
       this._firstStart = true // Assume first start
       this._newVersion = true // Obviously
@@ -351,16 +367,17 @@ module.exports = class ConfigProvider extends EventEmitter {
     }
 
     // Determine if this is a different version
-    let oldVersion = readConfig.version || undefined
-    this._newVersion = oldVersion !== this.config.version
+    this._newVersion = readConfig.version !== this.config.version
     if (this._newVersion) {
-      global.log.info(`Migrating from ${oldVersion} to ${this.config.version}!`)
+      global.log.info(`Migrating from ${readConfig.version} to ${this.config.version}!`)
     }
 
     this.update(readConfig)
 
     // Don't forget to update the version
-    if (this._newVersion) this.set('version', ZETTLR_VERSION)
+    if (this._newVersion) {
+      this.set('version', ZETTLR_VERSION)
+    }
 
     return this
   }
@@ -374,7 +391,13 @@ module.exports = class ConfigProvider extends EventEmitter {
       this.load()
     }
     // (Over-)write the configuration
-    fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
+    global.log.verbose(`[Config Provider] Writing configuration file to ${this.configFile}...`)
+
+    try {
+      fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
+    } catch (e) {
+      global.log.error(`[Config Provider] Error during file write: ${e.message}`, e)
+    }
 
     return this
   }
@@ -518,6 +541,7 @@ module.exports = class ConfigProvider extends EventEmitter {
         if (cfg.hasOwnProperty(arg)) {
           cfg = cfg[arg]
         } else {
+          global.log.warning(`[Config Provider] Someone has requested a non-existent key: ${attr}`)
           return null // The config option must match exactly
         }
       }
@@ -529,6 +553,7 @@ module.exports = class ConfigProvider extends EventEmitter {
     if (this.config.hasOwnProperty(attr)) {
       return this.config[attr]
     } else {
+      global.log.warning(`[Config Provider] Someone has requested a non-existent key: ${attr}`)
       return null
     }
   }
@@ -566,13 +591,18 @@ module.exports = class ConfigProvider extends EventEmitter {
     // Don't add non-existent options
     if (this.config.hasOwnProperty(option) && this._validate(option, value)) {
       // Do not set the option if it already has the requested value
-      if (this.config[option] === value) return true
+      if (this.config[option] === value) {
+        return true
+      }
 
       // Set the new value and inform the listeners
       this.config[option] = value
-      if (!SUPPRESS_NOTIFICATION.includes(option)) {
-        this.emit('update', option) // Pass the option for info
-        if (!this._bulkSetInProgress && global.hasOwnProperty('ipc')) global.ipc.send('config-update') // Notify renderer process
+      this.emit('update', option) // Pass the option for info
+
+      // Broadcast to all open windows
+      broadcastIpcMessage('config-provider', { command: 'update', payload: option })
+      if (!this._bulkSetInProgress && global.hasOwnProperty('ipc')) {
+        global.ipc.send('config-update') // Notify renderer process
       }
       return true
     }
@@ -597,10 +627,10 @@ module.exports = class ConfigProvider extends EventEmitter {
 
         // Set the new value and inform the listeners
         cfg[prop] = value
-        if (!SUPPRESS_NOTIFICATION.includes(option)) {
-          this.emit('update', option) // Pass the option for info
-          if (!this._bulkSetInProgress) global.ipc.send('config-update') // Notify renderer process
-        }
+        this.emit('update', option) // Pass the option for info
+        // Broadcast to all open windows
+        broadcastIpcMessage('config-provider', { command: 'update', payload: option })
+        if (!this._bulkSetInProgress) global.ipc.send('config-update') // Notify renderer process
         return true
       }
     }
@@ -626,6 +656,8 @@ module.exports = class ConfigProvider extends EventEmitter {
     this._bulkSetInProgress = false
     if (global.hasOwnProperty('ipc')) global.ipc.send('config-update')
     this.emit('update', this.getConfig()) // Notify everyone else
+    // Broadcast to all open windows
+    broadcastIpcMessage('config-provider', { command: 'update', payload: undefined })
 
     return ret
   }
@@ -641,6 +673,8 @@ module.exports = class ConfigProvider extends EventEmitter {
     // old deprecated values).
     this.config = safeAssign(newcfg, this.config)
     this.emit('update') // Emit an event to all listeners
+    // Broadcast to all open windows
+    broadcastIpcMessage('config-provider', { command: 'update', payload: undefined })
   }
 
   /**

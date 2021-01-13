@@ -156,7 +156,7 @@ export default class FSALCache {
     let directoryContents = fs.readdirSync(this._datadir)
     for (let file of directoryContents) {
       let realPath = path.join(this._datadir, file)
-      promises.push(new Promise((resolve, reject) => {
+      promises.push(new Promise<void>((resolve, reject) => {
         fs.unlink(realPath, (err) => {
           if (err) {
             reject(err)

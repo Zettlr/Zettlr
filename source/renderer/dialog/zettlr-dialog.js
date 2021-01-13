@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -16,11 +15,67 @@
 
 const tippy = require('tippy.js').default
 const EventEmitter = require('events')
-const { clipboard } = require('electron')
-const { trans } = require('../../common/lang/i18n.js')
-require('jquery-ui/ui/unique-id')
-require('jquery-ui/ui/widget')
-require('jquery-ui/ui/widgets/tabs')
+const { clipboard, ipcRenderer } = require('electron')
+const { trans } = require('../../common/i18n.js')
+
+/**
+ * Activates a tab structure within the given tabContainer.
+ *
+ * @param   {DOMElement}  tabContainer   The container for the tabs
+ */
+function activateTabs (tabContainer) {
+  const tabLinks = tabContainer.querySelectorAll('[role="tab"]')
+  const tabs = tabContainer.querySelectorAll('[role="tabpanel"]')
+
+  // First, figure out the height so that all elements are of the same height
+  let height = 0
+  for (const tab of tabs) {
+    const h = tab.offsetHeight
+    if (h > height) {
+      height = h
+    }
+  }
+
+  // Now set all containers to that height
+  for (const tab of tabs) {
+    tab.style.height = `${height}px`
+  }
+
+  // Enable clicking the tabs
+  for (const link of tabLinks) {
+    link.addEventListener('click', (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+      for (const button of tabLinks) {
+        if (button === link) {
+          button.classList.add('tab-list-tab-active')
+          button.setAttribute('aria-selected', 'true')
+        } else {
+          button.classList.remove('tab-list-tab-active')
+          button.setAttribute('aria-selected', 'false')
+        }
+      }
+
+      const id = link.getAttribute('aria-controls')
+      for (const tab of tabs) {
+        if (tab.getAttribute('id') !== id) {
+          tab.style.display = 'none'
+        } else {
+          tab.style.display = ''
+        }
+      }
+    })
+  }
+
+  // Select the first tab
+  tabs.forEach(tab => {
+    tab.style.display = 'none'
+  })
+  tabs[0].style.display = ''
+  tabLinks[0].classList.add('tab-list-tab-active')
+  tabLinks[0].setAttribute('aria-selected', 'true')
+  tabLinks[0].focus()
+}
 
 /**
  * This class definitely needs a revamp, because it is not self-sustaining but
@@ -50,6 +105,7 @@ class ZettlrDialog extends EventEmitter {
     this._dialog = null // Must be overwritten by extension dialogs.
     this._statsData = []
     this._statsLabels = []
+    this._placeCallback = (event) => { this._place() }
   }
 
   /**
@@ -97,6 +153,7 @@ class ZettlrDialog extends EventEmitter {
     document.body.removeChild(this._modal)
     this._container.classList.remove('blur')
     this._modal.innerHTML = ''
+    window.removeEventListener('resize', this._placeCallback)
     this.emit('afterClose') // Notify listeners that the dialog is now closed.
     return this
   }
@@ -150,7 +207,7 @@ class ZettlrDialog extends EventEmitter {
   _act () {
     // Focus the first input, if there is a form.
     let form = this._modal.querySelector('form#dialog')
-    if (form !== null) {
+    if (form !== null && form.querySelector('input') !== null) {
       form.querySelector('input').select()
     }
 
@@ -177,16 +234,13 @@ class ZettlrDialog extends EventEmitter {
     this._modal.addEventListener('mousedown', (e) => { this.close() })
 
     // Enable tabs if there are any.
-    if (this._modal.querySelector('#prefs-tabs') !== null) {
-      // TODO
-      $(this._modal.querySelector('.dialog')).tabs({
-        // Always re-place the modal and adjust the margins.
-        activate: (event, ui) => { this._place() }
-      })
+    const tabContainers = this._modal.querySelectorAll('.modal-tab-container')
+    for (const container of tabContainers) {
+      activateTabs(container)
     }
 
     // Always keep the dialog centered and nice
-    window.addEventListener('resize', (e) => { this._place() })
+    window.addEventListener('resize', this._placeCallback)
 
     // If there are any images in the tab, re-compute the size of the dialog
     // margins after the images load.
@@ -211,14 +265,15 @@ class ZettlrDialog extends EventEmitter {
         multiSel: false
       }
 
-      // After all is done send an async callback message
-      global.ipc.send('request-files', payload, (ret) => {
-        // Don't update to empty paths.
-        if (!ret || ret.length === 0 || ret[0] === '') return
-        // Write the return value into the data-request-target of the clicked
-        // button, because each button has a designated text field.
-        document.querySelector(requestTarget).value = ret[0]
-      })
+      ipcRenderer.invoke('request-files', payload)
+        .then(result => {
+          // Don't update to empty paths.
+          if (result.length === 0 || result[0].trim() === '') return
+          // Write the return value into the data-request-target of the clicked
+          // button, because each button has a designated text field.
+          document.querySelector(requestTarget).value = result[0]
+        })
+        .catch(e => console.error(e))
     }
 
     let requestFileButtons = this._modal.querySelectorAll('.request-file')

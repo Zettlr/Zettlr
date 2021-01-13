@@ -20,8 +20,7 @@ module.exports = function (dateObj) {
   // TODO: Enable settings for these
   const options = {
     dateStyle: 'long', // full|long|medium|short
-    timeStyle: 'short', // full|long|medium|short
-    fractionalSecondDigits: 0
+    timeStyle: 'short' // full|long|medium|short
   }
 
   // NOTE: This does not work during any tests, as Node.js needs Intl locales

@@ -17,7 +17,7 @@ const fs = require('fs').promises
 const path = require('path')
 const { exec } = require('child_process')
 
-const { trans } = require('../../../common/lang/i18n.js')
+const { trans } = require('../../../common/i18n.js')
 
 // Module utilities
 const checkImportIntegrity = require('./check-import-integrity')
@@ -49,9 +49,26 @@ module.exports = async function makeImport (fileOrFolder, dirToImport, errorCall
         errorCallback(file.path, err.message)
       }
     } else if (file.knownFormat) {
+      const useBundledPandoc = Boolean(global.config.get('export.useBundledPandoc'))
+      const bundledPandoc = process.env.PANDOC_PATH !== undefined
+      const isAppleSilicon = process.platform === 'darwin' && process.arch === 'arm64'
+
+      // Determine whether to use the bundled Pandoc
+      let binary = 'pandoc'
+      if (bundledPandoc && useBundledPandoc) {
+        global.log.info(`[Import] Using the bundled Pandoc binary at ${process.env.PANDOC_PATH}`)
+        binary = process.env.PANDOC_PATH
+      }
+
+      if (bundledPandoc && useBundledPandoc && isAppleSilicon) {
+        // On Apple M1/ARM64 chips, we need to run the 64 bit Intel-compiled Pandoc
+        // through Rosetta 2, which we can do by prepending with arch -x86_64.
+        binary = 'arch -x86_64 ' + binary
+      }
+
       // The file is known -> let's import it!
       let newName = path.join(dirToImport.path, path.basename(file.path, path.extname(file.path))) + '.md'
-      let cmd = `pandoc -f ${file.knownFormat} -t markdown -o "${newName}" --wrap=none --atx-headers "${file.path}"`
+      let cmd = `${binary} -f ${file.knownFormat} -t markdown -o "${newName}" --wrap=none --atx-headers "${file.path}"`
 
       exec(cmd, { 'cwd': dirToImport.path }, (error, stdout, stderr) => {
         if (error && errorCallback) {

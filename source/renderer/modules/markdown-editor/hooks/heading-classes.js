@@ -4,27 +4,33 @@
  * @param   {CodeMirror}  cm  The instance
  */
 module.exports = (cm) => {
-  cm.on('cursorActivity', applyHeadingClasses)
-  cm.on('viewportChange', applyHeadingClasses)
+  // DEBUG TESTING
+
+  // While taskHandle is undefined, there's no task scheduled. Else, there is.
+  let taskHandle
+
+  const callback = function (cm) {
+    if (taskHandle !== undefined) {
+      return // There's already a task scheduled
+    }
+
+    taskHandle = requestIdleCallback(function () {
+      applyHeadingClasses(cm)
+      taskHandle = undefined // Reset task handle
+    }, { timeout: 1000 }) // Execute after 1 seconds, even if there's a performance penalty involved
+  }
+
+  cm.on('cursorActivity', callback)
+  cm.on('viewportChange', callback)
+  cm.on('optionChange', callback)
+  // cm.on('optionChange', applyHeadingClasses) // DEBUG
 }
 
 function applyHeadingClasses (cm) {
-  let wrapperClass = ''
-  let needsRefresh = false // Will be set to true if at least one line has been altered
-
   // We'll only render the viewport
   const viewport = cm.getViewport()
   for (let i = viewport.from; i < viewport.to; i++) {
-    let oldClass = ''
     const line = cm.getLine(i)
-
-    // Retrieve the wrapper class
-    wrapperClass = cm.lineInfo(i).wrapClass
-
-    // Save the old class name
-    if (/size-header-\d/.test(wrapperClass)) {
-      oldClass = /(size-header-\d)/.exec(wrapperClass)[1]
-    }
 
     // Then remove all header styles
     for (let x = 1; x < 7; x++) {
@@ -33,8 +39,6 @@ function applyHeadingClasses (cm) {
 
     // Only re-apply a header class if allowed.
     if (cm.getModeAt({ 'line': i, 'ch': 0 }).name !== 'markdown') {
-      // Indicate a refresh if necessary
-      if (oldClass !== '') needsRefresh = true
       continue
     }
 
@@ -42,9 +46,6 @@ function applyHeadingClasses (cm) {
     let match = /^(#{1,6}) /.exec(line)
     if (match) {
       cm.addLineClass(i, 'wrap', `size-header-${match[1].length}`)
-      // If the new header class is different
-      // than the old one, indicate a refresh.
-      if (oldClass !== `size-header-${match[1].length}`) needsRefresh = true
     }
 
     if (i === 0) continue // No need to check for Setext header
@@ -85,18 +86,6 @@ function applyHeadingClasses (cm) {
       for (let line = begin; line <= i; line++) {
         cm.addLineClass(line, 'wrap', `size-header-${level}`)
       }
-
-      // If the new header class is different
-      // than the old one, indicate a refresh.
-      if (oldClass !== `size-header-${level}`) {
-        needsRefresh = true
-      }
     }
-  }
-
-  // If at least one header class has been altered, refresh the codemirror
-  // instance as the sizes won't match up in that case.
-  if (needsRefresh) {
-  //   cm.refresh()
   }
 }

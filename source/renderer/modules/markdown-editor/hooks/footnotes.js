@@ -2,6 +2,7 @@
 // it's not in the plugins folder.
 
 const tippy = require('tippy.js').default
+const { getFnRefRE } = require('../../../../common/regular-expressions')
 const md2html = require('../../../../common/util/md-to-html')
 
 module.exports = (cm) => {
@@ -12,17 +13,21 @@ module.exports = (cm) => {
 
     if (process.platform === 'darwin' && !event.metaKey) return true
     if (process.platform !== 'darwin' && !event.ctrlKey) return true
-    if (cm.isReadOnly()) return true
-    if (cm.getModeAt(cursor).name !== 'markdown') return true
-
-    event.preventDefault()
+    if (cm.isReadOnly() || cm.getModeAt(cursor).name !== 'markdown') return true
 
     let tokenInfo = cm.getTokenAt(cursor)
+
+    if (tokenInfo.type === null) {
+      return
+    }
+
     let tokenList = tokenInfo.type.split(' ')
     let startsWithCirc = tokenInfo.string.indexOf('^') === 0
 
     // A link (reference) that starts with a cironflex is a footnote
     if (tokenList.includes('link') && startsWithCirc) {
+      event.preventDefault()
+      event.codemirrorIgnore = true
       editFootnote(cm, event.target)
     }
   })
@@ -56,7 +61,7 @@ function showFootnoteTooltip (cm, element) {
 
   // Now find the respective line and extract the footnote content using
   // our RegEx from the footnotes plugin.
-  let fnrefRE = /^\[\^([\da-zA-Z_-]+)\]: (.+)/gm
+  let fnrefRE = getFnRefRE(true) // Get the multiline version
 
   for (let lineNo = cm.doc.lastLine(); lineNo > -1; lineNo--) {
     fnrefRE.lastIndex = 0
@@ -72,7 +77,7 @@ function showFootnoteTooltip (cm, element) {
   fnref = (fnref && fnref !== '') ? fnref : '_No reference text_'
 
   // For preview we should convert the footnote text to HTML.
-  fnref = md2html(fnref)
+  fnref = md2html(fnref, true) // Ensure safe links
 
   // Now we either got a match or an empty fnref. So create a tippy
   // instance
@@ -82,7 +87,9 @@ function showFootnoteTooltip (cm, element) {
     onHidden (instance) {
       instance.destroy() // Destroy the tippy instance.
     },
-    arrow: true
+    arrow: true,
+    interactive: true, // Enable clicking on links, etc.
+    appendTo: document.body // Necessary because these tippys are interactive
   }).show() // Immediately show the tooltip
 }
 
@@ -111,10 +118,9 @@ function editFootnote (cm, element) {
   global.popupProvider.show('footnote-edit', element, data)
 
   // Focus the textarea immediately.
-  document.getElementById('#footnote-edit-textarea').focus()
+  const fnTextarea = document.getElementById('footnote-edit-textarea')
 
-  const fnTextarea = document.querySelector('.popup .footnote-edit')
-
+  fnTextarea.focus()
   fnTextarea.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && e.shiftKey) {
       // Done editing.

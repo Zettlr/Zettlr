@@ -14,7 +14,7 @@
 
 import path from 'path'
 import { promises as fs } from 'fs'
-import { app, BrowserWindow } from 'electron'
+import { app, ipcMain } from 'electron'
 import chalk from 'chalk'
 const hasProp = Object.prototype.hasOwnProperty
 
@@ -25,15 +25,9 @@ const hasProp = Object.prototype.hasOwnProperty
  */
 const LOG_FILES_TO_KEEP = 30
 
-const debugConsole = {
-  error: function (message: string) { console.error(chalk.bold.red(message)) },
-  warn: function (message: string) { console.warn(chalk.yellow(message)) },
-  info: function (message: string) { console.log(chalk.keyword('cornflowerblue')(message)) },
-  verbose: function (message: string) { console.log(chalk.grey(message)) }
-}
-
 /**
- * Available LogLevels
+ * Available LogLevels BUG: Somehow I have to declare this twice. That happens
+ * if you devise a system for typings where you can put types "somewhere."
  */
 enum LogLevel {
   verbose = 1,
@@ -42,22 +36,18 @@ enum LogLevel {
   error = 4
 }
 
-/**
- * A single log message
- */
-interface LogMessage {
-  time: string
-  level: LogLevel
-  message: string
-  details: any
+const debugConsole = {
+  error: function (message: string) { console.error(chalk.bold.red(message)) },
+  warn: function (message: string) { console.warn(chalk.yellow(message)) },
+  info: function (message: string) { console.log(chalk.keyword('cornflowerblue')(message)) },
+  verbose: function (message: string) { console.log(chalk.grey(message)) }
 }
 
-module.exports = class LogProvider {
+export default class LogProvider {
   private readonly _logPath: string
   private readonly _log: LogMessage[]
   private _entryPointer: number
   private _fileLock: boolean
-  private _win: BrowserWindow|null
 
   constructor () {
     this._logPath = path.join(app.getPath('userData'), 'logs')
@@ -68,12 +58,11 @@ module.exports = class LogProvider {
     this._log = []
     this._entryPointer = 0 // Set the log entry file pointer to zero
     this._fileLock = false // True while data is being appended to the log
-    this._win = null
 
     // Initialise log with pre-boot messages and an initialisation message
     this._migratePreBootLog()
 
-    this.log(LogLevel.info, 'Log provider booting up ...', null)
+    this.log(LogLevel.verbose, 'Log provider booting up ...', null)
 
     // Inject the global provider functions
     global.log = {
@@ -88,11 +77,22 @@ module.exports = class LogProvider {
       },
       error: (msg, details = null) => {
         this.log(LogLevel.error, msg, details)
-      },
-      showLogViewer: () => {
-        this.showLogViewer()
       }
     }
+
+    // Ensure message handling
+    ipcMain.handle('log-provider', (event, payload) => {
+      const { command } = payload
+
+      if (command === 'retrieve-log-chunk') {
+        let { nextIndex } = payload
+        if (nextIndex >= this._log.length) {
+          return []
+        }
+
+        return this._log.slice(nextIndex)
+      }
+    })
   }
 
   /**
@@ -100,50 +100,9 @@ module.exports = class LogProvider {
    * @return {Boolean} Whether or not the shutdown was successful
    */
   async shutdown (): Promise<boolean> {
-    this.log(LogLevel.info, 'Log provider shutting down ...', null)
+    this.log(LogLevel.verbose, 'Log provider shutting down ...', null)
     await this._append() // One final append to flush the log
     return true
-  }
-
-  /**
-   * Opens the log viewer window
-   */
-  showLogViewer (): void {
-    if (this._win !== null) {
-      // Show the existing one instead opening a new one
-      if (this._win.isMinimized()) this._win.restore()
-      this._win.focus()
-      return
-    }
-
-    this._win = new BrowserWindow({
-      width: 800,
-      height: 600,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true
-      }
-    })
-
-    this._win.once('ready-to-show', () => {
-      if (this._win === null) return
-
-      this._win.show()
-      setTimeout(() => {
-        if (this._win === null) return
-        // Send all log entries at once
-        this._win.webContents.send('log-view-reload', this._log)
-      }, 1000)
-    })
-
-    this._win.on('closed', () => { this._win = null })
-
-    // Load the renderer index
-    // @ts-expect-error
-    this._win.loadURL(LOG_VIEWER_WEBPACK_ENTRY)
-      .catch(err => {
-        global.log.error(`[Log Provider] Error while opening the log window: ${err.message as string}`, err)
-      })
   }
 
   /**
@@ -171,6 +130,8 @@ module.exports = class LogProvider {
       switch (msg.level) {
         case LogLevel.error:
           debugConsole.error(output)
+          // In case of an error, spit out anything that comes in
+          console.error(msg.details)
           break
         case LogLevel.info:
           debugConsole.info(output)
@@ -182,11 +143,6 @@ module.exports = class LogProvider {
           debugConsole.warn(output)
           break
       }
-    }
-
-    // Immediately append the log
-    if (this._win !== null) {
-      this._win.webContents.send('log-view-add', msg)
     }
 
     this._append()

@@ -18,7 +18,7 @@ module.exports = (cm) => {
       // need to cancel the paste event and handle the image ourselves.
       let image = clipboard.readImage()
       let plain = clipboard.readText()
-      let explicitPaste = plain === changeObj.text.join('\n')
+      let explicitPaste = plain.replace(/\r/g, '') === changeObj.text.join('\n')
 
       if (!image.isEmpty() && (explicitPaste || !changeObj.text)) {
         // We've got an image. So we need to handle it.
@@ -51,6 +51,6 @@ module.exports = (cm) => {
 function displayPasteImageDialog (cm) {
   const basePath = cm.getOption('zettlr').markdownImageBasePath
   this._currentDialog = new PasteImage()
-  this._currentDialog.init({ 'activeFile': { path: basePath } }).open()
+  this._currentDialog.init({ currentPath: basePath }).open()
   this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
 }

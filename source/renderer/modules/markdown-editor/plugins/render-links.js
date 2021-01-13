@@ -113,7 +113,7 @@
         }
 
         // We can only have one marker at any given position at any given time
-        if (cm.findMarks(curFrom, curTo).length > 0) continue
+        if (cm.doc.findMarks(curFrom, curTo).length > 0) continue
 
         // Do not render if it's inside a comment (in this case the mode will be
         // markdown, but comments shouldn't be included in rendering)
@@ -165,7 +165,8 @@
           regularLinkCaption = regularLinkCaption.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>')
           regularLinkCaption = regularLinkCaption.replace(/__([^_]+?)__/g, '<strong>$1</strong>')
           regularLinkCaption = regularLinkCaption.replace(/\*([^*]+?)\*/g, '<em>$1</em>')
-          regularLinkCaption = regularLinkCaption.replace(/_([^_]+?)_/g, '<em>$1</em>')
+          regularLinkCaption = regularLinkCaption.replace(/\s_([^_]+?)_/g, ' <em>$1</em>')
+          regularLinkCaption = regularLinkCaption.replace(/^_([^_]+?)_/, '<em>$1</em>')
           regularLinkCaption = regularLinkCaption.replace(/~~([^~]+?)~~/g, '<del>$1</del>')
           if (/^!\[.+\]\(.+\)$/.test(regularLinkCaption)) {
             regularLinkCaption = regularLinkCaption.replace(/^!\[(.*)\]\((.+)\)$/, '<img src="$2" title="$1">')
@@ -187,7 +188,7 @@
         }
 
         // Apply TextMarker
-        let textMarker = cm.markText(
+        let textMarker = cm.doc.markText(
           curFrom, curTo,
           {
             'clearOnEnter': true,
@@ -216,7 +217,7 @@
             cm.focus()
           }
         }
-      }
-    }
+      } // END while-loop
+    } // END for-loop
   }
 })

@@ -52,7 +52,7 @@ export default function resolveTimespanMs (ms: number): Timespan {
   }
 
   if (hours > 24) {
-    days = Math.floor(hours / 60)
+    days = Math.floor(hours / 24)
     hours = hours % 24
   }
 

@@ -13,7 +13,7 @@
  */
 const renderTemplate = require('./util/render-template')
 
-const { trans } = require('../common/lang/i18n.js')
+const { trans } = require('../common/i18n.js')
 const clarityIcons = require('@clr/icons').ClarityIcons
 const Citr = require('@zettlr/citr')
 
@@ -39,10 +39,10 @@ module.exports = class ZettlrSidebar {
     this._renderer = parent
 
     const tabs = renderTemplate(`
-    <div id="sidebar-tabs">
-      <div data-target="sidebar-files" class="sidebar-tab active" title="${trans('gui.attachments')}"><clr-icon shape="attachment"></clr-icon></div>
-      <div data-target="sidebar-bibliography" class="sidebar-tab" title="${trans('gui.citeproc.references_heading')}"><clr-icon shape="book"></clr-icon></div>
-      <div data-target="sidebar-toc" class="sidebar-tab" title="Table of Contents"><clr-icon shape="indented-view-list"></clr-icon></div>
+    <div id="sidebar-tabs" role="tablist">
+      <div role="tab" aria-label="${trans('gui.attachments')}" data-target="sidebar-files" class="sidebar-tab active" title="${trans('gui.attachments')}"><clr-icon shape="attachment" role="presentation"></clr-icon></div>
+      <div role="tab" aria-label="${trans('gui.citeproc.references_heading')}" data-target="sidebar-bibliography" class="sidebar-tab" title="${trans('gui.citeproc.references_heading')}"><clr-icon shape="book" role="presentation"></clr-icon></div>
+      <div role="tab" aria-label="Table of Contents" data-target="sidebar-toc" class="sidebar-tab" title="Table of Contents"><clr-icon shape="indented-view-list" role="presentation"></clr-icon></div>
     </div>`)
 
     // Immediately preset the container element with the necessary structure
@@ -76,7 +76,7 @@ module.exports = class ZettlrSidebar {
     // Enable opening of the directory in Finder/Explorer/linux file browser
     this.openDirButton.addEventListener('click', (e) => {
       if (this._renderer.getCurrentDir() !== null) {
-        global.ipc.send('open-external', { href: this._renderer.getCurrentDir().path })
+        window.location = `safe-file://${this._renderer.getCurrentDir().path}`
       }
     })
 
@@ -194,10 +194,11 @@ module.exports = class ZettlrSidebar {
     return renderTemplate(
       `<a
         class="attachment"
+        draggable="true"
         data-link="${attachment.path}"
         data-hash="${attachment.hash}"
         title="${attachment.path}"
-        onclick="global.ipc.send('open-external', { href: '${attachment.path}' })"
+        href="safe-file://${attachment.path}"
       >
         ${icon} ${attachment.name}
       </a>`
@@ -245,7 +246,7 @@ module.exports = class ZettlrSidebar {
 
     let currentDir = this._renderer.getCurrentDir()
     // Grab the newest attachments and refresh
-    if (currentDir === null || currentDir.attachments.length === 0) {
+    if (currentDir == null || currentDir.attachments.length === 0) {
       this.fileContainer.append(renderTemplate(`<p>${trans('gui.no_attachments')}</p>`))
       return // Don't activate in this instance
     }
@@ -331,7 +332,7 @@ module.exports = class ZettlrSidebar {
     const entries = this.tocContainer.querySelectorAll('.toc-entry')
     for (let entry of entries) {
       entry.addEventListener('click', (e) => {
-        const targetLine = entry.dataset.line
+        const targetLine = parseInt(entry.dataset.line, 10)
         this._renderer.getEditor().jtl(targetLine)
       })
     }
@@ -349,25 +350,8 @@ module.exports = class ZettlrSidebar {
       this.bibliographyContainer.innerHTML = `<p>${bib}</p>`
       return
     }
-    // Convert links, so that they remain but do not open in the same
-    // window.
-    let aRE = /<a(.+?)>(.*?)<\/a>/g
-    let hrefRE = /href="(.+)"/i
-    let output = []
-    for (let entry of bib[1]) {
-      aRE.lastIndex = 0
-      output.push(
-        entry.replace(aRE, function (match, p1, p2, offset, string) {
-          let href = hrefRE.exec(p1)
-          if (href !== null) {
-            return `<a onclick="global.ipc.send('open-external', { href: '${href[1]}'})">${p2}</a>`
-          }
-          // If we can't link it, return an unlinked link
-          return p2
-        })
-      )
-    }
-    this.bibliographyContainer.innerHTML = bib[0].bibstart + output.join('\n') + bib[0].bibend
+
+    this.bibliographyContainer.innerHTML = bib[0].bibstart + bib[1].join('\n') + bib[0].bibend
   }
 
   /**

@@ -14,11 +14,23 @@
  */
 
 const path = require('path')
+// NOTE: fileExists is called "isFile" everywhere else, we have just renamed
+// it because of a naming conflict in the function.
+const fileExists = require('../../common/util/is-file')
+const { getProtocolRE, getLinkRE, getMarkDownFileRE } = require('../regular-expressions')
 
-const protocolRE = /^([a-z0-9]{1,10}):\/\//i
-const linkRE = /^.+\.[a-z0-9]+/i
-const mdFileRE = /.+\.(?:md|markdown|txt)$/i
+const protocolRE = getProtocolRE()
+const linkRE = getLinkRE()
+const mdFileRE = getMarkDownFileRE()
 
+/**
+ * Returns a valid URI, using the available context information
+ *
+ * @param   {string}  uri   The URI to check
+ * @param   {string}  base  The base which can be used to make uri absolute
+ *
+ * @return  {string}        The absolute, parsed string.
+ */
 module.exports = function (uri, base = '') {
   // Why do we need a helper function for this?
   // Because it's not only hard to distinguish
@@ -38,19 +50,33 @@ module.exports = function (uri, base = '') {
   //
   // So what we need to do first is distinguish between a URL and a Path.
 
+  if (uri.startsWith('mailto:')) {
+    // Shortcut for mailto-links, as these have a protocol (mailto) but with
+    // *only* a colon, not the double-slash (//).
+    return uri
+  }
+
   // Set the isFile var to undefined
   let isFile
 
   // First, remove a potential protocol and save it for later use
   let protocol = protocolRE.exec(uri)
   // If there was a protocol, extract the capturing group
-  if (protocol !== null) protocol = protocol[1]
+  if (protocol !== null) {
+    protocol = protocol[1]
+  }
 
   if (protocol === 'file') {
     // We know it's a file
     isFile = true
-  } else if (uri.indexOf('//') === 0) {
-    // We know it's a link to a file on a shared drive
+  } else if (uri.startsWith('//') || uri.startsWith('./') || uri.startsWith('../')) {
+    // We know it's a file (shared drive, or relative to this directory)
+    isFile = true
+  } else if (path.isAbsolute(uri) && fileExists(uri)) {
+    // The link is already absolute and exists
+    isFile = true
+  } else if (!path.isAbsolute(uri) && fileExists(path.join(base, uri))) {
+    // The link is relative and exists
     isFile = true
   }
 

@@ -19,9 +19,10 @@
 })(function (CodeMirror) {
   'use strict'
 
-  var listRE = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/
-  let emptyListRE = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/
-  let unorderedListRE = /[*+-]\s/
+  const { getListUnorderedRE, getListEmptyRE, getListRE } = require('../../../../common/regular-expressions')
+  const listRE = getListRE()
+  const emptyListRE = getListEmptyRE()
+  const unorderedListRE = getListUnorderedRE()
 
   CodeMirror.commands.newlineAndIndentContinueMarkdownList = function (cm) {
     if (cm.isReadOnly()) return CodeMirror.Pass
@@ -31,15 +32,22 @@
       let pos = ranges[i].head
       // If we're not in Markdown mode, fall back to normal newlineAndIndent
       var eolState = cm.getStateAfter(pos.line)
-      var inner = cm.getMode().innerMode(eolState)
+      let mode = cm.getMode()
+      if (mode.innerMode !== undefined) {
+        mode = cm.getMode().innerMode(eolState)
+      }
+
+      // Modes can either be just strings or objects with a name property
+      let modeName = (mode.mode !== undefined) ? mode.mode.name : mode.name
+
       // innerMode gets the first inner mode, i.e.:
       // multiplex -> spellchecker (not visible the
       // underyling md mode)
-      if (inner.mode.name !== 'spellchecker') {
+      if (modeName !== 'spellchecker') {
         cm.execCommand('newlineAndIndent')
         return
       } else {
-        eolState = inner.state
+        eolState = mode.state
       }
 
       var inList = eolState.list !== false

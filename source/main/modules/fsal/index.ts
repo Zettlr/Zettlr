@@ -21,29 +21,41 @@ import isAttachment from '../../../common/util/is-attachment'
 import objectToArray from '../../../common/util/object-to-array'
 import findObject from '../../../common/util/find-object'
 import * as FSALFile from './fsal-file'
+import * as FSALCodeFile from './fsal-code-file'
 import * as FSALDir from './fsal-directory'
 import * as FSALAttachment from './fsal-attachment'
 import FSALWatchdog from './fsal-watchdog'
 import FSALCache from './fsal-cache'
 import hash from '../../../common/util/hash'
-import sort from '../../../common/util/sort'
+import sort from './util/sort'
 import {
-  OtherFileDescriptor,
   DirDescriptor,
   MDFileDescriptor,
   MDFileMeta,
   AnyDescriptor,
-  DescriptorType,
   MaybeRootMeta,
   WatchdogEvent,
   AnyMetaDescriptor,
-  MaybeRootDescriptor
+  MaybeRootDescriptor,
+  CodeFileDescriptor,
+  CodeFileMeta
 } from './types'
+
+const ALLOWED_CODE_FILES = [
+  '.tex'
+]
+
+const MARKDOWN_FILES = [
+  '.md',
+  '.rmd',
+  '.markdown',
+  '.txt'
+]
 
 interface FSALState {
   openDirectory: DirDescriptor|null
-  openFiles: MDFileDescriptor[]
-  activeFile: MDFileDescriptor|null
+  openFiles: Array<MDFileDescriptor|CodeFileDescriptor>
+  activeFile: MDFileDescriptor|CodeFileDescriptor|null
   filetree: MaybeRootDescriptor[]
 }
 
@@ -76,7 +88,7 @@ export default class FSAL extends EventEmitter {
     // Finally, set up listeners for global targets
     global.targets.on('update', (hash: number) => {
       let file = this.findFile(hash)
-      if (file === null) return // Not our business
+      if (file === null || file.type !== 'file') return // Not our business
       // Simply pull in the new target
       FSALFile.setTarget(file, global.targets.get(hash))
       this.emit('fsal-state-changed', 'file', {
@@ -86,8 +98,8 @@ export default class FSAL extends EventEmitter {
     })
     global.targets.on('remove', (hash: number) => {
       let file = this.findFile(hash)
-      if (file === null) return // Also not our business
-      FSALFile.setTarget(file, null) // Reset
+      if (file === null || file.type !== 'file') return // Also not our business
+      FSALFile.setTarget(file, undefined) // Reset
       this.emit('fsal-state-changed', 'file', {
         'oldHash': file.hash,
         'newHash': file.hash
@@ -279,7 +291,7 @@ export default class FSAL extends EventEmitter {
         // It was a root directory, so we need to find another root dir
         if (rootIndex === this._state.filetree.length) {
           // Last directory has been removed, check if there are any before it
-          let dirs = this._state.filetree.filter(dir => dir.type === DescriptorType.Directory) as DirDescriptor[]
+          let dirs = this._state.filetree.filter(dir => dir.type === 'directory') as DirDescriptor[]
           if (dirs.length > 0) this._state.openDirectory = dirs[dirs.length - 1]
         } else {
           // Either the first root or something in between has been removed -->
@@ -368,9 +380,10 @@ export default class FSAL extends EventEmitter {
    *
    * @returns {boolean} Whether or not the shutdown was successful
    */
-  public shutdown (): boolean {
+  public async shutdown (): Promise<boolean> {
     global.log.verbose('FSAL shutting down ...')
     this._cache.persist()
+    await this._watchdog.shutdown()
     return true
   }
 
@@ -380,10 +393,16 @@ export default class FSAL extends EventEmitter {
    */
   private async _loadFile (filePath: string): Promise<void> {
     // Loads a standalone file
-    let start = Date.now()
-    let file = await FSALFile.parse(filePath, this._cache)
-    this._state.filetree.push(file)
-    console.log(`${Date.now() - start} ms: Loaded file ${filePath}`) // DEBUG
+    const isCode = ALLOWED_CODE_FILES.includes(path.extname(filePath))
+    const isMD = MARKDOWN_FILES.includes(path.extname(filePath))
+
+    if (isCode) {
+      let file = await FSALCodeFile.parse(filePath, this._cache)
+      this._state.filetree.push(file)
+    } else if (isMD) {
+      let file = await FSALFile.parse(filePath, this._cache)
+      this._state.filetree.push(file)
+    }
   }
 
   /**
@@ -392,10 +411,8 @@ export default class FSAL extends EventEmitter {
    */
   private async _loadDir (dirPath: string): Promise<void> {
     // Loads a directory
-    let start = Date.now()
     let dir = await FSALDir.parse(dirPath, this._cache)
     this._state.filetree.push(dir)
-    console.log(`${Date.now() - start} ms: Loaded directory ${dirPath}`) // DEBUG
   }
 
   /**
@@ -404,7 +421,22 @@ export default class FSAL extends EventEmitter {
    */
   private async _loadPlaceholder (dirPath: string): Promise<void> {
     // Load a "dead" directory
-    console.log('Creating placeholder for dir ' + dirPath) // DEBUG
+    let dir: DirDescriptor = FSALDir.getDirNotFoundDescriptor(dirPath)
+    this._state.filetree.push(dir)
+  }
+
+  public async rescanForDirectory (descriptor: DirDescriptor): Promise<void> {
+    // Rescans a not found directory and, if found, replaces the directory
+    // descriptor.
+    if (isDir(descriptor.path)) {
+      // Remove this descriptor, and have the FSAL load the real one
+      const idx = this._state.filetree.indexOf(descriptor)
+      this._state.filetree.splice(idx, 1)
+      global.log.info(`Directory ${descriptor.name} found - Adding to file tree ...`)
+      await this.loadPath(descriptor.path)
+    } else {
+      global.log.info(`Rescanned directory ${descriptor.name}, but the directory still does not exist.`)
+    }
   }
 
   /**
@@ -413,6 +445,7 @@ export default class FSAL extends EventEmitter {
    */
   public async loadPath (p: string): Promise<boolean> {
     // Load a path
+    let start = Date.now()
     if (isFile(p)) {
       await this._loadFile(p)
       this._watchdog.watch(p)
@@ -426,6 +459,10 @@ export default class FSAL extends EventEmitter {
     } else {
       // If we've reached here the path poses a problem -> notify caller
       return false
+    }
+
+    if (Date.now() - start > 500) {
+      global.log.warning(`[FSAL] Path ${p} took ${Date.now() - start}ms to load.`)
     }
 
     this._state.filetree = sort(this._state.filetree)
@@ -467,8 +504,8 @@ export default class FSAL extends EventEmitter {
     // Set the open directory to an appropriate value
     if (this.openDirectory === root) {
       const rootIdx = this._state.filetree.indexOf(root)
-      const dirAfter = this._state.filetree[rootIdx + 1]?.type === DescriptorType.Directory
-      const dirBefore = this._state.filetree[rootIdx - 1]?.type === DescriptorType.Directory
+      const dirAfter = this._state.filetree[rootIdx + 1]?.type === 'directory'
+      const dirBefore = this._state.filetree[rootIdx - 1]?.type === 'directory'
       if (rootIdx === this._state.filetree.length - 1 && dirBefore) {
         this.openDirectory = this._state.filetree[rootIdx - 1] as DirDescriptor
       } else if (rootIdx >= 0 && dirAfter) {
@@ -476,6 +513,11 @@ export default class FSAL extends EventEmitter {
       } else {
         this.openDirectory = null
       }
+    }
+
+    if (this.openFiles.includes(root.hash) && root.type === 'file') {
+      // It's an open root file --> close before splicing from the tree
+      this.closeFile(root)
     }
 
     this._state.filetree.splice(this._state.filetree.indexOf(root), 1)
@@ -514,7 +556,7 @@ export default class FSAL extends EventEmitter {
    * @param {Array} hashArray An array with hashes to sort with
    * @return {Array} The new sorting
    */
-  public sortOpenFiles (hashArray: number[]): MDFileDescriptor[] {
+  public sortOpenFiles (hashArray: number[]): Array<MDFileDescriptor|CodeFileDescriptor> {
     if (!Array.isArray(hashArray)) return this._state.openFiles
     // Expand the hash array
     let notFound = this._state.openFiles.filter(e => !hashArray.includes(e.hash))
@@ -537,7 +579,7 @@ export default class FSAL extends EventEmitter {
    * Returns a file's metadata including the contents.
    * @param {Object} file The file descriptor
    */
-  public openFile (file: MDFileDescriptor): boolean {
+  public openFile (file: MDFileDescriptor|CodeFileDescriptor): boolean {
     if (this._state.openFiles.includes(file)) return false
     if (file.type !== 'file') return false
     this._state.openFiles.push(file)
@@ -549,7 +591,7 @@ export default class FSAL extends EventEmitter {
    * Closes a given file.
    * @param {Object} file The file descriptor
    */
-  public closeFile (file: MDFileDescriptor): boolean {
+  public closeFile (file: MDFileDescriptor|CodeFileDescriptor): boolean {
     if (this._state.openFiles.includes(file)) {
       this._state.openFiles.splice(this._state.openFiles.indexOf(file), 1)
       this.emit('fsal-state-changed', 'openFiles')
@@ -596,34 +638,50 @@ export default class FSAL extends EventEmitter {
    * Returns a file metadata object including the file contents.
    * @param {Object} file The file descriptor
    */
-  public async getFileContents (file: MDFileDescriptor): Promise<MDFileMeta> {
-    let returnFile = FSALFile.metadata(file)
-    returnFile.content = await FSALFile.load(file)
-    return returnFile
+  public async getFileContents (file: MDFileDescriptor|CodeFileDescriptor): Promise<MDFileMeta|CodeFileMeta> {
+    if (file.type === 'file') {
+      let returnFile = FSALFile.metadata(file)
+      returnFile.content = await FSALFile.load(file)
+      return returnFile
+    } else if (file.type === 'code') {
+      let returnFile = FSALCodeFile.metadata(file)
+      returnFile.content = await FSALCodeFile.load(file)
+      return returnFile
+    }
+
+    throw new Error('[FSAL] Could not retrieve file contents: Invalid type or invalid descriptor.')
   }
 
   /**
    * Sets the modification flag on an open file
    */
-  public markDirty (file: MDFileDescriptor): void {
+  public markDirty (file: MDFileDescriptor|CodeFileDescriptor): void {
     if (!this._state.openFiles.includes(file)) {
       console.error('Cannot mark dirty a non-open file!')
       return
     }
 
-    FSALFile.markDirty(file)
+    if (file.type === 'file') {
+      FSALFile.markDirty(file)
+    } else if (file.type === 'code') {
+      FSALCodeFile.markDirty(file)
+    }
   }
 
   /**
    * Removes the modification flag on an open file
    */
-  public markClean (file: MDFileDescriptor): void {
+  public markClean (file: MDFileDescriptor|CodeFileDescriptor): void {
     if (!this._state.openFiles.includes(file)) {
       console.error('Cannot mark clean a non-open file!')
       return
     }
 
-    FSALFile.markClean(file)
+    if (file.type === 'file') {
+      FSALFile.markClean(file)
+    } else if (file.type === 'code') {
+      FSALCodeFile.markClean(file)
+    }
   }
 
   /**
@@ -657,9 +715,10 @@ export default class FSAL extends EventEmitter {
    * @return  {AnyMetaDescriptor}          The metadata for that descriptor
    */
   public getMetadataFor (descriptor: AnyDescriptor): AnyMetaDescriptor|undefined {
-    if (descriptor.type === DescriptorType.Directory) return FSALDir.metadata(descriptor as DirDescriptor)
-    if (descriptor.type === DescriptorType.MDFile) return FSALFile.metadata(descriptor as MDFileDescriptor)
-    if (descriptor.type === DescriptorType.Other) return FSALAttachment.metadata(descriptor as OtherFileDescriptor)
+    if (descriptor.type === 'directory') return FSALDir.metadata(descriptor)
+    if (descriptor.type === 'file') return FSALFile.metadata(descriptor)
+    if (descriptor.type === 'code') return FSALCodeFile.metadata(descriptor)
+    if (descriptor.type === 'other') return FSALAttachment.metadata(descriptor)
     return undefined
   }
 
@@ -676,7 +735,6 @@ export default class FSAL extends EventEmitter {
     if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
     if (typeof val !== 'number') val = parseInt(val, 10)
 
-    // let found = findObject(this._roots, 'hash', val, 'children')
     let found = findObject(baseTree, 'hash', val, 'children')
     if (!found || found.type !== 'directory') return null
     return found
@@ -687,15 +745,20 @@ export default class FSAL extends EventEmitter {
    * @param {Mixed} val Either an absolute path or a hash
    * @return {Mixed} Either null or the wanted file
    */
-  public findFile (val: string|number, baseTree = this._state.filetree): MDFileDescriptor|null {
+  public findFile (
+    val: string|number,
+    baseTree = this._state.filetree
+  ): MDFileDescriptor|CodeFileDescriptor|null {
     // We'll only search for hashes, so if the user searches for a path,
     // convert it to the hash prior to searching the tree.
     if (typeof val === 'string' && path.isAbsolute(val)) val = hash(val)
     if (typeof val !== 'number') val = parseInt(val, 10)
 
-    // let found = findObject(this._roots, 'hash', val, 'children')
     let found = findObject(baseTree, 'hash', val, 'children')
-    if (!found || found.type !== 'file') return null
+    if (!found || ![ 'code', 'file' ].includes(found.type)) {
+      return null
+    }
+
     return found
   }
 
@@ -703,7 +766,7 @@ export default class FSAL extends EventEmitter {
    * Convenience wrapper for findFile && findDir
    * @param {number|string} val The value to search for (hash or path)
    */
-  public find (val: number|string): MDFileDescriptor|DirDescriptor|null {
+  public find (val: number|string): MDFileDescriptor|DirDescriptor|CodeFileDescriptor|null {
     let res = this.findFile(val)
     if (res === null) return this.findDir(val)
     return res
@@ -723,7 +786,7 @@ export default class FSAL extends EventEmitter {
    * @param {DirDescriptor} haystack A dir descriptor
    * @param {MDFileDescriptor|DirDescriptor} needle A file or directory descriptor
    */ // TODO: Only Directories!
-  public hasChild (haystack: DirDescriptor, needle: MDFileDescriptor|DirDescriptor): boolean {
+  public hasChild (haystack: DirDescriptor, needle: MDFileDescriptor|CodeFileDescriptor|DirDescriptor): boolean {
     // Hello, PHP
     // If a name checks out, return true
     for (let child of (haystack).children) {
@@ -742,6 +805,100 @@ export default class FSAL extends EventEmitter {
     return this._state.openDirectory
   }
 
+  public get statistics (): any {
+    // First, we need ALL of our loaded paths as an array
+    let pathsArray: Array<DirDescriptor|MDFileDescriptor|CodeFileDescriptor> = []
+    for (const descriptor of this._state.filetree) {
+      pathsArray = pathsArray.concat(objectToArray(descriptor, 'children'))
+    }
+
+    // Now only the files
+    const mdArray = pathsArray.filter(descriptor => descriptor.type === 'file') as MDFileDescriptor[]
+
+    // So, let's first get our min, max, mean, and median word and charcount
+    let minChars = Infinity
+    let maxChars = -Infinity
+    let minWords = Infinity
+    let maxWords = -Infinity
+    let sumChars = 0
+    let sumWords = 0
+
+    for (const descriptor of mdArray) {
+      if (descriptor.charCount < minChars) {
+        minChars = descriptor.charCount
+      }
+
+      if (descriptor.charCount > maxChars) {
+        maxChars = descriptor.charCount
+      }
+
+      if (descriptor.wordCount < minWords) {
+        minWords = descriptor.wordCount
+      }
+
+      if (descriptor.wordCount > maxWords) {
+        maxWords = descriptor.wordCount
+      }
+
+      sumChars += descriptor.charCount
+      sumWords += descriptor.wordCount
+    }
+
+    // Now calculate the mean
+    const meanChars = Math.round(sumChars / mdArray.length)
+    const meanWords = Math.round(sumWords / mdArray.length)
+
+    // Now we are interested in the standard deviation to calculate the
+    // spread of words in 95 and 99 percent intervals around the mean.
+    let charsSS = 0
+    let wordsSS = 0
+
+    for (const descriptor of mdArray) {
+      charsSS += (descriptor.charCount - meanChars) ** 2
+      wordsSS += (descriptor.wordCount - meanWords) ** 2
+    }
+
+    // Now the standard deviation
+    //                        |<      Variance      >|
+    const sdChars = Math.sqrt(charsSS / mdArray.length)
+    const sdWords = Math.sqrt(wordsSS / mdArray.length)
+
+    // Calculate the standard deviation interval bounds
+    const chars68PercentLower = Math.round(meanChars - sdChars)
+    const chars68PercentUpper = Math.round(meanChars + sdChars)
+    const chars95PercentLower = Math.round(meanChars - 2 * sdChars)
+    const chars95PercentUpper = Math.round(meanChars + 2 * sdChars)
+
+    const words68PercentLower = Math.round(meanWords - sdWords)
+    const words68PercentUpper = Math.round(meanWords + sdWords)
+    const words95PercentLower = Math.round(meanWords - 2 * sdWords)
+    const words95PercentUpper = Math.round(meanWords + 2 * sdWords)
+
+    return {
+      minChars: minChars,
+      maxChars: maxChars,
+      minWords: minWords,
+      maxWords: maxWords,
+      sumChars: sumChars,
+      sumWords: sumWords,
+      meanChars: meanChars,
+      meanWords: meanWords,
+      sdChars: Math.round(sdChars),
+      sdWords: Math.round(sdWords),
+      chars68PercentLower: (chars68PercentLower < minChars) ? minChars : chars68PercentLower,
+      chars68PercentUpper: (chars68PercentUpper > maxChars) ? maxChars : chars68PercentUpper,
+      chars95PercentLower: (chars95PercentLower < minChars) ? minChars : chars95PercentLower,
+      chars95PercentUpper: (chars95PercentUpper > maxChars) ? maxChars : chars95PercentUpper,
+      words68PercentLower: (words68PercentLower < minWords) ? minWords : words68PercentLower,
+      words68PercentUpper: (words68PercentUpper > maxWords) ? maxWords : words68PercentUpper,
+      words95PercentLower: (words95PercentLower < minWords) ? minWords : words95PercentLower,
+      words95PercentUpper: (words95PercentUpper > maxWords) ? maxWords : words95PercentUpper,
+      mdFileCount: pathsArray.filter(d => d.type === 'file').length,
+      codeFileCount: pathsArray.filter(d => d.type === 'code').length,
+      dirCount: pathsArray.filter(d => d.type === 'directory').length
+    }
+  }
+
   /**
    * Clears the cache
    */
@@ -749,7 +906,6 @@ export default class FSAL extends EventEmitter {
     return this._cache.clearCache()
   }
 
-  // WAS: SORT
   public async sortDirectory (src: DirDescriptor, sorting: string = ''): Promise<void> {
     this._fsalIsBusy = true
     await FSALDir.sort(src, sorting)
@@ -761,7 +917,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: CREATE-FILE
   public async createFile (src: DirDescriptor, options: any): Promise<void> {
     this._fsalIsBusy = true
     // This action needs the cache because it'll parse a file
@@ -780,8 +935,7 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: RENAME-FILE
-  public async renameFile (src: MDFileDescriptor, options: any): Promise<void> {
+  public async renameFile (src: MDFileDescriptor|CodeFileDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink, 1x add
     let oldHash = src.hash
@@ -794,10 +948,15 @@ export default class FSAL extends EventEmitter {
     }])
     this._watchdog.ignoreEvents([{
       'event': 'add',
-      'path': path.join(path.dirname(src.path), options.name)
+      'path': path.join(path.dirname(src.path), newName)
     }])
 
-    await FSALFile.rename(src, this._cache, options)
+    if (src.type === 'file') {
+      await FSALFile.rename(src, this._cache, newName)
+    } else if (src.type === 'code') {
+      await FSALCodeFile.rename(src, this._cache, newName)
+    }
+
     // Now we need to re-sort the parent directory
     if (src.parent !== null) {
       await FSALDir.sort(src.parent) // Omit sorting
@@ -812,8 +971,7 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: REMOVE-FILE
-  public async removeFile (src: MDFileDescriptor): Promise<void> {
+  public async removeFile (src: MDFileDescriptor|CodeFileDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink
     // First remove the file
@@ -825,7 +983,11 @@ export default class FSAL extends EventEmitter {
     this.closeFile(src) // Does nothing if the file is not open
 
     // Now we're safe to remove the file actually.
-    await FSALFile.remove(src)
+    if (src.type === 'file') {
+      await FSALFile.remove(src)
+    } else {
+      await FSALCodeFile.remove(src)
+    }
 
     // In case it was a root file, we need to splice it
     if (src.parent === null) {
@@ -841,12 +1003,17 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: SAVE-FILE
-  public async saveFile (src: MDFileDescriptor, content: string): Promise<void> {
+  public async saveFile (src: MDFileDescriptor|CodeFileDescriptor, content: string): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x change
     this._watchdog.ignoreEvents([{ 'event': 'change', 'path': src.path }])
-    await FSALFile.save(src, content, this._cache)
+
+    if (src.type === 'file') {
+      await FSALFile.save(src, content, this._cache)
+    } else {
+      await FSALCodeFile.save(src, content, this._cache)
+    }
+
     // Notify that a file has saved, which strictly speaking does not
     // modify the openFiles array, but does change the modification flag.
     this.emit('fsal-state-changed', 'fileSaved', { fileHash: src.hash })
@@ -854,14 +1021,16 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: SEARCH-FILE
-  public async searchFile (src: MDFileDescriptor, searchTerms: any): Promise<any> { // TODO: Implement search results type
+  public async searchFile (src: MDFileDescriptor|CodeFileDescriptor, searchTerms: any): Promise<any> { // TODO: Implement search results type
     // NOTE: Generates no events
     // Searches a file and returns the result
-    return await FSALFile.search(src, searchTerms)
+    if (src.type === 'file') {
+      return await FSALFile.search(src, searchTerms)
+    } else {
+      return await FSALCodeFile.search(src, searchTerms)
+    }
   }
 
-  // WAS: SET-DIRECTORY-SETTING
   public async setDirectorySetting (src: DirDescriptor, settings: any): Promise<void> {
     this._fsalIsBusy = true
     // Sets a setting on the directory
@@ -875,7 +1044,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: CREATE-PROJECT
   public async createProject (src: DirDescriptor, initialProps: any): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates no events as dotfiles are not watched
@@ -888,7 +1056,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: UPDATE-PROJECT
   public async updateProject (src: DirDescriptor, options: any): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates no events as dotfiles are not watched
@@ -902,7 +1069,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: REMOVE-PROJECT
   public async removeProject (src: DirDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates no events as dotfiles are not watched
@@ -915,7 +1081,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: CREATE-DIRECTORY
   public async createDir (src: DirDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
     // Parses a directory and henceforth needs the cache
@@ -943,7 +1108,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: RENAME-DIRECTORY
   public async renameDir (src: DirDescriptor, newName: string): Promise<void> {
     this._fsalIsBusy = true
     // We are probably going to need that code from the move action
@@ -986,12 +1150,12 @@ export default class FSAL extends EventEmitter {
     let removes = []
     for (const child of objectToArray(src, 'children')) {
       adds.push({
-        'event': child.type === DescriptorType.MDFile ? 'add' : 'addDir',
+        'event': child.type === 'file' ? 'add' : 'addDir',
         // Converts /old/path/oldname/file.md --> /old/path/newname/file.md
         'path': child.path.replace(oldPrefix, newPrefix)
       })
       removes.push({
-        'event': child.type === DescriptorType.MDFile ? 'unlink' : 'unlinkDir',
+        'event': child.type === 'file' ? 'unlink' : 'unlinkDir',
         'path': child.path
       })
     }
@@ -1037,7 +1201,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: REMOVE-DIRECTORY
   public async removeDir (src: DirDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink for each child + src!
@@ -1079,7 +1242,6 @@ export default class FSAL extends EventEmitter {
     this._afterRemoteChange()
   }
 
-  // WAS: move
   public async move (src: AnyDescriptor, target: DirDescriptor): Promise<void> {
     this._fsalIsBusy = true
     // NOTE: Generates 1x unlink, 1x add for each child, src and on the target!
@@ -1088,8 +1250,8 @@ export default class FSAL extends EventEmitter {
     let newOpenDirHash
     let newFileHashes: number[] = []
     const hasOpenDir = this.openDirectory !== null
-    const srcIsDir = src.type === DescriptorType.Directory
-    const srcIsFile = src.type === DescriptorType.MDFile
+    const srcIsDir = src.type === 'directory'
+    const srcIsFile = src.type === 'file'
     const srcIsOpenDir = src === this.openDirectory
     const srcContainsOpenDir = srcIsDir && hasOpenDir && this.findDir((this.openDirectory as DirDescriptor).hash, [src as DirDescriptor]) !== null
     const srcContainsActiveFile = srcIsDir && this.activeFile !== null && this.findFile(this.activeFile, [src as DirDescriptor]) !== null
@@ -1144,12 +1306,12 @@ export default class FSAL extends EventEmitter {
     let removes = []
     for (let obj of arr) {
       adds.push({
-        'event': obj.type === DescriptorType.MDFile ? 'add' : 'addDir',
+        'event': obj.type === 'file' ? 'add' : 'addDir',
         // Converts /path/source/file.md --> /path/target/file.md
         'path': obj.path.replace(sourcePath, targetPath)
       })
       removes.push({
-        'event': obj.type === DescriptorType.MDFile ? 'unlink' : 'unlinkDir',
+        'event': obj.type === 'file' ? 'unlink' : 'unlinkDir',
         'path': obj.path
       })
     }

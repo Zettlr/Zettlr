@@ -20,6 +20,7 @@ import environmentCheck from './util/environment-check'
 
 // Utility functions
 import resolveTimespanMs from './util/resolve-timespan-ms'
+import { loadI18nMain } from '../common/i18n'
 
 // Developer tools
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
@@ -32,11 +33,13 @@ import CssProvider from './service-providers/css-provider'
 import DictionaryProvider from './service-providers/dictionary-provider'
 import LogProvider from './service-providers/log-provider'
 import RecentDocsProvider from './service-providers/recent-docs-provider'
+import MenuProvider from './service-providers/menu-provider'
 import TagProvider from './service-providers/tag-provider'
 import TargetProvider from './service-providers/target-provider'
 import TranslationProvider from './service-providers/translation-provider'
 import UpdateProvider from './service-providers/update-provider'
-import WatchdogProvider from './service-providers/watchdog-provider'
+import NotificationProvider from './service-providers/notification-provider'
+import StatsProvider from './service-providers/stats-provider'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
@@ -51,10 +54,25 @@ var tagProvider: TagProvider
 var targetProvider: TargetProvider
 var translationProvider: TranslationProvider
 var updateProvider: UpdateProvider
-var watchdogProvider: WatchdogProvider
+var menuProvider: MenuProvider
+var notificationProvider: NotificationProvider
+var statsProvider: StatsProvider
 
 // Statistics: Record the uptime of the application
 var upTimestamp: number
+
+/**
+ * Catches potential errors during shutdown of certain providers.
+ *
+ * @param   {Provider}      provider  The provider to shut down
+ */
+async function safeShutdown (provider: any): Promise<void> {
+  try {
+    await provider.shutdown()
+  } catch (err) {
+    global.log.error(`[Shutdown] Could not shut down provider ${provider.constructor.name as string}: ${err.message as string}`, err)
+  }
+}
 
 /**
  * Boots the application
@@ -81,7 +99,7 @@ export async function bootApplication (): Promise<void> {
   registerCustomProtocols()
 
   // Then we need to extract possible files that should be opened from the argv
-  global.filesToOpen = extractFilesFromArgv()
+  extractFilesFromArgv()
 
   // Second, we need all providers. The order is sometimes important.
   // For instance, the first provider should be the log provider, and the second
@@ -89,15 +107,26 @@ export async function bootApplication (): Promise<void> {
   logProvider = new LogProvider()
   configProvider = new ConfigProvider()
   appearanceProvider = new AppearanceProvider()
-  watchdogProvider = new WatchdogProvider()
   citeprocProvider = new CiteprocProvider()
   dictionaryProvider = new DictionaryProvider()
   recentDocsProvider = new RecentDocsProvider()
+  menuProvider = new MenuProvider()
   tagProvider = new TagProvider()
   targetProvider = new TargetProvider()
   cssProvider = new CssProvider()
   translationProvider = new TranslationProvider()
   updateProvider = new UpdateProvider()
+  notificationProvider = new NotificationProvider()
+  statsProvider = new StatsProvider()
+
+  // Initiate i18n after the config provider has definitely spun up
+  let metadata: any = loadI18nMain(global.config.get('appLang'))
+
+  // It may be that only a fallback has been provided or else. In this case we
+  // must update the config to reflect this.
+  if (metadata.tag !== global.config.get('appLang')) {
+    global.config.set('appLang', metadata.tag)
+  }
 }
 
 /**
@@ -108,17 +137,19 @@ export async function bootApplication (): Promise<void> {
 export async function shutdownApplication (): Promise<void> {
   global.log.info(`さようなら！ Shutting down at ${(new Date()).toString()}`)
   // Shutdown all providers in the reverse order
-  await updateProvider.shutdown()
-  await translationProvider.shutdown()
-  await cssProvider.shutdown()
-  await targetProvider.shutdown()
-  await tagProvider.shutdown()
-  await recentDocsProvider.shutdown()
-  await dictionaryProvider.shutdown()
-  await citeprocProvider.shutdown()
-  await watchdogProvider.shutdown()
-  await appearanceProvider.shutdown()
-  await configProvider.shutdown()
+  await safeShutdown(notificationProvider)
+  await safeShutdown(updateProvider)
+  await safeShutdown(translationProvider)
+  await safeShutdown(cssProvider)
+  await safeShutdown(targetProvider)
+  await safeShutdown(tagProvider)
+  await safeShutdown(menuProvider)
+  await safeShutdown(recentDocsProvider)
+  await safeShutdown(dictionaryProvider)
+  await safeShutdown(citeprocProvider)
+  await safeShutdown(appearanceProvider)
+  await safeShutdown(configProvider)
+  await safeShutdown(statsProvider)
 
   const downTimestamp = Date.now()
 

@@ -12,11 +12,57 @@
 })(function (CodeMirror) {
   'use strict'
 
-  var codeRE = /`.*?`/i
-  var zknTagRE = /##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*^+~÷\\/|<=>[\](){}]+#?/i
-  var footnoteRefRE = /\[\^[^\]]+\]/
+  const { ipcRenderer } = require('electron')
+  const { getCodeRE, getFootnoteRefRE, getZknTagRE } = require('../../../../common/regular-expressions.js')
+
+  var codeRE = getCodeRE()
+  var zknTagRE = getZknTagRE()
+  var footnoteRefRE = getFootnoteRefRE()
   // NOTE: The whitespace after ~ are first a normal space, then an NBSP
   var delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~  «»‹›„“”「」『』–—…÷‘’‚'
+
+  // The cache is a simple hashmap
+  var spellcheckCache = Object.create(null)
+
+  // Listen for dictionary-provider messages
+  ipcRenderer.on('dictionary-provider', (event, message) => {
+    const { command } = message
+
+    if (command === 'invalidate-dict') {
+      // Invalidate the buffered dictionary
+      spellcheckCache = Object.create(null)
+    }
+  })
+
+  /**
+   * Checks whether a term is spelled correctly, or not
+   *
+   * @param   {string}  term  The word to check
+   *
+   * @return  {boolean}       True, if the word is considered correct.
+   */
+  function check (term) {
+    // Return cache if possible
+    if (spellcheckCache[term] !== undefined) {
+      return spellcheckCache[term]
+    }
+
+    // Save into the corresponding cache and return the query result
+    // Return the query result
+    let correct = ipcRenderer.sendSync('dictionary-provider', {
+      'command': 'check',
+      'term': term
+    })
+
+    if (correct === undefined) {
+      // Don't check unless its ready
+      return true
+    }
+
+    // Cache the result
+    spellcheckCache[term] = correct
+    return correct
+  }
 
   /**
     * Define the spellchecker mode that will simply check all found words against
@@ -89,7 +135,7 @@
           word = word.substr(0, word.length - 1)
         }
 
-        if (global.typo && !global.typo.check(word)) {
+        if (!check(word)) {
           return 'spell-error' // CSS class: cm-spell-error
         }
 

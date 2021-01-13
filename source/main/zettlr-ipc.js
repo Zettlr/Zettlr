@@ -16,7 +16,7 @@
  * END HEADER
  */
 
-const { trans, getTranslationMetadata } = require('../common/lang/i18n.js')
+const { trans, getTranslationMetadata } = require('../common/i18n.js')
 const ipc = require('electron').ipcMain
 const { BrowserWindow } = require('electron') // Needed for close and maximise commands
 
@@ -33,19 +33,6 @@ class ZettlrIPC {
     */
   constructor (zettlrObj) {
     this._app = zettlrObj
-
-    // Listen for synchronous messages from the renderer process to access
-    // config options.
-    ipc.on('config-get', (event, key) => {
-      // We have received a config event -> simply return back the respective
-      // key.
-      event.returnValue = global.config.get(key)
-    })
-
-    // We shall set a config value
-    ipc.on('config-set', (event, key, value) => {
-      event.returnValue = global.config.set(key, value)
-    })
 
     // Beginn listening to messages
     ipc.on('message', (event, arg) => {
@@ -77,23 +64,6 @@ class ZettlrIPC {
         return // Also, don't dispatch further
       }
 
-      // Last possibility: A quicklook window has requested a file. In this case
-      // we mustn't obliterate the "event" because this way we don't need to
-      // search for the window.
-      if (arg.command === 'ql-get-file') {
-        let QLFile = this._app.findFile(arg.content)
-        global.application.getFile(QLFile).then(file => {
-          event.sender.send('file', file)
-        })
-        return
-      }
-
-      if (arg.command === 'get-custom-css-path') {
-        // The main window's calls will be intercepted by having a cypher previously.
-        event.sender.send('custom-css', global.css.getPath())
-        return
-      }
-
       // In all other occasions omit the event.
       this.dispatch(arg)
     })
@@ -105,23 +75,9 @@ class ZettlrIPC {
        * @param  {String} cmd The command to be sent
        * @param  {Object} arg An optional object with data.
        * @return {void}     Does not return.
+       * @deprecated
        */
-      send: (cmd, arg) => { this.send(cmd, arg) },
-      /**
-       * Sends a message to the renderer and displays it as a notification.
-       * @param  {String} msg The message to be sent.
-       * @return {void}       Does not return.
-       */
-      notify: (msg) => { this.send('notify', msg) },
-      /**
-       * Sends an error to the renderer process that should be displayed using
-       * a dedicated dialog window (is used, e.g., during export when Pandoc
-       * throws potentially a lot of useful information for fixing problems in
-       * the source files).
-       * @param  {Object} msg        The error object
-       * @return {void}            Does not return.
-       */
-      notifyError: (msg) => { this.send('notify-error', msg) }
+      send: (cmd, arg) => { this.send(cmd, arg) }
     }
   }
 
@@ -144,17 +100,8 @@ class ZettlrIPC {
     * @return {ZettlrIPC}              This for chainability.
     */
   send (command, content = {}) {
-    let focusedWindow = BrowserWindow.getFocusedWindow()
-    let mainWinFocused = this._app.window.getWindow() === focusedWindow
-    if (command === 'attempt-close-tab' && !mainWinFocused && focusedWindow) {
-      // DEBUG attention, monkey-patch
-      focusedWindow.close()
-      return this
-    }
-
-    if (!this._app.window.getWindow()) return this
-    let sender = this._app.window.getWindow().webContents
-    sender.webContents.send('message', {
+    if (this._app.getMainWindow() === null) return this
+    this._app.getMainWindow().webContents.send('message', {
       'command': command,
       'content': content
     })
@@ -208,11 +155,6 @@ class ZettlrIPC {
         if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().close()
         break
 
-      // Also the application menu must be shown on request
-      case 'win-menu':
-        this._app.getWindow().popupMenu(cnt.x, cnt.y)
-        break
-
       case 'get-paths':
         // The child process requested the current paths and files
         this._app.sendPaths()
@@ -260,14 +202,19 @@ class ZettlrIPC {
         global.targets.set(cnt)
         break
 
-      case 'dir-open':
+      case 'workspace-open':
         // Client requested a totally different folder.
-        this._app.open()
+        this._app.openWorkspace()
+        break
+
+      case 'root-file-open':
+        // Client requested a new file.
+        this._app.openRootFile()
         break
 
       // Change theme in config
       case 'toggle-theme':
-        global.config.set('darkTheme', !global.config.get('darkTheme'))
+        global.config.set('darkMode', !global.config.get('darkMode'))
         break
 
       // Change file meta setting in config
@@ -284,35 +231,14 @@ class ZettlrIPC {
         this.send('pdf-preferences', global.config.get())
         break
 
-      case 'get-tags-preferences':
-        this.send('tags-preferences', global.tags.getSpecialTags())
-        break
-
       // Got a new config object
       case 'update-config':
         global.config.bulkSet(cnt)
         break
 
-      case 'update-tags':
-        global.tags.update(cnt)
-        // fall through
-      case 'get-tags':
-        this.send('set-tags', global.tags.getSpecialTags())
-        break
-
-      // Send the global tag database to the renderer process.
-      case 'get-tags-database':
-        this.send('tags-database', global.tags.getTagDatabase())
-        break
-
       // Handle dropped files/folders
       case 'handle-drop':
         this._app.handleAddRoots(cnt)
-        break
-
-      // Statistics
-      case 'request-stats-data':
-        this.send('stats-data', this._app.getStats().getStats())
         break
 
       // Return a list of all available IDs in the currently loaded database
@@ -354,32 +280,6 @@ class ZettlrIPC {
     // We received a new event and need to handle it.
 
     switch (cmd) {
-      // Window controls actions can be send either as callback IPC calls or as
-      // normals (which is why they are present both in runCall and handleEvent)
-      case 'win-maximise':
-        if (BrowserWindow.getFocusedWindow()) {
-          // Implements maximise-toggling for windows
-          if (BrowserWindow.getFocusedWindow().isMaximized()) {
-            BrowserWindow.getFocusedWindow().unmaximize()
-          } else {
-            BrowserWindow.getFocusedWindow().maximize()
-          }
-        }
-        break
-
-      case 'win-minimise':
-        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().minimize()
-        break
-
-      case 'win-close':
-        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().close()
-        break
-
-      // We should show the askFile dialog to the user and return its result.
-      case 'request-files':
-        // The client only can choose what and how much it wants to get
-        return this._app.getWindow().askFile(arg.filters, arg.multiSel)
-
       // A quicklook window wants to pop-out of the main window
       case 'open-quicklook':
         this._app.openQL(arg)
@@ -388,22 +288,6 @@ class ZettlrIPC {
       // Return the metadata for the translation files
       case 'get-translation-metadata':
         return getTranslationMetadata()
-
-      // Send the global tag database to the renderer process.
-      case 'get-tags-database':
-        return global.tags.getTagDatabase()
-
-      // Returns the custom CSS's file contents
-      case 'get-custom-css':
-        return global.css.get()
-
-      // Returns the custom CSS's file name
-      case 'get-custom-css-path':
-        return global.css.getPath()
-
-      // Updates the file contents
-      case 'set-custom-css':
-        return global.css.set(arg)
 
       default:
         global.log.error(trans('system.unknown_command', cmd))

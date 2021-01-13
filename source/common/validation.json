@@ -1,5 +1,5 @@
 {
-   "darkTheme": "required|boolean|default:false",
+   "darkMode": "required|boolean|default:false",
    "autoDarkMode": "required|string|in:off,system,schedule,auto|default:off",
    "fileMeta": "required|boolean|default:true",
    "sorting": "required|string|in:natural,ascii|default:natural",
@@ -15,7 +15,7 @@
    "zkn.idRE": "required|string|default:",
    "zkn.linkStart": "required|string|default:",
    "zkn.linkEnd": "required|string|default:",
-   "zkn.idGen": "required|string|min:3|default:",
+   "zkn.idGen": "required|string|min:2|default:",
    "zkn.autoCreateLinkedFiles": "required|boolean|default:false",
    "attachmentExtensions": "optional|array",
    "pandoc": "optional|string|min:6|default:",

@@ -23,18 +23,6 @@
  */
 
 /**
- * We do not use classes to represent the different descriptors
- * to save computational overhead, which means we need a type
- * property to distinguish all of them.
- */
-export enum DescriptorType {
-  MDFile = 'file',
-  TexFile = 'tex',
-  Directory = 'directory',
-  Other = 'attachment' // TODO: Rename to other in the renderer as well
-}
-
-/**
  * Represents an event the watchdog can work with
  */
 export interface WatchdogEvent {
@@ -51,7 +39,7 @@ interface FSMetaInfo {
   dir: string // path.dirname(absolutePath)
   path: string // absolutePath
   hash: number // Hashed absolute path
-  type: DescriptorType // Descriptor type (MD, Tex, dir or other)
+  type: 'file' | 'directory' | 'code' | 'other'
   modtime: number
   creationtime: number
 }
@@ -62,8 +50,10 @@ interface FSMetaInfo {
 export interface DirDescriptor extends FSMetaInfo {
   parent: DirDescriptor|null
   _settings: any
-  children: Array<MDFileDescriptor|DirDescriptor>
+  type: 'directory'
+  children: Array<MDFileDescriptor|DirDescriptor|CodeFileDescriptor>
   attachments: OtherFileDescriptor[]
+  dirNotFoundFlag?: boolean // If the flag is set & true this directory has not been found
 }
 
 /**
@@ -73,24 +63,28 @@ export interface MDFileDescriptor extends FSMetaInfo {
   parent: DirDescriptor|null
   ext: string
   id: string
+  type: 'file'
   tags: string[]
+  bom: string // An optional BOM
   wordCount: number
   charCount: number
-  target: any // TODO
-  firstHeading: string|undefined
-  frontmatter: any|undefined
+  target: WritingTarget|undefined
+  firstHeading: string|null
+  frontmatter: any|null
   linefeed: string
   modified: boolean
 }
 
 /**
- * The FSAL Tex file descriptor
+ * The FSAL code file descriptor (.tex, .yml)
  */
-export interface TexFileDescriptor extends FSMetaInfo {
-  parent: DirDescriptor
+export interface CodeFileDescriptor extends FSMetaInfo {
+  parent: DirDescriptor|null
   ext: string
+  type: 'code'
   id: string
   tags: string[]
+  bom: string // An optional BOM
   linefeed: string
   modified: boolean
 }
@@ -100,6 +94,7 @@ export interface TexFileDescriptor extends FSMetaInfo {
  */
 export interface OtherFileDescriptor extends FSMetaInfo {
   parent: DirDescriptor
+  type: 'other'
   ext: string
 }
 
@@ -109,10 +104,12 @@ export interface OtherFileDescriptor extends FSMetaInfo {
 export interface DirMeta extends FSMetaInfo {
   parent: number|null
   attachments: OtherFileMeta[]
-  children: Array<DirMeta|MDFileMeta>
+  children: Array<DirMeta|MDFileMeta|CodeFileMeta>
   project: any
+  type: 'directory'
   sorting: string
   icon: string
+  dirNotFoundFlag?: boolean // If the flag is set & true this directory has not been found
 }
 
 /**
@@ -122,23 +119,28 @@ export interface MDFileMeta extends FSMetaInfo {
   parent: number|null
   ext: string
   id: string
+  type: 'file'
   tags: string[]
   wordCount: number
   charCount: number
   target: any // TODO
-  firstHeading: string|undefined
-  frontmatter: any|undefined
+  firstHeading: string|null
+  frontmatter: any|null
   linefeed: string
   modified: boolean
   content: string
 }
 
 /**
- * Represents a non-circular Tex file
+ * Represents a non-circular code file (.tex or .yml)
  */
-export interface TexFileMeta extends FSMetaInfo {
-  parent: number
+export interface CodeFileMeta extends FSMetaInfo {
+  parent: number|null
+  type: 'code'
+  linefeed: string
+  modified: boolean
   ext: string
+  content: string
 }
 
 /**
@@ -146,14 +148,15 @@ export interface TexFileMeta extends FSMetaInfo {
  */
 export interface OtherFileMeta extends FSMetaInfo {
   parent: number
+  type: 'other'
   ext: string
 }
 
 // Convenience types to prevent too much typing:
 // - AnyDescriptor: Anything that looks like a descriptor
-export type AnyDescriptor = DirDescriptor | MDFileDescriptor | TexFileDescriptor | OtherFileDescriptor
+export type AnyDescriptor = DirDescriptor | MDFileDescriptor | CodeFileDescriptor | OtherFileDescriptor
 // Anything that can also be a root
-export type MaybeRootDescriptor = DirDescriptor | MDFileDescriptor
+export type MaybeRootDescriptor = DirDescriptor | MDFileDescriptor | CodeFileDescriptor
 // The same, only for meta descriptors
-export type AnyMetaDescriptor = DirMeta | MDFileMeta | TexFileMeta | OtherFileMeta
+export type AnyMetaDescriptor = DirMeta | MDFileMeta | CodeFileMeta | OtherFileMeta
 export type MaybeRootMeta = DirMeta | MDFileMeta

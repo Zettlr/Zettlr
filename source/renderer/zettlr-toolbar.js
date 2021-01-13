@@ -15,7 +15,7 @@
 const tippy = require('tippy.js').default
 const localiseNumber = require('../common/util/localise-number')
 const renderTemplate = require('./util/render-template')
-const { trans } = require('../common/lang/i18n')
+const { trans } = require('../common/i18n')
 
 const { ipcRenderer } = require('electron')
 
@@ -69,7 +69,7 @@ class ZettlrToolbar {
         'command': 'update-check',
         'content': {}
       })
-    }, 10000)
+    }, 1000)
 
     ipcRenderer.on('update-provider', (event, data) => {
       let { command, content } = data
@@ -83,6 +83,8 @@ class ZettlrToolbar {
         let progress = document.getElementById('app-update-progress')
         let progressPercent = document.getElementById('app-update-progress-percent')
         let progressEta = document.getElementById('app-update-progress-eta')
+
+        // Update the progress bar if applicable
         if (progress && progressPercent) {
           progress.setAttribute('max', this._downloadProgress.size_total)
           progress.setAttribute('value', this._downloadProgress.size_downloaded)
@@ -94,6 +96,7 @@ class ZettlrToolbar {
             progressEta.textContent = '(' + seconds + 's)'
           }
         }
+
         if (this._downloadProgress.finished === false) {
           setTimeout(() => {
             ipcRenderer.send('update-provider', {
@@ -101,8 +104,15 @@ class ZettlrToolbar {
               'content': null
             })
           }, 1000)
-        } // end if
-      }
+        } else { // end if
+          // If the update is done and the corresponding popup still open,
+          // show the download button
+          const progressButton = document.getElementById('begin-update-progress-button')
+          if (progressButton !== null) {
+            progressButton.style.display = ''
+          }
+        }
+      } // End command: download-progress
     })
   }
 
@@ -172,9 +182,17 @@ class ZettlrToolbar {
       // is the keyword here, because if the isComposing flag is set, simply
       // don't handle that event and wait for the compositionend-event to fire
       // on the textfield for the magic to happen!
-      if (e.isComposing) return
+      if (e.isComposing) {
+        return
+      }
       // Check for non triggering keys
-      if (NON_TRIGGERING_KEYS.includes(e.key)) return
+      if (NON_TRIGGERING_KEYS.includes(e.key)) {
+        return
+      }
+      // Check for modifiers
+      if (e.metaKey || e.ctrlKey) {
+        return
+      }
 
       if (e.key === 'Escape') {
         this.searchBarInput.blur()
@@ -205,14 +223,7 @@ class ZettlrToolbar {
 
     this.searchBarInput.addEventListener('focus', () => {
       this._autocomplete = this._renderer.getFilesInDirectory()
-      if (this.searchBarInput.value === '') {
-        // Let's prefill this with the selection from the editor if possible.
-        let selections = this._renderer.getEditor().getSelections()
-        if (selections.length > 0) {
-          this.searchBarInput.value = selections[0]
-          this.searchBarInput.select() // Ease of access
-        }
-      }
+      this.searchBarInput.select() // Ease of access
     })
 
     this.searchBarInput.addEventListener('blur', () => {
@@ -304,7 +315,7 @@ class ZettlrToolbar {
               'content': null
             })
           })
-        } else {
+        } else { // END: if downloadProgress !== undefined
           // No download progress, so display the normal popup
           global.popupProvider.show('update', button, this._updateData)
 
@@ -328,7 +339,7 @@ class ZettlrToolbar {
               })
             })
           })
-        }
+        } // END: Else, no download progress
 
         // Display the changelog, if requested. Available in all popups
         document.getElementById('view-changelog-button').addEventListener('click', (e) => {
@@ -340,7 +351,7 @@ class ZettlrToolbar {
           })
           global.popupProvider.close()
         })
-      })
+      }) // END: Click handler
     } else {
       // No update available, remove button if applicable
       let button = document.getElementById('update-info-button')
@@ -382,26 +393,28 @@ class ZettlrToolbar {
 
     // Append everything to the div.
     for (let elem of tpl) {
-      // Some buttons are only for certain platforms, so don't show them on the
-      // wrong one.
-      if (elem.context && !elem.context.includes(process.platform)) continue
-
       let child = document.createElement('div')
       child.classList.add(elem.role)
       if (elem.role === 'button') {
         child.classList.add(elem.class)
+        child.setAttribute('role', 'button') // ARIA role
         child.setAttribute('data-command', elem.command)
         child.setAttribute('data-content', elem.content)
       } else if (elem.role === 'searchbar') {
-        child.innerHTML = '<input type="text"><div class="end-search">&times;</div>'
+        child.setAttribute('role', 'presentation') // The div is just for presentation purposes
+        child.innerHTML = '<input type="text" role="search"/><div class="end-search" role="button" aria-label="End global search">&times;</div>'
       } else if (elem.role === 'pomodoro') {
         child.classList.add('button')
         child.setAttribute('data-command', 'pomodoro')
+        child.setAttribute('role', 'button') // ARIA role
         child.innerHTML = '<svg width="20" height="20" viewBox="-1 -1 2 2"><circle class="pomodoro-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle><path d="" fill="" class="pomodoro-value" shape-rendering="geometricPrecision"></path></svg>'
       }
-      if (elem.hasOwnProperty('title')) child.setAttribute('data-tippy-content', trans(elem.title))
+      if (elem.hasOwnProperty('title')) {
+        child.setAttribute('data-tippy-content', trans(elem.title))
+        child.setAttribute('aria-label', trans(elem.title))
+      }
       if (elem.hasOwnProperty('icon') && typeof elem.icon === 'string') {
-        child.innerHTML = `<clr-icon shape="${elem.icon}"></clr-icon>`
+        child.innerHTML = `<clr-icon alt="${elem.icon}" shape="${elem.icon}"></clr-icon>`
       }
       this.container.appendChild(child)
     }
@@ -480,6 +493,9 @@ class ZettlrToolbar {
     * @return {ZettlrToolbar} Chainability.
     */
   focusSearch () {
+    // Let's prefill this with the selection from the editor if possible.
+    let query = this._renderer.getEditor().getSelections().pop()
+    this.searchBarInput.value = query
     this.searchBarInput.focus()
     this.searchBarInput.select()
     return this

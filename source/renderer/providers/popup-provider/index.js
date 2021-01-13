@@ -75,7 +75,6 @@ module.exports = class PopupProvider {
         return this._createPopup(type, element, data, callback)
       },
       close: () => {
-        console.log('Global close called')
         this._closePopup(true)
       }
     }

@@ -1,5 +1,9 @@
 /* global CodeMirror define */
 // ZETTLR SPELLCHECKER PLUGIN
+const {
+  getZknTagRE, getHeadingRE, getHighlightRE,
+  getTableRE, getInlineMathRE, getBlockMathRE, getFnReferenceRE
+} = require('../../../../common/regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS
@@ -12,12 +16,13 @@
 })(function (CodeMirror) {
   'use strict'
 
-  var zknTagRE = /##?[^\s,.:;…!?"'`»«“”‘’—–@$%&*#^+~÷\\/|<=>[\](){}]+#?/i
-  var headingRE = /(#+)\s+/
-  var highlightRE = /::.+?::|==.+?==/
-  var tableRE = /^\|.+\|$/i
-  var inlineMathRE = /^(?:\${1,2}[^\s\\]\${1,2}(?!\d)|\${1,2}[^\s].*?[^\s\\]\${1,2}(?!\d))/
-  var blockMathRE = /^\s*\$\$\s*$/
+  var zknTagRE = getZknTagRE()
+  var headingRE = getHeadingRE()
+  var highlightRE = getHighlightRE()
+  var tableRE = getTableRE()
+  var inlineMathRE = getInlineMathRE()
+  var blockMathRE = getBlockMathRE()
+  var fnReferenceRE = getFnReferenceRE()
 
   /**
     * This defines the Markdown Zettelkasten system mode, which highlights IDs
@@ -78,23 +83,42 @@
           state.startOfFile = false
         }
 
-        // Second: If we don't have a frontmatter, escaping is possible.
-        if (state.hasJustEscaped) {
-          state.hasJustEscaped = false // Needs to be reset always
-          if (!stream.eol()) stream.next()
-          return null // No highlighting for escaped characters
-        }
-
-        // Third: Directly afterwards check for inline code or comments, so
+        // Directly afterwards check for inline code or comments, so
         // that stuff such as zkn-links are not highlighted:
         if (state.mdState.overlay.code || state.mdState.overlay.codeBlock || state.mdState.baseCur === 'comment') {
           return mdMode.token(stream, state.mdState)
         }
 
-        // Fourth: Handle block equations.
-        // ATTENTION: We have to check for inEquation first, because
+        // In everything that follows, escpaing things is allowed and possible.
+        // By immediately returning and checking right at the beginning of the
+        // method, we can prevent other modes from triggering.
+        if (stream.match('\\')) {
+          if (!stream.eol()) {
+            // Only set the escaped state if the backslash
+            // did not occur at the end of a line
+            state.hasJustEscaped = true
+          }
+          return 'escape-char'
+        }
+
+        // Then check if we have just escaped, and, if so, return an empty class
+        // which will also (intentionally) break any rendering that the next()
+        // char would have initiated.
+        if (state.hasJustEscaped) {
+          state.hasJustEscaped = false // Needs to be reset always
+          if (!stream.eol()) {
+            stream.next()
+            return null // No highlighting for escaped characters
+          } // Else: It might be sol(), but don't escape
+        }
+
+        // Then handle block equations.
+        // NOTE: We have to check for inEquation first, because
         // otherwise, stream.match() will ALWAYS be executed, hence
         // falsifying the otherwise correct else-if!!
+        // TODO: We are currently using the multiplex mode to enhance block
+        // equations with syntax highlight, so I'm unsure if this code is
+        // executed at all or if we can just trash it …?
         if (stream.sol() && !state.inEquation && stream.match(blockMathRE)) {
           // We have a multiline equation
           state.inEquation = true
@@ -109,15 +133,13 @@
           return 'comment'
         }
 
-        // In everything that follows, escpaing things is allowed and possible.
-        // By immediately returning and checking right at the beginning of the
-        // method, we can prevent other modes from triggering.
-        if (stream.match('\\')) {
-          state.hasJustEscaped = true
-          return 'escape-char'
-        } // This is here because escaping link-endings is a thing. Maybe. For some.
+        // Now let's check for footnotes. Other than reference style links these
+        // require a different formatting, which we'll implement here.
+        if (stream.sol() && stream.match(fnReferenceRE)) {
+          return 'footnote-formatting' // TODO: Do we want rendering in footnotes?
+        }
 
-        // Fifth: Are we in a link?
+        // Are we in a link?
         if (state.inZknLink) {
           if (stream.match(config.zettlr.zettelkasten.linkEnd)) {
             state.inZknLink = false
