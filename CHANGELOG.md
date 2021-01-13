@@ -22,6 +22,7 @@
 - Removed generic IPC calls for the CSS Provider and migrated that to the provider class.
 - Zettlr now detects a potential downloaded Pandoc in the resources directory during development.
 - Fixed a logical error in calculating the application uptime.
+- The application now exits forcefully if an error is produced during boot.
 
 # 1.8.5
 

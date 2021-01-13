@@ -96,8 +96,14 @@ app.whenReady().then(() => {
   bootApplication().then(() => {
     // Now instantiate the main class which will care about everything else
     zettlr = new Zettlr()
-    zettlr.init().catch(err => console.error(err))
-  }).catch(err => console.error(err))
+    zettlr.init().catch(err => {
+      console.error(err)
+      app.exit(1)
+    })
+  }).catch(err => {
+    console.error(err)
+    app.exit(1)
+  })
 }).catch(e => console.error(e))
 
 /**
