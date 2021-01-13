@@ -20,6 +20,20 @@ import createStore from './store'
 import Vuex from 'vuex'
 import { ipcRenderer } from 'electron'
 
+/**
+ * Updated the coloured tags in the store
+ */
+function updateColouredTags (): void {
+  ipcRenderer.invoke('tag-provider', {
+    command: 'get-coloured-tags'
+  })
+    .then(tags => {
+      console.log(tags)
+      store.commit('tags', tags)
+    })
+    .catch(e => console.error(e))
+}
+
 // Indicate that we would like to use a vuex store
 Vue.use(Vuex)
 
@@ -27,14 +41,11 @@ const store = createStore()
 
 ipcRenderer.on('coloured-tags', (event) => {
   // Update the tags
-  ipcRenderer.invoke('tag-provider', {
-    command: 'get-coloured-tags'
-  })
-    .then(tags => {
-      store.commit('tags', tags)
-    })
-    .catch(e => console.error(e))
+  updateColouredTags()
 })
+
+// Send the first update for tags
+updateColouredTags()
 
 // Then create the global application store -- currently
 // it's only used for the file manager, but in perspective
