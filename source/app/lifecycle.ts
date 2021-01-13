@@ -21,6 +21,7 @@ import environmentCheck from './util/environment-check'
 // Utility functions
 import resolveTimespanMs from './util/resolve-timespan-ms'
 import { loadI18nMain } from '../common/i18n'
+import path from 'path'
 
 // Developer tools
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
@@ -118,6 +119,19 @@ export async function bootApplication (): Promise<void> {
   updateProvider = new UpdateProvider()
   notificationProvider = new NotificationProvider()
   statsProvider = new StatsProvider()
+
+  // If we have a bundled pandoc, unshift its path to env.PATH in order to have
+  // the system search there first for the binary, and not use the internal
+  // one. NOTE: This effectively means users have to restart Zettlr for a change
+  // of the "Use bundled Pandoc?" setting to take effect.
+  const useBundledPandoc = Boolean(global.config.get('export.useBundledPandoc'))
+  if (process.env.PANDOC_PATH !== undefined && useBundledPandoc) {
+    const DELIM = (process.platform === 'win32') ? ';' : ':'
+    const tempPATH = (process.env.PATH as string).split(DELIM)
+    tempPATH.unshift(path.dirname(process.env.PANDOC_PATH))
+    process.env.PATH = tempPATH.join(DELIM)
+    global.log.info('[Application] The bundled pandoc executable is now in PATH. If you do not want to use the bundled pandoc, uncheck the corresponding setting and reboot the app.')
+  }
 
   // Initiate i18n after the config provider has definitely spun up
   let metadata: any = loadI18nMain(global.config.get('appLang'))

@@ -89,13 +89,6 @@ module.exports = async function (options) {
     command = command.replace(new RegExp('\\$' + key + '\\$', 'g'), pandocFlags[key])
   }
 
-  if (bundledPandoc && useBundledPandoc && command.substr(0, 6) === 'pandoc') {
-    command = process.env.PANDOC_PATH + command.substr(6)
-    global.log.info('[Export] Using bundled Pandoc instead of system-wide!')
-  } else {
-    global.log.warning('[Export] No bundled pandoc was found. Proceeding with system installation.')
-  }
-
   if (bundledPandoc && useBundledPandoc && isAppleSilicon) {
     // On Apple M1/ARM64 chips, we need to run the 64 bit Intel-compiled Pandoc
     // through Rosetta 2, which we can do by prepending with arch -x86_64.

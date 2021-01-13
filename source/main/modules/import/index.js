@@ -15,7 +15,7 @@
 const commandExists = require('command-exists')
 const fs = require('fs').promises
 const path = require('path')
-const { exec } = require('child_process')
+const { /* exec, */ spawn } = require('child_process')
 
 const { trans } = require('../../../common/i18n.js')
 
@@ -24,7 +24,11 @@ const checkImportIntegrity = require('./check-import-integrity')
 const importTextbundle = require('./import-textbundle')
 
 module.exports = async function makeImport (fileOrFolder, dirToImport, errorCallback = null, successCallback = null) {
-  if (!await commandExists('pandoc')) {
+  const useBundledPandoc = Boolean(global.config.get('export.useBundledPandoc'))
+  const bundledPandoc = process.env.PANDOC_PATH !== undefined
+  const isAppleSilicon = process.platform === 'darwin' && process.arch === 'arm64'
+  const pandocFound = await commandExists('pandoc')
+  if (!pandocFound) {
     throw Error(trans('system.error.no_pandoc_message'))
   }
 
@@ -49,36 +53,62 @@ module.exports = async function makeImport (fileOrFolder, dirToImport, errorCall
         errorCallback(file.path, err.message)
       }
     } else if (file.knownFormat) {
-      const useBundledPandoc = Boolean(global.config.get('export.useBundledPandoc'))
-      const bundledPandoc = process.env.PANDOC_PATH !== undefined
-      const isAppleSilicon = process.platform === 'darwin' && process.arch === 'arm64'
-
       // Determine whether to use the bundled Pandoc
       let binary = 'pandoc'
       if (bundledPandoc && useBundledPandoc) {
+        // DEBUG: Remove after Zettlr 1.9
         global.log.info(`[Import] Using the bundled Pandoc binary at ${process.env.PANDOC_PATH}`)
-        binary = process.env.PANDOC_PATH
       }
 
       if (bundledPandoc && useBundledPandoc && isAppleSilicon) {
         // On Apple M1/ARM64 chips, we need to run the 64 bit Intel-compiled Pandoc
         // through Rosetta 2, which we can do by prepending with arch -x86_64.
+        global.log.info('[Import] Using Rosetta 2 to run Pandoc...')
         binary = 'arch -x86_64 ' + binary
       }
 
       // The file is known -> let's import it!
       let newName = path.join(dirToImport.path, path.basename(file.path, path.extname(file.path))) + '.md'
-      let cmd = `${binary} -f ${file.knownFormat} -t markdown -o "${newName}" --wrap=none --atx-headers "${file.path}"`
+      // let cmd = `${binary} -f ${file.knownFormat} -t markdown -o "${newName}" --wrap=none --atx-headers "${file.path}"`
+      const argv = [
+        '-t', 'markdown',
+        '-o', newName,
+        '--wrap=none', '--atx-headers',
+        file.path
+      ]
 
-      exec(cmd, { 'cwd': dirToImport.path }, (error, stdout, stderr) => {
-        if (error && errorCallback) {
-          // Call the error callback function to let the initiator
-          // handle errors (e.g. notifying the user).
-          errorCallback(file.path, error)
-        } else if (successCallback) {
+      const pandocProcess = spawn(binary, argv, {
+        cwd: dirToImport.path,
+        windowsHide: true
+      })
+
+      const output = []
+      pandocProcess.stdout.on('data', (data) => {
+        output.push(String(data))
+      })
+
+      pandocProcess.on('close', (code, signal) => {
+        // Code should be 0
+        if (code === 0) {
           successCallback(file.path)
+        } else {
+          errorCallback(file.path)
         }
       })
+
+      pandocProcess.on('error', (err) => {
+        errorCallback(file.path, err)
+      })
+
+      // exec(cmd, { 'cwd': dirToImport.path }, (error, stdout, stderr) => {
+      //   if (error && errorCallback) {
+      //     // Call the error callback function to let the initiator
+      //     // handle errors (e.g. notifying the user).
+      //     errorCallback(file.path, error)
+      //   } else if (successCallback) {
+      //     successCallback(file.path)
+      //   }
+      // })
     } else { // If file.knownFormat evaluated to false
       failedFiles.push(file.path)
     }
