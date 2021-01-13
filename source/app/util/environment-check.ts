@@ -81,6 +81,15 @@ export default async function environmentCheck (): Promise<void> {
   if (isFile(pandocPath)) {
     global.log.info(`[Application] Pandoc has been bundled with this release. Path: ${pandocPath}`)
     process.env.PANDOC_PATH = pandocPath
+  } else if (!app.isPackaged) {
+    // We're in develop mode, so possibly, we have a Pandoc exe. Let's check
+    const resPath = path.join(__dirname, '../../resources', executable)
+    if (isFile(resPath)) {
+      global.log.info(`[Application] App is unpackaged, and Pandoc has been found in the resources directory: ${resPath}`)
+      process.env.PANDOC_PATH = resPath
+    } else {
+      global.log.warning(`[Application] App is unpackaged, but there was no Pandoc executable: ${resPath}`)
+    }
   } else {
     global.log.warning('[Application] Pandoc has not been bundled with this release. Falling back to system version instead.')
   }
