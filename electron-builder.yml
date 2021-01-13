@@ -20,6 +20,12 @@ fileAssociations:
   mimeType: text/markdown
   role: Editor
   isPackage: false
+- ext: rmd
+  name: RMarkdown
+  description: RMarkdown document
+  mimeType: text/markdown
+  role: Editor
+  isPackage: false
 directories:
   output: release
 #
