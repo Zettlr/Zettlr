@@ -21,6 +21,7 @@
           v-model="filterQuery"
           type="search"
           placeholder="Filter …"
+          v-on:focus="$event.target.select()"
         />
       </div>
       <template v-if="getFilteredDirectoryContents.length === 0">
