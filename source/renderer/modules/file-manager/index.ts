@@ -28,7 +28,6 @@ function updateColouredTags (): void {
     command: 'get-coloured-tags'
   })
     .then(tags => {
-      console.log(tags)
       store.commit('tags', tags)
     })
     .catch(e => console.error(e))
