@@ -107,7 +107,7 @@ class ZettlrBody {
         // Obviously, focus the editor
         this._renderer.getEditor().focus()
       } else if (focusFileManagerShortcut) { // Cmd/Ctrl+Shift+T
-        this._renderer.getFileManager().focusFileList()
+        this._renderer.getFileManager().focusFilter()
       } else if (event.key === 'F2') {
         // Trigger a rename
         this.requestNewFileName(this._renderer.getActiveFile())

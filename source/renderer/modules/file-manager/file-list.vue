@@ -358,6 +358,8 @@ export default {
     },
     onFocusHandler: function (event) {
       this.activeDescriptor = this.selectedFile
+    },
+    focusFilter: function () {
       this.$refs.quickFilter.focus()
     }
   }

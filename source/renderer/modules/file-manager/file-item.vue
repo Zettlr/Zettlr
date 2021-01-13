@@ -26,8 +26,8 @@
       v-bind:data-id="getId"
       v-bind:data-filename="getFilename"
       v-bind:draggable="isDraggable"
-      v-on:click="requestSelection"
-      v-on:dragstart="beginDragging"
+      v-on:click.stop="requestSelection"
+      v-on:dragstart.stop="beginDragging"
       v-on:drag="onDragHandler"
     >
       <p class="filename">

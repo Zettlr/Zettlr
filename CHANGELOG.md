@@ -5,6 +5,7 @@
 - Your typing speed is now as fast as previously again, even for long paragraphs and files (thanks to @mattj23 for implementing the fixes in the multiplexer).
 - You can now also switch to sub-directories using the file list navigation; it is not limited to files only anymore.
 - Fixed a bug that would show a wrong path as the current one on pasting image data onto the editor.
+- Fixed a bug that would make dragging items from the file list impossible.
 
 ## Under the Hood
 

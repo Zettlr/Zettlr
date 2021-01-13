@@ -213,11 +213,11 @@ export default {
       }
     },
     /**
-     * Set focus to file list
+     * Set focus to the file list filter (the file list will then also have focus)
      */
-    focusFileList: function () {
+    focusFilter: function () {
       if (this.isFileListVisible) {
-        this.$refs.fileList.$el.focus()
+        this.$refs.fileList.focusFilter()
       }
     },
     /**
