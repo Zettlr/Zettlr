@@ -16,11 +16,6 @@
   <div
     class="container"
     v-bind:data-hash="obj.hash"
-    v-bind:draggable="!isRoot"
-    v-on:dragstart="beginDragging"
-    v-on:drag="onDragHandler"
-    v-on:dragenter.stop="enterDragging"
-    v-on:dragleave.stop="leaveDragging"
   >
     <div
       ref="listElement"
@@ -28,9 +23,14 @@
       v-bind:data-hash="obj.hash"
       v-bind:data-id="obj.id || ''"
       v-bind:style="pad"
+      v-bind:draggable="!isRoot"
       v-on:click="requestSelection"
-      v-on:drop="handleDrop"
       v-on:dragover="acceptDrags"
+      v-on:dragstart="beginDragging"
+      v-on:drag="onDragHandler"
+      v-on:dragenter="enterDragging"
+      v-on:dragleave="leaveDragging"
+      v-on:drop="handleDrop"
       v-on:mouseenter="hover=true"
       v-on:mouseleave="hover=false"
       v-on:contextmenu="handleContextMenu"

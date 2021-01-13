@@ -6,6 +6,7 @@
 - You can now also switch to sub-directories using the file list navigation; it is not limited to files only anymore.
 - Fixed a bug that would show a wrong path as the current one on pasting image data onto the editor.
 - Fixed a bug that would make dragging items from the file list impossible.
+- Fixed odd behaviour that would make dragging and dropping items in the file tree (especially in combined mode of the file manager) hard.
 
 ## Under the Hood
 
