@@ -5,9 +5,9 @@
 # because this gives us more control over the built-in pandoc binary.
 
 # Retrieve the versions from https://github.com/jgm/pandoc/releases/latest
-PANDOC_LINUX="https://github.com/jgm/pandoc/releases/download/2.11.2/pandoc-2.11.2-linux-amd64.tar.gz"
-PANDOC_WIN32="https://github.com/jgm/pandoc/releases/download/2.11.2/pandoc-2.11.2-windows-x86_64.zip"
-PANDOC_MACOS="https://github.com/jgm/pandoc/releases/download/2.11.2/pandoc-2.11.2-macOS.zip"
+PANDOC_LINUX="https://github.com/jgm/pandoc/releases/download/2.11.3.2/pandoc-2.11.3.2-linux-amd64.tar.gz"
+PANDOC_WIN32="https://github.com/jgm/pandoc/releases/download/2.11.3.2/pandoc-2.11.3.2-windows-x86_64.zip"
+PANDOC_MACOS="https://github.com/jgm/pandoc/releases/download/2.11.3.2/pandoc-2.11.3.2-macOS.zip"
 
 PLATFORM="$1"
 RELEASE=""
