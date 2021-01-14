@@ -15,7 +15,7 @@
 const commandExists = require('command-exists')
 const fs = require('fs').promises
 const path = require('path')
-const { /* exec, */ spawn } = require('child_process')
+const { spawn } = require('child_process')
 
 const { trans } = require('../../../common/i18n.js')
 
@@ -27,8 +27,10 @@ module.exports = async function makeImport (fileOrFolder, dirToImport, errorCall
   const useBundledPandoc = Boolean(global.config.get('export.useBundledPandoc'))
   const bundledPandoc = process.env.PANDOC_PATH !== undefined
   const isAppleSilicon = process.platform === 'darwin' && process.arch === 'arm64'
-  const pandocFound = await commandExists('pandoc')
-  if (!pandocFound) {
+  const pandocFound = Boolean(await commandExists('pandoc'))
+  // We cannot import either if the Pandoc command does not exist or there is
+  // no bundled Pandoc.
+  if (!pandocFound && !(useBundledPandoc && bundledPandoc)) {
     throw Error(trans('system.error.no_pandoc_message'))
   }
 
