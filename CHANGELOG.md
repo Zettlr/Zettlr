@@ -9,6 +9,7 @@
 - Fixed odd behaviour that would make dragging and dropping items in the file tree (especially in combined mode of the file manager) hard.
 - Fixed a logical bug that would open a dialog notifying of remote changes for every detected change, rather than just once per file.
 - Added RMarkdown files (`.Rmd`) to the list of supported file extensions for which Zettlr can be registered as a default handler.
+- Fix a regression error that has rendered citation exporting impossible.
 
 ## Under the Hood
 
