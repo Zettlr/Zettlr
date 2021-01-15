@@ -33,8 +33,7 @@ directories:
 #
 mac:
   category: "public.app-category.productivity"
-  target:
-  - dmg
+  target: dmg
   artifactName: "Zettlr-${version}-${arch}.${ext}"
   icon: "./resources/icons/icon.icns"
   darkModeSupport: true
