@@ -27,7 +27,7 @@
     "release:mac-x64": "yarn package:mac-x64 && electron-builder --mac --publish never --prepackaged out/Zettlr-darwin-x64/Zettlr.app",
     "release:mac-arm": "yarn package:mac-arm && electron-builder --mac --publish never --prepackaged out/Zettlr-darwin-arm64/Zettlr.app",
     "release:win": "yarn package:win && electron-builder --win --x64 --publish never --prepackaged out/Zettlr-win32-x64",
-    "release:win-arm": "yarn package:win-arm && electron-builder --win --arm64 --publish never --prepackaged out/Zettlr-win32-arm64",
+    "release:win-arm": "yarn package:win-arm && electron-builder --win --ia32 --arm64 --publish never --prepackaged out/Zettlr-win32-arm64",
     "release:linux-x32": "yarn package:linux-x32 && electron-builder --linux AppImage --ia32 --publish never --prepackaged out/Zettlr-linux-ia32",
     "release:linux-x64": "yarn package:linux-x64 && electron-builder --linux AppImage deb rpm zip --x64 --publish never --prepackaged out/Zettlr-linux-x64",
     "release:linux": "yarn release:linux-x32 && yarn release:linux-x64",

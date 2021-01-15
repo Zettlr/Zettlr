@@ -49,7 +49,7 @@ win:
   target:
   - nsis
   artifactName: "Zettlr-${version}-${arch}.${ext}"
-  icon: "./resources/icons/ico/icon.ico"
+  icon: "./resources/icons/icon.ico"
 #
 # Generic Linux options
 #
@@ -63,7 +63,7 @@ linux:
   executableName: Zettlr
   synopsis: Markdown editor
   category: Office
-  icon: resources/icons/png
+  icon: "./resources/icons/1024x1024.png"
   desktop:
     StartupWMClass: zettlr
 #
