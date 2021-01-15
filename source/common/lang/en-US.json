@@ -7,7 +7,7 @@
             "Huey"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-12-31T13:50:52.000000Z"
+        "updated_at": "2021-01-04T10:08:29.000000Z"
     },
     "dialog": {
         "about": {
@@ -219,7 +219,8 @@
                 "strip_links_unlink_label": "Unlink internal links",
                 "strip_tags_label": "Remove tags from files",
                 "stripping": "Options for ZKN elements",
-                "title": "Export"
+                "title": "Export",
+                "use_bundled_pandoc": "Use the internal Pandoc for exports"
             },
             "file_meta": "Show file information",
             "filemanager_combined": "Combined &mdash; show files and directories in the file tree",
@@ -321,6 +322,7 @@
             "xelatex_default": "Default: xelatex",
             "zkn": {
                 "auto_create_file": "Automatically create non-existing files when following internal links",
+                "auto_search": "Start a search when following Zettelkasten-links",
                 "generated_id": "Generated ID",
                 "id_generator_label": "Pattern used to generate new IDs",
                 "id_label": "ID regular expression",
