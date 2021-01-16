@@ -6,11 +6,16 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 
 ## GUI and Functionality
 
+- **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
 - 32 bit AppImages and Windows are no longer supported.
 
 ## Under the Hood
 
 - Removed support for 32 bit AppImages on the CI.
+- Migrated the exporter to TypeScript.
+- Completely rewritten the exporter in order to be able to use defaults files and enable much more flexibility.
+- Removed the Pandoc command.
+- Add typings for external modules, remove the internal custom ones for `bcp-47` and `nspell`.
 
 # 1.8.6
 
