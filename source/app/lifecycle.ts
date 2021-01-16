@@ -13,14 +13,15 @@
  * END HEADER
  */
 
-// Helper functions
+// Helper/Utility functions
 import extractFilesFromArgv from '../common/util/extract-files-from-argv'
 import registerCustomProtocols from './util/custom-protocols'
 import environmentCheck from './util/environment-check'
-
-// Utility functions
+import addToPath from './util/add-to-PATH'
 import resolveTimespanMs from './util/resolve-timespan-ms'
 import { loadI18nMain } from '../common/i18n'
+import isFile from '../common/util/is-file'
+import isDir from '../common/util/is-dir'
 import path from 'path'
 
 // Developer tools
@@ -120,16 +121,38 @@ export async function bootApplication (): Promise<void> {
   notificationProvider = new NotificationProvider()
   statsProvider = new StatsProvider()
 
+  // If the user has provided a working path to XeLaTeX, make sure that its
+  // directory name is in path for Zettlr to find it.
+  const xelatexPath: string = global.config.get('xelatex').trim()
+  const xelatexPathIsFile = isFile(xelatexPath)
+  const xelatexPathIsDir = isDir(xelatexPath)
+  if (xelatexPath !== '' && (xelatexPathIsFile || xelatexPathIsDir)) {
+    if (xelatexPathIsFile) {
+      addToPath(path.dirname(xelatexPath), 'unshift')
+    } else {
+      addToPath(xelatexPath, 'unshift')
+    }
+  }
+
+  // If the user has provided a working path to Pandoc, make sure that its
+  // directory name is in path for Zettlr to find it.
+  const pandocPath: string = global.config.get('pandoc').trim()
+  const pandocPathIsFile = isFile(pandocPath)
+  const pandocPathIsDir = isDir(pandocPath)
+  if (pandocPath !== '' && (pandocPathIsFile || pandocPathIsDir)) {
+    if (pandocPathIsFile) {
+      addToPath(path.dirname(pandocPath), 'unshift')
+    } else {
+      addToPath(pandocPath, 'unshift')
+    }
+  }
+
   // If we have a bundled pandoc, unshift its path to env.PATH in order to have
   // the system search there first for the binary, and not use the internal
-  // one. NOTE: This effectively means users have to restart Zettlr for a change
-  // of the "Use bundled Pandoc?" setting to take effect.
+  // one.
   const useBundledPandoc = Boolean(global.config.get('export.useBundledPandoc'))
   if (process.env.PANDOC_PATH !== undefined && useBundledPandoc) {
-    const DELIM = (process.platform === 'win32') ? ';' : ':'
-    const tempPATH = (process.env.PATH as string).split(DELIM)
-    tempPATH.unshift(path.dirname(process.env.PANDOC_PATH))
-    process.env.PATH = tempPATH.join(DELIM)
+    addToPath(path.dirname(process.env.PANDOC_PATH), 'unshift')
     global.log.info('[Application] The bundled pandoc executable is now in PATH. If you do not want to use the bundled pandoc, uncheck the corresponding setting and reboot the app.')
   }
 

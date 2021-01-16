@@ -9,6 +9,7 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
 - 32 bit AppImages and Windows are no longer supported.
 - Removed the Pandoc installation item from the help menu.
+- Moved the Pandoc and XeLaTeX settings to the export tab in preferences.
 
 ## Under the Hood
 
@@ -17,6 +18,7 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 - Completely rewritten the exporter in order to be able to use defaults files and enable much more flexibility.
 - Removed the Pandoc command.
 - Add typings for external modules, remove the internal custom ones for `bcp-47` and `nspell`.
+- Reenabled the Pandoc and XeLaTeX options in preferences.
 
 # 1.8.6
 
