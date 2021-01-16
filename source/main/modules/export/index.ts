@@ -22,7 +22,6 @@ import prepareFile from './prepare-file'
 import { ExporterOptions } from './types'
 import writeDefaults from './write-defaults'
 import makeRevealJS from './make-reveal'
-// import makeRevealBundle from './make-reveal-bundle'
 
 interface PandocRunnerOutput {
   code: number
