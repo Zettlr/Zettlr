@@ -8,6 +8,7 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
 - 32 bit AppImages and Windows are no longer supported.
+- Removed the Pandoc installation item from the help menu.
 
 ## Under the Hood
 
