@@ -185,11 +185,6 @@ class PreferencesDialog extends ZettlrDialog {
       zknIdGenElement.value = '%Y%M%D%h%m%s'
     })
 
-    // Reset the pandoc command
-    $('#reset-pandoc-command').on('click', (e) => {
-      document.getElementById('pandocCommand').value = 'pandoc "$infile$" -f markdown $outflag$ $tpl$ $toc$ $tocdepth$ $bibliography$ $cslstyle$ $standalone$ --pdf-engine=xelatex --mathjax -o "$outfile$"'
-    })
-
     const reportTestResult = (resultTranslationKey) => {
       document.getElementById('pass-check').textContent = trans(resultTranslationKey)
     }
