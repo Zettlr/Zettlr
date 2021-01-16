@@ -1,3 +1,17 @@
+# 1.9.0
+
+## DEPRECATION: 32 bit
+
+No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supported. On Linux, ARM is not available until we find a good solution of running Pandoc there.
+
+## GUI and Functionality
+
+- 32 bit AppImages and Windows are no longer supported.
+
+## Under the Hood
+
+- Removed support for 32 bit AppImages on the CI.
+
 # 1.8.6
 
 ## GUI and Functionality
