@@ -20,16 +20,16 @@
     "package": "electron-forge package",
     "package:mac-x64": "electron-forge package --platform=darwin --arch=x64",
     "package:mac-arm": "electron-forge package --platform=darwin --arch=arm64",
-    "package:win": "electron-forge package --platform=win32 --arch=x64",
+    "package:win-x64": "electron-forge package --platform=win32 --arch=x64",
     "package:win-arm": "electron-forge package --platform=win32 --arch=arm64",
     "package:linux-x32": "electron-forge package --platform=linux --arch=ia32",
     "package:linux-x64": "electron-forge package --platform=linux --arch=x64",
-    "release:mac-x64": "yarn package:mac-x64 && electron-builder --mac --x64 --publish never --prepackaged out/Zettlr-darwin-x64/Zettlr.app",
-    "release:mac-arm": "yarn package:mac-arm && electron-builder --mac --arm64 --publish never --prepackaged out/Zettlr-darwin-arm64/Zettlr.app",
-    "release:win": "yarn package:win && electron-builder --win --x64 --publish never --prepackaged out/Zettlr-win32-x64",
-    "release:win-arm": "yarn package:win-arm && electron-builder --win --ia32 --arm64 --publish never --prepackaged out/Zettlr-win32-arm64",
-    "release:linux-x32": "yarn package:linux-x32 && electron-builder --linux AppImage --ia32 --publish never --prepackaged out/Zettlr-linux-ia32",
-    "release:linux-x64": "yarn package:linux-x64 && electron-builder --linux AppImage deb rpm zip --x64 --publish never --prepackaged out/Zettlr-linux-x64",
+    "release:mac-x64": "electron-builder --mac --x64 --publish never --prepackaged out/Zettlr-darwin-x64/Zettlr.app",
+    "release:mac-arm": "electron-builder --mac --arm64 --publish never --prepackaged out/Zettlr-darwin-arm64/Zettlr.app",
+    "release:win-x64": "electron-builder --win --x64 --publish never --prepackaged out/Zettlr-win32-x64",
+    "release:win-arm": "electron-builder --win --ia32 --arm64 --publish never --prepackaged out/Zettlr-win32-arm64",
+    "release:linux-x32": "electron-builder --linux AppImage --ia32 --publish never --prepackaged out/Zettlr-linux-ia32",
+    "release:linux-x64": "electron-builder --linux AppImage deb rpm zip --x64 --publish never --prepackaged out/Zettlr-linux-x64",
     "release:linux": "yarn release:linux-x32 && yarn release:linux-x64",
     "lang:refresh": "node scripts/refresh-language.js",
     "csl:refresh": "node scripts/update-csl.js",
@@ -40,104 +40,6 @@
   },
   "config": {
     "forge": "./forge.config.js"
-  },
-  "build": {
-    "appId": "com.zettlr.app",
-    "productName": "Zettlr",
-    "npmRebuild": false,
-    "copyright": "Zettlr is licensed under GNU GPL v3.",
-    "fileAssociations": [
-      {
-        "ext": "md",
-        "name": "Markdown",
-        "description": "Markdown document",
-        "mimeType": "text/markdown",
-        "role": "Editor",
-        "isPackage": false
-      },
-      {
-        "ext": "markdown",
-        "name": "Markdown",
-        "description": "Markdown document",
-        "mimeType": "text/markdown",
-        "role": "Editor",
-        "isPackage": false
-      }
-    ],
-    "directories": {
-      "output": "release"
-    },
-    "afterPack": "./scripts/afterPack.js",
-    "mac": {
-      "category": "public.app-category.productivity",
-      "target": "dmg",
-      "artifactName": "Zettlr-${version}-${arch}.${ext}",
-      "icon": "resources/icons/icon.icns",
-      "darkModeSupport": true,
-      "hardenedRuntime": true,
-      "gatekeeperAssess": false,
-      "entitlements": "./scripts/assets/entitlements.plist",
-      "entitlementsInherit": "./scripts/assets/entitlements.plist"
-    },
-    "win": {
-      "target": [
-        "nsis"
-      ],
-      "artifactName": "Zettlr-${version}-${arch}.${ext}",
-      "icon": "resources/icons/ico/icon.ico"
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "deb",
-        "rpm",
-        "zip"
-      ],
-      "artifactName": "Zettlr-${version}-${arch}.${ext}",
-      "executableName": "Zettlr",
-      "synopsis": "Markdown editor",
-      "category": "Office",
-      "icon": "resources/icons/png",
-      "desktop": {
-        "StartupWMClass": "zettlr"
-      }
-    },
-    "dmg": {
-      "background": "resources/icons/dmg/dmg_back.tiff",
-      "icon": "resources/icons/icon.icns",
-      "contents": [
-        {
-          "x": 130,
-          "y": 220
-        },
-        {
-          "x": 410,
-          "y": 220,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ],
-      "window": {
-        "width": 540,
-        "height": 400
-      }
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": false,
-      "allowElevation": true,
-      "allowToChangeInstallationDirectory": true,
-      "uninstallDisplayName": "Uninstall ${productName}",
-      "installerHeader": "resources/NSIS/NSISinstallerHeader.bmp",
-      "installerSidebar": "resources/NSIS/NSISinstallerSidebar.bmp"
-    },
-    "deb": {
-      "priority": "optional",
-      "compression": "xz"
-    },
-    "rpm": {
-      "compression": "xz"
-    }
   },
   "dependencies": {
     "@clr/icons": "^4.0.9",

@@ -2,7 +2,6 @@
 # packages for our officially supported distributions.
 #
 # Formerly the "build" key in the package.json.
-#
 appId: com.zettlr.app
 productName: Zettlr
 npmRebuild: false
@@ -33,7 +32,8 @@ directories:
 #
 mac:
   category: "public.app-category.productivity"
-  target: dmg
+  target:
+  - dmg
   artifactName: "Zettlr-${version}-${arch}.${ext}"
   icon: "./resources/icons/icon.icns"
   darkModeSupport: true
