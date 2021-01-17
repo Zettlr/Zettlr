@@ -1,0 +1,38 @@
+// Styles for the menubar (for Windows and Linux)
+
+#menubar {
+  height: @menubar-height;
+  // Use the system font with a somewhat smaller font-size
+  font-family: @font-system;
+  font-size: 14px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: none;
+  padding-left: 30px;
+  // Use the Zettlr logo as fixed background to enable branding in the menubar
+  background-image: url("../../img/image-preview.png");
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  // If the menubar is shown, this indicates there's no title bar, hence we
+  // need the menubar to be draggable.
+  -webkit-app-region: drag;
+
+  span.top-level-item {
+    display: inline-block;
+    padding: 3px;
+    height: @menubar-height;
+    line-height: @menubar-height;
+    padding: 0 10px;
+    // Don't drag the top-level menubar items
+    -webkit-app-region: no-drag;
+  }
+}
+
+// Show the menu bar if applicable
+body.show-menubar #menubar {
+  display: initial;
+}

@@ -1,0 +1,156 @@
+// This file holds all geometry for the Zettlr toolbar
+
+#toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: @toolbar-height;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    & > .searchbar, & > .file-info, & > .button, & > svg:not(#search-progress-indicator) {
+        // Remove the outline everywhere
+        &:focus { outline: 0; }
+    }
+
+
+    .button {
+        flex-grow: 1;
+        outline: 0;
+        display: inline-block;
+        width: @button-size;
+        height: @button-size;
+        margin: @button-margin;
+        border-radius: @border-radius; // Control the radius with the margin var
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        & clr-icon {
+            width: @button-icon-size;
+            height: @button-icon-size;
+        }
+
+        &:first-child { margin-left: @toolbar-margin * 2; }
+        &:last-child { margin-right: @toolbar-margin * 2; }
+
+        // Pomodoro meter
+        &.pomodoro {
+            padding: 2px;
+            // Don't display as button
+            background-image: none;
+            border: none;
+
+            svg {
+                transform: rotate(-90deg);
+                display: inherit;
+                margin: 0 auto;
+            }
+        }
+    }
+
+    .text {
+      // A text-label
+      padding: 0px 5px;
+      flex-grow: 2; // At least double the size of buttons
+    }
+
+    .spacer { flex-grow: 5; }
+    .spacer-5x { flex-grow: 5; }
+    .spacer-3x { flex-grow: 3; }
+    .spacer-1x { flex-grow: 1; }
+
+    .separator {
+        flex-grow: 0.3;
+        width: 1px;
+        text-align: center;
+
+        &:before {
+            content: "|";
+            display: inline;
+            font-size: @font-size-big;
+        }
+    }
+
+    .file-info {
+        flex-grow: 5;
+        text-align: center;
+        line-height: @toolbar-height;
+        white-space: nowrap;
+        line-height: 1em;
+        p {
+            // The word count should not expand/contract
+            width: 150px;
+            margin: 0 auto;
+        }
+    }
+
+    .searchbar {
+        position: relative;
+        flex-grow: 5;
+
+        input {
+            height: @toolbar-height; // @button-size;
+            width: 90%; // Fill out the whole space
+            line-height: @toolbar-height; // @button-size;
+            padding: 0.2em 1em;
+            margin: 0 @button-margin;
+            // border-radius: @button-margin;
+            outline: none;
+        }
+
+        div.end-search {
+            position: absolute;
+            top: @button-margin;
+            right: @button-margin + @button-size;
+            height: @button-size;
+            width: @button-size;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80%;
+
+            &:hover {
+                color: var(--c-primary);
+            }
+        }
+    }
+}
+
+// If the menu bar is shown, pull down the toolbar
+body.show-menubar #toolbar {
+    top: @menubar-height;
+}
+
+// When there is a menubar, it should be draggable. However, if there is none,
+// the toolbar must be draggable. Formerly, the following code was restricted
+// to darwin only until I realised that this won't work with custom window chrome.
+// NOTE: We need to devise a mechanism to make the toolbar draggable only in
+// conjunction with custom appearance plus no menubar.
+body:not(.show-menubar) #toolbar {
+    -webkit-app-region: drag;
+
+    & > .searchbar,
+    & > .file-info,
+    & > .button,
+    & > svg:not(#search-progress-indicator),
+    #toolbar-misc-buttons {
+      -webkit-app-region: no-drag;
+    }
+}
+
+// For macOS, we need to add some more margin when the native appearance is used
+body.darwin:not(.show-window-controls) #toolbar {
+  padding-left: 70px;
+}
+
+// For Windows and Linux the same, only on the other side
+// NOTE: We do not check for :not(.darwin), because if the native appearance on
+// macOS is not being used, the Windows window controls will be displayed, so
+// the same padding applies to all platforms in this situation.
+body.show-window-controls:not(.show-menubar) #toolbar {
+  padding-right: 140px; // Windows window controls are ... huge.
+}

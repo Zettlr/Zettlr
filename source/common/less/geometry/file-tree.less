@@ -1,0 +1,81 @@
+// Geometry for the tree view
+
+#file-manager:not(.expanded) #file-tree {
+  transition: 0.3s left ease;
+}
+
+#file-tree {
+    position: absolute;
+    top: 0;
+    left: 0%;
+    width: 100%;
+    bottom: 0;
+    overflow-y: auto;
+    outline: none;
+    transition: 0.3s left ease;
+
+    &.hidden {
+      left:-100%;
+    }
+
+    #directories-dirs-header, #directories-files-header {
+      height: @ribbon-height;
+      vertical-align: bottom;
+      margin-top: @ribbon-height/2;
+
+      clr-icon {
+        width: 12px;
+        height: 12px;
+        margin-left: 3px;
+        margin-right: 3px;
+        vertical-align: bottom;
+      }
+    }
+
+    .filename {
+        line-height: @ribbon-height;
+        padding: @ribbon-padding;
+        white-space: nowrap;
+        padding-left: 5px;
+        margin: 5px 0px;
+        overflow: hidden;
+
+        .item-icon, .toggle-icon {
+          display: inline-block;
+          width: 18px; // Size of clr-icon with the margin of the icon
+        }
+    }
+
+    .list-item {
+      position: relative;
+
+      &.directory .sorter {
+        display: block;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+
+        .sortDirection, .sortType {
+          margin: 5px 3px;
+        }
+      }
+    }
+
+    .empty-tree {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        cursor: pointer; // Indicate that the user can click the area
+
+        .info {
+            display: block;
+            padding: 10px;
+            margin-top: 50%;
+            font-weight: bold;
+            font-size: 200%;
+        }
+    }
+}

@@ -3,7 +3,7 @@ name: Test
 on: [push, pull_request]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,18 +15,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
-    - name: Install packages in main and source directories
-      # Simply use one single command for all that stuff and chain using &&
-      run: yarn install --frozen-lockfile && cd ./source && yarn install --frozen-lockfile && cd ..
+    - name: Install packages
+      run: yarn install --frozen-lockfile
     - name: Run the unit tests
       run: yarn test
-    - name: Test template compilation # Can we successfully compile the templates?
-      run: yarn handlebars
-    - name: Test stylesheet compilation # Does the LESS compile without errors?
-      run: yarn less
-    - name: Test webpack build
-      # We're testing against the production build as this is what effectively matters during automated builds.
-      run: yarn wp:prod
     - name: Test reveal.JS template pre-building
       run: yarn reveal:build
     - name: Test CSL refreshing

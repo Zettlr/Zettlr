@@ -39,7 +39,14 @@ module.exports = function (fileContents, baseDir = '') {
         // Multiple entries are delimited with ;
         // Reference: https://github.com/JabRef/jabref/blob/93f47c9069d01247375cabbe6e1328f0a477472b/src/main/java/org/jabref/gui/filelist/FileListEntry.java#L46
         let f = property.value[0].value.split(';')
-        f = f.map(elem => elem.split(':')[1]) // Extract the file paths
+        f = f.map(elem => {
+          // Extract the file paths
+          if (elem.indexOf(':') >= 0) {
+            return elem.split(':')[1]
+          } else {
+            return elem
+          }
+        })
         // Now sort so that PDF-files are at the top
         f = f.sort(pdfSorter)
 

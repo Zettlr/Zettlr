@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const gridParser = require('../source/renderer/util/table-parser-grid')
+const parseGridTable = require('../source/renderer/modules/table-editor/parse-grid')
 const assert = require('assert')
 
 const table = []
@@ -75,7 +75,7 @@ tableResults.push({
 describe('TableEditor#gridParser()', function () {
   for (let i = 0; i < table.length; i++) {
     it(`Should parse test table ${i + 1} correctly`, function () {
-      assert.deepStrictEqual(gridParser(table[i]), tableResults[i])
+      assert.deepStrictEqual(parseGridTable(table[i]), tableResults[i])
     })
   }
 })

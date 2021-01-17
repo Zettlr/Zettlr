@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -15,7 +14,10 @@
 
 const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
-const { trans } = require('../../common/lang/i18n')
+const { trans } = require('../../common/i18n')
+const serializeFormData = require('../../common/util/serialize-form-data')
+const renderTemplate = require('../util/render-template')
+const { ipcRenderer } = require('electron')
 
 class TagsPreferences extends ZettlrDialog {
   constructor () {
@@ -23,25 +25,33 @@ class TagsPreferences extends ZettlrDialog {
     this._dialog = 'tags-preferences'
   }
 
+  get addTagButton () {
+    return document.getElementById('addTagLine')
+  }
+
+  get tagListContainer () {
+    return document.getElementById('prefs-taglist')
+  }
+
   postAct () {
     // Activate the form to be submitted
-    let form = this._modal.find('form#dialog')
-    form.on('submit', (e) => {
+    let form = this._modal.querySelector('form#dialog')
+    form.addEventListener('submit', (e) => {
       e.preventDefault()
       // Give the ZettlrBody object the results
       // Form: dialog type, values, the originally passed object
-      this.proceed(form.serializeArray())
+      this.proceed(serializeFormData(form))
     })
 
-    $('#addTagLine').click((e) => {
-      $('#prefs-taglist').append(
+    this.addTagButton.addEventListener('click', (event) => {
+      this.tagListContainer.appendChild(renderTemplate(
         `<div>
             <input type="text" name="prefs-tags-name" placeholder="${trans('dialog.tags.name_desc')}">
             <input type="color" name="prefs-tags-color" placeholder="${trans('dialog.tags.color_desc')}">
             <input type="text" name="prefs-tags-desc" placeholder="${trans('dialog.tags.desc_desc')}">
-            <button type="button" onclick="$(this).parent().detach()">-</button>
-            </div>`
-      )
+            <button type="button" onclick="this.parentElement.parentElement.removeChild(this.parentElement)">-</button>
+        </div>`
+      ))
     })
   }
 
@@ -71,8 +81,12 @@ class TagsPreferences extends ZettlrDialog {
     }
 
     // Send and close
-    global.ipc.send('update-tags', cfg['tags'])
-    this.close()
+    ipcRenderer.invoke('tag-provider', {
+      command: 'set-coloured-tags',
+      colouredTags: cfg['tags']
+    })
+      .then(() => this.close())
+      .catch(e => console.error(e))
   }
 }
 

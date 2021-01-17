@@ -68,7 +68,7 @@ module.exports = async function checkImportIntegrity (fileList) {
     let detectedFile = { 'path': file, 'knownFormat': false }
 
     for (let format of FILES) {
-      if (format.includes(ext)) {
+      if (format.slice(2).includes(ext.substr(1).toLowerCase())) {
         // Known extension, we can go further
         detectedFile.knownFormat = format[0]
         break

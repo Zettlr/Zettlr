@@ -13,7 +13,7 @@
  */
 
 /**
-* Basic hashing function (thanks to https://stackoverflow.com/a/7616484)
+* Returns true, if the passed callback is actually callable.
 * @param  {Function} callback The callback variable that should be tested
 * @return {Boolean}        Whether or not the given callback is actually callable.
 */
@@ -23,5 +23,5 @@ module.exports = function (callback) {
   // We could also use the toString-method from any newly created object {},
   // as it will inherit the unaltered tostring method from Object.prototype.
   // Further reading: http://luxiyalu.com/object-prototype-tostring-call/
-  return callback && Object.prototype.toString.call(callback) === '[object Function]'
+  return Object.prototype.toString.call(callback) === '[object Function]'
 }

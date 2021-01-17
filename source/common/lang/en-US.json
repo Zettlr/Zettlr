@@ -3,10 +3,11 @@
         "authors": [
             "Hendrik Erz \u003Chendrik@zettlr.com\u003E",
             "ScaredCoward",
-            "Celso Lira"
+            "Celso Lira",
+            "Huey"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-07-09T14:43:58.000000Z"
+        "updated_at": "2021-01-04T10:08:29.000000Z"
     },
     "dialog": {
         "about": {
@@ -18,7 +19,7 @@
             "contributors": "Contributors",
             "jquery": "Makes it easy to render the whole user interface",
             "katex": "Renders LaTeX-formulae in the editor",
-            "lead": "Zettlr is a project by Hendrik Erz, licenced under the GNU GPL v3 licence. It is Open Source, free of charge and based upon the Electron framework. Zettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Zettlr would not be possible. Below you can find all projects that Zettlr uses.",
+            "lead": "Zettlr is a project by Hendrik Erz, licensed under the GNU GPL v3 license. It is Open Source, free of charge and based upon the Electron framework. Zettlr would like to thank the developers of Electron, the Node.js framework and the CodeMirror editor for their work. Without them, Zettlr would not be possible. Below you can find all projects that Zettlr uses.",
             "lessjs": "Helps a lot in writing the styles for Zettlr",
             "license": "License",
             "main": "Main Projects",
@@ -75,10 +76,12 @@
             "replace_placeholder": "Replace with"
         },
         "paste_image": {
+            "current_directory": "Current directory",
             "dimensions": "Image size",
             "info": "Here is a preview of the image that is currently in your clipboard. Hit return to save it to the current directory, or choose a custom directory.",
             "name_label": "Filename",
             "name_placeholder": "A unique filename",
+            "resize_to": "Resize image to",
             "retain_aspect_label": "Retain aspect ratio",
             "save_cwd": "Save to current directory",
             "title": "Insert Image from Clipboard"
@@ -109,6 +112,7 @@
                 "es-ES": "Spanish (Spain)",
                 "et-ET": "Estonian",
                 "eu-EU": "Basque",
+                "fa-IR": "Persian (Farsi)",
                 "fi-FI": "Finnish",
                 "fo-FO": "Faroese",
                 "fr-FR": "French (France)",
@@ -162,15 +166,16 @@
             "auto_dark_mode_schedule": "Schedule",
             "auto_dark_mode_schedule_format": "HH:MM (24h format)",
             "auto_dark_mode_system": "Follow Operating System",
+            "autocomplete_accept_space": "Accept spaces during autocompletion",
             "autocorrect": {
                 "active_label": "Turn on AutoCorrect",
                 "quick_select_label": "Quick select",
-                "quick_select_none_label": "None",
+                "quick_select_none_label": "Disable Magic Quotes",
                 "quotes_double_label": "Primary Magic Quotes",
                 "quotes_single_label": "Secondary Magic Quotes",
                 "replacement_info": "Here you can define certain strings that will be replaced when AutoCorrect is on. The characters on the left side will be replaced with whatever comes on the right.",
-                "style_libre_office_label": "LibreOffice style",
-                "style_word_label": "Word style",
+                "style_libre_office_label": "LibreOffice style (press Space or Enter to replace)",
+                "style_word_label": "Word style (replace immediately without pressing Space/Enter)",
                 "title": "AutoCorrect"
             },
             "checkForBeta": "Notify me about beta releases",
@@ -180,8 +185,9 @@
             "creationtime": "File creation time",
             "debug": "Enable debug mode",
             "default_image_save_path": "Default image path (relative or absolute)",
+            "delete_on_fail": "Delete items irreversibly, if moving them to trash fails",
             "display": {
-                "image_size_info": "With these controls you can constrain the image previews.",
+                "image_size_info": "With these controls you can control the dimensions of the image previews.",
                 "preview_info": "These options determine which elements are rendered in documents.",
                 "render_citations": "Render Citations",
                 "render_htags": "Hide heading characters",
@@ -195,6 +201,7 @@
             },
             "display_time_explanation": "In the file metadata display",
             "editor": "Editor",
+            "editor_font_size": "Editor font size",
             "editor_setting": {
                 "direction_ltr": "Use left-to-right (LTR) writing direction",
                 "direction_rtl": "Use right-to-left (RTL) writing direction",
@@ -212,9 +219,14 @@
                 "strip_links_unlink_label": "Unlink internal links",
                 "strip_tags_label": "Remove tags from files",
                 "stripping": "Options for ZKN elements",
-                "title": "Export"
+                "title": "Export",
+                "use_bundled_pandoc": "Use the internal Pandoc for exports"
             },
             "file_meta": "Show file information",
+            "filemanager_combined": "Combined &mdash; show files and directories in the file tree",
+            "filemanager_expanded": "Expanded &mdash; Show both file tree and file list",
+            "filemanager_explanation": "File manager mode",
+            "filemanager_thin": "Thin &mdash; show either file tree or file list",
             "filename_generator": "Pattern for new filenames",
             "formatting_characters_explanation": "Choose the formatting characters that the bold/emphasis commands should use",
             "general": "General",
@@ -278,17 +290,13 @@
             },
             "readability_algorithm": "Algorithm to use for the readability mode",
             "reset_pandoc_command": "Reset pandoc command",
-            "sidebar_combined": "Combined &mdash; show files and directories in the file tree",
-            "sidebar_expanded": "Expanded &mdash; Show both file tree and file list",
-            "sidebar_explanation": "Sidebar mode",
-            "sidebar_thin": "Thin &mdash; show either file tree or file list",
             "sorting_ascii": "ASCII order (2 after 10)",
             "sorting_explanation": "Sorting order for files (used for sorting by name)",
             "sorting_natural": "Natural order (10 after 2)",
             "sorting_time_explanation": "When sorting by time, sort by",
             "spellcheck": "Select the languages for which you want to enable automatic spell checking.",
             "spellcheck_search_placeholder": "Search for dictionaries &hellip;",
-            "spellcheck_warning": "\u003Cem\u003EAttention:\u003C/em\u003E Too many active spell check libraries may slow the app down significanty! Try to stick with three at maximum.",
+            "spellcheck_warning": "\u003Cem\u003EAttention:\u003C/em\u003E Too many active spell check libraries may slow the app down significantly! Try to stick with three at maximum. (1)",
             "spellchecking": {
                 "title": "Spellchecking"
             },
@@ -305,6 +313,7 @@
                 "success": "Successfully downloaded %s!",
                 "updated": "Updated translations: %s"
             },
+            "use_native_appearance": "Use native window appearance",
             "user_dictionary": "User dictionary. Remove words by clicking them.",
             "watchdog_checkbox_label": "Activate Watchdog polling",
             "watchdog_explainer": "On some computers, Zettlr may report too many remote file changes. If this happens, try activating this setting.",
@@ -313,6 +322,7 @@
             "xelatex_default": "Default: xelatex",
             "zkn": {
                 "auto_create_file": "Automatically create non-existing files when following internal links",
+                "auto_search": "Start a search when following Zettelkasten-links",
                 "generated_id": "Generated ID",
                 "id_generator_label": "Pattern used to generate new IDs",
                 "id_label": "ID regular expression",
@@ -336,8 +346,10 @@
                 "var_minute": "Minutes (leading zeroes)",
                 "var_month": "Month (leading zeroes)",
                 "var_second": "Seconds (leading zeroes)",
+                "var_unix_epoch": "Unix time",
                 "var_week_number": "Week of the year (leading zeroes)",
-                "var_year": "Year (four digit)"
+                "var_year": "Year (four digit)",
+                "var_year_two": "Year (two digits)"
             }
         },
         "statistics": {
@@ -375,7 +387,6 @@
             "connection_error": "Could not check for updates: Could not establish connection",
             "current_version": "Your version",
             "no_data": "Could not check for updates: Server hasn't sent any data",
-            "no_update": "You got the newest version of Zettlr",
             "notification": "There is a new version of Zettlr available to download. Please read the changelog below.",
             "redirect_error": "Could not check for updates: The server tried to redirect (Status code: %s)",
             "release_url": "Open download page",
@@ -431,10 +442,14 @@
         "no_attachments": "No attachments",
         "no_dir_selected": "No directory selected",
         "no_search_results": "No results",
+        "number_selections": "%s selections",
+        "statistics_more": "More statistics \u2026",
+        "table_of_contents": "Table of Contents",
         "today_words": "words today",
-        "virtual_dirs": "Virtual Directories",
         "words": "%s words",
-        "words_last_month": "words last month"
+        "words_last_month": "words last month",
+        "words_selected": "%s selected",
+        "workspaces": "Workspaces"
     },
     "localise": {
         "decimal_delimiter": ".",
@@ -446,8 +461,10 @@
         "all_front": "Bring All to Front",
         "bold": "Bold",
         "clear_recent_docs": "Empty",
+        "close_all_tabs": "Close all tabs",
         "close_dir": "Close directory",
         "close_file": "Close file",
+        "close_workspace": "Close Workspace",
         "copy": "Copy",
         "copy_filename": "Copy filename",
         "copy_html": "Copy as HTML",
@@ -489,12 +506,12 @@
         "new_dir": "New directory\u2026",
         "new_file": "New File\u2026",
         "new_project": "Create Project",
-        "new_vd": "New virtual directory\u2026",
         "no_suggestions": "No suggestions",
         "open": "Open\u2026",
         "open_attachment": "Open Attachment",
         "open_link": "Open Link",
         "open_logs": "Open Logs",
+        "open_workspace": "Open Workspace \u2026",
         "pandoc": "Get Pandoc",
         "paste": "Paste",
         "paste_plain": "Paste without style",
@@ -526,13 +543,14 @@
         "tab_next": "Next Tab",
         "tab_previous": "Previous Tab",
         "tags": "Manage Tags\u2026",
-        "toggle_attachments": "View attachments",
         "toggle_devtools": "Toggle developer tools",
         "toggle_distraction_free": "Distraction free mode",
         "toggle_file_meta": "Additional Information",
+        "toggle_filemanager": "Toggle file manager",
         "toggle_fullscreen": "Toggle fullscreen",
         "toggle_sidebar": "Toggle Sidebar",
         "toggle_theme": "Night mode",
+        "toggle_typewriter_mode": "Typewriter Mode",
         "undo": "Undo",
         "unhide": "Show",
         "update": "Check for updates",
@@ -543,7 +561,6 @@
         "zoom_out": "Zoom out"
     },
     "pomodoro": {
-        "mute": "Sound",
         "phase": {
             "long": "Break",
             "short": "Short break",
@@ -555,6 +572,7 @@
     "system": {
         "all_files": "All Files",
         "cancel": "Cancel",
+        "directories": "Directories",
         "directory_removed": "Directory %s has been removed.",
         "error": {
             "already_exists_message": "The file/directory %s already exists in target.",
@@ -565,7 +583,6 @@
             "could_not_create_file": "Could not create file",
             "could_not_save_image": "Could not save image",
             "delete_root_message": "You cannot remove the root directory.",
-            "delete_root_title": "Cannot remove root",
             "dnf_message": "The requested directory was not found.",
             "dnf_title": "Directory not found",
             "export_error_message": "An error occurred on export: %s",
@@ -585,19 +602,16 @@
             "no_xelatex_message": "Zettlr couldn't detect a LaTeX-distribution on this system. Please install LaTeX prior to exporting to PDF.",
             "no_xelatex_title": "LaTeX not found",
             "open_attachment_error": "Could not open attachment. Is Zotero running?",
-            "open_root_error": "Could not open %s",
             "open_url_error": "Could not open %s",
             "pandoc_error_message": "Pandoc reported an error: %s",
             "pandoc_error_title": "Could not export file",
             "remove_message": "Do you really want to remove %s?",
-            "remove_title": "Really delete?",
-            "rename_root_message": "You cannot rename the root directory.",
-            "rename_root_title": "Cannot rename root",
-            "virtual_dir_exists": "The virtual directory &quot;%s&quot; already exists."
+            "remove_title": "Really delete?"
         },
         "export_success": "Exporting to %s",
         "file_changed": "File %s has changed remotely.",
         "file_removed": "File %s has been removed.",
+        "files": "Files",
         "import_error": "Couldn't import %s.",
         "import_fail": "The following %s files could not be imported, because their filetype is unknown: %s",
         "import_lang_file": "Import new translation",
@@ -608,6 +622,7 @@
         "lang_import_success": "Language file imported: %s",
         "no_command": "Received a message with no command: %s",
         "ok": "Ok",
+        "open_file": "Open file",
         "open_folder": "Open project folder",
         "open_root_directory": "Opening new root %s \u2026",
         "open_root_directory_success": "%s has been loaded.",
@@ -628,7 +643,7 @@
         "dir_new": "Create a new directory",
         "dir_open": "Open existing directory",
         "file_delete": "Remove the current file",
-        "file_info": "Display file information (right-click for line:column)",
+        "file_info": "Display file information",
         "file_new": "Create a new file",
         "file_rename": "Rename the current file",
         "file_save": "Save the current file",

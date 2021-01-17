@@ -16,7 +16,7 @@ const fs = require('fs').promises
 const path = require('path')
 const showdown = require('showdown')
 const formatDate = require('../../../common/util/format-date')
-const { trans } = require('../../../common/lang/i18n')
+const { trans } = require('../../../common/i18n')
 
 module.exports = async function (options) {
   // Create a new showdown converter w/ footnotes support

@@ -32,19 +32,20 @@ module.exports = async function (options) {
   // Indicate to the Pandoc-runner that this template can be safely discared
   options.discardTemplate = true
 
-  let file = path.join(__dirname, '../../assets/export.tex')
   let pdf = options.pdf // Easier access to the PDF options
 
   // Replace the pagenumbering if applicable
   if (pdf.pagenumbering === 'alph_upper') pdf.pagenumbering = 'Alph'
   if (pdf.pagenumbering === 'roman_upper') pdf.pagenumbering = 'Roman'
 
+  let cnt = ''
   // If a textpl is given, read this instead of the builtin template
   if (pdf.hasOwnProperty('textpl') && isFile(pdf.textpl)) {
-    file = pdf.textpl
+    cnt = await fs.readFile(pdf.textpl, 'utf8')
+  } else {
+    cnt = await fs.readFile(path.join(__dirname, '../../assets/export.tex'), 'utf8')
   }
 
-  let cnt = await fs.readFile(file, 'utf8')
   // Do updates to the template
   // General options
   let variables = {
@@ -70,8 +71,6 @@ module.exports = async function (options) {
     'TITLEPAGE': (pdf.titlepage) ? TITLEPAGE_REPLACEMENT : '',
     'GENERATE_TOC': (pdf.toc) ? `\\setcounter{tocdepth}{${pdf.tocDepth}}\n\\tableofcontents\n\\pagebreak\n` : ''
   }
-
-  console.log(variables)
 
   for (let key in variables) {
     cnt = cnt.replace(new RegExp('\\$' + key + '\\$', 'g'), variables[key])

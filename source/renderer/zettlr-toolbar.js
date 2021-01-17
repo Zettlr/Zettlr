@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -15,7 +14,10 @@
 
 const tippy = require('tippy.js').default
 const localiseNumber = require('../common/util/localise-number')
-const { trans } = require('../common/lang/i18n')
+const renderTemplate = require('./util/render-template')
+const { trans } = require('../common/i18n')
+
+const { ipcRenderer } = require('electron')
 
 /**
  * The following keys do not trigger the autocomplete on the searchbar
@@ -40,22 +42,132 @@ class ZettlrToolbar {
      */
   constructor (parent) {
     this._renderer = parent
-    this._div = $('#toolbar')
     this._build()
-    this._searchbar = this._div.find('.searchbar').first().find('input').first()
-    this._searchbar.attr('placeholder', trans('dialog.find.find_placeholder'))
-    this._fileInfo = this._div.find('.file-info')
 
-    // Create the progress indicator circle and insert it hidden
-    this._searchProgress = $('<svg id="search-progress-indicator" class="hidden" width="20" height="20" viewBox="-1 -1 2 2"><circle class="indicator-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle><path d="" fill="" class="indicator-value" shape-rendering="geometricPrecision"></path></svg>')
-    this._searchProgress.insertAfter($('#toolbar .searchbar').first())
     // Searchbar autocomplete variables
     this._autocomplete = []
     this._oldval = ''
 
-    this._lastFileInfo = null // Holds the last received fileInfo object
+    /**
+     * Contains the update data, if any
+     *
+     * @var {Object}
+     */
+    this._updateData = null
+
+    // Holds the last received fileInfo object
+    this._lastFileInfo = null
+
+    // If an update is in progress, this contains the progress
+    this._downloadProgress = undefined
 
     this._act()
+
+    setTimeout(() => {
+      // Send an initial check for an update
+      ipcRenderer.send('update-provider', {
+        'command': 'update-check',
+        'content': {}
+      })
+    }, 1000)
+
+    ipcRenderer.on('update-provider', (event, data) => {
+      let { command, content } = data
+
+      if (command === 'update-data') {
+        // New data from the provider
+        this._updateData = content
+        this._onUpdateData() // Update the toolbar accordingly
+      } else if (command === 'download-progress') {
+        this._downloadProgress = content
+        let progress = document.getElementById('app-update-progress')
+        let progressPercent = document.getElementById('app-update-progress-percent')
+        let progressEta = document.getElementById('app-update-progress-eta')
+
+        // Update the progress bar if applicable
+        if (progress && progressPercent) {
+          progress.setAttribute('max', this._downloadProgress.size_total)
+          progress.setAttribute('value', this._downloadProgress.size_downloaded)
+          progressPercent.textContent = this._downloadProgress.download_percent + ' %'
+          let seconds = this._downloadProgress.eta_seconds
+          if (seconds > 60) {
+            progressEta.textContent = '(' + Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's)'
+          } else {
+            progressEta.textContent = '(' + seconds + 's)'
+          }
+        }
+
+        if (this._downloadProgress.finished === false) {
+          setTimeout(() => {
+            ipcRenderer.send('update-provider', {
+              'command': 'download-progress',
+              'content': null
+            })
+          }, 1000)
+        } else { // end if
+          // If the update is done and the corresponding popup still open,
+          // show the download button
+          const progressButton = document.getElementById('begin-update-progress-button')
+          if (progressButton !== null) {
+            progressButton.style.display = ''
+          }
+        }
+      } // End command: download-progress
+    })
+  }
+
+  /**
+   * Returns the toolbar container
+   *
+   * @return  {Element}  The toolbar container
+   */
+  get container () {
+    return document.getElementById('toolbar')
+  }
+
+  /**
+   * Returns the file information element
+   *
+   * @return  {Element}  The file information container
+   */
+  get fileInfo () {
+    return this.container.querySelector('.file-info')
+  }
+
+  /**
+   * Returns the search bar's input element
+   *
+   * @return  {HTMLInputElement}  The input
+   */
+  get searchBarInput () {
+    return this.container.querySelector('.searchbar').querySelector('input')
+  }
+
+  /**
+   * Returns the "end search" button element
+   *
+   * @return  {HTMLButtonElement}  The end search button element
+   */
+  get endSearchButton () {
+    return this.container.querySelector('.searchbar').querySelector('.end-search')
+  }
+
+  /**
+   * Returns the search progress indicator
+   *
+   * @return  {SVGElement}  The SVG of the search progress
+   */
+  get searchProgressIndicator () {
+    return document.getElementById('search-progress-indicator')
+  }
+
+  /**
+   * Returns the miscellaneous container
+   *
+   * @return  {Element}  The container element
+   */
+  get miscellaneousContainer () {
+    return document.getElementById('toolbar-misc-buttons')
   }
 
   /**
@@ -64,75 +176,75 @@ class ZettlrToolbar {
      */
   _act () {
     // Activate search function.
-    this._searchbar.on('keyup', (e) => {
+    this.searchBarInput.addEventListener('keyup', (e) => {
       // In case the user is using an IME (for non-latin script) autocomplete
       // will not work correctly due to the way IMEs compose the letters. Which
       // is the keyword here, because if the isComposing flag is set, simply
       // don't handle that event and wait for the compositionend-event to fire
       // on the textfield for the magic to happen!
-      if (e.originalEvent.isComposing) return
+      if (e.isComposing) {
+        return
+      }
       // Check for non triggering keys
-      if (NON_TRIGGERING_KEYS.includes(e.key)) return
+      if (NON_TRIGGERING_KEYS.includes(e.key)) {
+        return
+      }
+      // Check for modifiers
+      if (e.metaKey || e.ctrlKey) {
+        return
+      }
 
       if (e.key === 'Escape') {
-        this._searchbar.blur()
-        this._searchbar.val('')
+        this.searchBarInput.blur()
+        this.searchBarInput.value = ''
         this._renderer.exitSearch()
       } else if (e.key === 'Enter') {
-        this._renderer.beginSearch(this._searchbar.val())
-        this._searchbar.select() // Select everything in the area.
+        this._renderer.beginSearch(this.searchBarInput.value)
+        this.searchBarInput.select() // Select everything in the area.
       } else {
         this._applyAutocomplete()
       }
     })
 
     // Listen for the event fired if an IME is done composing something
-    this._searchbar.on('compositionend', (e) => {
-      // Composition has ended, so we can apply autocomplete!
+    this.searchBarInput.addEventListener('compositionend', () => {
       this._applyAutocomplete()
     })
 
-    this._searchbar.on('dblclick', (e) => { e.stopPropagation() })
+    this.searchBarInput.addEventListener('dblclick', (e) => {
+      e.stopPropagation()
+    })
 
-    this._div.find('.end-search').on('click', (e) => {
-      this._searchbar.blur()
-      this._searchbar.val('')
+    this.endSearchButton.addEventListener('click', () => {
+      this.searchBarInput.blur()
+      this.searchBarInput.value = ''
       this._renderer.exitSearch()
     })
 
-    this._searchbar.on('focus', (e) => {
+    this.searchBarInput.addEventListener('focus', () => {
       this._autocomplete = this._renderer.getFilesInDirectory()
-      if (this._searchbar[0].value === '') {
-        // Let's prefill this with the selection from the editor if possible.
-        let selections = this._renderer.getEditor().getSelections()
-        if (selections.length > 0) {
-          this._searchbar[0].value = selections[0]
-          this._searchbar[0].select() // Ease of access
-        }
-      }
+      this.searchBarInput.select() // Ease of access
     })
 
-    this._searchbar.on('blur', (e) => {
+    this.searchBarInput.addEventListener('blur', () => {
       this._autocomplete = [] // Reset auto completion array
       this._oldval = ''
     })
 
-    this._fileInfo.click((e) => {
+    this.fileInfo.addEventListener('click', () => {
       this._renderer.getBody().showFileInfo()
     })
 
     // Activate buttons
     // -- so beautifully DRY <3
-    this._div.find('.button').on('click', (e) => {
-      // Don't let the event bubble up to the document. Why? Because if a popup
-      // opens up and the event reaches the document element this will cause the
-      // popup to think it should close itself again.
-      e.stopPropagation()
-      let elem = $(e.currentTarget)
-      let command = elem.attr('data-command') || 'unknown-command'
-      let content = elem.attr('data-content') || {}
-
-      this._renderer.handleEvent(command, content)
+    this.container.querySelectorAll('.button').forEach((elem, key, parent) => {
+      elem.addEventListener('click', (e) => {
+        // Don't let the event bubble up to the document. Why? Because if a popup
+        // opens up and the event reaches the document element this will cause the
+        // popup to think it should close itself again.
+        e.stopPropagation()
+        this._renderer.handleEvent(elem.dataset['command'], elem.dataset['content'])
+      })
     })
 
     // On platforms other than darwin, a menu button is used to show the app's
@@ -143,13 +255,16 @@ class ZettlrToolbar {
     // re-focus any formerly focused element if the menu button receives focus
     // to make sure, for instance, the paste event for new file IDs will have a
     // receiving end for the paste action.
-    this._div.find('.menu-popup').on('focus', (e) => {
-      // Re-focus the former element
-      $(e.relatedTarget).focus()
-    })
+    let menuPopup = this.container.querySelector('.menu-popup')
+    if (menuPopup) {
+      menuPopup.addEventListener('focus', (e) => {
+        // Re-focus the former element
+        e.relatedTarget.focus()
+      })
+    }
 
     // Toggle the maximisation status of the main window
-    this._div.on('dblclick', (e) => {
+    this.container.addEventListener('dblclick', () => {
       global.ipc.send('win-maximise')
     })
 
@@ -162,12 +277,95 @@ class ZettlrToolbar {
   }
 
   /**
+   * Called whenever there's new update data from the update provider
+   */
+  _onUpdateData () {
+    // Update the toolbar according to the status of the update data
+    if (this._updateData !== null && this._updateData.isNewer === true) {
+      let button = document.createElement('div')
+      button.classList.add('button')
+      button.setAttribute('id', 'update-info-button')
+      button.innerHTML = '<clr-icon shape="download-cloud" class="is-success"></clr-icon>'
+      this.miscellaneousContainer.appendChild(button)
+
+      let instance = tippy(button, {
+        content: `Update to version ${this._updateData.newVer} available`,
+        delay: 100,
+        arrow: true,
+        duration: 100
+      })
+
+      // Show the tippy for 3 seconds to get the user's attention
+      instance.show()
+      setTimeout(() => {
+        instance.hide()
+        instance.setContent('Update available')
+      }, 3000)
+
+      button.addEventListener('click', (e) => {
+        e.stopPropagation()
+
+        if (this._downloadProgress !== undefined) {
+          // We have a download progress to show
+          global.popupProvider.show('update-progress', button, this._downloadProgress)
+
+          document.getElementById('begin-update-progress-button').addEventListener('click', (e) => {
+            ipcRenderer.send('update-provider', {
+              'command': 'begin-update',
+              'content': null
+            })
+          })
+        } else { // END: if downloadProgress !== undefined
+          // No download progress, so display the normal popup
+          global.popupProvider.show('update', button, this._updateData)
+
+          // Enable listening for update requests
+          let requestButtons = document.querySelectorAll('.request-app-update')
+
+          requestButtons.forEach((button, key, parent) => {
+            button.addEventListener('click', (e) => {
+              let url = button.dataset['url']
+              ipcRenderer.send('update-provider', {
+                'command': 'request-app-update',
+                'content': url
+              })
+              global.popupProvider.close()
+
+              // Now, send a request for the download progress data, and poll on
+              // each update until it is finished
+              ipcRenderer.send('update-provider', {
+                'command': 'download-progress',
+                'content': null
+              })
+            })
+          })
+        } // END: Else, no download progress
+
+        // Display the changelog, if requested. Available in all popups
+        document.getElementById('view-changelog-button').addEventListener('click', (e) => {
+          this._renderer.getBody().displayUpdate({
+            'newVer': this._updateData.newVer,
+            'curVer': this._updateData.curVer,
+            'isBeta': this._updateData.isBeta,
+            'changelog': this._updateData.changelog
+          })
+          global.popupProvider.close()
+        })
+      }) // END: Click handler
+    } else {
+      // No update available, remove button if applicable
+      let button = document.getElementById('update-info-button')
+      if (button) button.parentElement.removeChild(button)
+    }
+  }
+
+  /**
    * Applies autocorrect to the global search area. This code has been
-   * outsources from the keyup event listener, because it also needs to be
+   * outsourced from the keyup event listener, because it also needs to be
    * executed after the endcomposing-event fires.
    */
   _applyAutocomplete () {
-    let elem = this._searchbar[0]
+    let elem = this.searchBarInput
     if ((elem.value === '') || (elem.value === this._oldval)) return // Content has not changed
 
     // First, get the current value of the searchbar
@@ -179,9 +377,7 @@ class ZettlrToolbar {
     for (let name of this._autocomplete) {
       if (name.substr(0, this._oldval.length).toLowerCase() === this._oldval.toLowerCase()) {
         elem.value = this._oldval + name.substr(this._oldval.length)
-        if (elem.setSelectionRange) {
-          elem.setSelectionRange(this._oldval.length, elem.value.length)
-        }
+        elem.setSelectionRange(this._oldval.length, elem.value.length)
         break
       }
     }
@@ -197,28 +393,44 @@ class ZettlrToolbar {
 
     // Append everything to the div.
     for (let elem of tpl) {
-      // Some buttons are only for certain platforms, so don't show them on the
-      // wrong one.
-      if (elem.context && !elem.context.includes(process.platform)) continue
-
-      let child = $('<div>').addClass(elem.role)
+      let child = document.createElement('div')
+      child.classList.add(elem.role)
       if (elem.role === 'button') {
-        child.addClass(elem.class)
-        child.attr('data-command', elem.command)
-        child.attr('data-content', elem.content)
+        child.classList.add(elem.class)
+        child.setAttribute('role', 'button') // ARIA role
+        child.setAttribute('data-command', elem.command)
+        child.setAttribute('data-content', elem.content)
       } else if (elem.role === 'searchbar') {
-        child.html('<input type="text"><div class="end-search">&times;</div>')
+        child.setAttribute('role', 'presentation') // The div is just for presentation purposes
+        child.innerHTML = '<input type="text" role="search"/><div class="end-search" role="button" aria-label="End global search">&times;</div>'
       } else if (elem.role === 'pomodoro') {
-        child.addClass('button')
-        child.attr('data-command', 'pomodoro')
-        child.html('<svg width="20" height="20" viewBox="-1 -1 2 2"><circle class="pomodoro-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle><path d="" fill="" class="pomodoro-value" shape-rendering="geometricPrecision"></path></svg>')
+        child.classList.add('button')
+        child.setAttribute('data-command', 'pomodoro')
+        child.setAttribute('role', 'button') // ARIA role
+        child.innerHTML = '<svg width="20" height="20" viewBox="-1 -1 2 2"><circle class="pomodoro-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle><path d="" fill="" class="pomodoro-value" shape-rendering="geometricPrecision"></path></svg>'
       }
-      if (elem.title) child.attr('data-tippy-content', trans(elem.title))
-      if (elem.icon && typeof elem.icon === 'string') {
-        child.html(`<clr-icon shape="${elem.icon}"></clr-icon>`)
+      if (elem.hasOwnProperty('title')) {
+        child.setAttribute('data-tippy-content', trans(elem.title))
+        child.setAttribute('aria-label', trans(elem.title))
       }
-      this._div.append(child)
+      if (elem.hasOwnProperty('icon') && typeof elem.icon === 'string') {
+        child.innerHTML = `<clr-icon alt="${elem.icon}" shape="${elem.icon}"></clr-icon>`
+      }
+      this.container.appendChild(child)
     }
+
+    // Final actions after the toolbar has been set up
+    this.searchBarInput.setAttribute('placeholder', trans('dialog.find.find_placeholder'))
+
+    // Create the progress indicator circle and insert it hidden
+    let searchProgressIndicator = renderTemplate('<svg id="search-progress-indicator" class="hidden" width="20" height="20" viewBox="-1 -1 2 2"><circle class="indicator-meter" cx="0" cy="0" r="1" shape-rendering="geometricPrecision"></circle><path d="" fill="" class="indicator-value" shape-rendering="geometricPrecision"></path></svg>')
+    this.container.querySelector('.searchbar').after(searchProgressIndicator)
+
+    // Insert a div container for additional buttons that may or may not be
+    // part of the toolbar (e.g. dynamics)
+    let miscellaneousContainer = document.createElement('div')
+    miscellaneousContainer.setAttribute('id', 'toolbar-misc-buttons')
+    this.container.appendChild(miscellaneousContainer)
   }
 
   /**
@@ -228,12 +440,34 @@ class ZettlrToolbar {
     */
   updateFileInfo (fileInfo = this._lastFileInfo) {
     this._lastFileInfo = fileInfo
+    let cnt = ''
 
-    let cnt = trans('gui.words', localiseNumber(this._lastFileInfo.words))
-    cnt += '<br>'
-    cnt += (this._lastFileInfo.cursor.line + 1) + ':' + (this._lastFileInfo.cursor.ch + 1)
+    if (fileInfo.selections.length > 0) {
+      // We have selections to display.
+      let length = 0
+      fileInfo.selections.forEach(sel => {
+        length += sel.selectionLength
+      })
 
-    this._fileInfo.html(cnt)
+      cnt = trans('gui.words_selected', localiseNumber(length))
+      cnt += '<br>'
+      if (fileInfo.selections.length === 1) {
+        cnt += (this._lastFileInfo.selections[0].start.line + 1) + ':'
+        cnt += (this._lastFileInfo.selections[0].start.ch + 1) + ' &ndash; '
+        cnt += (this._lastFileInfo.selections[0].end.line + 1) + ':'
+        cnt += (this._lastFileInfo.selections[0].end.ch + 1)
+      } else {
+        // Multiple selections --> indicate
+        cnt += trans('gui.number_selections', this._lastFileInfo.selections.length)
+      }
+    } else {
+      // No selection. NOTE: words always contains the count of chars OR words.
+      cnt = trans('gui.words', localiseNumber(this._lastFileInfo.words))
+      cnt += '<br>'
+      cnt += (this._lastFileInfo.cursor.line + 1) + ':' + (this._lastFileInfo.cursor.ch + 1)
+    }
+
+    this.fileInfo.innerHTML = `<p>${cnt}</p>`
   }
 
   /**
@@ -241,7 +475,7 @@ class ZettlrToolbar {
     * @return {ZettlrToolbar} Chainability.
     */
   hideWordCount () {
-    this._fileInfo.text('')
+    this.fileInfo.textContent = ''
     return this
   }
 
@@ -250,7 +484,7 @@ class ZettlrToolbar {
     * @return {ZettlrToolbar} This for chainability.
     */
   toggleDistractionFree () {
-    this._div.toggleClass('mute')
+    this.container.classList.toggle('mute')
     return this
   }
 
@@ -259,8 +493,11 @@ class ZettlrToolbar {
     * @return {ZettlrToolbar} Chainability.
     */
   focusSearch () {
-    this._searchbar.focus()
-    this._searchbar.select()
+    // Let's prefill this with the selection from the editor if possible.
+    let query = this._renderer.getEditor().getSelections().pop()
+    this.searchBarInput.value = query
+    this.searchBarInput.focus()
+    this.searchBarInput.select()
     return this
   }
 
@@ -269,11 +506,11 @@ class ZettlrToolbar {
     * @param {String} term The new value to be written into the searchbar.
     */
   setSearch (term) {
-    this._searchbar.val(term)
+    this.searchBarInput.value = term
   }
 
   getSearchTerm () {
-    return this._searchbar.val()
+    return this.searchBarInput.value
   }
 
   /**
@@ -283,14 +520,17 @@ class ZettlrToolbar {
     * @return {void}         Nothing to return.
     */
   searchProgress (item, itemCnt) {
-    if (this._searchProgress.hasClass('hidden')) {
-      this._searchProgress.removeClass('hidden')
+    if (this.searchProgressIndicator.classList.contains('hidden')) {
+      this.searchProgressIndicator.classList.remove('hidden')
     } else {
       let progress = item / itemCnt
       let large = (progress > 0.5) ? 1 : 0
       let x = Math.cos(2 * Math.PI * progress)
       let y = Math.sin(2 * Math.PI * progress)
-      this._searchProgress.find('.indicator-value').attr('d', `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`)
+
+      this.searchProgressIndicator
+        .querySelector('.indicator-value')
+        .setAttribute('d', `M 1 0 A 1 1 0 ${large} 1 ${x} ${y} L 0 0`)
     }
   }
 
@@ -299,7 +539,7 @@ class ZettlrToolbar {
     * @return {void} Nothing to return.
     */
   endSearch () {
-    this._searchProgress.addClass('hidden')
+    this.searchProgressIndicator.classList.add('hidden')
   }
 }
 

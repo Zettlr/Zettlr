@@ -11,7 +11,7 @@
  * END HEADER
  */
 
-const { trans } = require('../lang/i18n')
+const { trans } = require('../i18n')
 
 /**
  * Adds delimiters to numbers.

@@ -40,6 +40,10 @@ const inputs = [
       'c': [ 'one', 'two', 'three' ],
       'd': 1000
     }
+  },
+  // Based on a true story, as safeAssign apparently doesn't overwrite values
+  {
+    'fullScreen': true
   }
 ]
 const referenceObjects = [
@@ -66,6 +70,10 @@ const referenceObjects = [
       'c': [],
       'd': -1
     }
+  },
+  {
+    'fullScreen': false,
+    someOtherVar: 'Hello World'
   }
 ]
 const expectedOutputs = [
@@ -92,6 +100,11 @@ const expectedOutputs = [
       'c': [ 'one', 'two', 'three' ],
       'd': 1000
     }
+  },
+  // Expected output four
+  {
+    'fullScreen': true,
+    someOtherVar: 'Hello World'
   }
 ]
 

@@ -16,12 +16,16 @@ const fs = require('fs').promises
 const path = require('path')
 const { exec } = require('child_process')
 const commandExists = require('command-exists')
-const { trans } = require('../../../common/lang/i18n')
+const { trans } = require('../../../common/i18n')
 const isFile = require('../../../common/util/is-file')
 
 module.exports = async function (options) {
   // Pull in the pandoc command from config
   let command = global.config.get('pandocCommand')
+
+  const bundledPandoc = process.env.PANDOC_PATH !== undefined
+  const useBundledPandoc = Boolean(global.config.get('export.useBundledPandoc'))
+  const isAppleSilicon = process.platform === 'darwin' && process.arch === 'arm64'
 
   let hasPandoc = true
   let hasLaTeX = true
@@ -36,6 +40,10 @@ module.exports = async function (options) {
     hasLaTeX = false
   }
 
+  if (bundledPandoc) {
+    hasPandoc = true
+  }
+
   // This is the right time & place to check for
   // the existence of the respective binaries
   if (!hasPandoc && options.format !== 'html') {
@@ -47,14 +55,16 @@ module.exports = async function (options) {
     throw new Error(trans('system.error.no_xelatex_message'), trans('system.error.no_xelatex_title'))
   }
 
-  // Also check if we can have pandoc-citeproc run over the file
-  let citeproc = ''
-  if (isFile(global.config.get('export.cslLibrary'))) {
-    citeproc += `--filter pandoc-citeproc --bibliography "${global.config.get('export.cslLibrary')}"`
+  // Include CSL library if exist
+  let bibliography = ''
+  if (global.config.get('export.cslLibrary') && isFile(global.config.get('export.cslLibrary'))) {
+    bibliography = `--citeproc --bibliography "${global.config.get('export.cslLibrary')}"`
   }
 
+  // Add a custom CSL style if applicable
+  let cslstyle = ''
   if (options.hasOwnProperty('cslStyle') && isFile(options.cslStyle)) {
-    citeproc += ` --csl "${options.cslStyle}"`
+    cslstyle = `--csl "${options.cslStyle}"`
   }
 
   // Pandoc flags to be passed to the compiler
@@ -63,7 +73,8 @@ module.exports = async function (options) {
     'infile': options.sourceFile,
     'toc': (options.pdf.toc && options.format === 'pdf') ? '--toc' : '',
     'tocdepth': (options.pdf.tocDepth) ? '--toc-depth=' + options.pdf.tocDepth : '',
-    'citeproc': citeproc,
+    'bibliography': bibliography,
+    'cslstyle': cslstyle,
     'outfile': options.targetFile,
     'outflag': '-t ' + ((options.format === 'pdf') ? 'latex' : options.format),
     'format': options.format,
@@ -76,6 +87,12 @@ module.exports = async function (options) {
   // Recursively replace all flags in the command
   for (let key in pandocFlags) {
     command = command.replace(new RegExp('\\$' + key + '\\$', 'g'), pandocFlags[key])
+  }
+
+  if (bundledPandoc && useBundledPandoc && isAppleSilicon) {
+    // On Apple M1/ARM64 chips, we need to run the 64 bit Intel-compiled Pandoc
+    // through Rosetta 2, which we can do by prepending with arch -x86_64.
+    command = 'arch -x86_64 ' + command
   }
 
   // Finally, run the command.

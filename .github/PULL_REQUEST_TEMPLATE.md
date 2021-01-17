@@ -18,19 +18,19 @@ following points:
   - [ ] I synced the latest commits to develop shortly before proposing
         so that no merge issues occur.
 
-  N.B.: Of course you can open a Pull Repository and ask for certain things
+  N.B.: Of course you can open a Pull Request and ask for certain things
   such as file structure later on! It does not need to be perfect on the first
   try :)
  -->
 
-<!-- Below, please shortly describe what the PR does in one or two short sentences. -->
 ## Description
+<!-- Below, please describe what the PR does in one or two short sentences. -->
 
-<!-- What changes did you make? Please explicitly state any breaking API changes so that nobody is confused why other components suddenly stop working -->
 ## Changes
+<!-- What changes did you make? Please explicitly state any breaking API changes so that nobody is confused why other components suddenly stop working -->
 
-<!-- If there is anything else that might be of interest, please provide it here -->
 ## Additional information
+<!-- If there is anything else that might be of interest, please provide it here -->
 
 <!-- Please provide any testing system -->
 Tested on: <!-- OS including version ->

@@ -5,5 +5,8 @@
         "zotero",
         "citeproc"
     ],
-    "cSpell.language": "en-GB"
+    "cSpell.language": "en-GB",
+    "files.associations": {
+        ".ztr-directory": "json"
+    }
 }

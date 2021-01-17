@@ -12,6 +12,7 @@
  */
 
 const path = require('path')
+const { getImageRE } = require('../regular-expressions')
 
 /**
  * This function takes a Markdown string and replaces all occurrences of images
@@ -21,13 +22,17 @@ const path = require('path')
  * @return {String}          The altered mdstring value.
  */
 module.exports = function (basePath, mdstring) {
-  let imgRE = /^!\[(.*?)\]\((.+?)\)({.*})?$/gmi
-  return mdstring.replace(imgRE, (match, p1, p2, p3, offset, string) => {
+  let imgRE = getImageRE(true) // We need the multiline version
+  return mdstring.replace(imgRE, (match, p1, p2, p3, p4, offset, string) => {
     // We'll make use of path for file system URIs, and the URL() constructor
     // for web links. We know that new URL() will throw a TypeError if the URL
     // is not valid, so we can distinct two cases: If URL does not throw, it's
     // a valid URL and we can simply pass that one. But if it throws, use some
     // path-magic to convert it into an absolute path.
+
+    // There was an alt-text
+    if (p3) p2 = p2.replace(`"${p3}"`, '').trim()
+
     try {
       // Short explainer for "throwawayVariable": If we instantiate URL
       // without "new" it'll throw an error always. But if we simply use "new"
@@ -39,6 +44,7 @@ module.exports = function (basePath, mdstring) {
       // the work for us.
       p2 = path.resolve(basePath, p2)
     }
-    return `![${p1}](${p2})${(p3 != null) ? p3 : ''}`
+
+    return `![${p1}](${p2}${(p3 !== undefined) ? ' "' + p3 + '"' : ''})${(p4 !== undefined) ? p4 : ''}`
   })
 }
