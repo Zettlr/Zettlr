@@ -1,8 +1,33 @@
+
 # (no version assigned)
 
 ## GUI and Functionality
 
 - All images paths created when pasting or dropping an image are now relative and POSIX (using forward slashes). This unifies images paths across platforms (in particular Windows) and insertion method.
+
+=======
+# 1.9.0
+
+## DEPRECATION: 32 bit
+
+No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supported. On Linux, ARM is not available until we find a good solution of running Pandoc there.
+
+## GUI and Functionality
+
+- **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
+- **Feature**: The macOS version of Zettlr now boasts a new application icon, adapted to fit the style of the Big Sur operating system. It was provided by Marc Oliver Orth (@marc2o) – thank you!
+- 32 bit AppImages and Windows are no longer supported.
+- Removed the Pandoc installation item from the help menu.
+- Moved the Pandoc and XeLaTeX settings to the export tab in preferences.
+
+## Under the Hood
+
+- Removed support for 32 bit AppImages on the CI.
+- Migrated the exporter to TypeScript.
+- Completely rewritten the exporter in order to be able to use defaults files and enable much more flexibility.
+- Removed the Pandoc command.
+- Add typings for external modules, remove the internal custom ones for `bcp-47` and `nspell`.
+- Reenabled the Pandoc and XeLaTeX options in preferences.
 
 # 1.8.6
 

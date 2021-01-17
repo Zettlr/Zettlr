@@ -203,10 +203,6 @@ jobs:
         run: yarn reveal:build
       - name: Download Pandoc (64 bit)
         run: ./scripts/get-pandoc.sh linux
-      - name: Package Linux targets (x32)
-        run: yarn package:linux-x32
-      - name: Create Linux installers (x32)
-        run: yarn release:linux-x32
       - name: Package Linux targets (x64)
         run: yarn package:linux-x64
       - name: Create Linux installers (x64)
@@ -221,11 +217,6 @@ jobs:
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
           path: ./release/Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
-      - name: Cache AppImage (x32) release
-        uses: actions/upload-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-i386.AppImage
-          path: ./release/Zettlr-${{steps.ref.outputs.version}}-i386.AppImage
       - name: Cache AppImage (x64) release
         uses: actions/upload-artifact@v1
         with:
@@ -288,11 +279,6 @@ jobs:
         with:
           name: Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
           path: .
-      - name: Download AppImage binary (x32)
-        uses: actions/download-artifact@v1
-        with:
-          name: Zettlr-${{steps.ref.outputs.version}}-i386.AppImage
-          path: .
       - name: Download AppImage binary (x64)
         uses: actions/download-artifact@v1
         with:
@@ -308,7 +294,6 @@ jobs:
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-arm64.dmg" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-amd64.deb" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm" >> "SHA256SUMS.txt"
-          sha256sum "Zettlr-${{steps.ref.outputs.version}}-i386.AppImage" >> "SHA256SUMS.txt"
           sha256sum "Zettlr-${{steps.ref.outputs.version}}-x86_64.AppImage" >> "SHA256SUMS.txt"
       - name: Verify checksums
         run: sha256sum -c SHA256SUMS.txt
@@ -378,15 +363,6 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
           asset_name: Zettlr-${{steps.ref.outputs.version}}-x86_64.rpm
-          asset_content_type: application/octet-stream
-      - name: Upload AppImage binary (x32)
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Zettlr-${{steps.ref.outputs.version}}-i386.AppImage
-          asset_name: Zettlr-${{steps.ref.outputs.version}}-i386.AppImage
           asset_content_type: application/octet-stream
       - name: Upload AppImage binary (x64)
         uses: actions/upload-release-asset@v1.0.1

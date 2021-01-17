@@ -12,14 +12,21 @@
  * END HEADER
  */
 
-const fs = require('fs').promises
-const writeStream = require('fs').createWriteStream
-const path = require('path')
-const archiver = require('archiver')
-const rimraf = require('rimraf')
-const isFile = require('../../../common/util/is-file')
+import {
+  promises as fs,
+  createWriteStream as writeStream
+} from 'fs'
+import path from 'path'
+import archiver from 'archiver'
+import rimraf from 'rimraf'
+import isFile from '../../../common/util/is-file'
 
-module.exports = async function (options) {
+export default async function (
+  sourceFile: string,
+  targetFile: string,
+  textpack: boolean = false,
+  overrideFilename?: string
+): Promise<void> {
   /*
    * We have to do the following (in order):
    * 1. Find all images in the Markdown file.
@@ -34,12 +41,12 @@ module.exports = async function (options) {
 
   // First of all we must make sure that the generated file is actually a
   // textbundle, and not a textpack. This way we can simply zip the bundle.
-  if (options.format === 'textpack') {
-    options.targetFile = options.targetFile.replace('.textpack', '.textbundle')
+  if (textpack) {
+    targetFile = targetFile.replace('.textpack', '.textbundle')
   }
 
   // Load in the tempfile
-  let cnt = await fs.readFile(options.sourceFile, 'utf8')
+  let cnt = await fs.readFile(sourceFile, 'utf8')
   let imgRE = /!\[.*?\]\(([^)]+)\)/g
   let match
   let images = []
@@ -61,53 +68,63 @@ module.exports = async function (options) {
 
   // Create the textbundle folder
   try {
-    await fs.lstat(options.targetFile)
+    await fs.lstat(targetFile)
   } catch (e) {
-    await fs.mkdir(options.targetFile)
+    await fs.mkdir(targetFile)
   }
 
   // Write the markdown file
-  await fs.writeFile(path.join(options.targetFile, 'text.md'), cnt, { encoding: 'utf8' })
+  await fs.writeFile(path.join(targetFile, 'text.md'), cnt, { encoding: 'utf8' })
 
   // Create the assets folder
   try {
-    await fs.lstat(path.join(options.targetFile, 'assets'))
+    await fs.lstat(path.join(targetFile, 'assets'))
   } catch (e) {
-    await fs.mkdir(path.join(options.targetFile, 'assets'))
+    await fs.mkdir(path.join(targetFile, 'assets'))
   }
 
   // Copy over all images
   for (let image of images) {
-    await fs.copyFile(image.old, path.join(options.targetFile, image.new))
+    await fs.copyFile(image.old, path.join(targetFile, image.new))
   }
 
   // Finally, create the info.json
-  await fs.writeFile(path.join(options.targetFile, 'info.json'), JSON.stringify({
+  await fs.writeFile(path.join(targetFile, 'info.json'), JSON.stringify({
     'version': 2,
     'type': 'net.daringfireball.markdown',
     'creatorIdentifier': 'com.zettlr.app',
-    'sourceURL': path.basename(options.file.path)
+    'sourceURL': (overrideFilename !== undefined) ? overrideFilename : sourceFile
   }), { encoding: 'utf8' })
 
   // As a last step, check whether or not we should actually create a textpack
-  if (options.format === 'textpack') {
-    await new Promise((resolve, reject) => {
-      let packFile = options.targetFile.replace('.textbundle', '.textpack')
+  if (textpack) {
+    await new Promise<void>((resolve, reject) => {
+      let packFile = targetFile.replace('.textbundle', '.textpack')
       let stream = writeStream(packFile)
       // Create a Zip file with compression 9
       let archive = archiver('zip', { zlib: { level: 9 } })
       // Throw the error for the engine to capture
-      archive.on('error', (err) => { reject(err) })
+      archive.on('error', (err) => {
+        reject(err)
+      })
       // Resolve the promise as soon as the archive has finished writing
-      stream.on('finish', () => { resolve() })
+      stream.on('finish', () => {
+        resolve()
+      })
       archive.pipe(stream) // Pipe the data through to our file
-      archive.directory(options.targetFile, path.basename(options.targetFile))
+      archive.directory(targetFile, path.basename(targetFile))
       archive.finalize() // Done.
+        .catch(err => global.log.error(`[TextBundler] Could not finalize the Textpack archive: ${err.message as string}`, err))
       // Now we need to overwrite the targetFile with the pack name
-      options.targetFile = packFile
+      targetFile = packFile
     })
 
     // Afterwards remove the source file
-    rimraf(options.targetFile.replace('.textpack', '.textbundle'), () => { /* Nothing to do */ })
+    rimraf(targetFile.replace('.textpack', '.textbundle'), (error) => {
+      if (error !== undefined) {
+        global.log.error(`[Export] Could not remove the temporary textbundle: ${error.message}`, error)
+      }
+      /* Nothing to do */
+    })
   }
 }

@@ -13,7 +13,10 @@ module.exports = {
         { from: 'source/main/assets/dict', to: 'dict' },
         { from: 'source/common/lang', to: 'lang' },
         { from: 'source/app/service-providers/assets/csl-locales', to: 'assets/csl-locales' },
-        { from: 'source/app/service-providers/assets/csl-styles', to: 'assets/csl-styles' }
+        { from: 'source/app/service-providers/assets/csl-styles', to: 'assets/csl-styles' },
+        { from: 'source/main/modules/export/assets/export.tpl.htm', to: 'assets' },
+        { from: 'source/main/modules/export/assets/template.revealjs.htm', to: 'assets' },
+        { from: 'source/main/modules/export/assets/revealjs-styles', to: 'assets/revealjs-styles' }
       ]
     })
   ],

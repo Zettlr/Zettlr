@@ -114,20 +114,20 @@ export default class Export extends ZettlrCommand {
 
     // Call the exporter. Don't throw the "big" error as this is single-file export
     try {
-      const targetFile: string = await makeExport(opt)
-      global.log.info(`Successfully exported file to ${targetFile}`)
-      global.notify.normal(trans('system.export_success', opt.format.toUpperCase()), true)
+      const output = await makeExport(opt)
+      if (output.code === 0) {
+        global.log.info(`Successfully exported file to ${output.targetFile}`)
+        global.notify.normal(trans('system.export_success', opt.format.toUpperCase()), true)
+      } else if (output.stderr.length > 0) {
+        global.notify.error({
+          title: trans('system.error.export_error_title'),
+          message: trans('system.error.export_error_message', output.stderr[0]),
+          additionalInfo: output.stderr.join('')
+        }, true)
+      }
     } catch (err) {
       global.log.error(err.message, err)
-      // Error may be thrown. If there's additional info, spit out an extended
-      // dialog.
-      if (err.additionalInfo) {
-        global.notify.error(err, true)
-      } else {
-        global.notify.normal(`${err.name as string}: ${err.message as string}`, true)
-      }
+      global.notify.normal(`${err.name as string}: ${err.message as string}`, true)
     }
   }
 }
-
-module.exports = Export

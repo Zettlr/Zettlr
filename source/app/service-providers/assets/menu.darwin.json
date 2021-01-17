@@ -394,10 +394,6 @@
         "target": "https://www.zettlr.com/"
       },
       {
-        "label": "menu.pandoc",
-        "target": "https://github.com/jgm/pandoc/releases/latest"
-      },
-      {
         "label": "menu.latex",
         "target": "https://www.latex-project.org/get/#tex-distributions"
       },
