@@ -18,6 +18,7 @@ const clarityIcons = require('@clr/icons').ClarityIcons
 const Citr = require('@zettlr/citr')
 
 const path = require('path')
+const generateFileLink = require('../common/util/generate-file-link')
 
 const FILETYPES_IMG = [
   '.jpg',
@@ -268,9 +269,10 @@ module.exports = class ZettlrSidebar {
         // won't work.
         const uri = decodeURIComponent(a.path)
         this.setDragData(
-          this.isImage(a.ext.toLowerCase())
-            ? `![${a.name}](${uri})`
-            : `[${a.name}](${uri})`,
+          generateFileLink(
+            uri,
+            this._renderer.getActiveFile().dir,
+            this.isImage(a.ext.toLowerCase())),
           event)
       }
       this.fileContainer.append(link)

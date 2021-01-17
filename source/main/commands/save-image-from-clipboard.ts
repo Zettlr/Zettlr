@@ -19,7 +19,7 @@ import path from 'path'
 import fs from 'fs'
 import { clipboard } from 'electron'
 import isDir from '../../common/util/is-dir'
-const generateFileLink = require('../../common/util/generate-file-link')
+import generateFileLink from '../../common/util/generate-file-link'
 
 export default class SaveImage extends ZettlrCommand {
   constructor (app: any) {
@@ -120,7 +120,7 @@ export default class SaveImage extends ZettlrCommand {
     fs.writeFile(imagePath, image.toPNG(), (err) => {
       if (err) return global.notify.normal(trans('system.error.could_not_save_image'))
       // Insert a relative path instead of an absolute one
-      let pathToInsert = path.relative(path.dirname(activeFile.path), imagePath)
+      let textToInsert = generateFileLink(imagePath, path.dirname(activeFile.path), true)
 
       // Everything worked out - now tell the editor to insert some text
       this._app.ipc.send('insert-text', `${textToInsert}\n`)
