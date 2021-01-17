@@ -7,6 +7,7 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 ## GUI and Functionality
 
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
+- **Feature**: The macOS version of Zettlr now boasts a new application icon, adapted to fit the style of the Big Sur operating system. It was provided by Marc Oliver Orth (@marc2o) – thank you!
 - 32 bit AppImages and Windows are no longer supported.
 - Removed the Pandoc installation item from the help menu.
 - Moved the Pandoc and XeLaTeX settings to the export tab in preferences.
