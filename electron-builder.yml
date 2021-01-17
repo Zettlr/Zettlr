@@ -62,7 +62,7 @@ linux:
   executableName: Zettlr
   synopsis: Markdown editor
   category: Office
-  icon: "./resources/icons/1024x1024.png"
+  icon: "./resources/icons/png"
   desktop:
     StartupWMClass: zettlr
 #
