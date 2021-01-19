@@ -11,5 +11,5 @@ module.exports = (cm, zoomHook) => {
       let direction = e.deltaY / Math.abs(e.deltaY)
       zoomHook(isNaN(direction) ? 0 : direction)
     }
-  })
+  }, { passive: true })
 }
