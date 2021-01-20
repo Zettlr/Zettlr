@@ -11,7 +11,7 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 - 32 bit AppImages and Windows are no longer supported.
 - Removed the Pandoc installation item from the help menu.
 - Moved the Pandoc and XeLaTeX settings to the export tab in preferences.
-- Fixed a bug that would delete file if it got renamed as itself
+- Fixed a bug that would delete file if it got renamed as itself.
 
 ## Under the Hood
 

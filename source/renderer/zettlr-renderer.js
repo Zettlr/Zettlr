@@ -23,6 +23,7 @@ const GlobalSearch = require('./util/global-search')
 const ZettlrStore = require('./zettlr-store')
 
 const createFileManager = require('./modules/file-manager').default
+const createModal = require('./modules/modal').default
 
 const path = require('path')
 
@@ -61,6 +62,7 @@ class ZettlrRenderer {
     this._sidebar = new ZettlrSidebar(this)
     // Create and mount the file manager
     this._fileManager = createFileManager()
+    this._modal = createModal(this._fileManager.$store) // Create the modal carrier
     // Create the store wrapper which will act as
     // a unifying interface to commit changes to the store.
     this._store = new ZettlrStore(this, this._fileManager.$store)
