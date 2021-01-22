@@ -24,7 +24,7 @@ export default function registerGlobals (): void {
     set: (key: string, val: any) => {
       // Send a synchronous event
       return ipcRenderer.sendSync('config-provider', {
-        command: 'set-config',
+        command: 'set-config-single',
         payload: {
           key: key,
           val: val

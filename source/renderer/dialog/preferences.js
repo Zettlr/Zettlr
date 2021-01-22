@@ -392,8 +392,14 @@ class PreferencesDialog extends ZettlrDialog {
     global.ipc.send('update-user-dictionary', userDictionary)
 
     // Finally send and close this dialog.
-    global.ipc.send('update-config', cfg)
-    this.close()
+    ipcRenderer.invoke('config-provider', {
+      command: 'set-config',
+      payload: cfg
+    })
+      .then(() => {
+        this.close()
+      })
+      .catch(err => console.error(err))
   }
 }
 
