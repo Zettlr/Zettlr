@@ -231,11 +231,6 @@ class ZettlrIPC {
         this.send('pdf-preferences', global.config.get())
         break
 
-      // Got a new config object
-      case 'update-config':
-        global.config.bulkSet(cnt)
-        break
-
       // Handle dropped files/folders
       case 'handle-drop':
         this._app.handleAddRoots(cnt)

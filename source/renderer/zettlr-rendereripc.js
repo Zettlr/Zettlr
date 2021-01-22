@@ -429,11 +429,6 @@ class ZettlrRendererIPC {
         }
         break
 
-      // An update in the config needs to be reflected in the renderer.
-      case 'config-update':
-        this._app.configChange()
-        break
-
       case 'open-preferences':
         this.send('get-preferences')
         break

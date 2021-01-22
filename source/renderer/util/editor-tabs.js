@@ -82,7 +82,10 @@ module.exports = class EditorTabs {
     }
 
     // For those non-macOS users (boo!)
-    this._div.onwheel = (evt) => { this._div.scrollLeft += evt.deltaY }
+    this._div.addEventListener('wheel', (evt) => {
+      this._div.scrollLeft += evt.deltaY
+    }, { passive: true })
+    // this._div.onwheel = (evt) => { this._div.scrollLeft += evt.deltaY }
 
     // Listen to Cmd/Ctrl+[0-9] events on the window
     window.addEventListener('keydown', (e) => {

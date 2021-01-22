@@ -59,8 +59,13 @@ export default {
     }
   },
   mounted: function () {
-    ipcRenderer.on('config-update', (evt, config) => {
-      this.$emit('config-update')
+    ipcRenderer.on('config-provider', (event, message) => {
+      const { command } = message
+
+      if (command === 'update') {
+        const { payload } = message
+        this.$emit('config-update', payload)
+      }
     })
   },
   methods: {

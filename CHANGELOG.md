@@ -11,6 +11,7 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 - 32 bit AppImages and Windows are no longer supported.
 - Removed the Pandoc installation item from the help menu.
 - Moved the Pandoc and XeLaTeX settings to the export tab in preferences.
+- Fixed a bug that would delete file if it got renamed as itself.
 
 ## Under the Hood
 
@@ -20,6 +21,18 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 - Removed the Pandoc command.
 - Add typings for external modules, remove the internal custom ones for `bcp-47` and `nspell`.
 - Reenabled the Pandoc and XeLaTeX options in preferences.
+- Removed the generic IPC call from the config provider and replaced it with consistent checks as to which options have actually changed. This increases the performance after configuration saves.
+
+# 1.8.7
+
+## GUI and Functionality
+
+- On Linux systems, the application icon should now show up again.
+- Fixed an issue where your text would "jump" irradically when you were writing in the last line of the file.
+
+## Under the Hood
+
+- Restored the generic folder path in the `electron-builer.yaml` config.
 
 # 1.8.6
 

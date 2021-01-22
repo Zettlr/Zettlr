@@ -632,55 +632,95 @@ class ZettlrEditor {
    * editor can reload all defaults
    * @return {ZettlrEditor} Chainability
    */
-  configChange () {
-    // The configuration has changed, so reload everything
-    let newOptions = {
-      indentUnit: global.config.get('editor.indentUnit'),
-      autoCloseBrackets: global.config.get('editor.autoCloseBrackets'),
-      keyMap: global.config.get('editor.inputMode'),
-      direction: global.config.get('editor.direction'),
-      zettlr: {
-        muteLines: global.config.get('muteLines'),
-        imagePreviewWidth: global.config.get('display.imageWidth'),
-        imagePreviewHeight: global.config.get('display.imageHeight'),
-        markdownBoldFormatting: global.config.get('editor.boldFormatting'),
-        markdownItalicFormatting: global.config.get('editor.italicFormatting'),
-        zettelkasten: global.config.get('zkn'),
-        readabilityAlgorithm: global.config.get('editor.readabilityAlgorithm'),
-        render: {
-          citations: global.config.get('display.renderCitations'),
-          iframes: global.config.get('display.renderIframes'),
-          images: global.config.get('display.renderImages'),
-          links: global.config.get('display.renderLinks'),
-          math: global.config.get('display.renderMath'),
-          tasks: global.config.get('display.renderTasks'),
-          headingTags: global.config.get('display.renderHTags'),
-          tables: global.config.get('editor.enableTableHelper')
+  configChange (option) {
+    if (option === 'editor.indentUnit') {
+      this._editor.setOptions({
+        indentUnit: global.config.get('editor.indentUnit')
+      })
+    } else if (option === 'editor.autoCloseBrackets') {
+      this._editor.setOptions({
+        autoCloseBrackets: global.config.get('editor.autoCloseBrackets')
+      })
+    } else if (option === 'editor.inputMode') {
+      this._editor.setOptions({
+        keyMap: global.config.get('editor.inputMode')
+      })
+    } else if (option === 'editor.direction') {
+      this._editor.setOptions({
+        direction: global.config.get('editor.direction')
+      })
+    } else if (option === 'muteLines') {
+      this._editor.setOptions({
+        muteLines: global.config.get('muteLines')
+      })
+    } else if (option === 'display.imageWidth') {
+      this._editor.setOptions({
+        zettlr: { imagePreviewWidth: global.config.get('display.imageWidth') }
+      })
+    } else if (option === 'display.imageHeight') {
+      this._editor.setOptions({
+        zettlr: { imagePreviewHeight: global.config.get('display.imageHeight') }
+      })
+    } else if (option === 'editor.boldFormatting') {
+      this._editor.setOptions({
+        zettlr: { markdownBoldFormatting: global.config.get('editor.boldFormatting') }
+      })
+    } else if (option === 'editor.italicFormatting') {
+      this._editor.setOptions({
+        zettlr: { markdownItalicFormatting: global.config.get('editor.italicFormatting') }
+      })
+    } else if (option.startsWith('zkn') === true) {
+      this._editor.setOptions({
+        zettlr: { zettelkasten: global.config.get('zkn') }
+      })
+    } else if (option === 'editor.readabilityAlgorithm') {
+      this._editor.setOptions({
+        zettlr: { readabilityAlgorithm: global.config.get('editor.readabilityAlgorithm') }
+      })
+    } else if (option.startsWith('display.render') === true) {
+      this._editor.setOptions({
+        zettlr: {
+          render: {
+            citations: global.config.get('display.renderCitations'),
+            iframes: global.config.get('display.renderIframes'),
+            images: global.config.get('display.renderImages'),
+            links: global.config.get('display.renderLinks'),
+            math: global.config.get('display.renderMath'),
+            tasks: global.config.get('display.renderTasks'),
+            headingTags: global.config.get('display.renderHTags')
+          }
         }
+      })
+    } else if (option === 'editor.enableTableHelper') {
+      this._editor.setOptions({
+        zettlr: {
+          render: {
+            tables: global.config.get('editor.enableTableHelper')
+          }
+        }
+      })
+    } else if (option === 'editor.countChars') {
+      this._countChars = global.config.get('editor.countChars')
+    } else if (option === 'editor.autoCorrect') {
+      // Set the autoCorrect options
+      let conf = global.config.get('editor.autoCorrect')
+      if (conf.active === false) {
+        this._editor.setOptions({ autoCorrect: false })
+      } else {
+        // Convert the replacements into the correct format for the plugin
+        let keys = {}
+        for (let repl of conf.replacements) {
+          keys[repl.key] = repl.val
+        }
+        this._editor.setOptions({
+          autoCorrect: {
+            style: conf.style,
+            quotes: conf.quotes,
+            replacements: keys
+          }
+        })
       }
     }
-
-    // this._countChars = global.config.get('editor.countChars')
-
-    // Set the autoCorrect options
-    let conf = global.config.get('editor.autoCorrect')
-    if (!conf.active) {
-      newOptions.autoCorrect = false
-    } else {
-      // Convert the replacements into the correct format for the plugin
-      let keys = {}
-      for (let repl of conf.replacements) {
-        keys[repl.key] = repl.val
-      }
-      newOptions.autoCorrect = {
-        style: conf.style,
-        quotes: conf.quotes,
-        replacements: keys
-      }
-    }
-
-    // Finally set the updated values
-    this._editor.setOptions(newOptions)
 
     // Check for RTL-support
     setTimeout(() => {
@@ -692,8 +732,10 @@ class ZettlrEditor {
       })
     }, 100)
 
-    // Finally, set the font size of the editor div
-    this._div.style.fontSize = global.config.get('editor.fontSize') + 'px'
+    if (option === 'editor.fontSize') {
+      // Finally, set the font size of the editor div
+      this._div.style.fontSize = global.config.get('editor.fontSize') + 'px'
+    }
 
     return this
   }

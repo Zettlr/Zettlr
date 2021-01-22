@@ -4,8 +4,6 @@
  * @param   {CodeMirror}  cm  The instance
  */
 module.exports = (cm) => {
-  // DEBUG TESTING
-
   // While taskHandle is undefined, there's no task scheduled. Else, there is.
   let taskHandle
 

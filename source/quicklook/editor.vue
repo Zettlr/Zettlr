@@ -143,8 +143,8 @@ export default {
     this.scrollbarAnnotations = this.editor.codeMirror.annotateScrollbar('sb-annotation')
     this.scrollbarAnnotations.update([])
 
-    this.$root.$on('config-update', () => {
-      this.updateConfig()
+    this.$root.$on('config-update', (option) => {
+      this.updateConfig(option)
     })
 
     this.$root.$on('search-next', () => {
@@ -152,7 +152,10 @@ export default {
     })
   },
   methods: {
-    updateConfig: function () {
+    updateConfig: function (option) {
+      // TODO: Make use of option, too lazy to copy over the boilerplate from
+      // the main editor right now. Quicklooks are more static so they shouldn't
+      // care too much about these things.
       this.editor.setOptions({
         zettlr: {
           imagePreviewWidth: global.config.get('display.imageWidth'),
