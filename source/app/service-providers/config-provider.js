@@ -26,7 +26,6 @@ const { app, ipcMain } = require('electron')
 const ignoreFile = require('../../common/util/ignore-file')
 const safeAssign = require('../../common/util/safe-assign')
 const isDir = require('../../common/util/is-dir')
-const isFile = require('../../common/util/is-file')
 const isDictAvailable = require('../../common/util/is-dict-available')
 const { getLanguageFile } = require('../../common/i18n')
 const COMMON_DATA = require('../../common/data.json')
@@ -406,35 +405,7 @@ module.exports = class ConfigProvider extends EventEmitter {
     * @return {ZettlrConfig} This for chainability.
     */
   checkSystem () {
-    let delim = (process.platform === 'win32') ? ';' : ':'
-
-    // Also add to PATH xelatex and pandoc-directories
-    // if these variables contain actual dirs.
-    if (this.get('xelatex').length > 0) {
-      let xelatex = this.get('xelatex').substr(0, this.get('xelatex').length - 1)
-      if (isFile(xelatex)) {
-        // The user provided the path including the executable name
-        xelatex = path.dirname(xelatex)
-      }
-
-      if (process.env.PATH.indexOf(xelatex) === -1) {
-        process.env.PATH += delim + xelatex
-      }
-    }
-
-    if (this.get('pandoc').length > 0) {
-      let pandoc = this.get('pandoc')
-      if (isFile(pandoc)) {
-        // The user provided the path including the executable name
-        pandoc = path.dirname(pandoc)
-      }
-
-      if (process.env.PATH.indexOf(pandoc) === -1) {
-        process.envPATH += delim + pandoc
-      }
-    }
-
-    // Finally, check whether or not a UUID exists, and, if not, generate one.
+    // Check whether or not a UUID exists, and, if not, generate one.
     if (this.config.uuid === null) {
       this.config.uuid = uuid4()
     }
