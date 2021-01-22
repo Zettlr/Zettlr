@@ -49,7 +49,7 @@ export default class FileRename extends ZettlrCommand {
     // Test if we are about to override a file
     const dir = file.parent
     let found = dir?.children.find(e => e.name.toLowerCase() === newName.toLowerCase())
-    if (found !== undefined && found.type !== 'directory') {
+    if (found !== undefined && found.type !== 'directory' && file !== found) {
       // Ask for override
       if (!await this._app.shouldOverwriteFile(newName)) {
         return // No override wanted

@@ -26,7 +26,6 @@ const { app, ipcMain } = require('electron')
 const ignoreFile = require('../../common/util/ignore-file')
 const safeAssign = require('../../common/util/safe-assign')
 const isDir = require('../../common/util/is-dir')
-const isFile = require('../../common/util/is-file')
 const isDictAvailable = require('../../common/util/is-dict-available')
 const { getLanguageFile } = require('../../common/i18n')
 const COMMON_DATA = require('../../common/data.json')
@@ -76,8 +75,6 @@ module.exports = class ConfigProvider extends EventEmitter {
     this._rules = [] // This array holds all validation rules
     this._firstStart = false // Only true if a config file has been created
     this._newVersion = false // True if the last read config had a different version
-
-    this._bulkSetInProgress = false // As long as this is true, a bulk set happens
 
     // Config Template providing all necessary arguments
     this.cfgtpl = {
@@ -281,12 +278,6 @@ module.exports = class ConfigProvider extends EventEmitter {
       get: (key) => { return JSON.parse(JSON.stringify(this.get(key))) },
       // The setter is a simply pass-through
       set: (key, val) => { return this.set(key, val) },
-      /**
-       * Set multiple config keys at once.
-       * @param  {Object} obj An object containing key/value-pairs to set.
-       * @return {Boolean}     Whether or not the call succeeded.
-       */
-      bulkSet: (obj) => { return this.bulkSet(obj) },
       // Enable global event listening to updates of the config
       on: (evt, callback) => { this.on(evt, callback) },
       // Also do the same for the removal of listeners
@@ -320,14 +311,32 @@ module.exports = class ConfigProvider extends EventEmitter {
       newVersionDetected: () => { return this._newVersion }
     } // END globals for the configuration
 
-    // Listen for renderer events
+    // Listen for renderer events TODO: Migrate to the handler
     ipcMain.on('config-provider', (event, message) => {
       const { command, payload } = message
 
       if (command === 'get-config') {
         event.returnValue = this.get(payload.key)
-      } else if (command === 'set-config') {
+      } else if (command === 'set-config-single') {
         event.returnValue = this.set(payload.key, payload.val)
+      }
+    })
+
+    // Handle config events
+    ipcMain.handle('config-provider', (event, message) => {
+      const { command } = message
+
+      if (command === 'set-config') {
+        // Sets the complete config object
+        const { payload } = message
+        let ret = true
+        for (let opt in payload) {
+          if (!this.set(opt, payload[opt])) {
+            ret = false
+          }
+        }
+
+        return ret
       }
     })
   }
@@ -406,35 +415,7 @@ module.exports = class ConfigProvider extends EventEmitter {
     * @return {ZettlrConfig} This for chainability.
     */
   checkSystem () {
-    let delim = (process.platform === 'win32') ? ';' : ':'
-
-    // Also add to PATH xelatex and pandoc-directories
-    // if these variables contain actual dirs.
-    if (this.get('xelatex').length > 0) {
-      let xelatex = this.get('xelatex').substr(0, this.get('xelatex').length - 1)
-      if (isFile(xelatex)) {
-        // The user provided the path including the executable name
-        xelatex = path.dirname(xelatex)
-      }
-
-      if (process.env.PATH.indexOf(xelatex) === -1) {
-        process.env.PATH += delim + xelatex
-      }
-    }
-
-    if (this.get('pandoc').length > 0) {
-      let pandoc = this.get('pandoc')
-      if (isFile(pandoc)) {
-        // The user provided the path including the executable name
-        pandoc = path.dirname(pandoc)
-      }
-
-      if (process.env.PATH.indexOf(pandoc) === -1) {
-        process.envPATH += delim + pandoc
-      }
-    }
-
-    // Finally, check whether or not a UUID exists, and, if not, generate one.
+    // Check whether or not a UUID exists, and, if not, generate one.
     if (this.config.uuid === null) {
       this.config.uuid = uuid4()
     }
@@ -598,10 +579,10 @@ module.exports = class ConfigProvider extends EventEmitter {
       this.emit('update', option) // Pass the option for info
 
       // Broadcast to all open windows
-      broadcastIpcMessage('config-provider', { command: 'update', payload: option })
-      if (!this._bulkSetInProgress && global.hasOwnProperty('ipc')) {
-        global.ipc.send('config-update') // Notify renderer process
-      }
+      broadcastIpcMessage('config-provider', {
+        command: 'update',
+        payload: option
+      })
       return true
     }
 
@@ -621,43 +602,23 @@ module.exports = class ConfigProvider extends EventEmitter {
       // Set the nested property
       if (cfg.hasOwnProperty(prop) && this._validate(option, value)) {
         // Do not set the option if it already has the requested value
-        if (cfg[prop] === value) return true
+        if (cfg[prop] === value) {
+          return true
+        }
 
         // Set the new value and inform the listeners
         cfg[prop] = value
         this.emit('update', option) // Pass the option for info
         // Broadcast to all open windows
-        broadcastIpcMessage('config-provider', { command: 'update', payload: option })
-        if (!this._bulkSetInProgress) global.ipc.send('config-update') // Notify renderer process
+        broadcastIpcMessage('config-provider', {
+          command: 'update',
+          payload: option
+        })
         return true
       }
     }
 
     return false
-  }
-
-  /**
-   * This function allows multiple options to be set at once. It needs to be an
-   * associative array in the form key:value.
-   * @param  {Object} cfgObj An object containing the keys and new values.
-   * @return {Boolean}        True, if all went well, or false, if an error occurred.
-   */
-  bulkSet (cfgObj) {
-    // Iterate and return whether there was a mistake.
-    let ret = true
-    this._bulkSetInProgress = true
-    for (let opt in cfgObj) {
-      if (!this.set(opt, cfgObj[opt])) ret = false
-    }
-
-    // Notify renderer afterwards
-    this._bulkSetInProgress = false
-    if (global.hasOwnProperty('ipc')) global.ipc.send('config-update')
-    this.emit('update', this.getConfig()) // Notify everyone else
-    // Broadcast to all open windows
-    broadcastIpcMessage('config-provider', { command: 'update', payload: undefined })
-
-    return ret
   }
 
   /**

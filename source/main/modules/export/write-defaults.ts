@@ -64,7 +64,7 @@ export default async function writeDefaults (
     columns: 78,
     dpi: 72,
     // 'extract-media': 'mediadir', // TODO: Can be used for docx containers in the importer, as this way images are correctly retrieved
-    // toc: true, // TODO
+    toc: false, // TODO
     'toc-depth': 2, // TODO: Is the pdf-option equivalent
     'number-sections': false, // TODO: Number section headings in LaTeX, ConTeXt, HTML, Docx, ms, or EPUB output. By default, sections are not numbered.
     // TODO: a list of offsets at each heading level
@@ -106,8 +106,8 @@ export default async function writeDefaults (
     // 'epub-chapter-level': 1,
     // 'epub-cover-image': 'cover.jpg',
     // 'reference-links': true, // TODO: Only for importer, creates references instead of inline
-    'reference-location': 'block', // TODO: Can be block, section, or document, only affects Markdown imports
-    'markdown-headings': 'atx', // TODO: Can be atx or setext
+    // 'reference-location': 'block', // TODO: Can be block, section, or document, only affects Markdown imports
+    // 'markdown-headings': 'atx', // TODO: Can be atx or setext
     // 'track-changes': 'accept', // TODO: Only necessary for the IMPORTER! Can be accept, reject, or all
     'html-q-tags': false, // Whether to use <q> tags in HTML
     css: [

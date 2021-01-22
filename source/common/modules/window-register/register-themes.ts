@@ -45,11 +45,14 @@ export default function registerThemes (): void {
     const { command } = message
 
     if (command === 'update') {
-      // Switch the theme based on the current configuration value
-      switchTheme(global.config.get('display.theme'))
-
-      // Switch to light/dark mode based on the configuration variable
-      document.body.classList.toggle('dark', global.config.get('darkMode'))
+      const { payload } = message
+      if (payload === 'display.theme') {
+        // Switch the theme based on the current configuration value
+        switchTheme(global.config.get('display.theme'))
+      } else if (payload === 'darkMode') {
+        // Switch to light/dark mode based on the configuration variable
+        document.body.classList.toggle('dark', global.config.get('darkMode'))
+      }
     }
   })
 
