@@ -22,6 +22,17 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 - Add typings for external modules, remove the internal custom ones for `bcp-47` and `nspell`.
 - Reenabled the Pandoc and XeLaTeX options in preferences.
 
+# 1.8.7
+
+## GUI and Functionality
+
+- On Linux systems, the application icon should now show up again.
+- Fixed an issue where your text would "jump" irradically when you were writing in the last line of the file.
+
+## Under the Hood
+
+- Restored the generic folder path in the `electron-builer.yaml` config.
+
 # 1.8.6
 
 ## GUI and Functionality
