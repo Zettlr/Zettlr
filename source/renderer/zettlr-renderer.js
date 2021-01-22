@@ -90,6 +90,15 @@ class ZettlrRenderer {
         }
       }
     })
+
+    ipcRenderer.on('config-provider', (event, message) => {
+      const { command } = message
+
+      if (command === 'update') {
+        const { payload } = message
+        this.configChange(payload)
+      }
+    })
   }
 
   /**
@@ -158,18 +167,56 @@ class ZettlrRenderer {
    * have to be applied in the renderer. It will fetch all config variables
    * and apply them.
    */
-  configChange () {
-    // Set file meta
-    global.store.set('fileMeta', global.config.get('fileMeta'))
-    global.store.set('hideDirs', global.config.get('hideDirs')) // TODO: Not yet implemented
-    global.store.set('displayTime', global.config.get('fileMetaTime'))
-    global.store.set('fileManagerMode', global.config.get('fileManagerMode'))
-    global.store.set('useFirstHeadings', global.config.get('display.useFirstHeadings'))
-    // Receive the application language
-    this.setLocale(global.config.get('appLang'))
+  configChange (option) {
+    if (option === undefined) {
+      // During start up. LOOK I'M AN IDIOT!
+      const keys = [
+        'fileMeta',
+        'hideDirs',
+        'fileMetaTime',
+        'fileManagerMode',
+        'display.useFirstHeadings',
+        'appLang',
+        'editor.indentUnit',
+        'editor.autoCloseBrackets',
+        'editor.inputMode',
+        'editor.direction',
+        'muteLines',
+        'display.imageWidth',
+        'display.imageHeight',
+        'editor.boldFormatting',
+        'editor.italicFormatting',
+        'zkn',
+        'editor.readabilityAlgorithm',
+        'display.render',
+        'editor.enableTableHelper',
+        'editor.countChars',
+        'editor.autoCorrect',
+        'editor.fontSize'
+      ]
+      for (const key of keys) {
+        this.configChange(key)
+      }
+      return
+    }
+
+    if (option === 'fileMeta') {
+      global.store.set('fileMeta', global.config.get('fileMeta'))
+    } else if (option === 'hideDirs') {
+      global.store.set('hideDirs', global.config.get('hideDirs')) // TODO: Not yet implemented
+    } else if (option === 'fileMetaTime') {
+      global.store.set('displayTime', global.config.get('fileMetaTime'))
+    } else if (option === 'fileManagerMode') {
+      global.store.set('fileManagerMode', global.config.get('fileManagerMode'))
+    } else if (option === 'display.useFirstHeadings') {
+      global.store.set('useFirstHeadings', global.config.get('display.useFirstHeadings'))
+    } else if (option === 'appLang') {
+      // Receive the application language
+      this.setLocale(global.config.get('appLang'))
+    }
 
     // Tell the editor that the config has changed
-    this.getEditor().configChange()
+    this.getEditor().configChange(option)
   }
 
   /**

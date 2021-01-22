@@ -35,9 +35,13 @@ ipcRenderer.on('shortcut', (event, shortcut) => {
   }
 })
 
-ipcRenderer.on('config-provider', (event, payload) => {
-  if (payload.command === 'update') {
-    app.$data.fontSize = global.config.get('editor.fontSize')
+ipcRenderer.on('config-provider', (event, message) => {
+  const { command } = message
+  if (command === 'update') {
+    const { payload } = message
+    if (payload === 'editor.fontSize') {
+      app.$data.fontSize = global.config.get('editor.fontSize')
+    }
   }
 })
 
