@@ -110,7 +110,7 @@ export default class CiteprocProvider {
       ignored: /(^|[/\\])\../,
       persistent: true,
       ignoreInitial: true
-    }) // TODO: Listen to events
+    })
 
     this._watcher.on('all', (eventName, affectedPath) => {
       const db = this._databases.find(db => db.path === affectedPath)
@@ -210,15 +210,7 @@ export default class CiteprocProvider {
     ipcMain.on('citation-renderer', (event, content) => {
       const { command, payload } = content
 
-      if (command === 'get-citation') {
-        event.reply('citation-renderer', {
-          'command': 'get-citation',
-          'payload': {
-            'originalCitation': payload.citation,
-            'renderedCitation': this.getCitation(payload.citation)
-          }
-        })
-      } else if (command === 'get-citation-sync') {
+      if (command === 'get-citation-sync') {
         event.returnValue = this.getCitation(payload.citation)
       }
     })
@@ -233,6 +225,12 @@ export default class CiteprocProvider {
           return []
         } else {
           return this._databases[this._databaseIdx].cslData
+        }
+      } else if (command === 'get-citation') {
+        const { payload } = message
+        return {
+          'originalCitation': payload,
+          'renderedCitation': this.getCitation(payload)
         }
       }
     })

@@ -15,33 +15,6 @@
   const { ipcRenderer } = require('electron')
   const { getCitationRE } = require('../../../../common/regular-expressions')
 
-  // Listen to IPC events to update the citations
-  ipcRenderer.on('citation-renderer', (event, message) => {
-    const { command, payload } = message
-
-    if (command === 'get-citation') {
-      // Find the correct citation and replace the span's text content
-      // with the correct, rendered citation
-      let spanToRender = toRender.find(elem => elem.citation === payload.originalCitation)
-      let contents = payload.renderedCitation
-
-      // If we have a span and the contents are not undefined
-      if (spanToRender !== undefined) {
-        // Replace HTML content and remove item from array
-        if (contents !== undefined) {
-          // We need to set the HTML as citeproc may spit out <i>-tags etc.
-          spanToRender.element.innerHTML = contents
-          // The textMarker's contents have changed, we need to inform CodeMirror
-          spanToRender.textMarker.changed()
-        } else {
-          spanToRender.element.classList.add('error')
-        }
-
-        toRender.splice(toRender.indexOf(spanToRender), 1)
-      }
-    }
-  })
-
   var citationRE = getCitationRE()
   var Citr = require('@zettlr/citr')
 
@@ -143,10 +116,32 @@
             textMarker: textMarker
           })
 
-          ipcRenderer.send('citation-renderer', {
+          ipcRenderer.invoke('citeproc-provider', {
             command: 'get-citation',
-            payload: { citation: citation }
+            payload: citation
           })
+            .then((payload) => {
+              // Find the correct citation and replace the span's text content
+              // with the correct, rendered citation
+              let spanToRender = toRender.find(elem => elem.citation === payload.originalCitation)
+              let contents = payload.renderedCitation
+
+              // If we have a span and the contents are not undefined
+              if (spanToRender !== undefined) {
+                // Replace HTML content and remove item from array
+                if (contents !== undefined) {
+                  // We need to set the HTML as citeproc may spit out <i>-tags etc.
+                  spanToRender.element.innerHTML = contents
+                  // The textMarker's contents have changed, we need to inform CodeMirror
+                  spanToRender.textMarker.changed()
+                } else {
+                  spanToRender.element.classList.add('error')
+                }
+
+                toRender.splice(toRender.indexOf(spanToRender), 1)
+              }
+            })
+            .catch(e => console.error(e))
         } catch (e) {
           // CodeMirror throws errors if one tries to paper over an existing
           // mark with a new marker. In this case, don't mark the text and simply
