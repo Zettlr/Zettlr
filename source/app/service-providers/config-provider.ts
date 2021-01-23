@@ -16,22 +16,23 @@
  * END HEADER
  */
 
-const fs = require('fs')
-const path = require('path')
-const uuid4 = require('uuid').v4
-const EventEmitter = require('events')
-const bcp47 = require('bcp-47')
-const ZettlrValidation = require('../../common/zettlr-validation')
-const { app, ipcMain } = require('electron')
-const ignoreFile = require('../../common/util/ignore-file')
-const safeAssign = require('../../common/util/safe-assign')
-const isDir = require('../../common/util/is-dir')
-const isDictAvailable = require('../../common/util/is-dict-available')
-const { getLanguageFile } = require('../../common/i18n')
-const COMMON_DATA = require('../../common/data.json')
-const ZETTLR_VERSION = app.getVersion()
+import fs from 'fs'
+import path from 'path'
+import { v4 as uuid4 } from 'uuid'
+import EventEmitter from 'events'
+import bcp47 from 'bcp-47'
+import ZettlrValidation from '../../common/zettlr-validation'
+import { app, ipcMain } from 'electron'
+import ignoreFile from '../../common/util/ignore-file'
+import safeAssign from '../../common/util/safe-assign'
+import isDir from '../../common/util/is-dir'
+import isDictAvailable from '../../common/util/is-dict-available'
+import { getLanguageFile } from '../../common/i18n'
+import COMMON_DATA from '../../common/data.json'
+import broadcastIpcMessage from '../../common/util/broadcast-ipc-message'
+import RULES from '../../common/validation.json'
 
-const broadcastIpcMessage = require('../../common/util/broadcast-ipc-message')
+const ZETTLR_VERSION = app.getVersion()
 
 /**
  * This class represents the configuration of Zettlr, represented by the
@@ -39,7 +40,14 @@ const broadcastIpcMessage = require('../../common/util/broadcast-ipc-message')
  * variables. Basically, this class tells Zettlr what the user wants and what
  * the environment Zettlr is running in is capable of.
  */
-module.exports = class ConfigProvider extends EventEmitter {
+export default class ConfigProvider extends EventEmitter {
+  private readonly configFile: string
+  private readonly _rules: any[]
+  private readonly cfgtpl: any
+  private config: any
+  private _firstStart: boolean
+  private _newVersion: boolean
+
   /**
     * Preset sane defaults, then load the config and perform a system check.
     * @param {Zettlr} parent Parent Zettlr object.
@@ -47,8 +55,7 @@ module.exports = class ConfigProvider extends EventEmitter {
   constructor () {
     super() // Initiate the emitter
     global.log.verbose('Config provider booting up ...')
-    this.configPath = app.getPath('userData')
-    this.configFile = path.join(this.configPath, 'config.json')
+    this.configFile = path.join(app.getPath('userData'), 'config.json')
 
     // The user may provide a temporary config to the process, which
     // leaves the "original" one untouched. This is very handy for
@@ -56,19 +63,22 @@ module.exports = class ConfigProvider extends EventEmitter {
     const configFlag = process.argv.find(elem => elem.indexOf('--config=') === 0)
     if (configFlag !== undefined) {
       // A different configuration was, provided, so let's use that one instead!
-      let temporaryConfig = /^--config="?([^"]+)"?$/.exec(configFlag)[1]
+      const match = /^--config="?([^"]+)"?$/.exec(configFlag)
+      if (match !== null) {
+        let temporaryConfig = match[1]
 
-      if (!path.isAbsolute(temporaryConfig)) {
-        if (app.isPackaged) {
-          // Attempt to use the executable file's path
-          temporaryConfig = path.join(path.dirname(app.getPath('exe')), temporaryConfig)
-        } else {
-          // Attempt to use the repository's root directory
-          temporaryConfig = path.join(__dirname, '../../../', temporaryConfig)
+        if (!path.isAbsolute(temporaryConfig)) {
+          if (app.isPackaged) {
+            // Attempt to use the executable file's path
+            temporaryConfig = path.join(path.dirname(app.getPath('exe')), temporaryConfig)
+          } else {
+            // Attempt to use the repository's root directory
+            temporaryConfig = path.join(__dirname, '../../../', temporaryConfig)
+          }
         }
+        global.log.info('Using temporary configuration file at ' + temporaryConfig)
+        this.configFile = temporaryConfig
       }
-      global.log.info('Using temporary configuration file at ' + temporaryConfig)
-      this.configFile = temporaryConfig
     }
 
     this.config = null
@@ -267,48 +277,70 @@ module.exports = class ConfigProvider extends EventEmitter {
     this.checkPaths()
 
     // Boot up the validation rules
-    let rules = require('../../common/validation.json')
-    for (let key in rules) {
-      this._rules.push(new ZettlrValidation(key, rules[key]))
+    for (const key in RULES) {
+      // @ts-expect-error TODO: Somehow TSLint doesn't like this
+      this._rules.push(new ZettlrValidation(key, RULES[key]))
     }
 
     // Put a global setter and getter for config keys into the globals.
     global.config = {
       // Clone the properties to prevent intrusion
-      get: (key) => { return JSON.parse(JSON.stringify(this.get(key))) },
+      get: (key: string) => {
+        return JSON.parse(JSON.stringify(this.get(key)))
+      },
       // The setter is a simply pass-through
-      set: (key, val) => { return this.set(key, val) },
+      set: (key: string, val: any) => {
+        return this.set(key, val)
+      },
       // Enable global event listening to updates of the config
-      on: (evt, callback) => { this.on(evt, callback) },
+      on: (evt: string, callback: (...args: any[]) => void) => {
+        this.on(evt, callback)
+      },
       // Also do the same for the removal of listeners
-      off: (evt, callback) => { this.off(evt, callback) },
+      off: (evt: string, callback: (...args: any[]) => void) => {
+        this.off(evt, callback)
+      },
       /**
        * Persists the current configuration to disk
        * @return {void} Does not return
        */
-      save: () => { this.save() },
+      save: () => {
+        this.save()
+      },
       /**
        * Adds a path to the startup path array
        * @param {String} p The path to add
        * @return {Boolean} Whether or not the call succeeded
        */
-      addPath: (p) => { return this.addPath(p) },
+      addPath: (p: string) => {
+        return this.addPath(p)
+      },
       /**
        * Removes a path from the startup path array
        * @param  {String} p The path to remove
        * @return {Boolean}   Whether or not the call succeeded
        */
-      removePath: (p) => { return this.removePath(p) },
-      addFile: (f) => { return this.addFile(f) },
-      removeFile: (f) => { return this.removeFile(f) },
+      removePath: (p: string) => {
+        return this.removePath(p)
+      },
+      addFile: (f: string) => {
+        return this.addFile(f)
+      },
+      removeFile: (f: string) => {
+        return this.removeFile(f)
+      },
       /**
        * If true, Zettlr assumes this is the first start of the app
        */
-      isFirstStart: () => { return this._firstStart },
+      isFirstStart: () => {
+        return this._firstStart
+      },
       /**
        * If true, Zettlr has detected a change in version in the config
        */
-      newVersionDetected: () => { return this._newVersion }
+      newVersionDetected: () => {
+        return this._newVersion
+      }
     } // END globals for the configuration
 
     // Listen for renderer events TODO: Migrate to the handler
@@ -345,7 +377,7 @@ module.exports = class ConfigProvider extends EventEmitter {
    * Shutdown the service provider -- here save the config to disk
    * @return {Boolean} Returns true after successful shutdown.
    */
-  shutdown () {
+  async shutdown (): Promise<boolean> {
     global.log.verbose('Config provider shutting down ...')
     this.save()
     return true
@@ -355,9 +387,9 @@ module.exports = class ConfigProvider extends EventEmitter {
     * This function only (re-)reads the configuration file if present
     * @return {ZettlrConfig} This for chainability.
     */
-  load () {
+  load (): this {
     this.config = this.cfgtpl
-    let readConfig = {}
+    let readConfig = null
     global.log.verbose(`[Config Provider] Loading configuration file from ${this.configFile} ...`)
 
     // Does the file already exist?
@@ -376,7 +408,7 @@ module.exports = class ConfigProvider extends EventEmitter {
     // Determine if this is a different version
     this._newVersion = readConfig.version !== this.config.version
     if (this._newVersion) {
-      global.log.info(`Migrating from ${readConfig.version} to ${this.config.version}!`)
+      global.log.info(`Migrating from ${String(readConfig.version)} to ${String(this.config.version)}!`)
     }
 
     this.update(readConfig)
@@ -393,7 +425,7 @@ module.exports = class ConfigProvider extends EventEmitter {
     * Write the config file (e.g. on app exit)
     * @return {ZettlrConfig} This for chainability.
     */
-  save () {
+  save (): this {
     if (this.configFile == null || this.config == null) {
       this.load()
     }
@@ -403,7 +435,7 @@ module.exports = class ConfigProvider extends EventEmitter {
     try {
       fs.writeFileSync(this.configFile, JSON.stringify(this.config), { encoding: 'utf8' })
     } catch (e) {
-      global.log.error(`[Config Provider] Error during file write: ${e.message}`, e)
+      global.log.error(`[Config Provider] Error during file write: ${String(e.message)}`, e)
     }
 
     return this
@@ -413,7 +445,7 @@ module.exports = class ConfigProvider extends EventEmitter {
     * This function runs a general check and runs any potential migrations.
     * @return {ZettlrConfig} This for chainability.
     */
-  runMigrations () {
+  runMigrations (): this {
     // Check whether or not a UUID exists, and, if not, generate one.
     if (this.config.uuid === null) {
       this.config.uuid = uuid4()
@@ -427,18 +459,18 @@ module.exports = class ConfigProvider extends EventEmitter {
     * those that are invalid
     * @return {void} Nothing to return.
     */
-  checkPaths () {
+  checkPaths (): void {
     // Remove duplicates
-    this.config['openPaths'] = [...new Set(this.config['openPaths'])]
+    this.config.openPaths = [...new Set(this.config.openPaths)]
 
     // Now sort the paths.
     this._sortPaths()
 
     // We have to run over the spellchecking dictionaries and see whether or
     // not they are still valid or if they have been deleted.
-    for (let i = 0; i < this.config['selectedDicts'].length; i++) {
-      if (!isDictAvailable(this.config['selectedDicts'][i])) {
-        this.config['selectedDicts'].splice(i, 1)
+    for (let i = 0; i < this.config.selectedDicts.length; i++) {
+      if (!isDictAvailable(this.config.selectedDicts[i])) {
+        this.config.selectedDicts.splice(i, 1)
         --i
       }
     }
@@ -449,10 +481,10 @@ module.exports = class ConfigProvider extends EventEmitter {
     * @param {String} p The path to be added
     * @return {Boolean} True, if the path was succesfully added, else false.
     */
-  addPath (p) {
+  addPath (p: string): boolean {
     // Only add valid and unique paths
-    if ((!ignoreFile(p) || isDir(p)) && !this.config['openPaths'].includes(p)) {
-      this.config['openPaths'].push(p)
+    if ((!ignoreFile(p) || isDir(p)) && !this.config.openPaths.includes(p)) {
+      this.config.openPaths.push(p)
       this._sortPaths()
       return true
     }
@@ -465,9 +497,9 @@ module.exports = class ConfigProvider extends EventEmitter {
     * @param  {String} p The path to be removed
     * @return {Boolean} Whether or not the call succeeded.
     */
-  removePath (p) {
-    if (this.config['openPaths'].includes(p)) {
-      this.config['openPaths'].splice(this.config['openPaths'].indexOf(p), 1)
+  removePath (p: string): boolean {
+    if (this.config.openPaths.includes(p)) {
+      this.config.openPaths.splice(this.config.openPaths.indexOf(p), 1)
       return true
     }
     return false
@@ -477,10 +509,10 @@ module.exports = class ConfigProvider extends EventEmitter {
    * Adds a file to the array of open files.
    * @param {String} f The path of the file to add
    */
-  addFile (f) {
+  addFile (f: string): boolean {
     // Only add valid and unique files
-    if ((!ignoreFile(f) || isDir(f)) && !this.config['openFiles'].includes(f)) {
-      this.config['openFiles'].push(f)
+    if ((!ignoreFile(f) || isDir(f)) && !this.config.openFiles.includes(f)) {
+      this.config.openFiles.push(f)
       return true
     }
 
@@ -492,9 +524,9 @@ module.exports = class ConfigProvider extends EventEmitter {
     * @param  {String} f The file to be removed
     * @return {Boolean} Whether or not the call succeeded.
     */
-  removeFile (f) {
-    if (this.config['openFiles'].includes(f)) {
-      this.config['openFiles'].splice(this.config['openFiles'].indexOf(f), 1)
+  removeFile (f: string): boolean {
+    if (this.config.openFiles.includes(f)) {
+      this.config.openFiles.splice(this.config.openFiles.indexOf(f), 1)
       return true
     }
     return false
@@ -505,8 +537,8 @@ module.exports = class ConfigProvider extends EventEmitter {
     * @param  {String} attr The property to return
     * @return {Mixed}      Either the config property or null
     */
-  get (attr) {
-    if (!attr) {
+  get (attr?: string): any {
+    if (attr === undefined) {
       // If no attribute is given, simply return the complete config object.
       return this.getConfig()
     }
@@ -539,8 +571,9 @@ module.exports = class ConfigProvider extends EventEmitter {
   /**
     * Simply returns the complete config object.
     * @return {Object} The configuration object.
+    * @deprecated
     */
-  getConfig () {
+  getConfig (): any {
     return this.config
   }
 
@@ -549,14 +582,16 @@ module.exports = class ConfigProvider extends EventEmitter {
     * installed on the system.
     * @return {String} The user's locale
     */
-  getLocale () {
+  getLocale (): string {
     let locale = app.getLocale()
     let locSchema = bcp47.parse(locale)
     // Fail if the string was malformed
-    if (!locSchema.language) return 'en-US'
+    if (!locSchema.language) {
+      return 'en-US'
+    }
 
     // Return the best match that the app can find (only the tag).
-    return getLanguageFile(locale).tag
+    return (getLanguageFile(locale) as any).tag
   }
 
   /**
@@ -565,7 +600,7 @@ module.exports = class ConfigProvider extends EventEmitter {
     * @param {Mixed} value  The value of the config variable.
     * @return {Boolean} Whether or not the option was successfully set.
     */
-  set (option, value) {
+  set (option: string, value: any): boolean {
     // Don't add non-existent options
     if (this.config.hasOwnProperty(option) && this._validate(option, value)) {
       // Do not set the option if it already has the requested value
@@ -588,7 +623,8 @@ module.exports = class ConfigProvider extends EventEmitter {
     if (option.indexOf('.') > 0) {
       // A nested argument was requested, so iterate until we find it
       let nested = option.split('.')
-      let prop = nested.pop() // Last one must be set manually, b/c simple attributes aren't pointers
+      // Last one must be set manually, b/c simple attributes aren't pointers
+      let prop = nested.pop() as string // We can be sure it's not undefined
       let cfg = this.config
       for (let arg of nested) {
         if (cfg.hasOwnProperty(arg)) {
@@ -625,7 +661,7 @@ module.exports = class ConfigProvider extends EventEmitter {
     * @param  {Object} newcfg               The new object containing new props
     * @return {void}                      Does not return anything.
     */
-  update (newcfg) {
+  update (newcfg: any): void {
     // Use safeAssign to make sure only properties from the config
     // are retained, and no rogue values (which can also simply be
     // old deprecated values).
@@ -639,10 +675,10 @@ module.exports = class ConfigProvider extends EventEmitter {
     * Sorts the paths prior to using them alphabetically and by type.
     * @return {ZettlrConfig} Chainability.
     */
-  _sortPaths () {
+  _sortPaths (): this {
     let f = []
     let d = []
-    for (let p of this.config['openPaths']) {
+    for (let p of this.config.openPaths) {
       if (isDir(p)) {
         d.push(p)
       } else {
@@ -651,7 +687,7 @@ module.exports = class ConfigProvider extends EventEmitter {
     }
     f.sort()
     d.sort()
-    this.config['openPaths'] = f.concat(d)
+    this.config.openPaths = f.concat(d)
 
     return this
   }
@@ -662,10 +698,12 @@ module.exports = class ConfigProvider extends EventEmitter {
    * @param  {mixed} value The value to be validated
    * @return {Boolean}       False, if a given validation failed, otherwise true.
    */
-  _validate (key, value) {
+  _validate (key: string, value: any): boolean {
     let rule = this._rules.find(elem => elem.getKey() === key)
     // There is a rule for this key, so validate
-    if (rule) return rule.validate(value)
+    if (rule !== undefined) {
+      return rule.validate(value)
+    }
     // There are some options for which there is no validation.
     return true
   }
