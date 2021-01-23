@@ -265,8 +265,6 @@ export default class CiteprocProvider {
       lang = global.config.get('appLang')
     }
 
-    console.log(this._sys)
-
     const engine = new CSL.Engine(
       this._sys, // Pass the kernel config
       style,

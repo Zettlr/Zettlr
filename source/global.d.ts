@@ -46,5 +46,7 @@ declare module NodeJS {
     recentDocs: RecentDocumentsProvider
     tags: TagProvider
     stats: StatsProvider
+    i18n: any
+    i18nFallback: any
   }
 }

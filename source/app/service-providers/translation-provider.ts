@@ -12,20 +12,25 @@
  * END HEADER
  */
 
-const path = require('path')
-const fs = require('fs')
-const { promisify } = require('util')
-const { app, ipcMain } = require('electron')
-const got = require('got')
-const { getTranslationMetadata, trans } = require('../../common/i18n.js')
-const moment = require('moment')
+import path from 'path'
+import { promises as fs } from 'fs'
+import { app, ipcMain } from 'electron'
+import got from 'got'
+import { getTranslationMetadata, trans } from '../../common/i18n.js'
+import moment from 'moment'
+import { translation_api_url as TRANSLATION_API_URL } from '../../common/data.json'
 
-// We'll use the asynchronous version for convenience
-const writeFileAsync = promisify(fs.writeFile)
+interface APIResponse {
+  bcp47: string
+  completion: number
+  updated_at: string
+  download_url: string
+}
 
-const TRANSLATION_API_URL = require('../../common/data.json').translation_api_url
+export default class TranslationProvider {
+  private _availableLanguages: APIResponse[]
+  private readonly _languageDirectory: string
 
-module.exports = class TranslationProvider {
   constructor () {
     global.log.verbose('Translation provider booting up ...')
     this._availableLanguages = [] // Holds all translations able to download
@@ -36,12 +41,20 @@ module.exports = class TranslationProvider {
        * Return a copy of the available languages
        * @return {Array} An array containing online languages available
        */
-      getAvailableLanguages: () => { return JSON.parse(JSON.stringify(this._availableLanguages)) },
-      requestLanguage: (bcp47) => { this.requestLanguage(bcp47) }
+      getAvailableLanguages: () => {
+        return JSON.parse(JSON.stringify(this._availableLanguages))
+      },
+      requestLanguage: (bcp47: string) => {
+        this.requestLanguage(bcp47)
+          .then(() => {})
+          .catch(err => {
+            global.log.error(`[Translation Provider] Could not download language ${bcp47}: ${String(err.message)}`, err)
+          })
+      }
     }
 
     this.init().catch((err) => {
-      global.log.error(`[Translation Provider] Could not initialize provider: ${err.message}`, err)
+      global.log.error(`[Translation Provider] Could not initialize provider: ${String(err.message)}`, err)
     })
 
     // NOTE: Possible race condition: If this provider is in the future being
@@ -61,13 +74,13 @@ module.exports = class TranslationProvider {
    * Get an initial load of all available translations
    * @return {Promise} Resolves if everything worked out, rejects otherwise.
    */
-  async init () {
+  async init (): Promise<void> {
     let response
     try {
       response = await got(TRANSLATION_API_URL, { method: 'GET' })
     } catch (err) {
       // Not critical.
-      global.log.warning(`[Translation Provider] Could not update translations: ${err.code}`, err)
+      global.log.warning(`[Translation Provider] Could not update translations: ${String(err.code)}`, err)
       return
     }
 
@@ -85,15 +98,19 @@ module.exports = class TranslationProvider {
     for (let lang of metadata) {
       // Find the appropriate language
       let l = this._availableLanguages.find(elem => elem.bcp47 === lang.bcp47)
-      if (l) {
+      if (l !== undefined) {
         let oldLang = moment(lang.updated_at)
         let newLang = moment(l.updated_at)
         // l is the new language containing a download url
-        if (newLang.isAfter(oldLang)) toUpdate.push(l)
+        if (newLang.isAfter(oldLang)) {
+          toUpdate.push(l)
+        }
       }
     }
 
-    if (toUpdate.length === 0) return // Nothing to do here!
+    if (toUpdate.length === 0) {
+      return // Nothing to do here!
+    }
 
     // At this moment, we should have all languages.
     for (let language of toUpdate) {
@@ -114,17 +131,23 @@ module.exports = class TranslationProvider {
 
   /**
    * Downloads a given language.
+   *
    * @param  {Language}  language A language option containing a bcp47 and a download url.
    */
-  async downloadLanguage (language) {
+  async downloadLanguage (language: APIResponse): Promise<void> {
     let l = await got(language.download_url, { method: 'GET' })
     let file = path.join(this._languageDirectory, language.bcp47 + '.json')
-    await writeFileAsync(file, l.body)
+    await fs.writeFile(file, l.body, { encoding: 'utf8' })
   }
 
-  async requestLanguage (bcp47) {
+  /**
+   * Downloads a language
+   *
+   * @param   {string}   bcp47  The language to download
+   */
+  async requestLanguage (bcp47: string): Promise<void> {
     let l = this._availableLanguages.find(elem => elem.bcp47 === bcp47)
-    if (l) {
+    if (l !== undefined) {
       try {
         await this.downloadLanguage(l)
         // Notify the renderer of the successful download
@@ -146,7 +169,7 @@ module.exports = class TranslationProvider {
    * Shuts down the provider
    * @return {Boolean} Whether or not the shutdown was successful
    */
-  shutdown () {
+  shutdown (): boolean {
     global.log.verbose('Translation provider shutting down ...')
     return true
   }
