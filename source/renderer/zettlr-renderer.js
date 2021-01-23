@@ -144,7 +144,11 @@ class ZettlrRenderer {
       this._ipc.send('get-paths')
 
       // Send an initial request to the reference database.
-      this._ipc.send('citeproc-get-ids')
+      ipcRenderer.invoke('citeproc-provider', { command: 'get-items' })
+        .then(items => {
+          this._editor.setCiteprocIDs(items)
+        })
+        .catch(e => console.error(e))
     }, 100)
 
     // Initial sidebar refresh

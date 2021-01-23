@@ -236,11 +236,6 @@ class ZettlrIPC {
         this._app.handleAddRoots(cnt)
         break
 
-      // Return a list of all available IDs in the currently loaded database
-      case 'citeproc-get-ids':
-        this.send('citeproc-ids', (global.citeproc) ? global.citeproc.getIDs() : [])
-        break
-
       case 'open-quicklook':
         this._app.openQL(cnt)
         return true

@@ -23,6 +23,9 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 - Reenabled the Pandoc and XeLaTeX options in preferences.
 - Removed the generic IPC call from the config provider and replaced it with consistent checks as to which options have actually changed. This increases the performance after configuration saves.
 - Migrate the config provider to TypeScript.
+- Migrated the Citeprov Provider to TypeScript, and cleaned the provider up:
+    - The provider has now the capability to load multiple databases at once and switch between them.
+    - Furthermore, the provider now needs much less variables, the logic is much simpler, and many unnecessary ipc calls have been removed.
 
 # 1.8.7
 

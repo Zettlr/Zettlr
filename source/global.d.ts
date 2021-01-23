@@ -33,7 +33,7 @@ declare module NodeJS {
     store: any
     notify: NotificationProvider
     ipc: any
-    citeproc: any // CiteprocProvider
+    citeproc: CiteprocProvider
     config: any
     application: Application
     typo: any

@@ -170,12 +170,30 @@ class ZettlrEditor {
         .catch(e => console.error(e))
     })
 
+    // Listen for database updates
+    ipcRenderer.on('citeproc-provider', (event, message) => {
+      if (message === 'database-changed') {
+        ipcRenderer.invoke('citeproc-provider', { command: 'get-items' })
+          .then(items => {
+            this.setCiteprocIDs(items)
+          })
+          .catch(e => console.error(e))
+      }
+    })
+
     // ... also, request the first batch of tags right now
     ipcRenderer.invoke('tag-provider', {
       command: 'get-tags-database'
     })
       .then(tags => {
         this._editor.setCompletionDatabase('tags', tags)
+      })
+      .catch(e => console.error(e))
+
+    // Send an initial request to the reference database.
+    ipcRenderer.invoke('citeproc-provider', { command: 'get-items' })
+      .then(items => {
+        this.setCiteprocIDs(items)
       })
       .catch(e => console.error(e))
 
@@ -742,9 +760,36 @@ class ZettlrEditor {
 
   /**
    * Sets the citeprocIDs available to autocomplete to a new list
-   * @param {Array} idList An array containing the new IDs
+   * @param {Array} cslItems An array containing the new IDs
    */
-  setCiteprocIDs (idList) {
+  setCiteprocIDs (cslItems) {
+    const idList = cslItems.map(item => {
+      // Get a rudimentary author list
+      let authors = ''
+      if (item.author !== undefined) {
+        authors = item.author.map(author => {
+          if (author.family !== undefined) {
+            return author.family
+          } else if (author.literal !== undefined) {
+            return author.literal
+          }
+        }).join(', ')
+      }
+
+      let title = ''
+      if (item.title !== undefined) {
+        title = item.title
+      } else if (item['container-title'] !== undefined) {
+        title = item['container-title']
+      }
+
+      // This is just a very crude representation of the citations.
+      return {
+        text: item.id,
+        displayText: `${item.id}: ${authors} - ${title}`
+      }
+    })
+
     this._editor.setCompletionDatabase('citekeys', idList)
   }
 
