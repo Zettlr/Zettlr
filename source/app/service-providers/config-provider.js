@@ -260,8 +260,8 @@ module.exports = class ConfigProvider extends EventEmitter {
     // Load the configuration
     this.load()
 
-    // Run system check
-    this.checkSystem()
+    // Run potential migrations if applicable.
+    this.runMigrations()
 
     // Remove potential dead links to non-existent files and dirs
     this.checkPaths()
@@ -410,11 +410,10 @@ module.exports = class ConfigProvider extends EventEmitter {
   }
 
   /**
-    * This function runs a general environment check and tries to determine
-    * some environment variables (such as the existence of pandoc or xelatex)
+    * This function runs a general check and runs any potential migrations.
     * @return {ZettlrConfig} This for chainability.
     */
-  checkSystem () {
+  runMigrations () {
     // Check whether or not a UUID exists, and, if not, generate one.
     if (this.config.uuid === null) {
       this.config.uuid = uuid4()
