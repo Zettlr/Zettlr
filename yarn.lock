@@ -6668,10 +6668,10 @@ npmlog@^4.0.2, npmlog@^4.1.2:
     gauge "~2.7.3"
     set-blocking "~2.0.0"
 
-nspell@^2.1.4:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/nspell/-/nspell-2.1.4.tgz#2057f11ad19bf43ee510d2c2f6ba4082865bc9e6"
-  integrity sha512-nlMEyhE6kyR2GoTm2ldrVlEmK5xgFHXayQEqLhb+3yYa8ncKtjsoYJo3ahYwrZsNaCZr822S5ZRlEqYdMQy9xw==
+nspell@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/nspell/-/nspell-2.1.5.tgz#85d51ef71499da72d899f261d7399ea2fc607633"
+  integrity sha512-PSStyugKMiD9mHmqI/CR5xXrSIGejUXPlo88FBRq5Og1kO5QwQ5Ilu8D8O5I/SHpoS+mibpw6uKA8rd3vXd2Sg==
   dependencies:
     is-buffer "^2.0.0"
 
