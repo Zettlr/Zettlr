@@ -26,6 +26,7 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 - Migrated the Citeprov Provider to TypeScript, and cleaned the provider up:
     - The provider has now the capability to load multiple databases at once and switch between them.
     - Furthermore, the provider now needs much less variables, the logic is much simpler, and many unnecessary ipc calls have been removed.
+- Migrated extractBibTexAttachments to TypeScript.
 
 # 1.8.7
 

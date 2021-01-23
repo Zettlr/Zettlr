@@ -12,9 +12,15 @@
  * END HEADER
  */
 
-const path = require('path')
-const AstrociteAST = require('astrocite').bibtex.AST
-const pdfSorter = require('./sort-by-pdf')
+import path from 'path'
+import { bibtex } from 'astrocite'
+import pdfSorter from '../../../common/util/sort-by-pdf'
+
+const AstrociteAST = bibtex.AST
+
+interface BibTexAttachments {
+  [citekey: string]: string
+}
 
 /**
  * Returns a dictionary in the form citeKey: Array(files)
@@ -22,26 +28,35 @@ const pdfSorter = require('./sort-by-pdf')
  * @param {String} baseDir The base directory to use in case the links are relative.
  * @return {Object} Returns a dictionary containing all extracted files
  */
-module.exports = function (fileContents, baseDir = '') {
+export default function extractBibtexAttachments (
+  fileContents: string,
+  baseDir: string = ''
+): BibTexAttachments {
   let ast = AstrociteAST.parse(fileContents)
   // Return value will be a fast-access dictionary
   let files = Object.create(null)
 
-  // First, filter out all the entries (there could also be TextEntries or Comments)
-  let entries = ast.children.filter(elem => elem.kind === 'Entry')
-
   // Now let's see what entries have files attached.
   // Such attributes are stored in properties within the entry.
-  for (let entry of entries) {
+  for (let entry of ast.children) {
+    if (entry.kind !== 'Entry') {
+      continue
+    }
+
     for (let property of entry.properties) {
       if (property.key === 'file') {
+        const firstValue = property.value[0]
+        if (firstValue.kind !== 'String' && firstValue.kind !== 'Text') {
+          continue
+        }
+
         // The file entry by JabRef is saved as description:path:type
         // Multiple entries are delimited with ;
         // Reference: https://github.com/JabRef/jabref/blob/93f47c9069d01247375cabbe6e1328f0a477472b/src/main/java/org/jabref/gui/filelist/FileListEntry.java#L46
-        let f = property.value[0].value.split(';')
+        let f = firstValue.value.split(';')
         f = f.map(elem => {
           // Extract the file paths
-          if (elem.indexOf(':') >= 0) {
+          if (elem.includes(':')) {
             return elem.split(':')[1]
           } else {
             return elem
@@ -62,7 +77,9 @@ module.exports = function (fileContents, baseDir = '') {
     // If the entry has not been assigned by now, this means there
     // are no files attached. -> Set it to false so one can easily
     // check if (!files[key]), as an array will evaluate to true.
-    if (files[entry.id] === undefined) files[entry.id] = false
+    if (files[entry.id] === undefined) {
+      files[entry.id] = false
+    }
   }
 
   return files
