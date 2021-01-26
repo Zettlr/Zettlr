@@ -91,7 +91,7 @@
     "@types/nspell": "^2.1.0",
     "@types/rimraf": "^3.0.0",
     "@types/uuid": "^8.3.0",
-    "@typescript-eslint/eslint-plugin": "^4.14.0",
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.0",
     "@zeit/webpack-asset-relocator-loader": "^0.8.0",
     "copy-webpack-plugin": "^6.1.0",
