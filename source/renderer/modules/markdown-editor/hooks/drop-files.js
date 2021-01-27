@@ -1,4 +1,5 @@
 const path = require('path')
+const generateFileLink = require('../../../../common/util/generate-file-link')
 const IMAGE_REGEXP = require('../../../../common/regular-expressions').getImageFileRE()
 
 module.exports = (cm) => {
@@ -37,17 +38,9 @@ module.exports = (cm) => {
       const filesToAdd = []
 
       for (let file of event.dataTransfer.files) {
-        // For each file, see if it's an image or not. If not, simply link,
-        // if it's an image, make one out of it. The difference is exactly one
-        // character, so piece of cake.
-
-        const relativePath = path.relative(basePath, file.path)
-
-        if (IMAGE_REGEXP.test(file.path)) {
-          filesToAdd.push(`![${path.basename(file.path)}](${relativePath})`)
-        } else {
-          filesToAdd.push(`[${path.basename(file.path)}](${relativePath})`)
-        }
+        // For each file, generate the link.
+        const isImage = IMAGE_REGEXP.test(file.path)
+        filesToAdd.push(generateFileLink(file.path, basePath, isImage))
       }
 
       cm.replaceSelection(filesToAdd.join('\n'))
