@@ -1,4 +1,4 @@
-# 1.9.0
+# 2.0.0
 
 ## DEPRECATION: 32 bit
 
@@ -12,6 +12,7 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 - Removed the Pandoc installation item from the help menu.
 - Moved the Pandoc and XeLaTeX settings to the export tab in preferences.
 - Fixed a bug that would delete file if it got renamed as itself.
+- All languages will now be downloaded by the CI workflow. Updates will still be pulled via the application on boot.
 
 ## Under the Hood
 
