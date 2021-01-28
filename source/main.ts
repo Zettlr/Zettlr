@@ -26,6 +26,11 @@ import extractFilesFromArgv from './common/util/extract-files-from-argv'
 // Zettlr running, and, if so, exit immediately. The arguments (including files)
 // from this instance will already be passed to the first instance.
 if (!app.requestSingleInstanceLock()) {
+  if (!app.isPackaged) {
+    // I always forget to close my system install before starting the
+    // development app, so let's just add a small reminder to myself.
+    console.log('There is another instance of Zettlr running. Did you forget to close that one?')
+  }
   app.exit(0)
 }
 
