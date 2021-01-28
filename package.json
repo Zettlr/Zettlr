@@ -42,7 +42,7 @@
     "@clr/icons": "^5.0.0",
     "@types/semver": "^7.3.4",
     "@zettlr/citr": "^1.2.2",
-    "adm-zip": "^0.5.1",
+    "adm-zip": "^0.5.2",
     "archiver": "^5.2.0",
     "astrocite": "^0.16.4",
     "bcp-47": "^1.0.8",
