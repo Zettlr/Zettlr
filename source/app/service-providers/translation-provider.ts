@@ -16,7 +16,7 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import { app, ipcMain } from 'electron'
 import got from 'got'
-import { getTranslationMetadata, trans } from '../../common/i18n.js'
+import { enumLangFiles, getTranslationMetadata, trans } from '../../common/i18n.js'
 import moment from 'moment'
 import { translation_api_url as TRANSLATION_API_URL } from '../../common/data.json'
 
@@ -43,13 +43,6 @@ export default class TranslationProvider {
        */
       getAvailableLanguages: () => {
         return JSON.parse(JSON.stringify(this._availableLanguages))
-      },
-      requestLanguage: (bcp47: string) => {
-        this.requestLanguage(bcp47)
-          .then(() => {})
-          .catch(err => {
-            global.log.error(`[Translation Provider] Could not download language ${bcp47}: ${String(err.message)}`, err)
-          })
       }
     }
 
@@ -66,6 +59,21 @@ export default class TranslationProvider {
       event.returnValue = {
         i18n: global.i18n,
         i18nFallback: global.i18nFallback
+      }
+    })
+
+    ipcMain.handle('translation-provider', (event, message) => {
+      const { command } = message
+
+      if (command === 'get-supported-languages') {
+        return this._availableLanguages
+      } else if (command === 'get-available-languages') {
+        // NOTE: We have a small inconsistency, because the translation
+        // provider has only been used for requesting additional languages
+        // thus far. This means we have to now append the provider, but
+        // "available" for this provider originally meant "everything
+        // that is downloadable".
+        return enumLangFiles().map(elem => elem.tag)
       }
     })
   }
@@ -138,31 +146,6 @@ export default class TranslationProvider {
     let l = await got(language.download_url, { method: 'GET' })
     let file = path.join(this._languageDirectory, language.bcp47 + '.json')
     await fs.writeFile(file, l.body, { encoding: 'utf8' })
-  }
-
-  /**
-   * Downloads a language
-   *
-   * @param   {string}   bcp47  The language to download
-   */
-  async requestLanguage (bcp47: string): Promise<void> {
-    let l = this._availableLanguages.find(elem => elem.bcp47 === bcp47)
-    if (l !== undefined) {
-      try {
-        await this.downloadLanguage(l)
-        // Notify the renderer of the successful download
-        global.ipc.send('language-download', {
-          'bcp47': l.bcp47,
-          'success': true
-        })
-      } catch (e) {
-        global.log.error(e.message, e)
-        global.ipc.send('language-download', {
-          'bcp47': l.bcp47,
-          'success': false
-        })
-      }
-    }
   }
 
   /**

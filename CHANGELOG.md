@@ -13,6 +13,7 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 - Moved the Pandoc and XeLaTeX settings to the export tab in preferences.
 - Fixed a bug that would delete file if it got renamed as itself.
 - All languages will now be downloaded by the CI workflow. Updates will still be pulled via the application on boot.
+- Removed the ability for the translation provider to arbitrarily request languages that have not been installed in order to remove that fragile feature. All languages will now be provided from the application immediately.
 
 ## Under the Hood
 
