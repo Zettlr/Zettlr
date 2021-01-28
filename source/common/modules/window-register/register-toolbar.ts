@@ -4,6 +4,7 @@ export interface ToolbarTextControl {
   type: 'text'
   content: string
   style?: 'strong'|'emphasis'
+  align?: 'left'|'right'|'center'
   onClickHandler?: () => void // Optional click handler
 }
 
@@ -88,6 +89,10 @@ export default function registerToolbar (toolbarControls: ToolbarControl[]): voi
         } else if (control.style === 'emphasis') {
           elem.style.fontStyle = 'italics'
         }
+      }
+
+      if (control.align !== undefined) {
+        elem.style.textAlign = control.align
       }
     } else if (control.type === 'toggle' || control.type === 'button') {
       // Toggle button
