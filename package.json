@@ -39,7 +39,7 @@
     "forge": "./forge.config.js"
   },
   "dependencies": {
-    "@clr/icons": "^5.0.0",
+    "@clr/icons": "^5.0.1",
     "@types/semver": "^7.3.4",
     "@zettlr/citr": "^1.2.2",
     "adm-zip": "^0.5.1",
@@ -98,7 +98,7 @@
     "cross-env": "^7.0.3",
     "css-loader": "^5.0.1",
     "csso": "^4.2.0",
-    "electron": "^11.2.0",
+    "electron": "^11.2.2",
     "electron-builder": "^22.9.1",
     "electron-devtools-installer": "^3.1.1",
     "electron-notarize": "^1.0.0",
