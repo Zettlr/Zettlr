@@ -39,7 +39,7 @@
     "forge": "./forge.config.js"
   },
   "dependencies": {
-    "@clr/icons": "^5.0.0",
+    "@clr/icons": "^5.0.1",
     "@types/semver": "^7.3.4",
     "@zettlr/citr": "^1.2.2",
     "adm-zip": "^0.5.2",
