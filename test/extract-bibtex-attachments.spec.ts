@@ -13,8 +13,13 @@
  * END HEADER
  */
 
-const extractBibTexAttachments = require('../source/common/util/extract-bibtex-attachments')
-const assert = require('assert')
+import extractBibTexAttachments from '../source/app/service-providers/assets/extract-bibtex-attachments'
+import assert from 'assert'
+import 'mocha'
+
+interface BibTexAttachments {
+  [citekey: string]: string[]|false
+}
 
 const validBibTexFile = `
 % Encoding: UTF-8
@@ -48,7 +53,7 @@ const validBibTexFile = `
 @Comment{jabref-meta: databaseType:bibtex;}
 `
 
-const validResults = {
+const validResults: BibTexAttachments = {
   'Szegedy2014a': ['References_HE/0x04 Neural Networks, Machine Learning, General AI/Szegedy, Zaremba, Sutskever, Bruna, Erhan, Goodfellow, Fergus 2014 - Intriguing properties of neural networks.pdf'],
   'Javadnejad2019a': [
     'References_HE/0x02 Sensors and Sensor Analysis/Javadnejad, Gillins, Parrish, Slocum 2019 - A photogrammetric approach to fusing natural colour and thermal infrared UAS imagery in 3D point cloud generation.pdf',
@@ -73,9 +78,9 @@ const invalidBibTexFile = `
 
 describe('Utility#extractBibTexAttachments()', function () {
   it('should successfully parse a valid BibTex file', function () {
-    let files = extractBibTexAttachments(validBibTexFile)
+    const files = extractBibTexAttachments(validBibTexFile)
     assert.deepStrictEqual(Object.keys(files), Object.keys(validResults), 'The parsed results do not contain the same keys!')
-    for (let key in files) {
+    for (const key in files) {
       assert.deepStrictEqual(files[key], validResults[key], `Key ${key} differs from the expected result!`)
     }
   })

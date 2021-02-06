@@ -38,6 +38,7 @@ Several configuration values and options have changed their format. This means t
 - Migrated the preferences dialog to Vue.js.
 - Added manifold new Vue components to compose windows from.
 - The menubar and window controls are no longer controlled by the window registration handler.
+- Now tests can be run as JavaScript or as TypeScript files (use `.js` or `.spec.ts` files respectively).
 
 # 1.8.7
 

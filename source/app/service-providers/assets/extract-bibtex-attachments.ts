@@ -19,7 +19,7 @@ import pdfSorter from '../../../common/util/sort-by-pdf'
 const AstrociteAST = bibtex.AST
 
 interface BibTexAttachments {
-  [citekey: string]: string
+  [citekey: string]: string[]|false
 }
 
 /**
