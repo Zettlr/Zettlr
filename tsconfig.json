@@ -18,7 +18,8 @@
     }
   },
   "include": [
-    "source/**/*"
+    "source/**/*",
+    "test/**/*"
   ],
   "files": [
     "source/renderer/renderer.d.ts",
