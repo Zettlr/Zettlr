@@ -15,9 +15,9 @@
 const { getCodeBlockRE } = require('../../../../common/regular-expressions')
 const codeBlockRE = getCodeBlockRE()
 
-var autocompleteStart = null
-var currentDatabase = null
-var availableDatabases = {
+let autocompleteStart = null
+let currentDatabase = null
+let availableDatabases = {
   'tags': [],
   'citekeys': [],
   'files': [],
