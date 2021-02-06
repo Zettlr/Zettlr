@@ -28,7 +28,7 @@ const localiseNumberTesters = [
 describe('Utility#localiseNumber()', function () {
   for (let test of localiseNumberTesters) {
     it(`should return ${test.expected} for ${test.input.toString()}`, function () {
-      global.i18n = { 'localise': { 'thousand_delimiter': ',', 'decimal_delimiter': '.' } }
+      global.i18n = global.i18nFallback = { 'localise': { 'thousand_delimiter': ',', 'decimal_delimiter': '.' } }
       assert.strictEqual(localiseNumber(test.input), test.expected)
     })
   }
