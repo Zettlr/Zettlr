@@ -365,17 +365,6 @@ class ZettlrBody {
   }
 
   /**
-    * Open a new dialog for displaying the preferences.
-    * @param  {Object} prefs An object containing all current config variables
-    * @return {void}       Nothing to return.
-    */
-  displayPreferences (prefs) {
-    this._currentDialog = new PreferencesDialog()
-    this._currentDialog.init(prefs).open()
-    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
-  }
-
-  /**
     * Open a new dialog for displaying the PDF preferences.
     * @param  {Object} prefs An object containing all current config variables
     * @return {void}       Nothing to return.

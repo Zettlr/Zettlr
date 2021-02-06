@@ -429,16 +429,8 @@ class ZettlrRendererIPC {
         }
         break
 
-      case 'open-preferences':
-        this.send('get-preferences')
-        break
-
       case 'open-pdf-preferences':
         this.send('get-pdf-preferences')
-        break
-
-      case 'preferences':
-        this._app.getBody().displayPreferences(cnt)
         break
 
       case 'pdf-preferences':
