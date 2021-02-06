@@ -56,41 +56,41 @@
 })(function (CodeMirror) {
   'use strict'
 
-  var startChars = ' ([{-–—'
+  const startChars = ' ([{-–—'
 
   // This variable holds the generated keymap
   // that triggers the plugin's functionality
-  var builtKeyMap
+  let builtKeyMap
 
   // This variable holds the magic quotes
-  var quotes = false
+  let quotes = false
 
   // This variable holds the replacement table
-  var replacementCandidates
+  let replacementCandidates
 
   // Do we use Word-style AutoCorrect, or LibreOffice?
   // Difference: Word triggers on the last character of
   // a replacement candidate, while LibreOffice requires
   // the use of space/enter.
-  var wordStyleAutoCorrect = true
+  let wordStyleAutoCorrect = true
 
   // This variable will be set to true after a replacement
   // has taken place. As long as it's true, handleBackspace
   // will reverse a replacement by looking up the table
   // backwards. As soon as a special character (Space or
   // Enter) is used, the variable will be set to false again.
-  var canPerformReverseReplacement = false
+  let canPerformReverseReplacement = false
 
   // This variable will be true once a reverse replacement has
   // taken place to prevent special characters (space/enter)
   // from simply re-replacing the characters again, which would
   // lead to an infinite loop.
-  var hasJustPerformedReverseReplacement = false
+  let hasJustPerformedReverseReplacement = false
 
   // This variable will be true if the user just typed in a quote (' or ") and
   // MagicQuotes has inserted a special one. If set, the user can press
   // backspace immediately to insert a "normal" quote instead.
-  var hasJustAddedQuote = false
+  let hasJustAddedQuote = false
 
   // Define the autocorrect option
   CodeMirror.defineOption('autoCorrect', false, onOptionChange)
@@ -181,15 +181,15 @@
 
     // If we're here we should be using Word-style replacement, that is:
     // We need to retrieve the triggering characters
-    var triggerCharacters = {}
-    for (var key in replacementCandidates) {
-      var character = key[key.length - 1]
+    const triggerCharacters = {}
+    for (const key in replacementCandidates) {
+      const character = key[key.length - 1]
       if (!triggerCharacters[character]) triggerCharacters[character] = {}
       triggerCharacters[character][key] = replacementCandidates[key]
     }
 
     // Finally, fill the keymap with the trigger characters
-    for (var char in triggerCharacters) {
+    for (const char in triggerCharacters) {
       // Create the handler and provide it with all potential
       // candidates for that very character. NOTE that we have
       // to surround these characters with LITERAL single quotes.
@@ -219,7 +219,7 @@
    */
   function handleKey (cm, candidates, key) {
     if (cm.isReadOnly()) return CodeMirror.Pass
-    var cursor = cm.getCursor()
+    const cursor = cm.getCursor()
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
     if (cm.getModeAt(cursor).name !== 'markdown') return CodeMirror.Pass
@@ -227,11 +227,11 @@
     let tokens = cm.getTokenTypeAt(cursor)
     if (tokens && tokens.split(' ').includes('comment')) return CodeMirror.Pass
 
-    var { cursorBegin, cursorEnd } = cursors(cursor, candidates)
+    let { cursorBegin, cursorEnd } = cursors(cursor, candidates)
     if (cursorBegin.ch === cursorEnd.ch) return CodeMirror.Pass // Empty range, no need to check
-    var replacementOccurred = false
+    let replacementOccurred = false
     for (; cursorBegin.ch < cursorEnd.ch; cursorBegin.ch++) {
-      for (var candidate in candidates) {
+      for (const candidate in candidates) {
         if (candidate === cm.getRange(cursorBegin, cursorEnd) + key) {
           cm.replaceRange(candidates[candidate], cursorBegin, cursorEnd)
           replacementOccurred = true
@@ -253,7 +253,7 @@
     if (cm.isReadOnly()) return CodeMirror.Pass
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
-    var cursor = cm.getCursor()
+    const cursor = cm.getCursor()
     if (cm.getModeAt(cursor).name !== 'markdown') return CodeMirror.Pass
     // Additionally, we only should replace if we're not within comment-style tokens
     let tokens = cm.getTokenTypeAt(cursor)
@@ -270,10 +270,10 @@
     }
 
     // The cursor will now be at the position BEFORE the space has been inserted
-    var { cursorBegin, cursorEnd } = cursors(cursor, replacementCandidates)
+    let { cursorBegin, cursorEnd } = cursors(cursor, replacementCandidates)
     if (cursorBegin.ch === cursorEnd.ch) return CodeMirror.Pass // Empty range, no need to check
     for (; cursorBegin.ch < cursorEnd.ch; cursorBegin.ch++) {
-      for (var candidate in replacementCandidates) {
+      for (const candidate in replacementCandidates) {
         if (candidate === cm.getRange(cursorBegin, cursorEnd)) {
           // We have found a suitable candidate and can replace. However, we
           // need to check that both range endings are actually in the Markdown
@@ -301,13 +301,13 @@
    */
   function handleQuote (cm, type) {
     if (quotes === false || cm.isReadOnly()) return CodeMirror.Pass
-    var cursor = cm.getCursor()
+    const cursor = cm.getCursor()
     // In case of overlay markdown modes, we need to make sure
     // we only apply this if we're in markdown.
     if (cm.getModeAt(cursor).name !== 'markdown') return CodeMirror.Pass
 
     canPerformReverseReplacement = false // Reset the handleBackspace flag
-    var cursorBefore = { 'line': cursor.line, 'ch': cursor.ch - 1 }
+    const cursorBefore = { 'line': cursor.line, 'ch': cursor.ch - 1 }
 
     // We have to check for two possibilities:
     // There's a "startChar" in front of the quote or not.
@@ -368,8 +368,8 @@
 
     // What do we do here? Easy: Check if the characters preceeding the cursor equal a replacement table value. If they do,
     // replace that with the original replacement *key*.
-    var reverse = {}
-    for (var key in replacementCandidates) {
+    const reverse = {}
+    for (const key in replacementCandidates) {
       reverse[replacementCandidates[key]] = key
     }
 
@@ -386,9 +386,11 @@
    * @param {Object} candidates The replacement table (or a subset thereof)
    */
   function getMaxCandidateLength (candidates) {
-    var len = 0
+    let len = 0
     for (let key of Object.keys(candidates)) {
-      if (key.length > len) len = key.length
+      if (key.length > len) {
+        len = key.length
+      }
     }
     return len
   }
@@ -400,7 +402,7 @@
    * @param {Object} candidates An object of replacement candidates.
    */
   function cursors (cursor, candidates) {
-    var cursorBegin = {
+    const cursorBegin = {
       'line': cursor.line,
       'ch': cursor.ch - getMaxCandidateLength(candidates)
     }
