@@ -30,16 +30,6 @@ export default function windowRegister (options?: RegistrationOptions): void {
   // Load the clarity icons
   loadIcons().catch(e => { console.error(e) })
 
-  // Prevent any funny navigation -- Zettlr does not allow any other file
-  // to be open here, so if anyone wants to navigate, open the link externally
-  // instead.
-  // TODO: Currently, this also prevents reloads
-  // window.addEventListener('beforeunload', (event) => {
-  //   event.preventDefault()
-  //   event.returnValue = false // equivalent to `return false` but not recommended
-  //   return false
-  // })
-
   // Determine if the menubar should be shown (default: yes)
   let shouldShowMenubar: boolean = true
   if (options !== undefined) {
