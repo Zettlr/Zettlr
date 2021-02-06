@@ -16,7 +16,12 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import { app, ipcMain } from 'electron'
 import got from 'got'
-import { enumLangFiles, getTranslationMetadata, trans } from '../../common/i18n.js'
+import {
+  enumLangFiles,
+  enumDictFiles,
+  getTranslationMetadata,
+  trans
+} from '../../common/i18n.js'
 import moment from 'moment'
 import { translation_api_url as TRANSLATION_API_URL } from '../../common/data.json'
 
@@ -74,6 +79,8 @@ export default class TranslationProvider {
         // "available" for this provider originally meant "everything
         // that is downloadable".
         return enumLangFiles().map(elem => elem.tag)
+      } else if (command === 'get-available-dictionaries') {
+        return enumDictFiles().map(elem => elem.tag)
       }
     })
   }

@@ -30,6 +30,8 @@
 // Then the font sets
 @import "../fonts.less";
 
+// NEW NEW NEW NEW NEW NEW NEW NEW
+// This code is already in the right format and will be used
 // Common CSS
 * {
   margin: 0;
@@ -47,7 +49,18 @@ html {
 }
 
 body {
+  width: 100vw;
+  height: 100vh;
+}
+
+@import "./helper-classes.less";
+
+// Here the new code ends, everything outside of this must be migrated
+
+body {
   overflow: hidden;
+  width: 100vw;
+  height: 100vh;
   user-select: none; // Prevent arbitrary selection outside of inputs
 
   .dragger {
@@ -121,12 +134,14 @@ input, select, textarea, button {
   }
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-}
+body:not(.darwin) {
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
 
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+  }
 }
 
 .clearfix {
@@ -165,10 +180,6 @@ input, select, textarea, button {
 @import "sidebar.less";
 
 @import "inputs.less";
-
-@import "window-controls.less";
-
-@import "menubar.less";
 
 @import "application-menu.less";
 

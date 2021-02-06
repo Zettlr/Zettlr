@@ -11,7 +11,7 @@
       {
         "label": "menu.preferences",
         "accelerator": "Cmd+,",
-        "command": "open-preferences"
+        "zettlrRole": "openPreferences"
       },
       {
         "label": "menu.pdf_preferences",

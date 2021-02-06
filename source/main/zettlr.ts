@@ -64,9 +64,14 @@ export default class Zettlr {
     // Inject some globals
     global.application = {
       // Flag indicating whether or not the application is booting
-      isBooting: () => { return this.isBooting },
+      isBooting: () => {
+        return this.isBooting
+      },
       showLogViewer: () => {
         this._windowManager.showLogWindow()
+      },
+      showPreferences: () => {
+        this._windowManager.showPreferences()
       },
       // TODO: Match the signatures of fileUpdate and dirUpdate
       fileUpdate: (oldHash: number, fileMetadata: any) => {
@@ -94,8 +99,12 @@ export default class Zettlr {
         global.ipc.send('paths-update', this._fsal.getTreeMeta())
         global.notify.normal(msg)
       },
-      findFile: (prop: any) => { return this._fsal.findFile(prop) },
-      findDir: (prop: any) => { return this._fsal.findDir(prop) },
+      findFile: (prop: any) => {
+        return this._fsal.findFile(prop)
+      },
+      findDir: (prop: any) => {
+        return this._fsal.findDir(prop)
+      },
       // Same as findFile, only with content
       getFile: async (fileDescriptor: any) => {
         return await this._fsal.getFileContents(fileDescriptor)

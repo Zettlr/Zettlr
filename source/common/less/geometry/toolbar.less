@@ -1,12 +1,10 @@
 // This file holds all geometry for the Zettlr toolbar
 
 #toolbar {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: @toolbar-height;
     padding: 0;
+    position: fixed;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -120,11 +118,6 @@
     }
 }
 
-// If the menu bar is shown, pull down the toolbar
-body.show-menubar #toolbar {
-    top: @menubar-height;
-}
-
 // When there is a menubar, it should be draggable. However, if there is none,
 // the toolbar must be draggable. Formerly, the following code was restricted
 // to darwin only until I realised that this won't work with custom window chrome.
@@ -144,7 +137,7 @@ body:not(.show-menubar) #toolbar {
 
 // For macOS, we need to add some more margin when the native appearance is used
 body.darwin:not(.show-window-controls) #toolbar {
-  padding-left: 70px;
+  padding-left: 80px;
 }
 
 // For Windows and Linux the same, only on the other side

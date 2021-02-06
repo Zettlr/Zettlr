@@ -4,7 +4,7 @@
  */
 export interface WindowPosition {
   // Currently, only main and quicklook windows retain their state
-  windowType: 'main'|'quicklook'
+  windowType: string
   // Optionally holds the path to the previewed file in order to associate
   // the window's bounds with the given file
   quicklookFile?: string

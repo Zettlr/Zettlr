@@ -281,6 +281,7 @@ export default class MenuProvider {
     }
 
     // Commands need to be simply sent to the renderer
+    // TODO: DEPRECATED
     if ((menutpl as any).command !== undefined) {
       menu.click = function (menuItem, focusedWindow) {
         global.ipc.send((menutpl as any).command)
@@ -314,9 +315,15 @@ export default class MenuProvider {
             focusedWindow?.webContents.toggleDevTools()
           }
           break
+        // Window openers
         case 'openLogViewer':
           menu.click = function (menuitem, focusedWindow) {
             global.application.showLogViewer()
+          }
+          break
+        case 'openPreferences':
+          menu.click = function (menuitem, focusedWindow) {
+            global.application.showPreferences()
           }
           break
         case 'openDictData':

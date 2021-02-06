@@ -59,7 +59,7 @@
             "label": "menu.preferences",
             "id": "preferences-item",
             "accelerator": "Ctrl+,",
-            "command": "open-preferences"
+            "zettlrRole": "openPreferences"
           },
           {
             "label": "menu.pdf_preferences",

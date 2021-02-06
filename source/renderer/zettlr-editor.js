@@ -725,11 +725,6 @@ class ZettlrEditor {
       if (conf.active === false) {
         this._editor.setOptions({ autoCorrect: false })
       } else {
-        // Convert the replacements into the correct format for the plugin
-        let keys = {}
-        for (let repl of conf.replacements) {
-          keys[repl.key] = repl.val
-        }
         this._editor.setOptions({
           autoCorrect: {
             style: conf.style,
@@ -742,8 +737,8 @@ class ZettlrEditor {
                 start: conf.magicQuotes.primary.split('…')[0],
                 end: conf.magicQuotes.primary.split('…')[1]
               }
-            }, // conf.quotes,
-            replacements: keys
+            },
+            replacements: conf.replacements
           }
         })
       }

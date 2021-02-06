@@ -1,6 +1,4 @@
-import registerMenubar from './register-menu-bar'
 import registerToolbar, { ToolbarControl } from './register-toolbar'
-import registerWindowControls from './register-window-controls'
 import registerGlobals from './register-globals'
 import registerThemes from './register-themes'
 import registerDefaultContextMenu from './register-default-context'
@@ -29,22 +27,6 @@ export default function windowRegister (options?: RegistrationOptions): void {
   // Load the clarity icons
   loadIcons().catch(e => { console.error(e) })
 
-  // Determine if the menubar should be shown (default: yes)
-  let shouldShowMenubar: boolean = true
-  if (options !== undefined) {
-    if (options.showMenubar !== undefined) {
-      shouldShowMenubar = options.showMenubar
-    }
-  }
-
-  // Determine if the window controls should be shown (default: yes)
-  let shouldShowWindowControls: boolean = true
-  if (options !== undefined) {
-    if (options.showWindowControls !== undefined) {
-      shouldShowWindowControls = options.showWindowControls
-    }
-  }
-
   // Determine if this code should handle the toolbar (default: no).
   // The default is set to give this code backward compatibility (only
   // touch the toolbar where we explicitly set this)
@@ -57,10 +39,6 @@ export default function windowRegister (options?: RegistrationOptions): void {
 
   // Register globals (such as global.config, etc.)
   registerGlobals()
-  // Then, we also need to listen to clicks onto the window controls
-  registerWindowControls(shouldShowWindowControls)
-  // ... register the menu bar ...
-  registerMenubar(shouldShowMenubar)
   // ... the toolbar ...
   if (shouldHandleToolbar && options?.toolbarControls !== undefined) {
     registerToolbar(options.toolbarControls)

@@ -4,6 +4,10 @@
 
 No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supported. On Linux, ARM is not available until we find a good solution of running Pandoc there.
 
+## New Configuration Options
+
+Several configuration values and options have changed their format. This means that changes to these won't be recognised by Zettlr 2.0. In this case, you may have to re-adapt your preferences in several places.
+
 ## GUI and Functionality
 
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.
@@ -30,6 +34,10 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
     - Furthermore, the provider now needs much less variables, the logic is much simpler, and many unnecessary ipc calls have been removed.
 - Migrated extractBibTexAttachments to TypeScript.
 - Migrated the Translation Provider to TypeScript.
+- The translations are now loaded by the `trans` helper to make sure it will always work.
+- Migrated the preferences dialog to Vue.js.
+- Added manifold new Vue components to compose windows from.
+- The menubar and window controls are no longer controlled by the window registration handler.
 
 # 1.8.7
 

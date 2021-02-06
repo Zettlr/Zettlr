@@ -87,6 +87,11 @@ module.exports = {
               html: './source/quicklook/index.htm',
               js: './source/quicklook/index.ts',
               name: 'quicklook'
+            },
+            {
+              html: './source/preferences/index.htm',
+              js: './source/preferences/index.ts',
+              name: 'preferences'
             }
           ]
         }

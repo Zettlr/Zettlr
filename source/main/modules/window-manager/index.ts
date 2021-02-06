@@ -33,6 +33,7 @@ import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createLogWindow from './create-log-window'
 import createQuicklookWindow from './create-ql-window'
+import createPreferencesWindow from './create-preferences-window'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
 import shouldReplaceFileDialog from './dialog/should-replace-file'
 import askDirectoryDialog from './dialog/ask-directory'
@@ -51,6 +52,7 @@ export default class WindowManager {
   private readonly _qlWindows: QuicklookRecord[]
   private _printWindow: BrowserWindow|null
   private _logWindow: BrowserWindow|null
+  private _preferences: BrowserWindow|null // Holds a potential modal window
   private _printWindowFile: string|undefined
   private _windowState: WindowPosition[]
   private readonly _configFile: string
@@ -61,6 +63,7 @@ export default class WindowManager {
     this._mainWindow = null
     this._qlWindows = []
     this._printWindow = null
+    this._preferences = null
     this._printWindowFile = undefined
     this._logWindow = null
     this._windowState = []
@@ -121,8 +124,13 @@ export default class WindowManager {
      * of those selected.
      */
     ipcMain.handle('request-files', async (event, message) => {
+      const focusedWindow = BrowserWindow.getFocusedWindow()
       // The client only can choose what and how much it wants to get
-      let files = await this.askFile(message.filters, message.multiSelection)
+      let files = await this.askFile(
+        message.filters,
+        message.multiSelection,
+        focusedWindow
+      )
       return files
     })
   }
@@ -414,8 +422,7 @@ export default class WindowManager {
   }
 
   showLogWindow (): void {
-    // Shows the log window TODO
-    // Shows the print window
+    // Shows the log window
     if (this._logWindow === null) {
       this._logWindow = createLogWindow()
 
@@ -425,6 +432,48 @@ export default class WindowManager {
       })
     } else {
       this._makeVisible(this._logWindow)
+    }
+  }
+
+  showPreferences (): void {
+    if (this._preferences === null) {
+      let windowConfiguration = this._windowState.find(state => {
+        return state.windowType === 'preferences'
+      })
+
+      if (windowConfiguration === undefined) {
+        // Pass a default configuration
+        const display = screen.getPrimaryDisplay()
+        const width = Math.min(display.workArea.width, display.workArea.width / 2)
+        const height = Math.min(display.workArea.height, display.workArea.height / 2)
+        const top = (display.workArea.height - height) / 2
+        const left = (display.workArea.width - width) / 2
+        windowConfiguration = {
+          windowType: 'preferences',
+          top: display.workArea.y + top, // Some displays begin at a y > 0
+          left: display.workArea.x + left, // Same as with the y-value
+          width: width,
+          height: height,
+          isMaximised: false,
+          lastDisplayId: display.id
+        }
+
+        this._windowState.push(windowConfiguration)
+      }
+
+      const saneConfiguration = sanitizeWindowPosition(windowConfiguration)
+      // Exchange the sanitised configuration
+      this._windowState.splice(this._windowState.indexOf(windowConfiguration), 1, saneConfiguration)
+
+      this._preferences = createPreferencesWindow(saneConfiguration)
+      this._hookWindowResize(this._preferences, saneConfiguration)
+
+      // Dereference the window as soon as it is closed
+      this._preferences.on('closed', () => {
+        this._preferences = null
+      })
+    } else {
+      this._makeVisible(this._preferences)
     }
   }
 
@@ -516,13 +565,18 @@ export default class WindowManager {
   /**
    * Shows the dialog for importing files from the disk.
    *
-   * @param  {FileFilter[]|null}  [filters=null]    An array of extension filters.
-   * @param  {boolean}            [multiSel=false]  Determines if multiple files are allowed
+   * @param  {FileFilter[]|null}   [filters=null]    An array of extension filters.
+   * @param  {boolean}             [multiSel=false]  Determines if multiple files are allowed
+   * @param  {BrowserWindow|null}  [win]             An optional window to attach to
    *
    * @return {string[]}                             An array containing all selected files.
    */
-  async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false): Promise<string[]> {
-    return await askFileDialog(this._mainWindow, filters, multiSel)
+  async askFile (filters: FileFilter[]|null = null, multiSel: boolean = false, win?: BrowserWindow|null): Promise<string[]> {
+    if (win != null) {
+      return await askFileDialog(win, filters, multiSel)
+    } else {
+      return await askFileDialog(this._mainWindow, filters, multiSel)
+    }
   }
 
   /**

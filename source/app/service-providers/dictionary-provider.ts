@@ -109,6 +109,15 @@ export default class DictionaryProvider extends EventEmitter {
       }
     })
 
+    ipcMain.handle('dictionary-provider', (event, message) => {
+      const { command } = message
+      if (command === 'get-user-dictionary') {
+        return this._userDictionary.map(elem => elem)
+      } else if (command === 'set-user-dictionary') {
+        global.dict.setUserDictionary(message.payload)
+      }
+    })
+
     // Reload as soon as the config has been updated
     global.config.on('update', (opt: string) => {
       // Reload the dictionaries (if applicable) ...
@@ -141,7 +150,7 @@ export default class DictionaryProvider extends EventEmitter {
    */
   _cacheAutoCorrectValues (): void {
     const table = global.config.get('editor.autoCorrect.replacements')
-    this._cachedAutocorrect = table.map((e: any) => e.val)
+    this._cachedAutocorrect = Object.values(table)
   }
 
   /**

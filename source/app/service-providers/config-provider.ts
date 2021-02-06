@@ -180,63 +180,68 @@ export default class ConfigProvider extends EventEmitter {
         'autoCorrect': {
           'active': true, // AutoCorrect is on by default
           'style': 'LibreOffice', // Default to LibreOffice style
-          'quotes': false,
-          'replacements': [
+          'magicQuotes': {
+            // Can be various quote pairs. The default characters (" and ')
+            // will disable magic quotes.
+            'primary': '"…"',
+            'secondary': '\'…\''
+          },
+          'replacements': {
             // Arrows
-            { key: '-->', val: '→' },
-            { key: '–>', val: '→' }, // For Word mode arrows
-            { key: '<--', val: '←' },
-            { key: '<->', val: '↔' },
-            { key: '<-->', val: '↔' },
-            { key: '==>', val: '⇒' },
-            { key: '<==', val: '⇐' },
-            { key: '<=>', val: '⇔' },
-            { key: '<==>', val: '⇔' },
+            '-->': '→',
+            '–>': '→', // For Word mode arrows
+            '<--': '←',
+            '<->': '↔',
+            '<-->': '↔',
+            '==>': '⇒',
+            '<==': '⇐',
+            '<=>': '⇔',
+            '<==>': '⇔',
             // Mathematical symbols
-            { key: '!=', val: '≠' },
-            { key: '<>', val: '≠' },
-            { key: '+-', val: '±' },
-            { key: ':times:', val: '×' },
-            { key: ':division:', val: '÷' },
-            { key: '<=', val: '≤' },
-            { key: '>=', val: '≥' },
-            { key: '1/2', val: '½' },
-            { key: '1/3', val: '⅓' },
-            { key: '2/3', val: '⅔' },
-            { key: '1/4', val: '¼' },
-            { key: '3/4', val: '¾' },
-            { key: '1/8', val: '⅛' },
-            { key: '3/8', val: '⅜' },
-            { key: '5/8', val: '⅝' },
-            { key: '7/8', val: '⅞' },
+            '!=': '≠',
+            '<>': '≠',
+            '+-': '±',
+            ':times:': '×',
+            ':division:': '÷',
+            '<=': '≤',
+            '>=': '≥',
+            '1/2': '½',
+            '1/3': '⅓',
+            '2/3': '⅔',
+            '1/4': '¼',
+            '3/4': '¾',
+            '1/8': '⅛',
+            '3/8': '⅜',
+            '5/8': '⅝',
+            '7/8': '⅞',
             // Units
-            { key: 'mm2', val: 'mm²' },
-            { key: 'cm2', val: 'cm²' },
-            { key: 'm2', val: 'm²' },
-            { key: 'km2', val: 'km²' },
-            { key: 'mm3', val: 'mm³' },
-            { key: 'cm3', val: 'cm³' },
-            { key: 'ccm', val: 'cm³' },
-            { key: 'm3', val: 'm³' },
-            { key: 'km3', val: 'km³' },
-            { key: ':sup2:', val: '²' },
-            { key: ':sup3:', val: '³' },
-            { key: ':deg:', val: '°' },
+            'mm2': 'mm²',
+            'cm2': 'cm²',
+            'm2': 'm²',
+            'km2': 'km²',
+            'mm3': 'mm³',
+            'cm3': 'cm³',
+            'ccm': 'cm³',
+            'm3': 'm³',
+            'km3': 'km³',
+            ':sup2:': '²',
+            ':sup3:': '³',
+            ':deg:': '°',
             // Currencies
-            { key: ':eur:', val: '€' },
-            { key: ':gbp:', val: '£' },
-            { key: ':yen:', val: '¥' },
-            { key: ':cent:', val: '¢' },
-            { key: ':inr:', val: '₹' },
+            ':eur:': '€',
+            ':gbp:': '£',
+            ':yen:': '¥',
+            ':cent:': '¢',
+            ':inr:': '₹',
             // Special symbols
-            { key: '(c)', val: '©' },
-            { key: '(tm)', val: '™' },
-            { key: '(r)', val: '®' },
+            '(c)': '©',
+            '(tm)': '™',
+            '(r)': '®',
             // Interpunctation
-            { key: '...', val: '…' },
-            { key: '--', val: '–' },
-            { key: '---', val: '—' }
-          ]
+            '...': '…',
+            '--': '–',
+            '---': '—'
+          }
         } // END autoCorrect options
       },
       'display': {

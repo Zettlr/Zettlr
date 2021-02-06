@@ -8,6 +8,7 @@
 interface Application {
   isBooting: () => boolean
   showLogViewer: () => void
+  showPreferences: () => void
   // TODO: Match the signatures of fileUpdate and dirUpdate
   fileUpdate: (oldHash: number, fileMetadata: any) => void
   dirUpdate: (oldHash: number, newHash: number) => void

@@ -1,0 +1,73 @@
+<template>
+  <div class="form-control">
+    <label v-if="label" v-bind:for="fieldID">{{ label }}</label>
+    <div v-if="reset" class="input-button-group">
+      <input
+        v-bind:id="fieldID"
+        ref="input"
+        v-bind:value="value"
+        type="number"
+        v-on:input="$emit('input', parseInt($event.target.value, 10))"
+      >
+      <button
+        type="button"
+        data-tippy-content="dialog.preferences.zkn.reset_default_id"
+        v-on:click="resetValue"
+      >
+        <clr-icon shape="refresh"></clr-icon>
+      </button>
+    </div>
+    <!-- Else: Normal input w/o reset button -->
+    <input
+      v-else
+      v-bind:id="fieldID"
+      ref="input"
+      v-bind:value="value"
+      type="number"
+      v-on:input="$emit('input', $event.target.value)"
+    >
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'FieldNumber',
+  props: {
+    value: {
+      type: Number,
+      default: 0
+    },
+    label: {
+      type: String,
+      default: ''
+    },
+    name: {
+      type: String,
+      default: ''
+    },
+    reset: {
+      type: Number,
+      default: 0
+    }
+  },
+  computed: {
+    fieldID: function () {
+      return 'field-input-' + this.name
+    }
+  },
+  methods: {
+    resetValue: function () {
+      this.$refs.input.value = this.reset
+      this.$emit('input', this.reset)
+    }
+  }
+}
+</script>
+
+<style lang="less">
+body.darwin {
+  label {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+}
+</style>
