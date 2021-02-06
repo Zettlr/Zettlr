@@ -719,7 +719,7 @@ class ZettlrEditor {
       })
     } else if (option === 'editor.countChars') {
       this._countChars = global.config.get('editor.countChars')
-    } else if (option === 'editor.autoCorrect') {
+    } else if (option.startsWith('editor.autoCorrect')) {
       // Set the autoCorrect options
       let conf = global.config.get('editor.autoCorrect')
       if (conf.active === false) {
@@ -733,7 +733,16 @@ class ZettlrEditor {
         this._editor.setOptions({
           autoCorrect: {
             style: conf.style,
-            quotes: conf.quotes,
+            quotes: {
+              single: {
+                start: conf.magicQuotes.secondary.split('…')[0],
+                end: conf.magicQuotes.secondary.split('…')[1]
+              },
+              double: {
+                start: conf.magicQuotes.primary.split('…')[0],
+                end: conf.magicQuotes.primary.split('…')[1]
+              }
+            }, // conf.quotes,
             replacements: keys
           }
         })
@@ -772,8 +781,10 @@ class ZettlrEditor {
             return author.family
           } else if (author.literal !== undefined) {
             return author.literal
+          } else {
+            return undefined
           }
-        }).join(', ')
+        }).filter(elem => elem !== undefined).join(', ')
       }
 
       let title = ''

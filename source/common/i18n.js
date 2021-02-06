@@ -15,7 +15,7 @@
 const fs = require('fs')
 const path = require('path')
 const bcp47 = require('bcp-47')
-const { app } = require('electron')
+const { app, ipcRenderer } = require('electron')
 const isDir = require('./util/is-dir')
 const isFile = require('./util/is-file')
 
@@ -74,6 +74,13 @@ function trans (string, ...args) {
     // Wtf? But alright, return the string and log an error
     global.log.warning('The translation string was malformed: ' + string + '!')
     return string
+  }
+
+  // Make sure the translations are ready
+  if (global.i18n === undefined || global.i18nFallback === undefined) {
+    const { i18n, i18nFallback } = ipcRenderer.sendSync('get-translation')
+    global.i18n = i18n
+    global.i18nFallback = i18nFallback
   }
 
   // Split the string by dots

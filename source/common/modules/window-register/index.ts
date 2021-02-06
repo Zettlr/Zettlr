@@ -2,7 +2,6 @@ import registerMenubar from './register-menu-bar'
 import registerToolbar, { ToolbarControl } from './register-toolbar'
 import registerWindowControls from './register-window-controls'
 import registerGlobals from './register-globals'
-import loadI18nRenderer from '../../load-i18n-renderer'
 import registerThemes from './register-themes'
 import registerDefaultContextMenu from './register-default-context'
 import loadIcons from './load-icons'
@@ -55,9 +54,6 @@ export default function windowRegister (options?: RegistrationOptions): void {
       shouldHandleToolbar = true // Existence of toolbarControls implies a toolbar
     }
   }
-
-  // Load the translation strings
-  loadI18nRenderer()
 
   // Register globals (such as global.config, etc.)
   registerGlobals()
