@@ -23,10 +23,12 @@ function reconstruct (rootPointer, currentPointer) {
         if (!found) console.log('Did not find object!' + elem.parent)
         elem.parent = found
       }
+      return null
     })
 
     currentPointer.attachments.map((elem) => {
       elem.parent = findObject(rootPointer, 'hash', elem.parent, 'children')
+      return null
     })
   } else {
     currentPointer.parent = findObject(rootPointer, 'hash', currentPointer.parent, 'children')

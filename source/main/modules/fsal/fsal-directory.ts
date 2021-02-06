@@ -114,8 +114,10 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
       return FSALFile.metadata(elem)
     } else if (elem.type === 'code') {
       return FSALCodeFile.metadata(elem)
+    } else {
+      return undefined
     }
-  }) as MaybeRootMeta[]
+  }).filter(elem => elem !== undefined) as MaybeRootMeta[]
 
   return {
     // By only passing the hash, the object becomes
