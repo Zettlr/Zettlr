@@ -44,10 +44,7 @@ import windowRegister from '../common/modules/window-register'
 import { ipcRenderer } from 'electron'
 
 // The first thing we have to do is run the window controller
-windowRegister({
-  // No menubar
-  showMenubar: false
-})
+windowRegister()
 
 // This window will be closed immediately on a window-close command
 // TODO: Move this to the window register function?
