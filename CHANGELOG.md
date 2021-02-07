@@ -18,6 +18,7 @@ Several configuration values and options have changed their format. This means t
 - Fixed a bug that would delete file if it got renamed as itself.
 - All languages will now be downloaded by the CI workflow. Updates will still be pulled via the application on boot.
 - Removed the ability for the translation provider to arbitrarily request languages that have not been installed in order to remove that fragile feature. All languages will now be provided from the application immediately.
+- All windows will now remember their last position (new: log window and print window).
 
 ## Under the Hood
 
@@ -39,6 +40,7 @@ Several configuration values and options have changed their format. This means t
 - Added manifold new Vue components to compose windows from.
 - The menubar and window controls are no longer controlled by the window registration handler.
 - Now tests can be run as JavaScript or as TypeScript files (use `.js` or `.spec.ts` files respectively).
+- Generalised the window state management so that all windows are now able to remember their positions easily.
 
 # 1.8.7
 

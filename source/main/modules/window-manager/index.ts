@@ -172,7 +172,9 @@ export default class WindowManager {
       for (const win of allWindows) {
         // Don't close the main window just yet. We are just preparing for the
         // shutdown by closing all other windows.
-        if (win === this._mainWindow) continue
+        if (win === this._mainWindow) {
+          continue
+        }
 
         // Now find the window to close. Emit a warning if the window is not
         // handled by the Window manager, as this indicates a bug and helps us
@@ -206,7 +208,7 @@ export default class WindowManager {
   /**
    * Makes a BrowserWindow visible and focuses it.
    *
-   * @param   {BrowserWindow}  win  The window to make visible
+   * @param  {BrowserWindow}  win  The window to make visible
    */
   private _makeVisible (win: BrowserWindow): void {
     if (win.isMinimized()) {
@@ -233,7 +235,9 @@ export default class WindowManager {
         this._persistTimeout = undefined
       }
       // Try again after one second, because there is currently data being written
-      this._persistTimeout = setTimeout(() => { this._persistWindowPositions() }, 1000)
+      this._persistTimeout = setTimeout(() => {
+        this._persistWindowPositions()
+      }, 1000)
       return
     }
 
@@ -246,6 +250,94 @@ export default class WindowManager {
       .catch((err) => {
         global.log.error(`[Window Manager] Could not persist data: ${err.message as string}`, err)
       })
+  }
+
+  /**
+   * Returns a sanitised, ready to use WindowPosition, either from the saved
+   * window states, or a brand new one. If no window position was found, a new
+   * one will be created using the given default size.
+   *
+   * @param   {string}                          type         The window state to find
+   * @param   {Rect|null}                       defaultSize  An optional size. If null, will use half the screen.
+   * @param   {Record<string><WindowPosition>}  predicate    Optional WindowPosition attributes to look for
+   *
+   * @return  {WindowPosition}                               A sanitised WindowPosition
+   */
+  private _retrieveWindowPosition (type: string, defaultSize: Rect|null, predicate?: Record<string, any>): WindowPosition {
+    let windowConfiguration = this._windowState.find(state => {
+      if (state.windowType !== type) {
+        return false
+      }
+
+      if (predicate !== undefined) {
+        for (const property in predicate) {
+          // If property is not, in fact, a property of WindowPosition, it'll
+          // be undefined, and therefore probably not === to the predicate.
+          if (predicate[property] === state[property as keyof WindowPosition]) {
+            return false
+          }
+        }
+      }
+
+      return true
+    })
+
+    if (windowConfiguration === undefined) {
+      // Create a new default configuration
+      const display = screen.getPrimaryDisplay()
+
+      // Make a window half the size of the current primary display, if no
+      // sizes were passed.
+      if (defaultSize === null) {
+        const width = Math.min(display.workArea.width, display.workArea.width / 2)
+        const height = Math.min(display.workArea.height, display.workArea.height / 2)
+        const top = (display.workArea.height - height) / 2
+        const left = (display.workArea.width - width) / 2
+        defaultSize = {
+          top: display.workArea.y + top, // Some displays begin at a y > 0
+          left: display.workArea.x + left, // Same as with the y-value
+          width: width,
+          height: height
+        }
+      }
+
+      // Determine if the window should show up maximised
+      let maximised = false
+      if (defaultSize.top === display.workArea.y &&
+        defaultSize.left === display.workArea.x &&
+        defaultSize.width === display.workArea.width &&
+        defaultSize.height === display.workArea.height
+      ) {
+        maximised = true
+      }
+
+      // Create the configuration object
+      windowConfiguration = {
+        windowType: type,
+        top: defaultSize.top,
+        left: defaultSize.left,
+        width: defaultSize.width,
+        height: defaultSize.height,
+        isMaximised: maximised,
+        lastDisplayId: display.id
+      }
+
+      if (predicate !== undefined) {
+        // Add the predicates to the WindowConfiguration so the next filter won't
+        // return undefined.
+        for (const property in predicate) {
+          windowConfiguration[property] = predicate[property]
+        }
+      }
+
+      this._windowState.push(windowConfiguration)
+    }
+
+    // Sanitise the configuration and then replace the one in our window state
+    const saneConfiguration = sanitizeWindowPosition(windowConfiguration)
+    this._windowState.splice(this._windowState.indexOf(windowConfiguration), 1, saneConfiguration)
+
+    return saneConfiguration
   }
 
   /**
@@ -280,6 +372,9 @@ export default class WindowManager {
       })
     }
 
+    window.on('resize', callback)
+    window.on('move', callback)
+
     // Now hook the resizing events to save the last positions to config
     window.on('maximize', () => {
       conf.isMaximised = true
@@ -301,8 +396,6 @@ export default class WindowManager {
         payload: window.isMaximized()
       })
     })
-    window.on('resize', callback)
-    window.on('move', callback)
   }
 
   /**
@@ -310,34 +403,17 @@ export default class WindowManager {
    */
   showMainWindow (): void {
     if (this._mainWindow === null) {
-      // Instantiate a new main window
-      let windowConfiguration = this._windowState.find(state => {
-        return state.windowType === 'main'
+      const display = screen.getPrimaryDisplay()
+      const windowConfiguration = this._retrieveWindowPosition('main', {
+        top: display.workArea.y,
+        left: display.workArea.x,
+        width: display.workArea.width,
+        height: display.workArea.height
       })
 
-      if (windowConfiguration === undefined) {
-        // Pass a default configuration
-        const display = screen.getPrimaryDisplay()
-        windowConfiguration = {
-          windowType: 'main',
-          top: display.workArea.y,
-          left: display.workArea.x,
-          width: display.workArea.width,
-          height: display.workArea.height,
-          isMaximised: true,
-          lastDisplayId: display.id
-        }
-
-        this._windowState.push(windowConfiguration)
-      }
-
-      const saneConfiguration = sanitizeWindowPosition(windowConfiguration)
-      // Exchange the sanitised configuration
-      this._windowState.splice(this._windowState.indexOf(windowConfiguration), 1, saneConfiguration)
-
-      this._mainWindow = createMainWindow(saneConfiguration)
+      this._mainWindow = createMainWindow(windowConfiguration)
       this._hookMainWindow()
-      this._hookWindowResize(this._mainWindow, saneConfiguration)
+      this._hookWindowResize(this._mainWindow, windowConfiguration)
     } else {
       this._makeVisible(this._mainWindow)
     }
@@ -371,39 +447,12 @@ export default class WindowManager {
       // The window is already open -> make it visible
       this._makeVisible(record.win)
     } else {
-      let windowConfiguration = this._windowState.find(state => {
-        return state.windowType === 'quicklook' &&
-        state.quicklookFile === file.path
-      })
-
-      if (windowConfiguration === undefined) {
-        // Pass a default configuration
-        const display = screen.getPrimaryDisplay()
-        const width = Math.min(display.workArea.width, display.workArea.width / 2)
-        const height = Math.min(display.workArea.height, display.workArea.height / 2)
-        const top = (display.workArea.height - height) / 2
-        const left = (display.workArea.width - width) / 2
-        windowConfiguration = {
-          windowType: 'quicklook',
-          quicklookFile: file.path,
-          top: display.workArea.y + top, // Some displays begin at a y > 0
-          left: display.workArea.x + left, // Same as with the y-value
-          width: width,
-          height: height,
-          isMaximised: false,
-          lastDisplayId: display.id
-        }
-
-        this._windowState.push(windowConfiguration)
-      }
-
-      const saneConfiguration = sanitizeWindowPosition(windowConfiguration)
-      // Exchange the sanitised configuration
-      this._windowState.splice(this._windowState.indexOf(windowConfiguration), 1, saneConfiguration)
-
       // This particular file is not yet open -> open it
-      const window: BrowserWindow = createQuicklookWindow(file, saneConfiguration)
-      this._hookWindowResize(window, saneConfiguration)
+      // Pass null for default size
+      const conf = this._retrieveWindowPosition('quicklook', null, { quicklookFile: file.path })
+      const window: BrowserWindow = createQuicklookWindow(file, conf)
+      this._hookWindowResize(window, conf)
+
       const qlWindow: QuicklookRecord = {
         path: file.path,
         win: window
@@ -421,10 +470,14 @@ export default class WindowManager {
     }
   }
 
+  /**
+   * Displays the log window
+   */
   showLogWindow (): void {
-    // Shows the log window
     if (this._logWindow === null) {
-      this._logWindow = createLogWindow()
+      const conf = this._retrieveWindowPosition('log', null)
+      this._logWindow = createLogWindow(conf)
+      this._hookWindowResize(this._logWindow, conf)
 
       // Dereference the window as soon as it is closed
       this._logWindow.on('closed', () => {
@@ -435,38 +488,14 @@ export default class WindowManager {
     }
   }
 
+  /**
+   * Shows the preferences window
+   */
   showPreferences (): void {
     if (this._preferences === null) {
-      let windowConfiguration = this._windowState.find(state => {
-        return state.windowType === 'preferences'
-      })
-
-      if (windowConfiguration === undefined) {
-        // Pass a default configuration
-        const display = screen.getPrimaryDisplay()
-        const width = Math.min(display.workArea.width, display.workArea.width / 2)
-        const height = Math.min(display.workArea.height, display.workArea.height / 2)
-        const top = (display.workArea.height - height) / 2
-        const left = (display.workArea.width - width) / 2
-        windowConfiguration = {
-          windowType: 'preferences',
-          top: display.workArea.y + top, // Some displays begin at a y > 0
-          left: display.workArea.x + left, // Same as with the y-value
-          width: width,
-          height: height,
-          isMaximised: false,
-          lastDisplayId: display.id
-        }
-
-        this._windowState.push(windowConfiguration)
-      }
-
-      const saneConfiguration = sanitizeWindowPosition(windowConfiguration)
-      // Exchange the sanitised configuration
-      this._windowState.splice(this._windowState.indexOf(windowConfiguration), 1, saneConfiguration)
-
-      this._preferences = createPreferencesWindow(saneConfiguration)
-      this._hookWindowResize(this._preferences, saneConfiguration)
+      const conf = this._retrieveWindowPosition('preferences', null)
+      this._preferences = createPreferencesWindow(conf)
+      this._hookWindowResize(this._preferences, conf)
 
       // Dereference the window as soon as it is closed
       this._preferences.on('closed', () => {
@@ -483,9 +512,10 @@ export default class WindowManager {
    * @param   {string}  filePath  The file to load
    */
   showPrintWindow (filePath: string): void {
-    // Shows the print window
     if (this._printWindow === null) {
-      this._printWindow = createPrintWindow(filePath)
+      const conf = this._retrieveWindowPosition('print', null)
+      this._printWindow = createPrintWindow(filePath, conf)
+      this._hookWindowResize(this._printWindow, conf)
       this._printWindowFile = filePath
 
       // Dereference the window as soon as it is closed
@@ -518,7 +548,7 @@ export default class WindowManager {
   /**
    * Returns the main window
    *
-   * @return  {BrowserWindow}  The main window
+   * @return  {BrowserWindow|null}  The main window
    */
   getMainWindow (): BrowserWindow|null {
     return this._mainWindow

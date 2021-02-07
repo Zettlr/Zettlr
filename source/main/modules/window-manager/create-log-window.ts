@@ -19,19 +19,24 @@ import {
 import attachLogger from './attach-logger'
 import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
+import { WindowPosition } from './types'
 
 /**
- * Creates a BrowserWindow with print window configuration and loads the
+ * Creates a BrowserWindow with log window configuration and loads the
  * corresponding renderer.
  *
- * @param   {string}  file  The file to load in the print preview
- * @return  {BrowserWindow}           The loaded print window
+ * @param   {WindowPosition}  conf  The configuration to load
+ * @return  {BrowserWindow}         The loaded log window
  */
-export default function createLogWindow (): BrowserWindow {
+export default function createLogWindow (conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
     minHeight: 200,
+    width: conf.width,
+    height: conf.height,
+    x: conf.left,
+    y: conf.top,
     show: false,
     webPreferences: {
       nodeIntegration: true

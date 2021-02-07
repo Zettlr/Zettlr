@@ -31,10 +31,10 @@ import { WindowPosition } from './types'
 export default function createPreferencesWindow (conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
-    width: conf.width,
-    height: conf.height,
     minWidth: 300,
     minHeight: 200,
+    width: conf.width,
+    height: conf.height,
     x: conf.left,
     y: conf.top,
     show: false,

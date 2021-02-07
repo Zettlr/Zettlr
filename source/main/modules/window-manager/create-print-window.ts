@@ -19,6 +19,7 @@ import {
 import attachLogger from './attach-logger'
 import preventNavigation from './prevent-navigation'
 import setWindowChrome from './set-window-chrome'
+import { WindowPosition } from './types'
 
 /**
  * Creates a BrowserWindow with print window configuration and loads the
@@ -27,11 +28,15 @@ import setWindowChrome from './set-window-chrome'
  * @param   {string}  file  The file to load in the print preview
  * @return  {BrowserWindow}           The loaded print window
  */
-export default function createPrintWindow (file: string): BrowserWindow {
+export default function createPrintWindow (file: string, conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
     minHeight: 200,
+    width: conf.width,
+    height: conf.height,
+    x: conf.left,
+    y: conf.top,
     show: false,
     webPreferences: {
       // Zettlr needs all the node features, so in preparation for Electron
