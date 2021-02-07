@@ -30,7 +30,7 @@ Several configuration values and options have changed their format. This means t
 - Reenabled the Pandoc and XeLaTeX options in preferences.
 - Removed the generic IPC call from the config provider and replaced it with consistent checks as to which options have actually changed. This increases the performance after configuration saves.
 - Migrated the config provider to TypeScript.
-- Migrated the Citeprov Provider to TypeScript, and cleaned the provider up:
+- Migrated the Citeproc Provider to TypeScript, and cleaned the provider up:
     - The provider has now the capability to load multiple databases at once and switch between them.
     - Furthermore, the provider now needs much less variables, the logic is much simpler, and many unnecessary ipc calls have been removed.
 - Migrated extractBibTexAttachments to TypeScript.
