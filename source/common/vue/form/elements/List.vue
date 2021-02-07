@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import Checkbox from './checkbox.vue'
+import Checkbox from './Checkbox.vue'
 
 export default {
   name: 'ListField',

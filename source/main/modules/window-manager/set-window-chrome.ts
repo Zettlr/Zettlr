@@ -28,21 +28,15 @@ import path from 'path'
 export default function setWindowChrome (winConf: BrowserWindowConstructorOptions): void {
   const shouldUseNativeAppearance: boolean = global.config.get('window.nativeAppearance')
 
-  // If the user wants to use native appearance, this means to use a frameless
-  // window with the traffic lights slightly inset for macOS.
-  if (process.platform === 'darwin' && shouldUseNativeAppearance) {
+  // On macOS, we want the traffic lights slightly inset and no native window
+  // chrome.
+  if (process.platform === 'darwin') {
     winConf.titleBarStyle = 'hiddenInset'
-  } else if (process.platform === 'darwin' && !shouldUseNativeAppearance) {
-    // Now we're simply creating a frameless window without everything.
+  } else if (process.platform !== 'linux' || !shouldUseNativeAppearance) {
+    // On Windows, we need a frameless window. On Linux, only if the
+    // shouldUseNativeAppearance flag is set to false.
     winConf.frame = false
-  }
-
-  // If the user wants to use non-native appearance on non-macOS platforms,
-  // this means we need a frameless window (so that the renderer instead can
-  // display the menu and window controls).
-  if (process.platform !== 'darwin' && !shouldUseNativeAppearance) {
-    winConf.frame = false
-  } // Else: Leave title- and menu-bar in place.
+  } // Else: We have Linux with native appearance.
 
   // Application icon for Linux. Cannot not be embedded in the executable.
   if (process.platform === 'linux') {

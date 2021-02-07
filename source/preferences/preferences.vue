@@ -1,7 +1,8 @@
 <template>
   <WindowChrome
     v-bind:title="windowTitle"
-    v-bind:show-titlebar="true"
+    v-bind:titlebar="true"
+    v-bind:menubar="false"
     v-bind:show-tabbar="true"
     v-bind:tabbar-tabs="tabs"
     v-bind:tabbar-label="'Preferences'"

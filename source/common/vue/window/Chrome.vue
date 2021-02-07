@@ -49,6 +49,7 @@ import Menubar from './Menubar.vue'
 import Toolbar from './Toolbar.vue'
 import Tabbar from './Tabbar.vue'
 import WindowControls from './Controls.vue'
+import { ipcRenderer } from 'electron'
 
 // First we need some general variables
 const TITLEBAR_MACOS_HEIGHT = 40
@@ -89,11 +90,11 @@ export default {
       type: String,
       default: ''
     },
-    showTitlebar: {
+    titlebar: {
       type: Boolean,
       default: true
     },
-    showMenubar: {
+    menubar: {
       type: Boolean,
       default: process.platform !== 'darwin'
     },
@@ -108,10 +109,33 @@ export default {
   },
   data: function () {
     return {
-      platform: process.platform
+      platform: process.platform,
+      useNativeAppearance: global.config.get('window.nativeAppearance')
     }
   },
   computed: {
+    showTitlebar: function () {
+      // Shows a titlebar if one is requested and we are on macOS or on Windows
+      // or on Linux with not native appearance.
+      if (this.platform === 'linux' && this.useNativeAppearance === true) {
+        return false
+      }
+
+      return this.titlebar
+    },
+    showMenubar: function () {
+      // Shows a menubar if one is requested and we are on Windows or on Linux
+      // with not native appearance.
+      if (this.platform === 'darwin') {
+        return false
+      }
+
+      if (this.platform === 'linux' && this.useNativeAppearance === true) {
+        return false
+      }
+
+      return this.menubar
+    },
     showWindowControls: function () {
       if (this.platform !== 'darwin') {
         return true
@@ -222,6 +246,15 @@ export default {
       document.body.classList.remove('darwin', 'win32', 'linux')
       document.body.classList.add(this.platform)
     }
+  },
+  created: function () {
+    // Oh, we can destructure stuff directly in the method signature?! Uuuuh
+    ipcRenderer.on('config-provider', (event, { command, payload }) => {
+      if (command === 'update' && payload === 'window.nativeAppearance') {
+        console.log('Apperance has changed for window chrome!')
+        this.useNativeAppearance = global.config.get('window.nativeAppearance')
+      }
+    })
   }
 }
 </script>
