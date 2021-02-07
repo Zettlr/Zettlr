@@ -1,11 +1,15 @@
 <template>
-  <div
-    id="ql-container"
-    v-on:keyup.stop="onKeyup"
+  <WindowChrome
+    v-bind:title="windowTitle"
+    v-bind:titlebar="false"
+    v-bind:menubar="false"
+    v-bind:show-toolbar="true"
+    v-bind:toolbar-controls="toolbarControls"
+    v-on:toolbar-search="query = $event"
   >
     <Editor
       v-bind:id="id"
-      v-bind:fontSize="fontSize"
+      v-bind:font-size="fontSize"
       v-bind:query="query"
       v-bind:name="name"
       v-bind:dir="dir"
@@ -24,15 +28,18 @@
       v-bind:modified="modified"
       v-bind:content="content"
     ></Editor>
-  </div>
+  </WindowChrome>
 </template>
 
 <script>
-const { ipcRenderer } = require('electron')
-const Editor = require('./editor.vue').default
+import { ipcRenderer } from 'electron'
+import Editor from './editor.vue'
+import WindowChrome from '../common/vue/window/Chrome.vue'
+import { trans } from '../common/i18n'
 
 export default {
   components: {
+    WindowChrome,
     Editor
   },
   data: function () {
@@ -58,6 +65,44 @@ export default {
       content: ''
     }
   },
+  computed: {
+    windowTitle: function () {
+      let title = this.name
+      const firstHeadings = Boolean(global.config.get('display.useFirstHeadings'))
+      if (this.type === 'file') {
+        if (this.firstHeading !== null && firstHeadings) {
+          title = this.firstHeading
+        }
+        if (this.frontmatter != null && this.frontmatter.title !== undefined) {
+          title = this.frontmatter.title
+        }
+      }
+      return title
+    },
+    toolbarControls: function () {
+      return [
+        {
+          type: 'text',
+          content: (this.windowTitle === undefined) ? 'QuickLook' : this.windowTitle,
+          style: 'strong'
+        },
+        {
+          type: 'spacer', // Make sure the content is flushed to the left
+          size: 'size-5x'
+        },
+        {
+          type: 'search',
+          placeholder: trans('dialog.find.find_placeholder'),
+          onInputHandler: (value) => {
+            this.query = value
+          },
+          onSubmitHandler: (value) => {
+            this.$emit('search-next')
+          }
+        }
+      ]
+    }
+  },
   mounted: function () {
     ipcRenderer.on('config-provider', (event, message) => {
       const { command } = message
@@ -69,15 +114,6 @@ export default {
     })
   },
   methods: {
-    onKeyup: function (event) {
-      if (!event.metaKey && process.platform === 'darwin') return
-      if (!event.ctrlKey && process.platform !== 'darwin') return
-
-      if ([ 'f', 'F' ].includes(event.key)) {
-        event.stopPropagation()
-        document.getElementById('toolbar').querySelector('input').focus()
-      }
-    }
   }
 }
 </script>

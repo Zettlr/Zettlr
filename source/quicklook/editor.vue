@@ -1,5 +1,5 @@
 <template>
-  <div id="editor" v-bind:style="editorStyles" class="fullscreen">
+  <div id="editor" v-bind:style="editorStyles">
     <textarea id="cm-text" ref="editor" style="display:none;"></textarea>
   </div>
 </template>
@@ -137,7 +137,7 @@ export default {
     })
 
     // We're always in fullscreen here
-    this.editor.isFullscreen = true
+    // this.editor.isFullscreen = true
 
     // Initiate the scrollbar annotations
     this.scrollbarAnnotations = this.editor.codeMirror.annotateScrollbar('sb-annotation')
