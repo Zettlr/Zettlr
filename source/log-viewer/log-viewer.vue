@@ -1,20 +1,32 @@
 <template>
-  <div id="log-viewer" ref="log-viewer">
-    <Message
-      v-for="(entry, idx) in filteredMessages"
-      v-bind:key="idx"
-      v-bind:message="entry"
-    />
-  </div>
+  <WindowChrome
+    v-bind:title="'Log Viewer'"
+    v-bind:titlebar="true"
+    v-bind:menubar="false"
+    v-bind:show-toolbar="true"
+    v-bind:toolbar-controls="toolbarControls"
+    v-on:toolbar-search="filter = $event"
+    v-on:toolbar-toggle="handleToggle($event)"
+  >
+    <div id="log-viewer" ref="log-viewer">
+      <Message
+        v-for="(entry, idx) in filteredMessages"
+        v-bind:key="idx"
+        v-bind:message="entry"
+      />
+    </div>
+  </WindowChrome>
 </template>
 
 <script>
 import { ipcRenderer } from 'electron'
 import Message from './message.vue'
+import WindowChrome from '../common/vue/window/Chrome.vue'
 
 export default {
   components: {
-    Message
+    Message,
+    WindowChrome
   },
   data: function () {
     return {
@@ -59,6 +71,50 @@ export default {
       } else {
         return preFiltered
       }
+    },
+    toolbarControls: function () {
+      return [
+        {
+          type: 'text',
+          content: 'Filter messages:'
+        },
+        {
+          type: 'toggle',
+          label: 'Verbose',
+          id: 'verboseToggle',
+          activeClass: 'verbose-control-active',
+          initialState: 'active'
+        },
+        {
+          type: 'toggle',
+          label: 'Info',
+          id: 'infoToggle',
+          activeClass: 'info-control-active',
+          initialState: 'active'
+        },
+        {
+          type: 'toggle',
+          label: 'Warning',
+          id: 'warningToggle',
+          activeClass: 'warning-control-active',
+          initialState: 'active'
+        },
+        {
+          type: 'toggle',
+          label: 'Error',
+          id: 'errorToggle',
+          activeClass: 'error-control-active',
+          initialState: 'active'
+        },
+        {
+          type: 'spacer', // Make sure the content is flushed to the left
+          size: '3x'
+        },
+        {
+          type: 'search',
+          placeholder: 'Filter …'
+        }
+      ]
     }
   },
   mounted: function () {
@@ -110,19 +166,49 @@ export default {
     scrollToBottom: function () {
       const elem = this.$refs['log-viewer']
       elem.scrollTop = elem.scrollHeight - elem.getBoundingClientRect().height
+    },
+    handleToggle: function (toggleID) {
+      if (toggleID === 'verboseToggle') {
+        this.includeVerbose = !this.includeVerbose
+      } else if (toggleID === 'infoToggle') {
+        this.includeInfo = !this.includeInfo
+      } else if (toggleID === 'warningToggle') {
+        this.includeWarning = !this.includeWarning
+      } else if (toggleID === 'errorToggle') {
+        this.includeError = !this.includeError
+      }
     }
   }
 }
 </script>
 
 <style lang="less">
+// This is bad style, but let's add the toolbar button classes here
+body div#toolbar button {
+  &.verbose-control-active {
+    background-color: #d8d8d8;
+    color: rgb(131, 131, 131);
+  }
+
+  &.warning-control-active {
+    background-color: rgb(236, 238, 97);
+    color: rgb(139, 139, 24);
+  }
+
+  &.info-control-active {
+    background-color: rgb(165, 204, 255);
+    color: rgb(61, 136, 233);
+  }
+
+  &.error-control-active {
+    background-color: rgb(255, 130, 130);
+    color: rgb(139, 27, 27);
+  }
+}
+
 #log-viewer {
   user-select: text;
-  position: absolute;
-  top: 39px;
-  bottom: 0px;
   width: 100%;
-  height: calc(100vh - 39px);
   overflow-y: auto;
   overflow-x: hidden;
   background-color: rgb(131, 137, 151);

@@ -96,27 +96,6 @@ export default {
 </script>
 
 <style lang="less">
-  // This is bad style, but let's add the toolbar button classes here
-  .verbose-control-active {
-    background-color: #d8d8d8;
-    color: rgb(131, 131, 131);
-  }
-
-  .warning-control-active {
-    background-color: rgb(236, 238, 97);
-    color: rgb(139, 139, 24);
-  }
-
-  .info-control-active {
-    background-color: rgb(165, 204, 255);
-    color: rgb(61, 136, 233);
-  }
-
-  .error-control-active {
-    background-color: rgb(255, 130, 130);
-    color: rgb(139, 27, 27);
-  }
-
   .message {
     display: table-row;
     transition: 0.5s all ease;

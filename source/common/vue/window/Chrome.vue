@@ -23,6 +23,10 @@
       <Toolbar
         v-if="showToolbar"
         v-bind:margin-top="toolbarMargin"
+        v-bind:controls="toolbarControls"
+        v-on:search="$emit('toolbar-search', $event)"
+        v-on:toggle="$emit('toolbar-toggle', $event)"
+        v-on:click="$emit('toolbar-click', $event)"
       ></Toolbar>
       <Tabbar
         v-if="showTabbar"
@@ -60,7 +64,7 @@ const MENUBAR_MACOS_HEIGHT = 31 // No menubar on macOS
 const MENUBAR_WIN32_HEIGHT = 31
 const MENUBAR_LINUX_HEIGHT = 31
 
-const TOOLBAR_MACOS_HEIGHT = 39
+const TOOLBAR_MACOS_HEIGHT = 40
 const TOOLBAR_WIN32_HEIGHT = 40
 const TOOLBAR_LINUX_HEIGHT = 40
 
@@ -78,30 +82,42 @@ export default {
     WindowControls
   },
   props: {
+    // Window title
     title: {
       type: String,
       default: ''
     },
+    // Tabbar tabs
     tabbarTabs: {
       type: Array,
       default: function () { return [] }
     },
+    // Tabbar ARIA label
     tabbarLabel: {
       type: String,
       default: ''
     },
+    // Toolbar controls
+    toolbarControls: {
+      type: Array,
+      default: function () { return [] }
+    },
+    // Should show a titlebar if adequate?
     titlebar: {
       type: Boolean,
       default: true
     },
+    // Should show a menubar if adequate?
     menubar: {
       type: Boolean,
       default: process.platform !== 'darwin'
     },
+    // Show the toolbar?
     showToolbar: {
       type: Boolean,
       default: false
     },
+    // Show the tabbar?
     showTabbar: {
       type: Boolean,
       default: false
