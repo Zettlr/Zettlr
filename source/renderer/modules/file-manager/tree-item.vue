@@ -316,7 +316,7 @@ export default {
     /**
      * On click, this will call the selection function.
      */
-    requestSelection: function (evt) {
+    requestSelection: function (event) {
       // Determine if we have a middle (wheel) click
       const middleClick = (event.type === 'auxclick' && event.button === 1)
       const ctrl = event.ctrlKey === true && process.platform !== 'darwin'
@@ -326,7 +326,7 @@ export default {
       // Dead directories can't be opened, so stop the propagation to
       // the file manager and don't do a thing.
       if (this.obj.dirNotFoundFlag === true) {
-        return evt.stopPropagation()
+        return event.stopPropagation()
       }
 
       if (this.obj.type === 'file' && alt) {
