@@ -15,6 +15,7 @@
       <Titlebar
         v-if="showTitlebar"
         v-bind:title-content="title"
+        v-on:dblclick="handleDoubleClick('titlebar')"
       ></Titlebar>
       <Menubar
         v-if="showMenubar"
@@ -27,6 +28,7 @@
         v-on:search="$emit('toolbar-search', $event)"
         v-on:toggle="$emit('toolbar-toggle', $event)"
         v-on:click="$emit('toolbar-click', $event)"
+        v-on:dblclick="handleDoubleClick('toolbar')"
       ></Toolbar>
       <Tabbar
         v-if="showTabbar"
@@ -271,6 +273,21 @@ export default {
         this.useNativeAppearance = global.config.get('window.nativeAppearance')
       }
     })
+  },
+  methods: {
+    handleDoubleClick: function (origin) {
+      if (origin === 'titlebar') {
+        // A doubleclick on the titlebar is pretty universally recognised as
+        // an action that should maximise the window.
+        ipcRenderer.send('window-controls', { command: 'win-maximise' })
+      } else if (origin === 'toolbar') {
+        // A doubleclick on the toolbar should trigger a maximisation if there
+        // is no titlebar on darwin
+        if (this.platform === 'darwin' && !this.titlebar) {
+          ipcRenderer.send('window-controls', { command: 'win-maximise' })
+        }
+      }
+    }
   }
 }
 </script>

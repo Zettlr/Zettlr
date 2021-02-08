@@ -2,6 +2,7 @@
   <div
     id="toolbar"
     v-bind:style="{ top: marginTop }"
+    v-on:dblclick="$emit('dblclick')"
   >
     <template v-for="(item, idx) in controls">
       <ButtonControl
