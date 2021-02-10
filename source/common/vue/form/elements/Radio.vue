@@ -110,10 +110,6 @@ body.darwin {
     height: @input-size;
     padding: 0;
 
-    input:checked + .toggle {
-      background-color: var(--c-primary);
-    }
-
     .toggle {
       border: 1px solid var(--grey-1);
       border-radius: @input-size;
@@ -127,6 +123,10 @@ body.darwin {
         top: 4px;
         background-color: white;
       }
+    }
+
+    input:checked + .toggle {
+      background-color: var(--system-accent-color, --c-primary);
     }
   }
 
@@ -155,12 +155,12 @@ body.win32 {
     width: @input-size;
     height: @input-size;
 
-    input:checked + .toggle:before {
-      background-color: var(--c-primary);
+    input:checked + .toggle {
+      border-color: var(--system-accent-color, --c-primary);
     }
 
-    input:checked + .toggle {
-      border-color: var(--c-primary);
+    input:checked + .toggle:before {
+      background-color: var(--system-accent-color, --c-primary);
     }
 
     .toggle {

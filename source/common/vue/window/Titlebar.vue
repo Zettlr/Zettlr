@@ -52,7 +52,7 @@ body.win32 {
     height: 30px;
     line-height: 30px;
     padding-left: 20px;
-    background-color: var(--c-primary);
+    background-color: var(--system-accent-color, --c-primary);
     color: white;
   }
 

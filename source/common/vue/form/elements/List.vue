@@ -205,7 +205,7 @@ div.table-view {
           border-radius: 4px;
           &:focus {
             outline: 0;
-            background-color: rgb(230, 230, 230);
+            background-color: var(--system-accent-color, rgb(230, 230, 230));
           }
         }
       }

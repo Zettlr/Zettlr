@@ -19,6 +19,7 @@ Several configuration values and options have changed their format. This means t
 - All languages will now be downloaded by the CI workflow. Updates will still be pulled via the application on boot.
 - Removed the ability for the translation provider to arbitrarily request languages that have not been installed in order to remove that fragile feature. All languages will now be provided from the application immediately.
 - All windows will now remember their last position (new: log window and print window).
+- Some components of the renderer elements will now respect a given accent colour set by your operating system (only available for macOS and Windows).
 
 ## Under the Hood
 

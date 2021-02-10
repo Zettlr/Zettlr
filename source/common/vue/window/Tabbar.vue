@@ -72,6 +72,11 @@ div.tab-list {
       padding: 5px;
       outline: none;
       white-space: nowrap;
+
+      &.active {
+        // --system variables are set dynamically based on the operating system.
+        color: var(--system-accent-color, --c-primary);
+      }
     }
 }
 // macOS styling
@@ -90,15 +95,10 @@ body.darwin {
       border: none;
       border-radius: 4px;
       margin: 1px;
-      color: inherit;
       text-align: center;
 
       &:hover, &.active {
         background-color: rgb(225, 225, 225);
-      }
-
-      &.active {
-        color: var(--c-primary);
       }
 
       div.toolbar-icon {
@@ -139,10 +139,6 @@ body.win32 {
 
       &:hover {
         background-color: rgb(238, 238, 238);
-      }
-
-      &.active {
-        color: var(--c-primary);
       }
     }
   }
@@ -189,10 +185,6 @@ body.linux {
 
       &:hover {
         background-color: rgb(230, 230, 230);
-      }
-
-      &.active {
-        color: var(--c-primary);
       }
     }
   }

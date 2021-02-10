@@ -81,6 +81,10 @@ body {
     input:checked ~ .checkmark:after {
       opacity: 1;
     }
+
+    input:checked ~ .checkmark {
+      background-color: var(--system-accent-color, --c-primary);
+    }
   }
 }
 
@@ -112,10 +116,6 @@ body.darwin {
         border: solid white;
         border-width: 0 2px 2px 0;
       }
-    }
-
-    input:checked ~ .checkmark {
-      background-color: var(--c-primary);
     }
   }
 
@@ -165,8 +165,7 @@ body.win32 {
     }
 
     input:checked ~ .checkmark {
-      background-color: var(--c-primary);
-      border-color: var(--c-primary);
+      border-color: var(--system-accent-color, --c-primary);
     }
   }
 }
