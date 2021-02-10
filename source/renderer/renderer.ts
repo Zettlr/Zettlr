@@ -29,7 +29,7 @@ declare global {
 windowRegister()
 
 // We need a global for our renderer element
-var renderer = new ZettlrRenderer()
+const renderer = new ZettlrRenderer()
 renderer.init()
 
 // TODO: Remove asap
