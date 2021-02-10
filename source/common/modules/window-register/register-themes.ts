@@ -21,7 +21,7 @@ interface ThemeLoader {
 type Theme = 'berlin'|'bielefeld'|'frankfurt'|'karl-marx-stadt'|'bordeaux'
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-var availableThemes: Record<Theme, ThemeLoader> = {
+const availableThemes: Record<Theme, ThemeLoader> = {
   'berlin': require('../../less/theme-berlin/theme-main.less').default as ThemeLoader,
   'bielefeld': require('../../less/theme-bielefeld/theme-main.less').default as ThemeLoader,
   'frankfurt': require('../../less/theme-frankfurt/theme-main.less').default as ThemeLoader,
@@ -34,7 +34,7 @@ var availableThemes: Record<Theme, ThemeLoader> = {
  *
  * @var {ThemeLoader|null}
  */
-var currentTheme: ThemeLoader|null = null
+let currentTheme: ThemeLoader|null = null
 
 /**
  * Listens for theming changes (main theme + custom CSS) and handles dark mode
