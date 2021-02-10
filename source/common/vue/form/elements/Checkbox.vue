@@ -78,12 +78,12 @@ body {
       }
     }
 
-    input:checked ~ .checkmark:after {
-      opacity: 1;
-    }
-
     input:checked ~ .checkmark {
       background-color: var(--system-accent-color, --c-primary);
+
+      &:after {
+        opacity: 1;
+      }
     }
   }
 }
@@ -93,6 +93,7 @@ body.darwin {
 
   label {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 13px;
   }
 
   label.checkbox {
@@ -113,7 +114,7 @@ body.darwin {
         top: 2px;
         width: 3px;
         height: 6px;
-        border: solid white;
+        border: solid rgb(228, 228, 228);
         border-width: 0 2px 2px 0;
       }
     }
@@ -122,7 +123,11 @@ body.darwin {
   &.dark {
     label.checkbox {
       .checkmark {
-        background-color: rgb(90, 90, 90);
+        background-image: radial-gradient(circle at top, rgb(60, 60, 60), rgb(90, 90, 90));
+      }
+
+      input:checked ~ .checkmark {
+        background-image: none;
       }
     }
   }

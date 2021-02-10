@@ -181,7 +181,7 @@ body {
 body.darwin {
   fieldset {
     border: none;
-    border-bottom: 1px solid var(--grey-2);
+    border-bottom: 1px solid rgb(210, 210, 210);
 
     &:last-child {
       border-bottom: none;
@@ -198,7 +198,7 @@ body.darwin {
 
   &.dark {
     fieldset {
-      border-bottom-color: var(--grey-4);
+      border-bottom-color: rgb(50, 50, 50);
     }
   }
 }

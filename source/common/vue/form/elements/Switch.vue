@@ -53,8 +53,6 @@ body {
     display: inline-block !important;
     width: @input-size * 2;
     height: @input-size;
-    margin:0 !important;
-    padding: 0;
     background-color: var(--grey-4);
     border-radius: @input-size;
 

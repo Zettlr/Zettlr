@@ -88,9 +88,10 @@ body.darwin {
     justify-content: center;
     list-style-type: none;
     background-color: rgb(238, 238, 238);
-    color: var(--grey-4);
 
     button[role="tab"] {
+      color: var(--grey-4);
+      font-size: 11px;
       background-color: transparent;
       border: none;
       border-radius: 4px;
@@ -110,11 +111,18 @@ body.darwin {
   &.dark {
     div.tab-list {
       background-color: rgb(52, 52, 52);
-      color: rgb(172, 172, 172);
+      color: rgb(153, 153, 153);
+      border-bottom: 1px solid rgb(0, 0, 0);
 
       button[role="tab"] {
+        color: inherit;
+
         &:hover, &.active {
           background-color: rgb(64, 64, 64);
+        }
+
+        &.active {
+          color: var(--system-accent-color, --c-primary);
         }
       }
     }

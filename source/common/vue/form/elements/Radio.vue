@@ -62,7 +62,6 @@ body {
     display: inline-block !important;
     width: @input-size;
     height: @input-size;
-    padding: 0;
 
     input {
       display: none !important;
@@ -95,7 +94,7 @@ body {
 }
 
 body.darwin {
-  @input-size: 16px;
+  @input-size: 14px;
 
   label {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -111,7 +110,7 @@ body.darwin {
     padding: 0;
 
     .toggle {
-      border: 1px solid var(--grey-1);
+      border: 1px solid rgb(160, 160, 160);
       border-radius: @input-size;
       background-color: white;
 
@@ -119,29 +118,37 @@ body.darwin {
       &:before {
         height: 6px;
         width: 6px;
-        left: 4px;
-        top: 4px;
+        left: 3px;
+        top: 3px;
         background-color: white;
       }
     }
 
     input:checked + .toggle {
       background-color: var(--system-accent-color, --c-primary);
+      border-color: var(--system-accent-color, --c-primary);
     }
   }
 
   &.dark {
     label.radio {
-      input:checked + .toggle:before {
-        background-color: white;
-      }
 
       .toggle {
-        background-color: rgb(90, 90, 90);
-        border-color: rgb(100, 100, 100);
+        background: radial-gradient(circle at top, rgb(60, 60, 60), rgb(90, 90, 90));
+        border-color: transparent;
 
         &:before {
-          background-color: rgb(90, 90, 90);
+          background-color: transparent;
+        }
+      }
+
+      input:checked + .toggle {
+        background: none;
+        background-color: var(--system-accent-color, --c-primary);
+        border-color: transparent;
+
+        &:before {
+          background-color: rgb(228, 228, 228);
         }
       }
     }
