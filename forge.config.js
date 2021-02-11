@@ -97,6 +97,11 @@ module.exports = {
               html: './source/custom-css/index.htm',
               js: './source/custom-css/index.ts',
               name: 'custom_css'
+            },
+            {
+              html: './source/tag-manager/index.htm',
+              js: './source/tag-manager/index.ts',
+              name: 'tag_manager'
             }
           ]
         }

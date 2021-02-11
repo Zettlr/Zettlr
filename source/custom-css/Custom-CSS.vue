@@ -70,16 +70,15 @@ export default {
   methods: {
     handleClick: function (controlID) {
       if (controlID === 'save') {
-        console.log('Save!')
         ipcRenderer.invoke('css-provider', {
-        command: 'set-custom-css',
-        css: this.css
-      })
-        .then(() => {
-          // After we have successfully saved, close the window
-          ipcRenderer.send('window-controls', { command: 'win-close' })
+          command: 'set-custom-css',
+          css: this.css
         })
-        .catch(e => console.error(e))
+          .then(() => {
+            // After we have successfully saved, close the window
+            ipcRenderer.send('window-controls', { command: 'win-close' })
+          })
+          .catch(e => console.error(e))
       } else if (controlID === 'cancel') {
         ipcRenderer.send('window-controls', { command: 'win-close' })
       }

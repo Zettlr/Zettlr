@@ -34,6 +34,15 @@
           v-bind:inline="field.inline"
           v-on:input="$emit('input', field.model, $event)"
         ></TimeInput>
+        <ColorInput
+          v-if="field.type === 'color'"
+          v-bind:key="f_idx"
+          v-bind:value="getModelValue(field.model)"
+          v-bind:label="field.label"
+          v-bind:name="field.model"
+          v-bind:inline="field.inline"
+          v-on:input="$emit('input', field.model, $event)"
+        ></ColorInput>
         <FileInput
           v-if="field.type === 'file'"
           v-bind:key="f_idx"
@@ -105,6 +114,7 @@
 import TextInput from './elements/Text.vue'
 import NumberInput from './elements/Number.vue'
 import TimeInput from './elements/Time.vue'
+import ColorInput from './elements/Color.vue'
 import FileInput from './elements/File.vue'
 import CheckboxInput from './elements/Checkbox.vue'
 import SwitchInput from './elements/Switch.vue'
@@ -119,6 +129,7 @@ export default {
     TextInput,
     NumberInput,
     TimeInput,
+    ColorInput,
     FileInput,
     CheckboxInput,
     SwitchInput,
@@ -152,58 +163,6 @@ export default {
 </script>
 
 <style lang="less">
-body {
-  .form-control {
-    margin: 4px 0px;
-
-    input:not(.inline),
-    select:not(.inline),
-    textarea:not(.inline) {
-      width: 100%;
-      display: block;
-    }
-  }
-
-  // Shows an input and a button side by side
-  .input-button-group {
-    display: flex;
-    input {
-      flex: 9;
-      margin-right: 4px;
-    }
-
-    button {
-      flex: 1;
-    }
-  }
-}
-
-body.darwin {
-  fieldset {
-    border: none;
-    border-bottom: 1px solid rgb(210, 210, 210);
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-
-  // Generic inputs
-  input, select, textarea, button {
-    background-color: white;
-    border: 1px solid rgb(210, 210, 210);
-    border-bottom-color: rgb(180, 180, 180);
-    border-radius: 6px;
-    padding: 2px 4px;
-  }
-
-  &.dark {
-    fieldset {
-      border-bottom-color: rgb(50, 50, 50);
-    }
-  }
-}
-
 body.win32 {
   fieldset {
     border: none;

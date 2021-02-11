@@ -330,6 +330,11 @@ export default class MenuProvider {
             global.application.showCustomCSS()
           }
           break
+        case 'openTagManager':
+          menu.click = function (menuitem, focusedWindow) {
+            global.application.showTagManager()
+          }
+          break
         case 'openDictData':
           menu.click = function (menuitem, focusedWindow) {
             shell.openPath(path.join(app.getPath('userData'), '/dict'))

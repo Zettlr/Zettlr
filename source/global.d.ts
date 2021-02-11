@@ -10,6 +10,7 @@ interface Application {
   showLogViewer: () => void
   showPreferences: () => void
   showCustomCSS: () => void
+  showTagManager: () => void
   // TODO: Match the signatures of fileUpdate and dirUpdate
   fileUpdate: (oldHash: number, fileMetadata: any) => void
   dirUpdate: (oldHash: number, newHash: number) => void

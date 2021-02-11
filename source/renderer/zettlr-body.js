@@ -31,7 +31,6 @@ const TagCloud = require('./dialog/tag-cloud.js')
 const UpdateDialog = require('./dialog/update.js')
 const AboutDialog = require('./dialog/about.js')
 const PDFPreferences = require('./dialog/pdf-preferences.js')
-const TagsPreferences = require('./dialog/tags-preferences.js')
 const ProjectProperties = require('./dialog/project-properties.js')
 const ErrorDialog = require('./dialog/error-dialog.js')
 const DevClipboard = require('./dialog/clipboard.js')
@@ -133,8 +132,6 @@ class ZettlrBody {
     ipcRenderer.on('shortcut', (event, shortcut) => {
       if (shortcut === 'search') {
         this.displayFind()
-      } else if (shortcut === 'open-tags-preferences') {
-        this.displayTagsPreferences()
       }
     })
   }
@@ -369,24 +366,6 @@ class ZettlrBody {
     this._currentDialog = new PDFPreferences()
     this._currentDialog.init(prefs).open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
-  }
-
-  /**
-    * Displays the tag preferences with the current settings.
-    * @return {void}       Nothing to return.
-    */
-  displayTagsPreferences () {
-    ipcRenderer.invoke('tag-provider', {
-      command: 'get-coloured-tags'
-    })
-      .then((tags) => {
-        this._currentDialog = new TagsPreferences()
-        this._currentDialog.init(tags).open()
-        this._currentDialog.on('afterClose', (e) => {
-          this._currentDialog = null
-        })
-      })
-      .catch(e => console.error(e))
   }
 
   /**

@@ -35,6 +35,7 @@ import createLogWindow from './create-log-window'
 import createQuicklookWindow from './create-ql-window'
 import createPreferencesWindow from './create-preferences-window'
 import createCustomCSSWindow from './create-custom-css-window'
+import createTagManagerWindow from './create-tag-manager-window'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
 import shouldReplaceFileDialog from './dialog/should-replace-file'
 import askDirectoryDialog from './dialog/ask-directory'
@@ -55,6 +56,7 @@ export default class WindowManager {
   private _logWindow: BrowserWindow|null
   private _preferences: BrowserWindow|null
   private _customCSS: BrowserWindow|null
+  private _tagManager: BrowserWindow|null
   private _printWindowFile: string|undefined
   private _windowState: WindowPosition[]
   private readonly _configFile: string
@@ -67,6 +69,7 @@ export default class WindowManager {
     this._printWindow = null
     this._preferences = null
     this._customCSS = null
+    this._tagManager = null
     this._printWindowFile = undefined
     this._logWindow = null
     this._windowState = []
@@ -524,6 +527,24 @@ export default class WindowManager {
       })
     } else {
       this._makeVisible(this._customCSS)
+    }
+  }
+
+  /**
+   * Shows the tag manager window
+   */
+  showTagManager (): void {
+    if (this._tagManager === null) {
+      const conf = this._retrieveWindowPosition('tag-manager', null)
+      this._tagManager = createTagManagerWindow(conf)
+      this._hookWindowResize(this._tagManager, conf)
+
+      // Dereference the window as soon as it is closed
+      this._tagManager.on('closed', () => {
+        this._tagManager = null
+      })
+    } else {
+      this._makeVisible(this._tagManager)
     }
   }
 

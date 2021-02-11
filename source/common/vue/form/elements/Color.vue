@@ -8,7 +8,7 @@
         v-bind:value="value"
         v-bind:class="{ 'inline': inline }"
         v-bind:placeholder="placeholder"
-        type="text"
+        type="color"
         v-on:input="$emit('input', $event.target.value)"
       >
       <button
@@ -27,7 +27,7 @@
       v-bind:value="value"
       v-bind:class="{ 'inline': inline }"
       v-bind:placeholder="placeholder"
-      type="text"
+      type="color"
       v-on:input="$emit('input', $event.target.value)"
     >
   </div>
@@ -35,7 +35,7 @@
 
 <script>
 export default {
-  name: 'FieldText',
+  name: 'FieldColor',
   props: {
     value: {
       type: String,

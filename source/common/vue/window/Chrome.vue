@@ -67,6 +67,10 @@ import Statusbar from './Statusbar.vue'
 import WindowControls from './Controls.vue'
 import { ipcRenderer } from 'electron'
 
+// Import the correct styles (the platform styles are namespaced)
+import './assets/generic.less'
+import './assets/darwin.less'
+
 // First we need some general variables
 const TITLEBAR_MACOS_HEIGHT = 40
 const TITLEBAR_WIN32_HEIGHT = 30

@@ -214,13 +214,6 @@ div.table-view {
 }
 
 body.darwin.dark {
-  input, select, textarea, button {
-    color: rgb(215, 215, 215);
-    border-color: transparent;
-    background-color: rgb(85, 85, 85);
-    border-top-color: rgb(100, 100, 100);
-  }
-
   div.table-view {
     table {
       border-color: rgb(50, 50, 50);

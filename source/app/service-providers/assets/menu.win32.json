@@ -68,7 +68,7 @@
           },
           {
             "label": "menu.tags",
-            "shortcut": "open-tags-preferences"
+            "zettlrRole": "openTagManager"
           },
           {
             "label": "menu.custom_css",

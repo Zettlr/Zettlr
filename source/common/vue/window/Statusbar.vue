@@ -71,23 +71,23 @@ div#statusbar {
   right: 0;
   padding: 0px 20px;
   line-height: 40px;
-  background-color: #ebebeb; // TODO: Enable the status bar to be "invisible" and visible
+  background-color: rgb(235, 235, 235); // TODO: Enable the status bar to be "invisible" and visible
 
   button {
-    font-family:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: white;
-    border: 1px solid rgb(210, 210, 210);
-    border-bottom-color: rgb(180, 180, 180);
-    border-radius: 6px;
-    padding: 2px 8px;
-    font-size: 13px;
-    margin: 4px 5px;
-
+    margin-right: 5px; // Increase spacing a little bit here
     &.primary {
       background-color: var(--system-accent-color, --c-primary);
       border-color: var(--system-accent-color, --c-primary);
       background-image: linear-gradient(transparent, #00000020);
       color: white;
+    }
+  }
+}
+
+body {
+  &.dark {
+    div#statusbar {
+      background-color: rgb(30, 30, 30);
     }
   }
 }
