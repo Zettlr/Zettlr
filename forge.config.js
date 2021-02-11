@@ -102,6 +102,11 @@ module.exports = {
               html: './source/tag-manager/index.htm',
               js: './source/tag-manager/index.ts',
               name: 'tag_manager'
+            },
+            {
+              html: './source/paste-image/index.htm',
+              js: './source/paste-image/index.ts',
+              name: 'paste_image'
             }
           ]
         }

@@ -1,7 +1,6 @@
 // Hook for pasting images
 
-const { clipboard } = require('electron')
-const PasteImage = require('../../../dialog/paste-image')
+const { clipboard, ipcRenderer } = require('electron')
 
 module.exports = (cm) => {
   /**
@@ -22,7 +21,7 @@ module.exports = (cm) => {
 
       if (!image.isEmpty() && (explicitPaste || !changeObj.text)) {
         // We've got an image. So we need to handle it.
-        displayPasteImageDialog(cm)
+        displayPasteImageDialog()
         return changeObj.cancel() // Cancel handling of the event
       }
     }
@@ -43,14 +42,11 @@ module.exports = (cm) => {
     // dialog twice -- once when the beforeChange event triggers, and then here
     // as well.
     if (!image.isEmpty() && clipboard.readText().length === 0) {
-      displayPasteImageDialog(cm)
+      displayPasteImageDialog()
     }
   })
 }
 
-function displayPasteImageDialog (cm) {
-  const basePath = cm.getOption('zettlr').markdownImageBasePath
-  this._currentDialog = new PasteImage()
-  this._currentDialog.init({ currentPath: basePath }).open()
-  this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
+function displayPasteImageDialog () {
+  ipcRenderer.send('message', { command: 'save-image-from-clipboard', content: {} }) // TODO: Deprecated command call
 }

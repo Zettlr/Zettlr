@@ -32,10 +32,7 @@ export default class SaveImage extends ZettlrCommand {
    * @param  {Object} target Options on the image
    * @return {void}        Does not return.
    */
-  async run (evt: string, target: any): Promise<void> {
-    // First check the name for sanity
-    let targetFile = sanitize(target.name, { replacement: '-' })
-
+  async run (evt: string /*, target: any */): Promise<void> {
     const activeHash = this._app.getFileSystem().activeFile
     if (activeHash === null) {
       return global.notify.normal(trans('system.error.fnf_message'))
@@ -46,6 +43,20 @@ export default class SaveImage extends ZettlrCommand {
       return global.notify.normal(trans('system.error.fnf_message'))
     }
 
+    const startPath = path.resolve(
+      activeFile.dir,
+      global.config.get('editor.defaultSaveImagePath')
+    )
+
+    const target = await this._app.showPasteImageModal(startPath)
+    if (target === undefined) {
+      global.log.info('[Application] Aborted image pasting process.')
+      return
+    }
+
+    // First check the name for sanity
+    let targetFile = sanitize(target.name, { replacement: '-' })
+
     // A file must be opened and active, and the name valid
     if (targetFile === '') {
       return global.notify.normal(trans('system.error.no_allowed_chars'))
@@ -53,49 +64,35 @@ export default class SaveImage extends ZettlrCommand {
 
     // Now check the extension of the name (some users may
     // prefer to choose to provide it already)
-    if (path.extname(targetFile) !== '.png') {
+    if ([ '.png', '.jpg' ].includes(path.extname(targetFile))) {
       targetFile += '.png'
     }
 
     // Now resolve the path correctly, taking into account a potential relative
     // path the user has chosen.
-    let targetPath = path.resolve(
-      path.dirname(activeFile.path),
-      global.config.get('editor.defaultSaveImagePath') || ''
-    )
-
-    // Did the user want to choose the directory for this one? In this case,
-    // that choice overrides the resolved path from earlier.
-    if (target.mode === 'save-other') {
-      let dirs = await this._app.askDir()
-      targetPath = dirs[0] // We only take one directory
-    }
-
-    // Failsafe. Shouldn't be necessary, but you never know. (In that case log
-    // an error, just to be safe)
-    if (!path.isAbsolute(targetPath)) {
-      global.log.error(`Error while saving image to ${targetPath}: Not absolute. This should not have happened.`)
-      targetPath = path.resolve(path.dirname(activeFile.path), targetPath)
-    }
 
     // Now we need to make sure the directory exists.
     try {
-      fs.lstatSync(targetPath)
+      fs.lstatSync(target.targetDir)
     } catch (e) {
-      fs.mkdirSync(targetPath, { recursive: true })
+      fs.mkdirSync(target.targetDir, { recursive: true })
     }
 
     // If something went wrong or the user did not provide a directory, abort
-    if (!isDir(targetPath)) return global.notify.normal(trans('system.error.dnf_message'))
+    if (!isDir(target.targetDir)) {
+      return global.notify.normal(trans('system.error.dnf_message'))
+    }
 
     // Build the correct path
-    let imagePath = path.join(targetPath, targetFile)
+    let imagePath = path.join(target.targetDir, targetFile)
 
     // And now save the image
     let image = clipboard.readImage()
 
     // Somebody may have remotely overwritten the clipboard in the meantime
-    if (image.isEmpty()) return global.notify.normal(trans('system.error.could_not_save_image'))
+    if (image.isEmpty()) {
+      return global.notify.normal(trans('system.error.could_not_save_image'))
+    }
 
     let size = image.getSize()
     let resizeWidth = parseInt(target.width)
@@ -117,7 +114,10 @@ export default class SaveImage extends ZettlrCommand {
     global.log.info(`Saving image ${targetFile} to ${imagePath} ...`)
 
     fs.writeFile(imagePath, image.toPNG(), (err) => {
-      if (err) return global.notify.normal(trans('system.error.could_not_save_image'))
+      if (err) {
+        return global.notify.normal(trans('system.error.could_not_save_image'))
+      }
+
       // Insert a relative path instead of an absolute one
       let pathToInsert = path.relative(path.dirname(activeFile.path), imagePath)
 

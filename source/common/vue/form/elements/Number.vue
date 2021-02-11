@@ -1,11 +1,14 @@
 <template>
-  <div class="form-control">
+  <div v-bind:class="{ 'inline': inline, 'form-control': true }">
     <label v-if="label" v-bind:for="fieldID">{{ label }}</label>
     <div v-if="reset" class="input-button-group">
       <input
         v-bind:id="fieldID"
         ref="input"
+        v-bind:min="min"
+        v-bind:max="max"
         v-bind:value="value"
+        v-bind:class="{ 'inline': inline }"
         type="number"
         v-on:input="$emit('input', parseInt($event.target.value, 10))"
       >
@@ -23,8 +26,9 @@
       v-bind:id="fieldID"
       ref="input"
       v-bind:value="value"
+      v-bind:class="{ 'inline': inline }"
       type="number"
-      v-on:input="$emit('input', $event.target.value)"
+      v-on:input="$emit('input', parseInt($event.target.value, 10))"
     >
   </div>
 </template>
@@ -37,6 +41,14 @@ export default {
       type: Number,
       default: 0
     },
+    min: {
+      type: Number,
+      default: 0
+    },
+    max: {
+      type: Number,
+      default: 10 ** 12
+    },
     label: {
       type: String,
       default: ''
@@ -48,6 +60,10 @@ export default {
     reset: {
       type: Number,
       default: 0
+    },
+    inline: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

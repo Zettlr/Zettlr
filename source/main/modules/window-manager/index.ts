@@ -36,6 +36,7 @@ import createQuicklookWindow from './create-ql-window'
 import createPreferencesWindow from './create-preferences-window'
 import createCustomCSSWindow from './create-custom-css-window'
 import createTagManagerWindow from './create-tag-manager-window'
+import createPasteImageModal from './create-paste-image-modal'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
 import shouldReplaceFileDialog from './dialog/should-replace-file'
 import askDirectoryDialog from './dialog/ask-directory'
@@ -57,6 +58,7 @@ export default class WindowManager {
   private _preferences: BrowserWindow|null
   private _customCSS: BrowserWindow|null
   private _tagManager: BrowserWindow|null
+  private _pasteImageModal: BrowserWindow|null
   private _printWindowFile: string|undefined
   private _windowState: WindowPosition[]
   private readonly _configFile: string
@@ -70,6 +72,7 @@ export default class WindowManager {
     this._preferences = null
     this._customCSS = null
     this._tagManager = null
+    this._pasteImageModal = null
     this._printWindowFile = undefined
     this._logWindow = null
     this._windowState = []
@@ -138,6 +141,12 @@ export default class WindowManager {
         focusedWindow
       )
       return files
+    })
+
+    ipcMain.handle('request-dir', async (event, message) => {
+      const focusedWindow = BrowserWindow.getFocusedWindow()
+      let dir = await this.askDir(focusedWindow)
+      return dir
     })
   }
 
@@ -549,6 +558,31 @@ export default class WindowManager {
   }
 
   /**
+   * Shows the paste image modal and, after closing, returns
+   */
+  async showPasteImageModal (startPath: string): Promise<any> {
+    return await new Promise((resolve, reject) => {
+      if (this._mainWindow === null) {
+        return reject(new Error('[Window Manager] A paste image modal was requested, but there was no main window open.'))
+      }
+      this._pasteImageModal = createPasteImageModal(this._mainWindow, startPath)
+
+      ipcMain.on('paste-image-ready', (event, data) => {
+        // Resolve now
+        resolve(data)
+        this._pasteImageModal?.close()
+      })
+
+      // Dereference the modal as soon as it is closed
+      this._pasteImageModal.on('closed', () => {
+        ipcMain.removeAllListeners('paste-image-ready') // Not to have a dangling listener hanging around
+        resolve(undefined) // Resolve with undefined to indicate that the user has aborted
+        this._pasteImageModal = null
+      })
+    })
+  }
+
+  /**
    * Opens the print window with the given file
    *
    * @param   {string}  filePath  The file to load
@@ -630,8 +664,12 @@ export default class WindowManager {
     * Show the dialog for choosing a directory
     * @return {string[]} An array containing all selected paths.
     */
-  async askDir (): Promise<string[]> {
-    return await askDirectoryDialog(this._mainWindow)
+  async askDir (win?: BrowserWindow|null): Promise<string[]> {
+    if (win != null) {
+      return await askDirectoryDialog(win)
+    } else {
+      return await askDirectoryDialog(this._mainWindow)
+    }
   }
 
   /**

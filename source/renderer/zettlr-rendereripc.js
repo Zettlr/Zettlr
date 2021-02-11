@@ -548,12 +548,6 @@ class ZettlrRendererIPC {
         clipboard.writeText(cnt)
         break
 
-      case 'paste-image':
-        // An image has been pasted onto the editor. Show the dialog to
-        // determine what to do.
-        this._app.getBody().displayPasteImage()
-        break
-
       /**
        * TAB FUNCTIONALITY
        */

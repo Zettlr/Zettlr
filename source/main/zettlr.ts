@@ -763,6 +763,15 @@ export default class Zettlr {
   }
 
   /**
+   * Shortcut for accessing the pasteImageModal in the Window manager.
+   *
+   * @return  {Promise<any>} The data generated in the modal
+   */
+  async showPasteImageModal (startPath: string): Promise<any> {
+    return await this._windowManager.showPasteImageModal(startPath)
+  }
+
+  /**
    * Presents a confirmation to the user whether or not they want to actually
    * remove a file or directory from the system.
    *

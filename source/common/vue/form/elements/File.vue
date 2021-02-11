@@ -9,13 +9,14 @@
         readonly="readonly"
         v-bind:name="name"
         v-bind:value="value"
-        v-on:click="requestFile"
+        v-bind:placeholder="placeholder"
+        v-on:click="(directory) ? requestDir() : requestFile()"
       >
       <button
         type="button"
         class="request-file"
         data-tippy-content="dialog.preferences.choose_file"
-        v-on:click="requestFile"
+        v-on:click="(directory) ? requestDir() : requestFile()"
       >
         <clr-icon shape="file"></clr-icon>
       </button>
@@ -41,6 +42,14 @@ export default {
       type: String,
       default: ''
     },
+    placeholder: {
+      type: String,
+      default: ''
+    },
+    directory: {
+      type: Boolean,
+      default: false // If true, actually selects a directory
+    },
     filter: {
       type: Object,
       default: function () {
@@ -56,7 +65,6 @@ export default {
   methods: {
     requestFile: function () {
       const payload = {
-        // Only one filter possible for brevity reasons
         filters: [],
         multiSel: false
       }
@@ -77,6 +85,19 @@ export default {
 
           // Write the return value into the data-request-target of the clicked
           // button, because each button has a designated text field.
+          this.$refs.input.value = result[0]
+          this.$emit('input', result[0])
+        })
+        .catch(e => console.error(e))
+    },
+    requestDir: function () {
+      ipcRenderer.invoke('request-dir')
+        .then(result => {
+          // Don't update to empty paths.
+          if (result.length === 0 || result[0].trim() === '') {
+            return
+          }
+
           this.$refs.input.value = result[0]
           this.$emit('input', result[0])
         })
