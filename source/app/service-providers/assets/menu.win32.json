@@ -72,7 +72,7 @@
           },
           {
             "label": "menu.custom_css",
-            "shortcut": "open-custom-css"
+            "zettlrRole": "openCustomCSS"
           }
         ]
       },

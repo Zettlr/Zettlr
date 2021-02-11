@@ -92,6 +92,11 @@ module.exports = {
               html: './source/preferences/index.htm',
               js: './source/preferences/index.ts',
               name: 'preferences'
+            },
+            {
+              html: './source/custom-css/index.htm',
+              js: './source/custom-css/index.ts',
+              name: 'custom_css'
             }
           ]
         }

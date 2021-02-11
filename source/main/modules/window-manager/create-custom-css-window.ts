@@ -2,7 +2,7 @@
  * @ignore
  * BEGIN HEADER
  *
- * Contains:        createPreferencesWindow function
+ * Contains:        createCustomCSSWindow function
  * CVM-Role:        Utility function
  * Maintainer:      Hendrik Erz
  * License:         GNU GPL v3
@@ -28,7 +28,7 @@ import { WindowPosition } from './types'
  *
  * @return  {BrowserWindow}           The loaded print window
  */
-export default function createPreferencesWindow (conf: WindowPosition): BrowserWindow {
+export default function createCustomCSSWindow (conf: WindowPosition): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
     minWidth: 300,
@@ -52,10 +52,10 @@ export default function createPreferencesWindow (conf: WindowPosition): BrowserW
 
   // Load the index.html of the app.
   // @ts-expect-error
-  window.loadURL(PREFERENCES_WEBPACK_ENTRY)
+  window.loadURL(CUSTOM_CSS_WEBPACK_ENTRY)
     .catch(e => {
       // @ts-expect-error
-      global.log.error(`Could not load URL ${PREFERENCES_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
+      global.log.error(`Could not load URL ${CUSTOM_CSS_WEBPACK_ENTRY as string}: ${e.message as string}`, e)
     })
 
   // EVENT LISTENERS

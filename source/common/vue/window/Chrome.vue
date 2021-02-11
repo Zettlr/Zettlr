@@ -42,10 +42,19 @@
         v-if="showWindowControls"
       ></WindowControls>
     </div>
-    <div id="window-content" v-bind:style="{ top: windowChromeHeight }">
+    <div id="window-content" v-bind:style="{
+      top: windowChromeHeight,
+      bottom: contentMarginBottom
+    }"
+    >
       <!-- The actual window contents will be mounted here -->
       <slot></slot>
     </div>
+    <Statusbar
+      v-if="showStatusbar"
+      v-bind:controls="statusbarControls"
+      v-on:click="$emit('statusbar-click', $event)"
+    ></Statusbar>
   </div>
 </template>
 
@@ -54,6 +63,7 @@ import Titlebar from './Titlebar.vue'
 import Menubar from './Menubar.vue'
 import Toolbar from './Toolbar.vue'
 import Tabbar from './Tabbar.vue'
+import Statusbar from './Statusbar.vue'
 import WindowControls from './Controls.vue'
 import { ipcRenderer } from 'electron'
 
@@ -74,6 +84,10 @@ const TABBAR_MACOS_HEIGHT = 60
 const TABBAR_WIN32_HEIGHT = 40
 const TABBAR_LINUX_HEIGHT = 40
 
+const STATUSBAR_MACOS_HEIGHT = 40
+const STATUSBAR_WIN32_HEIGHT = 40
+const STATUSBAR_LINUX_HEIGHT = 40
+
 export default {
   name: 'WindowChrome',
   components: {
@@ -81,6 +95,7 @@ export default {
     Menubar,
     Toolbar,
     Tabbar,
+    Statusbar,
     WindowControls
   },
   props: {
@@ -123,6 +138,14 @@ export default {
     showTabbar: {
       type: Boolean,
       default: false
+    },
+    showStatusbar: {
+      type: Boolean,
+      default: false
+    },
+    statusbarControls: {
+      type: Array,
+      default: function () { return [] }
     }
   },
   data: function () {
@@ -197,6 +220,15 @@ export default {
         return TABBAR_LINUX_HEIGHT // Default
       }
     },
+    platformStatusbarHeight: function () {
+      if (this.platform === 'darwin') {
+        return STATUSBAR_MACOS_HEIGHT
+      } else if (this.platform === 'win32') {
+        return STATUSBAR_WIN32_HEIGHT
+      } else {
+        return STATUSBAR_LINUX_HEIGHT // Default
+      }
+    },
     windowChromeHeight: function () {
       let margin = 0
 
@@ -217,6 +249,13 @@ export default {
       }
 
       return `${margin}px`
+    },
+    contentMarginBottom: function () {
+      if (this.showStatusbar) {
+        return `${this.platformStatusbarHeight}px`
+      } else {
+        return '0px'
+      }
     },
     menubarMargin: function () {
       // Only a titlebar may be on top of the menubar

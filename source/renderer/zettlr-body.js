@@ -33,7 +33,6 @@ const AboutDialog = require('./dialog/about.js')
 const PDFPreferences = require('./dialog/pdf-preferences.js')
 const TagsPreferences = require('./dialog/tags-preferences.js')
 const ProjectProperties = require('./dialog/project-properties.js')
-const CustomCSS = require('./dialog/custom-css.js')
 const ErrorDialog = require('./dialog/error-dialog.js')
 const DevClipboard = require('./dialog/clipboard.js')
 
@@ -136,8 +135,6 @@ class ZettlrBody {
         this.displayFind()
       } else if (shortcut === 'open-tags-preferences') {
         this.displayTagsPreferences()
-      } else if (shortcut === 'open-custom-css') {
-        this.displayCustomCss()
       }
     })
   }
@@ -441,23 +438,6 @@ class ZettlrBody {
     this._currentDialog = new AboutDialog()
     this._currentDialog.init().open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
-  }
-
-  /**
-   * This dialog lets the user edit his/her custom CSS
-   */
-  displayCustomCss () {
-    ipcRenderer.invoke('css-provider', {
-      command: 'get-custom-css'
-    })
-      .then(css => {
-        this._currentDialog = new CustomCSS()
-        this._currentDialog.init(css).open()
-        this._currentDialog.on('afterClose', (e) => {
-          this._currentDialog = null
-        })
-      })
-      .catch(e => console.error(e))
   }
 
   /**

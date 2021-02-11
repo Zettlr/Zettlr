@@ -192,6 +192,7 @@ body.darwin {
   input, select, textarea, button {
     background-color: white;
     border: 1px solid rgb(210, 210, 210);
+    border-bottom-color: rgb(180, 180, 180);
     border-radius: 6px;
     padding: 2px 4px;
   }

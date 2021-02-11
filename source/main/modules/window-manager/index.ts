@@ -34,6 +34,7 @@ import createPrintWindow from './create-print-window'
 import createLogWindow from './create-log-window'
 import createQuicklookWindow from './create-ql-window'
 import createPreferencesWindow from './create-preferences-window'
+import createCustomCSSWindow from './create-custom-css-window'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
 import shouldReplaceFileDialog from './dialog/should-replace-file'
 import askDirectoryDialog from './dialog/ask-directory'
@@ -52,7 +53,8 @@ export default class WindowManager {
   private readonly _qlWindows: QuicklookRecord[]
   private _printWindow: BrowserWindow|null
   private _logWindow: BrowserWindow|null
-  private _preferences: BrowserWindow|null // Holds a potential modal window
+  private _preferences: BrowserWindow|null
+  private _customCSS: BrowserWindow|null
   private _printWindowFile: string|undefined
   private _windowState: WindowPosition[]
   private readonly _configFile: string
@@ -64,6 +66,7 @@ export default class WindowManager {
     this._qlWindows = []
     this._printWindow = null
     this._preferences = null
+    this._customCSS = null
     this._printWindowFile = undefined
     this._logWindow = null
     this._windowState = []
@@ -503,6 +506,24 @@ export default class WindowManager {
       })
     } else {
       this._makeVisible(this._preferences)
+    }
+  }
+
+  /**
+   * Shows the custom CSS window
+   */
+  showCustomCSS (): void {
+    if (this._customCSS === null) {
+      const conf = this._retrieveWindowPosition('custom-css', null)
+      this._customCSS = createCustomCSSWindow(conf)
+      this._hookWindowResize(this._customCSS, conf)
+
+      // Dereference the window as soon as it is closed
+      this._customCSS.on('closed', () => {
+        this._customCSS = null
+      })
+    } else {
+      this._makeVisible(this._customCSS)
     }
   }
 

@@ -288,7 +288,6 @@ export default class MenuProvider {
       }
     }
 
-    // // "command": "file-find"
     // Shortcuts are commands that need to be send to the currently focused
     // window.
     if ((menutpl as any).shortcut !== undefined) {
@@ -324,6 +323,11 @@ export default class MenuProvider {
         case 'openPreferences':
           menu.click = function (menuitem, focusedWindow) {
             global.application.showPreferences()
+          }
+          break
+        case 'openCustomCSS':
+          menu.click = function (menuitem, focusedWindow) {
+            global.application.showCustomCSS()
           }
           break
         case 'openDictData':

@@ -73,6 +73,9 @@ export default class Zettlr {
       showPreferences: () => {
         this._windowManager.showPreferences()
       },
+      showCustomCSS: () => {
+        this._windowManager.showCustomCSS()
+      },
       // TODO: Match the signatures of fileUpdate and dirUpdate
       fileUpdate: (oldHash: number, fileMetadata: any) => {
         if (typeof fileMetadata === 'number') {
