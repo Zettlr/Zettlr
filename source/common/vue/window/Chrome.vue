@@ -298,7 +298,7 @@ body {
   // macOS OPERATING SYSTEM STYLES
   &.darwin {
     div#window-content {
-      background-color: rgb(240, 240, 240);
+      background-color: rgb(235, 235, 235);
     }
 
     &.dark {

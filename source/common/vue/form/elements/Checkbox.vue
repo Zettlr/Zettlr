@@ -107,16 +107,21 @@ body.darwin {
       height: @input-size;
       width: @input-size;
       border-radius: 4px;
+      border: 1px solid rgb(179, 179, 179);
       background-color: white;
 
       &:after {
-        left: 5px;
-        top: 2px;
+        left: 4px;
+        top: 1px;
         width: 3px;
         height: 6px;
-        border: solid rgb(228, 228, 228);
+        border: solid white;
         border-width: 0 2px 2px 0;
       }
+    }
+
+    input:checked ~ .checkmark {
+      border-color: var(--system-accent-color, --c-primary);
     }
   }
 
@@ -124,6 +129,11 @@ body.darwin {
     label.checkbox {
       .checkmark {
         background-image: radial-gradient(circle at top, rgb(60, 60, 60), rgb(90, 90, 90));
+        border-color: transparent;
+
+        &:after {
+          border-color: solid rgb(228, 228, 228);
+        }
       }
 
       input:checked ~ .checkmark {

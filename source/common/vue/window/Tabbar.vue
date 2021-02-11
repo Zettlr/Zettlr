@@ -87,7 +87,8 @@ body.darwin {
     height: 60px;
     justify-content: center;
     list-style-type: none;
-    background-color: rgb(238, 238, 238);
+    background-color: rgb(240, 240, 240);
+    border-bottom: 1px solid rgb(150, 150, 150);
 
     button[role="tab"] {
       color: var(--grey-4);

@@ -110,7 +110,7 @@ body.darwin {
     padding: 0;
 
     .toggle {
-      border: 1px solid rgb(160, 160, 160);
+      border: 1px solid rgb(179, 179, 179);
       border-radius: @input-size;
       background-color: white;
 

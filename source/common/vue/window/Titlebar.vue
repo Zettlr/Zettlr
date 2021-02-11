@@ -35,7 +35,7 @@ body.darwin {
   div#titlebar {
     height: 40px;
     line-height: 40px;
-    background-color: rgb(238, 238, 238);
+    background-color: rgb(240, 240, 240);
     color: var(--grey-4);
     text-align: center;
     font-weight: bold;
