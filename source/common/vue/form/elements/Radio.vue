@@ -127,6 +127,7 @@ body.darwin {
     input:checked + .toggle {
       background-color: var(--system-accent-color, --c-primary);
       border-color: var(--system-accent-color, --c-primary);
+      background-image: linear-gradient(transparent, #00000020);
     }
   }
 

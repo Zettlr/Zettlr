@@ -122,6 +122,7 @@ body.darwin {
 
     input:checked ~ .checkmark {
       border-color: var(--system-accent-color, --c-primary);
+      background-image: linear-gradient(transparent, #00000020);
     }
   }
 

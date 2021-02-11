@@ -4,6 +4,7 @@
     v-bind:titlebar="true"
     v-bind:menubar="false"
     v-bind:show-statusbar="true"
+    v-bind:statusbar-controls="statusbarControls"
     v-on:statusbar-click="handleClick($event)"
   >
     <div id="custom-css">
@@ -39,6 +40,23 @@ export default {
     }
   },
   computed: {
+    statusbarControls: function () {
+      return [
+        {
+          type: 'button',
+          label: trans('dialog.button.save'),
+          id: 'save',
+          icon: '',
+          buttonClass: 'primary' // It's a primary button
+        },
+        {
+          type: 'button',
+          label: trans('dialog.button.cancel'),
+          id: 'cancel',
+          icon: ''
+        }
+      ]
+    }
   },
   created: function () {
     ipcRenderer.invoke('css-provider', {

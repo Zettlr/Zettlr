@@ -1,6 +1,7 @@
 <template>
   <button
     role="button"
+    v-bind:class="getClass"
     v-on:click="$emit('click')"
   >
     <clr-icon v-if="control.icon" v-bind:shape="control.icon"></clr-icon>
@@ -15,6 +16,15 @@ export default {
     control: {
       type: Object,
       default: function () { return {} }
+    }
+  },
+  computed: {
+    getClass: function () {
+      if (this.control.buttonClass !== undefined) {
+        return this.control.buttonClass
+      } else {
+        return ''
+      }
     }
   }
 }
