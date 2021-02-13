@@ -330,6 +330,11 @@ export default class MenuProvider {
             global.application.showCustomCSS()
           }
           break
+        case 'openAboutWindow':
+          menu.click = function (menuitem, focusedWindow) {
+            global.application.showAboutWindow()
+          }
+          break
         case 'openTagManager':
           menu.click = function (menuitem, focusedWindow) {
             global.application.showTagManager()

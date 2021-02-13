@@ -35,6 +35,7 @@ import createLogWindow from './create-log-window'
 import createQuicklookWindow from './create-ql-window'
 import createPreferencesWindow from './create-preferences-window'
 import createCustomCSSWindow from './create-custom-css-window'
+import createAboutWindow from './create-about-window'
 import createTagManagerWindow from './create-tag-manager-window'
 import createPasteImageModal from './create-paste-image-modal'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
@@ -57,6 +58,7 @@ export default class WindowManager {
   private _logWindow: BrowserWindow|null
   private _preferences: BrowserWindow|null
   private _customCSS: BrowserWindow|null
+  private _aboutWindow: BrowserWindow|null
   private _tagManager: BrowserWindow|null
   private _pasteImageModal: BrowserWindow|null
   private _printWindowFile: string|undefined
@@ -71,6 +73,7 @@ export default class WindowManager {
     this._printWindow = null
     this._preferences = null
     this._customCSS = null
+    this._aboutWindow = null
     this._tagManager = null
     this._pasteImageModal = null
     this._printWindowFile = undefined
@@ -542,6 +545,30 @@ export default class WindowManager {
       })
     } else {
       this._makeVisible(this._customCSS)
+    }
+  }
+
+  /**
+   * Shows the custom CSS window
+   */
+  showAboutWindow (): void {
+    if (this._aboutWindow === null) {
+      const display = screen.getPrimaryDisplay()
+      const conf = this._retrieveWindowPosition('about', {
+        width: 600,
+        height: 500,
+        top: (display.workArea.height - 500) / 2,
+        left: (display.workArea.width - 600) / 2
+      })
+      this._aboutWindow = createAboutWindow(conf)
+      this._hookWindowResize(this._aboutWindow, conf)
+
+      // Dereference the window as soon as it is closed
+      this._aboutWindow.on('closed', () => {
+        this._aboutWindow = null
+      })
+    } else {
+      this._makeVisible(this._aboutWindow)
     }
   }
 

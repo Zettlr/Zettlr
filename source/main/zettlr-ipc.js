@@ -16,7 +16,7 @@
  * END HEADER
  */
 
-const { trans, getTranslationMetadata } = require('../common/i18n.js')
+const { trans } = require('../common/i18n.js')
 const ipc = require('electron').ipcMain
 const { BrowserWindow } = require('electron') // Needed for close and maximise commands
 
@@ -274,10 +274,6 @@ class ZettlrIPC {
       case 'open-quicklook':
         this._app.openQL(arg)
         return true
-
-      // Return the metadata for the translation files
-      case 'get-translation-metadata':
-        return getTranslationMetadata()
 
       default:
         global.log.error(trans('system.unknown_command', cmd))

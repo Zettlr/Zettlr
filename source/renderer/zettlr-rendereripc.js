@@ -481,11 +481,6 @@ class ZettlrRendererIPC {
         this._app.getPomodoro().popup()
         break
 
-      // About dialog
-      case 'display-about':
-        this._app.getBody().displayAbout()
-        break
-
       case 'select-icon':
         this._app.getBody().displayIconSelect(cnt)
         break

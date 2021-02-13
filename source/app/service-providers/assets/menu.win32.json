@@ -336,7 +336,7 @@
     "submenu": [
       {
         "label": "menu.about",
-        "command": "display-about"
+        "zettlrRole": "openAboutWindow"
       },
       {
         "label": "menu.donate",

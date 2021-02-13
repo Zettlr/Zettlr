@@ -29,7 +29,6 @@ const { ipcRenderer } = require('electron')
 const StatsDialog = require('./dialog/stats.js')
 const TagCloud = require('./dialog/tag-cloud.js')
 const UpdateDialog = require('./dialog/update.js')
-const AboutDialog = require('./dialog/about.js')
 const PDFPreferences = require('./dialog/pdf-preferences.js')
 const ProjectProperties = require('./dialog/project-properties.js')
 const ErrorDialog = require('./dialog/error-dialog.js')
@@ -407,15 +406,6 @@ class ZettlrBody {
   displayUpdate (cnt) {
     this._currentDialog = new UpdateDialog()
     this._currentDialog.init(cnt).open()
-    this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
-  }
-
-  /**
-    * Displays the about dialog
-    */
-  displayAbout () {
-    this._currentDialog = new AboutDialog()
-    this._currentDialog.init().open()
     this._currentDialog.on('afterClose', (e) => { this._currentDialog = null })
   }
 

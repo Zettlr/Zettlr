@@ -55,11 +55,9 @@ export default class TranslationProvider {
       global.log.error(`[Translation Provider] Could not initialize provider: ${String(err.message)}`, err)
     })
 
-    // NOTE: Possible race condition: If this provider is in the future being
-    // loaded AFTER the translations are loaded, this will return undefined,
-    // as both global.i18n and global.u18nFallback will not yet be set.
-    // loadi18nMain therefore has to be called BEFORE any browser window may
-    // request a translation.
+    // NOTE: This must be a synchronous event, because it is called from within
+    // the trans() function if one of those two objects is not yet set in the
+    // renderer. Ergo, we cannot do this asynchronously.
     ipcMain.on('get-translation', (event) => {
       event.returnValue = {
         i18n: global.i18n,
@@ -81,6 +79,8 @@ export default class TranslationProvider {
         return enumLangFiles().map(elem => elem.tag)
       } else if (command === 'get-available-dictionaries') {
         return enumDictFiles().map(elem => elem.tag)
+      } else if (command === 'get-translation-metadata') {
+        return getTranslationMetadata()
       }
     })
   }
