@@ -12,7 +12,7 @@
         {{ tagManagerIntro }}
       </p>
       <div>
-        <div class="tag-flex" v-for="(tag, index) in tags" v-bind:key="index">
+        <div v-for="(tag, index) in tags" v-bind:key="index" class="tag-flex">
           <TextControl
             v-model="tag.name"
             v-bind:placeholder="namePlaceholder"
