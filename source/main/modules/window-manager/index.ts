@@ -526,7 +526,13 @@ export default class WindowManager {
    */
   showCustomCSS (): void {
     if (this._customCSS === null) {
-      const conf = this._retrieveWindowPosition('custom-css', null)
+      const display = screen.getPrimaryDisplay()
+      const conf = this._retrieveWindowPosition('custom-css', {
+        width: 600,
+        height: 500,
+        top: (display.workArea.height - 500) / 2,
+        left: (display.workArea.width - 600) / 2
+      })
       this._customCSS = createCustomCSSWindow(conf)
       this._hookWindowResize(this._customCSS, conf)
 
