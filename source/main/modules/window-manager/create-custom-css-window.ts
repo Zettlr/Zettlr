@@ -65,7 +65,7 @@ export default function createCustomCSSWindow (conf: WindowPosition): BrowserWin
   preventNavigation(window)
 
   // Implement main process logging
-  attachLogger(window, 'Preferences')
+  attachLogger(window, 'Custom CSS')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {

@@ -65,7 +65,7 @@ export default function createTagManagerWindow (conf: WindowPosition): BrowserWi
   preventNavigation(window)
 
   // Implement main process logging
-  attachLogger(window, 'Preferences')
+  attachLogger(window, 'Tag Manager')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {

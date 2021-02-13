@@ -64,7 +64,7 @@ export default function createPasteImageModal (win: BrowserWindow, startPath: st
   preventNavigation(window)
 
   // Implement main process logging
-  attachLogger(window, 'Preferences')
+  attachLogger(window, 'Paste Image Modal')
 
   // Only show window once it is completely initialized + maximize it
   window.once('ready-to-show', function () {
