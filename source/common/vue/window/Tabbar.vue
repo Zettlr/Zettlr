@@ -103,6 +103,10 @@ body.darwin {
         background-color: rgb(225, 225, 225);
       }
 
+      &.active {
+        color: var(--system-accent-color, --c-primary);
+      }
+
       div.toolbar-icon {
         text-align: center;
       }
@@ -116,7 +120,7 @@ body.darwin {
       border-bottom: 1px solid rgb(0, 0, 0);
 
       button[role="tab"] {
-        color: inherit;
+        color: rgb(172, 172, 172);
 
         &:hover, &.active {
           background-color: rgb(64, 64, 64);
