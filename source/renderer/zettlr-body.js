@@ -31,7 +31,6 @@ const TagCloud = require('./dialog/tag-cloud.js')
 const UpdateDialog = require('./dialog/update.js')
 const PDFPreferences = require('./dialog/pdf-preferences.js')
 const ProjectProperties = require('./dialog/project-properties.js')
-const ErrorDialog = require('./dialog/error-dialog.js')
 const DevClipboard = require('./dialog/clipboard.js')
 
 const { trans } = require('../common/i18n.js')
@@ -118,8 +117,6 @@ class ZettlrBody {
     ipcRenderer.on('notification-provider', (event, type, message) => {
       if (type === 'normal') {
         this.notify(message)
-      } else if (type === 'error') {
-        this.notifyError(message)
       }
     })
 
@@ -310,17 +307,6 @@ class ZettlrBody {
     let index = this._n.indexOf(ntf)
     if (index > -1) this._n.splice(index, 1)
     for (let msg of this._n) msg.moveUp()
-  }
-
-  /**
-   * Displays a dedicated dialog. Should not be used for all errors, but only
-   * for those where the error information is large.
-   * @param  {Error} message The error object
-   * @return {void}         Does not return.
-   */
-  notifyError (message) {
-    let d = new ErrorDialog()
-    d.init(message).open()
   }
 
   /**

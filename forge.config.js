@@ -109,6 +109,11 @@ module.exports = {
               name: 'paste_image'
             },
             {
+              html: './source/win-error/index.htm',
+              js: './source/win-error/index.ts',
+              name: 'error'
+            },
+            {
               html: './source/win-about/index.htm',
               js: './source/win-about/index.ts',
               name: 'about'

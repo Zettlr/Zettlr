@@ -79,6 +79,9 @@ export default class Zettlr {
       showAboutWindow: () => {
         this._windowManager.showAboutWindow()
       },
+      displayErrorMessage: (title: string, message: string, contents?: string) => {
+        this._windowManager.showErrorMessage(title, message, contents)
+      },
       showTagManager: () => {
         this._windowManager.showTagManager()
       },

@@ -10,6 +10,7 @@ interface Application {
   showLogViewer: () => void
   showPreferences: () => void
   showCustomCSS: () => void
+  displayErrorMessage: (title: string, message: string, contents?: string) => void
   showAboutWindow: () => void
   showTagManager: () => void
   // TODO: Match the signatures of fileUpdate and dirUpdate

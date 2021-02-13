@@ -243,11 +243,11 @@ export default class CiteprocProvider {
         })
         .catch(err => {
           global.log.error(`[Citeproc Provider] Could not load main library: ${String(err.message)}`, err)
-          global.notify.error({
-            title: trans('gui.citeproc.error_db'),
-            message: err.message,
-            additionalInfo: err.message
-          }, true)
+          global.application.displayErrorMessage(
+            trans('gui.citeproc.error_db'),
+            err.message,
+            err.message
+          )
         })
     }
   } // END constructor
@@ -442,11 +442,10 @@ export default class CiteprocProvider {
           })
           .catch(err => {
             global.log.error(`[Citeproc Provider] Could not reload main library: ${String(err.message)}`, err)
-            global.notify.error({
-              title: trans('gui.citeproc.error_db'),
-              message: err.message,
-              additionalInfo: err.message
-            }, true)
+            global.application.displayErrorMessage(
+              trans('gui.citeproc.error_db'),
+              err.message
+            )
           })
       }
     }

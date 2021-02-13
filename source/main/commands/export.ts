@@ -119,15 +119,14 @@ export default class Export extends ZettlrCommand {
         global.log.info(`Successfully exported file to ${output.targetFile}`)
         global.notify.normal(trans('system.export_success', opt.format.toUpperCase()), true)
       } else if (output.stderr.length > 0) {
-        global.notify.error({
-          title: trans('system.error.export_error_title'),
-          message: trans('system.error.export_error_message', output.stderr[0]),
-          additionalInfo: output.stderr.join('')
-        }, true)
+        const title = trans('system.error.export_error_title')
+        const message = trans('system.error.export_error_message', output.stderr[0])
+        const contents = output.stderr.join('')
+        global.application.displayErrorMessage(title, message, contents)
       }
     } catch (err) {
+      global.application.displayErrorMessage(err.message, err.message)
       global.log.error(err.message, err)
-      global.notify.normal(`${err.name as string}: ${err.message as string}`, true)
     }
   }
 }

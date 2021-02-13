@@ -38,6 +38,7 @@ import createCustomCSSWindow from './create-custom-css-window'
 import createAboutWindow from './create-about-window'
 import createTagManagerWindow from './create-tag-manager-window'
 import createPasteImageModal from './create-paste-image-modal'
+import createErrorModal from './create-error-modal'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
 import shouldReplaceFileDialog from './dialog/should-replace-file'
 import askDirectoryDialog from './dialog/ask-directory'
@@ -61,6 +62,7 @@ export default class WindowManager {
   private _aboutWindow: BrowserWindow|null
   private _tagManager: BrowserWindow|null
   private _pasteImageModal: BrowserWindow|null
+  private _errorModal: BrowserWindow|null
   private _printWindowFile: string|undefined
   private _windowState: WindowPosition[]
   private readonly _configFile: string
@@ -76,6 +78,7 @@ export default class WindowManager {
     this._aboutWindow = null
     this._tagManager = null
     this._pasteImageModal = null
+    this._errorModal = null
     this._printWindowFile = undefined
     this._logWindow = null
     this._windowState = []
@@ -612,6 +615,26 @@ export default class WindowManager {
         resolve(undefined) // Resolve with undefined to indicate that the user has aborted
         this._pasteImageModal = null
       })
+    })
+  }
+
+  showErrorMessage (title: string, message: string, contents?: string): void {
+    if (this._mainWindow === null) {
+      global.log.error('[Application] Could not display error message, because the main window was not open!', message)
+      return
+    }
+
+    if (this._errorModal !== null) {
+      this._errorModal.close()
+      // Dereference
+      this._errorModal = null
+    }
+
+    this._errorModal = createErrorModal(this._mainWindow, title, message, contents)
+
+    // Dereference the window as soon as it is closed
+    this._errorModal.on('closed', () => {
+      this._errorModal = null
     })
   }
 
