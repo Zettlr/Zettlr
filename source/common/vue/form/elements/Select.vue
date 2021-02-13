@@ -1,6 +1,6 @@
 <template>
   <div class="form-control">
-    <label v-if="label" v-bind:for="fieldID">{{ label }}</label>
+    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
     <select
       v-bind:id="fieldID"
       ref="input"

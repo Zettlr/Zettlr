@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@clr/icons": "^5.0.1",
+    "@types/sanitize-html": "^1.27.1",
     "@types/semver": "^7.3.4",
     "@zettlr/citr": "^1.2.2",
     "adm-zip": "^0.5.2",
@@ -64,6 +65,7 @@
     "nspell": "^2.1.5",
     "rimraf": "^3.0.2",
     "sanitize-filename": "^1.6.3",
+    "sanitize-html": "^2.3.2",
     "semver": "^7.3.4",
     "showdown": "^1.9.1",
     "tippy.js": "^6.2.7",

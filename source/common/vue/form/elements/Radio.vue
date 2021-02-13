@@ -1,6 +1,6 @@
 <template>
   <div class="radio-group">
-    <p>{{ label }}</p>
+    <p v-html="label"></p>
     <div
       v-for="(optionLabel, key) in options"
       v-bind:key="key"

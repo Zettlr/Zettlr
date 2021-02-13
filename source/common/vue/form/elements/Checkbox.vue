@@ -9,7 +9,7 @@
       >
       <span class="checkmark"></span>
     </label>
-    <label v-if="label" v-bind:for="fieldID">{{ label }}</label>
+    <label v-if="label" v-bind:for="fieldID" v-html="label"></label>
   </div>
 </template>
 

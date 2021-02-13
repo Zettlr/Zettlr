@@ -18,6 +18,7 @@ const bcp47 = require('bcp-47')
 const { app, ipcRenderer } = require('electron')
 const isDir = require('./util/is-dir')
 const isFile = require('./util/is-file')
+const sanitizeHtml = require('sanitize-html')
 
 /**
  * Status mode that describes a returned language metadata object as an exact
@@ -107,13 +108,22 @@ function trans (string, ...args) {
 
   // There was an additional attribute missing (there is a whole object
   // in the variable) -> just return the string
-  if (typeof transString !== 'string') return string
+  if (typeof transString !== 'string') {
+    return string
+  }
 
   for (let a of args) {
     transString = transString.replace('%s', a) // Always replace one %s with an arg
   }
 
-  return transString
+  // Finally, before returning the translation, sanitize it. As these are only
+  // translation strings, we can basically only allow a VERY small subset of all
+  // tags.
+  const safeString = sanitizeHtml(transString, {
+    allowedTags: [ 'em', 'strong', 'kbd' ]
+  })
+
+  return safeString
 }
 
 /**

@@ -6,7 +6,7 @@
     v-on:click="toggle"
   >
     <clr-icon v-if="control.icon" v-bind:shape="control.icon"></clr-icon>
-    {{ control.label }}
+    <span v-html="control.label"></span>
   </button>
 </template>
 
