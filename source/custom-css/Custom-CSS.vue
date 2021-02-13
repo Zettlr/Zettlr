@@ -8,9 +8,7 @@
     v-on:statusbar-click="handleClick($event)"
   >
     <div id="custom-css">
-      <p id="custom-css-info">
-        {{ customCSSInfo }}
-      </p>
+      <p id="custom-css-info" v-html="customCSSInfo"></p>
       <CodeEditor
         v-bind:contents="initialCss"
         v-on:input="css = $event"
