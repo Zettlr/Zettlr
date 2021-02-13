@@ -34,13 +34,13 @@ module.exports = [
       options: {
         // Do not wrap in js module (important for handlebars)
         esModule: false,
-        name: "[path][name].[ext]",
+        name: '[path][name].[ext]',
         // Forge puts the entry points in their own dedicated directory, so we
         // have to "manually" move up from that directory again
-        publicPath: "..",
+        publicPath: '..',
         // The main context is our source directory. The resources are only
         // important for handlebars, but not for anything else.
-        context: "source"
+        context: 'source'
       }
     }
   },
@@ -52,13 +52,13 @@ module.exports = [
       options: {
         // Do not wrap in js module
         esModule: false,
-        name: "[path][name].[ext]",
+        name: '[path][name].[ext]',
         // Forge puts the entry points in their own dedicated directory, so we
         // have to "manually" move up from that directory again
-        publicPath: "..",
+        publicPath: '..',
         // The main context is our source directory. The resources are only
         // important for handlebars, but not for anything else.
-        context: "source"
+        context: 'source'
       }
     }
   },
@@ -70,13 +70,13 @@ module.exports = [
       options: {
         // Do not wrap in js module
         esModule: false,
-        name: "[path][name].[ext]",
+        name: '[path][name].[ext]',
         // Forge puts the entry points in their own dedicated directory, so we
         // have to "manually" move up from that directory again
-        publicPath: "..",
+        publicPath: '..',
         // The main context is our source directory. The resources are only
         // important for handlebars, but not for anything else.
-        context: "source"
+        context: 'source'
       }
     }
   },

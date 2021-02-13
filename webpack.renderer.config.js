@@ -10,9 +10,9 @@ rules.push({
   use: [{
     loader: 'style-loader' // Create style nodes from JS strings
   }, {
-    loader: "@teamsupercell/typings-for-css-modules-loader" // Enrich css by typing information
+    loader: '@teamsupercell/typings-for-css-modules-loader' // Enrich css by typing information
   }, {
-    loader: "css-loader" // Translate CSS into JS string
+    loader: 'css-loader' // Translate CSS into JS string
   }, {
     loader: 'less-loader' // Compile Less to CSS
   }],
@@ -24,9 +24,9 @@ rules.push({
     loader: 'style-loader', // Create style nodes from JS strings
     options: { injectType: 'lazyStyleTag' } // Lazy-load themes so that we can switch between them
   }, {
-    loader: "@teamsupercell/typings-for-css-modules-loader" // Enrich css by typing information
+    loader: '@teamsupercell/typings-for-css-modules-loader' // Enrich css by typing information
   }, {
-    loader: "css-loader" // Translate CSS into JS string
+    loader: 'css-loader' // Translate CSS into JS string
   }, {
     loader: 'less-loader' // Compile Less to CSS
   }]
@@ -66,6 +66,10 @@ module.exports = {
     new VueLoaderPlugin()
   ],
   resolve: {
-    extensions: [ '.js', '.ts', '.jsx', '.tsx', '.css', '.less', '.handlebars' ]
+    extensions: [
+      '.js', '.ts', '.jsx', '.tsx',
+      '.css', '.less',
+      '.vue', '.handlebars'
+    ]
   }
 }

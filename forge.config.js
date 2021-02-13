@@ -53,7 +53,7 @@ module.exports = {
     },
     osxNotarize: {
       appleId: process.env['APPLE_ID'],
-      appleIdPassword: process.env['APPLE_ID_PASS'],
+      appleIdPassword: process.env['APPLE_ID_PASS']
     },
     extraResource:
       // NOTE: This logic relies upon the Pandoc binary being downloaded
@@ -107,6 +107,11 @@ module.exports = {
               html: './source/paste-image/index.htm',
               js: './source/paste-image/index.ts',
               name: 'paste_image'
+            },
+            {
+              html: './source/win-about/index.htm',
+              js: './source/win-about/index.ts',
+              name: 'about'
             }
           ]
         }
