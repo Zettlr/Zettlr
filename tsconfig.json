@@ -19,7 +19,11 @@
   },
   "include": [
     "source/**/*",
-    "test/**/*"
+    "test/**/*",
+    "forge.config.js",
+    "webpack.main.config.js",
+    "webpack.renderer.config.js",
+    "webpack.rules.js"
   ],
   "files": [
     "source/renderer/renderer.d.ts",
