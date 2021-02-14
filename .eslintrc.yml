@@ -1,0 +1,136 @@
+env:
+  node: true
+  commonjs: true
+  es6: true
+parser: vue-eslint-parser
+parserOptions:
+  parser: '@typescript-eslint/parser'
+  ecmaVersion: 2018
+  impliedStrict: true
+  project: ./tsconfig.json
+  extraFileExtensions: [.vue]
+plugins:
+  - jsdoc
+  - ava
+  - '@typescript-eslint'
+  - prettier-vue
+  - jquery
+globals:
+  Atomics: readonly
+  SharedArrayBuffer: readonly
+settings:
+  node:
+    tryExtensions:
+      - .ts
+      - .js
+# Removed to suppress type errors while port in progress, but should be re-enabled.
+#  - plugin:@typescript-eslint/recommended-requiring-type-checking
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/eslint-recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:import/typescript
+  - plugin:jsdoc/recommended
+  - plugin:node/recommended
+  - plugin:prettier-vue/recommended
+  - plugin:vue/recommended
+  - prettier/@typescript-eslint
+  - prettier/vue
+
+rules:
+  linebreak-style:
+    - error
+    - unix
+  prettier-vue/prettier:
+    - error
+    -
+      semi: false
+      singleQuote: true
+      printWidth: 120
+  node/no-unsupported-features/es-syntax: 0
+  node/no-unpublished-require:
+    - error
+    -
+      allowModules:
+        - electron
+  node/no-unpublished-import:
+    - error
+    -
+      allowModules:
+        - electron
+  # Disable a few typescript rules as we are not yet there to easily implement them
+  "@typescript-eslint/no-floating-promises":
+    - warn
+  "@typescript-eslint/no-misused-promises": 
+    - warn
+  "@typescript-eslint/strict-boolean-expressions":
+    - warn
+  # This rule is necessary for the FSAL Cache (featuring safe deletion of keys)
+  "@typescript-eslint/no-dynamic-delete":
+    - warn
+  # Only warn if there's no array comparison given
+  "@typescript-eslint/require-array-sort-compare": 
+    - warn
+  # New Temporary rules until typescript port complete (MJ)
+  "@typescript-eslint/no-unsafe-call":
+    - warn
+  "@typescript-eslint/no-unsafe-member-access":
+    - warn
+  "@typescript-eslint/no-unsafe-assignment":
+    - warn
+  vue/v-bind-style: 
+    - error
+    - longform
+  vue/v-on-style: 
+    - error 
+    - longform
+  vue/component-tags-order:
+    - error
+    - order: 
+        - template
+        - script
+        - style
+  # Let the implementation decide if self-closing is wanted or not.
+  vue/html-self-closing:
+    - warn 
+    - 
+      html: 
+          void: any
+          normal: any
+          component: any
+      svg: any
+      math: any
+  # Allow up to three attributes per line so that the contributor can
+  # decide if the attributes are too long for the 80 character column
+  vue/max-attributes-per-line: 
+    - error 
+    -
+      singleline: 3
+      multiline: 
+        max: 3
+        allowFirstLine: true
+
+  # Disallow jquery
+  jquery/no-ajax: 2
+  jquery/no-ajax-events: 2
+  jquery/no-animate: 2
+  jquery/no-bind: 2
+  jquery/no-fade: 2
+  jquery/no-load: 2
+  jquery/no-param: 2
+  jquery/no-serialize: 2
+  jquery/no-size: 2
+  jquery/no-sizzle: 2
+  jquery/no-slide: 2
+  jquery/no-submit: 2
+  jquery/no-text: 2
+  jquery/no-toggle: 2
+  jquery/no-trigger: 2
+  jquery/no-trim: 2
+  jquery/no-val: 2
+  jquery/no-when: 2
+  jquery/no-wrap: 2
+
+
+
+
