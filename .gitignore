@@ -39,3 +39,7 @@ eslint_report.htm
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
+
+# Don't pull in code coverage output
+.nyc_output/
+coverage
