@@ -46,7 +46,7 @@ rules:
     -
       semi: false
       singleQuote: true
-      printWidth: 120
+      printWidth: 140
   node/no-unsupported-features/es-syntax: 0
   node/no-unpublished-require:
     - error
