@@ -8,7 +8,7 @@
             "brunnogama \u003Cbrunnogama@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-10-24T20:26:07.000000Z"
+        "updated_at": "2021-02-13T16:54:55.000000Z"
     },
     "dialog": {
         "about": {
@@ -167,6 +167,7 @@
             "auto_dark_mode_schedule": "Agendar",
             "auto_dark_mode_schedule_format": "HH:MM (Formato 24h)",
             "auto_dark_mode_system": "Seguir Sistema Operacionarl",
+            "autocomplete_accept_space": "Aceitar espa\u00e7os durante o autocompletar",
             "autocorrect": {
                 "active_label": "Ligar Auto Corre\u00e7\u00e3o",
                 "quick_select_label": "Sele\u00e7\u00e3o r\u00e1pida",
@@ -185,6 +186,7 @@
             "creationtime": "Hora de cria\u00e7\u00e3o do arquivo",
             "debug": "Ativar modo de depura\u00e7\u00e3o",
             "default_image_save_path": "Caminho de imagem padr\u00e3o (relativo ou absoluto)",
+            "delete_on_fail": "Apaga os itens de maneira irrevers\u00edvel, se ocorrer uma falha ao mover para lixeira",
             "display": {
                 "image_size_info": "Com esses controles, voc\u00ea pode modificar as pr\u00e9-visualiza\u00e7\u00f5es de imagens.",
                 "preview_info": "Essas op\u00e7\u00f5es determinam quais elementos s\u00e3o renderizados nos documentos.",
@@ -200,6 +202,7 @@
             },
             "display_time_explanation": "Nos metadados do arquivo mostre",
             "editor": "Editor",
+            "editor_font_size": "Tamanho da fonte do editor",
             "editor_setting": {
                 "direction_ltr": "Usar escrita da esquerda-para-direita (EPD)",
                 "direction_rtl": "Usar escrita da direita-para-esquerda (DPE)",
@@ -217,7 +220,8 @@
                 "strip_links_unlink_label": "Desligue os links internos.",
                 "strip_tags_label": "Remova as tags do arquivos",
                 "stripping": "Op\u00e7\u00f5es para elementos ZKN",
-                "title": "Exportar"
+                "title": "Exportar",
+                "use_bundled_pandoc": "Use o Pandoc interno para exportar"
             },
             "file_meta": "Mostrar informa\u00e7\u00f5es do arquivo",
             "filemanager_combined": "Combinada &mdash; mostrar arquivos e pastas na \u00e1rvore de arquivos",
@@ -319,6 +323,7 @@
             "xelatex_default": "Padr\u00e3o: xelatex",
             "zkn": {
                 "auto_create_file": "Criar arquivos inexistentes automaticamente ao clicar em links internos",
+                "auto_search": "Inicia uma busca ao percorrer links Zettelkasten",
                 "generated_id": "ID gerado",
                 "id_generator_label": "Padr\u00e3o usado para gerar novos IDs",
                 "id_label": "Express\u00e3o regular de ID",
@@ -342,8 +347,10 @@
                 "var_minute": "Minutos (zeros \u00e0 esquerda)",
                 "var_month": "M\u00eas (zeros \u00e0 esquerda)",
                 "var_second": "Segundos (zeros \u00e0 esquerda)",
+                "var_unix_epoch": "Tempo Unix",
                 "var_week_number": "Semana do ano",
-                "var_year": "Ano (quatro digitos)"
+                "var_year": "Ano (quatro digitos)",
+                "var_year_two": "Ano (dois digitos)"
             }
         },
         "statistics": {
@@ -616,6 +623,7 @@
         "lang_import_success": "Arquivo de idioma importado: %s",
         "no_command": "Recebeu uma mensagem sem comando: %s",
         "ok": "Ok",
+        "open_file": "Abrir arquivo",
         "open_folder": "Abrir projeto",
         "open_root_directory": "Abrir pasta raiz %s ...",
         "open_root_directory_success": "% carregado.",

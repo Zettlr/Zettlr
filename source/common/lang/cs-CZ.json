@@ -4,7 +4,7 @@
             "Ales Nehyba \u003Cneal.cz@gmail.com\u003E"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2020-12-27T16:27:38.000000Z"
+        "updated_at": "2021-02-09T20:11:30.000000Z"
     },
     "dialog": {
         "about": {
@@ -215,7 +215,8 @@
                 "strip_links_unlink_label": "Odpojit intern\u00ed odkazy",
                 "strip_tags_label": "Odstranit ze soubor\u016f \u0161t\u00edtky",
                 "stripping": "Mo\u017enosti ZKN prvk\u016f",
-                "title": "Export"
+                "title": "Export",
+                "use_bundled_pandoc": "Pou\u017e\u00edt pro export intern\u00ed pandoc"
             },
             "file_meta": "Zobrazit informace o souboru",
             "filemanager_combined": "Kombinovan\u00fd &mdash; zobrazit ve stromov\u00e9m pohledu soubory i slo\u017eky",
@@ -317,6 +318,7 @@
             "xelatex_default": "V\u00fdchoz\u00ed: xelatex",
             "zkn": {
                 "auto_create_file": "Automaticky vytv\u00e1\u0159et neexistuj\u00edc\u00ed soubory p\u0159i n\u00e1sledov\u00e1n\u00ed vnit\u0159n\u00edch odkaz\u016f",
+                "auto_search": "Spustit hled\u00e1n\u00ed p\u0159i n\u00e1sledov\u00e1n\u00ed odkaz\u016f kartot\u00e9ky",
                 "generated_id": "Vygenerovan\u00e9 ID",
                 "id_generator_label": "Vzor pro generov\u00e1n\u00ed nov\u00fdch ID.",
                 "id_label": "Regul\u00e1rn\u00ed v\u00fdraz ID",
@@ -340,6 +342,7 @@
                 "var_minute": "Minuty (\u00favodn\u00ed nuly)",
                 "var_month": "M\u011bs\u00edc (\u00favodn\u00ed nuly)",
                 "var_second": "Sekundy (\u00favodn\u00ed nuly)",
+                "var_unix_epoch": "Unixov\u00fd \u010das",
                 "var_week_number": "Kalend\u00e1\u0159n\u00ed t\u00fdden (v\u010detn\u011b \u00favodn\u00edch nul)",
                 "var_year": "Rok (\u010dty\u0159i \u010d\u00edslice)",
                 "var_year_two": "Rok (2 \u010d\u00edslice)"
