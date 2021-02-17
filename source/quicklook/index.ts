@@ -15,7 +15,7 @@
  */
 
 import Vue from 'vue'
-import Quicklook from './Quicklook.vue'
+import Quicklook from './quicklook.vue'
 import windowRegister from '../common/modules/window-register'
 // import { ToolbarControl } from '../common/modules/window-register/register-toolbar'
 import { ipcRenderer } from 'electron'
