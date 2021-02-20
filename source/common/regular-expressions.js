@@ -282,7 +282,7 @@ module.exports = {
   'getInlineMathRenderRE': function (global = false) {
     let flag = (global) ? 'g' : ''
     return RegExp(
-      /(?<!\\)\${1,2}([^\s\\])\${1,2}(?!\d)|(?<!\\)\${1,2}([^\s].*?[^\s\\])\${1,2}(?!\d)/.source,
+      /(?<![\\$])(?<dollar>\${1,2})(?![\s$])(?<eq>.+?)(?<![\s\\])\k<dollar>(?!\d)/.source,
       flag)
   },
   /**
