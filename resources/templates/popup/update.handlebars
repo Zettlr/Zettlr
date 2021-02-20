@@ -1,0 +1,15 @@
+<p><strong>{{i18n "dialog.update.title"}}</strong></p>
+<p class="alert success">
+  {{newVer}}
+</p>
+<p>{{i18n "dialog.update.current_version"}}: <strong>{{curVer}}</strong></p>
+
+{{#if isBeta}}
+<p><clr-icon shape="warning-standard" class="is-warning"></clr-icon> This is a beta release.</p>
+{{/if}}
+
+<p><a class="button" id="view-changelog-button">View changelog</a></p>
+
+{{#each assets}}
+<p><a class="button request-app-update" data-url="{{ this.browser_download_url}}">Download {{ this.name }}</a></p>
+{{/each}}

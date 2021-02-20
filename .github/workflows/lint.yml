@@ -14,14 +14,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
-    - name: Install packages in main and source directories
-      # Simply use one single command for all that stuff and chain using &&
-      run: npm install && cd ./source && npm install && cd ..
+    - name: Install packages
+      run: yarn install --frozen-lockfile
     - name: Run ESLint
-      run: npm run lint
-    - name: Provide ESLint Report
-      if: failure() # Only upload if ESLint had something to say
-      uses: actions/upload-artifact@v1
-      with:
-        name: eslint-report.htm
-        path: ./eslint_report.htm
+      run: yarn lint

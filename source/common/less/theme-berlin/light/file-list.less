@@ -1,0 +1,82 @@
+// Preview styling
+
+#file-list {
+  background-color: var(--bg-preview);
+  transition:
+    background-color @mode-transition ease,
+    color @mode-transition ease;
+  font-size: @font-size-small;
+  box-shadow: inset -14px 2px 54px -23px rgba(0,0,0,0.25);
+
+  #file-manager-filter {
+    background-color: var(--grey-1);
+    #file-manager-filter-input {
+      font-family: inherit;
+      transition: 0.5s all ease-in-out;
+
+      &:focus {
+        border-color: var(--c-primary);
+      }
+    }
+  }
+
+  div.list-item {
+    border-bottom:1px solid var(--grey-2);
+    border-left: 5px solid transparent;
+
+    &.selected {
+      background-color: var(--grey-2);
+      border-left: 5px solid var(--c-primary);
+    }
+
+    &.active {
+      background-color: var(--grey-2);
+    }
+
+    &.file:hover, &.code:hover {
+      // important is needed to not mess with the heatmap styles
+      background-color:var(--grey-0) !important;
+      p.filename { color: var(--grey-7) !important; }
+    }
+
+    /* Taglist stuff */
+    .taglist:hover .tag { border:2px solid white; }
+
+    &.directory {
+      background-color:var(--grey-1);
+      transition: @mode-transition background-color ease;
+      color:var(--c-primary);
+
+      .sorter {
+        background-color:var(--grey-1);
+      }
+
+      .sorter .sortDirection:hover,
+      .sorter .sortType:hover {
+        color:var(--grey-5);
+      }
+    }
+
+    div.meta {
+      .id, .tags, .directories, .files {
+        background-color:var(--grey-1);
+        color: var(--grey-3);
+      }
+
+      .date { color: var(--grey-4); }
+
+      .code-indicator {
+        color: var(--grey-1);
+        font-family: @font-code;
+        background-color: var(--c-primary);
+      }
+
+      .target-progress-indicator {
+        circle { fill: var(--grey-1); }
+        path { fill: var(--c-primary-shade); }
+      }
+    }
+  }
+
+  .empty-file-list, .empty-directory { color:var(--grey-4); }
+}

@@ -1,0 +1,19 @@
+// Document tabs styling
+
+#document-tabs {
+  border-bottom: 1px solid #666;
+  color: var(--grey-1);
+
+  .document {
+    &:hover { background-color: var(--grey-6); }
+
+    &.active { background-color: var(--grey-6); }
+
+    .close {
+      &:hover {
+        transform: rotate(90deg);
+        fill: var(--red-0);
+      }
+    }
+  }
+}

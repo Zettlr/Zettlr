@@ -14,7 +14,7 @@
  */
 
 const MARGIN = 10 // 10 px margin between all notifications
-const OFFSET = 49 // The offset from the top of the window (toolbar + margin)
+const OFFSET = 49 + 25 // The offset from the top of the window (toolbar + margin + tabbar)
 
 /**
  * This is one of the shortest classes in Zettlr, as it only displays small

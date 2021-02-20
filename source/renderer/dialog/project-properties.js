@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -16,6 +15,7 @@
 
 const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
+const serializeFormData = require('../../common/util/serialize-form-data')
 const SUPPORTED_PAPERTYPES = require('../../common/data.json').papertypes
 const PAPERNAMES = require('../../common/data.json').papernames
 
@@ -29,46 +29,62 @@ class ProjectDialog extends ZettlrDialog {
     let hash = data.hash
     data = data.properties
     data.hash = hash
-    data.availableTocLevels = [ '1', '2', '3', '4', '5', '6' ]
     data.availableExportFormats = [ 'pdf', 'docx', 'odt', 'html' ]
     data.pdf.lineheight = data.pdf.lineheight * 100
     data.supportedPapertypes = SUPPORTED_PAPERTYPES
     data.papertypeNames = PAPERNAMES
     data.availableMarginUnits = [ 'cm', 'mm', 'pt' ]
-    data.availablePageNumberingSystems = [ 'arabic', 'alph', 'alph_upper', 'roman', 'roman_upper', 'gobble' ]
+    data.availablePageNumberingSystems = [
+      'arabic',
+      'alph',
+      'alph_upper',
+      'roman',
+      'roman_upper',
+      'gobble'
+    ]
+
     return data
   }
 
   postAct () {
     // Activate the form to be submitted
-    let form = this._modal.find('form#dialog')
-    form.on('submit', (e) => {
+    let form = this._modal.querySelector('form#dialog')
+    form.addEventListener('submit', (e) => {
       e.preventDefault()
       // Give the ZettlrBody object the results
       // Form: dialog type, values, the originally passed object
-      this.proceed(form.serializeArray())
+      this.proceed(serializeFormData(form))
     })
 
     // These scripts only are used to update the preview paragraph
-    $('#lineheight').change((e) => {
-      $('p.pdf-preview').css('line-height', $(e.target).val() + '%')
+    const previewElement = document.querySelector('p.pdf-preview')
+    const previewHeading = document.querySelector('h1.pdf-preview')
+    const lineHeightInput = document.getElementById('lineheight')
+    const fontSizeInput = document.getElementById('fontsize')
+    const mainFontInput = document.getElementById('mainfont')
+    const sansFontInput = document.getElementById('sansfont')
+    lineHeightInput.addEventListener('change', (e) => {
+      previewElement.style.lineHeight = e.target.value + '%'
     })
-    $('#fontsize').change((e) => {
+
+    fontSizeInput.addEventListener('change', (e) => {
       // 1pt is approx. 1.333333 px
-      $('p.pdf-preview').css('font-size', ($(e.target).val() * 1.3) + 'px')
+      previewElement.style.fontSize = (e.target.value * 1.3) + 'px'
     })
-    $('#mainfont').change((e) => {
-      $('p.pdf-preview').css('font-family', $(e.target).val())
+
+    mainFontInput.addEventListener('change', (e) => {
+      previewElement.style.fontFamily = e.target.value
     })
-    $('#sansfont').change((e) => {
-      $('h1.pdf-preview').css('font-family', $(e.target).val())
+
+    sansFontInput.addEventListener('change', (e) => {
+      previewHeading.style.fontFamily = e.target.value
     })
 
     // Initial changing of CSS
-    $('p.pdf-preview').css('line-height', $('#lineheight').val() + '%')
-    $('p.pdf-preview').css('font-size', ($('#fontsize').val() * 1.3) + 'px')
-    $('p.pdf-preview').css('font-family', $('#mainfont').val())
-    $('h1.pdf-preview').css('font-family', $('#sansfont').val())
+    previewElement.style.lineHeight = lineHeightInput.value + '%'
+    previewElement.style.fontSize = (fontSizeInput.value * 1.3) + 'px'
+    previewElement.style.fontFamily = mainFontInput.value
+    previewHeading.style.fontFamily = sansFontInput.value
   }
 
   proceed (data) {

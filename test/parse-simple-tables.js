@@ -13,7 +13,7 @@
  * END HEADER
  */
 
-const simpleParser = require('../source/renderer/util/table-parser-simple')
+const parseSimpleTable = require('../source/renderer/modules/table-editor/parse-simple')
 const assert = require('assert')
 
 const table = []
@@ -90,7 +90,7 @@ tableResults.push({
 describe('TableEditor#simpleParser()', function () {
   for (let i = 0; i < table.length; i++) {
     it(`Should parse test table ${i + 1} correctly`, function () {
-      assert.deepStrictEqual(simpleParser(table[i]), tableResults[i])
+      assert.deepStrictEqual(parseSimpleTable(table[i]), tableResults[i])
     })
   }
 })

@@ -25,14 +25,15 @@ module.exports = function (string) {
   let d = moment()
 
   // Now generate the id by replacing all placeholders in the pattern
-  string = string.replace(/%Y/g, d.format('YYYY'))
-  string = string.replace(/%M/g, d.format('MM'))
-  string = string.replace(/%D/g, d.format('DD'))
-  string = string.replace(/%W/g, d.format('WW'))
-  string = string.replace(/%h/g, d.format('HH'))
-  string = string.replace(/%m/g, d.format('mm'))
-  string = string.replace(/%s/g, d.format('ss'))
-  string = string.replace(/%uuid4/g, uuid4())
-
   return string
+    .replace(/%Y/g, d.format('YYYY'))
+    .replace(/%y/g, d.format('YY'))
+    .replace(/%M/g, d.format('MM'))
+    .replace(/%D/g, d.format('DD'))
+    .replace(/%W/g, d.format('WW'))
+    .replace(/%h/g, d.format('HH'))
+    .replace(/%m/g, d.format('mm'))
+    .replace(/%s/g, d.format('ss'))
+    .replace(/%X/g, d.format('X'))
+    .replace(/%uuid4/g, uuid4())
 }

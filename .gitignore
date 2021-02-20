@@ -1,8 +1,20 @@
 # Node modules
 node_modules
 
+# Package Lock
+package-lock.json
+
 # Compiled releases
 release
+
+# Ignore electron-forge build output
+out/
+
+# Igrone webpack build output
+.webpack/
+
+# Ignore the custom user test config
+test-config.yml
 
 # Hidden files and stuff
 /**/.DS_Store
@@ -22,6 +34,7 @@ eslint_report.htm
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+!.vscode/zettlr.code-snippets
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files

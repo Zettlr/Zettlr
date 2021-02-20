@@ -1,4 +1,3 @@
-/* global $ */
 /**
  * @ignore
  * BEGIN HEADER
@@ -18,6 +17,7 @@ const ZettlrDialog = require('./zettlr-dialog.js')
 const validate = require('../../common/validate.js')
 const SUPPORTED_PAPERTYPES = require('../../common/data.json').papertypes
 const PAPERNAMES = require('../../common/data.json').papernames
+const serializeFormData = require('../../common/util/serialize-form-data')
 
 class PDFPreferences extends ZettlrDialog {
   constructor () {
@@ -36,34 +36,40 @@ class PDFPreferences extends ZettlrDialog {
 
   postAct () {
     // Activate the form to be submitted
-    let form = this._modal.find('form#dialog')
-    form.on('submit', (e) => {
+    let form = this._modal.querySelector('form#dialog')
+    form.addEventListener('submit', (e) => {
       e.preventDefault()
       // Give the ZettlrBody object the results
       // Form: dialog type, values, the originally passed object
-      this.proceed(form.serializeArray())
+      this.proceed(serializeFormData(form))
     })
 
     // These scripts only are used to update the preview paragraph
-    $('#lineheight').change((e) => {
-      $('p.pdf-preview').css('line-height', $(e.target).val() + '%')
+    const lineheight = document.getElementById('lineheight')
+    const fontsize = document.getElementById('fontsize')
+    const mainfont = document.getElementById('mainfont')
+    const sansfont = document.getElementById('sansfont')
+    const para = document.querySelector('p.pdf-preview')
+    const head = document.querySelector('h1.pdf-preview')
+    lineheight.addEventListener('change', (e) => {
+      para.style.lineHeight = lineheight.value + '%'
     })
-    $('#fontsize').change((e) => {
+    fontsize.addEventListener('change', (e) => {
       // 1pt is approx. 1.333333 px
-      $('p.pdf-preview').css('font-size', ($(e.target).val() * 1.3) + 'px')
+      para.style.fontsize = (parseInt(fontsize.value, 10) * 1.3) + 'px'
     })
-    $('#mainfont').change((e) => {
-      $('p.pdf-preview').css('font-family', $(e.target).val())
+    mainfont.addEventListener('change', (e) => {
+      para.style.fontFamily = mainfont.value
     })
-    $('#sansfont').change((e) => {
-      $('h1.pdf-preview').css('font-family', $(e.target).val())
+    sansfont.addEventListener('change', (e) => {
+      head.style.fontFamily = sansfont.value
     })
 
     // Initial changing of CSS
-    $('p.pdf-preview').css('line-height', $('#lineheight').val() + '%')
-    $('p.pdf-preview').css('font-size', ($('#fontsize').val() * 1.3) + 'px')
-    $('p.pdf-preview').css('font-family', $('#mainfont').val())
-    $('h1.pdf-preview').css('font-family', $('#sansfont').val())
+    para.style.lineHeight = lineheight.value + '%'
+    para.style.fontSize = (parseInt(fontsize.value, 10) * 1.3) + 'px'
+    para.style.fontFamily = mainfont.value
+    head.style.fontFamily = sansfont.value
   }
 
   proceed (data) {

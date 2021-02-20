@@ -1,4 +1,4 @@
-<div class="dialog">
+<div class="dialog" role="dialog">
     <h1>{{i18n "dialog.update.title"}}: {{newVer}}</h1>
     <p><strong>{{i18n "dialog.update.current_version"}}: {{curVer}}</strong></p>
     <p>
@@ -12,6 +12,5 @@
     <div class="changelog">
         {{{changelog}}}
     </div>
-    <a href="{{downloadLink}}" target="_blank" class="button" onclick="require('electron').shell.openExternal(this.getAttribute('href')); return false;">{{i18n "dialog.update.release_url"}}</a>
     <button id="abort">{{i18n "dialog.button.close"}}</button>
 </div>

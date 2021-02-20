@@ -1,28 +1,34 @@
 <table>
   <tr>
-    <td style="text-align:right"><strong>{{words}}</strong></td>
+    <td colspan="3" style="text-align:right"><strong>{{words}}</strong></td>
     <td>{{i18n 'gui.file_words'}}</td>
   </tr>
   <tr>
-    <td style="text-align:right"><strong>{{chars}}</strong></td>
+    <td colspan="3" style="text-align:right"><strong>{{chars}}</strong></td>
     <td>{{i18n 'gui.file_chars'}}</td>
   </tr>
   <tr>
-    <td style="text-align:right"><strong>{{chars_wo_spaces}}</strong></td>
+    <td colspan="3" style="text-align:right"><strong>{{chars_wo_spaces}}</strong></td>
     <td>{{i18n 'gui.file_chars_wo_spaces'}}</td>
   </tr>
 
-  {{#if words_sel}}
+  {{#ifCond selections.length '>' 0}}
+  {{!-- Spacer --}}
   <tr>
-    <td style="text-align:right"><strong>{{words_sel}}</strong></td>
-    <td>{{i18n 'gui.file_words_sel'}}</td>
+    <td colspan="4">&nbsp;</td>
   </tr>
-  {{/if}}
+  {{/ifCond}}
 
-  {{#if chars_sel}}
+  {{#each selections}}
   <tr>
-    <td style="text-align:right"><strong>{{chars_sel}}</strong></td>
-    <td>{{i18n 'gui.file_chars_sel'}}</td>
+    <td style="text-align:right">
+      <strong>{{this.start.line}}:{{this.start.ch}}</strong>
+    </td>
+    <td><strong>&ndash;</strong></td>
+    <td>
+      <strong>{{this.end.line}}:{{this.end.ch}}</strong>
+    </td>
+    <td>{{i18n_value 'gui.words_selected' this.selectionLength}}</td>
   </tr>
-  {{/if}}
+  {{/each}}
 </table>

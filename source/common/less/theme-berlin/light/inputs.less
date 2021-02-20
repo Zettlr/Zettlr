@@ -1,0 +1,54 @@
+// Input styling
+
+/*
+* CHECKBOXES
+*/
+
+// Apply this class to elements that should represent toggles instead of
+// regular checkboxes.
+.cb-toggle {
+  .toggle {
+    background-color: var(--grey-1);
+
+    &:before { background-color: white; }
+  }
+  input:checked + .toggle { background-color: var(--c-primary); }
+}
+
+.radio-toggle {
+  .toggle {
+    background-color: var(--grey-1);
+
+    // Inner part
+    &:before { background-color: transparent; }
+  }
+  input:checked + .toggle:before { background-color: var(--c-primary); }
+}
+
+/*
+* SLIDERS / RANGES
+*/
+
+input[type=range] {
+  background-color: transparent; // Make sure there are no artifacts
+  &::-webkit-slider-runnable-track { background: var(--grey-1); }
+  &::-webkit-slider-thumb { background: var(--c-primary); }
+  &:focus::-webkit-slider-runnable-track { background: var(--grey-1); }
+}
+
+progress {
+  border: 0;
+  height: 18px;
+  border-radius: @border-radius;
+
+  &::-webkit-progress-bar {
+    background-color: var(--grey-1);
+    border-radius: @border-radius;
+  }
+
+  &::-webkit-progress-value {
+    background-color: var(--c-primary);
+    border-radius: @border-radius;
+    transition: 0.4s all ease; // Ease out the value changes
+  }
+}
