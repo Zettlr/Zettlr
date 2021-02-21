@@ -28,7 +28,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "args": [
-         "${file}"
+        "-r ts-node/register",
+        "${file}"
        ],
        "cwd": "${workspaceRoot}"
    }

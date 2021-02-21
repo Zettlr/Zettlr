@@ -1,5 +1,6 @@
 'use strict';
 
 module.exports = {
-  require: ['./test/setup.js']
+  require: ['./test/setup.js'],
+  extension: ["ts"],
 };
