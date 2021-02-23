@@ -22,7 +22,7 @@ module.exports = {
    */
   'getBlockMathRE': function () {
     return RegExp(
-      /^(\s*$$)\s*$/.source
+      /^(\s*\$\$)\s*$/.source
     )
   },
 

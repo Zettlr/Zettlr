@@ -93,13 +93,16 @@
     }
 
     // Math equations in display mode
-    .katex-display {
-      margin-top: 0.8em;
-      margin-bottom: -0.5em;
+    .katex {
+      font-size: 1.1em; // reduce font-size of math a bit
+      display: inline-block; // needed for display math to behave properly
     }
 
-    // Reduce font size of math a bit
-    .katex { font-size: 1.1em; }
+    .katex-display, .katex-display > .katex > .katex-html {
+      display: inline-block; // needed for display math to behave properly
+      width: 100%; // display math should be centred
+      margin-bottom: -0.5em; // counterbalance additional empty line that is added by code mirror due to a bug https://github.com/codemirror/CodeMirror/issues/6600
+    }
   }
 
 // If the menu bar is shown, pull down the editor
