@@ -71,6 +71,7 @@ async function updateFileMetadata (fileObject: MDFileDescriptor): Promise<void> 
   try {
     let stat = await fs.lstat(fileObject.path)
     fileObject.modtime = stat.mtime.getTime()
+    fileObject.size = stat.size
     global.log.info(`Updated modtime for fileDescriptor ${fileObject.name} to ${fileObject.modtime}`)
   } catch (e) {
     global.log.error(`Could not update the metadata for file ${fileObject.name}: ${String(e.message).toString()}`, e)
@@ -222,6 +223,7 @@ export function metadata (fileObject: MDFileDescriptor): MDFileMeta {
     name: fileObject.name,
     hash: fileObject.hash,
     ext: fileObject.ext,
+    size: fileObject.size,
     id: fileObject.id,
     tags: fileObject.tags,
     type: fileObject.type,
@@ -256,6 +258,7 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
     name: path.basename(filePath),
     hash: hash(filePath),
     ext: path.extname(filePath),
+    size: 0,
     id: '', // The ID, if there is one inside the file.
     tags: [], // All tags that are to be found inside the file's contents.
     bom: '', // Default: No BOM
@@ -275,8 +278,9 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
   try {
     // Get lstat
     let stat = await fs.lstat(filePath)
-    file.modtime = stat.mtime.getTime() // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
+    file.modtime = stat.mtime.getTime()
     file.creationtime = stat.birthtime.getTime()
+    file.size = stat.size
   } catch (e) {
     global.log.error('Error reading file ' + filePath, e)
     throw e // Rethrow
@@ -447,4 +451,16 @@ export function markDirty (fileObject: MDFileDescriptor): void {
  */
 export function markClean (fileObject: MDFileDescriptor): void {
   fileObject.modified = false
+}
+
+export async function reparseChangedFile (fileObject: MDFileDescriptor, cache: FSALCache): Promise<void> {
+  // Literally the same as the save() function only without prior writing of contents
+  const contents = await load(fileObject)
+  await updateFileMetadata(fileObject)
+  // Make sure to keep the file object itself as well as the tags updated
+  global.tags.remove(fileObject.tags)
+  parseFileContents(fileObject, contents)
+  global.tags.report(fileObject.tags)
+  fileObject.modified = false // Always reset the modification flag.
+  cacheFile(fileObject, cache)
 }

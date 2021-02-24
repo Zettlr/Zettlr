@@ -28,6 +28,7 @@ export async function parse (absPath: string, parent: DirDescriptor): Promise<Ot
     name: path.basename(absPath),
     hash: hash(absPath),
     ext: path.extname(absPath),
+    size: 0,
     dir: path.dirname(absPath),
     modtime: 0,
     creationtime: 0,
@@ -39,6 +40,7 @@ export async function parse (absPath: string, parent: DirDescriptor): Promise<Ot
     let stat = await fs.lstat(absPath)
     attachment.modtime = stat.mtime.getTime() // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
     attachment.creationtime = stat.birthtime.getTime()
+    attachment.size = stat.size
   } catch (e) {
     global.log.error('Error reading file ' + absPath, e)
     throw e // Rethrow
@@ -58,10 +60,18 @@ export function metadata (attachment: OtherFileDescriptor): OtherFileMeta {
     name: attachment.name,
     hash: attachment.hash,
     ext: attachment.ext,
+    size: attachment.size,
     type: attachment.type,
     modtime: attachment.modtime,
     creationtime: attachment.creationtime,
     dir: attachment.dir
 
   }
+}
+
+export async function reparseChangedFile (attachment: OtherFileDescriptor): Promise<void> {
+  let stat = await fs.lstat(attachment.path)
+  attachment.modtime = stat.mtime.getTime() // stat.ctimeMs DEBUG: Switch to mtimeMs for the time being
+  attachment.creationtime = stat.birthtime.getTime()
+  attachment.size = stat.size
 }

@@ -136,6 +136,7 @@ export function metadata (dirObject: DirDescriptor): DirMeta {
     dir: dirObject.dir,
     name: dirObject.name,
     hash: dirObject.hash,
+    size: dirObject.size,
     // The project itself is not needed, renderer only checks if it equals
     // null, or not (then it means there is a project)
     project: (dirObject._settings.project !== null) ? true : null,
@@ -215,6 +216,7 @@ export async function parse (currentPath: string, cache: FSALCache, parent: DirD
     path: currentPath,
     name: path.basename(currentPath),
     dir: path.dirname(currentPath),
+    size: 0,
     hash: hash(currentPath),
     children: [],
     attachments: [],
@@ -294,6 +296,7 @@ export function getDirNotFoundDescriptor (dirPath: string): DirDescriptor {
     name: path.basename(dirPath),
     dir: path.dirname(dirPath),
     hash: hash(dirPath),
+    size: 0,
     children: [], // Always empty
     attachments: [], // Always empty
     type: 'directory',
@@ -498,4 +501,35 @@ export async function move (sourceObject: AnyDescriptor, targetDir: DirDescripto
 
   // Finally resort the target. Now the state should be good to go.
   sortChildren(targetDir)
+}
+
+export async function addAttachment (dirObject: DirDescriptor, attachmentPath: string): Promise<void> {
+  const attachment = await FSALAttachment.parse(attachmentPath, dirObject)
+  dirObject.attachments.push(attachment)
+  // TODO: Sort the attachments afterwards! Generally, I just realised we never sort any of these.
+}
+
+export function removeAttachment (dirObject: DirDescriptor, attachmentPath: string): void {
+  const idx = dirObject.attachments.findIndex(element => element.path === attachmentPath)
+  dirObject.attachments.splice(idx, 1)
+}
+
+export async function addChild (dirObject: DirDescriptor, childPath: string, cache: FSALCache): Promise<void> {
+  const isDirectory = isDir(childPath)
+  const isCode = ALLOWED_CODE_FILES.includes(path.extname(childPath))
+  const isMD = MARKDOWN_FILES.includes(path.extname(childPath))
+
+  if (isDirectory) {
+    dirObject.children.push(await parse(childPath, cache, dirObject))
+  } else if (isCode) {
+    dirObject.children.push(await FSALCodeFile.parse(childPath, cache, dirObject))
+  } else if (isMD) {
+    dirObject.children.push(await FSALFile.parse(childPath, cache, dirObject))
+  }
+  sortChildren(dirObject)
+}
+
+export function removeChild (dirObject: DirDescriptor, childPath: string): void {
+  const idx = dirObject.children.findIndex(element => element.path === childPath)
+  dirObject.children.splice(idx, 1)
 }
