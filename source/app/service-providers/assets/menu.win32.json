@@ -29,7 +29,7 @@
       {
         "label": "menu.save",
         "accelerator": "Ctrl+S",
-        "command": "file-save"
+        "shortcut": "save-file"
       },
       {
         "label": "menu.recent_docs",

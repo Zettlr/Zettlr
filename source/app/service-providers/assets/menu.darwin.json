@@ -87,7 +87,7 @@
       {
         "label": "menu.save",
         "accelerator": "Cmd+S",
-        "command": "file-save"
+        "shortcut": "save-file"
       },
       {
         "label": "menu.recent_docs",
