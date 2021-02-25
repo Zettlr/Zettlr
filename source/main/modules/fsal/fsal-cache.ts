@@ -39,7 +39,7 @@ export default class FSALCache {
     try {
       fs.lstatSync(this._datadir)
     } catch (e) {
-      console.log('Cache data dir does not yet exist.', this._datadir)
+      global.log.warning(`[FSAL Cache] Cache data dir does not yet exist: ${this._datadir}.`)
       // Make sure the path exists
       fs.mkdirSync(this._datadir, { 'recursive': true })
     }
