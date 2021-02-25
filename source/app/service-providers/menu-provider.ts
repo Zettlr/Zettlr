@@ -261,12 +261,13 @@ export default class MenuProvider {
     // Custom quit item
     if (menutpl.id === 'menu-quit') {
       menu.click = function (item, focusedWindow) {
-        if (focusedWindow != null) {
-          focusedWindow.webContents.send('message', { 'command': 'app-quit' })
-        } else {
-          // If this part is executed it means there's no window, so simply quit.
-          app.quit()
-        }
+        app.quit() // TODO: We need to listen to the app's before-quit event to make sure files are saved etc
+        // if (focusedWindow != null) {
+        //   focusedWindow.webContents.send('message', { 'command': 'app-quit' })
+        // } else {
+        //   // If this part is executed it means there's no window, so simply quit.
+        //   app.quit()
+        // }
       }
     }
 
