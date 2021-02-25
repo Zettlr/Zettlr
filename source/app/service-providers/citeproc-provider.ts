@@ -197,9 +197,10 @@ export default class CiteprocProvider {
         event.returnValue = this.updateItems(message.content)
       } else if (message.type === 'make-bibliography') {
         // Make and send out a bibliography based on the state of the registry
-        event.reply('message', {
+        // TODO: Move that whole thing to the ipcMain.on()
+        event.reply('citeproc-renderer', {
           'command': 'citeproc-bibliography',
-          'content': this.makeBibliography()
+          'payload': this.makeBibliography()
         })
       }
     })
