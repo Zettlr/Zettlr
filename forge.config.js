@@ -69,8 +69,8 @@ module.exports = {
           config: './webpack.renderer.config.js',
           entryPoints: [
             {
-              html: './source/renderer/assets/index.htm',
-              js: './source/renderer/renderer.ts',
+              html: './source/win-main/index.htm',
+              js: './source/win-main/index.ts',
               name: 'main_window'
             },
             {
