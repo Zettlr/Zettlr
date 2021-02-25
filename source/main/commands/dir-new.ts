@@ -14,7 +14,6 @@
 
 import ZettlrCommand from './zettlr-command'
 import { trans } from '../../common/i18n'
-import hash from '../../common/util/hash'
 import path from 'path'
 import sanitize from 'sanitize-filename'
 
@@ -66,8 +65,8 @@ export default class DirNew extends ZettlrCommand {
     // Now the dir should be created, the FSAL will automatically notify the
     // application of the changes, so all we have to do is set the directory
     // as the new current directory.
-    let newDirHash = hash(path.join(sourceDir.path, arg.name))
-    this._app.setCurrentDir(this._app.findDir(newDirHash))
+    let newDirPath = path.join(sourceDir.path, arg.name)
+    this._app.getFileSystem().openDirectory = this._app.findDir(newDirPath)
 
     return true
   }

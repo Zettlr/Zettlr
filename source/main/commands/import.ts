@@ -30,7 +30,7 @@ export default class ImportFiles extends ZettlrCommand {
     * @return {void} Does not return.
     */
   async run (evt: string, arg: any): Promise<boolean> {
-    if (this._app.getCurrentDir() === null) {
+    if (this._app.getFileSystem().openDirectory === null) {
       global.notify.normal(trans('system.import_no_directory'))
       return false
     }
@@ -56,7 +56,8 @@ export default class ImportFiles extends ZettlrCommand {
     // Now import.
     global.notify.normal(trans('system.import_status'))
     try {
-      let ret = await makeImport(fileList, this._app.getCurrentDir(), (file: string, error: any) => {
+      const openDirectory = this._app.getFileSystem().openDirectory
+      let ret = await makeImport(fileList, openDirectory, (file: string, error: any) => {
         // This callback gets called whenever there is an error while running pandoc.
         global.notify.normal(trans('system.import_error', path.basename(file)))
       }, (file: string) => {

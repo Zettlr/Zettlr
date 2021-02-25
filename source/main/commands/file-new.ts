@@ -38,7 +38,7 @@ export default class FileNew extends ZettlrCommand {
       dir = this._app.getFileSystem().findDir(arg.hash)
     } else {
       global.log.warning('No directory selected. Using currently selected directory ...')
-      dir = this._app.getCurrentDir()
+      dir = this._app.getFileSystem().openDirectory
     }
 
     if (dir === null) {

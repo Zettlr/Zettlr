@@ -48,7 +48,7 @@ export default class FileDuplicate extends ZettlrCommand {
     // Then, the target directory.
     let dir = this._app.findDir(arg.dir) // (1) A specified directory
     if (dir === null) dir = file.parent // (2) The source file's dir
-    if (dir === null) dir = this._app.getCurrentDir() // (3) The current dir
+    if (dir === null) dir = this._app.getFileSystem().openDirectory // (3) The current dir
     if (dir === null) { // (4) Fail
       global.log.error('Could not create file, because no directory was found')
       this._app.prompt({
