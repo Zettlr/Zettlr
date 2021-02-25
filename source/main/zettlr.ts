@@ -31,10 +31,10 @@ import { commands } from './commands'
 import hash from '../common/util/hash'
 
 import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from './modules/fsal/types'
+import broadcastIpcMessage from '../common/util/broadcast-ipc-message'
 
 export default class Zettlr {
   isBooting: boolean
-  currentFile: any
   editFlag: boolean
   _openPaths: any
   _fsal: FSAL
@@ -49,9 +49,6 @@ export default class Zettlr {
     */
   constructor () {
     this.isBooting = true // Only is true until the main process has fully loaded
-    // INTERNAL VARIABLES
-    this.currentFile = null // Currently opened file (object)
-    // this.currentDir = null // Current working directory (object)
     this.editFlag = false // Is the current opened file edited?
     this._openPaths = [] // Holds all currently opened paths.
     this.isShownFor = [] // Contains all files for which remote notifications are currently shown
@@ -147,32 +144,83 @@ export default class Zettlr {
       this._fsal.clearCache()
     }
 
+    // Listen to the before-quit event by which we make sure to only quit the
+    // application if the status of possibly modified files has been cleared.
+    // We listen to this event, because it will fire *before* the process
+    // attempts to close the open windows, including the main window, which
+    // would result in a loss of data. NOTE: The exception is the auto-updater
+    // which will close the windows before this event. But because we also
+    // listen to close-events on the main window, we should be able to handle
+    // this, if we ever switched to the auto updater.
+    app.on('before-quit', (event) => {
+      if (!this._fsal.isClean()) {
+        // Immediately prevent quitting ...
+        event.preventDefault()
+        // ... and ask the user if we should *really* quit.
+        this._windowManager.askSaveChanges()
+          .then(result => {
+            // TODO translate and agree on buttons!
+            // 0 = 'Close without saving changes',
+            // 1 = 'Save changes'
+            if (result.response === 0) {
+              // Clear the modification flags and close again
+              this._fsal.updateModifiedFlags([]) // Empty array = no modified files
+              app.quit()
+            } else {
+              // TODO: Following strategy for the "Save and then quit" behaviour:
+              // 1. Broadcast an event to all renderers to immediately save all their changes
+              // 2. Once that is done, quit. So we should watch the modification files, shouldn't we ...?
+            }
+          })
+          .catch(e => global.log.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
+      }
+    })
+
+    // If the user wants to close the main window (either during quitting or
+    // by closing the window itself) we have to prevent this if not all files
+    // are clean. NOTE: The two events before-quit and onBeforeMainWindowClose
+    // make sure that this logic works on all platforms:
+    // If the main window is closed, quitting will work because no file can be
+    // modified without the main window being open. If the main window is still
+    // open, that will already prevent the quitting. As soon as the main window
+    // is closed on any platform, the "windows-all-closed" will quit the app
+    // successfully in any case.
+    this._windowManager.onBeforeMainWindowClose(() => {
+      if (!this._fsal.isClean()) {
+        this._windowManager.askSaveChanges()
+          .then(result => {
+            // TODO translate and agree on buttons!
+            // 0 = 'Close without saving changes',
+            // 1 = 'Save changes'
+            if (result.response === 0) {
+              // Clear the modification flags and close again
+              this._fsal.updateModifiedFlags([]) // Empty array = no modified files
+              this._windowManager.closeMainWindow()
+            } else {
+              // TODO: Following strategy for the "Save and then quit" behaviour:
+              // 1. Broadcast an event to all renderers to immediately save all their changes
+              // 2. Once that is done, quit. So we should watch the modification files, shouldn't we ...?
+            }
+          })
+          .catch(e => global.log.error('[Application] Could not ask the user to save their changes, because the message box threw an error. Not quitting!', e))
+      }
+      // We must return false to prevent the window from closing
+      return this._fsal.isClean()
+    })
+
     // Listen to changes in the file system
     this._fsal.on('fsal-state-changed', (objPath: string, info: any) => {
       // Emitted when anything in the state changes
-      if (this.isBooting) return // Only propagate these results when not booting
-
-      let dir = this.getCurrentDir()
+      const openDir = this._fsal.openDirectory
       switch (objPath) {
         case 'activeFile':
           // The active file has changed; set it in the config and notify the
           // renderer process to switch to this file again.
-          global.config.set('lastFile', this._fsal.activeFile)
-          this.ipc.send('sync-files', this._fsal.openFiles)
+          global.config.set('activeFile', this._fsal.activeFile)
+          broadcastIpcMessage('fsal-state-changed', 'activeFile')
           break
-        // The root filetree has changed (added or removed root)
         case 'filetree':
-          // Nothing specific, so send the full payload
-          global.ipc.send('paths-update', this._fsal.getTreeMeta())
-          break
-        case 'directory':
-          // Only a directory has changed
-          console.log('Updating directory in the renderer!')
-          global.application.dirUpdate(info.oldHash, info.newHash)
-          break
-        case 'file':
-          // Only a file has changed
-          global.application.fileUpdate(info.oldHash, info.newHash)
+          broadcastIpcMessage('fsal-state-changed', 'filetree')
           break
         case 'fileSaved':
           if (!this.isModified()) {
@@ -183,16 +231,14 @@ export default class Zettlr {
           // Re-send the file
           global.application.fileUpdate(info.fileHash, global.application.findFile(info.fileHash))
           break
-        case 'fileContents':
-          this._onFileContentsChanged(info)
-          break
         case 'openDirectory':
-          this.ipc.send('dir-set-current', (dir !== null) ? dir.hash : null)
-          global.config.set('lastDir', (dir !== null) ? dir.hash : null)
+          global.config.set('openDirectory', (openDir !== null) ? openDir.path : null)
+          broadcastIpcMessage('fsal-state-changed', 'openDirectory')
           break
         case 'openFiles':
           this.ipc.send('sync-files', this._fsal.openFiles)
           global.config.set('openFiles', this._fsal.openFiles)
+          broadcastIpcMessage('fsal-state-changed', 'openFiles')
           if (!this.isModified()) {
             this._windowManager.setModified(false)
           }
@@ -217,11 +263,65 @@ export default class Zettlr {
       }
     })
 
-    ipcMain.handle('application', async (event, payload) => {
-      const { command } = payload
-
+    ipcMain.handle('application', async (event, { command, payload }) => {
       if (command === 'get-statistics-data') {
         return this._fsal.statistics
+      } else if (command === 'get-filetree-events') {
+        return this._fsal.filetreeHistorySince(payload)
+      } else if (command === 'get-descriptor') {
+        const descriptor = this._fsal.find(payload)
+        if (descriptor === null) {
+          return null
+        }
+        return this._fsal.getMetadataFor(descriptor)
+      } else if (command === 'get-open-directory') {
+        const openDir = this._fsal.openDirectory
+        if (openDir === null) {
+          return null
+        }
+
+        return this._fsal.getMetadataFor(openDir)
+      } else if (command === 'get-active-file') {
+        const activeFile = this._fsal.activeFile
+        if (activeFile === null) {
+          return null
+        }
+
+        const descriptor = this.findFile(activeFile)
+        if (descriptor === null) {
+          return null
+        }
+
+        return this._fsal.getMetadataFor(descriptor as MDFileDescriptor)
+      } else if (command === 'set-active-file') {
+        const descriptor = this._fsal.findFile(payload)
+        if (descriptor !== null) {
+          this._fsal.activeFile = descriptor.path
+        }
+      } else if (command === 'get-open-files') {
+        const openFiles = this._fsal.openFiles
+        const ret = []
+        for (const openFilePath of openFiles) {
+          const descriptor = this._fsal.findFile(openFilePath)
+          if (descriptor !== null) {
+            ret.push(this._fsal.getMetadataFor(descriptor))
+          }
+        }
+        return ret
+      } else if (command === 'get-file-contents') {
+        const descriptor = this._fsal.findFile(payload)
+        if (descriptor === null) {
+          return null
+        }
+
+        const fileWithContents = await this._fsal.getFileContents(descriptor)
+        return fileWithContents
+      } else if (command === 'update-modified-files') {
+        // Update the modification status according to the file path array given
+        // in the payload.
+        console.log('Updating modification status of the following paths:', payload)
+        this._fsal.updateModifiedFlags(payload)
+        this._windowManager.setModified(!this._fsal.isClean())
       }
     })
   }
@@ -233,6 +333,7 @@ export default class Zettlr {
    * @memberof Zettlr
    */
   _onFileContentsChanged (info: any): void {
+    // TODO: This function is currently not called, but we probably need this!!!
     let changedFile = this.findFile(info.hash)
     if (changedFile === null) {
       global.log.error('[Application] Could not handle remote change, as no descriptor was found.', info)
@@ -285,6 +386,11 @@ export default class Zettlr {
    * Initiate the main process logic after boot.
    */
   async init (): Promise<void> {
+    // Open the main window as a first thing to make the app feel snappy. The
+    // algorithms will make sure the roots will appear one after another in the
+    // main window.
+    this.openWindow()
+
     let start = Date.now()
     // First: Initially load all paths
     for (let p of global.config.get('openPaths') as string[]) {
@@ -292,26 +398,30 @@ export default class Zettlr {
         await this._fsal.loadPath(p)
       } catch (e) {
         console.error(e)
-        global.log.info(`FSAL Removing path ${p}, as it does no longer exist.`)
-        // global.config.removePath(p) TODO
+        global.log.info(`[Application] Removing path ${p}, as it does no longer exist.`)
+        global.config.removePath(p)
       }
     }
 
     // Set the pointers either to null or last opened dir/file
-    let lastDir = null
-    let lastFile = null
+    let openDirectory = null
+    let activeFile = null
+    let openFiles = []
 
     try {
-      lastDir = this._fsal.findDir(global.config.get('lastDir'))
-      lastFile = this._fsal.findFile(global.config.get('lastFile'))
+      openDirectory = this._fsal.findDir(global.config.get('openDirectory'))
+      activeFile = this._fsal.findFile(global.config.get('activeFile'))
+      openFiles = global.config.get('openFiles')
     } catch (e) {
       console.log('Error on finding last dir or file', e)
     }
 
-    this.setCurrentDir(lastDir)
-    this.setCurrentFile((lastFile !== null) ? lastFile.hash : null)
-    if (lastFile !== null) {
-      global.recentDocs.add(this._fsal.getMetadataFor(lastFile))
+    // Pre-set the state based on the configuration
+    this._fsal.openFiles = openFiles
+    this._fsal.openDirectory = openDirectory
+    this._fsal.activeFile = (activeFile !== null) ? activeFile.path : null
+    if (activeFile !== null) {
+      global.recentDocs.add(this._fsal.getMetadataFor(activeFile))
     }
     // Second: handleAddRoots with global.filesToOpen
     await this.handleAddRoots(global.filesToOpen) // TODO
@@ -328,10 +438,6 @@ export default class Zettlr {
     // Also, we need to (re)open all files in tabs
     this._fsal.openFiles = global.config.get('openFiles')
 
-    // Now after all paths have been loaded, we are ready to load the
-    // main window to get this party started!
-    this.openWindow()
-
     // Finally, initiate a first check for updates
     global.updates.check()
   }
@@ -341,39 +447,12 @@ export default class Zettlr {
     * @return {Promise} Resolves after the providers have shut down
     */
   async shutdown (): Promise<void> {
+    if (!this._fsal.isClean()) {
+      global.log.error('[Application] Attention! The FSAL reported there were unsaved changes to certain files. This indicates a critical logical bug in the application!')
+    }
+    this._windowManager.shutdown()
     // Finally shut down the file system
     await this._fsal.shutdown()
-  }
-
-  /**
-    * Returns false if the file should not close, and true if it's safe.
-    * @return {Boolean} Either true, if the window can close, or false.
-    */
-  async canClose (): Promise<boolean> {
-    if (this.isModified()) {
-      global.log.error('[Application] There are unsaved changes. This indicates a bug, as everything should be saved before canClose() is called.')
-      return false
-    }
-    return true
-  }
-
-  /**
-    * This function is mainly called by the browser window to close the app.
-    * @return {void} Does not return anything.
-    */
-  async saveAndClose (): Promise<void> {
-    if (await this.canClose()) {
-      // "Hard reset" any edit flags that might prevent closing down of the app
-      this._windowManager.setModified(false)
-      let modifiedFiles = this._fsal.openFiles.map((e: number) => this._fsal.findFile(e)).filter(e => e !== null)
-
-      // This is the programmatical middle finger to good state management
-      for (let file of modifiedFiles as MDFileDescriptor[]) {
-        this._fsal.markClean(file)
-      }
-
-      app.quit()
-    }
   }
 
   async runCommand (evt: String, arg: any): Promise<any> {
@@ -408,7 +487,7 @@ export default class Zettlr {
 
     // Now send it back (the GUI should by itself filter out the files)
     if (obj !== null && obj.type === 'directory') {
-      this.setCurrentDir(obj)
+      this._fsal.openDirectory = obj
     } else {
       global.log.error('Could not find directory', arg)
       this._windowManager.prompt({
@@ -498,10 +577,7 @@ export default class Zettlr {
 
     // Open the newly added path(s) directly.
     if (newDir !== null) {
-      this.setCurrentDir(newDir)
-    }
-    if (newFile !== null) {
-      await this.sendFile(newFile.hash)
+      this._fsal.openDirectory = newDir
     }
   }
 
@@ -540,24 +616,6 @@ export default class Zettlr {
   }
 
   /**
-    * Sets the current file to the given file.
-    * @param {Number} f A file hash
-    */
-  setCurrentFile (f: number|null): void {
-    this.currentFile = f
-    global.config.set('lastFile', f)
-  }
-
-  /**
-    * Sets the current directory.
-    * @param {ZettlrDir} d Directory to be selected.
-    */
-  setCurrentDir (d: DirDescriptor|null): void {
-    // Set the dir
-    this._fsal.openDirectory = d
-  }
-
-  /**
    * Opens the file by moving it into the openFiles array on the FSAL.
    * @param {Number} arg The hash of a file to open
    */
@@ -574,7 +632,7 @@ export default class Zettlr {
       global.recentDocs.add(this._fsal.getMetadataFor(file))
       // Also, add to last opened files to persist during reboots
       global.config.addFile(file.path)
-      await this.sendFile(file.hash)
+      this._fsal.activeFile = file.path // Also make this thing active.
     } else {
       global.log.error('Could not find file', arg)
       this._windowManager.prompt({
@@ -582,27 +640,6 @@ export default class Zettlr {
         title: trans('system.error.fnf_title'),
         message: trans('system.error.fnf_message')
       })
-    }
-  }
-
-  /**
-    * Send a file with its contents to the renderer process.
-    * @param  {number} arg An integer containing the file's hash.
-    * @return {void}     This function does not return anything.
-    */
-  async sendFile (arg: number): Promise<void> {
-    // arg contains the hash of a file.
-    // findFile now returns the file object
-    let file = this._fsal.findFile(arg)
-
-    if (file !== null) {
-      try {
-        let fileMeta = await this._fsal.getFileContents(file)
-        this.ipc.send('file-open', fileMeta)
-      } catch (e) {
-        const fileName: String = file.name
-        global.log.error(`Error sending file! ${fileName.toString()}`, e)
-      }
     }
   }
 
@@ -697,18 +734,6 @@ export default class Zettlr {
     * @return {ZettlrIPC}  The IPC object
     */
   getIPC (): ZettlrIPC { return this.ipc }
-
-  /**
-    * Get the current directory.
-    * @return {ZettlrDir} Current directory.
-    */
-  getCurrentDir (): DirDescriptor|null { return this._fsal.openDirectory }
-
-  /**
-    * Return the current file.
-    * @return {Mixed} ZettlrFile or null.
-    */
-  getCurrentFile (): MDFileDescriptor|null { return this.currentFile }
 
   /**
    * Returns the File System Abstraction Layer
