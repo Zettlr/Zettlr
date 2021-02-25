@@ -91,8 +91,8 @@ export default class ConfigProvider extends EventEmitter {
       'version': ZETTLR_VERSION, // Useful for migrating
       'openPaths': [], // Array to include all opened root paths
       'openFiles': [], // Array to include all currently opened files
-      'lastFile': null, // Save last opened file hash here
-      'lastDir': null, // Save last opened dir hash here
+      'activeFile': null, // Save last opened file hash here
+      'openDirectory': null, // Save last opened dir path here
       'dialogPaths': {
         'askFileDialog': '',
         'askDirDialog': '',
