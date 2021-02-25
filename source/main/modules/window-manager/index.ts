@@ -42,6 +42,7 @@ import createErrorModal from './create-error-modal'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
 import shouldReplaceFileDialog from './dialog/should-replace-file'
 import askDirectoryDialog from './dialog/ask-directory'
+import askSaveChanges from './dialog/ask-save-changes'
 import promptDialog from './dialog/prompt'
 import sanitizeWindowPosition from './sanitize-window-position'
 import { WindowPosition } from './types.d'
@@ -68,6 +69,7 @@ export default class WindowManager {
   private readonly _configFile: string
   private _fileLock: boolean
   private _persistTimeout: ReturnType<typeof setTimeout>|undefined
+  private _beforeMainWindowCloseCallback: Function|null
 
   constructor () {
     this._mainWindow = null
@@ -84,6 +86,7 @@ export default class WindowManager {
     this._windowState = []
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
+    this._beforeMainWindowCloseCallback = null
 
     // Listen to window control commands
     ipcMain.on('window-controls', (event, message) => {
@@ -169,6 +172,25 @@ export default class WindowManager {
   }
 
   /**
+   * Sets a callback that will be called before the main window closes. Must
+   * return false if the window should not be closed.
+   *
+   * @param   {Function}  callback  The callback that will be called. Must return boolean.
+   */
+  onBeforeMainWindowClose (callback: () => boolean): void {
+    this._beforeMainWindowCloseCallback = callback
+  }
+
+  /**
+   * Programmatically closes the main window if it is open.
+   */
+  closeMainWindow (): void {
+    if (this._mainWindow !== null) {
+      this._mainWindow.close()
+    }
+  }
+
+  /**
    * Shuts down the window manager and performs final operations
    */
   shutdown (): void {
@@ -216,8 +238,12 @@ export default class WindowManager {
         }
       }
 
-      // TODO: Check if we can really close the window. Abort using
-      // event.preventDefault() if necessary.
+      if (this._beforeMainWindowCloseCallback !== null) {
+        const shouldClose: boolean = this._beforeMainWindowCloseCallback()
+        if (!shouldClose) {
+          event.preventDefault()
+        }
+      }
     }) // END: mainWindow.on(close)
 
     this._mainWindow.on('closed', () => {
@@ -714,6 +740,17 @@ export default class WindowManager {
     */
   async shouldOverwriteFile (filename: string): Promise<boolean> {
     return await shouldOverwriteFileDialog(this._mainWindow, filename)
+  }
+
+  /**
+   * Asks the user whether or not to persist or drop changes to their files. It
+   * returns the ID of the clicked button in the message box, which is 0 to
+   * simply drop changes, 1 to abort closing in order to save. TODO: Enable auto-save
+   *
+   * @return  {Promise<any>}  Returns the message box results
+   */
+  async askSaveChanges (): Promise<any> {
+    return await askSaveChanges(this._mainWindow)
   }
 
   /**
