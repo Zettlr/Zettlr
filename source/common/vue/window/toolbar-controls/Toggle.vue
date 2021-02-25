@@ -2,7 +2,11 @@
   <button
     role="button"
     v-bind:aria-pressed="isActive"
-    v-bind:class="getClass"
+    v-bind:class="{
+      'toggle': true,
+      'active': isActive,
+      [control.activeClass]: control.activeClass !== undefined && isActive
+    }"
     v-on:click="toggle"
   >
     <clr-icon v-if="control.icon" v-bind:shape="control.icon"></clr-icon>
@@ -25,13 +29,6 @@ export default {
     }
   },
   computed: {
-    getClass: function () {
-      if (this.isActive === true) {
-        return this.control.activeClass
-      } else {
-        return ''
-      }
-    }
   },
   methods: {
     toggle: function () {
@@ -43,5 +40,12 @@ export default {
 </script>
 
 <style lang="less">
-//
+body.darwin {
+
+  button.toggle {
+    &.active {
+      background-color: rgb(200, 200, 200) !important; // TODO
+    }
+  }
+}
 </style>

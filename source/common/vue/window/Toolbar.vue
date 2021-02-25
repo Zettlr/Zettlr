@@ -69,7 +69,7 @@ export default {
 </script>
 
 <style lang="less">
-#toolbar {
+body #toolbar {
   width: 100%;
   height: 40px;
   padding: 0px 10px;
@@ -77,6 +77,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  -webkit-app-region: drag;
+
+  & > * {
+    -webkit-app-region: no-drag;
+  }
 
   div.spacer {
     .size-1x { flex-grow: 1; }
@@ -84,6 +89,7 @@ export default {
     .size-5x { flex-grow: 5; }
   }
 }
+
 body.darwin {
   @toolbar-height: 40px;
   @font-size: 14px;
@@ -92,14 +98,7 @@ body.darwin {
     height: @toolbar-height;
     font-size: @font-size;
     background-color: rgb(245, 245, 245);
-
-    input[type="search"] {
-      border-radius: 4px;
-      background-color: rgb(230, 230, 230);
-      border: 1px solid rgb(190, 190, 190);
-      padding: 2px 6px;
-      margin: 0 4px;
-    }
+    padding-left: 80px; // Make space for the traffic lights
 
     button {
       border-radius: 4px;
@@ -107,7 +106,6 @@ body.darwin {
       color: rgb(100, 100, 100);
       border: none;
       padding: 4px 8px;
-      margin: (@toolbar-height / 2 - @font-size / 2) 4px;
 
       &:hover {
         background-color: rgb(230, 230, 230);
