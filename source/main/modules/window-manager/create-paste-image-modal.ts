@@ -30,10 +30,8 @@ import setWindowChrome from './set-window-chrome'
 export default function createPasteImageModal (win: BrowserWindow, startPath: string): BrowserWindow {
   const winConf: BrowserWindowConstructorOptions = {
     acceptFirstMouse: true,
-    minWidth: 300,
-    minHeight: 200,
-    width: 600,
-    height: 300,
+    width: 700,
+    height: 500,
     modal: true,
     parent: win,
     show: false,
