@@ -51,5 +51,16 @@ body.darwin {
     padding: 2px 6px;
     margin: 0 4px;
   }
+
+  &.dark {
+    .toolbar-search {
+      background-color: rgb(51, 51, 51);;
+      border: 1px solid rgb(120, 120, 120);
+
+      &::placeholder {
+        color: rgb(120, 120, 120);
+      }
+    }
+  }
 }
 </style>
