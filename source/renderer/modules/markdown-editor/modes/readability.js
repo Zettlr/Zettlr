@@ -84,7 +84,7 @@
    * coleman-liau and automated readability.
    * @type {Object}
    */
-  var readabilityAlgorithms = {
+  const readabilityAlgorithms = {
     /**
      * Calculates a score for a sentence, given an Array of words.
      * @type {Function}
@@ -188,8 +188,8 @@
     }
   }
 
-  var delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚'
-  var sentenceEndings = '!?.:'
+  const delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~ «»“”–—…÷‘’‚'
+  const sentenceEndings = '!?.:'
 
   /**
   * This defines the readability mode. It will highlight sentences according
@@ -201,7 +201,7 @@
   * @return {OverlayMode}              The loaded overlay mode.
   */
   CodeMirror.defineMode('readability', function (config, parserConfig) {
-    var readability = {
+    const readability = {
       token: function (stream, state) {
         // First extract a sentence, but exclude Markdown formatting.
         let sentence = ''
