@@ -216,7 +216,7 @@ body {
   #sidebar {
     background-color: rgba(30, 30, 30, .3);
 
-    position: absolute;
+    position: fixed;
     z-index: 2; // Otherwise the editor will have a higher z-index somehow
     top: 0;
     right: -20%;
@@ -303,9 +303,16 @@ body {
       div.toc-entry { flex-grow: 3; }
     }
   }
+
+  &.dark {
+    #sidebar {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: rgb(230, 230, 230);
+    }
+  }
 }
 
 body.darwin div#sidebar {
-  top: 30px; // On macOS the documents tabbar is 30px high, so we want to offset the sidebar by that.
+  top: 40px; // On macOS the documents titlebar is 30px high, so we want to offset the sidebar by that.
 }
 </style>
