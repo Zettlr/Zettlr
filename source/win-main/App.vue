@@ -35,6 +35,7 @@ import SplitView from './SplitView'
 import Editor from './Editor'
 import { trans } from '../common/i18n'
 import localiseNumber from '../common/util/localise-number'
+import { ipcRenderer } from 'electron'
 
 export default {
   name: 'Main',
@@ -93,36 +94,31 @@ export default {
       return [
         {
           type: 'button',
-          class: 'workspace-open',
-          command: 'workspace-open',
+          id: 'open-workspace',
           title: 'menu.open_workspace',
           icon: 'folder-open'
         },
         {
           type: 'button',
-          class: 'file-new',
           command: 'file-new',
           title: 'toolbar.file_new',
           icon: 'file'
         },
         {
           type: 'button',
-          class: 'stats',
           command: 'show-stats',
           title: 'toolbar.stats',
           icon: 'line-chart'
         },
         {
           type: 'button',
-          class: 'tag-cloud',
           command: 'show-tag-cloud',
           title: 'toolbar.tag_cloud',
           icon: 'tags'
         },
         {
           type: 'button',
-          class: 'preferences',
-          command: 'open-preferences',
+          id: 'open-preferences',
           title: 'toolbar.preferences',
           icon: 'cog'
         },
@@ -145,42 +141,36 @@ export default {
         },
         {
           type: 'button',
-          class: 'file-rename',
           command: 'file-rename',
           title: 'toolbar.file_rename',
           icon: 'pencil'
         },
         {
           type: 'button',
-          class: 'file-delete',
           command: 'file-delete',
           title: 'toolbar.file_delete',
           icon: 'trash'
         },
         {
           type: 'button',
-          class: 'formatting',
           command: 'formatting',
           title: 'toolbar.formatting',
           icon: 'text'
         },
         {
           type: 'button',
-          class: 'show-toc',
           command: 'toc',
           title: 'toolbar.show_toc',
           icon: 'indented-view-list'
         },
         {
           type: 'button',
-          class: 'find',
           command: 'file-find',
           title: 'toolbar.find',
           icon: 'search'
         },
         {
           type: 'toggle',
-          class: 'readability',
           id: 'toggle-readability',
           title: 'toolbar.readability',
           icon: 'eye'
@@ -199,7 +189,6 @@ export default {
         },
         {
           type: 'toggle',
-          class: 'toggle-sidebar',
           id: 'toggle-sidebar',
           title: 'menu.toggle_sidebar',
           icon: 'view-columns'
@@ -214,6 +203,12 @@ export default {
         this.readabilityActive = !this.readabilityActive
       } else if (clickedID === 'toggle-sidebar') {
         this.sidebarVisible = !this.sidebarVisible
+      } else if (clickedID === 'open-workspace') {
+        ipcRenderer.invoke('application', { command: 'open-workspace' })
+          .catch(e => console.error(e))
+      } else if (clickedID === 'open-preferences') {
+        ipcRenderer.invoke('application', { command: 'open-preferences' })
+          .catch(e => console.error(e))
       }
     }
   }

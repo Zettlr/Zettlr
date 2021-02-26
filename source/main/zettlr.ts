@@ -322,6 +322,12 @@ export default class Zettlr {
         console.log('Updating modification status of the following paths:', payload)
         this._fsal.updateModifiedFlags(payload)
         this._windowManager.setModified(!this._fsal.isClean())
+      } else if (command === 'open-workspace') {
+        await this.openWorkspace()
+        return true
+      } else if (command === 'open-preferences') {
+        this._windowManager.showPreferences()
+        return true
       }
     })
   }
