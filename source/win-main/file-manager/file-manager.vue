@@ -439,7 +439,7 @@ export default {
 </script>
 
 <style lang="less">
-#file-manager {
+body #file-manager {
     // display: inline-block;
     // position: relative;
     width: 100%;
@@ -476,5 +476,12 @@ export default {
           left:-60px;
         }
     }
+}
+
+body.dark #file-manager {
+  #arrow-button {
+    background-color: rgb(80, 80, 80);
+    color: rgb(230, 230, 230);
+  }
 }
 </style>
