@@ -19,7 +19,7 @@
       </template>
       <template #view2>
         <Tabs></Tabs>
-        <Editor></Editor>
+        <Editor v-bind:readability-mode="readabilityActive"></Editor>
       </template>
     </SplitView>
     <Sidebar v-bind:show-sidebar="sidebarVisible"></Sidebar>

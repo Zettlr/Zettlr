@@ -383,7 +383,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
     const docMode = (typeof cmDoc.mode === 'string') ? cmDoc.mode : cmDoc.mode.name
     const cmMode = (typeof this._cmOptions.mode === 'string') ? this._cmOptions['mode'] : this._cmOptions['mode'].name
 
-    if (docMode !== cmMode) {
+    if (docMode !== cmMode && !this.readabilityMode) {
       this.setOptions({ 'mode': cmDoc.mode })
     }
 
@@ -582,6 +582,30 @@ module.exports = class MarkdownEditor extends EventEmitter {
    */
   set hasTypewriterMode (shouldBeTypewriter) {
     this.setOptions({ 'zettlr': { 'typewriterMode': shouldBeTypewriter } })
+  }
+
+  /**
+   * Returns whether or not the readability mode is currently active
+   *
+   * @return  {boolean}  True if the readability mode is active
+   */
+  get readabilityMode () {
+    return this._cmOptions.mode === 'readability'
+  }
+
+  /**
+   * Sets the readability mode
+   *
+   * @param   {boolean}  shouldBeReadability  Whether or not the mode should be active
+   */
+  set readabilityMode (shouldBeReadability) {
+    if (this._cmOptions.mode === 'readability' && !shouldBeReadability) {
+      this.setOptions({ 'mode': this._lastMode })
+      this._lastMode = undefined
+    } else if (shouldBeReadability) {
+      this._lastMode = this._cmOptions.mode
+      this.setOptions({ 'mode': 'readability' })
+    }
   }
 
   /**

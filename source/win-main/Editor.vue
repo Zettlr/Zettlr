@@ -17,6 +17,10 @@ export default {
     query: {
       type: String,
       default: ''
+    },
+    readabilityMode: {
+      type: Boolean,
+      default: false
     }
   },
   data: function () {
@@ -77,6 +81,9 @@ export default {
 
   },
   watch: {
+    readabilityMode: function () {
+      this.editor.readabilityMode = this.readabilityMode
+    },
     editorConfiguration: function () {
       // Update the editor configuration, if anything changes.
       this.editor.setOptions(this.editorConfiguration)
