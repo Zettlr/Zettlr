@@ -52,17 +52,6 @@
         v-bind:class="{hidden: !fileListVisible}"
       ></FileList>
     </div>
-    <!-- <div
-      v-if="isExpanded"
-      id="file-manager-inner-resizer"
-      ref="fileManagerInnerResizer"
-      v-on:mousedown="fileManagerStartInnerResize"
-    ></div>
-    <div
-      id="file-manager-resize"
-      ref="fileManagerResizer"
-      v-on:mousedown="fileManagerStartResize"
-    ></div> -->
   </div>
 </template>
 
@@ -83,8 +72,6 @@ export default {
     return {
       previous: '', // Can be "file-list" or "directories"
       lockedTree: false, // Is the file tree locked in?
-      fileManagerResizing: false, // Only true during file manager resizes
-      fileManagerResizeX: 0, // Save the resize cursor position during resizes
       fileManagerInnerResizing: false,
       fileManagerInnerResizeX: 0,
       // Whether file tree and list are visible
@@ -325,60 +312,6 @@ export default {
         this.toggleFileList()
         this.previous = ''
       }
-    },
-    /**
-     * Begins a file manager resizing operation.
-     * @param {MouseEvent} evt The associated event.
-     */
-    fileManagerStartResize: function (evt) {
-      // Begin a resize movement
-      this.fileManagerResizing = true
-      this.fileManagerResizeX = evt.clientX
-      document.addEventListener('mousemove', this.fileManagerResize)
-      document.addEventListener('mouseup', this.fileManagerStopResize)
-    },
-    /**
-     * Resizes the file manager according to the event's direction.
-     * @param {MouseEvent} evt The associated event.
-     */
-    fileManagerResize: function (evt) {
-      // Resize the file manager
-      if (!this.fileManagerResizing) {
-        return
-      }
-
-      const fileTree = this.$refs.directories.$el
-      const fileList = this.$refs.fileList.$el
-
-      let x = this.fileManagerResizeX - evt.clientX
-      if (this.isExpanded && fileList.offsetWidth <= 50 && x > 0) {
-        return // Don't overdo it
-      }
-
-      if (this.$el.offsetWidth <= 50 && x > 0) {
-        return // The file manager shouldn't become less than this
-      }
-
-      this.fileManagerResizeX = evt.clientX
-      this.$el.style.width = (this.$el.offsetWidth - x) + 'px'
-      // TODO: This is monkey-patched, emit regular events, like a grown up
-      // 10px resizer width
-      // document.getElementById('editor').style.left = this.$el.offsetWidth + 10 + 'px'
-      if (this.isExpanded) {
-        // We don't have a thin file manager, so resize the fileList accordingly
-        fileList.style.width = (this.$el.offsetWidth - fileTree.offsetWidth) + 'px'
-      }
-    },
-    /**
-     * Stops the file manager resize on mouse button release.
-     * @param {MouseEvent} evt The associated event.
-     */
-    fileManagerStopResize: function (evt) {
-      // Stop the resize movement
-      this.fileManagerResizing = false
-      this.fileManagerResizeX = 0
-      document.removeEventListener('mousemove', this.fileManagerResize)
-      document.removeEventListener('mouseup', this.fileManagerStopResize)
     },
     /**
      * Begins a resize of the inner file manager components.
