@@ -40,12 +40,17 @@ export default {
 </script>
 
 <style lang="less">
-body.darwin {
-
+body.darwin div#toolbar {
   button.toggle {
     &.active {
-      background-color: rgb(200, 200, 200) !important; // TODO
+      background-color: rgb(200, 200, 200);
     }
+  }
+}
+
+body.darwin.dark div#toolbar {
+  button.toggle.active {
+    background-color: rgb(40, 40, 40);
   }
 }
 </style>
