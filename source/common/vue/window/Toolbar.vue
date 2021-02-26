@@ -69,7 +69,7 @@ export default {
 </script>
 
 <style lang="less">
-body #toolbar {
+body div#toolbar {
   width: 100%;
   height: 40px;
   padding: 0px 10px;
@@ -99,11 +99,11 @@ body.darwin {
     font-size: @font-size;
     background-color: rgb(245, 245, 245);
     padding-left: 80px; // Make space for the traffic lights
+    color: rgb(100, 100, 100);
 
     button {
       border-radius: 4px;
       background-color: transparent;
-      color: rgb(100, 100, 100);
       border: none;
       padding: 4px 8px;
 
@@ -116,8 +116,12 @@ body.darwin {
   &.dark {
     // Dark styling
     div#toolbar {
-      background-color: rgb(52, 52, 52);
+      background-color: rgb(51, 51, 51);
       color: rgb(172, 172, 172);
+
+      button:hover {
+        background-color: rgb(60, 60, 60,);
+      }
 
       &:window-inactive {
         background-color: rgb(34, 34, 34);
