@@ -64,8 +64,8 @@ export default {
       this.view1Width = this.availableSize * view1Percent
       this.view2Width = this.availableSize * view2Percent
       // Don't forget to also update the minum widths
-      this.view1WidthMin = this.availableSize * (this.minimumWidthPercent / 100)
-      this.view2WidthMin = this.availableSize * (this.minimumWidthPercent / 100)
+      this.view1WidthMin = this.availableSize * (this.minimumSizePercent / 100)
+      this.view2WidthMin = this.availableSize * (this.minimumSizePercent / 100)
     },
     beginViewResizing: function (event) {
       this.viewResizing = true
