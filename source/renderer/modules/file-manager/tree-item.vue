@@ -148,6 +148,7 @@ import { trans } from '../../../common/i18n'
 import Sorter from './sorter.vue'
 import fileContextMenu from './util/file-item-context.js'
 import dirContextMenu from './util/dir-item-context.js'
+import { ipcRenderer } from 'electron'
 
 export default {
   name: 'TreeItem',
@@ -337,10 +338,18 @@ export default {
         if (!middleClick && !ctrl && !cmd) {
           global.editor.announceTransientFile(this.obj.hash)
         }
-        global.ipc.send('file-get', this.obj.hash)
+        ipcRenderer.invoke('application', {
+          command: 'open-file',
+          payload: this.obj.path
+        })
+          .catch(e => console.error(e))
       } else {
         // Select this directory
-        global.ipc.send('dir-select', this.obj.hash)
+        ipcRenderer.invoke('application', {
+          command: 'set-open-directory',
+          payload: this.obj.path
+        })
+          .catch(e => console.error(e))
         this.collapsed = false // Also open the directory
       }
     },

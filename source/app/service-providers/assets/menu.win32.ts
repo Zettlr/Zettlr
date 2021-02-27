@@ -65,7 +65,7 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           label: trans('menu.open'),
           accelerator: 'Ctrl+O',
           click: function (menuitem, focusedWindow) {
-            global.application.runCommand('open-file')
+            global.application.runCommand('open-root-file')
               .catch(e => global.log.error(String(e.message), e))
           }
         },

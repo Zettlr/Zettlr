@@ -362,12 +362,20 @@ export default {
       } else if (this.obj.type === 'file') {
         // Request the clicked file
         if (!middleClick && !ctrl && !cmd) {
-          global.editor.announceTransientFile(this.obj.hash)
+          // global.editor.announceTransientFile(this.obj.hash)
         }
-        global.ipc.send('file-get', this.obj.hash)
+        ipcRenderer.invoke('application', {
+          command: 'open-file',
+          payload: this.obj.path
+        })
+          .catch(e => console.error(e))
       } else {
         // Select this directory
-        ipcRenderer.send('message', { command: 'dir-select', content: this.obj.hash })
+        ipcRenderer.invoke('application', {
+          command: 'set-open-directory',
+          payload: this.obj.path
+        })
+          .catch(e => console.error(e))
       }
     },
     /**

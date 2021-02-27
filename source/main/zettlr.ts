@@ -414,7 +414,7 @@ export default class Zettlr {
     // wouldn't make sense.
     if (command === 'open-workspace') {
       return await this.openWorkspace()
-    } else if (command === 'open-file') {
+    } else if (command === 'open-root-file') {
       return await this.openRootFile()
     } else if (command === 'get-statistics-data') {
       return this._fsal.statistics
@@ -433,6 +433,9 @@ export default class Zettlr {
       }
 
       return this._fsal.getMetadataFor(openDir)
+    } else if (command === 'set-open-directory') {
+      this.selectDir(payload)
+      return true
     } else if (command === 'get-active-file') {
       const activeFile = this._fsal.activeFile
       if (activeFile === null) {
@@ -450,6 +453,9 @@ export default class Zettlr {
       if (descriptor !== null) {
         this._fsal.activeFile = descriptor.path
       }
+    } else if (command === 'open-file') {
+      this.openFile(payload)
+      return true
     } else if (command === 'get-open-files') {
       const openFiles = this._fsal.openFiles
       const ret = []
@@ -499,19 +505,19 @@ export default class Zettlr {
   }
 
   /**
-    * Send a new directory list to the client.
-    * @param  {number} arg A hash identifying the directory.
-    * @return {void}     This function does not return anything.
-    */
-  selectDir (arg: number): void {
+   * Sets the active/open directory to the specified path.
+   *
+   * @param   {string}  dirPath  The directory's path
+   */
+  selectDir (dirPath: string): void {
     // arg contains a hash for a directory.
-    let obj = this._fsal.findDir(arg)
+    let obj = this._fsal.findDir(dirPath)
 
     // Now send it back (the GUI should by itself filter out the files)
     if (obj !== null && obj.type === 'directory') {
       this._fsal.openDirectory = obj
     } else {
-      global.log.error('Could not find directory', arg)
+      global.log.error('Could not find directory', dirPath)
       this._windowManager.prompt({
         type: 'error',
         title: trans('system.error.dnf_title'),
@@ -590,7 +596,7 @@ export default class Zettlr {
         let loaded = await this._fsal.loadPath(f)
         if (!loaded) continue
         let file = this._fsal.findFile(f)
-        if (file !== null) await this.openFile(file.hash)
+        if (file !== null) await this.openFile(file.path)
       } else {
         global.notify.normal(trans('system.error.open_root_error', path.basename(f)))
         global.log.error(`Could not open new root file ${f}!`)
@@ -638,13 +644,14 @@ export default class Zettlr {
   }
 
   /**
-   * Opens the file by moving it into the openFiles array on the FSAL.
-   * @param {Number} arg The hash of a file to open
+   * Opens the file passed to this function
+   *
+   * @param   {string}   filePath  The filepath
    */
-  async openFile (arg: number): Promise<void> {
+  openFile (filePath: string): void {
     // arg contains the hash of a file.
     // findFile now returns the file object
-    let file = this.findFile(arg)
+    let file = this.findFile(filePath)
 
     if (file != null) {
       // Add the file's metadata object to the recent docs
@@ -656,7 +663,7 @@ export default class Zettlr {
       global.config.addFile(file.path)
       this._fsal.activeFile = file.path // Also make this thing active.
     } else {
-      global.log.error('Could not find file', arg)
+      global.log.error('Could not find file', filePath)
       this._windowManager.prompt({
         type: 'error',
         title: trans('system.error.fnf_title'),

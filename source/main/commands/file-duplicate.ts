@@ -14,7 +14,6 @@
 
 import ZettlrCommand from './zettlr-command'
 import { trans } from '../../common/i18n'
-import hash from '../../common/util/hash'
 import { filetypes as ALLOWED_FILETYPES } from '../../common/data.json'
 import path from 'path'
 import sanitize from 'sanitize-filename'
@@ -78,8 +77,7 @@ export default class FileDuplicate extends ZettlrCommand {
     })
 
     // And directly thereafter, open the file
-    let fileHash = hash(path.join(dir.path, filename))
-    await this._app.openFile(fileHash)
+    await this._app.openFile(path.join(dir.path, filename))
   }
 }
 

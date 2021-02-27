@@ -127,16 +127,6 @@ class ZettlrIPC {
     }
 
     switch (cmd) {
-      case 'file-get':
-        // The client requested a different file.
-        this._app.openFile(cnt)
-        break
-
-      case 'dir-select':
-        // The client requested another directory
-        this._app.selectDir(cnt)
-        break
-
       // Set or update a target
       case 'set-target':
         global.targets.set(cnt)

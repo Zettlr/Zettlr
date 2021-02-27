@@ -344,16 +344,25 @@ export default {
         global.ipc.send('open-quicklook', this.obj.hash)
       } else if ([ 'file', 'code' ].includes(this.obj.type)) {
         // Request the clicked file
-        ipcRenderer.send('message', { command: 'file-get', content: this.obj.hash })
-        // global.ipc.send('file-get', this.obj.hash) TODO: Everything in here needs to be made better
+        ipcRenderer.invoke('application', {
+          command: 'open-file',
+          payload: this.obj.path
+        })
+          .catch(e => console.error(e))
       } else if (alt && this.obj.parent !== null) {
         // Select the parent directory
-        // global.ipc.send('dir-select', this.obj.parent.hash)
-        ipcRenderer.send('message', { command: 'dir-select', content: this.obj.parent })
+        ipcRenderer.invoke('application', {
+          command: 'set-open-directory',
+          payload: this.obj.path // TODO parent!!
+        })
+          .catch(e => console.error(e))
       } else {
         // Select this directory
-        // global.ipc.send('dir-select', this.obj.hash)
-        ipcRenderer.send('message', { command: 'dir-select', content: this.obj.parent })
+        ipcRenderer.invoke('application', {
+          command: 'set-open-directory',
+          payload: this.obj.path
+        })
+          .catch(e => console.error(e))
       }
     },
     /**

@@ -81,6 +81,7 @@ import { trans } from '../../../common/i18n'
 import tippy from 'tippy.js'
 import FileItem from './file-item.vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
+import { ipcRenderer } from 'electron'
 
 export default {
   name: 'FileList',
@@ -259,11 +260,19 @@ export default {
       // On pressing enter, that's the same as clicking
       if (evt.key === 'Enter' && this.activeDescriptor !== null) {
         if (descriptor.type === 'directory') {
-          global.ipc.send('dir-select', this.activeDescriptor)
+          ipcRenderer.invoke('application', {
+            command: 'set-open-directory',
+            payload: descriptor.path
+          })
+            .catch(e => console.error(e))
         } else {
           // Select the active file (if there is one)
           global.editor.announceTransientFile(this.activeDescriptor)
-          global.ipc.send('file-get', this.activeDescriptor)
+          ipcRenderer.invoke('application', {
+            command: 'open-file',
+            payload: descriptor.path
+          })
+            .catch(e => console.error(e))
         }
         return // Stop handling
       }
