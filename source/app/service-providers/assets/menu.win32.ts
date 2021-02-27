@@ -291,8 +291,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.copy_id',
           label: trans('menu.copy_id'),
-          accelerator: 'Ctrl+Shift+L' // ,
-          // command: 'copy-current-id' TODO
+          accelerator: 'Ctrl+Shift+L',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'copy-current-id')
+          }
         }
       ]
     },

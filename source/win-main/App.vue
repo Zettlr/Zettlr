@@ -227,6 +227,12 @@ export default {
             'rtf': rtf
           })
         }, 10) // Why do a timeout? Because the paste event is asynchronous.
+      } else if (shortcut === 'copy-current-id') {
+        const activeFile = this.$store.state.activeFile
+
+        if (activeFile !== null && activeFile.id !== '') {
+          clipboard.writeText(activeFile.id)
+        }
       }
     })
   },
