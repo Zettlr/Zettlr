@@ -343,8 +343,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.toggle_sidebar',
           label: trans('menu.toggle_sidebar'),
-          accelerator: 'Ctrl+?' // ,
-          // command: 'toggle-sidebar'
+          accelerator: 'Ctrl+?',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'toggle-sidebar')
+          }
         },
         {
           type: 'separator'

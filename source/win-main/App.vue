@@ -196,13 +196,20 @@ export default {
       ]
     }
   },
+  mounted: function () {
+    ipcRenderer.on('shortcut', (event, shortcut) => {
+      if (shortcut === 'toggle-sidebar') {
+        this.sidebarVisible = this.sidebarVisible === false
+      }
+    })
+  },
   methods: {
     handleClick: function (clickedID) {
       console.log('Clicked:', clickedID)
       if (clickedID === 'toggle-readability') {
-        this.readabilityActive = !this.readabilityActive
+        this.readabilityActive = this.readabilityActive === false
       } else if (clickedID === 'toggle-sidebar') {
-        this.sidebarVisible = !this.sidebarVisible
+        this.sidebarVisible = this.sidebarVisible === false
       } else if (clickedID === 'open-workspace') {
         ipcRenderer.invoke('application', { command: 'open-workspace' })
           .catch(e => console.error(e))
