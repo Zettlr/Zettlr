@@ -8,6 +8,7 @@
 const MarkdownEditor = require('../common/modules/markdown-editor')
 const CodeMirror = require('codemirror')
 const makeSearchRegEx = require('../common/util/make-search-regex')
+const { ipcRenderer } = require('electron')
 
 export default {
   name: 'Editor',
@@ -149,6 +150,13 @@ export default {
 
     this.$root.$on('search-next', () => {
       this.searchNext()
+    })
+
+    // Listen to shortcuts from the main process
+    ipcRenderer.on('shortcut', (event, shortcut) => {
+      if (shortcut === 'copy-as-html') {
+        this.editor.copyAsHTML()
+      }
     })
   },
   methods: {

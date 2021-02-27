@@ -235,8 +235,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.copy_html',
           label: trans('menu.copy_html'),
-          accelerator: 'Ctrl+Alt+C' // ,
-          // command: 'copy-as-html' TODO
+          accelerator: 'Ctrl+Alt+C',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'copy-as-html')
+          }
         },
         {
           id: 'menu.paste',
@@ -247,8 +249,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.paste_plain',
           label: trans('menu.paste_plain'),
-          accelerator: 'Ctrl+Shift+V' // ,
-          // command: 'paste-as-plain' TODO
+          accelerator: 'Ctrl+Shift+V',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'paste-as-plain')
+          }
         },
         {
           id: 'menu.select_all',

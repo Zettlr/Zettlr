@@ -269,8 +269,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.copy_html',
           label: trans('menu.copy_html'),
-          accelerator: 'Cmd+Alt+C' // ,
-          // command: 'copy-as-html'
+          accelerator: 'Cmd+Alt+C',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'copy-as-html')
+          }
         },
         {
           id: 'menu.paste',
@@ -281,8 +283,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.paste_plain',
           label: trans('menu.paste_plain'),
-          accelerator: 'Cmd+Shift+V' // ,
-          // command: 'paste-as-plain'
+          accelerator: 'Cmd+Shift+V',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'paste-as-plain')
+          }
         },
         {
           id: 'menu.select_all',
@@ -305,7 +309,7 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           id: 'menu.find_dir',
           label: trans('menu.find_dir'),
           accelerator: 'Cmd+Shift+F' // ,
-          // command: 'dir-find'
+          // command: 'dir-find' TODO
         },
         {
           type: 'separator'
@@ -314,13 +318,13 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           id: 'menu.generate_id',
           label: trans('menu.generate_id'),
           accelerator: 'Cmd+L' // ,
-          // command: 'insert-id'
+          // command: 'insert-id' TODO
         },
         {
           id: 'menu.copy_id',
           label: trans('menu.copy_id'),
           accelerator: 'Cmd+Shift+L' // ,
-          // command: 'copy-current-id'
+          // command: 'copy-current-id' TODO
         },
         {
           type: 'separator'

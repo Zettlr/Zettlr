@@ -183,9 +183,14 @@ export default {
       this.searchNext()
     })
 
+    // Listen to shortcuts from the main process
     ipcRenderer.on('shortcut', (event, shortcut) => {
       if (shortcut === 'save-file') {
         this.save()
+      } else if (shortcut === 'copy-as-html') {
+        this.editor.copyAsHTML()
+      } else if (shortcut === 'paste-as-plain') {
+        this.editor.pasteAsPlainText()
       }
     })
 
