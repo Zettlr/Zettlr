@@ -18,7 +18,6 @@
 
 const { trans } = require('../common/i18n.js')
 const ipc = require('electron').ipcMain
-const { BrowserWindow } = require('electron') // Needed for close and maximise commands
 
 /**
  * This class acts as the interface between the main process and the renderer.
@@ -128,52 +127,9 @@ class ZettlrIPC {
     }
 
     switch (cmd) {
-      case 'app-quit':
-        // This command is sent by the renderer once the user requested to quit
-        // the app. This way it is ensured that the "save before quit?"-message
-        // only shows in rare cases where the file cannot be saved.
-        require('electron').app.quit()
-        break
-
-      // Window controls for the Quicklook windows must use IPC calls
-      case 'win-maximise':
-        if (BrowserWindow.getFocusedWindow()) {
-          // Implements maximise-toggling for windows
-          if (BrowserWindow.getFocusedWindow().isMaximized()) {
-            BrowserWindow.getFocusedWindow().unmaximize()
-          } else {
-            BrowserWindow.getFocusedWindow().maximize()
-          }
-        }
-        break
-
-      case 'win-minimise':
-        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().minimize()
-        break
-
-      case 'win-close':
-        if (BrowserWindow.getFocusedWindow()) BrowserWindow.getFocusedWindow().close()
-        break
-
-      case 'get-paths':
-        // The child process requested the current paths and files
-        this._app.sendPaths()
-        // Also set the current file and dir correctly immediately
-        this.send('dir-set-current', (this._app.getCurrentDir()) ? this._app.getCurrentDir().hash : null)
-        this._app.sendOpenFiles()
-        break
-
       case 'file-get':
         // The client requested a different file.
         this._app.openFile(cnt)
-        break
-
-      case 'file-request-sync':
-        // The editor has received a synchronisation command and now needs to
-        // pull some additional files from the main process in order to have
-        // their contents available.
-        this._app.getFileSystem().getFileContents(this._app.getFileSystem().findFile(cnt.hash))
-          .then(file => { this.send('file-request-sync', file) })
         break
 
       case 'dir-select':
@@ -181,45 +137,9 @@ class ZettlrIPC {
         this._app.selectDir(cnt)
         break
 
-      case 'file-modified':
-        // Set the modification flag and notify the FSAL of a dirty doc.
-        this._app.setModified(cnt.hash)
-        break
-
-      // Sent by the renderer to indicate the active file has changed
-      case 'set-active-file':
-        this._app.getFileSystem().activeFile = cnt.hash
-        break
-
-      // The renderer requested that the editor
-      // is marked clean again
-      case 'mark-clean':
-        this._app.clearModified(cnt.hash)
-        break
-
       // Set or update a target
       case 'set-target':
         global.targets.set(cnt)
-        break
-
-      case 'workspace-open':
-        // Client requested a totally different folder.
-        this._app.openWorkspace()
-        break
-
-      case 'root-file-open':
-        // Client requested a new file.
-        this._app.openRootFile()
-        break
-
-      // Change theme in config
-      case 'toggle-theme':
-        global.config.set('darkMode', !global.config.get('darkMode'))
-        break
-
-      // Change file meta setting in config
-      case 'toggle-file-meta':
-        global.config.set('fileMeta', !global.config.get('fileMeta'))
         break
 
       case 'get-pdf-preferences':
@@ -239,20 +159,6 @@ class ZettlrIPC {
       case 'open-quicklook':
         this._app.openQL(cnt)
         return true
-
-      // Request a language to download from the API
-      case 'request-language':
-        global.translations.requestLanguage(cnt)
-        break
-
-      case 'switch-theme-berlin':
-      case 'switch-theme-bielefeld':
-      case 'switch-theme-frankfurt':
-      case 'switch-theme-karl-marx-stadt':
-      case 'switch-theme-bordeaux':
-        // Set the theme accordingly
-        global.config.set('display.theme', cmd.substr(13))
-        break
 
       default:
         global.log.error(trans('system.unknown_command', cmd))
