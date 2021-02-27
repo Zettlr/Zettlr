@@ -60,6 +60,9 @@ export default class Zettlr {
 
     // Inject some globals
     global.application = {
+      runCommand: async (command: string, payload?: any) => {
+        return await this.runCommand(command, payload)
+      },
       // Flag indicating whether or not the application is booting
       isBooting: () => {
         return this.isBooting
@@ -263,72 +266,9 @@ export default class Zettlr {
       }
     })
 
+    // Runs a command through the application
     ipcMain.handle('application', async (event, { command, payload }) => {
-      if (command === 'get-statistics-data') {
-        return this._fsal.statistics
-      } else if (command === 'get-filetree-events') {
-        return this._fsal.filetreeHistorySince(payload)
-      } else if (command === 'get-descriptor') {
-        const descriptor = this._fsal.find(payload)
-        if (descriptor === null) {
-          return null
-        }
-        return this._fsal.getMetadataFor(descriptor)
-      } else if (command === 'get-open-directory') {
-        const openDir = this._fsal.openDirectory
-        if (openDir === null) {
-          return null
-        }
-
-        return this._fsal.getMetadataFor(openDir)
-      } else if (command === 'get-active-file') {
-        const activeFile = this._fsal.activeFile
-        if (activeFile === null) {
-          return null
-        }
-
-        const descriptor = this.findFile(activeFile)
-        if (descriptor === null) {
-          return null
-        }
-
-        return this._fsal.getMetadataFor(descriptor as MDFileDescriptor)
-      } else if (command === 'set-active-file') {
-        const descriptor = this._fsal.findFile(payload)
-        if (descriptor !== null) {
-          this._fsal.activeFile = descriptor.path
-        }
-      } else if (command === 'get-open-files') {
-        const openFiles = this._fsal.openFiles
-        const ret = []
-        for (const openFilePath of openFiles) {
-          const descriptor = this._fsal.findFile(openFilePath)
-          if (descriptor !== null) {
-            ret.push(this._fsal.getMetadataFor(descriptor))
-          }
-        }
-        return ret
-      } else if (command === 'get-file-contents') {
-        const descriptor = this._fsal.findFile(payload)
-        if (descriptor === null) {
-          return null
-        }
-
-        const fileWithContents = await this._fsal.getFileContents(descriptor)
-        return fileWithContents
-      } else if (command === 'update-modified-files') {
-        // Update the modification status according to the file path array given
-        // in the payload.
-        console.log('Updating modification status of the following paths:', payload)
-        this._fsal.updateModifiedFlags(payload)
-        this._windowManager.setModified(!this._fsal.isClean())
-      } else if (command === 'open-workspace') {
-        await this.openWorkspace()
-        return true
-      } else if (command === 'open-preferences') {
-        this._windowManager.showPreferences()
-        return true
-      }
+      return await this.runCommand(command, payload)
     })
   }
 
@@ -461,24 +401,100 @@ export default class Zettlr {
     await this._fsal.shutdown()
   }
 
-  async runCommand (evt: String, arg: any): Promise<any> {
-    // This function will be called from IPC with a command and an arg.
-    // First find the command
-    let cmd = this._commands.find((elem: any) => elem.respondsTo(evt))
-
-    if (cmd) {
-      // Return the return value of the command, if there is any
-      try {
-        return cmd.run(evt, arg)
-      } catch (e) {
-        global.log.error(e.message, e)
-        // Re-throw for the IPC to handle a fall-through
-        throw e
+  /**
+   * Runs a command through the application pipeline
+   *
+   * @param   {string}  command  The command to run
+   * @param   {any}     payload  The payload, if any
+   *
+   * @return  {Promise<any>}     The return from running the command
+   */
+  async runCommand (command: string, payload: any): Promise<any> {
+    // FIRST: Try to run a minimal command for which its own custom function
+    // wouldn't make sense.
+    if (command === 'open-workspace') {
+      return await this.openWorkspace()
+    } else if (command === 'open-file') {
+      return await this.openRootFile()
+    } else if (command === 'get-statistics-data') {
+      return this._fsal.statistics
+    } else if (command === 'get-filetree-events') {
+      return this._fsal.filetreeHistorySince(payload)
+    } else if (command === 'get-descriptor') {
+      const descriptor = this._fsal.find(payload)
+      if (descriptor === null) {
+        return null
       }
+      return this._fsal.getMetadataFor(descriptor)
+    } else if (command === 'get-open-directory') {
+      const openDir = this._fsal.openDirectory
+      if (openDir === null) {
+        return null
+      }
+
+      return this._fsal.getMetadataFor(openDir)
+    } else if (command === 'get-active-file') {
+      const activeFile = this._fsal.activeFile
+      if (activeFile === null) {
+        return null
+      }
+
+      const descriptor = this.findFile(activeFile)
+      if (descriptor === null) {
+        return null
+      }
+
+      return this._fsal.getMetadataFor(descriptor as MDFileDescriptor)
+    } else if (command === 'set-active-file') {
+      const descriptor = this._fsal.findFile(payload)
+      if (descriptor !== null) {
+        this._fsal.activeFile = descriptor.path
+      }
+    } else if (command === 'get-open-files') {
+      const openFiles = this._fsal.openFiles
+      const ret = []
+      for (const openFilePath of openFiles) {
+        const descriptor = this._fsal.findFile(openFilePath)
+        if (descriptor !== null) {
+          ret.push(this._fsal.getMetadataFor(descriptor))
+        }
+      }
+      return ret
+    } else if (command === 'get-file-contents') {
+      const descriptor = this._fsal.findFile(payload)
+      if (descriptor === null) {
+        return null
+      }
+
+      const fileWithContents = await this._fsal.getFileContents(descriptor)
+      return fileWithContents
+    } else if (command === 'update-modified-files') {
+      // Update the modification status according to the file path array given
+      // in the payload.
+      console.log('Updating modification status of the following paths:', payload)
+      this._fsal.updateModifiedFlags(payload)
+      this._windowManager.setModified(!this._fsal.isClean())
+    } else if (command === 'open-workspace') {
+      await this.openWorkspace()
+      return true
+    } else if (command === 'open-preferences') {
+      this._windowManager.showPreferences()
+      return true
     } else {
-      // We need to throw, because the return value of a successful command run
-      // may very well also evaluate to null, undefined, false or anything else.
-      throw new Error(`No command registered with the application for command ${evt.toString()}`)
+      // ELSE: If the command has not yet been found, try to run one of the
+      // bigger commands
+      let cmd = this._commands.find((elem: any) => elem.respondsTo(command))
+      if (cmd) {
+        // Return the return value of the command, if there is any
+        try {
+          return cmd.run(command, payload)
+        } catch (e) {
+          global.log.error('[Application] Error received while running command: ' + String(e.message), e)
+          return undefined
+        }
+      } else {
+        global.log.warning(`[Application] Received a request to run command ${command}, but it's not registered.`)
+      }
     }
   }
 

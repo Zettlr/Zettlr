@@ -6,6 +6,7 @@
  * DECLARE THE GLOBAL INTERFACES
  */
 interface Application {
+  runCommand: (command: string, payload?: any) => Promise<any>
   isBooting: () => boolean
   showLogViewer: () => void
   showPreferences: () => void
