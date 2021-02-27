@@ -29,6 +29,14 @@ export default {
     }
   },
   computed: {
+    controlActiveChanged: function () {
+      return this.control.initialState
+    }
+  },
+  watch: {
+    controlActiveChanged: function () {
+      this.isActive = this.control.initialState
+    }
   },
   methods: {
     toggle: function () {

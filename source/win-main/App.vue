@@ -192,14 +192,14 @@ export default {
           type: 'toggle',
           id: 'toggle-sidebar',
           title: 'menu.toggle_sidebar',
-          icon: 'view-columns'
+          icon: 'view-columns',
+          initialState: (this.sidebarVisible === true) ? 'active' : ''
         }
       ]
     }
   },
   mounted: function () {
     ipcRenderer.on('shortcut', (event, shortcut) => {
-      console.log(shortcut)
       if (shortcut === 'toggle-sidebar') {
         this.sidebarVisible = this.sidebarVisible === false
       } else if (shortcut === 'insert-id') {
