@@ -283,8 +283,10 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.generate_id',
           label: trans('menu.generate_id'),
-          accelerator: 'Ctrl+L' // ,
-          // command: 'insert-id' TODO
+          accelerator: 'Ctrl+L',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'insert-id')
+          }
         },
         {
           id: 'menu.copy_id',

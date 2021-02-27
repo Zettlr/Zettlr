@@ -35,7 +35,8 @@ import SplitView from './SplitView'
 import Editor from './Editor'
 import { trans } from '../common/i18n'
 import localiseNumber from '../common/util/localise-number'
-import { ipcRenderer } from 'electron'
+import generateId from '../common/util/generate-id'
+import { ipcRenderer, clipboard } from 'electron'
 
 export default {
   name: 'Main',
@@ -198,8 +199,34 @@ export default {
   },
   mounted: function () {
     ipcRenderer.on('shortcut', (event, shortcut) => {
+      console.log(shortcut)
       if (shortcut === 'toggle-sidebar') {
         this.sidebarVisible = this.sidebarVisible === false
+      } else if (shortcut === 'insert-id') {
+        // Generates an ID based upon the configured pattern, writes it into the
+        // clipboard and then triggers the paste command on these webcontents.
+
+        // First we need to backup the existing clipboard contents
+        // so that they are not lost during the operation.
+        let text = clipboard.readText()
+        let html = clipboard.readHTML()
+        let image = clipboard.readImage()
+        let rtf = clipboard.readRTF()
+
+        // Write an ID to the clipboard
+        clipboard.writeText(generateId(global.config.get('zkn.idGen')))
+        // Paste the ID
+        ipcRenderer.send('window-controls', { command: 'paste' })
+
+        // Now restore the clipboard's original contents
+        setTimeout((e) => {
+          clipboard.write({
+            'text': text,
+            'html': html,
+            'image': image,
+            'rtf': rtf
+          })
+        }, 10) // Why do a timeout? Because the paste event is asynchronous.
       }
     })
   },
