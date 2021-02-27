@@ -21,6 +21,8 @@ import Vuex, { Store, StoreOptions } from 'vuex'
 import isAttachment from '../common/util/is-attachment'
 import sanitizeHtml from 'sanitize-html'
 import md2html from '../common/util/md-to-html'
+import sort from '../main/modules/fsal/util/sort'
+import { MDFileMeta, CodeFileMeta, DirMeta } from '../main/modules/fsal/types'
 
 interface FSALEvent {
   event: 'remove'|'add'|'change'
@@ -139,7 +141,7 @@ interface ZettlrState {
   /**
    * Contains the full file tree that is loaded into the app
    */
-  fileTree: any[]
+  fileTree: Array<MDFileMeta|CodeFileMeta|DirMeta>
   /**
    * Contains the last update timestamp from main
    */
@@ -242,7 +244,8 @@ const config: StoreOptions<ZettlrState> = {
       if (descriptor.parent == null && !state.fileTree.includes(descriptor)) {
         // It's a root, so insert at the root level
         state.fileTree.push(descriptor)
-        // TODO: sort
+        // @ts-expect-error TODO: The sorting function currently expects only FSAL descriptors, not metas
+        state.fileTree = sort(state.fileTree) // Omit sorting to sort name-up
       } else {
         const parentPath = descriptor.dir
         const parentDescriptor = findPathDescriptor(parentPath, state.fileTree)
@@ -255,10 +258,19 @@ const config: StoreOptions<ZettlrState> = {
 
         if (isAttachment(descriptor.path, true)) {
           parentDescriptor.attachments.push(descriptor)
+          parentDescriptor.attachments.sort((a: any, b: any) => {
+            if (a.name > b.name) {
+              return -1
+            } else if (a.name < b.name) {
+              return 1
+            } else {
+              return 0
+            }
+          })
         } else {
           parentDescriptor.children.push(descriptor)
+          parentDescriptor.children = sort(parentDescriptor.children, parentDescriptor.sorting)
         }
-        // TODO: sort
       }
     },
     removeFromFiletree: function (state, pathToRemove) {
