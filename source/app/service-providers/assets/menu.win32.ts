@@ -454,14 +454,18 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.tab_previous',
           label: trans('menu.tab_previous'),
-          accelerator: 'Ctrl+Shift+Tab' // ,
-          // command: 'select-previous-tab' TODO
+          accelerator: 'Ctrl+Shift+Tab',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'previous-tab')
+          }
         },
         {
           id: 'menu.tab_next',
           label: trans('menu.tab_next'),
-          accelerator: 'Ctrl+Tab' // ,
-          // command: 'select-next-tab'
+          accelerator: 'Ctrl+Tab',
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'next-tab')
+          }
         }
       ]
     },

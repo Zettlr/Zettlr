@@ -31,6 +31,25 @@ export default {
       return this.$store.state.modifiedDocuments
     }
   },
+  mounted: function () {
+    // Listen for shortcuts so that we can switch tabs programmatically
+    ipcRenderer.on('shortcut', (event, shortcut) => {
+      const currentIdx = this.openFiles.findIndex(elem => elem === this.activeFile)
+      if (shortcut === 'previous-tab') {
+        if (currentIdx > 0) {
+          this.handleSelectFile(this.openFiles[currentIdx - 1])
+        } else {
+          this.handleSelectFile(this.openFiles[this.openFiles.length - 1])
+        }
+      } else if (shortcut === 'next-tab') {
+        if (currentIdx < this.openFiles.length - 1) {
+          this.handleSelectFile(this.openFiles[currentIdx + 1])
+        } else {
+          this.handleSelectFile(this.openFiles[0])
+        }
+      }
+    })
+  },
   methods: {
     handleCloseFile: function (file) {
       ipcRenderer.send('message', {
