@@ -12,13 +12,14 @@
  * END HEADER
  */
 
-const path = require('path')
-const fs = require('fs').promises
-const { app } = require('electron')
-const ZIP = require('adm-zip')
+import path from 'path'
+import { promises as fs } from 'fs'
+import { app } from 'electron'
+import ZIP from 'adm-zip'
 
-const { trans } = require('../../../common/i18n.js')
-const isFile = require('../../../common/util/is-file')
+import { trans } from '../../../common/i18n'
+import isFile from '../../../common/util/is-file'
+import { DirDescriptor } from '../fsal/types'
 
 /**
  * Imports both textpacks and textbundles to the target directory.
@@ -26,7 +27,7 @@ const isFile = require('../../../common/util/is-file')
  * @param  {String} target The destination directory
  * @return {void}        This thing only throws up.
  */
-module.exports = async function importTextbundle (bundle, target) {
+export default async function importTextbundle (bundle: any, target: DirDescriptor): Promise<void> {
   if (bundle.knownFormat === 'textpack') {
     // We need to unzip it before importing.
     let file = new ZIP(bundle.path)

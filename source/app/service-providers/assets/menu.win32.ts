@@ -92,8 +92,11 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         },
         {
           id: 'menu.import_files',
-          label: trans('menu.import_files') // ,
-          // command: 'import-files' TODO
+          label: trans('menu.import_files'),
+          click: function (menuItem, focusedWindow) {
+            global.application.runCommand('import-files')
+              .catch(e => global.log.error('[Menu Provider] Cannot import files', e))
+          }
         },
         {
           id: 'menu.export',
