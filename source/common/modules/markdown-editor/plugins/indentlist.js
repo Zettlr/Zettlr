@@ -11,7 +11,7 @@
  */
 
 // Additional fix: Different paths to CodeMirror
-const { getListTokenRE } = require('../../../../common/regular-expressions');
+const { getListTokenRE } = require('../../../regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

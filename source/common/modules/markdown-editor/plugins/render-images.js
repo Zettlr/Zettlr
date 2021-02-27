@@ -13,8 +13,8 @@
   'use strict'
 
   // GENERAL PLUGIN VARIABLES
-  const { getImageRE } = require('../../../../common/regular-expressions')
-  const makeAbsoluteURL = require('../../../../common/util/make-absolute-url')
+  const { getImageRE } = require('../../../regular-expressions')
+  const makeAbsoluteURL = require('../../../util/make-absolute-url')
 
   // Image detection regex
   var imageRE = getImageRE()

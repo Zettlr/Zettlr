@@ -1,7 +1,7 @@
 /* global CodeMirror define */
 // This plugin renders GitHub Flavoured Markdown Task items
 
-const { getTaskRE } = require('../../../../common/regular-expressions');
+const { getTaskRE } = require('../../../regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

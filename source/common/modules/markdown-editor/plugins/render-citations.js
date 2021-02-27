@@ -13,7 +13,7 @@
   'use strict'
 
   const { ipcRenderer } = require('electron')
-  const { getCitationRE } = require('../../../../common/regular-expressions')
+  const { getCitationRE } = require('../../../regular-expressions')
 
   var citationRE = getCitationRE()
   var Citr = require('@zettlr/citr')

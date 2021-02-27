@@ -1,5 +1,5 @@
 const tippy = require('tippy.js').default
-const openMarkdownLink = require('../../../util/open-markdown-link')
+const openMarkdownLink = require('../open-markdown-link')
 
 /**
  * A hook for displaying link tooltips which can be used to visually

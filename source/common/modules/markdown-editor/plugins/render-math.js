@@ -1,7 +1,7 @@
 /* global CodeMirror define */
 // This plugin renders MathJax parts in CodeMirror instances
 
-const { getBlockMathRE, getInlineMathRenderRE } = require('../../../../common/regular-expressions');
+const { getBlockMathRE, getInlineMathRenderRE } = require('../../../regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

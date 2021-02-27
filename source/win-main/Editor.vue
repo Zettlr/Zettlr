@@ -8,7 +8,7 @@
 import { ipcRenderer } from 'electron'
 import countWords from '../common/util/count-words'
 import makeSearchRegEx from '../common/util/make-search-regex'
-import MarkdownEditor from '../renderer/modules/markdown-editor'
+import MarkdownEditor from '../common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
 
 export default {

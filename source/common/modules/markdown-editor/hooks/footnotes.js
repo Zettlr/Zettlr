@@ -2,8 +2,8 @@
 // it's not in the plugins folder.
 
 const tippy = require('tippy.js').default
-const { getFnRefRE } = require('../../../../common/regular-expressions')
-const md2html = require('../../../../common/util/md-to-html')
+const { getFnRefRE } = require('../../../regular-expressions')
+const md2html = require('../../../util/md-to-html')
 
 module.exports = (cm) => {
   // Hook into click events

@@ -22,9 +22,9 @@
  */
 
 const getCodeMirrorDefaultOptions = require('./get-cm-options')
-const safeAssign = require('../../../common/util/safe-assign')
-const countWords = require('../../../common/util/count-words')
-const md2html = require('../../../common/util/md-to-html')
+const safeAssign = require('../../util/safe-assign')
+const countWords = require('../../util/count-words')
+const md2html = require('../../util/md-to-html')
 const generateKeymap = require('./generate-keymap.js')
 
 /**

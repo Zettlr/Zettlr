@@ -1,7 +1,7 @@
 /* global CodeMirror $ define */
 // This plugin renders iFrames in CodeMirror instances
 
-const { getIframeRE } = require('../../../../common/regular-expressions');
+const { getIframeRE } = require('../../../regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

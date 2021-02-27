@@ -1,10 +1,10 @@
 const { shell } = require('electron')
-const makeValidUri = require('../../common/util/make-valid-uri')
-const hash = require('../../common/util/hash')
-const { trans } = require('../../common/i18n')
+const makeValidUri = require('../../util/make-valid-uri')
+const hash = require('../../util/hash')
+const { trans } = require('../../i18n')
 const path = require('path')
 
-const VALID_FILETYPES = require('../../common/data.json').filetypes
+const VALID_FILETYPES = require('../../data.json').filetypes
 
 /**
  * Resolves and opens a link safely (= not inside Zettlr, except it's a local MD file)

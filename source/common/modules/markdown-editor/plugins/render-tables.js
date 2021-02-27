@@ -1,8 +1,8 @@
 /* global define CodeMirror */
 // This plugin renders markdown tables for easy editability
 
-const TableEditor = require('../../table-editor')
-const { getTableHeadingRE } = require('../../../../common/regular-expressions.js');
+const TableEditor = require('../table-editor')
+const { getTableHeadingRE } = require('../../../regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

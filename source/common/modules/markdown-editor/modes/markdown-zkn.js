@@ -3,7 +3,7 @@
 const {
   getZknTagRE, getHeadingRE, getHighlightRE,
   getTableRE, getInlineMathRE, getBlockMathRE, getFnReferenceRE
-} = require('../../../../common/regular-expressions');
+} = require('../../../regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-const MarkdownEditor = require('../renderer/modules/markdown-editor')
+const MarkdownEditor = require('../common/modules/markdown-editor')
 const CodeMirror = require('codemirror')
 const makeSearchRegEx = require('../common/util/make-search-regex')
 

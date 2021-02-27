@@ -1,5 +1,5 @@
 const { clipboard } = require('electron')
-const html2md = require('../../../../common/util/html-to-md')
+const html2md = require('../../../util/html-to-md')
 
 /**
  * Parses possible HTML clipboard content to Markdown to enable

@@ -12,7 +12,7 @@
  * END HEADER
  */
 
-const { getCodeBlockRE } = require('../../../../common/regular-expressions')
+const { getCodeBlockRE } = require('../../../regular-expressions')
 const codeBlockRE = getCodeBlockRE()
 
 let autocompleteStart = null

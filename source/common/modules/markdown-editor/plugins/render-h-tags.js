@@ -1,7 +1,7 @@
 /* global CodeMirror define */
 // This plugin renders Bear-style heading indicators
 
-const { getHeadRE } = require('../../../../common/regular-expressions');
+const { getHeadRE } = require('../../../regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

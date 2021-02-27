@@ -1,7 +1,7 @@
 /* global define CodeMirror */
 // This plugin gives the editor a real WYSIWYG feeling
 
-const { getWysiwygRE } = require('../../../../common/regular-expressions');
+const { getWysiwygRE } = require('../../../regular-expressions');
 
 (function (mod) {
   if (typeof exports === 'object' && typeof module === 'object') { // CommonJS

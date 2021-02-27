@@ -12,8 +12,8 @@
 })(function (CodeMirror) {
   'use strict'
 
-  const makeAbsoluteURL = require('../../../../common/util/make-absolute-url')
-  const openMarkdownLink = require('../../../util/open-markdown-link')
+  const makeAbsoluteURL = require('../../../util/make-absolute-url')
+  const openMarkdownLink = require('../open-markdown-link')
 
   // This regular expression matches three different kinds of URLs:
   // 1. Linked images in the format [![Alt text](image/path.png)](www.link-target.tld)

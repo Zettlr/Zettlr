@@ -13,7 +13,7 @@
   'use strict'
 
   const { ipcRenderer } = require('electron')
-  const { getCodeRE, getFootnoteRefRE, getZknTagRE } = require('../../../../common/regular-expressions.js')
+  const { getCodeRE, getFootnoteRefRE, getZknTagRE } = require('../../../regular-expressions.js')
 
   var codeRE = getCodeRE()
   var zknTagRE = getZknTagRE()

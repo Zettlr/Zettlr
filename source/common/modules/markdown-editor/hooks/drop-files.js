@@ -1,5 +1,5 @@
 const path = require('path')
-const IMAGE_REGEXP = require('../../../../common/regular-expressions').getImageFileRE()
+const IMAGE_REGEXP = require('../../../regular-expressions').getImageFileRE()
 
 module.exports = (cm) => {
   cm.on('drop', (cm, event) => {
