@@ -63,14 +63,20 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.open',
           label: trans('menu.open'),
-          accelerator: 'Ctrl+O' // ,
-          // command: 'root-file-open' TODO
+          accelerator: 'Ctrl+O',
+          click: function (menuitem, focusedWindow) {
+            global.application.runCommand('open-file')
+              .catch(e => global.log.error(String(e.message), e))
+          }
         },
         {
           id: 'menu.open_workspace',
           label: trans('menu.open_workspace'),
-          accelerator: 'Ctrl+Shift+O' // ,
-          // command: 'workspace-open' TODO
+          accelerator: 'Ctrl+Shift+O',
+          click: function (menuitem, focusedWindow) {
+            global.application.runCommand('open-workspace')
+              .catch(e => global.log.error(String(e.message), e))
+          }
         },
         {
           id: 'menu.save',
