@@ -31,7 +31,7 @@
     for (let i = 0; i < ranges.length; i++) {
       let pos = ranges[i].head
       // If we're not in Markdown mode, fall back to normal newlineAndIndent
-      var eolState = cm.getStateAfter(pos.line)
+      let eolState = cm.getStateAfter(pos.line)
       let mode = cm.getMode()
       if (mode.innerMode !== undefined) {
         mode = cm.getMode().innerMode(eolState)
@@ -50,12 +50,12 @@
         eolState = mode.state
       }
 
-      var inList = eolState.list !== false
-      var inQuote = eolState.quote !== 0
+      const inList = eolState.list !== false
+      const inQuote = eolState.quote !== 0
 
       let line = cm.getLine(pos.line)
       let match = listRE.exec(line)
-      var cursorBeforeBullet = /^\s*$/.test(line.slice(0, pos.ch))
+      const cursorBeforeBullet = /^\s*$/.test(line.slice(0, pos.ch))
       if (!ranges[i].empty() || (!inList && !inQuote) || !match || cursorBeforeBullet) {
         cm.execCommand('newlineAndIndent')
         return
@@ -92,11 +92,12 @@
     let startItem = listRE.exec(cm.getLine(startLine))
     let startIndent = startItem[1]
 
+    let nextItem
     do {
       lookAhead += 1
       let nextLineNumber = startLine + lookAhead
       let nextLine = cm.getLine(nextLineNumber)
-      var nextItem = listRE.exec(nextLine)
+      nextItem = listRE.exec(nextLine)
 
       if (nextItem) {
         let nextIndent = nextItem[1]

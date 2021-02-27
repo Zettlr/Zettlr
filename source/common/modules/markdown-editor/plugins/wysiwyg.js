@@ -14,7 +14,7 @@ const { getWysiwygRE } = require('../../../regular-expressions');
 })(function (CodeMirror) {
   'use strict'
 
-  var wysiwygRE = getWysiwygRE()
+  const wysiwygRE = getWysiwygRE()
 
   // WYSIWYG means you need HTML elements rendered instead of
   // the underlying Markdown code

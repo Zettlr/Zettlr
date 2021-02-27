@@ -3,7 +3,7 @@
  *
  * @var {Number}
  */
-var lastHighlightLine = -1
+let lastHighlightLine = -1
 
 /**
  * Enables muting of lines in the editor if the option is set

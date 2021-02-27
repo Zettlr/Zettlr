@@ -16,13 +16,13 @@ const {
 })(function (CodeMirror) {
   'use strict'
 
-  var zknTagRE = getZknTagRE()
-  var headingRE = getHeadingRE()
-  var highlightRE = getHighlightRE()
-  var tableRE = getTableRE()
-  var inlineMathRE = getInlineMathRE()
-  var blockMathRE = getBlockMathRE()
-  var fnReferenceRE = getFnReferenceRE()
+  const zknTagRE = getZknTagRE()
+  const headingRE = getHeadingRE()
+  const highlightRE = getHighlightRE()
+  const tableRE = getTableRE()
+  const inlineMathRE = getInlineMathRE()
+  const blockMathRE = getBlockMathRE()
+  const fnReferenceRE = getFnReferenceRE()
 
   /**
     * This defines the Markdown Zettelkasten system mode, which highlights IDs
@@ -34,10 +34,10 @@ const {
     * @return {OverlayMode}              The loaded overlay mode.
     */
   CodeMirror.defineMode('markdown-zkn', function (config, parserConfig) {
-    var yamlMode = CodeMirror.getMode(config, 'yaml')
-    var mdMode = CodeMirror.getMode(config, { name: 'gfm', highlightFormatting: true, gitHubSpice: false })
+    const yamlMode = CodeMirror.getMode(config, 'yaml')
+    const mdMode = CodeMirror.getMode(config, { name: 'gfm', highlightFormatting: true, gitHubSpice: false })
 
-    var markdownZkn = {
+    const markdownZkn = {
       startState: function () {
         return {
           startOfFile: true,

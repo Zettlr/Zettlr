@@ -15,8 +15,8 @@ const { getTableHeadingRE } = require('../../../regular-expressions');
 })(function (CodeMirror) {
   'use strict'
 
-  var tables = []
-  var tableHeadingRE = getTableHeadingRE()
+  const tables = []
+  const tableHeadingRE = getTableHeadingRE()
 
   CodeMirror.commands.markdownInsertTable = function (cm) {
     // A small command that inserts a 2x2 table at the current cursor position.

@@ -14,7 +14,7 @@ const { getTaskRE } = require('../../../regular-expressions');
 })(function (CodeMirror) {
   'use strict'
 
-  var taskRE = getTaskRE() // Matches `- [ ]` and `- [x]`
+  const taskRE = getTaskRE() // Matches `- [ ]` and `- [x]`
 
   CodeMirror.commands.markdownRenderTasks = function (cm) {
     let match

@@ -14,7 +14,7 @@ const { getIframeRE } = require('../../../regular-expressions');
 })(function (CodeMirror) {
   'use strict'
 
-  var iframeRE = getIframeRE() // Matches all iframes
+  const iframeRE = getIframeRE() // Matches all iframes
 
   CodeMirror.commands.markdownRenderIframes = function (cm) {
     let match

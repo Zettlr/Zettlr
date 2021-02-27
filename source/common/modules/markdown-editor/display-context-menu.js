@@ -5,9 +5,9 @@ const {
   ipcRenderer
 } = require('electron')
 
-var currentMenu = []
-var currentSuggestions = []
-var linkToCopy = null
+let currentMenu = []
+let currentSuggestions = []
+let linkToCopy = null
 
 const TEMPLATE = [
   {

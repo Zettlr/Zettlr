@@ -15,8 +15,8 @@
   const { ipcRenderer } = require('electron')
   const { getCitationRE } = require('../../../regular-expressions')
 
-  var citationRE = getCitationRE()
-  var Citr = require('@zettlr/citr')
+  const citationRE = getCitationRE()
+  const Citr = require('@zettlr/citr')
 
   /**
    * This Array contains citations that should be rendered somewhere in the DOM

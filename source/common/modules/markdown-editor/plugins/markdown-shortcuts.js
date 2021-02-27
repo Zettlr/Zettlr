@@ -22,7 +22,7 @@ const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, get
   const taskListRE = getListTaskListRE()
   const orderedListRE = getListOrderedRE()
 
-  var reservedChars = '+.*_/\\[](){}?^$'.split('')
+  const reservedChars = '+.*_/\\[](){}?^$'.split('')
   const urlRE = getUrlRE()
   const blockRE = getBlockRE()
 
@@ -102,7 +102,7 @@ const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, get
     let re = new RegExp(preregex + '(.*)' + postregex, 'g')
 
     // Retrieve currently selected selections
-    var sel = cm.doc.getSelections()
+    const sel = cm.doc.getSelections()
 
     // Traverse all selections and perform bolden or unbolden on them
     for (let i = 0; i < sel.length; i++) {
@@ -297,7 +297,7 @@ const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, get
     }
 
     // Retrieve currently selected selections
-    var sel = cm.doc.getSelections()
+    const sel = cm.doc.getSelections()
 
     // Traverse all selections and perform bolden or unbolden on them
     for (let i = 0; i < sel.length; i++) {
@@ -331,7 +331,7 @@ const { getListOrderedRE, getListTaskListRE, getListUnorderedCMRE, getUrlRE, get
     }
 
     // Retrieve currently selected selections
-    var sel = cm.doc.getSelections()
+    const sel = cm.doc.getSelections()
 
     // Traverse all selections and perform bolden or unbolden on them
     for (let i = 0; i < sel.length; i++) {

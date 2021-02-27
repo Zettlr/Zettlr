@@ -14,9 +14,9 @@ const { getHeadRE } = require('../../../regular-expressions');
 })(function (CodeMirror) {
   'use strict'
 
-  var headRE = getHeadRE()
+  const headRE = getHeadRE()
 
-  var currentCallback = null
+  let currentCallback = null
 
   CodeMirror.commands.markdownRenderHTags = function (cm) {
     let match

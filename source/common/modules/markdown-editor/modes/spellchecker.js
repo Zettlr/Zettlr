@@ -15,14 +15,14 @@
   const { ipcRenderer } = require('electron')
   const { getCodeRE, getFootnoteRefRE, getZknTagRE } = require('../../../regular-expressions.js')
 
-  var codeRE = getCodeRE()
-  var zknTagRE = getZknTagRE()
-  var footnoteRefRE = getFootnoteRefRE()
+  const codeRE = getCodeRE()
+  const zknTagRE = getZknTagRE()
+  const footnoteRefRE = getFootnoteRefRE()
   // NOTE: The whitespace after ~ are first a normal space, then an NBSP
-  var delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~  «»‹›„“”「」『』–—…÷‘’‚'
+  const delim = '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~  «»‹›„“”「」『』–—…÷‘’‚'
 
   // The cache is a simple hashmap
-  var spellcheckCache = Object.create(null)
+  let spellcheckCache = Object.create(null)
 
   // Listen for dictionary-provider messages
   ipcRenderer.on('dictionary-provider', (event, message) => {
@@ -75,10 +75,10 @@
     // word separators including special interpunction
 
     // Create the overlay and such
-    var spellchecker = {
+    const spellchecker = {
       token: function (stream) {
-        var ch = stream.peek()
-        var word = ''
+        let ch = stream.peek()
+        let word = ''
         // Regex replacer taken from https://stackoverflow.com/a/6969486 (thanks!)
         let ls = config.zettlr.zettelkasten.linkStart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input
         let le = config.zettlr.zettelkasten.linkEnd.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape raw user input

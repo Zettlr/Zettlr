@@ -17,8 +17,8 @@ const { getBlockMathRE, getInlineMathRenderRE } = require('../../../regular-expr
   const katex = require('katex')
   require('katex/dist/contrib/mhchem.js') // modify katex module
 
-  var inlineMathRE = getInlineMathRenderRE(true) // Get the RE with the global flag set.
-  var multilineMathRE = getBlockMathRE()
+  const inlineMathRE = getInlineMathRenderRE(true) // Get the RE with the global flag set.
+  const multilineMathRE = getBlockMathRE()
 
   CodeMirror.commands.markdownRenderMath = function (cm) {
     let match

@@ -12,8 +12,8 @@
 })(function (CodeMirror) {
   'use strict'
   const { getFnRE, getFnRefRE } = require('../../../regular-expressions')
-  var fnRE = getFnRE()
-  var fnrefRE = getFnRefRE(true) // Get the multiline version
+  const fnRE = getFnRE()
+  const fnrefRE = getFnRefRE(true) // Get the multiline version
 
   // Inserts a footnote
   // This is done by parseInt()-ing the existing footnotes and search for the

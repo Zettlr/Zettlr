@@ -3,7 +3,7 @@
  *
  * @var {Number}
  */
-var lastHighlightLine = -1
+let lastHighlightLine = -1
 
 /**
  * Enables a typewriter-like mode if the option is set

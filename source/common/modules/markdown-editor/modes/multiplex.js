@@ -214,14 +214,14 @@ const highlightingModes = {
   */
   let zettlrMultiplexer = function (outer /*, others */) {
     // Others should be {open, close, mode [, delimStyle] [, innerStyle]} objects
-    var others = Array.prototype.slice.call(arguments, 1)
+    let others = Array.prototype.slice.call(arguments, 1)
 
     function indexOf (string, pattern, from, returnEnd) {
       if (typeof pattern === 'string') {
-        var found = string.indexOf(pattern, from)
+        const found = string.indexOf(pattern, from)
         return returnEnd && found > -1 ? found + pattern.length : found
       }
-      var m = pattern.exec(from ? string.slice(from) : string)
+      const m = pattern.exec(from ? string.slice(from) : string)
       return m ? m.index + from + (returnEnd ? m[0].length : 0) : -1
     }
 
@@ -255,14 +255,14 @@ const highlightingModes = {
       */
       token: function (stream, state) {
         if (!state.innerActive) {
-          var cutOff = Infinity
-          var oldContent = stream.string
+          let cutOff = Infinity
+          let oldContent = stream.string
 
           // Check if the stream contains triple backticks ```
           let hasBackticks = oldContent.includes('```')
 
-          for (var i = 0; i < others.length; ++i) {
-            var other = others[i]
+          for (let i = 0; i < others.length; ++i) {
+            let other = others[i]
 
             // If we do not have the triple backticks in this line AND the mode requires the
             // triple backticks in its open pattern, we know that indexOf will return -1.
@@ -273,15 +273,15 @@ const highlightingModes = {
               continue
             }
 
-            var found = indexOf(oldContent, other.open, stream.pos)
+            const found = indexOf(oldContent, other.open, stream.pos)
             if (found === stream.pos) {
               if (!other.parseDelimiters) stream.match(other.open)
               state.innerActive = other
 
               // Get the outer indent, making sure to handle CodeMirror.Pass
-              var outerIndent = 0
+              let outerIndent = 0
               if (outer.indent) {
-                var possibleOuterIndent = outer.indent(state.outer, '', '')
+                const possibleOuterIndent = outer.indent(state.outer, '', '')
                 if (possibleOuterIndent !== CodeMirror.Pass) outerIndent = possibleOuterIndent
               }
 
@@ -293,24 +293,24 @@ const highlightingModes = {
           }
 
           if (cutOff !== Infinity) stream.string = oldContent.slice(0, cutOff)
-          var outerToken = outer.token(stream, state.outer)
+          const outerToken = outer.token(stream, state.outer)
           if (cutOff !== Infinity) stream.string = oldContent
           return outerToken
         } else {
-          var curInner = state.innerActive
-          oldContent = stream.string
+          const curInner = state.innerActive
+          const oldContent = stream.string
           if (!curInner.close && stream.sol()) {
             state.innerActive = state.inner = null
             return this.token(stream, state)
           }
-          found = curInner.close ? indexOf(oldContent, curInner.close, stream.pos, curInner.parseDelimiters) : -1
+          const found = curInner.close ? indexOf(oldContent, curInner.close, stream.pos, curInner.parseDelimiters) : -1
           if (found === stream.pos && !curInner.parseDelimiters) {
             stream.match(curInner.close)
             state.innerActive = state.inner = null
             return curInner.delimStyle && (curInner.delimStyle + ' ' + curInner.delimStyle + '-close')
           }
           if (found > -1) stream.string = oldContent.slice(0, found)
-          var innerToken = curInner.mode.token(stream, state.inner)
+          let innerToken = curInner.mode.token(stream, state.inner)
           if (found > -1) stream.string = oldContent
 
           if (found === stream.pos && curInner.parseDelimiters) {
@@ -327,19 +327,19 @@ const highlightingModes = {
       },
 
       indent: function (state, textAfter, line) {
-        var mode = state.innerActive ? state.innerActive.mode : outer
+        const mode = state.innerActive ? state.innerActive.mode : outer
         if (!mode.indent) return CodeMirror.Pass
         return mode.indent(state.innerActive ? state.inner : state.outer, textAfter, line)
       },
 
       blankLine: function (state) {
-        var mode = state.innerActive ? state.innerActive.mode : outer
+        const mode = state.innerActive ? state.innerActive.mode : outer
         if (mode.blankLine) {
           mode.blankLine(state.innerActive ? state.inner : state.outer)
         }
         if (!state.innerActive) {
-          for (var i = 0; i < others.length; ++i) {
-            var other = others[i]
+          for (let i = 0; i < others.length; ++i) {
+            const other = others[i]
             if (other.open === '\n') {
               state.innerActive = other
               state.inner = CodeMirror.startState(other.mode, mode.indent ? mode.indent(state.outer, '', '') : 0)

@@ -24,20 +24,20 @@ const { getListTokenRE } = require('../../../regular-expressions');
 })(function (CodeMirror) {
   'use strict'
 
-  var Pos = CodeMirror.Pos
+  const Pos = CodeMirror.Pos
   const listTokenRE = getListTokenRE()
 
   function matchListToken (pos, cm) {
     /* Get some info about the current state */
-    var eolState = cm.getStateAfter(pos.line)
-    var inList = eolState.list !== false
-    var inQuote = eolState.quote !== 0
+    const eolState = cm.getStateAfter(pos.line)
+    const inList = eolState.list !== false
+    const inQuote = eolState.quote !== 0
 
     /* Get the line from the start to where the cursor currently is */
-    var lineStart = cm.getRange(Pos(pos.line, 0), pos)
+    const lineStart = cm.getRange(Pos(pos.line, 0), pos)
 
     /* Matches the beginning of the list line with the list token RE */
-    var match = listTokenRE.exec(lineStart)
+    const match = listTokenRE.exec(lineStart)
 
     /* Not being in a list, or being in a list but not right after the list
      * token, are both not considered a match */
@@ -50,9 +50,9 @@ const { getListTokenRE } = require('../../../regular-expressions');
 
   CodeMirror.commands.autoIndentMarkdownList = function (cm) {
     if (cm.getOption('disableInput')) return CodeMirror.Pass
-    var ranges = cm.listSelections()
-    for (var i = 0; i < ranges.length; i++) {
-      var pos = ranges[i].head
+    const ranges = cm.listSelections()
+    for (let i = 0; i < ranges.length; i++) {
+      const pos = ranges[i].head
 
       if (!ranges[i].empty() || !matchListToken(pos, cm)) {
         /* If no match, call regular Tab handler */
@@ -67,9 +67,9 @@ const { getListTokenRE } = require('../../../regular-expressions');
 
   CodeMirror.commands.autoUnindentMarkdownList = function (cm) {
     if (cm.getOption('disableInput')) return CodeMirror.Pass
-    var ranges = cm.listSelections()
-    for (var i = 0; i < ranges.length; i++) {
-      var pos = ranges[i].head
+    const ranges = cm.listSelections()
+    for (let i = 0; i < ranges.length; i++) {
+      const pos = ranges[i].head
 
       if (!ranges[i].empty() || !matchListToken(pos, cm)) {
         /* If no match, call regular Shift-Tab handler */

@@ -3,14 +3,14 @@
  *
  * @var {Number}
  */
-var monospaceWidth = 0
+let monospaceWidth = 0
 
 /**
  * Holds the width of a non-monospace space character
  *
  * @var {Number}
  */
-var nonMonospaceWidth = 0
+let nonMonospaceWidth = 0
 
 /**
  * Adds an event listener to indent soft-wrapped lines (e.g. blockquotes, list items)
@@ -74,11 +74,11 @@ function computeNonMonospaceWidth (cm) {
 function measureCharWidth (cm, id) {
   // Idea: Create a span containing a space and measure its size
   // Infact, We use 100 characters in order to get an approximately correct width (clientWidth is an integer)
-  var container = document.createElement('div')
+  const container = document.createElement('div')
   container.id = id
   container.innerHTML = '<span>' + '&nbsp'.repeat(100) + '</span>'
   cm.getWrapperElement().appendChild(container)
-  var width = (container.clientWidth + 1) / 100
+  const width = (container.clientWidth + 1) / 100
   cm.getWrapperElement().removeChild(container)
   return width
 }
