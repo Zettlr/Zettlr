@@ -107,8 +107,11 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.print',
           label: trans('menu.print'),
-          accelerator: 'Ctrl+P' // ,
-          // command: 'print' TODO
+          accelerator: 'Ctrl+P',
+          click: function (menuItem, focusedWindow) {
+            global.application.runCommand('print')
+              .catch(e => global.log.error(String(e.message), e))
+          }
         },
         {
           id: 'menu.preferences',

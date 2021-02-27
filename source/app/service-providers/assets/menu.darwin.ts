@@ -181,8 +181,11 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.print',
           label: trans('menu.print'),
-          accelerator: 'Cmd+P' // ,
-          // command: 'print' TODO
+          accelerator: 'Cmd+P',
+          click: function (menuItem, focusedWindow) {
+            global.application.runCommand('print')
+              .catch(e => global.log.error(String(e.message), e))
+          }
         },
         {
           type: 'separator'
@@ -190,7 +193,7 @@ export default function getMenu (): MenuItemConstructorOptions[] {
         {
           id: 'menu.import_lang_file',
           label: trans('menu.import_lang_file') // ,
-          // command: 'import-lang-file'
+          // command: 'import-lang-file' TODO
         },
         {
           id: 'menu.import_dict_file',
