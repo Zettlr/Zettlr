@@ -238,7 +238,6 @@ export default {
   },
   methods: {
     handleClick: function (clickedID) {
-      console.log('Clicked:', clickedID)
       if (clickedID === 'toggle-readability') {
         this.readabilityActive = this.readabilityActive === false
       } else if (clickedID === 'toggle-sidebar') {
