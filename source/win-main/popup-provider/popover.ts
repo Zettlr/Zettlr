@@ -18,6 +18,8 @@
 
 import Vue from 'vue'
 
+const ARROW_SIZE = 20 // in pixels
+
 export default class ZettlrPopover {
   private readonly _callback: (data: any) => void
   private readonly _elem: HTMLElement
@@ -61,11 +63,11 @@ export default class ZettlrPopover {
 
     // Create the container and append it to the DOM
     this._popup = document.createElement('div')
-    this._popup.classList.add('popup')
+    this._popup.classList.add('popover')
     const popoverMountPoint = document.createElement('div')
     this._popup.appendChild(popoverMountPoint)
     this._arrow = document.createElement('div')
-    this._arrow.classList.add('popup-arrow')
+    this._arrow.classList.add('popover-arrow')
     document.body.appendChild(this._popup)
     document.body.appendChild(this._arrow)
 
@@ -73,7 +75,7 @@ export default class ZettlrPopover {
     this._popover = new Vue(component)
     // Preset the data with initial values
     for (const key in initialData) {
-      this._popover.$data[key] = initialData[key]
+      Vue.set(this._popover.$data, key, initialData[key])
     }
     // We need to mount it onto a div inside our container because the Vue component will replace the mount point
     this._popover.$mount(popoverMountPoint)
@@ -83,7 +85,7 @@ export default class ZettlrPopover {
     // property popoverData, which can either contain a primitive value or an
     // object collecting several values.
     this._watcher = this._popover.$watch('popoverData', (newValue, oldValue) => {
-      this._callback(this._popover.$data)
+      this._callback(newValue)
     }, { deep: true })
 
     // Place
@@ -162,7 +164,7 @@ export default class ZettlrPopover {
     if (bottom > height + 10 || elemRect.top < 50) {
       // Below element
       this._arrow.classList.add('up')
-      this._popup.style.top = `${this._y + 5}px` // 5px margin for arrow
+      this._popup.style.top = `${this._y + ARROW_SIZE}px` // 5px margin for arrow
       if ((this._x + width / 2) > (window.innerWidth - 10)) { // 10px margin to document
         this._popup.style.left = `${window.innerWidth - width - 10}px` // 10px margin to document
       } else if (this._x - width / 2 < 10) { // 10px margin to document
@@ -193,9 +195,9 @@ export default class ZettlrPopover {
       this._x = elemRect.left + elemRect.width
       this._y = elemRect.top + elemRect.height / 2
       this._arrow.classList.add('left')
-      this._popup.style.left = `${this._x + 5}px`
-      if (this._y + height / 2 > window.innerHeight - 5) {
-        this._popup.style.top = `${window.innerHeight - height - 5}px`
+      this._popup.style.left = `${this._x + ARROW_SIZE}px`
+      if (this._y + height / 2 > window.innerHeight - ARROW_SIZE) {
+        this._popup.style.top = `${window.innerHeight - height - ARROW_SIZE}px`
       } else {
         this._popup.style.top = `${this._y - height / 2}px`
       }
@@ -214,13 +216,13 @@ export default class ZettlrPopover {
       this._x = elemRect.left + elemRect.width / 2
       this._y = elemRect.top
       this._arrow.classList.add('down')
-      this._popup.style.top = `${this._y - height - 5}px`
-      if (this._x + width / 2 > window.innerWidth - 5) {
-        this._popup.style.left = `${window.innerWidth - width - 5}px`
+      this._popup.style.top = `${this._y - height - ARROW_SIZE}px`
+      if (this._x + width / 2 > window.innerWidth - ARROW_SIZE) {
+        this._popup.style.left = `${window.innerWidth - width - ARROW_SIZE}px`
       } else {
         this._popup.style.left = `${this._x - width / 2}px`
       }
-      this._arrow.style.top = `${top - 5}px`
+      this._arrow.style.top = `${top - ARROW_SIZE}px`
       this._arrow.style.left = `${left + elemRect.width / 2 - this._arrow.offsetWidth / 2}px`
 
       // Ensure the popup is completely visible (move inside the document if it's at an edge)

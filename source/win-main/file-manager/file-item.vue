@@ -141,7 +141,7 @@ import localiseNumber from '../../common/util/localise-number'
 import fileContextMenu from './util/file-item-context.js'
 import dirContextMenu from './util/dir-item-context.js'
 import { ipcRenderer } from 'electron'
-import PopoverWritingTarget from './PopoverWritingTarget'
+import PopoverFileProps from './PopoverFileProps'
 
 export default {
   name: 'FileItem',
@@ -193,9 +193,6 @@ export default {
 
         return ret
       }
-    },
-    getTagList: function () {
-      return this.obj.tags.join(', ')
     },
     hasTags: function () {
       return this.obj.tags !== undefined && this.obj.tags.length > 0
@@ -334,24 +331,34 @@ export default {
         fileContextMenu(event, this.obj, this.$el, (clickedID) => {
           if (clickedID === 'menu.rename_file') {
             this.nameEditing = true
-          } else if (clickedID === 'menu.set_target') {
+          } else if (clickedID === 'menu.properties') {
             const data = {
-              value: 0,
-              mode: 'words'
+              filename: this.obj.name,
+              creationtime: this.obj.creationtime,
+              modtime: this.obj.modtime,
+              tags: this.obj.tags,
+              // We need to provide the coloured tags so
+              // the popover can render them correctly
+              colouredTags: this.$store.state.colouredTags,
+              targetValue: 0,
+              targetMode: 'words'
             }
 
             if (this.hasWritingTarget) {
-              data.value = this.obj.target.count
-              data.mode = this.obj.target.mode
+              data.targetValue = this.obj.target.count
+              data.targetMode = this.obj.target.mode
             }
 
-            this.$showPopover(PopoverWritingTarget, this.$el, data, (data) => {
+            this.$showPopover(PopoverFileProps, this.$el, data, (data) => {
               // Whenever the data changes, update the target
+              console.log(data)
+
+              // 1.: Writing Target
               ipcRenderer.invoke('application', {
                 command: 'set-writing-target',
                 payload: {
-                  mode: data.mode,
-                  count: data.value,
+                  mode: data.target.mode,
+                  count: data.target.value,
                   path: this.obj.path
                 }
               }).catch(e => console.error(e))
