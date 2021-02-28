@@ -453,6 +453,9 @@ export default class Zettlr {
       if (descriptor !== null) {
         this._fsal.activeFile = descriptor.path
       }
+    } else if (command === 'set-writing-target') {
+      // Sets or updates a file's writing target
+      global.targets.set(payload)
     } else if (command === 'open-file') {
       this.openFile(payload)
       return true

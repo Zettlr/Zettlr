@@ -6,76 +6,78 @@
  *                         *
  * * * * * * * * * * * * * */
 
-@size-share-buttons: 46px;
-@size-icon-buttons:  25px;
+ @size-share-buttons: 46px;
+ @size-icon-buttons:  25px;
+ @arrow-size: 5px;
 
-/* * * * * * * * * * * * * *
- *                         *
- *    END VARIABLES AREA   *
- *                         *
- * * * * * * * * * * * * * */
+ /* * * * * * * * * * * * * *
+  *                         *
+  *    END VARIABLES AREA   *
+  *                         *
+  * * * * * * * * * * * * * */
 
-/* * * * * * * * * * * * * *
- *                         *
- *     BEGIN MIXIN AREA    *
- *                         *
- * * * * * * * * * * * * * */
+ /* * * * * * * * * * * * * *
+  *                         *
+  *     BEGIN MIXIN AREA    *
+  *                         *
+  * * * * * * * * * * * * * */
 
-// Makes a div flex, can be used to generate a grid style button set
-.flex-button-mixin(@size) {
-  flex-grow: 1;
-  width: @size;
-  height: @size;
-  line-height: @size;
-  text-align: center;
-  transition: 0.2s all ease;
-  cursor: default;
-}
+ // Makes a div flex, can be used to generate a grid style button set
+ .flex-button-mixin(@size) {
+   flex-grow: 1;
+   width: @size;
+   height: @size;
+   line-height: @size;
+   text-align: center;
+   transition: 0.2s all ease;
+   cursor: default;
+ }
 
-/* * * * * * * * * * * * * *
- *                         *
- *      END MIXIN AREA     *
- *                         *
- * * * * * * * * * * * * * */
+ /* * * * * * * * * * * * * *
+  *                         *
+  *      END MIXIN AREA     *
+  *                         *
+  * * * * * * * * * * * * * */
 
+ .popup-arrow {
+   @arrow-color: rgb(230, 230, 230);
+   width:0;
+   height:0;
+   position:fixed;
 
-.popup-arrow {
-  width:0;
-  height:0;
-  position:fixed;
-
-  &.up {
-    border-left: @arrow-size solid transparent;
-    border-right: @arrow-size solid transparent;
-    border-bottom-width: @arrow-size;
-    border-bottom-style: solid;
-  }
-  &.down {
-    border-left: @arrow-size solid transparent;
-    border-right: @arrow-size solid transparent;
-    border-top-width: @arrow-size;
-    border-top-style: solid;
-  }
-  &.left {
-    border-top: @arrow-size solid transparent;
-    border-bottom: @arrow-size solid transparent;
-    border-right-width: @arrow-size;
-    border-right-style: solid;
-  }
-  &.right {
-    border-top: @arrow-size solid transparent;
-    border-bottom: @arrow-size solid transparent;
-    border-left-width: @arrow-size;
-    border-left-style: solid;
-  }
-}
+   &.up {
+     border-left: @arrow-size solid transparent;
+     border-right: @arrow-size solid transparent;
+     border-bottom: @arrow-size solid @arrow-color;
+   }
+   &.down {
+     border-left: @arrow-size solid transparent;
+     border-right: @arrow-size solid transparent;
+     border-top: @arrow-size solid @arrow-color;
+   }
+   &.left {
+     border-top: @arrow-size solid transparent;
+     border-bottom: @arrow-size solid transparent;
+     border-right: @arrow-size solid @arrow-color;
+   }
+   &.right {
+     border-top: @arrow-size solid transparent;
+     border-bottom: @arrow-size solid transparent;
+     border-left: @arrow-size solid @arrow-color;
+   }
+ }
 
 .popup {
+  background-color: rgb(230, 230, 230);
+  border: 1px solid rgb(213, 213, 213);
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, .3);
+  border-radius: 4px;
   position: fixed;
   max-width: 350px; // Maximum width.
   max-height: 600px; // Maximum height. If its too much simply scroll.
   overflow-y: auto;
   overflow-x: hidden;
+  padding: 5px;
 
   // TOC links
   a.toc-link {
@@ -155,7 +157,7 @@
     background-repeat: no-repeat;
 
     &.htm {
-      background-image: url('../../img/html5.svg');
+    //  background-image: url('../../img/html5.svg');
       &:hover {
         /* W3C color code */
         background-color: rgb(78, 175, 87);
@@ -163,7 +165,7 @@
     }
 
     &.pdf {
-      background-image: url('../../img/pdf.svg');
+    //  background-image: url('../../img/pdf.svg');
       &:hover {
         /* Adobe reader PDF color code */
         background-color: lighten(rgb(253, 48, 26), 10%);
@@ -171,7 +173,7 @@
     }
 
     &.docx {
-      background-image: url('../../img/docx.svg');
+    //  background-image: url('../../img/docx.svg');
       &:hover {
         /* MS Word color code */
         background-color: lighten(rgb(45, 88, 151), 10%);
@@ -179,7 +181,7 @@
     }
 
     &.odt {
-      background-image: url('../../img/odt.svg');
+    //  background-image: url('../../img/odt.svg');
     }
 
     &.odt, &.tex, &.plain {
@@ -359,7 +361,7 @@
       &:focus { outline: 0; }
 
       // Use monospaced font for regular expressions.
-      &.regexp { font-family: @font-code; }
+    //  &.regexp { font-family: @font-code; }
     }
 
     button {
@@ -381,7 +383,6 @@
   // Footnote edit popup
   .footnote-edit {
     textarea {
-      font-size: @font-size-base;
       min-height: 150px;
       border: none;
       width: 250px; // Maximum width

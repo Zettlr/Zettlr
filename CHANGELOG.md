@@ -8,6 +8,10 @@ No 32 bit builds are now available anymore. Only 64 bit (Intel and ARM) are supp
 
 Several configuration values and options have changed their format. This means that changes to these won't be recognised by Zettlr 2.0. In this case, you may have to re-adapt your preferences in several places.
 
+## Writing Targets Must Be Re-Applied
+
+Due to a change in the underlying data structure, this version of Zettlr will not recognise any writing target set by a Zettlr version 1.x. This means: Please note down the important writing targets you have set before installing Zettlr 2.0 and then once re-apply them. We would like to apologise for this inconvenience, but believe its benefits by far outweigh the single additional migration effort on your side.
+
 ## GUI and Functionality
 
 - **Feature**: Switched the Exporting process in a way that allows more flexibility in setting options.

@@ -97,24 +97,18 @@ export default class FSAL extends EventEmitter {
     }
 
     // Finally, set up listeners for global targets
-    global.targets.on('update', (hash: number) => {
-      let file = this.findFile(hash)
+    global.targets.on('update', (filePath: string) => {
+      let file = this.findFile(filePath)
       if (file === null || file.type !== 'file') return // Not our business
       // Simply pull in the new target
-      FSALFile.setTarget(file, global.targets.get(hash))
-      this.emit('fsal-state-changed', 'file', {
-        'oldHash': file.hash,
-        'newHash': file.hash
-      })
+      FSALFile.setTarget(file, global.targets.get(filePath))
+      this._recordFiletreeChange('change', file.path)
     })
-    global.targets.on('remove', (hash: number) => {
-      let file = this.findFile(hash)
+    global.targets.on('remove', (filePath: string) => {
+      let file = this.findFile(filePath)
       if (file === null || file.type !== 'file') return // Also not our business
       FSALFile.setTarget(file, undefined) // Reset
-      this.emit('fsal-state-changed', 'file', {
-        'oldHash': file.hash,
-        'newHash': file.hash
-      })
+      this._recordFiletreeChange('change', file.path)
     })
 
     this._watchdog.on('change', (event, changedPath) => {

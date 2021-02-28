@@ -127,11 +127,6 @@ class ZettlrIPC {
     }
 
     switch (cmd) {
-      // Set or update a target
-      case 'set-target':
-        global.targets.set(cnt)
-        break
-
       case 'get-pdf-preferences':
         // Get the same whole config object. ZettlrDialog will filter out
         // the PDF preferences. Why do we need the whole? Because the project

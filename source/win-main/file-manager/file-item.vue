@@ -104,28 +104,29 @@
           <span v-else-if="!hasWritingTarget" class="badge">
             {{ formattedWordCount }}
           </span>
-          <svg
-            v-else
-            class="target-progress-indicator"
-            width="16"
-            height="16"
-            viewBox="-1 -1 2 2"
-            v-bind:data-tippy-content="writingTargetInfo"
-          >
-            <circle
-              class="indicator-meter"
-              cx="0"
-              cy="0"
-              r="1"
-              shape-rendering="geometricPrecision"
-            ></circle>
-            <path
-              v-bind:d="writingTargetPath"
-              fill=""
-              class="indicator-value"
-              shape-rendering="geometricPrecision"
-            ></path>
-          </svg>
+          <span v-else class="badge">
+            <svg
+              class="target-progress-indicator"
+              width="16"
+              height="16"
+              viewBox="-1 -1 2 2"
+            >
+              <circle
+                class="indicator-meter"
+                cx="0"
+                cy="0"
+                r="1"
+                shape-rendering="geometricPrecision"
+              ></circle>
+              <path
+                v-bind:d="writingTargetPath"
+                fill=""
+                class="indicator-value"
+                shape-rendering="geometricPrecision"
+              ></path>
+            </svg>
+            {{ writingTargetInfo }}
+          </span>
         </div>
       </template> <!-- END meta info for files -->
     </div>
@@ -140,6 +141,7 @@ import localiseNumber from '../../common/util/localise-number'
 import fileContextMenu from './util/file-item-context.js'
 import dirContextMenu from './util/dir-item-context.js'
 import { ipcRenderer } from 'electron'
+import PopoverWritingTarget from './PopoverWritingTarget'
 
 export default {
   name: 'FileItem',
@@ -273,12 +275,21 @@ export default {
     },
     writingTargetInfo: function () {
       let current = this.obj.charCount
-      if (this.obj.target.mode === 'words') current = this.obj.wordCount
+      if (this.obj.target.mode === 'words') {
+        current = this.obj.wordCount
+      }
 
       let progress = Math.round(current / this.obj.target.count * 100)
-      if (progress > 100) progress = 100 // Never exceed 100 %
+      if (progress > 100) {
+        progress = 100 // Never exceed 100 %
+      }
 
-      return `${current} / ${this.obj.target.count} (${progress} %)`
+      let label = trans('dialog.target.chars')
+      if (this.obj.target.mode === 'words') {
+        label = trans('dialog.target.words')
+      }
+
+      return `${localiseNumber(current)} / ${localiseNumber(this.obj.target.count)} ${label} (${progress} %)`
     },
     formattedWordCount: function () {
       if (this.obj.wordCount === undefined) {
@@ -323,6 +334,28 @@ export default {
         fileContextMenu(event, this.obj, this.$el, (clickedID) => {
           if (clickedID === 'menu.rename_file') {
             this.nameEditing = true
+          } else if (clickedID === 'menu.set_target') {
+            const data = {
+              value: 0,
+              mode: 'words'
+            }
+
+            if (this.hasWritingTarget) {
+              data.value = this.obj.target.count
+              data.mode = this.obj.target.mode
+            }
+
+            this.$showPopover(PopoverWritingTarget, this.$el, data, (data) => {
+              // Whenever the data changes, update the target
+              ipcRenderer.invoke('application', {
+                command: 'set-writing-target',
+                payload: {
+                  mode: data.mode,
+                  count: data.value,
+                  path: this.obj.path
+                }
+              }).catch(e => console.error(e))
+            })
           }
         })
       }
@@ -462,7 +495,6 @@ body {
       // Optional target progress meter, if a target has been set
       .target-progress-indicator {
         vertical-align: middle;
-        margin: 0 4px;
         transform: rotateZ(-90deg); // Beginning must be at the top
       }
     }
@@ -542,6 +574,16 @@ body.darwin {
             border: 1px solid white;
             border-radius: 50%;
           }
+        }
+
+        svg {
+          display: inline-block;
+          width: 11px;
+          height: 11px;
+          margin: 0;
+
+          circle { fill: rgb(200, 200, 200); }
+          path { fill: rgb(90, 90, 90); }
         }
       }
     }

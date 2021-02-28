@@ -309,7 +309,7 @@ export async function parse (filePath: string, cache: FSALCache, parent: DirDesc
   }
 
   // Get the target, if applicable
-  file.target = global.targets.get(file.hash)
+  file.target = global.targets.get(file.path)
 
   // Finally, report the tags
   global.tags.report(file.tags)

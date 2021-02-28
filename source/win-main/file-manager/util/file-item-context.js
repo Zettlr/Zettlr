@@ -120,37 +120,12 @@ module.exports = function displayFileContext (event, fileObject, el, callback) {
       case 'menu.show_file':
         shell.showItemInFolder(fileObject.path)
         break
-      case 'menu.set_target':
-        displayTargetPopup(fileObject, el)
-        break
       case 'menu.close_file':
         ipcRenderer.send('message', {
           command: 'root-close',
           content: fileObject.hash
         })
         break
-    }
-  })
-}
-
-function displayTargetPopup (file, element) {
-  const data = {
-    mode: 'words',
-    count: 0
-  }
-
-  if (file.target !== undefined) {
-    data.mode = file.target.mode
-    data.count = file.target.count
-  }
-
-  global.popupProvider.show('target', element, data, (form) => {
-    if (form !== null) {
-      global.ipc.send('set-target', {
-        hash: file.hash,
-        count: parseInt(form[0].value, 10),
-        mode: form[1].value
-      })
     }
   })
 }

@@ -18,16 +18,13 @@ import Vuex from 'vuex'
 import App from './App.vue'
 import createStore from './store'
 import { ipcRenderer } from 'electron'
-import PopupProvider from './modules/popup-provider'
+import PopupProvider from './popup-provider'
 
 // The first thing we have to do is run the window controller
 windowRegister()
 
-// Also, we need to register the popup provider
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const popups = new PopupProvider()
-
 Vue.use(Vuex)
+Vue.use(PopupProvider) // Exposes $showPopover and $closePopover
 
 // Create the Vue app
 const app = new Vue({
