@@ -380,7 +380,7 @@ export default {
       const alt = event.altKey === true
 
       if (this.obj.type === 'file' && alt) {
-        // QuickLook the file
+        // QuickLook the file TODO: application invocation
         global.ipc.send('open-quicklook', this.obj.hash)
       } else if ([ 'file', 'code' ].includes(this.obj.type)) {
         // Request the clicked file
@@ -393,7 +393,7 @@ export default {
         // Select the parent directory
         ipcRenderer.invoke('application', {
           command: 'set-open-directory',
-          payload: this.obj.path // TODO parent!!
+          payload: this.obj.parent.path
         })
           .catch(e => console.error(e))
       } else {
@@ -409,6 +409,7 @@ export default {
      * Request to re-sort this directory
      */
     sort: function (sorting) {
+      // TODO: application invocation, plus: Move to popover
       global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': sorting })
     },
     beginDragging: function (event) {
@@ -451,11 +452,12 @@ export default {
 
       const command = (this.obj.type === 'directory') ? 'dir-rename' : 'file-rename'
 
-      ipcRenderer.send('message', {
+      ipcRenderer.invoke('application', {
         command: command,
-        content: { hash: this.obj.hash, name: newName }
+        payload: { hash: this.obj.hash, name: newName }
       })
-      this.nameEditing = false
+        .catch(e => console.error(e))
+        .finally(() => { this.nameEditing = false })
     }
   }
 }

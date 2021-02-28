@@ -357,7 +357,7 @@ export default {
       }
 
       if (this.obj.type === 'file' && alt) {
-        // QuickLook the file
+        // QuickLook the file TODO: application invocation
         global.ipc.send('open-quicklook', this.obj.hash)
       } else if (this.obj.type === 'file') {
         // Request the clicked file
@@ -388,6 +388,7 @@ export default {
      * Request to re-sort this directory
      */
     sort: function (sorting) {
+      // TODO: application invocation, plus: Move to directory popover
       global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': sorting })
     },
     /**
@@ -477,7 +478,7 @@ export default {
         return
       }
 
-      // Finally, request the move!
+      // Finally, request the move! TODO: application invocation
       global.ipc.send('request-move', {
         from: parseInt(data.hash),
         to: this.obj.hash
@@ -503,11 +504,14 @@ export default {
         return // Not changed
       }
 
-      ipcRenderer.send('message', {
-        command: 'dir-rename',
+      const command = (this.obj.type === 'directory') ? 'dir-rename' : 'file-rename'
+
+      ipcRenderer.invoke('application', {
+        command: command,
         content: { hash: this.obj.hash, name: newName }
       })
-      this.nameEditing = false
+        .catch(e => console.error(e))
+        .finally(() => { this.nameEditing = false })
     }
   }
 }
