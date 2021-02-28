@@ -9,6 +9,8 @@
  @size-share-buttons: 46px;
  @size-icon-buttons:  25px;
  @arrow-size: 20px;
+ @color-light: rgb(230, 230, 230);
+ @color-dark: rgb(30, 30, 30);
 
  /* * * * * * * * * * * * * *
   *                         *
@@ -39,8 +41,7 @@
   *                         *
   * * * * * * * * * * * * * */
 
- .popover-arrow {
-   @arrow-color: rgb(230, 230, 230);
+ body .popover-arrow {
    width: 0;
    height: 0;
    position: fixed;
@@ -49,27 +50,27 @@
    &.up {
      border-left: @arrow-size solid transparent;
      border-right: @arrow-size solid transparent;
-     border-bottom: @arrow-size solid @arrow-color;
+     border-bottom: @arrow-size solid @color-light;
    }
    &.down {
      border-left: @arrow-size solid transparent;
      border-right: @arrow-size solid transparent;
-     border-top: @arrow-size solid @arrow-color;
+     border-top: @arrow-size solid @color-light;
    }
    &.left {
      border-top: @arrow-size solid transparent;
      border-bottom: @arrow-size solid transparent;
-     border-right: @arrow-size solid @arrow-color;
+     border-right: @arrow-size solid @color-light;
    }
    &.right {
      border-top: @arrow-size solid transparent;
      border-bottom: @arrow-size solid transparent;
-     border-left: @arrow-size solid @arrow-color;
+     border-left: @arrow-size solid @color-light;
    }
  }
 
-.popover {
-  background-color: rgb(230, 230, 230);
+body .popover {
+  background-color: @color-light;
   border: 1px solid rgb(213, 213, 213);
   box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, .4);
   border-radius: 8px;
@@ -417,4 +418,16 @@
       margin: 0 auto;
     }
   }
+}
+
+body.dark .popover-arrow {
+  &.up { border-bottom-color: @color-dark; }
+  &.down { border-top-color: @color-dark; }
+  &.left { border-right-color: @color-dark; }
+  &.right { border-left-color: @color-dark; }
+}
+
+body.dark .popover {
+  background-color: @color-dark;
+  border: 1px solid rgb(70, 70, 70);
 }

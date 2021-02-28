@@ -138,4 +138,10 @@ body div.popover {
     }
   }
 }
+
+body.dark div.popover {
+  .badge {
+    background-color: rgb(60, 60, 60);
+  }
+}
 </style>
