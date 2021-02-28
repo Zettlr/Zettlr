@@ -15,7 +15,7 @@
         <a href="https://nodejs.org/">
           <img
             src="./assets/nodejs-official-logo.png"
-            style="margin-top: 5%" alt="Node.js Logo" title="Node.js"
+            style="" alt="Node.js Logo" title="Node.js"
           >
         </a>
       </div>
@@ -23,7 +23,7 @@
         <a href="https://codemirror.net/">
           <img
             src="./assets/codemirror-official-logo.png"
-            style="width:60%; margin:0 20%" alt="CodeMirror Logo"
+            style="" alt="CodeMirror Logo"
             title="CodeMirror"
           >
         </a>
@@ -32,8 +32,17 @@
         <a href="https://citationstyles.org/">
           <img
             src="./assets/csl-official-logo.svg"
-            style="margin-top: 25%" alt="Citation Style Language Logo"
+            style="" alt="Citation Style Language Logo"
             title="Citation Style Language (CSL)"
+          >
+        </a>
+      </div>
+      <div class="flex">
+        <a href="https://www.pandoc.org">
+          <img
+            src="./assets/pandoc.svg"
+            style="" alt="Pandoc"
+            title="Pandoc"
           >
         </a>
       </div>
@@ -73,8 +82,12 @@ div#about-general {
 
   div.projects {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     div.flex {
       flex: 1;
+      text-align: center;
 
       img {
         max-width: 100%;
