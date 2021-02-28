@@ -64,6 +64,29 @@ function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: B
   return null
 }
 
+/**
+ * Reconstructs a descriptor tree by re-assigning the parent properties to the
+ * correct object references, instead of just numbers. NOTE: You still have to
+ * assign the parent of the descriptor itself.
+ *
+ * @param   {DirMeta}  descriptor  The directory descriptor to reconstruct
+ */
+function reconstructTree (descriptor: DirMeta): void {
+  for (const attachment of descriptor.attachments) {
+    // @ts-expect-error NOTE: The file metas have numbers to prevent circular
+    // structures over IPC. In the renderer we only need to override it here.
+    attachment.parent = descriptor
+  }
+
+  for (const child of descriptor.children) {
+    // @ts-expect-error
+    child.parent = descriptor
+    if (child.type === 'directory') {
+      reconstructTree(child)
+    }
+  }
+}
+
 function sanitizeFiletreeUpdates (events: FSALEvent[]): FSALEvent[] {
   const ret: FSALEvent[] = []
 
@@ -255,6 +278,9 @@ const config: StoreOptions<ZettlrState> = {
           return // It was an attachment already there
         }
         descriptor.parent = parentDescriptor // Attach the child to its parent
+        if (descriptor.type === 'directory') {
+          reconstructTree(descriptor) // Make sure the parent pointers work correctly
+        }
 
         if (isAttachment(descriptor.path, true)) {
           parentDescriptor.attachments.push(descriptor)
