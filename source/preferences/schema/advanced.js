@@ -39,6 +39,13 @@ export default {
     ],
     [
       {
+        type: 'token',
+        label: trans('dialog.preferences.attachments_info'),
+        model: 'attachmentExtensions'
+      }
+    ],
+    [
+      {
         type: 'checkbox',
         label: trans('dialog.preferences.watchdog_checkbox_label'),
         model: 'watchdog.activatePolling'

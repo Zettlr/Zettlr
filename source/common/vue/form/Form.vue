@@ -96,6 +96,14 @@
           v-bind:options="field.options"
           v-on:input="$emit('input', field.model, $event)"
         ></ListInput>
+        <TokenInput
+          v-if="field.type === 'token'"
+          v-bind:key="f_idx"
+          v-bind:value="getModelValue(field.model)"
+          v-bind:label="field.label"
+          v-bind:name="field.model"
+          v-on:input="$emit('input', field.model, $event)"
+        ></TokenInput>
         <Theme
           v-if="field.type === 'theme'"
           v-bind:key="f_idx"
@@ -121,6 +129,7 @@ import SwitchInput from './elements/Switch.vue'
 import RadioInput from './elements/Radio.vue'
 import SelectInput from './elements/Select.vue'
 import ListInput from './elements/List.vue'
+import TokenInput from './elements/TokenList.vue'
 import Theme from './elements/Theme.vue'
 
 export default {
@@ -136,6 +145,7 @@ export default {
     RadioInput,
     SelectInput,
     ListInput,
+    TokenInput,
     Theme
   },
   props: {
