@@ -3,6 +3,14 @@ const { ipcRenderer, shell, clipboard } = require('electron')
 
 const TEMPLATE = [
   {
+    label: 'menu.properties',
+    id: 'properties',
+    type: 'normal'
+  },
+  {
+    type: 'separator'
+  },
+  {
     label: 'menu.rename_file',
     command: 'file-rename',
     accelerator: 'CmdOrCtrl+R',
@@ -43,11 +51,6 @@ const TEMPLATE = [
   {
     label: 'menu.show_file',
     command: 'show-in-finder',
-    type: 'normal'
-  },
-  {
-    label: 'menu.set_target',
-    command: 'set-target',
     type: 'normal'
   }
 ]
