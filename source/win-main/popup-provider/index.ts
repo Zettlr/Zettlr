@@ -80,6 +80,6 @@ export default {
       return currentPopover
     }
 
-    VueInstance.prototype.$close = closeFunction
+    VueInstance.prototype.$closePopover = closeFunction
   }
 }

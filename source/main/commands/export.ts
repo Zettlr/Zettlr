@@ -30,7 +30,7 @@ export default class Export extends ZettlrCommand {
     * @return {Boolean}     Whether or not the call succeeded.
     */
   async run (evt: string, arg: any): Promise<void> {
-    const fileDescriptor = this._app.getFileSystem().findFile(arg.hash)
+    const fileDescriptor = this._app.getFileSystem().findFile(arg.file)
     if (fileDescriptor === null) {
       return global.notify.normal(trans('system.error.fnf_message'))
     }
@@ -38,7 +38,7 @@ export default class Export extends ZettlrCommand {
     let fileMetadata = await this._app.getFileSystem().getFileContents(fileDescriptor)
 
     let dest
-    if (global.config.get('export.dir') === 'temp') {
+    if (arg.exportTo === 'temp') {
       // The user wants the file saved to the temporary directory.
       dest = app.getPath('temp')
     } else if (fileMetadata.parent !== null) {
@@ -98,7 +98,7 @@ export default class Export extends ZettlrCommand {
     }
 
     let opt = {
-      'format': arg.ext, // Which format: "html", "docx", "odt", "pdf"
+      'format': arg.format,
       'file': fileMetadata, // The file to be exported
       'dest': dest,
       'stripIDs': global.config.get('export.stripIDs'),

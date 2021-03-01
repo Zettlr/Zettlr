@@ -1,5 +1,6 @@
 <template>
   <div
+    v-bind:id="`toolbar-${control.id}`"
     role="presentation"
     class="toolbar-text"
     v-bind:style="{

@@ -33,6 +33,7 @@ import Sidebar from './Sidebar'
 import Tabs from './Tabs'
 import SplitView from './SplitView'
 import Editor from './Editor'
+import PopoverExport from './PopoverExport'
 import { trans } from '../common/i18n'
 import localiseNumber from '../common/util/localise-number'
 import generateId from '../common/util/generate-id'
@@ -136,7 +137,7 @@ export default {
         {
           type: 'button',
           class: 'share',
-          command: 'export',
+          id: 'export',
           title: 'toolbar.share',
           icon: 'export'
         },
@@ -248,6 +249,27 @@ export default {
       } else if (clickedID === 'open-preferences') {
         ipcRenderer.invoke('application', { command: 'open-preferences' })
           .catch(e => console.error(e))
+      } else if (clickedID === 'export') {
+        if (this.$store.state.activeFile === null) {
+          return // Can't export a non-open file
+        }
+        const data = {
+          exportDirectory: this.$store.state.config['export.dir']
+        }
+        this.$showPopover(PopoverExport, document.getElementById('toolbar-export'), data, (data) => {
+          if (data.shouldExport === true) {
+            ipcRenderer.invoke('application', {
+              command: 'export',
+              payload: {
+                format: data.format,
+                exportTo: data.exportTo,
+                file: this.$store.state.activeFile.path
+              }
+            })
+              .catch(e => console.error(e))
+            this.$closePopover()
+          }
+        })
       }
     }
   }

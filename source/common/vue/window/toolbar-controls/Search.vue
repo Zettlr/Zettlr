@@ -1,5 +1,6 @@
 <template>
   <input
+    v-bind:id="`toolbar-${control.id}`"
     ref="input"
     type="search"
     role="search"

@@ -351,7 +351,6 @@ export default {
 
             this.$showPopover(PopoverFileProps, this.$el, data, (data) => {
               // Whenever the data changes, update the target
-              console.log(data)
 
               // 1.: Writing Target
               ipcRenderer.invoke('application', {
