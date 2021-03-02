@@ -2,10 +2,19 @@
   <div>
     <h4>Properties: {{ filename }}</h4>
     <div class="properties-info-container">
-      <span>Created: {{ creationTime }}</span>
-      <span>Modified: {{ modificationTime }}</span>
+      <div><span>Created: {{ creationTime }}</span></div>
+      <div v-if="type === 'file'">
+        <span>Words: {{ formattedWords }}</span>
+      </div>
+      <div v-else>
+        <span>Type: <span class="badge primary">{{ ext.substr(1) }}</span></span>
+      </div>
     </div>
-    <template v-if="tags.length > 0">
+    <div class="properties-info-container">
+      <div><span>Modified: {{ modificationTime }}</span></div>
+      <div><span>Size: {{ formattedSize }}</span></div>
+    </div>
+    <template v-if="type === 'file' && tags.length > 0">
       <hr>
       <div>
         <div v-for="(item, idx) in tags" v-bind:key="idx" class="badge">
@@ -20,25 +29,27 @@
         </div>
       </div>
     </template>
-    <hr>
-    <p>
-      Writing Target
-    </p>
-    <NumberControl
-      v-model="targetValue"
-      v-bind:inline="true"
-    ></NumberControl>
-    <SelectControl
-      v-model="targetMode"
-      v-bind:inline="true"
-      v-bind:options="{
-        'words': wordsLabel,
-        'chars': charactersLabel
-      }"
-    ></SelectControl>
-    <button v-on:click="reset">
-      Reset
-    </button>
+    <template v-if="type === 'file'">
+      <hr>
+      <p>
+        Writing Target
+      </p>
+      <NumberControl
+        v-model="targetValue"
+        v-bind:inline="true"
+      ></NumberControl>
+      <SelectControl
+        v-model="targetMode"
+        v-bind:inline="true"
+        v-bind:options="{
+          'words': wordsLabel,
+          'chars': charactersLabel
+        }"
+      ></SelectControl>
+      <button v-on:click="reset">
+        Reset
+      </button>
+    </template>
   </div>
 </template>
 
@@ -47,6 +58,8 @@ import NumberControl from '../../common/vue/form/elements/Number'
 import SelectControl from '../../common/vue/form/elements/Select'
 import { trans } from '../../common/i18n'
 import formatDate from '../../common/util/format-date'
+import formatSize from '../../common/util/format-size'
+import localiseNumber from '../../common/util/localise-number'
 
 export default {
   name: 'Popover',
@@ -62,19 +75,25 @@ export default {
       tags: [],
       colouredTags: [],
       targetValue: 0,
-      targetMode: 'words'
+      targetMode: 'words',
+      words: 0,
+      fileSize: 0,
+      type: 'file',
+      ext: '.md'
     }
   },
   computed: {
     // This property needs to be exposed on every Popover. The popover needs to
     // return the data that will then be reported back to the caller.
     popoverData: function () {
-      return {
-        target: {
+      const data = {}
+      if (this.type === 'file') {
+        data.target = {
           value: this.targetValue,
           mode: this.targetMode
         }
       }
+      return data
     },
     wordsLabel: function () {
       return trans('dialog.target.words')
@@ -87,6 +106,12 @@ export default {
     },
     modificationTime: function () {
       return formatDate(new Date(this.modtime), true)
+    },
+    formattedSize: function () {
+      return formatSize(this.fileSize)
+    },
+    formattedWords: function () {
+      return localiseNumber(this.words)
     }
   },
   methods: {
@@ -117,6 +142,12 @@ body div.popover {
     font-size: 11px;
     display: flex;
     justify-content: space-evenly;
+
+    // Enable a table-like visual experience
+    & > div {
+      width: 100%;
+      padding: 0 10px;
+    }
   }
 
   .badge {
@@ -135,6 +166,11 @@ body div.popover {
       height: 9px;
       border: 1px solid white;
       border-radius: 50%;
+    }
+
+    &.primary {
+      background-color: var(--system-accent-color, --c-primary);
+      color: rgb(230, 230, 230);
     }
   }
 }

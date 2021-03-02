@@ -135,9 +135,10 @@
 
 <script>
 import Sorter from './sorter.vue'
-import formatDate from '../../common/util/format-date.js'
 import { trans } from '../../common/i18n.js'
+import formatDate from '../../common/util/format-date.js'
 import localiseNumber from '../../common/util/localise-number'
+import formatSize from '../../common/util/format-size'
 import fileContextMenu from './util/file-item-context.js'
 import dirContextMenu from './util/dir-item-context.js'
 import { ipcRenderer } from 'electron'
@@ -296,15 +297,7 @@ export default {
       return trans('gui.words', localiseNumber(this.obj.wordCount))
     },
     formattedSize: function () {
-      if (this.obj.size < 1024) {
-        return `${this.obj.size} Byte`
-      } else if (this.obj.size < 1024 * 1000) {
-        return `${Math.round(this.obj.size / 1000)} Kilobyte`
-      } else if (this.obj.size < 1024 * 1000 * 1000) {
-        return `${Math.round(this.obj.size / (1000 * 1000))} Megabyte`
-      } else {
-        return `${Math.round(this.obj.size / (1000 * 1000 * 1000))} Gigabyte`
-      }
+      return formatSize(this.obj.size)
     }
   },
   watch: {
@@ -341,7 +334,11 @@ export default {
               // the popover can render them correctly
               colouredTags: this.$store.state.colouredTags,
               targetValue: 0,
-              targetMode: 'words'
+              targetMode: 'words',
+              fileSize: this.obj.size,
+              type: this.obj.type,
+              words: 0,
+              ext: this.obj.ext
             }
 
             if (this.hasWritingTarget) {
@@ -349,18 +346,24 @@ export default {
               data.targetMode = this.obj.target.mode
             }
 
+            if (this.obj.type === 'file') {
+              data.words = this.obj.wordCount
+            }
+
             this.$showPopover(PopoverFileProps, this.$el, data, (data) => {
               // Whenever the data changes, update the target
 
               // 1.: Writing Target
-              ipcRenderer.invoke('application', {
-                command: 'set-writing-target',
-                payload: {
-                  mode: data.target.mode,
-                  count: data.target.value,
-                  path: this.obj.path
-                }
-              }).catch(e => console.error(e))
+              if (this.obj.type === 'file') {
+                ipcRenderer.invoke('application', {
+                  command: 'set-writing-target',
+                  payload: {
+                    mode: data.target.mode,
+                    count: data.target.value,
+                    path: this.obj.path
+                  }
+                }).catch(e => console.error(e))
+              }
             })
           }
         })
@@ -572,7 +575,7 @@ body.darwin {
 
         &.tag {
           background-color: rgba(90, 90, 90, 0.5); // Make those tags a little bit translucent
-          color: rgb(220, 220, 220);
+          color: rgb(240, 240, 240);
 
           .color-circle {
             // If there's a coloured tag in there, display that as well
