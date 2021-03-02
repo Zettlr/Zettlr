@@ -85,9 +85,15 @@ body {
 
     .token {
       display: inline-block;
+      background-color: rgba(90, 90, 90, 0.5);
+      color: white;
       border-radius: 4px;
       margin: 2px;
       padding: 2px;
+
+      &:hover {
+        background-color: rgb(175, 56, 56);
+      }
     }
 
     input {
