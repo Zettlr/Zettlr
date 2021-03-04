@@ -170,7 +170,7 @@ export default {
     basename: function () {
       if (this.obj.frontmatter && this.obj.frontmatter.hasOwnProperty('title')) {
         return this.obj.frontmatter.title
-      } else if (this.obj.firstHeading && this.$store.state.useFirstHeadings) {
+      } else if (this.obj.firstHeading && this.$store.state.config['display.useFirstHeadings']) {
         return this.obj.firstHeading
       } else {
         return this.obj.name.replace(this.obj.ext, '')
