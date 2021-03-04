@@ -1,6 +1,5 @@
 const { trans } = require('../../../common/i18n')
 const { ipcRenderer, shell } = require('electron')
-const generateFileName = require('../../../common/util/generate-filename')
 
 const TEMPLATE = [
   {
@@ -120,22 +119,6 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
           content: { hash: dirObject.hash }
         })
         break
-      case 'menu.new_file':
-        displayTextPopup(generateFileName(), trans('dialog.file_rename.placeholder'), el, (newValue) => {
-          ipcRenderer.send('message', {
-            command: 'file-new',
-            content: { hash: dirObject.hash, name: newValue }
-          })
-        })
-        break
-      case 'menu.new_dir':
-        displayTextPopup('', trans('dialog.dir_new.placeholder'), el, (newValue) => {
-          ipcRenderer.send('message', {
-            command: 'dir-new',
-            content: { hash: dirObject.hash, name: newValue }
-          })
-        })
-        break
       case 'gui.attachments_open_dir':
         shell.showItemInFolder(dirObject.path)
         break
@@ -177,19 +160,6 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
           command: 'rescan-dir',
           content: dirObject.hash
         })
-    }
-  })
-}
-
-function displayTextPopup (value, placeholder, element, callback) {
-  const data = {
-    'val': value,
-    'placeholder': placeholder
-  }
-
-  global.popupProvider.show('textfield', element, data, (form) => {
-    if (form !== null) {
-      callback(form[0].value)
     }
   })
 }

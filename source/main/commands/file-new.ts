@@ -18,6 +18,12 @@ import path from 'path'
 import sanitize from 'sanitize-filename'
 import { filetypes as ALLOWED_FILETYPES } from '../../common/data.json'
 
+const CODEFILE_TYPES = [
+  '.yml',
+  '.yaml',
+  '.tex'
+]
+
 export default class FileNew extends ZettlrCommand {
   constructor (app: any) {
     super(app, 'file-new')
@@ -30,13 +36,9 @@ export default class FileNew extends ZettlrCommand {
    * @return {void}     This function does not return anything.
    */
   async run (evt: string, arg: any): Promise<void> {
-    let dir = null
+    let dir = this._app.getFileSystem().findDir(arg.path)
 
-    // There should be also a hash in the argument.
-    if (arg.hasOwnProperty('hash')) {
-      dir = this._app.getFileSystem().findDir(arg.hash)
-    } else {
-      global.log.warning('No directory selected. Using currently selected directory ...')
+    if (dir === null) {
       dir = this._app.getFileSystem().openDirectory
     }
 
@@ -54,7 +56,7 @@ export default class FileNew extends ZettlrCommand {
 
       // If no valid filename is provided, assume .md
       let ext = path.extname(filename).toLowerCase()
-      if (!ALLOWED_FILETYPES.includes(ext)) {
+      if (!ALLOWED_FILETYPES.includes(ext) && !CODEFILE_TYPES.includes(ext)) {
         filename += '.md'
       }
 

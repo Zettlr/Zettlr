@@ -15,7 +15,6 @@
   <div
     v-bind:class="{
       'list-item': true,
-      'selected': $store.state.selectedFile === obj.hash,
       'project': obj.type === 'directory' && obj.project !== null,
       'selected': obj === activeFile,
       'has-meta-info': fileMeta,
@@ -318,12 +317,22 @@ export default {
         dirContextMenu(event, this.obj, this.$el, (clickedID) => {
           if (clickedID === 'menu.rename_dir') {
             this.nameEditing = true
+          } else if (clickedID === 'menu.new_file') {
+            this.$emit('create-file')
+          } else if (clickedID === 'menu.new_dir') {
+            this.$emit('create-dir')
           }
         })
       } else {
         fileContextMenu(event, this.obj, this.$el, (clickedID) => {
+          console.log(clickedID)
           if (clickedID === 'menu.rename_file') {
             this.nameEditing = true
+          } else if (clickedID === 'menu.duplicate_file') {
+            // The user wants to duplicate this file --> instruct the file list
+            // controller to display a mock file object below this file for the
+            // user to enter a new file name.
+            this.$emit('duplicate')
           } else if (clickedID === 'menu.properties') {
             const data = {
               filename: this.obj.name,
@@ -524,6 +533,7 @@ body {
       // These inputs should be more or less "invisible"
       input {
         border: none;
+        width: 100%;
         color: inherit;
         font-family: inherit;
         font-size: inherit;
