@@ -507,17 +507,39 @@ export default class FSAL extends EventEmitter {
   }
 
   /**
-   * Closes a given file.
-   * @param {Object} file The file descriptor
+   * Closes the given file if it's in fact open. This function also makes sure
+   * to re-set the current active file if the file to be closed was the active
+   * one.
+   *
+   * @param   {MDFileDescriptor|CodeFileDescriptor}  file  The file to be closed
+   *
+   * @return  {boolean}                                    Whether or not the file was closed
    */
   public closeFile (file: MDFileDescriptor|CodeFileDescriptor): boolean {
-    if (this._state.openFiles.includes(file)) {
-      this._state.openFiles.splice(this._state.openFiles.indexOf(file), 1)
-      this.emit('fsal-state-changed', 'openFiles')
-      return true
-    } else {
+    if (!this._state.openFiles.includes(file)) {
       return false
     }
+
+    // Retrieve the index of the active file and whether it's an active file
+    const activeFileIdx = this._state.openFiles.findIndex(elem => elem === this._state.activeFile)
+    const isActive = this._state.activeFile === file
+
+    // Then remove the file from the list of open files
+    this._state.openFiles.splice(this._state.openFiles.indexOf(file), 1)
+    this.emit('fsal-state-changed', 'openFiles')
+
+    // Now, if we just closed the active file, we need to make another file
+    // active, or none, if there are no more open files active.
+    if (isActive) {
+      if (this._state.openFiles.length > 0 && activeFileIdx > 0) {
+        this.activeFile = this._state.openFiles[activeFileIdx - 1].path
+      } else if (this._state.openFiles.length > 0 && activeFileIdx === 0) {
+        this.activeFile = this._state.openFiles[0].path
+      } else {
+        this.activeFile = null
+      }
+    }
+    return true
   }
 
   /**
