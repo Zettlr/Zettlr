@@ -365,6 +365,7 @@ const config: StoreOptions<ZettlrState> = {
       }
     },
     updateOpenFiles: function (state, openFiles) {
+      const activeFileIdx = state.openFiles.findIndex(elem => elem === state.activeFile)
       state.openFiles = []
 
       // TODO: I know we can create a more sophisticated algorithm that only
@@ -373,6 +374,19 @@ const config: StoreOptions<ZettlrState> = {
         const descriptor = findPathDescriptor(file.path, state.fileTree)
         if (descriptor !== null) {
           state.openFiles.push(descriptor)
+        }
+      }
+
+      if (!state.openFiles.includes(state.activeFile)) {
+        // Also reset the open file
+        if (state.openFiles.length > 0) {
+          if (activeFileIdx > 0) {
+            state.activeFile = state.openFiles[activeFileIdx - 1]
+          } else {
+            state.activeFile = state.openFiles[0]
+          }
+        } else {
+          state.activeFile = null
         }
       }
     },
