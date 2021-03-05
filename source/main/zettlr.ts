@@ -239,7 +239,6 @@ export default class Zettlr {
           broadcastIpcMessage('fsal-state-changed', 'openDirectory')
           break
         case 'openFiles':
-          this.ipc.send('sync-files', this._fsal.openFiles)
           global.config.set('openFiles', this._fsal.openFiles)
           broadcastIpcMessage('fsal-state-changed', 'openFiles')
           if (!this.isModified()) {
