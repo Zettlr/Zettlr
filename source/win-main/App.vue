@@ -102,19 +102,19 @@ export default {
         },
         {
           type: 'button',
-          command: 'file-new',
+          id: 'file-new',
           title: 'toolbar.file_new',
           icon: 'file'
         },
         {
           type: 'button',
-          command: 'show-stats',
+          id: 'show-stats',
           title: 'toolbar.stats',
           icon: 'line-chart'
         },
         {
           type: 'button',
-          command: 'show-tag-cloud',
+          id: 'show-tag-cloud',
           title: 'toolbar.tag_cloud',
           icon: 'tags'
         },
@@ -143,31 +143,31 @@ export default {
         },
         {
           type: 'button',
-          command: 'file-rename',
+          id: 'file-rename',
           title: 'toolbar.file_rename',
           icon: 'pencil'
         },
         {
           type: 'button',
-          command: 'file-delete',
+          id: 'file-delete',
           title: 'toolbar.file_delete',
           icon: 'trash'
         },
         {
           type: 'button',
-          command: 'formatting',
+          id: 'formatting',
           title: 'toolbar.formatting',
           icon: 'text'
         },
         {
           type: 'button',
-          command: 'toc',
+          id: 'toc',
           title: 'toolbar.show_toc',
           icon: 'indented-view-list'
         },
         {
           type: 'button',
-          command: 'file-find',
+          id: 'file-find',
           title: 'toolbar.find',
           icon: 'search'
         },
