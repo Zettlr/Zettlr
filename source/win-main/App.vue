@@ -34,6 +34,7 @@ import Tabs from './Tabs'
 import SplitView from './SplitView'
 import Editor from './Editor'
 import PopoverExport from './PopoverExport'
+import PopoverStats from './PopoverStats'
 import { trans } from '../common/i18n'
 import localiseNumber from '../common/util/localise-number'
 import generateId from '../common/util/generate-id'
@@ -270,6 +271,22 @@ export default {
             this.$closePopover()
           }
         })
+      } else if (clickedID === 'show-stats') {
+        // The user wants to display the stats
+        ipcRenderer.invoke('stats-provider', { command: 'get-data' }).then(stats => {
+          const data = {
+            sumMonth: stats.sumMonth,
+            averageMonth: stats.avgMonth,
+            sumToday: stats.today
+          }
+
+          this.$showPopover(PopoverStats, document.getElementById('toolbar-show-stats'), data, (data) => {
+            if (data.showMoreStats === true) {
+              console.log('Should display stats window')
+            }
+            this.$closePopover()
+          })
+        }).catch(e => console.error(e))
       }
     }
   }
