@@ -109,7 +109,12 @@ export default {
         return
       }
 
-      // TODO: Handle all closed state!
+      if (this.activeFile === null) {
+        this.editor.swapDoc(CodeMirror.Doc('', 'multiplex'))
+        this.editor.readOnly = true
+        this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
+        return
+      }
 
       const doc = this.openDocuments.find(doc => doc.path === this.activeFile.path)
 
