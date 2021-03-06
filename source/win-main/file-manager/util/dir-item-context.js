@@ -76,19 +76,8 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
   }
 
   // Now check for a project
-  if (dirObject.project === null && dirObject.dirNotFoundFlag !== true) {
-    items.push({
-      id: 'menu.new_project',
-      label: trans('menu.new_project'),
-      enabled: true
-    })
-  } else if (dirObject.dirNotFoundFlag !== true) {
+  if (dirObject.project !== null && dirObject.dirNotFoundFlag !== true) {
     items = items.concat([{
-      id: 'menu.remove_project',
-      label: trans('menu.remove_project'),
-      enabled: true
-    },
-    {
       id: 'menu.project_properties',
       label: trans('menu.project_properties'),
       enabled: true
