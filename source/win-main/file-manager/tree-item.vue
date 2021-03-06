@@ -125,12 +125,6 @@
           &nbsp;({{ dirname }})
         </span>
       </span>
-      <Sorter
-        v-if="isDirectory && combined"
-        v-show="hover"
-        v-bind:sorting="obj.sorting"
-        v-on:sort-change="sort"
-      />
     </div>
     <div
       v-if="hasSearchResults"
@@ -160,9 +154,7 @@
 
 <script>
 // Tree View item component
-import findObject from '../../common/util/find-object.js'
 import { trans } from '../../common/i18n'
-import Sorter from './sorter.vue'
 import fileContextMenu from './util/file-item-context.js'
 import dirContextMenu from './util/dir-item-context.js'
 import { ipcRenderer } from 'electron'
@@ -171,7 +163,6 @@ import path from 'path'
 export default {
   name: 'TreeItem',
   components: {
-    'Sorter': Sorter
   },
   props: {
     // The actual tree item
@@ -300,16 +291,24 @@ export default {
   },
   watch: {
     activeFile: function (newVal, oldVal) {
+      if (this.activeFile === null) {
+        return
+      }
+
       // Open the tree on activeFile change, if the
       // selected file is contained in this dir somewhere
-      if (findObject(this.obj, 'hash', this.activeFile, 'children')) {
+      if (this.activeFile.path.startsWith(this.obj.path)) {
         this.collapsed = false
       }
     },
     selectedDir: function (newVal, oldVal) {
+      if (this.selectedDir === null) {
+        return
+      }
+
       // If a directory within this has been selected,
       // open up, lads!
-      if (findObject(this.obj, 'hash', this.selectedDir, 'children')) {
+      if (this.selectedDir.path.startsWith(this.obj.path)) {
         this.collapsed = false
       }
     },
@@ -383,13 +382,6 @@ export default {
      */
     toggleCollapse: function (event) {
       this.collapsed = !this.collapsed
-    },
-    /**
-     * Request to re-sort this directory
-     */
-    sort: function (sorting) {
-      // TODO: application invocation, plus: Move to directory popover
-      global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': sorting })
     },
     /**
      * Initiates a drag movement and inserts the correct data

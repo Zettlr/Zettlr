@@ -49,7 +49,22 @@ export default {
       // right after setting the new configurations. Plus, the user won't update
       // everything all the time, but rather do one initial configuration, so
       // even if we incur a performance penalty, it won't be noticed that much.
+      const doubleQuotes = this.$store.state.config['editor.autoCorrect.magicQuotes.primary'].split('…')
+      const singleQuotes = this.$store.state.config['editor.autoCorrect.magicQuotes.secondary'].split('…')
       return {
+        autoCorrect: {
+          style: this.$store.state.config['editor.autoCorrect.style'],
+          quotes: {
+            single: {
+              start: singleQuotes[0],
+              end: singleQuotes[1]
+            },
+            double: {
+              start: doubleQuotes[0],
+              end: doubleQuotes[1]
+            }
+          }
+        },
         zettlr: {
           imagePreviewWidth: this.$store.state.config['display.imageWidth'],
           imagePreviewHeight: this.$store.state.config['display.imageHeight'],
@@ -94,7 +109,12 @@ export default {
         return
       }
 
-      // TODO: Handle all closed state!
+      if (this.activeFile === null) {
+        this.editor.swapDoc(CodeMirror.Doc('', 'multiplex'))
+        this.editor.readOnly = true
+        this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
+        return
+      }
 
       const doc = this.openDocuments.find(doc => doc.path === this.activeFile.path)
 
@@ -399,6 +419,11 @@ export default {
     // Reduce font size of math a bit
     .katex { font-size: 1.1em; }
   }
+
+body.darwin #editor {
+  // On macOS the tabbar is 30px high.
+  height: calc(100% - 30px);
+}
 
 // CodeMirror fullscreen
 .CodeMirror-fullscreen {

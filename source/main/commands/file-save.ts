@@ -43,7 +43,7 @@ export default class SaveFile extends ZettlrCommand {
       await this._app.getFileSystem().saveFile(realFile, file.newContents)
 
       // Update word count
-      global.stats.increaseWordCount(file.offsetWordcount || 0)
+      global.stats.increaseWordCount(file.offsetWordCount)
 
       global.log.info(`File ${realFile.name} saved.`)
     } catch (e) {

@@ -175,7 +175,7 @@ export default {
       if (document.body.classList.contains('darwin')) {
         return this.tabs[this.currentTab].label
       } else {
-        return 'Preferences' // TODO: Translate
+        return trans('dialog.preferences.title')
       }
     },
     showTitlebar: function () {

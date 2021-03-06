@@ -15,7 +15,6 @@
   <div
     v-bind:class="{
       'list-item': true,
-      'selected': $store.state.selectedFile === obj.hash,
       'project': obj.type === 'directory' && obj.project !== null,
       'selected': obj === activeFile,
       'has-meta-info': fileMeta,
@@ -57,12 +56,6 @@
         {{ basename }}
       </span>
     </div>
-    <Sorter
-      v-if="isDirectory"
-      v-show="hover"
-      v-bind:sorting="obj.sorting"
-      v-on:sort-change="sort"
-    ></Sorter>
     <div v-if="fileMeta" class="meta-info">
       <div v-if="isDirectory">
         <span class="badge">{{ countDirs }}</span>
@@ -134,19 +127,19 @@
 </template>
 
 <script>
-import Sorter from './sorter.vue'
-import formatDate from '../../common/util/format-date.js'
 import { trans } from '../../common/i18n.js'
+import formatDate from '../../common/util/format-date.js'
 import localiseNumber from '../../common/util/localise-number'
+import formatSize from '../../common/util/format-size'
 import fileContextMenu from './util/file-item-context.js'
 import dirContextMenu from './util/dir-item-context.js'
 import { ipcRenderer } from 'electron'
 import PopoverFileProps from './PopoverFileProps'
+import PopoverDirProps from './PopoverDirProps'
 
 export default {
   name: 'FileItem',
   components: {
-    Sorter
   },
   // Bind the actual object to the container
   props: {
@@ -170,7 +163,7 @@ export default {
     basename: function () {
       if (this.obj.frontmatter && this.obj.frontmatter.hasOwnProperty('title')) {
         return this.obj.frontmatter.title
-      } else if (this.obj.firstHeading && this.$store.state.useFirstHeadings) {
+      } else if (this.obj.firstHeading && this.$store.state.config['display.useFirstHeadings']) {
         return this.obj.firstHeading
       } else {
         return this.obj.name.replace(this.obj.ext, '')
@@ -296,15 +289,7 @@ export default {
       return trans('gui.words', localiseNumber(this.obj.wordCount))
     },
     formattedSize: function () {
-      if (this.obj.size < 1024) {
-        return `${this.obj.size} Byte`
-      } else if (this.obj.size < 1024 * 1000) {
-        return `${Math.round(this.obj.size / 1000)} Kilobyte`
-      } else if (this.obj.size < 1024 * 1000 * 1000) {
-        return `${Math.round(this.obj.size / (1000 * 1000))} Megabyte`
-      } else {
-        return `${Math.round(this.obj.size / (1000 * 1000 * 1000))} Gigabyte`
-      }
+      return formatSize(this.obj.size)
     }
   },
   watch: {
@@ -325,12 +310,62 @@ export default {
         dirContextMenu(event, this.obj, this.$el, (clickedID) => {
           if (clickedID === 'menu.rename_dir') {
             this.nameEditing = true
+          } else if (clickedID === 'menu.new_file') {
+            this.$emit('create-file')
+          } else if (clickedID === 'menu.new_dir') {
+            this.$emit('create-dir')
+          } else if (clickedID === 'menu.properties') {
+            const data = {
+              dirname: this.obj.name,
+              creationtime: this.obj.creationtime,
+              modtime: this.obj.modtime,
+              files: this.obj.children.filter(e => e.type !== 'directory').length,
+              dirs: this.obj.children.filter(e => e.type === 'directory').length,
+              isProject: this.isProject === true
+            }
+
+            if (this.obj.sorting !== null) {
+              data.sortingType = this.obj.sorting.split('-')[0]
+              data.sortingDirection = this.obj.sorting.split('-')[1]
+            } // Else: Default sorting of name-up
+
+            this.$showPopover(PopoverDirProps, this.$el, data, (data) => {
+              // Apply new sorting if applicable
+              if (data.sorting !== this.obj.sorting) {
+                ipcRenderer.invoke('application', {
+                  command: 'dir-sort',
+                  payload: {
+                    path: this.obj.path,
+                    sorting: data.sorting
+                  }
+                }).catch(e => console.error(e))
+              }
+
+              const projectChanged = data.isProject !== this.isProject
+              if (projectChanged && data.isProject) {
+                ipcRenderer.invoke('application', {
+                  command: 'dir-new-project',
+                  payload: { path: this.obj.path }
+                }).catch(e => console.error(e))
+              } else if (projectChanged && !data.isProject) {
+                ipcRenderer.invoke('application', {
+                  command: 'dir-remove-project',
+                  payload: { path: this.obj.path }
+                }).catch(e => console.error(e))
+              }
+            })
           }
         })
       } else {
         fileContextMenu(event, this.obj, this.$el, (clickedID) => {
+          console.log(clickedID)
           if (clickedID === 'menu.rename_file') {
             this.nameEditing = true
+          } else if (clickedID === 'menu.duplicate_file') {
+            // The user wants to duplicate this file --> instruct the file list
+            // controller to display a mock file object below this file for the
+            // user to enter a new file name.
+            this.$emit('duplicate')
           } else if (clickedID === 'menu.properties') {
             const data = {
               filename: this.obj.name,
@@ -341,7 +376,11 @@ export default {
               // the popover can render them correctly
               colouredTags: this.$store.state.colouredTags,
               targetValue: 0,
-              targetMode: 'words'
+              targetMode: 'words',
+              fileSize: this.obj.size,
+              type: this.obj.type,
+              words: 0,
+              ext: this.obj.ext
             }
 
             if (this.hasWritingTarget) {
@@ -349,18 +388,24 @@ export default {
               data.targetMode = this.obj.target.mode
             }
 
+            if (this.obj.type === 'file') {
+              data.words = this.obj.wordCount
+            }
+
             this.$showPopover(PopoverFileProps, this.$el, data, (data) => {
               // Whenever the data changes, update the target
 
               // 1.: Writing Target
-              ipcRenderer.invoke('application', {
-                command: 'set-writing-target',
-                payload: {
-                  mode: data.target.mode,
-                  count: data.target.value,
-                  path: this.obj.path
-                }
-              }).catch(e => console.error(e))
+              if (this.obj.type === 'file') {
+                ipcRenderer.invoke('application', {
+                  command: 'set-writing-target',
+                  payload: {
+                    mode: data.target.mode,
+                    count: data.target.value,
+                    path: this.obj.path
+                  }
+                }).catch(e => console.error(e))
+              }
             })
           }
         })
@@ -403,13 +448,6 @@ export default {
         })
           .catch(e => console.error(e))
       }
-    },
-    /**
-     * Request to re-sort this directory
-     */
-    sort: function (sorting) {
-      // TODO: application invocation, plus: Move to popover
-      global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': sorting })
     },
     beginDragging: function (event) {
       event.dataTransfer.dropEffect = 'move'
@@ -521,6 +559,7 @@ body {
       // These inputs should be more or less "invisible"
       input {
         border: none;
+        width: 100%;
         color: inherit;
         font-family: inherit;
         font-size: inherit;
@@ -572,7 +611,7 @@ body.darwin {
 
         &.tag {
           background-color: rgba(90, 90, 90, 0.5); // Make those tags a little bit translucent
-          color: rgb(220, 220, 220);
+          color: rgb(240, 240, 240);
 
           .color-circle {
             // If there's a coloured tag in there, display that as well

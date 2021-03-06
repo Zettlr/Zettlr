@@ -28,9 +28,9 @@ export default function (a: AnyDescriptor, b: AnyDescriptor): number {
     bDate = b.creationtime
   }
 
-  if (aDate < bDate) {
+  if (aDate > bDate) {
     return -1
-  } else if (aDate > bDate) {
+  } else if (aDate < bDate) {
     return 1
   } else {
     return 0

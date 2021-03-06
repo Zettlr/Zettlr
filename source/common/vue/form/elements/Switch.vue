@@ -43,56 +43,60 @@ export default {
 @input-margin: 2px;
 
 body {
-  div.switch-group label {
-    line-height: @input-size;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
+  div.switch-group {
+    display: flex;
 
-  label.switch {
-    position: relative;
-    display: inline-block !important;
-    width: @input-size * 2;
-    height: @input-size;
-    background-color: var(--grey-4);
-    border-radius: @input-size;
-
-    input {
-      display: none !important;
+    label {
+      line-height: @input-size;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
 
-    .toggle {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      transition: .4s;
-      border-radius: (@input-size / 2);
-      box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, .25);
-      background-color: var(--grey-1);
+    label.switch {
+      position: relative;
+      margin-right: 5px;
+      width: @input-size * 2;
+      height: @input-size;
+      background-color: var(--grey-4);
+      border-radius: @input-size;
 
-      &:before {
-        position: absolute;
-        content: "";
-        height: (@input-size - @input-margin * 2); // Fancy equations here!
-        width: (@input-size - @input-margin * 2);
-        box-shadow: @input-margin @input-margin 5px 0px rgba(0, 0, 0, .5);
-        left: @input-margin;
-        bottom: @input-margin;
-        background-color: white;
-        transform: translateX(0);
-        transition: transform .4s ease;
-        border-radius: 50%;
+      input {
+        display: none !important;
       }
-    }
 
-    input:checked + .toggle:before {
-      transform: translateX((@input-size));
-    }
+      .toggle {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        transition: .4s;
+        border-radius: (@input-size / 2);
+        box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, .25);
+        background-color: var(--grey-1);
 
-    input:checked + .toggle {
-      background-color: var(--system-accent-color, --c-primary);
+        &:before {
+          position: absolute;
+          content: "";
+          height: (@input-size - @input-margin * 2); // Fancy equations here!
+          width: (@input-size - @input-margin * 2);
+          box-shadow: @input-margin @input-margin 5px 0px rgba(0, 0, 0, .5);
+          left: @input-margin;
+          bottom: @input-margin;
+          background-color: white;
+          transform: translateX(0);
+          transition: transform .4s ease;
+          border-radius: 50%;
+        }
+      }
+
+      input:checked + .toggle:before {
+        transform: translateX((@input-size));
+      }
+
+      input:checked + .toggle {
+        background-color: var(--system-accent-color, --c-primary);
+      }
     }
   }
 }

@@ -46,18 +46,35 @@
           v-bind:page-mode="true"
           v-on:update="updateDynamics"
         >
+          <FileItemMock
+            v-if="item.mock !== undefined && item.mock === true"
+            v-bind:obj="item.props"
+            v-on:submit="handleOperationFinish($event)"
+            v-on:cancel="handleOperationFinish('')"
+          >
+          </FileItemMock>
           <FileItem
+            v-else
             v-bind:obj="item.props"
             v-bind:active-file="activeDescriptor"
+            v-on:duplicate="startOperation('duplicate', item.id)"
+            v-on:create-file="startOperation('createFile', item.id)"
+            v-on:create-dir="startOperation('createDir', item.id)"
           ></FileItem>
         </RecycleScroller>
       </template>
     </template>
     <template v-else-if="getDirectoryContents.length === 1">
+      <!--
+        We don't need the mock item here, because if any operation is started
+        the actual directory contents will be larger than 1.
+      -->
       <FileItem
         v-for="item in getDirectoryContents"
         v-bind:key="item.hash"
         v-bind:obj="item.props"
+        v-on:create-file="startOperation('createFile', item.id)"
+        v-on:create-dir="startOperation('createDir', item.id)"
       >
       </FileItem>
       <div
@@ -79,20 +96,29 @@
 <script>
 import { trans } from '../../common/i18n'
 import tippy from 'tippy.js'
-import FileItem from './file-item.vue'
+import FileItem from './file-item'
+import FileItemMock from './file-item-mock'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { ipcRenderer } from 'electron'
+import generateFileName from '../../common/util/generate-filename'
 
 export default {
   name: 'FileList',
   components: {
     FileItem,
+    FileItemMock,
     RecycleScroller
   },
   data: function () {
     return {
       filterQuery: '',
-      activeDescriptor: null // Can contain a hash of the active ("focused") item
+      activeDescriptor: null, // Can contain a hash of the active ("focused") item
+      // The next two properties are needed for three operations: Create a new
+      // file, create a new directory, and duplicate a file.
+      // operationType will indicate what we want to do, while the index points
+      // to our reference (a file in case of duplication, otherwise a dir).
+      operationType: '', // Can be createFile, createDir, duplicate
+      operationIndex: null
     }
   },
   computed: {
@@ -144,6 +170,43 @@ export default {
           props: children[i] // The actual item
         })
       }
+
+      // Afterwards, if there is a file-duplication in progress, splice in the
+      // mock object at the right position.
+      if (this.operationType !== '' && this.operationIndex !== null) {
+        const mirroredItem = ret.find(item => item.id === this.operationIndex).props
+        if (this.operationType === 'duplicate') {
+          // Why plus 2? Because we're actually starting at -1, and we have to
+          // add that thing AFTER the item to be duplicated. The index is not
+          // the array index but the object's ID.
+          ret.splice(this.operationIndex + 2, 0, {
+            id: children.length,
+            mock: true, // This will help getFilteredDirectoryContents to never exclude it in display
+            props: {
+              name: 'Copy of ' + mirroredItem.name, // TODO: Translate
+              type: mirroredItem.type
+            }
+          })
+        } else if (this.operationType === 'createFile') {
+          ret.splice(this.operationIndex + 2, 0, {
+            id: children.length,
+            mock: true, // This will help getFilteredDirectoryContents to never exclude it in display
+            props: {
+              name: generateFileName(), // TODO: Generate file name!
+              type: 'file' // TODO: Enable file extensions on the mock object so the user can create code files
+            }
+          })
+        } else if (this.operationType === 'createDir') {
+          ret.splice(this.operationIndex + 2, 0, {
+            id: children.length,
+            mock: true, // This will help getFilteredDirectoryContents to never exclude it in display
+            props: {
+              name: 'New Directory', // TODO: Translate
+              type: 'directory'
+            }
+          })
+        }
+      }
       return ret
     },
     getFilteredDirectoryContents: function () {
@@ -160,6 +223,11 @@ export default {
 
       // Filter based on the query (remember: there's an ID and a "props" property)
       return originalContents.filter(element => {
+        if (element.mock !== undefined && element.mock === true) {
+          // Never hide mocked elements
+          return true
+        }
+
         const item = element.props
 
         for (const q of queries) {
@@ -385,6 +453,54 @@ export default {
     },
     focusFilter: function () {
       this.$refs.quickFilter.focus()
+    },
+    startOperation: function (type, idx) {
+      // We are told that the user wants to perform operation type on reference
+      // object idx.
+      this.operationType = type
+      this.operationIndex = idx
+    },
+    handleOperationFinish: function (name) {
+      // Called whenever a mock object reports a "submit" event after the user
+      // has confirmed the operation.
+      const mirroredItem = this.getDirectoryContents.find(item => item.id === this.operationIndex).props
+      console.log(this.operationIndex, mirroredItem)
+      if (this.operationType === 'duplicate') {
+        if (name.trim() !== '') {
+          ipcRenderer.invoke('application', {
+            command: 'file-duplicate',
+            payload: {
+              path: mirroredItem.path,
+              name: name.trim()
+            }
+          }).catch(e => console.error(e))
+        }
+      } else if (this.operationType === 'createFile') {
+        if (name.trim() !== '') {
+          ipcRenderer.invoke('application', {
+            command: 'file-new',
+            payload: {
+              path: mirroredItem.path,
+              name: name.trim()
+            }
+          }).catch(e => console.error(e))
+        }
+      } else if (this.operationType === 'createDir') {
+        if (name.trim() !== '') {
+          ipcRenderer.invoke('application', {
+            command: 'dir-new',
+            payload: {
+              path: mirroredItem.path,
+              name: name.trim()
+            }
+          }).catch(e => console.error(e))
+        } else {
+          console.log('Canceling operation.')
+        }
+      }
+
+      this.operationType = ''
+      this.operationIndex = null
     }
   }
 }

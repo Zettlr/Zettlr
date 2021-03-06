@@ -24,7 +24,6 @@ const TEMPLATE = [
   },
   {
     label: 'menu.duplicate_file',
-    command: 'file-duplicate',
     type: 'normal'
   },
   {
@@ -105,9 +104,6 @@ module.exports = function displayFileContext (event, fileObject, el, callback) {
           content: { hash: fileObject.hash }
         })
         break
-      case 'menu.duplicate_file':
-        displayDuplicatePopup(fileObject, el)
-        break
       case 'menu.copy_filename':
         clipboard.writeText(fileObject.name)
         break
@@ -129,23 +125,6 @@ module.exports = function displayFileContext (event, fileObject, el, callback) {
           content: fileObject.hash
         })
         break
-    }
-  })
-}
-
-function displayDuplicatePopup (file, element) {
-  const data = {
-    'val': 'Copy of ' + file.name,
-    'placeholder': trans('dialog.file_new.placeholder')
-  }
-
-  global.popupProvider.show('textfield', element, data, (form) => {
-    if (form !== null) {
-      global.ipc.send('file-duplicate', {
-        'dir': (file.parent != null) ? file.parent.hash : null,
-        'file': file.hash,
-        'name': form[0].value
-      })
     }
   })
 }

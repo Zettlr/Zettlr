@@ -1,8 +1,12 @@
 const { trans } = require('../../../common/i18n')
 const { ipcRenderer, shell } = require('electron')
-const generateFileName = require('../../../common/util/generate-filename')
 
 const TEMPLATE = [
+  {
+    label: 'menu.properties',
+    id: 'properties',
+    type: 'normal'
+  },
   {
     label: 'menu.rename_dir',
     command: 'dir-rename'
@@ -72,19 +76,8 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
   }
 
   // Now check for a project
-  if (dirObject.project === null && dirObject.dirNotFoundFlag !== true) {
-    items.push({
-      id: 'menu.new_project',
-      label: trans('menu.new_project'),
-      enabled: true
-    })
-  } else if (dirObject.dirNotFoundFlag !== true) {
+  if (dirObject.project !== null && dirObject.dirNotFoundFlag !== true) {
     items = items.concat([{
-      id: 'menu.remove_project',
-      label: trans('menu.remove_project'),
-      enabled: true
-    },
-    {
       id: 'menu.project_properties',
       label: trans('menu.project_properties'),
       enabled: true
@@ -118,22 +111,6 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
         ipcRenderer.send('message', {
           command: 'dir-delete',
           content: { hash: dirObject.hash }
-        })
-        break
-      case 'menu.new_file':
-        displayTextPopup(generateFileName(), trans('dialog.file_rename.placeholder'), el, (newValue) => {
-          ipcRenderer.send('message', {
-            command: 'file-new',
-            content: { hash: dirObject.hash, name: newValue }
-          })
-        })
-        break
-      case 'menu.new_dir':
-        displayTextPopup('', trans('dialog.dir_new.placeholder'), el, (newValue) => {
-          ipcRenderer.send('message', {
-            command: 'dir-new',
-            content: { hash: dirObject.hash, name: newValue }
-          })
         })
         break
       case 'gui.attachments_open_dir':
@@ -177,19 +154,6 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
           command: 'rescan-dir',
           content: dirObject.hash
         })
-    }
-  })
-}
-
-function displayTextPopup (value, placeholder, element, callback) {
-  const data = {
-    'val': value,
-    'placeholder': placeholder
-  }
-
-  global.popupProvider.show('textfield', element, data, (form) => {
-    if (form !== null) {
-      callback(form[0].value)
     }
   })
 }

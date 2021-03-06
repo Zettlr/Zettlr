@@ -46,9 +46,17 @@ export default {
     ],
     [
       {
-        type: 'theme',
+        type: 'select',
         model: 'display.theme',
+        label: trans('dialog.preferences.theme.title'),
         options: {
+          'berlin': 'Berlin',
+          'frankfurt': 'Frankfurt',
+          'bielefeld': 'Bielefeld',
+          'karl-marx-stadt': 'Karl-Marx-Stadt',
+          'bordeaux': 'Bordeaux'
+        },
+        placeholder_for_reference: {
           'berlin': {
             textColor: 'white',
             backgroundColor: '#1cb27e',
