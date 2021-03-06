@@ -321,19 +321,38 @@ export default {
               modtime: this.obj.modtime,
               files: this.obj.children.filter(e => e.type !== 'directory').length,
               dirs: this.obj.children.filter(e => e.type === 'directory').length,
-              sortingType: this.obj.sorting.split('-')[0],
-              sortingDirection: this.obj.sorting.split('-')[1]
+              isProject: this.isProject === true
             }
 
+            if (this.obj.sorting !== null) {
+              data.sortingType = this.obj.sorting.split('-')[0]
+              data.sortingDirection = this.obj.sorting.split('-')[1]
+            } // Else: Default sorting of name-up
+
             this.$showPopover(PopoverDirProps, this.$el, data, (data) => {
-              // Data has changed
-              ipcRenderer.invoke('application', {
-                command: 'dir-sort',
-                payload: {
-                  path: this.obj.path,
-                  sorting: data.sorting
-                }
-              }).catch(e => console.error(e))
+              // Apply new sorting if applicable
+              if (data.sorting !== this.obj.sorting) {
+                ipcRenderer.invoke('application', {
+                  command: 'dir-sort',
+                  payload: {
+                    path: this.obj.path,
+                    sorting: data.sorting
+                  }
+                }).catch(e => console.error(e))
+              }
+
+              const projectChanged = data.isProject !== this.isProject
+              if (projectChanged && data.isProject) {
+                ipcRenderer.invoke('application', {
+                  command: 'dir-new-project',
+                  payload: { path: this.obj.path }
+                }).catch(e => console.error(e))
+              } else if (projectChanged && !data.isProject) {
+                ipcRenderer.invoke('application', {
+                  command: 'dir-remove-project',
+                  payload: { path: this.obj.path }
+                }).catch(e => console.error(e))
+              }
             })
           }
         })

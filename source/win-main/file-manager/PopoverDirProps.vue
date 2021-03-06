@@ -29,6 +29,13 @@
         'down': 'descending'
       }"
     ></SelectControl>
+    <hr>
+    <!-- Project options -->
+    <SwitchControl
+      v-model="isProject"
+      v-bind:label="'Enable Project'"
+    ></SwitchControl>
+    <template v-if="isProject"></template>
   </div>
 </template>
 
@@ -36,11 +43,13 @@
 import formatDate from '../../common/util/format-date'
 import localiseNumber from '../../common/util/localise-number'
 import SelectControl from '../../common/vue/form/elements/Select'
+import SwitchControl from '../../common/vue/form/elements/Switch'
 
 export default {
   name: 'PopoverDirProps',
   components: {
-    SelectControl
+    SelectControl,
+    SwitchControl
   },
   data: function () {
     return {
@@ -50,7 +59,8 @@ export default {
       files: 0,
       dirs: 0,
       sortingType: 'name',
-      sortingDirection: 'up'
+      sortingDirection: 'up',
+      isProject: false
     }
   },
   computed: {
@@ -58,7 +68,8 @@ export default {
     // return the data that will then be reported back to the caller.
     popoverData: function () {
       return {
-        sorting: `${this.sortingType}-${this.sortingDirection}`
+        sorting: `${this.sortingType}-${this.sortingDirection}`,
+        isProject: this.isProject
       }
     },
     creationTime: function () {
