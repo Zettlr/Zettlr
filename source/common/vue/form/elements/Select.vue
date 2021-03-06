@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: 'FieldText',
+  name: 'SelectControl',
   props: {
     value: {
       type: String,

@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: 'FieldText',
+  name: 'RadioControl',
   props: {
     value: {
       type: String,

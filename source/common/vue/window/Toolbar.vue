@@ -17,6 +17,13 @@
         v-bind:control="item"
         v-on:toggle="$emit('toggle', item.id)"
       ></ToggleControl>
+      <RingControl
+        v-if="item.type === 'ring'"
+        v-bind:key="idx"
+        v-bind:control="item"
+        v-bind:progress-percent="item.progressPercent"
+        v-on:click="$emit('click', item.id)"
+      ></RingControl>
       <SearchControl
         v-if="item.type === 'search'"
         v-bind:key="idx"
@@ -39,6 +46,7 @@
 
 <script>
 import ButtonControl from './toolbar-controls/Button.vue'
+import RingControl from './toolbar-controls/RingProgressButton'
 import ToggleControl from './toolbar-controls/Toggle.vue'
 import SearchControl from './toolbar-controls/Search.vue'
 import SpacerControl from './toolbar-controls/Spacer.vue'
@@ -48,6 +56,7 @@ export default {
   name: 'Toolbar',
   components: {
     ButtonControl,
+    RingControl,
     ToggleControl,
     SearchControl,
     SpacerControl,

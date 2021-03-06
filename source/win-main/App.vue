@@ -35,10 +35,31 @@ import SplitView from './SplitView'
 import Editor from './Editor'
 import PopoverExport from './PopoverExport'
 import PopoverStats from './PopoverStats'
+import PopoverPomodoro from './PopoverPomodoro'
 import { trans } from '../common/i18n'
 import localiseNumber from '../common/util/localise-number'
 import generateId from '../common/util/generate-id'
 import { ipcRenderer, clipboard } from 'electron'
+
+// Import the sound effects for the pomodoro timer
+import glassFile from './assets/glass.wav'
+import alarmFile from './assets/digital_alarm.mp3'
+import chimeFile from './assets/chime.mp3'
+
+const SOUND_EFFECTS = [
+  {
+    file: glassFile,
+    label: 'Glass'
+  },
+  {
+    file: alarmFile,
+    label: 'Digital Alarm'
+  },
+  {
+    file: chimeFile,
+    label: 'Chime'
+  }
+]
 
 export default {
   name: 'Main',
@@ -54,7 +75,32 @@ export default {
     return {
       title: 'Zettlr',
       readabilityActive: false,
-      sidebarVisible: false
+      sidebarVisible: false,
+      // Pomodoro state
+      pomodoro: {
+        currentEffectFile: glassFile,
+        soundEffect: new Audio(glassFile),
+        intervalHandle: undefined,
+        durations: {
+          task: 1500,
+          short: 300,
+          long: 1200
+        },
+        phase: {
+          type: 'task',
+          elapsed: 0
+        },
+        counter: {
+          task: 0,
+          short: 0,
+          long: 0
+        },
+        colour: {
+          task: '#ff3366',
+          short: '#ddff00',
+          long: '#33ffcc'
+        }
+      }
     }
   },
   computed: {
@@ -187,8 +233,12 @@ export default {
           content: this.parsedDocumentInfo
         },
         {
-          type: 'pomodoro',
-          title: 'toolbar.pomodoro'
+          type: 'ring',
+          id: 'pomodoro',
+          title: 'toolbar.pomodoro',
+          // Good morning, we are verbose here
+          progressPercent: this.pomodoro.phase.elapsed / this.pomodoro.durations[this.pomodoro.phase.type] * 100,
+          colour: this.pomodoro.colour[this.pomodoro.phase.type]
         },
         {
           type: 'toggle',
@@ -288,7 +338,106 @@ export default {
             this.$closePopover()
           })
         }).catch(e => console.error(e))
+      } else if (clickedID === 'pomodoro') {
+        // TODO: Show pomodoro progress
+        const data = {
+          taskDuration: this.pomodoro.durations.task / 60,
+          shortDuration: this.pomodoro.durations.short / 60,
+          longDuration: this.pomodoro.durations.long / 60,
+          currentPhase: this.pomodoro.phase.type,
+          elapsed: this.pomodoro.phase.elapsed,
+          isRunning: this.pomodoro.intervalHandle !== undefined,
+          effect: this.pomodoro.currentEffectFile,
+          // Data type magic ✨
+          soundEffects: Object.fromEntries(new Map(SOUND_EFFECTS.map(effect => [ effect.file, effect.label ]))),
+          volume: this.pomodoro.soundEffect.volume * 100
+        }
+
+        this.$showPopover(PopoverPomodoro, document.getElementById('toolbar-pomodoro'), data, (data) => {
+          // Update the durations as necessary
+          this.pomodoro.durations.task = data.taskDuration
+          this.pomodoro.durations.short = data.shortDuration
+          this.pomodoro.durations.long = data.longDuration
+
+          const effectChanged = data.effect !== this.pomodoro.currentEffectFile
+          const volumeChanged = data.volume !== this.pomodoro.soundEffect.volume
+          if (effectChanged) {
+            this.pomodoro.currentEffectFile = data.effect
+            this.pomodoro.soundEffect = new Audio(data.effect)
+            this.pomodoro.soundEffect.volume = data.volume
+          }
+
+          if (volumeChanged) {
+            this.pomodoro.soundEffect.volume = data.volume
+          }
+
+          if (effectChanged || volumeChanged) {
+            this.pomodoro.soundEffect.pause()
+            this.pomodoro.soundEffect.currentTime = 0
+            this.pomodoro.soundEffect.play().catch(e => {
+              /* We will be getting errors when pausing quickly */
+            })
+          }
+
+          const shouldStart = this.pomodoro.intervalHandle === undefined && data.isRunning
+          const shouldStop = this.pomodoro.intervalHandle !== undefined && !data.isRunning
+
+          if (shouldStart) {
+            this.pomodoro.soundEffect.pause()
+            this.pomodoro.soundEffect.currentTime = 0
+            this.startPomodoro()
+            this.$closePopover()
+          } else if (shouldStop) {
+            this.pomodoro.soundEffect.pause()
+            this.pomodoro.soundEffect.currentTime = 0
+            this.stopPomodoro()
+            this.$closePopover()
+          }
+        })
       }
+    },
+    startPomodoro: function () {
+      // Starts a new pomodoro timer
+      this.pomodoro.phase.type = 'task'
+      this.pomodoro.phase.elapsed = 0
+
+      this.pomodoro.intervalHandle = setInterval(() => {
+        this.pomodoroTick()
+      }, 1000)
+    },
+    pomodoroTick: function () {
+      // Progresses the pomodoro counter by one second
+      this.pomodoro.phase.elapsed += 1
+
+      const currentPhaseDur = this.pomodoro.durations[this.pomodoro.phase.type]
+      const phaseIsFinished = this.pomodoro.phase.elapsed === currentPhaseDur
+
+      if (phaseIsFinished) {
+        this.pomodoro.phase.elapsed = 0
+        this.pomodoro.counter[this.pomodoro.phase.type] += 1
+
+        if (this.pomodoro.phase.type === 'task' && this.pomodoro.counter.task % 4 === 0) {
+          this.pomodoro.phase.type = 'long'
+        } else if (this.pomodoro.phase.type === 'task') {
+          this.pomodoro.phase.type = 'short'
+        } else {
+          // Both breaks lead to a new task
+          this.pomodoro.phase.type = 'task'
+        }
+
+        this.pomodoro.soundEffect.play().catch(e => { /* We will be getting errors when pausing quickly */ })
+      }
+    },
+    stopPomodoro: function () {
+      // Stops the pomodoro timer
+      this.pomodoro.phase.type = 'task'
+      this.pomodoro.phase.elapsed = 0
+      this.pomodoro.counter.task = 0
+      this.pomodoro.counter.short = 0
+      this.pomodoro.counter.long = 0
+
+      clearInterval(this.pomodoro.intervalHandle)
+      this.pomodoro.intervalHandle = undefined
     }
   }
 }
