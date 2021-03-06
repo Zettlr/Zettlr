@@ -29,15 +29,25 @@
     <p v-else>
       {{ notReachedMessage }}
     </p>
-    <button v-on:click="buttonClick">
-      {{ buttonLabel }}
-    </button>
+    <div id="stats-counter-container">
+      <svg
+        v-bind:width="svgWidth"
+        v-bind:height="svgHeight"
+        title="These are the current month's word counts"
+      >
+        <path v-bind:d="getDailyCountsSVGPath"></path>
+      </svg>
+      <button v-on:click="buttonClick">
+        {{ buttonLabel }}
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
 import { trans } from '../common/i18n'
 import localiseNumber from '../common/util/localise-number'
+import { DateTime } from 'luxon'
 
 export default {
   name: 'PopoverExport',
@@ -48,7 +58,8 @@ export default {
       sumMonth: 0,
       averageMonth: 0,
       sumToday: 0,
-      showMoreStats: false
+      showMoreStats: false,
+      wordCounts: {}
     }
   },
   computed: {
@@ -56,6 +67,69 @@ export default {
       return {
         showMoreStats: this.showMoreStats
       }
+    },
+    svgWidth: function () {
+      return 100
+    },
+    svgHeight: function () {
+      return 20
+    },
+    wordCountsLastMonth: function () {
+      // This function basically returns a list of the last 30 days of word counts
+      const today = DateTime.now()
+      const year = today.year
+      const month = today.month
+      const numDays = today.daysInMonth
+      const allKeys = Object.keys(this.wordCounts)
+      const dailyCounts = []
+      for (let i = 1; i <= numDays; i++) {
+        let day = i
+        if (day < 10) {
+          day = `0${i}`
+        }
+
+        let m = month
+        if (m < 10) {
+          m = `0${m}`
+        }
+
+        const currentKey = `${year}-${m}-${day}`
+        if (allKeys.includes(currentKey)) {
+          dailyCounts.push(this.wordCounts[currentKey])
+        } else {
+          dailyCounts.push(0)
+        }
+      }
+      return dailyCounts
+    },
+    getDailyCountsSVGPath: function () {
+      // Retrieve the size, and substract a little bit padding
+      const height = this.svgHeight - 2
+      const width = this.svgWidth - 2
+      const interval = width / this.wordCountsLastMonth.length
+      let p = `M1 ${height} ` // Move to the bottom left
+      let max = 1 // Prevent division by zero
+
+      // Find the maximum word count
+      for (const count of this.wordCountsLastMonth) {
+        if (count > max) {
+          max = count
+        }
+      }
+
+      console.log('Max: ' + max)
+
+      // Move to the right
+      let position = interval
+      for (const count of this.wordCountsLastMonth) {
+        p += `L${position} ${height - count / max * height} `
+        console.log('Count: ' + count, height, max)
+        console.log(`L${position} ${height - count / max * height} `)
+        position += interval
+      }
+
+      // Finally return the path
+      return p
     },
     displaySumMonth: function () {
       return localiseNumber(this.sumMonth)
@@ -105,6 +179,23 @@ body div#stats-popover {
 
   p {
     margin: 10px 0;
+  }
+
+  div#stats-counter-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    svg {
+      fill: transparent;
+      stroke: #333333;
+    }
+  }
+}
+
+body.dark div#stats-popover {
+  div#stats-counter-container {
+    svg { stroke: #dddddd; }
   }
 }
 </style>

@@ -277,7 +277,8 @@ export default {
           const data = {
             sumMonth: stats.sumMonth,
             averageMonth: stats.avgMonth,
-            sumToday: stats.today
+            sumToday: stats.today,
+            wordCounts: stats.wordCount
           }
 
           this.$showPopover(PopoverStats, document.getElementById('toolbar-show-stats'), data, (data) => {
