@@ -62,7 +62,7 @@ import formatSize from '../../common/util/format-size'
 import localiseNumber from '../../common/util/localise-number'
 
 export default {
-  name: 'Popover',
+  name: 'PopoverFileProps',
   components: {
     NumberControl,
     SelectControl
@@ -147,6 +147,10 @@ body div.popover {
     & > div {
       width: 100%;
       padding: 0 10px;
+
+      & > span {
+        white-space: nowrap;
+      }
     }
   }
 

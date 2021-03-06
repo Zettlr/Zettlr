@@ -56,12 +56,6 @@
         {{ basename }}
       </span>
     </div>
-    <Sorter
-      v-if="isDirectory"
-      v-show="hover"
-      v-bind:sorting="obj.sorting"
-      v-on:sort-change="sort"
-    ></Sorter>
     <div v-if="fileMeta" class="meta-info">
       <div v-if="isDirectory">
         <span class="badge">{{ countDirs }}</span>
@@ -133,7 +127,6 @@
 </template>
 
 <script>
-import Sorter from './sorter.vue'
 import { trans } from '../../common/i18n.js'
 import formatDate from '../../common/util/format-date.js'
 import localiseNumber from '../../common/util/localise-number'
@@ -142,11 +135,11 @@ import fileContextMenu from './util/file-item-context.js'
 import dirContextMenu from './util/dir-item-context.js'
 import { ipcRenderer } from 'electron'
 import PopoverFileProps from './PopoverFileProps'
+import PopoverDirProps from './PopoverDirProps'
 
 export default {
   name: 'FileItem',
   components: {
-    Sorter
   },
   // Bind the actual object to the container
   props: {
@@ -321,6 +314,27 @@ export default {
             this.$emit('create-file')
           } else if (clickedID === 'menu.new_dir') {
             this.$emit('create-dir')
+          } else if (clickedID === 'menu.properties') {
+            const data = {
+              dirname: this.obj.name,
+              creationtime: this.obj.creationtime,
+              modtime: this.obj.modtime,
+              files: this.obj.children.filter(e => e.type !== 'directory').length,
+              dirs: this.obj.children.filter(e => e.type === 'directory').length,
+              sortingType: this.obj.sorting.split('-')[0],
+              sortingDirection: this.obj.sorting.split('-')[1]
+            }
+
+            this.$showPopover(PopoverDirProps, this.$el, data, (data) => {
+              // Data has changed
+              ipcRenderer.invoke('application', {
+                command: 'dir-sort',
+                payload: {
+                  path: this.obj.path,
+                  sorting: data.sorting
+                }
+              }).catch(e => console.error(e))
+            })
           }
         })
       } else {
@@ -415,13 +429,6 @@ export default {
         })
           .catch(e => console.error(e))
       }
-    },
-    /**
-     * Request to re-sort this directory
-     */
-    sort: function (sorting) {
-      // TODO: application invocation, plus: Move to popover
-      global.ipc.send('dir-sort', { 'hash': this.obj.hash, 'type': sorting })
     },
     beginDragging: function (event) {
       event.dataTransfer.dropEffect = 'move'

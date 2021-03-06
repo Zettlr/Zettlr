@@ -3,6 +3,11 @@ const { ipcRenderer, shell } = require('electron')
 
 const TEMPLATE = [
   {
+    label: 'menu.properties',
+    id: 'properties',
+    type: 'normal'
+  },
+  {
     label: 'menu.rename_dir',
     command: 'dir-rename'
   },
