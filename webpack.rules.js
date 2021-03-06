@@ -64,7 +64,7 @@ module.exports = [
   },
   {
     // Handle audio files: just copy them
-    test: /\.(ogg)$/,
+    test: /\.(ogg|mp3|wav)$/,
     use: {
       loader: 'file-loader',
       options: {
