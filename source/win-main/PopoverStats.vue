@@ -117,8 +117,6 @@ export default {
         }
       }
 
-      console.log('Max: ' + max)
-
       // Move to the right
       let position = interval
       for (const count of this.wordCountsLastMonth) {
