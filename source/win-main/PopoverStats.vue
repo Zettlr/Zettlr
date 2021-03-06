@@ -123,8 +123,6 @@ export default {
       let position = interval
       for (const count of this.wordCountsLastMonth) {
         p += `L${position} ${height - count / max * height} `
-        console.log('Count: ' + count, height, max)
-        console.log(`L${position} ${height - count / max * height} `)
         position += interval
       }
 
