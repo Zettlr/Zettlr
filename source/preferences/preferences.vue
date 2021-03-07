@@ -161,12 +161,12 @@ export default {
           icon: 'tools'
         }
       ],
-      model: {
-        // Will be prepopulated afterwards
-        userDictionaryContents: [],
-        // This will return the full object
-        ...global.config.get()
-      },
+      // Will be prepopulated afterwards, contains the user dict
+      userDictionaryContents: [],
+      // Will be populated afterwards, contains all dictionaries
+      availableDictionaries: [],
+      // This will return the full object
+      config: global.config.get(),
       schema: SCHEMA['tab-general']
     }
   },
@@ -181,6 +181,17 @@ export default {
     showTitlebar: function () {
       const isDarwin = document.body.classList.contains('darwin')
       return isDarwin || global.config.get('nativeAppearance') === false
+    },
+    model: function () {
+      // The model to be passed on will simply be a merger of custom values
+      // and the configuration object. This way we can safely change some of
+      // these values without risking to overwrite the model (which we have
+      // done in a previous iteration of the preferences ...)
+      return {
+        userDictionaryContents: this.userDictionaryContents,
+        availableDictionaries: this.availableDictionaries,
+        ...this.config
+      }
     }
   },
   watch: {
@@ -213,7 +224,7 @@ export default {
         // Don't waste boilerplate, just overwrite that whole thing
         // and let's hope the Vue algorithm of finding out what has
         // to be re-rendered is good!
-        this.model = global.config.get()
+        this.config = global.config.get()
         this.populateDynamicValues()
       }
     })
@@ -236,16 +247,20 @@ export default {
       // We do have an easy time here
       if (prop === 'userDictionaryContents') {
         // The user dictionary is not handled by the config
-        const newDictionary = []
-        for (const word of Object.values(val)) {
-          newDictionary.push(word)
-        }
         ipcRenderer.invoke('dictionary-provider', {
           command: 'set-user-dictionary',
-          payload: newDictionary
+          payload: val
         })
           .catch(err => console.error(err))
+      } else if (prop === 'availableDictionaries') {
+        // We have to extract the selected dictionaries and send their keys only
+        const enabled = val.filter(elem => elem.selected).map(elem => elem.key)
+        global.config.set('selectedDicts', enabled)
+        // Additionally, we have to backpropagate the new stuff down the pipe
+        // so that the list view has them again
       } else {
+        // By default, we should have the correct value already, we just need to
+        // treat (complex) lists as special (not even token inputs).
         global.config.set(prop, val)
       }
     },
@@ -278,9 +293,6 @@ export default {
               return null
             })
             field.options = options
-
-            // Manually re-trigger a re-draw
-            // this.$refs.form.renderForm()
           } else {
             console.error('Could not set available languages')
           }
@@ -292,20 +304,17 @@ export default {
         command: 'get-available-dictionaries'
       })
         .then((dictionaries) => {
-          const field = modelToField('selectedDicts', SCHEMA['tab-spellchecking'])
-
-          if (field !== undefined) {
-            const options = {}
-            dictionaries.map(dict => {
-              options[dict] = trans('dialog.preferences.app_lang.' + dict)
-              return null
+          const values = []
+          dictionaries.map(dict => {
+            values.push({
+              selected: this.model.selectedDicts.includes(dict),
+              key: dict,
+              value: trans('dialog.preferences.app_lang.' + dict)
             })
-            field.options = options
+            return null
+          })
 
-            // this.$refs.form.renderForm()
-          } else {
-            console.error('Could not set available dictionaries')
-          }
+          this.availableDictionaries = values
         })
         .catch(err => console.error(err))
 
@@ -314,17 +323,7 @@ export default {
         command: 'get-user-dictionary'
       })
         .then((dictionary) => {
-          const field = modelToField('userDictionaryContents', SCHEMA['tab-spellchecking'])
-
-          if (field !== undefined) {
-            field.options = {}
-            for (const key in dictionary) {
-              field.options[key] = dictionary[key]
-            }
-            // this.$refs.form.renderForm()
-          } else {
-            console.error('Could not set user dictionary')
-          }
+          this.userDictionaryContents = dictionary
         })
         .catch(err => console.error(err))
     }

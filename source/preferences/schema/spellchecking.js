@@ -6,27 +6,19 @@ export default {
       {
         type: 'list',
         label: trans('dialog.preferences.spellcheck'),
-        model: 'selectedDicts',
-        listOptions: {
-          selectable: true,
-          multiSelect: true,
-          deletable: false,
-          searchable: true,
-          searchLabel: trans('dialog.preferences.spellcheck_search_placeholder')
-        },
-        options: {
-          'en-GB': 'English (United Kingdom)'
-        }
+        model: 'availableDictionaries',
+        deletable: false,
+        editable: [0], // Only the "selectable" column may be edited
+        searchable: true,
+        searchLabel: trans('dialog.preferences.spellcheck_search_placeholder')
       },
       {
         type: 'list',
         label: trans('dialog.preferences.user_dictionary'),
         model: 'userDictionaryContents',
-        listOptions: {
-          deletable: true,
-          searchable: true,
-          searchLabel: 'Search for entries …'
-        }
+        deletable: true,
+        searchable: true,
+        searchLabel: 'Search for entries …'
       }
     ]
   ]

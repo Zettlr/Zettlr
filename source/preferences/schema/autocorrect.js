@@ -70,10 +70,10 @@ export default {
         type: 'list',
         label: 'AutoCorrect',
         model: 'editor.autoCorrect.replacements',
-        listOptions: {
-          deletable: true,
-          isDatatable: true // In this case, the module won't look for options, but take the values for these
-        }
+        deletable: true,
+        searchable: true,
+        addable: true,
+        editable: true // All columns may be edited
       }
     ]
   ]

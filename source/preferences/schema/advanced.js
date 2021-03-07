@@ -56,15 +56,5 @@ export default {
         model: 'watchdog.stabilityThreshold'
       }
     ]
-  ],
-  fields: [
-    // {
-    //   type: 'list',
-    //   label: 'Other files',
-    //   listOptions: {},
-    //   options: {
-    //     '.pdf': 'PDF' // TODO
-    //   }
-    // },
   ]
 }

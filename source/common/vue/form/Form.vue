@@ -90,10 +90,13 @@
           v-if="field.type === 'list'"
           v-bind:key="f_idx"
           v-bind:value="getModelValue(field.model)"
-          v-bind:label="field.label"
+          v-bind:labels="field.labels"
           v-bind:name="field.model"
-          v-bind:list-options="field.listOptions"
-          v-bind:options="field.options"
+          v-bind:deletable="field.deletable"
+          v-bind:editable="field.editable"
+          v-bind:addable="field.addable"
+          v-bind:searchable="field.searchable"
+          v-bind:search-label="field.searchLabel"
           v-on:input="$emit('input', field.model, $event)"
         ></ListInput>
         <TokenInput

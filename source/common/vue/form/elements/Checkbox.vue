@@ -5,6 +5,7 @@
         v-bind:id="fieldID"
         type="checkbox" v-bind:name="name" value="yes"
         v-bind:checked="value"
+        v-bind:disabled="disabled"
         v-on:input="$emit('input', $event.target.checked)"
       >
       <span class="checkmark"></span>
@@ -28,6 +29,10 @@ export default {
     name: {
       type: String,
       default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

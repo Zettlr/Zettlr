@@ -63,7 +63,8 @@ export default {
               start: doubleQuotes[0],
               end: doubleQuotes[1]
             }
-          }
+          },
+          replacements: this.$store.state.config['editor.autoCorrect.replacements']
         },
         zettlr: {
           imagePreviewWidth: this.$store.state.config['display.imageWidth'],

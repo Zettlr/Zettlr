@@ -11,6 +11,9 @@
         v-bind:class="{ 'inline': inline }"
         type="number"
         v-on:input="$emit('input', sanitize($event.target.value))"
+        v-on:keyup.enter="$emit('confirm', sanitize($event.target.value))"
+        v-on:keyup.esc="$emit('escape', sanitize($event.target.value))"
+        v-on:blur="$emit('blur', sanitize($event.target.value))"
       >
       <button
         type="button"
@@ -29,6 +32,9 @@
       v-bind:class="{ 'inline': inline }"
       type="number"
       v-on:input="$emit('input', sanitize($event.target.value))"
+      v-on:keyup.enter="$emit('confirm', sanitize($event.target.value))"
+      v-on:keyup.esc="$emit('escape', sanitize($event.target.value))"
+      v-on:blur="$emit('blur', sanitize($event.target.value))"
     >
   </div>
 </template>

@@ -116,19 +116,27 @@
    * @param {Mixed} option The new configuration of the AutoCorrect plugin.
    */
   function setup (option) {
-    if (option.hasOwnProperty('replacements') && typeof option.replacements === 'object') {
+    if (option.replacements !== undefined && Array.isArray(option.replacements)) {
+      // The user has provided an array of values
+      replacementCandidates = {}
+      for (const element of option.replacements) {
+        replacementCandidates[element.key] = element.value
+      }
+    } else if (option.replacements !== undefined && typeof option.replacements === 'object') {
       // In case we have a property "replacements" which is also an object
       // this indicates we should use this. If it's not an object,
       // it indicates that the user might want to replace "replacements"
       // with something.
       replacementCandidates = option.replacements
-    } else if (option.hasOwnProperty('replacements') && option.keys === false) {
+    } else if (option.replacements !== undefined && option.keys === false) {
       // Deactivate replacements
       replacementCandidates = {}
     } else {
       // Assume key-value-pair object.
       replacementCandidates = option
     }
+
+    console.log(replacementCandidates)
 
     // This variable indicates whether or not the user likes to
     // have word-style auto-correct or LibreOffice style
