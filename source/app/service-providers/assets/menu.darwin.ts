@@ -397,9 +397,11 @@ export default function getMenu (): MenuItemConstructorOptions[] {
           id: 'menu.toggle_typewriter_mode',
           label: trans('menu.toggle_typewriter_mode'),
           accelerator: 'Cmd+Alt+T',
-          type: 'checkbox',
-          checked: false // , TODO
-          // command: 'toggle-typewriter-mode'
+          // type: 'checkbox',
+          // checked: false, // TODO
+          click: function (menuitem, focusedWindow) {
+            focusedWindow?.webContents.send('shortcut', 'toggle-typewriter-mode')
+          }
         },
         {
           type: 'separator'

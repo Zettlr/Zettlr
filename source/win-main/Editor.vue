@@ -212,6 +212,8 @@ export default {
         this.editor.copyAsHTML()
       } else if (shortcut === 'paste-as-plain') {
         this.editor.pasteAsPlainText()
+      } else if (shortcut === 'toggle-typewriter-mode') {
+        this.editor.hasTypewriterMode = this.editor.hasTypewriterMode === false
       }
     })
 
