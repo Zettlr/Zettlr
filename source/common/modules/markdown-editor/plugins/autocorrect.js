@@ -136,8 +136,6 @@
       replacementCandidates = option
     }
 
-    console.log(replacementCandidates)
-
     // This variable indicates whether or not the user likes to
     // have word-style auto-correct or LibreOffice style
     // autocorrect. The former is a bit more aggressive in that
