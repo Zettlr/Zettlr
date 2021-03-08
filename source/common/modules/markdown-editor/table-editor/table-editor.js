@@ -287,7 +287,7 @@ module.exports = class TableEditor {
     } else if (event.key === 'Tab') {
       event.preventDefault()
       // Move to next column, or to previous if shift was pressed.
-      if (event.shiftKey) {
+      if (event.shiftKey === true) {
         this.previousCell()
       } else {
         this.nextCell()
@@ -878,23 +878,11 @@ module.exports = class TableEditor {
     let sel
     let range
 
-    if (window.getSelection) {
-      sel = window.getSelection()
-      if (sel.rangeCount) {
-        range = sel.getRangeAt(0)
-        if (range.commonAncestorContainer.parentNode === elem) {
-          caretPos = range.endOffset
-        }
-      }
-    } else if (document.selection && document.selection.createRange) {
-      range = document.selection.createRange()
-      if (range.parentElement() === elem) {
-        let helper = document.createElement('span')
-        elem.insertBefore(helper, elem.firstChild)
-        let tempRange = range.duplicate()
-        tempRange.moveToElementText(helper)
-        tempRange.setEndPoint('EndToEnd', range)
-        caretPos = tempRange.text.length
+    sel = window.getSelection()
+    if (sel.rangeCount) {
+      range = sel.getRangeAt(0)
+      if (range.commonAncestorContainer.parentNode === elem) {
+        caretPos = range.endOffset
       }
     }
 

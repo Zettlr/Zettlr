@@ -225,7 +225,7 @@ export default {
         return false
       }
 
-      return this.isDirectory && this.filteredChildren.length > 0
+      return this.isDirectory === true && this.filteredChildren.length > 0
     },
     /**
      * Returns the (containing) directory name.
@@ -246,7 +246,7 @@ export default {
         list.push('project')
       }
       // Determine if this is a root component
-      if (this.isRoot) {
+      if (this.isRoot === true) {
         list.push('root')
       }
 
@@ -256,7 +256,7 @@ export default {
      * Returns a list of children that can be displayed inside the tree view
      */
     filteredChildren: function () {
-      if (this.combined) {
+      if (this.combined === true) {
         return this.obj.children
       } else {
         return this.obj.children.filter(e => e.type === 'directory')
@@ -274,7 +274,7 @@ export default {
      */
     hasSearchResults: function () {
       // Should return true, if this directory has search results in combined mode
-      if (!this.combined) {
+      if (this.combined === false) {
         return false
       }
       if (this.$store.state.searchResults.length < 1) {

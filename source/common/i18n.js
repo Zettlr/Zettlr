@@ -141,7 +141,6 @@ function getDictionaryFile (query) {
   }
 
   let lang = bcp47.parse(query)
-  if (!lang) throw new Error(`Request for BCP 47 compatible dictionary file was malformed: ${query}`)
 
   // Now we should have a list of all available dictionaries. Next, we need to
   // search for a best and a close match.
@@ -166,7 +165,6 @@ function getLanguageFile (query) {
   }
 
   let lang = bcp47.parse(query)
-  if (!lang) throw new Error(`Request for BCP 47 compatible dictionary file was malformed: ${query}`)
 
   // Now we should have a list of all available dictionaries. Next, we need to
   // search for a best and a close match.
@@ -230,14 +228,18 @@ function findLangCandidates (lang, candidates) {
     if (candidateType === 'best') {
       bestMatch = candidate
       break
-    } else if (candidateType === 'close' && !closeMatch) {
+    } else if (candidateType === 'close' && closeMatch === undefined) {
       closeMatch = candidate
       // Don't break here, because maybe the best match comes afterwards in the list
     }
   }
 
-  if (bestMatch) bestMatch.status = EXACT
-  if (closeMatch) closeMatch.status = CLOSE
+  if (bestMatch !== undefined) {
+    bestMatch.status = EXACT
+  }
+  if (closeMatch !== undefined) {
+    closeMatch.status = CLOSE
+  }
 
   return {
     'exact': bestMatch,

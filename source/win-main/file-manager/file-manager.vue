@@ -104,7 +104,7 @@ export default {
      * @returns {Boolean}  Whether the file list is visible.
      */
     isFileListVisible: function () {
-      return this.isExpanded || this.fileListVisible
+      return this.isExpanded === true || this.fileListVisible
     },
     getDirectoryContents: function () {
       return this.$store.getters.directoryContents
@@ -117,9 +117,9 @@ export default {
     selectedDirectory: function () {
       // If the directory just got de-selected and the fileList
       // is visible, switch to the directories.
-      if (!this.selectedDirectory && this.isFileListVisible) {
+      if (this.selectedDirectory !== null && this.isFileListVisible === true) {
         this.toggleFileList()
-      } else if (!this.isFileListVisible) {
+      } else if (this.isFileListVisible === false) {
         // Otherwise make sure the fileList is visible (toggleFileList
         // will return if the mode is combined or expanded)
         this.toggleFileList()

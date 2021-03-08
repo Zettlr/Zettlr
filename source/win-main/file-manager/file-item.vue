@@ -194,10 +194,10 @@ export default {
       return this.obj.type === 'directory'
     },
     isProject: function () {
-      return this.isDirectory && this.obj.project !== null
+      return this.isDirectory === true && this.obj.project !== null
     },
     isDraggable: function () {
-      return !this.isDirectory
+      return this.isDirectory === false
     },
     fileMeta: function () {
       return this.$store.state.config['fileMeta']

@@ -30,7 +30,7 @@ interface FSALEvent {
   timestamp: number
 }
 
-function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: Boolean = false): any|null {
+function findPathDescriptor (targetPath: string, tree: any, treatAsAttachment: boolean = false): any|null {
   const prop = (treatAsAttachment) ? 'attachments' : 'children'
   // We need to find a target
   if (Array.isArray(tree)) {
