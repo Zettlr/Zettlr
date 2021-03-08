@@ -38,7 +38,7 @@ export default {
       lineWrapping: true,
       autoCloseBrackets: true,
       // Disable cursor blinking, as we apply a @keyframes animation
-      cursorBlinkRate: 0,
+      cursorBlinkRate: 0
     })
 
     this.cmInstance.setValue(this.contents)

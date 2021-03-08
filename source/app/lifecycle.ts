@@ -45,23 +45,23 @@ import StatsProvider from './service-providers/stats-provider'
 
 // We need module-global variables so that garbage collect won't shut down the
 // providers before the app is shut down.
-var appearanceProvider: AppearanceProvider
-var citeprocProvider: CiteprocProvider
-var configProvider: ConfigProvider
-var cssProvider: CssProvider
-var dictionaryProvider: DictionaryProvider
-var logProvider: LogProvider
-var recentDocsProvider: RecentDocsProvider
-var tagProvider: TagProvider
-var targetProvider: TargetProvider
-var translationProvider: TranslationProvider
-var updateProvider: UpdateProvider
-var menuProvider: MenuProvider
-var notificationProvider: NotificationProvider
-var statsProvider: StatsProvider
+let appearanceProvider: AppearanceProvider
+let citeprocProvider: CiteprocProvider
+let configProvider: ConfigProvider
+let cssProvider: CssProvider
+let dictionaryProvider: DictionaryProvider
+let logProvider: LogProvider
+let recentDocsProvider: RecentDocsProvider
+let tagProvider: TagProvider
+let targetProvider: TargetProvider
+let translationProvider: TranslationProvider
+let updateProvider: UpdateProvider
+let menuProvider: MenuProvider
+let notificationProvider: NotificationProvider
+let statsProvider: StatsProvider
 
 // Statistics: Record the uptime of the application
-var upTimestamp: number
+let upTimestamp: number
 
 /**
  * Catches potential errors during shutdown of certain providers.
