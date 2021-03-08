@@ -321,7 +321,8 @@ export default {
               modtime: this.obj.modtime,
               files: this.obj.children.filter(e => e.type !== 'directory').length,
               dirs: this.obj.children.filter(e => e.type === 'directory').length,
-              isProject: this.isProject === true
+              isProject: this.isProject === true,
+              icon: this.obj.icon
             }
 
             if (this.obj.sorting !== null) {
@@ -341,6 +342,7 @@ export default {
                 }).catch(e => console.error(e))
               }
 
+              // Set the project flag if applicable
               const projectChanged = data.isProject !== this.isProject
               if (projectChanged && data.isProject) {
                 ipcRenderer.invoke('application', {
@@ -351,6 +353,17 @@ export default {
                 ipcRenderer.invoke('application', {
                   command: 'dir-remove-project',
                   payload: { path: this.obj.path }
+                }).catch(e => console.error(e))
+              }
+
+              // Set the icon if it has changed
+              if (data.icon !== this.obj.icon) {
+                ipcRenderer.invoke('application', {
+                  command: 'dir-set-icon',
+                  payload: {
+                    path: this.obj.path,
+                    icon: data.icon
+                  }
                 }).catch(e => console.error(e))
               }
             })

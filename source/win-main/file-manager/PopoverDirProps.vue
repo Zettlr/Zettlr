@@ -35,7 +35,25 @@
       v-model="isProject"
       v-bind:label="'Enable Project'"
     ></SwitchControl>
-    <template v-if="isProject"></template>
+    <template v-if="isProject">
+      <!-- TODO: Insert some generic project properties -->
+    </template>
+    <hr>
+    <!-- Directory icon -->
+    <div class="icon-selector">
+      <div
+        v-for="iconElement, idx in icons"
+        v-bind:key="idx"
+        v-bind:class="{ 'active': iconElement.shape === icon }"
+        v-bind:title="iconElement.title"
+        v-on:click="icon = iconElement.shape"
+      >
+        <clr-icon
+          v-if="iconElement.shape !== null"
+          v-bind:shape="iconElement.shape"
+        ></clr-icon>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -44,6 +62,79 @@ import formatDate from '../../common/util/format-date'
 import localiseNumber from '../../common/util/localise-number'
 import SelectControl from '../../common/vue/form/elements/Select'
 import SwitchControl from '../../common/vue/form/elements/Switch'
+
+const ICONS = [
+  { shape: null, title: 'Reset' },
+  { shape: 'cog', title: 'Cog' },
+  { shape: 'cloud', title: 'Cloud' },
+  { shape: 'check', title: 'Check' },
+  { shape: 'times', title: 'Times' },
+  { shape: 'help-info', title: 'Help' },
+  { shape: 'info-standard', title: 'Info' },
+  { shape: 'success-standard', title: 'Success' },
+  { shape: 'error-standard', title: 'Error' },
+  { shape: 'warning-standard', title: 'Warning' },
+  { shape: 'bell', title: 'Bell' },
+  { shape: 'user', title: 'Person' },
+  { shape: 'users', title: 'People' },
+  { shape: 'folder', title: 'Folder' },
+  { shape: 'folder-open', title: 'Folder (open)' },
+  { shape: 'image', title: 'Image' },
+  { shape: 'eye', title: 'Eye' },
+  { shape: 'eye-hide', title: 'Eye (crossed)' },
+  { shape: 'calendar', title: 'Calendar' },
+  { shape: 'calculator', title: 'Calculator' },
+  { shape: 'store', title: 'Store' },
+  { shape: 'shopping-bag', title: 'Shopping bag' },
+  { shape: 'shopping-cart', title: 'Shopping cart' },
+  { shape: 'factory', title: 'Factory' },
+  { shape: 'heart', title: 'Heart' },
+  { shape: 'heart-broken', title: 'Heart (broken)' },
+  { shape: 'talk-bubbles', title: 'Bubbles' },
+  { shape: 'chat-bubble', title: 'Bubble' },
+  { shape: 'bubble-exclamation', title: 'Bubble (exclamation)' },
+  { shape: 'color-palette', title: 'Colour Palette' },
+  { shape: 'bars', title: 'Bars' },
+  { shape: 'thermometer', title: 'Thermometer' },
+  { shape: 'book', title: 'Book' },
+  { shape: 'library', title: 'Library' },
+  { shape: 'bug', title: 'Bug' },
+  { shape: 'note', title: 'Note' },
+  { shape: 'lightbulb', title: 'Lightbulb' },
+  { shape: 'trash', title: 'Trash' },
+  { shape: 'snowflake', title: 'Snowflake' },
+  { shape: 'asterisk', title: 'Asterisk' },
+  { shape: 'key', title: 'Key' },
+  { shape: 'bolt', title: 'Bolt' },
+  { shape: 'wrench', title: 'Wrench' },
+  { shape: 'flame', title: 'Flame' },
+  { shape: 'hourglass', title: 'Hourglass' },
+  { shape: 'briefcase', title: 'Briefcase' },
+  { shape: 'tools', title: 'Tools' },
+  { shape: 'moon', title: 'Moon' },
+  { shape: 'sun', title: 'Sun' },
+  { shape: 'tree', title: 'Tree' },
+  { shape: 'dot-circle', title: 'Circle (dot)' },
+  { shape: 'circle', title: 'Circle' },
+  { shape: 'video-camera', title: 'Video camera' },
+  { shape: 'film-strip', title: 'Film strip' },
+  { shape: 'microphone', title: 'Microphone' },
+  { shape: 'crown', title: 'Crown' },
+  { shape: 'star', title: 'Star' },
+  { shape: 'flag', title: 'Flag' },
+  { shape: 'envlope', title: 'Envelope' },
+  { shape: 'airplane', title: 'Airplane' },
+  { shape: 'happy-face', title: 'Happy emoji' },
+  { shape: 'neutral-face', title: 'Neutral emoji' },
+  { shape: 'sad-face', title: 'Sad emoji' },
+  { shape: 'thumbs-up', title: 'Thumbs up' },
+  { shape: 'thumbs-down', title: 'Thumbs down' },
+  { shape: 'map', title: 'Map' },
+  { shape: 'compass', title: 'Compass' },
+  { shape: 'map-marker', title: 'Map marker' },
+  { shape: 'flask', title: 'Flask' },
+  { shape: 'cd-dvd', title: 'CD/DVD' }
+]
 
 export default {
   name: 'PopoverDirProps',
@@ -60,7 +151,8 @@ export default {
       dirs: 0,
       sortingType: 'name',
       sortingDirection: 'up',
-      isProject: false
+      isProject: false,
+      icon: null
     }
   },
   computed: {
@@ -69,7 +161,8 @@ export default {
     popoverData: function () {
       return {
         sorting: `${this.sortingType}-${this.sortingDirection}`,
-        isProject: this.isProject
+        isProject: this.isProject,
+        icon: this.icon
       }
     },
     creationTime: function () {
@@ -83,6 +176,9 @@ export default {
     },
     formattedDirs: function () {
       return localiseNumber(this.dirs)
+    },
+    icons: function () {
+      return ICONS
     }
   },
   methods: {
@@ -91,5 +187,29 @@ export default {
 </script>
 
 <style lang="less">
-// Styles are defined in the File popover
+// Most styles are defined in the File popover
+body .icon-selector {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto; // Center the div
+  width: 200px; // Ten icons per row
+  div {
+    display: inline-block;
+    padding: 2px; // The icons are 16x16px
+    width: 20px;
+    height: 20px;
+  }
+}
+
+body.darwin {
+  .icon-selector div {
+    border-radius: 2px;
+    &:hover { background-color: rgb(180, 180, 180); }
+    &.active { background-color: var(--system-accent-color, --c-primary) }
+  }
+
+  &.dark .icon-selector div:hover {
+    background-color: rgb(90, 90, 90);
+  }
+}
 </style>
