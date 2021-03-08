@@ -1,13 +1,19 @@
 <template>
-  <input
-    v-bind:id="`toolbar-${control.id}`"
-    ref="input"
-    type="search"
-    role="search"
-    class="toolbar-search"
-    v-bind:placeholder="control.placeholder"
-    v-on:input="$emit('input', $event.target.value)"
+  <div
+    class="toolbar-search-container"
+    v-on:click="$refs.input.focus()"
   >
+    <clr-icon shape="search"></clr-icon>
+    <input
+      v-bind:id="`toolbar-${control.id}`"
+      ref="input"
+      type="search"
+      role="search"
+      class="toolbar-search"
+      v-bind:placeholder="control.placeholder"
+      v-on:input="$emit('input', $event.target.value)"
+    >
+  </div>
 </template>
 
 <script>
@@ -37,30 +43,67 @@ export default {
 </script>
 
 <style lang="less">
-body.darwin {
-  .toolbar-search {
-    border-radius: 4px;
-    background-color: rgb(245, 245, 245);
-    border: 1px solid rgb(190, 190, 190);
-    &::placeholder {
-      color: rgb(190, 190, 190);
+body {
+  .toolbar-search-container {
+    position: relative;
+
+    clr-icon {
+      position: absolute;
+      top: 2px;
+      left: 2px;
     }
 
-    &:focus {
-      border: 4px solid var(--system-accent-color, --c-primary);
+    .toolbar-search {
+      // Make the search input itself invisible
+      background-color: transparent !important;
+      border: none !important; // TODO: Remove once the styles have been migrated
+      padding-left: 24px;
     }
-    padding: 2px 6px;
-    margin: 0 4px;
+  }
+}
+body.darwin {
+  .toolbar-search-container {
+    border-radius: 4px;
+    background-color: rgb(245, 245, 245);
+    width: 32px; // Hide the search bar initially, and reveal on focus
+    height: 26px;
+    transition: width 0.2s ease;
+
+    &:hover:not(:focus-within) { background-color: rgb(230, 230, 230); }
+
+    &:not(:focus-within) {
+      padding: 4px 8px;
+
+      // While the input is hidden anyway, we must reset the CLR-ICON's position
+      clr-icon { position: initial; }
+    }
+
+    .toolbar-search {
+      width: 0%;
+      &::placeholder { color: rgb(190, 190, 190); }
+    }
+
+    &:focus-within {
+      width: initial; // Reset the width of the container
+      height: initial;
+      border: 1px solid rgb(190, 190, 190);
+    }
+
+    &:focus-within .toolbar-search {
+      width: 100%;
+    }
   }
 
   &.dark {
-    .toolbar-search {
-      background-color: rgb(51, 51, 51);;
-      border: 1px solid rgb(120, 120, 120);
+    .toolbar-search-container {
+      background-color: rgb(51, 51, 51);
+      &:hover:not(:focus-within) { background-color: rgb(60, 60, 60,); }
 
-      &::placeholder {
+      .toolbar-search::placeholder {
         color: rgb(120, 120, 120);
       }
+
+      &:focus-within { border: 1px solid rgb(120, 120, 120); }
     }
   }
 }
