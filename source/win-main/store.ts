@@ -186,6 +186,10 @@ interface ZettlrState {
    */
   colouredTags: any[]
   /**
+   * Contains all tags across all files loaded into Zettlr
+   */
+  tagDatabase: any[]
+  /**
    * Holds all configuration options. These need to be stored here separately
    * to make use of the reactivity of Vue. We'll basically be binding the config
    * listener to this store state. It's basically a dictionary for quick access.
@@ -213,6 +217,7 @@ const config: StoreOptions<ZettlrState> = {
     activeFile: null,
     openFiles: [],
     colouredTags: [],
+    tagDatabase: [],
     config: {},
     activeDocumentInfo: null,
     modifiedDocuments: [],
@@ -378,6 +383,9 @@ const config: StoreOptions<ZettlrState> = {
     },
     colouredTags: function (state, tags) {
       state.colouredTags = tags
+    },
+    updateTagDatabase: function (state, tags) {
+      state.tagDatabase = tags
     }
   },
   actions: {

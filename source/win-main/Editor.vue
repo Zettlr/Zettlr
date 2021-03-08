@@ -93,8 +93,10 @@ export default {
           }
         }
       }
+    },
+    tagDatabase: function () {
+      return this.$store.state.tagDatabase
     }
-
   },
   watch: {
     readabilityMode: function () {
@@ -103,6 +105,9 @@ export default {
     editorConfiguration: function () {
       // Update the editor configuration, if anything changes.
       this.editor.setOptions(this.editorConfiguration)
+    },
+    tagDatabase: function () {
+      this.editor.setCompletionDatabase('tags', this.tagDatabase)
     },
     activeFile: function () {
       if (this.editor === null) {
