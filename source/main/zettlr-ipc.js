@@ -49,20 +49,6 @@ class ZettlrIPC {
         return // Don't dispatch further
       }
 
-      // Next possibility: An asynchronous callback from the renderer.
-      if (arg.hasOwnProperty('cypher') && arg.cypher !== '') {
-        // In this case we have to run whatever is wanted and immediately return
-        // (Don't let yourselves be fooled by how I named this argument. This is
-        // only to confuse myself in some months when I will stumble back upon
-        // this piece of code and wonder why I have to send/return the thing
-        // twice.)
-        this.runCall(arg.command, arg.content).then((retVal) => {
-          arg.returnValue = retVal
-          event.sender.send('message', arg)
-        })
-        return // Also, don't dispatch further
-      }
-
       // In all other occasions omit the event.
       this.dispatch(arg)
     })
@@ -144,22 +130,6 @@ class ZettlrIPC {
       default:
         global.log.error(trans('system.unknown_command', cmd))
         break
-    }
-  }
-
-  /**
-   * Literally the same as dispatch(), only with returns
-   * @param  {string} cmd The Command
-   * @param  {Object} arg The payload
-   * @return {Promise}    Returns a promise that resolves to the return value
-   */
-  async runCall (cmd, arg) {
-    // We received a new event and need to handle it.
-
-    switch (cmd) {
-      default:
-        global.log.error(trans('system.unknown_command', cmd))
-        return null
     }
   }
 }
