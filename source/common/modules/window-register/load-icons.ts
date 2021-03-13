@@ -21,6 +21,7 @@ export default async function loadIcons (): Promise<void> {
   ClarityIcons.add({
     'code-alt': require('!!svg-inline-loader!./icons/clarity-custom/code-alt.svg'),
     'file-ext': require('!!svg-inline-loader!./icons/clarity-custom/file-ext.svg'),
-    'indented-view-list': require('!!svg-inline-loader!./icons/clarity-custom/indented-view-list.svg')
+    'indented-view-list': require('!!svg-inline-loader!./icons/clarity-custom/indented-view-list.svg'),
+    'regexp': require('!!svg-inline-loader!./icons/clarity-custom/regexp.svg')
   })
 }
