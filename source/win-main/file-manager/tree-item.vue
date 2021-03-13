@@ -19,7 +19,13 @@
   >
     <div
       ref="listElement"
-      v-bind:class="classList"
+      v-bind:class="{
+        'tree-item': true,
+        [obj.type]: true,
+        'selected': activeFile === obj || selectedDir === obj,
+        'project': obj.project != null,
+        'root': isRoot
+      }"
       v-bind:data-hash="obj.hash"
       v-bind:data-id="obj.id || ''"
       v-bind:style="{
@@ -232,25 +238,6 @@ export default {
      */
     dirname: function () {
       return path.basename(this.obj.dir)
-    },
-    /**
-     * Computes the classList property for the container and returns it
-     */
-    classList: function () {
-      const list = [ 'tree-item', this.obj.type ]
-      if ([ this.activeFile, this.selectedDir ].includes(this.obj)) {
-        list.push('selected')
-      }
-
-      if (this.obj.project != null) {
-        list.push('project')
-      }
-      // Determine if this is a root component
-      if (this.isRoot === true) {
-        list.push('root')
-      }
-
-      return list.join(' ')
     },
     /**
      * Returns a list of children that can be displayed inside the tree view
