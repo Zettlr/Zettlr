@@ -358,8 +358,12 @@ export default {
       }
 
       if (this.obj.type === 'file' && alt) {
-        // QuickLook the file TODO: application invocation
-        global.ipc.send('open-quicklook', this.obj.hash)
+        // QuickLook the file
+        ipcRenderer.invoke('application', {
+          command: 'open-quicklook',
+          payload: this.obj.path
+        })
+          .catch(e => console.error(e))
       } else if (this.obj.type === 'file') {
         // Request the clicked file
         if (!middleClick && !ctrl && !cmd) {

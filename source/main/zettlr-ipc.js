@@ -141,10 +141,6 @@ class ZettlrIPC {
         this._app.handleAddRoots(cnt)
         break
 
-      case 'open-quicklook':
-        this._app.openQL(cnt)
-        return true
-
       default:
         global.log.error(trans('system.unknown_command', cmd))
         break
@@ -161,11 +157,6 @@ class ZettlrIPC {
     // We received a new event and need to handle it.
 
     switch (cmd) {
-      // A quicklook window wants to pop-out of the main window
-      case 'open-quicklook':
-        this._app.openQL(arg)
-        return true
-
       default:
         global.log.error(trans('system.unknown_command', cmd))
         return null

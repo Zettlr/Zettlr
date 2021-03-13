@@ -47,15 +47,27 @@ export default {
         } else {
           this.handleSelectFile(this.openFiles[0])
         }
+      } else if (shortcut === 'close-window') {
+        // The tab bar has the responsibility to first close the activeFile if
+        // there is one. If there is none, it should send a request to close
+        // this window as if the user had clicked on the close-button.
+        if (currentIdx > -1) {
+          // There's an active file, so request the closure
+          this.handleCloseFile(this.openFiles[currentIdx])
+        } else {
+          // No more open files, so request closing of the window
+          ipcRenderer.send('window-controls', { command: 'win-close' })
+        }
       }
     })
   },
   methods: {
     handleCloseFile: function (file) {
-      ipcRenderer.send('message', {
+      ipcRenderer.invoke('application', {
         command: 'file-close',
-        content: file.path
+        payload: file.path
       })
+        .catch(e => console.error(e))
     },
     handleSelectFile: function (file) {
       ipcRenderer.invoke('application', {

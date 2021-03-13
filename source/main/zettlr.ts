@@ -488,6 +488,8 @@ export default class Zettlr {
     } else if (command === 'open-preferences') {
       this._windowManager.showPreferences()
       return true
+    } else if (command === 'open-quicklook') {
+      this.openQL(payload)
     } else {
       // ELSE: If the command has not yet been found, try to run one of the
       // bigger commands
@@ -616,10 +618,10 @@ export default class Zettlr {
    * @param  {number} hash The hash of the file to be displayed in the window
    * @return {void}      No return.
    */
-  openQL (hash: number): void {
-    let file: MDFileDescriptor|CodeFileDescriptor|null = this._fsal.findFile(hash)
+  openQL (filePath: string): void {
+    let file: MDFileDescriptor|CodeFileDescriptor|null = this._fsal.findFile(filePath)
     if (file === null || file.type !== 'file') {
-      global.log.error(`[Application] A Quicklook window for ${hash} was requested, but the file was not found.`)
+      global.log.error(`[Application] A Quicklook window for ${filePath} was requested, but the file was not found.`)
       return
     }
 

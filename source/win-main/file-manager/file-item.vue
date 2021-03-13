@@ -27,8 +27,6 @@
     v-on:click.stop="requestSelection"
     v-on:dragstart.stop="beginDragging"
     v-on:drag="onDragHandler"
-    v-on:mouseenter="hover=true"
-    v-on:mouseleave="hover=false"
     v-on:contextmenu="handleContextMenu"
   >
     <div class="filename">
@@ -150,7 +148,6 @@ export default {
   },
   data: () => {
     return {
-      hover: false, // True as long as the user hovers over the element
       nameEditing: false // True as long as the user edits the filename
     }
   },
@@ -437,8 +434,12 @@ export default {
       const alt = event.altKey === true
 
       if (this.obj.type === 'file' && alt) {
-        // QuickLook the file TODO: application invocation
-        global.ipc.send('open-quicklook', this.obj.hash)
+        // QuickLook the file
+        ipcRenderer.invoke('application', {
+          command: 'open-quicklook',
+          payload: this.obj.path
+        })
+          .catch(e => console.error(e))
       } else if ([ 'file', 'code' ].includes(this.obj.type)) {
         // Request the clicked file
         ipcRenderer.invoke('application', {
