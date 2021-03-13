@@ -159,18 +159,27 @@ export default {
      * Toggles the fileList's visibility, if applicable.
      */
     toggleFileList: function () {
-      if (this.isExpanded) {
-        return // Don't toggle if the mode is not thin
-      }
-
-      // Toggle the fileList during combined mode only if there are search results
-      if (this.isCombined && this.$store.state.searchResults.length < 1) {
-        return
-      }
-
       if (this.lockedTree) {
         return // Don't toggle in case of a lockdown
       }
+
+      // Switch back to directories in case of fileManagerMode changes
+      if (!this.isThin && this.isFileListVisible) {
+        this.fileTreeVisible = true
+        this.fileListVisible = false
+        this.$refs.arrowButton.classList.add('hidden') // Hide the arrow button
+        return
+      }
+
+      if (this.fileTreeVisible && !this.isThin) {
+        return // Can't show the file list
+      }
+
+      // Toggle the fileList during combined mode only if there are search results
+      // TODO
+      // if (this.isCombined && this.$store.state.searchResults.length < 1) {
+      //   return
+      // }
 
       if (this.isFileListVisible) {
         // Display directories
@@ -199,6 +208,7 @@ export default {
       // TODO: Handle the case where the mouse is outside this element.
       // The fileList is not visible after all
       if (!this.isFileListVisible || this.isExpanded) {
+        this.$refs.arrowButton.classList.add('hidden')
         return
       }
       // This only displays the arrow button if
@@ -206,6 +216,7 @@ export default {
       // fileList is displayed and the user moves
       // up to an area about 100px at the top
       if (this.isCombined && this.$store.state.searchResults.length < 1) {
+        this.$refs.arrowButton.classList.add('hidden')
         return
       }
 

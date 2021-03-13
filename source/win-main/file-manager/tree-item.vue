@@ -277,6 +277,7 @@ export default {
       if (this.combined === false) {
         return false
       }
+      // TODO
       // if (this.$store.state.searchResults.length < 1) {
       //   return false
       // }
