@@ -120,7 +120,7 @@
     "eslint-plugin-vue": "^7.5.0",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^6.1.0",
-    "handlebars": "^4.7.6",
+    "handlebars": "^4.7.7",
     "handlebars-loader": "^1.7.1",
     "jsdom": "^16.4.0",
     "less": "^4.1.1",
