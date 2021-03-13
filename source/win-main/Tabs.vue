@@ -7,7 +7,12 @@
         active: file === activeFile,
         modified: modifiedDocs.includes(file.path)
       }"
+      v-bind:data-path="file.path"
       role="tab"
+      draggable="true"
+      v-on:dragstart="handleDragStart"
+      v-on:drag="handleDrag"
+      v-on:dragend="handleDragEnd"
     >
       <span class="filename" v-on:click="handleSelectFile(file)">{{ file.name }}</span>
       <span class="close" v-on:click.stop="handleCloseFile(file)">&times;</span>
@@ -75,6 +80,85 @@ export default {
         payload: file.path
       })
         .catch(e => console.error(e))
+    },
+    handleDragStart: function (event) {
+      // console.log(event)
+    },
+    handleDrag: function (event) {
+      const tab = event.target
+      const tablist = tab.parentNode
+      let coordsX = event.clientX
+      let coordsY = event.clientY
+
+      // Ensure the coords are somewhere inside the tablist. NOTE that exactly
+      // the border would only select the tablist, not the actual tab at that
+      // point. NOTE that the value of five is arbitrary and relies on the fact
+      // that the tablist only contains tabs.
+      const { left, top, right, bottom, height } = this.$el.getBoundingClientRect()
+      const middle = height / 2
+      if (coordsX < left) {
+        coordsX = left + 5
+      }
+
+      if (coordsX > right) {
+        coordsX = right - 5
+      }
+
+      if (coordsY < top) {
+        coordsY = top + middle
+      }
+
+      if (coordsY > bottom) {
+        coordsY = bottom - middle
+      }
+
+      let swapItem = document.elementFromPoint(coordsX, coordsY)
+      if (swapItem === null) {
+        swapItem = tab
+      }
+
+      // We need to make sure we got the DIV, not one of the containing spans
+      while (swapItem.getAttribute('role') !== 'tab') {
+        if (swapItem.parentNode === document) {
+          break // Don't overdo it
+        }
+        swapItem = swapItem.parentNode
+      }
+
+      if (tablist === swapItem.parentNode) {
+        swapItem = swapItem !== tab.nextSibling ? swapItem : swapItem.nextSibling
+        tablist.insertBefore(tab, swapItem)
+      }
+    },
+    handleDragEnd: function (event) {
+      // Here we just need to inspect the actual order and notify the main
+      // process of that order.
+      const newOrder = []
+      for (let i = 0; i < this.$el.children.length; i++) {
+        const fpath = this.$el.children[i].getAttribute('data-path')
+        newOrder.push(fpath)
+      }
+
+      // Now that we have the correct NEW ordering, we need to temporarily
+      // restore the old ordering, because otherwise Vue will be confused since
+      // it needs to keep track of the element ordering, and we just messed with
+      // that big time.
+      const originalOrdering = this.openFiles.map(file => file.path)
+      const targetElement = event.target
+      const originalIndex = originalOrdering.indexOf(targetElement.getAttribute('data-path'))
+      if (originalIndex === 0) {
+        this.$el.insertBefore(targetElement, this.$el.children[0])
+      } else if (originalIndex === this.$el.children.length - 1) {
+        this.$el.insertBefore(targetElement, null) // null means append at the end
+      } else {
+        this.$el.insertBefore(targetElement, this.$el.children[originalIndex + 1])
+      }
+
+      ipcRenderer.invoke('application', {
+        command: 'sort-open-files',
+        payload: newOrder
+      })
+        .catch(err => console.error(err))
     }
   }
 }

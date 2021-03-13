@@ -496,6 +496,7 @@ const config: StoreOptions<ZettlrState> = {
         }
 
         if (!hasChanged) {
+          console.log('Not updating open files array')
           return // No need to update
         }
       }

@@ -475,23 +475,17 @@ export default class FSAL extends EventEmitter {
    * @param {Array} hashArray An array with hashes to sort with
    * @return {Array} The new sorting
    */
-  public sortOpenFiles (hashArray: number[]): Array<MDFileDescriptor|CodeFileDescriptor> {
-    if (!Array.isArray(hashArray)) return this._state.openFiles
-    // Expand the hash array
-    let notFound = this._state.openFiles.filter(e => !hashArray.includes(e.hash))
-    let newSorting = hashArray.map(e => this._state.openFiles.find(file => file.hash === e))
-    // Then filter out undefines from the find function
-    newSorting = newSorting.filter(e => e !== undefined)
+  public sortOpenFiles (pathArray: string[]): Array<MDFileDescriptor|CodeFileDescriptor> {
+    if (Array.isArray(pathArray)) {
+      // Simply re-sort based on the new paths
+      this._state.openFiles.sort((a, b) => {
+        return pathArray.indexOf(a.path) - pathArray.indexOf(b.path)
+      })
 
-    // Finally make sure that not found elements are still added again.
-    if (notFound.length > 0) {
-      global.log.warning(`${notFound.length} elements were not found in the new sorting! Adding anyway ...`)
-      newSorting.concat(notFound)
+      this.emit('fsal-state-changed', 'openFiles')
     }
 
-    this._state.openFiles = newSorting as MDFileDescriptor[]
-    this.emit('fsal-state-changed', 'openFiles')
-    return newSorting as MDFileDescriptor[]
+    return this._state.openFiles
   }
 
   /**
