@@ -87,17 +87,17 @@ export default {
       return this.$store.state.selectedDirectory
     },
     isThin: function () {
-      return this.$store.state.fileManagerMode === 'thin'
+      return this.fileManagerMode === 'thin'
     },
     isCombined: function () {
-      return this.$store.state.fileManagerMode === 'combined'
+      return this.fileManagerMode === 'combined'
     },
     isExpanded: function () {
-      return this.$store.state.fileManagerMode === 'expanded'
+      return this.fileManagerMode === 'expanded'
     },
     // We need the fileManagerMode separately to watch the property
     fileManagerMode: function () {
-      return this.$store.state.fileManagerMode
+      return this.$store.state.config['fileManagerMode']
     },
     /**
      * Determines whether the file list is currently visible
