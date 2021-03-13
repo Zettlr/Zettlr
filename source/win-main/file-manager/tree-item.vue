@@ -33,8 +33,6 @@
       v-on:dragenter="enterDragging"
       v-on:dragleave="leaveDragging"
       v-on:drop="handleDrop"
-      v-on:mouseenter="hover=true"
-      v-on:mouseleave="hover=false"
       v-on:contextmenu="handleContextMenu"
     >
       <!-- First: Primary icon (either directory icon, file icon, or project icon) -->
@@ -101,6 +99,7 @@
         />
       </span>
       <span
+        ref="display-text"
         class="display-text"
         v-bind:data-hash="obj.hash"
       >
@@ -159,6 +158,8 @@ import fileContextMenu from './util/file-item-context.js'
 import dirContextMenu from './util/dir-item-context.js'
 import { ipcRenderer } from 'electron'
 import path from 'path'
+import PopoverFileProps from './PopoverFileProps'
+import PopoverDirProps from './PopoverDirProps'
 
 export default {
   name: 'TreeItem',
@@ -183,7 +184,6 @@ export default {
   data: () => {
     return {
       collapsed: true, // Initial: collapsed list (if there are children)
-      hover: false, // True as long as the user hovers over the element
       nameEditing: false // True if the user wants to rename the item
     }
   },
@@ -331,12 +331,115 @@ export default {
         dirContextMenu(event, this.obj, this.$el, (clickedID) => {
           if (clickedID === 'menu.rename_dir') {
             this.nameEditing = true
+          } else if (clickedID === 'menu.new_file') {
+            this.$emit('create-file')
+          } else if (clickedID === 'menu.new_dir') {
+            this.$emit('create-dir')
+          } else if (clickedID === 'menu.properties') {
+            const data = {
+              dirname: this.obj.name,
+              creationtime: this.obj.creationtime,
+              modtime: this.obj.modtime,
+              files: this.obj.children.filter(e => e.type !== 'directory').length,
+              dirs: this.obj.children.filter(e => e.type === 'directory').length,
+              isProject: this.isProject === true,
+              icon: this.obj.icon
+            }
+
+            if (this.obj.sorting !== null) {
+              data.sortingType = this.obj.sorting.split('-')[0]
+              data.sortingDirection = this.obj.sorting.split('-')[1]
+            } // Else: Default sorting of name-up
+
+            this.$showPopover(PopoverDirProps, this.$refs['display-text'], data, (data) => {
+              // Apply new sorting if applicable
+              if (data.sorting !== this.obj.sorting) {
+                ipcRenderer.invoke('application', {
+                  command: 'dir-sort',
+                  payload: {
+                    path: this.obj.path,
+                    sorting: data.sorting
+                  }
+                }).catch(e => console.error(e))
+              }
+
+              // Set the project flag if applicable
+              const projectChanged = data.isProject !== this.isProject
+              if (projectChanged && data.isProject) {
+                ipcRenderer.invoke('application', {
+                  command: 'dir-new-project',
+                  payload: { path: this.obj.path }
+                }).catch(e => console.error(e))
+              } else if (projectChanged && !data.isProject) {
+                ipcRenderer.invoke('application', {
+                  command: 'dir-remove-project',
+                  payload: { path: this.obj.path }
+                }).catch(e => console.error(e))
+              }
+
+              // Set the icon if it has changed
+              if (data.icon !== this.obj.icon) {
+                ipcRenderer.invoke('application', {
+                  command: 'dir-set-icon',
+                  payload: {
+                    path: this.obj.path,
+                    icon: data.icon
+                  }
+                }).catch(e => console.error(e))
+              }
+            })
           }
         })
       } else {
         fileContextMenu(event, this.obj, this.$el, (clickedID) => {
           if (clickedID === 'menu.rename_file') {
             this.nameEditing = true
+          } else if (clickedID === 'menu.duplicate_file') {
+            // The user wants to duplicate this file --> instruct the file list
+            // controller to display a mock file object below this file for the
+            // user to enter a new file name.
+            this.$emit('duplicate')
+          } else if (clickedID === 'menu.properties') {
+            const data = {
+              filename: this.obj.name,
+              creationtime: this.obj.creationtime,
+              modtime: this.obj.modtime,
+              tags: this.obj.tags,
+              // We need to provide the coloured tags so
+              // the popover can render them correctly
+              colouredTags: this.$store.state.colouredTags,
+              targetValue: 0,
+              targetMode: 'words',
+              fileSize: this.obj.size,
+              type: this.obj.type,
+              words: 0,
+              ext: this.obj.ext
+            }
+
+            if (this.hasWritingTarget) {
+              data.targetValue = this.obj.target.count
+              data.targetMode = this.obj.target.mode
+            }
+
+            if (this.obj.type === 'file') {
+              data.words = this.obj.wordCount
+            }
+
+            this.$showPopover(PopoverFileProps, this.$refs['display-text'], data, (data) => {
+              // Whenever the data changes, update the target
+
+              // 1.: Writing Target
+              if (this.obj.type === 'file') {
+                ipcRenderer.invoke('application', {
+                  command: 'set-writing-target',
+                  payload: {
+                    mode: data.target.mode,
+                    count: data.target.value,
+                    path: this.obj.path
+                  }
+                }).catch(e => console.error(e))
+              }
+            })
           }
         })
       }

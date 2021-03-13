@@ -368,7 +368,6 @@ export default {
         })
       } else {
         fileContextMenu(event, this.obj, this.$el, (clickedID) => {
-          console.log(clickedID)
           if (clickedID === 'menu.rename_file') {
             this.nameEditing = true
           } else if (clickedID === 'menu.duplicate_file') {
