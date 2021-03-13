@@ -101,6 +101,7 @@ import FileItemMock from './file-item-mock'
 import { RecycleScroller } from 'vue-virtual-scroller'
 import { ipcRenderer } from 'electron'
 import generateFileName from '../../common/util/generate-filename'
+import objectToArray from '../../common/util/object-to-array'
 
 export default {
   name: 'FileList',
@@ -159,15 +160,14 @@ export default {
         return []
       }
 
-      let ret = [{
-        id: -1, // ¯\_(ツ)_/¯
-        props: this.$store.state.selectedDirectory
-      }]
-      const children = this.$store.state.selectedDirectory.children
-      for (let i = 0; i < children.length; i++) {
+      let ret = []
+      const items = objectToArray(this.$store.state.selectedDirectory, 'children')
+      // TODO: Right now I've built everything around the first list item having
+      // the index -1, but that's obviously bullshit, so fix that soon!
+      for (let i = -1; i < items.length - 1; i++) {
         ret.push({
           id: i, // This helps the virtual scroller to adequately position the items
-          props: children[i] // The actual item
+          props: items[i + 1] // The actual item
         })
       }
 
@@ -180,7 +180,7 @@ export default {
           // add that thing AFTER the item to be duplicated. The index is not
           // the array index but the object's ID.
           ret.splice(this.operationIndex + 2, 0, {
-            id: children.length,
+            id: items.length,
             mock: true, // This will help getFilteredDirectoryContents to never exclude it in display
             props: {
               name: 'Copy of ' + mirroredItem.name, // TODO: Translate
@@ -189,7 +189,7 @@ export default {
           })
         } else if (this.operationType === 'createFile') {
           ret.splice(this.operationIndex + 2, 0, {
-            id: children.length,
+            id: items.length,
             mock: true, // This will help getFilteredDirectoryContents to never exclude it in display
             props: {
               name: generateFileName(), // TODO: Generate file name!
@@ -198,7 +198,7 @@ export default {
           })
         } else if (this.operationType === 'createDir') {
           ret.splice(this.operationIndex + 2, 0, {
-            id: children.length,
+            id: items.length,
             mock: true, // This will help getFilteredDirectoryContents to never exclude it in display
             props: {
               name: 'New Directory', // TODO: Translate

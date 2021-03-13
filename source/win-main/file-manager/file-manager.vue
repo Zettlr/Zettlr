@@ -117,7 +117,7 @@ export default {
     selectedDirectory: function () {
       // If the directory just got de-selected and the fileList
       // is visible, switch to the directories.
-      if (this.selectedDirectory !== null && this.isFileListVisible === true) {
+      if (this.selectedDirectory === null && this.isFileListVisible === true) {
         this.toggleFileList()
       } else if (this.isFileListVisible === false) {
         // Otherwise make sure the fileList is visible (toggleFileList
