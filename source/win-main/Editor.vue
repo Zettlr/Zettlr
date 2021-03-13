@@ -159,7 +159,7 @@ export default {
       }
 
       if (this.activeFile === null) {
-        this.editor.swapDoc(CodeMirror.Doc('', 'multiplex'))
+        this.editor.swapDoc(CodeMirror.Doc('', 'multiplex'), 'multiplex')
         this.editor.readOnly = true
         this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
         return
@@ -172,7 +172,7 @@ export default {
         this.editor.setOptions({
           zettlr: { markdownImageBasePath: this.activeFile.dir }
         })
-        this.editor.swapDoc(doc.cmDoc)
+        this.editor.swapDoc(doc.cmDoc, doc.mode)
         this.activeDocument = doc
         this.editor.readOnly = false
         this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
@@ -185,6 +185,7 @@ export default {
             const mode = (this.activeFile.ext === '.tex') ? 'stex' : 'multiplex'
             const newDoc = {
               path: descriptorWithContent.path,
+              mode: mode, // Save the mode for later swaps
               cmDoc: CodeMirror.Doc(descriptorWithContent.content, mode),
               modified: false,
               lastWordCount: countWords(descriptorWithContent.content, false) // TODO: re-enable countChars
@@ -198,7 +199,7 @@ export default {
               this.editor.setOptions({
                 zettlr: { markdownImageBasePath: this.activeFile.dir }
               })
-              this.editor.swapDoc(newDoc.cmDoc)
+              this.editor.swapDoc(newDoc.cmDoc, newDoc.mode)
               this.activeDocument = newDoc
               this.editor.readOnly = false
               this.$store.commit('updateTableOfContents', this.editor.tableOfContents)

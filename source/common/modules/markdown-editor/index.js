@@ -84,11 +84,20 @@ module.exports = class MarkdownEditor extends EventEmitter {
     this._anchorElement = null
 
     /**
-     * Remembers the last mode while toggling the readability mode
+     * Should the editor contents be displayed using the readability mode?
      *
-     * @var {String|undefined}
+     * @var {boolean}
      */
-    this._lastMode = undefined
+    this._readabilityMode = false
+
+    /**
+     * Contains the document's current active mode because after switching to
+     * readability we can't retrieve that anymore, and if the user in between
+     * switched documents, that's just awful.
+     *
+     * @var {string|undefined}
+     */
+    this._currentDocumentMode = 'multiplex'
 
     /**
      * Holds the font size of the CodeMirror instance (in em)
@@ -372,20 +381,21 @@ module.exports = class MarkdownEditor extends EventEmitter {
   /**
    * Swaps the current CodeMirror Document with a new one
    *
-   * @param   {Doc}  cmDoc  The CodeMirror document instance
+   * @param   {Doc}     cmDoc         The CodeMirror document instance
+   * @param   {string}  documentMode  The mode to be associated with the editor
    *
-   * @return  {Doc}         The previous CodeMirror document instance
+   * @return  {Doc}                   The previous CodeMirror document instance
    */
-  swapDoc (cmDoc) {
-    let oldDoc = this._instance.swapDoc(cmDoc)
+  swapDoc (cmDoc, documentMode) {
+    const oldDoc = this._instance.swapDoc(cmDoc)
     this._instance.focus()
 
-    // Switch the mode, if we're coming from TeX to MD or vice versa.
-    const docMode = (typeof cmDoc.mode === 'string') ? cmDoc.mode : cmDoc.mode.name
-    const cmMode = (typeof this._cmOptions.mode === 'string') ? this._cmOptions['mode'] : this._cmOptions['mode'].name
+    this._currentDocumentMode = documentMode
 
-    if (docMode !== cmMode && !this.readabilityMode) {
-      this.setOptions({ 'mode': cmDoc.mode })
+    if (!this.readabilityMode) {
+      this.setOptions({ 'mode': this._currentDocumentMode })
+    } else {
+      this.setOptions({ 'mode': 'readability' })
     }
 
     return oldDoc
@@ -514,7 +524,7 @@ module.exports = class MarkdownEditor extends EventEmitter {
    * @return  {boolean}  True if the readability mode is active
    */
   get readabilityMode () {
-    return this._cmOptions.mode === 'readability'
+    return this._readabilityMode
   }
 
   /**
@@ -523,12 +533,14 @@ module.exports = class MarkdownEditor extends EventEmitter {
    * @param   {boolean}  shouldBeReadability  Whether or not the mode should be active
    */
   set readabilityMode (shouldBeReadability) {
-    if (this._cmOptions.mode === 'readability' && !shouldBeReadability) {
-      this.setOptions({ 'mode': this._lastMode })
-      this._lastMode = undefined
-    } else if (shouldBeReadability) {
-      this._lastMode = this._cmOptions.mode
+    if (shouldBeReadability && !this._readabilityMode) {
+      // Switch to readability
       this.setOptions({ 'mode': 'readability' })
+      this._readabilityMode = true
+    } else if (!shouldBeReadability && this._readabilityMode) {
+      // Switch off from readability
+      this.setOptions({ 'mode': this._currentDocumentMode })
+      this._readabilityMode = false
     }
   }
 
