@@ -214,7 +214,7 @@ export default {
      * Returns true if the file manager mode is set to "combined"
      */
     combined: function () {
-      return this.$store.state.fileManagerMode === 'combined'
+      return this.$store.state.config['fileManagerMode'] === 'combined'
     },
     /**
      * Returns true if there are children that can be displayed
@@ -277,13 +277,14 @@ export default {
       if (this.combined === false) {
         return false
       }
-      if (this.$store.state.searchResults.length < 1) {
-        return false
-      }
+      // if (this.$store.state.searchResults.length < 1) {
+      //   return false
+      // }
       if (this.obj.hash !== this.selectedDir) {
         return false
       }
-      return true
+      return false
+      // return true
     },
     displayResultsMessage: function () {
       return trans('gui.display_search_results')
