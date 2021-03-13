@@ -39,7 +39,7 @@ export default class Zettlr {
   _openPaths: any
   _fsal: FSAL
   ipc: ZettlrIPC
-  _commands: any
+  _commands: any[]
   private readonly _windowManager: WindowManager
   private readonly isShownFor: string[]
 
@@ -492,13 +492,13 @@ export default class Zettlr {
       // ELSE: If the command has not yet been found, try to run one of the
       // bigger commands
       let cmd = this._commands.find((elem: any) => elem.respondsTo(command))
-      if (cmd) {
+      if (cmd !== undefined) {
         // Return the return value of the command, if there is any
         try {
           return cmd.run(command, payload)
         } catch (e) {
           global.log.error('[Application] Error received while running command: ' + String(e.message), e)
-          return undefined
+          return false
         }
       } else {
         global.log.warning(`[Application] Received a request to run command ${command}, but it's not registered.`)
