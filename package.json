@@ -80,7 +80,8 @@
     "fsevents": "^2.3.2"
   },
   "resolutions": {
-    "**/electron-packager": "15.2.0"
+    "**/electron-packager": "15.2.0",
+    "**/node-abi": "^2.21.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.54",
