@@ -5,7 +5,7 @@
  *
  * @return  {any[]}             The ToC elements
  */
-export default function generateTableOfContents (mdString) {
+module.exports = function generateTableOfContents (mdString) {
   let toc = []
 
   let lines = mdString.split('\n')
