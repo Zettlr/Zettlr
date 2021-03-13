@@ -44,6 +44,7 @@ export default function createErrorModal (win: BrowserWindow, title: string, mes
     fullscreenable: false,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       additionalArguments: [ title, message, contents ]
     },
     backgroundColor: '#fff'

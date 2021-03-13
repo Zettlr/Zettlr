@@ -38,6 +38,7 @@ export default function createPasteImageModal (win: BrowserWindow, startPath: st
     fullscreenable: false,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       additionalArguments: [startPath]
     },
     backgroundColor: '#fff'

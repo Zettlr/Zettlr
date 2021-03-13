@@ -41,7 +41,8 @@ export default function createAboutWindow (conf: WindowPosition): BrowserWindow 
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false
     },
     backgroundColor: '#fff'
   }

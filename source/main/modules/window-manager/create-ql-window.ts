@@ -41,6 +41,7 @@ export default function createQuicklookWindow (file: MDFileDescriptor, conf: Win
     show: false,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
       additionalArguments: [file.hash.toString()]
     },
     backgroundColor: '#fff'

@@ -41,7 +41,8 @@ export default function createTagManagerWindow (conf: WindowPosition): BrowserWi
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false
     },
     backgroundColor: '#fff'
   }

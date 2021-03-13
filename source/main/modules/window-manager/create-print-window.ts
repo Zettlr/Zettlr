@@ -44,7 +44,8 @@ export default function createPrintWindow (file: string, conf: WindowPosition): 
       nodeIntegration: true,
       additionalArguments: [file],
       // We are loading an iFrame with a local resource, so we must disable webSecurity for this window
-      webSecurity: false
+      webSecurity: false,
+      contextIsolation: false
     },
     backgroundColor: '#fff'
   }

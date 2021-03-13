@@ -41,7 +41,8 @@ export default function createCustomCSSWindow (conf: WindowPosition): BrowserWin
     show: false,
     fullscreenable: false,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false
     },
     backgroundColor: '#fff'
   }

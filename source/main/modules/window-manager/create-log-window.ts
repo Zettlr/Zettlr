@@ -39,7 +39,8 @@ export default function createLogWindow (conf: WindowPosition): BrowserWindow {
     y: conf.top,
     show: false,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false
     },
     backgroundColor: '#fff'
   }
