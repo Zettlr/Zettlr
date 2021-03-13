@@ -46,11 +46,11 @@ export default class SaveFile extends ZettlrCommand {
       global.stats.increaseWordCount(file.offsetWordCount)
 
       global.log.info(`File ${realFile.name} saved.`)
+      return true
     } catch (e) {
       global.log.error(`Error saving file: ${e.message as string}`, e)
+      return false
     }
-
-    return true
   }
 }
 

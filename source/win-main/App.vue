@@ -175,13 +175,6 @@ export default {
           type: 'spacer'
         },
         {
-          type: 'search',
-          placeholder: 'Find …'
-        },
-        {
-          type: 'spacer'
-        },
-        {
           type: 'button',
           class: 'share',
           id: 'export',
@@ -211,12 +204,6 @@ export default {
           id: 'toc',
           title: 'toolbar.show_toc',
           icon: 'indented-view-list'
-        },
-        {
-          type: 'button',
-          id: 'file-find',
-          title: 'toolbar.find',
-          icon: 'search'
         },
         {
           type: 'toggle',

@@ -1,5 +1,42 @@
 <template>
   <div id="editor" ref="editor" v-bind:style="{ 'font-size': `${fontSize}px` }">
+    <div v-if="showSearch" id="editor-search">
+      <div class="row">
+        <input
+          ref="search-input"
+          v-model="query"
+          type="text"
+          placeholder="Find"
+          v-bind:class="{'monospace': regexpSearch }"
+          v-on:keypress.enter="searchNext()"
+        >
+        <button
+          v-bind:class="{ 'active': regexpSearch }"
+          v-on:click="toggleQueryRegexp()"
+        >
+          <clr-icon shape="regexp"></clr-icon>
+        </button>
+        <button v-on:click="showSearch = false">
+          <clr-icon shape="times"></clr-icon>
+        </button>
+      </div>
+      <div class="row">
+        <input
+          v-model="replaceString"
+          type="text"
+          placeholder="Replace"
+          v-bind:class="{'monospace': regexpSearch }"
+          v-on:keypress.enter.exact="replaceNext()"
+          v-on:keypress.alt.enter.exact="replaceAll()"
+        >
+        <button v-on:click="replaceNext()">
+          <clr-icon shape="two-way-arrows"></clr-icon>
+        </button>
+        <button v-on:click="replaceAll()">
+          <clr-icon shape="step-forward-2"></clr-icon>
+        </button>
+      </div>
+    </div>
     <textarea id="cm-text" ref="textarea" style="display:none;"></textarea>
   </div>
 </template>
@@ -13,11 +50,9 @@ import CodeMirror from 'codemirror'
 
 export default {
   name: 'Editor',
+  components: {
+  },
   props: {
-    query: {
-      type: String,
-      default: ''
-    },
     readabilityMode: {
       type: Boolean,
       default: false
@@ -28,8 +63,16 @@ export default {
       editor: null,
       openDocuments: [], // Contains all loaded documents if applicable
       currentlyFetchingFiles: [], // Contains the paths of files that are right now being fetched
+      // Should we perform a regexp search?
+      regexpSearch: false,
+      showSearch: false, // Set to true to show the search box
       searchCursor: null,
       currentLocalSearch: '',
+      lastSearchResult: false, // Holds the last search result
+      query: '', // Models the search value
+      replaceString: '', // Models the replace string
+      findTimeout: undefined, // Holds a timeout so that not every single keypress results in a searchNext
+      // END: Search options
       scrollbarAnnotations: null,
       activeDocument: null // Almost like activeFile, only with additional info
     }
@@ -133,6 +176,7 @@ export default {
         this.activeDocument = doc
         this.editor.readOnly = false
         this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
+        this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
       } else if (this.currentlyFetchingFiles.includes(this.activeFile.path) === false) {
         // We have to request the document beforehand
         this.currentlyFetchingFiles.push(this.activeFile.path)
@@ -158,6 +202,7 @@ export default {
               this.activeDocument = newDoc
               this.editor.readOnly = false
               this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
+              this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
             }
           })
           .catch(e => console.error(e))
@@ -176,8 +221,41 @@ export default {
       }
     },
     query: function () {
+      // Make sure to switch the regexp search depending on the search input
+      const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(this.query)
+      if (isRegexp && this.regexpSearch === false) {
+        this.regexpSearch = true
+      } else if (!isRegexp && this.regexpSearch === true) {
+        this.regexpSearch = false
+      }
+
       // Begin a search
-      this.searchNext()
+      if (this.findTimeout !== undefined) {
+        clearTimeout(this.findTimeout)
+      }
+
+      if (this.regexpSearch === true) {
+        // Don't automatically start a search b/c certain expressions will crash
+        // the process (such as searching for /.*/ in a large document)
+        return
+      }
+
+      this.findTimeout = setTimeout(() => {
+        this.searchNext()
+      }, 1000)
+    },
+    showSearch: function (newValue, oldValue) {
+      if (newValue === true && oldValue === false) {
+        // The user activated search, so focus the input and run a search (if
+        // the query wasnt' empty)
+        this.$nextTick(() => {
+          this.$refs['search-input'].focus()
+          this.searchNext()
+        })
+      } else if (newValue === false && oldValue === true) {
+        // Unmark all search results
+        this.unmarkResults()
+      }
     }
   },
   mounted: function () {
@@ -219,6 +297,8 @@ export default {
         this.editor.pasteAsPlainText()
       } else if (shortcut === 'toggle-typewriter-mode') {
         this.editor.hasTypewriterMode = this.editor.hasTypewriterMode === false
+      } else if (shortcut === 'search') {
+        this.showSearch = this.showSearch === false
       }
     })
 
@@ -245,14 +325,36 @@ export default {
 
       this.activeDocument.lastWordCount = currentWordCount
 
-      // TODO: Switch to handle/invoke to only mark it as clean if there was no error
-      ipcRenderer.send('message', { command: 'file-save', content: descriptor })
-
-      this.activeDocument.cmDoc.markClean()
-      this.$store.commit('announceModifiedFile', {
-        filePath: this.activeDocument.path,
-        isClean: this.activeDocument.cmDoc.isClean()
+      ipcRenderer.invoke('application', {
+        command: 'file-save',
+        payload: descriptor
       })
+        .then((result) => {
+          if (result !== true) {
+            console.error('Retrieved a falsy result from main, indicating an error with saving the file.')
+            return
+          }
+
+          // Everything worked out, so clean up
+          this.activeDocument.cmDoc.markClean()
+          this.$store.commit('announceModifiedFile', {
+            filePath: this.activeDocument.path,
+            isClean: this.activeDocument.cmDoc.isClean()
+          })
+        })
+        .catch((err) => { console.error(err) })
+    },
+    toggleQueryRegexp () {
+      const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(this.query.trim())
+
+      if (isRegexp) {
+        const match = /^\/(.+)\/[gimy]{0,4}$/.exec(this.query.trim())
+        if (match !== null) {
+          this.query = match[1]
+        }
+      } else {
+        this.query = `/${this.query}/`
+      }
     },
     searchNext () {
       if (this.query.trim() === '') {
@@ -261,18 +363,75 @@ export default {
         return
       }
 
-      if (this.searchCursor === null || this.currentLocalSearch !== this.query.trim()) {
+      let currentTerm = this.query.trim()
+      const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(currentTerm)
+      if (this.regexpSearch === true && !isRegexp) {
+        // Make sure it looks like a regular expression
+        currentTerm = `/${currentTerm}/`
+      }
+
+      if (this.searchCursor === null || this.currentLocalSearch !== currentTerm) {
         // (Re)start search in case there was none or the term has changed
         this.startSearch()
-      } else if (this.searchCursor.findNext() === true) {
-        this.editor.codeMirror.setSelection(this.searchCursor.from(), this.searchCursor.to())
-      } else {
-        // Start from beginning
-        this.searchCursor = this.editor.codeMirror.getSearchCursor(makeSearchRegEx(this.query), { 'line': 0, 'ch': 0 })
-        if (this.searchCursor.findNext() === true) {
+      } else if (this.searchCursor !== null) {
+        this.lastSearchResult = this.searchCursor.findNext()
+        if (this.lastSearchResult !== false) {
+          // Another match
           this.editor.codeMirror.setSelection(this.searchCursor.from(), this.searchCursor.to())
+        } else {
+          // Start from beginning
+          const regex = makeSearchRegEx(this.currentLocalSearch)
+          this.searchCursor = this.editor.codeMirror.getSearchCursor(regex, { 'line': 0, 'ch': 0 })
+          this.searchNext()
         }
       }
+    },
+    replaceNext () {
+      if (this.searchCursor === null) {
+        return
+      }
+
+      // First we need to check whether or not there have been capturing groups
+      // within the search result. If so, replace each variable with one of the
+      // matched groups from the last found search result. Do this globally for
+      // multiple occurrences.
+      let replacement = this.replaceString
+      for (let i = 1; i < this.lastSearchResult.length; i++) {
+        replacement = replacement.replace(new RegExp('\\$' + i, 'g'), this.lastSearchResult[i])
+      }
+
+      this.searchCursor.replace(replacement)
+      return this.searchNext()
+    },
+    replaceAll () {
+      let searchWhat = this.query.trim()
+      let replaceWhat = this.replaceString
+      // First select all matches
+      let ranges = []
+      let replacements = []
+      let res
+      const regex = makeSearchRegEx(searchWhat)
+      let cur = this.editor.codeMirror.getSearchCursor(regex, { 'line': 0, 'ch': 0 })
+      while ((res = cur.findNext()) !== false) {
+        // First push the match to the ranges to be replaced
+        ranges.push({ 'anchor': cur.from(), 'head': cur.to() })
+        // Also make sure to replace variables in the replaceWhat, if applicable
+        if (res.length < 2) {
+          replacements.push(replaceWhat)
+        } else {
+          let repl = replaceWhat
+          for (let i = 1; i < res.length; i++) {
+            repl = repl.replace(new RegExp('\\$' + i, 'g'), res[i])
+          }
+          replacements.push(repl)
+        }
+      }
+
+      // Aaaand do it
+      this.editor.codeMirror.setSelections(ranges, 0)
+      this.editor.codeMirror.replaceSelections(replacements)
+
+      this.unmarkResults() // Nothing to show afterwards.
     },
 
     /**
@@ -281,9 +440,9 @@ export default {
       */
     startSearch () {
       // Create a new search cursor
-      this.currentLocalSearch = this.query
+      this.currentLocalSearch = this.query.trim()
       const cursor = this.editor.codeMirror.getCursor()
-      let regex = makeSearchRegEx(this.currentLocalSearch)
+      const regex = makeSearchRegEx(this.currentLocalSearch)
       this.searchCursor = this.editor.codeMirror.getSearchCursor(regex, cursor)
 
       // Find all matches
@@ -378,9 +537,29 @@ export default {
 
 #editor {
   width: 100%;
-  height: 97%;
+  height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+
+  div#editor-search {
+    position: absolute;
+    width: 300px;
+    right: 0;
+    z-index: 7; // One less and the scrollbar will on top of the input field
+    padding: 5px 10px;
+
+    div.row { display: flex; }
+
+    input {
+      flex: 3;
+      &.monospace { font-family: monospace; }
+    }
+
+    button {
+      flex: 1;
+      max-width: 24px;
+    }
+  }
 
   &.fullscreen {
     left: 0%; padding-left: 0px;
@@ -431,6 +610,26 @@ export default {
 body.darwin #editor {
   // On macOS the tabbar is 30px high.
   height: calc(100% - 30px);
+
+  div#editor-search {
+    background-color: rgba(230, 230, 230, 1);
+    border-bottom-left-radius: 6px;
+    padding: 6px;
+
+    input[type="text"], button {
+      border-radius: 0;
+      margin: 0;
+    }
+
+    button:hover { background-color: rgb(240, 240, 240); }
+    button.active { background-color: rgb(200, 200, 200) }
+  }
+}
+
+body.darwin.dark #editor {
+  div#editor-search {
+    background-color: rgba(60, 60, 60, 1);
+  }
 }
 
 // CodeMirror fullscreen
