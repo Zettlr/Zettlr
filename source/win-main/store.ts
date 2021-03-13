@@ -336,12 +336,22 @@ const config: StoreOptions<ZettlrState> = {
       const attachment = isAttachment(descriptor.path)
       const ownDescriptor = findPathDescriptor(descriptor.path, state.fileTree, attachment)
 
+      const protectedKeys = [ 'parent', 'children', 'attachments' ]
+
       for (const key of Object.keys(descriptor)) {
-        if (key === 'parent') {
-          continue // Don't overwrite the circularity
+        if (protectedKeys.includes(key)) {
+          continue // Don't overwrite protected keys which would result in dangling descriptors
         }
 
         ownDescriptor[key] = descriptor[key]
+      }
+
+      // Now we have to check if we had a directory. If so, we can know for sure
+      // that the name did not change (because that would've resulted in a
+      // removal and one addition) but rather something else, so we need to make
+      // sure to simply re-sort it in case the sorting has changed.
+      if (ownDescriptor.type === 'directory') {
+        ownDescriptor.children = sort(ownDescriptor.children, ownDescriptor.sorting)
       }
     },
     lastFiletreeUpdate: function (state, payload) {
