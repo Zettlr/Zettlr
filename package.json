@@ -127,7 +127,7 @@
     "less": "^4.1.1",
     "less-loader": "^7.3.0",
     "lorem-ipsum": "^2.0.3",
-    "mocha": "^8.3.1",
+    "mocha": "^8.3.2",
     "node-loader": "^1.0.2",
     "raw-loader": "^4.0.2",
     "reveal.js": "^4.1.0",
