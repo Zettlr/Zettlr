@@ -149,12 +149,6 @@ export default {
         },
         {
           type: 'button',
-          id: 'file-new',
-          title: 'toolbar.file_new',
-          icon: 'file'
-        },
-        {
-          type: 'button',
           id: 'show-stats',
           title: 'toolbar.stats',
           icon: 'line-chart'
@@ -183,27 +177,81 @@ export default {
         },
         {
           type: 'button',
-          id: 'file-rename',
-          title: 'toolbar.file_rename',
-          icon: 'pencil'
+          id: 'bold',
+          title: 'gui.formatting.bold',
+          icon: 'bold'
         },
         {
           type: 'button',
-          id: 'file-delete',
-          title: 'toolbar.file_delete',
-          icon: 'trash'
+          id: 'italic',
+          title: 'gui.formatting.italic',
+          icon: 'italic'
         },
         {
           type: 'button',
-          id: 'formatting',
-          title: 'toolbar.formatting',
-          icon: 'text'
+          id: 'code',
+          title: 'gui.formatting.code',
+          icon: 'code-alt'
         },
         {
           type: 'button',
-          id: 'toc',
-          title: 'toolbar.show_toc',
-          icon: 'indented-view-list'
+          id: 'comment',
+          title: 'gui.formatting.comment',
+          icon: 'code'
+        },
+        {
+          type: 'button',
+          id: 'link',
+          title: 'gui.formatting.link',
+          icon: 'link'
+        },
+        {
+          type: 'button',
+          id: 'image',
+          title: 'gui.formatting.image',
+          icon: 'image'
+        },
+        {
+          type: 'button',
+          id: 'blockquote',
+          title: 'gui.formatting.blockquote',
+          icon: 'block-quote'
+        },
+        {
+          type: 'button',
+          id: 'ol',
+          title: 'gui.formatting.ol',
+          icon: 'number-list'
+        },
+        {
+          type: 'button',
+          id: 'ul',
+          title: 'gui.formatting.ul',
+          icon: 'bullet-list'
+        },
+        {
+          type: 'button',
+          id: 'tasklist',
+          title: 'gui.formatting.tasklist',
+          icon: 'checkbox-list'
+        },
+        {
+          type: 'button',
+          id: 'table',
+          title: 'gui.formatting.insert_table',
+          icon: 'table'
+        },
+        {
+          type: 'button',
+          id: 'divider',
+          title: 'gui.formatting.divider',
+          icon: 'minus'
+        },
+        {
+          type: 'button',
+          id: 'footnote',
+          title: 'gui.formatting.footnote',
+          icon: 'footnote'
         },
         {
           type: 'toggle',
