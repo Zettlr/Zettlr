@@ -493,8 +493,10 @@ export default class FSAL extends EventEmitter {
    * @param {Object} file The file descriptor
    */
   public openFile (file: MDFileDescriptor|CodeFileDescriptor): boolean {
-    if (this._state.openFiles.includes(file)) return false
-    if (file.type !== 'file') return false
+    if (this._state.openFiles.includes(file)) {
+      return false
+    }
+
     this._state.openFiles.push(file)
     this.emit('fsal-state-changed', 'openFiles')
     return true
