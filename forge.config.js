@@ -74,38 +74,38 @@ module.exports = {
               name: 'main_window'
             },
             {
-              html: './source/print/index.htm',
-              js: './source/print/index.ts',
+              html: './source/win-print/index.htm',
+              js: './source/win-print/index.ts',
               name: 'print'
             },
             {
-              html: './source/log-viewer/index.htm',
-              js: './source/log-viewer/index.ts',
+              html: './source/win-log-viewer/index.htm',
+              js: './source/win-log-viewer/index.ts',
               name: 'log_viewer'
             },
             {
-              html: './source/quicklook/index.htm',
-              js: './source/quicklook/index.ts',
+              html: './source/win-quicklook/index.htm',
+              js: './source/win-quicklook/index.ts',
               name: 'quicklook'
             },
             {
-              html: './source/preferences/index.htm',
-              js: './source/preferences/index.ts',
+              html: './source/win-preferences/index.htm',
+              js: './source/win-preferences/index.ts',
               name: 'preferences'
             },
             {
-              html: './source/custom-css/index.htm',
-              js: './source/custom-css/index.ts',
+              html: './source/win-custom-css/index.htm',
+              js: './source/win-custom-css/index.ts',
               name: 'custom_css'
             },
             {
-              html: './source/tag-manager/index.htm',
-              js: './source/tag-manager/index.ts',
+              html: './source/win-tag-manager/index.htm',
+              js: './source/win-tag-manager/index.ts',
               name: 'tag_manager'
             },
             {
-              html: './source/paste-image/index.htm',
-              js: './source/paste-image/index.ts',
+              html: './source/win-paste-image/index.htm',
+              js: './source/win-paste-image/index.ts',
               name: 'paste_image'
             },
             {
