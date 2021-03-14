@@ -414,8 +414,8 @@ export default {
             })
           }
 
-          const shouldStart = this.pomodoro.intervalHandle === undefined && data.isRunning
-          const shouldStop = this.pomodoro.intervalHandle !== undefined && !data.isRunning
+          const shouldStart = this.pomodoro.intervalHandle === undefined && data.isRunning === true
+          const shouldStop = this.pomodoro.intervalHandle !== undefined && data.isRunning === false
 
           if (shouldStart) {
             this.pomodoro.soundEffect.pause()
