@@ -357,6 +357,11 @@ export default {
         this.query = `/${this.query}/`
       }
     },
+    executeCommand (cmd) {
+      // Executes a markdown command on the editor instance
+      this.editor.runCommand(cmd)
+      this.editor.focus()
+    },
     searchNext () {
       if (this.query.trim() === '') {
         // Stop search if the field is empty

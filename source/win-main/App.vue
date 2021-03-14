@@ -19,7 +19,10 @@
       </template>
       <template #view2>
         <Tabs></Tabs>
-        <Editor v-bind:readability-mode="readabilityActive"></Editor>
+        <Editor
+          ref="editor"
+          v-bind:readability-mode="readabilityActive"
+        ></Editor>
       </template>
     </SplitView>
     <Sidebar v-bind:show-sidebar="sidebarVisible"></Sidebar>
@@ -176,88 +179,86 @@ export default {
           icon: 'export'
         },
         {
+          type: 'toggle',
+          id: 'toggle-readability',
+          title: 'toolbar.readability',
+          icon: 'eye'
+        },
+        {
+          type: 'spacer',
+          size: '1x'
+        },
+        {
           type: 'button',
-          id: 'bold',
+          id: 'markdownBold',
           title: 'gui.formatting.bold',
           icon: 'bold'
         },
         {
           type: 'button',
-          id: 'italic',
+          id: 'markdownItalic',
           title: 'gui.formatting.italic',
           icon: 'italic'
         },
         {
           type: 'button',
-          id: 'code',
+          id: 'markdownCode',
           title: 'gui.formatting.code',
           icon: 'code-alt'
         },
         {
           type: 'button',
-          id: 'comment',
+          id: 'markdownComment',
           title: 'gui.formatting.comment',
           icon: 'code'
         },
         {
           type: 'button',
-          id: 'link',
+          id: 'markdownLink',
           title: 'gui.formatting.link',
           icon: 'link'
         },
         {
           type: 'button',
-          id: 'image',
+          id: 'markdownImage',
           title: 'gui.formatting.image',
           icon: 'image'
         },
         {
           type: 'button',
-          id: 'blockquote',
+          id: 'markdownBlockquote',
           title: 'gui.formatting.blockquote',
           icon: 'block-quote'
         },
         {
           type: 'button',
-          id: 'ol',
+          id: 'markdownMakeOrderedList',
           title: 'gui.formatting.ol',
           icon: 'number-list'
         },
         {
           type: 'button',
-          id: 'ul',
+          id: 'markdownMakeUnorderedList',
           title: 'gui.formatting.ul',
           icon: 'bullet-list'
         },
         {
           type: 'button',
-          id: 'tasklist',
+          id: 'markdownMakeTaskList',
           title: 'gui.formatting.tasklist',
           icon: 'checkbox-list'
         },
         {
           type: 'button',
-          id: 'table',
+          id: 'markdownInsertTable',
           title: 'gui.formatting.insert_table',
           icon: 'table'
         },
         {
           type: 'button',
-          id: 'divider',
-          title: 'gui.formatting.divider',
-          icon: 'minus'
-        },
-        {
-          type: 'button',
-          id: 'footnote',
+          id: 'insertFootnote',
           title: 'gui.formatting.footnote',
           icon: 'footnote'
-        },
-        {
-          type: 'toggle',
-          id: 'toggle-readability',
-          title: 'toolbar.readability',
-          icon: 'eye'
         },
         {
           type: 'spacer'
@@ -429,6 +430,9 @@ export default {
             this.$closePopover()
           }
         })
+      } else if (clickedID.startsWith('markdown') && clickedID.length > 8) {
+        // The user clicked a command button, so we just have to run that.
+        this.$refs['editor'].executeCommand(clickedID)
       }
     },
     startPomodoro: function () {
