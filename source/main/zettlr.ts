@@ -490,6 +490,10 @@ export default class Zettlr {
       return true
     } else if (command === 'open-quicklook') {
       this.openQL(payload)
+      return true
+    } else if (command === 'open-stats-window') {
+      this._windowManager.showStatsWindow()
+      return true
     } else {
       // ELSE: If the command has not yet been found, try to run one of the
       // bigger commands

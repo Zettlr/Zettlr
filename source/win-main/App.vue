@@ -370,7 +370,10 @@ export default {
 
           this.$showPopover(PopoverStats, document.getElementById('toolbar-show-stats'), data, (data) => {
             if (data.showMoreStats === true) {
-              console.log('Should display stats window')
+              ipcRenderer.invoke('application', {
+                command: 'open-stats-window'
+              })
+                .catch(err => console.error(err))
             }
             this.$closePopover()
           })

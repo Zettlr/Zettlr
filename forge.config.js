@@ -117,6 +117,11 @@ module.exports = {
               html: './source/win-about/index.htm',
               js: './source/win-about/index.ts',
               name: 'about'
+            },
+            {
+              html: './source/win-stats/index.htm',
+              js: './source/win-stats/index.ts',
+              name: 'stats'
             }
           ]
         }

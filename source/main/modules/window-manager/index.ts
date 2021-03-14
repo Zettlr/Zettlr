@@ -32,6 +32,7 @@ import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from '../fsal/typ
 import createMainWindow from './create-main-window'
 import createPrintWindow from './create-print-window'
 import createLogWindow from './create-log-window'
+import createStatsWindow from './create-stats-window'
 import createQuicklookWindow from './create-ql-window'
 import createPreferencesWindow from './create-preferences-window'
 import createCustomCSSWindow from './create-custom-css-window'
@@ -58,6 +59,7 @@ export default class WindowManager {
   private readonly _qlWindows: QuicklookRecord[]
   private _printWindow: BrowserWindow|null
   private _logWindow: BrowserWindow|null
+  private _statsWindow: BrowserWindow|null
   private _preferences: BrowserWindow|null
   private _customCSS: BrowserWindow|null
   private _aboutWindow: BrowserWindow|null
@@ -83,6 +85,7 @@ export default class WindowManager {
     this._errorModal = null
     this._printWindowFile = undefined
     this._logWindow = null
+    this._statsWindow = null
     this._windowState = []
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
@@ -532,6 +535,23 @@ export default class WindowManager {
       })
     } else {
       this._makeVisible(this._logWindow)
+    }
+  }
+
+  /**
+   * Shows the statistics window
+   */
+  showStatsWindow (): void {
+    if (this._statsWindow === null) {
+      const conf = this._retrieveWindowPosition('stats', null)
+      this._statsWindow = createStatsWindow(conf)
+      this._hookWindowResize(this._statsWindow, conf)
+
+      this._statsWindow.on('closed', () => {
+        this._statsWindow = null
+      })
+    } else {
+      this._makeVisible(this._statsWindow)
     }
   }
 
