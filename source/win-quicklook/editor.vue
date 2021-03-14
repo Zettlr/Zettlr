@@ -119,7 +119,7 @@ export default {
       })
 
       const mode = (this.ext === '.tex') ? 'stex' : 'multiplex'
-      this.editor.swapDoc(CodeMirror.Doc(this.content, mode))
+      this.editor.swapDoc(CodeMirror.Doc(this.content, mode), mode)
     },
     query: function () {
       // Begin a search
@@ -291,3 +291,12 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+body #editor {
+  .CodeMirror {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    height: 100%;
+  }
+}
+</style>
