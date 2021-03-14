@@ -25,6 +25,7 @@
         v-if="showToolbar"
         v-bind:margin-top="toolbarMargin"
         v-bind:controls="toolbarControls"
+        v-bind:show-labels="toolbarLabels"
         v-on:search="$emit('toolbar-search', $event)"
         v-on:toggle="$emit('toolbar-toggle', $event)"
         v-on:click="$emit('toolbar-click', $event)"
@@ -135,6 +136,11 @@ export default {
     },
     // Show the toolbar?
     showToolbar: {
+      type: Boolean,
+      default: false
+    },
+    // Show labels under the toolbar icons?
+    toolbarLabels: {
       type: Boolean,
       default: false
     },

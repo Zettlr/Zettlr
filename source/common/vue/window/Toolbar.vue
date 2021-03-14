@@ -9,18 +9,21 @@
         v-if="item.type === 'button'"
         v-bind:key="idx"
         v-bind:control="item"
+        v-bind:show-label="showLabels"
         v-on:click="$emit('click', item.id)"
       ></ButtonControl>
       <ToggleControl
         v-if="item.type === 'toggle'"
         v-bind:key="idx"
         v-bind:control="item"
+        v-bind:show-label="showLabels"
         v-on:toggle="$emit('toggle', item.id)"
       ></ToggleControl>
       <RingControl
         v-if="item.type === 'ring'"
         v-bind:key="idx"
         v-bind:control="item"
+        v-bind:show-label="showLabels"
         v-bind:progress-percent="item.progressPercent"
         v-on:click="$emit('click', item.id)"
       ></RingControl>
@@ -28,6 +31,7 @@
         v-if="item.type === 'search'"
         v-bind:key="idx"
         v-bind:control="item"
+        v-bind:show-label="showLabels"
         v-on:input="$emit('search', $event)"
       ></SearchControl>
       <SpacerControl
@@ -70,6 +74,10 @@ export default {
     controls: {
       type: Array,
       default: function () { return [] }
+    },
+    showLabels: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -96,6 +104,16 @@ body div#toolbar {
     .size-1x { flex-grow: 1; }
     .size-3x { flex-grow: 3; }
     .size-5x { flex-grow: 5; }
+  }
+
+  div.toolbar-group {
+    text-align: center;
+
+    span.toolbar-label {
+      display: block;
+      font-size: 10px;
+      text-align: center;
+    }
   }
 }
 

@@ -4,6 +4,7 @@
     v-bind:titlebar="false"
     v-bind:menubar="true"
     v-bind:show-toolbar="true"
+    v-bind:toolbar-labels="false"
     v-bind:toolbar-controls="toolbarControls"
     v-on:toolbar-toggle="handleClick($event)"
     v-on:toolbar-click="handleClick($event)"
@@ -147,25 +148,25 @@ export default {
         {
           type: 'button',
           id: 'open-workspace',
-          title: 'menu.open_workspace',
+          title: trans('menu.open_workspace'),
           icon: 'folder-open'
         },
         {
           type: 'button',
           id: 'show-stats',
-          title: 'toolbar.stats',
+          title: trans('toolbar.stats'),
           icon: 'line-chart'
         },
         {
           type: 'button',
           id: 'show-tag-cloud',
-          title: 'toolbar.tag_cloud',
+          title: trans('toolbar.tag_cloud'),
           icon: 'tags'
         },
         {
           type: 'button',
           id: 'open-preferences',
-          title: 'toolbar.preferences',
+          title: trans('toolbar.preferences'),
           icon: 'cog'
         },
         {
@@ -175,13 +176,13 @@ export default {
           type: 'button',
           class: 'share',
           id: 'export',
-          title: 'toolbar.share',
+          title: 'Export', // title: trans('toolbar.share'),
           icon: 'export'
         },
         {
           type: 'toggle',
           id: 'toggle-readability',
-          title: 'toolbar.readability',
+          title: trans('toolbar.readability'),
           icon: 'eye'
         },
         {
@@ -191,73 +192,73 @@ export default {
         {
           type: 'button',
           id: 'markdownBold',
-          title: 'gui.formatting.bold',
+          title: trans('gui.formatting.bold'),
           icon: 'bold'
         },
         {
           type: 'button',
           id: 'markdownItalic',
-          title: 'gui.formatting.italic',
+          title: trans('gui.formatting.italic'),
           icon: 'italic'
         },
         {
           type: 'button',
           id: 'markdownCode',
-          title: 'gui.formatting.code',
+          title: trans('gui.formatting.code'),
           icon: 'code-alt'
         },
         {
           type: 'button',
           id: 'markdownComment',
-          title: 'gui.formatting.comment',
+          title: trans('gui.formatting.comment'),
           icon: 'code'
         },
         {
           type: 'button',
           id: 'markdownLink',
-          title: 'gui.formatting.link',
+          title: trans('gui.formatting.link'),
           icon: 'link'
         },
         {
           type: 'button',
           id: 'markdownImage',
-          title: 'gui.formatting.image',
+          title: trans('gui.formatting.image'),
           icon: 'image'
         },
         {
           type: 'button',
           id: 'markdownBlockquote',
-          title: 'gui.formatting.blockquote',
+          title: trans('gui.formatting.blockquote'),
           icon: 'block-quote'
         },
         {
           type: 'button',
           id: 'markdownMakeOrderedList',
-          title: 'gui.formatting.ol',
+          title: trans('gui.formatting.ol'),
           icon: 'number-list'
         },
         {
           type: 'button',
           id: 'markdownMakeUnorderedList',
-          title: 'gui.formatting.ul',
+          title: trans('gui.formatting.ul'),
           icon: 'bullet-list'
         },
         {
           type: 'button',
           id: 'markdownMakeTaskList',
-          title: 'gui.formatting.tasklist',
+          title: trans('gui.formatting.tasklist'),
           icon: 'checkbox-list'
         },
         {
           type: 'button',
           id: 'markdownInsertTable',
-          title: 'gui.formatting.insert_table',
+          title: trans('gui.formatting.insert_table'),
           icon: 'table'
         },
         {
           type: 'button',
           id: 'insertFootnote',
-          title: 'gui.formatting.footnote',
+          title: trans('gui.formatting.footnote'),
           icon: 'footnote'
         },
         {
@@ -271,7 +272,7 @@ export default {
         {
           type: 'ring',
           id: 'pomodoro',
-          title: 'toolbar.pomodoro',
+          title: trans('toolbar.pomodoro'),
           // Good morning, we are verbose here
           progressPercent: this.pomodoro.phase.elapsed / this.pomodoro.durations[this.pomodoro.phase.type] * 100,
           colour: this.pomodoro.colour[this.pomodoro.phase.type]
