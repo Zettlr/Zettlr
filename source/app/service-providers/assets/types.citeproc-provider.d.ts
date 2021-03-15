@@ -35,4 +35,20 @@ interface CiteprocProvider {
    * @return  {string|undefined}      Either the path to the attachment, or undefined.
    */
   getBibTexAttachments: (id: string) => string|undefined
+  /**
+   * Loads the given database (if it's not yet loaded) and selects it as the
+   * active database. This will ensure appropriate events are being emitted so
+   * that, e.g., the main window will be notified of it. Once this function
+   * resolves, you can cite using this database.
+   *
+   * @param   {string}         database  The database to load and select
+   *
+   * @return  {Promise<void>}            The function resolves after the database has been loaded.
+   */
+  loadAndSelect: (database: string) => Promise<void>
+  /**
+   * Selects the main database to cite from. This is useful when switching to
+   * a file that does not define its own database.
+   */
+  loadMainDatabase: () => void
 }

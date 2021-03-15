@@ -553,12 +553,35 @@ export default class FSAL extends EventEmitter {
   public set activeFile (descriptorPath: string|null) {
     if (descriptorPath === null && this._state.activeFile !== null) {
       this._state.activeFile = null
+      global.citeproc.loadMainDatabase()
       this.emit('fsal-state-changed', 'activeFile')
     } else if (descriptorPath !== null && descriptorPath !== this.activeFile) {
       let file = this.findFile(descriptorPath)
       if (file !== null && this._state.openFiles.includes(file)) {
-        this._state.activeFile = file
-        this.emit('fsal-state-changed', 'activeFile')
+        // Make sure the main database is set before, and only load an optional
+        // bibliography file afterwards.
+        global.citeproc.loadMainDatabase()
+        // Make sure before selecting the file to load a potential file-specific
+        // database. This can be defined (as for Pandoc) either directly in the
+        // frontmatter OR in the metadata.
+        if (file.type === 'file' && file.frontmatter !== null && 'bibliography' in file.frontmatter) {
+          let dbFile: string = file.frontmatter.bibliography
+          if (!path.isAbsolute(dbFile)) {
+            // Convert to absolute path if necessary
+            dbFile = path.resolve(file.dir, dbFile)
+          }
+          // We have a bibliography
+          global.citeproc.loadAndSelect(dbFile)
+            .finally(() => {
+              // No matter what, we need to make the file active
+              this._state.activeFile = file
+              this.emit('fsal-state-changed', 'activeFile')
+            })
+            .catch(err => global.log.error(`[FSAL] Could not load file-specific database ${dbFile}`, err))
+        } else {
+          this._state.activeFile = file
+          this.emit('fsal-state-changed', 'activeFile')
+        }
       } else {
         console.error('Could not set active file. Either file was null or not in openFiles')
       }
@@ -990,6 +1013,19 @@ export default class FSAL extends EventEmitter {
     // Notify that a file has saved, which strictly speaking does not
     // modify the openFiles array, but does change the modification flag.
     this.emit('fsal-state-changed', 'fileSaved', { fileHash: src.hash })
+
+    // Also, make sure to (re)load the file's bibliography file, if applicable.
+    if (src.type === 'file' && src.frontmatter !== null && 'bibliography' in src.frontmatter) {
+      let dbFile: string = src.frontmatter.bibliography
+      if (!path.isAbsolute(dbFile)) {
+        // Convert to absolute path if necessary
+        dbFile = path.resolve(src.dir, dbFile)
+      }
+      // We have a bibliography
+      global.citeproc.loadAndSelect(dbFile)
+        .catch(err => global.log.error(`[FSAL] Could not load file-specific database ${dbFile}`, err))
+    }
+
     this._fsalIsBusy = false
     this._afterRemoteChange()
   }

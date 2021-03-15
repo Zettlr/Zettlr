@@ -176,6 +176,23 @@ export default class CiteprocProvider {
       },
       getBibTexAttachments: (id: string) => {
         return this._databases[this._databaseIdx].bibtexAttachments[id]
+      },
+      loadAndSelect: async (database: string) => {
+        let db = this._databases.find((db) => db.path === database)
+
+        if (db === undefined) {
+          db = await this._loadDatabase(database)
+        }
+
+        this._selectDatabase(db.path)
+      },
+      loadMainDatabase: () => {
+        // Make sure we deselect the current one, in case there is no main library
+        // defined so that the library will be effectively empty afterwards.
+        this._deselectDatabase()
+        if (this._databases.find((db) => db.path === this._mainLibrary) !== undefined) {
+          this._selectDatabase(this._mainLibrary)
+        }
       }
     }
 
@@ -336,12 +353,7 @@ export default class CiteprocProvider {
     }
 
     if (idx === this._databaseIdx) {
-      // We are unloading the current database
-      this._items = Object.create(null)
-      this._engine.updateItems([]) // Remove the items from the registry
-      this._databaseIdx = -1
-      // Notify everyone interested
-      broadcastIpcMessage('citeproc-provider', 'database-changed')
+      this._deselectDatabase()
     }
 
     const db = this._databases[idx]
@@ -352,7 +364,7 @@ export default class CiteprocProvider {
   /**
    * Selects another database and activates it.
    *
-   * @param   {number}  idx  [idx description]
+   * @param   {string}  dbPath  The database to select
    */
   _selectDatabase (dbPath: string): void {
     // Find the database
@@ -383,6 +395,19 @@ export default class CiteprocProvider {
     // Remove the items from the registry
     this._engine.updateItems([])
 
+    // Notify everyone interested
+    broadcastIpcMessage('citeproc-provider', 'database-changed')
+  }
+
+  /**
+   * Unloads the current database so that none is loaded.
+   *
+   */
+  _deselectDatabase (): void {
+    // We are unloading the current database
+    this._items = Object.create(null)
+    this._engine.updateItems([]) // Remove the items from the registry
+    this._databaseIdx = -1
     // Notify everyone interested
     broadcastIpcMessage('citeproc-provider', 'database-changed')
   }

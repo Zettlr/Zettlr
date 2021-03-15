@@ -63,7 +63,6 @@ updateColouredTags()
 function updateCitationDatabase (): void {
   ipcRenderer.invoke('citeproc-provider', { command: 'get-items' })
     .then(cslData => {
-      console.log(cslData)
       app.$store.commit('updateCSLItems', cslData)
     })
     .catch(err => console.error(err))

@@ -36,7 +36,8 @@ const FRONTMATTER_VARS = [
   'date',
   'keywords',
   'tags',
-  'lang'
+  'lang',
+  'bibliography'
 ]
 
 /**
