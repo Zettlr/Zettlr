@@ -17,7 +17,7 @@
             "Joris"
         ],
         "license": "GNU GPL v3",
-        "updated_at": "2021-01-08T13:30:56.000000Z"
+        "updated_at": "2021-03-09T15:39:01.000000Z"
     },
     "dialog": {
         "about": {
@@ -530,6 +530,7 @@
         "print": "Imprimer\u2026",
         "project_build": "Exporter le Projet",
         "project_properties": "Param\u00e8tres de Projet\u2026",
+        "properties": "Propri\u00e9t\u00e9s",
         "quicklook": "Aper\u00e7u",
         "quit": "Quitter",
         "recent_docs": "Fichiers r\u00e9cents",
