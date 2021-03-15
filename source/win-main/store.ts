@@ -207,6 +207,14 @@ interface ZettlrState {
    * Contains the current table of contents of the active document
    */
   tableOfContents: any|null
+  /**
+   * Citation keys to be found within the current document
+   */
+  citationKeys: string[]
+  /**
+   * All CSL items available in the currently loaded database
+   */
+  cslItems: any[]
 }
 
 const config: StoreOptions<ZettlrState> = {
@@ -221,7 +229,9 @@ const config: StoreOptions<ZettlrState> = {
     config: {},
     activeDocumentInfo: null,
     modifiedDocuments: [],
-    tableOfContents: null
+    tableOfContents: null,
+    citationKeys: [],
+    cslItems: []
   },
   getters: {
   },
@@ -396,6 +406,13 @@ const config: StoreOptions<ZettlrState> = {
     },
     updateTagDatabase: function (state, tags) {
       state.tagDatabase = tags
+    },
+    updateCitationKeys: function (state, newKeys: string[]) {
+      // Update the citations, removing possible duplicates
+      state.citationKeys = [...new Set(newKeys)]
+    },
+    updateCSLItems: function (state, newItems: any[]) {
+      state.cslItems = newItems
     }
   },
   actions: {

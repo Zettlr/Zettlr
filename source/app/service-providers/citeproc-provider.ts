@@ -184,27 +184,6 @@ export default class CiteprocProvider {
       this._onConfigUpdate(option)
     })
 
-    // Listen for synchronous citation messages from the renderer
-    // Citeproc calls (either single citation or a whole cluster)
-    ipcMain.on('cite', (event, message) => {
-      if (message.type === 'get-citation') {
-        // Return a single citation
-        event.returnValue = {
-          'citation': this.getCitation(message.content)
-        }
-      } else if (message.type === 'update-items') {
-        // Update the items of the registry
-        event.returnValue = this.updateItems(message.content)
-      } else if (message.type === 'make-bibliography') {
-        // Make and send out a bibliography based on the state of the registry
-        // TODO: Move that whole thing to the ipcMain.on()
-        event.reply('citeproc-renderer', {
-          'command': 'citeproc-bibliography',
-          'payload': this.makeBibliography()
-        })
-      }
-    })
-
     /**
      * Listen for events coming from the citation renderer of the MarkdownEditor
      */
@@ -233,6 +212,11 @@ export default class CiteprocProvider {
           'originalCitation': payload,
           'renderedCitation': this.getCitation(payload)
         }
+      } else if (command === 'get-bibliography') {
+        // The Payload contains the items the renderer wants to have
+        const { payload } = message
+        this.updateItems(payload)
+        return this.makeBibliography()
       }
     })
 
@@ -296,7 +280,7 @@ export default class CiteprocProvider {
     }
 
     // Prepare some helper variables
-    const libraryType = path.extname(databasePath)
+    const libraryType = path.extname(databasePath).toLowerCase()
 
     // First read in the database file
     const data = await fs.readFile(databasePath, 'utf8')

@@ -82,17 +82,9 @@
     <div v-show="currentTab === 'references'">
       <!-- References -->
       <h1>{{ referencesLabel }}</h1>
-      <p v-if="bibContents === undefined">
-        No references
-      </p>
-      <template v-else>
-        <div v-html="bibContents[0].bibstart"></div>
-        <div v-for="(entry, idx) of bibContents[1]" v-bind:key="idx">
-          <!-- TODO: Doesn't work right now because the bibliography is never rendered as of now -->
-          <div v-html="entry"></div>
-        </div>
-        <div v-html="bibContents[0].bibend"></div>
-      </template>
+      <div v-html="referenceHTML">
+        <!-- Will contain the actual HTML -->
+      </div>
     </div>
     <div v-show="currentTab === 'toc'">
       <!-- Table of Contents -->
@@ -172,6 +164,37 @@ export default {
     },
     tableOfContents: function () {
       return this.$store.state.tableOfContents
+    },
+    citationKeys: function () {
+      return this.$store.state.citationKeys
+    },
+    referenceHTML: function () {
+      if (this.bibContents === undefined || this.bibContents[1].length === 0) {
+        return `<p>${trans('gui.citeproc.references_none')}</p>`
+      } else {
+        const html = [this.bibContents[0].bibstart]
+
+        for (const entry of this.bibContents[1]) {
+          html.push(entry)
+        }
+
+        html.push(this.bibContents[0].bibend)
+
+        return html.join('\n')
+      }
+    }
+  },
+  watch: {
+    citationKeys: function () {
+      // Reload the bibliography
+      ipcRenderer.invoke('citeproc-provider', {
+        command: 'get-bibliography',
+        payload: this.citationKeys
+      })
+        .then(bibliography => {
+          this.bibContents = bibliography
+        })
+        .catch(err => console.error(err))
     }
   },
   mounted: function () {

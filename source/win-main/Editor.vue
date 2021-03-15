@@ -47,6 +47,7 @@ import countWords from '../common/util/count-words'
 import makeSearchRegEx from '../common/util/make-search-regex'
 import MarkdownEditor from '../common/modules/markdown-editor'
 import CodeMirror from 'codemirror'
+import { util as citrUtil, parseSingle } from '@zettlr/citr'
 
 export default {
   name: 'Editor',
@@ -139,9 +140,44 @@ export default {
     },
     tagDatabase: function () {
       return this.$store.state.tagDatabase
+    },
+    cslItems: function () {
+      return this.$store.state.cslItems
     }
   },
   watch: {
+    cslItems: function () {
+      // We have received new items, so we should update them in the editor.
+      const items = this.cslItems.map(item => {
+        // Get a rudimentary author list
+        let authors = ''
+        if (item.author !== undefined) {
+          authors = item.author.map(author => {
+            if (author.family !== undefined) {
+              return author.family
+            } else if (author.literal !== undefined) {
+              return author.literal
+            } else {
+              return undefined
+            }
+          }).filter(elem => elem !== undefined).join(', ')
+        }
+
+        let title = ''
+        if (item.title !== undefined) {
+          title = item.title
+        } else if (item['container-title'] !== undefined) {
+          title = item['container-title']
+        }
+
+        // This is just a very crude representation of the citations.
+        return {
+          text: item.id,
+          displayText: `${item.id}: ${authors} - ${title}`
+        }
+      })
+      this.editor.setCompletionDatabase('citekeys', items)
+    },
     readabilityMode: function () {
       this.editor.readabilityMode = this.readabilityMode
     },
@@ -162,6 +198,8 @@ export default {
         this.editor.swapDoc(CodeMirror.Doc('', 'multiplex'), 'multiplex')
         this.editor.readOnly = true
         this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
+        // Update the citation keys with an empty array
+        this.updateCitationKeys()
         return
       }
 
@@ -177,6 +215,8 @@ export default {
         this.editor.readOnly = false
         this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
         this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
+        // Update the citation keys
+        this.updateCitationKeys()
       } else if (this.currentlyFetchingFiles.includes(this.activeFile.path) === false) {
         // We have to request the document beforehand
         this.currentlyFetchingFiles.push(this.activeFile.path)
@@ -204,6 +244,7 @@ export default {
               this.editor.readOnly = false
               this.$store.commit('updateTableOfContents', this.editor.tableOfContents)
               this.$store.commit('activeDocumentInfo', this.editor.documentInfo)
+              this.updateCitationKeys()
             }
           })
           .catch(e => console.error(e))
@@ -342,8 +383,25 @@ export default {
             filePath: this.activeDocument.path,
             isClean: this.activeDocument.cmDoc.isClean()
           })
+
+          // Also, extract all cited keys
+          this.updateCitationKeys()
         })
         .catch((err) => { console.error(err) })
+    },
+    updateCitationKeys: function () {
+      const value = this.editor.value
+
+      const citations = citrUtil.extractCitations(value)
+      const keys = []
+      for (const citation of citations) {
+        const cslArray = parseSingle(citation)
+
+        for (const csl of cslArray) {
+          keys.push(csl.id)
+        }
+      }
+      this.$store.commit('updateCitationKeys', keys)
     },
     toggleQueryRegexp () {
       const isRegexp = /^\/.+\/[gimy]{0,4}$/.test(this.query.trim())
