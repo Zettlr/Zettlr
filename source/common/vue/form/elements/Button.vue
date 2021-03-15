@@ -9,6 +9,7 @@
       v-bind:id="fieldID"
       v-bind:name="name"
       v-bind:disabled="disabled"
+      v-bind:class="{ 'primary': primary }"
       v-on:click="$emit('click')"
     >
       <clr-icon v-if="icon !== ''" v-bind:shape="icon"></clr-icon>
@@ -38,6 +39,10 @@ export default {
       default: false
     },
     inline: {
+      type: Boolean,
+      default: false
+    },
+    primary: {
       type: Boolean,
       default: false
     }

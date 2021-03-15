@@ -16,7 +16,7 @@ import ZettlrCommand from './zettlr-command'
 import { trans } from '../../common/i18n'
 import sanitize from 'sanitize-filename'
 import path from 'path'
-import fs from 'fs'
+import { promises as fs } from 'fs'
 import { clipboard } from 'electron'
 import isDir from '../../common/util/is-dir'
 
@@ -32,7 +32,7 @@ export default class SaveImage extends ZettlrCommand {
    * @param  {Object} target Options on the image
    * @return {void}        Does not return.
    */
-  async run (evt: string /*, target: any */): Promise<void> {
+  async run (evt: string /*, target: any */): Promise<any> {
     const activeHash = this._app.getFileSystem().activeFile
     if (activeHash === null) {
       return global.notify.normal(trans('system.error.fnf_message'))
@@ -64,7 +64,7 @@ export default class SaveImage extends ZettlrCommand {
 
     // Now check the extension of the name (some users may
     // prefer to choose to provide it already)
-    if ([ '.png', '.jpg' ].includes(path.extname(targetFile))) {
+    if (![ '.png', '.jpg' ].includes(path.extname(targetFile).toLowerCase())) {
       targetFile += '.png'
     }
 
@@ -73,9 +73,9 @@ export default class SaveImage extends ZettlrCommand {
 
     // Now we need to make sure the directory exists.
     try {
-      fs.lstatSync(target.targetDir)
+      await fs.lstat(target.targetDir)
     } catch (e) {
-      fs.mkdirSync(target.targetDir, { recursive: true })
+      await fs.mkdir(target.targetDir, { recursive: true })
     }
 
     // If something went wrong or the user did not provide a directory, abort
@@ -113,17 +113,15 @@ export default class SaveImage extends ZettlrCommand {
 
     global.log.info(`Saving image ${targetFile} to ${imagePath} ...`)
 
-    fs.writeFile(imagePath, image.toPNG(), (err) => {
-      if (err) {
-        return global.notify.normal(trans('system.error.could_not_save_image'))
-      }
+    if (path.extname(imagePath).toLowerCase() === '.png') {
+      await fs.writeFile(imagePath, image.toPNG())
+    } else if (path.extname(imagePath).toLowerCase() === '.jpg') {
+      await fs.writeFile(imagePath, image.toJPEG(100))
+    }
 
-      // Insert a relative path instead of an absolute one
-      let pathToInsert = path.relative(path.dirname(activeFile.path), imagePath)
+    // Insert a relative path instead of an absolute one
+    let pathToInsert = path.relative(path.dirname(activeFile.path), imagePath)
 
-      // Everything worked out - now tell the editor to insert some text
-      this._app.ipc.send('insert-text', `![${targetFile}](${pathToInsert})\n`)
-      // Tada!
-    })
+    return pathToInsert
   }
 }

@@ -130,7 +130,7 @@ export default {
           label: trans('dialog.button.save'),
           id: 'save',
           icon: '',
-          buttonClass: 'primary' // It's a primary button
+          primary: true // It's a primary button
         },
         {
           type: 'button',
@@ -166,21 +166,14 @@ export default {
     },
     handleClick: function (controlID) {
       if (controlID === 'save') {
-        ipcRenderer.invoke('css-provider', {
-          command: 'set-custom-css',
-          css: this.css
+        // Transmit the collected information to main. It will be received
+        // by the window manager, which will pass it on to the caller.
+        ipcRenderer.send('paste-image-ready', {
+          targetDir: this.targetPath,
+          name: this.fileName,
+          width: this.imgWidth,
+          height: this.imgHeight
         })
-          .then(() => {
-            // After we have successfully saved, close the window
-            ipcRenderer.send('paste-image-ready', {
-              targetDir: this.targetPath,
-              name: this.fileName,
-              width: this.imgWidth,
-              height: this.imgHeight
-            })
-            // ipcRenderer.send('window-controls', { command: 'win-close' })
-          })
-          .catch(e => console.error(e))
       } else if (controlID === 'cancel') {
         ipcRenderer.send('window-controls', { command: 'win-close' })
       }

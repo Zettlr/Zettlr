@@ -1,6 +1,7 @@
 // Hook for pasting images
 
 const { clipboard, ipcRenderer } = require('electron')
+const path = require('path')
 
 module.exports = (cm) => {
   /**
@@ -21,7 +22,13 @@ module.exports = (cm) => {
 
       if (!image.isEmpty() && (explicitPaste || !changeObj.text)) {
         // We've got an image. So we need to handle it.
-        displayPasteImageDialog()
+        ipcRenderer.invoke('application', {
+          command: 'save-image-from-clipboard'
+        })
+          .then(relativePath => {
+            cm.replaceSelection(`![${path.basename(relativePath)}](${relativePath})`)
+          })
+          .catch(err => console.error(err))
         return changeObj.cancel() // Cancel handling of the event
       }
     }
@@ -42,11 +49,13 @@ module.exports = (cm) => {
     // dialog twice -- once when the beforeChange event triggers, and then here
     // as well.
     if (!image.isEmpty() && clipboard.readText().length === 0) {
-      displayPasteImageDialog()
+      ipcRenderer.invoke('application', {
+        command: 'save-image-from-clipboard'
+      })
+        .then(relativePath => {
+          cm.replaceSelection(`![${path.basename(relativePath)}](${relativePath})`)
+        })
+        .catch(err => console.error(err))
     }
   })
-}
-
-function displayPasteImageDialog () {
-  ipcRenderer.send('message', { command: 'save-image-from-clipboard', content: {} }) // TODO: Deprecated command call
 }
