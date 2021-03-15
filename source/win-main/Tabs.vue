@@ -13,6 +13,7 @@
       v-on:dragstart="handleDragStart"
       v-on:drag="handleDrag"
       v-on:dragend="handleDragEnd"
+      v-on:contextmenu="handleContextMenu($event, file)"
     >
       <span class="filename" v-on:click="handleSelectFile(file)">{{ file.name }}</span>
       <span class="close" v-on:click.stop="handleCloseFile(file)">&times;</span>
@@ -22,6 +23,7 @@
 
 <script>
 import { ipcRenderer } from 'electron'
+import displayTabsContextMenu from './tabs-context'
 
 export default {
   name: 'Tabs',
@@ -80,6 +82,37 @@ export default {
         payload: file.path
       })
         .catch(e => console.error(e))
+    },
+    handleContextMenu: function (event, file) {
+      displayTabsContextMenu(event, async (clickedID) => {
+        if (clickedID === 'close-this') {
+          // Close only this
+          await ipcRenderer.invoke('application', {
+            command: 'file-close',
+            payload: file.path
+          })
+        } else if (clickedID === 'close-others') {
+          // Close all files ...
+          for (const openFile of this.openFiles) {
+            if (openFile === file) {
+              continue // ... except this
+            }
+
+            await ipcRenderer.invoke('application', {
+              command: 'file-close',
+              payload: openFile.path
+            })
+          }
+        } else if (clickedID === 'close-all') {
+          // Close all files
+          for (const openFile of this.openFiles) {
+            await ipcRenderer.invoke('application', {
+              command: 'file-close',
+              payload: openFile.path
+            })
+          }
+        }
+      })
     },
     handleDragStart: function (event) {
       // console.log(event)
