@@ -50,6 +50,7 @@
       <FileList
         ref="fileList"
         v-bind:class="{hidden: !fileListVisible}"
+        v-on:lock-file-tree="lockDirectoryTree()"
       ></FileList>
     </div>
   </div>

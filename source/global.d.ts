@@ -3,6 +3,14 @@
 // More info: https://stackoverflow.com/a/35074833
 
 /**
+ * DECLARE ANY OTHER FILETYPES
+ *
+ * These filetypes can be "imported" but their resolved value will be a string
+ * pointing to wherever the file-loader has put these files.
+ */
+declare module '*.png'
+
+/**
  * DECLARE THE GLOBAL INTERFACES
  */
 interface Application {

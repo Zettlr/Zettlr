@@ -60,6 +60,7 @@
             v-on:duplicate="startOperation('duplicate', item.id)"
             v-on:create-file="startOperation('createFile', item.id)"
             v-on:create-dir="startOperation('createDir', item.id)"
+            v-on:begin-dragging="$emit('lock-file-tree')"
           ></FileItem>
         </RecycleScroller>
       </template>

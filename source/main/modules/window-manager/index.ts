@@ -48,6 +48,7 @@ import promptDialog from './dialog/prompt'
 import sanitizeWindowPosition from './sanitize-window-position'
 import { WindowPosition } from './types.d'
 import askFileDialog from './dialog/ask-file'
+// import dragIcon from '../../assets/dragicon.png'
 
 interface QuicklookRecord {
   path: string
@@ -134,6 +135,13 @@ export default class WindowManager {
           break
         case 'inspect-element':
           event.sender.inspectElement(payload.x, payload.y)
+          break
+        case 'drag-start':
+          app.getFileIcon(payload.filePath)
+            .then((icon) => {
+              event.sender.startDrag({ file: payload.filePath, icon: icon })
+            })
+            .catch(err => global.log.error(`[Window Manager] Could not fetch icon for path ${String(payload.filePath)}`, err))
           break
       }
     })

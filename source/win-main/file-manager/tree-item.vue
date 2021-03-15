@@ -18,7 +18,6 @@
     v-bind:data-hash="obj.hash"
   >
     <div
-      ref="listElement"
       v-bind:class="{
         'tree-item': true,
         [obj.type]: true,
@@ -403,7 +402,7 @@ export default {
               ext: this.obj.ext
             }
 
-            if (this.hasWritingTarget) {
+            if (this.hasWritingTarget === true) {
               data.targetValue = this.obj.target.count
               data.targetMode = this.obj.target.mode
             }
@@ -477,7 +476,7 @@ export default {
      * On a click on the indicator, this'll toggle the collapsed state
      */
     toggleCollapse: function (event) {
-      this.collapsed = !this.collapsed
+      this.collapsed = this.collapsed === false
     },
     /**
      * Initiates a drag movement and inserts the correct data
@@ -487,20 +486,19 @@ export default {
       event.dataTransfer.dropEffect = 'move'
       if (this.obj.type === 'file') {
         event.dataTransfer.setData('text/x-zettlr-file', JSON.stringify({
-          hash: this.obj.hash,
           type: this.obj.type,
           path: this.obj.path,
           id: this.obj.id
         }))
       } else {
         event.dataTransfer.setData('text/x-zettlr-dir', JSON.stringify({
-          hash: this.obj.hash,
+          path: this.obj.path,
           type: this.obj.type
         }))
       }
     },
     onDragHandler: function (event) {
-      if (this.isDirectory) {
+      if (this.isDirectory === true) {
         return // Directories cannot be dragged out of the app
       }
 
@@ -515,23 +513,27 @@ export default {
       if (x === 0 || y === 0 || x === w || y === h) {
         event.stopPropagation()
         event.preventDefault()
-        global.ipc.send('file-drag-start', { hash: this.obj.hash })
+
+        ipcRenderer.send('window-controls', {
+          command: 'drag-start',
+          payload: { filePath: this.obj.path }
+        })
       }
     },
     /**
      * Called when a drag operation enters this item; adds a highlight class
      */
     enterDragging: function (event) {
-      if (this.isDirectory) {
-        this.$refs.listElement.classList.add('highlight')
+      if (this.isDirectory === true) {
+        this.$refs['display-text'].classList.add('highlight')
       }
     },
     /**
      * The oppossite of enterDragging; removes the highlight class
      */
     leaveDragging: function (event) {
-      if (this.isDirectory) {
-        this.$refs.listElement.classList.remove('highlight')
+      if (this.isDirectory === true) {
+        this.$refs['display-text'].classList.remove('highlight')
       }
     },
     /**
@@ -539,7 +541,7 @@ export default {
      * Only executes if it's a valid tree-item/file-list object.
      */
     handleDrop: function (event) {
-      this.$refs.listElement.classList.remove('highlight')
+      this.$refs['display-text'].classList.remove('highlight')
       event.preventDefault()
       // Now we have to be careful. The user can now ALSO
       // drag and drop files right onto the list. So we need
@@ -562,15 +564,19 @@ export default {
       }
 
       // The user dropped the file onto itself
-      if (data.hash === this.obj.hash) {
+      if (data.path === this.obj.path) {
         return
       }
 
-      // Finally, request the move! TODO: application invocation
-      global.ipc.send('request-move', {
-        from: parseInt(data.hash),
-        to: this.obj.hash
+      // Finally, request the move!
+      ipcRenderer.invoke('application', {
+        command: 'request-move',
+        payload: {
+          from: data.path,
+          to: this.obj.path
+        }
       })
+        .catch(err => console.error(err))
     },
     /**
      * Makes sure the browser doesn't do unexpected stuff when dragging, e.g., external files.
@@ -636,6 +642,11 @@ body.darwin {
       border-radius: 4px;
       white-space: nowrap;
       overflow: hidden;
+
+      &.highlight {
+        background-color: var(--system-accent-color, --c-primary);
+        color: white;
+      }
     }
 
     &.selected .display-text {
