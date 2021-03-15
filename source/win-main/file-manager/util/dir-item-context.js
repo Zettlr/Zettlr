@@ -116,9 +116,6 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
       case 'gui.attachments_open_dir':
         shell.showItemInFolder(dirObject.path)
         break
-      case 'menu.set_icon':
-        displayIconPopup(dirObject, el)
-        break
       case 'menu.remove_project':
         ipcRenderer.send('message', {
           command: 'dir-remove-project',
@@ -155,33 +152,5 @@ module.exports = function displayFileContext (event, dirObject, el, callback) {
           content: dirObject.hash
         })
     }
-  })
-}
-
-function displayIconPopup (dirObject, element) {
-  // Display the popup
-  global.popupProvider.show('icon-selector', element)
-
-  // Listen to clicks
-  const popup = document.getElementById('icon-selector-popup')
-  popup.addEventListener('click', (event) => {
-    let target = event.target
-
-    if (target.tagName === 'CLR-ICON') {
-      target = target.parentElement
-    }
-
-    if (target.classList.contains('icon-block') === false) {
-      return
-    }
-
-    const icon = target.dataset.shape
-    global.ipc.send('dir-set-icon', {
-      'hash': dirObject.hash,
-      'icon': (icon === '__reset') ? null : icon
-    })
-
-    // Close & dereference
-    global.popupProvider.close()
   })
 }
