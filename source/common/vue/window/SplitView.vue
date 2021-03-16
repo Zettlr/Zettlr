@@ -23,20 +23,16 @@ export default {
       default: 'horizontal' // TODO: Not yet implemented b/c I don't need it yet
     },
     minimumSizePercent: {
-      type: Number,
-      default: 10
+      type: Array,
+      default: function () { return [ 20, 20 ] } // Default min 20% width
     },
     initialSizePercent: {
       type: Array,
       default: function () { return [ 50, 50 ] } // Default same width
-    },
-    initialTotalSize: {
-      type: Number,
-      default: window.innerWidth
     }
   },
   data: function () {
-    const availableSize = this.initialTotalSize
+    const availableSize = window.innerWidth
     return {
       availableSize: availableSize,
       viewResizing: false,
@@ -45,18 +41,23 @@ export default {
       view1Width: availableSize * (this.initialSizePercent[0] / 100),
       view2Width: availableSize * (this.initialSizePercent[1] / 100),
       // Minimum widths
-      view1WidthMin: availableSize * (this.minimumSizePercent / 100),
-      view2WidthMin: availableSize * (this.minimumSizePercent / 100)
+      view1WidthMin: availableSize * (this.minimumSizePercent[0] / 100),
+      view2WidthMin: availableSize * (this.minimumSizePercent[1] / 100)
     }
   },
   created: function () {
-    window.addEventListener('resize', this.onWindowResize)
+    window.addEventListener('resize', this.recalculateSizes)
   },
   destroyed: function () {
-    window.removeEventListener('resize', this.onWindowResize)
+    window.removeEventListener('resize', this.recalculateSizes)
+  },
+  mounted: function () {
+    // As soon as the element is mounted, get the correct width
+    this.availableSize = this.$el.getBoundingClientRect().width
+    this.recalculateSizes() // Apply the new sizes immediately.
   },
   methods: {
-    onWindowResize: function (event) {
+    recalculateSizes: function (_event) {
       // Save the current ratios before applying the new widths
       const view1Percent = this.view1Width / this.availableSize
       const view2Percent = this.view2Width / this.availableSize
@@ -64,8 +65,8 @@ export default {
       this.view1Width = this.availableSize * view1Percent
       this.view2Width = this.availableSize * view2Percent
       // Don't forget to also update the minum widths
-      this.view1WidthMin = this.availableSize * (this.minimumSizePercent / 100)
-      this.view2WidthMin = this.availableSize * (this.minimumSizePercent / 100)
+      this.view1WidthMin = this.availableSize * (this.minimumSizePercent[0] / 100)
+      this.view2WidthMin = this.availableSize * (this.minimumSizePercent[1] / 100)
     },
     beginViewResizing: function (event) {
       this.viewResizing = true
@@ -103,6 +104,9 @@ export default {
       this.viewResizeX = 0
       this.$el.removeEventListener('mousemove', this.onViewResizing)
       this.$el.removeEventListener('mouseup', this.endViewResizing)
+    },
+    hideView: function (viewNumber) {
+      // Enables you to hide one of the views programmatically
     }
   }
 }

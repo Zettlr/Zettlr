@@ -11,9 +11,8 @@
   >
     <SplitView
       v-bind:initial-size-percent="[ 20, 80 ]"
-      v-bind:minimum-size-percent="10"
+      v-bind:minimum-size-percent="[ 10, 50 ]"
       v-bind:split="'horizontal'"
-      v-bind:initial-total-width="$el.getBoundingClientRect().width"
     >
       <template #view1>
         <FileManager></FileManager>
