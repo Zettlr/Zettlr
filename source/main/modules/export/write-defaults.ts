@@ -147,10 +147,15 @@ export default async function writeDefaults (
   // Populate the default author name
   defaults.metadata.author.push(global.config.get('pdf').author)
 
-  const bibliography: string = global.config.get('export.cslLibrary')
-  if (isFile(bibliography)) {
+  // In order to facilitate file-only databases, we need to get the currently
+  // selected database. This could break in a lot of places, but until Pandoc
+  // respects a file-defined bibliography, this is our best shot.
+  const bibliography = global.citeproc.getSelectedDatabase()
+  if (bibliography !== undefined && isFile(bibliography)) {
+    console.log('Adding database ' + bibliography)
     defaults.bibliography.push(bibliography)
   }
+
   const cslStyle: string = global.config.get('export.cslStyle')
   if (isFile(cslStyle)) {
     defaults.csl = cslStyle

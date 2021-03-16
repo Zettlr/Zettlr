@@ -167,5 +167,11 @@ async function runPandoc (defaultsFile: string): Promise<PandocRunnerOutput> {
     })
   })
 
+  // The data doesn't come in clean lines because it's a stream, but it will
+  // include linefeeds. In order to enable easy checks (stderr.length === 0,
+  // for example), clean up the output.
+  output.stderr = output.stderr.join('').split('\n').filter(line => line.trim() !== '')
+  output.stdout = output.stdout.join('').split('\n').filter(line => line.trim() !== '')
+
   return output
 }
