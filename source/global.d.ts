@@ -41,6 +41,7 @@ interface Application {
  */
 declare module NodeJS {
   interface Global {
+    assets: AssetsProvider
     css: CssProvider
     dict: DictionaryProvider
     log: LogProvider

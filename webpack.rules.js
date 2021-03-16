@@ -81,17 +81,6 @@ module.exports = [
     }
   },
   {
-    // Handle files for citeproc: copy them, and import them as string
-    test: /\.(xml|csl)$/,
-    use: {
-      loader: 'raw-loader',
-      options: {
-        // Do not wrap in js module
-        esModule: false
-      }
-    }
-  },
-  {
     test: /(.ts|.tsx)$/,
     exclude: /(node_modules|\.webpack)/,
     use: {
