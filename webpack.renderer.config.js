@@ -1,5 +1,4 @@
 const rules = require('./webpack.rules')
-const path = require('path')
 const webpack = require('webpack')
 
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
@@ -32,21 +31,6 @@ rules.push({
   }]
 })
 
-// Handle handlebars files: Precompile them
-// The precompiled templates can be imported using "require(path to the handlebars fie)"
-rules.push({
-  test: /\.handlebars$/,
-  use: [{
-    loader: 'handlebars-loader',
-    options: {
-      // Automatically load referenced images
-      inlineRequires: '/img/',
-      // Use custom Handlebars runtime with extra helpers registered
-      runtime: path.join(__dirname, 'source/common/zettlr-handlebars-runtime.js')
-    }
-  }]
-})
-
 module.exports = {
   module: {
     rules
@@ -68,8 +52,7 @@ module.exports = {
   resolve: {
     extensions: [
       '.js', '.ts', '.jsx', '.tsx',
-      '.css', '.less',
-      '.vue', '.handlebars'
+      '.css', '.less', '.vue'
     ]
   }
 }
