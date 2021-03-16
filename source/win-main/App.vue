@@ -40,6 +40,7 @@ import Editor from './Editor'
 import PopoverExport from './PopoverExport'
 import PopoverStats from './PopoverStats'
 import PopoverPomodoro from './PopoverPomodoro'
+import PopoverTable from './PopoverTable'
 import { trans } from '../common/i18n'
 import localiseNumber from '../common/util/localise-number'
 import generateId from '../common/util/generate-id'
@@ -251,7 +252,7 @@ export default {
         },
         {
           type: 'button',
-          id: 'markdownInsertTable',
+          id: 'insert-table',
           title: trans('gui.formatting.insert_table'),
           icon: 'table'
         },
@@ -434,7 +435,24 @@ export default {
             this.$closePopover()
           }
         })
-      } else if (clickedID.startsWith('markdown') && clickedID.length > 8) {
+      } else if (clickedID === 'insert-table') {
+        // Display the insertion popover
+        this.$showPopover(PopoverTable, document.getElementById('toolbar-insert-table'), {}, (data) => {
+          // Generate a simple table based on the info, and insert it.
+          let table = ''
+          for (let i = 0; i < data.tableSize.rows; i++) {
+            table += '|'
+            for (let k = 0; k < data.tableSize.cols; k++) {
+              table += '   |'
+            }
+            table += '\n'
+          }
+
+          // This seems hacky, but it's not that bad, I think.
+          this.$refs['editor'].editor.codeMirror.replaceSelection(table)
+          this.$closePopover()
+        })
+      } else if (clickedID.startsWith('markdown') === true && clickedID.length > 8) {
         // The user clicked a command button, so we just have to run that.
         this.$refs['editor'].executeCommand(clickedID)
       }
