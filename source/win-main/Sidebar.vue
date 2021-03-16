@@ -237,7 +237,7 @@ body {
   @button-size: 5px;
   @button-icon-size: 5px;
   #sidebar {
-    background-color: rgba(30, 30, 30, .3);
+    background-color: rgba(230, 230, 230, 1);
 
     position: fixed;
     z-index: 2; // Otherwise the editor will have a higher z-index somehow
@@ -329,13 +329,15 @@ body {
 
   &.dark {
     #sidebar {
-      background-color: rgba(0, 0, 0, 0.8);
+      background-color: rgba(30, 30, 30, 1);
       color: rgb(230, 230, 230);
     }
   }
 }
 
 body.darwin div#sidebar {
-  top: 40px; // On macOS the documents titlebar is 30px high, so we want to offset the sidebar by that.
+  // On macOS the toolbar is 40px high and the documents titlebar is 30px high,
+  // so we want to offset the sidebar by that.
+  top: calc(40px + 30px);
 }
 </style>
