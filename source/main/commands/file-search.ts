@@ -36,11 +36,11 @@ export default class FileSearch extends ZettlrCommand {
 
     try {
       let result = await this._app.getFileSystem().searchFile(file, arg.terms)
-
-      this._app.ipc.send('file-search-result', {
-        'hash': arg.hash,
-        'result': result
-      })
+      global.log.error('[File search command] Could not send back file search result: Not implemented', result)
+      // this._app.ipc.send('file-search-result', {
+      //   'hash': arg.hash,
+      //   'result': result
+      // })
       return true
     } catch (e) {
       global.log.error(`Could not search file ${file.name}: ${e.message as string}`, e)

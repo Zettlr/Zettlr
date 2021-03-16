@@ -19,7 +19,6 @@ import path from 'path'
 import fs from 'fs'
 
 // Internal classes
-import ZettlrIPC from './zettlr-ipc'
 import WindowManager from './modules/window-manager'
 import FSAL from './modules/fsal'
 import { trans, findLangCandidates } from '../common/i18n'
@@ -30,7 +29,7 @@ import isFile from '../common/util/is-file'
 import { commands } from './commands'
 import hash from '../common/util/hash'
 
-import { CodeFileDescriptor, DirDescriptor, MDFileDescriptor } from './modules/fsal/types'
+import { CodeFileDescriptor, CodeFileMeta, DirDescriptor, MDFileDescriptor, MDFileMeta } from './modules/fsal/types'
 import broadcastIpcMessage from '../common/util/broadcast-ipc-message'
 
 export default class Zettlr {
@@ -38,7 +37,6 @@ export default class Zettlr {
   editFlag: boolean
   _openPaths: any
   _fsal: FSAL
-  ipc: ZettlrIPC
   _commands: any[]
   private readonly _windowManager: WindowManager
   private readonly isShownFor: string[]
@@ -91,24 +89,12 @@ export default class Zettlr {
           // NOTE: This will become permanent later on
           fileMetadata = this._fsal.findFile(fileMetadata)
         }
-        this.ipc.send('file-replace', {
-          'hash': oldHash,
-          'file': this._fsal.getMetadataFor(fileMetadata)
-        })
+        // TODO: DEAD CODE
       },
       dirUpdate: (oldHash: number, newHash: number) => {
-        let dir = this._fsal.findDir(newHash)
-        if (dir === null) {
-          return
-        }
-
-        this.ipc.send('dir-replace', {
-          'hash': oldHash,
-          'dir': this._fsal.getMetadataFor(dir)
-        })
+        // TODO DEAD CODE
       },
       notifyChange: (msg: string) => {
-        global.ipc.send('paths-update', this._fsal.getTreeMeta())
         global.notify.normal(msg)
       },
       findFile: (prop: any) => {
@@ -132,9 +118,6 @@ export default class Zettlr {
       global.log.info(`[First Start] Copying over the interactive tutorial to ${app.getPath('documents')}!`)
       this._prepareFirstStart()
     }
-
-    // Boot up the IPC.
-    this.ipc = new ZettlrIPC(this)
 
     // File System Abstraction Layer, pass the folder
     // where it can store its internal files.
@@ -229,10 +212,6 @@ export default class Zettlr {
           if (!this.isModified()) {
             this._windowManager.setModified(false)
           }
-          // Mark this file as clean
-          global.ipc.send('mark-clean', { 'hash': info.fileHash })
-          // Re-send the file
-          global.application.fileUpdate(info.fileHash, global.application.findFile(info.fileHash))
           break
         case 'openDirectory':
           global.config.set('openDirectory', (openDir !== null) ? openDir.path : null)
@@ -288,11 +267,9 @@ export default class Zettlr {
     // The contents of one of the open files have changed.
     // What follows looks a bit ugly, welcome to callback hell.
     if (global.config.get('alwaysReloadFiles') === true) {
-      this._fsal.getFileContents(changedFile).then((file: any) => {
-        this.ipc.send('replace-file-contents', {
-          'hash': info.hash,
-          'contents': file.content
-        })
+      this._fsal.getFileContents(changedFile).then((file: MDFileMeta|CodeFileMeta) => {
+        // TODO: NOT IMPLEMENTED!
+        global.log.error('[Application] Could not send the file-replace-contents-command, since it has not yet been re-implemetned.')
       }).catch(e => global.log.error(e.message, e))
     } else {
       // Prevent multiple instances of the dialog, just ask once. The logic
@@ -318,10 +295,8 @@ export default class Zettlr {
           }
 
           this._fsal.getFileContents(changedFile).then((file: any) => {
-            this.ipc.send('replace-file-contents', {
-              'hash': info.hash,
-              'contents': file.content
-            })
+            // TODO: NOT IMPLEMENTED
+            global.log.error('[Application] Could not send the file-replace-contents-command, since it has not yet been re-implemetned.')
           }).catch(e => global.log.error(e.message, e))
         }).catch(e => global.log.error(e.message, e)) // END ask replace file
     }
@@ -564,7 +539,6 @@ export default class Zettlr {
     global.notify.normal(trans('system.open_root_directory', path.basename(retPath)))
     await this.handleAddRoots([retPath])
     global.notify.normal(trans('system.open_root_directory_success', path.basename(retPath)))
-    global.ipc.send('paths-update', this._fsal.getTreeMeta())
   }
 
   /**
@@ -578,7 +552,6 @@ export default class Zettlr {
 
     let ret = await this._windowManager.askFile(filter, true)
     await this.handleAddRoots(ret)
-    global.ipc.send('paths-update', this._fsal.getTreeMeta())
   }
 
   /**
@@ -754,23 +727,7 @@ export default class Zettlr {
     }
   }
 
-  /**
-   * Convenience function to send a full file object to the renderer
-   */
-  sendPaths (): void { global.ipc.send('paths-update', this._fsal.getTreeMeta()) }
-
-  /**
-   * Sends all currently opened files to the renderer
-   */
-  sendOpenFiles (): void { global.ipc.send('sync-files', this._fsal.openFiles) }
-
   // Getters
-
-  /**
-    * Returns the IPC instance.
-    * @return {ZettlrIPC}  The IPC object
-    */
-  getIPC (): ZettlrIPC { return this.ipc }
 
   /**
    * Returns the File System Abstraction Layer

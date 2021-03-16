@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron'
 import { trans } from '../../common/i18n'
 import TreeItem from './tree-item.vue'
 
@@ -80,7 +81,8 @@ export default {
      * @return {void}     Does not return.
      */
     requestOpenRoot: function (evt) {
-      global.ipc.send('dir-open')
+      ipcRenderer.invoke('application', { command: 'open-workspace' })
+        .catch(err => console.error(err))
     },
     clickHandler: function (event) {
       // We need to bubble this event upwards so that the file manager is informed of the selection

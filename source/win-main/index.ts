@@ -32,6 +32,30 @@ const app = new Vue({
   store: createStore()
 })
 
+document.addEventListener('dragover', function (event) {
+  event.preventDefault()
+  return false
+}, false)
+
+// On drop, tell the renderer to tell main that there's something to
+// handle. TODO: TO IMPLEMENT
+document.addEventListener('drop', (event) => {
+  event.preventDefault()
+  if (event.dataTransfer === null) {
+    return
+  }
+
+  // Retrieve all paths
+  let f = []
+  for (let i = 0; i < event.dataTransfer.files.length; i++) {
+    f.push(event.dataTransfer.files.item(i)?.path)
+  }
+  console.log('The user dropped some files onto the main window, but the handler is not yet implemented.')
+  console.log(f)
+  // this._renderer.handleDrop(f)
+  return false
+}, false)
+
 // In the end: mount the app onto the DOM
 app.$mount('#app')
 

@@ -1,6 +1,5 @@
-const { shell } = require('electron')
+const { shell, ipcRenderer } = require('electron')
 const makeValidUri = require('../../util/make-valid-uri')
-const hash = require('../../util/hash')
 const { trans } = require('../../i18n')
 const path = require('path')
 
@@ -44,7 +43,11 @@ module.exports = function (url, cm) {
 
     if (isLocalMdFile) {
       // Attempt to open internally
-      global.ipc.send('file-get', hash(localPath))
+      ipcRenderer.invoke('application', {
+        command: 'open-file',
+        payload: this.obj.path
+      })
+        .catch(e => console.error(e))
     } else {
       shell.openExternal(validURI).catch((err) => {
         // Notify the user that we couldn't open the URL

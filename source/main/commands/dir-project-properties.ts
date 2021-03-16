@@ -29,7 +29,7 @@ export default class DirProjectProperties extends ZettlrCommand {
     if (dir !== null) {
       arg.properties = dir._settings.project
       // Send the properties back to the renderer
-      global.ipc.send('project-properties', arg)
+      global.log.error('[Dir-project-properties Command] Sending project properties is not yet implemented again.')
     } else {
       global.log.warning(`Cannot open project properties for hash ${String(arg.hash)}: No directory found.`)
     }
