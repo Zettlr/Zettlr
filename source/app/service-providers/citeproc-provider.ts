@@ -193,6 +193,11 @@ export default class CiteprocProvider {
         if (this._databases.find((db) => db.path === this._mainLibrary) !== undefined) {
           this._selectDatabase(this._mainLibrary)
         }
+      },
+      getSelectedDatabase: () => {
+        if (this._databaseIdx > -1) {
+          return this._databases[this._databaseIdx].path
+        }
       }
     }
 

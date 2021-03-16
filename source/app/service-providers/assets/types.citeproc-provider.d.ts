@@ -51,4 +51,10 @@ interface CiteprocProvider {
    * a file that does not define its own database.
    */
   loadMainDatabase: () => void
+  /**
+   * Returns the path to the currently selected database (or undefined)
+   *
+   * @return  {string|undefined}  The database path, or undefined
+   */
+  getSelectedDatabase: () => string|undefined
 }
