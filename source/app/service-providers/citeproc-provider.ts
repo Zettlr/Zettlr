@@ -536,7 +536,12 @@ export default class CiteprocProvider {
    */
   updateItems (citations: string[]): boolean {
     try {
-      this._engine.updateItems(citations)
+      // Don't try to pass non-existent items in there, since that will make
+      // the citeproc engine to throw an error.
+      const sanitizedCitations = citations.filter(id => {
+        return this._sys.retrieveItem(id) !== undefined
+      })
+      this._engine.updateItems(sanitizedCitations)
       return true
     } catch (e) {
       global.log.error('[citeproc] Could not update engine registry: ' + String(e.message), citations)
