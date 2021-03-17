@@ -17,8 +17,16 @@
         v-bind:key="idx"
         v-bind:control="item"
         v-bind:show-label="showLabels"
-        v-on:toggle="$emit('toggle', item.id)"
+        v-on:toggle="$emit('toggle', { id: item.id, state: $event })"
       ></ToggleControl>
+      <ThreeWayToggle
+        v-if="item.type === 'three-way-toggle'"
+        v-bind:key="idx"
+        v-bind:control="item"
+        v-bind:show-labels="showLabels"
+        v-on:toggle="$emit('toggle', { id: item.id, state: $event })"
+      >
+      </ThreeWayToggle>
       <RingControl
         v-if="item.type === 'ring'"
         v-bind:key="idx"
@@ -52,6 +60,7 @@
 import ButtonControl from './toolbar-controls/Button.vue'
 import RingControl from './toolbar-controls/RingProgressButton'
 import ToggleControl from './toolbar-controls/Toggle.vue'
+import ThreeWayToggle from './toolbar-controls/ThreeWayToggle'
 import SearchControl from './toolbar-controls/Search.vue'
 import SpacerControl from './toolbar-controls/Spacer.vue'
 import TextControl from './toolbar-controls/Text.vue'
@@ -62,6 +71,7 @@ export default {
     ButtonControl,
     RingControl,
     ToggleControl,
+    ThreeWayToggle,
     SearchControl,
     SpacerControl,
     TextControl

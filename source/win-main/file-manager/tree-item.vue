@@ -14,7 +14,7 @@
 
 <template>
   <div
-    class="container"
+    class="tree-item-container"
     v-bind:data-hash="obj.hash"
   >
     <div
@@ -131,18 +131,6 @@
       </span>
     </div>
     <div
-      v-if="hasSearchResults"
-      class="display-search-results list-item"
-      v-bind:style="{
-        'padding-left': `${depth + 1}em`
-      }"
-      v-on:click="this.$root.toggleFileList"
-    >
-      <p class="filename">
-        <clr-icon shape="search"></clr-icon> {{ displayResultsMessage }}
-      </p>
-    </div>
-    <div
       v-if="isDirectory"
       v-show="!collapsed"
     >
@@ -158,7 +146,6 @@
 
 <script>
 // Tree View item component
-import { trans } from '../../common/i18n'
 import fileContextMenu from './util/file-item-context.js'
 import dirContextMenu from './util/dir-item-context.js'
 import { ipcRenderer } from 'electron'
@@ -253,52 +240,14 @@ export default {
      */
     indicatorShape: function () {
       return this.collapsed ? 'caret right' : 'caret down'
-    },
-    /**
-     * returns true, if this is the current selected directory, there
-     * are search results and the file manager is in combined mode
-     */
-    hasSearchResults: function () {
-      // Should return true, if this directory has search results in combined mode
-      if (this.combined === false) {
-        return false
-      }
-      // TODO
-      // if (this.$store.state.searchResults.length < 1) {
-      //   return false
-      // }
-      if (this.obj.hash !== this.selectedDir) {
-        return false
-      }
-      return false
-      // return true
-    },
-    displayResultsMessage: function () {
-      return trans('gui.display_search_results')
     }
   },
   watch: {
     activeFile: function (newVal, oldVal) {
-      if (this.activeFile === null) {
-        return
-      }
-
-      // Open the tree on activeFile change, if the
-      // selected file is contained in this dir somewhere
-      if (this.activeFile.path.startsWith(this.obj.path)) {
-        this.collapsed = false
-      }
+      this.uncollapseIfApplicable()
     },
     selectedDir: function (newVal, oldVal) {
-      if (this.selectedDir === null) {
-        return
-      }
-
-      // If a directory within this has been selected,
-      // open up, lads!
-      if (this.selectedDir.path.startsWith(this.obj.path)) {
-        this.collapsed = false
-      }
+      this.uncollapseIfApplicable()
     },
     nameEditing: function (newVal, oldVal) {
       if (newVal === false) {
@@ -311,7 +260,24 @@ export default {
       })
     }
   },
+  mounted: function () {
+    this.uncollapseIfApplicable()
+  },
   methods: {
+    uncollapseIfApplicable: function () {
+      const filePath = (this.activeFile !== null) ? this.activeFile.path : ''
+      const dirPath = (this.selectedDir !== null) ? this.selectedDir.path : ''
+
+      // Open the tree, if the selected file is contained in this dir somewhere
+      if (filePath.startsWith(this.obj.path)) {
+        this.collapsed = false
+      }
+
+      // If a directory within this has been selected, open up, lads!
+      if (dirPath.startsWith(this.obj.path)) {
+        this.collapsed = false
+      }
+    },
     handleContextMenu: function (event) {
       if (this.isDirectory === true) {
         dirContextMenu(event, this.obj, this.$el, (clickedID) => {
@@ -613,15 +579,19 @@ export default {
 
 <style lang="less">
 body {
-  .tree-item {
-    // These inputs should be more or less "invisible"
-    input {
-      border: none;
-      color: inherit;
-      font-family: inherit;
-      font-size: inherit;
-      background-color: transparent;
-      padding: 0;
+  div.tree-item-container {
+    white-space: nowrap;
+
+    .tree-item {
+      // These inputs should be more or less "invisible"
+      input {
+        border: none;
+        color: inherit;
+        font-family: inherit;
+        font-size: inherit;
+        background-color: transparent;
+        padding: 0;
+      }
     }
   }
 }
@@ -640,7 +610,6 @@ body.darwin {
       font-size: 13px;
       padding: 3px 5px;
       border-radius: 4px;
-      white-space: nowrap;
       overflow: hidden;
 
       &.highlight {

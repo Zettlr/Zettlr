@@ -114,7 +114,7 @@ export default {
   data: function () {
     return {
       filterQuery: '',
-      activeDescriptor: null, // Can contain a hash of the active ("focused") item
+      activeDescriptor: null, // Can contain the active ("focused") item
       // The next two properties are needed for three operations: Create a new
       // file, create a new directory, and duplicate a file.
       // operationType will indicate what we want to do, while the index points
@@ -147,7 +147,7 @@ export default {
       return false // TODO this.$store.state.searchNoResults
     },
     selectedFile: function () {
-      return this.$store.state.selectedFile
+      return this.$store.state.activeFile
     },
     itemHeight: function () {
       if (this.$store.state.config['fileMeta'] === true) {
@@ -281,7 +281,7 @@ export default {
       // Whenever the directory contents change, reset the active file if it's
       // no longer in the list
       const foundDescriptor = this.getFilteredDirectoryContents.find((elem) => {
-        return elem.props.hash === this.activeDescriptor
+        return elem.props === this.activeDescriptor
       })
 
       if (foundDescriptor === undefined) {
@@ -335,9 +335,9 @@ export default {
       const list = this.getFilteredDirectoryContents.map(e => e.props)
       const descriptor = list.find(e => {
         if (this.activeDescriptor !== null) {
-          return e.hash === this.activeDescriptor
+          return e === this.activeDescriptor
         } else {
-          return e.hash === this.selectedFile
+          return e === this.selectedFile
         }
       })
 
@@ -373,9 +373,9 @@ export default {
           }
           if (cmdOrCtrl) {
             // Select the last file
-            this.activeDescriptor = list[list.length - 1].hash
+            this.activeDescriptor = list[list.length - 1]
           } else if (index < list.length) {
-            this.activeDescriptor = list[index].hash
+            this.activeDescriptor = list[index]
           }
           break
         case 'ArrowUp':
@@ -388,9 +388,9 @@ export default {
           }
           if (cmdOrCtrl) {
             // Select the first file
-            this.activeDescriptor = list[0].hash
+            this.activeDescriptor = list[0]
           } else if (index >= 0) {
-            this.activeDescriptor = list[index].hash
+            this.activeDescriptor = list[index]
           }
           break
       }
@@ -401,9 +401,9 @@ export default {
       let scrollTop = this.$el.scrollTop
       let index = this.getFilteredDirectoryContents.find(e => {
         if (this.activeDescriptor !== null) {
-          return e.props.hash === this.activeDescriptor
+          return e.props === this.activeDescriptor
         } else {
-          return e.props.hash === this.selectedFile
+          return e.props === this.selectedFile
         }
       })
 

@@ -16,7 +16,8 @@
     v-bind:class="{
       'list-item': true,
       'project': obj.type === 'directory' && obj.project !== null,
-      'selected': obj === activeFile,
+      'selected': obj === selectedFile,
+      'active': obj === activeFile,
       'has-meta-info': fileMeta,
       'directory': obj.type === 'directory'
     }"
@@ -144,6 +145,10 @@ export default {
     obj: {
       type: Object,
       default: function () { return {} }
+    },
+    activeFile: {
+      type: Object,
+      default: function () { return {} }
     }
   },
   data: () => {
@@ -152,7 +157,7 @@ export default {
     }
   },
   computed: {
-    activeFile: function () {
+    selectedFile: function () {
       return this.$store.state.activeFile
     },
     // We have to explicitly transform ALL properties to computed ones for
@@ -587,8 +592,10 @@ body {
         position: absolute;
         font-size: 11px;
         color: rgb(130, 130, 130);
+        background-color: inherit;
         top: 0;
-        right: 5px;
+        right: 0;
+        padding: 2px 5px;
       }
     }
 
@@ -615,6 +622,10 @@ body {
 body.darwin {
   div.list-item {
     border-bottom: 1px solid rgb(213, 213, 213);
+    background-color: rgb(235, 235, 235);
+
+    div.filename div.date { background-color: rgb(235, 235, 235); }
+
     div.meta-info {
       .badge {
         background-color: rgb(220, 220, 220);
@@ -654,14 +665,13 @@ body.darwin {
 
   &.dark {
     div.list-item {
-      border-bottom: 1px solid rgb(80, 80, 80);
+      border-bottom: 1px solid rgb(40, 40, 40);
+      background-color: rgb(40, 40, 40);
 
-      &.selected {
-        background-color: rgb(50, 50, 50);
-      }
+      div.filename div.date { background-color: rgb(40, 40, 40); }
 
       &.active {
-        background-color: rgb(50, 50, 50);
+        background-color: rgb(80, 80, 80);
       }
 
       div.meta-info .badge {

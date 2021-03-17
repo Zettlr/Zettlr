@@ -6,7 +6,7 @@
     v-bind:show-toolbar="true"
     v-bind:toolbar-labels="false"
     v-bind:toolbar-controls="toolbarControls"
-    v-on:toolbar-toggle="handleClick($event)"
+    v-on:toolbar-toggle="handleToggle($event)"
     v-on:toolbar-click="handleClick($event)"
   >
     <SplitView
@@ -17,7 +17,12 @@
     >
       <template #view1>
         <!-- File manager in the left side of the split view -->
-        <FileManager></FileManager>
+        <FileManager
+          v-if="mainSplitViewVisibleComponent === 'fileManager'"
+        ></FileManager>
+        <!-- ... or the global search, if selected -->
+        <GlobalSearch v-else-if="mainSplitViewVisibleComponent === 'globalSearch'">
+        </GlobalSearch>
       </template>
       <template #view2>
         <!-- Another split view in the right side -->
@@ -51,6 +56,7 @@ import FileManager from './file-manager/file-manager'
 import Sidebar from './Sidebar'
 import Tabs from './Tabs'
 import SplitView from '../common/vue/window/SplitView'
+import GlobalSearch from './GlobalSearch'
 import Editor from './Editor'
 import PopoverExport from './PopoverExport'
 import PopoverStats from './PopoverStats'
@@ -89,6 +95,7 @@ export default {
     Tabs,
     SplitView,
     Editor,
+    GlobalSearch,
     Sidebar
   },
   data: function () {
@@ -97,6 +104,7 @@ export default {
       readabilityActive: false,
       sidebarVisible: false,
       fileManagerVisible: true,
+      mainSplitViewVisibleComponent: 'fileManager',
       // Pomodoro state
       pomodoro: {
         currentEffectFile: glassFile,
@@ -163,11 +171,19 @@ export default {
     toolbarControls: function () {
       return [
         {
-          type: 'toggle',
+          type: 'three-way-toggle',
           id: 'toggle-file-manager',
-          title: 'Toggle file manager',
-          icon: 'hard-disk',
-          initialState: (this.fileManagerVisible === true) ? 'active' : ''
+          stateOne: {
+            id: 'fileManager',
+            title: 'Toggle file manager',
+            icon: 'hard-disk'
+          },
+          stateTwo: {
+            id: 'globalSearch',
+            title: 'Toggle search window',
+            icon: 'search'
+          },
+          initialState: (this.fileManagerVisible === true) ? this.mainSplitViewVisibleComponent : undefined
         },
         {
           type: 'button',
@@ -371,13 +387,7 @@ export default {
   },
   methods: {
     handleClick: function (clickedID) {
-      if (clickedID === 'toggle-readability') {
-        this.readabilityActive = this.readabilityActive === false
-      } else if (clickedID === 'toggle-sidebar') {
-        this.sidebarVisible = this.sidebarVisible === false
-      } else if (clickedID === 'toggle-file-manager') {
-        this.fileManagerVisible = this.fileManagerVisible === false
-      } else if (clickedID === 'open-workspace') {
+      if (clickedID === 'open-workspace') {
         ipcRenderer.invoke('application', { command: 'open-workspace' })
           .catch(e => console.error(e))
       } else if (clickedID === 'open-preferences') {
@@ -500,6 +510,21 @@ export default {
       } else if (clickedID.startsWith('markdown') === true && clickedID.length > 8) {
         // The user clicked a command button, so we just have to run that.
         this.$refs['editor'].executeCommand(clickedID)
+      }
+    },
+    handleToggle: function (controlState) {
+      const { id, state } = controlState
+      if (id === 'toggle-readability') {
+        this.readabilityActive = state // For simple toggles, the state is just a boolean
+      } else if (id === 'toggle-sidebar') {
+        this.sidebarVisible = state
+      } else if (id === 'toggle-file-manager') {
+        // Since this is a three-way-toggle, we have to inspect the state.
+        this.fileManagerVisible = state !== undefined
+        if (state !== undefined) {
+          // Set the shown component to the correct one
+          this.mainSplitViewVisibleComponent = state
+        }
       }
     },
     startPomodoro: function () {

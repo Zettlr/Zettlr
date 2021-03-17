@@ -42,7 +42,7 @@ export default {
   methods: {
     toggle: function () {
       this.isActive = !this.isActive
-      this.$emit('toggle')
+      this.$emit('toggle', this.isActive)
     }
   }
 }
