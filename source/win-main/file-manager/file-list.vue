@@ -7,13 +7,7 @@
     v-on:focus="onFocusHandler"
     v-on:blur="activeDescriptor = null"
   >
-    <template v-if="emptySearchResults">
-      <!-- Did we have no search results? -->
-      <div class="empty-file-list">
-        {{ noResultsMessage }}
-      </div>
-    </template>
-    <template v-else-if="getDirectoryContents.length > 1">
+    <template v-if="getDirectoryContents.length > 1">
       <div id="file-manager-filter">
         <input
           id="file-manager-filter-input"
@@ -142,9 +136,6 @@ export default {
     },
     emptyDirectoryMessage: function () {
       return trans('gui.empty_dir')
-    },
-    emptySearchResults: function () {
-      return false // TODO this.$store.state.searchNoResults
     },
     selectedFile: function () {
       return this.$store.state.activeFile
