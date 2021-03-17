@@ -10,22 +10,38 @@
     v-on:toolbar-click="handleClick($event)"
   >
     <SplitView
+      ref="file-manager-split"
       v-bind:initial-size-percent="[ 20, 80 ]"
-      v-bind:minimum-size-percent="[ 10, 50 ]"
+      v-bind:minimum-size-percent="[ 10, 70 ]"
       v-bind:split="'horizontal'"
     >
       <template #view1>
+        <!-- File manager in the left side of the split view -->
         <FileManager></FileManager>
       </template>
       <template #view2>
-        <Tabs></Tabs>
-        <Editor
-          ref="editor"
-          v-bind:readability-mode="readabilityActive"
-        ></Editor>
+        <!-- Another split view in the right side -->
+        <SplitView
+          ref="editor-sidebar-split"
+          v-bind:initial-size-percent="[ 80, 20 ]"
+          v-bind:minimum-size-percent="[ 50, 10 ]"
+          v-bind:split="'horizontal'"
+        >
+          <template #view1>
+            <!-- First side: Editor -->
+            <Tabs></Tabs>
+            <Editor
+              ref="editor"
+              v-bind:readability-mode="readabilityActive"
+            ></Editor>
+          </template>
+          <template #view2>
+            <!-- Second side: Sidebar -->
+            <Sidebar></Sidebar>
+          </template>
+        </SplitView>
       </template>
     </SplitView>
-    <Sidebar v-bind:show-sidebar="sidebarVisible"></Sidebar>
   </WindowChrome>
 </template>
 
@@ -80,6 +96,7 @@ export default {
       title: 'Zettlr',
       readabilityActive: false,
       sidebarVisible: false,
+      fileManagerVisible: true,
       // Pomodoro state
       pomodoro: {
         currentEffectFile: glassFile,
@@ -145,6 +162,13 @@ export default {
     },
     toolbarControls: function () {
       return [
+        {
+          type: 'toggle',
+          id: 'toggle-file-manager',
+          title: 'Toggle file manager',
+          icon: 'hard-disk',
+          initialState: (this.fileManagerVisible === true) ? 'active' : ''
+        },
         {
           type: 'button',
           id: 'open-workspace',
@@ -287,6 +311,22 @@ export default {
       ]
     }
   },
+  watch: {
+    sidebarVisible: function (newValue, oldValue) {
+      if (newValue === true) {
+        this.$refs['editor-sidebar-split'].unhide()
+      } else {
+        this.$refs['editor-sidebar-split'].hideView(2)
+      }
+    },
+    fileManagerVisible: function (newValue, oldValue) {
+      if (newValue === true) {
+        this.$refs['file-manager-split'].unhide()
+      } else {
+        this.$refs['file-manager-split'].hideView(1)
+      }
+    }
+  },
   mounted: function () {
     ipcRenderer.on('shortcut', (event, shortcut) => {
       if (shortcut === 'toggle-sidebar') {
@@ -324,6 +364,10 @@ export default {
         }
       }
     })
+
+    // Initially, we need to hide the sidebar, since the view will be visible
+    // by default.
+    this.$refs['editor-sidebar-split'].hideView(2)
   },
   methods: {
     handleClick: function (clickedID) {
@@ -331,6 +375,8 @@ export default {
         this.readabilityActive = this.readabilityActive === false
       } else if (clickedID === 'toggle-sidebar') {
         this.sidebarVisible = this.sidebarVisible === false
+      } else if (clickedID === 'toggle-file-manager') {
+        this.fileManagerVisible = this.fileManagerVisible === false
       } else if (clickedID === 'open-workspace') {
         ipcRenderer.invoke('application', { command: 'open-workspace' })
           .catch(e => console.error(e))

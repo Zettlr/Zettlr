@@ -70,8 +70,19 @@ export default {
       const view1Percent = this.view1Width / this.availableSize
       const view2Percent = this.view2Width / this.availableSize
       this.availableSize = this.$el.getBoundingClientRect().width
-      this.view1Width = this.availableSize * view1Percent
-      this.view2Width = this.availableSize * view2Percent
+
+      if (this.hasHiddenView === 1) {
+        // Give view 2 all of the available size
+        this.view2Width = this.availableSize
+      } else if (this.hasHiddenView === 2) {
+        // Give view 1 all of the available size
+        this.view1Width = this.availableSize
+      } else { // Else: this.hasHiddenView === 0
+        // Scale both proportionally
+        this.view1Width = this.availableSize * view1Percent
+        this.view2Width = this.availableSize * view2Percent
+      }
+
       // Don't forget to also update the minum widths
       this.view1WidthMin = this.availableSize * (this.minimumSizePercent[0] / 100)
       this.view2WidthMin = this.availableSize * (this.minimumSizePercent[1] / 100)
@@ -121,7 +132,10 @@ export default {
 
       // Now no view is hidden at this point.
       this.hasHiddenView = viewNumber
-      this.originalViewWidth = [ this.view1Width, this.view2Width ]
+      this.originalViewWidth = [
+        this.view1Width / this.availableSize,
+        this.view2Width / this.availableSize
+      ]
       if (viewNumber === 1) {
         this.view2Width += this.view1Width
         this.view1Width = 0
@@ -133,8 +147,8 @@ export default {
     unhide: function () {
       if (this.hasHiddenView > 0) {
         // Un-hide
-        this.view1Width = this.originalViewWidth[0]
-        this.view2Width = this.originalViewWidth[1]
+        this.view1Width = this.originalViewWidth[0] * this.availableSize
+        this.view2Width = this.originalViewWidth[1] * this.availableSize
         this.hasHiddenView = 0
         // After we've unhidden the view, make sure to recalculate possibly
         // changed metrics in the meantime.

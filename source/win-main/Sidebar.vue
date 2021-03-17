@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="sidebar"
-    v-bind:class="{ 'open': showSidebar }"
-  >
+  <div id="sidebar">
     <div id="sidebar-tabs" role="tablist">
       <div
         role="tab"
@@ -127,10 +124,6 @@ const FILETYPES_IMG = [
 export default {
   name: 'Sidebar',
   props: {
-    showSidebar: {
-      type: Boolean,
-      default: true
-    }
   },
   data: function () {
     return {
@@ -239,19 +232,10 @@ body {
   #sidebar {
     background-color: rgba(230, 230, 230, 1);
 
-    position: fixed;
-    z-index: 2; // Otherwise the editor will have a higher z-index somehow
-    top: 0;
-    right: -20%;
-    bottom: 0;
-    width: 20%;
+    height: 100%;
+    width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    transition: right 0.5s ease 0s;
-
-    &.open {
-      right: 0%;
-    }
 
     // Enable tabs
     #sidebar-tabs {
