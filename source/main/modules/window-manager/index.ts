@@ -38,6 +38,7 @@ import createPreferencesWindow from './create-preferences-window'
 import createCustomCSSWindow from './create-custom-css-window'
 import createAboutWindow from './create-about-window'
 import createTagManagerWindow from './create-tag-manager-window'
+import createDefaultsWindow from './create-defaults-window'
 import createPasteImageModal from './create-paste-image-modal'
 import createErrorModal from './create-error-modal'
 import shouldOverwriteFileDialog from './dialog/should-overwrite-file'
@@ -61,6 +62,7 @@ export default class WindowManager {
   private _printWindow: BrowserWindow|null
   private _logWindow: BrowserWindow|null
   private _statsWindow: BrowserWindow|null
+  private _defaultsWindow: BrowserWindow|null
   private _preferences: BrowserWindow|null
   private _customCSS: BrowserWindow|null
   private _aboutWindow: BrowserWindow|null
@@ -87,6 +89,7 @@ export default class WindowManager {
     this._printWindowFile = undefined
     this._logWindow = null
     this._statsWindow = null
+    this._defaultsWindow = null
     this._windowState = []
     this._configFile = path.join(app.getPath('userData'), 'window_state.json')
     this._fileLock = false
@@ -543,6 +546,24 @@ export default class WindowManager {
       })
     } else {
       this._makeVisible(this._logWindow)
+    }
+  }
+
+  /**
+   * Displays the defaults window
+   */
+  showDefaultsWindow (): void {
+    if (this._defaultsWindow === null) {
+      const conf = this._retrieveWindowPosition('log', null)
+      this._defaultsWindow = createDefaultsWindow(conf)
+      this._hookWindowResize(this._defaultsWindow, conf)
+
+      // Dereference the window as soon as it is closed
+      this._defaultsWindow.on('closed', () => {
+        this._defaultsWindow = null
+      })
+    } else {
+      this._makeVisible(this._defaultsWindow)
     }
   }
 

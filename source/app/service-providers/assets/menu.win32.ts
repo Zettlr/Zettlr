@@ -126,10 +126,12 @@ export default function getMenu (): MenuItemConstructorOptions[] {
               }
             },
             {
-              id: 'menu.pdf_preferences',
-              label: trans('menu.pdf_preferences'),
-              accelerator: 'Ctrl+Alt+,' // ,
-              // command: 'open-pdf-preferences' TODO
+              id: 'menu.defaults_preferences',
+              label: trans('menu.defaults_preferences'),
+              accelerator: 'Ctrl+Alt+,',
+              click: function (menuitem, focusedWindow) {
+                global.application.showDefaultsPreferences()
+              }
             },
             {
               id: 'menu.tags',

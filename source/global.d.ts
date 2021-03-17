@@ -21,6 +21,7 @@ interface Application {
   showCustomCSS: () => void
   displayErrorMessage: (title: string, message: string, contents?: string) => void
   showAboutWindow: () => void
+  showDefaultsPreferences: () => void
   showTagManager: () => void
   // TODO: Match the signatures of fileUpdate and dirUpdate
   fileUpdate: (oldHash: number, fileMetadata: any) => void

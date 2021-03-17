@@ -122,6 +122,11 @@ module.exports = {
               html: './source/win-stats/index.htm',
               js: './source/win-stats/index.ts',
               name: 'stats'
+            },
+            {
+              html: './source/win-defaults/index.htm',
+              js: './source/win-defaults/index.ts',
+              name: 'defaults'
             }
           ]
         }

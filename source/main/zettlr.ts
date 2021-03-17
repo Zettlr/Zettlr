@@ -68,6 +68,9 @@ export default class Zettlr {
       showLogViewer: () => {
         this._windowManager.showLogWindow()
       },
+      showDefaultsPreferences: () => {
+        this._windowManager.showDefaultsWindow()
+      },
       showPreferences: () => {
         this._windowManager.showPreferences()
       },
