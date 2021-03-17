@@ -28,7 +28,7 @@
       v-bind:data-hash="obj.hash"
       v-bind:data-id="obj.id || ''"
       v-bind:style="{
-        'padding-left': `${depth}em`
+        'padding-left': `${depth * 15 + 10}px`
       }"
       v-bind:draggable="!isRoot"
       v-on:click="requestSelection"
