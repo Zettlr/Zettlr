@@ -46,18 +46,23 @@ export default {
       view2WidthMin: availableSize * (this.minimumSizePercent[1] / 100),
       // Properties necessary for hiding views programmatically
       originalViewWidth: [ 0, 0 ],
-      hasHiddenView: 0 // Is 1 or 2 if one view is hidden
+      hasHiddenView: 0, // Is 1 or 2 if one view is hidden
+      observer: new ResizeObserver(this.recalculateSizes)
     }
   },
   created: function () {
     window.addEventListener('resize', this.recalculateSizes)
   },
   destroyed: function () {
+    // Stop listening to any size changes
     window.removeEventListener('resize', this.recalculateSizes)
+    this.observer.unobserve(this.$el)
   },
   mounted: function () {
     // As soon as the element is mounted, get the correct width
     this.recalculateSizes()
+    // Begin observing changes to the element size
+    this.observer.observe(this.$el, { box: 'border-box' })
   },
   methods: {
     recalculateSizes: function (_event) {
@@ -131,6 +136,9 @@ export default {
         this.view1Width = this.originalViewWidth[0]
         this.view2Width = this.originalViewWidth[1]
         this.hasHiddenView = 0
+        // After we've unhidden the view, make sure to recalculate possibly
+        // changed metrics in the meantime.
+        this.recalculateSizes()
       }
     }
   }
