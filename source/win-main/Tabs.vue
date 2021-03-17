@@ -7,6 +7,7 @@
         active: file === activeFile,
         modified: modifiedDocs.includes(file.path)
       }"
+      v-bind:title="file.name"
       v-bind:data-path="file.path"
       role="tab"
       draggable="true"
@@ -225,9 +226,7 @@ body div#tab-container {
     overflow: hidden;
     padding-right: @tabbar-height; // Push the filename back
 
-    &:hover {
-      background-color: rgb(200, 200, 210);
-    }
+    &:hover { background-color: rgb(200, 200, 210); }
 
     .filename {
       line-height: 30px;
@@ -281,9 +280,9 @@ body.darwin {
       color: rgb(83, 83, 83);
 
       .filename {
-        padding-left: 0;
-        display: block;
-        width: 100%;
+        padding: 0 5px;
+        margin-left: (@tabbar-height / 3 * 1.9);
+        overflow: hidden;
       }
 
       &:not(.active) {
@@ -292,15 +291,11 @@ body.darwin {
         box-shadow: inset 0px 5px 4px -5px rgba(0, 0, 0, .4);
       }
 
-      &:last-child {
-        border-right: none;
-      }
+      &:last-child { border-right: none; }
 
       &:hover {
         background-color: rgb(214, 214, 214);
-        .close {
-          opacity: 1;
-        }
+        .close { opacity: 1; }
       }
 
       &.active {
