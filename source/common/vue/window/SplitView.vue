@@ -4,6 +4,7 @@
       <slot name="view1"></slot>
     </div>
     <div
+      v-if="hasHiddenView === 0"
       class="horizontal-resizer"
       v-bind:style="{ left: `${view1Width - 5}px` }"
       v-on:mousedown="beginViewResizing"
@@ -42,7 +43,10 @@ export default {
       view2Width: availableSize * (this.initialSizePercent[1] / 100),
       // Minimum widths
       view1WidthMin: availableSize * (this.minimumSizePercent[0] / 100),
-      view2WidthMin: availableSize * (this.minimumSizePercent[1] / 100)
+      view2WidthMin: availableSize * (this.minimumSizePercent[1] / 100),
+      // Properties necessary for hiding views programmatically
+      originalViewWidth: [ 0, 0 ],
+      hasHiddenView: 0 // Is 1 or 2 if one view is hidden
     }
   },
   created: function () {
@@ -53,8 +57,7 @@ export default {
   },
   mounted: function () {
     // As soon as the element is mounted, get the correct width
-    this.availableSize = this.$el.getBoundingClientRect().width
-    this.recalculateSizes() // Apply the new sizes immediately.
+    this.recalculateSizes()
   },
   methods: {
     recalculateSizes: function (_event) {
@@ -106,7 +109,29 @@ export default {
       this.$el.removeEventListener('mouseup', this.endViewResizing)
     },
     hideView: function (viewNumber) {
-      // Enables you to hide one of the views programmatically
+      // Enables you to hide one of the views programmatically. First, we need
+      // to un-hide any view if applicable. Then, we need to hide the view in
+      // a second step.
+      this.unhide()
+
+      // Now no view is hidden at this point.
+      this.hasHiddenView = viewNumber
+      this.originalViewWidth = [ this.view1Width, this.view2Width ]
+      if (viewNumber === 1) {
+        this.view2Width += this.view1Width
+        this.view1Width = 0
+      } else {
+        this.view1Width += this.view2Width
+        this.view2Width = 0
+      }
+    },
+    unhide: function () {
+      if (this.hasHiddenView > 0) {
+        // Un-hide
+        this.view1Width = this.originalViewWidth[0]
+        this.view2Width = this.originalViewWidth[1]
+        this.hasHiddenView = 0
+      }
     }
   }
 }
@@ -121,6 +146,10 @@ body div.split-view {
   right: 0;
   height: 100%;
   display: flex;
+
+  div.view {
+    position: relative; // Necessary so that the horizontal resizer sits correct
+  }
 
   div.horizontal-resizer {
     cursor: ew-resize;
